@@ -1,0 +1,18 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$lang_new_item = "Aggiunta una nuova voce";
+$lang_title_notification = "Dall\'ultima visita";
+$lang_update_agenda = "Voce dell\'agenda aggiornata";
+$lang_new_agenda = "Aggiunta una nuova voce all\'agenda";
+$lang_update_announcements = "Aggiornato un annuncio esistente";
+$lang_new_announcements = "Aggiunto un nuovo annuncio";
+$lang_new_document = "Aggiunti nuovi documenti";
+$lang_new_exercise = "Disponibili nuovi esercizi";
+$lang_update_link = "Aggiornato un collegamento esistente";
+$lang_new_link = "Aggiunto un nuovo collegamento";
+$lang_new_forum_topic = "Nuovo argomento aggiunto";
+$lang_new_groupforum_topic = "Nuovo argomento aggiunto al forum del gruppo";
+$lang_new_dropbox_file = "ricevuto un nuovo file";
+$lang_update_dropbox_file = "il file nella tua casella è stato aggiornato";
+?>

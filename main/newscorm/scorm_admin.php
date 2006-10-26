@@ -1,0 +1,411 @@
+<?php //$id: $
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004 Denes Nagy
+	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+==============================================================================
+*/
+/**
+==============================================================================
+* This script handles SCO administration features
+* @package dokeos.learnpath.scorm
+* @author Denes Nagy, principal author
+* @author Isthvan Mandak, several new features
+* @author Roan Embrechts, code improvements and refactoring
+* @author Yannick Warnier, complete refactoring <ywarnier@beeznest.org>
+==============================================================================
+*/
+/**
+ * Script init
+ */
+
+$langFile = "scormdocument";
+$uncompress=1; //this variable shouldn't be found here (find its usage before removal)
+
+require_once('back_compat.inc.php');
+include("../learnpath/learnpath_functions.inc.php");
+include_once('scorm.lib.php');
+
+$is_allowedToEdit = api_is_allowed_to_edit();
+ 
+/**
+ * Variables
+ */
+//escapable integers
+if($_REQUEST['id'] != strval(intval($_REQUEST['id']))){$id = $_REQUEST['id'];}else{$id=null;}
+
+//imported strings
+$path 					= (!empty($_REQUEST['path'])?$_REQUEST['path']:null);
+$Submit 				= (!empty($_POST['Submit'])?$_POST['Submit']:null);
+$submitImage 			= (!empty($_POST['submitImage'])?$_POST['submitImage']:null);
+$cancelSubmitImage 		= (!empty($_POST['cancelSubmitImage'])?$_POST['cancelSubmitImage']:null);
+$action					= (!empty($_REQUEST['action'])?$_REQUEST['action']:null);
+$delete					= (!empty($_REQUEST['delete'])?$_REQUEST['delete']:null);
+$createDir				= (!empty($_REQUEST['createDir'])?$_REQUEST['createDir']:null);
+$make_directory_visible = (!empty($_REQUEST['make_directory_visible'])?$_REQUEST['make_directory_visible']:'');
+$make_directory_invisible = (!empty($_REQUEST['make_directory_invisible'])?$_REQUEST['make_directory_invisible']:'');
+
+//values from POST form to add directory
+$newDirPath				= (!empty($_POST['newDirPath'])?$_POST['newDirPath']:null);
+$newDirName				= (!empty($_POST['newDirName'])?$_POST['newDirName']:null);
+//initialising internal variables
+$dialogbox = '';
+
+if (! $is_allowed_in_course) api_not_allowed();
+$is_allowedToUnzip = $is_courseAdmin;
+
+
+/**
+ * Main code
+ */
+switch($action){
+	case 'exportpath':
+		if(!empty($id)){
+  			$export = exportpath($id);
+  			$dialogBox .= "This LP has been exported to the Document folder "
+  						."of your course.";
+		}
+		break;
+	case 'exportscorm':
+		exportSCORM($path);
+		break;
+	case 'deletepath':
+		/*==================================================
+			DELETE A DOKEOS LEARNPATH
+			and all the items in it
+		 ==================================================*/
+		if(!empty($id)){
+			$l="learnpath/learnpath_handler.php?learnpath_id=$id";
+			$sql="DELETE FROM $tbl_tool where (link='$l' AND image='scormbuilder.gif')";
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$sql="SELECT * FROM $tbl_learnpath_chapter where learnpath_id=$id";
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			while ($row=mysql_fetch_array($result))
+			{
+				$c=$row['id'];
+				$sql2="DELETE FROM $tbl_learnpath_item where chapter_id=$c";
+				$result2=api_sql_query($sql2,__FILE__,__LINE__);
+			}
+			$sql="DELETE FROM $tbl_learnpath_chapter where learnpath_id=$id";
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			deletepath($id);
+			$dialogBox=get_lang('_learnpath_deleted');
+		}
+		break;
+	case 'publishpath':
+		/*==================================================================
+		  PUBLISHING (SHOWING) A DOKEOS LEARNPATH
+		  ==================================================================*/
+		if(!empty($id)){
+			$sql="SELECT * FROM $tbl_learnpath_main where learnpath_id=$id";
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$row=mysql_fetch_array($result);
+			$name=domesticate($row['learnpath_name']);
+			if ($set_visibility == 'i') { 
+				$s=$name." ".get_lang('_no_published'); 
+				$dialogBox=$s; 
+				$v=0; 
+			}
+			if ($set_visibility == 'v') { 
+				$s=$name." ".get_lang('_published');    
+				$dialogBox=$s; 
+				$v=1; 
+			}
+			$sql="SELECT * FROM $tbl_tool where (name='$name' and image='scormbuilder.gif')";
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$row2=mysql_fetch_array($result);
+			$num=mysql_num_rows($result);
+			if (($set_visibility == 'i') && ($num>0))
+			{
+				//it is visible or hidden but once was published
+				if (($row2['visibility'])==1)
+				{
+					$sql ="DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif')";
+				}
+				else
+				{
+					$sql ="UPDATE $tbl_tool set visibility=1 WHERE (name='$name' and image='scormbuilder.gif')";
+				}
+			}
+			elseif (($set_visibility == 'v') && ($num==0))
+			{
+				$sql ="INSERT INTO $tbl_tool (id, name, link, image, visibility, admin, address, added_tool) VALUES ('$theid','$name','learnpath/learnpath_handler.php?learnpath_id=$id','scormbuilder.gif','$v','0','pastillegris.gif',0)";
+			}
+			else
+			{
+				//parameter and database incompatible, do nothing
+			}
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+		
+		}
+		break;
+	case 'editpath':
+		/*==================================================================
+		  EDITING A DOKEOS NEW LEARNPATH
+  		==================================================================*/
+		if(!empty($Submit))
+		{
+		  $l="learnpath/learnpath_handler.php?learnpath_id=$id";
+		  $sql="UPDATE $tbl_tool set name='".domesticate($learnpath_name)."' where (link='$l' and image='scormbuilder.gif')";
+		  $result=api_sql_query($sql,__FILE__,__LINE__);
+		  $sql ="UPDATE $tbl_learnpath_main SET learnpath_name='".domesticate($learnpath_name)."', learnpath_description='".domesticate($learnpath_description)."' WHERE learnpath_id=$id";
+		  $result=api_sql_query($sql,__FILE__,__LINE__);
+		  $dialogBox=get_lang('_learnpath_edited');
+		}
+		break;
+	case 'add':
+		/*==================================================================
+		  		ADDING A NEW LEARNPATH : treating the form
+		 ==================================================================*/
+		if (!empty($Submit))
+		{
+		  $sql ="INSERT INTO $tbl_learnpath_main (learnpath_name, learnpath_description) VALUES ('".domesticate($learnpath_name)."','".domesticate($learnpath_description)."')";
+		  api_sql_query($sql,__FILE__,__LINE__);
+		  $my_lp_id = Database::get_last_insert_id();
+		  $sql ="INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('".domesticate($learnpath_name)."','learnpath/learnpath_handler.php?learnpath_id=$my_lp_id','scormbuilder.gif','1','0','pastillegris.gif',0)";
+		  api_sql_query($sql,__FILE__,__LINE__);
+		  //instead of displaying this info text, get the user directly to the learnpath edit page
+		  //$dialogBox=get_lang('_learnpath_added');
+		  header('location:../learnpath/learnpath_handler.php?'.api_get_cidreq().'&learnpath_id='.$my_lp_id);
+		  exit();
+		}
+		break;
+	case 'editscorm':
+		/*==================================================================
+		EDITING A SCORM PACKAGE
+ 		==================================================================*/
+		if (!empty($Submit))
+		{
+			$sql ="UPDATE $tbl_document SET comment='".domesticate($learnpath_description)."', name='".domesticate($learnpath_name)."' WHERE path='$path'";
+			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$dialogBox=get_lang('_learnpath_edited');
+		}
+		break;
+	default:
+		break;
+}
+
+/*============================================================================*/
+
+if($is_allowedToEdit) // TEACHER ONLY
+{
+  /*======================================
+	 UPLOAD SCORM
+   ======================================*/
+  /*
+   * Check the request method instead of a variable from POST
+   * because if the file size exceeds the maximum file upload
+   * size set in php.ini, all variables from POST are cleared !
+   */
+
+  if ($_SERVER['REQUEST_METHOD'] == 'POST' 
+  	&& count($_FILES)>0 
+  	&& empty($submitImage) 
+  	&& empty($cancelSubmitImage) 
+  	&& empty($action))
+  {
+    // A SCORM upload has been detected, now deal with the file...
+    //directory creation
+    $s=$_FILES['userFile']['name'];
+    $pathInfo = pathinfo($s);
+    //Check the filename has at least several letters in it :-)
+    //This is a very loose check as later on we might accept other formats of packages
+    //sent than just "zip"
+    if(preg_match('/[\w-_]+/',$pathInfo['basename'])){
+	    //get the basename without extension
+	    $newDirName=substr(
+	    	$pathInfo['basename'],
+	    	0,
+	    	strlen($pathInfo['basename'])-(strlen($pathInfo['extension'])+1));
+	    $newDirName = replace_dangerous_char(trim($newDirName),'strict');
+	    if( check_name_exist($baseWorkDir.$newDirPath.$openDir."/".$newDirName) )
+	    {
+	      /** @todo change this output. Inaccurate at least in french. In this case, the
+	       * file might not exist or the transfer might have been wrong (no $_FILES at all)
+	       * but we still get the error message
+	       */
+	      $dialogBox = get_lang('FileExists');
+	      $createDir = $newDirPath; unset($newDirPath);// return to step 1
+	    }
+	    else
+	    {
+	      if(mkdir($baseWorkDir.$newDirPath.$openDir."/".$newDirName, 0700)){
+	        FileManager::set_default_settings($newDirPath.$openDir, $newDirName, "folder", $tbl_document);
+	        // RH: was:  set_default_settings($newDirPath.$openDir,$newDirName,"folder");
+	        $dialogBox = get_lang('DirCr');
+	      }else{
+	      	//Display msg "could not create dir..."
+	        //exit();
+	    }
+	    //directory creation end
+	    
+	    $uploadPath=$openDir.'/'.$newDirName;
+	    if(!$_FILES['userFile']['size'])
+        {
+	        $dialogBox .= get_lang('FileError').'<br />'.get_lang('Notice').' : '.get_lang('MaxFileSize').' '.ini_get('upload_max_filesize');
+	    }
+	    else //the file size is alright, we can assume the file is OK too
+	    {
+	      if($uncompress == 1 && $is_allowedToUnzip)
+	      {
+		    $unzip = 'unzip';
+	      }
+	      else
+	      {
+	        $unzip = '';
+	      }
+	      if (treat_uploaded_file($_FILES['userFile'], $baseWorkDir,
+		        $uploadPath, $maxFilledSpace, $unzip))
+	      {
+	        if ($uncompress == 1)
+		    {
+	          //$dialogBox .= get_lang('DownloadAndZipEnd');
+	          //modified by darkden : I omitted this part, so the user can see
+		      //the scorm content message at once
+		    }
+	        else
+		    {
+		      $dialogBox = get_lang('DownloadEnd');
+		    }
+	        // "WHAT'S NEW" notification: update table last_tooledit
+	        //update_last_tooledit($_course, $nameTools, $id, get_lang('_new_document'), $_uid);
+	        item_property_update($_course, TOOL_LEARNPATH, $id, "LearnpathAdded", $_uid);
+	      }
+	      else
+	      {
+	        if(api_failure::get_last_failure() == 'not_enough_space')
+	        {
+	          $dialogBox = get_lang('NoSpace');
+		    }
+		    elseif (api_failure::get_last_failure() == 'php_file_in_zip_file')
+		    {
+		      $dialogBox = get_lang('ZipNoPhp');
+		    }
+		    elseif(api_failure::get_last_failure() == 'not_scorm_content')
+		    {
+		      $dialogBox = get_lang('NotScormContent');
+		    }
+	      }
+	    }
+	    $uploadPath='';
+	    if (api_failure::get_last_failure())
+	    {
+	      rmdir($baseWorkDir.$newDirPath.$openDir."/".$newDirName);
+	    }
+     
+    }
+  }//
+  else
+  {//the filename doesn't contain any alphanum chars (empty filename?)
+  	//get a more detailed message?
+    $dialogBox .= get_lang('FileError').'<br />';  
+  }
+
+  /*======================================
+	DELETE FILE OR DIRECTORY
+    ======================================*/
+
+  if ( isset($delete) )
+  {
+    if ( scorm_delete($baseWorkDir.$delete))
+    {
+      //$tbl_document = substr($tbl_document, 1, strlen($tbl_document) - 2);  // RH...
+      update_db_info("delete", $delete); 
+      $dialogBox = get_lang('DocDeleted');
+    }
+  }
+  /*======================================
+	CREATE DIRECTORY
+  ======================================*/
+  /*
+   * The code begin with STEP 2 so it allows to return to STEP 1
+   * if STEP 2 unsucceds
+   */
+
+  /*-------------------------------------
+	STEP 2
+  --------------------------------------*/
+  if (isset($newDirPath) && isset($newDirName))
+  {
+    // echo $newDirPath . $newDirName;
+    $newDirName = replace_dangerous_char(trim(stripslashes($newDirName)),'strict');
+    if( check_name_exist($baseWorkDir.$newDirPath."/".$newDirName) )
+    {
+      $dialogBox = get_lang('FileExists');
+      $createDir = $newDirPath; unset($newDirPath);// return to step 1
+    }
+    else
+    {
+      if(mkdir($baseWorkDir.$newDirPath."/".$newDirName, 0700))
+        FileManager::set_default_settings($newDirPath, $newDirName, "folder", $tbl_document);
+      // RH: was:  set_default_settings($newDirPath,$newDirName,"folder");
+			$dialogBox = get_lang('DirCr');
+    }
+  }
+
+  /*-------------------------------------
+	 STEP 1
+   --------------------------------------*/
+  if (isset($createDir))
+  {
+    $dialogBox .= "<!-- create dir -->\n"
+	."<form name='createdir' action='' method='POST'>\n"
+	."<input type=\"hidden\" name=\"newDirPath\" value=\"$createDir\" />\n"
+	.get_lang('NameDir')." : \n"
+	."<input type=\"text\" name=\"newDirName\" />\n"
+	."<input type=\"submit\" value=\"".get_lang('Ok')."\" />\n"
+	."</form>\n";
+  }
+
+  /*======================================
+  	  VISIBILITY COMMANDS
+  ======================================*/
+  if (!empty($make_directory_visible) || !empty($make_directory_invisible))
+  {
+    $visibilityPath = $make_directory_visible.$make_directory_invisible; 
+    // At least one of these variables are empty. So it's okay to proceed this way
+    /* Check if there is yet a record for this file in the DB */
+    $result = mysql_query ("SELECT * FROM $tbl_document WHERE path LIKE '".$visibilityPath."'");
+    while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+    {
+      $attribute['path'      ] = $row['path'      ];
+      $attribute['visibility'] = $row['visibility'];
+      $attribute['comment'   ] = $row['comment'   ];
+    }
+
+    if ($make_directory_visible)
+    {
+      $newVisibilityStatus = "v";
+    }
+    elseif ($make_directory_invisible)
+    {
+      $newVisibilityStatus = "i";
+    }
+    $query = "UPDATE $tbl_document SET visibility='$newVisibilityStatus' WHERE path=\"".$visibilityPath."\""; //added by Toon
+    api_sql_query($query,__FILE__,__LINE__);
+    if (mysql_affected_rows() == 0) // extra check added by Toon, normally not necessary anymore because all files are in the db
+    {
+      api_sql_query("INSERT INTO $tbl_document SET path=\"".$visibilityPath."\", visibility=\"".$newVisibilityStatus."\"",__FILE__,__LINE__);
+    }
+    unset($attribute);
+    $dialogBox = get_lang('ViMod');
+  }
+ } // END is Allowed to Edit;
+}
+?>

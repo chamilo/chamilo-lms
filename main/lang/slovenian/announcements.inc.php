@@ -1,0 +1,53 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$Announcement = "Obvestila";
+$langAnnEmpty = "Seznam obvestil je bil izpraznjen";
+$AnnouncementModified = "Obvestilo je bilo spremenjeno";
+$AnnouncementAdded = "Obvestilo je bilo dodano";
+$AnnouncementDeleted = "Obvestilo je bilo odstranjeno";
+$AnnouncementPublishedOn = "Objavljeno ";
+$AddAnnouncement = "Dodaj obvestilo";
+$langContent = "Vsebina";
+$AnnouncementDeleteAll = "Odstrani seznam obvestil";
+$professorMessage = "Obvestilo vodje teèaja";
+$langEmailSent = " in odposlano registriranim uporabnikom";
+$EmailOption = "Pošlji to obvestilo registriranim uporabnikom";
+$langOn = "Od";
+$langRegUser = "registriranih uporabnikov te strani";
+$langUnvalid = "vsebuje neveljaven ali neobstojeè e-poštni naslov";
+$langModifAnn = "Spremeni to obvestilo";
+$langModify    = "spremeni";
+$langDelete    = "odstrani";
+$langTitle     = "Naslov";
+$langHelp      = "pomoè";
+$langOk        = "OK";
+$langAddIntro  = "Dodaj uvodno besedilo ";
+$langBackList  = "Vrni se na seznam";
+$langSelMess   = "Opozorila izbranim uporabnikom";
+$EmailTitle  = "Predmet";
+$langUserlist  = "Seznam skupin in uporabnikov";
+$langSelectedUsers  = "Izbrani uporabniki";
+$langSubmit  = "Pošlji";
+$langPleaseEnterMessage  = "Vnesti je potrebno besedilo sporoèila.";
+$langPleaseSelectUsers  = "Izbrati je potrebno nekaj uporabnikov.";
+$Teachersubject = "Sporoèilo odposlano vašim uporabnikom ";
+$langMessages  = "Sporoèila";
+$langMessageToSelectedUsers  = "Sporoèila izbranim uporabnikom";
+$langUsers  = "uporabniki";
+$langIntroText  = "Za pošiljanje sporoèila, izberite skupino uporabnikov (oznaèenih z G)
+ ali posamezne uporabnike s seznama na levi.";
+$langDown = "dol";
+$langMsgSent = "Sporoèilo je bilo odposlano izbranim uporabnikom";
+$langSelUser = "izbranim uporabnikom te strani";
+$langMessageToSelectedGroups = "Sporoèilo izbranim skupinam";
+$langGrouplist = "seznam skupine";
+$langSelectedGroups = "izbrane skupine";
+$langMsg = "Sporoèila";
+$langYes = "Da";
+$MsgText = "Sporoèilo";
+$AnnouncementDeletedAll = "Vsa obvestila so bila odstranjena";
+$AnnouncementMoved = "Obvestilo je bilo prestavljeno";
+$NoAnnouncements = "Tu ni nobenih obvestil";
+$SelectEverybody = "Izberi vse";
+?>

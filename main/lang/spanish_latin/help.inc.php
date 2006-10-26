@@ -1,0 +1,480 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langHFor = "Ayuda de los foros";
+$langClose = "Cerrar la ventana";
+$langForContent = "El foro es una herramienta de discusión escrita y asincrónica.
+ A diferencia del email que permite un dialogo uno-a-uno, los foros permiten diálogos públicos o semi-públicos.</p><p>Hablando técnicamente, los estudiantes solo necesitan un prograama de navegación para usar los foros de Claroline.</P><p>Para organizar los foros, haga un clic en  \'Administrar\'. Las discusiones se organizan en conjuntos y subconjuntos como sigue:</p><p><b>Categoría > Foro > Tema > Respuestas</b></p>Para estructurar las discusiones de sus estudiantes, es necesario organizar categorías y los foros de antemano, dejando a ellos la creación de los temas y las respuestas. Por defecto, el foro de Claroline contiene solo la categoría  \'Público\', un foro y un tema de ejemploc.</p><p>La primera cosa que debe hacer es eliminar el foro de ejemplo y modificar el nombre del primero foro. Entonces, podrá crear, en la categoría  \'publica\', otros foros,por grupos o por temas, para colocar su requerimiento de escenario de aprendizaje.</p><p>No mezcle Categorías y foros, y no olvide que una categoría vacía (sin foros) no aparece a la vista de los estudiantes.</p><p>La descripción de un foro puede ser la lista de sus miembros, la definición de un objetivo, una tarea, un tema ...";
+$langHDropbox = "Baúl de tareas";
+$langDropboxContent = "<p>El Baúl de tareas es una herramienta de administración de contenidos dedicada al intercambio de datos \"peer-to-peer\".  Cualquier tipo de archivo es aceptado: Word, Excel, PDF etc.  Manejará versiones en el sentido que evitará la destrucción de un documento por otro que tenga el mismo nombre.</p> <p>El Baúl de tareas muestra los archivos que le fueron enviados (el folder recibido) y los archivos que usted envía a otros miembros de este curso (el folder enviado). </p> <p>Si la lista de archivos recibidos o enviados se hace nuy extensa, usted debe borrar algunos de los archivos de la lista.   El archivo no es removido hasta que la otra parte pueda verlo. </p> <p>Para enviar un documento a más de una persona, usted necesita usar CTRL+clic en la caja de selección múltiple.  La  caja de selección múltiple es el campo del formulario que muestra la lista de miembros.</p>";
+$langHHome = "Ayuda página principal";
+$langHomeContent = "La mayoría de las rúbricas de iCampus están ya rellenadas con un corto texto o por un enlace dados por defecto, o por un ejemplo. A usted le corresponde el modificarlos.</p><p>As&iacute un corto texto aparece, bien a la vista, en la cabecera de vuestra web.  \'Este es el texto de introducción de vuestra web...\' Modifiquelo y aproveche para describir su curso, vuestros objectivos, vuestros dispositivos. Es importante para la correcta presentación de vuestro trabajo.</p><p>En el momento de la creación de vuestra web, numerosas herramientas (Agenda, documentos, ejercicios...) son activadas para usted por defecto. Es aconsejable desactivar aquellas que usted no utiliza con el fin de no hacer perder el tiempo a sus usuarios o a sus visitantes.</p><p>Usted puede también añadir páginas a la página principal. Utilice la función \'añadir página\' para añadir una página y enviarla al servidor. Si por el contrario usted quiere enlarar con una página o web ya existente, utilice la función \'Enlace a la web\'. Las páginas y enlaces que usted añade a la página principal pueden ser desactivadas y luego suprimidas, a diferencias de las herramientas existentes por defecto, las cuales pueden ser desactivadas, pero no suprimidas.</p><p>También le corresponde a usted el decidir si su curso debe aparecer en la lista de los cursos. Es aconsejable que un curso en fase de pruebas o \'en obras\' no aparezca en la lista (ver la función \'Modificar información sobre el curso\') y permanezca privado sin posibilidad de inscribirse en el durante el tiempo de su creación.</p>";
+$langHOnline = "Ayuda para Sistema de Conferencia en línea";
+$langOnlineContent = "<br>
+<span style=\\\\\\\"font-weight: bold;\\\\\\\">Introducción</span><br> <br> <div style=\\\\\\\"margin-left: 40px;\\\\\\\">El sistema de Conferencia en línea de dokeos le permite de forma sencilla, enseñar, informar o reunir a más de 500 personas.<br> </div> <ul> <ul> <li><b>audio :</b> la voz del ponente se envía por broadcast en tiempo real a los participantes en calidad radio FM fracias al streaming mp3<br> </li> 
+<li><b>diapositivas:</b> los participantes siguen las presentaciones de PowerPoint, Flash, PDF...<br> </li> 
+<li><b>interacción :</b> los participantes pueden realizar sus preguntas al ponente a través del Chat.</li> 
+</ul> </ul> <span style=\\\\\\\"font-weight: bold;\\\\\\\"></span><span style=\\\\\\\"font-weight: bold;\\\\\\\"><br> 
+Estudiante / asistente</span><br> <br> <div style=\\\\\\\"margin-left: 40px;\\\\\\\">Para asistir a la conferencia Vd. necesita:<br> </div> <br> <div style=\\\\\\\"margin-left: 40px;\\\\\\\">1. Altavoces (o auriculares) conectados a su PC<br>  <br> 2. Winamp Media player<br> <br> <a href=\\\"http://www.winamp.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\" src=\\\"../img/winamp.gif\\\"></a><br> <br> 
+Mac : usar<a href=\\\"http://www.quicktime.com\\\">Quicktime</a><br>
+ Linux : usar<a href=\\\"http://www.xmms.org\\\">XMMS</a> <br> <br> 
+   3. Acrobat PDF reader, Word, PowerPoint, Flash, ..., dependiendo del formato de las diapositivas del profesor<br> <br> <a href=\\\"http://www.acrobat.com\\\"><img style=\\\\\\\"border: 0px solid ; width: 87px; height: 31px;\\\\\\\" alt=\\\"acrobat reader\\\" src=\\\"../img/acroread.gif\\\"></a><br> </div> <br> <span style=\\\"font-weight: bold;\\\"><br> 
+ Profesor / ponente</span><br> <br> <div style=\\\\\\\"margin-left: 40px;\\\\\\\">Para dar una conferencia Vd. necesita:<br> </div> <br> <div style=\\\"margin-left: 40px;\\\">1. Unos auriculares con micrófono<br> <br> <img style=\\\\\\\"border: 0px solid ; width: 87px; height: 87px;\\\\\\\" alt=\\\"Auriculares\\\" src=\\\"../img/headset.gif\\\"></a><br> 
+ <br> 
+ <br> 2. Winamp<br> <br> <a href=\\\"http://www.winamp.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\" src=\\\"../img/winamp.gif\\\"></a><br> <br> 
+ 3. SHOUTcast DSP Plug-In para Winamp 2.x <br> <br> <a href=\\\"http://www.shoutcast.com\\\"><img style=\\\\\\\"border: 0px solid ; width: 87px; height: 24px;\\\" alt=\\\"Shoutcast\\\" src=\\\"../img/shoutcast.gif\\\"></a><br> <br> 
+ Siga las instrucciones de <a href=\\\"http://www.shoutcast.com\\\">www.shoutcast.com</a> para instalar y configurar Shoutcast Winamp DSP Plug-In. <br> </div> <br> <span style=\\\\\\\"font-weight: bold;\\\\\\\"><br> 
+ ¿ Cómo dar una conferencia ?<br> <br> </span> <div style=\\\"margin-left: 40px;\\\">
+   <p>Crear un curso en Dokeos > Entrar en el curso > Hacer visible la herramienta Conferencia Online > Editar los parámetros (icono en forma de lápiz, arriba a la izquierda) > Enviar sus diapositivas (PDF, PowerPoint....) > Escribir un texto de introducción > escribir la URL desde donde se va a proveer el streaming.</p>
+   </div> 
+ <div style=\\\"margin-left: 40px;\\\">
+   <p><img style=\\\"width: 256px; height: 182px;\\\" alt=\\\"conference config\\\" src=\\\"../img/conf_screen_conf.gif\\\"><br> 
+   No olvide dar previamente a los futuros participantes en la reunión una fecha, hora y directrices lo suficientemente claras..<br> 
+   <br> 
+   <span style=\\\"font-weight: bold;\\\">Consejo</span> : 10 minutos antes de la conferencia, escriba un pequeño mensaje informando a los participantes de que está online y puede ayudarles a solucionar algún problema de audio. </p>
+   <p> <br> 
+     <span style=\\\"font-weight: bold;\\\">Servidor de streaming</span><br> 
+   Para dar una conferencia en tiempo real, necesita un servidor de streaming y probablemente personal técnico que le ayude a realizarla. El técnico le suministrará el URL que necesita escribir en el campo de streaming cuando edita los parámetros de la herramienta Conferencia Online.<br> 
+     <br> 
+     <small><a href=\\\"http://www.dokeos.com/hosting.php#streaming\\\"><img style=\\\"border: 0px solid ; width: 258px; height: 103px;\\\" alt=\\\"dokeos streaming\\\" src=\\\"../img/streaming.jpg\\\"><br> 
+     Dokeos streaming</a></small><br> 
+     <br>
+     Hágalo usted mismo : instale, configure y administre <a href=\\\"http://www.shoutcast.com\\\">Shoutcast</a> o <a href=\\\"http://developer.apple.com/darwin/projects/streaming/\\\">Apple Darwin</a>. <br> 
+     <br>
+     O contacte con Dokeos. Podemos ayudarles a organizar su conferencia, asistir a su ponente y alquilarle a bajo costo la posibilidad de streaming en nuestros servidores: <a href=\\\"http://www.dokeos.com/hosting.php#streaming\\\">http://www.dokeos.com/hosting.php</a><br> 
+     <br> 
+     <br>
+   </p>
+ </div> ";
+$langHClar = "Ayuda: primeros pasos";
+$langClarContent = "<p><b>Instructor</b></p>
+<p>Dokeos es un Sistema de Gestión del Aprendizaje y el Conocimiento. Permite a los instructores organizar material e itinerarios de aprendizaje y administrar las interacciones con sus alumnos, todo mediante un simple navegador web. </p>
+
+<p>Para usar Dokeos como un instructor, usted necesita un nombre de usuario y una contraseña. Dependiendo de la configuración de seguridad de su portal, usted obtiene éstos por auto-registro (menú a la mano derecha) o de la administración central de su organización. Recuerde que un nombre de usuario y una contraseña nunca contienen espacios o acentos y son sensibles al uso de mayúsculas. Escriba su nombre de usuario y contraseña, entonces cree un curso (superior derecha) o use el curso que ha sido creado para usted por la administración central de su organización. </p>
+
+<p>Para añadir a un colega como co-administrador de su curso: <ol><li> Si no está registrado en el sistema, regístrelo y seleccione \"Instructor\" como un perfil, ,</li> <li>Si ya está registrado en el sistema, abra temporalmente la suscripción al curso en Configuración del curso y pregúntele si desea inscribirse en su curso.  Entonces edite su perfil y asígnele derechos de Instructor.</li></ol></p>
+
+<p>Cada herramienta de Dokeos contiene una ayuda contextual representada por una boya roja. Si no encuentra allí la información correcta, considere verificar la página de documentación de Dokeos: <a href=\\\"http://www.dokeos.com/documentation.php\\\">http://www.dokeos.com/documentation.php</a>
+  y descargue el manual del instructor en su propio lenguaje o en inglés. </p>
+
+<p><b>Estudiante</b></p>
+<p>Este portal le permite seguir y participar en cursos, entrenamientos, talleres colaborativos, etc. El software Dokeos  ha sido diseñado para promover el aprendizaje activo:  basado en proyectos, basado en problemas, basado en casos, investigación colaborativa, etc. Sus instructores  han construido para ustedes  espacios de aprendizaje que pueden tomar la  forma de simples repositorios de contenidos o ser más sofisticados,  con una lista de actividades a seguir de acuerdo a un calendario, etc. </p>
+
+<p>El proceso de registro puede variar de una organización a otra. En algunos casos el auto-registro es permitido. En otros, usted debe obtener un nombre de usuario y una contraseña de la administración central .</p>";
+$langHDoc = "Ayuda documentos";
+$langDocContent = "<p>El módulo de gestión de documentos funciona de manera semejante a la gestión de sus documentos en un ordenador. </p><p>Usted puede introducir documentos de todo tipo (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Tenga en cuenta, sin embargo, el que los estudiantes dispongan de las herramientas apropiadas para poder consultarlos. Tenga también cuidado de no enviar 
+  documentos infectados con virus. Es conveniente de comprobar primero con un programa antivirus que los documentos
+no estén infectados antes de colocarlos en iCampus.</p>
+<p>Los documentos se presentan en pantalla por orden alfabético.<br>
+  <b>Consejos:</b> si usted desea que los documentos sean ordenados de 
+  manera diferente, usted puede hacerlos preceder de un número, a partir de este momento se ordenarán según esta base. </p>
+<p>Usted puede:</p>
+<h4>Usted puede cargar a distancia un documento  en este módulo</h4>
+<ul>
+  <li>Seleccione el documento en su ordenador con la ayuda del  
+	botón \"Buscar\" 
+	<input type=submit value=Buscar name=submit2>
+	a la derecha de su pantalla.</li>
+  <li>Ejecute la carga a distancia con la ayuda del botón\" 
+	cargar a distancia\" 
+	<input type=submit value=cargar a distancia name=submit2>
+	.</li>
+</ul>
+<h4>Cambiar el nombre de un documento (o de un directorio)</h4>
+<ul>
+  <li>Haga click en el botón <img src=../img/renommer.gif width=20 height=20 align=baseline> 
+	en la columna \"Cambiar el nombre.</li>
+  <li>Introduzca el nuevo nombre en el lugar previsto para este efecto que aparece 
+	arriba a la izquierda</li>
+  <li>Validar haciendo click en \"OK\" 
+	<input type=submit value=OK name=submit24>
+	. 
+</ul>
+	<h4>Suprimir un documento (o un directorio)</h4>
+	<ul>
+	  
+  <li>Haga click en el botón <img src=../img/delete.gif width=20 height=20> 
+	en la columna \"Suprimir\".</li>
+	</ul>
+	<h4>Hacer que un documento sea invisible para los estudiantes (o un directorio)</h4>
+	<ul>
+	  
+  <li>Haga click en el botón <img src=../img/visible.gif width=20 height=20>
+     en la columna \"Visible/invisible\".</li>
+	  <li>El documento (o el directorio) continua existiendo, pero ya no es visible para los estudiantes.</li>
+	</ul>
+	<ul>
+	  
+  <li>Si ustede desea que este elemento vuelva a ser visible, 
+	haga click en el botón <img src=../document/../img/invisible.gif width=24 height=20> 
+	en la columna \"Visible/invisible\"</li>
+	</ul>
+	<h4>Añadir o modificar un comentario a un documento (o a un directorio)</h4>
+	<ul>
+	  
+  <li>Haga click en el botón  <img src=../document/../img/comment.gif width=20 height=20> 
+	en la columna \"Commentario\"</li>
+	  <li>Introduzca el nuevo comentario en la zona prevista para tal efecto qui aparecerá arriba a la izquierda.</li>
+	  <li>Valide haciendo click en \"OK\" 
+		<input type=submit value=OK name=submit2>
+		.</li>
+	</ul>
+	<p>Si ustede desea suprimir un comentario, haga click en el botón <img src=../document/../img/comment.gif width=20 height=20>, 
+	  \"borrar el antiguo comentario de la zona\" y valide haciendo click en \"OK\" 
+	  <input type=submit value=OK name=submit22>
+	  . 
+	<hr>
+	<p>Usted puede también organizar el contenido del módulo de los documentos guardando 
+	  los documentos en directorios. Para hacer esto usted debe :</p>
+	<h4><b>Crear un directorio</b></h4>
+	<ul>
+	  <li>Hacer click en la función \"<img src=../document/../img/dossier.gif width=20 height=20>crear 
+		un directorio\" arriba a la izquierda de la pantalla</li>
+	  <li>Introduzca el nombre de su nuevo repertorio en la zona prevista para tal efecto 
+          arriba a la izquierda de la pantalla.</li>
+	  <li>Valide haciendo click en \"OK\" 
+		<input type=submit value=OK name=submit23>
+		.</li>
+	</ul>
+	<h4>Desplazar un documento (o un directorio)</h4>
+	<ul>
+	  <li>Haga click sobre el botón <img src=../document/../img/deplacer.gif width=34 height=16> 
+		en la columna \"desplazar\"</li>
+	  <li>Escoja el repertorio al que usted quiere desplazar el documento
+              o el directorio en el menú de selección previsto
+	     para tal efecto que aparecerá arriba a la izquierda.(nota: 
+		la palabra \"raiz\" en dicho menú representa la raiz (base) de 
+		su módulo de documentos).</li>
+	  <li>Valide haciendo click sobre \"OK\" 
+		<input type=submit value=OK name=submit232>
+		.</li>
+	</ul>
+	<center>
+	  <p>";
+$langHUser = "Ayuda usuarios";
+$langUserContent = "<b>Papeles (roles)</b><p>Los papeles (roles) no tienen ninguna función informática. No otorgan ningún derecho sobre el sistema. Usted puede modificarlos haciendo click sobre \'modificar\' debajo de  \'rol/papel\' y después introduciendo todas las letras de la descripción de la función conveniente: profesor, asistente, tutor, visitante, documentalista, experto, moderador... Estó servirá solamente para indicar públicamente que rol (papel) que desempeña en el curso.</P><hr>
+<b>Derechos de administración</b>
+<p>Los derechos de administración, por el contrario, se refieren al sistema informático. Actualmente, se puede escoger entre <b>todos</b> (modificar todo, suprimir todo, añadir todo) y <b>ninguno</b> (a parte del derceho de visitar la web, de publicar mensajes en el foro y trabajos via la página \'trabajos\').</P>
+<p>Para permitir a un co-titular, un asistente, un tutor o quien sea el co-administrar la web con usted, ustede debe inscribirlo previamente en su curso o asegurarse que ya está inscrito y después modificar los derechos que le corresponden haciendo click sobre \'modificar\' debajo \'derechos de administració.\' y luego marcando \'todos\'.</P><hr>
+<b>Co-titulares</b>
+<p>Para hacer que figure el nombre de un co-titular en la cabecera de su curso, utilice la página \'Modificar la información sobre el curso\' (en las herramientas de color naranja). Esta modificación de la cabercera del curso no inscribe automáticamente a este co-titular como usuario del curso. Se trata de dos acciones distintas.</p><hr>
+<b>Ayudar a un usuario</b>
+<p>Para añadir un usuario a su curso, comprobar primero si ya está inscrito en iCampus utilizando el motor de búsqueda. Si ya está inscrito, marque la casilla que aparece al lado de su nombre y valide. Si todavía no está inscrito añadale a mano. En los dos casos, la persona recibirá un email de confirmación de su inscripción conteniendo su nombre de usuario y su password, excepto en el caso de que ustede no haya introducido su email.</p>";
+$langGroupManagement = "Ayuda de grupos";
+$langGroupContent = "<p><b>Introducción</b></p>
+<p>Esta herramienta permite crear y gestionar grupos dentro de su curso.
+Cuando se crea el curso (Crear Grupos), los grupos están vacios. Hay muchas formas de rellenarlos:
+<ul><li>automáticamente (\\\'Rellenar grupos\\\'),</li>
+<li>manualmente (\\\'Editar\\\'),</li>
+<li>Autoadscripción por parte de los propios estudiantes (Modificar características: \\\'Se permite a los estudiantes..\\\').</li>
+</ul>
+Se pueden combinar estas tres formas. Puede, por ejemplo, pedir a los estudiantes que se inscriban en un grupo.
+Más tarde puede descubrir que alguno no lo hizo y decida finalmente rellenar de forma automática
+los grupos para completarlos. También puede editar cada grupo para decidir quién forma parte de qué grupo.</p>
+<p>Rellenar grupos, tanto de forma manual o automática sólo es efectivo si hay estudiantes inscritos
+en el curso (no confunda la inscripción en el curso con la inscripción en los grupos).
+La lista de estudiantes es visible en el módulo <b>Usuarios</b>.</p>
+<hr noshade size=1>
+<p><b>Crear Grupos</b></p>
+<p>Para crear grupos nuevos, pulsa en \\\'Crear nuevos grupos\\\'y determinar el número de grupos que quiere crear.
+El número máximo de miembros es ilimitado, pero le sugerimos que indique uno. Si deja el campo número máximo sin rellenar,
+el tamaño será infinito. </p>
+<hr noshade size=1>
+<p><b>Características de los Grupos</b></p>
+<p>Vd. puede determinar las  características de los grupos de forma global (para todos los grupos). 
+
+<b>Se permite a los estudiantes inscribirse en el grupo que quieran</b>:
+<p>Vd. puede crear grupos vacios, para que los estudiantes se inscriban.
+Si Vd. ha definido un número máximo, los grupos completos no aceptarán nuevos miembros.
+Este método es bueno para profesores que aún no conocen la lista de estudiantes cuando crean los grupos. </p>
+
+<b>Herramientas</b>:</p>
+<p>Cada grupo puede disponer de un \\\'Foro\\\' (privado o público) y/o de un área de \\\'Documentos\\\' (privada o pública)</p>
+<hr noshade size=1>
+<p><b>Edición Manual</b></p>
+<p>Una vez que se crean los grupos (Crear grupos), verá en la parte inferior de la página
+una lista de los grupos con una serie de información y funciones
+
+<ul><li><b>Editar</b> modificar manualmente el nombre del grupo, descripción, tutor,
+lista de miembros.</li>
+<li><b>Borrar</b> elimina un grupo.</li></ul>
+<hr noshade size=1>";
+$langHExercise = "Ayuda: Ejercicios";
+$langExerciseContent = "<p>La herramienta \\\'Ejercicios\\\' le permite crear ejercicios que contendrán tantas 
+preguntas como Vd. quiera.<br><br>
+Las preguntas que cree, pueden tener varios modelos de respuestas disponibles :<br><br>
+<ul>
+  <li>Elección múltiple (Respuesta única)</li>
+  <li>Elección múltiple (Respuestas múltiples )</li>
+  <li>Relacionar</li>
+  <li>Rellenar huecos</li>
+  <li>Respuesta libre</li>
+</ul>
+Un ejercicio está compuesto por varias preguntas que guardan relación entre ellas.</p>
+<hr>
+<b>Creación de Ejercicios</b>
+<p>Para crear un ejercicio, pulse sobre el enlace \\\"Nuevo ejercicio \\\".<br><br>
+Escriba el nombre del ejercicio y, si quiere, una descripción del mismo.<br><br>
+También puede escoger entre dos tipos de ejercicios :<br><br>
+<ul>
+  <li>Preguntas en una sóla página</li>
+  <li>Una pregunta por página (secuencial)</li>
+</ul>
+y diga si quiere que las preguntas sean ordenadas de forma aleatoria en el momento que se haga el ejercicio.<br><br>
+Después, guarde su ejercicio. Vd. verá la gestión de preguntas de este ejercicio.</p>
+<hr>
+<b>Añadir Preguntas</b>
+<p>Puede añadir una pregunta a un ejercicio que haya creado previamente. La descripción es opcional,
+así como la posibilidad de incluir una imagen en su pregunta.</p>
+<hr>
+<b>Elección Múltiple</b>
+<p>Esta también se conoce como \\\'pregunta de respuesta o elección múltiple\\\' MAQ / MCQ.<br><br>
+Para crear una:<br><br>
+<ul>
+  <li>Defina respuestas a su pregunta. Puede añadir o borrar una respuesta pulsando en el botén derecho</li>
+  <li>Marque en la casilla de la izquierda la(s) respuesta(s) correcta(s)</li>
+  <li>Añada un comentario opcional. Este comentario no lo verá el alumno hasta que haya respondido a la pregunta</li>
+  <li>Otorgue un \\\'peso\\\' (valor de la respuesta respecto a la totalidad del ejercicio) a cada respuesta. 
+  El peso puede ser un número positivo, negativo, o cero.</li>
+  <li>Guarde sus respuestas</li>
+</ul></p>
+<hr>
+<b>Rellenar huecos</b>
+<p>Esto permite crear un texto con huecos. El objetivo es dejar que el estudiante rellene en estos huecos palabras que Vd. ha eliminado del texto .<br><br>
+Para quitar una palabra del texto, y por tanto crear un hueco, ponga la palabra entre corchetes [como esto].<br><br>
+Una vez que el texto se ha escrito y definido los huecos, puede añadir un comentario que verá el estudiante
+cuando responda a cada pregunta.<br><br>
+Guarde su texto, y verá el paso siguiente que le permitirá asignar un peso a cada hueco. Por ejemplo,si
+la pregunta entera vale 10 puntos y tiene 5 huecos, Vd. puede darle un peso de 2 puntos a cada hueco.</p>
+<hr>
+<b>Relacionar</b>
+<p>Este modelo de respuesta puede elegirse para crear una pregunta donde el estudiante tenga que relacionar elementos
+desde una unidad U1 a otra unidad U2. <br><br>
+También se puede usar para pedir a los estudiantes que seleccionen los elementos en un cierto orden.<br><br>
+Primero defina las opciones entre las que los estudiantes podrán seleccionar la respuesta correcta. Después
+defina las preguntas que tendrán que ir relacionadas con una de las opciones definidas previamente. Por último,
+relacione, mediante el menú desplegable elementos de la primera unidad que se relacionen con la segunda.<br><br>
+Atención : Varios elementos de la primera unidad pueden referirse al mismo elemento en la segunda unidad.<br><br>
+Otorgue un peso a cada relación correcta, y guarde su respuesta.</p>
+<hr>
+<b>Modificación de Ejercicios</b>
+<p>Para modificar un ejercicio, siga los mismos pasos que hizo para crearlo. Sólo pulse en la imagen <img src=\\\"../img/edit.gif\\\" border=\\\"0\\\" align=\\\"absmiddle\\\"> al lado del ejercicio que quiere
+modificar y siga las instrucciones de anteriores.</p>
+<hr>
+<b>Borrar Ejercicios</b>
+<p>Para borrar un ejercicio, pulse en la imagen <img src=\\\"../img/delete.gif\\\" border=\\\"0\\\" align=\\\"absmiddle\\\">
+al lado del ejercicio que quiera borrar.</p>
+<hr>
+<b>Activar Ejercicios</b>
+<p>Para que los alumnos puedan hacer un ejercicio, Vd. tiene que activarlo pulsando en la imagen <img src=\\\"../img/invisible.gif\\\" border=\\\"0\\\" align=\\\"absmiddle\\\"> 
+al lado del ejercicio que quiere activar.</p>
+<hr>
+<b>Probar un Ejercicio</b>
+<p>Vd. puede probar su ejercicio pulsando sobre el nombre del ejercicio en la lista de ejercicios.</p>
+<hr>
+<b>Ejercicios Aleatorios</b>
+<p>En el momento en que se crea / modifica un ejercicio, puede especificar si quiere que las preguntas aparezcan
+en orden aleatorio de entre todas las introducidas en ese ejercicio. <br><br>
+Eso significa que, si Vd. activa esta opción, las preguntas aparecerán en un orden diferente cada vez que
+los estudiantes pulsen sobre el ejercicio.<br><br>
+Si Vd. tiene un número elevado de preguntas, también puede hacer que aparezcan sólo X preguntas
+de entre todas las preguntas disponibles para ese ejercicio.</p>
+<hr>
+<b>Banco de preguntas</b>
+<p>Cuando borra un ejercicio, las preguntas no se eliminan de la base de datos, y pueden ser utilizadas en un nuevo ejercicio, 
+mediante el \\\'Banco de preguntas\\\'.<br><br>
+El Banco de preguntas permite reutilizar las mismas preguntas en varios ejercicios.<br><br>
+Por defecto, se muestran todas las preguntas de su curso. Vd. puede mostrar las preguntas 
+relacionadas con un ejercicio eligiendo éste del menú desplegable \\\"Filtro\\\".<br><br>
+Las preguntas huérfanas son preguntas que no pertenecen a ningún ejercicio.</p>
+<hr> 
+<b>Ejercicios HotPotatoes</b> 
+<p>La herramienta \\\'Ejercicios\\\', también le permite importar ejercicios Hotpotatoes a su portal Dokeos. Los resultados de estos ejercicios se almacenarán de la misma manera que lo hacen los ejercicios de Dokeos. Puede explorar los resultados mediante el Seguimiento de usuarios. En caso de un solo ejercicio, se recomienda utilizar el formato HTML o HTM, pero si el ejercicio contiene imágenes el envío de un archivo ZIP será lo más conveniente.</p>
+<p>Nota: También, puede agregar los ejercicios de HotPotatoes como una etapa en un Itinerario de aprendizaje.</p>
+<p><b>Método de importación</b> </p>
+<ul> <li>Seleccione el archivo de su ordenador usando el botón
+    <input type=submit value=Examinar name=submit2> 
+    situado a la derecha de su pantalla.</li> 
+  <li> Trasnfiéralo a la plataforma mediante el botón
+    <input type=submit value=Enviar name=submit2>. </li> 
+  <li> Si quiere abrir el ejercicio bastará con que haga clic sobre su nombre. </li> 
+</ul> <br> 
+<b>Direcciones útiles</b><br> 
+<ul> <li>Página principal de Hot Potatoes: <a href=\\\"http://web.uvic.ca/hrd/halfbaked/\\\">http://web.uvic.ca/hrd/halfbaked/</a></li> 
+  </li> </ul>";
+$langHPath = "Ayuda: Itinerarios formativos";
+$langPathContent = "La herramienta de Itinerarios formativos tiene dos funciones:
+
+<ul><li>Crear un itinerario de aprendizaje con recursos del propio curso</li>
+<li>Importar un contenido externo con formato SCORM o IMS</li>
+</ul>
+<img src=\\\"../img/path_help.gif\\\">
+<p><b>
+¿Qué es un Itinerario formativo?</b>
+</p>
+<p>Un itinerario formativo es una secuencia de etapas de aprendizaje que se estructuran en módulos.
+La secuencia se puede organizar en función de conceptos, resultando un Indice o tabla de materias, o bien estar basada en actividades, en cuyo caso resultará una Agenda de actividades. De ambas formas se pueden adquirir conceptos y habilidades. Los sucesivos módulos del itinerario se podrán llamar capítulos, semanas, módulos, secuencias, etapas o de cualquier otra forma que responda a la naturaleza de su escenario pedagógico.</p>
+<p>Además de la estructura modular, un Itinerario formativo puede estar secuenciado. Esto significa que determinados conceptos o actividades constituyen prerrequisitos para otros (No se puede pasar a la segunda etapa antes de haber acabado la primera), esta es secuencia no es una sugerencia sino que obliga a la persona que realiza la actividad a seguir las etapas en un orden determinado</p>
+<p><b>¿Cómo crear su propio itinerario formativo?</b></p>
+<p>En la sección Itinerarios formativos puede crear tantos como considere necesarios. Para crear uno debe seguir los siguientes pasos:</p>
+<ol>
+  <li>Haga clic sobre \'Crear un Itinerario formativo\'.
+Déle un título y opcionalmente una descripción.
+  <li>Pulse sobre el nombre del itinerario que ha creado y añádale el módulo que contendrá las distintas etapas. Déle un título y opcionalmente una descripción. 
+  <li>Pulse sobre el signo más situado dentro del cuadrado en la columna \'Añadir etapa\', para incorporar los recursos que constituirán las distintas etapas dentro de este módulo. Estos recursos, podrán ser internos: material con que cuenta el sitio web de la actividad (documentos, actividades, foros trabajos, etc.), o externos (una dirección de Internet).          
+  <li> Cuando acabe, haga clic en \'Ok\' para volver al constructor de itinerarios formativos, allí podrá completar si lo desea otros módulos y ver el resultado haciendo clic en \'Vista de usuario\'.
+</ol>
+<p>Después parametrice más su Itinerario formativo: </p>
+<ul>
+  <li>Si es necesario, renombre cada uno de los recursos añadidos e incorpórele una descripción, con el fin de constituir un auténtico \'Indice de contenidos\'. El título del documento original no cambiará realmente, aunque será presentado con el nuevo. Por ej., se puede renombrar el documento \'examen1.doc\' con el nombre \'Examen de la Primera Evaluación.\'
+  <li>Cambie el orden de presentación de los módulos y de los recursos en función del escenario pedagógico de la actividad, mediante los iconos en forma de triángulo normal e invertido.
+  <li>Establezca prerrequisitos: con la ayuda del icono de la columna \'Añadir prerrequisitos\', defina los módulos o recursos que deben consultarse previamente (cada módulo o recurso mostrará los que le antecedan en la secuencia para seleccionarlos o no, como etapas previas obligatorias). Por ej., las personas que realizan la actividad no pueden realizar el test 2 hasta que no hayan leído el Documento 1. Todas los pasos (items), sean módulos o recursos, tienen un estatus: completo o incompleto, de forma que la progresión de los usuarios es fácilmente apreciable.</li>
+                <li>Cuando termine, no olvide comprobar todos los pasos en la \'Vista de estudiante\', donde aparece la tabla de contenidos a la izquierda y los pasos del itinerario a la derecha.</li>
+                <li>Si hace visible un Itinerario formativo, aparecerá como una nueva herramienta en la página inicial del curso.</li>
+</ul>
+<p>Es importante comprender que un Itinerario formativo es algo más que el desarrollo de una materia: es una secuencia a través del conocimiento que potencialmente incluye pruebas, tiempos de discusión, evaluación, experimentación, publicación, ... Es por ello, por lo que la herramienta de Itinerarios formativos constituye una especie de metaherramienta que permite utilizar el resto de las herramientas para secuenciarlas: </p>
+<ul>
+  <li>Eventos de la agenda
+  <li>Documentos de toda naturaleza (html, imágenes, Word, PowerPoint,...).
+  <li>Anuncios
+  <li>Foros
+  <li>Un tema concreto de un foro
+  <li>Mensajes individuales de los foros
+  <li>Enlaces              
+  <li>Ejercicios tipo test (no olvide hacerlos visibles con la utilidad de ejercicios)
+  <li>Publicaciones de los estudiantes
+  <li>Baúl de tareas (para compartir ficheros, ...)
+  <li>Enlaces externos a Dokeos 
+</li>
+</ul>
+<p><b>
+
+¿ Qué es un itinerario de aprendizaje SCORM o IMS y cómo se importa ?
+</b>
+</p>
+<p>La herramienta Itinerarios formativos también permite importar contenidos
+de cursos en formato SCORM e IMS.</p>
+<p>SCORM  (<i>Sharable Content Object Reference Model</i>)   es un estándar público
+que siguen los principales creadores de contenidos de e-Learning: NETg, Macromedia,
+ Microsoft, Skillsoft, etc. Este estándar actúa en tres niveles:
+</p>
+<ul>
+<li><b>Económico</b> : SCORM permite que cursos completos o pequeñas unidades de
+contenido se puedan reutilizar en diferentes LMS (Learning Management Systems), gracias a la separación del contenido y el contexto,
+</li>
+<li><b>Pedagógico</b> : SCORM integra la noción de prerrequisitos
+o <i>secuenciación</i> (<i>p.ej. </i>\\\'No puedes ir al capítulo
+2 antes de pasar el test 1\\\'),</li>
+<li><b>Tecnológico</b> : SCORM genera una tabla de materias independiente tanto del contenido como del LMS. Esto permite comunicar contenidos y LMS para salvaguardar entre otros: la <em>progresión </em> del aprendizaje (\'¿ A qué capítulo del curso ha llegado María ?\'), la <em>puntuación</em> (\'¿ Cuál es el resultado de Juan en el Test 1 ?\') y el <em>tiempo </em> (\'¿Cuánto tiempo ha pasado Juan en el Capítulo 4 ?\').</li>
+</ul>
+<p><strong>¿ </strong><b>Cómo puedo crear un itinerario formativo compatible con SCORM ?</b><br>
+  <br>
+  La forma más natural es utilizar el constructor de itinerarios de Dokeos.
+Ahora bien, si quiere crear webs totalmente compatibles con SCORM en su propio
+ordenador y luego enviarlas a la plataforma Dokeos, le recomendamos el uso de un
+programa externo, como por ejemplo: Lectora® o Reload®
+<br>
+</p>
+</p>
+<p>
+<b>Enlaces de interés</b><br>
+<ul>
+<li>Adlnet : Autoridad responsable de la normalización del estándard SCORM,
+ <a
+href=\\\"http://www.adlnet.org/\\\">http://www.adlnet.org</a></li>
+<li>Reload : Un editor y visualizador SCORM gratuito y de código libre, <a
+href=\\\"http://www.reload.ac.uk/\\\">http://www.reload.ac.uk</a></li>
+<li>Lectora : Un software para publicar y crear contenido SCORM, <a
+href=\\\"http://www.trivantis.com/\\\">http://www.trivantis.com</a><br>
+</li>
+</ul>
+<p><b>
+Nota :</b></p>
+<p>
+La sección Itinerarios formativos muestra, por un lado todos los <i>itinerarios creados en Dokeos</i>
+y por otro, todos los <i>Itinerarios formativos en formato SCORM</i> que hayan sido importados.
+Es más que recomendable que coloque cada itinerario en una carpeta distinta.
+</p>
+";
+$langHDescription = "Ayuda: Descripción del curso";
+$langDescriptionContent = "<p>Esta herramienta le ayudará  a describir su curso de una forma sintética. Esta descripción dará los estudiantes una idea de lo que pueden esperar del curso.
+Así mismo, a Vd. le puede ayudar a repensar el escenario educativo propuesto.
+</p>Para facilitar la creación de la descripción, ésta se realiza mediante formularios. Como sugerencia se proporciona una lista de encabezados para los distintos apartados de la descripción; pero si quiere crear su propia  descripción con apartados con distinto nombre, escoja la opción \'Apartado personalizado\' y ponga Vd. el título. Repitiendo la operación, podrá añadir tantos apartados adicionales como desee.</p>
+<p>
+Para realizar la descripción del curso, haga clic sobre el botón \'Crear o editar el programa del curso\'; luego despliegue el menú, seleccione el apartado que desee y pulse el botón \'añadir\'. Seguidamente el título del apartado aparecerá sobre un formulario, que tras rellenarlo, podrá guardar pulsando en el botón Ok. En todo momento será posible borrar o modificar un apartado haciendo clic respectivamente sobre los iconos en forma de lápiz o cruz roja.</p>";
+$langHLinks = "Ayuda: Enlaces";
+$langLinksContent = "<p> Esta herramienta  permite a los profesores ofrecer una biblioteca de recursos a sus alumnos</p>
+<p>Si la lista de enlaces es muy larga, puede ser útil organizarlos en categorías para facilitar la búsqueda de información. También puede modificar cada enlace y reasignarlo
+a una nueva categoría que haya creado. Tenga en cuenta que si borra una categoría también borrará todos los enlaces que contenga.
+</p>
+<p>El campo descripción puede utilizarse para dar información adicional
+sobre el contenido del enlace, pero también para describir lo que el profesor espera
+que hagan u obtengan los alumnos a través de dicho enlace.
+Si por ejemplo, si apunta hacia una página sobre Aristóteles, en el campo descripción
+puede pedir al estudiante que estudie la diferencia entre síntesis y análisis.</p>
+<p>Finalmente, es una buena práctica revisar de cuando en cuando los enlaces para ver si siguen activos.</p>";
+$langHMycourses = "Acerca de la página de inicio";
+$langMycoursesContent = "<p>Una vez ingresado en la plataforma, usted ingresa a su <i>página de inicio personal</i>.</p> <p> En el área principal (central) usted verá \"<b>Mi lista de cursos</b>\", una lista de todos sus cursos. Dependiendo de sus derechos de usuario, tendrá la oportunidad de crear nuevos cursos  (a través del menú a la derecha). </p> <p> En el banner superior se ve <ul><li>\"<b>Mi perfil</b>\": uselo para modificar su contraseña, nombre de usuario, foto, u otras configuraciones. También puede revisar las estadísticas de la plataforma;</li> <li>\"<b>Mi agenda</b>\": esto contiene todos los eventos en la agenda de los cursos en los cuales está registrado. </li></ul> </p> <p> <b>Editar mi lista de cursos</b>, en el menú de la derecha, se le permite matricularse en los cursos que los profesores o la organización pongan a disposición del público. Este enlace le permite retirarse de los cursos, también. </p> <p> Los enlaces <b>Foro de soporte</b> y <b>Documentación</b> que apuntan a la web de Dokeos, usted puede preguntar sobre temas técnicos o pedagógicos, encontrar más información.</li> Para entrar en un curso (área principal de la página de inicio), click en este nombre. Su perfil puede variar de un curso a otro. Es posible ser profesor de un curso y alumno en otro. </p>";
+$langHAgenda = "Ayuda de Agenda";
+$langAgendaContent = "<p>La agenda aparece tanto en el área de cada curso como herramienta permanente de los estudiantes. (\'Mi agenda\' en el encabezado).</p> <p>En el curso, la agenda aparece como una lista de eventos. Usted puede adjuntar documentos o actividades a una fecha, de modo que la agenda se convierta en un programador cronológico de sus actividades de aprendizaje.</p> <p>En adición a su presencia en la agenda, los nuevos eventos se anuncian al estudiante cada vez que ingresa.El sistema informa que ha sido añadido en la Agenda (y los Anuncios) desde la última visita : los íconos aparecen en la página de inicio junto a los cursos con los eventos y anuncios añadidos.</p> <p>Si desea profundizar en la lógica de estructurar las actividades de aprendizaje una detrás de otra, le sugerimos el uso de la Ruta de Aprendizaje, que ofrece estos principios con herramientas más avanzadas. La Ruta de Aprendizaje puede ser considerado como una síntesis entre las herramientas de Tabla de Contenidos    + Agenda + secuenciamiento (orden impuesto) y seguimiento.</p>";
+$langHAnnouncements = "Ayuda de Anuncios";
+$langAnnouncementsContent = "<p>La herramienta de Anuncios le permite enviar un email a todos los estudiantes, a algunos de ellos o a algunos grupos. Puede ser un medio útil para atraer a los estudiantes ala plataforma si no la visitan con frecuencia.</p> <p>Para enviar los mensajes, seleccione \'Mensajes para usuarios seleccionados\' entonces use CTRL+C para seleccionar más de uno en el menú de la izquierda, click en la flecha derecha  para arrastrarlos y luego escriba el mensaje en el cuerpo del mensaje.</p>";
+$langHChat = "Ayuda de Chat";
+$langChatContent = "<p>La herramienta de Chat le permite sostener una discusión en tiempo real con sus alumnos. </p> <p>Este chat es distinto de los tradicionales como  MSN® o Yahoo Messenger® porque se basa en web. La desventaja es que se refresca cada diez segundos y no inmediatamente. La ventaja es que está integrado en su curso, archiva sus discusiones en la herramienta de Documentos y no requiere ningún plugin.</p> <p>Si los usuarios usan sus fotos de \'Mi perfil\' (cabezote), entonces la foto aparecerá en el chat, ayudando a identificar a los participantes.</p> <p>Sólo el profesor tiene permisos para modificar o borrar la discusión cuando lo encuentre relevante.</p> <p><b>Relevancia pedagógica</b></p> <p>Añadir un chat al curso no necesariamente es una buena idea. Sin embargo, si usted lo involucra en su modelo, el chat puede ser una herramienta útil. Usted puede imaginar, por ejemplo, esconder el chat, excepto en el momento en que haya establecido una reunión con sus alumnos para responder sus inquietudes en directo. De esta forma es una herramienta de discusión menos \"libre\", pero le garantiza a los estudiantes una disponibilidad real de su parte.</p>.";
+$langHWork = "Ayuda para las Publicaciones de Estudiantes";
+$langWorkContent = "<p>La herramienta de publicaciones de estudiantes es muy simple. Le permite a sus alumnos subir cualquier documento en el curso. </p> <p>Dependiendo del modelo de su curso, usted puede permitir que sean visibles por defecto para todos los alumnos, o sólo para usted. Hacer visible para todos le permite que cada estudiante de su opinión sobre el trabajo de los demás y que aprendan a publicar su trabajo ante el mundo.  Si decide mantenerlos invisibles usted le pregunta lo mismo a todos y evita que se copien entre ellos.</p> <p>Esta herramienta tiene un <i>Texto Introductorio</i> que le permite crear una pregunta, dar una guía, publicar una fecha límite o aquello que considere relevante.</p>";
+$langHTracking = "Ayuda del seguimiento";
+$langTrackingContent = "<p>El segumiento le ayuda a usted a ver el desarrollo de sus estudiantes : se conectaron al sistema, cuando, cuantas veces? Cómo les va en las pruebas? Han entregado sus trabajos? Cuando? Si utiliza cursos Scorm, puede saber cuanto tiempo gasta su alumno por capítulo o módulo. Le sa información a dos niveles: <ul><li><b>Globalmente</b>: Cuantos estudiantes ingresan al curso? Qué páginas son las más visitadas y qué enlaces los más frecuentados?</i> <li><b>Nominativamente</i>: Qué páginas ha visitado el usuario XXX? Cuál fue su puntaje en los exámenes? Cuando se conectó por última vez?</li>>/ul>";
+$langHSettings = "Ayuda de Configuración del Curso";
+$langSettingsContent = "<p>La configuración del curso le permite manejar los parámetros globales de su curso: Titulo, código, idioma, nombre de los docentes, etc.</p> <p>Las opciones situadas en la mitad de la página se refieren a la confidencialidad: es el curso público o privado? Pueden los estudiantes registrarse o no? Usted puede manejar esta configuración como desee : registro abierto durante una semana > pedir a los estudiantes que se registren > cerrar el acceso a nuevos registros > remover intrusos a través de la lista de usuarios. De esta forma controla el acceso sin la carga administrativa de manejar los usuarios.</p> <p>Al final de la página, puede hacer una copia del curso o eliminarlo. La copia generará una copia de respaldo en su disco duro. Así resultan 2 copias del mismo curso. Si ha hecho la copia puede eliminarlo. Usted no tendrá permisos para restaurar el curso pero si el adminsitrador del sistema. De esta forma usted mantiene copia de los documentos en su disco duro. Necesitará , un descompresor como  Winzip® para descomprimir el archivo. Note que la copia no elimina el curso.</p>";
+$langHExternal = "Ayuda de añadir un enlace";
+$langExternalContent = "<p>Dokeos es una herramienta modular. Usted puede mostrar y esconder las herramientas que desee, de acuerdo a su proyecto o a sus etapas cronológicas. Pero usted también puede añadir sus herramientas o herramientas externas al portal Dokeos. De esta forma usted personalizarà su pàgina inicial.</p> <p>To take possession of your page that way, you will Add links on it. These links can be of 2 types: <ul><li><b>External link</b>: you create on your home page a link to a website situated outside your course area. In this case, you will select Target= In a new window because you don\'t want that website to replace your Dokeos environment.</li> <li><b>Internal link</b>: you link towards a page or a tool inside your Dokeos course. To do this, you go first to that page or document or tool, you copy its URL from the URL bar of your browser (CTRL+C), then you go to Add a link and you paste this URL in the URL field and you give it the name you want. In this case, you will select Target=Same window because you will keep the Dokeos banner on top and the remain in the same environment.</li></ul> Once created, these links cannot be edited. To modify them, the only solution is to deactivate them then delete them, then restart from zero.</p>";
+$langClarContent3 = "</p><p><b>Pedagogía</b><p>Para los profesores, preparar un curso en internet es también un asunto  pedagógico.";
+$langClarContent4 = "está a vuestra disposición para ayudaros en las diferentes fases de la creación de vuestro proyecto: de la concepción de la herramienta en su integración en un dispositivo coherente y a su evaluatión en terminos del impacto sobre el aprendizaje.</p>";
+$langClarContent1 = "es el campous virtual de";
+$langClarContent2 = "Aquí, los profesores y los asitentes crean y administran las webs de los cursos, los estudiantes las consultan (documentos, agendas, informaciones diversos). Cuando proceda, los estudiantes realizan ejercicios, publican trabajos, toman parte en las discusiones via los foros...</p><b>Inscripción</b><p>Si usted es estudiante, sólo necesita inscribirse eligiendo \'Incribirme a los cursos (estudiante)\' y después marcar los cursos que usted desea seguir.</p><p>Si usted es profesor o asistente, inscribase de la misma manera, pero escogiendo \'Crear webs de cursos (profesor)\'. Usted tendrá que rellenar entonces un formulario precisando el código de un primer curso y su título. Una vez qze usted habrá validado esta elección, usted será conducido a la web que usted habrá creado y usted podrá modificar el contenido y la organisación a vuestro modo.</P><p>Si este portal de creación y de administración de cursos no os satisface, no dude en comunicarnoslo via la rúbrica \'Sugerencias\' accesible desde la página principal del campus (só después de haberse identificado).</p><p>El enlace a la inscripción s eencuentra en la página principal de la web en la esquina superior derecha.</p><b>Identificación personal (login)</b><p>En sus próximas visitas, para acceder a sus cursos, introduzca su nombre de usuario y su password en los campos de introducción de datos situados en la esquina superior derecha de la pantalla. La dirección de la web es";
+$langHGroups = "Ayuda: Grupos ";
+$langGroupsContent = "Esta herramienta le permite crear áreas para grupos de estudiantes y asignarles dos herramientas de colaboración: un foro de debate y una sección de documentación común donde pueden compartir, subir y organizar sus propios archivos (independiente del módulo Documentos, exclusivo para profesores y tutores). El área de documentos es privada, y el foro puede ser
+público o privado.
+<br/><br/>
+Esta puede ser una opción muy útil para tener secciones privadas de documentación y discusión para subgrupos de participantes en su curso. (Incluso podría hacer que cada alumno tuviese su <b>area de documentos</b> privada mediante esta herramienta, creando tantos grupos como alumnos y asignándoles un área de documentos privada a cada grupo.) ";
+$langGuide = "Manual";
+$langHCourseRolesRights = "Ayuda sobre Roles y derechos";
+$langCourseRolesRightsContent = "<p> En la página Descripción de roles y permisos de su curso puede definir exactamente <em>quién tiene permiso para realizar determinadas acciones en cada lugar</em>.
+</p> 
+
+<P>El concepto básico es que para cada herramienta del curso, Ud. pueda especificar quién puede ver el contenido de esa herramienta, añadir nuevos elementos y carpetas, editar una información, o borrar contenidos. Sin embargo, no es necesario que haga esto para cada uno de los usuarios. Los usuarios tienen roles dentro de su curso, como el de visitante invitado, miembro ordinario del curso, profesor ayudante y administrador del curso. En cada uno de estos roles se pueden especificar los permisos de cada herramienta. Ud. puede decidir que todos los usuarios tengan acceso al foro, pero que los invitados no puedan escribir en él - sólo los usuarios registrados. Ud. puede decidir que el profesor ayudante pueda añadir documentos a su curso, pero no borrarlos, etc.</p>
+
+<P>En la herramienta Usuarios de su curso, puede ver los roles de los usuarios y modificarlos (usando el botón modificar de la lista de usuarios).</p>
+
+<h3>Descripción de todos los roles del sitio</h3>
+<p>En Dokeos hay cinco roles. Son los roles que se pueden asignar a cada usuario en un curso. 
+<ul>
+              <li><strong>Visitante anónimo del curso</strong>: éste papel corresponde a cualquier persona situada en cualquier parte del mundo, cualquiera que cuente con un navegador e intente visitar su curso. Por defecto, estos usuarios no tienen derechos y no pueden visualizar el curso.</li>
+  <li><strong>Visitante registrado del curso</strong>: éste papel corresponde a quienes están registrados en la plataforma Dokeos, y visitan su curso sin haberse inscrito en él.. </li>
+  <li><strong>Miembro normal del curso</strong>: éste es el rol que tienen por defecto los usuarios que están inscritos en su curso. Lo habitual es que la mayoría de los usuarios tengan este rol y los administradores del curso asignen el rol de profesor ayudante a alguno de estos usuarios para que les ayuden en el desarrollo del curso.</li>
+  <li><strong>Profesor ayudante</strong>: éste papel de ayudante tiene muchos permisos. En la mayoría de las herramientas, el ayudante puede ver, añadir y modificar el contenido, pero no borrarlo. El profesor ayudante tampoco puede editar la configuración del curso o los derechos por defecto del curso.</li>
+  <li><strong>Administrador del curso</strong>: el administrador del curso tiene todos los derechos en el curso y puede realizar todas las posibilidades que éste le ofrece. El creador de un curso tiene automáticamente este papel por defecto.</li>
+</ul>
+
+<h3>Descripción de todos los permisos</h3>
+<p>En Dokeos hay cuatro permisos básicos:</p>
+ <ul>
+<li><strong>Ver</strong>: el permiso de ver una herramienta y sus contenidos.</li>
+<li><strong>Añadir</strong>: el permiso de añadir nuevos contenidos a una herramienta, por ej., añadir enlaces, categorías, documentos, directorios, publicaciones de los estudiantes, mensajes en los foros…</li>
+<li><strong>Editar</strong>: el permiso de editar un contenido en una herramienta, por ej., modificar el url de un enlace, el nombre de un directorio, el título y las palabras clave de un documento…</li>
+<li><strong>Borrar</strong>: el permiso de borrar un contenido en una herramienta, por ej., borrar enlaces, publicaciones de los estudiantes, mensajes de los foros, documentos... </li>
+</ul>
+
+<h3>Descripción de sitios</h3>
+<p>Cada curso y cada herramienta para cada curso tienen una localización independiente en Dokeos. Algunos ejemplos de localizaciones son:</p>
+<ul>
+<li>El curso  TEST_COURSE.</li>
+<li>La herramienta documentos del curso TEST_COURSE.</li>
+<li>La herramienta Agenda del curso Psicología101 </li>
+</ul>
+
+<h3>Configuración de los permisos</h3>
+<p>Un administrador de un curso, puede especificar quien puede hacer qué en cada lugar. En cada combinación de un rol y una localización, los cuatro permisos pueden ser fijados. Puede fijar los derechos para el profesor ayudante en la herramienta documentos, los derechos de adición para los usuarios normales del curso en la herramienta enlaces, etc.</p>
+";
+?>

@@ -1,0 +1,412 @@
+<html>
+<head>
+<title>Dokeos 1.8 installation guide</title>
+<link rel="stylesheet" href="./main/css/default.css" type="text/css" media="screen,projection" />
+<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+<div id="header1">
+<h1>Dokeos 1.8 installation guide</h1>
+</div>
+
+<div id="outerframe">
+<div id="main">
+
+<p>
+Thank you for downloading Dokeos!
+This text will guide you through the basics of installing Dokeos 1.8.
+Please read this fully before proceeding with the installation.
+</p>
+
+<p>
+The installation guide is also available in other languages, please see <a href="documentation/index.html">this overview page</a> for a list. The Dokeos website will notify when new translations are available.
+</p>
+<p>
+This is only a short installation guide. We are writing a manual with more info on installation, but this was not ready at the time of writing. When ready, this manual will be accessible through the <a href="http://www.dokeos.com/documentation.php">Dokeos documentation page</a>. You can read the work in progress manual on our <a href="http://www.dokeos.com/wiki/index.php/Manual">web writing area</a>. We also maintain a list of <a href="http://www.dokeos.com/wiki/index.php/FAQ">Frequently Asked Questions (FAQ)</a>.
+</p>
+
+<p>
+<b>Contents</b>
+<ol>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#install_new_version">Installing a new version of Dokeos</a></li>
+<li><a href="#upgrade_previous_version">Upgrading from a previous version of Dokeos</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#admin_section">Administration section</a></li>
+<li><a href="#ldap">Ldap (optional)</a></li>
+</ol>
+</p>
+
+<h2><a name="requirements">1. Requirements</a></h2>
+<p>Dokeos is a web application which requires some other software to function:</p>
+<ul>
+<li>A web server - we recommend <strong>Apache</strong></li>
+<li><strong>PHP</strong></li>
+<li>The <strong>MySQL</strong> database server</li>
+</ul>
+<p>
+These software packages have to be installed on the computer where you will install Dokeos. 
+<br/>
+You can install all these software packages separately, which often gives the best results. However, beginning users who want to test Dokeos can use a <i>combination package</i> that installs all these software packages in one simple install. If you want to use a combination package, we recommend Wamp (Download at <a href="http://www.wampserver.com/en/index.php">the WAMP5 website</a>, you also need the <a href="http://www.wampserver.com/en/add-ons.php">PHP4 add-on</a>) or <a href="http://www.apachefriends.org/en/index.html">XAMP</a>.
+</p>
+
+<h3>1.1. A web server</h3>
+<p>
+The Apache web server is recommended, and Dokeos is configured to use some Apache security enhancements if possible. However, other web servers will work too. For best security results, you need to have the Apache module mod_rewrite activated. The mod_rewrite rules for Dokeos are read from a .htaccess file in the courses folder, so Apache needs to allow this (AllowOverride FileInfo in httpd.conf).
+<br/><br/>
+<a href="http://httpd.apache.org/download.cgi">Download Apache web server</a><br/>
+<a href="http://httpd.apache.org/docs-project/">Apache web server manual</a>
+</p>
+
+<h3>1.2. PHP</h3>
+<p>
+You need PHP version 4.3.2 or later (4.x versions), configured with the following modules : mysql, zlib, preg, xml. PHP versions 5 or later are not supported by Dokes yet.
+You need the ldap module too if you want to use ldap with Dokeos.
+Most of the PHP4 compiled distributions are provided with these modules.
+Anyway, their presence is checked by the Dokeos install script.
+<br/><br/>
+<a href="http://www.php.net/downloads.php">Download PHP</a><br/>
+<a href="http://www.php.net/docs.php">PHP manual</a>
+</p>
+
+<p>
+Some users could meet problems if their PHP setting doesn't fit
+these ones:</p>
+<ul>
+<li>short_open_tag       = On</li>
+<li>safe_mode            = Off</li>
+<li>magic_quotes_gpc     = On</li>
+<li>magic_quotes_runtime = Off</li>
+</ul>
+<p>
+Past Dokeos versions required register_globals to be set to On. This is
+no longer necessary, this can be set to Off and Dokeos will work fine.
+</p>
+
+<p><strong>BSD users:</strong> these php libraries have to be included during php installation:</p>
+<ul>
+<li>php-mysql The mysql shared extension for php</li>
+<li>php-pcre The pcre shared extension for php</li>
+<li>php-session The session shared extension for php</li>
+<li>php-zlib The zlib shared extension for php</li>
+<li>php-xml</li>
+<li>(optional) php-ldap if you want to be able to use LDAP authentication</li>
+</ul>
+
+<h3>1.3. The MySQL database server</h3>
+<p>
+You will need a login and password allowing to administrate
+   and create at least one database. By default, Dokeos will create a new
+   database for each course created. It means your host should allow you to
+   create and administrate several databases. You can also install DOkeos using only one database, in that case you have to select this option during the
+   installation.
+<br/><br/>
+<a href="http://dev.mysql.com/downloads/">Download MySQL server</a><br/>
+<a href="http://dev.mysql.com/doc/mysql/en/index.html">MySQL server manual</a>
+</p>
+
+<p>
+<b>Note:</b><br/>
+It seems the backticks characters (`) inserted inside most of
+the Dokeos SQL queries since version 1.3 don't work with MySQL
+versions before 3.23.6.
+</p>
+
+<h3>1.4. Permissions</h3>
+<p>
+Furthermore, you need web Write access to web directory where Dokeos has been moved
+or unzipped to. On a Windows machine locally, this
+is not a problem. Remotely, you need to be allowed to CHMOD
+through FTP, telnet or any means.
+</p>
+
+<hr>
+<h2><a name="install_new_version">2. Installing a new version of Dokeos</a></h2>
+
+<p>
+2.1. Download the Dokeos 1.8 install package (.zip for Windows users or .tar.gz for all others) from the <a href="http://www.dokeos.com/download.php">Dokeos download page</a>.
+</p>
+
+<p>
+2.2. Unzip or untar the downloaded install package. 
+Most current operating systems
+   can do this with a built-in graphical application, if this doesn't work
+   you can open a commandline, go to the download directory and type
+   tar -zxvf dokeos-community-1.8.tar.gz
+</p>
+
+<p>
+2.3. Move by any means (FTP, SCP, local file copy) the contents of the 
+Dokeos install package to your website on your webserver (whether webroot or subdirectory). Your webserver can also be your local computer. Be sure to copy all the folders (archive, home, claroline, courses) as well as all the .php files.
+</p>
+
+<p>
+For Windows users who install Dokeos locally: if you use an Apache/PHP/MySQL combination package, just drag and drop the contents of the Dokeos install package into the web directory of the combination package:</p>
+<ul>
+<li><strong>EasyPHP</strong> - C:\Program Files\easyphp\www\</li>
+<li><strong>WAMP</strong> - C:\Program Files\wamp\www\
+<li><strong>XAMP</strong> - C:\Program Files\xamp\www\</li>
+</ul> 
+
+<p>
+2.4. The following directories need to be readable, writeable and executable for everyone:
+</p>
+<ul>
+<li>dokeos/main/inc/conf/</li>
+<li>dokeos/main/garbage/</li>
+<li>dokeos/main/upload/</li>
+<li>dokeos/archive/</li>
+<li>dokeos/courses/</li>
+<li>dokeos/home/</li>
+</ul>
+<p>
+On Linux, Mac OS X and BSD operating systems you can use the CHMOD 777 command for this.
+In Windows, you may need to check the properties of the folders (by right-clicking on them).
+</p>
+
+<p>
+2.5. The following files need to be readable and writeable for everyone:
+</p>
+<ul>
+<li>dokeos/main/inc/conf/claro_main.conf.php (if present)</li>
+<li>dokeos/home/*.html</li>
+</ul>
+<p>
+On Linux, Mac OS X and BSD operating systems you can use the CHMOD 666 command for this.
+In Windows, you may need to check the properties of the files and folders (by right-clicking on them).
+</p>
+
+<p>
+<b>NOTE:</b><br/>
+Do not modify the home_*.html files directly. Instead,
+choose "Configure the homepage" in the Dokeos administration section.
+</p>
+
+<p>
+2.6. Open a web browser and go to
+   http://www.yourserver.org/yoursite/dokeos/index.php
+
+   If you install Dokeos locally (not on a server) open:
+   http://localhost/dokeos/index.php
+</p>
+<p>
+2.7. Click on the install button and follow instructions.
+
+   Windows: with combination packages like easyphp, out of the box, login and password
+   for MySQL should probably remain empty.
+</p>
+<p>
+<strong>2.8. Configuration and security after installation</strong>
+</p>
+
+<ul>
+<li><strong>Protect your configuration file: </strong>
+make sure no one can overwrite it. You can find the config file in <em>(dokeos folder)</em>/main/inc/conf/claro_main.conf.php. Make it read-only (windows/xwindows: right-click the file to edit the properties. linux/bsd/macosx: use the chmod 444 command). The config file is created by Apache so you may need to be root user to change its permissions.</li>
+<li><strong>Protect your installation folder: </strong>
+if the <em>(dokeos folder)</em>/main/install folder is still accessible, someone could install over your existing version (you could lose your data that way). Move the folder somewhere out of the web directories so it is not accessible, change its name, or edit its properties so no one can read or execute it.</li>
+<li><strong>For better security: </strong>
+making the files world-writable will help you install, and solves many issues for people without much admin experience. However, it's better security to make the owner of the apache process (often called apache or www-data) also owner of all the dokeos files and folders. Ths way, these files need only be readable and writable by the Apache process owner, not by the entire world.</li>
+<li><strong>Configure your Dokeos installation: </strong>
+in the administration section of Dokeos, you can use the Dokeos Config Settings to adjust the behavior of your installation.</li>
+<li><strong>Configure Dokeos mail: </strong>
+most of Dokeos uses the mail settings from the php.ini file. However, the announcements tool uses phpMailer (another free software project) and the settings for this tool can be adjusted in <em>(dokeos folder)</em>/main/inc/conf/mail.conf.php.</li>
+</ul>
+
+<hr>
+<h2><a name="upgrade_previous_version">3. Upgrading from a previous version of Dokeos</a></h2>
+
+<p>
+Before upgrading we heavily recommend you do a full backup of the previous
+Dokeos directories and databases. If you are unsure how to achieve this
+please ask your hosting provider for advice.<br/></p>
+
+<p>
+<em>If you upgrade from Dokeos 1.8</em>, you can simply copy the new files of 2.0.1 over
+the files of the older version. You should not copy over the home, courses or archive folders, otherwise you might lose data. If you accidentally copy over those folders, you can simply replace them with the folders from your backup.<br/>
+
+<em>If you upgrade from a lower version of Dokeos (1.6.x)</em>,
+you'll have to use the built-in upgrade facility, as described below.
+</p>
+
+<p>
+3.1. Download the Dokeos 1.8 install package (.zip for Windows users or .tar.gz for all others) from the <a href="http://www.dokeos.com/download.php">Dokeos download page</a>.
+</p>
+
+<p>
+3.2. Unzip or untar the downloaded install package. 
+Most current operating systems
+   can do this with a built-in graphical application, if this doesn't work
+   you can open a commandline, go to the download directory and type
+   tar -zxvf dokeos-community-1.8.tar.gz
+</p>
+
+<p>
+3.3. Move the Dokeos directory to a different path from the previous version
+</p>
+<p>
+<b>WARNING:</b><br/>
+Do not delete the previous Dokeos installation directory before installing
+the new one. When the update is successfully finished, you can remove
+the old path.
+</p>
+<p>
+<b>TIP:</b><br/>
+If you want Dokeos 1.8 to be installed in the same directory as
+the previous version :
+
+<ul>
+<li>move the old directory to a new location (e.g. move dokeos/ to dokeos_old/)</li>
+<li>uncompress Dokeos 1.8 to the old version directory (e.g. uncompress Dokeos 2.0.1 to dokeos/)</li>
+<li>go to next step</li>
+</ul>
+</p>
+
+<p>
+3.4. The following files need to be readable and writeable for everyone:
+
+<ul>
+<li>dokeos/main/inc/conf/claro_main.conf.php (if present)</li>
+<li>dokeos/home/*.html</li>
+</ul>
+
+On Linux, Mac OS X and BSD operating systems you can use the CHMOD 666 command for this.
+In Windows, you may need to check the properties of the folders.
+</p>
+
+<p>
+<b>NOTE:</b><br/>
+Do not modify the home_*.html files directly. Instead,
+choose "Configure the homepage" in the Dokeos administration section.
+</p>
+
+<p>
+3.5. The following directories need to be readable, writeable and executable for everyone:
+
+<ul>
+<li>dokeos/main/inc/conf/</li>
+<li>dokeos/main/garbage/</li>
+<li>dokeos/main/upload/</li>
+<li>dokeos/archive/</li>
+<li>dokeos/courses/</li>
+<li>dokeos/home/</li>
+</ul>
+
+On Linux, Mac OS X and BSD operating systems you can use the CHMOD 777 command for this.
+In Windows, you may need to check the properties of the folders.
+</p>
+
+<p>
+3.6. Open a web browser and go to
+   http://www.yourserver.org/yoursite/dokeos/index.php
+
+   Windows locally, with e.g easyphp or another combination package, open:
+   http://localhost/dokeos/index.php
+</p>
+
+<p>
+3.7. Click on the install button, then click on "Update from Dokeos 1.6, 1.6.1, 1.6.2, 1.6.3" and follow the instructions.
+</p>
+
+<h2><a name="troubleshooting">4. Troubleshooting</a></h2>
+<p>
+In the future we will also provide instructions on how to do a "manual" install
+of Dokeos, by creating the database tables yourself.
+
+If you have any problems, go to the <a href="http://www.dokeos.com">Dokeos website</a> and ask a question on our
+<a href="http://www.dokeos.com/forum/">support forum</a>. Please read the previous messages first to see if there is
+already an answer to your question. We also maintain a list of
+<a href="http://www.dokeos.com/wiki/index.php/FAQ">Frequently Asked Questions</a>.
+</p>
+
+<h2><a name="admin_section">5. Administration section</a></h2>
+<p>
+To access the Dokeos administration section, open browser,
+go to your Dokeos adress and log in with the admin user.
+Then you will see a "Platform admin section" link in the header of the web page.
+</p>
+
+<h2><a name="ldap">6. LDAP</a></h2>
+<p>
+<i>This part is optional, only organisations with an LDAP server will need to read this.</i><br/>
+An LDAP module is already provided in Dokeos, but it has to be configured to make it work.
+</p>
+
+<p>
+<b>Compiling</b><br/>
+Linux servers: It's possible that you have to recompile php with ldap support.
+Newer distributions also allow downloading rpms for additional packages.
+</p>
+
+<p>
+<b>Activating LDAP in Dokeos</b><br/>
+In (dokeos folder)/main/inc/conf/claro_main.conf.php, around line 90, you see<br/>
+//for new login module<br/>
+//uncomment these to activate ldap<br/>
+//$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br/>
+//$extAuthSource['ldap']['newUser'] = "./main/auth/ldap/newUser.php";<br/>
+<br/>
+remove the // from the last two lines to activate LDAP.<br/>
+</p>
+
+<p>
+<b>Settings</b><br/>
+Ask the LDAP server admin for the settings:
+<ul>
+<li>ldap server name</li>
+<li>ldap server port (usually 389)</li>
+<li>ldap dc</li>
+</ul>
+You must enter these in
+(dokeos folder)/main/auth/ldap/ldap_var.inc.php
+<br/>
+//parameters for LDAP module<br/>
+$usesLDAP						=	TRUE;<br/>
+$usesCurriculum					=	FALSE;<br/>
+$ldaphost = "myldapserver.com";  // your ldap server<br/>
+$ldapport = 389;                 // your ldap server's port number<br/>
+$ldapDc = "dc=xx, dc=yy, dc=zz"; //domain<br/>
+</p>
+
+<p>
+<b>Teacher/student status</b><br/>
+If you wish, you can give teacher/student status to dokeos users according to settings in the ldap server.
+This is not a standard field however, so you'll have to change some code.
+main/auth/ldap/ldap_var.inc.php
+around line 189, function putUserInfoInClaroline ($login, $infoArray)
+</p>
+
+<p>
+if (<i>your criterium</i>)<br/>
+{<br/>
+   $statut = STUDENT;<br/>
+}<br/>
+else<br/>
+{<br/>
+   $statut = COURSEMANAGER;<br/>
+}<br/>
+</p>
+
+<p>
+If this seems too difficult, the simplest solution is to just put
+$statut = STUDENT; and give course manager rights through the administration section.
+</p>
+
+<p>
+<b>Protected LDAP servers</b><br/>
+Some LDAP servers do not support anonymous use of the directory services
+In this case, you need code that binds with a name and password - this code has already been provided,
+just ask on a forum or email for this.
+</p>
+
+<p>
+<hr>
+Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium<br/>
+Mail: info@dokeos.com
+<hr>
+</p>
+
+</div>
+</div>
+
+</body></html>

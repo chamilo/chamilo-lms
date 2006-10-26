@@ -1,0 +1,39 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langChat  = "Chat ";
+$langOnlineConference  = "Konferencija";
+$langWash  = "Izbeli";
+$langReset  = "Restartuj";
+$langSave  = "Snimi";
+$langRefresh  = "Osveži";
+$langIsNowInYourDocDir  = "je sada u vašem alatu Dokumenta. <br><B>ovaj fajl je vidljiv</B>";
+$langCopyFailed  = "Štampanje nije uspelo.";
+$langTypeMessage  = "Molim Vas, otkucajte vašu poruku!";
+$langConfirmReset  = "Da li zaista želite da obrišete sve poruke?";
+$langHasResetChat  = "je restartovao Chat   ";
+$langNoOnlineConference  = "Trenutno nema konferencije...";
+$langMediaFile  = "Audio ili video protok podataka uživo.";
+$langContentFile  = "Prezentacija";
+$langListOfParticipants  = "Lista u&#269;esnika";
+$langYourPicture  = "Vaša slika";
+$langOnlineDescription  = "Opis konferencije";
+$langOnlyCheckForImportantQuestion = "Molim Vas, obeležite ovu opciju samo za važna pitanja!";
+$langQuestion = "pitanje";
+$langClearList = "Obriši listu";
+$langWhiteBoard = "Bela tabla";
+$langHome = "Po&#269;etak";
+$langTextEditorDefault = "<h2>Word processor</h2> Isecite i prilepite ovde tekst iz Ms-Word® i onda izmenite. U&#269;esnici &#263;e mo&#263;i odmah da vide vaše izmene.";
+$langLinks = "Linkovi";
+$langStreaming = "Protok";
+$langStreamURL = "Adresa za povezivanje na konferenciju";
+$langStreamType = "Tip protoka podataka";
+$langLinkName = "Ime linka";
+$langLinkURL = "URL linka";
+$langWelcomeToOnlineConf = "Dobrodošli na <b>Online konferenciju</b>";
+$langNoLinkAvailable = "Ni jedan link nije dostupan";
+$langChat_reset_by = "Restartuj Chat";
+$OrFile = "Ili fajl";
+$langCallSent = "Poziv za Chat  je poslat. &#268;eka se odobrenje vašeg sagovornika.";
+$langChatDenied = "Vaš sagovornik je odbio vaš poziv.";
+?>

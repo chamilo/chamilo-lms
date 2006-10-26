@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Contacts>
+    <Contact>
+        <LastName>Gates</LastName>
+        <FirstName>Bill</FirstName>
+        <UserName>BillGates</UserName>
+        <Password>secret_password</Password>
+        <Email>bill.gates@microsoft.com</Email>
+        <OfficialCode>12345678</OfficialCode>
+        <PhoneNumber>001-123-456-789</PhoneNumber>
+        <Status>user</Status>
+        <Courses>COURSE1|COURSE2|COURSE3</Courses>
+    </Contact>
+    <Contact>
+        <LastName>Bush</LastName>
+        <FirstName>Georges</FirstName>
+        <UserName></UserName>
+        <Password></Password>
+        <Email>georges_bush@usa.org</Email>
+        <OfficialCode />
+        <PhoneNumber />
+        <Status>teacher</Status>
+        <Courses>COURSE2</Courses>
+    </Contact>
+</Contacts>

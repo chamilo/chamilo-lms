@@ -1,0 +1,180 @@
+<?php // $Id: index.php,v 1.44 2005/07/01 10:03:36 olivierb78 Exp $
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) Olivier Brouckaert
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+==============================================================================
+*/
+/**
+==============================================================================
+*	Index of the admin tools
+*
+*	@package dokeos.admin
+==============================================================================
+*/
+$langFile='survey_answer';
+$cidReset=true;
+session_start();
+$lang = $_REQUEST['lang'];
+$_SESSION["user_language_choice"]=$lang;
+require_once ('../inc/global.inc.php');
+//api_protect_admin_script();
+require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
+require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
+require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
+require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
+require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+//$tool_name=get_lang("AdministrationTools");
+$surveyid = $_REQUEST['surveyid'];
+$uid = $_REQUEST['uid'];
+$uid1 = $_REQUEST['uid1'];
+$db_name = $_REQUEST['db_name'];
+$temp = $_REQUEST['temp'];
+$mail = $_REQUEST['mail'];
+//$temp = 'template3';
+//$db_name = "stableJAZ";
+//$uid = 2;
+//$surveyid = 1; 
+$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+$sql_sname = "select * from $db_name.survey where survey_id='$surveyid'";
+$res_sname = api_sql_query($sql_sname,__FILE__,__LINE__);
+$obj_sname = mysql_fetch_object($res_sname);
+$surveyname = $obj_sname->title;
+$intro=$obj_sname->intro;
+if(isset($_POST['Next']))
+{
+ $firstname = $_REQUEST['firstname'];
+ $lastname = $_REQUEST['lastname'];
+ $temp = $_REQUEST['temp'];
+ $surveyid = $_REQUEST['surveyid'];
+ $uid = $_REQUEST['uid'];
+ $uid1 = $_REQUEST['uid1'];
+ $db_name = $_REQUEST['db_name'];
+ $email = $_REQUEST['email'];
+ $organization = $_REQUEST['organization'];
+ $age = $_REQUEST['age'];
+ if(isset($uid))
+	{$registered='Y';}
+ else{$registered='N';}
+ $user_table = Database :: get_main_table(MAIN_USER_TABLE);
+ $survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+ if($uid1!=""){
+	header("location:surveytemp_white.php?temp=$temp&surveyid=$surveyid&uid1=$uid1&db_name=$db_name&mail=$mail&lang=$lang");
+	exit;
+	}else{
+	header("location:surveytemp_white.php?temp=$temp&surveyid=$surveyid&uid1=$uid1&db_name=$db_name&mail=$mail&lang=$lang");
+	exit;
+  }
+}
+if($uid1){
+$survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+$sql_u="Select * from $survey_user_info_table where id='$uid1'";
+}
+else{
+	$sql_u="Select * from $user_table where user_id='$uid'";
+}
+$res = api_sql_query($sql_u,__FILE__,__LINE__);
+$obj=@mysql_fetch_object($res);
+$email=$obj->email;
+$rs=mysql_query("select * from $db_name.questions");
+$row=mysql_num_rows($rs);
+$page=ceil($row/4);
+
+if(isset($_GET[num])){
+	$num=$_GET[num];
+	if($num>$page){
+		header("Location:test.php");
+		exit;
+	}
+}else{
+	$num = 1;
+}
+$lower = $num*4-4;
+
+Display::display_header($tool_name);
+?><center><?api_display_tool_title($surveyname);?></center><?
+api_display_tool_title($tool_name);
+if($error_message)
+{
+Display::display_error_message($error_message);	
+}
+?>
+<link href="../css/survey_white.css" rel="stylesheet" type="text/css">
+
+<table width="727" style="border: 1px solid" border="0" align="center" cellpadding="2" cellspacing="0" bgcolor="#F6F5F5">
+  <tr>
+    <td width="23" height="21">&nbsp;</td>
+    <td height="21">&nbsp;</td>
+    <td width="20" height="21">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td valign="top">
+<table width="100%" height="132"  border="0" cellpadding="0" cellspacing="0" bgcolor="#F6F5F5">
+		  <form method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>">
+		   <!--<form method="post" action="surveytemp_white.php">-->
+		    <input type="hidden" name="uid" value="<?=$uid;?>">
+		    <input type="hidden" name="surveyid" value="<?=$surveyid;?>">
+		    <input type="hidden" name="db_name" value="<?=$db_name;?>">
+		    <input type="hidden" name="temp" value="<?=$temp;?>">
+		    <input type="hidden" name="email" value="<?=$email;?>">
+		    <input type="hidden" name="mail" value="<?=$mail;?>">
+			<input type="hidden" name="uid1" value="<?=$uid1;?>">
+			<input type="hidden" name="lang" value="<?=$lang;?>">
+		    <tr>
+            <td align='left'>
+			<?
+			echo $intro;
+			?>
+			</td>
+			</tr>
+			<tr><td>&nbsp;</td></tr>
+            <tr>
+			<td align="center">
+			<? if($num > "1"){?>
+			<input type="button" name="Back" value="<? if($lang=='french')echo 'Précédent'; else if($lang=='dutch')echo 'Terug'; else echo  'Back';?>" onClick="location.href('<?=$phpself?>?temp=<?=$temp?>&db_name=<?=$db_name?>&mail=<?=$mail?>&surveyid=<?=$surveyid?>&uid1=<?=$uid1?>&num=<?($num-1)?>');">
+			<?
+			} else{
+			?>
+			<input type="button" name="Back" value="<? if($lang=='french')echo 'Précédent'; else if($lang=='dutch') echo 'Terug'; else echo 'Back';?>" onClick="location.href('template1.php?temp=<?=$temp?>&db_name=<?=$db_name?>&uid1=<?=$uid1?>&mail=<?=$mail?>&surveyid=<?=$surveyid?>');">
+			<?
+			}
+			?>
+            <input type="submit" name="Next" value="<?if($lang=='french')echo 'Suivant'; else if($lang=='dutch')echo 'Volgende'; else echo 'Next' ;?>"></td>
+            </tr></form>
+          </table>
+	</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<?php
+/*
+==============================================================================
+		FOOTER
+==============================================================================
+*/
+Display::display_footer();
+?>

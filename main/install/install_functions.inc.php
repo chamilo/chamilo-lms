@@ -1,0 +1,958 @@
+<?php
+/**
+ * This function prints class=active_step $current_step=$param
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ */
+function step_active($param)
+{
+	global $current_step;
+
+	if ($param==$current_step)
+	{
+		echo 'class="current_step" ';
+	}
+}
+
+/**
+ * This function displays the Step X of Y -
+ */
+function display_step_sequence()
+{
+	global $current_step;
+	global $total_steps;
+
+	return get_lang('Step').' '.$current_step.' '.get_lang('Of').' '.$total_steps.' &ndash; ';
+}
+/**
+ * this function checks if a php extension exists or not
+ *
+ * @param string  $extentionName  name of the php extension to be checked
+ * @param boolean  $echoWhenOk  true => show ok when the extension exists
+ * @author Christophe Gesche
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version Dokeos 1.8, august 2006
+ */
+function check_extension($extention_name,$return_success=false, $return_failure=false)
+{
+	if(extension_loaded($extention_name))
+	{
+		return '<strong><font color="green">'.$return_success.'</font></strong>';
+	}
+	else
+		{
+		return '<strong><font color="red">'.$return_failure.'</font></strong>';
+		//echo "\t<li><b>$extentionName</b> <font color=\"red\">is missing (Dokeos can work without it)</font> (<a href=\"http://www.php.net/$extentionName\" target=\"_blank\">$extentionName</a>)</li>\n";
+		}
+	}
+
+
+/**
+ * This function checks if a php settings matches the recommended value
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version Dokeos 1.8, august 2006
+ */
+function check_php_setting($php_setting, $recommended_value, $return_success=false, $return_failure=false)
+{
+	$current_php_value = get_php_setting($php_setting);
+	if ( $current_php_value== $recommended_value)
+	{
+		return '<strong><font color="green">'.$current_php_value.' '.$return_success.'</font></strong>';
+	}
+	else
+	{
+		return '<strong><font color="red">'.$current_php_value.' '.$return_failure.'</font></strong>';
+	}
+}
+/**
+ * Enter description here...
+ *
+ * @param string $val a php ini value
+ * @return boolean: ON or OFF
+ * @author Joomla <http://www.joomla.org>
+ */
+function get_php_setting($val) {
+	$r =  (ini_get($val) == '1' ? 1 : 0);
+	return $r ? 'ON' : 'OFF';
+}
+
+/**
+ * This function checks if the given folder is writable
+ */
+function check_writable($folder)
+{
+	if (is_writable('../'.$folder))
+	{
+		return '<strong><font color="green">'.get_lang('Writable').'</font></strong>';
+	}
+	else
+	{
+		return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
+	}
+}
+
+/**
+ * this function returns a string "FALSE" or "TRUE" according to the variable in parameter
+ *
+ * @param integer  $var  the variable to convert
+ * @return  string  the string "FALSE" or "TRUE"
+ * @author Christophe Gesche
+ */
+function trueFalse($var)
+{
+	return $var?'true':'false';
+}
+
+/**
+ * this function returns a the value of a parameter from the configuration file
+ *
+ * WARNING - this function relies heavily on global variables $updateFromConfigFile
+ * and $configFile, and also changes these globals. This can be rewritten.
+ *
+ * @param string  $param  the parameter which the value is returned for
+ * @return  string  the value of the parameter
+ * @author Olivier Brouckaert
+ */
+function get_config_param($param)
+{
+	global $configFile, $updateFromConfigFile;
+
+	if(empty($updateFromConfigFile))
+	{
+		if(file_exists($_POST['updatePath'].'main/include/config.inc.php'))
+		{
+			$updateFromConfigFile='main/include/config.inc.php';
+		}
+		elseif(file_exists($_POST['updatePath'].'main/inc/conf/claro_main.conf.php'))
+		{
+			$updateFromConfigFile='main/inc/conf/claro_main.conf.php';
+		}
+		else
+		{
+			return;
+		}
+	}
+
+	if(is_array($configFile) && isset($configFile[$param]))
+	{
+		return $configFile[$param];
+	}
+	elseif(file_exists($_POST['updatePath'].$updateFromConfigFile))
+	{
+		$configFile=array();
+
+		$temp=file($_POST['updatePath'].$updateFromConfigFile);
+
+		$val='';
+
+		foreach($temp as $enreg)
+		{
+			if(strstr($enreg,'='))
+			{
+				$enreg=explode('=',$enreg);
+
+				if($enreg[0][0] == '$')
+				{
+					list($enreg[1])=explode(' //',$enreg[1]);
+
+					$enreg[0]=trim(str_replace('$','',$enreg[0]));
+					$enreg[1]=str_replace('\"','"',ereg_replace('(^"|"$)','',substr(trim($enreg[1]),0,-1)));
+
+					if(strtolower($enreg[1]) == 'true')
+					{
+						$enreg[1]=1;
+					}
+					if(strtolower($enreg[1]) == 'false')
+					{
+						$enreg[1]=0;
+					}
+					else
+					{
+						$implode_string=' ';
+
+						if(!strstr($enreg[1],'." ".') && strstr($enreg[1],'.$'))
+						{
+							$enreg[1]=str_replace('.$','." ".$',$enreg[1]);
+							$implode_string='';
+						}
+
+						$tmp=explode('." ".',$enreg[1]);
+
+						foreach($tmp as $tmp_key=>$tmp_val)
+						{
+							if(eregi('^\$[a-z_][a-z0-9_]*$',$tmp_val))
+							{
+								$tmp[$tmp_key]=get_config_param(str_replace('$','',$tmp_val));
+							}
+						}
+
+						$enreg[1]=implode($implode_string,$tmp);
+					}
+
+					$configFile[$enreg[0]]=$enreg[1];
+
+					if($enreg[0] == $param)
+					{
+						$val=$enreg[1];
+					}
+				}
+			}
+		}
+
+		return $val;
+	}
+}
+
+/**
+*	Return a list of language directories.
+*	@todo function does not belong here, move to code library,
+*	also see infocours.php which contains similar function
+*/
+function get_language_folder_list($dirname)
+{
+	if ($dirname[strlen($dirname)-1] != '/') $dirname .= '/';
+	$handle = opendir($dirname);
+	$language_list = array();
+
+	while ($entries = readdir($handle))
+	{
+		if ($entries=='.' || $entries=='..' || $entries=='CVS'  || $entries == '.svn') continue;
+		if (is_dir($dirname.$entries))
+		{
+			$language_list[] = $entries;
+		}
+	}
+
+	closedir($handle);
+
+	return $language_list;
+}
+
+/*
+==============================================================================
+		DISPLAY FUNCTIONS
+==============================================================================
+*/
+
+
+/**
+*	Displays a form (drop down menu) so the user can select
+*	his/her preferred language.
+*/
+function display_language_selection_box()
+{
+	$langNameOfLang = get_lang('NameOfLang');
+
+	//get language list
+	$dirname = '../lang/';
+	$language_list = get_language_folder_list($dirname);
+	sort($language_list);
+	$language_to_display = $language_list;
+
+	//display
+	echo "\t\t<select name=\"language_list\">\n";
+
+	$default_language = 'english';
+	foreach ($language_to_display as $key => $value)
+	{
+		if ($value == $default_language) $option_end = ' selected="selected">';
+		else $option_end = '>';
+		echo "\t\t\t<option value=\"$value\"$option_end";
+
+		echo $value;
+		echo "</option>\n";
+	}
+
+	echo "\t\t</select>\n";
+}
+
+/**
+ * This function displays a language dropdown box so that the installatioin
+ * can be done in the language of the user
+ */
+function display_language_selection()
+{ ?>
+	<h1>Welcome to the Dokeos installer!</h1>
+	<h2><?php echo display_step_sequence(); ?>Installation Language</h2>
+	<p>Please select the language you'd like to use while installing:</p>
+	<form id="lang_form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<?php display_language_selection_box(); ?>
+		<input type="submit" name="step1" value="Next &gt;" />
+	</form>
+<?php }
+
+/**
+ * This function displays the requirements for installing Dokeos.
+ *
+ * @param unknown_type $installType
+ * @param unknown_type $badUpdatePath
+ * @param unknown_type $update_from_version
+ *
+ * @author unknow
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+*/
+function display_requirements($installType, $badUpdatePath, $update_from_version)
+{
+	echo '<h2>'.display_step_sequence().get_lang('Requirements')."</h2>\n";
+
+	echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
+	echo get_lang('MoreDetails').' <a href="../../installation_guide.html" target="_blank">read the installation guide</a>.<br />'."\n";
+
+	//	SERVER REQUIREMENTS
+	echo '<div class="RequirementHeading"><h1>'.get_lang('ServerRequirements').'</h1>';
+	echo '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
+	echo '<div class="RequirementContent">';
+	echo '<table class="requirements">
+			<tr>
+				<td class="requirements-item">'.get_lang('PHPVersion').'>= 4.1.0</td>
+				<td class="requirements-value">';
+					if (phpversion() < '4.1')
+					{
+						echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
+					}
+					else
+					{
+						echo '<strong><font color="green">'.get_lang('PHPVersionOK'). ' '.phpversion().'</font></strong>';
+					}
+	echo '		</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">session '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('session',get_lang('OK'), get_lang('ExtensionSessionsNotAvailable')).'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">MySQL '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('mysql',get_lang('OK'), get_lang('ExtensionMySQLNotAvailable')).'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">zlib '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('zlib',get_lang('OK'), get_lang('ExtensionZlibNotAvailable')).'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">Regular Expressions '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('pcre',get_lang('OK'), get_lang('ExtensionPCRENotAvailable')).'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">XML '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('xml',get_lang('OK'), get_lang('ExtensionZlibNotAvailable')).'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">LDAP '.get_lang('support').'('.get_lang('Optional').')</td>
+				<td class="requirements-value">'.check_extension('ldap',get_lang('OK'), get_lang('ExtensionLDAPNotAvailable')).'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">GD '.get_lang('support').'('.get_lang('Optional').')</td>
+				<td class="requirements-value">'.check_extension('gd',get_lang('OK'), get_lang('ExtensionGDNotAvailable')).'</td>
+			</tr>
+		  </table>';
+	echo '	</div>';
+	echo '</div>';
+
+	// RECOMMENDED SETTINGS
+	// Note: these are the settings for Joomla, does this also apply for Dokeos?
+	// Note: also add upload_max_filesize here so that large uploads are possible
+	echo '<div class="RequirementHeading"><h1>'.get_lang('RecommendedSettings').'</h1>';
+	echo '<div class="RequirementText">'.get_lang('RecommendedSettingsInfo').'</div>';
+	echo '<div class="RequirementContent">';
+	echo '<table class="requirements">
+			<tr>
+				<th>'.get_lang('Setting').'</th>
+				<th>'.get_lang('Recommended').'</th>
+				<th>'.get_lang('Actual').'</th>
+			</tr>
+			<tr>
+				<td class="requirements-item"><a href="http://php.net/manual/features.safe-mode.php">Safe Mode</a></td>
+				<td class="requirements-recommended">OFF</td>
+				<td class="requirements-value">'.check_php_setting('safe_mode','OFF').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">Display Errors</td>
+				<td class="requirements-recommended">ON</td>
+				<td class="requirements-value">'.check_php_setting('display_errors','ON').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.file-uploads">File Uploads</a></td>
+				<td class="requirements-recommended">ON</td>
+				<td class="requirements-value">'.check_php_setting('file_uploads','ON').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-gpc">Magic Quotes GPC</a></td>
+				<td class="requirements-recommended">ON</td>
+				<td class="requirements-value">'.check_php_setting('magic_quotes_gpc','ON').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-runtime">Magic Quotes Runtime</a></td>
+				<td class="requirements-recommended">OFF</td>
+				<td class="requirements-value">'.check_php_setting('magic_quotes_runtime','OFF').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item"><a href="http://php.net/manual/security.globals.php">Register Globals</a></td>
+				<td class="requirements-recommended">OFF</td>
+				<td class="requirements-value">'.check_php_setting('register_globals','OFF').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">Output Buffering</td>
+				<td class="requirements-recommended">ON</td>
+				<td class="requirements-value">'.check_php_setting('output_buffering','ON').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">Session auto start</td>
+				<td class="requirements-recommended">OFF</td>
+				<td class="requirements-value">'.check_php_setting('session.auto_start','OFF').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">Short Open Tag</td>
+				<td class="requirements-recommended">ON</td>
+				<td class="requirements-value">'.check_php_setting('short_open_tag','ON').'</td>
+			</tr>
+		  </table>';
+	echo '	</div>';
+	echo '</div>';
+
+	// DIRECTORY AND FILE PERMISSIONS
+	echo '<div class="RequirementHeading"><h1>'.get_lang('DirectoryAndFilePermissions').'</h1>';
+	echo '<div class="RequirementText">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
+	echo '<div class="RequirementContent">';
+	echo '<table class="requirements">
+			<tr>
+				<td class="requirements-item">dokeos/main/inc/conf/</td>
+				<td class="requirements-value">'.check_writable('inc/conf/').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">dokeos/main/garbage/</td>
+				<td class="requirements-value">'.check_writable('garbage/').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">dokeos/main/upload/</td>
+				<td class="requirements-value">'.check_writable('upload/').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">dokeos/archive/</td>
+				<td class="requirements-value">'.check_writable('../archive/').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">dokeos/courses/</td>
+				<td class="requirements-value">'.check_writable('../courses/').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item">dokeos/home/</td>
+				<td class="requirements-value">'.check_writable('../home/').'</td>
+			</tr>
+			';
+	echo '</table>';
+	echo '	</div>';
+	echo '</div>';
+
+	if($installType == 'update' && (empty($_POST['updatePath']) || $badUpdatePath))
+	{
+		if($badUpdatePath)
+		{ ?>
+			<div style="color:red; background-color:white; font-weight:bold; text-align:center;">
+				Error!<br />
+				Dokeos <?php echo implode('|',$update_from_version); ?> has not been found in that directory.
+			</div>
+		<?php }
+		else
+		{
+			echo '<br />';
+		}
+		?>
+			<table border="0" cellpadding="5" align="center">
+			<tr>
+			<td>Old version root path:</td>
+			<td><input type="text" name="updatePath" size="50" value="<?php echo $badUpdatePath?htmlentities($_POST['updatePath']):$_SERVER['DOCUMENT_ROOT'].'/old_version/'; ?>" /></td>
+			</tr>
+			<tr>
+			<td colspan="2" align="center">
+				<input type="submit" name="step1" value="&lt; Back" />
+				<input type="submit" name="step2_update" value="Next &gt;" />
+			</td>
+			</tr>
+			</table>
+		<?php
+	}
+	else
+	{
+		$error=false;
+
+		//First, attempt to set writing permissions if we don't have them yet
+		//0xxx is an octal number, this is the required format
+		if(!is_writable('../inc/conf'))
+		{
+			$notwritable[]='../inc/conf';
+			@chmod('../inc/conf',0777);
+		}
+
+		if(!is_writable('../garbage'))
+		{
+			$notwritable[]='../garbage';
+			@chmod('../garbage',0777);
+		}
+
+		if(!is_writable('../upload'))
+		{
+			$notwritable[]='../upload';
+			@chmod('../upload', 0777);
+		}
+
+		if(!is_writable('../../archive'))
+		{
+			$notwritable[]='../../archive';
+			@chmod('../../archive',0777);
+		}
+
+		if(!is_writable('../../courses'))
+		{
+			$notwritable[]='../../courses';
+			@chmod('../../courses',0777);
+		}
+
+		if(!is_writable('../../home'))
+		{
+			$notwritable[]='../../home';
+			@chmod('../../home',0777);
+		}
+
+		if(file_exists('../inc/conf/claro_main.conf.php') && !is_writable('../inc/conf/claro_main.conf.php'))
+		{
+			$notwritable[]='../inc/conf/claro_main.conf.php';
+			@chmod('../inc/conf/claro_main.conf.php',0666);
+		}
+
+		//Second, if this fails, report an error
+		//--> the user will have to adjust the permissions manually
+		if(!is_writable('../inc/conf') ||
+		!is_writable('../garbage') ||
+		!is_writable('../upload') ||
+		!is_writable('../../archive') ||
+		!is_writable('../../courses') ||
+		!is_writable('../../home') ||
+		(file_exists('../inc/conf/claro_main.conf.php') && !is_writable('../inc/conf/claro_main.conf.php')))
+		{
+			$error=true;
+			?>
+				<div style="color:#cc0033; background-color:white; font-weight:bold; text-align:center;">
+				Warning:<br />
+				Some files or folders don't have writing permission. To be able to install Dokeos you should first change their permissions (using CHMOD). Please read the</font> <a href="../../installation_guide.html" target="blank">installation guide</a> <font color="#cc0033">.
+				<?php
+				if (is_array($notwritable) AND count($notwritable)>0)
+				{
+					echo '<ul>';
+					foreach ($notwritable as $value)
+					{
+						echo '<li>'.$value.'</li>';
+					}
+
+					echo '<ul>';
+				}
+				?>
+				</div>
+			<?php
+		}
+		// check wether a Dokeos configuration file already exists.
+		elseif(file_exists('../inc/conf/claro_main.conf.php'))
+		{
+				echo '<div style="color:#cc0033; background-color:white; font-weight:bold; text-align:center;">';
+				echo get_lang('WarningExistingDokeosInstallationDetected');
+				echo '</div>';
+		}
+		?>
+			<p align="center">
+			<input type="submit" name="step1" onclick="window.location='index.php';return false;" value="&lt; <?php echo get_lang('Previous'); ?>"/>
+			<input type="submit" name="step2_install" value="<?php echo get_lang("NewInstallation"); ?>" <?php if($error) echo 'disabled="disabled"'; ?> />
+
+		<?php
+		//real code
+/*		echo '<input type="submit" name="step2_update" value="Upgrade from Dokeos ' . implode(', ',$update_from_version) . '"';
+		if($error) echo ' disabled="disabled"';*/
+		//temporary code for alpha version, disabling upgrade
+		echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
+		echo ' disabled="disabled"';
+		//end temp code
+		echo ' />';
+		echo '</p>';
+	}
+}
+
+/**
+* Displays the license (GNU GPL) as step 2, with
+* - an "I accept" button named step3 to proceed to step 3;
+* - a "Back" button named step1 to go back to the first step.
+*/
+function display_license_agreement()
+{
+	echo '<h2>'.display_step_sequence().get_lang('Licence').'</h2>';
+	echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
+	echo '<p><a href="../license/gpl_print.txt">'.get_lang('PrintVers').'</a></p>';
+	?>
+	<table><tr><td>
+		<p><textarea cols="75" rows="15" wrap="virtual"><?php include('../license/gpl.txt'); ?></textarea></p>
+		</td>
+		</tr>
+		<tr>
+		<td>
+		<table width="100%">
+			<tr>
+				<td></td>
+				<td align="right">
+					<input type="submit" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" />
+					<input type="submit" name="step3" value="<?php echo get_lang('IAccept'); ?> &gt;" />
+				</td>
+			</tr>
+		</table>
+	</td></tr></table>
+	<?php
+}
+
+/**
+* Displays a parameter in a table row.
+* Used by the display_database_settings_form function.
+*/
+function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = 'true')
+{
+	echo "<tr>\n";
+	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
+	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update)
+	{
+		echo '<td><input type="hidden" name="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'.$parameter_value."</td>\n";
+	}
+	else
+	{
+		echo '<td><input type="text" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'."</td>\n";
+		echo "<td>$extra_notice</td>\n";
+	}
+	echo "</tr>\n";
+}
+
+/**
+ * Displays step 3 - a form where the user can enter the installation settings
+ * regarding the databases - login and password, names, prefixes, single
+ * or multiple databases, tracking or not...
+ */
+function display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm)
+{
+	if($installType == 'update')
+	{
+		$dbHostForm=get_config_param('dbHost');
+		$dbUsernameForm=get_config_param('dbLogin');
+		$dbPassForm=get_config_param('dbPass');
+		$dbPrefixForm=get_config_param('dbNamePrefix');
+		$enableTrackingForm=get_config_param('is_trackingEnabled');
+		$singleDbForm=get_config_param('singleDbEnabled');
+		$dbNameForm=get_config_param('mainDbName');
+		$dbStatsForm=get_config_param('statsDbName');
+		$dbScormForm=get_config_param('scormDbName');
+
+		$dbScormExists=true;
+
+		if(empty($dbScormForm))
+		{
+			if($singleDbForm)
+			{
+				$dbScormForm=$dbNameForm;
+			}
+			else
+			{
+				$dbScormForm=$dbPrefixForm.'scorm';
+
+				$dbScormExists=false;
+			}
+		}
+
+		if($singleDbForm)
+		{
+			$dbUserForm=$dbNameForm;
+		}
+		else
+		{
+			$dbUserForm=$dbPrefixForm.'dokeos_user';
+		}
+	}
+
+	echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
+	echo get_lang("DBSettingIntro");
+
+	?>
+	<br /><br />
+	</td>
+	</tr>
+	<tr>
+	<td>
+	<table width="100%">
+	<tr>
+	  <td width="40%"><?php echo get_lang('DBHost'); ?> </td>
+
+	  <?php if($installType == 'update'): ?>
+	  <td width="30%"><input type="hidden" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /><?php echo $dbHostForm; ?></td>
+	  <td width="30%">&nbsp;</td>
+	  <?php else: ?>
+	  <td width="30%"><input type="text" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /></td>
+	  <td width="30%"><?php echo get_lang('EG').' localhost'; ?></td>
+	  <?php endif; ?>
+
+	</tr>
+	<?php
+	//database user username
+	$example_login = get_lang('EG').' root';
+	display_database_parameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login);
+	//database user password
+	$example_password = get_lang('EG').' '.api_generate_password();
+	display_database_parameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
+	//database prefix
+	display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
+	//fields for the four standard Dokeos databases
+	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;');
+	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;');
+	display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;');
+	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;');
+	?>
+	<tr>
+	  <td><?php echo get_lang('EnableTracking'); ?> </td>
+
+	  <?php if($installType == 'update'): ?>
+	  <td><input type="hidden" name="enableTrackingForm" value="<?php echo $enableTrackingForm; ?>" /><?php echo $enableTrackingForm? get_lang('Yes') : get_lang('No'); ?></td>
+	  <?php else: ?>
+	  <td>
+		<input class="checkbox" type="radio" name="enableTrackingForm" value="1" id="enableTracking1" <?php echo $enableTrackingForm?'checked="checked" ':''; ?>/> <label for="enableTracking1"><?php echo get_lang('Yes'); ?></label>
+		<input class="checkbox" type="radio" name="enableTrackingForm" value="0" id="enableTracking0" <?php echo $enableTrackingForm?'':'checked="checked" '; ?>/> <label for="enableTracking0"><?php echo get_lang('No'); ?></label>
+	  </td>
+	  <?php endif; ?>
+
+	  <td>&nbsp;</td>
+	</tr>
+	<tr>
+	  <td><?php echo get_lang('SingleDb'); ?> </td>
+
+	  <?php if($installType == 'update'): ?>
+	  <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm? get_lang('One') : get_lang('Several'); ?></td>
+	  <?php else: ?>
+	  <td>
+		<input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm?'checked="checked" ':''; ?>/> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
+		<input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm?'':'checked="checked" '; ?>/> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
+	  </td>
+	  <?php endif; ?>
+
+	  <td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td><input type="submit" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" /> </td>
+		<?php if (mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false): ?>
+		<td colspan="2">
+			<div class="confirmation-message">
+				<div  style="float:left; margin-right:10px;">
+				<img src="../img/message_confirmation.png" alt="Confirmation" />
+				</div>
+				<div style="float:left;">
+				MySQL host info: <?php echo mysql_get_host_info(); ?><br />
+				MySQL server version: <?php echo mysql_get_server_info(); ?><br />
+				MySQL protocol version: <?php echo mysql_get_proto_info(); ?>
+			</div>
+				<div style="clear:both;"
+			</div>
+		</td>
+		<?php else: ?>
+		<td colspan="2">
+			<div class="error-message">
+				<div  style="float:left; margin-right:10px;">
+				<img src="../img/message_error.png" alt="Error" />
+				</div>
+				<div style="float:left;">
+				<strong>MySQL error: <?php echo mysql_errno(); ?></strong><br />
+				<?php echo mysql_error(); ?>
+				</div>
+			</div>
+		</td>
+		<?php endif; ?>
+	</tr>
+	<tr>
+	  <td><input type="submit" name="step2" value="&lt; <?php echo get_lang('Previous'); ?>" /></td>
+	  <td>&nbsp;</td>
+	  <td align="right"><input type="submit" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /></td>
+	</tr>
+	</table>
+	<?php
+}
+
+/**
+* Displays a parameter in a table row.
+* Used by the display_configuration_settings_form function.
+*/
+function display_configuration_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $display_when_update = 'true')
+{
+	echo "<tr>\n";
+	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
+	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update)
+	{
+		echo '<td><input type="hidden" name="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'.$parameter_value."</td>\n";
+	}
+	else
+	{
+		echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'."</td>\n";
+	}
+	echo "</tr>\n";
+}
+
+/**
+ * Displays step 4 of the installation - configuration settings about Dokeos itself.
+ */
+function display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $loginForm, $passForm)
+{
+	if($installType == 'update')
+	{
+		$languageForm=get_config_param('platformLanguage');
+		$emailForm=get_config_param('emailAdministrator');
+		list($adminFirstName,$adminLastName)=explode(' ',get_config_param('administrator["name"]'));
+		$adminPhoneForm=get_config_param('administrator["phone"]');
+		$campusForm=get_config_param('siteName');
+		$institutionForm=get_config_param('institution["name"]');
+		$institutionUrlForm=get_config_param('institution["url"]');
+		$encryptPassForm=get_config_param('userPasswordCrypted');
+		$allowSelfReg=get_config_param('allowSelfReg');
+	}
+	else
+	{
+		$languageForm = $_SESSION['install_language'];
+	}
+
+	echo "<h2>" . display_step_sequence() . get_lang("CfgSetting") . "</h2>";
+	echo '<p>'.get_lang('ConfigSettingsInfo').'</p>';
+
+	echo "</td></tr>\n<tr><td>";
+	echo "<table width=\"100%\">";
+
+	//First parameter: language
+	echo "<tr>\n";
+	echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>\n";
+	if($installType == 'update')
+	{
+		echo '<td><input type="hidden" name="languageForm" value="'.htmlentities($languageForm).'" />'.$languageForm."</td>\n";
+	}
+	else // new installation
+	{
+		echo '<td>';
+		echo "<select name=\"languageForm\">\n";
+		$dirname='../lang/';
+		if($dir=@opendir($dirname))
+		{
+			while($file=readdir($dir))
+			{
+				if($file != '.' && $file != '..' && $file != 'CVS' && $file != '.svn' && is_dir($dirname.$file))
+				{
+					echo '<option value="'.$file.'"';
+					if($file == $languageForm) echo ' selected="selected"';
+					echo ">$file</option>\n";
+				}
+			}
+			closedir($dir);
+		}
+
+		echo '</select>';
+		echo "</td>\n";
+	}
+	echo "</tr>\n";
+
+	//Second parameter: Dokeos URL
+	echo "<tr>\n";
+	echo '<td>'.get_lang('DokeosURL').' (<font color="#cc0033">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>\n";
+	echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.htmlentities($urlForm).'" />'."</td>\n";
+	echo "</tr>\n";
+
+	//Parameter 3: administrator's email
+	display_configuration_parameter($installType, get_lang("AdminEmail"), "emailForm", $emailForm);
+
+	//Parameter 4: administrator's last name
+	display_configuration_parameter($installType, get_lang("AdminLastName"), "adminLastName", $adminLastName);
+
+	//Parameter 5: administrator's first name
+	display_configuration_parameter($installType, get_lang("AdminFirstName"), "adminFirstName", $adminFirstName);
+
+	//Parameter 6: administrator's telephone
+	display_configuration_parameter($installType, get_lang("AdminPhone"), "adminPhoneForm", $adminPhoneForm);
+
+	//Parameter 7: administrator's login
+	display_configuration_parameter($installType, get_lang("AdminLogin"), "loginForm", $loginForm, false);
+
+	//Parameter 8: administrator's password
+	display_configuration_parameter($installType, get_lang("AdminPass"), "passForm", $passForm, false);
+
+	//Parameter 9: campus name
+	display_configuration_parameter($installType, get_lang("CampusName"), "campusForm", $campusForm);
+
+	//Parameter 10: institute (short) name
+	display_configuration_parameter($installType, get_lang("InstituteShortName"), "institutionForm", $institutionForm);
+
+	//Parameter 11: institute (short) name
+	display_configuration_parameter($installType, get_lang("InstituteURL"), "institutionUrlForm", $institutionUrlForm);
+
+	?>
+	<tr>
+	  <td><?php echo get_lang("EncryptUserPass"); ?> :</td>
+
+	  <?php if($installType == 'update'): ?>
+	  <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php echo $encryptPassForm? get_lang("Yes") : get_lang("No"); ?></td>
+	  <?php else: ?>
+	  <td>
+		<input class="checkbox" type="radio" name="encryptPassForm" value="1" id="encryptPass1" <?php echo $encryptPassForm?'checked="checked" ':''; ?>/> <label for="encryptPass1"><?php echo get_lang("Yes"); ?></label>
+		<input class="checkbox" type="radio" name="encryptPassForm" value="0" id="encryptPass0" <?php echo $encryptPassForm?'':'checked="checked" '; ?>/> <label for="encryptPass0"><?php echo get_lang("No"); ?></label>
+	  </td>
+	  <?php endif; ?>
+
+	</tr>
+	<tr>
+	  <td><?php echo get_lang("AllowSelfReg"); ?> :</td>
+
+	  <?php if($installType == 'update'): ?>
+	  <td><input type="hidden" name="allowSelfReg" value="<?php echo $allowSelfReg; ?>" /><?php echo $allowSelfReg? get_lang("Yes") : get_lang("No"); ?></td>
+	  <?php else: ?>
+	  <td>
+		<input class="checkbox" type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg?'checked="checked" ':''; ?>/> <label for="allowSelfReg1"><?php echo get_lang("Yes").' '.get_lang("Recommended"); ?></label>
+		<input class="checkbox" type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg?'':'checked="checked" '; ?>/> <label for="allowSelfReg0"><?php echo get_lang("No"); ?></label>
+	  </td>
+	  <?php endif; ?>
+
+	</tr>
+	<tr>
+	  <td><?php echo get_lang("AllowSelfRegProf"); ?> :</td>
+
+	  <?php if($installType == 'update'): ?>
+	  <td><input type="hidden" name="allowSelfRegProf" value="<?php echo $allowSelfRegProf; ?>" /><?php echo $allowSelfRegProf? get_lang("Yes") : get_lang("No"); ?></td>
+	  <?php else: ?>
+	  <td>
+		<input class="checkbox" type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" <?php echo $allowSelfRegProf?'checked="checked" ':''; ?>/> <label for="allowSelfRegProf1"><?php echo get_lang("Yes"); ?></label>
+		<input class="checkbox" type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" <?php echo $allowSelfRegProf?'':'checked="checked" '; ?>/> <label for="allowSelfRegProf0"><?php echo get_lang("No"); ?></label>
+	  </td>
+	  <?php endif; ?>
+
+	</tr>
+	<tr>
+	  <td><input type="submit" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" /></td>
+	  <td align="right"><input type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" /></td>
+	</tr>
+	</table>
+	<?php
+}
+
+/**
+* After installation is completed (step 6), this message is displayed.
+*/
+function display_after_install_message($installType, $nbr_courses)
+{
+	?>
+	<h2><?php echo display_step_sequence() . get_lang("CfgSetting"); ?></h2>
+
+	<?php echo get_lang('FirstUseTip'); ?>
+
+	<?php if($installType == 'update' && $nbr_courses > MAX_COURSE_TRANSFER): ?>
+	<br><br>
+	<font color="red"><b>Warning :</b> You have more than <?php echo MAX_COURSE_TRANSFER; ?> courses on your Dokeos platform ! Only <?php echo MAX_COURSE_TRANSFER; ?> courses have been updated. To update the other courses, <a href="update_courses.php"><font color="red">click here</font></a>.</font>
+	<?php endif; ?>
+
+	<br><br>
+	<b>Security advice :</b> To protect your site, make read-only (CHMOD 444) 'main/inc/conf/claro_main.conf.php' and 'main/install/index.php'.
+	<br><br><br><br>
+
+	</form>
+	<a href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
+	<?php
+}
+?>

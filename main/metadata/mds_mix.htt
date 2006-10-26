@@ -1,0 +1,115 @@
+<!-- {-mds_mix.htt-} -->                 <!-- for Dokeos metadata/search.php -->
+                                                             <!-- 2005/04/14 -->
+
+<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
+
+<!-- {-MDSEARCH-} -->
+
+<h3>Metadata {-L Search-}</h3>
+
+{-P traceinfo-}
+
+<div id="resultstable"><table class="wide">
+    <tr>
+        <td colspan="2" class="bg1">&#xa0;</td><td class="bg2">&#xa0;</td>
+        <td class="bg1">&#xa0;</td>            <td class="bg2">&#xa0;</td>
+    </tr>
+{-R item C RESULTROW-}
+    <tr>
+        <td colspan="2" class="bg1">&#xa0;</td><td class="bg2">&#xa0;</td>
+        <td class="bg1">&#xa0;</td>            <td class="bg2">&#xa0;</td>
+    </tr>
+</table></div>
+
+<div>
+{-R item C RESULTTHUMB-}
+</div>
+
+<div onMouseUp="if ((kw = pU_clicked(event))) pU_select(kw); else pU_hide();">
+
+<input type="text" id="kwds_string" class="kwl" onKeyUp="takeTypeIn(this, 150, -100, '60%'); return true;"/><br/>
+
+<form action="{-P self-}" method="post">
+
+
+    {-L SearchCrit-}<br/>
+    <textarea rows=10 name="mdsc" id="mdsc"></textarea>
+
+
+
+<input type="hidden" id="kwdswere_string" name="kwdswere_string"/>
+
+<input type="submit" value="{-L Search-}" onClick="document.getElementById('kwdswere_string').value = document.getElementById('kwds_string').value; return prepSearch(event);"></input>
+
+<div id="popup" noWrap="1" class="pup">
+    Working...
+</div>
+
+</form>
+
+{-T keywordscache != empty 
+
+<div noWrap="1" id="maindiv">
+    <input type="button" class="btn" value="+" onClick="if (this.value == '+') deselectAll(event, this); openOrClose(this);"/>
+    <input type="button" class="btm" id="btnOpenOrCloseAll" value="++" onClick="openOrCloseAll(this);"/>
+    <input type="button" class="btn" value="?" onClick="openOrCloseHelp(this)"/>
+    &#xa0;{-L ClickKw-}
+    {-P keywordscache-}
+</div>
+
+<div id='moreHelp' class='dvc'>
+    {-L KwHelp-}
+</div>
+ -}
+
+{-T keywordscache == empty 
+<div noWrap="1" id="maindiv">&#xa0;</div>
+ -}
+
+</div><!-- onMouseUp -->
+
+<!<!------------------------  End Of script Output  ---------------------->
+
+
+<!-- {-RESULTROW-} -->
+
+{-D info {-X metadata/lom/lifeCycle/contribute[1]/entity-}-}
+{-T info != empty D info {-P info-}, {-X parent/@identifier-}-}
+{-T info == empty D info X parent/@identifier-}
+<tr>
+    <td colspan="2">{-P info-}: {-X metadata/lom/general/title-}</td>
+    <td><span class="lbs" onClick="makeWindow('{-X @url-}', '')"><small>Open</small></span></td>
+    <td><span class="lbs" onClick="makeWindow('{-P index-}?eid={-U {-V @eid-}-}', '')"><small>MD</small></span></td>
+    <td>{-X @eid-}</td>
+</tr>
+
+
+<!-- {-RESULTTHUMB-} -->
+
+{-D thumb {-X resource/file[1]/@href-}-}{-E check_is_thumb xxx-}
+{-T thumb != empty 
+{-D info {-X metadata/lom/lifeCycle/contribute[1]/entity-}-}
+{-T info != empty D info {-P info-}, {-X parent/@identifier-}-}
+{-T info == empty D info X parent/@identifier-}
+<img class="lbs" title="{-P info-}: {-X metadata/lom/general/title-}" onClick="makeWindow('{-X @url-}', '')" src="{-X @brl-}/{-P thumb-}"/>
+ -}
+
+<!-- {-HEAD-} -->
+
+<link rel="stylesheet" type="text/css" href="md_styles.css">
+
+<script language="JavaScript" src="md_script.js"></script>
+<script language="JavaScript">var kwdswere = "{-P kwdswere_string-}";</script>
+
+
+<!-- {-HTTP-} -->
+
+Expires: Mon, 26 Jul 1997 05:00:00 GMT
+
+
+<!-- {-DEFAULTMix-} -->
+
+<searchresults/>
+
+
+<!-- {--} -->

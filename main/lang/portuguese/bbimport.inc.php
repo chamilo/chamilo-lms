@@ -1,0 +1,23 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langViewCourseMaterialImport  = "Ver material do curso tal como foi importado";
+$langViewExternalLinksImport  = "Visualizar ligações externas tal como foram importadas";
+$langViewForumImport  = "Visualizar fórum tal como foi importado";
+$langImportCourseMaterial  = "Importar material de curso (Ferramenta \\\"Material do Curso\\\" do Blackboard ";
+$langImportExternalLinks  = "Importar ligações (Ferramenta \\\"Ligações Externas\\\" do Blackboard)";
+$langImportForum  = "Importar fóruns (Ferramenta \\\"Quadro de Discussões\\\" do Blackboard)";
+$langToolInfo  = "Esta ferramenta importa cursos do Blackboard 5.5 (Material de Curso, Quadro de Discussões e Ligações Externas)";
+$langToolName = "Importar cursos do Blackboard";
+$langSelectCoursePackage = "Seleccionar um pacote de curso";
+$langPackageAlreadySelected = "Já seleccionou um pacote";
+$langFirstSelectPackage = "É necessário seleccionar primeiro um pacote e abrí-lo antes de poder prosseguir com a importação";
+$langCourseToMigrate = "Curso a transferir";
+$langSelectPackage = "Seleccione um pacote";
+$langOpenPackageForImporting = "Abrir este pacote para importação";
+$langInformation = "Informação sobre o processo de importação";
+$langChooseImportOptions = "Escolha as opções de importação";
+$langCheckWhatIsImported = "Pode verificar para ver o que será importado antes de iniciar o processo de importação";
+$langStartImporting = "Iniciar importação";
+$langImport = "Importar";
+?>

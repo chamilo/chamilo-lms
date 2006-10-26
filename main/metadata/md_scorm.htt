@@ -1,0 +1,17 @@
+<!-- {-MD_SCORM.HTT-} -->                 <!-- for Dokeos metadata/index.php -->
+                                                             <!-- 2005/03/15 -->
+
+<!-- Copyright (C) 2004 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
+
+
+<!-- {-METADATA-} -->
+
+<textarea rows="30" style="width: 100%" name="mdt" id="mdt">{-H {-P mdt-}-}</textarea>
+
+
+<!-- {-HTTP-} -->
+
+Expires: Mon, 26 Jul 1997 05:00:00 GMT
+
+
+<!-- {--} -->

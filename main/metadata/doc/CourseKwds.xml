@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="iso-8859-1"?>                 <!-- AquaKwd.xml -->
+<!-- Copyright (C) Jean.Dhont@UGent.be, 2004/01/15 -->
+<!-- Test subset by René Haentjens -->
+
+<all-keywords title="Aquaculture&#xa0;Keywords">
+<organisms comment=" (test subset, more or less in systematical order)">
+	<fish postit="poisson, vis">
+		<salmon_trout_smelt>
+			<atlantic-salmon_salmo-salar/>
+			<pacific-salmon_oncorhynchus-mykiss/>
+			<rainbow-trout_salmo-gairdneri/>
+		</salmon_trout_smelt>
+		<flatfish>
+			<flounder_paralichthys-olivaceus/>
+			<halibut_hippoglossus-hippoglossus/>
+			<sole_pleuronectes/>
+			<plaice_pleuronectes-platessa/>
+			<turbot_scophthalmus-maximus/>
+			<flatfish-nei/>
+		</flatfish>
+		<herring_sardine_anchovy>
+		</herring_sardine_anchovy>
+		<tuna_bonito_billfish/>
+		<shark_ray/>
+	</fish>
+	<crustacean>
+		<brine-shrimp_artemia>
+		</brine-shrimp_artemia>
+		<crab>
+			<mudcrab_scylla/>
+			<mitten-crab_eriocheir/>
+		</crab>
+		<lobster>
+			<lobster_homarus/>
+			<spiny-lobster_panilurus/>
+		</lobster>
+	</crustacean>
+	<other-aquatic-organism>
+		<sponge/>
+		<coral/>
+	</other-aquatic-organism>
+	<non-aquatic-organism/>
+</organisms>
+<culture-aspects>
+	<life-stage>
+		<cyst/>
+		<hatching/>
+		<diapause/>
+		<egg/>
+		<larva>
+		</larva>
+		<post-larva/>
+		<fingerling/>
+		<juvenile/>
+		<adult/>
+		<broodstock/>
+		<life-cycle/>
+		<biomass/>
+		<other-life-stage/>
+	</life-stage>
+	<nutrition>
+		<diet>
+			<dry-diet/>
+			<microbound-diet_mbd/>
+			<wet-diet/>
+			<live-food/>
+			<diet-type-nei/>
+		</diet>
+		<feeding-biology>
+			<feed-intake/>
+			<digestion/>
+			<excretion/>
+		</feeding-biology>
+		<nutritional-aspect-nei/>
+	</nutrition>
+</culture-aspects>
+<geography>
+	<world>
+		<north-and-central-america>
+		</north-and-central-america>
+		<south-america>
+		</south-america>
+		<europe>
+			<belgium/>
+			<the-netherlands/>
+			<france/>
+			<italy/>
+			<spain_portugal/>
+			<greece/>
+			<uk_ireland/>
+			<norway_sweden_denmark_iceland/>
+			<european-country-nei/>
+		</europe>
+		<africa>
+		</africa>
+		<asia>
+		</asia>
+		<oceania>
+		</oceania>
+	</world>
+	<biotope>
+		<ocean_sea/>
+		<river/>
+		<bay_lagoon/>
+		<beach_coastline/>
+		<pond_lake/>
+		<salt-lake/>
+		<reef/>
+		<tundra_prairie_savanna/>
+		<mountain/>
+		<forest_jungle/>
+		<cultured-land/>
+		<biotope-nei/>
+	</biotope>
+</geography>
+</all-keywords>

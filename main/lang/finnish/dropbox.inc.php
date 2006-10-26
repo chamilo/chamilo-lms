@@ -1,0 +1,53 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$dropbox_lang["help"]  = "Apua";
+$dropbox_lang["aliensNotAllowed"]  = "Ainoastaan kurssin jäsenet voivat käyttää Dropboxia. Et ole tämän kurssin jäsen.";
+$dropbox_lang["dropbox"]  = "Dropbox";
+$dropbox_lang["queryError"]  = "Virhe tietokanta-ajossa. Ota yhteyttä ylläpitäjään.";
+$dropbox_lang["generalError"]  = "VIrhe on tapahtunut. Ota yhteyttä ylläpitäjään.";
+$dropbox_lang["badFormData"]  = "Lähetys epäonnistui: datavirhe. Ota yhteyttä ylläpitäjään.";
+$dropbox_lang["noUserSelected"]  = "Valitse käyttäjä, jolle haluat tiedoston lähettää.";
+$dropbox_lang["noFileSpecified"]  = "Et valinnut tiedostoa tallennettavaksi.";
+$dropbox_lang["tooBig"]  = "Et valinnut tiedostoa tai tiedosto on liian iso.";
+$dropbox_lang["uploadError"]  = "Tallentaminen epäonnistui yritä uudelleen, jos virhe toistuu ota yhteys ylläpitäjään.";
+$dropbox_lang["errorCreatingDir"]  = "Tiedostorakennetta ei voitu luoda. Ota yhteyttä ylläpitoon.";
+$dropbox_lang["installError"]  = "Tietokannan käsittelyssä tapahtui virhe. Ota yhteyttä ylläpitoon.";
+$dropbox_lang["uploadFile"]  = "Tallenna dokumentti";
+$dropbox_lang["authors"]  = "Tekijä";
+$dropbox_lang["description"]  = "Dokumentin kuvaus";
+$dropbox_lang["sendTo"]  = "Vastaanottaja";
+$dropbox_lang["receivedTitle"]  = "Vastaanotetut tiedostot";
+$dropbox_lang["sentTitle"]  = "Lähetetyt tiedostot";
+$dropbox_lang["confirmDelete"]  = "Tämä poistaa tiedon vain sinun listaltasi";
+$dropbox_lang["all"]  = "kaikki dokumentit";
+$dropbox_lang["workDelete"]  = "Poista merkintä listalta";
+$dropbox_lang["sentBy"]  = "Lähettäjä";
+$dropbox_lang["sentTo"]  = "Vastaanottaja";
+$dropbox_lang["anonymous"]  = "tuntematon";
+$dropbox_lang["ok"]  = "OK";
+$dropbox_lang["lastUpdated"]  = "Viimeksi päivitetty";
+$dropbox_lang["lastResent"]  = "Viimeisin";
+$dropbox_lang["overwriteFile"]  = "Korvaa aiemmin lähetetty tiedosto?";
+$dropbox_lang["orderBy"]  = "Järjestä";
+$dropbox_lang["lastDate"]  = "uusin";
+$dropbox_lang["firstDate"]  = "vanhin";
+$dropbox_lang["title"]  = "otsikko";
+$dropbox_lang["size"]  = "tiedostokoko";
+$dropbox_lang["author"]  = "tekijä";
+$dropbox_lang["sender"]  = "lähettäjä";
+$dropbox_lang["recipient"]  = "vastaanottaja";
+$dropbox_lang["docAdd"]  = "Tiedosto on lisätty onnistuneesti";
+$dropbox_lang["fileDeleted"]  = "Valitut tiedostot on poistettu Dropboxistasi.";
+$dropbox_lang["mailingAsUsername"]  = "Sähköpostilla";
+$dropbox_lang["mailingInSelect"]  = "--sähköpostilla--";
+$dropbox_lang["mailingSelectNoOther"]  = "Sähköpostitukseen ei voi yhdistää useampia vastaanottajia";
+$dropbox_lang["mailingFileSentTo"]  = "vastaanottaja";
+$dropbox_lang["mailingFileNotRegistered"]  = "(ei ole rekisteröitynyt tälle kurssille)";
+$dropbox_lang["justUploadInSelect"]  = "Tallenna itsellesi";
+$dropbox_lang["justUploadInList"]  = "Tallentaja";
+$dropbox_lang["mailingJustUploadNoOther"]  = "Et voi tallentaa itsellesi ja lähettää toiselle samalla kertaa";
+$dropbox_lang["giveFeedback"] = "Anna / muokkaa palautetta";
+$dropbox_lang["showFeedback"] = "Näytä palaute";
+$dropbox_lang["backList"] = "Takaisin";
+?>

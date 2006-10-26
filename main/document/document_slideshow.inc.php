@@ -1,0 +1,109 @@
+<?php // $Id: document_slideshow.inc.php 9246 2006-09-25 13:24:53Z bmol $
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+==============================================================================
+*/
+/**
+==============================================================================
+Developped by Patrick Cool
+patrick.cool@UGent.be
+Ghent University
+Mai 2004
+http://icto.UGent.be
+
+Please bear in mind that this is only an alpha release. 
+I wrote this quite quick and didn't think too much about it in advance. 
+It is not perfect at all but it is workable and usefull (I think)
+Do not consider this as a powerpoint replacement, although it has
+the same starting point. 
+
+*	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
+*	files (since these are the files that can be viewed in a browser) and creates
+*	a slideshow with it by allowing to go to the next/previous image.
+*	You can also have a quick overview (thumbnail view) of all the images in 
+*	that particular folder.
+*
+*	Each slideshow is folder based. Only
+*	the images of the chosen folder are shown. 
+*	
+*	This file has two large sections.
+*	1. code that belongs in document.php, but to avoid clutter I put the code here
+*	(not present) 2. the function resize_image that handles the image resizing
+*	
+*	@author Patrick Cool, responsible author
+*	@author Roan Embrechts, minor cleanup
+*	@package dokeos.document
+==============================================================================
+*/
+
+/*
+============================================================================== 
+	general code that belongs in document.php 
+	   
+	this code should indeed go in documents.php but since document.php is already a really ugly file with
+	too much things in one file , I decided to put the code for document.php here and to include this
+	file into document.php
+============================================================================== 
+*/ 
+
+// resetting the images of the slideshow = destroying the slideshow
+if ($_GET['action']=="exit_slideshow")
+{
+	$_SESSION["image_files_only"]=null;
+	unset($image_files_only); 
+}
+
+// We check if there are images in this folder by searching the extensions for .jpg, .gif, .png
+// grabbing the list of all the documents of this folder
+//$all_files=$fileList['name'];
+$array_to_search = (is_array($docs_and_folders))?$docs_and_folders:array();
+
+if(count($array_to_search) > 0) {
+	while(list ($key) = each ($array_to_search))
+	{
+		$all_files[] = basename($array_to_search[$key]['path']);
+		//echo basename($array_to_search[$key]['path']).'<br>';
+	}
+}
+
+
+// storing the extension of all the documents in an array 
+// and checking if there is a .jpg, .jpeg, .gif or .png file
+// if this is the case a slideshow can be made. 
+$all_extensions=array(); 
+$image_present=0;
+
+if ( count($all_files) > 0 )
+{
+	foreach ($all_files as $file)
+	{
+		$slideshow_extension=strrchr($file,"."); 
+		$slideshow_extension=strtolower($slideshow_extension); 
+		$all_extensions[]=$slideshow_extension;
+		if ($slideshow_extension==".jpg" OR $slideshow_extension==".jpeg" OR $slideshow_extension==".gif" or $slideshow_extension==".png")
+		{
+			$image_present=1;
+			$image_files_only[]=$file; 
+		}
+	}
+}
+	
+$_SESSION["image_files_only"]=$image_files_only; 
+?>

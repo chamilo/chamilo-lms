@@ -1,0 +1,220 @@
+		body
+		{
+			margin: 0; padding: 0;
+			font: 11px Tahoma,Verdana,sans-serif;
+		}
+		select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
+
+		#indicator
+		{
+			width: 29px;
+			height: 20px;
+			background-color: #eef;			
+			padding: 15px 20px;
+			position: absolute;
+			left: 0; top: 0;
+		}
+		* html #indicator
+		{
+			padding: 14px 22px;
+		}
+		#tools
+		{
+			width: 600px;
+			height: 50px;
+			background-color: #eef;
+			padding: 0;
+			position: absolute;
+			left: 69px;
+			border-left: 1px solid white;
+			border-bottom: 1px solid white;
+		}
+		#toolbar
+		{
+			width: 59px;
+			height: 435px;
+			background-color: #eef;
+			float: left;
+			text-align: center;
+			padding: 5px;
+			position: absolute;
+			top: 50px;
+			border-top: 1px solid white;
+			border-right: 1px solid white;
+		}
+		
+		#contents
+		{
+			width: 600px;
+			height: 445px;
+			position: absolute;
+			left: 70px; top: 51px;
+		}
+		
+		#editor
+		{
+			width: 600px;
+			height: 445px;
+		}
+
+		#toolbar a 
+		{
+			padding: 5px 3px;
+			width: 52px;
+			display: block;
+			border: 1px solid #eef;
+			text-align: center;
+			text-decoration: none;
+			color: #669;
+			margin: 5px 0;
+		}
+		#toolbar a:hover
+		{
+			background-color: #F9F9FF;
+			border-color: #669;
+		}
+		
+		#toolbar a.iconActive
+		{
+			border-color: #669;
+		}
+
+		#toolbar a span
+		{
+			display: block;
+			text-decoration: none;
+			
+		}
+		#toolbar a img
+		{
+			border: 0 none;
+		}
+		
+		#tools .textInput
+		{
+			width: 3em;
+			vertical-align: 0px;
+
+		}
+		* html #tools .textInput
+		{
+			vertical-align: middle;
+		}
+		#tools .measureStats
+		{
+			width: 4.5em;
+			border: 0 none;
+			background-color: #eef;
+			vertical-align: 0px;
+		}
+		* html #tools .measureStats
+		{
+			vertical-align: middle;
+		}
+		.measureStats
+		{
+			color: black;
+		}
+		#tools label
+		{
+			margin: 0 2px 0 5px;
+		}
+		#tools input
+		{
+			vertical-align: middle;
+		}
+		#tools #tool_inputs
+		{
+			padding-top: 10px;
+			float: left;			
+		}
+		#tools .div
+		{
+			vertical-align: middle;
+			margin: 0 5px;
+		}
+		#tools img
+		{
+			border: 0 none;
+		}
+		#tools a.buttons
+		{
+			margin-top: 10px;
+			border: 1px solid #eef;
+			display: block;
+			float: left;
+		}
+		#tools a.buttons:hover
+		{
+			background-color: #F9F9FF;
+			border-color: #669;
+		}
+
+		.slidercasing {
+    /*border:1px solid #CCCCCC;
+    background-color:#FFFFFF;*/
+    width:100px;
+    height:5px;
+    position:relative;
+    z-index:4;
+    padding:10px;
+	 top: 6px;
+	 margin: 0 -5px 0 -10px;
+
+	
+}
+
+
+.slidertrack {
+    position:relative;
+    border:1px solid #CCCCCC;
+    background-color:#FFFFCC;
+    z-index:5;
+    height:5px;
+}
+
+
+.sliderbar {
+    position:absolute;
+    z-index:6;
+    border:1px solid #CCCCCC;
+    background-color:#DDDDDD;
+    width:15px;     
+    padding:0px;
+    height:20px; 
+    cursor: pointer;
+    top:2px;
+}
+
+* html #slidercasing
+{
+	top:0;
+}
+
+
+#bottom
+{
+	position: relative;
+	top: 490px;
+}
+
+#messages
+{
+	position: relative;
+	left: 175px;
+	top: 115px;
+	background-color: white;
+	width: 200px;
+	float: left;
+	margin-top: -52px;
+	border: 1px solid #ccc;
+	text-align: center;
+	padding: 15px;
+}
+
+#message
+{
+	font-size: 15px;
+	font-weight: bold;
+	color: #69c;
+}

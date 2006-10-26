@@ -1,0 +1,72 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langInvalidId = "Vstop ni uspel. Napaèno uporabniško ime ali geslo";
+$langWelcome = "Prosto dosegljivi teèaji so spodaj. Ostali teèaji zahtevajo
+uporabniško ime in geslo, ki ga lahko dobiš s klikom na opcijo \'registracija\'. Uèitelji
+lahko tvorijo spletne teèajev s klikom na registracijo in z izbiro
+\'Tvori spletno stran teèaja (uèitelji)\'.";
+$langUserName = "Uporabniško ime";
+$langPass = "Geslo";
+$langEnter = "Vstop";
+$langHelp = "Zaènimo";
+$langReg = "Registracija";
+$langMenu  = "Menu";
+$langDoc = "Dokumentacija";
+$langAdvises = "Nasveti";
+$langCourseDoesntExist = "<b>Opozorilo :</b> Ta teèaj ne obstaja";
+$langGetCourseFromOldPortal = "kliknite tukaj za prenos teèaja iz starega portala";
+$langOtherCourses = "Seznam teèajev";
+$langSupportForum = "Forum podpore";
+$langCategories  = "Kategorije";
+$langBackToHomePage  = "Povratek na domaèo stran";
+$lang_No_course_publicly_available  = "Trenutno ni javno dostopnih teèajev.";
+$langLostPassword  = "Izgubljeno geslo";
+$lang_edit_my_course_list  = "Uredi seznam mojih teèajev";
+$langAgenda  = "Agenda (napovedani dogodki)";
+$langValvas  = "Zadnja obvestila";
+$langUp  = "predhodni nivo";
+$langCatList  = "Kategorije";
+$langCourseList  = "Teèaji";
+$langHelptwo = "Pomoè";
+$langRegAll = "vpiši";
+$EussMenu = "izbira";
+$Opinio = "Mnenje";
+$menuauth = "Izbira avtentifikacija";
+$email = "e-pošta";
+$Intranet = "Intranet";
+$Englin = "English";
+$langInvalidForSelfRegistration = "Vstop ni uspel - èe nisi registriran, lahko to storiš s pomoèjo <a href=claroline/auth/inscription.php>registracijskega obrazca</a>";
+$langCourses = "teèaj-ev";
+$langIn = "v";
+$langSubCat = "podkategorijah";
+$langMenuGeneral = "Splošno";
+$langMenuUser = "Uporabnik";
+$langMenuAdmin = "Admin. portala";
+$langUsersOnLineList = "Seznam aktivnih uporabnikov";
+$langTotalOnLine = "Skupaj aktivnih";
+$langRefresh = "Osveži vsebino";
+$langMe = "*";
+$langSystemAnnouncements = "Obvestila sistema";
+$langHelpMaj = "Pomoè";
+$langNotRegistered = "Ni vpisan";
+$langAdmin = "Admin platforme";
+$Login = "Prijava";
+$langRegisterForCourse = "Vpis v nov teèaj";
+$langUnregisterForCourse = "Izpis iz teèajev";
+$langCombinedCourse = "Sestavljen teèaj -";
+$Platform = "Izvedeno z";
+$Refresh = "Osveži";
+$UsersOnLine = "Aktivni uporabniki";
+$TotalOnLine = "Skupaj aktivnih";
+$langCourseCreate = "Kreiraj teèaj";
+$langCourseClosed = "(teèaj je trenutno zaprt)";
+$ViewOpenCourses = "Poglej odprte teèaje";
+$langCompetences = "Kompetence";
+$langDiplomas = "Kvalifikacije";
+$langTeach = "Kaj on/ona (lahko) uèi";
+$langOpenarea = "Osebna interesna podroèja";
+$langProductions = "Rezultati dela";
+$langSendChatRequest = "Pošlji vabilo za klepet tej osebi";
+$langRequestDenied = "Poziv je bil zavrnjen.";
+?>

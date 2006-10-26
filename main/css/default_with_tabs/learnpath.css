@@ -1,0 +1,11 @@
+div.text {
+	margin-left : 6;
+	margin-right : 6;
+	margin-top : 5;
+	margin-bottom : 5;
+	text-align : justify;
+}
+span.messagesmall {
+	font-style : italic;
+	color : Red;
+}

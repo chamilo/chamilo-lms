@@ -1,0 +1,622 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langHFor = "Pomoè: Forumi (diskusije)";
+$langClose = "Zapri okno";
+$langForContent = "<p>Forum je pisno, asinhrono orodje za razpravo.
+ Medtem ko e-posta omogoèa pogovor ena proti ena, omogoèajo forumi javen ali napol javen
+razgovor.</p><p>V tehniènem smislu potrebujejo teèajniki za uporabo forumov DokeOS le svoj brkljalnik
+.</P><p>Forume organiziramo tako, da kliknemo na orodje 
+ \'Administacija foruma\'. Razprave so organizirane v skupinah ali podskupinah na naslednji naèin:
+</p><p><b>Kategorija > Forum > Predmet > Odgovori</b></p>
+<p>Za strukturiranje uporabniških diskusij, jih je vnaprej potrebno organizirati v kategorije in kategorije
+ v posamezne forume. Kreiranje tem in odgovorom pa prepustimo teèajnikom samim. Prednastavljeno
+ Dokeos forum vsebuje le kategorijo \'Javno\', demonstracijski forum in primerek teme.</p>
+ <p>Prvo, kar je potrebno narediti je brisanje demonstracijskega foruma in ustrezna sprememba imena prvega foruma.
+ Nato lahko kreiramo, v kategoriji \'Javno\' , druge forume, po želenih temah, da bodo ustrezale zahtevam
+ uènega scenarija.</p><p>Ne zamenjujte kategorij in forumov ne pozabite, da se prazna kategorija (brez forumov) 
+ ne pojavlja na spisku forumov v uporabniškem pogledu.</p><p>Opis foruma je lahko seznam njegovih èlanov, 
+ definicija cilja, naloga,tema, ...</p>
+ <p>Forumov skupin naj bi ne kreirali preko orodij foruma, temveè zgolj preko orodij skupine. 
+    Tu se lahko tudi odloèite, ali bo forum skupine javen ali privaten.</p>
+ <b>Pedagoško naprednejša raba</b>
+ <p>Nekateri uèitelji / vodje teèajev uporabljajo forume za objavljanje popravkov (nalog, testov, izpitov, vaj, ...). 
+   Pri tem teèajnik objavi preko foruma izdelek. Uèitelj z uporabo orodja \'uredi\' (rumeno pisalo) oz. vgrajenega
+   WYSYWIG urejevalnika izvede popravke (uporabi razliène barve, podèrtavanje ali preèrtavanje za nakazovanje napak
+   in izvajanje korekcij). Ker se popravljeni dokumenti pojavljajo v okviru foruma, imajo od tega korist
+   tudi ostali teèajniki.";
+$langHDropbox = "Pomoè: Nabiralnik";
+$langDropboxContent = "<p>Nabiralnik je orodje za upravljanje z vsebinami (Content Management Tool) in je namenjen izmenjavi datotek med dvema entitetama (dvema osebama). Sprejemljiva je poljubna oblika datoteke : Word, Excel, PDF ,... Podpira upravljanje verzij dokumentov na naèin, ki onemogoèa unièenje predhodno poslanega dokumenta v primeru, da kasneje pošljete še en dokument z enakim imenom.</p>
+<p>Nabiralnik kaže seznam datotek, ki so vam bile poslane (v odseku prejete datoteke)
+in datoteke, ki so jih drugi (vaši teèajniki) poslali vam (v odseku poslane datoteke).
+</p><p>Èe seznam prejetih in poslanih datotek postane predolg, lahko iz seznama datotek poljubne odstranite. 
+Pri tem se datoteka sama ne odstrani dokler jo druga stran še vedno vidi v svojem seznamu.</p>
+<p>Za pošiljanje datoteke veè kot enemu uporabniku, uporabi kombinacijo tipke CTRL+klik z miško na želene prejemnike v oknu prejemnikov. Okno prejemnikov kaže vse registirane uporabnike teèaja.</p>";
+$langHHome = "Pomoè: Domaèa stran";
+$langHomeContent = "<p>Domaèa stran teèaja prikazuje množico orodij : uvodno besedilo teèaja, opis teèaja, upravitelja dokumentov, idr. Stran je zgrajena modularno : z enim samim klikom lahko skrijete/prikažete poljubno orodje. Skrita orodja lahko reaktivirate kadarkoli.</p>
+<b>Navigacija</b>
+<p>Za brskanje po vsebinah vašega teèaja imate na voljo dve navigacijski orodji. Levo zgoraj se nahaja kazalo, ki kaže, kje v hierarhiji teèaja se trenutno nahajate. Zgoraj desno lahko dostopite do razliènih orodij preko klika na ustrezno ikono. Èe izberete kodo vašega teèaja na levi strani (vedno izpisano z VELIKIMI ÈRKAMI) ali ikono v obliki hiške na desni, boste dosegli domaèo stran svojega teèaja. </p>
+<b>Primer najboljše prakse</b>
+<p>Za motivacijo vaših teèajnikov je pomembno, da je podroèje vašega teèaja èimbolj dinamièno. Dinamiènost ohranja preprièanje, da je vedno nekdo \'tam zadaj\'. Enostaven in hiter naèin za doseganje tega obèutka je urejenje Uvodnega besedila teèaja (klik na rumeno pisalo) vsaj enkrat tedensko, da jih informirate o zadnjih dogodkih, obvestite o zadnjih rokih za oddajo izdelkov, ...</p>
+<p>Za kreiranje lastnega teèaja, se bo morda izkazalo za koristno upoštevati naslednje:
+<ol><li>V nastavitvah teèaja, izberite <b><i>Dostop do teèaja : Privaten dostop</i></b> in <b><i>Prijava : Prepovedano</i></b>. Na ta naèin dosežete, da nihèe ne more dostopiti do vašega teèaja, npr. med procesom izgradnje vsebin teèaja</li>
+<li>Vsako orodja lahko prikažete s klikom na sivo obarvano povezavo pod orodjem na dnu strani,</li>
+<li>Uporabite orodja kadarkoli želite \'napolniti\' vaše podroèje z vsebino, dogodki, smernicami, testi, ...,</li>
+<li>Skrijte vsa orodja : vaša domaèa stran bo pri dostopu uporabnikov teèaja videti prazna,</li>
+<li>Uporabite orodje Uène poti za strukturiranje poti teèajnikovih obiskov vsebin (in s tem uèenja). Na ta naèin dejansko uporabljate tudi druga orodja, ki pa jih ne prikažete v seznamu dostopnih orodij.</li>
+<li>Kliknite na ikono v obliki oèesa poleg poti, ki ste jo skreirali : kreirana uèna pot se bo pojavila na vaši domaèi strani,</li>
+<li>Priprava podroèja vašega teèaja je konèana. Vaša domaèa stran kaže uvodno besedilo, temu sledi ena sama povezava, ki vodi teèajnike skozi teèaj. Kliknite na Uporabniški pogled (zgoraj desno) za predogled strani, kot jo vidijo vaši teèajniki.<I></I></li></ol>";
+$langHOnline = "Pomoè: Konference";
+$langOnlineContent = "<br><span style=\\\"font-weight: bold;\\\">Uvod </span><br>
+      <br>
+      <div style=\\\"margin-left: 40px;\\\">Dokeos online konferenèni sistem
+vam dovoljuje pouèevanje, informiranje ali zbiranje 
+skupaj do 500 udeležencev na enostaven in hiter naèin.<br>
+      </div>
+      <ul>
+        <ul>
+          <li><b>zvok v živo (live audio) :</b> predavateljev glas se sodelujoèim teèajnikom
+prenaša
+v
+živo,<br>
+          </li>
+          <li><b>diapozitivi :</b> udeleženci sledijo Power Point
+ali
+PDF predstavitvi,<br>
+          </li>
+          <li><b>interaktivnost :</b> udeleženci zastavljajo vprašanja 
+preko mehanizma klepetalnice.</li>
+        </ul>
+      </ul>
+      <span style=\\\"font-weight: bold;\\\"></span><span
+ style=\\\"font-weight: bold;\\\"><br>
+Teèajnik / udeleženec</span><br>
+      <br>
+      <div style=\\\"margin-left: 40px;\\\">Za sodelovanje v konferenci potrebuje:<br>
+      </div>
+      <br>
+      <div style=\\\"margin-left: 40px;\\\">1. Zvoènike (ali slušalke)
+povezanimi z osebnim raèunalnikom<br>
+      <br>
+      <a href=\\\"http://www.logitech.com\\\"><img
+ style=\\\"border: 0px solid ; width: 87px; height: 58px;\\\" alt=\\\"zvoèniki\\\"
+ src=\\\"../img/speaker.gif\\\"></a><br>
+      <br>
+2. Programsko opremo Winamp Media player<br>
+      <br>
+      <a href=\\\"http://www.winamp.com\\\"><img
+ style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\"
+ src=\\\"../img/winamp.gif\\\"></a><br>
+      <br>
+Mac : uporabi <a href=\\\"http://www.quicktime.com\\\">Quicktime</a><br>
+Linux : uporabi <a href=\\\"http://www.xmms.org/\\\">XMMS</a> <br>
+      <br>
+  3. Acrobat PDF Reader ali Word ali PowerPoint, odvisno od 
+porabljenega formata
+uèiteljevih diapozitivov<br>
+      <br>
+      <a href=\\\"http://www.acrobat.com\\\"><img
+ style=\\\"border: 0px solid ; width: 87px; height: 31px;\\\"
+ alt=\\\"Acrobat Reader\\\" src=\\\"../img/acroread.gif\\\"></a><br>
+      </div>
+      <br>
+      <span style=\\\"font-weight: bold;\\\"><br>
+Uèitelj / predavatelj / vodja</span><br>
+      <br>
+      <div style=\\\"margin-left: 40px;\\\">Za podajanje vsebine/lekcije, potrebujete :<br>
+      </div>
+      <br>
+      <div style=\\\"margin-left: 40px;\\\">1. Set slušalk z mikrofonom<br>
+      <br>
+      <a href=\\\"http://www.logitech.com\\\"><img
+ style=\\\"border: 0px solid ; width: 87px; height: 87px;\\\" alt=\\\"Set\\\"
+ src=\\\"../img/headset.gif\\\"></a><br>
+Priporoèamo, da uporabite <a href=\\\"http://www.logitech.com/\\\">Logitech</a>
+USB s katerim dosežete boljšo kvaliteto oddajanja zvoka.<br>
+      <br>
+2. Programsko opremo Winamp<br>
+      <br>
+      <a href=\\\"http://www.winamp.com\\\"><img
+ style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\"
+ src=\\\"../img/winamp.gif\\\"></a><br>
+      <br>
+3. SHOUTcast DSP Plug-In za uporabljeno verzijo Winamp  <br>
+      <br>
+      <a href=\\\"http://www.shoutcast.com\\\"><img
+ style=\\\"border: 0px solid ; width: 87px; height: 24px;\\\" alt=\\\"Shoutcast\\\"
+ src=\\\"../img/shoutcast.gif\\\"></a><br>
+      <br>
+Sledite navodilom <a href=\\\"http://www.shoutcast.com\\\">www.shoutcast.com</a>
+za namestitev (inštalacijo in konfiguracijo) 
+Shoutcast Winamp DSP Plug-In. <br>
+      </div>
+      <br>
+      <span style=\\\"font-weight: bold;\\\"><br>
+Kako izvesti konferenco?<br>
+      <br>
+      </span>
+      <div style=\\\"margin-left: 40px;\\\">Kreirajte Dokeos teèaj > Vstopite vanj > 
+Omogoèite in uporabite orodje Konference > 
+Uredite (ikona pisala zgoraj levo) nastavitve konference > prenesite vaše diapozitive
+ (PDF, PowerPoint ali karkoliže) > vnesite uvodno besedilo
+> vnesite URL vašega živega podatkovnega toka glede na informacije,
+ki jih dobite od vašega tehniènega administratorja.<span style=\\\"font-weight: bold;\\\"></span><br>
+      <span style=\\\"font-weight: bold;\\\"></span></div>
+      <div style=\\\"margin-left: 40px;\\\"><img
+ style=\\\"width: 256px; height: 182px;\\\" alt=\\\"nastavitev konference\\\"
+ src=\\\"../img/conf_screen_conf.gif\\\"><br>
+Ne pozabite predhodno objaviti toènega datuma, ure sreèanja in drugih navodil,
+ki jih potrebujejo udeleženci konference. <br>
+      <br>
+      <span style=\\\"font-weight: bold;\\\">Nasvet</span> : 10 minut pred prièetkom
+objavljenega konferenènega zaèetka, natipkajte kratko sporoèilo v klepetalnièno okno, da informirate udeležence o 
+svoji prisotnosti in v pomoè udeležencem, ki imajo morebitne težave
+s sprejemenjem ali predstavitvijo zvoka. <br>
+      </div>
+      <br>
+      <br>
+      <span style=\\\"font-weight: bold;\\\">Strežnik podatkovnega toka (Stream server)</span><br>
+      <br>
+      <div style=\\\"margin-left: 40px;\\\">Za zagotovitev podatkovnega toka za konferenco
+v živo, potrebujete strežnik podatkovnega toka
+in po vsej verjetnosti administrativno pomoè za njegovo uporabo. Obrnite se na administratorja, ki
+vam bo doloèil URL, ki ga potrebujete
+pri vpisu v polje forme nastavitev konference.<br>
+      <br>
+      <small><a href=\\\"http://www.dokeos.com/hosting.php#streaming\\\"><img
+ style=\\\"border: 0px solid ; width: 258px; height: 103px;\\\"
+ alt=\\\"dokeos streaming\\\" src=\\\"../img/streaming.jpg\\\"><br>
+dokeos podatkovni tok</a></small><br>
+      <br>
+Naredi sam : namesti, nastavi in adminstriraj <a
+ href=\\\"http://www.shoutcast.com\\\">Shoutcast</a> ali <a
+ href=\\\"http://developer.apple.com/darwin/projects/streaming/\\\">Apple
+Darwin</a>. <br>
+      <br>
+Hm, \'Dokeos\' zbira sredstva : ali vzpostavite kontakt z Dokeos. Pomagali vam bodo vzpostaviti vašo konferenco, pomagali predavateljem
+ in na željo celo za dokaj nizko ceno rentali podatkovni tokovni strežnik : <a
+ href=\\\"http://www.dokeos.com/hosting.php#streaming\\\">http://www.dokeos.com/hosting.php</a><br>
+      <br>
+      <br>";
+$langHClar = "Pomoè: Dokeos portal";
+$langClarContent = "<p><b>Uèitelj</b></p>
+<p>Dokeos je sistem za upravljanje z uèenjem in znanjem (LMS - Learning Management System in KMS -Knowledge Management System). 
+Omogoèa uèiteljem organizirati uèno snov, uène poti in upravljati interakcije s svojimi teèajniki. Vse to s pomoèjo spletnega brskalnika.</p>
+<p>Èe uporavljate Dokeos kot uèitelj, potrebujete uporabniško ime in geslo. V odvisnosti od varnostnih nastavitev portala, ju lahko pridobite s 
+samo-registracijo (menu na desni strani) ali preko centralizirane administracije vaše organizacije. Pomnite, da uporabniško ime in geslo nikoli 
+ne moreta vsebovati presledkov ali drugih posebnih znakov, ter da se rzalikuje pomen velikih in malih èrk. Vpišite vaše uporabniško ime/geslo, 
+nato kreirajte teèaj (desno zgoraj) ali uporabite teèaj, ki je bil kreiran za vas s strani administracije portala.</p>
+<p>Za dodajanje sodelavca kot so-administratorja vašega teèaja:
+<ol><li>Èe še ni registriran v sistemu, ga registrirajte in njegovem profilu izberite vlogo \'Uèitelj/vodja\',</li>
+<li>Èe je že registriran v sistemu, zaèasno omogoèite samo-registracijo v teèaj in ga prosite, da se vpiše v vaš teèaj. Potem uredite njegov profil in mu dodelite vlogo \'Uèitelj/vodja\'.</li></ol></p>
+<p>
+Vsako Dokeos orodje vsebuje integrirano vsebinsko pomoè, do katere imate dostop preko ikone v obliki rdeèega rešilnega pasu. 
+Èe v okviru danih vsebin ne najdete dovolj dobre pomoèi, razmislite o pregledu dokumentacijskih strani na Dokeos spletnih straneh: <a href=\"http://www.dokeos.com/documentation.php\">http://www.dokeos.com/documentation.php</a> in si prenesite priroènik za uèitelje v vašem jeziku ali v Anglešèini</p>
+<p><b>Teèajniki</b></p>
+<p>Portal vam omogoèa sledenje in sodelovanje v izvajanju teèaja, vadbo, delavnice, ... Zasnovan je bil z namenom promoviranja aktivnega uèenja: projektno usmerjeno, problemsko-usmerjeno, uèenje na primerih, kolaborativno sodelovanje, ...
+Vaši uèitelji so izgradili uèna obmoèja, ki se lahko pojavljajo enostavno kot serija imenikov z dokumenti ali kot komplesno zaporedje aktivnosti za samostojno ali skupinsko uèenje.</p>
+<p>Registracijski proces je odvisen od organizacije, katere last je portal. V nekaterih je dovoljena samoregistracija, v drugih pridobite uporabniško ime in geslo od centralne administracije.</p>";
+$langHDoc = "Pomoè: Dokumenti";
+$langDocContent = "<p>Orodje dokumenti je podobno upravniku datotek vašega namiznega raèunalnika.</p>
+<p>Kreirate lahko enostavne spletne strani (\'Kreiraj dokument\') ali prepišete (upload) datoteke kateregakoli tipa (HTML, Word,
+ Powerpoint, Excel, Acrobat, Flash, Quicktime, idr.) na strežnik oz. v portal. 
+Poskrbeti morate le za to, da bodo teèajniki imeli na voljo potrebno programsko opremo za njihovo branje.
+ Nekatere datoteke lahko vsebujejo viruse in sami ste odgovorni, da ne prepisujete okuženih datotek. 
+Zato je smiselno, da datoteke pred prepisovanjem preverite s primernim protivirusnim programom.</p>
+<p>Dokumenti so predstavljeni v abecednem vrstnem redu.<br><b>Nasvet : </b>
+Èe jih želite predstaviti v drugaènem zaporedju, jih oštevilèite: 01, 02,  03... 
+Lahko pa uporabite tudi sistem uènih poti in jih predstavite v obliki kompleksnejšega kazala vsebine. 
+Ko je dokument enkrat prenešen v portal, se lahko odloèite, da skrijete podroèje dokumentov in prikažete 
+le eno samo stran na domaèi strani teèaja (orodje Dodaj povezavo na domaèi strani teèaja) ali pa uèno pot, 
+ki vsebuje izbrane dokumente iz vašega podroèja dokumentov.</p>
+<p>Možnosti :</p>
+<H4>Kreiranje dokumenta</H4>
+<p>Izberite Tvori dokument > dodelite mu naslov (brez presledkov, brez posebnih znakov) > vpišite želeno besedilo > 
+Uporabite gumbe Wysiwyg (What You See Is What You Get) urejevalnika za strukturiranje informacij, kreiranje tabel, 
+stilov,... Za kreiranje spletne strani, morate biti seznanjeni s tremi koncepti : Povezave, Slike in Tabele. 
+Pomnite, da spletne strani ponujajo precej manj možnosti oblikovanja kot pa npr. Ms-Word dokumenti. 
+Pomnite tudi, da namesto kreiranja dokumenta znotraj vgrajenega urejevalnika, lahko uporabite princip izreži in prilepi 
+obstojeèe vsebine poljubne spletne strani ali MS Word dokumenta. To je hkrati najhitrejši in najlažji naèin prenosa vsebine v vaš teèaj.
+</p>
+<ul><li><b>Za dodajanje povezave</b>, je potrebno narediti kopijo URL želenega cilja. Predlagamo, da soèasno odprete 2 brskalnikova okna, prvega z vašim dokeos teèajem in drugega za brskanje po spletu. Ko s slednjim najdete stran, ki jo išèete (ta stran je lahko tudi vaš dokeos teèaj), kopirajte URL strani (CTRL+C oz. APPLE+C), preklopite v urejevalnik s katerim urejate stran, izberite besedo, ki bo predstavljala povezavo, kliknite na malo ikono z verigo, prilepite URL ciljne strani in uveljavite spremembe. Ko je vaša stran shranjena, preskusite povezavo, da vidite, èe dejansko odpre želeno ciljno stran. Pomnite, da se preko menija povezav lahko odloèite, ali se bo cilj povezave odprl v novem oknu ali pa bo zamenjal obstojeèo vsebino dokeos strani v trenutnem oknu.</li>
+<li><b>Za dodajanje slike</b>, uporabimo podoben princip kot pri povezavah : poišèite želeno stran v drugem oknu brskalnika, poišèite sliko (èe je slika znotraj podroèja vašega teèaja, izberite \'Brez okvirjev\' da dobite le sliko in celotne vsebine ciljne strani), kopirajte URL slike(CTRL+C oz. APPLE+C v naslovni vrstici brskalnika potem, ko izberete celoten URL) v urejevalniku strani postavite miškin kazalec na mesto, kjer želite, da se pojavi slika, kliknite na malo ikono v obliki slike in prilepite URL ciljne slike v URL polje, izvedite predogled in uveljavite spremembe. Pomnite, da ne morete spreminjati dimenzij slik kot npr. v PowerPoint predstavitvi, niti ne morete spremeniti položaja slike na strani.</li>
+<li><b>Za dodajanje tabele</b>, postavite miškin kazalec v polje, kjer želite tabelo, izberite ikono tabele v orodni vrstici Wysiwyg urejevalnika, 
+izberite želeno število stolpcev in vrstic ter potrdite izbiro. Da bi bil izgled tabel primeren, predlagamo, da izberete naslednje vrednosti : border=1, cellspacing=0, cellpadding=4. 
+Pomnite, da naknadno spreminjanje dimenzij tabel ni mogoèe (vgrajen urejevalnik paè ni tekstovni procesor!).</li>
+</ul>
+
+<h4>Prepisovanje (Upload) dokumenta</h4>
+<ul>
+  <li>Izberi datoteko na svojem raèunalniku z gumbom (brskanje) Browse <input
+ type=submit value=Browse name=submit2>
+	na desni strani zaslona.</li>
+		<li>
+			Sproži prepis (upload) z gumbom Prepis (Upload) <input type=submit value=Prepiši name=submit2>.
+		</li>
+<li> Preveri stanje checkbox-a pod gumbom Prenesi v primeru, da je dokument komprimiran (npr.: .zip) ali je njegova vsebine <b>Scorm vsebina</b>. Scorm vsebine so posebna oblika teèajev katerih vsebina je oblikovana v posebni \'standardizirani\' obliki : <b>Scorm</b>. This is a special format for learning contents which enables the free exchange of these materials between different Learning Management Systems. Z drugimi besedami, <b>Scorm</b> vsebine so neodvisne od platforme, njih uvoz in izvoz sta enostavna. </li>
+	</ul>
+	<h4>
+		Preimenuj dokument (mapo)
+	</h4>
+	<ul>
+		<li>
+			klikni na  gumb <img src=../img/renommer.gif width=20 height=20 align=baseline>
+			v stolpcu Preimenuj (Rename)
+		</li>
+		<li>
+			Vtipkaj v polje(levo zgoraj) novo ime
+		</li>
+		<li>
+			Potrdi s klikom <input type=submit value=Ok name=submit24>.
+		</li>
+	</ul>
+		<h4>
+			Odstrani dokument (ali direktorij oz mapo)
+		</h4>
+		<ul>
+			<li>
+				Klikni na <img src=../img/delete.gif width=20 height=20>
+				v stolpcu \'Briši\'
+			</li>
+		</ul>
+		<h4>
+			Naredi dokument (direktorij, mapo) neviden za teèajnike
+		</h4>
+		<ul>
+			<li>
+				Klikni na <img src=../img/visible.gif width=20 height=20>
+				v stolpcu \'Vidno/skrito\'.
+			</li>
+			<li>
+				Dokument (ali mapa) še obstaja, vendar je teèajnikom skrit.
+			</li>
+			<li>
+				Ponovno postane viden s klikom na 
+				<img src=../img/invisible.gif width=24 height=20>
+				v stolpcu \'Vidno/skrito\'
+			</li>
+		</ul>
+		<h4>
+			Dodaj ali spremeni komentar k dokumentu (direktoriju, mapi)
+		</h4>
+		<ul>
+			<li>
+				Klikni na <img src=../img/comment.gif width=20 height=20> v stolpcu \'Komentar\'
+			</li>
+			<li>
+				Vtipkaj nov komentar v ustrezno polje (desno zgoraj).
+			</li>
+			<li>
+				Potrdi s klikom  na <input type=submit value=OK name=submit2>
+			.</li>
+		</ul>
+		<p>
+		Za brisanje komentarja klikni na <img src=../img/comment.gif width=20 height=20>,
+		briši stari komentar v polju in klikni 
+		<input type=submit value=OK name=submit22>.
+		<hr>
+		<p>
+			Vsebino lahko urediš s polnjenjem. Za to:
+		</p>
+		<h4>
+			<b>
+				Tvori mapo
+			</b>
+		</h4>
+		<ul>
+			<li>
+				Klilkni na
+				<img src=../img/dossier.gif width=20 height=20>
+				\'Tvori mapo\' (levo zgoraj)
+			</li>
+			<li>
+				Vtipkaj ime nove mape v ustrezno polje (levo zgoraj)
+			</li>
+			<li>
+				Potrdi s klikom <input type=submit value=OK name=submit23>.
+			</li>
+		</ul>
+		<h4>
+			Premik dokumenta (ali mape)
+		</h4>
+		<ul>
+			<li>
+				Klikni na gumb <img src=../img/deplacer.gif width=34 height=16>
+				v stolpcu \'Premakni\'
+			</li>
+			<li>
+				Izberi mapo, v kateri želis premakniti dokument (ali mapo) v ustreznem meniju (levo zgoraj) 
+                                (opomba: beseda \'root\' pomeni, da višje od tega nivoja ne moreš iti v strežnikovem drevesu dokumentov).
+			</li>
+			<li>
+				Potrdi s klikom na <input type=submit value=OK name=submit232>.
+			</li>
+		</ul>
+<h4>
+			<b>
+				Kreiraj uèno pot
+			</b>
+		</h4>Ta uèna pot bo videti kot kazalo vsebine in jo na ta naèin lahko tudi koristimo, ponuja pa precej veè. Poglejte si: Uène poti.";
+$langHUser = "Pomoè: Uporabniki";
+$langUserContent = "<p><b>Dodajanje uporabnikov</b></p>
+ <p>Teèajnike lahko dodajate v teèaj posamezno. Ne pozabite, da se jim v primeru, da so ti že registrirani v portal, dodeli novo (dodatno!) uporabniško ime. 
+ Bolj praktièna je odloèitev med samo-registracijo teèajnikov in centralno administrativno registracijo. 
+ V omenjenih primerih uèitelj kontrolira le dostop do svojega teèaja.</p>
+ <p><b>Opis</b></p>
+ <p>Opis nima nobene povezave s katerokoli funkcijo sistema ali portala.
+ Ne daje nobenih pravic na sistemu ali v portalu. Je le pojasnilo
+ (ljudem), kdo je kdo. Opis lahko spremenimo s klikom na ikono pisala, in vpisom želenega besedila: uèitelj, profesor, asistent, laborant, študent,
+ obiskovalec, strokovnjak...</P>
+<p><b>Administratorske pravice</b></p>
+<p>Administratorske pravice, po drugi strani, odgovarjajo tehnièni
+ avtorizaciji pri spremembah vsebine in organizacije podroèja. Izbiramo lahko le med tem, ali bomo nekomu podelili administratorske pravice ali ne.</P>
+<p>Da bi omogoèili, na primer asistentu, da soadministrira podroèje teèaja, se je potrebno preprièati, da je dotièni registirran, nato klikniti
+ na pisalo, izbrati \'Uèitelj/vodja\', nato klikniti \'Ok\'.</P>
+<p><b>Sodelavci (souèitelji, gostujoèi, asistenti, laboranti, ...)</b></p>
+<p>Za navedbo imena sodelavca v zaglavju podroèja,
+ uporabite orodje \'Nastavitve teèaja\'. Ta sprememba 
+ ne registrira vašega sodelavca kot uporabnika teèaja.
+ Polje \'Uèitelj/vodja\' je popolnoma neodvisno od seznama uporabnikov.</p>
+ <p><b>Sledenje in osebna domaèa stran</b></p>
+ <p>Dodatno k prikazu seznama uporabnikov in spremembi njihovih pravic, orodje Uporabniki omogoèa prikaz sledenja 
+ posameznega teèajnika in zapolnjevanje vsebin domaèe strani teèaja s strani teèajnikov.</p>";
+$langGroupManagement = "Pomoè: Skupine";
+$langGroupContent = "<p><b>Uvod</b></p>
+<p>To orodje omogoèa tvorbo in upravljanje delovnih skupin.
+Ob tvorbi (Tvorba novih skupin), so skupine prazne. Napolnimo jih lahko na veè naèinov:
+<ul><li>avtomatièno (\'Napolni skupine (nakljuèno)\'),</li>
+<li>roèno (\'Uredi\'),</li>
+<li>s samo-registracijo teèajnikov(Nastavitev skupin: \'Samo-registracija je dovoljena...\').</li>
+</ul></p>
+<p>Te tri naèine lahko kombiniramo. Tako lahko teèajnike najprej prosimo, da se sami registrirajo.
+Nato ugotovimo, da tega nekateri niso storili in se odloèimo za avtomatièno zapolnjevanje skupin. 
+Lahko tudi urejaš vsako skupino tako, da dodaš posamezne teèajnike po samostojni registraciji ali po 
+avtomatiènem zapolnjevanju.</p>
+<p>Polnjenje skupin, roèno ali avtomatièno, je izvedljivo le, èe so teèajniki že registrirani v teèaj
+ (ne mešajmo registracije v teèaj z registracijami v skupine).
+Seznam študentov vidimo v orodju <b>Uporabniki</b>. </p><hr noshade size=1>
+<p><b>Tvorba skupin </b></p>
+<p>Za tvorbo nove skupine kliknemo na \'Tvorba novih skupin\' in doloèimo število novih skupin. </p><hr noshade size=1>
+<p><b>Nastavitev lastnosti skupin</b></p>
+<p>Nastavitve za skupino lohko doloèimo globalno (za vse skupine).
+<b>Uporabnikom je dovoljeno, da se sami porazdelijo v skupine (samoregistracija v skupine)</b>:
+<p>Kreiramo prazne skupine, uporabniki se sami registrirajo v skupine.
+Èe definiramo najveèje število èlanov, polna skupina ne sprejme nobenih dodatnih novih registracij.
+Ta metoda je uèinkovita v primeru, ko uèitelj ne pozna seznama teèajnikov v trenutku, ko kreira skupine.</p>
+<b>Orodja</b>:</p>
+<p>Vsaka skupina ima svoj forum (privaten ali javen) ali svoje podroèje za dokumente ali (v veèini realnih primerov) oba našteta.</p>
+<hr noshade size=1>
+<p><b>Roèno urejanje</b></p>
+<p>OKo so skupine kreiranje (Tvorba novih skupin), lahko na dnu strani vidimo seznam skupin
+z množico informacij in funkcij 
+<ul><li><b>Uredi</b> roèno urejanje imena skupine, opisa, skrbnika skupine, seznama èlanov.</li>
+<li><b>Odstrani</b> odstrani skupino.</li></ul>
+<hr noshade size=1>";
+$langHExercise = "Pomoè: Vaje";
+$langExerciseContent = "<p>Orodje Vaje omogoèa tvorbo vaj (testov), ki lahko vsebujejo poljubno število vprašanj.<br><br>
+Možni so naslednji tipi nalog:<br><br>
+<ul>
+  <li>Veèkratna izbira (en odgovor)</li>
+  <li>Veèkratna izbira (veè odgovorov)</li>
+  <li>Ujemanje</li>
+  <li>Zapolnjevanje praznih polj</li>
+</ul>
+</p><p>Vaja združuje doloèeno število vprašanj s skupno tematiko.</p>
+<hr>
+<b>Tvorba vaje</b>
+<p>Vajo tvorimo tako, da kliknemo na povezavo \"Nova vaja\".<br><br>
+Vtipkamo ime vaje in njen opis.<br><br>
+Dodamo lahko avdio ali video datoteko, za npr. slušni preskus razumevanja, ... Izbira oblike datotek ni naèeloma ni omejena. Predlagamo .mp3 oz. .wav datoteke, predvsem zaradi njihove velike kompresije, s tem manjše velikosti, kar zmanjšuje èase prenosa datotek na lokalni raèunalnik.
+<br>
+<br>
+Lahko izbiramo med dvema naèinoma predstavitve vprašanj :<br><br>
+<ul>
+  <li>Vsa zastavljena vprašanja na isti strani</li>
+  <li>Po eno vprašanje na stran (zaporedno)</li>
+</ul>
+</p><p>in povemo, ali želimo, da bodo med izvajanjem vaje vprašanja pojavljala v nakljuènem vrstnem redu ali ne.<br><br>
+Nato vajo shranimo. Preidemo na administracijo vprašanj za to vajo.</p>
+<hr>
+<b>Dodajanje vprašanj</b>
+<p>Sedaj lahko dodajamo vprašanja predhodno tvorjeni vaji. Lahko dodamo poljuben opis in po potrebi navežemo ustrezno sliko.</p>
+<hr>
+<b>Veèkratna izbira</b>
+<p>To je slavni MAQ (multiple answer question) / MCQ (multiple choice question).<br><br>
+MAQ / MCQ tvorimo tako da:<br><br>
+<ul>
+  <li>Definiramo odgovore na vprašanja. Odgovore dodajaš ali brišeš s klikom na desni gumb.</li>
+  <li>Oznaèimo pravilne odgovore s klikom kvadratka na levi strani.</li>
+  <li>Dodamo komentar. Tega komentarja teèajnik ne bo videl, dokler ne odgovori na vprašanje.</li>
+  <li>Vsakemu odgovoru (lahko) dodelimo utež. Utež je lahko pozitivno ali negativno celo stevilo, ali niè</li>
+  <li>Shranimo odgovore</li>
+</ul></p>
+<hr>
+<b>Zapolnjevanje praznih polj</b>
+<p>Ta naèin predvideva zapolnjevanje praznih polj z besedilom. Cilj je, da teèajnik poišèe besede, ki smo jih odstranili iz besedila.<br><br>
+Besedo odstranimo iz besedila in s tem tvorimo prazno polje tako, da  dano besedo oklenemo v oklepaje [tako].<br><br>
+Ko je besedilo vtipkano in prazna polja zapolnjena, lahko dodamo komentar, 
+ki ga bo videl teèajnik, ko bo odgovoril na vprašanja.<br><br>
+Besedilo shranimo in gremo na naslednji korak, v katerem za vsako prazno polje doloèimo utež. 
+Tako je lahko vprašanje uteženo z 10 toèkami in èe imamo 5 praznih polj, je vsako imed njih potemtakem uteženo z dvema toèkama.</p>
+<hr>
+<b>Ujemanje</b>
+<p>Ta tip odgovorov izbereš za tvorbo vprašanja, kjer mora teèajnik povezati elemente enote U1 z elementi enote U2.<br><br>
+Lahko ga uporabimo tudi v primeru, ko zahtevamo od teèajnika razvršèanje elementov v doloèenem zaporedju.<br><br>
+Najprej definiramo možnosti, izmed katerih bo teèajnik poskusil izbrati pravilen odgovor. 
+Nato doloèimo vprašanja, ki jih bomo povezali na eno od prej predvidenih opcij. 
+Konèno povežemo z uporabo menija elemente iz prve enote z elementi iz druge.<br><br>
+Opomba : Veè elementov iz prve enote lahko kaže na isti element iz druge enote.<br><br>
+Podamo utež za vsako pravilno ujemanje in shranimo odgovor.</p>
+<hr>
+<b>Spreminjanje vaje</b>
+<p>Vaje lahko spreminjamo na enak naèin, kot jih tvorimo. Kliknemo na sliko <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> ob vaji, ki jo spreminjamo, 
+in sledimo navodilom.</p>
+<hr>
+<b>Brisanje vaje</b>
+<p>Vajo brišemo tako, da kliknemo na sliko <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> 
+ob vaji, ki jo želimo odstraniti.</p>
+<hr>
+<b>Omogoèanje vaje</b>
+<p>Vajo, ki naj bi bila uporabljena, moramo omogoèiti s klikom na sliko <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> ob vaji, ki jo omogoèamo.</p>
+<hr>
+<b>Izvajanje vaje</b>
+<p>Vajo lahko preskusimo s klikom na njeno ime v seznamu vaj.</p>
+<hr>
+<b>Nakljuènost izvajanja</b>
+<p>Ko vajo tvorimo ali spreminjamo, lahko doloèimo, ali bodo postavljana vprašanja v nakljuènem vrstnem redu.<br><br>
+Z izbiro te opcije bodo teèajniki vsakokrat dobili vprašanja v drugaènem zaporedju.<br><br>
+Èe imamo veliko število vprašanj, lahko tudi izberemo da bodo nakljuèno dobili le X vprašanj iz zaloge vseh možnih vprašanj za to vajo.</p>
+<hr>
+<b>Zaloga vprašanj</b>
+<p>Ko neko vajo zbrišemo, vprašanja niso odstranjena iz podatkovne baze in jih lahko ponovno uporabimo v drugih vajah preko zaloge vprašanj.<br><br>
+Taka zaloga vprašanj omogoèa tudi njihovo uporabo v veèih vajah.<br><br>
+Privzeto so skrita vsa vprašanja našega teèaja. 
+Vprašanja neke vaje lahko prikažemo tako, da jih izberemo iz padajoèega menija \"Filter\".<br><br>
+Neuporabljena (osirotela) vprašanja so tista izmed vprašanj v zalogi, ki ne pripadajo nobeni vaji.</p>
+<hr> <b>HotPotatoes Tests</b> <p>You can import HotPotatoes tests into Dokeos portal, to this Tests tool. Results of these tests are stored the same way as Dokeos tests. You can explore the results in User Tracking. In case of single tests, we recommend to use html or htm format, if your test contains pictures, a zip file upload is the most convenient way.</p> <p>Note : You can add HotPotatoes Tests as a step in the Learning Path, as well.</p> <b>Method of the import</b> <ul> <li>Select the file on your computer using the Browse button <input type=submit value=Browse name=submit2> on the right of your screen.</li> <li> Launch the upload with the Upload Button <input type=submit value=Upload name=submit2>. </li> <li> You can open the test by clicking onto its name. </li> </ul> <br> <b>Useful link</b><br> <ul> <li>Hot Potatoes home page : <a href=\\\"http://web.uvic.ca/hrd/halfbaked/\\\">http://web.uvic.ca/hrd/halfbaked/</a></li> </li> </ul>";
+$langHPath = "Pomoè: Uèna pot";
+$langPathContent = "Orodje uèna pot ima dve glavni funkciji :
+<ul><li>Kreiranje uènih poti</li>
+<li>Prepis (upload) Scorm ali IMS oblikovanih uènih poti v portal</li></ul>
+<img src=\"../img/path_help.gif\">
+<p><b>
+Kaj je uèna pot ?</b>
+</p><p>Uèna pot je zaporedje uènih korakov vkljuèenih v samostojne module. Zaporedje je lahko vsebinsko-orientirano (navzven videti kot kazalo vsebine) ali aktivnostno-orientirano, pri èemer je videti kot agenda ali program aktivnosti, ki jih je potrebno izvesti za razumevanje doloèene snovi in njeno utrjevanje oz. doseganje želenega znanja ali razumevanja.</p><p>Dodatno k temu, lahko uèno pot naredimo sekvenèno. To pomeni, da izvedba doloèenega koraka lahko vzpostavi zahtevo po predhodno opravljenih drugih modulih (v stilu: \'ne moreš napredovati na lekcijo št. 3, èe predhodno ne opraviš obveznosti iz lekcije št. 2\'). Sekvenca je lahko sugestivna (prikazujemo korak za korakom) ali imperativna (dodamo predzahteve in s tem teèajnike prisilimo da sledijo zastavljeni sekvenci).
+</p>
+<p><b>Kako kreirati lastno uèno pot ?</b></p>
+<p>
+V prvem koraku uporabimo Kreator uène poti. Nanj kaže povezava iz glavnega okna orodja Uèna pot. Tu lahko kreiramo veè razliènim uènih poti z uporabo <i>Dodaj novo uèno pot</i>. Novo kreirane uène poti so prazne, dokler vanje ne dodate želenih modulov in korakov uène poti.<br>Èe naredite pot vidno
+visible, se ta pojavi kot novo orodje na domaèi strani teèaja. Na ta naèin omogoèite do njih enostavnejši dostop.</p>
+<p>
+<b>Kateri so koraki za te poti ? (Katere elemente lahko dodamo?)</b></p>
+<p>Vkljuèite lahko vsa Dokeos orodja, aktivnosti in vsebine za katere smatrate, da so lahko koristne in povezane z vašo namišljeno potjo :<br><ul>
+<li>elemente agende</li>
+<li>posamezne dokumente (besedila, slike, Office dokumenti, ...)</li>
+<li>elemente obvestil</li>
+<li>forume (kot celoto)</li>
+<li>naslove poglavij</li>
+<li>sporoèila posameznih poglavij oz. tematik</li>
+<li>povezave</li>
+<li>Dokeos teste oz. vaje (teste/vaje je potrebno narediti vidne preko orodja Vaje; tiste, ki jih želite teèajnikom
+predstaviti znotraj uène poti)</li>
+<li>strani z nalogami</li>
+<li>nabiralnik</li>
+<li>zunanje povezave, ki kažejo izven Dokeos portala</li></ul>
+</p>
+<p><b>
+
+Druge zmožnosti uènih poti</b>
+</p>
+<p>
+Od teèajnikov lahko zahtevamo sledenje (branje) uène poti v danem zaporedju. Zaporedje lahko definiramo s pomoèjo
+<u>predzahtev</u> v poti. To pomeni da npr. teèajniki ne morejo izvesti (prebrati, rešiti) Naloge št. 2 predenj ne preberejo besedila v Dokument št.1.  Vsi elementi poti so opremljeni s statusom :
+dokonèan ali nedokonèan, tako je napredovanje teèajnikov skozi uèno pot jasno razvidno.
+</p><p>
+Èe spremenite prvotni naslov koraka, se bo spremenjeni pojavil v poti, vendar pa bo ostal tudi prvotni naslov. Torej, èe želite, da se bo <i>test8.doc</i> pojavil kot <i>Zadnje preverjanje znanja</i> v uèni poti, ni potrebno preimenovati datoteke, temveè le uporabiti nov naslov v poti. Koristno je tudi dodeliti nove naslove povezavam, ker se slednje lahko pojavljajo kot (pre)dolga besedila.
+</p><p>
+Ko konèate, ne pozabite preveriti delovanje v naèinu, kot ga vidijo teèajniki (uporabniški pogled), kjer se kazalo vsebine pojavlja na levi strani in koraki poti obièajno posamièno na desni strani.
+</p><br><p><b>
+Kaj je SCORM ali IMS oblikovana uèna pot in kako je prenesemo (importiramo) v Dokeos portal?</b>
+</p>
+<p>Orodje Uèna pot dovoljuje prenos SCORM in IMS združljivih vsebin teèajev.</p>
+<p>SCORM  (<i>Sharable Content Object Reference Model</i>) je javni standard, ki ga uporablja in mu sledi
+veèina akterjev na podroèju e-uèenja, kot so: NETg, Macromedia, Microsoft, Skillsoft, idr...
+<u>Deluje</u> na treh ravneh:
+</p>
+<ul>
+<li><b>Ekonomski</b> : Scorm dovoljuje celotnemu teèaju ali njegovim manjšim enotam
+uporabnost znotraj razliènih LMS (Learning Management Systems - sistemi za upravljanje z uèenjem) s tem, da loèuje vsebinski del teèaja od
+dela, ki vsebino opisuje,</li>
+<li><b>Pedagoški</b> : Scorm vsebuje zapise o potrebnih pogojih in/ali
+ <i>zaporednosti (sekvenènosti)</i> (<i>npr. </i>\"Ne morete preiti na poglavje 2 preden (uspešno)ne izvedete test 
+ iz poglavja 1\"),</li>
+<li><b>Tehnološki</b> : Scorm generira tabelo vsebine kot abstraktno plast
+izven same vsebine teèaja in izven LMS (Learning Management System). Omogoèa, da vsebina
+in LMS medsebojno komunicirata. Kar se v komunikaciji prenaša, so pretežno <i><u>beležke </u></i>  (\\\'Kje se John nahaja znotraj teèaja?\\\'), <i><u>toèkovanje</u></i> 
+(\\\'Kako je John izvedel test?\\\') in <i><u>èas</u></i> 
+(\\\'Koliko èasa je John porabil za poglavje 1?\\\').</li>
+</ul>
+
+<b>Kako izdelati SCORM združljive uène poti?</b><br>
+<br>
+Najbolj naraven naèin je uporaba Dokeos-ovega kreatorja uènih poti. Lhko pa da želite izgraditi celotno Scorm združljivo spletno stran lokalno na vašem lastnem raèunalniku, predenj jo prenesete v Dokeos portal. V tem primeru priporoèamo uporabo kompleksnejših orodij, kot sta npr. Lectora® in Reload®.
+<br></p><p>
+<b>Uporabne povezave</b><br>
+<ul>
+<li>Adlnet : odgovorni za Scorm standardizacijo (normalizacijo), <a
+href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li>
+<li>Reload : Open Source brezplaèen Scorm predvajalaec in urejevalec, <a
+href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li>
+<li>Lectora : Scorm založniška programska oprema, <a
+href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br>
+</li>
+</ul>
+<p><b>
+Opomba :</b></p><p>
+Orodje uènih poti prikazuje vse <i>lastno-zgrajene uène poti</i>
+in vse prenešene <i>uène poti v Scorm obliki</i> v istem seznamu. Zato je pametno vsak posamezen prenešen (uploaded) teèaj v Scorm obliki odložiti v lastno mapo.
+</p>";
+$langHDescription = "Pomoè: Opis teèaja";
+$langDescriptionContent = "<p>To orodje vam nudi pomoè pri opisovanju vašega teèaja. Opis omogoèa (bodoèim) teèajnikom jasen vpogled v vsebine, zahteve in nenazadnje koristi, ki jih bodo imeli od teèaja. Hkrati pa nudi tvorcu teèaja tudi možnost, da razmisli o scenariju izvajanja vsebin teèaja.</p><p>Elementi opisa iz menija na desni strani, so podani zgolj kot predlog. Èe želite tvoriti opis s svojimi elementi, uporabite element \'Drugo\' in mu dodajte lasten naslov.</p>
+<p>
+Za vnos opisa teèaja, izberite Kreiraj in uredi z obrazcem > v padajoèem meniju izvedite želeno izbiro > izpolnite obrazec > uporabite gumb Uveljavi. V vsakem trenutku lahko uredite ali odstranite vsebino vsakega dela opisa s klikom na ikono pisala ali rdeèega križca.</p>";
+$langHLinks = "Pomoè: orodje Povezave";
+$langLinksContent = "<p>Orodje Povezave vam omogoèa ustvariti knjižnico resursov (zmožnosti, virov, ..) za vaše teèajnike. Še posebej resursov, ki jih niste naredili sami.</p>
+<p>Ko seznam raste, se mogoèe izkaže za smiselno organizirati jih v posamene kategorije, da vaši teèajniki laže najdejo želeno informacijo. Vsako ustvarjeno povezavo lahko v vsakem trenutku premaknete v drugo kategorijo (v primeru, da jih želite premakniti v novo kategorijo, je le to najprej potrebno ustvariti).</p>
+<p>Polje Opis lahko pri tem uporabite za informacijo o strani, na katero kaže povezava, lahko pa tudi za opis tega, kaj od teèajnikov prikakujete, da bodo naredili pri uporabi te povezave. Èe npr. izvedete povezavo na stran s podatki o Aristotlu, lahko polje opisa vsebuje tudi vprašanje teèajnikom o razliki med sintezo in analizo. ";
+$langHMycourses = "Pomoè: Domaèa stran";
+$langMycoursesContent = "<p>Ko se prijavite v sistemu, ste tu, na <i>vaši</i> strani. Vidite lahko:
+<ul><li><b>Seznam mojih teèajev</b> v sredini strani, in tudi (v odvisnosti od varnostnih nastavitev portala) možnost kreiranja novih (desni meni),</li>
+<li>V orodni vrstici zaglavja strani <b>Moj profil</b>: se uporablja za spreminjanje gesla, uporabniškega imena, dodajanje osebne slike, preverjanje lastnega sledenja, ...</li>
+<li><b>Agenda</b>: vsebuje vse dogodke v zvezi s teèaji, v katere ste prijavljeni,</li>
+
+<li>V meniju na desni strani: <b>Uredi seznam mojih teèajev</b> ki omogoèa vpis v nove teèaje dokler uèitelj ali organizacija omogoèa prost vpis. Uporabite to orodje tudi v primeru, da se želite iz teèaja izpisati,
+</li>
+<li>Povezave  <b>Forum Podpore</b> in <b>Dokumentacija</b>, ki se povezujejo na glavno Dokeos WWW stran, kjer lahko zastavite tehnièna ali pedagoška vprašanja, poišèete veè informacij na doloèeno temo.</li></ul>
+Za vstop v podroèje teèaja (centralno obmoèje strani), kliknite na njegovo ime. Vaš profil se lahko spreminja od teèaja do teèaja. Možno je, da ste v nekem teèaju v vlogi uèitelja, v nekem drugem pa istoèasno v vlogi slušatelja. 
+</p>";
+$langHAgenda = "Pomoè: Agenda";
+$langAgendaContent = "<p><p>Agenda se pojavlja tako v podroèju vsakega teèaja, kot tudi v obliki stalno vgrajenega orodja za teèajnike (\'Agenda\' v orodni vrstici zaglavja strani).</p>
+<p>V teèaju se agenda pojavlja kot spisek obvestil. Z njeno pomoèjo lahko prilepite dokumente in/ali aktivnosti na doloèen oz. izbran datum, in s tem lahko postane kronološki program izvajanja uènih aktivnosti.</p>
+<p>Vsak nov dogodek, vnešen v agendo, se predstavi teèajniku, kadar se ta naslednjiè prijavi v portal. Sistem samostojno predstavi, kaj je bilo dodano Agendi (tudi v Obvestilih) od njenega/njegovega zadnjega obiska : na domaèi strani portala se ob imenu teèaja pojavi ikona, ki oznaèuje, da so bili novi dogodki dodani.</p>
+<p>Èe želite iti še korak naprej v logiki strukturiranja uènih aktivnosti, predlagamo, da raje uporabite orodje Uèna pot, ki ponuja enak pristop z bolj izpopolnjenimi zmožnostmi. Orodje Uèna pot lahko smatramo kot sintezo orodij Kazalo vsebine + Agenda + zaporedje (predpostavljen vrstni red izvajanja) in Sledenje.</p>";
+$langHAnnouncements = "Pomoè: Obvestila";
+$langAnnouncementsContent = "<p>Orodje Obvestila omogoèa pošiljanje elektronskih sporoèil (e-pošta) vsem vašim teèajnikom, posameznikom ali izbrani skupini teèajnikov. Svojo uèinkovitost kaže v tem, da teèajnike usmerja nazaj na vašo spletno stran (teèaja), ko njihovi obiski postajajo redkejši.</p>
+<p>Da bi poslali sporoèilo izbranim uporabnikom in/ali skupini, izberite \'Sporoèila izbranim uporabnikom\', uporabite CTRL+C za izbiro veè kot enega naslovnika v levi izbiri, kliknite pušèico, usmerjeno v desno in vpišite želeno sporoèilo v spodnje tekstovno polje.</p>";
+$langHChat = "Pomoè: Klepetalnica";
+$langChatContent = "<p><p>Orodje Klepetalnica (Chat) vam omogoèa neposreden razgovor z vašimi teèajniki.</p>
+<p>Vgrajena klepetalnica ni podobna obièajnim, kot sta npr. MSN® ali Yahoo Messenger®, ker preprosto bazira na WWW vmesniku. Slabost takega pristopa je, da se vsebina ne osvežuje takoj ampak šele približno po 10 sekundah. Njena glavna prednost pa je v njeni integraciji v sam teèaj, v avtomatiènem arhiviranju diskusij (arhiv diskusij je dostopen preko orodja Dokumenti) in v tem, da od teèajnikov ne zahteva posebne dodatne programske opreme.</p>
+<p>Èe uporabnik objavi svojo sliko  (s pomoèjo orodja \'Moj Profil\' - orodna vrstica v zaglavju strani), se ta slika prikaže med diskusijo, kar omogoèa lažjo identifikacijo osebe, s katero razpravljamo.</p>
+<p>Le uèiteljem je dovoljeno odstraniti diskusijo. Ponavadi v primeru, ko opazi, da vsebina diskusij ni pomembna ali je neustrezna.</p>
+<p><b>Pedagoška ustreznost uporabe</b></p>
+<p>Dodajanje tega orodja k teèaju ni nujno pametna ideja. Vendar, v primeru, da ustreza vašemu scenariju, je klepetalnica lahko tudi koristno orodje. Predstavljajte si, na primer, da skrijete klepetalnico vedno, razen v doloèenih èasovnih obdobjih, ko se odloèite, da boste dajali odgovore na vprašanja teèajnikom v živo. V tem primeru, gre manj za prosto dostopno debatno orodje kot za zagotovilo taèajnikom, da bodo imeli korist od take povezave.</p>";
+$langHWork = "Pomoè: Naloge";
+$langWorkContent = "<p>Orodje Naloge je zelo enostavno orodje. Omogoèa teèajnikom prenos (upload) poljubnega dokumenta v podroèje teèaja.</p>
+<p>V odvisnosti od scenarija teèaja, se boste odloèili ali želite, da vsi teèajniki vidijo vse dokumente (v primeru, da želite od ostalih teèajnikov mnenje o neki nalogi) ali pa ste vi edini, ki jih lahko pogleda (v primeru, da želite isto vprašanje zastaviti vsem teèajnikom, pa se želite izogniti goljufanju).</p>
+<p>To orodje vsebuje tekstovno podroèje, poimenovano Uvodno besedilo, ki vam omogoèa vnos vprašanja, podrobnejših navodil, lahko služi kot opomnik za skrajni rok oddaje naloge ali kakršnokoli drugo pomembno informacijo.</p>";
+$langHTracking = "Pomoè: Sledenje";
+$langTrackingContent = "<p>Sledenje omogoèa spremljanje dela vaših teèajnikov : ali so se prijavili v portal, kdaj, kolikokrat? Kako so reševali naloge? Ali so že prenesli izdelke? Kdaj? Èe uporabljate Scorm teèaje, lahko izveste koliko èasa je posamezen teèajnik porabil za doloèen modul ali poglavje. Sledenje daje informacije na 2 nivojih:
+<ul><li><b>Globalno</b>: Koliko teèajnikov je dostopilo do teèaja? Katere so bile najveèkrat obiskane strani in povezave?</i>
+<li><b>Poimensko</b>: Katere strani je Janez Novak obiskal? Kakšen rezultat je dosegel v doloèenem testu? Kdaj se je nazadnje prijavil v sistem?</li></ul>";
+$langHSettings = "Pomoè: Nastavitve teèaja";
+$langSettingsContent = "<p>Nastavitve teèaja vam omogoèajo upravljanje z globalnimi parametri vašega teèaja, kot so npr. : naslov teèaja, koda, jezik, imena uèiteljev, ...</p>
+<p>Nastavitve, ki se nahajajo na sredini strani, se nanašajo na varnost oz. zasebnost : je teèaj javen ali zaseben? Ali se lahko teèajniki registrirajo vanj? <br/>Nastavitve lahko uporabljate dinamièno : <br/></br><b>omogoèite registracijo za en teden > pozovete teèajnike, da se registrirajo > zaprete dostop do registracije > odstranite neželene uporabnike iz seznama uporabnikov.</b> <br/><br/>Na ta naèin lahko kontrolirate seznam teèajnikov, ne da bi jih sami morali registrirati.</p>
+<p>Na dnu strani sta orodji za izdelavo rezervne kopije teèaja (Backup) in za brisanje teèaja. Orodje za izdelavo rezervne kopije skreira datoteko na strežniku in omogoèa hkraten prenos narejene datoteke na lokalni raèunalnik. Tako dobite 2 rezervni kopiji teèaja na dveh razliènih lokacijah. Pred vsakim brisanjem teèaja priporoèamo izdelavo rezervne kopije. Uporabnikom ni dovoljeno samodejno restavriranje teèaja iz rezervne kopije, temveè to zanje naredi administrator portala potem, ko mu dostavite kodo teèaja. Izdelava rezervne kopije teèaja je tudi dober naèin, ki vam omogoèa dobiti vse objavljene dokumente nazaj na vaš lasten raèunalniški sistem. Potrebovali boste le orodje, kot je npr. Winzip® za dekomprimiranje ZIP arhivske datoteke. Pomnite, da izdelava rezervne kopije teèaja le tega ne odstrani iz spiska teèajev portala, niti ne odstrani katerega koli njegovega dela.</p>";
+$langHExternal = "Pomoè: Dodaj povezavo";
+$langExternalContent = "<p>Dokeos je modularno orodje. Skrijete ali prikažete lahko posamezna orodje kadarkoli to želite, v odvisnosti od vašega projekta ali glede na razliène kronološke faze poteka teèaja. Na vašo stran lahko dodate tudi orodja ali strani, ki ste jih kreirali in/ali prihajajo oz. so namešèene izven vašega Dokeos portala. Na ta naèin, boste iz vaše strani teèaja dejansko naredili VAŠO osebno stran.</p>
+<p>Za izvedbo nadzora nad vašo stranjo na opisan naèin, nanjo dodate povezave. Te povezave so trenutno lahko dveh tipov:
+<ul><li><b>Zunanja povezava</b>: na vaši spletni strani ustvarite povezavo na neko drugo spletno stran, ki se nahaja izven podroèja vašega teèaja. V tem primeru izberete <i>Cilj povezave=</i> <b><i>v novem oknu</i></b>, ker ponavadi ne želite, da bi ta spletna stran nadomestila vaše trenutno Dokeos okolje.</li>
+<li><b>Notranja povezava</b>: povezujete na stran ali orodje znotraj vašega Dokeos teèaja. Da bi to dosegli, greste z brskalnikom najprej na stran ali dokument ali orodje, naredite kopijo URL naslova iz naslovne vrstice URL vašega brskalnika (npr. uporabite kombinacijo tipk CTRL+C), nato izberete orodje Dodaj povezavo in prilepite URL (CTRL-V) v polje URL ter povezavo poljubno poimenujete. V tem primeru izberete <i>Cilj povezave=</i> <b><i>v istem oknu</i></b>, da obržite na ciljni strani zaglavje Dokeos oz. da obdržite isto izvajalno okolje.</li></ul>
+Ko povezave enkrat ustvarite, jih ne morete popraviti. Da bi jih spremenili, je povezave potrebno deaktivirati, šele nato odstraniti, in postopek dodajanja ponoviti od zaèetka.</p>";
+$langClarContent3 = "Poèisti vsebino";
+$langClarContent4 = "Poèisti vsebino";
+$langClarContent1 = "Poèisti vsebino";
+$langClarContent2 = "Poèisti vsebino";
+$langHGroups = "Skupine";
+$langGroupsContent = "Vsebina skupin";
+$langGuide = "Priroènik";
+$langHCourseRolesRights = "Pomoè za Vloge in pravice";
+$langCourseRolesRightsContent = "<p>Na strani Pregled vlog in pravic lahko za svoj teèaj natanèno doloèite <em>komu je kaj dovoljeno narediti in na katerem mestu (orodju) to lahko stori</em>.</p> <p>Osnovna ideja je, da za vsako orodje teèaja lahko natanèno opredelimo, kdo lahko vrši vpogled v vsebine, kdo lahko dodaja vsebine, kreira mape, spreminja obstojeèo vsebino, ali briše doloèen del vsebin teèaja. Da pa tega ne bi bilo potrebno definirati za vsakega uporabnika posebej, so znotraj plaforme definirane vloge uporabnikov. Vsak uporabnik, ki obišèe platformo, igra znotraj portala eno izmed prednastavljenih vlog, kot so npr. anonimen gost, obièajen teèajnik, uèni asistent,  upravitelj teèaja. Za vsako od teh vlog lahko doloèimo pravice za delo z vsakim posameznim orodjem teèaja. Lahko npr. doloèite, da vsi uporabniki lahko dostopajo do foruma, a anonimni obiskovalci ne morejo objavljati - to lahko le registrirani uporabniki. Ali pa: asistent lahko dodaja dokumente v orodju dokumenti teèaja, ne more pa jih odstraniti. </p> <p> V orodju uporabniki teèaja lahko dostopate do obstojeèih vlog uporabnikov, lahko pa jih tudi spremenite (uporabite gumb uredi v seznamu uporabnikov). </p> <h3>Pregled vseh lokalnih vlog</h3> <p> Znotraj Dokeos je definiranih 5 lokalnih vlog. Te vloge lahko dodeljujete uporabnikom znotraj teèaja. <ul> <li><b>Anonimen obiskovalec teèaja</b>: je lahko poljubna oseba, ki zgolj odpre spletni brskalnik in skuša obiskati poljuben teèaj. Prednastavljeno ti uporabniki nimajo nobenih pravic, niti nimajo pravice vpogleda v vsebine teèaja.</li> <li><b>Registriran obiskovalec teèaja</b>: to vlogo igra uporabnik, ki je sicer registriran v Dokeos platformo in obišèe teèaj, v katerega pa ni vpisan.</li> <li><b>Obièajen teèajnik</b>: je osnovna vloga za uporabnike, ki so vpisani v ta teèaj. Tipièno v teèaju igra to vlogo veèina v teèaj vpisanih uporabnikov, razen tistih, ki jim upravitelj teèaja dodeli vlogo uènega asistenta, da mu pomaga pri razvoju/izvedbi teèaja.</li> <li><b>U&#269;ni asistent</b>: ta vloga vkljuèuje mnoge izmed prednastavljenih pravic. V veèini orodij ima asistent pravico vpogleda, dodajanja in urejanja vsebine, ne pa tudi odstranjevanja vsebine. Uènemu asistentu je tudi onemogoèeno upravljanje z nastavitvami teèaja in upravljanje z vlogami in pravicami.</li> <li><b>Upravitelj teèaja</b>: upravitelj teèaja ima vse možne pravice v teèaju in lahko poène s svojim teèajem karkoli. Kreatorju teèaja se avtomatièno dodeli ta vloga.</li> </ul> </p> <h3>Pregled vseh pravic</h3> <p> Dokeos definira štiri osnovne vrste pravic: <ul> <li><b>Pregledovanje</b>: the right to see a tool and its contents</li> <li><b>Dodajanje</b>: the right to add new content in a tool, e.g. add hyperlinks, categories, documents, folders, student publications, forum messages...</li> <li><b>Urejanje</b>: the right to edit existing content in a tool, e.g. edit the url of a hyperlinks, the name of a folder, the title and keywords of a document...</li> <li><b>Brisanje</b>: pravica brisanja obstojeèe vsebine v doloèenem orodju, npr. brisanje hiperpovezav, objav teèajnikov, sporo&#269;il foruma, dokumentov...</li> </ul> </p> <h3>Pregled lokacij</h3> <p> Vsak teèaj in vsako orodje teèaja v vsakem teèaju predstavljajo loèene lokacije v Dokeos. Nekaj primerov lokacij je podanih spodaj <ul> <li>teèaj TEST_COURSE</li> <li>orodje Dokumenti teèaja TEST_COURSE</li> <li>orodje Agenda teèaja Psihologija101</li> </ul></p> <h3>Nastavitev pravic</h3> <p>Kot upravitelj teèaja, lahko doloèite, kdo lahko kaj poène in na kateri lokacijo lahko to stori. Za vsako kombinacijo vloga-lokacija lahko nastavite štiri vrste pravic. can be set. Tako lahko nastavite pravico vpogleda za uènega asistenta v orodju dokumenti, pravico dodajanja za registrirane uporabnike teèaja v orodju povezav, .... </p>
+
+ ";
+?>

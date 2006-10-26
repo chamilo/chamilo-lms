@@ -1,0 +1,61 @@
+<!-- {-mdp_scorm_rls.htt-} -->            <!-- for Dokeos metadata/index.php -->
+                                                             <!-- 2005/04/19 -->
+
+<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
+
+
+<!-- {-METADATA-} -->
+
+{-D level {-V @level-}-}{-T level == 0 C SCORM0-}{-T level != 0 C SCORM123-}
+
+
+<!-- {-SCORM0-} -->
+
+<h1>{-X title-}</h1>
+
+<table>
+    {-R child C SUBITEM-}
+</table>
+
+
+<!-- {-SUBITEM-} -->
+
+<tr>
+    <td><a href="{-P self-}&sid={-U {-V @identifier-}-}">{-X @identifier-}</a></td>
+    <td><a href="{-U {-V resource/@href-}-}" target="_blank">{-X title-}</a></td>
+</tr>
+    
+
+<!-- {-SCORM123-} -->
+
+<br/>
+{-D prv {-V previous/@identifier-}-}{-D nxt {-V next/@identifier-}-}{-D kwds {-X metadata/lom/general/keyword/string , -}-}
+<table border="1" width="100%">
+    <tr>
+        <td align="left">
+        {-T prv != empty <a href="{-P self-}&sid={-U {-P prv-}-}">{-H {-P prv-}-}</a>-}{-T prv == empty X @identifier-}
+        </td>
+        <td align="center">
+         <a href="{-P self-}&sid={-U {-V parent/@identifier-}-}">{-X parent/@identifier-}</a>
+        </td>
+        <td align="right">
+        {-T nxt != empty <a href="{-P self-}&sid={-U {-P nxt-}-}">{-H {-P nxt-}-}</a>-}{-T nxt == empty X @identifier-}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3"><a href="{-U {-V resource/@href-}-}" target="_blank">{-X @identifier-}: <font size="+1">{-X title-}</font></a></td>
+    </tr>
+</table>
+
+
+<!-- {-HEAD-} -->
+
+<title>{-X title-}</title>
+
+
+<!-- {-HTTP-} -->
+
+Expires: Mon, 26 Jul 1997 05:00:00 GMT
+
+
+<!-- {--} -->

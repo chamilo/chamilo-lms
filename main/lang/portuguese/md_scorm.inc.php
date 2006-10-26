@@ -1,0 +1,49 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$nameTools = "variável de linguaguem obsoleta";
+$langMdCallingTool = "Sequência de Aprendizagem - Scorm";
+$langTool = "Operações MD Scorm";
+$langSorry = "Seleccionar um curso primeiro";
+$langDenied = "Esta função está apenas disponível para o administrador do curso";
+$langWorkOn = "em";
+$langNotInDB = "Não existe entrada DB Dokeos";
+$langManifestSyntax = "(erro de sintaxe no ficheiro manifest ...)";
+$langEmptyManifest = "(esvaziar ficheiro manifest ...)";
+$langNoManifest = "(não existe ficheiro manifest ...)";
+$langNotFolder = "não é possível, não é uma pasta ...";
+$langContinue = "Continue com SD-id";
+$langUploadHtt = "Transferir ficheiro HTT";
+$langHttFileNotFound = "O novo ficheiro HTT não pôde ser aberto (ex.: vazio, demasiado grande)";
+$langHttOk = "Novo ficheiro HTT foi transferido";
+$langHttNotOk = "falhou a transferência do ficheiro HTT";
+$langRemoveHtt = "Remover ficheiro HTT";
+$langHttRmvOk = "O ficheiro HTT foi removido";
+$langHttRmvNotOk = "A remoção do ficheiro HTT falhou";
+$langImport = "Criar MDEs a partir de manifest";
+$langRemove = "Remover MDEs";
+$langAllRemovedFor = "Todas as entradas foram removidas para";
+$langIndex = "Index Words with PhpDig";
+$langStatistics = "Estatísticas";
+$langTotalMDEs = "Número total de entradas MD Scorm:";
+$langMainMD = "Abrir MDE Principal";
+$langLines = "linhas";
+$langPlay = "Abrir index.php";
+$langNonePossible = "Não são possíveis operações MD";
+$langOrElse = "Seleccionar uma Directoria Scorm ou uma id ";
+$langWorkWith = "Trabalhar com a Directoria Scorm";
+$langSDI = "... Scorm Directory with SD-id (and split manifest - or leave empty)";
+$langRoot = "root";
+$langSplitData = "Split manifests, and #MDe, if any:";
+$langMffNotOk = "Falhou reposição do ficheiro manifest";
+$langMffOk = "O ficheiro manifest foi recolocado";
+$langMffFileNotFound = "Novo ficheiro manifest não pode ser aberto (ex.: vazio, demasiado grande)";
+$langUploadMff = "Recolocar o ficheiro manifest";
+$langMfMissing = "O ficheiro manifest não foi encontrado";
+$langMfFile = "Ficheiro manifest";
+$langMfSyntaxError = "Erro de sintaxe no ficheiro manifest";
+$langManifest = "Manifest";
+$langImported = "importado";
+$langImpossible = "Impossível";
+$langTo = "para";
+?>

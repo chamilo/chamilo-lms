@@ -1,0 +1,36 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
+$LearningPath = "Learning Path";
+$LevelUp = "level up";
+$AddIt = "Add it";
+$MainCategory = "main category";
+$lang_delete_added_resources = "Delete added resources";
+$AddToLinks = "Add to the course links";
+$DontAdd = "do not add";
+$lang_show_all_added_resources = "Show all added resources";
+$ResourcesAdded = "Added new resources";
+$BackTo = "Back to";
+$ExternalResources = "External resources";
+$CourseResources = "Course resources";
+$ExternalLink = "External link";
+$DropboxAdd = "Add the dropbox page to this chapter.";
+$AddAssignmentPage = "Add the upload assignment page to this chapter.";
+$Dropbox = "Dropbox";
+$Assignments = "Assignments";
+$Exercise = "Test";
+$Link = "Link";
+$Forum = "Forum";
+$AdValvas = "Ad Valvas";
+$Document = "Document";
+$Agenda = "Agenda";
+$IntroductionText = "Εισαγωγικό κείμενο";
+$CourseDescription = "περιγραφή στο κατάλογο μαθημάτων";
+$Groups = "Ομάδες Χρηστών";
+$Users = "Χρήστες";
+$Modify = "Τροποποίηση";
+$Detail = "Λεπτομέρειες";
+$EditSuccess = "Η διόρθωση των στοιχείων της εργασίας έγινε με επιτυχία!";
+$AddAnn = "Προσθήκη Ανακοίνωσης";
+?>

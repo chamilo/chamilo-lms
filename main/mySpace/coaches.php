@@ -1,0 +1,264 @@
+<?php
+
+/*
+ * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
+ */
+ 
+ob_start(); 
+
+$langFile = array ('registration', 'index','trad4all', 'tracking', 'admin');
+$cidReset=true;
+require ('../inc/global.inc.php');
+
+$this_section = "session_my_space";
+
+$nameTools= get_lang('Tutors');
+
+api_block_anonymous_users();
+$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+Display :: display_header($nameTools);
+
+api_display_tool_title($nameTools);
+
+$tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+$tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
+$tbl_session_rel_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+$tbl_session_rel_course_rel_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+$tbl_session_rel_user = Database :: get_main_table(MAIN_SESSION_USER_TABLE);
+$tbl_track_login = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+
+
+/*
+ ===============================================================================
+ 	FUNCTION
+ ===============================================================================  
+ */
+ 
+ function exportCsv($a_header,$a_data)
+ {
+ 	global $archiveDirName;
+
+	$fileName = 'coaches.csv';
+	$archivePath = api_get_path(SYS_PATH).$archiveDirName.'/';
+	$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
+	
+	if(!$open = fopen($archivePath.$fileName,'w+'))
+	{
+		$message = get_lang('noOpen');
+	}
+	else
+	{
+		$info = '';
+		
+		foreach($a_header as $header)
+		{
+			$info .= $header.';';
+		}
+		$info .= "\r\n";
+		
+		
+		foreach($a_data as $data)
+		{
+			foreach($data as $infos)
+			{
+				$info .= $infos.';';
+			}
+			$info .= "\r\n";
+		}
+		
+		fwrite($open,$info);
+		fclose($open);
+		chmod($fileName,0777);
+		
+		header("Location:".$archiveURL.$fileName);
+	}
+	
+	return $message;
+ }
+ 
+ function calculHours($seconds)
+	{
+	  //combien d'heures ?
+	  $hours = floor($seconds / 3600);
+	
+	  //combien de minutes ?
+	  $min = floor(($seconds - ($hours * 3600)) / 60);
+	  if ($min < 10)
+	    $min = "0".$min;
+	
+	  //combien de secondes
+	  $sec = $seconds - ($hours * 3600) - ($min * 60);
+	  if ($sec < 10)
+	    $sec = "0".$sec;
+	        
+	  //echo $hours."h".$min."m".$sec."s";
+	
+		return $hours."h".$min."m".$sec."s" ;
+	
+	}
+
+
+/**
+ * MAIN PART
+ */
+
+/*
+ * liste nominative avec coordonnées et lien vers les cours et
+les stagiaires dont il est le
+responsable. 
+ */
+
+if(isset($_GET["id_student"])){
+	
+	$i_id_student=$_GET["id_student"];
+	$sqlCoachs = "SELECT DISTINCT src.id_coach " .
+					"FROM $tbl_session_rel_course as src, $tbl_session_rel_course_rel_user as srcru, $tbl_user as user " .
+					"WHERE src.id_coach<>'0' AND src.course_code=srcru.course_code AND srcru.id_user='$i_id_student' AND srcru.id_user=user.user_id
+				  ";
+
+}
+
+else{
+$sqlCoachs = "	SELECT DISTINCT id_coach, user_id, lastname, firstname
+					FROM $tbl_user, $tbl_session_rel_course
+					WHERE id_coach=user_id
+					ORDER BY lastname ASC
+				  ";
+}
+$resultCoachs = api_sql_query($sqlCoachs);
+
+echo '<table class="data_table">
+	 	<tr>
+			<th>
+				'.get_lang('Lastname').'
+			</th>
+			<th>
+				'.get_lang('Firstname').'
+			</th>
+			<th>
+				'.get_lang('ConnectionTime').'
+			</th>
+			<th>
+				'.get_lang('AdminCourses').'
+			</th>
+			<th>
+				'.get_lang('Students').'
+			</th>
+		</tr>
+  	 ';
+
+$a_header[]=get_lang('Lastname');
+$a_header[]=get_lang('Firstname');
+$a_header[]=get_lang('ConnectionTime');
+
+if(mysql_num_rows($resultCoachs)>0){
+	
+	while($a_coachs=mysql_fetch_array($resultCoachs)){
+		
+		$i_id_coach=$a_coachs["id_coach"];
+		
+		if(isset($_GET["id_student"])){
+			$sql_infos_coach="SELECT lastname, firstname FROM $tbl_user WHERE user_id='$i_id_coach'";
+			$resultCoachsInfos = api_sql_query($sql_infos_coach);
+			$s_lastname=mysql_result($resultCoachsInfos,0,"lastname");
+			$s_firstname=mysql_result($resultCoachsInfos,0,"firstname");
+		}
+		
+		else{
+			$s_lastname=$a_coachs["lastname"];
+			$s_firstname=$a_coachs["firstname"];
+		}
+		
+		$s_sql_connection_time="SELECT login_date, logout_date FROM $tbl_track_login WHERE login_user_id ='$i_id_coach' AND logout_date <> 'null'";
+
+		$q_result_connection_time=api_sql_query($s_sql_connection_time);
+		
+		$i_nb_seconds=0;
+		
+		while($a_connections=mysql_fetch_array($q_result_connection_time)){
+			
+			$s_login_date=$a_connections["login_date"];
+			$s_logout_date=$a_connections["logout_date"];
+			
+			$i_timestamp_login_date=strtotime($s_login_date);
+			$i_timestamp_logout_date=strtotime($s_logout_date);
+			
+			$i_nb_seconds+=($i_timestamp_logout_date-$i_timestamp_login_date);
+			
+		}
+		
+		$s_connection_time=calculHours($i_nb_seconds);
+		if($s_connection_time=="0h00m00s"){
+			$s_connection_time="";
+		}
+		
+		if($i%2==0){
+			$s_css_class="row_odd";
+			
+			if($i%20==0 && $i!=0){
+				echo '<tr>
+					<th>
+						'.get_lang('Lastname').'
+					</th>
+					<th>
+						'.get_lang('Firstname').'
+					</th>
+					<th>
+						'.get_lang('ConnectionTime').'
+					</th>
+					<th>
+						'.get_lang('AdminCourses').'
+					</th>
+					<th>
+						'.get_lang('Students').'
+					</th>
+				</tr>';
+			}
+			
+		}
+		else{
+			$s_css_class="row_even";
+		}
+		
+		$i++;
+		
+		$a_data[$i_id_coach]["lastname"]=$s_lastname;
+		$a_data[$i_id_coach]["firstname"]=$s_firstname;
+		$a_data[$i_id_coach]["connection_time"]=$s_connection_time;
+			
+		echo '<tr class="'.$s_css_class.'"><td>'.$s_lastname.'</td><td>'.$s_firstname.'</td><td>'.$s_connection_time.'</td><td><a href="cours.php?type=coach&user_id='.$i_id_coach.'">-></a></td><td><a href="myStudents.php?type=coach&user_id='.$i_id_coach.'">-></a></td></tr>';
+		
+	}
+	
+}
+
+//No results
+else{
+	
+	echo '<tr><td colspan="5" "align=center">'.get_lang("NoResult").'</td></tr>';
+	
+}
+
+echo '</table>';
+
+if(isset($_POST['export'])){
+	
+	exportCsv($a_header,$a_data);
+	
+}
+
+echo "<br /><br />";
+echo "<form method='post' action='coaches.php'>
+		<input type='submit' name='export' value='".get_lang('exportExcel')."'/>
+	  <form>";
+
+/*
+==============================================================================
+	FOOTER
+==============================================================================
+*/
+
+Display::display_footer();
+
+?>

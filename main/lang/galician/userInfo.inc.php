@@ -1,0 +1,38 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langUsers = "Usuarios";
+$langLineNumber = "Número de liñas";
+$langLine = "liña";
+$langLines = "liñas";
+$langLineOrLines = "liña(s)";
+$langRemove = "borrar";
+$langMoveUp = "Subir";
+$langMoveDown = "Baixar";
+$langAddNewHeading = "Engadir novo encabezado";
+$langCourseAdministratorOnly = "Só o administrador do curso";
+$langDefineHeadings = "Definir encabezados";
+$langBackToUsersList = "Volver &aacute lista de usuarios";
+$langTracking = "Seguemento";
+$langCourseManager = "Profesor";
+$langModRight = "cambiar os dereitos de";
+$langNone = "ningún";
+$langAll = "todos";
+$langNoAdmin = "desde agora non ten dereito de administración neste sitio";
+$langAllAdmin = "agora ten todos os dereitos de administración sobre esta páxina";
+$langModRole = "Cambiar o rol de";
+$langRole = "Rol/Estatus";
+$langIsNow = "agora está arriba";
+$langInC = "neste curso";
+$langFilled = "Algúns campos están incompletos";
+$langUserNo = "Usuario Nº";
+$langTaken = "xa está en uso. Por favor, seleccione un diferente";
+$langUserName = "Nome";
+$langTutor = "Titor";
+$langUnreg = "Anular inscrición";
+$langGroupUserManagement = "Xestión de grupos";
+$langUserInfo = "Información do usuario";
+$langUnregister = "Sen rexistrar";
+$langAddAUser = "Engadir usuarios";
+$langGroupManagement = "Xestión de grupos";
+?>

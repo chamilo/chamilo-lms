@@ -1,0 +1,112 @@
+body {
+	scrollbar-base-color: #EEEEEE;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	text-align : left;
+	margin-left : 5;
+	margin-right : 3;
+	margin-top : 2;
+	margin-bottom : 5;
+}
+p, blockquote, td, ol, ul {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	text-align : left;
+}
+a:link, a:active, a:visited { text-decoration:none; color: blue; font-size: 10px; }
+a:hover { text-decoration:underline; color: blue; font-size: 10px; }
+a.completed:link, a.completed:active, a.completed:visited {text-decoration:none; color: blue; font-size: 10px;}
+a.completed:hover { text-decoration:underline; color: blue; font-size: 10px;}
+a.menu:link, a.menu:active, a.menu:visited {text-decoration:none; color: black; font-size: 11px;}
+a.menu:hover { text-decoration:underline; color: black; font-size: 11px;}
+div.title {
+	font-size: 11px;
+	font-weight : bold;
+	text-align : left;
+}
+div.message {
+	font-size: 10px;
+	font-style : italic;
+	color : black;
+	text-align : left;
+	font-weight : bold;
+	margin-left: 0.5em;
+	margin-top: 0.5em;
+}
+div.message_thin {
+	font-size: 10px;
+	font-style : italic;
+	color : black;
+	text-align : left;
+}
+div.mystatusfirstrow {
+	font-weight : bold;
+	font-size: 10px;
+	text-align : left;
+}
+div.mystatus {
+	font-size: 10px;
+}
+div.description {
+	font-family : Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: Silver;
+}
+p.version {
+	font-family : Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: Silver;
+	font-style : italic;
+}
+span.messagesmall {
+	font-style : italic;
+	color : Red;
+}
+
+.invisible {color: #999; }
+.invisible a {color: #999; }
+
+
+ .data_table
+  {
+  	border-collapse: collapse;
+  }
+ .data_table th{
+	padding-right: 0px;
+  	border: 1px  solid gray;
+  	background-color: #eef;
+  }
+  .data_table tr.row_odd
+  {
+  	background-color: #fafafa;
+  }
+  .data_table tr.row_odd:hover, .data_table tr.row_even:hover
+  {
+  	background-color: #f0f0f0;
+  }
+  .data_table tr.row_even
+  {
+  	background-color: #fff;
+  }
+ .data_table td
+  {
+  	padding: 5px;
+	vertical-align: top;
+  	border-bottom: 1px solid #b1b1b1;
+  	border-right: 1px dotted #e1e1e1; 
+  	border-left: 1px dotted #e1e1e1;
+ }
+
+ .margin_table
+ {
+	margin-left : 3px;
+        width: 80%;
+ }
+ .margin_table td.title
+ {
+    background-color: #ffff99;
+ }
+ .margin_table td.content
+ {
+    background-color: #ddddff;
+ }

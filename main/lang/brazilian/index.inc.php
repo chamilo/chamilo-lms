@@ -1,0 +1,72 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langInvalidId = "O login falhou.<BR>Se você não possuir uma conta, utilize o <a href=claroline/auth/inscription.php>formulário de registro</a></font color>";
+$langWelcome = "os cursos estão disponíveis abertamente abaixo. Outros cursos requerem
+um nome de usuário e uma senha, a qual você pode obter clicando em \'inscrição\'. Professores
+podem criar áreas de curso clicando na ferramenta de inscrição também, mas selecionando então
+\'Criar áreas de curso\'.";
+$langUserName = "Nome de usuário";
+$langPass = "Senha";
+$langEnter = "Entrar";
+$langHelp = "Ajuda";
+$langReg = "Inscrição";
+$langMenu  = "Menu";
+$langDoc = "Documentação";
+$langAdvises = "Avisos";
+$langCourseDoesntExist = "<b>Atenção :</b> Esse curso não existe";
+$langGetCourseFromOldPortal = "clique aqui para acessar esse curso a partir do seu portal antigo";
+$langOtherCourses = "Lista de cursos";
+$langSupportForum = "Fórum de suporte";
+$langCategories  = "Cursos";
+$langBackToHomePage  = "Voltar para a home page";
+$lang_No_course_publicly_available  = "Nenhum curso disponível publicamente.";
+$langLostPassword  = "Senha Perdida";
+$lang_edit_my_course_list  = "Editar minha lista de cursos";
+$langAgenda  = "Próximos eventos da agenda";
+$langValvas  = "Últimos comunicados";
+$langUp  = "nível anterior";
+$langCatList  = "Cursos";
+$langCourseList  = "Cursos";
+$langHelptwo = "Ajuda";
+$langRegAll = "registrar";
+$EussMenu = "menu";
+$Opinio = "Opinião";
+$menuauth = "Menu autenticação";
+$email = "e-mail";
+$Intranet = "Intranet";
+$Englin = "Inglês";
+$langInvalidForSelfRegistration = "O login falhou - se você não está registrado, você pode fazê-lo usando o <a href=claroline/auth/inscription.php>formulário de registro</a>";
+$langCourses = "cursos";
+$langIn = "no";
+$langSubCat = "sub-categorias";
+$langMenuGeneral = "Geral";
+$langMenuUser = "Usuário";
+$langMenuAdmin = "Administrador da Plataforma";
+$langUsersOnLineList = "Lista de usuários on-line";
+$langTotalOnLine = "Total on-line";
+$langRefresh = "renovar página";
+$langMe = "eu";
+$langSystemAnnouncements = "Anúncios de Sistema";
+$langHelpMaj = "Ajuda";
+$langNotRegistered = "Não Registrado";
+$langAdmin = "Plataforma Administrador";
+$Login = "Login";
+$langRegisterForCourse = "Matricular-se em um novo curso";
+$langUnregisterForCourse = "Desistir de Cursos";
+$langCombinedCourse = "Curso combinado -";
+$Platform = "Plataforma";
+$Refresh = "Atualizar";
+$UsersOnLine = "usuários online";
+$TotalOnLine = "total de usuários online";
+$langCourseCreate = "Criar um curso";
+$langCourseClosed = "(o curso encontra-se fechado atualmente)";
+$ViewOpenCourses = "Visualizar cursos abertos";
+$langCompetences = "Competências";
+$langDiplomas = "Diplomas";
+$langTeach = "O que ele/ela pode ensinar";
+$langOpenarea = "Área pessoal aberta";
+$langProductions = "Produções";
+$langSendChatRequest = "Enviar solicitação de chat para essa pessoa";
+$langRequestDenied = "A chamada foi negada.";
+?>

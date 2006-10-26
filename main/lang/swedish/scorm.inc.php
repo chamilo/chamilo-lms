@@ -1,0 +1,41 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langScormVersion = "version";
+$langScormRestarted = "Alla lektioner är nu ofullständiga";
+$langScormNoNext = "Detta är den sista lektionen.";
+$langScormNoPrev = "Detta är den första lektionen.";
+$langScormTime = "Tid";
+$langScormNoOrder = "Det finns ingen given ordning, du kan välja vilken lektion du vill.";
+$langScormScore = "Poäng";
+$langScormLessonTitle = "Lektions titel";
+$langScormStatus = "Status";
+$langScormToEnter = "Att gå in";
+$langScormFirstNeedTo = "du behöver först slutföra";
+$langScormThisStatus = "Denna lektion är nu";
+$langScormClose = "Avbryt";
+$langScormRestart = "Starta om";
+$langScormCompstatus = "Slutförd";
+$langScormIncomplete = "Ej slutförd";
+$langScormPassed = "Avklarad";
+$langScormFailed = "Ej godkänd";
+$langScormPrevious = "Föregående";
+$langScormNext = "Nästa";
+$langScormTitle = "Dokeos Scorm spelare";
+$langScormMystatus = "Min status";
+$langScormNoItems = "Detta innehåll innehåller inga objekt.";
+$langScormNoStatus = "Ingen status för detta innehåll";
+$langScormLoggedout = "utloggad från Scorm arean";
+$langScormCloseWindow = "Stäng fönster";
+$ScormBrowsed = "Läst";
+$langScormExitFullScreen = "Tillbaka till normal skärm";
+$langScormFullScreen = "Helskärm";
+$langScormNotAttempted = "ej försökt";
+$langCharset = "Tecken snitt";
+$langLocal = "Lokal";
+$langRemote = "Fjärr";
+$langAutodetect = "Automatisk";
+$langAccomplishedStepsTotal = "Totalt antal slutförda steg";
+$langUnknown = "Okänd";
+$h = "t";
+?>

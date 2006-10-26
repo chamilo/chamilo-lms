@@ -1,0 +1,371 @@
+<?php
+$langFile = 'survey';
+
+require_once ('../inc/global.inc.php');
+//api_protect_admin_script();
+require_once ("select_question.php");
+require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
+require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
+require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
+require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+$interbredcrump[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
+$$cidReq = $_REQUEST['cidReq'];
+$curr_dbname = $_REQUEST['curr_dbname'];
+$groupid=$_REQUEST['groupid'];
+$surveyid=$_REQUEST['surveyid'];
+$qid=$_REQUEST['qid'];
+$qtype=$_REQUEST['qtype'];
+$table_question = Database :: get_course_table('questions');
+$Add = get_lang("updatequestiontype");
+$Multi = get_lang("numbered");
+$tool_name = $Add.$Multi;
+$rs=SurveyManager::get_question_data($qid,$curr_dbname);
+$sql = "SELECT * FROM $curr_dbname.questions WHERE qid = '$qid'";
+$res = api_sql_query($sql);
+$obj = mysql_fetch_object($res);
+for($i=0,$check=0;$i<10;$i++)
+{
+$temp = a.$i;
+if($obj->$temp)
+  $check++;
+}
+if(isset($_REQUEST['questtype']))
+$add_question12=$_REQUEST['questtype'];
+else
+$add_question12=$rs->qtype;
+
+if (isset($_POST['update']))
+{
+	$qid=$_POST['qid'];
+	$alignment='';
+    if(isset($_POST['enterquestion']))
+		$enter_question=$_POST['enterquestion'];
+		else
+		$enter_question=$rs->caption;  
+    
+		
+		if(isset($_POST['mutlichkboxtext']))
+		$answers=$_POST['mutlichkboxtext'];
+		else
+		{
+			$answers=array();
+			$i=1;
+			while($rs)
+			{
+				$ans=a.$i;
+				$answers[]=$rs->$ans;
+				$i++;
+			}
+		}
+		$open_ans="";
+		$count=count($_POST['mutlichkboxtext']);		
+		$noans=0;
+		for($i=0;$i<$count;$i++)
+		{			
+			$answers[$i]=trim($answers[$i]);
+			if(empty($answers[$i]))
+				$noans++;
+		}
+		$enter_question=trim($enter_question);
+		if(empty($enter_question))
+		$error_message = get_lang('PleaseEnterAQuestion')."<br>";		
+		if ($noans)
+		$error_message = $error_message."<br>".get_lang('PleasFillAllAnswer');
+		if(isset($error_message));
+		//Display::display_error_message($error_message);	
+		else
+		{
+			
+			$questtype=$rs->qtype; 
+			$curr_dbname = $_REQUEST['curr_dbname'];
+			$enter_question = addslashes($enter_question);
+			SurveyManager::update_question($qid,$questtype,$enter_question,$alignment,$answers,$open_ans,$curr_dbname);
+            $cidReq = $_GET['cidReq'];		 		 header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		    exit;
+		}
+
+}
+if(isset($_POST['back']))
+{
+		   $groupid = $_REQUEST['groupid'];
+		   $surveyid = $_REQUEST['surveyid'];
+		   $cidReq = $_REQUEST['cidReq'];
+		   $curr_dbname = $_REQUEST['curr_dbname'];		 	header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+           exit;
+}
+
+Display::display_header($tool_name);
+api_display_tool_title($tool_name);
+if( isset($error_message) )
+{
+	Display::display_error_message($error_message);	
+}
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<div id=content>
+<form method="POST" name='numbered' action="<?php echo $_SERVER['PHP_SELF'];?>?qid=<?=$qid?>&cidReq=<?=$cidReq?>&groupid=<?=$groupid?>&surveyid=<?=$surveyid?>&curr_dbname=<?=$curr_dbname?>" name="frmitemchkboxmulti">
+<input type="hidden" name="action" value="addquestion">
+<input type="hidden" name="qid" value="<?=$qid?>">
+<input type="hidden" name="groupid" value="<?=$groupid?>">
+<input type="hidden" name="surveyid" value="<?=$surveyid?>">
+<input type="hidden" name="curr_dbname" value="<?=$curr_dbname?>">
+<!--<input type="hidden" name="cidReq" value="<?=$cidReq?>">-->
+<input type="hidden" name="questtype" value="<?=$add_question12?>">
+
+	  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
+				<tr> 
+					<td class="pagedetails_heading"><a class="form_text_bold"><strong>Question</strong></a></td>
+				</tr>
+	  </table>
+	<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="outerBorder_innertable">
+				<tr class="white_bg"> 
+					<td height="30" class="form_text1"> 
+						Enter the question.        
+					</td>
+					<td class="form_text1" align="right">&nbsp;
+					</td>
+				</tr>
+				<tr class="form_bg"> 
+					<td width="542" height="30" colspan="2" ><?php  api_disp_html_area('enterquestion',$rs->caption,'200px');?><!-- <textarea name="enterquestion" id="enterquestion" cols="50" rows="6" class="text_field" style="width:75%;" ><?
+					if(isset($_POST['enterquestion']))
+						echo $_POST['enterquestion'];
+						else
+						echo $rs->caption;
+					?></textarea>-->
+					</td>
+				</tr>
+			</table>
+			<br>			
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
+			<tr> 
+				<td class="pagedetails_heading"><a class="form_text_bold"><strong>Answer</strong></a></td>
+			</tr>
+			</table>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
+				<tr class="white_bg"> 
+					<td height="30"><span class="form_text1">Enter the answers</span>.
+					</td>
+					<td>&nbsp;</td>
+					<td width="192" align="right">&nbsp; </td>
+				</tr>
+			</table>  
+				  <!--table for adding the multiple answers-->						  
+						<!--<a name="tbl">-->										
+			<table ID="tblFields" width="70%" border="0" cellpadding="0" cellspacing="0" class="outerBorder_innertable">
+<?php	
+$start=1;$end=$check;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
+	$id="id";
+	$tempmutlichkboxtext="jkjk";		
+	$up="up";
+	$down="down";
+	$flag=1;
+	if(isset($_POST['mutlichkboxtext']))
+	$end=count($_POST['mutlichkboxtext']);	
+	for($i=$start;$i<=$end;$i++)
+	{	
+		$id="id".$i."_x";
+		
+		if(isset($_POST[$id]))
+		{
+				$jd=$i;
+				$flag=0;
+				$end=count($_POST['mutlichkboxtext']);
+				if($end<=3)
+				{
+					$end=3;
+				}
+				else
+				$end-=1;
+				break;
+				
+		}
+
+	}
+	
+	for($i=$start;$i<=$end;$i++)
+	{		
+		$up="up".$i."_x";
+		$down="down".$i."_x";		
+		if(isset($_POST[$up])||isset($_POST[$down]))
+		{			
+			$flag=0;
+			if(isset($_POST[$up]))
+			{
+				$tempmutlichkboxtext=$_POST['mutlichkboxtext'];
+				$tempm=	$tempmutlichkboxtext[$i-2];
+				$tempmutlichkboxtext[$i-2]=$tempmutlichkboxtext[$i-1];
+				$tempmutlichkboxtext[$i-1]=$tempm;
+				$_POST['mutlichkboxtext']=$tempmutlichkboxtext;
+			}
+			if(isset($_POST[$down]))
+			{
+				$tempmutlichkboxtext=$_POST['mutlichkboxtext'];
+				$tempm=	$tempmutlichkboxtext[$i];
+				$tempmutlichkboxtext[$i]=$tempmutlichkboxtext[$i-1];
+				$tempmutlichkboxtext[$i-1]=$tempm;
+				$_POST['mutlichkboxtext']=$tempmutlichkboxtext;
+			}
+			//echo ",while checking up/down end=".$end;
+			$jd=0;
+			break;		
+		}
+	}	
+	if($flag==1)
+	{
+		if(isset($_POST['addnewrows']))
+		{								
+				$end=count($_POST['mutlichkboxtext']);							
+				if($end<10)
+				{
+					$end=$end+$_POST['addnewrows'];
+					if($end>10)
+						$end=10;
+				}
+				else
+				{
+				  $end=10;
+				  $error_message = get_lang('YouCanntAddmorethanTen')."<br>";
+				if( isset($error_message) )
+                  {
+	                  Display::display_error_message($error_message);	
+                  }
+				}
+		}
+	}		
+	//echo ",after select end=".$end;	
+	for($i=$start;$i<=$end;$i++)
+	{
+		if($i==$jd)
+		{
+			$end++;
+		}
+		else
+		{
+			$k=$i-1;
+			$val="a".$i;
+			$sco="r".$i;
+
+			if(isset($_POST['mutlichkboxtext']))
+			{
+				$post_text1=$_POST['mutlichkboxtext'];
+				$post_text = $post_text1[$i-1];
+			}
+			else 
+			$post_text=$rs->$val;
+?>				
+			<tr class="form_bg" id="0"> 					
+					<td width="16" height="30" align="left" class="form_text"> 
+					  <? echo $sn;?>
+					</td>					
+					<td class="form_bg"><textarea name="mutlichkboxtext[]" cols="50" rows="3" class="text_field" style="width:100%;"><?=$post_text?></textarea>
+					</td>
+<?					if($i>$start)
+					{
+?>
+					<td width="30" align="center" class="form_text1"> 
+						<input type="image" src="../img/up.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?echo "up".$i;?>" style="cursor:hand"> 
+					</td>
+<?					}
+					else
+					{
+?>						<td width="30" align="center" class="form_text1"> 
+						</td>
+<?					}
+					$sn++;
+?>
+
+<?					if($i<$end)
+					{
+?>
+					<td width="30" align="center" class="form_text"> 
+						<input type="image" src="../img/down.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?echo "down".$i;?>" style="cursor:hand"> 
+					</td>
+<?					}
+					else
+					{
+?>						<td width="30" align="center" class="form_text1"> 
+						</td>
+<?					}
+?>
+					<td width="30" align="center" class="form_text">					
+					<input type="image" src="../img/delete.gif" width="24" height="24" border="0" style="cursor:hand" name="<? echo "id".$i;?>" value="<?=$end;?>" onclick="this.form.submit();">	
+			</tr>
+<?		}	
+	}
+	
+?>		
+			</table>											
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr class="white_bg"> 
+					  <td height="30"><span class="form_text1">Add&nbsp;&nbsp;</span>
+							<select name="addnewrows" class="text_field_small" style="width:100px" onChange="this.form.submit();">							
+								<option value="0" >0</option>
+								<option value="1" >1</option>
+								<option value="2" >2</option>
+								<option value="3" >3</option>
+								<option value="4" >4</option>
+								<option value="5" >5</option>								
+							</select>
+						  <a class="form_text1">New Answer</a>						  
+						<span class="form_text"><span class="form_text1">						
+					</td>
+				</tr>
+			</table>
+	        <br>
+			<br>
+			<div align="center">	
+			<?
+			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";
+			$res=api_sql_query($sql);
+			$obj=mysql_fetch_object($res);
+			switch($obj->template)
+			{
+				case "template1":
+					$temp = 'white';
+					break;
+				case "template2":
+					$temp = 'bluebreeze';
+					break;
+				case "template3":
+					$temp = 'brown';
+					break;
+				case "template4":
+					$temp = 'grey';
+					break;		
+				case "template5":
+					$temp = 'blank';
+					break;
+			}
+			?>
+
+			<input type="HIDDEN" name="end1" value="<?=$end?>">
+			<input type="submit"  name="back" value="<?=get_lang("back");?>">
+			<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('numbered','<?=$temp?>','<?=$Multi?>')">
+			<input type="submit"  name="update" value="<?=get_lang("update");?>"> 
+			</div>
+<!--this partcular field helps in identify the item to be add at the itemadd.php-->
+			
+</form>
+</div>
+  
+<div id=bottomnav align="center"></DIV>
+</body>
+</html>
+<SCRIPT LANGUAGE="JavaScript">
+function preview(form,temp,qtype)
+{
+	var ques = editor.getHTML();
+	//alert(ques);
+	var id_str = "";
+	for(i=0;i<eval("document."+form+"['mutlichkboxtext[]'].length");i++)
+	{
+		var box = (eval("document."+form+"['mutlichkboxtext[]']["+i+"]"));
+			id_str += box.value+"|";
+	}
+	window.open(temp+'.php?ques='+ques+'&ans='+id_str+'&qtype='+qtype, 'popup', 'width=800,height=600,scrollbars=yes,toolbar = no, status = no');
+}
+</script>
+<?php
+Display :: display_footer();
+?>

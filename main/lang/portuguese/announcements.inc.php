@@ -1,0 +1,52 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$Announcement = "Anúncios";
+$langAnnEmpty = "Todos os anúncios foram apagados";
+$AnnouncementModified = "O anúncio foi alterado";
+$AnnouncementAdded = "O anúncio foi acrescentado";
+$AnnouncementDeleted = "O anúncio foi apagado";
+$AnnouncementPublishedOn = "Publicado em";
+$AddAnnouncement = "Acrescentar anúncio";
+$langContent = "Conteúdo";
+$AnnouncementDeleteAll = "Apagar todos os anúncios";
+$professorMessage = "Mensagem do seu professor";
+$langEmailSent = "e enviado aos estudantes registados";
+$EmailOption = "Enviar este anúncio por email aos estudantes/grupos seleccionados";
+$langOn = "Em";
+$langRegUser = "utilizadores registados no curso";
+$langUnvalid = "tem um endereço de correio electrónico inválido ou não especificado";
+$langModifAnn = "Alterar  anúncio";
+$langModify    = "alterar";
+$langDelete    = "apagar";
+$langTitle     = "Título";
+$langHelp      = "ajuda";
+$langOk        = "Validar";
+$langAddIntro  = "Acrescentar texto de apresentação";
+$langBackList  = "Voltar à lista";
+$langSelMess   = "Avisos a utilizadores concretos";
+$EmailTitle  = "Assunto do anúncio";
+$langUserlist  = "Lista dos grupos e utilizadores";
+$langSelectedUsers  = "Utilizadores seleccionados";
+$langSubmit  = "Enviar";
+$langPleaseEnterMessage  = "É necessário escrever a mensagem.";
+$langPleaseSelectUsers  = "É necessário seleccionar alguns utilizadores.";
+$Teachersubject = "Mensagem enviada para os estudantes ";
+$langMessages  = "Mensagens";
+$langMessageToSelectedUsers  = "Mensagens para utilizadores seleccionados";
+$langUsers  = "utilizador(es)";
+$langIntroText  = "Para enviar uma mensagem, seleccione grupos de utilizadores (marcados com um G na frente) ou utilizadores individuais da lista à esquerda.\"";
+$langDown = "abaixo";
+$langMsgSent = "A mensagem foi enviada aos estudantes escolhidos";
+$langSelUser = "utilizadores escolhidos";
+$langMessageToSelectedGroups = "Mensagem para grupos seleccionados";
+$langGrouplist = "Lista do grupo";
+$langSelectedGroups = "Grupos seleccionados";
+$langMsg = "Mensagens";
+$langYes = "Sim";
+$MsgText = "Mensagem";
+$AnnouncementDeletedAll = "Todos os anúncios foram apagados";
+$AnnouncementMoved = "O anúncio foi deslocado";
+$NoAnnouncements = "Não existem anúncios";
+$SelectEverybody = "Seleccionar Todos";
+?>

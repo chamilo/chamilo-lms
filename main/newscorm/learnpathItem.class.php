@@ -1,0 +1,1412 @@
+<?php //$id:$
+/**
+ * This file contains the lp_item class, that inherits from the learnpath class
+ * @package	dokeos.learnpath
+ * @author	Yannick Warnier <ywarnier@beeznest.org>
+ * @license	GNU/GPL - See Dokeos license directory for details
+ */
+/**
+ * lp_item defines items belonging to a learnpath. Each item has a name, a score, a use time and additional
+ * information that enables tracking a user's progress in a learning path
+ * @package	dokeos.learnpath
+ */
+class learnpathItem{
+	var $attempt_id; //also called "objectives" SCORM-wise
+	var $children = array(); //contains the ids of children items
+	var $condition; //if this item has a special condition embedded
+	var $current_score;
+	var $current_start_time;
+	var $current_stop_time;
+	var $current_data = '';
+	var $db_id;
+	var $db_item_view_id = '';
+	var $description = '';
+	var $file;
+	//at the moment, interactions are just an array of arrays with a structure of 8 text fields
+	//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
+	var $interactions = array();
+	var $interactions_count = 0;
+	var $launch_data = '';
+	var $lesson_location = '';
+	var $level = 0;
+	//var $location; //only set this for SCORM?
+	var $lp_id;
+	var $max_score;
+	var $min_score;
+	var $name;
+	var $next;
+	var $parent;
+	var $path;
+	var $possible_status = array('not attempted','incomplete','completed','passed','failed','succeeded','browsed');
+	var $prereq_string = '';
+	var $prereq_alert = '';
+	var $prereqs = array();
+	var $previous;
+	var $prevent_reinit = 1;
+	var $ref;
+	var $save_on_close = true;
+	var $status;
+	var $title;
+	var $type;
+	var $view_id;
+	
+	var $debug = 0; //logging param
+    /**
+     * Class constructor. Prepares the learnpath_item for later launch
+     * 
+     * Don't forget to use set_lp_view() if applicable after creating the item.
+     * Setting an lp_view will finalise the item_view data collection
+     * @param	integer	Learnpath item ID
+     * @param	integer	User ID
+     * @return	boolean	True on success, false on failure
+     */
+    function learnpathItem($db_id, $user_id) {
+    	//get items table
+    	if($this->debug>0){error_log('New LP - In learnpathItem constructor: '.$db_id.','.$user_id,0);}
+    	$items_table = Database::get_course_table('lp_item');
+    	$id = (int) $db_id;
+    	$sql = "SELECT * FROM $items_table WHERE id = $id";
+    	//error_log('New LP - Creating item object from DB: '.$sql,0);
+    	$res = mysql_query($sql);
+    	if(mysql_num_rows($res)<1)
+    	{
+    		$this->error = "Could not find given learnpath item in learnpath_item table";
+    		//error_log('New LP - '.$this->error,0);
+    		return false;
+    	}
+    	$row = mysql_fetch_array($res);
+    	$this->lp_id	 = $row['lp_id'];
+    	$this->max_score = $row['max'];
+    	$this->min_score = $row['min'];
+    	$this->name 	 = $row['title'];
+    	$this->type 	 = $row['item_type'];
+    	$this->ref		 = $row['ref'];
+    	$this->title	 = $row['title'];
+    	$this->description = $row['description'];
+    	$this->path		 = $row['path'];
+    	$this->masteryscore = $row['mastery_score'];
+    	$this->parent	 = $row['parent_item_id'];
+    	$this->next		 = $row['next_item_id'];
+    	$this->previous	 = $row['previous_item_id'];
+    	$this->display_order = $row['display_order'];
+    	$this->prereq_string = $row['prerequisite'];
+    	if(isset($row['launch_data'])){
+    		$this->launch_data = $row['launch_data'];
+    	}
+		$this->save_on_close = true;
+		$this->db_id = $id;
+		
+		//error_log('New LP - End of learnpathItem constructor for item '.$id,0);
+    	return true;
+    }
+    /**
+     * Adds a child to the current item
+     */
+    function add_child($item)
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::add_child()',0);}
+    	if(!empty($item))
+    	{
+    		//do not check in DB as we expect the call to come from the learnpath class which should
+    		//be aware of any fake
+    		$this->children[] = $item;
+    	}
+    }
+    /**
+	 * Adds an interaction to the current item
+	 * @param	int		Index (order ID) of the interaction inside this item
+	 * @param	array	Array of parameters: id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
+	 * @result	void
+     */
+    function add_interaction($index,$params)
+    {
+		$this->interactions[$index] = $params;
+    	/*
+		if(is_array($this->interactions[$index]) && count($this->interactions[$index])>0){
+    		$this->interactions[$index] = $params;
+    		return false;
+    	}else{
+    		if(count($params)==8){//we rely on the calling script to provide parameters in the right order
+    			$this->interactions[$index] = $params;
+    			return true;
+    		}else{
+    			return false;
+    		}
+    	}
+    	*/
+    }
+    /**
+     * Closes/stops the item viewing. Finalises runtime values. If required, save to DB.
+     * @return	boolean	True on success, false otherwise
+     */
+    function close()
+    {
+		if($this->debug>0){error_log('New LP - In learnpathItem::close()',0);}
+	   	$this->current_stop_time = time();
+    	if($this->get_type() != 'sco'){
+    		$this->status = $this->possible_status[2];
+    	}
+    	if($this->save_on_close)
+    	{
+    		$this->save();
+    	}	
+    	return true;
+    }
+    /**
+     * Deletes all traces of this item in the database
+     * @return	boolean	true. Doesn't check for errors yet.
+     */
+    function delete()
+    {
+    	if($this->debug>0){error_log('New LP - In learnpath_item::delete() for item '.$this->db_id,0);}
+    	$lp_item_view = Database::get_course_table('lp_item_view');
+    	$lp_item = Database::get_course_table('lp_item');
+    	$sql_del_view = "DELETE FROM $lp_item_view WHERE item_id = ".$this->db_id;
+		//error_log('New LP - Deleting from lp_item_view: '.$sql_del_view,0);
+    	$res_del_view = api_sql_query($sql_del_view);
+    	$sql_del_item = "DELETE FROM $lp_item WHERE id = ".$this->db_id;
+		//error_log('New LP - Deleting from lp_item: '.$sql_del_view,0);
+    	$res_del_item = api_sql_query($sql_del_item);
+    	return true;
+    }
+    /**
+     * Drops a child from the children array
+     * @param	string index of child item to drop
+     * @return 	void
+     */
+    function drop_child($item)
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::drop_child()',0);}
+    	if(!empty($item))
+    	{
+    		foreach($this->children as $index => $child)
+    		{
+    			if($child == $item){
+    				$this->children[$index] = null;
+    			}
+    		}
+    	}
+    }
+    /**
+     * Gets the current attempt_id for this user on this item
+     * @return	integer	The attempt_id for this item view by this user, or 1 if none defined
+     */
+    function get_attempt_id()
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_attempt_id()',0);}
+    	if(!empty($this->attempt_id))
+    	{
+    		return $this->attempt_id;
+    	}
+    	return 1;
+    }
+    /**
+     * Gets a list of the item's children
+     * @return	array	Array of children items IDs
+     */
+    function get_children()
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_children()',0);}
+    	$list = array();
+    	foreach($this->children as $child){
+    		if(!empty($child))
+    		{
+    			//error_log('New LP - Found '.$child,0);
+    			$list[] = $child;
+    		}
+    	}
+    	return $list;
+    }
+    /**
+     * Gets the credit information (rather scorm-stuff) based on current status and reinit
+     * autorization. Credit tells the sco(content) if Dokeos will record the data it is sent (credit) or not (no-credit)
+     * @return	string	'credit' or 'no-credit'. Defaults to 'credit' because if we don't know enough about this item, it's probably because it was never used before.
+     */
+    function get_credit(){
+    	if(!empty($this->debug) && $this->debug>1){error_log('In learnpathItem::get_credit()',0);}
+		$credit = 'credit';
+    	//now check the value of prevent_reinit (if it's 0, return credit as the default was)
+		if($this->get_prevent_reinit() != 0){ //if prevent_reinit == 1 (or more)
+			//if status is not attempted or incomplete, credit anyway. Otherwise:
+    		//check the status in the database rather than in the object, as checking in the object
+			//would always return "no-credit" when we want to set it to completed
+			$status = $this->get_status(true);
+			if(!empty($this->debug) && $this->debug>2){error_log('In learnpathItem::get_credit() - get_prevent_reinit!=0 and status is '.$status,0);}			
+			if($status != $this->possible_status[0] AND $status != $this->possible_status[1]){
+				$credit = 'no-credit';
+			}
+		}
+		return $credit;
+    }
+    /**
+     * Gets the current start time property
+     * @return	integer	Current start time, or current time if none
+     */
+    function get_current_start_time()
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_current_start_time()',0);}
+    	if(empty($this->current_start_time))
+    	{
+    		return time();
+    	}else{
+    		return $this->current_start_time;
+    	}
+    }
+    /**
+     * Gets the item's description
+     * @return	string	Description
+     */
+    function get_description(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_description()',0);}
+    	if(empty($this->description)){return '';}
+    	return $this->description;
+    }
+    /**
+     * Gets the DB ID
+     * @return	integer	Database ID for the current item
+     */
+    function get_id(){
+    	if($this->debug>1){error_log('New LP - In learnpathItem::get_id()',0);}
+    	if(!empty($this->db_id))
+    	{
+    		return $this->db_id;
+    	}
+    	//TODO check this return value is valid for children classes (SCORM?)
+    	return 0;
+    }
+    /**
+     * Gets the current count of interactions recorded in the database
+     * @return	int	The current number of interactions recorder
+     */
+    function get_interactions_count()
+    {
+    	if($this->debug>1){error_log('New LP - In learnpathItem::get_interactions_count()',0);}
+    	$res = 0;
+    	if(!empty($this->interactions_count)){
+    		$res = $this->interactions_count;
+    	}
+    	return $res;
+    }
+    /**
+     * Gets the launch_data field found in imsmanifests (this is SCORM- or AICC-related, really)
+     * @return	string	Launch data as found in imsmanifest and stored in Dokeos (read only). Defaults to ''.
+     */
+    function get_launch_data(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_launch_data()',0);}
+    	if(!empty($this->launch_data)){
+    		return $this->launch_data;
+    	}
+    	return '';
+    }
+    /**
+     * Gets the lesson location
+     * @return string	lesson location as recorded by the SCORM and AICC elements. Defaults to ''
+     */
+	function get_lesson_location(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_lesson_location()',0);}
+    	if(!empty($this->lesson_location)){return $this->lesson_location;}else{return '';}
+	}
+	/**
+	 * Gets the lesson_mode (scorm feature, but might be used by aicc as well as dokeos paths)
+	 * 
+	 * The "browse" mode is not supported yet (because there is no such way of seeing a sco in Dokeos)
+	 * @return	string	'browse','normal' or 'review'. Defaults to 'normal'
+	 */
+	function get_lesson_mode(){
+		$mode = 'normal';
+		if($this->get_prevent_reinit() != 0){ //if prevent_reinit == 0
+			if($this->status != $this->possible_status[0] AND $this->status != $this->possible_status[1]){	
+				$mode = 'review';
+			}
+		}
+	}
+    /**
+     * Gets the depth level
+     * @return int	Level. Defaults to 0
+     */
+    function get_level(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_level()',0);}
+    	if(empty($this->level)){return 0;}
+    	return $this->level;
+    }
+    /**
+     * Gets the maximum (score)
+     * @return	int	Maximum score. Defaults to 100
+     */
+    function get_max(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_max()',0);}
+    	if(!empty($this->max_score)){return $this->max_score;}else{return 100;}
+    }
+    /**
+     * Gets the minimum (score)
+     * @return int	Minimum score. Defaults to 0
+     */
+    function get_min(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_min()',0);}
+    	if(!empty($this->min_score)){return $this->min_score;}else{return 0;}
+    }
+    /**
+     * Gets the parent ID
+     * @return	int	Parent ID. Defaults to null
+     */
+    function get_parent(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_parent()',0);}
+    	if(!empty($this->parent))
+    	{
+    		return $this->parent;
+    	}
+    	//TODO check this return value is valid for children classes (SCORM?)
+    	return null;
+    }
+    /**
+     * Gets the path attribute.
+     * @return	string	Path. Defaults to ''
+     */
+    function get_path(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_path()',0);}
+    	if(empty($this->path)){return '';}
+    	return $this->path;
+    }
+    /**
+     * Gets the prerequisites string
+     * @return	string	Empty string or prerequisites string if defined. Defaults to 
+     */
+    function get_prereq_string()
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_prereq_string()',0);}
+    	if(!empty($this->prereq_string))
+    	{
+    		return $this->prereq_string;
+    	}else{
+    		return '';
+    	}
+    }
+    /**
+     * Gets the prevent_reinit attribute value (and sets it if not set already)
+     * @return	int	1 or 0 (defaults to 1)
+     */
+    function get_prevent_reinit(){
+		if($this->debug>2){error_log('New LP - In learnpathItem::get_prevent_reinit()',0);}
+    	if(!isset($this->prevent_reinit)){
+	    	if(!empty($this->lp_id)){
+	    		$db = Database::get_course_table('lp');
+			   	$sql = "SELECT * FROM $db WHERE id = ".$this->lp_id;
+		    	$res = mysql_query($sql);
+		    	if(mysql_num_rows($res)<1)
+		    	{
+		    		$this->error = "Could not find parent learnpath in learnpath table";
+					if($this->debug>2){error_log('New LP - End of learnpathItem::get_prevent_reinit() - Returning false',0);}
+		    		return false;
+		    	}else{
+		    		$row = Database::fetch_array($res);
+		    		$this->prevent_reinit = $row['prevent_reinit']; 
+		    	}
+	    	}else{
+	    		$this->prevent_reinit = 1;//prevent reinit is always 1 by default - see learnpath.class.php
+	    	}
+    	}
+		if($this->debug>2){error_log('New LP - End of learnpathItem::get_prevent_reinit() - Returned '.$this->prevent_reinit,0);}
+    	return $this->prevent_reinit;
+    }
+    /**
+     * Gets the score
+     * @return	float	The current score or 0 if no score set yet
+     */
+    function get_score(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_score()',0);}
+    	if(!empty($this->current_score))
+    	{
+    		return $this->current_score;
+    	}
+    	//TODO check this return value is valid for children classes (SCORM?)
+    	return 0;
+    }
+    /**
+     * Gets the item status
+     * @param	boolean	Do or don't check into the database for the latest value. Optional. Default is true
+     * @param	boolean	Do or don't update the local attribute value with what's been found in DB
+     * @return	string	Current status or 'Nnot attempted' if no status set yet
+     */
+    function get_status($check_db=true,$update_local=false)
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_status()',0);}
+    	if($check_db)
+    	{
+    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status(): checking db',0);}
+    		$table = Database::get_course_table('lp_item_view');
+    		$sql = "SELECT * FROM $table WHERE id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";
+    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Checking DB: '.$sql,0);}
+    		$res = api_sql_query($sql);
+    		if(Database::num_rows($res)==1){
+    			$row = Database::fetch_array($res);
+    			if($update_local==true){
+    				$this->set_status($row['status']);
+    			}
+    			return $row['status'];
+    		}
+    	}
+    	else
+    	{
+    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - in get_status: using attrib',0);}
+	    	if(!empty($this->status))
+	    	{
+	    		return $this->status;
+	    	}
+    	}
+    	return $this->possible_status[0];
+    }
+    /**
+     * Gets the suspend data
+     */
+    function get_suspend_data()
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_suspend_data()',0);}
+    	if(!empty($this->current_data)){return $this->current_data;}else{return '';}
+    }
+    /**
+     * Gets the total time spent on this item view so far
+     * @param	string	Origin of the request. If coming from PHP, send formatted as xxhxx'xx", otherwise use scorm format 00:00:00
+     * @param	integer	Given time is a default time to return formatted
+     */
+    function get_scorm_time($origin='php',$given_time=null){
+    	//if($this->debug>0){error_log('New LP - In learnpathItem::get_scorm_time()',0);}
+    	$h = get_lang('h');
+    	if(!isset($given_time)){
+	    	if(!empty($this->current_start_time)){
+	    		if(!empty($this->current_stop_time)){
+	    			$time = $this->current_stop_time - $this->current_start_time;
+	    		}else{
+	    			$time = time() - $this->current_start_time;
+	    		}
+	    	}else{
+	    		if($origin == 'js'){
+	    			return '00:00:00';
+	    		}else{
+	    			return '00'.$h.'00\'00"';
+	    		}
+	    	}
+    	}else{
+    		$time = $given_time;
+    	}
+		$hours = $time/3600;
+		$mins  = ($time%3600)/60;
+		$secs  = ($time%60);
+  		if($origin == 'js'){
+			$scorm_time = sprintf("%4d:%02d:%02d",$hours,$mins,$secs);
+  		}else{
+			$scorm_time = sprintf("%4d$h%02d'%02d\"",$hours,$mins,$secs);
+  		}
+		return $scorm_time;
+    }
+    /**
+     * Returns the item's title
+     * @return	string	Title
+     */
+    function get_title(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_title()',0);}
+    	if(empty($this->title)){return '';}
+    	return $this->title;
+    }
+    /**
+     * Returns the total time used to see that item
+     * @return	integer	Total time
+     */
+    function get_total_time(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_total_time()',0);}
+    	if($this->current_start_time == 0){ //shouldn't be necessary thanks to the open() method
+    		$this->current_start_time = time();
+    	}
+    	$time = $this->current_stop_time - $this->current_start_time;
+    	if($time < 0){
+    		return 0;
+    	}else{
+    	if($this->debug>2){error_log('New LP - In learnpathItem::get_total_time() - Current stop time = '.$this->current_stop_time.', current start time = '.$this->current_start_time.' Returning '.$time,0);}
+    		return $time;
+    	}
+    }
+    /**
+     * Gets the item type
+     * @return	string	The item type (can be doc, dir, sco, asset)
+     */
+    function get_type()
+    {
+    	$res = 'asset';
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_type()',0);}
+    	if(!empty($this->type))
+    	{
+    		//error_log('In item::get_type() - returning '.$this->type,0);
+    		$res = $this->type;
+    	}
+    	if($this->debug>2){error_log('New LP - In learnpathItem::get_type() - Returning '.$res.' for item '.$this->get_id(),0);}
+    	return $res;    	
+    }
+    /**
+     * Gets the view count for this item
+     */
+	function get_view_count(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_view_count()',0);}
+		if(!empty($this->attempt_id)){
+			return $this->attempt_id;
+		}else{
+			return 0;
+		}
+	}
+	/**
+	 * Tells if an item is done ('completed','passed','succeeded') or not
+	 * @return	bool	True if the item is done ('completed','passed','succeeded'), false otherwise
+	 */
+	function is_done(){
+   		if($this->status_is(array('completed','passed','succeeded'))){
+   			if($this->debug>2){error_log('New LP - In learnpath::is_done() - Item '.$this->get_id().' is complete',0);}
+   			return true;
+   		}else{
+   			if($this->debug>2){error_log('New LP - In learnpath::is_done() - Item '.$this->get_id().' is not complete',0);}
+   			return false;
+   		}
+	}
+	/**
+	 * Tells if a restart is allowed (take it from $this->prevent_reinit and $this->status)
+	 * @return	integer	-1 if retaking the sco another time for credit is not allowed,
+	 * 					 0 if it is not allowed but the item has to be finished 
+	 * 					 1 if it is allowed. Defaults to 1
+	 */
+	function is_restart_allowed()
+	{
+		if($this->debug>2){error_log('New LP - In learnpathItem::is_restart_allowed()',0);}
+		$restart = 1;
+		if($this->get_prevent_reinit() > 0){ //if prevent_reinit == 1 (or more)
+			//if status is not attempted or incomplete, authorize retaking (of the same) anyway. Otherwise:
+			if($this->status != $this->possible_status[0] AND $this->status != $this->possible_status[1]){
+				$restart = -1;
+			}else{
+				$restart = 0;
+			}
+		}else{
+			if($this->status == $this->possible_status[0] OR $this->status == $this->possible_status[1]){
+				$restart = 0;
+			}
+		}
+		if($this->debug>2){error_log('New LP - End of learnpathItem::is_restart_allowed() - Returning '.$restart,0);}
+		return $restart;
+	}
+    /**
+     * Opens/launches the item. Initialises runtime values.
+     * @return	boolean	True on success, false on failure.
+     */
+    function open(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::open()',0);}
+    	if($this->prevent_reinit == 0){
+	    	$this->current_score = 0;
+	    	$this->current_start_time = time();
+	    	$this->status = $this->possible_status[1];
+	    	$this->attempt_id = $this->attempt_id + 1; //open a new attempt
+    	}else{
+    		if($this->current_start_time == 0){ //small exception for start time, to avoid amazing values
+    			$this->current_start_time = time();
+    		}
+    		//error_log('New LP - reinit blocked by setting',0);
+    	}
+    }
+    /**
+     * Outputs the item contents
+     * @return	string	HTML file (displayable in an <iframe>) or empty string if no path defined
+     */
+    function output()
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::output()',0);}
+    	if(!empty($this->path) and is_file($this->path))
+    	{
+	    	$output = '';
+	    	$output .= file_get_contents($this->path);
+	    	return $output;
+    	}
+    	return '';
+    }
+    /**
+     * Parses the prerequisites string with the AICC logic language
+     * @param	string	The prerequisites string as it figures in imsmanifest.xml
+     * @param	object	Learnpath object pointer. We need it to get a list of other resources the prerequisites might be pointing to.
+     * @return	boolean	True if the list of prerequisites given is entirely satisfied, false otherwise
+     * @TODO //TODO if it's a Dokeos LP, use item ID instead of item REF for prereq!!!
+     */
+    function parse_prereq($prereqs_string, &$oLP){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::parse_prereq() for item '.$this->lp_id.' with string '.$prereqs_string,0);}
+    	//deal with &, |, ~, =, <>, {}, ,, X*, () in reverse order
+		$this->prereq_alert = '';
+		// First parse all parenthesis by using a sequential loop (looking for less-inclusives first)
+		if($prereqs_string == '_true_'){return true;}
+		if($prereqs_string == '_false_'){    	
+			if(empty($this->prereq_alert)){
+    			$this->prereq_alert = get_lang('_prereq_not_complete');
+    		}
+			return false;
+		}		
+		while(strpos($prereqs_string,'(')!==false){
+			//remove any () set and replace with its value
+			$matches = array();
+			$res = preg_match_all('/(\(([^\(\)]*)\))/',$prereqs_string,$matches);
+			if($res){
+				foreach($matches[2] as $id=>$match){
+					$str_res = $this->parse_prereq($match);
+					if($str_res){
+						$prereqs_string = str_replace($matches[1][$id],'_true_',$prereqs_string);
+					}else{
+						$prereqs_string = str_replace($matches[1][$id],'_false_',$prereqs_string);
+					}
+				}
+			}
+		}
+		
+		//parenthesis removed, now look for ORs as it is the lesser-priority binary operator (= always uses one text operand)
+		if(strpos($prereqs_string,"|")===false){
+    		if($this->debug>1){error_log('New LP - Didnt find any OR, looking for AND',0);}
+	    	if(strpos($prereqs_string,"&")!==false){
+	    		$list = split("&",$prereqs_string);
+	    		if(count($list)>1){
+					$andstatus = true;
+					foreach($list as $condition){
+	    				$andstatus = $andstatus && $this->parse_prereq($condition);
+	    				if($andstatus==false){
+							if($this->debug>1){error_log('New LP - One condition in AND was false, short-circuit',0);}
+							break;	    					
+	    				}
+					}
+					if(empty($this->prereq_alert) && !$andstatus){
+    					$this->prereq_alert = get_lang('_prereq_not_complete');
+    				}
+					return $andstatus;
+	    		}else{
+	    			if(isset($oLP->items[$oLP->refs_list[$list[0]]])){
+	    				$status = $oLP->items[$oLP->refs_list[$list[0]]]->get_status(true);
+		    			$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
+				    	if(empty($this->prereq_alert) && !$returnstatus){
+				    		$this->prereq_alert = get_lang('_prereq_not_complete');
+				    	}
+		    			return $returnstatus;
+	    			}
+		    		$this->prereq_alert = get_lang('_prereq_not_complete');
+					return false;
+	    		}
+	    	}else{
+	    		
+	    		//no ORs found, now look for ANDs
+	    		
+    			if($this->debug>1){error_log('New LP - Didnt find any AND, looking for =',0);}	    		
+	    		if(strpos($prereqs_string,"=")!==false){
+		    		if($this->debug>1){error_log('New LP - Found =, looking into it',0);}
+		    		//we assume '=' signs only appear when there's nothing else around
+		    		$params = split('=',$prereqs_string);
+		    		if(count($params) == 2){
+		    			//right number of operands
+		    			if(isset($oLP->items[$oLP->refs_list[$params[0]]])){
+		    				$status = $oLP->items[$oLP->refs_list[$params[0]]]->get_status(true);
+			    			$returnstatus = ($status == $params[1]);
+					    	if(empty($this->prereq_alert) && !$returnstatus){
+					    		$this->prereq_alert = get_lang('_prereq_not_complete');
+					    	}
+			    			return $returnstatus;
+		    			}
+			    		$this->prereq_alert = get_lang('_prereq_not_complete');
+						return false;
+		    		}
+	    		}else{
+	    		
+	    			//No ANDs found, look for <>
+	    		
+	    			if($this->debug>1){error_log('New LP - Didnt find any =, looking for <>',0);}	    		
+		    		if(strpos($prereqs_string,"<>")!==false){
+			    		if($this->debug>1){error_log('New LP - Found <>, looking into it',0);}
+			    		//we assume '<>' signs only appear when there's nothing else around
+			    		$params = split('<>',$prereqs_string);
+			    		if(count($params) == 2){
+			    			//right number of operands
+			    			if(isset($oLP->items[$oLP->refs_list[$params[0]]])){
+			    				$status = $oLP->items[$oLP->refs_list[$params[0]]]->get_status(true);
+				    			$returnstatus =  ($status != $params[1]);
+						    	if(empty($this->prereq_alert) && !$returnstatus){
+						    		$this->prereq_alert = get_lang('_prereq_not_complete');
+						    	}
+				    			return $returnstatus;
+			    			}
+				    		$this->prereq_alert = get_lang('_prereq_not_complete');
+			    			return false;
+			    		}
+		    		}else{
+		    			
+		    			//No <> found, look for ~ (unary)
+		    			
+		    			if($this->debug>1){error_log('New LP - Didnt find any =, looking for ~',0);}
+		    			//only remains: ~ and X*{}
+		    			if(strpos($prereqs_string,"~")!==false){
+		    				//found NOT
+				    		if($this->debug>1){error_log('New LP - Found ~, looking into it',0);}
+		    				$list = array();
+		    				$myres = preg_match('/~([^(\d+\*)\{]*)/',$prereqs_string,$list);
+		    				if($myres){
+		    					$returnstatus = !$this->parse_prereq($list[1]);
+						    	if(empty($this->prereq_alert) && !$returnstatus){
+						    		$this->prereq_alert = get_lang('_prereq_not_complete');
+						    	}
+								return $returnstatus;
+		    				}else{
+		    					//strange...
+					    		if($this->debug>1){error_log('New LP - Found ~ but strange string: '.$prereqs_string,0);}
+		    				}
+		    			}else{
+		    				
+		    				//Finally, look for sets/groups
+		    				
+			    			if($this->debug>1){error_log('New LP - Didnt find any ~, looking for groups',0);}	    		
+		    				//only groups here
+					    	$groups = array();
+					    	$groups_there = preg_match_all('/((\d+\*)?\{([^\}]+)\}+)/',$prereqs_string,$groups);
+					    	if($groups_there){
+						    	foreach($groups[1] as $gr) //only take the results that correspond to the big brackets-enclosed condition
+						    	{
+						    		if($this->debug>1){error_log('New LP - Dealing with group '.$gr,0);}
+						    		$multi = array();
+									$mycond = false;
+						    		if(preg_match('/(\d+)\*\{([^\}]+)\}/',$gr,$multi)){
+						    			if($this->debug>1){error_log('New LP - Found multiplier '.$multi[0],0);}
+						    			$count = $multi[1];
+						    			$list = split(',',$multi[2]);
+						    			$mytrue = 0;
+						    			foreach($list as $cond){
+							    			if(isset($oLP->items[$oLP->refs_list[$cond]])){
+							    				$status = $oLP->items[$oLP->refs_list[$cond]]->get_status(true);
+								    			if (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3])){
+						    						$mytrue ++;
+						    						if($this->debug>1){error_log('New LP - Found true item, counting.. ('.($mytrue).')',0);}
+								    			}
+						    				}else{
+							    				if($this->debug>1){error_log('New LP - item '.$cond.' does not exist in items list',0);}
+							    			}
+						    			}
+										if($mytrue >= $count){
+					    					if($this->debug>1){error_log('New LP - Got enough true results, return true',0);}
+											$mycond = true;
+										}else{
+					    					if($this->debug>1){error_log('New LP - Not enough true results',0);}
+										}
+						    		}
+						    		else{
+						    			if($this->debug>1){error_log('New LP - No multiplier',0);}
+						    			$list = split(',',$gr);
+						    			$mycond = true;
+						    			foreach($list as $cond){
+							    			if(isset($oLP->items[$oLP->refs_list[$cond]])){
+							    				$status = $oLP->items[$oLP->refs_list[$cond]]->get_status(true);
+								    			if (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3])){
+						    						$mycond = true;
+							    					if($this->debug>1){error_log('New LP - Found true item',0);}						    					
+								    			}else{
+							    					if($this->debug>1){error_log('New LP - Found false item, the set is not true, return false',0);}						    					
+								    				$mycond = false;
+								    				break;
+								    			}
+						    				}else{
+							    				if($this->debug>1){error_log('New LP - item '.$cond.' does not exist in items list',0);}
+						    					if($this->debug>1){error_log('New LP - Found false item, the set is not true, return false',0);}			    					
+							    				$mycond = false;
+							    				break;
+							    			}
+						    			}
+						    		}
+							    	if(!$mycond && empty($this->prereq_alert)){
+							    		$this->prereq_alert = get_lang('_prereq_not_complete');
+							    	}
+						    		return $mycond;
+						    	}
+					    	}else{
+					    		
+					    		//Nothing found there either. Now return the value of the corresponding resource completion status
+					    		
+				    			if($this->debug>1){error_log('New LP - Didnt find any group, returning value for '.$prereqs_string,0);}
+				    			if(isset($oLP->items[$oLP->refs_list[$prereqs_string]])){
+				    				$status = $oLP->items[$oLP->refs_list[$prereqs_string]]->get_status(true);
+					    			$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
+							    	if(!$returnstatus && empty($this->prereq_alert)){
+							    		$this->prereq_alert = get_lang('_prereq_not_complete');
+							    	}
+							    	if(!$returnstatus){
+							    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
+							    	}else{
+							    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
+							    	}
+					    			return $returnstatus;
+				    			}else{
+				    				if($this->debug>1){error_log('New LP - Could not find '.$prereqs_string.' in '.print_r($oLP->refs_list,true),0);}
+				    			}
+					    	}
+		    			}
+		    		}
+	    		}
+	    	}
+    	}else{
+    		$list = split("\|",$prereqs_string);
+    		if(count($list)>1){
+	    		if($this->debug>1){error_log('New LP - Found OR, looking into it',0);}
+				$orstatus = false;
+				foreach($list as $condition){
+					if($this->debug>1){error_log('New LP - Found OR, adding it ('.$condition.')',0);}
+    				$orstatus = $orstatus || $this->parse_prereq($condition);
+    				if($orstatus == true){
+    					//shortcircuit OR
+						if($this->debug>1){error_log('New LP - One condition in OR was true, short-circuit',0);}
+    					break;
+    				}
+				}
+		    	if(!$orstatus && empty($this->prereq_alert)){
+		    		$this->prereq_alert = get_lang('_prereq_not_complete');
+		    	}
+				return $orstatus;
+    		}else{
+	    		if($this->debug>1){error_log('New LP - OR was found but only one elem present !?',0);}
+    			if(isset($oLP->items[$oLP->refs_list[$list[0]]])){
+    				$status = $oLP->items[$oLP->refs_list[$list[0]]]->get_status(true);
+	    			$returnstatus = (($status == 'completed') OR ($status == 'passed'));
+			    	if(!$returnstatus && empty($this->prereq_alert)){
+			    		$this->prereq_alert = get_lang('_prereq_not_complete');
+			    	}
+	    			return $returnstatus;
+    			}
+    		}
+    	}
+    	if(empty($this->prereq_alert)){
+    		$this->prereq_alert = get_lang('_prereq_not_complete');
+    	}
+    	if($this->debug>1){error_log('New LP - End of parse_prereq. Error code is now '.$this->prereq_alert,0);}
+    	return false;
+    }
+    /**
+     * Reinits all local values as the learnpath is restarted
+     * @return	boolean	True on success, false otherwise	
+     */
+    function restart()
+    {
+		if($this->debug>0){error_log('New LP - In learnpathItem::restart()',0);}
+		$this->save();
+		$allowed = $this->is_restart_allowed();
+		if($allowed === -1){
+			//nothing allowed, do nothing
+		}elseif($allowed === 1){
+			//restart as new attempt is allowed, record a new attempt
+	    	$this->attempt_id = $this->attempt_id + 1; //simply reuse the previous attempt_id
+			$this->current_score = 0;
+			$this->current_start_time = 0;
+			$this->current_stop_time = 0;
+			$this->current_data = '';
+			$this->status = $this->possible_status[0];
+			$this->interactions_count = 0;
+			$this->lesson_location = '';
+		}else{ 
+			//restart current element is allowed (because it's not finished yet), 
+			// reinit current
+			$this->current_score = 0;
+			$this->current_start_time = 0;
+			$this->current_stop_time = 0;
+			$this->current_data = '';
+			$this->status = $this->possible_status[0];			
+		}
+    	return true;
+    }
+    /**
+     * Saves data in the database
+     * @param	boolean	Save from URL params (1) or from object attributes (0)
+     * @return	boolean	True on success, false on failure
+     */
+    function save($from_outside=true)
+    {
+		if($this->debug>0){error_log('New LP - In learnpathItem::save()',0);}
+
+		//$item_view_table = Database::get_course_table(COURSEID,LEARNPATH_ITEM_VIEW_TABLE);
+     	$item_id = $this->get_id();
+     	//first check if parameters passed via GET can be saved here
+     	//in case it's a SCORM, we should get:
+		if($this->type == 'sco'){
+			$s = $this->get_status(true);
+			if($this->prevent_reinit == 1 AND
+				$s != $this->possible_status[0] AND $s != $this->possible_status[1]){
+				if($this->debug>1){error_log('New LP - In learnpathItem::save() - save reinit blocked by setting',0);}
+				//do nothing because the status has already been set. Don't allow it to change.
+				//TODO check there isn't a special circumstance where this should be saved
+			}else{
+			  if($this->debug>1){error_log('New LP - In learnpathItem::save() - SCORM save request received',0);}
+			  //get all new settings from the URL
+				if($from_outside==true){
+				  if($this->debug>1){error_log('New LP - In learnpathItem::save() - Getting item data from outside',0);}
+		     	  foreach($_GET as $param => $value)
+		     	  {
+		     		$value = mysql_real_escape_string($value);
+		     		switch($param){
+		     			case 'score':
+		   					$this->set_score($value);
+		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting score to '.$value,0);}
+		     				break;
+		     			case 'max':
+		     				$this->max_score = $value;
+		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting max_score to '.$value,0);}
+		     				break;
+		     			case 'min':
+		     				$this->min_score = $value;
+		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting min_score to '.$value,0);}
+		     				break;
+		     			case 'lesson_status':
+		     				if(!empty($value)){
+			     				$this->set_status($value); 
+			   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting status to '.$value,0);}
+		     				}
+		     				break;
+		     			case 'time':
+		     				$this->set_time($value);
+		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting time to '.$value,0);}
+		     				break;
+		     			case 'suspend_data':
+		     				$this->current_data = $value;
+		     				if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting suspend_data to '.$value,0);}
+		     				break;
+		     			case 'lesson_location':
+		     				$this->set_lesson_location($value);
+		     				if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting lesson_location to '.$value,0);}
+		     				break;	
+		     			case 'interactions':
+		     				//$interactions = unserialize($value);
+		     				//foreach($interactions as $interaction){
+		     				//	;
+		     				//}
+		     				break;	     				
+		     			/*
+		     			case 'objectives._count':
+		     				$this->attempt_id = $value;
+		     				break;
+		     			*/
+		     			default:
+		     				//ignore
+		     				break;
+		     		}
+		     	  }
+				}else{
+					if($this->debug>1){error_log('New LP - In learnpathItem::save() - Using inside item status',0);}
+					//do nothing, just let the local attributes be used
+				}
+			}
+		}else{ //if not SCO, such messages should not be expected
+			$type = strtolower($type);
+			switch($type){
+				case 'asset':
+		 			$this->set_status($this->possible_status[2]);
+		 			break;
+		 		case 'hotpotatoes':
+					$tbl_hotpot = Database::get_course_table(QUIZ_TABLE);
+					$hotpot_sql = "SELECT * FROM $tbl_hotpot WHERE ...";
+					$hotpot_res = api_sql_query($hotpot_sql,__FILE__,__LINE__);
+					if(Database::num_rows($hotpot_res)>0){
+						$hotpot_row = Database::fetch_array($hotpot_res);
+			 			$this->min_score = $hotpot_row['min_score'];
+			 			$this->max_score = $hotpot_row['max_score'];
+			 			$this->set_score($hotpot_row['score']);
+			 			//TODO move hardcoded quota value somewhere as variable
+			 			if($hotpot_row['score']/$hotpot_row['max_score']>=0.70){
+			 				$this->set_status($this->possible_status[3]);
+			 			}else{
+			 				$this->set_status($this->possible_status[4]);		 			
+			 			}
+					}else{
+						//if not found, set to incompleted as it probably means 
+						//the user hasn't passed the test
+						$this->set_status($this->possible_status[2]);
+					}
+		 			break;
+		 		case TOOL_QUIZ:
+						$this->set_status($this->possible_status[2]);		 			
+		 			break;
+				default:
+		 			//for now, everything that is not sco and not asset is set to
+		 			//completed when saved
+		 			$this->set_status($this->possible_status[2]);	 			
+				break;
+	 		}
+		}
+		//$time = $this->time
+		if($this->debug>1){error_log('New LP - End of learnpathItem::save() - Calling write_to_db()',0);}
+		return $this->write_to_db();
+    }
+    /**
+     * Sets the number of attempt_id to a given value
+     * @param	integer	The given value to set attempt_id to
+     * @return	boolean	TRUE on success, FALSE otherwise
+     */
+    function set_attempt_id($num)
+    {
+		if($this->debug>0){error_log('New LP - In learnpathItem::set_attempt_id()',0);}
+     	if($num == strval(intval($num)) && $num>=0){
+     		$this->attempt_id = $num;
+     		return true;
+     	}
+     	return false;
+    }
+    /**
+     * Sets the item's description
+     * @param	string	Description
+     */
+    function set_description($string=''){
+		if($this->debug>0){error_log('New LP - In learnpathItem::set_description()',0);}
+    	if(!empty($string)){$this->description = $string;}
+    }
+    /**
+     * Sets the lesson_location value
+     * @param	string	lesson_location as provided by the SCO
+     * @return	boolean	True on success, false otherwise
+     */
+    function set_lesson_location($location)
+    {
+   		if($this->debug>0){error_log('New LP - In learnpathItem::set_lesson_location()',0);}
+		if(isset($location)){
+   			$this->lesson_location = mysql_real_escape_string($location);
+  			return true;
+  		}
+     	return false;
+    }
+    /**
+     * Sets the item's depth level in the LP tree (0 is at root)
+     * @param	integer	Level
+     */
+    function set_level($int=0){
+		if($this->debug>0){error_log('New LP - In learnpathItem::set_level('.$int.')',0);}
+    	if(!empty($int) AND $int == strval(intval($int))){$this->level = $int;}
+    }
+    /**
+     * Sets the lp_view id this item view is registered to
+     * @param	integer	lp_view DB ID
+     * @todo //todo insert into lp_item_view if lp_view not exists
+     */
+    function set_lp_view($lp_view_id)
+    {
+		if($this->debug>0){error_log('New LP - In learnpathItem::set_lp_view('.$lp_view_id.')',0);}
+    	if(!empty($lp_view_id) and $lp_view_id = intval(strval($lp_view_id)))
+     	{
+     		$this->view_id = $lp_view_id;
+	     	$item_view_table = Database::get_course_table('lp_item_view');
+	     	//get the lp_item_view with the highest view_count
+	     	$sql = "SELECT * FROM $item_view_table WHERE lp_item_id = ".$this->get_id()." " .
+	     			" AND lp_view_id = ".$lp_view_id." ORDER BY view_count DESC";
+	     	if($this->debug>2){error_log('New LP - In learnpathItem::set_lp_view() - Querying lp_item_view: '.$sql,0);}
+	     	$res = api_sql_query($sql,__FILE__,__LINE__);
+	     	if(Database::num_rows($res)>0){
+	     		$row = Database::fetch_array($res);
+	     		$this->db_item_view_id  = $row['id'];
+	     		$this->attempt_id 		= $row['view_count'];
+				$this->current_score	= $row['score'];
+				$this->current_data		= $row['suspend_data'];
+				$this->status			= $row['status'];
+				$this->current_start_time	= $row['start_time'];
+				$this->current_stop_time 	= $this->current_start_time + $row['total_time']; 
+				$this->lesson_location  = $row['lesson_location'];
+		     	if($this->debug>2){error_log('New LP - In learnpathItem::set_lp_view() - Updated item object with database values',0);}
+
+		     	//now get the number of interactions for this little guy
+		     	$item_view_interaction_table = Database::get_course_table('lp_iv_interaction');
+		     	$sql = "SELECT * FROM $item_view_interaction_table WHERE lp_iv_id = '".$this->db_item_view_id."'"; 
+				$res = api_sql_query($sql,__FILE__,__LINE__);
+				if($res !== false){
+					$this->interactions_count = Database::num_rows($res);
+				}else{
+					$this->interactions_count = 0;
+				}
+	     	}
+     	}
+		//end
+		if($this->debug>2){error_log('New LP - End of learnpathItem::set_lp_view()',0);}
+    }
+    /**
+     * Sets the path
+     * @param	string	Path
+     */
+    function set_path($string=''){
+		if($this->debug>0){error_log('New LP - In learnpathItem::set_path()',0);}
+    	if(!empty($string)){$this->path = $string;}
+    }
+    /**
+     * Sets the prevent_reinit attribute. This is based on the LP value and is set at creation time for
+     * each learnpathItem. It is a (bad?) way of avoiding a reference to the LP when saving an item.
+     * @param	integer	1 for "prevent", 0 for "don't prevent" saving freshened values (new "not attempted" status etc)
+     */
+    function set_prevent_reinit($prevent){
+		if($this->debug>0){error_log('New LP - In learnpathItem::set_prevent_reinit()',0);}
+    	if($prevent){
+    		$this->prevent_reinit = 1;
+    	}else{
+    		$this->prevent_reinit = 0;
+    	}
+    }
+    /**
+     * Sets the score value
+     * @param	float	Score
+     * @return	boolean	True on success, false otherwise
+     */
+    function set_score($score)
+    {
+   		if($this->debug>0){error_log('New LP - In learnpathItem::set_score()',0);}
+   		if(($score <= $this->max_score) && ($score >= $this->min_score))
+   		{
+   			$this->current_score = $score;
+  			return true;
+  		}
+     	return false;
+    }
+    /**
+     * Sets the status for this item
+     * @param	string	Status - must be one of the values defined in $this->possible_status
+     * @return	boolean	True on success, false on error
+     */
+    function set_status($status)
+    {
+   		if($this->debug>0){error_log('New LP - In learnpathItem::set_status('.$status.')',0);}
+     	$found = false;
+     	foreach($this->possible_status  as $possible){
+     		if(preg_match('/^'.$possible.'$/i',$status)){
+     			$found = true;
+     		}
+     	}
+     	//if(in_array($status,$this->possible_status))
+     	if($found)
+     	{
+     		$this->status = mysql_real_escape_string($status);
+     		if($this->debug>1){error_log('New LP - In learnpathItem::set_status() - Updated object status of item '.$this->db_id.' to '.$this->status,0);}
+     		return true;
+     	}
+     	//error_log('New LP - '.$status.' was not in the possible status',0);
+     	$this->status = $this->possible_status[0];
+     	return false;
+    }
+    /**
+     * Sets the item viewing time in a usable form, given that SCORM packages often give it as 00:00:00.0000
+     * @param	string	Time as given by SCORM
+     */
+    function set_time($scorm_time)
+    {
+   		if($this->debug>0){error_log('New LP - In learnpathItem::set_time('.$scorm_time.')',0);}
+     	if($scorm_time == 0 and ($this->type=='asset' or $this->type=='doc') and $this->current_start_time!=0){
+     		$my_time = time() - $this->current_start_time;
+     		if($my_time > 0){
+     			$this->update_time($my_time);
+     			if($this->debug>-1){error_log('New LP - In learnpathItem::set_time('.$scorm_time.') - found asset - set time to '.$my_time,0);}
+     		}
+     	}else{
+	     	$res = array();
+	     	if(preg_match('/^(\d{1,4}):(\d{2}):(\d{2})(\.\d{1,4})?/',$scorm_time,$res)){
+	     		$time = time();
+				$hour = $res[1];
+				$min = $res[2];
+				$sec = $res[3];
+				//getting total number of seconds spent
+	     		$total_sec = $hour*3600 + $min*60 + $sec;
+	     		$this->update_time($total_sec);
+	     	}
+     	}
+    }
+    /**
+     * Sets the item's title
+     * @param	string	Title
+     */
+    function set_title($string=''){
+   		if($this->debug>0){error_log('New LP - In learnpathItem::set_title()',0);}
+    	if(!empty($string)){$this->title = $string;}
+    }
+    /**
+     * Sets the item's type
+     * @param	string	Type
+     */
+    function set_type($string=''){
+   		if($this->debug>0){error_log('New LP - In learnpathItem::set_type()',0);}
+    	if(!empty($string)){$this->type = $string;}
+    }
+	/**
+	 * Checks if the current status is part of the list of status given
+	 * @param	strings_array	An array of status to check for. If the current status is one of the strings, return true
+	 * @return	boolean			True if the status was one of the given strings, false otherwise	
+	 */
+	function status_is($list=array())
+	{
+   		if($this->debug>1){error_log('New LP - In learnpathItem::status_is('.print_r($list,true).')',0);}
+		if(empty($this->status)){
+			return false;
+		}
+		$found = false;
+		foreach($list as $status)
+		{
+			if(preg_match('/^'.$status.'$/i',$this->status))
+			{
+				if($this->debug>2){error_log('New LP - learnpathItem::status_is() - Found status '.$status.' corresponding to current status',0);}
+				$found = true;
+				return $found;
+			}
+		}
+		if($this->debug>2){error_log('New LP - learnpathItem::status_is() - Status '.$this->status.' did not match request',0);}
+		return $found;
+	}
+    /**
+     * Updates the time info according to the given session_time
+     * @param	integer	Time in seconds
+     * //TODO @TODO make this method better by allowing better/multiple time slices
+     */
+    function update_time($total_sec=0){
+   		if($this->debug>0){error_log('New LP - In learnpathItem::update_time('.$total_sec.')',0);}
+    	if($total_sec>=0){
+	 		//getting start time from finish time. The only problem in the calculation is it might be
+	 		//modified by the scripts processing time
+	 		$now = time();
+	 		$start = $now-$total_sec;
+			$this->current_start_time = $start;
+			$this->current_stop_time  = $now;
+	 		/*if(empty($this->current_start_time)){
+	 			$this->current_start_time = $start;
+	 			$this->current_stop_time  = $now;
+	 		}else{
+	 			//if($this->current_stop_time != $this->current_start_time){
+		 			//if the stop time has already been set before to something else
+		 			//than the start time, add the given time to what's already been
+		 			//recorder.
+		 			//This is the SCORM way of doing things, because the time comes from
+		 			//core.session_time, not core.total_time
+     			// UPDATE: adding time to previous time is only done on SCORM's finish()
+     			// call, not normally, so for now ignore this section
+		 		//	$this->current_stop_time = $this->current_stop_time + $stop;
+		 		//	error_log('New LP - Adding '.$stop.' seconds - now '.$this->current_stop_time,0);
+		 		//}else{
+		 			//if no previous stop time set, use the one just calculated now from
+		 			//start time
+		 			//$this->current_start_time = $start;
+		 			//$this->current_stop_time  = $now;
+		 			//error_log('New LP - Setting '.$stop.' seconds - now '.$this->current_stop_time,0);
+		 		//}
+	 		}*/
+    	}
+    }
+    /**
+     * Writes the current data to the database
+     * @return	boolean	Query result
+     */
+     function write_to_db()
+     {
+   		if($this->debug>0){error_log('New LP - In learnpathItem::write_to_db()',0);}
+   		$mode = $this->get_lesson_mode();
+   		$credit = $this->get_credit();
+   		if($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse')
+   		{
+   			//this info shouldn't be saved as the credit or lesson mode info prevent it
+   			if($this->debug>1){error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!',0);}
+   		}else{
+	     	//check the row exists
+	     	$item_view_table = Database::get_course_table('lp_item_view');
+	     	$check = "SELECT * FROM $item_view_table " .
+	     			"WHERE lp_item_id = ".$this->db_id. " " .
+	     			"AND   lp_view_id = ".$this->view_id. " ".
+	     			"AND   view_count = ".$this->get_attempt_id();
+	     	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Querying item_view: '.$check,0);}
+	     	$check_res = api_sql_query($check);
+	     	//depending on what we want (really), we'll update or insert a new row
+	     	//now save into DB
+	     	if(Database::num_rows($check_res)<1){
+		     	$sql = "INSERT INTO $item_view_table " .
+		     			"(total_time, " .
+		     			"start_time, " .
+		     			"score, " .
+		     			"status, " .
+		     			"lp_item_id, " .
+		     			"lp_view_id, " .
+		     			"view_count, " .
+		     			"suspend_data, " .
+		     			"lesson_location)" .
+		     			"VALUES" .
+		     			"(".$this->get_total_time()."," .
+		     			"".$this->current_start_time."," .
+		     			"".$this->get_score()."," .
+		     			"'".$this->get_status(false)."'," .
+		     			"".$this->db_id."," .
+		     			"".$this->view_id."," .
+		     			"".$this->get_attempt_id()."," .
+		     			"'".$this->current_data."'," .
+		     			"'".$this->lesson_location."')";
+		     	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view: '.$sql,0);}
+	     	}else{
+		     	$sql = "UPDATE $item_view_table " .
+		     			"SET total_time = ".$this->get_total_time().", " .
+		     			" start_time = ".$this->get_current_start_time().", " .
+		     			" score = ".$this->get_score().", " .
+		     			" status = '".$this->get_status(false)."'," .
+		     			" suspend_data = '".$this->current_data."'," .
+		     			" lesson_location = '".$this->lesson_location."' " .
+		     			"WHERE lp_item_id = ".$this->db_id." " .
+		     			"AND lp_view_id = ".$this->view_id." " .
+		     			"AND view_count = ".$this->attempt_id;
+	    	 	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Updating item_view: '.$sql,0);}
+	     	}
+	     	$res = api_sql_query($sql,__FILE__,__LINE__);
+	     	if(!$res)
+	     	{
+	     		$this->error = 'Could not update item_view table...'.mysql_error();
+	     	}
+	     	if(is_array($this->interactions) && count($this->interactions)>0){
+	     		//save interactions
+	     		$tbl = Database::get_course_table('lp_item_view');
+	     		$sql = "SELECT id FROM $tbl " .
+	     				"WHERE lp_item_id = ".$this->db_id." " .
+	     				"AND   lp_view_id = ".$this->view_id." " .
+	     				"AND   view_count = ".$this->attempt_id;
+	     		$res = api_sql_query($sql,__FILE__,__LINE__);
+	     		if(Database::num_rows($res)>0){
+	     			$row = Database::fetch_array($res);
+	     			$lp_iv_id = $row[0];
+	     			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Got item_view_id '.$lp_iv_id.', now checking interactions ',0);}
+		     		foreach($this->interactions as $index => $interaction){
+		     			$correct_resp = '';
+		     			if(is_array($interaction[4]) && !empty($interactions[4][0]) ){
+		     				foreach($interactions[4] as $resp){
+		     					$correct_resp .= $resp.',';
+		     				}
+		     				$correct_resp = substr($correct_resp,0,strlen($correct_resp)-1);
+		     			}
+		     			$iva_table = Database::get_course_table('lp_iv_interaction');
+		     			$iva_sql = "SELECT id FROM $iva_table " .
+		     					"WHERE lp_iv_id = $lp_iv_id " .
+		     					"AND order_id = $index";
+		     			$iva_res = api_sql_query($iva_sql,__FILE__,__LINE__);
+						//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
+		     			if(Database::num_rows($iva_res)>0){
+		     				//update (or don't)
+		     				$iva_row = Database::fetch_array($iva_res);
+		     				$iva_id = $iva_row[0];
+		     				$ivau_sql = "UPDATE $iva_table " .
+		     					"SET interaction_id = '".$interaction[0]."'," .
+		     					"interaction_type = '".$interaction[1]."'," .
+		     					"weighting = '".$interaction[3]."'," .
+		     					"completion_time = '".$interaction[2]."'," .
+		     					"correct_responses = '".$correct_resp."'," .
+		     					"student_response = '".$interaction[5]."'," .
+		     					"result = '".$interaction[6]."'," .
+		     					"latency = '".$interaction[7]."'" .
+		     					"WHERE id = $iva_id";
+		     				$ivau_res = api_sql_query($ivau_sql,__FILE__,__LINE__);
+		     			}else{
+		     				//insert new one
+		     				$ivai_sql = "INSERT INTO $iva_table " .
+		     						"(order_id, lp_iv_id, interaction_id, interaction_type, " .
+		     						"weighting, completion_time, correct_responses, " .
+		     						"student_response, result, latency)" .
+		     						"VALUES" .
+		     						"(".$index.",".$lp_iv_id.",'".$interaction[0]."','".$interaction[1]."'," .
+		     						"'".$interaction[3]."','".$interaction[2]."','".$correct_resp."'," .
+		     						"'".$interaction[5]."','".$interaction[6]."','".$interaction[7]."'" .
+		     						")";
+		     				$ivai_res = api_sql_query($ivai_sql,__FILE__,__LINE__);
+		     			}
+		     		}
+	     		}
+	     	}
+   		}
+		if($this->debug>2){error_log('New LP - End of learnpathItem::write_to_db()',0);}
+     	return true;
+     }
+}
+?>

@@ -1,0 +1,41 @@
+<?php //$id: $
+/**
+ * Container script for the messages coming from the learnpath object. Initially, this wasn't supposed to be
+ * a separate file but rather some text included in lp_view.php, but SCORM involves loading a script that
+ * saves the data asynchronously while the SCORM learning path carries on. Having an informational iframe
+ * helps not popping up an additional window when saving data.
+ * 
+ * This script is also used to refresh the TOC as sometimes the SCORM JS messages are taken into account
+ * only after the TOC is drawn. As such, you might complete an item, browse to the next page, have the
+ * TOC drawn with your 'incomplete' status, while the SCORM messages generally arrives just after the TOC
+ * is drawn. By updating it here and in lp_save.php, we avoid funny visual effect like having a complete
+ * item showing as incomplete.
+ * @package dokeos.learnpath
+ * @author Yannick Warnier <ywarnier@beeznest.org>
+ */
+/**
+ * Script
+ */
+require_once('back_compat.inc.php');
+$charset = 'ISO-8859-1';
+$htmlHeadXtra[] = '<script language="javascript">
+function cleanlog(){
+  if(document.getElementById){
+  	document.getElementById("log_content").innerHTML = "";
+  }
+}
+</script>';
+$htmlHeadXtra[] = '' .
+'<style type="text/css" media="screen, projection">
+	/*<![CDATA[*/
+	@import "../css/default/scorm.css";
+	/*]]>*/
+</style>';
+include_once('../inc/reduced_header.inc.php');
+?>
+<body>
+<div id="log_content">
+</div>
+<div style="color: white;" onclick="cleanlog();">.</div>
+</body>
+</html>

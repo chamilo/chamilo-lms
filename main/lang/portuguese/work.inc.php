@@ -1,0 +1,34 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langTools  = "Ferramentas";
+$langDownloadFile = "Enviar documento";
+$langTooBig = "Não escolheu o ficheiro que pretende enviar, ou então é demasiado grande";
+$langListDeleted = "A lista foi apagada";
+$langDocModif = "O documento foi alterado";
+$langDocAdd = "O documento foi acrescentado";
+$langDocDel = "O trabalho foi apagado";
+$langTitleWork = "Título do trabalho";
+$langAuthors = "Autor";
+$langDelList = "Apagar toda a lista";
+$langDocument = "Documento";
+$langWorkDelete = "Apagar";
+$langWorkModify = "Alterar";
+$langWorkConfirmDelete = "Tem a certeza que quer apagar este documento?";
+$langAllFiles = "Todos os ficheiros";
+$lang_default_upload = "Configurar visibilidade dos novos ficheiros";
+$lang_new_visible = "Novos documentos visíveis por todos";
+$lang_new_unvisible = "Novos documentos visíveis apenas pelo professor";
+$lang_doc_unvisible = "O ficheiro só será visível pelo professor deste curso e por mais ninguém.";
+$langDelLk = "Apagar ligação";
+$langMustBeRegisteredUser = "Só os utilizadores deste curso podem publicar documentos.";
+$langListDel = "A lista foi apagada completamente";
+$langWork = "Trabalho";
+$langCreateDir = "Criar um directório";
+$langNameDir = "Nome do novo directório";
+$langFileExists = "Não é possível realizar esta operação.<br>Já existe um elemento com o mesmo nome.";
+$langDirCr = "Directório criado";
+$langCurrentDir = "Directório actual";
+$UploadADocument = "Transferir documento";
+$EditToolOptions = "Editar opções desta ferramenta";
+?>

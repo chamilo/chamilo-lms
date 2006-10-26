@@ -1,0 +1,12 @@
+#!/bin/sh
+
+NAME_TGZ=phpfreechat-`cat ../version`.tar.gz
+NAME_ZIP=phpfreechat-`cat ../version`.zip
+PFCSETUP_TGZ=pfcsetup-`cat ../version`.tar.gz
+PFCSETUP_ZIP=pfcsetup-`cat ../version`.zip
+
+scp ./$NAME_ZIP ./$NAME_TGZ micropolia@phpfreechat.net:/home/micropolia/svn/phpfreechat/prod/www/download/
+lftp -c "mput -O ftp://upload.sourceforge.net/incoming/ $NAME_TGZ"
+lftp -c "mput -O ftp://upload.sourceforge.net/incoming/ $NAME_ZIP"
+#lftp -c "mput -O ftp://upload.sourceforge.net/incoming/ $PFCSETUP_TGZ"
+#lftp -c "mput -O ftp://upload.sourceforge.net/incoming/ $PFCSETUP_ZIP"

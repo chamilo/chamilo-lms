@@ -1,0 +1,38 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langUsers = "Užívatelia";
+$langLineNumber = "&#268;íslo riadku";
+$langLine = "riadok";
+$langLines = "Riadkov";
+$langLineOrLines = "riadky(ov)";
+$langRemove = "odstráni&#357;";
+$langMoveUp = "Posunú&#357; hore";
+$langMoveDown = "Posunú&#357; dole";
+$langAddNewHeading = "Prida&#357; nový nadpis";
+$langCourseAdministratorOnly = "Len pre u&#269;ite&#318;ov";
+$langDefineHeadings = "Definuj nadpisy";
+$langBackToUsersList = "Spa&#357; na zoznam užívate&#318;ov";
+$langTracking = "Sledovanie";
+$langCourseManager = "Lektor";
+$langModRight = "zmeni&#357; práva";
+$langNone = "žiadne";
+$langAll = "všetky";
+$langNoAdmin = "od teraz <b>nemá</b> žiadne práva na tejto stránke";
+$langAllAdmin = "od teraz <b>má</b> všetky práva na tejto stránke";
+$langModRole = "Zmeni&#357; rolu na";
+$langRole = "Rola";
+$langIsNow = "je odteraz";
+$langInC = "v tomto kurze";
+$langFilled = "Neboli vyplnené všetky polia";
+$langUserNo = "&#268;íslo užívate&#318;a";
+$langTaken = "je už použité. Vyberte si iné";
+$langUserName = "Meno";
+$langTutor = "Tútor";
+$langUnreg = "Odhlási&#357;";
+$langGroupUserManagement = "Správa skupín";
+$langUserInfo = "informácie o užívate&#318;ovi";
+$langUnregister = "Zruši&#357; registráciu";
+$langAddAUser = "Prida&#357; užívate&#318;a";
+$langGroupManagement = "Správa skupín";
+?>

@@ -1,0 +1,25 @@
+/*                                                                2005/01/04
+
+     Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php  */
+
+.bg1    {background-color: #4171B5; font-size: 2pt}
+.bg2    {background-color: #666666; font-size: 2pt}
+.bg3    {background-color: #E6E6E6; width: 100%}
+
+.kwl    {width: 92%}
+.w23    {width: 66%}
+.wd1    {width: 15ex}
+.wd2    {width: 32ex}
+.mda    {width: 100%; display: none}
+.lgr    {background-color: #F0F0F0}
+
+.dvc    {display: none;  margin-left: 3ex}
+.dvo    {display: block; margin-left: 3ex}
+.btm    {height: 3.5ex; width: 5ex; font-family: monospace; font-size: xx-small}
+.btn    {height: 3.5ex; width: 3ex; font-family: monospace; font-size: xx-small}
+.lfn    {height: 3.5ex; width: 3ex; font-family: monospace; font-size: xx-small; visibility: hidden}
+.lbl    {background-color: #C0C0C0; cursor: pointer}
+.lbs    {background-color: #B0C4DE; cursor: pointer; border-style: solid; border-width: 1px}
+.pup    {position:absolute; visibility:hidden; width: 50%; border: 1px solid black; overflow:auto; background-color: #C0C0C0}
+.pul    {background-color: #FFFFFF}
+.wide   {width: 99%}

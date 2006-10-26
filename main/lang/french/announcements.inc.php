@@ -1,0 +1,52 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$Announcement = "Annonces";
+$langAnnEmpty = "Les annonces ont été vidées complètement";
+$AnnouncementModified = "L\'annonce a été modifiée";
+$AnnouncementAdded = "L\'annonce a été ajoutée";
+$AnnouncementDeleted = "L\'annonce a été effacée";
+$AnnouncementPublishedOn = "Publiée le";
+$AddAnnouncement = "Ajouter une annonce";
+$langContent = "Contenu";
+$AnnouncementDeleteAll = "Vider complètement les annonces";
+$professorMessage = "Message du responsable";
+$langEmailSent = " et envoyée par mail aux membres";
+$EmailOption = "Envoyer cette annonce par courriel aux groupes/utilisateurs sélectionnés";
+$langOn = "Sur";
+$langRegUser = "utilisateurs inscrits";
+$langUnvalid = "ont une adresse e-mail non valide ou n\'en ont pas fournie";
+$langModifAnn = "Modifier cette annonce";
+$langModify    = "modifier";
+$langDelete    = "supprimer";
+$langTitle     = "Titre";
+$langHelp      = "Aide";
+$langOk        = "Valider";
+$langAddIntro  = "Ajouter un texte d\'introduction ";
+$langBackList  = "Retour à la liste";
+$langSelMess   = "Avertissements à certains utilisateurs";
+$EmailTitle  = "Titre du mail";
+$langUserlist  = "Liste des membres";
+$langSelectedUsers  = "Membres sélectionnés";
+$langSubmit  = "Envoyer";
+$langPleaseEnterMessage  = "Entrez le message à envoyer.";
+$langPleaseSelectUsers  = "Sélectionnez des membres.";
+$Teachersubject = "Message envoyé aux membres ";
+$langMessages  = "Messages";
+$langMessageToSelectedUsers  = "Message pour certains membres";
+$langUsers  = "membres";
+$langIntroText  = "Pour envoyer un message, sélectionnez des groupes (précédés de G) et/ou des membres dans la liste de gauche. CTRL+clic pour sélectionner plusieurs éléments. Puis cliquez sur la flèche \"droite\" entre les deux listes, introduisez votre message et validez.";
+$langDown = "descendre";
+$langMsgSent = "le message est envoyé aux membres sélectionnés.";
+$langSelUser = "Membres";
+$langMessageToSelectedGroups = "Message aux groupes sélectionnés";
+$langGrouplist = "Liste des groupes";
+$langSelectedGroups = "groupes sélectionnés";
+$langMsg = "Messages";
+$langYes = "oui";
+$MsgText = "Message";
+$AnnouncementDeletedAll = "Toutes les annonces ont été supprimées";
+$AnnouncementMoved = "L\'annonce a été déplacée";
+$NoAnnouncements = "Il n\'y a aucune annonce";
+$SelectEverybody = "Sélectionner tous";
+?>

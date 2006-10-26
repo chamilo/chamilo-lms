@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This is a Reload version 1.0.18 Content Package document-->
+<!--Spawned from the Reload Content Package Generator - http://www.reload.ac.uk-->
+<manifest xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" xmlns:imsmd="http://www.imsglobal.org/xsd/imsmd_v1p2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" identifier="MANIFEST-DCFD9D7F-A83F-6E2C-F52B-7F1F44C7C15E" xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 imscp_v1p1.xsd http://www.imsglobal.org/xsd/imsmd_v1p2 imsmd_v1p2p2.xsd">
+  <metadata>
+    <schema>IMS Content</schema>
+    <schemaversion>1.2.2</schemaversion>
+    <imsmd:lom>
+      <imsmd:general>
+        <imsmd:title>
+          <imsmd:langstring xml:lang="en">Summer Pictures</imsmd:langstring>
+        </imsmd:title>
+        <imsmd:catalogentry>
+          <imsmd:catalog />
+          <imsmd:entry>
+            <imsmd:langstring xml:lang="en" />
+          </imsmd:entry>
+        </imsmd:catalogentry>
+        <imsmd:language>en</imsmd:language>
+        <imsmd:description>
+          <imsmd:langstring xml:lang="en">Simple exemplar content package</imsmd:langstring>
+        </imsmd:description>
+        <imsmd:keyword>
+          <imsmd:langstring xml:lang="en">Exemplar</imsmd:langstring>
+        </imsmd:keyword>
+        <imsmd:structure>
+          <imsmd:source>
+            <imsmd:langstring xml:lang="x-none">LOMv1.0</imsmd:langstring>
+          </imsmd:source>
+          <imsmd:value>
+            <imsmd:langstring xml:lang="x-none">Linear</imsmd:langstring>
+          </imsmd:value>
+        </imsmd:structure>
+      </imsmd:general>
+      <imsmd:lifecycle>
+        <imsmd:version>
+          <imsmd:langstring xml:lang="en">0.1</imsmd:langstring>
+        </imsmd:version>
+        <imsmd:status>
+          <imsmd:source>
+            <imsmd:langstring xml:lang="x-none">LOMv1.0</imsmd:langstring>
+          </imsmd:source>
+          <imsmd:value>
+            <imsmd:langstring xml:lang="x-none">Draft</imsmd:langstring>
+          </imsmd:value>
+        </imsmd:status>
+      </imsmd:lifecycle>
+      <imsmd:metametadata>
+        <imsmd:contribute>
+          <imsmd:role>
+            <imsmd:source>
+              <imsmd:langstring xml:lang="x-none">LOMv1.0</imsmd:langstring>
+            </imsmd:source>
+            <imsmd:value>
+              <imsmd:langstring xml:lang="x-none">Creator</imsmd:langstring>
+            </imsmd:value>
+          </imsmd:role>
+          <imsmd:centity>
+            <imsmd:vcard>BEGIN:VCARD FN:Dr.Colin D. Milligan END:VCARD</imsmd:vcard>
+          </imsmd:centity>
+          <imsmd:date>
+            <imsmd:datetime>2003-07-08</imsmd:datetime>
+          </imsmd:date>
+        </imsmd:contribute>
+        <imsmd:metadatascheme>UKCMF</imsmd:metadatascheme>
+        <imsmd:language>en</imsmd:language>
+      </imsmd:metametadata>
+      <imsmd:technical>
+        <imsmd:format>text/html</imsmd:format>
+        <imsmd:location type="URI">http://www.reload.ac.uk/ex/testpkg.zip</imsmd:location>
+        <imsmd:installationremarks>
+          <imsmd:langstring xml:lang="en" />
+        </imsmd:installationremarks>
+      </imsmd:technical>
+      <imsmd:rights>
+        <imsmd:cost>
+          <imsmd:source>
+            <imsmd:langstring xml:lang="x-none">LOMv1.0</imsmd:langstring>
+          </imsmd:source>
+          <imsmd:value>
+            <imsmd:langstring xml:lang="x-none">no</imsmd:langstring>
+          </imsmd:value>
+        </imsmd:cost>
+        <imsmd:copyrightandotherrestrictions>
+          <imsmd:source>
+            <imsmd:langstring xml:lang="x-none">LOMv1.0</imsmd:langstring>
+          </imsmd:source>
+          <imsmd:value>
+            <imsmd:langstring xml:lang="x-none">no</imsmd:langstring>
+          </imsmd:value>
+        </imsmd:copyrightandotherrestrictions>
+        <imsmd:description>
+          <imsmd:langstring xml:lang="en">This content is copyright free.</imsmd:langstring>
+        </imsmd:description>
+      </imsmd:rights>
+      <imsmd:annotation>
+        <imsmd:person>
+          <imsmd:vcard>BEGIN:VCARD FN:Dr.Colin D. Milligan END:VCARD</imsmd:vcard>
+        </imsmd:person>
+        <imsmd:date>
+          <imsmd:datetime>2003-07-08</imsmd:datetime>
+        </imsmd:date>
+        <imsmd:description>
+          <imsmd:langstring xml:lang="en">These materials are very simplistic.</imsmd:langstring>
+        </imsmd:description>
+      </imsmd:annotation>
+    </imsmd:lom>
+  </metadata>
+  <organizations default="ORG-D6257D46-F4BF-B282-732C-8412E21AC988">
+    <organization identifier="ORG-D6257D46-F4BF-B282-732C-8412E21AC988" structure="hierarchical">
+      <title>Summer Pictures</title>
+      <item identifier="ITEM-AB190567-46F6-DEA5-321F-18035FC94656" isvisible="true" identifierref="RES-96882175-AA6B-4A19-0160-EB3A181E7115">
+        <title>Loch Katrine</title>
+      </item>
+      <item identifier="ITEM-061E8E5A-1B1C-EFCA-8FA3-6BB89732226B" isvisible="true" identifierref="RES-B3A9C9BF-58B4-A7E8-9C14-E909E01ED753">
+        <title>Ben Ledi</title>
+      </item>
+      <item identifier="ITEM-6B895A68-4D42-CB93-594F-3EF2AE17F8FA" isvisible="true" identifierref="RES-1DC3140B-3BA5-3888-E090-B7041D71880A">
+        <title>Jencks Earthwork</title>
+      </item>
+      <item identifier="ITEM-F3C883BF-E1E7-9B6D-2E7A-06C4B88FD424" isvisible="true" identifierref="RES-8C97ECAB-F3EA-A391-FFC7-1B10CB4A8914">
+        <title>MSP Cells</title>
+      </item>
+      <item identifier="ITEM-D07C70BD-EF62-FEA9-3EAB-016CFD6FB566" isvisible="true" identifierref="RES-94D147FA-06F1-BCA6-5EFC-29C123481EE4">
+        <title>Holyrood Building Site</title>
+      </item>
+      <item identifier="ITEM-47419598-DDAC-D593-9336-A189ED37036F" isvisible="true" identifierref="RES-59CE1240-62AD-E5A9-DF4A-D9C91E370932">
+        <title>Salisbury Crags</title>
+      </item>
+      <item identifier="ITEM-A69B52E2-C70D-9099-6E63-EDB81BC81E80" isvisible="true" identifierref="RES-99863A93-02C8-8996-2FD1-6042124014FD">
+        <title>Castle Sunset</title>
+      </item>
+      <item identifier="ITEM-BEBD6D04-5C98-58C8-A967-907D01BF9D08" isvisible="true" identifierref="RES-42D808C8-431A-D55E-E941-211BDDE5DF02">
+        <title>Bridges Sunset</title>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="RES-42D808C8-431A-D55E-E941-211BDDE5DF02" type="webcontent" href="one.html">
+      <file href="one.html" />
+      <file href="supp/reloadhelp.css" />
+      <file href="supp/reloadeditoricon.gif" />
+      <file href="supp/sunset1.jpg" />
+    </resource>
+    <resource identifier="RES-99863A93-02C8-8996-2FD1-6042124014FD" type="webcontent" href="two.html">
+      <file href="two.html" />
+      <file href="supp/reloadhelp.css" />
+      <file href="supp/reloadeditoricon.gif" />
+      <file href="supp/sunset2.jpg" />
+    </resource>
+    <resource identifier="RES-B3A9C9BF-58B4-A7E8-9C14-E909E01ED753" type="webcontent" href="three.html">
+      <file href="three.html" />
+      <file href="supp/reloadhelp.css" />
+      <file href="supp/reloadeditoricon.gif" />
+      <file href="supp/benledi.jpg" />
+    </resource>
+    <resource identifier="RES-8C97ECAB-F3EA-A391-FFC7-1B10CB4A8914" type="webcontent" href="four.html">
+      <file href="four.html" />
+      <file href="supp/reloadhelp.css" />
+      <file href="supp/reloadeditoricon.gif" />
+      <file href="supp/cells.jpg" />
+    </resource>
+    <resource identifier="RES-96882175-AA6B-4A19-0160-EB3A181E7115" type="webcontent" href="five.html">
+      <file href="five.html" />
+      <file href="supp/reloadhelp.css" />
+      <file href="supp/reloadeditoricon.gif" />
+      <file href="supp/trossachs.jpg" />
+    </resource>
+    <resource identifier="RES-1DC3140B-3BA5-3888-E090-B7041D71880A" type="webcontent" href="six.html">
+      <file href="six.html" />
+      <file href="supp/reloadhelp.css" />
+      <file href="supp/reloadeditoricon.gif" />
+      <file href="supp/jencks.jpg" />
+    </resource>
+    <resource identifier="RES-94D147FA-06F1-BCA6-5EFC-29C123481EE4" type="webcontent" href="seven.html">
+      <file href="seven.html" />
+      <file href="supp/reloadhelp.css" />
+      <file href="supp/reloadeditoricon.gif" />
+      <file href="supp/holyrood.jpg" />
+    </resource>
+    <resource identifier="RES-59CE1240-62AD-E5A9-DF4A-D9C91E370932" type="webcontent" href="eight.html">
+      <file href="eight.html" />
+      <file href="supp/reloadhelp.css" />
+      <file href="supp/reloadeditoricon.gif" />
+      <file href="supp/crags.jpg" />
+    </resource>
+  </resources>
+</manifest>
+

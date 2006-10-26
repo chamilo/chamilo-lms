@@ -1,0 +1,55 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langStatDB              = "Sekot datub&#257;zes darb&#299;bai.";
+$langEnableTracking      = "Iesl&#275;gt sekošanu";
+$langInstituteShortName  = "J&#363;su organiz&#257;cijas nosaukuma sa&#299;sin&#257;jums";
+$langWarningResponsible  = "Lietojiet šo skriptu tikai p&#275;c rezerves kopijas izveides. DOKEOS komanda neatbild par zaud&#275;tiem vai saboj&#257;tiem datiem.";
+$langAllowSelfRegProf  = "At&#316;aut pašre&#291;istr&#275;šanos, k&#257; kursa izveidot&#257;jiem";
+$langEG = "piem.";
+$langDBHost = "Datub&#257;žu serveris";
+$langDBLogin = "Datub&#257;zes lietot&#257;jv&#257;rds";
+$langDBPassword = "Datub&#257;zes parole";
+$langMainDB = "Galven&#257; DOKEOS datub&#257;ze (DB)";
+$langAllFieldsRequired = "visi lauci&#326;i ir oblig&#257;ti aizpild&#257;mi";
+$langPrintVers = "Izdrukas versija";
+$langLocalPath = "Attiec&#299;g&#257; viet&#275;j&#257; nor&#257;de (<i>local path</i>)";
+$langAdminEmail = "Administratora e-pasts";
+$langAdminName = "Administratora v&#257;rds";
+$langAdminSurname = "Administratora uzv&#257;rds";
+$langAdminLogin = "Administratora autoriz&#275;šan&#257;s kods";
+$langAdminPass = "Administratora parole (<font color=\"red\">šo vajadz&#275;tu nomain&#299;t</font>)";
+$langEducationManager = "Projekta vad&#299;t&#257;js";
+$langCampusName = "J&#363;su port&#257;la nosaukums";
+$langDBSettingIntro = "Instal&#257;cijas skripts izveidos DOKEOS galveno datub&#257;zi(es). &#325;emiet v&#275;r&#257;, ka DOKEOS vajadz&#275;s izveidot vair&#257;kas datub&#257;zes. Ja J&#363;su Interneta lapas uztur&#275;t&#257;js &#316;auj Jums izmantot tikai vienu datub&#257;zi, tad DOKEOS sist&#275;ma nestr&#257;d&#257;s, ja vien J&#363;s izv&#275;l&#275;sieties papildus iesp&#275;ju \"Vien&#257; datub&#257;z&#275;\".";
+$langStep1 = "Posms Nr.1 no 6";
+$langStep2 = "Posms Nr.2 no 6";
+$langStep3 = "Posms Nr.3 no 6";
+$langStep4 = "Posms Nr.4 no 6";
+$langStep5 = "Posms Nr.5 no 6";
+$langStep6 = "Posms Nr.6 no 6";
+$langCfgSetting = "Konfigur&#257;cijas iestat&#299;jumi";
+$langDBSetting = "MySQL datub&#257;zes iestat&#299;jumi";
+$langMainLang = "Pamata sazi&#326;as valoda";
+$langLicence = "Licenze";
+$langLastCheck = "P&#275;d&#275;j&#257; p&#257;rbaude pirms izveides";
+$langRequirements = "Nepieciešamie nor&#257;d&#299;jumi";
+$langDbPrefixForm = "MySQL datub&#257;zes prefikss";
+$langDbPrefixCom = "Atst&#257;jiet tukšu, ja netiek piepras&#299;ts";
+$langEncryptUserPass = "Veikt lietot&#257;ju paro&#316;u kript&#275;šanu datub&#257;z&#275;";
+$langSingleDb = "Lietot vienu vai vair&#257;kas datub&#257;zes DOKEOS sist&#275;mai";
+$langAllowSelfReg = "At&#316;aut pašre&#291;istr&#275;šanos";
+$langRecommended = "(ieteicamais)";
+$langScormDB = "<i>SCORM</i> datub&#257;ze";
+$langAdminLastName = "Administratora uzv&#257;rds";
+$langAdminFirstName = "Administratora v&#257;rds";
+$langAdminPhone = "Administratora t&#257;lrunis";
+$langInstituteURL = "uz&#326;&#275;muma Interneta lapa";
+$langDokeosURL = "DOKEOS Interneta lapa";
+$langUserDB = "Lietot&#257;ju datub&#257;ze";
+$ReadThoroughly = "Lasiet uzman&#299;gi";
+$DokeosNeedFollowingOnServer = "Lai DOKEOS darbotos, uz J&#363;su servera j&#257;b&#363;t sekojošajam";
+$WarningExistingDokeosInstallationDetected = "Uzman&#299;bu!<br>Instal&#275;t&#257;js atrada eksist&#275;jošu DOKEOS platformu J&#363;su server&#299;.";
+$NewInstallation = "Jauna instal&#257;cija";
+$CheckDatabaseConnection = "P&#257;rbaud&#299;t datub&#257;zes savienojuma esam&#299;bu";
+?>

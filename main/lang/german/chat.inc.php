@@ -1,0 +1,39 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langChat  = "Chat";
+$langOnlineConference  = "Konferenz";
+$langWash  = "Löschen";
+$langReset  = "Zurücksetzen";
+$langSave  = "Speichern";
+$langRefresh  = "Aktualisieren";
+$langIsNowInYourDocDir  = "ist nun in Ihrem Dokumentenverzeichnis abgelegt. <br><B>Diese Datei ist sichtbar</B>";
+$langCopyFailed  = "Druck fehlgeschlagen";
+$langTypeMessage  = "Bitte geben Sie Ihre Mitteilung ein!";
+$langConfirmReset  = "Möchten sie wirklich alle Mitteilungen löschen?";
+$langHasResetChat  = "hat den Chat zurückgesetzt";
+$langNoOnlineConference  = "Zur Zeit findet keine Konferenz statt...";
+$langMediaFile  = "Live Audio- bzw. Video-Streaming";
+$langContentFile  = "Präsentation";
+$langListOfParticipants  = "Liste der Teilnehmer";
+$langYourPicture  = "Ihr Bild";
+$langOnlineDescription  = "Beschreibung der Konferenz";
+$langOnlyCheckForImportantQuestion = "Bitte nutzen Sie dieses Auswahlfeld nur, wenn Sie eine wichtige Frage stellen möchten!";
+$langQuestion = "Frage";
+$langClearList = "Liste leeren";
+$langWhiteBoard = "Whiteboard";
+$langHome = "Home";
+$langTextEditorDefault = "<h2>Textverarbeitung</h2>Fügen Sie hier Text per Kopieren+Einfügen aus Ms-Word® ein und bearbeiten Sie diesen. Teilnehmer können Ihre Aktionen live verfolgen.";
+$langLinks = "Links";
+$langStreaming = "Streaming";
+$langStreamURL = "Stream-URL";
+$langStreamType = "Stream-Typ";
+$langLinkName = "Link-Name";
+$langLinkURL = "Link-URL";
+$langWelcomeToOnlineConf = "Willkommen zur <b>Online-Konferenz</b>";
+$langNoLinkAvailable = "Kein Link verfügbar";
+$langChat_reset_by = "Chat zurücksetzen";
+$OrFile = "oder Datei";
+$langCallSent = "Char Anfrage wurde gesendet. Warte auf Bestätigung Ihres Partners";
+$langChatDenied = "Ihre Anfrage wurde von Ihem Partner abgewiesen";
+?>

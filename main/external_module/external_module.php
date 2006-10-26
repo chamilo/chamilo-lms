@@ -1,0 +1,185 @@
+<?php
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2003 Ghent University (UGent)
+	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+	Copyright (c) various contributors
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+==============================================================================
+*/
+/**
+==============================================================================
+*	This script is used for adding hyperlinks to a course homepage.
+*	It used to be able to link html documents as well,
+*	which it displayed in context, but that was abandoned
+*	because of changes in documents tool:
+*
+*	Html files are displayed by default with frames now in the documents tool
+*	so the external module - html file include has to be refactored to
+*	reuse documents tool code.
+*
+*	@package dokeos.external_module
+==============================================================================
+*/
+
+$langFile='external_module';
+
+$iconForImportedTools='external.gif';
+$iconForInactiveImportedTools='external_inactive.gif';
+
+include('../inc/global.inc.php');
+
+$tbl_courseHome = Database::get_course_table(TOOL_LIST_TABLE);
+$toolid = $_GET['id'];  // RH: all lines with $toolid added/changed by me
+
+if($toolid)
+{
+        $nameTools = get_lang('EditLink');
+        $noPHP_SELF = TRUE;  // RH: no click to self on edit
+}
+else    $nameTools = get_lang('AddLink');
+
+
+$is_allowedToEdit=$is_courseAdmin;
+
+$linkAdded=false;
+
+if($is_allowedToEdit && $_POST['formSent'] && $toolid)  // RH: new section
+{
+	$name_link=trim(stripslashes($_POST['name_link']));
+	$link=trim(stripslashes($_POST['link']));
+	$target=($_POST['target'] == '_blank')?'_blank':'_self';
+
+	if(empty($name_link)) $msgErr=get_lang('NoLinkName');
+	elseif(empty($link) || $link == 'http://') $msgErr=get_lang('NoLinkURL');
+	else
+	{
+		$sql =  "UPDATE $tbl_courseHome SET " .
+		        "name='" .   addslashes($name_link) .
+		        "', link='" .    addslashes($link) .
+		        "', target='" .  addslashes($target) .
+		        "' WHERE id='" . addslashes($id) . "'";
+
+		api_sql_query($sql, __FILE__, __LINE__);
+
+		$linkAdded = TRUE;
+	}
+}
+elseif($is_allowedToEdit && $_POST['formSent'])
+{
+	$name_link=trim(stripslashes($_POST['name_link']));
+	$link=trim(stripslashes($_POST['link']));
+	$target=($_POST['target'] == '_blank')?'_blank':'_self';
+
+	if(empty($name_link)) $msgErr=get_lang('NoLinkName');
+	elseif(empty($link) || $link == 'http://') $msgErr=get_lang('NoLinkURL');
+	else
+	{
+		if(!stristr($link,'http://'))
+		{
+			$link='http://'.$link;
+		}
+
+		api_sql_query("INSERT INTO $tbl_courseHome(name,link,image,visibility,admin,address,target) VALUES('".addslashes($name_link)."','".addslashes($link)."','$iconForImportedTools','1','0','$iconForInactiveImportedTools','$target')",__FILE__,__LINE__);
+
+		$linkAdded=true;
+	}
+}
+
+Display::display_header($nameTools,"External");
+?>
+
+<h3><?php echo $toolid ? get_lang('EditLink') : $nameTools; ?></h3>
+
+<?php
+
+
+if(!$is_allowedToEdit)
+{
+	api_not_allowed();
+}
+
+if($linkAdded)
+{
+	echo $toolid ? get_lang('LinkChanged') :get_lang('OkSentLink');
+}
+else
+{
+    if ($toolid)  // RH: new section
+    {
+    	$sql =  "SELECT name,link,target FROM $tbl_courseHome" .
+        " WHERE id='" . addslashes($id) . "'";
+
+    	$result = api_sql_query($sql, __FILE__, __LINE__);
+
+    	(mysql_num_rows($result) == 1 && ($row = mysql_fetch_array($result)))
+    	    or die('? Could not fetch data with ' . htmlspecialchars($sql));
+	}
+
+?>
+
+<p><?php echo $toolid ? get_lang('ChangePress') : get_lang('SubTitle'); ?></p>
+
+<table border="0">
+<form method="post" action="<?php echo $toolid ? $_SERVER['PHP_SELF'] . '?id=' . $id : $_SERVER['PHP_SELF']; ?>">
+<input type="hidden" name="formSent" value="1">
+
+<?php
+if(!empty($msgErr))
+{
+?>
+
+<tr>
+  <td colspan="2">
+
+<?php
+	Display::display_normal_message($msgErr); //main API
+?>
+
+  </td>
+</tr>
+
+<?php
+}
+?>
+
+<tr>
+  <td align="right"><?php echo get_lang('Link'); ?> :</td>
+  <td><input type="text" name="link" size="50" value="<?php if($_POST['formSent']) echo htmlentities($link); else echo $toolid ? htmlspecialchars($row['link']) : 'http://'; ?>"></td>
+</tr>
+<tr>
+  <td align="right"><?php echo get_lang('Name'); ?> :</td>
+  <td><input type="text" name="name_link" size="50" value="<?php if($_POST['formSent']) echo htmlentities($name_link); else echo $toolid ? htmlspecialchars($row['name']) : ''; ?>"></td>
+</tr>
+<tr>
+  <td align="right"><?php echo get_lang('LinkTarget'); ?> :</td>
+  <td><select name="target">
+  <option value="_self"><?php echo get_lang('SameWindow'); ?></option>
+  <option value="_blank" <?php if(($_POST['formSent'] && $target == '_blank') || ($toolid && $row['target'] == '_blank')) echo 'selected="selected"'; ?>><?php echo get_lang('NewWindow'); ?></option>
+  </select></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"></td>
+</tr>
+</table>
+
+<?php
+}
+
+Display::display_footer();
+?>

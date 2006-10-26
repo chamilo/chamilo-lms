@@ -1,0 +1,47 @@
+<?php //$id: $
+/**
+ * Container script for the messages coming from the learnpath object. Initially, this wasn't supposed to be
+ * a separate file but rather some text included in lp_view.php, but SCORM involves loading a script that
+ * saves the data asynchronously while the SCORM learning path carries on. Having an informational iframe
+ * helps not popping up an additional window when saving data.
+ * 
+ * This script is also used to refresh the TOC as sometimes the SCORM JS messages are taken into account
+ * only after the TOC is drawn. As such, you might complete an item, browse to the next page, have the
+ * TOC drawn with your 'incomplete' status, while the SCORM messages generally arrives just after the TOC
+ * is drawn. By updating it here and in lp_save.php, we avoid funny visual effect like having a complete
+ * item showing as incomplete.
+ * @package dokeos.learnpath
+ * @author Yannick Warnier <ywarnier@beeznest.org>
+ */
+/**
+ * Script
+ */
+$langFile = "learnpath";
+require_once('back_compat.inc.php');
+require_once('learnpath.class.php');
+require_once('scorm.class.php');
+if(isset($_SESSION['lpobject'])){
+	$temp = $_SESSION['lpobject'];
+	$_SESSION['oLP'] = unserialize($temp);
+}
+if($debug>0){error_log('New LP - Loaded lp_message : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'],0);}
+$charset = 'ISO-8859-1';
+$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
+  var dokeos_xajax_handler = window.parent.oxajax;
+</script>';
+$htmlHeadXtra[] = '' .
+'<style type="text/css" media="screen, projection">
+	/*<![CDATA[*/
+	@import "scorm.css";
+	/*]]>*/
+</style>';
+include_once('../inc/reduced_header.inc.php');
+?>
+
+<body>
+<div id="msg_div_id">
+<?php
+echo $_SESSION['oLP']->error;
+?>
+</div>
+</body></html>

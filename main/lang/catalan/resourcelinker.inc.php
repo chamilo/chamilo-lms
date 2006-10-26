@@ -1,0 +1,60 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
+$LearningPath = "Learning Path";
+$LevelUp = "level up";
+$AddIt = "Add it";
+$MainCategory = "main category";
+$lang_delete_added_resources = "Delete added resources";
+$AddToLinks = "Add to the course links";
+$DontAdd = "do not add";
+$lang_show_all_added_resources = "Show all added resources";
+$ResourcesAdded = "Added new resources";
+$BackTo = "Back to";
+$ExternalResources = "External resources";
+$CourseResources = "Course resources";
+$ExternalLink = "External link";
+$DropboxAdd = "Add the dropbox page to this chapter.";
+$AddAssignmentPage = "Add the upload assignment page to this chapter.";
+$Dropbox = "Dropbox";
+$Assignments = "Assignments";
+$Exercise = "Test";
+$Link = "Link";
+$Forum = "Forum";
+$AdValvas = "Ad Valvas";
+$Document = "Document";
+$Agenda = "Agenda";
+$ShowDelete = "Mostrar/eliminar";
+$IntroductionText = "Introduir text";
+$CourseDescription = "Descripció del curs";
+$Groups = "Grups";
+$Users = "Usuaris";
+$IntroductionTextAdd = "Afegeixi una pàgina que conté el text d\'introducció a aquest capítol.";
+$CourseDescriptionAdd = "Afegeixi una pàgina que conté la descripció de curs a aquest capítol.";
+$GroupsAdd = "Afegeixi la pàgina de Grups a aquest capítol.";
+$UsersAdd = "Afegeixi la pàgina d\'Usuaris a aquest capítol.
+";
+$ExportableCourseResources = "Recursos de curs exportables";
+$DokeosRelatedCourseMaterial = "Dokeos relacionava recursos de curs";
+$LinkTarget = "Destí d\'enllaç";
+$SameWindow = "A la mateixa finestra";
+$NewWindow = "A una nova finestra";
+$StepDeleted1 = "Aquest";
+$StepDeleted2 = "l\'element fou suprimit en aquesta eina";
+$Modify = "modificar";
+$Chapter = "Capítol";
+$NoAgendaItems = "No hi ha elements a l\'agenda";
+$AgendaAdd = "Afegir un element a l\'agenda";
+$UserGroupFilter = "Filtrar per grups d\'usuaris";
+$AgendaSortChronologicallyUp = "Ordenar l\'agenda cronologicament (adalt)";
+$ShowCurrent = "Ordenar els elements de l\'agenda";
+$ModifyCalendarItem = "Modificar els elements de l\'agenda";
+$HourMinuteDivider = "h";
+$ItemTitle = "Títol";
+$Detail = "Detalls";
+$EditSuccess = "L\'edició ha estat exitosa";
+$AddCalendarItem = "Afegir element a l\'agenda";
+$AddAnn = "Afegir un anunci";
+$ForumAddNewTopic = "Fòrum: afegir un nou tòpic";
+?>

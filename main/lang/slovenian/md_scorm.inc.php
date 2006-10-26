@@ -1,0 +1,49 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$nameTools = "Scorm Manifest Metadata";
+$langMdCallingTool = "Uèna pot - Scorm";
+$langTool = "Scorm MD operacije";
+$langSorry = "Najprej izberite teèaj";
+$langDenied = "Ta funkcija je dostopna le administratorjem teèaja";
+$langWorkOn = "dne";
+$langNotInDB = "ni vnosa v Dokeos podatkovno bazo";
+$langManifestSyntax = "(sintaktièna napaka v manifest datoteki)";
+$langEmptyManifest = "(prazna manifest datoteka...)";
+$langNoManifest = "(ni manifest datoteke...)";
+$langNotFolder = "ni možno, ni mapa ...";
+$langContinue = "Nadaljuj z SD-ID";
+$langUploadHtt = "Prenesi (upload) HTT datoteko";
+$langHttFileNotFound = "Nove HTT datoteke ni mogoèe odpreti (prazna, prevelika)";
+$langHttOk = "Nova HTT datoteka je bila prenešena";
+$langHttNotOk = "prenos HTT datoteke ni bil uspešen";
+$langRemoveHtt = "Odstrani HTT datoteko";
+$langHttRmvOk = "HTT datoteka je bila odstranjena";
+$langHttRmvNotOk = "Odstranitev HTT datoteke ni bila uspešna";
+$langImport = "Uvozi imsmanifest.xml";
+$langRemove = "Odstrani MDE-je";
+$langAllRemovedFor = "Vsi vnosi odstranjeni za";
+$langIndex = "Indeksiraj besede z PhpDig";
+$langStatistics = "Statistika";
+$langTotalMDEs = "Skupno število Scorm MDD vnosov:";
+$langMainMD = "Odpri glavni MDE";
+$langLines = "vrstic";
+$langPlay = "Zaženi index.php";
+$langNonePossible = "Nobena MD operacija ni možna";
+$langOrElse = "Izberi Scorm mapo ali ID Scorm mape";
+$langWorkWith = "Operacije s Scorm mapo";
+$langSDI = "... Scorm mapa z SD-ID (in deljen manifest - ali pusti prazno)";
+$langRoot = "koren";
+$langSplitData = "Deljen manifest, in #MDe, èe obstaja:";
+$langMffNotOk = "Zamenjava manifest datoteke ni uspela";
+$langMffOk = "Manifest datoteka je bila zamenjana";
+$langMffFileNotFound = "Novo manifest datoteko ni mogoèe odpreti (lahko je prazna, prevelika)";
+$langUploadMff = "Nadomesti manifest datoteko";
+$langMfMissing = "Ne najdem Manifest datoteke";
+$langMfFile = "Manifest datoteka";
+$langMfSyntaxError = "sintaktièna napaka";
+$langManifest = "manifest";
+$langImported = "Manifest metadata uvoženi";
+$langImpossible = "Ne morem uvoziti manifest metadata...";
+$langTo = "iz";
+?>

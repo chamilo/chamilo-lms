@@ -1,0 +1,256 @@
+<!-- {-md_document.htt-} -->              <!-- for Dokeos metadata/index.php -->
+                                                             <!-- 2005/04/25 -->
+
+<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
+
+
+<!-- {-METADATA-} -->
+
+{-D TRUE TRUE-}{-D XML application/xml;iso-8859-1-}
+
+<div id="indexabletext" class="dvc">
+{-H {-E md_indexabletext C METADATA_INDEXABLETEXT-}-}
+</div>
+
+<noscript>
+{-P traceinfo-}
+<hr>
+<form method="post" action="{-P self-}">
+    <textarea rows="30" class="wide" name="mdt" id="mdt">{-H {-P mdt-}-}</textarea>
+    <input type="submit" value="{-L Store-}"></input>
+</form>
+{-L NoScript-}
+</noscript>
+
+<div  onMouseUp="if ((kw = pU_clicked(event))) pU_select(kw); else pU_hide();">
+{-T dbrecord == empty <div class="lgr">-}
+{-E md_part1 C METADATA_PART1-}
+{-T dbrecord == empty </div>-}
+
+{-T isallowedtoedit == TRUE 
+
+<div class="dvc">{-P traceinfo-}</div>
+
+<form method="post" action="{-P self-}">
+    <textarea rows="4" class="mda" name="mda" id="mda" title="{-L ConfirmDelete-}"></textarea>
+    <input type="submit" value="{-L Store-}" onClick="return checkBeforeSubmit(event);"></input>
+    {-T dbrecord != empty <input type="submit" value="{-L DeleteAll-}" onClick="return setPendingOperation('~~', event);"></input>-}
+    <span onClick="document.getElementById('indexabletext').className ='dvo'">&#xa0;</span>
+{-D techfmt {-V metadata/lom/technical/format-}-}{-T techfmt == XML 
+    <input type="submit" value="{-L CourseKwds-}" onClick="return setPendingOperation('!!', event);"></input>
+ -}
+</form>
+
+<textarea rows="10" class="mda" name="mdt" id="mdt">{-H {-P mdt-}-}</textarea>
+
+ -}
+
+{-T keywordscache != empty 
+
+<div noWrap="1" id="maindiv">
+    <input type="button" class="btn" value="+" onClick="if (this.value == '+') deselectAll(event, this); openOrClose(this);"/>
+    <input type="button" class="btm" id="btnOpenOrCloseAll" value="++" onClick="openOrCloseAll(this);"/>
+    <input type="button" class="btn" value="?" onClick="openOrCloseHelp(this)"/>
+    &#xa0;{-L ClickKw-}
+    {-P keywordscache-}
+</div>
+
+<div id='moreHelp' class='dvc'>
+    {-L KwHelp-}
+</div>
+
+ -}
+
+{-T keywordscache == empty 
+
+<div noWrap="1" id="maindiv">
+{-L KwNote-}
+</div>
+
+ -}
+
+<div id="popup" noWrap="1" class="pup">
+    Working...
+</div>
+</div><!-- onMouseUp -->
+
+<!<!------------------------  End Of script Output  ---------------------->
+
+
+<!-- {-METADATA_PART1-} -->
+
+<h3>{-L Tool-}: {-X metadata/lom/general/identifier/entry-}</h3>
+
+<table class="wide">
+    <tr>
+        <td colspan="2" class="bg1">&#xa0;</td><td class="bg2">&#xa0;</td>
+        <td class="bg1">&#xa0;</td>            <td class="bg2">&#xa0;</td>
+    </tr>
+    <tr>
+        <td>{-D label Language-}{-C LABEL-}</td>
+        <td>{-D xpath metadata/lom/general/language-}{-C LANGSELECT-}</td>
+        <td>{-D xpath metadata/lom/general/identifier/catalog-}{-D iclass disabled class="wd2" -}{-C INPUT-}</td>
+        <td>{-D label Identifier-}{-C LABEL-}</td>
+        <td>{-D xpath metadata/lom/general/identifier/entry-}{-D iclass class="wd2" onKeyPress="return isValidChar(event, '[a-z0-9\x08\x25\*\.\'\(\)_!-]', 'i');" -}{-C INPUT-}</td>
+    </tr>
+    <tr>
+        <td>{-D label Title-}{-C LABEL-}</td>
+        <td>{-D xpath metadata/lom/general/title/string/@language-}{-C LANGSELECT-}</td>
+        <td colspan="3">{-D xpath metadata/lom/general/title/string-}{-C INPUTW-}</td>
+    </tr>
+    <tr>
+        <td>{-D label Description-}{-C LABEL-}</td>
+        <td>{-C MDLANGSELECT-}</td>
+        <td colspan="3">{-D xpath metadata/lom/general/description/string-}{-C INPUTW-}</td>
+    </tr>
+    <tr>
+        <td colspan="2">{-D label Coverage-}{-C LABEL-}</td>
+        <td colspan="3">{-D xpath metadata/lom/general/coverage/string-}{-C INPUTW-}</td>
+    </tr>
+    <tr>
+        <td colspan="2">{-D label Keyword-}{-C LABEL-}</td>
+        <td colspan="3">{-C INPUT_ALLKWDS-}</td>
+    </tr>
+    <tr>
+        <td colspan="2">{-D label Rights-}{-C LABEL-}</td>
+        <td colspan="3">{-D xpath metadata/lom/rights/description/string-}{-C INPUTW-}</td>
+    </tr>
+    <tr>
+        <td colspan="2">{-D label Version-}{-C LABEL-}</td>
+        <td>{-D xpath metadata/lom/lifeCycle/version/string-}{-D iclass class="wd2" -}{-C INPUT-}</td>
+        <td>{-D label Status-}{-C LABEL-}</td>
+        <td nowrap>
+            {-D xpath metadata/lom/lifeCycle/status/value-}{-D optionarray Statuses-}{-C SELECT-}
+            {-D xpath metadata/lom/rights/cost/value-}{-D optionarray Costs-}{-C SELECT-}
+            {-D xpath metadata/lom/rights/copyrightAndOtherRestrictions/value-}{-D optionarray Copyrights-}{-C SELECT-}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">{-D label CreatedSize-}{-C LABEL-}</td>
+        <td nowrap>
+            {-D xpath metadata/lom/lifeCycle/contribute[1]/date/dateTime-}{-D iclass class="wd1" onKeyUp="checkValid(this,'^[0-9]{4}-[0-9]{2}-[0-9]{2}$','i');" -}{-C INPUT-}
+            {-D xpath metadata/lom/technical/size-}{-D iclass class="wd1"  onKeyPress="return isValidChar(event, '[0-9]', 'i');" -}{-C INPUT-}
+        </td>
+        <td>{-D label Author-}{-C LABEL-}</td>
+        <td>{-D xpath metadata/lom/lifeCycle/contribute[1]/entity-}{-C INPUTW-}</td>
+    </tr>
+    <tr>
+        <td colspan="2">{-D label Format-}{-C LABEL-}</td>
+        <td>{-D xpath metadata/lom/technical/format-}{-D optionarray Formats-}{-C SELECT-}</td>
+        <td><a href="{-X metadata/lom/technical/location-}">{-D label Location-}{-C LABEL-}</a></td>
+        <td>{-D xpath metadata/lom/technical/location-}{-C INPUTW-}</td>
+    </tr>
+    <tr>
+        <td colspan="2" class="bg1">&#xa0;</td><td class="bg2">&#xa0;</td>
+        <td class="bg1">&#xa0;</td>            <td class="bg2">&#xa0;</td>
+    </tr>
+</table>
+
+
+<!-- {-METADATA_INDEXABLETEXT-} -->
+
+ {-V metadata/lom/general/title/string-} txt-sep
+ {-R metadata/lom/general/keyword C KWTEXT-} txt-sep
+ {-V metadata/lom/general/description[1]/string-} txt-end
+ document-type
+ {-V metadata/lom/lifeCycle/contribute[1]/entity-}
+ {-V metadata/lom/lifeCycle/contribute[1]/date/dateTime-}
+ {-V metadata/lom/technical/format-}
+
+
+<!-- {-KWTEXT-} -->
+
+ {-V string-}-kw
+
+
+<!-- {-LABEL-} -->
+
+<span class="bg3" title="{-L {-P label-}Tip-}">{-L {-P label-}-}&#xa0;:</span>
+
+
+<!-- {-MDLANGSELECT-} -->
+
+<select onchange="spcSel('metadata/lom/general/description,metadata/lom/general/coverage,metadata/lom/general/keyword,metadata/lom/rights/description;string@language', this);">{-D selvalue {-V metadata/lom/general/description/string/@language-}-}{-R Langs C OPTION-}</select>
+
+
+<!-- {-LANGSELECT-} -->
+
+{-D optionarray Langs-}{-C SELECT-}
+
+
+<!-- {-SELECT-} -->
+
+<select onchange="spcSel('{-H {-P xpath-}-}', this);">{-D selvalue {-V P xpath-}-}{-R {-P optionarray-} C OPTION-}</select>
+
+
+<!-- {-OPTION-} -->
+
+<option value="{-P key-}" {-T key == selvalue selected-}>{-P value-}</option>
+
+
+<!-- {-INPUTW-} -->
+
+{-D iclass class="wide" -}{-C INPUT-}
+
+
+<!-- {-INPUT-} -->
+
+<input type="text" title="{-H {-P xpath-}-}" {-P iclass-}value="{-H {-V P xpath-}-}" onchange="spc(this.title, this.value);"/>
+
+
+<!-- {-INPUT_ALLKWDS-} -->
+
+<input type="text" title="{-X metadata/lom/general/description/string/@language-}" 
+ id="kwds_string" class="wide" value="{-X metadata/lom/general/keyword/string , -}" 
+ onKeyUp="takeTypeIn(this, 150, -100, '150px'); return true;" 
+ onKeyPress="return isValidChar(event, '[0-9a-z\xC0-\xFF\.\x08\x25, -]', 'i');" />
+
+
+<!-- {-HEAD-} -->
+
+<link rel="stylesheet" type="text/css" href="md_styles.css">
+
+<script language="JavaScript" src="md_script.js"></script>
+<script language="JavaScript">var kwdswere = "{-X metadata/lom/general/keyword/string , -}";</script>
+
+
+<!-- {-HTTP-} -->
+
+Expires: Mon, 26 Jul 1997 05:00:00 GMT
+
+
+<!-- {-KEYWORD_VERYOLDVERSIONWITHLANGSELECTS-} -->
+
+<tr>
+    <td>{-D label Keyword-}{-D tip {-L KeywordTip-}-}{-C LABEL-}</td>
+    <td nowrap><select onchange="spc('metadata/lom/general/keyword[{-P number-}]/string/@language', this.options[this.selectedIndex].value);">{-D selvalue {-V string/@language-}-}{-R Langs C OPTION-}</select>
+    <input type="checkbox" title="{-L DeleteKw-}" id="keyword{-P number-}"/></td>
+    <td colspan="3">{-D value {-X string-}-}{-D title metadata/lom/general/keyword[{-P number-}]/string-}{-C INPUTKWD-}</td>
+</tr>
+
+
+<!-- {-KEYWORD_OLDVERSIONSEPARATELINES-} -->
+
+<tr>
+    <td colspan="2" nowrap>{-D label Keyword-}{-D tip {-L KeywordTip-}-}{-C LABEL-}
+    <input type="checkbox" title="{-L DeleteKw-}" id="keyword{-P number-}"/></td>
+    <td colspan="3">{-D value {-X string-}-}{-D title metadata/lom/general/keyword[{-P number-}]/string-}{-C INPUTKWD-}</td>
+</tr>
+
+
+<!-- {-INPUTKWD-} -->
+
+<input type="text" title="{-P title-}" class="wide" value="{-H {-P value-}-}" onchange="spckwd(this.title, this.value, '{-P selvalue-}');"/>
+
+
+<!-- {-Remarks-} -->
+
+Small problems with NS 7 and Mozilla 1.7...
+
+1. See 'End Of script Output' below: a double <!<! is required in that comment 
+   (and only there) otherwise it is not recognised as a comment.
+
+2. Old script is cached and may pop up as error 'oCl is not defined'.
+
+
+<!-- {--} -->

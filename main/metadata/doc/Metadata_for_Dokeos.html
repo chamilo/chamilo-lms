@@ -1,0 +1,655 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Metadata for Dokeos</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <style>
+
+    .code   {font-family: Courier New, Courier, monospace; font-size: x-small}
+
+  </style>
+</head>
+<body style="color: rgb(0, 0, 0); background-color: rgb(255, 204, 153);"
+ alink="#000099" link="#000099" vlink="#990099">
+<font face="Helvetica, Arial, sans-serif">
+<h1>Metadata for Dokeos 1.6</h1>
+<div align="right">document version:2005/09/20.<br>
+</div>
+<br>
+This is a short technical documentation about the metadata (MD)
+implementation in Dokeos 1.6. The 1.6 implementation (DMD1.6) mainly
+consists of:<br>
+<ul>
+  <li>screens and scripts for document-MD viewing and editing;</li>
+  <li>two XML-related libraries;</li>
+  <li>a general MD toolkit with some API functions;</li>
+  <li>experimental scripts for search via MD and for getting statistics
+on keyword usage;</li>
+  <li>not fully supported scripts for indexing and searching MD with
+PhpDig;<br>
+  </li>
+  <li>not fully supported scripts for storing/editing MD related to
+Links;<br>
+  </li>
+  <li>not fully supported scripts for SCORM package metadata import
+and custom browsing (see end of document).</li>
+</ul>
+Background information can be found on&nbsp;<a
+ href="http://zephyr.ugent.be/courses/TW05DBRH/">Zephyr</a>:
+VeloMetadataClaroline.doc (via Documenten, Metadata). (That document
+is, however, outdated where it
+describes the implementation.)<br>
+<br>
+<h2>Metadata, XML, MD table</h2>
+MD is XML-formatted information about a Dokeos object. It is stored in
+a course database table (not globally), and Dokeos objects are
+identified in that table by their type + '.' + id. For example,
+'Document.12'
+refers to an object
+of type 'Document' (a file or a folder in the Dokeos Documents tool).<br>
+<br>
+The design of DMD1.6 allows to define, per type of object, which info
+is to be stored as MD, and how the MD is represented in XML. Both can
+be
+adapted relatively easily, in a PHP-script that defines the object
+class
+'mdobject' for the object type at hand.<br>
+<br>
+DMD1.6 fully implements MD definition, storage and editing for
+'Document'-type
+objects. The class 'mdobject' for these type of objects is defined in
+the script 'md_document.php'. The class definition includes a method
+to generate the default MD for new entries. (The scripts 'md_link.php'
+and 'md_scorm.php' define the class 'mdobject' for 'Link'- and
+'Scorm'-type objects. Script 'md_mix.php' defines a subset of the
+'mdobject' class functionality for the experimental Search script.)<br>
+<br>
+DMD1.6 works with standard IEEE LOM (Learning Objects MD). The
+XML-representation
+conforms to SCORM 1.3 (also known as SCORM 2004). The IEEE LOM elements
+General.Identifier.Catalog
+and .Entry are made to contain a globally unique object identifier of
+the
+form urn:institution:platform.coursecode.type.id and for element
+Technical.Location an URL is generated that points to script
+'openobject.php', also part of DMD1.6.<br>
+<br>
+To make changes to type and representation of MD more easy, the
+'mdobject' class also defines a map for the (generally accepted) Dublin
+Core elements. A specific Dokeos installation can thereby adapt
+DMD1.6 relatively easily e.g. to use SCORM 1.2 and/or IMS-XML instead
+of SCORM 2004.<br>
+<br>
+MD is stored in the (new) course database table 'metadata'. Count on
+2-4 KB per metadata record.<br>
+<br>
+The MD records currently have 5 fields: eid (entry-id or object
+identifier),
+mdxmltext (metadata text, XML-formatted), md5, htmlcache1, htmlcache2,
+indexabletext. The latter three fields are used for cached HTML and for
+storing text to be indexed for search; the hash-value md5 is used to
+validate
+the cache.<br>
+<br>
+The script
+'md_funcs', part of the MD toolkit, and used a.o. in the index and
+search
+scripts, contains a class definition 'mdstore', which handles all
+database operations. Code
+that is shared by several other scripts is also to be found in
+'md_funcs.php': common functions, code related to IEEE, and code
+related
+to the keyword tree (see below).<br>
+<br>
+<h2>XMD and XHT</h2>
+Two new libraries in inc/lib are essential for DMD1.6: the XML Mini-DOM
+'xmd' and XML HTML Templates 'xht'. The corresponding scripts contain
+some comments describing their functionality. Test scripts are included
+in DMD1.6
+to demonstrate the use of these libraries.<br>
+<br>
+DOM XML functions are also available in PHP 4 itself, but they are
+experimental. They require an extra
+nonstandard XML library and, on Windows, fiddling with DLLs. To avoid
+these problems, DMD1.6 comes with its own XML Mini-DOM library.<br>
+<br>
+Several open source template libraries exist for PHP, and yet DMD1.6
+again comes with its own one. The main design goal for the XML HTML
+Templates library is
+to combine HTML separation and a tight connection with an XML
+(mini-dom-)document. These
+are essential, given the goal of flexibility concerning kind and
+representation of MD and presentation to the user. The 'xht' library
+is mainly used to generate HTML, but DMD1.6 also uses it to generate
+XML
+(e.g. the default XML for new MD records in 'md_document.php') and
+JavaScript (in 'md_funcs.php').<br>
+<br>
+If it is decided for a future version of Dokeos to use a more
+'standard'
+approach for XML and/or for templates (e.g. Smarty), then DMD will
+most
+probably be adapted.<br>
+<br>
+The use of 'xht' in DMD1.6 allows to define, per type of object,
+what part of the MD is to be shown to a Dokeos user or presented for
+editing, and how
+that info is rendered as HTML (between the page header and footer).
+For 'Document'-type objects, the HTML templates for MD viewing and
+editing are to be found in 'md_document.htt'. (Compare them with the
+templates in 'md_link.htt', 'md_scorm.htt' (both not fully supported),
+and 'mds_mix.htt'., the
+templates used when rendering the (experimental)
+search screen.)<br>
+<br>
+Some little notes here will come in handy for easier understanding of
+the templates. For more info, look into the
+source code of the libraries.<br>
+<ul>
+  <small> <li>A&nbsp;template starts with a special comment line
+giving the
+template name. A template ends where the next one starts.<br>
+  </li>
+  <li>Templates can call other templates, example "<span class="code">{-C
+LANGSELECT-}</span>" (a "call" construct).</li>
+  <li>Calls do not have parameters. Instead, there is a global
+parameter array. String values are stored in it with the "define
+construct", e.g. "<span class="code">{-D label Language-}</span>"
+(define "label" to have the value "Language"). Parameter values are
+fetched with the "parameter" construct, e.g. "<span class="code">{-P
+title-}</span>".&nbsp;</li>
+  <li>Some parameters are predefined, e.g. "<span class="code">{-P 0-}</span>"
+('0'), "<span class="code">{-P 1-}</span>", "<span class="code">{-P
+empty-}</span>" (empty string). When another literal values needs to be
+used in a construct, put it in a parameter, e.g. "<span class="code">{-D
+XML application/xml;iso-8859-1-}</span>" </li>
+  <li>The "language" construct "<span class="code">{-L KwHelp-}</span>"
+includes the value of a language variable from a Dokeos language file
+(here: $langKwHelp). (To be correct, it calls the function that has
+been assigned to xht_get_lang, usually get_lang.)<br>
+  </li>
+  <li>The "XML construct", e.g. "<span class="code">{-X
+technical/format-}</span>" fetches a value from the associated XML
+document (in DMD1.6 most often the metadata of a Dokeos object).</li>
+  <li>The "test construct", e.g. "<span class="code">{-T key ==
+selvalue selected-}</span>" provides conditional inclusion. Our
+example: include
+the word "selected" only when parameter "key" is equal to parameter
+"selvalue".</li>
+  <li>Constructs can span several lines, but special care is required
+for correct spacing. See examples with the test construct in
+'md_document.htt': the space at the end of an unclosed "<span
+ class="code">{-T ...</span>" line is essential!</li>
+  <li>The "repeat construct", e.g. "<span class="code">{-R Langs C
+OPTION-}</span>" repeatedly calls a subtemplate. In this example, the
+subtemplate "OPTION" is repeated for all values in the associative list
+$langLangs. (Sample associative lists can be found in <span
+ class="code">lang/english/md_document.inc.php</span>
+Another example: "<span class="code">{-R general/keyword C
+KEYWORD-}</span>" - repeat "KEYWORD" for all XML elements found by the
+given path "general/keyword".</li>
+  <li>Constructs can be nested such as in e.g. "<span class="code">{-H
+{-L {-P label-}Tip-}-}</span>". </li>
+  <li>The "X" construct implicitly includes the htmlspecialchars
+transformation. Where this is not desired, the "V" ("value") construct
+can be used instead. ("X" = "V" + "H") To refer to the associated XML
+document, both constructs use an XPath parameter such as
+'general/title/string/@language'. There is a provision in 'xht'
+allowing to include the callback marker '=/' in XPaths (see source
+code).<br>
+  </li>
+  <li>As a convenience, the C, L, P, V, and X constructs allow
+cascading instead of nesting, e.g. "<span class="code">{-V P xpath-}</span>"
+is equivalent to "<span class="code">{-V {-P xpath-}-}</span>". </li>
+  <li>For the "E" construct, see "Caching".<br>
+  </li>
+  <li>It should be kept in mind that template scanning and substitution
+is simple character-processing. To help with template definition and
+adaptation, 'xht' can generate tracing information that can be
+made visible in the HTML page source (see xht_dbgn and xht_dbgo).</li>
+  </small>
+</ul>
+<br>
+<h2>Mime types and Technical.Format</h2>
+In the IEEE LOM standard, the metadata element Technical.Format must
+contain the learning object mime type. DMD1.6 uses
+DocumentManager::file_get_mime_type as authorative source for mime
+types and for determining the default mime type based on file extension.<br>
+<br>
+There is a provision for adding mime types that are not listed in
+DocumentManager::file_get_mime_type,
+for example alternative mime types for a specific file extension. This
+is done via the language variable $langFormats (see DLTT and Dokeos
+lang-file md_document). This language variable must contain an
+associative list such as e.g. "<span class="code">:text/plain;iso-8859-1:Text;Latin-1,,
+application/xml;iso-8859-1:Xml;Latin-1</span>". (The second part of a
+list
+item, e.g. "<span class="code">Text;Latin-1</span>", appears in the
+selection box in the metadata
+screen and can be made language-specific.) (In associative lists,
+elements are separated by double comma; value and language text are
+separated by the first character in the language string, here a colon.)<br>
+<br>
+One specific mime type can be designated as the mime type for course
+keywords documents (see next section). This is done by defining
+parameter XML in the template file metadata/md_document.htt. In DMD1.6
+it contains:<br>
+<span class="code">{-D XML application/xml;iso-8859-1-}</span><br>
+<br>
+<h2>Keywords in a tree, JavaScript<br>
+</h2>
+MD usually includes
+keywords, and there is a special provision in
+DMD1.6 allowing to (optionally) define a structured set of keywords for
+each course. The course manager defines the keywords in an xml file (an
+example is provided) and uploads it to the course documents area. When
+browsing to that document's metadata, there will be a button 'This
+document contains the course keywords'. The
+XML-structured keywordtree is then converted to the cache file
+'CourseKwds.js'
+in the course's top-level directory. The button must be used after each
+change to the xml file. To remove all course keywords (and the cache
+file), use the button on an xml file containing only spaces or only a
+top element with no content.<br>
+<br>
+The cache file constructs a clickable tree
+in HTML (restricted to W3C browsers). The toolkit script 'md_funcs'
+contains the server-side functions related to the keyword tree, the
+file 'md_script.js' contains
+the client-side script.<br>
+&nbsp; <br>
+Whether the keyword tree is
+presented in a screen (index, search, ...), and if so, where and how,
+can again be defined relatively easily via the templates. The MD
+view-and-edit screen also converts comma-separated keywords (whether
+selected with the clickable tree or typed in)
+to separate XML elements (as required by SCORM 1.3).<br>
+<br>
+The file 'md_script.js' also contains the client-side script used by
+the HTML templates in 'md_document.htt' for input validation and MD
+update preparation in screens for 'Document'-type object MD. Whereas
+keyword-tree clicking requires a W3C browser, input validation and MD
+update should also work with IE4 and NS4 browsers (not tested).<br>
+<br>
+DMD1.6 contains input validation of two kinds (put the following on the
+HTML INPUT element):<br>
+<ul>
+  <li><span class="code">onKeyPress="return
+isValidChar(event, pattern, flags)"</span>, e.g. '[a-z]', 'i': allow
+only the
+26*2 letters: all other input is disabled in the INPUT field; examples
+in the fields for the learning object identifier and for keywords;</li>
+  <li><span class="code">onKeyUp="checkValid(this,
+pattern, flags)"</span>, e.g. '^[a-z]{2,8}$', 'i': field must contain
+between 2
+and 8 letters: nonconforming input will pass, but text is rendered in
+red to alert the user; an example in the date field (lng. obj.
+creation).</li>
+</ul>
+To provide a minimum level of MD editing support when there is no
+scripting in the browser, the templates in 'md_editxml' allow direct
+editing of the XML formatted data. (This same template is used should
+an XML syntax error be detected, thereby allowing to repair XML
+metadata.)<br>
+<br>
+To view the XML formatted data, click the 'Store' button while holding
+CTRL- and ALT-keys down.<br>
+<br>
+The server-side functions for the construction of the keyword tree
+cache file (in 'md_funcs')
+mimic an XSLT process which is
+documented in 'SelKwds.xsl'. (This file, and XSLT in general, is not
+used in DMD1.6.)<br>
+<br>
+The experimental script 'statistics.php' gives statistics about the
+usage of course keywords. It is not linked to any Dokeos
+1.6 screen, therefore not reachable in a standard installation.<br>
+<br>
+<h2>MD toolkit and API<br>
+</h2>
+The script 'md_funcs' contains the main part of the toolkit and API.
+They allow other Dokeos scripts to define, modify and delete MD for
+specific objects (see class 'mdstore'). The script 'md_funcs' must be
+combined with a script
+that defines the object class 'mdobject' for the specific type of
+object
+(such as&nbsp; 'md_document.php' for 'Document'-type objects). The test
+scripts 'dcex' and 'mdApiTest' demonstrate the toolkit and the API
+functions.<br>
+<br>
+The simplest way of working with the API is by using the functions
+'mds_get_dc_elements' and 'mds_put_dc_elements'. They allow to fetch
+and store the MD elements that are part of the so called Dublin Core.
+The DC elements form a generally accepted core set of metadata.<br>
+<br>
+The function 'mds_update_xml_and_mdt' is particularly useful for
+translating user interactions with a MD edit screen to MD-store
+operations. When using the API, it might be more handy to work with xmd
+and mdstore operations directly.<br>
+<br>
+A word of warning: MD scanning is a relatively compute-intensive task.
+If used in a loop, e.g. to display some specific info about several
+hundreds of documents, server response might slow down.<br>
+<br>
+<h2>Other files in DMD1.6</h2>
+Language files
+'md_document.inc.php' are available for English, French and Dutch.
+Language files 'md_link.inc.php' and 'md_scorm.inc.php' only exist in
+English.<br>
+<br>
+Files 'md_link.php' and 'md_link.htt', also 'md_scorm.php' and
+'md_scorm.htt', all already mentioned, are used in
+conjunction with the not fully supported functionality related to Link
+metadata
+and SCORM
+package metadata import.<br>
+<br>
+File 'md_link.php', in conjunction with 'index.php', demonstrates the
+use of the mdo_override and mdo_storeback methods allowing to implement
+a more tight synchronization between MD and standard Dokeos object
+properties than is actually implemented for document MD (see also
+below: Link metadata editing).<br>
+<br>
+<h2>Caching</h2>
+The 'xht' library provides caching functions, which allow to speed up
+screen building. DMD1.6 caches information to database fields
+'htmlcache1' and 'indexabletext' ('htmlcache2' is not used in DMD1.6).<br>
+<br>
+In 'md_document.htt' it can be seen that the MD view-and-edit screen
+(produced by index.php) is divided in four main parts: part 1, the
+keywords tree,
+part 2 and the POST form.<br>
+<br>
+Instead of a normal "call" from a template to a subtemplate, which
+would be "<span class="code">{-C METADATA_PART1-}</span>", the main
+template does an "escape-call" "<span class="code">{-E
+md_part1 C METADATA_PART1-}</span>". The escape construct works as
+follows: the
+'xht' library does a callback to the user code, in this example to the
+PHP
+function 'md_part1'. The code for that function can be found in
+'index.php'.
+That function checks whether it has a valid cached HTML and if so,
+returns
+it, thereby avoiding the template expansion of the subtemplate
+METADATA_PART1.
+If not, 'xht' effectively does the (supposedly slow) expansion and
+allows
+the callback function 'md_part1' to store it for re-use.<br>
+<br>
+In DMD1.6, "part 1" of the screen contains most template expansion
+work, hence the database field 'htmlcache1' is a real HTML cache.
+Another part of the screen is made to contain the "words" from the
+metadata that must
+be indexable and searchable. It corresponds with the database
+field 'indexabletext'.<br>
+<br>
+Under certain circumstances, caching may cause a delay after a change.
+For example, when making languages visible or unvisible, they may not
+immediately appear in or disappear from the SELECT inputfields in
+existing metadata. To make the change visible, edit that metadata.<br>
+<br>
+Toolkit/API functions such as
+'mds_append', useful e.g. for adding searchable words to
+'indexabletext', must be used with care, because of possible
+interactions with the index
+script, when it allows users to modify metadata (and therefore also
+indexable words) interactively.<br>
+<br>
+<h2>Index and Search scripts<br>
+</h2>
+Both scripts lean heavily on the libraries and on the API;
+they are therefore relatively short.<br>
+<br>
+Note that all output is produced in a section at the end of the scripts.<br>
+<br>
+DMD1.6 has an experimental screen for searching documents based on
+their MD. It is not linked to any Dokeos
+1.6 screen, therefore not reachable in a standard installation.<br>
+<br>
+This MD search screen described in this section does not require the
+installation of PhpDig 1.8.6. as opposed to the (not fully supported)
+PhpDig indexing/searching scripts described further down.<br>
+<br>
+A general search in all metadata is not so easy,
+because the metadata can in theory be quite different for different
+types of
+Dokeos objects. In practice, Dokeos platforms will probably stick to
+identical or rather similar metadata for all objects and might
+therefore find the search script useful.<br>
+<br>
+The DMD1.6 MD search script does an unsophisticated database query in
+field 'indexabletext', supposedly containing all searchable words.<br>
+<br>
+DMD1.6 puts these searchable words in the field:
+<ul>
+  <li>via function md_indexabletext in index.php if that function is
+called from the templates in a "E" construct (see Caching); this is the
+case for Document;</li>
+  <li>for Scorm and Link: via function mdo_define_htt in md_scorm.php
+and md_link.php, called by
+importmanifest.php and importlinks.php.</li>
+</ul>
+Note that keywords are transformed, e.g. MD keyword 'fish' will become
+searchable word 'fish-kw'. This allows search to focus on the keyword,
+without finding references where the word 'fish' is part of some
+description. This can of course (because of the templates) be changed
+relatively easily, but it should be noted that the current search
+screen &amp; script, and also the PhpDig connection, assume this
+transformation.<br>
+<br>
+The script
+'update_indexabletext.php' can be used to update MD records when the
+definition of the searchable words is changed. It is not linked to any Dokeos
+1.6 screen, therefore not reachable in a standard installation. It uses
+function mdo_define_htt already mentioned above. For documents,
+md_document.php should then contain the same definition as the one in
+md_document.htt. Use the script with e.g. '?eid_type=Document'.<br>
+The SCORM package metadata import script importmanifest.php (see
+below), if used with SCORM
+2004 packages, generates metadata records (type 'Scorm') that are very
+similar to the 'Document' type metadata records.<br>
+<br>
+Before generating output, search combines (in memory) the XML metadata
+of all
+Dokeos objects that it has found for a particular query into a big,
+imsmanifest-like XML document. It is expected that this will cause
+problems if many hundreds or thousands of objects have metadata and can
+therefore be "found" in one query.<br>
+<br>
+All of this shows that the search script will need to evolve in future
+Dokeos versions.<br>
+<br>
+To make metadata search available on your Dokeos server, include a link
+to <br>
+<span class="code">.../metadata/search.php?type=Mix
+</span><br>
+<br>
+<h2>DMD1.6 files with comments</h2>
+<h3>Updates for standard Dokeos scripts</h3>
+<h4>document/edit_document.php</h4>
+The (one and only) link between Dokeos and metadata (via Documents).<br>
+<h4>lang/*/document.inc.php</h4>
+Two additional language-dependent words for edit_document.<br>
+<h4>inc/lib/fileManage.lib.php</h4>
+Updated to delete the metadata entry when deleting a document or a
+SCORM folder. (Link-MD is not automatically deleted.)<br>
+<br>
+<h2>Functionality not fully
+supported in DMD1.6</h2>
+<h3>Link metadata editing</h3>
+To allow course managers to interactively store and edit metadata about
+a Link, provide an URL such as:<br>
+<span class="code">.../metadata/?eid=Link.nnn</span><br>
+<br>
+This metadata may e.g. add keywords.<br>
+<br>
+Unlike with Document-type objects, Link-type metadata object editing
+has an override- and storeback-functionality. When metadata is
+displayed for editing, DB data is overridden by new data from the Links
+table (but not automatically stored): category, url, title,
+description, keywords. When metadata is changed in the MD edit screen
+and stored, then new data is stored back into the Links table: url,
+title, description, keywords (but not category).<br>
+<br>
+In the Links table, MD description and keywords are combined in the
+description field, as follows:<br>
+<span class="code">&lt;i kw="kw1, kw2, ..."&gt;Description&lt;/i&gt;</span><br>
+Thereby keywords are not visible to the user, yet editable by the
+course admin.<br>
+<h4>importlinks.php</h4>
+This script, not reachable
+until you e.g. link it to a course homepage,
+performs the following operations
+related to Links:<br>
+<ul>
+  <li>Create MTEs (Metadata
+Table Entries) for all Links of a specific category</li>
+  <li>Delete all MTEs for
+Links of a specific category</li>
+  <li>Index all MTEs of a
+Link category for search (see also below, PhpDig connection)</li>
+</ul>
+As importlinks is meant to be used only by course admins, hide
+it after you have linked it to the course homepage.<br>
+<br>
+<h3>SCORM metadata import and custom browsing</h3>
+<h4>importmanifest.php</h4>
+This script, not reachable until you e.g. link it to a course homepage,
+performs the following operations
+related to Metadata Table Entries (MTEs) and SCORM package directories
+(SPDs) in Learning Path (which have a SCORM Directory Id SDI):
+<ul>
+  <li>Import or re-import the 'imsmanifest.xml' file from a SPD into
+MTEs</li>
+  <li>Find the SDI of some SPD</li>
+  <li>Delete all MTEs corresponding to a specific SDI</li>
+  <li>Show the main MTE corresponding to some SDI (after import)</li>
+  <li>Start 'index.php' in some SPD (after import)<br>
+  </li>
+  <li>Index some SPD for search (see also below, PhpDig connection)<br>
+  </li>
+</ul>
+Note that the above mentioned 'index.php' in the SPD is created by
+import.<br>
+<br>
+As importmanifest is meant to be used only by course admins, hide
+it after you have linked it to the course homepage.<br>
+<h4>playscormmdset.inc.php</h4>
+This include-script contains the main functionality of the custom
+browser.<br>
+<br>
+Import creates an 'index.php' in the corresponding scorm folder of a
+course. It includes 'playscormmdset'.<br>
+<br>
+(Thereby to a search engine, the custom browser will appear as if it is
+located in that scorm folder. This is important for search engines that
+allow to index/re-index by virtual directory.)<br>
+<br>
+The custom browser uses a templates file to generate HTML, but unlike
+the standard MD screens, it looks for that templates file in the scorm
+folder or in its parent folders. Thereby the generated HTML can be
+different for different scorm folders.
+<br>
+An example templates file can be found in metadata/doc/mdp_scorm.htt.<br>
+<br>
+<br>
+<h3>PhpDig connection</h3>
+DMD1.6 includes functionality
+allowing a specific course to work with a customized version of PhpDig
+1.8.6 that has been built into the course. This provides quicker and
+more
+sophisticated search functionality.<br>
+<br>
+The connection consists of the script 'md_phpdig.php', this document
+section, and the customized files in ...main/metadata/phpdig.<br>
+<br>
+It is assumed that a system admin installs a copy of PhpDig in a
+subfolder 'phpdig-1.8.6' of the course webfolder, customizes it as
+described below and by the sample files, and initializes it by running
+PhpDig's install script.<br>
+<br>
+The admin screen of PhpDig can best be defined as a hidden
+link (because course-admin only) in the course homepage. A link in a
+separate window is best, as the admin screen has no Dokeos header.<br>
+<br>
+Script 'md_phpdig.php' contains a few lines copied from the PhpDig
+config script and a set of functions that can be used as API functions
+providing a PhpDig DB-feeder mechanism. They allow combinations of URLs
+and searchable words to be fed into the DB directly, bypassing the
+PhpDig spider script. The API code is PhpDig spider code, covered by
+the GNU GPL just like PhpDig is.<br>
+<br>
+Scripts 'importdocs.php', 'importlinks.php' and
+'importmanifest.php' make use of that API to index MD for PhpDig. None
+of them are reachable from standard Dokeos 1.6 screens.<br>
+<br>
+The PhpDig Search screen, which can be used instead of the experimental
+MD search screen, is the custom 'search.php' available in the
+metadata/phpdig folder. It must be copied to the 'phpdig-1.8.6'
+subfolder of the
+course webfolder and then made reachable from the course homepage.<br>
+<br>
+PhpDig by default combines search terms with AND and searches for words
+starting with the search term strings. Negation is done by putting a
+hyphen before the search term (implemented as ALT-click in the search
+screen keyword tree).<br>
+<br>
+Some background information can be found on&nbsp;<a
+ href="http://zephyr.ugent.be/courses/TW05DBRH/">Zephyr</a>:
+VeloMetadataClaroline.doc (via Documenten, Leerobjectbouwstenen,
+Exploreerbare leerstof: document SearchableImageWebsite).<br>
+<h4>PhpDig 1.8.6 customizations overview</h4>
+<h5>includes/config</h5>
+<ul>
+  <span class="code"> <li>define('PHPDIG_ADM_PASS','admin');
+// insert a password</li>
+  <li>$template =
+"array";</li>
+  <li>define('MAX_WORDS_SIZE',50);</li>
+  <li>define('SUMMARY_DISPLAY_LENGTH',700);</li>
+  <li>define('CONTENT_TEXT',0);</li>
+  <li>define('USE_IS_EXECUTABLE_COMMAND','0');</li>
+  </span>
+</ul>
+<h5>libs/phpdig_functions<br>
+</h5>
+<span class="code">' \'._~@#$:&amp;%/;,=-]+'</span>
+replaced (twice) by<br>
+<span class="code">' \'._~@#$&amp;%/=-]+' no :;, in words</span><br>
+<h5>search.php</h5>
+This is the script that must be made accessible in the course, to
+provide PhpDig search. It is a newly developed script replacing
+PhpDig's standard one.<br>
+<br>
+Course managers can adapt the search form and provide extra search
+criteria as explained in the SearchableImageWebsite document mentioned
+above.<br>
+<h5>libs/search_function</h5>
+<span class="code">" \'.\_~@#$:&amp;\%/;,=-]+"</span>
+replaced by<br>
+<span class="code">" \'._~@#$&amp;%/=-]+" no \:;, in words<br>
+<br>
+two special "words" are used for controlling the displaying of the
+search results: "txt-sep" (newline) and "txt-end" (end of display)<br>
+<br>
+the "-kw" tail of keywords is stripped off in the search results</span><br>
+<h5>thumbnail support</h5>
+This is quite well explained in the above mentioned background material.<br>
+<br>
+This works only with special-design SCORM packages: item resource
+file[1]/@href is assumed to point to the thumbnail image, which must
+have a filename 'pptsl' + nnn + '_t.jpg' (see a.o.
+'importmanifest.php').<br>
+<br>
+In md_phpdig.php, the '&amp;thumb=...' part of URLs is cut off for
+display.<br>
+<br>
+Metadata search also displays the thumbs (see
+'.../main/metadata/search.php' and 'mds_mix.htt').
+<br>
+</font>
+<br>
+</body>
+</html>

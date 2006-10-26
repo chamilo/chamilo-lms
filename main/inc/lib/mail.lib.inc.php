@@ -1,0 +1,94 @@
+<?php
+require(api_get_path(INCLUDE_PATH).'lib/phpmailer/class.phpmailer.php');
+
+ //regular expression to test for valid email address
+ $regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
+
+/**
+ * Sends email using the phpmailer class
+ * Sender name and email can be specified, if not specified
+ * name and email of the platform admin are used
+ *
+ * @author Bert Vanderkimpen ICT&O UGent
+ *
+ * @param recipient_name   	name of recipient
+ * @param recipient_email  	email of recipient
+ * @param message           email body
+ * @param subject           email subject
+ * @return                  returns true if mail was sent
+ * @see                     class.phpmailer.php
+ */
+function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name="", $sender_email="", $extra_headers="") {
+
+   global $regexp;
+   global $platform_email;
+
+   $mail = new PHPMailer();
+   $mail->Mailer  = $platform_email['SMTP_MAILER'];
+   $mail->Host    = $platform_email['SMTP_HOST'];
+   $mail->Port    = $platform_email['SMTP_PORT'];
+
+   if($platform_email['SMTP_AUTH'])
+   {
+      $mail->SMTPAuth = 1;
+      $mail->Username = $platform_email['SMTP_USER'];
+      $mail->Password = $platform_email['SMTP_PASS'];
+   }
+
+   $mail->Priority = 3; // 5=low, 1=high
+   $mail->AddCustomHeader("Errors-To: ".$platform_email['SMTP_FROM_EMAIL']."");
+   $mail->IsHTML(0);
+   $mail->SMTPKeepAlive = true;
+
+
+   // attachments
+   // $mail->AddAttachment($path);
+   // $mail->AddAttachment($path,$filename);
+
+
+   if ($sender_email!="")
+   {
+      $mail->From 		  = $sender_email;
+      $mail->Sender       = $sender_email;
+      //$mail->ConfirmReadingTo = $sender_email; //Disposition-Notification
+   }
+   else
+    {
+      $mail->From 		= $platform_email['SMTP_FROM_EMAIL'];
+      $mail->Sender 	= $platform_email['SMTP_FROM_EMAIL'];
+      //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
+    }
+
+
+   if ($sender_name!="")
+   {
+      $mail->FromName = $sender_name;
+   }
+   else
+   {
+      $mail->FromName = $platform_email['SMTP_FROM_NAME'];
+   }
+      $mail->Subject = $subject;
+      $mail->Body    = $message;
+      //only valid address
+      if(eregi( $regexp, $recipient_email ))
+      {
+     	 $mail->AddAddress($recipient_email, $recipient_name);
+      }
+
+	if ($extra_headers != ""){
+		$mail->AddCustomHeader($extra_headers);
+	}
+   //send mail
+   if (!$mail->Send())
+   {
+        //echo "ERROR: mail not sent to ".$recipient_name." (".$recipient_email.") because of ".$mail->ErrorInfo."<br>";
+        return 0;
+   }
+
+   // Clear all addresses
+   $mail->ClearAddresses();
+   return 1;
+ }
+
+?>

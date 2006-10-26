@@ -1,0 +1,41 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langScormVersion = "versão";
+$langScormRestarted = "Todas as etapas estão incompletas.";
+$langScormNoNext = "Essa é a última etapa.";
+$langScormNoPrev = "Essa é a primeira etapa.";
+$langScormTime = "Tempo";
+$langScormNoOrder = "Não há uma ordem pré-definida, você pode clicar em qualquer etapa.";
+$langScormScore = "Pontuação";
+$langScormLessonTitle = "Título da etapa";
+$langScormStatus = "Status";
+$langScormToEnter = "Para entrar na etapa";
+$langScormFirstNeedTo = "você precisa primeiro completar a etapa";
+$langScormThisStatus = "Essa etapa no momento está";
+$langScormClose = "Concluir";
+$langScormRestart = "Reiniciar";
+$langScormCompstatus = "Completa";
+$langScormIncomplete = "Incompleta";
+$langScormPassed = "Aprovado";
+$langScormFailed = "Reprovada";
+$langScormPrevious = "Anterior";
+$langScormNext = "Próxima";
+$langScormTitle = "Player Scorm do Dokeos";
+$langScormMystatus = "Meu status";
+$langScormNoItems = "Este conteúdo não possui nenhum ítem.";
+$langScormNoStatus = "Nenhum status para esse conteúdo";
+$langScormLoggedout = "desconectado da área Scorm";
+$langScormCloseWindow = "Fechar janelas";
+$ScormBrowsed = "Exibir";
+$langScormExitFullScreen = "Voltar para a tela normal";
+$langScormFullScreen = "Tela Cheia";
+$langScormNotAttempted = "Nenhuma tentativa";
+$langCharset = "Conjunto de caracteres";
+$langLocal = "Local";
+$langRemote = "Remoto";
+$langAutodetect = "Auto-detecta";
+$langAccomplishedStepsTotal = "Total de etapas realizadas";
+$langUnknown = "Desconhecido";
+$h = "h";
+?>

@@ -1,0 +1,21 @@
+<!-- {-MD_EDITXML.HTT-} -->               <!-- for Dokeos metadata/index.php -->
+                                                             <!-- 2005/03/15 -->
+
+<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
+
+
+<!-- {-METADATA-} -->
+
+{-P traceinfo-}
+<hr>
+<form method="post" action="{-P self-}">
+    <textarea rows="30" style="width: 100%" name="mdt" id="mdt">{-H {-P mdt-}-}</textarea>
+    <input type="submit" value="{-H {-L Store-}-}"></input>
+</form>
+
+<!-- {-HTTP-} -->
+
+Expires: Mon, 26 Jul 1997 05:00:00 GMT
+
+
+<!-- {--} -->

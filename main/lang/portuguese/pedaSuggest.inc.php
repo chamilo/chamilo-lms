@@ -1,0 +1,25 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$GeneralDescription = "Descrição Geral";
+$GeneralDescriptionQuestions = "Qual o lugar do curso dentro do programa? Existem pré-requisitos? De que modo o curso está relacionado com outros cursos?";
+$GeneralDescriptionInformation = "Descrever o curso (número de horas, código oficial, sala de aula...) e o professor (nome, gabinete, telefone, email, etc.).";
+$Objectives = "Objectivos";
+$ObjectivesInformation = "Apresentação dos objectivos gerais e objectivos específicos do curso.";
+$ObjectivesQuestions = "O que é que os alunos deverão saber no final do curso e o que é suposto fazerem durante o processo de aprendizagem.";
+$Topics = "Tópicos";
+$TopicsInformation = "Lista dos tópicos fundamentais do curso. Importância de cada tópico. Grau de dificuldades. Estrutura e interdependência de cada uma das partes.";
+$TopicsQuestions = "Como é que o curso evolui? A que devem tomar mais atenção? Há algum problema na compreensão dos diferentes capítulos? Quanto tempo se deverá dedicar a cada parte do curso?";
+$Methodology = "Metodologia";
+$MethodologyQuestions = "Que métodos e que actividades ajudarão a alcançar os objectivos do curso? Com que horário?";
+$MethodologyInformation = "Apresentação de actividades (conferências, trabalhos, grupos de investigação, laboratório, etc.).";
+$CourseMaterial = "Material do Curso";
+$CourseMaterialQuestions = "Há alguma sebenta, colectânea de textos, bibliografia, lista de ligações na Internet?";
+$CourseMaterialInformation = "Breve descrição dos materiais do curso.";
+$HumanAndTechnicalResources = "Recursos humanos e técnicos";
+$HumanAndTechnicalResourcesQuestions = "Há professores, tutores, ajuda, assistente social, psicólogo, sala de computadores?";
+$HumanAndTechnicalResourcesInformation = "Breve descrição sobre as diferentes pessoas a contactar e sobre os recursos materiais e técnicos.";
+$Assessment  = "Avaliação";
+$AssessmentQuestions = "Como serão avaliados os alunos? Há alguma estratégia a desenvolver em ordem à prossecução dos objectivos?";
+$AssessmentInformation = "Exemplo de questões de exame. Critérios de avaliação. Sugestões e truques.";
+?>

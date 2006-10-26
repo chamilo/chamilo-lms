@@ -1,0 +1,33 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langScormVersion = "versió";
+$langScormRestarted = "Totes les lliçons estan incomplertes ara";
+$langScormNoNext = "Aquesta és la darrera lliçó";
+$langScormNoPrev = "Aquesta és la primera lliçó";
+$langScormTime = "Temps";
+$langScormNoOrder = "No hi ha una ordre establerta, pots clicar sobre qualsevol lliçó";
+$langScormScore = "Puntuació";
+$langScormLessonTitle = "Títol de la lliçó";
+$langScormStatus = "Situació";
+$langScormToEnter = "Per introduir";
+$langScormFirstNeedTo = "Primer necessites finalitzar";
+$langScormThisStatus = "Aquesta lliço està ara";
+$langScormClose = "Tancar aplicació";
+$langScormRestart = "Reiniciar";
+$langScormCompstatus = "Completat";
+$langScormIncomplete = "Incomplert";
+$langScormPassed = "Aprovat";
+$langScormFailed = "Suspens";
+$langScormPrevious = "Anterior";
+$langScormNext = "Següent";
+$langScormTitle = "Visualitzador de continguts DOKEOS";
+$langScormMystatus = "La meva situació";
+$langScormNoItems = "Aquest contingut no té elements";
+$langScormNoStatus = "No hi ha situació per aquest contingut";
+$langScormLoggedout = "Has sortit de l\'àrea SCORM";
+$langScormCloseWindow = "Tancar finestres";
+$langScormExitFullScreen = "Tornar a la pantalla normal";
+$langScormFullScreen = "Pantalla completa";
+$langScormNotAttempted = "Sense intentar";
+?>

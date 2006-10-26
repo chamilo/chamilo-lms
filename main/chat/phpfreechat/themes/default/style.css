@@ -1,0 +1,345 @@
+div#pfc_container * {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+div#pfc_container {
+  border: 1px solid #555;
+  color: #000;
+  padding: 10px;
+  min-height: 20px;
+  background-color: #FFF;
+  background-image: url("proxy.php?p=default/images/background.gif");
+  background-position: right;
+/*  background-repeat: repeat-xy;*/
+  font-family: Verdana, Sans-Serif; /* without this rule, the tabs are not correctly display on FF */
+}
+
+#pfc_minmax {
+  cursor: pointer;
+}
+div#pfc_content_expandable {
+  margin-top: 0.2em;
+}
+
+div#pfc_channels_content {
+  z-index: 20;
+  position: relative;
+  width: 100%;
+  border-right: 1px solid #555;
+  border-left: 1px solid #555;
+  border-bottom: 1px solid #555;
+  background-color: #FFF;
+  margin-top: 5px;
+  height: 300px;
+}
+div.pfc_content {
+}
+
+/* channels tabpanes */
+ul#pfc_channels_list {
+  list-style-type: none;
+  display: block;
+  z-index: 50;
+  border-bottom: 1px solid #555;
+  margin-bottom: -5px;
+}
+ul#pfc_channels_list li {
+  display: inline;
+  margin-left: 5px;
+}
+ul#pfc_channels_list li div {
+  display: inline;
+  padding: 0 4px 0 4px;
+  border-top: 1px solid #555;
+  border-right: 1px solid #555;
+  border-left: 1px solid #555;
+  border-bottom: 1px solid #555;
+  background-color: #DDD;
+}
+ul#pfc_channels_list li.selected div {
+  background-color: #FFF;
+  border-bottom: 1px solid #FFF;
+  color: #000;
+  font-weight: bold;
+}
+ul#pfc_channels_list li > div:hover {
+  background-color: #FFF;
+}
+ul#pfc_channels_list li a {
+  color: #000;
+  text-decoration: none;  
+}
+ul#pfc_channels_list li a.pfc_tabtitle {
+  cursor: pointer;
+}
+ul#pfc_channels_list li a.pfc_tabtitle img {
+  padding-right: 4px;
+}
+ul#pfc_channels_list li a.pfc_tabclose {
+  margin-left: 4px;
+  cursor: pointer;
+}
+/* blinking stuff (tab notifications) */
+ul#pfc_channels_list li div.pfc_tabblink2 {
+  background-color: #FFF;
+}
+
+
+div.pfc_chat {
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80%;
+/* WARNING: do not fix height in % because it will display blank screens on IE6 */
+/*  height: 100%;*/
+  overflow: auto;
+}
+
+div.pfc_online {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0;
+  overflow: auto;
+  width: 20%;
+/* WARNING: do not fix height in % because it will display blank screens on IE6 */
+/*  height: 100%;*/
+  color: #000; /* colors can be overriden by js nickname colorization */
+  background-color: #FFF;
+
+  /* borders are drawn by this image background */
+  background-image: url("proxy.php?p=default/images/online-separator.gif");
+  background-position: left;
+  background-repeat: repeat-y;
+}
+div.pfc_online ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+div.pfc_online li {
+  font-weight: bold;
+  font-size: 90%;
+  /* bottom borders are drawn by the javascript routines */
+}
+
+h2#pfc_title {
+  font-size: 110%;
+}
+
+img#pfc_minmax {
+  float: right;
+}
+
+.pfc_invisible {
+  display: none;
+}
+
+div.pfc_message {
+  background-image: url("proxy.php?p=default/images/newmsg.gif");
+  background-position: right;
+  background-repeat: no-repeat; 
+}
+
+div.pfc_oldmsg {
+  background-image: url("proxy.php?p=default/images/oldmsg.gif");
+  background-position: right;
+  background-repeat: no-repeat; 
+}
+
+span.pfc_heure, span.pfc_date {
+  color: #bebebe;
+  font-size: 70%;
+}
+
+span.pfc_nick {
+  color: #fbac17;
+  font-weight: bold;
+}
+
+div#pfc_input_container {
+  margin-top: 5px;
+}
+
+input#pfc_words {
+  border: #555 solid 1px;
+  background-color: #FAFAFA;
+  width: 100%;
+  font-size: 12px;
+  height: 20px;
+  vertical-align: bottom;
+  font-size: 1em;
+  height: 1.2em;
+}
+
+input#pfc_send {
+  display: block;
+  padding: 2px;
+  margin-left: 5px;
+  border: 1px solid #555;
+  background-color: #CCC;
+  font-size: 10px;
+  height: 21px;
+  vertical-align: bottom;
+  font-size: 0.7em;
+  height: 1.8em;
+  cursor: pointer;
+}
+
+
+div#pfc_cmd_container {
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+div#pfc_cmd_container * {
+  margin-right: 2px;
+}
+
+p#pfc_handle {
+  display: inline;
+  cursor: pointer;
+  border: 1px solid #555;
+  padding: 2px 10px 2px 10px;
+  color: black;
+  margin-bottom: 5px;
+  font-weight: bold;
+  background-color: #EEE;
+  font-size: 70%;          /* these two line fix a display problem in IE6 : */
+  vertical-align: middle;  /* the nickname box bottom border is hidden without these lines */
+}
+
+a#pfc_logo {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+div.pfc_btn {
+  display: inline;  
+  cursor: pointer;
+}
+div.pfc_btn img {
+  /* doesn't work */
+  /*  border: 1px solid #393;*/ /* same as container color */
+}
+div.pfc_btn img:hover {
+  /* doesn't work */
+  /*  border: 1px solid #000;*/
+}
+
+div#pfc_bbcode_container * {
+  margin-right: 2px;
+}
+
+div#pfc_errors {
+  display: none;
+  padding: 5px;
+  border: 1px solid #555;
+  color: #EC4B0F;
+  background-color: #FFBB77;
+  font-style: italic;
+  font-family: monospace;
+  font-size: 90%;
+}
+
+/* commands */
+.pfc_cmd_msg {
+  color: black;
+}
+.pfc_cmd_me {
+  font-style: italic;
+  color: black;
+}
+.pfc_cmd_notice {
+  font-style: italic;
+  color: #888;
+}
+
+/* commands info */
+.pfc_info {
+  color: #888;
+
+  /* to fix IE6 display bug */
+  /* http://sourceforge.net/tracker/index.php?func=detail&aid=1545403&group_id=158880&atid=809601 */
+  font-family: sans-serif; /* do NOT setup monospace font or it will not work in IE6 */
+
+  font-style: italic;
+  background-color: #EEE;
+  font-size: 80%;
+}
+
+
+div#pfc_colorlist {
+  display: none;
+}
+img.pfc_color {
+  padding: 1px;
+  cursor: pointer;
+}
+
+.pfc_nickmarker {
+  white-space: pre;
+}
+
+div#pfc_smileys {
+  display: none; /* will be shown by javascript routines */
+  background-color: #FFF;
+  border: 1px solid #555;
+  padding: 4px;
+  margin-top: 4px;
+}
+div#pfc_smileys * {
+  margin-right: 2px;
+}
+
+div#pfc_smileys img {
+ cursor: pointer;
+}
+
+
+
+div.pfc_nickwhois * { padding: 0; margin: 0; }
+div.pfc_nickwhois a img { border: none; }
+div.pfc_nickwhois {
+  border: 1px solid #444;
+  background-color: #FFF;
+  font-size: 75%;
+}
+div.pfc_nickwhois ul {
+  list-style-type: none;
+  background-color: #EEE;
+  border-bottom: 1px solid #444;
+}
+div.pfc_nickwhois li {
+  display: inline;
+  margin-right: 4px;
+  padding: 2px;
+}
+td.pfc_nickwhois_c1 {
+  font-weight: bold;
+}
+li.pfc_nickwhois_pv {
+  padding-left: 2px;
+  border-left: 1px solid #444;
+}
+li.pfc_nickwhois_pv a {
+  text-decoration: none;
+}
+
+ul.pfc_nicklist span.pfc_nickmarker {
+}
+
+img.pfc_nickbutton {
+  cursor: pointer;
+}
+
+div#pfc_debug {
+  font-size: 11px;
+}

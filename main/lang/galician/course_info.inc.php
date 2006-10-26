@@ -1,0 +1,97 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langModifInfo = "Modifica-las Características do curso";
+$langModifDone = "As características foron modificadas";
+$langHome = "Volver á páxina principal";
+$langCode = "Código do curso";
+$langDelCourse = "Suprimir a web deste curso";
+$langProfessors = "Profesores";
+$langFaculty = "Categoría";
+$langConfidentiality = "Confidencialidade";
+$langPublic = "Acceso público (a partir da páxina principal do LMS) sen identificación";
+$langUnsubscription = "Desinscribir";
+$langPrivOpen = "Acceso privado, inscrición aberta";
+$langPrivate = "Acceso privado, inscrición fechada (web reservada ás persoas que aparecen na lista <a href=../user/user.php>usuarios</a>)";
+$langForbidden = "Non estás rexistrado como responsable neste curso";
+$langLanguage = "Idioma";
+$langConfTip = "Por defecto, o seu curso soamente é accesible
+para vostede, vostede é o único usuario. Se vostede desexa un mínimo de confidencialidade, o más simple é abrir
+a inscripción durante unha semana, pedir ós estudiantes que se inscriban eles mesmos,
+despois pechar a inscripción e verificar na lista dos usuarios os eventuais intrusos.";
+$langOpenToTheWorld = "Aberto - acceso permitido para todo o mundo";
+$OpenToThePlatform = "Aberto - acceso permitido para os usuarios rexistrados na plataforma";
+$langOpenToThePlatform = "Aberto - acceso permitido para usuarios rexistrados na plataforma";
+$langTipLang  = "Esta lingua será válida para todos os visitantes da web do seu curso.";
+$langAgenda = "Axenda";
+$langLink = "Ligazóns";
+$langDocument = "Documentos";
+$langVid = "Vídeo";
+$langWork = "Traballos";
+$langProgramMenu = "Programa do Curso";
+$langAnnouncement = "Anuncios";
+$langForum = "Foros";
+$langExercise = "Exercicios";
+$langStats = "Estatísticas";
+$langUplPage = "Introducir unha páxina e enlazala á principal";
+$langLinkSite = "Engadir unha ligazón externa ou interna á desde a páxina principal";
+$langCourse = "O curso ";
+$langHasDel = "suprimíuse";
+$langBackHome = "Voltar á páxina principal de";
+$langByDel = "Se suprime esta web, vostede suprimirá t&ocute;dolos documentos que conten e desinscribirá a todos os estudiantes que están inscritos ó mesmo. <p>Está vostede seguro de que quere suprimir o curso";
+$langY = "SI";
+$langN = "NON";
+$langDepartmentUrl  = "URL do Departamento";
+$langDepartmentUrlName  = "Departamento";
+$langBackupCourse = "Garda este curso";
+$langModifGroups = "Grupos";
+$langProfessor = "Profesor";
+$langGroups  = "Grupos";
+$langChat  = "Debate";
+$langDescriptionCours   = "Descrición do Curso";
+$langArchive = "Arquivo";
+$langArchiveCourse  = "Backup do Curso";
+$langRestoreCourse  = "Restaurar un curso";
+$langRestore = "Restaurar";
+$langCreatedIn  = "creado en";
+$langCreateMissingDirectories  = "Creación dos directorios que faltan";
+$langCopyDirectoryCourse  = "Copia-los arquivos do curso";
+$langDisk_free_space  = "espazo libre";
+$langBuildTheCompressedFile  = "Creación de backups dos arquivos";
+$langFileCopied  = "ficheiro copiado";
+$langArchiveLocation = "Localización do arquivo";
+$langSizeOf  = "tamaño de";
+$langArchiveName  = "Nome do Arquivo";
+$langBackupSuccesfull  = "Backup realizada";
+$langBUCourseDataOfMainBase  = "Backup dos datos do curso na base de datos principal";
+$langBUUsersInMainBase  = "Backup dos datos dos usuarios na base de datos principal";
+$langBUAnnounceInMainBase = "Backup dos datos dos anuncios na base de datos principal";
+$langBackupOfDataBase = "Backup da base de datos";
+$langCreationDate  = "Creado";
+$langExpirationDate   = "Finalizado";
+$langPostPone  = "Aprazado";
+$langLastEdit  = "Última edición";
+$langLastVisit  = "Última Visita";
+$langSubscription = "Subscrición";
+$langCourseAccess = "Acceso ó curso";
+$langDownload = "Descargar";
+$langConfirmBackup = "Realmente queres facer un backup do curso?";
+$langCreateSite = "Crear un curso";
+$langRestoreDescription = "O curso está nun arquivo que podes seleccionar de abaixo.<br><br>
+Cando fagas clic en \"Restaurar\", o arquivo descomprimirase e o curso crearase novamente.";
+$langRestoreNotice = "Este script non che permite automaticamente restaura-los usuarios, pero os datos gardados dos \"usuarios.csv\" son suficientes para o administrador.";
+$langAvailableArchives = "Lista de ficheiros dispoñible";
+$langNoArchive = "Non se seleccionou ningún ficheiro";
+$langArchiveNotFound = "Non se encontrou ningún ficheiro";
+$langArchiveUncompressed = "Descomprimiuse e instalouse o ficheiro.";
+$langCsvPutIntoDocTool = "O ficheiro \"usuarios.csv\" púxose dentro da ferramenta documentos.";
+$langBackH = "volver á páxina de inicio";
+$langOtherCategory = "Outra categoría";
+$langAllowedToUnsubscribe = "Permítese ós ususarios que se desubscriban do curso";
+$langNotAllowedToUnsubscribe = "Non se permite ós usuarios que se desubscriban do curso";
+$langDescription = "Descrición";
+$langCourseVisibilityClosed = "Totalmente pechado; o curso só é accesible para o administrador do curso.";
+$CourseVisibilityClosed = "Pechado -non hai acceso a este curso";
+$NotAllowedToModifyOwnRole = "Non lle está permitido modificar o seu propio rol.";
+$CourseVisibilityModified = "Modificado (axustes máis detallados especificados a través de roles-permisos do sistema)";
+?>

@@ -1,0 +1,215 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langHFor = "&#1605;&#1578;&#1583;&#1610;&#1575;&#1578; &#1604;&#1604;&#1605;&#1587;&#1575;&#1593;&#1583;&#1577;";
+$langClose = " &#1594;&#1604;&#1602; &#1575;&#1604;&#1606;&#1575;&#1601;&#1584;&#1577; ";
+$langForContent = " &#1573;&#1584;&#1575; &#1571;&#1585;&#1583;&#1578;&#1605; &#1605;&#1579;&#1604;&#1575; &#1548; &#1582;&#1604;&#1602; &#1589;&#1606;&#1601; \" &#1606;&#1602;&#1575;&#1588;&#1575;&#1578; &#1601;&#1610; &#1573;&#1591;&#1575;&#1585; &#1605;&#1580;&#1605;&#1608;&#1593;&#1575;&#1578; &#1589;&#1594;&#1610;&#1585;&#1577; \" &#1593;&#1604;&#1610;&#1603;&#1605; &#1571;&#1606; &#1578;&#1582;&#1604;&#1602;&#1608;&#1575; &#1605;&#1580;&#1605;&#1608;&#1593;&#1575; &#1605;&#1606; &#1575;&#1604;&#1605;&#1606;&#1578;&#1583;&#1610;&#1575;&#1578; &#1601;&#1610; &#1589;&#1606;&#1601; &#1603;&#1575;&#1606; &#1548; &#1605;&#1579;&#1575;&#1604; \"&#1605;&#1580;&#1605;&#1608;&#1593;&#1577;1\" &#1548; \"&#1605;&#1580;&#1605;&#1608;&#1593;&#1577; 2\" &#1548; \" &#1605;&#1580;&#1605;&#1608;&#1593;&#1577; 3\"...&#1575;&#1604;&#1582; &#1610;&#1605;&#1603;&#1606; &#1571;&#1606; &#1610;&#1603;&#1608;&#1606; &#1608;&#1589;&#1601; &#1605;&#1606;&#1578;&#1583;&#1609; &#1605;&#1580;&#1605;&#1608;&#1593;&#1577; &#1605;&#1575; &#1602;&#1575;&#1574;&#1605;&#1577; &#1575;&#1604;&#1571;&#1588;&#1582;&#1575;&#1589; &#1575;&#1604;&#1584;&#1610;&#1606; &#1610;&#1587;&#1578;&#1583;&#1593;&#1608;&#1606; &#1575;&#1604;&#1606;&#1602;&#1575;&#1588;&#1548; &#1605;&#1593; &#1573;&#1590;&#1575;&#1601;&#1577; &#1578;&#1576;&#1585;&#1610;&#1585; &#1604;&#1573;&#1602;&#1575;&#1605;&#1578;&#1607;. &#1573;&#1606; &#1582;&#1604;&#1602;&#1578;&#1605; &#1587;&#1576;&#1576; &#1571;&#1608; &#1604;&#1570;&#1582;&#1585; &#1605;&#1606;&#1578;&#1583;&#1609; \" &#1606;&#1583;&#1575;&#1569; &#1604;&#1604;&#1573;&#1593;&#1575;&#1606;&#1577;\" &#1610;&#1605;&#1603;&#1606;&#1603;&#1605; &#1604;&#1594;&#1575;&#1610;&#1577; &#1575;&#1604;&#1608;&#1589;&#1601;&#1548; &#1573;&#1590;&#1575;&#1601;&#1577; \" &#1575;&#1604;&#1573;&#1588;&#1575;&#1585;&#1577; &#1604;&#1604;&#1589;&#1593;&#1608;&#1576;&#1575;&#1578; &#1576;&#1575;&#1604;&#1606;&#1587;&#1576;&#1577; &#1573;&#1604;&#1609; &#1575;&#1604;&#1605;&#1581;&#1578;&#1608;&#1609; &#1571;&#1608; &#1573;&#1604;&#1609; &#1575;&#1604;&#1580;&#1607;&#1575;&#1586;.";
+$langHDropbox = "&#1589;&#1606;&#1583;&#1608;&#1602; &#1575;&#1587;&#1578;&#1604;&#1575;&#1605; &#1575;&#1604;&#1576;&#1585;&#1610;&#1583;";
+$langHHome = " &#1573;&#1593;&#1575;&#1606;&#1577; &#1605;&#1578;&#1593;&#1604;&#1617;&#1602;&#1577; &#1576;&#1589;&#1601;&#1581;&#1577; &#1575;&#1604;&#1573;&#1587;&#1578;&#1602;&#1576;&#1575;&#1604; ";
+$langHomeContent = " &#1580;&#1604;&#1617; &#1580;&#1583;&#1575;&#1608;&#1604; (&#1582;&#1575;&#1606;&#1575;&#1578;) &#1575;&#1610;&#1603;&#1575;&#1605;&#1576;&#1608;&#1587; &#1605;&#1605;&#1578;&#1604;&#1574;&#1577; &#1576;&#1593;&#1583; &#1576;&#1606;&#1589; &#1589;&#1594;&#1610;&#1585; &#1571;&#1608; &#1576;&#1585;&#1575;&#1576;&#1591; &#1581;&#1605;&#1604; &#1608;&#1590;&#1593;&#1607;&#1605;&#1575; &#1593;&#1606; &#1591;&#1585;&#1610;&#1602; &#1575;&#1604;&#1582;&#1591;&#1571; &#1571;&#1608; &#1593;&#1604;&#1609; &#1587;&#1576;&#1610;&#1604; &#1575;&#1604;&#1605;&#1579;&#1575;&#1604;. &#1601;&#1575;&#1604;&#1605;&#1591;&#1604;&#1608;&#1576; &#1605;&#1606;&#1603;&#1605; &#1578;&#1581;&#1608;&#1610;&#1585;&#1607;&#1605;&#1575;. &#1603;&#1571;&#1606; &#1610;&#1603;&#1608;&#1606; &#1579;&#1605;&#1617;&#1577; &#1606;&#1589;&#1617; &#1589;&#1594;&#1610;&#1585;. &#1608;&#1575;&#1590;&#1581; &#1604;&#1604;&#1585;&#1572;&#1610;&#1577; &#1610;&#1578;&#1589;&#1583;&#1585; &#1605;&#1608;&#1602;&#1593;&#1603;&#1605; . &#1610;&#1576;&#1578;&#1583;&#1574; &#1607;&#1584;&#1575; &#1575;&#1604;&#1606;&#1589; &#1576;&#1600;\" &#1607;&#1584;&#1575; &#1607;&#1608; &#1606;&#1589; &#1605;&#1583;&#1582;&#1604; &#1605;&#1608;&#1602;&#1593;&#1603;&#1605;...\" &#1581;&#1608;&#1617;&#1585;&#1608;&#1607; &#1608;&#1575;&#1587;&#1578;&#1594;&#1604;&#1608;&#1607; &#1604;&#1608;&#1589;&#1601; &#1583;&#1585;&#1587;&#1603;&#1605; &#1608;&#1571;&#1607;&#1583;&#1575;&#1601;&#1603;&#1605; &#1608;&#1580;&#1607;&#1575;&#1586;&#1603;&#1605;. &#1601;&#1605;&#1585;&#1574;&#1610;&#1617;&#1577; &#1593;&#1605;&#1604;&#1603;&#1605; &#1585;&#1607;&#1610;&#1606;&#1577; &#1584;&#1604;&#1603;. &#1601;&#1593;&#1583;&#1610;&#1583; &#1575;&#1604;&#1571;&#1583;&#1608;&#1575;&#1578; ( &#1575;&#1580;&#1610;&#1606;&#1583;&#1575;&#1548; &#1608;&#1579;&#1575;&#1574;&#1602;&#1548; &#1578;&#1605;&#1575;&#1585;&#1610;&#1606;..)&#1578;&#1606;&#1588;&#1591; &#1605;&#1606; &#1571;&#1580;&#1604;&#1603;&#1605; &#1593;&#1606; &#1591;&#1585;&#1610;&#1602; &#1575;&#1604;&#1582;&#1591;&#1571; &#1593;&#1606;&#1583;&#1605;&#1575; &#1578;&#1578;&#1608;&#1604;&#1608;&#1606; &#1582;&#1604;&#1602; &#1605;&#1608;&#1602;&#1593;&#1603;&#1605;. &#1601;&#1605;&#1606; &#1575;&#1604;&#1605;&#1587;&#1578;&#1581;&#1587;&#1606; &#1576;&#1575;&#1604;&#1606;&#1587;&#1576;&#1577; &#1573;&#1604;&#1610;&#1603;&#1605; &#1571;&#1606; &#1578;&#1593;&#1591;&#1617;&#1604;&#1608;&#1575; &#1575;&#1604;&#1571;&#1583;&#1608;&#1575;&#1578; &#1575;&#1604;&#1578;&#1610; &#1604;&#1575; &#1578;&#1587;&#1578;&#1593;&#1605;&#1604;&#1608;&#1606;&#1607;&#1575; &#1581;&#1578;&#1609; &#1604;&#1575; &#1578;&#1590;&#1610;&#1593;&#1608;&#1575; &#1575;&#1604;&#1608;&#1602;&#1578; &#1593;&#1604;&#1609; &#1605;&#1587;&#1578;&#1593;&#1605;&#1604;&#1610;&#1603;&#1605; &#1571;&#1608; &#1586;&#1575;&#1574;&#1585;&#1610;&#1603;&#1605;. &#1610;&#1605;&#1603;&#1606;&#1603;&#1605; &#1573;&#1590;&#1575;&#1601;&#1577; &#1608;&#1585;&#1602;&#1575;&#1578; &#1604;&#1608;&#1585;&#1602;&#1577; &#1575;&#1604;&#1575;&#1587;&#1578;&#1602;&#1576;&#1575;&#1604; &#1571;&#1610;&#1590;&#1575;. &#1575;&#1587;&#1578;&#1593;&#1605;&#1604;&#1608;&#1575;  &#1571;&#1583;&#1575;&#1577; \" &#1571;&#1590;&#1601; &#1589;&#1601;&#1581;&#1577;\" &#1604;&#1573;&#1590;&#1575;&#1601;&#1577; &#1589;&#1601;&#1581;&#1577; &#1605;&#1593; &#1573;&#1585;&#1587;&#1575;&#1604;&#1607;&#1575; &#1606;&#1581;&#1608; &#1575;&#1604;&#1605;&#1586;&#1608;&#1617;&#1583;. &#1571;&#1605;&#1617;&#1575; &#1573;&#1584;&#1575; &#1571;&#1585;&#1583;&#1578;&#1603;&#1605; &#1575;&#1604;&#1573;&#1581;&#1575;&#1604;&#1577; &#1593;&#1604;&#1609; &#1589;&#1601;&#1581;&#1577; &#1571;&#1608; &#1605;&#1608;&#1602;&#1593; &#1605;&#1608;&#1580;&#1608;&#1583;&#1610;&#1606;&#1548; &#1601;&#1575;&#1587;&#1578;&#1593;&#1605;&#1604;&#1608;&#1575; &#1571;&#1583;&#1575;&#1577; \"&#1575;&#1604;&#1585;&#1576;&#1591; &#1606;&#1581;&#1608; &#1575;&#1604;&#1605;&#1608;&#1602;&#1593;\". &#1608;&#1610;&#1605;&#1603;&#1606; &#1604;&#1604;&#1589;&#1601;&#1581;&#1575;&#1578; &#1608;&#1575;&#1604;&#1585;&#1608;&#1575;&#1576;&#1591; &#1575;&#1604;&#1578;&#1610; &#1578;&#1590;&#1610;&#1601;&#1608;&#1606;&#1607;&#1575; &#1604;&#1604;&#1589;&#1601;&#1581;&#1577; &#1575;&#1604;&#1571;&#1608;&#1604;&#1609; &#1571;&#1606; &#1578;&#1603;&#1608;&#1606; &#1605;&#1593;&#1591;&#1617;&#1604;&#1577; &#1579;&#1605;&#1617; &#1605;&#1604;&#1594;&#1575;&#1577; &#1582;&#1604;&#1575;&#1601;&#1575; &#1604;&#1604;&#1571;&#1583;&#1608;&#1575;&#1578; &#1575;&#1604;&#1605;&#1608;&#1580;&#1608;&#1583;&#1577; &#1593;&#1606; &#1591;&#1585;&#1610;&#1602; &#1575;&#1604;&#1582;&#1591;&#1571; &#1608;&#1575;&#1604;&#1578;&#1610; &#1610;&#1605;&#1603;&#1606; &#1571;&#1606; &#1578;&#1603;&#1608;&#1606; &#1605;&#1593;&#1591;&#1604;&#1577; &#1583;&#1608;&#1606; &#1571;&#1606; &#1578;&#1603;&#1608;&#1606; &#1605;&#1604;&#1594;&#1575;&#1577;. &#1608;&#1575;&#1604;&#1571;&#1605;&#1585; &#1605;&#1608;&#1603;&#1608;&#1604; &#1604;&#1603;&#1605; &#1571;&#1606; &#1578;&#1602;&#1585;&#1617;&#1585;&#1608;&#1575; &#1573;&#1606; &#1603;&#1575;&#1606; &#1610;&#1580;&#1576; &#1593;&#1604;&#1609; &#1583;&#1585;&#1587;&#1603;&#1605; &#1571;&#1606; &#1610;&#1592;&#1607;&#1585; &#1576;&#1602;&#1575;&#1574;&#1605;&#1577; &#1575;&#1604;&#1583;&#1585;&#1608;&#1587; &#1605;&#1606; &#1575;&#1604;&#1605;&#1601;&#1590;&#1617;&#1604; &#1571;&#1606; &#1604;&#1575; &#1610;&#1592;&#1607;&#1585; &#1576;&#1602;&#1575;&#1574;&#1605;&#1577; &#1575;&#1604;&#1583;&#1585;&#1608;&#1587; (&#1575;&#1606;&#1592;&#1585; &#1608;&#1592;&#1610;&#1601;&#1577; \" &#1582;&#1575;&#1589;&#1610;&#1575;&#1578; &#1575;&#1604;&#1583;&#1585;&#1587;\") &#1603;&#1604;&#1617; &#1583;&#1585;&#1587; &#1604;&#1575; &#1610;&#1586;&#1575;&#1604; &#1601;&#1610; &#1581;&#1575;&#1604;&#1577; \" &#1578;&#1580;&#1585;&#1610;&#1576;\" &#1571;&#1608; &#1576;&#1589;&#1583;&#1583; &#1575;&#1604;&#1573;&#1593;&#1583;&#1575;&#1583;&#1548; &#1608;&#1571;&#1606; &#1610;&#1592;&#1604; &#1573;&#1605;&#1603;&#1575;&#1606;&#1610;&#1577; &#1578;&#1587;&#1580;&#1610;&#1604; &#1591;&#1610;&#1604;&#1577; &#1575;&#1604;&#1608;&#1602;&#1578; &#1575;&#1604;&#1584;&#1610; &#1610;&#1587;&#1578;&#1594;&#1585;&#1602;&#1607; &#1578;&#1589;&#1608;&#1617;&#1585; &#1573;&#1593;&#1583;&#1575;&#1583;&#1607;.";
+$langHOnline = "&#1605;&#1587;&#1575;&#1593;&#1583;&#1577; &#1605;&#1576;&#1575;&#1588;&#1585;&#1577; &#1604;&#1606;&#1592;&#1575;&#1605; &#1575;&#1604;&#1578;&#1608;&#1575;&#1589;&#1604;";
+$langHClar = " &#1573;&#1593;&#1575;&#1606;&#1577; &#1605;&#1578;&#1593;&#1604;&#1617;&#1602;&#1577; &#1576;&#1575;&#1604;&#1573;&#1606;&#1591;&#1604;&#1575;&#1602; ";
+$langClarContent = "<br><p><b> &#1591;&#1575;&#1604;&#1576; </b></p>
+<p>
+Pour visiter les cours accessibles depuis la page d\\\'accueil du campus,
+il suffit de cliquer sur le code du cours dans la liste, sans inscription préalable.</p>
+<p> &#1604;&#1576;&#1604;&#1608;&#1594; &#1575;&#1604;&#1583;&#1585;&#1608;&#1587; &#1594;&#1610;&#1585; &#1605;&#1605;&#1603;&#1606; &#1575;&#1604;&#1581;&#1589;&#1608;&#1604; &#1593;&#1604;&#1610;&#1607;&#1575; &#1575;&#1606;&#1591;&#1604;&#1575;&#1602;&#1575; &#1605;&#1606; &#1589;&#1601;&#1581;&#1577; &#1575;&#1604;&#1575;&#1587;&#1578;&#1602;&#1576;&#1575;&#1604; &#1576;&#1575;&#1604;&#1605;&#1580;&#1578;&#1605;&#1593; &#1575;&#1604;&#1580;&#1575;&#1605;&#1593;&#1610;&#1548; &#1605;&#1606; &#1575;&#1604;&#1590;&#1585;&#1608;&#1585;&#1610; &#1571;&#1606; &#1578;&#1602;&#1608;&#1605;&#1608;&#1575; &#1576;&#1593;&#1605;&#1604;&#1610;&#1577; &#1575;&#1604;&#1578;&#1587;&#1580;&#1610;&#1604; Inscription > &#1575;&#1583;&#1582;&#1604;&#1608;&#1575; &#1605;&#1578;&#1594;&#1610;&#1585;&#1575;&#1578;&#1603;&#1605; &#1575;&#1604;&#1588;&#1582;&#1589;&#1610;&#1617;&#1577; > 
+&#1575;&#1604;&#1575;&#1588;&#1578;&#1594;&#1575;&#1604;: &#1548; &#1571;&#1587;&#1580;&#1604; &#1606;&#1601;&#1587; &#1610;&#1583;&#1585;&#1587; > Cochez les cours et validez.</p>
+<p>Un courriel vous sera envoyé
+pour vous rappeler nom d\\\'utilisateur et mot de passe à introduire lors de votre prochaine visite.</p>
+<hr noshade size=1>
+<p><b> &#1575;&#1604;&#1571;&#1587;&#1578;&#1575;&#1584;     </b></p>
+<p><b> &#1582;&#1604;&#1602; &#1605;&#1608;&#1602;&#1593; &#1604;&#1604;&#1583;&#1585;&#1608;&#1587; </b></p>
+<p> &#1575;&#1578;&#1617;&#1576;&#1593;&#1608;&#1575; &#1575;&#1604;&#1582;&#1591;&#1608;&#1575;&#1578; - &#1575;&#1578;&#1617;&#1576;&#1593;&#1608;&#1575; &#1575;&#1604;&#1582;&#1591;&#1608;&#1575;&#1578; &#1575;&#1604;&#1578;&#1575;&#1604;&#1610;&#1577; : &#1575;&#1604;&#1578;&#1587;&#1580;&#1610;&#1604; : &#1593;&#1605;&#1617;&#1585;&#1608;&#1575; &#1603;&#1604; &#1575;&#1604;&#1581;&#1602;&#1608;&#1604; &#1608;&#1575;&#1582;&#1578;&#1575;&#1585;&#1608;&#1575; \" &#1582;&#1604;&#1602; &#1605;&#1608;&#1575;&#1602;&#1593; &#1604;&#1604;&#1583;&#1585;&#1608;&#1587;\" &#1604;&#1604;&#1575;&#1588;&#1578;&#1594;&#1575;&#1604;: \" &#1579;&#1576;&#1578;\"&#1548; &#1575;&#1583;&#1585;&#1580; (&#1575;&#1583;&#1582;&#1604;) &#1585;&#1605;&#1586; &#1575;&#1604;&#1583;&#1585;&#1587; &#1608;&#1575;&#1576;&#1578;&#1603;&#1585; &#1585;&#1605;&#1586;&#1575; &#1605;&#1575; &#1593;&#1583;&#1575; &#1576;&#1593;&#1590; &#1575;&#1604;&#1605;&#1581;&#1578;&#1608;&#1610;&#1575;&#1578; &#1575;&#1604;&#1593;&#1585;&#1590;&#1610;&#1577; &#1575;&#1604;&#1605;&#1607;&#1610;&#1574;&#1577; &#1604;&#1578;&#1580;&#1606;&#1610;&#1576;&#1603;&#1605; &#1575;&#1604;&#1588;&#1593;&#1608;&#1585; &#1576;&#1575;&#1604;&#1602;&#1604;&#1602; &#1573;&#1586;&#1575;&#1569; &#1575;&#1604;&#1589;&#1601;&#1581;&#1577; &#1575;&#1604;&#1576;&#1610;&#1590;&#1575;&#1569;. &#1608;&#1593;&#1606;&#1583; &#1575;&#1604;&#1578;&#1587;&#1580;&#1610;&#1604; &#1610;&#1603;&#1608;&#1606; &#1579;&#1605;&#1577; &#1605;&#1585;&#1575;&#1587;&#1604;&#1577; &#1602;&#1583; &#1576;&#1593;&#1579;&#1578; &#1573;&#1604;&#1610;&#1603;&#1605; &#1604;&#1606;&#1584;&#1603;&#1585;&#1603;&#1605; &#1576;&#1575;&#1587;&#1605; &#1575;&#1604;&#1605;&#1587;&#1578;&#1593;&#1605;&#1604; &#1608;&#1576;&#1603;&#1604;&#1605;&#1577; &#1575;&#1604;&#1587;&#1585; &#1575;&#1604;&#1578;&#1610; &#1610;&#1580;&#1576; &#1593;&#1604;&#1610;&#1603;&#1605; &#1585;&#1602;&#1606;&#1607;&#1575; &#1593;&#1606;&#1583; &#1586;&#1610;&#1575;&#1585;&#1578;&#1603;&#1605; &#1575;&#1604;&#1605;&#1602;&#1576;&#1604;&#1577;
+</p>
+<p>En cas de problème, contactez votre responsable réseau ou le responsable de ce campus virtuel. Vous pouvez aussi publier un message sur le forum de support de <a href=http://www.claroline.net>http://www.claroline.net</a>.
+</p>";
+$langHDoc = " &#1573;&#1593;&#1575;&#1606;&#1577; &#1605;&#1578;&#1593;&#1604;&#1617;&#1602;&#1577; &#1576;&#1575;&#1604;&#1608;&#1579;&#1575;&#1574;&#1602; ";
+$langDocContent = "<p>Le module de gestion de document fonctionne de
+ manière semblable à la gestion de vos documents sur un
+ ordinateur. </p><p>Vous pouvez y déposer des documents de tout type
+ (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Soyez
+ attentifs cependant à ce que vos étudiants disposent des
+ outils nécessaires à leur consultation. Soyez
+ également vigilants à ne pas envoyer 
+  des documents infectés par des virus. Il est prudent de soumettre
+ son 
+  document à un logiciel antivirus à jour avant de le
+ déposer 
+  sur iCampus.</p>
+<p>Les documents sont présentés par ordre
+ alphabétique.<br>
+  <b>Astuces:</b> si vous souhaitez que les documents soient classés
+ de 
+  manière différente, vous pouvez les faire
+ précéder 
+  d\'un numéro, le classement se fera dès lors sur cette base.
+ </p>
+<p>Vous pouvez :</p>
+<h4>Télécharger un document dans ce module</h4>
+<ul>
+  <li>Sélectionnez le document sur votre ordinateur à l\'aide
+ du 
+	bouton \"Parcourir\" 
+	<input type=submit value=Parcourir name=submit2>
+	à droite de votre écran.</li>
+  <li>Exécutez le téléchargement à l\'aide du
+ bouton\" 
+	télecharger\" 
+	<input type=submit value=télécharger name=submit2>
+	.</li>
+</ul>
+<h4>Renommer un document (ou un répertoire)</h4>
+<ul>
+  <li>cliquez sur le bouton <img src=../img/rename.gif width=20
+ height=20 align=baseline> 
+	dans la colonne \"Renommer\".</li>
+  <li>Tapez le nouveau nom dans la zone prévue à cet effet
+ qui apparaît 
+	en haut à gauche</li>
+  <li>Valider en cliquant sur \"OK\" 
+	<input type=submit value=OK name=submit24>
+	. 
+</ul>
+	<h4>Supprimer un document (ou un répertoire)</h4>
+	<ul>
+	  
+  <li>Cliquer sur le bouton <img src=../img/delete.gif width=20
+ height=20> 
+	dans la colonne \"Supprimer\".</li>
+	</ul>
+	<h4>Rendre invisibles aux étudiants un document (ou un
+ répertoire)</h4>
+	<ul>
+	  
+  <li>Cliquez sur le bouton <img src=../img/visible.gif width=20
+ height=20>dans 
+	la colonne \"Visible/invisible\".</li>
+	  <li>Le document (ou le répertoire) existe toujours, mais il n\'est
+ 
+		plus visible pour les étudiants.</li>
+	</ul>
+	<ul>
+	  
+  <li> Si vous souhaitez rendre cet élément à nouveau
+ visible, 
+	cliquez sur le bouton <img src=../document/../img/invisible.gif
+ width=24 height=20> 
+	dans la colonne Visible/invisible</li>
+	</ul>
+	<h4>Ajouter ou modifier un commentaire au document (ou au
+ répertoire)</h4>
+	<ul>
+	  
+  <li>Cliquez sur le bouton <img
+ src=../document/../img/comment.gif width=20 height=20> 
+	dans la colonne \"Commentaire\"</li>
+	  <li>Tapez le nouveau commentaire dans la zone prévue à cet
+ 
+		effet qui apparaîtra en haut à gauche.</li>
+	  <li>Validez en cliquant sur \"OK\" 
+		<input type=submit value=OK name=submit2>
+		.</li>
+	</ul>
+	<p>Si vous souhaitez supprimer un commentaire, cliquez sur le bouton <img
+ src=../document/../img/comment.gif width=20 height=20>, 
+	  effacez l\'ancien commentaire de la zonne et validez en cliquant
+ \"OK\" 
+	  <input type=submit value=OK name=submit22>
+	  . 
+	<hr>
+	<p>Vous pouvez aussi organiser le contenu du module de document en
+ rangeant 
+	  les documents dans de répertoires. Pour ce faire vous devez :</p>
+	<h4><b>Créer un répertoire</b></h4>
+	<ul>
+	  <li>Cliquez sur la commande \"<img
+ src=../document/../img/dossier.gif width=20
+ height=20>créer 
+		un répertoire\" en haut à gauche de l\'écran</li>
+	  <li>Tapez le nom de votre nouveau répertoire dans la zone
+ prévue 
+		à cet effet en haut à gauche de l\'écran.</li>
+	  <li>Validez en cliquant \"OK\" 
+		<input type=submit value=OK name=submit23>
+		.</li>
+	</ul>
+	<h4>Déplacer un document (ou un répertoire)</h4>
+	<ul>
+	  <li>Cliquez sur le bouton <img
+ src=../document/../img/deplacer.gif width=34 height=16> 
+		dans la colonne déplacer</li>
+	  <li>Choisissez le répertoire dans lequel vous souhaitez
+ déplacer 
+		le document ou le répertoire dans le menu déroulant
+ prévu 
+		à cet effet qui apparaîtra en haut à gauche.(note: 
+		le mot \"racine\" dans ce menu représente la racine de 
+		votre module document).</li>
+	  <li>Validez en cliquant \"OK\" 
+		<input type=submit value=OK name=submit232>
+		.</li>
+	</ul>
+	<center>
+	  <p>";
+$langHUser = "&#1605;&#1587;&#1575;&#1593;&#1583;&#1577; &#1575;&#1604;&#1605;&#1587;&#1578;&#1582;&#1583;&#1605;&#1610;&#1606;";
+$langUserContent = "<b>Droits d\'administration</b>
+<p>Pour permettre à un co-titulaire, un assistant, un tuteur ou qui que ce
+ soit de co-administrer le site avec vous, vous devez préalablement
+ l\'inscrire à votre cours ou vous assurer qu\'il est inscrit puis modifier
+ ses droits en cochant \'modifier\' sous \'droits d\'admin.\' puis
+ \'tous\'.</P><hr>
+<b>Co-titulaires</b>
+<p>Pour faire figurer le nom d\'un co-titulaire dans l\'en-tête de votre
+ cours, utilisez la page \'Modifier info cours\' (dans les outils orange
+ sur la page d\'accueil de votre cours). Cette modification de l\'en-tête 
+ du cours n\'inscrit pas automatiquement ce co-titulaire comme utilisateur 
+ du cours. Ce sont deux actions distinctes.</p><hr>
+<b>Ajouter un utilisateur</b>
+<p>Pour ajouter un utilisateur à votre cours, remplissez les champs
+et validez. La personne recevra un courriel de confirmation de son 
+inscription contenant son nom d\'utilisateur et son mot de passe, sauf si
+vous n\'avez pas introduit son email.</p>";
+$langGroupManagement = "Gestion des groupes";
+$langGroupContent = "<p><b>Introduction</b></p>
+	<p>Cet outil permet de créer et de gérer des groupes de travail. 
+	A la création, les groupes sont vides. Le professeur dispose de 
+	plusieurs façons de les remplir: 
+	<ul><li>automatique (\'Remplir les groupes\'),</li>
+	<li>à la pièce (\'Editer\'),</li>
+	<li>par les étudiants (Propriétés: \'Etudiants autorisés ...\').</li></ul>
+	Ces modes de remplissage sont combinables entre eux. Ainsi, on peut demander aux étudiants
+	de s\'inscrire eux-mêmes puis constater que certains d\'entre eux ont oublié de s\'inscrire
+	et choisir alors de remplir les groupes, ce qui aura pour effet de les compléter. On peut
+	aussi (via la fonction \'Editer\') modifier manuellement la composition de chacun des groupes
+	après remplissage automatique ou après auto-inscription par les étudiants.</p>
+	<p>Le remplissage des groupes, qu\'il soit automatique ou manuel, ne fonctionne que 
+	si les étudiants sont déjà inscrits au cours, ce qui peut être vérifié via l\'outil 
+	\'Utilisateurs\'.</p><hr noshade size=1>
+	<p><b>Créer des groupes</b></p>
+	<p>Pour créer de nouveaux groupes, cliquez sur \'Créer nouveau(x) groupe(s)\' et déterminez
+	le nombre de groupes à créer. Le nombre maximum de participants est facultatif. Si 
+	vous laissez ce champ inchangé, la taille des groupes sera illimitée.</p><hr noshade size=1>
+	<p><b>Propriétés des groupes</b></p>
+	<p>Vous pouvez déterminer de façon globale les propriétés des groupes.
+	<ul><li><b>Etudiants autorisés à s\'inscrire eux-mêmes dans les groupes</b>: 
+	vous créez des groupes vides et laissez les étudiants s\'y ajouter eux-mêmes. 
+	Si vous avez défini un nombre de places maximum
+	par groupe, les groupes complets n\'acceptent plus de nouveaux membres. 
+	Cette méthode convient particulièrement au professeur qui ne connaît pas la 
+	liste des étudiants au moment de créer les groupes.</li>
+	<li><b>Accès aux groupes réservé uniquement à leurs membres</b>: les groupes n\'accèdent
+	pas aux forums et documents partagés des autres groupes. Cette propriété n\'exclut pas
+	la publication de documents par les groupes hors de leur espace privé.</li>
+	<li><b>Outils</b>: chaque groupe dispose soit d\'un forum, soit d\'un répertoire partagé associé
+	à un gestionnaire de documents, soit (cas le plus fréquent) les deux.</li></ul>
+	<hr noshade size=1>
+	<p><b>Edition manuelle</b></p>
+	<p>Une fois des groupes crées, vous voyez apparaître leur liste assortie d\'une série d\'informations
+	et de fonctions. <ul><li><b>Editer</b> permet de modifier manuellement la composition du groupe.</li>
+	<li><b>Supprimer</b> détruit un groupe.</li></ul>
+	<hr noshade size=1>";
+$langHExercise = "&#1575;&#1582;&#1578;&#1576;&#1575;&#1585;&#1575;&#1578; &#1575;&#1604;&#1605;&#1587;&#1575;&#1593;&#1583;&#1577;";
+$langHPath = "&#1605;&#1587;&#1575;&#1593;&#1583;&#1577; &#1591;&#1585;&#1610;&#1602; &#1575;&#1604;&#1578;&#1593;&#1604;&#1605;";
+$langHDescription = "&#1575;&#1604;&#1605;&#1587;&#1575;&#1593;&#1583;&#1577; &#1604;&#1578;&#1601;&#1575;&#1589;&#1610;&#1604; &#1575;&#1604;&#1583;&#1585;&#1587;";
+?>

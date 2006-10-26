@@ -1,0 +1,51 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$AgendaAdd = "Προσθήκη ενός γεγονότος";
+$ShowAll = "Προβολή όλων των γεγονότων";
+$ShowCurrent = "Προβολή γεγονότων αυτού του μήνα";
+$AgendaSortChronologicallyUp = "Τα παλαιότερα πρώτα";
+$AgendaSortChronologicallyDown = "Τα νεότερα πρώτα";
+$AddCalendarItem = "Προσθήκη ενός γεγονότος";
+$Day = "Μέρα";
+$Month = "Μήνας";
+$Year = "Έτος";
+$Hour = "Ώρα";
+$Minutes = "Λεπτά";
+$Title = "Τίτλος";
+$Detail = "Detail";
+$Lasting = "Διάρκεια";
+$EditSuccess = "The agenda item has been edited";
+$AddSuccess = "Το γεγονός προστέθηκε";
+$AgendaDeleteSuccess = "The agenda item has been deleted";
+$NoAgendaItems = "There are no Agenda Items";
+$lang_september = "Σεπτέμβριος";
+$langClassName = " Όνομα τάξης";
+$lang_agenda = "Ατζέντα";
+$ModifyCalendarItem = "Τροποποίηση";
+$ItemTitle = "Τίτλος";
+$langDay = "Μέρα";
+$month_default = "Μήνας";
+$langYear = "Έτος";
+$year_default = "Ετος";
+$langHour = "Ώρα";
+$hour_default = "Ώρα";
+$langMinute = "Λεπτά";
+$langLasting = "Διάρκεια";
+$langOldToNew = "Αντιστροφή σειράς παρουσίασης";
+$langNewToOld = "Αντιστροφή σειράς παρουσίασης";
+$langNow = "τώρα";
+$langAddEvent = "Προσθήκη ενός γεγονότος";
+$langDetail = "Λεπτομέρειες";
+$MonthView = "Mήνας";
+$WeekView = "Εβδομάδα";
+$DayView = "Ημέρα";
+$AddPersonalItem = "Προσθήκη ενός προσωπικού γεγονότος";
+$Week = "Εβδομάδα";
+$Date = "Ημερομηνία";
+$Time = "Ώρα";
+$Title = "Τίτλος";
+$AddPersonalCalendarItem = "Προσθήκη ενός προσωπικού γεγονότος";
+$ModifyPersonalCalendarItem = "Τροποποίηση προσωπικού γεγονότος";
+$Print = "&#917;&#954;&#964;&#973;&#960;&#969;&#963;&#951;";
+?>

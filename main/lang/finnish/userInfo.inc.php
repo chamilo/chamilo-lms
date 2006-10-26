@@ -1,0 +1,38 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langUsers = "Käyttäjät";
+$langLineNumber = "Rivinumero";
+$langLine = "rivi";
+$langLines = "rivit";
+$langLineOrLines = "rivi(t)";
+$langRemove = "poista";
+$langMoveUp = "Siirrä ylöspäin";
+$langMoveDown = "Siirrä alaspäin";
+$langAddNewHeading = "Lisää uusi otsikko";
+$langCourseAdministratorOnly = "Ainoastaan opettajat";
+$langDefineHeadings = "Määrittelet otsikot";
+$langBackToUsersList = "Takaisin käyttäjälistaan";
+$langTracking = "Seuranta";
+$langCourseManager = "Opettaja";
+$langModRight = "muuta oikeuksia";
+$langNone = "ei mikään";
+$langAll = "kaikki";
+$langNoAdmin = "ei omista enää oikeuksia tälle sivulle";
+$langAllAdmin = "omistaa tästä eteenpäin kaikki oikeudet tälle sivulle";
+$langModRole = "Vaihda roolia";
+$langRole = "rooli";
+$langIsNow = "on tästä eteenpäin";
+$langInC = "tällä kurssilla";
+$langFilled = "Kaikkia kenttiä ei ole täytetty";
+$langUserNo = "Käyttäjä";
+$langTaken = "on jo käytössä. Ole hyvä ja valitse joku muu";
+$langUserName = "Nimi";
+$langTutor = "Tutor";
+$langUnreg = "Peruuta";
+$langGroupUserManagement = "Ryhmän hallinta";
+$langUserInfo = "tietoja käyttäjästä";
+$langUnregister = "Poista";
+$langAddAUser = "Lisää käyttäjä";
+$langGroupManagement = "Ryhmän hallinta";
+?>

@@ -1,0 +1,56 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langAdminBy  = "Ipinfunni nipase";
+$langAdministrationTools  = "Ipinfunni";
+$langState  = "Ipo nipa ero";
+$langDevAdmin  = "Igbero ipinfunni";
+$langLinksToClaroProjectSite  = "so-po sodo igbero webusite";
+$langStatistiques  = "iro numeri";
+$langNbProf  = "eeye awon oluko";
+$langNbStudents  = "eeye awon akeko";
+$langNbLogin  = "iye igba ibawole";
+$langToday    = "eni";
+$langLast7Days  = "ojo keje seyin";
+$langLast30Days  = "Ogbon ojo seyin";
+$langNbAnnoucement  = "eeye ikede";
+$langCheckDatabase  = "wo olori ipile data dokeos ";
+$langPleaseCheckConfigForMainDataBaseName  = "jowo wo awon iye <br> oruko olori ipile data ninu <br>";
+$langBaseFound  = "Ri<br>wiwa tabili awon ipile eyi";
+$langNeeded  = "dandan";
+$langNotNeeded  = "ko pon dandan";
+$langArchive    = "Ibi Ipamo";
+$langUsed       = "Lo";
+$langPresent   = "dara";
+$langCreateMissingNow  = "se o fe se tabili nisin yi";
+$langMissing    = "so nu";
+$langCheckingCourses  = "wiwo ise";
+$langExist      = "o wa nbe";
+$langCreateClaroTables  = "da tabili fun olori ipile data";
+$langTableStructureDontKnow  = "aomo ona tabili yi ";
+$DisplayTeacherInCourselistTitle = "Fi Oluko wan ni ori eko";
+$DisplayTeacherInCourselistComment = "fi oluko han ninu ise iwe asoye";
+$DisplayCourseCodeInCourselistComment = "fi ena ise yi han ninu iwe iladi";
+$DisplayCourseCodeInCourselistTitle = "fi ena ise yi han ninu oruko ise";
+$ThereAreNoVirtualCourses = "ko si virtual ise lori pepe";
+$ConfigureHomePage = "se eto ewe iwe akoko";
+$CourseCreateActiveToolsTitle = "yara ipa sori ise didasile";
+$langCourseCode = "Ena ise";
+$langCourseTitular = "Oluko";
+$langCourseTitle = "Oruko ise";
+$langCourseFaculty = "Ise idipo";
+$langCourseDepartment = "Iso ise";
+$langCourseDepartmentURL = "Iso URL";
+$langCourseLanguage = "Ede ise";
+$langCourseAccess = "aye ise";
+$langCourseSubscription = "ifi oruko sile fun ise";
+$langPublicAccess = "ayefun gbogbo enia";
+$langPrivateAccess = "aye fun enia kan";
+$langCode = "Ena";
+$langLanguage = "Ede";
+$langCategory = "Idipo";
+$langFirstName = "Oruko e";
+$langLastName = "Oruko idile";
+$langLoginName = "wole";
+$langAddPicture = "Fi aworan si";
+?>

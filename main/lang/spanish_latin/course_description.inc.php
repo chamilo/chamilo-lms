@@ -1,0 +1,16 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langCourseProgram  = "Descripción del Curso";
+$langThisCourseDescriptionIsEmpty  = "Actualmente, este curso no tiene una descripción";
+$langEditCourseProgram  = "Crear y editar con formularios";
+$langQuestionPlan  = "Pregunta al profesor";
+$langInfo2Say  = "Información para dar a los estudiantes";
+$langOuAutreTitre  = "Título";
+$langNewBloc  = "Otro";
+$langAddCat  = "agregar categoría";
+$langAdd  = "Agregar";
+$langValid  = "Validar";
+$langBackAndForget  = "Volver y descartar";
+$langOkSent = "Su página ha sido enviada al servidor.<p>Es accesible desde la <a href=../..//index.php>página principal</a> de su curso";
+?>

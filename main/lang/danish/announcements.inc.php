@@ -1,0 +1,51 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$Announcement = "Meddelelser";
+$langAnnEmpty = "Meddelelseslisten er blevet ryddet op";
+$AnnouncementModified = "Meddelelsen er blevet ændret";
+$AnnouncementAdded = "Meddelelsen er blevet tilføjet";
+$AnnouncementDeleted = "Meddelelsen er fjernet";
+$AnnouncementPublishedOn = "Lagt ud";
+$AddAnnouncement = "Tilføj meddelelse";
+$langContent = "indhold";
+$AnnouncementDeleteAll = "Fjern meddelelseslisten";
+$professorMessage = "Besked fra underviseren";
+$langEmailSent = " og sendt til registrerede studerende";
+$EmailOption = "Send denne meddelelse som email til registrerede studerende";
+$langOn = "Til";
+$langRegUser = "registrerede studerende af denne website";
+$langUnvalid = "har ugyldig eller ingen email adresse";
+$langModifAnn = "Ændre meddelelsen";
+$langModify    = "modificer";
+$langDelete    = "slet";
+$langTitle     = "Titel";
+$langHelp      = "hjælp";
+$langOk        = "OK";
+$langAddIntro  = "Tilføj introduktions tekst";
+$langBackList  = "Tilbage til listen";
+$langSelMess   = "Advarsel til visse brugere";
+$EmailTitle  = "Emailens emne";
+$langUserlist  = "Liste over grupper og brugere";
+$langSelectedUsers  = "Valgte Brugere";
+$langSubmit  = "Afsend";
+$langPleaseEnterMessage  = "Du skal indtaste beskedtekst.";
+$langPleaseSelectUsers  = "Du skal vælge nogle brugere.";
+$Teachersubject = "Besked sendt til dine studerende";
+$langMessages  = "Beskeder";
+$langMessageToSelectedUsers  = "Beskeder til valgte brugere";
+$langUsers  = "brugere";
+$langIntroText  = "For at afsende en besked, vælg de grupper af brugere (markeret med et G foran) eller enkelte brugere fra listen til venstre.";
+$langDown = "ned";
+$langMsgSent = "Beskeden er afsendt til de valgte studerende";
+$langSelUser = "valgte brugere af sitet";
+$langMessageToSelectedGroups = "Besked til valgte grupper";
+$langGrouplist = "gruppeliste";
+$langSelectedGroups = "valgte grupper";
+$langMsg = "Beskeder";
+$langYes = "ja";
+$MsgText = "Besked";
+$AnnouncementDeletedAll = "Alle bekendtgørelser blev slettet";
+$AnnouncementMoved = "Bekendtgørelsen er flyttet";
+$NoAnnouncements = "Der er ingen bekendtgørelser";
+?>

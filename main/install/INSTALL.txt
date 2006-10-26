@@ -1,0 +1,2 @@
+For installation help, see installation_guide.html or INSTALL.txt at the Dokeos root directory 
+(which should be two directories up from this)

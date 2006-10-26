@@ -1,0 +1,71 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langInvalidId = "การเข้าสู่ระบบล้มเหลว รหัสผู้ใช้และระหัสผ่านไม่ถูกต้อง";
+$langWelcome = "รายวิชาที่เปิดให้เลือกเรียนได้ทุกคนอยู่ด้านล่าง รายวิชาอื่นนอกเหนือจากนี้ ต้องการ
+ชื่อผู้ใช้และรหัสผ่าน  ซึ่งท่านสามารถได้จากการ \'ลงทะเบียน\'   สำหรับอาจารย์ สามารถสร้างรายวิชาของท่านได้ โดยคลิกที่หน้าลงทะเบียนเช่นกัน แต่ให้เลือก
+\'สร้างรายวิชา\'";
+$langUserName = "ชื่อผู้ใช้";
+$langPass = "รหัสผ่าน";
+$langEnter = "ตกลง";
+$langHelp = "ช่วยเหลือ";
+$langReg = "ลงทะเบียน";
+$langMenu  = "เมนู";
+$langDoc = "เอกสารคู่มือการใช้งาน";
+$langAdvises = "แนะนำ";
+$langCourseDoesntExist = "<b>คำเตือน: </b> ไม่มีรายวิชานี้";
+$langGetCourseFromOldPortal = "คลิกที่นี่เพื่อรับวิชานี้ จากระบบควบคุมเดิมของท่าน ";
+$langOtherCourses = "รายชื่อรายวิชา";
+$langSupportForum = "อภิปรายปรึกษา";
+$langCategories  = "ประเภทรายวิชา";
+$langBackToHomePage  = "กลับไปที่หน้าแรก";
+$lang_No_course_publicly_available  = "ยังไม่มีวิชาที่เปิดเพื่อสาธารณะ";
+$langLostPassword  = "แจ้งลืมรหัสผ่าน";
+$lang_edit_my_course_list  = "สร้างสารบัญวิชาของเรา";
+$langAgenda  = "กำหนดการต่อไป";
+$langValvas  = "ประกาศที่ผ่านมา";
+$langUp  = "ระดับที่ผ่านมา";
+$langCatList  = "ประเภทรายวิชา";
+$langCourseList  = "รายวิชา";
+$langHelptwo = "ระบบช่วยเหลือ";
+$langRegAll = "ลงทะเบียน";
+$EussMenu = "รายการเชื่อมโยง";
+$Opinio = "ความคิดเห็น";
+$menuauth = "รายการสิทธิฐานะ";
+$email = "อีเมล";
+$Intranet = "เครือข่ายภายใน";
+$Englin = "อังกฤษ";
+$langInvalidForSelfRegistration = "การเข้าสู่ระบบล้มเหลว หากยังไม่ลงทะเบียน กรุณาคลิกที่<a href=claroline/auth/inscription.php>แบบฟอร์มการลงทะเบียนนี้</a>";
+$langCourses = "รายวิชา";
+$langIn = "ใน";
+$langSubCat = "หัวข้อย่อย";
+$langMenuGeneral = "รายการเชื่อมโยงทั่วไป";
+$langMenuUser = "เมนูของผู้เข้าใช้ระบบ";
+$langMenuAdmin = "ระบบการจัดการ";
+$langUsersOnLineList = "รายชื่อผู้ใช้ที่กำลังใช้งานระบบ";
+$langTotalOnLine = "กำลังใช้งานระบบทั้งสิ้น";
+$langRefresh = "กะพริบหน้าจอใหม่";
+$langMe = "ตัวเรา";
+$langSystemAnnouncements = "ประกาศข่าวภายใน";
+$langHelpMaj = "ระบบช่วยเหลือ";
+$langNotRegistered = "ยังไม่ลงทะเบียน";
+$langAdmin = "ระบบ";
+$Login = "เข้าระบบ";
+$langRegisterForCourse = "ลงทะเบียนวิชา";
+$langUnregisterForCourse = "ถอนการลงทะเบียนวิชา";
+$langCombinedCourse = "บูรณาการวิชา";
+$Platform = "ระบบ";
+$Refresh = "ล้างหน้าจอใหม่";
+$UsersOnLine = "ผู้ใช้ที่กำลังใช้งานระบบ";
+$TotalOnLine = "จำนวนผู้ที่กำลังใช้งานระบบรวมทั้งสิ้น";
+$langCourseCreate = "สร้างรายวิชา";
+$langCourseClosed = "ยังไม่เปิดวิชา";
+$ViewOpenCourses = "ดูวิชาที่เปิดเรียน";
+$langCompetences = "ความสามารถพิเศษ";
+$langDiplomas = "คุณวุฒิ";
+$langTeach = "วิชาที่สามารถสอนได้";
+$langOpenarea = "ข้อมูลส่วนตัวที่เปิดเผยได้";
+$langProductions = "ผลงาน";
+$langSendChatRequest = "ส่งข้อความเชิญร่วมสนทนาออนไลน์";
+$langRequestDenied = "ไม่รับคำเชิญ";
+?>

@@ -1,0 +1,39 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langChat  = "Chat";
+$langOnlineConference  = "Konferencia";
+$langWash  = "Mosni";
+$langReset  = "Újraindít";
+$langSave  = "Ment";
+$langRefresh  = "Frissít";
+$langIsNowInYourDocDir  = "most már a Dokumentumok eszközben van. <br><B>Ez a fájl látható</B>";
+$langCopyFailed  = "Nyomtatási hiba";
+$langTypeMessage  = "Kérjük, írja be az üzenetét !";
+$langConfirmReset  = "Valóban ki akarja törölni az összes üzenetet ?";
+$langHasResetChat  = "újraindította a Chat-et";
+$langNoOnlineConference  = "Jelenleg nincs konferencia ...";
+$langMediaFile  = "Él&#337; hang vagy videó sugárzása";
+$langContentFile  = "Prezentáció";
+$langListOfParticipants  = "Résztvev&#337;k listája";
+$langYourPicture  = "Az ön fotója";
+$langOnlineDescription  = "Konferencia leírás";
+$langOnlyCheckForImportantQuestion = "Jelölje be a négyzetet, ha fontos kérdést akar feltenni !";
+$langQuestion = "kérdés";
+$langClearList = "Lista kiürítése";
+$langWhiteBoard = "Tábla";
+$langHome = "Kezd&#337;lap";
+$langTextEditorDefault = "<h2>Szövegszerkeszt&#337;</h2>Másolja át szövegét Ms-Word-b&#337;l, és utána szerkessze itt. A jelenlev&#337;k él&#337;ben követhetik figyelemmel a változásokat.";
+$langLinks = "Hivatkozások";
+$langStreaming = "Videó-sugárzás";
+$langStreamURL = "Sugárzás URL-je";
+$langStreamType = "Sugárzás típusa";
+$langLinkName = "Hivatkozás neve";
+$langLinkURL = "Hivatkozás URL-je";
+$langWelcomeToOnlineConf = "Üdvözöljük az <b>Online konferencián</b>";
+$langNoLinkAvailable = "Nincs elérhet&#337; hivatkozás";
+$langChat_reset_by = "cseveg&#337; kiürítése";
+$OrFile = "vagy fájl";
+$langCallSent = "Chat-felhívás elküldve";
+$langChatDenied = "Visszautasítva.";
+?>

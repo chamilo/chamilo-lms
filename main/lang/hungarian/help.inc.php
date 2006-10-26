@@ -1,0 +1,511 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langHFor = "Fórum Súgók";
+$langClose = "Bezár";
+$langForContent = "A fórum egy írott, szinkronizálatlan vita-eszköz.
+ Elektronikus levelek írása két fél közti kapcsolatot jelent, amíg fórumok nyilvánosak
+ vagy fél-nyilvánosak.</p><p>A gyakorlatban tehát a felhasználóknak csak a
+ böngészõjükre van szükségük, hogy megtekintsék a Dokeos fórumokat.</P><p>
+ A fórumok rendezéséhez, kattintson az \'Adminisztrátor\'-ra. A viták
+ csoportokba és alcsoportokba vannak szervezve, a következõek alapján:</p>
+ <p><b>Kategória > Fórum > Téma > Válaszok</b></p>A felhasználók vitáinak
+ struktúrálásához kategóriákat és fórumokat kell elõször létrehozni,
+ és hagyni, hogy a témákat és a válaszokat õk töltsék fel. Alapbeállítás
+ szerint a Dokeos fórum csak \'Nyilvános\' kategóriát tartalmaz, egy
+ mintafórumot és egy mintatémát.</p><p>Ezért az elsõ dolog, amit javaslunk,
+ hogy törölje a mintatémát és változtassa meg a fórum nevét. Aztán a nyilvános
+ kategóriában létrehozhat más fórumokat vagy témákat, amik illeszkednek
+ a kurzusainak követelményeihez.</p><p>Ne keverje össze a Kategóriákat
+ a fórumokkal és ne felejtse el, hogy a fórum nélküli kategóriák nem
+ jelennek meg a hallgatók számára.</p><p>A fórum leírása lehet a tagjainak
+ a listája, egy cél kitûzése, egy feladat, bármi...";
+$langHDropbox = "Fájlposta";
+$langDropboxContent = "A File Posta azokat a file-okat mutatja, amiket kapott
+és azokat melyeket a kurzus többi tagjainak küldött el (kimenõ könyvtár).
+Ha egy file-t kétszer ugyanazzal a névvel küld el, az elõzõleg elküldöttet
+felülírja az újjal.
+<br><br>
+A felhasználó csak küldhet file-t a vezetõnek, hacsak a rendszer admin
+nem engedélyezte a P2P (kétoldalú) kommunikációt.
+<br><br>
+Egy vezetõ a kurzus minden felhasználójának küldhet file-t.
+<br><br>
+A rendszer admin beállíthatja, hogy címzett nélküli file-okat is fel
+lehessen tölteni.
+<br><br>
+Ha a kapott file-ok listája nagyon megnõne, törölhet belõle file-okat.
+A file maga ekkor nem törlõdik, míg a másik fél látja azt.
+<br>
+<h5>Vezetõknek szóló kiegészítõ információ</h5>
+Ha a levelezés engedélyezve van, feltölthet egy levelezõ zip-file-t ha a 
+---Levelezés--- -t választja címzettként. Ezután meg kell vizsgálnia a
+zipfile tartalmát és ha nincs probléma, küldhet tartalom-fileokat egyéni
+cízettekhez. Mindkét mûveletet a törlés ikonhoz közeli, a zip-file mellett
+jobbra található ikonok segítségével végezheti el.
+<br>
+A megvizsgál mûvelet jelzi a hibát, ha helytelen file lett feltöltve 
+---Levelezés--- címzettel. A file nem törlõdik automatikusan.
+<br><br>
+A zip-file nevének illeszkednie kell a tartalom file-ok neveihez.
+Például, ha a tartalom file-ok közt van mailing_19970001_20040229.doc,
+mailing_19981234_20040229.pdf, ..., ahol 19970001 és 19981234 a felhasználók
+hivatalos kódjai, akkor a megadott zip-file neve mailing_HALLGATÓIKÓD_20040229.zip.
+Ha a tartlom file-ok a hivatalos kód helyett a login-t használják, hogy
+megállapítsák a címzettet akkor a HALLGATÓI KÓD-ot helyettesítse
+a LOGINNÉV-vel a zip-file nevében.
+<br><br>
+A tartalom file-ok kiküldése után a levelezõ mappa iconra kattinthat a zip-file
+nevétõl balra, hogy megtekintse a tartalom file-ok listáját a címzettekkel
+együtt. Ami a File Posta által kezelt többi file-t illeti, az arról a
+listáról való törlés vagy a zip-file törlése nem vonja maga után, hogy a file
+is törlõdik a címzett File Postából.
+<br><br>
+Ha a felülírás engedélyezett, akkor a zip-file második felülírási feltöltése
+új küldést tesz lehetõvé. Ha a zip-file régi tartalom file-okat tartalmaz,
+azok újra elküldõdnek.
+<br><br>
+Ne használjon helyközt a levelezõ zip-file nevében.
+<br>";
+$langHHome = "Súgó f&#337;oldal";
+$langHomeContent = "A kurzusok létrehozásakor szinte minden eszköz tartalmaz egy kis példát, ami röviden
+ bemutatja, hogy hogyan is m&#369;ködik az adott eszköz. Ön dönt, hogy törli-e a példát
+ vagy módosítja azt.</p><p>Például a kurzus fõoldalán van egy rövid bemutatkozó
+ szöveg, melyben ez áll \'Ez a kurzusának a bemutatkozó szövege. Ahhoz hogy
+ módosítsa, kattintson a ceruzára.\' Kattintson a ceruzára, szerkessze, majd Ok.
+ Ennyire egyszerû. Minden eszköz ugyanazon logika szerint épül fel, ami a
+ dinamikus web-oldalak logikája: hozzáadni, törölni, módosítani.</p><p>
+ A kurzus létrehozásakor néhány eszköz alapból látszik. Újra csak
+ Önön múlik, hogy elrejtsen/mutasson eszközöket. Csak a rejt/mutat -ra
+ kell kattintania. Elrejtéskor a honlap alsó részén található szürke Rejtett eszközök mezõjébe kerül be és a felhasználók nem fogják látni. Bármikor újra aktiválhatja ezeket, ha szeretné, hogy a felhasználók is lássák azokat.</p>
+<p>Saját oldalait is hozzáadhatja a fõoldalhoz. Ezeknek HTML oldalaknak
+ kell lenniük (HTML-t bármilyen Szöveg- vagy Webszerkesztõ programmal
+ elõ lehet állítani). Használja a \'Hivatkozás és oldal feltöltése a fõoldalra\' eszközt hogy a saját weboldalát feltöltse a szerverre. A weboldal állományában felhasznált cím és egyéb adatok (fejléc) automatikusan összeillesztõdik az új dokumentumával, így
+ csak a tartalomra kell összpontosítania. Ha azt szeretné, hogy a fõoldalról egy hivatkozás mutasson egy létezõ internetes oldalra (akár saját kurzusán belül),  használja a \'Hivatkozás hozzáadása a fõoldalhoz\' eszközt. A fõoldalhoz adott
+ oldalak elrejthet&#337;k illetve törölhetõek, míg az alapeszközöket el lehet rejteni, de törölni nem.</p><p>Mikor a kurzus készen áll, lépjen be
+ a \'Kurzus beállításokba\' és döntse el, hogy kiknek a belépését engedélyezi.
+ Alapértelmezés szerint a kurzus mindenki számára nyitva áll.</p>";
+$langHOnline = "Konferencia súgó";
+$langOnlineContent = "A Dokeos online konferencia lehetõvé teszi, hogy tanítson,
+ informáljon és összegyûjtsön maximum 100 embert egyszerre, egyszerûen és
+ gyorsan.<br>
+ <ul>
+   <li><b>audio :</b> az oktató hangja élõben hallható a résztvevõk számára
+   FM rádió minõségben az mp3 technológiának köszönetõen</li>
+   <li><b>tartalom :</b> a résztvevõk egy Power Point prezentációt vagy
+   akármilyen más dokumentumot követhetnek</li>
+   <li><b>interakció :</b> a résztvevõk kérdéseket tehetnek fel az oktatónak
+   egy webes chat-en keresztül</li>
+ </ul>
+ A Dokeos online konferencia rendszer a legjobb kombinációja az alacsony
+ technikai követelményeknek (alacsony költségek, platformfüggetlenség,
+ résztvevõk számának magas száma) és a sokrétû interakciónak
+ (valódi kérdések/válaszok).<br><br>
+ A tanár/trainer/oktató-nak szüksége van :<br>
+ <ul>
+   <li>bármilyen számítógép, mely csatlakoztatva van az internetre</li>
+   <li>bármilyen olcsó mikrofon headset</li>
+   <li>egy böngészõ</li>
+   <li>Windows esetén : Winamp software (<a href=\"http://www.winamp.com\" target=\"_blank\">www.winamp.com</a>)</li>
+   <li>Mac esetén : Quicktime broadcaster (<a href=\"http://www.quicktime.com\" target=\"_blank\">www.quicktime.com</a>)</li>
+ </ul>
+ A résztvevõkenk szüksége van :<br>
+ <ul>
+   <li>bármilyen számítógép, mely csatlakoztatva van az internetre</li>
+   <li>hangszóró vagy headset</li>
+   <li>egy böngészõ</li>
+   <li>Windows vagy Mac esetén : Quicktime (<a href=\"http://www.quicktime.com\" target=\"_blank\">www.quicktime.com</a>)</li>
+   <li>Linux esetén : XMMS</li>
+ </ul>
+ Probléma esetén, lépjenek kapcsolatba a Dokeos-szal : <a href=\"http://www.dokeos.com\" target=\"_blank\">http://www.dokeos.com</a>.";
+$langHClar = "Súgó Start";
+$langClarContent = "Itt projektvezetõk, oktatók és professzorok hozhatnak létre és 
+ adminisztrálhatnak kurzusokat. Résztvevõk, hallgatók, diákok... olvasás (dokumentumok, naptárak, információk), tesztek
+ létrehozása, dokumentumok közzététele, fórumokban való részvétel...</p>
+ <b>Regisztráció</b><p>A következõek csak akkor vonatkoznak Önre, ha
+ az Ön Dokeos verzója támogatja a saját kezdeményezésû regisztrációt
+ (néhány portál automatikusan beregisztrálja). <br>Ha Ön hallgató, akkor
+ csak úgy kell regisztálnia magát, hogy a \'Kurzusok hallgatása\'-t választja ki,
+ utána pedig kiválasztja, hogy mely kurzusokat kívánja hallgatni.</p><p>
+ Ha Ön kurzusvezetõ, akkor is regisztrálja magát, de a \'Kurzusok létrehozása\'-t
+ válassza. Ezután ki kell töltenie egy ûrlapot a kurzus kódjával, kategóriájával
+ és címével. Amint ez megvan, belép akurzusra, amit éppen most hozott létre
+ és megváltoztathatja a tartalmát és jellegét igényei szerint. </p>
+<p>A kapcsolódó fórumok az összes Dokeos felhasználót összekötik a világon.
+Ha a Dokeos portálon nem talál választ kérdéseire, küldhet üzenetet a fórumra.</p>
+<p>A Regisztrációs link a campus fõoldalán van (jobbra fennt).</p><b>Login</b>
+<p>Következõ látogatásai alkalmával írja be a loginját és jelszavát, majd kattintson
+ az Ok-re a belépéshez. A honlap URL-je";
+$langHDoc = "Dokumentumok Súgó";
+$langDocContent = "<p>A Dokuemtumok eszköz hasonlít a FileManager (Intézõ)
+ programhoz a számítógépén.</p><p>Bármilyen file-t feltölthet (HTML, Word,
+ Powerpoint, Excel, Acrobat, Flash, Quicktime, stb.). Csak arra kell
+ figyelnie, hogy a felhasználóinak rendelkezésére áll a megfelelõ
+ olvasó program. Néhány file vírusokat tartalmazhat. Az Ön felelõssége
+ hogy ne töltsön fel fertõzött file-okat, kivéve ha a portál adminisztrátora
+ nem installált fel szerveroldali anit-vírus szoftvert. 
+ De egyébként is érdemes vigyázni és leellenõrizni a feltöltendõ file-okat
+ egy anit-vírus szoftverrel.</p>
+<p>A dokumentumok abc-sorrendben jelennek meg.<br><b>Tipp : </b>Ha egyéb
+ sorrendben akarja megjeleníteni õket, számozza be a file-neveket: 01, 02,
+ 03...</p>
+<p>Lehetõségek :</p>
+<h4>Dokumentum feltöltése</h4>
+<ul>
+  <li>A jobb oldali Böngész gomb segítségével válassza ki a file-t a számítógépén <input
+ type=submit value=Böngész name=submit2>.</li>
+		<li>
+			A Feltölt gombbal indítsa el a feltöltést <input type=submit value=Feltölt name=submit2>.
+		</li>
+		<li>
+			A Feltölt gomb alatt ikszekje be a Scorm négyzetet ha dokumentuma egy úgynevezett Scorm zip file. A Scorm tartalmak speciális tanító-modulok, melyek egy nemzetközi norma alapján készültek el, melynek neve : <b>Scorm</b>. Ez a speciális formátum lehetõvé teszi, hogy ezeket az anyagokat a Learning Management (Virtuális Oktató) Rendszerek szabadon exportálják és importálják egymás között. Más szavakkal a <b>Scorm</b> tartalmak platform függetlenek.
+		</li>
+	</ul>
+	<h4>
+		Dokumentum (mappa) átnevezése
+	</h4>
+	<ul>
+		<li>
+			kattintson a <img src=../img/renommer.gif width=20 height=20 align=baseline>
+			gombra az Átnevez oszlopoban
+		</li>
+		<li>
+			Írja be az új nevet a mezõbe (balra fennt)
+		</li>
+		<li>
+			Érvényesítse az Ok-re kattintással <input type=submit value=Ok name=submit24>.
+		</li>
+	</ul>
+		<h4>
+			Dokumentum (vagy mappa) törlése
+		</h4>
+		<ul>
+			<li>
+				Kattintson a <img src=../img/supprimer.gif width=20 height=20>
+				-re a \'Törlés\' oszlopban.
+			</li>
+		</ul>
+		<h4>
+			Dokumentum (vagy mappa) elrejtése a felhasználók elõl
+		</h4>
+		<ul>
+			<li>
+				Kattintson a <img src=../img/visible.gif width=20 height=20>
+				-ra a \'Látható/rejtett\' oszlopban.
+			</li>
+			<li>
+				A dokumentum (vagy mappa) nem törlõdik, csak a felhasználók számára láthatatlan.
+			</li>
+			<li>
+				Ha újra meg akarja mutatni nekik, akkor kattintson a
+				<img src=../document/../img/invisible.gif width=24 height=20>
+				-ra a \'Látható/rejtett\' oszlopban.
+			</li>
+		</ul>
+		<h4>
+			Megjegyzés hozzáadása egy dokumentumhoz (vagy mappához) vagy megjegyzés módosítása
+		</h4>
+		<ul>
+			<li>
+				Kattintson a <img src=../document/../img/comment.gif width=20 height=20> -ra a \'Megjegyzés\' oszlopban
+			</li>
+			<li>
+				Írja be a megjegyzést a megfelelõ mezõbe (jobbra fennt).
+			</li>
+			<li>
+				Az érvényesítéséhez kattintson az Ok-ra <input type=submit value=OK name=submit2>
+			.</li>
+		</ul>
+		<p>
+		Megjegyzés törléséhez kattintson a <img src=../document/../img/comment.gif width=20 height=20> -ra,
+		törölje ki a régi megjegyzést és kattintson az
+		<input type=submit value=OK name=submit22> -ra.
+		<hr>
+		<p>
+			A tartalmat rendezheti is. Ehhez:
+		</p>
+		<h4>
+			<b>
+				Könyvtár létrehozása
+			</b>
+		</h4>
+		<ul>
+			<li>
+				Kattintson ide :
+				<img src=../document/../img/dossier.gif width=20 height=20>
+				\'Könyvtár létrehozása\' (balra fennt)
+			</li>
+			<li>
+				Írja be az új könyvtár nevet a megfeleleõ mezõbe (balra fennt)
+			</li>
+			<li>
+				Az érvényesítéséhez kattintson az Ok-ra <input type=submit value=OK name=submit23>.
+			</li>
+		</ul>
+		<h4>
+			Dokumentum (vagy mappa) áthelyezése
+		</h4>
+		<ul>
+			<li>
+				Kattintson a <img src=../document/../img/deplacer.gif width=34 height=16>
+				-ra az \'Áthelyez\' oszlopban.
+			</li>
+			<li>
+				Válassza ki, hogy melyik könyvárba akarja helyezni a dokumentumot (mappát) a legördülõ menübõl (balra fennt) (megjegyzés: a \'gyökér\' jelentése, hogy abból a könyvtárból már nem léphet feljebb a szerveren).
+			</li>
+			<li>
+				Az érvényesítéséhez kattintson az Ok-ra <input type=submit value=OK name=submit232>.
+			</li>
+		</ul>
+<center>
+<p>";
+$langHUser = "Felhasználói Súgó";
+$langUserContent = "<b>Leírás</b><p>A leírásnak nincs számítógéphez kötött funkciója.
+ Nem ad jogokat a rendszernek. Csak jelzi az embereknek, hogy ki kicsoda.
+ A ceruzára kattintással módosíthatja, amire akrja: oktató, segéd, hallgató,
+ látogató, specialista...</P><hr>
+<b>Adminisztrátori jogok</b>
+<p>Az adminisztrátori jogok másfelõl technikai engedélyt biztosítanak a portál
+ tartalmának megváltoztatására. Két lehetõség van : az összes admin jog odaítélése
+ vagy egyik sem.</P>
+<p>Egy segéd-adminisztrátor engedélyezéséhez a megfelelõ személy regisztrálva kell
+ hogy legyen. Ezután a ceruzára kattinva jelölje ki, hogy \'Vezetõ\', majd kattintson
+ az Ok-ra.</P><hr>
+<b>Segéd-oktatók</b>
+<p>Ha a fejlécben meg kívánja jeleníteni a segéd-oktatót, használja a
+ \'Kurzus beállítások\'-at. Ez a módosítás nem regisztrálja a segéd-oktatót, mint
+ kurzusának egy felhasználóját. A \'Vezetõk\' mezõ teljesen független a 
+ Felhasználói Listától.</p><hr>";
+$langGroupManagement = "Csoport Súgó";
+$langGroupContent = "<p><b>Bevezetés</b></p>
+<p>Ezzel az eszközzel munkacsoportokat hozhat létre és kezelhet.
+Létrehozáskor a csoportok üresek. Több módon is fel lehet tölteni
+õket:
+<ul><li>automatikusan (\'Csoportok feltöltése (véletlenszerûen)\'),</li>
+<li>kézzel (\'Szerkesztés\'),</li>
+<li>a felhasználók regisztrálják magukat (Csoport beállítások: \'Saját regisztráció engedélyezett...\').</li>
+</ul>
+A három módszer kombinálható. Például elõször megadhatja, hogy a felhasználók regisztrálják
+magukat. Aztán észreveszi, hogy néhányan ezt nem tették meg, és velük lejátszhatja a
+véletlen módszert, hogy feltöltsék a csoportokat. A csoportokat bármikor szerkesztheti
+kézzel és adhat/megvonhat tagságot akármelyik feltöltési módszer használata elõtt és
+után.</p>
+<p>A csoportok feltöltése azonban csak akkor mûködik akármelyik módszerrel is, ha a kurzusra
+már bejelentkeztek a felhasználók. A felhasználói lista a <b>Felhasználók</b> eszközben van.
+</p><hr noshade size=1>
+<p><b>Csoportok létrehozása</b></p>
+<p>Csoportok létrehozásához kattintson az \'Új csoport(ok) létrehozása\'-ra és adja meg, hogy
+hány csoportot kíván létrehozni.</p><hr noshade size=1>
+<p><b>Csoport beállítások</b></p>
+<p>A csoport beállításokat globálisan adhatja meg (minden csoporta).
+<b>A felhasználók bejelentkezhetnek önállóan a csoportokba</b>:
+<p>Üres csoportokat is létrehozhat, ahová a felhasználók bejelentkeznek.
+Ha megad maximális létszámot, a teli csoportok nem fogadnak újabb jelentkezéseket.
+Ez a módszer azoknak a vezetõknek hasznos, akik nem ismerik a felhasználói listát,
+amikor létrehozzák a csoportot.</p>
+<b>Eszközök</b>:</p>
+<p>Minden csoportnak van egy fóruma (privát vagy nyilvános) vagy egy Dokumentum-területe
+(ami egy megosztott file menedszer) vagy legtöbb esetben mindkettõ.</p>
+<hr noshade size=1>
+<p><b>Kézi szerkesztés</b></p>
+<p>Amint a csoport létre lett hozva, az oldal alján látható a csoportok listája
+egy sor információval és funkcióval
+<ul><li>A <b>Szerkesztés</b>sel módosíthatja a csoport nevét, leírását, oktatóját,
+taglistáját.</li>
+<li>A <b>Törlés</b>sel csoportot törölhet.</li></ul>
+<hr noshade size=1>";
+$langHExercise = "Teszt Súgó";
+$langExerciseContent = "<p>A teszt eszközzel teszteket hozhat létre annyi kérdéssel, amyennyit csak akar.<br><br>
+Többféle típusú kérdés hozható létre :<br><br>
+<ul>
+  <li>Többválasztós (Egy helyes válasz)</li>
+  <li>Többválasztós (Több helyes válasz)</li>
+  <li>Párosítós</li>
+  <li>Beírós</li>
+</ul>
+Egy teszt kérdésekbõl áll.</p>
+<hr>
+<b>Teszt létrehozása</b>
+<p>Teszt létrehozásáshoz kattintson az \"Új teszt\" linkre.<br><br>
+Írja be a teszt nevét, és megadhatja a leírását is.<br><br>
+Feltölthet audio vagy video file-t, például hallás utáni értés gyakorlathoz. Önön áll, hogy kis méretû file-okat használjon, amelyeket könnyû letölteni a web-en keresztül. Az .mp3 file-ok például jobbak ilyen szempontból a .wav file-oknál, mert a jobb tömörítési metódusuk kisebb file méretet eredményez.
+<br>
+<br>
+Kétféle teszttípus közül is választhat :<br><br>
+<ul>
+  <li>Az összes kérdés egy oldalon</li>
+  <li>Egy kérdés egy oldal (szekvenciális)</li>
+</ul>
+és megadhatja, hogy a kérdések véletlenszerûen következzenek egymás után, amikor valaki
+megnyitja a tesztet.<br><br>
+A végén mentse el a tesztjét. Ezután a kérdések adminisztrációjához érkezik.</p>
+<hr>
+<b>Kérdés hozzáadása</b>
+<p>Most adhatja hozzá a kérdéseket a létrehozott teszthez. A leírás opcionális, csakúgy mint a kép, amit feltölthet a képéhez.</p>
+<hr>
+<b>Többválasztós kérdés</b>
+<p>Ahhoz hogy ilyet hozzon létre :<br><br>
+<ul>
+  <li>Adja meg a kérdéshez a válaszokat. A jobb gombbal hozzáadhat vagy törölhet választ</li>
+  <li>A bal oldalon ikszelje be a helyes válasz(oka)t</li>
+  <li>Hozzáadhat kommentárt is. Ez addig nem fog látszani, amíg a felhasználó meg nem válaszolta a kérdést</li>
+  <li>Rendeljen súlyt mindne válaszhoz. A súly bármilyen pozitív vagy negatív egész szám lehet vagy nulla</li>
+  <li>Mentse el a válaszokat</li>
+</ul></p>
+<hr>
+<b>Beírós</b>
+<p>Létrehozhat egy szöveget benne üres részekkel. A cél az, hogy a felhasználó beírja azt a szót, amit Ön kihagyott a szövegbõl.<br><br>
+A szó helyének elõkészítéséhez rakja a kihagyandó szót szögletes zárójelek közé [így].<br><br>
+Miután beírta a szöveget és meghatárizta a beírandó szót, hozzáadhat kommentárt, melyet a diák akkor fog látni, amikor már megválaszolta a kérdést.<br><br>
+Mentse el a szövegét, miután megérkezik a következõ szintre, ahol súlyokat rendelhet a kihagyott szavaknak. Például, ha a kérdés 10 pontot ér és 5 szót hagyott ki, adhat minden szónak 2 pont súlyt.</p>
+<hr>
+<b>Párosítás</b>
+<p>Ebben a feladattípusban a felhasználónak az CS1 csoport elemeit össze kell kötnie a CS2 csoport elemeivel.<br><br>
+Arra is fel lehet használni, hogy a felhasználónak sorba kelljen raknia az elemeket egy bizonyos szabály szerint.<br><br>
+Elõször határozza meg az opciókat, amik közül a felhasználónak ki kell majd választania a helyes választ. Aztán hozza létre a kérdéseket amelyeket az elõbb definiált opciókhoz kell kötni. Végül, a legördülõ menü segítségével kösse össze össze a két csoportot.<br><br>
+Figyelem : Az elsõ csoportból több elem is mutathat a második csoportban lévõ ugyanazon elemre.<br><br>
+Rendeljen súlyt minden helyes párosításhoz, majd mentse el válaszát.</p>
+<hr>
+<b>Teszt módosítás</b>
+<p>Teszt módosításakor ugyanaz a szabály, mint létrehozáskor. Csak kattintson a képre <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> a teszt mellett a módosításhoz és kövesse a fent leírtakat.</p>
+<hr>
+<b>Teszt törlése</b>
+<p>Teszt törléséhez kattintson a képre <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> a teszt mellett, hogy törölni szeretné.</p>
+<hr>
+<b>Teszt engedélyezés</b>
+<p>Ahhoz, hogy a felhasználók használhassák a tesztet, engedélyeznie kell a teszt neve melletti képre <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> kattintva.</p>
+<hr>
+<b>Teszt futtatása</b>
+<p>Kipróbálhatja a tesztjét ha a tesztlistában a nevére kattint.</p>
+<hr>
+<b>Véletlenszerû kérdések</b>
+<p>A teszt létrehozásakor és módosításakor megadhatja, hogy a kérdések véletlenszerûen jelenjenek meg vagy sem.<br><br>
+Ha engedélyezi a véletlenszerû lejátszást, a kérdések minden megnyitáskor más és más sorrendben fognak megjelenni.<br><br>
+Ha a teszt sok kérdést tartalmaz, megadhatja, hogy csak X számú kérdés jelenjen meg véletlenszerûen az összes közül.</p>
+<hr>
+<b>Kérdések raktár</b>
+<p>Mikor töröl egy tesztet, a kérdései nem törlõdnek az adatbázisból, így azok egy új tesztben újrahasznosíthatóak a kérdések raktár segítségével.<br><br>
+A kérdések raktár segítségével ugyanaz a kérdés több tesztben is felhasználható.<br><br>
+Alapértelmezés szerint, a kurzus összes kérdése rejtett. Megmutathatja a teszthez tartozó összes kérdést, a \"Szûrõ\" opció használatával a legördülõ menüben.<br><br>
+Azok a kérdések, melyek nem tartoznak egy teszthez sem, árva kérdések.</p>";
+$langHPath = "Tanulási programok súgó";
+$langPathContent = "<p>A Tanulási programok segítségével használhat fel SCORM formátumú tartalmakat a kurzusában. Lehet&#337;sége van a kurzusban létrehozott tesztekb&#337;l, feltöltött dokumentumokból új tanulási programot létrehozni, amit aztán elmenthet SCORM csomagként. </p>
+<p>A SCORM (<i>Sharable Content Object Reference Model</i>) egy nyilvános szabvány, melyet olyan vezetõ e-Learning fejlesztõk használnak, mint például NETg, Macromedia, Microsoft, Skillsoft, stb. Három nagy elõnye van:
+</p>
+<ul>
+<li><b>Gazdasági</b> : A Scorm segítségével az egész kurzus
+vagy annak egy része szabadon cserélhetõ különbözõ tartalom
+bemutató szoftverek (Learning Management Systems - LMS) között,
+mivel maga a tananyag kisebb részekbõl áll,</li>
+<li><b>Pedagógiai</b> : A Scorm-ban létezik az elõzmények
+fogalma, vagyis a tananyag részeinek <i>szekvenciális</i> bemutatása 
+(<i>pl. </i>\"Csak akkor nyithatja meg a 2. fejezetet, ha már
+elvégezte az elsõ tesztet\"),</li>
+<li><b>Technológiai</b> : A Scorm létrehozza a tananyag vázlatát
+(tartalomjegyzékét), mely magán a tartalmon és a bemutató
+szoftveren kívül helyezkedik el. Ez segít abban, hogy a tartalom
+és az azt bemutató szoftver (LMS) kommunikálhasson egymással.
+A kommunikáció abból áll például, hogy megjelöljük, hogy a felhasználó
+éppen <i>hol tart</i> a kurzusban, <i>pontszámok</i> közlése történik
+(\"Hány pontot ért el János a teszten?\") és hogy <i>mennyi ideig</i>
+használták az adott részt (\"Mennyi idõt töltött el János az elsõ
+fejezettel?\").</li>
+</ul>
+<b>Hogyan hozzunk létre SCORM kompatibilis tanulási programot?</b><br>
+<br>
+Használjuk a Dreamweaver-t, a Lectora-t vagy a Reload-ot, csomagoljuk
+be az elkészített tartalmunkat zip állományként, és töltsük be a Dokeos
+Tanulási programok részlegébe.<br>
+<br>
+<b>Hasznos linkek</b><br>
+<ul>
+<li>Adlnet : a Scorm fejlesztésééert és dokumentálásáért felelõs szervezet, <a
+href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li>
+<li>Reload : Szabad Forráskódú ingyenes Scorm építõ és lejátszó, <a
+href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li>
+<li>Lectora : Scorm építõ/exportáló szoftware, <a
+href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br>
+</li>
+</ul>
+<br>";
+$langHDescription = "Kurzusleírás súgója";
+$langDescriptionContent = "<p>Ezzel az eszközzel meghatározhatja a kurzusát a kivülálló számára. A jöv&#337;beli hallgatóinak tiszta képet adhat arról, hogy mit is vár el t&#337;lük a kurzus teljesítéséhez. Ezen  kívül itt újra végiggondolhatja a kurzusa felépítését, oktatásának menetét. </p>A felsorolt elemek javaslatok, ha saját kurzusleírást szeretne létrehozni más elemekkel, Csak az  \'Egyéb\' elemet használja, és nevezze el.</p> <p> A kurzus leírásának kitöltéséhez válassza a &#368;rlapokkal létrehoz  > menyíló menüt és onnan válassza ki a kívánt elemet > töltse ki az &#369;rlapot &gt és érvényesítse. Ezeket az elemeket a kés&#337;bbiekben is módosíthatja vagy törölheti, ha a ceruza ikonra kattint az elemek mellett.</p>";
+$langHLinks = "Hivatkozások súgó";
+$langLinksContent = "<p>A hivatkozások eszköz lehet&#337;vé teszi, hogy küls&#337; er&#337;forrásokat csatoljon kurzusához hallgatói számára, f&#337;leg olyanokat, amiket nem Ön készített.  </p> <p>Ahogy a lista b&#337;vül, fontossá válhat csoportosítani a hivatkozásokat kategóriákba, ezzel megkönnyítve az átláthatóságot. Minden hivatkozás kategóriáját módosíthatja, azokat áthelyezheti új kategóriákba (ha el&#337;z&#337;leg létrehozta azt).</p> <p>A leírás mez&#337;ben adhat tájékoztató információt a céloldalakról, és arról, hogy mi a feladatok ezeken az oldalakon a hallgatóinak. Ha például a céloldal Arisztotelésszel foglalkozik, akkor kérje meg hallgatóit, hogy viszgálják meg, mi a különbség a szintézis és az analízis között.</p>";
+$langHMycourses = "A kezd&#337;oldalról";
+$langMycoursesContent = "<p>Amint bejelentkezett a felületre, a <i>személyes nyitóoldalára lép be</i>.</p> <p> A közpnti területen A kurzusainak listáját láthatja. A felhasználói jogaitól függ&#337;en arra is lehet jogosultsága, hogy létrehozzon kurzusokat a jobb oldali menüben. </p> <p>A fels&#337; oldalon láthatja <b>Profilját</b>, amit jelszava vagy személyes adatai módosítására használhat. Itt tölthet fel magáról képet is. Megnézheti személyes statisztikáját a rendszeren végzett m&#369;veleteir&#337;l;</li> <li>A \"<b>Naptáram</b>\": tartalmazza azokat az id&#337;pontokat, amik a kurzussal kapcsolatosak.</li></ul> </p> <p> <b>A kurzusaim listája</b> a jobb oldali menüben lehet&#337;vé teszi, hogy felvehessen új kurzusokat, ha ezt az oktató és az intézmény megengedi. Ezzel a funkcióval le is iratkozhat a kurzusokról. </p> <p> A <b>Támogatói fórum</b> és <b>Dokumentáció</b> hivatkozások a Dokeos központi weboldalára mutatnak, ahol technikai vagy pedagógiai informáciokhoz juthat vagy kérdéseket tehet fel.</li> A kurzusba lépéshez (az odal középs&#337; részén), kattintson annak nevére. Profilja eltér&#337; lehet kurzusonként, vagyis lehet az egyik kurzus tanára, és a másik hallgatója. </p>";
+$langHAgenda = "Naptár súgó";
+$langAgendaContent = "<p>A naptár megtekinthet&#337; minden kurzusoldalon, és a \'Naptáram\' hivatkozásra kattintva a hallgatói menüben.</p> <p>A kurzus felületén a naptár események listájaként jelenik meg. Ezekhez a dátumokhoz dokumentumokat, tevékenységeket kapcsolhat, így a naptára az oktatási tevékenysége id&#337;beosztásaként m&#369;ködhet.</p> <p>Ezen felül ha új esemény kerül felvételre a naptárba, ezt a rendszer jelzi a hallgató számára következ&#337; bejelentkezéskor. A rendszer kiírja, hogy mi került felvitelre az utolsó látogatás óta: ikonok fognak megjelenni azok mellett a kurzusok mellett, amik eseményei változtak.</p> <p>Ha ennél is tovább akar menni a tanulási tevékenységek id&#337;beli struktúrálásában, azt javasoljuk, hogy részesítse el&#337;nyben a Tanösvény eszközt, amely hasonló elgondolásra épül, de még több lehet&#337;séget nyújt. A Tanösvényt jellemezhetjük tartalomjegyzékkel, naptárral, sorba rendezési és nyomonkövetési lehet&#337;séggel rendelkez&#337; eszközként.</p>";
+$langHAnnouncements = "Hirdetmények súgó";
+$langAnnouncementsContent = "<p>A hirdetmények eszközzel elektronikus level küldhet minden hallgatónak, csoportnak, vagy a kijelölt személyeknek. Ez az eszköz akkor hasznos, ha a hallgatók nem látogatják gyakran az kurzus oldalait.</p> <p>Néhány csoportnak és/vagy hallgatónak szánt üzenet küldéséhez válassza ki az \'Üzenetek kijelölt felhasználóknak\' lehet&#337;séget, aztán a CTRL+C billenty&#369;zetkombináció használatával válasszon ki több mint egyet a jobb to select more than one in the left hand menu, click on the right arrow to move them then type your message in the field below.</p>";
+$langHChat = "Cseveg&#337; súgó";
+$langChatContent = "<p>A Cseveg&#337; eszközzel él&#337;ben, valós id&#337;ben tud kapcsolatba lépni a tanulóival.</p> <p>A cseveg&#337; nem olyan, mint pl. az MSN Messenger vagy a Yahoo Messenger® azért, mert ez web-alapú. Ennek hátránya, hogy a beírt tartalom 10 másodpercenként frissül, ennyivel kés&#337;bb jelenik meg. Az el&#337;nye, hogy így integrálható a kurzusába, meg&#337;rizve beszélgetéseiket a Dokumentumok eszközben, és nem kell hallgatóionak plusz programokat letöltenie és telepítenie. </p> <p>Ha a felhasználók feltöltik képeiket a \'Profilom\' menüpontban, akkor azután a képük meg fog jelenni a beszélgetéskor, segíve a hozzászóló beazonosítását.</p> <p>Csak a tanár jogosult törölni a beszélgetést, ha ezt fontosnak tartja.</p> <p><b>Pedagógiai értékelés</b></p> <p>Csevegés hozzáadása a kurzusához nem feltétlenül jó ötlet. Mindazonáltal, ha ez hozzájárulhat az oktatás menetéhez, sikeréhez, akkor a csevegés hasznos lehet. Képzelje el, hogy a Csevegés eszközt elrejti hallgatói el&#337;l, és csak egy adott id&#337;ben, el&#337;re megbeszélt találkozó alkalmával engedélyezi, ekkor tehetik fl Önnek kérdéseiket a hallgatók él&#337;ben. Ezzel a diákoknak is garantálni tudja, hogy el&#337;nyük származik a Cseveg&#337; használatából.</p>";
+$langHWork = "Hallgatói publikációk súgó";
+$langWorkContent = "<p>A Hallgatói publikációk eszköz használata nagyon egyszer&#369;. Lehet&#337;vé teszi a hallgatóknak, hogy bármilyen dokumentumot feltöltsenek a kurzus területére.</p> <p>A kurzusa forgatókönyvát&#337;l függ&#337;en beállíthatja, hogy mindenki láthassa mindenki fájljait, vagy csak Ön. A mindenki számára látható mód akkor lehet hasznos, ha megkéri tanulóit, hogy osszák meg véleményüket egy adott témával kapcsolatban a többiekkel, hogy tanulják meg, hogyan publikáljanak iratokat. Akkor legyenek a fájlok láthatatlanok a hallgatók számára, ha pl. ugyanarról a témáról kér beadandó írást, és nem akarja, hogy diákjai egymás írásait felhasznánják, csaljanak.</p> <p>Az eszközben található egy <i>Bevezet&#337; szöveg</i> terület, ahol felteheti kérdését, megadhatja részletesen irányelveit, emlékeztet&#337;t a határid&#337;re és bármi mást, amit fontosnak ítál meg.</p>";
+$langHTracking = "Nyomonkövetés súgó";
+$langTrackingContent = "<p>A nyomonkövetés segít figyelemmel kísérnie hallgatóit: beléptek-e a rendszerbe, mikor, hányszor. Mennyi pontot értek el a tesztekben? Feltöltötték-e már beadandó munkáikat? Mikor? Ha Scorm típusú kurzust használ, azt is megtudhatja, hogy a hallgató mennyi id&#337;t töltött egy modullal vagy fejezettel. A nyomonkövetés két szinten szolgál információkkal: <ul><li><b>Globálisan</b>: Hány diák látogatja a kurzust? Mik a leg látogatottabb oldalak és hivatkozások?</i> <li><b>Névre szólóan</b>: Mely oldalakat tekintette meg Kovács István? Mennyi pontot ért el a tesztben? Mikor látogatta meg a kurzust utoljára?</li></ul>";
+$langHSettings = "Kurzus beállításai súgó";
+$langSettingsContent = "<p>A kurzus beállításai lehet&#337;vé teszik a kurzus f&#337; paramétereinek módosítását: a címét, kódját, nyelvét, oktatók nevét, stb.</p> <p>Ezeket a beállításokat az oldal közepén találja, a korzos elérhet&#337;ségével kiegészítve : a kurzus szabadon hozzáférhet&#337;-e vagy zártkör&#369;? A hallgatók felvehetik-e? Ezeket a beállításokat használhatja dinamikusan: egy hétig lehet&#337;vé teheti, hogy diákjai felvehessék a kurzusát, majd ennek végével zérttá teheti a kurzust, és akik nem illenek oda, azokat törli. Ezzel kikerülhet&#337; a halgatók központi regisztrációjával járó pluszmunka. </p> <p>Az oldal alján biztonsági mentés készíthet kurzusáról, és törölheti azt. A biztonsági mentés egy állományt hoz létre a szerveren, amit eltárolhat saját gépén. így meg&#337;rizhet&#337; a mentés két különböz&#337; helyen is. Ha biztonsági mentést végzett a kurzusán, és utána törölte, nem állíthatja vissza csak a rendszer adminisztrátora, ha megadja neki a kurzus kódját. A kurzusok mentése arra is jó módszer, hogy akurzusban közzétett anyagokat visszategye számítógépére. A fájlok kicsomagolásához ZIP állományt kezel&#337; tömörít&#337; programra lesz szüksége. A kurzus mentése nem távolítja el azt semmilyen módon.</p>";
+$langHExternal = "Küls&#337; hivatkozás hozzáadása súgó";
+$langExternalContent = "<p>A Dokeos moduláris rendszer. Elrejthet vagy megjeleníthet eszközöket aszerint, hogy melyekre van szüksége. De ezen kívül olyan eszközöket is elhelyezhet kurzusa kezd&#337;oldalán, amit ön készített, vagy küls&#337;leg lett kifejlesztve. Ezéltal személyessé teheti kurzusa kezd&#337;oldalát.</p> <p>Ennek megvalósításához kétféle képpen helyezhet el hivatkozásokat: <ul><li><b>Küls&#337; hivatkozás</b>: étrehoz egy hivatkozást, ami a kurzusa területén kívül esik. Ebben az esetben adja meg azt, hogy új ablakban nyíljon meg oldala, mert így nem fog a Dokeos rendszer helyére betölt&#337;dni a küls&#337; behívott oldal.</li> <li><b>Bels&#337; hivatkozás</b>: Hivatkozhat egy elkészített oldalra, vagy bármelyik Dokeos eszközre a kurzusán belül.  Ennek végrehajtásához el&#337;ször hívja be azt a mellékelni kívánt oldalt, másolja ki ennek címét a böngész&#337;je címsorából (CTRL+C), és visszatérve erre a felületre illessze be az URL mez&#337;be (nevezze is el azt). A cél beállításainál adja meg ugyanazt az ablakot, mert így a Dokeos keretein belül meradhat. </li></ul> Ha egyszer ezeket a hivatkozásokat létrehozta, már nem módosíthatja azokat. Erre az egyetlen lehet&#337;sége, ha törli &#337;ket, és újra létrehozza azokat a nulláról. </p>";
+$langClarContent3 = "</p><p><b>Az oktatás elmélete</b><p>Egy kurzus elkészítése
+ az interneten egy oktatási elmélet is.";
+$langClarContent4 = "rendelkezésére áll, hogy segítsen a tanítási folyamat
+ fejlõdésének különbözõ lépéseiben: eszközfejlesztésbõl egy tiszta és koherens
+ stratégia integrálásáig és a diák tanulási folyamatára való ráhatásnak
+ az objektív értékeléséig.</p>";
+$langClarContent1 = "Tartalom törlése";
+$langClarContent2 = "Tartalom törlése";
+$langHGroups = "Csoportok";
+$langGroupsContent = "Csoportok tartalma";
+$langGuide = "Kézikönyv";
+$langHCourseRolesRights = "Szerepek és jogok súgó";
+$langCourseRolesRightsContent = "<p>A Szerepek és jogok áttekintése oldalon a kurzusa számára megadhatja, hogy <em>ki és mire jogosult milyen területeken. </em></p>
+<p>Az eszköz alapvet&#337; koncepciója, hogy minden kurzus eszköznek megadhatja, hogy 
+ki tekintheti meg a tartalmát, adhat hozzá új elemeket és mappákat, szerkesztheti 
+a meglév&#337; információkat, vagy törölheti annak tartalmát. </p>
+<p>Mindazonáltal nem kell minden egyes felhasználónak ezt külön-külön megadnia. 
+A felhasználók a kurzusában szerepekkel rendelkeznek, például vendégek, normál 
+kurzus-tagok, tanársegédek, vagy kurzusgazdák. A szerepek mindegyikének megadhat 
+hozzáférési jogokat valamennyi eszközhöz. Megadhatja, hogy minden felhasználó 
+használhatja a fórumot, de a vendégek ne üzenhessenek benne, csak a regisztrált 
+felhasználók. Azt is beállíthatja, hogy a tanársegédek feltehessenek dokumentumokat 
+a kurzusba, de ne törölhessék azokat, és így tovább.</p>
+<p>A kurzusa \'Felhasználók\' eszközében láthatja és szerkesztheti a felhasználói 
+jogokat (a módosítás gomb használatával a felhasználói listában). </p>
+<h3>A lehetséges szerepek áttekintése</h3>
+<p>Öt helyi szerep látezik a Dokeos rendszeren belül.Ezeket a szerepeket tudja hozzárendelni 
+felhasználóihoz a kurzuson belül. </p>
+<ul>
+<li><strong>Névtelen kurzus látogató (vendég): </strong>ez bárki lehet, aki a nagyvilágból rátalált az Ön oktatási oldalára. Ezek a látogatók 
+alapértelmezésként nem rendelkeznek jogokkal, és még a kurzusát sem láthatják. 
+</li>
+<li><strong>Regisztrált kurzus látogató: </strong>mindenki, aki regisztrálva van aDokeos rendszeren, és anélkül látogat meg egy 
+kurzust, hogy feliratkozott volna rá.</li>
+<li><b>Normál kurzus tag: </b>ez az alapértelmezett szerepe azoknak a felhasználóknak, akik feliratkoztak egy 
+kurzusra. A felhasználók többsége ebben a szerepben tevékenykedik, de a kurzus 
+gazda adhat nekik tanársegédi jogot a kurzus  fejlesztése érdekében. </li>
+<li><b>Tanársedég</b>: A segédnek sok mindenhez van hozzáférése. A legtöbb eszköz tartalmát megtekintheti, 
+módosíthatja, de nem törölheti le. A tanársegéd ezenkívül nem jogosult a kurzus 
+beállításainak és a kurzusban betöltött szerepeknek a módosítására. </li>
+<li><b>Kurzus gazda</b>: a kurzus gazda minden lehetséges joggal rendelkezik, és megtehet bármit. Egy 
+kurzus létrehozója automatikusan megkapja ezt a szerepet a kurzusához. </li></ul>
+<p> </p>
+<h3>Jogok áttekintése</h3>
+<p>Négy alapvet&#337; joga van a Dokeos felhasználóinak: </p>
+<ul>
+<li><b>Megtekintés</b>: jog arra, hogy megtekintsük az eszközt és annak tartamát</li>
+<li><b>Hozzáadás</b>: új tartalom hozzáadásának joga az eszközökhöz, pl. hivatkozások, hallgatói 
+publikációk, fórum üzenetek, dokumentumok, stb... </li>
+<li><b>Módosítás</b>: a meglev&#337; tartalmak módosításának joga, pl. a hivatkozások szerkesztése, mappa 
+átnevezése, dokumetum címének módosítása... </li>
+<li><b>Törlés</b>: meglev&#337; tartalmak törlésének joga az eszközökben, pl. hivatkozások, hallgatói 
+publikációk, fórum üzenetek ... </li></ul>
+<p> </p><p><h3>Területek ismertetése</h3></p>
+<p>Minden kurzus, és minden kurzuseszköz egy különálló terület a Dokeos-on belül.</p>
+<h3>Hozzáférési jogok beállítása</h3>
+<p>Kurzusgazdaként megadhatja, ki és mit csinálhat a kurzusnak mely területén. Minden 
+szerep és terület számára beállítható a 4 alapjog. Így megadható a tanársegéd 
+részére a megtekintés joga a dokumentumok eszközben, normál hallgatónak a hivatkozások 
+módosítása, stb.</p>";
+?>

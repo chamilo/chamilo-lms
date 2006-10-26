@@ -1,0 +1,37 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langUsers = "Usuaris";
+$langLineNumber = "Número de línia";
+$langLine = "Línia";
+$langLines = "Línies";
+$langLineOrLines = "Línia/Línies";
+$langRemove = "esborrar";
+$langMoveUp = "Pujar";
+$langMoveDown = "Baixar";
+$langAddNewHeading = "Afegir nova capçalera";
+$langCourseAdministratorOnly = "Només professors";
+$langDefineHeadings = "Definir capçaleres";
+$langBackToUsersList = "Tornar a la llista d\'usuaris";
+$langTracking = "Acompanyament";
+$langCourseManager = "Professor";
+$langModRight = "Canviar drets de";
+$langNone = "Cap";
+$langAll = "tots";
+$langNoAdmin = "A partir d\'ara <B>no</b> tens drets sobre aquesta pàgina";
+$langAllAdmin = "A partir d\'ara <b>tens</b> drets sobre aquesta pàgina";
+$langRole = "rol/estat";
+$langIsNow = "està a partir d\'ara";
+$langInC = "en aquest curs";
+$langFilled = "No has completat tots els camps";
+$langUserNo = "Usuari no";
+$langTaken = "Ja està en ús, seleccioneu un diferent";
+$langUserName = "Nom";
+$langTutor = "Tutor";
+$langUnreg = "Desinscriure\'s";
+$langGroupUserManagement = "Administració del grup";
+$langUserInfo = "Informació de l\'usuari";
+$langUnregister = "Esborrar";
+$langAddAUser = "Afegir usuaris";
+$langGroupManagement = "Administració del grup";
+?>

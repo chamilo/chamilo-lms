@@ -1,0 +1,20 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langActivate = "Mostrar";
+$langDeactivate = "Ocultar";
+$langRemove = "Eliminar";
+$langInLnk  = "Ferramentas e ligações ocultas";
+$langDelLk = "De certeza que quer apagar esta ligação?";
+$langEnter  = "Entrar";
+$langCourseCreate  = "Criar um Curso";
+$langNameOfTheLink  = "Nome da ligação";
+$lang_main_categories_list                  = "Lista de categorias principais";
+$langHelp = "Ajuda";
+$langCourseAdminOnly = "Reservado aos Professores";
+$PlatformAdminOnly = "Reservado aos Administradores da Plataforma";
+$langCombinedCourse = "Curso combinado";
+$ToolIsNowVisible = "Ferramenta visível";
+$ToolIsNowHidden = "Ferramenta invisível";
+$EditLink = "Editar ligação";
+?>

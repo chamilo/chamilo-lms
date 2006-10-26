@@ -1,0 +1,307 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langHFor = "ÂÛÌ³°ïÖú";
+$langClose = "¹Ø±Õ´°¿Ú";
+$langForContent = "ÂÛÌ³ÊÇÒì²½ÌÖÂÛ¹¤¾ß. µç×ÓÓÊ¼þÊÇÒ»¶ÔÒ»µÄ¶Ô»°·½Ê½, ¶øÂÛÌ³ÔòÊ¹µÃ¹«¹²¶Ô»°»òÕß°ë¹«¹²(×é)¶Ô»°³ÉÎª¿ÉÄÜ.<p>´Ó¼¼ÊõÉÏ½², ÓÃ»§Ö»ÒªÊ¹ÓÃä¯ÀÀÆ÷¾Í¿ÉÒÔÊ¹ÓÃDokeosÂÛÌ³.</p><p>Òª×éÖ¯ÂÛÌ³, Çëµã»÷\'ÂÛÌ³¹ÜÀí\'. ÂÛÌ³°´ÕÕÀàºÍ×ÓÀàÒÔÈçÏÂ·½Ê½×éÖ¯ÆðÀ´:</p><p><b>·ÖÀà > ÂÛÌ³ > »°Ìâ > »Ø¸´</b></p>ÎªÊ¹Ñ§ÉúµÄÌÖÂÛÓÐÒ»¸öÇåÎúµÄ½á¹¹, Ô¤ÏÈ×éÖ¯·ÖÀàºÍÂÛÌ³ÊÇ±ØÒªµÄ, È»ºóÈÃÑ§ÉúÀ´·¢±í»°ÌâºÍ»Ø¸´. DokeosÂÛÌ³µÄÄ¬ÈÏÉèÖÃÖ»°üº¬Ò»¸ö\'Public\'·ÖÀà,Ò»¸öÂÛÈ¥ÑùÀýºÍÒ»¸ö»°Ìâ.<p>ËùÒÔÊ×ÏÈÒª×öµÄÊÂÊÇÉ¾³ý»°ÌâÑùÀý, ¸üÐÂµÚÒ»¸öÂÛÌ³µÄÃû³Æ. ½ÓÏÂÀ´,¿ÉÒÔÔÚ\'public\'·ÖÀàÖÐ°´ÕÕÐ¡×é»òÖ÷Ìâ´´½¨ÐÂµÄÂÛÌ³À´Âú×ã¿Î³ÌÑ§Ï°»·¾³µÄÐèÒª.</p><p>²»Òª»ìÏý·ÖÀàºÍÂÛÌ³, Ò²²»ÒªÍü¼Ç¿ÕµÄÀà±ð (²»º¬ÓÐÂÛÌ³) ¶ÔÑ§ÉúÊÇ²»¿É¼ûµÄ.</p><p>ÂÛÌ³¼ò½é¿ÉÒÔÊÇËüµÄÓÃ»§ÁÐ±í, Ä¿±ê, ÈÎÎñ, Ö÷ÌâµÈµÈ...</p> <p>Ð¡×éÂÛÌ³²»ÄÜÍ¨¹ýÂÛÌ³¹¤¾ß´´½¨, 
+µ«¿ÉÒÔÍ¨¹ýÐ¡×é¹¤¾ß´´½¨. Ê¹ÓÃÐ¡×é¹¤¾ßÄã¿ÉÒÔ¾ö¶¨Ëù´´½¨µÄÂÛÌ³ÊÇË½ÓÐÂÛÌ³»¹ÊÇ¹«¿ªÂÛÌ³.</p> <b>½ÌÓýÑ§µÄ¸ß¼¶Ó¦ÓÃ</b><p>Ò»Ð©½ÌÊ¦/½ÌÁ·Ô±Ê¹ÓÃÂÛÌ³·¢²¼×÷Òµ. Ñ§Éú/Ñ§Ô±Ìá½»×÷Òµ´ð°¸. ½ÌÊ¦/½ÌÁ·Ô±µã»÷±à¼­Æ÷°´Å¥(»ÆÉ«µÄ±Ê), È»ºóÆô¶¯Ëù¼û¼´ËùµÃ±à¼­Æ÷ÅÐ×÷Òµ (Ê¹ÓÃÑÕÉ«ºÍÏÂ»®ÏßÖ¸³ö´íÎóºÍÕýÈ·µÄÀý×Ó), ÆäËûÑ§Éú/Ñ§Ô±´ÓÕâ¸ö¸ÄÕýÖÐÊÜÒæ.";
+$langHDropbox = "Í¶µÝÏä";
+$langDropboxContent = "<p>Í¶µÝÏäÊÇÒ»¸öÖÂÁ¦ÓÚµã¶ÔµãÊý¾Ý½»»»µÄÄÚÈÝ¹ÜÀí¹¤¾ß. 
+ÈÎºÎÀàÐÍµÄÎÄ¼þ¶¼¿ÉÒÔ½ÓÊÜ : Word, Excel, PDF µÈµÈ. Í¶µÝÏäÊÇÒÔ¹ÜÀí°æ±¾µÄ·½Ê½¹ÜÀíÎÄ¼þÒÔÃâÏàÍ¬Ãû×ÖµÄÎÄ¼þ¸²¸Ç.</p> <p>Í¶µÝÏäÏÔÊ¾ÁË·¢¸øÄãµÄÎÄ¼þ 
+(ÊÕ¼þÏä) ºÍÄã·¢¸øÆäËû¿Î³Ì³ÉÔ±µÄÎÄ¼þ (·¢¼þÏä). </p><p>Èç¹û½ÓÊÕ»ò·¢ËÍÎÄ¼þÁÐ±íÌ«³¤, 
+Äã¿ÉÒÔ´ÓÁÐ±íÀïÉ¾³ýËùÓÐµÄ»òÒ»²¿·ÖÎÄ¼þ. 
+ÔÚ±ðÈË¿ÉÒÔ¿´µ½Õâ¸öÎÄ¼þÊ±, ÎÄ¼þ±¾Éí²»ÄÜÒÆ³ý.</p> <p>·¢ËÍÎÄµµ¸ø¶à¸öÈË, 
+ÄãÐèÒªÔÚ¶àÑ¡¿òÊ¹ÓÃ CTRL+clic. ¶àÑ¡¿òÊÇÏÔÊ¾³ÉÔ±ÁÐ±íµÄ¿ò.</p>";
+$langHHome = "¿Î³ÌÊ×Ò³°ïÖú";
+$langHomeContent = "<p>¿Î³ÌÊ×Ò³ÏÔÊ¾Ò»ÏµÁÐ¹¤¾ß : Ç°ÑÔ, ¿Î³Ì¼ò½é, ÎÄ¼þ¹ÜÀíµÈ. 
+ÕâÊÇÒ»¸öÄ£¿é»¯µÄÒ³Ãæ : 
+Äã¿ÉÒÔÔÚÈÎºÎÊ±¼äÍ¨¹ýµã»÷°´Å¥Òþ²Ø/ÏÔÊ¾ÈÎºÎ¹¤¾ß.</p> <B>µ¼º½</B>
+<p>ä¯ÀÀ¿Î³ÌÓÐ¶þ¸ö¹¤¾ß. 
+Ò»¸öÊÇÔÚ¶¥¶Ë×ó²àÂ·¾¶¿ÉÒÔÏÔÊ¾ÄãËùÔÚ¿Î³ÌµÄÎ»ÖÃ. 
+ÁíÒ»¸öÔÚÓÒ²à, Äã¿ÉÒÔÍ¨¹ýµã»÷Í¼±ê½øÈë. 
+ÎÞÂÛÄãÑ¡Ôñ×ó²àµÄ¿Î³Ì´úÂë (³£³£ÊÇ´óÐ´) »òÕßÊÇ×ó²àµÄÍ¼±ê, 
+Äã¶¼»á½øÈëµ½Äã¿Î³ÌµÄÊ×Ò³. </p> <B>×î¼ÑÊµ¼ù</B>
+<p>ÒªÏëÎüÒýÄãµÄÑ§Éú, ×îÖØÒªµÄÊÇÄãµÄ¿Î³ÌÊÇ¶¯Ì¬µÄ. 
+Õâ¾Í»áÊ¹ÈË¸Ðµ½ÏÔÊ¾Æ÷Òþ²Ø×ÅÄ³¸öÈË. 
+¸øÈËÕâÖÖ¸Ð¾õµÄ×î¿ì·½·¨ÊÇÖÁÉÙÃ¿ÖÜÍ¨¹ý±à¼­Ç°ÑÔ (µã»÷»ÆÉ«µÄÇ¦±Ê) 
+À´¸æËßÃ¿Ò»¸öÈË½«ÒªÑ§Ï°µÄÄÚÈÝÊÇÊ²Ã´µÈµÈ.</p> <p>ÏëÒª´´½¨¿Î³Ì¿ÉÄÜÐèÒªÍ¨¹ýÒÔÏÂ²½ÖèÍê³É: <ol><li>ÔÚ¿Î³ÌÉèÖÃÖÐ, 
+    ¼ì²é¿Î³Ì¿ª·Å : Ë½ÓÐÓë×¢²á : ¾Ü¾ø. ÕâÑù, 
+    ÔÚ´´½¨¹ý³ÌÖÐ¾ÍÃ»ÓÐÈËÄÜ¹»½øÈëµ½ÄãµÄ¿Î³ÌÖÐÁË;</li> <li>µã»÷Ò³ÃæÏÂÃæµÄ»ÒÉ«µÄÁ´½ÓÒÔÏÔÊ¾ËùÓÐµÄ¹¤¾ß;</li> <li>ÓÃ¹¤¾ß 
+    \'ÌîÂú\' ÄãµÄ¿Î³Ì, ±ÈÈçÄÚÈÝ¡¢ÊÂ¼þ¡¢Ö¸ÄÏ¡¢²âÑéµÈ;</li> <li>Òþ²ØËùÓÐ¹¤¾ß 
+    : ´ÓÑ§Éú½Ç¶ÈÀ´¿´, ÄãµÄÖ÷Ò³ÊÇ¿ÕµÄ;</li> <li>Ê¹ÓÃÑ§Ï°Â·¾¶¹¤¾ß´´½¨Ñ§Éú·ÃÎÊºÍÑ§Ï°µÄ·½Ê½. 
+    ÕâÑùÄãÊ¹ÓÃÆäËüµÄ¹¤¾ß, µ«²»»áÔÚÒ»¿ªÊ¼¾ÍÏÔÊ¾³öÀ´;</li> <li>µã»÷Äã´´½¨µÄÑ§Ï°Â·¾¶ÅÔ±ßµÄÑÛ¾¦Í¼±ê 
+    : Õâ¸öÑ§Ï°Â·¾¶¾Í»áÔÚÄãµÄÖ÷Ò³ÉÏÏÔÊ¾³öÀ´;</li> <li>ÄãµÄ¿Î³Ì×¼±¸ÒÑ¾­Íê±Ï. 
+    ÄãµÄÖ÷Ò³ÏÔÊ¾ÁËÒ»¸öÇ°ÑÔ. 
+    È»ºóÓÐÒ»¸öÁ´½ÓÒýµ¼Ñ§ÉúÍê³É¿Î³Ì.µãÊ¾Ñ§ÉúÊ¾Í¼£¨¶¥¶ËÓÒ²à£©ÒÔ´ÓÑ§ÉúµÄ½Ç¶È²ì¿´Ëù×¼±¸µÄ¿Î³Ì.</li></ol>";
+$langHOnline = "ÊÓÆµ»áÒéÏµÍ³°ïÖú";
+$langOnlineContent = "<br><span style=\\\"font-weight: bold;\\\">¼ò½é </span><br> <br> <div style=\\\"margin-left: 40px;\\\">DokeosÔÚÏß»áÒéÏµÍ³ÔÊÐíÄúÒÔ¼òµ¥¶ø¿ìËÙµÄ·½·¨¿ªÕ¹½ÌÑ§¡¢Í¨Öª»òÕÙ¼¯´ï500ÈË.<br> </div> <ul> <ul> <li><b>ÊµÊ±ÊÓÆµ :</b> ½ÌÔ±µÄÉùÒôÊµÊ±¹ã²¥¸øÑ§Éú,<br> </li> <li><b>»ÃµÆÆ¬ :</b> Ñ§ÉúÍ¨¹ý³ÊÏÖÔÚÃæÇ°µÄPower Point»òPDFÑ§Ï°,<br> </li> <li><b>»¥¶¯ :</b> Ñ§Éú¿ÉÒÔÍ¨¹ýÁÄÌìÊÒÌá³öÎÊÌâ.</li> </ul> </ul> <span style=\\\"font-weight: bold;\\\"></span><span style=\\\"font-weight: bold;\\\"><br> Ñ§Éú / ³ÉÔ±</span><br> <br> <div style=\\\"margin-left: 40px;\\\">Òª²Î¼ÓÄ³Ò»»áÒéÄúÐèÒª:<br> </div> <br> <div style=\\\"margin-left: 40px;\\\">1. ÒôÏä (»ò¶ú»ú)Á¬½Óµ½ÄúµÄPCÉÏ<br> <br> <a href=\\\"http://www.logitech.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 58px;\\\" alt=\\\"speakers\\\" src=\\\"../img/speaker.gif\\\"></a><br> <br> 2. Winamp Ã½Ìå²¥·ÅÆ÷<br> <br> <a href=\\\"http://www.winamp.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\" src=\\\"../img/winamp.gif\\\"></a><br> <br> Mac : Ê¹ÓÃ <a href=\\\"http://www.quicktime.com\\\">Quicktime</a><br> Linux : Ê¹ÓÃ <a href=\\\"http://www.xmms.org/\\\">XMMS</a> <br> <br>   3. Acrobat PDF reader »ò Word »ò PowerPoint, ÒÀÀµÓÚ½ÌÊ¦»ÃµÆÆ¬µÄ¸ñÊ½<br> <br> <a href=\\\"http://www.acrobat.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 31px;\\\" alt=\\\"acrobat reader\\\" src=\\\"../img/acroread.gif\\\"></a><br> </div> <br> <span style=\\\"font-weight: bold;\\\"><br> ½ÌÊ¦ / ÑÝ½²ÈË</span><br> <br> <div style=\\\"margin-left: 40px;\\\">¿ªÕ¹Ò»´ÎÑÝ½²ÄúÐèÒª :<br> </div> <br> <div style=\\\"margin-left: 40px;\\\">1. ¶úÂó<br> <br> <a href=\\\"http://www.logitech.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 87px;\\\" alt=\\\"Headset\\\" src=\\\"../img/headset.gif\\\"></a><br> ½¨ÒéÄúÊ¹ÓÃ <a href=\\\"http://www.logitech.com/\\\">Logitech</a> USB ½Ó¿ÚÒÔÈ¡µÃ½ÏºÃµÄÒôÖÊ.<br> <br> 2. Winamp<br> <br> <a href=\\\"http://www.winamp.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\" src=\\\"../img/winamp.gif\\\"></a><br> <br> 3. SHOUTcast DSP Plug-In for Winamp 2.x <br> <br> <a href=\\\"http://www.shoutcast.com\\\"><img style=\\\"border: 0px solid ; width: 87px; height: 24px;\\\" alt=\\\"Shoutcast\\\" src=\\\"../img/shoutcast.gif\\\"></a><br> <br> °´ÕÕ <a href=\\\"http://www.shoutcast.com\\\">www.shoutcast.com</a> ÉÏµÄÖ¸µ¼°²×°ºÍÅäÖÃShoutcast Winamp DSP Plug-In. <br> </div> <br> <span style=\\\"font-weight: bold;\\\"><br> ÈçºÎÕÙ¿ªÒ»´Î»áÒé?<br> <br> </span> <div style=\\\"margin-left: 40px;\\\">´´½¨Ò»¸öDokeos¿Î³Ì > µÇÂ½ > ÏÔÊ¾²¢½øÈë»áÒéÊÒ > ±à¼­ (ÔÚ×ó±ßµÄÇ¦±ÊÍ¼±ê) ÉèÖÃ > ÉÏ´«ÄúµÄ»ÃµÆÆ¬ (PDF, PowerPoint »òÕßÆäËü¸ñÊ½) > ¼üÈë¼ò½é > °´ÕÕÄú´Ó¼¼ÊõÖ¸µ¼½ÌÄúµÄ·½·¨×öºÃÄúÊÓÆµÁ÷µÄÁ´½Ó.<span style=\\\"font-weight: bold;\\\"></span><br> <span style=\\\"font-weight: bold;\\\"></span></div> <div style=\\\"margin-left: 40px;\\\"><img style=\\\"width: 256px; height: 182px;\\\" alt=\\\"conference config\\\" src=\\\"../img/conf_screen_conf.gif\\\"><br> ²»ÒªÍü¼ÇÊÂÏÈÍ¨Öª²ÎÓëÕß¹ØÓÚ»áÒéÈÕÆÚ, Ê±¼äÒÔ¼°ÆäËüÊÂÏî. <br> <br> <span style=\\\"font-weight: bold;\\\">×¢</span> : »áÒé¿ªÊ¼10·ÖÖÓÇ°, ÔÚÁÄÌìÊÒÄÚÊäÈëÒ»Ð¡¶ÎÐÅÏ¢Í¨Öª²ÎÓëÕßÄúÒÑ¾­ÔÚÕâÀï²¢°ïÖúÄÇÐ©¿ÉÄÜÊÕÌýÉè±¸ÓÐ¹ÊÕÏµÄÈË. <br> </div> <br> <br> <span style=\\\"font-weight: bold;\\\">Á÷Ã½Ìå·þÎñÆ÷</span><br> <br> <div style=\\\"margin-left: 40px;\\\">Èç¹ûÒªÊµÊ±Ïß²¥·Å, ÄúÐèÒªÒ»¸öÁ÷Ã½Ìå·þÎñÆ÷²¢ÈÃ¼¼ÊõÈËÔ±Ö¸µ¼ÄúÊ¹ÓÃ. ¼¼ÊõÈËÔ±¿ÉÄÜ¸øÄúÌá¹©Á÷Ã½Ìå·þÎñÆ÷µÄÁ´½Ó.<br> <br> <small><a href=\\\"http://www.dokeos.com/hosting.php#streaming\\\"><img style=\\\"border: 0px solid ; width: 258px; height: 103px;\\\" alt=\\\"dokeos streaming\\\" src=\\\"../img/streaming.jpg\\\"><br> dokeos streaming</a></small><br> <br> ×Ô¼º×ö : °²×°, ÅäÖÃºÍ¹ÜÀí <a href=\\\"http://www.shoutcast.com\\\">Shoutcast</a> »ò <a href=\\\"http://developer.apple.com/darwin/projects/streaming/\\\">Apple Darwin</a>. <br> <br> »òÕßÁªÏµDokeos. ÎÒÃÇ¿ÉÒÔ°ïÖúÄú×éÖ¯ÄúµÄ»áÒé, °ïÖúÄú½²ÑÝ²¢µÍ¼Û×â¸øÄúÎÒÃÇµÄ·þÎñÆ÷ : <a href=\\\"http://www.dokeos.com/hosting.php#streaming\\\">http://www.dokeos.com/hosting.php</a><br> <br> <br>";
+$langHClar = "Dokeo °ïÖú";
+$langClarContent = "<p><b>½ÌÊ¦</b></p> <p>Dokeos ÍøÂç½ÌÑ§Æ½Ì¨ÊÇÒ»¸ö»ùÓÚWebµÄ¿Î³Ì¹ÜÀíÏµÍ³£¬ËüÔÊÐí½ÌÊ¦£¨½ÌÊÚ£¬½²Ê¦£©Í¨¹ýä¯ÀÀÆ÷£¨Explorer£¬Netscape¡­ £©´´½¨ºÍ¹ÜÀí¿Î³ÌÍøÕ¾¡£</p> <p>×÷Îª½ÌÊ¦Ê¹ÓÃDokeos, ÄãÐèÒªÒ»¸öÓÃ»§ÃûºÍÃÜÂë£¬ÕâÒÀÀµÓÚÄãËùÔÚÆ½Ì¨µÄ°²È«ÉèÖÃ, Äã¿ÉÒÔÍ¨¹ý×ÔÖú×¢²á£¨ÓÒ²à²Ëµ¥£©»òÕß´Ó³¬¼¶¹ÜÀíÔ±»ñµÃÊÚÈ¨¡£×¢²áÓÃ»§ÃûºÍÃÜÂë²»ÄÜ°üº¬¿Õ¸ñºÍ±êµã²¢ÇÒÇø·Ö´óÐ¡Ð´¡£ÌîÐ´ÓÃ»§Ãû/ÃÜÂë£¬È»ºó´´½¨Ò»¸ö¿Î³Ì£¨¶¥¶ËÓÒ²à£©»òÕßÊ¹ÓÃ³¬¼¶¹ÜÀíÔ±ÒÑ¾­ÎªÄã´´½¨µÄ¿Î³Ì¡£</p> <p>ÎªÄãµÄ¿Î³ÌÌí¼Ó³ÉÔ±: <ol><li>Èç¹ûËû/Ëý»¹Ã»ÓÐÔÚÏµÍ³ÖÐ×¢²á£¬ÄÇÃ´×¢²áºó£¬½«ÆäÑ¡ÔñÎª¡°½ÌÊ¦¡±µÄ¸öÈËÉèÖÃ,</li> <li>Èç¹ûËû/ËýÒÑ¾­ÊÇÏµÍ³×¢²áÓÃ»§, ´ò¿ª¿Î³Ì×¢²áÉèÖÃ, Ñ¯ÎÊËû/ËýÊÇ·ñ¼ÓÈëµ½ÄãµÄ¿Î³ÌÖÐ. È»ºó±à¼­Ëû/ËýµÄ¸öÈËÉèÖÃ, ¸øËû/Ëý½ÌÊ¦È¨ÏÞ.</li></ol></p> <p> Ã¿¸öDokeos¹¤¾ß°üº¬Ò»¸öÇ°ºó¹ØÁªµÄ°ïÖú, ÏÔÊ¾ÎªºìÉ«±ê¼Ç. Èç¹ûÄãÔÚ°ïÖúÖÐÃ»ÓÐÕÒµ½ÏëÒªµÄÐÅÏ¢, Äã¿ÉÒÔµ½DokeosÖ÷Ò³: <a href=\\\"http://www.dokeos.com/documentation.php\\\">http://www.dokeos.com/documentation.php</a> ²ì¿´²¢ÏÂÔØ½ÌÊ¦ÊÖ²á(Ó¢Óï»òÄãµÄ±¾µØÓïÑÔ).</p> <p><b>Ñ§Éú</b></p> <p>Ñ§ÉúÉí·ÝÔÊÐíÄã¸úËæÒ»¸ö¿Î³Ì, ÑµÁ·, ºÏ×öµÈµÈ¡£Ñ§ÉúÉí·ÝÊÇÓÃÓÚÑ§Ï°: »ùÓÚ¼Æ»®, »ùÓÚÎÊÌâ, »ùÓÚ°¸ÀýµÄ½ÌÑ§, ºÏ×÷ÑÐ¾¿µÈ. ÄãµÄ½ÌÊ¦¿ÉÒÔÒÑ¾­½¨Á¢ÁËÑ§Ï°ÇøÓò²¢°ÑÒ»¸ö¼òµ¥µÄÎÄ¼þ¼Ð»ò¶¼Ò»¸ö¸´ÔÓµÄ×ÔÎÒÑ§Ï°»òÕßÐ¡×éÑ§Ï°»î¶¯·ÅÔÚÄÇÀï.</p> <p>²»Í¬µÄÑ§Ð£¿ÉÒÔÉèÖÃ²»Í¬µÄ×¢²á¹ý³Ì. ÔÚÄ³´ËÇé¿öÏÂ, ÔÊÐí×ÔÖú×¢²á, µ«ÔÚÒ»Ð©Ñ§Ð£, Äã±ØÐë´Ó³¬¼¶¹ÜÀíÔ±ÄÇÀï»ñµÃÓÃ»§ÃûºÍÃÜÂë.</p>";
+$langHDoc = "ÎÄµµ°ïÖú";
+$langDocContent = "<p>ÎÄµµ¹ÜÀí¹¤¾ßÀàËÆ×ÀÃæµçÄÔÓ¦ÓÃÖÐµÄÎÄ¼þ¹ÜÀíÆ÷.</p><p>Äú¿ÉÒÔÉÏ´«¸÷ÖÖ¸ñÊ½(HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime,µÈµÈ)µÄÎÄ¼þ,ÐèÒª×¢ÒâµÄÊÇÑ§Éú±ØÐëÓÐÏàÓ¦µÄÈí¼þ¶ÁÈ¡ÕâÐ©²ÄÁÏ.¶øÇÒ,ÓÐÐ©ÎÄ¼þ¿ÉÄÜ»áÐ¯´ø²¡¶¾, ²»ÒªÉÏ´«ÕâÑùµÄÎÄ¼þÒ²ÊÇÄúµÄÔðÈÎ.½¨ÒéÔ¤ÏÈÓÃÉ±¶¾Èí¼þ¼ì²éºóÔÚÉÏ´«.</p> <p>ÎÄ¼þÒÔ×ÖÄ¸Ë³ÐòÅÅÁÐ.<br><br><b>ÌáÊ¾ : </b>Èç¹ûÄúÐèÒªÒÔ²»Í¬µÄË³ÐòÏÔÊ¾,ÔÚÎÄ¼þÃûÖÐÌí¼ÓÊý×Ö: 01, 02, 03...»òÕßÊ¹ÓÃÑ§Ï°Â·¾¶¸ø³ö½Ï¸´ÔÓµÄ±í¸ñÄÚÈÝ. ÎÄµµÉÏ´«ºó, ¿ÉÒÔÊ¹ÓÃÏÔÊ¾Òþ²Ø¹¤¾ß¾ö¶¨ÊÇ·ñÔÚÖ÷Ò³ÃæÉÏÏÔÊ¾(ÓÃÖ÷Ò³ÉÏµÄ½Û»ÆÉ«µÄ¹¤¾ßÌí¼ÓÁ´½Ó)»òÕßÔÚÑ§Ï°Â·¾¶ÖÐÏÔÊ¾ÎÄµµÄÚÈÝ.</p> <p>Äú¿ÉÒÔ:</p> <H4>ÐÂ½¨ÎÄµµ</H4> <p>Ñ¡¶¨ÎÄµµ > ÃüÃû (ÎÞ¿Õ¸ñ, ÎÞ±êµã) > ÊäÈëÎÄ±¾ > Ê¹ÓÃWysiwyg±à¼­Æ÷(Ëù¼û¼´ËùµÃ)°´Å¥¹¹½¨ÐÅÏ¢, ´´½¨±í¸ñ, ·ç¸ñµÈ. Òª´´½¨ÍøÒ³, Ê¹ÐèÒªÃ÷È·3¸ö¸ÅÄî : Á´½Ó, Í¼Æ¬ºÍ±í¸ñ. ÍøÒ³ÄÜÌá¹©µÄÒ³ÃæÒª±ÈMs-WordÉÙ. Äã¿ÉÒÔ´ÓÏÖÓÐÍøÒ³ºÍWordÎÄµµÖÐ¼ôÇÐºÍÕ³Ìù, ¶ø²»ÊÇÔÚ±à¼­Æ÷ÖÐÐÂ½¨ÎÄµµ. ÕâÑù¿ÉÒÔÈÝÒ×¶ø¿ìËÙµØ°ÑÏÖÓÐÄÚÈÝÒÆÖ²µ½Dokeos¿Î³ÌÖÐ. </p> <ul><li><b>Ìí¼ÓÁ´½Ó</b>, Äã¿ÉÒÔ°ÑÈÎºÎÒ»¸öÍøÖ·¿½±´¹ýÀ´. ÎÒÃÇ½¨ÒéÄãÍ¬Ê±´ò¿ªÁ½¸öä¯ÀÀÆ÷´°¿ÚÒ»¸öÊÇÄãµÄdokeos¿Î³Ì,ÁíÒ»¸öÓÃÓÚä¯ÀÀÍøÕ¾. Ò»µ©Äã·¢ÏÖÄãÒªÕÒµÄÍøÒ³ (ÄãµÄdokeos¿Î³ÌËùÐèµÄÍøÒ³), ¿½±´ËüµÄÍøÖ· (CTRL+C »ò APPLE+C), »Øµ½ÄãµÄÒ³Ãæ±à¼­Æ÷, Ñ¡¶¨ÒªÁ´½ÓµÄÎÄ±¾, µã»÷Ð¡µÄÁ´½ÓÍ¼±ê, ½«ÍøÖ·Õ³Ìùµ½ÄÇÀï. Ò³Ãæ±£´æºó, ²âÊÔÒ»ÏÂÁ´½Ó¿´ÊÇ·ñÄÜ´ò¿ªÄ¿±ê. Äã¿ÉÒÔ¶¨ÒåÁ´½ÓÊÇÔÚÐÂ½¨´°¿Ú´ò¿ª»¹ÊÇÔÚÍ¬Ò»´°¿Ú´ò¿ª.</li> <li><b>Ìí¼ÓÍ¼Æ¬</b>, ÓëÌí¼ÓÁ´½ÓÏàËÆ : Í¬Ê±´ò¿ªÁ½¸ö´°¿Ú, ÕÒµ½Í¼Æ¬ (ÄãµÄdokeos¿Î³ÌËùÐèµÄÍ¼Æ¬, Ñ¡Ôñ \'ÎÞ¿ò¼Ü\' ÒÔÊ¹½öµÃµ½Í¼Æ¬¶ø²»ÊÇÄÚÈÝ), ¿½±´ÍøÖ· (ÔÚµØÖ·À¸ÖÐÑ¡¶¨Õû¸öÍøÖ·È»ºó CTRL+C »ò APPLE+C) È»ºó·µ»ØÒ³Ãæ±à¼­Æ÷, ½«Êó±ê·Åµ½ÄãÏ£ÍûÍ¼Æ¬Ëù·ÅµÄÎ»ÖÃÉÏ, µã»÷Ê÷×´Í¼±ê²¢½«Í¼Æ¬µÄÁ´½Ó¿½±´µ½Á´½ÓÀ¸ÖÐ, Ô¤ÀÀ²¢È·ÈÏ. ÔÚÍøÒ³ÖÐ, Äã²»ÄÜÏñÔÚPowerPointÖÐÄÇÑùÖØÐÂ¶¨Òå³ß´ç, Ò²²»ÄÜÖØÐÂ¶¨Î»ËüÔÚÍøÒ³µÄÈÎºÎÒ»¸öÎ»ÖÃ.</li> <li><b>Ìí¼Ó±í¸ñ</b>, ½«Êó±ê·ÅÔÚ±í¸ñËùÒªÏÔÊ¾µÄÎ»ÖÃ, ÔÚWysiwyg±à¼­Æ÷²Ëµ¥ÖÐÑ¡¶¨±í¸ñÍ¼±ê, È·¶¨ÐÐÁÐÊý²¢Ìá½». Òª»­Ò»¸öºÃµÄ±í¸ñ, ÎÒÃÇ½¨ÒéÄãÑ¡ÔñÒÔÏÂÖµ : border=1, cellspacing=0, cellpadding=4. ±í¸ñ´´½¨ºóÊÇÎÞ·¨¸Ä±ä±í¸ñ³ß´ç»òÕßÌí¼ÓÐÐÁÐµÄ (ÕâÒ»µã·Ç³£ÒÅº¶, ÒòÎªÖ»ÊÇÒ»¸öÔÚÏß±à¼­Æ÷, ¶ø²»ÊÇword´¦Àí³ÌÐò).</li> </ul> <h4>ÉÏ´«ÎÄµµ</h4> <ul> <li>Ñ¡ÔñÄúµçÄÔÉÏµÄÎÄ¼þ, µã»÷ÓÒ²àµÄ <input type=submit value=ä¯ÀÀ name=submit2> °´Å¥.</li> <li> µã»÷ <input type=submit value=ÉÏ´« name=submit2> °´Å¥¿ªÊ¼ÉÏ´«. </li> <li> Èç¹ûÄãµÄÎÄµµÊÇzipÎÄ¼þ»òÕßÊÇËùÎ½µÄ<b>Scorm content</b>ÄÚÈÝ, ÇëÑ¡ÖÐÉÏ´«°´Å¥ÏÂÃæµÄÑ¡Ïî. ScormÄÚÈÝ±È½ÏÌØÊâ,ÉÙËüÊÇ°´ÕÕ¹ú¼Ê±ê×¼Éè¼ÆµÄ : <b>Scorm</b>. ËüÊÇÒ»¸ö×¨ÃÅÎªÑ§Ï°ÄÚÈÝ×¼±¸µÄÌØÊâ¸ñÊ½, ¿ÉÒÔÔÚ²»ÊÇÑ§Ï°¹ÜÀíÏµÍ³ÖÐ(LMS)×ÔÓÉ½»»». »»¾ä»°Ëµ, <b>Scorm</b> ×ÊÁÏ¾ßÓÐÆ½Ì¨¶ÀÁ¢ÐÔ, ËüÃÇµÄµ¼ÈëºÍµ¼³ö·Ç³£¼òµ¥. </li> </ul> <h4> ÖØÃüÃûÎÄµµ (Ä¿Â¼) </h4> <ul> <li> ÔÚÖØÃüÃûÀ¸ÖÐµã»÷ <img src=../img/renommer.gif width=20 height=20 align=baseline> °´Å¥ </li> <li> ÊäÈëÐÂÃû³Æ (×óÉÏ) </li> <li> µã»÷ <input type=submit value=È·¶¨ name=submit24> È·ÈÏ. </li> </ul> <h4> É¾³ýÎÄµµ (Ä¿Â¼) </h4> <ul> <li> ÔÚÉ¾³ýÀ¸ÖÐµã»÷ <img src=../img/delete.gif width=20 height=20>. </li> </ul> <h4> ÏÔÊ¾/Òþ²ØÎÄ¼þ (»òÄ¿Â¼) </h4> <ul> <li> ÔÚÏÔÊ¾/Òþ²ØÀ¸ÖÐµã»÷<img src=../img/visible.gif width=20 height=20>. </li> <li> Òþ²ØÎÄ¼þ(»òÄ¿Â¼)ºó,Ëü»¹ÊÇ´æÔÚµÄ,Ö»ÊÇ¶ÔÑ§ÉúÒÑ¾­²»¿É¼û. </li> <li> ÒªÔÙÊ¹Æä·µ»Ø²»¿É¼û×´Ì¬, ÔÚÏÔ»÷/Òþ²ØÀ¸ÖÐµã»÷ <img src=../document/../img/invisible.gif width=24 height=20> </li> </ul> <h4> ÎªÎÄ¼þ(»òÄ¿Â¼)Ìí¼Ó»ò¸üÐÂÕªÒª </h4> <ul> <li> ÔÚÕªÒªÀ¸ÖÐµã»÷<img src=../document/../img/comment.gif width=20 height=20></li> <li> ÊäÈëÐÂÕªÒª(ÓÒÉÏ). </li> <li> µã»÷<input type=submit value=È·¶¨ name=submit2> È·ÈÏ.</li> </ul> <p> É¾³ýÕªÒª, µã»÷<img src=../document/../img/comment.gif width=20 height=20>, É¾³ý¾ÉÕªÒªÈ»ºóµã»÷<input type=submit value=È·¶¨ name=submit22>. <hr> <p> ¿ÉÒÔÍ¨¹ýÌîÐ´×éÖ¯ÄÚÈÝ. Äã¿ÉÒÔ: </p> <h4> <b> ÐÂ½¨Ä¿Â¼ </b> </h4> <ul> <li> µã»÷ <img src=../document/../img/dossier.gif width=20 height=20> \'´´½¨Ä¿Â¼\' (×óÉÏ) </li> <li> ÊäÈëÐÂ½¨Ä¿Â¼Ãû³Æ (×óÉÏ) </li> <li> µã»÷ <input type=submit value=È·¶¨ name=submit23>È·ÈÏ. </li> </ul> <h4> ÒÆ¶¯ÎÄµµ (»òÄ¿Â¼) </h4> <ul> <li> ÔÚÒÆ¶¯À¸ÖÐµã»÷ <img src=../document/../img/deplacer.gif width=34 height=16> </li> <li> ÔÚÏàÓ¦µÄ²Ëµ¥ÖÐ(×óÉÏ)Ñ¡¶¨ÎÄµµ(»òÄ¿Â¼)ÒªÒÆ¶¯µÄÄ¿±êÄ¿Â¼ (×¢:  \'¸ù\' µÄÒâË¼ÊÇ·þÎñÆ÷ÉÏÄãµÄÎÄ¼þÄ¿Â¼Ê÷µÄ×î¸ßÒ»¼¶). </li> <li> Validate by clicking on <input type=submit value=OK name=submit232>. </li> </ul> <h4> <b> ÐÂ½¨Ñ§Ï°Â·¾¶ </b> </h4>Ñ§Ï°Â·¾¶ÏñÒ»¸öÄÚÈÝ±í¸ñ, Ò²¿ÉÒÔ×÷ÎªÒ»¸öÄÚÈÝ±í¸ñ, µ«ËüÄÜÌá¹©¸ü·á¸»µÄÄÚÈÝ. ²Î¼ûÑ§Ï°Â·¾¶.";
+$langHUser = "ÓÃ»§°ïÖú";
+$langUserContent = "<B>½ÇÉ«</B> 
+<P>½ÇÉ«Ã»ÓÐ¼ÆËã»ú¹ÜÀíÏà¹ØµÄ¹¦ÄÜ. Õâ²¢²»¸³ÓèË­ÏµÍ³²Ù×÷µÄÈ¨Á¦. ÕâÖ»ÊÇ¸æËßÎÒÃÇ,Ã¿¸öÈËÔÚ½ÌÑ§¹ý³ÌÖÐ°çÑÝµÄ½ÇÉ«.Äú¿ÉÒÔµã»÷\'½ÇÉ«\'ÏÂÃæµÄ\'¸üÐÂ\'À´¸üÐÂ, 
+¿ÉÒÔ¼üÈëÈÎºÎÄúÈÏÎªµÄ½ÇÉ«:½ÌÊÚ, Öú½Ì, Ñ§Éú, ¹ý¿Í, ×¨¼Ò...</P>
+<HR>
+<B>¹ÜÀíÈ¨Á¦</B> 
+<P>¹ÜÀíÈ¨Àû,ÁíÒ»·½Ãæ,¶ÔÓ¦ÓÚÏµÍ³²Ù×÷È¨Á¦,¸üÐÂÄÚÈÝ,×éÖ¯¿Î³ÌÍøÕ¾µÈ. Ä¿Ç°ÎªÖ®, ÄúÖ»ÄÜÑ¡Ôñ¸³ÓèËùÓÐÈ¨Á¦,»òÕßÏà·´,²»¸³ÓèÈÎºÎÈ¨Á¦.</P>
+<P>¾ÙÀýÀ´Ëµ,Ê¹Ò»Î»Öú½ÌÀ´¹²Í¬¹ÜÀíÍøÕ¾,ÄúÐèÒªÈ·±£ËûÒÑÔÚ±¾¿Î³Ì×¢²á,µã»÷ \'¹ÜÀíÈ¨Á¦\'ÏÂµÄ\'¸üÐÂ\',È»ºóÑ¡Ôñ\'ËùÓÐ\', \'È·ÈÏ\'¼´¿É.</P>
+<HR>
+<B>ÁªºÏÖ÷½²</B> 
+<P>ÎªÔÚ¿Î³ÌÍøÕ¾ÏÔÊ¾ÁªºÏÖ÷½²µÄÃû×Ö,ÇëÊ¹ÓÃ\'¸üÐÂ¿Î³ÌÐÅÏ¢\'¹¤¾ß(½Û»ÆÉ«). ÕâÏî¸üÐÂ²¢²»ÎªÁªºÏÖ÷½²ÔÚ±¾¿Î³Ì×¢²á.\'½ÌÊÚ\'ÓòºÍÓÃ»§ÁÐ±íÊÇÏà»¥¶ÀÁ¢µÄ.</P>
+<HR>
+<B>Ôö¼ÓÓÃ»§</B> 
+<P>Îª±¾¿Î³ÌÔö¼ÓÒ»¸öÓÃ»§,Ê×ÏÈ¼ì²é¸ÃÓÃ»§ÊÇ·ñÒÑÔÚÐéÄâÐ£Ô°×¢²á.Èç¹ûÒÑ¾­×¢²á, Ñ¡ÔñËûÃû×ÖÅÔ±ßµÄÑ¡Ïî¸ñ,È»ºó\'È·ÈÏ\'. Èç¹û»¹Ã»ÓÐ×¢²á, ¿ÉÒÔÊÖ¹¤Ìí¼Ó. 
+ÈÎºÎÒ»ÖÖÇé¿ö, Ëû¶¼»áÊÕµ½Ò»·âº¬ÓÃ»§ÃûºÍÃÜÂëµÄÈ·ÈÏÓÊ¼þ.</P>";
+$langGroupManagement = "Ð¡×é°ïÖú";
+$langGroupContent = "<P><B>½éÉÜ</B></P>
+<P>ÔÚ´´½¨Ð¡×éÊ±£¬×éÊÇ¿ÕµÄ£¬ÓÐºÃ¼¸ÖÖ·½·¨ÌîÂúÐ¡×é£º 
+<UL>
+<LI>×Ô¶¯£¨Ëæ»úÌîÂú£© 
+<LI>ÊÖ¶¯(?#32534;¼­?, 
+<LI>ÓÃ»§×ÔÖú×¢²á(Ð¡×éÉèÖÃ: ?#20801;Ðí×ÔÖú×¢²á...?. 
+</LI></UL>ÈýÖÖ·½·¨¿ÉÒÔÁªºÏÊ¹ÓÃ¡£ÀýÈç£¬Äã¿ÉÒÔÒªÇóÊ¹ÓÃÕßÊ×ÏÈ×ÔÖú×¢²á£¬È»ºó·¢ÏÖËûÃÇÖÐµÄÒ»Ð©Ã»ÓÐ×¢²á£¬ÄÇÃ´¾ö¶¨×Ô¶¯ÌîÂúÐ¡×éÒÔ±ãÍê³É×¢²á¡£ÔÚ×ÔÖú×¢²áºÍ×Ô¶¯Ìî³äÖ®Ç°»òÖ®ºó£¬ÄãÒ²¿ÉÒÔ±à¼­Ã¿Ò»¸öÐ¡×é£¬Ò»¸öÒ»¸öµÄÅÅ¶¨ÓÃ»§¡£ 
+
+<P>²»¹ÜÊÇ×Ô¶¯»òÊÖ¶¯£¬Èç¹ûÓÃ»§ÒÑ¾­×¢²áµ½Õâ¸öÇøÓò£¬Ð¡×éÌî³ä²ÅÆð×÷ÓÃ¡£ÔÚÓÃ»§¹¤¾ß£¬ÓÃ»§ÁÐ±íÊÇ¿É¼ûµÄ¡£ </P>
+<HR noShade SIZE=1>
+
+<P><B>´´½¨Ð¡×é</B></P>
+<P>µã»÷?#21019;½¨ÐÂ×é?#20197;¼°×éµÄ±àºÅ£¬¾Í¿ÉÒÔ´´½¨ÐÂ×éÁË¡£</P>
+<HR noShade SIZE=1>
+
+<P><B>Ð¡×éÉèÖÃ</B></P>
+<P>Äã¿ÉÒÔÉèÖÃÐ¡×éÈ«¾ÖÉè¶¨(Õë¶ÔËùÓÐµÄÐ¡×é). <B>ÔÊÐíÓÃ»§ÔÚÐ¡×éÖÐ×ÔÖú×¢²á</B>: 
+<P>Äã´´½¨¿ÕµÄÐ¡×é£¬ÓÃ»§×ÔÖú×¢²á¡£Èç¹ûÄãÒÑ¾­¶¨ÒåÁËÒ»¸ö×î´óÖµ£¬ÌîÂúµÄÐ¡×é²»ÄÜ½ÓÊÜÐÂµÄ³ÉÔ±¡£Õâ¸ö·½·¨¶ÔÄÇÐ©Òª´´½¨Ð¡×é¶ø²»ÖªµÀÓÃ»§ÁÐ±íµÄ½ÌÊ¦À´Ëµ£¬ÊÇÒ»¸öºÃµÄÖ÷Òâ¡£</P>¹¤¾ß: 
+
+<P>Ã¿¸öÐ¡×é¶¼ÓµÓÐÒ»¸öÂÛÌ³£¨Ë½ÈË»ò¹«¿ª£©»òÒ»¸öÎÄµµÇø£¨Ò»¸ö¹²ÏíÎÄ¼þ¹ÜÀíÆ÷£©»òÁ½Õß¶¼ÓÐ£¨´ó¶àÊýÇé¿öÊÇÕâÑù£©¡£</P>
+<HR noShade SIZE=1>
+
+<P><B>ÊÖ¶¯±à¼­</B></P>
+<P>Ò»µ©Ð¡×é±»´´½¨£¬ÔÚÒ³ÃæµÄµ×²¿£¬Äã¿ÉÒÔ¿´µ½Ð¡×éÉè¶¨¹¤¾ß 
+<UL>
+<LI><B>±à¼­</B> ¿ÉÒÔÐÞ¸Ä×éÃû×Ö£¬ÃèÊö£¬Öú½Ì£¬³ÉÔ±ÁÐ±í¡£ 
+<LI><B>É¾³ý</B> É¾³ýÒ»¸öÐ¡×é</LI></UL>
+<HR noShade SIZE=1>";
+$langHExercise = "²âÑé°ïÖú";
+$langExerciseContent = "<P>Á·Ï°²âÊÔ¹¤¾ßÔÊÐíÄã´´½¨°üº¬ÓÐÄãÏëÒªµÄºÜ¶àÎÊÌâµÄ²âÊÔ<BR><BR>´´½¨²âÊÔÎÊÌâ£¬ÓÐ¸÷ÖÖÀàÐÍµÄÊÔÌâ´ð°¸£º:<BR><BR>
+<UL>
+<LI>µ¥ÏîÑ¡Ôñ 
+<LI>¶àÏîÑ¡Ôñ 
+<LI>Æ¥Åä 
+<LI>Ìî¿Õ </LI></UL>²âÊÔ¾í¼¯ºÏÁËÒ»¶¨ÊýÁ¿µÄÎÊÌâ¡£ 
+<HR>
+´´½¨²âÊÔ¾í
+<P>IÎªÁË´´½¨²âÊÔ¾í£¬ÔÚ¿Î³ÌÖ÷Ò³£¬Ñ¡Ôñ\"²âÊÔÁ·Ï°\"£¬µã»÷\"ÐÂµÄ²âÊÔ¾í\"¡£<BR><BR>ÊäÈë²âÊÔ¾íµÄÃû³Æ<BR><BR>Äã¿ÉÒÔÔö¼ÓÒôÆµ»òÊÓÆµÎÄ¼þ¸øÌýÁ¦Àí½âµÈ¡£µÈÓÚÊÇÑ¡ÔñÕâÐ©ÎÄ¼þ¾¡Á¿Ð¡ÒÔ±ãºÜÈÝÒ×µÄÍ¨¹ýWeb 
+ä¯ÀÀÆ÷ÏÂÔØ£¬×îºÃÊÇMP3 ÎÄ¼þ»òWAV ÎÄ¼þ£¬ÒòÎª£¬Ñ¹ËõÂÊÔ½¸ß£¬ÎÄ¼þ³ß´çÔ½Ð¡¡£ <BR><BR>Äã¿ÉÒÔÔÚÁ½ÖÖ²âÊÔÀàÐÍÖÐÑ¡Ôñ£º<BR><BR>
+<UL>
+<LI>ÎÊÌâÔÚÒ»Ò³ÏÔÊ¾ 
+<LI>Ã¿Ò³Ò»¸öÎÊÌâ(Ë³´ÎÅÅÐò) 
+</LI></UL>Ò»¸öÎÊÌâÒ»Ò³È»ºóÈ·¶¨ÔÚ²âÊÔ¿ªÊ¼Ê±£¬ÎÊÌâÊÇ·ñËæ»úÅÅÐò¡£<BR><BR>È»ºó£¬µã»÷È·ÈÏ±£´æ²âÊÔ¾í¡£½øÈëÎÊÌâ¹ÜÀí¡£ 
+<HR>
+Ôö¼ÓÎÊÌâ 
+<P>Äã¿ÉÒÔÔö¼ÓÎÊÌâµ½ÏÈÇ°´´½¨µÄ²âÊÔ¾í£¬ÃèÊöÊÇ¿ÉÑ¡µÄ£¬ºÍÄãµÄÎÊÌâÏà¹ØµÄÍ¼Æ¬Ò²ÊÇ¿ÉÑ¡µÄ¡£</P>
+<HR>
+Ñ¡ÔñÌâ
+<P>ÎªÁË´´½¨Ò»¸öµ¥ÏîÑ¡ÔñÌâ»ò¶àÏîÑ¡ÔñÌâ£º<BR><BR>
+<UL>
+<LI>¶¨ÒåÎÊÌâ´ð°¸£¬Äã¿ÉÒÔÍ¨¹ýµã»÷+/-°´Å¥£¬Ôö¼Ó»òÉ¾¼õÎÊÌâ´ð°¸ 
+<LI>Ñ¡ÔñÕýÈ·´ð°¸ 
+<LI>Ôö¼Ó¿ÉÑ¡µÄ×¢ÊÍ£¬ÓÃ»§»Ø´ðÁËÎÊÌâÒÔºó£¬Õâ¸ö×¢ÊÍ²ÅÄÜ±»¿´µ½ 
+<LI>¸øÃ¿Ò»¸öÎÊÌâÒ»¸ö·ÖÖµ¡£·ÖÖµ¿ÉÒÔÊÇÕýÕûÊý»ò¸ºÕûÊý»òÁã¡£±£´æÁ·Ï°Ö®ºó£¬Äã¿ÉÒÔµ÷Õû·ÖÊý»úÖÆ¡£ 
+<LI>±£´æ´ð°¸ </LI></UL>
+<HR>
+Ìî¿Õ 
+<P>ÔÊÐíÄã´´½¨Ò»¸öÎÄ±¾¿ÕÈ±£¬Ä¿±ê¾ÍÊÇÈÃÓÃ»§ÌîÈëÄãÒÑ´ÓÎÄ±¾ÖÐÒÆ×ßµÄµ¥´Ê¡£<BR><BR>ÎªÁË´ÓÎÄ±¾ÖÐÒÆ×ßµ¥´Ê£¬´´½¨Ò»¸ö¿ÕÈ±£¬°Ñµ¥´Ê·ÅÔÚÖÐÀ¨ºÅÖ®¼ä¡£<BR><BR>Ò»µ©ÎÄ±¾ÊäÈëºÍ¿ÕÈ±¶¨ÒåÒÔºó£¬Äã¿ÉÒÔÔö¼Ó×¢ÊÍ£¬µ±Ñ§Éú»Øµ½ÎÊÌâºó£¬Ñ§Éú¿ÉÒÔ¿´µ½×¢ÊÍ¡£<BR><BR>±£´æÄãµÄÎÄ±¾£¬È»ºóÄã½«½øÈëÏÂÒ»²½£¬¸øÓèÃ¿Ò»¸ö¿ÕÈ±Ò»¸ö·ÖÖµ¡£ÀýÈç£¬Èç¹ûÎÊÌâÊÇ10 
+·Ö£¬ÄãÓÐ5 ¸ö¿ÕÈ±£¬Äã¿ÉÒÔ¸øÓèÒ»¸ö¿ÕÈ±2 ·Ö¡£</P>
+<HR>
+<B>Æ¥Åä</B>
+<P>µ±ÓÃ»§ÐèÒª´ÓÒ»¸öµ¥ÔªµÄÔªËØÁ¬½ÓÁíÍâÒ»¸öµ¥ÔªµÄÔªËØÊ±£¬ÕâÖÖ´ð°¸ÀàÐÍ¿ÉÒÔ±»Ñ¡Ôñ´´½¨ÎÊÌâ¡£<BR><BR>µ±ÓÃ»§ÒªÇóÅÅÐòÊ±£¬Ò²¿É±»Ñ¡Ôñ¡£<BR><BR>Ê×ÏÈ¶¨ÒåÕýÈ·´ð°¸µÄÑ¡Ïî£¬È»ºó¶¨ÒåÁ¬½Óµ½¸Õ¸Õ¶¨ÒåµÄÑ¡ÏîµÄÎÊÌâ£¬×îºó£¬Í¨¹ýÑ¡ÔñÏÂÀ­²Ëµ¥£¬Á´½ÓµÚÒ»¸öµ¥ÔªºÍµÚ¶þ¸öµ¥Ôª¡£<BR><BR>×¢Òâ£ºµÚÒ»¸öµ¥ÔªµÄÔªËØ¿ÉÒÔÖ¸ÏòµÚ¶þ¸öµ¥ÔªÍ¬Ò»¸öÔªËØ¡£<BR><BR>¸øÃ¿Ò»¸öÕýÈ·µÄÆ¥ÅäÒ»¸ö·ÖÖµ£¬±£´æÄãµÄÎÊÌâ¡£</P>
+<HR>
+<B>Á·Ï°²âÊÔÐÞ¸Ä</B>
+<P>ÐÞ¸Ä²âÊÔ£¬ºÍ´´½¨²âÊÔÒ»Ñù£¬µã»÷ÒªÐÞ¸ÄµÄ²âÊÔÏÂÃæµÄ <IMG src=\'\\\"../img/edit.gif\\\"\' align=\'\\\"absmiddle\\\"\' 
+border=\'\\\"0\\\"\'> Í¼±êÐÞ¸Ä.</P>
+<HR>
+<B>É¾³ý²âÊÔ</B>
+<P>É¾³ý²âÊÔ£¬µã»÷ÒªÉ¾³ýµÄ²âÊÔÏÂÃæµÄ <IMG src=\'\\\"../img/delete.gif\\\"\' align=\'\\\"absmiddle\\\"\' 
+border=\'\\\"0\\\"\'> Í¼±ê¡£</P>
+<HR>
+<B>ÏÔÊ¾²âÊÔ</B>
+<P>ÔÚ²âÊÔÃû³ÆÏÂÃæ£¬µã»÷Í¼±ê <IMG src=\'\\\"../img/invisible.gif\\\"\' align=\'\\\"absmiddle\\\"\' 
+border=\'\\\"0\\\"\'> £¬Ê¹²âÊÔ¿ÉÓÃ¡£</P>
+<HR>
+<B>ÔËÐÐ²âÊÔ</B> 
+<P>µã»÷²âÊÔÃû³ÆÀ´²âÊÔÄãµÄÁ·Ï°¡£</P>
+<HR>
+<B>Ëæ»úÎÊÌâ</B>
+<P>ÔÚ²âÊÔ´´½¨»òÐÞ¸ÄÊ±£¬ÄãÄÜ¸æËßÄãÏëÄãµÄÎÊÌâÔÚËùÓÐ²âÊÔÎÊÌâÖÐÊÇÒ»¸öËæ»úµÄË³ÐòÏÔÊ¾¡£<BR><BR>Í¨¹ýÊ¹ÓÃÕâ¸ö²Ù×÷£¬µ±Ã¿´ÎÔËÐÐ²âÊÔÊ±£¬ÎÊÌâ¿ÉÒÔÒÔÒ»¸ö²»Í¬µÄË³Ðò³öÏÖ¡£<BR><BR>Èç¹ûÄãÓÐÒ»¸öÊÔÌâ¿â£¬ÄãÒ²¿ÉÒÔÑ¡ÔñÔÚËùÓÐÎÊÌâÖÐËæ»ú³é³öX¸öÎÊÌâ¡£</P>
+<HR>
+ÎÊÌâ³Ø
+<P>µ±ÄãÉ¾³ýÒ»¸ö²âÊÔÊ±£¬ËûµÄÎÊÌâ²»ÄÜ´ÓÊý¾Ý¿âÖÐÒÆ³ý£¬Í¨¹ýÎÊÌâ¹¤¾ß£¬ËûÃÇ¿ÉÒÔ±»ÖØÐÂÊ¹ÓÃµ½ÁíÍâÒ»¸ö²âÊÔÖÐ¡£<BR><BR>ÎÊÌâ¹¤¾ßÔÊÐíÄãÊ¹ÓÃÒ»ÑùµÄÎÊÌâµ½ºÜ¶à²âÊÔÖÐ¡£<BR><BR>Ä¬ÈÏ£¬ËùÓÐÎÊÌâÊÇÒþ²ØµÄ¡£Äã¿ÉÒÔÔÚ¹ýÂËÏÂÀ­²Ëµ¥Ñ¡ÔñÄãµÄ²âÊÔÉæ¼°µÄÎÊÌâ¡£<BR><BR>¹ÂÁ¢ÎÊÌâÊÇ²»ÊôÓÚÈÎºÎ²âÊÔµÄÎÊÌâ¡£</P>Ìí¼ÓÎÊÌâ 
+
+<HR>
+<B>HotPotatoesÊÔÌâ</B>
+<P>Äã¿ÉÒÔµ¼ÈëHotPotatoesÊÔÌâµ½DokeosÖÐ¡£²âÌâ½á¹ûµÄ´æ·Å·½·¨ºÍDokeosÊÔÌâÒ»Ñù¡£ÔÚÓÃ»§¸ú×Ù¹¤¾ßÖÐÄã¿ÉÒÔ²ì¿´²âÊÔ½á¹û¡£ÔÚµ¥¶À²âÊÔÖÐ£¬ÎÒÃÇ½¨ÒéÊ¹ÓÃ 
+html»òhtm¸ñÊ½, Èç¹û°üº¬Í¼Õ§£¬ÓÃÑ¹ËõÎÄ¼þÉÏ´«ÊÇÒ»¸ö½ÏÎª·½±ãµÄ·½·¨¡£</P>
+<P>×¢: Í¬ÑùÄã¿ÉÒÔÌí¼ÓHotPotatoesÊÔÌâÔÚÑ§Ï°Â·¾¶ÖÐ¡£</P><B>µ¼Èë·½·¨</B> 
+<UL>
+<LI>µã»÷ä¯ÀÀ°´Å¥£¬<INPUT type=submit value=Browse name=submit2> ÔÚÏÔÊ¾Æ÷ÓÒ²à´ÓÄã±¾µØ¼ÆËã»úÑ¡ÔñÎÄ¼þ¡£ 
+<LI>µã»÷ÉÏ´«°´Å¥µ¯³öÉÏ´«¶Ô»°¿ò<INPUT type=submit value=Upload name=submit2>¡£ 
+<LI>Äã¿ÉÒÔÍ¨¹ýµã»÷ÊÔÌâÃû´ò¿ªÊÔÌâ¡£ </LI></UL><BR><B>ÓÐÓÃÁ´½Ó</B><BR>
+<UL>
+<LI>Hot Potatoes home page : <A 
+href=\"\\%22http:/web.uvic.ca/hrd/halfbaked/\\%22\">http://web.uvic.ca/hrd/halfbaked/</A> 
+</LI></UL>";
+$langHPath = "Ñ§Ï°Â·¾¶°ïÖú";
+$langPathContent = "Ñ§Ï°Â·¾¶ÓÐÁ½¸ö¹¦ÄÜ£º 
+<UL>
+<LI>´´½¨Ñ§Ï°Â·¾¶ 
+<LI>ÉÏ´«Ò»¸öSCORM»òIMS¸ñÊ½µÄÑ§Ï°Â·¾¶</LI></UL><IMG src=\"../img/path_help.gif\"> 
+<P><B>Ê²Ã´ÊÇÑ§Ï°Â·¾¶£¿</B> </P>
+<P>Ñ§Ï°Â·¾¶ÊÇÒ»¸öÄ£¿é»¯µÄÑ§Ï°²½ÖèÐòÁÐ¡£ËüÊÇ»ùÓÚÄÚÈÝµÄ£¨¿´ÆðÀ´ÏñÒ»¸öÄÚÈÝ±í¸ñ£©¡¢»î¶¯µÄ¡£¾ÍÏñ½ÌÑ§»ú¼Æ»®»òÒ»¸öÖ¸µ¼Äã²âÊÔ»òÁ·Ï°ÖªÊ¶µãµÄµÄ³ÌÐò¡£</P>
+<P>³ýÁË¹¹ÔìÖ®Íâ£¬Ñ§Ï°Â·¾¶Ò²ÊÇÓÐÐòÁÐµÄ¡£Õâ¸öÒâË¼ÊÇËµÄãÍê³ÉÒ»¸ö²½ÖèÒÔºó²ÅÄÜ½øÐÐµÚ¶þ¸ö²½Öè¡£ÐòÁÐ»áÌáÊ¾Äã£¨ÄãÓ¦¸ÃÍê³ÉÒ»¸ö²½ÖèÔÙ×öÏÂÒ»¸ö£©»òÃüÁîÄã£¨ÄãÔö¼ÓÏÈ¾öÌõ¼þÒÔ±ãÇ¿ÆÈÑ§ÉúÍê³ÉÐòÁÐ£©¡£ 
+</P>
+<P><B>ÔõÑù´´½¨×Ô¼ºµÄÑ§Ï°Â·¾¶£¿</B></P>
+<P>µÚÒ»²½ÊÇÇ°ÍùÑ§Ï°Â·¾¶´´½¨ÇøÓò¡£ÔÚÑ§Ï°Â·¾¶ÆÁÄ»£¬ÓÐÒ»¸ö´´½¨Ñ§Ï°Â·¾¶µÄÁ´½Ó£¬ÔÚÕâÀï£¬Äã¿ÉÒÔÍ¨¹ýµã»÷\"Ôö¼ÓÒ»¸öÐÂµÄÑ§Ï°Â·¾¶\"´´½¨ºÜ¶àÑ§Ï°Â·¾¶£¬µ«ÊÇÔÚÄãÔö¼ÓÄ£¿éºÍ²½Öèµ½Ñ§Ï°Â·¾¶Ö®Ç°£¬ËûÃÇÊÇ¿ÕµÄ¡£<BR>Èç¹ûÄãÉèÖÃÁËÏÔÊ¾Â·¾¶£¬ÄÇÃ´Ëü×÷ÎªÒ»¸öÐÂµÄ¹¤¾ß³öÏÖÔÚ¿Î³ÌÖ÷Ò³ÉÏ¡£</P>
+<P><B>Â·¾¶µÄ²½ÖèÊÇÊ²Ã´ (ÄÜ¹»Ôö¼ÓÊ²Ã´ÏîÄ¿)</B></P>
+<P>ËùÓÐDokeos ¹¤¾ß£¬ÊÂ¼þºÍÄãÈÏÎªÓÐÓÃºÍºÍÄãÉè¼ÆµÄÂ·¾¶¹ØÁªµÄÄÚÈÝ¶¼¿ÉÒÔ¼ÓÈë£º<BR>
+<UL>
+<LI>½ÌÑ§¼Æ»® 
+<LI>ÎÄµµ£¨ÎÄ±¾£¬Í¼Æ¬£¬OFFICEÎÄµµ£© 
+<LI>Í¨Öª 
+<LI>Õû¸öÂÛÌ³ 
+<LI>Ö÷Ìâ 
+<LI>¸öÈËÖ÷ÌâÏûÏ¢ 
+<LI>Á´½Ó 
+<LI>Dokeos²âÊÔ 
+<LI>HotPotatoes²âÊÔ <BR>£¨×¢£ºÔÚ³ÊÏÖËûÃÇÖ®Ç°£¬Äã±ØÐëÔÚ×Ô²â¹¤¾ßÀïÉèÖÃÏÔÊ¾²âÊÔ£© 
+<LI>·¢²¼×÷Òµ 
+<LI>ÊÕ¼þÏä 
+<LI>Á´½Óµ½ÏµÍ³ÍâµÄÍâ²¿Á´½Ó</LI></UL>
+<P><B>Ñ§Ï°Â·¾¶µÄÆäËûÌØµã</B> </P>
+<P>ÄãÉèÖÃÔ¤ÏÈµÄÂ·¾¶ºó£¬Ñ§Éú±»ÒÔÒ»¸ö¼È¶¨µÄË³ÐòÈ¥Ö´ÐÐÄãµÄÂ·¾¶¡£Õâ¸öÒâË¼¾ÍÊÇ£¬Ñ§ÉúÔÚÃ»ÓÐ¶ÁÍêÎÄµµ1Ö®Ç°²»ÄÜ½øÈë²âÊÔ2¡£ËùÓÐµÄÌõÄ¿¶¼ÓÐÒ»¸ö×´Ì¬£ºÍê³É»òÎªÍê³É£¬Òò´Ë£¬Ñ§ÉúµÄ½ø³ÌÊÇÇå³þ¿É¼ûµÄ¡£ 
+</P>
+<P>Èç¹ûÄãÐÞ¸Ä²½ÖèµÄÔ­Ê¼±êÌâ£¬ÐÂµÄ±êÌâ½«³öÏÖÔÚÍ¨Â·ÖÐ£¬µ«ÊÇÔ­Ê¼±êÌâ²»ÄÜ¹»±»Ì½²âµ½¡£Òò´Ë£¬Èç¹ûÄãÏëÒªtest8.doc 
+×÷ÎªÆÚÄ©²âÊÔ³öÏÖÔÚÍ¨Â·ÖÐ£¬Äã±ØÐëÖØÃüÃûÕâ¸öÎÄ¼þ£¬Ê¹Í¨Â·ÖÐ³öÏÖÒ»¸öÐÂµÄÃû×Ö¡£ÐÞ¸ÄÎÄ¼þÃû¶ÔÎÄ¼þÃûÌ«³¤Ò²ÊÇÓÐÒæµÄ¡£ </P>
+<P>×öÍêºó£¬²»ÒªÍü¼ÇºË²éÑ§ÉúÊÓÍ¼¡£ÄÚÈÝ±í¸ñ³öÏÖÔÚ×ó±ß£¬Í¨Â·²½ÖèÒ»°ãÒ»¸ö½ÓÒ»¸ö³öÏÖÔÚÓÒ±ß¡£ </P><BR>
+<P><B>Ê²Ã´ÊÇSCORM »òIMS ¸ñÊ½µÄÑ§Ï°Â·¾¶ºÍÔõÑùÉÏ´«£¨µ¼Èë£©ËûÃÇ£¿</B> </P>
+<P>Ñ§Ï°Â·¾¶¹¤¾ßÔÊÐíÄãÉÏ´«SCORM ºÍIMS ¼æÈÝµÄ¿Î³ÌÄÚÈÝ¡£</P>
+<P>SCORM£¨¿ÉÀ©Õ¹ÄÚÈÝ¶ÔÏó²Î¿¼Ä£ÐÍ£©ÊÇÒ»¸öÓÉÖ÷ÒªµÄE£­Learning ³§ÉÌÏñ NETg£¬Macromedia£¬Microsoft£¬Skillsoft 
+µÈ×ñÑ­µÄ¹«¹²±ê×¼¡£ÓÐÈý¸öÌØÐÔ£º </P>
+<UL>
+<LI><B>¾­¼ÃÐÔ£º</B>Í¨¹ý·ÖÀëÄÚÈÝºÍÄÚÈÝ¿ò¼Ü£¬ScormÔÊÐíÕû¸ö¿Î³Ì»òÐ¡ÄÚÈÝµ¥ÔªÔÚ²»Í¬µÄÑ§Ï°ÄÚÈÝ¹ÜÀíÆ½Ì¨Ö®¼ä¿ÉÖØ¸´Ê¹ÓÃ¡£ 
+<LI><B>½ÌÓýÐÔ£º</B>Scorm¼¯³ÉÁËÐòÁÐ»òË³Ðò¸ÅÄî£¨ÀýÈç£ºÔÚÃ»ÓÐÍ¨¹ý²âÊÔ1 £¬Äã²»ÄÜÇ°ÍùµÚ2 ÕÂ£© 
+<LI><B>ÏÈ½øÐÔ£º</B>Scorm´´ÔìÁËÒ»¸öÄÚÈÝ±í¸ñ£¬ËüÊÇÒ»¸öÎ»ÓÚ¿Î³ÌÄÚÈÝºÍLSMÆ½Ì¨Ö®ÍâµÄ³éÏó²ã¡£ËüÓÐÖúÓÚ¿Î³ÌÄÚÈÝºÍLMS»¥ÏàÍ¨Ñ¶¡£¹µÍ¨µÄ¶«Î÷Ö÷ÒªÊÇÊéÇ©£¨ÕÅÈýÔÚ¿Î³ÌµÄÄÄÀï£¿£©¡¢µÃ·Ö£¨ÕÅÈýÔõÑùÍ¨¹ý¿¼ÊÔµÄ£¿£©ºÍÊ±¼ä£¨ÕÅÈý×öÍêµÚÒ»ÕÂÓÃÁË¶à³¤Ê±¼ä£¿£©¡£ 
+</LI></UL><B>ÔõÑù´´½¨SCORM¼æÈÝµÄÑ§Ï°Â·¾¶?<BR></B><BR>×îÆÕÍ¨µÄ·½·¨ÊÇÊ¹ÓÃÍøÂç½ÌÑ§Æ½Ì¨Ñ§Ï°Â·¾¶±à¼­Æ÷£¬È»¶ø£¬ÔÚÉÏ´«µ½ÄãµÄÍøÂç½ÌÑ§Æ½Ì¨Ö®Ç°£¬ÔÚÄã×Ô¼ºµÄ¼ÆËã»úÉÏ£¬Äã»òÐíÏëÒª´´½¨ÍêÈ«Scorm¼æÈÝµÄÍøÕ¾¡£ÕâÖÖÇé¿öÏÂ£¬ÎÒÃÇÍÆ¼öÄãÊ¹ÓÃÒ»¸ö¸´ÔÓµÄ¹¤¾ßÏñLectora®»òReload®  
+<BR>
+<P>ÓÐÓÃµÄÁ´½Ó<BR>
+<UL>
+<LI>Adlnet : Scorm ±ê×¼È¨Íþ <A 
+href=\"\\%22http:/www.adlnet.org/\\%22\">http://www.adlnet.org</A> 
+<LI>Reload : ¿ª·¢Ô´ÂëµÄScorm²¥·ÅÆ÷ºÍ±à¼­Æ÷£¬ <A 
+href=\"\\%22http:/www.reload.ac.uk/\\%22\">http://www.reload.ac.uk</A> 
+<LI>Lectora : ·¢ÐÐÖø×÷Èí¼þ£¬ <A 
+href=\"\\%22http:/www.trivantis.com/\\%22\">http://www.trivantis.com</A><BR>
+<LI>HotPotatoes Ö÷Ò³, <A 
+href=\"\\%22http:/web.uvic.ca/hrd/halfbaked/\\%22\">http://web.uvic.ca/hrd/halfbaked/</A><BR></LI></UL>
+<P><B>×¢Òâ£º</B></P>
+<P>Ñ§Ï°Â·¾¶ÇøÓòÁÐ³öËùÓÐ×Ô½¨µÄÑ§Ï°Â·¾¶ºÍÉÏ´«µÄScorm ¸ñÊ½µÄÑ§Ï°Â·¾¶¡£</P>";
+$langHDescription = "¿Î³Ì¼ò½é°ïÖú";
+$langDescriptionContent = "<P>¿Î³ÌÃèÊö¹¤¾ßÔÊÐíÄãÃèÊöÄãµÄ¿Î³Ì¡£½«À´Ñ§Éú¿ÉÒÔ¶ÔÄãµÄ¿Î³ÌÓÐÒ»¸öÂÖÀª¡£ËûÒ²ÊÇÒ»¸öÄãÖØÐÂÉè¼Æ¿Î³ÌµÄ»ú»á¡£</P>ÔÚÕâÀï£¬ÓÐ½¨ÒéµÄ±êÌâ¡£Èç¹ûÄãÏëÒªÓÃ×Ô¼º´´½¨µÄ±êÌâ£¬½ö½öÑ¡Ôñ\"ÆäËû\"£¬ÌîÈëÄãµÄ±êÌâ¡£ 
+
+<P>ÎªÁËÌî³ä¿Î³ÌÃèÊö£¬Ñ¡Ôñ´´½¨ºÍ±à¼­¿Î³ÌÃèÊö>ÏÂÀ­²Ëµ¥£¬Ñ¡ÔñÄãÒªµÄÏîÄ¿>Ìî³ä±í¸ñ>È·ÈÏ¡£µã»÷Ç¦±Ê»òºì²æÍ¼±ê£¬Äã¿ÉÒÔËæÊ±ÐÞ¸Ä»òÉ¾³ýÃ¿Ò»¸öÏîÄ¿µÄÄÚÈÝ¡£</P>";
+$langHLinks = "Á´½Ó¹¤¾ß°ïÖú";
+$langLinksContent = "<P>Á´½Ó¹¤¾ßÔÊÐíÄãÎªÑ§Éú´´½¨Ò»¸ö×ÊÔ´¿â¡£ÓÈÆäÄã²»¿ÉÒÔ×Ô¼º´´½¨×ÊÔ´¡£</P>
+<P>Ëæ×ÅÁÐ±íµÄÔö³¤£¬·ÖÀàÁ´½ÓÓÐÖúÓÚÄãµÄÑ§ÉúÔÚÕýÈ·µÄµØ·½ÕÒµ½ÕýÈ·µÄÐÅÏ¢¡£Äã¿ÉÒÔ±à¼­Ã¿Ò»¸öÁ´½Ó£¬ÖØÐÂÖ¸ÅÉµ½Ò»¸öÐÂµÄ·ÖÀà£¨ÄãÐèÒªÊ×ÏÈ´´½¨Õâ¸ö·ÖÀà£©¡£</P>
+<P>ÃèÊöÇøÓò¼È¿ÉÒÔÌá¹©Ä¿±êWebÒ³µÄÔ¤ÏÈÐÅÏ¢£¬Ò²¿ÉÒÔÃèÊöÄãÆÚÍûÑ§ÉúÓÃÕâ¸öÁ´½Ó×öÊ²Ã´¡£ÀýÈç£¬ÄãÔÚÑÇÀïË¹¶àµÂÉÏÉèÖÃÁËÁ´½Ó£¬ÃèÊö»òÐíÒªÇóÑ§ÉúÑ§Ï°ºÏ³ÉºÍ·Ö½âµÄ²»Í¬¡£</P>";
+$langHMycourses = "¹ØÓÚÊ×Ò³";
+$langMycoursesContent = "<P>½øÈëÆ½Ì¨ºó£¬Äã¾Í»áÔÚ¸öÈË¿ªÊ¼Ò³Ãæ¡£</P>
+<P>ÔÚÖ÷ÇøÓò(ÖÐ¼ä)»á¿´µ½ \"<B>ÎÒµÄ¿Î³ÌÁÐ±í</B>\", ÄãËùÓÐ¿Î³ÌµÄÁÐ±í¡£Èç¹ûÄãµÄÓÃ»§È¨ÏÞ¿ÉÒÔ³ÉÎª½ÌÊ¦µÄ»°£¬Äã¿ÉÒÔ´´½¨ÐÂµÄ¿Î³Ì (Í¨¹ýÓÒ²àµÄ²Ëµ¥)¡£ 
+</P>
+<P>ÔÚ¶¥¶ËÄã¿É¿´µ½ 
+<UL>
+<LI>\"<B>¸öÈËÉèÖÃ</B>\": Ê¹ÓÃ¸öÈËÉèÖÃÐÞ¸ÄÄãµÄÃÜÂë£¬ÓÃ»§Ãû£¬Í·Ïñ£¬»òÆäËüÉèÖÃ¡£ÄãÒ²¿ÉÒÔ²ì¿´¸öÈË×´Ì¬£» 
+<LI>\"<B>ÎÒµÄÈÕ³Ì</B>\": ÎÒµÄÈÕ³Ì°üº¬ÁËÄã×¢²áÖ®ºóËùÓÐ¿Î³ÌÊÂ¼þ¡£</LI></UL>
+<P><B>±à¼­ÎÒµÄ¿Î³ÌÁÐ±í</B>, ÔÚÓÒ²à²Ëµ¥ÖÐ£¬Äã¿ÉÒÔÒÔÒ»¸ö½ÌÊ¦»ò×éÖ¯ÕßµÄÉí·Ý×¢²áÒ»¸öÐÂµÄ¿Î³Ì²¢ÔÊÐí±ðÈË¼ÓÈëµ½ÄãµÄ¿Î³ÌÖÐ¡£Õâ¸ö¹¤¾ßÒ²ÔÊÐíÄãÍË³öÄ³Ò»¿Î³Ì¡£ 
+</P>
+<P>ÔÚ <B>Ö§³ÖÂÛÌ³</B> ºÍ <B>ÎÄ¼þ</B> Á´½ÓÖÐ£¬Á´½Óµ½ Dokeos Ö÷Ò³, 
+ÔÚÄÇ¶ùÄã¿ÉÒÔÑ¯ÎÊ¼¼ÊõÎÊÌâ»ò½ÌÑ§ÎÊÌâ£¬²éÕÒ¸ü¶àµÄÐÅÏ¢¡£½øÈëÒ»¸ö¿Î³Ì£¨ÄãÖ÷Ò³µÄÖ÷ÇøÓò), 
+µã»÷¸÷¸öÃû³Æ¡£Äã¾Í¿ÉÒÔ´ÓÒ»¸ö¿Î³Ì×ªµ½ÁíÒ»¸ö¿Î³ÌÖÐ¡£ÔÚÄ³Ò»¿Î³ÌÖÐÄãÊÇ½ÌÊ¦£¬¶øÔÚÁíÒ»¿Î³ÌÖÐ£¬Äã¾Í¿ÉÄÜÊÇÑ§Éú¡£</P>
+";
+$langHAgenda = "ÈÕ³Ì°ïÖú";
+$langAgendaContent = "<P>Ã¿Ò»ÃÅ¿Î³ÌÍøÕ¾¶¼ÓÐ½ÌÑ§¼Æ»®£¬×÷ÎªÑ§Éú×ÛºÏ¹¤¾ßÊÇ\"ÎÒµÄÈÕÀú\"£¬ËüÔÚÍøÒ³µÄ¶¥²¿¡£</P>
+<P>ÔÚ¿Î³ÌÍøÕ¾Àï£¬½ÌÑ§¼Æ»®ÏÔÊ¾ÁËËùÓÐÊÂ¼þÁÐ±í¡£Äã¿ÉÒÔÕ³ÌùÎÄµµ»ò»î¶¯µ½Ò»¸öÈÕÆÚ£¬ÒÔ±ãÊ¹ÓÃ½ÌÑ§¼Æ»®Ë³Ðò°²ÅÅÄãµÄ½ÌÑ§»î¶¯¡£</P>
+<P>½ÌÑ§¼Æ»®³ýÁË°²ÅÅÊÂ¼þÒÔÍâ£¬Ñ§ÉúÏÂ´ÎµÇÂ¼Ê±£¬ÐÂµÄ½ÌÑ§¼Æ»®ÊÂ¼þ½«Õ¹ÏÖ¸øÑ§Éú£¬ÏµÍ³¸æËßÑ§Éú×ÔËûÉÏ´Î·ÃÎÊÒÔÀ´ÔÚ½ÌÑ§¼Æ»®£¨»òÍ¨Öª£©ÀïÔö¼ÓÁËÊ²Ã´¡£ÔÚ¿Î³ÌÃÅ»§ÍøÒ³Àï£¬¿Î³ÌÃûµÄÅÔ±ß£¬½«ÓÐÒ»¸ö±íÊ¾Í¨Öª»òÊÂ¼þÔö¼ÓµÄÐ¡Í¼±ê¡£</P>
+<P>Èç¹ûÄãÏëÒªÏà¼ÌµÄ½ÌÑ§»î¶¯Âß¼­½á¹¹¸üÓÐÇ°Õ°ÐÔ£¬ÎÒÃÇ½¨Òé£¬ÄãÊÊÒËÊ¹ÓÃÑ§Ï°Í¨Â·£¬ËüÓÃ¸ü¸ß¼¶µÄ¹¦ÄÜÌá¹©Ò»ÑùµÄÔ­Àí¡£Ñ§Ï°Í¨Â·¿ÉÒÔµ±×÷ÊÇÒ»¸ö×ÛºÏ±í¸ñÄÚÈÝ¹¤¾ß+½ÌÑ§¼Æ»®+ÐòÁÐ£¨Ç¿¼ÓµÄË³Ðò£©ºÍ¸ú×Ù¡£</P>";
+$langHAnnouncements = "Í¨Öª°ïÖú";
+$langAnnouncementsContent = "<P>Í¨Öª¹¤¾ßÔÊÐíÄã·¢ËÍEmail ¸øËùÓÐµÄÑ§Éú»òÒ»²¿·ÖÑ§Éú»òÒ»×éÑ§Éú¡£Èç¹ûÑ§Éú²»¾­³£·ÃÎÊÄãµÄ¿Î³ÌÍøÕ¾£¬Í¨Öª¹¤¾ßÄÜÊ¹Ñ§Éú·µ»Øµ½ÄãµÄ¿Î³ÌÍøÕ¾¡£</P>
+<P>·¢ËÍÍ¨Öª¸øÄ³¸öÓÃ»§ºÍ/»òÄ³Ð©×é£¬Ñ¡Ôñ \'Ñ¡ÔñÓÃ»§·¢ËÍÍ¨Öª\' È»ºóÓÃ CTRL+C ÔÚ×ó²à²Ëµ¥ÖÐÑ¡ÔñÒ»¸öÒÔÉÏÓÃ»§, 
+µã»÷ÏòÓÒµÄË«¼ýÍ·ÒÆ¶¯ËûÃÇµ½Ñ¡ÖÐÑ§ÉúÁÐ±í£¬ÔÚÏÂÃæµÄÇøÓòÊäÈëÄãµÄÏûÏ¢ÄÚÈÝ£¬µã»÷\"È·ÈÏ\"¡£</P>";
+$langHChat = "ÁÄÌìÊÒ°ïÖú";
+$langChatContent = "<P>ÁÄÌì¹¤¾ßÔÊÐíÄãºÍÄãµÄÑ§ÉúÔÚÏßÌÖÂÛ¡£</P>
+<P>Õâ¸öÁÄÌì¹¤¾ß²»ºÍ³£¼ûµÄÁÄÌì¹¤¾ß£¨ÈçMSN,Yahoo 
+Messenger£©²»Ò»Ñù£¬ËûÊÇ»ùÓÚWeb·½Ê½µÄ¡£È±µãÊÇËü²»ÊÇ¼´Ê±µÄ£¬¶øÊÇ10ÃëÖÓË¢ÐÂÒ»´Î£¬ÓÅµãÊÇËü¼¯³ÉÔÚÄãµÄ¿Î³ÌÀï±ß£¬¹éµµÄãµÄÌÖÂÛµ½½²Òå²ÄÁÏÀï¶øÇÒ²»ÐèÒªÑ§ÉúÏÂÔØÈÎºÎ²å¼þ.</P>
+<P>Èç¹ûÓÃ»§ÔÚ¶¥²¿\"¸öÈË×ÊÁÏ\"ÀïÌí¼ÓÁËËûÃÇµÄÕÕÆ¬£¬ÄÇÃ´ÕÕÆ¬½«ÏÔÊ¾ÔÚÁÄÌì¹¤¾ßÀï±ß°ïÖúÄãÊ¶±ðÕýÔÚÁÄÌìµÄÈËÊÇË­¡£</P>
+<P>½ö½öÀÏÊ¦¿ÉÒÔÉ¾³ýÁÄÌì¼ÇÂ¼¡£</P>
+<P><B>½ÌÓýÑ§Ïà¹Ø</B></P>
+<P>Ôö¼ÓÁÄÌì¹¤¾ßµ½ÄãµÄ¿Î³Ì²»Ò»¶¨ÊÇ¸öºÃÖ÷Òâ¡£È»¶ø£¬Èç¹ûÄãµÄ½ÌÑ§Éè¼ÆÐèÒªÁÄÌì¹¤¾ß£¬ÄÇÃ´ËüÊÇºÜÓÐ°ïÖúµÄ¡£Äã¿ÉÒÔÏëÏñ£¬ÀýÈç£¬Æ½Ê±Òþ²ØÁÄÌì¹¤¾ß³ý·ÇÔÚÌØ¶¨µÄÊ±¼äÄãÐèÒªºÍÑ§Éú½øÐÐÔÚÏß»Ø´ðÎÊÌâµÄµÄ»áÒé¡£ºÜÉÙÓÃÕâÖÖ·½Ê½×ÔÓÉÌÖÂÛ£¬µ«ÊÇÄã¿ÉÒÔ¸øÑ§ÉúÒ»¸ö±£Ö¤£¬²Î¼ÓÔÚÏßÁÄÌìÊÇÓÐÒæÓÚÑ§Ï°µÄ¡£</P>";
+$langHWork = "×÷ÒµÂÛÎÄ°ïÖú";
+$langWorkContent = "<P>×÷ÒµÂÛÎÄ¹¤¾ßÊÇ¼òµ¥µÄ¡£ËüÔÊÐíÄãµÄÑ§ÉúÉÏ´«ÈÎºÎÎÄµµµ½¿Î³ÌÇøÓò¡£</P>
+<P>ÒÀÀµÓÚÄãµÄ¿Î³ÌÉè¼Æ£¬ÄãÐèÒª¾ö¶¨ÊÇ·ñÏëÒªÈ«ÌåÑ§Éú¿´µ½ËùÓÐÎÄµµ£¨ÀýÈç£¬ÄãÏëÒªËûÃÇÔÚÆäËûµÄ¿Õ°×Ò³Ð´ÏÂËûÃÇµÄÒâ¼û£©»òÄãÏëÒª½ö½öÄã×Ô¼º¿ÉÒÔ¿´µ½ÎÄµµ£¨ÀýÈç£¬ÄãÏëÒª·ÅÒ»·Ý´ð°¸¡££©¡£</P>
+<P>Õâ¸ö¹¤¾ßÓÐÒ»¸ö½éÉÜÎÄ±¾ÇøÓò£¬ÔÊÐíÄãÐ´Ò»¸öÒÉÎÊ»òÏêÏ¸Ö¸µ¼·½Õë»ò½ØÖÁÆÚÏÞ»òÄã·¢ÏÖÏà¹ØµÄ¶«Î÷¡£</P>";
+$langHTracking = "Ñ§Ï°¸ú×Ù°ïÖú";
+$langTrackingContent = "<P>Äã¿ÉÒÔ×¢Òâµ½Ñ§ÉúµÄÐÐÎª£ºËûÃÇµÇÂ¼¹ýÏµÍ³Âð£¿Ê²Ã´Ê±ºòµÇÂ¼»òµÇÂ¼¶à³¤Ê±¼ä£¿´Ó²âÊÔÖÐËûÃÇµÃµ½¶àÉÙ£¿ËûÃÇÉÏ´«ÁË×÷ÒµÃ»ÓÐ£¿Ê²Ã´Ê±ºòÉÏ´«µÄ£¿Èç¹ûÄãÔÚÊ¹ÓÃSCORM¿Î³Ì£¬Äã¿ÉÒÔ¿´µ½Ñ§ÉúÔÚÒ»¸öÕÂ½Ú»òÄ£¿éÉÏ»¨ÁË¶à³¤Ê±¼ä¡£¸ú×ÙÌá¹©ÁËÁ½¸öË®Æ½µÄÐÅÏ¢£º 
+
+<UL>
+<LI><B>È«¾ÖÐÔ£º</B>¶àÉÙÑ§Éú·ÃÎÊÕâÃÅ¿Î³Ì£¿·ÃÎÊÁ¿×î´óµÄÒ³ÃæºÍÁ´½ÓÊÇÊ²Ã´£¿ 
+<LI><B>¸ö±ðÐÔ£º</B>John Doe·ÃÎÊ¹ýÊ²Ã´Ò³Ãæ£¿ÔÚ²âÊÔÖÐ£¬ËûµÃÁË¶àÉÙ·Ö£¿×îºóÒ»´ÎµÇÂ¼ÏµÍ³ÊÇÊ²Ã´Ê±ºò£¿</LI></UL>";
+$langHSettings = "¿Î³ÌÉèÖÃ°ïÖú";
+$langSettingsContent = "<P>¿Î³ÌÉèÖÃÔÊÐíÄã¹ÜÀíÄã¿Î³ÌµÄÈ«¾Ö±äÁ¿: ±êÌâ£¬´úÂë£¬ÓïÑÔ£¬½ÌÊ¦Ãû×ÖµÈ¡£</P>
+<P>Õâ¸öÑ¡ÏîÎ»ÓÚÒ³ÃæµÄÖÐ²¿ÄÜ¹»½øÐÐ¸öÐÔ»¯ÉèÖÃ£º¿Î³ÌÊÇ¹«¿ª»¹ÊÇË½ÓÐ Ñ§ÉúÄÜ·ñ×¢²á½øÈë? Äã¿ÉÒÔÁé»îµØÊ¹ÓÃÕâÐ©ÉèÖÃ : ÔÚÐèÒ»ÖÜ´ò¿ª×¢²á¹¦ÄÜ > ¸æËßÄãµÄÑ§Éú¿ªÊ¼×¢²á > ¹Ø±Õ×¢²á > ÔÚÓÃ»§ÁÐ±íÖÐÉ¾³ýÎÞ¹ØÈËÔ±¡£Í¨¹ýÕâÖÖ·½·¨ÐØ¿ÉÒÔ¶ÔÑ¡ÔñÄã¿Î³ÌµÄÑ§Éú¼ÓÒÔ¿ØÖÆ¡£</P>
+<P>ÔÚÒ³ÃæµÄµ×²¿£¬Äã¿ÉÒÔ±¸·Ý»òÉ¾³ý¿Î³Ì¡£±¸·Ý¿Î³Ì½«»áÔÚ·þÎñÆ÷ÉÏ´´½¨Ò»¸öÎÄ¼þ²¢ÔÊÐíÄã½«Æä¿½±´µ½Äã×Ô¼ºµÄÎïÀíÓ²ÅÌÉÏ¡£ÕâÑù¾ÍÓÐ2¸öÔÚ²»Í¬Î»ÖÃÉÏµÄ±¸·ÝÁË¡£Èç¹ûÄã±¸·ÝÁËÒ»¸ö¿Î³ÌÈ»ºóÉ¾³ýÁËËü£¬Äã±¾ÈËÊÇÎÞ·¨»Ö¸´ÄãµÄ¿Î³ÌÁË£¬Èç¹ûÄã¸æËßÏµÍ³¹ÜÀíÔ±ÄãµÄ¿Î³Ì´úÂë£¬Ö»ÓÐÏµÍ³¹ÜÀíÔ±²ÅÄÜ¹»»Ö¸´¡£±¸·Ý¿Î³ÌÄÜ¹»½«ÄãËùÓÐµÄ×ÊÁÏ±¸·Ýµ½Äã×Ô¼ºµÄ¼ÆËã»úÉÏ¡£Äã½«ÐèÒªÒ»Ð©¹¤¾ß£¬±ÈÈç 
+Winzip® È¥½âÑ¹ËõÕâÐ©ÎÄ¼þ. ×¢ÒâÕýÔÚ±¸·ÝµÄÎÄ¼þÊÇ²»»á±»É¾³ýµÄ¡£</P>";
+$langHExternal = "Ìí¼ÓÁ´½Ó";
+$langExternalContent = "<P>Dokeos 
+ÊÇÒ»¸öÄ£¿é»¯¹¤¾ß¡£¸ù¾ÝÄãµÄ¿Î³ÌÖ÷ÌâºÍ½ÌÑ§Éè¼ÆÀíÄîµÄ²»Í¬£¬Äã¿ÉÒÔÒþ²ØºÍÏÔÊ¾ÄãÏëÒªÒþ²ØµÄ¹¤¾ß¡£È»¶ø£¬ÄãÒ²¿ÉÒÔÔö¼ÓÄãÒÑ¾­´´½¨µÄ¸öÈËÖ÷Ò³£¬ËûÊÇÔÚDokeosÏµÍ³µÄÍâ±ß¡£ÕâÑù,¾ÍÊ¹ÄãµÄ¿Î³ÌÖ÷Ò³³ÉÎªÄãµÄ¸öÈËÖ÷Ò³.</P>
+<P>Ôö¼ÓÁ´½Óµ½Ö÷Ò³£¬Ñ¡Ôñ¡°Ìí¼ÓÁ´½Ó¡±°´Å¥¡£Á´½ÓÓÐ2ÖÖÀàÐÍ£º 
+<UL>
+<LI><B>Íâ²¿Á´½Ó</B>: Äã¿ÉÒÔÔÚÄãµÄ¿Î³ÌÍøÕ¾´´½¨Ò»¸öÁ´ÏòÍâ²¿µÄURL 
+¡£ÕâÖÖÇé¿öÏÂ£¬Äã¿ÉÒÔÑ¡ÔñÔÚÐÂ´°¿Ú´ò¿ªÁ´½Ó£¬ÒòÎªÄã²»ÏëÒªÕâ¸öÁ´½ÓÌæ»»ÄãµÄDokeos»·¾³¡£ . 
+<LI><B>ÄÚ²¿Á´½Ó</B>: 
+Äã¿ÉÒÔÔÚÄãµÄ¿Î³ÌÍøÕ¾Á´½ÓÒ»¸öÒ³Ãæ»ò¹¤¾ß£¬ÄãÐèÒªÊ×ÏÈÈ¥ÄÇÒ³»òÎÄµµ»ò¹¤¾ß£¬´Óä¯ÀÀÆ÷µÄµØÖ·À¸¿½±´ËûµÄUR£¬È»ºóÔö¼ÓÁ´½Ó£¬Õ³ÌùÕâ¸öURLµ½URLÊäÈë¿ò£¬È»ºó£¬ÊäÈëÄÚ²¿Á¬½ÓÃû×Ö¡£ÕâÖÖÇé¿öÏÂ£¬Äã¿ÉÒÔÑ¡ÔñÔÚÍ¬Ò»¸ö´°¿Ú´ò¿ªÐÂµÄÁ´½Ó£¬ÒòÎªÄãÏ£Íû±£³ÖÍøÂç½ÌÑ§Æ½Ì¨ºáÌõ·ùÈÔÈ»ÔÚÒ»¸ö´°¿ÚÖÐ¡£.</LI></UL>Ò»µ©´´½¨£¬ÕâÐ©Á´½Ó²»ÄÜ¹»ÐÞ¸Ä£¬Èç¹ûÒªÐÞ¸Ä£¬Î¨Ò»µÄ½â¾ö°ì·¨ÊÇÉ¾³ýËûÃÇÈ»ºóÖØ½¨¡£";
+$langClarContent3 = "Çå³ýÄÚÈÝ";
+$langClarContent4 = "Çå³ýÄÚÈÝ";
+$langClarContent1 = "Çå³ýÄÚÈÝ";
+$langClarContent2 = "Çå³ýÄÚÈÝ";
+$langHGroups = "Ð¡×é";
+$langGroupsContent = "Ð¡×éÄÚÈÝ";
+$langGuide = "ÊÖ²á";
+$langHCourseRolesRights = "½ÇÉ«ºÍÈ¨ÏÞ°ïÖú";
+$langCourseRolesRightsContent = "<P>ÔÚÄãµÄ½ÇÉ«ºÍÈ¨ÏÞÒ³ÃæÖÐ£¬Äã¿ÉÒÔ¾«È·ÉèÖÃ<I>Ë­±»ÔÊÐíÔÚÊ²Ã´Î»ÖÃ×öÊ²Ã´</I>¡£</P>
+<P>Õâ¸ö»ù±¾¸ÅÄîÊÇ£¬¶ÔÓÚÃ¿Ò»¸ö¿Î³Ì¹¤¾ß£¬Äã¿ÉÒÔÉèÖÃË­¿ÉÒÔ²ì¿´Õâ¸ö¹¤¾ßµÄÄÚÈÝ£¬Ìí¼ÓÐÂÌõÄ¿ºÍÎÄ¼þ¼Ð£¬±à¼­ÏÖÓÐÐÅÏ¢£¬»òÕßÉ¾³ýÄÚÈÝ¡£µ«ÊÇ£¬Äã²»±ØÎªÃ¿Ò»¸öÓÃ»§×öÏÞ¶¨¡£ÓÃ»§ÔÚÄãµÄ¿Î³ÌÖÐµÄ½ÇÉ«£¬¿ÉÒÔÊÇÓÎ¿Í¡¢Ñ§Éú¡¢Öú½Ì»òÕßÊÇ¿Î³Ì¹ÜÀíÔ±¡£Äã¿ÉÒÔÎª²»Í¬½ÇÉ«ÏÞ¶¨Ã¿Ò»¸ö¹¤¾ßµÄÈ¨ÏÞ¡£Äã¿ÉÒÔÉè¶¨Ã¿Ò»¸öÓÃ»§¶¼ÄÜ¹»½øÈëÂÛÌ³£¬µ«ÊÇÓÎ¿Í²»ÄÜ·¢±íÌù×Ó 
+- Ö»ÓÐ×¢²áÓÃ»§¿ÉÒÔ¡£Äã¿ÉÒÔÉèÖÃÖú½Ì¿ÉÒÔÌí¼ÓÎÄ¼þµ½ÄãµÄ¿Î³ÌÖÐ£¬µ«ÊÇ²»ÄÜÉ¾³ý£¬µÈµÈ¡£</P>
+<P>ÔÚÄã¿Î³ÌµÄÓÃ»§¹¤¾ßÖÐ£¬Äã¿ÉÒÔ¿´µ½ÓÃ»§µÄ½ÇÉ«²¢±à¼­ËüÃÇ£¨Ê¹ÓÃÓÃ»§ÁÐ±íÖÐµÄ±à¼­°´Å¥£©¡£ </P>
+<H3>½ÇÉ«</H3>
+<P>ÔÚDokeosÖÐÓÐÎå¸ö½ÇÉ«£¬Äã¿ÉÒÔÔÚ¿Î³ÌÖÐ·ÖÅä²»Í¬µÄ½ÇÉ«¡£ 
+<UL>
+<LI><B>ÄäÃû·ÃÎÊ</B>: ÄäÃû·ÃÎÊ¿ÉÒÔÊÇÊÀ½çÉÏÈÎºÎµØ·½µÄÈÎºÎÈË£¬´ò¿ªä¯ÀÀÆ÷£¬È»ºó·ÃÎÊÄãµÄ¿Î³Ì¡£Ä¬ÈÏÇé¿öÏÂ£¬ÕâÐ©ÓÃ»§¸ù±¾ÎÞÈ¨·ÃÎÊÄãµÄ¿Î³Ì¡£ 
+<LI><B>×¢²áÓÃ»§</B>: ×¢²áÓÃ»§ÊÇÖ¸ÔÚDokeosÆ½Ì¨ÖÐ×¢²áµÄÓÃ»§£¬Ã»ÓÐ¼ÓÈëÄãµÄ¿Î³Ì£¬·ÃÎÊÄãµÄ¿Î³Ì¡£ 
+<LI><B>¿Î³ÌÓÃ»§</B>: ¿Î³ÌÓÃ»§ÊÇ¼ÓÈëµ½ÄãµÄ¿Î³ÌÖÐµÄ×¢²áÓÃ»§¡£´ó²¿·ÖÓÃ»§ÊôÓÚ¸Ã½ÇÉ«£¬¿Î³Ì¹ÜÀíÕß¿ÉÒÔ·ÖÅäÕâÐ©½ÇÉ«ÖÐµÄÒ»Ð©ÈËÎªÖú½ÌÒÔ±ã°ïÖú¿Î³Ì¿ªÕ¹¡£ 
+<LI><B>Öú½Ì</B>: Öú½Ì½ÇÉ«¿ÉÒÔÓÐºÜ¶àÈ¨ÏÞ¡£ÔÚÐí¶à¹¤¾ßÖÐ£¬Öú½Ì¿ÉÒÔ²ì¿´£¬Ìí¼ÓºÍ±à¼­ÄÚÈÝ£¬µ«²»ÄÜÉ¾³ý¡£Ä¬ÈÏÇé¿öÏÂ£¬Öú½ÌÒ²²»ÄÜ±à¼­¿Î³ÌÉèÖÃ¿ÉÕß¿Î³ÌÈ¨ÏÞ¡£ 
+<LI><B>¿Î³Ì¹ÜÀíÔ±</B>: ¿Î³Ì¹ÜÀíÔ±ÓµÓÐ¿Î³ÌµÄËùÓÐÈ¨ÏÞ£¬¿ÉÒÔ×öÈÎºÎÊÂÇé¡£¿Î³ÌµÄ´´½¨Õß×Ô¶¯»ñµÃ´ËÈ¨ÏÞ¡£ </LI></UL>
+<H3>ËùÓÐÈ¨ÏÞ</H3>
+<P>ÔÚDokeosÖÐÓÐËÄ¸ö»ù±¾È¨ÏÞ£º 
+<UL>
+<LI><B>²ì¿´</B>: ²ì¿´Ä³Ò»¹¤¾ßÄÚÈÝµÄÈ¨ÏÞ 
+<LI><B>Ìí¼Ó</B>: ÔÚÄ³Ò»¹¤¾ßÖÐÌí¼ÓÄÚÈÝµÄÈ¨ÏÞ£¬¼´Ìí¼ÓÁ´½Ó£¬·ÖÀà£¬ÎÄ¼þ£¬ÎÄ¼þ¼Ð£¬Ñ§Éú×÷Òµ£¬ÂÛÌ³ÐÅÏ¢¡­¡­ 
+<LI><B>±à¼­</B>: ÔÚÄ³Ò»¹¤¾ßÖÐ±à¼­ÏÖÓÐÄÚÈÝµÄÈ¨ÏÞ£¬¼´±à¼­Á´½Ó£¬ÎÄ¼þÃû£¬ÎÄ¼þµÄ±êÌâ»ò¹Ø¼ü×ÖµÈ¡­¡­ 
+<LI><B>É¾³ý</B>: ÔÚÄ³Ò»¹¤¾ßÖÐÉ¾³ýÄÚÈÝµÄÈ¨ÏÞ£¬¼´É¾³ýÁ´½Ó£¬Ñ§Éú×÷Òµ£¬ÂÛÌ³ÐÅÏ¢£¬ÎÄ¼þ¡­¡­ </LI></UL>
+<H3>Î»ÖÃ</H3>
+<P>Ã¿Ò»¸ö¿Î³ÌµÄ¿Î³ÌºÍÃ¿¸ö¿Î³Ì¹¤¾ßÔÚDokeosÖÐµÄÎ»ÖÃÊÇ²»Í¬µÄ£¬Òò´Ë¾ÙÀýËµÃ÷ÓÐÒÔÏÂ¼¸¸öÎ»ÖÃ 
+<UL>
+<LI>¿Î³ÌTEST_COURSE 
+<LI>¿Î³ÌTEST_COURSEµÄÎÄ¼þ¹¤¾ß 
+<LI>¿Î³ÌPsychology101µÄÈÕ³Ì±í¹¤¾ß </LI></UL>
+<H3>ÉèÖÃÈ¨ÏÞ</H3>
+<P>×÷Îª¿Î³Ì¹ÜÀíÔ±£¬Äã¿ÉÒÔÉè¶¨ÄÄ¸öÈË¿ÉÒÔÔÚÄÄÀï×öÊ²Ã´¡£¶ÔÓÚÃ¿Ò»¸ö½ÇÉ«ºÍÎ»ÖÃ¼ÓÔÚÒ»ÆðÓÐËÄ¸öÈ¨ÏÞ¿ÉÒÔÉèÖÃ¡£Òò´ËÄã¿ÉÒÔÎªÖú½ÌÔÚÎÄ¼þ¹¤¾ßÖÐÉèÖÃ²ì¿´È¨ÏÞ£¬ÔÚÁ´½Ó¹¤¾ßÖÐÎªÑ§ÉúÌí¼ÓÈ¨ÏÞµÈ¡£</P>";
+?>

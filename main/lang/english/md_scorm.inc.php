@@ -1,0 +1,49 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$nameTools = "obsolete language var";
+$langMdCallingTool = "Learning path - Scorm";
+$langTool = "Scorm MD Operations";
+$langSorry = "Select a course first";
+$langDenied = "This function is only available for course admins";
+$langWorkOn = "on";
+$langNotInDB = "no Dokeos DB entry";
+$langManifestSyntax = "(syntax error in manifest file...)";
+$langEmptyManifest = "(empty manifest file...)";
+$langNoManifest = "(no manifest file...)";
+$langNotFolder = "are not possible, it is not a folder...";
+$langContinue = "Continue with SD-id";
+$langUploadHtt = "Upload HTT file";
+$langHttFileNotFound = "New HTT file could not be opened (e.g. empty, too big)";
+$langHttOk = "New HTT file has been uploaded";
+$langHttNotOk = "HTT file upload has failed";
+$langRemoveHtt = "Remove HTT file";
+$langHttRmvOk = "HTT file has been removed";
+$langHttRmvNotOk = "HTT file remove has failed";
+$langImport = "Create MDEs from manifest";
+$langRemove = "Remove MDEs";
+$langAllRemovedFor = "All entries removed for";
+$langIndex = "Index Words with PhpDig";
+$langStatistics = "Statistics";
+$langTotalMDEs = "Total number of Scorm MD entries: ";
+$langMainMD = "Open Main MDE";
+$langLines = "lines";
+$langPlay = "Play index.php";
+$langNonePossible = "No MD operations are possible";
+$langOrElse = "Select a Scorm Directory or a Scorm Directory id";
+$langWorkWith = "Work with Scorm Directory";
+$langSDI = "... Scorm Directory with SD-id (and split manifest - or leave empty)";
+$langRoot = "root";
+$langSplitData = "Split manifests, and #MDe, if any: ";
+$langMffNotOk = "Manifest file replace has failed";
+$langMffOk = "Manifest file has been replaced";
+$langMffFileNotFound = "New manifest file could not be opened (e.g. empty, too big)";
+$langUploadMff = "Replace manifest file";
+$langMfMissing = "The manifest file was not found";
+$langMfFile = "Manifest file";
+$langMfSyntaxError = "Syntax error in the manifest file";
+$langManifest = "Manifest";
+$langImported = "imported";
+$langImpossible = "Impossible";
+$langTo = "to";
+?>

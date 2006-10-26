@@ -1,0 +1,205 @@
+<?php
+/*
+==============================================================================
+	Dokeos - elearning and course management software
+
+	Copyright (c) 2006 Dokeos S.A.
+	Copyright (c) 2006 Ghent University (UGent)
+
+	For a full list of contributors, see "credits.txt".
+	The full license can be read in "license.txt".
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	See the GNU General Public License for more details.
+
+	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
+	Mail: info@dokeos.com
+==============================================================================
+*/
+
+/**
+*	These files are a complete rework of the forum. The database structure is 
+*	based on phpBB but all the code is rewritten. A lot of new functionalities
+*	are added:
+* 	- forum categories and forums can be sorted up or down, locked or made invisible
+*	- consistent and integrated forum administration
+* 	- forum options: 	are students allowed to edit their post? 
+* 						moderation of posts (approval)
+* 						reply only forums (students cannot create new threads)
+* 						multiple forums per group
+*	- sticky messages
+* 	- new view option: nested view
+* 	- quoting a message
+*	
+*	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+*	@Copyright Ghent University
+*	@Copyright Patrick Cool
+* 
+* 	@package dokeos.forum
+*/
+
+/**
+ **************************************************************************
+ *						IMPORTANT NOTICE
+ * Please do not change anything is this code yet because there are still
+ * some significant code that need to happen and I do not have the time to
+ * merge files and test it all over again. So for the moment, please do not
+ * touch the code
+ * 							-- Patrick Cool <patrick.cool@UGent.be>
+ ************************************************************************** 
+ */
+
+/*
+==============================================================================
+		INIT SECTION
+==============================================================================
+*/
+
+/*
+-----------------------------------------------------------
+	Language Initialisation
+-----------------------------------------------------------
+*/
+$langFile = 'forum';
+require ('../inc/global.inc.php');
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+$nameTools=get_lang('Forum');
+
+
+/*
+-----------------------------------------------------------
+	Including necessary files
+-----------------------------------------------------------
+*/
+include('forumconfig.inc.php');
+include('forumfunction.inc.php');
+
+
+/*
+==============================================================================
+		MAIN DISPLAY SECTION
+==============================================================================
+*/
+/*
+-----------------------------------------------------------
+	Retrieving forum and forum categorie information
+-----------------------------------------------------------
+*/
+$current_forum=get_forum_information($_GET['forum']); // note: this has to be validated that it is an existing forum. 
+$current_forum_category=get_forumcategory_information($current_forum['forum_category']);
+
+/*
+-----------------------------------------------------------
+	Breadcrumbs
+-----------------------------------------------------------
+*/
+$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
+$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
+$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" => $current_forum['forum_title']);
+$interbreadcrumb[]=array("url" => "newthread.php?forum=".$_GET['forum'],"name" => get_lang('NewThread'));
+
+/*
+-----------------------------------------------------------
+	Resource Linker
+-----------------------------------------------------------
+*/
+if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources'))
+{
+	$_SESSION['formelements']=$_POST; 
+	$_SESSION['origin']=$_SERVER['REQUEST_URI'];
+	$_SESSION['breadcrumbs']=$interbreadcrumb;
+	header("Location: ../resourcelinker/resourcelinker.php");
+}
+
+/*
+-----------------------------------------------------------
+	Header
+-----------------------------------------------------------
+*/
+Display :: display_header($nameTools);
+api_display_tool_title($nameTools);
+//echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
+/*
+-----------------------------------------------------------
+	Is the user allowed here? 
+-----------------------------------------------------------
+*/
+// the user is not allowed here if: 
+// 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
+// 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
+// 3. new threads are not allowed and the user is not a course manager
+// 4. anonymous posts are not allowed and the user is not logged in
+// I have split this is several pieces for clarity.  
+
+if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0)))
+{
+	forum_not_allowed_here();
+}
+// 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
+if (!api_is_allowed_to_edit() AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0))
+{
+	forum_not_allowed_here();
+}
+// 3. new threads are not allowed and the user is not a course manager
+if (!api_is_allowed_to_edit() AND $current_forum['allow_new_threads']<>1)
+{
+	forum_not_allowed_here();
+}
+// 4. anonymous posts are not allowed and the user is not logged in
+if (!$_uid  AND $current_forum['allow_anonymous']<>1)
+{
+	forum_not_allowed_here();
+}
+
+/*
+-----------------------------------------------------------
+	Display forms / Feedback Messages
+-----------------------------------------------------------
+*/
+handle_forum_and_forumcategories();
+
+/*
+-----------------------------------------------------------
+	Display Forum Category and the Forum information
+-----------------------------------------------------------
+*/
+echo "<table width='100%'>\n";
+
+// the forum category
+echo "\t<tr class=\"forum_category\">\n\t\t<td colspan=\"2\">";
+echo '<a href="index.php" '.class_visible_invisible($current_forum_category['visibility']).'>'.$current_forum_category['cat_title'].'</a><br />';
+echo '<span>'.$current_forum_category['cat_comment'].'</span>';
+echo "</td>\n";
+echo "\t</tr>\n";
+
+// the forum 
+echo "\t<tr class=\"forum_header\">\n";
+echo "\t\t<td colspan=\"2\">".$current_forum['forum_title']."<br />";
+echo '<span>'.$current_forum['forum_comment'].'</span>';
+echo "</td>\n";
+echo "\t</tr>\n";
+
+echo '</table>';
+
+$values=show_add_post_form('newthread','', $_SESSION['formelements']);
+if (!empty($values) and isset($values['SubmitPost']))
+{
+	store_thread($values);
+}
+
+/*
+==============================================================================
+		FOOTER
+==============================================================================
+*/
+
+Display :: display_footer();
+?>
+
+
+

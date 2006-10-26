@@ -1,0 +1,51 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$Announcement = "Obaveštenja";
+$langAnnEmpty = "Lista obaveštenja je ispražnjena";
+$AnnouncementModified = "Obaveštenje je izmenjeno";
+$AnnouncementAdded = "Obaveštenje je dodato";
+$AnnouncementDeleted = "Obaveštenje je obrisano";
+$AnnouncementPublishedOn = "Objavljeno na";
+$AddAnnouncement = "Dodaj obaveštenje";
+$langContent = "Sadržaj";
+$AnnouncementDeleteAll = "Isprazni listu obaveštenja ";
+$professorMessage = "poruke od predava&#269;a";
+$langEmailSent = "i poslato na e-mail registrovanom korisniku";
+$EmailOption = "Pošalji ovo obaveštenje na e-mail registrovanom korisniku";
+$langOn = "Uklju&#269;eno";
+$langRegUser = "registrovani korisnici sajta";
+$langUnvalid = "ima pogrešnu ili nema e-mail adresu";
+$langModifAnn = "Modifikuje ovo obaveštenje";
+$langModify    = "modifikuj";
+$langDelete    = "obriši";
+$langTitle     = "Naslov";
+$langHelp      = "pomo&#263;";
+$langOk        = "OK";
+$langAddIntro  = "Dodaj uvodni tekst";
+$langBackList  = "Povratak na listu";
+$langSelMess   = "Upozorenja nekim korisnicima";
+$EmailTitle  = "Tema za ovaj e-mail";
+$langUserlist  = "Lista grupa i korisnika";
+$langSelectedUsers  = "Selektovani korisnici";
+$langSubmit  = "Pošalji";
+$langPleaseEnterMessage  = "Morate uneti tekst poruke.";
+$langPleaseSelectUsers  = "Morate selektovati neke korisnike.";
+$Teachersubject = "Poruka poslata vašim polaznicima.";
+$langMessages  = "Poruke";
+$langMessageToSelectedUsers  = "Poruke selektovanim korisnicima";
+$langUsers  = "korisnici";
+$langIntroText  = "Da biste poslali poruku, selektujte grupe korisnika (obeležene sa G napred) ili po jednog korisnika sa liste levo.";
+$langDown = "dole";
+$langMsgSent = "Poruka je poslata selektovanim polaznicima";
+$langSelUser = "selektovani korisnici sajta";
+$langMessageToSelectedGroups = "poruka selektovanim grupama";
+$langGrouplist = "Lista grupa";
+$langSelectedGroups = "selektovne grupe";
+$langMsg = "Poruke";
+$langYes = "da";
+$MsgText = "Poruka";
+$AnnouncementDeletedAll = "Sva obaveštenja su obrisana";
+$AnnouncementMoved = "Obaveštenje je premešteno";
+$NoAnnouncements = "Nema obaveštenja";
+?>

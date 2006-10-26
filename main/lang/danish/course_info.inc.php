@@ -1,0 +1,95 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langModifInfo = "Ændre kursusinformation";
+$langModifDone = "Informationen er blevet ændret";
+$langHome = "Tilbage til kursushjemmesiden";
+$langCode = "Kursuskode";
+$langDelCourse = "Slet hele kursushjemmesiden";
+$langProfessors = "Undervisere";
+$langFaculty = "Fakultet";
+$langConfidentiality = "Fortrolighed omkring dit kursus";
+$langPublic = "Offentlig adgang til kurset fra E-learning\'s forside selv uden login.";
+$langUnsubscription = "Afmeld";
+$langPrivOpen = "Fortrolig adgang, åben tilmelding";
+$langPrivate = "Fortrolig adgang, tilmeldingen er lukket (kursushjemmesiden er dermed kun åben for deltagere på <a href=../user/user.php>Deltagerlisten</a>)";
+$langForbidden = "Ikke tilladt";
+$langLanguage = "Sprog";
+$langConfTip = "Som standard er dit kursus kun tilgængeligt for dig som dets eneste registrerede bruger. Ønsker du en vis fortrolighed omkring adgang til kurset, 
+er det letteste, at du åbner for tilmeldinger i f.eks.
+en uge (vælg: Fortrolig adgang, åben tilmelding), og beder de studerende om i første lektion selv at tilmelde sig indenfor denne tid, og derefter lukker for tilmeldinger (vælg: Fortrolig adgang, tilmeldingen er lukket). Du kan nu se de tilmeldte på deltagerlisten, og slette evt. uvelkomne.
+Kurset er nu kun tilgængeligt via login.";
+$langOpenToTheWorld = "Åben - adgang for hele verden";
+$OpenToThePlatform = "Åben - adgang tilladt for registrerede brugere af platformen";
+$langOpenToThePlatform = "Åben - adgang tilladt for brugere registreret på platformen";
+$langTipLang  = "Kursushjemmesidens sprog";
+$langAgenda = "Kalenderen";
+$langLink = "Links";
+$langDocument = "Dokumenter";
+$langVid = "Multimedia";
+$langWork = "Studerendes Opgaver";
+$langProgramMenu = "Kursusprogram";
+$langAnnouncement = "Meddelelser";
+$langForum = "Diskussionsforum";
+$langExercise = "Øvelser";
+$langStats = "Statistikker";
+$langUplPage = "Læg et html dokument ud på kursushjemmesiden";
+$langLinkSite = "Tilføj link til kursushjemmesiden";
+$langCourse = "Kursushjemmesiden ";
+$langHasDel = "er slettet";
+$langBackHome = "Tilbage til min kursusoversigt på ";
+$langByDel = "Ved at slette kursushjemmesiden, fjernes alle dokumenter og tilmeldte studerende (de fjernes ikke fra andre kurser).<p>Ønsker du virkelig at slette kurset?";
+$langY = "JA";
+$langN = "Nej";
+$langDepartmentUrl  = "Institut/Afdeling URL";
+$langDepartmentUrlName  = "Institut/Afdeling";
+$langBackupCourse = "Arkiver dette kursus";
+$langModifGroups = "Groups";
+$langProfessor = "Underviser";
+$langGroups  = "Grupper";
+$langChat  = "Chat";
+$langDescriptionCours   = "kursusbeskrivelse";
+$langArchive = "Arkiv";
+$langArchiveCourse  = "Sikkerhedskopi af kurset";
+$langRestoreCourse  = "Geopret et kursus";
+$langRestore = "Genopret";
+$langCreatedIn  = "Oprettet i";
+$langCreateMissingDirectories  = "Oprettelse af tabte kataloger";
+$langCopyDirectoryCourse  = "Kopi af kursusfiler";
+$langDisk_free_space  = "ledigt mellemrum";
+$langBuildTheCompressedFile  = "Oprettelse af sikkerhedskopi";
+$langFileCopied  = "filer er kopieret";
+$langArchiveLocation = "Arkivplacering";
+$langSizeOf  = "Størrelse af";
+$langArchiveName  = "Arkivnavn";
+$langBackupSuccesfull  = "Sikkerhedskopiering lykkedes";
+$langBUCourseDataOfMainBase  = "Sikkerhedskopi af kursusdata i hoveddatabase af";
+$langBUUsersInMainBase  = "Sikkerhedskopi af deltagerdata i hoveddatabase af";
+$langBUAnnounceInMainBase = "Sikkerhedskopi af meddelelsesdata i hoveddatabase af";
+$langBackupOfDataBase = "Sikkerhedskopi af database";
+$langCreationDate  = "Oprettet";
+$langExpirationDate   = "Udløb";
+$langPostPone  = "Udsat";
+$langLastEdit  = "Sidste redigering";
+$langLastVisit  = "Sidste besøg";
+$langSubscription = "Kursustilmelding";
+$langCourseAccess = "Kursusadgang";
+$langDownload = "Hent";
+$langConfirmBackup = "Ønsker du at sikkerhedskopiere dit kursus";
+$langCreateSite = "Opret en kursushjemmeside";
+$langRestoreDescription = "Dit kursus er i filarkivet som du kan vælge nedenfor.<br><br>
+Når du har klikket på \"Genetabler\", vil din arkivfil blive pakket ud og kurset vil blive genskabt.";
+$langRestoreNotice = "Dette script tillader ikke automatisk genopretning af deltagerlisten, men datanene fra \"deltagerlsiten.csv\" er gemt på en måde, således at administrator kan arbejde med disse manuelt.";
+$langAvailableArchives = "Tilgængelig arkivliste";
+$langNoArchive = "Der er ikke valgt et arkiv";
+$langArchiveNotFound = "Arkivet kan ikke findes";
+$langArchiveUncompressed = "Arkivet er blevet installeret.";
+$langCsvPutIntoDocTool = "Filen \"deltagerlisten.csv\" er lagt ind i værktøjet Dokuemnter.";
+$langBackH = "tilbage til hjemmesiden";
+$langOtherCategory = "Anden kategori";
+$langAllowedToUnsubscribe = "Brugere kan afmelde dette kursus";
+$langNotAllowedToUnsubscribe = "Brugere kan ikke afmelde dette kursus";
+$langDescription = "Beskrivelse";
+$langCourseVisibilityClosed = "Fuldstændig lukket; kurset er kun tilgængeligt for kursus administratoren.";
+$CourseVisibilityClosed = "Lukket - ingen adgang til dette kursus";
+?>

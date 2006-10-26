@@ -1,0 +1,63 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$ResourceAdded = "Recurso añadido. Usted ahora puede volver al itinerario o añadir más recursos.";
+$LearningPath = "Itinerarios de aprendizaje";
+$LevelUp = "nivel superior";
+$AddIt = "Añadir";
+$MainCategory = "categoría principal";
+$lang_delete_added_resources = "Borrar los recursos añadidos";
+$AddToLinks = "Añadir a los enlaces del curso";
+$DontAdd = "no añadir";
+$lang_show_all_added_resources = "Mostrar todos los recursos añadidos";
+$ResourcesAdded = "Recursos añadidos";
+$BackTo = "Volver a";
+$ExternalResources = "Recursos externos";
+$CourseResources = "Recursos del curso";
+$ExternalLink = "Enlace externo";
+$DropboxAdd = "Añadir una página con el Baúl de tareas a este módulo.";
+$AddAssignmentPage = "Añadir una página con las Publicaciones de los estudiantes a este módulo.";
+$Dropbox = "Baúl de tareas";
+$Assignments = "Publicaciones de los estudiantes";
+$Exercise = "Ejercicios";
+$Link = "Enlace";
+$Forum = "Foro";
+$AdValvas = "Añadir anuncio";
+$Document = "Documento";
+$Agenda = "Agenda";
+$ShowDelete = "Mostrar / Borrar";
+$IntroductionText = "Texto de introducción";
+$CourseDescription = "Descripción del curso";
+$Groups = "Grupos";
+$Users = "Usuarios";
+$IntroductionTextAdd = "Añadir una página que contenga el texto de introducción a este módulo.";
+$CourseDescriptionAdd = "Añadir una página que contenga la Descripción del curso a este módulo.";
+$GroupsAdd = "Añadir una página con los Grupos a este módulo.";
+$UsersAdd = "Añadir una página de los Usuarios a este módulo.";
+$ExportableCourseResources = "Recursos del curso exportables al formato SCORM";
+$DokeosRelatedCourseMaterial = "Recursos relacionados. No exportables al formato SCORM";
+$LinkTarget = "Destino del enlace";
+$SameWindow = "En la misma ventana";
+$NewWindow = "En una nueva ventana";
+$StepDeleted1 = "Este";
+$StepDeleted2 = "el elemento fue suprimido en esta herramienta.
+";
+$Modify = "modificar";
+$Chapter = "Capítulo";
+$NoAgendaItems = "No hay eventos en la Agenda";
+$AgendaAdd = "Añadir un evento de la Agenda";
+$UserGroupFilter = "Filtrar por grupos de usuarios";
+$AgendaSortChronologicallyUp = "Ordenar la agenda cronológicamente (arriba)";
+$ShowCurrent = "Mostrar los eventos actuales de la agenda";
+$ModifyCalendarItem = "Modificar eventos de la agenda";
+$HourMinuteDivider = "h";
+$ItemTitle = "Título";
+$Detail = "Detalles";
+$EditSuccess = "La modificación se ha producido";
+$AddCalendarItem = "Añadir un evento a la Agenda";
+$AddAnn = "Añadir un anuncio";
+$ForumAddNewTopic = "Foro: añadir un tema";
+$ForumEditTopic = "Foro: editar un tema";
+$ExerciseAnswers = "Ejercicio: Respuestas";
+$ForumReply = "Foro: responder";
+?>

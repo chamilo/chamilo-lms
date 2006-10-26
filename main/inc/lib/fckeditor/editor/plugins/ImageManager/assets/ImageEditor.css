@@ -1,0 +1,76 @@
+.icons {
+    font: 11px Tahoma,Verdana,sans-serif;
+    color: #666699;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid #EEEEFF;
+    -Moz-Border-Radius: 6px 6px 6px 6px;
+}
+
+body, td, p {
+    font: 11px Tahoma,Verdana,sans-serif;
+}
+.iconsOver {
+    font: 11px Tahoma,Verdana,sans-serif;
+    color: #666699;
+    text-align: center;
+    text-decoration: none;
+    background-color: #F9F9FF;
+    border: 1px solid #666699;
+    -Moz-Border-Radius: 6px 6px 6px 6px;
+}
+.topBar {
+    font: 11px Tahoma,Verdana,sans-serif;
+    color: #666699;
+}
+.iconsSel {
+    font: 11px Tahoma,Verdana,sans-serif;
+    color: #666699;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid #666699;
+    -Moz-Border-Radius: 6px 6px 6px 6px;
+}
+.iconText {
+    font: 11px Tahoma,Verdana,sans-serif;
+    color: #666699;
+    text-decoration: none;
+    text-align: center;
+}
+.measureStats{
+    width: 50px;
+}
+
+#slidercasing {
+    /*border:1px solid #CCCCCC;
+    background-color:#FFFFFF;*/
+    width:100px;
+    height:5px;
+    position:relative;
+    z-index:4;
+    padding:10px;
+}
+
+
+#slidertrack {
+    position:relative;
+    border:1px solid #CCCCCC;
+    background-color:#FFFFCC;
+    z-index:5;
+    height:5px;
+}
+
+
+#sliderbar {
+    position:absolute;
+    z-index:6;
+    border:1px solid #CCCCCC;
+    background-color:#DDDDDD;
+    width:15px;     
+    padding:0px;
+    height:20px; 
+    cursor: pointer;
+    top:2px;
+}
+
+select, input, button { font: 11px Tahoma,Verdana,sans-serif; }

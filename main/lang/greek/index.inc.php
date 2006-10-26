@@ -1,0 +1,63 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$langInvalidId = "Λάθος στοιχεία. Αν δεν είστε γραμμένος, συμπληρωστε τη <a href=\'claroline/auth/inscription.php\'>φόρμα εγγραφής</a></font color>";
+$langWelcome = "τα μαθήματα είναι διαθέσιμα παρακάτω. Αλλα μαθήματα απαιτούν
+όνομα χρήστη και συνθηματικό, τα οποία μπορείτε να τα αποκτήσετε κάνοντας κλίκ στην \'εγγραφή\'. Οι καθηγητές
+μπορούν να δημιουργήσουν μαθήματα κάνοντας κλικ στην εγγραφή επίσης, αλλά επιλέγοντας ύστερα
+\'Δημιουργία μαθημάτων (καθηγητές)\'.";
+$langUserName = "Όνομα χρήστη";
+$langPass = "Συνθηματικό";
+$langEnter = "Είσοδος";
+$langHelp = "Βοήθεια";
+$langReg = "Εγγραφή";
+$langMenu  = "Μενού";
+$langDoc = "Εγχειρίδια";
+$langAdvises = "&#931;&#965;&#956;&#946;&#959;&#965;&#955;&#941;&#962;";
+$langCourseDoesntExist = "<b>Προσοχή:</b>  το μάθημα δεν υπάρχει";
+$langOtherCourses = "Λίστα Μαθημάτων";
+$langSupportForum = "Περιοχή υποστήριξης";
+$langCategories  = "Κατηγορίες";
+$langBackToHomePage  = "Επιστροφή στην κεντρική σελίδα";
+$lang_No_course_publicly_available  = "Δεν υπάρχει διαθέσιμο σε όλους μάθημα";
+$langLostPassword  = "Ξέχασες το συνθηματικό;";
+$langAgenda  = "Ατζέντα: επόμενα γεγονότα";
+$langValvas  = "Τελευταίες ανακοινώσεις";
+$langUp  = "πάνω";
+$langCatList  = " Κατηγορίες";
+$langCourseList  = "Μαθήματα";
+$langHelptwo = "&#914;&#959;&#942;&#952;&#949;&#953;&#945;";
+$langRegAll = "&#949;&#947;&#947;&#961;&#945;&#966;&#942;";
+$EussMenu = "&#956;&#949;&#957;&#959;&#973;";
+$Opinio = "&#915;&#957;&#974;&#956;&#951;";
+$email = "e-mail";
+$Englin = "&#913;&#947;&#947;&#955;&#953;&#954;&#940;";
+$langCourses = "μαθήματα";
+$langIn = "σε";
+$langSubCat = "&#965;&#960;&#959;&#954;&#945;&#964;&#951;&#947;&#959;&#961;&#943;&#949;&#962;";
+$langMenuGeneral = "Γενικά";
+$langMenuUser = "Χρήστης";
+$langMenuAdmin = " Διαχειριστής";
+$langUsersOnLineList = "Συνδεδεμένοι χρήστες";
+$langTotalOnLine = "Συνδεδεμένοι συνολικά";
+$langRefresh = "ανανέωση σελίδας";
+$langMe = "εγώ";
+$langSystemAnnouncements = "Ανακοινώσεις  Πλατφόρμας";
+$langHelpMaj = "&#914;&#959;&#942;&#952;&#949;&#953;&#945;";
+$langAdmin = " Διαχειριστής";
+$langRegisterForCourse = "Εγγραφή σε καινούριο μάθημα";
+$langUnregisterForCourse = "Τα μαθήματά μου: Διαγραφή";
+$langCombinedCourse = "Συνδυασμένο μάθημα";
+$Platform = "Πλατφόρμα";
+$Refresh = "Ανανέωση";
+$UsersOnLine = "χρήστες συνδεδεμένοι";
+$TotalOnLine = "χρήστες συνδεδεμένοι συνολικά";
+$langCourseCreate = "Δημιουργία ενός μαθήματος";
+$langCourseClosed = "(προς το παρόν, το μάθημα είναι κλειστό)";
+$langCompetences = "Δυνατότητες";
+$langDiplomas = "Διπλόματα";
+$langTeach = "Τι μπορώ να διδάσκω";
+$langOpenarea = "Ανοιχτός προσωπικός χώρος";
+$langProductions = "Παραγωγές";
+$langRequestDenied = "&#919; &#954;&#955;&#942;&#963;&#951; &#941;&#967;&#949;&#953; &#945;&#960;&#959;&#961;&#961;&#953;&#966;&#952;&#949;&#943;";
+?>

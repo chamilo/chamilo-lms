@@ -474,8 +474,8 @@ function display_digest($toolsList, $digest, $orderKey, $courses)
  */
 function get_logged_user_course_html($mycours)
 {
-
-	if(api_get_setting('use_session_mode')=='true' && !isset($_GET['nosession'])){
+	global $nosession;
+	if(api_get_setting('use_session_mode')=='true' && !$nosession){
 		global $now, $date_start, $date_end;
 	}
 	//initialise
@@ -543,7 +543,7 @@ function get_logged_user_course_html($mycours)
 	//show a hyperlink to the course, unless the course is closed and user is not course admin
 	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)
 	{
-		if(api_get_setting('use_session_mode')=='true' && !isset($_GET['nosession'])){
+		if(api_get_setting('use_session_mode')=='true' && !$nosession){
 			if(empty($mycours['id_session']))
 				$mycours['id_session'] = 0;
 			if($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start=='0000-00-00')
@@ -672,7 +672,7 @@ function get_logged_user_course_html($mycours)
 	$result .= "</li>";
 
 
-	if(api_get_setting('use_session_mode')=='true' && !isset($_GET['nosession'])){
+	if(api_get_setting('use_session_mode')=='true' && !$nosession){
 		if(!empty($mycours['session_name'])){
 			$session = $mycours['session_name'];
 			if($date_start=='0000-00-00'){
@@ -843,7 +843,7 @@ else
 
 	$list = '';
 
-	if(api_get_setting('use_session_mode')=='true' && !isset($_GET['nosession']))
+	if(api_get_setting('use_session_mode')=='true' && !$nosession)
 	{
 		$personal_course_list = get_personal_session_course_list($_uid);
 	}
@@ -969,7 +969,7 @@ else
 
 if (is_array($list))
 {
-	if(api_get_setting('use_session_mode')=='true' && !isset($_GET['nosession']))
+	if(api_get_setting('use_session_mode')=='true' && !$nosession)
 	{
 		$listActives = $listInactives = $listCourses = array();
 		foreach($list as $key=>$value){

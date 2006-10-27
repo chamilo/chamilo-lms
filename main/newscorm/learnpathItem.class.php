@@ -583,7 +583,7 @@ class learnpathItem{
 			}
 		}else{
 			if($this->status == $this->possible_status[0] OR $this->status == $this->possible_status[1]){
-				$restart = 0;
+				$restart = -1;
 			}
 		}
 		if($this->debug>2){error_log('New LP - End of learnpathItem::is_restart_allowed() - Returning '.$restart,0);}

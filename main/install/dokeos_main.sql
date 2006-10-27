@@ -489,8 +489,8 @@ INSERT INTO `settings_current` VALUES
 (70, 'registered', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL),
 (71, 'donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL),
 (72, 'show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL),
-(73, 'banner', NULL, NULL, 'Plugins', 'messages', '', NULL, NULL, NULL);
-
+(73, 'banner', NULL, NULL, 'Plugins', 'messages', '', NULL, NULL, NULL),
+(74,'profile','phone','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'phone');
 
 
 

@@ -121,6 +121,10 @@ class learnpathItem{
     function add_interaction($index,$params)
     {
 		$this->interactions[$index] = $params;
+		//take the current maximum index to generate the interactions_count
+		if(($index+1)>$this->interactions_count){
+			$this->interactions_count = $index+1;
+		}
     	/*
 		if(is_array($this->interactions[$index]) && count($this->interactions[$index])>0){
     		$this->interactions[$index] = $params;
@@ -898,6 +902,7 @@ class learnpathItem{
 			$this->current_data = '';
 			$this->status = $this->possible_status[0];
 			$this->interactions_count = 0;
+			$this->interactions = array();
 			$this->lesson_location = '';
 		}else{ 
 			//restart current element is allowed (because it's not finished yet), 
@@ -1370,7 +1375,10 @@ class learnpathItem{
 		     			$iva_table = Database::get_course_table('lp_iv_interaction');
 		     			$iva_sql = "SELECT id FROM $iva_table " .
 		     					"WHERE lp_iv_id = $lp_iv_id " .
-		     					"AND order_id = $index";
+//		     					"AND order_id = $index";
+								//also check for the interaction ID as it must be unique for this SCO view
+		     					"AND (order_id = $index " .
+		     					"OR interaction_id = '".$interaction[0]."')";
 		     			$iva_res = api_sql_query($iva_sql,__FILE__,__LINE__);
 						//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
 		     			if(Database::num_rows($iva_res)>0){

@@ -1,4 +1,4 @@
-<?php // $Id: view_message.php 9584 2006-10-19 13:07:05Z evie_em $
+<?php // $Id: view_message.php 9847 2006-10-30 12:52:12Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,10 +34,10 @@ $nameTools = get_lang("Messages");
 $interbredcrump[]=array("url" => "inbox.php","name" => get_lang("Inbox"));
 Display::display_header($nameTools,"messages");
 
-$query = "UPDATE `".MESSAGES_DATABASE."` SET `status` = '0' WHERE `id_reciv`=".$_SESSION['_uid']." AND `id`='".mysql_real_escape_string($_GET['id'])."';";
+$query = "UPDATE `".MESSAGES_DATABASE."` SET `status` = '0' WHERE `id_receiver`=".$_SESSION['_uid']." AND `id`='".mysql_real_escape_string($_GET['id'])."';";
 $result = api_sql_query($query,__FILE__,__LINE__);
 
-$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_reciv=".$_SESSION['_uid']." AND id='".mysql_real_escape_string($_GET['id'])."';";
+$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid']." AND id='".mysql_real_escape_string($_GET['id'])."';";
 $result = api_sql_query($query,__FILE__,__LINE__);
 $row = mysql_fetch_array($result);
 

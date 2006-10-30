@@ -1,4 +1,4 @@
-<?php // $Id: functions.inc.php 9680 2006-10-24 13:23:45Z evie_em $
+<?php // $Id: functions.inc.php 9847 2006-10-30 12:52:12Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -114,7 +114,7 @@ function get_new_messages()
 {
 	if (! isset($_SESSION['_uid'])) return false;
 	$i=0;
-	$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_reciv=".$_SESSION['_uid']." AND status=1;";
+	$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid']." AND status=1;";
 	$result = api_sql_query($query,__FILE__,__LINE__);
 	while ($result_row = mysql_fetch_array($result)) $i++;
 	return $i;
@@ -140,7 +140,7 @@ function users_connected_by_id()
  */
 function get_number_of_messages()
 {
-	$sql_query = "SELECT COUNT(*) as number_messages FROM `".MESSAGES_DATABASE."` WHERE id_reciv=".$_SESSION['_uid'];
+	$sql_query = "SELECT COUNT(*) as number_messages FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid'];
 	$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 	$result = mysql_fetch_array($sql_result);
 	return $result['number_messages'];
@@ -154,7 +154,7 @@ function get_number_of_messages()
  */
 function get_message_data($from, $number_of_items, $column, $direction)
 {
-	$sql_query = "SELECT id as col0, id_rem as col1, fecha as col2 FROM `".MESSAGES_DATABASE."` WHERE id_reciv=".$_SESSION['_uid']." ORDER BY col$column $direction LIMIT $from,$number_of_items";
+	$sql_query = "SELECT id as col0, id_sender as col1, date as col2 FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid']." ORDER BY col$column $direction LIMIT $from,$number_of_items";
 	$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 	$i = 0;
 	$message_list = array ();
@@ -186,7 +186,7 @@ function inbox_display()
 				$number_of_selected_messages = count($_POST['id']);
 				foreach ($_POST['id'] as $index => $message_id)
 				{
-					$query = "DELETE FROM ".MESSAGES_DATABASE." WHERE id_reciv=".$_SESSION['_uid']." AND id='$message_id'";
+					$query = "DELETE FROM ".MESSAGES_DATABASE." WHERE id_receiver=".$_SESSION['_uid']." AND id='$message_id'";
 					api_sql_query($query,__FILE__,__LINE__);
 				}
 				Display :: display_normal_message(get_lang('SelectedMessagesDeleted'));

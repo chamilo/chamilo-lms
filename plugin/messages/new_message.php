@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 9769 2006-10-25 14:12:00Z evie_em $
+<?php // $Id: new_message.php 9847 2006-10-30 12:52:12Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -191,7 +191,7 @@ else
 		$id_tmp = $_SESSION['_uid'].$_POST['user_list'].date('d-D-w-m-Y-H-s').
 					microtime().rand();
 		$id_msg = md5($id_tmp);
-		$query = "INSERT INTO `".MESSAGES_DATABASE."` ( `id` , `id_rem` , `id_reciv` , `status` , `fecha` ,`contenido` ) ".
+		$query = "INSERT INTO `".MESSAGES_DATABASE."` ( `id` , `id_sender` , `id_receiver` , `status` , `date` ,`content` ) ".
 				 " VALUES (".
 		 		 "' ".$id_msg ."' , '".$_SESSION['_uid']."', '".$_POST['user_list']."', '1', '".date('Y-m-d H:i:s')."','".$_POST['content']."'".
 		 		 ");";

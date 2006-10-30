@@ -84,8 +84,8 @@ if ($_GET['logout'])
 	{
 		$query_string='?language='.$_SESSION['user_language_choice'];
 	}
-	
-	
+
+
 	//LoginDelete($_uid, $statsDbName);
 	LoginDelete($_GET["uid"], $statsDbName);
 	api_session_destroy();
@@ -273,8 +273,9 @@ function display_anonymous_right_menu()
 	if ( !(isset($_uid) && $_uid) ) // only display if the user isn't logged in
 	{
 		api_display_language_form();
+		echo '<br />';
 		display_login_form();
-		
+
 		if ($loginFailed)
 			handle_login_failed();
 		if (api_get_setting('allow_lostpassword') == 'true' OR api_get_setting('allow_registration') == 'true')
@@ -292,7 +293,7 @@ function display_anonymous_right_menu()
 		}
 		api_plugin('loginpage_menu');
 	}
-	
+
 	/*** hide right menu "general" and other parts on anonymous right menu  *****/
 	echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
 	 echo "<ul class=\"menulist\">";
@@ -311,7 +312,7 @@ function display_anonymous_right_menu()
 	}
 	 echo '</ul>';
 	echo '</div>';
-	
+
 	if ($_uid)
 	{
 		api_plugin('campushomepage_menu');
@@ -320,7 +321,7 @@ function display_anonymous_right_menu()
 /**** use this comment to hide notice file section from right menu ****
 
 	echo '<div class="note">';
-	// includes for any files to be displayed below anonymous right menu 
+	// includes for any files to be displayed below anonymous right menu
 	if(!file_exists('home/home_notice_'.$user_selected_language.'.html'))
 	{
 		include ('home/home_notice.html');
@@ -350,7 +351,7 @@ function handle_login_failed()
 			if (api_is_self_registration_allowed())
 			{
 				$message = get_lang("InvalidForSelfRegistration");
-			}		
+			}
 			break;
 		case 'account_expired':
 			$message=get_lang('AccountExpired');
@@ -360,7 +361,7 @@ function handle_login_failed()
 			break;
 		case 'user_password_incorrect':
 			$message=get_lang('InvalidId');
-			break;						
+			break;
 	}
 	echo "<div id=\"login_fail\">".$message."</div>";
 }
@@ -372,11 +373,13 @@ function handle_login_failed()
 function display_login_form()
 {
 	$form = new FormValidator('formLogin');
-	$form->addElement('static',null,null,get_lang('UserName'));
-	$form->addElement('text','login','',array('size'=>15));
-	$form->addElement('static',null,null,get_lang('Pass'));
-	$form->addElement('password','password','',array('size'=>15));
+	$form->addElement('text','login',get_lang('UserName'),array('size'=>15));
+	$form->addElement('password','password',get_lang('Pass'),array('size'=>15));
 	$form->addElement('submit','submitAuth',get_lang('Ok'));
+	$renderer =& $form->defaultRenderer();
+	$element_template = '<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}<br />
+			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}<br />';
+	$renderer->setElementTemplate($element_template);
 	$form->display();
 }
 /**
@@ -410,12 +413,12 @@ function display_anonymous_course_list()
 								ORDER BY UPPER(visual_code)";
 	//removed: AND cours.visibility='".COURSE_VISIBILITY_OPEN_WORLD."'
 	$sql_result_courses = api_sql_query($sql_get_course_list, __FILE__, __LINE__);
-	
+
 	while ($course_result = mysql_fetch_array($sql_result_courses))
 	{
 		$course_list[] = $course_result;
 	}
-	
+
 	$sqlGetSubCatList = "
 				SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
 				FROM $main_category_table t1
@@ -423,7 +426,7 @@ function display_anonymous_course_list()
 				LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code AND t3.visibility='".COURSE_VISIBILITY_OPEN_WORLD."')
 				WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
 				GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos";
-	
+
 	$resCats = api_sql_query($sqlGetSubCatList, __FILE__, __LINE__);
 	$thereIsSubCat = FALSE;
 	if (mysql_num_rows($resCats) > 0)
@@ -434,7 +437,7 @@ function display_anonymous_course_list()
 			if ($catLine['code'] != $category)
 			{
 				$htmlListCat .= "<li>";
-				
+
 				$category_has_open_courses = category_has_open_courses($catLine['code']);
 				if ($category_has_open_courses)
 				{
@@ -519,11 +522,11 @@ function category_has_open_courses($category)
 	$sql_query = "SELECT * FROM $main_course_table WHERE category_code='$category'";
 	$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 	while ($course = mysql_fetch_array($sql_result))
-	{	
-		if ($is_allowed_anonymous_access) 
+	{
+		if ($is_allowed_anonymous_access)
 		return true; //at least one open course
 	}
-	
+
 	return false;
 }
 
@@ -541,9 +544,9 @@ echo '<div class="maincontent">';
 */
 if (!$_uid)
 {
-	api_plugin('loginpage_main'); 
+	api_plugin('loginpage_main');
 }
-else 
+else
 {
 	api_plugin('campushomepage_main');
 }

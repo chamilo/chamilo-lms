@@ -229,7 +229,7 @@ margin: 0px;
 	MARGIN: 0px;
 	LIST-STYLE-TYPE: none;
 	display: inline;
-margin: 0px; padding: 0px 20px 0px 0px; 
+margin: 0px; padding: 0px 20px 0px 0px;
 }
 #header3 LI {
 	list-style: none;
@@ -339,7 +339,7 @@ border-left: solid 1px rgb(115,162,182);
 .menu {
 	float: right;
 	width: 20%;
-	padding: 0 0 6px 0;
+	padding: 6px;
 	background-color: #E5EDF9;
 	border: 1px solid #4171B5;
 }
@@ -790,7 +790,7 @@ span.form_error {
 /*****************************************************
  *  ACCORDION STYLES                                *
  *****************************************************/
- 
+
 .accordion_header {
   	border: 1px  solid gray;
   	background-color: #E5EDF9;
@@ -1350,7 +1350,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 }
 #tabbed_menu #tabbed_menu_tabs li
 {
-	margin: 0 10; 
+	margin: 0 10;
 	padding: 0;
 	display: inline;
 	list-style-type: none;

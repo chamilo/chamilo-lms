@@ -339,7 +339,7 @@ border-left: solid 1px rgb(115,162,182);
 .menu {
 	float: right;
 	width: 20%;
-	padding: 6px;
+	padding: 0 0 6px 0;
 	background-color: #E5EDF9;
 	border: 1px solid #4171B5;
 }

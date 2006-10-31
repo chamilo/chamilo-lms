@@ -19,5 +19,6 @@ $ToolIsNowHidden = "De module is nu onzichtbaar.";
 $EditLink = "Link wijzigen";
 $GreyIcons = "Modules";
 $Interaction = "Interactie";
+$Authoring = "Opstellen";
 $Administration = "Administratie";
 ?>

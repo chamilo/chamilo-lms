@@ -58,4 +58,7 @@ $CheckDatabaseConnection = "Testar conexão com Banco de Dados";
 $PrintOverview = "Mostrar visão geral";
 $Installing = "Instalar";
 $of = "de";
+$Step = "Passo";
+$MoreDetails = "Para maiores detalhes";
+$PHPVersion = "Versão do PHP";
 ?>

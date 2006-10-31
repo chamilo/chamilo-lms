@@ -91,4 +91,6 @@ $langCourseVisibilityClosed = "Completamente fechado; o curso estará acessível a
 $CourseVisibilityClosed = "Fechado - sem acesso para esse curso";
 $NotAllowedToModifyOwnRole = "Você não tem permissões para alterar suas próprias funções.";
 $CourseVisibilityModified = "Modificado (maiores detalhes nas configurações do sitema de direitos/permissões do sistema)";
+$AllowUserEditAnnouncementActivate = "Permitir edição para usuários";
+$AllowUserEditAnnouncementDeactivate = "Desabilitar edição por usuários";
 ?>

@@ -343,4 +343,6 @@ $myInActiveSessions = "Mes sessions inactives";
 $NoOnlineStudents = "Pas d\'étudiants en ligne";
 $InCourse = "dans cours";
 $UserOnlineListSession = "Liste des utilisateurs en ligne - Session";
+$From = "du";
+$To = "au";
 ?>

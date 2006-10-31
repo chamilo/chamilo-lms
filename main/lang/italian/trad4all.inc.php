@@ -297,4 +297,6 @@ $AddRight = "Aggiungi";
 $bb_post = "Messaggio del Forum";
 $bb_thread = "Argomento del Forum";
 $CampusHomepage = "Pagina principale del Campus";
+$From = "Da";
+$To = "a";
 ?>

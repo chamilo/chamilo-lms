@@ -18,5 +18,7 @@ $ToolIsNowVisible = "Orodje je sedaj vidno";
 $ToolIsNowHidden = "Orodje je sedaj nevidno";
 $EditLink = "Uredi povezavo";
 $GreyIcons = "Orodjarna";
+$Interaction = "Interakcija";
+$Authoring = "Avtorska orodja (Authoring)";
 $Administration = "Upravljanje";
 ?>

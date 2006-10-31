@@ -81,4 +81,6 @@ $DokeosLicenseInfo = "A Dokeos egy GNU Általános Nyilvános Licensz (General Publ
 $IAccept = "Elfogadom";
 $ConfigSettingsInfo = "Az alábbi értékek kerülnek beállításra a <b>main/inc/conf/claro_main.conf.php</b> állományban:";
 $InstallDokeos = "Dokeos telepítése";
+$GoToYourNewlyCreatedPortal = "Az újonnan létrehozott portál megtekintése";
+$FirstUseTip = "Könnyen megértheti a portál m&#369;ködését, ha az els&#337; belépéskor a \'Kurzusterület létrehozása\' opció kijelölésével regisztrálja magát, majd követi a lépéseket.";
 ?>

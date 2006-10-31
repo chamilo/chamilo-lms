@@ -92,4 +92,6 @@ $GroupTutors = "Betreuer";
 $GroupWork = "Arbeiten";
 $GroupCalendar = "Agenda";
 $GroupAnnouncements = "Ankündigungen";
+$NoCategoriesDefined = "Es wurden keine Kategorien definiert";
+$GroupsFromClasses = "Gruppen aus Klassen";
 ?>

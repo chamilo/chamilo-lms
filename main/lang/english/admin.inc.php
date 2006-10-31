@@ -502,7 +502,7 @@ $ShowEmailAddressesComment = "Show email addresses to users";
 $langphone = "Phone";
 $langConfigureExtensions = "Configure the extensions";
 $langConfigureExtensions = "Configure the services";
-$langActiveExtensions = "Active the services";
+$langActiveExtensions = "Activate this service";
 $langVisioconf = "Visio-conference";
 $langVisioconfDescription = "Dokeos Live Conferencing® is a standard tool of visioconference which offers : displaying of diapos, whiteboard to draw and write, audio/video duplex, chat. It requires just the Flash® player and permits to use three modes : one2one, one2many et many2many. ";
 $langPpt2lp = "PowerPoint2LearningPath";
@@ -537,4 +537,5 @@ $ErrorsWhenImportingFile = "Errors when importing file";
 $ServiceActivated = "Service activated";
 $ActiveExtension = "Active services";
 $InvalidExtension = "Invalid extension";
+$VersionCheckExplanation = "In order to enable the automatic version checking you have to register your campus on dokeos.com. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of campusses, total number of dokeos courses, total number of dokeos students, ...) (see <a href=\"see http://www.dokeos.com/stats/\">see http://www.dokeos.com/stats/</a>. When registering you will also appear on the worldwide list (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>. If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button: <br />";
 ?>

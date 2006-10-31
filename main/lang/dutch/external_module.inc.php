@@ -24,4 +24,8 @@ $langNoLinkName = "Geef een naam aan de link.";
 $langEditLink = "Wijzig link op cursusstartpagina";
 $langChangePress = "Wijzig en druk OK";
 $langLinkChanged = "De link op de cursusstartpagina is gewijzigd. Gebruik het broodkruimelmenu boven om terug te keren naar de hoofdpagina.";
+$NoLinkName = "Geen link naam";
+$NoLinkURL = "Geen link URL";
+$LinkChanged = "Link aangepast";
+$OkSentLink = "De link werd verzonden";
 ?>

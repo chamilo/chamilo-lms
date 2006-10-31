@@ -79,4 +79,9 @@ $NotWritable = "keine Schreiberlaubnis";
 $Writable = "Schreiberlaubnis";
 $ExtensionLDAPNotAvailable = "LDAP Erweiterung ist nicht verfügbar";
 $ExtensionGDNotAvailable = "GD Erweiterung ist nicht verfügbar";
+$DokeosLicenseInfo = "Dokeos ist frei Software, die unter der GNU General Public Licence angeboten wird.";
+$IAccept = "Ich akzeptiere";
+$ConfigSettingsInfo = "Die nachfolgenden Werte werden in Ihre Konfigurationsdatei <b>main/inc/conf/claro_main.conf.php</b> geschrieben:";
+$InstallDokeos = "Dokeos installieren";
+$GoToYourNewlyCreatedPortal = "Gehen Sie zu Ihrem neu erstellten Portal";
 ?>

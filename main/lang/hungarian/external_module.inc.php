@@ -24,4 +24,8 @@ $langNoLinkName = "Kérjük, írja be a link nevét";
 $langEditLink = "Kurzus kezd&#337;oldal hivatkozásának módosítása";
 $langChangePress = "Módosítson és kattinson az OK -ra";
 $langLinkChanged = "A Kurzus kezd&#337;oldal hivatkozás megváltozott. A fenti navigációs menüben térjen vissza a kezd&#337;lapra.";
+$NoLinkName = "Hiányzó hivatkozás név";
+$NoLinkURL = "Hiányzó hivatkozás URL";
+$LinkChanged = "A hivatkozás módosítása megtörtént";
+$OkSentLink = "A hivatkozás elküldése megtörtént";
 ?>

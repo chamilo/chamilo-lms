@@ -66,4 +66,7 @@ $langOpenarea = "Persoonlijke ruimte";
 $langProductions = "Producties";
 $langSendChatRequest = "Zend een chatverzoek naar deze persoon";
 $langRequestDenied = "Het verzoek is geweigerd.";
+$UsageDatacreated = "Gebruiksgegevens gecreëerd";
+$SessionView = "De cursussen weergeven volgens sessies";
+$CourseView = "De volledige lijst met cursussen weergeven";
 ?>

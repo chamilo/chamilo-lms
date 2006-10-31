@@ -42,7 +42,7 @@ $langMenuUser = "Usuario";
 $langMenuAdmin = "Administrador de la plataforma";
 $langUsersOnLineList = "Lista de usuarios en línea";
 $langTotalOnLine = "Total en línea";
-$langRefresh = "actualizar la página";
+$langRefresh = "Actualizar la página";
 $langMe = "yo";
 $langSystemAnnouncements = "Anuncios del sistema";
 $langHelpMaj = "Ayuda";
@@ -66,4 +66,7 @@ $langOpenarea = "Area personal pública";
 $langProductions = "Trabajos";
 $langSendChatRequest = "Enviar una petición de chat a esta persona";
 $langRequestDenied = "Esta llamada ha sido rechazada";
+$UsageDatacreated = "Datos de uso creados";
+$SessionView = "Mostrar los cursos ordenados por sesiones";
+$CourseView = "Mostrar toda la lista de cursos";
 ?>

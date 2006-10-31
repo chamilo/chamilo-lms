@@ -72,4 +72,6 @@ $langProductions = "Productions";
 $langSendChatRequest = "Envoyer une demande de \"chat\" à cette personne";
 $langRequestDenied = "Cet appel a été refusé.";
 $UsageDatacreated = "Données d\'utilisation créées";
+$SessionView = "Voir les cours par sessions";
+$CourseView = "Voir la liste complète des cours";
 ?>

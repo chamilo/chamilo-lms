@@ -507,4 +507,17 @@ $SocketFunctionsDisabled = "Conexiónes vía Socket desabilitada";
 $ShowEmailAddresses = "Mostrar dirección e-mail";
 $ShowEmailAddressesComment = "Mostrar dirección e-mail a los usuarios";
 $langphone = "Teléfono";
+$langConfigureExtensions = "Configurar las extensiones";
+$langConfigureExtensions = "Configurar los servicios";
+$langActiveExtensions = "Activar este servicio";
+$langVisioconf = "Videoconferencia";
+$langVisioconfDescription = "Dokeos Live Conferencing® es una herramienta estándar de videoconferencia que ofrece: mostrar diapositivas, pizarra para dibujar y escribir, audio/video duplex, chat. Sólo requiere de Flash® player y permite usar tres modos: uno a uno, uno a muchos, y muchos a muchos.";
+$langPpt2lp = "PowerPoint2LearningPath";
+$langPpt2lpDescription = "PowerPoint2LearningPath le permite transformar una presentación Powerpoint en un Itinerario de aprendizaje en unos pocos clicks.";
+$langBandWidthStatistics = "Estadísticas de Ancho de Banda";
+$langBandWidthStatisticsDescription = "MRTG le permite consultar estadísticas detalladas del estado del servidor en las últimas 24 horas.";
+$langServerStatistics = "Estadísticas del servidor";
+$langServerStatisticsDescription = "AWStats le permite consultar las estadísticas de su plataforma: visitantes, páginas vistas, referenciadores...";
+$langSearchEngine = "Buscador de texto completo";
+$langSearchEngineDescription = "El buscador de texto completo le permite buscar una palabra a través de toda la plataforma. La indización diaria de los contenidos le asegura la calidad de los resultados.";
 ?>

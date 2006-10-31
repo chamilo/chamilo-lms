@@ -17,4 +17,8 @@ $langCombinedCourse = "Corso combinato";
 $ToolIsNowVisible = "Ora lo strumento è visibile";
 $ToolIsNowHidden = "Ora lo strumento non è più visibile";
 $EditLink = "Modifica il collegamento";
+$GreyIcons = "Strumenti";
+$Interaction = "Interazione";
+$Authoring = "Contenuti";
+$Administration = "Gestione";
 ?>

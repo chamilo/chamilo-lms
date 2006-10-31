@@ -162,4 +162,8 @@ $langUseExistantQuestion = "Utilize uma questão existente";
 $freeAnswer = "Resposta livre";
 $notCorrectedYet = "Essa resposta ainda não foi corrigida. Enquanto isso, a sua pontuação para essa questão está definida como 0, afetando a sua pontuação total.";
 $adminHP = "Administração do Hot Potatoes";
+$langDescription = "Descrição";
+$langAllQuestions = "Todas as perguntas";
+$langModifyTitleDescription = "Editar título e comentários";
+$Fault = "Incorreto";
 ?>

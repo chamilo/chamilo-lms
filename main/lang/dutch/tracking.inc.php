@@ -140,4 +140,17 @@ $Visited = "Doorlopen";
 $Name = "Naam";
 $FirstAccess = "Eerste toegang";
 $LastAccess = "Laatste toegang";
+$MoyenneTest = "Testgemiddelde";
+$exportExcel = "Export in Excel-formaat";
+$MoyCourse = "Cursusgemiddelde";
+$MoyenneExamen = "Examengemiddelde";
+$MoySession = "Sessiegemiddelde";
+$TakenSessions = "Gevolgde sessies";
+$FollowUp = "Opvolging";
+$Trainers = "Opleider / docent";
+$Probationers = "Aspiranten";
+$Administrators = "Beheerders";
+$Tracks = "Leertrajecten (tracks)";
+$Success = "Succes";
+$ExcelFormat = "Excel-formaat";
 ?>

@@ -187,4 +187,18 @@ $langHotspotValidateError1 = "Je dient de vraag volledig te beantwoorden (";
 $langHotspotValidateError2 = "Vereiste aantal muiskliks op de afbeelding voor het resultaat getoond wordt";
 $langHotspotRequired = "Beschrijving en gewist zijn verplicht voor elke hotspot - commentaar is optioneel";
 $langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Om een hotspot aan te maken: selecteer een vorm naast de kleuren en teken de hotspot op de afbeelding.</div><div style=\\\"padding:2px 3px;\\\">&bull; Om een hotspot te verplaatsen, selecteer de kleur, klik op een andere plaats in de afbeelding en teken de hotspot.</div><div style=\\\"padding:2px 3px;\\\">&bull; Om een hotspot bij te voegen: klik op de [+hotspot] knop.</div><div style=\\\"padding:2px 3px;\\\">&bull; Om een polygoon vorm te sluiten: rechtsklikken en selecteer \\\"Sluit polygoon\\\".</div>";
+$Fault = "Fout";
+$Hotspot = "Hotspot";
+$ClickNumber = "Aantal klikken.";
+$HotspotGiveAnswers = "Gelieve een antwoord op te geven";
+$Addlimits = "Grenzen toevoegen";
+$AreYouSure = "Weet u zeker";
+$StudentScore = "Score student";
+$backtoTesthome = "Terug naar startpagina test";
+$Feedback = "Feedback";
+$MarkIsUpdated = "De score is gewijzigd";
+$MarkInserted = "Score toegevoegd";
+$PleaseGiveAMark = "Gelieve een score op te geven";
+$EditCommentsAndMarks = "Wijzig commentaar en score";
+$AddComments = "Voeg commentaar toe";
 ?>

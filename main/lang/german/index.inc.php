@@ -67,4 +67,6 @@ $langOpenarea = "Persönliche offene Inhalte";
 $langProductions = "Produktionen";
 $langSendChatRequest = "Eine Chat Anfrage an diese Person schicken";
 $langRequestDenied = "Die Anfrage wurde abgewiesen";
+$UsageDatacreated = "Daten für Usage wurden erstellt";
+$CourseView = "Die Gesamtliste aller Kurse anzeigen";
 ?>

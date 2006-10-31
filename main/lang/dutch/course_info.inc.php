@@ -105,4 +105,7 @@ $AllowUserEditAnnouncementActivate = "Wijzigen door gebruikers inschakelen";
 $AllowUserEditAnnouncementDeactivate = "Wijzigen door gebruikers uitschakelen";
 $OrInTime = "Of binnen";
 $CourseRegistrationPassword = "Registratie-wachtwoord voor cursus";
+$langDescriptionDeleteCourse = "Klik op deze link om alle sporen van de cursus op de server te verwijderen. <br><br> Wees zeer voorzichtig met het gebruik van deze functionaliteit! ";
+$langDescriptionCopyCourse = "Dokeos biedt nu ook de mogelijkheid om een bestaande cursus geheel of gedeeltelijk te kopiëren naar een andere cursus, die aanvankelijk leeg mag zijn.<br><br>De enige voorwaarde voor deze functie is dat u beschikt over een cursus met een aantal documenten, aankondigingen, forums… en een tweede cursus die niet dezelfde elementen als de eerste bevat !";
+$langDescriptionRecycleCourse = "Deze functie verwijdert uit de cursus de geselecteerde onderdelen, of alle onderdelen. Documenten, forums, links... worden verwijderd. Deze procedure kan uitgevoerd worden aan het einde van de opleiding, of na afloop van het academiejaar. Opgelet: alvorens deze \"recycling\" uit te voeren, kunt u best een volledige backup nemen van uw cursus ! ";
 ?>

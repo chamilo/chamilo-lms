@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 9859 2006-10-31 11:14:49Z evie_em $
+<?php // $Id: new_message.php 9860 2006-10-31 12:00:20Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -97,9 +97,9 @@ function show_compose_to_any($user_id)
          </table>';
 }
 
-function show_compose_reply_to_message()
+function show_compose_reply_to_message($message_id, $receiver_id)
 {
-	$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid']." AND id='".$_GET['re_id']."';";
+	$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$receiver_id." AND id='".$message_id."';";
 	$result = api_sql_query($query,__FILE__,__LINE__);
 	$row = mysql_fetch_array($result);
 	if(!isset($row[1]))
@@ -173,7 +173,9 @@ if(!isset($_POST['compose']))
 {
 	if(isset($_GET['re_id']))
 	{
-		show_compose_reply_to_message();
+		$message_id = $_GET['re_id'];
+		$receiver_id = $_SESSION['_uid'];
+		show_compose_reply_to_message($message_id, $receiver_id);
 	}
 	else if(isset($_GET['send_to_user']))
 	{

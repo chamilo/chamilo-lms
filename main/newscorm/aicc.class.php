@@ -41,7 +41,7 @@ class aicc extends learnpath {
 	var $zipname = ''; //keeps the zipfile safe for the object's life so that we can use it if no title avail
 	var $lastzipnameindex = 0; //keeps an index of the number of uses of the zipname so far
 	var $config_encoding = 'ISO-8859-1';
-	var $debug = 3;
+	var $debug = 0;
 	/**
 	 * Class constructor. Based on the parent constructor.
 	 * @param	string	Course code
@@ -88,7 +88,7 @@ class aicc extends learnpath {
      		// Parse the Course Description File (.crs) - ini-type
      		$crs_file = $dir.'/'.$this->config_files['crs'];
      		$crs_params = $this->parse_ini_file_quotes_safe($crs_file);
-     		echo '<pre>crs:'.print_r($crs_params,true).'</pre>';
+     		//echo '<pre>crs:'.print_r($crs_params,true).'</pre>';
 	    	if($this->debug>1){error_log('New LP - In aicc::parse_config_files() - '.$crs_file.' has been parsed',0);}
 			
 			//CRS distribute crs params into the aicc object
@@ -135,7 +135,7 @@ class aicc extends learnpath {
      		// Parse the Descriptor File (.des) - csv-type
      		$des_file = $dir.'/'.$this->config_files['des'];
     		$des_params = $this->parse_csv_file($des_file);
-     		echo '<pre>des:'.print_r($des_params,true).'</pre>';
+     		//echo '<pre>des:'.print_r($des_params,true).'</pre>';
 	    	if($this->debug>1){error_log('New LP - In aicc::parse_config_files() - '.$des_file.' has been parsed',0);}
 			//distribute des params into the aicc object
 			foreach($des_params as $des){
@@ -147,7 +147,7 @@ class aicc extends learnpath {
      		// Parse the Assignable Unit File (.au) - csv-type
      		$au_file = $dir.'/'.$this->config_files['au'];
      		$au_params = $this->parse_csv_file($au_file);
-     		echo '<pre>au:'.print_r($au_params,true).'</pre>';
+     		//echo '<pre>au:'.print_r($au_params,true).'</pre>';
 	    	if($this->debug>1){error_log('New LP - In aicc::parse_config_files() - '.$au_file.' has been parsed',0);}
 			//distribute au params into the aicc object
 			foreach($au_params as $au){
@@ -159,7 +159,7 @@ class aicc extends learnpath {
      		// Parse the Course Structure File (.cst) - csv-type
      		$cst_file = $dir.'/'.$this->config_files['cst'];
      		$cst_params = $this->parse_csv_file($cst_file,',','"',true);
-     		echo '<pre>cst:'.print_r($cst_params,true).'</pre>';
+     		//echo '<pre>cst:'.print_r($cst_params,true).'</pre>';
 	    	if($this->debug>1){error_log('New LP - In aicc::parse_config_files() - '.$cst_file.' has been parsed',0);}
 			//distribute cst params into the aicc object
 			foreach($cst_params as $cst){
@@ -257,7 +257,7 @@ class aicc extends learnpath {
 		foreach($this->aulist as $identifier => $dummy)
 		{
 			$oAu =& $this->aulist[$identifier];
-			echo "Item ".$oAu->identifier;
+			//echo "Item ".$oAu->identifier;
 			$field_add = '';
 			$value_add = '';
 			if(!empty($oAu->masteryscore)){
@@ -298,6 +298,21 @@ class aicc extends learnpath {
 			$previous = $item_id;
 		}
      }
+ 	 /**
+	  * Intermediate to import_package only to allow import from local zip files
+	  * @param	string	Path to the zip file, from the dokeos sys root 
+	  * @param	string	Current path (optional)
+	  * @return string	Absolute path to the AICC description files or empty string on error
+	  */
+	 function import_local_package($file_path,$current_dir='')
+	 {
+	 	//todo prepare info as given by the $_FILES[''] vector
+	 	$file_info = array();
+	 	$file_info['tmp_name'] = $file_path;
+	 	$file_info['name'] = basename($file_path);
+	 	//call the normal import_package function
+	 	return $this->import_package($file_info,$current_dir); 
+	 }
      /**
       * Imports a zip file (presumably AICC) into the Dokeos structure
       * @param	string	Zip file info as given by $_FILES['userFile']
@@ -380,10 +395,10 @@ class aicc extends learnpath {
 					}else{
 						if(!$subdir_isset){
 							if(preg_match('?^.*/aicc$?i',dirname($thisContent['filename']))){
-								echo "Cutting subdir<br/>";
+								//echo "Cutting subdir<br/>";
 								$this->subdir .= '/'.substr(dirname($thisContent['filename']),0,-5);							
 							}else{
-								echo "Not cutting subdir<br/>";
+								//echo "Not cutting subdir<br/>";
 								$this->subdir .= '/'.dirname($thisContent['filename']);
 							}
 							$subdir_isset = true;

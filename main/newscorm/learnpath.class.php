@@ -2009,7 +2009,58 @@ class learnpath {
     	return $this->ordered_items[$new_index];
 
      }
+	/**
+	 * Returns the package type ('scorm','aicc','scorm2004','dokeos',...)
+	 * 
+	 * Generally, the package provided is in the form of a zip file, so the function
+	 * has been written to test a zip file. If not a zip, the function will return the
+	 * default return value: ''
+	 * @param	string	the path to the file
+	 * @param	string 	the original name of the file
+	 * @return	string	'scorm','aicc','scorm2004','dokeos' or '' if the package cannot be recognized
+	 */
+	function get_package_type($file_path,$file_name){
+     	//error_log('In learnpath::get_package_type("'.$file_path.'","'.$file_name.'")',0);
+     	
+     	//get name of the zip file without the extension
+		$file_info = pathinfo($file_name);
+		$filename = $file_info['basename'];//name including extension
+		$extension = $file_info['extension'];//extension only
+		$file_base_name = str_replace('.'.$extension,'',$filename); //filename without its extension
+		$this->zipname = $file_base_name; //save for later in case we don't have a title
+		
+		$zipFile = new pclZip($file_path);
+		// Check the zip content (real size and file extension)
+		$zipContentArray = $zipFile->listContent();
+		$package_type='';
+		$at_root = false;
+		$manifest = '';
 
+		//the following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?)
+		foreach($zipContentArray as $thisContent)
+		{
+			if ( preg_match('~.(php.*|phtml)$~i', $thisContent['filename']) )
+			{
+				return '';
+			}
+			elseif(stristr($thisContent['filename'],'imsmanifest.xml')!==FALSE)
+			{
+				$manifest = $thisContent['filename']; //just the relative directory inside scorm/
+				$package_type = 'scorm';
+				break;//exit the foreach loop
+			}
+			elseif(stristr($thisContent['filename'],'AICC')!==FALSE)
+			{
+				$package_type='aicc';
+				break;//exit the foreach loop
+			}
+			else
+			{
+				$package_type = '';
+			}
+		}
+		return $package_type;
+	}
     /**
 
      * Gets the previous resource in queue (url). Also initialises time values for this viewing
@@ -2693,13 +2744,18 @@ class learnpath {
 	    					if($this->debug>2){error_log('New LP - In learnpath::get_link() '.__LINE__.' - Found match for protocol in '.$lp_item_path,0);}
 	    					//distant url, return as is
 	    					$file = $lp_item_path;
+	    					/*
+	    					if(stristr($file,'<servername>')!==false){
+	    						$file = str_replace('<servername>',$course_path.'/scorm/'.$lp_path.'/',$lp_item_path);
+	    					}
+	    					*/
 	    					$file .= $aicc_append;
 	    				}else{
 	    					if($this->debug>2){error_log('New LP - In learnpath::get_link() '.__LINE__.' - No starting protocol in '.$lp_item_path,0);}
 	    					//prevent getting untranslatable urls
 	    					$lp_item_path = preg_replace('/%2F/','/',$lp_item_path);
 	    					$lp_item_path = preg_replace('/%3A/',':',$lp_item_path);
-		    				//prepare the path
+		    				//prepare the path - lp_path might be unusable because it includes the "aicc" subdir name
 		    				$file = $course_path.'/scorm/'.$lp_path.'/'.$lp_item_path;
 		    				//TODO fix this for urls with protocol header
 		    				$file = str_replace('//','/',$file);

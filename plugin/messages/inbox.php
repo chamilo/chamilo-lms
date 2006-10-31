@@ -1,5 +1,5 @@
 <?php 
-// $Id: inbox.php 9690 2006-10-24 16:13:08Z evie_em $
+// $Id: inbox.php 9859 2006-10-31 11:14:49Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,7 +76,7 @@ else
 	{
 		if($_POST[$i])
 		{
-			$query = "DELETE FROM `".MESSAGES_DATABASE."` WHERE id_reciv=".$_SESSION['_uid']." AND id='".$_POST['_'.$i]."';";
+			$query = "DELETE FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid']." AND id='".$_POST['_'.$i]."';";
 			api_sql_query($query,__FILE__,__LINE__);
 		}
 	}

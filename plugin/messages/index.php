@@ -1,4 +1,4 @@
-<?php // $Id: index.php 9847 2006-10-30 12:52:12Z evie_em $
+<?php // $Id: index.php 9859 2006-10-31 11:14:49Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,15 +27,6 @@ $inb = get_lang("Inbox");
 $newm = get_lang("ComposeMessage");
 if(api_get_user_id())
 {
-	/*$query = "CREATE TABLE IF NOT EXISTS `".MESSAGES_DATABASE."` (".
-		"`id` VARCHAR(150) NOT NULL,".
-		"`id_rem` INT( 10 ) NOT NULL ,".
-		"`id_reciv` INT( 10 ) NOT NULL ,".
-		"`status` BOOL NOT NULL,".
-		"`fecha` DATETIME NOT NULL ,".
-		"`contenido` TEXT NOT NULL,".
-		"INDEX ( `id`,`id_reciv` )". 
-		") TYPE = MYISAM ;";*/
 	$query = "CREATE TABLE IF NOT EXISTS `".MESSAGES_DATABASE."` (".
 		"`id` VARCHAR(150) NOT NULL,".
 		"`id_sender` INT( 10 ) NOT NULL ,".

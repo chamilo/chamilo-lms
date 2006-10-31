@@ -215,7 +215,7 @@ function get_personal_course_list($user_id)
 	$main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
 	$main_course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
 	$main_course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-	
+
 	$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
 										course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
 										course_rel_user.user_course_cat user_course_cat
@@ -223,9 +223,9 @@ function get_personal_course_list($user_id)
 										WHERE course.code = course_rel_user.course_code"."
 										AND   course_rel_user.user_id = '".$user_id."'
 										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,course.title,course.code";
-	
+
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-	
+
 	$personal_course_list = array ();
 	while ($result_row = mysql_fetch_array($course_list_sql_result))
 	{
@@ -252,7 +252,7 @@ function get_personal_session_course_list($user_id, $list_sessions){
 
 	// get the list of sessions where the user is subscribed / coach
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 5 as s
-							FROM session_rel_user, session 
+							FROM session_rel_user, session
 							WHERE id_session=id AND id_user=$_uid ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
 	$Sessions=api_store_result($result);
@@ -299,7 +299,7 @@ function get_personal_session_course_list($user_id, $list_sessions){
 			{
 				$result_row['s'] = 1;
 				$key = $result_row['id_session'].' - '.$result_row['k'];
-				$personal_course_list[$key] = $result_row;				
+				$personal_course_list[$key] = $result_row;
 			}
 		}
 
@@ -327,7 +327,7 @@ function get_personal_session_course_list($user_id, $list_sessions){
 		{
 			$key = $result_row['id_session'].' - '.$result_row['k'];
 			$result_row['s'] = $enreg['s'];
-			if(!isset($personal_course_list[$key]))	{				
+			if(!isset($personal_course_list[$key]))	{
 				$personal_course_list[$key] = $result_row;
 			}
 		}
@@ -522,21 +522,21 @@ function get_logged_user_course_html($mycours)
 		$course_display_title = $course_title;
 		$course_display_code = $course_visual_code;
 	}
-	
+
 	$s_course_status=$mycours["s"];
-	
+
 	$s_htlm_status_icon="";
-	
+
 	if($s_course_status==1){
-		$s_htlm_status_icon="<img src='main/img/staryellow.jpg'>";	
+		$s_htlm_status_icon="<img src='main/img/staryellow.jpg'>";
 	}
 	if($s_course_status==2){
-		$s_htlm_status_icon="<img src='main/img/starblue.jpg'>";	
+		$s_htlm_status_icon="<img src='main/img/starblue.jpg'>";
 	}
 	if($s_course_status==5){
-		$s_htlm_status_icon="<img src='main/img/stargreen.jpg'>";	
+		$s_htlm_status_icon="<img src='main/img/stargreen.jpg'>";
 	}
-	
+
 	//display course entry
 	$result.="\n\t";
 	$result .= '<li style="list-style-type: none;"><div style="border:0px solid #000; width: auto; float:left;padding-right: 5px;">'.$s_htlm_status_icon.'</div>';
@@ -812,7 +812,7 @@ api_plugin('mycourses_main');
 echo "<div class=\"maincontent\">"; // start of content for logged in users
 
 // link to see the session view or course view
-if(api_is_allowed_to_create_course()) {
+if(api_get_setting('use_session_mode')=='true' && api_is_allowed_to_create_course()) {
 	if(isset($_GET['sessionview'])){
 		echo '<a href="'.$_SERVER['PHP_SELF'].'">'.get_lang('CourseView').'</a>';
 	}
@@ -871,7 +871,7 @@ else
 		}*/
 		$dbname = $mycours['k'];
 		$status[$dbname] = $mycours['s'];
-		
+
 		$nbDigestEntries = 0; // number of entries already collected
 		if ($maxCourse < $maxValvas)
 			$maxValvas = $maxCourse;

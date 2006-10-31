@@ -24,7 +24,6 @@ $uncompress  = 1;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' 
 	&& count($_FILES)>0
-	&& empty($_POST['file_name'])
 	)
 {
 
@@ -43,21 +42,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 	$new_dir = replace_dangerous_char(trim($file_base_name),'strict');
 
 	require_once('learnpath.class.php');
-	require_once('scorm.class.php');
-	$oScorm = new scorm();
-	$manifest = $oScorm->import_package($_FILES['user_file'],$current_dir);
-	if(!empty($manifest)){
-		$oScorm->parse_manifest($manifest);
-		$oScorm->import_manifest(api_get_course_id());
+	$type = learnpath::get_package_type($_FILES['user_file']['tmp_name'],$_FILES['user_file']['name']);
+	switch($type){
+		case 'scorm':
+			require_once('scorm.class.php');
+			$oScorm = new scorm();
+			$manifest = $oScorm->import_package($_FILES['user_file'],$current_dir);
+			if(!empty($manifest)){
+				$oScorm->parse_manifest($manifest);
+				$oScorm->import_manifest(api_get_course_id());
+			}
+		
+			$proximity = '';
+			if(!empty($_REQUEST['content_proximity'])){$proximity = mysql_real_escape_string($_REQUEST['content_proximity']);}
+			$maker = '';
+			if(!empty($_REQUEST['content_maker'])){$maker = mysql_real_escape_string($_REQUEST['content_maker']);}
+			$oScorm->set_proximity($proximity);
+			$oScorm->set_maker($maker);
+			$oScorm->set_jslib('scorm_api.php');
+			break;
+		case 'aicc':
+			require_once('aicc.class.php');
+			$oAICC = new aicc();
+			$config_dir = $oAICC->import_package($_FILES['user_file']);
+			echo "Config dir: ".$config_dir."<br/>";
+			if(!empty($config_dir)){
+				$oAICC->parse_config_files($config_dir);
+				$oAICC->import_aicc(api_get_course_id());
+			}
+			$proximity = '';
+			if(!empty($_REQUEST['content_proximity'])){$proximity = mysql_real_escape_string($_REQUEST['content_proximity']);}
+			$maker = '';
+			if(!empty($_REQUEST['content_maker'])){$maker = mysql_real_escape_string($_REQUEST['content_maker']);}
+			$oAICC->set_proximity($proximity);
+			$oAICC->set_maker($maker);
+			$oAICC->set_jslib('aicc_api.php');
+			break;
+		case '':
+		default:
+			return api_failure::set_failure('not_a_learning_path');
 	}
-
-	$proximity = '';
-	if(!empty($_REQUEST['content_proximity'])){$proximity = mysql_real_escape_string($_REQUEST['content_proximity']);}
-	$maker = '';
-	if(!empty($_REQUEST['content_maker'])){$maker = mysql_real_escape_string($_REQUEST['content_maker']);}
-	$oScorm->set_proximity($proximity);
-	$oScorm->set_maker($maker);
-	$oScorm->set_jslib('scorm_api.php');
 } // end if is_uploaded_file
 elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 {
@@ -78,21 +102,45 @@ elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 	$new_dir = replace_dangerous_char(trim($file_base_name),'strict');
 
 	require_once('learnpath.class.php');
-	require_once('scorm.class.php');
-	$oScorm = new scorm();
-	$manifest = $oScorm->import_local_package($s,$current_dir);
-	if(!empty($manifest)){
-		$oScorm->parse_manifest($manifest);
-		$oScorm->import_manifest(api_get_course_id());
-	}
 
-	$proximity = '';
-	if(!empty($_REQUEST['content_proximity'])){$proximity = mysql_real_escape_string($_REQUEST['content_proximity']);}
-	$maker = '';
-	if(!empty($_REQUEST['content_maker'])){$maker = mysql_real_escape_string($_REQUEST['content_maker']);}
-	$oScorm->set_proximity($proximity);
-	$oScorm->set_maker($maker);
-	$oScorm->set_jslib('scorm_api.php');
-	
+	$type = learnpath::get_package_type($s,basename($s));
+	switch($type){
+		case 'scorm':
+			require_once('scorm.class.php');
+			$oScorm = new scorm();
+			$manifest = $oScorm->import_local_package($s,$current_dir);
+			if(!empty($manifest)){
+				$oScorm->parse_manifest($manifest);
+				$oScorm->import_manifest(api_get_course_id());
+			}
+		
+			$proximity = '';
+			if(!empty($_REQUEST['content_proximity'])){$proximity = mysql_real_escape_string($_REQUEST['content_proximity']);}
+			$maker = '';
+			if(!empty($_REQUEST['content_maker'])){$maker = mysql_real_escape_string($_REQUEST['content_maker']);}
+			$oScorm->set_proximity($proximity);
+			$oScorm->set_maker($maker);
+			$oScorm->set_jslib('scorm_api.php');
+			break;
+		case 'aicc':
+			require_once('aicc.class.php');
+			$oAICC = new aicc();
+			$config_dir = $oAICC->import_local_package($s,$current_dir);
+			if(!empty($config_dir)){
+				$oAICC->parse_config_files($config_dir);
+				$oAICC->import_aicc(api_get_course_id());
+			}
+			$proximity = '';
+			if(!empty($_REQUEST['content_proximity'])){$proximity = mysql_real_escape_string($_REQUEST['content_proximity']);}
+			$maker = '';
+			if(!empty($_REQUEST['content_maker'])){$maker = mysql_real_escape_string($_REQUEST['content_maker']);}
+			$oAICC->set_proximity($proximity);
+			$oAICC->set_maker($maker);
+			$oAICC->set_jslib('aicc_api.php');
+			break;
+		case '':
+		default:
+			return api_failure::set_failure('not_a_learning_path');
+	}	
 }
 ?>

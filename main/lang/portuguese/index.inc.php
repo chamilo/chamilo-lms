@@ -66,4 +66,7 @@ $langOpenarea = "Área pessoal";
 $langProductions = "Produções";
 $langSendChatRequest = "Convidar esta pessoa para sessão no Chat";
 $langRequestDenied = "O convite foi negado.";
+$UsageDatacreated = "Dados de utilização criados";
+$SessionView = "Mostrar os cursos ordenados por sessões";
+$CourseView = "Mostrar a lista de todos os cursos disponíveis";
 ?>

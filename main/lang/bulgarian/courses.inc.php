@@ -62,4 +62,6 @@ $SubscribingNotAllowed = "Записването не е позволено";
 $CourseSortingDone = "Сортирането на курсовете е завършено";
 $ExistingCourseCategories = "Съществуващи категории курсове";
 $YouAreNowUnsubscribed = "Вие вече сте отписан от курса";
+$AddRight = "Добавяне";
+$ViewOpenCourses = "Преглед на отворен курс";
 ?>

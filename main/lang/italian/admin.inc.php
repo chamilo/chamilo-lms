@@ -524,4 +524,20 @@ $langDateEnd = "Data di conclusione";
 $langCoachName = "Nome del tutor";
 $langNoTimeLimits = "Senza limiti di tempo";
 $SessionList = "Elenco sessioni";
+$SessionNameIsRequired = "E` necessario indicare un nome per la sessione";
+$NextStep = "Prossimo passo";
+$keyword = "Parola chiave";
+$Confirm = "Conferma";
+$UnsubscribeUsersFromCourse = "Cancella l\'utente dal corso";
+$MissingClassName = "Nome della classe mancante";
+$ClassNameExists = "Il nome della classe non esiste";
+$ImportCSVFileLocation = "Indirizzo del file CVS da importare";
+$ClassesCreated = "Classe creata";
+$ErrorsWhenImportingFile = "Errore nell\'importazione del file";
+$ServiceActivated = "Servizio attivato";
+$ActiveExtension = "Servizi attivi";
+$InvalidExtension = "Estensione non valida";
+$VersionCheckExplanation = "Per attivare il controllo automatico della versione è necessario registrare il campus su dokeos.com. L\'informazione trasmessa cliccando sul pulsante sarà usata solo internamente al sistema e i dati verranno pubblicati in modo aggregato (numero totale di piattaforme installate, corsi totali, studenti totali...) Vedi <a href=\"http://www.dokeos.com/stats/\">vedi  http://www.dokeos.com/stats/</a>. La registrazione implica la comparsa del nome del campus nell\'elenco internazionale (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>.
+Se non vuoi che il nome del campus compaia nell\'elenco devi indicarlo nel pulsante qui sotto.
+Non ci sono altri moduli da riempire, si tratta solo di cliccare sul pulsante.";
 ?>

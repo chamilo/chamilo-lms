@@ -38,4 +38,12 @@ $langAutodetect = "Auto-detecta";
 $langAccomplishedStepsTotal = "Total de etapas realizadas";
 $langUnknown = "Desconhecido";
 $h = "h";
+$AreYouSureToDeleteSteps = "Você tem certeza que deseja apagar estas etapas?";
+$Origin = "Origem";
+$Local = "Local";
+$Remote = "Remoto";
+$FileToUpload = "Arquivo para envio";
+$ContentMaker = "Criação de conteúdos";
+$ContentProximity = "Situação do Conteúdo";
+$UploadLocalFileFromGarbageDir = "Enviar arquivo a partir do diretorio principal/reciclagem";
 ?>

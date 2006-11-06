@@ -17,4 +17,7 @@ $langCombinedCourse = "&#1050;&#1086;&#1084;&#1073;&#1080;&#1085;&#1080;&#1088;&
 $ToolIsNowVisible = "Инструментът е видим";
 $ToolIsNowHidden = "Инструментът е невидим";
 $EditLink = "Редактиране на връзката";
+$Interaction = "Взаимодействие";
+$Authoring = "Авторство";
+$Administration = "Администрация";
 ?>

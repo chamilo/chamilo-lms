@@ -93,4 +93,17 @@ $langCourseVisibilityClosed = "Chiuso definitivamente; il corso è accessibile so
 $CourseVisibilityClosed = "Chiuso - temporaneamente non è possibile accedere al corso";
 $NotAllowedToModifyOwnRole = "La modifica del proprio ruolo non è ammessa";
 $CourseVisibilityModified = "Modificato (per maggiori dettagli vedi il sotto-sistema ruoli e permessi)";
+$WorkEmailAlert = "Avvisa via e-mail della pubblicazione di un nuovo elaborato.";
+$WorkEmailAlertActivate = "Avvisa via e-mail della pubblicazione di un nuovo elaborato.";
+$WorkEmailAlertDeactivate = "Disabilita l\'avviso via e-mail della pubblicazione di un nuovo elaborato.";
+$DropboxEmailAlert = "Avviso via e-mail dell\'invio di un file nella casella.";
+$DropboxEmailAlertActivate = "Avviso via e-mail dell\'invio di un file nella casella.";
+$DropboxEmailAlertDeactivat = "Disabilita l\'avviso via e-mail dell\'invio di un file nella casella.";
+$AllowUserEditAgenda = "Permetti ai corsisti di modificare l\'agenda del corso";
+$AllowUserEditAgendaActivate = "Attivare la possibilità per i corsisti di modificare l\'agenda del corso";
+$AllowUserEditAgendaDeactivate = "Disabilita la possibilità da parte dei corsisti di modificare l\'agenda del corso";
+$AllowUserEditAnnouncement = "Permetti ai corsisti di modificare gli annunci del corso";
+$AllowUserEditAnnouncementActivate = "Consenti la modifica da parte dei corsisti";
+$AllowUserEditAnnouncementDeactivate = "Disabilita la modifica da parte dei corsisti";
+$OrInTime = "o entro";
 ?>

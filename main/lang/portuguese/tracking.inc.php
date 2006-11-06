@@ -140,4 +140,17 @@ $Visited = "Visitado";
 $Name = "Nome";
 $FirstAccess = "Primeiro acesso";
 $LastAccess = "Último acesso";
+$MoyenneTest = "Média do teste";
+$exportExcel = "Exportar em formato Excel";
+$MoyCourse = "Média do curso";
+$MoyenneExamen = "Média do exame";
+$MoySession = "Média das sessões";
+$TakenSessions = "Sessões feitas";
+$FollowUp = "Seguimento";
+$Trainers = "Professores";
+$Probationers = "Estudantes";
+$Administrators = "Administradores";
+$Tracks = "Estatísticas";
+$Success = "Êxito";
+$ExcelFormat = "Formato Excel";
 ?>

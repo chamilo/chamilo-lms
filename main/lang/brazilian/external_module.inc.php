@@ -25,5 +25,7 @@ $langEditLink = "Editar Link da Homepage do Curso";
 $langChangePress = "Modifique e pressione OK";
 $langLinkChanged = "Link da Homepage do Curso modificado. Use o menu auxiliar abaixo para retornar para a homepage.";
 $NoLinkName = "Link sem nome";
+$NoLinkURL = "Link sem endereço (URL)";
 $LinkChanged = "Link alterado";
+$OkSentLink = "O link foi enviado";
 ?>

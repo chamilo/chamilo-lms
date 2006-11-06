@@ -39,6 +39,7 @@ $langAccomplishedStepsTotal = "Zbir (Total of accomplished steps)";
 $langUnknown = "Neznano";
 $h = "ur";
 $AreYouSureToDeleteSteps = "Ste preprièani, da želite odstraniti te korake ?";
+$Origin = "Izvor";
 $Local = "Lokalna";
 $Remote = "Oddaljena";
 $FileToUpload = "Datoteka za prenos";

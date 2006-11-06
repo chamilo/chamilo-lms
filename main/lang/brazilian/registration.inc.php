@@ -217,4 +217,5 @@ $CorrespondsToAccounts = "Este endereço do E-mail corresponde aos seguintes usuá
 $AccountExternalAuthSource = "Dokeos não pode autorizar o pedido automaticamente porque a conta tem uma fonte de autorização externa. Por favor, tome as medidas apropiadas e notifique-as ao usuário.";
 $AccountsExternalAuthSource = "Dokeos não pode realizar automáticamente a solicitação porque pelo menos uma das contas tem uma fonte de autorização externa. Por favor, tome as medidas apropiadas em todas as contas (incluindo as que tem autorização da plataforma) e notifique-as para o usuário.";
 $RequestSentToPlatformAdmin = "Dokeos não pode realizar seu pedido automáticamente  para este tipo de conta. Seu pedido foi enviado para o administrador da plataforma, que tomará as medidas apropiadas e lhe notificará.";
+$langphone = "Telefone";
 ?>

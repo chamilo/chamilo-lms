@@ -59,6 +59,7 @@ $langCode = "Kód";
 $langUsers = "Užívatelia";
 $langLanguage = "Jazyk";
 $langCategory = "Kategória";
+$langDBManagementOnlyForServerAdmin = "Databázu môžu spravova&#357; iba administrátori serveru";
 $langOfficialCode = "Oficiálny pridelený kód ";
 $langFirstName = "Krstné meno";
 $langLastName = "Priezvisko";

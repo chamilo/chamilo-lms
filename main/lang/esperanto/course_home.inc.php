@@ -17,4 +17,8 @@ $langCombinedCourse = "Kombinita: ";
 $ToolIsNowVisible = "La modulo nun videblas ";
 $ToolIsNowHidden = "La modulo nun estas nevidebla ";
 $EditLink = "&#348;an&#285;u ligilon ";
+$GreyIcons = "Moduloj";
+$Interaction = "Interago";
+$Authoring = "Redakti";
+$Administration = "Administrado";
 ?>

@@ -296,4 +296,15 @@ $Other = "Aliajn ";
 $AddRight = "Aldoni";
 $bb_post = "Foruma po&#349;ta&#309;o ";
 $bb_thread = "Foruma temo ";
+$Tutors = "Trejnantoj";
+$Tel = "Telefono";
+$RdvAgenda = "Rendevua agendo";
+$VideoConf = "Videokonferenco";
+$MyProgress = "Mia progreso";
+$myInActiveSessions = "Miaj neaktivaj sesioj";
+$NoOnlineStudents = "Neniu studento &#349;altita";
+$InCourse = "en la kurso";
+$UserOnlineListSession = "&#348;altitaj uzantoj - Sesio";
+$From = "de";
+$To = "al";
 ?>

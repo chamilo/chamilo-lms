@@ -20,6 +20,6 @@ $ToolIsNowHidden = "La herramienta ahora es invisible";
 $EditLink = "Editar enlace";
 $GreyIcons = "Caja de herramientas";
 $Interaction = "Interacción";
-$Authoring = "Autoría";
+$Authoring = "Creación de contenidos";
 $Administration = "Administración";
 ?>

@@ -147,11 +147,10 @@ $MoyenneExamen = "Media de examen";
 $MoySession = "Media de sesión";
 $TakenSessions = "Sesiones seguidas";
 $FollowUp = "Seguimiento";
-$Trainers = "Formadores";
-$Probationers = "Tutorados
-";
+$Trainers = "Profesores";
+$Probationers = "Estudiantes";
 $Administrators = "Administradores";
-$Tracks = "Seguimientos";
-$Success = "Éxito";
+$Tracks = "Seguimiento";
+$Success = "Calificación";
 $ExcelFormat = "Formato Excel";
 ?>

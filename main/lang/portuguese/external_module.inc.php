@@ -24,4 +24,8 @@ $langNoLinkName = "Por favor, escreva o nome da ligação";
 $langEditLink = "Editar Link da Página do Curso";
 $langChangePress = "Altere e clique em OK";
 $langLinkChanged = "Course Homepage Link changed. Use breadcrumb menu above to return to the homepage.";
+$NoLinkName = "Ligação sem nome";
+$NoLinkURL = "Ligação sem endereço (URL)";
+$LinkChanged = "Ligação alterada";
+$OkSentLink = "A ligação foi enviada";
 ?>

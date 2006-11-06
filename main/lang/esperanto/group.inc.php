@@ -92,4 +92,5 @@ $GroupTutors = "Mentoro";
 $GroupWork = "Laboroj";
 $GroupCalendar = "Agendo";
 $GroupAnnouncements = "Anoncoj";
+$GroupsFromClasses = "Grupoj sur bazo de klasoj";
 ?>

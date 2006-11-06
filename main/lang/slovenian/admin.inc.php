@@ -505,9 +505,16 @@ $langConfigureExtensions = "Nastavitev razširitev";
 $langConfigureExtensions = "Nastavitev storitev";
 $langActiveExtensions = "Aktiviraj to storitev";
 $langVisioconf = "Visio-konferenca";
+$langVisioconfDescription = "Dokeos Live Conferencing® je standardno orodje, namenjeno visiokonferencam, in ponuja: prikaz diapozitivov, belo tablo (whiteboard) za risanje in pisanje, dvosmeren avdio in video prenos, klepet. Zahteva le Flash® predvajalnik in dovoljuje uporabo treh razliènih na&#269;inov interakcije : ena-na-ena, ena-na-ve&#269; in ve&#269;-z-ve&#269;imi.
+";
 $langPpt2lp = "PPT2LP";
 $langPpt2lpDescription = "PPT2LP omogoèa pretvorbo predstavitev, izdelanih v PowerPoint obliki v uèno pot.";
+$langBandWidthStatistics = "Statistika izrabe pasovne širine";
+$langBandWidthStatisticsDescription = "MRTG omogoèa vpogled na napredno statistiko stanja strežnika v zadnjih 24-tih urah.";
 $langServerStatistics = "Statistike strežnika";
+$langServerStatisticsDescription = "AWStats omogoèa vpogled v statistiko platforme : število obiskovalcev, število obiskov posameznih strani, ....";
+$langSearchEngine = "Iskalnik po besedilu";
+$langSearchEngineDescription = "Iskalnik po besedilu (Full Text Search Engine) omogoèa iskanje želenega preko vsebine celotne platforme. Dnevno indeksiranje vsebine zagotavlja kvalitetne rezultate iskanja.";
 $langListSession = "Seznam sej";
 $AddSession = "Dodaj sejo";
 $langImportSessionListXMLCSV = "Uvozi seje iz XML/CSV datoteke";

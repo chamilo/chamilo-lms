@@ -261,4 +261,6 @@ $Actions = "Akcie";
 $Inbox = "Doru&#269;ená pošta";
 $ComposeMessage = "Vytvori&#357; správu";
 $Other = "Iný";
+$From = "od";
+$To = "komu";
 ?>

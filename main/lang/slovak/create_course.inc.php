@@ -3,6 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Lektori";
 $langExplanation = "Kliknutím na OK sa vytvorí stránka z agendou, fórom, menežérom dokumentov at&#271;. Prihlásenie vaším menom, ako tvorcom Vam umožní ju meni&#357; pod&#318;a potreby.";
+$langEmpty = "Nevyplnili ste niektore polí&#269;ka.<br>Pomocou gombíka  <b>Spä&#357;</b> vo vašom prehliada&#269;i sa vrá&#357;te a skúste to znovu.<br>If you ignore your course code, see the Course Program";
 $langAgenda = "Agenda";
 $langLinks = "Odkazy";
 $langDoc = "Dokumenty";

@@ -152,7 +152,6 @@ class scormOrganization {
 		$i = 1;
 		foreach($this->items as $id=>$dummy)
 		{
-			$item =& stripslashes($this->items[$id]);
 			$abs_order = 0;
 			$this->items[$id]->get_flat_list($list,$abs_order,$i,0); //passes the array as a pointer so it is modified in $list directly
 			$i++;

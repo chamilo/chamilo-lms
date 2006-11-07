@@ -2730,7 +2730,7 @@ class learnpath {
     			case 3:
     				if($this->debug>2){error_log('New LP - In learnpath::get_link() '.__LINE__.' - Item type: '.$lp_item_type,0);}
     				//formatting AICC HACP append URL
-    				$aicc_append = '?aicc_sid='.urlencode(session_id()).'&aicc_url='.urlencode(api_get_path(WEB_CODE_PATH).'newscorm/aicc.hacp.php').'&';
+    				$aicc_append = '?aicc_sid='.urlencode(session_id()).'&aicc_url='.urlencode(api_get_path(WEB_CODE_PATH).'newscorm/aicc_hacp.php').'&';
     				if($lp_item_type!='dir'){
     					//Quite complex here:
     					//we want to make sure 'http://' (and similar) links can 

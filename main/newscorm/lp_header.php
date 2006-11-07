@@ -11,6 +11,7 @@ $langFile[] = "scormdocument";
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
 require_once('scorm.class.php');
+require_once('aicc.class.php');
 if(isset($_SESSION['lpobject'])){
 	$temp = $_SESSION['lpobject'];
 	$_SESSION['oLP'] = unserialize($temp);

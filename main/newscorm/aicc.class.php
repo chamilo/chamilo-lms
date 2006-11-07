@@ -141,7 +141,7 @@ class aicc extends learnpath {
 			foreach($des_params as $des){
 				//one AU in AICC is equivalent to one SCO in SCORM (scormItem class)
 				$oDes = new aiccResource('config',$des);
-				$this->deslist[$oDes->identifier] =& $oDes;				
+				$this->deslist[$oDes->identifier] = $oDes;				
 			}
 			
      		// Parse the Assignable Unit File (.au) - csv-type
@@ -152,7 +152,7 @@ class aicc extends learnpath {
 			//distribute au params into the aicc object
 			foreach($au_params as $au){
 				$oAu = new aiccItem('config',$au);
-				$this->aulist[$oAu->identifier] =& $oAu;
+				$this->aulist[$oAu->identifier] = $oAu;
 				$this->au_order_list[] = $oAu->identifier;
 			}
      	
@@ -164,7 +164,7 @@ class aicc extends learnpath {
 			//distribute cst params into the aicc object
 			foreach($cst_params as $cst){
 				$oCst = new aiccBlock('config',$cst);
-				$this->cstlist[$oCst->identifier] =& $oCst;
+				$this->cstlist[$oCst->identifier] = $oCst;
 			}
 			
      		// Parse the Objectives Relationships File (.ore) - csv-type - if exists
@@ -177,7 +177,7 @@ class aicc extends learnpath {
 				//distribute ore params into the aicc object
 				foreach($ore_params as $ore){
 					$oOre = new aiccObjective('config',$ore);
-					$this->orelist[$oOre->identifier] =& $oOre;
+					$this->orelist[$oOre->identifier] = $oOre;
 				}
      		}
 

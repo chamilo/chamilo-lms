@@ -763,6 +763,58 @@ class aicc extends learnpath {
 			return $r;
 		}
 	  /**
+	   * Static function to parse AICC ini strings.
+	   * Based on work by sinedeo at gmail dot com published on php.net (parse_ini_file())
+	   * @param		string	INI File string
+	   * @return	array	Structured array
+	   */
+		function parse_ini_string_quotes_safe($s)
+		{
+			$null = "";
+			$r=$null;
+			$sec=$null;
+			$f = split("\r\n",$s);
+			for ($i=0;$i<@count($f);$i++)
+			{
+				$newsec=0;
+				$w=@trim($f[$i]);
+				if ($w)
+				{
+					if ((!$r) or ($sec))
+					{
+						if ((@substr($w,0,1)=="[") and (@substr($w,-1,1))=="]") 
+						{
+							$sec=@substr($w,1,@strlen($w)-2);
+							$newsec=1;
+						}
+					}
+					if (!$newsec)
+					{
+						$w=@explode("=",$w);
+						$k=@trim($w[0]);
+						unset($w[0]); 
+						$v=@trim(@implode("=",$w));
+						if ((@substr($v,0,1)=="\"") and (@substr($v,-1,1)=="\"")) 
+						{
+							$v=@substr($v,1,@strlen($v)-2);
+						}
+						if ($sec) 
+						{
+							if(strtolower($sec)=='course_description'){//special case
+								$r[strtolower($sec)]=$k;
+							}else{
+								$r[strtolower($sec)][strtolower($k)]=$v;
+							}
+						} else 
+						{
+							$r[strtolower($k)]=$v;
+						}
+					}
+				}
+			}
+			return $r;
+		}
+	  /**
 	   * Static function that parses CSV files into simple arrays, based on a function
 	   * by spam at cyber-space dot nl published on php.net (fgetcsv())
 	   * @param	string	Filepath

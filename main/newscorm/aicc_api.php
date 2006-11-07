@@ -51,36 +51,24 @@ $autocomplete_when_80pct = 0;
 		JavaScript Functions
 ============================================================================== 
 */ 
-?>var scorm_logs='<?php echo (empty($oLP->scorm_debug)?'0':'3');?>'; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
-var lms_logs=0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
+?>var scorm_logs=<?php echo (empty($oLP->scorm_debug)?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+var lms_logs=3; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 //logit_lms('scormfunctions.php included',0);
 
 function APIobject() {
-  this.LMSInitialize=LMSInitialize;  //for Scorm 1.2
-  this.Initialize=LMSInitialize;     //for Scorm 1.3
+  this.LMSInitialize=LMSInitialize;
   this.LMSGetValue=LMSGetValue;
-  this.GetValue=LMSGetValue;
   this.LMSSetValue=LMSSetValue;
-  this.SetValue=LMSSetValue;
   this.LMSCommit=LMSCommit;
-  this.Commit=LMSCommit;
   this.LMSFinish=LMSFinish;
-  this.Finish=LMSFinish;
   this.LMSGetLastError=LMSGetLastError;
-  this.GetLastError=LMSGetLastError;
   this.LMSGetErrorString=LMSGetErrorString;
-  this.GetErrorString=LMSGetErrorString;
   this.LMSGetDiagnostic=LMSGetDiagnostic;
-  this.GetDiagnostic=LMSGetDiagnostic;
-  this.Terminate=Terminate;  //only in Scorm 1.3
 }
 
 //it is not sure that the scos use the above declarations
 
 API = new APIobject(); //for scorm 1.2
-api = new APIobject(); //for scorm 1.2
-API_1484_11 = new APIobject();  //for scorm 1.3
-api_1484_11 = new APIobject();  //for scorm 1.3
 
 var G_NoError = 0;
 var G_GeneralException = 101;
@@ -137,20 +125,11 @@ var old_session_time = '';
 var old_suspend_data = '';
 var lms_old_item_id = 0;
 
-/**
- * Function called mandatorily by the SCORM content to start the SCORM communication
- */
 function LMSInitialize() {  //this is the initialize function of all APIobjects
 	logit_scorm('LMSInitialise()',0);
 	lms_initialized=1;
 	return('true');
 }
-
-function Initialize() {  //this is the initialize function of all APIobjects
-  return LMSInitialize();
-}
-
-
 function LMSGetValue(param) {
 	//logit_scorm("LMSGetValue('"+param+"')",1);
 	var result='';
@@ -274,11 +253,6 @@ function LMSGetValue(param) {
 	logit_scorm("LMSGetValue('"+param+"') returned '"+result+"'",1);
 	return result;
 }
-
-function GetValue(param) {
-	return LMSGetValue(param);
-}
-
 function LMSSetValue(param, val) {
 	logit_scorm("LMSSetValue('"+param+"','"+val+"')",0);
 	switch(param) {
@@ -308,11 +282,6 @@ function LMSSetValue(param, val) {
 	?>
 	return(true);
 }
-
-function SetValue(param, val) {
-	return LMSSetValue(param, val);
-}
-
 function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
     <?php if ($autocomplete_when_80pct){ ?>
     if( ( lesson_status == 'incomplete') && (score >= (0.8*max) ) ){
@@ -339,11 +308,6 @@ function LMSCommit(val) {
 	savedata('commit');
 	return('true');
 }
-
-function Commit(val) {
-	return LMSCommit(val);
-}
-
 function LMSFinish(val) {
 	if (( commit == false )) { 	
 		logit_scorm('LMSFinish() (no LMSCommit())',1); 
@@ -354,43 +318,17 @@ function LMSFinish(val) {
 	}
 	return('true');
 }
-
-function Finish(val) {
-	return LMSFinish(val);
-}
-
 function LMSGetLastError() {
 	logit_scorm('LMSGetLastError()',1);
 	return(G_LastError);
 }
-
-function GetLastError() {
-	return LMSGetLastError();
-}
-
 function LMSGetErrorString(errCode){
 	logit_scorm('LMSGetErrorString()',1);
 	return('No error !');
 }
-
-function GetErrorString(errCode){
-	return LMSGetErrorString(errCode);
-}
-
 function LMSGetDiagnostic(errCode){
 	logit_scorm('LMSGetDiagnostic()',1);
 	return(API.LMSGetLastError());
-}
-
-function GetDiagnostic(errCode){
-	return LMSGetDiagnostic(errCode);
-}
-
-function Terminate(){
-	logit_scorm('Terminate()',0);
-	commit = true;
-	savedata('terminate');
-	return (true);
 }
 <?php
 //--------------------------------------------------------------------//
@@ -512,7 +450,7 @@ function dokeos_save_asset(){
  */
 function logit_scorm(message,priority){
 	if(frames["lp_log_name"] && scorm_logs>priority){
-		frames["lp_log_name"].document.getElementById("log_content").innerHTML += "SCORM: " + message + "<br/>";
+		frames["lp_log_name"].document.getElementById("log_content").innerHTML += "AICC: " + message + "<br/>";
 	}
 }
 /**

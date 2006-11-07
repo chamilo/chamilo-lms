@@ -160,6 +160,7 @@ class scormItem extends learnpathItem{
 						     				}
 						     				break;
 				     					case 'maxtimeallowed':
+				     					case 'adlcp:maxtimeallowed':
 						     				$tmp_children = $child->childNodes;
 						     				//if(count($tmp_children)==1 and $tmp_children[0]->textContent!='' )
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue!='' )
@@ -168,6 +169,7 @@ class scormItem extends learnpathItem{
 						     				}
 						     				break;
 										case 'prerequisites':
+										case 'adlcp:prerequisites':
 						     				$tmp_children = $child->childNodes;
 						     				//if(count($tmp_children)==1 and $tmp_children[0]->textContent!='' )
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue!='' )
@@ -176,6 +178,7 @@ class scormItem extends learnpathItem{
 						     				}
 						     				break;
 										case 'timelimitaction':
+										case 'adlcp:timelimitaction':
 						     				$tmp_children = $child->childNodes;
 						     				//if(count($tmp_children)==1 and $tmp_children[0]->textContent!='' )
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue!='' )
@@ -184,6 +187,7 @@ class scormItem extends learnpathItem{
 						     				}
 						     				break;
 										case 'datafromims':
+										case 'adlcp:datafromims':
 						     				$tmp_children = $child->childNodes;
 						     				//if(count($tmp_children)==1 and $tmp_children[0]->textContent!='' )
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue!='' )
@@ -192,6 +196,7 @@ class scormItem extends learnpathItem{
 						     				}
 						     				break;
 										case 'masteryscore':
+										case 'adlcp:masteryscore':
 						     				$tmp_children = $child->childNodes;
 						     				//if(count($tmp_children)==1 and $tmp_children[0]->textContent!='' )
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue!='' )

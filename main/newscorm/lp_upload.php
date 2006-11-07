@@ -24,6 +24,7 @@ $uncompress  = 1;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' 
 	&& count($_FILES)>0
+	&& !empty($_FILES['user_file']['name'])
 	)
 {
 

@@ -66,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			require_once('aicc.class.php');
 			$oAICC = new aicc();
 			$config_dir = $oAICC->import_package($_FILES['user_file']);
-			echo "Config dir: ".$config_dir."<br/>";
 			if(!empty($config_dir)){
 				$oAICC->parse_config_files($config_dir);
 				$oAICC->import_aicc(api_get_course_id());

@@ -25,6 +25,7 @@ class aiccItem extends learnpathItem{
 	var $system_vendor = ''; //AICC AU's system_vendor
 	var $au_type = ''; //AICC AU's type
 	var $command_line = ''; //AICC AU's command_line
+	var $debug=0;
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormItem

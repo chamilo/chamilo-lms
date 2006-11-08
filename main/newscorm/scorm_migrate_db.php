@@ -17,8 +17,8 @@ ini_set('max_execution_time',7200);
 
 function my_get_time($time){
 	$matches = array();
-	if(preg_match('/(\d{2}):(\d{2}):(\d{2})(\.\d*)?/',$time,$matches)){
-		return ($matches[1]*3600)+($matches[2]*60)+($matches[3]);
+	if(preg_match('/(\d{2,4}):(\d{2})(:(\d{2})(\.\d*)?)?/',$time,$matches)){
+		return ($matches[1]*3600)+($matches[2]*60)+($matches[4]);
 	}
 	else return 0;
 }
@@ -55,6 +55,7 @@ echo "Tables created/deleted for all courses<br />\n";
  * The migration needs to take all data from the original learnpath tables and add them to the new
  * lp, lp_view, lp_item and lp_item_view tables
  */
+	//MIGRATING LEARNPATHS
 //test only one course
 //$courses_list = array('fadtest_BLA');
 foreach($courses_list as $db)
@@ -216,6 +217,7 @@ foreach($courses_list as $db)
 		//'chapter'	=> 'dokeos_chapter', Chapters should all be in learnpath_chapter, no matter the nesting level
 		
 	);
+	//MIGRATING LEARNPATH ITEMS
 	$sql_lp_item = "SELECT * FROM $lp_item ORDER BY chapter_id, display_order";
 	//echo "$sql_lp_item<br />\n";
 	$res_lp_item = api_sql_query($sql_lp_item,__FILE__,__LINE__);	
@@ -263,7 +265,7 @@ foreach($courses_list as $db)
 				"'$ref', " .
 				"'".mysql_real_escape_string($row['title'])."'," .
 				"'".mysql_real_escape_string($row['description'])."'," .
-				"''," .
+				"'$ref'," .
 				"".$lp_chap_items[$row['chapter_id']]."," .
 				"'$prereq_id'," .
 				$row['display_order']." " .
@@ -329,7 +331,8 @@ foreach($courses_list as $db)
 	}
 	
 	//echo "</pre>\n";
-	 //MIGRATING THE learnpath_user TABLE (results)
+	
+	//MIGRATING THE learnpath_user TABLE (results)
 	$sql_lp_user = "SELECT * FROM $lp_user ORDER BY user_id, learnpath_id, learnpath_item_id";
 	//echo "$sql_lp_user<br />\n";
 	$res_lp_user = api_sql_query($sql_lp_user,__FILE__,__LINE__);
@@ -421,6 +424,7 @@ foreach($courses_list as $db)
 	 * update the links to newscorm/lp_controller.php?action=view&lp_id=x)
 	 * Only normal learnpaths were visible from the homepage so we only need to update here
 	 */
+	//MIGRATING LEARNPATH LINKS ON COURSES HOMEPAGES
 	$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE,$db);
 	$sql_tool = "SELECT * FROM $tbl_tool WHERE image='scormbuilder.gif' AND link LIKE '%learnpath_handler%'";
 	$res_tool = api_sql_query($sql_tool,__FILE__,__LINE__);
@@ -522,17 +526,17 @@ while($course_row = Database::fetch_array($res_crs)){
 				//avoid if contentTitle is not the name of an existing directory
 			}elseif(!is_file($courses_dir."/imsmanifest.xml")){
 				//if the imsmanifest file was not found there
-				echo "!!imsmanifest.xml  not found at scormdocument's $courses_dir/imsmanifest.xml, skipping<br/>\n";
+				echo "  !!imsmanifest.xml  not found at scormdocument's $courses_dir/imsmanifest.xml, skipping<br/>\n";
 				//try subdirectories on one level depth
-				echo "Trying subdirectories...<br/>";
+				echo "  Trying subdirectories...<br/>";
 				$dh = opendir($courses_dir);
 				while($entry = readdir($dh)){
 					if(substr($entry,0,1)!='.'){
 						if(is_dir($courses_dir."/".$entry)){
 							if(is_file($courses_dir."/".$entry."/imsmanifest.xml")){
-								echo "... and found $courses_dir/$entry/imsmanifest.xml!<br/>";
+								echo ".  .. and found $courses_dir/$entry/imsmanifest.xml!<br/>";
 								if(!in_array($tmp_path."/".$entry."/imsmanifest.xml",$scormdocuments_lps)){
-									echo "Recording.<br/>";
+									echo "  Recording.<br/>";
 									$scormdocuments_lps[] = $tmp_path."/".$entry;
 								}
 							}
@@ -540,7 +544,7 @@ while($course_row = Database::fetch_array($res_crs)){
 					}
 				}
 			}else{
-				echo "Found scormdocument $tmp_path in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm, treating it.<br/>\n";
+				echo "  Found scormdocument $tmp_path in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm, treating it.<br/>\n";
 				$scormdocuments_lps[] = $tmp_path;
 			}
 		}
@@ -591,7 +595,11 @@ while($course_row = Database::fetch_array($res_crs)){
 
 //echo "<pre>courses_id_list: ".print_r($courses_id_list,true)."</pre>\n";
 
-echo "<br/>\n---- Scorms array now contains ".count($scorms)." paths to migrate. Starting migration...<br />\n";
+$my_count = 0;
+foreach($scorms as $mycourse => $my_paths){
+	$my_count += count($my_paths);
+}
+echo "<br/>\n---- Scorms array now contains ".$mycount." paths to migrate. Starting migration...<br />\n";
 
 /**
  * Looping through the SCO_MAIN table for SCORM learnpath attached to courses
@@ -652,8 +660,97 @@ foreach($scorms as $my_course_code => $paths_list )
 		$oScorm->import_manifest($my_course_code);
 		//TODO add code to update the path in that new lp created, as it probably uses / where
 		//$sco_path_temp should be used... 
+		$lp_ids[$my_content_id] = $oScorm->lp_id; //contains the old LP ID => the new LP ID
+		$lp_course[$my_content_id] = $courses_id_list[$my_course_code]; //contains the old learnpath ID => the course DB name
+		$lp_course_code[$my_content_id] = $my_course_code;
+		$max_dsp_lp++;
+
+		$my_lp_title = mb_convert_encoding($oScorm->get_title(),'ISO-8859-1','UTF-8');
+		if(!empty($my_lp_title)){
+			$my_new_lp = $db_name.$new_lp;	
+			$my_sql = "UPDATE $my_new_lp " .
+					"SET name = '$my_lp_title', " .
+					"WHERE id = ".$lp_ids[$my_content_id];
+			echo "Updating title: ".$my_sql."<br/>\n";
+			$my_res = api_sql_query($my_sql,__FILE__,__LINE__);	
+		}
+
+		/*
+		 * QUERY SCORM ITEMS FROM SCORM_SCO_DATA
+		 * The danger here is that we might have several users for the same data, and so
+		 * we have to avoid entering the same elements twice
+		 */
+		$sql_items = "SELECT * FROM $scorm_item WHERE contentId = '".$my_content_id."' ORDER BY scoId";
+		//echo "$sql_items<br />\n";
+		$res_items = api_sql_query($sql_items,__FILE__,__LINE__);
+		while($scormItem = Database::fetch_array($res_items))
+		{
+			$my_sco_id 		= $scormItem['scoId']; //the index for display??? (check that)
+			$my_identifier	= $scormItem['scoIdentifier']; //the scorm item path/name
+			$my_title		= mysql_real_escape_string($scormItem['scoTitle']);
+			$my_status		= $scormItem['status'];
+			$my_student		= $scormItem['studentId'];
+			$my_score		= $scormItem['score'];
+			$my_time		= my_get_time($scormItem['time']);
+			$my_type		= 'sco';
+			//$my_item_path	= $scorm_lp_paths[$my_content_id]['path'];
+			$my_item_path 	= '';
+			
+			//echo "&nbsp;&nbsp;FOUND item belonging to old learnpath num $my_content_id so belongs to course ".$lp_course[$my_content_id]."<br />\n";
+			$my_new_lp_item = $db_name.$new_lp_item;	
+			$my_new_lp_view = $db_name.$new_lp_view;	
+			$my_new_lp_item_view = $db_name.$new_lp_item_view;	
+
+			/*
+			 * Check if a view is needed
+			 */
+			if($my_score != '' and $my_status != 'not attempted'){
+				//it is worth creating an lp_view and an lp_item_view - otherwise not
+				$sel_sqlb = "SELECT * FROM $my_new_lp_view " .
+						"WHERE lp_id = ".$lp_ids[$my_content_id]." AND user_id = $my_student";
+				$sel_resb = api_sql_query($sel_sqlb,__FILE__,__LINE__);
+				if(Database::num_rows($sel_resb)>0){
+					//dont insert
+					$rowb = Database::fetch_array($sel_resb);
+					$view_insert_id = $rowb['id'];
+				}else{
+					$ins_sql = "INSERT INTO $my_new_lp_view (" .
+						"lp_id," .
+						"user_id," .
+						"view_count" .
+						") VALUES (" .
+						$lp_ids[$my_content_id].", " .
+						$my_student.", " .
+						"1" .
+						")";
+					//echo "$ins_sql<br/>";
+					$ins_res = api_sql_query($ins_sql,__FILE__,__LINE__);
+					$view_insert_id = Database::get_last_insert_id();
+				}
+				$sel_sqlc = "SELECT * FROM $my_new_lp_item " .
+						"WHERE lp_id = ".$lp_ids[$my_content_id]." AND ref = '$my_identifier'";
+				$sel_resc = api_sql_query($sel_sqlc,__FILE__,__LINE__);
+				if(Database::num_rows($sel_resc)>0){
+					$my_item_id_row = Database::fetch_array($sel_resc);
+					$item_insert_id = $my_item_id_row['id'];
+					$ins_sql = "INSERT INTO $my_new_lp_item_view (" .
+							"lp_item_id, lp_view_id, view_count," .
+							"start_time, total_time, score," .
+							"status" .
+							") VALUES (" .
+							"$item_insert_id, $view_insert_id, 1," .
+							"0, $my_time, $my_score," .
+							"'$my_status'" .
+							")";
+					//echo "$ins_sql<br/>";
+					$ins_res = api_sql_query($ins_sql,__FILE__,__LINE__);
+				}else{
+					//echo "  Didn't find corresponding item for $my_identifier in new tables<br/>\n";
+				}
+			}
+		}
+
 	}		
-	//if($my_content_id != -1){
 	else{
 		echo "This is a normal SCORM path<br/>\n";
 		$scorm_lp_paths[$my_content_id]['path'] = $my_path;

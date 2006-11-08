@@ -22,12 +22,12 @@ while ($row = Database::fetch_array($res))
 	//TODO add check for learnpath element. If not exist, create one.
 	$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE,$row['db_name']);
 	$sql_t = "UPDATE $tbl_tool SET link = 'newscorm/lp_controller.php' WHERE name='learnpath'";
-	$res_t = @mysql_query($sql_t);
+	$res_t = api_sql_query($sql_t,__FILE__,__LINE__);
 	if(!$res_t){
 		echo "SQL error with query: ".$sql_t." - ignoring<br/>\n";
 	}
 	$sql_s = "SELECT * FROM $tbl_tool WHERE link LIKE '%scorm/showinframes%'";
-	$res_s = @mysql_query($sql_s);
+	$res_s = api_sql_query($sql_s,__FILE__,__LINE__);
 	if(!$res_s){
 		echo "SQL error with query: ".$sql_s." - ignoring<br/>\n";
 	}else{
@@ -36,7 +36,9 @@ while ($row = Database::fetch_array($res))
 			error_log('YWUPDTOOL - '.$row['code'].' -'.$row_s['link'],0);
 			$link = 'newscorm/lp_controller.php?cidReq='.$row['code'].'&action=view&lp_id='.$lp_id;
 			$sql_r = "UPDATE $tbl_tool SET link = '$link' WHERE id=".$row_s['id'];
-			$res_r = @mysql_query($sql_r);
+            //make sure we can revert by printing a list of updated links
+            echo $sql_r." (AND link='".$row_s['link']."')<br/>\n";
+            $res_r = api_sql_query($sql_r,__FILE__,__LINE__);
 			if(!$res_r){
 				echo "SQL error with query: ".$sql_r." - ignoring<br/>\n";
 			}
@@ -45,8 +47,4 @@ while ($row = Database::fetch_array($res))
 		}
 	}
 }
-/**
- * Update course description (intro page) to use new links instead of learnpath/learnpath_handler.php
- */
-
 ?>

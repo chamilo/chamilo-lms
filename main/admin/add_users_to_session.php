@@ -102,15 +102,14 @@ if($_POST['formSent'])
 					}
 				}
 			}
-			
-			foreach($ClassList as $class){
-				$result = api_sql_query ("SELECT user_id FROM $tbl_class_user WHERE class_id=$class");
-				$usersTmp = api_store_result($result);	
-				foreach($usersTmp as $enreg_user){
-					api_sql_query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','{$enreg_user['user_id']}')",__FILE__,__LINE__);
+			foreach($existingUsers as $existing_user){
+				if(!in_array($existing_user, $UserList)){
+					$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
+					api_sql_query($sql);
+					
 					if(mysql_affected_rows())
 					{
-					$nbr_users++;
+						$nbr_users--;
 					}
 				}
 			}
@@ -121,9 +120,7 @@ if($_POST['formSent'])
 			
 		}
 		
-		api_sql_query("DELETE FROM $tbl_session_rel_class WHERE session_id = $id_session");
 		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session");
-		
 		$nbr_users = 0;
 		foreach($UserList as $enreg_user){
 			$nbr_users++;
@@ -131,7 +128,7 @@ if($_POST['formSent'])
 			
 		}
 		$nbr_users = count($UserList);
-		api_sql_query("UPDATE $tbl_session SET nbr_classes=0, nbr_users= $nbr_users WHERE id='$id_session' ",__FILE__,__LINE__);
+		api_sql_query("UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ",__FILE__,__LINE__);
 		
 		//if(empty($_GET['add']))
 			//header('Location: '.$_GET['page'].'?id_session='.$id_session);

@@ -80,8 +80,8 @@ $create_lp_item_view = "CREATE TABLE IF NOT EXISTS XXX_$new_lp_item_view (" .
 		")";
 //table implementing item_view interactions
 $new_lp_iv_interaction = 'lp_iv_interaction';
-$alter_lp_iv_interaction = "CREATE TABLE XXX_$new_lp_iv_interaction(" .
-		"id				bigint unsigned AUTO_INCREMENT PRIMARY KEY," .
+$create_lp_iv_interaction = "CREATE TABLE IF NOT EXISTS XXX_$new_lp_iv_interaction (" .
+		"id				bigint unsigned primary key auto_increment," .
 		"order_id		smallint	unsigned	not null default 0,". //internal order (0->...) given by Dokeos but usable by sco
 		"lp_iv_id		bigint	unsigned not null," . //identifier of the related sco_view
 		"interaction_id		varchar(255) not null default ''," . //sco-specific, given by the sco
@@ -141,6 +141,9 @@ while ($row = Database::fetch_array($res))
 		$create_table = str_replace('XXX_',$dbname,$create_lp_item_view);
 		echo "$create_table<br />\n";
 		api_sql_query($create_table);
+		$create_table = str_replace('XXX_',$dbname,$create_lp_iv_interaction);
+		echo "$create_table<br />\n";
+		api_sql_query($create_table);
 		echo "<br /><br />\n";
 	}else{
 		echo "Deleting tables for ".$row['db_name']."<br />\n";
@@ -151,6 +154,8 @@ while ($row = Database::fetch_array($res))
 		$del_sql = "DROP TABLE ".$dbname.$new_lp_item;
 		echo "$del_sql<br />\n";
 		$del_sql = "DROP TABLE ".$dbname.$new_lp_item_view;
+		echo "$del_sql<br />\n";
+		$del_sql = "DROP TABLE ".$dbname.$new_lp_iv_interaction;
 		echo "$del_sql<br />\n";
 		echo "<br /><br />\n";		
 	}

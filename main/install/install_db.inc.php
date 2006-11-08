@@ -363,6 +363,7 @@ mysql_query("CREATE TABLE `track_e_login` (
 			`login_user_id` int unsigned NOT NULL default '0',
 			`login_date` datetime NOT NULL default '0000-00-00 00:00:00',
 			`login_ip` varchar(39) NOT NULL default '',
+			`logout_date` datetime NULL default NULL,
 			PRIMARY KEY  (`login_id`),
 			KEY `login_user_id` (`login_user_id`)
 			) TYPE=MyISAM") or die(mysql_error());

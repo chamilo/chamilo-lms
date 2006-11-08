@@ -377,4 +377,19 @@ foreach($language_files as $index => $language_file)
 	include(api_get_path(SYS_CODE_PATH).'lang/english/'.$language_file.'.inc.php');
 	include(api_get_path(SYS_CODE_PATH).'lang/'.$language_interface.'/'.$language_file.'.inc.php');
 }
+
+
+//Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
+
+$tbl_track_login = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+	
+$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_SESSION["_uid"]."' ORDER BY login_date DESC LIMIT 0,1";
+
+$q_last_connection=mysql_query($sql_last_connection);
+$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
+
+$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
+
+api_sql_query($s_sql_update_logout_date);
+
 ?>

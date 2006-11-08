@@ -21,6 +21,7 @@ Display :: display_header($nameTools);
 api_display_tool_title($nameTools);
 
 $tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 $tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
 $tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
 $tbl_session_rel_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
@@ -98,33 +99,56 @@ $tbl_track_login = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE
 	
 	}
 
+function is_coach(){
+  	
+  	global $tbl_session_course;
+  	
+	$sql="SELECT course_code FROM $tbl_session_course WHERE id_coach='".$_SESSION["_uid"]."'";
+
+	$result=api_sql_query($sql);
+	  
+	if(mysql_num_rows($result)>0){
+	    return true;	    
+	}
+	else{
+		return false;
+	}
+  
+}
+
 
 /**
  * MAIN PART
- */
-
-/*
- * liste nominative avec coordonnées et lien vers les cours et
-les stagiaires dont il est le
-responsable. 
  */
 
 if(isset($_GET["id_student"])){
 	
 	$i_id_student=$_GET["id_student"];
 	$sqlCoachs = "SELECT DISTINCT src.id_coach " .
-					"FROM $tbl_session_rel_course as src, $tbl_session_rel_course_rel_user as srcru, $tbl_user as user " .
-					"WHERE src.id_coach<>'0' AND src.course_code=srcru.course_code AND srcru.id_user='$i_id_student' AND srcru.id_user=user.user_id
+					"FROM $tbl_session_rel_course as src, $tbl_session_rel_course_rel_user as srcru " .
+					"WHERE src.id_coach<>'0' AND src.course_code=srcru.course_code AND srcru.id_user='$i_id_student' AND srcru.id_session=src.id_session 
 				  ";
 
 }
 
 else{
-$sqlCoachs = "	SELECT DISTINCT id_coach, user_id, lastname, firstname
-					FROM $tbl_user, $tbl_session_rel_course
-					WHERE id_coach=user_id
-					ORDER BY lastname ASC
-				  ";
+	if(api_is_platform_admin()){
+		$sqlCoachs = "	SELECT DISTINCT id_coach, user_id, lastname, firstname
+						FROM $tbl_user, $tbl_session_rel_course
+						WHERE id_coach=user_id
+						ORDER BY lastname ASC
+					  ";
+	}
+	else{
+		
+		$sqlCoachs = "	SELECT DISTINCT id_coach, $tbl_user.user_id, lastname, firstname
+						FROM $tbl_user as user, $tbl_session_rel_course as session_rel_course, $tbl_course_user as course_rel_user  
+						WHERE course_rel_user.course_code=session_rel_course.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".$_SESSION["_uid"]."' 
+						AND session_rel_course.id_coach=user.user_id 
+						ORDER BY lastname ASC
+					  ";
+	
+	}
 }
 $resultCoachs = api_sql_query($sqlCoachs);
 

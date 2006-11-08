@@ -2,7 +2,7 @@
 /*
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
- 
+ ob_start();
  $nameTools= 'Cours';
  $langFile = array ('registration', 'index','trad4all', 'tracking');
  $cidReset=true;
@@ -11,7 +11,20 @@
  $this_section = "session_my_space";
  
  api_block_anonymous_users();
-  $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+ $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+ 
+ if(isset($_GET["id_session"]) && $_GET["id_session"]!=""){
+	$interbreadcrumb[] = array ("url" => "session.php", "name" => get_lang('Sessions'));
+ }
+ 
+ if(isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"]=="coach"){
+ 	 $interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
+ }
+ 
+ if(isset($_GET["user_id"]) && $_GET["user_id"]!="" && !isset($_GET["type"])){
+ 	 $interbreadcrumb[] = array ("url" => "cours.php", "name" => get_lang('Teachers'));
+ }
+ 
  Display :: display_header($nameTools);
  
  
@@ -20,6 +33,7 @@
  $tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
  $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
  $tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
+ $tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
  
 /*
  ===============================================================================
@@ -68,13 +82,56 @@
 	
 	return $message;
  }
+ 
+ function is_coach(){
+  	
+  	global $tbl_session_course;
+  	
+	$sql="SELECT course_code FROM $tbl_session_course WHERE id_coach='".$_SESSION["_uid"]."'";
+
+	$result=api_sql_query($sql);
+	  
+	if(mysql_num_rows($result)>0){
+	    return true;	    
+	}
+	else{
+		return false;
+	}
+  }
+  
+  function isDisplayed($s_code, $a_courses){
+  	
+  	if(array_key_exists($s_code,$a_courses)){
+  		return true;
+  	}
+  	else{
+  		return false;
+  	}
+  	
+  }
+  
 
 /*
  ===============================================================================
  	MAIN CODE
  ===============================================================================  
  */
+	
+	
+	if(isset($_GET["id_session"]) && $_GET["id_session"]!=""){
+		
+		$i_id_session=intval($_GET["id_session"]);
+		
+		$sqlCourse="SELECT DISTINCT code, title " .
+ 					"FROM $tbl_course as course, $tbl_session_course as src " .
+ 					"WHERE course.code=src.course_code AND src.id_session='$i_id_session'";
 
+		$resultCourses = api_sql_query($sqlCourse);
+		
+		$a_courses = api_store_result($resultCourses);
+		
+	}
+	
 	if(isset($_GET["user_id"]) && $_GET["user_id"]!=""){
  		
  		$i_user_id=$_GET["user_id"];
@@ -88,6 +145,14 @@
  			
  		}
  		
+ 		elseif(isset($_GET["type"]) && $_GET["type"]=="student"){
+ 			
+ 			$sqlCourse="SELECT title,code " .
+	 					"FROM $tbl_course as course, $tbl_session_course_user as srcu " .
+	 					"WHERE course.code=srcu.course_code AND srcu.id_user='$i_user_id'";
+
+ 		}
+ 		
  		//It's a teacher
  		else{
 	 		$sqlCourse = "	SELECT 	title,code
@@ -96,13 +161,58 @@
 							ORDER BY title ASC
 						  ";
  		}
+ 		
+ 		$resultCourses = api_sql_query($sqlCourse);
+		
+		$a_courses = api_store_result($resultCourses);
+ 		
  	}
- 	else{
- 		$sqlCourse = "	SELECT 	title,code
-						FROM $tbl_course as course
-						ORDER BY title ASC
-					  ";
+ 	if(!isset($_GET["user_id"]) && !isset($_GET["id_session"])){
+ 		
+ 		//La personne est admin
+		if(api_is_platform_admin()){
+ 		
+	 		$sqlCourse = "	SELECT 	title,code
+							FROM $tbl_course as course
+							ORDER BY title ASC
+						  ";
+			$resultCourses = api_sql_query($sqlCourse);
+		
+			$a_courses = api_store_result($resultCourses);
+
+		}
+		else{
+			
+			if($is_allowedCreateCourse){
+				
+				$sqlCourse = "	SELECT title,code
+								FROM $tbl_course as course, $tbl_user_course as course_rel_user 
+								WHERE course_rel_user.course_code=course.code AND course_rel_user.user_id='$_uid' AND course_rel_user.status='1'
+								ORDER BY title ASC
+							  ";
+
+			}
+			
+			$resultCoursesTeacher = api_sql_query($sqlCourse);
+		
+			$a_courses_teacher = api_store_result($resultCoursesTeacher);
+			
+			if(is_coach()){
+				
+				$sqlCourse = "	SELECT DISTINCT code, title 
+								FROM $tbl_course as course, $tbl_session_course as session_rel_course 
+							  	WHERE session_rel_course.course_code=course.code AND id_coach='$_uid' 
+							  ";
+
+				$resultCoursesCoach = api_sql_query($sqlCourse);
+				$a_courses = array_merge($a_courses_teacher,api_store_result($resultCoursesCoach));
+				
+			}
+			
+		}
  	}
+	
+	
 	
 	$resultCourse = api_sql_query($sqlCourse);
 	
@@ -125,76 +235,82 @@
 					</th>
 				</tr>
           	 ';
-
-		while($a_course= mysql_fetch_array($resultCourse))
-		{
-			$sqlCoach = "SELECT CONCAT(user.firstname,' ',user.lastname) as tutor_name
-						 FROM $tbl_user
-						 INNER JOIN $tbl_session_course as sessionCourse
-							ON sessionCourse.course_code = '".$a_course['code']."'
-							AND sessionCourse.id_coach = user.user_id
-						";
-			$resultCoach = api_sql_query($sqlCoach);
-			$a_coach = mysql_fetch_array($resultCoach);
+		
+		$a_alreadydisplay=array();
+		
+		foreach($a_courses as $a_course){
 			
-			/*$sqlFormateur = "	SELECT CONCAT(user.firstname,' ',user.lastname) as formateur_name
-						 		FROM $tbl_user
-								INNER JOIN $tbl_session_course as sessionCourse
-									ON sessionCourse.course_code = '".$a_course['code']."'
-								INNER JOIN $tbl_session AS session
-									ON session.id = sessionCourse.id_session
-									AND session.id_coach = user.user_id
-							";*/
-			$sqlFormateur = "	SELECT CONCAT(user.firstname,' ',user.lastname) as formateur_name
-						 		FROM $tbl_user as user, $tbl_user_course as cru
-								WHERE user.user_id=cru.user_id AND cru.status='1' AND cru.course_code='".$a_course['code']."'
+			if(!isDisplayed($a_course["code"],$a_alreadydisplay)){
+				
+				$a_alreadydisplay[$a_course["code"]]=1;
+				
+				$sqlCoach = "SELECT CONCAT(user.firstname,' ',user.lastname) as tutor_name
+							 FROM $tbl_user
+							 INNER JOIN $tbl_session_course as sessionCourse
+								ON sessionCourse.course_code = '".$a_course['code']."'
+								AND sessionCourse.id_coach = user.user_id
 							";
-
-			$resultFormateur = api_sql_query($sqlFormateur);
-			$a_formateur = mysql_fetch_array($resultFormateur);
-			
-			if($i%2==0){
-				$s_css_class="row_odd";
+				$resultCoach = api_sql_query($sqlCoach);
+				$a_coach = mysql_fetch_array($resultCoach);
 				
-				if($i%20==0 && $i!=0){
-						echo '<tr>
-						<th>
-							'.get_lang('Title').'
-						</th>
-						<th>
-							'.get_lang('Tutor').'
-						</th>
-						<th>
-							'.get_lang('Teachers').'
-						</th>
-					</tr>';
-					}
+				/*$sqlFormateur = "	SELECT CONCAT(user.firstname,' ',user.lastname) as formateur_name
+							 		FROM $tbl_user
+									INNER JOIN $tbl_session_course as sessionCourse
+										ON sessionCourse.course_code = '".$a_course['code']."'
+									INNER JOIN $tbl_session AS session
+										ON session.id = sessionCourse.id_session
+										AND session.id_coach = user.user_id
+								";*/
+				$sqlFormateur = "	SELECT CONCAT(user.firstname,' ',user.lastname) as formateur_name
+							 		FROM $tbl_user as user, $tbl_user_course as cru
+									WHERE user.user_id=cru.user_id AND cru.status='1' AND cru.course_code='".$a_course['code']."'
+								";
+	
+				$resultFormateur = api_sql_query($sqlFormateur);
+				$a_formateur = mysql_fetch_array($resultFormateur);
 				
+				if($i%2==0){
+					$s_css_class="row_odd";
+					
+					if($i%20==0 && $i!=0){
+							echo '<tr>
+							<th>
+								'.get_lang('Title').'
+							</th>
+							<th>
+								'.get_lang('Tutor').'
+							</th>
+							<th>
+								'.get_lang('Teachers').'
+							</th>
+						</tr>';
+						}
+					
+				}
+				else{
+					$s_css_class="row_even";
+				}
+				
+				$i++;
+	
+				echo '<tr class="'.$s_css_class.'">
+						<td>
+					 		<a href="'.api_get_path(REL_CLARO_PATH).'tracking/courseLog.php?cidReq='.$a_course['code'].'">'.$a_course['title'].'</a></td>
+						<td>
+							'.$a_coach['tutor_name'].'
+						</td>
+					 	<td>
+							'.$a_formateur['formateur_name'].'
+						</td>
+					  </tr>
+					 ';
+	
+				$a_data[$index]["title"]=$a_course['title'];
+				$a_data[$index]["tutor_name"]=$a_coach['tutor_name'];
+				$a_data[$index]["formateur_name"]=$a_formateur['formateur_name'];
+				
+				$index++;			
 			}
-			else{
-				$s_css_class="row_even";
-			}
-			
-			$i++;
-
-			echo '<tr class="'.$s_css_class.'">
-					<td>
-				 		'.$a_course['title'].'</td>
-					<td>
-						'.$a_coach['tutor_name'].'
-					</td>
-				 	<td>
-						'.$a_formateur['formateur_name'].'
-					</td>
-				  </tr>
-				 ';
-
-			$a_data[$index]["title"]=$a_course['title'];
-			$a_data[$index]["tutor_name"]=$a_coach['tutor_name'];
-			$a_data[$index]["formateur_name"]=$a_formateur['formateur_name'];
-			
-			$index++;			
-
 		}
 		echo '</table>';
 	}

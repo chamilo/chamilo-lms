@@ -2,6 +2,7 @@
 /*
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
+ 
 ob_start();
  $nameTools= 'Students';
  $langFile = array ('registration', 'index','trad4all', 'tracking');
@@ -17,8 +18,10 @@ ob_start();
  
  $tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
  $tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+ $tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
  $tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
  $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+ $tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
  $tbl_session_rel_user = Database :: get_main_table(MAIN_SESSION_USER_TABLE);
  
 /*
@@ -68,28 +71,232 @@ ob_start();
 	
 	return $message;
  }
+ 
+ /**
+  * Returns an array of students of courses (who belong to no sessions) which in the given user is a teacher
+  * @param int teacher_id The id of the teacher
+  */
+ function getStudentsFromCoursesNoSession($i_teacher_id, $a_students){
+ 	
+ 	$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+ 	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+ 	$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+ 	$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+ 	
+ 	
+ 	$sql_select_courses="SELECT course_rel_user.course_code FROM $tbl_course_user as course_rel_user LEFT OUTER JOIN $tbl_session_course as src ON course_rel_user.course_code=src.course_code WHERE user_id='$i_teacher_id' AND status='1' AND src.course_code IS NULL";
+
+ 	$result_courses=api_sql_query($sql_select_courses);
+ 	
+ 	while($a_courses=mysql_fetch_array($result_courses)){
+ 		
+ 		$s_course_code=$a_courses["course_code"];
+ 		$sqlStudents = "SELECT user.user_id,lastname,firstname,email FROM $tbl_course_user as course_rel_user, $tbl_user as user WHERE course_rel_user.user_id=user.user_id AND course_rel_user.status='5' AND course_rel_user.course_code='$s_course_code'";
+ 		$result_students=api_sql_query($sqlStudents);
+
+ 		if(mysql_num_rows($result_students)>0){
+ 		
+	 		while($a_students_temp=mysql_fetch_array($result_students)){
+	 			
+	 			$a_current_student=array();
+	 			
+	 			//If the user has already been added to the table
+	 			if(!array_key_exists($a_students,$a_students_temp["user_id"])){
+	 			
+		 			$a_current_student[]=$a_students_temp["user_id"];
+		 			$a_current_student[]=$a_students_temp["lastname"];
+		 			$a_current_student[]=$a_students_temp["firstname"];
+		 			$a_current_student[]=$a_students_temp["email"];
+		 			
+		 			$a_students[$a_students_temp["user_id"]]=$a_current_student;
+		 			$a_students[$a_students_temp["user_id"]]["teacher"]=true;
+		 			
+	 			}
+	 			
+	 		}
+	 		
+ 		}
+ 		 
+ 	}
+ 	
+ 	return $a_students;
+ 	
+ }
+ 
+ 
+ /**
+  * Returns an array of students of courses (who belong to at least one session) which in the given user is a teacher
+  * @param int teacher_id The id of the teacher
+  */
+ function getStudentsFromCoursesFromSessions($i_teacher_id, $a_students){
+ 	
+ 	$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+ 	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+ 	$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+ 	$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+ 	
+ 	$sql_select_courses="SELECT course_rel_user.course_code FROM $tbl_course_user as course_rel_user, $tbl_session_course as session_rel_course WHERE user_id='$i_teacher_id' AND status='1' AND session_rel_course.course_code=course_rel_user.course_code";
+ 	$result_courses=api_sql_query($sql_select_courses);
+
+ 	while($a_courses=mysql_fetch_array($result_courses)){
+ 		
+ 		$s_course_code=$a_courses["course_code"];
+ 		$sqlStudents = "SELECT DISTINCT user.user_id,lastname,firstname,email FROM $tbl_session_course_user as srcru, $tbl_user as user WHERE srcru.id_user=user.user_id AND srcru.course_code='$s_course_code'";
+ 		$result_students=api_sql_query($sqlStudents);
+ 		echo $sqlStudents;
+ 		if(mysql_num_rows($result_students)>0){
+ 		
+	 		while($a_students_temp=mysql_fetch_array($result_students)){
+	 			
+	 			$a_current_student=array();
+	 			
+	 			//If the user has already been added to the table
+	 			if(!array_key_exists($a_students,$a_students_temp["user_id"])){
+	 				
+		 			$a_current_student[]=$a_students_temp["user_id"];
+		 			$a_current_student[]=$a_students_temp["lastname"];
+		 			$a_current_student[]=$a_students_temp["firstname"];
+		 			$a_current_student[]=$a_students_temp["email"];
+		 			
+		 			$a_students[$a_students_temp["user_id"]]=$a_current_student;
+		 			$a_students[$a_students_temp["user_id"]]["teacher"]=true;
+		 			
+	 			}
+	 			
+	 		}
+	 		
+ 		}
+ 		 
+ 	}
+ 	
+ 	return $a_students;
+ 	
+ }
+ 
+ 
+ /**
+  * Returns an array of students of courses which in the given user is a coach
+  * @param int coach_id The id of the coach
+  */
+ function getStudentsFromCoursesFromSessionsCoach($i_coach_id, $a_students){
+ 	
+ 	$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+ 	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+ 	$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+ 	$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+ 	
+ 	$sql_select_courses="SELECT course_code, id_session FROM $tbl_session_course as session_rel_course WHERE session_rel_course.id_coach='$i_coach_id'";
+ 	$result_courses=api_sql_query($sql_select_courses);
+
+ 	while($a_courses=mysql_fetch_array($result_courses)){
+ 		
+ 		$s_course_code=$a_courses["course_code"];
+ 		$i_id_session=$a_courses["id_session"];
+ 		
+ 		$sqlStudents="SELECT user.user_id,lastname,firstname,email 
+						FROM $tbl_session_course_user as srcru, $tbl_user as user 
+						WHERE srcru.course_code='$s_course_code' AND srcru.id_session='$i_id_session' AND srcru.id_user=user.user_id 
+						";
+ 		$result_students=api_sql_query($sqlStudents);
+
+ 		if(mysql_num_rows($result_students)>0){
+ 		
+	 		while($a_students_temp=mysql_fetch_array($result_students)){
+	 			
+	 			$a_current_student=array();
+	 			
+	 			//If the user has already been added to the table
+	 			if(!array_key_exists($a_students,$a_students_temp["user_id"])){
+	 			
+		 			$a_current_student[]=$a_students_temp["user_id"];
+		 			$a_current_student[]=$a_students_temp["lastname"];
+		 			$a_current_student[]=$a_students_temp["firstname"];
+		 			$a_current_student[]=$a_students_temp["email"];
+		 			
+		 			$a_students[$a_students_temp["user_id"]]=$a_current_student;
+		 			$a_students[$a_students_temp["user_id"]]["teacher"]=false;
+		 			
+	 			}
+	 			
+	 		}
+	 		
+ 		}
+ 		 
+ 	}
+ 	
+ 	return $a_students;
+ 	
+ }
+ 
+ 
+ function mysort($a , $b){
+	if($a[1]>$b[1]){
+		return 1;
+	}
+	else if($b[1]>$a[1]){
+		return -1;
+	}
+	else {
+		return 0;
+	}
+	
+}
+ 
 
 /*
  ===============================================================================
  	MAIN CODE
  ===============================================================================  
  */
+	$a_students=array();
+	
+	//La personne est admin
+	if(api_is_platform_admin()){
+	
+		$sqlStudent = "	SELECT user_id,lastname,firstname,email
+						FROM $tbl_user
+						WHERE status = '5'
+						ORDER BY lastname ASC
+					  ";
+		$resultStudent = api_sql_query($sqlStudent);
+		
+		while($a_students_temp=mysql_fetch_array($resultStudent)){
+			
+			$a_current_student=array();
+	 			
+ 			//If the user has already been added to the table
+ 			
+ 			$a_current_student[]=$a_students_temp["user_id"];
+ 			$a_current_student[]=$a_students_temp["lastname"];
+ 			$a_current_student[]=$a_students_temp["firstname"];
+ 			$a_current_student[]=$a_students_temp["email"];
+ 			
+ 			$a_students[$a_students_temp["user_id"]]=$a_current_student;
+ 			$a_students[$a_students_temp["user_id"]]["teacher"]=true;
+	 		
+		}
+	}
+	
+	else{
+		
+		$a_students=getStudentsFromCoursesNoSession($_uid, $a_students);
 
-	$sqlStudent = "	SELECT user_id,lastname,firstname,email
-					FROM $tbl_user
-					WHERE status = 5
-					ORDER BY lastname ASC
-				  ";
-	$resultStudent = api_sql_query($sqlStudent);
+		$a_students=getStudentsFromCoursesFromSessions($_uid, $a_students);
+
+		$a_students=getStudentsFromCoursesFromSessionsCoach($_uid, $a_students);
+
+		
+	}	  
+	
+	usort($a_students,"mysort");
 	
 	$a_header[]=get_lang('Lastname');
 	$a_header[]=get_lang('Firstname');
 	$a_header[]=get_lang('Email');
-	$a_header[]=get_lang('Tutor');
 	
 	$a_data=array();
 
-	if(mysql_num_rows($resultStudent)>0)
+	if(count($a_students)>0)
 	{
 		echo '<table class="data_table">
 			 	<tr>
@@ -106,11 +313,15 @@ ob_start();
 						'.get_lang('Tutor').'
 					</th>
 					<th>
+						'.get_lang('Courses').'
+					</th>
+					<th>
 						'.get_lang('TakenSessions').'
 					</th>
 				</tr>
           	 ';
-		while($a_student= mysql_fetch_array($resultStudent))
+          	 
+		foreach($a_students as $a_current_student)
 		{
 			
 			if($i%2==0){
@@ -118,24 +329,27 @@ ob_start();
 				
 				if($i%20==0 && $i!=0){
 					echo '<tr>
-					<th>
-						'.get_lang('Lastname').'
-					</th>
-					<th>
-						'.get_lang('Firstname').'
-					</th>
-					<th>
-						'.get_lang('Email').'
-					</th>
-					<th>
-						'.get_lang('Tutor').'
-					</th>
-					<th>
-						'.get_lang('TakenSessions').'
-					</th>
-				</tr>';
+							<th>
+								'.get_lang('Lastname').'
+							</th>
+							<th>
+								'.get_lang('Firstname').'
+							</th>
+							<th>
+								'.get_lang('Email').'
+							</th>
+							<th>
+								'.get_lang('Tutor').'
+							</th>
+							<th>
+								'.get_lang('Courses').'
+							</th>
+							<th>
+								'.get_lang('TakenSessions').'
+							</th>
+						</tr>
+		          	 ';
 				}
-				
 			}
 			else{
 				$s_css_class="row_even";
@@ -146,34 +360,45 @@ ob_start();
 			echo '<tr class="'.$s_css_class.'">
 					<td>
 				 ';
-			echo		$a_student['lastname'];
+			echo		$a_current_student[1];
 			echo '	</td>
 					<td>
-						'.$a_student['firstname'].'
+						'.$a_current_student[2].'
 					</td>
 					<td>
 				 ';
-			if(!empty($a_student['email']))
+			if(!empty($a_current_student[3]))
 			{	
-				echo	'<a href="mailto:'.$s_email.'">'.$a_student['email'].'</a>';
+				echo	'<a href="mailto:'.$s_email.'">'.$a_current_student[3].'</a>';
 			}
 			else
 			{
 				//echo get_lang('NoEmail');
 			}
-			echo '	</td>
+			echo '	</td>';
+			
+			if($a_current_student["teacher"]==true){
+			
+				echo '<td>
+						<a href="coaches.php?id_student='.$a_current_student[0].'">-></a>
+					</td>
 					<td>
-						<a href="coaches.php?id_student='.$a_student['user_id'].'">-></a>
+						<a href="cours.php?type=student&user_id='.$a_current_student[0].'">-></a>
 					</td>
 					<td align="center">
-						<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_student['user_id'].'#sessionSuivie"> -> </a>
-					</td>
-				  </tr>
-				 ';
+						<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_current_student[0].'#sessionSuivie"> -> </a>
+					</td>';
+			}
+			else{
+				echo '<td colspan="3"></td>';
+			}
+			  echo '</tr>';
+
+				 
 			$a_data[$a_student['user_id']]["lastname"]=$a_student['lastname'];
 			$a_data[$a_student['user_id']]["firstname"]=$a_student['firstname'];
 			$a_data[$a_student['user_id']]["email"]=$a_student['email'];
-			$a_data[$a_student['user_id']]["coach"]="";
+
 		}
 		echo '</table>';
 	}

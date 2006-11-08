@@ -20,6 +20,15 @@
  * 
  * This script implements the HACP messaging for AICC. The API messaging is
  * made by another set of scripts.
+ * 
+ * Rules for HACP processing of one AU
+ * Rule #1 The first HACP message issued must be a GetParam
+ * Rule #2 The last HACP message issued must be an ExitAU
+ * Rule #3 At least one PutParam message must be issued prior to an ExitAU message
+ * Rule #4 No HACP messages can be issued after a successfully issued ExitAU message
+ * 
+ * Only suspend_data and core.lesson_location should be sent updated to a late GetParam
+ * request. All other params should be as when the AU was launched.
  */
 /*
 ============================================================================== 
@@ -46,9 +55,9 @@ $_uid							= $_SESSION['_uid'];
 $_user							= $_SESSION['_user'];
 $file							= $_SESSION['file'];
 $oLP							= unserialize($_SESSION['lpobject']);
-$oItem 							= $oLP->items[$oLP->current];
+$oItem 							=& $oLP->items[$oLP->current];
 if(!is_object($oItem)){
-	error_log('New LP - scorm_api - Could not load oItem item',0);
+	error_log('New LP - aicc_hacp - Could not load oItem item',0);
 	exit;
 }
 $autocomplete_when_80pct = 0;
@@ -60,76 +69,168 @@ $result = array(
 	'evaluation'=>array(),
 	'student_data'=>array(),
 );
+$convert_enc = array('%25','%0D','%0A','%09','%20','%2D','%2F','%3B','%3F','%7B','%7D','%7C','%5C','%5E','%7E','%5B','%5D','%60','%23','%3E','%3C','%22');
+$convert_dec = array('%',"\r","\n","\t",' ','-','/',';','?','{','}','|','\\','^','~','[',']','`','#','>','<','"');
+$crlf = "\r\n";
+$tab = "\t";
+$s_ec = 'error='; //string for error code
+$s_et = 'error_text='; //string for error text
+$s_ad = 'aicc_data='; //string for aicc_data
+
+$errors = array(0=>'Successful',1=>'Invalid Command',2=>'Invalid AU password',3=>'Invalid Session ID');
+
 $error_code = 0;
 $error_text = '';
 $aicc_data = '';
+$result = '';
 //GET REQUEST
 if(!empty($_REQUEST['command']))
 {
+	error_log('In '.__FILE__.', '.__LINE__.' - request is '.$_REQUEST['command'],0);
 	switch(strtolower($_REQUEST['command']))
 	{
 		case 'getparam':
-			foreach($_REQUEST as $name => $value){
-				switch(strtolower($name)){
-					case 'student_id':
-						break;
-					case 'student_name':
-						break;
-					case 'lesson_location':
-						break;
-					case 'credit':
-						break;
-					case 'lesson_status':
-						break;
-					case 'entry':
-						break;
-					case 'score':
-						break;
-					case 'time': //total time
-						break;
-					case 'lesson_mode':
-						break;
-					case 'core_lesson':
-						break;
-					case 'core_vendor':
-						break;
-				}
+			//request for all available data to be printed out in the answer
+			if(!empty($_REQUEST['version'])){
+				$hacp_version = learnpath::escape_string($_REQUEST['version']);
 			}
+			if(!empty($_REQUEST['session_id'])){
+				$hacp_session_id = learnpath::escape_string($_REQUEST['session_id']);
+			}
+			$error_code = 0;
+			$error_text = $errors[$error_code];
+			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
+			$result .= '[Core]'.$crlf;
+			$result .= $tab.'Student_ID='.$_uid.$crlf;
+			$result .= $tab.'Student_Name='.$_user['lastName'].', '.$_user['firstName'].$_uid.$crlf;
+			$result .= $tab.'Lesson_Location='.$oItem->get_lesson_location().$crlf;
+			$result .= $tab.'Credit='.$oItem->get_credit().$crlf;
+			$result .= $tab.'Lesson_Status='.$oItem->get_status().$crlf;
+			$result .= $tab.'Score='.$oItem->get_score().$crlf;
+			$result .= $tab.'Time='.$oItem->get_scorm_time('js').$crlf;
+			$result .= $tab.'Lesson_Mode='.$oItem->get_lesson_mode().$crlf;
+			$result .= '[Core_Lesson]'.$crlf;
+			$result .= $oItem->get_suspend_data().$crlf;
+			$result .= '[Core_Vendor]'.$crlf;
+			$result .= $oItem->get_launch_data.$crlf;
+			$result .= '[Comments]'.$crlf;
+			$result .= $crlf;
+			$result .= '[Evaluation]'.$crlf;
+			$result .= $tab.'Course_ID={'.api_get_course_id().'}'.$crlf;
+			//$result .= '[Objectives_Status]'.$crlf;
+			$result .= '[Student_Data]'.$crlf;
+			$result .= $tab.'Mastery_Score='.$oItem->masteryscore.$crlf;
+			//$result .= '[Student_Demographics]'.$crlf;
+			//$result .= '[Student_Preferences]'.$crlf;
+						
+			error_log('Returning message: '.$result,0);
+			$result = str_replace($convert_dec,$convert_enc,$result);
+			error_log('Returning message (encoded): '.$result,0);
 			break;
 		case 'putparam':
+			$hacp_version = '';
+			$hacp_session_id = '';
+			$hacp_aicc_data = '';
 			foreach($_REQUEST as $name => $value)
 			{
+				//escape the value as described in the AICC documentation p170
 				switch(strtolower($name))
 				{
-					case 'lesson_location':
+					case 'version':
+						$hacp_version = $value;
 						break;
-					case 'lesson_status':
+					case 'session_id':
+						$hacp_session_id = $value;
 						break;
-					case 'exit':
-						break;
-					case 'score':
-						break;
-					case 'time': //session time
-						break;
-					case 'core_lesson':
+					case 'aicc_data':
+						//error_log('In '.__FILE__.', '.__LINE__.' - aicc data before translation is '.$value,0);
+						$value = str_replace('+',' ',$value);
+						$value = str_replace($convert_enc,$convert_dec,$value);
+						$hacp_aicc_data = $value;						
 						break;
 				}
-
 			}
+			//error_log('In '.__FILE__.', '.__LINE__.' - aicc data is '.$hacp_aicc_data,0);
+			//treat the incoming request:
+			$msg_array = aicc::parse_ini_string_quotes_safe($hacp_aicc_data);
+			//error_log('Message is now in this form: '.print_r($msg_array,true),0);
+			foreach($msg_array as $key=>$dummy){
+				switch (strtolower($key)){
+					case 'core':
+						foreach($msg_array[$key] as $subkey => $value){
+							switch(strtolower($subkey)){
+								case 'lesson_location':
+									$oItem->set_lesson_location($value);
+									break;
+								case 'lesson_status':
+									$oItem->set_status($value);
+									break;
+								case 'score':
+									$oItem->set_score($value);
+									break;
+								case 'time':
+									$oItem->set_time($value);
+									break;
+							}
+						}
+						break;
+					case 'core_lesson':
+						$oItem->current_data = $msg_array[$key];
+						break;
+					case 'comments':
+						break;
+					case 'objectives_status':
+						break;
+					case 'student_data':
+						break;
+					case 'student_preferences':
+						break;
+				}
+			}
+			
+			$error_code = 0;
+			$error_text = $errors[$error_code];
+			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
+			$oItem->save(false);
 			break;
 		case 'putcomments':
+			$error_code = 0;
+			$error_text = $errors[$error_code];
+			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
 			break;
 		case 'putobjectives':
+			$error_code = 0;
+			$error_text = $errors[$error_code];
+			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
 			break;
 		case 'putpath':
+			$error_code = 0;
+			$error_text = $errors[$error_code];
+			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
 			break;
 		case 'putinteractions':
+			$error_code = 0;
+			$error_text = $errors[$error_code];
+			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
 			break;
 		case 'putperformance':
+			$error_code = 0;
+			$error_text = $errors[$error_code];
+			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
+			break;
+		case 'exitau':
+			$error_code = 0;
+			$error_text = $errors[$error_code];
+			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
 			break;
 		default:
 			$error_code = 1;
+			$error_text = $errors[1];
+			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf;
 	}
 }
+$_SESSION['lpobject'] = serialize($oLP);
+//content type must be text/plain
+header('Content-type: text/plain');
 echo $result;
 ?>

@@ -928,7 +928,7 @@ class learnpathItem{
      	$item_id = $this->get_id();
      	//first check if parameters passed via GET can be saved here
      	//in case it's a SCORM, we should get:
-		if($this->type == 'sco'){
+		if($this->type == 'sco' || $this->type== 'au'){
 			$s = $this->get_status(true);
 			if($this->prevent_reinit == 1 AND
 				$s != $this->possible_status[0] AND $s != $this->possible_status[1]){

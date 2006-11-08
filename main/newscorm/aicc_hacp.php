@@ -86,7 +86,7 @@ $result = '';
 //GET REQUEST
 if(!empty($_REQUEST['command']))
 {
-	error_log('In '.__FILE__.', '.__LINE__.' - request is '.$_REQUEST['command'],0);
+	//error_log('In '.__FILE__.', '.__LINE__.' - request is '.$_REQUEST['command'],0);
 	switch(strtolower($_REQUEST['command']))
 	{
 		case 'getparam':
@@ -123,9 +123,9 @@ if(!empty($_REQUEST['command']))
 			//$result .= '[Student_Demographics]'.$crlf;
 			//$result .= '[Student_Preferences]'.$crlf;
 						
-			error_log('Returning message: '.$result,0);
+			//error_log('Returning message: '.$result,0);
 			$result = str_replace($convert_dec,$convert_enc,$result);
-			error_log('Returning message (encoded): '.$result,0);
+			//error_log('Returning message (encoded): '.$result,0);
 			break;
 		case 'putparam':
 			$hacp_version = '';
@@ -152,7 +152,7 @@ if(!empty($_REQUEST['command']))
 			}
 			//error_log('In '.__FILE__.', '.__LINE__.' - aicc data is '.$hacp_aicc_data,0);
 			//treat the incoming request:
-			$msg_array = aicc::parse_ini_string_quotes_safe($hacp_aicc_data);
+			$msg_array = aicc::parse_ini_string_quotes_safe($hacp_aicc_data,array('core_lesson','core_vendor'));
 			//error_log('Message is now in this form: '.print_r($msg_array,true),0);
 			foreach($msg_array as $key=>$dummy){
 				switch (strtolower($key)){
@@ -160,21 +160,26 @@ if(!empty($_REQUEST['command']))
 						foreach($msg_array[$key] as $subkey => $value){
 							switch(strtolower($subkey)){
 								case 'lesson_location':
+									//error_log('Setting lesson_location to '.$value,0);
 									$oItem->set_lesson_location($value);
 									break;
 								case 'lesson_status':
+									//error_log('Setting lesson_status to '.$value,0);
 									$oItem->set_status($value);
 									break;
 								case 'score':
+									//error_log('Setting lesson_score to '.$value,0);
 									$oItem->set_score($value);
 									break;
 								case 'time':
+									//error_log('Setting lesson_time to '.$value,0);
 									$oItem->set_time($value);
 									break;
 							}
 						}
 						break;
 					case 'core_lesson':
+						//error_log('Setting suspend_data to '.print_r($msg_array[$key],true),0);
 						$oItem->current_data = $msg_array[$key];
 						break;
 					case 'comments':

@@ -766,9 +766,10 @@ class aicc extends learnpath {
 	   * Static function to parse AICC ini strings.
 	   * Based on work by sinedeo at gmail dot com published on php.net (parse_ini_file())
 	   * @param		string	INI File string
+	   * @param		array	List of names of sections that should be considered as containing only hard string data (no variables), provided in lower case
 	   * @return	array	Structured array
 	   */
-		function parse_ini_string_quotes_safe($s)
+		function parse_ini_string_quotes_safe($s,$pure_strings=array())
 		{
 			$null = "";
 			$r=$null;
@@ -785,6 +786,12 @@ class aicc extends learnpath {
 						if ((@substr($w,0,1)=="[") and (@substr($w,-1,1))=="]") 
 						{
 							$sec=@substr($w,1,@strlen($w)-2);
+							$pure_data = 0;
+							if(in_array(strtolower($sec),$pure_strings)){
+								//this section can only be considered as pure string data (until the next section)
+								$pure_data = 1;
+								$r[strtolower($sec)] = '';
+							}
 							$newsec=1;
 						}
 					}
@@ -800,10 +807,14 @@ class aicc extends learnpath {
 						}
 						if ($sec) 
 						{
-							if(strtolower($sec)=='course_description'){//special case
-								$r[strtolower($sec)]=$k;
+							if($pure_data){
+								$r[strtolower($sec)] .= $f[$i];
 							}else{
-								$r[strtolower($sec)][strtolower($k)]=$v;
+								if(strtolower($sec)=='course_description'){//special case
+									$r[strtolower($sec)]=$k;
+								}else{
+									$r[strtolower($sec)][strtolower($k)]=$v;
+								}
 							}
 						} else 
 						{

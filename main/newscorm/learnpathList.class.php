@@ -45,7 +45,8 @@ class learnpathList {
     		//it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
     		//is done using domesticate()
     		$myname = domesticate($row['name']);
-			$sql2="SELECT * FROM $tbl_tool where (name='$myname' and image='scormbuilder.gif')";
+			$mylink = 'newscorm/lp_controller.php?mode=view&lp_id='.$row['id'];
+			$sql2="SELECT * FROM $tbl_tool where (name='$myname' and image='scormbuilder.gif' and link LIKE '$mylink%')";
 			//error_log('New LP - learnpathList::learnpathList - getting visibility - '.$sql2,0);
 			$res2 = api_sql_query($sql2,__FILE__,__LINE__);
 			if(Database::num_rows($res2)>0){

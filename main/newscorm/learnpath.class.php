@@ -3358,14 +3358,16 @@ class learnpath {
 
 		$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE);
 
-		$sql="SELECT * FROM $tbl_tool where name='$name' and image='scormbuilder.gif'";
+		$link = 'newscorm/lp_controller.php?mode=view&lp_id='.$lp_id;
+
+		$sql="SELECT * FROM $tbl_tool where name='$name' and image='scormbuilder.gif' and link LIKE '$link%'";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		$num=Database::num_rows($result);
 
 		$row2=Database::fetch_array($result);
-
+		
 		//if($this->debug>2){error_log('New LP - '.$sql.' - '.$num,0);}
 
 		if(($set_visibility == 'i') && ($num>0))
@@ -3378,7 +3380,7 @@ class learnpath {
 
 			{
 
-				$sql ="DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif')";
+				$sql ="DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%')";
 
 			}
 
@@ -3386,7 +3388,7 @@ class learnpath {
 
 			{
 
-				$sql ="UPDATE $tbl_tool set visibility=1 WHERE (name='$name' and image='scormbuilder.gif')";
+				$sql ="UPDATE $tbl_tool set visibility=1 WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%')";
 
 			}
 

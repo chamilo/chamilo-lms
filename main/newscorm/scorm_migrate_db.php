@@ -23,6 +23,14 @@ function my_get_time($time){
 	else return 0;
 }
 
+//open log file
+$fh = fopen('../garbage/newscorm_'.time().'.log','w');
+$fh_revert = fopen('../garbage/newscorm_'.time().'_revert.log','w');
+$fh_res = fopen('../garbage/newscorm_'.time().'_res.log','w');
+fwrite($fh,"-- Recording course homepages links changes to enable reverting\n");
+fwrite($fh_revert,"-- Recording reverted course homepages links changes to enable reverting\n");
+fwrite($fh_res,"-- Recording resulting course homepages links changes\n");
+
 echo "<html><body>";
 
 /**
@@ -440,9 +448,41 @@ foreach($courses_list as $db)
 					"SET link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id' " .
 					"WHERE id = ".$row_tool['id'];
 			error_log('New LP - Migration - Updating tool table: '.$sql_tool_upd,0);
+			//make sure there is a way of retrieving which links were updated (to revert)
+			fwrite($fh,$sql_tool_upd." AND link ='$link'");
+			fwrite($fh_revert,"UPDATE $tbl_tool SET link='$link' WHERE id=".$row_tool['id']." AND link ='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id';\n");
+			//echo $sql_tool_upd." (and link='$link')<br/>\n";
 			$res_tool_upd = api_sql_query($sql_tool_upd,__FILE__,__LINE__);
 		}
 	}
+	/**
+	 * Update course description (intro page) to use new links instead of learnpath/learnpath_handler.php
+	 */
+	$tbl_intro = Database::get_course_table(TOOL_INTRO_TABLE,$db);
+	$sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
+	$res_i = api_sql_query($sql_i,__FILE__,__LINE__);
+	//$link_to_course1 = 'scorm/scormdocument.php'; 
+	while($row_i = Database::fetch_array($res_i)){
+		$intro = $row_i['intro_text'];
+		$update = 0;
+		$out = array();
+		if(preg_match_all('/learnpath\/showinframes\.php([^\s"\']*)learnpath_id=(\d*)/',$intro,$out,PREG_SET_ORDER)){
+			foreach($out as $results){
+				//echo "---> replace ".'/learnpath\/showinframes\.php([^\s"\']*)learnpath_id='.$results[2].'/ by newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$results[2]];
+				$intro = preg_replace('/learnpath\/showinframes\.php([^\s"\']*)learnpath_id='.$results[2].'/','newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$results[2]],$intro);
+			}
+		}
+		if($intrp != $row_i['intro_text']){
+			//echo "<pre>Replacing ".$row_i['intro_text']."\n by \n ".$intro."</pre><br/>\n";
+			$sql_upd = "update $tbl_intro set intro_text = '".mysql_real_escape_string($intro)."' WHERE id = 'course_homepage' AND intro_text = '".mysql_real_escape_string($row_i['intro_text'])."'";
+			//echo $sql_upd."<br/>\n";
+			fwrite($fh,"$sql_upd\n");
+			fwrite($fh_revert,"UPDATE $tbl_intro set intro_text = '".$row_i['intro_text']."' WHERE id = 'course_homepage' AND intro_text = '$intro';\n");
+			fwrite($fh_res,"$intro\n");
+			api_sql_query($sql_upd,__FILE__,__LINE__);
+		}
+	}
+	
 	
 		
 	echo "Done!".$msg."<br/>\n";
@@ -457,6 +497,10 @@ unset($ordered_chaps);
 unset($lp_items);
 unset($lp_ordered_items);
 unset($parent_lps);
+
+fwrite($fh,"-- Recording course homepages links changes for SCORM to enable reverting\n");
+fwrite($fh_revert,"-- Recording reverted course homepages links changes for SCORM to enable reverting\n");
+fwrite($fh_res,"-- Recording resulting course homepages links changes for SCORM\n");
 
 /**
  * SCORM
@@ -661,19 +705,10 @@ foreach($scorms as $my_course_code => $paths_list )
 		//TODO add code to update the path in that new lp created, as it probably uses / where
 		//$sco_path_temp should be used... 
 		$lp_ids[$my_content_id] = $oScorm->lp_id; //contains the old LP ID => the new LP ID
+		echo " @@@ Created scorm lp ".$oScorm->lp_id." from imsmanifest [".$ims."] in course $my_course_code<br/>\n";
 		$lp_course[$my_content_id] = $courses_id_list[$my_course_code]; //contains the old learnpath ID => the course DB name
 		$lp_course_code[$my_content_id] = $my_course_code;
 		$max_dsp_lp++;
-
-		$my_lp_title = mb_convert_encoding($oScorm->get_title(),'ISO-8859-1','UTF-8');
-		if(!empty($my_lp_title)){
-			$my_new_lp = $db_name.$new_lp;	
-			$my_sql = "UPDATE $my_new_lp " .
-					"SET name = '$my_lp_title', " .
-					"WHERE id = ".$lp_ids[$my_content_id];
-			echo "Updating title: ".$my_sql."<br/>\n";
-			$my_res = api_sql_query($my_sql,__FILE__,__LINE__);	
-		}
 
 		/*
 		 * QUERY SCORM ITEMS FROM SCORM_SCO_DATA
@@ -1021,10 +1056,58 @@ foreach($scorms as $my_course_code => $paths_list )
 		//}
 	//end of case where $my_content_id != -1
 
-	}		
+	}
+
+	/**
+	 * Update course description (intro page) to use new links instead of learnpath/learnpath_handler.php
+	 */
+	$tbl_intro = $db_name.TOOL_INTRO_TABLE;
+	$sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
+	$res_i = api_sql_query($sql_i,__FILE__,__LINE__);
+	//$link_to_course1 = 'scorm/scormdocument.php'; 
+	while($row_i = Database::fetch_array($res_i)){
+		$intro = $row_i['intro_text'];
+		$out = array();
+		$enc_path = str_replace('/','%2F',$my_path);
+		$enc_path = str_replace(' ','\+',$enc_path);
+		//echo "Looking for path ".$enc_path."<br>\n";
+		$pattern = ';scorm/scormdocument\.php([^\s"\']*)openDir='.$enc_path.'([\\"\'\s&]*);';
+		if(preg_match_all($pattern,$intro,$out,PREG_SET_ORDER)){
+			foreach($out as $results){
+				//echo "---> replace ".'/'.$results[0].'/ by newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id];
+				//$intro = preg_replace('/scorm\/scormdocument\.php([^\s"\']*)openDir='.$enc_path.'([\\"\'\s&])/','newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id],$intro);
+				$intro = preg_replace(';scorm/scormdocument\.php([^\s"\']*)openDir='.$enc_path.'([^\s"\']*);','newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id],$intro);
+			}
+		}else{
+			//echo "No scorm link found in intro text<br/>";
+		}
+		$pattern = ';scorm/showinframes\.php([^\s"\']*)file=([^\s"\'&]*)'.$enc_path.';';
+		if(preg_match_all($pattern,$intro,$out,PREG_SET_ORDER)){
+			foreach($out as $results){
+				//echo "---> replace ".'/'.$results[0].'/ by newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id];
+				//$intro = preg_replace('/scorm\/showinframes\.php([^\s"\']*)file=([^\s"\']*)'.$enc_path.'/','newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id],$intro);
+				$intro = preg_replace(';scorm/showinframes\.php([^\s"\']*)file=([^\s"\'&]*)'.$enc_path.'([^\s"\']*);','newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id],$intro);
+			}
+		}else{
+			//echo "No scorm link found in intro text<br/>";
+		}
+		if($intro != $row_i['intro_text']){
+			//echo "<pre>Replacing ".$row_i['intro_text']."\n by \n ".$intro."</pre><br/>\n";
+			$sql_upd = "update $tbl_intro set intro_text = '".mysql_real_escape_string($intro)."' WHERE id = 'course_homepage' AND intro_text = '".mysql_real_escape_string($row_i['intro_text'])."'";
+			//echo $sql_upd."<br/>\n";
+			fwrite($fh,$sql_upd."\n");
+			fwrite($fh_revert,"UPDATE $tbl_intro set intro_text = '".$row_i['intro_text']."' WHERE id = 'course_homepage' AND intro_text = '$intro';\n");
+			fwrite($fh_res,$intro."\n");
+			api_sql_query($sql_upd,__FILE__,__LINE__);
+		}
+	}
+
 	flush();
   }
 }
 echo "All done!";
 echo "</body></html>";
+fclose($fh);
+fclose($fh_revert);
+fclose($fh_res);
 ?>

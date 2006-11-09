@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 9926 2006-11-09 13:46:10Z evie_em $
+<?php // $Id: new_message.php 9929 2006-11-09 14:02:43Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,29 +74,6 @@ $nameTools = get_lang('ComposeMessage');
 */
 function show_compose_to_any($user_id)
 {
-	/*echo '<form action="'.$_SERVER['PHP_SELF'].
-        '" method="post" name="msgform" id="msgform" onSubmit="return validate(msgform,user_list)">
-        <table width="100%" border="0" cellpadding="5" cellspacing="0">
-        <tr>
-        <td width="64%">
-        </td>
-        <td width="36%" align="left"><strong>'.get_lang("SendMessageTo").'</strong></td>
-        </tr>
-        <tr>
-        <td valign="top">';
-	display_html_editor_area("content",0);
-	echo '</td>
-			<td valign="top" align="left">';
-	display_select_user_list($user_id,'user_list',200,20);
-	echo '</td>
-          </tr>
-          <tr>
-          <td><input type="submit" name="Submit" value="' . get_lang("SendMessage") . '">
-          <input name="compose" type="hidden" id="compose" value="1"></td>
-          <td>&nbsp;</td>
-          </tr>
-         </table>';*/
-	
 	$online_user_list = get_online_user_list($user_id,$_name,$width,$size);
 	
 	$default['title'] = "Please enter a title";

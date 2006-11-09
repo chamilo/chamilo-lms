@@ -1,4 +1,4 @@
-<?php // $Id: view_message.php 9847 2006-10-30 12:52:12Z evie_em $
+<?php // $Id: view_message.php 9927 2006-11-09 13:57:05Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -86,7 +86,7 @@ echo '
         <TABLE height=209 width="100%" bgColor=#ffffff>
           <TBODY>
             <TR>
-              <TD vAlign=top>'.$row[5].'</TD>
+              <TD vAlign=top>'.$row[6].'</TD>
             </TR>
           </TBODY>
         </TABLE>

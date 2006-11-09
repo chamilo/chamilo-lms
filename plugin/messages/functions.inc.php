@@ -1,4 +1,4 @@
-<?php // $Id: functions.inc.php 9847 2006-10-30 12:52:12Z evie_em $
+<?php // $Id: functions.inc.php 9926 2006-11-09 13:46:10Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,6 +38,20 @@ function display_select_user_list($_uid,$_name,$width,$size)
 	foreach($userlist as $row)
 		echo "<option value=\"$row[0]\">".GetFullUserName($row[0]).($_uid==$row[0]?("&nbsp;(".get_lang('Myself').")"):(""))."</option>\n";
 	echo "</select>";
+}
+
+function get_online_user_list($current_user_id)
+{
+	$MINUTE=30;
+	global $statsDbName;
+	$userlist = WhoIsOnline($current_user_id,$statsDbName,$MINUTE);
+	foreach($userlist as $row)
+	{
+		$receiver_id = $row[0];
+		$online_user_list[$receiver_id] = GetFullUserName($receiver_id).($current_user_id==$receiver_id?("&nbsp;(".get_lang('Myself').")"):(""));
+	}
+	
+	return $online_user_list;
 }
 
 /**

@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 9925 2006-11-09 13:31:36Z evie_em $
+<?php // $Id: new_message.php 9926 2006-11-09 13:46:10Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,7 +74,7 @@ $nameTools = get_lang('ComposeMessage');
 */
 function show_compose_to_any($user_id)
 {
-	echo '<form action="'.$_SERVER['PHP_SELF'].
+	/*echo '<form action="'.$_SERVER['PHP_SELF'].
         '" method="post" name="msgform" id="msgform" onSubmit="return validate(msgform,user_list)">
         <table width="100%" border="0" cellpadding="5" cellspacing="0">
         <tr>
@@ -95,7 +95,20 @@ function show_compose_to_any($user_id)
           <input name="compose" type="hidden" id="compose" value="1"></td>
           <td>&nbsp;</td>
           </tr>
-         </table>';
+         </table>';*/
+	
+	$online_user_list = get_online_user_list($user_id,$_name,$width,$size);
+	
+	$default['title'] = "Please enter a title";
+	$default['user_list'] = $receiver_id;
+	
+	$form = new FormValidator('compose_message');
+	$form->addElement('select', 'user_list', get_lang('SendMessageTo'), $online_user_list);
+	$form->add_textfield('title', get_lang('MessageTitle'));
+	$form->add_html_editor('content', get_lang('MessageContent'));
+	$form->addElement('submit', 'compose', get_lang('Ok'));
+	$form->setDefaults($default);
+	$form->display();
 }
 
 function show_compose_reply_to_message($message_id, $receiver_id)

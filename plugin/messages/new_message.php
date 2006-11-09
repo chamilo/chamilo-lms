@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 9924 2006-11-09 13:22:21Z evie_em $
+<?php // $Id: new_message.php 9925 2006-11-09 13:31:36Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -126,30 +126,18 @@ function show_compose_reply_to_message($message_id, $receiver_id)
 
 function show_compose_to_user($receiver_id)
 {
-	echo '<form action="'.$_SERVER['PHP_SELF'].
-        '" method="post" name="msgform" id="msgform" onSubmit="return validate(msgform,user_list)">
-        <table width="100%" border="0" cellpadding="5" cellspacing="0">
-        <tr>
-        <td width="64%">
-        '.get_lang('To').':&nbsp;<strong>' . GetFullUserName($receiver_id,$mysqlMainDb) . '</strong>
-        </td>
-        <td width="36%"><div align="left"></div></td>
-        </tr>
-        <tr>
-        <td>';
-	display_html_editor_area("content",1);
-	echo '</td>
-          <td><div align="left">';
-  
-	echo '<input type="hidden" name="user_list" value ="'.$receiver_id.'">';
-	echo '</div></td>
-          </tr>
-          <tr>
-          <td><input type="submit" name="Submit" value="'.get_lang("SendMessage").'">
-          <input name="compose" type="hidden" id="compose" value="1"></td>
-          <td>&nbsp;</td>
-          </tr>
-         </table>';
+	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($receiver_id,$mysqlMainDb).'</strong>';
+	
+	$default['title'] = "Please enter a title";
+	$default['user_list'] = $receiver_id;
+	
+	$form = new FormValidator('compose_message');
+	$form->add_textfield('title', get_lang('MessageTitle'));
+	$form->add_html_editor('content', get_lang('MessageContent'));
+	$form->addElement('hidden', 'user_list');
+	$form->addElement('submit', 'compose', get_lang('Ok'));
+	$form->setDefaults($default);
+	$form->display();
 }
 
 /*
@@ -184,9 +172,9 @@ else
 		$id_tmp = $_SESSION['_uid'].$_POST['user_list'].date('d-D-w-m-Y-H-s').
 					microtime().rand();
 		$id_msg = md5($id_tmp);
-		$query = "INSERT INTO `".MESSAGES_DATABASE."` ( `id` , `id_sender` , `id_receiver` , `status` , `date` ,`content` ) ".
+		$query = "INSERT INTO `".MESSAGES_DATABASE."` ( `id`, `id_sender`, `id_receiver`, `status`, `date`, `title`, `content` ) ".
 				 " VALUES (".
-		 		 "' ".$id_msg ."' , '".$_SESSION['_uid']."', '".$_POST['user_list']."', '1', '".date('Y-m-d H:i:s')."','".$_POST['content']."'".
+		 		 "' ".$id_msg ."' , '".$_SESSION['_uid']."', '".$_POST['user_list']."', '1', '".date('Y-m-d H:i:s')."','".$_POST['title']."','".$_POST['content']."'".
 		 		 ");";
 		@api_sql_query($query,__FILE__,__LINE__);
 		display_success_message($_POST['user_list']);

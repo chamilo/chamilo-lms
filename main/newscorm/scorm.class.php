@@ -362,10 +362,10 @@ class scorm extends learnpath {
         $res = api_sql_query($sql,__FILE__,__LINE__);
         if(Database::num_rows($res)<1){ error_log('Database for '.$course_code.' not found '.__FILE__.' '.__LINE__,0);return -1;}
         $row = Database::fetch_array($res);
-        $dbname = Database::get_course_table_prefix().$row['db_name'].Database::get_database_glue();
+        $dbname = Database::get_course_table_prefix().$row['db_name'];
 		
-		$new_lp = Database::get_course_table('lp');
-		$new_lp_item = Database::get_course_table('lp_item');
+		$new_lp = $dbname.'.lp';
+		$new_lp_item = $dbname.'.lp_item';
 		
 		foreach($this->organizations as $id => $dummy)
 		{

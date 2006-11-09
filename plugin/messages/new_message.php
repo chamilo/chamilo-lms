@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 9860 2006-10-31 12:00:20Z evie_em $
+<?php // $Id: new_message.php 9924 2006-11-09 13:22:21Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,8 +38,9 @@ $cidReset=true;
 include_once('../../main/inc/global.inc.php');
 echo $_SESSION['prueba'];
 api_block_anonymous_users();
-include_once('./functions.inc.php');
-include_once(api_get_path(LIBRARY_PATH).'/text.lib.php');
+require_once('./functions.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'/text.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php');
 
 /*
 -----------------------------------------------------------
@@ -102,35 +103,25 @@ function show_compose_reply_to_message($message_id, $receiver_id)
 	$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$receiver_id." AND id='".$message_id."';";
 	$result = api_sql_query($query,__FILE__,__LINE__);
 	$row = mysql_fetch_array($result);
+	
 	if(!isset($row[1]))
 	{
 		echo get_lang('InvalidMessageId');
 		die();
 	}
-	echo '<form action="'.$_SERVER['PHP_SELF'].
-        '" method="post" name="msgform" id="msgform" onSubmit="return validate(msgform,user_list)">
-        <table width="100%" border="0" cellpadding="5" cellspacing="0">
-        <tr>
-        <td width="64%">
-        '.get_lang('To').':&nbsp;<strong>'.	GetFullUserName($row[1],$mysqlMainDb).'</strong>
-        </td>
-        <td width="36%"><div align="left"></div></td>
-        </tr>
-        <tr>
-        <td>';
-	display_html_editor_area("content",1);
-	echo '</td>
-          <td><div align="left">';
-  
-	echo '<input type="hidden" name="user_list" value ="'.$row[1].'">';
-	echo '</div></td>
-          </tr>
-          <tr>
-          <td><input type="submit" name="Submit" value="'.get_lang("SendMessage").'">
-          <input name="compose" type="hidden" id="compose" value="1"></td>
-          <td>&nbsp;</td>
-          </tr>
-         </table>';
+		
+	echo get_lang('To').':&nbsp;<strong>'.	GetFullUserName($row[1],$mysqlMainDb).'</strong>';
+	
+	$default['title'] = "Please enter a title";
+	$default['user_list'] = $row[1];
+	
+	$form = new FormValidator('compose_message');
+	$form->add_textfield('title', get_lang('MessageTitle'));
+	$form->add_html_editor('content', get_lang('MessageContent'));
+	$form->addElement('hidden', 'user_list');
+	$form->addElement('submit', 'compose', get_lang('Ok'));
+	$form->setDefaults($default);
+	$form->display();
 }
 
 function show_compose_to_user($receiver_id)

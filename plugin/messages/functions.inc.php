@@ -1,4 +1,4 @@
-<?php // $Id: functions.inc.php 9926 2006-11-09 13:46:10Z evie_em $
+<?php // $Id: functions.inc.php 9928 2006-11-09 13:59:07Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -168,7 +168,7 @@ function get_number_of_messages()
  */
 function get_message_data($from, $number_of_items, $column, $direction)
 {
-	$sql_query = "SELECT id as col0, id_sender as col1, date as col2 FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid']." ORDER BY col$column $direction LIMIT $from,$number_of_items";
+	$sql_query = "SELECT id as col0, id_sender as col1, title as col2, date as col3 FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid']." ORDER BY col$column $direction LIMIT $from,$number_of_items";
 	$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 	$i = 0;
 	$message_list = array ();
@@ -176,9 +176,10 @@ function get_message_data($from, $number_of_items, $column, $direction)
 	{
 		$message[0] = $result[0];
 		$message[1] = GetFullUserName($result[1]);
-		$message[1] = "<a href=\"view_message.php?id=".$result[0]."\" title=\"$texto\">".GetFullUserName($result[1])."</a></td>";
-		$message[2] = $result[2]; //date stays the same
-		$message[3] = '<a href="new_message.php?re_id='.$result[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'forum.gif" alt="'.get_lang("ReplyToMessage").'" align="middle"></img></a>';
+		//$message[1] = "<a href=\"view_message.php?id=".$result[0]."\" title=\"$texto\">".GetFullUserName($result[1])."</a>";
+		$message[2] = '<a href="view_message.php?id='.$result[0].'">'.$result[2].'</a>';
+		$message[3] = $result[3]; //date stays the same
+		$message[4] = '<a href="new_message.php?re_id='.$result[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'forum.gif" alt="'.get_lang("ReplyToMessage").'" align="middle"></img></a>';
 		$message_list[] = $message;
 		$i++;
 	}
@@ -212,8 +213,9 @@ function inbox_display()
 	$table = new SortableTable('messages', 'get_number_of_messages', 'get_message_data', 1);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('From'));
-	$table->set_header(2, get_lang('Date'));
-	$table->set_header(3, get_lang("ReplyToMessage"), false);
+	$table->set_header(2, get_lang('Title'));
+	$table->set_header(3, get_lang('Date'));
+	$table->set_header(4, get_lang("ReplyToMessage"), false);
 	$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
 	$table->display();
 }

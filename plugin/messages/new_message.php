@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 9929 2006-11-09 14:02:43Z evie_em $
+<?php // $Id: new_message.php 9930 2006-11-10 08:45:40Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -81,7 +81,7 @@ function show_compose_to_any($user_id)
 	
 	$form = new FormValidator('compose_message');
 	$form->addElement('select', 'user_list', get_lang('SendMessageTo'), $online_user_list);
-	$form->add_textfield('title', get_lang('MessageTitle'));
+	$form->add_textfield('title', get_lang('Title'));
 	$form->add_html_editor('content', get_lang('MessageContent'));
 	$form->addElement('submit', 'compose', get_lang('Ok'));
 	$form->setDefaults($default);
@@ -106,7 +106,7 @@ function show_compose_reply_to_message($message_id, $receiver_id)
 	$default['user_list'] = $row[1];
 	
 	$form = new FormValidator('compose_message');
-	$form->add_textfield('title', get_lang('MessageTitle'));
+	$form->add_textfield('title', get_lang('Title'));
 	$form->add_html_editor('content', get_lang('MessageContent'));
 	$form->addElement('hidden', 'user_list');
 	$form->addElement('submit', 'compose', get_lang('Ok'));
@@ -122,7 +122,7 @@ function show_compose_to_user($receiver_id)
 	$default['user_list'] = $receiver_id;
 	
 	$form = new FormValidator('compose_message');
-	$form->add_textfield('title', get_lang('MessageTitle'));
+	$form->add_textfield('title', get_lang('Title'));
 	$form->add_html_editor('content', get_lang('MessageContent'));
 	$form->addElement('hidden', 'user_list');
 	$form->addElement('submit', 'compose', get_lang('Ok'));

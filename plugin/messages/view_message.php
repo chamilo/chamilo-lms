@@ -1,4 +1,4 @@
-<?php // $Id: view_message.php 9927 2006-11-09 13:57:05Z evie_em $
+<?php // $Id: view_message.php 9930 2006-11-10 08:45:40Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -64,6 +64,10 @@ echo '
                     <TR>
                       <TD noWrap>'.get_lang("To").':&nbsp; </TD>
                       <TD>'.GetFullUserName($row[2],$mysqlMainDb).'</TD>
+                    </TR>
+                    <TR>
+                      <TD noWrap>'.get_lang("Title").':&nbsp; </TD>
+                      <TD>'.$row[5].'</TD>
                     </TR>
                     <TR>
                       <TD style="PADDING-BOTTOM: 0px"></TD>

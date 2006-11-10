@@ -49,7 +49,7 @@ require_once('learnpath.class.php');
 require_once('learnpathItem.class.php');
 
 // storing the tables names in variables.
-$tbl_document           = Database::get_course_scormdocument_table();
+$tbl_document           = Database::get_course_table(SCORMDOC_TABLE);
 $tbl_learnpath_main     = Database::get_course_learnpath_main_table();
 $tbl_tool               = Database::get_course_tool_list_table();
 

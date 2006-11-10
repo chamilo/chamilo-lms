@@ -78,7 +78,7 @@ function mdobject($_course, $id)
 {
     global $ieee_dcmap_e, $ieee_dcmap_v;  // md_funcs
     
-    $scormdocument = Database::get_course_scormdocument_table();
+    $scormdocument = Database::get_course_table(SCORMDOC_TABLE);
     
     $this->mdo_course = $_course; $this->mdo_type = 'Scorm';
     $this->mdo_id = $id; $this->mdo_eid = $this->mdo_type . '.' . $id;

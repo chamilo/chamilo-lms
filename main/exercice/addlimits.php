@@ -190,33 +190,31 @@ Attempts :
  * @todo shouldn't this be moved to the part above (around line 111: action handling)
  */
 if (isset($_POST['ok']))
+{
+	$exercise_id = $_POST['exe_id'];
+	if ($_POST['limit']==1)
 	{
-		$exercise_id = $_POST['exe_id'];
-		if ($_POST['limit']==1)
-				{
-				$minutes = $_POST['minutes'];
-				$query = "update `".$TBL_EXERCICES."` set ques_time_limit= $minutes where id= $exercise_id";
-				api_sql_query($query,_FILE_,_LINE_);
-				}
-				
-		else
-				{
-				$query = "update `".$TBL_EXERCICES."` set ques_time_limit= 0 where id= $exercise_id";
-				api_sql_query($query,_FILE_,_LINE_);
-		
-				}
-	if ($_POST['attempt']==1)
-				{
-				$attempts = $_POST['attempts'];
-				$query = "update `".$TBL_EXERCICES."` set num_attempts = $attempts where id= $exercise_id";
-				api_sql_query($query,_FILE_,_LINE_);
-				}
-				
-		else
-				{
-				$query = "update`".$TBL_EXERCICES."` set num_attempts = 0 where id= $exercise_id";
-				 api_sql_query($query,_FILE_,_LINE_);
-				}
-	
+		$minutes = $_POST['minutes'];
+		$query = "update `".$TBL_EXERCICES."` set ques_time_limit= $minutes where id= $exercise_id";
+		api_sql_query($query,__FILE__,__LINE__);
 	}
+	else
+	{
+		$query = "update `".$TBL_EXERCICES."` set ques_time_limit= 0 where id= $exercise_id";
+		api_sql_query($query,__FILE__,__LINE__);
+	}
+
+	if ($_POST['attempt']==1)
+	{
+		$attempts = $_POST['attempts'];
+		$query = "update `".$TBL_EXERCICES."` set num_attempts = $attempts where id= $exercise_id";
+		api_sql_query($query,__FILE__,__LINE__);
+	}
+	else
+	{
+		$query = "update`".$TBL_EXERCICES."` set num_attempts = 0 where id= $exercise_id";
+		api_sql_query($query,__FILE__,__LINE__);
+	}
+}
 ?>
+

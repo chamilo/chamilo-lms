@@ -1,23 +1,54 @@
 <?php
+/*
+-----------------------------------------------------------
+	including the global file
+-----------------------------------------------------------
+*/
+include('../inc/global.inc.php');
+
+/*
+-----------------------------------------------------------
+	Including necessary files
+-----------------------------------------------------------
+*/
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
+include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
-// answer types
+/*
+-----------------------------------------------------------
+	Answer types
+-----------------------------------------------------------
+*/
 define('UNIQUE_ANSWER',	1);
 define('MULTIPLE_ANSWER',	2);
 define('FILL_IN_BLANKS',	3);
 define('MATCHING',		4);
 define('FREE_ANSWER', 5);
 
+/*
+-----------------------------------------------------------
+	Language
+-----------------------------------------------------------
+*/
 $langFile='exercice';
 
-include('../inc/global.inc.php');
-
+/*
+-----------------------------------------------------------
+	section (for the tabs)
+-----------------------------------------------------------
+*/
 $this_section=SECTION_COURSES;
+
 api_protect_course_script();
-include(api_get_path(LIBRARY_PATH).'text.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+/*
+-----------------------------------------------------------
+	Table definitions 
+	@todo: use the Database :: get_course_table functions
+-----------------------------------------------------------
+*/
 $TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
 $TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
 $TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
@@ -67,18 +98,29 @@ if ( empty ( $objExercise ) ) {
 }
 $exercise_id = $_GET['exercise_id'];
 $is_allowedToEdit=$is_courseAdmin;	
+
+
 $nameTools=get_lang('Exercice');
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 
 Display::display_header($nameTools,"Exercise");
-  if (isset($_POST['ok']))
-	{
 
-  $message = "Test limits added";
+/*
+-----------------------------------------------------------
+	Action handling
+-----------------------------------------------------------
+*/
+include('../inc/global.inc.php');
+if (isset($_POST['ok']))
+{
+	$message = "Test limits added";
 	Display::display_normal_message($message);
-  }
-  ?>
+}
+?>
+
+
+
   <script type="text/javascript">
   function selectlimited()
   {
@@ -144,6 +186,9 @@ Attempts :
 <input type="submit" name="ok" value="Ok">
 </form>
 <?php
+/**
+ * @todo shouldn't this be moved to the part above (around line 111: action handling)
+ */
 if (isset($_POST['ok']))
 	{
 		$exercise_id = $_POST['exe_id'];

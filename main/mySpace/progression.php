@@ -2,11 +2,12 @@
 /*
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
+require ('../inc/global.inc.php');
  
  $nameTools= get_lang('Progression');
  $langFile = array ('registration', 'index','trad4all','tracking');
  $cidReset=true;
- require ('../inc/global.inc.php');
+
  
  $this_section = "session_my_space";
  

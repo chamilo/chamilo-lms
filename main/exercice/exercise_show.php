@@ -705,7 +705,7 @@ $totalWeighting+=$questionWeighting;
 	<tr><td></td>
 		<td align="right">
 		<br />
-		<? $strids = implode(",",$arrid);
+		<?php $strids = implode(",",$arrid);
 			$marksid = implode(",",$arrmarks);
 			if($is_allowedToEdit)
 			{

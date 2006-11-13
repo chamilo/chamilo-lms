@@ -33,33 +33,55 @@
 ==============================================================================
 */
 $langFile = 'survey';
+/*
+-----------------------------------------------------------
+	Including necessary files
+-----------------------------------------------------------
+*/
 require_once ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
-require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
-$cidReq = $_REQUEST['cidReq'];
-$table_survey = Database :: get_course_table('survey');
-/*
-echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
-exit;
-*/
-//api_protect_admin_script();
+require_once (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH)."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+
+$cidReq = $_GET['cidReq'];
+/*
+-----------------------------------------------------------
+	Table definitions
+-----------------------------------------------------------
+*/
+$table_survey = Database :: get_course_table('survey');
+//$table_category = Database :: get_course_table(MAIN_CATEGORY_TABLE);
+//$table_survey = Database :: get_course_table(MAIN_SURVEY_TABLE);
+//$table_course = Database::get_course_table(MAIN_COURSE_TABLE);
+
+/*
+-----------------------------------------------------------
+	some permissions stuff
+-----------------------------------------------------------
+*/
 $status = surveymanager::get_status();
 api_protect_course_script();
 if($status==5)
 {
 api_protect_admin_script();
 }
-//$table_category = Database :: get_course_table(MAIN_CATEGORY_TABLE);
-//$table_survey = Database :: get_course_table(MAIN_SURVEY_TABLE);
-//$table_course = Database::get_course_table(MAIN_COURSE_TABLE);
+
+/*
+-----------------------------------------------------------
+	Breadcrumbs and toolname
+-----------------------------------------------------------
+*/
 $tool_name = get_lang('CreateSurvey');
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+
+/*
+-----------------------------------------------------------
+	some variables
+-----------------------------------------------------------
+*/
 $newsurvey = '0';
 $existingsurvey = '1';
 $aaa = '11';
@@ -71,6 +93,12 @@ if($_POST['back'])
  header("location:survey_list.php?cidReq=$cidReq");
  exit;
 }
+
+/*
+-----------------------------------------------------------
+	Action Handling
+-----------------------------------------------------------
+*/
 if (!empty($_POST['action']))
 {	
 	$surveyid=$_POST['exiztingsurvey'];
@@ -96,41 +124,30 @@ if(!$survey_list){
 		 exit;
 }
 */
+
+
+/*
+-----------------------------------------------------------
+	Header
+-----------------------------------------------------------
+*/
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
-//echo "<pre>";
-//print_r($_SESSION);
-//echo "</pre>";
-//echo $survey_table = Database :: get_course_table('survey');
+
 ?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>" name="mainForm">
-<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">
-<!--<input type="hidden"  value="add_survey">-->
-<table>
-<tr>
-<td valign="top"></td>
-<td>
-<input class="checkbox" checked type="radio" name="survey" id="new_survey" value="<?php echo $newsurvey ?>"> <label for="visibility_open_world"><?php echo get_lang("Newsurvey") ?></label>
-<?php
-$extra_script = "OnChange=\"javascript:document.mainForm.survey[1].checked=true;\"";
-//$survey_list=SurveyManager::select_survey_list('',$extra_script);
-//if($survey_list){
-?>
-	<br/>
-	<input class="checkbox" type="radio" name="survey" id="Existing_survey" value="<?php echo $existingsurvey ?>"> <label for="visibility_open_platform"><?php echo  get_lang("Existingsurvey") ?></label>&nbsp;<?php ?></td></tr>
-	<tr>
-	 <td></td>
-	 <td></td>
-	</tr>
-
-<tr>
-  <td></td>
-  <td><input type="submit" name="back" value="<?php echo get_lang('back');?>">&nbsp;<input type="submit" name="action" value="<?php echo get_lang('Ok1'); ?>"></td>
-  <td><input type="hidden" name="newsurveyid" value="<?php echo $newsurvey_id; ?>"></td>  
-  <td></td> 
-</tr>
-</table>
+<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>" />
+<input type="hidden" name="newsurveyid" value="<?php echo $newsurvey_id; ?>" />
+<input class="checkbox" checked type="radio" name="survey" id="new_survey" value="<?php echo $newsurvey; ?>" /> <label for="new_survey"><?php echo get_lang("Newsurvey"); ?></label><br/>
+<input class="checkbox" type="radio" name="survey" id="existing_survey" value="<?php echo $existingsurvey; ?>" /> <label for="existing_survey"><?php echo  get_lang("Existingsurvey"); ?></label><br />
+<input type="submit" name="back" value="<?php echo get_lang('Back');?>" />&nbsp;
+<input type="submit" name="action" value="<?php echo get_lang('Ok1'); ?>" />
 </form>
 <?php
+/*
+-----------------------------------------------------------
+	Footer
+-----------------------------------------------------------
+*/
 Display :: display_footer();
 ?>

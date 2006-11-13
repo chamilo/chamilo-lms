@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 9665 2006-10-24 10:43:48Z elixir_inter $
+<?php // $Id: admin.php 9951 2006-11-13 10:54:30Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -444,7 +444,7 @@ if($newQuestion || $modifyQuestion)
 {
 	// statement management
 	$type = $_REQUEST['answerType'];
-	?><input type="hidden" name="Type" value=" <?= $type; ?>" /> 
+	?><input type="hidden" name="Type" value=" <?php echo $type; ?>" /> 
 	<?php
 	include("statement_admin.inc.php");
 }

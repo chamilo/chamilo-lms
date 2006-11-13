@@ -610,7 +610,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								$name = "fckdiv".$questionId;
 								$marksname = "marksName".$questionId;
 								?>
-								<a href="#" onclick="showfck('<?=$name?>','<?=$marksname?>');"><?php if ($answerType == FREE_ANSWER) echo "&nbsp;".get_lang('EditCommentsAndMarks'); else echo "&nbsp;".get_lang('AddComments');?></a>
+								<a href="#" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');"><?php if ($answerType == FREE_ANSWER) echo "&nbsp;".get_lang('EditCommentsAndMarks'); else echo "&nbsp;".get_lang('AddComments');?></a>
 								<?php
 								$comnt = get_comments($id,$questionId);
 								echo "<br> <br>".$comnt;
@@ -663,7 +663,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								$marksname = "marksName".$questionId;
 								?>
 							 <div id="<?php echo $marksname; ?>" style="visibility:hidden">
-							 <form name="marksform_<?=$questionId?>" method="post" action="">
+							 <form name="marksform_<?php echo $questionId; ?>" method="post" action="">
 														 
 								  
 								  <?php 
@@ -712,7 +712,7 @@ $totalWeighting+=$questionWeighting;
 		?>
 			
 			 <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid=<?php echo $id; ?>&test=<?php echo $test; ?>&emailid=<?php echo $emailId;?>" method="post">
-			 <input type="submit" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?=$strids?>','<?=$marksid?>');"/> 
+			 <input type="submit" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"/> 
 			 </form>
 		<?php } ?>
 		</td>

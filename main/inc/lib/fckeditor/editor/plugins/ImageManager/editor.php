@@ -79,9 +79,9 @@ $editor = new ImageEditor($manager, $IMConfig);
 		<table>
 		<tr>
 			<td>
-				<form action="editorFrame.php?img=<?=$_GET['img']?>&action=replace" target='editor' id="uploadForm" method="post" enctype="multipart/form-data">
+				<form action="editorFrame.php?img=<?php echo $_GET['img']; ?>&action=replace" target='editor' id="uploadForm" method="post" enctype="multipart/form-data">
 					&nbsp;<input type="file" name="upload" id="upload"/>
-					<input type="hidden" name="dir" id="dir" value="<?=dirname($img)?>" />
+					<input type="hidden" name="dir" id="dir" value="<?php echo dirname($img); ?>" />
 				</form>
 			</td>
 			<td>

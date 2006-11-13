@@ -49,7 +49,7 @@
 <script type="text/javascript">
 // <![CDATA[
 
-	var processedAction = "<?=$_GET['action']?>";
+	var processedAction = "<?php echo $_GET['action']; ?>";
 
 	if (processedAction == 'replace' && parent.old)
 	{
@@ -163,7 +163,7 @@
 	if ($editor->forcedNewName != false)
 	{
 ?>
-	message += '\n' + i18n('File name was changed into ') +  '<?=$editor->forcedNewName?>';
+	message += '\n' + i18n('File name was changed into ') +  '<?php echo $editor->forcedNewName; ?>';
 <?
 	}
 ?>
@@ -252,7 +252,7 @@
 <?php if(count($imageInfo) > 0 && is_file($imageInfo['fullpath'])) { ?>
 
 		<div id="background" name="background" style="margin: auto; width: <?php echo $imageInfo['width']; ?>px; height: <?php echo $imageInfo['height']; ?>px; background-image: url(<?php echo $imageInfo['src']; ?>);">
-			<img name="floater" id="floater" style="width: 150px; height: 150px; behavior: url('assets/pngbehavior.htc'); position: absolute" src="<?= $IMConfig['base_url'] . $IMConfig['watermarks'][0] ?>" />
+			<img name="floater" id="floater" style="width: 150px; height: 150px; behavior: url('assets/pngbehavior.htc'); position: absolute" src="<?php echo  $IMConfig['base_url'] . $IMConfig['watermarks'][0]; ?>" />
 		</div>
 
 		<span id="imgCanvas" name="imgCanvas" class="crop" style="display: none;"><img src="<?php echo $imageInfo['src']; ?>" <?php echo $imageInfo['dimensions']; ?> alt="" id="theImage" name="theImage" /></span>

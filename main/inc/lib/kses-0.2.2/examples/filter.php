@@ -66,7 +66,7 @@ if (get_magic_quotes_gpc())
 ?>
 <h1>Input</h1>
 
-<pre><?= htmlspecialchars($val); ?></pre>
+<pre><?php echo  htmlspecialchars($val); ?></pre>
 
 <?php
 
@@ -91,7 +91,7 @@ echo htmlspecialchars($val);
 <h1>Type something</h1>
 
 <form method="POST" action="filter.php">
-<textarea name="val" rows=5 cols=50><?= htmlspecialchars($val); ?></textarea>
+<textarea name="val" rows=5 cols=50><?php echo  htmlspecialchars($val); ?></textarea>
 <br>
 <input type="submit" value="Send it!">
 </form>

@@ -175,11 +175,11 @@ window.open(inf+".htm", 'popup', 'width=900,height=800,toolbar = no, status = no
 </script>
 
 <script src=tbl_change.js type="text/javascript" language="javascript"></script>
-<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
+<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
 <input type="hidden" name="action" value="add_survey">
-<input type="hidden" name="surveyid" value="<?=$oldsurveyid?>">
-<input type="hidden" name="db_name" value="<?=$db_name?>">
-<input type="hidden" name="gids" value="<?=$gids?>">
+<input type="hidden" name="surveyid" value="<?php echo $oldsurveyid; ?>">
+<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
+<input type="hidden" name="gids" value="<?php echo $gids; ?>">
 <table>
 <tr>
  <td><?php echo get_lang('surveycode'); ?></td>

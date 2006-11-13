@@ -108,10 +108,10 @@ if($qdeleted)
 <?php
 }
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<!--<input type="hidden" name="cidReq" value="<?=$cidReq?>">-->
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">-->
 <?php
     $sql="SELECT * FROM $table_group WHERE survey_id='$surveyid'";	
 	$res = api_sql_query($sql,__FILE__,__LINE__);

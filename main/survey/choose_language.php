@@ -102,13 +102,13 @@ Display::display_error_message($error_message);
     <td valign="top">
     <table width="100%" height="132"  border="0" cellpadding="0" cellspacing="0" bgcolor="#F6F5F5">
 		  <form method="GET" action="<?php echo $_SERVER['PHP_SELF'] ?>">
-		    <input type="hidden" name="uid" value="<?=$uid;?>">
-		    <input type="hidden" name="db_name" value="<?=$db_name;?>">
-		    <input type="hidden" name="temp" value="<?=$temp;?>">
-		    <input type="hidden" name="email" value="<?=$email;?>">
-		    <input type="hidden" name="mail" value="<?=$mail;?>">
-			<input type="hidden" name="uid1" value="<?=$uid1;?>">
-			<input type="hidden" name="code_survey" value="<?=$code_survey;?>">
+		    <input type="hidden" name="uid" value="<?php echo $uid;?>">
+		    <input type="hidden" name="db_name" value="<?php echo $db_name;?>">
+		    <input type="hidden" name="temp" value="<?php echo $temp;?>">
+		    <input type="hidden" name="email" value="<?php echo $email;?>">
+		    <input type="hidden" name="mail" value="<?php echo $mail;?>">
+			<input type="hidden" name="uid1" value="<?php echo $uid1;?>">
+			<input type="hidden" name="code_survey" value="<?php echo $code_survey;?>">
 			Select in which language you want to see this survey : 
 			<select name="lang">
 			<?php

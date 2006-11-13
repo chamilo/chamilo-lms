@@ -74,7 +74,7 @@ api_display_tool_title($tool_name);
       <tr>
         <td colspan="2" align="center" class="text">
 			 <br>
-			 <?=$obj_sname->surveythanks;?>
+			 <?php echo $obj_sname->surveythanks;?>
 			 <br>
 			</td>
       </tr>

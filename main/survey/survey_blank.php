@@ -119,13 +119,13 @@ if ($numb=mysql_num_rows($res) > 0)
 		<tr>
 		<td>&nbsp;</td>
 		<td valign="top">
-		<form method="post" action="<?=$phpself?>?num=<?=$num+1?>">
-			  <input type="hidden" name="uid1" value="<?=$uid1;?>">
-		      <input type="hidden" name="surveyid" value="<?=$surveyid;?>">
-		      <input type="hidden" name="db_name" value="<?=$db_name;?>">		  
-		      <input type="hidden" name="temp" value="<?=$temp;?>">
-		      <input type="hidden" name="mail" value="<?=$mail;?>">
-			  <input type="hidden" name="username" value="<?=$username;?>">
+		<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?num=<?php echo $num+1; ?>">
+			  <input type="hidden" name="uid1" value="<?php echo $uid1;?>">
+		      <input type="hidden" name="surveyid" value="<?php echo $surveyid;?>">
+		      <input type="hidden" name="db_name" value="<?php echo $db_name;?>">		  
+		      <input type="hidden" name="temp" value="<?php echo $temp;?>">
+		      <input type="hidden" name="mail" value="<?php echo $mail;?>">
+			  <input type="hidden" name="username" value="<?php echo $username;?>">
 	   <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 		<?
 		$users = array ();
@@ -773,14 +773,14 @@ if ($numb=mysql_num_rows($res) > 0)
   <tr>
     <td class="form-left">&nbsp;</td>
     <td valign="top">
-	<form method="post" action="<?=$phpself?>?num=<?=$num+1?>&cidReq=<?=$cidReq?>">
-			  <input type="hidden" name="uid1" value="<?=$uid1;?>">
-		      <input type="hidden" name="surveyid" value="<?=$surveyid;?>">
-		      <input type="hidden" name="db_name" value="<?=$db_name;?>">
-			  <input type="hidden" name="cidReq" value="<?=$cidReq;?>">
-		      <input type="hidden" name="temp" value="<?=$temp;?>">
-		      <input type="hidden" name="mail" value="<?=$mail;?>">
-			  <input type="hidden" name="username" value="<?=$username;?>">
+	<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?num=<?php echo $num+1; ?>&cidReq=<?php echo $cidReq; ?>">
+			  <input type="hidden" name="uid1" value="<?php echo $uid1;?>">
+		      <input type="hidden" name="surveyid" value="<?php echo $surveyid;?>">
+		      <input type="hidden" name="db_name" value="<?php echo $db_name;?>">
+			  <input type="hidden" name="cidReq" value="<?php echo $cidReq;?>">
+		      <input type="hidden" name="temp" value="<?php echo $temp;?>">
+		      <input type="hidden" name="mail" value="<?php echo $mail;?>">
+			  <input type="hidden" name="username" value="<?php echo $username;?>">
 			  <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 
 				  <tr>
@@ -797,7 +797,7 @@ if ($numb=mysql_num_rows($res) > 0)
 					<?}
 					else{ $sub_name = "Next";
 					?>			
-					<input type="submit" name="submit" value="<?=$sub_name?>">&nbsp;<input type="button"
+					<input type="submit" name="submit" value="<?php echo $sub_name; ?>">&nbsp;<input type="button"
 value="Print" onClick="printpage()"></td>
 					<?}?>
 				  </tr>

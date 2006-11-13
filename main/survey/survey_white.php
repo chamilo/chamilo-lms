@@ -258,14 +258,14 @@ echo '</td></tr></table>';
 
 ?>
 <br /><br />
-<form method="get" action="<?=$_SERVER['PHP_SELF']?>">
-			  <input type="hidden" name="surveyid" value="<?=$surveyid;?>">
-		      <input type="hidden" name="db_name" value="<?=$db_name;?>">		  
-		      <input type="hidden" name="temp" value="<?=$temp;?>">
-		      <input type="hidden" name="cidReq" value="<?=$_GET['cidReq'];?>">
-		      <input type="hidden" name="group_offset" value="<?=$group_offset;?>">
-		      <input type="hidden" name="question_offset" value="<?=$question_offset;?>">
-		      <input type="hidden" name="indiceQuestion" value="<?=$indiceQuestion;?>">
+<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+			  <input type="hidden" name="surveyid" value="<?php echo $surveyid;?>">
+		      <input type="hidden" name="db_name" value="<?php echo $db_name;?>">		  
+		      <input type="hidden" name="temp" value="<?php echo $temp;?>">
+		      <input type="hidden" name="cidReq" value="<?php echo $_GET['cidReq'];?>">
+		      <input type="hidden" name="group_offset" value="<?php echo $group_offset;?>">
+		      <input type="hidden" name="question_offset" value="<?php echo $question_offset;?>">
+		      <input type="hidden" name="indiceQuestion" value="<?php echo $indiceQuestion;?>">
 			  
 			  <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 

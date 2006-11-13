@@ -51,7 +51,7 @@ if( isset($error_message) )
 	Display::display_error_message($error_message);	
 }
 ?>
-<form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
+<form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid?>">
 <input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname?>">
@@ -64,11 +64,11 @@ if( isset($error_message) )
 <td>
 <select name="add_question" onChange="javascript:this.form.submit();">
 	<option value="0"><?php echo get_lang('Select');?></option>
-	<option value="<?=get_lang('yesno')?>" <?php if($add_question12==get_lang('yesno'))echo "selected";?>><?php echo get_lang('yesno');?></option>
-	<option value="<?=get_lang('MultipleChoiceSingle')?>" <?php if($add_question12==get_lang('MultipleChoiceSingle')) { echo " selected ";}?>><?php echo get_lang('MultipleChoiceSingle');?></option>
-	<option value="<?=get_lang('MultipleChoiceMulti')?>" <?php if($add_question12==get_lang('MultipleChoiceMulti')) { echo " selected ";}?>><?php echo get_lang('MultipleChoiceMulti');?></option>
-	<option value="<?=get_lang('Open')?>" <?php if($add_question12==get_lang('Open')) { echo "selected";}?>><?php echo get_lang('Open');?></option>
-	<option value="<?=get_lang('numbered')?>" <?php if($add_question12==get_lang('numbered')) { echo "selected";}?>><?php echo get_lang('numbered');?></option>
+	<option value="<?php echo get_lang('YesNo'); ?>" <?php if($add_question12==get_lang('yesno'))echo "selected";?>><?php echo get_lang('yesno');?></option>
+	<option value="<?php echo get_lang('MultipleChoiceSingle'); ?>" <?php if($add_question12==get_lang('MultipleChoiceSingle')) { echo " selected ";}?>><?php echo get_lang('MultipleChoiceSingle');?></option>
+	<option value="<?php echo get_lang('MultipleChoiceMulti'); ?>" <?php if($add_question12==get_lang('MultipleChoiceMulti')) { echo " selected ";}?>><?php echo get_lang('MultipleChoiceMulti');?></option>
+	<option value="<?php echo get_lang('Open'); ?>" <?php if($add_question12==get_lang('Open')) { echo "selected";}?>><?php echo get_lang('Open');?></option>
+	<option value="<?php echo get_lang('Numbered'); ?>" <?php if($add_question12==get_lang('numbered')) { echo "selected";}?>><?php echo get_lang('numbered');?></option>
 </select>
 </td>
 </tr>

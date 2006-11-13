@@ -86,10 +86,10 @@ $GName = get_lang('groupname');
 api_display_tool_title($tool_name);
 $name = surveymanager :: get_groupname($gid);
 ?>
-<form name="radiobutton" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<!--<input type="hidden" name="cidReq" value="<?=$_REQUEST['cidReq']?>">-->
+<form name="radiobutton" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+<!--<input type="hidden" name="cidReq" value="<?php echo $_REQUEST['cidReq']; ?>">-->
 <table>
 <tr>
 <td><?php api_display_tool_title($GName);?></td> 
@@ -167,11 +167,11 @@ function g_redirect($url,$mode)
        header("Refresh: 0; URL=\"$url\""); 
        exit;
      case 'META':
-       ?><meta http-equiv="refresh" content="0;url=<?=$url?>" /><?
+       ?><meta http-equiv="refresh" content="0;url=<?php echo $url; ?>" /><?
        exit;
      default: /* -- JavaScript */
        ?><script type="text/javascript">
-       window.location.href='<?=$url?>';
+       window.location.href='<?php echo $url; ?>';
        </script><?
   }
   exit;

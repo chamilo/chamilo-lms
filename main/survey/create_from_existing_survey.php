@@ -111,15 +111,15 @@ if( isset($error_message) )
 }
 
 ?>
-<form action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>" method="POST" name="frm1">
-<input type="submit" name="importexistingsurvey" value="<?=get_lang('ImportExistingSurvey')?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="db_name" value="<?=$db_name?>">
+<form action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>" method="POST" name="frm1">
+<input type="submit" name="importexistingsurvey" value="<?php echo get_lang('ImportExistingSurvey'); ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
 </form>
-<form method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>" name="frm2">
+<form method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>" name="frm2">
 <input type="hidden" name="action" value="add_survey">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="db_name" value="<?=$db_name?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
 <?php 	
    		$nameTools=get_lang('CreateFromExistingSurveys');
 		$table_group = Database :: get_course_table('survey_group');

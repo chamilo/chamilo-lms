@@ -155,12 +155,12 @@ function checkLength(form){
     return true;
 }
 </SCRIPT>
-<form method="POST" name = "yesno" id="yesno" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>&add_question=<?=$add_question?>&groupid=<?=$groupid?>&surveyid=<?=$surveyid?>&curr_dbname=<?=$curr_dbname?>">
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="questtype" value="<?=$add_question12?>">
-<input type="hidden" name="curr_dbname" value="<?=$curr_dbname?>">
-<!--<input type="hidden" name="cidReq" value="<?=$cidReq?>">-->
+<form method="POST" name = "yesno" id="yesno" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>&add_question=<?php echo $add_question; ?>&groupid=<?php echo $groupid; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>">
+<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="questtype" value="<?php echo $add_question12; ?>">
+<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
+<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">-->
 <input type="hidden" name="action" value="addquestion" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
 <tr> 
@@ -330,7 +330,7 @@ function checkLength(form){
 					<td width="16" height="30" align="left" class="form_text"> 
 					  <?php echo $sn;?>
 					</td>					
-					<td class="form_bg"><textarea name="mutlichkboxtext[]" cols="50" rows="3" class="text_field" style="width:100%;"><?=$post_text[$k]?></textarea> 
+					<td class="form_bg"><textarea name="mutlichkboxtext[]" cols="50" rows="3" class="text_field" style="width:100%;"><?php echo $post_text[$k]; ?></textarea> 
 					</td>					
 					<td width="10" class="form_text"><img src="../img/blank.gif" width="10" height="8">
 					</td>
@@ -373,7 +373,7 @@ function checkLength(form){
             <br>
 			<br>
 			<div align="center">
-			<input type="HIDDEN" name="end1" value="<?=$end?>">
+			<input type="HIDDEN" name="end1" value="<?php echo $end; ?>">
 <?			
             if(isset($_POST['add_question']))
 			{
@@ -402,10 +402,10 @@ function checkLength(form){
 					break;
 			}
 ?>
-						<input type="submit"  name="back" value="<?=get_lang("back");?>">
-						<input type="submit"  name="saveandexit" value="<?=get_lang("saveandexit");?>">
-						<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('yesno','<?=$temp?>','<?=$Multi?>')">
-						<input type="submit"  name="next" value="<?=get_lang("next");?>"> 
+						<input type="submit"  name="back" value="<?php echo get_lang("Back");?>">
+						<input type="submit"  name="saveandexit" value="<?php echo get_lang("SaveAndExit");?>">
+						<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('yesno','<?php echo $temp;?>','<?php echo $Multi; ?>')">
+						<input type="submit"  name="next" value="<?php echo get_lang("next");?>"> 
 			</div>
 <!--this partcular field helps in identify the item to be add at the itemadd.php-->			
 </form>
@@ -425,7 +425,7 @@ function preview(form,temp,qtype)
 		var box = (eval("document."+form+"['mutlichkboxtext[]']["+i+"]"));
 			id_str += box.value+"|";
 	}
-	window.open(temp+'.php?temp=<?=$temp;?>&ques='+ques+'&ans='+id_str+'&qtype='+qtype, 'popup', 'width=800,height=600,scrollbars=yes,toolbar = no, status = no');
+	window.open(temp+'.php?temp=<?php echo $temp;?>&ques='+ques+'&ans='+id_str+'&qtype='+qtype, 'popup', 'width=800,height=600,scrollbars=yes,toolbar = no, status = no');
 }
 </script>
 <?php

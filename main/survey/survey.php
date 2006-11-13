@@ -103,8 +103,8 @@ api_display_tool_title($tool_name);
 //echo "</pre>";
 //echo $survey_table = Database :: get_course_table('survey');
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>" name="mainForm">
-<input type="hidden" name="cidReq" value="<?=$cidReq?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>" name="mainForm">
+<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">
 <!--<input type="hidden"  value="add_survey">-->
 <table>
 <tr>
@@ -126,7 +126,7 @@ $extra_script = "OnChange=\"javascript:document.mainForm.survey[1].checked=true;
 <tr>
   <td></td>
   <td><input type="submit" name="back" value="<?php echo get_lang('back');?>">&nbsp;<input type="submit" name="action" value="<?php echo get_lang('Ok1'); ?>"></td>
-  <td><input type="hidden" name="newsurveyid" value="<?=$newsurvey_id;?>"></td>  
+  <td><input type="hidden" name="newsurveyid" value="<?php echo $newsurvey_id; ?>"></td>  
   <td></td> 
 </tr>
 </table>

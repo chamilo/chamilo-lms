@@ -86,8 +86,8 @@ Display::display_header($tool_name);
 ?>
 <form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="action" value="add_question">
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
+<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <table>
 <tr>
   <td><?php api_display_tool_title($header1) ?></td>

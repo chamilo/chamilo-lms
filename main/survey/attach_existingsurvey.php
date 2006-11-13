@@ -166,10 +166,10 @@ window.open(inf+".htm", 'popup', 'width=600,height=600,toolbar = no, status = no
 </script>
 
 <script src=tbl_change.js type="text/javascript" language="javascript"></script>
-<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
+<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
 <input type="hidden" name="action" value="add_survey">
-<input type="hidden" name="surveyid" value="<?=$oldsurveyid?>">
-<input type="hidden" name="db_name" value="<?=$db_name?>">
+<input type="hidden" name="surveyid" value="<?php echo $oldsurveyid; ?>">
+<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
 <table>
 <tr>
  <td><?php echo get_lang('surveycode'); ?></td>
@@ -177,11 +177,11 @@ window.open(inf+".htm", 'popup', 'width=600,height=600,toolbar = no, status = no
 </tr>
 <tr>
   <td><?php echo get_lang('surveytitle'); ?></td>
-  <td><input type="text" name="survey_title" size="40"  maxlength="79" value="<?php echo $surveytitle ?>"></td>
+  <td><input type="text" name="survey_title" size="40"  maxlength="79" value="<?php echo $surveytitle; ?>"></td>
 </tr>
 <tr>
   <td><?php echo get_lang('surveysubtitle'); ?></td>
-  <td><input type="text" name="survey_subtitle" size="40"  maxlength="79" value="<?php echo $surveysubtitle ?>"></td>
+  <td><input type="text" name="survey_subtitle" size="40"  maxlength="79" value="<?php echo $surveysubtitle; ?>"></td>
 </tr>
 <tr>
 <?php

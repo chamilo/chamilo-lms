@@ -77,9 +77,9 @@ function displayTemplate(url) {
 </td>
 </tr>
 </table>		
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
 <input type="hidden" name="action" value="add_survey">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <?php 	
    		$surveyid=$_REQUEST['surveyid'];
 		$nameTools=get_lang('CreateFromExistingSurveys');
@@ -147,8 +147,8 @@ function displayTemplate(url) {
 	if($flag=='1')
 	{echo get_lang('SurveyNotShared');}
 ?>
-<form action="select_question_group.php?cidReq=<?=$cidReq?>&db_name=<?=$db_name?>&surveyid=<?=$surveyid?>&curr_dbname=<?=$curr_dbname?>" method="post">
-<input type="submit" name="back1" value="<?=get_lang('back')?>">
+<form action="select_question_group.php?cidReq=<?php echo $cidReq; ?>&db_name=<?php echo $db_name; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>" method="post">
+<input type="submit" name="back1" value="<?php echo get_lang('Back'); ?>">
 </form>
 <?
 Display :: display_footer();

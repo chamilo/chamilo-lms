@@ -207,12 +207,12 @@ $table_group =  Database :: get_course_table('survey_group');
 api_display_tool_title($tool_name);
 ?>
 <script src=tbl_change.js type="text/javascript" language="javascript"></script>
-<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
+<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
 <input type="hidden" name="action" value="new_group">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<input type="hidden" name="curr_dbname" value="<?=$curr_dbname?>">
-<!--<input type="hidden" name="cidReq" value="<?=$_REQUEST['cidReq']?>">-->
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
+<!--<input type="hidden" name="cidReq" value="<?php echo $_REQUEST['cidReq']; ?>">-->
 <table>
 <tr>
   <td><?php echo get_lang('groupname'); ?></td>

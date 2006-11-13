@@ -178,14 +178,14 @@ function displayTemplate(url) {
 <?php	
 	echo get_lang('SelectQuestion');
 ?>
-		<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
+		<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
 		<input type="hidden" name="action" value="add_survey"/>
-		<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-		<input type="hidden" name="sid" value="<?=$sid?>">
-		<input type="hidden" name="groupid" value="<?=$groupid?>">
-		<input type="hidden" name="gid1" value="<?=$str?>">	
-		<input type="hidden" name="db_name" value="<?=$db_name?>">
-		<input type="hidden" name="curr_dbname" value="<?=$curr_dbname;?>">
+		<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+		<input type="hidden" name="sid" value="<?php echo $sid; ?>">
+		<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+		<input type="hidden" name="gid1" value="<?php echo $str; ?>">	
+		<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
+		<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname;?>">
 <?php 
 		$questions = array ();	
 		$cidReq=$_GET['cidReq'];

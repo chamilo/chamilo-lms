@@ -131,17 +131,17 @@ if(isset($group_id))
  $res = api_sql_query($sql, __FILE__, __LINE__);
  $obj= mysql_fetch_object($res);
  ?>
- <div align="center"><strong><font color="#FF0000"><?php echo "Group";?>&nbsp;&nbsp;<font color="#0000CC"><u><?=$obj->groupname;?></u>&nbsp;&nbsp;</font><?=get_lang('GroupCreated');?></font></strong></div>
+ <div align="center"><strong><font color="#FF0000"><?php echo "Group";?>&nbsp;&nbsp;<font color="#0000CC"><u><?php echo $obj->groupname;?></u>&nbsp;&nbsp;</font><?php echo get_lang('GroupCreated');?></font></strong></div>
 <?
 }
 
 ?>
-<form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="newgroupid" value="<?=$group_id?>">
-<input type="hidden" name="curr_dbname" value="<?=$curr_dbname?>">
-<!--<input type="hidden" name="cidReq" value="<?=$cidReq?>">-->
+<form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="newgroupid" value="<?php echo $group_id; ?>">
+<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
+<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">-->
 <table>
 <tr>
 <td>

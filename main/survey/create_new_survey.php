@@ -147,8 +147,8 @@ $avail_day_till = $arr_avail_till['2'];
 $template = $obj->template;
 
 ?>
-<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
+<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="action" value="update_survey">
 <table>
 <tr>
@@ -406,10 +406,10 @@ window.open(inf+".htm", 'popup', 'width=600,height=600,toolbar = no, status = no
 </script>
 
 <script src=tbl_change.js type="text/javascript" language="javascript"></script>
-<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
+<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
 <input type="hidden" name="action" value="add_survey">
-<input type="hidden" name="page" value="<?=$page?>">
-<!--<input type="hidden" name="cidReq" value="<?=$cidReq?>">-->
+<input type="hidden" name="page" value="<?php echo $page; ?>">
+<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">-->
 <table>
 <tr>
  <td><?php echo get_lang('surveycode'); ?></td>

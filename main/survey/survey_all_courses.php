@@ -69,9 +69,9 @@ function displayTemplate(url) {
 </td>
 </tr>
 </table>		
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
 <input type="hidden" name="action" value="add_survey">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <?php 	
 		$rsDbs = mysql_list_dbs();
 		$db_list = array();
@@ -151,8 +151,8 @@ function displayTemplate(url) {
 	if($flag=='1')
 	{echo get_lang('SurveyNotShared');}
 	?>
-	<form action="survey.php?cidReq=<?=$cidReq?>&db_name=<?=$db_name?>" method="post">
-    <input type="submit" name="back1" value="<?=get_lang('back')?>">
+	<form action="survey.php?cidReq=<?php echo $cidReq; ?>&db_name=<?php echo $db_name; ?>" method="post">
+    <input type="submit" name="back1" value="<?php echo get_lang('Back'); ?>">
     </form>
 <?
 Display :: display_footer();

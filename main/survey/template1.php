@@ -177,14 +177,14 @@ Display::display_error_message($error_message);
 <table width="100%" height="132"  border="0" cellpadding="0" cellspacing="0" bgcolor="#F6F5F5">
 		  <form method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>">
 		   <!--<form method="post" action="surveytemp_white.php">-->
-		    <input type="hidden" name="uid" value="<?=$uid;?>">
-		    <input type="hidden" name="surveyid" value="<?=$surveyid;?>">
-		    <input type="hidden" name="db_name" value="<?=$db_name;?>">
-		    <input type="hidden" name="temp" value="<?=$temp;?>">
-		    <input type="hidden" name="email" value="<?=$email;?>">
-		    <input type="hidden" name="mail" value="<?=$mail;?>">
-		    <input type="hidden" name="lang" value="<?=$lang;?>">
-			<input type="hidden" name="uid1" value="<?=$uid1;?>">
+		    <input type="hidden" name="uid" value="<?php echo $uid;?>">
+		    <input type="hidden" name="surveyid" value="<?php echo $surveyid;?>">
+		    <input type="hidden" name="db_name" value="<?php echo $db_name;?>">
+		    <input type="hidden" name="temp" value="<?php echo $temp;?>">
+		    <input type="hidden" name="email" value="<?php echo $email;?>">
+		    <input type="hidden" name="mail" value="<?php echo $mail;?>">
+		    <input type="hidden" name="lang" value="<?php echo $lang;?>">
+			<input type="hidden" name="uid1" value="<?php echo $uid1;?>">
 		    <tr>
               <td width="32%" class="text"><?if($lang=='french')echo 'Prénom :'; else if($lang=='dutch')echo 'Voornaam :'; else echo 'First Name :' ;?></td>
               <td width="68%"><input type="text" name="firstname" maxlength="40" value="<?php echo mysql_result($res,0,"firstname");?>"></td>
@@ -229,8 +229,8 @@ Display::display_error_message($error_message);
 			  {
 			  $name=$names[$i];
 			  ?>
-			  <option value='<?=$name;?>'>
-			  <?=$names[$i];?>
+			  <option value='<?php echo $name;?>'>
+			  <?php echo $names[$i];?>
 			  </option>
 			  <?
 			  }
@@ -244,8 +244,8 @@ Display::display_error_message($error_message);
 			  {
 			  $name=$names[$i];
 			  ?>
-			  <option value='<?=$name;?>'>
-			  <?=$names[$i];?>
+			  <option value='<?php echo $name;?>'>
+			  <?php echo $names[$i];?>
 			  </option>
 			  <?
 			  }			  
@@ -256,8 +256,8 @@ Display::display_error_message($error_message);
 			  {
 			  $name=$names[$i];
 			  ?>
-			  <option value='<?=$name;?>'>
-			  <?=$names[$i];?>
+			  <option value='<?php echo $name;?>'>
+			  <?php echo $names[$i];?>
 			  </option><?
 			  }			  
 			  }

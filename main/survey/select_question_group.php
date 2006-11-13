@@ -269,13 +269,13 @@ if(isset($messege) && $messege )
 <?
 }
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
 <input type="hidden" name="action" value="selectquestion_group">
-<input type="hidden" name="newsurveyid" value="<?=$surveyid;?>">
-<input type="hidden" name="curr_dbname" value="<?=$curr_dbname;?>">
-<input type="hidden" name="cidReq" value="<?=$_REQUEST['cidReq']?>">
-<!--<input type="hidden" name="qid" value="<?=$_REQUEST['qid']?>">
-<input type="hidden" name="direction" value="<?=$_REQUEST['direction']?>">-->
+<input type="hidden" name="newsurveyid" value="<?php echo $surveyid;?>">
+<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
+<input type="hidden" name="cidReq" value="<?php echo $_REQUEST['cidReq']; ?>">
+<!--<input type="hidden" name="qid" value="<?php echo $_REQUEST['qid']; ?>">
+<input type="hidden" name="direction" value="<?php echo $_REQUEST['direction']; ?>">-->
 <table>
 <tr>
 <td valign="top"></td>
@@ -367,11 +367,11 @@ $result=api_sql_query($query);*/
 		}
 	}
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="curr_dbname" value="<?=$curr_dbname;?>">
-<input type="hidden" name="page" value="<?=$page;?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname;?>">
+<input type="hidden" name="page" value="<?php echo $page; ?>">
 <?
 if(!empty($courses))
 {

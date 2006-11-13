@@ -130,11 +130,11 @@ function checkLength(form){
 }
 </SCRIPT>
 <DIV id=content>
-<FORM name="frmitemchkboxmulti" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>"  method="POST">
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="questtype" value="<?=$add_question12?>">
-<input type="hidden" name="curr_dbname" value="<?=$curr_dbname?>">
+<FORM name="frmitemchkboxmulti" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>"  method="POST">
+<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="questtype" value="<?php echo $add_question12; ?>">
+<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
 <input type="hidden" name="action" value="addquestion" >
   <BR>
 <TABLE class=outerBorder_innertable cellSpacing=0 cellPadding=0 width="100%" 
@@ -197,10 +197,10 @@ border=0>
 
 <BR>
 <DIV align=center> 
-	<input type="submit"  name="back" value="<?=get_lang("back");?>">
-	<input type="submit"  name="saveandexit" value="<?=get_lang("saveandexit");?>">
-	<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('this.form','<?=$temp?>','<?=$Multi?>')">
-	<input type="submit"  name="next" value="<?=get_lang("next");?>">  
+	<input type="submit"  name="back" value="<?php echo get_lang('Back');?>">
+	<input type="submit"  name="saveandexit" value="<?php echo get_lang("saveandexit"); ?>">
+	<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('this.form','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
+	<input type="submit"  name="next" value="<?php echo get_lang('Next'); ?>">  
 </DIV></FORM></DIV>
 <DIV id=bottomnav align=center></DIV>
 </BODY></HTML>

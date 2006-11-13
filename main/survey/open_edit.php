@@ -88,13 +88,13 @@ if( isset($error_message) )
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <BODY id=surveys>
 <DIV id=content>
-<FORM name="frmitemchkboxmulti" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>" method=post>
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="questtype" value="<?=$add_question12?>">
+<FORM name="frmitemchkboxmulti" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>" method=post>
+<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="questtype" value="<?php echo $add_question12; ?>">
 <input type="hidden" name="action" value="addquestion" >
-<input type="hidden" name="qid" value="<?=$qid?>">
-<input type="hidden" name="curr_dbname" value="<?=$curr_dbname?>">
+<input type="hidden" name="qid" value="<?php echo $qid; ?>">
+<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
 <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="outerBorder_innertable">
 				<tr class="white_bg"> 
 					<td height="30" class="form_text1"> 
@@ -154,9 +154,9 @@ border=0>
 
 <BR>
 <DIV align=center> 
-	<input type="submit"  name="back" value="<?=get_lang("back");?>">
-	<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('this.form','<?=$temp?>','<?=$Multi?>')">
-	<input type="submit"  name="update" value="<?=get_lang("update");?>">  
+	<input type="submit"  name="back" value="<?php echo get_lang('Back');?>">
+	<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('this.form','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
+	<input type="submit"  name="update" value="<?php echo get_lang('Update'); ?>">  
 	
 </DIV></FORM></DIV>
 <DIV id=bottomnav align=center></DIV>

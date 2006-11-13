@@ -104,14 +104,14 @@ if( isset($error_message) )
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <div id=content>
-<form method="POST" name='numbered' action="<?php echo $_SERVER['PHP_SELF'];?>?qid=<?=$qid?>&cidReq=<?=$cidReq?>&groupid=<?=$groupid?>&surveyid=<?=$surveyid?>&curr_dbname=<?=$curr_dbname?>" name="frmitemchkboxmulti">
+<form method="POST" name='numbered' action="<?php echo $_SERVER['PHP_SELF'];?>?qid=<?php echo $qid; ?>&cidReq=<?php echo $cidReq; ?>&groupid=<?php echo $groupid; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>" name="frmitemchkboxmulti">
 <input type="hidden" name="action" value="addquestion">
-<input type="hidden" name="qid" value="<?=$qid?>">
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="curr_dbname" value="<?=$curr_dbname?>">
-<!--<input type="hidden" name="cidReq" value="<?=$cidReq?>">-->
-<input type="hidden" name="questtype" value="<?=$add_question12?>">
+<input type="hidden" name="qid" value="<?php echo $qid; ?>">
+<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
+<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">-->
+<input type="hidden" name="questtype" value="<?php echo $add_question12; ?>">
 
 	  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
 				<tr> 
@@ -258,7 +258,7 @@ $start=1;$end=$check;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 					<td width="16" height="30" align="left" class="form_text"> 
 					  <?php echo $sn;?>
 					</td>					
-					<td class="form_bg"><textarea name="mutlichkboxtext[]" cols="50" rows="3" class="text_field" style="width:100%;"><?=$post_text?></textarea>
+					<td class="form_bg"><textarea name="mutlichkboxtext[]" cols="50" rows="3" class="text_field" style="width:100%;"><?php echo $post_text; ?></textarea>
 					</td>
 <?					if($i>$start)
 					{
@@ -289,7 +289,7 @@ $start=1;$end=$check;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 <?					}
 ?>
 					<td width="30" align="center" class="form_text">					
-					<input type="image" src="../img/delete.gif" width="24" height="24" border="0" style="cursor:hand" name="<?php echo "id".$i;?>" value="<?=$end;?>" onclick="this.form.submit();">	
+					<input type="image" src="../img/delete.gif" width="24" height="24" border="0" style="cursor:hand" name="<?php echo "id".$i;?>" value="<?php echo $end;?>" onclick="this.form.submit();">	
 			</tr>
 <?		}	
 	}
@@ -339,10 +339,10 @@ $start=1;$end=$check;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 			}
 			?>
 
-			<input type="HIDDEN" name="end1" value="<?=$end?>">
-			<input type="submit"  name="back" value="<?=get_lang("back");?>">
-			<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('numbered','<?=$temp?>','<?=$Multi?>')">
-			<input type="submit"  name="update" value="<?=get_lang("update");?>"> 
+			<input type="HIDDEN" name="end1" value="<?php echo $end; ?>">
+			<input type="submit"  name="back" value="<?php echo get_lang('Back'); ?>">
+			<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('numbered','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
+			<input type="submit"  name="update" value="<?php echo get_lang('Update'); ?>"> 
 			</div>
 <!--this partcular field helps in identify the item to be add at the itemadd.php-->
 			

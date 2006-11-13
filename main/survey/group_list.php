@@ -78,13 +78,13 @@ $table_group =  Database :: get_course_table('survey_group');
 	{
 		$surveys = array ();
 		?>		
-		<form method="POST" action="question_list_new.php?cidReq=<?=$cidReq?>">
+		<form method="POST" action="question_list_new.php?cidReq=<?php echo $cidReq; ?>">
 		<input type="hidden" name="action" value="add_survey">
-		<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-		<input type="hidden" name="sid" value="<?=$sid?>">
-		<input type="hidden" name="groupid" value="<?=$groupid?>">
-		<input type="hidden" name="db_name" value="<?=$db_name?>">
-		<input type="hidden" name="curr_dbname" value="<?=$curr_dbname;?>">
+		<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+		<input type="hidden" name="sid" value="<?php echo $sid; ?>">
+		<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
+		<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
+		<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname;?>">
 	<?	
 		$gnames = array();
 		while ($obj = mysql_fetch_object($res))

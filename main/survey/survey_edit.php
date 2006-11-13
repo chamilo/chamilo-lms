@@ -158,8 +158,8 @@ $template = $obj->template;
 $lang=$obj->lang;
 
 ?>
-<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
+<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="action" value="update_survey">
 <table>
 <tr>

@@ -98,8 +98,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	api_display_tool_title($tool_name);
 ?>
 	<form method="get" action="survey_list.php">
-	<input type="hidden" name="cidReq" value="<?=$cidReq?>">
-	<input type="hidden" name="db_name" value="<?=$db_name?>">
+	<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">
+	<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
 	<table>
 	<tr>
 	<td>
@@ -161,12 +161,12 @@ else
 		CourseManager :: delete_course($_GET['delete_course']);
 	}
 ?>
-	<form method="get" action="survey_list.php?cidReq=<?=$cidReq?>">
-	<input type="hidden" name="cidReq" value="<?=$cidReq?>">
-	<input type="hidden" name="db_name" value="<?=$db_name?>">
+	<form method="get" action="survey_list.php?cidReq=<?php echo $cidReq; ?>">
+	<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">
+	<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
 	<input type="text" name="keyword" value="<?php echo $_GET['keyword']; ?>"/>
 	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
-	<a href="survey_list.php?cidReq=<?=$cidReq?>&search=advanced&db_name=<?=$db_name?>"><?php echo get_lang('AdvancedSearch'); ?></a>
+	<a href="survey_list.php?cidReq=<?php echo $cidReq; ?>&search=advanced&db_name=<?php echo $db_name; ?>"><?php echo get_lang('AdvancedSearch'); ?></a>
 	</form>
 <?php
 	$table_survey = Database :: get_course_table('survey');
@@ -289,10 +289,10 @@ else
 if(!isset ($_GET['search']))
 {
 ?>
-<form action="survey.php?cidReq=<?=$_SESSION[_course][id]?>" method="post">
-<input type="submit" name="newsurvey" value="<?=get_lang('CreateSurvey')?>">
-<input type="hidden" name="cidReq" value="<?=$cidReq?>">
-<input type="hidden" name="db_name" value="<?=$db_name?>">
+<form action="survey.php?cidReq=<?php echo $_SESSION[_course][id]; ?>" method="post">
+<input type="submit" name="newsurvey" value="<?php echo get_lang('CreateSurvey'); ?>">
+<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">
+<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
 </form>
 <?php 
 }

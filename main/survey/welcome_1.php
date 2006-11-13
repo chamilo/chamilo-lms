@@ -131,14 +131,14 @@ Display::display_error_message($error_message);
 <table width="100%" height="132"  border="0" cellpadding="0" cellspacing="0" bgcolor="#F6F5F5">
 		  <form method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>">
 		   <!--<form method="post" action="surveytemp_white.php">-->
-		    <input type="hidden" name="uid" value="<?=$uid;?>">
-		    <input type="hidden" name="surveyid" value="<?=$surveyid;?>">
-		    <input type="hidden" name="db_name" value="<?=$db_name;?>">
-		    <input type="hidden" name="temp" value="<?=$temp;?>">
-		    <input type="hidden" name="email" value="<?=$email;?>">
-		    <input type="hidden" name="mail" value="<?=$mail;?>">
-			<input type="hidden" name="uid1" value="<?=$uid1;?>">
-			<input type="hidden" name="lang" value="<?=$lang;?>">
+		    <input type="hidden" name="uid" value="<?php echo $uid;?>">
+		    <input type="hidden" name="surveyid" value="<?php echo $surveyid;?>">
+		    <input type="hidden" name="db_name" value="<?php echo $db_name;?>">
+		    <input type="hidden" name="temp" value="<?php echo $temp;?>">
+		    <input type="hidden" name="email" value="<?php echo $email;?>">
+		    <input type="hidden" name="mail" value="<?php echo $mail;?>">
+			<input type="hidden" name="uid1" value="<?php echo $uid1;?>">
+			<input type="hidden" name="lang" value="<?php echo $lang;?>">
 		    <tr>
             <td align='left'>
 			<?
@@ -150,11 +150,11 @@ Display::display_error_message($error_message);
             <tr>
 			<td align="center">
 			<?php if($num > "1"){?>
-			<input type="button" name="Back" value="<?php if($lang=='french')echo 'Précédent'; else if($lang=='dutch')echo 'Terug'; else echo  'Back';?>" onClick="location.href('<?=$phpself?>?temp=<?=$temp?>&db_name=<?=$db_name?>&mail=<?=$mail?>&surveyid=<?=$surveyid?>&uid1=<?=$uid1?>&num=<?($num-1)?>');">
+			<input type="button" name="Back" value="<?php if($lang=='french')echo 'Précédent'; else if($lang=='dutch')echo 'Terug'; else echo  'Back';?>" onClick="location.href('<?php echo $_SERVER['PHP_SELF']; ?>?temp=<?php echo $temp; ?>&db_name=<?php echo $db_name; ?>&mail=<?php echo $mail; ?>&surveyid=<?php echo $surveyid; ?>&uid1=<?php echo $uid1; ?>&num=<?($num-1)?>');">
 			<?
 			} else{
 			?>
-			<input type="button" name="Back" value="<?php if($lang=='french')echo 'Précédent'; else if($lang=='dutch') echo 'Terug'; else echo 'Back';?>" onClick="location.href('template1.php?temp=<?=$temp?>&db_name=<?=$db_name?>&uid1=<?=$uid1?>&mail=<?=$mail?>&surveyid=<?=$surveyid?>');">
+			<input type="button" name="Back" value="<?php if($lang=='french')echo 'Précédent'; else if($lang=='dutch') echo 'Terug'; else echo 'Back';?>" onClick="location.href('template1.php?temp=<?php echo $temp; ?>&db_name=<?php echo $db_name; ?>&uid1=<?php echo $uid1; ?>&mail=<?php echo $mail; ?>&surveyid=<?php echo $surveyid; ?>');">
 			<?
 			}
 			?>

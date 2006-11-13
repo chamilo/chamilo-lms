@@ -187,15 +187,15 @@ Display::display_error_message($error_message);
 			<input type="hidden" name="uid1" value="<?=$uid1;?>">
 		    <tr>
               <td width="32%" class="text"><?if($lang=='french')echo 'Prénom :'; else if($lang=='dutch')echo 'Voornaam :'; else echo 'First Name :' ;?></td>
-              <td width="68%"><input type="text" name="firstname" maxlength="40" value="<? echo mysql_result($res,0,"firstname");?>"></td>
+              <td width="68%"><input type="text" name="firstname" maxlength="40" value="<?php echo mysql_result($res,0,"firstname");?>"></td>
             </tr>
             <tr>
               <td class="text"><?if($lang=='french')echo 'Nom :'; else if($lang=='dutch')echo 'Naam :'; else echo ' Last Name :' ;?></td>
-              <td><input name="lastname" type="text" id="lastname"  maxlength="40" value="<? echo mysql_result($res,0,"lastname");?>"></td>
+              <td><input name="lastname" type="text" id="lastname"  maxlength="40" value="<?php echo mysql_result($res,0,"lastname");?>"></td>
             </tr>
             <tr>
                <td class="text"><?if($lang=='french')echo 'Email :'; else if($lang=='dutch')echo 'Email :'; else echo 'EMail :' ;?></td>					
-			   <td  class="text"><? echo $mail;?></td>
+			   <td  class="text"><?php echo $mail;?></td>
             </tr>
             <tr>
               <td class="text"><?if($lang=='french')echo 'Organisation :'; else if($lang=='dutch')echo 'Organisatie :'; else echo 'Organization :' ;?></td>

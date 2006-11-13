@@ -111,10 +111,10 @@ select_question_type($add_question12,$groupid,$surveyid,$cidReq,$curr_dbname);
 <table>
 <tr>
 <td>
-<? api_display_tool_title($Add);?>
+<?php api_display_tool_title($Add);?>
 </td>
 <td>
-<? api_display_tool_title($Multi);?>
+<?php api_display_tool_title($Multi);?>
 
 </td>
 </tr>

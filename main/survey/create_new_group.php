@@ -133,7 +133,7 @@ if ($_POST['action'] == 'new_group')
 Display::display_header($tool_name1);
 ?>
 <tr>
-<td><? api_display_tool_title($header1) ?></td>
+<td><?php api_display_tool_title($header1); ?></td>
 </tr>
 <?
 if( isset($error_message) )

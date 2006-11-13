@@ -78,17 +78,17 @@ if( isset($error_message) )
 <table>
 <tr>
 <td>
-<? echo get_lang('Selectype');?>
+<?php  echo get_lang('Selectype');?>
 </td>
 <td>
 
 <select name="add_question">
-	<option value="0"><? echo get_lang('Select');?></option>
-	<option value="<? echo get_lang('yesno');?>" <? if(isset($_POST['add_question'])){if($_POST['add_question']=="1")echo "selected";}?>><? echo get_lang('yesno');?></option>
-	<option value="<? echo get_lang('MultipleChoiceSingle');?>" <? if(isset($_POST['add_question'])){if($_POST['add_question']=="2")echo "selected";}?>><? echo get_lang('MultipleChoiceSingle');?></option>
-	<option value="<? echo get_lang('MultipleChoiceMulti');?>" <? if(isset($_POST['add_question'])){if($_POST['add_question']=="3")echo "selected";}?>><? echo get_lang('MultipleChoiceMulti');?></option>
-	<option value="<? echo get_lang('Open');?>" <? if(isset($_POST['add_question'])){if($_POST['add_question']=="4")echo "selected";}?>><? echo get_lang('Open');?></option>
-	<option value="<? echo get_lang('numbered');?>" <? if(isset($_POST['add_question'])){if($_POST['add_question']=="5")echo "selected";}?>><? echo get_lang('numbered');?></option>
+	<option value="0"><?php  echo get_lang('Select');?></option>
+	<option value="<?php  echo get_lang('yesno');?>" <?php  if(isset($_POST['add_question'])){if($_POST['add_question']=="1")echo "selected";}?>><?php echo get_lang('yesno');?></option>
+	<option value="<?php  echo get_lang('MultipleChoiceSingle');?>" <?php  if(isset($_POST['add_question'])){if($_POST['add_question']=="2")echo "selected";}?>><?php echo get_lang('MultipleChoiceSingle');?></option>
+	<option value="<?php  echo get_lang('MultipleChoiceMulti');?>" <?php  if(isset($_POST['add_question'])){if($_POST['add_question']=="3")echo "selected";}?>><?php echo get_lang('MultipleChoiceMulti');?></option>
+	<option value="<?php  echo get_lang('Open');?>" <?php  if(isset($_POST['add_question'])){if($_POST['add_question']=="4")echo "selected";}?>><?php echo get_lang('Open');?></option>
+	<option value="<?php echo get_lang('numbered');?>" <?php if(isset($_POST['add_question'])){if($_POST['add_question']=="5")echo "selected";}?>><?php echo get_lang('numbered');?></option>
 </select>
 </td>
 </tr>
@@ -96,7 +96,7 @@ if( isset($error_message) )
 <tr>
 <td></td>
 <td>
-<input type="submit" name= 'next' value="<? echo get_lang('next');?>">
+<input type="submit" name= 'next' value="<?php echo get_lang('next');?>">
 </td>
 </tr>
 </table>

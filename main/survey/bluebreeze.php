@@ -74,7 +74,7 @@ body {
 		case "Yes/No":
 		{?>
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
-          <td><strong>Question: </strong><br><? echo $ques;?><br><br><strong>Answers: </strong><br>
+          <td><strong>Question: </strong><br><?php echo $ques;?><br><br><strong>Answers: </strong><br>
 		 <textarea cols="50" rows="3" disabled='true'><?echo $answers[0];?></textarea>
 		 <input name="radiobutton" type="radio" value="radiobutton"><br><textarea cols="50" rows="3" disabled='true'><?echo $answers[1];?></textarea>
 		 <input name="radiobutton" type="radio" value="radiobutton"></td>
@@ -85,13 +85,13 @@ body {
 		case "Multiple Choice (multiple answer)":
 		{?>
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
-        <td><strong>Question: </strong><br><? echo $ques;?><br><br><strong>Answers: </strong><br>
+        <td><strong>Question: </strong><br><?php echo $ques;?><br><br><strong>Answers: </strong><br>
 		<?
 		$i=0;
 		for($p=1;$p<$count;$i++,$p++)
 		{
 		?>
-		<textarea cols="50" rows="3" disabled='true'><? echo $answers[$i]; ?></textarea>
+		<textarea cols="50" rows="3" disabled='true'><?php echo $answers[$i]; ?></textarea>
 		<input type="checkbox" name="checkbox" value="checkbox"><br>
 		<?
 		}
@@ -104,13 +104,13 @@ body {
 		case "Multiple Choice (single answer)":
 		{?>
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
-        <td><strong>Question: </strong><br><? echo $ques;?><br><br><strong>Answers: </strong><br>
+        <td><strong>Question: </strong><br><?php echo $ques;?><br><br><strong>Answers: </strong><br>
 		<?
 		$i=0;
 		for($p=1;$p<$count;$i++,$p++)
 		{
 		?>
-		<textarea cols="50" rows="3" disabled='true'><? echo $answers[$i]; ?></textarea>
+		<textarea cols="50" rows="3" disabled='true'><?php echo $answers[$i]; ?></textarea>
 		<input name="radiobutton" type="radio" value="radiobutton"><br>
 		<?
 		}
@@ -123,7 +123,7 @@ body {
 		case "Open":
 		{?>
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
-        <td><strong>Question: </strong><br><? echo $ques;?><br><br><strong>Answer: </strong><br>
+        <td><strong>Question: </strong><br><?php echo $ques;?><br><br><strong>Answer: </strong><br>
 		<TEXTAREA  style="WIDTH: 100%" name="defaultext" rows=3 cols=60>
         </TEXTAREA> 	
 		</td>
@@ -134,13 +134,13 @@ body {
 		case "Numbered":
 		{?>
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
-        <td><strong>Question: </strong><br><? echo $ques;?><br><br><strong>Answers: </strong><br>
+        <td><strong>Question: </strong><br><?php echo $ques;?><br><br><strong>Answers: </strong><br>
 		<?
 		$i=0;
 		for($p=1;$p<$count;$i++,$p++)
 		{
 		?>
-		<textarea cols="50" rows="3" disabled='true'><? echo $answers[$i]; ?></textarea>
+		<textarea cols="50" rows="3" disabled='true'><?php echo $answers[$i]; ?></textarea>
 		<select>
 		<option value="not applicable">Not Applicable</option>
 		<option value="$i">1</option>

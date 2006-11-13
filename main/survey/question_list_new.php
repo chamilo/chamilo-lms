@@ -169,7 +169,7 @@ function displayTemplate(url) {
 
 <table>
 <tr>
-<td><strong><? echo get_lang('SurveyName'); ?></strong></td>
+<td><strong><?php echo get_lang('SurveyName'); ?></strong></td>
 <td><?echo $sname;?></td>
 </tr>
 <tr><td></td></tr>
@@ -186,7 +186,7 @@ function displayTemplate(url) {
 		<input type="hidden" name="gid1" value="<?=$str?>">	
 		<input type="hidden" name="db_name" value="<?=$db_name?>">
 		<input type="hidden" name="curr_dbname" value="<?=$curr_dbname;?>">
-<? 
+<?php 
 		$questions = array ();	
 		$cidReq=$_GET['cidReq'];
 		$endloop=count($gid1);
@@ -240,7 +240,7 @@ function displayTemplate(url) {
 		<table>
 		<tr>		
 		<td><input type="submit" name="back" value="<?echo get_lang("back");?>"></td>
-		<td><input type="submit" name="importquestion" value="<? echo get_lang('ImportQuestion');?>"></td>
+		<td><input type="submit" name="importquestion" value="<?php echo get_lang('ImportQuestion');?>"></td>
 		</tr>
 		</table>
 		</form>	

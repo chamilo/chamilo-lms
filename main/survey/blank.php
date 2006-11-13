@@ -60,7 +60,7 @@ body {
 		case "Yes/No":
 		{?>
           <td width="100%" bgcolor="F6F5F5"><p><font face="Verdana"><strong><font size="2">Question:</font> </strong><br>
-              <? echo html_entity_decode($ques);?><br>
+              <?php echo html_entity_decode($ques);?><br>
               <font size="2"><strong>Answers:</strong></font><br>
                      <textarea cols="50" rows="3" disabled='true'><?echo $answers[0];?></textarea>
                    &nbsp;
@@ -78,7 +78,7 @@ body {
 		case "Multiple Choice (multiple answer)":
 		{?>
           <td width="100%" bgcolor="F6F5F5"><font face="Verdana"><strong><font size="2">Question:</font> </strong><br>
-                <? echo $ques;?><br>
+                <?php echo $ques;?><br>
                 <br>
                 <strong><font size="2">Answers: </font></strong><br>
            
@@ -87,7 +87,7 @@ body {
 		for($p=1;$p<$count;$i++,$p++)
 		{
 		?>
-              <textarea cols="50" rows="3" disabled='true'><? echo $answers[$i]; ?></textarea>&nbsp;   
+              <textarea cols="50" rows="3" disabled='true'><?php echo $answers[$i]; ?></textarea>&nbsp;   
               <input type="checkbox" name="checkbox" value="checkbox"></font>
               <br>
               <?
@@ -101,7 +101,7 @@ body {
 		case "Multiple Choice (single answer)":
 		{?>
           <td width="100%" bgcolor="F6F5F5"><font face="Verdana"><strong><font size="2">Question:</font> </strong><br>
-                <? echo $ques;?><br>
+                <?php echo $ques;?><br>
                 <br>
                 <strong><font size="2">Answers: </font></strong><br>
           
@@ -110,7 +110,7 @@ body {
 		for($p=1;$p<$count;$i++,$p++)
 		{
 		?>
-              <textarea cols="50" rows="3" disabled='true'><? echo $answers[$i]; ?></textarea>
+              <textarea cols="50" rows="3" disabled='true'><?php echo $answers[$i]; ?></textarea>
               <input name="radiobutton" type="radio" value="radiobutton">  </font>
               <br>
               <?
@@ -124,7 +124,7 @@ body {
 		case "Open":
 		{?>
           <td width="87" bgcolor="F6F5F5"><font face="Verdana"><strong><font size="2">Question:</font> </strong><br>
-                <? echo $ques;?><br>
+                <?php echo $ques;?><br>
                 <br>
                 <strong><font size="2">Answers: </font></strong><br></font>
             
@@ -137,7 +137,7 @@ body {
 		case "Numbered":
 		{?>
            <td width="144" bgcolor="F6F5F5"><font face="Verdana"><strong><font size="2">Question:</font> </strong><br>
-                <? echo $ques;?><br>
+                <?php echo $ques;?><br>
                 <br>
                 <strong><font size="2">Answers: </font></strong><br>
             
@@ -146,7 +146,7 @@ body {
 		for($p=1;$p<$count;$i++,$p++)
 		{
 		?>
-              <textarea cols="50" rows="3" disabled='true'><? echo $answers[$i]; ?></textarea>
+              <textarea cols="50" rows="3" disabled='true'><?php echo $answers[$i]; ?></textarea>
               <select>
                 <option value="not applicable">Not Applicable</option>
 				<option value="$i">1</option>

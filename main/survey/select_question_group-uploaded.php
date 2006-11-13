@@ -357,11 +357,11 @@ if(!empty($courses))
 				SurveyManager :: display_sortable_table($groupid,$surveyid,$curr_dbname,$table_header, $courses, array (), array (), $parameters);
 
 ?>	
-	<!--<input type="submit" name="delete" value="<? echo get_lang("Delete");?>">-->
+	<!--<input type="submit" name="delete" value="<?php  echo get_lang("Delete");?>">-->
 	<!--<input type=button value="Back" onClick="history.go(-1)">-->
-	<input type="submit" name="addanother" value="<?echo get_lang("AddAnotherQuestion");?>">
-	<input type="submit" name="addanotherg" value="<?echo get_lang("AddNewGroup");?>">
-	<input type="submit" name="finish" value="<? echo get_lang("finishsurvey");?>">
+	<input type="submit" name="addanother" value="<?php echo get_lang("AddAnotherQuestion");?>">
+	<input type="submit" name="addanotherg" value="<?php echo get_lang("AddNewGroup");?>">
+	<input type="submit" name="finish" value="<?php echo get_lang("finishsurvey");?>">
 <?
 }
 else

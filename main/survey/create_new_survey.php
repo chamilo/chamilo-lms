@@ -186,7 +186,7 @@ $template = $obj->template;
   <td><?php echo get_lang('availablefrom'); ?>&nbsp;</td>
   <td>	
         <select name="fday">
-		<? 
+		<?php 
 	       
            for($i=$todate;$i<=31;$i++){
 			if($i<=9)
@@ -217,7 +217,7 @@ december -->
 	?>
 </select>
 <select name="fyear">
-<? 
+<?php 
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $avail_year_from)
 		echo   "<option value=\"$i\" selected>$i</option>\n";
@@ -233,7 +233,7 @@ december -->
   <td><?php echo get_lang('availabletill'); ?>&nbsp;</td>
   <td>
   	  <select name="end_fday">
-		<? for($i=1;$i<=31;$i++){
+		<?php for($i=1;$i<=31;$i++){
 			if($i<=9)
 			$val = "0".$i;
 			else
@@ -262,7 +262,7 @@ december -->
 	?>
 </select>
 <select name="end_fyear">
-<? 
+<?php 
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $avail_year_till)
 		echo   "<option value=\"$i\" selected>$i</option>\n";
@@ -276,7 +276,7 @@ december -->
 <tr>
 <td valign="top"><?php echo get_lang('IsShareSurvey'); ?>&nbsp;</td>
 <td>
-<input type="radio" name="isshare" value="1" <? if($obj->is_shared=='1') echo "checked";?>>Yes&nbsp;<input type="radio" name="isshare" value="0" <? if($obj->is_shared=='0') echo "checked";?>>No
+<input type="radio" name="isshare" value="1" <?php if($obj->is_shared=='1') echo "checked";?>>Yes&nbsp;<input type="radio" name="isshare" value="0" <?php if($obj->is_shared=='0') echo "checked";?>>No
 </td>
 </tr>
 <tr><td valign="top"><?php echo get_lang('surveyintroduction'); ?>&nbsp;</td>
@@ -450,7 +450,7 @@ window.open(inf+".htm", 'popup', 'width=600,height=600,toolbar = no, status = no
   <td><?php echo get_lang('availablefrom'); ?>&nbsp;</td>
   <td>	
 <select name="fday">
-<? 
+<?php 
 	for($i=1;$i<=31;$i++){
 	if($i<=9) $val = "0".$i;
 	else $val = $i;
@@ -478,7 +478,7 @@ december -->
 ?>
 </select>
 <select name="fyear">
-<? 
+<?php 
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $curr_year)
 		echo   "<option value=\"$i\" selected>$i</option>\n";
@@ -494,7 +494,7 @@ december -->
   <td><?php echo get_lang('availabletill'); ?>&nbsp;</td>
   <td>
 <select name="end_fday">
-	<? for($i=1;$i<=31;$i++){
+	<?php for($i=1;$i<=31;$i++){
 		if($i<=9)
 		$val = "0".$i;
 		else
@@ -523,7 +523,7 @@ december -->
 ?>
 </select>
 <select name="end_fyear">
-<? 
+<?php 
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $curr_year+1)
 		echo   "<option value=\"$i\" selected>$i</option>\n";

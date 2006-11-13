@@ -59,7 +59,7 @@ body {
         </tr>
         <tr>
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
-        <td><strong>Question: </strong><br><? echo $obj->caption;;?><br><br><strong>Answer: </strong><br>
+        <td><strong>Question: </strong><br><?php echo $obj->caption;;?><br><br><strong>Answer: </strong><br>
 		<TEXTAREA  style="WIDTH: 100%" name="defaultext" rows=3 cols=60>
         </TEXTAREA> 	
 		</td>

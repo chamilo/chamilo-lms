@@ -149,12 +149,12 @@ Display::display_error_message($error_message);
 			<tr><td>&nbsp;</td></tr>
             <tr>
 			<td align="center">
-			<? if($num > "1"){?>
-			<input type="button" name="Back" value="<? if($lang=='french')echo 'Précédent'; else if($lang=='dutch')echo 'Terug'; else echo  'Back';?>" onClick="location.href('<?=$phpself?>?temp=<?=$temp?>&db_name=<?=$db_name?>&mail=<?=$mail?>&surveyid=<?=$surveyid?>&uid1=<?=$uid1?>&num=<?($num-1)?>');">
+			<?php if($num > "1"){?>
+			<input type="button" name="Back" value="<?php if($lang=='french')echo 'Précédent'; else if($lang=='dutch')echo 'Terug'; else echo  'Back';?>" onClick="location.href('<?=$phpself?>?temp=<?=$temp?>&db_name=<?=$db_name?>&mail=<?=$mail?>&surveyid=<?=$surveyid?>&uid1=<?=$uid1?>&num=<?($num-1)?>');">
 			<?
 			} else{
 			?>
-			<input type="button" name="Back" value="<? if($lang=='french')echo 'Précédent'; else if($lang=='dutch') echo 'Terug'; else echo 'Back';?>" onClick="location.href('template1.php?temp=<?=$temp?>&db_name=<?=$db_name?>&uid1=<?=$uid1?>&mail=<?=$mail?>&surveyid=<?=$surveyid?>');">
+			<input type="button" name="Back" value="<?php if($lang=='french')echo 'Précédent'; else if($lang=='dutch') echo 'Terug'; else echo 'Back';?>" onClick="location.href('template1.php?temp=<?=$temp?>&db_name=<?=$db_name?>&uid1=<?=$uid1?>&mail=<?=$mail?>&surveyid=<?=$surveyid?>');">
 			<?
 			}
 			?>

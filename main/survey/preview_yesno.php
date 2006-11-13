@@ -101,13 +101,13 @@ $ques_type = $_GET['qtype'];
   <td><?php api_display_tool_title($surveyname)?></td>
   </tr>
   <tr>
-  <td><? api_display_tool_title($header2) ?></td>
+  <td><?php  api_display_tool_title($header2); ?></td>
    <?php $groupname = surveymanager::get_groupname($groupid); ?>
-  <td><?php api_display_tool_title($groupname) ?></td>
+  <td><?php api_display_tool_title($groupname); ?></td>
   </tr>
   <tr>
-  <td><? api_display_tool_title($header3) ?></td>
-   <td><?php api_display_tool_title($qid)?></td>
+  <td><?php api_display_tool_title($header3); ?></td>
+   <td><?php api_display_tool_title($qid); ?></td>
   </tr>
 <tr>
   <td><?php echo get_lang('question'); ?></td>

@@ -288,7 +288,7 @@ if( isset($error_message) )
 ?>					
 			<tr class="form_bg" id="0">					
 					<td width="16" height="30" align="left" class="form_text"> 
-					  <? echo $sn;?>
+					  <?php echo $sn;?>
 					</td>					
 					<td class="form_bg"><textarea name="mutlichkboxtext[]" cols="50" rows="3" class="text_field" style="width:100%;"><?=$post_text?></textarea>
 					</td>					
@@ -328,7 +328,7 @@ if( isset($error_message) )
 
 					
 					
-					<input type="image" src="../img/delete.gif" width="24" height="24" border="0" style="cursor:hand" name="<? echo "id".$i;?>" value="<?=$end;?>" onclick="this.form.submit();">					
+					<input type="image" src="../img/delete.gif" width="24" height="24" border="0" style="cursor:hand" name="<?php echo "id".$i;?>" value="<?=$end;?>" onclick="this.form.submit();">					
 			</tr>
 <?		}	
 	}
@@ -367,7 +367,7 @@ if( isset($error_message) )
 
 <?			if(isset($_POST['add_question']))
 			{
-?>				<input type="hidden" name="add_question" value="<? echo $_POST['add_question'];?>" >
+?>				<input type="hidden" name="add_question" value="<?php echo $_POST['add_question'];?>" >
 <?			}
 			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);

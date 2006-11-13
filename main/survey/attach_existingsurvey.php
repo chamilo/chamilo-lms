@@ -210,7 +210,7 @@ window.open(inf+".htm", 'popup', 'width=600,height=600,toolbar = no, status = no
   <td><?php echo get_lang('availablefrom'); ?>&nbsp;</td>
   <td>	
 <select name="fday">
-<? 
+<?php 
 	for($i=1;$i<=31;$i++){
 	if($i<=9) $val = "0".$i;
 	else $val = $i;
@@ -238,7 +238,7 @@ december -->
 ?>
 </select>
 <select name="fyear">
-<? 
+<?php 
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $curr_year)
 		echo   "<option value=\"$i\" selected>$i</option>\n";
@@ -254,7 +254,7 @@ december -->
   <td><?php echo get_lang('availabletill'); ?>&nbsp;</td>
   <td>
 <select name="end_fday">
-	<? for($i=1;$i<=31;$i++){
+	<?php for($i=1;$i<=31;$i++){
 		if($i<=9)
 		$val = "0".$i;
 		else
@@ -283,7 +283,7 @@ december -->
 ?>
 </select>
 <select name="end_fyear">
-<? 
+<?php 
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $curr_year+1)
 		echo   "<option value=\"$i\" selected>$i</option>\n";

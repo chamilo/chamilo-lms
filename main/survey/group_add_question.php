@@ -92,8 +92,8 @@ $name = surveymanager :: get_groupname($gid);
 <!--<input type="hidden" name="cidReq" value="<?=$_REQUEST['cidReq']?>">-->
 <table>
 <tr>
-<td><? api_display_tool_title($GName);?></td> 
-<td><? api_display_tool_title($name);?></td>
+<td><?php api_display_tool_title($GName);?></td> 
+<td><?php api_display_tool_title($name);?></td>
 </tr>
 <?
 if( isset($error_message) )
@@ -104,7 +104,7 @@ if( isset($error_message) )
 ?>
 <tr>
 	<td>
-		<input name="radiobutton" type="radio" value="1" checked><? echo get_lang('CreateNew');?>
+		<input name="radiobutton" type="radio" value="1" checked><?php echo get_lang('CreateNew');?>
 	</td>
 </tr>
 <tr>
@@ -113,17 +113,17 @@ if( isset($error_message) )
 </tr>
 <tr>
 	<td>
-		<strong><? echo get_lang('GetFromDB');?></strong>
+		<strong><?php echo get_lang('GetFromDB');?></strong>
 	</td>
 </tr>
 <tr>
 	<td>
-		<input name="radiobutton" type="radio" value="2"><? echo get_lang('ByQuestion');?>
+		<input name="radiobutton" type="radio" value="2"><?php echo get_lang('ByQuestion');?>
 	</td>	
 </tr>
 <tr>
 	<td>
-		<input name="radiobutton" type="radio" value="3"><? echo get_lang('ByGroup');?>
+		<input name="radiobutton" type="radio" value="3"><?php echo get_lang('ByGroup');?>
 	</td>
 </tr>
 <tr>
@@ -132,8 +132,8 @@ if( isset($error_message) )
 </tr>
 <tr>
 <td>
-<input type="submit" name= 'back' value="<? echo get_lang('back');?>">
-<input type="submit" name= 'next' value="<? echo get_lang('next');?>"></td>
+<input type="submit" name= 'back' value="<?php echo get_lang('back');?>">
+<input type="submit" name= 'next' value="<?php echo get_lang('next');?>"></td>
 </tr>
 </table>
 </form>

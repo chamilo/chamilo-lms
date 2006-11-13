@@ -220,7 +220,7 @@ window.open(inf+".htm", 'popup', 'width=900,height=800,toolbar = no, status = no
   <td><?php echo get_lang('availablefrom'); ?>&nbsp;</td>
   <td>	
 <select name="fday">
-<? 
+<?php 
 	for($i=1;$i<=31;$i++){
 	if($i<=9) $val = "0".$i;
 	else $val = $i;
@@ -248,7 +248,7 @@ december -->
 ?>
 </select>
 <select name="fyear">
-<? 
+<?php 
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $curr_year)
 		echo   "<option value=\"$i\" selected>$i</option>\n";
@@ -264,7 +264,7 @@ december -->
   <td><?php echo get_lang('availabletill'); ?>&nbsp;</td>
   <td>
 <select name="end_fday">
-	<? for($i=1;$i<=31;$i++){
+	<?php for($i=1;$i<=31;$i++){
 		if($i<=9)
 		$val = "0".$i;
 		else
@@ -278,7 +278,7 @@ december -->
     <!-- month: january ->
 december -->
 <select name="end_fmonth">
-<?
+<?php 
 		for($i=1;$i<count($MonthsLong);$i++)
 		{
 			if($i<=9)
@@ -293,7 +293,7 @@ december -->
 ?>
 </select>
 <select name="end_fyear">
-<? 
+<?php 
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $curr_year+1)
 		echo   "<option value=\"$i\" selected>$i</option>\n";
@@ -352,7 +352,7 @@ december -->
  </table>
  <tr>
   <td>&nbsp;</td>
-  <td><input type="submit" name="back" value="<? echo get_lang('back');?>"></td>
+  <td><input type="submit" name="back" value="<?php echo get_lang('back');?>"></td>
   <td><input type="submit" name="saveandexit" value="<?php echo get_lang('createlater'); ?>"></td>
   <td><input type="submit" name="next" value="<?php echo get_lang('next'); ?>"></td>
 </tr>

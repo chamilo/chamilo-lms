@@ -122,9 +122,9 @@ $table_group =  Database :: get_course_table('survey_group');
 		?>		
 		<table>
 		<tr>
-		<td><input type="submit" name="back1" value="<? echo get_lang('back');?>"></td>
-		<td><input type="submit" name="view" value="<? echo get_lang('ViewQues');?>"></td>
-		<td><input type="submit" name="import" value="<? echo get_lang('Import');?>"></td>
+		<td><input type="submit" name="back1" value="<?php echo get_lang('back');?>"></td>
+		<td><input type="submit" name="view" value="<?php echo get_lang('ViewQues');?>"></td>
+		<td><input type="submit" name="import" value="<?php echo get_lang('Import');?>"></td>
 		</tr>
 		</table>
 		</form>

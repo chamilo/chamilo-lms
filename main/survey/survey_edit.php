@@ -196,7 +196,7 @@ $lang=$obj->lang;
   <td><?php echo get_lang('availablefrom'); ?>&nbsp;</td>
   <td>	
         <select name="fday">
-		<? for($i=1;$i<=31;$i++){
+		<?php for($i=1;$i<=31;$i++){
 			if($i<=9)
 			$val = "0".$i;
 			else
@@ -225,7 +225,7 @@ december -->
 	?>
 </select>
 <select name="fyear">
-<? 
+<?php 
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $avail_year_from)
 		echo   "<option value=\"$i\" selected>$i</option>\n";
@@ -241,7 +241,7 @@ december -->
   <td><?php echo get_lang('availabletill'); ?>&nbsp;</td>
   <td>
   	  <select name="end_fday">
-		<? for($i=1;$i<=31;$i++){
+		<?php for($i=1;$i<=31;$i++){
 			if($i<=9)
 			$val = "0".$i;
 			else
@@ -270,7 +270,7 @@ december -->
 	?>
 </select>
 <select name="end_fyear">
-<? 
+<?php 
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $avail_year_till)
 		echo   "<option value=\"$i\" selected>$i</option>\n";
@@ -284,7 +284,7 @@ december -->
 <tr>
 <td valign="top"><?php echo get_lang('IsShareSurvey'); ?>&nbsp;</td>
 <td>
-<input type="radio" name="isshare" value="1" <? if($obj->is_shared=='1') echo "checked";?>>Yes&nbsp;<input type="radio" name="isshare" value="0" <? if($obj->is_shared=='0') echo "checked";?>>No
+<input type="radio" name="isshare" value="1" <?php if($obj->is_shared=='1') echo "checked";?>>Yes&nbsp;<input type="radio" name="isshare" value="0" <?php if($obj->is_shared=='0') echo "checked";?>>No
 </td>
 </tr>
 

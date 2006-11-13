@@ -65,7 +65,7 @@ body {
         </tr>
         <tr>
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
-        <td><strong>Question: </strong><br><? echo $ques;?><br><br><strong>Answers: </strong><br>
+        <td><strong>Question: </strong><br><?php echo $ques;?><br><br><strong>Answers: </strong><br>
 		<textarea name="textfield" cols="50" rows="3" disabled='true'><?echo $obj->a1;?></textarea>
 		<input name="radiobutton" type="radio" value="radiobutton"><br><textarea name="textfield" cols="50" rows="3" disabled='true'><?echo $obj->a2;?></textarea>
 		<input name="radiobutton" type="radio" value="radiobutton"></td>

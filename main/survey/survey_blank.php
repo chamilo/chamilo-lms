@@ -785,7 +785,7 @@ if ($numb=mysql_num_rows($res) > 0)
 
 				  <tr>
 				 <td align="center">
-					<? if($num > "1"){
+					<?php if($num > "1"){
 								
 							   echo "<input type=\"button\" name=\"Back\" value=\"Back\" onClick=\"location.href('".$phpself."?temp=$temp&cidReq=$cidReq&db_name=$db_name&surveyid=$surveyid&num=".($num-1)."');\">";
 					} else{

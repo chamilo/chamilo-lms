@@ -131,7 +131,7 @@ if(isset($group_id))
  $res = api_sql_query($sql, __FILE__, __LINE__);
  $obj= mysql_fetch_object($res);
  ?>
- <div align="center"><strong><font color="#FF0000"><? echo "Group";?>&nbsp;&nbsp;<font color="#0000CC"><u><?=$obj->groupname;?></u>&nbsp;&nbsp;</font><?=get_lang('GroupCreated');?></font></strong></div>
+ <div align="center"><strong><font color="#FF0000"><?php echo "Group";?>&nbsp;&nbsp;<font color="#0000CC"><u><?=$obj->groupname;?></u>&nbsp;&nbsp;</font><?=get_lang('GroupCreated');?></font></strong></div>
 <?
 }
 
@@ -145,16 +145,16 @@ if(isset($group_id))
 <table>
 <tr>
 <td>
-<? echo get_lang('SelectQuestionType');?>
+<?php echo get_lang('SelectQuestionType');?>
 </td>
 <td>
 
 <select name="add_question" >	
-	<option value="<?=get_lang('yesno')?>" ><? echo get_lang('yesno');?></option>
-	<option value="<?=get_lang('MultipleChoiceSingle')?>"  ><? echo get_lang('MultipleChoiceSingle');?></option>
-	<option value="<?=get_lang('MultipleChoiceMulti')?>" ><? echo get_lang('MultipleChoiceMulti');?></option>
-	<option value="<?=get_lang('Open')?>" ><? echo get_lang('Open');?></option>
-	<option value="<?=get_lang('numbered')?>"><? echo get_lang('numbered');?></option>
+	<option value="<?php echo get_lang('yesno'); ?>" ><?php echo get_lang('yesno');?></option>
+	<option value="<?php echo get_lang('MultipleChoiceSingle'); ?>"  ><?php echo get_lang('MultipleChoiceSingle');?></option>
+	<option value="<?php echo get_lang('MultipleChoiceMulti'); ?>" ><?php echo get_lang('MultipleChoiceMulti');?></option>
+	<option value="<?php echo get_lang('Open');?>" ><?php echo get_lang('Open');?></option>
+	<option value="<?php echo get_lang('numbered');?>"><?php echo get_lang('numbered');?></option>
 </select>
 </td>
 </tr>
@@ -164,15 +164,15 @@ if(isset($group_id))
 <tr></tr>
 <tr>
 <td>
-<? echo get_lang('SelectGroup');?>
+<?php echo get_lang('SelectGroup');?>
 </td>
 <td>
-<? 
+<?php 
 	echo SurveyManager::select_group_list($surveyid, $groupid, $extra_script);
 ?>
 <!--<select name="select_group" >-->
 
-<?
+<?php 
 	/*$query="SELECT * FROM $table_group WHERE survey_id='$surveyid'";
 	//echo $query;
 	$result=api_sql_query($query);
@@ -184,8 +184,8 @@ if(isset($group_id))
 		$gname=mysql_result($result,$i,'groupname');
 		*/
 ?>
-		<!--<option value="<?echo $groupid;?>" ><? echo $gname;?></option>-->
-<?	//}
+		<!--<option value="<?echo $groupid;?>" ><?php echo $gname;?></option>-->
+<?php 	//}
 ?>
 
 <!--</select>-->
@@ -197,12 +197,12 @@ if(isset($group_id))
 <tr>
 <td>&nbsp;</td>
 <td>
-	<input type="submit" name="back" value="<? echo get_lang("back");?>">
-	<input type="submit" name="next" value="<? echo get_lang("next");?>">
+	<input type="submit" name="back" value="<?php echo get_lang("back");?>">
+	<input type="submit" name="next" value="<?php echo get_lang("next");?>">
 </tr>
 
 </table>
 </form>
-<?
+<?php 
 	Display :: display_footer();
 ?>

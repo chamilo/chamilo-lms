@@ -79,7 +79,7 @@ api_display_tool_title($tool_name);
 			</td>
       </tr>
       <tr>
-        <td colspan="2" align="center" class="text"><input type="button" name="exit" value="<? if($lang=='french')echo 'Quitter'; else if($lang=='dutch') echo 'Verlaten'; else echo 'Exit';?>" onclick="document.location.href='<?php echo api_get_path(WEB_PATH) ?>'">
+        <td colspan="2" align="center" class="text"><input type="button" name="exit" value="<?php if($lang=='french')echo 'Quitter'; else if($lang=='dutch') echo 'Verlaten'; else echo 'Exit';?>" onclick="document.location.href='<?php echo api_get_path(WEB_PATH) ?>'">
         </td>
       </tr>
     </table></td>

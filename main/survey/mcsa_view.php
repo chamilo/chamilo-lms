@@ -61,7 +61,7 @@ body {
         </tr>
         <tr>
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
-        <td><strong>Question: </strong><br><? echo $obj->caption;?><br><br><strong>Answers: </strong><br>
+        <td><strong>Question: </strong><br><?php echo $obj->caption;?><br><br><strong>Answers: </strong><br>
 		<?
 		for($i=1;$i<10;$i++)
 		{
@@ -71,7 +71,7 @@ body {
 			else
 			{
 		?>
-		<textarea cols="50" rows="3" disabled='true'><? echo $obj->$temp;?></textarea>
+		<textarea cols="50" rows="3" disabled='true'><?php echo $obj->$temp;?></textarea>
 		<input name="radiobutton" type="radio" value="radiobutton"><br>
 		<?
 			}

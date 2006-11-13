@@ -132,10 +132,10 @@ select_question_type($add_question12,$groupid,$surveyid,$cidReq,$curr_dbname);
 <table>
 <tr>
 <td>
-<? api_display_tool_title($Add);?>
+<?php api_display_tool_title($Add);?>
 </td>
 <td>
-<? api_display_tool_title($Multi);?>
+<?php api_display_tool_title($Multi);?>
 
 </td>
 </tr>
@@ -328,7 +328,7 @@ function checkLength(form){
 ?>					
 			<tr class="form_bg" id="0"> 					
 					<td width="16" height="30" align="left" class="form_text"> 
-					  <? echo $sn;?>
+					  <?php echo $sn;?>
 					</td>					
 					<td class="form_bg"><textarea name="mutlichkboxtext[]" cols="50" rows="3" class="text_field" style="width:100%;"><?=$post_text[$k]?></textarea> 
 					</td>					
@@ -377,7 +377,7 @@ function checkLength(form){
 <?			
             if(isset($_POST['add_question']))
 			{
-?>				<input type="hidden" name="add_question" value="<? echo $_POST['add_question'];?>" >
+?>				<input type="hidden" name="add_question" value="<?php echo $_POST['add_question'];?>" >
 <?			}
 
 			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";

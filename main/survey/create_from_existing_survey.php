@@ -156,9 +156,9 @@ if( isset($error_message) )
 		?>		
 		<table>
 		<tr>
-		<td><input type="submit" name="back" value="<? echo get_lang('back');?>"></td>
-		<td><input type="submit" name="view" value="<? echo get_lang('ViewQues');?>"></td>
-		<td><input type="submit" name="import" value="<? echo get_lang('ImportGroups');?>"></td>
+		<td><input type="submit" name="back" value="<?php  echo get_lang('back');?>"></td>
+		<td><input type="submit" name="view" value="<?php echo get_lang('ViewQues');?>"></td>
+		<td><input type="submit" name="import" value="<?php echo get_lang('ImportGroups');?>"></td>
 		</tr>
 		</table>
 		</form>

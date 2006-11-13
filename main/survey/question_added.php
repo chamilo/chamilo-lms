@@ -144,10 +144,10 @@ if($qdeleted)
 			Display :: display_sortable_table($table_header, $courses, array (), array (), $parameters);
 		//echo '</form>';	
 ?>	
-	<input type="submit" name="delete" value="<? echo get_lang("Delete");?>">
-	<input type="submit" name="addanother" value="<?echo get_lang("AddAnotherQuestion");?>">
-	<input type="submit" name="addanotherg" value="<?echo get_lang("AddAnotherGroup");?>">
-	<input type="submit" name="finish" value="<? echo get_lang("finishsurvey");?>">
+	<input type="submit" name="delete" value="<?php  echo get_lang("Delete");?>">
+	<input type="submit" name="addanother" value="<?php echo get_lang("AddAnotherQuestion");?>">
+	<input type="submit" name="addanotherg" value="<?php echo get_lang("AddAnotherGroup");?>">
+	<input type="submit" name="finish" value="<?php echo get_lang("finishsurvey");?>">
 </form>	
 <?
 /*

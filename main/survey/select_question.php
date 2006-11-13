@@ -41,8 +41,8 @@ function select_question_type($add_question12,$groupid,$surveyid,$cidReq,$curr_d
 
 <table>
 <tr>
-<td><? api_display_tool_title('Group Name :'); ?></td>
-<td><?api_display_tool_title($group_name); ?></td>
+<td><?php api_display_tool_title('Group Name :'); ?></td>
+<td><?php api_display_tool_title($group_name); ?></td>
 </tr>
 </table>
 <?
@@ -52,23 +52,23 @@ if( isset($error_message) )
 }
 ?>
 <form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?=$cidReq?>">
-<input type="hidden" name="groupid" value="<?=$groupid?>">
-<input type="hidden" name="surveyid" value="<?=$surveyid?>">
-<input type="hidden" name="curr_dbname" value="<?=$curr_dbname?>">
-<!--<input type="hidden" name="cidReq" value="<?=$cidReq?>">-->
+<input type="hidden" name="groupid" value="<?php echo $groupid?>">
+<input type="hidden" name="surveyid" value="<?php echo $surveyid?>">
+<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname?>">
+<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq?>">-->
 <table>
 <tr>
 <td>
-<? echo get_lang('Selectype');?>
+<?php echo get_lang('Selectype');?>
 </td>
 <td>
 <select name="add_question" onChange="javascript:this.form.submit();">
-	<option value="0"><? echo get_lang('Select');?></option>
-	<option value="<?=get_lang('yesno')?>" <? if($add_question12==get_lang('yesno'))echo "selected";?>><? echo get_lang('yesno');?></option>
-	<option value="<?=get_lang('MultipleChoiceSingle')?>" <? if($add_question12==get_lang('MultipleChoiceSingle')) { echo " selected ";}?>><? echo get_lang('MultipleChoiceSingle');?></option>
-	<option value="<?=get_lang('MultipleChoiceMulti')?>" <? if($add_question12==get_lang('MultipleChoiceMulti')) { echo " selected ";}?>><? echo get_lang('MultipleChoiceMulti');?></option>
-	<option value="<?=get_lang('Open')?>" <? if($add_question12==get_lang('Open')) { echo "selected";}?>><? echo get_lang('Open');?></option>
-	<option value="<?=get_lang('numbered')?>" <? if($add_question12==get_lang('numbered')) { echo "selected";}?>><? echo get_lang('numbered');?></option>
+	<option value="0"><?php echo get_lang('Select');?></option>
+	<option value="<?=get_lang('yesno')?>" <?php if($add_question12==get_lang('yesno'))echo "selected";?>><?php echo get_lang('yesno');?></option>
+	<option value="<?=get_lang('MultipleChoiceSingle')?>" <?php if($add_question12==get_lang('MultipleChoiceSingle')) { echo " selected ";}?>><?php echo get_lang('MultipleChoiceSingle');?></option>
+	<option value="<?=get_lang('MultipleChoiceMulti')?>" <?php if($add_question12==get_lang('MultipleChoiceMulti')) { echo " selected ";}?>><?php echo get_lang('MultipleChoiceMulti');?></option>
+	<option value="<?=get_lang('Open')?>" <?php if($add_question12==get_lang('Open')) { echo "selected";}?>><?php echo get_lang('Open');?></option>
+	<option value="<?=get_lang('numbered')?>" <?php if($add_question12==get_lang('numbered')) { echo "selected";}?>><?php echo get_lang('numbered');?></option>
 </select>
 </td>
 </tr>

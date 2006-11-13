@@ -219,32 +219,32 @@ $editor = new ImageEditor($manager, $IMConfig);
 	</div>
 	<div id="tools_save" style="display:none;">
 
-<? if($IMConfig['demo'] != true) { ?>
+<?php if($IMConfig['demo'] != true) { ?>
 
 		<div id="tool_inputs">
 
-	<? if($IMConfig['allow_newFileName'] == true) { ?>
-			<label for="save_filename">Filename:</label><input type="text" id="save_filename" value="<? if($IMConfig['allow_overwrite'] == false){ echo $editor->getDefaultSaveFile(); }else{ echo basename($_GET['img']); } ?>" />
-	<? }else{ ?>
-			<input type="hidden" id="save_filename" value="<? echo basename($_GET['img']); ?>" />
-	<? } ?>
+	<?php if($IMConfig['allow_newFileName'] == true) { ?>
+			<label for="save_filename">Filename:</label><input type="text" id="save_filename" value="<?php if($IMConfig['allow_overwrite'] == false){ echo $editor->getDefaultSaveFile(); }else{ echo basename($_GET['img']); } ?>" />
+	<?php }else{ ?>
+			<input type="hidden" id="save_filename" value="<?php echo basename($_GET['img']); ?>" />
+	<?php } ?>
 
 	<?
 	$pos = strrpos($_GET['img'], ".");
 	$ext = substr($_GET['img'], $pos + 1);
 	?>
-			<select name="format" id="save_format" style="margin-left: 10px; vertical-align: middle; <? if($IMConfig['allow_newFileName'] != true && $ext != "jpg" && $ext != "jpeg") {echo "display: none;";} ?>" onchange="updateFormat(this)">
+			<select name="format" id="save_format" style="margin-left: 10px; vertical-align: middle; <?php if($IMConfig['allow_newFileName'] != true && $ext != "jpg" && $ext != "jpeg") {echo "display: none;";} ?>" onchange="updateFormat(this)">
             <option value="" selected>Image Format</option>
             <option value="">---------------------</option>
             <option value="jpeg,85">JPEG High</option>
             <option value="jpeg,60">JPEG Medium</option>
             <option value="jpeg,35">JPEG Low</option>
-			<? if($IMConfig['allow_newFileName'] == true){ ?>
+			<?php if($IMConfig['allow_newFileName'] == true){ ?>
             <option value="png">PNG</option>
-			<?    if($editor->isGDGIFAble() != -1) { ?>
+			<?php    if($editor->isGDGIFAble() != -1) { ?>
             <option value="gif">GIF</option>
-			<?    } ?>
-			<? } ?>
+			<?php    } ?>
+			<?php } ?>
 			</select>
 
 			<label>Quality:</label>
@@ -263,21 +263,21 @@ $editor = new ImageEditor($manager, $IMConfig);
 		</div>	
 		<a href="javascript: editor.doSubmit('save');" class="buttons" title="OK"><img src="img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
 
-	<? }else{ ?>
+	<?php }else{ ?>
 
 		<div id="tool_inputs" style="text-align: center; width: 90%; font-size: 150%; font-weight: bold; letter-spacing: 3px; color: #474767;">
 			<label>Demo</label>
 		</div>	
 
-	<? } ?>
+	<?php } ?>
 
 	</div>	
 </div>
 <div id="toolbar">
 	<div id="buttons">
 
-		<a href="javascript:toggle('replace')" id="icon_replace" title="Replace" <? if($IMConfig['allow_replace'] == false) { echo "style=\"display: none;\""; } ?> ><img src="img/replace.gif" height="20" width="20" alt="Replace" /><span>Replace</span></a>
-		<a href="javascript:toggle('watermark')" id="icon_watermark" title="Watermark" <? if(empty($IMConfig['watermarks'])) { echo "style=\"display: none;\""; } ?> ><img src="img/watermark.gif" height="20" width="20" alt="Watermark" /><span>Watermark</span></a>
+		<a href="javascript:toggle('replace')" id="icon_replace" title="Replace" <?php if($IMConfig['allow_replace'] == false) { echo "style=\"display: none;\""; } ?> ><img src="img/replace.gif" height="20" width="20" alt="Replace" /><span>Replace</span></a>
+		<a href="javascript:toggle('watermark')" id="icon_watermark" title="Watermark" <?php if(empty($IMConfig['watermarks'])) { echo "style=\"display: none;\""; } ?> ><img src="img/watermark.gif" height="20" width="20" alt="Watermark" /><span>Watermark</span></a>
 		<a href="javascript:toggle('crop')" id="icon_crop" title="Crop"><img src="img/crop.gif" height="20" width="20" alt="Crop" /><span>Crop</span></a>
 		<a href="javascript:toggle('scale')" id="icon_scale" title="Resize"><img src="img/scale.gif" height="20" width="20" alt="Resize" /><span>Resize</span></a>
 		<a href="javascript:toggle('rotate')" id="icon_rotate" title="Rotate"><img src="img/rotate.gif" height="20" width="20" alt="Rotate" /><span>Rotate</span></a>
@@ -288,7 +288,7 @@ $editor = new ImageEditor($manager, $IMConfig);
 </div>
 <div id="contents">
 <div id="messages" style="display: none;"><span id="message"></span><img SRC="img/dots.gif" width="22" height="12" alt="..." /></div>
-<iframe src="editorFrame.php?img=<? if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor" scrolling="auto" title="Image Editor" frameborder="0"></iframe>
+<iframe src="editorFrame.php?img=<?php if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor" scrolling="auto" title="Image Editor" frameborder="0"></iframe>
 </div>
 <div id="bottom"></div>
 </body>

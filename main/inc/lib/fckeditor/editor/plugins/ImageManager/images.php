@@ -54,15 +54,15 @@ function drawFiles($list, &$manager)
 	foreach($list as $entry => $file) 
 	{ ?>
 		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
-		<a href="javascript:;" onclick="selectImage('<? echo $file['relative'];?>', '<? echo $entry; ?>', <? echo $file['image'][0];?>, <? echo $file['image'][1]; ?>);"title="<? echo $entry; ?> - <? echo Files::formatSize($file['stat']['size']); ?>"><img src="<? echo $manager->getThumbnail($file['relative']); ?>" alt="<? echo $entry; ?> - <? echo Files::formatSize($file['stat']['size']); ?>"/></a>
+		<a href="javascript:;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);"title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php echo $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
 		</td></tr><tr><td class="edit">
-		<? if($IMConfig['allow_delete'] == true) { ?>
-			<a href="images.php?dir=<? echo $relative; ?>&amp;delf=<? echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<? echo $entry; ?>');"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
-		<? } ?>
-			<a href="javascript:;" title="Edit" onclick="editImage('<? echo rawurlencode($file['relative']);?>');"><img src="img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
-		<? if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } else echo $entry;?>
+		<?php if($IMConfig['allow_delete'] == true) { ?>
+			<a href="images.php?dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
+		<?php } ?>
+			<a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
+		<?php if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } else echo $entry;?>
 		</td></tr></table></td> 
-	  <? 
+	  <?php 
 	}//foreach
 }//function drawFiles
 
@@ -77,14 +77,14 @@ function drawDirs($list, &$manager)
 	foreach($list as $path => $dir) 
 	{ ?>
 		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
-		<a href="images.php?dir=<? echo rawurlencode($path); ?>" onclick="updateDir('<? echo $path; ?>')" title="<? echo $dir['entry']; ?>"><img src="img/folder.gif" height="80" width="80" alt="<? echo $dir['entry']; ?>" /></a>
+		<a href="images.php?dir=<?php echo rawurlencode($path); ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>"><img src="img/folder.gif" height="80" width="80" alt="<?php echo $dir['entry']; ?>" /></a>
 		</td></tr><tr>
 		<td class="edit">
-			<a href="images.php?dir=<? echo $relative; ?>&amp;deld=<? echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<? echo $dir['entry']; ?>', <? echo $dir['count']; ?>);"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
-			<? echo $dir['entry']; ?>
+			<a href="images.php?dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
+			<?php echo $dir['entry']; ?>
 		</td>
 		</tr></table></td>
-	  <? 
+	  <?php 
 	} //foreach
 }//function drawDirs
 
@@ -111,7 +111,7 @@ function drawErrorBase(&$manager)
 ?>
 <table width="100%">
   <tr>
-    <td class="error">Invalid base directory: <? echo $manager->config['base_dir']; ?></td>
+    <td class="error">Invalid base directory: <?php echo $manager->config['base_dir']; ?></td>
   </tr>
 </table>
 <?	
@@ -145,7 +145,7 @@ function drawErrorBase(&$manager)
 		hideMessage();
 		var topDoc = window.top.document;
 
-<? 
+<?php 
 	//we need to refesh the drop directory list
 	//save the current dir, delete all select options
 	//add the new list, re-select the saved dir.
@@ -159,10 +159,10 @@ function drawErrorBase(&$manager)
 		while(selection.length > 0)
 		{	selection.remove(0); }
 		
-		selection.options[selection.length] = new Option("/","<? echo rawurlencode('/'); ?>");	
-		<? foreach($dirs as $relative=>$fullpath) { ?>
-		selection.options[selection.length] = new Option("<? echo $relative; ?>","<? echo rawurlencode($relative); ?>");		
-		<? } ?>
+		selection.options[selection.length] = new Option("/","<?php echo rawurlencode('/'); ?>");	
+		<?php foreach($dirs as $relative=>$fullpath) { ?>
+		selection.options[selection.length] = new Option("<?php echo $relative; ?>","<?php echo rawurlencode($relative); ?>");		
+		<?php } ?>
 		
 		for(var i = 0; i < selection.length; i++)
 		{
@@ -173,7 +173,7 @@ function drawErrorBase(&$manager)
 				break;
 			}
 		}		
-<? } ?>
+<?php } ?>
 	}	
 
 	function editImage(image) 
@@ -196,14 +196,14 @@ function drawErrorBase(&$manager)
 </head>
 
 <body>
-<? if ($manager->isValidBase() == false) { drawErrorBase($manager); } 
+<?php if ($manager->isValidBase() == false) { drawErrorBase($manager); } 
 	elseif(count($list[0]) > 0 || count($list[1]) > 0) { ?>
 <table>
 	<tr>
-	<? drawDirs($list[0], $manager); ?>
-	<? drawFiles($list[1], $manager); ?>
+	<?php drawDirs($list[0], $manager); ?>
+	<?php drawFiles($list[1], $manager); ?>
 	</tr>
 </table>
-<? } else { drawNoResults(); } ?>
+<?php } else { drawNoResults(); } ?>
 </body>
 </html>

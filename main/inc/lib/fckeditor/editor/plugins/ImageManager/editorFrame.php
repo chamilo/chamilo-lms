@@ -101,8 +101,8 @@
 
 <script type="text/javascript">
 
-	var mode = "<? echo $editor->getAction(); ?>" //crop, scale, measure
-	var currentImageFile = "<? if(count($imageInfo)>0) echo rawurlencode($imageInfo['file']); ?>";
+	var mode = "<?php echo $editor->getAction(); ?>" //crop, scale, measure
+	var currentImageFile = "<?php if(count($imageInfo)>0) echo rawurlencode($imageInfo['file']); ?>";
 
 	if(window.top)
 	{
@@ -243,23 +243,23 @@
 <body>
 <div id="status"></div>
 <div id="ant" class="selection" style="visibility:hidden"><img src="img/spacer.gif" width="0" height="0" border="0" alt="" id="cropContent"></div>
-<? if ($editor->isGDEditable() == -1) { ?>
+<?php if ($editor->isGDEditable() == -1) { ?>
 	<div style="text-align:center; padding:10px;"><span class="error">GIF format is not supported, image editing not supported.</span></div>
-<? } ?>
+<?php } ?>
 <table height="100%" width="100%">
 	<tr>
 		<td>
-<? if(count($imageInfo) > 0 && is_file($imageInfo['fullpath'])) { ?>
+<?php if(count($imageInfo) > 0 && is_file($imageInfo['fullpath'])) { ?>
 
-		<div id="background" name="background" style="margin: auto; width: <? echo $imageInfo['width']; ?>px; height: <? echo $imageInfo['height']; ?>px; background-image: url(<? echo $imageInfo['src']; ?>);">
+		<div id="background" name="background" style="margin: auto; width: <?php echo $imageInfo['width']; ?>px; height: <?php echo $imageInfo['height']; ?>px; background-image: url(<?php echo $imageInfo['src']; ?>);">
 			<img name="floater" id="floater" style="width: 150px; height: 150px; behavior: url('assets/pngbehavior.htc'); position: absolute" src="<?= $IMConfig['base_url'] . $IMConfig['watermarks'][0] ?>" />
 		</div>
 
-		<span id="imgCanvas" name="imgCanvas" class="crop" style="display: none;"><img src="<? echo $imageInfo['src']; ?>" <? echo $imageInfo['dimensions']; ?> alt="" id="theImage" name="theImage" /></span>
+		<span id="imgCanvas" name="imgCanvas" class="crop" style="display: none;"><img src="<?php echo $imageInfo['src']; ?>" <?php echo $imageInfo['dimensions']; ?> alt="" id="theImage" name="theImage" /></span>
 
-<? } else { ?>
+<?php } else { ?>
 				<span class="error">No Image Available</span>
-<? } ?>
+<?php } ?>
 		</td>
 	</tr>
 </table>

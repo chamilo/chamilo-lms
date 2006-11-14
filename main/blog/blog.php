@@ -187,32 +187,32 @@ $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" langua
 switch ($current_page)
 {
 	case "new_post" :
-		$nameTools = get_lang('langNewPost');
+		$nameTools = get_lang('NewPost');
 		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
 		Display :: display_header($nameTools, 'blogs');
 		break;
 	case "manage_tasks" :
-		$nameTools = get_lang('langTaskManager');
+		$nameTools = get_lang('TaskManager');
 		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
 		Display :: display_header($nameTools, 'blogs');
 		break;
 	case "manage_members" :
-		$nameTools = get_lang('langMemberManager');
+		$nameTools = get_lang('MemberManager');
 		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
 		Display :: display_header($nameTools, 'blogs');
 		break;
 	case "manage_rights" :
-		$nameTools = get_lang('langRightsManager');
+		$nameTools = get_lang('RightsManager');
 		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
 		Display :: display_header($nameTools, 'blogs');
 		break;
 	case "view_search_result" :
-		$nameTools = get_lang('langSearchResults');
+		$nameTools = get_lang('SearchResults');
 		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
 		Display :: display_header($nameTools, 'blogs');
 		break;
 	case "execute_task" :
-		$nameTools = get_lang('langExecuteThisTask');
+		$nameTools = get_lang('ExecuteThisTask');
 		$interbreadcrumb[] = array ("url" => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
 		Display :: display_header($nameTools, 'blogs');
 		break;
@@ -239,15 +239,15 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 		<br />
 		<table width="100%">
 			<tr>
-				<td class="blog_menu_title"><?php echo get_lang('langThisBlog') ?></td>
+				<td class="blog_menu_title"><?php echo get_lang('ThisBlog') ?></td>
 			</tr>
 			<tr>
 				<td class="blog_menu">
 					<ul>
-						<li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('langHome') ?>"><?php echo get_lang('langHome') ?></a></li>
-						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_add')) { ?><li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('langNewPost') ?>"><?php echo get_lang('langNewPost') ?></a></li><?php } ?>
-						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'task_management')) { ?><li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('langManageTasks') ?>"><?php echo get_lang('langTaskManager') ?></a></li> <?php } ?>
-						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'member_management')) { ?><li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('langManageMembers') ?>"><?php echo get_lang('langMemberManager') ?></a></li><?php } ?>
+						<li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('Home') ?>"><?php echo get_lang('Home') ?></a></li>
+						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_add')) { ?><li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo get_lang('NewPost') ?></a></li><?php } ?>
+						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'task_management')) { ?><li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>"><?php echo get_lang('TaskManager') ?></a></li> <?php } ?>
+						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'member_management')) { ?><li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>"><?php echo get_lang('MemberManager') ?></a></li><?php } ?>
 					</ul>
 				</td>
 			</tr>
@@ -255,7 +255,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 		<br />
 		<table width="100%">
 			<tr>
-				<td class="blog_menu_title"><?php echo get_lang('langSearch') ?></td>
+				<td class="blog_menu_title"><?php echo get_lang('Search') ?></td>
 			</tr>
 			<tr>
 				<td class="blog_menu">
@@ -270,7 +270,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 		<br />
 		<table width="100%">
 			<tr>
-				<td class="blog_menu_title"><?php echo get_lang('langMyTasks') ?></td>
+				<td class="blog_menu_title"><?php echo get_lang('MyTasks') ?></td>
 			</tr>
 			<tr>
 				<td class="blog_menu">
@@ -282,7 +282,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 		<br />
 		<table width="100%">
 			<tr>
-				<td class="blog_menu_title"><?php echo get_lang('langFavoriteBlogs') ?></td>
+				<td class="blog_menu_title"><?php echo get_lang('FavoriteBlogs') ?></td>
 			</tr>
 			<tr>
 				<td class="blog_menu">
@@ -297,7 +297,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 		<br />
 		<table width="100%">
 			<tr>
-				<td class="blog_menu_title"><?php echo get_lang('langTopTen') ?></td>
+				<td class="blog_menu_title"><?php echo get_lang('TopTen') ?></td>
 			</tr>
 			<tr>
 				<td class="blog_menu">
@@ -413,7 +413,7 @@ switch ($current_page)
 			if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'role_management'))
 			{
 			?>
-				<a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('langManageRights') ?>"><?php echo get_lang('langRightsManager') ?></a>
+				<a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo get_lang('RightsManager') ?></a>
 			<?php
 			}
 		}

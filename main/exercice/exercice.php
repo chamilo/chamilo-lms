@@ -434,7 +434,7 @@ if($show == 'test'){
   <tr bgcolor="#e6e6e6">
     <td align="center"><?php echo get_lang("ExerciseName");?></td>
      <td align="center"><?php echo get_lang("Description");?></td>
-	 <td width="13%" align="center"><b><?php echo get_lang('langAddlimits'); ?> </b><br /> 
+	 <td width="13%" align="center"><b><?php echo get_lang('Addlimits'); ?> </b><br /> 
     (time,attempts)</td>
 	 <td align="center"><?php echo get_lang("Modify");?></td>
    
@@ -491,7 +491,7 @@ if($show == 'test'){
  $sqlresult =mysql_query($sqlquery);
  $rowi = mysql_result($sqlresult,0);
  echo $rowi.' Questions'; ?> </td>
- <td  width="13%" align="center"><a href="addlimits.php?exercise_id=<?php echo $exid; ?>"> <img src="../img/test_prop.gif" border="0" align="absmiddle" alt="<?php echo get_lang('langAddlimits'); ?>" /></a> </td>
+ <td  width="13%" align="center"><a href="addlimits.php?exercise_id=<?php echo $exid; ?>"> <img src="../img/test_prop.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Addlimits'); ?>" /></a> </td>
       <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row[id]; ?>"> <img src="../img/edit.gif" border="0" alt="<?php echo htmlentities(get_lang('Modify')); ?>" /></a> 
     <a href="exercice.php?choice=delete&exerciseId=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('areYouSure'))); echo $row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete')); ?>" /></a> 
     <?php

@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 9866 2006-11-06 09:43:17Z bmol $
+<?php // $Id: exercise.lib.php 9972 2006-11-14 14:44:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -307,7 +307,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 
-		$answer_list = '<div style="padding: 10px; margin-left: -8px; border: 1px solid #4271b5; height: 448px; width: 200px;"><b>'.get_lang('langHotspotZones').'</b><ol>';
+		$answer_list = '<div style="padding: 10px; margin-left: -8px; border: 1px solid #4271b5; height: 448px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
 			$answer_list .= '<li>'.$objAnswerTmp->selectAnswer($answerId).'</li>';

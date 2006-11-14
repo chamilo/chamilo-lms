@@ -419,6 +419,8 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 	global $learnpath_id;
 	$tbl_lp_item = Database::get_course_table('lp_item');
 	
+	
+	// @todo: coding standards: Language variables are CaMMelCaSe, all other variables should use the underscoring method.
 	$lang_move_down = get_lang('_move_down');
 	$lang_move_up = get_lang('lang_move_up');
 	$lang_edit_learnpath_module = get_lang('lang_edit_learnpath_module');
@@ -432,7 +434,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 	$lang_change_order = get_lang('lang_change_order');
 	$lang_add_prereqi = get_lang('lang_add_prereqi');
 	$lang_add_title_and_desc = get_lang('lang_add_title_and_desc');
-	$lang_delete = get_lang('lang_delete');
+	$lang_delete = get_lang('Delete');
 
 	if ($parent_item_id === 0)
 	{

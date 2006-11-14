@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 9665 2006-10-24 10:43:48Z elixir_inter $
+<?php // $Id: exercice_submit.php 9972 2006-11-14 14:44:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -417,7 +417,7 @@ foreach($questionList as $questionId)
 
 if($number_of_hotspot_questions > 0)
 {
-	$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('langHotspotValidateError1')."', '".get_lang('langHotspotValidateError2')."')\"";
+	$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."')\"";
 }
 $s="
 <p>$exerciseDescription</p>

@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 9812 2006-10-26 08:57:18Z bmol $
+<?php // $Id: user_add.php 9972 2006-11-14 14:44:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -203,7 +203,7 @@ if( $form->validate())
 		$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
 		$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 		$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
-		$emailbody=get_lang('langDear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." ". $username ."\n". get_lang('langPass')." : ".stripslashes($password)."\n\n" .get_lang('langAddress') ." ". get_setting('siteName') ." ". get_lang('langIs') ." : ". $rootWeb ."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('langManager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('langEmail') ." : ".get_setting('emailAdministrator');
+		$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $rootWeb ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
 		@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 	}
 	if(isset($user['submit_plus']))

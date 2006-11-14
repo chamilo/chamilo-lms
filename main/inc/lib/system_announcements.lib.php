@@ -206,17 +206,17 @@ class SystemAnnouncementManager
 			
 			if($nb_announcement > 20)
 			{
-				echo '<a href="newsList.php?start='.$next.'">'.get_lang('langNextBis').' >> </a>';
+				echo '<a href="newsList.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 			
 		}
 		else
 		{
-			echo '<a href="newsList.php?start='.$prev.'"> << '.get_lang('langPrev').'</a>';
+			echo '<a href="newsList.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
 			
 			if($nb_announcement > 20)
 			{
-				echo '<a href="newsList.php?start='.$next.'">'.get_lang('langNextBis').' >> </a>';
+				echo '<a href="newsList.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 			
 	}

@@ -111,9 +111,9 @@ echo "<table class=\"data_table\">\n";
 // the header
 echo "\t<tr>\n";	
 	echo "\t\t<th rowspan=\"2\">".get_lang('Module')."</th>\n";
-	echo "\t\t<th colspan=\"4\">".get_lang('langArticleManager')."</th>\n";
-	echo "\t\t<th colspan=\"3\">".get_lang('langCommentManager')."</th>\n";
-	echo "\t\t<th colspan=\"3\">".get_lang('langBlogManager')."</th>\n";
+	echo "\t\t<th colspan=\"4\">".get_lang('ArticleManager')."</th>\n";
+	echo "\t\t<th colspan=\"3\">".get_lang('CommentManager')."</th>\n";
+	echo "\t\t<th colspan=\"3\">".get_lang('BlogManager')."</th>\n";
 echo "\t</tr>\n";
 
 // Subheader

@@ -133,10 +133,10 @@ if($usedInSeveralExercises)
 	<input type="hidden" name="answerType" value="<?php echo $answerType; ?>">
 
 <?php
-	$msgBox= " ".get_lang('langUsedInSeveralExercises')." :<br />
-		  <input class=\"checkbox\" type=\"radio\" name=\"modifyIn\" value=\"allExercises\" checked=\"checked\"> ".get_lang('langModifyInAllExercises')."<br />
-		 <input class=\"checkbox\" type=\"radio\" name=\"modifyIn\" value=\"thisExercise\"> ".get_lang('langModifyInThisExercise')."<br />
-         <input type=\"submit\" name=\"".($submitQuestion?'submitQuestion':'submitAnswers')."\" value=\"".get_lang('langOk')."\">
+	$msgBox= " ".get_lang('UsedInSeveralExercises')." :<br />
+		  <input class=\"checkbox\" type=\"radio\" name=\"modifyIn\" value=\"allExercises\" checked=\"checked\"> ".get_lang('ModifyInAllExercises')."<br />
+		 <input class=\"checkbox\" type=\"radio\" name=\"modifyIn\" value=\"thisExercise\"> ".get_lang('ModifyInThisExercise')."<br />
+         <input type=\"submit\" name=\"".($submitQuestion?'submitQuestion':'submitAnswers')."\" value=\"".get_lang('Ok')."\">
 		 ";
 	Display::display_normal_message($msgBox); //main API
 ?>
@@ -163,7 +163,7 @@ else
 	{
 //edited
 ?>
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>?myid=<?php echo $myid; ?>&modifyQuestion=<?php echo $questionId; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('langModify'); ?>"></a>
+<a href="<?php echo $_SERVER['PHP_SELF']; ?>?myid=<?php echo $myid; ?>&modifyQuestion=<?php echo $questionId; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>"></a>
 
 <?php
 	}
@@ -192,7 +192,7 @@ else
 	{
 ?>
 
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>?modifyQuestion=<?php echo $questionId; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('langModify'); ?>"></a>
+<a href="<?php echo $_SERVER['PHP_SELF']; ?>?modifyQuestion=<?php echo $questionId; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>"></a>
 
 <?php
 	}*/
@@ -206,7 +206,7 @@ else
 	{
 ?>
 
-<!--<a href="<?php echo $_SERVER['PHP_SELF']; ?>">&lt;&lt; <?php echo get_lang('langGoBackToQuestionList'); ?></a>-->
+<!--<a href="<?php echo $_SERVER['PHP_SELF']; ?>">&lt;&lt; <?php echo get_lang('GoBackToQuestionList'); ?></a>-->
 
 <?php
 	}
@@ -215,17 +215,17 @@ else
 	{
 ?>
 
-<a href="question_pool.php?fromExercise=<?php echo $fromExercise; ?>">&lt;&lt; <?php echo get_lang('langGoBackToQuestionPool'); ?></a>
+<a href="question_pool.php?fromExercise=<?php echo $fromExercise; ?>">&lt;&lt; <?php echo get_lang('GoBackToQuestionPool'); ?></a>
 
 <?php
 	}
 	if($answerType != FREE_ANSWER){
 ?>
 
-<b><?php echo get_lang('langQuestionAnswers'); ?></b>
+<b><?php echo get_lang('QuestionAnswers'); ?></b>
 
 
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>?myid=<?php echo $myid; ?>&modifyAnswers=<?php echo $questionId; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('langModify'); ?>"></a>
+<a href="<?php echo $_SERVER['PHP_SELF']; ?>?myid=<?php echo $myid; ?>&modifyAnswers=<?php echo $questionId; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>"></a>
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
 <form>
 
@@ -238,7 +238,7 @@ else
 ?>
 
 <tr>
-  <td><?php echo get_lang('langNoAnswer'); ?></td>
+  <td><?php echo get_lang('NoAnswer'); ?></td>
 </tr>
 
 <?php
@@ -257,13 +257,13 @@ else
 	{
 ?>
 
-<!--<a href="<?php //echo $_SERVER['PHP_SELF']; ?>?modifyAnswers=<?php //echo $questionId; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php //echo get_lang('langModify'); ?>"></a>-->
+<!--<a href="<?php //echo $_SERVER['PHP_SELF']; ?>?modifyAnswers=<?php //echo $questionId; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php //echo get_lang('Modify'); ?>"></a>-->
 
 <?php
 	}
 	if ($exerciseId)
 	{
-	?><a href="<?php echo $_SERVER['PHP_SELF']; ?>">&lt;&lt; <?php echo get_lang('langGoBackToQuestionList'); ?></a>
+	?><a href="<?php echo $_SERVER['PHP_SELF']; ?>">&lt;&lt; <?php echo get_lang('GoBackToQuestionList'); ?></a>
 
 	
 	<?php

@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 9951 2006-11-13 10:54:30Z pcool $
+<?php // $Id: admin.php 9972 2006-11-14 14:44:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -164,7 +164,7 @@ $picturePath=$documentPath.'/images';
 $audioPath=$documentPath.'/audio';
 
 // the 5 types of answers
-$aType=array(get_lang('langUniqueSelect'),get_lang('langMultipleSelect'),get_lang('langFillBlanks'),get_lang('langMatching'),get_lang('freeAnswer'));
+$aType=array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillBlanks'),get_lang('Matching'),get_lang('freeAnswer'));
 
 // tables used in the exercise tool
 $TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';

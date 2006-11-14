@@ -148,7 +148,7 @@ class Blog
 		$this_blog_id = Database::get_last_insert_id();
 		
 		// Make first post. :)
-		$sql = "INSERT INTO $tbl_blogs_posts (`title`, `full_text`, `date`, `blog_id`, `author` ) VALUES ('Welkom!', '" . get_lang('langFirstPostText')."', NOW(), '$this_blog_id', '$_uid');";
+		$sql = "INSERT INTO $tbl_blogs_posts (`title`, `full_text`, `date`, `blog_id`, `author` ) VALUES ('Welkom!', '" . get_lang('FirstPostText')."', NOW(), '$this_blog_id', '$_uid');";
 		api_sql_query($sql, __FILE__, __LINE__);
 		
 		// Put it on course homepage
@@ -593,18 +593,18 @@ class Blog
 				echo '<ul>';
 				while($mytask = mysql_fetch_array($result))
 				{
-					echo '<li><a href="blog.php?action=execute_task&amp;blog_id=' . $mytask['blog_id'] . '&amp;task_id='.stripslashes($mytask['task_id']) . '" title="[Blog: '.stripslashes($mytask['blog_name']) . '] ' . get_lang('langExecuteThisTask') . '">'.stripslashes($mytask['title']) . '</a></li>';	
+					echo '<li><a href="blog.php?action=execute_task&amp;blog_id=' . $mytask['blog_id'] . '&amp;task_id='.stripslashes($mytask['task_id']) . '" title="[Blog: '.stripslashes($mytask['blog_name']) . '] ' . get_lang('ExecuteThisTask') . '">'.stripslashes($mytask['title']) . '</a></li>';	
 				}
 				echo '<ul>';
 			}
 			else
 			{
-				echo get_lang('langNoTasks');
+				echo get_lang('NoTasks');
 			}
 		}
 		else
 		{
-			echo get_lang('langNoTasks');
+			echo get_lang('NoTasks');
 		}
 		
 	}
@@ -707,7 +707,7 @@ class Blog
 				}
 				if($words >= $limit)
 				{
-					$readMoreLink = ' <span class="link" onclick="document.getElementById(\'blogpost_text_' . $blog_post_id . '\').style.display=\'block\'; document.getElementById(\'blogpost_introduction_' . $blog_post_id . '\').style.display=\'none\'">' . get_lang('langReadMore') . '</span>';
+					$readMoreLink = ' <span class="link" onclick="document.getElementById(\'blogpost_text_' . $blog_post_id . '\').style.display=\'block\'; document.getElementById(\'blogpost_introduction_' . $blog_post_id . '\').style.display=\'none\'">' . get_lang('ReadMore') . '</span>';
 				}
 				else
 				{
@@ -715,21 +715,21 @@ class Blog
 				}
 				
 				echo '<div class="blogpost">'."\n";
-					echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('langReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>'."\n";
+					echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>'."\n";
 					echo '<span class="blogpost_date">' . $blog_post_date . ' (' . $blog_post_time . ')</span>'."\n";
 					echo '<span id="blogpost_introduction_' . $blog_post_id . '">' . $introduction_text . $readMoreLink . '</span>'."\n";
 					echo '<span id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</span>'."\n";
-					echo '<span class="blogpost_info">' . get_lang('langAuthor') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('langReadPost') . '" >' . get_lang('langComments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
+					echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
 				echo '</div>'."\n";
 			}
 		} else {
 			if($filter == '1=1')
 			{
-				echo get_lang('langNoArticles');
+				echo get_lang('NoArticles');
 			}
 			else
 			{
-				echo get_lang('langNoArticleMatches');
+				echo get_lang('NoArticleMatches');
 			}
 			
 		}
@@ -753,7 +753,7 @@ class Blog
 		$query_string = '('.implode('OR',$query_string) . ')';
 		
 		// Display the posts
-		echo '<span class="blogpost_title">' . get_lang('langSearchResults') . '</span>';
+		echo '<span class="blogpost_title">' . get_lang('SearchResults') . '</span>';
 		Blog::display_blog_posts($blog_id, $query_string);
 	}
 	
@@ -775,7 +775,7 @@ class Blog
 		$date_output = ucfirst(format_locale_date($dateFormatLong,strtotime($date_output)));
 		
 		// Display the posts
-		echo '<span class="blogpost_title">' . get_lang('langPostsOf') . ': ' . $date_output . '</span>';
+		echo '<span class="blogpost_title">' . get_lang('PostsOf') . ': ' . $date_output . '</span>';
 		Blog::display_blog_posts($blog_id, $query_string);
 	}
 	
@@ -813,10 +813,10 @@ class Blog
 		$task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 		
 		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_edit', $task_id))
-			$blog_post_actions .= '<a href="blog.php?action=edit_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;article_id=' . $blog_post['post_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('langEditThisPost') . '"><img src="../img/edit.gif" /></a>';
+			$blog_post_actions .= '<a href="blog.php?action=edit_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;article_id=' . $blog_post['post_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('EditThisPost') . '"><img src="../img/edit.gif" /></a>';
 		
 		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_delete', $task_id))
-			$blog_post_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_article&amp;article_id=' . $blog_post['post_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('langDeleteThisArticle') . '" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>';
+			$blog_post_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_article&amp;article_id=' . $blog_post['post_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisArticle') . '" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>';
 		
 		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_rate'))
 			$rating_select = Blog::display_rating_form('post',$blog_id,$post_id);
@@ -824,10 +824,10 @@ class Blog
 		
 		// Display post
 		echo '<div class="blogpost">';
-			echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '" title="' . get_lang('langReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
+			echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
 			echo '<span class="blogpost_date">' . $blog_post_date . ' (' . $blog_post_time . ')</span>';
 			echo '<span class="blogpost_text">' . $blog_post_text . '</span>';
-			echo '<span class="blogpost_info">' . get_lang('langAuthor') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - ' . get_lang('langComments') . ': ' . $blog_post_comments['number_of_comments'] . ' - ' . get_lang('langRating') . ': '.Blog::display_rating('post',$blog_id,$post_id) . $rating_select . '</span>';
+			echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - ' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('post',$blog_id,$post_id) . $rating_select . '</span>';
 			echo '<span class="blogpost_actions">' . $blog_post_actions . '</span>';
 		echo '</div>';
 		
@@ -835,7 +835,7 @@ class Blog
 		if($blog_post_comments['number_of_comments'] > 0)
 		{
 			echo '<div class="comments">';
-				echo '<span class="blogpost_title">' . get_lang('langComments') . '</span><br />';
+				echo '<span class="blogpost_title">' . get_lang('Comments') . '</span><br />';
 				Blog::get_threaded_comments(0, 0, $blog_id, $post_id, $task_id);
 			echo '</div>';
 		}
@@ -916,7 +916,7 @@ class Blog
 			
 			if(mysql_num_rows($result) == 0) // Add rating
 			{
-				return ' - ' . get_lang('langRateThis') . ': <form method="get" action="blog.php" style="display: inline" id="frm_rating_' . $type . '_' . $post_id . '" name="frm_rating_' . $type . '_' . $post_id . '"><select name="rating" onchange="document.forms[\'frm_rating_' . $type . '_' . $post_id . '\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="' . $type . '" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="' . $blog_id . '" /><input type="hidden" name="post_id" value="' . $post_id . '" /></form>';
+				return ' - ' . get_lang('RateThis') . ': <form method="get" action="blog.php" style="display: inline" id="frm_rating_' . $type . '_' . $post_id . '" name="frm_rating_' . $type . '_' . $post_id . '"><select name="rating" onchange="document.forms[\'frm_rating_' . $type . '_' . $post_id . '\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="' . $type . '" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="' . $blog_id . '" /><input type="hidden" name="post_id" value="' . $post_id . '" /></form>';
 			}
 			else // Return 
 			{
@@ -931,7 +931,7 @@ class Blog
 			
 			if(mysql_num_rows($result) == 0) // Add rating
 			{
-				return ' - ' . get_lang('langRateThis') . ': <form method="get" action="blog.php" style="display: inline" id="frm_rating_' . $type . '_' . $comment_id . '" name="frm_rating_' . $type . '_' . $comment_id . '"><select name="rating" onchange="document.forms[\'frm_rating_' . $type . '_' . $comment_id . '\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="' . $type . '" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="' . $blog_id . '" /><input type="hidden" name="post_id" value="' . $post_id . '" /><input type="hidden" name="comment_id" value="' . $comment_id . '" /></form>';
+				return ' - ' . get_lang('RateThis') . ': <form method="get" action="blog.php" style="display: inline" id="frm_rating_' . $type . '_' . $comment_id . '" name="frm_rating_' . $type . '_' . $comment_id . '"><select name="rating" onchange="document.forms[\'frm_rating_' . $type . '_' . $comment_id . '\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="' . $type . '" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="' . $blog_id . '" /><input type="hidden" name="post_id" value="' . $post_id . '" /><input type="hidden" name="comment_id" value="' . $comment_id . '" /></form>';
 			}
 			else // Return 
 			{
@@ -981,7 +981,7 @@ class Blog
 			$blog_comment_date = ucfirst(format_locale_date($dateFormatLong,strtotime($comment['date'])));
 			$blog_comment_time = date('H:m',strtotime($comment['date']));
 			$blog_comment_actions = "";
-			if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_comment&amp;comment_id=' . $comment['comment_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('langDeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
+			if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_comment&amp;comment_id=' . $comment['comment_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
 			if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_comments_rate')) { $rating_select = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']); }
 			
 			if(!is_null($comment['task_id']))
@@ -993,10 +993,10 @@ class Blog
 			// Output...
 			$margin = $current_level * 30;
 			echo '<div class="blogpost_comment" style="margin-left: ' . $margin . 'px;' . $border_color . '">';
-				echo '<span class="blogpost_comment_title"><a href="#add_comment" onclick="document.getElementById(\'comment_parent_id\').value=\'' . $comment['comment_id'] . '\'; document.getElementById(\'comment_title\').value=\'Re: '.addslashes($comment['title']) . '\'" title="' . get_lang('langReplyToThisComment') . '" >'.stripslashes($comment['title']) . '</a></span>';
+				echo '<span class="blogpost_comment_title"><a href="#add_comment" onclick="document.getElementById(\'comment_parent_id\').value=\'' . $comment['comment_id'] . '\'; document.getElementById(\'comment_title\').value=\'Re: '.addslashes($comment['title']) . '\'" title="' . get_lang('ReplyToThisComment') . '" >'.stripslashes($comment['title']) . '</a></span>';
 				echo '<span class="blogpost_comment_date">' . $blog_comment_date . ' (' . $blog_comment_time . ')</span>';
 				echo '<span class="blogpost_text">' . $comment_text . '</span>';
-				echo '<span class="blogpost_comment_info">' . get_lang('langAuthor') . ': ' . $comment['lastname'] . ' ' . $comment['firstname'] . ' - ' . get_lang('langRating') . ': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']) . $rating_select . '</span>';
+				echo '<span class="blogpost_comment_info">' . get_lang('Author') . ': ' . $comment['lastname'] . ' ' . $comment['firstname'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']) . $rating_select . '</span>';
 				echo '<span class="blogpost_actions">' . $blog_comment_actions . '</span>';
 			echo '</div>';
 					
@@ -1095,14 +1095,14 @@ class Blog
 			
 			
 			echo '<form name="add_post" method="post" action="blog.php?blog_id=' . $blog_id . '">
-				 <span class="blogpost_title">' . get_lang('langNewPost') . '</span>
+				 <span class="blogpost_title">' . get_lang('NewPost') . '</span>
 						<table width="100%" border="0" cellspacing="2" cellpadding="0">
 							<tr>
-						   <td width="80" valign="top">' . get_lang('langTitle') . ':&nbsp;&nbsp;</td>
+						   <td width="80" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 						   <td><input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" /><input type="hidden" name="post_title_edited" id="post_title_edited" value="false" /><br /><br /></td>
 							</tr>
 							<tr>
-						   <td valign="top">' . get_lang('langPostFullText') . ':&nbsp;&nbsp;</td>
+						   <td valign="top">' . get_lang('PostFullText') . ':&nbsp;&nbsp;</td>
 						   <td>';
 									$oFCKeditor = new FCKeditor('post_full_text') ;
 									$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
@@ -1150,14 +1150,14 @@ class Blog
 		$blog_post_text = stripslashes($blog_post['full_text']);
 		
 		echo '<form name="edit_post" method="post" action="blog.php?blog_id=' . $blog_id . '">
-			 <span class="blogpost_title">' . get_lang('langEditPost') . '</span>
+			 <span class="blogpost_title">' . get_lang('EditPost') . '</span>
 					<table width="100%" border="0" cellspacing="2" cellpadding="0">
 						<tr>
-					   <td width="80" valign="top">' . get_lang('langTitle') . ':&nbsp;&nbsp;</td>
+					   <td width="80" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="post_title" id="post_title" type="text" size="60" value="'.stripslashes($blog_post['title']) . '" /><br /><br /></td>
 						</tr>
 						<tr>
-					   <td valign="top">' . get_lang('langPostFullText') . ':&nbsp;&nbsp;</td>
+					   <td valign="top">' . get_lang('PostFullText') . ':&nbsp;&nbsp;</td>
 					   <td>';
 								$oFCKeditor = new FCKeditor('post_full_text') ;
 								$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
@@ -1195,9 +1195,9 @@ class Blog
 			$counter = 0;
 			global $color2;
 			
-			echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=add"><img src="../img/blog.gif" border="0" align="middle" alt="scormbuilder" />' . get_lang('langAddTasks') . '</a> ';
-			echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=assign"><img src="../img/blog.gif" border="0" align="middle" alt="scormbuilder" />' . get_lang('langAssignTasks') . '</a>';
-			echo '<span class="blogpost_title">' . get_lang('langTaskList') . '</span><br />';
+			echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=add"><img src="../img/blog.gif" border="0" align="middle" alt="scormbuilder" />' . get_lang('AddTasks') . '</a> ';
+			echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=assign"><img src="../img/blog.gif" border="0" align="middle" alt="scormbuilder" />' . get_lang('AssignTasks') . '</a>';
+			echo '<span class="blogpost_title">' . get_lang('TaskList') . '</span><br />';
 			echo "<table class=\"data_table\">";
 			echo	"<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
 					 "<th width='240'><b>",get_lang("langTitle"),"</b></th>\n",
@@ -1229,7 +1229,7 @@ class Blog
 				$counter++;
 				$css_class = (($counter % 2) == 0) ? "row_odd" : "row_even";
 				$delete_icon = ($task['system_task'] == '1') ? "delete_na.gif" : "delete.gif";
-				$delete_title = ($task['system_task'] == '1') ? get_lang('langDeleteSystemTask') : get_lang('langDeleteTask');
+				$delete_title = ($task['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
 				$delete_link = ($task['system_task'] == '1') ? '#' : $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=delete&amp;task_id=' . $task['task_id'];
 				$delete_confirm = ($task['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"';
 				
@@ -1239,7 +1239,7 @@ class Blog
 							 '<td><span style="background-color: #' . $task['color'] . '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>',
 							 '<td width="50">',
 							 	'<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=edit&amp;task_id=' . $task['task_id'] . '">',
-								'<img src="../img/edit.gif" border="0" title="' . get_lang('langEditTask') . '" />',
+								'<img src="../img/edit.gif" border="0" title="' . get_lang('EditTask') . '" />',
 								"</a>\n",
 								'<a href="' . $delete_link . '"',
 								$delete_confirm,
@@ -1267,7 +1267,7 @@ class Blog
 		$counter = 0;
 		global $color2;
 		
-		echo '<span class="blogpost_title">' . get_lang('langAssignedTasks') . '</span><br />';
+		echo '<span class="blogpost_title">' . get_lang('AssignedTasks') . '</span><br />';
 		echo "<table class=\"data_table\">";
 		echo	"<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
 				 "<th width='240'><b>",get_lang("langMember"),"</b></th>\n",
@@ -1289,7 +1289,7 @@ class Blog
 			$counter++;
 			$css_class = (($counter % 2)==0) ? "row_odd" : "row_even";
 			$delete_icon = ($task['system_task'] == '1') ? "delete_na.gif" : "delete.gif";
-			$delete_title = ($task['system_task'] == '1') ? get_lang('langDeleteSystemTask') : get_lang('langDeleteTask');
+			$delete_title = ($task['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
 			$delete_link = ($task['system_task'] == '1') ? '#' : $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=delete&amp;task_id=' . $task['task_id'];
 			$delete_confirm = ($task['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"';
 			
@@ -1299,7 +1299,7 @@ class Blog
 						 '<td>' . $assignment['target_date'] . '</td>',
 						 '<td width="50">',
 						 	'<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=edit_assignment&amp;assignment_id=' . $assignment['task_id'] . '|' . $assignment['user_id'] . '">',
-							'<img src="../img/edit.gif" border="0" title="' . get_lang('langEditTask') . '" />',
+							'<img src="../img/edit.gif" border="0" title="' . get_lang('EditTask') . '" />',
 							"</a>\n",
 							'<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=delete_assignment&amp;assignment_id=' . $assignment['task_id'] . '|' . $assignment['user_id'] . '" ',
 							'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"',
@@ -1326,14 +1326,14 @@ class Blog
 					<table width="100%" border="0" cellspacing="2" cellpadding="0" style="background-color: #f6f6f6; border: 1px solid #dddddd">
 					  <tr>
 					  	<td width="200"></td>
-					  	<td><b>' . get_lang('langAddTask') . '</b><br /><br /></td>
+					  	<td><b>' . get_lang('AddTask') . '</b><br /><br /></td>
 					  </tr>
 						<tr>
-					   <td align="right">' . get_lang('langTitle') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="task_name" type="text" size="70" /></td>
 						</tr>
 						<tr>
-					   <td align="right">' . get_lang('langDescription') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('Description') . ':&nbsp;&nbsp;</td>
 					   <td><input name="task_description" type="text" size="70" /></td>
 						</tr>';
 						
@@ -1343,8 +1343,8 @@ class Blog
 							echo "\t\t" . '<td>' . "\n";
 								echo "\t\t\t" . '<table cellspacing="0" style="border:1px solid #808080; border-collapse:collapse; width:446px;">';
 									echo "\t\t\t\t" . '<tr style="background:#E5EDF9;">' . "\n";
-										echo "\t\t\t\t\t" . '<th colspan="2" style="border:1px solid #808080; width:223px;">' . get_lang('langArticleManager') . '</th>' . "\n";
-										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080;" width:223px;>' . get_lang('langCommentManager') . '</th>' . "\n";
+										echo "\t\t\t\t\t" . '<th colspan="2" style="border:1px solid #808080; width:223px;">' . get_lang('ArticleManager') . '</th>' . "\n";
+										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080;" width:223px;>' . get_lang('CommentManager') . '</th>' . "\n";
 									echo "\t\t\t\t" . '</tr>' . "\n";
 									echo "\t\t\t\t" . '<tr style="background:#E5EDF9;">' . "\n";
 										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080; width:111px;"><label for="articleDelete">' . get_lang('Delete') . '</label></th>' . "\n";
@@ -1362,7 +1362,7 @@ class Blog
 						/* end of edit */
 		
 		echo '			<tr>
-					   <td align="right">' . get_lang('langColor') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('Color') . ':&nbsp;&nbsp;</td>
 					   <td>
 					   	<select name="task_color" id="color" style="width: 150px; background-color: #eeeeee" onchange="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value" onkeypress="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value">';
 								foreach ($colors as $color)
@@ -1403,14 +1403,14 @@ class Blog
 					<table width="100%" border="0" cellspacing="2" cellpadding="0" style="background-color: #f6f6f6; border: 1px solid #dddddd">
 					  <tr>
 					  	<td width="200"></td>
-					  	<td><b>' . get_lang('langEditTask') . '</b><br /><br /></td>
+					  	<td><b>' . get_lang('EditTask') . '</b><br /><br /></td>
 					  </tr>
 						<tr>
-					   <td align="right">' . get_lang('langTitle') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="task_name" type="text" size="70" value="'.stripslashes($task['title']) . '" /></td>
 						</tr>
 						<tr>
-					   <td align="right">' . get_lang('langDescription') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('Description') . ':&nbsp;&nbsp;</td>
 					   <td><input name="task_description" type="text" size="70" value="'.stripslashes($task['description']) . '" /></td>
 						</tr>';
 						
@@ -1435,8 +1435,8 @@ class Blog
 							echo "\t\t" . '<td>' . "\n";
 								echo "\t\t\t" . '<table cellspacing="0" style="border:1px solid #808080; border-collapse:collapse; width:446px;">';
 									echo "\t\t\t\t" . '<tr style="background:#E5EDF9;">' . "\n";
-										echo "\t\t\t\t\t" . '<th colspan="2" style="border:1px solid #808080; width:223px;">' . get_lang('langArticleManager') . '</th>' . "\n";
-										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080;" width:223px;>' . get_lang('langCommentManager') . '</th>' . "\n";
+										echo "\t\t\t\t\t" . '<th colspan="2" style="border:1px solid #808080; width:223px;">' . get_lang('ArticleManager') . '</th>' . "\n";
+										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080;" width:223px;>' . get_lang('CommentManager') . '</th>' . "\n";
 									echo "\t\t\t\t" . '</tr>' . "\n";
 									echo "\t\t\t\t" . '<tr style="background:#E5EDF9;">' . "\n";
 										echo "\t\t\t\t\t" . '<th style="border:1px solid #808080; width:111px;"><label for="articleDelete">' . get_lang('Delete') . '</label></th>' . "\n";
@@ -1454,7 +1454,7 @@ class Blog
 						/* end of edit */
 						
 						echo '<tr>
-					   <td align="right">' . get_lang('langColor') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('Color') . ':&nbsp;&nbsp;</td>
 					   <td>
 					   	<select name="task_color" id="color" style="width: 150px; background-color: #' . $task['color'] . '" onchange="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value" onkeypress="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value">';
 								foreach ($colors as $color)
@@ -1534,18 +1534,18 @@ class Blog
 					<table width="100%" border="0" cellspacing="2" cellpadding="0" style="background-color: #f6f6f6; border: 1px solid #dddddd">
 					  <tr>
 					  	<td width="200"></td>
-					  	<td><b>' . get_lang('langAssignTask') . '</b><br /><br /></td>
+					  	<td><b>' . get_lang('AssignTask') . '</b><br /><br /></td>
 					  </tr>
 						<tr>
-					   <td align="right">' . get_lang('langSelectUser') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('SelectUser') . ':&nbsp;&nbsp;</td>
 					   <td>' . $select_user_list . '</td>
 						</tr>
 						<tr>
-					   <td align="right">' . get_lang('langSelectTask') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('SelectTask') . ':&nbsp;&nbsp;</td>
 					   <td>' . $select_task_list . '</td>
 						</tr>
 						<tr>
-					   <td align="right">' . get_lang('langSelectTargetDate') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('SelectTargetDate') . ':&nbsp;&nbsp;</td>
 					   <td>
 					    <select name="task_day">';
 								for($i=1; $i<=31; $i++)
@@ -1696,18 +1696,18 @@ class Blog
 				<table width="100%" border="0" cellspacing="2" cellpadding="0" style="background-color: #f6f6f6; border: 1px solid #dddddd">
 				  <tr>
 				  	<td width="200"></td>
-				  	<td><b>' . get_lang('langAssignTask') . '</b><br /><br /></td>
+				  	<td><b>' . get_lang('AssignTask') . '</b><br /><br /></td>
 				  </tr>
 					<tr>
-				   <td align="right">' . get_lang('langSelectUser') . ':&nbsp;&nbsp;</td>
+				   <td align="right">' . get_lang('SelectUser') . ':&nbsp;&nbsp;</td>
 				   <td>' . $select_user_list . '</td>
 					</tr>
 					<tr>
-				   <td align="right">' . get_lang('langSelectTask') . ':&nbsp;&nbsp;</td>
+				   <td align="right">' . get_lang('SelectTask') . ':&nbsp;&nbsp;</td>
 				   <td>' . $select_task_list . '</td>
 					</tr>
 					<tr>
-				   <td align="right">' . get_lang('langSelectTargetDate') . ':&nbsp;&nbsp;</td>
+				   <td align="right">' . get_lang('SelectTargetDate') . ':&nbsp;&nbsp;</td>
 				   <td>
 				    <select name="task_day">';
 		
@@ -1875,17 +1875,17 @@ class Blog
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		
 		// Display
-		echo '<span class="blogpost_title">' . get_lang('langSelectTaskArticle') . ' "' . $row['title'] . '"</span>';
+		echo '<span class="blogpost_title">' . get_lang('SelectTaskArticle') . ' "' . $row['title'] . '"</span>';
 		
 		if(mysql_num_rows($result) > 0)
 		{
 			while($blog_post = mysql_fetch_array($result))
 			{
-				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('langWrittenBy') . ' ' . $blog_post['firstname'] . ' '.stripslashes($blog_post['lastname']) . '<br />';
+				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . $blog_post['firstname'] . ' '.stripslashes($blog_post['lastname']) . '<br />';
 			}
 		}
 		else
-			echo get_lang('langNoArticles');	
+			echo get_lang('NoArticles');	
 	}
 	
 	/**
@@ -1951,7 +1951,7 @@ class Blog
 		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
 		$table_course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
-		echo '<span class="blogpost_title">' . get_lang('langSubscribeMembers') . '</span>';
+		echo '<span class="blogpost_title">' . get_lang('SubscribeMembers') . '</span>';
 		$properties["width"] = "100%";
 		
 		// Get blog members' id.
@@ -1965,10 +1965,10 @@ class Blog
 		
 		// Set table headers
 		$column_header[] = array ('', false, '');
-		$column_header[] = array (get_lang('langLastname'), true, '');
-		$column_header[] = array (get_lang('langFirstname'), true, '');
-		$column_header[] = array (get_lang('langEmail'), true, '');
-		$column_header[] = array (get_lang('langRegister'), false, '');
+		$column_header[] = array (get_lang('Lastname'), true, '');
+		$column_header[] = array (get_lang('Firstname'), true, '');
+		$column_header[] = array (get_lang('Email'), true, '');
+		$column_header[] = array (get_lang('Register'), false, '');
 		
 		// Get users in this course
 		$sql = "SELECT u.user_id, u.lastname, u.firstname, u.email FROM $tbl_users u INNER JOIN $table_course_user cu on u.user_id = cu.user_id and course_code='$currentCourse'";
@@ -1987,7 +1987,7 @@ class Blog
 				//Link to register users
 				if($user["user_id"] != $HTTP_SESSION_VARS["uid"])
 				{
-					$row[] = "<a href=\"" . $_SERVER['PHP_SELF']."?action=manage_members&amp;blog_id=$blog_id&amp;register=yes&amp;user_id=" . $user[user_id]."\">" . get_lang('langRegister')."</a>";
+					$row[] = "<a href=\"" . $_SERVER['PHP_SELF']."?action=manage_members&amp;blog_id=$blog_id&amp;register=yes&amp;user_id=" . $user[user_id]."\">" . get_lang('Register')."</a>";
 				}
 				else
 				{
@@ -2013,7 +2013,7 @@ class Blog
 			echo '<a href="blog.php?' . $link . '">' . get_lang('UnSelectAll') . '</a> ';
 			echo get_lang('WithSelected') . ' : ';
 			echo '<select name="action">';
-			echo '<option value="select_subscribe">' . get_lang('langRegister') . '</option>';
+			echo '<option value="select_subscribe">' . get_lang('Register') . '</option>';
 			echo '</select>';
 			echo '<input type="hidden" name="register" value="true" />';
 			echo '<input type="submit" value="' . get_lang('Ok') . '"/>';
@@ -2037,16 +2037,16 @@ class Blog
 		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
 		
-		echo '<span class="blogpost_title">' . get_lang('langUnsubscribeMembers') . '</span>';
+		echo '<span class="blogpost_title">' . get_lang('UnsubscribeMembers') . '</span>';
 		
 		$properties["width"] = "100%";
 		//table column titles
 		$column_header[] = array ('', false, '');
-		$column_header[] = array (get_lang('langLastname'), true, '');
-		$column_header[] = array (get_lang('langFirstname'), true, '');
-		$column_header[] = array (get_lang('langEmail'), true, '');
-		$column_header[] = array (get_lang('langTaskManager'), true, '');
-		$column_header[] = array (get_lang('langUnRegister'), false, '');
+		$column_header[] = array (get_lang('Lastname'), true, '');
+		$column_header[] = array (get_lang('Firstname'), true, '');
+		$column_header[] = array (get_lang('Email'), true, '');
+		$column_header[] = array (get_lang('TaskManager'), true, '');
+		$column_header[] = array (get_lang('UnRegister'), false, '');
 		
 		$sql_query = "SELECT user.user_id, user.lastname, user.firstname, user.email
 			FROM $tbl_users user
@@ -2093,7 +2093,7 @@ class Blog
 			
 			if($myrow["user_id"] != $_uid)
 			{
-				$row[] = "<a href=\"" . $_SERVER['PHP_SELF']."?action=manage_members&amp;blog_id=$blog_id&amp;unregister=yes&amp;user_id=" . $myrow[user_id]."\">" . get_lang('langUnRegister')."</a>";
+				$row[] = "<a href=\"" . $_SERVER['PHP_SELF']."?action=manage_members&amp;blog_id=$blog_id&amp;unregister=yes&amp;user_id=" . $myrow[user_id]."\">" . get_lang('UnRegister')."</a>";
 			}
 			else
 			{
@@ -2118,7 +2118,7 @@ class Blog
 		echo '<a href="blog.php?' . $link . '">' . get_lang('UnSelectAll') . '</a> ';
 		echo get_lang('WithSelected') . ' : ';
 		echo '<select name="action">';
-		echo '<option value="select_unsubscribe">' . get_lang('langUnRegister') . '</option>';
+		echo '<option value="select_unsubscribe">' . get_lang('UnRegister') . '</option>';
 		echo '</select>';
 		echo '<input type="hidden" name="unregister" value="true" />';
 		echo '<input type="submit" value="' . get_lang('Ok') . '"/>';
@@ -2137,7 +2137,7 @@ class Blog
 		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
 		
-		echo '<span class="blogpost_title">' . get_lang('langRightsManager') . '</span>';
+		echo '<span class="blogpost_title">' . get_lang('RightsManager') . '</span>';
 		
 		// Integration of patricks permissions system.
 		include_once('../permissions/blog_permissions.inc.php');
@@ -2155,16 +2155,16 @@ class Blog
 					<table width="100%" border="0" cellspacing="2" cellpadding="0" class="new_comment">
 						<tr>
 							<td colspan="2">
-								<span class="blogpost_title">'.(isset($_GET['task_id']) ? get_lang('langExecuteThisTask') : get_lang('langNewComment')) . '</span><br />
+								<span class="blogpost_title">'.(isset($_GET['task_id']) ? get_lang('ExecuteThisTask') : get_lang('NewComment')) . '</span><br />
 			 					<a name="add_comment" />
 							</td>
 						</tr>
 						<tr>
-					   <td width="100" valign="top">' . get_lang('langTitle') . ':&nbsp;&nbsp;</td>
+					   <td width="100" valign="top">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" /><br /><br /></td>
 						</tr>
 						<tr>
-					   <td valign="top">' . get_lang('langComment') . ':&nbsp;&nbsp;</td>
+					   <td valign="top">' . get_lang('Comment') . ':&nbsp;&nbsp;</td>
 					   <td>';
 									$oFCKeditor = new FCKeditor('comment_text') ;
 									$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
@@ -2283,7 +2283,7 @@ class Blog
 					$tasks[$mytask['task_day']][$mytask['task_id']]['blog_id'] = $mytask['blog_id'];
 					$tasks[$mytask['task_day']][$mytask['task_id']]['blog_name'] = $mytask['blog_name'];
 					$tasks[$mytask['task_day']][$mytask['task_id']]['day'] = $mytask['task_day'];
-					//echo '<li><a href="blog.php?action=execute_task&amp;blog_id=' . $mytask['blog_id'] . '&amp;task_id='.stripslashes($mytask['task_id']) . '" title="[Blog: ' . $mytask['blog_name'] . '] ' . get_lang('langExecuteThisTask') . '">'.stripslashes($mytask['title']) . '</a></li>';	
+					//echo '<li><a href="blog.php?action=execute_task&amp;blog_id=' . $mytask['blog_id'] . '&amp;task_id='.stripslashes($mytask['task_id']) . '" title="[Blog: ' . $mytask['blog_name'] . '] ' . get_lang('ExecuteThisTask') . '">'.stripslashes($mytask['title']) . '</a></li>';	
 				}
 			}
 		}
@@ -2328,13 +2328,13 @@ class Blog
 					
 					// If there are posts on this day, create a filter link.
 					if(in_array($curday, $posts))
-						echo '<a href="blog.php?blog_id=' . $blog_id . '&amp;filter=' . $year . '-' . $month . '-' . $curday . '&amp;month=' . $month . '&amp;year=' . $year . '" title="' . get_lang('langViewPostsOfThisDay') . '">' . $curday . '</a>';
+						echo '<a href="blog.php?blog_id=' . $blog_id . '&amp;filter=' . $year . '-' . $month . '-' . $curday . '&amp;month=' . $month . '&amp;year=' . $year . '" title="' . get_lang('ViewPostsOfThisDay') . '">' . $curday . '</a>';
 					else
 						echo $dayheader;
 					
 					// Add tasks to calendar
 					foreach ($tasks[$curday] as $task)
-						echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="« ' . $task['title'] . ' » ' . get_lang('langInBlog') . ' « ' . $task['blog_name'] . ' » - ' . get_lang('langExecuteThisTask') . '"><img src="../img/blog_task.gif" alt="Task" /></a>';
+						echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="« ' . $task['title'] . ' » ' . get_lang('InBlog') . ' « ' . $task['blog_name'] . ' » - ' . get_lang('ExecuteThisTask') . '"><img src="../img/blog_task.gif" alt="Task" /></a>';
 					
 					echo "</td>\n";
 					
@@ -2360,14 +2360,14 @@ class Blog
 					<table width="100%" border="0" cellspacing="2" cellpadding="0" class="newBlog">
 					  <tr>
 					  	<td></td>
-					  	<td><b>' . get_lang('langAddBlog') . '</b><br /><br /></td>
+					  	<td><b>' . get_lang('AddBlog') . '</b><br /><br /></td>
 					  </tr>
 						<tr>
-					   <td align="right">' . get_lang('langTitle') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="blog_name" type="text" size="100" /></td>
 						</tr>
 						<tr>
-					   <td align="right">' . get_lang('langSubtitle') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('Subtitle') . ':&nbsp;&nbsp;</td>
 					   <td><input name="blog_subtitle" type="text" size="100" /></td>
 						</tr>
 						<tr>
@@ -2397,14 +2397,14 @@ class Blog
 					<table width="100%" border="0" cellspacing="2" cellpadding="0" class="newBlog">
 					  <tr>
 					  	<td></td>
-					  	<td><b>' . get_lang('langEditBlog') . '</b><br /><br /></td>
+					  	<td><b>' . get_lang('EditBlog') . '</b><br /><br /></td>
 					  </tr>
 						<tr>
-					   <td align="right">' . get_lang('langTitle') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
 					   <td><input name="blog_name" type="text" size="100" value="' . $blog['blog_name'] . '" /></td>
 						</tr>
 						<tr>
-					   <td align="right">' . get_lang('langSubtitle') . ':&nbsp;&nbsp;</td>
+					   <td align="right">' . get_lang('Subtitle') . ':&nbsp;&nbsp;</td>
 					   <td><input name="blog_subtitle" type="text" size="100" value="' . $blog['blog_subtitle'] . '" /></td>
 						</tr>
 						<tr>
@@ -2444,14 +2444,14 @@ class Blog
 						 '<td' . $visibility_class . '>'.stripslashes($blog['blog_subtitle']) . '</td>',
 						 '<td width="200">',
 						 	'<a href="' . $_SERVER['PHP_SELF'] . '?action=edit&amp;blog_id=' . $blog['blog_id'] . '">',
-							'<img src="../img/edit.gif" border="0" title="' . get_lang('langEditBlog') . '" />',
+							'<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />',
 							"</a>\n",
 							'<a href="' . $_SERVER['PHP_SELF'] . '?action=delete&amp;blog_id=' . $blog['blog_id'] . '" ',
 							'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"',
-							'<img src="../img/delete.gif" border="0" title="' . get_lang('langDeleteBlog') . '" />',
+							'<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />',
 							"</a>\n",
 							'<a href="' . $_SERVER['PHP_SELF'] . '?action=visibility&amp;blog_id=' . $blog['blog_id'] . '">',
-							'<img src="../img/' . $visibility_icon . '" border="0" title="' . get_lang('langVisible') . '" />',
+							'<img src="../img/' . $visibility_icon . '" border="0" title="' . get_lang('Visible') . '" />',
 							"</a>\n",
 						 '</td>',
 					'</tr>';

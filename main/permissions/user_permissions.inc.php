@@ -154,7 +154,7 @@ foreach ($tool_rights as $tool=>$rights) // $tool_rights contains all the possib
 		$tmp = strpos($tool,'_')+1;
 		$blog_id = substr($tool,$tmp,strlen($tool));
 		// Get title
-		echo get_lang('langBlog').": ".Blog::get_blog_title($blog_id);
+		echo get_lang('Blog').": ".Blog::get_blog_title($blog_id);
 	}
 	else
 	{

@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 9730 2006-10-25 09:15:58Z elixir_inter $
+// $Id: inscription.php 9972 2006-11-14 14:44:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -200,7 +200,7 @@ if ($form->validate())
 
 			// The body can be as long as you wish, and any combination of text and variables
 
-			$emailbody = get_lang('langDear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('langYouAreReg')." ".get_setting('siteName')." ".get_lang('langSettings')." ".$values['username']."\n".get_lang('langPass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('langAddress')." ".get_setting('siteName')." ".get_lang('langIs')." : ".$rootWeb."\n\n".get_lang('langProblem')."\n\n".get_lang('langFormula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('langManager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('langEmail')." : ".get_setting('emailAdministrator');
+			$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ".get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is')." : ".$rootWeb."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n".get_lang('Manager')." ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n".get_lang('Email')." : ".get_setting('emailAdministrator');
 
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last
@@ -212,25 +212,25 @@ if ($form->validate())
 		}
 	}
 
-	echo "<p>".get_lang('langDear')." ".stripslashes("$firstname $lastname").",<br><br>".get_lang('langPersonalSettings').".</p>\n";
+	echo "<p>".get_lang('Dear')." ".stripslashes("$firstname $lastname").",<br><br>".get_lang('PersonalSettings').".</p>\n";
 
 	if (!empty ($values['email']))
 	{
-		echo "<p>".get_lang('langMailHasBeenSent').".</p>";
+		echo "<p>".get_lang('MailHasBeenSent').".</p>";
 	}
 
 	if ($is_allowedCreateCourse)
 	{
-		echo "<p>", get_lang('langNowGoCreateYourCourse'), ".</p>\n";
+		echo "<p>", get_lang('NowGoCreateYourCourse'), ".</p>\n";
 		$actionUrl = "../create_course/add_course.php";
 	}
 	else
 	{
-		echo "<p>", get_lang('langNowGoChooseYourCourses'), ".</p>\n";
+		echo "<p>", get_lang('NowGoChooseYourCourses'), ".</p>\n";
 		$actionUrl = "courses.php?action=subscribe";
 	}
 	// ?uidReset=true&uidReq=$_uid
-	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<input type=\"submit\" name=\"next\" value=\"", get_lang('langNext'), "\" validationmsg=\" ", get_lang('langNext'), " \">\n", "</form>\n";
+	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<input type=\"submit\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">\n", "</form>\n";
 
 }
 else

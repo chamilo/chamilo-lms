@@ -1,4 +1,4 @@
-<?php // $Id: exercise_admin.inc.php 9665 2006-10-24 10:43:48Z elixir_inter $
+<?php // $Id: exercise_admin.inc.php 9972 2006-11-14 14:44:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -113,11 +113,11 @@ if(!empty($msgErr))
 ?>
 
 <tr>
-  <td><?php echo get_lang('langExerciseName'); ?> :</td>
+  <td><?php echo get_lang('ExerciseName'); ?> :</td>
   <td><input type="text" name="exerciseTitle" size="50" maxlength="200" value="<?php echo htmlentities($exerciseTitle); ?>" style="width:400px;"></td>
 </tr>
 <tr>
-  <td valign="top"><?php echo get_lang('langExerciseDescription'); ?> :</td>
+  <td valign="top"><?php echo get_lang('ExerciseDescription'); ?> :</td>
   <td>
 <textarea name="exerciseDescription" rows="4" cols="48"><?php echo $exerciseDescription; ?></textarea>
 <?php
@@ -130,10 +130,10 @@ if(!empty($msgErr))
 
 <!--
 <tr>
-  <td valign="top"><?php echo get_lang('langSound'); ?> :
+  <td valign="top"><?php echo get_lang('Sound'); ?> :
 
   <?php if(!empty($exerciseSound)): ?>
-  <a href="../document/download.php?doc_url=%2Faudio%2F<?php echo $exerciseSound; ?>" target="_blank"><img src="../img/wav.gif" border="0" align="absmiddle" alt="<?php echo get_lang('langSound'); ?>"></a>
+  <a href="../document/download.php?doc_url=%2Faudio%2F<?php echo $exerciseSound; ?>" target="_blank"><img src="../img/wav.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Sound'); ?>"></a>
   <?php endif; ?>
 
   </td>
@@ -141,7 +141,7 @@ if(!empty($msgErr))
 
   <?php if(!empty($exerciseSound)): ?>
   <br>
-  <input class="checkbox" type="checkbox" name="deleteSound" value="1"> <?php echo get_lang('langDeleteSound'); ?>
+  <input class="checkbox" type="checkbox" name="deleteSound" value="1"> <?php echo get_lang('DeleteSound'); ?>
   <?php endif; ?>
 
   </td>
@@ -149,9 +149,9 @@ if(!empty($msgErr))
 //-->
 
 <tr>
-  <td valign="top"><?php echo get_lang('langExerciseType'); ?> :</td>
-  <td><input class="checkbox" type="radio" name="exerciseType" value="1" <?php if($exerciseType <= 1) echo 'checked="checked"'; ?>> <?php echo get_lang('langSimpleExercise'); ?><br>
-      <input class="checkbox" type="radio" name="exerciseType" value="2" <?php if($exerciseType >= 2) echo 'checked="checked"'; ?>> <?php echo get_lang('langSequentialExercise'); ?></td>
+  <td valign="top"><?php echo get_lang('ExerciseType'); ?> :</td>
+  <td><input class="checkbox" type="radio" name="exerciseType" value="1" <?php if($exerciseType <= 1) echo 'checked="checked"'; ?>> <?php echo get_lang('SimpleExercise'); ?><br>
+      <input class="checkbox" type="radio" name="exerciseType" value="2" <?php if($exerciseType >= 2) echo 'checked="checked"'; ?>> <?php echo get_lang('SequentialExercise'); ?></td>
 </tr>
 
 <?php
@@ -160,8 +160,8 @@ if(!empty($msgErr))
 ?>
 
 <tr>
-  <td valign="top"><?php echo get_lang('langRandomQuestions'); ?> :</td>
-  <td><input class="checkbox" type="checkbox" name="randomQuestions" value="1" <?php if($randomQuestions) echo 'checked="checked"'; ?>> <?php echo get_lang('langYes'); ?>, <?php echo get_lang('langTake'); ?>
+  <td valign="top"><?php echo get_lang('RandomQuestions'); ?> :</td>
+  <td><input class="checkbox" type="checkbox" name="randomQuestions" value="1" <?php if($randomQuestions) echo 'checked="checked"'; ?>> <?php echo get_lang('Yes'); ?>, <?php echo get_lang('Take'); ?>
     <select name="questionDrawn">
 
 <?php
@@ -175,7 +175,7 @@ if(!empty($msgErr))
 		}
 ?>
 
-	</select> <?php echo strtolower(get_lang('langQuestions')).' '.get_lang('langAmong').' '.$nbrQuestions; ?>
+	</select> <?php echo strtolower(get_lang('Questions')).' '.get_lang('Among').' '.$nbrQuestions; ?>
   </td>
 </tr>
 
@@ -187,8 +187,8 @@ if(!empty($msgErr))
   <td>&nbsp;</td>
   <td>
 	  <input type="hidden" name="myid" value="1"><?php //added?>
-	<input type="submit" name="submitExercise" value="<?php echo get_lang('langOk'); ?>">
-	<!-- &nbsp;&nbsp;<input type="submit" name="cancelExercise" value="<?php echo get_lang('langCancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('langConfirmYourChoice'))); ?>')) return false;"> //-->
+	<input type="submit" name="submitExercise" value="<?php echo get_lang('Ok'); ?>">
+	<!-- &nbsp;&nbsp;<input type="submit" name="cancelExercise" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"> //-->
   </td>
 </tr>
 </table>
@@ -205,7 +205,7 @@ else
   $exerciseTitle = api_parse_tex($exerciseTitle);
   echo $exerciseTitle; ?>
   <?php if(!empty($exerciseSound)): ?>
-  <a href="../document/download.php?doc_url=%2Faudio%2F<?php echo $exerciseSound; ?>" target="_blank"><img src="../img/wav.gif" border="0" align="absmiddle" alt="<?php echo get_lang('langSound'); ?>"></a>
+  <a href="../document/download.php?doc_url=%2Faudio%2F<?php echo $exerciseSound; ?>" target="_blank"><img src="../img/wav.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Sound'); ?>"></a>
   <?php endif; ?>
 </h3>
 
@@ -215,7 +215,7 @@ else
   echo $exerciseDescription; ?>
 </blockquote>
 
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>?modifyExercise=yes"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('langModify'); ?>"></a>
+<a href="<?php echo $_SERVER['PHP_SELF']; ?>?modifyExercise=yes"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>"></a>
 
 <?php
 }

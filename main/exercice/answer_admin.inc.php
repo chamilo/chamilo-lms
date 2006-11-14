@@ -1,4 +1,4 @@
-<?php // $Id: answer_admin.inc.php 9665 2006-10-24 10:43:48Z elixir_inter $
+<?php // $Id: answer_admin.inc.php 9972 2006-11-14 14:44:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -174,7 +174,7 @@ if($submitAnswers || $buttonBack)
             // checks if field is empty
             if(empty($reponse[$i]) && $reponse[$i] != '0')
             {
-                $msgErr=get_lang('langGiveAnswers');
+                $msgErr=get_lang('GiveAnswers');
 
                 // clears answers already recorded into the Answer object
                 $objAnswer->cancel();
@@ -202,7 +202,7 @@ if($submitAnswers || $buttonBack)
         {
             if(!$nbrGoodAnswers)
             {
-                $msgErr=($answerType == UNIQUE_ANSWER)?get_lang('langChooseGoodAnswer'):get_lang('langChooseGoodAnswers');
+                $msgErr=($answerType == UNIQUE_ANSWER)?get_lang('ChooseGoodAnswer'):get_lang('ChooseGoodAnswers');
 
                 // clears answers already recorded into the Answer object
                 $objAnswer->cancel();
@@ -290,11 +290,11 @@ if($submitAnswers || $buttonBack)
             // if no text has been typed or the text contains no blank
             elseif(empty($reponse))
             {
-                $msgErr=get_lang('langGiveText');
+                $msgErr=get_lang('GiveText');
             }
             elseif(!ereg('\[.+\]',$reponse))
             {
-                $msgErr=get_lang('langDefineBlanks');
+                $msgErr=get_lang('DefineBlanks');
             }
             else
             {
@@ -407,11 +407,11 @@ if($submitAnswers || $buttonBack)
             elseif(empty($free_comment))
             {
                 if($debug>0){echo str_repeat('&nbsp;',6).'$free_comment is empty'."<br />\n";}
-                $msgErr=get_lang('langGiveText');
+                $msgErr=get_lang('GiveText');
             }
             /*elseif(!ereg('\[.+\]',$reponse))
             {
-                $msgErr=get_lang('langDefineBlanks');
+                $msgErr=get_lang('DefineBlanks');
             }*/
             else
             {
@@ -438,7 +438,7 @@ if($submitAnswers || $buttonBack)
             // checks if field is empty
             if(empty($option[$i]) && $option[$i] != '0')
             {
-                $msgErr=get_lang('langFillLists');
+                $msgErr=get_lang('FillLists');
 
                 // clears options already recorded into the Answer object
                 $objAnswer->cancel();
@@ -466,7 +466,7 @@ if($submitAnswers || $buttonBack)
                 // checks if field is empty
                 if(empty($match[$i]) && $match[$i] != '0')
                 {
-                    $msgErr=get_lang('langFillLists');
+                    $msgErr=get_lang('FillLists');
 
                     // clears matches already recorded into the Answer object
                     $objAnswer->cancel();
@@ -529,7 +529,7 @@ if($submitAnswers || $buttonBack)
             // checks if field is empty
             if(empty($reponse[$i]) && $reponse[$i] != '0')
             {
-                $msgErr=get_lang('langHotspotGiveAnswers');
+                $msgErr=get_lang('HotspotGiveAnswers');
 
                 // clears answers already recorded into the Answer object
                 $objAnswer->cancel();
@@ -539,7 +539,7 @@ if($submitAnswers || $buttonBack)
             
             if($weighting[$i] <= 0)
             {
-            	$msgErr=get_lang('langHotspotWeightingError');
+            	$msgErr=get_lang('HotspotWeightingError');
             	
             	// clears answers already recorded into the Answer object
                 $objAnswer->cancel();
@@ -548,7 +548,7 @@ if($submitAnswers || $buttonBack)
             }
             if($hotspot_coordinates[$i] == '0;0|0|0' || empty($hotspot_coordinates[$i]))
             {
-            	$msgErr=get_lang('langHotspotNotDrawn');
+            	$msgErr=get_lang('HotspotNotDrawn');
             	
             	// clears answers already recorded into the Answer object
                 $objAnswer->cancel();
@@ -854,7 +854,7 @@ if($modifyAnswers)
         	}
         	else
         	{
-        		$msgErr=get_lang('langMinHotspot');
+        		$msgErr=get_lang('MinHotspot');
         	}
         }
 
@@ -873,7 +873,7 @@ if($modifyAnswers)
         	}
         	else
         	{
-        		$msgErr=get_lang('langMaxHotspot');
+        		$msgErr=get_lang('MaxHotspot');
         	}
         }
 
@@ -953,14 +953,14 @@ if($modifyAnswers)
 ?>
 
 <tr>
-  <td colspan="5"><?php echo get_lang('langAnswers'); ?> :</td>
+  <td colspan="5"><?php echo get_lang('Answers'); ?> :</td>
 </tr>
 <tr bgcolor="#E6E6E6">
   <td>N°</td>
-  <td><?php echo get_lang('langTrue'); ?></td>
-  <td><?php echo get_lang('langAnswer'); ?></td>
-  <td><?php echo get_lang('langComment'); ?></td>
-  <td><?php echo get_lang('langQuestionWeighting'); ?></td>
+  <td><?php echo get_lang('True'); ?></td>
+  <td><?php echo get_lang('Answer'); ?></td>
+  <td><?php echo get_lang('Comment'); ?></td>
+  <td><?php echo get_lang('QuestionWeighting'); ?></td>
 </tr>
 
 <?php
@@ -1002,10 +1002,10 @@ if($modifyAnswers)
 
 <tr>
   <td colspan="5">
-	<input type="submit" name="submitAnswers" value="<?php echo get_lang('langOk'); ?>">
-	&nbsp;&nbsp;<input type="submit" name="lessAnswers" value="<?php echo get_lang('langLessAnswers'); ?>">
-	&nbsp;&nbsp;<input type="submit" name="moreAnswers" value="<?php echo get_lang('langMoreAnswers'); ?>">
-	<!-- &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="<?php echo get_lang('langCancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('langConfirmYourChoice'))); ?>')) return false;"> //-->
+	<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>">
+	&nbsp;&nbsp;<input type="submit" name="lessAnswers" value="<?php echo get_lang('LessAnswers'); ?>">
+	&nbsp;&nbsp;<input type="submit" name="moreAnswers" value="<?php echo get_lang('MoreAnswers'); ?>">
+	<!-- &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"> //-->
   </td>
 </tr>
 </table>
@@ -1068,15 +1068,15 @@ if($modifyAnswers)
 ?>
 
 <tr>
-  <td><?php echo get_lang('langTypeTextBelow').', '.get_lang('langAnd').' '.get_lang('langUseTagForBlank'); ?> :</td>
+  <td><?php echo get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'); ?> :</td>
 </tr>
 <tr>
-  <td><textarea wrap="virtual" name="reponse" cols="65" rows="6"><?php if(!$submitAnswers && empty($reponse)) echo get_lang('langDefaultTextInBlanks'); else echo htmlentities($reponse); ?></textarea></td>
+  <td><textarea wrap="virtual" name="reponse" cols="65" rows="6"><?php if(!$submitAnswers && empty($reponse)) echo get_lang('DefaultTextInBlanks'); else echo htmlentities($reponse); ?></textarea></td>
 </tr>
 <tr>
   <td colspan="5">
-	<!-- <input type="submit" name="cancelAnswers" value="<?php echo get_lang('langCancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('langConfirmYourChoice'))); ?>')) return false;">
-	&nbsp;&nbsp; //--> <input type="submit" name="submitAnswers" value="<?php echo get_lang('langOk'); ?>">
+	<!-- <input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;">
+	&nbsp;&nbsp; //--> <input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>">
   </td>
 </tr>
 </table>
@@ -1109,7 +1109,7 @@ if($modifyAnswers)
 ?>
 
 <tr>
-  <td colspan="2"><?php echo get_lang('langWeightingForEachBlank'); ?> :</td>
+  <td colspan="2"><?php echo get_lang('WeightingForEachBlank'); ?> :</td>
 </tr>
 <tr>
   <td colspan="2">&nbsp;</td>
@@ -1134,9 +1134,9 @@ if($modifyAnswers)
 </tr>
 <tr>
   <td colspan="2">
-	<input type="submit" name="buttonBack" value="&lt; <?php echo get_lang('langBack'); ?>">
-	&nbsp;&nbsp;<input type="submit" name="submitAnswers" value="<?php echo get_lang('langOk'); ?>">
-	<!-- &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="<?php echo get_lang('langCancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('langConfirmYourChoice'))); ?>')) return false;"> //-->
+	<input type="submit" name="buttonBack" value="&lt; <?php echo get_lang('Back'); ?>">
+	&nbsp;&nbsp;<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>">
+	<!-- &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"> //-->
   </td>
 </tr>
 </table>
@@ -1196,12 +1196,12 @@ if($modifyAnswers)
 				echo '';
 			else 
 				echo htmlentities($free_comment); ?>
-   				<tr><td width="22%"><?php echo get_lang('langQuestionWeighting'); ?></td>
+   				<tr><td width="22%"><?php echo get_lang('QuestionWeighting'); ?></td>
 				<td width="78%"><input type="text" size="4" name="weighting" value="<?php if(!$submitAnswers && !isset($weighting)) echo '0'; else echo $weighting; ?>"></td>
 				</tr>
 				<tr>
 			   <td colspan="5">
-					<input type="submit" name="submitAnswers" value="<?php echo get_lang('langOk'); ?>">
+					<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>">
   				</td>
 				</tr>
 			</table>
@@ -1263,8 +1263,8 @@ if($modifyAnswers)
 ?>
 
 <tr>
-  <td colspan="3"><?php echo get_lang('langMakeCorrespond'); ?> :</td>
-  <td><?php echo get_lang('langQuestionWeighting'); ?> :</td>
+  <td colspan="3"><?php echo get_lang('MakeCorrespond'); ?> :</td>
+  <td><?php echo get_lang('QuestionWeighting'); ?> :</td>
 </tr>
 
 <?php
@@ -1298,12 +1298,12 @@ if($modifyAnswers)
 
 <tr>
   <td colspan="4">
-	<input type="submit" name="lessMatches" value="<?php echo get_lang('langLessElements'); ?>">
-	&nbsp;&nbsp;<input type="submit" name="moreMatches" value="<?php echo get_lang('langMoreElements'); ?>">
+	<input type="submit" name="lessMatches" value="<?php echo get_lang('LessElements'); ?>">
+	&nbsp;&nbsp;<input type="submit" name="moreMatches" value="<?php echo get_lang('MoreElements'); ?>">
   </td>
 </tr>
 <tr>
-  <td colspan="4"><?php echo get_lang('langDefineOptions'); ?> :</td>
+  <td colspan="4"><?php echo get_lang('DefineOptions'); ?> :</td>
 </tr>
 
 <?php
@@ -1322,8 +1322,8 @@ if($modifyAnswers)
 
 <tr>
   <td colspan="4">
-	<input type="submit" name="lessOptions" value="<?php echo get_lang('langLessElements'); ?>">
-	&nbsp;&nbsp;<input type="submit" name="moreOptions" value="<?php echo get_lang('langMoreElements'); ?>">
+	<input type="submit" name="lessOptions" value="<?php echo get_lang('LessElements'); ?>">
+	&nbsp;&nbsp;<input type="submit" name="moreOptions" value="<?php echo get_lang('MoreElements'); ?>">
   </td>
 </tr>
 <tr>
@@ -1331,8 +1331,8 @@ if($modifyAnswers)
 </tr>
 <tr>
   <td colspan="4">
-	<!-- <input type="submit" name="cancelAnswers" value="<?php echo get_lang('langCancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('langConfirmYourChoice'))); ?>')) return false;">
-	&nbsp;&nbsp; //--> <input type="submit" name="submitAnswers" value="<?php echo get_lang('langOk'); ?>">
+	<!-- <input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;">
+	&nbsp;&nbsp; //--> <input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>">
   </td>
 </tr>
 </table>
@@ -1370,7 +1370,7 @@ if($modifyAnswers)
 ?>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 	<tr>
-		<td colspan="2" style="border:1px solid #4271b5; border-bottom:none;"><?php echo get_lang('langHotspotChoose'); ?></td>
+		<td colspan="2" style="border:1px solid #4271b5; border-bottom:none;"><?php echo get_lang('HotspotChoose'); ?></td>
 	</tr>
 	<tr>
 		<td width="550" valign="top">
@@ -1403,14 +1403,14 @@ if($modifyAnswers)
 				<table border="0" cellpadding="3" cellspacing="0" style="border: 1px solid #4271b5; border-left:none; width: 100%; ">
 					<!--
 					<tr>
-					  <td colspan="5"><?php echo get_lang('langAnswerHotspot'); ?> :</td>
+					  <td colspan="5"><?php echo get_lang('AnswerHotspot'); ?> :</td>
 					</tr>
 					-->
 					<tr style="background-color: #E6E6E6; height: 37px">
-					  <td style="width: 20px; border-bottom: 1px solid #4271b5">&nbsp;<?php /* echo get_lang('langHotspot'); */ ?></td>
-					  <td style="width: 100px; border-bottom: 1px solid #4271b5"><?php echo get_lang('langDescription'); ?>*</td>
-					  <td style="border-bottom: 1px solid #4271b5"><?php echo get_lang('langComment'); ?></td>
-					  <td style="width: 60px; border-bottom: 1px solid #4271b5"><?php echo get_lang('langQuestionWeighting'); ?>*</td>
+					  <td style="width: 20px; border-bottom: 1px solid #4271b5">&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></td>
+					  <td style="width: 100px; border-bottom: 1px solid #4271b5"><?php echo get_lang('Description'); ?>*</td>
+					  <td style="border-bottom: 1px solid #4271b5"><?php echo get_lang('Comment'); ?></td>
+					  <td style="width: 60px; border-bottom: 1px solid #4271b5"><?php echo get_lang('QuestionWeighting'); ?>*</td>
 					</tr>
 					
 					<?php
@@ -1433,11 +1433,11 @@ if($modifyAnswers)
 					
 					<tr>
 					  <td colspan="5">
-						<input type="submit" name="lessAnswers" value="<?php echo get_lang('langLessHotspots'); ?>" />
-						<input type="submit" name="moreAnswers" value="<?php echo get_lang('langMoreHotspots'); ?>" />
+						<input type="submit" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" />
+						<input type="submit" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />
 						<hr noshade="noshade" size="1" style="color: #4271b5" />
-						<input type="submit" name="submitAnswers" value="<?php echo get_lang('langOk'); ?>" />
-						<input type="submit" name="cancelAnswers" value="<?php echo get_lang('langCancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('langConfirmYourChoice'))); ?>')) return false;" />
+						<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />
+						<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" />
 					  </td>
 					</tr>
 				</table>
@@ -1445,7 +1445,7 @@ if($modifyAnswers)
 			<table cellpadding="0" cellspacing="0">
 				<tr>
 					<td style="text-align:center; vertical-align:top; width:20px;">*</td>
-					<td style="width:auto;"><?php echo get_lang('langHotspotRequired'); ?></td>
+					<td style="width:auto;"><?php echo get_lang('HotspotRequired'); ?></td>
 				</tr>
 			</table>
 		</td>

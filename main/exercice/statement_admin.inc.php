@@ -1,4 +1,4 @@
-<?php // $Id: statement_admin.inc.php 9665 2006-10-24 10:43:48Z elixir_inter $
+<?php // $Id: statement_admin.inc.php 9972 2006-11-14 14:44:37Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -245,10 +245,10 @@ if($okPicture)
 	}
 
 if($modifyQuestion) {
-	$obj_group_type[] = &HTML_QuickForm::createElement('radio', NULL, NULL, get_lang('langUniqueSelect'),1);
-	$obj_group_type[] = &HTML_QuickForm::createElement('radio', NULL, NULL, get_lang('langMultipleSelect'),2);
-	$obj_group_type[] = &HTML_QuickForm::createElement('radio', NULL, NULL, get_lang('langMatching'),4);
-	$obj_group_type[] = &HTML_QuickForm::createElement('radio', NULL, NULL, get_lang('langFillBlanks'),3);
+	$obj_group_type[] = &HTML_QuickForm::createElement('radio', NULL, NULL, get_lang('UniqueSelect'),1);
+	$obj_group_type[] = &HTML_QuickForm::createElement('radio', NULL, NULL, get_lang('MultipleSelect'),2);
+	$obj_group_type[] = &HTML_QuickForm::createElement('radio', NULL, NULL, get_lang('Matching'),4);
+	$obj_group_type[] = &HTML_QuickForm::createElement('radio', NULL, NULL, get_lang('FillBlanks'),3);
 	$obj_group_type[] = &HTML_QuickForm::createElement('radio', NULL, NULL, get_lang('freeAnswer'),5);
 	$obj_group_type[] = &HTML_QuickForm::createElement('radio', NULL, NULL, get_lang('Hotspot'),6);
 	$form->addGroup($obj_group_type, 'answerType', get_lang('AnswerType').':','<br />');
@@ -269,12 +269,12 @@ $form->display();
 
 <!--
  <td valign="top"><?php echo get_lang('AnswerType'); ?> :</td>
-  <td><input class="checkbox" type="radio" name="answerType" value="1" <?php if($answerType <= 1) echo 'checked="checked"'; ?>> <?php echo get_lang('langUniqueSelect'); ?><br />
-	  <input class="checkbox" type="radio" name="answerType" value="2" <?php if($answerType == 2) echo 'checked="checked"'; ?>> <?php echo get_lang('langMultipleSelect'); ?><br />
-	  <input class="checkbox" type="radio" name="answerType" value="4" <?php if($answerType == 4) echo 'checked="checked"'; ?>> <?php echo get_lang('langMatching'); ?><br />
-	  <input class="checkbox" type="radio" name="answerType" value="3" <?php if($answerType == 3) echo 'checked="checked"'; ?>> <?php echo get_lang('langFillBlanks'); ?><br />
+  <td><input class="checkbox" type="radio" name="answerType" value="1" <?php if($answerType <= 1) echo 'checked="checked"'; ?>> <?php echo get_lang('UniqueSelect'); ?><br />
+	  <input class="checkbox" type="radio" name="answerType" value="2" <?php if($answerType == 2) echo 'checked="checked"'; ?>> <?php echo get_lang('MultipleSelect'); ?><br />
+	  <input class="checkbox" type="radio" name="answerType" value="4" <?php if($answerType == 4) echo 'checked="checked"'; ?>> <?php echo get_lang('Matching'); ?><br />
+	  <input class="checkbox" type="radio" name="answerType" value="3" <?php if($answerType == 3) echo 'checked="checked"'; ?>> <?php echo get_lang('FillBlanks'); ?><br />
     <input class="checkbox" type="radio" name="answerType" value="5" <?php if($answerType == 5) echo 'checked="checked"'; ?>> <?php echo get_lang('freeAnswer'); ?>
-  	<input class="checkbox" type="radio" name="answerType" value="6" <?php if($answerType == 6) echo 'checked="checked"'; ?>> <?php echo get_lang('langHotspot'); ?>
+  	<input class="checkbox" type="radio" name="answerType" value="6" <?php if($answerType == 6) echo 'checked="checked"'; ?>> <?php echo get_lang('Hotspot'); ?>
   </td>
 </tr>
 <tr>

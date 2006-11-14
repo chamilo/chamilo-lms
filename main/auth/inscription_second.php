@@ -1,4 +1,4 @@
-<?php // $Id: inscription_second.php 9246 2006-09-25 13:24:53Z bmol $ 
+<?php // $Id: inscription_second.php 9972 2006-11-14 14:44:37Z pcool $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -107,7 +107,7 @@ if(!empty($_POST['submitRegistration']))
 
 		unset($password1, $password);
 
-		$error_message .=	"<p>".get_lang('langEmptyFields')."</p>\n";
+		$error_message .=	"<p>".get_lang('EmptyFields')."</p>\n";
 	}
 
 	// CHECK IF THE TWO PASSWORD TOKEN ARE IDENTICAL
@@ -117,11 +117,11 @@ if(!empty($_POST['submitRegistration']))
 		$regDataOk = false;
 		unset($password1, $password);
 
-		$error_message .=		"<p>".get_lang('langPassTwice')."</p>\n";
+		$error_message .=		"<p>".get_lang('PassTwice')."</p>\n";
 	}
 	elseif(CHECK_PASS_EASY_TO_FIND && !api_check_password($password))
 	{
-		$error_message .= "<p>".get_lang('langPassTooEasy')." : <code>".api_generate_password()."</code><br></p>";
+		$error_message .= "<p>".get_lang('PassTooEasy')." : <code>".api_generate_password()."</code><br></p>";
 	}
 	// CHECK EMAIL ADDRESS VALIDITY
 
@@ -130,7 +130,7 @@ if(!empty($_POST['submitRegistration']))
 		$regDataOk = false;
 		unset($password1, $password, $email);
 
-		$error_message .=	"<p>".get_lang('langEmailWrong').".</p>\n";
+		$error_message .=	"<p>".get_lang('EmailWrong').".</p>\n";
 	}
 
 	// CHECK IF THE LOGIN NAME IS ALREADY OWNED BY ANOTHER USER
@@ -145,7 +145,7 @@ if(!empty($_POST['submitRegistration']))
 			$regDataOk = false;
 			unset($password1, $password, $uname);
 
-			$error_message .=	"<p>".get_lang('langUserFree')."</p>";
+			$error_message .=	"<p>".get_lang('UserFree')."</p>";
 		}
 		else
 		{
@@ -161,7 +161,7 @@ if ( ! $regDataOk)
 	echo 	$error_message;
 	echo	"<p>",
 			"<a href=\"inscription.php?lastname=",urlencode(stripslashes($lastname)),"&firstname=",urlencode(stripslashes($firstname)),"&official_code=",urlencode(stripslashes($official_code)),"&uname=",urlencode(stripslashes($uname)),"&email=",urlencode(stripslashes($email)),"&status=",$status,"\">",
-			get_lang('langAgain'),
+			get_lang('Again'),
 			"</a>",
 			"</p>\n";
 	Display::display_footer();
@@ -231,7 +231,7 @@ if ($_uid)
 
 		// The body can be as long as you wish, and any combination of text and variables
 
-		$emailbody=get_lang('langDear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." ". $uname ."\n". get_lang('langPass')." : ".stripslashes($password)."\n\n" .get_lang('langAddress') ." ". api_get_setting('siteName') ." ". get_lang('langIs') ." : ". $rootWeb ."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('langManager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('langEmail') ." : ".get_setting('emailAdministrator');
+		$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $uname ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $rootWeb ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
 
 		// Here we are forming one large header line
 		// Every header must be followed by a \n except the last
@@ -247,26 +247,26 @@ if ($_uid)
 Display::display_header($nameTools);
 api_display_tool_title($nameTools);
 
-	echo "<p>".get_lang('langDear')." ".stripslashes("$firstname $lastname").",<br><br>".get_lang('langPersonalSettings').".</p>\n";
+	echo "<p>".get_lang('Dear')." ".stripslashes("$firstname $lastname").",<br><br>".get_lang('PersonalSettings').".</p>\n";
 
 	if(!empty($email))
 	{
-		echo "<p>".get_lang('langMailHasBeenSent').".</p>";
+		echo "<p>".get_lang('MailHasBeenSent').".</p>";
 	}
 
 	if($is_allowedCreateCourse)
 	{
-		echo "<p>",get_lang('langNowGoCreateYourCourse'),".</p>\n";
+		echo "<p>",get_lang('NowGoCreateYourCourse'),".</p>\n";
 		$actionUrl = "../create_course/add_course.php";
 	}
 	else
 	{
-		echo "<p>",get_lang('langNowGoChooseYourCourses'),".</p>\n";
+		echo "<p>",get_lang('NowGoChooseYourCourses'),".</p>\n";
 		$actionUrl = "courses.php?action=subscribe";
 	}
 // ?uidReset=true&uidReq=$_uid
 	echo	"<form action=\"",$actionUrl,"\"  method=\"post\">\n",
-			"<input type=\"submit\" name=\"next\" value=\"",get_lang('langNext'),"\" validationmsg=\" ",get_lang('langNext')," \">\n",
+			"<input type=\"submit\" name=\"next\" value=\"",get_lang('Next'),"\" validationmsg=\" ",get_lang('Next')," \">\n",
 			"</form>\n";
 
 }	// else Registration accepted

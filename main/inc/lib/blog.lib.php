@@ -135,12 +135,13 @@ class Blog
 	 */
 	function create_blog($title, $subtitle)
 	{
-		// Init
-		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
-		$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE);
-		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
-		global $_uid;
+		global $_user; 
+
+		// Tabel definitions
+		$tbl_blogs 			= Database::get_course_table(BLOGS_TABLE);
+		$tbl_tool 			= Database::get_course_table(TOOL_LIST_TABLE);
+		$tbl_blogs_posts 	= Database::get_course_table(BLOGS_POSTS_TABLE);
+		$tbl_blogs_tasks 	= Database::get_course_table(BLOGS_TASKS);
 		
 		// Create the blog
 		$sql = "INSERT INTO $tbl_blogs (`blog_name`, `blog_subtitle`, `date_creation`, `visibility` ) VALUES ('$title', '$subtitle', NOW(), '1');";
@@ -148,7 +149,7 @@ class Blog
 		$this_blog_id = Database::get_last_insert_id();
 		
 		// Make first post. :)
-		$sql = "INSERT INTO $tbl_blogs_posts (`title`, `full_text`, `date`, `blog_id`, `author` ) VALUES ('Welkom!', '" . get_lang('FirstPostText')."', NOW(), '$this_blog_id', '$_uid');";
+		$sql = "INSERT INTO $tbl_blogs_posts (`title`, `full_text`, `date`, `blog_id`, `author` ) VALUES ('Welkom!', '" . get_lang('FirstPostText')."', NOW(), '$this_blog_id', '".$_user['user_id']."');";
 		api_sql_query($sql, __FILE__, __LINE__);
 		
 		// Put it on course homepage
@@ -156,7 +157,7 @@ class Blog
 		api_sql_query($sql, __FILE__, __LINE__);
 		
 		// Subscribe the teacher to this blog
-		Blog::set_user_subscribed($this_blog_id,$_uid);
+		Blog::set_user_subscribed($this_blog_id,$_user['user_id']);
 		
 		return void;
 	}
@@ -166,17 +167,18 @@ class Blog
 	 * @author Toon Keppens
 	 *
 	 * @param Integer $course_id Id
-	 * @param String $title
+	 * @param String $title			
 	 * @param Text $description
 	 * 
 	 * @return void
 	 */
 	function edit_blog($blog_id, $title, $subtitle)
 	{
-		// Init
+		global $_user;
+		
+		// Table definitions
 		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
 		$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE);
-		global $_uid;
 		
 		// Update the blog
 		$sql = "UPDATE $tbl_blogs SET blog_name = '$title',	blog_subtitle = '$subtitle' WHERE blog_id =$blog_id LIMIT 1";
@@ -242,12 +244,13 @@ class Blog
 	 */
 	function create_post($title, $full_text, $blog_id)
 	{
-		// Init
+		global $_user; 
+		
+		// Table Definitions
 		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
-		global $_uid;
 		
 		// Create the post
-		$sql = "INSERT INTO " . $tbl_blogs_posts." (`title`, `full_text`, `date`, `blog_id`, `author` ) VALUES ('$title', '$full_text', NOW(), '$blog_id', '$_uid');";
+		$sql = "INSERT INTO " . $tbl_blogs_posts." (`title`, `full_text`, `date`, `blog_id`, `author` ) VALUES ('$title', '$full_text', NOW(), '$blog_id', '".$_user['user_id']."');";
 		api_sql_query($sql, __FILE__, __LINE__);
 		
 		return void;
@@ -321,12 +324,13 @@ class Blog
 	 */
 	function create_comment($title, $full_text, $blog_id, $post_id, $parent_id, $task_id = 'NULL')
 	{
-		// Init
+		global $_user; 
+		
+		// Table Definition
 		$tbl_blogs_comments = Database::get_course_table(BLOGS_COMMENTS_TABLE);
-		global $_uid;
 		
 		// Create the comment
-		$sql = "INSERT INTO $tbl_blogs_comments (`title`, `comment`, `author`, `date`, `blog_id`, `post_id`, `parent_comment_id`, `task_id` ) VALUES ('$title', '$full_text', '$_uid', NOW(), '$blog_id', '$post_id', '$parent_id', $task_id)";
+		$sql = "INSERT INTO $tbl_blogs_comments (`title`, `comment`, `author`, `date`, `blog_id`, `post_id`, `parent_comment_id`, `task_id` ) VALUES ('$title', '$full_text', '".$_user['user_id']."', NOW(), '$blog_id', '$post_id', '$parent_id', $task_id)";
 		api_sql_query($sql, __FILE__, __LINE__);
 		
 		// Empty post values, or they are shown on the page again
@@ -574,18 +578,19 @@ class Blog
 	 */
 	function get_personal_task_list()
 	{
+		global $_user; 
+		
 		// Init
-		global $_uid;
 		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);
 		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
 		
-		if($_uid)
+		if($_user['user_id'])
 		{
 			$sql = "SELECT task_rel_user.*, task.title, blog.blog_name FROM $tbl_blogs_tasks_rel_user task_rel_user
 			INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 			INNER JOIN $tbl_blogs blog ON task_rel_user.blog_id = blog.blog_id
-			WHERE task_rel_user.user_id = $_uid ORDER BY `target_date` ASC";
+			WHERE task_rel_user.user_id = ".$_user['user_id']." ORDER BY `target_date` ASC";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			
 			if(mysql_numrows($result) > 0)
@@ -860,17 +865,18 @@ class Blog
 	 */
 	function add_rating($type, $blog_id, $item_id, $rating)
 	{
+		global $_user; 
+		
 		// Init
-		global $_uid;
 		$tbl_blogs_rating = Database::get_course_table(BLOGS_RATING);
 		
 		// Check if the user has already rated this post/comment
-		$sql = "SELECT rating_id FROM $tbl_blogs_rating WHERE blog_id = $blog_id AND item_id = $item_id AND rating_type = '$type' AND user_id = '$_uid'";
+		$sql = "SELECT rating_id FROM $tbl_blogs_rating WHERE blog_id = $blog_id AND item_id = $item_id AND rating_type = '$type' AND user_id = '".$_user['user_id']."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		
 		if(mysql_num_rows($result) == 0) // Add rating
 		{
-			$sql = "INSERT INTO $tbl_blogs_rating ( `blog_id`, `rating_type`, `item_id`, `user_id`, `rating` ) VALUES ('$blog_id', '$type', '$item_id', '$_uid', '$rating')";
+			$sql = "INSERT INTO $tbl_blogs_rating ( `blog_id`, `rating_type`, `item_id`, `user_id`, `rating` ) VALUES ('$blog_id', '$type', '$item_id', '".$_user['user_id']."', '$rating')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			return true;
 		}
@@ -904,14 +910,15 @@ class Blog
 	 */
 	function display_rating_form($type, $blog_id, $post_id, $comment_id = NULL)
 	{
+		global $_user; 
+		
 		// Init
-		global $_uid;
 		$tbl_blogs_rating = Database::get_course_table(BLOGS_RATING);
 		
 		if($type == 'post')
 		{
 			// Check if the user has already rated this post
-			$sql = "SELECT rating_id FROM $tbl_blogs_rating WHERE blog_id = $blog_id AND item_id = $post_id AND rating_type = '$type' AND user_id = '$_uid'";
+			$sql = "SELECT rating_id FROM $tbl_blogs_rating WHERE blog_id = $blog_id AND item_id = $post_id AND rating_type = '$type' AND user_id = '".$_user['user_id']."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			
 			if(mysql_num_rows($result) == 0) // Add rating
@@ -926,7 +933,7 @@ class Blog
 		if($type = 'comment')
 		{
 			// Check if the user has already rated this comment
-			$sql = "SELECT rating_id FROM $tbl_blogs_rating WHERE blog_id = $blog_id AND item_id = $comment_id AND rating_type = '$type' AND user_id = '$_uid'";
+			$sql = "SELECT rating_id FROM $tbl_blogs_rating WHERE blog_id = $blog_id AND item_id = $comment_id AND rating_type = '$type' AND user_id = '".$_user['user_id']."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			
 			if(mysql_num_rows($result) == 0) // Add rating
@@ -2032,8 +2039,9 @@ class Blog
 	 */
 	function display_form_user_unsubscribe($blog_id)
 	{
+		global $_user; 
+		
 		// Init
-		global $_uid;
 		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
 		
@@ -2091,7 +2099,7 @@ class Blog
 			$row[] = $task;
 			//Link to register users
 			
-			if($myrow["user_id"] != $_uid)
+			if($myrow["user_id"] != $_user['user_id'])
 			{
 				$row[] = "<a href=\"" . $_SERVER['PHP_SELF']."?action=manage_members&amp;blog_id=$blog_id&amp;unregister=yes&amp;user_id=" . $myrow[user_id]."\">" . get_lang('UnRegister')."</a>";
 			}
@@ -2211,7 +2219,7 @@ class Blog
 	function display_minimonthcalendar($month, $year, $blog_id)
 	{
 		// Init
-		global $_uid;
+		global $_user;
 		global $DaysShort;
 		global $MonthsLong;
 		
@@ -2255,7 +2263,7 @@ class Blog
 		}
 		
 		// Get tasks for this month
-		if($_uid)
+		if($_user['user_id'])
 		{
 			$sql = "
 				SELECT
@@ -2267,7 +2275,7 @@ class Blog
 				INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 				INNER JOIN $tbl_blogs blog ON task_rel_user.blog_id = blog.blog_id
 				WHERE
-					task_rel_user.user_id = $_uid AND
+					task_rel_user.user_id = ".$_user['user_id']." AND
 					MONTH(`target_date`) = '$month' AND
 					YEAR(`target_date`) = '$year'
 				ORDER BY `target_date` ASC";

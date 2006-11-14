@@ -1200,10 +1200,10 @@ class Blog
 			echo '<span class="blogpost_title">' . get_lang('TaskList') . '</span><br />';
 			echo "<table class=\"data_table\">";
 			echo	"<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
-					 "<th width='240'><b>",get_lang("langTitle"),"</b></th>\n",
-					 "<th><b>",get_lang("langDescription"),"</b></th>\n",
-					 "<th><b>",get_lang("langColor"),"</b></th>\n",
-					 "<th width='50'><b>",get_lang("Modify"),"</b></th>\n",
+					 "<th width='240'><b>",get_lang('Title'),"</b></th>\n",
+					 "<th><b>",get_lang('Description'),"</b></th>\n",
+					 "<th><b>",get_lang('Color'),"</b></th>\n",
+					 "<th width='50'><b>",get_lang('Modify'),"</b></th>\n",
 				"</tr>\n";
 			
 			
@@ -1270,10 +1270,10 @@ class Blog
 		echo '<span class="blogpost_title">' . get_lang('AssignedTasks') . '</span><br />';
 		echo "<table class=\"data_table\">";
 		echo	"<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
-				 "<th width='240'><b>",get_lang("langMember"),"</b></th>\n",
-				 "<th><b>",get_lang("langTask"),"</b></th>\n",
-				 "<th><b>",get_lang("langTargetDate"),"</b></th>\n",
-				 "<th width='50'><b>",get_lang("Modify"),"</b></th>\n",
+				 "<th width='240'><b>",get_lang('Member'),"</b></th>\n",
+				 "<th><b>",get_lang('Task'),"</b></th>\n",
+				 "<th><b>",get_lang('TargetDate'),"</b></th>\n",
+				 "<th width='50'><b>",get_lang('Modify'),"</b></th>\n",
 			"</tr>\n";
 		
 		

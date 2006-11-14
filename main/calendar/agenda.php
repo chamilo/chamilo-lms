@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 9246 2006-09-25 13:24:53Z bmol $
+<?php //$Id: agenda.php 9973 2006-11-14 14:53:22Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -168,7 +168,7 @@ $htmlHeadXtra[] = user_group_filter_javascript();
 $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
 
 // setting the name of the tool
-$nameTools = get_lang("langcalendar_event"); // language variable in trad4all.inc.php
+$nameTools = get_lang('Agenda'); // language variable in trad4all.inc.php
 
 // showing the header if we are not in the learning path, if we are in 
 // the learning path, we do not include the banner so we have to explicitly 

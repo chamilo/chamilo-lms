@@ -1,4 +1,4 @@
-<?php // $Id: answer_admin.inc.php 9972 2006-11-14 14:44:37Z pcool $
+<?php // $Id: answer_admin.inc.php 9973 2006-11-14 14:53:22Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1313,7 +1313,7 @@ if($modifyAnswers)
 
 <tr>
   <td><?php echo $val; ?></td>
-  <td colspan="3"><input type="text" name="option[<?php echo $key; ?>]" size="80" value="<?php if(!$formSent && !isset($option[$key])) echo get_lang("langDefaultMatchingOpt$val"); else echo htmlentities($option[$key]); ?>"></td>
+  <td colspan="3"><input type="text" name="option[<?php echo $key; ?>]" size="80" value="<?php if(!$formSent && !isset($option[$key])) echo get_lang("DefaultMatchingOpt$val"); else echo htmlentities($option[$key]); ?>"></td>
 </tr>
 
 <?php

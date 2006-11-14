@@ -1,5 +1,5 @@
 <?php
-// $Id: lost_password.lib.php 9246 2006-09-25 13:24:53Z bmol $ 
+// $Id: lost_password.lib.php 9973 2006-11-14 14:53:22Z pcool $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -85,7 +85,7 @@ function handle_encrypted_password($user)
 	$secretword = get_secret_word($emailTo);
 	$emailBody = get_lang("password_request")."\n\n\n".get_lang("YourAccountParam")." $rootWeb\n\n".$userAccountList;
 	if (@ api_send_mail($emailTo, $emailSubject, $emailBody, $emailHeaders))
-		return get_lang("lang_your_password_has_been_emailed_to_you");
+		return get_lang('YourPasswordHasBeenEmailed');
 	else
 		echo "<p>", "The system is unable to send you an e-mail.<br/>", "Please contact the ", Display::encrypted_mailto_link(get_setting('emailAdministrator'),"platform administrator"), ".<p>";
 	return "";

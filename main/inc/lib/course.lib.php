@@ -66,7 +66,7 @@
 	CourseManager::get_target_of_linked_course($virtual_course_code)
 
 	TITLE AND CODE FUNCTIONS
-	DEPRECATED CourseManager::determine_course_title($_uid, $_cid, $_course)
+	DEPRECATED CourseManager::determine_course_title($user_id, $_cid, $_course)
 	CourseManager::determine_course_title_from_course_info($user_id, $course_info)
 	CourseManager::create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list)
 	CourseManager::create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list)
@@ -608,7 +608,7 @@ class CourseManager
 	 * @deprecated	 use	  determine_course_title_from_course_info($user_id,
 	 * $course_info) instead 	Declares global $_course
 		*/
-	function determine_course_title($_uid, $_cid, $_course)
+	function determine_course_title($user_id, $_cid, $_course)
 	{
 		global $_course;
 		$real_course_code = $_course['sysCode'];
@@ -618,7 +618,7 @@ class CourseManager
 
 		//is the user registered in the real course?
 		$table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-		$sql_query = "SELECT * FROM $table WHERE `user_id` = '$_uid' AND `course_code` = '$real_course_code'";
+		$sql_query = "SELECT * FROM $table WHERE `user_id` = '$user_id' AND `course_code` = '$real_course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = mysql_fetch_array($sql_result);
 
@@ -633,7 +633,7 @@ class CourseManager
 		//get a list of virtual courses linked to the current real course
 		//and to which the current user is subscribed
 
-		$user_subscribed_virtual_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($_uid, $real_course_code);
+		$user_subscribed_virtual_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code);
 
 		if (count($user_subscribed_virtual_course_list) > 0)
 		{
@@ -948,7 +948,7 @@ class CourseManager
 	/**
 	* Return course info array of virtual course
 	*
-	* @param $_uid, the id (int) of the user
+	* @param $user_id, the id (int) of the user
 	* @param $course_info, array with info about the course (comes from course table)
 	*
 	* @return true if the user is registered in the course, false otherwise

@@ -1,5 +1,5 @@
 <?php
-// $Id: btf_functions.php 9477 2006-10-12 11:36:14Z bmol $
+// $Id: btf_functions.php 9966 2006-11-14 10:28:04Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -182,13 +182,13 @@ function showtools2($cat)
 		{
 			if ($toolsRow["visibility"])
 			{
-				$link['name'] = '<img src="'.api_get_path(WEB_IMG_PATH).'visible.gif"  style="vertical-align:middle;" alt="'.get_lang('Deactivate').'"/>';
+				$link['name'] = '<img src="'.api_get_path(WEB_IMG_PATH).'remove.gif"  style="vertical-align:middle;" alt="'.get_lang('Deactivate').'"/>';
 				$link['cmd'] = "hide=yes";
 				$lnk[] = $link;
 			}
 			else
 			{
-				$link['name'] = '<img src="'.api_get_path(WEB_IMG_PATH).'invisible.gif" style="vertical-align:middle;" alt="'.get_lang('Activate').'"/>';
+				$link['name'] = '<img src="'.api_get_path(WEB_IMG_PATH).'add.gif" style="vertical-align:middle;" alt="'.get_lang('Activate').'"/>';
 				$link['cmd'] = "restore=yes";
 				$lnk[] = $link;
 

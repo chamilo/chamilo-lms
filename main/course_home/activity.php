@@ -216,7 +216,7 @@ function show_tools_category($course_tool_category)
 				if($toolsRow['visibility'] == '1' && $toolsRow['admin'] !='1' && !strpos($toolsRow['link'],'learnpath_handler.php?learnpath_id'))
 				{
 
-					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/visible.gif" align="absmiddle" alt="'.get_lang("Deactivate").'"/>';
+					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/remove.gif" align="absmiddle" alt="'.get_lang("Deactivate").'"/>';
 
 					$link['cmd'] = "hide=yes";
 					$lnk[] = $link;
@@ -224,7 +224,7 @@ function show_tools_category($course_tool_category)
 
 				if($toolsRow['visibility'] == '0' && $toolsRow['admin'] !='1')
 				{
-					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/invisible.gif" align="absmiddle" alt="'.get_lang("Activate").'"/>';
+					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/add.gif" align="absmiddle" alt="'.get_lang("Activate").'"/>';
 					$link['cmd'] = "restore=yes";
 					$lnk[] = $link;
 				}

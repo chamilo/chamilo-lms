@@ -206,8 +206,9 @@ function api_protect_admin_script()
 */
 function api_block_anonymous_users()
 {
-	$_uid = api_get_user_id();
-	if (!(isset ($_uid) && $_uid))
+	global $_user; 
+	
+	if (!(isset ($_user['user_id']) && $_user['user_id']))
 	{
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");
 		api_not_allowed();
@@ -350,7 +351,7 @@ function api_get_path($path_type)
 */
 function api_get_user_id()
 {
-	return $GLOBALS["_uid"];
+	return $GLOBALS[$_user['user_id']];
 }
 /**
  * @param $user_id (integer): the id of the user
@@ -988,20 +989,22 @@ function api_is_course_admin()
  */
 function api_is_coach()
 {
-	global $_uid;
-	$result = api_sql_query("SELECT DISTINCT id, name, date_start, date_end
+	global $_user;
+	global $sessionIsCoach;
+	
+	$sql = "SELECT DISTINCT id, name, date_start, date_end
 							FROM session
 							INNER JOIN session_rel_course
-								ON session_rel_course.id_coach = $_uid
-							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
-
-	global $sessionIsCoach;
+								ON session_rel_course.id_coach = '".mysql_real_escape_string($_user['user_id'])."'
+							ORDER BY date_start, date_end, name";
+	$result = api_sql_query($sql,__FILE__,__LINE__);
 	$sessionIsCoach = api_store_result($result);
 
-	$result = api_sql_query("SELECT DISTINCT id, name, date_start, date_end
+	$sql = "SELECT DISTINCT id, name, date_start, date_end
 							FROM session
-							WHERE session.id_coach = $_uid
-							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
+							WHERE session.id_coach =  '".mysql_real_escape_string($_user['user_id'])."'
+							ORDER BY date_start, date_end, name";
+	$result = api_sql_query($sql,__FILE__,__LINE__);
 	$sessionIsCoach = array_merge($sessionIsCoach , api_store_result($result));
 
 	if(count($sessionIsCoach) > 0)
@@ -1210,7 +1213,7 @@ function api_is_allowed_to_edit()
 function api_is_allowed($tool, $action, $task_id = 0)
 {
 	global $_course;
-	global $_uid;
+	global $_user;
 
 	if(api_is_course_admin())
 		return true;
@@ -1224,7 +1227,7 @@ function api_is_allowed($tool, $action, $task_id = 0)
 		// getting the permissions of this user
 		if($task_id == 0)
 		{
-			$user_permissions = get_permissions('user', $_uid);
+			$user_permissions = get_permissions('user', $_user['user_id']);
 			$_SESSION['total_permissions'][$_course['code']] = $user_permissions;
 		}
 
@@ -1237,16 +1240,16 @@ function api_is_allowed($tool, $action, $task_id = 0)
 		//print_r($_SESSION['total_permissions']);
 
 		// getting the permissions of the groups of the user
-		$groups_of_user = GroupManager::get_group_ids($_course['db_name'], $_uid);
+		$groups_of_user = GroupManager::get_group_ids($_course['db_name'], $_user['user_id']);
 
 		foreach($groups_of_user as $group)
 			$this_group_permissions = get_permissions('group', $group);
 
 		// getting the permissions of the courseroles of the user
-		$user_courserole_permissions = get_roles_permissions('user', $_uid);
+		$user_courserole_permissions = get_roles_permissions('user', $_user['user_id']);
 
 		// getting the permissions of the platformroles of the user
-		//$user_platformrole_permissions = get_roles_permissions('user', $_uid, ', platform');
+		//$user_platformrole_permissions = get_roles_permissions('user', $_user['user_id'], ', platform');
 
 		// getting the permissions of the roles of the groups of the user
 		foreach($groups_of_user as $group)

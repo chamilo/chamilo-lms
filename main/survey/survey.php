@@ -59,7 +59,7 @@ $table_survey = Database :: get_course_table('survey');
 
 /*
 -----------------------------------------------------------
-	some permissions stuff
+	some permissions stuff (?)
 -----------------------------------------------------------
 */
 $status = surveymanager::get_status();

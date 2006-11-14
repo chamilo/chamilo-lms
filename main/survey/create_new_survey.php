@@ -96,7 +96,8 @@ $todate=date('j');
 	Breadcrumbs
 -----------------------------------------------------------
 */
-$interbreadcrumbs[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
 
 /*
 -----------------------------------------------------------

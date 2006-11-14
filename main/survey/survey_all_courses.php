@@ -33,28 +33,60 @@
 ==============================================================================
 */
 $langFile = 'survey';
-
-require ('../inc/global.inc.php');
+/*
+-----------------------------------------------------------
+	Including necessary files
+-----------------------------------------------------------
+*/
+require_once ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
+
+/*
+-----------------------------------------------------------
+	Table definitions
+-----------------------------------------------------------
+*/
+$table_survey 				= Database :: get_course_table('survey');
+$table_group 				= Database :: get_course_table('survey_group');
+$table_question 			= Database :: get_course_table('questions');
+$table_course_survey_rel 	= Database :: get_main_table(MAIN_COURSE_SURVEY_TABLE);
+
+/*
+-----------------------------------------------------------
+	some permissions stuff (?)
+-----------------------------------------------------------
+*/
 $status = surveymanager::get_status();
 if($status==5)
 {
 api_protect_admin_script();
 }
-//api_protect_admin_script();
-require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 $cidReq = $_REQUEST['cidReq'];
-$table_survey = Database :: get_course_table('survey');
-$table_group =  Database :: get_course_table('survey_group');
-$table_question = Database :: get_course_table('questions');
-$table_course_survey_rel = Database :: get_main_table(MAIN_COURSE_SURVEY_TABLE);
-//$interbredcrump[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
-//$interbredcrump[] = array ("url" => "survey.php", "name" => get_lang('a_survey'));
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
-$n='e';
+
+
+/*
+-----------------------------------------------------------
+	Breadcrumbs
+-----------------------------------------------------------
+*/
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
+
+/*
+-----------------------------------------------------------
+	some variables
+-----------------------------------------------------------
+*/
 $tool_name = get_lang('CreateFromExistingSurveys');
 $tool_name1 = get_lang('SurveysOfAllCourses');
 $surveyid=$_GET['surveyid'];
+
+/*
+-----------------------------------------------------------
+	Header
+-----------------------------------------------------------
+*/
 Display :: display_header($tool_name);
 api_display_tool_title($tool_name1);
 ?>
@@ -155,6 +187,11 @@ function displayTemplate(url) {
     <input type="submit" name="back1" value="<?php echo get_lang('Back'); ?>">
     </form>
 <?
+/*
+-----------------------------------------------------------
+	Footer
+-----------------------------------------------------------
+*/
 Display :: display_footer();
 ?> 
 

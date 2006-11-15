@@ -53,7 +53,7 @@ if (isset ($_cid))
 elseif (isset ($nameTools) && $langFile != 'course_home')
 {
 	//Put the name of the user-tools in the header
-	if (!isset ($_uid))
+	if (!isset ($_user['user_id']))
 		echo " ";
 	elseif(!$noPHP_SELF)
 	{
@@ -100,11 +100,11 @@ echo '<div id="header2">';
 echo '<div id="Header2Right">';
 echo '<ul>';
 
-if ((api_get_setting('showonline','world') == "true" AND !$_uid) OR (api_get_setting('showonline','users') == "true" AND $_uid) OR (api_get_setting('showonline','course') == "true" AND $_uid AND $_cid))
+if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id']) OR (api_get_setting('showonline','course') == "true" AND $_user['user_id'] AND $_cid))
 {
-	if(api_get_setting("use_session_mode") == "true" && isset($_uid) && api_is_coach())
+	if(api_get_setting("use_session_mode") == "true" && isset($_user['user_id']) && api_is_coach())
 	{
-		echo "<li><a href='".api_get_path(WEB_PATH)."whoisonlinesession.php?id_coach=".$_uid."&referer=".urlencode($_SERVER['REQUEST_URI'])."' target='_top'>Voir les utilisateurs connectés à mes sessions</a></li>";
+		echo "<li><a href='".api_get_path(WEB_PATH)."whoisonlinesession.php?id_coach=".$_user['user_id']."&referer=".urlencode($_SERVER['REQUEST_URI'])."' target='_top'>Voir les utilisateurs connectés à mes sessions</a></li>";
 	}
 
 	$statistics_database = Database :: get_statistic_database();
@@ -114,7 +114,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_uid) OR (api_get_set
 	echo "<li>".get_lang('UsersOnline').": ";
 
 	// Display the who's online of the platform
-	if ((api_get_setting('showonline','world') == "true" AND !$_uid) OR (api_get_setting('showonline','users') == "true" AND $_uid))
+	if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id']))
 	{
 		echo "<a href='".api_get_path(WEB_PATH)."whoisonline.php' target='_top'>".$number."</a>";
 	}
@@ -128,7 +128,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_uid) OR (api_get_set
 
 	echo '</li>';
 }
-if ($_uid)
+if ($_user['user_id'])
 {
 	if (api_is_course_admin() && is_student_view_enabled())
 	{
@@ -168,14 +168,14 @@ echo "<div class=\"clear\">&nbsp;</div>";
 	User section
 -----------------------------------------------------------------------------
 */
-if ($_uid)
+if ($_user['user_id'])
 {
 	?>
 	 <!-- start user section line with name, my course, my profile, scorm info, etc -->
 
 	<form method="get" action="<?php echo api_get_path(WEB_PATH); ?>index.php" class="banner_links" target="_top">
 	<input type="hidden" name="logout" value="true"/>
-	<input type="hidden" name="uid" value="<?php echo $_uid; ?>"/>
+	<input type="hidden" name="uid" value="<?php echo $_user['user_id']; ?>"/>
 	 <ul id="logout">
 	 <li>
 	<input type="submit" name="submit" value="<?php echo get_lang("Logout"); ?>"
@@ -191,7 +191,7 @@ $navigation = array();
 // Link to campus homepage
 $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
 $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
-if ($_uid)
+if ($_user['user_id'])
 {
 	if(api_get_setting('use_session_mode')=='true')
 	{

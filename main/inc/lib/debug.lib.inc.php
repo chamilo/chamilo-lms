@@ -310,7 +310,7 @@ function printVar($var, $varName = "@")
  */
 function printInit($selection = "*")
 {
-	GLOBAL $uidReset, $cidReset, $gidReset, $uidReq, $cidReq, $gidReq, $_uid, $_cid, $_gid, $_user, $_course, $is_platformAdmin, $is_allowedCreateCourse, $is_courseMember, $is_courseAdmin, $is_allowed_in_course, $is_courseTutor, $_SESSION, $_claro_local_run;
+	GLOBAL $uidReset, $cidReset, $gidReset, $uidReq, $cidReq, $gidReq, $_user, $_cid, $_gid, $_user, $_course, $is_platformAdmin, $is_allowedCreateCourse, $is_courseMember, $is_courseAdmin, $is_allowed_in_course, $is_courseTutor, $_SESSION, $_claro_local_run;
 
 	if ($_claro_local_run)
 	{
@@ -326,7 +326,7 @@ function printInit($selection = "*")
 	{
 		echo "<TD valign=\"top\" >USER :
 						(uid):  ".$uid." |
-						(_uid):  ".$_uid." |
+						(_uid):  ".$_user['user_id']." |
 						(session[_uid]):  ".$_SESSION['_uid']."
 						<PRE>
 						reset = ".$uidReset." | req = ".$uidReq."<br>
@@ -357,7 +357,7 @@ function printInit($selection = "*")
 	echo "</TR><TR>";
 	if ($selection == "*" or (strstr($selection, "u") && strstr($selection, "c")))
 	{
-		echo "<TD valign=\"top\" colspan=2>USER :".$_uid." in ".$_cid."<PRE>";
+		echo "<TD valign=\"top\" colspan=2>USER :".$_user['user_id']." in ".$_cid."<PRE>";
 		echo "_courseUser:";
 		var_dump($_courseUser);
 		echo "is_courseMember:";
@@ -374,7 +374,7 @@ function printInit($selection = "*")
 	if ($selection == "*" or (strstr($selection, "u") && strstr($selection, "g")))
 	{
 
-		echo "<td></td><TD valign=\"top\"  colspan=2>USER :".$_uid." in ".$_gid."<PRE>";
+		echo "<td></td><TD valign=\"top\"  colspan=2>USER :".$_user['user_id']." in ".$_gid."<PRE>";
 		echo "</PRE></TD>";
 	}
 	echo "</TR></TABLE>";

@@ -446,7 +446,7 @@ class Display {
 	{
 		$nameTools = $tool_name;
 		global $_plugins;
-		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_uid, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $langFile, $noPHP_SELF;
+		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $langFile, $noPHP_SELF;
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");
 	}
 	/**

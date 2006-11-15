@@ -141,7 +141,7 @@ require($includePath."/local.inc.php");
 
 include_once($includePath."/lib/online.inc.php");
 // check and modify the date of user in the track.e.online table
-if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php')) { LoginCheck(isset($_uid) ? $_uid : '',$statsDbName); }
+if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php')) { LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '',$statsDbName); }
 
 // ===== end "who is logged in?" module section =====
 

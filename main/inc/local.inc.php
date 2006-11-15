@@ -69,14 +69,13 @@ The course id is stored in $_cid session variable.
  *
  * USER VARIABLES
  *
- * int $_uid (the user id)
- *
  * string	$_user ['firstName'   ]
  * string	$_user ['lastName'    ]
  * string	$_user ['mail'        ]
  * string	$_user ['lastLogin'   ]
- * 			$_user ['official_code']
- * 			$_user ['picture_uri'  ]
+ * string	$_user ['official_code']
+ * string	$_user ['picture_uri'  ]
+ * string 	$_user['user_id']
  *
  * boolean $is_platformAdmin
  * boolean $is_allowedCreateCourse
@@ -126,7 +125,7 @@ The course id is stored in $_cid session variable.
  *
  * 1. The script determines if there is an authentication attempt. This part
  * only chek if the login name and password are valid. Afterwards, it set the
- * $_uid (user id) and the $uidReset flag. Other user informations are retrieved
+ * $_user['user_id'] (user id) and the $uidReset flag. Other user informations are retrieved
  * later. It's also in this section that optional external authentication
  * devices step in.
  *
@@ -190,13 +189,13 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 if (isset($_SESSION['_uid']) && $_SESSION['_uid'] && ! ($login || $logout))
 {
     // uid is in session => login already done, continue with this value
-    $_uid = $_SESSION['_uid'];
+    $_user['user_id'] = $_SESSION['_uid'];
 
 
 }
 else
 {
-    unset($_uid); // uid not in session ? prevent any hacking
+    unset($_user['user_id']); // uid not in session ? prevent any hacking
 
     if(isset($_POST['login']) && isset($_POST['password'])) // $login && $password are given to log in
     {
@@ -238,7 +237,7 @@ else
                 		// check if the expiration date has not been reached
                 		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00')
                 		{
-							$_uid = $uData['user_id'];
+							$_user['user_id'] = $uData['user_id'];
 							api_session_register('_uid');
                 		}
                 		else 
@@ -265,7 +264,7 @@ else
                     exit;
                 }
 
-                if (isset($uData['creator_id']) && $_uid != $uData['creator_id'])
+                if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id'])
                 {
                     //first login for a not self registred
                     //e.g. registered by a teacher
@@ -314,10 +313,10 @@ else
              * of the authentication source list
              * provided by the configuration settings.
              * If the login succeeds, for going further,
-             * Dokeos needs the $_uid variable to be
+             * Dokeos needs the $_user['user_id'] variable to be
              * set and registered in the session. It's the
              * responsability of the external login script
-             * to provide this $_uid.
+             * to provide this $_user['user_id'].
              */
 
             if (is_array($extAuthSource))
@@ -362,7 +361,7 @@ if (isset($uidReset) && $uidReset) // session data refresh requested
 {
     $is_platformAdmin = false; $is_allowedCreateCourse = false;
 
-    if (isset($_uid) && $_uid) // a uid is given (log in succeeded)
+    if (isset($_user['user_id']) && $_user['user_id']) // a uid is given (log in succeeded)
     {
 $user_table = Database::get_main_table(MAIN_USER_TABLE);
 $admin_table = Database::get_main_table(MAIN_ADMIN_TABLE);
@@ -375,7 +374,7 @@ $admin_table = Database::get_main_table(MAIN_ADMIN_TABLE);
                      ON `user`.`user_id` = `a`.`user_id`
                      LEFT JOIN `".$statsDbName."`.`track_e_login` `login`
                      ON `user`.`user_id`  = `login`.`login_user_id`
-                     WHERE `user`.`user_id` = '".$_uid."'
+                     WHERE `user`.`user_id` = '".$_user['user_id']."'
                      ORDER BY `login`.`login_date` DESC LIMIT 1";
         }
         else
@@ -384,7 +383,7 @@ $admin_table = Database::get_main_table(MAIN_ADMIN_TABLE);
                     FROM $user_table
                     LEFT JOIN $admin_table `a`
                     ON `user`.`user_id` = `a`.`user_id`
-                    WHERE `user`.`user_id` = '".$_uid."'";
+                    WHERE `user`.`user_id` = '".$_user['user_id']."'";
         }
 
         $result = api_sql_query($sql,__FILE__,__LINE__);
@@ -505,7 +504,7 @@ else // continue with the previous values
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // session data refresh requested
 {
-    if (isset($_uid) && $_uid && isset($_cid) && $_cid) // have keys to search data
+    if (isset($_user['user_id']) && $_user['user_id'] && isset($_cid) && $_cid) // have keys to search data
     {
     	
     	if(api_get_setting('use_session_mode') != 'true')
@@ -513,7 +512,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
     		
 	    	$course_user_table = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 	        $sql = "SELECT * FROM $course_user_table
-	               WHERE `user_id`  = '$_uid'
+	               WHERE `user_id`  = '".$_user['user_id']."'
 	               AND `course_code` = '$cidReq'";
 	
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
@@ -548,7 +547,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 					INNER JOIN `".$mainDbName."`.`session_rel_course`
 						ON session_rel_course.id_session = session.id
 						AND session_rel_course.course_code='$_cid'
-					WHERE session.id_coach = $_uid";
+					WHERE session.id_coach = '".$_user['user_id']."'";
 	        
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
 	        if($row = mysql_fetch_array($result)){
@@ -564,7 +563,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	        	$sql = "SELECT 1 
 						FROM `".$mainDbName."`.`session_rel_course`
 						WHERE session_rel_course.course_code='$_cid'
-						AND session_rel_course.id_coach = $_uid";
+						AND session_rel_course.id_coach = '".$_user['user_id']"'";
 		        
 		        $result = api_sql_query($sql,__FILE__,__LINE__);
 		        if($row = mysql_fetch_array($result)){
@@ -578,7 +577,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 		        else {       
 	        		// vérifier que c pas un élève de la session        
 			        $sql = "SELECT * FROM `".$mainDbName."`.`session_rel_course_rel_user`
-			        		WHERE `id_user`  = '$_uid' 
+			        		WHERE `id_user`  = '".$_user['user_id']."' 
 							AND `course_code` = '$cidReq'";
 	        		
 			        $result = api_sql_query($sql,__FILE__,__LINE__);
@@ -597,7 +596,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 					else 
 					{	
 			 			$sql = "SELECT * FROM `".$mainDbName."`.`course_rel_user`
-			               WHERE `user_id`  = '$_uid'
+			               WHERE `user_id`  = '".$_user['user_id']."'
 			               AND `course_code` = '$cidReq'";
 			               
 				        $result = api_sql_query($sql,__FILE__,__LINE__);
@@ -643,7 +642,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	{
     	if ($_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)
     		$is_allowed_in_course = true;
-    	elseif ($_course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && isset($_uid) )
+    	elseif ($_course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && isset($_user['user_id']) )
     		$is_allowed_in_course = true;
     	elseif ($_course['visibility'] == COURSE_VISIBILITY_REGISTERED && ($is_platformAdmin || $is_courseMember))
     		$is_allowed_in_course = true;

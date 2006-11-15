@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 9972 2006-11-14 14:44:37Z pcool $
+// $Id: inscription.php 9983 2006-11-15 00:21:16Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -121,14 +121,14 @@ if ($form->validate())
 		// TODO: add language to parameter list of UserManager::create_user(...)
 		$sql = "UPDATE ".Database::get_main_table(MAIN_USER_TABLE)."
 		             SET language	= '".mysql_real_escape_string($values['language'])."'
-					WHERE user_id = '".$_uid."'	 ";
+					WHERE user_id = '".$_user['user_id']."'	 ";
 		//api_sql_query($sql,__FILE__,__LINE__);
 		
 		// if there is a default duration of a valid account then we have to change the expiration_date accordingly
 		if (get_setting('account_valid_duration')<>'')
 		{
 			$sql = "UPDATE ".Database::get_main_table(MAIN_USER_TABLE)."
-						SET expiration_date='registration_date+1' WHERE user_id='".$_uid."'";
+						SET expiration_date='registration_date+1' WHERE user_id='".$_user['user_id']."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 		
@@ -137,7 +137,7 @@ if ($form->validate())
 		{
 			// 1. set account inactive
 			$sql = "UPDATE ".Database::get_main_table(MAIN_USER_TABLE)."
-						SET active='0' WHERE user_id='".$_uid."'";
+						SET active='0' WHERE user_id='".$_user['user_id']."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 			
 			// 2. send mail to the platform admin
@@ -157,7 +157,7 @@ if ($form->validate())
 			@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);			
 			
 			// 3. exit the page
-			unset($_uid);
+			unset($_user['user_id']);
 			Display :: display_footer();
 			exit; 
 		}
@@ -166,13 +166,12 @@ if ($form->validate())
 		/*--------------------------------------
 		          SESSION REGISTERING
 		  --------------------------------------*/
-		$_uid=$user_id; 
 		$_user['firstName'] = stripslashes($values['firstname']);
-		$_user['lastName'] = stripslashes($values['lastname']);
-		$_user['mail'] = $values['email'];
-		$_user['language'] = $values['language'];
+		$_user['lastName'] 	= stripslashes($values['lastname']);
+		$_user['mail'] 		= $values['email'];
+		$_user['language'] 	= $values['language'];
+		$_user['user_id']	= $values['user_id'];
 		$is_allowedCreateCourse = ($values['status'] == 1) ? true : false;
-		api_session_register('_uid');
 		api_session_register('_user');
 		api_session_register('is_allowedCreateCourse');
 
@@ -229,7 +228,7 @@ if ($form->validate())
 		echo "<p>", get_lang('NowGoChooseYourCourses'), ".</p>\n";
 		$actionUrl = "courses.php?action=subscribe";
 	}
-	// ?uidReset=true&uidReq=$_uid
+	// ?uidReset=true&uidReq=$_user['user_id']
 	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<input type=\"submit\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">\n", "</form>\n";
 
 }

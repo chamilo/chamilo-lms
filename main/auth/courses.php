@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 9721 2006-10-25 08:23:18Z grayd0n $
+<?php // $Id: courses.php 9983 2006-11-15 00:21:16Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -80,7 +80,6 @@ api_display_tool_title($nameTools);
 		COMMANDS SECTION
 ==============================================================================
 */
-$userId = $_uid;
 unset($message);
 // we are moving a course or category of the user up/down the list (=Sort My Courses)
 if (isset($_GET['move']))
@@ -120,7 +119,7 @@ if (isset($_POST['subscribe']))
 // we are unsubscribing from a course (=Unsubscribe from course)
 if (isset($_POST['unsubscribe']))
 {
-	$message=remove_user_from_course($_uid, $_POST['unsubscribe']);
+	$message=remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
 }
 // we are deleting a course category
 if ($_GET['action']=='deletecoursecategory' AND isset($_GET['id']))
@@ -157,8 +156,8 @@ switch ($_GET['action'])
 		break;
 	case 'unsubscribe':
 		api_display_tool_title(get_lang('UnsubscribeFromCourse'));
-		$user_courses=get_courses_of_user($_uid);
-		display_courses($_uid, true, $user_courses);
+		$user_courses=get_courses_of_user($_user['user_id']);
+		display_courses($_user['user_id'], true, $user_courses);
 		break;
 	case 'createcoursecategory':
 		api_display_tool_title(get_lang('CreateCourseCategory'));
@@ -168,8 +167,8 @@ switch ($_GET['action'])
 	case 'sortmycourses':
 	default:
 		api_display_tool_title(get_lang('SortMyCourses'));
-		$user_courses=get_courses_of_user($_uid);
-		display_courses($_uid, true, $user_courses);
+		$user_courses=get_courses_of_user($_user['user_id']);
+		display_courses($_user['user_id'], true, $user_courses);
 		break;
 }
 echo '</div>';
@@ -195,13 +194,13 @@ Display :: display_footer();
  */
 function subscribe_user($course_code)
 {
-	global $_uid;
+	global $_user;
 
 	$all_course_information =  CourseManager::get_course_information($course_code);
 
 	if ($all_course_information['registration_code']=='' OR $_POST['course_registration_code']==$all_course_information['registration_code'])
 	{
-		if (CourseManager::add_user_to_course($_uid, $course_code))
+		if (CourseManager::add_user_to_course($_user['user_id'], $course_code))
 		{
 			return get_lang('EnrollToCourseSuccessful');
 		}
@@ -367,7 +366,7 @@ function browse_courses_in_category()
 */
 function display_search_courses()
 {
-	global $_uid;
+	global $_user;
 	echo "<p><b>".get_lang("SearchCourse")."</b><br />";
 	echo "<form class=\"course_list\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=subscribe\">",
 					"<input type=\"hidden\" name=\"search_course\" value=\"1\" />",
@@ -389,9 +388,9 @@ function display_search_courses()
 function display_subscribe_to_courses($courses)
 {
 
-	global $_uid;
+	global $_user;
 	// getting all the courses to which the user is subscribed to
-	$user_courses=get_courses_of_user($_uid);
+	$user_courses=get_courses_of_user($_user['user_id']);
 	$user_coursecodes=array();
 
 	// we need only the course codes as these will be used to match against the courses of the category
@@ -492,14 +491,14 @@ function search_courses($search_term)
 */
 function delete_course_category($id)
 {
-	global $_uid, $user_personal_database;
+	global $_user, $user_personal_database;
 
 	$DATABASE_USER_TOOLS = $user_personal_database;
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$TABLECOURSUSER=Database::get_main_table(MAIN_COURSE_USER_TABLE);
 
-	$sql_delete="DELETE FROM `$TABLE_USER_COURSE_CATEGORY` WHERE id='".$id."' and user_id='".$_uid."'";
-	$sql_update="UPDATE $TABLECOURSUSER SET user_course_cat='0' WHERE user_course_cat='".$id."' AND user_id='".$_uid."'";
+	$sql_delete="DELETE FROM `$TABLE_USER_COURSE_CATEGORY` WHERE id='".$id."' and user_id='".$_user['user_id']."'";
+	$sql_update="UPDATE $TABLECOURSUSER SET user_course_cat='0' WHERE user_course_cat='".$id."' AND user_id='".$_user['user_id']."'";
 	mysql_query($sql_delete) or die(mysql_error());
 	mysql_query($sql_update) or die(mysql_error());
 
@@ -514,19 +513,19 @@ function delete_course_category($id)
 */
 function store_course_category()
 {
-	global $_uid, $user_personal_database;
+	global $_user, $user_personal_database;
 
 	$DATABASE_USER_TOOLS = $user_personal_database;
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 
 	// step 1: we determine the max value of the user defined course categories
-	$sql="SELECT sort FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_uid."' ORDER BY sort DESC";
+	$sql="SELECT sort FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' ORDER BY sort DESC";
 	$result=api_sql_query($sql);
 	$maxsort=mysql_fetch_array($result);
 	$nextsort=$maxsort['sort']+1;
 
 
-	$sql_insert="INSERT INTO `$TABLE_USER_COURSE_CATEGORY` (user_id, title,sort) VALUES ('".$_uid."', '".htmlentities($_POST['title_course_category'])."', '".$nextsort."')";
+	$sql_insert="INSERT INTO `$TABLE_USER_COURSE_CATEGORY` (user_id, title,sort) VALUES ('".$_user['user_id']."', '".htmlentities($_POST['title_course_category'])."', '".$nextsort."')";
 	api_sql_query($sql_insert);
 	return get_lang("CourseCategoryStored");
 }
@@ -539,7 +538,7 @@ function store_course_category()
 */
 function display_create_course_category_form()
 {
-	global $_uid, $user_personal_database;
+	global $_user, $user_personal_database;
 
 	echo "<form name=\"create_course_category\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=sortmycourses\">\n";
 	echo "<input type=\"text\" name=\"title_course_category\" />\n";
@@ -549,7 +548,7 @@ function display_create_course_category_form()
 	echo get_lang("ExistingCourseCategories");
 	$DATABASE_USER_TOOLS = $user_personal_database;
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
-	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_uid."'";
+	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
 	if (mysql_num_rows($result)>0)
 	{
@@ -575,12 +574,13 @@ function display_create_course_category_form()
 */
 function store_changecoursecategory($course_code, $newcategory)
 {
-	global $_uid;
+	global $_user;
+	
 	$TABLECOURSUSER = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 
-	$max_sort_value=api_max_sort_value($newcategory,$_uid); //max_sort_value($newcategory);
+	$max_sort_value=api_max_sort_value($newcategory,$_user['user_id']); //max_sort_value($newcategory);
 
-	$sql="UPDATE $TABLECOURSUSER SET user_course_cat='".$newcategory."', sort='".($max_sort_value+1)."' WHERE course_code='".$course_code."' AND user_id='".$_uid."'";
+	$sql="UPDATE $TABLECOURSUSER SET user_course_cat='".$newcategory."', sort='".($max_sort_value+1)."' WHERE course_code='".$course_code."' AND user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql);
 	return get_lang("EditCourseCategorySucces");
 }
@@ -593,10 +593,10 @@ function store_changecoursecategory($course_code, $newcategory)
 */
 function move_course($direction, $course2move, $category)
 {
-	global $_uid;
+	global $_user;
 	$TABLECOURSUSER = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 
-	$all_user_courses=get_courses_of_user($_uid);
+	$all_user_courses=get_courses_of_user($_user['user_id']);
 
 	// we need only the courses of the category we are moving in
 	foreach ($all_user_courses as $key=>$course)
@@ -624,8 +624,8 @@ function move_course($direction, $course2move, $category)
 		} // if ($course2move==$course['code'])
 	}
 
-	$sql_update1="UPDATE $TABLECOURSUSER SET sort='".$target_course['sort']."' WHERE course_code='".$source_course['code']."' AND user_id='".$_uid."'";
-	$sql_update2="UPDATE $TABLECOURSUSER SET sort='".$source_course['sort']."' WHERE course_code='".$target_course['code']."' AND user_id='".$_uid."'";
+	$sql_update1="UPDATE $TABLECOURSUSER SET sort='".$target_course['sort']."' WHERE course_code='".$source_course['code']."' AND user_id='".$_user['user_id']."'";
+	$sql_update2="UPDATE $TABLECOURSUSER SET sort='".$source_course['sort']."' WHERE course_code='".$target_course['code']."' AND user_id='".$_user['user_id']."'";
 	mysql_query($sql_update2);
 	mysql_query($sql_update1);
 	return get_lang("CourseSortingDone");
@@ -641,7 +641,7 @@ function move_course($direction, $course2move, $category)
 */
 function move_category($direction, $category2move)
 {
-	global $_uid;
+	global $_user;
 	// the database definition of the table that stores the user defined course categories
 	$table_user_defined_category = Database::get_user_personal_table(USER_COURSE_CATEGORY_TABLE);
 
@@ -662,8 +662,8 @@ function move_category($direction, $category2move)
 			 } // if ($course2move==$course['code'])
 		} // foreach ($user_courses as $key=>$course)
 
-	$sql_update1="UPDATE $table_user_defined_category SET sort='".$target_category['sort']."' WHERE id='".$source_category['id']."' AND user_id='".$_uid."'";
-	$sql_update2="UPDATE $table_user_defined_category SET sort='".$source_category['sort']."' WHERE id='".$target_category['id']."' AND user_id='".$_uid."'";
+	$sql_update1="UPDATE $table_user_defined_category SET sort='".$target_category['sort']."' WHERE id='".$source_category['id']."' AND user_id='".$_user['user_id']."'";
+	$sql_update2="UPDATE $table_user_defined_category SET sort='".$source_category['sort']."' WHERE id='".$target_category['id']."' AND user_id='".$_user['user_id']."'";
 	mysql_query($sql_update2);
 	mysql_query($sql_update1);
 	return get_lang("CategorySortingDone");
@@ -680,7 +680,7 @@ function move_category($direction, $category2move)
 
 function display_courses($user_id, $show_course_icons, $user_courses)
 {
-	global $_uid, $user_personal_database;
+	global $_user, $user_personal_database;
 
 	echo "<table cellpadding=\"4\">\n";
 
@@ -695,7 +695,7 @@ function display_courses($user_id, $show_course_icons, $user_courses)
 	// Step 1: we get all the categories of the user
 	$DATABASE_USER_TOOLS = $user_personal_database;
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
-	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id=$_uid ORDER BY sort ASC";
+	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
 	$result=api_sql_query($sql);
 	while ($row=mysql_fetch_array($result))
 	{
@@ -735,7 +735,7 @@ function display_courses($user_id, $show_course_icons, $user_courses)
 */
 function display_courses_in_category($user_category_id, $showicons)
 {
-	global $_uid;
+	global $_user;
 
 	// table definitions
 	$TABLECOURS=Database::get_main_table(MAIN_COURSE_TABLE);
@@ -749,7 +749,7 @@ function display_courses_in_category($user_category_id, $showicons)
 		                        FROM    $TABLECOURS       course,
 										$TABLECOURSUSER  course_rel_user
 		                        WHERE course.code = course_rel_user.course_code
-		                        AND   course_rel_user.user_id = '".$_uid."'
+		                        AND   course_rel_user.user_id = '".$_user['user_id']."'
 		                        AND course_rel_user.user_course_cat='".$user_category_id."'
 		                        ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
 	$result = api_sql_query($sql_select_courses) or die(mysql_error());
@@ -804,12 +804,12 @@ function display_courses_in_category($user_category_id, $showicons)
 */
 function get_user_course_category($id)
 {
-	global $_uid, $user_personal_database;
+	global $_user, $user_personal_database;
 
 	$DATABASE_USER_TOOLS = $user_personal_database;
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 
-	$sql="SELECT * FROM `".$TABLE_USER_COURSE_CATEGORY."` WHERE user_id='$_uid' AND id='$id'";
+	$sql="SELECT * FROM `".$TABLE_USER_COURSE_CATEGORY."` WHERE user_id='".$_user['user_id']."' AND id='$id'";
 	$result=mysql_query($sql) or die(mysql_error());
 	$row=mysql_fetch_array($result);
 	return $row;
@@ -964,11 +964,11 @@ function display_category_icons($current_category, $all_user_categories)
 */
 function display_change_course_category_form($edit_course)
 {
-	global $_uid, $user_personal_database;
+	global $_user, $user_personal_database;
 
 	$DATABASE_USER_TOOLS = $user_personal_database;
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
-	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_uid."'";
+	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql);
 
 
@@ -1051,9 +1051,9 @@ function get_courses_of_user($user_id)
 */
 function get_user_course_categories()
 {
-	global $_uid;
+	global $_user;
 	$table_category = Database::get_user_personal_table(USER_COURSE_CATEGORY_TABLE);
-	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_uid."' ORDER BY sort ASC";
+	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while ($row = mysql_fetch_array($result))
 	{
@@ -1097,7 +1097,7 @@ function display_edit_course_category_form($edit_course_category)
 */
 function store_edit_course_category()
 {
-	global $_uid, $user_personal_database;
+	global $_user, $user_personal_database;
 
 	$DATABASE_USER_TOOLS = $user_personal_database;
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";

@@ -1,4 +1,4 @@
-<?php // $Id: login.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: login.php 9983 2006-11-15 00:21:16Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,8 +36,8 @@
 		needs to set
 		- $loginFailed
 		- $uidReset
-		- $_uid
-		- register the $_uid in the session
+		- $_user['user_id']
+		- register the $_user['user_id'] in the session
 		As the LDAP code shows, this is not as difficult as you might think.
 	*/
 	/*
@@ -56,13 +56,13 @@
 	{
 		$loginFailed = false;
 		$uidReset = true;
-		$_uid = $uData['user_id'];
+		$_user['user_id'] = $uData['user_id'];
 		api_session_register('_uid');
 	}
 	else
 	{
 		$loginFailed = true;
-		unset($_uid);
+		unset($_user['user_id']);
     	$uidReset = false;
 	}
 ?>

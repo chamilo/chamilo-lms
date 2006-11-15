@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 9548 2006-10-18 08:19:15Z elixir_inter $
+// $Id: profile.php 9983 2006-11-15 00:21:16Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -94,7 +94,7 @@ $table_user = Database :: get_main_table(MAIN_USER_TABLE);
 /*
  * Get initial values for all fields.
  */
-$sql = "SELECT * FROM $table_user WHERE user_id = '$_uid'";
+$sql = "SELECT * FROM $table_user WHERE user_id = '".$_user['user_id']."'";
 $result = api_sql_query($sql, __FILE__, __LINE__);
 if ($result)
 {
@@ -162,7 +162,7 @@ $form->addRule('phone', get_lang('EmailWrong'), 'email');*/
 //	PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true')
 {
-	$form->addElement('file', 'picture', (get_user_image($_uid) != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
+	$form->addElement('file', 'picture', (get_user_image($_user['user_id']) != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
 	$form->add_progress_bar();
 	if( strlen($user_data['picture_uri']) > 0)
 	{
@@ -202,7 +202,7 @@ if (api_get_setting('extended_profile') == 'true')
 
 	//	MY PRODUCTIONS
 	$form->addElement('file', 'production', get_lang('MyProductions'));
-	if ($production_list = build_production_list($_uid))
+	if ($production_list = build_production_list($_user['user_id']))
 		$form->addElement('static', 'productions', null, $production_list);
 
 	//	MY PERSONAL OPEN AREA
@@ -273,13 +273,13 @@ function is_profile_editable()
  * Get a user's display picture. If the user doesn't have a picture, this
  * function will return an empty string.
  *
- * @param	$_uid	User id
+ * @param	$user_id	User id
  * @return	The uri to the picture
  */
-function get_user_image($_uid)
+function get_user_image($user_id)
 {
 	$table_user = Database :: get_main_table(MAIN_USER_TABLE);
-	$sql = "SELECT picture_uri FROM $table_user WHERE user_id = '$_uid'";
+	$sql = "SELECT picture_uri FROM $table_user WHERE user_id = '$user_id'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 
 	if ($result && $row = mysql_fetch_array($result, MYSQL_ASSOC))
@@ -293,10 +293,10 @@ function get_user_image($_uid)
 /**
  * Upload a submitted user image.
  *
- * @param	$_uid	User id
+ * @param	$user_id User id
  * @return	The filename of the new picture or FALSE if the upload has failed
  */
-function upload_user_image($_uid)
+function upload_user_image($user_id)
 {
 	/* Originally added by Miguel (miguel@cesga.es) - 2003-11-04
 	 * Code Refactoring by Hugues Peeters (hugues.peeters@claroline.net) - 2003-11-24
@@ -304,7 +304,7 @@ function upload_user_image($_uid)
 	 */
 
 	$image_repository = api_get_path(SYS_CODE_PATH).'upload/users/';
-	$existing_image = get_user_image($_uid);
+	$existing_image = get_user_image($user_id);
 
 	$file_extension = explode('.', $_FILES['picture']['name']);
 	$file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
@@ -322,7 +322,7 @@ function upload_user_image($_uid)
 		else
 		{
 			$old_picture_filename = $existing_image;
-			$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? 'u'.$_uid.'_' : '').uniqid('').'.'.$file_extension;
+			$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? 'u'.$user_id.'_' : '').uniqid('').'.'.$file_extension;
 		}
 
 		if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE)
@@ -332,7 +332,7 @@ function upload_user_image($_uid)
 	}
 	else
 	{
-		$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? $_uid.'_' : '').uniqid('').'.'.$file_extension;
+		$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? $user_id.'_' : '').uniqid('').'.'.$file_extension;
 	}
 
 	if (move_uploaded_file($_FILES['picture']['tmp_name'], $image_repository.$picture_filename))
@@ -344,12 +344,12 @@ function upload_user_image($_uid)
 /**
  * Remove an existing user image.
  *
- * @param	$_uid	User id
+ * @param	$user_id	User id
  */
-function remove_user_image($_uid)
+function remove_user_image($user_id)
 {
 	$image_repository = api_get_path(SYS_CODE_PATH).'upload/users/';
-	$image = get_user_image($_uid);
+	$image = get_user_image($user_id);
 
 	if ($image != '')
 	{
@@ -376,21 +376,21 @@ function remove_user_image($_uid)
  * productions on the filesystem before the removal request has been carried
  * out because they'll have to be re-read afterwards anyway.
  *
- * @param	$_uid	User id
+ * @param	$user_id	User id
  * @param	$force	Optional parameter to force building after a removal request
  * @return	A string containing the XHTML code to dipslay the production list, or FALSE
  */
-function build_production_list($_uid, $force = false)
+function build_production_list($user_id, $force = false)
 {
 	if (!$force && $_POST['remove_production'])
 		return true; // postpone reading from the filesystem
 
-	$productions = get_user_productions($_uid);
+	$productions = get_user_productions($user_id);
 
 	if (empty($productions))
 		return false;
 
-	$production_dir = api_get_path(WEB_CODE_PATH)."upload/users/$_uid/";
+	$production_dir = api_get_path(WEB_CODE_PATH)."upload/users/$user_id/";
 	$del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
 	$del_text = get_lang('Delete');
 
@@ -410,12 +410,12 @@ function build_production_list($_uid, $force = false)
 /**
  * Returns an array with the user's productions.
  *
- * @param	$_uid	User id
+ * @param	$user_id	User id
  * @return	An array containing the user's productions
  */
-function get_user_productions($_uid)
+function get_user_productions($user_id)
 {
-	$production_repository = api_get_path(SYS_CODE_PATH)."upload/users/$_uid/";
+	$production_repository = api_get_path(SYS_CODE_PATH)."upload/users/$user_id/";
 	$productions = array();
 
 	if (is_dir($production_repository))
@@ -437,12 +437,12 @@ function get_user_productions($_uid)
 /**
  * Upload a submitted user production.
  *
- * @param	$_uid	User id
+ * @param	$user_id	User id
  * @return	The filename of the new production or FALSE if the upload has failed
  */
-function upload_user_production($_uid)
+function upload_user_production($user_id)
 {
-	$production_repository = api_get_path(SYS_CODE_PATH)."upload/users/$_uid/";
+	$production_repository = api_get_path(SYS_CODE_PATH)."upload/users/$user_id/";
 
 	if (!file_exists($production_repository))
 		mkpath($production_repository);
@@ -459,12 +459,12 @@ function upload_user_production($_uid)
 /**
  * Remove a user production.
  *
- * @param	$_uid		User id
+ * @param	$user_id		User id
  * @param	$production	The production to remove
  */
-function remove_user_production($_uid, $production)
+function remove_user_production($user_id, $production)
 {
-	unlink(api_get_path(SYS_CODE_PATH)."upload/users/$_uid/$production");
+	unlink(api_get_path(SYS_CODE_PATH)."upload/users/$user_id/$production");
 }
 
 /*
@@ -481,9 +481,9 @@ if ($_SESSION['profile_update'])
 elseif ($_POST['remove_production'])
 {
 	foreach (array_keys($_POST['remove_production']) as $production)
-		remove_user_production($_uid, urldecode($production));
+		remove_user_production($_user['user_id'], urldecode($production));
 
-	if ($production_list = build_production_list($_uid, true))
+	if ($production_list = build_production_list($_user['user_id'], true))
 		$form->insertElementBefore($form->createElement('static', null, null, $production_list), 'productions');
 
 	$form->removeElement('productions');
@@ -501,20 +501,20 @@ elseif ($form->validate())
 	// upload picture if a new one is provided
 	if ($_FILES['picture']['size'])
 	{
-		if ($new_picture = upload_user_image($_uid))
+		if ($new_picture = upload_user_image($_user['user_id']))
 			$user_data['picture_uri'] = $new_picture;
 	}
 	// remove existing picture if asked
 	elseif ($user_data['remove_picture'])
 	{
-		remove_user_image($_uid);
+		remove_user_image($_user['user_id']);
 
 		$user_data['picture_uri'] = '';
 	}
 
 	// upload production if a new one is provided
 	if ($_FILES['production']['size'])
-		upload_user_production($_uid);
+		upload_user_production($_user['user_id']);
 
 	// remove values that shouldn't go in the database
 	unset($user_data['password1'], $user_data['password2'], $user_data['MAX_FILE_SIZE'],
@@ -544,7 +544,7 @@ elseif ($form->validate())
 		$sql = rtrim($sql, ',');
 	}
 
-	$sql .= " WHERE user_id  = '$_uid'";
+	$sql .= " WHERE user_id  = '$_user['user_id']'";
 
 	api_sql_query($sql, __FILE__, __LINE__);
 
@@ -572,7 +572,7 @@ elseif ($update_success)
 	Display :: display_normal_message(get_lang('ProfileReg'));
 }
 //	USER PICTURE
-$image = get_user_image($_uid);
+$image = get_user_image($_user['user_id']);
 $image_file = ($image != '' ? api_get_path(WEB_CODE_PATH)."upload/users/$image" : api_get_path(WEB_CODE_PATH).'img/unknown.jpg');
 $image_size = @getimagesize($image_file);
 

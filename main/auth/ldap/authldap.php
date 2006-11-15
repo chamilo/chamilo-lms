@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 9730 2006-10-25 09:15:58Z elixir_inter $
+<?php // $Id: authldap.php 9983 2006-11-15 00:21:16Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -214,7 +214,7 @@ include ('ldap_var.inc.php');
 		global $submitRegistration, $submit, $uname, $email,
 				$nom, $prenom, $password, $password1, $status;
 		global $includePath, $platformLanguage;
-		global $loginFailed, $uidReset, $_uid;
+		global $loginFailed, $uidReset, $_user;
 
 		/*----------------------------------------------------------
 			1. set the necessary variables
@@ -268,7 +268,7 @@ include ('ldap_var.inc.php');
 
 		$loginFailed = false;
 		$uidReset = true;
-		$_uid = $uData['user_id'];
+		$_user['user_id'] = $uData['user_id'];
 		api_session_register('_uid');
 	}
 

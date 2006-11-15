@@ -1,4 +1,4 @@
-<?php // $Id: inscription_second.php 9972 2006-11-14 14:44:37Z pcool $ 
+<?php // $Id: inscription_second.php 9983 2006-11-15 00:21:16Z pcool $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -189,10 +189,10 @@ if ($regDataOk)
 					 language	= '".$language."'
 					 ");
 
-	$_uid = mysql_insert_id();
+	$_user['user_id'] = mysql_insert_id();
 
 
-if ($_uid)
+if ($_user['user_id'])
 {
 	/*--------------------------------------
 	          SESSION REGISTERING
@@ -264,7 +264,7 @@ api_display_tool_title($nameTools);
 		echo "<p>",get_lang('NowGoChooseYourCourses'),".</p>\n";
 		$actionUrl = "courses.php?action=subscribe";
 	}
-// ?uidReset=true&uidReq=$_uid
+// ?uidReset=true&uidReq=$_user['user_id']
 	echo	"<form action=\"",$actionUrl,"\"  method=\"post\">\n",
 			"<input type=\"submit\" name=\"next\" value=\"",get_lang('Next'),"\" validationmsg=\" ",get_lang('Next')," \">\n",
 			"</form>\n";

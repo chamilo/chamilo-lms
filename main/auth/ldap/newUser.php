@@ -1,4 +1,4 @@
-<?php # $Id: newUser.php 9246 2006-09-25 13:24:53Z bmol $
+<?php # $Id: newUser.php 9983 2006-11-15 00:21:16Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -57,7 +57,7 @@ if ($loginLdapSucces)
 else
 {
 	$loginFailed = true;
-	unset($_uid);
+	unset($_user['user_id']);
 	$uidReset = false;
 }
 ?>

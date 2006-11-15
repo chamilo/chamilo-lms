@@ -40,7 +40,7 @@ $tbl_course_lp = Database :: get_course_table('lp');
 $tbl_course_lp_item = Database :: get_course_table('lp_item');
 $tbl_course_quiz = Database :: get_course_table('quiz');
 
-$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end FROM session_rel_course_rel_user,session WHERE id_session=id AND id_user=$_uid ORDER BY date_start, date_end, name",__FILE__,__LINE__);
+$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end FROM session_rel_course_rel_user,session WHERE id_session=id AND id_user=".$_user['user_id']." ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
 $Sessions=api_store_result($result);
 
@@ -52,7 +52,7 @@ if($id_session)
 	$result=api_sql_query("SELECT code, title, CONCAT(user.lastname,' ',user.firstname) coach, email
 							FROM $tbl_session_course_user AS session_course_user, $tbl_session_course AS session_course, $tbl_course AS course, $tbl_user AS user
 							WHERE session_course_user.id_session='$id_session'
-							AND session_course_user.id_user='$_uid'
+							AND session_course_user.id_user='".$_user['user_id']."'
 							AND session_course_user.course_code=course.code
 							AND session_course_user.id_session=session_course.id_session
 							AND session_course_user.course_code=session_course.course_code
@@ -66,7 +66,7 @@ if($id_session)
 				ON $tbl_session_course.id_coach = $tbl_user.user_id
 			INNER JOIN $tbl_session_course_user
 				ON $tbl_session_course_user.id_session = $tbl_session_course.id_session
-				AND $tbl_session_course_user.id_user = '$_uid'
+				AND $tbl_session_course_user.id_user = '".$_user['user_id']."'
 			INNER JOIN $tbl_session ON $tbl_session.id = $tbl_session_course.id_session
 			WHERE $tbl_session_course.course_code=code
 			AND $tbl_session_course.id_session='$id_session'
@@ -152,7 +152,7 @@ foreach($Courses as $enreg)
 				FROM ".$enreg['db_name'].'.'.$tbl_course_lp_view_item." AS lpi
 				INNER JOIN ".$enreg['db_name'].'.'.$tbl_course_lp_view." AS lpv
 					ON lpv.lp_id = lpi.lp_view_id
-					AND lpv.user_id = ".$_uid
+					AND lpv.user_id = ".$_user['user_id']
 				;
 	$result = api_sql_query($sqlTime);
 	while($totalTime = mysql_fetch_array($result))
@@ -162,7 +162,7 @@ foreach($Courses as $enreg)
 	
 	$sqlScore = "SELECT exe_result,exe_weighting
 				 FROM $tbl_stats_exercices
-				 WHERE exe_user_id = ".$_uid."
+				 WHERE exe_user_id = ".$_user['user_id']."
 				 AND exe_cours_id = '".$enreg['code']."'
 				";
 				
@@ -185,7 +185,7 @@ foreach($Courses as $enreg)
 	
 	$sqlLastAccess = "	SELECT access_date
 						FROM $tbl_stats_lastaccess
-						WHERE access_user_id = ".$_uid."
+						WHERE access_user_id = ".$_user['user_id']."
 						AND access_cours_code = '".$enreg['code']."'
 						ORDER BY access_date DESC LIMIT 0,1"
 					;
@@ -207,7 +207,7 @@ foreach($Courses as $enreg)
 	$sqlProgress = "SELECT COUNT(DISTINCT item_view.lp_item_id) AS nbItem
 					FROM ".$enreg['db_name'].".".$tbl_course_lp_view_item." AS item_view
 					INNER JOIN ".$enreg['db_name'].".".$tbl_course_lp_view." AS view
-						ON view.user_id = ".$_uid."
+						ON view.user_id = ".$_user['user_id']."
 					WHERE item_view.status = 'completed'
 					";
 	$resultProgress = api_sql_query($sqlProgress);
@@ -394,7 +394,7 @@ $progress = round(($totalProgress*100)/$totalItem);
 										INNER JOIN ".$a_infosCours['db_name'].".".$tbl_course_lp_view." AS view
 											ON item_view.lp_view_id = view.id
 											AND view.lp_id = ".$a_learnpath['id']."
-											AND view.user_id = ".$_uid."
+											AND view.user_id = ".$_user['user_id']."
 										WHERE item_view.status = 'completed'
 										";
 						$resultProgress = api_sql_query($sqlProgress);
@@ -471,7 +471,7 @@ $progress = round(($totalProgress*100)/$totalItem);
 					
 					$sqlScore = "SELECT exe_result,exe_weighting
 								 FROM $tbl_stats_exercices
-								 WHERE exe_user_id = ".$_uid."
+								 WHERE exe_user_id = ".$_user['user_id']."
 								 AND exe_cours_id = '".$a_infosCours['code']."'
 								 AND exe_exo_id = ".$a_exercices['id']
 									;

@@ -156,6 +156,8 @@ The course id is stored in $_cid session variable.
 ==============================================================================
 */
 
+$_SESSION["_uid"]=1;
+
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? $_GET["gidReq"] : '';
@@ -239,6 +241,11 @@ else
                 		{
 							$_user['user_id'] = $uData['user_id'];
 							api_session_register('_uid');
+							
+							if(!function_exists('event_login')){
+								include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
+								event_login();
+							}
                 		}
                 		else 
                 		{

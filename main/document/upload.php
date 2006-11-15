@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: upload.php 9985 2006-11-15 00:43:47Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -110,7 +110,7 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') //if the group id is set, 
 	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
 	$noPHP_SELF=true;
 		
-	if($is_allowed_to_edit || GroupManager::is_user_in_group($_uid,$_SESSION['_gid'])) //only courseadmin or group members allowed
+	if($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'],$_SESSION['_gid'])) //only courseadmin or group members allowed
 	{
 		$to_group_id = $_SESSION['_gid'];
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
@@ -215,7 +215,7 @@ if(isset($_FILES['user_upload']))
 	if($upload_ok)
 	{
 		//file got on the server without problems, now process it
-		$new_path = handle_uploaded_document($_course, $_FILES['user_upload'],$base_work_dir,$_POST['curdirpath'],$_uid,$to_group_id,$to_user_id,$max_filled_space,$_POST['unzip'],$_POST['if_exists']);
+		$new_path = handle_uploaded_document($_course, $_FILES['user_upload'],$base_work_dir,$_POST['curdirpath'],$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space,$_POST['unzip'],$_POST['if_exists']);
     	$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
     	$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
 		
@@ -248,13 +248,13 @@ if(isset($_POST['submit_image']))
 		//we could also create a function for this, I'm not sure...
 		//create a directory for the missing files
 		$img_directory = str_replace('.','_',$_POST['related_file']."_files");
-		$missing_files_dir = create_unexisting_directory($_course,$_uid,$to_group_id,$to_user_id,$base_work_dir,$img_directory);
+		$missing_files_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$img_directory);
 		//put the uploaded files in the new directory and get the paths
-		$paths_to_replace_in_file = move_uploaded_file_collection_into_directory($_course, $_FILES['img_file'],$base_work_dir,$missing_files_dir,$_uid,$to_group_id,$to_user_id,$max_filled_space);
+		$paths_to_replace_in_file = move_uploaded_file_collection_into_directory($_course, $_FILES['img_file'],$base_work_dir,$missing_files_dir,$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space);
 		//open the html file and replace the paths
 		replace_img_path_in_html_file($_POST['img_file_path'],$paths_to_replace_in_file,$base_work_dir.$_POST['related_file']);
 		//update parent folders
-		item_property_update_on_folder($_course,$_POST['curdirpath'],$_uid);	
+		item_property_update_on_folder($_course,$_POST['curdirpath'],$_user['user_id']);	
 	}
 }
 //they want to create a directory
@@ -262,7 +262,7 @@ if(isset($_POST['create_dir']) && $_POST['dirname']!='')
 {
 	$added_slash = ($path=='/')?'':'/';
 	$dir_name = $path.$added_slash.replace_dangerous_char($_POST['dirname']);
-	$created_dir = create_unexisting_directory($_course,$_uid,$to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
+	$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
 	if($created_dir)
 	{
 		//Display::display_normal_message("<strong>".$created_dir."</strong> was created!");

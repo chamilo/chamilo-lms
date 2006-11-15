@@ -35,7 +35,7 @@
 */
 function handle_multiple_actions()
 {
-	global $_uid, $is_courseAdmin, $is_courseTutor;
+	global $_user, $is_courseAdmin, $is_courseTutor;
 
 	//print_r($_POST);
 	// STEP 1: are we performing the actions on the received or on the sent files?
@@ -65,7 +65,7 @@ function handle_multiple_actions()
 	// STEP 3A: deleting
 	if ($_POST['actions']=='delete')
 	{
-		$dropboxfile=new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor);
+		$dropboxfile=new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 		foreach ($checked_file_ids as $key=>$value)
 		{
 			if ($_GET['view']=='received' OR !$_GET['view'])
@@ -120,7 +120,7 @@ function handle_multiple_actions()
 function delete_category($action, $id)
 {
 	global $dropbox_cnf;
-	global $_uid, $is_courseAdmin, $is_courseTutor;
+	global $_user['user_id'], $is_courseAdmin, $is_courseTutor;
 
 	// an additional check that might not be necessary
 	if ($action=='deletereceivedcategory')
@@ -150,7 +150,7 @@ function delete_category($action, $id)
 
 	while ($row=mysql_fetch_array($result))
 	{
-		$dropboxfile=new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor);
+		$dropboxfile=new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 		if ($action=='deletereceivedcategory')
 		{
 			$dropboxfile->deleteReceivedWork($row[$id_field]);
@@ -202,7 +202,7 @@ function display_move_form($part, $id, $target=array())
 */
 function store_move($id, $target, $part)
 {
-	global $_uid;
+	global $_user;
 	global $dropbox_cnf;
 
 	if ((isset($id) AND $id<>'') AND (isset($target) AND $target<>'') AND (isset($part) AND $part<>''))
@@ -210,7 +210,7 @@ function store_move($id, $target, $part)
 		if ($part=='received')
 		{
 			$sql="UPDATE `".$dropbox_cnf["postTbl"]."` SET cat_id='".mysql_real_escape_string($target)."'
-						WHERE dest_user_id='".mysql_real_escape_string($_uid)."'
+						WHERE dest_user_id='".mysql_real_escape_string($_user['user_id'])."'
 						AND file_id='".mysql_real_escape_string($id)."'
 						";
 			api_sql_query($sql,__FILE__,__LINE__);
@@ -219,7 +219,7 @@ function store_move($id, $target, $part)
 		if ($part=='sent')
 		{
 			$sql="UPDATE `".$dropbox_cnf["fileTbl"]."` SET cat_id='".mysql_real_escape_string($target)."'
-						WHERE uploader_id='".mysql_real_escape_string($_uid)."'
+						WHERE uploader_id='".mysql_real_escape_string($_user['user_id'])."'
 						AND id='".mysql_real_escape_string($id)."'
 						";
 			api_sql_query($sql,__FILE__,__LINE__);
@@ -302,14 +302,14 @@ function display_file_checkbox($id, $part)
 */
 function get_dropbox_categories($filter='')
 {
-	global $_uid;
+	global $_user;
 	global $dropbox_cnf;
 
 	echo '<h1>'.$filter.'</h1>';
 
 	$return_array=array();
 
-	$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE user_id='".$_uid."'";
+	$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE user_id='".$_user['user_id']."'";
 
 	$result=api_sql_query($sql);
 	while ($row=mysql_fetch_array($result))
@@ -339,7 +339,7 @@ function get_dropbox_categories($filter='')
 */
 function store_addcategory()
 {
-	global $_uid;
+	global $_user;
 	global $dropbox_cnf;
 
 	// check if the target is valid
@@ -367,7 +367,7 @@ function store_addcategory()
 	if (!$_POST['edit_id'])
 	{
 		// step 3a, we check if the category doesn't already exist
-		$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE user_id='".$_uid."' AND cat_name='".mysql_real_escape_string($_POST['category_name'])."' AND received='".$received."' AND sent='".$sent."'";
+		$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE user_id='".$_user['user_id']."' AND cat_name='".mysql_real_escape_string($_POST['category_name'])."' AND received='".$received."' AND sent='".$sent."'";
 		$result=api_sql_query($sql);
 
 
@@ -375,7 +375,7 @@ function store_addcategory()
 		if (mysql_num_rows($result)==0)
 		{
 			$sql="INSERT INTO `".$dropbox_cnf['tbl_category']."` (cat_name, received, sent, user_id)
-					VALUES ('".mysql_real_escape_string($_POST['category_name'])."', '".mysql_real_escape_string($received)."', '".mysql_real_escape_string($sent)."', '".mysql_real_escape_string($_uid)."')";
+					VALUES ('".mysql_real_escape_string($_POST['category_name'])."', '".mysql_real_escape_string($received)."', '".mysql_real_escape_string($sent)."', '".mysql_real_escape_string($_user['user_id'])."')";
 			api_sql_query($sql);
 			return get_lang('CategoryStored');
 		}
@@ -387,7 +387,7 @@ function store_addcategory()
 	else
 	{
 		$sql="UPDATE `".$dropbox_cnf['tbl_category']."` SET cat_name='".mysql_real_escape_string($_POST['category_name'])."', received='".mysql_real_escape_string($received)."' , sent='".mysql_real_escape_string($sent)."'
-				WHERE user_id='".mysql_real_escape_string($_uid)."'
+				WHERE user_id='".mysql_real_escape_string($_user['user_id'])."'
 				AND cat_id='".mysql_real_escape_string($_POST['edit_id'])."'";
 		api_sql_query($sql);
 		return get_lang('CategoryModified');
@@ -477,12 +477,12 @@ function display_addcategory_form($category_name='', $id='')
 */
 function display_add_form()
 {
-	global $_uid;
+	global $_user;
 	global $is_courseAdmin;
 	global $is_courseTutor;
 	global $course_info; // this
 
-	$dropbox_person = new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor);
+	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	?>
 	<form method="post" action="index.php?view_received_category=<?php echo $_GET['view_received_category']; ?>&view_sent_category=<?php echo $_GET['view_sent_category']; ?>&view=<?php echo $_GET['view']; ?>&<?php echo "&origin=$origin"; ?>" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 	<table border="0">
@@ -521,7 +521,7 @@ function display_add_form()
 				<?php echo dropbox_lang("authors")?>:
 			</td>
 			<td>
-				<input type="text" name="authors" value="<?php echo getUserNameFromId($_uid)?>" size="32" />
+				<input type="text" name="authors" value="<?php echo getUserNameFromId($_user['user_id'])?>" size="32" />
 			</td>
 		</tr>
 		<tr>
@@ -570,7 +570,7 @@ function display_add_form()
 		|| dropbox_cnf("allowStudentToStudent")	// RH: also if option is set
 		|| $current_user['status']!=5				// always allow teachers
 		|| $current_user['tutor_id']==1				// always allow tutors
-		) && $current_user['user_id'] != $_uid ) 	// don't include yourself
+		) && $current_user['user_id'] != $_user['user_id'] ) 	// don't include yourself
 		{
 			$full_name = $current_user['lastcommafirst'];
 			echo '<option value="user_' . $current_user['user_id'] . '">' . $full_name . '</option>';
@@ -605,7 +605,7 @@ function display_add_form()
     if ( dropbox_cnf("allowJustUpload"))  // RH
     {
 	  //echo '<option value="upload">'.dropbox_lang("justUploadInSelect").'</option>';
-	  echo '<option value="user_'.$_uid.'">'.dropbox_lang("justUploadInSelect").'</option>';
+	  echo '<option value="user_'.$_user['user_id'].'">'.dropbox_lang("justUploadInSelect").'</option>';
     }
 
 	echo "</select>",
@@ -787,7 +787,7 @@ function dropbox_cnf($variable)
 function store_add_dropbox()
 {
 	global $dropbox_cnf;
-	global $_uid;
+	global $_user;
 	require_once(api_get_path(LIBRARY_PATH) . "/fileUpload.lib.php");
 
 	// ----------------------------------------------------------
@@ -890,14 +890,14 @@ function store_add_dropbox()
 	// set author
 	if ( $_POST['authors'] == '')
 	{
-		$_POST['authors'] = getUserNameFromId( $_uid);
+		$_POST['authors'] = getUserNameFromId( $_user['user_id']);
 	}
 
 	// note: I think we could better migrate everything from here on to separate functions: store_new_dropbox, store_new_mailing, store_just_upload
 
 	if ( $dropbox_overwrite)  // RH: Mailing: adapted
 	{
-		$dropbox_person = new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor);
+		$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 
 		foreach($dropbox_person->sentWork as $w)
 		{
@@ -907,7 +907,7 @@ function store_add_dropbox()
 			    {
 					return get_lang('mailingNonMailingError');
 				}
-				if ( ($w->recipients[0]['id'] == $_uid) xor $thisIsJustUpload)
+				if ( ($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload)
 				{
 					return get_lang('mailingJustUploadNoOther');
 				}
@@ -919,7 +919,7 @@ function store_add_dropbox()
 	}
 	else  // rename file to login_filename_uniqueId format
 	{
-		$dropbox_filename = getLoginFromId( $_uid) . "_" . $dropbox_filename . "_".uniqid('');
+		$dropbox_filename = getLoginFromId( $_user['user_id']) . "_" . $dropbox_filename . "_".uniqid('');
 	}
 
 	// creating the array that contains all the users who will receive the file
@@ -935,7 +935,7 @@ function store_add_dropbox()
 			$userList = GroupManager::get_subscribed_users(substr($rec, strlen('group_') ));
 			foreach ($userList as $usr)
 			{
-				if (! in_array($usr['user_id'], $newWorkRecipients) && $usr['user_id'] != $_uid)
+				if (! in_array($usr['user_id'], $newWorkRecipients) && $usr['user_id'] != $_user['user_id'])
 				{
 					$new_work_recipients[] = $usr['user_id'];
 				}
@@ -946,7 +946,7 @@ function store_add_dropbox()
 
 	@move_uploaded_file( $dropbox_filetmpname, dropbox_cnf("sysPath") . '/' . $dropbox_filename);
 
-	new Dropbox_SentWork( $_uid, $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $new_work_recipients);
+	new Dropbox_SentWork( $_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $new_work_recipients);
 
     return get_lang('FileUploadSucces');
 }
@@ -1063,7 +1063,7 @@ function feedback_form()
 function store_feedback()
 {
 	global $dropbox_cnf;
-	global $_uid;
+	global $_user;
 
 	if (!is_numeric($_GET['id']))
 	{
@@ -1077,7 +1077,7 @@ function store_feedback()
 	else
 	{
 		$sql="INSERT INTO `".$dropbox_cnf['tbl_feedback']."` (file_id, author_user_id, feedback, feedback_date) VALUES
-				('".mysql_real_escape_string($_GET['id'])."','".mysql_real_escape_string($_uid)."','".mysql_real_escape_string($_POST['feedback'])."',NOW())";
+				('".mysql_real_escape_string($_GET['id'])."','".mysql_real_escape_string($_user['user_id'])."','".mysql_real_escape_string($_POST['feedback'])."',NOW())";
 		api_sql_query($sql);
 		return get_lang('DropboxFeedbackStored');
 	}
@@ -1097,7 +1097,7 @@ function zip_download ($array)
 {
 	global $_course;
 	global $dropbox_cnf;
-	global $_uid;
+	global $_user;
 	global $files;
 
 	// zip library for creation of the zipfile
@@ -1121,7 +1121,7 @@ function zip_download ($array)
 			FROM `".$dropbox_cnf["fileTbl"]."` file, `".$dropbox_cnf["personTbl"]."` person
 			WHERE file.id IN (".implode(', ',$array).")
 			AND file.id=person.file_id
-			AND person.user_id='".$_uid."'";
+			AND person.user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
@@ -1138,7 +1138,7 @@ function zip_download ($array)
 	}
 
 	// create the zip file
-	$temp_zip_file=$temp_zip_dir.'/dropboxdownload-'.$_uid.'-'.mktime().'.zip';
+	$temp_zip_file=$temp_zip_dir.'/dropboxdownload-'.$_user['user_id'].'-'.mktime().'.zip';
 	$zip_folder=new PclZip($temp_zip_file);
 
 	foreach ($files as $key=>$value)
@@ -1192,7 +1192,6 @@ function my_pre_add_callback($p_event, &$p_header)
 function zip_download_alternative($files)
 {
 	global $_course;
-	global $_uid;
 	global $_user;
 
 	$temp_zip_dir = api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/";
@@ -1214,7 +1213,7 @@ function zip_download_alternative($files)
 	}
 
 	// Step 3: create the zip file and add all the files to it
-	$temp_zip_file=$temp_zip_dir.'/dropboxdownload-'.$_uid.'-'.mktime().'.zip';
+	$temp_zip_file=$temp_zip_dir.'/dropboxdownload-'.$_user['user_id'].'-'.mktime().'.zip';
 	$zip_folder=new PclZip($temp_zip_file);
 	foreach ($files as $key=>$value)
 	{
@@ -1414,7 +1413,7 @@ function check_number_feedback($key, $array)
  */
 function get_last_tool_access($tool, $course_code='', $user_id='')
 {
-	global $_course, $_user, $_uid;
+	global $_course, $_user;
 
 	// The default values of the parameters
 	if ($course=='')
@@ -1423,7 +1422,7 @@ function get_last_tool_access($tool, $course_code='', $user_id='')
 	}
 	if ($user_id=='')
 	{
-		$user_id=$_uid;
+		$user_id=$_user['user_id'];
 	}
 
 	// the table where the last tool access is stored (=track_e_lastaccess)

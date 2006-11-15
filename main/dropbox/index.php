@@ -121,7 +121,7 @@ require_once( "dropbox_init.inc.php");
 // get the last time the user accessed the tool
 if ($_SESSION['last_access'][$_course['id']][TOOL_DROPBOX]=='')
 {
-	$last_access=get_last_tool_access(TOOL_DROPBOX,$_course['code'],$_uid);
+	$last_access=get_last_tool_access(TOOL_DROPBOX,$_course['code'],$_user['user_id']);
 	$_SESSION['last_access'][$_course['id']][TOOL_DROPBOX]=$last_access;
 }
 else 
@@ -197,7 +197,7 @@ if ($_POST['do_move'])
 // *** Delete a file ***
 if (($_GET['action']=='deletereceivedfile' OR $_GET['action']=='deletesentfile') AND isset($_GET['id']) AND is_numeric($_GET['id']))
 {
-	$dropboxfile=new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor);
+	$dropboxfile=new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	if ($_GET['action']=='deletereceivedfile')
 	{
 		$dropboxfile->deleteReceivedWork($_GET['id']);
@@ -309,7 +309,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	
 	
 	// object initialisation
-	$dropbox_person = new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
+	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
 	
 	// constructing the array that contains the total number of feedback messages per document. 
 	$number_feedback=get_total_number_feedback();
@@ -456,7 +456,7 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 	echo '<form name="recieved_files" method="post" action="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action='.$_GET['action'].'&amp;id='.$_GET['id'].'">';
 	
 	// object initialisation
-	$dropbox_person = new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor);
+	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	
 	// constructing the array that contains the total number of feedback messages per document. 
 	$number_feedback=get_total_number_feedback();	
@@ -598,7 +598,7 @@ exit;
 
 if ( $_GET['mailing'])  // RH: Mailing detail window passes parameter
 {
-	getUserOwningThisMailing($_GET['mailing'], $_uid, '304');  // RH or die
+	getUserOwningThisMailing($_GET['mailing'], $_user['user_id'], '304');  // RH or die
 	$dropbox_person = new Dropbox_Person( $_GET['mailing'], $is_courseAdmin, $is_courseTutor);
 	$mailingInUrl = "&mailing=" . urlencode( $_GET['mailing']);
 }
@@ -733,7 +733,7 @@ $i = 0;
   
 foreach ( $dropbox_person -> receivedWork as $w)
 {
-	if ( $w -> uploader_id == $_uid)  // RH: justUpload
+	if ( $w -> uploader_id == $_user['user_id'])  // RH: justUpload
 	{
 		$numberDisplayed -= 1; continue;
 	}
@@ -916,7 +916,7 @@ foreach ( $dropbox_person -> sentWork as $w)
 								<td align="right" valign="top">
 
 <?php  // RH: Mailing: clickable images for examine and send
-if ( $w->recipients[0]['id'] == $_uid)
+if ( $w->recipients[0]['id'] == $_user['user_id'])
 {
 	$langSentTo = dropbox_lang("justUploadInList", "noDLTT") . '&nbsp;';  // RH: justUpload
 }

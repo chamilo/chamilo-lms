@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 9527 2006-10-17 09:38:49Z elixir_inter $
+// $Id: add_course.php 9985 2006-11-15 00:43:47Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -113,7 +113,7 @@ if($form->validate())
 		update_Db_course($db_name);
 		fill_course_repository($directory);
 		fill_Db_course($db_name, $directory, $course_language);
-		register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $_uid, $expiration_date);
+		register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $_user['user_id'], $expiration_date);
 	}
 	$message = get_lang('JustCreated');
 	$message .= " <strong>".$course_values['wanted_code']."</strong>";

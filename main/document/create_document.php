@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: create_document.php 9985 2006-11-15 00:43:47Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -199,8 +199,8 @@ if ($form->validate())
 
 			$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
 
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_uid);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_uid);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
 		}
 
 		if (!is_file($filepath.'css/frames.css'))
@@ -209,8 +209,8 @@ if ($form->validate())
 
 			$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
 
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_uid);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_uid);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
 		}
 
 		$file_size = filesize($filepath.$filename.'.'.$extension);
@@ -219,10 +219,10 @@ if ($form->validate())
 		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $filename);
 		if ($document_id)
 		{
-			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_uid, $to_group_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id);
 
 			//update parent folders
-			item_property_update_on_folder($_course, $_GET['dir'], $_uid);
+			item_property_update_on_folder($_course, $_GET['dir'], $_user['user_id']);
 
 			$new_comment = isset ($_POST['comment']) ? trim($_POST['comment']) : '';
 			$new_title = isset ($_POST['title']) ? trim($_POST['title']) : '';

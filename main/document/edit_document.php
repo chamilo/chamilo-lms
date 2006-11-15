@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: edit_document.php 9985 2006-11-15 00:43:47Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -381,8 +381,8 @@ if($is_allowedToEdit)
 
 					$doc_id=add_document($_course,$dir.'css','folder',0,'css');
 
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_uid);
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_uid);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
 				}
 
 				if(!is_file($filepath.'css/frames.css'))
@@ -391,8 +391,8 @@ if($is_allowedToEdit)
 
 					$doc_id=add_document($_course,$dir.'css/frames.css','file',filesize($filepath.'css/frames.css'),'frames.css');
 
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_uid);
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_uid);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
 				}
 
 				// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
@@ -401,9 +401,9 @@ if($is_allowedToEdit)
 				{
 					$file_size = filesize($filepath.$filename.'.'.$extension);
 					update_existing_document($_course, $document_id,$file_size);
-					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_uid);
+					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id']);
 					//update parent folders
-					item_property_update_on_folder($_course,$dir,$_uid);
+					item_property_update_on_folder($_course,$dir,$_user['user_id']);
 					header('Location: document.php?curdirpath='.urlencode($_GET['curdirpath']).$req_gid);
 					exit();
 				}

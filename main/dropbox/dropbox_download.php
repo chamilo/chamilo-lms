@@ -65,9 +65,9 @@ if ( isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action']=
 	{
 		// here we also incorporate the person table to make sure that deleted sent documents are not included.
 		$sql="SELECT DISTINCT file.id, file.filename, file.title FROM `".$dropbox_cnf["fileTbl"]."` file, `".$dropbox_cnf["personTbl"]."` person
-				WHERE file.uploader_id='".mysql_real_escape_string($_uid)."'
+				WHERE file.uploader_id='".mysql_real_escape_string($_user['user_id'])."'
 				AND file.cat_id='".mysql_real_escape_string($_GET['cat_id'])."'
-				AND person.user_id='".mysql_real_escape_string($_uid)."'
+				AND person.user_id='".mysql_real_escape_string($_user['user_id'])."'
 				AND person.file_id=file.id
 				" ;
 	}
@@ -75,7 +75,7 @@ if ( isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action']=
 	{
 		$sql="SELECT DISTINCT file.id, file.filename, file.title FROM `".$dropbox_cnf["fileTbl"]."` file, `".$dropbox_cnf["personTbl"]."` person, `".$dropbox_cnf["postTbl"]."` post
 				WHERE post.cat_id='".mysql_real_escape_string($_GET['cat_id'])."'
-				AND person.user_id='".mysql_real_escape_string($_uid)."'
+				AND person.user_id='".mysql_real_escape_string($_user['user_id'])."'
 				AND person.file_id=file.id
 				AND post.file_id=file.id
 				" ;
@@ -120,7 +120,7 @@ if ( ! isset( $_GET['id']) || ! is_numeric( $_GET['id']))
 $allowed_to_download=false;
 
 // Check if the user has sent or received the file.
-$sql="SELECT * FROM `".$dropbox_cnf["personTbl"]."` WHERE file_id='".mysql_real_escape_string($_GET['id'])."' AND user_id='".mysql_real_escape_string($_uid)."'";
+$sql="SELECT * FROM `".$dropbox_cnf["personTbl"]."` WHERE file_id='".mysql_real_escape_string($_GET['id'])."' AND user_id='".mysql_real_escape_string($_user['user_id'])."'";
 $result=api_sql_query($sql);
 if (mysql_num_rows($result)>0)
 {
@@ -357,14 +357,14 @@ require_once( "dropbox_class.inc.php");
 		AUTHORISATION SECTION
 ==============================================================================
 */
-if ( !isset( $_uid) || !$is_course_member )
+if ( !isset( $_user['user_id']) || !$is_course_member )
 {
     require_once( "dropbox_init2.inc.php");
     exit( );
 }
 
 if ($_GET['mailing'])  // RH: Mailing detail window call
-	getUserOwningThisMailing($_GET['mailing'], $_uid, '500');  // RH or die
+	getUserOwningThisMailing($_GET['mailing'], $_user['user_id'], '500');  // RH or die
 
 /*
 ==============================================================================

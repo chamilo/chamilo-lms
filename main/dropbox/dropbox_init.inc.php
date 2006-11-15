@@ -121,7 +121,7 @@ $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($
 // only when it is needed. 
 if ($_GET['action']=='add')
 {
-	$dropbox_person = new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor);
+	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 }
 
 /*

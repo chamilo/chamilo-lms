@@ -1,4 +1,4 @@
-<?php // $Id: document.php 9757 2006-10-25 11:35:34Z elixir_inter $
+<?php // $Id: document.php 9985 2006-11-15 00:43:47Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -135,7 +135,7 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
 
 	if($group_properties['doc_state']==2) //documents are private
 	{
-		if($is_allowed_to_edit || GroupManager :: is_user_in_group($_uid,$_SESSION['_gid'])) //only courseadmin or group members (members + tutors) allowed
+		if($is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid'])) //only courseadmin or group members (members + tutors) allowed
 		{
 			$to_group_id = $_SESSION['_gid'];
 			$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
@@ -156,7 +156,7 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
 		$interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['_gid'], "name"=> get_lang('GroupSpace'));
 		//allowed to upload?
-		if($is_allowed_to_edit || GroupManager::is_subscribed($_uid,$_SESSION['_gid'])) //only courseadmin or group members can upload
+		if($is_allowed_to_edit || GroupManager::is_subscribed($_user['user_id'],$_SESSION['_gid'])) //only courseadmin or group members can upload
 		{
 			$group_member_with_upload_rights = true;
 		}
@@ -229,7 +229,7 @@ $course_quota = DocumentManager::get_course_quota();
  */
 function launch_ppt2lp($file){
 
-	global $_course,$_uid, $openoffice_conf, $base_work_dir;
+	global $_course,$_user, $openoffice_conf, $base_work_dir;
 
 	$response = new XajaxResponse();
 	// lp tables
@@ -248,7 +248,7 @@ function launch_ppt2lp($file){
 	//create the directory
 	$added_slash = '/';
 	$dir_name = $added_slash.substr($file, 1, strrpos($file,'.')-1);
-	$created_dir = create_unexisting_directory($_course,$_uid,$to_group_id,$to_user_id,$base_work_dir,$dir_name);
+	$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name);
 
 	chmod ($base_work_dir.$created_dir,0777);
 	/*
@@ -518,7 +518,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 		$added_slash = ($curdirpath=='/')?'':'/';
 		$dir_name = $curdirpath.$added_slash.replace_dangerous_char($_POST['dirname']);
-		$created_dir = create_unexisting_directory($_course,$_uid,$to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
+		$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
 		if($created_dir)
 		{
 			//Display::display_normal_message("<strong>".$created_dir."</strong> was created!");
@@ -565,7 +565,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 			$visibility_command = 'invisible';
 		}
 		//update item_property to change visibility
-		if(api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, $_uid))
+		if(api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, $_user['user_id']))
 		{
 			Display::display_normal_message(get_lang("ViMod"));
 		}

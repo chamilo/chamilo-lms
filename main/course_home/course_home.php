@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 9744 2006-10-25 10:04:16Z fvauthier $
+<?php // $Id: course_home.php 9985 2006-11-15 00:43:47Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -116,7 +116,7 @@ $user_id = api_get_user_id();
 $course_code = $_course["sysCode"];
 $course_info = Database::get_course_info($course_code);
 
-$return_result = CourseManager::determine_course_title_from_course_info($_uid, $course_info);
+$return_result = CourseManager::determine_course_title_from_course_info($_user['user_id'], $course_info);
 $course_title = $return_result["title"];
 $course_code = $return_result["code"];
 

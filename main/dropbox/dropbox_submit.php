@@ -197,12 +197,12 @@ if ( isset( $_POST["submitWork"]))
             // set author
             if ( $_POST['authors'] == '')
             {
-                $_POST['authors'] = getUserNameFromId( $_uid);
+                $_POST['authors'] = getUserNameFromId( $_user['user_id']);
             } 
 			
 			if ( $dropbox_overwrite)  // RH: Mailing: adapted
 			{
-				$dropbox_person = new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor);
+				$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 				
 				foreach($dropbox_person->sentWork as $w)
 				{
@@ -213,7 +213,7 @@ if ( isset( $_POST["submitWork"]))
 							$error = TRUE; 
 							$errormsg = dropbox_lang("mailingNonMailingError");
 						}
-						if ( ($w->recipients[0]['id'] == $_uid) xor $thisIsJustUpload)
+						if ( ($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload)
 						{
 							$error = TRUE; 
 							$errormsg = dropbox_lang("mailingJustUploadNoOther");
@@ -225,7 +225,7 @@ if ( isset( $_POST["submitWork"]))
 			}
 			else  // rename file to login_filename_uniqueId format
 			{
-				$dropbox_filename = getLoginFromId( $_uid) . "_" . $dropbox_filename . "_".uniqid(''); 
+				$dropbox_filename = getLoginFromId( $_user['user_id']) . "_" . $dropbox_filename . "_".uniqid(''); 
 			}
                         
 			if ( ( ! is_dir( dropbox_cnf("sysPath"))))
@@ -272,7 +272,7 @@ if ( isset( $_POST["submitWork"]))
 	            		$userList = GroupManager::get_subscribed_users(substr($rec, strlen('group_') ));
 	            		foreach ($userList as $usr) 
 	            		{
-	            			if (! in_array($usr['user_id'], $newWorkRecipients) && $usr['user_id'] != $_uid)
+	            			if (! in_array($usr['user_id'], $newWorkRecipients) && $usr['user_id'] != $_user['user_id'])
 	            			{
 	            				$newWorkRecipients[] = $usr['user_id'];
 	            			}
@@ -287,7 +287,7 @@ if ( isset( $_POST["submitWork"]))
         	{
 	            @move_uploaded_file( $dropbox_filetmpname, dropbox_cnf("sysPath") . '/' . $dropbox_filename) 
 	            	or die( dropbox_lang("uploadError")." (code 407)");
-	            new Dropbox_SentWork( $_uid, $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
+	            new Dropbox_SentWork( $_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
         	}
         }
     } //end if(!$error)
@@ -317,7 +317,7 @@ if ( isset( $_POST["submitWork"]))
  */
 if ( isset( $_GET['mailingIndex']))  // examine or send
 {
-    $dropbox_person = new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor);
+    $dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	if ( isset($_SESSION["sentOrder"]))
 	{
 		$dropbox_person->orderSentWork ($_SESSION["sentOrder"]);
@@ -513,7 +513,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 		            }
 		            else
 		            {
-				        $newName = getLoginFromId( $_uid) . "_" . $thisFile . "_" . uniqid('');
+				        $newName = getLoginFromId( $_user['user_id']) . "_" . $thisFile . "_" . uniqid('');
 				        if ( rename(dropbox_cnf("sysPath") . '/' . $thisFile, dropbox_cnf("sysPath") . '/' . $newName))
 							new Dropbox_SentWork( $mailingPseudoId, $thisFile, $mailing_item->description, $mailing_item->author, $newName, $thisContent['size'], array($thisRecip[0]));
 		            }
@@ -580,12 +580,12 @@ if ( isset( $_GET['deleteReceived']) || isset( $_GET['deleteSent'])
 {
 	if ( $_GET['mailing'])  // RH: Mailing
 	{
-		getUserOwningThisMailing($_GET['mailing'], $_uid, '408');  // RH or die
+		getUserOwningThisMailing($_GET['mailing'], $_user['user_id'], '408');  // RH or die
 		$dropbox_person = new Dropbox_Person( $_GET['mailing'], $is_courseAdmin, $is_courseTutor);
 	}
 	else
 	{
-	    $dropbox_person = new Dropbox_Person( $_uid, $is_courseAdmin, $is_courseTutor);
+	    $dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
     }
 
 	// RH: these two are needed, I think
@@ -637,8 +637,8 @@ if ( isset( $_GET['deleteReceived']) || isset( $_GET['deleteSent'])
     {
 		$w = new Dropbox_SentWork($id = $_GET['showFeedback']);
 		
-		if ($w->uploader_id != $_uid)
-		    getUserOwningThisMailing($w->uploader_id, $_uid, '411');  // RH or die
+		if ($w->uploader_id != $_user['user_id'])
+		    getUserOwningThisMailing($w->uploader_id, $_user['user_id'], '411');  // RH or die
     		
     	foreach( $w -> recipients as $r) if (($fb = $r["feedback"]))
     	{

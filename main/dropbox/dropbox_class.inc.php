@@ -196,7 +196,7 @@ class Dropbox_Work {
 		/*
 		* private function creating existing object by retreiving info from db
 		*/
-		global $_uid;  // RH: Feedback
+		global $_user;  // RH: Feedback
 		
 		/*
 		* Do some sanity checks
@@ -259,7 +259,7 @@ class Dropbox_Work {
 		/*
 		// RH: Feedback
 		$result = api_sql_query("SELECT feedback_date, feedback, cat_id FROM `".
-		    dropbox_cnf("postTbl")."` WHERE dest_user_id='".$_uid.
+		    dropbox_cnf("postTbl")."` WHERE dest_user_id='".$_user['user_id'].
 		    "' AND file_id='".$id."'",__FILE__,__LINE__);		
 		if ($res = mysql_fetch_array($result))
 		{

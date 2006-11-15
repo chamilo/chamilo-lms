@@ -121,7 +121,7 @@ if ( $is_trackingEnabled )
     </tr>";
         $sql = "SELECT `login_date`
                     FROM `".$TABLETRACK_LOGIN."`
-                    WHERE `login_user_id` = '".$_uid."'
+                    WHERE `login_user_id` = '".$_user['user_id']."'
                     ORDER BY `login_date` DESC
                     LIMIT ".$limitOfDisplayedLogins."";
         echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('LoginsExplaination')."<br/>";
@@ -154,7 +154,7 @@ if ( $is_trackingEnabled )
 
                 $sql = "SELECT `access_tool`, count(access_tool), `access_cours_code`
                             FROM `".$TABLETRACK_ACCESS."`
-                            WHERE `access_user_id` = '".$_uid."'".
+                            WHERE `access_user_id` = '".$_user['user_id']."'".
                                 //AND access_tool IS NOT NULL
                                 "AND access_date > '".$value."'
                                 AND access_date < '".$previousDate."'
@@ -242,7 +242,7 @@ if ( $is_trackingEnabled )
         echo " Ceci est amen  etre dplac vers la page de garde des exercices ";
         $sql = "SELECT `ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, `te`.`exe_date`
                     FROM `$TABLECOURSE_EXERCICES` AS ce , `$TABLETRACK_EXERCICES` AS te
-                    WHERE `te`.`exe_user_id` = '$_uid'
+                    WHERE `te`.`exe_user_id` = '".$_user['user_id']."'
                         AND `te`.`exe_exo_id` = `ce`.`id`
                     ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
     

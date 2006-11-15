@@ -46,7 +46,6 @@ $sco_identifier = $_GET['sco_identifier'];
 $file 		= $_GET['file'];
 $edoceo 	= $_GET['edoceo'];
 $items 		= $_SESSION['items'];
-$_uid		= $_SESSION['_uid'];
 $contentId	= $_SESSION['contentId'];
 $openDir = $_REQUEST['openDir'];
 //prepare those variables for scormfunctions.php
@@ -101,8 +100,8 @@ $i=$_SESSION['items_dictionary'][$prereq];
 $prereqtitle=$items[$i]['title'];
 if ($prereq != '') {
 	$result = api_sql_query("SELECT status FROM $TBL_SCORM_SCO_DATA 
-		WHERE (scoIdentifier='$prereq' and studentId='$_uid' and contentId='$contentId')",__FILE__,__LINE__);
-	//echo "SELECT status FROM `$TBL_SCORM_SCO_DATA` WHERE (scoIdentifier='$prereq' and studentId='$_uid' and contentId='$contentId')";
+		WHERE (scoIdentifier='$prereq' and studentId='".$_user['user_id']."' and contentId='$contentId')",__FILE__,__LINE__);
+	//echo "SELECT status FROM `$TBL_SCORM_SCO_DATA` WHERE (scoIdentifier='$prereq' and studentId='".$_user['user_id']."' and contentId='$contentId')";
 	$ar=mysql_fetch_array($result);
 	$status=$ar['status'];
 	if ($status=='completed' or $status='passed') 	{ $openpage=true; }	else { $openpage=false; }

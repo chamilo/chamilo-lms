@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 9981 2006-11-15 00:05:16Z pcool $
+// $Id: user_list.php 9991 2006-11-15 12:11:22Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -75,7 +75,6 @@ function login_user($user_id)
 
 	$message = "Attempting to login as ".$firstname." ".$lastname." (id ".$user_id.")";
 
-	$_uid = $user_id;
 	//bug: this only works if $_uid is global
 	api_session_register('_uid');
 

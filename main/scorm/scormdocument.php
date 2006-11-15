@@ -488,7 +488,7 @@ if(api_is_allowed_to_edit()) // TEACHER ONLY
 					$dialogBox = get_lang('DownloadEnd');
 				}
 
-				api_item_property_update($_course, TOOL_LEARNPATH, $id, "LearnpathAdded", $_uid);
+				api_item_property_update($_course, TOOL_LEARNPATH, $id, "LearnpathAdded", $_user['user_id']);
 			}
 			else
 			{

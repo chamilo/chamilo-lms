@@ -18,7 +18,8 @@ $langFile = "scorm";
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
-if ($_uid=='') { //that means, that the used logged out in the other window
+if ($_user['user_id']=='') 
+{ //that means, that the used logged out in the other window
 	echo "<script type=\"text/javascript\">
 			/* <![CDATA[ */
 			alert('".get_lang('ScormLoggedout')."');
@@ -27,8 +28,7 @@ if ($_uid=='') { //that means, that the used logged out in the other window
 		  </script>";
 	exit();
 }
-?>
-<?php echo "<html><head><title>".get_lang('ScormTitle')."</title></head>"; ?>
+echo "<html><head><title>".get_lang('ScormTitle')."</title></head>"; ?>
 
 
 <frameset rows="40,*" frameborder="yes" framespacing="1">

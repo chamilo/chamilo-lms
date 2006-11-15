@@ -46,9 +46,6 @@ include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
 $TBL_SCORM_SCO_DATA=$scormDbName.".scorm_sco_data";
-
-$_uid							= $_SESSION['_uid'];
-$_user						= $_SESSION['_user'];
 $old_s_identifier	= $_SESSION['old_sco_identifier'];
 $my_s_identifier	= $_SESSION['s_identifier'];
 $file							= $_SESSION['file'];
@@ -142,7 +139,7 @@ result='entry, exit, lesson_status, student_id, student_name, lesson_location, t
 	case 'cmi.core.lesson_status'	: 
     if(lesson_status != '') {result=lesson_status;}
     else{<?php
-        $result = api_sql_query("SELECT status FROM $TBL_SCORM_SCO_DATA WHERE (studentId='$_uid' and scoIdentifier='$my_s_identifier')");
+        $result = api_sql_query("SELECT status FROM $TBL_SCORM_SCO_DATA WHERE (studentId='".$_user['user_id']."' and scoIdentifier='$my_s_identifier')");
         $ar=mysql_fetch_array($result);
         $status=$ar['status'];
         if(empty($ar['status'])){$status = "not attempted";}
@@ -151,7 +148,7 @@ result='entry, exit, lesson_status, student_id, student_name, lesson_location, t
         echo " result='$status';";?>
         } 
     break;
-	case 'cmi.core.student_id'	   : <?php echo "result='$_uid';"; ?> break;
+	case 'cmi.core.student_id'	   : <?php echo "result='".$_user['user_id']."';"; ?> break;
 	case 'cmi.core.student_name'	: 
 	  <?php
 		$who=$_user ['firstName']." ".$_user ['lastName'];

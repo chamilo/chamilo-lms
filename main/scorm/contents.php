@@ -62,8 +62,6 @@ if(substr($request_file,0,strlen($file_path)) != $file_path || strpos($request_f
 {
 	api_not_allowed();
 }
-//$s_identifier		= $_SESSION['s_identifier'];
-$_uid					= $_SESSION['_uid'];
 
 //Charset settings (very important for imported contents)
 $charset = GetXMLEncode($_GET['file']);
@@ -321,7 +319,7 @@ $_SESSION['contentId'] = $mycontentId;
 $everopened = true;
 $numrows2 = 0; 
 $result2='';
-$sql2 = "SELECT * FROM $TBL_SCORM_SCO_DATA WHERE (studentId='$_uid' and contentId='$mycontentId')";
+$sql2 = "SELECT * FROM $TBL_SCORM_SCO_DATA WHERE (studentId='".$_user['user_id']."' and contentId='$mycontentId')";
 $result2 = api_sql_query($sql2,__FILE__,__LINE__);
 $numrows2 = mysql_num_rows($result2);
 
@@ -360,7 +358,7 @@ if ( $menu == 'restart' ) { //Restrart clicked
 		
 		//5.1.b.2 update the status for the current user and content in the SCORM data table
 		$sql = "UPDATE $TBL_SCORM_SCO_DATA SET score='0', status='not attempted', time='00:00' "
-							." WHERE (studentId='$_uid' and contentId='$mycontentId')";
+							." WHERE (studentId='".$_user['user_id']."' and contentId='$mycontentId')";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		//5.1.b.3 clean session vars about this content
 		api_session_unregister('s_href');
@@ -477,7 +475,7 @@ if ( $menu == 'restart' ) { //Restrart clicked
 		// the database table
 		foreach($items as $i => $myitem ) {
 			$sql="SELECT * FROM $TBL_SCORM_SCO_DATA 
-				WHERE (studentId='$_uid' 
+				WHERE (studentId='".$_user['user_id']."' 
 				AND contentId='".$mycontentId."' 
 				AND scoIdentifier = '".$myitem['identifier']."')";// order by scoId";
 			$result = api_sql_query($sql,__FILE__,__LINE__);
@@ -587,7 +585,7 @@ while ($items[$i]) {
 		$sql = "INSERT INTO $TBL_SCORM_SCO_DATA "
 					."(contentId, scoId, scoIdentifier, scoTitle, status, studentID, score, time)VALUES "
 					."('".$mycontentId."','".$index."','".$items[$i]['identifier']."','"
-					.addslashes($items[$i]['title'])."','not attempted','".$_uid."','0','00:00')";
+					.addslashes($items[$i]['title'])."','not attempted','".$_user['user_id']."','0','00:00')";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 	}
 	
@@ -613,7 +611,7 @@ while ($items[$i]) {
 	
 	//6.2.7 Get the recorded status for this document/content
 	$sql3 = "SELECT status FROM $TBL_SCORM_SCO_DATA WHERE "
-				." (contentId='$mycontentId' and studentId='$_uid' and scoIdentifier='$identifier')";
+				." (contentId='$mycontentId' and studentId='".$_user['user_id']."' and scoIdentifier='$identifier')";
 	$result3 = api_sql_query($sql3,__FILE__,__LINE__);
 	$ar3=mysql_fetch_array($result3);
 	$lesson_status=$ar3['status'];

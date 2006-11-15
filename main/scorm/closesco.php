@@ -46,7 +46,6 @@ $origin							= $_GET['origin'];
 $max									= $_GET['max'];
 $min									= $_GET['min'];
 $file									= $_GET['file'];
-$_uid									= $_SESSION['_uid'];
 
 $charset_lang = 'ISO-8859-15';
 
@@ -81,7 +80,7 @@ if($_SESSION['dont_save_last']!=true){
 		if(is_array($items[$j])){
 			//error_log('items['.$j.'] is an array',0);
 			$sql = "SELECT status FROM $TBL_SCORM_SCO_DATA 
-				WHERE (contentId='$contentId' and studentId='$_uid' and scoIdentifier='".$items[$j]['identifier']."')";
+				WHERE (contentId='$contentId' and studentId='".$_user['user_id']."' and scoIdentifier='".$items[$j]['identifier']."')";
 			$result = api_sql_query($sql,__FILE__,__LINE__);
 			$ar=mysql_fetch_array($result);
 			$sub_lesson_status=$ar['status'];
@@ -91,12 +90,12 @@ if($_SESSION['dont_save_last']!=true){
 	}
 	if($sub_cluster_completed){
 		//error_log("Element $my_sco_identifier has no incomplete children, change status to $lesson_status",0);
-		$sql="UPDATE $TBL_SCORM_SCO_DATA SET score='$score', status='$lesson_status', time='$time' WHERE (studentId='$_uid' and scoIdentifier='$my_sco_identifier' and contentId='$contentId')";
+		$sql="UPDATE $TBL_SCORM_SCO_DATA SET score='$score', status='$lesson_status', time='$time' WHERE (studentId='".$_user['user_id']."' and scoIdentifier='$my_sco_identifier' and contentId='$contentId')";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		//error_log($sql,0);
 	}else{
 		//error_log("Element $my_sco_identifier has incomplete children, set status to incomplete)",0);
-		$sql="UPDATE $TBL_SCORM_SCO_DATA SET score='$score', status='incomplete', time='$time' WHERE (studentId='$_uid' and scoIdentifier='$my_sco_identifier' and contentId='$contentId')";
+		$sql="UPDATE $TBL_SCORM_SCO_DATA SET score='$score', status='incomplete', time='$time' WHERE (studentId='".$_user['user_id']."' and scoIdentifier='$my_sco_identifier' and contentId='$contentId')";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 	}
 }else{
@@ -132,7 +131,7 @@ for ($cluster=($startcluster*10); (($cluster<=($startcluster*10+9)) && ($cluster
 	$i = (!empty($items_clusterinfo_dictionary[$cluster])?$items_clusterinfo_dictionary[$cluster]:0);
 	$id=$items[$i]['identifier'];
 	$sql = "SELECT status FROM $TBL_SCORM_SCO_DATA 
-		WHERE (contentId='$contentId' and studentId='$_uid' and scoIdentifier='$id')";
+		WHERE (contentId='$contentId' and studentId='".$_user['user_id']."' and scoIdentifier='$id')";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	$ar=mysql_fetch_array($result);
 	$cluster_lesson_status=$ar['status'];
@@ -146,7 +145,7 @@ if ($clustercompleted) { //if every sub-element of this cluster was completed
 	//} while (($items[$i]['clusterinfo'] != $startcluster) and ($i <= count($items)));
 	$i = (!empty($items_clusterinfo_dictionary[$startcluster])?$items_clusterinfo_dictionary[$startcluster]:0);	
 	$my_sco_identifier=$items[$i]['identifier'];
-	$sql="UPDATE $TBL_SCORM_SCO_DATA SET status='completed' WHERE (studentId='$_uid' and scoIdentifier='$my_sco_identifier' and contentId='$contentId')";
+	$sql="UPDATE $TBL_SCORM_SCO_DATA SET status='completed' WHERE (studentId='".$_user['user_id']."' and scoIdentifier='$my_sco_identifier' and contentId='$contentId')";
 	//echo $sql;
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 } else { // if at least one element was not completed
@@ -156,7 +155,7 @@ if ($clustercompleted) { //if every sub-element of this cluster was completed
 	//} while (($items[$i]['clusterinfo'] != $startcluster) and ($i <= count($items)));
 	$i = (!empty($items_clusterinfo_dictionary[$startcluster])?$items_clusterinfo_dictionary[$startcluster]:0);	
 	$my_sco_identifier=$items[$i]['identifier'];
-	$sql="UPDATE $TBL_SCORM_SCO_DATA SET status='incomplete' WHERE (studentId='$_uid' and scoIdentifier='$my_sco_identifier' and contentId='$contentId')";
+	$sql="UPDATE $TBL_SCORM_SCO_DATA SET status='incomplete' WHERE (studentId='".$_user['user_id']."' and scoIdentifier='$my_sco_identifier' and contentId='$contentId')";
 	//echo $sql;
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 }

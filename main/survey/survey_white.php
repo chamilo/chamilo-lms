@@ -124,7 +124,7 @@ while($o_group = mysql_fetch_object($rsGroups) ){
 			// select the previous answer the user did
 			$sql = '	SELECT answer 
 						FROM '.$db_name.'.survey_report 
-						WHERE user_id='.$_uid.' AND survey_id='.$surveyid.' AND qid='.$o_question->qid;
+						WHERE user_id='.$_user['user_id'].' AND survey_id='.$surveyid.' AND qid='.$o_question->qid;
 			
 			$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
 			list($answer) = mysql_fetch_array($rsAttempt);

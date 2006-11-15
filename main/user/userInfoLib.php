@@ -258,9 +258,9 @@ function move_cat_rank_by_rank($rank, $direction) // up & down.
 
 function update_user_course_properties($user_id, $course_code, $properties)
 {
-	global $tbl_coursUser,$_uid;
+	global $tbl_coursUser,$_user;
         $sqlChangeStatus = "";
-        if ($user_id != $_uid)
+        if ($user_id != $_user['user_id'])
             $sqlChangeStatus = "`status`     = '".$properties['status']."',";
 	$result = api_sql_query("UPDATE $tbl_coursUser
 	                        SET     `role`       = '".$properties['role']."',

@@ -92,7 +92,7 @@ $mainDB = $mainDbName;
 $courseCode = $currentCourseID = $_course['sysCode'];
 $tbl_coursUser = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 
-$userIdViewer = $_uid; // id fo the user currently online
+$userIdViewer = $_user['user_id']; // id fo the user currently online
 //$userIdViewed = $_GET['userIdViewed']; // Id of the user we want to view
 
 $allowedToEditContent = ($userIdViewer == $userIdViewed) || $is_platformAdmin;
@@ -322,7 +322,7 @@ elseif ($displayMode == "viewMainInfoEdit")
 
 		echo "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n", "<input type=\"hidden\" name=\"submitMainUserInfo\" value=\"$userIdViewed\">\n", "<table width=\"80%\" border=\"0\">", "<tr align=\"center\" bgcolor=\"#E6E6E6\">\n", "<td align=\"left\">", get_lang('Name'), "</td>\n", "<td align=\"left\">", get_lang('Role'), "</td>\n", "<td>", get_lang('Tutor'), "</td>\n", "<td>", get_lang('CourseManager'), "</td>\n", "</tr>\n", "<tr align=\"center\">", "<td align=\"left\"><b>", htmlize($mainUserInfo['firstName']), " ", htmlize($mainUserInfo['lastName']), "</b></td>\n", "<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\"></td>", "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, "></td>";
 
-		if (!($is_courseAdmin && $_uid == $userIdViewed))
+		if (!($is_courseAdmin && $_user['user_id'] == $userIdViewed))
 		{
 			echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteCourseAdmin\" value=\"1\"", $courseAdminChecked, "></td>\n";
 		}

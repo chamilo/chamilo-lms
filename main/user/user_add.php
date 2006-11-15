@@ -149,7 +149,7 @@ if($register)
 		                           email     = '$email_form',
 		                           status    = '$platformStatus',
 		                           official_code = '$official_code_form',
-		                           creator_id = '$_uid'");
+		                           creator_id = '".$_user['user_id']."'");
 
 		$userId = mysql_insert_id();
 

@@ -73,7 +73,7 @@ if ($content=="")
 				"			}\n".
 				"			else\n".
 				"			{\n".
-				"				window.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=$time&test=".$doc_url."&uid=".$_uid."&cid=".$cid."&score=\"+Score;\n".
+				"				window.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=$time&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
 				"			}\n".
 				"		}\n".
 				"}\n".

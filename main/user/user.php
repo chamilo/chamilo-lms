@@ -97,10 +97,10 @@ function display_user_search_form()
 */
 function show_users_in_virtual_courses()
 {
-	global $_course, $_uid;
+	global $_course, $_user;
 	$real_course_code = $_course['sysCode'];
 	$real_course_info = Database::get_course_info($real_course_code);
-	$user_subscribed_virtual_course_list = CourseManager::get_list_of_virtual_courses_for_specific_user_and_real_course($_uid, $real_course_code);
+	$user_subscribed_virtual_course_list = CourseManager::get_list_of_virtual_courses_for_specific_user_and_real_course($_user['user_id'], $real_course_code);
 	$number_of_virtual_courses = count($user_subscribed_virtual_course_list);
 	$row = 0;
 	$column_header[$row ++] = "ID";
@@ -192,7 +192,7 @@ if(api_is_allowed_to_edit())
 		{
 			case 'unsubscribe' :
 				// Make sure we don't unsubscribe current user from the course
-				$user_ids = array_diff($_POST['user'],array($_uid));
+				$user_ids = array_diff($_POST['user'],array($_user['user_id']));
 				if(count($user_ids) > 0)
 				{
 					CourseManager::unsubscribe_user($user_ids, $_SESSION['_course']['sysCode']);
@@ -248,7 +248,7 @@ if(api_is_allowed_to_edit())
 	// Unregister user from course
 	if($_GET['unregister'])
 	{
-		if(isset($_GET['user_id']) && is_numeric($_GET['user_id']) && $_GET['user_id'] != $_uid)
+		if(isset($_GET['user_id']) && is_numeric($_GET['user_id']) && $_GET['user_id'] != $_user['user_id'])
 		{
 			CourseManager::unsubscribe_user($_GET['user_id'],$_SESSION['_course']['sysCode']);
 			$message = get_lang('UserUnsubscribed');
@@ -498,7 +498,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function modify_filter($user_id)
 {
-	global $origin,$_uid,$is_allowed_to_track;
+	global $origin,$_user,$is_allowed_to_track;
 
 	// info
 	$result = '<a href="userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/info_small.gif" /></a>';
@@ -511,7 +511,7 @@ function modify_filter($user_id)
 		// edit
 		$result .= '<a href="userInfo.php?origin='.$origin.'&amp;editMainUserInfo='.$user_id.'"><img border="0" alt="'.get_lang('Edit').'" src="../img/edit.gif" /></a>';
 		// unregister
-		 if( $user_id != $_uid)
+		 if( $user_id != $_user['user_id'])
 		{
 			$result .= '<a href="'.$_SERVER['PHP_SELF'].'?unregister=yes&amp;user_id='.$user_id.'&amp;'.$sort_params.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
 		}

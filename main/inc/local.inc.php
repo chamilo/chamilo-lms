@@ -563,7 +563,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	        	$sql = "SELECT 1 
 						FROM `".$mainDbName."`.`session_rel_course`
 						WHERE session_rel_course.course_code='$_cid'
-						AND session_rel_course.id_coach = '".$_user['user_id']"'";
+						AND session_rel_course.id_coach = '".$_user['user_id']."'";
 		        
 		        $result = api_sql_query($sql,__FILE__,__LINE__);
 		        if($row = mysql_fetch_array($result)){

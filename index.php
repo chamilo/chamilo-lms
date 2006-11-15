@@ -98,7 +98,7 @@ if ($_GET['logout'])
 	api_sql_query($s_sql_update_logout_date);
 	
 
-	//LoginDelete($_uid, $statsDbName);
+	//LoginDelete(".$_user['user_id'].", $statsDbName);
 	LoginDelete($_GET["uid"], $statsDbName);
 	api_session_destroy();
 
@@ -151,7 +151,7 @@ $dateFormatForInfosFromCourses = $dateFormatLong;
 //define("CONFVAL_limitPreviewTo",SCRIPTVAL_NewEntriesOfTheDay);
 //define("CONFVAL_limitPreviewTo",SCRIPTVAL_NoTimeLimit);
 define("CONFVAL_limitPreviewTo", SCRIPTVAL_NewEntriesOfTheDayOfLastLogin);
-if (isset ($_uid))
+if (isset ($_user['user_id']))
 {
 	$nameTools = api_get_setting('siteName');
 }
@@ -203,16 +203,15 @@ if ($_POST["submitAuth"])
 {
 	// To ensure legacy compatibility, we set the following variables.
 	// But they should be removed at last.
-	$uid = $_uid;
-	$lastname		 = $_user['lastName'];
-	$firstname	 = $_user['firstName'];
-	$email			 = $_user['mail'];
-	$status			 = $uData['status'];
-	if (isset ($_uid))
+	$lastname		 	= $_user['lastName'];
+	$firstname	 		= $_user['firstName'];
+	$email			 	= $_user['mail'];
+	$status			 	= $uData['status'];
+	if (isset ($_user['user_id']))
 	{
 		$sqlLastLogin = "SELECT UNIX_TIMESTAMP(login_date)
 								FROM $track_login_table
-								WHERE login_user_id = '$_uid'
+								WHERE login_user_id = '".$_user['user_id']."'
 								ORDER BY login_date DESC LIMIT 1";
 		$resLastLogin = api_sql_query($sqlLastLogin, __FILE__, __LINE__);
 		if (!$resLastLogin)
@@ -281,8 +280,7 @@ function display_anonymous_right_menu()
 
 	$platformLanguage = api_get_setting('platformLanguage');
 
-	$_uid = api_get_user_id();
-	if ( !(isset($_uid) && $_uid) ) // only display if the user isn't logged in
+	if ( !(isset(api_get_user_id()) && api_get_user_id()) ) // only display if the user isn't logged in
 	{
 		api_display_language_form();
 		echo '<br />';
@@ -325,7 +323,7 @@ function display_anonymous_right_menu()
 	 echo '</ul>';
 	echo '</div>';
 
-	if ($_uid)
+	if (api_get_user_id())
 	{
 		api_plugin('campushomepage_menu');
 	}
@@ -554,7 +552,7 @@ echo '<div class="maincontent">';
 	Plugins for loginpage_main AND campushomepage_main
 -----------------------------------------------------------------------------
 */
-if (!$_uid)
+if (!api_get_user_id())
 {
 	api_plugin('loginpage_main');
 }

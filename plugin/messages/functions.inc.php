@@ -1,4 +1,4 @@
-<?php // $Id: functions.inc.php 9928 2006-11-09 13:59:07Z evie_em $
+<?php // $Id: functions.inc.php 9992 2006-11-15 12:25:28Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -29,14 +29,14 @@ define ("MESSAGES_DATABASE", "messages");
 * Displays a select list containing the users
 * who are currently online. Used when composing a message.
 */
-function display_select_user_list($_uid,$_name,$width,$size)
+function display_select_user_list($user_id,$_name,$width,$size)
 {
 	$MINUTE=30;
 	global $statsDbName;
-	$userlist = WhoIsOnline($_uid,$statsDbName,$MINUTE);
+	$userlist = WhoIsOnline($user_id,$statsDbName,$MINUTE);
 	echo '<select  size="'.$size.'" style="width: '.$width.'px;" name="'.$_name.'">';
 	foreach($userlist as $row)
-		echo "<option value=\"$row[0]\">".GetFullUserName($row[0]).($_uid==$row[0]?("&nbsp;(".get_lang('Myself').")"):(""))."</option>\n";
+		echo "<option value=\"$row[0]\">".GetFullUserName($row[0]).($user_id==$row[0]?("&nbsp;(".get_lang('Myself').")"):(""))."</option>\n";
 	echo "</select>";
 }
 
@@ -139,9 +139,9 @@ function get_new_messages()
 */
 function users_connected_by_id()
 {
-	global $statsDbName, $_uid;
+	global $statsDbName, $_user;
 	$MINUTE=30;
-	$user_connect = WhoIsOnline($_uid,$statsDbName,$MINUTE);
+	$user_connect = WhoIsOnline($_user['user_id'],$statsDbName,$MINUTE);
 	for ($i=0; $i<count($user_connect); $i++)
 	{
 		$user_id_list[$i]=$user_connect[$i][0];

@@ -146,7 +146,7 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
 <?php
 	$sqlSessions = "SELECT id 
 					FROM $tbl_session
-					WHERE id_coach = $_uid
+					WHERE id_coach = '".$_user['user_id']."'
 				   ";
 	$resultSessions = api_sql_query($sqlSessions);
 	
@@ -154,8 +154,7 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
 	
 	$sqlSessions = "SELECT DISTINCT id_session as id
 			FROM $tbl_session_course
-			WHERE id_coach = $_uid
-		   ";
+			WHERE id_coach = ".$_user['user_id']."'";
 	  
 	$resultSessions = api_sql_query($sqlSessions);
 	$a_sessions = array_merge($a_sessions,api_store_result($resultSessions));
@@ -803,7 +802,7 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
 						</td>
 						<td align="center">
 							<?php 
-								if($_uid == $a_cours['id_coach'])
+								if($_user['user_id'] == $a_cours['id_coach'])
 								{
 									echo '<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$a_cours['code'].'#infosStudent"> -> </a>';
 								}

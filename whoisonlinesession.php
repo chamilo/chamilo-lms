@@ -43,7 +43,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 									date_end 
 								FROM session 
 								INNER JOIN session_rel_course
-									ON session_rel_course.id_coach = $_uid
+									ON session_rel_course.id_coach = ".$_user['user_id']."
 								ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 	
 	$sessionIsCoach = api_store_result($result);
@@ -53,7 +53,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 									date_start, 
 									date_end 
 							FROM session 
-							WHERE session.id_coach = $_uid
+							WHERE session.id_coach = ".$_user['user_id']."
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 	$sessionIsCoach = array_merge($sessionIsCoach , api_store_result($result));
 	

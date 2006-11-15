@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 9672 2006-10-24 12:04:30Z evie_em $
+<?php // $Id: whoisonline.php 9992 2006-11-15 12:25:28Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,7 +48,7 @@ if ($_GET['chatid'] != '') {
 	$time = time();
 	$time = date("Y-m-d H:i:s", $time);
 	$chatid = addslashes($_GET['chatid']);
-	$sql="update $track_user_table set chatcall_user_id = '".mysql_real_escape_string($_uid)."', chatcall_date = '".mysql_real_escape_string($time)."', chatcall_text = '' where (user_id = ".mysql_real_escape_string($chatid).")";
+	$sql="update $track_user_table set chatcall_user_id = '".mysql_real_escape_string($_user['user_id'])."', chatcall_date = '".mysql_real_escape_string($time)."', chatcall_text = '' where (user_id = ".mysql_real_escape_string($chatid).")";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 	//redirect caller to chat
@@ -211,15 +211,15 @@ function display_productions($user_id)
 
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.
-if ((get_setting('showonline','world') == 'true' AND !$_uid) OR (get_setting('showonline','users') == 'true' AND $_uid))
+if ((get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR (get_setting('showonline','users') == 'true' AND $_user['user_id']))
 {
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0)
 	{
-		$user_list = Who_is_online_in_this_course($_uid,api_get_setting('time_limit_whosonline'),$_GET['cidReq']);
+		$user_list = Who_is_online_in_this_course($_user['user_id'],api_get_setting('time_limit_whosonline'),$_GET['cidReq']);
 	}
 	else
 	{
-		$user_list = WhoIsOnline($_uid,$statsDbName,api_get_setting('time_limit_whosonline'));
+		$user_list = WhoIsOnline($_user['user_id'],$statsDbName,api_get_setting('time_limit_whosonline'));
 	}
 
 	$total=count($user_list);
@@ -234,7 +234,7 @@ if ((get_setting('showonline','world') == 'true' AND !$_uid) OR (get_setting('sh
 		}
 		else
 		{
-			if(0) // if ($_uid && $_GET["id"] != $_uid)
+			if(0) // if ($_user['user_id'] && $_GET["id"] != $_user['user_id'])
 			{
 				echo '<a href="'.$_SERVER['PHP_SELF'].'?chatid='.$_GET['id'].'">'.get_lang('SendChatRequest').'</a>';
 			}

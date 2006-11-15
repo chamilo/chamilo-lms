@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 9931 2006-11-10 09:09:51Z evie_em $
+<?php // $Id: new_message.php 9992 2006-11-15 12:25:28Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -152,7 +152,7 @@ if(!isset($_POST['compose']))
 	}
 	else
 	{
-		show_compose_to_any($_uid);
+		show_compose_to_any($_user['user_id']);
   	}
 }
 else

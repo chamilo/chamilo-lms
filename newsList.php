@@ -18,10 +18,10 @@
  	$start = 0;
  }
  
- if (isset($_uid))
+ if (isset($_user['user_id']))
  {
  	$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
- 	SystemAnnouncementManager :: display_all_announcements($visibility, $announcement, $start, $_uid);
+ 	SystemAnnouncementManager :: display_all_announcements($visibility, $announcement, $start, $_user['user_id']);
  }
  else
  {

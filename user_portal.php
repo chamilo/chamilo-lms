@@ -234,26 +234,33 @@ function get_personal_course_list($user_id)
 	return $personal_course_list;
 }
 
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $user_id
+ * @param unknown_type $list_sessions
+ * @return unknown
+ * 
+ */
+function get_personal_session_course_list($user_id, $list_sessions)
+{
+	// table definitions
+	$tbl_course 				= Database :: get_main_table(MAIN_COURSE_TABLE);
+	$tbl_user 					= Database :: get_main_table(MAIN_USER_TABLE);
+	$tbl_session 				= Database :: get_main_table(MAIN_SESSION_TABLE);
+	$tbl_course_user 			= Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+	$tbl_session_course 		= Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+	$tbl_session_course_user 	= Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+	$tbl_session_rel_user 		= Database :: get_main_table(MAIN_SESSION_USER_TABLE);
 
-function get_personal_session_course_list($user_id, $list_sessions){
-
-	global $_uid;
-
-	$tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
-	$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
-	$tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
-	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-	$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
-	$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
-	$tbl_session_rel_user = Database :: get_main_table(MAIN_SESSION_USER_TABLE);
-
-	$personal_course_list_sql="";
+	// variable initialisation
+	$personal_course_list_sql = '';
 	$personal_course_list = array();
 
 	// get the list of sessions where the user is subscribed / coach
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 5 as s
 							FROM session_rel_user, session
-							WHERE id_session=id AND id_user=$_uid ORDER BY date_start, date_end, name",__FILE__,__LINE__);
+							WHERE id_session=id AND id_user=$user_id ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
 	$Sessions=api_store_result($result);
 
@@ -261,7 +268,7 @@ function get_personal_session_course_list($user_id, $list_sessions){
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 2 as s
 							FROM $tbl_session as session
 							INNER JOIN $tbl_session_course as session_rel_course
-								ON session_rel_course.id_coach = $_uid
+								ON session_rel_course.id_coach = $user_id
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
 	//global $sessionIsCoach;
@@ -271,7 +278,7 @@ function get_personal_session_course_list($user_id, $list_sessions){
 
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 2 as s
 							FROM $tbl_session as session
-							WHERE session.id_coach = $_uid
+							WHERE session.id_coach = $user_id
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
 	$Sessions = array_merge($Sessions , api_store_result($result));
@@ -279,7 +286,8 @@ function get_personal_session_course_list($user_id, $list_sessions){
 
 	if(api_is_allowed_to_create_course())
 	{
-		foreach($Sessions as $enreg){
+		foreach($Sessions as $enreg)
+		{
 			$id_session = $enreg['id'];
 			$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name
 										 FROM $tbl_session_course as session_course
@@ -305,7 +313,8 @@ function get_personal_session_course_list($user_id, $list_sessions){
 
 	}
 
-	foreach($Sessions as $enreg){
+	foreach($Sessions as $enreg)
+	{
 		$id_session = $enreg['id'];
 		$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name
 									 FROM $tbl_session_course as session_course
@@ -327,15 +336,14 @@ function get_personal_session_course_list($user_id, $list_sessions){
 		{
 			$key = $result_row['id_session'].' - '.$result_row['k'];
 			$result_row['s'] = $enreg['s'];
-			if(!isset($personal_course_list[$key]))	{
+			if(!isset($personal_course_list[$key]))	
+			{
 				$personal_course_list[$key] = $result_row;
 			}
 		}
 	}
 
 	return $personal_course_list;
-
-
 }
 
 /*
@@ -345,16 +353,25 @@ function get_personal_session_course_list($user_id, $list_sessions){
 */
 /**
  * Warning: this function defines a global.
+ * @todo use the correct get_path function
  */
 function display_admin_links()
 {
 	global $rootAdminWeb;
 	echo "<li><a href=\"".$rootAdminWeb."\">".get_lang("PlatformAdmin")."</a></li>";
 }
+/**
+ * Enter description here...
+ *
+ */
 function display_create_course_link()
 {
 	echo "<li><a href=\"main/create_course/add_course.php\">".get_lang("CourseCreate")."</a></li>";
 }
+/**
+ * Enter description here...
+ *
+ */
 function display_edit_course_list_links()
 {
 	echo "<li><a href=\"main/auth/courses.php\">".get_lang("CourseManagement")."</a></li>";
@@ -762,9 +779,10 @@ function show_notification($mycours)
 */
 function get_user_course_categories()
 {
-	global $_uid;
+	global $_user;
+	
 	$table_category = Database::get_user_personal_table(USER_COURSE_CATEGORY_TABLE);
-	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_uid."'";
+	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_user['user_id']."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while ($row = mysql_fetch_array($result))
 	{
@@ -845,11 +863,11 @@ else
 
 	if(api_get_setting('use_session_mode')=='true' && !$nosession)
 	{
-		$personal_course_list = get_personal_session_course_list($_uid);
+		$personal_course_list = get_personal_session_course_list($_user['user_id']);
 	}
 	else
 	{
-		$personal_course_list = get_personal_course_list($_uid);
+		$personal_course_list = get_personal_course_list($_user['user_id']);
 	}
 	foreach ($personal_course_list as $mycours)
 	{

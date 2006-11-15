@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 9555 2006-10-18 10:05:15Z elixir_inter $
+// $Id: user_list.php 9981 2006-11-15 00:05:16Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,7 +49,7 @@ api_protect_admin_script();
 function login_user($user_id)
 {
 	//init ---------------------------------------------------------------------
-	global $_uid, $uidReset, $loginFailed, $uidReset, $is_trackingEnabled, $_user;
+	global $uidReset, $loginFailed, $uidReset, $is_trackingEnabled, $_user;
 	global $is_platformAdmin, $is_allowedCreateCourse;
 
 	$main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
@@ -57,7 +57,7 @@ function login_user($user_id)
 	$track_e_login_table = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
 
 	//logic --------------------------------------------------------------------
-	//unset($_uid); // uid not in session ? prevent any hacking
+	//unset($_user['user_id']); // uid not in session ? prevent any hacking
 
 	if (!isset ($user_id))
 	{
@@ -93,7 +93,7 @@ function login_user($user_id)
 				ON user.user_id = a.user_id
 				LEFT JOIN $track_e_login_table login
 				ON user.user_id = login.login_user_id
-				WHERE user.user_id = '$_uid'
+				WHERE user.user_id = '".$_user['user_id']."'
 				ORDER BY login.login_date DESC LIMIT 1";
 		}
 		else
@@ -102,7 +102,7 @@ function login_user($user_id)
 				FROM $main_user_table
 				LEFT JOIN $main_admin_table a
 				ON user.user_id = a.user_id
-				WHERE user.user_id = '$_uid'";
+				WHERE user.user_id = '".$_user['user_id']."'";
 		}
 
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -113,13 +113,14 @@ function login_user($user_id)
 
 			$user_data = mysql_fetch_array($sql_result);
 
-			$_user['firstName'] = $user_data['firstname'];
-			$_user['lastName'] = $user_data['lastname'];
-			$_user['mail'] = $user_data['email'];
-			$_user['lastLogin'] = $user_data['login_date'];
+			$_user['firstName'] 	= $user_data['firstname'];
+			$_user['lastName'] 		= $user_data['lastname'];
+			$_user['mail'] 			= $user_data['email'];
+			$_user['lastLogin'] 	= $user_data['login_date'];
 			$_user['official_code'] = $user_data['official_code'];
-			$_user['picture_uri'] = $user_data['picture_uri'];
-
+			$_user['picture_uri'] 	= $user_data['picture_uri'];
+			$_user['user_id']		= $user_data['user_id'];
+			
 			$is_platformAdmin = (bool) (!is_null($user_data['is_admin']));
 			$is_allowedCreateCourse = (bool) ($user_data['status'] == 1);
 			
@@ -269,7 +270,7 @@ function modify_filter($user_id,$url_params)
  */
 function active_filter($active, $url_params, $row)
 {
-	global $_uid;
+	global $_user;
 
 	if ($active=='1')
 	{
@@ -282,7 +283,7 @@ function active_filter($active, $url_params, $row)
 		$image='wrong';
 	}
 
-	if ($row['0']<>$_uid) // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
+	if ($row['0']<>$_user['user_id']) // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 	{
 		$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'"><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang($action).'" title="'.get_lang($action).'"/></a>';
 	}
@@ -381,7 +382,7 @@ else
 				Display :: display_normal_message(stripslashes($_GET['message']));
 				break;
 			case 'delete_user' :
-				if ($user_id != $_uid && UserManager :: delete_user($_GET['user_id']))
+				if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id']))
 				{
 					Display :: display_normal_message(get_lang('UserDeleted'));
 				}
@@ -410,7 +411,7 @@ else
 				$number_of_deleted_users = 0;
 				foreach ($_POST['id'] as $index => $user_id)
 				{
-					if($user_id != $_uid)
+					if($user_id != $_user['user_id'])
 					{
 						if(UserManager :: delete_user($user_id))
 						{

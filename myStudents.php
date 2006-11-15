@@ -1,11 +1,16 @@
 <?php
 /*
- * Created on 20 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
+ * Dokeos header should come here
+ */
+
+/**
+ * @todo use the correct database calls. example around line 480 : .$a_infosCours['db_name'].".".$tbl_course_lp_view_item."
+ * @todo language variables are sometimes in french: get_lang('Annoter')
+ * @todo other variables are sometimes in french: $pourcentageScore
  */
  
  $langFile = array ('registration', 'index','trad4all', 'tracking');
- $nameTools="Mes stagiaires";
- $langFile = array ('registration', 'index','trad4all');
+ $nameTools= get_lang('MyStagiaires');
  require ('main/inc/global.inc.php');
  api_block_anonymous_users();
  Display :: display_header($nameTools);
@@ -15,14 +20,27 @@
   * 	FUNCTIONS
   * ======================================================================================
   */
-  
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $a_infosUser
+ * @param unknown_type $tableTitle
+ * @param unknown_type $a_header
+ * @param unknown_type $a_dataLearnpath
+ * @param unknown_type $a_dataExercices
+ * @param unknown_type $a_dataProduction
+ * @return unknown
+ * 
+ * @author Elixir Interactive http://www.elixir-interactive.com
+ * @version 20 july 2006
+ */
 function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataExercices,$a_dataProduction)
 {
 	global $archiveDirName;
 	
 	$fileName = 'test.csv';
-	$archivePath = api_get_path(SYS_PATH).$archiveDirName.'/';
-	$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
+	$archivePath 	= api_get_path(SYS_PATH).$archiveDirName.'/';
+	$archiveURL 	= api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 	
 	if(!$open = fopen($archivePath.$fileName,'w+'))
 	{
@@ -106,17 +124,20 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
  *	MAIN CODE
  *===============================================================================  
  */
+ // Table definitions
+ $tbl_user 						= Database :: get_main_table(MAIN_USER_TABLE);
+ $tbl_session_user 				= Database :: get_main_table(MAIN_SESSION_USER_TABLE);
+ $tbl_session 					= Database :: get_main_table(MAIN_SESSION_TABLE);
+ $tbl_session_course 			= Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+ $tbl_session_course_user 		= Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+ $tbl_course 					= Database :: get_main_table(MAIN_COURSE_TABLE);
+ $tbl_stats_exercices 			= Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
+ $course_student_publication 	= Database :: get_course_table(STUDENT_PUBLICATION_TABLE);
+ $statistics_database 			= Database :: get_statistic_database();
  
- $tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
- $tbl_session_user = Database :: get_main_table(MAIN_SESSION_USER_TABLE);
- $tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
- $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
- $tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
- $tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
- $tbl_stats_exercices = Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
- //$tbl_course_lp_view = Database :: get_course_table('lp_view');
- //$tbl_course_lp_view_item = Database :: get_course_table('lp_item_view');
- //$tbl_course_lp_item = Database :: get_course_table('lp_item');
+ /**
+  * Are these needed? Apparently the correct database calls are not used 
+  */
  $tbl_course_lp_view = 'lp_view';
  $tbl_course_lp_view_item = 'lp_item_view';
  $tbl_course_lp_item = 'lp_item';
@@ -125,7 +146,7 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
  $course_quiz_question = 'quiz_question';
  $course_quiz_rel_question = 'quiz_rel_question';
  $course_quiz_answer = 'quiz_answer';
- $course_student_publication = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+
 
 
  //api_display_tool_title($nameTools);
@@ -207,7 +228,7 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
 	if(!empty($_GET['student']))
 	{
 		
-		$statistics_database = Database :: get_statistic_database();
+		
 		$a_usersOnline = WhoIsOnline($_GET['student'], $statistics_database, 30);
 		foreach($a_usersOnline as $a_online)
 		{
@@ -600,9 +621,9 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
 							  </tr>
 							 ";
 							 
-						$dataExercices[$i][] =  $a_exercices['title'];
+						$dataExercices[$i][] = $a_exercices['title'];
 						$dataExercices[$i][] = $pourcentageScore.'%';
-						$dataExercices[$i][] =  $a_essais['essais'];
+						$dataExercices[$i][] = $a_essais['essais'];
 						//$dataExercices[$i][] =  corrections;
 						$i++;
 					
@@ -767,15 +788,15 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
 					
 					$weighting = 0;
 					
-					$sqlProgress = "SELECT COUNT( DISTINCT item_view.lp_item_id ) AS nbItem 
+					$sql_progress = "SELECT COUNT( DISTINCT item_view.lp_item_id ) AS nbItem 
 									FROM ".$a_cours['db_name'].".".$tbl_course_lp_view_item." AS item_view 
 									INNER JOIN ".$a_cours['db_name'].".".$tbl_course_lp_view." AS lpview 
 										ON lpview.user_id = ".$_GET['student']." 
 									WHERE item_view.status = 'completed' 
 								   ";
 					//echo $sqlProgress;
-					$resultProgress = api_sql_query($sqlProgress);
-					$a_nbItem = mysql_fetch_array($resultProgress);
+					$result_progress = api_sql_query($sql_progress);
+					$a_nbItem = mysql_fetch_array($result_progress);
 					
 					$table = $a_cours['db_name'].'.'.$tbl_course_lp_item;
 					$nbTotalItem = Database::count_rows($table);
@@ -886,12 +907,12 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
 			
 			while($a_exerciceDetails = mysql_fetch_array($resultExerciceDetails))
 			{
-				$sqlAnswer = "	SELECT qa.comment, qa.answer
+				$sql_answer = "	SELECT qa.comment, qa.answer
 								FROM  ".$a_infosCours['db_name'].".".$course_quiz_answer." as qa
 								WHERE qa.question_id = ".$a_exerciceDetails['id']
 						 	 ;
 				
-				$resultAnswer = api_sql_query($sqlAnswer);
+				$result_answer = api_sql_query(sql_answer);
 				
 				echo "<a name='infosExe'></a>";
 				//print_r($a_exerciceDetails);
@@ -902,7 +923,7 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
 					</td>
 				</tr>
 				";
-				while($a_answer = mysql_fetch_array($resultAnswer))
+				while($a_answer = mysql_fetch_array($result_answer))
 				{
 					echo"
 					<tr>

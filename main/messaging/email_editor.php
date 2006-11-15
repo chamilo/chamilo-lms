@@ -30,7 +30,8 @@ $langFile = "index";
 
 include_once("../inc/global.inc.php");
 
-if(empty($_uid)){
+if(empty($_user['user_id']))
+{
 	api_not_allowed();
 }
 

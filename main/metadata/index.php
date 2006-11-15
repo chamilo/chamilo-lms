@@ -74,7 +74,7 @@ while ($row = mysql_fetch_array($result))
 
 // XML and DB STUFF ----------------------------------------------------------->
 
-$is_allowed_to_edit = isset($_uid) && $is_courseMember && is_allowed_to_edit();
+$is_allowed_to_edit = isset($_user['user_id']) && $is_courseMember && is_allowed_to_edit();
 
 $mdStore = new mdstore($is_allowed_to_edit);
 

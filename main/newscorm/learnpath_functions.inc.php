@@ -901,7 +901,7 @@ function is_prereq($learnpath_id)
 function prereqcheck($id_in_path)
 {
 	//1 Initialise and import working vars
-	global $learnpath_id, $_uid;
+	global $learnpath_id, $_user;
 	global $langPrereqToEnter, $langPrereqTestLimit1, $langPrereqTestLimit2, $langPrereqTestLimitNow, $langPrereqFirstNeedTo, $langPrereqModuleMinimum1, $langPrereqModuleMinimum2;
 	$tbl_learnpath_user = Database :: get_course_table(LEARNPATH_USER_TABLE);
 	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
@@ -923,13 +923,13 @@ function prereqcheck($id_in_path)
 		$prereq_limit = $row['prereq_completion_limit'];
 
 		//4.a.2 Get data from the user-item relation
-		if ($_uid == '')
+		if ($_user['user_id'] == '')
 		{
 			$user_id = '0';
 		}
 		else
 		{
-			$user_id = $_uid;
+			$user_id = $_user['user_id'];
 		}
 		$sql_items3 = "SELECT * FROM $tbl_learnpath_user WHERE (learnpath_item_id='$id_in_path3' and user_id=$user_id)";
 		$result_items3 = api_sql_query($sql_items3);
@@ -994,13 +994,13 @@ function prereqcheck($id_in_path)
 			//4.b.3 Cycle through items in the prerequisite chapter
 			//4.b.3.1 Get data ready to use
 			$id_in_path4 = $row3['id'];
-			if ($_uid == '')
+			if ($_user['user_id'] == '')
 			{
 				$user_id = '0';
 			}
 			else
 			{
-				$user_id = $_uid;
+				$user_id = $_user['user_id'];
 			}
 			//4.b.3.2 Get user-item relation
 			$sql_items4 = "SELECT * FROM $tbl_learnpath_user WHERE (learnpath_item_id='$id_in_path4' and user_id=$user_id)";

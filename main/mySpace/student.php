@@ -279,11 +279,11 @@ ob_start();
 	
 	else{
 		
-		$a_students=getStudentsFromCoursesNoSession($_uid, $a_students);
+		$a_students=getStudentsFromCoursesNoSession($_user['user_id'], $a_students);
 
-		$a_students=getStudentsFromCoursesFromSessions($_uid, $a_students);
+		$a_students=getStudentsFromCoursesFromSessions($_user['user_id'], $a_students);
 
-		$a_students=getStudentsFromCoursesFromSessionsCoach($_uid, $a_students);
+		$a_students=getStudentsFromCoursesFromSessionsCoach($_user['user_id'], $a_students);
 
 		
 	}	  

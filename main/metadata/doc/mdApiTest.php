@@ -26,7 +26,7 @@ $langFile = 'Whatever'; require("../../inc/global.inc.php");
 
 isset($_course) or give_up("Select a course first...");
 
-$is_allowed_to_edit = isset($_uid) && $is_courseMember && is_allowed_to_edit();
+$is_allowed_to_edit = isset($_user['user_id']) && $is_courseMember && is_allowed_to_edit();
 if (!$is_allowed_to_edit) give_up("You're not allowed to edit...");
 
 $mdStore = new mdstore($is_allowed_to_edit);  // create table if needed

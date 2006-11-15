@@ -40,7 +40,7 @@ define('HTF', 'mdp_scorm.htt');
 
 $_course = api_get_course_info(); isset($_course) or give_up(get_lang('Sorry'));
 
-$is_allowed_to_edit = isset($_uid) && $is_courseMember && is_allowed_to_edit();
+$is_allowed_to_edit = isset($_user['user_id']) && $is_courseMember && is_allowed_to_edit();
 if (!$is_allowed_to_edit) give_up(get_lang('Denied'));
 
 $mdStore = new mdstore($is_allowed_to_edit);  // create table if needed
@@ -223,7 +223,7 @@ elseif ($smo == get_lang('Import'))
     function store_md_and_traverse_subitems($mfdocId, $level, $counter, 
             $contextElem, $treeElem, $parentElem)
     {
-        global $_uid, $xht_doc, $mdStore, $mdObj, $sdisub;
+        global $_user, $xht_doc, $mdStore, $mdObj, $sdisub;
         
         //  $contextElem -> @identifier, metadata/lom
         //  $treeElem ->    title, items
@@ -251,7 +251,7 @@ elseif ($smo == get_lang('Import'))
         if ($level == 0)
         {
             $mddoc->xmd_set_attribute(0, 'created', date('Y/m/d H:i:s'), FALSE);
-            $mddoc->xmd_set_attribute(0, 'by', $_uid, FALSE);
+            $mddoc->xmd_set_attribute(0, 'by', $_user['user_id'], FALSE);
         }
 
         

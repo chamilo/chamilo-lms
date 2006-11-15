@@ -149,7 +149,7 @@ if(isset($_GET["user_id"]) && $_GET["user_id"]!=""){
 	$i_user_id=$_GET["user_id"];
 }
 else{
-	$i_user_id=$_uid;
+	$i_user_id = $_user['user_id'];
 }
 
 ?>

@@ -4346,10 +4346,10 @@ class learnpath {
 											
 				if($document_id)
 				{
-					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_uid, $to_group_id);
+					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id);
 									
 					//update parent folders
-					//item_property_update_on_folder($_course, $_GET['dir'], $_uid);
+					//item_property_update_on_folder($_course, $_GET['dir'], $_user['user_id']);
 									
 					$new_comment = (isset($_POST['comment'])) ? trim($_POST['comment']) : '';
 					$new_title = (isset($_POST['title'])) ? trim($_POST['title']) : '';

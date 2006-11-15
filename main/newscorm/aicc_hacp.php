@@ -51,8 +51,8 @@ require_once('learnpath.class.php');
 require_once('learnpathItem.class.php');
 require_once('aicc.class.php');
 
-$_uid							= $_SESSION['_uid'];
-$_user							= $_SESSION['_user'];
+// Is this needed? This is probabaly done in the header file
+//$_user							= $_SESSION['_user'];
 $file							= $_SESSION['file'];
 $oLP							= unserialize($_SESSION['lpobject']);
 $oItem 							=& $oLP->items[$oLP->current];
@@ -101,8 +101,8 @@ if(!empty($_REQUEST['command']))
 			$error_text = $errors[$error_code];
 			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
 			$result .= '[Core]'.$crlf;
-			$result .= $tab.'Student_ID='.$_uid.$crlf;
-			$result .= $tab.'Student_Name='.$_user['lastName'].', '.$_user['firstName'].$_uid.$crlf;
+			$result .= $tab.'Student_ID='.$_user['user_id'].$crlf;
+			$result .= $tab.'Student_Name='.$_user['lastName'].', '.$_user['firstName'].$_user['user_id'].$crlf;
 			$result .= $tab.'Lesson_Location='.$oItem->get_lesson_location().$crlf;
 			$result .= $tab.'Credit='.$oItem->get_credit().$crlf;
 			$result .= $tab.'Lesson_Status='.$oItem->get_status().$crlf;

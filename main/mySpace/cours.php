@@ -187,7 +187,7 @@
 				
 				$sqlCourse = "	SELECT title,code
 								FROM $tbl_course as course, $tbl_user_course as course_rel_user 
-								WHERE course_rel_user.course_code=course.code AND course_rel_user.user_id='$_uid' AND course_rel_user.status='1'
+								WHERE course_rel_user.course_code=course.code AND course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
 								ORDER BY title ASC
 							  ";
 
@@ -201,7 +201,7 @@
 				
 				$sqlCourse = "	SELECT DISTINCT code, title 
 								FROM $tbl_course as course, $tbl_session_course as session_rel_course 
-							  	WHERE session_rel_course.course_code=course.code AND id_coach='$_uid' 
+							  	WHERE session_rel_course.course_code=course.code AND id_coach='".$_user['user_id']."' 
 							  ";
 
 				$resultCoursesCoach = api_sql_query($sqlCourse);

@@ -140,11 +140,11 @@ function addlinkcategory($type)
 	// "WHAT'S NEW" notification : update last tool Edit
 	if ($type == "link")
 	{
-		global $_uid;
+		global $_user;
 		global $_course;
 		global $nameTools;
 
-		api_item_property_update($_course, TOOL_LINK, mysql_insert_id(), "LinkAdded", $_uid);
+		api_item_property_update($_course, TOOL_LINK, mysql_insert_id(), "LinkAdded", $_user['user_id']);
 	}
 
 	return $ok;
@@ -159,7 +159,7 @@ function deletelinkcategory($type)
 {
 	global $catlinkstatus;
 	global $_course;
-	global $_uid;
+	global $_user;
 	$tbl_link = Database :: get_course_table(LINK_TABLE);
 	$tbl_categories = Database :: get_course_table(LINK_CATEGORY_TABLE);
 	$TABLE_ITEM_PROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE);
@@ -170,7 +170,7 @@ function deletelinkcategory($type)
 		// -> items are no longer fysically deleted, but the visibility is set to 2 (in item_property). This will
 		// make a restore function possible for the platform administrator
 		//$sql="DELETE FROM $tbl_link WHERE id='".$_GET['id']."'";
-		api_item_property_update($_course, TOOL_LINK, $id, "delete", $_uid);
+		api_item_property_update($_course, TOOL_LINK, $id, "delete", $_user['user_id']);
 		$catlinkstatus = get_lang("LinkDeleted");
 		unset ($id);
 	}
@@ -254,11 +254,11 @@ function editlinkcategory($type)
 			$catlinkstatus = get_lang('LinkModded');
 
 			// "WHAT'S NEW" notification: update table last_toolEdit
-			global $_uid;
+			global $_user;
 			global $_course;
 			global $nameTools;
 
-			api_item_property_update($_course, TOOL_LINK, $_POST['id'], "LinkUpdated", $_uid);
+			api_item_property_update($_course, TOOL_LINK, $_POST['id'], "LinkUpdated", $_user['user_id']);
 		}
 	}
 	if ($type == "category")
@@ -313,7 +313,7 @@ function makedefaultviewcode($locatie)
 function change_visibility($id, $scope)
 {
 	global $_course;
-	global $_uid;
+	global $_user;
 	$TABLE_ITEM_PROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE);
 
 	if ($scope == "link")
@@ -321,7 +321,7 @@ function change_visibility($id, $scope)
 		$sqlselect = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".TOOL_LINK."' and ref='".$id."'";
 		$result = api_sql_query($sqlselect);
 		$row = mysql_fetch_array($result);
-		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_uid);
+		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_user['user_id']);
 	}
 }
 
@@ -548,11 +548,11 @@ function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 		$rv = 2; // 2= new
 	}
 
-	global $_course, $nameTools, $_uid;
-	api_item_property_update($_course, TOOL_LINK, $id, $ipu, $_uid);
+	global $_course, $nameTools, $_user;
+	api_item_property_update($_course, TOOL_LINK, $id, $ipu, $_user['user_id']);
 
 	if ($hidden && $ipu == "LinkAdded")
-		api_item_property_update($_course, TOOL_LINK, $id, "invisible", $_uid);
+		api_item_property_update($_course, TOOL_LINK, $id, "invisible", $_user['user_id']);
 
 	return $rv;
 }

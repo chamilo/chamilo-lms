@@ -284,8 +284,8 @@ if($is_allowedToEdit) // TEACHER ONLY
 		      $dialogBox = get_lang('DownloadEnd');
 		    }
 	        // "WHAT'S NEW" notification: update table last_tooledit
-	        //update_last_tooledit($_course, $nameTools, $id, get_lang('_new_document'), $_uid);
-	        item_property_update($_course, TOOL_LEARNPATH, $id, "LearnpathAdded", $_uid);
+	        //update_last_tooledit($_course, $nameTools, $id, get_lang('_new_document'), $_user['user_id']);
+	        item_property_update($_course, TOOL_LEARNPATH, $id, "LearnpathAdded", $_user['user_id']);
 	      }
 	      else
 	      {

@@ -35,8 +35,8 @@ require_once('learnpath.class.php');
 require_once('learnpathItem.class.php');
 require_once('aicc.class.php');
 
-$_uid							= $_SESSION['_uid'];
-$_user							= $_SESSION['_user'];
+// Is this needed? This is probabaly done in the header file
+// $_user							= $_SESSION['_user'];
 $file							= $_SESSION['file'];
 $oLP							= unserialize($_SESSION['lpobject']);
 $oItem 							= $oLP->items[$oLP->current];
@@ -110,7 +110,7 @@ var lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode;?>';
 if(lms_progress_bar_mode == ''){lms_progress_bar_mode='%';}
 var lms_view_id = '<?php echo $oLP->get_view();?>';
 if(lms_view_id == ''){ lms_view_id = 1;}
-var lms_user_id = '<?php echo $_uid;?>';
+var lms_user_id = '<?php echo $_user['user_id'];?>';
 var lms_next_item = '<?php echo $oLP->get_next_item_id();?>';
 var lms_previous_item = '<?php echo $oLP->get_previous_item_id();?>';
 var lms_lp_type = '<?php echo $oLP->get_type();?>';
@@ -147,7 +147,7 @@ function LMSGetValue(param) {
 	    	result='not attempted';
 	    }
 	}else if(param == 'cmi.core.student_id'){
-		result='<?php echo $_uid; ?>';
+		result='<?php echo $_user['user_id']; ?>';
 	}else if(param == 'cmi.core.student_name'){
 		  <?php
 			$who=$_user['lastName'].", ".$_user['firstName'];
@@ -202,7 +202,7 @@ function LMSGetValue(param) {
 		    }
 		    break;
 		case 'cmi.core.student_id'	   : 
-			result='<?php echo $_uid; ?>';
+			result='<?php echo $_user['user_id']; ?>';
 			break;
 		case 'cmi.core.student_name'	: 
 		  <?php

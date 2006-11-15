@@ -69,7 +69,6 @@ $type = $_REQUEST['type'];
 $origin = $_REQUEST['origin'];
 $docurl = $_REQUEST['docurl'];
 $thelink    = $_REQUEST['thelink'];
-$_uid       = $_SESSION['_uid'];
 $menu       = $_REQUEST['menu'];
 $item_id    = $_REQUEST['item_id'];
 
@@ -129,10 +128,13 @@ if ($action=='closelesson')
 	} else {
 		if ($how=='complete')
 		{
-			if (!$_uid) { 
+			if (!$_user['user_id']) 
+			{ 
 				$user_id=0; 
-			} else { 
-				$user_id=$_uid; 
+			} 
+			else 
+			{ 
+				$user_id=$_user['user_id']; 
 			}
 			
 			//setting completed status
@@ -187,7 +189,7 @@ if ($action=='closelesson')
 					$result = api_sql_query("SELECT * FROM ".$TBL_DOCUMENT." WHERE id=$id",__FILE__,__LINE__);
 					$myrow= mysql_fetch_array($result);
 					$path=$myrow["path"];
-					$fullpath=$rootWeb."main/exercice/showinframes.php?file=$path&origin=$origin&cid=".$_course['official_code']."&uid=$_uid&learnpath_id=$learnpath_id&learnpath_item_id=$id_in_path";
+					$fullpath=$rootWeb."main/exercice/showinframes.php?file=$path&origin=$origin&cid=".$_course['official_code']."&uid=".$_user['user_id']."&learnpath_id=$learnpath_id&learnpath_item_id=$id_in_path";
 					
 					echo "<script type='text/javascript'>\n/* <![CDATA[ */\n",
 					"zwindow=open('$fullpath','content',$properties);",
@@ -329,7 +331,7 @@ if ($action=='closelesson')
 if ($menu=='restart') { //Restart clicked
 	$_SESSION['cur_open']='restarted';
 	echo "<script type='text/javascript'>\n/* <![CDATA[ */\n xwindow=open('blank.php?display_msg=1','content');\n/* ]]> */\n</script>";
-	$sql = "UPDATE $tbl_learnpath_user SET score='0', status='incomplete', time='00:00' WHERE (user_id='$_uid' and learnpath_id='$learnpath_id')";
+	$sql = "UPDATE $tbl_learnpath_user SET score='0', status='incomplete', time='00:00' WHERE (user_id='".$_user['user_id']."' and learnpath_id='$learnpath_id')";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 
 	message("<table><tr><td><img src=\"../img/restart.jpg\"></td><td>".get_lang('LearnpathRestarted')."</td></tr></table>",'refresh');
@@ -436,12 +438,12 @@ while ($row2=mysql_fetch_array($result2)) {
 	$result3=api_sql_query($sql3,__FILE__,__LINE__);
 	while ($row3=mysql_fetch_array($result3)) {
 		$numrows=0;
-		$sql0 = "SELECT * FROM $tbl_learnpath_user WHERE (user_id='".$_uid."' and 	learnpath_item_id='".$row3['id']."')";
+		$sql0 = "SELECT * FROM $tbl_learnpath_user WHERE (user_id='".$_user['user_id']."' and 	learnpath_item_id='".$row3['id']."')";
 		$result0=api_sql_query($sql0,__FILE__,__LINE__);
 		$row0=mysql_fetch_array($result0);
 		$numrows = mysql_num_rows($result0);
 		if ($numrows==0) {
-			$sql4 = "INSERT INTO $tbl_learnpath_user VALUES 	('$_uid','$learnpath_id','".$row3['id']."','".get_lang('LearnpathIncomplete')."','0','00:00')";
+			$sql4 = "INSERT INTO $tbl_learnpath_user VALUES 	('".$_user['user_id']."','$learnpath_id','".$row3['id']."','".get_lang('LearnpathIncomplete')."','0','00:00')";
 			$result4 = api_sql_query($sql4,__FILE__,__LINE__);
 		}  //otherwise, the given item is already in the database
 	}
@@ -477,7 +479,7 @@ while ($row2=mysql_fetch_array($result2)) {
     }
     
     while ($row3=mysql_fetch_array($result3)) {
-        $sql0 = "SELECT * FROM $tbl_learnpath_user WHERE (user_id='".$_uid."' and learnpath_item_id='".$row3['id']."' and learnpath_id='".$learnpath_id."')";
+        $sql0 = "SELECT * FROM $tbl_learnpath_user WHERE (user_id='".$_user['user_id']."' and learnpath_item_id='".$row3['id']."' and learnpath_id='".$learnpath_id."')";
         $result0=api_sql_query($sql0,__FILE__,__LINE__);
         $row0=mysql_fetch_array($result0);
 

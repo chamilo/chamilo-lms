@@ -97,7 +97,7 @@ ob_start();
 			
 			$sqlSessions = "	SELECT DISTINCT id_session, name 
 								FROM $tbl_session_course as session_course, $tbl_course_user as course_rel_user, $tbl_sessions as session  
-							  	WHERE session.id=session_course.id_session AND session_course.course_code=course_rel_user.course_code AND course_rel_user.status='1' AND (course_rel_user.user_id='$_uid' OR session_course.id_coach='$_uid') 
+							  	WHERE session.id=session_course.id_session AND session_course.course_code=course_rel_user.course_code AND course_rel_user.status='1' AND (course_rel_user.user_id='".$_user['user_id']."' OR session_course.id_coach='".$_user['user_id']."') 
 							  ";
 
 			$resultSessions = api_sql_query($sqlSessions);

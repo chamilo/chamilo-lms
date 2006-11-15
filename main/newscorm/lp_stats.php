@@ -121,7 +121,7 @@ $TBL_LP_ITEM_VIEW = Database::get_course_table('lp_item_view');
 $TBL_LP_VIEW = Database::get_course_table('lp_view');
 $lp_id = $_SESSION['oLP']->get_id();
 $list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
-$sql = "SELECT max(view_count) FROM $TBL_LP_VIEW WHERE lp_id = $lp_id AND user_id = $_uid";
+$sql = "SELECT max(view_count) FROM $TBL_LP_VIEW WHERE lp_id = $lp_id AND user_id = '".$_user['user_id']."'";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 $view = '';
 if(Database::num_rows($res)>0){
@@ -149,7 +149,7 @@ foreach($list as $my_item_id){
 			" AND i.id = $my_item_id " .
 			" AND iv.lp_view_id = v.id " .
 			" AND i.lp_id = $lp_id " .
-			" AND v.user_id = $_uid " .
+			" AND v.user_id = ".$_user['user_id']."".
 			" AND v.view_count = $view ".
 			" ORDER BY iv.view_count $qry_order ";
 	}else{
@@ -159,7 +159,7 @@ foreach($list as $my_item_id){
 			" AND i.id = $my_item_id " .
 			" AND iv.lp_view_id = v.id " .
 			" AND i.lp_id = $lp_id " .
-			" AND v.user_id = $_uid ".
+			" AND v.user_id = ".$_user['user_id']." ".
 			" ORDER BY iv.view_count $qry_order ";
 	}
 	$result = api_sql_query($sql,__FILE__,__LINE__);

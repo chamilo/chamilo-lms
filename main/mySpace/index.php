@@ -79,7 +79,7 @@ function is_coach(){
   		
   		$sqlNbCours = "	SELECT course_code
 						FROM $tbl_course_user
-					  	WHERE user_id='$_uid' AND status='1'
+					  	WHERE user_id='".$_user['user_id']."' AND status='1'
 					  ";
 		$resultNbCours = api_sql_query($sqlNbCours);
 		
@@ -127,7 +127,7 @@ function is_coach(){
 		if($is_allowedCreateCourse){
 
 			$sqlNbStagiaire="SELECT DISTINCT srcru.id_user FROM $tbl_course_user as course_rel_user, $tbl_session_course_user as srcru " .
-							"WHERE course_rel_user.user_id='$_uid' AND course_rel_user.status='1' AND course_rel_user.course_code=srcru.course_code";
+							"WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1' AND course_rel_user.course_code=srcru.course_code";
 
 			$resultNbStagiaire = api_sql_query($sqlNbStagiaire);
 			
@@ -141,7 +141,7 @@ function is_coach(){
 
 			$a_stagiaire_coach=array();
 			
-			$sql="SELECT id_session, course_code FROM $tbl_session_course WHERE id_coach='$_uid'";
+			$sql="SELECT id_session, course_code FROM $tbl_session_course WHERE id_coach='".$_user['user_id']."'";
 
 			$result=api_sql_query($sql);
 			
@@ -200,7 +200,7 @@ function is_coach(){
 			
 			$sqlNbCours = "	SELECT DISTINCT course_code
 							FROM $tbl_course_user
-						  	WHERE user_id='$_uid' AND status='1'
+						  	WHERE user_id='".$_user['user_id']."' AND status='1'
 						  ";
 			$resultCours = api_sql_query($sqlNbCours);
 			
@@ -215,7 +215,7 @@ function is_coach(){
 			
 			$sqlNbCours = "	SELECT DISTINCT course_code 
 							FROM $tbl_session_course 
-						  	WHERE id_coach='$_uid' 
+						  	WHERE id_coach='".$_user['user_id']."' 
 						  ";
 			$resultCours = api_sql_query($sqlNbCours);
 			
@@ -252,7 +252,7 @@ function is_coach(){
 			
 			$sqlNbSessions = "	SELECT DISTINCT id_session 
 								FROM $tbl_session_course as session_course, $tbl_course_user as course_rel_user  
-							  	WHERE session_course.course_code=course_rel_user.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='$_uid' 
+							  	WHERE session_course.course_code=course_rel_user.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".$_user['user_id']."' 
 							  ";
 
 			$resultNbSessions = api_sql_query($sqlNbSessions);
@@ -266,7 +266,7 @@ function is_coach(){
 		if(is_coach()){
 			$sqlNbSessions = "	SELECT DISTINCT id_session 
 								FROM $tbl_session_course 
-							  	WHERE id_coach='$_uid' 
+							  	WHERE id_coach='".$_user['user_id']."' 
 							  ";
 
 			$resultNbSessions = api_sql_query($sqlNbSessions);

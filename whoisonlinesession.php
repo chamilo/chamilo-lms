@@ -1,11 +1,14 @@
 <?php
-/*
- * Created on 20 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
+// Dokeos Header here
+
+/**
+ * @todo variables are sometimes in cammelcase, or even worse a mixture of CammelCase and udnerscoring: $a_userList
+ * 
  */
 $langFile = "index";
 
 include_once("./main/inc/global.inc.php");
- api_block_anonymous_users();
+api_block_anonymous_users();
 /*
 -----------------------------------------------------------
 	Header
@@ -114,19 +117,13 @@ Display::display_header(get_lang('UserOnlineListSession'));
 	}
 	else
 	{
-		$online = get_lang('NoOnlineStudents');
-	}
-		
-	if(!empty($online))
-	{
-		echo "	<tr>
-					<td colspan='4'>
-						".$online."
+		echo '	<tr>
+					<td colspan="4">
+						'.get_lang('NoOnlineStudents').'
 					</td>
 				</tr>
-			 ";
+			 ';
 	}
-	
 ?>
 </table>
 <?php

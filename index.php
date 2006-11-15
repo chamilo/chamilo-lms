@@ -39,6 +39,12 @@
 *	@package dokeos.main
 ==============================================================================
 */
+
+/**
+ * @todo shouldn't the SCRIPTVAL_ and CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for? 
+ * 		 if these are really configuration settings then we can add those to the dokeos config settings
+ */
+
 /*
 ==============================================================================
 	   INIT SECTION
@@ -64,18 +70,22 @@ $cidReset = true; /* Flag forcing the 'current course' reset,
 	Included libraries
 -----------------------------------------------------------
 */
-//this includes main_api too:
 include_once ('./main/inc/global.inc.php');
-
-$this_section = SECTION_CAMPUS;
-
-
 include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+// the section (for the tabs)
+$this_section = SECTION_CAMPUS;
+
+/*
+-----------------------------------------------------------
+	Action Handling
+-----------------------------------------------------------
+*/
 if ($_GET['logout'])
 {
 	$query_string='';
@@ -105,21 +115,21 @@ if ($_GET['logout'])
 	header("Location: index.php$query_string");
 	exit();
 }
+
 /*
 -----------------------------------------------------------
 	Table definitions
 -----------------------------------------------------------
 */
-//new table definitions, using database library
-//these already have backticks around them!
-$main_course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
-$main_category_table = Database :: get_main_table(MAIN_CATEGORY_TABLE);
-$track_login_table = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+$main_course_table 		= Database :: get_main_table(MAIN_COURSE_TABLE);
+$main_category_table 	= Database :: get_main_table(MAIN_CATEGORY_TABLE);
+$track_login_table 		= Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
 /*
 -----------------------------------------------------------
 	Constants and CONFIGURATION parameters
 -----------------------------------------------------------
 */
+// @todo shouldn't these be moved to the config page or made into dokeos config settings?
 // ---- Category list options ----
 /** defines wether or not anonymous visitors can see a list of the courses on
 the Dokeos homepage that are open to the world */
@@ -195,6 +205,7 @@ if (CONFVAL_showExtractInfo != SCRIPTVAL_UnderCourseList and $orderKey[0] != "ke
 */
 if ($_GET["submitAuth"] == 1)
 {
+	// nice lie!!!
 	echo "Attempted breakin - sysadmins notified.";
 	session_destroy();
 	die();
@@ -273,6 +284,7 @@ Display :: display_header('', $help);
  * login form, useful links, help section
  * Warning: function defines globals
  * @version 1.0.1
+ * @todo does $_plugins need to be global?
  */
 function display_anonymous_right_menu()
 {
@@ -287,7 +299,9 @@ function display_anonymous_right_menu()
 		display_login_form();
 
 		if ($loginFailed)
+		{
 			handle_login_failed();
+		}
 		if (api_get_setting('allow_lostpassword') == 'true' OR api_get_setting('allow_registration') == 'true')
 		{
 			echo '<div class="menusection"><span class="menusectioncaption">'.get_lang('MenuUser').'</span><ul class="menulist">';
@@ -320,7 +334,7 @@ function display_anonymous_right_menu()
 	{
 		include('home/home_menu_'.$user_selected_language.'.html');
 	}
-	 echo '</ul>';
+	echo '</ul>';
 	echo '</div>';
 
 	if (api_get_user_id())
@@ -571,11 +585,11 @@ else
 {
 	if(!file_exists('home/home_news_'.$user_selected_language.'.html'))
 	{
-	include ('home/home_top.html');
+		include ('home/home_top.html');
 	}
 	else
 	{
-	include('home/home_top_'.$user_selected_language.'.html');
+		include('home/home_top_'.$user_selected_language.'.html');
 	}
 }
 

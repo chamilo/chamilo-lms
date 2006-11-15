@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 9992 2006-11-15 12:25:28Z pcool $
+<?php // $Id: whoisonline.php 9994 2006-11-15 13:27:45Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -20,11 +20,16 @@
 ==============================================================================
 */
 /**
+ * @todo use the correct api_get_path instead of $clarolineRepositorySys, $clarolineRepositoryWeb
+ */
+
+
+/**
 ==============================================================================
 * Who is online list
 ==============================================================================
 */
-
+// @todo: is this necessary? 
 if(isset($_GET['cidReq']))
 {
 	$course_code = $_GET['cidReq'];
@@ -34,16 +39,19 @@ else
 	$cidReset = true;
 }
 
-
+// language files
 $langFile = array('index','registration');
+
+// including necessary files
 require_once('./main/inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 
+// table definitions
 $track_user_table = Database::get_main_table(MAIN_USER_TABLE);
 
 
-if ($_GET['chatid'] != '') {
-
+if ($_GET['chatid'] != '') 
+{
 	//send out call request
 	$time = time();
 	$time = date("Y-m-d H:i:s", $time);
@@ -120,6 +128,7 @@ function display_user_list($user_list, $_plugins)
 function display_individual_user($user_id)
 {
 	global $interbreadcrumb;
+	
 	// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
 	$user_table=Database::get_main_table(MAIN_USER_TABLE);
 	$sql = "SELECT * FROM $user_table WHERE user_id='".mysql_real_escape_string($user_id)."'";
@@ -176,6 +185,7 @@ function display_individual_user($user_id)
 /**
  * Display productions in whoisonline
  * @param int $user_id User id
+ * @todo use the correct api_get_path instead of $clarolineRepositorySys, $clarolineRepositoryWeb
  */
 function display_productions($user_id)
 {
@@ -265,6 +275,5 @@ echo '<a href="'.($_GET['id']?'javascript:window.history.back();':$referer).'">&
 		FOOTER
 ==============================================================================
 */
-
 Display::display_footer();
 ?>

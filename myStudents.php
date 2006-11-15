@@ -7,6 +7,7 @@
  * @todo use the correct database calls. example around line 480 : .$a_infosCours['db_name'].".".$tbl_course_lp_view_item."
  * @todo language variables are sometimes in french: get_lang('Annoter')
  * @todo other variables are sometimes in french: $pourcentageScore
+ * @todo variables are sometimes in cammelcase
  */
  
  $langFile = array ('registration', 'index','trad4all', 'tracking');

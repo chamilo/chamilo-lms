@@ -19,17 +19,23 @@
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
 ============================================================================== 
 */
+
+/**
+ * @todo can't this be moved to a different file so that we can delete this file? 
+ * 		 Is this still in use? If not, then it should be removed or maybe offered as an extension
+ */
 /**
 ============================================================================== 
 * Deletes the web-chat request form the user table
-* 
 ============================================================================== 
 */
-
+// language files
 $langFile = "index";
 
+// including necessary files
 include_once('./main/inc/global.inc.php');
 
+// table definitions
 $track_user_table = Database::get_main_table(MAIN_USER_TABLE);
 
 $sql="update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='DENIED' where (user_id = ".$_user['user_id'].")";

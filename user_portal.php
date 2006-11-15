@@ -41,6 +41,16 @@
 *	@package dokeos.main
 ==============================================================================
 */
+
+/**
+ * @todo shouldn't the SCRIPTVAL_ and CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for? 
+ * 		 if these are really configuration settings then we can add those to the dokeos config settings
+ * @todo move get_personal_course_list and some other functions to a more appripriate place course.lib.php or user.lib.php
+ * @todo use api_get_path instead of $rootAdminWeb
+ * @todo check for duplication of functions with index.php (user_portal.php is orginally a copy of index.php)
+ * @todo display_digest, shouldn't this be removed and be made into an extension? 
+ */
+
 /*
 ==============================================================================
 	   INIT SECTION
@@ -65,16 +75,13 @@ $cidReset = true; /* Flag forcing the 'current course' reset,
 	Included libraries
 -----------------------------------------------------------
 */
-//this includes main_api too:
 include_once ('./main/inc/global.inc.php');
-
-
-api_block_anonymous_users(); // only users who are logged in can proceed
-
 include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+
+api_block_anonymous_users(); // only users who are logged in can proceed
 
 /*
 -----------------------------------------------------------
@@ -190,10 +197,10 @@ Display :: display_header($nameTools);
 		display_create_course_link()
 		display_edit_course_list_links()
 		display_digest($toolsList, $digest, $orderKey, $courses)
-		show_notification($mycours)
+		show_notification($my_course)
 
 		get_personal_course_list($user_id)
-		get_logged_user_course_html($mycours)
+		get_logged_user_course_html($my_course)
 		get_user_course_categories()
 ==============================================================================
 */
@@ -211,9 +218,12 @@ Display :: display_header($nameTools);
 */
 function get_personal_course_list($user_id)
 {
+	// initialisation
 	$personal_course_list = array();
-	$main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
-	$main_course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+	
+	// table definitions
+	$main_user_table 		= Database :: get_main_table(MAIN_USER_TABLE);
+	$main_course_table 		= Database :: get_main_table(MAIN_COURSE_TABLE);
 	$main_course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 
 	$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
@@ -223,7 +233,6 @@ function get_personal_course_list($user_id)
 										WHERE course.code = course_rel_user.course_code"."
 										AND   course_rel_user.user_id = '".$user_id."'
 										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,course.title,course.code";
-
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
 	$personal_course_list = array ();
@@ -478,59 +487,66 @@ function display_digest($toolsList, $digest, $orderKey, $courses)
  * Display code for one specific course a logged in user is subscribed to.
  * Shows a link to the course, what's new icons...
  *
- * $mycours['d'] - course directory
- * $mycours['i'] - course title
- * $mycours['c'] - visual course code
- * $mycours['k']   - system course code
- * $mycours['db']  - course database
+ * $my_course['d'] - course directory
+ * $my_course['i'] - course title
+ * $my_course['c'] - visual course code
+ * $my_course['k']   - system course code
+ * $my_course['db']  - course database
  *
  * @version 1.0.3
  * @todo refactor into different functions for database calls | logic | display
- * @todo replace single-character $mycours['d'] indices
+ * @todo replace single-character $my_course['d'] indices
  * @todo move code for what's new icons to a separate function to clear things up
+ * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this. 
  */
-function get_logged_user_course_html($mycours)
+function get_logged_user_course_html($my_course)
 {
 	global $nosession;
-	if(api_get_setting('use_session_mode')=='true' && !$nosession){
+	
+	if(api_get_setting('use_session_mode')=='true' && !$nosession)
+	{
 		global $now, $date_start, $date_end;
 	}
+	
 	//initialise
 	$result = '';
+	
+	// Table definitions
 	//$statistic_database = Database::get_statistic_database();
+	$course_tool_table 			= Database :: get_course_table(TOOL_LIST_TABLE, $course_database);
+	$tool_edit_table 			= Database :: get_course_table(LAST_TOOL_EDIT_TABLE, $course_database);
+	$course_group_user_table 	= Database :: get_course_table(TOOL_USER, $course_database);	
+	
 	$user_id = api_get_user_id();
-	$course_database = $mycours['db'];
-	$course_tool_table = Database::get_course_table(TOOL_LIST_TABLE, $course_database);
-	$tool_edit_table = Database::get_course_table(LAST_TOOL_EDIT_TABLE, $course_database);
-	$course_group_user_table = Database :: get_course_table(TOOL_USER, $course_database);
-	$course_system_code = $mycours['k'];
-	$course_visual_code = $mycours['c'];
-	$course_title = $mycours['i'];
-	$course_directory = $mycours['d'];
-	$course_teacher = $mycours['t'];
+	$course_database = $my_course['db'];
+	$course_system_code = $my_course['k'];
+	$course_visual_code = $my_course['c'];
+	$course_title = $my_course['i'];
+	$course_directory = $my_course['d'];
+	$course_teacher = $my_course['t'];
 	$course_info = Database :: get_course_info($course_system_code);
 	$course_access_settings = CourseManager :: get_access_settings($course_system_code);
 	$course_id = $course_info['course_id'];
 	$course_visibility = $course_access_settings['visibility'];
-	$user_in_course_status = CourseManager :: get_user_in_course_status($user_id, $course_system_code);
+	$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
 	//function logic - act on the data
-	$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($mycours['c']);
+	$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['c']);
 	if ($is_virtual_course)
 	{
 		// If the current user is also subscribed in the real course to which this
 		// virtual course is linked, we don't need to display the virtual course entry in
 		// the course list - it is combined with the real course entry.
 		$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);
-		$is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course($user_id, $target_course_code);
+		$is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
 		if ($is_subscribed_in_target_course)
 		{
 			return; //do not display this course entry
 		}
 	}
-	$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_system_code, $user_id);
+	$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_system_code, api_get_user_id());
 	if ($has_virtual_courses)
 	{
-		$return_result = CourseManager :: determine_course_title_from_course_info($user_id, $course_info);
+		$return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
 		$course_display_title = $return_result['title'];
 		$course_display_code = $return_result['code'];
 	}
@@ -540,7 +556,7 @@ function get_logged_user_course_html($mycours)
 		$course_display_code = $course_visual_code;
 	}
 
-	$s_course_status=$mycours["s"];
+	$s_course_status=$my_course["s"];
 
 	$s_htlm_status_icon="";
 
@@ -560,15 +576,19 @@ function get_logged_user_course_html($mycours)
 	//show a hyperlink to the course, unless the course is closed and user is not course admin
 	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)
 	{
-		if(api_get_setting('use_session_mode')=='true' && !$nosession){
-			if(empty($mycours['id_session']))
-				$mycours['id_session'] = 0;
+		if(api_get_setting('use_session_mode')=='true' && !$nosession)
+		{
+			if(empty($my_course['id_session']))
+			{
+				$my_course['id_session'] = 0;
+			}
 			if($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start=='0000-00-00')
 			{
-				$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$mycours['id_session'].'">'.$course_display_title.'</a>';
+				$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
 			}
 		}
-		else {
+		else 
+		{
 			$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
 		}
 	}
@@ -594,12 +614,12 @@ function get_logged_user_course_html($mycours)
 		$result .= $course_teacher;
 	}
 	// display the what's new icons
-	$result .= show_notification($mycours);
+	$result .= show_notification($my_course);
 	/*
 	// get the user's last access dates to all tools of this course
 	$sqlLastTrackInCourse = "SELECT * FROM $statistic_database.track_e_lastaccess"
 							." WHERE access_user_id = ".$user_id
-							." AND access_cours_code = '".$mycours['k']."'";
+							." AND access_cours_code = '".$my_course['k']."'";
 	$resLastTrackInCourse = api_sql_query($sqlLastTrackInCourse,__FILE__,__LINE__);
 	while($lastTrackInCourse = mysql_fetch_array($resLastTrackInCourse))
 	{
@@ -631,7 +651,7 @@ function get_logged_user_course_html($mycours)
 			$lastDate = date("d/m/Y H:i", convert_mysql_date($lastToolEdit["last_date"]));
 			$type = ($lastToolEdit["type"]=="" || $lastToolEdit["type"]==NULL) ? get_lang('_new_item') : $lastToolEdit["type"];
 
-			$result.= '<a href="'.api_get_path(WEB_CODE_PATH).$lastToolEdit['link'].'?cidReq='.$mycours['k'].'">'.
+			$result.= '<a href="'.api_get_path(WEB_CODE_PATH).$lastToolEdit['link'].'?cidReq='.$my_course['k'].'">'.
 				'<img title="&mdash; '.$lastToolEdit['tool'].' &mdash; '.get_lang('_title_notification').": $type ($lastDate).\""
 						.' src="'.api_get_path(WEB_IMG_PATH).$lastToolEdit['image'].'" border="0" align="middle" alt="'.$lastToolEdit['image'].'" /></a>';
 
@@ -689,22 +709,27 @@ function get_logged_user_course_html($mycours)
 	$result .= "</li>";
 
 
-	if(api_get_setting('use_session_mode')=='true' && !$nosession){
-		if(!empty($mycours['session_name'])){
-			$session = $mycours['session_name'];
-			if($date_start=='0000-00-00'){
+	if(api_get_setting('use_session_mode')=='true' && !$nosession)
+	{
+		if(!empty($my_course['session_name']))
+		{
+			$session = $my_course['session_name'];
+			if($date_start=='0000-00-00')
+			{
 				$session .= ' - '.get_lang('Without time limits');
 				$active = true;
 			}
-			else {
-				$session .= ' - '.get_lang('From').' '.$mycours['date_start'].' '.get_lang('To').' '.$mycours['date_end'];
+			else 
+			{
+				$session .= ' - '.get_lang('From').' '.$my_course['date_start'].' '.get_lang('To').' '.$my_course['date_end'];
 				$active = ($date_start <= $now && $date_end >= $now)?true:false;
 			}
 		}
-		$output = array ($mycours['user_course_cat'], $result, $mycours['id_session'], $session, 'active'=>$active);
+		$output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active'=>$active);
 	}
-	else {
-		$output = array ($mycours['user_course_cat'], $result);
+	else 
+	{
+		$output = array ($my_course['user_course_cat'], $result);
 	}
 	return $output;
 }
@@ -713,18 +738,18 @@ function get_logged_user_course_html($mycours)
  * Returns the "what's new" icon notifications
  * @version
  */
-function show_notification($mycours)
+function show_notification($my_course)
 {
 	$statistic_database = Database :: get_statistic_database();
 	$user_id = api_get_user_id();
-	$course_database = $mycours['db'];
+	$course_database = $my_course['db'];
 	$course_tool_table = Database::get_course_table(TOOL_LIST_TABLE, $course_database);
 	$tool_edit_table = Database::get_course_table(LAST_TOOL_EDIT_TABLE, $course_database);
 	$course_group_user_table = Database :: get_course_table(GROUP_USER_TABLE, $course_database);
 	// get the user's last access dates to all tools of this course
 	$sqlLastTrackInCourse = "SELECT * FROM $statistic_database.track_e_lastaccess
 									 USE INDEX (access_cours_code, access_user_id)
-									 WHERE access_cours_code = '".$mycours['k']."'
+									 WHERE access_cours_code = '".$my_course['k']."'
 									 AND access_user_id = '$user_id'";
 	$resLastTrackInCourse = api_sql_query($sqlLastTrackInCourse, __FILE__, __LINE__);
 	$oldestTrackDate = "3000-01-01 00:00:00";
@@ -751,7 +776,7 @@ function show_notification($mycours)
 	//filter all selected items
 	while ($res && ($item_property = mysql_fetch_array($res)))
 	{
-		if ((!isset ($lastTrackInCourseDate[$item_property['tool']]) || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date']) && (in_array($item_property['to_group_id'], $groups_ids) || $item_property['to_user_id'] == $user_id) && ($item_property['visibility'] == '1' || ($mycours['s'] == '1' && $item_property['visibility'] == '0') || !isset ($item_property['visibility'])))
+		if ((!isset ($lastTrackInCourseDate[$item_property['tool']]) || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date']) && (in_array($item_property['to_group_id'], $groups_ids) || $item_property['to_user_id'] == $user_id) && ($item_property['visibility'] == '1' || ($my_course['s'] == '1' && $item_property['visibility'] == '0') || !isset ($item_property['visibility'])))
 		{
 			$notifications[$item_property['tool']] = $item_property;
 		}
@@ -766,7 +791,7 @@ function show_notification($mycours)
 			$type = $notification['lastedit_type'];
 			//$notification[image]=str_replace(".png","gif",$notification[image]);
 			//$notification[image]=str_replace(".gif","_s.gif",$notification[image]);
-			$retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$mycours['k'].'&amp;ref='.$notification['ref'].'">'.'<img title="-- '.get_lang($notification['tool']).' -- '.get_lang('_title_notification').": $type ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="middle" /></a>&nbsp;';
+			$retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$my_course['k'].'&amp;ref='.$notification['ref'].'">'.'<img title="-- '.get_lang($notification['tool']).' -- '.get_lang('_title_notification').": $type ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="middle" /></a>&nbsp;';
 		}
 	}
 	return $retvalue;
@@ -802,11 +827,17 @@ function get_user_course_categories()
 ==============================================================================
 */
 if (!isset ($maxValvas))
+{
 	$maxValvas = CONFVAL_maxValvasByCourse; // Maximum number of entries
+}
 if (!isset ($maxAgenda))
+{
 	$maxAgenda = CONFVAL_maxAgendaByCourse; //  collected from each course
+}
 if (!isset ($maxCourse))
+{
 	$maxCourse = CONFVAL_maxTotalByCourse; //  and displayed in summary.
+}
 $maxValvas = (int) $maxValvas;
 $maxAgenda = (int) $maxAgenda;
 $maxCourse = (int) $maxCourse; // 0 if invalid
@@ -869,26 +900,26 @@ else
 	{
 		$personal_course_list = get_personal_course_list($_user['user_id']);
 	}
-	foreach ($personal_course_list as $mycours)
+	foreach ($personal_course_list as $my_course)
 	{
-		$thisCourseDbName = $mycours['db'];
-		$thisCourseSysCode = $mycours['k'];
-		$thisCoursePublicCode = $mycours['c'];
-		$thisCoursePath = $mycours['d'];
+		$thisCourseDbName = $my_course['db'];
+		$thisCourseSysCode = $my_course['k'];
+		$thisCoursePublicCode = $my_course['c'];
+		$thisCoursePath = $my_course['d'];
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
 		/*
 		currently disabled functionality, should return
 		$thisCoursePath = $sys_course_path . $thisCoursePath;
 		if(! file_exists($thisCoursePath))
 		{
-		echo	"<li>".$mycours['i']."<br/>";
+		echo	"<li>".$my_course['i']."<br/>";
 		echo "".get_lang("CourseDoesntExist")." (<a href=\"main/install/update_courses.php\">";
 		echo	"".get_lang("GetCourseFromOldPortal")."</a>)</li>";
 
 			continue;
 		}*/
-		$dbname = $mycours['k'];
-		$status[$dbname] = $mycours['s'];
+		$dbname = $my_course['k'];
+		$status[$dbname] = $my_course['s'];
 
 		$nbDigestEntries = 0; // number of entries already collected
 		if ($maxCourse < $maxValvas)
@@ -903,7 +934,7 @@ else
 			Announcements
 		-----------------------------------------------------------
 		*/
-		$course_database = $mycours['db'];
+		$course_database = $my_course['db'];
 		$course_tool_table = Database::get_course_table(TOOL_LIST_TABLE, $course_database);
 		$query = "SELECT visibility FROM $course_tool_table WHERE link = 'announcements/announcements.php' AND visibility = 1";
 		$result = api_sql_query($query);
@@ -946,7 +977,7 @@ else
 			Agenda
 		-----------------------------------------------------------
 		*/
-		$course_database = $mycours['db'];
+		$course_database = $my_course['db'];
 		$course_tool_table = Database :: get_course_table(TOOL_LIST_TABLE,$course_database);
 		$query = "SELECT visibility FROM $course_tool_table WHERE link = 'calendar/agenda.php' AND visibility = 1";
 		$result = api_sql_query($query);
@@ -981,7 +1012,7 @@ else
 			take collected data and display it
 		-----------------------------------------------------------
 		*/
-		$list[] = get_logged_user_course_html($mycours);
+		$list[] = get_logged_user_course_html($my_course);
 	} //end while mycourse...
 }
 

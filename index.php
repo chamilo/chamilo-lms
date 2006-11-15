@@ -233,7 +233,7 @@ if ($_POST["submitAuth"])
 				api_session_register('user_last_login_datetime');
 			}
 		mysql_free_result($resLastLogin);
-		event_login();
+		//event_login();
 		if (api_is_platform_admin())
 		{
 			// decode all open event informations and fill the track_c_* tables
@@ -292,7 +292,7 @@ function display_anonymous_right_menu()
 
 	$platformLanguage = api_get_setting('platformLanguage');
 
-	if ( !(isset(api_get_user_id()) && api_get_user_id()) ) // only display if the user isn't logged in
+	if ( !(api_get_user_id()) ) // only display if the user isn't logged in
 	{
 		api_display_language_form();
 		echo '<br />';

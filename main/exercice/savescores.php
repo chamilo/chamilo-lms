@@ -38,12 +38,11 @@ include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $full_file_path = $documentPath.$test;
 
-my_delete($full_file_path.$_uid.".t.html");
+my_delete($full_file_path.$_user['user_id'].".t.html");
 
 $TABLETRACK_HOTPOTATOES = $statsDbName."`.`track_e_hotpotatoes";
 $tbl_learnpath_user = Database::get_course_table(LEARNPATH_USER_TABLE);
 //$_course['dbNameGlu']."learnpath_user";
-$_uid = $uid;
 $_cid = $cid;
 $test = mysql_real_escape_string($_REQUEST['test']);
 $score = mysql_real_escape_string($_REQUEST['score']);
@@ -52,7 +51,7 @@ $origin = $_REQUEST['origin'];
 function save_scores($file, $score)
 {
 	global $is_trackingEnabled, $origin, $tbl_learnpath_user, 
-		$learnpath_id, $learnpath_item_id, $_uid, $_cid, 
+		$learnpath_id, $learnpath_item_id, $_user, $_cid, 
 		$TABLETRACK_HOTPOTATOES;
 	// if tracking is disabled record nothing
 	$weighting = 100; // 100%
@@ -61,9 +60,9 @@ function save_scores($file, $score)
 
 	if (!$is_trackingEnabled){return 0;}
 
-	if ($_uid)
+	if ($_user['user_id'])
 	{
-		$user_id = "'".$_uid."'";
+		$user_id = "'".$_user['user_id']."'";
 	}
 	else // anonymous
 		{

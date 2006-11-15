@@ -23,7 +23,7 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') //if the group id is set, 
 	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
 	$noPHP_SELF=true;
 		
-	if($is_allowed_to_edit || GroupManager::is_user_in_group($_uid,$_SESSION['_gid'])) //only courseadmin or group members allowed
+	if($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'],$_SESSION['_gid'])) //only courseadmin or group members allowed
 	{
 		$to_group_id = $_SESSION['_gid'];
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
@@ -72,7 +72,7 @@ if($_POST['fileupload']=="Attach File"){
 	if($upload_ok)
 	{
 		//file got on the server without problems, now process it
-		$new_path = handle_uploaded_document($_course, $_FILES['uploadedfile'],$base_work_dir,$path,$_uid,$to_group_id,$to_user_id,$max_filled_space,0,'overwrite');
+		$new_path = handle_uploaded_document($_course, $_FILES['uploadedfile'],$base_work_dir,$path,$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space,0,'overwrite');
 
     	$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
     	$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';

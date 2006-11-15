@@ -889,7 +889,7 @@ function unzip_uploaded_file($uploadedFile, $uploadPath, $baseWorkDir, $maxFille
 function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $max_filled_space, $output = true)
 {
 	global $_course;
-	global $_uid;
+	global $_user;
 	global $to_user_id;
 	global $to_group_id;
 	
@@ -966,7 +966,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 						$folder_id = add_document($_course,$upload_path.dirname($cleaned_up_filename),'folder',0,basename(dirname($cleaned_up_filename)));
 						if($folder_id)
 						{
-							api_item_property_update($_course,TOOL_DOCUMENT,$folder_id,'FolderAdded',$_uid,$to_group_id,$to_user_id);
+							api_item_property_update($_course,TOOL_DOCUMENT,$folder_id,'FolderAdded',$_user['user_id'],$to_group_id,$to_user_id);
 							//echo('folder '.$upload_path.dirname($cleaned_up_filename)." added<br>\n");
 						}
 					}
@@ -988,7 +988,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 					{	
 						$lastedit_type = ($filetype=='folder')?'FolderAdded':'DocumentAdded';
 						//update item property for document
-						api_item_property_update($_course,TOOL_DOCUMENT,$document_id,$lastedit_type,$_uid,$to_group_id,$to_user_id);
+						api_item_property_update($_course,TOOL_DOCUMENT,$document_id,$lastedit_type,$_user['user_id'],$to_group_id,$to_user_id);
 					}		
 				}
 				//file/dir exists -> update
@@ -996,14 +996,14 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 				{
 					$lastedit_type = ($filetype=='folder')?'FolderUpdated':'DocumentUpdated';
 					//update the document in item_property
-					api_item_property_update($_course,TOOL_DOCUMENT,$document_id,$lastedit_type,$_uid,$to_group_id,$to_user_id);
+					api_item_property_update($_course,TOOL_DOCUMENT,$document_id,$lastedit_type,$_user['user_id'],$to_group_id,$to_user_id);
 				}
 
 			}
 		}
 	//print_r_pre($zip_content_array);
 	//if the file is in a folder, we need to update all parent folders
-	item_property_update_on_folder($_course,$upload_path,$_uid);
+	item_property_update_on_folder($_course,$upload_path,$_user['user_id']);
 	//display success message to user
 	chdir($save_dir); //return to previous dir position
 	if($output){
@@ -1757,7 +1757,7 @@ function build_missing_files_form($missing_files,$upload_path,$file_name)
  * @param string $base_work_dir
  * @param string $current_path, needed for recursivity
  */
-function add_all_documents_in_folder_to_database($_course,$_uid,$base_work_dir,$current_path='')
+function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path='')
 {
 
 $path = $base_work_dir.$current_path;
@@ -1779,12 +1779,12 @@ $handle=opendir($path);
 		if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))
 		{
 			$document_id=add_document($_course,$current_path.'/'.$safe_file,'folder',0,$title);
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_uid);
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id);
 			//echo $current_path.'/'.$safe_file." added!<br/>";
 			
 		}
 		//recursive
-		add_all_documents_in_folder_to_database($_course,$_uid,$base_work_dir,$current_path.'/'.$safe_file);
+		add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path.'/'.$safe_file);
 	    } 
 	    //file!
 	    else 
@@ -1797,7 +1797,7 @@ $handle=opendir($path);
 			$title=get_document_title($file);
 			$size = filesize($base_work_dir.$current_path.'/'.$safe_file);
 			$document_id = add_document($_course,$current_path.'/'.$safe_file,'file',$size,$title);
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_uid);
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id);
 			//echo $current_path.'/'.$safe_file." added!<br/>";
 			}
 	    }

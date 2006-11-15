@@ -39,7 +39,7 @@
 	//include('../inc/lib/database.inc.lib');
 	
 	// set vars
-	$userId        = $_uid;
+	$userId        = $_user['user_id'];
 	$questionId    = $_GET['modifyAnswers'];
 	$objQuestion   = new Question();
 	$objQuestion->read($questionId);

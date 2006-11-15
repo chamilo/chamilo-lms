@@ -252,7 +252,7 @@ foreach ($group_cats as $index => $category)
 	{
 		$totalRegistered = 0;
 		// Determine wether current user is tutor for this course
-		$user_is_tutor = GroupManager :: is_tutor($_uid);
+		$user_is_tutor = GroupManager :: is_tutor($_user['user_id']);
 		$group_data = array ();
 		foreach ($group_list as $index => $this_group)
 		{
@@ -268,7 +268,7 @@ foreach ($group_cats as $index => $category)
 			}
 
 			// group name
-			if (api_is_allowed_to_edit() || in_array($_uid,$tutorsids_of_group) || $this_group['is_member'] || GroupManager::user_has_access($_uid,$this_group['id'],GROUP_TOOL_FORUM) || GroupManager::user_has_access($_uid,$this_group['id'],GROUP_TOOL_DOCUMENTS))
+			if (api_is_allowed_to_edit() || in_array($_user['user_id'],$tutorsids_of_group) || $this_group['is_member'] || GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_FORUM) || GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_DOCUMENTS))
 			{
 				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gidReq='.$this_group['id'].'">'.$this_group['name'].'</a>';
 				if ($_SESSION['_uid'] && $_SESSION['_uid'] == $this_group['id_tutor'])
@@ -288,11 +288,11 @@ foreach ($group_cats as $index => $category)
 			// self-registration / unregistration
 			if (!api_is_allowed_to_edit())
 			{
-				if (GroupManager :: is_self_registration_allowed($_uid, $this_group['id']))
+				if (GroupManager :: is_self_registration_allowed($_user['user_id'], $this_group['id']))
 				{
 					$row[] = '<a href="group.php?category='.$category['id'].'&amp;action=self_reg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.get_lang("GroupSelfRegInf").'</a>';
 				}
-				elseif (GroupManager :: is_self_unregistration_allowed($_uid, $this_group['id']))
+				elseif (GroupManager :: is_self_unregistration_allowed($_user['user_id'], $this_group['id']))
 				{
 					$row[] = '<a href="group.php?category='.$category['id'].'&amp;action=self_unreg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.get_lang("GroupSelfUnRegInf").'</a>';
 				}

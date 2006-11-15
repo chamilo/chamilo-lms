@@ -397,7 +397,7 @@ function store_forumcategory($values)
 {
 	global $table_categories; 
 	global $_course;
-	global $_uid; 
+	global $_user; 
 	
 	// find the max cat_order. The new forum category is added at the end => max cat_order + &
 	$sql="SELECT MAX(cat_order) as sort_max FROM ".mysql_real_escape_string($table_categories);
@@ -410,7 +410,7 @@ function store_forumcategory($values)
 		$sql="UPDATE ".$table_categories." SET cat_title='".mysql_real_escape_string($values['forum_category_title'])."', cat_comment='".mysql_real_escape_string($values['forum_category_comment'])."' WHERE cat_id='".mysql_real_escape_string($values['forum_category_id'])."'";		
 		api_sql_query($sql); 
 		$last_id=mysql_insert_id();
-		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $values['forum_category_id'],"ForumCategoryAdded", $_uid);
+		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $values['forum_category_id'],"ForumCategoryAdded", $_user['user_id']);
 		$return_message=get_lang('ForumCategoryEdited');
 	}
 	else 
@@ -418,7 +418,7 @@ function store_forumcategory($values)
 		$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".mysql_real_escape_string($values['forum_category_title'])."','".mysql_real_escape_string($values['forum_category_comment'])."','".mysql_real_escape_string($new_max)."')";
 		api_sql_query($sql); 
 		$last_id=mysql_insert_id();
-		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", $_uid);
+		api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", $_user['user_id']);
 		$return_message=get_lang('ForumCategoryAdded');
 	}
 	
@@ -438,7 +438,7 @@ function store_forum($values)
 {
 	global $table_forums; 
 	global $_course;
-	global $_uid; 
+	global $_user; 
 
 	// find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
 	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".mysql_real_escape_string($values['forum_category']);
@@ -483,7 +483,7 @@ function store_forum($values)
 						'".mysql_real_escape_string($new_max)."')";
 		api_sql_query($sql, __LINE__,__FILE__); 
 		$last_id=mysql_insert_id();
-		api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", $_uid);
+		api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", $_user['user_id']);
 		$return_message=get_lang('ForumAdded');
 
 	}
@@ -1516,7 +1516,7 @@ function store_thread($values)
 {
 	global $table_threads; 
 	global $table_posts; 
-	global $_uid; 
+	global $_user; 
 	global $_course; 
 	global $current_forum; 
 	
@@ -1535,20 +1535,20 @@ function store_thread($values)
 	$sql="INSERT INTO $table_threads (thread_title, forum_id, thread_poster_id, thread_poster_name, thread_date, thread_sticky) 
 			VALUES ('".mysql_real_escape_string($values['post_title'])."',
 					'".mysql_real_escape_string($values['forum_id'])."',
-					'".mysql_real_escape_string($_uid)."', 
+					'".mysql_real_escape_string($_user['user_id'])."', 
 					'".mysql_real_escape_string($values['poster_name'])."', 
 					'".mysql_real_escape_string($post_date)."',
 					'".mysql_real_escape_string($values['thread_sticky'])."')";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
 	$last_thread_id=mysql_insert_id();
-	api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", $_uid);
+	api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", $_user['user_id']);
 	// if the forum properties tell that the posts have to be approved we have to put the whole thread invisible
 	// because otherwise the students will see the thread and not the post in the thread. 
 	// we also have to change $visible because the post itself has to be visible in this case (otherwise the teacher would have 
 	// to make the thread visible AND the post
 	if ($visible==0)
 	{
-		api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"invisible", $_uid);
+		api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"invisible", $_user['user_id']);
 		$visible=1;
 	}
 	
@@ -1559,7 +1559,7 @@ function store_thread($values)
 			'".mysql_real_escape_string($values['post_text'])."',
 			'".mysql_real_escape_string($last_thread_id)."',
 			'".mysql_real_escape_string($values['forum_id'])."',
-			'".mysql_real_escape_string($_uid)."', 
+			'".mysql_real_escape_string($_user['user_id'])."', 
 			'".mysql_real_escape_string($values['poster_name'])."',
 			'".mysql_real_escape_string($post_date)."',
 			'".mysql_real_escape_string($values['post_notification'])."','0', 
@@ -1610,7 +1610,6 @@ function show_add_post_form($action='', $id='', $form_values='')
 	global $forum_setting; 
 	global $current_forum; 
 	global $_user; 
-	global $_uid; 
 	
 	// initiate the object
 	$form = new FormValidator('thread', 'post', $_SERVER['PHP_SELF'].'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post'].'&action='.$_GET['action']);
@@ -1621,7 +1620,7 @@ function show_add_post_form($action='', $id='', $form_values='')
 	$form->addElement('hidden', 'thread_id', $_GET['thread']);
 	
 	// if anonymous posts are allowed we also display a form to allow the user to put his name or username in
-	if ($current_forum['allow_anonymous']==1 AND !isset($_uid))
+	if ($current_forum['allow_anonymous']==1 AND !isset($_user['user_id']))
 	{
 		$form->addElement('text', 'poster_name', get_lang('Name'));
 	}
@@ -1629,7 +1628,7 @@ function show_add_post_form($action='', $id='', $form_values='')
 	$form->addElement('text', 'post_title', get_lang('Title'));
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
 
-	if ($forum_setting['allow_post_notificiation'] AND isset($_uid))
+	if ($forum_setting['allow_post_notificiation'] AND isset($_user['user_id']))
 	{
 		$form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$_user['mail'].')');
 	}
@@ -1676,7 +1675,7 @@ function show_add_post_form($action='', $id='', $form_values='')
 	
 	// the course admin can make a thread sticky (=appears with special icon and always on top)
 	$form->addRule('post_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
-	if ($current_forum['allow_anonymous']==1 AND !isset($_uid))
+	if ($current_forum['allow_anonymous']==1 AND !isset($_user['user_id']))
 	{
 		$form->addRule('poster_name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 	}	
@@ -1709,7 +1708,7 @@ function store_reply($values)
 {
 	global $table_threads; 
 	global $table_posts; 
-	global $_uid; 
+	global $_user; 
 	global $_course; 
 	global $current_forum;
 	
@@ -1729,7 +1728,7 @@ function store_reply($values)
 					'".mysql_real_escape_string($values['post_text'])."',
 					'".mysql_real_escape_string($values['thread_id'])."',
 					'".mysql_real_escape_string($values['forum_id'])."',
-					'".mysql_real_escape_string($_uid)."',
+					'".mysql_real_escape_string($_user['user_id'])."',
 					'".mysql_real_escape_string($post_date)."',
 					'".mysql_real_escape_string($values['post_notification'])."',
 					'".mysql_real_escape_string($values['post_parent_id'])."',
@@ -1745,7 +1744,7 @@ function store_reply($values)
 	update_thread($values['thread_id'], $new_post_id,$post_date);
 	
 	// update the forum
-	api_item_property_update($_course, TOOL_FORUM, $values['forum_id'],"NewMessageInForum", $_uid);
+	api_item_property_update($_course, TOOL_FORUM, $values['forum_id'],"NewMessageInForum", $_user['user_id']);
 	
 	$message=get_lang('ReplyAdded').'<br />';
 	if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())
@@ -1987,7 +1986,7 @@ function forum_not_allowed_here()
 */
 function get_whats_new()
 {
-	global $_uid; 
+	global $_user; 
 	global $_course; 
 	global $table_posts; 
 	
@@ -2001,7 +2000,7 @@ function get_whats_new()
 	if (!$_SESSION['last_forum_access'])
 	{
 		$tracking_last_tool_access=Database::get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
-		$sql="SELECT * FROM ".$tracking_last_tool_access." WHERE access_user_id='".mysql_real_escape_string($_uid)."' AND access_cours_code='".mysql_real_escape_string($_course['sysCode'])."' AND access_tool='".mysql_real_escape_string($tool)."'";
+		$sql="SELECT * FROM ".$tracking_last_tool_access." WHERE access_user_id='".mysql_real_escape_string($_user['user_id'])."' AND access_cours_code='".mysql_real_escape_string($_course['sysCode'])."' AND access_tool='".mysql_real_escape_string($tool)."'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 		$row=mysql_fetch_array($result);
 		$_SESSION['last_forum_access']=$row['access_date'];
@@ -2316,7 +2315,7 @@ function handle_mail_cue($content, $id)
 function send_mail($user_info=array(), $thread_information=array())
 {
 	global $_course;
-	global $_uid; 
+	global $_user; 
 	
 	$email_subject = get_lang('NewForumPost')." - ".$_course['official_code'];
 	
@@ -2336,7 +2335,7 @@ function send_mail($user_info=array(), $thread_information=array())
 	if(empty($charset)){$charset='ISO-8859-1';}
 
 	$encoding = 'Content-Type: text/html; charset='. $charset;
-	if ($user_info['user_id']<>$_uid)
+	if ($user_info['user_id']<>$_user['user_id'])
 	{
 		$newmail = api_mail($user_info["lastname"].' '.$user_info["firstname"], $user_info["email"], $email_subject, $email_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail'],$encoding);			
 	}

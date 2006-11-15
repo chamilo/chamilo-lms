@@ -146,7 +146,7 @@ $forum_list=get_forums();
 ------------------------------------------------------------------------------------------------------
 */
 $groups_of_user=array();
-$groups_of_user=GroupManager::get_group_ids($_course['dbName'], $_uid);
+$groups_of_user=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 //my_print_r($groups_of_user);
 
 

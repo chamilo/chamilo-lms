@@ -9,7 +9,7 @@
  * If the user is not logged in, don't define anything, so the normal
  * handling of mailto link can proceed
  */
-if(!empty($_uid) AND string_2_boolean(api_get_setting('allow_email_editor'))){
+if(!empty($_user['user_id']) AND string_2_boolean(api_get_setting('allow_email_editor'))){
 ?>
 <script language="javascript" version="1.3" type="text/javascript">
 /**

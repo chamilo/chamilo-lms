@@ -981,12 +981,13 @@ else
 /**
 * This function stores the forum category in the database. The new category is added to the end. 
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function store_forumcategory($values)
 {
 	global $table_categories; 
 	global $_course;
-	global $_uid; 
+	global $_user; 
 	
 	// find the max cat_order. The new forum category is added at the end => max cat_order + &
 	$sql="SELECT MAX(cat_order) as sort_max FROM ".mysql_real_escape_string($table_categories);
@@ -997,19 +998,20 @@ function store_forumcategory($values)
 	$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".mysql_real_escape_string($values['forum_category_title'])."','".mysql_real_escape_string($values['forum_category_comment'])."','".mysql_real_escape_string($new_max)."')";
 	api_sql_query($sql); 
 	$last_id=mysql_insert_id();
-	api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", $_uid);
+	api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", $_user['user_id']);
 	return array('id'=>$last_id,'title'=>$values['forum_category_title']) ;
 }
 
 /**
 * This function stores the forum in the database. The new forum is added to the end. 
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function store_forum($values)
 {
 	global $table_forums; 
 	global $_course;
-	global $_uid; 
+	global $_user; 
 
 	// find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
 	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".mysql_real_escape_string($values['forum_category']);
@@ -1034,7 +1036,7 @@ function store_forum($values)
 					'".mysql_real_escape_string($new_max)."')";
 	api_sql_query($sql, __LINE__,__FILE__); 
 	$last_id=mysql_insert_id();
-	api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", $_uid);
+	api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", $_user['user_id']);
 	return array('id'=>$last_id, 'title'=>$values['forum_title']);
 }
 
@@ -1042,12 +1044,13 @@ function store_forum($values)
 * This function stores a new thread. This is done through an entry in the forum_thread table AND 
 * in the forum_post table because. The threads are also stored in the item_property table. (forum posts are not (yet))
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function store_thread($values)
 {
 	global $table_threads; 
 	global $table_posts; 
-	global $_uid; 
+	global $_user; 
 	global $_course; 
 	global $current_forum; 
 	
@@ -1062,14 +1065,14 @@ function store_thread($values)
 					'".mysql_real_escape_string($values['thread_sticky'])."')";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
 	$last_thread_id=mysql_insert_id();
-	api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", $_uid);
+	api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", $_user['user_id']);
 	// if the forum properties tell that the posts have to be approved we have to put the whole thread invisible
 	// because otherwise the students will see the thread and not the post in the thread. 
 	// we also have to change $visible because the post itself has to be visible in this case (otherwise the teacher would have 
 	// to make the thread visible AND the post
 	if ($values['visible']==0)
 	{
-		api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"invisible", $_uid);
+		api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"invisible", $_user['user_id']);
 		$visible=1;
 	}
 
@@ -1081,6 +1084,7 @@ function store_thread($values)
 * @param $phpbb_forum_id the forum_id of the old (phpbb) forum
 * @param $new_forum_id the forum_id in the new forum
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function migrate_threads_of_forum($phpbb_forum_id, $new_forum_id)
 {
@@ -1130,6 +1134,7 @@ function migrate_threads_of_forum($phpbb_forum_id, $new_forum_id)
 * @param $phpbb_forum_id the forum_id of the old (phpbb) forum
 * @param $new_forum_id the forum_id in the new forum
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_forum_id)
 {
@@ -1207,6 +1212,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 /**
 * This function gets all the added resources for phpbb forum posts
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function get_added_resources()
 {
@@ -1226,6 +1232,7 @@ function get_added_resources()
 /**
 * This function gets the forum category information based on the name 
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function get_forumcategory_id_by_name($forum_category_name)
 {

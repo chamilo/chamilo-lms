@@ -111,7 +111,7 @@ function event_login()
 	// if tracking is disabled record nothing
 	if (!$is_trackingEnabled)
 		return 0;
-	global $_uid;
+	global $_user;
 	global $TABLETRACK_LOGIN;
 	$reallyNow = time();
 	$sql = "INSERT INTO `".$TABLETRACK_LOGIN."`
@@ -121,7 +121,7 @@ function event_login()
 				 `login_date`)
 	
 				 VALUES
-					('".$_uid."',
+					('".$_user['user_id']."',
 					'".$_SERVER['REMOTE_ADDR']."',
 					FROM_UNIXTIME(".$reallyNow."))";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -140,7 +140,7 @@ function event_access_course()
 	// if tracking is disabled record nothing
 	if (!$is_trackingEnabled)
 		return 0;
-	global $_uid;
+	global $_user;
 	global $_cid;
 	global $TABLETRACK_ACCESS;
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
@@ -155,9 +155,9 @@ function event_access_course()
 	}
 	
 	$reallyNow = time();
-	if ($_uid)
+	if ($_user['user_id'])
 	{
-		$user_id = "'".$_uid."'";
+		$user_id = "'".$_user['user_id']."'";
 	}
 	else // anonymous
 		{
@@ -211,7 +211,7 @@ function event_access_tool($tool, $id_session=0)
 	global $is_trackingEnabled;
 	// if tracking is disabled record nothing
 	// if( ! $is_trackingEnabled ) return 0; //commented because "what's new" notification must always occur
-	global $_uid;
+	global $_user;
 	global $_cid;
 	global $TABLETRACK_ACCESS;
 	global $rootWeb;
@@ -228,7 +228,7 @@ function event_access_tool($tool, $id_session=0)
 	}
 	
 	$reallyNow = time();
-	$user_id = $_uid ? "'".$_uid."'" : "NULL"; // "NULL" is anonymous
+	$user_id = $_user['user_id'] ? "'".$_user['user_id']."'" : "NULL"; // "NULL" is anonymous
 	// record information
 	// only if user comes from the course $_cid
 	//if( eregi($rootWeb.$_cid,$_SERVER['HTTP_REFERER'] ) )
@@ -288,13 +288,13 @@ function event_download($doc_url)
 	// if tracking is disabled record nothing
 	if (!$is_trackingEnabled)
 		return 0;
-	global $_uid;
+	global $_user;
 	global $_cid;
 	global $TABLETRACK_DOWNLOADS;
 	$reallyNow = time();
-	if ($_uid)
+	if ($_user['user_id'])
 	{
-		$user_id = "'".$_uid."'";
+		$user_id = "'".$_user['user_id']."'";
 	}
 	else // anonymous
 		{
@@ -333,13 +333,13 @@ function event_upload($doc_id)
 	// if tracking is disabled record nothing
 	if (!$is_trackingEnabled)
 		return 0;
-	global $_uid;
+	global $_user;
 	global $_cid;
 	global $TABLETRACK_UPLOADS;
 	$reallyNow = time();
-	if ($_uid)
+	if ($_user['user_id'])
 	{
-		$user_id = "'".$_uid."'";
+		$user_id = "'".$_user['user_id']."'";
 	}
 	else // anonymous
 		{
@@ -377,13 +377,13 @@ function event_link($link_id)
 	// if tracking is disabled record nothing
 	if (!$is_trackingEnabled)
 		return 0;
-	global $_uid;
+	global $_user;
 	global $_cid;
 	global $TABLETRACK_LINKS;
 	$reallyNow = time();
-	if ($_uid)
+	if ($_user['user_id'])
 	{
-		$user_id = "'".$_uid."'";
+		$user_id = "'".$_user['user_id']."'";
 	}
 	else // anonymous
 		{
@@ -422,14 +422,14 @@ function event_exercice($exo_id, $score, $weighting)
 	// if tracking is disabled record nothing
 	if (!$is_trackingEnabled)
 		return 0;
-	global $_uid;
+	global $_user;
 	global $_cid;
 	global $TABLETRACK_EXERCICES;
 	global $origin, $learnpath_id, $learnpath_item_id;
 	$reallyNow = time();
-	if ($_uid)
+	if ($_user['user_id'])
 	{
-		$user_id = "'".$_uid."'";
+		$user_id = "'".$_user['user_id']."'";
 	}
 	else // anonymous
 		{
@@ -482,14 +482,14 @@ function event_subscription($cours_id, $action)
 	// if tracking is disabled record nothing
 	if (!$is_trackingEnabled)
 		return 0;
-	global $_uid;
+	global $_user;
 	global $TABLETRACK_SUBSCRIPTIONS;
 	$sql = "INSERT INTO `$TABLETRACK_SUBSCRIPTIONS`
 			  (`sub_user_id`,
 			   `sub_cours_id`,
 			   `sub_action`)
 			  VALUES
-			  ('".$_uid."',
+			  ('".$_user['user_id']."',
 			   '".$cours_id."',
 			   '".$action."')";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -511,19 +511,19 @@ function event_default($type_event, $values)
 	// if tracking is disabled record nothing
 	if (!$is_trackingEnabled)
 		return 0;
-	global $_uid;
+	global $_user;
 	global $_cid;
 	global $TABLETRACK_DEFAULT;
 	$reallyNow = time();
-	if ($_uid)
+	if ($_user['user_id'])
 	{
-		$user_id = "'".$_uid."'";
+		$user_id = "'".$_user['user_id']."'";
 	}
 	else // anonymous
 		{
 		$user_id = "NULL";
 	}
-	if ($_uid)
+	if ($_user['user_id'])
 	{
 		$cours_id = "'".$_cid."'";
 	}
@@ -555,14 +555,14 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	// if tracking is disabled record nothing
 	if (!$is_trackingEnabled)
 		return 0;
-	global $_uid;
+	global $_user;
 	global $_cid;
 	global $TABLETRACK_ATTEMPT;
 	global $origin, $learnpath_id, $learnpath_item_id;
 	$reallyNow = time();
-	if ($_uid)
+	if ($_user['user_id'])
 	{
-		$user_id = "'".$_uid."'";
+		$user_id = "'".$_user['user_id']."'";
 	}
 	else // anonymous
 		{

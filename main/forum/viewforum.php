@@ -168,7 +168,7 @@ if (isset($message))
 // 1. the course admin is here
 // 2. the course member is here and new threads are allowed
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
-if (api_is_allowed_to_edit() OR ($current_forum['allow_new_threads']==1 AND isset($_uid)) OR ($current_forum['allow_new_threads']==1 AND !isset($_uid) AND $current_forum['allow_anonymous']==1))
+if (api_is_allowed_to_edit() OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1))
 {
 	echo '<a href="newthread.php?forum='.$_GET['forum'].'">'.get_lang('NewTopic').'</a>';
 }

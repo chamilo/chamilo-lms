@@ -148,7 +148,7 @@ if (!api_is_allowed_to_edit() AND ($current_forum_category['locked']<>0 OR $curr
 {
 	forum_not_allowed_here();
 }
-if (!$_uid AND $current_forum['allow_anonymous']==0)
+if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0)
 {
 	forum_not_allowed_here();
 }

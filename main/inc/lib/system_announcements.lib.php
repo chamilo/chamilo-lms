@@ -116,7 +116,7 @@ class SystemAnnouncementManager
 		return;
 	}
 	
-	function display_all_announcements($visible, $id = -1,$start = 0,$_uid)
+	function display_all_announcements($visible, $id = -1,$start = 0,$user_id)
 	{	
 		
 		$user_selected_language = $_SESSION["user_language_choice"] ? $_SESSION["user_language_choice"] : get_setting('platformLanguage');
@@ -159,7 +159,7 @@ class SystemAnnouncementManager
 			echo '<table align="center">';
 				echo '<tr>';
 					echo '<td>';
-						SystemAnnouncementManager :: display_fleche($_uid);
+						SystemAnnouncementManager :: display_fleche($user_id);
 					echo '</td>';
 				echo '</tr>';
 			echo '</table>';
@@ -185,7 +185,7 @@ class SystemAnnouncementManager
 			echo '<table align="center">';
 				echo '<tr>';
 					echo '<td>';
-						SystemAnnouncementManager :: display_fleche($_uid);
+						SystemAnnouncementManager :: display_fleche($user_id);
 					echo '</td>';
 				echo '</tr>';
 			echo '</table>';
@@ -194,10 +194,10 @@ class SystemAnnouncementManager
 		return;
 	}
 	
-	function display_fleche($_uid)
+	function display_fleche($user_id)
 	{
 		$start = (int)$_GET['start'];
-		$nb_announcement = SystemAnnouncementManager :: count_nb_announcement($start,$_uid);
+		$nb_announcement = SystemAnnouncementManager :: count_nb_announcement($start,$user_id);
 		$next = ((int)$_GET['start']+19);
 		$prev = ((int)$_GET['start']-19);
 		
@@ -223,7 +223,7 @@ class SystemAnnouncementManager
 		
 	}
 	
-	function count_nb_announcement($start = 0,$_uid = '')
+	function count_nb_announcement($start = 0,$user_id = '')
 	{
 		$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 		$user_selected_language = $_SESSION["user_language_choice"] ? $_SESSION["user_language_choice"] : get_setting('platformLanguage');
@@ -231,7 +231,7 @@ class SystemAnnouncementManager
 		$sql = 'SELECT id 
 				FROM '.$db_table.'
 				WHERE lang="'.$user_selected_language.'"';
-		if (isset($_uid))
+		if (isset($user_id))
  		{		
 			switch ($visibility)
 			{

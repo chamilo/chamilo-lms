@@ -197,9 +197,9 @@ if($is_allowedToEdit)
 		//$time = time();
 		//$time = date("Y-m-d H:i:s", $time);
 		
-		//$query = "INSERT INTO $TBL_ITEM_PROPERTY (tool, ref, insert_user_id, insert_date, lastedit_type) VALUES ('".TOOL_DOCUMENT."', $id, $_uid, '$time', 'DocumentAdded' )";
+		//$query = "INSERT INTO $TBL_ITEM_PROPERTY (tool, ref, insert_user_id, insert_date, lastedit_type) VALUES ('".TOOL_DOCUMENT."', $id, $_user['user_id'], '$time', 'DocumentAdded' )";
 		//api_sql_query($query,__FILE__,__LINE__);
-		api_item_property_update($_course,TOOL_DOCUMENT,$id,'FolderCreated',$_uid);
+		api_item_property_update($_course,TOOL_DOCUMENT,$id,'FolderCreated',$_user['user_id']);
 	}
 
 	if(!is_dir($picturePath))
@@ -218,9 +218,9 @@ if($is_allowedToEdit)
 		//$time = time();
 		//$time = date("Y-m-d H:i:s", $time);
 		
-		//$query = "INSERT INTO $TBL_ITEM_PROPERTY (tool, ref, insert_user_id, insert_date, lastedit_type) VALUES ('".TOOL_DOCUMENT."', $id, $_uid, '$time', 'DocumentAdded' )";
+		//$query = "INSERT INTO $TBL_ITEM_PROPERTY (tool, ref, insert_user_id, insert_date, lastedit_type) VALUES ('".TOOL_DOCUMENT."', $id, $_user['user_id'], '$time', 'DocumentAdded' )";
 		//api_sql_query($query,__FILE__,__LINE__);
-		api_item_property_update($_course,TOOL_DOCUMENT,$id,'FolderCreated',$_uid);
+		api_item_property_update($_course,TOOL_DOCUMENT,$id,'FolderCreated',$_user['user_id']);
 	}
 }
 if($origin != 'learnpath'){
@@ -247,7 +247,7 @@ $sql="SELECT count(id) FROM $TBL_EXERCICES";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 list($nbrexerc) = mysql_fetch_row($res);
 
-HotPotGCt($documentPath,1,$_uid);
+HotPotGCt($documentPath,1,$_user['user_id']);
 
 // only for administrator
 
@@ -272,7 +272,7 @@ if($is_allowedToEdit)
 								$objExerciseTmp->save();
 
 								// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
-								api_item_property_update($_course, TOOL_QUIZ, $exerciseId, "QuizAdded", $_uid);
+								api_item_property_update($_course, TOOL_QUIZ, $exerciseId, "QuizAdded", $_user['user_id']);
 
 								break;
 				case 'disable': // disables an exercise
@@ -317,7 +317,7 @@ if($is_allowedToEdit)
                     $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='$file'";
                     $res = api_sql_query($query,__FILE__,__LINE__);
                     $row = Database::fetch_array($res, 'ASSOC');
-                    api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'visible', $_uid);
+                    api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'visible', $_user['user_id']);
                     //$dialogBox = get_lang('ViMod');
 
 							break;
@@ -326,7 +326,7 @@ if($is_allowedToEdit)
                     $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='$file'";
                     $res = api_sql_query($query,__FILE__,__LINE__);
                     $row = Database::fetch_array($res, 'ASSOC');
-                    api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'invisible', $_uid);
+                    api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'invisible', $_user['user_id']);
 					#$query = "UPDATE $TBL_DOCUMENT SET visibility='$newVisibilityStatus' WHERE path=\"".$file."\""; //added by Toon
 					#api_sql_query($query,__FILE__,__LINE__);
 					//$dialogBox = get_lang('ViMod');
@@ -636,7 +636,7 @@ if($show == 'test'){
     <tr>
       <td width="20" align="right"><?php echo ($ind+($page*$limitExPage)).'.'; ?><!--<img src="../img/jqz.jpg" alt="HotPotatoes" />--></td>
 	   <td width="1">&nbsp;</td>
-           <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_uid;?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
+           <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
     </tr>
   </table></td>
   <td>
@@ -674,7 +674,7 @@ if($show == 'test'){
      
         <td width="20" align="right"><?php echo ($ind+($page*$limitExPage)).'.'; ?><!--<img src="../img/jqz.jpg" alt="HotPotatoes" />--></td>
        <td width="1">&nbsp;</td>
-        <td><a href="showinframes.php?<?php echo api_get_cidreq()."&file=".$path."&cid=".$_course['official_code']."&uid=".$_uid.'"'; if(!$active) echo 'class="invisible"'; ?>"><?php echo $title;?></a></td>
+        <td><a href="showinframes.php?<?php echo api_get_cidreq()."&file=".$path."&cid=".$_course['official_code']."&uid=".$_user['user_id'].'"'; if(!$active) echo 'class="invisible"'; ?>"><?php echo $title;?></a></td>
       
      </tr>
     </table></td>
@@ -849,7 +849,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 		if($is_allowedToEdit)
 		{
 			//get all results (ourself and the others) as an admin should see them
-			//AND exe_user_id <> $_uid  clause has been removed
+			//AND exe_user_id <> $_user['user_id']  clause has been removed
 			$sql="SELECT CONCAT(`lastname`,' ',`firstname`),`ce`.`title`, `te`.`exe_result` , 
 						`te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`),`te`.`exe_Id`,email
 				  FROM $TBL_EXERCICES AS ce , `$TBL_TRACK_EXERCICES` AS te, $TBL_USER AS user
@@ -867,12 +867,12 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 		{ // get only this user's results
 			  $sql="SELECT '',`ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`),`te`.`exe_Id`
 				  FROM $TBL_EXERCICES AS ce , `$TBL_TRACK_EXERCICES` AS te
-				  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `te`.`exe_user_id`='$_uid' AND `te`.`exe_cours_id`='$_cid'
+				  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `te`.`exe_user_id`='".$_user['user_id']."' AND `te`.`exe_cours_id`='$_cid'
 				  ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
 		
 			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
 					FROM `$TBL_TRACK_HOTPOTATOES`
-					WHERE exe_user_id = '$_uid' AND exe_cours_id = '".$_cid."'      
+					WHERE exe_user_id = '".$_user['user_id']."' AND exe_cours_id = '".$_cid."'      
 					ORDER BY exe_cours_id ASC, exe_date ASC";
 		
 		}

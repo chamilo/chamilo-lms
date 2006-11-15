@@ -1,4 +1,4 @@
-<?php // $Id: exercise.class.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: exercise.class.php 9986 2006-11-15 01:14:12Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -322,7 +322,7 @@ class Exercise
 	 */
 	function updateSound($sound,$delete)
 	{
-		global $audioPath, $documentPath,$_course,$_uid;
+		global $audioPath, $documentPath,$_course, $_user;
         $TBL_DOCUMENT = Database::get_course_table(DOCUMENT_TABLE);
         $TBL_ITEM_PROPERTY = Database::get_course_table(ITEM_PROPERTY_TABLE);
 
@@ -350,10 +350,10 @@ class Exercise
         /*$query = "INSERT INTO $TBL_ITEM_PROPERTY "
                 ."(tool, ref, insert_user_id,to_group_id, insert_date, lastedit_date, lastedit_type) "
                 ." VALUES "
-                ."('".TOOL_DOCUMENT."', $id, $_uid, 0, '$time', '$time', 'DocumentAdded' )";
+                ."('".TOOL_DOCUMENT."', $id, $_user['user_id'], 0, '$time', '$time', 'DocumentAdded' )";
         api_sql_query($query,__FILE__,__LINE__);*/
-        api_item_property_update($_course, TOOL_DOCUMENT, $id, 'DocumentAdded',$_uid);
-        item_property_update_on_folder($_course,str_replace($documentPath,'',$audioPath),$_uid);
+        api_item_property_update($_course, TOOL_DOCUMENT, $id, 'DocumentAdded',$_user['user_id']);
+        item_property_update_on_folder($_course,str_replace($documentPath,'',$audioPath),$_user['user_id']);
 				}
 			}
 		}

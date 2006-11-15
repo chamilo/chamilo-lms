@@ -62,9 +62,9 @@ if ($is_allowedToEdit)
 		//create the "HotPotatoes" directory
 		$doc_id = add_document($_course, '/HotPotatoes_files','folder',0,'HotPotatoes Files');
 		//update properties in dbase (in any case)
-		api_item_property_update($_course,TOOL_DOCUMENT,$doc_id,'FolderCreated',$_uid);
+		api_item_property_update($_course,TOOL_DOCUMENT,$doc_id,'FolderCreated',$_user['user_id']);
 		//make invisible(in any case) - why?
-		api_item_property_update($_course,TOOL_DOCUMENT,$doc_id,'invisible',$_uid);
+		api_item_property_update($_course,TOOL_DOCUMENT,$doc_id,'invisible',$_user['user_id']);
 	}
 }
 
@@ -121,7 +121,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 					$fld = GenerateHpFolder($document_sys_path.$uploadPath."/");
 					@mkdir($document_sys_path.$uploadPath."/".$fld);
 					$doc_id = add_document($_course, '/HotPotatoes_files/'.$fld,'folder',0,$fld);
-					api_item_property_update($_course,TOOL_DOCUMENT,$doc_id,'FolderCreated',$_uid);
+					api_item_property_update($_course,TOOL_DOCUMENT,$doc_id,'FolderCreated',$_user['user_id']);
 				}
 				else
 				{ //it is not the first step... get the filename directly from the system params
@@ -131,7 +131,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 				/*if (treat_uploaded_file($_FILES['userFile'], $document_sys_path,
 							$uploadPath."/".$fld, $maxFilledSpace, $unzip))*/
 				$allow_output_on_success = false;
-				if (handle_uploaded_document($_course,$_FILES['userFile'],$document_sys_path,$uploadPath."/".$fld,$_uid,null,null,$maxFilledSpace,$unzip,'',$allow_output_on_success))
+				if (handle_uploaded_document($_course,$_FILES['userFile'],$document_sys_path,$uploadPath."/".$fld,$_user['user_id'],null,null,$maxFilledSpace,$unzip,'',$allow_output_on_success))
 				{
 					
 					if ($finish==2)
@@ -169,7 +169,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 					/*, visibility='v' */
 	
 					api_sql_query($query,__FILE__,__LINE__);
-					api_item_property_update($_course, TOOL_QUIZ, $id, "QuizAdded", $_uid);
+					api_item_property_update($_course, TOOL_QUIZ, $id, "QuizAdded", $_user['user_id']);
 				}
 				else
 				{

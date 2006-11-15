@@ -51,20 +51,24 @@ class UserManager
 	  * @return int     new user id - if the new user creation succeeds
 	  *         boolean false otherwise
 	  *
-	  * @desc The function tries to retrieve $_uid from the global space.
-	  * if it exists, $_uid is the creator id       If       a problem arises,
+	  * @desc The function tries to retrieve $_user['user_id'] from the global space.
+	  * if it exists, $_user['user_id'] is the creator id       If       a problem arises,
 	  * it stores the error message in global $api_failureList
 	  *
 	  * @todo Add the user language to the parameters
 	  */
 	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language="english", $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1)
 	{
-		global $_uid, $userPasswordCrypted;
+		global $_user, $userPasswordCrypted;
 		$table_user = Database::get_main_table(MAIN_USER_TABLE);
-		if ($_uid)
-			$creator_id = $_uid;
+		if ($_user['user_id'])
+		{
+			$creator_id = $_user['user_id'];
+		}
 		else
+		{
 			$creator_id = '';
+		}
 		// First check wether the login already exists
 		if (! UserManager::is_username_available($loginName))
 			return api_set_failure('login-pass already taken');

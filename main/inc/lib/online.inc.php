@@ -180,14 +180,14 @@ function ClearURL($path)
 
 function chatcall() {
 
-	global $_uid, $_cid;
+	global $_user, $_cid;
 	
-	if (!$_uid)
+	if (!$_user['user_id'])
 	{
 		return (false);
 	}
 	$track_user_table = Database::get_main_table(MAIN_USER_TABLE);
-	$sql="select chatcall_user_id, chatcall_date from $track_user_table where ( user_id = $_uid )";
+	$sql="select chatcall_user_id, chatcall_date from $track_user_table where ( user_id = '".$_user['user_id']."' )";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$row=mysql_fetch_array($result);
 

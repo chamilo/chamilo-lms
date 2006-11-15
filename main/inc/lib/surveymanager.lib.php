@@ -51,8 +51,8 @@ class SurveyManager
 	  * @return int     new user id - if the new user creation succeeds
 	  *         boolean false otherwise
 	  *
-	  * @desc The function tries to retrieve $tbl_user and $_uid from the global space.
-	  *       if it exists, $_uid is the creator id
+	  * @desc The function tries to retrieve $tbl_user and $_user['user_id'] from the global space.
+	  *       if it exists, $_user['user_id'] is the creator id
 	  *       If a problem arises, it stores the error message in global $api_failureList
 	  
 	  * @todo	rework to use Database API

@@ -43,7 +43,6 @@ require_once(api_get_path(SYS_PATH).'main/exercice/hotpotatoes.lib.php');
 // init 
 $doc_url=urldecode($_GET['file']); 
 $cid = $_course['official_code']; 
-$_uid = $_SESSION['_uid'];
 $documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $documentWebPath= api_get_path(WEB_COURSE_PATH).$_course['path']."/document";
 $origin = $_REQUEST['origin'];
@@ -53,8 +52,8 @@ $time = $_REQUEST['time'];
 
 // read content
 $full_file_path = $documentPath.$doc_url;	
-my_delete($full_file_path.$_uid.".t.html");	
-$content = ReadFileCont($full_file_path.$_uid.".t.html");
+my_delete($full_file_path.$_user['user_id'].".t.html");	
+$content = ReadFileCont($full_file_path.$_user['user_id'].".t.html");
 
 if ($content=="")
 {
@@ -69,7 +68,7 @@ if ($content=="")
 				"			SaveScoreVariable = 1;\n".
 				"			if (C.ie)\n".
 				"			{\n". 
-				"				document.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=$time&test=".$doc_url."&uid=".$_uid."&cid=".$cid."&score=\"+Score;\n".
+				"				document.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=$time&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
 				"				//window.alert(Score);\n".
 				"			}\n".
 				"			else\n".
@@ -88,17 +87,17 @@ if ($content=="")
 	$newcontent = str_replace($prehref,$posthref,$newcontent);	
 	
 	
-	if (CheckSubFolder($full_file_path.$_uid.".t.html")==0)			
+	if (CheckSubFolder($full_file_path.$_user['user_id'].".t.html")==0)			
 	{ $newcontent = ReplaceImgTag($newcontent); } 
 								
 }
 else
 {
-	//my_delete($full_file_path.$_uid.".t.html");	
+	//my_delete($full_file_path.$_user['user_id'].".t.html");	
 	$newcontent = $content;
 }
 
-WriteFileCont($full_file_path.$_uid.".t.html",$newcontent);
+WriteFileCont($full_file_path.$_user['user_id'].".t.html",$newcontent);
 
 /*	$prehref="javascript:void(0);";
 	$posthref=$rootWeb."main/exercice/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
@@ -110,7 +109,7 @@ WriteFileCont($full_file_path.$_uid.".t.html",$newcontent);
 */		
 
 $doc_url = GetFolderPath($doc_url).urlencode(GetFileName($doc_url));
-//	echo $documentWebPath.$doc_url.$_uid.".t.html";
+//	echo $documentWebPath.$doc_url.$_user['user_id'].".t.html";
 //	exit;
 ?>	
 <html>
@@ -123,7 +122,7 @@ if ($origin!='learnpath') {
 	?>
 	<frameset rows="130,*" border="0" frameborder="no">
 		<frame name="top" scrolling="no" noresize target="contents" src="testheaderpage.php?file=<?php echo urlencode($_GET['file']); ?>">
-		<frame name="main" src="<?php echo $documentWebPath.$doc_url.$_uid.".t.html?time=$time"; ?>">
+		<frame name="main" src="<?php echo $documentWebPath.$doc_url.$_user['user_id'].".t.html?time=$time"; ?>">
 	<noframes>
 	<body>
 		<p>This page uses frames, but your browser doesn't support them.
@@ -136,7 +135,7 @@ if ($origin!='learnpath') {
 } else { 
 	?>
 	<script language='Javascript' type='text/javascript'>
-		s='<?php echo $documentWebPath.$doc_url.$_uid; ?>.t.html?time=<?php echo $time; ?>';
+		s='<?php echo $documentWebPath.$doc_url.$_user['user_id']; ?>.t.html?time=<?php echo $time; ?>';
 		//document.write(s);
 		window.location=s;
 	</script>

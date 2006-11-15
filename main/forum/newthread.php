@@ -151,7 +151,7 @@ if (!api_is_allowed_to_edit() AND $current_forum['allow_new_threads']<>1)
 	forum_not_allowed_here();
 }
 // 4. anonymous posts are not allowed and the user is not logged in
-if (!$_uid  AND $current_forum['allow_anonymous']<>1)
+if (!$_user['user_id']  AND $current_forum['allow_anonymous']<>1)
 {
 	forum_not_allowed_here();
 }

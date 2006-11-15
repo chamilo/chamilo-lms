@@ -91,7 +91,7 @@ if ($_GET['selfUnReg'] && GroupManager :: is_self_unregistration_allowed($_SESSI
 /*
  * Edit the group
  */
-if (api_is_allowed_to_edit() or GroupManager :: is_tutor($_uid))
+if (api_is_allowed_to_edit() or GroupManager :: is_tutor($_user['user_id']))
 {
 	echo "<a href=\"group_edit.php?origin=$origin\">".get_lang("EditGroup")."</a><br/><br/>";
 }

@@ -41,7 +41,7 @@
  */
 function hotpotatoes_init($baseWorkDir)
 {
-	//global $_course, $_uid;
+	//global $_course, $_user;
 	$documentPath=$baseWorkDir.'/';
 	if (!is_dir($documentPath))
 	{

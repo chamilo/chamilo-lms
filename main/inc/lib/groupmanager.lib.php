@@ -93,7 +93,7 @@ class GroupManager
 	 */
 	function get_group_list($category = null, $course_code = null)
 	{
-		global $_uid;
+		global $_user;
 		$course_db = '';
 		if ($course_code != null)
 		{
@@ -116,7 +116,7 @@ class GroupManager
 						COUNT(ug2.id) number_of_members
 					FROM ".$table_group." `g`
 					LEFT JOIN ".$table_group_user." `ug`
-					ON `ug`.`group_id` = `g`.`id` AND `ug`.`user_id` = '".$_uid."'
+					ON `ug`.`group_id` = `g`.`id` AND `ug`.`user_id` = '".$_user['user_id']."'
 					LEFT JOIN ".$table_group_user." `ug2`
 					ON `ug2`.`group_id` = `g`.`id`";
 		if ($category != null)
@@ -144,7 +144,7 @@ class GroupManager
 	 */
 	function create_group($name, $category_id, $tutor, $places)
 	{
-		global $_course,$_uid;
+		global $_course,$_user;
 		$currentCourseRepository = $_course['path'];
 		$coursesRepositorySys = api_get_path(SYS_COURSE_PATH);
 		$table_group = Database :: get_course_table(GROUP_TABLE);
@@ -165,7 +165,7 @@ class GroupManager
 		FileManager :: mkdirs($coursesRepositorySys.$currentCourseRepository."/group/".$secret_directory, 0777);
 		*/
 		$desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
-		$dir_name = create_unexisting_directory($_course,$_uid,$lastId,NULL,$coursesRepositorySys.$currentCourseRepository.'/document',$desired_dir_name);
+		$dir_name = create_unexisting_directory($_course,$_user['user_id'],$lastId,NULL,$coursesRepositorySys.$currentCourseRepository.'/document',$desired_dir_name);
 		/* Stores the directory path into the group table */
 		$sql = "UPDATE ".$table_group." SET   name = '".mysql_real_escape_string($name)."', secret_directory = '".$dir_name."' WHERE id ='".$lastId."'";
 		api_sql_query($sql,__FILE__,__LINE__);
@@ -821,7 +821,7 @@ class GroupManager
 		global $_course;
 		$course_code = $_course['sysCode'];
 		$category = GroupManager :: get_category_from_group($group_id);
-		$result = CourseManager :: is_user_subscribed_in_real_or_linked_course($_uid, $course_code);
+		$result = CourseManager :: is_user_subscribed_in_real_or_linked_course($user_id, $course_code);
 		$result = !GroupManager :: is_subscribed($user_id, $group_id);
 		$result &= (GroupManager :: number_of_students($group_id) < GroupManager :: maximum_number_of_students($group_id));
 		if ($category['groups_per_user'] == GROUP_PER_MEMBER_NO_LIMIT)
@@ -1141,14 +1141,14 @@ class GroupManager
 	*/
 	function get_complete_list_of_users_that_can_be_added_to_group($course_code, $group_id)
 	{
-		global $_course, $_uid;
+		global $_course, $_user;
 		$category = GroupManager :: get_category_from_group($group_id, $course_code);
 		$number_of_groups_limit = $category['groups_per_user'] == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $category['groups_per_user'];
 		$real_course_code = $_course['sysCode'];
 		$real_course_info = Database :: get_course_info($real_course_code);
 		$real_course_user_list = CourseManager :: get_user_list_from_course_code($virtual_course_code);
 		//get list of all virtual courses
-		$user_subscribed_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($_uid, $real_course_code);
+		$user_subscribed_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($_user['user_id'], $real_course_code);
 		//add real course to the list
 		$user_subscribed_course_list[] = $real_course_info;
 		if (!is_array($user_subscribed_course_list))

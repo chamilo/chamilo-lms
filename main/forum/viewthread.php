@@ -179,7 +179,7 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 	if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit())
 	{
 		// The link should only appear when the user is logged in or when anonymous posts are allowed. 
-		if ($_uid OR ($current_forum['allow_anonymous']==1 AND !$_uid))
+		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 		{
 			echo '<a href="reply.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;action=replythread">'.get_lang('ReplyToThread').'</a>';
 		}

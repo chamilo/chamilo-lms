@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 9654 2006-10-24 08:24:19Z bmol $
+<?php //$Id: announcements.php 9982 2006-11-15 00:08:08Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -860,7 +860,7 @@ if ($_GET['origin'] !== 'learnpath')
 		{
 			if ($_GET['origin'] !== 'learnpath')
 				{
-					$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_uid);
+					$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 
 					// the user is member of several groups => display personal announcements AND his group announcements AND the general announcements
 					if (is_array($group_memberships))
@@ -871,7 +871,7 @@ if ($_GET['origin'] !== 'learnpath')
 							WHERE announcement.id = toolitemproperties.ref
 							AND toolitemproperties.tool='announcement'
 							AND toolitemproperties.visibility='1'
-							AND	( toolitemproperties.to_user_id=$_uid " .
+							AND	( toolitemproperties.to_user_id='".$_user['user_id']."'" .
 								"OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 							GROUP BY toolitemproperties.ref
 							ORDER BY display_order DESC
@@ -881,7 +881,7 @@ if ($_GET['origin'] !== 'learnpath')
 					else
 					{
 						// this is an identified user => show the general announcements AND his personal announcements
-						if ($_uid)
+						if ($_user['user_id'])
 						{
 							$sql="SELECT
 								announcement.*, toolitemproperties.*
@@ -889,7 +889,7 @@ if ($_GET['origin'] !== 'learnpath')
 								WHERE announcement.id = toolitemproperties.ref
 								AND toolitemproperties.tool='announcement'
 								AND toolitemproperties.visibility='1'
-								AND ( toolitemproperties.to_user_id=$_uid OR toolitemproperties.to_group_id='0')
+								AND ( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
 								GROUP BY toolitemproperties.ref
 								ORDER BY display_order DESC
 								LIMIT 0,$maximum";
@@ -1105,7 +1105,7 @@ if ($message == true)
 	if ($display_announcement_list && !$surveyid)
 	{
 		// by default we use the id of the current user. The course administrator can see the announcement of other users by using the user / group filter
-		$user_id=$_uid;
+		$user_id=$_user['user_id'];
 		if ($_SESSION['user']!==null)
 		{
 			$user_id=$_SESSION['user'];
@@ -1115,8 +1115,8 @@ if ($message == true)
 			$group_id=$_SESSION['group'];
 		}
 
-		//$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_uid);
-		$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_uid);
+		//$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
+		$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
 
 		if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announcement'))
 		{
@@ -1217,14 +1217,14 @@ if ($message == true)
 		}
 		else
 		{
-			if ($_uid)
+			if ($_user['user_id'])
 			{
 				$sql="SELECT
 					announcement.*, toolitemproperties.*
 					FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
-					AND (toolitemproperties.to_user_id=$_uid OR toolitemproperties.to_group_id='0')
+					AND (toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
 					AND toolitemproperties.visibility='1'
 					ORDER BY display_order DESC";
 

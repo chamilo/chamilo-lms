@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 9246 2006-09-25 13:24:53Z bmol $
+<?php //$Id: announcements.inc.php 9982 2006-11-15 00:08:08Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -40,18 +40,18 @@
 */
 function display_announcement($announcement_id)
 {
-	global $_uid, $dateFormatLong;
+	global $_user, $dateFormatLong;
 	$tbl_announcement 	= Database::get_course_table('announcement');
 	$tbl_item_property	= Database::get_course_table('item_property');
 	
-	if ($_uid)
+	if ($_user['user_id'])
 	{
 		$sql_query = "	SELECT announcement.*, toolitemproperties.*
 						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 						WHERE announcement.id = toolitemproperties.ref
 						AND announcement.id = '$announcement_id'
 						AND toolitemproperties.tool='announcement'
-						AND (toolitemproperties.to_user_id=$_uid OR toolitemproperties.to_group_id='0')
+						AND (toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
 						AND toolitemproperties.visibility='1'
 						ORDER BY display_order DESC";
 
@@ -592,7 +592,7 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 
 	global $_course;
 	global $nameTools;
-	global $_uid;
+	global $_user;
 
 	global $tbl_announcement;
 	global $tbl_item_property;
@@ -611,7 +611,7 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 		{
 			foreach ($send_to['groups'] as $group)
 			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_uid, $group); 
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], $group); 
 			}
 		}
 
@@ -620,13 +620,13 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 		{
 			foreach ($send_to['users'] as $user)
 			{
-					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_uid, '', $user);
+					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], '', $user);
 			}
 		}
 	}
 	else // the message is sent to everyone, so we set the group to 0
 	{
-		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_uid, '0');
+		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], '0');
 	}
 
 	return $last_id;
@@ -645,7 +645,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to)
 {
 	global $_course;
 	global $nameTools;
-	global $_uid;
+	global $_user;
 
 	global $tbl_announcement;
 	global $tbl_item_property;
@@ -668,7 +668,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to)
 		{
 			foreach ($send_to['groups'] as $group)
 			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_uid, $group);
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_user['user_id'], $group);
 			}
 		}
 		// storing the selected users
@@ -676,13 +676,13 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to)
 		{
 			foreach ($send_to['users'] as $user)
 			{
-					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_uid, '', $user);
+					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_user['user_id'], '', $user);
 			}
 		}
 	}
 	else // the message is sent to everyone, so we set the group to 0
 	{
-		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_uid, '0');
+		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_user['user_id'], '0');
 	}
 }
 

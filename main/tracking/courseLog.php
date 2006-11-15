@@ -59,8 +59,6 @@ if ($_GET['scormcontopen'])
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
 }
 
-$nameTools = get_lang('ToolName');
-
 $htmlHeadXtra[] = "<style type='text/css'>
 /*<![CDATA[*/
 .secLine {background-color : #E6E6E6;}
@@ -69,9 +67,7 @@ $htmlHeadXtra[] = "<style type='text/css'>
 /*]]>*/
 </style>
 <style media='print' type='text/css'>
-/*<![CDATA[*/
-td {border-bottom: thin dashed gray;}
-/*]]>*/
+
 </style>";
 
 
@@ -102,6 +98,17 @@ $tbl_learnpath_view = Database::get_course_table('lp_view');
 $tbl_learnpath_item_view = Database::get_course_table('lp_item_view');
 
 $view = $_REQUEST['view'];
+
+if($view=="0000001") $nameTools=get_lang('SynthesisView');
+if($view=="1000000") $nameTools=get_lang('CourseStats');
+if($view=="0100000") $nameTools=get_lang('CourseAccess');
+if($view=="0010000") $nameTools=get_lang('ToolsAccess');
+if($view=="0001000") $nameTools=get_lang('LinksAccess');
+if($view=="0000100") $nameTools=get_lang('DocumentsAccess');
+if($view=="00000010") $nameTools=get_lang('ScormAccess');
+
+$interbreadcrumb[] = array ("url" => $_SERVER['PHP_SELF']."?view=0000000", "name" => get_lang('ToolName'));
+
 Display::display_header($nameTools, "Tracking");
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 include("../resourcelinker/resourcelinker.inc.php");
@@ -117,8 +124,7 @@ $is_allowedToTrack = $is_courseAdmin;
 <br>
 <h3><?php echo get_lang('StatsOfCourse')." : ".$_course['official_code']; ?></h3>
 <p><?php echo get_lang('SeeIndividualTracking'); ?></p>
-<br>
-<table width="100%" cellpadding="2" cellspacing="3" border="0">
+
 <?php
 // check if uid is prof of this group
 
@@ -126,46 +132,80 @@ if($is_allowedToTrack && $is_trackingEnabled)
 {
     // show all : view must be equal to the sum of all view values (1024+512+...+64)
     // show none : less than the tiniest value
-    echo "<tr>
-            <td>
+    /*echo "<div>
             [<a href='".$_SERVER['PHP_SELF']."?view=1111111'>".get_lang('ShowAll')."</a>]
             [<a href='".$_SERVER['PHP_SELF']."?view=0000000'>".get_lang('ShowNone')."</a>]
-            </td>
-        </tr>
-    ";
+        </div><br>
+    ";*/
 
     if(!isset($view)) $view ="0000000";
-
-
-
-
-    /***************************************************************************
-     *
-     *		Reporting
-     *
-     ***************************************************************************/
-    $tempView = $view;
-    if($view[6] == '1')
-    {
-        $tempView[6] = '0';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('SynthesisView')."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?view=".$tempView."'>".get_lang('Close')."</a>]
-                    </td>
-            </tr>
-            <tr>
-                    <td valign='top' style='padding-left: 40px'>
-            			 <table width='550' border='0' cellspacing='1' cellpadding='3'>
-							<tr>
-								<td class='secLine' width='200'>".get_lang('Name')."</td>
-								<td class='secLine' width='125'>".get_lang('FirstAccess')."</td>
-								<td class='secLine' width='125'>".get_lang('LastAccess')."</td>
-								<td class='secLine' width='100'>%&nbsp;".get_lang('Visited')."</td>
-							</tr>
-        ";
-
-
+	
+	
+	if($view =="0000000"){
+		
+		//Synthesis view
+		echo "<div class='admin_section'>
+			<h4>
+				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000001' class='specialLink'>".get_lang('SynthesisView')."</a>
+			</h4>
+		 </div>";
+		 
+		 //Course Stats
+		 echo "<div class='admin_section'>
+			<h4>
+				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=1000000' class='specialLink'>".get_lang('CourseStats')."</a>
+			</h4>
+		 </div>";
+		 
+		 //Access to this course
+		 echo "<div class='admin_section'>
+			<h4>
+				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0100000' class='specialLink'>".get_lang('CourseAccess')."</a>
+			</h4>
+		 </div>";
+		 
+		 //Access to tools
+		 echo "<div class='admin_section'>
+			<h4>
+				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0010000' class='specialLink'>".get_lang('ToolsAccess')."</a>
+			</h4>
+		 </div>";
+		 
+		 //Links
+		 echo "<div class='admin_section'>
+			<h4>
+				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0001000' class='specialLink'>".get_lang('LinksAccess')."</a>
+			</h4>
+		 </div>";
+		 
+		 //Documents
+		 echo "<div class='admin_section'>
+			<h4>
+				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000100' class='specialLink'>".get_lang('DocumentsAccess')."</a>
+			</h4>
+		 </div>";
+		 
+		 //Learning path - Scorm format courses
+		 echo "<div class='admin_section'>
+			<h4>
+				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000010' class='specialLink'>".get_lang('ScormAccess')."</a>
+			</h4>
+		 </div>";
+		 
+		
+	}
+	
+/***************************************************************************
+ *
+ *		Reporting
+ *
+ ***************************************************************************/
+	
+	$tempView = $view;
+    if($view[6] == '1'){
+    	
+    	$tempView[6] = '0';
+    	
         //--------------------------------BEGIN users in this course
         $sql = "SELECT $TABLECOURSUSER.`user_id`, $table_user.`lastname`, $table_user.`firstname`
                     FROM $TABLECOURSUSER, $table_user
@@ -179,6 +219,15 @@ if($is_allowedToTrack && $is_trackingEnabled)
 
         if (is_array($results))
         {
+        	
+        	echo '<table class="data_table">';
+			echo "<tr>
+					<td class='secLine'>".get_lang('Name')."</td>
+					<td class='secLine'>".get_lang('FirstAccess')."</td>
+					<td class='secLine'>".get_lang('LastAccess')."</td>
+					<td class='secLine'>%&nbsp;".get_lang('Visited')."</td>
+	        	  </tr>";
+        	
             for($j = 0 ; $j < count($results) ; $j++)
             {
 
@@ -222,113 +271,82 @@ if($is_allowedToTrack && $is_trackingEnabled)
 
             	//--------------------------------BEGIN presentation of data
 				echo "		<tr>";
-				echo "			<td width='200'>".$results[$j][1]." ".$results[$j][2]."</td>";
-				echo "			<td width='125'>".$first_access."</td>";
-				echo "			<td width='125'>".$last_access."</td>";
-				echo "			<td width='100' align='center'".$lpath_pct_completed_color.">".$lpath_pct_completed."</td>";
+				echo "			<td>".$results[$j][1]." ".$results[$j][2]."</td>";
+				echo "			<td>".$first_access."</td>";
+				echo "			<td>".$last_access."</td>";
+				echo "			<td align='center'".$lpath_pct_completed_color.">".$lpath_pct_completed."</td>";
 				echo "		</tr>";
 				//--------------------------------END presentation of data
+				
+				echo "</table>";
+				
             }
 
         }
         else
         {
-            echo "<tr>";
-            echo "<td colspan='4'><center>".get_lang('NoResult')."</center></td>";
-            echo"</tr>";
+            echo "<div class='secLine' align='center'>".get_lang('NoResult')."</div>";
         }
-
-		echo "			</table>
-					</td>
-				</tr>
-		";
-		//--------------------------------END users in this course
-
+		 
     }
-    else
-    {
-        $tempView[6] = '1';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=".$tempView."' class='specialLink'>".get_lang('SynthesisView')."</a>
-                    </td>
-            </tr>
-        ";
-
-    }
-
-    /***************************************************************************
-     *
-     *		Main
-     *
-     ***************************************************************************/
+    
+    
+    
+/***************************************************************************
+ *
+ *		Main
+ *
+ ***************************************************************************/
 
     $tempView = $view;
     if($view[0] == '1')
     {
         $tempView[0] = '0';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('CourseStats')."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?view=".$tempView."'>".get_lang('Close')."</a>]
-                    </td>
-            </tr>
-        ";
-
+        
         $sql = "SELECT count(*)
                     FROM $TABLECOURSUSER
                     WHERE course_code = '".$_cid."'";
         $count = getOneResult($sql);
-        echo "
-            <tr>
-                <td style='padding-left : 40px;' valign='top'>
-                ".get_lang('CountUsers')." : ".$count."
-                </td>
-            </tr>
-        ";
+        
+        echo '<table class="data_table">';
+        
+        echo "<tr><td class='secLine'>".get_lang('CountUsers')." : ".$count."</td></tr>";
+        
+        echo '</table>';
+        
+        
+    }   
+    
 
-    }
-    else
-    {
-        $tempView[0] = '1';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=".$tempView."' class='specialLink'>".get_lang('CourseStats')."</a>
-                    </td>
-            </tr>
-        ";
-    }
-
-    /***************************************************************************
-     *
-     *		Access to this course
-     *
-     ***************************************************************************/
+/***************************************************************************
+*
+*		Access to this course
+*
+***************************************************************************/
     $tempView = $view;
-    if($view[1] == '1')
-    {
+    if($view[1] == '1'){
+    	
         $tempView[1] = '0';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('CourseAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?view=".$tempView."'>".get_lang('Close')."</a>]
-                    </td>
-            </tr>
-        ";
+                
+        echo '<table class="data_table">';
+        
+        echo "<tr><td class='secLine'>".get_lang('ConnectionsToThisCourse')."</td></tr>";
+        
+        //Total
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
                     WHERE access_cours_code = '".$_cid."'
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
+        
         echo "
             <tr>
-                <td style='padding-left : 40px;' valign='top'>"
+                <td valign='top'>"
                 .get_lang('CountToolAccess')." : ".$count."
                 </td>
             </tr>
         ";
+        
         // last 31 days
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
@@ -336,13 +354,15 @@ if($is_allowedToTrack && $is_trackingEnabled)
                         AND (access_date > DATE_ADD(CURDATE(), INTERVAL -31 DAY))
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
+        
         echo "
             <tr>
-                <td style='padding-left : 40px;' valign='top'>
+                <td valign='top'>
                 ".get_lang('Last31days')." : ".$count."
                 </td>
             </tr>
         ";
+        
         // last 7 days
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
@@ -350,9 +370,10 @@ if($is_allowedToTrack && $is_trackingEnabled)
                         AND (access_date > DATE_ADD(CURDATE(), INTERVAL -7 DAY))
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
+        
         echo "
             <tr>
-                <td style='padding-left : 40px;' valign='top'>
+                <td valign='top'>
                 ".get_lang('Last7days')." : ".$count."
                 </td>
             </tr>
@@ -366,81 +387,61 @@ if($is_allowedToTrack && $is_trackingEnabled)
         $count = getOneResult($sql);
         echo "
             <tr>
-                <td style='padding-left : 40px;' valign='top'>
+                <td valign='top'>
                 ".get_lang('Thisday')." : ".$count."
                 </td>
             </tr>
         ";
+        
         //-- view details of traffic
         echo "
             <tr>
-                <td style='padding-left : 40px;' valign='top'>
+                <td valign='top'>
                 <a href='course_access_details.php'>".get_lang('TrafficDetails')."</a>
                 </td>
             </tr>
         ";
-
+        
+		echo '</table>';		
+		
     }
-    else
-    {
-        $tempView[1] = '1';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=".$tempView."' class='specialLink'>".get_lang('CourseAccess')."</a>
-                    </td>
-            </tr>
-        ";
-
-    }
-
-
-    /***************************************************************************
-     *
-     *		Tools
-     *
-     ***************************************************************************/
-    $tempView = $view;
-    if($view[2] == '1')
-    {
-        $tempView[2] = '0';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('ToolsAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?view=".$tempView."'>".get_lang('Close')."</a>]
-                    </td>
-            </tr>
-        ";
-
-
-        $sql = "SELECT `access_tool`, COUNT(DISTINCT `access_user_id`),count( `access_tool` )
-                    FROM $TABLETRACK_ACCESS
-                    WHERE `access_tool` IS NOT NULL
-                        AND `access_cours_code` = '$_cid'
-                    GROUP BY `access_tool`";
-
-        echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
+    
+    
+    
+/***************************************************************************
+ *
+ *		Tools
+ *
+ ***************************************************************************/
+	$tempView = $view;
+	if($view[2] == '1'){
+		
+	    $tempView[2] = '0';
+	    
+	    echo '<table class="data_table">';
+	    
+	    echo "<tr>
+                <td class='secLine'>".get_lang('ToolTitleToolnameColumn')."</td>
+                <td class='secLine'>".get_lang('ToolTitleUsersColumn')."                </td>
+                <td class='secLine'>".get_lang('ToolTitleCountColumn')."                </td>
+              </tr>";
+              
+		$sql = "SELECT `access_tool`, COUNT(DISTINCT `access_user_id`),count( `access_tool` )
+                FROM $TABLETRACK_ACCESS
+                WHERE `access_tool` IS NOT NULL
+                    AND `access_cours_code` = '$_cid'
+                GROUP BY `access_tool`";
+                
         $results = getManyResults3Col($sql);
-        echo "<table  cellpadding='2' cellspacing='1' border='0'>";
-        echo "<tr>
-                <td class='secLine'>
-                &nbsp;".get_lang('ToolTitleToolnameColumn')."&nbsp;
-                </td>
-                <td class='secLine'>
-                &nbsp;".get_lang('ToolTitleUsersColumn')."&nbsp;
-                </td>
-                <td class='secLine'>
-                &nbsp;".get_lang('ToolTitleCountColumn')."&nbsp;
-                </td>
-            </tr>";
+        
         if (is_array($results))
         {
             for($j = 0 ; $j < count($results) ; $j++)
             {
                 echo "<tr>";
                 echo "<td class='content'><a href='toolaccess_details.php?tool=".$results[$j][0]."'>".get_lang($results[$j][0])."</a></td>";
-                echo "<td align='right' class='content'>".$results[$j][1]."</td>";
-                echo "<td align='right' class='content'>".$results[$j][2]."</td>";
+                echo "<td align='left' class='content'>".$results[$j][1]."</td>";
+                echo "<td align='left' class='content'>".$results[$j][2]."</td>";
                 echo"</tr>";
             }
 
@@ -451,65 +452,47 @@ if($is_allowedToTrack && $is_trackingEnabled)
             echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
             echo"</tr>";
         }
-        echo "</table>";
-        echo "</td></tr>";
-    }
-    else
-    {
-        $tempView[2] = '1';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=".$tempView."' class='specialLink'>".get_lang('ToolsAccess')."</a>
-                    </td>
-            </tr>
-        ";
-    }
+	    
+	    echo '</table>';
+	    
+	}
+    
+    
+/***************************************************************************
+*
+*		Links
+*
+***************************************************************************/
 
-    /***************************************************************************
-     *
-     *		Links
-     *
-     ***************************************************************************/
     $tempView = $view;
-    if($view[3] == '1')
-    {
+    if($view[3] == '1'){
+    	
         $tempView[3] = '0';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('LinksAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?view=".$tempView."'>".get_lang('Close')."</a>]
-                    </td>
-            </tr>
-        ";
-
+        
         $sql = "SELECT `cl`.`title`, `cl`.`url`,count(DISTINCT `sl`.`links_user_id`), count(`cl`.`title`)
                     FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
                     WHERE `sl`.`links_link_id` = `cl`.`id`
                         AND `sl`.`links_cours_id` = '$_cid'
                     GROUP BY `cl`.`title`, `cl`.`url`";
-        echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
-        $results = getManyResultsXCol($sql,4);
-        echo "<table cellpadding='2' cellspacing='1' border='0'>";
-        echo "<tr>
-                <td class='secLine'>
-                &nbsp;".get_lang('LinksTitleLinkColumn')."&nbsp;
-                </td>
-                <td class='secLine'>
-                &nbsp;".get_lang('LinksTitleUsersColumn')."&nbsp;
-                </td>
-                <td class='secLine'>
-                &nbsp;".get_lang('LinksTitleCountColumn')."&nbsp;
-                </td>
+                    
+		$results = getManyResultsXCol($sql,4);
+		
+		echo '<table class="data_table">';
+		
+		echo "<tr>
+                <td class='secLine'>".get_lang('LinksTitleLinkColumn')."</td>
+                <td class='secLine'>".get_lang('LinksTitleUsersColumn')."</td>
+                <td class='secLine'>".get_lang('LinksTitleCountColumn')."</td>
             </tr>";
+        
         if (is_array($results))
         {
             for($j = 0 ; $j < count($results) ; $j++)
             {
                     echo "<tr>";
                     echo "<td class='content'><a href='".$results[$j][1]."'>".$results[$j][0]."</a></td>";
-                    echo "<td align='right' class='content'>".$results[$j][2]."</td>";
-                    echo "<td align='right' class='content'>".$results[$j][3]."</td>";
+                    echo "<td align='left' class='content'>".$results[$j][2]."</td>";
+                    echo "<td align='left' class='content'>".$results[$j][3]."</td>";
                     echo"</tr>";
             }
 
@@ -520,56 +503,36 @@ if($is_allowedToTrack && $is_trackingEnabled)
             echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
             echo"</tr>";
         }
-        echo "</table>";
-        echo "</td></tr>";
-    }
-    else
-    {
-        $tempView[3] = '1';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=".$tempView."' class='specialLink'>".get_lang('LinksAccess')."</a>
-                    </td>
-            </tr>
-        ";
+        
+        echo '</table>';
+        
     }
 
-    /***************************************************************************
-     *
-     *		Documents
-     *
-     ***************************************************************************/
+
+/***************************************************************************
+*
+*		Documents
+*
+***************************************************************************/
+
     $tempView = $view;
-    if($view[4] == '1')
-    {
+    if($view[4] == '1'){
+    	
         $tempView[4] = '0';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('DocumentsAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?view=".$tempView."'>".get_lang('Close')."</a>]
-                    </td>
-            </tr>
-        ";
-
+        
         $sql = "SELECT `down_doc_path`, COUNT(DISTINCT `down_user_id`), COUNT(`down_doc_path`)
                     FROM $TABLETRACK_DOWNLOADS
                     WHERE `down_cours_id` = '$_cid'
                     GROUP BY `down_doc_path`";
-
-        echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
+        
         $results = getManyResults3Col($sql);
-        echo "<table cellpadding='2' cellspacing='1' border='0'>";
+        
+        echo '<table class="data_table">';
+        
         echo "<tr>
-                <td class='secLine'>
-                &nbsp;".get_lang('DocumentsTitleDocumentColumn')."&nbsp;
-                </td>
-                <td class='secLine'>
-                &nbsp;".get_lang('DocumentsTitleUsersColumn')."&nbsp;
-                </td>
-                <td class='secLine'>
-                &nbsp;".get_lang('DocumentsTitleCountColumn')."&nbsp;
-                </td>
+                <td class='secLine'>".get_lang('DocumentsTitleDocumentColumn')."</td>
+                <td class='secLine'>".get_lang('DocumentsTitleUsersColumn')."</td>
+                <td class='secLine'>".get_lang('DocumentsTitleCountColumn')."</td>
             </tr>";
         if (is_array($results))
         {
@@ -577,8 +540,8 @@ if($is_allowedToTrack && $is_trackingEnabled)
             {
                     echo "<tr>";
                     echo "<td class='content'>".$results[$j][0]."</td>";
-                    echo "<td align='right' class='content'>".$results[$j][1]."</td>";
-                    echo "<td align='right' class='content'>".$results[$j][2]."</td>";
+                    echo "<td align='left' class='content'>".$results[$j][1]."</td>";
+                    echo "<td align='left' class='content'>".$results[$j][2]."</td>";
                     echo"</tr>";
             }
 
@@ -589,55 +552,42 @@ if($is_allowedToTrack && $is_trackingEnabled)
             echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
             echo"</tr>";
         }
-        echo "</table>";
-        echo "</td></tr>";
+        
+        echo '</table>';
+        
+        
     }
-    else
-    {
-        $tempView[4] = '1';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=".$tempView."' class='specialLink'>".get_lang('DocumentsAccess')."</a>
-                    </td>
-            </tr>
-        ";
-    }
-    /***************************************************************************
-     *
-     *		Scorm contents and Learning Path
-     *
-     ***************************************************************************/
-    $tempView = $view;
-    if($view[5] == '1')
-    {
-        $tempView[5] = '0';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('ScormAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?view=".$tempView."'>".get_lang('Close')."</a>]
-                    </td>
-            </tr>
-        ";
 
+
+/***************************************************************************
+*
+*		Scorm contents and Learning Path
+*
+***************************************************************************/
+    $tempView = $view;
+    if($view[5] == '1'){
+    	
+        $tempView[5] = '0';
+        
         $sql = "SELECT id, name 
 					FROM $tbl_learnpath_main";
                     //WHERE dokeosCourse='$_cid'"; we are using a table inside the course now, so no need for course id
 		$result=api_sql_query($sql,__FILE__,__LINE__);
+		
 	    $ar=Database::fetch_array($result);
-
-		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
-        echo "<table cellpadding='2' cellspacing='1' border='0'><tr>
-				                <td class='secLine'>
-								&nbsp;".get_lang('ScormContentColumn')."&nbsp;
-				                </td>
-				                <td class='secLine'>
-				                &nbsp;".get_lang('ScormStudentColumn')."&nbsp;
-				                </td>
-		</tr>";
-        if (is_array($ar))
-        {
-			while ($ar['id'] != '') {
+	    
+	    echo '<table class="data_table">';
+	    
+	    echo "<tr>
+	            <td class='secLine'>".get_lang('ScormContentColumn')."</td>
+			</tr>";
+			
+		$scormcontopen=$_REQUEST["scormcontopen"];
+		$scormstudentopen=$_REQUEST["scormstudentopen"];
+	    
+	    if (is_array($ar)){
+	    	
+	    	while ($ar['id'] != '') {
 				$lp_title = stripslashes($ar['name']);
 				echo "<tr><td>";
 				echo "<a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."' class='specialLink'>$lp_title</a>";
@@ -651,83 +601,108 @@ if($is_allowedToTrack && $is_trackingEnabled)
 		                    "WHERE sd.lp_id=$contentId group by u.user_id";
 		            //error_log($sql2,0);
 					$result2=api_sql_query($sql2,__FILE__,__LINE__);
-				    $ar2=Database::fetch_array($result2);
-					while ($ar2 != '') {
-						echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
-						echo "<a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."&scormstudentopen=".$ar2['user_id']."' class='specialLink'>{$ar2['lastname']} {$ar2['firstname']}</a>";
-						echo "</td></tr>";
-
-						if ($ar2['user_id']==$scormstudentopen) { //have to list the student's results
-							$studentId=$ar2['user_id'];
-							$sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
-									"FROM $tbl_learnpath_item i " .
-									"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
-									"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
-									"WHERE (v.user_id=$studentId and v.lp_id=$contentId) ORDER BY v.id, i.id";
-							$result3=api_sql_query($sql3,__FILE__,__LINE__);
-						    $ar3=Database::fetch_array($result3);
-					        echo "<tr><td>&nbsp;&nbsp;&nbsp;</td>
-				                <td class='secLine'>
-				                &nbsp;".get_lang('ScormTitleColumn')."&nbsp;
-				                </td>
-				                <td class='secLine'>
-				                &nbsp;".get_lang('ScormStatusColumn')."&nbsp;
-				                </td>
-				                <td class='secLine'>
-				                &nbsp;".get_lang('ScormScoreColumn')."&nbsp;
-				                </td>
-				                <td class='secLine'>
-				                &nbsp;".get_lang('ScormTimeColumn')."&nbsp;
-				                </td>
-					            </tr>";
-							while ($ar3['status'] != '') {
-								require_once('../newscorm/learnpathItem.class.php');
-								$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
-								$title = htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
-								echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
-								echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
-								echo "</tr>";
-								$ar3=Database::fetch_array($result3);
+					
+					if(mysql_num_rows($result2)>0){
+						
+						echo "<tr><td align='center'><table cellspacing='0' cellpadding='0' style='margin-left: 15px;margin-right: 15px; margin-top: 5px; margin-bottom: 5px; width: 97%;'>";
+						
+						$isFirstLine=true;
+						
+					    $ar2=Database::fetch_array($result2);
+						while ($ar2 != '') {
+							
+							if (isset($_REQUEST["scormstudentopen"]) && $ar2['user_id']==$scormstudentopen) {
+							
+							echo "<tr><td align='left' class='secLine' style=''><a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."&scormstudentopen=".$ar2['user_id']."' class='specialLink'>{$ar2['lastname']} {$ar2['firstname']}</a>";
+							echo "</td></tr>";
+							
 							}
+							
+							else{
+								
+								if($isFirstLine){
+									echo "<tr><td align='left' style='border-top: 1px solid #b0b0b0;'><a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."&scormstudentopen=".$ar2['user_id']."' class='specialLink'>{$ar2['lastname']} {$ar2['firstname']}</a>";
+									echo "</td></tr>";
+									$isFirstLine=false;
+								}
+								
+								else{
+								
+									echo "<tr><td align='left'><a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."&scormstudentopen=".$ar2['user_id']."' class='specialLink'>{$ar2['lastname']} {$ar2['firstname']}</a>";
+									echo "</td></tr>";
+								
+								}
+			
+							}
+							
+							$isFirstLine=false;
+							
+							
+							if ($ar2['user_id']==$scormstudentopen) { //have to list the student's results
+							
+								echo "<tr><td align='center'><table style='margin-left: 15px;margin-right: 15px; margin-top: 5px; margin-bottom: 5px; width: 97%;'>";
+								
+								$studentId=$ar2['user_id'];
+								$sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
+										"FROM $tbl_learnpath_item i " .
+										"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
+										"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
+										"WHERE (v.user_id=$studentId and v.lp_id=$contentId) ORDER BY v.id, i.id";
+								$result3=api_sql_query($sql3,__FILE__,__LINE__);
+							    $ar3=Database::fetch_array($result3);
+						        echo "<tr><td class='secLine'>
+					                &nbsp;".get_lang('ScormTitleColumn')."&nbsp;
+					                </td>
+					                <td class='secLine'>
+					                &nbsp;".get_lang('ScormStatusColumn')."&nbsp;
+					                </td>
+					                <td class='secLine'>
+					                &nbsp;".get_lang('ScormScoreColumn')."&nbsp;
+					                </td>
+					                <td class='secLine'>
+					                &nbsp;".get_lang('ScormTimeColumn')."&nbsp;
+					                </td>
+						            </tr>";
+								while ($ar3['status'] != '') {
+									require_once('../newscorm/learnpathItem.class.php');
+									$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
+									$title = htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
+									echo "<tr><td>";
+									echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
+									echo "</tr>";
+									$ar3=Database::fetch_array($result3);
+								}
+								
+								echo "</td></tr></table>";
+								
+							}
+						
+							$ar2=Database::fetch_array($result2);
 						}
-
-
-						$ar2=Database::fetch_array($result2);
+						
+						echo "</td></tr></table>";
+						
 					}
 
 				}
-
+				
 				$ar=Database::fetch_array($result);
+				
 			}
-
-        }
-        else
-        {
-			$noscorm=true;
-        }
-
-
-		if ($noscorm) {
-               echo "<tr>";
-               echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
-               echo"</tr>";
-		}
-
-
-		echo "</table>";
-        echo "</td></tr>";
+	    	
+    	}
+    	
+    	else{
+    		 echo "<tr>";
+             echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
+             echo"</tr>";
+    	}
+	    
+	    echo '</table>';
+        
     }
-    else
-    {
-        $tempView[5] = '1';
-        echo "
-            <tr>
-                    <td valign='top'>
-                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=".$tempView."' class='specialLink'>".get_lang('ScormAccess')."</a>
-                    </td>
-            </tr>
-        ";
-    }
+
+    
 }
 // not allowed
 else

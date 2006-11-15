@@ -1,4 +1,4 @@
-<?php // $Id: online_streaming.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: online_streaming.php 9988 2006-11-15 01:28:32Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,7 +39,7 @@ $this_section=SECTION_COURSES;
 
 $tbl_user = Database::get_main_table(MAIN_USER_TABLE);
 
-$query="SELECT username FROM $tbl_user WHERE user_id='$_uid'";
+$query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=api_sql_query($query,__FILE__,__LINE__);
 
 list($pseudoUser)=mysql_fetch_row($result);

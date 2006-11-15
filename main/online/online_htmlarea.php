@@ -39,7 +39,7 @@ $this_section=SECTION_COURSES;
 
 $tbl_user = Database::get_main_table(MAIN_USER_TABLE);
 
-$query="SELECT username FROM $tbl_user WHERE user_id='$_uid'";
+$query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=api_sql_query($query,__FILE__,__LINE__);
 
 list($pseudoUser)=mysql_fetch_row($result);

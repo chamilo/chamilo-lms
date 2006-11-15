@@ -1,4 +1,4 @@
-<?php // $Id: online_master.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: online_master.php 9988 2006-11-15 01:28:32Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,12 +43,12 @@ $tbl_user = Database::get_main_table(MAIN_USER_TABLE);
 $tbl_course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 $tbl_online_link=Database::get_course_table(ONLINE_LINK_TABLE);
 
-$query="SELECT t1.user_id,username,picture_uri,t2.status FROM $tbl_user t1,$tbl_course_user t2 WHERE t1.user_id=t2.user_id AND course_code='$_cid' AND (t1.user_id='$_uid' OR t2.status='1')";
+$query="SELECT t1.user_id,username,picture_uri,t2.status FROM $tbl_user t1,$tbl_course_user t2 WHERE t1.user_id=t2.user_id AND course_code='$_cid' AND (t1.user_id='".$_user['user_id']."' OR t2.status='1')";
 $result=api_sql_query($query,__FILE__,__LINE__);
 
 while($row=mysql_fetch_array($result))
 {
-	if($row['user_id'] == $_uid)
+	if($row['user_id'] == $_user['user_id'])
 	{
 		$pseudoUser=$row['username'];
 	}

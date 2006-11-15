@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 9414 2006-10-10 12:59:14Z sbil136 $
+<?php //$Id: agenda.inc.php 9984 2006-11-15 00:35:05Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -63,14 +63,14 @@ $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang
 function get_kalender_items($month, $year)
 {
 	global $courseTablePrefix, $dbGlu;
-	global $_uid, $_course;
+	global $_user, $_course;
 	global $is_allowedToEdit;
 
 	// database variables
 	$TABLEAGENDA=Database::get_course_table(AGENDA_TABLE);
 	$TABLE_ITEM_PROPERTY=Database::get_course_table(LAST_TOOL_EDIT_TABLE);
 
-	$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_uid);
+	$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 
 	if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
 	{
@@ -98,7 +98,7 @@ function get_kalender_items($month, $year)
 				WHERE `agenda`.`id` = `toolitemproperties`.`ref`   ".$show_all_current."
 				AND MONTH(`agenda`.`start_date`)='".$month."'
 				AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-				AND	( `toolitemproperties`.`to_user_id`='".$_uid."' OR `toolitemproperties`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
+				AND	( `toolitemproperties`.`to_user_id`='".$_user['user_id']."' OR `toolitemproperties`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
 				AND `toolitemproperties`.`visibility`='1'
 				ORDER BY  start_date ".$sort;
 		}
@@ -110,7 +110,7 @@ function get_kalender_items($month, $year)
 				WHERE `agenda`.`id` = `toolitemproperties`.`ref`   ".$show_all_current."
 				AND MONTH(`agenda`.`start_date`)='".$month."'
 				AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-				AND ( `toolitemproperties`.`to_user_id`='".$_uid."' OR `toolitemproperties`.`to_group_id`='0')
+				AND ( `toolitemproperties`.`to_user_id`='".$_user['user_id']."' OR `toolitemproperties`.`to_group_id`='0')
 				AND `toolitemproperties`.`visibility`='1'
 				ORDER BY  start_date ".$sort;
 		}
@@ -604,7 +604,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 function store_new_agenda_item()
 {
 global $TABLEAGENDA;
-global $_uid;
+global $_user;
 
 // some filtering of the input data
 $title=strip_tags(trim($_POST['title'])); // no html allowed in the title
@@ -633,7 +633,7 @@ if (($_SESSION['allow_individual_calendar']=="show" and !is_null($to))or (!empty
 		{
 		foreach ($send_to['groups'] as $group)
 			{
-				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_uid, $group,'',$start_visible, $end_visible);
+				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'], $group,'',$start_visible, $end_visible);
 			}
 		}
 	// storing the selected users
@@ -641,13 +641,13 @@ if (($_SESSION['allow_individual_calendar']=="show" and !is_null($to))or (!empty
 		{
 		foreach ($send_to['users'] as $user)
 			{
-				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_uid,'',$user, $start_visible,$end_visible);
+				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'],'',$user, $start_visible,$end_visible);
 			}
 		}
 	}
 else // the message is sent to everyone, so we set the group to 0
 	{
-	api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_uid, '','',$start_visible,$end_visible);
+	api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'], '','',$start_visible,$end_visible);
 	}
 
 // storing the resources
@@ -1109,7 +1109,7 @@ function get_agenda_item($id)
 */
 function store_edited_agenda_item()
 {
-	global $_uid;
+	global $_user;
 
 	// database definitions
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(LAST_TOOL_EDIT_TABLE);
@@ -1141,7 +1141,7 @@ function store_edited_agenda_item()
 			{
 				foreach ($send_to['groups'] as $group)
 				{
-					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_uid, $group,'',$start_visible, $end_visible);
+					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'], $group,'',$start_visible, $end_visible);
 				}
 			}
 			// storing the selected users
@@ -1149,13 +1149,13 @@ function store_edited_agenda_item()
 			{
 				foreach ($send_to['users'] as $user)
 				{
-					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_uid,'',$user, $start_visible,$end_visible);
+					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'],'',$user, $start_visible,$end_visible);
 				}
 			}
 		}
 		else // the message is sent to everyone, so we set the group to 0
 		{
-			api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_uid, '','',$start_visible,$end_visible);
+			api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'], '','',$start_visible,$end_visible);
 		}
 
 	} //if ($edit_result=true)
@@ -1256,10 +1256,10 @@ function display_agenda_items()
 	global $DaysShort, $DaysLong, $MonthsLong;
 	global $is_courseAdmin;
 	global $dateFormatLong, $timeNoSecFormat;
-	global $_uid;
+	global $_user;
 	
 	// getting the group memberships
-	$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_uid);
+	$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
 
 	// getting the name of the groups
 	$group_names=get_course_groups();
@@ -1280,7 +1280,7 @@ function display_agenda_items()
 	}
 
 	// by default we use the id of the current user. The course administrator can see the agenda of other users by using the user / group filter
-	$user_id=$_uid;
+	$user_id=$_user['user_id'];
 	if ($_SESSION['user']!==null)
 	{
 		$user_id=$_SESSION['user'];
@@ -1391,7 +1391,7 @@ function display_agenda_items()
 		}
 		else
 		{
-			if ($_uid)
+			if ($_user['user_id'])
 			{
 				$sql="SELECT
 					agenda.*, toolitemproperties.*
@@ -1617,7 +1617,7 @@ function display_one_agenda_item($agenda_id)
 	global $DaysShort, $DaysLong, $MonthsLong;
 	global $is_courseAdmin;
 	global $dateFormatLong, $timeNoSecFormat;
-	global $_uid;
+	global $_user;
 	//echo "displaying agenda items";
 
 

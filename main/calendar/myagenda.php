@@ -197,7 +197,7 @@ if ($_GET['action'] == "delete" AND $_GET['id'])
 /* ==============================================================================
   						OUTPUT
 ============================================================================== */
-if (isset ($_uid))
+if (isset ($_user['user_id']))
 {
 	// getting all the courses that this user is subscribed to
 	$courses_dbs = get_courses_of_user();
@@ -320,7 +320,7 @@ Display :: display_footer();
 function get_agendaitems($rootWeb, $courses_dbs, $month, $year)
 {
 	global $courseTablePrefix, $dbGlu;
-	global $_uid;
+	global $_user;
 	$items = array ();
 	// get agenda-items for every course
 	foreach ($courses_dbs as $key => $array_course_info)
@@ -329,7 +329,7 @@ function get_agendaitems($rootWeb, $courses_dbs, $month, $year)
 		$TABLEAGENDA = Database :: get_course_table(AGENDA_TABLE, $array_course_info["db"]);
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE, $array_course_info["db"]);
 
-		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_uid);
+		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
 		// if the user is administrator of that course we show all the agenda items
 		if ($array_course_info['status'] == '1')
 		{
@@ -359,7 +359,7 @@ function get_agendaitems($rootWeb, $courses_dbs, $month, $year)
 													AND MONTH(`agenda`.`start_date`)='".$month."'
 													AND YEAR(`agenda`.`start_date`)='".$year."'
 													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND	( `item_property`.`to_user_id`='".$_uid."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
+													AND	( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
 													AND `item_property`.`visibility`='1'
 													ORDER BY start_date ".$sort;
 			}
@@ -373,7 +373,7 @@ function get_agendaitems($rootWeb, $courses_dbs, $month, $year)
 													AND MONTH(`agenda`.`start_date`)='".$month."'
 													AND YEAR(`agenda`.`start_date`)='".$year."'
 													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND ( `item_property`.`to_user_id`='".$_uid."' OR `item_property`.`to_group_id`='0')
+													AND ( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id`='0')
 													AND `item_property`.`visibility`='1'
 													ORDER BY start_date ".$sort;
 			}
@@ -703,7 +703,7 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 function get_day_agendaitems($rootWeb, $courses_dbs, $month, $year, $day)
 {
 	global $courseTablePrefix, $dbGlu;
-	global $_uid;
+	global $_user;
 	$items = array ();
 
 	// get agenda-items for every course
@@ -715,7 +715,7 @@ function get_day_agendaitems($rootWeb, $courses_dbs, $month, $year, $day)
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE, $array_course_info["db"]);
 
 		// getting all the groups of the user for the current course
-		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_uid);
+		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
 		// if the user is administrator of that course we show all the agenda items
 		if ($array_course_info['status'] == '1')
 		{
@@ -743,7 +743,7 @@ function get_day_agendaitems($rootWeb, $courses_dbs, $month, $year, $day)
 													WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
 													AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND	( `item_property`.`to_user_id`='".$_uid."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
+													AND	( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
 													AND `item_property`.`visibility`='1'
 													ORDER BY start_date ".$sort;
 			}
@@ -756,7 +756,7 @@ function get_day_agendaitems($rootWeb, $courses_dbs, $month, $year, $day)
 													WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
 													AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND ( `item_property`.`to_user_id`='".$_uid."' OR `item_property`.`to_group_id`='0')
+													AND ( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id`='0')
 													AND `item_property`.`visibility`='1'
 													ORDER BY start_date ".$sort;
 			}
@@ -805,7 +805,7 @@ function get_week_agendaitems($rootWeb, $courses_dbs, $month, $year, $week = '')
 {
 	global $courseTablePrefix, $dbGlu;
 	global $TABLEAGENDA, $TABLE_ITEMPROPERTY;
-	global $_uid;
+	global $_user;
 	$items = array ();
 	// The default value of the week
 	if ($week == '')
@@ -862,7 +862,7 @@ function get_week_agendaitems($rootWeb, $courses_dbs, $month, $year, $week = '')
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE, $array_course_info["db"]);
 
 		// getting all the groups of the user for the current course
-		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_uid);
+		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
 
 		// if the user is administrator of that course we show all the agenda items
 		if ($array_course_info['status'] == '1')
@@ -891,7 +891,7 @@ function get_week_agendaitems($rootWeb, $courses_dbs, $month, $year, $week = '')
 													WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
 													AND start_date>='".$start_filter."' AND start_date<='".$end_filter."'
 													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND	( `item_property`.`to_user_id`='".$_uid."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
+													AND	( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
 													AND `item_property`.`visibility`='1'
 													ORDER BY start_date ".$sort;
 			}
@@ -904,7 +904,7 @@ function get_week_agendaitems($rootWeb, $courses_dbs, $month, $year, $week = '')
 													WHERE `agenda`.`id` = `item_property`.`ref`   ".$show_all_current."
 													AND start_date>='".$start_filter."' AND start_date<='".$end_filter."'
 													AND `item_property`.`tool`='".TOOL_CALENDAR_EVENT."'
-													AND ( `item_property`.`to_user_id`='".$_uid."' OR `item_property`.`to_group_id`='0')
+													AND ( `item_property`.`to_user_id`='".$_user['user_id']."' OR `item_property`.`to_group_id`='0')
 													AND `item_property`.`visibility`='1'
 													ORDER BY start_date ".$sort;
 			}
@@ -946,7 +946,7 @@ function show_new_item_form($id = "")
 {
 	global $year, $MonthsLong;
 	global $TABLE_PERSONAL_AGENDA;
-	global $_uid;
+	global $_user;
 	// we construct the default time and date data (used if we are not editing a personal agenda item)
 	$today = getdate();
 	$day = $today['mday'];
@@ -959,7 +959,7 @@ function show_new_item_form($id = "")
 	// to overwrite the default information)
 	if ($id <> "")
 	{
-		$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_uid."' AND id='".$id."'";
+		$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' AND id='".$id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$aantal = mysql_num_rows($result);
 		if ($aantal <> 0)
@@ -1114,16 +1114,16 @@ function show_new_item_form($id = "")
 function store_personal_item($day, $month, $year, $hour, $minute, $title, $content, $id = "")
 {
 	global $TABLE_PERSONAL_AGENDA;
-	global $_uid;
+	global $_user;
 	//constructing the date
 	$date = $year."-".$month."-".$day." ".$hour.":".$minute.":00";
 	if ($id <> "")
 	{ // we are updating
-		$sql = "UPDATE ".$TABLE_PERSONAL_AGENDA." SET user='".$_uid."', title='".$title."', text='".$content."', date='".$date."' WHERE id='".$id."'";
+		$sql = "UPDATE ".$TABLE_PERSONAL_AGENDA." SET user='".$_user['user_id']."', title='".$title."', text='".$content."', date='".$date."' WHERE id='".$id."'";
 	}
 	else
 	{ // we are adding a new item
-		$sql = "INSERT INTO $TABLE_PERSONAL_AGENDA (user, title, text, date) VALUES ('$_uid','$title', '$content', '$date')";
+		$sql = "INSERT INTO $TABLE_PERSONAL_AGENDA (user, title, text, date) VALUES ('".$_user['user_id']."','$title', '$content', '$date')";
 	}
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 }
@@ -1136,13 +1136,13 @@ function get_courses_of_user()
 {
 	global $TABLECOURS;
 	global $TABLECOURSUSER;
-	global $_uid;
+	global $_user;
 	$sql_select_courses = "SELECT course.code k, course.visual_code  vc,
 									course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status
 			                        FROM    $TABLECOURS       course,
 											$TABLECOURSUSER   course_rel_user
 			                        WHERE course.code = course_rel_user.course_code
-			                        AND   course_rel_user.user_id = '$_uid'";
+			                        AND   course_rel_user.user_id = '".$_user['user_id']."'";
 	$result = api_sql_query($sql_select_courses);
 	while ($row = mysql_fetch_array($result))
 	{
@@ -1158,11 +1158,11 @@ function get_courses_of_user()
 function get_personal_agendaitems($rootWeb, $agendaitems, $day = "", $month = "", $year = "", $week = "", $type)
 {
 	global $TABLE_PERSONAL_AGENDA;
-	global $_uid;
+	global $_user;
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
 	if ($type == "month_view" or $type == "") // we are in month view
 	{
-		$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_uid."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
+		$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
 	}
 	// 2. creating the SQL statement for getting the personal agenda items in WEEK view
 	if ($type == "week_view") // we are in week view
@@ -1177,7 +1177,7 @@ function get_personal_agendaitems($rootWeb, $agendaitems, $day = "", $month = ""
 		// in sql statements you have to use year-month-day for date calculations
 		$start_filter = $start_year."-".$start_month."-".$start_day;
 		$end_filter = $end_year."-".$end_month."-".$end_day;
-		$sql = " SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_uid."'
+		$sql = " SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."'
 								AND date>='".$start_filter."' AND date<='".$end_filter."'";
 	}
 	// 3. creating the SQL statement for getting the personal agenda items in DAY view
@@ -1186,7 +1186,7 @@ function get_personal_agendaitems($rootWeb, $agendaitems, $day = "", $month = ""
 		// we could use mysql date() function but this is only available from 4.1 and higher
 		$start_filter = $year."-".$month."-".$day." 00:00:01";
 		$end_filter = $year."-".$month."-".$day." 23:59:59";
-		$sql = " SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_uid."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
+		$sql = " SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
 	}
 	//echo "day:".$day."/";
 	//echo "month:".$month."/";
@@ -1249,9 +1249,9 @@ function show_personal_agenda()
 {
 	global $TABLE_PERSONAL_AGENDA;
 	global $MonthsLong;
-	global $_uid;
+	global $_user;
 	// The SQL statement that retrieves all the personal agenda items of this user
-	$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_uid."' ORDER BY date DESC";
+	$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' ORDER BY date DESC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	// variable initialisation
 	$month_bar = "";
@@ -1339,15 +1339,15 @@ function show_personal_agenda()
 function delete_personal_agenda($id)
 {
 	global $TABLE_PERSONAL_AGENDA;
-	global $_uid;
+	global $_user;
 	if ($id <> '')
 	{
-		$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_uid."' AND id='".$id."'";
+		$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' AND id='".$id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$aantal = mysql_num_rows($result);
 		if ($aantal <> 0)
 		{
-			$sql = "DELETE FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_uid."' AND id='".$id."'";
+			$sql = "DELETE FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' AND id='".$id."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 		}
 	}

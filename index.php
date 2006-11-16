@@ -288,11 +288,11 @@ Display :: display_header('', $help);
  */
 function display_anonymous_right_menu()
 {
-	global $loginFailed, $_plugins;
+	global $loginFailed, $_plugins, $_user;
 
 	$platformLanguage = api_get_setting('platformLanguage');
 
-	if ( !(api_get_user_id()) ) // only display if the user isn't logged in
+	if ( !($_user['user_id']) ) // only display if the user isn't logged in
 	{
 		api_display_language_form();
 		echo '<br />';
@@ -315,7 +315,9 @@ function display_anonymous_right_menu()
 			}
 			echo '</ul></div>';
 		}
+		echo '<div class="note" style="background: none">';
 		api_plugin('loginpage_menu');
+		echo '</div>';
 	}
 
 	/*** hide right menu "general" and other parts on anonymous right menu  *****/
@@ -337,9 +339,11 @@ function display_anonymous_right_menu()
 	echo '</ul>';
 	echo '</div>';
 
-	if (api_get_user_id())
+	if ($_user['user_id'])
 	{
+		echo '<div class="note" style="background: none">';
 		api_plugin('campushomepage_menu');
+		echo '</div>';
 	}
 
 /**** use this comment to hide notice file section from right menu ****
@@ -575,7 +579,7 @@ else
 	api_plugin('campushomepage_main');
 }
 
-
+// Including the page for the news
 if (!empty ($_GET['include']) && !strstr($_GET['include'], '/') && strstr($_GET['include'], '.html'))
 {
 	include ('./home/'.$_GET['include']);

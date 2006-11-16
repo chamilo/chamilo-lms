@@ -1138,7 +1138,9 @@ echo "</div>";
 	Plugins for banner section
 -----------------------------------------------------------------------------
 */
+echo '<div class="note" style="background: none">';
 api_plugin('mycourses_menu');
+echo "</div>";
 echo "</div>"; // end of menu
 
 /*

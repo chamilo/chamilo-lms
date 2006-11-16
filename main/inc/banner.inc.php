@@ -74,7 +74,7 @@ elseif (isset ($nameTools) && $langFile != 'course_home')
 	Plugins for banner section
 -----------------------------------------------------------------------------
 */
-api_plugin('banner');
+api_plugin('header');
 
 $web_course_path = api_get_path(WEB_COURSE_PATH);
 

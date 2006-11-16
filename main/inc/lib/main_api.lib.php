@@ -352,7 +352,7 @@ function api_get_path($path_type)
 */
 function api_get_user_id()
 {
-	return $GLOBALS[$_user]['user_id'];
+	return $GLOBALS['_user']['user_id'];
 }
 /**
  * @param $user_id (integer): the id of the user

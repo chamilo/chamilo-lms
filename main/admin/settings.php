@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 9589 2006-10-19 13:53:43Z bmol $
+// $Id: settings.php 10000 2006-11-16 08:41:18Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -40,12 +40,14 @@
 		INIT SECTION
 ==============================================================================
 */
+// setting the section
+$this_section = SECTION_PLATFORM_ADMIN;
+
 // stating the language file
 $langFile = 'admin';
 // including some necessary dokeos files
-include ('../inc/global.inc.php');
+include_once ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-$this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
@@ -59,7 +61,7 @@ if ($_POST['SubmitStylesheets'])
 
 $table_settings_current = Database :: get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
 // setting breadcrumbs
-//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
 // setting the name of the tool
 $tool_name = get_lang('DokeosConfigSettings');
 
@@ -255,13 +257,28 @@ function handle_plugins()
 	echo get_lang('Plugin');
 	echo "\t\t</th>\n";
 	echo "\t\t<th>\n";
-	echo get_lang('MainMenu');
+	echo get_lang('LoginPageMainArea');
 	echo "\t\t</th>\n";
 	echo "\t\t<th>\n";
-	echo get_lang('MainMenuLogged');
+	echo get_lang('LoginPageMenu');
 	echo "\t\t</th>\n";
 	echo "\t\t<th>\n";
-	echo get_lang('Banner');
+	echo get_lang('CampusHomepageMainArea');
+	echo "\t\t</th>\n";
+	echo "\t\t<th>\n";
+	echo get_lang('CampusHomepageMenu');
+	echo "\t\t</th>\n";
+	echo "\t\t<th>\n";
+	echo get_lang('MyCoursesMainArea');
+	echo "\t\t</th>\n";
+	echo "\t\t<th>\n";
+	echo get_lang('MyCoursesMenu');
+	echo "\t\t</th>\n";
+	echo "\t\t<th>\n";
+	echo get_lang('Header');
+	echo "\t\t</th>\n";
+	echo "\t\t<th>\n";
+	echo get_lang('Footer');
 	echo "\t\t</th>\n";
 	echo "\t</tr>\n";
 
@@ -300,56 +317,40 @@ function handle_plugins()
 			}
 			echo "\t\t</td>\n";
 
-			echo "\t\t<td align=\"center\">\n";
-			if (in_array('loginpage_menu', $plugin_info['location']))
-			{
-				if (in_array($testplugin, $usedplugins['loginpage_menu']))
-				{
-					$checked = "checked";
-				}
-				else
-				{
-					$checked = '';
-				}
-				echo '<input type="checkbox" name="'.$testplugin.'-loginpage_menu" value="true" '.$checked.'/>';
-			}
-			echo "\t\t</td>\n";
-
-			echo "\t\t<td align=\"center\">\n";
-			if (in_array('campushomepage_menu', $plugin_info['location']))
-			{
-				if (in_array($testplugin, $usedplugins['campushomepage_menu']))
-				{
-					$checked = "checked";
-				}
-				else
-				{
-					$checked = '';
-				}
-				echo '<input type="checkbox" name="'.$testplugin.'-campushomepage_menu" value="true" '.$checked.'/>';
-			}
-			echo "\t\t</td>\n";
-
-			echo "\t\t<td align=\"center\">\n";
-			if (in_array('banner', $plugin_info['location']))
-			{
-				if (in_array($testplugin, $usedplugins['banner']))
-				{
-					$checked = "checked";
-				}
-				else
-				{
-					$checked = '';
-				}
-				echo '<input type="checkbox" name="'.$testplugin.'-banner" value="true"'.$checked.'/>';
-			}
-			echo "\t\t</td>\n";
+			// column: LoginPageMainArea
+			display_plugin_cell('loginpage_main', $plugin_info, $testplugin, $usedplugins);
+			display_plugin_cell('loginpage_menu', $plugin_info, $testplugin, $usedplugins);
+			display_plugin_cell('campushomepage_main', $plugin_info, $testplugin, $usedplugins);
+			display_plugin_cell('campushomepage_menu', $plugin_info, $testplugin, $usedplugins);
+			display_plugin_cell('mycourses_main', $plugin_info, $testplugin, $usedplugins);
+			display_plugin_cell('mycourses_menu', $plugin_info, $testplugin, $usedplugins);
+			display_plugin_cell('header', $plugin_info, $testplugin, $usedplugins);
+			display_plugin_cell('footer', $plugin_info, $testplugin, $usedplugins);
 			echo "\t</tr>\n";
-		}
-	}
+				}
+				}
 	echo '</table>';
 
 	echo '<input type="submit" name="SubmitPlugins" value="Submit" /></form>';
+			}
+
+
+function display_plugin_cell($location, $plugin_info, $current_plugin, $active_plugins)
+				{
+			echo "\t\t<td align=\"center\">\n";
+	if (in_array($location, $plugin_info['location']))
+			{
+		if (in_array($current_plugin, $active_plugins[$location]))
+				{
+					$checked = "checked";
+				}
+				else
+				{
+					$checked = '';
+				}
+		echo '<input type="checkbox" name="'.$current_plugin.'-'.$location.'" value="true" '.$checked.'/>';
+			}
+			echo "\t\t</td>\n";
 }
 
 /**
@@ -370,7 +371,10 @@ function handle_stylesheets()
 		$counter=1;
 		while (false !== ($style_dir = readdir($handle)))
 		{
-			if(substr($style_dir,0,1)=='.'){continue;} //skip dirs starting with a '.'
+			if(substr($style_dir,0,1)=='.') //skip dirs starting with a '.'
+			{
+				continue;
+			} 
 			$dirpath = api_get_path(SYS_PATH).'main/css/'.$style_dir;
 			if (is_dir($dirpath))
 			{
@@ -413,17 +417,35 @@ function store_plugins()
 	$sql = "DELETE FROM $table_settings_current WHERE category='Plugins'";
 	api_sql_query($sql, __LINE__, __FILE__);
 
-	// step 2: looping through all the post values we only store these which end on loginpage_menu or campushomepage_menu or banner
+	// step 2: looping through all the post values we only store these which are really a valid plugin location.
 	foreach ($_POST as $form_name => $formvalue)
 	{
 		$form_name_elements = explode("-", $form_name);
-		if (in_array('loginpage_menu', $form_name_elements) OR in_array('campushomepage_menu', $form_name_elements) OR in_array('banner', $form_name_elements))
+		if (is_valid_plugin_location($form_name_elements[1]))
 		{
 			$sql = "INSERT into $table_settings_current (variable,category,selected_value) VALUES ('".$form_name_elements['1']."','Plugins','".$form_name_elements['0']."')";
 			api_sql_query($sql, __LINE__, __FILE__);
 		}
 	}
 }
+
+/**
+ * Check if the post information is really a valid plugin location.
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+*/			
+function is_valid_plugin_location($location)
+{
+	$valid_locations=array('loginpage_main', 'loginpage_menu', 'campushomepage_main', 'campushomepage_menu', 'mycourses_main', 'mycourses_menu','header', 'footer');
+	if (in_array($location, $valid_locations))
+	{
+		return true;
+	}
+	else 
+	{
+		return false; 
+	}
+}			
+			
 
 /**
  * This function allows the platform admin to choose which should be the default stylesheet

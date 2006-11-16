@@ -344,14 +344,15 @@ function api_get_path($path_type)
 }
 
 /**
-* note: this function was deprecated but turned out to be quite useful for
-* API functions, so it will remain here.
-*
-* @return the id of the current user
+* This function returns the id of the user which is stored in the $_user array. 
+* 
+* @example The function can be used to check if a user is logged in 
+* 			if (api_get_user_id())
+* @return integer the id of the current user
 */
 function api_get_user_id()
 {
-	return $GLOBALS[$_user['user_id']];
+	return $GLOBALS[$_user]['user_id'];
 }
 /**
  * @param $user_id (integer): the id of the user

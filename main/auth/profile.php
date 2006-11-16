@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 9983 2006-11-15 00:21:16Z pcool $
+// $Id: profile.php 10005 2006-11-16 10:47:21Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -544,7 +544,7 @@ elseif ($form->validate())
 		$sql = rtrim($sql, ',');
 	}
 
-	$sql .= " WHERE user_id  = '$_user['user_id']'";
+	$sql .= " WHERE user_id  = '".$_user['user_id']."'";
 
 	api_sql_query($sql, __FILE__, __LINE__);
 

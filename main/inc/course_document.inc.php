@@ -271,15 +271,13 @@ function getlist ($directory) {
 			if ($filename != '..')
 			if ($filename != '.')
 			{
-
-
-			$file = array(
-				"lastedit_date" =>date ("Y-m-d H:i:s", filemtime($path)),
-				"visibility" => 1,
-				"path" => $path,
-				"title" => basename($path),
-				"filetype" => filetype($path),
-				"size" => filesize ($path)
+				$file = array(
+					"lastedit_date" =>date ("Y-m-d H:i:s", filemtime($path)),
+					"visibility" => 1,
+					"path" => $path,
+					"title" => basename($path),
+					"filetype" => filetype($path),
+					"size" => filesize ($path)
 			);
 
 
@@ -291,7 +289,9 @@ function getlist ($directory) {
 
 		return $files;
 
-	} else {
+	} 
+	else
+	{
 		return false;
 	}
 

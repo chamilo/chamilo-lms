@@ -54,7 +54,9 @@ elseif (isset ($nameTools) && $langFile != 'course_home')
 {
 	//Put the name of the user-tools in the header
 	if (!isset ($_user['user_id']))
+	{
 		echo " ";
+	}
 	elseif(!$noPHP_SELF)
 	{
 		echo "<div id=\"my_courses\"><a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq(), "\" target=\"_top\">", $nameTools, "</a></div>", "\n";
@@ -350,9 +352,12 @@ if (isset ($dokeos_database_connection))
 <?php
 //to mask the main div, set $header_hide_main_div to true in any script just before calling Display::display_header();
 global $header_hide_main_div;
-if(!empty($header_hide_main_div) && $header_hide_main_div===true){
+if(!empty($header_hide_main_div) && $header_hide_main_div===true)
+{
 	//do nothing
-}else{
+}
+else
+{
 ?>
 <div id="main"> <!-- start of #main wrapper for #content and #menu divs -->
 <?php

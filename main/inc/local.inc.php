@@ -460,8 +460,8 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 
             $_cid                            = $cData['code'             ];
 
-	    $_course['id'          ]         = $cData['code'             ]; //auto-assigned integer
-	    $_course['name'        ]         = $cData['title'         ];
+			$_course['id'          ]         = $cData['code'             ]; //auto-assigned integer
+			$_course['name'        ]         = $cData['title'         ];
             $_course['official_code']         = $cData['visual_code'        ]; // use in echo
             $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
             $_course['path'        ]         = $cData['directory'        ]; // use as key in path
@@ -496,10 +496,13 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 }
 else // continue with the previous values
 {
-	if(empty($_SESSION['_course']) OR empty($_SESSION['_cid'])){ //no previous values...
+	if(empty($_SESSION['_course']) OR empty($_SESSION['_cid']))
+	{ //no previous values...
 		$_cid = -1;		//set default values that will be caracteristic of being unset
 		$_course = -1;
-	}else{
+	}
+	else
+	{
 		$_cid 		= $_SESSION['_cid'   ];
    		$_course    = $_SESSION['_course'];
 	}
@@ -565,7 +568,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	
 	            api_session_register('_courseUser');
 	        }
-        	else {
+        	else 
+        	{
 	        	// vérifier que c pas le coach du cours
 	        	$sql = "SELECT 1 
 						FROM `".$mainDbName."`.`session_rel_course`
@@ -573,7 +577,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 						AND session_rel_course.id_coach = '".$_user['user_id']."'";
 		        
 		        $result = api_sql_query($sql,__FILE__,__LINE__);
-		        if($row = mysql_fetch_array($result)){
+		        if($row = mysql_fetch_array($result))
+		        {
 		        	$_courseUser['role'] = 'Professor';
 		            $is_courseMember     = true;
 		            $is_courseTutor      = true;
@@ -581,7 +586,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 		
 		            api_session_register('_courseUser');
 		        }
-		        else {       
+		        else 
+		        {       
 	        		// vérifier que c pas un élève de la session        
 			        $sql = "SELECT * FROM `".$mainDbName."`.`session_rel_course_rel_user`
 			        		WHERE `id_user`  = '".$_user['user_id']."' 
@@ -708,7 +714,9 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) // sessi
 elseif(isset($_SESSION['_gid'])) // continue with the previous values
 {
     $_gid             = $_SESSION ['_gid'            ];
-}else{ //if no previous value, assign caracteristic undefined value
+}
+else
+{ //if no previous value, assign caracteristic undefined value
 	$_gid = -1;
 }
 

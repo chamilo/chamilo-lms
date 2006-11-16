@@ -93,15 +93,14 @@ if(empty($statsDbName) && $already_installed)
 
 $dokeos_database_connection = @mysql_connect($dbHost, $dbLogin, $dbPass) or die ($error_message);
 
-if (! $dbHost) die($error_message);
+if (! $dbHost)
+{
+	die($error_message);
+}
 
 unset($error_message);
 
-$selectResult = mysql_select_db($mainDbName,$dokeos_database_connection)
-
-or die ( "<center>"
-		."WARNING ! SYSTEM UNABLE TO SELECT THE MAIN DOKEOS DATABASE"
-		."</center>");
+$selectResult = mysql_select_db($mainDbName,$dokeos_database_connection) or die ('<center>WARNING ! SYSTEM UNABLE TO SELECT THE MAIN DOKEOS DATABASE</center>');
 
 /*
 --------------------------------------------
@@ -113,9 +112,13 @@ $result=mysql_query($sql) or die(mysql_error());
 while ($row=mysql_fetch_array($result))
 {
 	if ($row['subkey']==NULL)
-		{ $_setting[$row['variable']]=$row['selected_value']; }
+	{ 
+		$_setting[$row['variable']]=$row['selected_value']; 
+	}
 	else
-		{ $_setting[$row['variable']][$row['subkey']]=$row['selected_value']; }
+	{
+		$_setting[$row['variable']][$row['subkey']]=$row['selected_value'];
+	}
 }
 // we have to store the settings for the plugins differently because it expects an array
 $sql="SELECT * FROM settings_current WHERE category='plugins'";
@@ -141,7 +144,10 @@ require($includePath."/local.inc.php");
 
 include_once($includePath."/lib/online.inc.php");
 // check and modify the date of user in the track.e.online table
-if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php')) { LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '',$statsDbName); }
+if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php')) 
+{ 
+	LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '',$statsDbName); 
+}
 
 // ===== end "who is logged in?" module section =====
 

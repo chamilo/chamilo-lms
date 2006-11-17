@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 10000 2006-11-16 08:41:18Z pcool $
+// $Id: settings.php 10028 2006-11-17 10:26:07Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -45,23 +45,28 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // stating the language file
 $langFile = 'admin';
+
 // including some necessary dokeos files
 include_once ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
+// Access restrictions
 api_protect_admin_script();
 
 // Submit Stylesheets
-if ($_POST['SubmitStylesheets'])
+if ($_POST['submit_stylesheets'])
 {
 	$message = store_stylesheets();
 	header("Location: http://{$_SERVER['HTTP_HOST']}{$_SERVER['PHP_SELF']}?category=stylesheets");
 	exit;
 }
 
+// Table definitions
 $table_settings_current = Database :: get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
+
 // setting breadcrumbs
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+
 // setting the name of the tool
 $tool_name = get_lang('DokeosConfigSettings');
 
@@ -157,6 +162,7 @@ if ($_GET['action'] == "stored")
 {
 	Display :: display_normal_message($SettingsStored);
 }
+
 // grabbing the categories
 $selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
 $resultcategories = api_sql_query($selectcategories, __FILE__, __LINE__);
@@ -193,6 +199,13 @@ if (isset ($_GET['category']))
 */
 Display :: display_footer();
 
+
+
+/*
+==============================================================================
+		FUNCTIONS
+==============================================================================
+*/
 /**
  * The function that retrieves all the possible settings for a certain config setting
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -220,7 +233,7 @@ function handle_plugins()
 	global $SettingsStored;
 	$table_settings_current = Database :: get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
 
-	if ($_POST['SubmitPlugins'])
+	if ($_POST['submit_plugins'])
 	{
 		store_plugins();
 		Display :: display_normal_message($SettingsStored);
@@ -331,13 +344,13 @@ function handle_plugins()
 				}
 	echo '</table>';
 
-	echo '<input type="submit" name="SubmitPlugins" value="Submit" /></form>';
+	echo '<input type="submit" name="submit_plugins" value="Submit" /></form>';
 			}
 
 
 function display_plugin_cell($location, $plugin_info, $current_plugin, $active_plugins)
-				{
-			echo "\t\t<td align=\"center\">\n";
+{
+	echo "\t\t<td align=\"center\">\n";
 	if (in_array($location, $plugin_info['location']))
 			{
 		if (in_array($current_plugin, $active_plugins[$location]))
@@ -401,7 +414,7 @@ function handle_stylesheets()
 		}
 		closedir($handle);
 	}
-	echo '<input type="submit" name="SubmitStylesheets" value="Submit" /></form>';
+	echo '<input type="submit" name="submit_stylesheets" value="Submit" /></form>';
 }
 
 /**

@@ -11,9 +11,12 @@
 * - include of language files.
 *
 * @package dokeos.include
+* @todo isn't claro_main.conf.php renamed to configuration.inc.php yet? 
+* @todo use the $_configuration array for all the needed variables
 * @todo remove the code that displays the button that links to the install page
-* 		but use a redirect immediately.
+* 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
 * @todo $statsDbName: rename variable and use $_configuration array
+* @todo make it possible to enable / disable the tracking through the Dokeos config page.
 * 
 ==============================================================================
 */
@@ -23,6 +26,7 @@
 
 $includePath = dirname(__FILE__);
 
+// @todo isn't this file renamed to configuration.inc.php yet? 
 // include the main Dokeos platform configuration file
 $main_configuration_file_path = $includePath . "/conf/claro_main.conf.php";
 

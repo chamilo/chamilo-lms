@@ -36,6 +36,19 @@ install time.
 ==============================================================================
 */
 
+/**
+ * @todo change these into a $_configuration array. $_configuration will use only the bare essential variables
+ * 		for configuring the platform (paths, database connections, ...). Changing a $_configuration variable
+ * 		CAN break the installation.
+ * 		Besides the $_configuration array there is also a $_settings array that contains variables that 
+ * 		can be changed and will not break the platform. 
+ * 		Some of the variables that are used here can move to the $_settings array (and thus be stored in the database)
+ * 		example: $is_trackingEnabled (assuming that the install script creates the necessary tables anyway.
+ * 				 $phpMyAdminPath
+ * 	
+ * 		@todo use more obvious names for the variables and respect the code guidelines
+ */
+
 //============================================================================
 //   MYSQL connection settings
 //============================================================================
@@ -86,6 +99,7 @@ $coursesRepositoryAppend     = "courses/";
 // Directory of the admin-area
 $rootAdminAppend             = "admin/";
 // Do not change the following values
+// @todo should be moved to api_get_path
 $clarolineRepositorySys      = $rootSys.$clarolineRepositoryAppend;
 $clarolineRepositoryWeb      = $rootWeb.$clarolineRepositoryAppend;
 $coursesRepositorySys        = $rootSys.$coursesRepositoryAppend;
@@ -142,6 +156,7 @@ $openoffice_conf['ftppasswd'] = '****';
 //   Plugin settings
 //============================================================================
 // plugins arrays
+// @todo remove this because this is now handled through the dokeos config settings
 $plugins["main_menu"]        = array();
 $plugins["main_menu_logged"] = array();
 $plugins["banner"]           = array();

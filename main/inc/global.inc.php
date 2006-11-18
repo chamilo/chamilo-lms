@@ -11,6 +11,10 @@
 * - include of language files.
 *
 * @package dokeos.include
+* @todo remove the code that displays the button that links to the install page
+* 		but use a redirect immediately.
+* @todo $statsDbName: rename variable and use $_configuration array
+* 
 ==============================================================================
 */
 

@@ -8,6 +8,11 @@
 ==============================================================================
 */
 
+/**
+ * @todo check if these are used. If this is the case then they should be changed into dokeos config settings and stored in the database.
+ * 
+ */
+
 $course_info_is_editable = true;
 
 //if (basename($_SERVER["SCRIPT_FILENAME"])==basename(__FILE__)) die("Va voir ailleurs");

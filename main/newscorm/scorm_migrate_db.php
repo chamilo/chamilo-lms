@@ -415,7 +415,20 @@ foreach($courses_list as $db)
 			//echo $sql_ins_iv;
 			$res_ins_iv = api_sql_query($sql_ins_iv,__FILE__,__LINE__);
 		}
-		
+        //UPDATE THE LP_VIEW progress
+        $sql = "SELECT count(distinct(lp_item_id)) FROM $my_new_lp_item_view WHERE lp_view_id = ".$lp_view." AND status IN ('passed','completed','succeeded','browsed','failed')";
+        $myres = api_sql_query($sql,__FILE__,__LINE__);
+        $myrow = Database::fetch_array($myres);
+        $completed = $myrow[0];
+        $mylpid = $lp_ids[$row['learnpath_id']];
+        $sql = "SELECT count(*) FROM $my_new_lp_item WHERE lp_id = '".$mylpid."'";
+        $myres = api_sql_query($sql,__FILE__,__LINE__);
+        $myrow = Database::fetch_array($myres);
+        $total = $myrow[0];
+    	$progress = ((float)$completed/(float)$total)*100;
+    	$progress = number_format($progress,0);
+		$sql = "UPDATE $my_new_lp_view SET progress = '$progress' WHERE id = '$lp_view'";
+		$myres = api_sql_query($sql,__FILE__,__LINE__);
 	}
 
 	/**
@@ -952,6 +965,22 @@ foreach($scorms as $my_course_code => $paths_list )
 				$ins_res = api_sql_query($ins_sql,__FILE__,__LINE__);
 			}
 		}
+        //UPDATE THE LP_VIEW progress
+        $sql = "SELECT count(distinct(lp_item_id)) FROM $my_new_lp_item_view WHERE lp_view_id = ".$view_insert_id." AND status IN ('passed','completed','succeeded','browsed','failed')";
+        $myres = api_sql_query($sql,__FILE__,__LINE__);
+        $myrow = Database::fetch_array($myres);
+        $completed = $myrow[0];
+        $mylpid = $lp_ids[$my_content_id];
+        $sql = "SELECT count(*) FROM $my_new_lp_item WHERE lp_id = '".$mylpid."'";
+        $myres = api_sql_query($sql,__FILE__,__LINE__);
+        $myrow = Database::fetch_array($myres);
+        $total = $myrow[0];
+    	$progress = ((float)$completed/(float)$total)*100;
+    	$progress = number_format($progress,0);
+		$sql = "UPDATE $my_new_lp_view SET progress = '$progress' WHERE id = '$view_insert_id'";
+		$myres = api_sql_query($sql,__FILE__,__LINE__);
+
+
 		/*
 		 * Set all information that might be more correct coming from imsmanifest
 		 */

@@ -3358,7 +3358,7 @@ class learnpath {
 
 		$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE);
 
-		$link = 'newscorm/lp_controller.php?mode=view&lp_id='.$lp_id;
+		$link = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id;
 
 		$sql="SELECT * FROM $tbl_tool where name='$name' and image='scormbuilder.gif' and link LIKE '$link%'";
 
@@ -3398,7 +3398,7 @@ class learnpath {
 
 		{
 
-			$sql ="INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('$name','newscorm/lp_controller.php?mode=view&lp_id=$lp_id','scormbuilder.gif','$v','0','pastillegris.gif',0)";
+			$sql ="INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('$name','newscorm/lp_controller.php?action=view&lp_id=$lp_id','scormbuilder.gif','$v','0','pastillegris.gif',0)";
 
 		}
 

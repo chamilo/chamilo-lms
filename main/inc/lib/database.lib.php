@@ -50,7 +50,6 @@ define("MAIN_SYSTEM_ANNOUNCEMENTS_TABLE", "sys_announcement");
 define("MAIN_LANGUAGE_TABLE", "language");
 define("MAIN_SETTINGS_OPTIONS_TABLE", "settings_options");
 define("MAIN_SETTINGS_CURRENT_TABLE", "settings_current");
-define("MAIN_SETTINGS_SERVICE_TABLE", "settings_service");
 define("MAIN_SESSION_TABLE", "session");
 define("MAIN_SESSION_COURSE_TABLE", "session_rel_course");
 define("MAIN_SESSION_USER_TABLE", "session_rel_user");

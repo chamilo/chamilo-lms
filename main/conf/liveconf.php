@@ -11,7 +11,7 @@ $nameTool = get_lang('conference');
 Display::display_header($nameTool);
 
 
-$visio_link = api_get_path(WEB_PATH).'../lps-latest/dokeos/videoconference/videoconference.html';
+$visio_link = api_get_path(WEB_PATH).api_get_setting('service_visio','url');
 
 ?>
 <span align="center">

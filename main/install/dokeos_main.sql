@@ -491,7 +491,10 @@ INSERT INTO `settings_current` VALUES
 (72, 'show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL),
 (73, 'banner', NULL, NULL, 'Plugins', 'messages', '', NULL, NULL, NULL),
 (74,'profile','phone','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'phone'),
-(75, 'Ajax_course_tracking_refresh', NULL, 'textfield','Course','60', 'Ajax_course_tracking_refresh','Ajax_course_tracking_refresh_comment', NULL, NULL);
+(75, 'Ajax_course_tracking_refresh', NULL, 'textfield','Course','60', 'Ajax_course_tracking_refresh','Ajax_course_tracking_refresh_comment', NULL, NULL),
+(76, 'service_visio', 'active', 'radio',NULL,false, 'visio_actived','', NULL, NULL),
+(77, 'service_visio', 'url', 'textfield',NULL,'', 'visio_url','', NULL, NULL),
+(78, 'service_ppt2lp', 'active', 'radio',NULL,false, 'ppt2lp_actived','', NULL, NULL);
 
 
 
@@ -596,31 +599,6 @@ UNLOCK TABLES;
 
 /*!40000 ALTER TABLE `settings_options` ENABLE KEYS */;
 
---
--- Table structure for table `settings_service`
---
-
-DROP TABLE IF EXISTS `settings_service`;
-
-CREATE TABLE `settings_service` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
-  `code_service` varchar(100) NOT NULL,
-  `variable` varchar(100) NOT NULL,
-  `value` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-);
-
---
--- Contenu de la table `settings_service`
---
-/*!40000 ALTER TABLE `settings_service` DISABLE KEYS */;
-LOCK TABLES `settings_service` WRITE;
-INSERT INTO `settings_service` VALUES
-(1, 'visio', 'active', 'false'),
-(2, 'ppt2lp', 'active', 'false');
-UNLOCK TABLES;
-
-/*!40000 ALTER TABLE `settings_service` ENABLE KEYS */;
 
 --
 -- Table structure for table `sys_announcement`

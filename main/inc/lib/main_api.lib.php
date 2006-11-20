@@ -157,31 +157,6 @@ function api_protect_course_script()
 
 
 
-/**
- * check if a service (like visioconference) is actived
- * 
- * @todo This should be stored in the dokeos_main.settings_current table. No new table is neede for this: http://www.dokeos.com/forum/viewtopic.php?t=7767
- * @param the code_service of the service
- * @return boolean
- * @author 
- */
- 
-function api_service_is_active($code_service){
-	
-	$sql = 'SELECT 1 
-			FROM '.Database::get_main_table(MAIN_SETTINGS_SERVICE_TABLE).' 
-			WHERE code_service="'.$code_service.'"
-			AND variable="active"
-			AND value="true"';
-	$rs = api_sql_query($sql, __FILE__ , __LINE__);
-	if(mysql_num_rows($rs)>0){
-		return true;
-	}
-	else {
-		return false;
-	}
-	
-} 
 
 /**
 * Function used to protect an admin script.

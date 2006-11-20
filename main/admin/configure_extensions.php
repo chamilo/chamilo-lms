@@ -31,7 +31,7 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-$tbl_settings_services = Database::get_main_table(MAIN_SETTINGS_SERVICE_TABLE);
+$tbl_settings_current = Database::get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
 $message = '';
 
 if(isset($_POST['activeExtension'])){
@@ -39,14 +39,21 @@ if(isset($_POST['activeExtension'])){
 	switch ($_POST['extension_code']){
 		
 		case 'visio' :
-			$sql = 'UPDATE '.$tbl_settings_services.' SET
-					value="true"
-					WHERE variable="active"
-					AND code_service="visio"';
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="true"
+					WHERE variable="service_visio"
+					AND subkey="active"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);			
 			if(mysql_affected_rows()>0){
+				$sql = 'UPDATE '.$tbl_settings_current.' SET
+						selected_value="'.addslashes($_POST['visio_url']).'"
+						WHERE variable="service_visio"
+						AND subkey="url"';
+				$rs = api_sql_query($sql, __FILE__, __LINE__);	
 				$message = get_lang('ServiceActivated');
 			}
+			
+			
 			
 			// select all the courses and insert the tool inside
 			$sql = 'SELECT db_name FROM '.Database::get_main_table(MAIN_COURSE_TABLE);
@@ -71,11 +78,10 @@ if(isset($_POST['activeExtension'])){
 			break;	
 			
 		case 'ppt2lp' :
-			$sql = 'UPDATE '.$tbl_settings_services.' SET
-					value="true"
-					WHERE variable="active"
-					AND code_service="ppt2lp"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="true"
+					WHERE variable="service_ppt2lp"
+					AND subkey="active"';
 			if(mysql_affected_rows()>0){
 				$message = get_lang('ServiceActivated');
 			}
@@ -88,10 +94,11 @@ if(isset($_POST['activeExtension'])){
 $listActiveServices = array();
 
 // get the list of active services
-$sql = 'SELECT code_service FROM '.$tbl_settings_services.' WHERE variable="active" and value="true"';
+$sql = 'SELECT variable FROM '.$tbl_settings_current.' WHERE variable LIKE "service_%" AND subkey="active" and selected_value="true"';
+
 $rs = api_sql_query($sql, __FILE__, __LINE__);
 while($row = mysql_fetch_array($rs)){
-	$listActiveServices[] = $row['code_service'];
+	$listActiveServices[] = $row['variable'];
 }
 
 
@@ -193,11 +200,12 @@ Display::display_header($nameTool);
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
 						<?php 
-						if(in_array('visio',$listActiveServices)){
+						if(in_array('service_visio',$listActiveServices)){
 							echo get_lang('ExtensionActivedButNotYetOperational');
 						}
 						else {
-								echo '
+								echo get_lang('URL').' : 
+									<input type="text" size="30" name="visio_url" /><br /><br />
 									<input type="hidden" name="extension_code" value="visio" />
 									<input type="submit" name="activeExtension" value="'.get_lang('ActiveExtension').'" />';
 						}

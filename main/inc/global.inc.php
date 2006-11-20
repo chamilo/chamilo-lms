@@ -106,9 +106,9 @@ if(empty($statsDbName) && $already_installed)
 
 // connect to the server database and select the main claroline DB
 
-$dokeos_database_connection = @mysql_connect($dbHost, $dbLogin, $dbPass) or die ($error_message);
+$dokeos_database_connection = @mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']) or die ($error_message);
 
-if (! $dbHost)
+if (! $_configuration['db_host'])
 {
 	die($error_message);
 }

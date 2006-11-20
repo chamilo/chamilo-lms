@@ -53,11 +53,11 @@ install time.
 //   MYSQL connection settings
 //============================================================================
 // Your MySQL server
-$dbHost         = '{DATABASE_HOST}'; 		
+$_configuration['db_host']		= '{DATABASE_HOST}'; 		
 // Your MySQL username
-$dbLogin        = '{DATABASE_USER}'; 		
+$_configuration['db_user']		= '{DATABASE_USER}'; 		
 // Your MySQL password
-$dbPass         = '{DATABASE_PASSWORD}'; 	
+$_configuration['db_password']	= '{DATABASE_PASSWORD}'; 	
 
 //============================================================================
 //   Database settings

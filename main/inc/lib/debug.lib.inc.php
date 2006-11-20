@@ -50,7 +50,7 @@ function echoSessionValue()
 {
 	$infoResult = "";
 
-	global $statuts, $statut, $status, $dbHost, $dbLogin, $dbPass, $is_admin, $_GET, $_SESSION, $_POST;
+	global $statuts, $statut, $status, $_configuration, $is_admin, $_GET, $_SESSION, $_POST;
 
 	if (!isset ($is_admin) || !$is_admin)
 	{
@@ -82,12 +82,12 @@ function echoSessionValue()
 		print_r($status);
 	}
 
-	if (isset ($dbHost) || isset ($dbLogin))
+	if (isset ($_configuration['db_host']) || isset ($_configuration['db_user']))
 	{
 		$infoResult .= "
 					<strong>mysql param</strong> :
-					 Serveur : $dbHost
-					 User    : $dbLogin";
+					 Serveur : ".$_configuration['db_host']."
+					 User    : ".$_configuration['db_user']."";
 	}
 	if (isset ($_SESSION))
 	{
@@ -384,13 +384,13 @@ function printInit($selection = "*")
  */
 function printConfig()
 {
-	GLOBAL $dbHost, $dbLogin, $dbPass, $mainDbName, $dokeos_version, $rootWeb, $urlAppend, $userPasswordCrypted, $userPasswordCrypted, $platformLanguage, $siteName, $rootWeb, $rootSys, $clarolineRepositoryAppend, $coursesRepositoryAppend, $rootAdminAppend, $clarolineRepositoryWeb, $clarolineRepositorySys, $coursesRepositoryWeb, $coursesRepositorySys, $rootAdminSys, $rootAdminWeb;
+	GLOBAL $_configuration, $mainDbName, $dokeos_version, $rootWeb, $urlAppend, $userPasswordCrypted, $userPasswordCrypted, $platformLanguage, $siteName, $rootWeb, $rootSys, $clarolineRepositoryAppend, $coursesRepositoryAppend, $rootAdminAppend, $clarolineRepositoryWeb, $clarolineRepositorySys, $coursesRepositoryWeb, $coursesRepositorySys, $rootAdminSys, $rootAdminWeb;
 	echo "<table width=\"100%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\" bordercolor=\"#808080\" bgcolor=\"#C0C0C0\" lang=\"en\"><TR>";
 	echo "
 			<tr><td colspan=2><strong>Mysql</strong></td></tr>
-			<tr><td>dbHost</TD><TD>$dbHost 			</td></tr>
-			<tr><td>dbLogin 	</TD><TD>$dbLogin 			</td></tr>
-			<tr><td>dbPass	</TD><TD>".str_repeat("*", strlen($dbPass))."</td></tr>
+			<tr><td>dbHost</TD><TD>".$_configuration['db_host']."</td></tr>
+			<tr><td>dbLogin 	</TD><TD>".$_configuration['db_user']."</td></tr>
+			<tr><td>dbPass	</TD><TD>".str_repeat("*", strlen($_configuration['db_password']))."</td></tr>
 			<tr><td>mainDbName		</TD><TD>$mainDbName			</td></tr>
 			<tr><td>clarolineVersion	</TD><TD>$dokeos_version</td></tr>
 		    <tr><td>rootWeb</TD><TD>$rootWeb</td></tr>

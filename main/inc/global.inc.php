@@ -6,12 +6,12 @@
 * - http get, post, post_files, session, server-vars extraction into global namespace;
 *   (which doesn't occur anymore when servertype config setting is set to test,
 *    and which will disappear completely in Dokeos 1.6.1)
-* - include of /conf/claro_main.conf.php and /lib/main_api.lib.php;
+* - include of /conf/configuration.php and /lib/main_api.lib.php;
 * - selecting the main database;
 * - include of language files.
 *
 * @package dokeos.include
-* @todo isn't claro_main.conf.php renamed to configuration.inc.php yet? 
+* @todo isn't configuration.php renamed to configuration.inc.php yet? 
 * @todo use the $_configuration array for all the needed variables
 * @todo remove the code that displays the button that links to the install page
 * 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
@@ -28,7 +28,7 @@ $includePath = dirname(__FILE__);
 
 // @todo isn't this file renamed to configuration.inc.php yet? 
 // include the main Dokeos platform configuration file
-$main_configuration_file_path = $includePath . "/conf/claro_main.conf.php";
+$main_configuration_file_path = $includePath . "/conf/configuration.php";
 
 $already_installed = false;
 

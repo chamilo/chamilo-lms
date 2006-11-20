@@ -66,7 +66,7 @@ $updateFromVersion=array('1.5','1.5.4','1.5.5');
 		INITIALISE FORM VARIABLES
 		(If this is the first visit to this script.)
 		Variables are read from the configuration file
-		of the old Dokeos version (claro_main.conf.php).
+		of the old Dokeos version (configuration.php).
 ==============================================================================
 */
 
@@ -254,9 +254,9 @@ function get_config_param($param)
 		{
 			$updateFromConfigFile='main/include/config.inc.php.old';
 		}
-		elseif(file_exists($_POST['updatePath'].'main/inc/conf/claro_main.conf.php.old'))
+		elseif(file_exists($_POST['updatePath'].'main/inc/conf/configuration.php.old'))
 		{
-			$updateFromConfigFile='main/inc/conf/claro_main.conf.php.old';
+			$updateFromConfigFile='main/inc/conf/configuration.php.old';
 		}
 		else
 		{

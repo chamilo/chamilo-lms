@@ -44,12 +44,12 @@
 * - update the item properties of the group documents
 *
 * Additionally, when DOKEOS_INSTALL is defined
-* - write a config file, claro_main.conf.php, with important settings
+* - write a config file, configuration.php, with important settings
 * - write a .htaccess file (with instructions for Apache) in the courses directory
 * - remove the new main/upload/users directory and rename the main/img/users
 *   directory of the old version to main/upload/users
-* - rename the old claro_main.conf.php to claro_main.conf.php.old,
-*   or if this fails delete the old claro_main.conf.php
+* - rename the old configuration.php to configuration.php.old,
+*   or if this fails delete the old configuration.php
 *
 * @package dokeos.install
 ==============================================================================
@@ -222,9 +222,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	if (defined('DOKEOS_INSTALL'))
 	{
 		// Write the Dokeos config file
-		write_dokeos_config_file($newPath.'main/inc/conf/claro_main.conf.php');
+		write_dokeos_config_file($newPath.'main/inc/conf/configuration.php');
 		// Write a distribution file with the config as a backup for the admin
-		write_dokeos_config_file($newPath.'main/inc/conf/claro_main.conf.dist.php');
+		write_dokeos_config_file($newPath.'main/inc/conf/configuration.dist.php');
 		// Write a .htaccess file in the course repository
 		write_courses_htaccess_file($urlAppendPath);
 
@@ -234,9 +234,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		// Move the old user images to the new installation
 		@ rename($oldPath.'main/img/users', $newPath.'main/upload/users');
 
-		if (!@ rename($oldPath.'main/inc/conf/claro_main.conf.php', $oldPath.'main/inc/conf/claro_main.conf.php.old'))
+		if (!@ rename($oldPath.'main/inc/conf/configuration.php', $oldPath.'main/inc/conf/configuration.php.old'))
 		{
-			unlink($oldPath.'main/inc/conf/claro_main.conf.php');
+			unlink($oldPath.'main/inc/conf/configuration.php');
 		}
 	}
 }

@@ -31,7 +31,7 @@ This file contains a list of variables that can be modified by the campus
 site administrator. Pay attention when changing these variables, some changes
 can cause Dokeos to stop working.
 If you changed some settings and want to restore them, please have a look at
-claro_main.conf.dist.php. That file is an exact copy of the config file at
+configuration.php. That file is an exact copy of the config file at
 install time.
 ==============================================================================
 */

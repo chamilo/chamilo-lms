@@ -1,4 +1,4 @@
-<?php // $Id: install_files.inc.php 6030 2005-08-17 13:56:28Z bmol $
+<?php // $Id: install_files.inc.php 10060 2006-11-20 19:18:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 * Notice : This script has to be included by install/index.php
 *
 * The script creates two files:
-* - claro_main.conf.php, the file that contains very important info for Dokeos
+* - configuration.php, the file that contains very important info for Dokeos
 *   such as the database names.
 * - .htaccess file (in the courses directory) that is optional but improves
 *   security
@@ -39,9 +39,9 @@
 if(defined('DOKEOS_INSTALL'))
 {
 	// Write the Dokeos config file
-	write_dokeos_config_file('../inc/conf/claro_main.conf.php');
+	write_dokeos_config_file('../inc/conf/configuration.php');
 	// Write a distribution file with the config as a backup for the admin
-	write_dokeos_config_file('../inc/conf/claro_main.conf.dist.php');
+	write_dokeos_config_file('../inc/conf/configuration.dist.php');
 	// Write a .htaccess file in the course repository
 	write_courses_htaccess_file($urlAppendPath);
 }

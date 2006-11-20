@@ -169,7 +169,7 @@ In Windows, you may need to check the properties of the folders (by right-clicki
 2.5. The following files need to be readable and writeable for everyone:
 </p>
 <ul>
-<li>dokeos/main/inc/conf/claro_main.conf.php (if present)</li>
+<li>dokeos/main/inc/conf/configuration.php (if present)</li>
 <li>dokeos/home/*.html</li>
 </ul>
 <p>
@@ -202,7 +202,7 @@ choose "Configure the homepage" in the Dokeos administration section.
 
 <ul>
 <li><strong>Protect your configuration file: </strong>
-make sure no one can overwrite it. You can find the config file in <em>(dokeos folder)</em>/main/inc/conf/claro_main.conf.php. Make it read-only (windows/xwindows: right-click the file to edit the properties. linux/bsd/macosx: use the chmod 444 command). The config file is created by Apache so you may need to be root user to change its permissions.</li>
+make sure no one can overwrite it. You can find the config file in <em>(dokeos folder)</em>/main/inc/conf/configuration.php. Make it read-only (windows/xwindows: right-click the file to edit the properties. linux/bsd/macosx: use the chmod 444 command). The config file is created by Apache so you may need to be root user to change its permissions.</li>
 <li><strong>Protect your installation folder: </strong>
 if the <em>(dokeos folder)</em>/main/install folder is still accessible, someone could install over your existing version (you could lose your data that way). Move the folder somewhere out of the web directories so it is not accessible, change its name, or edit its properties so no one can read or execute it.</li>
 <li><strong>For better security: </strong>
@@ -266,7 +266,7 @@ the previous version :
 3.4. The following files need to be readable and writeable for everyone:
 
 <ul>
-<li>dokeos/main/inc/conf/claro_main.conf.php (if present)</li>
+<li>dokeos/main/inc/conf/configuration.php (if present)</li>
 <li>dokeos/home/*.html</li>
 </ul>
 
@@ -340,7 +340,7 @@ Newer distributions also allow downloading rpms for additional packages.
 
 <p>
 <b>Activating LDAP in Dokeos</b><br/>
-In (dokeos folder)/main/inc/conf/claro_main.conf.php, around line 90, you see<br/>
+In (dokeos folder)/main/inc/conf/configuration.php, around line 90, you see<br/>
 //for new login module<br/>
 //uncomment these to activate ldap<br/>
 //$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br/>

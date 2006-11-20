@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 9983 2006-11-15 00:21:16Z pcool $
+<?php // $Id: authldap.php 10060 2006-11-20 19:18:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -58,7 +58,7 @@
 		- code cleanup
 		- fixed bug: dc = xx, dc = yy was configured for UGent
 			and put literally in the code, this is now a variable
-			in claro_main.conf.php ($ldapDc)
+			in configuration.php ($ldapDc)
 
 	with thanks to
 	- Stefan De Wannemacker (Ghent University)
@@ -78,7 +78,7 @@ include ('ldap_var.inc.php');
 	----------------------------------------------------
 		Necessary constants for the LDAP functions
 	----------------------------------------------------
-		These should be placed in the claro_main.conf.php.
+		These should be placed in the configuration.php.
 		done: $usesLDAP, $ldaphost, $ldapport, $usesCurriculum --> config.inc
 	*/
 	$PLACEHOLDER = "PLACEHOLDER";

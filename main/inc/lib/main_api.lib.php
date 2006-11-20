@@ -242,7 +242,7 @@ function api_is_self_registration_allowed()
 *	Returns a full path to a certain Dokeos area, which you specify
 *	through a parameter.
 *
-*	See $coursesRepositoryAppend in the claro_main.conf.php
+*	See $coursesRepositoryAppend in the configuration.php
 *	to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
 *
 *	@param one of the following constants:

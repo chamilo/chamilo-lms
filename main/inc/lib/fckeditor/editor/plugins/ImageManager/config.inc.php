@@ -26,7 +26,7 @@
  for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
  in this directory and its subdirectories.
 */
-require_once('../../../../../conf/claro_main.conf.php');
+require_once('../../../../../conf/configuration.php');
 
 $IMConfig['base_url'] = $rootWeb.'main/img/gallery/';
 //$IMConfig['base_dir'] = $_SERVER['DOCUMENT_ROOT'].$IMConfig['base_url'];

@@ -123,9 +123,9 @@ function get_config_param($param)
 		{
 			$updateFromConfigFile='main/include/config.inc.php';
 		}
-		elseif(file_exists($_POST['updatePath'].'main/inc/conf/claro_main.conf.php'))
+		elseif(file_exists($_POST['updatePath'].'main/inc/conf/configuration.php'))
 		{
-			$updateFromConfigFile='main/inc/conf/claro_main.conf.php';
+			$updateFromConfigFile='main/inc/conf/configuration.php';
 		}
 		else
 		{
@@ -513,10 +513,10 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 			@chmod('../../home',0777);
 		}
 
-		if(file_exists('../inc/conf/claro_main.conf.php') && !is_writable('../inc/conf/claro_main.conf.php'))
+		if(file_exists('../inc/conf/configuration.php') && !is_writable('../inc/conf/configuration.php'))
 		{
-			$notwritable[]='../inc/conf/claro_main.conf.php';
-			@chmod('../inc/conf/claro_main.conf.php',0666);
+			$notwritable[]='../inc/conf/configuration.php';
+			@chmod('../inc/conf/configuration.php',0666);
 		}
 
 		//Second, if this fails, report an error
@@ -527,7 +527,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 		!is_writable('../../archive') ||
 		!is_writable('../../courses') ||
 		!is_writable('../../home') ||
-		(file_exists('../inc/conf/claro_main.conf.php') && !is_writable('../inc/conf/claro_main.conf.php')))
+		(file_exists('../inc/conf/configuration.php') && !is_writable('../inc/conf/configuration.php')))
 		{
 			$error=true;
 			?>
@@ -550,7 +550,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 			<?php
 		}
 		// check wether a Dokeos configuration file already exists.
-		elseif(file_exists('../inc/conf/claro_main.conf.php'))
+		elseif(file_exists('../inc/conf/configuration.php'))
 		{
 				echo '<div style="color:#cc0033; background-color:white; font-weight:bold; text-align:center;">';
 				echo get_lang('WarningExistingDokeosInstallationDetected');
@@ -948,7 +948,7 @@ function display_after_install_message($installType, $nbr_courses)
 	<?php endif; ?>
 
 	<br><br>
-	<b>Security advice :</b> To protect your site, make read-only (CHMOD 444) 'main/inc/conf/claro_main.conf.php' and 'main/install/index.php'.
+	<b>Security advice :</b> To protect your site, make read-only (CHMOD 444) 'main/inc/conf/configuration.php' and 'main/install/index.php'.
 	<br><br><br><br>
 
 	</form>

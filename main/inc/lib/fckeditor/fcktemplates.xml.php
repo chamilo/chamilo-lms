@@ -1,6 +1,6 @@
 <?php header('Content-Type: text/xml; charset=utf-8');
 echo '<?xml version="1.0" encoding="utf-8" ?>';
-require_once('../../conf/claro_main.conf.php');
+require_once('../../conf/configuration.php');
 
 $IMConfig['base_url'] = $rootWeb.'main/img/gallery/';
 ?>

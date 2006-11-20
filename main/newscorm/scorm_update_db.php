@@ -121,7 +121,7 @@ $courses_id_list = array();
 $courses_dir_list = array();
 while ($row = Database::fetch_array($res))
 {
-	//TODO change this db name construction to use DB instead of claro_main.conf settings
+	//TODO change this db name construction to use DB instead of configuration.php settings
 	$course_pref = Database::get_course_table_prefix();
 	$dbname = $row['db_name'].'.'.$course_pref;
 	$courses_list[] = $row['db_name'];

@@ -292,7 +292,7 @@ else
                  $key = $uData['auth_source'];
 
                 /* >>>>>>>>>>>>>>>> External authentication modules <<<<<<<<<<<<<<<< */
-				// see claro_main.conf.php to define these
+				// see configuration.php to define these
                 include_once($extAuthSource[$key]['login']);
                 /* >>>>>>>>>>>>>>>> External authentication modules <<<<<<<<<<<<<<<<<< */
             }

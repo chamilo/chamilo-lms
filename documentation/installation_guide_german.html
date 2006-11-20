@@ -166,7 +166,7 @@ In Windows mssen Sie vielleicht die Verzeichnis Eigenschaften (per rechts Klick)
 2.5. Die nachfolgenden Dateien mssen fr alle readable und writeable sein:
 </p>
 <ul>
-<li>dokeos/main/inc/conf/claro_main.conf.php (wenn vorhanden)</li>
+<li>dokeos/main/inc/conf/configuration.php (wenn vorhanden)</li>
 <li>dokeos/home/*.html</li>
 </ul>
 <p>
@@ -199,7 +199,7 @@ in der Dokeos Administration.
 
 <ul>
 <li><strong>Schtzen Sie ihre Konfigurationsdatei: </strong>
-Vergewissern Sie sich, da�niemand die Datei berschreiben kann. Die Konfigurationsdatei befindet sich hier: <em>(Dokeos Verzeichnis)</em>/main/inc/conf/claro_main.conf.php.
+Vergewissern Sie sich, da�niemand die Datei berschreiben kann. Die Konfigurationsdatei befindet sich hier: <em>(Dokeos Verzeichnis)</em>/main/inc/conf/configuration.php.
 Die Datei sollte nur lesbar sein (Windows/XWindows: rechts Klick auf die Datei und die Eigenschaften anpassen. 
 linux/bsd/macosx: den chmod 444 Befehl benutzen). Die Konfigurationsdatei wird von Apache erstellt, daher mssen Sie 
 eventuell ein "root" Benutzer sein, um die Erlaubnisse zu ver�dern.</li>
@@ -271,7 +271,7 @@ Falls Sie Dokeos 1.6.1 im gleichen Verzeichnis wie die vorherige Version install
 3.4. Die nachfolgenden Dateien mssen fr alle readable und writeable sein:
 
 </p><ul>
-<li>dokeos/main/inc/conf/claro_main.conf.php (falls vorhanden)</li>
+<li>dokeos/main/inc/conf/configuration.php (falls vorhanden)</li>
 <li>dokeos/home/*.html</li>
 </ul>
 <p>
@@ -389,7 +389,7 @@ Linux Server: Es k�nte sein, da�Sie PHP mit LDAP Untersttzung neu kompiliere
 
 <p>
 <b>LDAP in Dokeos aktivieren</b><br>
-In (Dokeos Verzeichnis)/main/inc/conf/claro_main.conf.php, etwa in Zeile 90, sehen Sie <br>
+In (Dokeos Verzeichnis)/main/inc/conf/configuration.php, etwa in Zeile 90, sehen Sie <br>
 //for new login module<br>
 //uncomment these to activate ldap<br>
 //$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br>

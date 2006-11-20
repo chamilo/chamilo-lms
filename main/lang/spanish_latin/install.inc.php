@@ -78,6 +78,6 @@ $ExtensionLDAPNotAvailable = "Extensión LDAP no disponible";
 $ExtensionGDNotAvailable = "Extensión GD no disponible";
 $DokeosLicenseInfo = "Dokeos es un software libre distribuido bajo licencia GNU General Public licence (GPL)";
 $IAccept = "Acepto";
-$ConfigSettingsInfo = "Los siguientes valores serán escritos en su archivo de configuración <b>main/inc/conf/claro_main.conf.php</b>:";
+$ConfigSettingsInfo = "Los siguientes valores serán escritos en su archivo de configuración <b>main/inc/conf/configuration.php</b>:";
 $InstallDokeos = "Instalar Dokeos";
 ?>

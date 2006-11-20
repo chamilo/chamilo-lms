@@ -1,4 +1,4 @@
-<?php // $Id: ldap_var.inc.php 5291 2005-06-01 09:31:57Z olivierb78 $
+<?php // $Id: ldap_var.inc.php 10060 2006-11-20 19:18:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -31,13 +31,13 @@
 *	in the future but then perhaps in a more general way.
 *
 *	Originally, Thomas and I agreed to store all settings in one file
-*	(claro_main.conf.php) to make it easier for claroline admins to make changes.
+*	(configuration.php) to make it easier for claroline admins to make changes.
 *	Since October 2003, this changed: the include directory has been
 *	changed to be called "inc", and all tools should have their own file(s).
 *
 *	This file "ldap_var.inc.php" was already used by the
 *	older french authentification functions. I have moved the new
-*	variables from the claro_main.conf.php to here as well.
+*	variables from the configuration.php to here as well.
 *
 *	@author Roan Embrechts
 *	@package dokeos.auth.ldap

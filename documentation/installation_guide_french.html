@@ -154,7 +154,7 @@ Avec Windows, vous avez besoin de v&eacute;rifier les propri&eacute;t&eacute;s d
 2.5. Les fichiers suivants doivent &ecirc;tre param&eacute;tr&eacute;s en lecture et &eacute;criture pour tous les utilisateurs:
 </p>
 <ul>
-<li>dokeos/main/inc/conf/claro_main.conf.php (si present)</li>
+<li>dokeos/main/inc/conf/configuration.php (si present)</li>
 <li>dokeos/home/*.html</li>
 </ul>
 <p>
@@ -185,7 +185,7 @@ Ne modifiez pas les fichiers home_*.html directement. Pour r&eacute;aliser les m
 
 <ul>
 <li><strong>Prot&eacute;ger le fichier de configuration : </strong>
-assurez-vous que personne ne puisse en modifier le contenu. Vous trouverez le fichier de configuration dans <em>(dokeos folder)</em>/main/inc/conf/claro_main.conf.php. R&eacute;duisez ses droits &agrave; la lecture seule (windows/xwindows: effectuez un clic droit au dessus du nom pour modifier les propri&eacute;t&eacute;s du fichier. Linux/bsd/macosx: r&eacute;alisez un CHMOD 444). Le fichier de configuration est cr&eacute;&eacute; par  Apache, ainsi, vous devez poss&eacute;der les droits n&eacute;cessaires (root) pour modifier les permissions.</li>
+assurez-vous que personne ne puisse en modifier le contenu. Vous trouverez le fichier de configuration dans <em>(dokeos folder)</em>/main/inc/conf/configuration.php. R&eacute;duisez ses droits &agrave; la lecture seule (windows/xwindows: effectuez un clic droit au dessus du nom pour modifier les propri&eacute;t&eacute;s du fichier. Linux/bsd/macosx: r&eacute;alisez un CHMOD 444). Le fichier de configuration est cr&eacute;&eacute; par  Apache, ainsi, vous devez poss&eacute;der les droits n&eacute;cessaires (root) pour modifier les permissions.</li>
 <li><strong>Prot&eacute;ger le dossier d'installation : </strong> si le dossier
 <em>(dokeos folder)</em>/main/install est toujours accessible, une nouvelle installation &eacute;crasant la v&ocirc;tre est possible (vous perdriez ainsi toutes vos donn&eacute;es). D&eacute;placez le dossier en dehors de votre dossier web pour le rendre inaccessible, modifiez son nom, ou modifiez ses propri&eacute;t&eacute;s de telle sorte que personne ne puisse le lire ou l'&eacute;xecuter.</li>
 <li><strong>Pour une meilleure s&eacute;curit&eacute; : </strong>
@@ -230,7 +230,7 @@ Si vous souhaitez que Dokeos 1.6.2 soit install&eacute; dans le m&ecirc;me dossi
 </p>
 3.4. Les fichiers suivants doivent &ecirc;tre param&eacute;tr&eacute;s en lecture et &eacute;criture pour tous les utilisateurs:
 <ul>
-<li>dokeos/main/inc/conf/claro_main.conf.php (si present)</li>
+<li>dokeos/main/inc/conf/configuration.php (si present)</li>
 <li>dokeos/home/*.html</li>
 </ul>
 
@@ -337,7 +337,7 @@ Les distributions r&eacute;centes autorisent le t&eacute;l&eacute;chargement de 
 
 <p>
 <b>Activer LDAP dans Dokeos</b><br/>
-Dans (dokeos folder)/main/inc/conf/claro_main.conf.php, aux environs de la ligne 90, vous pouvez lire: <br/>
+Dans (dokeos folder)/main/inc/conf/configuration.php, aux environs de la ligne 90, vous pouvez lire: <br/>
 //for new login module<br/>
 //uncomment these to activate ldap<br/>
 //$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br/>

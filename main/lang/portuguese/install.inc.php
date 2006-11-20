@@ -78,7 +78,7 @@ $ExtensionGDNotAvailable = "Extensão GD não disponível";
 $DokeosLicenseInfo = "Dokeos é um software distribuído sob a GNU Licença Pública Geral (GPL)";
 $IAccept = "Aceito";
 $ConfigSettingsInfo = "Os seguintes valores serão registados no ficheiro de configuração
-<b>main/inc/conf/claro_main.conf.php</b>:";
+<b>main/inc/conf/configuration.php</b>:";
 $InstallDokeos = "Instalar Dokeos";
 $GoToYourNewlyCreatedPortal = "Ir para o portal do curso acabado de criar.";
 $FirstUseTip = "Quando aceder ao campus pela primeira vez, a melhor maneira de o compreender/explorar é registar-se com a opção \"Criar cursos\" e seguir as indicações.";

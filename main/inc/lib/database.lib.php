@@ -67,6 +67,7 @@ define("STATISTIC_TRACK_E_DOWNLOADS_TABLE", "track_e_downloads");
 define("STATISTIC_TRACK_E_LINKS_TABLE", "track_e_links");
 define("STATISTIC_TRACK_E_ONLINE_TABLE", "track_e_online");
 define("STATISTIC_TRACK_E_HOTPOTATOES_TABLE", "track_e_hotpotatoes");
+define("STATISTIC_TRACK_E_COURSE_ACCESS_TABLE", "track_e_course_access");
 //scorm database tables
 define("SCORM_MAIN_TABLE", "scorm_main");
 define("SCORM_SCO_DATA_TABLE", "scorm_sco_data");

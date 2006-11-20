@@ -490,7 +490,8 @@ INSERT INTO `settings_current` VALUES
 (71, 'donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL),
 (72, 'show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL),
 (73, 'banner', NULL, NULL, 'Plugins', 'messages', '', NULL, NULL, NULL),
-(74,'profile','phone','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'phone');
+(74,'profile','phone','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'phone'),
+(75, 'Ajax_course_tracking_refresh', NULL, 'textfield','Course','60', 'Ajax_course_tracking_refresh','Ajax_course_tracking_refresh_comment', NULL, NULL);
 
 
 

@@ -396,6 +396,18 @@ mysql_query("CREATE TABLE `track_e_uploads` (
 			PRIMARY KEY  (`upload_id`)
 			) TYPE=MyISAM") or die(mysql_error());
 
+mysql_query("CREATE TABLE `track_e_course_access` (
+			  `course_access_id` int(11) NOT NULL auto_increment,
+			  `course_code` varchar(40) NOT NULL,
+			  `user_id` int(11) NOT NULL,
+			  `login_course_date` datetime NOT NULL default '0000-00-00 00:00:00',
+			  `logout_course_date` datetime default NULL,
+			  `counter` int(11) NOT NULL,
+			  PRIMARY KEY  (`course_access_id`)
+			)"
+) or die(mysql_error());
+
+
 $track_countries_table = "track_c_countries";
 fill_track_countries_table($track_countries_table);
 

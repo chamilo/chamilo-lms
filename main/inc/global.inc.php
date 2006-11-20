@@ -91,6 +91,13 @@ require_once(api_get_path(LIBRARY_PATH).'database.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'display.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
+//Include the librarie ajax for the course time refresh
+require_once(api_get_path(LIBRARY_PATH)."xajax/xajax.inc.php");
+
+//Include the file for the updateCourseTracking function
+require_once(api_get_path(INCLUDE_PATH)."update_course_tracking.php");
+
+
 
 if(empty($statsDbName) && $already_installed)
 {
@@ -105,6 +112,9 @@ if (! $dbHost)
 {
 	die($error_message);
 }
+
+
+$xajax->processRequests();
 
 unset($error_message);
 
@@ -397,7 +407,7 @@ foreach($language_files as $index => $language_file)
 
 $tbl_track_login = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
 	
-$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_SESSION["_uid"]."' ORDER BY login_date DESC LIMIT 0,1";
+$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
 
 $q_last_connection=mysql_query($sql_last_connection);
 $i_id_last_connection=mysql_result($q_last_connection,0,"login_id");

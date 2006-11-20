@@ -120,7 +120,7 @@ function handle_multiple_actions()
 function delete_category($action, $id)
 {
 	global $dropbox_cnf;
-	global $_user['user_id'], $is_courseAdmin, $is_courseTutor;
+	global $_user, $is_courseAdmin, $is_courseTutor;
 
 	// an additional check that might not be necessary
 	if ($action=='deletereceivedcategory')

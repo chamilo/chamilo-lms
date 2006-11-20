@@ -1,3 +1,5 @@
+for more information open documentation/index.html in your favorite browser.
+
 =======================================
  Dokeos 1.8 README
 =======================================

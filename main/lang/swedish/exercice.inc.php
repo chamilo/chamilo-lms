@@ -7,7 +7,6 @@ $langActivate = "aktivera";
 $langDeactivate = "inaktivera";
 $langNoEx = "Det finns inga övningar för tillfället";
 $langNewEx = "Ny övning";
-$langNewQu = "Ny fråga";
 $langQuestion = "Fråga";
 $langQuestions = "Frågor";
 $langAnswers = "Svar";

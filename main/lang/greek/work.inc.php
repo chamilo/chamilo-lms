@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "&#917;&#961;&#947;&#945;&#955;&#949;&#943;&#945;";
+$Tools  = "&#917;&#961;&#947;&#945;&#955;&#949;&#943;&#945;";
 $langDownloadFile = "Ανέβασμα εργασίας";
 $langTooBig = "Δεν επιλέξατε κάποιο αρχείο ή το αρχείο είναι πολύ μεγάλο.";
 $langListDeleted = "Ολοκληρη η λίστα διαγράφτηκε.";

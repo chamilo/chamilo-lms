@@ -11,7 +11,6 @@ $langTool = "$nameTools";
 $langSorry = "Zuerst einen Kurs auswählen";
 $langDenied = "Diese Funktion ist nur für Kurs-Administratoren verfügbar!";
 $langNoScript = "Script ist in Ihrem Browser nicht aktiviert; bitte ignorieren Sie den Teil des Bildschirms unter diesem Text, es wird nicht funktionieren ...";
-$langPressAgain = "Nochmals \'Sichern\' klicken ...";
 $langLanguage = "Sprache";
 $langLanguageTip = "Sprache, in der das Lernobjekt erstellt wurde";
 $langIdentifier = "Erkennungszeichen";
@@ -50,5 +49,4 @@ $langWarningDups = "- doppelte Kategorienamen wurden aus der Liste entfernt!";
 $langSLC = "Mit der benannten Links Kategorie arbeiten";
 $langTitle = "Titel";
 $langDescription = "Beschreibung";
-$langLangs = ":ca:ca,, da:da,, de:de,, en:en,, es:es,, fi:fi,, fr:fr,, gl:gl,, hr:hr,, hu:hu,, id:id,, it:it,, nl:nl,, pl:pl,, pt:pt,, ro:ro,, sl:sl,, sv:sv,, tr:tr,, xx:xx";
 ?>

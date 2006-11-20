@@ -612,38 +612,4 @@ $langClarContent2 = "Limpar conteúdo";
 $langHGroups = "Grupos";
 $langGroupsContent = "Conteúdo dos grupos";
 $langGuide = "Manual";
-$langHCourseRolesRights = "Ajuda sobre funções e direitos";
-$langCourseRolesRightsContent = "Na página das funções globais e de direitos do seu curso, pode definir exatamente quem está habilitado a fazer o quê e em que ferramentas.
-
-O conceito básico é o seguinte: para cada ferramenta, pode especificar quem pode ter acesso aos conteúdos, adicionar novos itens e pastas, editar informação já existente, alterá-la ou apagá-la. No entanto, não tem que especificar estas funções e direitos para cada utilizador individual. Dentro do seu curso os usuários têm funções atribuídas, tais como: visitante, membro normal do curso, professor tutor e administrador do curso. Para cada uma destas funções pode especificar as permissões para cada ferramenta. Pode, por exemplo, desejar que todos os utilizadores tenham acesso ao fórum, mas os meros visitantes não podem publicar mensagens no fórum - só os utilizadores registados na plataforma. Pode, por exemplo, desejar que o tutor adicione documentos ao seu curso, mas não possa apagá-los. E assim por diante.
-
-Na ferramenta usuários do seu curso, pode ver as funções dos usuários e editá-las, alterá-las (para isso basta usar o botão editar na lista de usuários). 
-
-Visão geral de todas as funções locais
-Existem cinco funções locais no interior da plataforma Dokeos. São as seguintes funções que podem atribuir aos usuários no seu curso. 
-
-Visitante anônimo: o visitante anônimo pode ser qualquer pessoa em qualquer parte do mundo que apenas tenta visitar e aceder ao seu curso. Por padrão, este tipo de usuários não têm direitos de nenhuma espécie e nem sequer podem visualizar os conteúdos do seu curso. 
-Visitante registado na plataforma: é o tipo de utilizador registado na plataforma Dokeos que visita o seu curso sem, contudo, nele estar inscrito. 
-Utilizador registado no curso: é a função atribuída por padrão a todos os utilizadores inscritos no seu curso. Normalmente, a maioria dos utilizadores mantém esta função, mas o administrador do curso pode atribuir a alguns deles a função de tutor para ajudarem na tarefa de desenvolver o curso. 
-Professor Assistente: a função de professor assistente tem imensas permissões. Na maior parte das ferramentas, o tutor pode visualizar os conteúdos, editar, alterar, adicionar, mas não pode apagar conteúdos. O tutor também não pode editar nem alterar as configurações globais do curso ou as configurações por defeito dos direitos e funções. 
-Admistrador do curso: o administrador do curso tem todos os direitos sobre o curso e pode fazer tudo. O criador (autor) do curso automaticamente obtém estes direitos e esta função. 
-
-Visão geral dos direitos
-Na plataforma Dokeos existem quatro direitos básicos: 
-
-Ver: direito a visualizar uma ferramenta e todos os seus conteúdos 
-Adicionar: direito a adicionar novos conteúdos numa dada ferramenta; por exemplo, adicionar hiperlinks, categorias, documentos, pastas, publicações dos estudantes, mensagens no fórum, ... 
-Editar: direito a editar (e alterar) conteúdos existentes numa dada ferramenta; por exemplo, editar (alterar) um hiperlink, o nome de um arquivo ou pasta, o título de um documento, ... 
-Apagar: direito a apagar conteúdos existentes numa dada ferramenta; por exemplo, apagar hiperlinks, publicações dos alunos, documentos, mensagens do fórum, ... 
-
-Visão geral dos lugares
-Todos os cursos e todas as ferramentas no interior de cada curso é considerado um lugar separado na plataforma Dokeos. Alguns exemplos de lugares são: 
-
-O curso TESTE_CURSO 
-A ferramenta documentos do curso TESTE_CURSO 
-A ferramenta agenda do curso PSICOLOGIA101 
-
-Configuração das permissões
-Enquanto o administrador do curso pode especificar quem faz o quê em cada local (cf. exemplo acima). Para cada combinação da função e local, os quatro direitos podem ser atribuídos. Assim, por exemplo, pode atribuir o direito de visualização sobre a ferramenta documentos ao tutor; o direito de acrescentar links na ferramenta para os membros inscritos no seu curso, etc. 
-";
 ?>

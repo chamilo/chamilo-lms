@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Darbar&#299;ki";
+$Tools  = "Darbar&#299;ki";
 $langDownloadFile = "Augšupiel&#257;d&#275;t failu";
 $langTooBig = "J&#363;s neatz&#299;m&#275;j&#257;t dokumentu vai ar&#299; tas ir p&#257;r&#257;k liels.";
 $langListDeleted = "Viss saraksts tika izdz&#275;sts";

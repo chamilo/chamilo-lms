@@ -2,37 +2,15 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langAdminBy  = "Administrat per";
-$langAdministrationTools  = "Eines d\'administració";
-$langState  = "Estat";
-$langDevAdmin  = "Administració del desenvolupament";
-$langLinksToClaroProjectSite  = "Enllaç a la web del projecte";
-$langStatistiques  = "Estadístiques";
-$langNbProf  = "Nombre de professors";
-$langNbStudents  = "Nombre de estudiants";
-$langNbLogin  = "Nombre de connexions";
-$langToday    = "Avui";
-$langLast7Days  = "7 dies previs";
-$langLast30Days  = "30 dies previs";
+$AdministrationTools  = "Eines d\'administració";
+$State  = "Estat";
+$Statistiques  = "Estadístiques";
 $langNbAnnoucement  = "Nombre d\'anuncis";
-$langCheckDatabase  = "Comprova base de dades principal";
-$langPleaseCheckConfigForMainDataBaseName  = "Si us plau comprova aquests valors
-<br>
-Nom de la base de dades principal en
-<br>";
-$langBaseFound  = "trobada(es)
-<br>
-Comprovant taules d\'aquesta base";
-$langNeeded  = "necessari";
-$langNotNeeded  = "no necessari";
 $langArchive    = "arxiu";
 $langUsed       = "usat";
 $langPresent   = "D\'acord";
-$langCreateMissingNow  = "Vols crear les taules ara?";
 $langMissing    = "manca";
-$langCheckingCourses  = "Comprovant cursos";
 $langExist      = "existeix";
-$langCreateClaroTables  = "Crea la Taula per la base de dades principal";
-$langTableStructureDontKnow  = "Estructura desconeguda d\'aquesta taula";
 $DisplayTeacherInCourselistTitle = "Mostrar professor/professora en el títol del curs";
 $DisplayTeacherInCourselistComment = "Mostrar professor/a del curs en la llista de comentaris.";
 $DisplayCourseCodeInCourselistComment = "Mostrar el codi del curs en la llista de comentaris";
@@ -41,11 +19,7 @@ $ThereAreNoVirtualCourses = "No hi ha cursos virtuals a la plataforma";
 $ConfigureHomePage = "Configurar pàgina d\'inici";
 $CourseCreateActiveToolsTitle = "activar mòduls damunt la creació en curs";
 $CourseCreateActiveToolsComment = "Quines eines s\'han d\'activar (visible) per defecte quan es crea un curs nou?";
-$AllowUserHeadings = "Permetre encapçalament usuari";
 $langCourseBackup = "Realitzar còpia de seguretat d\'aquest curs";
-$langSecureDocument = "Crea l\'arxiu de seguretat";
-$langProtectedDocument = "Posi un arxiu de .htaccess al guia /document/ evitar accessos desautoritzats";
-$langNotProtectedDocument = "Permeti accedir al guia /document/ sense estar connectat al curs";
 $langCourseCode = "Codi del curs";
 $langCourseTitular = "Professor/a";
 $langCourseTitle = "Títol del curs";
@@ -57,8 +31,6 @@ $langCourseAccess = "Accés al curs";
 $langCourseSubscription = "Subscripció al curs";
 $langPublicAccess = "Accés Públic";
 $langPrivateAccess = "Accés restringit";
-$langFromHomepageWithoutLogin = "De la pàgina inicial de portals fins i tot sense connexió";
-$langSiteReservedToPeopleInMemberList = "Accessible només habitar sobre la Llista d\'Usuaris";
 $langCode = "Codi";
 $langUsers = "Usuaris";
 $langLanguage = "Llenguatge";
@@ -128,7 +100,7 @@ $langAddUsersToACourse = "Afegir usuaris al curs";
 $langAddUsersToAClass = "Afegir ususaris a la classe";
 $langAddUsersToAGroup = "Afegir ususaris al grup";
 $langAtLeastOneClassAndOneCourse = "Has de seleccionar almenys una classe i un curs!";
-$langAtLeastOneUser = " Ha de seleccionar com a mínim un usuari!";
+$AtLeastOneUser = " Ha de seleccionar com a mínim un usuari!";
 $langAtLeastOneUserAndOneCourse = "Has de seleccionar almenys un usuari i un curs!";
 $langClassList = "Llistat de classes";
 $langUserList = "Llistat d\'usuaris";
@@ -376,10 +348,6 @@ $DokeosHomepage  = "Pagina web de Dokeos";
 $DokeosForum  = "Fòrum de Dokeos";
 $RegisterYourPortal  = "Registrar el teu portal";
 $DokeosExtensions  = "Extensions de Dokeos";
-$UserRolesRights = "Papers d\'usuari i drets";
-$ManageRoles = "Gestioni papers";
-$RolesRightsOverview = "Visió de conjunt de tots els papers i drets";
-$SeeAllRightsAllLocationsForSpecificRole = "Vegi tots els drets i localitzacions per a paper específic";
 $SeeAllRolesAllLocationsForSpecificRight = "Vegi tots els papers i localitzacions per|per a específic bé|a la dreta";
 $SeeAllRightsAllRolesForSpecificLocation = "Vegi tots els papers i drets per a localització específica
 ";
@@ -388,7 +356,5 @@ $ClassesSubscribed = "Les classes seleccionades eren subscrites als cursos selec
 $RoleId = "Paper ID";
 $RoleName = "Nom de paper";
 $RoleType = "Tipus";
-$RoleCreatedBy = "Creat per";
-$RoleDescription = "Descripció";
 $RightValueModified = "El valor ha estat modificat";
 ?>

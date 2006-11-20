@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHelp = "Hjelp";
 $langLinks = "Lenker";
 $langLinkName = "Navn på lenke";
 $langLinkAdd = "Legg til en lenke";

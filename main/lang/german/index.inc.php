@@ -30,7 +30,6 @@ $langHelptwo = "Hilfe 2";
 $langRegAll = "alle anmelden";
 $EussMenu = "Menu ??? ";
 $Opinio = "...";
-$menuauth = "...";
 $email = "E-Mail";
 $Intranet = "Intranet";
 $Englin = "...";
@@ -68,5 +67,6 @@ $langProductions = "Produktionen";
 $langSendChatRequest = "Eine Chat Anfrage an diese Person schicken";
 $langRequestDenied = "Die Anfrage wurde abgewiesen";
 $UsageDatacreated = "Daten für Usage wurden erstellt";
+$SessionView = "Kurse anzeigen nach Sessions";
 $CourseView = "Die Gesamtliste aller Kurse anzeigen";
 ?>

@@ -1,17 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langCanNotUnsubscribeYourSelf = "You can\'t unsubscribe yourself from a course that you admin, only another admin of the course can do it.";
-$langUnreg = "Unregister";
-$langAdmR = "Admin. rights";
-$langEnd = "end";
-$langFollow50 = "50 next";
-$langPreced50 = "50 preceed.";
-$langBegin = "begin.";
 $langStudent = "student";
 $langAddAU = "ユーザを加える";
-$langDereg = "has been unregistered from this course";
-$langAndP = "and his password";
 $langAddedU = "has been added. An email has been sent to give him his username";
 $langTheU = "The user";
 $langRegYou = "has registered you on this course";
@@ -20,14 +11,9 @@ $langTaken = "既に使われています。他の名前を選んでください。";
 $langUserNo = "あなたが選んだユーザ名";
 $langFilled = "いくつかの欄が空白です";
 $langInC = "in this course";
-$langIsNow = "is now";
 $langRole = "Role";
-$langModRole = "Modify the role of";
-$langAllAdmin = "has now <b>all admin rights on this site";
-$langNoAdmin = "has now <b>no admin rights on this site";
 $langAll = "all";
 $langNone = "none";
-$langModRight = "Modify admin rights of";
 $langUsers = "ユーザ";
 $langHome = "ホームページに戻る";
 $langProfileReg = "あなたの新プロファイルが保存されました";
@@ -37,9 +23,7 @@ $langFields = "いくつかの欄が空白です。";
 $langAgain = "再度試してください!";
 $langPassTwo = "You have typed two different passwords";
 $langModifProfile = "自分のプロファイルを修正";
-$langCanEnter = "You can now <a href";
 $langIsReg = "ccourses is registered";
-$langYourRegTo = "Your registration to";
 $langPersonalSettings = "個人設定が登録されました。ユーザ名とパスワードの覚えを記載した mailが送付されました。さて、あなたがとりたいコースを選んでください。";
 $langManager = "運用者";
 $langFormula = "Yours sincerely";

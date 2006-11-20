@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Poka&#380; wszystkie";
 $langToolName = "&#346;ledzenie";
-$langTrackingDisabled = "&#346;ledzenie zosta&#322;o wy&#322;&#261;czone przez administratora systemu.";
+$TrackingDisabled = "&#346;ledzenie zosta&#322;o wy&#322;&#261;czone przez administratora systemu.";
 $langShowNone = "Ukryj";
 $langCourseStats = "Statystyka kursu";
 $langToolsAccess = "Dost&#281;p do narz&#281;dzi";

@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Show all";
 $langToolName = "Tracking";
-$langTrackingDisabled = "Tracking has been disabled by system administrator.";
+$TrackingDisabled = "Tracking has been disabled by system administrator.";
 $langShowNone = "Show none";
 $langCourseStats = "Course Stats";
 $langToolsAccess = "Access to tools";
@@ -148,10 +148,8 @@ $MoySession = "Session average";
 $TakenSessions = "Taken sessions";
 $FollowUp = "Follow-up";
 $Trainers = "Trainers";
-$Probationers = "Probationers";
 $Administrators = "Administrators";
 $Tracks = "Tracks";
 $Success = "Success";
 $ExcelFormat = "Excel format";
-$langConnectionTime = "Connection time";
 ?>

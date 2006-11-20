@@ -8,7 +8,6 @@ $lang_title = "ชื่อหน่วย";
 $lang_prerequisites = "ที่ต้องเรียนผ่านมาก่อน";
 $lang_move_up = "เลื่อนขึ้น";
 $lang_move_down = "เลื่อนลง";
-$langAreYouSureToDelete = "คุณแน่ใจที่จะลบ";
 $langThisItem = "รายการนี้";
 $lang_title_and_desc = "ชื่อและคำอธิบาย";
 $lang_add_item = "เพิ่มขั้นตอนการเรียนรู้";

@@ -19,7 +19,6 @@ $langUsername = "Prihlasovacie meno";
 $langSurname = "Priezvisko";
 $langName = "Krstné meno";
 $langRegistration = "Registrácia";
-$lang_lost_password = "Zabudnuté heslo";
 $langLoginRequest = "Prihlásenie požadované";
 $langLastname = "Priezvisko";
 $langFirstname = "Krstné meno";

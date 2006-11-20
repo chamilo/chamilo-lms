@@ -8,7 +8,6 @@ $lang_title = "titel";
 $lang_prerequisites = "Förkunskaper";
 $lang_move_up = "Flytta upp";
 $lang_move_down = "Flytta ner";
-$langAreYouSureToDelete = "Är du säker på att du vill radera";
 $langThisItem = "detta objekt";
 $lang_title_and_desc = "Titel & beskrivning";
 $lang_add_item = "Lägg till ett steg";

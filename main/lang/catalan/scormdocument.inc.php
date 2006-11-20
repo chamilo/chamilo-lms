@@ -4,17 +4,6 @@ for more information: see languages.txt in the lang folder.
 $langChapter = "Capítol";
 $langDocumentList = "Llista del document";
 $langOrganisationList = "Liista de l\'organització";
-$langCreationSucces = "Taula de continguts creada amb èxit";
-$langCanViewOrganisation = "Pot veure la seva organització";
-$langHere = "Aquí";
-$langViewDocument = "Veure document";
-$langHtmlTitle = "Títol HTML";
-$langAddToTOC = "Afegir a continguts";
-$langAddChapter = "Afegir al capítol";
-$langReady = "Preparat";
-$langStoreDocuments = "Emmagatzemar documents";
-$langTocDown = "Abaix";
-$langTocUp = "Adalt";
 $langEditTOC = "Editar taula de continguts";
 $langDocuments = "Documents";
 $langEditDocument = "Editar documents";
@@ -25,11 +14,9 @@ $langScormcontentstudent = "Això és un curs de format Scorm. Si li agradaria jug
 $langScormcontent = "Aquest és un Scorm content<br><input type=button name=scormbutton value=\'Launch it ! onclick=\'openscorm()\'> ";
 $langDownloadAndZipEnd = "Arxiu de cremalleres carregat i incondensat
 ";
-$langAreYouSureToDelete = "Segur que vols borrar?";
 $langZipNoPhp = "L\'arxiu de cremalleres no pot contenir arxius de .PHP
 ";
 $langGroupForumLink = "Grup del fòrum";
-$langGroupSpaceLink = "Àrea del grup";
 $langGroupManagement = "Gestió del grup";
 $langGroupSpace = "Àrea del grup";
 $langNotScormContent = "Això no és un arxiu de CREMALLERA de scorm!";

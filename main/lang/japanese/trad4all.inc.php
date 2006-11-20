@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langDescription = "&#35500;&#26126;";
+$Description = "&#35500;&#26126;";
 $langComment = "コメント";
 $langVisible = "見えるようにする/見えないようにする";
 $langUp = "Up";

@@ -21,9 +21,7 @@ $langAdminSurname = "Имя администратора";
 $langAdminLogin = "Имя пользователя администратора";
 $langAdminPass = "Пароль администратора";
 $langEducationManager = "Ответственный за содержание";
-$langHelpDeskPhone = "номер телефона технической поддержки";
 $langCampusName = "Название кампуса";
-$langInstituteName = "URL учреждения";
 $langDBSettingIntro = "
 				Install script will create claroline main DB. Please note that Claroline
 				will need to create many DBs. If you are allowed only one

@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Lägg till agenda objekt";
 $ShowAll = "Visa alla agenda objekt";
 $ShowCurrent = "Visa agenda objekt i aktuell månad";
-$AgendaSortChronologicallyUp = "Äldsta objekt först";
-$AgendaSortChronologicallyDown = "Nyaste objekt först";
 $AddCalendarItem = "Lägg till agenda objekt";
 $Day = "Dag";
 $Month = "Månad";
@@ -14,7 +12,6 @@ $Hour = "Timme";
 $Minutes = "Minuter";
 $Title = "Titel";
 $Detail = "Detalj";
-$Lasting = "Lasting";
 $EditSuccess = "Agenda objektet har blivit ändrat";
 $AddSuccess = "Agenda item added";
 $AgendaDeleteSuccess = "Agenda objektet är raderat";

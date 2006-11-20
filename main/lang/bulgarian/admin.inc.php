@@ -2,37 +2,15 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langAdminBy  = "Администриран от ";
-$langAdministrationTools  = "Инструменти за администрация";
-$langState  = "Състояние";
-$langDevAdmin  = "Администриране на разработването";
-$langLinksToClaroProjectSite  = "Връзки към интернет страницата на проекта";
-$langStatistiques  = "Статистика";
-$langNbProf  = "Брой на преподавателите";
-$langNbStudents  = "Брой на студентите";
-$langNbLogin  = "Брой на login";
-$langToday    = "Днес";
-$langLast7Days  = "През последните 7 дни";
-$langLast30Days  = "Последните 30 дни";
+$AdministrationTools  = "Инструменти за администрация";
+$State  = "Състояние";
+$Statistiques  = "Статистика";
 $langNbAnnoucement  = "Броя на съобщенията";
-$langCheckDatabase  = "Провери главната база данни";
-$langPleaseCheckConfigForMainDataBaseName  = "Моля провери тези стойности
-<br>
-Главната база данни в  
-<br>";
-$langBaseFound  = "Открит
-<br>
-Проверява таблиците на базата данни";
-$langNeeded  = "нужни";
-$langNotNeeded  = "ненужни";
 $langArchive    = "архив";
 $langUsed       = "използван";
 $langPresent   = "ОК";
-$langCreateMissingNow  = "Желаете ли сега да създадете таблици  ?";
 $langMissing    = "липсващи";
-$langCheckingCourses  = "Проверяване на курсовете";
 $langExist      = "съществуващи";
-$langCreateClaroTables  = "Създах таблица в главната база данни";
-$langTableStructureDontKnow  = "Структурата на тази таблица непозната";
 $DisplayTeacherInCourselistTitle = "Покажи преподавателя в заглавието на курса";
 $DisplayTeacherInCourselistComment = "Покажи преподавателя в коментарите към листинг-а на курса";
 $DisplayCourseCodeInCourselistComment = "Display Course Code in course list comment";
@@ -41,11 +19,7 @@ $ThereAreNoVirtualCourses = "Липсват виртуални курсове на платформата";
 $ConfigureHomePage = "Конфигуриране на главната страница";
 $CourseCreateActiveToolsTitle = "Активни модули при създаването на курс";
 $CourseCreateActiveToolsComment = "Кои инструменти трябва да са активни (видими) по подразбиране при създаване на нов курс?";
-$AllowUserHeadings = "Разреши заглавки от потребителя";
 $langCourseBackup = "Създай архив на този курс";
-$langSecureDocument = "Осигури директорията на документа";
-$langProtectedDocument = "put a .htaccess file into the directory /document/ to avoid unauthorised accesses";
-$langNotProtectedDocument = "разреши достъп до директория /документ/ без да е свързан с курса";
 $langCourseCode = " Код на курса";
 $langCourseTitular = "Преподавател";
 $langCourseTitle = "Наименование на курса";
@@ -57,8 +31,6 @@ $langCourseAccess = "Достъп до курса";
 $langCourseSubscription = "Записване за курса";
 $langPublicAccess = "Публичен достъп";
 $langPrivateAccess = "Ограничен достъп";
-$langFromHomepageWithoutLogin = "from portal homepage even without login";
-$langSiteReservedToPeopleInMemberList = "достъпен само за лица от Списъка с потребители";
 $langCode = "Код";
 $langUsers = "Потребители";
 $langLanguage = "Език";
@@ -125,7 +97,7 @@ $langAddUsersToACourse = "Добавяне на потребител към курс";
 $langAddUsersToAClass = "Добавяне на потребител към класа";
 $langAddUsersToAGroup = "Добавяне на потребител към групата";
 $langAtLeastOneClassAndOneCourse = "You must select at least one class and one course !";
-$langAtLeastOneUser = "You must select at least one user !";
+$AtLeastOneUser = "You must select at least one user !";
 $langAtLeastOneUserAndOneCourse = "You must select at least one user and one course !";
 $langClassList = "Списък с класове";
 $langUserList = "Списък на потребителите";

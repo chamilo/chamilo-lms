@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Espandi tutti";
 $langToolName = "Statistiche";
-$langTrackingDisabled = "Il tracciamento è stato disabilitato dall\'Amministratore";
+$TrackingDisabled = "Il tracciamento è stato disabilitato dall\'Amministratore";
 $langShowNone = "Chiudi tutti";
 $langCourseStats = "Statistiche del corso";
 $langToolsAccess = "Accessi agli strumenti";
@@ -140,4 +140,16 @@ $Visited = "Visitato";
 $Name = "Nome";
 $FirstAccess = "Primo accesso";
 $LastAccess = "Ultimo accesso";
+$MoyenneTest = "Media dei test";
+$exportExcel = "Esporta in formato .csv";
+$MoyCourse = "Media del corso";
+$MoyenneExamen = "Media dell\'esame";
+$MoySession = "Media della sessione";
+$TakenSessions = "Sessioni seguite";
+$FollowUp = "Controllo";
+$Trainers = "Formatori";
+$Administrators = "Amministratori";
+$Tracks = "Sequenza";
+$Success = "Successo";
+$ExcelFormat = "Formato .csv";
 ?>

@@ -11,7 +11,6 @@ $langTool = "Linki Metadanych";
 $langSorry = "Najpierw wybierz kurs";
 $langDenied = "Ta funkcja jest udost&#281;pniona tylko administratorom kursu";
 $langNoScript = "Skrypt nie jest uruchomiony w Twojej przegl&#261;darce, prosz&#281; zignorowa&#263; cz&#281;&#347;&#263; ekranu poni&#380;ej tego tekstu, to nie zadzia&#322;a ...";
-$langPressAgain = "Naci&#347;nij \'Zachowaj\' ponownie ...";
 $langLanguage = "J&#281;zyk";
 $langLanguageTip = "j&#281;zyk, w którym ten obiekt do nauki zosta&#322; stworzony";
 $langIdentifier = "Identyfikator";

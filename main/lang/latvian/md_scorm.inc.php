@@ -37,6 +37,4 @@ $langMffNotOk = "Saraksta faila aizst&#257;šana nebija veiksm&#299;ga";
 $langMffOk = "Saraksta fails tika aizst&#257;ts";
 $langMffFileNotFound = "Jaunais saraksta fails nebija atverams (t.i., tukšs, p&#257;r&#257;k liels)";
 $langUploadMff = "Aizst&#257;t saraksta failu";
-$langImported = "import&#275;t";
-$langImpossible = "Neiesp&#275;jami";
 ?>

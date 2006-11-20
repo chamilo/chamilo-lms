@@ -20,9 +20,7 @@ $langAdminSurname = "Cognome dell\'amminstratore";
 $langAdminLogin = "login dell\'Amministratore";
 $langAdminPass = "password dell\'Amministratore (<font color=\"red\">puoi cambiarla</font>)";
 $langEducationManager = "Responsabile didattico";
-$langHelpDeskPhone = "Telefono dell\'Helpdesk ";
 $langCampusName = "Il nome del vostro campus";
-$langInstituteName = "URL dell\'organizzazione";
 $langDBSettingIntro = "
 				Lo script d\'installazione creerà il database principale. 
 				In seguito il sistema avrà la necessità di creare un database per ogni corso.
@@ -85,4 +83,6 @@ $DokeosLicenseInfo = "Dokeos è un software libero distribuito con licenza GPL (G
 $IAccept = "Accetto";
 $ConfigSettingsInfo = "I valori indicati di seguito verranno scritti nel vostro file di configurazione <b>main/inc/conf/claro_main.conf.php</b>:";
 $InstallDokeos = "Installa Dokeos";
+$GoToYourNewlyCreatedPortal = "Vai direttamente al portale appena creato";
+$FirstUseTip = "Se entri per la prima volta nel campus, la prima cosa da fare è quella di \"Creare un corso\" e seguire le indicazioni.";
 ?>

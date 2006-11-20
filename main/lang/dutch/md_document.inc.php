@@ -53,7 +53,6 @@ $langConfirmDelete = "Wil u *echt* alle metadata verwijderen?";
 $langCourseKwds = "Dit document bevat de sleutelwoorden van de cursus";
 $langSearch = "Zoek";
 $langSearchCrit = "Eén woord per regel!";
-$langLangs = ":";
 $langDescription = "Beschrijving";
 $langTitle = "Titel";
 $langStatuses = ":draft:kladversie,, 
@@ -77,7 +76,6 @@ application/vnd.ms-powerpoint:MsPowerpoint,,
 application/xml;iso-8859-1:XML;iso-8859-1,, 
 application/xml;utf-8:XML;utf-8,, 
 application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:oefening,, 
      simulation:simulatie,, 
      questionnaire:enquête,, 

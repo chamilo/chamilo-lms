@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $UsersOnline = "Online korisnici";
-$langDescription = "Opis";
+$Description = "Opis";
 $langComment = "Komentar";
 $langVisible = "Vidljiv/Nevidljiv";
 $langGroup = "Grupa";
@@ -259,14 +259,6 @@ $FormHasErrorsPleaseComplete = "Formular sadrži neta&#269;ne i nepotpune podatke
 $StartDateShouldBeBeforeEndDate = "Datum po&#269;etka treba da bude pre datuma kraja.";
 $InvalidDate = "Pogrešan datum";
 $OnlyLettersAndNumbersAllowed = "Dozvoljena je upotreba samo brojeva i slova.";
-$AnonymousVisitorRole = "Anonimni gost";
-$StudentRole = "Polaznik";
-$TeacherRole = "Predava&#269;";
-$PlatformAdminRole = "Administratorska platforma";
-$AnonymousGuestCourseMemberRole = "Anonimni gost kursa";
-$RegisteredGuestCourseMemberRole = "Registrovani gost kursa";
-$NormalCourseMemberRole = "Polaznik kursa";
-$TeachingAssistantRole = "Asistent";
 $CourseAdminRole = "Administrator kursa";
 $UserRole = "Uloga";
 $ViewRight = "Pogled";
@@ -275,15 +267,8 @@ $DeleteRight = "Brisanje";
 $OverviewCourseRights = "Pregled ulog i privilegija";
 $SeeAllRightsAllLocationsForSpecificRole = "Uloge";
 $SeeAllRolesAllLocationsForSpecificRight = "Privilegije";
-$SeeAllRightsAllRolesForSpecificLocation = "Lokacije";
 $RightValueModified = "Vrednost je modifikovana";
 $course_rights = "Pregled uloga i privilegija";
-$ViewAsRole = "Pogledaj kao";
-$AnonymousGuestCourseMemberRoleDescription = "Nepoznati gost, neprijavljen, koji sam pretrazuje platformu";
-$RegisteredGuestCourseMemberRoleDescription = "Registrovani korisnik, koji posecuje kurs na koji nije upisan";
-$NormalCourseMemberRoleDescription = "Registrovani korisnik (student, trener) koji je upisan na kurs";
-$TeachingAssistantRoleDescription = "Asistent administratora kursa";
 $CourseAdminRoleDescription = "Administrator kursa";
-$BackToOverviewOfRoles = "Nazad na pregled uloga";
 $languser = "Korisnici";
 ?>

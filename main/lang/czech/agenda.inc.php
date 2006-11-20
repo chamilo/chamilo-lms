@@ -1,4 +1,57 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$AgendaAdd = "P&#345;idat novou polo&#382;ku do agendy";
+$ShowAll = "Zobraz v&#353;echny polo&#382;ky agendy";
+$ShowCurrent = "Zobraz polo&#382;ky agendy pro tento m&#283;síc";
+$AddCalendarItem = "P&#345;idej novou polo&#382;ku do agendy";
+$Day = "Den";
+$Month = "M&#283;síc";
+$Year = "Rok";
+$Hour = "Hodina
+";
+$Minutes = "Minuta";
+$Title = "Název";
+$Detail = "Detail";
+$EditSuccess = "Polo&#382;ka agendy byla zm&#283;n&#283;na";
+$AddSuccess = "P&#345;edm&#283;t agendy p&#345;idán";
+$AgendaDeleteSuccess = "Polo&#382;ka agendy byla smazána";
+$NoAgendaItems = "Zde nejsou &#382;ádné polo&#382;ky agendy";
+$lang_september = "Zá&#345;í";
+$langClassName = "Jméno t&#345;ídy";
+$lang_agenda = "Agenda";
+$ModifyCalendarItem = "Zm&#283;nit polo&#382;ku agendy";
+$ItemTitle = "Název polo&#382;ky";
+$langDay = "den";
+$month_default = "výchozí m&#283;síc";
+$langYear = "Rok";
+$year_default = "výchozí rok";
+$langHour = "Hodina";
+$hour_default = "výchozí hodina";
+$langMinute = "minuta";
+$langLasting = "trvalý";
+$langOldToNew = "starý novému";
+$langNewToOld = "nový starému";
+$langNow = "nyní";
+$langAddEvent = "P&#345;idej událost";
+$langDetail = "detail";
+$MonthView = "M&#283;sí&#269;ní pohled";
+$WeekView = "Týdenní pohled";
+$DayView = "Denní pohled";
+$AddPersonalItem = "P&#345;idej soukromou polo&#382;ku";
+$Week = "Týden";
+$Date = "Datum";
+$Time = "&#268;as";
+$Title = "Název";
+$AddPersonalCalendarItem = "P&#345;idej soukromou polo&#382;ku agendy";
+$ModifyPersonalCalendarItem = "Uprav soukromou polo&#382;ku agendy";
+$PeronalAgendaItemAdded = "Tvoje soukromá polo&#382;ka byla p&#345;idána do agendy";
+$PeronalAgendaItemEdited = "Tvoje soukromá polo&#382;ka agendy byla zm&#283;n&#283;na";
+$PeronalAgendaItemDeleted = "Tvoje soukromá polo&#382;ka agendy byla smazána";
+$ViewPersonalItem = "Zobraz soukromé polo&#382;ky";
+$UserGroupFilter = "Filtr na skupiny/u&#382;ivatele";
+$HourMinuteDivider = "h";
+$VisibilityChanged = "Viditelnost zm&#283;n&#283;na";
+$ShowAll = "Zobraz v&#353;e";
+$Print = "Tisk";
 ?>

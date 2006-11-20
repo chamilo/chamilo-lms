@@ -43,13 +43,11 @@ $langConfirmDelete = "Želite li *doista* izbrisati sve definicijske podatke?";
 $langCourseKwds = "Dokument sadrži klju&#269;ne rije&#269;i kolegija";
 $langSearch = "Traži";
 $langSearchCrit = "Jedna rije&#269; po retku!";
-$langLangs = ":";
 $langDescription = "Opis";
 $langTitle = "Naslov";
 $langStatuses = ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
 $langCosts = ":ne:besplatno, ne pla&#263;a se,, da:nije besplatno, pla&#263;a se";
 $langCopyrights = ":da:autorska prava,, ne:nema autorskih prava";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:vježba,, simulation:simulacija,, questionnaire:upitnik,, diagram:dijagram,, figure:slika,, graph:graf,, index:indeks,, slide:projekcijska slika,, table:tablica,, narrative text:pripovjedni tekst,, exam:ispit,, experiment:eksperiment,, problem statement:problemska izjava,, self assessment:samoocjenjivanje,, lecture:predavanje";
 ?>

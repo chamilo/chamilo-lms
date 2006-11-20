@@ -30,7 +30,6 @@ $langHelptwo = "Aiuto";
 $langRegAll = "Iscrivi";
 $EussMenu = "Menù";
 $Opinio = "Opinione";
-$menuauth = "Autenticazione menù";
 $email = "e-mail";
 $Intranet = "Intranet";
 $Englin = "Inglese";

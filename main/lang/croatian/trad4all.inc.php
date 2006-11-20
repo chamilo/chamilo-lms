@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $UsersOnline = "Aktivnih korisnika";
-$langDescription = "Opis";
+$Description = "Opis";
 $langComment = "Opaska";
 $langVisible = "Vidljivo/nevidljivo";
 $langGroup = "Skupina";

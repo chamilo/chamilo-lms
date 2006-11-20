@@ -11,7 +11,6 @@ $langTool = "Ligações Metadados";
 $langSorry = "Primeiro seleccione um curso";
 $langDenied = "Esta função só está disponível para o administrador";
 $langNoScript = "Script não está habilitado no seu browser; por favor, ignore o texto da parte de baixo deste écrã. Não funcionará ...";
-$langPressAgain = "Clique novamente em Arquivar";
 $langLanguage = "Língua";
 $langLanguageTip = "a língua em que este objecto de aprendizagem foi feito";
 $langIdentifier = "Identificador";
@@ -50,5 +49,4 @@ $langWarningDups = "- nomes de categorias duplicadas foram removidas da lista!";
 $langSLC = "Work with Links category named";
 $langTitle = "Título";
 $langDescription = "Descrição";
-$langLangs = ":ca:ca,, da:da,, de:de,, en:en,, es:es,, fi:fi,, fr:fr,, gl:gl,, hr:hr,, hu:hu,, id:id,, it:it,, nl:nl,, pl:pl,, pt:pt,, ro:ro,, sl:sl,, sv:sv,, tr:tr,, xx:xx";
 ?>

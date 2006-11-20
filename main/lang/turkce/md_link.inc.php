@@ -11,7 +11,6 @@ $langTool = "Ba&#287;lant&#305;lar Metadata";
 $langSorry = "Lütfen önce bir ders seçin";
 $langDenied = "Bu i&#351;lev sadece ders yetkilileri için geçerlidir.";
 $langNoScript = "Taray&#305;c&#305;n&#305;z yaz&#305;l&#305;m&#305; desteklemiyor, lütfen bu yaz&#305;n&#305;n alt&#305;ndaki ekran bölümünü önemsemeyin, çal&#305;&#351;mayacak.";
-$langPressAgain = "\'Kaydet\' komutuna tekrar bas&#305;n..";
 $langLanguage = "Lisan";
 $langLanguageTip = "bu kursun olu&#351;turuldu&#287;u lisan";
 $langIdentifier = "Tan&#305;mlay&#305;c&#305; (ID)";
@@ -50,5 +49,4 @@ $langWarningDups = "- tekrarlanan kategori isimleri listeden silindi!";
 $langSLC = "Work with Links category named";
 $langTitle = "Ba&#351;l&#305;k";
 $langDescription = "Aç&#305;klama, Tan&#305;mlama";
-$langLangs = ":  tr:tr,, en:en,, xx:xx ";
 ?>

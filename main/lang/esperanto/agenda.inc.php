@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Aldoni Novan Agenderon";
 $ShowAll = "Montri &#265;iujn agenderojn ";
 $ShowCurrent = "Montri agenderojn &#265;i-monatajn";
-$AgendaSortChronologicallyUp = "Unue la plej malnovajn erojn ";
-$AgendaSortChronologicallyDown = "Plej novajn erojn unue";
 $AddCalendarItem = "Aldoni novan agenderon ";
 $Day = "Tago ";
 $Month = "Monato ";
@@ -14,7 +12,6 @@ $Hour = "Horo ";
 $Minutes = "Minutoj ";
 $Title = "Titolo ";
 $Detail = "Detalo ";
-$Lasting = "Da&#365;ro ";
 $EditSuccess = "La agendero &#349;an&#285;i&#285;is ";
 $AddSuccess = "Agendero aldoni&#285;is ";
 $AgendaDeleteSuccess = "Agendero forigita ";

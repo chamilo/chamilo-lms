@@ -7,7 +7,6 @@ $langActivate = "Omogu&#263;i";
 $langDeactivate = "Onemogu&#263;i";
 $langNoEx = "Trenutno nema vježbi";
 $langNewEx = "Nova vježba";
-$langNewQu = "Novo pitanje";
 $langQuestion = "Pitanje";
 $langQuestions = "Pitanja";
 $langAnswers = "Odgovori";

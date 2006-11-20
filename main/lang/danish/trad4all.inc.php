@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $UsersOnline = "Brugere online";
-$langDescription = "Beskrivelse";
+$Description = "Beskrivelse";
 $langComment = "Kommentar";
 $langVisible = "Synlig/usynlig";
 $langGroup = "Gruppe";

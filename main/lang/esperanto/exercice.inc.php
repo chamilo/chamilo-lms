@@ -7,7 +7,6 @@ $langActivate = "Aktivigi ";
 $langDeactivate = "Mal&#349;alti ";
 $langNoEx = "&#264;i-momente ne estas ekzerco ";
 $langNewEx = "Nova ekzerco ";
-$langNewQu = "Nova demando ";
 $langQuestion = "Demando ";
 $langQuestions = "Demandoj";
 $langAnswers = "Respondoj";

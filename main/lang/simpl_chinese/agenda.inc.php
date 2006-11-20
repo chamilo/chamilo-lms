@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "添加新日程";
 $ShowAll = "显示所有日程";
 $ShowCurrent = "显示本月日程";
-$AgendaSortChronologicallyUp = "旧项排前";
-$AgendaSortChronologicallyDown = "新项排前";
 $AddCalendarItem = "添加新日程";
 $Day = "日";
 $Month = "月";
@@ -14,7 +12,6 @@ $Hour = "时";
 $Minutes = "分";
 $Title = "标题";
 $Detail = "详细内容";
-$Lasting = "持续时间";
 $EditSuccess = "日程已被编辑";
 $AddSuccess = "已加入新日程";
 $AgendaDeleteSuccess = "日程已被删除";

@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Mostrar tot";
 $langToolName = "Seguiment";
-$langTrackingDisabled = "Seguir ha estat impossibilitat per administrador de sistema";
+$TrackingDisabled = "Seguir ha estat impossibilitat per administrador de sistema";
 $langShowNone = "No mostrar";
 $langCourseStats = "Estadístiques del curs";
 $langToolsAccess = "Accés a les eines";

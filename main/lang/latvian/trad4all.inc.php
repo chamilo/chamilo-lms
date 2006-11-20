@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $UsersOnline = "Lietot&#257;ji tiešsaist&#275;";
-$langDescription = "Apraksts";
+$Description = "Apraksts";
 $langComment = "Koment&#257;rs";
 $langVisible = "Redzams/neredzams";
 $langGroup = "Grupa";
@@ -257,26 +257,12 @@ $FormHasErrorsPleaseComplete = "Formas lauci&#326;os nor&#257;d&#299;ti nekorekt
 $StartDateShouldBeBeforeEndDate = "S&#257;kuma datumam vajadz&#275;tu b&#363;t nor&#257;d&#299;tam agr&#257;k par beigu datumu";
 $InvalidDate = "Nekorekts datums";
 $OnlyLettersAndNumbersAllowed = "Ir at&#316;auti tikai burti un cipari";
-$AnonymousVisitorRole = "Anon&#299;ms viesis";
-$StudentRole = "Students";
-$TeacherRole = "Doc&#275;t&#257;js";
-$PlatformAdminRole = "Sist&#275;mas administrators";
-$AnonymousGuestCourseMemberRole = "Anon&#299;ms viesis";
-$RegisteredGuestCourseMemberRole = "Re&#291;istr&#275;ts viesis";
-$NormalCourseMemberRole = "Vienk&#257;rši kursa dal&#299;bnieks";
-$TeachingAssistantRole = "Doc&#275;t&#257;ja asistents";
 $CourseAdminRole = "Kursa administrators";
 $ViewRight = "Skat&#299;t";
 $EditRight = "Main&#299;t";
 $DeleteRight = "Dz&#275;st";
 $RightValueModified = "V&#275;rt&#299;ba tika izmain&#299;ta.";
-$ViewAsRole = "Skat&#299;t k&#257;";
-$AnonymousGuestCourseMemberRoleDescription = "Anon&#299;ms viesis, kas nav autoriz&#275;jies, kas tikai p&#257;rl&#363;ko sist&#275;mas saturu";
-$RegisteredGuestCourseMemberRoleDescription = "Sist&#275;m&#257; re&#291;istr&#275;ts lietot&#257;js, kas apmekl&#275; kursu, kur&#257; nav re&#291;istr&#275;ts";
-$NormalCourseMemberRoleDescription = "Re&#291;istr&#275;ts lietot&#257;js (students, audz&#275;knis), kas ir re&#291;istr&#275;ts kurs&#257;";
-$TeachingAssistantRoleDescription = "Kursa administratora asistents";
 $CourseAdminRoleDescription = "Kursa administrators";
-$BackToOverviewOfRoles = "Atgriezties pie lomu p&#257;rskata";
 $languser = "Lietot&#257;ji";
 $NoSearchResults = "Mekl&#275;šana neatgrieza nebija rezultat&#299;va";
 ?>

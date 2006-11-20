@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Setarile cursului";
+$ModifInfo = "Setarile cursului";
 $langModifDone = "Informatia a fost modificata";
 $langHome = "Inapoi la Pagina Principala";
 $langCode = "Codul cursului";
@@ -18,7 +18,7 @@ $langConfTip = "Cursul tau este pubilic. Dar poti alege nivelul de confidentiali
 $langOpenToTheWorld = "Deschis - accesul permis pentru toata lumea";
 $langOpenToThePlatform = "Deschis - accesul permis doar utilizatorilor inregistrati pe aceasta platforma";
 $langTipLang  = "Aceasta limba va fi valabila pentru orice vizitator al cursurilor de pe site.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Linkuri";
 $langDocument = "Documente";
 $langVid = "Video";

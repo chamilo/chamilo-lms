@@ -11,7 +11,6 @@ $langTool = "Hipersaišu META dati";
 $langSorry = "Izv&#275;lieties vispirms kursu!";
 $langDenied = "Š&#299; funkcija ir pieejama tikai kursu administratoriem";
 $langNoScript = "J&#363;su p&#257;rl&#363;kprogramm&#257; nav iesl&#275;gti skripti, l&#363;dzu, ignor&#275;jiet ekr&#257;na da&#316;u zem š&#299; teksta, jo taj&#257; nekas nedarbosies...";
-$langPressAgain = "Nospiediet \"Saglab&#257;t\" v&#275;lreiz...";
 $langLanguage = "Valoda";
 $langLanguageTip = "valoda, kur&#257; šis m&#257;c&#299;bu priekšmets tika izveidots";
 $langIdentifier = "Identifikators";
@@ -50,5 +49,4 @@ $langWarningDups = "- dubl&#275;jošies kategoriju nosaukumi tika dz&#275;sti no 
 $langSLC = "Str&#257;d&#257;t ar Hipersaišu kategoriju, kas nosaukta";
 $langTitle = "Nosaukums";
 $langDescription = "Apraksts";
-$langLangs = ":";
 ?>

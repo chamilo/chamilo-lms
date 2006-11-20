@@ -7,7 +7,6 @@ $langActivate = "Enable";
 $langDeactivate = "Disable";
 $langNoEx = "There is no test for the moment";
 $langNewEx = "New test";
-$langNewQu = "Create a question";
 $langQuestion = "Question";
 $langQuestions = "Questions";
 $langAnswers = "Answers";

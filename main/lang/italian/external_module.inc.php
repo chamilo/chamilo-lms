@@ -25,4 +25,8 @@ $langNoLinkName = "Inserire il nome del collegamento!";
 $langEditLink = "Modifica il collegamento sulla pagina iniziale";
 $langChangePress = "Modifica e premi \"conferma\"";
 $langLinkChanged = "Il collegamento sulla pagina iniziale è stato modificato. Usa il menu di sopra per ritornare alla pagina iniziale.";
+$NoLinkName = "Nome del collegamento non fornito";
+$NoLinkURL = "URL del collegamento non fornita";
+$LinkChanged = "Collegamento modificato";
+$OkSentLink = "Il collegamento è stato inviato";
 ?>

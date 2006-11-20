@@ -8,7 +8,6 @@ $lang_title = "заглавие";
 $lang_prerequisites = "Изисквания";
 $lang_move_up = "Преместване нагоре";
 $lang_move_down = "Преместване надолу";
-$langAreYouSureToDelete = " Сигурни ли сте, че искате да изтриете";
 $langThisItem = "тази позиция";
 $lang_title_and_desc = "Име и описание";
 $lang_add_item = "Добавяне на стъпка";

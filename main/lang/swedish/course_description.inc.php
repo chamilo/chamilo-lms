@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $langCourseProgram  = "Kursbeskrivning";
 $langThisCourseDescriptionIsEmpty  = "Denna kurs är inte beskriven för närvande";
 $langEditCourseProgram  = "Skapa och redigera med formulär";
-$langQuestionPlan  = "Frågor till läraren";
+$QuestionPlan  = "Frågor till läraren";
 $langInfo2Say  = "Information att ge till eleverna";
 $langOuAutreTitre  = "Titel";
 $langNewBloc  = "Andra";

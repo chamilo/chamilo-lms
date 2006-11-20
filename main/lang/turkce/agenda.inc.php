@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Yeni bir etkinlik ekle";
 $ShowAll = "Etkinliklerin hepsini göster";
 $ShowCurrent = "Geçerli ay&#305;n etkinliklerini göster";
-$AgendaSortChronologicallyUp = "Eskiden yeniye";
-$AgendaSortChronologicallyDown = "Yeniden eskiye";
 $AddCalendarItem = "Yeni bir etkinlik ekle";
 $Day = "Gün";
 $Month = "Ay";
@@ -14,7 +12,6 @@ $Hour = "Saat";
 $Minutes = "Dakika";
 $Title = "Ba&#351;l&#305;k";
 $Detail = "Detay";
-$Lasting = "Süre";
 $EditSuccess = "Etkinlik düzenlendi";
 $AddSuccess = "Etkinlik eklendi";
 $AgendaDeleteSuccess = "Etkinlik silindi";

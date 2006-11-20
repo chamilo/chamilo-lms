@@ -2,32 +2,15 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langAdminBy  = "Ditadbir oleh ";
-$langAdministrationTools  = "Alat Bantu Pentadbiran";
-$langState  = "Status Sistem";
-$langDevAdmin  = "Pentadbiran Pembangunan";
-$langLinksToClaroProjectSite  = "Pautan ke Web Claroline";
-$langStatistiques  = "Statistik";
-$langNbProf  = "Bilangan Staf Akademik";
-$langNbStudents  = "Bilangan Pelajar";
-$langNbLogin  = "Bilangan Pengguna Login";
-$langToday    = "Hari ini";
-$langLast7Days  = "7 hari lalu";
-$langLast30Days  = "30 hari lalu";
+$AdministrationTools  = "Alat Bantu Pentadbiran";
+$State  = "Status Sistem";
+$Statistiques  = "Statistik";
 $langNbAnnoucement  = "Bilangan Pengumuman";
-$langCheckDatabase  = "Periksa Pangkalan Data Utama";
-$langPleaseCheckConfigForMainDataBaseName  = "Please check these values<br>Main database name in <br>";
-$langBaseFound  = "Found<br>Checking tables of this base";
-$langNeeded  = "needed";
-$langNotNeeded  = "not needed";
 $langArchive    = "archive";
 $langUsed       = "used";
 $langPresent   = "Ok";
-$langCreateMissingNow  = "Do you want to create tables now ?";
 $langMissing    = "missing";
-$langCheckingCourses  = "Checking courses";
 $langExist      = "exists";
-$langCreateClaroTables  = "Create Table for main Database";
-$langTableStructureDontKnow  = "Structure of this table unknown";
 $langLanguage = "Bahasa";
 $langAddAdminInApache  = "Tambah Pentadbir Sistem";
 $langAddFaculties  = "Tambah Pusat Pengajian";

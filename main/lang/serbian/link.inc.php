@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHelp = "Pomo&#263;";
 $langLinks = "Linkovi";
 $langLinkName = "Ime linka";
 $langLinkAdd = "Dodaj link";
@@ -22,7 +21,6 @@ $langCategoryDel = "Obriši kategoriju";
 $langCategoryDeleted = "Kategorija i svi njeni linkovi su obrisani. ";
 $langCategoryDelconfirm = "Kada brišete kategoriju svi linkovi katerije se tako&#273;e brišu. Da li zaista želite da obrišete kategoriju i sve njene linkove?";
 $langAllCategoryDel = "Obriši sve kategorije i sve linkove";
-$langAllCategoryDeleted = "Sve kategorije i linkovi su obrisani";
 $langGiveURL = "Molim Vas, dajte linku URL";
 $langGiveCategoryName = "Molim Vas, dajte kategoriji ime";
 $langNoCategory = "Nema kategorije";

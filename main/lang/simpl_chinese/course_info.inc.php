@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "课程设置";
+$ModifInfo = "课程设置";
 $langModifDone = "课程信息已更新";
 $langHome = "返回课程主页";
 $langCode = "课程代码";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "开放 －允许任何人访问";
 $OpenToThePlatform = "开放 －允许注册用户访问";
 $langOpenToThePlatform = "开放 －允许注册用户访问";
 $langTipLang  = "此语言将成为您课程网站的正式语言. ";
-$langAgenda = "我的日程";
+$Agenda = "我的日程";
 $langLink = "链接";
 $langDocument = "文档";
 $langVid = "视频";
@@ -88,6 +88,5 @@ $langNotAllowedToUnsubscribe = "不允许用户从这门课程注销";
 $langDescription = "简介";
 $langCourseVisibilityClosed = "完全关闭; 课程仅对课程管理员开放访问.";
 $CourseVisibilityClosed = "关闭 －仅允许管理员和助教访问这门课程";
-$NotAllowedToModifyOwnRole = "不允许您更改自身角色.";
 $CourseVisibilityModified = "修改 (角色 - 权限系统有更多详细设定)";
 ?>

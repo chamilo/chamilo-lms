@@ -45,13 +45,11 @@ $langConfirmDelete = "Sei *sicuro* di voler eliminare TUTTI i metadati?";
 $langCourseKwds = "Questo documento contiene le parole chiave del corso";
 $langSearch = "Cerca";
 $langSearchCrit = "Una parola per linea!";
-$langLangs = ":";
 $langDescription = "Descrizione";
 $langTitle = "Titolo";
 $langStatuses = ":draft:bozza,, final:finale,, revised:revisione,, unavailable:non disponibile";
 $langCosts = ":no:libero, gratuito,, yes:non libero, a pagamento";
 $langCopyrights = ":yes:copyright,, no:senza copyright";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, audio/basic:audio/basic,, audio/midi:audio/midi,, audio/mpeg:audio/mpeg,, audio/x-wav:audio/x-wav,, image/gif:image/gif,, image/jpeg:image/jpeg,, image/png:image/png,, image/tiff:image/tiff,, video/mpeg:video/mpeg,, video/quicktime:video/quicktime,, video/x-msvideo:video/x-msvideo,, message/rfc822:message/rfc822,, inode/directory:inode/directory,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:exercizio,, simulation:simulazione,, questionnaire:questionario,, diagram:diagramma,, figure:figura,, graph:grafico,, index:indice,, slide:slide,, table:tabella,, narrative text:narrazione,, exam:esame,, experiment:esperimento,, problem statement:enunciato di problema,, self assessment:autovalutazione,, lecture:lezione";
 ?>

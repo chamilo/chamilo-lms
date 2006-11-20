@@ -44,13 +44,11 @@ $langConfirmDelete = "คุณต้องการที่จะลบ metadata ทั้งหมดจริงๆใช่หรือไม่";
 $langCourseKwds = "เอกสารนี้มีคำสำคัญของวิชา ";
 $langSearch = "ค้นหา Search";
 $langSearchCrit = "หนึ่งคำต่อบรรทัด! One word per line!";
-$langLangs = ":";
 $langDescription = "คำอธิบาย Description";
 $langTitle = "ชื่อ Title";
 $langStatuses = "ร่าง:ร่าง,งานสำเร็จ:งานสำเร็จ,แก้ไขใหม่:แก้ไขใหม่,ยังไม่ได้:ยังไม่ได้ :draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
 $langCosts = ":ไม่:ฟรี,ไม่มีราคา,,ใช่:ไม่ฟรี,ราคา:no:free, no cost,, yes:not free, cost";
 $langCopyrights = ":ใช่ :ลิขสิทธิ์,, ไม่:ไม่มีลิขสิทธิ์ :yes:copyright,, no:no copyright";
 $langFormats = ":text/plain;tis-620:text/plain;tis-620,, text/plain;utf-8:text/plain;utf-8,, text/html;tis-620 1:text/html;tis-620,, text/html;windows-874:text/html;windows-874,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;tis-620 :XML;tis-620,, application/xml;windows-874:XML;windows-874,, application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":แบบฝึกหัด:แบบฝึกหัด,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
 ?>

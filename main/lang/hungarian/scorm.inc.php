@@ -38,4 +38,10 @@ $langAutodetect = "Automatikus felismerés";
 $langAccomplishedStepsTotal = "Az összes eddig megtett lépés";
 $langUnknown = "Ismeretlen";
 $h = "ó";
+$AreYouSureToDeleteSteps = "Biztos, hogy törölni kívánja ezeket a lépéseket?";
+$Origin = "Számazási hely";
+$Local = "Helyi";
+$Remote = "Távoli";
+$FileToUpload = "Feltöltend&#337; állomány";
+$ContentMaker = "Tartalom készít&#337;";
 ?>

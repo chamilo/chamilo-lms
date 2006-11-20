@@ -11,7 +11,6 @@ $langTool = "Definicijski podatci poveznice";
 $langSorry = "Najprije odaberite kolegij";
 $langDenied = "Funkcija je dostupna samo nadzornicima kolegija";
 $langNoScript = "Skript nije aktiviran u vašem pregledniku, molim zanemarite dio zaslona ispod ovoga teksta, ne&#263;e djelovati...";
-$langPressAgain = "Ponovno pritisnite \'Pohrani\'...";
 $langLanguage = "Jezik";
 $langLanguageTip = "jezik izrade ovoga objekta u&#269;enja";
 $langIdentifier = "Identifikator";
@@ -50,5 +49,4 @@ $langWarningDups = "- dvostruki nazivi kategorija uklonjeni su s popisa!";
 $langSLC = "Radi s kategorijom poveznica imena";
 $langTitle = "Naslov";
 $langDescription = "Opis";
-$langLangs = ":";
 ?>

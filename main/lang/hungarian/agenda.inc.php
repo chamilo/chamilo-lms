@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Új naptár-bejegyzés hozzáadása";
 $ShowAll = "Az összes naptár bejegyzés megmutatása";
 $ShowCurrent = "Az ehavi naptár bejegyzések megmutatása";
-$AgendaSortChronologicallyUp = "A legrégebbi bejegyzés legyen az els&#337;";
-$AgendaSortChronologicallyDown = "A legújabb bejegyzés legyen a legels&#337;";
 $AddCalendarItem = "Új naptárbejegyzés hozzáadása";
 $Day = "Nap";
 $Month = "Hónap";
@@ -14,7 +12,6 @@ $Hour = "Óra";
 $Minutes = "Perc";
 $Title = "Cím";
 $Detail = "Részletek";
-$Lasting = "Tartózkodás";
 $EditSuccess = "A naptárelem szerkesztése megtörtént";
 $AddSuccess = "Naptárelem hozzáadva";
 $AgendaDeleteSuccess = "A naptárbejegyzés törölve";

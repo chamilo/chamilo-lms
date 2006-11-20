@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Kurzusbeállítások";
+$ModifInfo = "Kurzusbeállítások";
 $langModifDone = "Az információ megváltoztatva";
 $langHome = "Vissza a honlapra";
 $langCode = "Kurzus kód";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Nyitva - elérhet&#337; az egész világ számára.";
 $OpenToThePlatform = "Nyitva - csak regisztrált tagok számára elérhet&#337;.";
 $langOpenToThePlatform = "Nyitva - csak regisztrált tagok számára elérhet&#337;.";
 $langTipLang  = "A kurzus website-ot látogató minden felhasználó ezt a nyelvet fogja látni.";
-$langAgenda = "Naptár";
+$Agenda = "Naptár";
 $langLink = "Linkek";
 $langDocument = "Dokumentumok";
 $langVid = "Video";
@@ -89,7 +89,6 @@ $langNotAllowedToUnsubscribe = "A hallgatók nem tehetik meg, hogy leiratkozzanak
 $langDescription = "Meghatározás";
 $langCourseVisibilityClosed = "Teljesen zárt; a kurzus csak a kurzusgazda számára elérhet&#337;";
 $CourseVisibilityClosed = "Zárt - nem lehet hozzáférni ehhez a kurzushoz.";
-$NotAllowedToModifyOwnRole = "Saját szerepének módosítása nem lehetséges.";
 $CourseVisibilityModified = "Módosított (további beállítások megadása a szerepek/jogosultságok részben lehetséges)";
 $WorkEmailAlert = "Értesítés emilben ha elektronikus beadás történt";
 $WorkEmailAlertActivate = "Email értesítés kérése ha új elektronikus beadás történt";
@@ -106,5 +105,5 @@ $AllowUserEditAnnouncementDeactivate = "Felhasználói módosítások letiltása";
 $CourseRegistrationPassword = "Kurzus regisztráció jelszava";
 $langDescriptionDeleteCourse = "Kattintson erre a hivatkozásra ha a szerverr&#337;l a kurzust (tárgyat) nyomtalanul törölni kívánja.<br><br> Figyelem! Ezt a funkciót csak rendkívüli körültekintéssel használja!";
 $langDescriptionCopyCourse = "A Dokoes lehet&#337;vé teszi, hogy a teljes kuzust (tárgyat), illetve annak egyes kiválsztott részeit egy másik, adott esetben akár üres kurzusba (tárgyba) átmásolja.br><br>A funkció használatának el&#337;feltétele, hogy rendelkezzen egy dokumentumokat, hirdetményeket, fórumokat, stb. tartalmazó kurzussal, illetve egy másikkal, amely az el&#337;bbi felsorolt elemeit nem tartalmazza!";
-$langDescriptionRecycleCourse = "Ez az eszköz a kurzus kiválasztott elemeinek vagy teljes tartalmának törlését teszi lehet&#337;vé. Eltávolítja a dokumentumokat, fórumokat, likeket, stb... A törlésre egy félév vagy a képzés végén kerülhet sor. Természetesen az újrahasznosítás eszköz használata el&#337;tt gondoskodni kell a teljes kurzus biztonsági mentésér&#337;l.";
+$DescriptionRecycleCourse = "Ez az eszköz a kurzus kiválasztott elemeinek vagy teljes tartalmának törlését teszi lehet&#337;vé. Eltávolítja a dokumentumokat, fórumokat, likeket, stb... A törlésre egy félév vagy a képzés végén kerülhet sor. Természetesen az újrahasznosítás eszköz használata el&#337;tt gondoskodni kell a teljes kurzus biztonsági mentésér&#337;l.";
 ?>

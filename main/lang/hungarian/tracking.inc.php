@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Mindet mutasd";
 $langToolName = "Nyomonkövetés";
-$langTrackingDisabled = "A nyomonkövetést a rendszer adminisztrátor kikapcsolta.";
+$TrackingDisabled = "A nyomonkövetést a rendszer adminisztrátor kikapcsolta.";
 $langShowNone = "Egyiket se mutasd";
 $langCourseStats = "Kurzus statisztikák";
 $langToolsAccess = "Eszközök elérése";
@@ -140,4 +140,12 @@ $Visited = "Megtekintve";
 $Name = "Név";
 $FirstAccess = "Els&#337; megtekintés";
 $LastAccess = "Utolsó megtekintés";
+$MoyenneTest = "Teszt átlag";
+$exportExcel = "Exportálás Excel formátumban";
+$MoyCourse = "Kurzus átlag";
+$MoyenneExamen = "Vizsgaátlag";
+$Trainers = "Gyakorlatvezet&#337;k";
+$Administrators = "Adminisztrátorok";
+$Success = "Siker";
+$ExcelFormat = "Excel formátum";
 ?>

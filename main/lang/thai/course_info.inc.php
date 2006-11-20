@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "ตั้งค่าวิชา";
+$ModifInfo = "ตั้งค่าวิชา";
 $langModifDone = "ได้แก้ไขข้อมูลแล้ว";
 $langHome = "กลับไปหน้าโฮมเพจ";
 $langCode = "รหัสวิชา";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "แบบสาธารณะ:เปิดให้เรียนได้ทั่วโลก";
 $OpenToThePlatform = "แบบสาธารณะ โดยอนุญาตเฉพาะผู้ทึลงทะเบียนเป็นผู้ใช้ในระบบ";
 $langOpenToThePlatform = "แบบสาธารณะ โดยอนุญาตเฉพาะผู้ทึลงทะเบียนเป็นผู้ใช้ในระบบ ";
 $langTipLang  = "ภาษาที่กำหนดใช้นี้ จะใช้แสดงผลตรงกับภาษาที่กำหนดไว้ และกับทุกคนที่เข้าใช้โฮมเพจวิชานี้";
-$langAgenda = "กำหนดการ";
+$Agenda = "กำหนดการ";
 $langLink = "การเชื่อมต่อ";
 $langDocument = "เอกสาร";
 $langVid = "วิดีทัศน์";
@@ -88,6 +88,5 @@ $langNotAllowedToUnsubscribe = "ผู้ใช้ไม่ได้รับอนุญาตให้ถอนวิชาด้วยตัวเอง";
 $langDescription = "คำอธิบาย";
 $langCourseVisibilityClosed = "ปิดวิชาแล้ว สามารถเข้าได้เฉพาะหน้าบริหารรายวิชา";
 $CourseVisibilityClosed = "ปิด-ไม่ให้เข้าในวิชานี้";
-$NotAllowedToModifyOwnRole = "คุณไม่ได้รับอนุญาตให้แก้ไขบทบาทหน้าที่ของคุณ ";
 $CourseVisibilityModified = "การแก้ไข(มีรายละเอียดการตั้งค่าอีกมากที่ต้องกำหนดผ่านทางระบบกำหนดสิทธิ์) ";
 ?>

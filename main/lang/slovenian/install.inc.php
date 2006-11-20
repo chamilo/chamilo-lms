@@ -20,9 +20,7 @@ $langAdminSurname = "Priimek upravitelja";
 $langAdminLogin = "Uporabniško ime admin.";
 $langAdminPass = "Geslo administratorja (<font color=\"red\">verjetno ga želite spremeniti</font>)";
 $langEducationManager = "Upravnik izobraževanja";
-$langHelpDeskPhone = "Telefon nujne pomoèi";
 $langCampusName = "Ime portala";
-$langInstituteName = "Naziv ustanove";
 $langDBSettingIntro = "Namestitveni skript bo tvoril glavno podatkovno bazo Dokeos/Claroline. Dokeos/Claroline  mora tvoriti
 				veè podatkovnih baz (DB) (v kolikor spodaj ne izbereš opcije \"Ena\" ). Èe administrator sistema dovoli 
 				za vašo spletno stran le eno DB, Dokeos/Claroline ne bo delovala.";

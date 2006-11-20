@@ -7,7 +7,6 @@ $langActivate = "Etkinleþtir";
 $langDeactivate = "Etkinliðini kaldýr";
 $langNoEx = "Þu anda alýþtýrma yok";
 $langNewEx = "Yeni alýþtýrma";
-$langNewQu = "Yeni soru";
 $langQuestion = "Soru";
 $langQuestions = "Sorular";
 $langAnswers = "Cevaplar";

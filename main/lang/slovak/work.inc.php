@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Nástroje";
+$Tools  = "Nástroje";
 $langDownloadFile = "Posla&#357; súbor na server";
 $langTooBig = "Žiadny alebo príliž ve&#318;ký súbor.";
 $langListDeleted = "Celý zoznam bol vymazaný.";

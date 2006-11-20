@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "เพิ่มกำหนดการใหม่";
 $ShowAll = "แสดงกำหนดการทั้งหมด";
 $ShowCurrent = "แสดงกำหนดการทั้งหมดของเดือนนี้";
-$AgendaSortChronologicallyUp = "แสดงรายการเริ่มจากอดีต";
-$AgendaSortChronologicallyDown = "แสดงรายการเริ่มจากปัจจุบัน";
 $AddCalendarItem = "เพิ่มกำหนดการใหม่";
 $Day = "วัน";
 $Month = "เดือน";
@@ -14,7 +12,6 @@ $Hour = "ชั่วโมง";
 $Minutes = "นาที";
 $Title = "เรื่อง";
 $Detail = "รายละเอียด";
-$Lasting = "ล่าสุด";
 $EditSuccess = "แก้ไขกำหนดการแล้ว";
 $AddSuccess = "เพิ่มกำหนดการแล้ว ";
 $AgendaDeleteSuccess = "ลบกำหนดการแล้ว";

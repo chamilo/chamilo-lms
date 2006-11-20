@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$langClose = "Zav&#345;ít okno";
 $langDocContent = "<p> Alati dokumenata su slièni FileManageru na vašoj radnoj površini raèunala.</p><p> Možete uèitati dokumente bilo kojeg tipa (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, itd.). Pritom je važno da studenti imaju takoðer odgovarajuæi software kako bi mogli èitati dokumente.
  Neke datoteke mogu sadržavati viruse, a Vaša je odgovornost da ne uèitavate zaražene virusom datoteke. Zbog mjere opreza preporuèa se provjeriti dokumente antivirusnim programom prije nihovog oèitavanja.
  </p>

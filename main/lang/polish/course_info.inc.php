@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Modyfikuj informacje o kursie";
+$ModifInfo = "Modyfikuj informacje o kursie";
 $langModifDone = "Informacje zosta&#322;y zmodyfikowane";
 $langHome = "Powrót do strony domowej";
 $langCode = "Kod kursu";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Dost&#281;p dla ootwarty dla ca&#322;ego &#347;wiata";
 $OpenToThePlatform = "Otwarty - dost&#281;pny dla zarejestrowanych u&#380;ytkowników platformy";
 $langOpenToThePlatform = "Dost&#281;p otwarty dla u&#380;ytkowników zarejestrowanych w platformie";
 $langTipLang  = "Ten j&#281;zyk b&#281;dzie obowi&#261;zywa&#322; wszystkich u&#380;ytkowników tego kursu.";
-$langAgenda = "Agenda(Terminarz)";
+$Agenda = "Agenda(Terminarz)";
 $langLink = "Odno&#347;niki";
 $langDocument = "Dokumenty";
 $langVid = "Wideo";

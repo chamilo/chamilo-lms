@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Vis alle";
 $langToolName = "Statistikker";
-$langTrackingDisabled = "Udtrækning af statistik er slået fra af systemadministrator.";
+$TrackingDisabled = "Udtrækning af statistik er slået fra af systemadministrator.";
 $langShowNone = "Vis ingen";
 $langCourseStats = "Kursusstatitsik";
 $langToolsAccess = "Adgang til værktøjer";

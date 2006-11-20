@@ -11,7 +11,6 @@ $langTool = "Legaturi Metadata";
 $langSorry = "Alege un curs pentru inceput";
 $langDenied = "Aceasa functie este disponibila doar pentru adminitratorii cursului";
 $langNoScript = "Scriptul nu este activat in browserul dvs, va rugam sa ignorati partea de mai jos a ecranului, nu va functiona...";
-$langPressAgain = "Apasa \'Memoreaza\' din nou...";
 $langLanguage = "Limba";
 $langLanguageTip = "limba in care a fost a fost creat acest obiect de invatare";
 $langIdentifier = "Identificator";

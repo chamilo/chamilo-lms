@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langDescription = "Mô tả tóm tắt";
+$Description = "Mô tả tóm tắt";
 $langComment = "Ghi chú";
 $langVisible = "Hiển thị/không hiển thị";
 $langGroup = "Group";

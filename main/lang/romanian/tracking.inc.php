@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Arata tot";
 $langToolName = "Urmariri";
-$langTrackingDisabled = "Urmarirea a fost dezactivata de catre administratotrul sistemului";
+$TrackingDisabled = "Urmarirea a fost dezactivata de catre administratotrul sistemului";
 $langShowNone = "Nu arata";
 $langCourseStats = "Situatia cursului";
 $langToolsAccess = "Acces la unelte";

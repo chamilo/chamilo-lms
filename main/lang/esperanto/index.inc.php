@@ -29,7 +29,6 @@ $langHelptwo = "Helpo";
 $langRegAll = "Registru ";
 $EussMenu = "Menuo ";
 $Opinio = "Opinio ";
-$menuauth = "Menua kontrolo  XX";
 $email = "Retpo&#349;to  XX";
 $Intranet = "Interna reto  XX";
 $Englin = "angla ";

@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Toon alles";
 $langToolName = "Statistieken";
-$langTrackingDisabled = "Statistieken zijn uitgeschakeld door de platformbeheerder.";
+$TrackingDisabled = "Statistieken zijn uitgeschakeld door de platformbeheerder.";
 $langShowNone = "Toon niets";
 $langCourseStats = "Cursusstatistieken";
 $langToolsAccess = "Toegang tot modules";
@@ -148,7 +148,6 @@ $MoySession = "Sessiegemiddelde";
 $TakenSessions = "Gevolgde sessies";
 $FollowUp = "Opvolging";
 $Trainers = "Opleider / docent";
-$Probationers = "Aspiranten";
 $Administrators = "Beheerders";
 $Tracks = "Leertrajecten (tracks)";
 $Success = "Succes";

@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Orodja";
+$Tools  = "Orodja";
 $langDownloadFile = "Prenesi dokument (upload)";
 $langTooBig = "Nisi izbral nobene datoteke ali pa je ta prevelika.";
 $langListDeleted = "Celoten seznam je bil odstranjen.";

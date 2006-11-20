@@ -112,37 +112,4 @@ $langClarContent2 = "Malplenigi enhavon ";
 $langHGroups = "Grupoj ";
 $langGroupsContent = "Enhavo de la grupoj ";
 $langGuide = "Manlibro ";
-$langHCourseRolesRights = "Helpo &#265;e roloj kaj rajtoj";
-$langCourseRolesRightsContent = "En la supervida pa&#285;o pri roloj kaj rajtoj pri via kurso vi povas didini percize tion, kiu rajtas fari kion en kiu loko.
-
-La baza koncepto estas, ke pri &#265;iu kursa ilo vi povas specifi tiun, kiu rajtas vidi la enhavon de tiu ilo, aldoni elementojn kaj dosierojn, redakti ekzistantan informon, a&#365; forigi enhavon. Vi tamen ne devas specifi tion por &#265;iu aparta uzulo. Uzuloj havas rolojn en via kurso, kiel vizitanta gasto, normala kursano, instruanta asistanto, kaj kursadministranto. Por &#265;iu el tiuj roloj, vi povas specifi la permesojn por &#265;iu ilo. Vi anka&#365; povas specifi forumaliron al &#265;iuj uzuloj, sed gastoj ne rajtas enpo&#349;tigi tie, nur registritaj uzuloj. Vi povas diri, ke la instruanta asistanto povasaldoni dokumentojn al via kurso, sed ne rajtas forigi ilin. K.t.p. 
-
-En la uzula ilo de via kurso, vi povas vidi la rolon de uzuloj kaj redakti ilin (uzu la redaktan butonon en la uzula listo). 
-
-Supervido de &#265;iuj lokaj roloj
-Estas kvin lokaj roloj en Dokeos. Estas la roloj, kiujn vi povas atribui al la uzuloj en via kurso. 
-
-Anonima kursovizitanto: Tiu povus esti iu en ajna loko de la mondo, kiu &#309;us malfermis  foliumilon kaj provas viziti vian kurson. Defa&#365;lte tiuj uzuloj havas neniun rajton kaj e&#265; ne rajtas vidi vian kurson. 
-Registrita kursovizitanto: estas iu registrito en la Dokeos-platformo vizitanta vian kurson sen havi rolon en &#285;i. 
-Normala kursano: estas la defa&#365;lta rolo de uzuloj, kiuj rolas en via kurso. Normale la plejmulto de uzuloj havas tiun rolon, kaj kursadministrantoj atribuas la rolon de instruanta asistanto al iuj uzuloj por ke ili povu helpi &#265;e la malvolvo de la kurso. 
-Instruanta asistanto: Tiu asistanta rolo havas multajn permesojn. En plej multaj iloj la asistanto rajtas vidi, aldoni kaj redakti enhavon, sed ne forigi &#285;in. La instruanta asistanto defa&#365;lte anka&#365; ne rajtas redakti la kursajn aran&#285;ojn a&#365; kursajn rajtojn. 
-Kursadministranto: la kursadministranto havas &#265;iujn rajtojn en la kurso kaj rajtas fari &#265;ion. La kurskreinto a&#365;tomate ricevas tiun rolon. 
-
-Supervido de &#265;iuj rajtoj
-Estas kvar bazaj rajtoj ene de Dokeos: 
-
-Vidi: la rajto vidi ilon kaj &#285;ian enhavon 
-Aldoni: la rajto aldoni novan enhavon en ilon, ekzemple aldoni ligilojn, kategoriojn, dokumentojn, dosierujojn, studentajn publikigojn, forumajn mesa&#285;ojn, ... 
-Redakti: la rajto redakti ekzistantan enhavon en ilo, ekz. redakti la adreson de ligiloj, la nomon de dosiero, la titolon kaj &#349;losilvortojn de dokumento, ... 
-Forigi: la rajto forigi ekzistantan enhavon en ilo, ekz. forigi ligilojn, studentajn publikigojn, forumajn mesa&#285;ojn, dokumentojn, ...
-
-Supervido de loki&#285;oj
-&#264;iu kurso kaj &#265;iu kursa ilo por &#265;iu kurso havas apartan loki&#285;on en Dokeos. Kelkaj tiaj ekzemplaj loki&#285;oj estas
-
-La kurso TEST_KURSO 
-La dokumenta ilo de la kurso TEST_KURSO 
-La agenda ilo de la kurso Psikologio101 
-
-Aran&#285;opermesoj
-Kiel kursadministranto vi specifas, kiu rajtas fari kion en kiu loki&#285;o. Por &#265;iu rolo kaj kombina&#309;o de loki&#285;oj la kvar rajtoj povas esti aran&#285;ataj. Tiele vi povas aran&#285;i la vidan rajton por la instruanta asistanto en la dokumenta ilo, la aldonan rajton por la normalaj kursanoj en la ligila ilo, ktp.";
 ?>

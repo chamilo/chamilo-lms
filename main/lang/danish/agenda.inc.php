@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Tilføj ny Kalender postering";
 $ShowAll = "Vis alle Kalender posteringer";
 $ShowCurrent = "Vis Kalender posteringer for nuværende måned";
-$AgendaSortChronologicallyUp = "Ældste posteringer først";
-$AgendaSortChronologicallyDown = "Nyeste posteringer først";
 $AddCalendarItem = "Tilføj ny Kalender postering";
 $Day = "Dag";
 $Month = "Måned";
@@ -14,7 +12,6 @@ $Hour = "Time";
 $Minutes = "Minutter";
 $Title = "Titel";
 $Detail = "Detaljer";
-$Lasting = "Vedvarende";
 $EditSuccess = "Kalender posteringen er blevet ændret";
 $AddSuccess = "Kalender postering tilføjet";
 $AgendaDeleteSuccess = "Kalender posteringen er slettet";

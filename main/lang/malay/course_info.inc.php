@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Setkan Subjek";
+$ModifInfo = "Setkan Subjek";
 $langModifDone = "Maklumat telah diubahsuai";
 $langHome = "Kembali ke Homepage";
 $langCode = "Kod Subjek";
@@ -18,7 +18,7 @@ $langConfTip = "Secara lalai, subjek anda hanya boleh diakses jika anda pengguna
 cara terbaik ialah membuka pendaftaran
 selama seminggu, dan arahkan Pelajar anda untuk mendaftar sendiri, kemudian tutup Pendaftaran dan periksa samada terdapat Pengguna yang tidak dikenali.";
 $langTipLang  = "Sila pilih bahasa yang anda kehendaki untuk Laman Subjek.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Pautan";
 $langDocument = "Dokumen";
 $langVid = "Video";

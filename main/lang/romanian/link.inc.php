@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHelp = "Ajutor";
 $langLinks = "Linkuri";
 $langLinkName = "Numele linkului";
 $langLinkAdd = "Adauga un link";

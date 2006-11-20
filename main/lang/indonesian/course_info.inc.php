@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Seting mata kuliah";
+$ModifInfo = "Seting mata kuliah";
 $langModifDone = "Informasi telah diubah";
 $langHome = "Kembali ke HomePage";
 $langCode = "Kode mata kuliah";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Terbuka - akses diijinkan untuk seluruh dunia";
 $OpenToThePlatform = "Terbuka - akses diijikan untuk user yang terdaftar di platform ini";
 $langOpenToThePlatform = "Terbuka - akses diijikan untuk user yang terdaftar di platform ini";
 $langTipLang  = "Bahasa ini akan digunakan untuk semua pengunjung situs mata kuliah anda.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Links";
 $langDocument = "Dokumen";
 $langVid = "Video";
@@ -89,6 +89,22 @@ $langNotAllowedToUnsubscribe = "User tidak diijinkan untuk undur diri dari mata 
 $langDescription = "Deskripsi";
 $langCourseVisibilityClosed = "Tertutup; mata kuliah ini hanya dapat diakses oleh admin mata kuliah.";
 $CourseVisibilityClosed = "Tertutup; tidak ada akses ke mata kuliah ini.";
-$NotAllowedToModifyOwnRole = "Anda tidak diperkenankan untuk mengubah role/peran anda sendiri.";
 $CourseVisibilityModified = "Diubah (seting lebih detil diatur dalam system pengelolaan peran-hak)";
+$WorkEmailAlert = "Ingatkan melalui email pada saat pengumpulan";
+$WorkEmailAlertActivate = "Akatifkan pengingat email pada saat pengumpulan kerja yang baru";
+$WorkEmailAlertDeactivate = "Non-aktifkan pengingat email pada saat pengumpulan kerja yang baru";
+$DropboxEmailAlert = "ngatkan melalui email pada saat pengumpulan dropbox";
+$DropboxEmailAlertActivate = "Aktifkan peringatan melalui email pada saat pengumpulan dropbox yang baru";
+$DropboxEmailAlertDeactivat = "Non-aktifkan peringatan melalui email pada saat pengumpulan dropbox yang baru";
+$AllowUserEditAgenda = "Ijinkan user untuk mengedit agenda mata kuliah";
+$AllowUserEditAgendaActivate = "Aktifkan edisi agenda mata kuliah oleh user";
+$AllowUserEditAgendaDeactivate = "Non-aktifkan edisi agenda mata kuliah oleh user";
+$AllowUserEditAnnouncement = "Ijinkan user untuk mengedit pengumuman mata kuliah";
+$AllowUserEditAnnouncementActivate = "Aktifkan edisi oleh user";
+$AllowUserEditAnnouncementDeactivate = "Non-aktifkan edisi oleh user";
+$OrInTime = "Atau pada";
+$CourseRegistrationPassword = "Password pendaftaran mata kuliah";
+$langDescriptionDeleteCourse = "Klik pada link ini untuk membuang jejak/trace dari mata kuliah di server. <br><br>Fungsi ini harus dilakukan dengan ekstra hati-hati!";
+$langDescriptionCopyCourse = "Dokeos mengenalkan kemungkinan penduplikasian sebagian atau keseluruhan mata kuliah yang ada ke mata kuliah lain, yang pada awalnya dapat saja kosong. <br><br> Syaratnya hanyalah adanya suatu mata kuliah berisi beberapa dokumen, iklan, forum ... dan pada mata kuliah ke-2 tidak berisi elemen-elemen tersebut pada mata kuliah ke-1!";
+$DescriptionRecycleCourse = "Tool ini mengosongkan elemen-elemen yang terseleksi pada mata kuliah.  Tool ini dapa t membuang dokumen, forum, link ... Prosedur ini dapat dilakukan misalnya pada akhir tahun ajaran.  Tentunya sebelum melakukan \"daur-ulang\", anda mesti membackup selengkapnya mata kuliah anda!";
 ?>

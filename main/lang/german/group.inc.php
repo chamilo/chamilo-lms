@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langGroupManagement = "Gruppen";
-$langHelp = "Hilfe";
 $langNewGroupCreate = "Neue Gruppe(n) erstellen";
 $langGroupCreation = "Neue Gruppen erstellen";
 $langCreate = "erstellen";
@@ -94,4 +93,5 @@ $GroupCalendar = "Agenda";
 $GroupAnnouncements = "Ankündigungen";
 $NoCategoriesDefined = "Es wurden keine Kategorien definiert";
 $GroupsFromClasses = "Gruppen aus Klassen";
+$GroupsFromClassesInfo = "Mit dieser Option können Sie Gruppen auf der Grundlage von Klassen erstellen, die für den Kurs angemeldet sind";
 ?>

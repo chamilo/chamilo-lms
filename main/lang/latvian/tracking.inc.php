@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "R&#257;d&#299;t visu";
 $langToolName = "Sekošana";
-$langTrackingDisabled = "Sekošanu izsl&#275;dza sist&#275;mas administrators.";
+$TrackingDisabled = "Sekošanu izsl&#275;dza sist&#275;mas administrators.";
 $langShowNone = "Neko ner&#257;d&#299;t";
 $langCourseStats = "Kursa statistika";
 $langToolsAccess = "Pieeja r&#299;kiem";

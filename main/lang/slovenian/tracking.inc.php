@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Prikaži vse";
 $langToolName = "Sledenje";
-$langTrackingDisabled = "Sledenje je onemogoèil administrator.";
+$TrackingDisabled = "Sledenje je onemogoèil administrator.";
 $langShowNone = "Prikaži nobenega";
 $langCourseStats = "Statistike teèaja";
 $langToolsAccess = "Dostop do orodij";
@@ -141,5 +141,6 @@ $Name = "Naziv";
 $FirstAccess = "Prvi dostop";
 $LastAccess = "Zadnji dostop";
 $exportExcel = "Izvoz v Excel obliki";
+$Administrators = "Upravitelji";
 $ExcelFormat = "Excel oblika";
 ?>

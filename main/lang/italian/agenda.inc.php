@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Aggiungi evento in agenda";
 $ShowAll = "Mostra tutti gli eventi in agenda";
 $ShowCurrent = "Mostra gli eventi del mese corrente";
-$AgendaSortChronologicallyUp = "Prima eventi meno recenti";
-$AgendaSortChronologicallyDown = "Prima eventi più recenti";
 $AddCalendarItem = "Aggiungi un evento";
 $Day = "Giorno";
 $Month = "Mese";
@@ -14,7 +12,6 @@ $Hour = "ora";
 $Minutes = "Minuti";
 $Title = "Titolo";
 $Detail = "Dettagli";
-$Lasting = "Durata";
 $EditSuccess = "L\'evento in agenda è stato modificato";
 $AddSuccess = "L\'evento è stato aggiunto in agenda";
 $AgendaDeleteSuccess = "L\'evento è stato cancellato dall\'agenda";

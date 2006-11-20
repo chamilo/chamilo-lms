@@ -32,7 +32,6 @@ $langHelptwo = "Pomoè";
 $langRegAll = "vpiši";
 $EussMenu = "izbira";
 $Opinio = "Mnenje";
-$menuauth = "Izbira avtentifikacija";
 $email = "e-pošta";
 $Intranet = "Intranet";
 $Englin = "English";

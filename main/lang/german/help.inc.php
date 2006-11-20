@@ -219,25 +219,4 @@ $langClarContent2 = "Inhalt von ??? 2 ";
 $langHGroups = "Hilfe - Gruppen";
 $langGroupsContent = "Inhalt von Gruppen";
 $langGuide = "Führer";
-$langHCourseRolesRights = "Hilfe zu Rollen und Rechten";
-$langCourseRolesRightsContent = "<p>In der Rollen und Rechte Übersicht für Ihren Kurs können Sie genau definieren <em>wem was an welchem Ort gestattet ist</em>.</p>
-<p>Das grundlegende Konzept ist: Für jedes Kurswerkzeug kann festgelegt werden, wer Inhalte dieses Werkzeugs ansehen, neue Inhalte hinzufügen, existierende Information editieren, oder Inhalte löschen darf. Dies muss nicht für jeden einzelnen Benutzer festgelegt werden. Benutzer haben Rollen in Ihrem Kurs: etwa Gast, normaler Kursteilnehmer, Lehrer Assistent, und Kursleiter. Für jede dieser Rollen können Rechte für jedes Werkzeug festgelegt werden. Man kann allen Benutzern den Zugang zu Foren geben, aber Gäste dürfen keine Beiträge schreiben, sondern nur angemeldete Kursteilnehmer. Man kann dem Lehrer Assistent gestatten, Dokumente zum Kurs hinzuzufügen aber nicht zu löschen, usw.</p>
-<p>Im Benutzer Werkzeug Ihres Kurses können Sie die Rollen der Benutzer ansehen und editieren (einfach den Edit Link in der Benutzerliste benutzen).</p>
-<h3>Überblick über alle lokalen Rollen</h3>
-<p>Es gibt fünf Rollen in Dokeos. Dies sind die Rollen, die Sie den Nutzern in Ihrem Kurs zuweisen können. 
-<ul><li><b>Anonymer Gast</b>: das könnte jemand irgendwo in der Welt sein, der seinen Browser aufmacht und versuch, Ihren Kurs zu besuchen. Standardmäßig haben diese benutzer keine Rechte und können nicht einmal Ihren Kurs ansehen.</li>
-<li><b>Angemeldeter Gast</b>: das ist jemand, der in der Dokeos Plattform registriert ist und Ihren Kurs besucht, ohne diesen belegt zu haben.</li>
-<li><b>Kursteilnehmer</b>: das ist die Standard Rolle der Benutzer, die Ihren Kurs belegt haben. Typischerweise haben die meisten Benutzer diese Rolle, und Kursleiter geben einigen Kursteilnehmern die Rolle Lehrer Assistent, so dass diese mit dem Kurs helfen können.</li>
-<li><b>Lehrer Assistent</b>: Die Assistent Rolle hat viele Rechte. In den meisten Werkzeugen kann der Assistent Inhalte ansehen, hinzufügen und editieren, aber nicht löschen. Der Lehrer Assistent kann auch standardmäßig die Kurseinstellungen und Kursrechte editieren.</li>
-<li><b>Kursleiter</b>: der Kursleiter hatte alle Rechte im Kurs und kann alles tun. Der Benutzer, der einen Kurs erstellt, erhält diese Rolle automatisch.</li></ul></p>
-<h3>Überblick über alle Rechte</h3> 
-<p>Es gibt vier grundlegende Rechte in Dokeos:
-<ul><li><b>Ansehen</b>: das Recht, ein Werkzeug und seine Inhalte anzusehen</li>
-<li><b>Hinzufügen</b>: das Recht, neue Inhalte in einem Werkzeug hinzuzufügen, z.B. Hyperlinks, Kategorien, Dokumente, Verzeichnisse, Schülerpublikationen, Forum Nachrichten ...</li>
-<li><b>Editieren</b>: das Recht, vorhandene Inhalte in einem Werkzeug zu editieren, z.B. die URL eines Links ändern, Name eines Verzeichnisses ändern, Titel und Schlüsselwörter eines Dokuments ändern, ...</li>
-<li><b>Löschen</b>: das Recht, vorhandene Inhalte in einem Werkzeug zu löschen, z.B. Hyperlinks, Veröffentlichungen, Forum Nachrichten, Dokumente ...</li></ul></p>
-<h3>Überblick über Orte</h3>
-<p>Jeder Kurs und jedes Werkzeug in einem Kurs ist ein eigenständiger Ort in Dokeos.</p> 
-<h3>Einstellungen Rechte</h3> 
-<p>Als Kursleiter bestimmen Sie, wer was und an welchem Ort tun darf. Die vier Rechte können für jede Kombination von Rolle und Ort festgelegt werden. Sie können z.B. das Ansehen Recht für den Lehrer Assistent im Dokumente Werkzeug; das Hinzufügen Recht für den Kursteilnehmer im Link Werkzeug, usw.</p>";
 ?>

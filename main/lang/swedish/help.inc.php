@@ -210,5 +210,4 @@ $langClarContent2 = "Ta bort innehåll";
 $langHGroups = "Grupper";
 $langGroupsContent = "Innehåll i grupperna";
 $langGuide = "Handbok";
-$langHCourseRolesRights = "Hjälp ang. Roller och Rättigheter";
 ?>

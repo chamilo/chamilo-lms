@@ -11,7 +11,6 @@ $langTool = "Länkarnas Metadata";
 $langSorry = "Välj en kurs först";
 $langDenied = "Denna funktion är endast tillgänglig för kurs administratörer";
 $langNoScript = "Skriptfunktionen är inte aktiverat i din webläsare, var vänlig ignorera skärminnehållet efter denna text, det kommer inte att fungera...";
-$langPressAgain = "Klicka på \"Lagra\" igen...";
 $langLanguage = "Språk";
 $langLanguageTip = "språket som används i detta learningobjekt";
 $langIdentifier = "ID";
@@ -50,5 +49,4 @@ $langWarningDups = "- dubletter av kategorinamn är borttagna från listan!";
 $langSLC = "Arbeta tillsammans med länkkategori:";
 $langTitle = "Titel";
 $langDescription = "Beskrivning";
-$langLangs = ":";
 ?>

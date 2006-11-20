@@ -46,14 +46,12 @@ $langConfirmDelete = "¿ Está *seguro* de querer borrar todos los metadatos ?";
 $langCourseKwds = "Este documento contiene las palabras clave del curso";
 $langSearch = "Buscar";
 $langSearchCrit = "¡ Una palabra por línea !";
-$langLangs = ":ca:ca,, da:da,, de:de,, en:en,, es:es,, fi:fi,, fr:fr,, gl:gl,, hr:hr,, hu:hu,, id:id,, it:it,, nl:nl,, pl:pl,, pt:pt,, ro:ro,, sl:sl,, sv:sv,, tr:tr";
 $langDescription = "Descripción";
 $langTitle = "Título";
 $langStatuses = ":draft:esbozo,, final:final,, revised:revisado,, unavailable:no disponible";
 $langCosts = ":no:gratuito,, yes:no es gratuito, debe pagarse";
 $langCopyrights = ":sí:copyright,, no:sin copyright";
 $langFormats = ":text/plain;iso-8859-1:texto/plano;iso-8859-1,, text/plain;utf-8:texto/plano;utf-8,, text/html;iso-8859-1:texto/html;iso-8859-1,, text/html;utf-8:texto/html;utf-8,, inode/directory:Directorio,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":txt:text/plain;iso-8859-1,, htm:text/html;iso-8859-1,, html:text/html;iso-8859-1,, au:audio/basic,, mid:audio/midi,, mp3:audio/mpeg,, mpg:audio/mpeg,, mpeg:audio/mpeg,, wav:audio/x-wav,, gif:image/gif,, jpg:image/jpeg,, jpeg:image/jpeg,, png:image/png,, tif:image/tiff,, tiff:image/tiff,, mpg:video/mpeg,, mpeg:video/mpeg,, mov:video/quicktime,, avi:video/x-msvideo,, msg:message/rfc822,, doc:application/msword,, dat:Octet stream,, pdf:application/pdf,, ps:application/postscript,, rtf:application/rtf,, xls:application/vnd.ms-excel,, ppt:application/vnd.ms-powerpoint,, xml:application/xml;iso-8859-1,, zip:application/zip";
 $langLngResTypes = ":exercise:ejercicio,, 
      simulation:simulación,, 
      questionnaire:cuestionario,, 

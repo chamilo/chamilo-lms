@@ -11,7 +11,6 @@ $langTool = "Hivatkozások Metaadat";
 $langSorry = "Válasszon ki egy kurzust el&#337;ször";
 $langDenied = "Ez a funkció csak a kurzus adminisztrátorai számára elérhet&#337;.";
 $langNoScript = "A parancsértelmez&#337; nincs engedélyezve böngész&#337;jén, kérjük, hagyja figyelmen kívül az alábbi szöveget, Önnek ez nem fog m&#369;ködni...";
-$langPressAgain = "Kattinson a \'Tárolás\'-ra újra....";
 $langLanguage = "Nyelv";
 $langLanguageTip = "az a nyelv, amelyben ez a tanulási objektum készült";
 $langIdentifier = "Azonosító";
@@ -50,5 +49,4 @@ $langWarningDups = "- megkett&#337;zött kategórianevek el lettek távolítva a lis
 $langSLC = "Munka a következ&#337; nev&#369; Hivatkozások kategóriával:";
 $langTitle = "Cím";
 $langDescription = "Meghatározás";
-$langLangs = ":";
 ?>

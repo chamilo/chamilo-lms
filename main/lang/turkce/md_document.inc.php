@@ -43,13 +43,11 @@ $langConfirmDelete = "Do you *really* want to delete all metadata?";
 $langCourseKwds = "Bu belge ders anahtar kelimeleri içeriyor";
 $langSearch = "Ara&#351;t&#305;r";
 $langSearchCrit = "Her sat&#305;ra bir kelime!";
-$langLangs = ":";
 $langDescription = "Aç&#305;klama";
 $langTitle = "Ba&#351;l&#305;k";
 $langStatuses = ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
 $langCosts = ":no:free, no cost,, yes:not free, cost";
 $langCopyrights = ":yes:copyright,, no:no copyright";
 $langFormats = ":text/plain;iso-8859-9:text/plain;iso-8859-9,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-9:text/html;iso-8859-9,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-9:XML;iso-8859-9,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:exercise,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
 ?>

@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "コースの情報を修正";
+$ModifInfo = "コースの情報を修正";
 $langModifDone = "情報修正されました";
 $langHome = "ホームページに戻る";
 $langCode = "コース番号";
@@ -18,7 +18,7 @@ $langConfTip = "By default, you course is only accessible to you as its only reg
 the simplest is to open registration during
 one week, ask the students to register themselves, then close registration and check possible intruders in the users list.";
 $langTipLang  = "この言語は、あなたのコースのウエブサイトの全ての訪問者の公用言語です。";
-$langAgenda = "予定";
+$Agenda = "予定";
 $langLink = "リンク";
 $langDocument = "文書たち";
 $langVid = "ヴィデオ";

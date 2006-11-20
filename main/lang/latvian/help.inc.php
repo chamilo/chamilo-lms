@@ -66,5 +66,4 @@ $langClarContent2 = "Dz&#275;st saturu";
 $langHGroups = "Grupas";
 $langGroupsContent = "Grupu saturs";
 $langGuide = "Dokument&#257;cija";
-$langHCourseRolesRights = "Pal&#299;gs par Pieejas ties&#299;b&#257;m un darb&#299;bas lom&#257;m";
 ?>

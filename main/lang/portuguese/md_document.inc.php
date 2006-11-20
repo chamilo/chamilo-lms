@@ -43,13 +43,11 @@ $langConfirmDelete = "Tem a certeza que quer apagar todos os metadados?";
 $langCourseKwds = "Este documento contém as palavras-chave do curso";
 $langSearch = "Procurar";
 $langSearchCrit = "Uma palavra por linha!";
-$langLangs = ":ca:ca,, da:da,, de:de,, en:en,, es:es,, fi:fi,, fr:fr,, gl:gl,, hr:hr,, hu:hu,, id:id,, it:it,, nl:nl,, pl:pl,, pt:pt,, ro:ro,, sl:sl,, sv:sv,, tr:tr,, xx:xx";
 $langDescription = "Descrição";
 $langTitle = "Título";
 $langStatuses = ":draft:rascunho,, final:final,, revised:revisto,, unavailable:não disponível";
 $langCosts = ":no:free, no cost,, yes:not free, cost";
 $langCopyrights = ":yes:copyright,, no:não copyright";
 $langFormats = " :text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, audio/basic:audio/basic,, audio/midi:audio/midi,, audio/mpeg:audio/mpeg,, audio/x-wav:audio/x-wav,, image/gif:image/gif,, image/jpeg:image/jpeg,, image/png:image/png,, image/tiff:image/tiff,, video/mpeg:video/mpeg,, video/quicktime:video/quicktime,, video/x-msvideo:video/x-msvideo,, message/rfc822:message/rfc822,, inode/directory:inode/directory,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":txt:text/plain;iso-8859-1,, htm:text/html;iso-8859-1,, html:text/html;iso-8859-1,, au:audio/basic,, mid:audio/midi,, mp3:audio/mpeg,, mpg:audio/mpeg,, mpeg:audio/mpeg,, wav:audio/x-wav,, gif:image/gif,, jpg:image/jpeg,, jpeg:image/jpeg,, png:image/png,, tif:image/tiff,, tiff:image/tiff,, mpg:video/mpeg,, mpeg:video/mpeg,, mov:video/quicktime,, avi:video/x-msvideo,, msg:message/rfc822,, doc:application/msword,, dat:Octet stream,, pdf:application/pdf,, ps:application/postscript,, rtf:application/rtf,, xls:application/vnd.ms-excel,, ppt:application/vnd.ms-powerpoint,, xml:application/xml;iso-8859-1,, zip:application/zip";
 $langLngResTypes = ":exercise:exercício,, simulation:simulação,, questionnaire:questionário,, diagram:diagrama,, figure:figura,, graph:gráfico,, index:índice,, slide:slide,, table:tabela,, narrative text:texto narrativo,, exam:exame,, experiment:experiência,, problem statement:problema,, self assessment:auto-avaliação,, lecture:lição";
 ?>

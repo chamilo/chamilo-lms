@@ -7,7 +7,6 @@ $langActivate = "Активирай";
 $langDeactivate = "Дезактивирай";
 $langNoEx = "В момента няма тестове";
 $langNewEx = "Нов тест";
-$langNewQu = "Нов въпрос";
 $langQuestion = "Въпрос";
 $langQuestions = "Въпроси";
 $langAnswers = "Отговори";

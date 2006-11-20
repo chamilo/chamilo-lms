@@ -43,13 +43,11 @@ $langConfirmDelete = "Resnièno želite odstraniti vse metapodatke?";
 $langCourseKwds = "Ta dokument vsebuje kljuène besede teèaja";
 $langSearch = "Iskanje";
 $langSearchCrit = "Ena beseda na vrstico!";
-$langLangs = ":";
 $langDescription = "Opis";
 $langTitle = "Naslov";
 $langStatuses = ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
 $langCosts = "ne:brezplaèno, brezplaèno,, da:plaèljivo, cena";
 $langCopyrights = ":yes:copyright,, no:no copyright";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:exercise,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
 ?>

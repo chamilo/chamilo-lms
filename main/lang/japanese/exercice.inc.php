@@ -7,7 +7,6 @@ $langActivate = "有効にする";
 $langDeactivate = "無効化";
 $langNoEx = "現在演習問題はありません";
 $langNewEx = "新演習問題";
-$langNewQu = "新問題";
 $langQuestion = "問";
 $langAnswers = "答え";
 $langTrue = "正解";

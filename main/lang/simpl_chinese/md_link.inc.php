@@ -11,7 +11,6 @@ $langTool = "元数据链接";
 $langSorry = "首先选择一门课程";
 $langDenied = "这项功能只能由课程管理员使用";
 $langNoScript = "脚本在浏览器中无法运行, 请忽略这段文本以下的屏幕内容, 无法正常显示... ";
-$langPressAgain = "请再次点击\'保存\'...";
 $langLanguage = "语言";
 $langLanguageTip = "学习对象语言已被定义";
 $langIdentifier = "标识符";
@@ -53,5 +52,4 @@ $langWarningDups = "- 已经从列表中删除了重复的分类名!";
 $langSLC = "启用链接分类名称";
 $langTitle = "标题";
 $langDescription = "简介";
-$langLangs = ":";
 ?>

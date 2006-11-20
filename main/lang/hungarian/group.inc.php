@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langGroupManagement = "Csoportok";
-$langHelp = "Súgó";
 $langNewGroupCreate = "Új csoport(ok) létrehozása";
 $langGroupCreation = "Új csoport(ok) létrehozása";
 $langCreate = "Létre kívánok hozni";
@@ -93,4 +92,7 @@ $GroupTutors = "Konzulensek";
 $GroupWork = "Munka";
 $GroupCalendar = "Naptár";
 $GroupAnnouncements = "Hirdetmények";
+$NoCategoriesDefined = "Nincs létehozott kategória.";
+$GroupsFromClasses = "Csoportok osztályokból";
+$GroupsFromClassesInfo = "Az opció használatával csoportokat hozhat létre a kurzusára feliratkozott osztályok felhasználásával.";
 ?>

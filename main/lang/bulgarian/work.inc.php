@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Инструменти";
+$Tools  = "Инструменти";
 $langDownloadFile = "Качи документ";
 $langTooBig = "Не сте избрали файл или файлът е прекалено голям";
 $langListDeleted = "Целия списък е изтрит.";

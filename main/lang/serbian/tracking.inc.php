@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Prikaži sve";
 $langToolName = "Pra&#263;enje";
-$langTrackingDisabled = "Pra&#263;enje je onemogu&#263;io sistem adminitrator.";
+$TrackingDisabled = "Pra&#263;enje je onemogu&#263;io sistem adminitrator.";
 $langShowNone = "Ne prikazuj nijedan";
 $langCourseStats = "Statistike kursa";
 $langToolsAccess = "Pristup alatima";

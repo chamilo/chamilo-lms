@@ -439,42 +439,4 @@ público o privado.
 <br/><br/>
 Esta puede ser una opción muy útil para tener secciones privadas de documentación y discusión para subgrupos de participantes en su curso. (Incluso podría hacer que cada alumno tuviese su <b>area de documentos</b> privada mediante esta herramienta, creando tantos grupos como alumnos y asignándoles un área de documentos privada a cada grupo.) ";
 $langGuide = "Manual";
-$langHCourseRolesRights = "Ayuda sobre Roles y derechos";
-$langCourseRolesRightsContent = "<p> En la página Descripción de roles y permisos de su curso puede definir exactamente <em>quién tiene permiso para realizar determinadas acciones en cada lugar</em>.
-</p> 
-
-<P>El concepto básico es que para cada herramienta del curso, Ud. pueda especificar quién puede ver el contenido de esa herramienta, añadir nuevos elementos y carpetas, editar una información, o borrar contenidos. Sin embargo, no es necesario que haga esto para cada uno de los usuarios. Los usuarios tienen roles dentro de su curso, como el de visitante invitado, miembro ordinario del curso, profesor ayudante y administrador del curso. En cada uno de estos roles se pueden especificar los permisos de cada herramienta. Ud. puede decidir que todos los usuarios tengan acceso al foro, pero que los invitados no puedan escribir en él - sólo los usuarios registrados. Ud. puede decidir que el profesor ayudante pueda añadir documentos a su curso, pero no borrarlos, etc.</p>
-
-<P>En la herramienta Usuarios de su curso, puede ver los roles de los usuarios y modificarlos (usando el botón modificar de la lista de usuarios).</p>
-
-<h3>Descripción de todos los roles del sitio</h3>
-<p>En Dokeos hay cinco roles. Son los roles que se pueden asignar a cada usuario en un curso. 
-<ul>
-              <li><strong>Visitante anónimo del curso</strong>: éste papel corresponde a cualquier persona situada en cualquier parte del mundo, cualquiera que cuente con un navegador e intente visitar su curso. Por defecto, estos usuarios no tienen derechos y no pueden visualizar el curso.</li>
-  <li><strong>Visitante registrado del curso</strong>: éste papel corresponde a quienes están registrados en la plataforma Dokeos, y visitan su curso sin haberse inscrito en él.. </li>
-  <li><strong>Miembro normal del curso</strong>: éste es el rol que tienen por defecto los usuarios que están inscritos en su curso. Lo habitual es que la mayoría de los usuarios tengan este rol y los administradores del curso asignen el rol de profesor ayudante a alguno de estos usuarios para que les ayuden en el desarrollo del curso.</li>
-  <li><strong>Profesor ayudante</strong>: éste papel de ayudante tiene muchos permisos. En la mayoría de las herramientas, el ayudante puede ver, añadir y modificar el contenido, pero no borrarlo. El profesor ayudante tampoco puede editar la configuración del curso o los derechos por defecto del curso.</li>
-  <li><strong>Administrador del curso</strong>: el administrador del curso tiene todos los derechos en el curso y puede realizar todas las posibilidades que éste le ofrece. El creador de un curso tiene automáticamente este papel por defecto.</li>
-</ul>
-
-<h3>Descripción de todos los permisos</h3>
-<p>En Dokeos hay cuatro permisos básicos:</p>
- <ul>
-<li><strong>Ver</strong>: el permiso de ver una herramienta y sus contenidos.</li>
-<li><strong>Añadir</strong>: el permiso de añadir nuevos contenidos a una herramienta, por ej., añadir enlaces, categorías, documentos, directorios, publicaciones de los estudiantes, mensajes en los foros…</li>
-<li><strong>Editar</strong>: el permiso de editar un contenido en una herramienta, por ej., modificar el url de un enlace, el nombre de un directorio, el título y las palabras clave de un documento…</li>
-<li><strong>Borrar</strong>: el permiso de borrar un contenido en una herramienta, por ej., borrar enlaces, publicaciones de los estudiantes, mensajes de los foros, documentos... </li>
-</ul>
-
-<h3>Descripción de sitios</h3>
-<p>Cada curso y cada herramienta para cada curso tienen una localización independiente en Dokeos. Algunos ejemplos de localizaciones son:</p>
-<ul>
-<li>El curso  TEST_COURSE.</li>
-<li>La herramienta documentos del curso TEST_COURSE.</li>
-<li>La herramienta Agenda del curso Psicología101 </li>
-</ul>
-
-<h3>Configuración de los permisos</h3>
-<p>Un administrador de un curso, puede especificar quien puede hacer qué en cada lugar. En cada combinación de un rol y una localización, los cuatro permisos pueden ser fijados. Puede fijar los derechos para el profesor ayudante en la herramienta documentos, los derechos de adición para los usuarios normales del curso en la herramienta enlaces, etc.</p>
-";
 ?>

@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Kursaj ecoj ";
+$ModifInfo = "Kursaj ecoj ";
 $langModifDone = "La ecoj estas &#349;an&#285;itaj ";
 $langHome = "Reiri al startpa&#285;o ";
 $langCode = "Kurskodo ";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Malferma - aliro permesita al &#265;iu ajn ";
 $OpenToThePlatform = "Malferma - aliro permesita al registritaj uzuloj ";
 $langOpenToThePlatform = "Malferma - aliro permesita al registritaj uzuloj ";
 $langTipLang  = "Cxi tiu lingvo estos deviga por cxiuj uzantoj de cxi tiu kurso.";
-$langAgenda = "Agendo";
+$Agenda = "Agendo";
 $langLink = "Ligiloj ";
 $langDocument = "Dokumentoj";
 $langVid = "Videofilmo";
@@ -88,7 +88,6 @@ $langNotAllowedToUnsubscribe = "Ne permesita ";
 $langDescription = "Priskribo ";
 $langCourseVisibilityClosed = "Ne atingebla; la kurso atingeblas nur por la kursmastrumanto. ";
 $CourseVisibilityClosed = "Fermita - ne aliro al &#265;i-kurso ";
-$NotAllowedToModifyOwnRole = "Modifo de la propra rolo estas malpermesata ";
 $CourseVisibilityModified = "Modifita (la aran&#285;oj estas modifitaj la&#365; la rolrajta sistemo)";
 $WorkEmailAlert = "Averti per retpo&#349;to &#265;e nova publiki&#285;o";
 $WorkEmailAlertActivate = "Aktivigi averton per retpo&#349;to &#265;e nova studenta publikigo.";
@@ -103,5 +102,5 @@ $OrInTime = "A&#365; en ";
 $CourseRegistrationPassword = "Pasvorto de registri&#285;o por kurso";
 $langDescriptionDeleteCourse = "Musklaku sur &#265;i tiun ligon por forigi &#265;iujn postresta&#309;ojn de la kurso en la servilo.<br><br> Estu tre singarda uzante tiun funkcion!";
 $langDescriptionCopyCourse = "Dokeos nun anka&#365; ofertas la eblon kopii perte a&#365; entute ekzistantan kurson al alia kurso, kiu komence povas esti malplena..<br><br>La nura kondi&#265;o estas, ke vi disponas kurson kun nombro da dokumentoj, anoncoj, forumoj... kaj duan kurson enhavantan dokumentojn diferencaj de la unua!";
-$langDescriptionRecycleCourse = "&#264;i tiu funkcio forigas el la kurso la elektitajn erojn, a&#365; &#265;iujn erojn. Dokumentoj, forumoj, ligoj... estas forigotaj. &#264;i tiu proceduro povas esti uzata &#265;e la fino de la edukado, a&#365; post la fino de la akademia jaro. Atentu: anta&#365; ol fari tion, vi prefere unue faru resta&#365;rkopion de via kurso!";
+$DescriptionRecycleCourse = "&#264;i tiu funkcio forigas el la kurso la elektitajn erojn, a&#365; &#265;iujn erojn. Dokumentoj, forumoj, ligoj... estas forigotaj. &#264;i tiu proceduro povas esti uzata &#265;e la fino de la edukado, a&#365; post la fino de la akademia jaro. Atentu: anta&#365; ol fari tion, vi prefere unue faru resta&#365;rkopion de via kurso!";
 ?>

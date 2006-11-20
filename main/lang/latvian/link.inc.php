@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHelp = "Pal&#299;gs";
 $langLinks = "Hipersaites";
 $langLinkName = "Hipersaites nosaukums";
 $langLinkAdd = "Pievienot hipersaiti";
@@ -22,7 +21,6 @@ $langCategoryDel = "Dz&#275;st kategoriju";
 $langCategoryDeleted = "Kategorija un visas t&#257;s hipersaites tika izdz&#275;stas.";
 $langCategoryDelconfirm = "Kad tiek dz&#275;sta kategorija, visas hipersaites taj&#257; tiek dz&#275;sti.\\nVai J&#363;s v&#275;laties dz&#275;st šo kategoriju un visas t&#257;s hipersaites?";
 $langAllCategoryDel = "Dz&#275;st visas kategorijas un visas saites";
-$langAllCategoryDeleted = "Visas kategorijas un visas saites tika dz&#275;stas";
 $langGiveURL = "L&#363;dzu, nor&#257;diet hipersaites URL";
 $langGiveCategoryName = "L&#363;dzu, nor&#257;diet kategorijas nosaukumu";
 $langNoCategory = "Nav nevienas kategorijas";

@@ -49,5 +49,4 @@ $langClarContent2 = "Obriši sadržaj";
 $langHGroups = "Grupe";
 $langGroupsContent = "Sadržaj grupa";
 $langGuide = "Uputstvo";
-$langHCourseRolesRights = "Pomo&#263; o ulogama i pravima";
 ?>

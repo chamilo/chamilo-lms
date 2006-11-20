@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHelp = "ระบบช่วยเหลือ";
 $langLinks = "รายการเชื่อมโยง";
 $langLinkName = "ชื่อรายการเชื่อมโยง ";
 $langLinkAdd = "เพิ่มรายการเชื่อมโยง";
@@ -22,7 +21,6 @@ $langCategoryDel = "ลบประเภท";
 $langCategoryDeleted = "รายการเชื่อมโยงในประเภททั้งหมดถูกลบแล้ว";
 $langCategoryDelconfirm = "เมื่อลบประเภทแล้วทุกรายการเชื่อมโยงต้องถูกลบด้วย คุณแน่ใจที่จะลบหรือไม่ ";
 $langAllCategoryDel = "ลบทุกรายการและประเภทเชื่อมโยง";
-$langAllCategoryDeleted = "ลบทุกรายการและประเภทแล้ว";
 $langGiveURL = "กรุณาใส่ที่อยู่ออนไลน์ของรายการเชื่อมโยง";
 $langGiveCategoryName = "กรุณาตั้งชื่อประเภท";
 $langNoCategory = "ไม่มีประเภท";

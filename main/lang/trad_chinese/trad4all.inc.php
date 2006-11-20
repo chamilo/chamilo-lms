@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $UsersOnline = "&#32218;&#19978;&#20351;&#29992;&#32773;";
-$langDescription = "&#31777;&#20171;";
+$Description = "&#31777;&#20171;";
 $langComment = "&#25688;&#35201;";
 $langVisible = "&#39023;&#31034;/&#38577;&#34255;";
 $langGroup = "&#32676;&#32068;";

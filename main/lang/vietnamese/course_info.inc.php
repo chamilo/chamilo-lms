@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Các xác lập của khoá học";
+$ModifInfo = "Các xác lập của khoá học";
 $langModifDone = "Thông tin đã được hiệu chỉnh";
 $langHome = "Trở về trang chủ";
 $langCode = "Mã khoá học";
@@ -18,7 +18,7 @@ $langConfTip = "By default, you course is only accessible to you as its only reg
 the simplest way is to open registration during
 one week, ask the students to register themselves, then close registration and check for possible intruders in the user list.";
 $langTipLang  = "This language will be valid for every visitor of your course\'s website.";
-$langAgenda = "Agenda (Lịch công tác)";
+$Agenda = "Agenda (Lịch công tác)";
 $langLink = "Liên kết";
 $langDocument = "Tài liệu";
 $langVid = "Video";

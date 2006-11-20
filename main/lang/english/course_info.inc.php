@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Course settings";
+$ModifInfo = "Course settings";
 $langModifDone = "The information has been modified";
 $langHome = "Back to HomePage";
 $langCode = "Course code";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Open - access allowed for the whole world";
 $OpenToThePlatform = "Open - access allowed for users registered on the platform";
 $langOpenToThePlatform = "Open - access allowed for users registered on the platform";
 $langTipLang  = "This language will be valid for every visitor of your course\'s website.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Links";
 $langDocument = "Documents";
 $langVid = "Video";
@@ -89,7 +89,6 @@ $langNotAllowedToUnsubscribe = "Users are not allowed to unsubscribe from this c
 $langDescription = "Description";
 $langCourseVisibilityClosed = "Completely closed; the course is only accessible to the course admin and teaching assistants.";
 $CourseVisibilityClosed = "Closed - the course is only accessible to the course admin and teaching assistants.";
-$NotAllowedToModifyOwnRole = "You are not allowed to modify your own role.";
 $CourseVisibilityModified = "Modified (more detailed settings specified through roles-rights system)";
 $WorkEmailAlert = "Alert by e-mail on work submission";
 $WorkEmailAlertActivate = "Activate e-mail alert on new work submission";
@@ -107,5 +106,5 @@ $OrInTime = "Or in";
 $CourseRegistrationPassword = "Course registration password";
 $langDescriptionDeleteCourse = "Click on this link in order to eliminate any trace from the course on the server.<br><br>This functionality has to be handled with an extreme precaution!";
 $langDescriptionCopyCourse = "Dokeos introduces the possibility of duplicating whole or part of an existing course towards another course, which can be initially empty.<br><br>The only precondition to this handling is to have a course containing some documents, advertisements, forums… and of a second course wich not containing the elements of the first !";
-$langDescriptionRecycleCourse = "This tool empties the course of the selected elements, or the whole of the elements which it contains. It removes the documents, the forums, links… This procedure can be implemented at the end of a formation, or one academic year. Of course, before “recycling”, you will have take care to carry out a complete save of your course !";
+$DescriptionRecycleCourse = "This tool empties the course of the selected elements, or the whole of the elements which it contains. It removes the documents, the forums, links… This procedure can be implemented at the end of a formation, or one academic year. Of course, before “recycling”, you will have take care to carry out a complete save of your course !";
 ?>

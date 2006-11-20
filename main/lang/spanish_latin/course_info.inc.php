@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Modificar la información sobre el curso";
+$ModifInfo = "Modificar la información sobre el curso";
 $langModifDone = "La información ha sido modificada";
 $langHome = "Volver a la página principal";
 $langCode = "Código del curso";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Abierto - accceso permitido para todos";
 $OpenToThePlatform = "Abierto - acceso permitido para usuarios registrados";
 $langOpenToThePlatform = "Abierto - acceso permitido para usuarios registrados";
 $langTipLang  = "Este lenguaje será válido para todos los visitantes de la web de su curso.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Enlaces";
 $langDocument = "Documentos";
 $langVid = "Video";
@@ -89,6 +89,5 @@ $langNotAllowedToUnsubscribe = "Los usuarios no pueden retirarse de este curso";
 $langDescription = "Descripción";
 $langCourseVisibilityClosed = "Completamente cerrado; el curso está accesible solamente para el administrador.";
 $CourseVisibilityClosed = "Cerrado - no hay acceso a este curso";
-$NotAllowedToModifyOwnRole = "No está autorizado para modificar su propio rol.";
 $CourseVisibilityModified = "Modificado (ajustes más detallados especificados a través del sistema roles-permisos)";
 ?>

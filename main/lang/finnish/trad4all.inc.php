@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $UsersOnline = "Käyttäjiä kirjautuneena";
-$langDescription = "Kuvaus";
+$Description = "Kuvaus";
 $langComment = "Kommentti";
 $langVisible = "Näkyvä/Näkymätön";
 $langGroup = "Ryhmä";

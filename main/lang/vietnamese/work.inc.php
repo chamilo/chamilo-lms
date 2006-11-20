@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Công cụ";
+$Tools  = "Công cụ";
 $langDownloadFile = "Upload bài";
 $langTooBig = "Bạn chưa chọn file hoặc file quá lớn.";
 $langListDeleted = "Đã xoá tất cả.";

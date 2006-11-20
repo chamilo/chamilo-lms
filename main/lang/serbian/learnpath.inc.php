@@ -8,7 +8,6 @@ $lang_title = "naslov";
 $lang_prerequisites = "Zahtev";
 $lang_move_up = "Pomeri gore";
 $lang_move_down = "Pomeri dole";
-$langAreYouSureToDelete = "Da li ste sigurni da želite da obrišete";
 $langThisItem = "ovu stavku";
 $lang_title_and_desc = "Naslov & opis";
 $lang_add_item = "Dodaj korak";

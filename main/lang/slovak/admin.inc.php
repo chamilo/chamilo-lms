@@ -2,34 +2,15 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langAdminBy  = "Správca";
-$langAdministrationTools  = "Administrácia";
-$langState  = "Stav systému";
-$langDevAdmin  = "Administrácia vývoja";
-$langLinksToClaroProjectSite  = "Link na webstránku projektu";
-$langStatistiques  = "Štatistika";
-$langNbProf  = "Po&#269;et u&#269;ite&#318;ov";
-$langNbStudents  = "Po&#269;et štundentov";
-$langNbLogin  = "Po&#269;et prihlásení";
-$langToday    = "Dnes";
-$langLast7Days  = "Posledných 7 dní";
-$langLast30Days  = "Posledných 30 dní";
+$AdministrationTools  = "Administrácia";
+$State  = "Stav systému";
+$Statistiques  = "Štatistika";
 $langNbAnnoucement  = "Po&#269;et správ";
-$langCheckDatabase  = "Skontroluj hlavnú databázu dokeos";
-$langPleaseCheckConfigForMainDataBaseName  = "Prosím skontroluj tieto hodnoty<br>
-Meno hlavnej databázy v<br>";
-$langBaseFound  = "Nájdené<br>
-Kontrolujem tabu&#318;ky v tomto zozname";
-$langNeeded  = "potrebné";
-$langNotNeeded  = "nepotrebné";
 $langArchive    = "archív";
 $langUsed       = "použité";
 $langPresent   = "Ok";
-$langCreateMissingNow  = "Chcete vytvori&#357; tabu&#318;ky teraz?";
 $langMissing    = "Chýbajúci";
-$langCheckingCourses  = "Kontrolujem kurzy";
 $langExist      = "existujúci";
-$langCreateClaroTables  = "Vytvor tabu&#318;ky hlavnej databázy";
-$langTableStructureDontKnow  = "Neznáma štruktúra tabu&#318;ky";
 $DisplayTeacherInCourselistTitle = "Zobraz meno u&#269;ite&#318;a v názve kurzu";
 $DisplayTeacherInCourselistComment = "Zobraz meno u&#269;ite&#318;a v poznámke v zozname kurzov";
 $DisplayCourseCodeInCourselistComment = "Zobraz kód kurzu  v poznámke zoznamu kurzov";
@@ -39,9 +20,6 @@ $ConfigureHomePage = "Nakonfigurova&#357; domovskú stránku";
 $CourseCreateActiveToolsTitle = "Moduly zaktivované po vytvorení kurzu";
 $CourseCreateActiveToolsComment = "Ktoré nástroje majú by&#357; zaktivované (vidite&#318;né) pri vytvorení kurzu";
 $langCourseBackup = "Vytvor zálohu tohto kurzu";
-$langSecureDocument = "Zabezpe&#269;i&#357; adresár dokumentov";
-$langProtectedDocument = "vloži&#357; súbor .htaccess do adresára /dokument/ a zabráni&#357; neautorizovaný prístup";
-$langNotProtectedDocument = "povol prístup do adresára /dokumentu/ aj bez pripojenia ku kurzu";
 $langCourseCode = "Kód kurzu";
 $langCourseTitular = "Lektor";
 $langCourseTitle = "Názov kurzu";
@@ -53,8 +31,6 @@ $langCourseAccess = "Prístup ku kurzu";
 $langCourseSubscription = "Prihlásenie do kurzu";
 $langPublicAccess = "Verejný prístup";
 $langPrivateAccess = "Súkromný prístup";
-$langFromHomepageWithoutLogin = "z domovskej stránky portálu aj bez prihlásenia";
-$langSiteReservedToPeopleInMemberList = "prístupný iba zapísaným v zozname užívate&#318;ov";
 $langCode = "Kód";
 $langUsers = "Užívatelia";
 $langLanguage = "Jazyk";

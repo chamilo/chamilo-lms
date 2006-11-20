@@ -20,9 +20,7 @@ $langAdminSurname = "Administratörens förname";
 $langAdminLogin = "Administratörens användare";
 $langAdminPass = "Administratörens lösenord  (<font color=\"red\">du vill kanske ändra detta sedan</font>)";
 $langEducationManager = "Utbildningsansvarig";
-$langHelpDeskPhone = "Helpdesk-telefon";
 $langCampusName = "Ditt campus-namn";
-$langInstituteName = "URL till denna institution";
 $langDBSettingIntro = "
 				Installationsscriptet kommer att skapa huvuddatabasen för claroline. Var snäll och notera att Claroline 
 				behöver skapa många databaser. Om du bara är tillåten för en  

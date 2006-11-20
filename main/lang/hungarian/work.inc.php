@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Eszközök";
+$Tools  = "Eszközök";
 $langDownloadFile = "Fájl feltöltése";
 $langTooBig = "Nem választott ki egy fájlt sem vagy a fájl mérete túl nagy.";
 $langListDeleted = "A teljes lista törölve.";

@@ -346,44 +346,4 @@ $langClarContent2 = "Maak inhoud leeg";
 $langHGroups = "Groepen";
 $langGroupsContent = "Inhoud van de groepen";
 $langGuide = "Handleiding";
-$langHCourseRolesRights = "Hulp bij Rollen en rechten";
-$langCourseRolesRightsContent = "<p>In het overzicht van de rollen en rechten voor uw cursus, kan u precies specifiëren <em>wie de toestemming heeft om wat te doen op welke plaats</em>.</p>
-
-<p>Het basisconcept bestaat erin dat u voor iedere cursusmodule kan specifiëren wie de inhoud mag bekijken, wie nieuwe inhoud mag toevoegen, wie bestaande inhoud mag wijzigen en wie inhoud mag verwijderen. U hoeft dit echter niet voor elke gebruiker afzonderlijk te doen. Gebruikers hebben een bepaalde rol binnen uw cursus, zoals anonieme gast, normaal cursuslid, assistent en cursusbeheerder. Voor elk van deze rollen kan u de rechten per moduele specifiëren. U kan zeggen dat alle gebruikers toegang hebben tot het forum maar dat enkel cursusleden berichten kunnen plaatsen, u kan zeggen dat een assistent documenten kan toevoegen aan uw cursus maar er geen kan verwijderen, enzovoort.</p>
-
-<p>In de gebruikersmodule van uw cursus kan u de gebruikersrollen bekijken en wijzigen (via de knop \'wijzigen\' in de gebruikerslijst).</p>
-
-<h3>Overzicht van de lokale rollen</h3>
-
-<p>Er zijn vijf lokale rollen binnen Dokeos. Dit zijn de rollen die u kan toekennen aan de gebruikers binnen uw cursus.
-<ul>
-	<li><b>Anonieme gast</b>: dit kan gelijk wie zijn die gelijk waar een browser opent en uw cursus probeert te bezoeken. Standaard hebben deze gebruikers helemaal geen rechten en kunnen ze uw cursus zelfs niet bekijken.</li>
-	<li><b>Geregistreerde gast</b>: dit is een gebruiker die ingelogd is op uw Dokeosplatform en uw cursus bezoekt zonder erin te zijn ingeschreven.</li>
-	<li><b>Normaal cursuslid</b>: dit is de standaardrol voor gebruikers die zich inschrijven in uw cursus. Gebruikers behouden deze rol, tenzij u ze de rol van assistent toekent zodat ze uw cursus kunnen helpen ontwikkelen.</li>
-	<li><b>Assistent</b>: de assistentrol heeft veel rechten. In de meeste modules kan de assistent inhoud bekijken, toevoegen en wijzigen, maar niet verwijderen. Standaard kan de assistent geen cursusinstellingen of cursusrechten wijzigen.</li>
-	<li><b>Cursusbeheerder</b>: de cursusbeheerder heeft alle rechten binnen een cursus. De gebruiker die de cursus aangemaakt heeft, krijgt deze rol automatisch toegewezen.</li>
-</ul></p>
-
-<h3>Overzicht van de rechten</h3>
-
-<p>Er zijn vier basisrechten binnen Dokeos.
-<ul>
-	<li><b>Bekijken</b>: het recht om een module en zijn inhoud te zien.</li>
-	<li><b>Toevoegen</b>: het recht om nieuwe inhoud toe te voegen aan een module (bv. links, categorieën, documenten, &hellip;).</li>
-	<li><b>Wijzigen</b>: het recht om bestaande inhoud aan te passen in een module (bv. de <abbr title=\"Uniform Resource Locator\" xml:lang=\"en\" lang=\"en\">URL</abbr> van een link, de naam van een map, de titel van een document, &hellip;).</li>
-	<li><b>Verwijderen</b>: het recht om bestaande inhoud uit een module te verwijderen.</li>
-</ul></p>
-
-<h3>Overzicht van de locaties</h3>
-
-<p>Iedere cursus en iedere cursusmodule van iedere cursus is een aparte locatie binnen Dokeos. Enkele voorbeeldlocaties zijn
-<ul>
-	<li>de cursus TEST_CURSUS,</li>
-	<li>de documentenmodule van de cursus TEST_CURSUS,</li>
-	<li>de agendamodule van de cursus Psychologie101.</li>
-</ul></p>
-
-<h3>Rechten toekennen</h3>
-
-<p>Als cursusbeheerder kan u precies specifiëren wie wat kan doen in welke locatie. Voor iedere combinatie van een rol en een locatie kunnen de vier rechten toegekend worden. U kan dus het bekijkrecht toekennen voor de assistent in de documentenmodule, het toevoegrecht voor het normaal cursuslid in de linkmodule, enzovoort.</p>";
 ?>

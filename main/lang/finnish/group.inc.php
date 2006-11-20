@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langGroupManagement = "Ryhmät";
-$langHelp = "Apua";
 $langNewGroupCreate = "Muodosta uusia ryhmiä";
 $langGroupCreation = "Uusien ryhmien muodostaminen";
 $langCreate = "muodosta";

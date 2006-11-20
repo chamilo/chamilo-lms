@@ -8,7 +8,6 @@ $lang_title = "judul";
 $lang_prerequisites = "Prasyarat";
 $lang_move_up = "Keataskan";
 $lang_move_down = "Kebawahkan";
-$langAreYouSureToDelete = "Anda yakin akan menghapus";
 $langThisItem = "this item";
 $lang_title_and_desc = "Judul & deskripsi";
 $lang_add_item = "Tambah tahapan";

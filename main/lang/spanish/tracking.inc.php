@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Mostrar todo";
 $langToolName = "Estadísticas";
-$langTrackingDisabled = "El seguimiento ha sido deshabilitado por el administrador del sistema.";
+$TrackingDisabled = "El seguimiento ha sido deshabilitado por el administrador del sistema.";
 $langShowNone = "Mostrar ninguno";
 $langCourseStats = "Estadísticas del curso";
 $langToolsAccess = "Accesos a las herramientas";
@@ -148,7 +148,6 @@ $MoySession = "Media de sesión";
 $TakenSessions = "Sesiones seguidas";
 $FollowUp = "Seguimiento";
 $Trainers = "Profesores";
-$Probationers = "Estudiantes";
 $Administrators = "Administradores";
 $Tracks = "Seguimiento";
 $Success = "Calificación";

@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Unelte";
+$Tools  = "Unelte";
 $langDownloadFile = "Incarcati fisierul";
 $langTooBig = "Nu ati selectat nici un fisier, sau acesta este prea mare.";
 $langListDeleted = "Lista a fost stearsa";

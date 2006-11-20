@@ -20,9 +20,7 @@ $langAdminSurname = "Administrator efternavn";
 $langAdminLogin = "Administrator login";
 $langAdminPass = "Administrator adgangskode";
 $langEducationManager = "Undervisningsansvarlig";
-$langHelpDeskPhone = "Helpdesk telefon";
 $langCampusName = "Dit universitets navn";
-$langInstituteName = "URL på denne organisation";
 $langDBSettingIntro = "
 				Install script opretter claroline hoved DB. Venligst bemærk at Claroline 
 				har brug for at oprette mange DBs (medmindre du har valgt \"En\" forneden). If you are allowed only one 

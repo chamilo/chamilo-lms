@@ -11,7 +11,6 @@ $langTool = "Ligiloj al Metadatumoj  XX";
 $langSorry = "Unue elektu kurson ";
 $langDenied = "&#264;i-funkcio estas nur disponebla al la kursmastrumantoj ";
 $langNoScript = "Skripto ne aplikeblas en via retumilo, neu la parton sub la teksto, &#285;i ne funkcios ...";
-$langPressAgain = "Reklaku sur \'Konservi\' ...";
 $langLanguage = "Lingvo";
 $langLanguageTip = "la lingvo, en kiu la lernilo estas farita ";
 $langIdentifier = "Rekonilo ";
@@ -50,5 +49,4 @@ $langWarningDups = "- duoblaj kategorinomoj estas forigitaj el la listo!";
 $langSLC = "Uzu ligilan kategorion nomitan ";
 $langTitle = "Titolo";
 $langDescription = "Priskribo ";
-$langLangs = ": ";
 ?>

@@ -10,7 +10,6 @@ $nameTools = "Utgåtte språkvariabler";
 $langTool = "Lenkers metadata";
 $langSorry = "Velg et kurs først";
 $langDenied = "Denne funksjonen er kun tilgjengelig for kursadministrasjonen";
-$langPressAgain = "Trykk på \'Lagre\' igjen";
 $langLanguage = "Språk";
 $langIdentifier = "Identifikasjon";
 $langKeyword = "Nøkkelord";

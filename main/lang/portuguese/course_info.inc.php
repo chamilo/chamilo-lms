@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Configurações do curso";
+$ModifInfo = "Configurações do curso";
 $langModifDone = "As informações foram alteradas";
 $langHome = "Voltar à página principal";
 $langCode = "Código do curso";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Aberto para todas as pessoas, inscritas ou anónimas.";
 $OpenToThePlatform = "Aberto - acesso permitido aos utilizadores inscritos na plataforma.";
 $langOpenToThePlatform = "Aberto - acesso permitido aos utilizadores inscritos na plataforma.";
 $langTipLang  = "Esta língua será a mesma para todos os visitantes do website do curso.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Ligações";
 $langDocument = "Documentos";
 $langVid = "Vídeo";
@@ -89,7 +89,6 @@ $langNotAllowedToUnsubscribe = "Não permitir anular inscrição";
 $langDescription = "Descrição";
 $langCourseVisibilityClosed = "Curso Oculto. Visível unicamente para o administrador.";
 $CourseVisibilityClosed = "Curso Oculto. Visível unicamente para o administrador.";
-$NotAllowedToModifyOwnRole = "Não está habilitado a alterar as suas próprias funções.";
 $CourseVisibilityModified = "Modificado (ajustes mais detalhados especificados através do sistema de permissões)";
 $WorkEmailAlert = "Avisar por e-mail quando submete um trabalho";
 $WorkEmailAlertActivate = "Activar o alerta por e-mail quando se submete um trabalho";
@@ -107,5 +106,5 @@ $OrInTime = "Ou em";
 $CourseRegistrationPassword = "Password de registo no curso";
 $langDescriptionDeleteCourse = "Clicar nesta ligação para eliminar todos os rastos do curso no servidor. <br><br>Esta função deve ser gerida com o máximo de precaução!";
 $langDescriptionCopyCourse = "Dokeos permite-lhe a possibilidade de duplicar a totalidade ou apenas partes de um curso existente para outro, que pode estar inicialmente vazio.<br><br> A única condição é ter um curso com alguns documentos, anúncios, fóruns... e um segundo curso sem os elementos do primeiro !";
-$langDescriptionRecycleCourse = "Esta ferramenta esvazia o curso dos elementos seleccionados, ou a totalidade dos elementos que contém. Remove os documentos, o fórum, as ligações... Este procedimento deve ser implementado no final da formação ou ano académico. Claro que, antes de reciclar, deve ter o cuidado de fazer um backup do curso ou salvar os elementos imprescindíveis!";
+$DescriptionRecycleCourse = "Esta ferramenta esvazia o curso dos elementos seleccionados, ou a totalidade dos elementos que contém. Remove os documentos, o fórum, as ligações... Este procedimento deve ser implementado no final da formação ou ano académico. Claro que, antes de reciclar, deve ter o cuidado de fazer um backup do curso ou salvar os elementos imprescindíveis!";
 ?>

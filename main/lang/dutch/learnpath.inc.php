@@ -8,7 +8,6 @@ $lang_title = "titel";
 $lang_prerequisites = "Voorkennisvereisten";
 $lang_move_up = "Omhoog";
 $lang_move_down = "Omlaag";
-$langAreYouSureToDelete = "Bent u zeker dat u ";
 $langThisItem = "dit item wenst te verwijderen";
 $lang_title_and_desc = "Titel & beschrijving";
 $lang_add_item = "Voeg een item toe";

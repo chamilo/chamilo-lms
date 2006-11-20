@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langGroupManagement = "Kumpulan";
-$langHelp = "Bantuan";
 $langNewGroupCreate = "Bina kumpulan baru";
 $langGroupCreation = "Bina Kumpulan Baru";
 $langCreate = "Bina";

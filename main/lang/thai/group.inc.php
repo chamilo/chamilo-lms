@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langGroupManagement = "การบริหารจัดการหมู่เรียน";
-$langHelp = "คำแนะนำ";
 $langNewGroupCreate = "สร้างหมู่เรียนใหม่";
 $langGroupCreation = "เปิดหมู่เรียนใหม่";
 $langCreate = "สร้าง";

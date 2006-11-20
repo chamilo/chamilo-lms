@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Показать все";
 $langToolName = "Статистика";
-$langTrackingDisabled = "Система статистики и отслеживания действий пользователей дезактивирована 
+$TrackingDisabled = "Система статистики и отслеживания действий пользователей дезактивирована 
 администратором системы.";
 $langShowNone = "Скрыть все";
 $langCourseStats = "Статистика по курсу";

@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Eines";
+$Tools  = "Eines";
 $langDownloadFile = "Penja un document";
 $langTooBig = "No has escollit cap fitxer o el fitxer és massa gran.";
 $langListDeleted = "La llista sencera ha estat esborrada.";

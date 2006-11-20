@@ -11,7 +11,6 @@ $langTool = "Metadata Link";
 $langSorry = "Pilih sebuah mata kuliah terlebih dahulu";
 $langDenied = "Fungsi ini hanya tersedia untuk administrator mata kuliah";
 $langNoScript = "Skrip tidak difungsikan pada browser anda, silahkan abaikan bagian layar dibawah teks ini, itu tidak dapat berkerja ...";
-$langPressAgain = "Tekan \'Simpan\' kembali ...";
 $langLanguage = "Bahasa";
 $langLanguageTip = "bahasa yang digunakan untuk membuat obyek pembelajaran";
 $langIdentifier = "Identifier (Penciri)";
@@ -50,5 +49,4 @@ $langWarningDups = "- nama kategori berganda dibuang dari daftar!";
 $langSLC = "Bekerja dengan kategori link yang dinamakan";
 $langTitle = "Judul";
 $langDescription = "Deskripsi";
-$langLangs = "-";
 ?>

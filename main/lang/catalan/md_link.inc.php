@@ -19,5 +19,4 @@ $langContinue = "Continuar amb";
 $langIndex = "Índex de paraules";
 $langTitle = "Títol";
 $langDescription = "Descripció";
-$langLangs = ":ca:ca,, da:da,, de:de,, en:en,, es:es,, fi:fi,, fr:fr,, gl:gl,, hr:hr,, hu:hu,, id:id,, it:it,, nl:nl,, pl:pl,, pt:pt,, ro:ro,, sl:sl,, sv:sv,, tr:tr";
 ?>

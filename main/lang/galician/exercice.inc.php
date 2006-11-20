@@ -7,7 +7,6 @@ $langActivate = "Habilitar";
 $langDeactivate = "Deshabilitar";
 $langNoEx = "Por agora non hai exercicios";
 $langNewEx = "Novo exercicio";
-$langNewQu = "Nova pregunta";
 $langQuestion = "Pregunta";
 $langQuestions = "Preguntas";
 $langAnswers = "Respostas";

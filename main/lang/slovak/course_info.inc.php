@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Kód kurzu";
+$ModifInfo = "Kód kurzu";
 $langModifDone = "Informácia bola zmenená";
 $langHome = "Spä&#357; na domovskú stránku";
 $langCode = "Kód kurzu";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Otvorený - prístup povolený pre každého";
 $OpenToThePlatform = "Open - prístup povolený len pre registrovaných na portále";
 $langOpenToThePlatform = "Open - prístup povolený len pre registrovaných na portále";
 $langTipLang  = "Tento jazyk bude prija&#357;e&#318;ný pre každého návštevníka portálu.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Odkazy";
 $langDocument = "Dokumenty";
 $langVid = "Video";
@@ -88,6 +88,5 @@ $langNotAllowedToUnsubscribe = "Užívatelia nemajú povolené zruši&#357; registrác
 $langDescription = "Popis";
 $langCourseVisibilityClosed = "Kompletne zatvorený; kurz je dostupný len pre administrátorov a ich asistentov";
 $CourseVisibilityClosed = "Zatvorený - kurz je dostupný len pre administrátorov a ich asistentov";
-$NotAllowedToModifyOwnRole = "Nemáte povolenie upravova&#357; svoje vlastné role";
 $CourseVisibilityModified = "Upravené (detailnejšie nastavenia urobte cez systém rolí a práv)";
 ?>

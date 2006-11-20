@@ -43,13 +43,11 @@ $langConfirmDelete = "¿Seguro que quere borrar *todos* os metadatos?";
 $langCourseKwds = "Este documento contén as palabras chave do curso";
 $langSearch = "Buscar";
 $langSearchCrit = "¡Unha palabra por liña!";
-$langLangs = ":";
 $langDescription = "Descrición";
 $langTitle = "Título";
 $langStatuses = ":draft:borrador,,final:final,,revised:revisado,,unavailable:non dispoñible";
 $langCosts = ":non:gratis, sen custo,, si:proprietario, con custo";
 $langCopyrights = ":si:con copyright,, non:sen copyright";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Directorio,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:exercicio,, simulation:simulación,, questionnaire:cuestionario,, diagram:diagrama,, figure:figura,, graph:gráfico,, index:índice,, slide:diapositiva,, table:táboa,, narrative text:texto narrativo,, exam:examen,, experiment:experimento,, problem statement:problema,, self assessment:autoevaluación,, lecture:presentación";
 ?>

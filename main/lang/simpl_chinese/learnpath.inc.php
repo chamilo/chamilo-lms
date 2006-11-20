@@ -8,7 +8,6 @@ $lang_title = "标题";
 $lang_prerequisites = "前提条件";
 $lang_move_up = "上移";
 $lang_move_down = "下移";
-$langAreYouSureToDelete = "真的要删除";
 $langThisItem = "这个主题";
 $lang_title_and_desc = "标题和简介";
 $lang_add_item = "添加步骤";

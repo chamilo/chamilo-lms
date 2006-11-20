@@ -2,37 +2,15 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langAdminBy  = "Upravljano : ";
-$langAdministrationTools  = "Alati za nadzor";
-$langState  = "Stanja";
-$langDevAdmin  = "Nadzor  ";
-$langLinksToClaroProjectSite  = "Website projekta - link ";
-$langStatistiques  = "Statistika";
-$langNbProf  = "Broj nastavnika";
-$langNbStudents  = "Broj studenata";
-$langNbLogin  = "Broj prijava";
-$langToday    = "Danas";
-$langLast7Days  = "Zadnjih 7 dana";
-$langLast30Days  = "Zadnjih 30 dana";
+$AdministrationTools  = "Alati za nadzor";
+$State  = "Stanja";
+$Statistiques  = "Statistika";
 $langNbAnnoucement  = "Broj najava";
-$langCheckDatabase  = "Provjeri glavnu bazu podataka";
-$langPleaseCheckConfigForMainDataBaseName  = "Molim provjerite podatke
-<br>
-Naziv baze podataka u 
-<br>";
-$langBaseFound  = "Na&#273;eno
-<br>
-Provjera tablica u bazi podataka";
-$langNeeded  = "potrebno";
-$langNotNeeded  = "nepotrebno";
 $langArchive    = "arhiva ( pohranjeno)";
 $langUsed       = "rabljeno";
 $langPresent   = "U redu";
-$langCreateMissingNow  = "Želite li izraditi tablice?";
 $langMissing    = "nedostaje";
-$langCheckingCourses  = "Provjera kolegija";
 $langExist      = "postoji";
-$langCreateClaroTables  = "Izradi tablicu u glavnoj bazi podataka";
-$langTableStructureDontKnow  = "Struktura tablice nepoznata";
 $DisplayTeacherInCourselistTitle = "Prikaži ime predava&#269;a u naslovu kolegija";
 $DisplayTeacherInCourselistComment = "Prikaži ime predava&#269;a u rubrici \"Opaska\" popisa kolegija";
 $DisplayCourseCodeInCourselistComment = "Prikaži šifru kolegija u rubrici \"Opaska\" popisa kolegija";
@@ -41,11 +19,7 @@ $ThereAreNoVirtualCourses = "Na platformi nema virtualnih kolegija";
 $ConfigureHomePage = "Postavi po&#269;etnu stranicu";
 $CourseCreateActiveToolsTitle = "Moduli aktivni pri izradi kolegija";
 $CourseCreateActiveToolsComment = "Koji alati moraju biti automatski aktivirani (vidljivi) pri izradi novoga kolegija?";
-$AllowUserHeadings = "Dopusti naslove korisnika";
 $langCourseBackup = "Izradi pri&#269;uvni primjerak kolegija";
-$langSecureDocument = "Osiguraj direktorij dokumenta";
-$langProtectedDocument = "Postavi file .htaccess u direktorij /document/ kako bi se izbjegao neovlašten pristup";
-$langNotProtectedDocument = "Omogu&#263;i pristup direktoriju /document/ bez priklju&#269;enja na kolegij";
 $langCourseCode = "Šifra kolegija";
 $langCourseTitular = "Predava&#269;";
 $langCourseTitle = "Naslov kolegija";
@@ -57,8 +31,6 @@ $langCourseAccess = "Pristup kolegiju";
 $langCourseSubscription = "Upis na kolegij";
 $langPublicAccess = "Javni pristup";
 $langPrivateAccess = "Privatni pristup";
-$langFromHomepageWithoutLogin = "s po&#269;etne stranice portala bez prijave";
-$langSiteReservedToPeopleInMemberList = "dostupno samo osobama s popisa korisnika";
 $langCode = "Šifra";
 $langUsers = "Korisnici";
 $langLanguage = "Jeziène postavke";
@@ -125,7 +97,7 @@ $langAddUsersToACourse = "Dodaj korisnike na kolegij";
 $langAddUsersToAClass = "Dodaj korisnike u razred";
 $langAddUsersToAGroup = "Dodaj korisnike u skupinu";
 $langAtLeastOneClassAndOneCourse = "Morate odabrati najmanje jedan razred i jedan kolegij!";
-$langAtLeastOneUser = "Morate odabrati najmanje jednoga korisnika!";
+$AtLeastOneUser = "Morate odabrati najmanje jednoga korisnika!";
 $langAtLeastOneUserAndOneCourse = "Morate odabrati najmanje jednoga korisnika i jedan kolegij!";
 $langClassList = "Popis razreda";
 $langUserList = "Popis korisnika";

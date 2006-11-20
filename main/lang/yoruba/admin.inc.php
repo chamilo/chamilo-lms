@@ -2,32 +2,15 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langAdminBy  = "Ipinfunni nipase";
-$langAdministrationTools  = "Ipinfunni";
-$langState  = "Ipo nipa ero";
-$langDevAdmin  = "Igbero ipinfunni";
-$langLinksToClaroProjectSite  = "so-po sodo igbero webusite";
-$langStatistiques  = "iro numeri";
-$langNbProf  = "eeye awon oluko";
-$langNbStudents  = "eeye awon akeko";
-$langNbLogin  = "iye igba ibawole";
-$langToday    = "eni";
-$langLast7Days  = "ojo keje seyin";
-$langLast30Days  = "Ogbon ojo seyin";
+$AdministrationTools  = "Ipinfunni";
+$State  = "Ipo nipa ero";
+$Statistiques  = "iro numeri";
 $langNbAnnoucement  = "eeye ikede";
-$langCheckDatabase  = "wo olori ipile data dokeos ";
-$langPleaseCheckConfigForMainDataBaseName  = "jowo wo awon iye <br> oruko olori ipile data ninu <br>";
-$langBaseFound  = "Ri<br>wiwa tabili awon ipile eyi";
-$langNeeded  = "dandan";
-$langNotNeeded  = "ko pon dandan";
 $langArchive    = "Ibi Ipamo";
 $langUsed       = "Lo";
 $langPresent   = "dara";
-$langCreateMissingNow  = "se o fe se tabili nisin yi";
 $langMissing    = "so nu";
-$langCheckingCourses  = "wiwo ise";
 $langExist      = "o wa nbe";
-$langCreateClaroTables  = "da tabili fun olori ipile data";
-$langTableStructureDontKnow  = "aomo ona tabili yi ";
 $DisplayTeacherInCourselistTitle = "Fi Oluko wan ni ori eko";
 $DisplayTeacherInCourselistComment = "fi oluko han ninu ise iwe asoye";
 $DisplayCourseCodeInCourselistComment = "fi ena ise yi han ninu iwe iladi";

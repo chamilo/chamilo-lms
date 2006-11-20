@@ -55,7 +55,6 @@ $langConfirmDelete = "Enlever *vraiment* toutes les métadonnées?";
 $langCourseKwds = "Ce document contient les mots clé du cours";
 $langSearch = "Cherchez";
 $langSearchCrit = "Un mot par ligne!";
-$langLangs = ":";
 $langDescription = "Description";
 $langTitle = "Titre";
 $langStatuses = ":draft:brouillon,, 
@@ -79,7 +78,6 @@ application/vnd.ms-powerpoint:MsPowerpoint,,
 application/xml;iso-8859-1:XML;iso-8859-1,, 
 application/xml;utf-8:XML;utf-8,, 
 application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:exercice,, 
      simulation:simulation,, 
      questionnaire:enquête,, 

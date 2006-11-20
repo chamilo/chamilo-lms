@@ -10,7 +10,6 @@ $langTool = "Metadatalinks";
 $langSorry = "Vælg først et kursus";
 $langDenied = "Denne funktion er kun tilgængelig for kursusadministratorer";
 $langNoScript = "Script er ikke aktiveret i din browser, ignorerer venligst skærmbillede nedenfor denne tekst, det vil ikke fungere...";
-$langPressAgain = "Klik på knappen Gem igen...";
 $langLanguage = "Sprog";
 $langLanguageTip = "sproget, som denne læringsplan er lavet på";
 $langIdentifier = "Identificér";
@@ -47,5 +46,4 @@ $langWarningDups = "- dublikerede kategorinavne er slettet fra listen";
 $langSLC = "Arbejd med kategori-links benævnt";
 $langTitle = "Titel";
 $langDescription = "Beskrivelse";
-$langLangs = ":";
 ?>

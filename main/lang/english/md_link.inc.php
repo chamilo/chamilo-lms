@@ -11,7 +11,6 @@ $langTool = " Links Metadata";
 $langSorry = "Select a course first";
 $langDenied = "This function is only available for course admins";
 $langNoScript = "Script is not enabled in your browser, please ignore the screen part below this text, it won\'t work...";
-$langPressAgain = "Press \'Store\' again...";
 $langLanguage = "Language";
 $langLanguageTip = "the language in which this learning object was made";
 $langIdentifier = "Identifier";
@@ -62,5 +61,4 @@ $langWarningDups = " - duplicate categorynames were removed from the list!";
 $langSLC = "Work with Links category named";
 $langTitle = "Title";
 $langDescription = "Description";
-$langLangs = ":";
 ?>

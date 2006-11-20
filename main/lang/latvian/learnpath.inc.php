@@ -8,7 +8,6 @@ $lang_title = "virsraksts";
 $lang_prerequisites = "Priekšnoteikumi";
 $lang_move_up = "Augšup";
 $lang_move_down = "Lejup";
-$langAreYouSureToDelete = "Vai esat p&#257;rliecin&#257;ti, ka v&#275;laties dz&#275;st";
 $langThisItem = "šo ierakstu";
 $lang_title_and_desc = "Virsraksts un apraksts";
 $lang_add_item = "Pievienojiet posmu";

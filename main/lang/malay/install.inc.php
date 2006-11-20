@@ -19,9 +19,7 @@ $langAdminSurname = "Administrator surname";
 $langAdminLogin = "Administrator login";
 $langAdminPass = "Administrator password";
 $langEducationManager = "Education manager";
-$langHelpDeskPhone = "Helpdesk telephone";
 $langCampusName = "Your campus\' name";
-$langInstituteName = "URL of this organisation";
 $langDBSettingIntro = "
 				Install script will create claroline main DB. Please note that Claroline 
 				will need to create many DBs (unless you select option \"One\" below). If you are allowed only one 

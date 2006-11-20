@@ -57,13 +57,11 @@ $langConfirmDelete = "*Biztosan* törölni akarja az összes metaadatot?";
 $langCourseKwds = "Ez a dokumentum tartalmazza a kurzus kulcsszavait";
 $langSearch = "Keresés";
 $langSearchCrit = "Soronként egy szó!";
-$langLangs = ":";
 $langDescription = "Leírás";
 $langTitle = "Cím";
 $langStatuses = ":draft:vázlat,, final:végleges,, revised:javított,, unavailable:nem elérhet&#337;";
 $langCosts = "no: szabad,  ingyenes,, yes: nem szabad,  fizet&#337;s";
 $langCopyrights = ":yes:jogvédett,, no:nem jogvédett";
 $langFormats = ":text/plain;iso-8859-2:text/plain;iso-8859-2,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-2:text/html;iso-8859-2,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-2:XML;iso-8859-2,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:feladat,, simulation:szimuláció,, questionnaire:kérd&#337;ív,, diagram:diagram,, figure:ábra,, graph:grafikon,, index:tárgymutató,, slide:dia,, table:tábla,, narrative text:narrátor szöveg,, exam:teszt,, experiment:kísérlet,, problem statement:probléma megállapítás,, self assessment:önértékelés,, lecture:el&#337;adó";
 ?>

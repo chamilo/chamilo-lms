@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHelp = "Yard&#305;m";
 $langLinks = "Baðlantýlar";
 $langLinkName = "Baðlantý adý";
 $langLinkAdd = "Ba&#287;lant&#305; ekle";
@@ -22,7 +21,6 @@ $langCategoryDel = "Kategori sil";
 $langCategoryDeleted = "Bu kategori ve içindeki ba&#287;lant&#305;lar&#305;n hepsi silindi.";
 $langCategoryDelconfirm = "Kategori silindi&#287;inde içindeki ba&#287;lant&#305;lar&#305;n tamam&#305; da silinecektir, bu kategoriyi silmek istiyormusunuz ?";
 $langAllCategoryDel = "Bütün kategorileri ve ba&#287;lant&#305;lar&#305; sil";
-$langAllCategoryDeleted = "Tüm kategoriler ve tüm ba&#287;lant&#305;lar silindi";
 $langGiveURL = "Lütfen ba&#287;lant&#305;n&#305;n adresini (URL) yaz&#305;n";
 $langGiveCategoryName = "Lütfen kategori ismini yaz&#305;n";
 $langNoCategory = "Herhangi bir kategori bulunmuyor.";

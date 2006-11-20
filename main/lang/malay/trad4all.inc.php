@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langDescription = "Penerangan";
+$Description = "Penerangan";
 $langComment = "Komen";
 $langVisible = "Papar/Tidak Papar";
 $langGroup = "Kumpulan";

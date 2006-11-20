@@ -43,13 +43,11 @@ $langConfirmDelete = "*&#51221;&#47568;&#47196;* &#47784;&#46304; &#47700;&#5344
 $langCourseKwds = "&#51060; &#47928;&#49436;&#45716; &#44284;&#51221; &#53412;&#50892;&#46300;&#47484; &#54252;&#54632;&#54616;&#44256; &#51080;&#49845;&#45768;&#45796;";
 $langSearch = "&#44160;&#49353;";
 $langSearchCrit = "&#46972;&#51064;&#47560;&#45796; &#54620; &#45800;&#50612;&#50473;!";
-$langLangs = ":";
 $langDescription = "&#49444;&#47749;";
 $langTitle = "&#51228;&#47785;";
 $langStatuses = ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
 $langCosts = ":no:free, no cost,, yes:not free, cost";
 $langCopyrights = ":yes:copyright,, no:no copyright";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:exercise,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
 ?>

@@ -7,7 +7,6 @@ $langActivate = "Gør aktiv";
 $langDeactivate = "Gør passiv";
 $langNoEx = "Der er ingen øvelser lige nu";
 $langNewEx = "Ny øvelse";
-$langNewQu = "Nyt spørgsmål";
 $langQuestion = "spørgsmål";
 $langQuestions = "Spørgsmål";
 $langAnswers = "Svar";

@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langDescription = "Описание";
+$Description = "Описание";
 $langComment = "Комментарий";
 $langVisible = "Видимая/скрытая";
 $langGroup = "зТХРРБ";

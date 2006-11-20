@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Montrer tout";
 $langToolName = "Suivi";
-$langTrackingDisabled = "Le système de suivi (tracking) a été désactivé par l\'administrateur système.";
+$TrackingDisabled = "Le système de suivi (tracking) a été désactivé par l\'administrateur système.";
 $langShowNone = "Cacher tout";
 $langCourseStats = "Statistiques du cours";
 $langToolsAccess = "Accès aux outils";
@@ -148,10 +148,8 @@ $MoySession = "Moyenne de la session";
 $TakenSessions = "Sessions suivies";
 $FollowUp = "Suivi";
 $Trainers = "Formateurs";
-$Probationers = "Stagiaires";
 $Administrators = "Administrateurs";
 $Tracks = "Parcours";
 $Success = "Réussite";
 $ExcelFormat = "Format Excel";
-$langConnectionTime = "Temps de connexion";
 ?>

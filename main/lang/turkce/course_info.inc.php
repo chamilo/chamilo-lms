@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Ders bilgilerini deðiþtir";
+$ModifInfo = "Ders bilgilerini deðiþtir";
 $langModifDone = "Bilgiler deðiþti";
 $langHome = "Ana Sayfaya dön";
 $langCode = "Ders kodu";
@@ -22,7 +22,7 @@ $langOpenToTheWorld = "Aç&#305;k - genel eri&#351;ime aç&#305;k";
 $OpenToThePlatform = "Aç&#305;k - sadece platforma kay&#305;tl&#305; kullan&#305;c&#305;lara eri&#351;im hakk&#305;";
 $langOpenToThePlatform = "Aç&#305;k - sadece platforma kay&#305;tl&#305; kullan&#305;c&#305;lara eri&#351;im hakk&#305;";
 $langTipLang  = "Seçtiðiniz dil her ziyaretçi için geçerli olacaktýr.";
-$langAgenda = "Gündem";
+$Agenda = "Gündem";
 $langLink = "Baðlantýlar";
 $langDocument = "Belgeler";
 $langVid = "Video";
@@ -90,6 +90,5 @@ $langNotAllowedToUnsubscribe = "Kullan&#305;c&#305;lar bu dersten kay&#305;tlar&
 $langDescription = "Aç&#305;klama-Tan&#305;mlama";
 $langCourseVisibilityClosed = "Tamamen kapal&#305;, sadece yetkili taraf&#305;ndan eri&#351;ime aç&#305;k";
 $CourseVisibilityClosed = "Kapal&#305; - bu derse eri&#351;im yok";
-$NotAllowedToModifyOwnRole = "Kendi rolünüzü de&#287;i&#351;tiremezsiniz.";
 $CourseVisibilityModified = "De&#287;i&#351;tirildi (roller-haklar sisteminden, daha fazla detayl&#305; ayarlar)";
 ?>

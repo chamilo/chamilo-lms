@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langGroupManagement = "&#44536;&#47353;";
-$langHelp = "&#46020;&#50880;&#47568;";
 $langNewGroupCreate = "&#49352; &#44536;&#47353; &#49373;&#49457;";
 $langGroupCreation = "&#49352; &#44536;&#47353; &#49373;&#49457;";
 $langCreate = "&#49373;&#49457;";

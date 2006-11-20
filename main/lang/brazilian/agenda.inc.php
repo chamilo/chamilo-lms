@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Adicionar novo Ítem na Agenda";
 $ShowAll = "Mostrar Todos os Ítens da Agenda";
 $ShowCurrent = "Mostrar Ítens da Agenda pra o mês atual";
-$AgendaSortChronologicallyUp = "Ítens antigos primeiro";
-$AgendaSortChronologicallyDown = "Ítens recentes primeiro";
 $AddCalendarItem = "Adicionar um novo ítem na Agenda";
 $Day = "Dia";
 $Month = "Mês";
@@ -14,7 +12,6 @@ $Hour = "Hora";
 $Minutes = "Minutos";
 $Title = "Título";
 $Detail = "Detalhe";
-$Lasting = "Faltando";
 $EditSuccess = "A ítem da agenda foi editado";
 $AddSuccess = "Ítem adicionado na agenda";
 $AgendaDeleteSuccess = "O ítem da agenda foi apagado";

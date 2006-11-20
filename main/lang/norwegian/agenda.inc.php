@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Legg til ny oppføring i kalender";
 $ShowAll = "Vis alle oppføringer i kalender";
 $ShowCurrent = "Vis oppføringer i kalender for inneværende måned";
-$AgendaSortChronologicallyUp = "Eldste oppføringer først";
-$AgendaSortChronologicallyDown = "Nyeste oppføringer først";
 $AddCalendarItem = "Legg til ett nytt oppføring i kalender";
 $Day = "Dag";
 $Month = "Måned";
@@ -14,7 +12,6 @@ $Hour = "Time";
 $Minutes = "Minutter";
 $Title = "Tittel";
 $Detail = "Detaljer";
-$Lasting = "Varighet";
 $EditSuccess = "Kalenderoppføringen ble endret";
 $AddSuccess = "Lagt til oppføring i kalender";
 $AgendaDeleteSuccess = "Slettet oppføring fra kalender";

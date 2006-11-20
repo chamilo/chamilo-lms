@@ -11,7 +11,6 @@ $langTool = "metadati dei collegamenti";
 $langSorry = "Seleziona prima un corso";
 $langDenied = "Questa funzione è riservata ai gestori del corso";
 $langNoScript = "L\'esecuzione di script è disabilitata nel tuo browse: ignora quanto segue, non può funzionare...";
-$langPressAgain = "Premi ancora \'Salva\'";
 $langLanguage = "Lingua";
 $langLanguageTip = "la lingua usata per creare il learning object";
 $langIdentifier = "Identificativo";
@@ -57,5 +56,4 @@ $langWarningDups = "- i nomi di categoria duplicato sono stati eliminati dall\'e
 $langSLC = "Adopera la categoria di Collegamento nominata";
 $langTitle = "Titolo";
 $langDescription = "Descrizione";
-$langLangs = ":ca:ca,, da:da,, de:de,, en:en,, es:es,, fi:fi,, fr:fr,, gl:gl,, hr:hr,, hu:hu,, id:id,, it:it,, nl:nl,, pl:pl,, pt:pt,, ro:ro,, sl:sl,, sv:sv,, tr:tr,, xx:xx";
 ?>

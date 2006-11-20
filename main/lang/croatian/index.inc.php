@@ -31,7 +31,6 @@ $langHelptwo = "Pomo&#263;";
 $langRegAll = "prijava";
 $EussMenu = "izbornik";
 $Opinio = "Mišljenje";
-$menuauth = "Potvrda izbornika";
 $email = "elektroni&#269;ka pošta";
 $Intranet = "Intranet";
 $Englin = "engleski";

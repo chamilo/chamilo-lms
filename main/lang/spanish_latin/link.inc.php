@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHelp = "Ayuda";
 $langLinks = "Enlaces";
 $langLinkName = "Nombre del enlace";
 $langLinkAdd = "El enlace ha sido agregado";
@@ -22,7 +21,6 @@ $langCategoryDel = "Eliminar categoría";
 $langCategoryDeleted = "La categoría y todos sus enlaces se ha eliminado";
 $langCategoryDelconfirm = "Cuando elimine una categoría, todos los enlaces de esta categoría se eliminan. ¿Desea eliminar la categoría y sus enlaces?";
 $langAllCategoryDel = " Borrar todas las categorías y sus enlaces";
-$langAllCategoryDeleted = "Se han borrado todas las categorías y enlaces.";
 $langGiveURL = "Por favor indique la URL del elnace";
 $langGiveCategoryName = "Por favor signe un nombre  a la categoría";
 $langNoCategory = "No hay categorías";

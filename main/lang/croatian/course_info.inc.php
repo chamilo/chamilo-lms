@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Postavke kolegija";
+$ModifInfo = "Postavke kolegija";
 $langModifDone = "Podatci su izmijenjeni";
 $langHome = "Povratak na po&#269;etnu stranicu";
 $langCode = "Šifra kolegija";
@@ -22,7 +22,7 @@ $langOpenToTheWorld = "Otvoreno - pristup omogu&#263;en svima";
 $OpenToThePlatform = "Otvoreno - pristup omogu&#263;en korisnicima registriranima na platformu";
 $langOpenToThePlatform = "Otvoreno - pristup omogu&#263;en korisnicima registriranima na platformu";
 $langTipLang  = "Ovaj &#263;e jezik vrijediti za sve posjetioce web stranica kolegija";
-$langAgenda = "Raspored";
+$Agenda = "Raspored";
 $langLink = "Poveznice";
 $langDocument = "Dokumenti";
 $langVid = "Video";

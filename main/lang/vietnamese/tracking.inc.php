@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Xem tất cả";
 $langToolName = "Thống kê";
-$langTrackingDisabled = "Tracking has been disabled by system administrator.";
+$TrackingDisabled = "Tracking has been disabled by system administrator.";
 $langShowNone = "Thu lại";
 $langCourseStats = "Trạng thái khoá học";
 $langToolsAccess = "Truy cập các công cụ";

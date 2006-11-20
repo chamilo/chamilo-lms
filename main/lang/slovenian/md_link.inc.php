@@ -11,7 +11,6 @@ $langTool = "Metapodatki povezav";
 $langSorry = "Najprej izberite teèaj";
 $langDenied = "Ta funkcija je dostopna le upraviteljem teèaja";
 $langNoScript = "Izvajanje skript v vašem brskalniku je onemogoèeno. Zanemarite vsebino zaslona pod tem besedilom, ne bo delovalo...";
-$langPressAgain = "Ponovno pritisnite \'Shrani\'";
 $langLanguage = "Jezik";
 $langLanguageTip = "jezik, v katerem je napisan ta uèni objekt";
 $langIdentifier = "Identifikator";
@@ -50,5 +49,4 @@ $langWarningDups = "- podvojena imena kategorij so bila odstranjena iz seznama!"
 $langSLC = "Delo z kategorijo povezav imenovano";
 $langTitle = "Naslov";
 $langDescription = "Opis";
-$langLangs = ":";
 ?>

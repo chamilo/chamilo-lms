@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Alati";
+$Tools  = "Alati";
 $langDownloadFile = "U&#269;itaj fajl";
 $langTooBig = "Niste selektovali fajl ili je fajl preveliki";
 $langListDeleted = "Cela lista je obrisana.";

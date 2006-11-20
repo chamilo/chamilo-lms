@@ -562,28 +562,4 @@ $langClarContent2 = "Borrar contido";
 $langHGroups = "Grupos";
 $langGroupsContent = "Contido dos grupos";
 $langGuide = "Manual";
-$langHCourseRolesRights = "Axuda sobre roles e dereitos";
-$langCourseRolesRightsContent = "<p>Na páxina de vista de Roles e dereitos para o teu curso, podes definir exactamente <em>a quen lle está permitido facer o que en que sitio</em>.</p>
-<p>O concepto básico é que, para cada ferramenta do curso, podes indicar quen pode ver os contidos desa ferramenta, engadir elementos e cartafois novos, modificar información existente ou eliminar contidos. Porén, non hai que especificar isto para cada usuario individual. Os usuarios teñen roles dentro do curso, como convidado, asistente normal, profesor axudante e administrador do curso. Para cada un destes roles podes especificar os permisos para cada ferramenta. Podes dicir que todos os usuarios poden acceder o foro, pero que os convidados non poden publicar, só os usuarios rexistrados. Podes dicir que o profesor axudante pode engadir documentos ao curso, pero non eliminalos. E así.</p>
-<p>Na ferramenta de usuarios do teu curso podes ver os roles dos usuarios e modificalos (simplemente utiliza o botón editar na lista de usuarios).</p>
-<h3>Visión xeral de todos os roles locais</h3>
-<p>Hai cinco roles locais en Dokeos. Estes son os roles que podes asignarlles aos usuarios do teu curso.
-<ul><li><b>Visitante anónimo do curso</b>: este podería ser calquer desde calquer sitio do mundo que simplemente abra un navegador e tente visitar o teu curso. Por omisión, estes usuarios non teñen nengún dereito e nen sequer poden ver o teu curso.</li>
-<li><b>Visitante rexistrado do curso</b>: este é alguén que está rexistrado na plataforma Dokeos e visita o teu curso sen estar dado de alta.</li>
-<li><b>Membro normal do curso</b></li>: este é o rol por omisión dos usuarios que se matriculan no teu curso. Normalmente, a maioría dos usuarios manteñen este rol e os administradores do curso asínganlle o rol de profesor axudante a algúns usuarios de maneira que poidan axudar a que se desenvolva..</li>
-<li><b>Profesor axudante</b>: este rol auxiliar ten moitos permisos. Na maioría dasferramentas, o axudante pode ver, engadir e modificar contidos, pero non eliminalos. O profesor axudante tampouco pode editar a configuración do curso ou os permisos por omisión do curso.</li>
-<li><b>Administrador do curso</b>: o administrador do curso ten todos os dereitos no curso e pódeo facer todo. O creador dun curso automaticamente recibe este rol.</lil></ul></p>
-<h3>Visión xeral de todos os dereitos</h3>
-<p>Existen catro dereitos básicos en Dokeos:
-<ul><li><b>Ver</b>: o dereito a ver unha ferramenta e os seus contidos</li>
-<li><b>Engadir</b>: o dereito a engadir contidos novos nunha ferramenta, como adicionar ligazóns, categorías, documentos, cartafois, publicacións do alumnado, mensaxes no foro...</li>
-<li><b>Editar</b>: o dereito a modificar os contidos existentes nunha ferramenta, como modificar o URL dun hipervínculo, o nome dun cartafol, o título e palabras chave dun documento...</li>
-<li><b>Eliminar</b>: o dereito a limpar os contidos existentes nunha ferramenta, como eliminar ligazóns, publicacións do alumnado, mensaxes do foro, documentos...</li></ul></p>
-<h3>Vista xeral das localizacións</h3>
-<p>Cada curso e cada ferramenta de cada curso é unha localización separada en Dokeos. Polo tanto, son localizacións
-<ul><li>O curso TEST_COURSE</li>
-<li>A ferramenta de documentos do curso TEST_COURSE</li>
-<li>A ferramenta axenda do curso Psicoloxía</li></ul></p>
-<h3>Configuración dos permisos</h3>
-<p>Como administrador do curso, especificas quen pode facer quen en que sitio. Para cada combinación de rol e localización pódense especificar os catro permisos. Polo tanto, pódese consignar o dereito a ver para o profesor axudante na ferramenta de documentos, o dereito a engadir para os membros normais do curso na ferramenta de ligazóns, etc.</p>";
 ?>

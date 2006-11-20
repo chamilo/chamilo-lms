@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Dodaj nov dogodek";
 $ShowAll = "Prikaži vse dogodke";
 $ShowCurrent = "Prikaži dogodke tekoèega meseca";
-$AgendaSortChronologicallyUp = "Najprej najstarejše";
-$AgendaSortChronologicallyDown = "Najprej najnovejše";
 $AddCalendarItem = "Dodaj nov dogodek";
 $Day = "Dan";
 $Month = "Mesec";
@@ -14,7 +12,6 @@ $Hour = "Ura";
 $Minutes = "Minute";
 $Title = "Naslov";
 $Detail = "Podrobnosti";
-$Lasting = "Trajanje";
 $EditSuccess = "Dogodek je bil spremenjen";
 $AddSuccess = "Dogodek je bil dodan";
 $AgendaDeleteSuccess = "Dogodek je bil odstranjen";

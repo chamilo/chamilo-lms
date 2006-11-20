@@ -11,7 +11,6 @@ $langTool = "Linkovi – Opisne definicije";
 $langSorry = "Selektujte prvo kurs";
 $langDenied = "Opcija je dostupna samo administratorima kursa";
 $langNoScript = "Skript nije dozvoljen u vašem pretraživa&#269;u, molim Vas, ne obra&#263;ajte pažnju na tekst ispod pošto ne&#263;e raditi... ";
-$langPressAgain = "Pritisnite \'Sa&#269;uvaj\' opet...";
 $langLanguage = "Jezik";
 $langLanguageTip = "jezik u kome je napravljen objekat u&#269;enja ";
 $langIdentifier = "Identifikator ";
@@ -51,5 +50,4 @@ $langWarningDups = "– dupla imena kategorija su uklonjena sa liste!";
 $langSLC = "Rad sa kategorijom linkova koja se zove";
 $langTitle = "Naslov";
 $langDescription = "Opis";
-$langLangs = ":";
 ?>

@@ -20,9 +20,7 @@ $langAdminSurname = "Apelidos do Administrador";
 $langAdminLogin = "Login do Administrador ";
 $langAdminPass = "Clave do Administrador";
 $langEducationManager = "Responsable Educativo";
-$langHelpDeskPhone = "Teléfono de Axuda";
 $langCampusName = "Nome do seu portal";
-$langInstituteName = "URL da Institución";
 $langDBSettingIntro = "O script de instalación creará a(s) base(s) de datos principal(is) de Dokeos. Por favor, lembre que Claroline
 necesitará crear varias BBDD. Se o seu fornecedor de servizos só lle permite usar unha base de datos, Dokeos non funcionará a non ser que escolla a opción \"Unha base de datos\".";
 $langStep1 = "Paso 1 de 6 ";

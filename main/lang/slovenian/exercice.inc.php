@@ -7,7 +7,6 @@ $langActivate = "Omogoèi";
 $langDeactivate = "Prepreèi";
 $langNoEx = "Trenutno ni nobene vaje";
 $langNewEx = "Nova vaja";
-$langNewQu = "Novo vprašanje";
 $langQuestion = "Vprašanje";
 $langQuestions = "Vprašanja";
 $langAnswers = "Odgovori";

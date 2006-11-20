@@ -29,7 +29,6 @@ $langHelptwo = "Pomo&#263;";
 $langRegAll = "registrovanje";
 $EussMenu = "meni";
 $Opinio = "Mišljenje";
-$menuauth = "Meni za autorizaciju";
 $email = "e-mail";
 $Intranet = "Intranet";
 $Englin = "engleski";

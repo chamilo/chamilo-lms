@@ -7,7 +7,6 @@ $langActivate = "Enable";
 $langDeactivate = "Disable";
 $langNoEx = "Chưa có bài tập";
 $langNewEx = "Bài tập mới";
-$langNewQu = "Câu hỏi mới";
 $langQuestion = "Câu hỏi";
 $langQuestions = "Câu hỏi";
 $langAnswers = "Trả lời";

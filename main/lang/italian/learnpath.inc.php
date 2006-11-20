@@ -8,7 +8,6 @@ $lang_title = "titolo";
 $lang_prerequisites = "Prerequisiti";
 $lang_move_up = "Sposta sopra";
 $lang_move_down = "Sposta sotto";
-$langAreYouSureToDelete = "Confermi l\'eliminazione?";
 $langThisItem = "questa voce";
 $lang_title_and_desc = "Titolo e descrizione";
 $lang_add_item = "Aggiungi elemento";

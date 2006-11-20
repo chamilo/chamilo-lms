@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langCourseManager = "Менеджер курса";
-$lang_your_password_has_been_emailed_to_you = "Ваш пароль выслан вам по электронной почте.";
+$YourPasswordHasBeenEmailed = "Ваш пароль выслан вам по электронной почте.";
 $lang_enter_email_and_well_send_you_password = "Введите адрес электронной почты, который вы использовали при регистрации,
 и мы вышлем вам пароль. ";
 $langLogin = "Вход, логин";
@@ -38,31 +38,14 @@ $langUserAddExplanation = "Каждая строка необходимого текстого файла должна соде
 $langUserMany = "Импортировать список пользователей из текстового файла";
 $langOneByOne = "Добавить пользователя вручную";
 $langNow = "в настоящее время";
-$langUserRights = "права пользователей";
-$langYesTutor = "является тьютором этого курса";
-$langNoTutor = "не является тьютором этого курса";
-$langDeleteUserDefinition = "Отписать (удалить из списка пользователей <b>этого</b> курса)";
-$langAdminDefinition = "Администратор (право изменять содержание сайта)";
-$langTutorDefinition = "Тьютор (право наблюдать за действиями групп)";
 $langTutor = "Тьютор";
-$langUserNoneMasc = "-";
-$langCanNotUnsubscribeYourSelf = "Вы не можете отписаться от курса, чьим администратором вы являетесь. 
-Только другой администратор курса может это сделать.";
 $langTitular = "Преподаватель";
 $langAddHereSomeCourses = "<font size=2 face=\'arial, helvetica\'><big>Мои курсы</big><br><br>
 			Выберите курсы, к которым вы хотите иметь доступ. Уберите галочки напротив курсов, 
 			к которым вы не хотите иметь доступ (курсы, за которые вы отвечаете, всегда будут вам доступны).
 			Затем нажмите ОК в конце списка.";
-$langUnreg = "Отписать";
-$langAdmR = "Администратор";
-$langEnd = "конец";
-$langFollow50 = "50 следующих";
-$langPreced50 = "50 предыдущих";
-$langBegin = "начало";
 $langStudent = "студент";
 $langAddAU = "Добавить пользователей";
-$langDereg = "был отписан от данного курса";
-$langAndP = "и паролем.";
 $langAddedU = "добавлен. Если вы ввели его адрес, ему отправлено сообщение с именем пользователя ";
 $langTheU = "Пользователь";
 $langRegYou = "зарегистрировал вас на ";
@@ -71,16 +54,10 @@ $langTaken = "уже используется. Выберите другое. ";
 $langUserNo = "Выбранное вами имя пользователя";
 $langFilled = "Вы заполнили не все поля";
 $langInC = "этого курса";
-$langIsNow = "отныне является";
 $langRole = "Роль (не обязательно)";
-$langModRole = "Изменить роль ";
-$langAllAdmin = "отныне имеет <b>все права администрирования сайта</b>";
-$langNoAdmin = "отныне не имеет <b>права редактирования сайта</b>";
 $langAll = "да";
 $langNone = "нет";
-$langModRight = "Изменить права: ";
 $langUsers = "Пользователи";
-$langMyStats = "Моя статистика";
 $langHome = "Вернуться на главную страницу";
 $langProfileReg = "Ваши новые настройки сохранены.";
 $langEmailWrong = "Указанный вами электронный адрес неполон или содержит неподходящие символы. ";
@@ -89,9 +66,7 @@ $langFields = "Вы заполнили не все поля";
 $langAgain = "Начните сначала!";
 $langPassTwo = "Пароль, набранный вами дважды, не идентичен.";
 $langModifProfile = "Изменить настройки";
-$langCanEnter = "Теперь вы можете <a href=../../index.php>войти в виртуальный университет</a>";
 $langIsReg = "Ваши изменения сохранены.";
-$langYourRegTo = "Ваши изменения";
 $langNowGoCreateYourCourse = "Теперь вы можете создать свой курс.";
 $langNowGoChooseYourCourses = "Теперь вы можете выбрать курсы, к которым вы хотите иметь доступ.";
 $langPersonalSettings = "Ваши личные данные записаны и вам был отправлено электронное письмо
@@ -120,28 +95,11 @@ $langUsername = "Имя пользователя";
 $langSurname = "Имя";
 $langName = "Фамилия";
 $langRegistration = "Регистрация";
-$lang_lost_password = "Пароль утерян";
-$langParamSentTo = "Ваши параметры подключения отправлены на адрес";
-$langInPlaceOf = "вместо";
-$langTryWith = "попробуйте ";
 $langYourAccountParam = "Вот ваши параметры подключения";
-$langEmailNotSent = "Что-то не сработало, отправьте это сообщение ";
-$langTotalEntryFound = "Количество найденных данных";
-$langExplainFormLostPass = "Введите тот текст, который вы ввели во время регистрации.";
 $langLoginRequest = "Просьба имени пользователя";
-$langDataFromDb = "Соответствующие данные в база данных";
-$langDataFromUser = "Данные, приведенные пользователем";
-$langCaseSensitiveCaution = "Система различает строчные и прописные буквы.";
-$langWaitAMailOn = "Ждите ответа по поводу ";
-$langAccountExist = "Это аккаунт существует. <BR> Электронное сообщение отправлено администратору. <BR><BR>";
-$langAccountNotExist = "Этот аккаунт не существует. <BR>Электронное сообщение отправлено администратору. 
-Он произведет поиск вручную. <BR><BR>";
-$langMailSentToAdmin = "Электронное сообщение отправлено администратору.";
-$langRetrieve = "Найти мои параметры регистрации";
 $langEmail = "Адрес электронной почты";
 $langLastname = "Фамилия";
 $langFirstname = "Имя";
-$langAddNewUser = "Добавить пользователя в систему";
 $langWorks = "Работы студентов";
 $langAdminOfCourse = "администратор";
 $langSimpleUserOfCourse = "пользователь";

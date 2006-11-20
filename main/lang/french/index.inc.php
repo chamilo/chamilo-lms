@@ -34,7 +34,6 @@ $langHelptwo = "Aide";
 $langRegAll = "S\'inscrire";
 $EussMenu = "menu";
 $Opinio = "Opinion";
-$menuauth = "Zone d\'identification";
 $email = "courriel";
 $Intranet = "Intranet";
 $Englin = "Anglais";

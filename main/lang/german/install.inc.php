@@ -20,9 +20,7 @@ $langAdminSurname = "Administrator Vorname";
 $langAdminLogin = "Administrator login";
 $langAdminPass = "Administrator password";
 $langEducationManager = "Verwalter der Lernplattform";
-$langHelpDeskPhone = "Telefonservice";
 $langCampusName = "Der Name Ihrer Lernplattform";
-$langInstituteName = "URL der Organisation";
 $langDBSettingIntro = "
                                 Installatioonprozess erstellt die Datenbank. Claroline legt mehrere Datenbanken an
                                  (außer wenn Sie die Option \"One\" wählen). Bei vielen Providern können nur eine begrenzte Anzhal von mySQL-Datenbanken angelegt werden";
@@ -84,4 +82,5 @@ $IAccept = "Ich akzeptiere";
 $ConfigSettingsInfo = "Die nachfolgenden Werte werden in Ihre Konfigurationsdatei <b>main/inc/conf/claro_main.conf.php</b> geschrieben:";
 $InstallDokeos = "Dokeos installieren";
 $GoToYourNewlyCreatedPortal = "Gehen Sie zu Ihrem neu erstellten Portal";
+$FirstUseTip = "Sie können die Funktionsweise am besten verstehen, wenn Sie sich bei der ersten Benutzung des Campus mit der Option \"Kurs erstellen\" einschreiben und dann den vorgegebenen Schritten folgen";
 ?>

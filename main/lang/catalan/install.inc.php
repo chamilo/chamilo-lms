@@ -20,9 +20,7 @@ $langAdminSurname = "Cognom de l\'administrator";
 $langAdminLogin = "Login de l\'administrator";
 $langAdminPass = "Password de l\'administrator";
 $langEducationManager = "Cap d\'estudis";
-$langHelpDeskPhone = "Telèfon de suport";
 $langCampusName = "El nom del teu campus";
-$langInstituteName = "URL d\'aquesta institució";
 $langDBSettingIntro = "
 			Les rutines d\'instalació crearan la BD principal de Claroline. Si us plau, recorda que Claroline
 			necessitara crear diverses BD\'s. Si només tens accés a una BD en el teu lloc web per

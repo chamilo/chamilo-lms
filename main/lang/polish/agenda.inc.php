@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Dodaj nowy element agendy";
 $ShowAll = "Poka&#380; wszystkie elementy agendy";
 $ShowCurrent = "Poka&#380; elementy agendy w bie&#380;&#261;cym miesi&#261;cu";
-$AgendaSortChronologicallyUp = "Najstarsze elementy najpierw";
-$AgendaSortChronologicallyDown = "Najnowsze elementy najpierw";
 $AddCalendarItem = "Dodaj nowy element agendy";
 $Day = "Dzie&#324;";
 $Month = "Miesi&#261;c";
@@ -14,7 +12,6 @@ $Hour = "godzina";
 $Minutes = "minut";
 $Title = "Tytu&#322;";
 $Detail = "Szczegó&#322;y";
-$Lasting = "Sta&#322;e";
 $EditSuccess = "Element agendy zosta&#322; wyedytowany";
 $AddSuccess = "Element zosta&#322; dodany do agendy";
 $AgendaDeleteSuccess = "Element agendy zosta&#322; usuni&#281;ty";

@@ -7,7 +7,6 @@ $langActivate = "Papar";
 $langDeactivate = "Tidak Papar";
 $langNoEx = "Tiada Latihan buat masa ini";
 $langNewEx = "Latihan baru";
-$langNewQu = "Soalan Baru";
 $langQuestion = "Soalan";
 $langQuestions = "Soalan";
 $langAnswers = "Jawapan";

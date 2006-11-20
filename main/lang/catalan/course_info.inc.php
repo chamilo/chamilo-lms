@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Modifica la informació del curs";
+$ModifInfo = "Modifica la informació del curs";
 $langModifDone = "La informació ha estat modificada";
 $langHome = "Retorna a la plana principal";
 $langCode = "Codi del curs";
@@ -18,7 +18,7 @@ $langConfTip = "Per dedfecte, el teu curs només és accessible per tu perquè ets 
 la manera més simple és obrir l\'enregistrament durant
 una setmana, demanar als estudiants que s\'enregistrin ells sols, llavors tancar l\'enregistrament i buscar els possibles intrussos en la llista d\'usuaris.";
 $langTipLang  = "Aquest llenguatge serà vàlid per cada visitant del lloc web del teu curs.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Enllasos";
 $langDocument = "Documents";
 $langVid = "Video";

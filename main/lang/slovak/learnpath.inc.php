@@ -8,7 +8,6 @@ $lang_title = "Názov";
 $lang_prerequisites = "vstupné podmienky";
 $lang_move_up = "Posunú&#357; vyššie";
 $lang_move_down = "Posunú&#357; nižšie";
-$langAreYouSureToDelete = "Naozaj chcete zmaza&#357;";
 $langThisItem = "túto položku";
 $lang_title_and_desc = "Názov a popis";
 $lang_add_item = "Prida&#357; krok";

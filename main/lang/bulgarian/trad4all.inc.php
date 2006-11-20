@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $UsersOnline = "Потребители online";
-$langDescription = "Описание";
+$Description = "Описание";
 $langComment = "Коментари";
 $langVisible = "Видим/Невидим";
 $langGroup = "Група";

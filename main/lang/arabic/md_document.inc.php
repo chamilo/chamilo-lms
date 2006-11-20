@@ -43,12 +43,10 @@ $langConfirmDelete = "&#1607;&#1604; &#1601;&#1593;&#1604;&#1575; &#1578;&#1585;
 $langCourseKwds = "&#1575;&#1604;&#1608;&#1579;&#1610;&#1602;&#1577; &#1578;&#1581;&#1578;&#1608;&#1610; &#1593;&#1604;&#1609; &#1575;&#1604;&#1578;&#1593;&#1585;&#1610;&#1601;&#1575;&#1578; &#1575;&#1604;&#1575;&#1587;&#1575;&#1587;&#1610;&#1577; &#1604;&#1604;&#1583;&#1585;&#1587;";
 $langSearch = "&#1575;&#1604;&#1576;&#1581;&#1579;";
 $langSearchCrit = "&#1603;&#1604;&#1605;&#1577; &#1608;&#1575;&#1581;&#1583;&#1577; &#1601;&#1610; &#1603;&#1604; &#1587;&#1591;&#1585;";
-$langLangs = " 	$langLangs";
 $langDescription = "&#1575;&#1604;&#1578;&#1601;&#1575;&#1589;&#1610;&#1604;";
 $langTitle = "&#1575;&#1604;&#1593;&#1606;&#1608;&#1575;&#1606;";
 $langStatuses = "&#1606;&#1587;&#1582;&#1577; &#1575;&#1608;&#1604;&#1610;&#1577;: &#1606;&#1587;&#1582;&#1577; &#1575;&#1608;&#1604;&#1610;&#1577;&#1548;&#1548; &#1606;&#1607;&#1575;&#1574;&#1610;&#1577;: &#1606;&#1607;&#1575;&#1574;&#1610;&#1577;&#1548;&#1548; &#1605;&#1593;&#1583;&#1604;&#1577;: &#1605;&#1593;&#1583;&#1604;&#1577;";
 $langCosts = "&#1604;&#1575; &#1610;&#1608;&#1580;&#1583; &#1585;&#1587;&#1608;&#1605;: &#1604;&#1575; &#1610;&#1608;&#1580;&#1583; &#1578;&#1603;&#1604;&#1601;&#1577; &#1606;&#1593;&#1605;:&#1594;&#1610;&#1585; &#1605;&#1580;&#1575;&#1606;&#1610;&#1577;&#1548; &#1576;&#1578;&#1603;&#1604;&#1601;&#1577;";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = "$langExtensions";
 $langLngResTypes = ":exercise:exercise,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
 ?>

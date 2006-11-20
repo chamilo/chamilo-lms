@@ -11,7 +11,6 @@ $langTool = "การเชื่อมโยงต่อ Metadata";
 $langSorry = "ต้องเลือกวิชาก่อน";
 $langDenied = "คำสั่งนี้อนุญาตเฉพาะผู้บริหารวิชา";
 $langNoScript = "สคริ๊ปคำสั่งนี้ โปรแกรมดูเว็ปไซท์ไม่ได้กำหนดให้ใช้งาน จึงใช้งานไม่ได้ กรุณายกเลิกคำสั่งนี้";
-$langPressAgain = "กด Store อีกครั้ง";
 $langLanguage = "ภาษา";
 $langLanguageTip = "the language in which this learning object was made";
 $langIdentifier = "ตัวบ่งชี้";
@@ -50,5 +49,4 @@ $langWarningDups = "สำเนาชื่อประเภทได้เอาออกจากรายการแล้ว";
 $langSLC = "ใช้งานร่วมกับชื่อของประเภท";
 $langTitle = "ชื่อ";
 $langDescription = "คำอธิบาย";
-$langLangs = ":";
 ?>

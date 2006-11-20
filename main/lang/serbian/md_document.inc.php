@@ -43,13 +43,11 @@ $langConfirmDelete = "Da li *stvarno* želite da obrišete sve Opisne definicije?"
 $langCourseKwds = "Ovaj dokument sadrži klju&#269;ne re&#269;i kursa";
 $langSearch = "Traži";
 $langSearchCrit = "Jedna re&#269; po liniji!";
-$langLangs = ":";
 $langDescription = "Opis";
 $langTitle = "Naslov";
 $langStatuses = ":draft:draft,, kona&#269;no:kona&#269;no,, pregledano:pregledano,, nedostupno:nedostupno";
 $langCosts = ":ne:besplatno, ne pla&#263;a se,, da:nije besplatno, pla&#263;a se";
 $langCopyrights = ":da:copyright,, ne:ne copyright";
 $langFormats = ":tekst/obi&#269;an;iso-8859-1:tekst/obi&#269;an;iso-8859-1,, tekst/obi&#269;an;utf-8:tekst/obi&#269;an;utf-8,, tekst/html;iso-8859-1:tekst/html;iso-8859-1,, tekst/html;utf-8:tekst/html;utf-8,, inode/direktorijum:Folder,, aplikacija/msword:MsWord,, aplikacija/octet-stream:Octet stream,, aplikacija/pdf:PDF,, aplikacija/postscript:PostScript,, aplikacija/rtf:RTF,, aplikacija/vnd.ms-excel:MsExcel,, aplikacija/vnd.ms-powerpoint:MsPowerpoint,, aplikacija/xml;iso-8859-1:XML;iso-8859-1,, aplikacija/xml;utf-8:XML;utf-8,, aplikacija/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":vežbanje:vežbanje,, simulacija:simulacija,, upitnik:upitnik,, dijagram:dijagram,, figura:figura,, graf:graf,, indeks:indeks,, slajd:slajd,, tabela:tabela,, narativni tekst:narativni tekst,, ispit:ispit,, eksperiment:eksperiment,, problem izjava:problem izjava,, samoocenjivanje:samoocenjivanje,, predavanje:predavanje";
 ?>

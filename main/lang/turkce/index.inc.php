@@ -33,7 +33,6 @@ $langHelptwo = "Yard&#305;m";
 $langRegAll = "Kay&#305;t Ol";
 $EussMenu = "menü";
 $Opinio = "Görü&#351;";
-$menuauth = "Menüye giri&#351; onay&#305;";
 $email = "e-posta";
 $Intranet = "Intranet";
 $Englin = "&#304;ngilizce";

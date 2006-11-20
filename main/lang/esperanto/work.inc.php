@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Ilaro";
+$Tools  = "Ilaro";
 $langDownloadFile = "El&#349;uti la dokumenton";
 $langTooBig = "Vi ne elektis el&#349;utendan dosieron a&#365; &#285;i estas tro granda. ";
 $langListDeleted = "La listo estas tute forigita. ";

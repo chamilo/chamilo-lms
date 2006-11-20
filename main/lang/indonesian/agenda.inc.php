@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Tambah Item Baru Agenda";
 $ShowAll = "Tampilkan semua item Agenda";
 $ShowCurrent = "Tampilkan Item Agenda bulan ini";
-$AgendaSortChronologicallyUp = "Item yang lama lebih dahulu";
-$AgendaSortChronologicallyDown = "Item yang baru lebih dahulu";
 $AddCalendarItem = "Tambah item baru Agenda";
 $Day = "Hari";
 $Month = "Bulan";
@@ -14,7 +12,6 @@ $Hour = "Jam";
 $Minutes = "Menit";
 $Title = "Judul";
 $Detail = "Detail";
-$Lasting = "Lama";
 $EditSuccess = "Item agenda telah diedit";
 $AddSuccess = "Item Agenda ditambahkan";
 $AgendaDeleteSuccess = "Item agenda telah dihapus";

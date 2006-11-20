@@ -7,7 +7,6 @@ $lang_title = "titlu";
 $lang_prerequisites = "Prerechizite";
 $lang_move_up = "Mergi in sus";
 $lang_move_down = "Mergi in jos";
-$langAreYouSureToDelete = "Esti sigur ca doresti sa stergi";
 $langThisItem = "acest obiect";
 $lang_title_and_desc = "Titlu si descriere";
 $lang_add_item = "Adauga pas";

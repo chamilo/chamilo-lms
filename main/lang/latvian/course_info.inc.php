@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Kursa iestat&#299;jumi";
+$ModifInfo = "Kursa iestat&#299;jumi";
 $langModifDone = "Inform&#257;cija tika labota";
 $langHome = "Atpaka&#316; uz s&#257;kumlapu";
 $langCode = "Kursa kods";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Atkl&#257;t&#257; pieeja - iesp&#275;jama no jebkuras vie
 $OpenToThePlatform = "Atv&#275;rts - pieeja at&#316;auta visiem sist&#275;m&#257; re&#291;istr&#275;tajiem lietot&#257;jiem";
 $langOpenToThePlatform = "Atkl&#257;t&#257; pieeja - iesp&#275;jama lietot&#257;jiem, kas re&#291;istr&#275;jušies port&#257;l&#257;";
 $langTipLang  = "Nor&#257;d&#299;t&#257; valoda str&#257;d&#257;s visiem J&#363;su kursa apmekl&#275;t&#257;jiem.";
-$langAgenda = "Pl&#257;not&#257;js";
+$Agenda = "Pl&#257;not&#257;js";
 $langLink = "Hipersaites";
 $langDocument = "Dokumenti";
 $langVid = "Video";
@@ -88,6 +88,5 @@ $langNotAllowedToUnsubscribe = "Lietot&#257;jiem ir liegta iesp&#275;ja atteikti
 $langDescription = "Apraksts";
 $langCourseVisibilityClosed = "Piln&#299;b&#257; nosl&#275;gts; šis kurss b&#363;s pieejams tikai kursa administratoram.";
 $CourseVisibilityClosed = "Pieeja šim kursam ir nosl&#275;gta";
-$NotAllowedToModifyOwnRole = "Nav at&#316;auts labot pašam savu administrat&#299;vo st&#257;vokli!";
 $CourseVisibilityModified = "Tika labots (s&#299;k&#257;ki iestat&#299;jumu parametri redzami pieejas ties&#299;bu sist&#275;m&#257;)";
 ?>

@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Adauga item nou";
 $ShowAll = "Prezinta toti itemii";
 $ShowCurrent = "Prezinta itemii lunii curente";
-$AgendaSortChronologicallyUp = "Itemii vechi primii";
-$AgendaSortChronologicallyDown = "Itemi noi primii";
 $AddCalendarItem = "Adauga item in agenda;";
 $Day = "Zi";
 $Month = "Luna";
@@ -14,7 +12,6 @@ $Hour = "Ora";
 $Minutes = "Minute";
 $Title = "Titlu";
 $Detail = "Detaliu";
-$Lasting = "Durata";
 $EditSuccess = "Itemul a fost editat";
 $AddSuccess = "Itemul a fost adaugat";
 $AgendaDeleteSuccess = "Itemul a fost sters";

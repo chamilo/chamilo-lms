@@ -29,7 +29,6 @@ $langHelptwo = "Help";
 $langRegAll = "Registreer";
 $EussMenu = "Menu";
 $Opinio = "Mening";
-$menuauth = "Menu verificatie";
 $email = "E-mail";
 $Intranet = "Intranet";
 $Englin = "Engels";

@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $langCourseProgram  = "Descrição do Curso";
 $langThisCourseDescriptionIsEmpty  = "Este curso ainda não está descrito.";
 $langEditCourseProgram  = "Criar e editar descrição de curso";
-$langQuestionPlan  = "Questões para o professor";
+$QuestionPlan  = "Questões para o professor";
 $langInfo2Say  = "Informações para os utilizadores";
 $langOuAutreTitre  = "Título";
 $langNewBloc  = "Outro";

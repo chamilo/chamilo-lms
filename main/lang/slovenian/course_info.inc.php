@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Nastavitve teèaja";
+$ModifInfo = "Nastavitve teèaja";
 $langModifDone = "Informacija je bila spremenjena";
 $langHome = "Povratek na domaèo stran";
 $langCode = "Koda teèaja";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Odprt - dostop dovoljen vsakomur";
 $OpenToThePlatform = "Odprt - dostop dovoljen vsem uporabnikom, registriranim v portal";
 $langOpenToThePlatform = " Odprt - dostop dovoljen vsem uporabnikom, registriranim v portal";
 $langTipLang  = "Ta jezik bo veljaven za vsakega obiskovalca spletnih strani tvojega teèaja.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Povezave";
 $langDocument = "Dokumenti";
 $langVid = "Video";
@@ -89,7 +89,6 @@ $langNotAllowedToUnsubscribe = "Uporabnikom ni dovoljen izpis iz tega teèaja";
 $langDescription = "Opis";
 $langCourseVisibilityClosed = "Popolnoma zaprt; teèaj je dostopen le upravniku teèaja.";
 $CourseVisibilityClosed = "Zaprt - ni dostopa do tega teèaja";
-$NotAllowedToModifyOwnRole = "Nimaš pravice spreminjati lastnih datotek.";
 $CourseVisibilityModified = "Vidnost spremenjena (podrobnosti doloèa sistem vlog in pravic)";
 $WorkEmailAlert = "E-poštno opozorilo ob oddaji novega izdelka";
 $WorkEmailAlertActivate = "Aktiraj e-poštno obvestilo ob oddaji novega izdelka";
@@ -107,5 +106,5 @@ $OrInTime = "Ali v";
 $CourseRegistrationPassword = "Geslo za registracijo v teèaj";
 $langDescriptionDeleteCourse = "Klikni to povezavo, èe želiš odstraniti vsako sled teèaja s strežnika.<br><br>Rokovanje s to funkcionalnostjo zahteva posebno pazljivost!";
 $langDescriptionCopyCourse = "Dokeos uvaja možnost podvojevanja vsebin celotnega ali dela obstojeèega te&#269;aja v nek drug teèaj, ki je prvotno lahko prazen.<br><br>Edina predpogoja za prepis vsebin sta, da obstaja teèaj za prepis, ki vsebuje npr. nekaj dokumentov, vaj, forumov, ... in da obstaja drug (ciljni) teèaj, ki ne vsebuje elementov prvega!";
-$langDescriptionRecycleCourse = "To orodje odstrani iz teèaja izbrane elemente ali vse elemente, ki jih teèaj vsebuje. Odstrani dokumente, forume, povezave, ... Izvedba te procedure se obièajno upoabi po zakljuèku teèaja ali ob koncu akademskega leta. In seveda, pred “recikliranjem” poskrbite za rezervno kopijo vsebin teèaja.";
+$DescriptionRecycleCourse = "To orodje odstrani iz teèaja izbrane elemente ali vse elemente, ki jih teèaj vsebuje. Odstrani dokumente, forume, povezave, ... Izvedba te procedure se obièajno upoabi po zakljuèku teèaja ali ob koncu akademskega leta. In seveda, pred “recikliranjem” poskrbite za rezervno kopijo vsebin teèaja.";
 ?>

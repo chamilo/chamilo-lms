@@ -43,13 +43,11 @@ $langConfirmDelete = "Vill du *verkligen* radera alla metadata?";
 $langCourseKwds = "Detta dokument innehåller kursens nyckelord";
 $langSearch = "Sök";
 $langSearchCrit = "Ett ord per rad!";
-$langLangs = ":";
 $langDescription = "Beskrivning";
 $langTitle = "Titel";
 $langStatuses = ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
 $langCosts = ":nej:fri, ingen avgift,, ja:inte fri, avgift";
 $langCopyrights = ":ja:copyright,, nej:ingen copyright";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning";
 ?>

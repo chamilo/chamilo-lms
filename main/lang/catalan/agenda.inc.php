@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Afegir una nova activitat a l\'agenda";
 $ShowAll = "Veure totes les activitats";
 $ShowCurrent = "Veure les activitats d\'aquest mes";
-$AgendaSortChronologicallyUp = "Primer activitats més antigues";
-$AgendaSortChronologicallyDown = "Primer activitats més noves";
 $AddCalendarItem = "Afegir una nova anotació a l\'agenda ";
 $Day = "Dia";
 $Month = "Mes";
@@ -14,7 +12,6 @@ $Hour = "Hora";
 $Minutes = "Minuts";
 $Title = "Títol";
 $Detail = "Detall";
-$Lasting = "Últims";
 $EditSuccess = "La anotació ha estat editada";
 $AddSuccess = "Agenda item added";
 $AgendaDeleteSuccess = "The agenda item has been deleted";

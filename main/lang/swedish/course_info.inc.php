@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Modifiera kursinformation";
+$ModifInfo = "Modifiera kursinformation";
 $langModifDone = "Informationen har modifierats";
 $langHome = "Tillbaka till hemsidan";
 $langCode = "Kurskod";
@@ -22,7 +22,7 @@ $langOpenToTheWorld = "Öppen - åtkomst tillåten för hela världen";
 $OpenToThePlatform = "Öppen - access tillåten för alla registrerade på plattformen";
 $langOpenToThePlatform = "Öppen - åtkomst tillåten för användare registrerade på plattformen.";
 $langTipLang  = "Detta språk gäller för all besökare som besöker denna kurswebbsajt.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Länkar";
 $langDocument = "Dokument";
 $langVid = "Video";
@@ -91,6 +91,5 @@ $langNotAllowedToUnsubscribe = "Användare är inte tillåtna att avsluta prenumera
 $langDescription = "Beskrivning";
 $langCourseVisibilityClosed = "Fullständigt stängd; kursen endast åtkomlig för kurs administratör";
 $CourseVisibilityClosed = "Avstängd - ingen åtkomst till denna kurs";
-$NotAllowedToModifyOwnRole = "Du är inte behörig att ändra din egen roll.";
 $CourseVisibilityModified = "Ändrad (mer detaljerade inställningar finns under roller-rättigheter ).";
 ?>

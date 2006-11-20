@@ -29,7 +29,6 @@ $langHelptwo = "帮助";
 $langRegAll = "注册";
 $EussMenu = "菜单";
 $Opinio = "意见";
-$menuauth = "菜单认证";
 $email = "电子邮件";
 $Intranet = "局域网";
 $Englin = "英语";

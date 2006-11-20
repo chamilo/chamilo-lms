@@ -44,13 +44,11 @@ $langConfirmDelete = "Apakah anda sungguh-sunguh ingin menghapus semua metadata?
 $langCourseKwds = "Dokumen ini berisi kata kunci mata kuliah tsb";
 $langSearch = "Cari";
 $langSearchCrit = "Satu kata per baris!";
-$langLangs = "-";
 $langDescription = "Deskripsi";
 $langTitle = "Judul";
 $langStatuses = ":draft:draft,, final:final,, perbaikan:perbaikan,, tak tersedia:tak tersedia";
 $langCosts = ":tidak:gratis, gratis,, ya:tidak gratis, biaya";
 $langCopyrights = ":ya:hak-cipta,, tidak:tidak ber-hak-cipta";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = " -";
 $langLngResTypes = ":exercise:exercise,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
 ?>

@@ -20,9 +20,7 @@ $langAdminSurname = "Yönetici soyad&#305;";
 $langAdminLogin = "Yönetici kullan&#305;c&#305; ad&#305;";
 $langAdminPass = "Yönetici parolas&#305; (<font color=\"red\">bunu de&#287;i&#351;tirmek isteyebilirsiniz</font>)";
 $langEducationManager = "E&#287;itim yöneticisi";
-$langHelpDeskPhone = "Helpdesk telephone";
 $langCampusName = "Kampüsünüzün ad&#305;";
-$langInstituteName = "URL of this institution";
 $langDBSettingIntro = "
 				Install script will create claroline main DB. Please note that Claroline 
 				will need to create many DBs. If you are allowed only one 

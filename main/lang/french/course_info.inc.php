@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Propriétés du cours";
+$ModifInfo = "Propriétés du cours";
 $langModifDone = "Les informations ont été modifiées";
 $langHome = "Retour à la page d\'accueil";
 $langCode = "Code de ce cours";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Ouvert à la planète";
 $OpenToThePlatform = "Ouvert - accès autorisé aux utilisateurs enregistrés sur la plateforme";
 $langOpenToThePlatform = "Ouvert à la plateforme";
 $langTipLang  = "Cette langue vaudra pour tous les visiteurs de votre cours.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Liens";
 $langDocument = "Documents";
 $langVid = "Vidéo";
@@ -90,7 +90,6 @@ $langNotAllowedToUnsubscribe = "Ne pas autoriser l\'annulation de son enregistre
 $langDescription = "Description";
 $langCourseVisibilityClosed = "Complètement fermé - le cours est seulement accessible à son administrateur";
 $CourseVisibilityClosed = "Fermé - pas d\'accès à ce cours";
-$NotAllowedToModifyOwnRole = "Vous n\'etes pas autorisé à modifier votre propre rôle";
 $CourseVisibilityModified = "Modifié (des configurations plus détaillés indiqués par le système de rôle-droits)";
 $WorkEmailAlert = "Alerte par e-mail pour nouveau travail soumis";
 $WorkEmailAlertActivate = "Activer alerte par e-mail pour nouveau travail soumis";
@@ -108,5 +107,5 @@ $OrInTime = "Soit dans";
 $CourseRegistrationPassword = "Mot de passe d\'enregistrement du cours";
 $langDescriptionDeleteCourse = "Cliquez sur ce lien afin d’éliminer toute trace du cours sur le serveur.<br><br>Cette fonctionnalité est à manier avec une extrême précaution !";
 $langDescriptionCopyCourse = "Dokeos introduit la possibilité de dupliquer tout ou partie d’un cours existant vers un autre cours, qui peut être initialement vide.<br>Le seul préalable à cette manipulation est de disposer d’un cours contenant des documents, annonces, forums… et d’un second cours ne contenant pas les éléments du premier !";
-$langDescriptionRecycleCourse = "Cet outil vide le cours des éléments sélectionnés, ou de l’ensemble des éléments qu’il contient. Il supprime les documents, les forums, liens… Cette procédure peut être mise en oeuvre à l’issue d’une formation, ou d’une année universitaire.<br>Bien entendu, avant de « recycler », vous aurez pris soin d’effectuer une sauvegarde complète de votre cours !";
+$DescriptionRecycleCourse = "Cet outil vide le cours des éléments sélectionnés, ou de l’ensemble des éléments qu’il contient. Il supprime les documents, les forums, liens… Cette procédure peut être mise en oeuvre à l’issue d’une formation, ou d’une année universitaire.<br>Bien entendu, avant de « recycler », vous aurez pris soin d’effectuer une sauvegarde complète de votre cours !";
 ?>

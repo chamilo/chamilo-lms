@@ -43,13 +43,11 @@ $langConfirmDelete = "&#264;u *vere* vi volas forigi &#265;iujn metadatumojn? ";
 $langCourseKwds = "&#264;i-dokumento enhavas la &#349;losilvortojn de la kurso ";
 $langSearch = "Ser&#265;i ";
 $langSearchCrit = "Po unu vorto en linio! ";
-$langLangs = ": ";
 $langDescription = "Priskribo ";
 $langTitle = "Titolo";
 $langStatuses = ":draft:malneta versio,, final:fina versio,, revised:reviziita versio,, unavailable:ne disponebla";
 $langCosts = ":no:senpaga,, yes:kontra&#365; pago";
 $langCopyrights = ":yes:kopirajto,, no:ne kopirajto";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ": ";
 $langLngResTypes = ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego";
 ?>

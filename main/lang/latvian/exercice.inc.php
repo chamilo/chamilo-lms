@@ -7,7 +7,6 @@ $langActivate = "Iesl&#275;gt";
 $langDeactivate = "Izsl&#275;gt";
 $langNoEx = "Patlaban nav neviena kontroldarba";
 $langNewEx = "Jauns tests";
-$langNewQu = "Izveidot jaut&#257;jumu";
 $langQuestion = "Jaut&#257;jums";
 $langQuestions = "Jaut&#257;jumi";
 $langAnswers = "Atbildes";

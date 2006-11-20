@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langGroupManagement = "Grupos";
-$langHelp = "Ayuda";
 $langNewGroupCreate = "Crear grupos";
 $langGroupCreation = "Creación de grupos";
 $langCreate = "Crear";

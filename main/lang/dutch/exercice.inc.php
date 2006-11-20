@@ -7,7 +7,6 @@ $langActivate = "Activeren";
 $langDeactivate = "Inactiveren";
 $langNoEx = "Er is momenteel geen oefening.";
 $langNewEx = "Nieuwe oefening";
-$langNewQu = "Nieuwe vraag";
 $langQuestion = "Vraag";
 $langQuestions = "Vragen";
 $langAnswers = "Antwoorden";

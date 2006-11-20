@@ -7,7 +7,6 @@ $langActivate = "Uklju&#269;i";
 $langDeactivate = "Isklju&#269;i";
 $langNoEx = "U ovom trenutku nema testa";
 $langNewEx = "Novi test";
-$langNewQu = "Kreiraj pitanje";
 $langQuestion = "Pitanje";
 $langQuestions = "Pitanja";
 $langAnswers = "Odgovori";

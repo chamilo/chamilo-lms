@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Configurazione";
+$ModifInfo = "Configurazione";
 $langModifDone = "Le informazioni sono state modificate";
 $langHome = "Ritorna alla Pagina Principale";
 $langCode = "Codice del Corso";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Aperto - chiunque può accedere al corso";
 $OpenToThePlatform = "Aperto - accesso consentito solo agli utenti registrati presso la piattaforma";
 $langOpenToThePlatform = "Aperto - accesso consentito agli utenti registrati presso la piattaforma";
 $langTipLang  = "Questa lingua verrà utilizzata per tutti i visitatori del sito del vostro corso.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Collegamenti";
 $langDocument = "Documenti";
 $langVid = "Video";
@@ -91,7 +91,6 @@ $langNotAllowedToUnsubscribe = "Gli utenti non possono cancellarsi dal corso";
 $langDescription = "Descrizione";
 $langCourseVisibilityClosed = "Chiuso definitivamente; il corso è accessibile solo dall\'amministratore del corso";
 $CourseVisibilityClosed = "Chiuso - temporaneamente non è possibile accedere al corso";
-$NotAllowedToModifyOwnRole = "La modifica del proprio ruolo non è ammessa";
 $CourseVisibilityModified = "Modificato (per maggiori dettagli vedi il sotto-sistema ruoli e permessi)";
 $WorkEmailAlert = "Avvisa via e-mail della pubblicazione di un nuovo elaborato.";
 $WorkEmailAlertActivate = "Avvisa via e-mail della pubblicazione di un nuovo elaborato.";
@@ -106,4 +105,8 @@ $AllowUserEditAnnouncement = "Permetti ai corsisti di modificare gli annunci del
 $AllowUserEditAnnouncementActivate = "Consenti la modifica da parte dei corsisti";
 $AllowUserEditAnnouncementDeactivate = "Disabilita la modifica da parte dei corsisti";
 $OrInTime = "o entro";
+$CourseRegistrationPassword = "Password per l\'iscrizione al corso";
+$langDescriptionDeleteCourse = "Clicca su questo collegamento per eliminare completamente il corso dal server.<br /><br />LA FUNZIONE VA USATA CON ESTREMA CAUTELA !";
+$langDescriptionCopyCourse = "Dokeos fornisce la possibilità di duplicare in parte o del tutto un corso, copiandolo su un corso che sia stato creato e sia inizialmente vuoto.<br /><br />L\'unico prerequisito è che il corso origine, da cui partire per la copia, contenga informazioni (documenti, forum...) che non si sovrappongano a quelle del corso destinazione.";
+$DescriptionRecycleCourse = "Questo strumento svuota del tutto o in parte il corso dei suoi contenuti. Il riazzeramento delle informazioni (documenti, forum, collegamenti ecc. saranno cancellati) è utile alla fine dell\'anno formativo per \"riciclare\" il corso. E\' OPPORTUNO FARE UN BACKUP DEL CORSO prima di attivare tale azione distruttiva.";
 ?>

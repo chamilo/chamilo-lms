@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Configurações do curso";
+$ModifInfo = "Configurações do curso";
 $langModifDone = "As informações foram modificadas";
 $langHome = "Voltar para a HomePage";
 $langCode = "Código do curso";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Aberto - acesso permitido para todo mundo";
 $OpenToThePlatform = "Aberto - acesso permitido para usuários registrados na plataforma";
 $langOpenToThePlatform = "Aberto - acesso permitido para usuários registrados na plataforma";
 $langTipLang  = "Essa língua irá valer para todos os visitantes do website do seu curso.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Links";
 $langDocument = "Documentos";
 $langVid = "Vídeo";
@@ -89,7 +89,6 @@ $langNotAllowedToUnsubscribe = "Os usuários não tem permissão para cancelar sua 
 $langDescription = "Descrição";
 $langCourseVisibilityClosed = "Completamente fechado; o curso estará acessível apenas para o administrador do curso.";
 $CourseVisibilityClosed = "Fechado - sem acesso para esse curso";
-$NotAllowedToModifyOwnRole = "Você não tem permissões para alterar suas próprias funções.";
 $CourseVisibilityModified = "Modificado (maiores detalhes nas configurações do sitema de direitos/permissões do sistema)";
 $WorkEmailAlert = "Avisar por e-mail quando um trabalho for enviado";
 $WorkEmailAlertActivate = "Ativar o alerta por e-mail quando se envia um trabalho";
@@ -107,5 +106,5 @@ $OrInTime = "Ou em";
 $CourseRegistrationPassword = "Senha para registro no curso";
 $langDescriptionDeleteCourse = "Clicar neste link para eliminar todos os rastros deste curso no servidor.<br><br>Esta função deve ser utilizada com o máximo de precaução!";
 $langDescriptionCopyCourse = "Dokeos permite a possibilidade de duplicar a totalidade ou apenas partes de um curso existente para outro, que pode estar inicialmente vazio.<br><br>A única condição é ter um curso com alguns documentos, anúncios, fóruns... e um segundo curso sem os elementos constantes do primeiro!";
-$langDescriptionRecycleCourse = "Esta ferramenta esvazia o curso dos elementos selecionados, ou a totalidade dos elementos que contém. Remove os documentos, o fórum, os links... Este procedimento deve ser implementado somente após a conclusão de um curso ou ano académico. Claro que, antes de reciclar, deve ter o cuidado de fazer um backup do curso ou salvar os elementos imprescindíveis!";
+$DescriptionRecycleCourse = "Esta ferramenta esvazia o curso dos elementos selecionados, ou a totalidade dos elementos que contém. Remove os documentos, o fórum, os links... Este procedimento deve ser implementado somente após a conclusão de um curso ou ano académico. Claro que, antes de reciclar, deve ter o cuidado de fazer um backup do curso ou salvar os elementos imprescindíveis!";
 ?>

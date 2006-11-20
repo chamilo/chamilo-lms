@@ -8,7 +8,6 @@ $lang_title = "titolo ";
 $lang_prerequisites = "Anta&#365;sciaj postuloj ";
 $lang_move_up = "Supren ";
 $lang_move_down = "Malsupren ";
-$langAreYouSureToDelete = "&#264;u certe, ke vi ";
 $langThisItem = "volas forigi &#265;i-elementon?";
 $lang_title_and_desc = "Titolo & priskribo ";
 $lang_add_item = "Aldoni elementon ";

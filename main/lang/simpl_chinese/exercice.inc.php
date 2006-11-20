@@ -7,7 +7,6 @@ $langActivate = "显示";
 $langDeactivate = "隐藏";
 $langNoEx = "现在还没有测验";
 $langNewEx = "新测验";
-$langNewQu = "新建问题";
 $langQuestion = "问题";
 $langQuestions = "问题";
 $langAnswers = "答案";

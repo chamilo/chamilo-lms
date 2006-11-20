@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHelp = "Hjälp";
 $langLinks = "Länkar";
 $langLinkName = "Länknamn";
 $langLinkAdd = "Länken har lagts till listan";
@@ -22,7 +21,6 @@ $langCategoryDel = "Radera kategori";
 $langCategoryDeleted = "Kategorin och alla länkar har blivit raderade.";
 $langCategoryDelconfirm = "Vid radering av kategori, kommer alla länkar i denna kategori också att raderas. Är du säker på att du vill radera denna kategori och länkar?";
 $langAllCategoryDel = "Radera alla kategorier och alla länkar";
-$langAllCategoryDeleted = "Alla kategorier och länkar är raderade";
 $langGiveURL = "Ange länkens URL";
 $langGiveCategoryName = "Var snäll ange kategorinamnet";
 $langNoCategory = "Ingen kategori";

@@ -7,7 +7,6 @@ $langActivate = "เปิด";
 $langDeactivate = "ปิด";
 $langNoEx = "ขณะนี้ยังไม่มีการสอบ";
 $langNewEx = "แบบทดสอบใหม่";
-$langNewQu = "สร้างคำถามใหม่";
 $langQuestion = "คำถาม";
 $langQuestions = "คำถามทั้งหมด";
 $langAnswers = "ตัวเลือกตอบ";

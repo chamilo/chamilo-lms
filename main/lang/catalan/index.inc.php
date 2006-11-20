@@ -31,7 +31,6 @@ $langHelptwo = "Ajuda d\'usuari";
 $langRegAll = "Enregistrar alumne ó professor";
 $EussMenu = "WEBEUSS";
 $Opinio = "Dona\'ns la teva opinió";
-$menuauth = "Menú d\'autenticació";
 $email = "dsuesta@hotmail.com";
 $Intranet = "Intranet de l\'EUSS";
 $Englin = "Enginyeria en linia";

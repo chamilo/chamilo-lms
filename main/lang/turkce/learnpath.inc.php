@@ -8,7 +8,6 @@ $lang_title = "ba&#351;l&#305;k";
 $lang_prerequisites = "Ön&#351;artlar";
 $lang_move_up = "Yukar&#305; ta&#351;&#305;";
 $lang_move_down = "A&#351;a&#287;&#305; ta&#351;&#305;";
-$langAreYouSureToDelete = "Silmek istiyormusunuz";
 $langThisItem = "?";
 $lang_title_and_desc = "Ba&#351;l&#305;k ve aç&#305;klama";
 $lang_add_item = "Bölüm ekle";

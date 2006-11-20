@@ -29,7 +29,6 @@ $langHelptwo = "Pal&#299;dz&#299;ba";
 $langRegAll = "re&#291;istr&#275;t";
 $EussMenu = "izv&#275;lne";
 $Opinio = "padoms";
-$menuauth = "Autoriz&#257;cijas izv&#275;lne";
 $email = "e-pasts";
 $Intranet = "Iekšt&#299;kls";
 $Englin = "Ang&#316;u valoda";

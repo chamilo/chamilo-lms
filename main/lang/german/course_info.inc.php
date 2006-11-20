@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Kursinformation ändern";
+$ModifInfo = "Kursinformation ändern";
 $langModifDone = "Information wurde geändert";
 $langHome = "Zurück zur Homepage";
 $langCode = "Kurscode";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Offen - Zugang möglich für alle";
 $OpenToThePlatform = "Offen - Kurs ist zugänglich für Benutzer der Lernplattform";
 $langOpenToThePlatform = "Offen - Zugang möglich für alle eingeschriebenen Benutzer";
 $langTipLang  = "Diese Sprache wird für alle Besucher Ihrer Webseite gültig sein.";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Links";
 $langDocument = "Dokumente";
 $langVid = "Video";
@@ -89,6 +89,22 @@ $langNotAllowedToUnsubscribe = "nicht erlaubt";
 $langDescription = "Beschreibung";
 $langCourseVisibilityClosed = "Geschlossen - der Kurs ist nur dem Kursleiter zugänglich";
 $CourseVisibilityClosed = "Geschlossen - kein Zugang zu diesem Kurs";
-$NotAllowedToModifyOwnRole = "Sie dürfen ihre eigene Rolle nicht bearbeiten.";
 $CourseVisibilityModified = "Modifiziert (speziellere Einstellungen werden durch das Rollen-Rechte System vorgegeben)";
+$WorkEmailAlert = "Bei Abgabe einer Arbeit per E-Mail benachrichtigen";
+$WorkEmailAlertActivate = "E-Mail Benachrichtigung fpr Abgabe einer neuen Arbeit aktivieren";
+$WorkEmailAlertDeactivate = "E.Mail Benachrichtigung bei Abgabe einer neuen Arbeit deaktivieren";
+$DropboxEmailAlert = "Bei Dropbox Abgabe per E.-Mail benachrichtigen";
+$DropboxEmailAlertActivate = "E-Mail Benachrichtigung für Abgabe in Dropbox aktivieren";
+$DropboxEmailAlertDeactivat = "E-Mail Benachrichtigung für Abgabe in Dropbox abschalten";
+$AllowUserEditAgenda = "Nutzern erlauben, Kurs Agenda zu editieren";
+$AllowUserEditAgendaActivate = "Erlaubnis fürs Editieren der Kurs Agenda aktivieren";
+$AllowUserEditAgendaDeactivate = "Erlaubnis fürs Editieren der Kurs Agenda deaktivieren";
+$AllowUserEditAnnouncement = "Nutzern das Editieren der Kurs Ankündigungen erlauben";
+$AllowUserEditAnnouncementActivate = "Erlaubnis fürs Editieren der Kurs Ankündigungen aktivieren";
+$AllowUserEditAnnouncementDeactivate = "Erlaubnis fürs Editieren der Kurs Ankündigungen deaktivieren";
+$OrInTime = "oder in";
+$CourseRegistrationPassword = "Passwort für Kursanmeldung";
+$langDescriptionDeleteCourse = "Klicken Sie auf diesen Link, um jegliche Spur von diesem Kurs vom Server zu entfernen.<br><br>Diese Funktionalität sollte mit äußerster Vorsicht benutzt werden!";
+$langDescriptionCopyCourse = "Dokeos führt die Möglichkeit ein, einen Kurs teilweise oder ganz für einen neuen Kurs zu duplizieren, der zunächst leer sein kann.<br><br>Die einzige Bedingung ist, dass man einen Kurs hat, der einige Dokumente, Ankündigungen, Foren hat ... und einen zweiten Kurs hat, der die Elemente des ersten Kurses nicht hat!";
+$DescriptionRecycleCourse = "Mit diesem Werkzeug entfernt man ausgewählte Elemente aus einem Kurs oder den gesamten Kurs. Es entfernt Dokumente, Foren, Links ... Dieser Schritt kann am Ende einer Periode, eine akademischen Jahres vorgenommen werden. Natürlich sollte man vor dem \"Recycling\" ein komplettes Backup des Kurses anlegen !";
 ?>

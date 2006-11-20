@@ -8,7 +8,6 @@ $lang_title = "Cím";
 $lang_prerequisites = "El&#337;tanulmányok";
 $lang_move_up = "Felfelé mozgat";
 $lang_move_down = "Lefelé mozgat";
-$langAreYouSureToDelete = "Biztosan törlöni kívánja: ";
 $langThisItem = "ez az elem";
 $lang_title_and_desc = "Cím és leírás";
 $lang_add_item = "Lépés hozzáadása";

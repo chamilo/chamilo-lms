@@ -6,7 +6,6 @@ $langMdCallingTool = "&#346;cie&#380;ka nauki - Scorm";
 $langTool = "Operacje MD Scorm";
 $langSorry = "Najpierw wybierz kurs";
 $langDenied = "Ta funkcja jest dost&#281;pna jedynie dla administratorów kursu";
-$langWorkOn = "na";
 $langNotInDB = "wpis niezgodny z DB Dokeos\'a";
 $langManifestSyntax = "(b&#322;&#261;d sk&#322;adni w pliku...)";
 $langEmptyManifest = "(pusty plik...)";

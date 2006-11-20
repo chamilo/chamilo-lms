@@ -7,7 +7,6 @@ $langActivate = "Tee toimiva";
 $langDeactivate = "Piilota";
 $langNoEx = "Tällä hetkellä ei ole harjoituksia";
 $langNewEx = "Uusi harjoitus";
-$langNewQu = "Uusi kysymys";
 $langQuestion = "Kysymys";
 $langQuestions = "Kysymykset";
 $langAnswers = "Vastaukset";

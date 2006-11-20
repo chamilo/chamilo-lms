@@ -11,7 +11,6 @@ $langTool = "Metadatos del enlace";
 $langSorry = "Primero seleccione un curso";
 $langDenied = "Esta función sólo está disponible para administradores";
 $langNoScript = "El script no está activado en su navegador, por favor ignore lo que se vea debajo de este texto, no funcionará";
-$langPressAgain = "Presione \"Guardar\" de nuevo";
 $langLanguage = "Idioma";
 $langLanguageTip = "el idioma en el cual este objeto de aprendizaje fue hecho";
 $langIdentifier = "Identificador";
@@ -58,5 +57,4 @@ $langWarningDups = "¡ - los nombres de categoría duplicados serán retirados de l
 $langSLC = "Trabajar con la categoría de Enlaces nombrada ";
 $langTitle = "Título";
 $langDescription = "Descripción";
-$langLangs = ":";
 ?>

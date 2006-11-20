@@ -17,4 +17,8 @@ $langCombinedCourse = "Mata kuliah gabungan";
 $ToolIsNowVisible = "Tool tersebur kini nampak";
 $ToolIsNowHidden = "Tool tersebut kini tersembunyi";
 $EditLink = "Edit link";
+$GreyIcons = "Kotak Tool";
+$Interaction = "Interaksi";
+$Authoring = "Authoring";
+$Administration = "Administrasi";
 ?>

@@ -24,4 +24,8 @@ $langNoLinkName = "Silahkan isi nama link";
 $langEditLink = "Edit link Homepage Mata Kuliah";
 $langChangePress = "Ubah dan tekan OK";
 $langLinkChanged = "Link Homepage Mata Kuliah diubah.  Gunakan menu di atas untuk kembali ke Homepage.";
+$NoLinkName = "Tanpa nama link";
+$NoLinkURL = "Tanpa URL link";
+$LinkChanged = "Link dimodifikasi";
+$OkSentLink = "Link terlah dikirim";
 ?>

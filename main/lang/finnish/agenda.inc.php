@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Lis‰‰ uusi merkint‰";
 $ShowAll = "N‰yt‰ kaikki kalenterimerkinn‰t";
 $ShowCurrent = "N‰yt‰ t‰m‰n kuun kalenterimerkinn‰t";
-$AgendaSortChronologicallyUp = "Vanhemmat ensin";
-$AgendaSortChronologicallyDown = "Uusimmat ensin";
 $AddCalendarItem = "Lis‰‰ uusi merkint‰";
 $Day = "P‰iv‰";
 $Month = "Kuukausi";
@@ -14,7 +12,6 @@ $Hour = "Tunti";
 $Minutes = "Minuutit";
 $Title = "Otsikko";
 $Detail = "Yksityiskohdat";
-$Lasting = "Kesto";
 $EditSuccess = "Merkint‰‰ on muokattu";
 $AddSuccess = "Merkint‰ on lis‰tty";
 $AgendaDeleteSuccess = "Merkint‰ on poistettu";

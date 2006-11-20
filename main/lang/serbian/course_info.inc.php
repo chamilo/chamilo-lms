@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Podešavanja kursa";
+$ModifInfo = "Podešavanja kursa";
 $langModifDone = "Ova informavija je izmenjena";
 $langHome = "Nazad na po&#269;etnu stranicu";
 $langCode = "Šifra kursa";
@@ -20,7 +20,7 @@ $langOpenToTheWorld = "Otvoren – pristup omogu&#263;en celom svetu";
 $OpenToThePlatform = "Otovreno – pristup je dozvoljen korisnicima koji su registrovani na platformi";
 $langOpenToThePlatform = "Otvoren – pristup dozvoljen svim korisnicima koji su registrovani na platformi";
 $langTipLang  = "Ovaj jezik &#263;e važiti za sve posetioce vašeg kursa";
-$langAgenda = "Agenda";
+$Agenda = "Agenda";
 $langLink = "Linkovi";
 $langDocument = "Dokumenta";
 $langVid = "Video";

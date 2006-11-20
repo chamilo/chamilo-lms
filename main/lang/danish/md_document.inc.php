@@ -51,13 +51,11 @@ $langConfirmDelete = "Vil du virkelig slette alle metadata?";
 $langCourseKwds = "Dette dokument indeholder kursusnøgleord";
 $langSearch = "Søg";
 $langSearchCrit = "Et ord per linie!";
-$langLangs = ":";
 $langDescription = "Beskrivelse";
 $langTitle = "Titel";
 $langStatuses = ":draft:udkast,, final:endelige,, revised:revideret,, unavailable:utilgængelig ";
 $langCosts = ":nej:gratis, ingen betaling,, ja:ikke gratis, betaling";
 $langCopyrights = ":ja:Copyright,, nej:ingen Copyright";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langExtensions = ":";
 $langLngResTypes = ":exercise:exercise,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
 ?>

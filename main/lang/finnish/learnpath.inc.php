@@ -7,7 +7,6 @@ $lang_title = "otsikko";
 $lang_prerequisites = "Ennakkovaatimukset";
 $lang_move_up = "Siirrä ylös";
 $lang_move_down = "Siirrä alas";
-$langAreYouSureToDelete = "Haluatko varmasti poistaa";
 $langThisItem = "tämä asia";
 $lang_title_and_desc = "Otsikko ja kuvaus";
 $lang_add_item = "Lisää osio";

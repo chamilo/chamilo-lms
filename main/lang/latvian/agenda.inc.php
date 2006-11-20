@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Ierakst&#299;t jaunu notikumu pl&#257;not&#257;j&#257;";
 $ShowAll = "Par&#257;d&#299;t visus notikumus";
 $ShowCurrent = "Par&#257;d&#299;t š&#299; m&#275;neša notikumus";
-$AgendaSortChronologicallyUp = "vispirms v&#275;l&#257;kos notikumus ";
-$AgendaSortChronologicallyDown = "Vispirms agr&#257;kos notikumus";
 $AddCalendarItem = "Ierakst&#299;t jaunu notikumu pl&#257;not&#257;j&#257;";
 $Day = "Diena";
 $Month = "M&#275;nesis";
@@ -14,7 +12,6 @@ $Hour = "Stunda";
 $Minutes = "Min&#363;tes";
 $Title = "Virsraksts";
 $Detail = "S&#299;k&#257;k";
-$Lasting = "Ilgums";
 $EditSuccess = "Notikums pl&#257;not&#257;j&#257; tika izlabots";
 $AddSuccess = "Notikums pl&#257;not&#257;ja tika ierakst&#299;ts";
 $AgendaDeleteSuccess = "Notikums no pl&#257;not&#257;ja tika izdz&#275;sts";

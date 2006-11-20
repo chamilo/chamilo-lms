@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Tools";
+$Tools  = "Tools";
 $langDownloadFile = "Dokument hochladen";
 $langTooBig = "Sie haben keine Datei ausgewählt, oder die Datei war zu gross.";
 $langListDeleted = "Die gesamte Liste wurde gelöscht.";

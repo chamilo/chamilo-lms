@@ -7,7 +7,6 @@ $langActivate = "Activeaza";
 $langDeactivate = "Dezactiveaza";
 $langNoEx = "Nu este nici un test momentan";
 $langNewEx = "Test nou";
-$langNewQu = "Creaza o intrebare";
 $langQuestion = "Intrebare";
 $langQuestions = "Intrebari";
 $langAnswers = "Raspunsuri";

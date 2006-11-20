@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langShowAll = "Hepsini Göster";
 $langToolName = "&#304;zleme Arac&#305;";
-$langTrackingDisabled = "&#304;zleme arac&#305; sistem yöneticisi taraf&#305;ndan devre d&#305;&#351;&#305; b&#305;rak&#305;lm&#305;&#351;t&#305;r.";
+$TrackingDisabled = "&#304;zleme arac&#305; sistem yöneticisi taraf&#305;ndan devre d&#305;&#351;&#305; b&#305;rak&#305;lm&#305;&#351;t&#305;r.";
 $langShowNone = "Hiçbirini gösterme";
 $langCourseStats = "Ders &#304;statistikleri";
 $langToolsAccess = "Araçlara Eri&#351;im";

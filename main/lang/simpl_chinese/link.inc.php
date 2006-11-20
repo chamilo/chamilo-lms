@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHelp = "帮助";
 $langLinks = "链接";
 $langLinkName = "链接名称";
 $langLinkAdd = "添加链接";
@@ -22,7 +21,6 @@ $langCategoryDel = "删除分类";
 $langCategoryDeleted = "分类及其中所有链接都已被删除.";
 $langCategoryDelconfirm = "当您删除分类时, 分类中的所有链接也被删除.\\n真的要删除此分类及其链接吗?";
 $langAllCategoryDel = "删除所有分类及其链接";
-$langAllCategoryDeleted = "所有分类及链接都已被删除";
 $langGiveURL = "请给出链接网址";
 $langGiveCategoryName = "请给出分类名称";
 $langNoCategory = "无分类";

@@ -29,7 +29,6 @@ $langHelptwo = "Súgó";
 $langRegAll = "beiratkozik";
 $EussMenu = "menü";
 $Opinio = "Vélemény";
-$menuauth = "Hitelesítési menü";
 $email = "e-mail";
 $Intranet = "Intranet";
 $Englin = "Angol";
@@ -66,4 +65,7 @@ $langOpenarea = "Személyes";
 $langProductions = "Productions";
 $langSendChatRequest = "Chat-felhívás küldése";
 $langRequestDenied = "Visszautasítva.";
+$UsageDatacreated = "Használati adat létrehozva.";
+$SessionView = "Kurzusok megjelenítése munkamenetek szerint rendezve";
+$CourseView = "A kurzusok teljes listájának megjelenítése.";
 ?>

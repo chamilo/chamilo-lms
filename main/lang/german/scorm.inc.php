@@ -38,4 +38,12 @@ $langAutodetect = "automatisch finden";
 $langAccomplishedStepsTotal = "Anzahl erledigte Schritte ";
 $langUnknown = "unbekannt";
 $h = "h";
+$AreYouSureToDeleteSteps = "Sind Sie sicher, dass Sie diese Schritte löschen möchen?";
+$Origin = "Ursprung";
+$Local = "Lokal ";
+$Remote = "Entfernt";
+$FileToUpload = "Datei für Upload";
+$ContentMaker = "Ersteller des Inhalts";
+$ContentProximity = "Ähnlichkeit des Inhalts";
+$UploadLocalFileFromGarbageDir = "Lokale Datei von Haupt/Garbage Verzeichnis hochladen";
 ?>

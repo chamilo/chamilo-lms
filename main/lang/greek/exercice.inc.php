@@ -7,7 +7,6 @@ $langActivate = "Ενεργοποίηση";
 $langDeactivate = "Απενεργοποίηση";
 $langNoEx = "Αυτή τη στιγμή δεν υπάρχει άσκηση";
 $langNewEx = "Καινούρια Ασκηση";
-$langNewQu = "Καινούρια ερώτηση";
 $langQuestion = "Ερώτηση";
 $langQuestions = "Ερωτήσεις";
 $langAnswers = "Απαντήσεις";

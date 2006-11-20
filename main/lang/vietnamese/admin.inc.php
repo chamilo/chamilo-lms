@@ -2,32 +2,15 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langAdminBy  = "Quản trị bởi ";
-$langAdministrationTools  = "Các công cụ quản trị";
-$langState  = "Tình trạng hệ thống";
-$langDevAdmin  = "Quản trị phát triển";
-$langLinksToClaroProjectSite  = "Liên kết tới website của dự án";
-$langStatistiques  = "Thống kê";
-$langNbProf  = "Số giáo viên";
-$langNbStudents  = "Số học sinhs";
-$langNbLogin  = "Số đăng nhập";
-$langToday    = "Hôm nay";
-$langLast7Days  = "7 ngày qua";
-$langLast30Days  = "30 ngày qua";
+$AdministrationTools  = "Các công cụ quản trị";
+$State  = "Tình trạng hệ thống";
+$Statistiques  = "Thống kê";
 $langNbAnnoucement  = "Số thông báo";
-$langCheckDatabase  = "Kiểm tra CSDL chính";
-$langPleaseCheckConfigForMainDataBaseName  = "Please check these values<br>Main database name in <br>";
-$langBaseFound  = "Tìm thấy<br>các Table sau";
-$langNeeded  = "needed";
-$langNotNeeded  = "not needed";
 $langArchive    = "archive";
 $langUsed       = "used";
 $langPresent   = "Ok";
-$langCreateMissingNow  = "Do you want to create tables now�?";
 $langMissing    = "missing";
-$langCheckingCourses  = "Checking courses";
 $langExist      = "exists";
-$langCreateClaroTables  = "Create Table for main Database";
-$langTableStructureDontKnow  = "Structure of this table unknown";
 $langLanguage = "Language";
 $langAddAdminInApache  = "Thêm người quản trịr";
 $langAddFaculties  = "Thêm bộ môn";

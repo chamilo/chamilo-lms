@@ -11,7 +11,6 @@ $langTool = "Links Metadata";
 $langSorry = "Selecteer eerst een cursus";
 $langDenied = "Deze functie is alleen beschikbaar voor de cursusbeheerders";
 $langNoScript = "Script is niet toepasbaar in uw browser, negeer het deel onder de tekst, het zal niet werken&hellip;";
-$langPressAgain = "Druk opnieuw op \"Opslaan\"";
 $langLanguage = "Taal";
 $langLanguageTip = "de taal waarin het leerobject is gemaakt";
 $langIdentifier = "Identificatie";
@@ -59,5 +58,4 @@ $langWarningDups = "- dubbele categorienamen zijn verwijderd uit de lijst!";
 $langSLC = "Werk met een linkcategorie genaamd ";
 $langTitle = "Titel";
 $langDescription = "Omschrijving";
-$langLangs = ":";
 ?>

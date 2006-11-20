@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Engadir un novo evento";
 $ShowAll = "Mostrar todos os eventos";
 $ShowCurrent = "Mostrar todos os eventos da axenda do mes en curso";
-$AgendaSortChronologicallyUp = "Primeiro os eventos antigos";
-$AgendaSortChronologicallyDown = "Primeiro os eventos novos";
 $AddCalendarItem = "Engadir un novo evento á axenda";
 $Day = "Día";
 $Month = "Mes";
@@ -14,7 +12,6 @@ $Hour = "Hora";
 $Minutes = "Minutos";
 $Title = "Título";
 $Detail = "Detalles";
-$Lasting = "Último";
 $EditSuccess = "Evento da axenda editado";
 $AddSuccess = "Evento da axenda engadido";
 $AgendaDeleteSuccess = "Evento da axenda borrado";

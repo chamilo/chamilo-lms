@@ -2,37 +2,15 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langAdminBy  = "Систему администрирует";
-$langAdministrationTools  = "Инструменты администрирования";
-$langState  = "состояние системы";
-$langDevAdmin  = "администрирование разработки";
-$langLinksToClaroProjectSite  = "Ссылки на сайт проекта";
-$langStatistiques  = "Статистика";
-$langNbProf  = "Количество студентов";
-$langNbStudents  = "Количество преподавателей";
-$langNbLogin  = "Количество подключений";
-$langToday    = "сегодня";
-$langLast7Days  = "За последние 7 дней";
-$langLast30Days  = "За последние 30 дней";
+$AdministrationTools  = "Инструменты администрирования";
+$State  = "состояние системы";
+$Statistiques  = "Статистика";
 $langNbAnnoucement  = "Количество объявлений";
-$langCheckDatabase  = "Анализ базы данных";
-$langPleaseCheckConfigForMainDataBaseName  = "Проверье переменные
-<br>
-Имя базы данных в 
-<br>";
-$langBaseFound  = "найденной
-<br>
-Проверка таблиц в базе";
-$langNeeded  = "обязательна";
-$langNotNeeded  = "не требуется";
 $langArchive    = "архив";
 $langUsed       = "используется";
 $langPresent   = "ОК";
-$langCreateMissingNow  = "Вы хотите создать отсутствующие базы данных сейчас?";
 $langMissing    = "отсутствующий";
-$langCheckingCourses  = "Проверка курсов";
 $langExist      = "существует";
-$langCreateClaroTables  = "Создание таблиц главной базы данных";
-$langTableStructureDontKnow  = "Структура данной таблицы неизвестна";
 $ConfigureHomePage = "Конфигурировать домашнюю страницу";
 $langCourseTitular = "Преподаватель";
 $langCourseLanguage = "&#1103;&#1079;&#1099;&#1082;";

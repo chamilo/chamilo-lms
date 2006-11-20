@@ -31,7 +31,6 @@ $langHelptwo = "ระบบช่วยเหลือ";
 $langRegAll = "ลงทะเบียน";
 $EussMenu = "รายการเชื่อมโยง";
 $Opinio = "ความคิดเห็น";
-$menuauth = "รายการสิทธิฐานะ";
 $email = "อีเมล";
 $Intranet = "เครือข่ายภายใน";
 $Englin = "อังกฤษ";

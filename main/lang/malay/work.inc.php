@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langTools  = "Alat Bantu";
+$Tools  = "Alat Bantu";
 $langDownloadFile = "Muatnaik Tugasan";
 $langTooBig = "Anda tidak memilih sebarang fail/saiz fail terlalu besar.";
 $langListDeleted = "Keseluruhan senarai telah dipadam.";

@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Muuta kurssin tietoja";
+$ModifInfo = "Muuta kurssin tietoja";
 $langModifDone = "Tietoja on muutettu";
 $langHome = "Takaisin omalle sivulle";
 $langCode = "Kurssin koodi";
@@ -19,7 +19,7 @@ $langConfTip = "Oletuksena kurssille on pääsy vain rekisteröityneille henkilöill
 $langOpenToTheWorld = "Avoinna - kaikilla pääsy (myös vierailijat)";
 $langOpenToThePlatform = "Avoinna - kaikki ympäristöön rekisteröityneet käyttäjät pääsevät sisälle";
 $langTipLang  = "Tämä kieli on pätee kaikille kurssin sivuston kävijöille.";
-$langAgenda = "Esityslista";
+$Agenda = "Esityslista";
 $langLink = "Linkit";
 $langDocument = "Dokumentit";
 $langVid = "Video";

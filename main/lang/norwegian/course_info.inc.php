@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langModifInfo = "Kursinnstillinger";
+$ModifInfo = "Kursinnstillinger";
 $langModifDone = "Informasjonen ble endret";
 $langHome = "Tilbake til hjemmesiden";
 $langCode = "Kurskode";

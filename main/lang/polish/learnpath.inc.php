@@ -7,7 +7,6 @@ $lang_title = "tytu&#322;";
 $lang_prerequisites = "Wymogi";
 $lang_move_up = "Podnie&#347;";
 $lang_move_down = "Opu&#347;&#263;";
-$langAreYouSureToDelete = "Na pewno usun&#261;&#263;";
 $langThisItem = "ten przedmiot";
 $lang_title_and_desc = "Tytu&#322; i opis";
 $lang_add_item = "Dodaj krok";

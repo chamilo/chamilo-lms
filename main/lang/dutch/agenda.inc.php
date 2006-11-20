@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $AgendaAdd = "Nieuw agenda-item";
 $ShowAll = "Toon alle agenda-items";
 $ShowCurrent = "Toon de agenda-items van deze maand";
-$AgendaSortChronologicallyUp = "Oudste items eerst";
-$AgendaSortChronologicallyDown = "Nieuwste items eerst";
 $AddCalendarItem = "Voeg nieuw agenda-item toe";
 $Day = "Dag";
 $Month = "Maand";
@@ -14,7 +12,6 @@ $Hour = "Uur";
 $Minutes = "Minuten";
 $Title = "Titel";
 $Detail = "Detail";
-$Lasting = "Duur";
 $EditSuccess = "Het agenda-item is gewijzigd.";
 $AddSuccess = "Het agenda-item is toegevoegd.";
 $AgendaDeleteSuccess = "Het agenda-item is verwijderd.";

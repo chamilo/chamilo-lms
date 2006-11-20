@@ -336,7 +336,7 @@ function get_number_of_users()
 	}
 	else{
 		$sql = "SELECT COUNT(id_user)+1 AS number_of_users
-				FROM ".Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE)."
+				FROM $user_table u, ".Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE)."
 				WHERE course_code= '".$_SESSION['_course']['id']."'
 				AND id_session='".$_SESSION['id_session']."'";
 	}

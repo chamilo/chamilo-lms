@@ -319,7 +319,7 @@ Display :: display_footer();
 // This function retrieves all the agenda items of all the course of the user
 function get_agendaitems($rootWeb, $courses_dbs, $month, $year)
 {
-	global $courseTablePrefix, $dbGlu;
+	global $dbGlu;
 	global $_user;
 	$items = array ();
 	// get agenda-items for every course
@@ -627,7 +627,7 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	global $DaysShort, $DaysLong;
 	global $MonthsLong;
 	global $query;
-	global $courseTablePrefix, $dbGlu;
+	global $dbGlu;
 	// some debug information
 	// echo "dag: ".$day;
 	// echo "maand: ".$month;
@@ -702,7 +702,7 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 // show the monthcalender of the given month
 function get_day_agendaitems($rootWeb, $courses_dbs, $month, $year, $day)
 {
-	global $courseTablePrefix, $dbGlu;
+	global $dbGlu;
 	global $_user;
 	$items = array ();
 
@@ -803,7 +803,7 @@ function get_day_agendaitems($rootWeb, $courses_dbs, $month, $year, $day)
   ============================================================================*/
 function get_week_agendaitems($rootWeb, $courses_dbs, $month, $year, $week = '')
 {
-	global $courseTablePrefix, $dbGlu;
+	global $dbGlu;
 	global $TABLEAGENDA, $TABLE_ITEMPROPERTY;
 	global $_user;
 	$items = array ();

@@ -1273,7 +1273,7 @@ class CourseManager
 	 */
 	function delete_course($code)
 	{
-		global $singleDbEnabled, $courseTablePrefix, $dbGlu;
+		global $_configuration, $dbGlu;
 		$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
 		$table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 		$table_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
@@ -1306,14 +1306,14 @@ class CourseManager
 			$sql = "SELECT * FROM $table_course WHERE code='".$code."'";
 			$res = api_sql_query($sql, __FILE__, __LINE__);
 			$course = mysql_fetch_object($res);
-			if (!$singleDbEnabled)
+			if (!$_configuration['single_database'])
 			{
 				$sql = "DROP DATABASE IF EXISTS ".$course->db_name;
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 			else
 			{
-				$db_pattern = $courseTablePrefix.$course->db_name.$dbGlu;
+				$db_pattern = $_configuration['table_prefix'].$course->db_name.$dbGlu;
 				$sql = "SHOW TABLES LIKE '$db_pattern%'";
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 				while (list ($courseTable) = mysql_fetch_row($result))
@@ -1344,8 +1344,9 @@ class CourseManager
 	 */
 	function create_database_dump($course_code)
 	{
-		global $singleDbEnabled;
-		if ($singleDbEnabled)
+		global $_configuration;
+		
+		if ($_configuration['single_database'])
 		{
 			return;
 		}

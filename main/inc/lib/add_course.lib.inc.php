@@ -83,7 +83,7 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
  */
 function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = "", $prefix4path = "", $addUniquePrefix = false, $useCodeInDepedentKeys = true)
 {
-	global $rootSys, $coursesRepositoryAppend, $prefixAntiNumber, $singleDbEnabled, $mainDbName, $courseTablePrefix, $dbGlu;
+	global $rootSys, $coursesRepositoryAppend, $prefixAntiNumber, $_configuration, $mainDbName, $dbGlu;
 
 	$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
 
@@ -154,9 +154,9 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 			$finalSuffix['CourseId'] = substr(md5(uniqid(rand())), 0, 4);
 		}
 
-		if($singleDbEnabled)
+		if($_configuration['single_database'])
 		{
-			$query = "SHOW TABLES FROM `$mainDbName` LIKE '$courseTablePrefix$keysCourseDbName$dbGlu%'";
+			$query = "SHOW TABLES FROM `$mainDbName` LIKE '".$_configuration['table_prefix']."$keysCourseDbName$dbGlu%'";
 			$result = api_sql_query($query, __FILE__, __LINE__);
 		}
 		else
@@ -250,12 +250,14 @@ function prepare_course_repository($courseRepository, $courseId)
 
 function update_Db_course($courseDbName)
 {
-	global $singleDbEnabled, $courseTablePrefix, $dbGlu;
+	global $_configuration, $dbGlu;
 
-	if(!$singleDbEnabled)
+	if(!$_configuration['single_database'])
+	{
 		api_sql_query("CREATE DATABASE IF NOT EXISTS `" . $courseDbName . "`", __FILE__, __LINE__);
+	}
 
-	$courseDbName = $courseTablePrefix.$courseDbName.$dbGlu;
+	$courseDbName = $_configuration['table_prefix'].$courseDbName.$dbGlu;
 
 	$tbl_course_homepage 		= $courseDbName . "tool";
 	$TABLEINTROS 				= $courseDbName . "tool_intro";
@@ -1344,9 +1346,9 @@ function lang2db($string)
 */
 function fill_Db_course($courseDbName, $courseRepository, $language)
 {
-	global $singleDbEnabled, $courseTablePrefix, $dbGlu, $clarolineRepositoryWeb, $clarolineRepositorySys, $_user;
+	global $_configuration, $dbGlu, $clarolineRepositoryWeb, $clarolineRepositorySys, $_user;
 
-	$courseDbName = $courseTablePrefix.$courseDbName.$dbGlu;
+	$courseDbName = $_configuration['table_prefix'].$courseDbName.$dbGlu;
 
 	$tbl_course_homepage = $courseDbName . "tool";
 	$TABLEINTROS = $courseDbName . "tool_intro";
@@ -1622,11 +1624,11 @@ function string2binary($variable)
  */
 function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "")
 {
-	GLOBAL $defaultVisibilityForANewCourse, $langCourseDescription, $langProfessor, $langAnnouncementEx, $error_msg, $courseTablePrefix, $dbGlu;
+	GLOBAL $defaultVisibilityForANewCourse, $langCourseDescription, $langProfessor, $langAnnouncementEx, $error_msg, $_configuration, $dbGlu;
 	$TABLECOURSE = Database :: get_main_table(MAIN_COURSE_TABLE);
 	$TABLECOURSUSER = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 
-	#$TABLEANNOUNCEMENTS=$courseTablePrefix.$courseDbName.$dbGlu.$TABLEANNOUNCEMENTS;
+	#$TABLEANNOUNCEMENTS=$_configuration['table_prefix'].$courseDbName.$dbGlu.$TABLEANNOUNCEMENTS;
 	$TABLEANNOUNCEMENTS = Database :: get_course_table(ANNOUNCEMENT_TABLE,$courseDbName);
 
 	$okForRegisterCourse = true;

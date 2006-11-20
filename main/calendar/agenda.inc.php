@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 9984 2006-11-15 00:35:05Z pcool $
+<?php //$Id: agenda.inc.php 10063 2006-11-20 19:52:42Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,7 +62,7 @@ $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang
 */
 function get_kalender_items($month, $year)
 {
-	global $courseTablePrefix, $dbGlu;
+	global $dbGlu;
 	global $_user, $_course;
 	global $is_allowedToEdit;
 

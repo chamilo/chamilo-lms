@@ -469,7 +469,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
             $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
             $_course['path'        ]         = $cData['directory'        ]; // use as key in path
             $_course['dbName'      ]         = $cData['db_name'           ]; // use as key in db list
-            $_course['dbNameGlu'   ]         = $courseTablePrefix . $cData['db_name'] . $dbGlu; // use in all queries
+            $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['db_name'] . $dbGlu; // use in all queries
             $_course['titular'     ]         = $cData['tutor_name'       ];
             $_course['language'    ]         = $cData['course_language'   ];
             $_course['extLink'     ]['url' ] = $cData['department_url'    ];

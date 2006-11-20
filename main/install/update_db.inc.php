@@ -59,7 +59,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 	if ($singleDbForm)
 	{
-		$courseTablePrefix = get_config_param('courseTablePrefix');
+		$_configuration['table_prefix'] = get_config_param('courseTablePrefix');
 	}
 
 	$dbScormForm = eregi_replace('[^a-z0-9_-]', '', $dbScormForm);
@@ -449,9 +449,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			{
 				if ($singleDbForm)
 				{
-					$prefix = $courseTablePrefix.$mysql_base_course.$dbGlu;
+					$prefix = $_configuration['table_prefix'].$mysql_base_course.$dbGlu;
 
-					$mysql_base_course = $dbNameForm.'`.`'.$courseTablePrefix.$mysql_base_course;
+					$mysql_base_course = $dbNameForm.'`.`'.$_configuration['table_prefix'].$mysql_base_course;
 				}
 				else
 				{

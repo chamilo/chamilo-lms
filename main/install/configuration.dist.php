@@ -65,10 +65,9 @@ $_configuration['db_password']	= '{DATABASE_PASSWORD}';
 // Is tracking enabled?
 $_configuration['tracking_enabled'] = {TRACKING_ENABLED};
 // Is single database enabled (DO NOT MODIFY THIS)
-$singleDbEnabled    = {SINGLE_DATABASE}; 		
-// Prefix for course tables (IF NOT EMPTY, can be replaced by another prefix, 
-// else leave empty)
-$courseTablePrefix  = '{COURSE_TABLE_PREFIX}'; 	
+$_configuration['single_database']    = {SINGLE_DATABASE}; 		
+// Prefix for course tables (IF NOT EMPTY, can be replaced by another prefix, else leave empty)
+$_configuration['table_prefix']  = '{COURSE_TABLE_PREFIX}'; 	
 // Separator between database and table name (DO NOT MODIFY THIS)
 $dbGlu              = '{DATABASE_GLUE}'; 
 // prefix all created bases (for courses) with this string		

@@ -6,7 +6,15 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
  
-$langFile='admin';
+ $langFile = "document";
+ include("../inc/global.inc.php");
+ api_protect_course_script();
+
+ $_SESSION['document_url'] = api_get_path(WEB_COURSE_PATH).'document';
+
+ header('Location: liveconf.php');
+ /*
+ $langFile='admin';
 
 include('../inc/global.inc.php');
 
@@ -36,5 +44,7 @@ Display::display_header($nameTool);
 		FOOTER
 ==============================================================================
 */
+/*
 Display::display_footer();
+*/
 ?>

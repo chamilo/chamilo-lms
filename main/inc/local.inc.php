@@ -228,7 +228,7 @@ else
                 // determine if the password needs to be encrypted before checking
                 // $userPasswordCrypted is set in an external configuration file
 
-                if ($userPasswordCrypted) 
+                if ($userPasswordCrypted)
                 {
                 	$password = md5($password);
                 }
@@ -244,21 +244,21 @@ else
                 		{
 							$_user['user_id'] = $uData['user_id'];
 							api_session_register('_uid');
-							
+
 							if(!function_exists('event_login')){
 								include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
 								event_login();
 							}
                 		}
-                		else 
+                		else
                 		{
 							$loginFailed = true;
 							api_session_unregister('_uid');
 							header('Location: index.php?loginFailed=1&error=account_expired');
-							exit;                			
+							exit;
                 		}
                 	}
-                	else 
+                	else
                 	{
 						$loginFailed = true;
 						api_session_unregister('_uid');
@@ -412,7 +412,7 @@ $admin_table = Database::get_main_table(MAIN_ADMIN_TABLE);
             $_user ['picture_uri'] = $uData ['picture_uri'];
 			$_user ['user_id'] = $uData ['user_id'];
 			$_user ['language'] = $uData ['language'];
-			
+
             $is_platformAdmin        = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse  = (bool) ($uData ['status'] == 1);
 
@@ -450,7 +450,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
     	$course_table = Database::get_main_table(MAIN_COURSE_TABLE);
     	$course_cat_table = Database::get_main_table(MAIN_CATEGORY_TABLE);
         $sql =    "SELECT `course`.*, `course_category`.`code` `faCode`, `course_category`.`name` `faName`
-                 FROM $course_table 
+                 FROM $course_table
                  LEFT JOIN $course_cat_table
                  ON `course`.`category_code` =  `course_category`.`code`
                  WHERE `course`.`code` = '$cidReq'";
@@ -462,7 +462,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
             $cData = mysql_fetch_array($result);
 
             $_cid                            = $cData['code'             ];
-
+			$_course = array();
 			$_course['id'          ]         = $cData['code'             ]; //auto-assigned integer
 			$_course['name'        ]         = $cData['title'         ];
             $_course['official_code']         = $cData['visual_code'        ]; // use in echo
@@ -483,25 +483,25 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 
             api_session_register('_cid');
             api_session_register('_course');
-            
+
             //We add a new record in the course tracking table
-            $course_tracking_table = Database :: get_statistic_table(STATISTIC_TRACK_E_COURSE_ACCESS_TABLE);        
+            $course_tracking_table = Database :: get_statistic_table(STATISTIC_TRACK_E_COURSE_ACCESS_TABLE);
 
             $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
 					"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
 
 			api_sql_query($sql,__FILE__,__LINE__);
-			
+
 			if(api_get_setting("Ajax_course_tracking_refresh")!=0){
-			
-				
+
+
 				$i_milliseconds_for_refresh=intval(api_get_setting("Ajax_course_tracking_refresh"))*1000;
-				
+
 				$htmlHeadXtra[] = $xajax->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
 				$htmlHeadXtra[] = "<script type=\"text/javascript\">var user_id=".$_user ['user_id'].";</script><script type=\"text/javascript\" src=\"".api_get_path(WEB_CODE_PATH)."inc/course_tracking.js\"></script><script type=\"text/javascript\">window.setInterval('update_course_tracking()',".$i_milliseconds_for_refresh.");</script>";
-				
-			}	
-			
+
+			}
+
         }
         else
         {
@@ -526,9 +526,9 @@ else // continue with the previous values
 	{
 		$_cid 		= $_SESSION['_cid'   ];
    		$_course    = $_SESSION['_course'];
-   		
+
    		$course_tracking_table = Database :: get_statistic_table(STATISTIC_TRACK_E_COURSE_ACCESS_TABLE);
-   		
+
    		//We select the last record for the current course in the course tracking table
    		$sql="SELECT course_access_id FROM $course_tracking_table WHERE user_id='".$_user ['user_id']."' ORDER BY login_course_date DESC LIMIT 0,1";
    		$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -541,17 +541,17 @@ else // continue with the previous values
 				"WHERE course_access_id='$i_course_access_id'";
 
 		api_sql_query($sql,__FILE__,__LINE__);
-		
-		if(api_get_setting("Ajax_course_tracking_refresh")!=0){			
-			
+
+		if(api_get_setting("Ajax_course_tracking_refresh")!=0){
+
 			$i_milliseconds_for_refresh=intval(api_get_setting("Ajax_course_tracking_refresh"))*1000;
-			
+
 			$htmlHeadXtra[] = $xajax->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
 			$htmlHeadXtra[] = "<script type=\"text/javascript\">var user_id=".$_user ['user_id'].";</script><script type=\"text/javascript\" src=\"".api_get_path(WEB_CODE_PATH)."inc/course_tracking.js\"></script><script type=\"text/javascript\">setInterval('update_course_tracking()',".$i_milliseconds_for_refresh.");</script>";
-			
+
 		}
-	
-   		
+
+
 	}
 }
 
@@ -563,25 +563,25 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 {
     if (isset($_user['user_id']) && $_user['user_id'] && isset($_cid) && $_cid) // have keys to search data
     {
-    	
+
     	if(api_get_setting('use_session_mode') != 'true')
     	{
-    		
+
 	    	$course_user_table = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 	        $sql = "SELECT * FROM $course_user_table
 	               WHERE `user_id`  = '".$_user['user_id']."'
 	               AND `course_code` = '$cidReq'";
-	
+
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
-	
+
 	        if (mysql_num_rows($result) > 0) // this  user have a recorded state for this course
 	        {
 	            $cuData = mysql_fetch_array($result);
-	
+
 	            $is_courseMember     = true;
 	            $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
 	            $is_courseAdmin      = (bool) ($cuData['status'] == 1 );
-	
+
 	            api_session_register('_courseUser');
 	        }
 	        else // this user has no status related to this course
@@ -590,39 +590,39 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 	            $is_courseAdmin  = false;
 	            $is_courseTutor  = false;
 	        }
-	
+
 	        $is_courseAdmin = (bool) ($is_courseAdmin || $is_platformAdmin);
-	        
+
     	}
-    	
-    	else 
+
+    	else
     	{
-    		
+
 	    	// is it the session coach ?
-	        $sql = "SELECT 1 
+	        $sql = "SELECT 1
 					FROM `".$mainDbName."`.`session`
 					INNER JOIN `".$mainDbName."`.`session_rel_course`
 						ON session_rel_course.id_session = session.id
 						AND session_rel_course.course_code='$_cid'
 					WHERE session.id_coach = '".$_user['user_id']."'";
-	        
+
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
 	        if($row = mysql_fetch_array($result)){
 	        	$_courseUser['role'] = 'Professor';
 	            $is_courseMember     = true;
 	            $is_courseTutor      = true;
 	            $is_courseAdmin      = true;
-	
+
 	            api_session_register('_courseUser');
 	        }
-        	else 
+        	else
         	{
 	        	// vérifier que c pas le coach du cours
-	        	$sql = "SELECT 1 
+	        	$sql = "SELECT 1
 						FROM `".$mainDbName."`.`session_rel_course`
 						WHERE session_rel_course.course_code='$_cid'
 						AND session_rel_course.id_coach = '".$_user['user_id']."'";
-		        
+
 		        $result = api_sql_query($sql,__FILE__,__LINE__);
 		        if($row = mysql_fetch_array($result))
 		        {
@@ -630,46 +630,46 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 		            $is_courseMember     = true;
 		            $is_courseTutor      = true;
 		            $is_courseAdmin      = true;
-		
+
 		            api_session_register('_courseUser');
 		        }
-		        else 
-		        {       
-	        		// vérifier que c pas un élève de la session        
+		        else
+		        {
+	        		// vérifier que c pas un élève de la session
 			        $sql = "SELECT * FROM `".$mainDbName."`.`session_rel_course_rel_user`
-			        		WHERE `id_user`  = '".$_user['user_id']."' 
+			        		WHERE `id_user`  = '".$_user['user_id']."'
 							AND `course_code` = '$cidReq'";
-	        		
+
 			        $result = api_sql_query($sql,__FILE__,__LINE__);
-			        
+
 			        if (mysql_num_rows($result) > 0) // this  user have a recorded state for this course
 			        {
 			        	while($row = mysql_fetch_array($result)){
 				            $is_courseMember     = true;
 				            $is_courseTutor      = false;
 				            $is_courseAdmin      = false;
-				
+
 				            api_session_register('_courseUser');
 			        	}
-			
-					}	
-					else 
-					{	
+
+					}
+					else
+					{
 			 			$sql = "SELECT * FROM `".$mainDbName."`.`course_rel_user`
 			               WHERE `user_id`  = '".$_user['user_id']."'
 			               AND `course_code` = '$cidReq'";
-			               
+
 				        $result = api_sql_query($sql,__FILE__,__LINE__);
-				
+
 				        if (mysql_num_rows($result) > 0) // this  user have a recorded state for this course
 				        {
 				            $cuData = mysql_fetch_array($result);
-				
+
 				            $_courseUser['role'] = $cuData['role'  ];
 				            $is_courseMember     = true;
 				            $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
 				            $is_courseAdmin      = (bool) ($cuData['status'] == 1 );
-				
+
 				            api_session_register('_courseUser');
 				        }
 				        else // this user has no status related to this course
@@ -678,7 +678,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 				            $is_courseAdmin  = false;
 				            $is_courseTutor  = false;
 				        }
-			
+
 					}
 		        }
         	}
@@ -770,7 +770,7 @@ else
 if(isset($_cid))
 {
 	$tbl_course = Database::get_main_table(MAIN_COURSE_TABLE);
-	$sql="UPDATE $tbl_course SET last_visit=NOW() WHERE code='$_cid'"; 
+	$sql="UPDATE $tbl_course SET last_visit=NOW() WHERE code='$_cid'";
 	api_sql_query($sql,__FILE__,__LINE__);
 }
 ?>

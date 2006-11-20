@@ -1,4 +1,4 @@
-<?php // $Id: document.php 9985 2006-11-15 00:43:47Z pcool $
+<?php // $Id: document.php 10055 2006-11-20 16:03:52Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -67,7 +67,7 @@ include("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 
 include('document.inc.php');
-include(api_get_path(LIBRARY_PATH).'/xajax/xajax.inc.php');
+//include(api_get_path(LIBRARY_PATH).'/xajax/xajax.inc.php');
 
 
 $xajax = new Xajax();

@@ -207,20 +207,21 @@
 				$resultCoursesCoach = api_sql_query($sqlCourse);
 				$a_courses = array_merge($a_courses_teacher,api_store_result($resultCoursesCoach));
 				
+				
+			}
+			
+			else{
+				$a_courses=$a_courses_teacher;
 			}
 			
 		}
  	}
 	
-	
-	
-	$resultCourse = api_sql_query($sqlCourse);
-	
 	$a_header[]=get_lang('Title');
 	$a_header[]=get_lang('Tutor');
 	$a_header[]=get_lang('Teachers');
 	
-	if(mysql_num_rows($resultCourse)>0)
+	if(count($a_courses)>0)
 	{
 		echo '<table class="data_table">
 			 	<tr>

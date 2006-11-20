@@ -85,7 +85,7 @@ ob_start();
  	
  	
  	$sql_select_courses="SELECT course_rel_user.course_code FROM $tbl_course_user as course_rel_user LEFT OUTER JOIN $tbl_session_course as src ON course_rel_user.course_code=src.course_code WHERE user_id='$i_teacher_id' AND status='1' AND src.course_code IS NULL";
-
+	
  	$result_courses=api_sql_query($sql_select_courses);
  	
  	while($a_courses=mysql_fetch_array($result_courses)){
@@ -143,7 +143,7 @@ ob_start();
  		$s_course_code=$a_courses["course_code"];
  		$sqlStudents = "SELECT DISTINCT user.user_id,lastname,firstname,email FROM $tbl_session_course_user as srcru, $tbl_user as user WHERE srcru.id_user=user.user_id AND srcru.course_code='$s_course_code'";
  		$result_students=api_sql_query($sqlStudents);
- 		echo $sqlStudents;
+
  		if(mysql_num_rows($result_students)>0){
  		
 	 		while($a_students_temp=mysql_fetch_array($result_students)){
@@ -310,13 +310,7 @@ ob_start();
 						'.get_lang('Email').'
 					</th>
 					<th>
-						'.get_lang('Tutor').'
-					</th>
-					<th>
-						'.get_lang('Courses').'
-					</th>
-					<th>
-						'.get_lang('TakenSessions').'
+						'.get_lang('Tracking').'
 					</th>
 				</tr>
           	 ';
@@ -328,7 +322,7 @@ ob_start();
 				$s_css_class="row_odd";
 				
 				if($i%20==0 && $i!=0){
-					echo '<tr>
+					/*echo '<tr>
 							<th>
 								'.get_lang('Lastname').'
 							</th>
@@ -348,6 +342,21 @@ ob_start();
 								'.get_lang('TakenSessions').'
 							</th>
 						</tr>
+		          	 ';*/
+		          	 echo '<tr>
+							<th>
+								'.get_lang('Lastname').'
+							</th>
+							<th>
+								'.get_lang('Firstname').'
+							</th>
+							<th>
+								'.get_lang('Email').'
+							</th>
+							<th>
+								'.get_lang('Tracking').'
+							</th>
+						</tr>
 		          	 ';
 				}
 			}
@@ -360,10 +369,10 @@ ob_start();
 			echo '<tr class="'.$s_css_class.'">
 					<td>
 				 ';
-			echo		$a_current_student[1];
+			echo		"<a href='myStudents.php?student=".$a_current_student[0]."#infosStudent'>".$a_current_student[1]."</a>";
 			echo '	</td>
 					<td>
-						'.$a_current_student[2].'
+						<a href="myStudents.php?student='.$a_current_student[0].'#infosStudent">'.$a_current_student[2].'</a>
 					</td>
 					<td>
 				 ';
@@ -377,20 +386,14 @@ ob_start();
 			}
 			echo '	</td>';
 			
-			if($a_current_student["teacher"]==true){
 			
-				echo '<td>
-						<a href="coaches.php?id_student='.$a_current_student[0].'">-></a>
-					</td>
-					<td>
-						<a href="cours.php?type=student&user_id='.$a_current_student[0].'">-></a>
-					</td>
-					<td align="center">
-						<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_current_student[0].'#sessionSuivie"> -> </a>
-					</td>';
+			if($a_current_student["teacher"]==true){
+							
+				echo '<td align="center"><a href="coaches.php?id_student='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'members.gif" alt="'.get_lang("StudentTutors").'" title="'.get_lang("StudentTutors").'"></a>&nbsp;<a href="cours.php?type=student&user_id='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'course.gif" alt="'.get_lang("StudentCourses").'" title="'.get_lang("StudentCourses").'"></a>&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_current_student[0].'#sessionSuivie"><img src="'.api_get_path(WEB_IMG_PATH).'agenda.gif" alt="'.get_lang("StudentSessions").'" title="'.get_lang("StudentSessions").'"></a>';
+				
 			}
 			else{
-				echo '<td colspan="3"></td>';
+				echo '<td></td>';
 			}
 			  echo '</tr>';
 

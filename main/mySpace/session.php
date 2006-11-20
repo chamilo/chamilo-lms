@@ -95,7 +95,7 @@ ob_start();
 		
 		if($is_allowedCreateCourse){
 			
-			$sqlSessions = "	SELECT DISTINCT id_session, name 
+			$sqlSessions = "	SELECT DISTINCT $tbl_sessions.id, name 
 								FROM $tbl_session_course as session_course, $tbl_course_user as course_rel_user, $tbl_sessions as session  
 							  	WHERE session.id=session_course.id_session AND session_course.course_code=course_rel_user.course_code AND course_rel_user.status='1' AND (course_rel_user.user_id='".$_user['user_id']."' OR session_course.id_coach='".$_user['user_id']."') 
 							  ";
@@ -132,7 +132,7 @@ ob_start();
 		while($a_sessions = mysql_fetch_array($resultSessions))
 		{
 			
-			$i_id_session=$a_sessions['id_session'];
+			$i_id_session=$a_sessions['id'];
 			/*
 			//On récupère tous les cours de la session courante
 			$sql="SELECT course.title FROM $tbl_course as course, $tbl_session_course as session_rel_course " .
@@ -151,7 +151,7 @@ ob_start();
 				  </tr>
 				 ';
 				 
-			$a_data[$i_user_id]["name"]=$a_sessions['name'];		
+			$a_data[$i_id_session]["name"]=$a_sessions['name'];		
 			
 		}
 		echo '</table>';

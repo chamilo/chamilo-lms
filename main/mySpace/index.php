@@ -125,10 +125,26 @@ function is_coach(){
 		
 		//La personne a le statut de professeur
 		if($is_allowedCreateCourse){
+			
+			//Cours ou la personne est formateur mais dont les cours ne sont pas dans une session
+			$sql_select_courses="SELECT course_rel_user.course_code FROM $tbl_course_user as course_rel_user LEFT OUTER JOIN $tbl_session_course as src ON course_rel_user.course_code=src.course_code WHERE user_id='$_uid' AND status='1' AND src.course_code IS NULL";
+			
+			$result_courses=api_sql_query($sql_select_courses);
+			
+			while($a_courses=mysql_fetch_array($result_courses)){
+				$s_course_code=$a_courses["course_code"];
+		 		$sqlStudents = "SELECT user.user_id,lastname,firstname,email FROM $tbl_course_user as course_rel_user, $tbl_user as user WHERE course_rel_user.user_id=user.user_id AND course_rel_user.status='5' AND course_rel_user.course_code='$s_course_code'";
+		 		$result_students=api_sql_query($sqlStudents);
+		 		if(mysql_num_rows($result_students)>0){
+	 				while($a_students_temp=mysql_fetch_array($result_students)){
+	 					$a_stagiaire_teacher[]=$a_students_temp["user_id"];
+	 				}
+		 		}
+			}
 
 			$sqlNbStagiaire="SELECT DISTINCT srcru.id_user FROM $tbl_course_user as course_rel_user, $tbl_session_course_user as srcru " .
 							"WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1' AND course_rel_user.course_code=srcru.course_code";
-
+			
 			$resultNbStagiaire = api_sql_query($sqlNbStagiaire);
 			
 			while($a_temp = mysql_fetch_array($resultNbStagiaire)){
@@ -292,7 +308,7 @@ function is_coach(){
  if(api_is_platform_admin()){
 	 echo '<div class="admin_section">
 		<h4>
-			<a href="teachers.php">'.get_lang('Trainers').' ('.$nbFormateurs.')</a>
+			<a href="teachers.php"><img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif">&nbsp;'.get_lang('Trainers').' ('.$nbFormateurs.')</a>
 		</h4>
 	 </div>';
  }
@@ -300,7 +316,7 @@ function is_coach(){
  if(api_is_platform_admin() || $is_allowedCreateCourse){
 	 echo '<div class="admin_section">
 		<h4>
-			<a href="coaches.php">'.get_lang("Tutor").' ('.$nbCoachs.')</a>
+			<a href="coaches.php"><img src="'.api_get_path(WEB_IMG_PATH).'coachs.gif">&nbsp;'.get_lang("Tutor").' ('.$nbCoachs.')</a>
 		</h4>
 	 </div>';
  }
@@ -308,29 +324,29 @@ function is_coach(){
  <div class="admin_section">
 	<h4>
 		<?php 
-			echo "<a href='student.php'>".get_lang('Probationers').' ('.$nbStagiaire.')'."</a>"; 
+			echo "<a href='student.php'><img src='".api_get_path(WEB_IMG_PATH)."students.gif'>&nbsp;".get_lang('Probationers').' ('.$nbStagiaire.')'."</a>"; 
 		?>
 	</h4>
  </div>
  <div class="admin_section">
 	<h4>
-		<?php echo "<a href='admin.php'>".get_lang('Administrators')." (".$i_nb_admin.")</a>"; ?>
+		<?php echo "<a href='admin.php'><img src='".api_get_path(WEB_IMG_PATH)."admins.gif'>&nbsp;".get_lang('Administrators')." (".$i_nb_admin.")</a>"; ?>
 	</h4>
  </div>
  <div class="admin_section">
 	<h4>
-		<?php echo "<a href='cours.php'>".get_lang('Course').' ('.$nbCours.')'."</a>"; ?>
+		<?php echo "<a href='cours.php'><img src='".api_get_path(WEB_IMG_PATH)."courses.gif'>&nbsp;".get_lang('Course').' ('.$nbCours.')'."</a>"; ?>
 	</h4>
  </div>
  <div class="admin_section">
 	<h4>
-		<?php echo "<a href='session.php'>".get_lang('Sessions').' ('.$nbSessions.')'."</a>"; ?>
+		<?php echo "<a href='session.php'><img src='".api_get_path(WEB_IMG_PATH)."sessions.gif'>&nbsp;".get_lang('Sessions').' ('.$nbSessions.')'."</a>"; ?>
 	</h4>
  </div>
 
  <div class="admin_section">
 	<h4>
-		<?php echo get_lang('Tracks'); ?>
+		<?php echo "<img src='".api_get_path(WEB_IMG_PATH)."statistics.gif'>&nbsp;".get_lang('Tracks'); ?>
 	</h4>
 	<ul>
 		<li>

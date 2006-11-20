@@ -1,4 +1,4 @@
-<?php // $Id: toolaccess_details.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: toolaccess_details.php 10062 2006-11-20 19:37:38Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -106,7 +106,7 @@ $reqdate=$_REQUEST['reqdate'];
         $is_allowedToTrack = $is_platformAdmin;
         $courseCodeEqualcidIfNeeded = "";
     }
-    if( $is_allowedToTrack && $is_trackingEnabled)
+    if( $is_allowedToTrack && $_configuration['tracking_enabled'])
     {
         // list of all tools
         if (!isset($tool))
@@ -289,13 +289,13 @@ $reqdate=$_REQUEST['reqdate'];
     }
     else // not allowed to track
     {
-        if(!$is_trackingEnabled)
+        if(!$_configuration['tracking_enabled'])
         {
             echo $langTrackingDisabled;
         }
         else
         {
-            echo $langNotAllowed;
+            echo get_lang('NotAllowed');
         }
     }
     

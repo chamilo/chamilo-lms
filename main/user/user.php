@@ -178,7 +178,7 @@ event_access_tool(TOOL_USER);
 	Setting the permissions for this page
 --------------------------------------
 */
-$is_allowed_to_track = $is_courseAdmin && $is_trackingEnabled;
+$is_allowed_to_track = $is_courseAdmin && $_configuration['tracking_enabled'];
 /*
 --------------------------------------
 	Unregistering a user section

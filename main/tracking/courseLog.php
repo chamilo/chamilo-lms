@@ -128,7 +128,7 @@ $is_allowedToTrack = $is_courseAdmin;
 <?php
 // check if uid is prof of this group
 
-if($is_allowedToTrack && $is_trackingEnabled)
+if($is_allowedToTrack && $_configuration['tracking_enabled'])
 {
     // show all : view must be equal to the sum of all view values (1024+512+...+64)
     // show none : less than the tiniest value
@@ -707,7 +707,7 @@ if($is_allowedToTrack && $is_trackingEnabled)
 // not allowed
 else
 {
-    if(!$is_trackingEnabled)
+    if(!$_configuration['tracking_enabled'])
     {
         echo get_lang('TrackingDisabled');
     }

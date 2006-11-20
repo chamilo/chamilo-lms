@@ -375,7 +375,7 @@ if (isset($uidReset) && $uidReset) // session data refresh requested
     {
 $user_table = Database::get_main_table(MAIN_USER_TABLE);
 $admin_table = Database::get_main_table(MAIN_ADMIN_TABLE);
-        if ($is_trackingEnabled)
+        if ($_configuration['tracking_enabled'])
         {
             $sql = "SELECT `user`.*, `a`.`user_id` `is_admin`,
                             UNIX_TIMESTAMP(`login`.`login_date`) `login_date`

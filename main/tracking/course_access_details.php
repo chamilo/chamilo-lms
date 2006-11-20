@@ -80,7 +80,7 @@ $is_allowedToTrack = $is_courseAdmin;
 </h3>
 <table width="100%" cellpadding="2" cellspacing="3" border="0">
 <?php
-    if( $is_allowedToTrack && $is_trackingEnabled)
+    if( $is_allowedToTrack && $_configuration['tracking_enabled'])
     {
         if( !isset($reqdate) || $reqdate < 0 || $reqdate > 2149372861 )
                 $reqdate = time();
@@ -232,7 +232,7 @@ $is_allowedToTrack = $is_courseAdmin;
     }
     else // not allowed to track
     {
-        if(!$is_trackingEnabled)
+        if(!$_configuration['tracking_enabled'])
         {
             echo get_lang('TrackingDisabled');
         }

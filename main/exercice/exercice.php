@@ -718,7 +718,8 @@ if($show == 'test'){
 /*****************************************/
 
 // if tracking is enabled
-if($is_trackingEnabled){
+if($_configuration['tracking_enabled'])
+{
 	?>
 <br>
 <br> 

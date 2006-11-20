@@ -50,7 +50,7 @@ $origin = $_REQUEST['origin'];
 
 function save_scores($file, $score)
 {
-	global $is_trackingEnabled, $origin, $tbl_learnpath_user, 
+	global $_configuration, $origin, $tbl_learnpath_user, 
 		$learnpath_id, $learnpath_item_id, $_user, $_cid, 
 		$TABLETRACK_HOTPOTATOES;
 	// if tracking is disabled record nothing
@@ -58,7 +58,10 @@ function save_scores($file, $score)
 	$reallyNow = time();
 	$date = date("Y-m-d H:i:s", $reallyNow);
 
-	if (!$is_trackingEnabled){return 0;}
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
 
 	if ($_user['user_id'])
 	{

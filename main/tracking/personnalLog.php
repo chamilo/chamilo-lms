@@ -85,7 +85,7 @@ api_display_tool_title($nameTools);
 		MAIN SECTION
 ==============================================================================
 */ 
-if ( $is_trackingEnabled )
+if ( $_configuration['tracking_enabled'] )
 {
         // show all : view must be equal to the sum of all view values (1024+512+...+64)
         // show none : 0

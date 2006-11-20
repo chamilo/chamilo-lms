@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 9718 2006-10-25 08:16:19Z bmol $
+<?php // $Id: userLog.php 10062 2006-11-20 19:37:38Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -115,8 +115,6 @@ Display::display_header($nameTools,"Tracking");
 	Constants and variables
 -----------------------------------------------------------
 */
-//$is_allowed_to_track = $is_allowed[EDIT_RIGHT] && $is_trackingEnabled;
-//YW hack security to quick fix RolesRights bug
 $is_allowedToTrack = $is_courseAdmin;
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_id);
 
@@ -617,7 +615,7 @@ function display_document_tracking_info($view, $user_id, $course_id)
 <table width="100%" cellpadding="2" cellspacing="3" border="0">
 <?php
 // check if uid is tutor of this group
-if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $is_trackingEnabled )
+if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configuration['tracking_enabled'] )
 {
 	if(!$uInfo && !isset($uInfo) )
 	{
@@ -907,7 +905,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $is_trackin
 // not allowed
 else
 {
-    if(!$is_trackingEnabled)
+    if(!$_configuration['tracking_enabled'])
     {
         echo myEnc(get_lang('TrackingDisabled'));
     }

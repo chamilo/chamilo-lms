@@ -95,7 +95,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
 <?php
 // check if uid is tutor of this group
 
-if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $is_trackingEnabled )
+if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configuration['tracking_enabled'] )
 {
     if( $is_allowedToTrackEverybodyInCourse )
     {
@@ -268,7 +268,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $is_trackin
 // not allowed
 else
 {
-    if(!$is_trackingEnabled)
+    if(!$_configuration['tracking_enabled'])
     {
         echo get_lang('TrackingDisabled');
     }

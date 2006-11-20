@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 9991 2006-11-15 12:11:22Z pcool $
+// $Id: user_list.php 10062 2006-11-20 19:37:38Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,7 +49,7 @@ api_protect_admin_script();
 function login_user($user_id)
 {
 	//init ---------------------------------------------------------------------
-	global $uidReset, $loginFailed, $uidReset, $is_trackingEnabled, $_user;
+	global $uidReset, $loginFailed, $uidReset, $_configuration, $_user;
 	global $is_platformAdmin, $is_allowedCreateCourse;
 
 	$main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
@@ -83,7 +83,7 @@ function login_user($user_id)
 
 	if ($user_id) // a uid is given (log in succeeded)
 	{
-		if ($is_trackingEnabled)
+		if ($_configuration['tracking_enabled'])
 		{
 			$sql_query = "SELECT user.*, a.user_id is_admin,
 				UNIX_TIMESTAMP(login.login_date) login_date

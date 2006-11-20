@@ -65,12 +65,16 @@ $TABLETRACK_LASTACCESS = $statsDbName."`.`track_e_lastaccess"; //for "what's new
  */
 function event_open()
 {
-	global $is_trackingEnabled, $_SERVER;
-	// if tracking is disabled record nothing
-	if (!$is_trackingEnabled)
-		return 0;
+	global $_configuration, $_SERVER;
 	global $rootWeb;
 	global $TABLETRACK_OPEN;
+	
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+
 	// @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
 	// $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
 	// $_SERVER['HTTP_REFERER'] : provide information about refering url
@@ -107,12 +111,16 @@ function event_open()
  */
 function event_login()
 {
-	global $is_trackingEnabled;
-	// if tracking is disabled record nothing
-	if (!$is_trackingEnabled)
-		return 0;
+	global $_configuration;	
 	global $_user;
 	global $TABLETRACK_LOGIN;
+	
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+
 	$reallyNow = time();
 	$sql = "INSERT INTO `".$TABLETRACK_LOGIN."`
 	
@@ -136,14 +144,17 @@ function event_login()
  */
 function event_access_course()
 {
-	global $is_trackingEnabled;
-	// if tracking is disabled record nothing
-	if (!$is_trackingEnabled)
-		return 0;
+	global $_configuration;	
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_ACCESS;
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
+	
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
 	
 	if(api_get_setting('use_session_mode')=='true' && isset($_SESSION['id_session']))
 	{
@@ -208,9 +219,9 @@ function event_access_course()
  */
 function event_access_tool($tool, $id_session=0)
 {
-	global $is_trackingEnabled;
+	global $_configuration;
 	// if tracking is disabled record nothing
-	// if( ! $is_trackingEnabled ) return 0; //commented because "what's new" notification must always occur
+	// if( ! $_configuration['tracking_enabled'] ) return 0; //commented because "what's new" notification must always occur
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_ACCESS;
@@ -237,7 +248,7 @@ function event_access_tool($tool, $id_session=0)
 	// added for "what's new" notification
 	$pos2 = strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower($rootWeb."index"));
 	// end "what's new" notification
-	if ($is_trackingEnabled && ($pos !== false || $pos2 !== false))
+	if ($_configuration['tracking_enabled'] && ($pos !== false || $pos2 !== false))
 	{
 			$sql = "INSERT INTO `".$TABLETRACK_ACCESS."`
 							(`access_user_id`,
@@ -284,13 +295,17 @@ function event_access_tool($tool, $id_session=0)
  */
 function event_download($doc_url)
 {
-	global $is_trackingEnabled;
-	// if tracking is disabled record nothing
-	if (!$is_trackingEnabled)
-		return 0;
+	global $_configuration;	
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_DOWNLOADS;
+	
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+
 	$reallyNow = time();
 	if ($_user['user_id'])
 	{
@@ -329,13 +344,16 @@ function event_download($doc_url)
  */
 function event_upload($doc_id)
 {
-	global $is_trackingEnabled;
-	// if tracking is disabled record nothing
-	if (!$is_trackingEnabled)
-		return 0;
+	global $_configuration;	
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_UPLOADS;
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+
 	$reallyNow = time();
 	if ($_user['user_id'])
 	{
@@ -373,13 +391,17 @@ function event_upload($doc_id)
 */
 function event_link($link_id)
 {
-	global $is_trackingEnabled;
-	// if tracking is disabled record nothing
-	if (!$is_trackingEnabled)
-		return 0;
+	global $_configuration;	
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_LINKS;
+	
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+
 	$reallyNow = time();
 	if ($_user['user_id'])
 	{
@@ -418,14 +440,18 @@ function event_link($link_id)
 */
 function event_exercice($exo_id, $score, $weighting)
 {
-	global $is_trackingEnabled;
-	// if tracking is disabled record nothing
-	if (!$is_trackingEnabled)
-		return 0;
+	global $_configuration;	
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_EXERCICES;
 	global $origin, $learnpath_id, $learnpath_item_id;
+	
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+
 	$reallyNow = time();
 	if ($_user['user_id'])
 	{
@@ -478,12 +504,16 @@ function event_exercice($exo_id, $score, $weighting)
 */
 function event_subscription($cours_id, $action)
 {
-	global $is_trackingEnabled;
-	// if tracking is disabled record nothing
-	if (!$is_trackingEnabled)
-		return 0;
+	global $_configuration;
 	global $_user;
 	global $TABLETRACK_SUBSCRIPTIONS;
+	
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+
 	$sql = "INSERT INTO `$TABLETRACK_SUBSCRIPTIONS`
 			  (`sub_user_id`,
 			   `sub_cours_id`,
@@ -507,13 +537,17 @@ function event_subscription($cours_id, $action)
 */
 function event_default($type_event, $values)
 {
-	global $is_trackingEnabled;
-	// if tracking is disabled record nothing
-	if (!$is_trackingEnabled)
-		return 0;
+	global $_configuration;
 	global $_user;
 	global $_cid;
-	global $TABLETRACK_DEFAULT;
+	global $TABLETRACK_DEFAULT;	
+	
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+
 	$reallyNow = time();
 	if ($_user['user_id'])
 	{
@@ -551,14 +585,18 @@ function event_default($type_event, $values)
 
 function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 {
-	global $is_trackingEnabled;
-	// if tracking is disabled record nothing
-	if (!$is_trackingEnabled)
-		return 0;
+	global $_configuration;	
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_ATTEMPT;
 	global $origin, $learnpath_id, $learnpath_item_id;
+	
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+
 	$reallyNow = time();
 	if ($_user['user_id'])
 	{
@@ -604,6 +642,4 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	$res = mysql_query($sql) or die(mysql_error());
 	//return 0;
 }
-
-
 ?>

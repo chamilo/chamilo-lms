@@ -97,7 +97,7 @@ $userIdViewer = $_user['user_id']; // id fo the user currently online
 
 $allowedToEditContent = ($userIdViewer == $userIdViewed) || $is_platformAdmin;
 $allowedToEditDef = $is_courseAdmin;
-$is_allowedToTrack = $is_courseAdmin && $is_trackingEnabled;
+$is_allowedToTrack = $is_courseAdmin && $_configuration['tracking_enabled'];
 
 // Library connection
 include ("userInfoLib.php");

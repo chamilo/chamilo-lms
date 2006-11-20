@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 9774 2006-10-25 15:13:32Z yannoo $
+<?php // $Id: exercise_result.php 10062 2006-11-20 19:37:38Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -620,22 +620,22 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 		$totalWeighting+=$questionWeighting;
 		//added by priya saini
-		if($is_trackingEnabled)
-			{
+		if($_configuration['tracking_enabled'])
+		{
 			if ($answerType==2 )
-				{
-				 $reply = array_keys($choice);
+			{
+				$reply = array_keys($choice);
 				for ($i=0;$i<sizeof($reply);$i++)
-					{
-						$ans = $reply[$i];
-						exercise_attempt($questionScore,$ans,$quesId,$exeId);			
-					}
+				{
+					$ans = $reply[$i];
+					exercise_attempt($questionScore,$ans,$quesId,$exeId);			
 				}
-			else if ($answerType==4)
-				{	$j=3;
-			
-					for ($i=0;$i<sizeof($choice);$i++,$j++)
-					{
+			}
+			elseif ($answerType==4)
+			{	
+				$j=3;
+				for ($i=0;$i<sizeof($choice);$i++,$j++)
+				{
 						$val = $choice[$j];
 						if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
 							$val = $arr1[1][0];
@@ -644,25 +644,25 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 						$answer = mysql_result($res,0,"position");
 						exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
 						
-					}
-				}				
-			else if ($answerType==5)	
+				}
+			}				
+			elseif ($answerType==5)	
 			{
-			$answer = $choice;
-			exercise_attempt($questionScore,$answer,$quesId,$exeId);
+				$answer = $choice;
+				exercise_attempt($questionScore,$answer,$quesId,$exeId);
 			}
-			else if ($answerType==1)
+			elseif ($answerType==1)
 			{
 				$sql = "select id from $table_ans where question_id=$questionId and position=$choice";	
 				$res = api_sql_query($sql, __FILE__, __LINE__);
 				$answer = mysql_result($res,0,"id");
 				exercise_attempt($questionScore,$answer,$quesId,$exeId);
 			}
-				else					
+			else					
+			{
 				exercise_attempt($questionScore,$answer,$quesId,$exeId);
 			}
-			
-		
+		}
 	} // end huge foreach() block that loops over all questions
 	?>
 		<table width="100%" border="0" cellpadding="3" cellspacing="2">
@@ -695,7 +695,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 ==============================================================================
 */
 
-if($is_trackingEnabled)
+if($_configuration['tracking_enabled'])
 {
 	//include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 	event_exercice($objExercise->selectId(),$totalScore,$totalWeighting,$answer,$question_id);

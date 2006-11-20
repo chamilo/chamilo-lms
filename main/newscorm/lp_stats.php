@@ -46,7 +46,7 @@ function get_iv_interactions_array($lp_iv_id){
 		while ($row = Database::fetch_array($res)){
 			$list[] = array(
 				"order_id"=>($row['order_id']+1),
-				"id"=>$row['interaction_id'],
+				"id"=>urldecode($row['interaction_id']),//urldecode because they often have %2F or stuff like that
 				"type"=>$row['interaction_type'],
 				"time"=>$row['completion_time'],
 				//"correct_responses"=>$row['correct_responses'],

@@ -153,4 +153,5 @@ $Administrators = "Administrateurs";
 $Tracks = "Parcours";
 $Success = "Réussite";
 $ExcelFormat = "Format Excel";
+$langConnectionTime = "Temps de connexion";
 ?>

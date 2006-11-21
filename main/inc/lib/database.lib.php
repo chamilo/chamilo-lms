@@ -165,28 +165,32 @@ class Database
 	 */
 	function get_main_database()
 	{
-		return $GLOBALS["mainDbName"];
+		global $_configuration;
+		return $_configuration['main_database'];
 	}
 	/**
 	*	Returns the name of the Dokeos statistics database.
 	*/
 	function get_statistic_database()
 	{
-		return $GLOBALS["statsDbName"];
+		global $_configuration;		
+		return $_configuration['statistics_database'];
 	}
 	/**
 	*	Returns the name of the Dokeos SCORM database.
 	*/
 	function get_scorm_database()
 	{
-		return $GLOBALS["scormDbName"];
+		global $_configuration;
+		return $_configuration['scorm_database'];
 	}
 	/**
 	*	Returns the name of the database where all the personal stuff of the user is stored
 	*/
 	function get_user_personal_database()
 	{
-		return $GLOBALS["user_personal_database"];
+		global $_configuration;
+		return $_configuration['user_personal_database'];
 	}
 	/**
 	*	Returns the name of the main Dokeos database.

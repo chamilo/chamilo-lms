@@ -67,10 +67,9 @@ $TBL_ITEM_PROPERTY      = Database::get_course_table(ITEM_PROPERTY_TABLE);
 $TBL_EXERCICE_QUESTION	= Database::get_course_table(QUIZ_TEST_QUESTION_TABLE);
 $TBL_EXERCICES			= Database::get_course_table(QUIZ_TEST_TABLE);
 $TBL_QUESTIONS			= Database::get_course_table(QUIZ_QUESTION_TABLE);
-$TBL_TRACK_EXERCICES   	= $statsDbName."`.`track_e_exercices";
-$TBL_TRACK_HOTPOTATOES  = $statsDbName."`.`track_e_hotpotatoes";
-$statsdb = $statsDbName;
-$TABLETRACK_ATTEMPT = $statsDbName."`.`track_e_attempt"; 
+$TBL_TRACK_EXERCICES   	= $_configuration['statistics_database']."`.`track_e_exercices";
+$TBL_TRACK_HOTPOTATOES  = $_configuration['statistics_database']."`.`track_e_hotpotatoes";
+$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt"; 
 
 // document path
 $documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";

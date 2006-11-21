@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 9983 2006-11-15 00:21:16Z pcool $
+<?php // $Id: courses.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -491,9 +491,9 @@ function search_courses($search_term)
 */
 function delete_course_category($id)
 {
-	global $_user, $user_personal_database;
+	global $_user, $_configuration;
 
-	$DATABASE_USER_TOOLS = $user_personal_database;
+	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$TABLECOURSUSER=Database::get_main_table(MAIN_COURSE_USER_TABLE);
 
@@ -513,9 +513,9 @@ function delete_course_category($id)
 */
 function store_course_category()
 {
-	global $_user, $user_personal_database;
+	global $_user, $_configuration;
 
-	$DATABASE_USER_TOOLS = $user_personal_database;
+	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 
 	// step 1: we determine the max value of the user defined course categories
@@ -538,7 +538,7 @@ function store_course_category()
 */
 function display_create_course_category_form()
 {
-	global $_user, $user_personal_database;
+	global $_user, $_configuration;
 
 	echo "<form name=\"create_course_category\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=sortmycourses\">\n";
 	echo "<input type=\"text\" name=\"title_course_category\" />\n";
@@ -546,7 +546,7 @@ function display_create_course_category_form()
 	echo "</form>\n";
 
 	echo get_lang("ExistingCourseCategories");
-	$DATABASE_USER_TOOLS = $user_personal_database;
+	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
@@ -680,7 +680,7 @@ function move_category($direction, $category2move)
 
 function display_courses($user_id, $show_course_icons, $user_courses)
 {
-	global $_user, $user_personal_database;
+	global $_user, $_configuration;
 
 	echo "<table cellpadding=\"4\">\n";
 
@@ -693,7 +693,7 @@ function display_courses($user_id, $show_course_icons, $user_courses)
 	display_courses_in_category(0,'true');
 
 	// Step 1: we get all the categories of the user
-	$DATABASE_USER_TOOLS = $user_personal_database;
+	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
 	$result=api_sql_query($sql);
@@ -804,9 +804,9 @@ function display_courses_in_category($user_category_id, $showicons)
 */
 function get_user_course_category($id)
 {
-	global $_user, $user_personal_database;
+	global $_user, $_configuration;
 
-	$DATABASE_USER_TOOLS = $user_personal_database;
+	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 
 	$sql="SELECT * FROM `".$TABLE_USER_COURSE_CATEGORY."` WHERE user_id='".$_user['user_id']."' AND id='$id'";
@@ -964,9 +964,9 @@ function display_category_icons($current_category, $all_user_categories)
 */
 function display_change_course_category_form($edit_course)
 {
-	global $_user, $user_personal_database;
+	global $_user, $_configuration;
 
-	$DATABASE_USER_TOOLS = $user_personal_database;
+	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql);
@@ -1097,9 +1097,9 @@ function display_edit_course_category_form($edit_course_category)
 */
 function store_edit_course_category()
 {
-	global $_user, $user_personal_database;
+	global $_user, $_configuration;
 
-	$DATABASE_USER_TOOLS = $user_personal_database;
+	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 
 	$sql_update="UPDATE `$TABLE_USER_COURSE_CATEGORY` SET title='".htmlentities($_POST['title_course_category'])."' WHERE id='".(int)$_POST['edit_course_category']."'";

@@ -100,7 +100,7 @@ else
 WriteFileCont($full_file_path.$_user['user_id'].".t.html",$newcontent);
 
 /*	$prehref="javascript:void(0);";
-	$posthref=$rootWeb."main/exercice/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
+	$posthref=$_configuration['root_web']."main/exercice/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
 	$newcontent = str_replace($prehref,$posthref,$newcontent);	
 		
 	$prehref="class=\"GridNum\" onclick=";

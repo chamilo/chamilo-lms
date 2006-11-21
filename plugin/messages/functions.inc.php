@@ -1,4 +1,4 @@
-<?php // $Id: functions.inc.php 9992 2006-11-15 12:25:28Z pcool $
+<?php // $Id: functions.inc.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -32,8 +32,8 @@ define ("MESSAGES_DATABASE", "messages");
 function display_select_user_list($user_id,$_name,$width,$size)
 {
 	$MINUTE=30;
-	global $statsDbName;
-	$userlist = WhoIsOnline($user_id,$statsDbName,$MINUTE);
+	global $_configuration;
+	$userlist = WhoIsOnline($user_id,$_configuration['statistics_database'],$MINUTE);
 	echo '<select  size="'.$size.'" style="width: '.$width.'px;" name="'.$_name.'">';
 	foreach($userlist as $row)
 		echo "<option value=\"$row[0]\">".GetFullUserName($row[0]).($user_id==$row[0]?("&nbsp;(".get_lang('Myself').")"):(""))."</option>\n";
@@ -43,8 +43,8 @@ function display_select_user_list($user_id,$_name,$width,$size)
 function get_online_user_list($current_user_id)
 {
 	$MINUTE=30;
-	global $statsDbName;
-	$userlist = WhoIsOnline($current_user_id,$statsDbName,$MINUTE);
+	global $_configuration;
+	$userlist = WhoIsOnline($current_user_id,$_configuration['statistics_database'],$MINUTE);
 	foreach($userlist as $row)
 	{
 		$receiver_id = $row[0];
@@ -139,9 +139,9 @@ function get_new_messages()
 */
 function users_connected_by_id()
 {
-	global $statsDbName, $_user;
+	global $_configuration, $_user;
 	$MINUTE=30;
-	$user_connect = WhoIsOnline($_user['user_id'],$statsDbName,$MINUTE);
+	$user_connect = WhoIsOnline($_user['user_id'],$_configuration['statistics_database'],$MINUTE);
 	for ($i=0; $i<count($user_connect); $i++)
 	{
 		$user_id_list[$i]=$user_connect[$i][0];

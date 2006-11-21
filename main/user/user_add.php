@@ -204,13 +204,13 @@ if($register)
 
 		if ($courseRegSucceed)
 		{
-			$emailbody = get_lang('Dear')." ".stripslashes("$firstname_form $lastname_form").",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".get_setting('siteName')." ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is').": $rootWeb\n".get_lang('Problem')."\n".get_lang('Formula').",\n".get_setting('administratorSurname')." ".get_setting('administratorName')."\n".get_lang('Manager')." ".get_setting('siteName')." \nT. ".get_setting('administratorTelephone')."\n".get_lang('Email').": ".get_setting('emailAdministrator')."\n";
+			$emailbody = get_lang('Dear')." ".stripslashes("$firstname_form $lastname_form").",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".get_setting('siteName')." ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is').": ".$_configuration['root_web']."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".get_setting('administratorSurname')." ".get_setting('administratorName')."\n".get_lang('Manager')." ".get_setting('siteName')." \nT. ".get_setting('administratorTelephone')."\n".get_lang('Email').": ".get_setting('emailAdministrator')."\n";
 
 			$message = get_lang('TheU')." ".stripslashes("$firstname_form $lastname_form")." ".get_lang('AddedToCourse')."<a href=\"user.php\">".get_lang('BackUser')."</a>\n";
 		}
 		else
 		{
-			$emailbody = get_lang('Dear')."  $firstname_form $lastname_form,\n ".get_lang('YouAreReg')."  ".get_setting('siteName')."  ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is').": $rootWeb\n".get_lang('Problem')."\n".get_lang('Formula').",\n".get_setting('administratorSurname')." ".get_setting('administratorName')."\n".get_lang('Manager')." ".get_setting('siteName')." \nT. ".get_setting('administratorTelephone')."\n".get_lang('Email').": ".get_setting('emailAdministrator')."\n";
+			$emailbody = get_lang('Dear')."  $firstname_form $lastname_form,\n ".get_lang('YouAreReg')."  ".get_setting('siteName')."  ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is').": ".$_configuration['root_web']."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".get_setting('administratorSurname')." ".get_setting('administratorName')."\n".get_lang('Manager')." ".get_setting('siteName')." \nT. ".get_setting('administratorTelephone')."\n".get_lang('Email').": ".get_setting('emailAdministrator')."\n";
 
 			$message = stripslashes("$firstname_form $lastname_form")." ".get_lang('AddedU');
 		}

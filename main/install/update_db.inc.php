@@ -32,6 +32,7 @@
 * - conditional changing of tables. Currently we execute for example
 * ALTER TABLE `$dbNameForm`.`cours` instructions without checking wether this is necessary.
 * - reorganise code into functions
+* @todo use database library
 ==============================================================================
 */
 
@@ -55,7 +56,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		exit ();
 	}
 
-	$dbGlu = get_config_param('dbGlu');
+	$_configuration['db_glue'] = get_config_param('dbGlu');
 
 	if ($singleDbForm)
 	{
@@ -449,7 +450,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			{
 				if ($singleDbForm)
 				{
-					$prefix = $_configuration['table_prefix'].$mysql_base_course.$dbGlu;
+					$prefix = $_configuration['table_prefix'].$mysql_base_course.$_configuration['db_glue'];
 
 					$mysql_base_course = $dbNameForm.'`.`'.$_configuration['table_prefix'].$mysql_base_course;
 				}
@@ -468,57 +469,57 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					include ("../lang/$languageCourse/create_course.inc.php");
 				}
 
-				mysql_query("CREATE TABLE `$mysql_base_course".$dbGlu."chat_connected` (
+				mysql_query("CREATE TABLE `$mysql_base_course".$_configuration['db_glue']."chat_connected` (
 																 `user_id` int unsigned NOT NULL default '0',
 																 `last_connection` datetime NOT NULL default '0000-00-00 00:00:00',
 																 PRIMARY KEY (`user_id`)
 																) TYPE=MyISAM");
 
-				mysql_query("CREATE TABLE `$mysql_base_course".$dbGlu."online_connected` (
+				mysql_query("CREATE TABLE `$mysql_base_course".$_configuration['db_glue']."online_connected` (
 																 `user_id` int unsigned NOT NULL default '0',
 																 `last_connection` datetime NOT NULL default '0000-00-00 00:00:00',
 																 PRIMARY KEY (`user_id`)
 																) TYPE=MyISAM");
 
-				mysql_query("CREATE TABLE `$mysql_base_course".$dbGlu."online_link` (
+				mysql_query("CREATE TABLE `$mysql_base_course".$_configuration['db_glue']."online_link` (
 																 `id` smallint(5) unsigned NOT NULL auto_increment,
 																 `name` char(50) NOT NULL default '',
 																 `url` char(100) NOT NULL default '',
 																 PRIMARY KEY (`id`)
 																) TYPE=MyISAM");
 
-				mysql_query("DROP TABLE `$mysql_base_course".$dbGlu."online`");
+				mysql_query("DROP TABLE `$mysql_base_course".$_configuration['db_glue']."online`");
 
-				mysql_query("DROP TABLE `$mysql_base_course".$dbGlu."pages`");
+				mysql_query("DROP TABLE `$mysql_base_course".$_configuration['db_glue']."pages`");
 
-				mysql_query("DROP TABLE `$mysql_base_course".$dbGlu."work_student`");
+				mysql_query("DROP TABLE `$mysql_base_course".$_configuration['db_glue']."work_student`");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."last_tooledit` RENAME `".$prefix."item_property`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` CHANGE `last_date` `lastedit_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` CHANGE `ref` `ref` INT(10) NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` CHANGE `type` `lastedit_type` VARCHAR(100) NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` CHANGE `user_id` `lastedit_user_id` INT UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` CHANGE `group_id` `to_group_id` INT(10) UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` ADD `to_user_id` INT UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` ADD `visibility` TINYINT(1) DEFAULT '1' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` ADD `start_visible` DATETIME NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` ADD `end_visible` DATETIME NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` ADD `insert_user_id` INT UNSIGNED NOT NULL AFTER `tool`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."item_property` ADD `insert_date` DATETIME NOT NULL AFTER `insert_user_id`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."last_tooledit` RENAME `".$prefix."item_property`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` CHANGE `last_date` `lastedit_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` CHANGE `ref` `ref` INT(10) NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` CHANGE `type` `lastedit_type` VARCHAR(100) NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` CHANGE `user_id` `lastedit_user_id` INT UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` CHANGE `group_id` `to_group_id` INT(10) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` ADD `to_user_id` INT UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` ADD `visibility` TINYINT(1) DEFAULT '1' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` ADD `start_visible` DATETIME NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` ADD `end_visible` DATETIME NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` ADD `insert_user_id` INT UNSIGNED NOT NULL AFTER `tool`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."item_property` ADD `insert_date` DATETIME NOT NULL AFTER `insert_user_id`");
 
 				/*
 				-----------------------------------------------------------
 				Update the announcement table
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."announcement` CHANGE `contenu` `content` TEXT DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."announcement` CHANGE `id` `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."announcement` CHANGE `temps` `end_date` DATE DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."announcement` DROP `code_cours`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."announcement` CHANGE `ordre` `display_order` MEDIUMINT(9) DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."announcement` ADD `title` TEXT AFTER `id`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."announcement` CHANGE `contenu` `content` TEXT DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."announcement` CHANGE `id` `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."announcement` CHANGE `temps` `end_date` DATE DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."announcement` DROP `code_cours`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."announcement` CHANGE `ordre` `display_order` MEDIUMINT(9) DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."announcement` ADD `title` TEXT AFTER `id`");
 				// Set item-properties of announcements and generate a title for the announcement
-				$sql = "SELECT id,end_date,content FROM `$mysql_base_course".$dbGlu."announcement`";
+				$sql = "SELECT id,end_date,content FROM `$mysql_base_course".$_configuration['db_glue']."announcement`";
 				$res = mysql_query($sql);
 				while ($obj = mysql_fetch_object($res))
 				{
@@ -528,9 +529,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					{
 						$title = substr(strip_tags($title),0,50).'...';
 					}
-					$sql = "UPDATE `$mysql_base_course".$dbGlu."announcement` SET title = '".mysql_real_escape_string($title)."' WHERE id='".$obj->id."'";
+					$sql = "UPDATE `$mysql_base_course".$_configuration['db_glue']."announcement` SET title = '".mysql_real_escape_string($title)."' WHERE id='".$obj->id."'";
 					mysql_query($sql);
-					$sql = "INSERT INTO `$mysql_base_course".$dbGlu."item_property` SET ";
+					$sql = "INSERT INTO `$mysql_base_course".$_configuration['db_glue']."item_property` SET ";
 					$sql .= " tool = '".TOOL_ANNOUNCEMENT."', ";
 					$sql .= " insert_date = '".$obj->end_date." 00:00:00', ";
 					$sql .= " lastedit_date = '".$obj->end_date." 00:00:00', ";
@@ -545,26 +546,26 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				Update the bb_whosonline table
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."bb_whosonline` CHANGE `date` `online_date` VARCHAR(255) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."bb_whosonline` CHANGE `date` `online_date` VARCHAR(255) DEFAULT NULL");
 
 				/*
 				-----------------------------------------------------------
 				Update the calendar_event table
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."calendar_event` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."calendar_event` CHANGE `titre` `title` VARCHAR(200) NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."calendar_event` CHANGE `contenu` `content` TEXT DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."calendar_event` CHANGE `day` `start_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."calendar_event` DROP `hour`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."calendar_event` DROP `lasting`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."calendar_event` ADD `end_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."calendar_event` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."calendar_event` CHANGE `titre` `title` VARCHAR(200) NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."calendar_event` CHANGE `contenu` `content` TEXT DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."calendar_event` CHANGE `day` `start_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."calendar_event` DROP `hour`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."calendar_event` DROP `lasting`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."calendar_event` ADD `end_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
 				// Set item-properties of calendar events
-				$sql = "SELECT id,start_date FROM `$mysql_base_course".$dbGlu."calendar_event`";
+				$sql = "SELECT id,start_date FROM `$mysql_base_course".$_configuration['db_glue']."calendar_event`";
 				$res = mysql_query($sql);
 				while ($obj = mysql_fetch_object($res))
 				{
-					$sql = "INSERT INTO `$mysql_base_course".$dbGlu."item_property` SET ";
+					$sql = "INSERT INTO `$mysql_base_course".$_configuration['db_glue']."item_property` SET ";
 					$sql .= " tool = '".TOOL_CALENDAR_EVENT."', ";
 					$sql .= " insert_date = NOW(), ";
 					$sql .= " lastedit_date = NOW(), ";
@@ -579,18 +580,18 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				Update the course_description table
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."course_description` CHANGE `id` `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."course_description` DROP `upDate`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."course_description` CHANGE `id` `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."course_description` DROP `upDate`");
 
 				/*
 				-----------------------------------------------------------
 				Update the document table
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."document` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."document` CHANGE `comment` `comment` TEXT DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."document` ADD `title` VARCHAR(255) AFTER `comment`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."document` ADD `size` INT(16) NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."document` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."document` CHANGE `comment` `comment` TEXT DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."document` ADD `title` VARCHAR(255) AFTER `comment`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."document` ADD `size` INT(16) NOT NULL");
 				// @note: Item properties of documents are set in update_files.inc.php
 
 				/*
@@ -598,26 +599,26 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				Update the dropbox tables
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_file` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_file` CHANGE `uploaderId` `uploader_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_file` CHANGE `filesize` `filesize` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_file` CHANGE `uploadDate` `upload_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_file` CHANGE `lastUploadDate` `last_upload_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_file` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_file` CHANGE `uploaderId` `uploader_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_file` CHANGE `filesize` `filesize` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_file` CHANGE `uploadDate` `upload_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_file` CHANGE `lastUploadDate` `last_upload_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_person` CHANGE `fileId` `file_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_person` CHANGE `personId` `user_id` INT UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_person` CHANGE `fileId` `file_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_person` CHANGE `personId` `user_id` INT UNSIGNED DEFAULT '0' NOT NULL");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_post` CHANGE `fileId` `file_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_post` CHANGE `recipientId` `dest_user_id` INT UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_post` ADD `feedback_date` DATETIME NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."dropbox_post` ADD `feedback` TEXT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_post` CHANGE `fileId` `file_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_post` CHANGE `recipientId` `dest_user_id` INT UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_post` ADD `feedback_date` DATETIME NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."dropbox_post` ADD `feedback` TEXT");
 
 				// Set item-properties of dropbox files
-				$sql = "SELECT * FROM `$mysql_base_course".$dbGlu."dropbox_file` f, `$mysql_base_course".$dbGlu."dropbox_post` p WHERE f.id = p.file_id";
+				$sql = "SELECT * FROM `$mysql_base_course".$_configuration['db_glue']."dropbox_file` f, `".$_configuration['db_glue']."_base_course".$_configuration['db_glue']."dropbox_post` p WHERE f.id = p.file_id";
 				$res = mysql_query($sql);
 				while ($obj = mysql_fetch_object($res))
 				{
-					$sql = "INSERT INTO `$mysql_base_course".$dbGlu."item_property` SET ";
+					$sql = "INSERT INTO `$mysql_base_course".$_configuration['db_glue']."item_property` SET ";
 					$sql .= " tool = '".TOOL_DROPBOX."', ";
 					$sql .= " insert_date = '".$obj->upload_date."', ";
 					$sql .= " lastedit_date = '".$obj->last_upload_date."', ";
@@ -710,7 +711,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				Update the group tables
 				-----------------------------------------------------------
 				*/
-				mysql_query("CREATE TABLE `$mysql_base_course".$dbGlu."group_category` (
+				mysql_query("CREATE TABLE `$mysql_base_course".$_configuration['db_glue']."group_category` (
 																 `id` int(10) unsigned NOT NULL auto_increment,
 																 `title` varchar(255) NOT NULL default '',
 																 `description` text NOT NULL,
@@ -725,87 +726,87 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 																) TYPE=MyISAM");
 
 				// Get the group-properties from old portal
-				$sql = "SELECT * FROM `$mysql_base_course".$dbGlu."group_property`";
+				$sql = "SELECT * FROM `$mysql_base_course".$_configuration['db_glue']."group_property`";
 				$res = mysql_query($sql);
 
 				$group_properties = mysql_fetch_array($res,MYSQL_ASSOC);
 
-				mysql_query("DROP TABLE `$mysql_base_course".$dbGlu."group_property`");
+				mysql_query("DROP TABLE `$mysql_base_course".$_configuration['db_glue']."group_property`");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_team` RENAME `".$prefix."group_info`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_info` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_info` CHANGE `tutor` `tutor_id` MEDIUMINT(8) UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_info` CHANGE `forumId` `forum_id` INT(10) UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_info` CHANGE `maxStudent` `max_student` SMALLINT(5) UNSIGNED DEFAULT '8' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_info` CHANGE `secretDirectory` `secret_directory` VARCHAR(200) DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_info` ADD `self_registration_allowed` ENUM('0', '1') DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_info` ADD `self_unregistration_allowed` ENUM('0', '1') DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_info` ADD `category_id` INT(10) UNSIGNED NOT NULL AFTER `name`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_info` ADD `forum_state` ENUM('0', '1', '2') DEFAULT '0' NOT NULL AFTER `tutor_id`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_info` ADD `doc_state` ENUM('0', '1', '2') DEFAULT '0' NOT NULL AFTER `max_student`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_team` RENAME `".$prefix."group_info`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_info` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_info` CHANGE `tutor` `tutor_id` MEDIUMINT(8) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_info` CHANGE `forumId` `forum_id` INT(10) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_info` CHANGE `maxStudent` `max_student` SMALLINT(5) UNSIGNED DEFAULT '8' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_info` CHANGE `secretDirectory` `secret_directory` VARCHAR(200) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_info` ADD `self_registration_allowed` ENUM('0', '1') DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_info` ADD `self_unregistration_allowed` ENUM('0', '1') DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_info` ADD `category_id` INT(10) UNSIGNED NOT NULL AFTER `name`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_info` ADD `forum_state` ENUM('0', '1', '2') DEFAULT '0' NOT NULL AFTER `tutor_id`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_info` ADD `doc_state` ENUM('0', '1', '2') DEFAULT '0' NOT NULL AFTER `max_student`");
 				// Update group-properties (doc_state = always private, forum_state ~ old group properties, category_id = default category)
 				$forum_state = ($group_properties['private']) == '0' ? '1' : '2';
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."group_info` SET category_id='2', doc_state='2', forum_state = '".$forum_state."', secret_directory = CONCAT('/',secret_directory)");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."group_info` SET tutor_id='0' WHERE tutor_id IS NULL");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."group_info` SET category_id='2', doc_state='2', forum_state = '".$forum_state."', secret_directory = CONCAT('/',secret_directory)");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."group_info` SET tutor_id='0' WHERE tutor_id IS NULL");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_rel_team_user` RENAME `".$prefix."group_rel_user`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_rel_user` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_rel_user` CHANGE `user` `user_id` INT UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_rel_user` CHANGE `team` `group_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."group_rel_user` CHANGE `role` `role` CHAR(50) NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_rel_team_user` RENAME `".$prefix."group_rel_user`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_rel_user` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_rel_user` CHANGE `user` `user_id` INT UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_rel_user` CHANGE `team` `group_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."group_rel_user` CHANGE `role` `role` CHAR(50) NOT NULL");
 
-				mysql_query("INSERT INTO `$mysql_base_course".$dbGlu."group_category` (`id`,`title`,`groups_per_user`) VALUES ('2','".get_lang('DefaultGroupCategory')."','".$group_properties['nbCoursPerUser']."')");
+				mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."group_category` (`id`,`title`,`groups_per_user`) VALUES ('2','".get_lang('DefaultGroupCategory')."','".$group_properties['nbCoursPerUser']."')");
 
 				/*
 				-----------------------------------------------------------
 				Update the learnpath tables
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_chapters` RENAME `".$prefix."learnpath_chapter`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_chapter` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_chapter` CHANGE `learnpath_id` `learnpath_id` INT(10) UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_chapter` CHANGE `ordre` `display_order` MEDIUMINT(8) UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_chapter` ADD `parent_chapter_id` INT UNSIGNED DEFAULT 0 NOT NULL AFTER `chapter_description`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_chapters` RENAME `".$prefix."learnpath_chapter`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_chapter` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_chapter` CHANGE `learnpath_id` `learnpath_id` INT(10) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_chapter` CHANGE `ordre` `display_order` MEDIUMINT(8) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_chapter` ADD `parent_chapter_id` INT UNSIGNED DEFAULT 0 NOT NULL AFTER `chapter_description`");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_items` RENAME `".$prefix."learnpath_item`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_item` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_item` CHANGE `chapter` `chapter_id` INT(10) UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_item` CHANGE `item_id` `item_id` INT(10) UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_item` CHANGE `ordre` `display_order` SMALLINT(6) DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_item` CHANGE `prereq` `prereq_id` INT(10) UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_item` ADD `prereq_completion_limit` VARCHAR(10) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_items` RENAME `".$prefix."learnpath_item`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_item` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_item` CHANGE `chapter` `chapter_id` INT(10) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_item` CHANGE `item_id` `item_id` INT(10) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_item` CHANGE `ordre` `display_order` SMALLINT(6) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_item` CHANGE `prereq` `prereq_id` INT(10) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_item` ADD `prereq_completion_limit` VARCHAR(10) DEFAULT NULL");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_main` CHANGE `learnpath_id` `learnpath_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_main` CHANGE `learnpath_id` `learnpath_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_users` RENAME `".$prefix."learnpath_user`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_user` CHANGE `user_id` `user_id` INT UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_user` CHANGE `learnpath_id` `learnpath_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_user` CHANGE `learnpath_item_id` `learnpath_item_id` INT(10) UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."learnpath_user` CHANGE `score` `score` SMALLINT(6) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_users` RENAME `".$prefix."learnpath_user`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_user` CHANGE `user_id` `user_id` INT UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_user` CHANGE `learnpath_id` `learnpath_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_user` CHANGE `learnpath_item_id` `learnpath_item_id` INT(10) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."learnpath_user` CHANGE `score` `score` SMALLINT(6) DEFAULT NULL");
 
 				/*
 				-----------------------------------------------------------
 				Update the link tables
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."link` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."link` CHANGE `url` `url` TEXT NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."link` CHANGE `titre` `title` VARCHAR(150) DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."link` CHANGE `category` `category_id` SMALLINT(5) UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."link` CHANGE `ordre` `display_order` SMALLINT(5) UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."link` ADD `on_homepage` ENUM('0', '1') DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."link` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."link` CHANGE `url` `url` TEXT NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."link` CHANGE `titre` `title` VARCHAR(150) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."link` CHANGE `category` `category_id` SMALLINT(5) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."link` CHANGE `ordre` `display_order` SMALLINT(5) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."link` ADD `on_homepage` ENUM('0', '1') DEFAULT '0' NOT NULL");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."link_categories` RENAME `".$prefix."link_category`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."link_category` CHANGE `id` `id` SMALLINT(5) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."link_category` CHANGE `categoryname` `category_title` VARCHAR(255) NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."link_category` CHANGE `ordre` `display_order` MEDIUMINT(8) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."link_categories` RENAME `".$prefix."link_category`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."link_category` CHANGE `id` `id` SMALLINT(5) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."link_category` CHANGE `categoryname` `category_title` VARCHAR(255) NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."link_category` CHANGE `ordre` `display_order` MEDIUMINT(8) UNSIGNED DEFAULT '0' NOT NULL");
 
 				// Set item-properties of links
-				$sql = "SELECT id FROM `$mysql_base_course".$dbGlu."link`";
+				$sql = "SELECT id FROM `$mysql_base_course".$_configuration['db_glue']."link`";
 				$res = mysql_query($sql);
 				while ($obj = mysql_fetch_object($res))
 				{
-					$sql = "INSERT INTO `$mysql_base_course".$dbGlu."item_property` SET ";
+					$sql = "INSERT INTO `$mysql_base_course".$_configuration['db_glue']."item_property` SET ";
 					$sql .= " tool = '".TOOL_LINK."', ";
 					$sql .= " insert_date = NOW(), ";
 					$sql .= " lastedit_date = NOW(), ";
@@ -817,24 +818,24 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				
 				// move all the links on the course homepage to the links tool
 				// step 1: count the max display order of the 0 category_id
-				$sql="SELECT * FROM `$mysql_base_course".$dbGlu."link` WHERE category_id='0' ORDER BY display_order DESC";
+				$sql="SELECT * FROM `$mysql_base_course".$_configuration['db_glue']."link` WHERE category_id='0' ORDER BY display_order DESC";
 				$result2=mysql_query($sql);
 				$row=mysql_fetch_array($result2);
 				$maxsort=$row['display_order']; 
 				
 				// step 2: select all the links that were added to the course homepage
-				$sql="SELECT * FROM `$mysql_base_course".$dbGlu."tool` WHERE link LIKE 'http://%'";
+				$sql="SELECT * FROM `$mysql_base_course".$_configuration['db_glue']."tool` WHERE link LIKE 'http://%'";
 				$result2 = mysql_query($sql);
 				while ($row=mysql_fetch_array($result2))
 				{
 					$maxsort++;
 					// step 3: for each link on homepage: add to the links table
-					$sqlinsert="INSERT INTO `$mysql_base_course".$dbGlu."link` (url, title, category_id, display_order, on_homepage) VALUES('".$row['link']."','".$row['name']."','0','".$maxsort."','1')";
+					$sqlinsert="INSERT INTO `$mysql_base_course".$_configuration['db_glue']."link` (url, title, category_id, display_order, on_homepage) VALUES('".$row['link']."','".$row['name']."','0','".$maxsort."','1')";
 					$resultinsert=mysql_query($sqlinsert);
 					$insertid=mysql_insert_id();
 					
 					// step 4: for each link on homepage: add the link in the item_property table
-					$sql_item_property = "INSERT INTO `$mysql_base_course".$dbGlu."item_property` SET ";
+					$sql_item_property = "INSERT INTO `$mysql_base_course".$_configuration['db_glue']."item_property` SET ";
 					$sql_item_property .= " tool = '".TOOL_LINK."', ";
 					$sql_item_property .= " ref = '".$insertid."', ";
 					$sql_item_property .= " lastedit_type = 'LinkAdded', ";
@@ -842,7 +843,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					api_sql_query($sql_item_property);	
 
 					// step 5: for each link on homepage: delete the link in the tool table.				
-					$sqldelete="DELETE FROM `$mysql_base_course".$dbGlu."tool` WHERE id='".$row['id']."'";
+					$sqldelete="DELETE FROM `$mysql_base_course".$_configuration['db_glue']."tool` WHERE id='".$row['id']."'";
 					$resultdelete=mysql_query($sqldelete);
 					
 				}
@@ -853,109 +854,109 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				Update the quiz tables
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz_rel_test_question` RENAME `".$prefix."quiz_rel_question`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz_rel_test_question` RENAME `".$prefix."quiz_rel_question`");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz_test` RENAME `".$prefix."quiz`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz` CHANGE `titre` `title` VARCHAR(200) NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz` CHANGE `description` `description` TEXT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz` CHANGE `sound` `sound` VARCHAR(50)");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz` CHANGE `type` `type` TINYINT(3) UNSIGNED DEFAULT '1' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz` CHANGE `active` `active` ENUM('0', '1') DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz_test` RENAME `".$prefix."quiz`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz` CHANGE `titre` `title` VARCHAR(200) NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz` CHANGE `description` `description` TEXT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz` CHANGE `sound` `sound` VARCHAR(50)");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz` CHANGE `type` `type` TINYINT(3) UNSIGNED DEFAULT '1' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz` CHANGE `active` `active` ENUM('0', '1') DEFAULT '0' NOT NULL");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz_answer` CHANGE `reponse` `answer` TEXT NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz_answer` CHANGE `ponderation` `ponderation` SMALLINT(6) DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz_answer` CHANGE `r_position` `position` MEDIUMINT(8) UNSIGNED DEFAULT '1' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz_answer` CHANGE `reponse` `answer` TEXT NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz_answer` CHANGE `ponderation` `ponderation` SMALLINT(6) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz_answer` CHANGE `r_position` `position` MEDIUMINT(8) UNSIGNED DEFAULT '1' NOT NULL");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz_question` CHANGE `description` `description` TEXT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz_question` CHANGE `q_position` `position` MEDIUMINT(8) UNSIGNED DEFAULT '1' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."quiz_question` CHANGE `picture` `picture` VARCHAR(50)");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz_question` CHANGE `description` `description` TEXT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz_question` CHANGE `q_position` `position` MEDIUMINT(8) UNSIGNED DEFAULT '1' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."quiz_question` CHANGE `picture` `picture` VARCHAR(50)");
 
 				/*
 				-----------------------------------------------------------
 				Update the resource linker table
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."added_resources` RENAME `".$prefix."resource`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."resource` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."resource` CHANGE `source_id` `source_id` INT(10) UNSIGNED DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."resource` CHANGE `resource_id` `resource_id` INT(10) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."added_resources` RENAME `".$prefix."resource`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."resource` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."resource` CHANGE `source_id` `source_id` INT(10) UNSIGNED DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."resource` CHANGE `resource_id` `resource_id` INT(10) UNSIGNED DEFAULT NULL");
 
 				/*
 				-----------------------------------------------------------
 				Update the scormdocument table
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."scormdocument` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."scormdocument` ADD `name` VARCHAR(100)");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."scormdocument` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."scormdocument` ADD `name` VARCHAR(100)");
 
 				/*
 				-----------------------------------------------------------
 				Update the student_publication table
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."assignment_doc` RENAME `".$prefix."student_publication`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."student_publication` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."student_publication` CHANGE `titre` `title` VARCHAR(200) DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."student_publication` CHANGE `auteurs` `author` VARCHAR(200) DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."student_publication` CHANGE `active` `active` TINYINT(4) DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."student_publication` CHANGE `accepted` `accepted` TINYINT(4) DEFAULT '0'");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."student_publication` CHANGE `date` `sent_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."assignment_doc` RENAME `".$prefix."student_publication`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."student_publication` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."student_publication` CHANGE `titre` `title` VARCHAR(200) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."student_publication` CHANGE `auteurs` `author` VARCHAR(200) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."student_publication` CHANGE `active` `active` TINYINT(4) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."student_publication` CHANGE `accepted` `accepted` TINYINT(4) DEFAULT '0'");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."student_publication` CHANGE `date` `sent_date` DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL");
 
 				/*
 				-----------------------------------------------------------
 				Update the tool introduction table
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."tool_intro` CHANGE `id` `id` VARCHAR(50) NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."tool_intro` CHANGE `texte_intro` `intro_text` TEXT NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."tool_intro` CHANGE `id` `id` VARCHAR(50) NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."tool_intro` CHANGE `texte_intro` `intro_text` TEXT NOT NULL");
 
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool_intro` SET id='".TOOL_COURSE_HOMEPAGE."' WHERE id = '1'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool_intro` SET id='".TOOL_COURSE_HOMEPAGE."' WHERE id = '1'");
 
 				/*
 				-----------------------------------------------------------
 				Update the user information tables
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."userinfo_content` CHANGE `user_id` `user_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."userinfo_content` CHANGE `def_id` `definition_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."userinfo_content` CHANGE `ed_ip` `editor_ip` VARCHAR(39) DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."userinfo_content` CHANGE `ed_date` `edition_time` DATETIME DEFAULT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."userinfo_content` CHANGE `content` `content` TEXT NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."userinfo_content` CHANGE `user_id` `user_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."userinfo_content` CHANGE `def_id` `definition_id` INT(10) UNSIGNED DEFAULT '0' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."userinfo_content` CHANGE `ed_ip` `editor_ip` VARCHAR(39) DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."userinfo_content` CHANGE `ed_date` `edition_time` DATETIME DEFAULT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."userinfo_content` CHANGE `content` `content` TEXT NOT NULL");
 
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."userinfo_def` CHANGE `nbLine` `line_count` TINYINT(3) UNSIGNED DEFAULT '5' NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."userinfo_def` CHANGE `nbLine` `line_count` TINYINT(3) UNSIGNED DEFAULT '5' NOT NULL");
 
 				/*
 				-----------------------------------------------------------
 				Update the tool table
 				-----------------------------------------------------------
 				*/
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."tool_list` RENAME `".$prefix."tool`");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."tool` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."tool` CHANGE `rubrique` `name` VARCHAR(100) NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."tool` CHANGE `lien` `link` VARCHAR(255) NOT NULL");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."tool` CHANGE `visible` `visibility` TINYINT(3) UNSIGNED DEFAULT '0'");
-				mysql_query("ALTER TABLE `$mysql_base_course".$dbGlu."tool` CHANGE `addedTool` `added_tool` ENUM('0', '1') DEFAULT '0'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_COURSE_DESCRIPTION."' WHERE link LIKE 'course_description/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_CALENDAR_EVENT."' WHERE link LIKE 'calendar/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_DOCUMENT."' WHERE link LIKE 'document/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_ANNOUNCEMENT."' WHERE link LIKE 'announcements/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_BB_FORUM."' WHERE link LIKE 'phpbb/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_LINK."' WHERE link = 'link/link.php'");
-				mysql_query("Update `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_DROPBOX."' WHERE link LIKE 'dropbox/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_QUIZ."' WHERE link LIKE 'exercice/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_USER."' WHERE link LIKE 'user/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_GROUP."' WHERE link LIKE 'group/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_CHAT."' WHERE link LIKE 'chat/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_CONFERENCE."' WHERE link LIKE 'online/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_STUDENTPUBLICATION."' WHERE link LIKE 'work/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_TRACKING."' WHERE link LIKE 'tracking/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_COURSE_SETTING."' WHERE link LIKE 'course_info/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_LEARNPATH."' WHERE link LIKE 'scorm/%'");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET name='".TOOL_HOMEPAGE_LINK."', link='link/link.php?action=addlink' WHERE link LIKE 'external_module/%'");
-				//mysql_query("INSERT INTO `$mysql_base_course".$dbGlu."tool` (`id`, `name`, `link`, `image`, `visibility`, `admin`, `address`, `added_tool`, `target`) VALUES ('', '".TOOL_BACKUP."', 'coursecopy/backup.php', 'backup.gif', '0', '1', '', '0', '_self')");
-				mysql_query("INSERT INTO `$mysql_base_course".$dbGlu."tool` (`id`, `name`, `link`, `image`, `visibility`, `admin`, `address`, `added_tool`, `target`) VALUES ('', '".TOOL_COPY_COURSE_CONTENT."', 'coursecopy/copy_course.php', 'copy.gif', '0', '1', '', '0', '_self')");
-				//mysql_query("INSERT INTO `$mysql_base_course".$dbGlu."tool` (`id`, `name`, `link`, `image`, `visibility`, `admin`, `address`, `added_tool`, `target`) VALUES ('', '".TOOL_RECYCLE_COURSE."', 'coursecopy/recycle_course.php', 'recycle.gif', '0', '1', '', '0', '_self')");
-				mysql_query("UPDATE `$mysql_base_course".$dbGlu."tool` SET `added_tool` = '0' WHERE `added_tool` = ''");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."tool_list` RENAME `".$prefix."tool`");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."tool` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."tool` CHANGE `rubrique` `name` VARCHAR(100) NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."tool` CHANGE `lien` `link` VARCHAR(255) NOT NULL");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."tool` CHANGE `visible` `visibility` TINYINT(3) UNSIGNED DEFAULT '0'");
+				mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."tool` CHANGE `addedTool` `added_tool` ENUM('0', '1') DEFAULT '0'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_COURSE_DESCRIPTION."' WHERE link LIKE 'course_description/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_CALENDAR_EVENT."' WHERE link LIKE 'calendar/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_DOCUMENT."' WHERE link LIKE 'document/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_ANNOUNCEMENT."' WHERE link LIKE 'announcements/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_BB_FORUM."' WHERE link LIKE 'phpbb/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_LINK."' WHERE link = 'link/link.php'");
+				mysql_query("Update `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_DROPBOX."' WHERE link LIKE 'dropbox/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_QUIZ."' WHERE link LIKE 'exercice/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_USER."' WHERE link LIKE 'user/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_GROUP."' WHERE link LIKE 'group/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_CHAT."' WHERE link LIKE 'chat/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_CONFERENCE."' WHERE link LIKE 'online/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_STUDENTPUBLICATION."' WHERE link LIKE 'work/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_TRACKING."' WHERE link LIKE 'tracking/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_COURSE_SETTING."' WHERE link LIKE 'course_info/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_LEARNPATH."' WHERE link LIKE 'scorm/%'");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET name='".TOOL_HOMEPAGE_LINK."', link='link/link.php?action=addlink' WHERE link LIKE 'external_module/%'");
+				//mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."tool` (`id`, `name`, `link`, `image`, `visibility`, `admin`, `address`, `added_tool`, `target`) VALUES ('', '".TOOL_BACKUP."', 'coursecopy/backup.php', 'backup.gif', '0', '1', '', '0', '_self')");
+				mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."tool` (`id`, `name`, `link`, `image`, `visibility`, `admin`, `address`, `added_tool`, `target`) VALUES ('', '".TOOL_COPY_COURSE_CONTENT."', 'coursecopy/copy_course.php', 'copy.gif', '0', '1', '', '0', '_self')");
+				//mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."tool` (`id`, `name`, `link`, `image`, `visibility`, `admin`, `address`, `added_tool`, `target`) VALUES ('', '".TOOL_RECYCLE_COURSE."', 'coursecopy/recycle_course.php', 'recycle.gif', '0', '1', '', '0', '_self')");
+				mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."tool` SET `added_tool` = '0' WHERE `added_tool` = ''");
 
 				$i ++;
 			}

@@ -1273,7 +1273,8 @@ class CourseManager
 	 */
 	function delete_course($code)
 	{
-		global $_configuration, $dbGlu;
+		global $_configuration;
+		
 		$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
 		$table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 		$table_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
@@ -1313,7 +1314,7 @@ class CourseManager
 			}
 			else
 			{
-				$db_pattern = $_configuration['table_prefix'].$course->db_name.$dbGlu;
+				$db_pattern = $_configuration['table_prefix'].$course->db_name.$_configuration['db_glue'];
 				$sql = "SHOW TABLES LIKE '$db_pattern%'";
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 				while (list ($courseTable) = mysql_fetch_row($result))

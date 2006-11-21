@@ -108,8 +108,8 @@ if ($_GET['logout'])
 	api_sql_query($s_sql_update_logout_date);
 	
 
-	//LoginDelete(".$_user['user_id'].", $statsDbName);
-	LoginDelete($_GET["uid"], $statsDbName);
+	//LoginDelete(".$_user['user_id'].", $_configuration['statistics_database']);
+	LoginDelete($_GET["uid"], $_configuration['statistics_database']);
 	api_session_destroy();
 
 	header("Location: index.php$query_string");

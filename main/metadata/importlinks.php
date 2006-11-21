@@ -241,7 +241,10 @@ elseif ($slo == get_lang('Index') && file_exists($phpDigIncCn) && count($mceids)
         }
     }
     
-    if(isset($db)) mysql_select_db($mainDbName, $db);  // back to Dokeos
+    if(isset($db))
+    {
+    	mysql_select_db($_configuration['main_database'], $db);  // back to Dokeos
+    }
 }
 elseif ($slo == get_lang('Index'))
 {

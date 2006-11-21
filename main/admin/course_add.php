@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 9403 2006-10-10 10:21:34Z bmol $
+// $Id: course_add.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -118,7 +118,7 @@ if( $form->validate())
 	{
 		$department_url = 'http://'.$department_url;
 	}
-	$keys = define_course_keys($code, "", $dbNamePrefix);
+	$keys = define_course_keys($code, "", $_configuration['db_prefix']);
 	if (sizeof($keys))
 	{
 		$currentCourseCode = $keys["currentCourseCode"];

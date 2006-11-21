@@ -1,4 +1,4 @@
-<?php // $Id: resourcelinker.inc.php 9988 2006-11-15 01:28:32Z pcool $
+<?php // $Id: resourcelinker.inc.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -362,8 +362,8 @@ function display_addedresource_link($type, $id, $style='')
 */
 function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_path, $builder, $icon, $level = 0)
 {
-	global $_course, $learnpath_id, $tbl_learnpath_item, $items;
-	global $_course, $curDirPath, $rootWeb, $enableDocumentParsing, $_course, $_user, $_cid, $rootSys;
+	global $learnpath_id, $tbl_learnpath_item, $items;
+	global $_course, $curDirPath, $_configuration, $enableDocumentParsing, $_user, $_cid, $rootSys;
 
 	$hyperlink_target_parameter = ''; //or e.g. 'target="_blank"'
 
@@ -1135,7 +1135,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 {
 	global $_course, $learnpath_id, $tbl_learnpath_item, $items;
-	global $curDirPath, $rootWeb, $enableDocumentParsing, $_user , $_cid, $rootSys;
+	global $curDirPath, $_configuration, $enableDocumentParsing, $_user , $_cid, $rootSys;
 
 	$hyperlink_target_parameter = ""; //or e.g. target='_blank'
  $builder = 'player';

@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: configure_homepage.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -176,7 +176,7 @@ if(!empty($action))
 
 				if(empty($link_url))
 				{
-					$link_url=$rootWeb.'index.php?include='.urlencode($filename);
+					$link_url=$_configuration['root_web'].'index.php?include='.urlencode($filename);
 
 					if(!file_exists($rootSys.'home/'.$filename))
 					{
@@ -327,7 +327,7 @@ if(!empty($action))
 
 				list($link_url)=explode('"',$enreg[sizeof($enreg)-1]);
 
-				if(strstr($link_url,$rootWeb) && strstr($link_url,'?include='))
+				if(strstr($link_url,$_configuration['root_web']) && strstr($link_url,'?include='))
 				{
 					$link_url=explode('?include=',$link_url);
 
@@ -335,7 +335,7 @@ if(!empty($action))
 
 					if(!strstr($filename,'/') && strstr($filename,'.html'))
 					{
-						$link_html=file($rootWeb.'home/'.$filename);
+						$link_html=file($_configuration['root_web'].'home/'.$filename);
 
 						$link_html=implode('',$link_html);
 
@@ -674,7 +674,7 @@ else
 			$edit_link='<a href="'.$_SERVER['PHP_SELF'].'?action=edit_link&amp;link_index='.$key.'"><img src="../img/edit.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Modify')).'"/></a>';
 			$delete_link='<a href="'.$_SERVER['PHP_SELF'].'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img src="../img/delete.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Delete')).'"/></a>';
 
-			echo str_replace(array('href="'.$rootWeb.'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($_SERVER['PHP_SELF']).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
+			echo str_replace(array('href="'.$_configuration['root_web'].'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($_SERVER['PHP_SELF']).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
 		}
 	}
 ?>

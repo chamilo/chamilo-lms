@@ -105,10 +105,10 @@ function validate_data($courses)
  */
 function save_data($courses)
 {
-	global $dbNamePrefix,$firstExpirationDelay;
+	global $_configuration, $firstExpirationDelay;
 	foreach($courses as $index => $course)
 	{
-		$keys = define_course_keys($course['Code'], "", $dbNamePrefix);
+		$keys = define_course_keys($course['Code'], "", $_configuration['db_prefix']);
 		$user_table = Database::get_main_table(MAIN_USER_TABLE);
 		$sql = "SELECT user_id, CONCAT(lastname,' ',firstname) AS name FROM $user_table WHERE username = '".mysql_real_escape_string($course['Teacher'])."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);

@@ -50,7 +50,7 @@ $interbredcrump[] = array ("url" => "survey.php", "name" => get_lang('CreateSurv
 $groupid=$_REQUEST['groupid'];
 $surveyid=$_REQUEST['surveyid'];
 $qdeleted=0;
-//$cidReqdb = $dbNamePrefix.$_REQUEST['cidReq'];
+//$cidReqdb = $_configuration['db_prefix'].$_REQUEST['cidReq'];
 //echo "dsfgdsgfsdgdsfg".$groupid;
 if (isset($_POST['addanother']))
 {

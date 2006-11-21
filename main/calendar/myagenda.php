@@ -111,7 +111,7 @@ if (get_setting("allow_personal_agenda") == "true")
 	// I use a separate database for storing all the information of user driven tools
 	// as the Personal Agenda tool has the potential to create a large database.
 	// If you do not want a separate database for the personal agenda tool you can add the table to
-	// the main dokeos database by changing $DATABASE_USER_TOOLS above to $mainDbName
+	// the main dokeos database by changing $DATABASE_USER_TOOLS above to $_configuration['main_database']
 	$sql_create_database = "CREATE DATABASE IF NOT EXISTS `$DATABASE_USER_TOOLS`";
 	$result = api_sql_query($sql_create_database);
 	$sql_create_table = "CREATE TABLE IF NOT EXISTS $TABLE_PERSONAL_AGENDA (
@@ -234,10 +234,10 @@ if (isset ($_user['user_id']))
 	echo "<tr>";
 	// output: the small calendar item on the left and the view / add links
 	echo "<td width=\"220\" valign=\"top\">";
-	$agendaitems = get_agendaitems($rootWeb, $courses_dbs, $month, $year);
+	$agendaitems = get_agendaitems($courses_dbs, $month, $year);
 	if (get_setting('allow_personal_agenda') == 'true')
 	{
-		$agendaitems = get_personal_agendaitems($rootWeb, $agendaitems, $day, $month, $year, $week, "month_view");
+		$agendaitems = get_personal_agendaitems($agendaitems, $day, $month, $year, $week, "month_view");
 	}
 	display_minimonthcalendar($agendaitems, $month, $year, $monthName);
 	echo "\n<ul id=\"agenda_select\">\n";
@@ -259,26 +259,26 @@ if (isset ($_user['user_id']))
 	switch ($proces)
 	{
 		case "month_view" :
-			$agendaitems = get_agendaitems($rootWeb, $courses_dbs, $month, $year);
+			$agendaitems = get_agendaitems($courses_dbs, $month, $year);
 			if (get_setting("allow_personal_agenda") == "true")
 			{
-				$agendaitems = get_personal_agendaitems($rootWeb, $agendaitems, $day, $month, $year, $week, "month_view");
+				$agendaitems = get_personal_agendaitems($agendaitems, $day, $month, $year, $week, "month_view");
 			}
 			display_monthcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long'], $monthName);
 			break;
 		case "week_view" :
-			$agendaitems = get_week_agendaitems($rootWeb, $courses_dbs, $month, $year, $week);
+			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);
 			if (get_setting("allow_personal_agenda") == "true")
 			{
-				$agendaitems = get_personal_agendaitems($rootWeb, $agendaitems, $day, $month, $year, $week, "week_view");
+				$agendaitems = get_personal_agendaitems($agendaitems, $day, $month, $year, $week, "week_view");
 			}
 			display_weekcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long'], $monthName);
 			break;
 		case "day_view" :
-			$agendaitems = get_day_agendaitems($rootWeb, $courses_dbs, $month, $year, $day);
+			$agendaitems = get_day_agendaitems($courses_dbs, $month, $year, $day);
 			if (get_setting("allow_personal_agenda") == "true")
 			{
-				$agendaitems = get_personal_agendaitems($rootWeb, $agendaitems, $day, $month, $year, $week, "day_view");
+				$agendaitems = get_personal_agendaitems($agendaitems, $day, $month, $year, $week, "day_view");
 			}
 			display_daycalendar($agendaitems, $day, $month, $year, $langDay_of_weekNames['long'], $monthName);
 			break;
@@ -314,13 +314,14 @@ echo "</td></tr></table>";
 Display :: display_footer();
 
 /*============================================================================
-	 get_agendaitems($rootWeb, $courses_db, $month, $year)
+	 get_agendaitems($courses_db, $month, $year)
   ============================================================================*/
 // This function retrieves all the agenda items of all the course of the user
-function get_agendaitems($rootWeb, $courses_dbs, $month, $year)
+function get_agendaitems($courses_dbs, $month, $year)
 {
-	global $dbGlu;
 	global $_user;
+	global $_configuration;
+	
 	$items = array ();
 	// get agenda-items for every course
 	foreach ($courses_dbs as $key => $array_course_info)
@@ -384,7 +385,7 @@ function get_agendaitems($rootWeb, $courses_dbs, $month, $year)
 		{
 			$agendaday = date("j",strtotime($item['start_date']));
 			$time= date("H:i",strtotime($item['start_date']));
-			$URL = $rootWeb."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$items[$agendaday][$item['start_time']] .= "<i>".$time."</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$array_course_info["visual_code"]."</a>  ".$item['title']."<br />";
 		}
 	}
@@ -627,11 +628,7 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	global $DaysShort, $DaysLong;
 	global $MonthsLong;
 	global $query;
-	global $dbGlu;
-	// some debug information
-	// echo "dag: ".$day;
-	// echo "maand: ".$month;
-	// echo "jaar: ".$year;
+
 	// timestamp of today
 	$today = mktime();
 	$nextday = $today + (24 * 60 * 60);
@@ -697,13 +694,14 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	echo "</table>\n";
 }
 /*============================================================================
-	 get_day_agendaitems($rootWeb, $query, $month, $year)
+	 get_day_agendaitems($query, $month, $year)
   ============================================================================*/
 // show the monthcalender of the given month
-function get_day_agendaitems($rootWeb, $courses_dbs, $month, $year, $day)
+function get_day_agendaitems($courses_dbs, $month, $year, $day)
 {
-	global $dbGlu;
 	global $_user;
+	global $_configuration;
+	
 	$items = array ();
 
 	// get agenda-items for every course
@@ -779,8 +777,8 @@ function get_day_agendaitems($rootWeb, $courses_dbs, $month, $year, $day)
 			{
 				$halfhour = $halfhour +1;
 			}
-			//$URL = $rootWeb.$mycours["dir"]."/";
-			$URL = $rootWeb."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			//$URL = $_configuration['root_web'].$mycours["dir"]."/";
+			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['name']."\">".$array_course_info['visual_code']."</a>  ".$item['title']."<br />";
 		}
 	}
@@ -799,13 +797,14 @@ function get_day_agendaitems($rootWeb, $courses_dbs, $month, $year, $day)
 	return $agendaitems;
 }
 /*============================================================================
-	 function get_week_agendaitems($rootWeb, $courses_dbs, $month, $year,$day)
+	 function get_week_agendaitems($courses_dbs, $month, $year,$day)
   ============================================================================*/
-function get_week_agendaitems($rootWeb, $courses_dbs, $month, $year, $week = '')
+function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 {
-	global $dbGlu;
 	global $TABLEAGENDA, $TABLE_ITEMPROPERTY;
 	global $_user;
+	global $_configuration;
+
 	$items = array ();
 	// The default value of the week
 	if ($week == '')
@@ -918,7 +917,7 @@ function get_week_agendaitems($rootWeb, $courses_dbs, $month, $year, $week = '')
 		{
 			$agendaday = date("j",strtotime($item['start_date']));
 			$time= date("H:i",strtotime($item['start_date']));
-			$URL = $rootWeb."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$items[$agendaday][$item['start_time']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$array_course_info["visual_code"]."</a>  ".$item['title']."<br />";
 		}
 	}
@@ -1152,13 +1151,14 @@ function get_courses_of_user()
 	return $courses;
 }
 /*============================================================================
-	 get_personal_agendaitems($rootWeb, $agendaitems, $month, $year, $day, $week, $type);
+	 get_personal_agendaitems($agendaitems, $month, $year, $day, $week, $type);
   ============================================================================*/
 // This function retrieves all the personal agenda items and add them to the agenda items found by the other functions.
-function get_personal_agendaitems($rootWeb, $agendaitems, $day = "", $month = "", $year = "", $week = "", $type)
+function get_personal_agendaitems($agendaitems, $day = "", $month = "", $year = "", $week = "", $type)
 {
 	global $TABLE_PERSONAL_AGENDA;
 	global $_user;
+	global $_configuration;
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
 	if ($type == "month_view" or $type == "") // we are in month view
 	{
@@ -1214,7 +1214,7 @@ function get_personal_agendaitems($rootWeb, $agendaitems, $day = "", $month = ""
 		// if the student has specified a course we a add a link to that course
 		if ($item['course'] <> "")
 		{
-			$url = $rootWeb."main/calendar/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$url = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$course_link = "<a href=\"$url\" title=\"".$item['course']."\">".$item['course']."</a>";
 		}
 		else

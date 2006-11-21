@@ -384,16 +384,16 @@ function printInit($selection = "*")
  */
 function printConfig()
 {
-	GLOBAL $_configuration, $mainDbName, $dokeos_version, $rootWeb, $urlAppend, $userPasswordCrypted, $userPasswordCrypted, $platformLanguage, $siteName, $rootWeb, $rootSys, $clarolineRepositoryAppend, $coursesRepositoryAppend, $rootAdminAppend, $clarolineRepositoryWeb, $clarolineRepositorySys, $coursesRepositoryWeb, $coursesRepositorySys, $rootAdminSys, $rootAdminWeb;
+	GLOBAL $_configuration, $dokeos_version, $urlAppend, $userPasswordCrypted, $userPasswordCrypted, $platformLanguage, $siteName, $clarolineRepositoryAppend, $coursesRepositoryAppend, $rootAdminAppend, $clarolineRepositoryWeb, $clarolineRepositorySys, $coursesRepositoryWeb, $coursesRepositorySys, $rootAdminSys, $rootAdminWeb;
 	echo "<table width=\"100%\" border=\"1\" cellspacing=\"1\" cellpadding=\"1\" bordercolor=\"#808080\" bgcolor=\"#C0C0C0\" lang=\"en\"><TR>";
 	echo "
 			<tr><td colspan=2><strong>Mysql</strong></td></tr>
 			<tr><td>dbHost</TD><TD>".$_configuration['db_host']."</td></tr>
 			<tr><td>dbLogin 	</TD><TD>".$_configuration['db_user']."</td></tr>
 			<tr><td>dbPass	</TD><TD>".str_repeat("*", strlen($_configuration['db_password']))."</td></tr>
-			<tr><td>mainDbName		</TD><TD>$mainDbName			</td></tr>
+			<tr><td>mainDbName		</TD><TD>".$_configuration['main_database']."			</td></tr>
 			<tr><td>clarolineVersion	</TD><TD>$dokeos_version</td></tr>
-		    <tr><td>rootWeb</TD><TD>$rootWeb</td></tr>
+		    <tr><td>rootWeb</TD><TD>".$_configuration['root_web']."</td></tr>
 			<tr><td>urlAppend </TD><TD>$urlAppend</td></tr>
 			<tr><td colspan=2><HR></td></tr>
 			<tr><td colspan=2><strong>param for new and future features</strong></td></tr>
@@ -401,7 +401,7 @@ function printConfig()
 			<tr><td colspan=2></td></tr>
 			<tr><td>platformLanguage 	</TD><TD>$platformLanguage 	</td></tr>
 			<tr><td>siteName			</TD><TD>$siteName			</td></tr>
-			<tr><td>rootWeb			</TD><TD>$rootWeb			</td></tr>
+			<tr><td>rootWeb			</TD><TD>".$_configuration['root_web']."			</td></tr>
 			<tr><td>rootSys			</TD><TD>$rootSys			</td></tr>
 			<tr><td colspan=2></td></tr>
 			<tr><td>clarolineRepository<strong>Append</strong>  	</TD><TD>$clarolineRepositoryAppend </td></tr>

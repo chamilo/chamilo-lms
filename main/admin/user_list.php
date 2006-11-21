@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 10062 2006-11-20 19:37:38Z pcool $
+// $Id: user_list.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -123,7 +123,7 @@ function login_user($user_id)
 			$is_platformAdmin = (bool) (!is_null($user_data['is_admin']));
 			$is_allowedCreateCourse = (bool) ($user_data['status'] == 1);
 			
-			LoginDelete($_SESSION["_user"]["user_id"], $statsDbName);
+			LoginDelete($_SESSION["_user"]["user_id"], $_configuration['statistics_database']);
 			
 			//bug: this only works if $_user is global
 			api_session_register('_user');

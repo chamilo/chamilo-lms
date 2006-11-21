@@ -1,4 +1,4 @@
-<?php // $Id: stats.lib.inc.php 9246 2006-09-25 13:24:53Z bmol $ 
+<?php // $Id: stats.lib.inc.php 10082 2006-11-21 19:08:15Z pcool $ 
 
 /*
 ============================================================================== 
@@ -29,6 +29,8 @@
 *
 *	@author Sebastien Piraux
 *	@package dokeos.library
+* 
+* 	@todo use the Database libraries
 ============================================================================== 
 */
 
@@ -66,13 +68,13 @@
 */ 
 
 // regroup table names for maintenance purpose
-$TABLETRACK_OPEN        = $statsDbName."`.`track_e_open";
+$TABLETRACK_OPEN        = $_configuration['statistics_database']."`.`track_e_open";
 
-$TABLESTATS_PROVIDERS   = $statsDbName."`.`track_c_providers";
-$TABLESTATS_COUNTRIES   = $statsDbName."`.`track_c_countries";
-$TABLESTATS_BROWSERS    = $statsDbName."`.`track_c_browsers";
-$TABLESTATS_OS          = $statsDbName."`.`track_c_os";
-$TABLESTATS_REFERERS    = $statsDbName."`.`track_c_referers";
+$TABLESTATS_PROVIDERS   = $_configuration['statistics_database']."`.`track_c_providers";
+$TABLESTATS_COUNTRIES   = $_configuration['statistics_database']."`.`track_c_countries";
+$TABLESTATS_BROWSERS    = $_configuration['statistics_database']."`.`track_c_browsers";
+$TABLESTATS_OS          = $_configuration['statistics_database']."`.`track_c_os";
+$TABLESTATS_REFERERS    = $_configuration['statistics_database']."`.`track_c_referers";
 
 
 /*

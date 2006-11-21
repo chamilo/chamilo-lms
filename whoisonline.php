@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 9994 2006-11-15 13:27:45Z pcool $
+<?php // $Id: whoisonline.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -229,7 +229,7 @@ if ((get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR (get
 	}
 	else
 	{
-		$user_list = WhoIsOnline($_user['user_id'],$statsDbName,api_get_setting('time_limit_whosonline'));
+		$user_list = WhoIsOnline($_user['user_id'],$_configuration['statistics_database'],api_get_setting('time_limit_whosonline'));
 	}
 
 	$total=count($user_list);

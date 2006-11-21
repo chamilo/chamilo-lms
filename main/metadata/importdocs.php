@@ -89,9 +89,15 @@ if (count($idt) && file_exists($phpDigIncCn))
         }
     }
     
-    if(isset($db)) mysql_select_db($mainDbName, $db);  // back to Dokeos
+    if(isset($db))
+    {
+    	mysql_select_db($_configuration['main_database'], $db);  // back to Dokeos
+    }
 }
-else echo 'No documents with metadata or no PhpDig in this course...<br>';
+else
+{
+	echo 'No documents with metadata or no PhpDig in this course...<br>';
+}
 
 if (false && file_exists($phpDigIncCn))  // future: buttons for operations
 {

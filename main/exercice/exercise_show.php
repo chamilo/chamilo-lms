@@ -1,4 +1,8 @@
 <?php
+/**
+ * @todo remove the debug code and use the general debug library
+ * @todo use the Database:: functions
+ */
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
@@ -25,15 +29,18 @@ $TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
 $TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
 $main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
 $main_course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-$statsdb = $statsDbName;
-$TABLETRACK_ATTEMPT = $statsDbName."`.`track_e_attempt"; 
-$TABLETRACK_EXERCICES = $statsDbName."`.`track_e_exercices";
+$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt"; 
+$TABLETRACK_EXERCICES = $_configuration['statistics_database']."`.`track_e_exercices";
 
 $dsp_percent = false; 
 $debug=0;
-if($debug>0){echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);}
+if($debug>0)
+{
+	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);
+}
 // general parameters passed via POST/GET
-if ( empty ( $origin ) ) {
+if ( empty ( $origin ) ) 
+{
     $origin = $_REQUEST['origin'];
 }
 if ( empty ( $learnpath_id ) ) {

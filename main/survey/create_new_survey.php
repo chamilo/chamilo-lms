@@ -369,7 +369,7 @@ else
 		$surveycode=$_POST['survey_code'];
 		$surveytitle = $_POST['survey_title'];
 		$surveysubtitle = $_POST['survey_subtitle'];
-		//$cidReq = $dbNamePrefix.$_POST['cidReq'];
+		//$cidReq = $_configuration['db_prefix'].$_POST['cidReq'];
 		$author = $_POST['author'];
 		$survey_language = $_POST['survey_language'];
 		$availablefrom = $_POST['fyear']."-".$_POST['fmonth']."-".$_POST['fday'];

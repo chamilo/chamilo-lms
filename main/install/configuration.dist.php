@@ -69,24 +69,24 @@ $_configuration['single_database']    = {SINGLE_DATABASE};
 // Prefix for course tables (IF NOT EMPTY, can be replaced by another prefix, else leave empty)
 $_configuration['table_prefix']  = '{COURSE_TABLE_PREFIX}'; 	
 // Separator between database and table name (DO NOT MODIFY THIS)
-$dbGlu              = '{DATABASE_GLUE}'; 
+$_configuration['db_glue'] = '{DATABASE_GLUE}'; 
 // prefix all created bases (for courses) with this string		
-$dbNamePrefix       = '{DATABASE_PREFIX}'; 		
+$_configuration['db_prefix']       = '{DATABASE_PREFIX}'; 		
 // main Dokeos database
-$mainDbName         = '{DATABASE_MAIN}'; 
+$_configuration['main_database'] = '{DATABASE_MAIN}'; 
 // stats Dokeos database
-$statsDbName        ='{DATABASE_STATS}'; 
+$_configuration['statistics_database']        ='{DATABASE_STATS}'; 
 // Scorm Dokeos database
-$scormDbName        ='{DATABASE_SCORM}'; 
+$_configuration['scorm_database']        ='{DATABASE_SCORM}'; 
 // User Personal Database (where all the personal stuff of the user is stored 
 // (personal agenda items, course sorting)
-$user_personal_database   ='{DATABASE_PERSONAL}'; 
+$_configuration['user_personal_database']   ='{DATABASE_PERSONAL}'; 
 
 //============================================================================
 //   Directory settings
 //============================================================================
 // URL to the root of your Dokeos installation
-$rootWeb                     = '{ROOT_WEB}';
+$_configuration['root_web']                     = '{ROOT_WEB}';
 // Path to the root of your Dokeos installation
 $rootSys                     = '{ROOT_SYS}';
 // Path from your WWW-root to the root of your Dokeos installation
@@ -100,9 +100,9 @@ $rootAdminAppend             = "admin/";
 // Do not change the following values
 // @todo should be moved to api_get_path
 $clarolineRepositorySys      = $rootSys.$clarolineRepositoryAppend;
-$clarolineRepositoryWeb      = $rootWeb.$clarolineRepositoryAppend;
+$clarolineRepositoryWeb      = $_configuration['root_web'].$clarolineRepositoryAppend;
 $coursesRepositorySys        = $rootSys.$coursesRepositoryAppend;
-$coursesRepositoryWeb        = $rootWeb.$coursesRepositoryAppend;
+$coursesRepositoryWeb        = $_configuration['root_web'].$coursesRepositoryAppend;
 $rootAdminSys                = $clarolineRepositorySys.$rootAdminAppend;
 $rootAdminWeb                = $clarolineRepositoryWeb.$rootAdminAppend;
 // directory to store archived courses

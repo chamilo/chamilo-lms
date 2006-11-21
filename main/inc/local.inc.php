@@ -382,7 +382,7 @@ $admin_table = Database::get_main_table(MAIN_ADMIN_TABLE);
                      FROM $user_table
                      LEFT JOIN $admin_table `a`
                      ON `user`.`user_id` = `a`.`user_id`
-                     LEFT JOIN `".$statsDbName."`.`track_e_login` `login`
+                     LEFT JOIN `".$_configuration['statistics_database']."`.`track_e_login` `login`
                      ON `user`.`user_id`  = `login`.`login_user_id`
                      WHERE `user`.`user_id` = '".$_user['user_id']."'
                      ORDER BY `login`.`login_date` DESC LIMIT 1";
@@ -469,7 +469,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
             $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
             $_course['path'        ]         = $cData['directory'        ]; // use as key in path
             $_course['dbName'      ]         = $cData['db_name'           ]; // use as key in db list
-            $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['db_name'] . $dbGlu; // use in all queries
+            $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
             $_course['titular'     ]         = $cData['tutor_name'       ];
             $_course['language'    ]         = $cData['course_language'   ];
             $_course['extLink'     ]['url' ] = $cData['department_url'    ];
@@ -605,8 +605,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 
 	    	// is it the session coach ?
 	        $sql = "SELECT 1
-					FROM `".$mainDbName."`.`session`
-					INNER JOIN `".$mainDbName."`.`session_rel_course`
+					FROM `".$_configuration['main_database']."`.`session`
+					INNER JOIN `".$_configuration['main_database']."`.`session_rel_course`
 						ON session_rel_course.id_session = session.id
 						AND session_rel_course.course_code='$_cid'
 					WHERE session.id_coach = '".$_user['user_id']."'";
@@ -624,7 +624,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
         	{
 	        	// vérifier que c pas le coach du cours
 	        	$sql = "SELECT 1
-						FROM `".$mainDbName."`.`session_rel_course`
+						FROM `".$_configuration['main_database']."`.`session_rel_course`
 						WHERE session_rel_course.course_code='$_cid'
 						AND session_rel_course.id_coach = '".$_user['user_id']."'";
 
@@ -641,7 +641,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 		        else
 		        {
 	        		// vérifier que c pas un élève de la session
-			        $sql = "SELECT * FROM `".$mainDbName."`.`session_rel_course_rel_user`
+			        $sql = "SELECT * FROM `".$_configuration['main_database']."`.`session_rel_course_rel_user`
 			        		WHERE `id_user`  = '".$_user['user_id']."'
 							AND `course_code` = '$cidReq'";
 
@@ -660,7 +660,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 					}
 					else
 					{
-			 			$sql = "SELECT * FROM `".$mainDbName."`.`course_rel_user`
+			 			$sql = "SELECT * FROM `".$_configuration['main_database']."`.`course_rel_user`
 			               WHERE `user_id`  = '".$_user['user_id']."'
 			               AND `course_code` = '$cidReq'";
 

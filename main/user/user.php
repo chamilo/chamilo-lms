@@ -64,7 +64,7 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 //CHECK KEYS
  if( !isset ($_cid))
 {
-	header("location: ".$rootWeb);
+	header("location: ".$_configuration['root_web']);
 }
 /*
 -----------------------------------------------------------

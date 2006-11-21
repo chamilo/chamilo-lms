@@ -28,7 +28,7 @@
 */
 require_once('../../../../../conf/configuration.php');
 
-$IMConfig['base_url'] = $rootWeb.'main/img/gallery/';
+$IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
 //$IMConfig['base_dir'] = $_SERVER['DOCUMENT_ROOT'].$IMConfig['base_url'];
 $IMConfig['base_dir'] = $rootSys.'main/img/gallery/';
 $IMConfig['server_name'] = $_SERVER['SERVER_NAME'];

@@ -1404,7 +1404,7 @@ function exporttofile($filename, $LPname, $LPid, $content)
 function export_exercise($item_id)
 {
 
-	global $expdir, $_course, $statsDbName, $_SESSION, $_SERVER, $language_interface, $langExerciseNotFound, $langQuestion, $langOk;
+	global $expdir, $_course, $_configuration, $_SESSION, $_SERVER, $language_interface, $langExerciseNotFound, $langQuestion, $langOk;
 
 	$exerciseId = $item_id;
 

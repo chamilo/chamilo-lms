@@ -309,7 +309,7 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 {
 		GLOBAL $error_msg, $error_no, $db, $archiveRepositorySys, $archiveRepositoryWeb, // from configs files
 		$appendCourse, $appendMainDb, //
-	$archiveName, $mainDbName, $_SESSION, $clarolineRepositorySys, $_course, $coursesRepositorySys, $TABLEUSER, $TABLECOURSUSER, $TABLECOURS, $TABLEANNOUNCEMENT, $langArchiveName, $langArchiveLocation, $langSizeOf, $langDisk_free_space, $langCreateMissingDirectories, $langBUCourseDataOfMainBase, $langBUUsersInMainBase, $langBUAnnounceInMainBase, $langCopyDirectoryCourse, $langFileCopied, $langBackupOfDataBase, $langBuildTheCompressedFile;
+	$archiveName, $_configuration, $clarolineRepositorySys, $_course, $coursesRepositorySys, $TABLEUSER, $TABLECOURSUSER, $TABLECOURS, $TABLEANNOUNCEMENT, $langArchiveName, $langArchiveLocation, $langSizeOf, $langDisk_free_space, $langCreateMissingDirectories, $langBUCourseDataOfMainBase, $langBUUsersInMainBase, $langBUAnnounceInMainBase, $langCopyDirectoryCourse, $langFileCopied, $langBackupOfDataBase, $langBuildTheCompressedFile;
 	////////////////////////////////////////////////////
 	// ****** 1° Check if all data needed are aivailable
 	// ****** 1° 1. $lang vars
@@ -351,7 +351,7 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 		$error_no["backup"][] = "1";
 		$stop = TRUE;
 	}
-	if (!isset ($mainDbName))
+	if (!isset ($_configuration['main_database']))
 	{
 		GLOBAL $error_msg, $error_no;
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] Main Db name is Missing";

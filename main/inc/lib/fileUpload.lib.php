@@ -1204,7 +1204,7 @@ function get_levels($filename)
  */
 function set_default_settings($upload_path,$filename,$filetype="file")
 {
-	global $dbTable,$dbNamePrefix;
+	global $dbTable,$_configuration;
 	global $default_visibility;
 
 	if (!$default_visibility)

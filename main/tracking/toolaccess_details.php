@@ -1,4 +1,4 @@
-<?php // $Id: toolaccess_details.php 10062 2006-11-20 19:37:38Z pcool $
+<?php // $Id: toolaccess_details.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -92,7 +92,7 @@ $reqdate=$_REQUEST['reqdate'];
 <?php 
     
     
-    $TABLETRACK_ACCESS = $statsDbName."`.`track_e_access";
+    $TABLETRACK_ACCESS = $_configuration['statistics_database']."`.`track_e_access";
     
     if(isset($_cid)) //stats for the current course
     {

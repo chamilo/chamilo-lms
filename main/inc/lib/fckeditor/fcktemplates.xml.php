@@ -2,7 +2,7 @@
 echo '<?xml version="1.0" encoding="utf-8" ?>';
 require_once('../../conf/configuration.php');
 
-$IMConfig['base_url'] = $rootWeb.'main/img/gallery/';
+$IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
 ?>
 <Templates imagesBasePath="fck_template/images/">
 	<Template title="Content" image="2.png">
@@ -65,7 +65,7 @@ $IMConfig['base_url'] = $rootWeb.'main/img/gallery/';
 			<![CDATA[
 				    <div class="course">
 				    <div id="right">
- 					    <p><img class="image" src="<?php echo $rootWeb; ?>main/img/gallery/pointer-right.png" /></p>
+ 					    <p><img class="image" src="<?php echo $_configuration['root_web']; ?>main/img/gallery/pointer-right.png" /></p>
 					    <p>Some text</p>
 				    </div>
 				    
@@ -96,7 +96,7 @@ $IMConfig['base_url'] = $rootWeb.'main/img/gallery/';
 						   </div>
 						   
 						   <div id="right">
-							   <p><img class="image" src="<?php echo $rootWeb; ?>main/img/gallery/pointer-right.png" /></p>
+							   <p><img class="image" src="<?php echo $_configuration['root_web']; ?>main/img/gallery/pointer-right.png" /></p>
 						   </div>
 						   
 						   <div id="content">
@@ -121,7 +121,7 @@ $IMConfig['base_url'] = $rootWeb.'main/img/gallery/';
 						   <![CDATA[
 				    <div class="course">
 								  <div class="left">
-									  <p><img class="image" src="<?php echo $rootWeb; ?>main/img/gallery/pointer-left.png" /></p>
+									  <p><img class="image" src="<?php echo $_configuration['root_web']; ?>main/img/gallery/pointer-left.png" /></p>
 								  </div>
 								  
 								  <div class="right">

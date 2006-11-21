@@ -55,9 +55,8 @@ $TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
 $TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
 $main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
 $main_course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-$statsdb = $statsDbName;
-$TABLETRACK_ATTEMPT = $statsDbName."`.`track_e_attempt"; 
-$TABLETRACK_EXERCICES = $statsDbName."`.`track_e_exercices";
+$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt"; 
+$TABLETRACK_EXERCICES = $_configuration['statistics_database']."`.`track_e_exercices";
 
 $dsp_percent = false; 
 $debug=0;

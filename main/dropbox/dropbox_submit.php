@@ -334,7 +334,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 		$var = strtoupper($nameParts[2]);  // the variable part of the name
 		$course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 		$sel = "SELECT u.user_id, u.lastname, u.firstname, cu.status 
-				FROM `".$mainDbName."`.`user` u 
+				FROM `".$_configuration['main_database']."`.`user` u 
 				LEFT JOIN $course_user cu 
 				ON cu.user_id = u.user_id AND cu.course_code = '".$_course['sysCode']."'";
 		$sel .= " WHERE u.".dropbox_cnf("mailingWhere".$var)." = '";
@@ -482,7 +482,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 			$course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 			$sql = "SELECT u.lastname, u.firstname 
 					FROM $course_user cu 
-					LEFT JOIN  `".$mainDbName."`.`user` u 
+					LEFT JOIN  `".$_configuration['main_database']."`.`user` u 
 					ON cu.user_id = u.user_id AND cu.course_code = '".$_course['sysCode']."'
 					WHERE cu.status = 5 
 					AND u.user_id NOT IN ('" . implode("', '" , $students) . "')";

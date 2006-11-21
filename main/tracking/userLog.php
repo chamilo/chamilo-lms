@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 10062 2006-11-20 19:37:38Z pcool $
+<?php // $Id: userLog.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -124,18 +124,18 @@ $TABLEUSER	        = Database::get_main_table(MAIN_USER_TABLE);
 $tbl_session_course_user = Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
 $tbl_session = Database::get_main_table(MAIN_SESSION_TABLE);
 
-$TABLETRACK_ACCESS      = $statsDbName."`.`track_e_access";
-$TABLETRACK_LINKS       = $statsDbName."`.`track_e_links";
-$TABLETRACK_LOGIN       = $statsDbName."`.`track_e_login";
-$TABLETRACK_DOWNLOADS   = $statsDbName."`.`track_e_downloads";
-$TABLETRACK_UPLOADS     = $statsDbName."`.`track_e_uploads";
-$TABLETRACK_EXERCICES   = $statsDbName."`.`track_e_exercices";
+$TABLETRACK_ACCESS      = $_configuration['statistics_database']."`.`track_e_access";
+$TABLETRACK_LINKS       = $_configuration['statistics_database']."`.`track_e_links";
+$TABLETRACK_LOGIN       = $_configuration['statistics_database']."`.`track_e_login";
+$TABLETRACK_DOWNLOADS   = $_configuration['statistics_database']."`.`track_e_downloads";
+$TABLETRACK_UPLOADS     = $_configuration['statistics_database']."`.`track_e_uploads";
+$TABLETRACK_EXERCICES   = $_configuration['statistics_database']."`.`track_e_exercices";
 
 $TABLECOURSE_LINKS		= Database::get_course_table(LINK_TABLE);
 $TABLECOURSE_WORK       = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
 $TABLECOURSE_GROUPSUSER =  Database::get_course_table(GROUP_USER_TABLE);
-$TABLECOURSE_EXERCICES = Database::get_course_table(QUIZ_TEST_TABLE);
-$TBL_TRACK_HOTPOTATOES   = Database::get_statistic_table(STATISTIC_TRACK_E_HOTPOTATOES_TABLE);
+$TABLECOURSE_EXERCICES  = Database::get_course_table(QUIZ_TEST_TABLE);
+$TBL_TRACK_HOTPOTATOES  = Database::get_statistic_table(STATISTIC_TRACK_E_HOTPOTATOES_TABLE);
 /*
 $tbl_learnpath_main = Database::get_course_table(LEARNPATH_MAIN_TABLE);
 $tbl_learnpath_item = Database::get_course_table(LEARNPATH_ITEM_TABLE);

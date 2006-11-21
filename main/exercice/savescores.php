@@ -40,7 +40,7 @@ $full_file_path = $documentPath.$test;
 
 my_delete($full_file_path.$_user['user_id'].".t.html");
 
-$TABLETRACK_HOTPOTATOES = $statsDbName."`.`track_e_hotpotatoes";
+$TABLETRACK_HOTPOTATOES = $_configuration['statistics_database']."`.`track_e_hotpotatoes";
 $tbl_learnpath_user = Database::get_course_table(LEARNPATH_USER_TABLE);
 //$_course['dbNameGlu']."learnpath_user";
 $_cid = $cid;

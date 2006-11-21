@@ -64,13 +64,12 @@ td {border-bottom: thin dashed gray;}
 */
 $view = $_REQUEST['view'];
 
-// regroup table names for maintenance purpose
-$TABLECOURSUSER	= Database::get_main_table(MAIN_COURSE_USER_TABLE);
-$TABLETRACK_ACCESS = $statsDbName."`.`track_e_access";
-$TABLETRACK_LINKS = $statsDbName."`.`track_e_links";
-$TABLETRACK_DOWNLOADS = $statsDbName."`.`track_e_downloads";
-$TABLETRACK_LOGIN = $statsDbName."`.`track_e_login";
-$TABLETRACK_EXERCICES   = $statsDbName."`.`track_e_exercices";
+$TABLECOURSUSER			= Database::get_main_table(MAIN_COURSE_USER_TABLE);
+$TABLETRACK_ACCESS 		= $_configuration['statistics_database']."`.`track_e_access";
+$TABLETRACK_LINKS 		= $_configuration['statistics_database']."`.`track_e_links";
+$TABLETRACK_DOWNLOADS 	= $_configuration['statistics_database']."`.`track_e_downloads";
+$TABLETRACK_LOGIN 		= $_configuration['statistics_database']."`.`track_e_login";
+$TABLETRACK_EXERCICES   = $_configuration['statistics_database']."`.`track_e_exercices";
 
 
 $limitOfDisplayedLogins = 25; // number of logins to display

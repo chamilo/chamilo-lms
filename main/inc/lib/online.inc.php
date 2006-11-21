@@ -31,15 +31,22 @@
 *	@package dokeos.whoisonline
 ============================================================================== 
 */
-
-function LoginCheck($uid,$statsDbName)
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $uid
+ * @param unknown_type $statistics_database
+ * 
+ * @todo the second parameter is of no use. 
+ */
+function LoginCheck($uid,$statistics_database)
 {
 	global $_course;
 	
 	$online_table = Database::get_statistic_table(STATISTIC_TRACK_E_ONLINE_TABLE);
 	if ($uid!="")
 	{
-		LoginDelete($uid,$statsDbName);
+		LoginDelete($uid,$statistics_database);
 		$login_ip = $_SERVER['REMOTE_ADDR'];
 		$reallyNow = time();
 		$login_date = date("Y-m-d H:i:s",$reallyNow);	
@@ -58,17 +65,24 @@ function LoginCheck($uid,$statsDbName)
 	}
 }
 
-function LoginDelete($uid,$statsDbName)
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $uid
+ * 
+ * @todo the name is not very clear. I would expect that it deletes a login from the tracking info or even it deletes a user.
+ */
+function LoginDelete($user_id)
 {
 	$online_table = Database::get_statistic_table(STATISTIC_TRACK_E_ONLINE_TABLE);
-	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '$uid'";
+	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".mysql_real_escape_string($user_id)."'";
 	@api_sql_query($query,__FILE__,__LINE__);
 }
 
 /**
-* @todo remove parameter $statsDbName which is no longer necessary
+* @todo remove parameter $statistics_database which is no longer necessary
 */
-function WhoIsOnline($uid,$statsDbName,$valid)
+function WhoIsOnline($uid,$statistics_database,$valid)
 {				
 	$track_online_table = Database::get_statistic_table(STATISTIC_TRACK_E_ONLINE_TABLE);
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW()  ";	

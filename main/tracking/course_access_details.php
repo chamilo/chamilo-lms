@@ -59,8 +59,8 @@ $htmlHeadXtra[] = "<style type='text/css'>
 td {border-bottom: thin dashed gray;}
 /*]]>*/
 </style>";
-
-$TABLETRACK_ACCESS = $statsDbName."`.`track_e_access";
+//@todo use Database library
+$TABLETRACK_ACCESS = $_configuration['statistics_database']."`.`track_e_access";
 Display::display_header($nameTools,"Tracking");
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 

@@ -76,7 +76,7 @@ api_display_tool_title(get_lang("Users"));
  *	$uid
  *	$isAdmin
  *	$isAdminOfCourse
- *	$mainDbName
+ *	$_configuration['main_database']
  *	$currentCourseID
  */
 
@@ -88,7 +88,7 @@ $userIdViewed = $uInfo; // Id of the user we want to view coming from the user.p
 -----------------------------------------------------------
 */
 
-$mainDB = $mainDbName;
+$mainDB = $_configuration['main_database'];
 $courseCode = $currentCourseID = $_course['sysCode'];
 $tbl_coursUser = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 

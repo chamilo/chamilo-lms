@@ -1021,7 +1021,7 @@ else
 		// collect from agenda, but only if tool is visible for the course
 		if ($result && $thisAgenda > 0 && mysql_num_rows($result) > 0)
 		{
-			$tableCal = $courseTablePrefix.$thisCourseDbName.$dbGlu."calendar_event";
+			$tableCal = $courseTablePrefix.$thisCourseDbName.$_configuration['db_glue']."calendar_event";
 			$sqlGetNextAgendaEvent = "SELECT  start_date , title content, start_time
 									                          FROM $tableCal
 									                          WHERE start_date >= CURDATE()

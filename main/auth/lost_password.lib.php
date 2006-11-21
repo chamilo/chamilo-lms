@@ -1,5 +1,5 @@
 <?php
-// $Id: lost_password.lib.php 9973 2006-11-14 14:53:22Z pcool $ 
+// $Id: lost_password.lib.php 10082 2006-11-21 19:08:15Z pcool $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -40,12 +40,12 @@ function get_email_headers()
 //-----------------------------------------------------------------------------
 function get_user_account_list($user, $reset = false)
 {
-	global $rootWeb;
+	global $_configuration;
 	foreach ($user as $thisUser)
 	{
 		$secretword = get_secret_word($thisUser["email"]);
 		if ($reset)
-			$reset_link = "\tReset link : $rootWeb"."main/auth/lostPassword.php?reset=$secretword&id=$thisUser[uid]";
+			$reset_link = "\tReset link : $_configuration['root_web']"."main/auth/lostPassword.php?reset=$secretword&id=$thisUser[uid]";
 		else
 			$reset_link = "\t".get_lang('Pass')." : $thisUser[password]";
 		$userAccountList[] = $thisUser["firstName"]." ".$thisUser["lastName"]."\n\n"."\t".get_lang('Username')." : ".$thisUser["loginName"]."\n"."$reset_link\n\n";
@@ -59,11 +59,11 @@ function get_user_account_list($user, $reset = false)
 function send_password_to_user($user, $success_msg)
 {
 	global $charset;
-	global $rootWeb;
+	global $_configuration;
 	$emailHeaders = get_email_headers(); // Email Headers
 	$emailSubject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 	$userAccountList = get_user_account_list($user); // BODY
-	$emailBody = get_lang('YourAccountParam')." $rootWeb\n\n$userAccountList";
+	$emailBody = get_lang('YourAccountParam')." ".$_configuration['root_web']."\n\n$userAccountList";
 	// SEND MESSAGE
 	$emailTo = $user[0]["email"];
 	if (@ api_send_mail($emailTo, $emailSubject, $emailBody, $emailHeaders))
@@ -77,13 +77,13 @@ function handle_encrypted_password($user)
 {
 	global $security_key;
 	global $charset;
-	global $rootWeb;
+	global $_configuration;
 	$emailHeaders = get_email_headers(); // Email Headers
 	$emailSubject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 	$userAccountList = get_user_account_list($user, true); // BODY
 	$emailTo = $user[0]["email"];
 	$secretword = get_secret_word($emailTo);
-	$emailBody = get_lang("password_request")."\n\n\n".get_lang("YourAccountParam")." $rootWeb\n\n".$userAccountList;
+	$emailBody = get_lang("password_request")."\n\n\n".get_lang("YourAccountParam")." ".$_configuration['root_web']."\n\n".$userAccountList;
 	if (@ api_send_mail($emailTo, $emailSubject, $emailBody, $emailHeaders))
 		return get_lang('YourPasswordHasBeenEmailed');
 	else

@@ -599,7 +599,7 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 	
 			if ($submitGroupWorkUrl) // For user comming from group space to publish his work
 			{
-				$realUrl = str_replace ($rootSys, $rootWeb, str_replace("\\", "/", realpath($submitGroupWorkUrl) ) ) ;
+				$realUrl = str_replace ($rootSys, $_configuration['root_web'], str_replace("\\", "/", realpath($submitGroupWorkUrl) ) ) ;
 	
 				echo	"<tr>\n",
 	

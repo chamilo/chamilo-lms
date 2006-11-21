@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10062 2006-11-20 19:37:38Z pcool $
+<?php // $Id: exercise_result.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -69,8 +69,8 @@ $TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
 $TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
 $TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
 $TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
-$TABLETRACK_EXERCICES = $statsDbName."`.`track_e_exercices";
-$TABLETRACK_ATTEMPT = $statsDbName."`.`track_e_attempt"; 
+$TABLETRACK_EXERCICES = $_configuration['statistics_database']."`.`track_e_exercices";
+$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt"; 
 $main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
 $main_course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 $table_ans = Database :: get_course_table(QUIZ_ANSWER_TABLE);

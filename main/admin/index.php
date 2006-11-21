@@ -1,4 +1,4 @@
-<?php // $Id: index.php 9797 2006-10-26 06:47:10Z pcool $
+<?php // $Id: index.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -183,7 +183,7 @@ else
  <ul>
   <li><a href="http://www.dokeos.com/"><?php echo get_lang('DokeosHomepage'); ?></a></li>
   <li><a href="http://www.dokeos.com/forum/"><?php echo get_lang('DokeosForum'); ?></a></li>
-  <li><a href="http://www.dokeos.com/community_add_portal.php?url=<?php echo $rootWeb; ?>&amp;name=<?php echo urlencode(get_setting('siteName'));?>&amp;organisation=<?php echo urlencode(get_setting('InstitutionUrl'));?>&amp;manager=<?php echo urlencode(get_setting('administratorSurname')." ".get_setting('administratorName'));?>&amp;manageremail=<?php echo urlencode(get_setting('emailAdministrator'));?>"><?php echo get_lang('RegisterYourPortal'); ?></a></li>
+  <li><a href="http://www.dokeos.com/community_add_portal.php?url=<?php echo $_configuration['root_web']; ?>&amp;name=<?php echo urlencode(get_setting('siteName'));?>&amp;organisation=<?php echo urlencode(get_setting('InstitutionUrl'));?>&amp;manager=<?php echo urlencode(get_setting('administratorSurname')." ".get_setting('administratorName'));?>&amp;manageremail=<?php echo urlencode(get_setting('emailAdministrator'));?>"><?php echo get_lang('RegisterYourPortal'); ?></a></li>
   <li><a href="http://www.dokeos.com/extensions/"><?php echo get_lang('DokeosExtensions'); ?></a></li>
   <li>
   <?php

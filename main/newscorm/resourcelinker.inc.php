@@ -366,7 +366,7 @@ function display_addedresource_link($type, $id, $style='')
 function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_path, $builder, $icon, $level = 0)
 {
 	global $_course, $learnpath_id, $tbl_learnpath_item, $items;
-	global $_course, $curDirPath, $rootWeb, $enableDocumentParsing, $_course, $_user, $_cid, $rootSys;
+	global $_course, $curDirPath, $_configuration, $enableDocumentParsing, $_course, $_user, $_cid, $rootSys;
 
 	$tbl_lp_item = Database::get_course_table('lp_item');
 	$hyperlink_target_parameter = ''; //or e.g. 'target="_blank"'
@@ -1164,7 +1164,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 {
 	global $_course, $learnpath_id, $tbl_learnpath_item, $items;
-	global $curDirPath, $rootWeb, $enableDocumentParsing, $_user, $_cid, $rootSys;
+	global $curDirPath, $_configuration, $enableDocumentParsing, $_user, $_cid, $rootSys;
 
 	$tbl_lp_item = Database::get_course_table('lp_item');
 	$hyperlink_target_parameter = ""; //or e.g. target='_blank'

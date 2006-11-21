@@ -15,7 +15,6 @@
 * @todo use the $_configuration array for all the needed variables
 * @todo remove the code that displays the button that links to the install page
 * 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
-* @todo $statsDbName: rename variable and use $_configuration array
 * @todo make it possible to enable / disable the tracking through the Dokeos config page.
 * 
 ==============================================================================
@@ -91,13 +90,13 @@ require_once(api_get_path(LIBRARY_PATH).'database.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'display.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
-
-if(empty($statsDbName) && $already_installed)
+// @todo: this shouldn't be done here. It should be stored correctly during installation
+if(empty($_configuration['statistics_database']) && $already_installed)
 {
-	$statsDbName=$mainDbName;
+	$_configuration['statistics_database'] = $_configuration['main_database'];
 }
 
-// connect to the server database and select the main claroline DB
+// connect to the server database and select the main dokeos database
 
 $dokeos_database_connection = @mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']) or die ($error_message);
 
@@ -109,7 +108,7 @@ if (! $_configuration['db_host'])
 
 unset($error_message);
 
-$selectResult = mysql_select_db($mainDbName,$dokeos_database_connection) or die ('<center>WARNING ! SYSTEM UNABLE TO SELECT THE MAIN DOKEOS DATABASE</center>');
+$selectResult = mysql_select_db($_configuration['main_database'],$dokeos_database_connection) or die ('<center>WARNING ! SYSTEM UNABLE TO SELECT THE MAIN DOKEOS DATABASE</center>');
 
 /*
 --------------------------------------------
@@ -155,7 +154,7 @@ include_once($includePath."/lib/online.inc.php");
 // check and modify the date of user in the track.e.online table
 if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php')) 
 { 
-	LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '',$statsDbName); 
+	LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '',$_configuration['statistics_database']); 
 }
 
 // ===== end "who is logged in?" module section =====

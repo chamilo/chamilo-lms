@@ -42,15 +42,15 @@
 ============================================================================== 
 */
 // REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
-$TABLETRACK_LOGIN = $statsDbName."`.`track_e_login";
-$TABLETRACK_OPEN = $statsDbName."`.`track_e_open";
-$TABLETRACK_ACCESS = $statsDbName."`.`track_e_access";
-$TABLETRACK_DOWNLOADS = $statsDbName."`.`track_e_downloads";
-$TABLETRACK_UPLOADS = $statsDbName."`.`track_e_uploads";
-$TABLETRACK_LINKS = $statsDbName."`.`track_e_links";
-$TABLETRACK_EXERCICES = $statsDbName."`.`track_e_exercices";
-$TABLETRACK_SUBSCRIPTIONS = $statsDbName."`.`track_e_subscriptions";
-$TABLETRACK_LASTACCESS = $statsDbName."`.`track_e_lastaccess"; //for "what's new" notification
+$TABLETRACK_LOGIN = $_configuration['statistics_database']."`.`track_e_login";
+$TABLETRACK_OPEN = $_configuration['statistics_database']."`.`track_e_open";
+$TABLETRACK_ACCESS = $_configuration['statistics_database']."`.`track_e_access";
+$TABLETRACK_DOWNLOADS = $_configuration['statistics_database']."`.`track_e_downloads";
+$TABLETRACK_UPLOADS = $_configuration['statistics_database']."`.`track_e_uploads";
+$TABLETRACK_LINKS = $_configuration['statistics_database']."`.`track_e_links";
+$TABLETRACK_EXERCICES = $_configuration['statistics_database']."`.`track_e_exercices";
+$TABLETRACK_SUBSCRIPTIONS = $_configuration['statistics_database']."`.`track_e_subscriptions";
+$TABLETRACK_LASTACCESS = $_configuration['statistics_database']."`.`track_e_lastaccess"; //for "what's new" notification
 
 
 /*
@@ -65,8 +65,7 @@ $TABLETRACK_LASTACCESS = $statsDbName."`.`track_e_lastaccess"; //for "what's new
  */
 function event_open()
 {
-	global $_configuration, $_SERVER;
-	global $rootWeb;
+	global $_configuration;
 	global $TABLETRACK_OPEN;
 	
 	// if tracking is disabled record nothing
@@ -80,8 +79,8 @@ function event_open()
 	// $_SERVER['HTTP_REFERER'] : provide information about refering url
 	$referer = $_SERVER['HTTP_REFERER'];
 	// record informations only if user comes from another site
-	//if(!eregi($rootWeb,$referer))
-	$pos = strpos($referer, $rootWeb);
+	//if(!eregi($_configuration['root_web'],$referer))
+	$pos = strpos($referer, $_configuration['root_web']);
 	if ($pos === false)
 	{
 		$remhost = @ getHostByAddr($_SERVER['REMOTE_ADDR']);
@@ -225,7 +224,7 @@ function event_access_tool($tool, $id_session=0)
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_ACCESS;
-	global $rootWeb;
+	global $_configuration;
 	global $_course;
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
 	
@@ -242,11 +241,11 @@ function event_access_tool($tool, $id_session=0)
 	$user_id = $_user['user_id'] ? "'".$_user['user_id']."'" : "NULL"; // "NULL" is anonymous
 	// record information
 	// only if user comes from the course $_cid
-	//if( eregi($rootWeb.$_cid,$_SERVER['HTTP_REFERER'] ) )
-	//$pos = strpos($_SERVER['HTTP_REFERER'],$rootWeb.$_cid);
+	//if( eregi($_configuration['root_web'].$_cid,$_SERVER['HTTP_REFERER'] ) )
+	//$pos = strpos($_SERVER['HTTP_REFERER'],$_configuration['root_web'].$_cid);
 	$pos = strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower(api_get_path(WEB_COURSE_PATH).$_course['path']));
 	// added for "what's new" notification
-	$pos2 = strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower($rootWeb."index"));
+	$pos2 = strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower($_configuration['root_web']."index"));
 	// end "what's new" notification
 	if ($_configuration['tracking_enabled'] && ($pos !== false || $pos2 !== false))
 	{

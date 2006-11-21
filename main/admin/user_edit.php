@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 9972 2006-11-14 14:44:37Z pcool $
+<?php // $Id: user_edit.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -278,7 +278,7 @@ if( $form->validate())
 		{
 			$emaibody .= "\n".get_lang('Pass')." : ".stripslashes($password);
 		}
-		$emailbody .= "\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $rootWeb ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
+		$emailbody .= "\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
 		@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 	}
 	header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')));

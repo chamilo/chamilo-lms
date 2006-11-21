@@ -45,7 +45,7 @@ $id  = isset($_GET['id']) ? intval($_GET['id']) : null;
 include('../../main/course_home/btf_functions.php');  // RH: extra ../
 $is_AllowedToEdit = is_allowed_to_edit();  // RH: Allowed is not allowed...
 
-//$TABLE_TOOLS = $mainDbName."`.`course_module";
+
 $TABLE_TOOLS = Database::get_main_table(MAIN_COURSE_MODULE_TABLE);
 $TBL_ACCUEIL = Database::get_course_table(TOOL_LIST_TABLE);
 

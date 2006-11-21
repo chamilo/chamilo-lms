@@ -112,7 +112,8 @@ if($action == 'mark'){
 	if (!empty($_POST['score']) AND $_POST['score'] < $obj_question->selectWeighting() AND $_POST['score'] >= 0){
 		
 		//mark the user mark into the database using something similar to the following function:
-		global $_configuration, $statsDbName;
+		global $_configuration;
+		
 		if($_configuration['tracking_enabled'])
 		{
 			$exercise_table = Database::get_statistic_table('track_e_exercices');

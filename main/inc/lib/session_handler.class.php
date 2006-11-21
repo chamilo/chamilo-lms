@@ -1,4 +1,4 @@
-<?php // $Id: session_handler.class.php 10045 2006-11-20 09:25:07Z pcool $
+<?php // $Id: session_handler.class.php 10082 2006-11-21 19:08:15Z pcool $
 /*
 ===============================================================================
 	Dokeos - elearning and course management software
@@ -47,11 +47,11 @@ class session_handler
 
 	function session_handler()
 	{
-		global $_configuration, $mainDbName;
+		global $_configuration;
 
 		$this->lifetime=60; // 60 minutes
 
-		$this->connexion=array('server' => $_configuration['db_host'],'login' => $_configuration['db_user'],'password' => $_configuration['db_password'],'base' => $mainDbName);
+		$this->connexion=array('server' => $_configuration['db_host'],'login' => $_configuration['db_user'],'password' => $_configuration['db_password'],'base' => $_configuration['main_database']);
 
 		$this->idConnexion=false;
 	}

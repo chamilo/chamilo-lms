@@ -225,7 +225,12 @@ function get_personal_course_list($user_id)
 	$main_user_table 		= Database :: get_main_table(MAIN_USER_TABLE);
 	$main_course_table 		= Database :: get_main_table(MAIN_COURSE_TABLE);
 	$main_course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-
+	$tbl_session_course 	= Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+	$tbl_session_course_user= Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+	$tbl_session 			= Database :: get_main_table(MAIN_SESSION_TABLE);
+	
+	$personal_course_list = array ();
+	
 	$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
 										course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
 										course_rel_user.user_course_cat user_course_cat
@@ -234,8 +239,35 @@ function get_personal_course_list($user_id)
 										AND   course_rel_user.user_id = '".$user_id."'
 										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,course.title,course.code";
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-
-	$personal_course_list = array ();
+	
+	while ($result_row = mysql_fetch_array($course_list_sql_result))
+	{
+		$personal_course_list[] = $result_row;
+	}
+	
+	//$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
+	
+	$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, 5 as s 
+								FROM $main_course_table as course, $tbl_session_course_user as srcru 
+							  	WHERE srcru.course_code=course.code AND srcru.id_user='$user_id'";
+	
+	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
+	
+	while ($result_row = mysql_fetch_array($course_list_sql_result))
+	{
+		$personal_course_list[] = $result_row;
+	}
+	
+	//$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
+	
+	$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, 2 as s 
+								FROM $main_course_table as course, $tbl_session_course as src, $tbl_session as session 
+							  	WHERE session.id_coach='$user_id' AND session.id=src.id_session AND src.course_code=course.code";
+	
+	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
+	
+	//$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
+	
 	while ($result_row = mysql_fetch_array($course_list_sql_result))
 	{
 		$personal_course_list[] = $result_row;
@@ -266,14 +298,16 @@ function get_personal_session_course_list($user_id, $list_sessions)
 	$personal_course_list_sql = '';
 	$personal_course_list = array();
 
-	// get the list of sessions where the user is subscribed / coach
+	// get the list of sessions where the user is subscribed as student
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 5 as s
 							FROM session_rel_user, session
 							WHERE id_session=id AND id_user=$user_id ORDER BY date_start, date_end, name",__FILE__,__LINE__);
-
+	
 	$Sessions=api_store_result($result);
 
 	$Sessions = array_merge($Sessions , api_store_result($result));
+	
+	// get the list of sessions where the user is subscribed as coach in a course
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 2 as s
 							FROM $tbl_session as session
 							INNER JOIN $tbl_session_course as session_rel_course
@@ -284,7 +318,8 @@ function get_personal_session_course_list($user_id, $list_sessions)
 	$sessionIsCoach = api_store_result($result);
 
 	$Sessions = array_merge($Sessions , $sessionIsCoach);
-
+	
+	// get the list of sessions where the user is subscribed as coach
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 2 as s
 							FROM $tbl_session as session
 							WHERE session.id_coach = $user_id
@@ -309,12 +344,12 @@ function get_personal_session_course_list($user_id, $list_sessions)
 										 WHERE session_course.id_session = $id_session
 										 AND (session_course.id_coach=$user_id OR session.id_coach=$user_id)
 										ORDER BY i";
-
+			
 			$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
 			while ($result_row = mysql_fetch_array($course_list_sql_result))
 			{
-				$result_row['s'] = 1;
+				$result_row['s'] = 2;
 				$key = $result_row['id_session'].' - '.$result_row['k'];
 				$personal_course_list[$key] = $result_row;
 			}
@@ -561,18 +596,18 @@ function get_logged_user_course_html($my_course)
 	$s_htlm_status_icon="";
 
 	if($s_course_status==1){
-		$s_htlm_status_icon="<img src='main/img/staryellow.jpg'>";
+		$s_htlm_status_icon="<img src='main/img/teachers.gif'>";
 	}
 	if($s_course_status==2){
-		$s_htlm_status_icon="<img src='main/img/starblue.jpg'>";
+		$s_htlm_status_icon="<img src='main/img/coachs.gif'>";
 	}
 	if($s_course_status==5){
-		$s_htlm_status_icon="<img src='main/img/stargreen.jpg'>";
+		$s_htlm_status_icon="<img src='main/img/students.gif'>";
 	}
 
 	//display course entry
 	$result.="\n\t";
-	$result .= '<li style="list-style-type: none;"><div style="border:0px solid #000; width: auto; float:left;padding-right: 5px;">'.$s_htlm_status_icon.'</div>';
+	$result .= '<li style="list-style-type: none; margin-bottom: 5px;"><div style="border:0px solid #000; width: auto; float:left;padding-right: 5px;">'.$s_htlm_status_icon.'</div>';
 	//show a hyperlink to the course, unless the course is closed and user is not course admin
 	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)
 	{
@@ -855,7 +890,6 @@ if ($maxCourse > 0)
 	Plugins for banner section
 -----------------------------------------------------------------------------
 */
-api_plugin('mycourses_main');
 
 
 echo "<div class=\"maincontent\">"; // start of content for logged in users
@@ -1029,8 +1063,11 @@ if (is_array($list))
 		}
 		$old_user_category = 0;
 		$userdefined_categories = get_user_course_categories();
-
-
+		
+		//Courses which belong to no sessions
+		//echo "<ul style=\"line-height: 20px;\">\n\n\n\t<ul class=\"user_course_category\"><li>".get_lang("Courses_no_sessions")."</li></ul>\n</ul>";
+		
+		
 		if(count($listActives)>0 && $display_actives){
 			echo "<ul style=\"line-height: 20px;\">\n";
 
@@ -1129,6 +1166,23 @@ if ($display_add_course_link)
 display_edit_course_list_links();
 display_digest($toolsList, $digest, $orderKey, $courses);
 
+$navigation=array();
+// Link to my profile
+$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+$navigation['myprofile']['title'] = get_lang('ModifyProfile');
+// Link to my agenda
+$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/myagenda.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+$navigation['myagenda']['title'] = get_lang('MyAgenda');
+
+foreach($navigation as $section => $navigation_info)
+{
+	$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
+	echo '<li'.$current.'>';
+	echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+	echo '</li>';
+	echo "\n";
+}
+
 echo "</ul>";
 echo "</div>";
 
@@ -1138,9 +1192,15 @@ echo "</div>";
 	Plugins for banner section
 -----------------------------------------------------------------------------
 */
-echo '<div class="note" style="background: none">';
-api_plugin('mycourses_menu');
-echo "</div>";
+
+if (is_array($_plugins['mycourses_menu'])){
+
+	echo '<div class="note" style="background: none">';
+	api_plugin('mycourses_menu');
+	echo "</div>";
+	
+}
+	
 echo "</div>"; // end of menu
 
 /*

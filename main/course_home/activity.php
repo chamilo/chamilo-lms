@@ -155,7 +155,7 @@ function show_tools_category($course_tool_category)
 			$properties['visibility'] = $links_row['visibility'];
 			$properties['image'] = ($links_row['visibility']== '0') ? "external_na.gif" : "external.gif";
 			$properties['adminlink'] = api_get_path(WEB_CODE_PATH) . "link/link.php?action=editlink&id=".$links_row['id'];
-
+			
 			$tmp_all_tools_list[] = $properties;
 		}
 	}
@@ -164,6 +164,7 @@ function show_tools_category($course_tool_category)
 	{
 		foreach($tmp_all_tools_list as $toolsRow)
 		{
+			
 			if($toolsRow['image'] == 'blog.gif')
 			{
 				// Init
@@ -283,8 +284,12 @@ function show_tools_category($course_tool_category)
 				$class='';
 
 			$qm_or_amp = ((strpos($toolsRow['link'], '?') === FALSE) ? '?' : '&amp;');
-
-				echo "\t" . ' &nbsp <a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">&nbsp;&nbsp;';
+				if($toolsRow['name']=='visio'){
+					echo "\t" . ' &nbsp <a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+(screen.height)+\', width=\'+(screen.width-20)+\', toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">&nbsp;&nbsp;';
+				}
+				else {
+					echo "\t" . ' &nbsp <a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">&nbsp;&nbsp;';
+				}
 					echo '<img src="' . $web_code_path . 'img/' . $toolsRow['image'] . '" align="absmiddle" border="0" alt="' . $toolsRow['image'] . '" /> &nbsp;&nbsp;';
 					echo ($toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'blog.gif') ? '  '.htmlspecialchars(stripslashes($toolsRow['name'])) : '  '.get_lang($toolsRow['name']);
 				echo "\t" . '</a>';

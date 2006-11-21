@@ -7,8 +7,8 @@
  */
  include("../inc/global.inc.php");
 api_protect_course_script();
-$nameTool = get_lang('conference');
-Display::display_header($nameTool);
+//$nameTool = get_lang('conference');
+//Display::display_header($nameTool);
 
 
 $visio_link = api_get_path(WEB_PATH).api_get_setting('service_visio','url');
@@ -18,5 +18,5 @@ $visio_link = api_get_path(WEB_PATH).api_get_setting('service_visio','url');
 <iframe frameborder="0" scrolling="no" width="100%" height="600" src="<?php echo $visio_link ?>"></iframe>
 </span>
 <?php 
-Display::display_footer();
+//Display::display_footer();
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: document.php 10055 2006-11-20 16:03:52Z elixir_inter $
+<?php // $Id: document.php 10079 2006-11-21 14:48:00Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -67,7 +67,7 @@ include("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 
 include('document.inc.php');
-//include(api_get_path(LIBRARY_PATH).'/xajax/xajax.inc.php');
+include(api_get_path(LIBRARY_PATH).'/xajax/xajax.inc.php');
 
 
 $xajax = new Xajax();
@@ -693,7 +693,7 @@ if($docs_and_folders)
 		{
 			$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key);
 			// if ppt2lp is actived and it's a ppt-like document, we display a link on which an ajax event is linked : prepare_ppt2lp (see upper)
-			if(api_service_is_active('ppt2lp') && in_array(substr($id['path'],strrpos($id['path'],'.')+1),array("ppt","odp"))){
+			if(in_array(substr($id['path'],strrpos($id['path'],'.')+1),array("ppt","odp"))){
 				$edit_icons .= '<a href="#" onclick="prepare_ppt2lp(\''.urlencode($id['path']).'\')" title="'.get_lang('Ppt2lp').'" alt="'.get_lang('Ppt2lp').'"><img src="../img/recycle.gif" border="0" /></a>';
 			}
 			$row[] = $edit_icons;

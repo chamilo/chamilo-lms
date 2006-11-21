@@ -485,21 +485,22 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
             api_session_register('_course');
 
             //We add a new record in the course tracking table
-            $course_tracking_table = Database :: get_statistic_table(STATISTIC_TRACK_E_COURSE_ACCESS_TABLE);
+            $course_tracking_table = Database :: get_statistic_table(STATISTIC_TRACK_E_COURSE_ACCESS_TABLE);        
 
             $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
 					"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
 
 			api_sql_query($sql,__FILE__,__LINE__);
-
-			if(api_get_setting("Ajax_course_tracking_refresh")!=0){
-
-
+			
+			if(api_get_setting("Ajax_course_tracking_refresh")!=0 && !isset($noajax)){
+				
+				include("common_course_tracking.ajax.php");
+				
 				$i_milliseconds_for_refresh=intval(api_get_setting("Ajax_course_tracking_refresh"))*1000;
-
-				$htmlHeadXtra[] = $xajax->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
+				
+				$htmlHeadXtra[] = $xajax_course_tracking->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
 				$htmlHeadXtra[] = "<script type=\"text/javascript\">var user_id=".$_user ['user_id'].";</script><script type=\"text/javascript\" src=\"".api_get_path(WEB_CODE_PATH)."inc/course_tracking.js\"></script><script type=\"text/javascript\">window.setInterval('update_course_tracking()',".$i_milliseconds_for_refresh.");</script>";
-
+				
 			}
 
         }
@@ -539,16 +540,20 @@ else // continue with the previous values
    				"SET logout_course_date = NOW(), " .
    					"counter = counter+1 " .
 				"WHERE course_access_id='$i_course_access_id'";
-
-		api_sql_query($sql,__FILE__,__LINE__);
-
-		if(api_get_setting("Ajax_course_tracking_refresh")!=0){
-
+		
+		if(!isset($noajax)){
+			api_sql_query($sql,__FILE__,__LINE__);
+		}
+		
+		if(api_get_setting("Ajax_course_tracking_refresh")!=0 && !isset($noajax)){			
+			
+			include("common_course_tracking.ajax.php");
+			
 			$i_milliseconds_for_refresh=intval(api_get_setting("Ajax_course_tracking_refresh"))*1000;
-
-			$htmlHeadXtra[] = $xajax->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
+			
+			$htmlHeadXtra[] = $xajax_course_tracking->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
 			$htmlHeadXtra[] = "<script type=\"text/javascript\">var user_id=".$_user ['user_id'].";</script><script type=\"text/javascript\" src=\"".api_get_path(WEB_CODE_PATH)."inc/course_tracking.js\"></script><script type=\"text/javascript\">setInterval('update_course_tracking()',".$i_milliseconds_for_refresh.");</script>";
-
+			
 		}
 
 

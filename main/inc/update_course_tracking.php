@@ -1,8 +1,7 @@
 <?php
-
-
-$xajax = new xajax();
-$xajax->registerFunction("updateCourseTracking");
+$noajax=true;
+include("global.inc.php");
+require('common_course_tracking.ajax.php');
 
 function updateCourseTracking($i_user_id){
 	
@@ -28,6 +27,6 @@ function updateCourseTracking($i_user_id){
 	
 }
 
-
+$xajax_course_tracking->processRequests();
 
 ?>

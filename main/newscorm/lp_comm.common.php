@@ -12,8 +12,7 @@
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
 
-//the library is included in global.inc.php
-//require('../inc/lib/xajax/xajax.inc.php');
+require('../inc/lib/xajax/xajax.inc.php');
 $xajax = new xajax(api_get_path(WEB_CODE_PATH).'newscorm/lp_comm.server.php');
 $xajax->registerFunction("save_item");
 $xajax->registerFunction("switch_item_details");

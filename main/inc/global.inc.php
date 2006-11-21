@@ -91,13 +91,6 @@ require_once(api_get_path(LIBRARY_PATH).'database.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'display.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
-//Include the librarie ajax for the course time refresh
-require_once(api_get_path(LIBRARY_PATH)."xajax/xajax.inc.php");
-
-//Include the file for the updateCourseTracking function
-require_once(api_get_path(INCLUDE_PATH)."update_course_tracking.php");
-
-
 
 if(empty($statsDbName) && $already_installed)
 {
@@ -113,8 +106,6 @@ if (! $_configuration['db_host'])
 	die($error_message);
 }
 
-
-$xajax->processRequests();
 
 unset($error_message);
 

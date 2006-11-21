@@ -1,4 +1,4 @@
-<?php # $Id: fileManage.lib.php 9246 2006-09-25 13:24:53Z bmol $
+<?php # $Id: fileManage.lib.php 10083 2006-11-21 19:43:29Z pcool $
 
 /* vim: set expandtab tabstop=4 shiftwidth=4:
 ===============================================================================
@@ -526,7 +526,7 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
  */
 function mkpath($path, $verbose = false, $mode = "herit")
 {
-	global $langCreatedIn, $rootSys;
+	global $langCreatedIn, $_configuration;
 
 	$path=str_replace("/","\\",$path);
 	$dirs=explode("\\",$path);
@@ -542,7 +542,7 @@ function mkpath($path, $verbose = false, $mode = "herit")
 	{
 		$path.='/'.$dirs[$i];
 
-		if(ereg('^'.$path,$rootSys) && strlen($path) < strlen($rootSys))
+		if(ereg('^'.$path,$_configuration['root_sys']) && strlen($path) < strlen($_configuration['root_sys']))
 		{
 			continue;
 		}

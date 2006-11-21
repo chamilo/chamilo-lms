@@ -1,4 +1,4 @@
-<?php // $Id: GC.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: GC.php 10083 2006-11-21 19:43:29Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -30,19 +30,19 @@
 ============================================================================== 
 */	
 		
-		// usage:  HotPotGC($rootSys,$flag);
+		// usage:  HotPotGC($_configuration['root_sys'],$flag);
 		// working recursively, flag[0,1] print or delete the HotPotatoes temp files (.t.html)
 
-		$rootSys = "C:/Program Files/EasyPHP1-7/www/dokeos_new/";
 		echo "Garbage Collector<BR>";
-		HotPotGC($rootSys,1,1);
+		HotPotGC($_configuration['root_sys'],1,1);
 		
 		
 		// functions 
 	
-		function HotPotGC($rootSys,$flag,$userID)
-		{	// flag[0,1] - print or delete the HotPotatoes temp files (.t.html)
-			$documentPath = $rootSys."courses";
+		function HotPotGC($root_sys,$flag,$userID)
+		{	
+			// flag[0,1] - print or delete the HotPotatoes temp files (.t.html)
+			$documentPath = $root_sys."courses";
 			require_once(api_get_path(LIBRARY_PATH)."fileManage.lib.php");
 			HotPotGCt($documentPath,$flag,$userID);
 		}

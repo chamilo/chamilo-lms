@@ -86,9 +86,9 @@ $_configuration['user_personal_database']   ='{DATABASE_PERSONAL}';
 //   Directory settings
 //============================================================================
 // URL to the root of your Dokeos installation
-$_configuration['root_web']                     = '{ROOT_WEB}';
+$_configuration['root_web'] = '{ROOT_WEB}';
 // Path to the root of your Dokeos installation
-$rootSys                     = '{ROOT_SYS}';
+$_configuration['root_sys'] = '{ROOT_SYS}';
 // Path from your WWW-root to the root of your Dokeos installation
 $urlAppend                   = '{URL_APPEND_PATH}';
 // Directory of the Dokeos code
@@ -99,9 +99,9 @@ $coursesRepositoryAppend     = "courses/";
 $rootAdminAppend             = "admin/";
 // Do not change the following values
 // @todo should be moved to api_get_path
-$clarolineRepositorySys      = $rootSys.$clarolineRepositoryAppend;
+$clarolineRepositorySys      = $_configuration['root_sys'].$clarolineRepositoryAppend;
 $clarolineRepositoryWeb      = $_configuration['root_web'].$clarolineRepositoryAppend;
-$coursesRepositorySys        = $rootSys.$coursesRepositoryAppend;
+$coursesRepositorySys        = $_configuration['root_sys'].$coursesRepositoryAppend;
 $coursesRepositoryWeb        = $_configuration['root_web'].$coursesRepositoryAppend;
 $rootAdminSys                = $clarolineRepositorySys.$rootAdminAppend;
 $rootAdminWeb                = $clarolineRepositoryWeb.$rootAdminAppend;

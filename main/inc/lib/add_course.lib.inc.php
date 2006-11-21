@@ -83,7 +83,7 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
  */
 function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = "", $prefix4path = "", $addUniquePrefix = false, $useCodeInDepedentKeys = true)
 {
-	global $rootSys, $coursesRepositoryAppend, $prefixAntiNumber, $_configuration;
+	global $coursesRepositoryAppend, $prefixAntiNumber, $_configuration;
 
 	$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
 
@@ -174,7 +174,7 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 			$finalSuffix['CourseDb'] = substr('_'.md5(uniqid(rand())), 0, 4);
 		}
 
-		if(file_exists($rootSys.$coursesRepositoryAppend.$keysCourseRepository))
+		if(file_exists($_configuration['root_sys'].$coursesRepositoryAppend.$keysCourseRepository))
 		{
 			$keysAreUnique = false;
 

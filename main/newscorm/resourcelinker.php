@@ -777,7 +777,7 @@ if ($content == "chapter")
 if ($content == "Document" OR (empty($content) AND (is_allowed_to_edit() OR in_array(TOOL_DOCUMENT,$active_modules))) AND !$_GET['showresources'])
 {
 	// setting variables for file locations
-	$baseServDir = $rootSys;
+	$baseServDir = $_configuration['root_sys'];
 	$courseDir = $_course['path']."/document";
 	$baseWorkDir = $baseServDir.$courseDir;
 	// showing the link to move one folder up (when not in the root folder)

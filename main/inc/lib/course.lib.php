@@ -164,7 +164,7 @@ $TABLECOURSDOMAIN = Database :: get_main_table(MAIN_CATEGORY_TABLE);
 $TABLEUSER = Database :: get_main_table(MAIN_USER_TABLE);
 $TABLECOURSUSER = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 $TABLEANNOUNCEMENTS = "announcement";
-$coursesRepositories = $rootSys;
+$coursesRepositories = $_configuration['root_sys'];
 
 /*
 ==============================================================================

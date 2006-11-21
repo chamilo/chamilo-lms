@@ -48,12 +48,12 @@ $filename=basename($doc_url);
 //event_download($doc_url);
 if (isset($_course['path']))
 {
-//	$full_file_name=$rootSys."courses/".$_course['path'].'/document'.$doc_url;
+//	$full_file_name=$_configuration['root_sys']."courses/".$_course['path'].'/document'.$doc_url;
 	$full_file_name = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$doc_url;
 }
 else
 {
-//$full_file_name=$rootSys."courses/".$cid.'/document'.$doc_url;	
+//$full_file_name=$_configuration['root_sys']."courses/".$cid.'/document'.$doc_url;	
 $full_file_name = api_get_path(SYS_COURSE_PATH).$cid.'/document'.$doc_url;	
 }
 
@@ -103,7 +103,7 @@ if($content_type == 'text/html')
 	include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 	$directory_name = dirname($full_file_name);
 	
-	$dir=str_replace(array('\\',$rootSys."courses/".$_course['path'].'/document'),array('/',''),$directory_name);
+	$dir=str_replace(array('\\',$_configuration['root_sys']."courses/".$_course['path'].'/document'),array('/',''),$directory_name);
 
 	if($dir[strlen($dir)-1] != '/')
 	{

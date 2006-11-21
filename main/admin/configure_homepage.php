@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10082 2006-11-21 19:08:15Z pcool $
+<?php // $Id: configure_homepage.php 10083 2006-11-21 19:43:29Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -178,9 +178,9 @@ if(!empty($action))
 				{
 					$link_url=$_configuration['root_web'].'index.php?include='.urlencode($filename);
 
-					if(!file_exists($rootSys.'home/'.$filename))
+					if(!file_exists($_configuration['root_sys'].'home/'.$filename))
 					{
-						$fp=@fopen($rootSys.'home/'.$filename,'w');
+						$fp=@fopen($_configuration['root_sys'].'home/'.$filename,'w');
 
 						if($fp)
 						{
@@ -193,7 +193,7 @@ if(!empty($action))
 
 				if($action == 'edit_link' && !empty($link_html))
 				{
-					$fp=@fopen($rootSys.'home/'.$filename,'w');
+					$fp=@fopen($_configuration['root_sys'].'home/'.$filename,'w');
 
 					if($fp)
 					{

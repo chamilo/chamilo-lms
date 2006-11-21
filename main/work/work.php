@@ -48,8 +48,8 @@
  * establish a correspondence between RealServer Content Path and the user's
  * documents path.
  *
- * All documents are sent to the address /$rootSys/$currentCourseID/document/
- * where $currentCourseID is the web directory for the course and $rootSys
+ * All documents are sent to the address /$_configuration['root_sys']/$currentCourseID/document/
+ * where $currentCourseID is the web directory for the course and $_configuration['root_sys']
  * usually /var/www/html
  *
  *	Modified by Patrick Cool, february 2004:
@@ -380,10 +380,6 @@ if($submitWork && $is_course_member)
 {
 	if($_FILES['file']['size'])
 	{
-		// exemple :
-		// $urlAppend="/cvs130/Dokeos150";
-		// $rootSys="/var/www/html/cvs130/Dokeos150/";
-
 		$updir           = $currentCourseRepositorySys.'work/'; //directory path to upload
 
 		// Try to add an extension to the file if it has'nt one
@@ -599,7 +595,7 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 	
 			if ($submitGroupWorkUrl) // For user comming from group space to publish his work
 			{
-				$realUrl = str_replace ($rootSys, $_configuration['root_web'], str_replace("\\", "/", realpath($submitGroupWorkUrl) ) ) ;
+				$realUrl = str_replace ($_configuration['root_sys'], $_configuration['root_web'], str_replace("\\", "/", realpath($submitGroupWorkUrl) ) ) ;
 	
 				echo	"<tr>\n",
 	

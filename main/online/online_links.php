@@ -1,4 +1,4 @@
-<?php // $Id: online_links.php 10082 2006-11-21 19:08:15Z pcool $
+<?php // $Id: online_links.php 10083 2006-11-21 19:43:29Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -101,7 +101,7 @@ if($_POST['sent'])
 
 		move_uploaded_file($link_file['tmp_name'],$doc_path.$link_file['name']);
 
-		$link_url=str_replace($rootSys,$_configuration['root_web'],$doc_path).$link_file['name'];
+		$link_url=str_replace($_configuration['root_sys'],$_configuration['root_web'],$doc_path).$link_file['name'];
 	}
 
 	if(!empty($link_name) && !empty($link_url))

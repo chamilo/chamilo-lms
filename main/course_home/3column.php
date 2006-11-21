@@ -153,7 +153,7 @@ if (is_allowed_to_edit())
 	{
 		$result 	= api_sql_query("SELECT * FROM $TBL_ACCUEIL WHERE id=$id");
 		$toolsRow 	= mysql_fetch_array($result);
-		$racine		= $rootSys."/".$currentCourseID."/images/";
+		$racine		= $_configuration['root_sys']."/".$currentCourseID."/images/";
 		$chemin		= $racine;
 		$name	= $toolsRow[1];
 		$image		= $toolsRow[3];

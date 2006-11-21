@@ -12,7 +12,9 @@
 *	@package dokeos.metadata
 ============================================================================== 
 */
-
+/**
+ * @todo $rootSys is replaced with $_configuration['root_sys'] except here because I do not understand this code. 
+ */
 
 // PRELIMS -------------------------------------------------------------------->
 
@@ -334,12 +336,13 @@ elseif ($smo == get_lang('Import'))
             $fp = fopen($thf, "rb"); fpassthru($fp); fclose($fp);
         }
 '
-            . str_replace('$rootSys', api_get_path(SYS_PATH), 
+            . str_replace($_configuration['root_sys'], api_get_path(SYS_PATH), 
                 str_replace('$scid', $scid, 
 '
         else
         {
-            $drs = "$rootSys"; $scormid = "$scid";
+            $drs = "$rootSys"; 
+            $scormid = "$scid";
             require($drs. "main/metadata/playscormmdset.inc.php");
         }
 '           )) . '?' . '>';

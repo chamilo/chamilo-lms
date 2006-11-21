@@ -209,6 +209,7 @@ if ($_user['user_id'])
 			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
 			$navigation['mycourses']['title'] = get_lang('MyCourses');
 		}
+		
 		// Link to active sessions
 		//$navigation[SECTION_ACTIVESESSIONS]['url'] = api_get_path(WEB_PATH).'user_portal.php';
 		//$navigation[SECTION_ACTIVESESSIONS]['title'] = get_lang('myActiveSessions');
@@ -223,12 +224,16 @@ if ($_user['user_id'])
 		$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
 		$navigation['mycourses']['title'] = get_lang('MyCourses');
 	}
+	
+	//NOW IN THE RIGHT MENU IN "MY COURSES"
+	/*
 	// Link to my profile
 	$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
 	$navigation['myprofile']['title'] = get_lang('ModifyProfile');
 	// Link to my agenda
 	$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/myagenda.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
-	$navigation['myagenda']['title'] = get_lang('MyAgenda');
+	$navigation['myagenda']['title'] = get_lang('MyAgenda');*/
+	
 	if(api_get_setting('use_session_mode')=='true')
 	{
 		//It's now in the reporting

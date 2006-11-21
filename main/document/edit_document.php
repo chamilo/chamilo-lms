@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 9985 2006-11-15 00:43:47Z pcool $
+<?php // $Id: edit_document.php 10085 2006-11-21 20:42:52Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -87,7 +87,7 @@ $file_name = $doc;
 //echo('file_name: '.$file_name.'<br>');
 
 $baseServDir = api_get_path(SYS_COURSE_PATH);
-$baseServUrl = $urlAppend."/";
+$baseServUrl = $_configuration['url_append']."/";
 $courseDir   = $_course['path']."/document";
 $baseWorkDir = $baseServDir.$courseDir;
 $group_document = false;

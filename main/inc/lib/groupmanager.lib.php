@@ -145,8 +145,8 @@ class GroupManager
 	function create_group($name, $category_id, $tutor, $places)
 	{
 		global $_course,$_user;
+		
 		$currentCourseRepository = $_course['path'];
-		$coursesRepositorySys = api_get_path(SYS_COURSE_PATH);
 		$table_group = Database :: get_course_table(GROUP_TABLE);
 		$table_forum = Database :: get_course_table(FORUM_TABLE);
 		$category = GroupManager :: get_category($category_id);
@@ -158,14 +158,14 @@ class GroupManager
 		api_sql_query($sql,__FILE__,__LINE__);
 		$lastId = mysql_insert_id();
 		/*$secret_directory = uniqid("")."_team_".$lastId;
-		while (is_dir($coursesRepositorySys.$currentCourseRepository."/group/$secret_directory"))
+		while (is_dir(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/$secret_directory"))
 		{
 			$secret_directory = uniqid("")."_team_".$lastId;
 		}
-		FileManager :: mkdirs($coursesRepositorySys.$currentCourseRepository."/group/".$secret_directory, 0777);
+		FileManager :: mkdirs(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/".$secret_directory, 0777);
 		*/
 		$desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
-		$dir_name = create_unexisting_directory($_course,$_user['user_id'],$lastId,NULL,$coursesRepositorySys.$currentCourseRepository.'/document',$desired_dir_name);
+		$dir_name = create_unexisting_directory($_course,$_user['user_id'],$lastId,NULL,api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document',$desired_dir_name);
 		/* Stores the directory path into the group table */
 		$sql = "UPDATE ".$table_group." SET   name = '".mysql_real_escape_string($name)."', secret_directory = '".$dir_name."' WHERE id ='".$lastId."'";
 		api_sql_query($sql,__FILE__,__LINE__);

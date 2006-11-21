@@ -83,7 +83,7 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
  */
 function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = "", $prefix4path = "", $addUniquePrefix = false, $useCodeInDepedentKeys = true)
 {
-	global $coursesRepositoryAppend, $prefixAntiNumber, $_configuration;
+	global $prefixAntiNumber, $_configuration;
 
 	$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
 
@@ -174,7 +174,8 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 			$finalSuffix['CourseDb'] = substr('_'.md5(uniqid(rand())), 0, 4);
 		}
 
-		if(file_exists($_configuration['root_sys'].$coursesRepositoryAppend.$keysCourseRepository))
+		// @todo: use and api_get_path here instead of constructing it by yourself
+		if(file_exists($_configuration['root_sys'].$_configuration['course_folder'].$keysCourseRepository))
 		{
 			$keysAreUnique = false;
 
@@ -209,19 +210,18 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
  */
 function prepare_course_repository($courseRepository, $courseId)
 {
-	GLOBAL $coursesRepositorySys;
 	umask(0);
-	mkdir($coursesRepositorySys.$courseRepository, 0777);
-	mkdir($coursesRepositorySys.$courseRepository . "/document", 0777);
-	mkdir($coursesRepositorySys.$courseRepository . "/dropbox", 0777);
-	mkdir($coursesRepositorySys.$courseRepository . "/group", 0777);
-	mkdir($coursesRepositorySys.$courseRepository . "/page", 0777);
-	mkdir($coursesRepositorySys.$courseRepository . "/scorm", 0777);
-	mkdir($coursesRepositorySys.$courseRepository . "/temp", 0777);
-	mkdir($coursesRepositorySys.$courseRepository . "/work", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/dropbox", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/group", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/page", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/scorm", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/temp", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/work", 0777);
 
 	//create .htaccess in dropbox
-	$fp = fopen($coursesRepositorySys.$courseRepository . "/dropbox/.htaccess", "w");
+	$fp = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . "/dropbox/.htaccess", "w");
 	fwrite($fp, "AuthName AllowLocalAccess
 	               AuthType Basic
 
@@ -232,7 +232,7 @@ function prepare_course_repository($courseRepository, $courseId)
 	fclose($fp);
 
 	// build index.php of course
-	$fd = fopen($coursesRepositorySys.$courseRepository . "/index.php", "w");
+	$fd = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . "/index.php", "w");
 
 	// str_replace() removes \r that cause squares to appear at the end of each line
 	$string = str_replace("\r", "", "<?" . "php
@@ -242,7 +242,7 @@ function prepare_course_repository($courseRepository, $courseId)
 	include(\"../../main/course_home/course_home.php\");
 	?>");
 	fwrite($fd, "$string");
-	$fd = fopen($coursesRepositorySys.$courseRepository . "/group/index.php", "w");
+	$fd = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . "/group/index.php", "w");
 	$string = "<html></html>";
 	fwrite($fd, "$string");
 	return 0;

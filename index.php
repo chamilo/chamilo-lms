@@ -428,7 +428,6 @@ function display_lost_password_info()
 function display_anonymous_course_list()
 {
 	//init
-	global $coursesRepositoryWeb;
 	$web_course_path = api_get_path(WEB_COURSE_PATH);
 	$category = $_GET["category"];
 	$main_course_table = Database :: get_main_table(MAIN_COURSE_TABLE);

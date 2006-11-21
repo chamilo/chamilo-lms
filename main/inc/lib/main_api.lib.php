@@ -242,7 +242,7 @@ function api_is_self_registration_allowed()
 *	Returns a full path to a certain Dokeos area, which you specify
 *	through a parameter.
 *
-*	See $coursesRepositoryAppend in the configuration.php
+*	See $_configuration['course_folder'] in the configuration.php
 *	to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
 *
 *	@param one of the following constants:
@@ -250,26 +250,66 @@ function api_is_self_registration_allowed()
 *	REL_COURSE_PATH, REL_CLARO_PATH, WEB_CODE_PATH, SYS_CODE_PATH,
 *	SYS_LANG_PATH, WEB_IMG_PATH, GARBAGE_PATH, PLUGIN_PATH, SYS_ARCHIVE_PATH,
 *	INCLUDE_PATH, LIBRARY_PATH, CONFIGURATION_PATH
+* 
+* 	@example assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
+* 	The other configuration paramaters have not been changed.
+* 	The different api_get_paths will give
+* 	WEB_PATH			http://www.mydokeos.com
+* 	SYS_PATH			/var/www/
+* 	REL_PATH			dokeos/
+* 	WEB_COURSE_PATH		http://www.mydokeos.com/courses/
+* 	SYS_COURSE_PATH		/var/www/dokeos/courses/
+*	REL_COURSE_PATH
+* 	REL_CLARO_PATH
+* 	WEB_CODE_PATH
+* 	SYS_CODE_PATH
+* 	SYS_LANG_PATH
+* 	WEB_IMG_PATH
+* 	GARBAGE_PATH
+* 	PLUGIN_PATH
+* 	SYS_ARCHIVE_PATH
+*	INCLUDE_PATH
+* 	LIBRARY_PATH
+* 	CONFIGURATION_PATH
 */
 function api_get_path($path_type)
 {
+	global $_configuration; 
+	
 	switch ($path_type)
 	{
 		case WEB_PATH :
-			return $GLOBALS['rootWeb'];
+			// example: http://www.mydokeos.com
+			return $_configuration['root_web'];
 			break;
+			
 		case SYS_PATH :
-			return $GLOBALS['rootSys'];
+			// example: /var/www/
+			return $_configuration['root_sys'];
 			break;
+			
 		case REL_PATH :
-			return (substr($GLOBALS['urlAppend'], -1) === '/' ? $GLOBALS['urlAppend'] : $GLOBALS['urlAppend'].'/');
+			// example: dokeos/
+			if (substr($GLOBALS['urlAppend'], -1) === '/')
+			{
+				return $_configuration['url_append'];
+			}
+			else 
+			{
+				return $_configuration['url_append'].'/';
+			}
 			break;
+			
 		case WEB_COURSE_PATH :
-			return $GLOBALS['coursesRepositoryWeb'];
+			// example: http://www.mydokeos.com/courses/
+			return $_configuration['root_web'].$_configuration['course_folder'];
 			break;
+			
 		case SYS_COURSE_PATH :
-			return $GLOBALS['coursesRepositorySys'];
+			// example: /var/www/dokeos/courses/
+			return $_configuration['root_sys'].$_configuration['course_folder'];
 			break;
+			
 		case REL_COURSE_PATH :
 			return api_get_path(REL_PATH).$GLOBALS['coursesRepositoryAppend'];
 			break;
@@ -1498,7 +1538,7 @@ function api_get_languages()
 */
 function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $optAttrib = '')
 {
-	global $urlAppend, $_course, $fck_attribute;
+	global $_configuration, $_course, $fck_attribute;
 	require_once(dirname(__FILE__).'/formvalidator/Element/html_editor.php');
 	$editor = new HTML_QuickForm_html_editor($name);
 	$editor->setValue($content);

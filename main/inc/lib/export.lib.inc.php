@@ -309,7 +309,7 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 {
 		GLOBAL $error_msg, $error_no, $db, $archiveRepositorySys, $archiveRepositoryWeb, // from configs files
 		$appendCourse, $appendMainDb, //
-	$archiveName, $_configuration, $clarolineRepositorySys, $_course, $coursesRepositorySys, $TABLEUSER, $TABLECOURSUSER, $TABLECOURS, $TABLEANNOUNCEMENT, $langArchiveName, $langArchiveLocation, $langSizeOf, $langDisk_free_space, $langCreateMissingDirectories, $langBUCourseDataOfMainBase, $langBUUsersInMainBase, $langBUAnnounceInMainBase, $langCopyDirectoryCourse, $langFileCopied, $langBackupOfDataBase, $langBuildTheCompressedFile;
+	$archiveName, $_configuration, $clarolineRepositorySys, $_course, $TABLEUSER, $TABLECOURSUSER, $TABLECOURS, $TABLEANNOUNCEMENT, $langArchiveName, $langArchiveLocation, $langSizeOf, $langDisk_free_space, $langCreateMissingDirectories, $langBUCourseDataOfMainBase, $langBUUsersInMainBase, $langBUAnnounceInMainBase, $langCopyDirectoryCourse, $langFileCopied, $langBackupOfDataBase, $langBuildTheCompressedFile;
 	////////////////////////////////////////////////////
 	// ****** 1° Check if all data needed are aivailable
 	// ****** 1° 1. $lang vars
@@ -711,7 +711,7 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 		echo "
 						<LI>
 							".$langCopyDirectoryCourse;
-	$nbFiles = copydir($coursesRepositorySys.$_course['path'], $archiveDirOriginalDocs.$appendCourse, $verboseBackup);
+	$nbFiles = copydir(api_get_path(SYS_COURSE_PATH).$_course['path'], $archiveDirOriginalDocs.$appendCourse, $verboseBackup);
 	if ($verboseBackup)
 		echo "
 							<strong>

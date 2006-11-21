@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 10082 2006-11-21 19:08:15Z pcool $
+<?php // $Id: whoisonline.php 10085 2006-11-21 20:42:52Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,7 +60,7 @@ if ($_GET['chatid'] != '')
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 	//redirect caller to chat
-	header("Location: ".$clarolineRepositoryAppend."chat/chat.php?cidReq=".$_cid."&origin=whoisonline&target=$chatid");
+	header("Location: ".$_configuration['code_append']."chat/chat.php?cidReq=".$_cid."&origin=whoisonline&target=$chatid");
 	exit();
 }
 

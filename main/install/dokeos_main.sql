@@ -491,7 +491,7 @@ INSERT INTO `settings_current` VALUES
 (72, 'show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL),
 (73, 'banner', NULL, NULL, 'Plugins', 'messages', '', NULL, NULL, NULL),
 (74,'profile','phone','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'phone'),
-(75, 'Ajax_course_tracking_refresh', NULL, 'textfield','Course','60', 'Ajax_course_tracking_refresh','Ajax_course_tracking_refresh_comment', NULL, NULL),
+(75, 'Ajax_course_tracking_refresh', NULL, 'textfield','Course','0', 'Ajax_course_tracking_refresh','Ajax_course_tracking_refresh_comment', NULL, NULL),
 (76, 'service_visio', 'active', 'radio',NULL,false, 'visio_actived','', NULL, NULL),
 (77, 'service_visio', 'url', 'textfield',NULL,'', 'visio_url','', NULL, NULL),
 (78, 'service_ppt2lp', 'active', 'radio',NULL,false, 'ppt2lp_actived','', NULL, NULL);

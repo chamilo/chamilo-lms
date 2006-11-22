@@ -15,7 +15,7 @@ $visio_link = api_get_path(WEB_PATH).api_get_setting('service_visio','url');
 
 ?>
 <span align="center">
-<iframe frameborder="0" scrolling="no" width="100%" height="600" src="<?php echo $visio_link ?>"></iframe>
+<iframe frameborder="0" scrolling="no" width="100%" height="100%" src="<?php echo $visio_link ?>"></iframe>
 </span>
 <?php 
 //Display::display_footer();

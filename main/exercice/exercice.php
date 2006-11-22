@@ -478,8 +478,8 @@ if($show == 'test'){
 				?>
   <td width="27%"><table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
-      <td width="20" valign="top" align="right"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
-      <td width="1">&nbsp;</td>
+      <td width="30" align="left"><img src="../img/test.gif"></td>
+      <td width="15" valign="left" align="center"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
       <?php $row['title']=api_parse_tex($row['title']); ?>
       <td><a href="exercice_submit.php?<?php echo api_get_cidreq()."&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id"; ?>&exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a></td>
     </tr>

@@ -232,7 +232,8 @@ else
                 {
                 	$password = md5($password);
                 }
-
+                
+                
                 // check the user's password
                 if ($password == $uData['password'] AND (trim($login) == $uData['username']))
                 {

@@ -1,4 +1,4 @@
-<?php // $Id: document.php 10079 2006-11-21 14:48:00Z elixir_inter $
+<?php // $Id: document.php 10101 2006-11-22 12:42:53Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -614,19 +614,19 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 		/* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
 		?>
 			<!-- create new document or directory -->
-			<a href="create_document.php?dir=<?php echo $curdirpathurl; ?>"><img src="../img/new_doc.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
+			<a href="create_document.php?dir=<?php echo $curdirpathurl; ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
 			<a href="create_document.php?dir=<?php echo $curdirpathurl; ?>"><?php echo get_lang("CreateDoc"); ?></a>&nbsp;&nbsp;
 			<!-- file upload link -->
-			<a href="upload.php?path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/upload.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
+			<a href="upload.php?path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
 			<a href="upload.php?path=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;
 			<!-- create directory -->
-			<a href="<?php echo $_SERVER['PHP_SELF']; ?>?curdirpath=<?php echo $curdirpathurl; ?>&amp;createdir=1"><img src="../img/new_folder.gif" border="0" alt ="" /></a>
+			<a href="<?php echo $_SERVER['PHP_SELF']; ?>?curdirpath=<?php echo $curdirpathurl; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" alt ="" /></a>
 			<a href="<?php echo $_SERVER['PHP_SELF']; ?>?curdirpath=<?php echo $curdirpathurl; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
 		<?php
 	}
 	?>
 	<!-- download zipped folder -->
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=downloadfolder&amp;path=<?php echo $curdirpathurl; ?>"><img src="../img/save_zip.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
+	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=downloadfolder&amp;path=<?php echo $curdirpathurl; ?>"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
 	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=downloadfolder&amp;path=<?php echo $curdirpathurl; ?>"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
 	<?php
 	// Slideshow by Patrick Cool, May 2004
@@ -635,7 +635,7 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 	include(api_get_path(SYS_LANG_PATH).$languageInterface."/"."slideshow.inc.php");
 	if ($image_present)
 	{
-		echo "<a href=\"slideshow.php?curdirpath=".$curdirpathurl."\"><img src=\"../img/gif.gif\" border=\"0\" align=\"absmiddle\" title=\"".get_lang('ViewSlideshow')."\"/>". get_lang('ViewSlideshow') . "</a>";
+		echo "<a href=\"slideshow.php?curdirpath=".$curdirpathurl."\"><img src=\"../img/images_gallery.gif\" border=\"0\" title=\"".get_lang('ViewSlideshow')."\"/>&nbsp;". get_lang('ViewSlideshow') . "</a>";
 	}
 	echo "</div>";
 

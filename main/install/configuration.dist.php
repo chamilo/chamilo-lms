@@ -156,23 +156,4 @@ $openoffice_conf['host'] = 'ns6077.ovh.net';
 $openoffice_conf['port'] = '2002';
 $openoffice_conf['ftpuser'] = '****';
 $openoffice_conf['ftppasswd'] = '****';
-
-
-
-
-//============================================================================
-//   Plugin settings
-//============================================================================
-// plugins arrays
-// @todo remove this because this is now handled through the dokeos config settings
-$plugins["main_menu"]        = array();
-$plugins["main_menu_logged"] = array();
-$plugins["banner"]           = array();
-// To load a new plugin, add a line like this
-//     $plugins["main_menu"][] = "my_plugin";
-// where "my_plugin" is the directory where your plugin is in main/plugin
-// main_menu_logged is the same as main_menu for when a user is logged in
-
-// PLUGINS INCLUDED BY DEFAULT
-$plugins["banner"][] = 'messages';
 ?>

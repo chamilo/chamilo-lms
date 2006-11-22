@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 10124 2006-11-22 17:19:37Z elixir_inter $
+<?php // $Id: document.inc.php 10125 2006-11-22 17:30:33Z elixir_inter $
 
 /*
 ==============================================================================
@@ -123,7 +123,7 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 	//build download link (icon)
 	$forcedownload_link=($filetype=='folder')?$_SERVER['PHP_SELF'].'?action=downloadfolder&amp;path='.$url_path.$req_gid:$_SERVER['PHP_SELF'].'?action=download&amp;id='.$url_path.$req_gid;
 	//folder download or file download?
-	$forcedownload_icon=($filetype=='folder')?'save_zip.gif':'filesave.gif';
+	$forcedownload_icon=($filetype=='folder')?'folder_zip.gif':'filesave.gif';
 	//prevent multiple clicks on zipped folder download
 	$prevent_multiple_click =($filetype=='folder')?" onclick=\"javascript:if(typeof clic_$dbl_click_id == 'undefined' || clic_$dbl_click_id == false) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"":'';
 	$target='_top';

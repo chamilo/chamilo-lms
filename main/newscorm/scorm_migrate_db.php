@@ -17,8 +17,13 @@ ini_set('max_execution_time',7200);
 
 function my_get_time($time){
 	$matches = array();
-	if(preg_match('/(\d{2,4}):(\d{2})(:(\d{2})(\.\d*)?)?/',$time,$matches)){
-		return ($matches[1]*3600)+($matches[2]*60)+($matches[4]);
+	if(preg_match('/(\d{1,4}):(\d{2})(:(\d{2})(\.\d*)?)?/',$time,$matches)){
+		print_r($matches);
+		if(count($matches)==3){
+			return ($matches[1]*60)+($matches[2]);
+		}else{
+			return ($matches[1]*3600)+($matches[2]*60)+($matches[4]);
+		}
 	}
 	else return 0;
 }

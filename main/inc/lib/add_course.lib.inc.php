@@ -1435,7 +1435,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 	
 	
 	if(api_get_setting('service_visio','active')=='true'){
-		api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_VISIO . "','conf/','','1','0','squaregrey.gif','NO','_self','authoring')");
+		api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_VISIO . "','conf/','visio.gif','1','0','squaregrey.gif','NO','_self','authoring')");
 	}
 	
 	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)

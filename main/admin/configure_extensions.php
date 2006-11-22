@@ -64,7 +64,7 @@ if(isset($_POST['activeExtension'])){
 				$sql = 'INSERT INTO '.$row['db_name'].'.'.TOOL_LIST_TABLE.' SET 
 						name="visio",
 						link="conf/",
-						image="",
+						image="visio.gif",
 						visibility="1",
 						admin="0",
 						address="squaregrey.gif",

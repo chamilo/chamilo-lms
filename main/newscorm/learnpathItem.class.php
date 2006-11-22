@@ -319,7 +319,8 @@ class learnpathItem{
 	function get_lesson_mode(){
 		$mode = 'normal';
 		if($this->get_prevent_reinit() != 0){ //if prevent_reinit == 0
-			if($this->status != $this->possible_status[0] AND $this->status != $this->possible_status[1]){	
+			$my_status = $this->get_status();
+			if($my_status != $this->possible_status[0] AND $my_status != $this->possible_status[1]){	
 				$mode = 'review';
 			}
 		}
@@ -418,12 +419,14 @@ class learnpathItem{
      */
     function get_score(){
     	if($this->debug>0){error_log('New LP - In learnpathItem::get_score()',0);}
+    	$res = 0;
     	if(!empty($this->current_score))
     	{
-    		return $this->current_score;
+    		$res = $this->current_score;
     	}
     	//TODO check this return value is valid for children classes (SCORM?)
-    	return 0;
+    	if($this->debug>1){error_log('New LP - Out of learnpathItem::get_score() - returning '.$res,0);}
+    	return $res;
     }
     /**
      * Gets the item status

@@ -12,7 +12,7 @@ class scormResource {
 	var $identifier = '';
 	var $type = 'webcontent';
 	//var $identifierref = '';
-	var $scormtype = 'asset';
+	var $scormtype = 'sco'; //fix problems with ENI content where asset is not defined
 	var $base = '';
 	var $href = '';
 	var $metadata;

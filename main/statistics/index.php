@@ -42,7 +42,7 @@ require_once ('statistics.lib.php');
 
 if($is_subPlatformAdmin)
 {
-	$interbredcrump[]=array("url" => "../subadmin/index.php","name" => get_lang('Beheer'));
+	$interbredcrump[]=array("url" => "../subadmin/index.php","name" => get_lang('Management'));
 }
 else
 {
@@ -86,7 +86,7 @@ $strCourse  = get_lang('Courses');
 $strUsers = get_lang('Users');
 
 
-$tools[$strCourse]['action=courses&amp;count_invisible_courses=1'] = get_lang('Statistics_total_amount_of_users');
+$tools[$strCourse]['action=courses&amp;count_invisible_courses=1'] = get_lang('Statistics_total_amount_of_courses');
 $tools[$strCourse]['action=curriculum_courses'] = get_lang('Statistics_curriculumcourses_a_year');
 
 if($is_platformAdmin)

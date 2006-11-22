@@ -310,10 +310,12 @@ class Statistics
 	 */
 	function print_access_to_old_courses_stats()
 	{
+	$currentDate =  getDate();
+	$my_year =  $currentDate["year"];
 		$sql = "SELECT 	count( access_id ) AS number,
 						IF( LOCATE( 'ALG', access_cours_code ) ,
 							'Algemene cursus',
-							IF( LENGTH( access_cours_code ) =14, 'Curr. 2004-2005', 'Curr. 2005-2006' )
+							IF( LENGTH( access_cours_code ) =14, 'Curr. " + my_year-2 + "-" + my_year-1 + "', 'Curr. "+my_year-1 +"-"+ my_year +")
 						) AS type
 				FROM dokeos_stats.track_e_access
 				GROUP BY TYPE";
@@ -386,8 +388,8 @@ class Statistics
 				$courses[] = $course;
 			}
 			
-			$table_header[] = array ('Coursecode', true);
-			$table_header[] = array ('Last login', true);
+			$table_header[] = array ("Coursecode", true);
+			$table_header[] = array ("Last login", true);
 				HoGent::display_page_navigation($number_of_courses,$per_page, $page_nr,array_merge($parameters,$_GET));
 			Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);
 			HoGent::display_page_navigation($number_of_courses,$per_page, $page_nr,array_merge($parameters,$_GET));

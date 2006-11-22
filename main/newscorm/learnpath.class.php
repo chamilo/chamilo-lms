@@ -2187,6 +2187,9 @@ class learnpath {
     		}
     		elseif($mode == 'both')
     		{
+    			if($progress<($completed/($total?$total:1))){
+    				$progress = number_format(($completed/($total?$total:1))*100,0);
+    			}
     			return $progress.'% ('.$completed.'/'.$total.')';
     		}
     	}

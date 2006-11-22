@@ -1,4 +1,4 @@
-<?php // $Id: answer_admin.inc.php 9973 2006-11-14 14:53:22Z pcool $
+<?php // $Id: answer_admin.inc.php 10110 2006-11-22 15:20:46Z develop-it $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,6 +76,7 @@ if($modifyIn)
         $objAnswer->duplicate($questionId);
 
         // construction of the duplicated Answers
+        
         $objAnswer=new Answer($questionId);
     }
 
@@ -604,10 +605,10 @@ if($modifyAnswers)
 
 	
     if($debug>0){echo str_repeat('&nbsp;',0).'$modifyAnswers is set'."<br />\n";}
-
+    
     // construction of the Answer object
     $objAnswer=new Answer($questionId);
-
+    
     api_session_register('objAnswer');
 
     if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
@@ -831,7 +832,7 @@ if($modifyAnswers)
             
         }
         
-        $_SESSION['tmp_answers']=array();
+        $_SESSION['tmp_answers'] = array();
         $_SESSION['tmp_answers']['answer'] = $reponse;
         $_SESSION['tmp_answers']['comment'] = $comment;
         $_SESSION['tmp_answers']['weighting'] = $weighting;

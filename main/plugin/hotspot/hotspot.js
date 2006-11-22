@@ -3,13 +3,17 @@
 var flashVar = 0;
 
 var lcId = new Date().getTime();
-var flashProxy = new FlashProxy(lcId, "JavaScriptFlashGateway.swf");
+//var flashProxy = new FlashProxy(lcId, "JavaScriptFlashGateway.swf");
 
 function validateFlashVar(counter, lang_1, lang_2)
 {
-	if (counter!=flashVar)
+	//alert(counter);
+	//alert(flashVar);
+	
+	if(counter!=flashVar)
 	{
-		alert (lang_1 + counter + lang_2);
+		//alert (lang_1 + counter + lang_2);
+		alert (lang_1);
 		return false;
 	}
 	else
@@ -20,6 +24,7 @@ function validateFlashVar(counter, lang_1, lang_2)
 
 function updateFlashVar()
 {
+	//alert('updateFlashVar: ' + flashVar);
 	flashVar++;
 }
 

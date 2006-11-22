@@ -1,4 +1,4 @@
-<?php // $Id: answer.class.php 9665 2006-10-24 10:43:48Z elixir_inter $
+<?php // $Id: answer.class.php 10110 2006-11-22 15:20:46Z develop-it $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -117,7 +117,7 @@ class Answer
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
 				
-		$sql="SELECT answer,correct,comment,ponderation,position FROM $TBL_ANSWER WHERE question_id='$questionId' ORDER BY position";			
+		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type FROM $TBL_ANSWER WHERE question_id='$questionId' ORDER BY position";			
 		
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -160,7 +160,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
 		
-		$sql="SELECT answer,correct,comment,ponderation,position " .
+		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type " .
 				"FROM $TBL_ANSWER " .
 				"WHERE question_id='$questionId' " .
 				"ORDER BY $field $order";

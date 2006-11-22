@@ -41,6 +41,9 @@
 	// set vars
 	$userId        = $_user['user_id'];
 	$questionId    = $_GET['modifyAnswers'];
+	
+	$questionId = 7;
+	
 	$objQuestion   = new Question();
 	$objQuestion->read($questionId);
 	
@@ -57,13 +60,14 @@
 	
 	$courseLang = $_course['language'];
 	$courseCode = $_course['sysCode'];
+	$coursePath = $_course['path'];
 	
 	// Query db for answers
 	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM `$TBL_ANSWERS` WHERE question_id = '$questionId' ORDER BY id";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	
 	// Init
-	$output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&dbNameGlu=$dbNameGlu&courseCode=$courseCode";
+	$output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&dbNameGlu=$dbNameGlu&courseCode=$coursePath";
 	$i = 0;
 	
 	while ($hotspot = mysql_fetch_array($result)) {
@@ -111,6 +115,7 @@
 		$output2 .= $coordinate."|";
 	}
 	
+	var_dump($_SESSION['exerciseResultCoordinates']);
 	// Output
 	$output .= "&p_hotspot_answers=".substr($output2,0,-1)."&done=done";
 	

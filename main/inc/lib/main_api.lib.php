@@ -492,7 +492,7 @@ function api_get_course_info()
 function api_sql_query($query, $file = '', $line = 0)
 {
 	$result = mysql_query($query);
-
+	
 	if ($line && !$result)
 	{
 		if (api_get_setting('server_type') !== 'test')

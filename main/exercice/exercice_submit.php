@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 9972 2006-11-14 14:44:37Z pcool $
+<?php // $Id: exercice_submit.php 10110 2006-11-22 15:20:46Z develop-it $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -92,6 +92,11 @@ if ( empty ( $formSent ) ) {
 if ( empty ( $exerciseResult ) ) {
     $exerciseResult = $_REQUEST['exerciseResult'];
 }
+
+if ( empty ( $exerciseResultCoordinates ) ) {
+    $exerciseResultCoordinates = $_REQUEST['exerciseResultCoordinates'];
+}
+
 if ( empty ( $exerciseType ) ) {
     $exerciseType = $_REQUEST['exerciseType'];
 }
@@ -128,6 +133,7 @@ if ($origin=='builder') {
 	if(isset($_SESSION['objAnswer']))		{ api_session_unregister('objAnswer');		unset($objAnswer);   }
 	if(isset($_SESSION['questionList']))	{ api_session_unregister('questionList');	unset($questionList); }
 	if(isset($_SESSION['exerciseResult']))	{ api_session_unregister('exerciseResult');	unset($exerciseResult); }
+	if(isset($_SESSION['exerciseResultCoordinates']))	{ api_session_unregister('exerciseResultCoordinates');	unset($exerciseResultCoordinates); }
 }
 
 // if the user has submitted the form
@@ -139,6 +145,7 @@ if($formSent)
     if(!is_array($exerciseResult))
     {
         $exerciseResult=array();
+        $exerciseResultCoordinates=array();
     }
 
     // if the user has answered at least one question
@@ -151,6 +158,11 @@ if($formSent)
             // $exerciseResult receives the content of the form.
             // Each choice of the student is stored into the array $choice
             $exerciseResult=$choice;
+            
+            if (isset($_POST['hotspot']))
+            {
+            	$exerciseResultCoordinates = $_POST['hotspot'];
+            }
         }
         else
         {
@@ -162,6 +174,11 @@ if($formSent)
             {
                 // stores the user answer into the array
                 $exerciseResult[$key]=$choice[$key];
+                
+                if (isset($_POST['hotspot']))
+                {
+                	$exerciseResultCoordinates[$key] = $_POST['hotspot'][$key];
+                }
             }
         }
         if($debug>0){echo str_repeat('&nbsp;',0).'$choice is an array - end'."<br />\n";}
@@ -169,6 +186,7 @@ if($formSent)
 
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
     api_session_register('exerciseResult');
+    api_session_register('exerciseResultCoordinates');
 
     // if it is the last question (only for a sequential exercise)
     if($exerciseType == 1 || $questionNum >= $nbrQuestions)
@@ -245,8 +263,8 @@ if(!$questionNum || $_POST['questionNum'])
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
-$htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../js/JavaScriptFlashGateway.js\"></script>
-					<script src=\"../js/hotspot.js\" type=\"text/javascript\"></script>					   
+$htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
+					<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>					   
 					<script language=\"JavaScript\" type=\"text/javascript\">
 					<!--
 					// -----------------------------------------------------------------------------

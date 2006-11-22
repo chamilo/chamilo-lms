@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10082 2006-11-21 19:08:15Z pcool $
+<?php // $Id: exercise_result.php 10110 2006-11-22 15:20:46Z develop-it $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -43,7 +43,6 @@
 		INIT SECTION
 ==============================================================================
 */
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');

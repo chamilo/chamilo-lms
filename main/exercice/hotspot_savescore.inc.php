@@ -62,10 +62,11 @@
 		
 	}
 	
-	$TBL_TRACK_E_HOTSPOT   = Database::get_statistic_table(STATISTIC_TRACK_E_HOTSPOTS);
+	$TBL_TRACK_E_HOTSPOT = Database::get_statistic_table(STATISTIC_TRACK_E_HOTSPOTS);
 	
 	// Save into db
 	$sql = "INSERT INTO $TBL_TRACK_E_HOTSPOT (`user_id` , `course_id` , `quiz_id` , `question_id` , `answer_id` , `correct` , `coordinate` ) VALUES ('".$_user['user_id']."', '$courseCode', '$exerciseId', '$questionId', '$answerId', '$hit', '$coordinates')";
+	
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	
 	// Save insert id into session if users changes answer.

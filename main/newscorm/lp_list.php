@@ -111,7 +111,7 @@ if(api_is_allowed_to_edit())
     <tr>
       <td style="padding-bottom: 15px;">' .
       	'<a href="'.$_SERVER['PHP_SELF'].'?action=add_lp">'.
-		'<img src="../img/scormbuilder.gif" border="0" align="absmiddle" alt="scormbuilder">'.get_lang('_add_learnpath').
+		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="scormbuilder">'.get_lang('_add_learnpath').
 		'</a>' .
 		str_repeat('&nbsp',10)."</td>".
        "<td>" .
@@ -121,7 +121,7 @@ if(api_is_allowed_to_edit())
 		'<form name="ext_upload" action="../upload/index.php" method="post">' .
 		'<input type="hidden" name="curdirpath" value="/">' .
 		'<input type="hidden" name="tool" value="'.TOOL_LEARNPATH.'">' .
-		'<img src="../img/scormbuilder.gif" border="0" align="absmiddle" alt="scormbuilder" style="margin-top:-10px;">'.
+		'<img src="../img/download_manager.gif" border="0" align="absmiddle" alt="scormbuilder" style="margin-top:-10px;">'.
 		'<input type="submit" name="upload" value="Upload">' .
 		'</form>'.
        "</td>" .
@@ -169,7 +169,7 @@ echo	'<td width="30%"><b>'.get_lang("Name").'</b></td>'."\n" .
 if (api_is_allowed_to_edit())
 {
   echo "<td><b>",get_lang("Description"),"</b></td>\n" .
-  		"<td><b>",get_lang("ExportShort"),"</b></td>\n",
+  		"<td width='9%'><b>",get_lang("ExportShort"),"</b></td>\n",
 	'<td width="25%"><b>',get_lang("Modify"),"</b></td>\n";
 }
 
@@ -191,11 +191,11 @@ if (is_array($flat_list))
 	
 		$url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
 		$name = $details['lp_name'];
-		$image='<img src="../img/scorm_logo.gif" border="0" align="absmiddle" alt="scorm">'."\n";
+		$image='<img src="../img/kcmdf.gif" border="0" align="absmiddle" alt="scorm">'."\n";
 	    $dsp_line =	'<tr align="center" class="'.$oddclass.'">'."\n" .
-        	'<td align="left" valign="middle">&nbsp;' .
-			'<a href="'.$url_start_lp.'" '.$style.'>' .
-			$image . '</a>&nbsp;<a href="'.$url_start_lp.'" '.$style.'>' . $name . '</a>' .
+        	'<td align="left" valign="top">' .
+			'<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_lp.'" '.$style.'>' .
+			$image . '</a></div><a href="'.$url_start_lp.'" '.$style.'>' . $name . '</a>' .
 			"</td>\n";
 	    //$dsp_desc='<td>'.$details['lp_desc'].'</td>'."\n";
 	    $dsp_desc = '';
@@ -209,7 +209,7 @@ if (is_array($flat_list))
 		$dsp_progress = '<td style="padding-top:1em;">'.learnpath::get_db_progress($id,api_get_user_id(),'both').'</td>';
 	    if(api_is_allowed_to_edit())
 	    {
-		    $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'</td>'."\n";
+		    $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'"><img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a></td>'."\n";
 			$fileExtension=explode('.',$dspFileName);
 			$fileExtension=strtolower($fileExtension[sizeof($fileExtension)-1]);
 			
@@ -218,26 +218,25 @@ if (is_array($flat_list))
 			if($details['lp_type']==1){
 				$dsp_export = '<td align="center">' .
 					//"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
-					"<img src=\"../img/save_zip.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
+					"<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					//"</a>" .
 					"";
 			}elseif($details['lp_type']==2){
 				$dsp_export = '<td align="center">' .
 					"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name,'strict').".zip'>" .
-					"<img src=\"../img/save_zip.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
+					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					"</a>" .
 					"";
 			}else{
 				$dsp_export = '<td align="center">' .
 					//"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
-					"<img src=\"../img/save_zip.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
+					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					//"</a>" .
 					"";
 			}			
 			/* edit title and description */
 			
-			$dsp_edit = '<td align="center">' .
-			'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'"><img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a>';
+			$dsp_edit = '<td align="center">';
 			
 			/* DELETE COMMAND */
 			$dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" " .
@@ -264,50 +263,50 @@ if (is_array($flat_list))
 			/* Default view mode settings (fullscreen/embedded) */
 			if($details['lp_view_mode'] == 'fullscreen'){
 				$dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
-						'<img src="scorm_fullscreen.gif" border="0" alt="View mode: embedded" title="Make mode embedded"/>' .
+						'<img src="../img/view_fullscreen.gif" border="0" alt="View mode: embedded" title="Make mode embedded"/>' .
 						'</a>';
 			}else{
 				$dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
-						'<img src="scorm_embed.gif" border="0" alt="View mode: fullscreen" title="Make mode fullscreen"/>' .
+						'<img src="../img/view_choose.gif" border="0" alt="View mode: fullscreen" title="Make mode fullscreen"/>' .
 						'</a>';
 			}
 			/* Increase SCORM recording */
 			if($details['lp_force_commit'] == 1){
 				$dsp_force_commit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_force_commit&lp_id='.$id.'">' .
-						'<img src="scorm_extra.gif" border="0" alt="Normal SCORM recordings" title="Make SCORM recordings normal"/>' .
+						'<img src="../img/clock.gif" border="0" alt="Normal SCORM recordings" title="Make SCORM recordings normal"/>' .
 						'</a>';
 			}else{
 				$dsp_force_commit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_force_commit&lp_id='.$id.'">' .
-						'<img src="scorm_normal.gif" border="0" alt="Extra SCORM recordings" title="Make SCORM recordings extra"/>' .
+						'<img src="../img/clock.gif" border="0" alt="Extra SCORM recordings" title="Make SCORM recordings extra"/>' .
 						'</a>';
 			}
 			if($details['lp_prevent_reinit']==1){
 				$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
-						'<img src="scorm_no_reinit.gif" border="0" alt="Allow reinit" title="Allow multiple attempts"/>' .
+						'<img src="../img/kaboodleloop.gif" border="0" alt="Allow reinit" title="Allow multiple attempts"/>' .
 						'</a>';
 			}else{
 				$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
-						'<img src="scorm_reinit.gif" border="0" alt="Prevent reinit" title="Prevent multiple attempts"/>' .
+						'<img src="../img/kaboodleloop.gif" border="0" alt="Prevent reinit" title="Prevent multiple attempts"/>' .
 						'</a>';
 			}
 			if($details['lp_type']==1){
-				$dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="scorm_build.gif" border="0" title="Build"></a>';
+				$dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/wizard.gif" border="0" title="Build"></a>';
 			}else{
-				$dsp_build = '<img src="scorm_build_disabled.gif" border="0" title="Build">';
+				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="Build">';
 			}
 			if($details['lp_scorm_debug']==1){
 				$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
-						'<img src="../img/info.gif" height="25px" width="25px" border="0" alt="Hide debug" title="Hide debug"/>' .
+						'<img src="../img/bug.gif" border="0" alt="Hide debug" title="Hide debug"/>' .
 						'</a>';
 			}else{
 				$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
-						'<img src="../img/info_na.gif" height="25px" width="25px" border="0" alt="Show debug" title="Show debug"/>' .
+						'<img src="../img/bug_gray.gif" border="0" alt="Show debug" title="Show debug"/>' .
 						'</a>';
 			}
 		
 	    }	// end if($is_allowedToEdit)
 	    //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
-	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible.$dsp_default_view.$dsp_force_commit.$dsp_build.$dsp_reinit.$dsp_debug;
+	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete;
 	    echo	"</tr>\n";
       
 	}	// end foreach ($flat_list)

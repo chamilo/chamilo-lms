@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: document.inc.php 10124 2006-11-22 17:19:37Z elixir_inter $
 
 /*
 ==============================================================================
@@ -123,7 +123,7 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 	//build download link (icon)
 	$forcedownload_link=($filetype=='folder')?$_SERVER['PHP_SELF'].'?action=downloadfolder&amp;path='.$url_path.$req_gid:$_SERVER['PHP_SELF'].'?action=download&amp;id='.$url_path.$req_gid;
 	//folder download or file download?
-	$forcedownload_icon=($filetype=='folder')?'save_zip.gif':'save.gif';
+	$forcedownload_icon=($filetype=='folder')?'save_zip.gif':'filesave.gif';
 	//prevent multiple clicks on zipped folder download
 	$prevent_multiple_click =($filetype=='folder')?" onclick=\"javascript:if(typeof clic_$dbl_click_id == 'undefined' || clic_$dbl_click_id == false) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"":'';
 	$target='_top';
@@ -167,7 +167,7 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
  */
 function build_document_icon_tag($type,$path)
 {
-	$icon='file.gif';
+	$icon='folder_document.gif';
 	if($type=='file')
 	{
 		$icon=choose_image(basename($path));
@@ -219,9 +219,9 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id)
 	$curdirpath = urlencode($curdirpath);
 	
 	$modify_icons = '<a href="edit_document.php?curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$gid_req.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-	$modify_icons .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$gid_req.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
-	$modify_icons .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$gid_req.'"><img src="../img/deplacer.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
-	$modify_icons .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$gid_req.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
+	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$gid_req.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
+	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$gid_req.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
+	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$gid_req.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
 	return $modify_icons;
 }
 

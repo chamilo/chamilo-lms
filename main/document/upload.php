@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 9985 2006-11-15 00:43:47Z pcool $
+<?php // $Id: upload.php 10124 2006-11-22 17:19:37Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -300,7 +300,7 @@ if(isset($_GET['createdir']))
 }
 else {	//give them a link to create a directory
 	?>
-	<p><a href="<?php echo $_SERVER['PHP_SELF']; ?>?path=<?php echo $path; ?>&amp;createdir=1"><img src="../img/new_folder.gif" border="0" align="absmiddle" alt ="" /> <?php echo(get_lang('CreateDir'));?></a></p>
+	<p><a href="<?php echo $_SERVER['PHP_SELF']; ?>?path=<?php echo $path; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" align="absmiddle" alt ="" /> <?php echo(get_lang('CreateDir'));?></a></p>
 	<?php
 }
 ?>

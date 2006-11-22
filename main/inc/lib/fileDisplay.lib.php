@@ -98,22 +98,22 @@ function choose_image($file_name)
 		$type['oo_impress'] = array('odp','sxi');
 		$type['oo_draw'   ] = array('odg','sxd');
 
-		$image['word'      ] = 'doc.gif';
-		$image['web'       ] = 'html.gif';
-		$image['image'     ] = 'gif.gif';
-		$image['audio'     ] = 'wav.gif';
-		$image['video'     ] = 'video.gif';
-		$image['excel'     ] = 'xls.gif';
-		$image['compressed'] = 'zip.gif';
-		$image['code'      ] = 'txt.gif';
-		$image['acrobat'   ] = 'pdf.gif';
-		$image['powerpoint'] = 'ppt.gif';
-		$image['flash'     ] = 'flash.gif';
-		$image['text'      ] = 'txt.gif';
-		$image['oo_writer' ] = 'odt.gif';
-		$image['oo_calc'   ] = 'ods.gif';
-		$image['oo_impress'] = 'odp.gif';
-		$image['oo_draw'   ] = 'odg.gif';
+		$image['word'      ] = 'doc_word.gif';//
+		$image['web'       ] = 'file_html.gif';//
+		$image['image'     ] = 'file_image.gif';//
+		$image['audio'     ] = 'file_sound.gif';
+		$image['video'     ] = 'film.gif';//
+		$image['excel'     ] = 'file_xls.gif';//
+		$image['compressed'] = 'file_zip.gif';//
+		$image['code'      ] = 'file_txt.gif';
+		$image['acrobat'   ] = 'file_pdf.gif';
+		$image['powerpoint'] = 'file_powerpoint.gif';//
+		$image['flash'     ] = 'file_flash.gif';//
+		$image['text'      ] = 'file_txt.gif';//
+		$image['oo_writer' ] = 'file_oo_writer.gif';//
+		$image['oo_calc'   ] = 'file_oo_calc.gif';//
+		$image['oo_impress'] = 'file_oo_impress.gif';//
+		$image['oo_draw'   ] = 'file_oo_draw.gif';
 	}
 
 	/* FUNCTION CORE */

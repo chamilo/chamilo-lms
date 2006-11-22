@@ -1,4 +1,4 @@
-<?php // $Id: document.php 10101 2006-11-22 12:42:53Z elixir_inter $
+<?php // $Id: document.php 10124 2006-11-22 17:19:37Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -597,7 +597,8 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 
 	<?php
 	echo "<div id=\"doc_links\">";
-
+	
+	
 	/* GO TO PARENT DIRECTORY */
 
 	if ($curdirpath!= '/'&& $curdirpath!=$group_properties['directory'])

@@ -109,24 +109,20 @@ if(api_is_allowed_to_edit())
   include('content_makers.inc.php');
   echo	'<table border="0" cellspacing="2" cellpadding="4">
     <tr>
-      <td style="padding-bottom: 15px;">' .
+      <td >' .
       	'<a href="'.$_SERVER['PHP_SELF'].'?action=add_lp">'.
-		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="scormbuilder">'.get_lang('_add_learnpath').
+		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="scormbuilder">&nbsp;'.get_lang('_add_learnpath').
 		'</a>' .
-		str_repeat('&nbsp',10)."</td>".
+		str_repeat('&nbsp',10).'</td>'.
        "<td>" .
    /*--------------------------------------
       UPLOAD SECTION - displays file upload box
      --------------------------------------*/
-		'<form name="ext_upload" action="../upload/index.php" method="post">' .
-		'<input type="hidden" name="curdirpath" value="/">' .
-		'<input type="hidden" name="tool" value="'.TOOL_LEARNPATH.'">' .
-		'<img src="../img/download_manager.gif" border="0" align="absmiddle" alt="scormbuilder" style="margin-top:-10px;">'.
-		'<input type="submit" name="upload" value="'.get_lang("UploadScorm").'">' .
-		'</form>'.
-       "</td>" .
+		'<a href="../upload/index.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/download_manager.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("UploadScorm").'</a>'.
+       '</td>' .
     "</tr>
   </table>";
+  
 }
 
 echo '<table width="100%" border="0" cellspacing="2" class="data_table">';

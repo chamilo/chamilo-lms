@@ -99,15 +99,15 @@ $noPHP_SELF=true;
 $max_filled_space = DocumentManager::get_course_quota();
 
 //what's the current path?
-if(isset($_POST['curdirpath'])) {
-	$path = $_POST['curdirpath'];
+if(isset($_REQUEST['curdirpath'])) {
+	$path = $_REQUEST['curdirpath'];
 }else{
 	$path = '/';
 }
 // set calling tool
-if(isset($_POST['tool'])) {
-	$my_tool = $_POST['tool'];
-	$_SESSION['my_tool'] = $_POST['tool'];
+if(isset($_REQUEST['tool'])) {
+	$my_tool = $_REQUEST['tool'];
+	$_SESSION['my_tool'] = $_REQUEST['tool'];
 }elseif(!empty($_SESSION['my_tool'])){
 	$my_tool = $_SESSION['my_tool'];
 }else{

@@ -296,7 +296,7 @@
 	
 				echo '<tr class="'.$s_css_class.'">
 						<td>
-					 		<a href="'.api_get_path(REL_CLARO_PATH).'tracking/courseLog.php?cidReq='.$a_course['code'].'">'.$a_course['title'].'</a></td>
+					 		<a href="'.api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?cidReq='.$a_course['code'].'">'.$a_course['title'].'</a></td>
 						<td>
 							'.$a_coach['tutor_name'].'
 						</td>

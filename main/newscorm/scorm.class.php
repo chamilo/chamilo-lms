@@ -382,7 +382,7 @@ class scorm extends learnpath {
 	     		//error_log('New LP - Converting name from '.$this->manifest_encoding.' to ISO-8859-1',0);
 	     	}
 			$sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib)" .
-					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 1, 'embedded', '".$this->manifest_encoding."','scorm_api.php')";
+					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php')";
 			if($this->debug>1){error_log('New LP - In import_manifest(), inserting path: '. $sql,0);}
 			$res = api_sql_query($sql,__FILE__,__LINE__);
 			$lp_id = Database::get_last_insert_id();

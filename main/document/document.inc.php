@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 10125 2006-11-22 17:30:33Z elixir_inter $
+<?php // $Id: document.inc.php 10126 2006-11-22 17:32:11Z elixir_inter $
 
 /*
 ==============================================================================
@@ -152,7 +152,7 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 		$url=$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&amp;curdirpath='.$url_path.$req_gid;
 	}
 	//the little download icon
-	$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'><img src="'.api_get_path(WEB_CODE_PATH).'img/'.$forcedownload_icon.'" alt="" /></a>';
+	$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'><img width="16" height="16" src="'.api_get_path(WEB_CODE_PATH).'img/'.$forcedownload_icon.'" alt="" /></a>';
 	
 	$tooltip_title = str_replace('?cidReq='.$_GET['cidReq'],'',basename($path));
 	return '<a href="'.$url.'" title="'.$tooltip_title.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;

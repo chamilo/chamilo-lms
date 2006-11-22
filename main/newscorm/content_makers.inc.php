@@ -39,5 +39,7 @@
 	29 => 'Thomson-NETg',
 	30 => 'U&I Learning',
 	31 => 'WebCT',
+	32 => 'Microsoft Powerpoint',
+	33 => 'Open Office Impress'
   );
 ?>

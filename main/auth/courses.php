@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 10082 2006-11-21 19:08:15Z pcool $
+<?php // $Id: courses.php 10115 2006-11-22 15:35:52Z edwandos $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -880,7 +880,8 @@ function display_course_icons($key, $number_of_courses, $course, $user_courses)
 		Display::display_icon('edit.gif',get_lang('Edit'));
 		echo "</a></td>";
 	}
-	echo "<td rowspan=\"2\" valign=\"top\">";
+	//ed: id grey added
+	echo "<td rowspan=\"2\" valign=\"top\" id=\"grey\">";
 	if ($course['status'] != 1)
 	{
 		if ($course['unsubscr'] == 1)
@@ -1069,10 +1070,12 @@ function get_user_course_categories()
  * @param string $text: the text that has to be written in grey
  * @return string: the text with the grey formatting
  * @todo move this to a stylesheet
+ * Added id grey to CSS
 */
 function display_info_text($text)
 {
-	echo "<font color=\"#808080\">" . $text . "</font>\n";
+	//echo "<font color=\"#808080\">" . $text . "</font>\n";
+	echo $text;
 }
 
 /**

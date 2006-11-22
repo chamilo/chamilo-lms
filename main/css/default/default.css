@@ -131,7 +131,7 @@ input[text] {font-size: 12px; }
 	margin: 0;
 }
 /********************************************************
- *  HEADER 1: Title, portal, organisation, course title	*
+ *  HEADER 1: Title, portal, organisation,  title	*
  ********************************************************/
 #header1 {
 	font-size: 12px;
@@ -156,7 +156,7 @@ input[text] {font-size: 12px; }
 	float: left;
 	font-weight: bold;
 }
-#my_courses {
+#my_s {
 	float: right;
 	font-weight: bold;
 }
@@ -392,7 +392,7 @@ border-left: solid 1px rgb(115,162,182);
 
 
 
-/* --- course navigation menu as a definition list  --- */
+/* ---  navigation menu as a definition list  --- */
 #toolnavbox {
 	margin: 0 0 0 10px;
 	padding: 0;
@@ -447,7 +447,7 @@ border-left: solid 1px rgb(115,162,182);
 	background: #fff;
 	color:#4171b5;
 }
-/* --- end of course navigation menu section  --- */
+/* --- end of  navigation menu section  --- */
 /*
 this lets the navigation menu appear to the left:
 #center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
@@ -507,9 +507,9 @@ input.liteoption {
 
 
 /*****************************************************
- * COURSE HOMEPAGE			                         *
+ *  HOMEPAGE			                         *
  *****************************************************/
-/* various sections in course-home.php file  */
+/* various sections in -home.php file  */
 #toolremove {
 	width: 40%;
 	color: #f00;
@@ -519,14 +519,19 @@ input.liteoption {
 	border: 2px solid #f00;
 }
 
-#courseintro { clear: both; width: 80%; margin: 10px auto;
+/* grey text */
+#grey{
+	color: #808080;
+}
+
+#intro { clear: both; width: 80%; margin: 10px auto;
  padding: 10px; border-bottom: 1px solid #4171B5;}
-#courseintro_icons { clear: both; width: 80%; margin: 10px auto;}
+#intro_icons { clear: both; width: 80%; margin: 10px auto;}
 
 .everybodyview { position: relative; /* to avoid the IE peekabo bug ?*/
  width: 80%; margin: 10px auto; padding: 10px;}
 
-.Authoringview,.courseadminview, .platformadminview {position: relative; width: 80%;
+.Authoringview,.adminview, .platformadminview {position: relative; width: 80%;
  margin: 25px auto 10px; padding: 10px; border: 1px solid #4171B5;}
 
 .viewcaption {position: relative; top: -20px; font-size: 12px;
@@ -927,7 +932,7 @@ div.admin_section h4 {
 	border-bottom: 1px solid gray;
 	width: 100%;
 }
-.user_course_category {
+.user__category {
 	background-color: #efefef;
 	border: 1px solid #666;
 	font-weight: bold;

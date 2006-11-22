@@ -78,6 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			$oAICC->set_maker($maker);
 			$oAICC->set_jslib('aicc_api.php');
 			break;
+		case 'ppt':
+			require_once('presentation.class.php');
+			$o_ppt = new presentation();
+			$o_ppt -> convert_presentation($_FILES['user_file']);
+				
+			break;
 		case '':
 		default:
 			return api_failure::set_failure('not_a_learning_path');

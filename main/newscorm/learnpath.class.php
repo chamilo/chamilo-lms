@@ -717,11 +717,11 @@ class learnpath {
     					"'local','')";
 
     			//if($this->debug>2){error_log('New LP - Inserting new lp '.$sql_insert,0);}
-
+				
     			$res_insert = api_sql_query($sql_insert);
 
 				$id = Database::get_last_insert_id();
-
+				
 				if($id>0){
 
 					return $id;
@@ -2010,7 +2010,7 @@ class learnpath {
 
      }
 	/**
-	 * Returns the package type ('scorm','aicc','scorm2004','dokeos',...)
+	 * Returns the package type ('scorm','aicc','scorm2004','dokeos','ppt'...)
 	 * 
 	 * Generally, the package provided is in the form of a zip file, so the function
 	 * has been written to test a zip file. If not a zip, the function will return the
@@ -2026,6 +2026,12 @@ class learnpath {
 		$file_info = pathinfo($file_name);
 		$filename = $file_info['basename'];//name including extension
 		$extension = $file_info['extension'];//extension only
+		
+		if(in_array($extension,array('ppt','odp')))
+		{
+			return 'ppt';
+		}
+		
 		$file_base_name = str_replace('.'.$extension,'',$filename); //filename without its extension
 	
 		$zipFile = new pclZip($file_path);

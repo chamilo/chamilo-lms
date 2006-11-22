@@ -1,5 +1,5 @@
 <?php
-// $Id: lost_password.lib.php 10082 2006-11-21 19:08:15Z pcool $ 
+// $Id: lost_password.lib.php 10114 2006-11-22 15:32:30Z pcool $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -75,7 +75,6 @@ function send_password_to_user($user, $success_msg)
 /*** By Olivier Cauberghe, UGent ***/
 function handle_encrypted_password($user)
 {
-	global $security_key;
 	global $charset;
 	global $_configuration;
 	$emailHeaders = get_email_headers(); // Email Headers
@@ -93,8 +92,8 @@ function handle_encrypted_password($user)
 //-----------------------------------------------------------------------------
 function get_secret_word($add)
 {
-	global $security_key;
-	return $secretword = md5($security_key.$add);
+	global $_configuration;
+	return $secretword = md5($_configuration['security_key'].$add);
 }
 //-----------------------------------------------------------------------------
 function reset_password($secret, $id)

@@ -397,8 +397,9 @@ foreach($courses_list as $db)
 			$incoherences ++;
 		}else{
 			$start_time = 0;
-			if(my_get_time($row['time'])>0){
-				$start_time = time()-my_get_time($row['time']);
+			$my_time = my_get_time($row['time']);
+			if($my_time>0){
+				$start_time = time()-$my_time;
 			}
 			$sql_ins_iv = "INSERT INTO $my_new_lp_item_view(" .
 					"lp_item_id," .
@@ -413,7 +414,7 @@ foreach($courses_list as $db)
 				"".$lp_view."," .
 				"1," .
 				"$start_time," .
-				"".my_get_time($row['time'])."," .
+				"".$my_time."," .
 				"".$row['score']."," .
 				"'".$row['status']."'" .
 				")";

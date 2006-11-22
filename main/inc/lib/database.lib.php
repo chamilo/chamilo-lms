@@ -217,7 +217,8 @@ class Database
 	*/
 	function get_database_glue()
 	{
-		return $GLOBALS["dbGlu"];
+		global $_configuration;
+		return $_configuration['db_glue'];
 	}
 	/**
 	*	Returns the database prefix.

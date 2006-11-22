@@ -77,14 +77,19 @@ class presentation extends learnpath {
 			
 			$this->lp_id = learnpath::add_lp($_course['id'], $learnpath_name,'','guess','manual');
 			$previous = 0;
+			$i = 0;
 			foreach($files as $file){
+				$i++;
 				$document_id = add_document($_course,$created_dir.'/'.$file,'file',filesize($base_work_dir.$created_dir.'/'.$file),$file);
 				if ($document_id){
 					//put the document in item_property update
 					api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],$to_group_id,$to_user_id);
 					
 					$infos = pathinfo($file);
-					$slide_name = substr($infos['basename'],0,strpos($infos['basename'],'.'));
+					//$slide_name = substr($infos['basename'],0,strpos($infos['basename'],'.'));
+					
+					$slide_name = 'slide'.str_repeat('0',2-strlen($i)).$i;
+					
 					$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, 0);
 					
 				}

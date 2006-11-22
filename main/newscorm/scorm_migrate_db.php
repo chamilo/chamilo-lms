@@ -825,7 +825,7 @@ foreach($scorms as $my_course_code => $paths_list )
 				"'$my_name'," .
 				"''," .
 				"'$my_path'," .
-				"1," .
+				"0," .
 				"'UTF-8'," .
 				"".$max_dsp_lp."," .
 				"'Unknown'," .

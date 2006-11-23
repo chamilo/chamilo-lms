@@ -275,7 +275,7 @@ function copydir($origine, $destination, $verbose = false)
  * Export a course to a zip file
  *
  * @param integer	$currentCourseID	needed		sysId Of course to be exported
- * @param boolean 	$verboseBackup		def FALSE	echo  step of work
+ * @param boolean 	$verbose_backup		def FALSE	echo  step of work
  * @param string	$ignore				def NONE 	// future param  for selected bloc to export.
  * @param string	$formats			def ALL		ALL,SQL,PHP,XML,CSV,XLS,HTML
  * 
@@ -305,97 +305,60 @@ function copydir($origine, $destination, $verbose = false)
 			 
 
  */
-function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = "", $formats = "ALL")
+function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "", $formats = "ALL")
 {
-		GLOBAL $error_msg, $error_no, $db, $archiveRepositorySys, $archiveRepositoryWeb, // from configs files
-		$appendCourse, $appendMainDb, //
-	$archiveName, $_configuration, $clarolineRepositorySys, $_course, $TABLEUSER, $TABLECOURSUSER, $TABLECOURS, $TABLEANNOUNCEMENT, $langArchiveName, $langArchiveLocation, $langSizeOf, $langDisk_free_space, $langCreateMissingDirectories, $langBUCourseDataOfMainBase, $langBUUsersInMainBase, $langBUAnnounceInMainBase, $langCopyDirectoryCourse, $langFileCopied, $langBackupOfDataBase, $langBuildTheCompressedFile;
-	////////////////////////////////////////////////////
-	// ****** 1° Check if all data needed are aivailable
-	// ****** 1° 1. $lang vars
-	if ($verboseBackup)
-	{
-		if ($langArchiveName == "")
-			$langArchiveName = "Archive name";
-		if ($langArchiveLocation == "")
-			$langArchiveLocation = "Archive location";
-		if ($langSizeOf == "")
-			$langSizeOf = "Size of";
-		if ($langDisk_free_space == "")
-			$langDisk_free_space = "Disk free";
-		if ($langCreateMissingDirectories == "")
-			$langCreateMissingDirectories = "Directory missing ";
-		if ($langBUCourseDataOfMainBase == "")
-			$langBUCourseDataOfMainBase = "Backup Course data";
-		if ($langBUUsersInMainBase == "")
-			$langBUUsersInMainBase = "Backup Users";
-		if ($langBUAnnounceInMainBase == "")
-			$langBUAnnounceInMainBase = "Backups announcement";
-		if ($langCopyDirectoryCourse == "")
-			$langCopyDirectoryCourse = "Copy files";
-		if ($langFileCopied == "")
-			$langFileCopied = "File copied";
-		if ($langBackupOfDataBase == "")
-			$langBackupOfDataBase = "Backup of database";
-		if ($langBuildTheCompressedFile == "")
-			$langBuildTheCompressedFile = "zip file";
-	}
+		global $error_msg, $error_no, $db, $archiveRepositorySys, $archiveRepositoryWeb, 
+				$appendCourse, $appendMainDb, $archiveName, $_configuration, $clarolineRepositorySys, $_course, $TABLEUSER, $TABLECOURSUSER, $TABLECOURS, $TABLEANNOUNCEMENT;
+	
 	// ****** 1° 2. params.
 	$errorCode = 0;
 	$stop = FALSE;
+
 	// ****** 1° 2. 1 params.needed
 	if (!isset ($exportedCourseId))
 	{
-		GLOBAL $error_msg, $error_no;
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] Course Id Missing";
 		$error_no["backup"][] = "1";
 		$stop = TRUE;
 	}
 	if (!isset ($_configuration['main_database']))
 	{
-		GLOBAL $error_msg, $error_no;
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] Main Db name is Missing";
 		$error_no["backup"][] = "2";
 		$stop = TRUE;
 	}
 	if (!isset ($archiveRepositorySys))
 	{
-		GLOBAL $error_msg, $error_no;
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] archive Path not found";
 		$error_no["backup"][] = "3";
 		$stop = TRUE;
 	}
 	if (!isset ($appendMainDb))
 	{
-		GLOBAL $error_msg, $error_no;
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] where place course datas from main db in archive";
 		$error_no["backup"][] = "4";
 		$stop = TRUE;
 	}
 	if (!isset ($appendCourse))
 	{
-		GLOBAL $error_msg, $error_no;
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] where place course datas in archive";
 		$error_no["backup"][] = "5";
 		$stop = TRUE;
 	}
 	if (!isset ($TABLECOURS))
 	{
-		GLOBAL $error_msg, $error_no;
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] name of table of course not defined";
 		$error_no["backup"][] = "6";
 		$stop = TRUE;
 	}
 	if (!isset ($TABLEUSER))
 	{
-		GLOBAL $error_msg, $error_no;
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] name of table of users not defined";
 		$error_no["backup"][] = "7";
 		$stop = TRUE;
 	}
 	if (!isset ($TABLECOURSUSER))
 	{
-		GLOBAL $error_msg, $error_no;
 		$error_msg["backup"][] = "[".basename(__FILE__)."][".__LINE__."] name of table of subscription of users in courses not defined";
 		$error_no["backup"][] = "8";
 		$stop = TRUE;
@@ -404,11 +367,13 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 	{
 		return false;
 	}
+	
 	// ****** 1° 2. 2 params.optional
-	if (!isset ($verboseBackup))
+	if (!isset ($verbose_backup))
 	{
-		$verboseBackup = false;
+		$verbose_backup = false;
 	}
+	
 	// ****** 1° 3. check if course exist
 	//  not  done
 	//////////////////////////////////////////////
@@ -430,32 +395,32 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 	$systemFileNameOfReadMe = "readme.txt";
 	$systemFileNameOfarchiveLog = "readme.txt";
 	###################
-	if ($verboseBackup)
+	if ($verbose_backup)
 	{
-		echo "<hr><u>", $langArchiveName, "</u> : ", "<strong>", basename($systemFileNameOfArchive), "</strong><br><u>", $langArchiveLocation, "</u> : ", "<strong>", realpath($systemFileNameOfArchive), "</strong><br><u>", $langSizeOf, " ", realpath("../../".$exportedCourseId."/"), "</u> : ", "<strong>", DirSize("../../".$exportedCourseId."/"), "</strong> bytes <br>";
+		echo "<hr><u>", get_lang('ArchiveName'), "</u> : ", "<strong>", basename($systemFileNameOfArchive), "</strong><br><u>", get_lang('ArchiveLocation'), "</u> : ", "<strong>", realpath($systemFileNameOfArchive), "</strong><br><u>", get_lang('SizeOf'), " ", realpath("../../".$exportedCourseId."/"), "</u> : ", "<strong>", DirSize("../../".$exportedCourseId."/"), "</strong> bytes <br>";
 		if (function_exists(diskfreespace))
-			echo "<u>".$langDisk_free_space."</u> : <strong>".diskfreespace("/")."</strong> bytes";
-		echo "<hr>";
+			echo "<u>".get_lang('DiskFreeSpace')."</u> : <strong>".diskfreespace("/")."</strong> bytes";
+		echo "<hr />";
 	}
-	mkpath($archiveDirOriginalDocs.$appendMainDb, $verboseBackup);
-	mkpath($archiveDirHtml.$appendMainDb, $verboseBackup);
-	mkpath($archiveDirCsv.$appendMainDb, $verboseBackup);
-	mkpath($archiveDirXml.$appendMainDb, $verboseBackup);
-	mkpath($archiveDirPhp.$appendMainDb, $verboseBackup);
-	mkpath($archiveDirLog.$appendMainDb, $verboseBackup);
-	mkpath($archiveDirSql.$appendMainDb, $verboseBackup);
-	mkpath($archiveDirOriginalDocs.$appendCourse, $verboseBackup);
-	mkpath($archiveDirHtml.$appendCourse, $verboseBackup);
-	mkpath($archiveDirCsv.$appendCourse, $verboseBackup);
-	mkpath($archiveDirXml.$appendCourse, $verboseBackup);
-	mkpath($archiveDirPhp.$appendCourse, $verboseBackup);
-	mkpath($archiveDirLog.$appendCourse, $verboseBackup);
-	mkpath($archiveDirSql.$appendCourse, $verboseBackup);
+	mkpath($archiveDirOriginalDocs.$appendMainDb, $verbose_backup);
+	mkpath($archiveDirHtml.$appendMainDb, $verbose_backup);
+	mkpath($archiveDirCsv.$appendMainDb, $verbose_backup);
+	mkpath($archiveDirXml.$appendMainDb, $verbose_backup);
+	mkpath($archiveDirPhp.$appendMainDb, $verbose_backup);
+	mkpath($archiveDirLog.$appendMainDb, $verbose_backup);
+	mkpath($archiveDirSql.$appendMainDb, $verbose_backup);
+	mkpath($archiveDirOriginalDocs.$appendCourse, $verbose_backup);
+	mkpath($archiveDirHtml.$appendCourse, $verbose_backup);
+	mkpath($archiveDirCsv.$appendCourse, $verbose_backup);
+	mkpath($archiveDirXml.$appendCourse, $verbose_backup);
+	mkpath($archiveDirPhp.$appendCourse, $verbose_backup);
+	mkpath($archiveDirLog.$appendCourse, $verbose_backup);
+	mkpath($archiveDirSql.$appendCourse, $verbose_backup);
 	$dirCourBase = $archiveDirSqlCourse;
 	$dirMainBase = $archiveDirSqlMainDb;
 	/////////////////////////////////////////////////////////////////////////
 	// ****** 3° Build exported element and Fill  the archive repository tree
-	if ($verboseBackup)
+	if ($verbose_backup)
 		echo "
 				build config file
 				<hr>";
@@ -491,10 +456,10 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 	// ********************************************************************
 	//  info  about cours
 	// ********************************************************************
-	if ($verboseBackup)
+	if ($verbose_backup)
 		echo "
 				<LI>
-				".$langBUCourseDataOfMainBase."  ".$exportedCourseId."
+				".get_lang('BUCourseDataOfMainBase')."  ".$exportedCourseId."
 				<HR>
 				<PRE>";
 	$sqlInsertCourse = "
@@ -530,8 +495,10 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 		#	".$sqlInsertCourse."
 		#------------------------
 			";
-	if ($verboseBackup)
+	if ($verbose_backup)
+	{
 		echo "</PRE>";
+	}
 	$fcoursql = fopen($archiveDirSql.$appendMainDb."course.sql", "w");
 	fwrite($fcoursql, $sqlInsertCourse);
 	fclose($fcoursql);
@@ -547,10 +514,10 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 	// ********************************************************************
 	//	if ($backupUser )
 	{
-		if ($verboseBackup)
+		if ($verbose_backup)
 			echo "
 								<LI>
-									".$langBUUsersInMainBase." ".$exportedCourseId."
+									".get_lang('BUUsersInMainBase')." ".$exportedCourseId."
 									<hR>
 								<PRE>";
 		// recup users
@@ -622,11 +589,15 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 		}
 		else
 		{
-			if ($verboseBackup)
+			if ($verbose_backup)
+			{
 				echo "<HR><div align=\"center\">NO user in this course !!!!</div><HR>";
+			}
 		}
-		if ($verboseBackup)
+		if ($verbose_backup)
+		{
 			echo "</PRE>";
+		}
 	}
 	/*  End  of  backup user */
 	if ($saveAnnouncement)
@@ -634,12 +605,14 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 		// ********************************************************************
 		//  info  about announcment
 		// ********************************************************************
-		if ($verboseBackup)
+		if ($verbose_backup)
+		{
 			echo "
 							<LI>
-								".$langBUAnnounceInMainBase." ".$exportedCourseId."
+								".get_lang('BUAnnounceInMainBase')." ".$exportedCourseId."
 								<hR>
 							<PRE>";
+		}
 		// recup annonce
 		$sqlAnnounceOfTheCourse = "
 				SELECT
@@ -686,8 +659,10 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 			$sqlInsertAnn .= ";";
 			$htmlInsertAnn .= "\t</TR>\n";
 		}
-		if ($verboseBackup)
+		if ($verbose_backup)
+		{
 			echo "</PRE>";
+		}
 		$htmlInsertAnn .= "</TABLE>\n";
 		$stringConfig .= "
 				#INSERT ANNOUNCE
@@ -707,17 +682,17 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 		/*  End  of  backup Annonces */
 	}
 	// we can copy file of course
-	if ($verboseBackup)
-		echo "
-						<LI>
-							".$langCopyDirectoryCourse;
-	$nbFiles = copydir(api_get_path(SYS_COURSE_PATH).$_course['path'], $archiveDirOriginalDocs.$appendCourse, $verboseBackup);
-	if ($verboseBackup)
+	if ($verbose_backup)
+	{
+		echo '<li>'.get_lang('CopyDirectoryCourse');
+	}
+	$nbFiles = copydir(api_get_path(SYS_COURSE_PATH).$_course['path'], $archiveDirOriginalDocs.$appendCourse, $verbose_backup);
+	if ($verbose_backup)
 		echo "
 							<strong>
 								".$nbFiles."
 							</strong>
-							".$langFileCopied."
+							".get_lang('FileCopied')."
 							<br>
 						</li>";
 	$stringConfig .= "
@@ -726,44 +701,44 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 	// Copy of  DB course
 	// with mysqldump
 	// ********************************************************************
-	if ($verboseBackup)
+	if ($verbose_backup)
 		echo "
 						<LI>
-							".$langBackupOfDataBase." ".$exportedCourseId."  (SQL)
+							".get_lang('BackupOfDataBase')." ".$exportedCourseId."  (SQL)
 							<hr>";
-	backupDatabase($db, $exportedCourseId, true, true, 'SQL', $archiveDirSql.$appendCourse, true, $verboseBackup);
-	if ($verboseBackup)
-		echo "
-						</LI>
-						<LI>
-							".$langBackupOfDataBase." ".$exportedCourseId."  (PHP)
-							<hr>";
-	backupDatabase($db, $exportedCourseId, true, true, 'PHP', $archiveDirPhp.$appendCourse, true, $verboseBackup);
-	if ($verboseBackup)
+	backupDatabase($db, $exportedCourseId, true, true, 'SQL', $archiveDirSql.$appendCourse, true, $verbose_backup);
+	if ($verbose_backup)
 		echo "
 						</LI>
 						<LI>
-							".$langBackupOfDataBase." ".$exportedCourseId."  (CSV)
+							".get_lang('BackupOfDataBase')." ".$exportedCourseId."  (PHP)
 							<hr>";
-	backupDatabase($db, $exportedCourseId, true, true, 'CSV', $archiveDirCsv.$appendCourse, true, $verboseBackup);
-	if ($verboseBackup)
+	backupDatabase($db, $exportedCourseId, true, true, 'PHP', $archiveDirPhp.$appendCourse, true, $verbose_backup);
+	if ($verbose_backup)
+		echo "
+						</LI>
+						<LI>
+							".get_lang('BackupOfDataBase')." ".$exportedCourseId."  (CSV)
+							<hr>";
+	backupDatabase($db, $exportedCourseId, true, true, 'CSV', $archiveDirCsv.$appendCourse, true, $verbose_backup);
+	if ($verbose_backup)
 		echo "
 						<LI>
-							".$langBackupOfDataBase." ".$exportedCourseId."  (HTML)
+							".get_lang('BackupOfDataBase')." ".$exportedCourseId."  (HTML)
 							<hr>";
-	backupDatabase($db, $exportedCourseId, true, true, 'HTML', $archiveDirHtml.$appendCourse, true, $verboseBackup);
-	if ($verboseBackup)
+	backupDatabase($db, $exportedCourseId, true, true, 'HTML', $archiveDirHtml.$appendCourse, true, $verbose_backup);
+	if ($verbose_backup)
 		echo "
 						<LI>
-							".$langBackupOfDataBase." ".$exportedCourseId."  (XML)
+							".get_lang('BackupOfDataBase')." ".$exportedCourseId."  (XML)
 							<hr>";
-	backupDatabase($db, $exportedCourseId, true, true, 'XML', $archiveDirXml.$appendCourse, true, $verboseBackup);
-	if ($verboseBackup)
+	backupDatabase($db, $exportedCourseId, true, true, 'XML', $archiveDirXml.$appendCourse, true, $verbose_backup);
+	if ($verbose_backup)
 		echo "
 						<LI>
-							".$langBackupOfDataBase." ".$exportedCourseId."  (LOG)
+							".get_lang('BackupOfDataBase')." ".$exportedCourseId."  (LOG)
 							<hr>";
-	backupDatabase($db, $exportedCourseId, true, true, 'LOG', $archiveDirLog.$appendCourse, true, $verboseBackup);
+	backupDatabase($db, $exportedCourseId, true, true, 'LOG', $archiveDirLog.$appendCourse, true, $verbose_backup);
 	// ********************************************************************
 	// Copy of DB course
 	// with mysqldump
@@ -771,7 +746,7 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 	$fdesc = fopen($archiveDir.$systemFileNameOfArchive, "w");
 	fwrite($fdesc, $stringConfig);
 	fclose($fdesc);
-	if ($verboseBackup)
+	if ($verbose_backup)
 		echo "
 						</LI>
 					</OL>
@@ -800,33 +775,12 @@ function makeTheBackup($exportedCourseId, $verboseBackup = "FALSE", $ignore = ""
 				echo "<br>";
 			}
 		$pathToArchive = $archiveRepositoryWeb.$archiveFileName;
-		if ($verboseBackup)
-			echo "<hr>".$langBuildTheCompressedFile;
+		if ($verbose_backup)
+		{
+			echo '<hr>'.get_lang('BuildTheCompressedFile');
+		}
 		//		removeDir($archivePath);
 	}
-?>
-	<!--
-	<hr>
-	3° - Si demandé suppression des éléments sources qui viennent d'être archivés
-	<font color="#FF0000">
-		non réalisé
-	</font>
-	-->
-	<?php
-
-
 	return 1;
 } // function makeTheBackup()
-/**
- * @deprecated Function not in use
- */
-function setValueIfNotInSession($varname, $value)
-{
-	global $$varname, $_SESSION;
-	if (!isset ($_SESSION[$varname]))
-	{
-		$$varname = $value;
-		api_session_register($varname);
-	}
-}
 ?>

@@ -339,14 +339,7 @@ class Database
 		$result = $result['isocode'];
 		return $result;
 	}
-	/**
-	* Returns the name of the login table of the stats database.
-	* @deprecated use Database::get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
-	*/
-	function get_statistic_track_e_login_table()
-	{
-		return Database::get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
-	}
+
 	/**
 	* Returns the name of the main table of the SCORM database.
 	* @deprecated use Database::get_scorm_table(SCORM_MAIN_TABLE);
@@ -377,18 +370,6 @@ class Database
 	function get_course_list()
 	{
 		$table = Database::get_main_table(MAIN_COURSE_TABLE);
-		$sql_query = "SELECT * FROM $table";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-		$result = api_store_result($sql_result);
-		return $result;
-	}
-	/**
-	* @return a list (array) of all users.
-	* @deprecated This function isn't used anywhere in the code.
-	*/
-	function get_user_list()
-	{
-		$table = Database::get_main_table(MAIN_USER_TABLE);
 		$sql_query = "SELECT * FROM $table";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = api_store_result($sql_result);
@@ -497,16 +478,6 @@ class Database
 	}
 	
 	
-	/**
-	* Changes the title of a course.
-	* @deprecated Function not in use
-	*/
-	function update_course_title($course_code, $new_title)
-	{
-		$table = Database::get_main_table(MAIN_COURSE_TABLE);
-		$sql_query = "UPDATE $table SET `title` = '$new_title' WHERE `code` = '$course_code' LIMIT 1";
-		api_sql_query($sql_query, __FILE__, __LINE__);
-	}
 	/*
 	-----------------------------------------------------------------------------
 		Private Functions

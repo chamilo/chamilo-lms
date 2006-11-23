@@ -497,38 +497,4 @@ function buildTabDefcon($array_of_results)
 	}
 	echo "</table>\n";
 }
-
-/**
- * @deprecated use format_locale_date in text.lib.php - 19-dec-2005
- */
-function dateLocalizer($formatOfDate, $timestamp = -1) //PMAInspiration :)
-{
-	return format_locale_date($formatOfDate, $timestamp = -1);
-}
-
-/**
- * changeResultOfVisibility($array_of_results)
- * @author Christophe Gesché <gesche@ipm.ucl.ac.be>
- * @param array_of_results
- * @desc        complete the content of visibility column a with the literal meaning
- */
-function changeResultOfVisibility($array_of_results)
-{
-	$visibility_label = array(
-		0 => 'closed - hide',
-		1 => 'open - hide',
-		2 => 'open - visible',
-		3 => 'closed - visible',
-	);
-
-	if (is_array($array_of_results))
-	{
-		for($j = 0 ; $j < count($array_of_results) ; $j++)
-		{
-			$array_of_results[$j][0] = $array_of_results[$j][0].' <small>('.$visibility_label[$array_of_results[$j][0]].')</small>';
-		}
-	}
-
-	return $array_of_results;
-}
 ?>

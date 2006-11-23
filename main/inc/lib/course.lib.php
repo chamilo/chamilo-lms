@@ -66,7 +66,6 @@
 	CourseManager::get_target_of_linked_course($virtual_course_code)
 
 	TITLE AND CODE FUNCTIONS
-	DEPRECATED CourseManager::determine_course_title($user_id, $_cid, $_course)
 	CourseManager::determine_course_title_from_course_info($user_id, $course_info)
 	CourseManager::create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list)
 	CourseManager::create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list)
@@ -227,18 +226,6 @@ class CourseManager
 		return $result["status"];
 	}
 
-	/**
-	* Change the status of a user in a course, status can be COURSEMANAGER or STUDENT.
-	* @deprecated Function not in use
-	*/
-	function set_user_in_course_status($user_id, $course_code, $status)
-	{
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-		$sql_query = "UPDATE $course_user_table SET status = '$status' WHERE `course_code` = '$course_code' AND `user_id` = '$user_id'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-		$result = mysql_fetch_array($sql_result);
-		return $result["status"];
-	}
 
 	/**
 	 * Unsubscribe one or more users from a course
@@ -602,77 +589,6 @@ class CourseManager
 		}
 
 		return $result_array;
-	}
-
-	/**
-	 * @deprecated	 use	  determine_course_title_from_course_info($user_id,
-	 * $course_info) instead 	Declares global $_course
-		*/
-	function determine_course_title($user_id, $_cid, $_course)
-	{
-		global $_course;
-		$real_course_code = $_course['sysCode'];
-		$real_course_info = Database :: get_course_info($real_course_code);
-		$real_course_name = $real_course_info["title"];
-		$real_course_visual_code = $real_course_info["visual_code"];
-
-		//is the user registered in the real course?
-		$table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-		$sql_query = "SELECT * FROM $table WHERE `user_id` = '$user_id' AND `course_code` = '$real_course_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-		$result = mysql_fetch_array($sql_result);
-
-		if (!isset ($result) || empty ($result))
-		{
-			$user_is_registered_in_real_course = false;
-		}
-		else
-		{
-			$user_is_registered_in_real_course = true;
-		}
-		//get a list of virtual courses linked to the current real course
-		//and to which the current user is subscribed
-
-		$user_subscribed_virtual_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code);
-
-		if (count($user_subscribed_virtual_course_list) > 0)
-		{
-			$virtual_courses_exist = true;
-		}
-		else
-		{
-			$virtual_courses_exist = false;
-		}
-
-		//now determine course code and name
-
-		if ($user_is_registered_in_real_course && $virtual_courses_exist)
-		{
-			$_course["name"] = CourseManager :: create_combined_name($user_is_registered_in_real_course, $real_course_name, $user_subscribed_virtual_course_list);
-			$_course['official_code'] = CourseManager :: create_combined_code($user_is_registered_in_real_course, $real_course_visual_code, $user_subscribed_virtual_course_list);
-		}
-		else
-			if ($user_is_registered_in_real_course)
-			{
-				//course name remains real course name
-				$_course["name"] = $real_course_name;
-				$_course['official_code'] = $real_course_visual_code;
-			}
-			else
-				if ($virtual_courses_exist)
-				{
-					$_course["name"] = CourseManager :: create_combined_name($user_is_registered_in_real_course, $real_course_name, $user_subscribed_virtual_course_list);
-					$_course['official_code'] = CourseManager :: create_combined_code($user_is_registered_in_real_course, $real_course_visual_code, $user_subscribed_virtual_course_list);
-				}
-				else
-				{
-					//course name remains real course name
-					$_course["name"] = $real_course_name;
-					$_course['official_code'] = $real_course_visual_code;
-				}
-
-		$result_title = $_course["name"];
-		return $result_title;
 	}
 
 	/**

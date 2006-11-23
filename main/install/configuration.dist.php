@@ -131,17 +131,10 @@ $phpMyAdminPath              							= '';
 // $extAuthSource["ldap"]["newUser"]=$clarolineRepositorySys."auth/ldap/newUser.php";
 
 //============================================================================
-//   Language settings
-//============================================================================
-// Available Languages : look at the "lang" directory
-$platformLanguage   									= '{PLATFORM_LANGUAGE}';
-$language           									= $platformLanguage;
-
-//============================================================================
 //   Misc. settings
 //============================================================================
 // Verbose backup
-$verboseBackup      									= false;
+$_configuration['verbose_backup']						= false;
 // security word for password recovery
 $_configuration['security_key']      					= '{SECURITY_KEY}';
 // Settings for new and future features

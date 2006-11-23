@@ -325,9 +325,9 @@ else
 $user_language = $_GET["language"];
 
 if ($_POST["language_list"])
-	{
+{
 	$user_language = str_replace("index.php?language=","",$_POST["language_list"]);
-	}
+}
 	
 // Checking if we have a valid language. If not we set it to the platform language. 
 $valid_languages=api_get_languages();

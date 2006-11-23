@@ -67,7 +67,8 @@ class Statistics
 	{
 		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
-		$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(mysql_real_escape_string($status))." AND cu.course_code = c.code";
+		$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+		$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(mysql_real_escape_string($status))." ";
 		if (isset ($category_code))
 		{
 			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(mysql_real_escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".mysql_real_escape_string($category_code)."'";

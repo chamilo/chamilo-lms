@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 10028 2006-11-17 10:26:07Z pcool $
+// $Id: settings.php 10166 2006-11-23 12:52:11Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -40,14 +40,15 @@
 		INIT SECTION
 ==============================================================================
 */
-// setting the section
-$this_section = SECTION_PLATFORM_ADMIN;
-
 // stating the language file
 $langFile = 'admin';
 
 // including some necessary dokeos files
 include_once ('../inc/global.inc.php');
+
+// setting the section
+$this_section = SECTION_PLATFORM_ADMIN;
+
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 // Access restrictions

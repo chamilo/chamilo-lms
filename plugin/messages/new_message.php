@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 10173 2006-11-23 13:15:44Z evie_em $
+<?php // $Id: new_message.php 10175 2006-11-23 13:25:10Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -127,6 +127,21 @@ function manage_form($default, $select_from_user_list)
 	$form->add_html_editor('content', get_lang('Content'));
 	$form->addElement('submit', 'compose', get_lang('Ok'));
 	$form->setDefaults($default);
+	
+	if( $form->validate() )
+	{
+		//all is well, send the message
+		$id_tmp = $_SESSION['_uid'].$_POST['user_list'].date('d-D-w-m-Y-H-s').
+					microtime().rand();
+		$id_msg = md5($id_tmp);
+		$query = "INSERT INTO `".MESSAGES_DATABASE."` ( `id`, `id_sender`, `id_receiver`, `status`, `date`, `title`, `content` ) ".
+				 " VALUES (".
+		 		 "' ".$id_msg ."' , '".$_SESSION['_uid']."', '".$_POST['user_list']."', '1', '".date('Y-m-d H:i:s')."','".$_POST['title']."','".$_POST['content']."'".
+		 		 ");";
+		@api_sql_query($query,__FILE__,__LINE__);
+		display_success_message($_POST['user_list']);
+	}
+	
 	$form->display();
 }
 
@@ -159,15 +174,9 @@ else
 {
 	if(isset($_SESSION['_uid']) && isset($_POST['user_list']) && isset($_POST['content']))
 	{
-		$id_tmp = $_SESSION['_uid'].$_POST['user_list'].date('d-D-w-m-Y-H-s').
-					microtime().rand();
-		$id_msg = md5($id_tmp);
-		$query = "INSERT INTO `".MESSAGES_DATABASE."` ( `id`, `id_sender`, `id_receiver`, `status`, `date`, `title`, `content` ) ".
-				 " VALUES (".
-		 		 "' ".$id_msg ."' , '".$_SESSION['_uid']."', '".$_POST['user_list']."', '1', '".date('Y-m-d H:i:s')."','".$_POST['title']."','".$_POST['content']."'".
-		 		 ");";
-		@api_sql_query($query,__FILE__,__LINE__);
-		display_success_message($_POST['user_list']);
+		$default['title'] = $_POST['title'];
+		$default['user_list'] = $_POST['user_list'];
+		manage_form($default);
 	}
 	else
 		Display::display_error_message(get_lang('ErrorSendingMessage'));

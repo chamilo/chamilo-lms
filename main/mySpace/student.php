@@ -389,7 +389,7 @@ ob_start();
 			
 			if($a_current_student["teacher"]==true){
 							
-				echo '<td align="center"><a href="coaches.php?id_student='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'members.gif" alt="'.get_lang("StudentTutors").'" title="'.get_lang("StudentTutors").'"></a>&nbsp;<a href="cours.php?type=student&user_id='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'course.gif" alt="'.get_lang("StudentCourses").'" title="'.get_lang("StudentCourses").'"></a>&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_current_student[0].'#sessionSuivie"><img src="'.api_get_path(WEB_IMG_PATH).'agenda.gif" alt="'.get_lang("StudentSessions").'" title="'.get_lang("StudentSessions").'"></a>';
+				echo '<td align="center"><a href="coaches.php?id_student='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'coachs.gif" alt="'.get_lang("StudentTutors").'" title="'.get_lang("StudentTutors").'"></a>&nbsp;<a href="cours.php?type=student&user_id='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'course.gif" alt="'.get_lang("StudentCourses").'" title="'.get_lang("StudentCourses").'"></a>&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_current_student[0].'#sessionSuivie"><img src="'.api_get_path(WEB_IMG_PATH).'agenda.gif" alt="'.get_lang("StudentSessions").'" title="'.get_lang("StudentSessions").'"></a>';
 				
 			}
 			else{

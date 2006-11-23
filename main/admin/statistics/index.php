@@ -26,27 +26,26 @@
 ==============================================================================
 */
 
-
- Header("Cache-Control: must-revalidate");
-
- $offset = 60 * 3;
- $ExpStr = "Expires: " . gmdate("D, d M Y H:i:s", time() + $offset) . " GMT";
- Header($ExpStr);
-
 $langFile=array('admin','tracking');
 $cidReset = true;
 
 include('../../inc/global.inc.php');
 api_protect_admin_script();
-require_once ('statistics.lib.php');
 
 $interbreadcrumb[] = array ("url" => "../index.php", "name" => get_lang('AdministrationTools'));
-
-
 
 $tool_name = get_lang('ToolName');
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
+
+if(!$_configuration['tracking_enabled'])
+{
+	Display::display_warning_message(get_lang('TrackingDisabled'));
+	Display::display_footer();
+	exit;
+}
+require_once ('statistics.lib.php');
+
 
 $strCourse  = get_lang('Courses');
 $strUsers = get_lang('Users');

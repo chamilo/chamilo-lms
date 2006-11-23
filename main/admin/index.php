@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10118 2006-11-22 16:14:01Z NushiFirefox $
+<?php // $Id: index.php 10158 2006-11-23 11:28:37Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -29,7 +29,7 @@
 ==============================================================================
 */
 
-$langFile='admin';
+$langFile=array('admin','tracking');
 
 $cidReset=true;
 
@@ -70,7 +70,7 @@ if ($_POST['Register'])
 	</form></li>
 	<li>
 <a href="user_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a>
-	
+
 </li>
 <li><a href="user_list.php"><?php echo get_lang('UserList') ?></a></li>
 <li><a href="user_add.php"><?php echo get_lang('AddUsers') ?></a></li>
@@ -88,7 +88,7 @@ if ($_POST['Register'])
 	</form></li>
 	<li>
 	<a href="course_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a>
-	
+
 </li>
 <li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
 <li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
@@ -117,7 +117,7 @@ if ($_POST['Register'])
   <li><a href="configure_extensions.php?display=search"><?php echo get_lang('SearchEngine'); ?></a></li>
   <li><a href="configure_extensions.php?display=serverstats"><?php echo get_lang('ServerStatistics'); ?></a></li>
   <li><a href="configure_extensions.php?display=bandwidthstats"><?php echo get_lang('BandWidthStatistics'); ?></a></li>
-  <li><a href="../statistics/index.php"><?php echo get_lang('Statistics_DokeosStatistics'); ?> </a></li>
+  <li><a href="statistics/index.php"><?php echo get_lang('ToolName'); ?> </a></li>
   <?php if(!empty($phpMyAdminPath)): ?>
   <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
   <?php endif; ?>
@@ -213,7 +213,7 @@ function version_check()
 	{
 		$return = '';
 		$return .= '<form action="'.$_SERVER['PHP_SELF'].'" id="VersionCheck" name="VersionCheck" method="post">';
-		$return .= get_lang('VersionCheckExplanation'); 
+		$return .= get_lang('VersionCheckExplanation');
 		$return .= '<input type="checkbox" name="donotlistcampus" value="1" id="checkbox" /> Do not display my campus in the list of Dokeos platforms';
 		$return .= '<input type="submit" name="Register" value="Enable Version Check" id="register" />';
 		$return .= '</form>';

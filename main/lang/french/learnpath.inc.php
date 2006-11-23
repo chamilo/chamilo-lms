@@ -87,4 +87,5 @@ $langItemMissing1 = "Il y avait un";
 $langItemMissing2 = "page (étape) ici dans le parcours pédagogique original.";
 $langDone = "Réalisé";
 $langNoItemSelected = "Pour afficher un élément dans cette zone, veuillez cliquer sur un élément du menu situé à gauche";
+$langUploadScorm = "Import SCORM, AICC, PPT and ODP";
 ?>

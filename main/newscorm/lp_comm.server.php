@@ -343,7 +343,6 @@ function start_timer()
 {
 	$objResponse = new xajaxResponse();
 	$time = time();
-	error_log('assigning '.$time.' to timer ',0);	
 	$objResponse->addScript("asset_timer='$time';asset_timer_total=0;");
 	return $objResponse;
 }

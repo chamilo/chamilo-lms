@@ -67,6 +67,10 @@ $lp_item_id = $_SESSION['oLP']->get_current_item_id();
 //$lp_item_id = learnpath::escape_string($_GET['item_id']);
 //$_SESSION['oLP']->set_current_item($lp_item_id); // already done by lp_controller.php
 
+//Prepare variables for the test tool (just in case) - honestly, this should disappear later on
+$_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();
+api_session_unregister($exerciseResult);
+
 /**
  * Get a link to the corresponding document
  */

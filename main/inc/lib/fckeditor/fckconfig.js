@@ -31,7 +31,7 @@ FCKConfig.FullPage = false ;
 FCKConfig.Debug = false ;
 FCKConfig.AllowQueryStringDebug = true ;
 
-FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/default/' ;
+FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/office2003/' ;
 
 FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
 
@@ -76,20 +76,37 @@ FCKConfig.PreserveSessionOnFileBrowser = false ;
 FCKConfig.FloatingPanelsZIndex = 10000 ;
 
 FCKConfig.ToolbarSets["Default"] = [
-	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
-	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
-	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['OrderedList','UnorderedList','-','Outdent','Indent'],
-	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Link','Unlink','Anchor'],
-	['Image','ImageManager','-','Flash','Video','MP3','Table','Rule','Smiley','SpecialChar','UniversalKey'],
-// 	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
+	['NewPage','Templates','-','Save','Preview','Print'],
+	['Cut','Copy','Paste'],
+	['Undo','Redo','-','Find','Replace','-','RemoveFormat'],
+	['ImageManager','-','Flash','Video','MP3','Table','Rule','SpecialChar','UniversalKey'],
+	['Link','Unlink'],
+	['Source'],
 	'/',
-	['Style','FontFormat','FontName','FontSize'],
-	['TextColor','BGColor'],
-	['About']
+     ['FontFormat','FontName','FontSize'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['OrderedList','UnorderedList','-','Outdent','Indent'],
+	['TextColor','BGColor']
 ] ;
+
+// default toolbar of FCKeditor
+// FCKConfig.ToolbarSets["Default"] = [
+// 	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
+// 	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
+// 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+// 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+// 	['OrderedList','UnorderedList','-','Outdent','Indent'],
+// 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+// 	['Link','Unlink','Anchor'],
+// 	['Image','ImageManager','-','Flash','Video','MP3','Table','Rule','Smiley','SpecialChar','UniversalKey'],
+//  	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
+// 	'/',
+// 	['Style','FontFormat','FontName','FontSize'],
+// 	['TextColor','BGColor'],
+// 	['About']
+// ] ;
+
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;
 FCKConfig.Plugins.Add("Video", "en,it", sOtherPluginPath ) ;

@@ -1,11 +1,16 @@
-/*html,body{margin:0;padding:0}*/
-.course {font: 76% arial,sans-serif; margin: 1.5em; line-height: 1.6em; }
-.course a{display:block;color: #006;padding:10px}
-.course #header{ margin: 0 0 20px 0; border: 1px solid #ccc; }
-.course #header h1{ line-height:80px; margin:0; padding-left:10px;background: #EEE; }
-.course #content { border: 1px solid #ccc; padding: 10px; margin: 0 0 15px 0;}
-.course li { list-style-type: square; background: #FCFFC6; border: 1px solid #ccc; margin: 0 0 5px 0; padding: 3px ;}
-.course #footer{ clear:both; border: 1px solid #ccc; padding: 10px; }
-.course #left { float: left; width: 45%; border: 1px solid #ccc; padding: 10px; margin: 0 0 15px 0;}
-.course #right{float:right;width: 45%; border: 1px solid #ccc; padding: 10px; margin: 0 0 15px 0;}
-.course .image { border: 1px solid #ccc; background: #eee; text-align: center; padding: 10px; }
+.dokeos_course {float:center; width: 98%; font: 76% arial,sans-serif; margin: 1.5em; line-height: 1.6em; }
+.dokeos_course #title{ font-size: 48px; text-align: center; }
+.dokeos_course a{display:block;color: #006;padding:10px}
+.dokeos_course #header{ margin: 0 0 20px 0; border: 1px solid #ccc; }
+.dokeos_course #header h1{ line-height:80px; margin:0; padding-left:10px;background: #EEE; }
+.dokeos_course #content {float:center; width: 98%; border: 1px solid #ccc; padding: 10px; margin: 0 0 15px 0;}
+.dokeos_course li { list-style-type: square; background: #FCFFC6; border: 1px solid #ccc; margin: 0 0 5px 0; padding: 3px ;}
+.dokeos_course #footer{ clear:both; border: 1px solid #ccc; padding: 10px; }
+.dokeos_course #left { float: left; width: 46%; border: 1px solid #ccc; padding: 10px; margin: 0 0 15px 0;}
+.dokeos_course #right{float:right; width: 46%; border: 1px solid #ccc; padding: 10px; margin: 0 0 15px 0;}
+.dokeos_course .image { float: center; border: 1px solid #ccc; padding: 10px; }
+.dokeos_course .data { border: 1px solid #ccc; width: 100%; }
+.dokeos_course .data td { background: #eee; padding: 5px; }
+.dokeos_course .data td:hover { background: #d8d8d8; }
+.dokeos_course .data td.item { background: #FFFAD7; font-weight: bold; }
+.dokeos_course .data td.item:hover { background: #EBE5BC; }

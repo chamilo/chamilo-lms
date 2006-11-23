@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 9445 2006-10-11 13:33:25Z bmol $
+// $Id: html_editor.php 10141 2006-11-23 05:12:52Z gmludo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -108,7 +108,9 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 
 		$fck_editor = new FCKeditor($name);
 		$fck_editor->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
-		$fck_editor->Width = $fck_attribute['Width'] ? $fck_attribute['Width'] : '800';
+
+		$fck_editor->Width = '990';
+ 		//$fck_editor->Width = $fck_attribute['Width'] ? $fck_attribute['Width'] : '100%';
 		//$fck_editor->Height = $this->fullPage ? '500' : '400';
 		$fck_editor->Height = $fck_attribute['Height'] ? $fck_attribute['Height'] : '400';
 		$fck_editor->Value = $this->getValue();

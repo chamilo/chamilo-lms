@@ -28,7 +28,7 @@
 	var base_url = "<?php echo $manager->getBaseURL(); ?>";
 	var server_name = "<?php echo $IMConfig['server_name']; ?>";
 
-	window.resizeTo(600, 460);
+	window.resizeTo(600, 330);
 
 	if(window.opener.ImageManager && window.opener.ImageManager.I18N)
 	{
@@ -84,7 +84,12 @@
 </div>
 </fieldset>
 <!-- image properties -->
-	<table class="inputTable">
+<input type="file" name="upload" id="upload"/>&nbsp;<button type="submit" name="submit" onclick="doUpload();"/>Upload</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		  <button type="button" class="buttons" onclick="return refresh();" style="visibility:hidden;">Refresh</button>
+          <button type="button" class="buttons" onclick="return onOK();">OK</button>
+          <button type="button" class="buttons" onclick="return onCancel();">Cancel</button>
+
+	<table class="inputTable" style="display:none;">
 		<tr>
 			<td align="right"><label for="f_url">Image File</label></td>
 			<td><input type="text" id="f_url" class="largelWidth" value="" /></td>
@@ -95,7 +100,7 @@
 			<td rowspan="3" align="right">&nbsp;</td>
 			<td align="right"><label for="f_vert">V Space</label></td>
 			<td><input type="text" id="f_vert" class="smallWidth" value="" /></td>
-		</tr>		
+		</tr>
 		<tr>
 			<td align="right"><label for="f_alt">Alt</label></td>
 			<td><input type="text" id="f_alt" class="largelWidth" value="" /></td>
@@ -136,7 +141,7 @@
 			<td align="right"><label for="f_border">Border</label></td>
 			<td><input type="text" id="f_border" class="smallWidth" value="" /></td>
 		</tr>
-		<tr> 
+		<tr>
          <td colspan="4" align="right">
 				<input type="hidden" id="orginal_width" />
 				<input type="hidden" id="orginal_height" />
@@ -148,9 +153,6 @@
 <!--// image properties -->	
 	<div style="text-align: right;"> 
           <hr />
-		  <button type="button" class="buttons" onclick="return refresh();">Refresh</button>
-          <button type="button" class="buttons" onclick="return onOK();">OK</button>
-          <button type="button" class="buttons" onclick="return onCancel();">Cancel</button>
     </div>
 	<input type="hidden" id="f_file" name="f_file" />
 </form>

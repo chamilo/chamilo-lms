@@ -131,7 +131,7 @@ input[text] {font-size: 12px; }
 	margin: 0;
 }
 /********************************************************
- *  HEADER 1: Title, portal, organisation,  title	*
+ *  HEADER 1: Title, portal, organisation, course title	*
  ********************************************************/
 #header1 {
 	font-size: 12px;
@@ -156,7 +156,7 @@ input[text] {font-size: 12px; }
 	float: left;
 	font-weight: bold;
 }
-#my_s {
+#my_courses {
 	float: right;
 	font-weight: bold;
 }
@@ -249,8 +249,8 @@ margin: 0px; padding: 0px 20px 0px 0px;
 	PADDING-TOP: 0px
 }
 #header3 #current {
-	background-color: #fff;
-	border-bottom: 1px solid #fff;
+	background-color: #e9a151;
+	border-bottom: 1px solid #4171b5;
 }
 #header3 #current A {
 	COLOR: #fff
@@ -392,7 +392,7 @@ border-left: solid 1px rgb(115,162,182);
 
 
 
-/* ---  navigation menu as a definition list  --- */
+/* --- course navigation menu as a definition list  --- */
 #toolnavbox {
 	margin: 0 0 0 10px;
 	padding: 0;
@@ -447,7 +447,7 @@ border-left: solid 1px rgb(115,162,182);
 	background: #fff;
 	color:#4171b5;
 }
-/* --- end of  navigation menu section  --- */
+/* --- end of course navigation menu section  --- */
 /*
 this lets the navigation menu appear to the left:
 #center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
@@ -507,9 +507,9 @@ input.liteoption {
 
 
 /*****************************************************
- *  HOMEPAGE			                         *
+ * COURSE HOMEPAGE			                         *
  *****************************************************/
-/* various sections in -home.php file  */
+/* various sections in course-home.php file  */
 #toolremove {
 	width: 40%;
 	color: #f00;
@@ -519,19 +519,14 @@ input.liteoption {
 	border: 2px solid #f00;
 }
 
-/* grey text */
-#grey{
-	color: #808080;
-}
-
-#intro { clear: both; width: 80%; margin: 10px auto;
+#courseintro { clear: both; width: 80%; margin: 10px auto;
  padding: 10px; border-bottom: 1px solid #4171B5;}
-#intro_icons { clear: both; width: 80%; margin: 10px auto;}
+#courseintro_icons { clear: both; width: 80%; margin: 10px auto;}
 
 .everybodyview { position: relative; /* to avoid the IE peekabo bug ?*/
  width: 80%; margin: 10px auto; padding: 10px;}
 
-.Authoringview,.adminview, .platformadminview {position: relative; width: 80%;
+.Authoringview,.courseadminview, .platformadminview {position: relative; width: 80%;
  margin: 25px auto 10px; padding: 10px; border: 1px solid #4171B5;}
 
 .viewcaption {position: relative; top: -20px; font-size: 12px;
@@ -932,7 +927,7 @@ div.admin_section h4 {
 	border-bottom: 1px solid gray;
 	width: 100%;
 }
-.user__category {
+.user_course_category {
 	background-color: #efefef;
 	border: 1px solid #666;
 	font-weight: bold;
@@ -1378,4 +1373,15 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	border-bottom: 1px solid #fff;
 	background: #fff;
 	color: #000;
+}
+
+/* FCKeditor */
+#content___Frame, #forum_category_comment___Frame, #forum_comment___Frame, #post_text___Frame
+{
+	margin-left: -200px;
+}
+
+#intro_content___Frame
+{
+	margin-left: -100px;
 }

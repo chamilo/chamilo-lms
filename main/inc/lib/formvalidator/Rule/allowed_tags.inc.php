@@ -347,6 +347,10 @@ $allowed_tags_student['strike'] =  array();
 // STRONG
 $allowed_tags_student['strong'] =  array();
 // STYLE
+$allowed_tags_student['style'] =  array();
+$allowed_tags_student['style']['type'] =  array();
+$allowed_tags_student['style']['media'] =  array();
+
 $allowed_tags_student_full_page['style'] =  array();
 $allowed_tags_student_full_page['style']['type'] =  array();
 $allowed_tags_student_full_page['style']['media'] =  array();
@@ -449,5 +453,22 @@ $allowed_tags_teacher['noscript'] =  array();
 // SCRIPT
 $allowed_tags_teacher['script'] = array();
 $allowed_tags_teacher['script']['type'] = array();
+
+$allowed_tags_teacher['html'] =  array();
+$allowed_tags_teacher['html']['xmlns'] =  array();
+
+$allowed_tags_teacher['head'] =  array();
+$allowed_tags_teacher['head']['profile'] =  array();
+
+// BODY
+$allowed_tags_teacher['body'] =  array();
+$allowed_tags_teacher['body']['alink'] =  array();
+$allowed_tags_teacher['body']['background'] =  array();
+$allowed_tags_teacher['body']['bgcolor'] =  array();
+$allowed_tags_teacher['body']['link'] =  array();
+$allowed_tags_teacher['body']['text'] =  array();
+$allowed_tags_teacher['body']['vlink'] =  array();
+
+
 $allowed_tags_teacher_full_page = $allowed_tags_student_full_page;
 ?>

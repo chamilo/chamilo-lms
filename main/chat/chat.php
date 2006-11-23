@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 9850 2006-10-30 14:47:42Z bmol $
+<?php // $Id: chat.php 10141 2006-11-23 05:12:52Z gmludo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -83,7 +83,8 @@ $params['frozen_nick'] = true;
 $params['max_nick_len'] = 100;
 $params['height'] = "300px";
 $params['refresh_delay'] = 2000;
-$params['xajaxpath'] = api_get_path(LIBRARY_PATH).'/xajax/';
+$params['xajaxpath'] = api_get_path(LIBRARY_PATH).'xajax/';
+echo $params['xajaxpath'];
 // $params['debug'] = true;
 // $params['debugxajax'] = true;
 

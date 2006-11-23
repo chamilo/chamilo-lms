@@ -293,13 +293,14 @@ class Statistics
 		<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 		</form>
 		<?php
-		$sql = "SELECT * FROM dokeos_stats.track_e_lastaccess GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) > ". $date_diff;
+		$table = Database::get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
+		$sql = "SELECT * FROM $table GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) >= ". $date_diff;
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$number_of_courses = mysql_num_rows($res);
 		$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
 		$from = ($page_nr -1) * $per_page;
 		$sql .= ' LIMIT '.$from.','.$per_page;
-		echo Get_lang('Statistics_Last_login_more_than').$date_diff.get_lang('Statistics_Days_ago');
+		echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		if (mysql_num_rows($res) > 0)
 		{
@@ -307,16 +308,14 @@ class Statistics
 			while ($obj = mysql_fetch_object($res))
 			{
 				$course = array ();
-				$course[]= '<a href="http://dokeos.hogent.be/courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
+				$course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
 				$course[] = $obj->access_date;
 				$courses[] = $course;
 			}
 
 			$table_header[] = array ("Coursecode", true);
 			$table_header[] = array ("Last login", true);
-				HoGent::display_page_navigation($number_of_courses,$per_page, $page_nr,array_merge($parameters,$_GET));
 			Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);
-			HoGent::display_page_navigation($number_of_courses,$per_page, $page_nr,array_merge($parameters,$_GET));
 			foreach(array_merge($parameters,$_GET) as $id => $value)
 			{
 				if ($id!='selectall'){

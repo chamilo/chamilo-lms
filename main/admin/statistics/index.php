@@ -53,7 +53,7 @@ $strUsers = get_lang('Users');
 
 $tools[$strCourse]['action=courses'] = get_lang('CountCours');
 $tools[$strCourse]['action=tools'] = get_lang('PlatformToolAccess');
-$tools[$strCourse]['action=courselastvisit'] = get_lang('Statistics_final_visit');
+$tools[$strCourse]['action=courselastvisit'] = get_lang('LastAccess');
 
 
 $tools[$strUsers]['action=users'] = get_lang('CountUsers');

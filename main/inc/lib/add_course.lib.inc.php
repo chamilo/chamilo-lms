@@ -1551,7 +1551,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 			Annoucement tool
 		-----------------------------------------------------------
 		*/
-		$sql = "INSERT INTO `".$TABLETOOLANNOUNCEMENTS . "` (id,title,content,end_date,display_order,email_sent) VALUES ( '', '".lang2db($AnnouncementExampleTitle) . "', '".lang2db($langAnnouncementEx) . "', NOW(), '1','0')";
+		$sql = "INSERT INTO `".$TABLETOOLANNOUNCEMENTS . "` (title,content,end_date,display_order,email_sent) VALUES ('".lang2db($AnnouncementExampleTitle) . "', '".lang2db($langAnnouncementEx) . "', NOW(), '1','0')";
 		api_sql_query($sql, __FILE__, __LINE__);
 		//we need to add the item properties too!
 		$insert_id = Database :: get_last_insert_id();

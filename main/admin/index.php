@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10158 2006-11-23 11:28:37Z bmol $
+<?php // $Id: index.php 10178 2006-11-23 14:11:01Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -111,16 +111,19 @@ if ($_POST['Register'])
   <li><a href="system_announcements.php"><?php echo get_lang('SystemAnnouncements') ?></a></li>
   <li><a href="languages.php"><?php echo get_lang('Languages'); ?></a></li>
   <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
-  <!-- <li><a href="configure_extensions.php"><?php echo get_lang('ConfigureExtensions'); ?></a></li> -->
+  <li><a href="statistics/index.php"><?php echo get_lang('ToolName'); ?> </a></li>
+  <?php if(!empty($phpMyAdminPath)): ?>
+  <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
+  <?php endif; ?>
+  <li><a href="configure_extensions.php"><?php echo get_lang('ConfigureExtensions'); ?></a></li>
+  <ul>
   <li><a href="configure_extensions.php?display=visio"><?php echo get_lang('Visioconf'); ?></a></li>
   <li><a href="configure_extensions.php?display=ppt2lp"><?php echo get_lang('Ppt2lp'); ?></a></li>
   <li><a href="configure_extensions.php?display=search"><?php echo get_lang('SearchEngine'); ?></a></li>
   <li><a href="configure_extensions.php?display=serverstats"><?php echo get_lang('ServerStatistics'); ?></a></li>
   <li><a href="configure_extensions.php?display=bandwidthstats"><?php echo get_lang('BandWidthStatistics'); ?></a></li>
-  <li><a href="statistics/index.php"><?php echo get_lang('ToolName'); ?> </a></li>
-  <?php if(!empty($phpMyAdminPath)): ?>
-  <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
-  <?php endif; ?>
+  </ul>
+
 
  </ul>
 </div>

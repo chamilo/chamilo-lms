@@ -420,11 +420,30 @@ class learnpathItem{
     function get_score(){
     	if($this->debug>0){error_log('New LP - In learnpathItem::get_score()',0);}
     	$res = 0;
-    	if(!empty($this->current_score))
-    	{
-    		$res = $this->current_score;
-    	}
-    	//TODO check this return value is valid for children classes (SCORM?)
+        if($this->type == 'quiz'){
+	      //get score directly from db and update current
+            $item_view_table = Database::get_course_table('lp_item_view');
+            $check = "SELECT * FROM $item_view_table " .
+                            "WHERE lp_item_id = ".$this->db_id. " " .
+                            "AND   lp_view_id = ".$this->view_id. " ".
+                            "AND   view_count = ".$this->get_attempt_id();
+            $resq = api_sql_query($check,__FILE__,__LINE__);
+            if(Database::num_rows($resq)>0){
+                    $row = Database::fetch_array($resq);
+                    if(!empty($row['score'])){
+                            //update current object score
+                            $this->current_score = $row['score'];
+                            $res = $this->current_score;
+                    }
+            }
+    	}else{
+    	
+	    	if(!empty($this->current_score))
+	    	{
+	    		$res = $this->current_score;
+	    	}
+        }
+	    //TODO check this return value is valid for children classes (SCORM?)
     	if($this->debug>1){error_log('New LP - Out of learnpathItem::get_score() - returning '.$res,0);}
     	return $res;
     }

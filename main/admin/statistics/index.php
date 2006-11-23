@@ -37,6 +37,7 @@ $langFile=array('admin','tracking');
 $cidReset = true;
 
 include('../../inc/global.inc.php');
+api_protect_admin_script();
 require_once ('statistics.lib.php');
 
 $interbreadcrumb[] = array ("url" => "../index.php", "name" => get_lang('AdministrationTools'));
@@ -81,23 +82,17 @@ $strUsers = get_lang('Users');
 
 $tools[$strCourse]['action=courses&amp;count_invisible_courses=1'] = get_lang('Statistics_total_amount_of_courses');
 $tools[$strCourse]['action=curriculum_courses'] = get_lang('Statistics_curriculumcourses_a_year');
-
-if($is_platformAdmin)
-{
-	$tools[$strCourse]['action=tools'] = get_lang('Statistics_Acces_to_coursemodules');
-	$tools[$strCourse]['action=courselastvisit'] = get_lang('Statistics_final_visit');
-}
+$tools[$strCourse]['action=tools'] = get_lang('Statistics_Acces_to_coursemodules');
+$tools[$strCourse]['action=courselastvisit'] = get_lang('Statistics_final_visit');
 
 
-$tools[$strUsers]['action=users'] = get_lang('Statistics_user_count');
-$tools[$strUsers]['action=logins&amp;type=month'] = get_lang('Statistics_logins_each_month');
-if($is_platformAdmin)
-{
-	$tools[$strUsers]['action=logins&amp;type=day'] = get_lang('Statistics_logins_each_day');
-	$tools[$strUsers]['action=logins&amp;type=hour'] = get_lang('Statistics_logins_each_hour');
-	$tools[$strUsers]['action=recentlogins'] = get_lang('Statistics_total_active_users');
-	$tools[$strUsers]['action=pictures'] = get_lang('Statistics_total_users_with_pic');
-}
+$tools[$strUsers]['action=users'] = get_lang('CountUsers');
+$tools[$strUsers]['action=logins&amp;type=month'] = get_lang('Logins').' ('.get_lang('PeriodMonth').')';
+$tools[$strUsers]['action=logins&amp;type=day'] = get_lang('Logins').' ('.get_lang('PeriodDay').')';
+$tools[$strUsers]['action=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('PeriodHour').')';
+$tools[$strUsers]['action=recentlogins'] = get_lang('Statistics_total_active_users');
+$tools[$strUsers]['action=pictures'] = get_lang('Statistics_total_users_with_pic');
+
 
 
 echo '<table><tr>';

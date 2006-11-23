@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10110 2006-11-22 15:20:46Z develop-it $
+<?php // $Id: exercise_result.php 10140 2006-11-23 04:36:47Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -705,6 +705,18 @@ if ($origin != 'learnpath')
 {
 	//we are not in learnpath tool
 	Display::display_footer();
+}else{
+				$user_id = (!empty($_SESSION['_user']['id'])?$_SESSION['_user']['id']:0);
+                $lp_item = Database::get_course_table('lp_item');
+                $lp_item_view = Database::get_course_table('lp_item_view');
+                $sql2 = "UPDATE $lp_item SET max_score = '$totalWeighting'
+                        WHERE id = '$learnpath_item_id'";
+                api_sql_query($sql2,__FILE__,__LINE__);
+                $sql2 = "UPDATE $lp_item_view SET score = '$totalScore'
+                        WHERE lp_item_id = '$learnpath_item_id'
+                        AND lp_view_id = '".$_SESSION['scorm_view_id']."'";
+                api_sql_query($sql2,__FILE__,__LINE__);
+
 }
 $csspath = "http://portal.dokeos.com/demo/main/css/default.css";
 if (!empty($arrques))

@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: CourseRestorer.class.php 10154 2006-11-23 08:48:12Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -323,9 +323,9 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_FORUM))
 		{
-			$table_forum = Database :: get_course_table(FORUM_TABLE, $this->course->destination_db);
-			$table_topic = Database :: get_course_table(FORUM_TOPIC_TABLE, $this->course->destination_db);
-			$table_post = Database :: get_course_table(FORUM_POST_TABLE, $this->course->destination_db);
+			$table_forum = Database :: get_course_table(TOOL_FORUM_TABLE, $this->course->destination_db);
+			$table_topic = Database :: get_course_table(TOOL_FORUM_TOPIC_TABLE, $this->course->destination_db);
+			$table_post = Database :: get_course_table(TOOL_FORUM_POST_TABLE, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum)
 			{
@@ -360,7 +360,7 @@ class CourseRestorer
 	 */
 	function restore_forum_category($id)
 	{
-		$forum_cat_table = Database :: get_course_table(FORUM_CATEGORY_TABLE, $this->course->destination_db);
+		$forum_cat_table = Database :: get_course_table(TOOL_FORUM_CATEGORY_TABLE, $this->course->destination_db);
 		$resources = $this->course->resources;
 		$forum_cat = $resources[RESOURCE_FORUMCATEGORY][$id];
 		if (!$forum_cat->is_restored())
@@ -378,7 +378,7 @@ class CourseRestorer
 	 */
 	function restore_topic($id, $forum_id)
 	{
-		$table = Database :: get_course_table(FORUM_TOPIC_TABLE, $this->course->destination_db);
+		$table = Database :: get_course_table(TOOL_FORUM_TOPIC_TABLE, $this->course->destination_db);
 		$resources = $this->course->resources;
 		$topic = $resources[RESOURCE_FORUMTOPIC][$id];
 		$sql = "INSERT INTO ".$table." SET topic_title = '".mysql_real_escape_string($topic->title)."', topic_time = '".$topic->time."', nom = '".mysql_real_escape_string($topic->lastname)."', prenom = '".mysql_real_escape_string($topic->firstname)."', topic_notify = '".$topic->topic_notify."', forum_id = '".$forum_id."'";
@@ -408,8 +408,8 @@ class CourseRestorer
 	 */
 	function restore_post($id, $topic_id, $forum_id)
 	{
-		$table_post = Database :: get_course_table(FORUM_POST_TABLE, $this->course->destination_db);
-		$table_posttext = Database :: get_course_table(FORUM_POST_TEXT_TABLE, $this->course->destination_db);
+		$table_post = Database :: get_course_table(TOOL_FORUM_POST_TABLE, $this->course->destination_db);
+		$table_posttext = Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE, $this->course->destination_db);
 		$resources = $this->course->resources;
 		$post = $resources[RESOURCE_FORUMPOST][$id];
 		$sql = "INSERT INTO ".$table_post." SET topic_id = '".$topic_id."', post_time = '".$post->post_time."', forum_id = '".$forum_id."', nom = '".mysql_real_escape_string($post->lastname)."', prenom = '".mysql_real_escape_string($post->firstname)."', topic_notify = '".$post->topic_notify."', poster_ip = '".$post->poster_ip."'";

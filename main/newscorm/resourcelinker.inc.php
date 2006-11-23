@@ -319,8 +319,8 @@ function display_addedresource_link($type, $id, $style='')
 			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$myrow['topic_id'].'&amp;forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow_title['post_title']."</a><br />\n";
 			break;
 		case 'Post':
-			$tbl_post = Database::get_course_table(FORUM_POST_TABLE);
-			$tbl_post_text = Database::get_course_table(FORUM_POST_TEXT_TABLE);
+			$tbl_post = Database::get_course_table(TOOL_FORUM_POST_TABLE);
+			$tbl_post_text = Database::get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
 			$sql = "SELECT * FROM $tbl_post p, $tbl_post_text t WHERE p.post_id = t.post_id AND p.post_id = $id";
 			$result = api_sql_query($sql,__FILE__,__LINE__);
 			$post = mysql_fetch_object($result);

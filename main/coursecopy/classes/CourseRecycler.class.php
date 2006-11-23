@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseRecycler.class.php 5950 2005-08-11 10:52:34Z bmol $
+// $Id: CourseRecycler.class.php 10154 2006-11-23 08:48:12Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -114,8 +114,8 @@ class CourseRecycler
 		{
 			$table_forum = Database :: get_course_table(FORUM_TABLE);
 			$table_topic = Database :: get_course_table(FORUM_TOPIC_TABLE);
-			$table_post = Database :: get_course_table(FORUM_POST_TABLE);
-			$table_posttext = Database :: get_course_table(FORUM_POST_TEXT_TABLE);
+			$table_post = Database :: get_course_table(TOOL_FORUM_POST_TABLE);
+			$table_posttext = Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
 			$forum_ids = implode(',', (array_keys($this->course->resources[RESOURCE_FORUM])));
 			$sql = "SELECT post_id FROM ".$table_post." WHERE forum_id IN (".$forum_ids.")";
 			$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -141,8 +141,8 @@ class CourseRecycler
 	 */
 	function recycle_forum_categories()
 	{
-		$table_forum = Database :: get_course_table(FORUM_TABLE);
-		$table_forumcat = Database :: get_course_table(FORUM_CATEGORY_TABLE);
+		$table_forum = Database :: get_course_table(TOOL_FORUM_TABLE);
+		$table_forumcat = Database :: get_course_table(TOOL_FORUM_CATEGORY_TABLE);
 		$sql = "SELECT fc.cat_id FROM ".$table_forumcat." fc LEFT JOIN ".$table_forum." f ON fc.cat_id=f.cat_id WHERE f.forum_id IS NULL";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		while ($obj = mysql_fetch_object($res))

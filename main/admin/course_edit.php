@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_edit.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: course_edit.php 10154 2006-11-23 08:48:12Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -141,7 +141,7 @@ if( $form->validate())
 								unsubscribe='".mysql_real_escape_string($unsubscribe)."'
 							WHERE code='".mysql_real_escape_string($course_code)."'";
 	api_sql_query($sql, __FILE__, __LINE__);
-	$forum_config_table = Database::get_course_table(FORUM_CONFIG_TABLE,$course_db_name);
+	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE,$course_db_name);
 	$sql = "UPDATE ".$forum_config_table." SET default_lang='".mysql_real_escape_string($course_language)."'";
 	header('Location: course_list.php');
 	exit ();

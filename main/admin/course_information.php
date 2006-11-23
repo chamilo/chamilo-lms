@@ -1,5 +1,5 @@
 <?php
-// $Id: course_information.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: course_information.php 10154 2006-11-23 08:48:12Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,7 +53,7 @@ function get_course_usage($course_code)
 	$table = Database :: get_course_table(LEARNPATH_MAIN_TABLE, $course->db_name);
 	$usage[] = array (get_lang(TOOL_LEARNPATH), Database::count_rows($table));
 	// Forums
-	$table = Database :: get_course_table(FORUM_TABLE, $course->db_name);
+	$table = Database :: get_course_table(TOOL_FORUM_TABLE, $course->db_name);
 	$usage[] = array (get_lang(TOOL_BB_FORUM), Database::count_rows($table));
 	// Quizzes
 	$table = Database :: get_course_table(QUIZ_TEST_TABLE, $course->db_name);

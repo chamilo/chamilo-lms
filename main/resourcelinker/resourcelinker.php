@@ -741,11 +741,11 @@ if ($content == "Ad_Valvas")
 */
 if ($content == "Forum")
 {
-	$TBL_FORUMS = Database::get_course_table(FORUM_TABLE);
-	$TBL_CATAGORIES = Database::get_course_table(FORUM_CATEGORY_TABLE);
-	$TBL_FORUMTOPICS = Database::get_course_table(FORUM_TOPIC_TABLE);
-	$tbl_posts = Database::get_course_table(FORUM_POST_TABLE);
-	$tbl_posts_text = Database::get_course_table(FORUM_POST_TEXT_TABLE);
+	$TBL_FORUMS = Database::get_course_table(TOOL_FORUM_TABLE);
+	$TBL_CATAGORIES = Database::get_course_table(TOOL_FORUM_CATEGORY_TABLE);
+	$TBL_FORUMTOPICS = Database::get_course_table(TOOL_FORUM_TOPIC_TABLE);
+	$tbl_posts = Database::get_course_table(TOOL_FORUM_POST_TABLE);
+	$tbl_posts_text = Database::get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
 
 	echo "<table width='100%'>";
 

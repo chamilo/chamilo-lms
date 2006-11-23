@@ -148,7 +148,7 @@ class GroupManager
 		
 		$currentCourseRepository = $_course['path'];
 		$table_group = Database :: get_course_table(GROUP_TABLE);
-		$table_forum = Database :: get_course_table(FORUM_TABLE);
+		$table_forum = Database :: get_course_table(TOOL_FORUM_TABLE);
 		$category = GroupManager :: get_category($category_id);
 		if( strlen($places) == 0)
 		{
@@ -285,10 +285,10 @@ class GroupManager
 		}
 		$group_table = Database :: get_course_table(GROUP_TABLE, $course_db);
 		$group_user_table = Database :: get_course_table(GROUP_USER_TABLE, $course_db);
-		$forum_table = Database :: get_course_table(FORUM_TABLE, $course_db);
-		$forum_post_table = Database :: get_course_table(FORUM_POST_TABLE, $course_db);
-		$forum_post_text_table = Database :: get_course_table(FORUM_POST_TEXT_TABLE, $course_db);
-		$forum_topic_table = Database :: get_course_table(FORUM_TOPIC_TABLE, $course_db);
+		$forum_table = Database :: get_course_table(TOOL_FORUM_TABLE, $course_db);
+		$forum_post_table = Database :: get_course_table(TOOL_FORUM_POST_TABLE, $course_db);
+		$forum_post_text_table = Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE, $course_db);
+		$forum_topic_table = Database :: get_course_table(TOOL_FORUM_TOPIC_TABLE, $course_db);
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
 		// define repository for deleted element
 		$group_garbage = api_get_path(GARBAGE_PATH).$course['path']."/group/";
@@ -359,7 +359,7 @@ class GroupManager
 	function set_group_properties($group_id, $name, $description, $maximum_number_of_students, $doc_state, $work_state, $calendar_state, $announcements_state, $self_registration_allowed, $self_unregistration_allowed)
 	{
 		$table_group = Database :: get_course_table(GROUP_TABLE);
-		//$table_forum = Database :: get_course_table(FORUM_TABLE);
+		//$table_forum = Database :: get_course_table(TOOL_FORUM_TABLE);
 		$sql = "UPDATE ".$table_group."
 					SET name='".trim($name)."',
 					doc_state = '".$doc_state."',

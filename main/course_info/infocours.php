@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 9822 2006-10-26 09:55:27Z bmol $
+// $Id: infocours.php 10154 2006-11-23 08:48:12Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -68,7 +68,7 @@ $TABLECOURSE = Database :: get_main_table(MAIN_COURSE_TABLE);
 $TABLEFACULTY = Database :: get_main_table(MAIN_CATEGORY_TABLE);
 $TABLECOURSEHOME = Database :: get_course_table(TOOL_LIST_TABLE);
 $TABLELANGUAGES = Database :: get_main_table(MAIN_LANGUAGE_TABLE);
-$TABLEBBCONFIG = Database :: get_course_table(FORUM_CONFIG_TABLE);
+$TABLEBBCONFIG = Database :: get_course_table(TOOL_FORUM_CONFIG_TABLE);
 $currentCourseID = $_course['sysCode'];
 $currentCourseRepository = $_course["path"];
 $is_allowedToEdit = $is_courseAdmin;

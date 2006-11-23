@@ -2066,8 +2066,8 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			//------------------------POST BEGIN---------------------------------------
 		case "Post" :
 			//1 Get the forum post data from the database
-			$tbl_posts =Database::get_course_table(FORUM_POST_TABLE);
-			$tbl_posts_text =Database::get_course_table(FORUM_POST_TEXT_TABLE);
+			$tbl_posts =Database::get_course_table(TOOL_FORUM_POST_TABLE);
+			$tbl_posts_text =Database::get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
 			$result = api_sql_query("SELECT * FROM $tbl_posts where post_id=$item_id", __FILE__, __LINE__);
 			$myrow = mysql_fetch_array($result);
 			// grabbing the title of the post

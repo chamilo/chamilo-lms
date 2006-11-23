@@ -154,6 +154,7 @@ var lms_item_credit = '<?php echo $oItem->get_credit();?>';
 var lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode();?>';
 var lms_item_launch_data = '<?php echo $oItem->get_launch_data();?>';
 var lms_item_interactions_count = '<?php echo $oItem->get_interactions_count(); ?>';
+var asset_timer = 0;
 
 //Backup for old values
 var old_score = 0;
@@ -559,6 +560,7 @@ function addEvent(elm, evType, fn, useCapture){
  * Add listeners to the page objects. This has to be defined for
  * the current context as it acts on objects that should exist
  * on the page 
+ * possibly deprecated
  */
 function addListeners(){
 	//exit if the browser doesn't support ID or tag retrieval
@@ -588,6 +590,7 @@ function addListeners(){
  * - making sure the previous item status have been saved
  * - first updating the current item ID (to save the right item) 
  * - updating the frame src
+ * possibly deprecated
  */
 function load_item(item_id,url){
 	if(document.getElementById('content_id'))
@@ -794,8 +797,11 @@ function update_message_frame(msg_msg)
 function switch_item(current_item, next_item){
 	//(1) save the current item
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
-	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions);
-	
+	if(lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
+		xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions);
+	}else{
+		xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions);
+	}
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
 	//xajax_backup_item_details(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data);
 	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);
@@ -814,6 +820,12 @@ function switch_item(current_item, next_item){
 			break;
 	}
 	cont_f.src = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item;
+	if(lms_lp_type==1 || lms_item_type=='asset'){
+		xajax_start_timer();
+	}	
 	return true;
 }
-addEvent(window,'load',addListeners,false);
+//addEvent(window,'load',addListeners,false);
+if(lms_lp_type==1 || lms_item_type=='asset'){
+	xajax_start_timer();
+}

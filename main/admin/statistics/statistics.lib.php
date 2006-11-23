@@ -67,10 +67,10 @@ class Statistics
 	{
 		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
-		$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = $status AND cu.course_code = c.code";
+		$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(mysql_real_escape_string($status))." AND cu.course_code = c.code";
 		if (isset ($category_code))
 		{
-			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = $status AND c.code = cu.course_code AND c.category_code = '".mysql_real_escape_string($category_code)."'";
+			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(mysql_real_escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".mysql_real_escape_string($category_code)."'";
 		}
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = mysql_fetch_object($res);
@@ -135,12 +135,9 @@ class Statistics
 		foreach ($stats as $subtitle => $number)
 		{
 			$i = $i % 13;
-			$short_subtitle = str_replace(get_lang('Statistics_Departement'),'',$subtitle);
-			$short_subtitle = str_replace(get_lang('Statistics_Central_Administration'),'',$short_subtitle);
-			$short_subtitle = trim($short_subtitle);
 			if (strlen($subtitle) > 30)
 			{
-				$short_subtitle = '<acronym title="'.$subtitle.'">'.substr($short_subtitle, 0, 27).'...</acronym>';
+				$subtitle = '<acronym title="'.$subtitle.'">'.substr($subtitle, 0, 27).'...</acronym>';
 			}
 			if(!$is_file_size)
 			{
@@ -151,7 +148,7 @@ class Statistics
 				$number_label = Statistics::make_size_string($number);
 			}
 			echo '<tr class="row_'.($i%2 == 0 ? 'odd' : 'even').'">
-								<td width="150">'.$short_subtitle.'</td>
+								<td width="150">'.$subtitle.'</td>
 								<td width="550">
 						 			<img src="../../img/bar_1u.gif" width="'.$data[$subtitle].'" height="10"/>
 								</td>
@@ -183,19 +180,20 @@ class Statistics
 	 */
 	function print_login_stats($type)
 	{
+		$table = Database::get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
 		switch($type)
 		{
 			case 'month':
 				$period = get_lang('PeriodMonth');
-				$sql = "SELECT DATE_FORMAT( login_date, '%Y %b' ) AS stat_date , count( login_id ) AS number_of_logins FROM dokeos_stats.track_e_login GROUP BY stat_date ORDER BY login_date ";
+				$sql = "SELECT DATE_FORMAT( login_date, '%Y %b' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY login_date ";
 				break;
 			case 'hour':
 				$period = get_lang('PeriodHour');
-				$sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM dokeos_stats.track_e_login GROUP BY stat_date ORDER BY stat_date ";
+				$sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY stat_date ";
 				break;
 			case 'day':
 				$period = get_lang('PeriodDay');
-				$sql = "SELECT DATE_FORMAT( login_date, '%a' ) AS stat_date , count( login_id ) AS number_of_logins FROM dokeos_stats.track_e_login GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
+				$sql = "SELECT DATE_FORMAT( login_date, '%a' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
 				break;
 		}
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -212,11 +210,11 @@ class Statistics
 	function print_recent_login_stats()
 	{
 		$total_logins = array();
-		$table = Database::get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
-		$sql[get_lang('Thisday')] = "SELECT count(DISTINCT access_user_id) AS number FROM $table WHERE DATE_ADD(access_date, INTERVAL 1 DAY) >= NOW()";
-		$sql[get_lang('Last7days')] = "SELECT count(DISTINCT access_user_id) AS number  FROM $table WHERE DATE_ADD(access_date, INTERVAL 7 DAY) >= NOW()";
-		$sql[get_lang('Last31days')] = "SELECT count(DISTINCT access_user_id) AS number  FROM $table WHERE DATE_ADD(access_date, INTERVAL 31 DAY) >= NOW()";
-		$sql[get_lang('Total')] = "SELECT count(DISTINCT access_user_id) AS number  FROM $table";
+		$table = Database::get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+		$sql[get_lang('Thisday')] = "SELECT count(login_user_id) AS number FROM $table WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW()";
+		$sql[get_lang('Last7days')] = "SELECT count(login_user_id) AS number  FROM $table WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW()";
+		$sql[get_lang('Last31days')] = "SELECT count(login_user_id) AS number  FROM $table WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW()";
+		$sql[get_lang('Total')] = "SELECT count(login_user_id) AS number  FROM $table";
 		foreach($sql as $index => $query)
 		{
 			$res = api_sql_query($query,__FILE__,__LINE__);
@@ -241,9 +239,6 @@ class Statistics
 		}
 		Statistics::print_stats(get_lang('PlatformToolAccess'),$result,true);
 	}
-
-
-
 	/**
 	 * Shows the number of users having their picture uploaded in Dokeos.
 	 */
@@ -259,10 +254,7 @@ class Statistics
 		$result[get_lang('No')] = $count1->n;
 		$result[get_lang('Yes')] = $count2->n;
 		Statistics::print_stats(get_lang('CountUsers').' ('.get_lang('UserPicture').')',$result,true);
-
-	#	echo $count2->n.' ' & get_lang('Statistics_user_who_have_picture_in_dokeos') & '('.number_format(($count2->n/$count1->n*100), 0, ',', '.').'%)';
 	}
-
 	/**
 	 * Shows statistics about the time of last visit to each course.
 	 */
@@ -270,10 +262,8 @@ class Statistics
 	{
 		$columns[0] = 'access_cours_code';
 		$columns[1] = 'access_date';
-
 		$sql_order[SORT_ASC] = 'ASC';
 		$sql_order[SORT_DESC] = 'DESC';
-
 		$per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 10;
 		$page_nr = isset($_GET['page_nr']) ? $_GET['page_nr'] : 1;
 		$column = isset($_GET['column']) ? $_GET['column'] : 0;
@@ -322,6 +312,5 @@ class Statistics
 			echo get_lang('NoSearchResults');
 		}
 	}
-
 }
 ?>

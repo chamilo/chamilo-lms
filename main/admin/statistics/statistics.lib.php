@@ -296,17 +296,11 @@ class Statistics
 				$course[] = $obj->access_date;
 				$courses[] = $course;
 			}
-
+			$parameters['action'] = 'courselastvisit';
+			$parameters['date_diff'] = $date_diff;
 			$table_header[] = array ("Coursecode", true);
 			$table_header[] = array ("Last login", true);
 			Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);
-			foreach(array_merge($parameters,$_GET) as $id => $value)
-			{
-				if ($id!='selectall'){
-					$link .= $id.'='.$value.'&amp;';
-				}
-			}
-
 		}
 		else
 		{

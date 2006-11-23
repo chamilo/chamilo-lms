@@ -54,6 +54,7 @@ $strUsers = get_lang('Users');
 $tools[$strCourse]['action=courses'] = get_lang('CountCours');
 $tools[$strCourse]['action=tools'] = get_lang('PlatformToolAccess');
 $tools[$strCourse]['action=courselastvisit'] = get_lang('LastAccess');
+$tools[$strCourse]['action=coursebylanguage'] = get_lang('CountCourseByLanguage');
 
 
 $tools[$strUsers]['action=users'] = get_lang('CountUsers');
@@ -113,6 +114,9 @@ switch($_GET['action'])
 		// students for each course category
 		statistics::print_stats(get_lang('Students'),$students);
 
+		break;
+	case 'coursebylanguage':
+		statistics::print_course_by_language_stats();
 		break;
 	case 'logins':
 		statistics::print_login_stats($_GET['type']);

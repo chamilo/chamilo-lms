@@ -242,6 +242,21 @@ class Statistics
 		Statistics::print_stats(get_lang('PlatformToolAccess'),$result,true);
 	}
 	/**
+	 * Show some stats about the number of courses per language
+	 */
+	function print_course_by_language_stats()
+	{
+		$table = Database::get_main_table(MAIN_COURSE_TABLE);
+		$sql = "SELECT course_language, count( code ) AS number_of_courses FROM $table GROUP BY course_language ";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$result = array();
+		while($obj = mysql_fetch_object($res))
+		{
+			$result[$obj->course_language] = $obj->number_of_courses;
+		}
+		Statistics::print_stats(get_lang('CountCourseByLanguage'),$result,true);
+	}
+	/**
 	 * Shows the number of users having their picture uploaded in Dokeos.
 	 */
 	function print_user_pictures_stats()

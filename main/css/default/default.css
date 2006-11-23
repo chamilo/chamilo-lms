@@ -1,87 +1,44 @@
-/*****************************************************
- *  MAIN		                                    *
- *****************************************************/
+/*
+==============================================================================
+	GLOBAL STYLES - REDEFINED HTML TAGS	                                    
+==============================================================================
+*/
+
 body {
+	background-color: #fff;
+	color: #000000;
 	font-family: arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
-	color: #000;
 	margin: 0;
-	padding: 0;
-	background-color: #fff;
+	padding: 0;	
 }
 
-#outerframe {
-	position: relative;  /* do not remove, fixes a bug in IE */
-	border: 1px solid #fff;
-	background-color: #fff;
-}
-
-/* Hides from IE5-mac \*/
-* html #outerframe {height: 1%;}
-/* End hide from IE5-mac */
-
-#main {
-	position: relative; /* to avoid the IE peekabo bug*/
-	margin: 0px auto;
-	margin-top: 10px;
-	width: 98%;
-	padding: 0px 10px 10px 10px;
-	background-color: #fff;
-	min-height: 320px;
-}
-
-/* for content section in main index.php file */
-.maincontent {
-	float: left;
-	width: 78%;
-	padding: 4px;
-	background-color: #fff;
-}
-#center {
-	margin: 0 190px 0 0;
-	padding: 10px 0 40px 0;
-	min-height: 300px;
-}
-.invisible {
-	color: #999;
-}
-.invisible a:link, .invisible a:visited {
-	color: #999;
-}
-a.invisible:link, a.invisible:visited {
-	color: #999;
-}
-.clear {clear: both; line-height: 0px; height: 0;}
-
-
-input.link_alike { background-color: #FFFFFF; border-width: 0px;
- color: #4171b5; font-weight: bold; text-align: left; padding: 0px; margin: 0px; }
-input.link_alike:hover { background-color: #FFFFFF; border-width: 0px;
- color: #FF0000; font-weight: bold; text-align: left; padding: 0px; margin: 0px; }
-
-/*****************************************************
- *  REDEFINED HTML TAGS                              *
- *****************************************************/
 img {
 	border: none;
 }
+
 p,blockquote,ol,ul {
 	font-size: 12px;
 }
+
 h1 {
 	font-size: 21px;
 }
+
 h2 {
 	font-size: 18px;
 }
+
 h3 {
 	font-size: 15px;
 	margin-top:0px;
 	padding-top:0px;
 }
+
 h4 {
 	font-size: 12px;
 }
+
 h5,h6 {
 	font-family: verdana, arial, helvetica, sans-serif;
 }
@@ -92,29 +49,33 @@ a:link {
 	font-weight : bold;
 	color : #4171b5;
 }
+
 a:visited {
 	text-decoration: none;
 	font-weight : bold;
 	color : #4171b5;
 }
+
 a:hover {
 	text-decoration: none;
 	color: red;
 	font-weight: bold;
 }
+
 a:active {
 	text-decoration: none;
 	font-weight : bold;
 	color : #f00;
 }
+
 select, textarea {
 	color : #000;
 	border: 1px solid #000;
 }
+
 input.checkbox {
 	border-width: 0;
 }
-
 
 select,
 input[type=checkbox],
@@ -122,17 +83,101 @@ input[type=radio],
 input[type=button],
 input[type=submit] {cursor:	pointer; font-size: 12px;}
 input[text] {font-size: 12px; }
-/*****************************************************
- *  HEADER STYLES                                    *
- *****************************************************/
+
+input.link_alike { 
+	background-color: #FFFFFF; 
+	border-width: 0px;
+ 	color: #4171b5; 
+ 	font-weight: bold; 
+ 	margin: 0px;
+ 	padding: 0px;
+ 	text-align: left; 	 
+}
+input.link_alike:hover { 
+	background-color: #FFFFFF; 
+	border-width: 0px;
+ 	color: #FF0000; 
+ 	font-weight: bold; 
+ 	margin: 0px; 
+ 	padding: 0px; 
+ 	text-align: left; 
+}
+
+
+/*
+==============================================================================
+	PAGE STRUCTURE 	                                    
+==============================================================================
+*/
+
+#outerframe {
+	background-color: #fff;
+	border: 1px solid #fff;
+	position: relative;  /* do not remove, fixes a bug in IE */
+}
+
+/* Hides from IE5-mac \*/
+* html #outerframe {height: 1%;}
+/* End hide from IE5-mac */
+
+#main {
+	background-color: #fff;
+	margin: 0px auto;
+	margin-top: 10px;
+	min-height: 320px;
+	padding: 0px 10px 10px 10px;
+	position: relative; /* to avoid the IE peekabo bug*/
+	width: 98%;
+}
+
+/* for content section in main index.php file */
+.maincontent {
+	background-color: #f00;
+	float: left;
+	padding: 4px;
+	width: 78%;
+}
+
+.clear {clear: both; line-height: 0px; height: 0;}
+
+
+ #center {
+	padding: 10px 0 40px 0;
+	margin: 0 190px 0 0;
+	min-height: 300px;
+}
+
+.invisible {
+	color: #999;
+}
+
+.invisible a:link, .invisible a:visited {
+	color: #999;
+}
+
+a.invisible:link, a.invisible:visited {
+	color: #999;
+}
+
+
+/*
+==============================================================================
+	HEADER STYLES	                                    
+==============================================================================
+*/
+
 #header {
 	width: 100%;
 	padding: 0;
 	margin: 0;
 }
-/********************************************************
- *  HEADER 1: Title, portal, organisation, course title	*
- ********************************************************/
+
+/*
+------------------------------------------------------------------------------
+	HEADER 1: Title, portal, organisation, course title	                                    
+------------------------------------------------------------------------------
+*/
+
 #header1 {
 	font-size: 12px;
 	padding: 4px;
@@ -140,29 +185,37 @@ input[text] {font-size: 12px; }
 	color: #fff;
 	border-bottom: 1px solid white;
 }
+
 #header1 a {
 	color: #fff;
 	text-decoration: none;
 }
+
 #header1 a:hover{
 	text-decoration: underline;
 	background-color: #264269;
 }
+
 #sitename {
 	margin: 0;
 	font-weight: bold;
 }
+
 #institution {
 	float: left;
 	font-weight: bold;
 }
+
 #my_courses {
 	float: right;
 	font-weight: bold;
 }
-/********************************************************
- *  HEADER 2: Users online, help, student/teacher view	*
- ********************************************************/
+
+/*
+------------------------------------------------------------------------------
+	HEADER 2: Users online, help, student/teacher view	
+------------------------------------------------------------------------------
+*/
 #header2 {
 	position: relative; /* to avoid the IE peekabo bug*/
 	font-size: 1.0em;
@@ -181,6 +234,7 @@ input[text] {font-size: 12px; }
 #header2 a:hover{
 	text-decoration: underline;
 }
+
 /* Header2Right: online users, student/teacher view, help */
 #Header2Right ul{
 	position: relative; /* to avoid the IE peekabo bug*/
@@ -199,10 +253,11 @@ input[text] {font-size: 12px; }
 	color:#fff;
 }
 
-
-/*****************************************************
- *  HEADER 3: TABS OF THE HEADER			     	 *
- *****************************************************/
+/*
+------------------------------------------------------------------------------
+	HEADER 3: TABS OF THE HEADER			     	 
+------------------------------------------------------------------------------
+*/
 #header3 {
 	font-size: 1.0em;
  	padding: 0em 0em 0.4em 0em;
@@ -290,6 +345,7 @@ margin: 0px; padding: 0px 20px 0px 0px;
 #header3 input.logout:hover {
 
 }
+
 #logout{
 border-left: solid 1px rgb(115,162,182);
 	display: inline;
@@ -299,30 +355,39 @@ border-left: solid 1px rgb(115,162,182);
    	font-size: 1.0em;
 }
 
-/*****************************************************
- *  HEADER 4: not used          			     	 *
- *****************************************************/
+/*
+------------------------------------------------------------------------------
+    HEADER 4: not used          			     	 
+------------------------------------------------------------------------------
+*/
+
 #header4 {
 	background-color: #fff;
 	color: #009;
 	padding: 4px;
 	margin-bottom: 2px;
 }
+
 #header4 a {
 	color: #4171b5;
 }
+
 #header4 a:hover {
 	text-decoration: none;
 	color: #f00;
 }
+
 /* The tool shortcuts */
 #toolshortcuts {
 	text-align: right;
 }
 
-/*****************************************************
- *  FOOTER STYLES                                    *
- *****************************************************/
+/*
+==============================================================================
+    FOOTER STYLES                                    
+==============================================================================
+*/
+
 #footer {
 	padding: 8px;
 	border-top: 1px solid #4171B5;
@@ -333,9 +398,13 @@ border-left: solid 1px rgb(115,162,182);
 	float: right;
 }
 
-/*****************************************************
- *  NAVIGATION MENU                                  *
- *****************************************************/
+
+/*
+==============================================================================
+    NAVIGATION MENU                                    
+==============================================================================
+*/
+
 .menu {
 	float: right;
 	width: 20%;
@@ -343,17 +412,20 @@ border-left: solid 1px rgb(115,162,182);
 	background-color: #E5EDF9;
 	border: 1px solid #4171B5;
 }
+
 .menucaption {
 	font-size: 12px;
 	font-weight: bold;
 	padding-left: 12px;
 }
+
 .menusection {
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
 	border: 1px solid #4171B5;
 }
+
 .menusectioncaption {
 	position: relative;
 	top: -9px;
@@ -361,11 +433,13 @@ border-left: solid 1px rgb(115,162,182);
 	font-size: 12px;
 	padding: 0 8px 0 4px;
 }
+
 .menulist {
 	list-style: none;
 	margin: 0 0 12px 0;
 	padding: 0;
 }
+
 #centerwrap {
   float: left;
   width: 100%;
@@ -391,7 +465,6 @@ border-left: solid 1px rgb(115,162,182);
  /* End hide from IE5/mac */
 
 
-
 /* --- course navigation menu as a definition list  --- */
 #toolnavbox {
 	margin: 0 0 0 10px;
@@ -399,6 +472,7 @@ border-left: solid 1px rgb(115,162,182);
 	float: left;
 	border: 1px solid #4271b5;
 }
+
 #toolnavbox dl {
 	width: 160px;
 	margin: 0 auto;
@@ -407,6 +481,7 @@ border-left: solid 1px rgb(115,162,182);
 	font-size: 12px;
 	text-align: center;
 }
+
 #toolnavbox dt {
 	margin: 0;
 	padding: 0;
@@ -417,6 +492,7 @@ border-left: solid 1px rgb(115,162,182);
 	border-bottom: 1px solid #fff;
 	background: transparent;
 }
+
 #toolnavbox dd {
 	margin: 0;
 	padding: 0;
@@ -425,12 +501,14 @@ border-left: solid 1px rgb(115,162,182);
 	border-bottom:1px solid #fff;
 	background: #E5EDF9;
 }
+
 #toolnav img {
 	float: left;
 	width: 25px;
 	height: 25px;
 	margin: 0 4px 0 0;
 }
+
 #toolnavlist a, #toolnavlist a:link {
 	background: #E5EDF9;
 	color: #4171b5;
@@ -439,15 +517,18 @@ border-left: solid 1px rgb(115,162,182);
 	text-decoration: none;
 	display: block;
 }
+
 #toolnavlist a:hover {
 	background: #fff;
 	color:#4171b5;
 }
+
 #toolnavlist a#here {
 	background: #fff;
 	color:#4171b5;
 }
 /* --- end of course navigation menu section  --- */
+
 /*
 this lets the navigation menu appear to the left:
 #center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
@@ -1373,6 +1454,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	border-bottom: 1px solid #fff;
 	background: #fff;
 	color: #000;
+    
 }
 
 /* FCKeditor */

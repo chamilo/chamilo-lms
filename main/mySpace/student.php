@@ -378,7 +378,7 @@ ob_start();
 				 ';
 			if(!empty($a_current_student[3]))
 			{	
-				echo	'<a href="mailto:'.$s_email.'">'.$a_current_student[3].'</a>';
+				echo	'<a href="mailto:'.$a_current_student[3].'">'.$a_current_student[3].'</a>';
 			}
 			else
 			{

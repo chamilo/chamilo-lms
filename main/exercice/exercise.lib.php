@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 9972 2006-11-14 14:44:37Z pcool $
+<?php // $Id: exercise.lib.php 10148 2006-11-23 07:58:25Z gmludo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -136,8 +136,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
 
 	$oFCKeditor->ToolbarSet = 'Comment' ;*/
-	$oFCKeditor->Width  = '70%';
-	$oFCKeditor->Height = '150';
+	$oFCKeditor->Width  = '800';
+	$oFCKeditor->Height = '300';
 	$oFCKeditor->Value	= '' ;
 	$s .= "<tr><td colspan='2'>".$oFCKeditor->CreateHtml()."</td></tr>";
 			//$s.="<tr><td colspan='2'><textarea cols='80' rows='10' name='choice[".$questionId."]'>$answer</textarea></td></tr>";

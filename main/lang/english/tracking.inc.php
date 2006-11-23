@@ -140,6 +140,7 @@ $Visited = "Visited";
 $Name = "Name";
 $FirstAccess = "First access";
 $LastAccess = "Last access";
+$langProbationers = "Probationers";
 $MoyenneTest = "Test average";
 $exportExcel = "Export in Excel format";
 $MoyCourse = "Course average";

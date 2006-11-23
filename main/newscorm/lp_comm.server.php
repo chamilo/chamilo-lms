@@ -102,7 +102,14 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 	}
 	if($time!='')
 	{
-		$mylpi->set_time($time);
+		//if big integer, then it's a timestamp, otherwise it's normal scorm time
+		if($time == intval(strval($time)) && $time>1000000){
+			$real_time = time() - $time;
+			//$real_time += $mylpi->get_total_time();
+			$mylpi->set_time($real_time,'int');
+		}else{
+			$mylpi->set_time($time);
+		}
 	}
 	if($suspend!='')
 	{
@@ -313,7 +320,8 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 			"lms_item_credit = '".$mycredit."';" .
 			"lms_item_lesson_mode = '".$mylesson_mode."';" .
 			"lms_item_launch_data = '".$mylaunch_data."';" .
-			"lms_item_interactions_count = '".$myinteractions_count."';"
+			"lms_item_interactions_count = '".$myinteractions_count."';" .
+			"asset_timer = 0;"
 			);
 	$objResponse->addScript("update_toc('unhighlight','".$current_item."');");
 	$objResponse->addScript("update_toc('highlight','".$new_item_id."');");
@@ -327,6 +335,19 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 	$_SESSION['lpobject'] = serialize($mylp);
 	return $objResponse;
 }
+/**
+ * Start a timer and hand it back to the JS by assigning the current time (of start) to
+ * var asset_timer
+ */
+function start_timer()
+{
+	$objResponse = new xajaxResponse();
+	$time = time();
+	error_log('assigning '.$time.' to timer ',0);	
+	$objResponse->addScript("asset_timer='$time';asset_timer_total=0;");
+	return $objResponse;
+}
+
 require('lp_comm.common.php');
 $xajax->processRequests();
 ?>

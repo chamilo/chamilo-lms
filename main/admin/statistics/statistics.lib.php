@@ -19,6 +19,7 @@
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 /**
 ==============================================================================
 * This class provides some functions for statistics
@@ -270,41 +271,51 @@ class Statistics
 		$column = isset($_GET['column']) ? $_GET['column'] : 0;
 		$date_diff = isset($_GET['date_diff']) ? $_GET['date_diff'] : 60;
 		$direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
-		?>
-		<form method="get" action="index.php">
-		<input type="hidden" name="action" value="courselastvisit"/>
-		<input type="text" name="date_diff" value="<?php echo $date_diff; ?>"/>
-		<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
-		</form>
-		<?php
-		$table = Database::get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
-		$sql = "SELECT * FROM $table GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) >= ". $date_diff;
-		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$number_of_courses = mysql_num_rows($res);
-		$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
-		$from = ($page_nr -1) * $per_page;
-		$sql .= ' LIMIT '.$from.','.$per_page;
-		echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
-		$res = api_sql_query($sql, __FILE__, __LINE__);
-		if (mysql_num_rows($res) > 0)
+		$form = new FormValidator('courselastvisit','get');
+		$form->addElement('hidden','action','courselastvisit');
+		$form->add_textfield('date_diff',get_lang('Days'),true);
+		$form->addRule('date_diff','InvalidNumber','numeric');
+		$form->addElement('submit','ok',get_lang('Ok'));
+		$defaults['date_diff'] = 60;
+		$form->setDefaults($defaults);
+		if($form->validate())
 		{
-			$courses = array ();
-			while ($obj = mysql_fetch_object($res))
+			$form->display();
+			$values = $form->exportValues();
+			$date_diff = $values['date_diff'];
+			$table = Database::get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
+			$sql = "SELECT * FROM $table GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) >= ". $date_diff;
+			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$number_of_courses = mysql_num_rows($res);
+			$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
+			$from = ($page_nr -1) * $per_page;
+			$sql .= ' LIMIT '.$from.','.$per_page;
+			echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
+			$res = api_sql_query($sql, __FILE__, __LINE__);
+			if (mysql_num_rows($res) > 0)
 			{
-				$course = array ();
-				$course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
-				$course[] = $obj->access_date;
-				$courses[] = $course;
+				$courses = array ();
+				while ($obj = mysql_fetch_object($res))
+				{
+					$course = array ();
+					$course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
+					$course[] = $obj->access_date;
+					$courses[] = $course;
+				}
+				$parameters['action'] = 'courselastvisit';
+				$parameters['date_diff'] = $date_diff;
+				$table_header[] = array ("Coursecode", true);
+				$table_header[] = array ("Last login", true);
+				Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);
 			}
-			$parameters['action'] = 'courselastvisit';
-			$parameters['date_diff'] = $date_diff;
-			$table_header[] = array ("Coursecode", true);
-			$table_header[] = array ("Last login", true);
-			Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);
+			else
+			{
+				echo get_lang('NoSearchResults');
+			}
 		}
 		else
 		{
-			echo get_lang('NoSearchResults');
+			$form->display();
 		}
 	}
 }

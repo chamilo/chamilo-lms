@@ -284,8 +284,14 @@ foreach($list as $my_item_id){
 		if (($counter % 2)==0) { $oddclass="row_odd"; } else { $oddclass="row_even"; }
 		$lesson_status=$row['mystatus'];
 		$score=$row['myscore'];
-		$time_for_total = $row['mytime'];
-		$time=learnpathItem::get_scorm_time('php',$row['mytime']);
+		$subtotal_time = $row['mytime'];
+		//if($row['mytime']==0){
+			while($tmp_row = Database::fetch_array($result)){
+				$subtotal_time += $tmp_row['mytime']; 
+			}
+		//}
+		$time_for_total = $subtotal_time;
+		$time=learnpathItem::get_scorm_time('php',$subtotal_time);
 		$scoIdentifier=$row['myid'];
 		$title=$row['mytitle'];
 		if($score==0){

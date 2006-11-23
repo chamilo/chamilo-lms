@@ -634,8 +634,10 @@ function dokeos_save_asset(){
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_scorm(message,priority){
-	if(frames["lp_log_name"] && scorm_logs>priority){
-		frames["lp_log_name"].document.getElementById("log_content").innerHTML += "SCORM: " + message + "<br/>";
+	if(scorm_logs>priority){
+		if(frames["lp_log_name"] && frames["lp_log_name"].document && frames["lp_log_name"].document.getElementById && frames["lp_log_name"].document.getElementById('log_content')){
+			frames["lp_log_name"].document.getElementById("log_content").innerHTML += "SCORM: " + message + "<br/>";
+		}
 	}
 }
 /**
@@ -644,8 +646,10 @@ function logit_scorm(message,priority){
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_lms(message,priority){
-	if(frames["lp_log_name"] && lms_logs>priority){
-		frames["lp_log_name"].document.getElementById("log_content").innerHTML += "LMS: " + message + "<br/>";
+	if(lms_logs>priority){
+		if(frames["lp_log_name"] && frames["lp_log_name"].document && frames["lp_log_name"].document.getElementById && frames["lp_log_name"].document.getElementById('log_content')){
+			frames["lp_log_name"].document.getElementById("log_content").innerHTML += "LMS: " + message + "<br/>";
+		}
 	}
 }
 

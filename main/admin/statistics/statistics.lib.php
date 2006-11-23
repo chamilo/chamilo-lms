@@ -226,12 +226,15 @@ class Statistics
 		switch($type)
 		{
 			case 'month':
+				$period = get_lang('PeriodMonth');
 				$sql = "SELECT DATE_FORMAT( login_date, '%Y %b' ) AS stat_date , count( login_id ) AS number_of_logins FROM dokeos_stats.track_e_login GROUP BY stat_date ORDER BY login_date ";
 				break;
 			case 'hour':
+				$period = get_lang('PeriodHour');
 				$sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM dokeos_stats.track_e_login GROUP BY stat_date ORDER BY stat_date ";
 				break;
 			case 'day':
+				$period = get_lang('PeriodDay');
 				$sql = "SELECT DATE_FORMAT( login_date, '%a' ) AS stat_date , count( login_id ) AS number_of_logins FROM dokeos_stats.track_e_login GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
 				break;
 		}
@@ -241,7 +244,7 @@ class Statistics
 		{
 			$result[$obj->stat_date] = $obj->number_of_logins;
 		}
-		Statistics::print_stats(get_lang('Statistics_count_logins'),$result,true);
+		Statistics::print_stats(get_lang('Logins').' ('.$period.')',$result,true);
 	}
 	/**
 	 * Print the number of resent logins (last minute, hour, day, month)
@@ -326,13 +329,16 @@ class Statistics
 	 */
 	function print_user_pictures_stats()
 	{
-		$sql = "SELECT COUNT(*) AS n FROM dokeos_main.user";
+		$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+		$sql = "SELECT COUNT(*) AS n FROM $user_table";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$count1 = mysql_fetch_object($res);
-		$sql = "SELECT COUNT(*) AS n FROM dokeos_main.user WHERE picture_uri != ''";
+		$sql = "SELECT COUNT(*) AS n FROM $user_table WHERE LENGTH(picture_uri) > 0";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$count2 = mysql_fetch_object($res);
-		Statistics::print_stats(get_lang('user_who_have_picture_in_dokeos'),'('.number_format(($count2->n/$count1->n*100), 0, ',', '.').'%)',true);
+		$result[get_lang('No')] = $count1->n;
+		$result[get_lang('Yes')] = $count2->n;
+		Statistics::print_stats(get_lang('CountUsers').' ('.get_lang('UserPicture').')',$result,true);
 
 	#	echo $count2->n.' ' & get_lang('Statistics_user_who_have_picture_in_dokeos') & '('.number_format(($count2->n/$count1->n*100), 0, ',', '.').'%)';
 	}

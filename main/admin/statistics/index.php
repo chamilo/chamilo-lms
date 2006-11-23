@@ -86,10 +86,10 @@ $tools[$strCourse]['action=courselastvisit'] = get_lang('Statistics_final_visit'
 
 
 $tools[$strUsers]['action=users'] = get_lang('CountUsers');
+$tools[$strUsers]['action=recentlogins'] = get_lang('Logins');
 $tools[$strUsers]['action=logins&amp;type=month'] = get_lang('Logins').' ('.get_lang('PeriodMonth').')';
 $tools[$strUsers]['action=logins&amp;type=day'] = get_lang('Logins').' ('.get_lang('PeriodDay').')';
 $tools[$strUsers]['action=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('PeriodHour').')';
-$tools[$strUsers]['action=recentlogins'] = get_lang('Statistics_total_active_users');
 $tools[$strUsers]['action=pictures'] = get_lang('CountUsers').' ('.get_lang('UserPicture').')';
 
 

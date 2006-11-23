@@ -128,7 +128,7 @@ class Statistics
 		$total = 0;
 		$data = Statistics::rescale($stats);
 		echo '<table class="statTable data_table" cellspacing="0" cellpadding="3">
-			  		  <tr><th colspan="4" class="statHeader">'.$title.'</th></tr>';
+			  		  <tr><th colspan="'.($show_total ? '4' : '3').'" class="statHeader">'.$title.'</th></tr>';
 		$i = 0;
 		foreach($stats as $subtitle => $number)
 		{
@@ -140,9 +140,9 @@ class Statistics
 			$short_subtitle = str_replace(get_lang('Statistics_Departement'),'',$subtitle);
 			$short_subtitle = str_replace(get_lang('Statistics_Central_Administration'),'',$short_subtitle);
 			$short_subtitle = trim($short_subtitle);
-			if (strlen($subtitle) > 20)
+			if (strlen($subtitle) > 30)
 			{
-				$short_subtitle = '<acronym title="'.$subtitle.'">'.substr($short_subtitle, 0, 17).'...</acronym>';
+				$short_subtitle = '<acronym title="'.$subtitle.'">'.substr($short_subtitle, 0, 27).'...</acronym>';
 			}
 			if(!$is_file_size)
 			{
@@ -157,9 +157,12 @@ class Statistics
 								<td width="550">
 						 			<img src="../../img/bar_1u.gif" width="'.$data[$subtitle].'" height="10"/>
 								</td>
-								<td align="right">'.$number_label.'</td>
-								<td align="right"> '.number_format(100*$number/$total, 1, ',', '.').'%</td>
-				 			</tr>';
+								<td align="right">'.$number_label.'</td>';
+			if($show_total)
+			{
+				echo '<td align="right"> '.number_format(100*$number/$total, 1, ',', '.').'%</td>';
+			}
+			echo '</tr>';
 			$i ++;
 		}
 		if ($show_total)
@@ -247,34 +250,23 @@ class Statistics
 		Statistics::print_stats(get_lang('Logins').' ('.$period.')',$result,true);
 	}
 	/**
-	 * Print the number of resent logins (last minute, hour, day, month)
+	 * Print the number of recent logins
 	 */
 	function print_recent_login_stats()
 	{
-		$total_logins = 0;
-
-		$sql['... ' & get_lang('Statistics_the_past_minute')] = "SELECT count(DISTINCT access_user_id) AS number FROM dokeos_stats.track_e_lastaccess WHERE DATE_ADD(access_date, INTERVAL 1 MINUTE) >= NOW()";
-		$sql['... ' & get_lang('Statistics_the_past_hour')] = "SELECT count(DISTINCT access_user_id) AS number  FROM dokeos_stats.track_e_lastaccess WHERE DATE_ADD(access_date, INTERVAL 1 HOUR) >= NOW()";
-		$sql['... ' & get_lang('Statistics_the_past_day')] = "SELECT count(DISTINCT access_user_id) AS number  FROM dokeos_stats.track_e_lastaccess WHERE DATE_ADD(access_date, INTERVAL 1 DAY) >= NOW()";
-		$sql['... ' & get_lang('Statistics_the_past_month')] = "SELECT count(DISTINCT access_user_id) AS number  FROM dokeos_stats.track_e_lastaccess WHERE DATE_ADD(access_date, INTERVAL 1 MONTH) >= NOW()";
-
-
+		$total_logins = array();
+		$table = Database::get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
+		$sql[get_lang('Thisday')] = "SELECT count(DISTINCT access_user_id) AS number FROM $table WHERE DATE_ADD(access_date, INTERVAL 1 DAY) >= NOW()";
+		$sql[get_lang('Last7days')] = "SELECT count(DISTINCT access_user_id) AS number  FROM $table WHERE DATE_ADD(access_date, INTERVAL 7 DAY) >= NOW()";
+		$sql[get_lang('Last31days')] = "SELECT count(DISTINCT access_user_id) AS number  FROM $table WHERE DATE_ADD(access_date, INTERVAL 31 DAY) >= NOW()";
+		$sql[get_lang('Total')] = "SELECT count(DISTINCT access_user_id) AS number  FROM $table";
 		foreach($sql as $index => $query)
 		{
-			#
-			#$index.': ';
 			$res = api_sql_query($query,__FILE__,__LINE__);
 			$obj = mysql_fetch_object($res);
-
-			/*
-			 * echo number_format($obj->number, 0, ',', '.');
-			 * echo '<br/>';
-			*/
-				$total_logins += number_format($obj->number, 0, ',', '.');
+			$total_logins[$index] = $obj->number;
 		}
-
-
-		Statistics::print_stats(get_lang('Statistics_Number_of_active_users_on_dokeos'),$total_logins,true);
+		Statistics::print_stats(get_lang('Logins'),$total_logins,false);
 	}
 	/**
 	 * Show some stats about the accesses to the different course tools

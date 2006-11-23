@@ -48,34 +48,6 @@ $tool_name = get_lang('ToolName');
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 
-?>
-<style type="text/css">
-<!--
-.statTable {
-	border: 1px solid #999999;
-	margin-bottom: 20px;
-}
-.statHeader{
-	background-color: #eeeeee;
-	border-bottom-width: 1px;
-	border-bottom-style: dashed;
-	border-bottom-color: #666666;
-	font-weight: bold;
-}
-.statFooter{
-	background-color: #eeeeee;
-	border-top-width: 1px;
-	border-top-style: dashed;
-	border-top-color: #666666;
-	font-weight: bold;
-}
-acronym{
-	 cursor: help;
-}
--->
-</style>
-<?php
-
 $strCourse  = get_lang('Courses');
 $strUsers = get_lang('Users');
 

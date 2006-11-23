@@ -1,5 +1,4 @@
 <?php
-
 // $Id: index.php 8216 2006-11-3 18:03:15 NushiFirefox $
 /*
 ==============================================================================
@@ -26,8 +25,6 @@
 * @package dokeos.statistics
 ==============================================================================
 */
-
-
 class Statistics
 {
 	/**
@@ -128,8 +125,8 @@ class Statistics
 	{
 		$total = 0;
 		$data = Statistics::rescale($stats);
-		echo '<table class="statTable data_table" cellspacing="0" cellpadding="3">
-			  		  <tr><th colspan="'.($show_total ? '4' : '3').'" class="statHeader">'.$title.'</th></tr>';
+		echo '<table class="data_table" cellspacing="0" cellpadding="3">
+			  		  <tr><th colspan="'.($show_total ? '4' : '3').'">'.$title.'</th></tr>';
 		$i = 0;
 		foreach($stats as $subtitle => $number)
 		{

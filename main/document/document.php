@@ -1,4 +1,4 @@
-<?php // $Id: document.php 10146 2006-11-23 07:55:38Z elixir_inter $
+<?php // $Id: document.php 10147 2006-11-23 07:56:16Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -282,31 +282,6 @@ if($to_group_id !=0) //add group name after for group documents
 }
 //api_display_tool_title($tool_name.$add_group_to_title);
 
-
-
-	/*======================================
-				PPT2LP SECTION
-	  ======================================*/
-
-
-$xajax -> printJavascript('../inc/lib/xajax/');
-
-echo '<script type="text/javascript">
-			function prepare_ppt2lp(file){
-				document.getElementById("ajax_response").style.display = "block";
-				document.getElementById("documents_content").style.display="none";
-				xajax_launch_ppt2lp(file);
-			}
-		</script>';
-
-echo '<div id="ajax_response" align="center" width="100%" style="display:none">
-		'.get_lang('Wait').'<br /><br />
-		<img src="../img/anim-loader.gif" />
-	  </div>';
-
-
-
-echo '<div id="documents_content">';
 
 
 
@@ -658,6 +633,5 @@ if ($is_allowed_to_edit) display_document_options();
 		Footer
 ==============================================================================
 */
-echo '</div>';
 Display::display_footer();
 ?>

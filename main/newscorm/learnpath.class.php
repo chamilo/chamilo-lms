@@ -5310,7 +5310,7 @@ class learnpath {
 									else
 										$content = '';
 									
-									$oFCKeditor = new FCKeditor('content') ;
+									$oFCKeditor = new FCKeditor('content_lp') ;
 									$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 									$oFCKeditor->Height		= '400';
 									$oFCKeditor->Width		= '100%';

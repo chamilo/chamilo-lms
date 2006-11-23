@@ -1,5 +1,4 @@
 <?php
-
 // $Id: index.php 8216 2006-11-3 18:03:15 NushiFirefox $
 /*
 ==============================================================================
@@ -27,30 +26,24 @@
 ==============================================================================
 */
 
- 
+
  Header("Cache-Control: must-revalidate");
 
  $offset = 60 * 3;
  $ExpStr = "Expires: " . gmdate("D, d M Y H:i:s", time() + $offset) . " GMT";
  Header($ExpStr);
- 
- $langFile='admin';
- $cidReset = true;
 
-include('../inc/global.inc.php');
+$langFile=array('admin','tracking');
+$cidReset = true;
+
+include('../../inc/global.inc.php');
 require_once ('statistics.lib.php');
 
-if($is_subPlatformAdmin)
-{
-	$interbredcrump[]=array("url" => "../subadmin/index.php","name" => get_lang('Management'));
-}
-else
-{
-	$interbredcrump[] = array ("url" => "../../../main/admin/index.php", "name" => get_lang('AdministrationTools'));
-}
+$interbreadcrumb[] = array ("url" => "../index.php", "name" => get_lang('AdministrationTools'));
 
 
-$tool_name = get_lang('Statistics_no_existing_courses');
+
+$tool_name = get_lang('ToolName');
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 
@@ -100,7 +93,7 @@ $tools[$strUsers]['action=users'] = get_lang('Statistics_user_count');
 $tools[$strUsers]['action=logins&amp;type=month'] = get_lang('Statistics_logins_each_month');
 if($is_platformAdmin)
 {
-	$tools[$strUsers]['action=logins&amp;type=day'] = get_lang('Statistics_logins_each_day');	
+	$tools[$strUsers]['action=logins&amp;type=day'] = get_lang('Statistics_logins_each_day');
 	$tools[$strUsers]['action=logins&amp;type=hour'] = get_lang('Statistics_logins_each_hour');
 	$tools[$strUsers]['action=recentlogins'] = get_lang('Statistics_total_active_users');
 	$tools[$strUsers]['action=pictures'] = get_lang('Statistics_total_users_with_pic');

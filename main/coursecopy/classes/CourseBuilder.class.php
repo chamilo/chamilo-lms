@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 10155 2006-11-23 08:53:59Z elixir_inter $
+<?php // $Id: CourseBuilder.class.php 10156 2006-11-23 08:59:13Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,7 +76,7 @@ class CourseBuilder
 		$this->build_announcements();
 		$this->build_links();
 		$this->build_tool_intro();
-		$this->build_forums();
+		//$this->build_forums();
 		$this->build_documents();
 		$this->build_course_descriptions();
 		$this->build_quizzes();

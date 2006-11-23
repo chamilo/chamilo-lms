@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 10155 2006-11-23 08:53:59Z elixir_inter $
+// $Id: CourseRestorer.class.php 10156 2006-11-23 08:59:13Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -100,7 +100,7 @@ class CourseRestorer
 		$this->restore_documents();
 		$this->restore_scorm_documents();
 		$this->restore_course_descriptions();
-		$this->restore_forums();
+		//$this->restore_forums();
 		$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
 		$this->restore_learnpaths();
 		// Restore the item properties

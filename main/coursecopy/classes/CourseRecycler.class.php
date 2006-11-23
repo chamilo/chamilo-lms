@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseRecycler.class.php 10154 2006-11-23 08:48:12Z elixir_inter $
+// $Id: CourseRecycler.class.php 10156 2006-11-23 08:59:13Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -69,8 +69,8 @@ class CourseRecycler
 		$this->recycle_events();
 		$this->recycle_announcements();
 		$this->recycle_documents();
-		$this->recycle_forums();
-		$this->recycle_forum_categories();
+		//$this->recycle_forums();
+		//$this->recycle_forum_categories();
 		$this->recycle_quizzes();
 		$this->recycle_learnpaths();
 		$this->recycle_cours_description();

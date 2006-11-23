@@ -80,9 +80,8 @@ $strCourse  = get_lang('Courses');
 $strUsers = get_lang('Users');
 
 
-$tools[$strCourse]['action=courses&amp;count_invisible_courses=1'] = get_lang('Statistics_total_amount_of_courses');
-$tools[$strCourse]['action=curriculum_courses'] = get_lang('Statistics_curriculumcourses_a_year');
-$tools[$strCourse]['action=tools'] = get_lang('Statistics_Acces_to_coursemodules');
+$tools[$strCourse]['action=courses'] = get_lang('CountCours');
+$tools[$strCourse]['action=tools'] = get_lang('PlatformToolAccess');
 $tools[$strCourse]['action=courselastvisit'] = get_lang('Statistics_final_visit');
 
 
@@ -113,25 +112,14 @@ $faculties = statistics::get_faculties();
 echo '<br/><br/>';
 switch($_GET['action'])
 {
-	case $strCourse:
+	case 'courses':
 		// total amount of courses
-		statistics::print_stats(
-				get_lang('Statistics_NumberOfCourses'),
-				array(
-					get_lang('Statistics_CurriculumCourses') => statistics::count_courses(true,null,$_GET['count_invisible_courses']),
-					get_lang('Statistics_CommonCourses') => statistics::count_courses(false,null,$_GET['count_invisible_courses'])
-				)
-			);
 		foreach($faculties as $code => $name)
 		{
-			$name = str_replace(get_lang('Statistics_Department'),"",$name);
-			$cur_courses[$name] = statistics::count_courses(true,$code,$_GET['count_invisible_courses']);
-			$alg_courses[$name] = statistics::count_courses(false,$code,$_GET['count_invisible_courses']);
+			$courses[$name] = statistics::count_courses($code);
 		}
 		// curriculum-course for each department
-		statistics::print_stats(get_lang('Statistics_CurriculumCourses'),$cur_courses);
-		// general course for each department
-		statistics::print_stats(get_lang('Statistics_CommonCourses'),$alg_courses);
+		statistics::print_stats(get_lang('CountCours'),$courses);
 
 		break;
 	case $strUsers:

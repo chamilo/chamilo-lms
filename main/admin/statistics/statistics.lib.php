@@ -47,23 +47,14 @@ class Statistics
 	 * @param $string faculty  Code of a faculty. Default: count all courses.
 	 * @return int Number of courses counted
 	 */
-	function count_courses($curriculum, $faculty = NULL, $count_invisible_courses = true)
+	function count_courses($faculty = NULL)
 	{
 		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
 		$sql = "SELECT COUNT(*) AS number FROM ".$course_table." ";
-		if ($curriculum)
-		{
-			$sql .= "WHERE visual_code NOT LIKE 'ALG%'";
-		}
-		else
-		{
-			$sql .= "WHERE visual_code LIKE 'ALG%'";
-		}
 		if (isset ($faculty))
 		{
-			$sql .= " AND category_code = '$faculty'";
+			$sql .= " WHERE category_code = '$faculty'";
 		}
-
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = mysql_fetch_object($res);
 		return $obj->number;

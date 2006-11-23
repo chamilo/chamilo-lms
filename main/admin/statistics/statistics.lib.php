@@ -164,7 +164,7 @@ class Statistics
 			echo '<tr class="row_'.($i%2 == 0 ? 'odd' : 'even').'">
 								<td width="150">'.$short_subtitle.'</td>
 								<td width="550">
-						 			<img src="../img/bar_1u.gif" width="'.$data[$subtitle].'" height="10"/>
+						 			<img src="../../img/bar_1u.gif" width="'.$data[$subtitle].'" height="10"/>
 								</td>
 								<td align="right">'.$number_label.'</td>
 								<td align="right"> '.number_format(100*$number/$total, 1, ',', '.').'%</td>
@@ -200,7 +200,7 @@ class Statistics
 			while($obj = mysql_fetch_object($res))
 			{
 				$result[$faculties[$obj->cat_code]] = $obj->number_of_courses;
-			}	
+			}
 			Statistics::print_stats(get_lang('Statistics_NumberOfCourses').$year.'-'.($year+1),$result,true);
 		}
 	}
@@ -219,7 +219,7 @@ class Statistics
 			while($obj = mysql_fetch_object($res))
 			{
 				$result[$faculties[$obj->cat_code]][$year.'-'.($year+1)] = $obj->number_of_courses;
-			}	
+			}
 		}
 		foreach($result as $faculty => $stats)
 		{
@@ -258,20 +258,20 @@ class Statistics
 	function print_recent_login_stats()
 	{
 		$total_logins = 0;
-		
+
 		$sql['... ' & get_lang('Statistics_the_past_minute')] = "SELECT count(DISTINCT access_user_id) AS number FROM dokeos_stats.track_e_lastaccess WHERE DATE_ADD(access_date, INTERVAL 1 MINUTE) >= NOW()";
 		$sql['... ' & get_lang('Statistics_the_past_hour')] = "SELECT count(DISTINCT access_user_id) AS number  FROM dokeos_stats.track_e_lastaccess WHERE DATE_ADD(access_date, INTERVAL 1 HOUR) >= NOW()";
 		$sql['... ' & get_lang('Statistics_the_past_day')] = "SELECT count(DISTINCT access_user_id) AS number  FROM dokeos_stats.track_e_lastaccess WHERE DATE_ADD(access_date, INTERVAL 1 DAY) >= NOW()";
 		$sql['... ' & get_lang('Statistics_the_past_month')] = "SELECT count(DISTINCT access_user_id) AS number  FROM dokeos_stats.track_e_lastaccess WHERE DATE_ADD(access_date, INTERVAL 1 MONTH) >= NOW()";
-		
-		
+
+
 		foreach($sql as $index => $query)
 		{
 			#
 			#$index.': ';
 			$res = api_sql_query($query,__FILE__,__LINE__);
 			$obj = mysql_fetch_object($res);
-			
+
 			/*
 			 * echo number_format($obj->number, 0, ',', '.');
 			 * echo '<br/>';
@@ -279,7 +279,7 @@ class Statistics
 				$total_logins += number_format($obj->number, 0, ',', '.');
 		}
 
-	
+
 		Statistics::print_stats(get_lang('Statistics_Number_of_active_users_on_dokeos'),$total_logins,true);
 	}
 	/**
@@ -328,8 +328,8 @@ class Statistics
 		Statistics::print_stats(get_lang('Statistics_Acces_to_old_curriculum_courses'),$result,true);
 	}
 
-	
-		
+
+
 	/**
 	 * Shows the number of users having their picture uploaded in Dokeos.
 	 */
@@ -342,7 +342,7 @@ class Statistics
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$count2 = mysql_fetch_object($res);
 		Statistics::print_stats(get_lang('user_who_have_picture_in_dokeos'),'('.number_format(($count2->n/$count1->n*100), 0, ',', '.').'%)',true);
-		
+
 	#	echo $count2->n.' ' & get_lang('Statistics_user_who_have_picture_in_dokeos') & '('.number_format(($count2->n/$count1->n*100), 0, ',', '.').'%)';
 	}
 
@@ -387,7 +387,7 @@ class Statistics
 				$course[] = $obj->access_date;
 				$courses[] = $course;
 			}
-			
+
 			$table_header[] = array ("Coursecode", true);
 			$table_header[] = array ("Last login", true);
 				HoGent::display_page_navigation($number_of_courses,$per_page, $page_nr,array_merge($parameters,$_GET));
@@ -406,6 +406,6 @@ class Statistics
 			echo get_lang('NoSearchResults');
 		}
 	}
-	
+
 }
 ?>

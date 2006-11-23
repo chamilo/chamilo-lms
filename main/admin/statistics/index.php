@@ -108,17 +108,17 @@ foreach($tools as $section => $items)
 	echo '</td>';
 }
 echo '</tr></table>';
-$faculties = statistics::get_faculties();
+$course_categories = statistics::get_course_categories();
 echo '<br/><br/>';
 switch($_GET['action'])
 {
 	case 'courses':
 		// total amount of courses
-		foreach($faculties as $code => $name)
+		foreach($course_categories as $code => $name)
 		{
 			$courses[$name] = statistics::count_courses($code);
 		}
-		// curriculum-course for each department
+		// courses for each course category
 		statistics::print_stats(get_lang('CountCours'),$courses);
 
 		break;
@@ -131,15 +131,15 @@ switch($_GET['action'])
 					get_lang('Students') => statistics::count_users(5,null,$_GET['count_invisible_courses'])
 				)
 			);
-		foreach($faculties as $code => $name)
+		foreach($course_categories as $code => $name)
 		{
 			$name = str_replace(get_lang('Department'),"",$name);
 			$teachers[$name] = statistics::count_users(1,$code,$_GET['count_invisible_courses']);
 			$students[$name] = statistics::count_users(5,$code,$_GET['count_invisible_courses']);
 		}
-		// docents for each departerment
+		// docents for each course category
 		statistics::print_stats(get_lang('Teachers'),$teachers);
-		// students for each departement
+		// students for each course category
 		statistics::print_stats(get_lang('Students'),$students);
 
 		break;
@@ -149,9 +149,6 @@ switch($_GET['action'])
 	case 'tools':
 		statistics::print_tool_stats();
 		break;
-	case 'accessoldcourses':
-		statistics::print_access_to_old_courses_stats();
-		break;
 	case 'courselastvisit':
 		statistics::print_course_last_visit();
 		break;
@@ -160,10 +157,6 @@ switch($_GET['action'])
 		break;
 	case 'pictures':
 		statistics::print_user_pictures_stats();
-		break;
-	case 'curriculum_courses':
-		statistics::print_curriculum_courses_stats_by_year();
-		statistics::print_curriculum_courses_stats_by_category();
 		break;
 }
 

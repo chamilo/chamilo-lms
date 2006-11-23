@@ -43,17 +43,17 @@ class Statistics
 	}
 	/**
 	 * Count courses
-	 * @param bool $curriculum True if only curriculum-courses should be counted
-	 * @param $string faculty  Code of a faculty. Default: count all courses.
+	 * @param string $category_code  Code of a course category. Default: count
+	 * all courses.
 	 * @return int Number of courses counted
 	 */
-	function count_courses($faculty = NULL)
+	function count_courses($category_code = NULL)
 	{
 		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
 		$sql = "SELECT COUNT(*) AS number FROM ".$course_table." ";
-		if (isset ($faculty))
+		if (isset ($category_code))
 		{
-			$sql .= " WHERE category_code = '$faculty'";
+			$sql .= " WHERE category_code = '".mysql_real_escape_string($category_code)."'";
 		}
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = mysql_fetch_object($res);
@@ -62,37 +62,38 @@ class Statistics
 	/**
 	 * Count users
 	 * @param int $status COURSEMANAGER or STUDENT
-	 * @param $string faculty  Code of a faculty. Default: count all students.
-	 * @return int Number of students counted
+	 * @param string $category_code  Code of a course category. Default: count
+	 * all users.
+	 * @return int Number of users counted
 	 */
-	function count_users($status, $faculty = NULL, $count_invisible_courses = true)
+	function count_users($status, $category_code = NULL, $count_invisible_courses = true)
 	{
 		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
 		$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = $status AND cu.course_code = c.code";
-		if (isset ($faculty))
+		if (isset ($category_code))
 		{
-			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = $status AND c.code = cu.course_code AND c.category_code = '$faculty'";
+			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = $status AND c.code = cu.course_code AND c.category_code = '".mysql_real_escape_string($category_code)."'";
 		}
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = mysql_fetch_object($res);
 		return $obj->number;
 	}
 	/**
-	 * Get all faculties
-	 * @return array All faculties (code => name)
+	 * Get all course categories
+	 * @return array All course categories (code => name)
 	 */
-	function get_faculties()
+	function get_course_categories()
 	{
 		$category_table = Database :: get_main_table(MAIN_CATEGORY_TABLE);
 		$sql = "SELECT * FROM $category_table ORDER BY tree_pos";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
-		$faculties = array ();
-		while ($fac = mysql_fetch_object($res))
+		$categories = array ();
+		while ($category = mysql_fetch_object($res))
 		{
-			$faculties[$fac->code] = $fac->name;
+			$categories[$category->code] = $category->name;
 		}
-		return $faculties;
+		return $categories;
 	}
 	/**
 	 * Rescale data
@@ -180,47 +181,6 @@ class Statistics
 		echo '</table>';
 	}
 	/**
-	 * Show statistics about the number of curriculum courses per year
-	 */
-	function print_curriculum_courses_stats_by_year()
-	{
-		$faculties = Statistics::get_faculties();
-		for($year = CURRENT_ACADEMIC_YEAR; $year >= FIRST_ACADEMIC_YEAR; $year--)
-		{
-			$cdb = 'cdb'.($year != CURRENT_ACADEMIC_YEAR ? $year : '');
-			$sql = 'SELECT c.category_code AS cat_code,COUNT(c.code) AS number_of_courses FROM dokeos_main.course c, '.$cdb.'.vak v WHERE c.visual_code = v.vak GROUP BY c.category_code';
-			$res = api_sql_query($sql,__FILE__,__LINE__);
-			$result = array();
-			while($obj = mysql_fetch_object($res))
-			{
-				$result[$faculties[$obj->cat_code]] = $obj->number_of_courses;
-			}
-			Statistics::print_stats(get_lang('Statistics_NumberOfCourses').$year.'-'.($year+1),$result,true);
-		}
-	}
-	/**
-	 * Show statistics about the number of curriculum courses per year per department
-	 */
-	function print_curriculum_courses_stats_by_category()
-	{
-		$result = array();
-		$faculties = Statistics::get_faculties();
-		for($year = CURRENT_ACADEMIC_YEAR; $year >= FIRST_ACADEMIC_YEAR; $year--)
-		{
-			$cdb = 'cdb'.($year != CURRENT_ACADEMIC_YEAR ? $year : '');
-			$sql = 'SELECT c.category_code AS cat_code,COUNT(c.code) AS number_of_courses FROM dokeos_main.course c, '.$cdb.'.vak v WHERE c.visual_code = v.vak GROUP BY c.category_code';
-			$res = api_sql_query($sql,__FILE__,__LINE__);
-			while($obj = mysql_fetch_object($res))
-			{
-				$result[$faculties[$obj->cat_code]][$year.'-'.($year+1)] = $obj->number_of_courses;
-			}
-		}
-		foreach($result as $faculty => $stats)
-		{
-			Statistics::print_stats(get_lang('Statistics_CurriculumCourses').$faculty,$stats,true);
-		}
-	}
-	/**
 	 * Show some stats about the number of logins
 	 * @param string $type month, hour or day
 	 */
@@ -290,28 +250,6 @@ class Statistics
 			$result[$obj->access_tool] = $obj->number_of_logins;
 		}
 		Statistics::print_stats(get_lang('Statistics_Acces_to_coursemodules_use'),$result,true);
-	}
-	/**
-	 * Show some stats about the access to old course tools
-	 */
-	function print_access_to_old_courses_stats()
-	{
-	$currentDate =  getDate();
-	$my_year =  $currentDate["year"];
-		$sql = "SELECT 	count( access_id ) AS number,
-						IF( LOCATE( 'ALG', access_cours_code ) ,
-							'Algemene cursus',
-							IF( LENGTH( access_cours_code ) =14, 'Curr. " + my_year-2 + "-" + my_year-1 + "', 'Curr. "+my_year-1 +"-"+ my_year +")
-						) AS type
-				FROM dokeos_stats.track_e_access
-				GROUP BY TYPE";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$result = array();
-		while($obj = mysql_fetch_object($res))
-		{
-			$result[$obj->type] = $obj->number;
-		}
-		Statistics::print_stats(get_lang('Statistics_Acces_to_old_curriculum_courses'),$result,true);
 	}
 
 

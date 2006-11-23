@@ -142,7 +142,7 @@ input.link_alike:hover {
 
 
 .maincontent {	/* for content section in main index.php file */
-	background-color: #f00;
+	background-color: #fff;
 	float: left;
 	padding: 4px;
 	width: 78%;

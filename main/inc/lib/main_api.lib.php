@@ -290,7 +290,7 @@ function api_get_path($path_type)
 			
 		case REL_PATH :
 			// example: dokeos/
-			if (substr($GLOBALS['urlAppend'], -1) === '/')
+			if (substr($_configuration['url_append'], -1) === '/')
 			{
 				return $_configuration['url_append'];
 			}

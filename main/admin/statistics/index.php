@@ -90,7 +90,7 @@ $tools[$strUsers]['action=logins&amp;type=month'] = get_lang('Logins').' ('.get_
 $tools[$strUsers]['action=logins&amp;type=day'] = get_lang('Logins').' ('.get_lang('PeriodDay').')';
 $tools[$strUsers]['action=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('PeriodHour').')';
 $tools[$strUsers]['action=recentlogins'] = get_lang('Statistics_total_active_users');
-$tools[$strUsers]['action=pictures'] = get_lang('Statistics_total_users_with_pic');
+$tools[$strUsers]['action=pictures'] = get_lang('CountUsers').' ('.get_lang('UserPicture').')';
 
 
 
@@ -122,7 +122,7 @@ switch($_GET['action'])
 		statistics::print_stats(get_lang('CountCours'),$courses);
 
 		break;
-	case $strUsers:
+	case 'users':
 		// total amount of users
 		statistics::print_stats(
 				get_lang('NumberOfUsers'),

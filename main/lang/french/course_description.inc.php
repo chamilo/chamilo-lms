@@ -13,4 +13,5 @@ $langAdd  = "Ajouter";
 $langValid  = "Enregistrer";
 $langBackAndForget  = "Abandonner";
 $langOkSent = "Votre page a été envoyée.<p>Elle est accessible depuis la <a href=../..//index.php>page d\'accueil</a> de votre cours";
+$Content = "Contenu";
 ?>

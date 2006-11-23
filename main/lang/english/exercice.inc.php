@@ -161,6 +161,7 @@ $langUseExistantQuestion = "Use an existing question";
 $freeAnswer = "Free answer";
 $notCorrectedYet = "This answer has not yet been corrected. Meanwhile, your score for this question is set to 0, affecting the total score.";
 $adminHP = "Hot Potatoes Admin";
+$NewQu = "New question";
 $NoImage = "Veuillez choisir une image.";
 $langAnswerHotspot = "Description and weighing are required for each hotspot - comment is optional";
 $langMinHotspot = "You have to create one (1) hotspot at least.";

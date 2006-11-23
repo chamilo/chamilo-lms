@@ -463,4 +463,6 @@ $ConnectSocketError = "Erro de Conexión (Socket)";
 $SocketFunctionsDisabled = "As conexións externas (sockets) están deshabilitadas";
 $ShowEmailAddresses = "Mostrar o enderzo de email";
 $ShowEmailAddressesComment = "Mostrar o enderezo de email aos usuarios";
+$langVisioconf = "Videoconferencia";
+$langCoachName = "Nome do titor";
 ?>

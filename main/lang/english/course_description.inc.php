@@ -13,4 +13,5 @@ $langAdd  = "Add";
 $langValid  = "Valid";
 $langBackAndForget  = "Back and forget";
 $langOkSent = "Your page has been uploaded.<p>It is now linked from <a href=../../$dbname/index.php>Homepage</a>";
+$Content = "Content";
 ?>

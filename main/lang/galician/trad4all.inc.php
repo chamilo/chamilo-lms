@@ -280,4 +280,5 @@ $Other = "Outro";
 $AddRight = "Engadir";
 $bb_post = "Mensaxe do foro";
 $bb_thread = "Tema do foro";
+$Students = "Estudantes";
 ?>

@@ -1,0 +1,23 @@
+<?php /*
+for more information: see languages.txt in the lang folder. 
+*/
+$Inbox  = "Inbox";
+$Messages = "Nachrichten";
+$SendMessage = "Nachricht senden";
+$NewMessage = "Neue Nachricht";
+$ComposeMessage = "Nachricht erstellen";
+$DeleteSelectedMessages = "Ausgewählte Nachrichten löschen";
+$SelectAll = "Alle auswählen";
+$DeselectAll  = "Gesamtauswahl aufheben";
+$ReplyToMessage = "Auf Nachricht antworten";
+$BackToInbox = "Zurück zum Posteingang ";
+$MessageSentTo = "Die Nachricht wurde versendet an ";
+$SendMessageTo = "Senden an ";
+$Myself = "selbst";
+$From = "Von";
+$To = "An";
+$Date = "Datum";
+$InvalidMessageId = "Die ID der zu beantwortenden Nachricht ist ungültig";
+$ErrorSendingMessage = "Beim Versenden der Nachricht gab es einen Fehler";
+$SureYouWantToDeleteSelectedMessages = "Sind Sie sicher, dass Sie die ausgewählten Nachrichten löschen möchten?";
+?>

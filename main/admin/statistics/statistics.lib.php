@@ -230,23 +230,16 @@ class Statistics
 	 */
 	function print_tool_stats()
 	{
+		$table = Database::get_statistic_table(STATISTIC_TRACK_E_ACCESS_TABLE);
 		$tools = array('announcement','assignment','calendar_event','chat','conference','course_description','document','dropbox','group','learnpath','link','quiz','student_publication','user','bb_forum');
-		$sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM dokeos_stats.track_e_access WHERE access_tool IN ('".implode("','",$tools)."') GROUP BY access_tool ";
+		$sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM $table WHERE access_tool IN ('".implode("','",$tools)."') GROUP BY access_tool ";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$result = array();
 		while($obj = mysql_fetch_object($res))
 		{
 			$result[$obj->access_tool] = $obj->number_of_logins;
 		}
-		Statistics::print_stats(get_lang('Statistics_Acces_to_coursemodules_hits'),$result,true);
-		$sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM dokeos_stats.track_e_lastaccess WHERE access_tool IN ('".implode("','",$tools)."') GROUP BY access_tool ";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$result = array();
-		while($obj = mysql_fetch_object($res))
-		{
-			$result[$obj->access_tool] = $obj->number_of_logins;
-		}
-		Statistics::print_stats(get_lang('Statistics_Acces_to_coursemodules_use'),$result,true);
+		Statistics::print_stats(get_lang('PlatformToolAccess'),$result,true);
 	}
 
 

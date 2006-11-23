@@ -1,4 +1,4 @@
-<?php // $Id: document.php 10124 2006-11-22 17:19:37Z elixir_inter $
+<?php // $Id: document.php 10146 2006-11-23 07:55:38Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -67,12 +67,7 @@ include("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 
 include('document.inc.php');
-include(api_get_path(LIBRARY_PATH).'/xajax/xajax.inc.php');
 
-
-$xajax = new Xajax();
-//$xajax -> debugOn();
-$xajax -> registerFunction('launch_ppt2lp');
 
 api_protect_course_script();
 
@@ -218,108 +213,6 @@ $course_quota = DocumentManager::get_course_quota();
 		MAIN SECTION
 ==============================================================================
 */
-
-
-
-/**
- * Function called with xajax.
- * It create a directory named like the powerpoint file and generate slides from it.
- * @param $file the path of the powerpoint document
- * @return XajaxResponse object
- */
-function launch_ppt2lp($file){
-
-	global $_course,$_user, $openoffice_conf, $base_work_dir;
-
-	$response = new XajaxResponse();
-	// lp tables
-	$tbl_learnpath_item     = Database::get_course_table(LEARNPATH_ITEM_TABLE);
-	$tbl_learnpath_chapter  = Database::get_course_table(LEARNPATH_CHAPTER_TABLE);
-	$tbl_learnpath_main     = Database::get_course_table(LEARNPATH_MAIN_TABLE);
-	$tbl_tool               = Database::get_course_table(TOOL_LIST_TABLE);
-
-	$file = urldecode($file);
-
-	// get properties of ppt file
-	$document_datas = DocumentManager::get_all_document_data($_course, $file);
-	$to_group_id = (empty($document_datas['to_group_id'])) ? 0 : $document_datas['to_group_id'];
-	$to_user_id = (empty($document_datas['to_user_id'])) ? null : $document_datas['to_user_id'];
-
-	//create the directory
-	$added_slash = '/';
-	$dir_name = $added_slash.substr($file, 1, strrpos($file,'.')-1);
-	$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name);
-
-	chmod ($base_work_dir.$created_dir,0777);
-	/*
-	 * exec java application
-	 * the parameters of the program are :
-	 * - javacommand on this server ;
-	 * - host where openoffice is running;
-	 * - port with which openoffice is listening
-	 * - file to convert
-	 * - folder where put the slides
-	 * - ftppassword if required
-	 * The program fills $files with the list of slides created
-	 */
-	$cmd = 'cd '.api_get_path(LIBRARY_PATH).'/ppt2png && ./launch_ppt2png.sh '.$openoffice_conf['javacommand'].' '.$openoffice_conf['host'].' '.$openoffice_conf['port'].' "'.$base_work_dir.$file.'" "'.$base_work_dir.$created_dir.'" '.$openoffice_conf['ftppasswd'];
-
-	$files = array();
-
-	$shell = exec($cmd, $files, $return);
-
-	chmod ($base_work_dir.$created_dir,0744);
-	if($return != 0) { //if the java application returns an error code
-		DocumentManager::delete_document($_course, $dir_name, $base_work_dir);
-
-		$response -> addAssign('ajax_response', 'innerHTML', '<div class="error-message">'.get_lang('nookppt2lp').' : '.$return.$cmd.'</div>');
-		$response -> addScript('document.getElementById("documents_content").style.display="block"');
-	}
-	else {
-		// create lp
-		$learnpath_name = 'lp_';
-		$learnpath_name .= substr($_GET['file'], strrpos($_GET['file'],'/')+1);
-		$learnpath_name = substr($learnpath_name,0, strrpos($learnpath_name,'.'));
-		$learnpath_description = '';
-		$sql ="INSERT INTO $tbl_learnpath_main (learnpath_name, learnpath_description) VALUES ('".domesticate($learnpath_name)."','".domesticate($learnpath_description)."')";
-		api_sql_query($sql,__FILE__,__LINE__);
-		$my_lp_id = Database::get_last_insert_id();
-
-		$sql ="INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('".domesticate($learnpath_name)."','learnpath/learnpath_handler.php?learnpath_id=$my_lp_id','scormbuilder.gif','1','0','squaregrey.gif',0)";
-		api_sql_query($sql,__FILE__,__LINE__);
-
-		// insert a new module
-		$title = 'slides';
-		$omschrijving = '';
-		$order = 1;
-		$sql ="INSERT INTO $tbl_learnpath_chapter (learnpath_id, chapter_name, chapter_description, display_order) VALUES ('".domesticate($my_lp_id)."', '".domesticate(htmlspecialchars($title))."','".domesticate(htmlspecialchars($omschrijving))."', '".domesticate($order)."')";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$chapter_id = Database::get_last_insert_id();
-
-
-
-		$order = 1;
-		foreach($files as $file){
-			$document_id = add_document($_course,$created_dir.'/'.$file,'file',filesize($base_work_dir.$created_dir.'/'.$file),$file);
-			if ($document_id){
-				//put the document in item_property update
-				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],$to_group_id,$to_user_id);
-				$sql = "INSERT INTO $tbl_learnpath_item (chapter_id, item_type, item_id, display_order) VALUES ('$chapter_id', 'Document','".$document_id."','".$order."')";
-				$result = api_sql_query($sql, __FILE__, __LINE__);
-				$order++;
-			}
-		}
-		// redirect on the lp view
-		$response -> addScript('document.location="../learnpath/showinframes.php?source_id=5&action=&learnpath_id='.$my_lp_id.'&chapter_id=&originalresource=no";');
-
-
-	}
-	return $response;
-}
-$xajax -> processRequests();
-
-
-
 
 //-------------------------------------------------------------------//
 if ($_GET['action']=="download")
@@ -693,10 +586,7 @@ if($docs_and_folders)
 		if ($is_allowed_to_edit || $group_member_with_upload_rights)
 		{
 			$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key);
-			// if ppt2lp is actived and it's a ppt-like document, we display a link on which an ajax event is linked : prepare_ppt2lp (see upper)
-			if(in_array(substr($id['path'],strrpos($id['path'],'.')+1),array("ppt","odp"))){
-				$edit_icons .= '<a href="#" onclick="prepare_ppt2lp(\''.urlencode($id['path']).'\')" title="'.get_lang('Ppt2lp').'" alt="'.get_lang('Ppt2lp').'"><img src="../img/recycle.gif" border="0" /></a>';
-			}
+			
 			$row[] = $edit_icons;
 		}
 		$sortable_data[] = $row;

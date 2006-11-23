@@ -1376,7 +1376,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 }
 
 /* FCKeditor */
-#content___Frame, #forum_category_comment___Frame, #forum_comment___Frame, #post_text___Frame, #texte___Frame
+#content___Frame, #forum_category_comment___Frame, #forum_comment___Frame, #post_text___Frame, #texte___Frame, #questionDescription___Frame
 {
 	margin-left: -200px;
 }

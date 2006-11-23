@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 10154 2006-11-23 08:48:12Z elixir_inter $
+<?php // $Id: CourseBuilder.class.php 10155 2006-11-23 08:53:59Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -167,7 +167,7 @@ class CourseBuilder
 	 */
 	function build_forum_topics()
 	{
-		$table = Database :: get_course_table(TOOL_FORUM_TOPIC_TABLE);
+		$table = Database :: get_course_table(TOOL_FORUM_POST_TABLE);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))

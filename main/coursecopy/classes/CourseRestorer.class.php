@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 10154 2006-11-23 08:48:12Z elixir_inter $
+// $Id: CourseRestorer.class.php 10155 2006-11-23 08:53:59Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -324,7 +324,7 @@ class CourseRestorer
 		if ($this->course->has_resources(RESOURCE_FORUM))
 		{
 			$table_forum = Database :: get_course_table(TOOL_FORUM_TABLE, $this->course->destination_db);
-			$table_topic = Database :: get_course_table(TOOL_FORUM_TOPIC_TABLE, $this->course->destination_db);
+			$table_topic = Database :: get_course_table(TOOL_FORUM_POST_TABLE, $this->course->destination_db);
 			$table_post = Database :: get_course_table(TOOL_FORUM_POST_TABLE, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum)
@@ -378,7 +378,7 @@ class CourseRestorer
 	 */
 	function restore_topic($id, $forum_id)
 	{
-		$table = Database :: get_course_table(TOOL_FORUM_TOPIC_TABLE, $this->course->destination_db);
+		$table = Database :: get_course_table(TOOL_FORUM_POST_TABLE, $this->course->destination_db);
 		$resources = $this->course->resources;
 		$topic = $resources[RESOURCE_FORUMTOPIC][$id];
 		$sql = "INSERT INTO ".$table." SET topic_title = '".mysql_real_escape_string($topic->title)."', topic_time = '".$topic->time."', nom = '".mysql_real_escape_string($topic->lastname)."', prenom = '".mysql_real_escape_string($topic->firstname)."', topic_notify = '".$topic->topic_notify."', forum_id = '".$forum_id."'";

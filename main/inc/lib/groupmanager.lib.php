@@ -288,7 +288,7 @@ class GroupManager
 		$forum_table = Database :: get_course_table(TOOL_FORUM_TABLE, $course_db);
 		$forum_post_table = Database :: get_course_table(TOOL_FORUM_POST_TABLE, $course_db);
 		$forum_post_text_table = Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE, $course_db);
-		$forum_topic_table = Database :: get_course_table(TOOL_FORUM_TOPIC_TABLE, $course_db);
+		$forum_topic_table = Database :: get_course_table(TOOL_FORUM_POST_TABLE, $course_db);
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
 		// define repository for deleted element
 		$group_garbage = api_get_path(GARBAGE_PATH).$course['path']."/group/";

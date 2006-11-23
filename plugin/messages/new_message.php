@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 9992 2006-11-15 12:25:28Z pcool $
+<?php // $Id: new_message.php 10173 2006-11-23 13:15:44Z evie_em $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,13 +79,7 @@ function show_compose_to_any($user_id)
 	$default['title'] = "Please enter a title";
 	$default['user_list'] = $receiver_id;
 	
-	$form = new FormValidator('compose_message');
-	$form->addElement('select', 'user_list', get_lang('SendMessageTo'), $online_user_list);
-	$form->add_textfield('title', get_lang('Title'));
-	$form->add_html_editor('content', get_lang('Content'));
-	$form->addElement('submit', 'compose', get_lang('Ok'));
-	$form->setDefaults($default);
-	$form->display();
+	manage_form($default, $online_user_list);
 }
 
 function show_compose_reply_to_message($message_id, $receiver_id)
@@ -105,13 +99,7 @@ function show_compose_reply_to_message($message_id, $receiver_id)
 	$default['title'] = "Please enter a title";
 	$default['user_list'] = $row[1];
 	
-	$form = new FormValidator('compose_message');
-	$form->add_textfield('title', get_lang('Title'));
-	$form->add_html_editor('content', get_lang('MessageContent'));
-	$form->addElement('hidden', 'user_list');
-	$form->addElement('submit', 'compose', get_lang('Ok'));
-	$form->setDefaults($default);
-	$form->display();
+	manage_form($default, $select_from_user_list);
 }
 
 function show_compose_to_user($receiver_id)
@@ -121,10 +109,22 @@ function show_compose_to_user($receiver_id)
 	$default['title'] = "Please enter a title";
 	$default['user_list'] = $receiver_id;
 	
+	manage_form($default, $select_from_user_list);
+}
+
+function manage_form($default, $select_from_user_list)
+{
 	$form = new FormValidator('compose_message');
+	if (isset($select_from_user_list))
+	{
+		$form->addElement('select', 'user_list', get_lang('SendMessageTo'), $select_from_user_list);
+	}
+	else
+	{
+		$form->addElement('hidden', 'user_list');
+	}
 	$form->add_textfield('title', get_lang('Title'));
-	$form->add_html_editor('content', get_lang('MessageContent'));
-	$form->addElement('hidden', 'user_list');
+	$form->add_html_editor('content', get_lang('Content'));
 	$form->addElement('submit', 'compose', get_lang('Ok'));
 	$form->setDefaults($default);
 	$form->display();

@@ -1191,7 +1191,7 @@ class learnpathItem{
      * Sets the item viewing time in a usable form, given that SCORM packages often give it as 00:00:00.0000
      * @param	string	Time as given by SCORM
      */
-    function set_time($scorm_time)
+    function set_time($scorm_time,$format='scorm')
     {
    		if($this->debug>0){error_log('New LP - In learnpathItem::set_time('.$scorm_time.')',0);}
      	if($scorm_time == 0 and ($this->type=='asset' or $this->type=='doc') and $this->current_start_time!=0){
@@ -1201,16 +1201,20 @@ class learnpathItem{
      			if($this->debug>-1){error_log('New LP - In learnpathItem::set_time('.$scorm_time.') - found asset - set time to '.$my_time,0);}
      		}
      	}else{
-	     	$res = array();
-	     	if(preg_match('/^(\d{1,4}):(\d{2}):(\d{2})(\.\d{1,4})?/',$scorm_time,$res)){
-	     		$time = time();
-				$hour = $res[1];
-				$min = $res[2];
-				$sec = $res[3];
-				//getting total number of seconds spent
-	     		$total_sec = $hour*3600 + $min*60 + $sec;
-	     		$this->update_time($total_sec);
-	     	}
+     		if($format == 'scorm'){
+		     	$res = array();
+		     	if(preg_match('/^(\d{1,4}):(\d{2}):(\d{2})(\.\d{1,4})?/',$scorm_time,$res)){
+		     		$time = time();
+					$hour = $res[1];
+					$min = $res[2];
+					$sec = $res[3];
+					//getting total number of seconds spent
+		     		$total_sec = $hour*3600 + $min*60 + $sec;
+		     		$this->update_time($total_sec);
+		     	}
+     		}elseif($format == 'int'){
+     			$this->update_time($scorm_time);
+     		}
      	}
     }
     /**

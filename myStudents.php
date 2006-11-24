@@ -125,13 +125,13 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
  *	MAIN CODE
  *===============================================================================  
  */
- // Table definitions
- $tbl_user 						= Database :: get_main_table(MAIN_USER_TABLE);
+ // Database table definitions
+ $tbl_user 						= Database :: get_main_table(TABLE_MAIN_USER);
  $tbl_session_user 				= Database :: get_main_table(MAIN_SESSION_USER_TABLE);
  $tbl_session 					= Database :: get_main_table(MAIN_SESSION_TABLE);
  $tbl_session_course 			= Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
  $tbl_session_course_user 		= Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
- $tbl_course 					= Database :: get_main_table(MAIN_COURSE_TABLE);
+ $tbl_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
  $tbl_stats_exercices 			= Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
  $course_student_publication 	= Database :: get_course_table(STUDENT_PUBLICATION_TABLE);
  $statistics_database 			= Database :: get_statistic_database();

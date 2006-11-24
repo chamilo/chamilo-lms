@@ -358,7 +358,7 @@ class scorm extends learnpath {
      	$new_lp_item = 'lp_item';
      	
      	//The previous method wasn't safe to get the database name, so do it manually with the course_code
-     	$sql = "SELECT * FROM ".Database::get_main_table(MAIN_COURSE_TABLE)." WHERE code='$course_code'";
+     	$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
         $res = api_sql_query($sql,__FILE__,__LINE__);
         if(Database::num_rows($res)<1){ error_log('Database for '.$course_code.' not found '.__FILE__.' '.__LINE__,0);return -1;}
         $row = Database::fetch_array($res);
@@ -837,7 +837,7 @@ class scorm extends learnpath {
 		if($this->debug>0){error_log('In scorm::reimport_manifest() method',0);}
 		global $_course;
 		//RECOVERING PATH FROM DB
-		$main_table = Database::get_main_table(MAIN_COURSE_TABLE);
+		$main_table = Database::get_main_table(TABLE_MAIN_COURSE);
 		//$course = Database::escape_string($course);
 		$course = $this->escape_string($course);
 		$sql = "SELECT * FROM $main_table WHERE code = '$course'";

@@ -43,7 +43,7 @@ class ClassManager
 	 */
 	function get_class_info($class_id)
 	{
-		$table_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE id='".$class_id."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		return mysql_fetch_array($res, MYSQL_ASSOC);
@@ -55,7 +55,7 @@ class ClassManager
 	 */
 	function set_name($name, $class_id)
 	{
-		$table_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "UPDATE $table_class SET name='".mysql_real_escape_string($name)."' WHERE id='".$class_id."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 	}
@@ -65,7 +65,7 @@ class ClassManager
 	 */
 	function create_class($name)
 	{
-		$table_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "INSERT INTO $table_class SET name='".mysql_real_escape_string($name)."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 		return mysql_affected_rows() == 1;
@@ -76,7 +76,7 @@ class ClassManager
 	 */
 	function class_name_exists($name)
 	{
-		$table_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE name='".mysql_real_escape_string($name)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		return mysql_num_rows($res) != 0;
@@ -89,7 +89,7 @@ class ClassManager
 	 */
 	function delete_class($class_id)
 	{
-		$table_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$table_class_course = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
 		$table_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
 		$sql = "DELETE FROM $table_class_user WHERE class_id = '".$class_id."'";
@@ -107,7 +107,7 @@ class ClassManager
 	function get_users($class_id)
 	{
 		$table_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
-		$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $table_class_user cu, $table_user u WHERE cu.class_id = '".$class_id."' AND cu.user_id = u.user_id";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$users = array ();
@@ -170,7 +170,7 @@ class ClassManager
 	function get_courses($class_id)
 	{
 		$table_class_course = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
-		$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT * FROM $table_class_course cc, $table_course c WHERE cc.class_id = '".$class_id."' AND cc.course_code = c.code";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$courses = array ();
@@ -233,7 +233,7 @@ class ClassManager
 	 */
 	function get_class_id($name)
 	{
-		$table_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE name='".$name."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = mysql_fetch_object($res);
@@ -246,7 +246,7 @@ class ClassManager
 	 */
 	function get_classes_in_course($course_code)
 	{
-		$table_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$table_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
 		$sql = "SELECT cl.* FROM $table_class cl, $table_course_class cc WHERE cc.course_code = '".mysql_real_escape_string($course_code)."' AND cc.class_id = cl.id";
 		$res = api_sql_query($sql, __FILE__, __LINE__);

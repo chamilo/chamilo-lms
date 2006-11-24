@@ -42,7 +42,7 @@ require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 //$table_category = Database :: get_main_table(MAIN_CATEGORY_TABLE);
 $table_survey = Database :: get_main_table(MAIN_SURVEY_IFA_TABLE);
-$table_course = Database::get_main_table(MAIN_COURSE_TABLE);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name = get_lang('a_survey');
 $interbredcrump[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
 $coursePathWeb = api_get_path(WEB_COURSE_PATH);

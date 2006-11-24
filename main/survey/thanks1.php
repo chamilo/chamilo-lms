@@ -43,7 +43,7 @@ $surveyid = $_REQUEST['surveyid'];
 $uid1 = $_REQUEST['uid1'];
 $db_name = $_REQUEST['db_name'];
 $temp = $_REQUEST['temp'];
-$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
 $sql_uname= "SELECT * FROM $survey_user_info_table WHERE id = $uid1";
 $res_uname = api_sql_query($sql_uname,__FILE__,__LINE__);

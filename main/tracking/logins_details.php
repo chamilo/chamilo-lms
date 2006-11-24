@@ -70,7 +70,7 @@ td {border-bottom: thin dashed gray;}
 
 $TABLECOURSUSER	        = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 $TABLECOURSE_GROUPSUSER = Database::get_course_table(GROUP_USER_TABLE);
-$TABLEUSER	        = Database::get_main_table(MAIN_USER_TABLE);
+$TABLEUSER	        = Database::get_main_table(TABLE_MAIN_USER);
 $TABLETRACK_ACCESS      = Database::get_statistic_table(STATISTIC_TRACK_E_ACCESS_TABLE);
 Display::display_header($nameTools, "Tracking");
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");

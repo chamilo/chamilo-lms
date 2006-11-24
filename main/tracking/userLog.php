@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 10082 2006-11-21 19:08:15Z pcool $
+<?php // $Id: userLog.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -119,10 +119,10 @@ $is_allowedToTrack = $is_courseAdmin;
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_id);
 
 // regroup table names for maintenance purpose
-$TABLECOURSUSER	        = Database::get_main_table(MAIN_COURSE_USER_TABLE);
-$TABLEUSER	        = Database::get_main_table(MAIN_USER_TABLE);
-$tbl_session_course_user = Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
-$tbl_session = Database::get_main_table(MAIN_SESSION_TABLE);
+$TABLECOURSUSER	        	= Database::get_main_table(MAIN_COURSE_USER_TABLE);
+$TABLEUSER	        		= Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session_course_user 	= Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+$tbl_session 				= Database::get_main_table(MAIN_SESSION_TABLE);
 
 $TABLETRACK_ACCESS      = $_configuration['statistics_database']."`.`track_e_access";
 $TABLETRACK_LINKS       = $_configuration['statistics_database']."`.`track_e_links";

@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 10156 2006-11-23 08:59:13Z elixir_inter $
+<?php // $Id: CourseBuilder.class.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -136,7 +136,7 @@ class CourseBuilder
 	 */
 	function build_forums()
 	{
-		$table = Database :: get_course_table(TOOL_FORUM_TABLE);
+		$table = Database :: get_course_table(TABLE_FORUM);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -153,7 +153,7 @@ class CourseBuilder
 	 */
 	function build_forum_category($id)
 	{
-		$table = Database :: get_course_table(TOOL_FORUM_CATEGORY_TABLE);
+		$table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$sql = 'SELECT * FROM '.$table.' WHERE cat_id = '.$id;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -167,7 +167,7 @@ class CourseBuilder
 	 */
 	function build_forum_topics()
 	{
-		$table = Database :: get_course_table(TOOL_FORUM_POST_TABLE);
+		$table = Database :: get_course_table(TABLE_FORUM_POST);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -181,7 +181,7 @@ class CourseBuilder
 	 */
 	function build_forum_posts()
 	{
-		$table_post = Database :: get_course_table(TOOL_FORUM_POST_TABLE);
+		$table_post = Database :: get_course_table(TABLE_FORUM_POST);
 		$table_posttext = Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
 		$sql = 'SELECT * FROM '.$table_post.' p,'.$table_posttext.' pt WHERE p.post_id = pt.post_id';
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);

@@ -158,9 +158,9 @@ define("VISIBLE_NO_SUBSCRIPTION_ALLOWED", 3);
 -----------------------------------------------------------
 */
 
-$TABLECOURSE = Database :: get_main_table(MAIN_COURSE_TABLE);
+$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSDOMAIN = Database :: get_main_table(MAIN_CATEGORY_TABLE);
-$TABLEUSER = Database :: get_main_table(MAIN_USER_TABLE);
+$TABLEUSER = Database :: get_main_table(TABLE_MAIN_USER);
 $TABLECOURSUSER = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 $TABLEANNOUNCEMENTS = "announcement";
 $coursesRepositories = $_configuration['root_sys'];
@@ -184,7 +184,7 @@ class CourseManager
 	*/
 	function get_course_information($course_code)
 	{
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql="SELECT * FROM ".$course_table." WHERE code='".$course_code."'";
 		$sql_result = api_sql_query($sql, __FILE__, __LINE__);
 		$result = mysql_fetch_array($sql_result);
@@ -205,7 +205,7 @@ class CourseManager
 	function get_access_settings($course_code)
 	{
 		$system_code = $course_info["sysCode"];
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT `visibility`, `subscribe`, `unsubscribe` from ".$course_table." where `code` = '".$course_code."'";
 		$sql_result = api_sql_query($sql, __FILE__, __LINE__);
 		$result = mysql_fetch_array($sql_result);
@@ -244,7 +244,7 @@ class CourseManager
 		}
 		$user_ids = implode(',', $user_id);
 		$table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-		$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		// Unsubscribe user from all groups in the course
 		$sql = "SELECT * FROM $table_course WHERE code = '".$course_code."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
@@ -274,8 +274,8 @@ class CourseManager
 	 */
 	function subscribe_user($user_id, $course_code, $status = STUDENT)
 	{
-		$user_table = Database :: get_main_table(MAIN_USER_TABLE);
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 		$location_table = Database :: get_main_table(MAIN_LOCATION_TABLE);
 		$user_role_table = Database :: get_main_table(MAIN_USER_ROLE_TABLE);
@@ -343,8 +343,8 @@ class CourseManager
 	*/
 	function add_user_to_course($user_id, $course_code, $status = STUDENT)
 	{
-		$user_table = Database :: get_main_table(MAIN_USER_TABLE);
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 
 		$status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
@@ -488,7 +488,7 @@ class CourseManager
 	*/
 	function is_existing_course_code($wanted_course_code)
 	{
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 		$sql_query = "SELECT COUNT(*) as number FROM ".$course_table."WHERE `code` = '$wanted_course_code' OR `visual_code` = '$wanted_course_code' ";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -509,7 +509,7 @@ class CourseManager
 	*/
 	function get_real_course_list()
 	{
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $course_table WHERE `target_course_code` IS NULL";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 
@@ -526,7 +526,7 @@ class CourseManager
 	*/
 	function get_virtual_course_list()
 	{
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $course_table WHERE `target_course_code` IS NOT NULL";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 
@@ -543,7 +543,7 @@ class CourseManager
 	*/
 	function get_real_course_list_of_user_as_course_admin($user_id)
 	{
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 
 		$sql_query = "	SELECT *
@@ -571,7 +571,7 @@ class CourseManager
 	*/
 	function get_course_list_of_user_as_course_admin($user_id)
 	{
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 
 		$sql_query = "	SELECT *
@@ -742,7 +742,7 @@ class CourseManager
 	*/
 	function get_virtual_course_info($real_course_code)
 	{
-		$table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table WHERE `target_course_code` = '$real_course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = array ();
@@ -759,7 +759,7 @@ class CourseManager
 	*/
 	function is_virtual_course_from_system_code($system_code)
 	{
-		$table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table WHERE `code` = '$system_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = mysql_fetch_array($sql_result);
@@ -781,7 +781,7 @@ class CourseManager
 	*/
 	function is_virtual_course_from_visual_code($visual_code)
 	{
-		$table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table WHERE `visual_code` = '$visual_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = mysql_fetch_array($sql_result);
@@ -823,7 +823,7 @@ class CourseManager
 	*/
 	function get_virtual_courses_linked_to_real_course($real_course_code)
 	{
-		$table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table WHERE `target_course_code` = '$real_course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result_array = array ();
@@ -844,7 +844,7 @@ class CourseManager
 	*/
 	function get_target_of_linked_course($virtual_course_code)
 	{
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 		//get info about the virtual course
 		$sql_query = "SELECT * FROM $course_table WHERE `code` = '$virtual_course_code'";
@@ -898,7 +898,7 @@ class CourseManager
 	function is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id='')
 	{
 		if($session_id==''){
-			$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+			$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 			$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 
 			$sql_query = "	SELECT *
@@ -1042,7 +1042,7 @@ class CourseManager
 	*/
 	function get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code)
 	{
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 
 		if(api_get_setting("use_session_mode")!="true"){
@@ -1135,7 +1135,7 @@ class CourseManager
 	function create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category)
 	{
 		global $firstExpirationDelay;
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$user_id = api_get_user_id();
 		$real_course_info = Database :: get_course_info($real_course_code);
 		$real_course_code = $real_course_info["system_code"];
@@ -1191,7 +1191,7 @@ class CourseManager
 	{
 		global $_configuration;
 		
-		$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 		$table_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
 		$user_role_table = Database :: get_main_table(MAIN_USER_ROLE_TABLE);
@@ -1268,7 +1268,7 @@ class CourseManager
 			return;
 		}
 		$sql_dump = '';
-		$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT * FROM $table_course WHERE code = '$course_code'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$course = mysql_fetch_object($res);

@@ -212,7 +212,7 @@ if(api_is_allowed_to_edit())
 		{
 			case 'export' :
 				if(api_get_setting('use_session_mode')!="true"){
-					$table_user = Database::get_main_table(MAIN_USER_TABLE);
+					$table_user = Database::get_main_table(TABLE_MAIN_USER);
 					$table_course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 					$course = api_get_course_info();
 					$sql = "SELECT official_code,firstname,lastname,email FROM $table_user u, $table_course_user cu WHERE cu.user_id = u.user_id AND cu.course_code = '".$course['sysCode']."' ORDER BY lastname ASC";
@@ -220,7 +220,7 @@ if(api_is_allowed_to_edit())
 				else {
 					$sql = "SELECT `user`.`user_id`, `user`.`lastname`, `user`.`firstname`,
 				                      `user`.`email`, `user`.`official_code`, session.name
-				               FROM ".Database::get_main_table(MAIN_USER_TABLE)." `user`, ".Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE)." cu, ".Database::get_main_table(MAIN_SESSION_TABLE)." session
+				               FROM ".Database::get_main_table(TABLE_MAIN_USER)." `user`, ".Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE)." cu, ".Database::get_main_table(MAIN_SESSION_TABLE)." session
 				               WHERE `user`.`user_id`= cu.`id_user`
 				               AND cu.`course_code`='".$currentCourseID."'
 								AND session.id=cu.id_session
@@ -329,7 +329,7 @@ Display::display_introduction_section(TOOL_USER, $is_allowed);
  */
 function get_number_of_users()
 {
-	$user_table = Database::get_main_table(MAIN_USER_TABLE);
+	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$course_user_table = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 	if(api_get_setting('use_session_mode')!="true"){
 		$sql = "SELECT COUNT(u.user_id) AS number_of_users FROM $user_table u,$course_user_table cu WHERE u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
@@ -358,7 +358,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 	if(api_get_setting('use_session_mode')!='true')
 	{
-		$user_table = Database::get_main_table(MAIN_USER_TABLE);
+		$user_table = Database::get_main_table(TABLE_MAIN_USER);
 		$course_user_table = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 
 		if(api_is_allowed_to_edit())
@@ -436,7 +436,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		}
 		$columns[] = 'u.user_id';
 		$sql = "SELECT  ".implode(',',$columns)."
-               FROM ".Database::get_main_table(MAIN_USER_TABLE)." `u`, ".Database::get_main_table(MAIN_SESSION_COURSE_TABLE)." c
+               FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(MAIN_SESSION_COURSE_TABLE)." c
                WHERE `u`.`user_id`= c.`id_coach`
                AND c.`course_code`='".$_SESSION['_course']['id']."'
 				AND c.id_session='".$_SESSION['id_session']."'";
@@ -465,7 +465,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		}
 		$columns[] = 'u.user_id';
 		$sql = "SELECT  ".implode(',',$columns)."
-				FROM ".Database::get_main_table(MAIN_USER_TABLE)." `u`, ".Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE)." c
+				FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE)." c
                WHERE `u`.`user_id`= c.`id_user`
                AND c.`course_code`='".$_SESSION['_course']['id']."'
 				AND c.id_session='".$_SESSION['id_session']."'";

@@ -48,7 +48,7 @@ api_protect_admin_script();
 $cidReq=$_GET['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $table_group = Database :: get_course_table('survey_group');
-$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $tool_name1 = get_lang('createnewgroup1');
 $tool_name = get_lang('ModifyGroupInformation');
 $interbredcrump[] = array ("url" => "survey_list.php?", "name" => get_lang('Survey'));

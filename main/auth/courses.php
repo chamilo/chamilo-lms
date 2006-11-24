@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 10115 2006-11-22 15:35:52Z edwandos $
+<?php // $Id: courses.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -56,10 +56,10 @@ include_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
 	Variables
 -----------------------------------------------------------
 */
-$tbl_course             = Database::get_main_table(MAIN_COURSE_TABLE);
+$tbl_course             = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_courses_nodes      = Database::get_main_table(MAIN_CATEGORY_TABLE);
 $tbl_courseUser         = Database::get_main_table(MAIN_COURSE_USER_TABLE);
-$tbl_user               = Database::get_main_table(MAIN_USER_TABLE);
+$tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
 
 /*
 -----------------------------------------------------------
@@ -283,7 +283,7 @@ function browse_courses()
 */
 function count_courses_in_category($category)
 {
-	$tbl_course         = Database::get_main_table(MAIN_COURSE_TABLE);
+	$tbl_course         = Database::get_main_table(TABLE_MAIN_COURSE);
 	$sql="SELECT * FROM $tbl_course WHERE category_code".(empty($category)?" IS NULL":"='".$category."'");
 	$result=api_sql_query($sql);
 	return mysql_num_rows($result);
@@ -336,7 +336,7 @@ function browse_course_categories()
 */
 function browse_courses_in_category()
 {
-	$tbl_course         = Database::get_main_table(MAIN_COURSE_TABLE);
+	$tbl_course         = Database::get_main_table(TABLE_MAIN_COURSE);
 
 
 	echo "<p><b>".get_lang('CoursesInCategory')."</b>";
@@ -468,7 +468,7 @@ function escape($s)
 */
 function search_courses($search_term)
 {
-	$TABLECOURS = Database::get_main_table(MAIN_COURSE_TABLE);
+	$TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
 
 	$search_term_safe=escape($search_term);
 
@@ -738,7 +738,7 @@ function display_courses_in_category($user_category_id, $showicons)
 	global $_user;
 
 	// table definitions
-	$TABLECOURS=Database::get_main_table(MAIN_COURSE_TABLE);
+	$TABLECOURS=Database::get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER=Database::get_main_table(MAIN_COURSE_USER_TABLE);
 	$TABLE_USER_COURSE_CATEGORY = "`".Database::get_user_personal_database()."`.`user_course_category`";
 
@@ -1023,7 +1023,7 @@ function display_unsubscribe_icons($course)
 */
 function get_courses_of_user($user_id)
 {
-	$TABLECOURS=Database::get_main_table(MAIN_COURSE_TABLE);
+	$TABLECOURS=Database::get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER=Database::get_main_table(MAIN_COURSE_USER_TABLE);
 
 	// Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category

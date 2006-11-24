@@ -1,26 +1,28 @@
 <?php
-/*
- * Created on 27 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
+/**
+ * @todo use constant for $this_section
  */
+$langFile = array ('registration', 'index','trad4all','tracking');
+$cidReset=true;
+
+require ('../inc/global.inc.php');
+$nameTools= get_lang("MySpace");
+
+$this_section = "session_my_space";
  
- $langFile = array ('registration', 'index','trad4all','tracking');
- $cidReset=true;
- require ('../inc/global.inc.php');
- $nameTools= get_lang("MySpace");
- $this_section = "session_my_space";
+api_block_anonymous_users();
+Display :: display_header($nameTools);
  
- api_block_anonymous_users();
- Display :: display_header($nameTools);
- 
-  $tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
-  $tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
-  $tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-  $tbl_class = Database :: get_main_table(MAIN_CLASS_TABLE);
-  $tbl_sessions = Database :: get_main_table(MAIN_SESSION_TABLE);
-  $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
-  $tbl_session_user = Database :: get_main_table(MAIN_SESSION_USER_TABLE);
-  $tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
-  $tbl_admin= Database :: get_main_table(MAIN_ADMIN_TABLE);
+// Database table definitions
+$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_course_user 			= Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+$tbl_class 					= Database :: get_main_table(TABLE_MAIN_CLASS);
+$tbl_sessions 				= Database :: get_main_table(MAIN_SESSION_TABLE);
+$tbl_session_course 		= Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+$tbl_session_user 			= Database :: get_main_table(MAIN_SESSION_USER_TABLE);
+$tbl_session_course_user 	= Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+$tbl_admin					= Database :: get_main_table(TABLE_MAIN_ADMIN);
   
   
     
@@ -32,13 +34,14 @@ function is_coach(){
 
 	$result=api_sql_query($sql);
 	  
-	if(mysql_num_rows($result)>0){
+	if(mysql_num_rows($result)>0)
+	{
 	    return true;	    
 	}
-	else{
+	else
+	{
 		return false;
 	}
-  
 }
   
   
@@ -49,68 +52,63 @@ function is_coach(){
  ===============================================================================  
  */
  	
- 	//Trainers
-    if(api_is_platform_admin()){
-		$sqlNbFormateurs = "SELECT COUNT(user_id)
-					  		FROM $tbl_user
-					  		WHERE status = 1 
-					 	  ";
-		$resultNbFormateurs = api_sql_query($sqlNbFormateurs);
-		$a_nbFormateurs = mysql_fetch_array($resultNbFormateurs);
-		$nbFormateurs = $a_nbFormateurs[0];
-    }
-  	
-  	
-  	//Coachs
-  	$nbCoachs=0;
-  	if(api_is_platform_admin()){
-	  	$sqlNbCoachs = "SELECT COUNT(DISTINCT id_coach)
-					  		FROM $tbl_session_course
-					  		WHERE id_coach<>'0'	 
-					 	  ";
-		$resultNbCoachs = api_sql_query($sqlNbCoachs);
-		$a_nbCoachs = mysql_fetch_array($resultNbCoachs);
-		$nbCoachs = $a_nbCoachs[0];
-  	}
-  	
-  	elseif($is_allowedCreateCourse){
+//Trainers
+if(api_is_platform_admin())
+{
+	$sqlNbFormateurs = "SELECT COUNT(user_id) FROM $tbl_user WHERE status = 1";
+	$resultNbFormateurs = api_sql_query($sqlNbFormateurs);
+	$a_nbFormateurs = mysql_fetch_array($resultNbFormateurs);
+	$nbFormateurs = $a_nbFormateurs[0];
+}
+ 	
+//Coachs
+$nbCoachs=0;
+if(api_is_platform_admin())
+{
+	$sqlNbCoachs = "SELECT COUNT(DISTINCT id_coach)	FROM $tbl_session_course WHERE id_coach<>'0'";
+	$resultNbCoachs = api_sql_query($sqlNbCoachs);
+	$a_nbCoachs = mysql_fetch_array($resultNbCoachs);
+	$nbCoachs = $a_nbCoachs[0];
+}
+elseif($is_allowedCreateCourse)
+{
+	$a_coach=array();
   		
-  		$a_coach=array();
-  		
-  		$sqlNbCours = "	SELECT course_code
-						FROM $tbl_course_user
-					  	WHERE user_id='".$_user['user_id']."' AND status='1'
-					  ";
-		$resultNbCours = api_sql_query($sqlNbCours);
-		
-		while($a_courses=mysql_fetch_array($resultNbCours)){
+  	$sqlNbCours = "	SELECT course_code
+					FROM $tbl_course_user
+				  	WHERE user_id='".$_user['user_id']."' AND status='1'
+				  ";
+	$resultNbCours = api_sql_query($sqlNbCours);
+	
+	while($a_courses=mysql_fetch_array($resultNbCours))
+	{
+		$sql="SELECT DISTINCT id_coach FROM $tbl_session_course WHERE course_code='".$a_courses["course_code"]."'";
 			
-			$sql="SELECT DISTINCT id_coach FROM $tbl_session_course WHERE course_code='".$a_courses["course_code"]."'";
+		$resultCoach = api_sql_query($sql);
 			
-			$resultCoach = api_sql_query($sql);
-			
-			if(mysql_num_rows($resultCoach)>0){
-				while($a_temp=mysql_fetch_array($resultCoach)){
-					$a_coach[]=$a_temp["id_coach"];
-				}
+		if(mysql_num_rows($resultCoach)>0)
+		{
+			while($a_temp=mysql_fetch_array($resultCoach))
+			{
+				$a_coach[]=$a_temp["id_coach"];
 			}
-			
 		}
+	}
 		
-		$a_coach=array_unique($a_coach);
-		$nbCoachs=count($a_coach);
-  		
-  	}
+	$a_coach=array_unique($a_coach);
+	$nbCoachs=count($a_coach);
+}
 
 
 	
-	//Nombre de stagiaires (cours dans lesquels il est coach ou formateurs)
+//Nombre de stagiaires (cours dans lesquels il est coach ou formateurs)
 	
 	$nbStagiaire=0;
 	$a_stagiaire_teacher=array();
 	
 	//La personne est admin
-	if(api_is_platform_admin()){
+	if(api_is_platform_admin())
+	{
 
 		$sqlNbStagiaire = "	SELECT COUNT(user_id)
 					  		FROM $tbl_user
@@ -120,9 +118,8 @@ function is_coach(){
 		$a_nbStagiaire = mysql_fetch_array($resultNbStagiaire);
 		$nbStagiaire = $a_nbStagiaire[0];
 	}
-	
-	else{
-		
+	else
+	{
 		//La personne a le statut de professeur
 		if($is_allowedCreateCourse){
 			
@@ -131,12 +128,15 @@ function is_coach(){
 			
 			$result_courses=api_sql_query($sql_select_courses);
 			
-			while($a_courses=mysql_fetch_array($result_courses)){
+			while($a_courses=mysql_fetch_array($result_courses))
+			{
 				$s_course_code=$a_courses["course_code"];
 		 		$sqlStudents = "SELECT user.user_id,lastname,firstname,email FROM $tbl_course_user as course_rel_user, $tbl_user as user WHERE course_rel_user.user_id=user.user_id AND course_rel_user.status='5' AND course_rel_user.course_code='$s_course_code'";
 		 		$result_students=api_sql_query($sqlStudents);
-		 		if(mysql_num_rows($result_students)>0){
-	 				while($a_students_temp=mysql_fetch_array($result_students)){
+		 		if(mysql_num_rows($result_students)>0)
+		 		{
+	 				while($a_students_temp=mysql_fetch_array($result_students))
+	 				{
 	 					$a_stagiaire_teacher[]=$a_students_temp["user_id"];
 	 				}
 		 		}
@@ -147,22 +147,22 @@ function is_coach(){
 			
 			$resultNbStagiaire = api_sql_query($sqlNbStagiaire);
 			
-			while($a_temp = mysql_fetch_array($resultNbStagiaire)){
+			while($a_temp = mysql_fetch_array($resultNbStagiaire))
+			{
 				$a_stagiaire_teacher[]=$a_temp[0];
 			}
-
-		}
+	}
 		
-		if(is_coach()){
-
+		if(is_coach())
+		{
 			$a_stagiaire_coach=array();
 			
 			$sql="SELECT id_session, course_code FROM $tbl_session_course WHERE id_coach='".$_user['user_id']."'";
 
 			$result=api_sql_query($sql);
 			
-			while($a_courses=mysql_fetch_array($result)){
-				
+			while($a_courses=mysql_fetch_array($result))
+			{
 		    	$course_code=$a_courses["course_code"];
 		    	$id_session=$a_courses["id_session"];
 		    	
@@ -175,7 +175,8 @@ function is_coach(){
 
 				$q_students=api_sql_query($sqlStudents);
 				
-				while($a_temp=mysql_fetch_array($q_students)){
+				while($a_temp=mysql_fetch_array($q_students))
+				{
 					$a_stagiaire_coach[]=$a_temp[0];
 				}
 				
@@ -187,16 +188,16 @@ function is_coach(){
 			$nbStagiaire=count($a_stagiaires);
 		    
 		}
-		else{
+		else
+		{
 			$nbStagiaire=count($a_stagiaire_teacher);
 		}
-		
 	}
 	
 	//Nombre de cours
-	
 	//La personne est admin donc on compte le nombre total de cours
-	if(api_is_platform_admin()){
+	if(api_is_platform_admin())
+	{
 	
 		$sqlNbCours = "	SELECT COUNT(code)
 						FROM $tbl_course
@@ -212,7 +213,8 @@ function is_coach(){
 		$a_cours=array();
 		
 		//La personne a le statut de professeur	
-		if($is_allowedCreateCourse){
+		if($is_allowedCreateCourse)
+		{
 			
 			$sqlNbCours = "	SELECT DISTINCT course_code
 							FROM $tbl_course_user
@@ -249,37 +251,37 @@ function is_coach(){
 	//Nombre de sessions
 	
 	//La personne est admin donc on compte le nombre total de sessions
-	if(api_is_platform_admin()){
-	
+	if(api_is_platform_admin())
+	{
 		$sqlNbSessions = "	SELECT COUNT(id)
 							FROM $tbl_sessions
 						 ";
 		$resultNbSessions = api_sql_query($sqlNbSessions);
 		$a_nbSessions= mysql_fetch_array($resultNbSessions);
 		$nbSessions = $a_nbSessions[0];
-		
 	}
-	
-	else{
-		
+	else
+	{
 		$a_sessions=array();
 		
-		if($is_allowedCreateCourse){
+		if($is_allowedCreateCourse)
+		{
 			
 			$sqlNbSessions = "	SELECT DISTINCT id_session 
 								FROM $tbl_session_course as session_course, $tbl_course_user as course_rel_user  
 							  	WHERE session_course.course_code=course_rel_user.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".$_user['user_id']."' 
 							  ";
-
 			$resultNbSessions = api_sql_query($sqlNbSessions);
 			
-			while($a_temp = mysql_fetch_array($resultNbSessions)){
+			while($a_temp = mysql_fetch_array($resultNbSessions))
+			{
 				$a_sessions[]=$a_temp["id_session"];
 			}
 			
 		}
 		
-		if(is_coach()){
+		if(is_coach())
+		{
 			$sqlNbSessions = "	SELECT DISTINCT id_session 
 								FROM $tbl_session_course 
 							  	WHERE id_coach='".$_user['user_id']."' 
@@ -287,10 +289,10 @@ function is_coach(){
 
 			$resultNbSessions = api_sql_query($sqlNbSessions);
 			
-			while($a_temp = mysql_fetch_array($resultNbSessions)){
+			while($a_temp = mysql_fetch_array($resultNbSessions))
+			{
 				$a_sessions[]=$a_temp["id_session"];
 			}
-		
 		}
 		
 		$a_sessions=array_unique($a_sessions);
@@ -301,26 +303,25 @@ function is_coach(){
 	$sql_nb_admin="SELECT count(user_id) FROM $tbl_admin";
 	$resultNbAdmin = api_sql_query($sql_nb_admin);
 	$i_nb_admin=mysql_result($resultNbAdmin,0,0);
-	
- ?>
- 
- <?php
- if(api_is_platform_admin()){
-	 echo '<div class="admin_section">
+
+if(api_is_platform_admin())
+{
+	echo '<div class="admin_section">
 		<h4>
-			<a href="teachers.php"><img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif">&nbsp;'.get_lang('Trainers').' ('.$nbFormateurs.')</a>
+		<a href="teachers.php"><img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif">&nbsp;'.get_lang('Trainers').' ('.$nbFormateurs.')</a>
 		</h4>
 	 </div>';
- }
+}
  
- if(api_is_platform_admin() || $is_allowedCreateCourse){
+if(api_is_platform_admin() || $is_allowedCreateCourse)
+{
 	 echo '<div class="admin_section">
 		<h4>
 			<a href="coaches.php"><img src="'.api_get_path(WEB_IMG_PATH).'coachs.gif">&nbsp;'.get_lang("Tutor").' ('.$nbCoachs.')</a>
 		</h4>
 	 </div>';
- }
- ?>
+}
+?>
  <div class="admin_section">
 	<h4>
 		<?php 

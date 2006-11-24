@@ -1092,7 +1092,7 @@ function migrate_threads_of_forum($phpbb_forum_id, $new_forum_id)
 	global $phpbb_threads; 
 	global $table_forums; 
 	
-	$table_users = Database :: get_main_table(MAIN_USER_TABLE);
+	$table_users = Database :: get_main_table(TABLE_MAIN_USER);
 	
 	$sql_phpbb_threads="SELECT forum.*, users.user_id 
 							FROM $phpbb_threads forum, $table_users users 
@@ -1145,7 +1145,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 	global $table_threads; 
 	global $added_resources; 
 	
-	$table_users = Database :: get_main_table(MAIN_USER_TABLE);
+	$table_users = Database :: get_main_table(TABLE_MAIN_USER);
 	$table_added_resources = Database::get_course_table(LINKED_RESOURCES_TABLE);
 	
 	

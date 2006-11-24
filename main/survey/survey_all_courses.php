@@ -114,7 +114,7 @@ function displayTemplate(url) {
 		$table_group = Database :: get_course_table('survey_group');
 		$sql = "SELECT course_survey.*, visual_code 
 				FROM $table_course_survey_rel as course_survey
-				INNER JOIN ".Database::get_main_table(MAIN_COURSE_TABLE)." as course
+				INNER JOIN ".Database::get_main_table(TABLE_MAIN_COURSE)." as course
 				ON course_survey.course_code = course.code";
 		$parameters = array ();
 		$parameters['surveyid']=$surveyid;

@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 10082 2006-11-21 19:08:15Z pcool $
+<?php // $Id: user_edit.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -58,8 +58,8 @@ $tool_name=get_lang('ModifyUserInfo');
 //$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array("url" => "user_list.php","name" => get_lang('UserList'));
 
-$table_user = Database::get_main_table(MAIN_USER_TABLE);
-$table_admin = Database::get_main_table(MAIN_ADMIN_TABLE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
+$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
 $sql = "SELECT u.*, a.user_id AS is_admin FROM $table_user u LEFT JOIN $table_admin a ON a.user_id = u.user_id WHERE u.user_id = '".$user_id."'";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 if(mysql_num_rows($res) != 1)

@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 10082 2006-11-21 19:08:15Z pcool $
+// $Id: course_add.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,7 +43,7 @@ require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
 require_once (api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-$table_course = Database::get_main_table(MAIN_COURSE_TABLE);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name = get_lang('AddCourse');
 //$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
 
@@ -63,7 +63,7 @@ while ($cat = mysql_fetch_array($res))
 }
 
 // Get all possible teachers
-$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1 ORDER BY lastname,firstname";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 $teachers = array();

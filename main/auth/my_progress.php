@@ -26,19 +26,20 @@ api_block_anonymous_users();
 
 Display :: display_header($nameTools);
 
-$tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
-$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
-$tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
-$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
-$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
-$tbl_stats_lastaccess = Database :: get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
-$tbl_stats_exercices = Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
-$tbl_course_lp_view = Database :: get_course_table('lp_view');
-$tbl_course_lp_view_item = Database :: get_course_table('lp_item_view');
-$tbl_course_lp = Database :: get_course_table('lp');
-$tbl_course_lp_item = Database :: get_course_table('lp_item');
-$tbl_course_quiz = Database :: get_course_table('quiz');
+// Database table definitions
+$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+$tbl_session 				= Database :: get_main_table(MAIN_SESSION_TABLE);
+$tbl_course_user 			= Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+$tbl_session_course 		= Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+$tbl_session_course_user 	= Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+$tbl_stats_lastaccess 		= Database :: get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
+$tbl_stats_exercices 		= Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
+$tbl_course_lp_view 		= Database :: get_course_table('lp_view');
+$tbl_course_lp_view_item 	= Database :: get_course_table('lp_item_view');
+$tbl_course_lp 				= Database :: get_course_table('lp');
+$tbl_course_lp_item 		= Database :: get_course_table('lp_item');
+$tbl_course_quiz 			= Database :: get_course_table('quiz');
 
 $result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end FROM session_rel_course_rel_user,session WHERE id_session=id AND id_user=".$_user['user_id']." ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 

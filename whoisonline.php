@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 10085 2006-11-21 20:42:52Z pcool $
+<?php // $Id: whoisonline.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -47,7 +47,7 @@ require_once('./main/inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 
 // table definitions
-$track_user_table = Database::get_main_table(MAIN_USER_TABLE);
+$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 
 
 if ($_GET['chatid'] != '') 
@@ -130,7 +130,7 @@ function display_individual_user($user_id)
 	global $interbreadcrumb;
 	
 	// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
-	$user_table=Database::get_main_table(MAIN_USER_TABLE);
+	$user_table=Database::get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT * FROM $user_table WHERE user_id='".mysql_real_escape_string($user_id)."'";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	if (mysql_num_rows($result)==1)

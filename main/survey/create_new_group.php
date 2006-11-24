@@ -49,7 +49,7 @@ require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 $cidReq=$_GET['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $table_group = Database :: get_course_table('survey_group');
-$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $tool_name1 = get_lang('createnewgroup1');
 $tool_name = get_lang('createnewgroup');
 $header1 = get_lang('GroupList');

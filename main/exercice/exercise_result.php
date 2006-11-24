@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10140 2006-11-23 04:36:47Z yannoo $
+<?php // $Id: exercise_result.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -35,6 +35,7 @@
 *	@author Roan Embrechts, some refactoring
 *	@package dokeos.exercise
 *	@todo	split more code up in functions, move functions to library?
+* 	@todo 	use database library
 ============================================================================== 
 */
 
@@ -62,17 +63,16 @@ $this_section=SECTION_COURSES;
 include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
-//include(api_get_path(LIBRARY_PATH).'text.lib.php');
-
-$TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
-$TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
-$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
-$TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
-$TABLETRACK_EXERCICES = $_configuration['statistics_database']."`.`track_e_exercices";
-$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt"; 
-$main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
+// Database table definitions
+$TBL_EXERCICE_QUESTION 	= $_course['dbNameGlu'].'quiz_rel_question';
+$TBL_EXERCICES         	= $_course['dbNameGlu'].'quiz';
+$TBL_QUESTIONS         	= $_course['dbNameGlu'].'quiz_question';
+$TBL_REPONSES          	= $_course['dbNameGlu'].'quiz_answer';
+$TABLETRACK_EXERCICES 	= $_configuration['statistics_database']."`.`track_e_exercices";
+$TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt"; 
+$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-$table_ans = Database :: get_course_table(QUIZ_ANSWER_TABLE);
+$table_ans 				= Database :: get_course_table(QUIZ_ANSWER_TABLE);
 					
 //temp values to move to AWACS
 $dsp_percent = false; //false to display total score as absolute values
@@ -113,8 +113,8 @@ if ( empty ( $questionList ) ) {
 if ( empty ( $objExercise ) ) {
     $objExercise = $_SESSION['objExercise'];
 }
-$main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
-$main_admin_table = Database :: get_main_table(MAIN_ADMIN_TABLE);
+$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
+$main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 $courseName = $_SESSION[_course][name];
 $query = "select user_id from $main_admin_table";
 $admin_id = mysql_result(api_sql_query($query),0,"user_id");

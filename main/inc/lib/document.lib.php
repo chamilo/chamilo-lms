@@ -81,7 +81,7 @@ class DocumentManager
 	{
 		global $_course, $maxFilledSpace;
 		$course_code = $_course['sysCode'];
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 		$sql_query = "SELECT `".DISK_QUOTA_FIELD."` FROM $course_table WHERE `code` = '$course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);

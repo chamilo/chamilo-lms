@@ -127,7 +127,7 @@ function WhoIsOnline($uid,$statistics_database,$valid)
 
 function GetFullUserName($uid)
 {
-	$user_table = Database::get_main_table(MAIN_USER_TABLE);
+	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$query = "SELECT `firstname`,`lastname` FROM ".$user_table." WHERE `user_id`='$uid'";
 	$result = @api_sql_query($query,__FILE__,__LINE__);
 	if (count($result)>0)
@@ -161,7 +161,7 @@ function GetURL($path)
 // picture? 
 function IsValidUser($uid)
 {
-	$user_table = Database::get_main_table(MAIN_USER_TABLE);
+	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	
 	$query = "SELECT `picture_uri`  FROM ".$user_table." WHERE `user_id`='$uid'";	
 	$result = @api_sql_query($query,__FILE__,__LINE__);
@@ -200,7 +200,7 @@ function chatcall() {
 	{
 		return (false);
 	}
-	$track_user_table = Database::get_main_table(MAIN_USER_TABLE);
+	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$sql="select chatcall_user_id, chatcall_date from $track_user_table where ( user_id = '".$_user['user_id']."' )";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$row=mysql_fetch_array($result);

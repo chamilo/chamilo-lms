@@ -10,7 +10,7 @@
  */
 require_once('back_compat.inc.php');
 
-$sql = "SELECT * FROM ".Database::get_main_table(MAIN_COURSE_TABLE)."";
+$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 while ($row = Database::fetch_array($res))
 {

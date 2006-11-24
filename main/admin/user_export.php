@@ -1,5 +1,5 @@
 <?php
-// $Id: user_export.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: user_export.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,9 +41,10 @@ include (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
 include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
-$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
-$user_table = Database :: get_main_table(MAIN_USER_TABLE);
-$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+// Database table definitions
+$course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
+$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
+$course_user_table 	= Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 
 $tool_name = get_lang('ExportUserListXMLCSV');
 

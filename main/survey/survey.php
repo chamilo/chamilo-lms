@@ -53,9 +53,6 @@ $cidReq = $_GET['cidReq'];
 -----------------------------------------------------------
 */
 $table_survey = Database :: get_course_table('survey');
-//$table_category = Database :: get_course_table(MAIN_CATEGORY_TABLE);
-//$table_survey = Database :: get_course_table(MAIN_SURVEY_TABLE);
-//$table_course = Database::get_course_table(MAIN_COURSE_TABLE);
 
 /*
 -----------------------------------------------------------

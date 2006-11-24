@@ -47,7 +47,7 @@ class Statistics
 	 */
 	function count_courses($category_code = NULL)
 	{
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT COUNT(*) AS number FROM ".$course_table." ";
 		if (isset ($category_code))
 		{
@@ -66,9 +66,11 @@ class Statistics
 	 */
 	function count_users($status, $category_code = NULL, $count_invisible_courses = true)
 	{
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-		$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
-		$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+		// Database table definitions
+		$course_user_table 	= Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
+		$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
+		
 		$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(mysql_real_escape_string($status))." ";
 		if (isset ($category_code))
 		{
@@ -246,7 +248,7 @@ class Statistics
 	 */
 	function print_course_by_language_stats()
 	{
-		$table = Database::get_main_table(MAIN_COURSE_TABLE);
+		$table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT course_language, count( code ) AS number_of_courses FROM $table GROUP BY course_language ";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$result = array();
@@ -261,7 +263,7 @@ class Statistics
 	 */
 	function print_user_pictures_stats()
 	{
-		$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT COUNT(*) AS n FROM $user_table";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$count1 = mysql_fetch_object($res);

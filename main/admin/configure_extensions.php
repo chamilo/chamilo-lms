@@ -56,7 +56,7 @@ if(isset($_POST['activeExtension'])){
 			
 			
 			// select all the courses and insert the tool inside
-			$sql = 'SELECT db_name FROM '.Database::get_main_table(MAIN_COURSE_TABLE);
+			$sql = 'SELECT db_name FROM '.Database::get_main_table(TABLE_MAIN_COURSE);
 			
 			$rs = api_sql_query($sql);
 			while($row = mysql_fetch_array($rs)){

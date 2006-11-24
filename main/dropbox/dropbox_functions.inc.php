@@ -971,7 +971,7 @@ function display_user_link($user_id, $name='')
 	{
 		if ($name=='')
 		{
-			$table_user = Database::get_main_table(MAIN_USER_TABLE);
+			$table_user = Database::get_main_table(TABLE_MAIN_USER);
 			$sql="SELECT * FROM $table_user WHERE user_id='".mysql_real_escape_string($user_id)."'";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 			$row=mysql_fetch_array($result);

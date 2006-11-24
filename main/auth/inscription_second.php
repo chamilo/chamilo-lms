@@ -1,4 +1,4 @@
-<?php // $Id: inscription_second.php 10082 2006-11-21 19:08:15Z pcool $ 
+<?php // $Id: inscription_second.php 10190 2006-11-24 00:23:20Z pcool $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -39,7 +39,7 @@
 $langFile = "registration";
 require("../inc/global.inc.php");
 
-$TABLEUSER      = Database::get_main_table(MAIN_USER_TABLE);
+$TABLEUSER      = Database::get_main_table(TABLE_MAIN_USER);
 
 define ("CHECK_PASS_EASY_TO_FIND", false);
 

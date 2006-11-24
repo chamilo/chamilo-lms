@@ -1,5 +1,5 @@
 <?php
-// $Id: class_list.php 9406 2006-10-10 11:28:36Z bmol $
+// $Id: class_list.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,7 +37,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
  */
 function get_number_of_classes()
 {
-	$tbl_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+	$tbl_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 	$sql = "SELECT COUNT(*) AS number_of_classes FROM $tbl_class";
 	if (isset ($_GET['keyword']))
 	{
@@ -56,7 +56,7 @@ function get_number_of_classes()
 function get_class_data($from, $number_of_items, $column, $direction)
 {
 	$tbl_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
-	$tbl_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+	$tbl_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 	$sql = "SELECT 	id AS col0,
 							name AS col1,
 							COUNT(user_id) AS col2,

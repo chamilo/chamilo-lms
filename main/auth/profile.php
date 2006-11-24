@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 10005 2006-11-16 10:47:21Z elixir_inter $
+// $Id: profile.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -84,7 +84,7 @@ if (is_profile_editable())
 else
 	$tool_name = get_lang('ViewProfile');
 
-$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 /*
 -----------------------------------------------------------
@@ -278,7 +278,7 @@ function is_profile_editable()
  */
 function get_user_image($user_id)
 {
-	$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT picture_uri FROM $table_user WHERE user_id = '$user_id'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 

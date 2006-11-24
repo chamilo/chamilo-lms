@@ -51,7 +51,7 @@ $temp = $_REQUEST['temp'];
 $mail = $_REQUEST['mail'];
 $survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
 
-$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $sql_sname = "select * from $db_name.survey where survey_id='$surveyid'";
 $res_sname = api_sql_query($sql_sname,__FILE__,__LINE__);
 $obj_sname = mysql_fetch_object($res_sname);
@@ -102,7 +102,7 @@ if(isset($_POST['Next']))
  if($uid!='')
 	{$registered='Y';}
  else{$registered='N';}
- $user_table = Database :: get_main_table(MAIN_USER_TABLE);
+ $user_table = Database :: get_main_table(TABLE_MAIN_USER);
  $survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
  $sql="SELECT * FROM $survey_user_info_table WHERE email = '$mail'";
  $result=api_sql_query($sql);

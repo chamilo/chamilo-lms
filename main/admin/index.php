@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10178 2006-11-23 14:11:01Z bmol $
+<?php // $Id: index.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -284,12 +284,12 @@ function check_dokeos_version2()
 	if (ini_get('allow_url_fopen')==1)
 	{
 		// the number of courses
-		$sql="SELECT code FROM ".Database::get_main_table(MAIN_COURSE_TABLE);
+		$sql="SELECT code FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
 		$result=api_sql_query($sql);
 		$number_of_courses = mysql_num_rows($result);
 
 		// the number of users
-		$sql="SELECT user_id FROM ".Database::get_main_table(MAIN_USER_TABLE);
+		$sql="SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_USER);
 		$result=api_sql_query($sql);
 		$number_of_users = mysql_num_rows($result);
 

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: user_import.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -152,7 +152,7 @@ function complete_missing_data($users)
  */
 function save_data($users)
 {
-	$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$sendMail = $_POST['sendMail'] ? 1 : 0;
 	foreach ($users as $index => $user)
 	{

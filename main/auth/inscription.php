@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 10082 2006-11-21 19:08:15Z pcool $
+// $Id: inscription.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -119,7 +119,7 @@ if ($form->validate())
 	if ($user_id)
 	{
 		// TODO: add language to parameter list of UserManager::create_user(...)
-		$sql = "UPDATE ".Database::get_main_table(MAIN_USER_TABLE)."
+		$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
 		             SET language	= '".mysql_real_escape_string($values['language'])."'
 					WHERE user_id = '".$_user['user_id']."'	 ";
 		//api_sql_query($sql,__FILE__,__LINE__);
@@ -127,7 +127,7 @@ if ($form->validate())
 		// if there is a default duration of a valid account then we have to change the expiration_date accordingly
 		if (get_setting('account_valid_duration')<>'')
 		{
-			$sql = "UPDATE ".Database::get_main_table(MAIN_USER_TABLE)."
+			$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
 						SET expiration_date='registration_date+1' WHERE user_id='".$_user['user_id']."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
@@ -136,7 +136,7 @@ if ($form->validate())
 		if (get_setting('allow_registration')=='approval')
 		{
 			// 1. set account inactive
-			$sql = "UPDATE ".Database::get_main_table(MAIN_USER_TABLE)."
+			$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
 						SET active='0' WHERE user_id='".$_user['user_id']."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 			

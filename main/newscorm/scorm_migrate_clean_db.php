@@ -5,7 +5,7 @@ $max_dsp_lp = 0;
 $courses_list = array();
 $courses_id_list = array();
 $courses_dir_list = array();
-$sql = "SELECT * FROM ".Database::get_main_table(MAIN_COURSE_TABLE)."";
+$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."";
 echo $sql."<br />\n";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 while ($row = Database::fetch_array($res))

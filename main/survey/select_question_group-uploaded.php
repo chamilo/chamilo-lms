@@ -53,7 +53,7 @@ echo "</pre>";
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$table_course = Database::get_main_table(MAIN_COURSE_TABLE);
+$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $cidReq = $_GET['cidReq'];
 $db_name = $_REQUEST['db_name'];
 $curr_dbname = $_REQUEST['curr_dbname'];

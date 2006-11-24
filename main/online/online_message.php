@@ -1,4 +1,4 @@
-<?php // $Id: online_message.php 9988 2006-11-15 01:28:32Z pcool $
+<?php // $Id: online_message.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -46,7 +46,7 @@ $this_section=SECTION_COURSES;
 $sent = $_REQUEST['sent'];
 $question = $_REQUEST['question'];
 
-$tbl_user = Database::get_main_table(MAIN_USER_TABLE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=api_sql_query($query,__FILE__,__LINE__);

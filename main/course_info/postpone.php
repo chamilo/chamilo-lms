@@ -1,4 +1,4 @@
-<?php  // $Id: postpone.php 9246 2006-09-25 13:24:53Z bmol $
+<?php  // $Id: postpone.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -68,7 +68,7 @@ Display::display_header($nameTools,"Settings");
 //include(api_get_path(CONFIGURATION_PATH)."postpone.conf.php");
 
 $nameTools = get_lang('Postpone');
-$TABLECOURSE	= Database::get_main_table(MAIN_COURSE_TABLE); 
+$TABLECOURSE	= Database::get_main_table(TABLE_MAIN_COURSE); 
 $is_allowedToEdit 			= $is_courseAdmin;
 $currentCourseID 			= $_course['sysCode'];
 $currentCourseRepository 	= $_course["path"];

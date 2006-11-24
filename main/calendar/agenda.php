@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 9973 2006-11-14 14:53:22Z pcool $
+<?php //$Id: agenda.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -200,13 +200,13 @@ $DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("Tue
 // Defining the months of the year to allow translation of the months. We use camelcase because these are arrays of language variables
 $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
 
-// setting the database variables
-$TABLEAGENDA 		= Database::get_course_table(AGENDA_TABLE);
-$TABLE_ITEM_PROPERTY = Database::get_course_table(LAST_TOOL_EDIT_TABLE);
-$tbl_user       = Database::get_main_table(MAIN_USER_TABLE);
-$tbl_courseUser = Database::get_main_table(MAIN_COURSE_USER_TABLE);
-$tbl_group      = Database::get_course_table(GROUP_TABLE);
-$tbl_groupUser  = Database::get_course_table(GROUP_USER_TABLE);
+// Database table definitions
+$TABLEAGENDA 			= Database::get_course_table(AGENDA_TABLE);
+$TABLE_ITEM_PROPERTY 	= Database::get_course_table(LAST_TOOL_EDIT_TABLE);
+$tbl_user       		= Database::get_main_table(TABLE_MAIN_USER);
+$tbl_courseUser 		= Database::get_main_table(MAIN_COURSE_USER_TABLE);
+$tbl_group      		= Database::get_course_table(GROUP_TABLE);
+$tbl_groupUser  		= Database::get_course_table(GROUP_USER_TABLE);
 $tbl_session_course_user= Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
 
 

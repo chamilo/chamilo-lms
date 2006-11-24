@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: user_information.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,7 +50,7 @@ $user = api_get_user_info($_GET['user_id']);
 $tool_name = $user['firstName'].' '.$user['lastName'].(empty($user['official_code'])?'':' ('.$user['official_code'].')');
 Display::display_header($tool_name);
 $table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 if( isset($_GET['action']) )
 {
 	switch($_GET['action'])
@@ -117,7 +117,7 @@ else
  * Show the classes in which this user is subscribed
  */
 $table_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
-$table_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = 'SELECT * FROM '.$table_class_user.' cu, '.$table_class.' c WHERE cu.user_id = '.$user['user_id'].' AND cu.class_id = c.id';
 $res = api_sql_query($sql,__FILE__,__LINE__);
 if (mysql_num_rows($res) > 0)

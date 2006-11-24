@@ -1,4 +1,4 @@
-<?php // $Id: online_master.php 9988 2006-11-15 01:28:32Z pcool $
+<?php // $Id: online_master.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,7 +39,7 @@ $this_section=SECTION_COURSES;
 
 $init=intval($_GET['init']);
 
-$tbl_user = Database::get_main_table(MAIN_USER_TABLE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 $tbl_online_link=Database::get_course_table(ONLINE_LINK_TABLE);
 

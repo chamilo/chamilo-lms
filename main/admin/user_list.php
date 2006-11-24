@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 10082 2006-11-21 19:08:15Z pcool $
+// $Id: user_list.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -52,8 +52,8 @@ function login_user($user_id)
 	global $uidReset, $loginFailed, $uidReset, $_configuration, $_user;
 	global $is_platformAdmin, $is_allowedCreateCourse;
 
-	$main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
-	$main_admin_table = Database :: get_main_table(MAIN_ADMIN_TABLE);
+	$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
+	$main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 	$track_e_login_table = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
 
 	//logic --------------------------------------------------------------------
@@ -149,7 +149,7 @@ function login_user($user_id)
  */
 function get_number_of_users()
 {
-	$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT COUNT(user_id) AS total_number_of_items FROM $user_table";
 	if (isset ($_GET['keyword']))
 	{
@@ -185,7 +185,7 @@ function get_number_of_users()
  */
 function get_user_data($from, $number_of_items, $column, $direction)
 {
-	$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT
                  user_id			AS col0,
                  official_code		AS col1,
@@ -298,7 +298,7 @@ function active_filter($active, $url_params, $row)
  */
 function lock_unlock_user($status,$user_id)
 {
-	$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 
 	if ($status=='lock')
 	{

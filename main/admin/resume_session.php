@@ -37,19 +37,20 @@ $langFile = 'admin';
 $cidReset = true;
 require ('../inc/global.inc.php');
 api_protect_admin_script();
-$tool_name = "Résumé de la session";
+$tool_name = get_lang('SessionOverview');
 $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
-$interbreadcrumb[]=array("url" => "session_list.php","name" => "Liste des sessions");
+$interbreadcrumb[]=array("url" => "session_list.php","name" => get_lang('SessionList'));
 
-$tbl_session=Database::get_main_table(MAIN_SESSION_TABLE);
-$tbl_session_rel_class=Database::get_main_table(MAIN_SESSION_CLASS_TABLE);
-$tbl_session_rel_course=Database::get_main_table(MAIN_SESSION_COURSE_TABLE);
-$tbl_course=Database::get_main_table(MAIN_COURSE_TABLE);
-$tbl_user=Database::get_main_table(MAIN_USER_TABLE);
-$tbl_session_rel_user=Database::get_main_table(MAIN_SESSION_USER_TABLE);
-$tbl_session_rel_course_rel_user=Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
-$tbl_class=Database::get_main_table(MAIN_CLASS_TABLE);
-$tbl_class_rel_user=Database::get_main_table(MAIN_CLASS_USER_TABLE);
+// Table Definitions
+$tbl_session						= Database::get_main_table(MAIN_SESSION_TABLE);
+$tbl_session_rel_class				= Database::get_main_table(MAIN_SESSION_CLASS_TABLE);
+$tbl_session_rel_course				= Database::get_main_table(MAIN_SESSION_COURSE_TABLE);
+$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session_rel_user				= Database::get_main_table(MAIN_SESSION_USER_TABLE);
+$tbl_session_rel_course_rel_user	= Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+$tbl_class							= Database::get_main_table(TABLE_MAIN_CLASS);
+$tbl_class_rel_user					= Database::get_main_table(MAIN_CLASS_USER_TABLE);
 
 $id_session = $_GET['id_session'];
 

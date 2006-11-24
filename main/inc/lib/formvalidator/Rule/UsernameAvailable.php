@@ -1,5 +1,5 @@
 <?php
-// $Id: UsernameAvailable.php 6392 2005-10-11 14:38:21Z bmol $
+// $Id: UsernameAvailable.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,7 +36,7 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
 	 */
 	function validate($username,$current_username = null)
 	{
-		$user_table = Database::get_main_table(MAIN_USER_TABLE);
+		$user_table = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $user_table WHERE username = '$username'";
 		if(!is_null($current_username))
 		{

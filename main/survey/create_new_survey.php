@@ -54,8 +54,8 @@ require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 */
 $table_survey 				= Database :: get_course_table('survey');
 $table_group 				= Database :: get_course_table('survey_group');
-$table_user 				= Database :: get_main_table(MAIN_USER_TABLE);
-$table_course 				= Database :: get_main_table(MAIN_COURSE_TABLE);
+$table_user 				= Database :: get_main_table(TABLE_MAIN_USER);
+$table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_course_survey_rel 	= Database :: get_main_table(MAIN_COURSE_SURVEY_TABLE);
 
 

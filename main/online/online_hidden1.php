@@ -37,7 +37,7 @@ $langFile='chat';
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
-$tbl_user=Database::get_main_table(MAIN_USER_TABLE);
+$tbl_user=Database::get_main_table(TABLE_MAIN_USER);
 $tbl_online_connected=Database::get_course_table(ONLINE_CONNECTED_TABLE);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";

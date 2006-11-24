@@ -208,7 +208,7 @@ else
 		$password = $_POST['password'];
 
         //lookup the user in the main database
-		$user_table = Database::get_main_table(MAIN_USER_TABLE);
+		$user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
                 FROM $user_table
                 WHERE username = '".trim(addslashes($login))."'";
@@ -374,8 +374,8 @@ if (isset($uidReset) && $uidReset) // session data refresh requested
 
     if (isset($_user['user_id']) && $_user['user_id']) // a uid is given (log in succeeded)
     {
-$user_table = Database::get_main_table(MAIN_USER_TABLE);
-$admin_table = Database::get_main_table(MAIN_ADMIN_TABLE);
+$user_table = Database::get_main_table(TABLE_MAIN_USER);
+$admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
         if ($_configuration['tracking_enabled'])
         {
             $sql = "SELECT `user`.*, `a`.`user_id` `is_admin`,
@@ -448,7 +448,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 {
     if ($cidReq)
     {
-    	$course_table = Database::get_main_table(MAIN_COURSE_TABLE);
+    	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     	$course_cat_table = Database::get_main_table(MAIN_CATEGORY_TABLE);
         $sql =    "SELECT `course`.*, `course_category`.`code` `faCode`, `course_category`.`name` `faName`
                  FROM $course_table
@@ -775,7 +775,7 @@ else
 
 if(isset($_cid))
 {
-	$tbl_course = Database::get_main_table(MAIN_COURSE_TABLE);
+	$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 	$sql="UPDATE $tbl_course SET last_visit=NOW() WHERE code='$_cid'";
 	api_sql_query($sql,__FILE__,__LINE__);
 }

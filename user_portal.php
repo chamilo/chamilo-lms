@@ -88,13 +88,12 @@ api_block_anonymous_users(); // only users who are logged in can proceed
 	Table definitions
 -----------------------------------------------------------
 */
-//new table definitions, using database library
-//these already have backticks around them!
-$main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
-$main_admin_table = Database :: get_main_table(MAIN_ADMIN_TABLE);
-$main_course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+//Database table definitions
+$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
+$main_admin_table 		= Database :: get_main_table(TABLE_MAIN_ADMIN);
+$main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 $main_course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-$main_category_table = Database :: get_main_table(MAIN_CATEGORY_TABLE);
+$main_category_table 	= Database :: get_main_table(MAIN_CATEGORY_TABLE);
 
 /*
 -----------------------------------------------------------
@@ -222,8 +221,8 @@ function get_personal_course_list($user_id)
 	$personal_course_list = array();
 	
 	// table definitions
-	$main_user_table 		= Database :: get_main_table(MAIN_USER_TABLE);
-	$main_course_table 		= Database :: get_main_table(MAIN_COURSE_TABLE);
+	$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
+	$main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 	$main_course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 	$tbl_session_course 	= Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
 	$tbl_session_course_user= Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
@@ -286,8 +285,8 @@ function get_personal_course_list($user_id)
 function get_personal_session_course_list($user_id, $list_sessions)
 {
 	// table definitions
-	$tbl_course 				= Database :: get_main_table(MAIN_COURSE_TABLE);
-	$tbl_user 					= Database :: get_main_table(MAIN_USER_TABLE);
+	$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
+	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 	$tbl_session 				= Database :: get_main_table(MAIN_SESSION_TABLE);
 	$tbl_course_user 			= Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 	$tbl_session_course 		= Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);

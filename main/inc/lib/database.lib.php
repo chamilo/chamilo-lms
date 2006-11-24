@@ -29,6 +29,8 @@
 *	Include/require it in your code to use its functionality.
 *
 *	@package dokeos.library
+* 	@todo the table constants have all to start with TABLE_ 
+* 		  This is because of the analogy with the tool constants TOOL_
 ============================================================================== 
 */
 /*
@@ -37,10 +39,10 @@
 ============================================================================== 
 */
 //main database tables
-define("MAIN_COURSE_TABLE", "course");
-define("MAIN_USER_TABLE", "user");
-define("MAIN_CLASS_TABLE", "class");
-define("MAIN_ADMIN_TABLE", "admin");
+define('TABLE_MAIN_COURSE', 'course');
+define('TABLE_MAIN_USER', 'user');
+define('TABLE_MAIN_CLASS', 'class');
+define('TABLE_MAIN_ADMIN', 'admin');
 define("MAIN_COURSE_CLASS_TABLE", "course_rel_class");
 define("MAIN_COURSE_USER_TABLE", "course_rel_user");
 define("MAIN_CLASS_USER_TABLE", "class_user");
@@ -84,10 +86,10 @@ define("TOOL_INTRO_TABLE", "tool_intro");
 define("SCORMDOC_TABLE", "scormdocument");
 define("STUDENT_PUBLICATION_TABLE", "student_publication");
 //course forum tables
-define("TOOL_FORUM_CATEGORY_TABLE",'forum_category');
-define("TOOL_FORUM_TABLE",'forum_forum');
-define("TOOL_FORUM_THREAD_TABLE",'forum_thread');
-define("TOOL_FORUM_POST_TABLE",'forum_post');
+define('TABLE_FORUM_CATEGORY','forum_category');
+define('TABLE_FORUM','forum_forum');
+define('TABLE_FORUM_THREAD','forum_thread');
+define('TABLE_FORUM_POST','forum_post');
 //course group tables
 define("GROUP_TABLE", "group_info");
 define("GROUP_USER_TABLE", "group_rel_user");
@@ -369,7 +371,7 @@ class Database
 	*/
 	function get_course_list()
 	{
-		$table = Database::get_main_table(MAIN_COURSE_TABLE);
+		$table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = api_store_result($sql_result);
@@ -383,7 +385,7 @@ class Database
 	*/
 	function get_course_info($course_code)
 	{
-		$table = Database::get_main_table(MAIN_COURSE_TABLE);
+		$table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table WHERE `code` = '$course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = mysql_fetch_array($sql_result);
@@ -400,7 +402,7 @@ class Database
 	*/
 	function get_user_info_from_id($user_id = '')
 	{
-		$table = Database::get_main_table(MAIN_USER_TABLE);
+		$table = Database::get_main_table(TABLE_MAIN_USER);
 		if ($user_id == '')
 		{
 			return $GLOBALS["_user"];

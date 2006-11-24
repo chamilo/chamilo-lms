@@ -38,7 +38,7 @@ include('../inc/global.inc.php');
 
 $reset=$_GET['reset']?true:false;
 
-$tbl_user = Database::get_main_table(MAIN_USER_TABLE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=api_sql_query($query,__FILE__,__LINE__);
 

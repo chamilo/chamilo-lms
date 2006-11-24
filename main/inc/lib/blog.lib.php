@@ -97,8 +97,8 @@ class Blog
 	 */
 	function get_blog_users($blog_id)
 	{
-		// Init
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		// Database table definitions
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
 		
@@ -669,7 +669,7 @@ class Blog
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
 		$tbl_blogs_comments = Database::get_course_table(BLOGS_COMMENTS_TABLE);
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		global $dateFormatLong;
 		
 		// Get posts and authors
@@ -795,7 +795,7 @@ class Blog
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
 		$tbl_blogs_comments = Database::get_course_table(BLOGS_COMMENTS_TABLE);
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		
 		global $dateFormatLong;
 		
@@ -959,7 +959,7 @@ class Blog
 	{
 		// Init
 		$tbl_blogs_comments = Database::get_course_table(BLOGS_COMMENTS_TABLE);
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
 		global $dateFormatLong;
 		
@@ -1146,7 +1146,7 @@ class Blog
 	{
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		
 		// Get posts and author
 		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post INNER JOIN $tbl_users user ON post.author = user.user_id WHERE post.blog_id = $blog_id AND post.post_id = $post_id ORDER BY post_id DESC";
@@ -1268,7 +1268,7 @@ class Blog
 	function display_assigned_task_list($blog_id)
 	{
 		// Init
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);
 		$counter = 0;
@@ -1493,7 +1493,7 @@ class Blog
 	function display_assign_task_form($blog_id)
 	{
 		// Init
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
 		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
 		$day	= date("d");
@@ -1616,7 +1616,7 @@ class Blog
 		
 		/* ------------- */
 		// Init
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
 		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);
@@ -1859,7 +1859,7 @@ class Blog
 		// Init
 		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
 		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		
 		$sql = "
 			SELECT title
@@ -1955,7 +1955,7 @@ class Blog
 		// Init
 		global $_course;
 		$currentCourse = $_course['sysCode'];
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
 		$table_course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
 		echo '<span class="blogpost_title">' . get_lang('SubscribeMembers') . '</span>';
@@ -2042,7 +2042,7 @@ class Blog
 		global $_user; 
 		
 		// Init
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
 		
 		echo '<span class="blogpost_title">' . get_lang('UnsubscribeMembers') . '</span>';
@@ -2142,7 +2142,7 @@ class Blog
 	function display_form_user_rights($blog_id)
 	{
 		// Init
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
 		
 		echo '<span class="blogpost_title">' . get_lang('RightsManager') . '</span>';
@@ -2226,7 +2226,7 @@ class Blog
 		$posts = array();
 		$tasks = array();
 		
-		$tbl_users = Database::get_main_table(MAIN_USER_TABLE);
+		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
 		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);

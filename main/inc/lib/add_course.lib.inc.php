@@ -85,7 +85,7 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 {
 	global $prefixAntiNumber, $_configuration;
 
-	$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 	$wantedCode = strtr($wantedCode, "ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİßàáâãäåæçèéêëìíîïğñòóôõöøùúûüıÿ", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
 
@@ -1625,7 +1625,7 @@ function string2binary($variable)
 function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "")
 {
 	GLOBAL $defaultVisibilityForANewCourse, $langCourseDescription, $langProfessor, $langAnnouncementEx, $error_msg, $_configuration;
-	$TABLECOURSE = Database :: get_main_table(MAIN_COURSE_TABLE);
+	$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 
 	#$TABLEANNOUNCEMENTS=$_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'].$TABLEANNOUNCEMENTS;

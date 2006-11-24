@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: copy_course.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -85,7 +85,7 @@ elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items'
 // Else, show the default page
 else
 {
-	$table_c = Database :: get_main_table(MAIN_COURSE_TABLE);
+	$table_c = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$table_cu = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 	$user_info = api_get_user_info();
 	$course_info = api_get_course_info();

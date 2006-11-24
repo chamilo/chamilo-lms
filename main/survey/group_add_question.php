@@ -42,7 +42,7 @@ require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 $cidReq=$_GET['cidReq'];
-$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 //$table_survey = Database :: get_main_table(MAIN_SURVEY_IFA_TABLE);
 $tool_name1 = get_lang('AddQuestion1');
 $tool_name = get_lang('AddQuestion');

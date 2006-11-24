@@ -101,8 +101,8 @@ class GroupManager
 			$course_db = $course_info['database'];
 		}
 		$table_group = Database :: get_course_table(GROUP_TABLE, $course_db);
-		$table_user = Database :: get_main_table(MAIN_USER_TABLE);
-		$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_group_user = Database :: get_course_table(GROUP_USER_TABLE, $course_db);
 		$sql = "SELECT  g.id ,
 						g.name ,
@@ -148,7 +148,7 @@ class GroupManager
 		
 		$currentCourseRepository = $_course['path'];
 		$table_group = Database :: get_course_table(GROUP_TABLE);
-		$table_forum = Database :: get_course_table(TOOL_FORUM_TABLE);
+		$table_forum = Database :: get_course_table(TABLE_FORUM);
 		$category = GroupManager :: get_category($category_id);
 		if( strlen($places) == 0)
 		{
@@ -283,12 +283,15 @@ class GroupManager
 		{
 			$course = api_get_course_info();
 		}
-		$group_table = Database :: get_course_table(GROUP_TABLE, $course_db);
-		$group_user_table = Database :: get_course_table(GROUP_USER_TABLE, $course_db);
-		$forum_table = Database :: get_course_table(TOOL_FORUM_TABLE, $course_db);
-		$forum_post_table = Database :: get_course_table(TOOL_FORUM_POST_TABLE, $course_db);
-		$forum_post_text_table = Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE, $course_db);
-		$forum_topic_table = Database :: get_course_table(TOOL_FORUM_POST_TABLE, $course_db);
+		
+		// Database table definitions
+		$group_table 			= Database :: get_course_table(GROUP_TABLE, $course_db);
+		$group_user_table 		= Database :: get_course_table(GROUP_USER_TABLE, $course_db);
+		$forum_table 			= Database :: get_course_table(TABLE_FORUM, $course_db);
+		$forum_post_table 		= Database :: get_course_table(TABLE_FORUM_POST, $course_db);
+		$forum_post_text_table 	= Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE, $course_db);
+		$forum_topic_table 		= Database :: get_course_table(TABLE_FORUM_POST, $course_db);
+		
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
 		// define repository for deleted element
 		$group_garbage = api_get_path(GARBAGE_PATH).$course['path']."/group/";
@@ -359,7 +362,7 @@ class GroupManager
 	function set_group_properties($group_id, $name, $description, $maximum_number_of_students, $doc_state, $work_state, $calendar_state, $announcements_state, $self_registration_allowed, $self_unregistration_allowed)
 	{
 		$table_group = Database :: get_course_table(GROUP_TABLE);
-		//$table_forum = Database :: get_course_table(TOOL_FORUM_TABLE);
+		//$table_forum = Database :: get_course_table(TABLE_FORUM);
 		$sql = "UPDATE ".$table_group."
 					SET name='".trim($name)."',
 					doc_state = '".$doc_state."',
@@ -852,7 +855,7 @@ class GroupManager
 	 */
 	function get_subscribed_users($group_id)
 	{
-		$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_group_user = Database :: get_course_table(GROUP_USER_TABLE);
 		$sql = "SELECT `ug`.`id`, `u`.`user_id`, `u`.`lastname`, `u`.`firstname`, `u`.`email`
 					FROM ".$table_user." u, ".$table_group_user." ug
@@ -881,7 +884,7 @@ class GroupManager
 	 */
 	function get_subscribed_tutors($group_id,$id_only=false)
 	{
-		$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_group_tutor = Database :: get_course_table(GROUP_TUTOR_TABLE);
 		$sql = "SELECT `tg`.`id`, `u`.`user_id`, `u`.`lastname`, `u`.`firstname`, `u`.`email`
 					FROM ".$table_user." u, ".$table_group_tutor." tg
@@ -1056,7 +1059,7 @@ class GroupManager
 	{
 		global $_course;
 		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-		$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT user.user_id AS user_id, user.lastname AS lastname, user.firstname AS firstname
 				FROM ".$user_table." user, ".$course_user_table." cu
 				WHERE cu.user_id=user.user_id

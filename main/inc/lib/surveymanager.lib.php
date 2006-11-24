@@ -127,7 +127,7 @@ class SurveyManager
 
 	function get_survey_author($authorid)
 	{
-			$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+			$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		    $sql_query = "SELECT * FROM $user_table where user_id='$authorid'";
 			$res = api_sql_query($sql_query, __FILE__, __LINE__);
 			$firstname=@mysql_result($res,0,'firstname');
@@ -882,7 +882,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question)
 
 function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cidReq)
 {
-	$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$obj_name=@mysql_fetch_object($res);
@@ -1016,7 +1016,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 
 function import_question($surveyid,$qids,$table_group,$table_question,$db_name,$cidReq,$yes)
  {
-   $table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+   $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
    $sql_course = "SELECT * FROM $table_course WHERE code = '$cidReq'";
    $res_course = api_sql_query($sql_course,__FILE__,__LINE__);
    $obj_name=@mysql_fetch_object($res_course);
@@ -1528,7 +1528,7 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 
 function get_status()
 {
-	$table_user = Database::get_main_table(MAIN_USER_TABLE);
+	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '$_SESSION[_uid]'";
 	$resm = api_sql_query($sqlm,__FILE__,__LINE__);
 	$objm=@mysql_fetch_object($resm);

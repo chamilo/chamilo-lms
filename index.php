@@ -121,7 +121,7 @@ if ($_GET['logout'])
 	Table definitions
 -----------------------------------------------------------
 */
-$main_course_table 		= Database :: get_main_table(MAIN_COURSE_TABLE);
+$main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 $main_category_table 	= Database :: get_main_table(MAIN_CATEGORY_TABLE);
 $track_login_table 		= Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
 /*
@@ -430,7 +430,7 @@ function display_anonymous_course_list()
 	//init
 	$web_course_path = api_get_path(WEB_COURSE_PATH);
 	$category = $_GET["category"];
-	$main_course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+	$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$main_category_table = Database :: get_main_table(MAIN_CATEGORY_TABLE);
 	$platformLanguage = api_get_setting('platformLanguage');
 
@@ -545,7 +545,7 @@ function display_anonymous_course_list()
 
 function category_has_open_courses($category)
 {
-	$main_course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+	$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql_query = "SELECT * FROM $main_course_table WHERE category_code='$category'";
 	$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 	while ($course = mysql_fetch_array($sql_result))

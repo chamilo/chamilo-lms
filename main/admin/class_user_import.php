@@ -54,7 +54,7 @@ function validate_data($user_classes)
 			if (!isset ($classcodes[$user_class['ClassName']]))
 			{
 				//2.1.1 check if code exists in DB
-				$class_table = Database :: get_main_table(MAIN_CLASS_TABLE);
+				$class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
 				$sql = "SELECT * FROM $class_table WHERE name = '".mysql_real_escape_string($user_class['ClassName'])."'";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
 				if (mysql_num_rows($res) == 0)
@@ -86,9 +86,11 @@ function validate_data($user_classes)
  */
 function save_data($users_classes)
 {
-	$user_table = Database :: get_main_table(MAIN_USER_TABLE);
-	$class_user_table = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
-	$class_table = Database :: get_main_table(MAIN_CLASS_TABLE);
+	// table definitions
+	$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
+	$class_user_table 	= Database :: get_main_table(MAIN_CLASS_USER_TABLE);
+	$class_table 		= Database :: get_main_table(TABLE_MAIN_CLASS);
+	
 	$csv_data = array ();
 	foreach ($users_classes as $index => $user_class)
 	{

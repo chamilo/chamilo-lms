@@ -121,12 +121,12 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
  *===============================================================================  
  */
  
- $tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+ $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
  $tbl_session_user = Database :: get_main_table(MAIN_SESSION_USER_TABLE);
  $tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
  $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
  $tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
- $tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+ $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
  $tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
  $tbl_stats_exercices = Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
  //$tbl_course_lp_view = Database :: get_course_table('lp_view');

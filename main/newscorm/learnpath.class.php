@@ -80,7 +80,7 @@ class learnpath {
     	}
     	else
     	{
-    		$main_table = Database::get_main_table(MAIN_COURSE_TABLE);
+    		$main_table = Database::get_main_table(TABLE_MAIN_COURSE);
     		//$course = Database::escape_string($course);
     		$course = $this->escape_string($course);
     		$sql = "SELECT * FROM $main_table WHERE code = '$course'";
@@ -152,7 +152,7 @@ class learnpath {
     	else
     	{
     		//$main_table = Database::get_main_user_table();
-    		$main_table = Database::get_main_table(MAIN_USER_TABLE);
+    		$main_table = Database::get_main_table(TABLE_MAIN_USER);
     		//$user_id = Database::escape_integer($user_id);
     		$user_id = $this->escape_string($user_id);
     		$sql = "SELECT * FROM $main_table WHERE user_id = '$user_id'";

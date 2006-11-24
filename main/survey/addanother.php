@@ -50,7 +50,7 @@ require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 //require_once ('../inc/global.inc.php');
 $coursePathWeb = api_get_path(WEB_COURSE_PATH);
 $coursePathSys = api_get_path(SYS_COURSE_PATH);
-$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 //$cidReq = $_SESSION[_course][id];
 $cidReq = $_GET['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];

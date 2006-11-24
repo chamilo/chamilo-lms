@@ -53,7 +53,7 @@ function validate_data($users_courses)
 			if (!isset ($coursecodes[$user_course['CourseCode']]))
 			{
 				//2.1.1 check if code exists in DB
-				$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+				$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 				$sql = "SELECT * FROM $course_table WHERE code = '".mysql_real_escape_string($user_course['CourseCode'])."'";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
 				if (mysql_num_rows($res) == 0)
@@ -94,7 +94,7 @@ function validate_data($users_courses)
  */
 function save_data($users_courses)
 {
-	$user_table= Database::get_main_table(MAIN_USER_TABLE);
+	$user_table= Database::get_main_table(TABLE_MAIN_USER);
 	$course_user_table= Database::get_main_table(MAIN_COURSE_USER_TABLE);
 	$csv_data = array();
 	foreach ($users_courses as $index => $user_course)

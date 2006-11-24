@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 10082 2006-11-21 19:08:15Z pcool $
+<?php // $Id: user_add.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,19 +27,26 @@
 *	@package dokeos.admin
 ==============================================================================
 */
+// language file
 $langFile = array('admin','registration');
 $cidReset = true;
+
+// including necessary libraries
 include ('../inc/global.inc.php');
-$this_section=SECTION_PLATFORM_ADMIN;
-
-api_protect_admin_script();
-$table_admin = Database :: get_main_table(MAIN_ADMIN_TABLE);
-$table_user = Database :: get_main_table(MAIN_USER_TABLE);
-
 include (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+// section for the tabs
+$this_section=SECTION_PLATFORM_ADMIN;
+
+// user permissions
+api_protect_admin_script();
+
+// Database table definitions
+$table_admin 	= Database :: get_main_table(TABLE_MAIN_ADMIN);
+$table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
 
 
 $htmlHeadXtra[] = '

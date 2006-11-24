@@ -2,6 +2,7 @@
 /**
  * @todo remove the debug code and use the general debug library
  * @todo use the Database:: functions
+ * @todo small letters for table variables
  */
 include('exercise.class.php');
 include('question.class.php');
@@ -23,14 +24,16 @@ $this_section=SECTION_COURSES;
 api_protect_course_script();
 include(api_get_path(LIBRARY_PATH).'text.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-$TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
-$TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
-$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
-$TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
-$main_user_table = Database :: get_main_table(MAIN_USER_TABLE);
+
+// Database table definitions
+$TBL_EXERCICE_QUESTION 	= $_course['dbNameGlu'].'quiz_rel_question';
+$TBL_EXERCICES         	= $_course['dbNameGlu'].'quiz';
+$TBL_QUESTIONS         	= $_course['dbNameGlu'].'quiz_question';
+$TBL_REPONSES          	= $_course['dbNameGlu'].'quiz_answer';
+$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt"; 
-$TABLETRACK_EXERCICES = $_configuration['statistics_database']."`.`track_e_exercices";
+$TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt"; 
+$TABLETRACK_EXERCICES 	= $_configuration['statistics_database']."`.`track_e_exercices";
 
 $dsp_percent = false; 
 $debug=0;

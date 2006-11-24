@@ -53,7 +53,7 @@ $mail = $_REQUEST['mail'];
 //$db_name = "stableJAZ";
 //$uid = 2;
 //$surveyid = 1; 
-$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $sql_sname = "select * from $db_name.survey where survey_id='$surveyid'";
 $res_sname = api_sql_query($sql_sname,__FILE__,__LINE__);
 $obj_sname = mysql_fetch_object($res_sname);
@@ -74,7 +74,7 @@ if(isset($_POST['Next']))
  if(isset($uid))
 	{$registered='Y';}
  else{$registered='N';}
- $user_table = Database :: get_main_table(MAIN_USER_TABLE);
+ $user_table = Database :: get_main_table(TABLE_MAIN_USER);
  $survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
  if($uid1!=""){
 	header("location:surveytemp_white.php?temp=$temp&surveyid=$surveyid&uid1=$uid1&db_name=$db_name&mail=$mail&lang=$lang");

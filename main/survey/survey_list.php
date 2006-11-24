@@ -48,7 +48,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 $sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 $obj=@mysql_fetch_object($res);

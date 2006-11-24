@@ -60,7 +60,7 @@ class UserManager
 	function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language="english", $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1)
 	{
 		global $_user, $userPasswordCrypted;
-		$table_user = Database::get_main_table(MAIN_USER_TABLE);
+		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		if ($_user['user_id'])
 		{
 			$creator_id = $_user['user_id'];
@@ -139,11 +139,11 @@ class UserManager
 		{
 			return false;
 		}
-		$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 		$table_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
-		$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
-		$table_admin = Database :: get_main_table(MAIN_ADMIN_TABLE);
+		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+		$table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
 
 		// Unsubscribe the user from all groups in all his courses
 		$sql = "SELECT * FROM $table_course c, $table_course_user cu WHERE cu.user_id = '".$user_id."' AND c.code = cu.course_code";
@@ -211,7 +211,7 @@ class UserManager
 	function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id= null )
 	{
 		global $userPasswordCrypted;
-		$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "UPDATE $table_user SET
 				lastname='".mysql_real_escape_string($lastname)."',
 				firstname='".mysql_real_escape_string($firstname)."',
@@ -248,7 +248,7 @@ class UserManager
 	 */
 	function is_username_available($username)
 	{
-		$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT username FROM $table_user WHERE username = '".addslashes($username)."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		return mysql_num_rows($res) == 0;
@@ -261,7 +261,7 @@ class UserManager
 	*/
 	function get_user_list()
 	{
-		$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql_query = "SELECT * FROM $user_table";
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 		while ($result = mysql_fetch_array($sql_result))
@@ -277,7 +277,7 @@ class UserManager
 	 */
 	function get_user_info($username)
 	{
-		$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $user_table WHERE username='".$username."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$user = mysql_fetch_array($res,MYSQL_ASSOC);
@@ -288,7 +288,7 @@ class UserManager
 	function get_teacher_list($course_id, $sel_teacher='')
 	{
 		$user_course_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-		$user_table = Database :: get_main_table(MAIN_USER_TABLE);
+		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql_query = "SELECT * FROM $user_table a, $user_course_table b where a.user_id=b.user_id AND b.status=1 AND b.course_code='$course_id'";
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 		echo "<select name=\"author\">";

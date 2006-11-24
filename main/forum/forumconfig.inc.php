@@ -21,7 +21,7 @@ $table_posts 			= "`".$_course["dbNameGlu"]."forum_post"."`";
 $table_mailcue			= "`".$_course["dbNameGlu"]."forum_mailcue"."`"; 
 
 $table_item_property 	= Database :: get_course_table(LAST_TOOL_EDIT_TABLE);
-$table_users 			= Database :: get_main_table(MAIN_USER_TABLE);
+$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 
 /*
 -----------------------------------------------------------

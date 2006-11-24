@@ -111,7 +111,7 @@ if(api_is_allowed_to_edit())
  */
 function get_number_of_classes()
 {
-	$class_table = Database :: get_main_table(MAIN_CLASS_TABLE);
+	$class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
 	$course_class_table = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
 	$sql = "SELECT c.id	FROM $class_table c, $course_class_table cc WHERE cc.class_id = c.id AND cc.course_code ='".$_SESSION['_course']['id']."'";
 	if (isset ($_GET['keyword']))
@@ -128,7 +128,7 @@ function get_number_of_classes()
  */
 function get_class_data($from, $number_of_items, $column, $direction)
 {
-	$class_table = Database :: get_main_table(MAIN_CLASS_TABLE);
+	$class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
 	$course_class_table = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
 	$class_user_table = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
 	$sql = "SELECT

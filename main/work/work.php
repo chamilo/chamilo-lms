@@ -107,7 +107,7 @@ include_once('work.lib.php');
 -----------------------------------------------------------
 */
 $tool_name = get_lang(TOOL_STUDENTPUBLICATION);
-$main_course_table = Database::get_main_table(MAIN_COURSE_TABLE);
+$main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
 $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
@@ -520,7 +520,7 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 		//YW Tis part serve to send a e-mail to the tutors when a new file is send
 	// Lets predefine some variables. Be sure to change the from address!
 	$table_course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
-	$table_user = Database::get_main_table(MAIN_USER_TABLE);
+	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$sql_resp = 'SELECT u.email as myemail FROM '.$table_course_user.' cu, '.$table_user.' u WHERE cu.course_code = '."'".api_get_course_id()."'".' AND cu.status = 1 AND u.user_id = cu.user_id';
 	//echo $sql_resp;
 	$res_resp = api_sql_query($sql_resp,__FILE__,__LINE__);

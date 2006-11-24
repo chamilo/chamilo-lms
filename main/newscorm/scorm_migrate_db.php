@@ -50,7 +50,7 @@ $max_dsp_lp = 0;
 $courses_list = array();
 $courses_id_list = array();
 $courses_dir_list = array();
-$sql = "SELECT * FROM ".Database::get_main_table(MAIN_COURSE_TABLE)."";
+$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
 $res = api_sql_query($sql,__FILE__,__LINE__);
 while ($row = Database::fetch_array($res))
 {
@@ -538,7 +538,7 @@ $lp_course_code = array();
 $scorm_lp_paths = array();
 
 //avoid empty dokeosCourse fields as they potentially break the rest
-$course_main = Database::get_main_table(MAIN_COURSE_TABLE);
+$course_main = Database::get_main_table(TABLE_MAIN_COURSE);
 $sql_crs = "SELECT * FROM $course_main WHERE target_course_code IS NULL";
 echo "$sql_crs<br />\n";
 $res_crs = api_sql_query($sql_crs,__FILE__,__LINE__);

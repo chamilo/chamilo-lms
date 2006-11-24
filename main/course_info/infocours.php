@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 10154 2006-11-23 08:48:12Z elixir_inter $
+// $Id: infocours.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -64,7 +64,7 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 */
 define("MODULE_HELP_NAME", "Settings");
 define("COURSE_CHANGE_PROPERTIES", "COURSE_CHANGE_PROPERTIES");
-$TABLECOURSE = Database :: get_main_table(MAIN_COURSE_TABLE);
+$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLEFACULTY = Database :: get_main_table(MAIN_CATEGORY_TABLE);
 $TABLECOURSEHOME = Database :: get_course_table(TOOL_LIST_TABLE);
 $TABLELANGUAGES = Database :: get_main_table(MAIN_LANGUAGE_TABLE);
@@ -204,7 +204,7 @@ if ($form->validate() && is_settings_editable())
 		{
 		$update_values[$index] = mysql_real_escape_string($value);
 		}
-	$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "UPDATE $table_course SET title 			= '".$update_values['title']."',
 										 visual_code 	= '".$update_values['visual_code']."',
 										 course_language = '".$update_values['course_language']."',

@@ -20,8 +20,8 @@ Display :: display_header($nameTools);
 
 api_display_tool_title($nameTools);
 
-$tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
-$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
 $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
 $tbl_session_rel_user = Database :: get_main_table(MAIN_SESSION_USER_TABLE);

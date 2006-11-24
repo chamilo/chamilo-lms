@@ -1,5 +1,5 @@
 <?php
-// $Id: course_list.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: course_list.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -47,7 +47,7 @@ require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
  */
 function get_number_of_courses()
 {
-	$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table";
 	if (isset ($_GET['keyword']))
 	{
@@ -74,7 +74,7 @@ function get_number_of_courses()
  */
 function get_course_data($from, $number_of_items, $column, $direction)
 {
-	$course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, code AS col8 FROM $course_table";
 	if (isset ($_GET['keyword']))
 	{

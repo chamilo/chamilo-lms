@@ -385,7 +385,7 @@ function api_get_user_info($user_id = '')
 	}
 	else
 	{
-		$sql = "SELECT * FROM ".Database :: get_main_table(MAIN_USER_TABLE)." WHERE user_id=$user_id";
+		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id=$user_id";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$result_array = mysql_fetch_array($result);
 		// this is done so that it returns the same array-index-names

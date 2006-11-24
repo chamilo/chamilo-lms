@@ -1,6 +1,6 @@
 <?php
 
-// $Id: lostPassword.php 9246 2006-09-25 13:24:53Z bmol $ 
+// $Id: lostPassword.php 10190 2006-11-24 00:23:20Z pcool $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -52,7 +52,7 @@ if (get_setting('allow_lostpassword') == "false")
 	api_not_allowed();
 }
 api_display_tool_title($tool_name);
-$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 if (isset ($_GET["reset"]) && isset ($_GET["id"]))
 {
 	$msg = reset_password($_GET["reset"], $_GET["id"]);

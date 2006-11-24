@@ -31,6 +31,7 @@
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
 *	@package dokeos.exercise
+* 	@todo use database library
 ============================================================================== 
 */
 
@@ -61,7 +62,7 @@ require_once('hotpotatoes.lib.php');
 */
 $is_allowedToEdit = is_allowed_to_edit();
 
-$TBL_USER          	    = Database::get_main_table(MAIN_USER_TABLE);
+$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_DOCUMENT          	= Database::get_course_table(DOCUMENT_TABLE);
 $TBL_ITEM_PROPERTY      = Database::get_course_table(ITEM_PROPERTY_TABLE);
 $TBL_EXERCICE_QUESTION	= Database::get_course_table(QUIZ_TEST_QUESTION_TABLE);
@@ -69,7 +70,7 @@ $TBL_EXERCICES			= Database::get_course_table(QUIZ_TEST_TABLE);
 $TBL_QUESTIONS			= Database::get_course_table(QUIZ_QUESTION_TABLE);
 $TBL_TRACK_EXERCICES   	= $_configuration['statistics_database']."`.`track_e_exercices";
 $TBL_TRACK_HOTPOTATOES  = $_configuration['statistics_database']."`.`track_e_hotpotatoes";
-$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt"; 
+$TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt"; 
 
 // document path
 $documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";

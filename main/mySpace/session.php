@@ -18,7 +18,7 @@ ob_start();
  $tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
  $tbl_sessions = Database :: get_main_table(MAIN_SESSION_TABLE);
  $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
- $tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+ $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
  
  
  /*

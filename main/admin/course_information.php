@@ -1,5 +1,5 @@
 <?php
-// $Id: course_information.php 10154 2006-11-23 08:48:12Z elixir_inter $
+// $Id: course_information.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -45,7 +45,7 @@ api_protect_admin_script();
  */
 function get_course_usage($course_code)
 {
-	$table = Database::get_main_table(MAIN_COURSE_TABLE);
+	$table = Database::get_main_table(TABLE_MAIN_COURSE);
 	$sql = "SELECT * FROM $table WHERE code='".$course_code."'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$course = mysql_fetch_object($res);
@@ -53,7 +53,7 @@ function get_course_usage($course_code)
 	$table = Database :: get_course_table(LEARNPATH_MAIN_TABLE, $course->db_name);
 	$usage[] = array (get_lang(TOOL_LEARNPATH), Database::count_rows($table));
 	// Forums
-	$table = Database :: get_course_table(TOOL_FORUM_TABLE, $course->db_name);
+	$table = Database :: get_course_table(TABLE_FORUM, $course->db_name);
 	$usage[] = array (get_lang(TOOL_BB_FORUM), Database::count_rows($table));
 	// Quizzes
 	$table = Database :: get_course_table(QUIZ_TEST_TABLE, $course->db_name);
@@ -82,7 +82,7 @@ if (!isset ($_GET['code']))
 }
 //$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'course_list.php', "name" => get_lang('Courses'));
-$table_course = Database :: get_main_table(MAIN_COURSE_TABLE);
+$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 $code = $_GET['code'];
 $sql = "SELECT * FROM $table_course WHERE code = '".$code."'";
 $res = api_sql_query($sql,__FILE__,__LINE__);
@@ -120,7 +120,7 @@ echo '</blockquote>';
 echo '<h4>'.get_lang('Users').'</h4>';
 echo '<blockquote>';
 $table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-$table_user = Database :: get_main_table(MAIN_USER_TABLE);
+$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = 'SELECT *,cu.status as course_status FROM '.$table_course_user.' cu, '.$table_user." u WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."' ";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 if (mysql_num_rows($res) > 0)
@@ -157,7 +157,7 @@ echo '</blockquote>';
  * Show all classes subscribed in this course
  */
 $table_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
-$table_class = Database :: get_main_table(MAIN_CLASS_TABLE);
+$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = 'SELECT * FROM '.$table_course_class.' cc, '.$table_class.' c WHERE cc.class_id = c.id AND cc.course_code = '."'".$_GET['code']."'";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 if (mysql_num_rows($res) > 0)

@@ -7,8 +7,9 @@ include('../inc/global.inc.php');
 
 api_protect_admin_script();
 
-$tbl_user=Database::get_main_table(MAIN_USER_TABLE);
-$tbl_course=Database::get_main_table(MAIN_COURSE_TABLE);
+// table definitions
+$tbl_user=Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course=Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_session=Database::get_main_table(MAIN_SESSION_TABLE);
 $tbl_session_rel_course=Database::get_main_table(MAIN_SESSION_COURSE_TABLE);
 $tbl_session_rel_course_rel_user=Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);

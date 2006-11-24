@@ -16,8 +16,8 @@ ob_start();
  Display :: display_header($nameTools);
 
  
- $tbl_course = Database :: get_main_table(MAIN_COURSE_TABLE);
- $tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+ $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+ $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
  $tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
  $tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
  $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
@@ -80,7 +80,7 @@ ob_start();
  	
  	$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
  	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
- 	$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+ 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
  	$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
  	
  	
@@ -132,7 +132,7 @@ ob_start();
  	
  	$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
  	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
- 	$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+ 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
  	$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
  	
  	$sql_select_courses="SELECT course_rel_user.course_code FROM $tbl_course_user as course_rel_user, $tbl_session_course as session_rel_course WHERE user_id='$i_teacher_id' AND status='1' AND session_rel_course.course_code=course_rel_user.course_code";
@@ -182,7 +182,7 @@ ob_start();
  	
  	$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
  	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
- 	$tbl_user = Database :: get_main_table(MAIN_USER_TABLE);
+ 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
  	$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
  	
  	$sql_select_courses="SELECT course_code, id_session FROM $tbl_session_course as session_rel_course WHERE session_rel_course.id_coach='$i_coach_id'";

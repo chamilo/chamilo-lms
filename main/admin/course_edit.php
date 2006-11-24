@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_edit.php 10154 2006-11-23 08:48:12Z elixir_inter $
+// $Id: course_edit.php 10190 2006-11-24 00:23:20Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,7 +42,7 @@ $this_section=SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 include (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-$course_table = Database::get_main_table(MAIN_COURSE_TABLE);
+$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_code = isset($_GET['course_code']) ? $_GET['course_code'] : $_POST['code'];
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyCourseInfo');

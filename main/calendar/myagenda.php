@@ -86,7 +86,7 @@ Display::display_header(get_lang('MyAgenda'));
   						SETTING SOME VARIABLES
 ============================================================================== */
 // setting the database variables
-$TABLECOURS = Database :: get_main_table(MAIN_COURSE_TABLE);
+$TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSUSER = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
 $TABLEAGENDA = Database :: get_course_table(AGENDA_TABLE);
 $TABLE_ITEMPROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE);

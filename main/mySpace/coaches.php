@@ -16,6 +16,11 @@ $nameTools= get_lang('Tutors');
 
 api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+
+if(isset($_GET["id_student"])){
+	$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang('Students'));
+}
+
 Display :: display_header($nameTools);
 
 api_display_tool_title($nameTools);
@@ -252,7 +257,7 @@ if(mysql_num_rows($resultCoachs)>0){
 		$a_data[$i_id_coach]["firstname"]=$s_firstname;
 		$a_data[$i_id_coach]["connection_time"]=$s_connection_time;
 			
-		echo '<tr class="'.$s_css_class.'"><td>'.$s_lastname.'</td><td>'.$s_firstname.'</td><td>'.$s_connection_time.'</td><td><a href="cours.php?type=coach&user_id='.$i_id_coach.'">-></a></td><td><a href="myStudents.php?type=coach&user_id='.$i_id_coach.'">-></a></td></tr>';
+		echo '<tr class="'.$s_css_class.'"><td>'.$s_lastname.'</td><td>'.$s_firstname.'</td><td>'.$s_connection_time.'</td><td><a href="cours.php?type=coach&user_id='.$i_id_coach.'">-></a></td><td><a href="student.php?type=coach&user_id='.$i_id_coach.'">-></a></td></tr>';
 		
 	}
 	

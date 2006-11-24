@@ -115,6 +115,30 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
 	return $message;
 }
 
+
+function calculHours($seconds)
+{
+	
+  //combien d'heures ?
+  $hours = floor($seconds / 3600);
+
+  //combien de minutes ?
+  $min = floor(($seconds - ($hours * 3600)) / 60);
+  if ($min < 10)
+    $min = "0".$min;
+
+  //combien de secondes
+  $sec = $seconds - ($hours * 3600) - ($min * 60);
+  if ($sec < 10)
+    $sec = "0".$sec;
+        
+  //echo $hours."h".$min."m".$sec."s";
+
+	return $hours."h".$min."m".$sec."s" ;
+
+}
+
+
 /*
  *===============================================================================
  *	MAIN CODE
@@ -223,7 +247,7 @@ if(!empty($_GET['student']))
 								}
 							?>
 						
-						<td class="none">
+						<td class="none" width="60%">
 							<table>
 								<tr>
 									<td class="none">
@@ -239,7 +263,7 @@ if(!empty($_GET['student']))
 											echo get_lang('Email').' : ';
 											if(!empty($a_infosUser['email']))
 											{
-												echo '<a href="mailto:'.$students['email'].'">'.$a_infosUser['email'].'</a>';
+												echo '<a href="mailto:'.$a_infosUser['email'].'">'.$a_infosUser['email'].'</a>';
 											}
 											else
 											{
@@ -278,7 +302,7 @@ if(!empty($_GET['student']))
 				
 						if(!empty($_GET['details']))
 						{
-							$sendMail = Display::encrypted_mailto_link($a_infosUser['email'], '> '.get_lang('SendMail'));
+							$sendMail = Display::encrypted_mailto_link($a_infosUser['email'], ' '.get_lang('SendMail'));
 						
 					?>
 						<td class="borderLeft">
@@ -294,13 +318,13 @@ if(!empty($_GET['student']))
 											if(!empty($a_infosUser['email']))
 											{
 												echo "<td class='none'>";
-												echo $sendMail;
+												echo '<img align="absbottom" src="../img/send_mail.gif">&nbsp;'.$sendMail;
 												echo "</td>";
 											}
 											else
 											{
 												echo "<td class='noLink none'>";
-												echo '<strong> > '.get_lang('SendMail').'</strong>';
+												echo '<img align="absbottom" src="../img/send_mail.gif">&nbsp; <strong> > '.get_lang('SendMail').'</strong>';
 												echo "</td>";
 											}
 										?>
@@ -308,23 +332,23 @@ if(!empty($_GET['student']))
 								</tr>
 								<tr>
 									<td class="none">
-										<?php echo "<a href=''>".'> '.get_lang('RdvAgenda')."</a>"; ?>
+										<?php echo "<img align='absbottom' src='../img/meeting_agenda.gif'><a href=''>".'&nbsp; '.get_lang('RdvAgenda')."</a>"; ?>
 									</td>
 								</tr>
 								<tr>
 									<td class="none">
-										<?php echo "<a href=''>".'> '.get_lang('VideoConf')."</a>"; ?>
+										<?php echo "<img align='absbottom' src='../img/visio.gif'><a href=''>".'&nbsp; '.get_lang('VideoConf')."</a>"; ?>
 									</td>
 								</tr>
 								<tr>
 									<td class="none">
-										<?php echo "<a href=''>".'> '.get_lang('Chat')."</a>"; ?>
+										<?php echo "<img align='absbottom' src='../img/chat.gif'><a href=''>".'&nbsp; '.get_lang('Chat')."</a>"; ?>
 									</td>
 								</tr>
 								<tr>
 									<td class="none">
 								
-										<?php echo "<a href='".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."&csv=true#infosStudent'>".'> '.get_lang('ExcelFormat')."</a>"; ?>
+										<?php echo "<img align='absbottom' src='../img/spreadsheet.gif'><a href='".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."&csv=true#infosStudent'>".'&nbsp; '.get_lang('ExcelFormat')."</a>"; ?>
 									</td>
 								</tr>
 							</table>
@@ -783,13 +807,44 @@ if(!empty($_GET['student']))
 					
 					$progress = round(($a_nbItem['nbItem'] * 100)/$nbTotalItem);
 					
+					
+					/**
+					 * Calcul du temps passé sur le cours courant
+					 */
+					
+					$tbl_track_lcourse_access = Database :: get_statistic_table(STATISTIC_TRACK_E_COURSE_ACCESS_TABLE);
+					
+					$s_sql_connection_time="SELECT login_course_date, logout_course_date FROM $tbl_track_lcourse_access WHERE user_id ='".$_GET['student']."' AND logout_course_date <> 'null' AND course_code='".$a_cours['code']."'";
+
+					$q_result_connection_time=api_sql_query($s_sql_connection_time);
+					
+					$i_nb_seconds=0;
+					
+					while($a_connections=mysql_fetch_array($q_result_connection_time)){
+						
+						$s_login_date=$a_connections["login_course_date"];
+						$s_logout_date=$a_connections["logout_course_date"];
+						
+						$i_timestamp_login_date=strtotime($s_login_date);
+						$i_timestamp_logout_date=strtotime($s_logout_date);
+						
+						$i_nb_seconds+=($i_timestamp_logout_date-$i_timestamp_login_date);
+						
+					}
+					
+					$s_connection_time=calculHours($i_nb_seconds);
+					if($s_connection_time=="0h00m00s"){
+						$s_connection_time="";
+					}
+					
+					
 	?>			
 					<tr class="<?php echo $s_css_class;?>">
 						<td>
 							<?php echo $a_cours['title'].' - '.get_lang('Tutor').' : '.$a_cours['tutor_name']; ?>
 						</td>
-						<td>
-							
+						<td align="center">
+							<?php echo $s_connection_time;?>
 						</td>
 						<td align="center">
 							<?php echo $progress.'%'; ?>

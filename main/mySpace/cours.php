@@ -21,8 +21,12 @@
  	 $interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
  }
  
+ if(isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"]=="student"){
+ 	 $interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang('Students'));
+ }
+ 
  if(isset($_GET["user_id"]) && $_GET["user_id"]!="" && !isset($_GET["type"])){
- 	 $interbreadcrumb[] = array ("url" => "cours.php", "name" => get_lang('Teachers'));
+ 	 $interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
  }
  
  Display :: display_header($nameTools);
@@ -117,6 +121,8 @@ $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE
  ===============================================================================  
  */
 	
+	$a_courses=array();
+	$a_coursesRelUser=array();
 	
 	if(isset($_GET["id_session"]) && $_GET["id_session"]!=""){
 		
@@ -150,7 +156,17 @@ $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE
  			$sqlCourse="SELECT title,code " .
 	 					"FROM $tbl_course as course, $tbl_session_course_user as srcu " .
 	 					"WHERE course.code=srcu.course_code AND srcu.id_user='$i_user_id'";
+	 					
+	 		$sqlCourseRelUser="SELECT title,code " .
+	 					"FROM $tbl_course as course, $tbl_user_course as src " .
+	 					"WHERE course.code=src.course_code AND src.user_id='$i_user_id' AND src.status='5'";
 
+			$resultCourseRelUser = api_sql_query($sqlCourseRelUser);
+		
+			$a_coursesRelUser = api_store_result($resultCourseRelUser);
+			
+			
+			
  		}
  		
  		//It's a teacher
@@ -160,12 +176,15 @@ $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE
 							WHERE course.code=cru.course_code AND cru.user_id='$i_user_id' AND cru.status='1'
 							ORDER BY title ASC
 						  ";
+
  		}
  		
  		$resultCourses = api_sql_query($sqlCourse);
 		
 		$a_courses = api_store_result($resultCourses);
- 		
+		
+		$a_courses=array_merge($a_courses,$a_coursesRelUser);
+
  	}
  	if(!isset($_GET["user_id"]) && !isset($_GET["id_session"])){
  		

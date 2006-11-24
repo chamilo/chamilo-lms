@@ -167,7 +167,7 @@ if(mysql_num_rows($resultFormateurs)>0){
 		$a_data[$i_user_id]["firstname"]=$s_firstname;
 		$a_data[$i_user_id]["email"]=$s_email;
 		
-		echo '<tr class="'.$s_css_class.'"><td>'.$s_lastname.'</td><td>'.$s_firstname.'</td><td><a href="mailto:'.$s_email.'">'.$s_email.'</a></td><td><a href="cours.php?user_id='.$i_user_id.'">-></a></td><td><a href="myStudents.php?user_id='.$i_user_id.'">-></a></td></tr>';
+		echo '<tr class="'.$s_css_class.'"><td>'.$s_lastname.'</td><td>'.$s_firstname.'</td><td><a href="mailto:'.$s_email.'">'.$s_email.'</a></td><td><a href="cours.php?user_id='.$i_user_id.'">-></a></td><td><a href="student.php?user_id='.$i_user_id.'">-></a></td></tr>';
 		
 	}
 	

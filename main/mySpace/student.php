@@ -12,7 +12,17 @@ ob_start();
  $this_section = "session_my_space";
  
  api_block_anonymous_users();
-  $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+ 
+ $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+ 
+ if(isset($_GET["user_id"]) && $_GET["user_id"]!="" && !isset($_GET["type"])){
+ 	$interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
+ }
+ 
+ if(isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"]=="coach"){
+ 	$interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
+ }
+ 
  Display :: display_header($nameTools);
 
 // Database Table Definitions
@@ -84,14 +94,16 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
  	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
  	
  	
- 	$sql_select_courses="SELECT course_rel_user.course_code FROM $tbl_course_user as course_rel_user LEFT OUTER JOIN $tbl_session_course as src ON course_rel_user.course_code=src.course_code WHERE user_id='$i_teacher_id' AND status='1' AND src.course_code IS NULL";
-	
+ 	//$sql_select_courses="SELECT course_rel_user.course_code, src.course_code as test FROM $tbl_course_user as course_rel_user LEFT OUTER JOIN $tbl_session_course as src ON course_rel_user.course_code=src.course_code WHERE user_id='$i_teacher_id' AND status='1' AND src.course_code IS NULL";
+ 	$sql_select_courses="SELECT course_rel_user.course_code FROM $tbl_course_user as course_rel_user  WHERE user_id='$i_teacher_id' AND status='1'";
+
  	$result_courses=api_sql_query($sql_select_courses);
  	
  	while($a_courses=mysql_fetch_array($result_courses)){
  		
  		$s_course_code=$a_courses["course_code"];
  		$sqlStudents = "SELECT user.user_id,lastname,firstname,email FROM $tbl_course_user as course_rel_user, $tbl_user as user WHERE course_rel_user.user_id=user.user_id AND course_rel_user.status='5' AND course_rel_user.course_code='$s_course_code'";
+
  		$result_students=api_sql_query($sqlStudents);
 
  		if(mysql_num_rows($result_students)>0){
@@ -251,7 +263,7 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 	$a_students=array();
 	
 	//La personne est admin
-	if(api_is_platform_admin()){
+	if(api_is_platform_admin() && !isset($_GET["user_id"])){
 	
 		$sqlStudent = "	SELECT user_id,lastname,firstname,email
 						FROM $tbl_user
@@ -278,15 +290,37 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 	}
 	
 	else{
+
+		if(isset($_GET["user_id"])){
+			
+			//It's a teacher
+			if(!isset($_GET["type"])){
+			
+				$a_students=getStudentsFromCoursesNoSession($_GET["user_id"], $a_students);
+				
+				$a_students=getStudentsFromCoursesFromSessions($_GET["user_id"], $a_students);
+				
+			}
+			
+			//It's a coach
+			else{
+				$a_students=getStudentsFromCoursesFromSessionsCoach($_user['user_id'], $a_students);
+			}
+			
+		}
 		
-		$a_students=getStudentsFromCoursesNoSession($_user['user_id'], $a_students);
-
-		$a_students=getStudentsFromCoursesFromSessions($_user['user_id'], $a_students);
-
-		$a_students=getStudentsFromCoursesFromSessionsCoach($_user['user_id'], $a_students);
+		else{
+			
+			$a_students=getStudentsFromCoursesNoSession($_user['user_id'], $a_students);
+	
+			$a_students=getStudentsFromCoursesFromSessions($_user['user_id'], $a_students);
+	
+			$a_students=getStudentsFromCoursesFromSessionsCoach($_user['user_id'], $a_students);
+			
+		}
 
 		
-	}	  
+	}
 	
 	usort($a_students,"mysort");
 	

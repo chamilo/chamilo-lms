@@ -113,7 +113,7 @@ class UserManager
 	 */
 	function can_delete_user($user_id)
 	{
-		$table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		while ($course = mysql_fetch_object($res))
@@ -140,8 +140,8 @@ class UserManager
 			return false;
 		}
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-		$table_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
+		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
 
@@ -287,7 +287,7 @@ class UserManager
 	//for survey
 	function get_teacher_list($course_id, $sel_teacher='')
 	{
-		$user_course_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$user_course_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql_query = "SELECT * FROM $user_table a, $user_course_table b where a.user_id=b.user_id AND b.status=1 AND b.course_code='$course_id'";
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);

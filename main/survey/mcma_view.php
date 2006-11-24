@@ -13,7 +13,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 $surveyid=$_REQUEST['surveyid'];
 $groupid=$_REQUEST['groupid'];
 $ques_type = $_GET['qtype'];
-$table_category = Database :: get_main_table(MAIN_CATEGORY_TABLE);
+$table_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');

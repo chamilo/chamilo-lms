@@ -12,7 +12,7 @@ require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 
 $un = $_REQUEST['un'];
-$survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+$survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 $sql="SELECT * FROM $survey_user_info_table WHERE user_number = '$un'";
 $result=api_sql_query($sql);
 $obj=mysql_fetch_object($result);

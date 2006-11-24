@@ -15,12 +15,12 @@ require ('../inc/global.inc.php');
   $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
  Display :: display_header($nameTools);
  
- 
- $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
- $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
- $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
- $tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
- $tbl_track_exercice = Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
+// Database Table Definitions 
+$tbl_course 		= Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_user 			= Database :: get_main_table(TABLE_MAIN_USER);
+$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session 		= Database :: get_main_table(TABLE_MAIN_SESSION);
+$tbl_track_exercice = Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
  
  /*
  ===============================================================================

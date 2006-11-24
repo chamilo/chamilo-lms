@@ -10,7 +10,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-$table_reminder=Database::get_main_table(MAIN_SURVEY_REMINDER_TABLE);
+$table_reminder=Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 $sql_remind="SELECT * FROM $table_reminder WHERE access='0'";
 $res_remind=api_sql_query($sql_remind);
 while($obj=mysql_fetch_object($res_remind))

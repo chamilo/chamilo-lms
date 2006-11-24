@@ -10,8 +10,9 @@ api_protect_admin_script();
 $formSent=0;
 $errorMsg='';
 
-$tbl_user=Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session=Database::get_main_table(MAIN_SESSION_TABLE);
+// Database Table Definitions
+$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 
 $tool_name = get_lang('AddSession');
 

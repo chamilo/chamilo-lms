@@ -67,7 +67,7 @@ class Statistics
 	function count_users($status, $category_code = NULL, $count_invisible_courses = true)
 	{
 		// Database table definitions
-		$course_user_table 	= Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user_table 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 		$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 		
@@ -86,7 +86,7 @@ class Statistics
 	 */
 	function get_course_categories()
 	{
-		$category_table = Database :: get_main_table(MAIN_CATEGORY_TABLE);
+		$category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 		$sql = "SELECT * FROM $category_table ORDER BY tree_pos";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$categories = array ();
@@ -300,7 +300,7 @@ class Statistics
 			$form->display();
 			$values = $form->exportValues();
 			$date_diff = $values['date_diff'];
-			$table = Database::get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
+			$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 			$sql = "SELECT * FROM $table GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) >= ". $date_diff;
 			$res = api_sql_query($sql,__FILE__,__LINE__);
 			$number_of_courses = mysql_num_rows($res);

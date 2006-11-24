@@ -46,7 +46,7 @@ include('../../main/course_home/btf_functions.php');  // RH: extra ../
 $is_AllowedToEdit = is_allowed_to_edit();  // RH: Allowed is not allowed...
 
 
-$TABLE_TOOLS = Database::get_main_table(MAIN_COURSE_MODULE_TABLE);
+$TABLE_TOOLS = Database::get_main_table(TABLE_MAIN_COURSE_MODULE);
 $TBL_ACCUEIL = Database::get_course_table(TOOL_LIST_TABLE);
 
 // WORK with data post askable by admin of  course

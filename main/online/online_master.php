@@ -1,4 +1,4 @@
-<?php // $Id: online_master.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: online_master.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -40,7 +40,7 @@ $this_section=SECTION_COURSES;
 $init=intval($_GET['init']);
 
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_online_link=Database::get_course_table(ONLINE_LINK_TABLE);
 
 $query="SELECT t1.user_id,username,picture_uri,t2.status FROM $tbl_user t1,$tbl_course_user t2 WHERE t1.user_id=t2.user_id AND course_code='$_cid' AND (t1.user_id='".$_user['user_id']."' OR t2.status='1')";

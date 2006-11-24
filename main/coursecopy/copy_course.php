@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 10190 2006-11-24 00:23:20Z pcool $
+// $Id: copy_course.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -86,7 +86,7 @@ elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items'
 else
 {
 	$table_c = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$table_cu = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+	$table_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$user_info = api_get_user_info();
 	$course_info = api_get_course_info();
 	$sql = 'SELECT * FROM '.$table_c.' c, '.$table_cu.' cu WHERE cu.course_code = c.code';

@@ -43,7 +43,7 @@ class SystemAnnouncementManager
 	{
 		$user_selected_language = $_SESSION["user_language_choice"] ? $_SESSION["user_language_choice"] : get_setting('platformLanguage');
 
-		$db_table = Database :: get_main_table(MAIN_SYSTEM_ANNOUNCEMENTS_TABLE);
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table." WHERE lang='$user_selected_language' AND (NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00' ";
 		switch ($visible)
 		{
@@ -121,7 +121,7 @@ class SystemAnnouncementManager
 		
 		$user_selected_language = $_SESSION["user_language_choice"] ? $_SESSION["user_language_choice"] : get_setting('platformLanguage');
 		
-		$db_table = Database :: get_main_table(MAIN_SYSTEM_ANNOUNCEMENTS_TABLE);
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table." 
 				WHERE lang='$user_selected_language' AND (NOW() BETWEEN date_start AND date_end) 
 				OR date_end='0000-00-00'";
@@ -227,7 +227,7 @@ class SystemAnnouncementManager
 	{
 		$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
 		$user_selected_language = $_SESSION["user_language_choice"] ? $_SESSION["user_language_choice"] : get_setting('platformLanguage');
-		$db_table = Database :: get_main_table(MAIN_SYSTEM_ANNOUNCEMENTS_TABLE);
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = 'SELECT id 
 				FROM '.$db_table.'
 				WHERE lang="'.$user_selected_language.'"';
@@ -263,7 +263,7 @@ class SystemAnnouncementManager
 	 */
 	function get_all_announcements($lang)
 	{
-		$db_table = Database :: get_main_table(MAIN_SYSTEM_ANNOUNCEMENTS_TABLE);
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
 		$where="";
 
@@ -301,7 +301,7 @@ class SystemAnnouncementManager
 		$a_arrayEH = explode(':',$a_dateE[1]);
 		$date_end = array_merge($a_arrayED,$a_arrayEH);
 		
-		$db_table = Database :: get_main_table(MAIN_SYSTEM_ANNOUNCEMENTS_TABLE);
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		
 		if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		{
@@ -346,7 +346,7 @@ class SystemAnnouncementManager
 		$a_arrayEH = explode(':',$a_dateE[1]);
 		$date_end = array_merge($a_arrayED,$a_arrayEH);
 		
-		$db_table = Database :: get_main_table(MAIN_SYSTEM_ANNOUNCEMENTS_TABLE);
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		{
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
@@ -375,7 +375,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 	 */
 	function delete_announcement($id)
 	{
-		$db_table = Database :: get_main_table(MAIN_SYSTEM_ANNOUNCEMENTS_TABLE);
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "DELETE FROM ".$db_table." WHERE id='".$id."'";
 		return api_sql_query($sql,__FILE__,__LINE__);
 	}
@@ -386,7 +386,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 	 */
 	function get_announcement($id)
 	{
-		$db_table = Database :: get_main_table(MAIN_SYSTEM_ANNOUNCEMENTS_TABLE);
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT * FROM ".$db_table." WHERE id='".$id."'";
 		$announcement = mysql_fetch_object(api_sql_query($sql,__FILE__,__LINE__));
 		return $announcement;
@@ -399,7 +399,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 	 */
 	function set_visibility($announcement_id, $user, $visible)
 	{
-		$db_table = Database :: get_main_table(MAIN_SYSTEM_ANNOUNCEMENTS_TABLE);
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$field = ($user == VISIBLE_TEACHER ? 'visible_teacher' : ($user == VISIBLE_STUDENT ? 'visible_student' : 'visible_guest'));
 		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."' WHERE id='".$announcement_id."'";
 		return api_sql_query($sql,__FILE__,__LINE__);

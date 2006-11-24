@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: userLog.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -118,30 +118,25 @@ Display::display_header($nameTools,"Tracking");
 $is_allowedToTrack = $is_courseAdmin;
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_id);
 
-// regroup table names for maintenance purpose
-$TABLECOURSUSER	        	= Database::get_main_table(MAIN_COURSE_USER_TABLE);
+// Database Table Definitions
+$TABLECOURSUSER	        	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEUSER	        		= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_course_user 	= Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
-$tbl_session 				= Database::get_main_table(MAIN_SESSION_TABLE);
+$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 
-$TABLETRACK_ACCESS      = $_configuration['statistics_database']."`.`track_e_access";
-$TABLETRACK_LINKS       = $_configuration['statistics_database']."`.`track_e_links";
-$TABLETRACK_LOGIN       = $_configuration['statistics_database']."`.`track_e_login";
-$TABLETRACK_DOWNLOADS   = $_configuration['statistics_database']."`.`track_e_downloads";
-$TABLETRACK_UPLOADS     = $_configuration['statistics_database']."`.`track_e_uploads";
-$TABLETRACK_EXERCICES   = $_configuration['statistics_database']."`.`track_e_exercices";
+$TABLETRACK_ACCESS      	= $_configuration['statistics_database']."`.`track_e_access";
+$TABLETRACK_LINKS       	= $_configuration['statistics_database']."`.`track_e_links";
+$TABLETRACK_LOGIN       	= $_configuration['statistics_database']."`.`track_e_login";
+$TABLETRACK_DOWNLOADS   	= $_configuration['statistics_database']."`.`track_e_downloads";
+$TABLETRACK_UPLOADS     	= $_configuration['statistics_database']."`.`track_e_uploads";
+$TABLETRACK_EXERCICES   	= $_configuration['statistics_database']."`.`track_e_exercices";
 
-$TABLECOURSE_LINKS		= Database::get_course_table(LINK_TABLE);
-$TABLECOURSE_WORK       = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
-$TABLECOURSE_GROUPSUSER =  Database::get_course_table(GROUP_USER_TABLE);
-$TABLECOURSE_EXERCICES  = Database::get_course_table(QUIZ_TEST_TABLE);
-$TBL_TRACK_HOTPOTATOES  = Database::get_statistic_table(STATISTIC_TRACK_E_HOTPOTATOES_TABLE);
-/*
-$tbl_learnpath_main = Database::get_course_table(LEARNPATH_MAIN_TABLE);
-$tbl_learnpath_item = Database::get_course_table(LEARNPATH_ITEM_TABLE);
-$tbl_learnpath_chapter = Database::get_course_table(LEARNPATH_CHAPTER_TABLE);
-$tbl_learnpath_user = Database::get_course_table(LEARNPATH_USER_TABLE);
-*/
+$TABLECOURSE_LINKS			= Database::get_course_table(LINK_TABLE);
+$TABLECOURSE_WORK       	= Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+$TABLECOURSE_GROUPSUSER 	= Database::get_course_table(GROUP_USER_TABLE);
+$TABLECOURSE_EXERCICES  	= Database::get_course_table(QUIZ_TEST_TABLE);
+$TBL_TRACK_HOTPOTATOES  	= Database::get_statistic_table(STATISTIC_TRACK_E_HOTPOTATOES_TABLE);
+
 
 if(api_get_setting('use_session_mode') == "true") {
 	$sql = "SELECT 1

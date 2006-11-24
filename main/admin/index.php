@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: index.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -252,8 +252,8 @@ function version_check()
  */
 function register_site()
 {
-	// the settings table
-	$tbl_settings = Database :: get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
+	// Database Table Definitions
+	$tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 	// the SQL statment
 	$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";

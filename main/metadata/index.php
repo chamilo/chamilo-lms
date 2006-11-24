@@ -62,7 +62,7 @@ $mdObj = new mdobject($_course, EID_ID);  // see 'md_' . EID_TYPE . '.php'
 // Construct assoclist $langLangs from language table ------------------------->
 
 $result = api_sql_query("SELECT isocode FROM " . 
-    Database :: get_main_table(MAIN_LANGUAGE_TABLE) . 
+    Database :: get_main_table(TABLE_MAIN_LANGUAGE) . 
     " WHERE available='1' ORDER BY isocode ASC", __FILE__, __LINE__);
 
 $sep = ":"; $langLangs = $sep . "xx" . $sep . "xx"; 

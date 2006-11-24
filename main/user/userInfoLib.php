@@ -482,7 +482,7 @@ function get_main_user_info($user_id, $courseCode)
 	}
 
 
-	$table_course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+	$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT	u.lastname lastName, u.firstname firstName, 
 	                u.email, u.picture_uri picture, cu.role, 

@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: course_home.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -150,10 +150,11 @@ if($is_allowed_in_course == false)
 */
 if(api_get_setting('use_session_mode')=='true' && $is_allowed_in_course) 
 {
-	$tbl_session = Database::get_main_table(MAIN_SESSION_TABLE);
-	$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-	$tbl_session_course = Database::get_main_table(MAIN_SESSION_COURSE_TABLE);
-	$tbl_session_course_user = Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+	// Database Table Definitions
+	$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
+	$tbl_user 					= Database::get_main_table(TABLE_MAIN_USER);
+	$tbl_session_course 		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+	$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	
 	if(!empty($_GET['id_session']))
 	{

@@ -88,7 +88,7 @@ function save_data($users_classes)
 {
 	// table definitions
 	$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
-	$class_user_table 	= Database :: get_main_table(MAIN_CLASS_USER_TABLE);
+	$class_user_table 	= Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 	$class_table 		= Database :: get_main_table(TABLE_MAIN_CLASS);
 	
 	$csv_data = array ();

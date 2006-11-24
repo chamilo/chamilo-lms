@@ -1510,7 +1510,7 @@ function api_display_language_form()
 */
 function api_get_languages()
 {
-	$tbl_language = Database :: get_main_table(MAIN_LANGUAGE_TABLE);
+	$tbl_language = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 	;
 	$sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -1583,7 +1583,7 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
 function api_max_sort_value($user_course_category, $user_id)
 {
 
-	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user WHERE user_id='".$user_id."' AND user_course_cat='".$user_course_category."'";
 	$result_max = mysql_query($sql_max) or die(mysql_error());

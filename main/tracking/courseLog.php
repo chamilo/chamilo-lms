@@ -77,11 +77,11 @@ $htmlHeadXtra[] = "<style type='text/css'>
 -----------------------------------------------------------
 */
 // regroup table names for maintenance purpose
-$TABLETRACK_ACCESS      = Database::get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
+$TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 $TABLETRACK_LINKS       = Database::get_statistic_table(STATISTIC_TRACK_E_LINKS_TABLE);
 $TABLETRACK_DOWNLOADS   = Database::get_statistic_table(STATISTIC_TRACK_E_DOWNLOADS_TABLE);
 $TABLETRACK_ACCESS_2    = Database::get_statistic_table("track_e_access");
-$TABLECOURSUSER	        = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+$TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSE_LINKS      = Database::get_course_table(LINK_TABLE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);

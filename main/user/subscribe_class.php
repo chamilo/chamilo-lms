@@ -113,7 +113,7 @@ if (isset ($_POST['action']))
 function get_number_of_classes()
 {
 	$class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
-	$course_class_table = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
+	$course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 	$sql = "SELECT * FROM $course_class_table WHERE course_code = '".$_SESSION['_course']['id']."'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$subscribed_classes = array();
@@ -141,8 +141,8 @@ function get_number_of_classes()
 function get_class_data($from, $number_of_items, $column, $direction)
 {
 	$class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
-	$course_class_table = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
-	$class_user_table = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
+	$course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
+	$class_user_table = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 	$sql = "SELECT * FROM $course_class_table WHERE course_code = '".$_SESSION['_course']['id']."'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$subscribed_classes = array();

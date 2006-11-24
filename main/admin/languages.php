@@ -1,5 +1,5 @@
 <?php
-// $Id: languages.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: languages.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,8 +53,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 // setting the table that is needed for the styles management (there is a check if it exists later in this code)
-$tbl_admin_languages = Database :: get_main_table(MAIN_LANGUAGE_TABLE);
-$tbl_settings_current = Database :: get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
+$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+$tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 /*
 ============================================================================== 

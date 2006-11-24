@@ -1626,7 +1626,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 {
 	GLOBAL $defaultVisibilityForANewCourse, $langCourseDescription, $langProfessor, $langAnnouncementEx, $error_msg, $_configuration;
 	$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$TABLECOURSUSER = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+	$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 	#$TABLEANNOUNCEMENTS=$_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'].$TABLEANNOUNCEMENTS;
 	$TABLEANNOUNCEMENTS = Database :: get_course_table(ANNOUNCEMENT_TABLE,$courseDbName);

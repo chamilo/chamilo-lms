@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: courses.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -57,8 +57,8 @@ include_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
 -----------------------------------------------------------
 */
 $tbl_course             = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_courses_nodes      = Database::get_main_table(MAIN_CATEGORY_TABLE);
-$tbl_courseUser         = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+$tbl_courses_nodes      = Database::get_main_table(TABLE_MAIN_CATEGORY);
+$tbl_courseUser         = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
 
 /*
@@ -235,7 +235,7 @@ function subscribe_user($course_code)
 */
 function remove_user_from_course($user_id, $course_code)
 {
-	$tbl_course_user         = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+	$tbl_course_user         = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	// we check (once again) if the user is not course administrator
 	// because the course administrator cannot unsubscribe himself
@@ -297,7 +297,7 @@ function count_courses_in_category($category)
 */
 function browse_course_categories()
 {
-	$tbl_courses_nodes      = Database::get_main_table(MAIN_CATEGORY_TABLE);
+	$tbl_courses_nodes      = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
 	echo "<p><b>".get_lang('CourseCategories')."</b>";
 
@@ -495,7 +495,7 @@ function delete_course_category($id)
 
 	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
-	$TABLECOURSUSER=Database::get_main_table(MAIN_COURSE_USER_TABLE);
+	$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$sql_delete="DELETE FROM `$TABLE_USER_COURSE_CATEGORY` WHERE id='".$id."' and user_id='".$_user['user_id']."'";
 	$sql_update="UPDATE $TABLECOURSUSER SET user_course_cat='0' WHERE user_course_cat='".$id."' AND user_id='".$_user['user_id']."'";
@@ -576,7 +576,7 @@ function store_changecoursecategory($course_code, $newcategory)
 {
 	global $_user;
 	
-	$TABLECOURSUSER = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+	$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$max_sort_value=api_max_sort_value($newcategory,$_user['user_id']); //max_sort_value($newcategory);
 
@@ -594,7 +594,7 @@ function store_changecoursecategory($course_code, $newcategory)
 function move_course($direction, $course2move, $category)
 {
 	global $_user;
-	$TABLECOURSUSER = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+	$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$all_user_courses=get_courses_of_user($_user['user_id']);
 
@@ -739,7 +739,7 @@ function display_courses_in_category($user_category_id, $showicons)
 
 	// table definitions
 	$TABLECOURS=Database::get_main_table(TABLE_MAIN_COURSE);
-	$TABLECOURSUSER=Database::get_main_table(MAIN_COURSE_USER_TABLE);
+	$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$TABLE_USER_COURSE_CATEGORY = "`".Database::get_user_personal_database()."`.`user_course_category`";
 
 
@@ -1024,7 +1024,7 @@ function display_unsubscribe_icons($course)
 function get_courses_of_user($user_id)
 {
 	$TABLECOURS=Database::get_main_table(TABLE_MAIN_COURSE);
-	$TABLECOURSUSER=Database::get_main_table(MAIN_COURSE_USER_TABLE);
+	$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	// Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
 	$sql_select_courses="SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,

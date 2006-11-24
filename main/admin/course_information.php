@@ -1,5 +1,5 @@
 <?php
-// $Id: course_information.php 10190 2006-11-24 00:23:20Z pcool $
+// $Id: course_information.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -119,7 +119,7 @@ echo '</blockquote>';
  */
 echo '<h4>'.get_lang('Users').'</h4>';
 echo '<blockquote>';
-$table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = 'SELECT *,cu.status as course_status FROM '.$table_course_user.' cu, '.$table_user." u WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."' ";
 $res = api_sql_query($sql,__FILE__,__LINE__);
@@ -156,7 +156,7 @@ echo '</blockquote>';
 /**
  * Show all classes subscribed in this course
  */
-$table_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
+$table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 $table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = 'SELECT * FROM '.$table_course_class.' cc, '.$table_class.' c WHERE cc.class_id = c.id AND cc.course_code = '."'".$_GET['code']."'";
 $res = api_sql_query($sql,__FILE__,__LINE__);

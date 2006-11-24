@@ -122,7 +122,7 @@ if ($_GET['logout'])
 -----------------------------------------------------------
 */
 $main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
-$main_category_table 	= Database :: get_main_table(MAIN_CATEGORY_TABLE);
+$main_category_table 	= Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $track_login_table 		= Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
 /*
 -----------------------------------------------------------
@@ -431,7 +431,7 @@ function display_anonymous_course_list()
 	$web_course_path = api_get_path(WEB_COURSE_PATH);
 	$category = $_GET["category"];
 	$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$main_category_table = Database :: get_main_table(MAIN_CATEGORY_TABLE);
+	$main_category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 	$platformLanguage = api_get_setting('platformLanguage');
 
 	//get list of courses in category $category

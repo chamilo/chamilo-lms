@@ -29,11 +29,11 @@ Display :: display_header($nameTools);
 // Database table definitions
 $tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_session 				= Database :: get_main_table(MAIN_SESSION_TABLE);
-$tbl_course_user 			= Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-$tbl_session_course 		= Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
-$tbl_session_course_user 	= Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
-$tbl_stats_lastaccess 		= Database :: get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
+$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
+$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_stats_lastaccess 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 $tbl_stats_exercices 		= Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
 $tbl_course_lp_view 		= Database :: get_course_table('lp_view');
 $tbl_course_lp_view_item 	= Database :: get_course_table('lp_item_view');

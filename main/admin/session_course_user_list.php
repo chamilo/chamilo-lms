@@ -7,12 +7,12 @@ include('../inc/global.inc.php');
 
 api_protect_admin_script();
 
-// table definitions
-$tbl_user=Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course=Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_session=Database::get_main_table(MAIN_SESSION_TABLE);
-$tbl_session_rel_course=Database::get_main_table(MAIN_SESSION_COURSE_TABLE);
-$tbl_session_rel_course_rel_user=Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+// Database Table Definitions
+$tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $id_session=intval($_GET['id_session']);
 $course_code=trim(stripslashes($_GET['course_code']));

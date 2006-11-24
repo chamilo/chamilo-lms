@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 10190 2006-11-24 00:23:20Z pcool $
+<?php //$Id: agenda.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -204,10 +204,10 @@ $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang
 $TABLEAGENDA 			= Database::get_course_table(AGENDA_TABLE);
 $TABLE_ITEM_PROPERTY 	= Database::get_course_table(LAST_TOOL_EDIT_TABLE);
 $tbl_user       		= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_courseUser 		= Database::get_main_table(MAIN_COURSE_USER_TABLE);
+$tbl_courseUser 		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_group      		= Database::get_course_table(GROUP_TABLE);
 $tbl_groupUser  		= Database::get_course_table(GROUP_USER_TABLE);
-$tbl_session_course_user= Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+$tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 
 

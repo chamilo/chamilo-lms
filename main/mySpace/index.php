@@ -16,22 +16,21 @@ Display :: display_header($nameTools);
 // Database table definitions
 $tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
-$tbl_course_user 			= Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_class 					= Database :: get_main_table(TABLE_MAIN_CLASS);
-$tbl_sessions 				= Database :: get_main_table(MAIN_SESSION_TABLE);
-$tbl_session_course 		= Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
-$tbl_session_user 			= Database :: get_main_table(MAIN_SESSION_USER_TABLE);
-$tbl_session_course_user 	= Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+$tbl_sessions 				= Database :: get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_user 			= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_admin					= Database :: get_main_table(TABLE_MAIN_ADMIN);
   
   
     
-function is_coach(){
-  	
+function is_coach()
+{
   	global $tbl_session_course;
   	
 	$sql="SELECT course_code FROM $tbl_session_course WHERE id_coach='".$_SESSION["_uid"]."'";
-
 	$result=api_sql_query($sql);
 	  
 	if(mysql_num_rows($result)>0)

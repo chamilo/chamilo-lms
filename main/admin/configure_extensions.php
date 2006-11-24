@@ -31,7 +31,9 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-$tbl_settings_current = Database::get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
+// Database Table Definitions
+$tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+
 $message = '';
 
 if(isset($_POST['activeExtension'])){

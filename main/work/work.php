@@ -519,7 +519,7 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 {
 		//YW Tis part serve to send a e-mail to the tutors when a new file is send
 	// Lets predefine some variables. Be sure to change the from address!
-	$table_course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+	$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$sql_resp = 'SELECT u.email as myemail FROM '.$table_course_user.' cu, '.$table_user.' u WHERE cu.course_code = '."'".api_get_course_id()."'".' AND cu.status = 1 AND u.user_id = cu.user_id';
 	//echo $sql_resp;

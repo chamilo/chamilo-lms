@@ -641,7 +641,7 @@ class GroupManager
 		global $_course;
 		$category = GroupManager :: get_category_from_group($group_ids[0]);
 		$groups_per_user = $category['groups_per_user'];
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$group_table = Database :: get_course_table(GROUP_TABLE);
 		$group_user_table = Database :: get_course_table(GROUP_USER_TABLE);
 		$complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['sysCode']);
@@ -1058,7 +1058,7 @@ class GroupManager
 	function get_all_tutors()
 	{
 		global $_course;
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT user.user_id AS user_id, user.lastname AS lastname, user.firstname AS firstname
 				FROM ".$user_table." user, ".$course_user_table." cu
@@ -1084,7 +1084,7 @@ class GroupManager
 	function is_tutor($user_id)
 	{
 		global $_course;
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql = "SELECT tutor_id FROM ".$course_user_table."
 		             WHERE `user_id`='".$user_id."'
 		             AND `course_code`='".$_course['sysCode']."'"."AND tutor_id=1";

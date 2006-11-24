@@ -43,70 +43,70 @@ define('TABLE_MAIN_COURSE', 'course');
 define('TABLE_MAIN_USER', 'user');
 define('TABLE_MAIN_CLASS', 'class');
 define('TABLE_MAIN_ADMIN', 'admin');
-define("MAIN_COURSE_CLASS_TABLE", "course_rel_class");
-define("MAIN_COURSE_USER_TABLE", "course_rel_user");
-define("MAIN_CLASS_USER_TABLE", "class_user");
-define("MAIN_CATEGORY_TABLE", "course_category");
-define("MAIN_COURSE_MODULE_TABLE", "course_module");
-define("MAIN_SYSTEM_ANNOUNCEMENTS_TABLE", "sys_announcement");
-define("MAIN_LANGUAGE_TABLE", "language");
-define("MAIN_SETTINGS_OPTIONS_TABLE", "settings_options");
-define("MAIN_SETTINGS_CURRENT_TABLE", "settings_current");
-define("MAIN_SESSION_TABLE", "session");
-define("MAIN_SESSION_COURSE_TABLE", "session_rel_course");
-define("MAIN_SESSION_USER_TABLE", "session_rel_user");
-define("MAIN_SESSION_CLASS_TABLE", "session_rel_class");
-define("MAIN_SESSION_COURSE_USER_TABLE", "session_rel_course_rel_user");
-define("MAIN_COURSE_SURVEY_TABLE", "course_rel_survey");
-define("MAIN_SURVEY_USER_TABLE", "survey_user_info");
-define("MAIN_SURVEY_REMINDER_TABLE","survey_reminder");
+define('TABLE_MAIN_COURSE_CLASS', 'course_rel_class');
+define('TABLE_MAIN_COURSE_USER', 'course_rel_user');
+define('TABLE_MAIN_CLASS_USER', 'class_user');
+define('TABLE_MAIN_CATEGORY', 'course_category');
+define('TABLE_MAIN_COURSE_MODULE', 'course_module');
+define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS', 'sys_announcement');
+define('TABLE_MAIN_LANGUAGE', 'language');
+define('TABLE_MAIN_SETTINGS_OPTIONS', 'settings_options');
+define('TABLE_MAIN_SETTINGS_CURRENT', 'settings_current');
+define('TABLE_MAIN_SESSION', 'session');
+define('TABLE_MAIN_SESSION_COURSE', 'session_rel_course');
+define('TABLE_MAIN_SESSION_USER', 'session_rel_user');
+define('TABLE_MAIN_SESSION_CLASS', 'session_rel_class');
+define('TABLE_MAIN_SESSION_COURSE_USER', 'session_rel_course_rel_user');
+define('TABLE_MAIN_COURSE_SURVEY', 'course_rel_survey');
+define('TABLE_MAIN_SURVEY_USER', 'survey_user_info');
+define('TABLE_MAIN_SURVEY_REMINDER','survey_reminder');
 //statistic database tables
-define("STATISTIC_TRACK_E_LASTACCESS_TABLE", "track_e_lastaccess");
-define("STATISTIC_TRACK_E_ACCESS_TABLE", "track_e_access");
-define("STATISTIC_TRACK_E_LOGIN_TABLE", "track_e_login");
-define("STATISTIC_TRACK_E_DOWNLOADS_TABLE", "track_e_downloads");
-define("STATISTIC_TRACK_E_LINKS_TABLE", "track_e_links");
-define("STATISTIC_TRACK_E_ONLINE_TABLE", "track_e_online");
-define("STATISTIC_TRACK_E_HOTPOTATOES_TABLE", "track_e_hotpotatoes");
-define("STATISTIC_TRACK_E_COURSE_ACCESS_TABLE", "track_e_course_access");
+define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');
+define('STATISTIC_TRACK_E_ACCESS_TABLE', 'track_e_access');
+define('STATISTIC_TRACK_E_LOGIN_TABLE', 'track_e_login');
+define('STATISTIC_TRACK_E_DOWNLOADS_TABLE', 'track_e_downloads');
+define('STATISTIC_TRACK_E_LINKS_TABLE', 'track_e_links');
+define('STATISTIC_TRACK_E_ONLINE_TABLE', 'track_e_online');
+define('STATISTIC_TRACK_E_HOTPOTATOES_TABLE', 'track_e_hotpotatoes');
+define('STATISTIC_TRACK_E_COURSE_ACCESS_TABLE', 'track_e_course_access');
 //scorm database tables
-define("SCORM_MAIN_TABLE", "scorm_main");
-define("SCORM_SCO_DATA_TABLE", "scorm_sco_data");
+define('SCORM_MAIN_TABLE', 'scorm_main');
+define('SCORM_SCO_DATA_TABLE', 'scorm_sco_data');
 //course tables
-define("AGENDA_TABLE", "calendar_event");
-define("ANNOUNCEMENT_TABLE", "announcement");
-define("CHAT_CONNECTED_TABLE", "chat_connected");
-define("COURSE_DESCRIPTION_TABLE", "course_description");
-define("DOCUMENT_TABLE", "document");
-define("LAST_TOOL_EDIT_TABLE", "item_property");
-define("LINK_TABLE", "link");
-define("LINK_CATEGORY_TABLE", "link_category");
-define("TOOL_LIST_TABLE", "tool");
-define("TOOL_INTRO_TABLE", "tool_intro");
-define("SCORMDOC_TABLE", "scormdocument");
-define("STUDENT_PUBLICATION_TABLE", "student_publication");
+define('AGENDA_TABLE', 'calendar_event');
+define('ANNOUNCEMENT_TABLE', 'announcement');
+define('CHAT_CONNECTED_TABLE', 'chat_connected');
+define('COURSE_DESCRIPTION_TABLE', 'course_description');
+define('DOCUMENT_TABLE', 'document');
+define('LAST_TOOL_EDIT_TABLE', 'item_property');
+define('LINK_TABLE', 'link');
+define('LINK_CATEGORY_TABLE', 'link_category');
+define('TOOL_LIST_TABLE', 'tool');
+define('TOOL_INTRO_TABLE', 'tool_intro');
+define('SCORMDOC_TABLE', 'scormdocument');
+define('STUDENT_PUBLICATION_TABLE', 'student_publication');
 //course forum tables
 define('TABLE_FORUM_CATEGORY','forum_category');
 define('TABLE_FORUM','forum_forum');
 define('TABLE_FORUM_THREAD','forum_thread');
 define('TABLE_FORUM_POST','forum_post');
 //course group tables
-define("GROUP_TABLE", "group_info");
-define("GROUP_USER_TABLE", "group_rel_user");
-define("GROUP_TUTOR_TABLE", "group_rel_tutor");
-define("GROUP_CATEGORY_TABLE", "group_category");
+define('GROUP_TABLE', 'group_info');
+define('GROUP_USER_TABLE', 'group_rel_user');
+define('GROUP_TUTOR_TABLE', 'group_rel_tutor');
+define('GROUP_CATEGORY_TABLE', 'group_category');
 //course quiz tables
-define("QUIZ_QUESTION_TABLE", "quiz_question");
-define("QUIZ_TEST_TABLE", "quiz");
-define("QUIZ_ANSWER_TABLE", "quiz_answer");
-define("QUIZ_TEST_QUESTION_TABLE", "quiz_rel_question");
+define('QUIZ_QUESTION_TABLE', 'quiz_question');
+define('QUIZ_TEST_TABLE', 'quiz');
+define('QUIZ_ANSWER_TABLE', 'quiz_answer');
+define('QUIZ_TEST_QUESTION_TABLE', 'quiz_rel_question');
 //linked resource table
-define("LINKED_RESOURCES_TABLE", "resource");
+define('LINKED_RESOURCES_TABLE', 'resource');
 //learnpath tables
-define("LEARNPATH_MAIN_TABLE", "learnpath_main");
-define("LEARNPATH_CHAPTER_TABLE", "learnpath_chapter");
-define("LEARNPATH_ITEM_TABLE", "learnpath_item");
-define("LEARNPATH_USER_TABLE", "learnpath_user");
+define('LEARNPATH_MAIN_TABLE', 'learnpath_main');
+define('LEARNPATH_CHAPTER_TABLE', 'learnpath_chapter');
+define('LEARNPATH_ITEM_TABLE', 'learnpath_item');
+define('LEARNPATH_USER_TABLE', 'learnpath_user');
 // Smartblogs (Kevin Van Den Haute::kevin@develop-it.be)
 // permission tables
 define('PERMISSION_USER_TABLE', 'permission_user');
@@ -138,12 +138,12 @@ define('COURSE_SETTING_TABLE', 'course_setting');
 define('ONLINE_LINK_TABLE', 'online_link');
 define('ONLINE_CONNECTED_TABLE', 'online_connected');
 // dokeos_user database
-define("PERSONAL_AGENDA", "personal_agenda");
-define("USER_COURSE_CATEGORY_TABLE", "user_course_category");
+define('PERSONAL_AGENDA', 'personal_agenda');
+define('USER_COURSE_CATEGORY_TABLE', 'user_course_category');
 //Survey
-define("MAIN_SURVEY_TABLE", "survey");
-define("MAIN_GROUP_TABLE", "survey_group");
-define("MAIN_SURVEYQUESTION_TABLE", "questions");
+define('MAIN_SURVEY_TABLE', 'survey');
+define('MAIN_GROUP_TABLE', 'survey_group');
+define('MAIN_SURVEYQUESTION_TABLE', 'questions');
 /*
 ============================================================================== 
 		DATABASE CLASS
@@ -334,7 +334,7 @@ class Database
 	*/
 	function get_language_isocode($lang_folder)
 	{
-		$table = Database::get_main_table(MAIN_LANGUAGE_TABLE);
+		$table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 		$sql_query = "SELECT isocode FROM $table WHERE dokeos_folder = '$lang_folder'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = mysql_fetch_array($sql_result);

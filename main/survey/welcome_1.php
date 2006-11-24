@@ -75,7 +75,7 @@ if(isset($_POST['Next']))
 	{$registered='Y';}
  else{$registered='N';}
  $user_table = Database :: get_main_table(TABLE_MAIN_USER);
- $survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+ $survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
  if($uid1!=""){
 	header("location:surveytemp_white.php?temp=$temp&surveyid=$surveyid&uid1=$uid1&db_name=$db_name&mail=$mail&lang=$lang");
 	exit;
@@ -85,7 +85,7 @@ if(isset($_POST['Next']))
   }
 }
 if($uid1){
-$survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+$survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 $sql_u="Select * from $survey_user_info_table where id='$uid1'";
 }
 else{

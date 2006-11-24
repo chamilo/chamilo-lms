@@ -120,41 +120,40 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
  *	MAIN CODE
  *===============================================================================  
  */
- 
- $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
- $tbl_session_user = Database :: get_main_table(MAIN_SESSION_USER_TABLE);
- $tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
- $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
- $tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
- $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
- $tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
- $tbl_stats_exercices = Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
- //$tbl_course_lp_view = Database :: get_course_table('lp_view');
- //$tbl_course_lp_view_item = Database :: get_course_table('lp_item_view');
- //$tbl_course_lp_item = Database :: get_course_table('lp_item');
- $tbl_course_lp_view = 'lp_view';
- $tbl_course_lp_view_item = 'lp_item_view';
- $tbl_course_lp_item = 'lp_item';
- $tbl_course_lp = 'lp';
- $tbl_course_quiz = 'quiz';
- $course_quiz_question = 'quiz_question';
- $course_quiz_rel_question = 'quiz_rel_question';
- $course_quiz_answer = 'quiz_answer';
- $course_student_publication = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+// Database Table Definitions
+$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+$tbl_session_user 			= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_stats_exercices 		= Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
+//$tbl_course_lp_view 		= Database :: get_course_table('lp_view');
+//$tbl_course_lp_view_item = Database :: get_course_table('lp_item_view');
+//$tbl_course_lp_item 		= Database :: get_course_table('lp_item');
 
+$tbl_course_lp_view = 'lp_view';
+$tbl_course_lp_view_item = 'lp_item_view';
+$tbl_course_lp_item = 'lp_item';
+$tbl_course_lp = 'lp';
+$tbl_course_quiz = 'quiz';
+$course_quiz_question = 'quiz_question';
+$course_quiz_rel_question = 'quiz_rel_question';
+$course_quiz_answer = 'quiz_answer';
+$course_student_publication = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
 
- api_display_tool_title($nameTools);
+api_display_tool_title($nameTools);
 
-if(isset($_GET["user_id"]) && $_GET["user_id"]!=""){
+if(isset($_GET["user_id"]) && $_GET["user_id"]!="")
+{
 	$i_user_id=$_GET["user_id"];
 }
-else{
+else
+{
 	$i_user_id = $_user['user_id'];
 }
 
-?>
-
-<?php
 if(!empty($_GET['student']))
 {
 	
@@ -200,7 +199,7 @@ if(!empty($_GET['student']))
 		
 ?>
 
-	<a name="infosStudent">
+	<a name="infosStudent"></a>
 	<table class="data_table">
 		<tr>
 			<td 

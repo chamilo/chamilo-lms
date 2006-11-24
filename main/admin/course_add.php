@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 10190 2006-11-24 00:23:20Z pcool $
+// $Id: course_add.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -54,7 +54,7 @@ $tool_name = get_lang('AddCourse');
 */
 
 // Get all course categories
-$table_course_category = Database :: get_main_table(MAIN_CATEGORY_TABLE);
+$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE' ORDER BY tree_pos";
 $res = api_sql_query($sql, __FILE__, __LINE__);
 while ($cat = mysql_fetch_array($res))

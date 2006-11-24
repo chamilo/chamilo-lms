@@ -117,7 +117,7 @@ if(isset($_POST['saveandexit']) || isset($_POST['next']) || isset($_POST['finish
 	}
 	
 	if(isset($_POST['finish']) || isset($_POST['printall'])){
-		$survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+		$survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 		$sql = 'UPDATE '.$survey_user_info_table.' SET 
 				attempted="yes" 
 				WHERE survey_id='.$surveyid.' 
@@ -185,7 +185,7 @@ list($nbGroups) = mysql_fetch_array($rscount);
 
 if(isset($_POST['printall'])){
 	//display the name of the guy
-	$sql = 'SELECT lastname, firstname FROM '.Database::get_main_table(MAIN_SURVEY_USER_TABLE).' WHERE user_id='.$uid1;
+	$sql = 'SELECT lastname, firstname FROM '.Database::get_main_table(TABLE_MAIN_SURVEY_USER).' WHERE user_id='.$uid1;
 	
 	$rsname = api_sql_query($sql, __FILE__, __LINE__);
 	$user = api_store_result($rsname);

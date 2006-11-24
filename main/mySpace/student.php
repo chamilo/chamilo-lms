@@ -15,15 +15,15 @@ ob_start();
   $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
  Display :: display_header($nameTools);
 
- 
- $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
- $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
- $tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
- $tbl_session = Database :: get_main_table(MAIN_SESSION_TABLE);
- $tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
- $tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
- $tbl_session_rel_user = Database :: get_main_table(MAIN_SESSION_USER_TABLE);
- 
+// Database Table Definitions
+$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
+
 /*
  ===============================================================================
  	FUNCTION
@@ -78,10 +78,10 @@ ob_start();
   */
  function getStudentsFromCoursesNoSession($i_teacher_id, $a_students){
  	
- 	$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
- 	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+ 	$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+ 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
  	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
- 	$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+ 	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
  	
  	
  	$sql_select_courses="SELECT course_rel_user.course_code FROM $tbl_course_user as course_rel_user LEFT OUTER JOIN $tbl_session_course as src ON course_rel_user.course_code=src.course_code WHERE user_id='$i_teacher_id' AND status='1' AND src.course_code IS NULL";
@@ -130,10 +130,10 @@ ob_start();
   */
  function getStudentsFromCoursesFromSessions($i_teacher_id, $a_students){
  	
- 	$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
- 	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+ 	$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+ 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
  	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
- 	$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+ 	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
  	
  	$sql_select_courses="SELECT course_rel_user.course_code FROM $tbl_course_user as course_rel_user, $tbl_session_course as session_rel_course WHERE user_id='$i_teacher_id' AND status='1' AND session_rel_course.course_code=course_rel_user.course_code";
  	$result_courses=api_sql_query($sql_select_courses);
@@ -180,10 +180,10 @@ ob_start();
   */
  function getStudentsFromCoursesFromSessionsCoach($i_coach_id, $a_students){
  	
- 	$tbl_session_course_user = Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
- 	$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+ 	$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+ 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
  	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
- 	$tbl_session_course = Database :: get_main_table(MAIN_SESSION_COURSE_TABLE);
+ 	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
  	
  	$sql_select_courses="SELECT course_code, id_session FROM $tbl_session_course as session_rel_course WHERE session_rel_course.id_coach='$i_coach_id'";
  	$result_courses=api_sql_query($sql_select_courses);

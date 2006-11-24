@@ -1836,7 +1836,7 @@ function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGU
 	
 	function listUsers($survey_id, $dbname, $fields='id, user_id, firstname, lastname, email, organization') {
 		
-		$tbl_survey_users = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+		$tbl_survey_users = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 		$sql = 'SELECT '.$fields.' FROM '.$tbl_survey_users.' 
 				WHERE survey_id='.$survey_id.'
 				AND db_name="'.$dbname.'"
@@ -1853,7 +1853,7 @@ function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGU
 	
 	function getUserAnswersDetails($id_userAnswers, $params=''){
 	
-		$table_answers = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+		$table_answers = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 		$sql = 'SELECT * FROM '.$table_answers.' '.$where.' '.$order;
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		$answers = array();

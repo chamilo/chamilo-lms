@@ -42,16 +42,16 @@ $errorMsg=$firstLetterUser=$firstLetterSession='';
 $UserList=$SessionList=array();
 $users=$sessions=array();
 
-// Table Definitions
-$tbl_session						= Database::get_main_table(MAIN_SESSION_TABLE);
-$tbl_session_rel_class				= Database::get_main_table(MAIN_SESSION_CLASS_TABLE);
-$tbl_session_rel_course				= Database::get_main_table(MAIN_SESSION_COURSE_TABLE);
-$tbl_session_rel_course_rel_user	= Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+// Database Table Definitions
+$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_rel_class				= Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
+$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_rel_user				= Database::get_main_table(MAIN_SESSION_USER_TABLE);
+$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_class							= Database::get_main_table(TABLE_MAIN_CLASS);
-$tbl_class_user						= Database::get_main_table(MAIN_CLASS_USER_TABLE);
+$tbl_class_user						= Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
 $noPHP_SELF=true;
 

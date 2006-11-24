@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10083 2006-11-21 19:43:29Z pcool $
+<?php // $Id: configure_homepage.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,7 +34,7 @@ include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 
 $action=$_GET['action'];
 
-$tbl_category=Database::get_main_table(MAIN_CATEGORY_TABLE);
+$tbl_category=Database::get_main_table(TABLE_MAIN_CATEGORY);
 
 $tool_name=get_lang('ConfigureHomePage');
 

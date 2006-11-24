@@ -45,7 +45,7 @@ if($status==5)
 {
 api_protect_admin_script();
 }
-$table_category = Database :: get_main_table(MAIN_CATEGORY_TABLE);
+$table_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $table_survey = Database :: get_main_table(MAIN_SURVEY_TABLE);
 $table_group =  Database :: get_main_table(MAIN_GROUP_TABLE);
 $table_question = Database :: get_main_table(MAIN_SURVEYQUESTION_TABLE);

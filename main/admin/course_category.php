@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: course_category.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,7 +39,7 @@ $category=$_GET['category'];
 $action=$_GET['action'];
 
 $tbl_course  = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_category = Database::get_main_table(MAIN_CATEGORY_TABLE);
+$tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
 $errorMsg='';
 

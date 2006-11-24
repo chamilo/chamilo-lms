@@ -254,7 +254,7 @@ switch($screen) {
 		
 		$params = array_merge($_POST['left'] , $_POST['right']);
 		
-		$tbl_user_survey = Database::get_main_table(MAIN_SURVEY_USER_TABLE);
+		$tbl_user_survey = Database::get_main_table(TABLE_MAIN_SURVEY_USER);
 		$tbl_questions = Database::get_course_table('questions');
 		$tbl_answers = Database::get_course_table('survey_report');
 		

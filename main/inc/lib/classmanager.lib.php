@@ -90,8 +90,8 @@ class ClassManager
 	function delete_class($class_id)
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
-		$table_class_course = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
-		$table_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
+		$table_class_course = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
+		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$sql = "DELETE FROM $table_class_user WHERE class_id = '".$class_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 		$sql = "DELETE FROM $table_class_course WHERE class_id = '".$class_id."'";
@@ -106,7 +106,7 @@ class ClassManager
 	 */
 	function get_users($class_id)
 	{
-		$table_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
+		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $table_class_user cu, $table_user u WHERE cu.class_id = '".$class_id."' AND cu.user_id = u.user_id";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
@@ -125,7 +125,7 @@ class ClassManager
 	 */
 	function add_user($user_id, $class_id)
 	{
-		$table_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
+		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$sql = "INSERT IGNORE INTO $table_class_user SET user_id = '".$user_id."', class_id='".$class_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 		$courses = ClassManager :: get_courses($class_id);
@@ -142,8 +142,8 @@ class ClassManager
 	 */
 	function unsubscribe_user($user_id, $class_id)
 	{
-		$table_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
-		$table_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
+		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
+		$table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$courses = ClassManager :: get_courses($class_id);
 		if (count($courses) != 0)
 		{
@@ -169,7 +169,7 @@ class ClassManager
 	 */
 	function get_courses($class_id)
 	{
-		$table_class_course = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
+		$table_class_course = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT * FROM $table_class_course cc, $table_course c WHERE cc.class_id = '".$class_id."' AND cc.course_code = c.code";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
@@ -187,9 +187,9 @@ class ClassManager
 	 */
 	function subscribe_to_course($class_id, $course_code)
 	{
-		$tbl_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
-		$tbl_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
-		$tbl_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$tbl_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
+		$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
+		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql = "INSERT IGNORE INTO $tbl_course_class SET course_code = '".mysql_real_escape_string($course_code)."', class_id = '".mysql_real_escape_string($class_id)."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 		$sql = "SELECT user_id FROM $tbl_class_user WHERE class_id = '".mysql_real_escape_string($class_id)."'";
@@ -208,8 +208,8 @@ class ClassManager
 	 */
 	function unsubscribe_from_course($class_id, $course_code)
 	{
-		$tbl_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
-		$tbl_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
+		$tbl_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
+		$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$sql = "SELECT cu.user_id,COUNT(cc.class_id) FROM $tbl_course_class cc, $tbl_class_user cu WHERE  cc.class_id = cu.class_id AND cc.course_code = '".mysql_real_escape_string($course_code)."' GROUP BY cu.user_id HAVING COUNT(cc.class_id) = 1";
 		$single_class_users = api_sql_query($sql, __FILE__, __LINE__);
 		while ($single_class_user = mysql_fetch_object($single_class_users))
@@ -247,7 +247,7 @@ class ClassManager
 	function get_classes_in_course($course_code)
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
-		$table_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
+		$table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$sql = "SELECT cl.* FROM $table_class cl, $table_course_class cc WHERE cc.course_code = '".mysql_real_escape_string($course_code)."' AND cc.class_id = cl.id";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$classes = array ();

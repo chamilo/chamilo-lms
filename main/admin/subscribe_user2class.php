@@ -1,5 +1,5 @@
 <?php
-// $Id: subscribe_user2class.php 10190 2006-11-24 00:23:20Z pcool $
+// $Id: subscribe_user2class.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -46,7 +46,7 @@ $right_user_list = array ();
 
 // Database table definitions
 $tbl_class 		= Database :: get_main_table(TABLE_MAIN_CLASS);
-$tbl_class_user = Database :: get_main_table(MAIN_CLASS_USER_TABLE);
+$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 $tbl_user 		= Database :: get_main_table(TABLE_MAIN_USER);
 
 $sql = "SELECT name FROM $tbl_class WHERE id='$class_id'";

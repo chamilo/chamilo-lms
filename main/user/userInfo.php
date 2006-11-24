@@ -90,7 +90,7 @@ $userIdViewed = $uInfo; // Id of the user we want to view coming from the user.p
 
 $mainDB = $_configuration['main_database'];
 $courseCode = $currentCourseID = $_course['sysCode'];
-$tbl_coursUser = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+$tbl_coursUser = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 $userIdViewer = $_user['user_id']; // id fo the user currently online
 //$userIdViewed = $_GET['userIdViewed']; // Id of the user we want to view

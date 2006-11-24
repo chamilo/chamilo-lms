@@ -17,7 +17,7 @@ $blog_users = Blog::get_blog_users(mysql_escape_string($_GET['blog_id']));
 
 // Remove the blog creater because he has all the rights automatically
 // and we want to keep it that way.
-$tbl_course_rel_user = $table=Database::get_main_table(MAIN_COURSE_USER_TABLE);
+$tbl_course_rel_user = $table=Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $sql = "SELECT user_id FROM $tbl_course_rel_user WHERE status = '1' AND course_code = '".$_SESSION['_cid']."'";
 $result = api_sql_query($sql,__FILE__,__LINE__);
 while ($user = mysql_fetch_assoc($result)) {

@@ -64,7 +64,7 @@ td {border-bottom: thin dashed gray;}
 */
 $view = $_REQUEST['view'];
 
-$TABLECOURSUSER			= Database::get_main_table(MAIN_COURSE_USER_TABLE);
+$TABLECOURSUSER			= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLETRACK_ACCESS 		= $_configuration['statistics_database']."`.`track_e_access";
 $TABLETRACK_LINKS 		= $_configuration['statistics_database']."`.`track_e_links";
 $TABLETRACK_DOWNLOADS 	= $_configuration['statistics_database']."`.`track_e_downloads";

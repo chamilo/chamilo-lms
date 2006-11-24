@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 10190 2006-11-24 00:23:20Z pcool $
+<?php //$Id: announcements.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,16 +76,16 @@ $maximum 	= '12';
 // Length of the titles
 $length 	= '36';
 
-// Database variables
-$tbl_course_user   		= Database::get_main_table(MAIN_COURSE_USER_TABLE);
+// Database Table Definitions
+$tbl_course_user   		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_user          		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_courses			= Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_sessions			= Database::get_main_table(MAIN_SESSION_TABLE);
-$tbl_session_course_user= Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+$tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_group     			= Database::get_course_table(GROUP_TABLE);
 $tbl_groupUser  		= Database::get_course_table(GROUP_USER_TABLE);
 $tbl_announcement		= Database::get_course_table(ANNOUNCEMENT_TABLE);
-$tbl_item_property  = Database::get_course_table(ITEM_PROPERTY_TABLE);
+$tbl_item_property  	= Database::get_course_table(ITEM_PROPERTY_TABLE);
 
 /*
 -----------------------------------------------------------
@@ -583,7 +583,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 	$res_date=api_sql_query($sql_date);
 	$obj_date=mysql_fetch_object($res_date);
 	$end_date=$obj_date->avail_till;
-	$table_reminder = Database :: get_main_table(MAIN_SURVEY_REMINDER_TABLE);
+	$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 	if($_REQUEST['reminder']=="1")
 	{
 		$time=getdate();
@@ -730,7 +730,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 								$res_date=api_sql_query($sql_date);
 								$obj_date=mysql_fetch_object($res_date);
 								$end_date=$obj_date->avail_till;
-								$table_reminder = Database :: get_main_table(MAIN_SURVEY_REMINDER_TABLE);
+								$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 								if($_REQUEST['reminder']=="1")
 								{
 									$time=getdate();

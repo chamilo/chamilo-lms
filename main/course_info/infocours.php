@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 10190 2006-11-24 00:23:20Z pcool $
+// $Id: infocours.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -65,9 +65,9 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 define("MODULE_HELP_NAME", "Settings");
 define("COURSE_CHANGE_PROPERTIES", "COURSE_CHANGE_PROPERTIES");
 $TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
-$TABLEFACULTY = Database :: get_main_table(MAIN_CATEGORY_TABLE);
+$TABLEFACULTY = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $TABLECOURSEHOME = Database :: get_course_table(TOOL_LIST_TABLE);
-$TABLELANGUAGES = Database :: get_main_table(MAIN_LANGUAGE_TABLE);
+$TABLELANGUAGES = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $TABLEBBCONFIG = Database :: get_course_table(TOOL_FORUM_CONFIG_TABLE);
 $currentCourseID = $_course['sysCode'];
 $currentCourseRepository = $_course["path"];
@@ -96,7 +96,7 @@ if (!$is_allowedToEdit)
 	api_not_allowed();
 }
 // Get all course categories
-$table_course_category = Database :: get_main_table(MAIN_CATEGORY_TABLE);
+$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE'  OR code = '".mysql_real_escape_string($_course['categoryCode'])."'  ORDER BY tree_pos";
 $res = api_sql_query($sql, __FILE__, __LINE__);
 

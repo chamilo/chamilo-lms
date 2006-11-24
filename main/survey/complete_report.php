@@ -5,7 +5,7 @@ require_once ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 $cidReq = $_REQUEST['cidReq'];
-$tbl_user_survey = Database::get_main_table(MAIN_SURVEY_USER_TABLE);
+$tbl_user_survey = Database::get_main_table(TABLE_MAIN_SURVEY_USER);
 $tbl_questions = Database::get_course_table('questions');
 $tbl_questions_groups = Database::get_course_table('survey_group');
 $tbl_answers = Database::get_course_table('survey_report');

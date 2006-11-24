@@ -95,7 +95,7 @@ function validate_data($users_courses)
 function save_data($users_courses)
 {
 	$user_table= Database::get_main_table(TABLE_MAIN_USER);
-	$course_user_table= Database::get_main_table(MAIN_COURSE_USER_TABLE);
+	$course_user_table= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$csv_data = array();
 	foreach ($users_courses as $index => $user_course)
 	{

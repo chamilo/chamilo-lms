@@ -1957,7 +1957,7 @@ class Blog
 		$currentCourse = $_course['sysCode'];
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
-		$table_course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+		$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 		echo '<span class="blogpost_title">' . get_lang('SubscribeMembers') . '</span>';
 		$properties["width"] = "100%";
 		

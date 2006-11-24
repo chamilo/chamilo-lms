@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 10166 2006-11-23 12:52:11Z evie_em $
+// $Id: settings.php 10191 2006-11-24 08:09:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -63,7 +63,7 @@ if ($_POST['submit_stylesheets'])
 }
 
 // Table definitions
-$table_settings_current = Database :: get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
+$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 // setting breadcrumbs
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
@@ -213,7 +213,7 @@ Display :: display_footer();
 */
 function get_settings_options($var)
 {
-	$table_settings_options = Database :: get_main_table(MAIN_SETTINGS_OPTIONS_TABLE);
+	$table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
 	$sql = "SELECT * FROM $table_settings_options WHERE variable='$var'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_array($result))
@@ -232,7 +232,7 @@ function get_settings_options($var)
 function handle_plugins()
 {
 	global $SettingsStored;
-	$table_settings_current = Database :: get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
+	$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 	if ($_POST['submit_plugins'])
 	{
@@ -425,7 +425,7 @@ function handle_stylesheets()
 */
 function store_plugins()
 {
-	$table_settings_current = Database :: get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
+	$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 	// Step 1 : we remove all the plugins
 	$sql = "DELETE FROM $table_settings_current WHERE category='Plugins'";
@@ -467,7 +467,8 @@ function is_valid_plugin_location($location)
 */
 function store_stylesheets()
 {
-	$table_settings_current = Database :: get_main_table(MAIN_SETTINGS_CURRENT_TABLE);
+	// Database Table Definitions
+	$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 	// Delete the current stylesheet (if there is one). We are not sure there is one
 	$sql = "DELETE FROM $table_settings_current WHERE category='stylesheets'";

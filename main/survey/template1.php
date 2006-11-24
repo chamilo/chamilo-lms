@@ -49,14 +49,14 @@ $uid1 = $_REQUEST['uid1'];
 $db_name = $_REQUEST['db_name'];
 $temp = $_REQUEST['temp'];
 $mail = $_REQUEST['mail'];
-$survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+$survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 
 $user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $sql_sname = "select * from $db_name.survey where survey_id='$surveyid'";
 $res_sname = api_sql_query($sql_sname,__FILE__,__LINE__);
 $obj_sname = mysql_fetch_object($res_sname);
 $surveyname = $obj_sname->title;
-$survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+$survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 
 
 $sql_check="SELECT 1 
@@ -81,7 +81,7 @@ if(mysql_num_rows($res_check)>0)
 if(isset($mail))
 {
 
-$table_reminder = Database:: get_main_table(MAIN_SURVEY_REMINDER_TABLE);
+$table_reminder = Database:: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 $sql_update = "UPDATE $table_reminder SET access='1' WHERE db_name='$db_name' AND sid='$surveyid' AND email='$mail'";
 api_sql_query($sql_update);
 
@@ -103,7 +103,7 @@ if(isset($_POST['Next']))
 	{$registered='Y';}
  else{$registered='N';}
  $user_table = Database :: get_main_table(TABLE_MAIN_USER);
- $survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+ $survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
  $sql="SELECT * FROM $survey_user_info_table WHERE email = '$mail'";
  $result=api_sql_query($sql);
  $obj=mysql_fetch_object($result);
@@ -130,7 +130,7 @@ if(isset($_POST['Next']))
   }
 }
 if($uid==''){
-$survey_user_info_table = Database :: get_main_table(MAIN_SURVEY_USER_TABLE);
+$survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 $sql_u="Select * from $survey_user_info_table where user_id='$uid1' or email='$mail'";
 }
 else{

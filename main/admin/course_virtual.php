@@ -1,4 +1,4 @@
-<?php // $Id: course_virtual.php 9246 2006-09-25 13:24:53Z bmol $ 
+<?php // $Id: course_virtual.php 10191 2006-11-24 08:09:14Z pcool $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -189,7 +189,7 @@ function display_real_course_code_select($element_name)
 
 function display_create_virtual_course_form()
 {
-	$category_table = Database::get_main_table(MAIN_CATEGORY_TABLE);
+	$category_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
 	$message = make_strong(get_lang('AdminCreateVirtualCourse')) . "<br/>" . get_lang('AdminCreateVirtualCourseExplanation') . "<br/>This feature is in development phase, bug reports welcome.";
 	?>

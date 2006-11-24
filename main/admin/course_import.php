@@ -87,7 +87,7 @@ function validate_data($courses)
 		//4. check if category exists
 		if (isset ($course['CourseCategory']) && strlen($course['CourseCategory']) != 0)
 		{
-			$category_table = Database :: get_main_table(MAIN_CATEGORY_TABLE);
+			$category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 			$sql = "SELECT * FROM $category_table WHERE code = '".mysql_real_escape_string($course['CourseCategory'])."'";
 			$res = api_sql_query($sql, __FILE__, __LINE__);
 			if (mysql_num_rows($res) == 0)

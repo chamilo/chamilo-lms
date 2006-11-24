@@ -332,7 +332,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
     if ( preg_match( dropbox_cnf("mailingZipRegexp"), $mailing_title, $nameParts))
 	{
 		$var = strtoupper($nameParts[2]);  // the variable part of the name
-		$course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 		$sel = "SELECT u.user_id, u.lastname, u.firstname, cu.status 
 				FROM `".$_configuration['main_database']."`.`user` u 
 				LEFT JOIN $course_user cu 
@@ -479,7 +479,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 			
 			// find student course members not among the recipients
 			
-			$course_user = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+			$course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 			$sql = "SELECT u.lastname, u.firstname 
 					FROM $course_user cu 
 					LEFT JOIN  `".$_configuration['main_database']."`.`user` u 

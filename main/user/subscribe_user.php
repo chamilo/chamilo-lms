@@ -106,7 +106,7 @@ if (isset ($_POST['action']))
 function get_number_of_users()
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql = "SELECT 	u.user_id  
 						FROM $user_table u
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
@@ -127,7 +127,7 @@ function get_number_of_users()
 function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql = "SELECT 
 							u.user_id AS col0,
 							u.official_code   AS col1, 

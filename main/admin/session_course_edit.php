@@ -13,11 +13,11 @@ $course_code=trim(stripslashes($_GET['course_code']));
 $formSent=0;
 $errorMsg='';
 
-// Table definitions
-$tbl_user=Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course=Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_session=Database::get_main_table(MAIN_SESSION_TABLE);
-$tbl_session_course=Database::get_main_table(MAIN_SESSION_COURSE_TABLE);
+// Database Table Definitions
+$tbl_user			= Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course			= Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_session		= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
 $tool_name=get_lang('ModifySessionCourse');
 

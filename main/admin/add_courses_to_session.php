@@ -41,11 +41,13 @@ $formSent=0;
 $errorMsg=$firstLetterCourse=$firstLetterSession='';
 $CourseList=$SessionList=array();
 $courses=$sessions=array();
-$tbl_session_rel_course_rel_user=Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
-$tbl_session=Database::get_main_table(MAIN_SESSION_TABLE);
-$tbl_session_rel_user=Database::get_main_table(MAIN_SESSION_USER_TABLE);
-$tbl_session_rel_course=Database::get_main_table(MAIN_SESSION_COURSE_TABLE);
-$tbl_course=Database::get_main_table(TABLE_MAIN_COURSE);
+
+// Database Table Definitions
+$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 
 $noPHP_SELF=true;
 

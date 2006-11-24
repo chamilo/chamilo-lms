@@ -159,9 +159,9 @@ define("VISIBLE_NO_SUBSCRIPTION_ALLOWED", 3);
 */
 
 $TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
-$TABLECOURSDOMAIN = Database :: get_main_table(MAIN_CATEGORY_TABLE);
+$TABLECOURSDOMAIN = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $TABLEUSER = Database :: get_main_table(TABLE_MAIN_USER);
-$TABLECOURSUSER = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEANNOUNCEMENTS = "announcement";
 $coursesRepositories = $_configuration['root_sys'];
 
@@ -219,7 +219,7 @@ class CourseManager
 	*/
 	function get_user_in_course_status($user_id, $course_code)
 	{
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql_query = "SELECT * FROM $course_user_table WHERE `course_code` = '$course_code' AND `user_id` = '$user_id'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = mysql_fetch_array($sql_result);
@@ -243,7 +243,7 @@ class CourseManager
 			return;
 		}
 		$user_ids = implode(',', $user_id);
-		$table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		// Unsubscribe user from all groups in the course
 		$sql = "SELECT * FROM $table_course WHERE code = '".$course_code."'";
@@ -276,7 +276,7 @@ class CourseManager
 	{
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$location_table = Database :: get_main_table(MAIN_LOCATION_TABLE);
 		$user_role_table = Database :: get_main_table(MAIN_USER_ROLE_TABLE);
 
@@ -345,7 +345,7 @@ class CourseManager
 	{
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 		$status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
 		if (empty($user_id) || empty ($course_code))
@@ -544,7 +544,7 @@ class CourseManager
 	function get_real_course_list_of_user_as_course_admin($user_id)
 	{
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 		$sql_query = "	SELECT *
 										FROM $course_table course
@@ -572,7 +572,7 @@ class CourseManager
 	function get_course_list_of_user_as_course_admin($user_id)
 	{
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 		$sql_query = "	SELECT *
 										FROM $course_table course
@@ -620,7 +620,7 @@ class CourseManager
 		$real_course_real_code = $course_info['system_code'];
 
 		//is the user registered in the real course?
-		$table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql_query = "SELECT * FROM $table WHERE `user_id` = '$user_id' AND `course_code` = '$real_course_real_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		$result = mysql_fetch_array($sql_result);
@@ -871,7 +871,7 @@ class CourseManager
 	*/
 	function is_user_subscribed_in_course($user_id, $course_code)
 	{
-		$table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 		$sql_query = "SELECT * FROM $table WHERE `user_id` = '$user_id' AND `course_code` = '$course_code'";
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -899,7 +899,7 @@ class CourseManager
 	{
 		if($session_id==''){
 			$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-			$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+			$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 			$sql_query = "	SELECT *
 								FROM $course_table course
@@ -921,9 +921,10 @@ class CourseManager
 		}
 		else {
 			// is he subscribed to the course of the session ?
-			$tbl_sessions			= Database::get_main_table(MAIN_SESSION_TABLE);
-			$tbl_sessions_course	= Database::get_main_table(MAIN_SESSION_COURSE_TABLE);
-			$tbl_session_course_user= Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+			// Database Table Definitions
+			$tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
+			$tbl_sessions_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+			$tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 			$_cid = $course_info["code"];
 
 
@@ -974,12 +975,12 @@ class CourseManager
 	{
 		if(api_get_setting('use_session_mode')!='true')
 		{
-			$table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+			$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 			$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code' ORDER BY `status`";
 		}
 		else
 		{
-			$table = Database::get_main_table(MAIN_SESSION_COURSE_USER_TABLE);
+			$table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 			$sql_query = "SELECT id_user as user_id FROM $table WHERE `course_code` = '$course_code' AND id_session = '".$_SESSION['id_session']."'";
 		}
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -1043,7 +1044,7 @@ class CourseManager
 	function get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code)
 	{
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$course_user_table = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
+		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 		if(api_get_setting("use_session_mode")!="true"){
 			$sql_query = "	SELECT *
@@ -1055,7 +1056,7 @@ class CourseManager
 		else {
 			$sql_query = "SELECT course.*
 			               FROM $course_table
-							INNER JOIN ".Database :: get_main_table(MAIN_SESSION_COURSE_USER_TABLE)." course_user
+							INNER JOIN ".Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." course_user
 								ON course.code = course_user.course_code
 								AND course_user.course_code = '$real_course_code'
 								AND course_user.id_user = '$user_id'
@@ -1192,8 +1193,8 @@ class CourseManager
 		global $_configuration;
 		
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$table_course_user = Database :: get_main_table(MAIN_COURSE_USER_TABLE);
-		$table_course_class = Database :: get_main_table(MAIN_COURSE_CLASS_TABLE);
+		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$user_role_table = Database :: get_main_table(MAIN_USER_ROLE_TABLE);
 		$location_table = Database::get_main_table(MAIN_LOCATION_TABLE);
 		$role_right_location_table = Database::get_main_table(MAIN_ROLE_RIGHT_LOCATION_TABLE);

@@ -449,7 +449,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
     if ($cidReq)
     {
     	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    	$course_cat_table = Database::get_main_table(MAIN_CATEGORY_TABLE);
+    	$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql =    "SELECT `course`.*, `course_category`.`code` `faCode`, `course_category`.`name` `faName`
                  FROM $course_table
                  LEFT JOIN $course_cat_table
@@ -573,7 +573,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
     	if(api_get_setting('use_session_mode') != 'true')
     	{
 
-	    	$course_user_table = Database::get_main_table(MAIN_COURSE_USER_TABLE);
+	    	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	        $sql = "SELECT * FROM $course_user_table
 	               WHERE `user_id`  = '".$_user['user_id']."'
 	               AND `course_code` = '$cidReq'";

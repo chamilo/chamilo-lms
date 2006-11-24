@@ -203,7 +203,7 @@ else
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if (mysql_num_rows($res) > 0)
 	{
-		$user_info = Database::get_main_table(MAIN_SURVEY_REMINDER_TABLE);
+		$user_info = Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 		$courses = array ();
 		while ($obj = mysql_fetch_object($res))
 		{
@@ -226,7 +226,7 @@ else
 			$attempted=0;
 			
 			$sqlAttempt = '	SELECT DISTINCT *
-							FROM '.Database::get_main_table(MAIN_SURVEY_USER_TABLE).'
+							FROM '.Database::get_main_table(TABLE_MAIN_SURVEY_USER).'
 							WHERE survey_id='.$obj->survey_id.' AND db_name="'.$db_name.'"';
 			$res_attempt=api_sql_query($sqlAttempt);
 			$attempted=mysql_num_rows($res_attempt);

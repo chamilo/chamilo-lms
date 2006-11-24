@@ -1999,7 +1999,7 @@ function get_whats_new()
 	
 	if (!$_SESSION['last_forum_access'])
 	{
-		$tracking_last_tool_access=Database::get_statistic_table(STATISTIC_TRACK_E_LASTACCESS_TABLE);
+		$tracking_last_tool_access=Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 		$sql="SELECT * FROM ".$tracking_last_tool_access." WHERE access_user_id='".mysql_real_escape_string($_user['user_id'])."' AND access_cours_code='".mysql_real_escape_string($_course['sysCode'])."' AND access_tool='".mysql_real_escape_string($tool)."'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 		$row=mysql_fetch_array($result);

@@ -1,6 +1,6 @@
 /*
 ==============================================================================
-	GLOBAL STYLES - REDEFINED HTML TAGS	                                    
+	GLOBAL STYLES - REDEFINED HTML TAGS
 ==============================================================================
 */
 
@@ -10,7 +10,7 @@ body {
 	font-family: arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	margin: 0;
-	padding: 0;	
+	padding: 0;
 }
 
 img {
@@ -51,13 +51,13 @@ h6 {
 a:link {
 	color : #4171b5;
 	font-weight : bold;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 a:visited {
 	color : #4171b5;
 	font-weight : bold;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 a:hover {
@@ -74,7 +74,7 @@ a:active {
 
 select, textarea {
 	border: 1px solid #000;
-	color : #000;	
+	color : #000;
 }
 
 input.checkbox {
@@ -90,33 +90,33 @@ input[type=submit] {
 }
 
 input[text] {
-	font-size: 12px; 
+	font-size: 12px;
 }
 
-input.link_alike { 
-	background-color: #FFFFFF; 
+input.link_alike {
+	background-color: #FFFFFF;
 	border-width: 0px;
- 	color: #4171b5; 
- 	font-weight: bold; 
+ 	color: #4171b5;
+ 	font-weight: bold;
  	margin: 0px;
  	padding: 0px;
- 	text-align: left; 	 
+ 	text-align: left;
 }
 
-input.link_alike:hover { 
-	background-color: #FFFFFF; 
+input.link_alike:hover {
+	background-color: #FFFFFF;
 	border-width: 0px;
- 	color: #FF0000; 
- 	font-weight: bold; 
- 	margin: 0px; 
- 	padding: 0px; 
- 	text-align: left; 
+ 	color: #FF0000;
+ 	font-weight: bold;
+ 	margin: 0px;
+ 	padding: 0px;
+ 	text-align: left;
 }
 
 
 /*
 ==============================================================================
-	PAGE STRUCTURE 	                                    
+	PAGE STRUCTURE
 ==============================================================================
 */
 
@@ -149,9 +149,9 @@ input.link_alike:hover {
 }
 
 .clear {
-	clear: both; 
+	clear: both;
 	height: 0;
-	line-height: 0px; 
+	line-height: 0px;
 }
 
 #center {
@@ -177,19 +177,19 @@ a.invisible:visited {
 
 /*
 ==============================================================================
-	HEADER STYLES	                                    
+	HEADER STYLES
 ==============================================================================
 */
 
-#header {	
+#header {
 	margin: 0;
 	padding: 0;
-	width: 100%;	
+	width: 100%;
 }
 
 /*
 ------------------------------------------------------------------------------
-	HEADER 1: Title, portal, organisation, course title	                                    
+	HEADER 1: Title, portal, organisation, course title
 ------------------------------------------------------------------------------
 */
 
@@ -198,7 +198,7 @@ a.invisible:visited {
 	border-bottom: 1px solid white;
 	color: #fff;
 	font-size: 12px;
-	padding: 4px;	
+	padding: 4px;
 }
 
 #header1 a {
@@ -228,7 +228,7 @@ a.invisible:visited {
 
 /*
 ------------------------------------------------------------------------------
-	HEADER 2: Users online, help, student/teacher view	
+	HEADER 2: Users online, help, student/teacher view
 ------------------------------------------------------------------------------
 */
 
@@ -240,7 +240,7 @@ a.invisible:visited {
 	font-weight: normal;
 	padding:  0.2em 0.5em;
 	padding-bottom: 0.2em;
-	position: relative; /* to avoid the IE peekabo bug*/	
+	position: relative; /* to avoid the IE peekabo bug*/
 }
 
 #header2 a {
@@ -270,12 +270,12 @@ a.invisible:visited {
 
 #Header2Right ul li a {
 	color:#fff;
-	padding: 4px 6px 4px 4px;	
+	padding: 4px 6px 4px 4px;
 }
 
 /*
 ------------------------------------------------------------------------------
-	HEADER 3: TABS OF THE HEADER			     	 
+	HEADER 3: TABS OF THE HEADER
 ------------------------------------------------------------------------------
 */
 
@@ -307,7 +307,7 @@ a.invisible:visited {
 #header3 UL {
 	display: inline;
 	list-style-type: none;
-	margin: 0px; 
+	margin: 0px;
 	padding: 0px 20px 0px 0px;
 }
 
@@ -318,7 +318,7 @@ a.invisible:visited {
 	float: left;
 	list-style: none;
 	margin: 0px;
-	padding: 0px;	
+	padding: 0px;
 }
 
 #header3 LI:hover {
@@ -343,7 +343,7 @@ a.invisible:visited {
 	margin: 0;
 }
 
-#header3 input.logout {	/* makes an input appear like a link in this header */	
+#header3 input.logout {	/* makes an input appear like a link in this header */
  	display: inline;
 	padding: 0;
 	background-color: transparent;
@@ -355,7 +355,7 @@ a.invisible:visited {
 	margin: 0 0 0 0;
 	padding-right: 2px;
 	padding-top: 3px;
-	
+
 }
 #header3 input:hover {
 	COLOR: #333;
@@ -384,7 +384,7 @@ border-left: solid 1px rgb(115,162,182);
 
 /*
 ------------------------------------------------------------------------------
-    HEADER 4: not used          			     	 
+    HEADER 4: not used
 ------------------------------------------------------------------------------
 */
 
@@ -411,7 +411,7 @@ border-left: solid 1px rgb(115,162,182);
 
 /*
 ==============================================================================
-    FOOTER STYLES                                    
+    FOOTER STYLES
 ==============================================================================
 */
 
@@ -428,7 +428,7 @@ border-left: solid 1px rgb(115,162,182);
 
 /*
 ==============================================================================
-    NAVIGATION MENU                                    
+    NAVIGATION MENU
 ==============================================================================
 */
 
@@ -739,52 +739,10 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 /*****************************************************
  *  DISPLAY MESSAGES	                             *
  *****************************************************/
-/* normal and erro message-box */
-.normal-message {
-	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
-	border-width: 1px;
-	border-style: solid;
-	padding: 5px;
-	border: 1px solid #4171B5;
-	color: #000;
-	background-color: #E5EDF9;
-	min-height: 30px;
-}
-.warning-message {
-	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
-	border-width: 1px;
-	border-style: solid;
-	padding: 5px;
-	border: 1px solid #FFB30F;
-	color: #000;
-	background-color: #FFEFA7;
-	min-height: 30px;
-}
-.confirmation-message {
-	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
-	border-width: 1px;
-	border-style: solid;
-	padding: 5px;
-	border: 1px solid #1F8323;
-	color: #000;
-	background-color: #CAF0C7;
-	min-height: 30px;
-}
+/* Common message styles */
+.normal-message,
+.warning-message,
+.confirmation-message,
 .error-message {
 	position: relative;
 	margin: 10px auto;
@@ -792,13 +750,31 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 	width: 500px;
 	left: 50%;
 	right: 50%;
-	border-width: 1;
+	border-width: 1px;
 	border-style: solid;
 	padding: 5px;
-	border: 1px solid #FF0000;
+	min-height: 30px;
+}
+/* Specific message styles */
+.normal-message {
+	border-color: #4171B5;
+	color: #000;
+	background-color: #E5EDF9;
+}
+.warning-message {
+	border-color: #FFB30F;
+	color: #000;
+	background-color: #FFEFA7;
+}
+.confirmation-message {
+	border-color: #1F8323;
+	color: #000;
+	background-color: #CAF0C7;
+}
+.error-message {
+	border-color: #FF0000;
 	color: #000;
 	background-color: #FFD1D1;
-	min-height: 30px;
 }
 
 #message {margin: 0 auto; text-align: center;}
@@ -1481,7 +1457,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	border-bottom: 1px solid #fff;
 	background: #fff;
 	color: #000;
-    
+
 }
 
 /* FCKeditor */

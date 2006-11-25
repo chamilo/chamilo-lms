@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 10191 2006-11-24 08:09:14Z pcool $
+<?php //$Id: agenda.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -201,11 +201,11 @@ $DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("Tue
 $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
 
 // Database table definitions
-$TABLEAGENDA 			= Database::get_course_table(AGENDA_TABLE);
-$TABLE_ITEM_PROPERTY 	= Database::get_course_table(LAST_TOOL_EDIT_TABLE);
+$TABLEAGENDA 			= Database::get_course_table(TABLE_AGENDA);
+$TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 $tbl_user       		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_courseUser 		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_group      		= Database::get_course_table(GROUP_TABLE);
+$tbl_group      		= Database::get_course_table(TABLE_GROUP);
 $tbl_groupUser  		= Database::get_course_table(GROUP_USER_TABLE);
 $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 

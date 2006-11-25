@@ -1,4 +1,4 @@
-<?php // $Id: index.php 9387 2006-10-09 08:14:31Z bmol $
+<?php // $Id: index.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -68,7 +68,7 @@ $nameTools = get_lang(TOOL_COURSE_DESCRIPTION);
 
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('CourseProgram'));
 
-$tbl_course_description = Database::get_course_table(COURSE_DESCRIPTION_TABLE);
+$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 $show_description_list = true;
 $show_peda_suggest = true;
 define('ADD_BLOCK', 0);

@@ -1629,7 +1629,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 	$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 	#$TABLEANNOUNCEMENTS=$_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'].$TABLEANNOUNCEMENTS;
-	$TABLEANNOUNCEMENTS = Database :: get_course_table(ANNOUNCEMENT_TABLE,$courseDbName);
+	$TABLEANNOUNCEMENTS = Database :: get_course_table(TABLE_ANNOUNCEMENT,$courseDbName);
 
 	$okForRegisterCourse = true;
 

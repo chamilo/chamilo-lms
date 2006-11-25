@@ -745,7 +745,7 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) // sessi
 {
     if ($gidReq && $_cid ) // have keys to search data
     {
-    	$group_table = Database::get_course_table(GROUP_TABLE);
+    	$group_table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $group_table WHERE `id` = '$gidReq'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
         if (mysql_num_rows($result) > 0) // This group has recorded status related to this course

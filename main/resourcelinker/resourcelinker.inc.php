@@ -1,4 +1,4 @@
-<?php // $Id: resourcelinker.inc.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: resourcelinker.inc.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -105,8 +105,8 @@ function show_documents($folder)
 		$visibility="visibility='1'";
 	}
 
-	$item_property_table = Database::get_course_table(ITEM_PROPERTY_TABLE);
-	$document_table = Database::get_course_table(DOCUMENT_TABLE);
+	$item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$document_table = Database::get_course_table(TABLE_DOCUMENT);
 	$sql="SELECT * from $document_table, $item_property_table WHERE id=ref AND tool = '".TOOL_DOCUMENT."' AND $visibility AND to_group_id = 0 AND to_user_id IS NULL  ORDER BY path ASC";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=mysql_fetch_array($result))
@@ -1170,7 +1170,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			break;
 
 		case "Ad_Valvas":
-			$tbl_announcement = Database::get_course_announcement_table();
+			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 			$result = api_sql_query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 

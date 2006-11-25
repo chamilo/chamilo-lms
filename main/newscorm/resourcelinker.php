@@ -57,8 +57,8 @@ include ('resourcelinker.inc.php');
 -----------------------------------------------------------
 */
 
-$link_table = Database :: get_course_table(LINK_TABLE);
-$item_property_table = Database :: get_course_table(ITEM_PROPERTY_TABLE);
+$link_table = Database :: get_course_table(TABLE_LINK);
+$item_property_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 //$tbl_learnpath_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE);
 //$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
@@ -305,7 +305,7 @@ if ($add)
 					case 'Document':
 						$addedresource_item = TOOL_DOCUMENT;
 						//get title from tool-type table
-						$tooltable = Database::get_course_table(DOCUMENT_TABLE);
+						$tooltable = Database::get_course_table(TABLE_DOCUMENT);
 						$result = api_sql_query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i],__FILE__,__LINE__);
 						$myrow=mysql_fetch_array($result);
 						$title = $myrow['title'];
@@ -325,7 +325,7 @@ if ($add)
 					case 'Agenda':
 						$addedresource_item = TOOL_CALENDAR_EVENT;
 						//get title from tool-type table
-						$tooltable = Database::get_course_table(AGENDA_TABLE);
+						$tooltable = Database::get_course_table(TABLE_AGENDA);
 						$result = api_sql_query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i],__FILE__,__LINE__);
 						$myrow=mysql_fetch_array($result);
 						$title = $myrow['title'];						
@@ -333,7 +333,7 @@ if ($add)
 					case 'Ad_Valvas':
 						$addedresource_item = TOOL_ANNOUNCEMENT;
 						//get title from tool-type table
-						$tooltable = Database::get_course_table(ANNOUNCEMENT_TABLE);
+						$tooltable = Database::get_course_table(TABLE_ANNOUNCEMENT);
 						$result = api_sql_query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i],__FILE__,__LINE__);
 						$myrow=mysql_fetch_array($result);
 						$title = $myrow['title'];						
@@ -518,7 +518,7 @@ echo "</h3>";
 // We use this to check which resources a student may add (only the modules that are active)
 // see http://www.dokeos.com/forum/viewtopic.php?t=4858
 $active_modules=array();
-$tool_table = Database::get_course_table(TOOL_LIST_TABLE);
+$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 $sql_select_active="SELECT * FROM $tool_table WHERE visibility='1'";
 $result_select_active=api_sql_query($sql_select_active);
 while ($row=mysql_fetch_array($result_select_active))
@@ -724,8 +724,8 @@ if ($from_learnpath != 'yes')
 if ($content == "Agenda")
 {
 	include (api_get_path(LIBRARY_PATH)."text.lib.php");
-	$TABLEAGENDA = Database::get_course_table(AGENDA_TABLE);
-	$TABLE_ITEM_PROPERTY = Database::get_course_table(LAST_TOOL_EDIT_TABLE);
+	$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
+	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
 	$sql="SELECT agenda.*, toolitemproperties.* 
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties 
@@ -803,7 +803,7 @@ if ($content == "Document" OR (empty($content) AND (is_allowed_to_edit() OR in_a
 if ($content == "Ad_Valvas")
 {
 	include (api_get_path(LIBRARY_PATH)."text.lib.php");
-	$tbl_announcement = Database :: get_course_table(ANNOUNCEMENT_TABLE);
+	$tbl_announcement = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 	$sql = "SELECT * FROM ".$tbl_announcement." a, ".$item_property_table." i  WHERE i.tool = '".TOOL_ANNOUNCEMENT."' AND a.id=i.ref AND i.visibility='1' AND i.to_group_id = 0 AND i.to_user_id IS NULL ORDER BY a.display_order ASC";
 	//error_log($sql,0);
 	$result = api_sql_query($sql,__FILE__,__LINE__);
@@ -910,7 +910,7 @@ if ($content == "Link")
 	// including the links functions file
 	include ("../link/linkfunctions.php");
 
-	$tbl_categories = Database::get_course_table(LINK_CATEGORY_TABLE);
+	$tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 	if (($learnpath_id != '') and ($content == 'Link'))
 	{
 		echo "<form name='learnpath_link'><table>";
@@ -979,7 +979,7 @@ if (($content == "Exercise") or ($content == "HotPotatoes"))
 	if ($from_learnpath == 'yes')
 	{
 		$uploadPath = "/HotPotatoes_files";
-		$TBL_DOCUMENT = Database::get_course_table(DOCUMENT_TABLE);
+		$TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 		$documentPath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document';
 		$sql = "SELECT * FROM ".$TBL_DOCUMENT." WHERE (path LIKE '%htm%' OR path LIKE '%html%') AND path LIKE '".$uploadPath."/%/%' ORDER BY `id` ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -1024,7 +1024,7 @@ if ($content == "Externallink")
 	  <option value="0"><?php echo get_lang('MainCategory'); ?></option>
 		<?php
 
-	$tbl_categories = Database::get_course_table(LINK_CATEGORY_TABLE);
+	$tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 	$sql = "SELECT * FROM `$tbl_categories` ORDER BY display_order ASC";
 	echo $sql;
 	$result = api_sql_query($sql, __FILE__, __LINE__);

@@ -1713,7 +1713,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 		//------------------------AGENDA BEGIN-------------------
 		case "Agenda" :
 			//1 Get agenda event data from the database table
-			$TABLEAGENDA = Database :: get_course_table(AGENDA_TABLE);
+			$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
 			$sql = "SELECT * FROM ".$TABLEAGENDA." where (id=$item_id)";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
@@ -1788,7 +1788,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			//------------------------ANNOUNCEMENT BEGIN-------------------
 		case "Ad_Valvas" :
 			//1 Get the announcement data from the database
-			$tbl_announcement = Database :: get_course_announcement_table();
+			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 			$sql = "SELECT * FROM $tbl_announcement where id='$item_id'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
@@ -1834,7 +1834,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			//------------------------Course_description BEGIN-------------------
 		case "Course_description" :
 			//1 Get course description data from database
-			$tbl_course_description = Database :: get_course_description_table();
+			$tbl_course_description = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
 			$result = api_sql_query("SELECT id, title, content FROM ".$tbl_course_description." ORDER BY id", __FILE__, __LINE__);
 
 			//2 Check this element
@@ -1864,7 +1864,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			//------------------------DOCUMENT BEGIN-------------------
 		case "Document" :
 			//1 Get the document data from the database
-			$tbl_document = Database :: get_course_document_table();
+			$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 			$sql_query = "SELECT * FROM $tbl_document WHERE id=$item_id";
 			$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 			$myrow = mysql_fetch_array($sql_result);
@@ -1989,7 +1989,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			//------------------------HotPotatoes BEGIN-------------------
 		case "HotPotatoes" :
 			//1 Get HotPotatoes data from the document table
-			$tbl_document = Database :: get_course_document_table();
+			$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 			$result = api_sql_query("SELECT * FROM $tbl_document WHERE id=$item_id", __FILE__, __LINE__);
 			$myrow = mysql_fetch_array($result);
 			//2 Get the document path

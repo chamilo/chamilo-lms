@@ -446,12 +446,12 @@ foreach($courses_list as $db)
 		$msg = "(found $incoherences incoherences between views and items - ignored)";
 	}
 	/**
-	 * Migrate links on the homepage as well now (look into the TOOL_LIST_TABLE table and
+	 * Migrate links on the homepage as well now (look into the TABLE_TOOL_LIST table and
 	 * update the links to newscorm/lp_controller.php?action=view&lp_id=x)
 	 * Only normal learnpaths were visible from the homepage so we only need to update here
 	 */
 	//MIGRATING LEARNPATH LINKS ON COURSES HOMEPAGES
-	$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE,$db);
+	$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST,$db);
 	$sql_tool = "SELECT * FROM $tbl_tool WHERE image='scormbuilder.gif' AND link LIKE '%learnpath_handler%'";
 	$res_tool = api_sql_query($sql_tool,__FILE__,__LINE__);
 	while($row_tool = Database::fetch_array($res_tool)){
@@ -476,7 +476,7 @@ foreach($courses_list as $db)
 	/**
 	 * Update course description (intro page) to use new links instead of learnpath/learnpath_handler.php
 	 */
-	$tbl_intro = Database::get_course_table(TOOL_INTRO_TABLE,$db);
+	$tbl_intro = Database::get_course_table(TABLE_TOOL_INTRO,$db);
 	$sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
 	$res_i = api_sql_query($sql_i,__FILE__,__LINE__);
 	//$link_to_course1 = 'scorm/scormdocument.php'; 
@@ -557,7 +557,7 @@ while($course_row = Database::fetch_array($res_crs)){
 	//reinit the scormdocuments list
 	//$scormdocuments_lps = array();
 	$db_name = $courses_id_list[$my_course_code];
-	$tblscodoc = Database::get_course_table(SCORMDOC_TABLE,$db_name);		
+	$tblscodoc = Database::get_course_table(TABLE_SCORMDOC,$db_name);		
 	$sql_scodoc = "SELECT path FROM $tblscodoc WHERE path IS NOT NULL AND path != ''";
 	echo "$sql_scodoc<br/>";
 	$res_scodoc = api_sql_query($sql_scodoc,__FILE__,__LINE__);
@@ -1083,7 +1083,7 @@ foreach($scorms as $my_course_code => $paths_list )
 				}
 			}
 			/**
-			 * Migrate links on the homepage as well now (look into the TOOL_LIST_TABLE table and
+			 * Migrate links on the homepage as well now (look into the TABLE_TOOL_LIST table and
 			 * update the links to newscorm/lp_controller.php?action=view&lp_id=x)
 			 * See scorm_migrate_hometools.php
 			 */
@@ -1095,7 +1095,7 @@ foreach($scorms as $my_course_code => $paths_list )
 	/**
 	 * Update course description (intro page) to use new links instead of learnpath/learnpath_handler.php
 	 */
-	$tbl_intro = $db_name.TOOL_INTRO_TABLE;
+	$tbl_intro = $db_name.TABLE_TOOL_INTRO;
 	$sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
 	$res_i = api_sql_query($sql_i,__FILE__,__LINE__);
 	//$link_to_course1 = 'scorm/scormdocument.php'; 

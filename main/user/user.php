@@ -411,7 +411,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				ug.group_id group_id,
 				sg.name
 			FROM " . Database::get_course_table(GROUP_USER_TABLE) . " ug
-			LEFT JOIN " . Database::get_course_table(GROUP_TABLE) . " sg ON ug.group_id = sg.id
+			LEFT JOIN " . Database::get_course_table(TABLE_GROUP) . " sg ON ug.group_id = sg.id
 			WHERE ug.user_id IN ('".implode("','", $user_ids)."')";
 
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -481,7 +481,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 		$sql = "SELECT ug.user_id, ug.group_id group_id, sg.name
 	                    FROM ".Database::get_course_table(GROUP_USER_TABLE)." ug
-	                    LEFT JOIN ".Database::get_course_table(GROUP_TABLE)." sg
+	                    LEFT JOIN ".Database::get_course_table(TABLE_GROUP)." sg
 	                    ON ug.group_id = sg.id
 	                    WHERE ug.user_id IN ('".implode("','", $user_ids)."')";
 	    $res = api_sql_query($sql,__FILE__,__LINE__);

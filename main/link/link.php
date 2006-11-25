@@ -51,8 +51,8 @@ $this_section=SECTION_COURSES;
 
 api_protect_course_script();
 
-$tbl_link = Database::get_course_table(LINK_TABLE);
-$tbl_categories = Database::get_course_table(LINK_CATEGORY_TABLE);
+$tbl_link = Database::get_course_table(TABLE_LINK);
+$tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
 $nameTools = get_lang("Links");
 

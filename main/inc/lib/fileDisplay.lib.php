@@ -260,8 +260,8 @@ function folder_size($dir_name)
  */
 function get_total_folder_size($path, $can_see_invisible = false)
 {	
-	$table_itemproperty = Database::get_course_table(LAST_TOOL_EDIT_TABLE);
-	$table_document = Database::get_course_table(DOCUMENT_TABLE);
+	$table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$table_document = Database::get_course_table(TABLE_DOCUMENT);
 	$tool_document = TOOL_DOCUMENT;
 	
 	$visibility_rule = 'props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');

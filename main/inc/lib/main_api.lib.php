@@ -1380,7 +1380,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 {
 	$time = time();
 	$time = date("Y-m-d H:i:s", $time);
-	$TABLE_ITEMPROPERTY = Database :: get_course_table(ITEM_PROPERTY_TABLE);
+	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 	if ($to_user_id <= 0)
 		$to_user_id = NULL; //no to_user_id set
 	$start_visible = ($start_visible == 0) ? "0000-00-00 00:00:00" : $start_visible;

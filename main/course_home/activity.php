@@ -55,7 +55,7 @@
 function show_tools_category($course_tool_category)
 {
 	$web_code_path = api_get_path(WEB_CODE_PATH);
-	$course_tool_table = Database::get_course_table(TOOL_LIST_TABLE);
+	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
 	switch ($course_tool_category)
 	{
@@ -100,8 +100,8 @@ function show_tools_category($course_tool_category)
 
 		$i=0;
 	// grabbing all the links that have the property on_homepage set to 1
-	$course_link_table = Database::get_course_table(LINK_TABLE);
-	$course_item_property_table = Database::get_course_table(ITEM_PROPERTY_TABLE);
+	$course_link_table = Database::get_course_table(TABLE_LINK);
+	$course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 
 

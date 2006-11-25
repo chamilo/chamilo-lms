@@ -44,7 +44,7 @@ $interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices
 $is_allowedToEdit=(!empty($is_courseAdmin)?$is_courseAdmin:false);
 
 //$dbTable     = '`'.$_course['dbNameGlu']."document`";
-$dbTable				= Database::get_course_table(DOCUMENT_TABLE);
+$dbTable				= Database::get_course_table(TABLE_DOCUMENT);
 $baseServDir = $_configuration['root_sys'];
 $baseServUrl = $_configuration['url_append']."/";
 $document_sys_path = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";

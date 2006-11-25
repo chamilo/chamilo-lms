@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: CourseBuilder.class.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -95,7 +95,7 @@ class CourseBuilder
 				}
 			}
 		}
-		$table = Database :: get_course_table(ITEM_PROPERTY_TABLE);
+		$table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 		foreach ($this->course->resources as $type => $resources)
 		{
 			foreach ($resources as $id => $resource)
@@ -121,8 +121,8 @@ class CourseBuilder
 	 */
 	function build_documents()
 	{
-		$table_doc = Database :: get_course_table(DOCUMENT_TABLE);
-		$table_prop = Database :: get_course_table(ITEM_PROPERTY_TABLE);
+		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
+		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 		$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 ORDER BY path';
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -196,8 +196,8 @@ class CourseBuilder
 	 */
 	function build_links()
 	{
-		$table = Database :: get_course_table(LINK_TABLE);
-		$table_prop = Database :: get_course_table(ITEM_PROPERTY_TABLE);
+		$table = Database :: get_course_table(TABLE_LINK);
+		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 		$sql = "SELECT * FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2  ORDER BY l.display_order";
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -212,7 +212,7 @@ class CourseBuilder
 	 */
 	function build_tool_intro()
 	{
-		$table = Database :: get_course_table(TOOL_INTRO_TABLE);
+		$table = Database :: get_course_table(TABLE_TOOL_INTRO);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -226,7 +226,7 @@ class CourseBuilder
 	 */
 	function build_link_category($id)
 	{
-		$link_cat_table = Database :: get_course_table(LINK_CATEGORY_TABLE);
+		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
 		$sql = 'SELECT * FROM '.$link_cat_table.' WHERE id = '.$id;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -242,7 +242,7 @@ class CourseBuilder
 	{
 		$table_qui = Database :: get_course_table(QUIZ_TEST_TABLE);
 		$table_rel = Database :: get_course_table(QUIZ_TEST_QUESTION_TABLE);
-		$table_doc = Database :: get_course_table(DOCUMENT_TABLE);
+		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
 		$sql = 'SELECT * FROM '.$table_qui;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -289,7 +289,7 @@ class CourseBuilder
 	 */
 	function build_announcements()
 	{
-		$table = Database :: get_course_table(ANNOUNCEMENT_TABLE);
+		$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -303,7 +303,7 @@ class CourseBuilder
 	 */
 	function build_events()
 	{
-		$table = Database :: get_course_table(AGENDA_TABLE);
+		$table = Database :: get_course_table(TABLE_AGENDA);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -317,7 +317,7 @@ class CourseBuilder
 	 */
 	function build_course_descriptions()
 	{
-		$table = Database :: get_course_table(COURSE_DESCRIPTION_TABLE);
+		$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -331,10 +331,10 @@ class CourseBuilder
 	 */
 	function build_learnpaths()
 	{
-		$table_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE);
-		$table_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
-		$table_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
-		$table_tool = Database::get_course_table(TOOL_LIST_TABLE);
+		$table_main 	= Database :: get_course_table(LEARNPATH_MAIN_TABLE);
+		$table_chapter 	= Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+		$table_item 	= Database :: get_course_table(LEARNPATH_ITEM_TABLE);
+		$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST);
 
 		$sql = 'SELECT * FROM '.$table_main;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);

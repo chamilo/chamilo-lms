@@ -194,7 +194,7 @@ if (api_is_allowed_to_edit())
 	{
 		echo '<li><a href="group_category.php?id=2">'.get_lang('PropModify').'</a></li>';
 	}
-	if( Database::count_rows(Database::get_course_table(GROUP_TABLE)) > 0)
+	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0)
 	{
 		echo '<li><a href="group_overview.php">'.get_lang('GroupOverview').'</a></li>';
 	}

@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 10126 2006-11-22 17:32:11Z elixir_inter $
+<?php // $Id: document.inc.php 10195 2006-11-25 15:26:00Z pcool $
 
 /*
 ==============================================================================
@@ -27,7 +27,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='')
 		$escaped_folders = $folders;
 		array_walk($escaped_folders, 'mysql_real_escape_string');
 		$folder_sql = implode("','",$escaped_folders);
-		$doc_table = Database::get_course_table(DOCUMENT_TABLE);
+		$doc_table = Database::get_course_table(TABLE_DOCUMENT);
 		$sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$folder_titles = array();

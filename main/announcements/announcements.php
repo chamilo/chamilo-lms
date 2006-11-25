@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 10191 2006-11-24 08:09:14Z pcool $
+<?php //$Id: announcements.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -82,10 +82,10 @@ $tbl_user          		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_courses			= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_group     			= Database::get_course_table(GROUP_TABLE);
+$tbl_group     			= Database::get_course_table(TABLE_GROUP);
 $tbl_groupUser  		= Database::get_course_table(GROUP_USER_TABLE);
-$tbl_announcement		= Database::get_course_table(ANNOUNCEMENT_TABLE);
-$tbl_item_property  	= Database::get_course_table(ITEM_PROPERTY_TABLE);
+$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
+$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 /*
 -----------------------------------------------------------

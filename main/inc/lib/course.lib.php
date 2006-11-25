@@ -1083,7 +1083,7 @@ class CourseManager
 	{
 		$course_info = Database :: get_course_info($course_code);
 		$database_name = $course_info['db_name'];
-		$group_table = Database :: get_course_table(GROUP_TABLE, $database_name);
+		$group_table = Database :: get_course_table(TABLE_GROUP, $database_name);
 		$group_user_table = Database :: get_course_table(GROUP_USER_TABLE, $database_name);
 
 		$sql = "SELECT g.id, g.name, COUNT(gu.id) userNb

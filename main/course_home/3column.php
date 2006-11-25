@@ -47,7 +47,7 @@ $is_AllowedToEdit = is_allowed_to_edit();  // RH: Allowed is not allowed...
 
 
 $TABLE_TOOLS = Database::get_main_table(TABLE_MAIN_COURSE_MODULE);
-$TBL_ACCUEIL = Database::get_course_table(TOOL_LIST_TABLE);
+$TBL_ACCUEIL = Database::get_course_table(TABLE_TOOL_LIST);
 
 // WORK with data post askable by admin of  course
 if (is_allowed_to_edit())

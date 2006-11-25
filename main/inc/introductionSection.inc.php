@@ -53,7 +53,7 @@ include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php')
 	Constants and variables
 -----------------------------------------------------------
 */
-$TBL_INTRODUCTION = Database::get_course_table(TOOL_INTRO_TABLE);
+$TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
 $intro_editAllowed = $is_allowed_to_edit;
 
 $intro_cmdEdit = $_GET['intro_cmdEdit'];

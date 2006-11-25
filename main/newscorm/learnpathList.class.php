@@ -40,7 +40,7 @@ class learnpathList {
     	$names = array();
     	while ($row = Database::fetch_array($res))
     	{
-    		$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE);
+    		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
     		//use domesticate here instead of mysql_real_escape_string because
     		//it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
     		//is done using domesticate()

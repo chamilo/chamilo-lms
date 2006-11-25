@@ -1,4 +1,4 @@
-<?php // $Id: downloadfolder.inc.php 9388 2006-10-09 09:03:34Z bmol $
+<?php // $Id: downloadfolder.inc.php 10195 2006-11-25 15:26:00Z pcool $
 /**
 ==============================================================================
 *	Functions and main code for the download folder feature
@@ -57,8 +57,8 @@ else
 //create zipfile of given directory
 $temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 $zip_folder=new PclZip($temp_zip_file);
-$doc_table = Database::get_course_table(DOCUMENT_TABLE);
-$prop_table = Database::get_course_table(ITEM_PROPERTY_TABLE);
+$doc_table = Database::get_course_table(TABLE_DOCUMENT);
+$prop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 //Put the files in the zip
 //2 possibilities: admins get all files and folders in the selected folder (except for the deleted ones)
 //normal users get only visible files that are in visible folders

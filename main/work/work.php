@@ -113,8 +113,8 @@ $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $_SESSION['id_session']);
 
-$work_table = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
-$iprop_table = Database::get_course_table(ITEM_PROPERTY_TABLE);
+$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $currentCourseRepositorySys =  api_get_path(SYS_COURSE_PATH) . $_course["path"]."/";
 $currentCourseRepositoryWeb =  api_get_path(WEB_COURSE_PATH) . $_course["path"]."/";
 $currentUserFirstName       = $_user['firstName'];

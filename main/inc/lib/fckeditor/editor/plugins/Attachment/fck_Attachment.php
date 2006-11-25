@@ -80,7 +80,7 @@ if($_POST['fileupload']=="Attach File"){
     	if ($new_path && ($new_comment || $new_title))
     	if (($docid = DocumentManager::get_document_id($_course, $new_path)))
     	{
-        	$table_document = Database::get_course_table(DOCUMENT_TABLE);
+        	$table_document = Database::get_course_table(TABLE_DOCUMENT);
         	$ct = '';
         	if ($new_comment) $ct .= ", comment='$new_comment'";
         	if ($new_title)   $ct .= ", title='$new_title'";

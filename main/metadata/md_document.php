@@ -163,7 +163,7 @@ function mdobject($_course, $id)
     
     $this->mdo_dcmap_e = $ieee_dcmap_e; $this->mdo_dcmap_v = $ieee_dcmap_v;
     
-    $document_table = Database::get_course_table(DOCUMENT_TABLE);
+    $document_table = Database::get_course_table(TABLE_DOCUMENT);
     if (($docinfo = @mysql_fetch_array(api_sql_query(
             "SELECT path,title,comment,filetype FROM $document_table WHERE id='" . 
             addslashes($id) . "'", __FILE__, __LINE__))))
@@ -174,7 +174,7 @@ function mdobject($_course, $id)
         $this->mdo_filetype = $docinfo['filetype'];
         $this->mdo_group =    '';  // 2005-05-30: find group_id, if any
         
-        $group_info = Database::get_course_table(GROUP_TABLE);
+        $group_info = Database::get_course_table(TABLE_GROUP);
         if (($result = api_sql_query(
                 "SELECT id,secret_directory FROM $group_info",  __FILE__, __LINE__)))
             while (($row = mysql_fetch_array($result)))

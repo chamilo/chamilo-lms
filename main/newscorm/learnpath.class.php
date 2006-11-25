@@ -3365,7 +3365,7 @@ class learnpath {
 
 		}
 
-		$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE);
+		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
 		$link = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id;
 
@@ -4365,7 +4365,7 @@ class learnpath {
 												
 					if($new_comment || $new_title)
 					{
-						$tbl_doc = Database::get_course_table(DOCUMENT_TABLE);
+						$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 						$ct = '';
 						
 						if($new_comment)
@@ -4417,7 +4417,7 @@ class learnpath {
 			$dir = '/';
 		}
 		
-		$table_doc = Database::get_course_table(DOCUMENT_TABLE);
+		$table_doc = Database::get_course_table(TABLE_DOCUMENT);
 		
 		$sql = "
 			SELECT path
@@ -4457,7 +4457,7 @@ class learnpath {
 		if(is_numeric($item_id))
 		{
 			$tbl_lp_item	= Database::get_course_table('lp_item');
-			$tbl_doc		= Database::get_course_table(DOCUMENT_TABLE);
+			$tbl_doc		= Database::get_course_table(TABLE_DOCUMENT);
 			
 			$sql = "
 				SELECT
@@ -4534,7 +4534,7 @@ class learnpath {
 					
 				case TOOL_DOCUMENT:
 				
-					$tbl_doc = Database::get_course_table(DOCUMENT_TABLE);
+					$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 			
 					$sql_step = "
 						SELECT
@@ -4651,7 +4651,7 @@ class learnpath {
 			
 		$return = '';
 		
-		$tbl_doc = Database::get_course_table(DOCUMENT_TABLE);
+		$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 		
 		$sql_doc = "
 			SELECT *
@@ -5090,7 +5090,7 @@ class learnpath {
 	function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
 	{
 		$tbl_lp_item = Database::get_course_table('lp_item');
-		$tbl_doc = Database::get_course_table(DOCUMENT_TABLE);
+		$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 		
 		if($id != 0 && is_array($extra_info))
 		{
@@ -5378,7 +5378,7 @@ class learnpath {
 	function display_link_form($action = 'add', $id = 0, $extra_info = '')
 	{
 		$tbl_lp_item = Database::get_course_table('lp_item');
-		$tbl_link = Database::get_course_table(LINK_TABLE);
+		$tbl_link = Database::get_course_table(TABLE_LINK);
 		
 		if($id != 0 && is_array($extra_info))
 		{
@@ -5593,7 +5593,7 @@ class learnpath {
 	function display_student_publication_form($action = 'add', $id = 0, $extra_info = '')
 	{
 		$tbl_lp_item = Database::get_course_table('lp_item');
-		$tbl_publication = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+		$tbl_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 		
 		if($id != 0 && is_array($extra_info))
 		{
@@ -6206,7 +6206,7 @@ class learnpath {
 	{
 		global $_course;
 		
-		$tbl_doc = Database::get_course_table(DOCUMENT_TABLE);
+		$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 		
 		$sql_doc = "
 			SELECT *
@@ -6288,7 +6288,7 @@ class learnpath {
 	 */
 	function get_links()
 	{
-		$tbl_link = Database::get_course_table(LINK_TABLE);
+		$tbl_link = Database::get_course_table(TABLE_LINK);
 			
 		$sql_link = "
 			SELECT *
@@ -6324,7 +6324,7 @@ class learnpath {
 	 */
 	function get_student_publications()
 	{
-		$tbl_student = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+		$tbl_student = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 			
 		$sql_student = "
 			SELECT *

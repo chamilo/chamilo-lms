@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 10191 2006-11-24 08:09:14Z pcool $
+<?php // $Id: course_home.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -180,7 +180,7 @@ if(!isset($coursesAlreadyVisited[$_cid]) )
 	api_session_register('coursesAlreadyVisited');
 }
 
-$tool_table = Database::get_course_table(TOOL_LIST_TABLE);
+$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
 $temps=time();
 $reqdate="&reqdate=$temps";

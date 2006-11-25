@@ -133,7 +133,7 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
  $tbl_session_course_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
  $tbl_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
  $tbl_stats_exercices 			= Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
- $course_student_publication 	= Database :: get_course_table(STUDENT_PUBLICATION_TABLE);
+ $course_student_publication 	= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
  $statistics_database 			= Database :: get_statistic_database();
  
  /**

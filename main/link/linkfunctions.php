@@ -60,7 +60,7 @@ function addlinkcategory($type)
 
 	if ($type == "link")
 	{
-		$tbl_link = Database :: get_course_table(LINK_TABLE);
+		$tbl_link = Database :: get_course_table(TABLE_LINK);
 
 		$title = $_POST['title'];
 		$urllink = $_POST['urllink'];
@@ -108,7 +108,7 @@ function addlinkcategory($type)
 	}
 	elseif ($type == "category")
 	{
-		$tbl_categories = Database :: get_course_table(LINK_CATEGORY_TABLE);
+		$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
 		$category_title = trim($_POST['category_title']);
 		$description = trim($_POST['description']);
@@ -160,9 +160,9 @@ function deletelinkcategory($type)
 	global $catlinkstatus;
 	global $_course;
 	global $_user;
-	$tbl_link = Database :: get_course_table(LINK_TABLE);
-	$tbl_categories = Database :: get_course_table(LINK_CATEGORY_TABLE);
-	$TABLE_ITEM_PROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE);
+	$tbl_link = Database :: get_course_table(TABLE_LINK);
+	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
+	$TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 	if ($type == "link")
 	{
@@ -201,8 +201,8 @@ function editlinkcategory($type)
 	global $id;
 	global $submitLink;
 	global $submitCategory;
-	$tbl_link = Database :: get_course_table(LINK_TABLE);
-	$tbl_categories = Database :: get_course_table(LINK_CATEGORY_TABLE);
+	$tbl_link = Database :: get_course_table(TABLE_LINK);
+	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
 	if ($type == "link")
 	{
@@ -314,7 +314,7 @@ function change_visibility($id, $scope)
 {
 	global $_course;
 	global $_user;
-	$TABLE_ITEM_PROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE);
+	$TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 	if ($scope == "link")
 	{
@@ -335,9 +335,9 @@ function showlinksofcategory($catid)
 	global $urlview;
 	global $up;
 	global $down;
-	$tbl_link = Database :: get_course_table(LINK_TABLE);
+	$tbl_link = Database :: get_course_table(TABLE_LINK);
 
-	$TABLE_ITEM_PROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE);
+	$TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 	$sqlLinks = "SELECT * FROM ".$tbl_link." link, ".$TABLE_ITEM_PROPERTY." itemproperties WHERE itemproperties.tool='".TOOL_LINK."' AND link.id=itemproperties.ref AND  link.category_id='".$catid."' AND (itemproperties.visibility='0' OR itemproperties.visibility='1')ORDER BY link.display_order DESC";
 	$result = api_sql_query($sqlLinks);
@@ -421,8 +421,8 @@ function movecatlink($catlinkid)
 	global $catmove;
 	global $up;
 	global $down;
-	$tbl_link = Database :: get_course_table(LINK_TABLE);
-	$tbl_categories = Database :: get_course_table(LINK_CATEGORY_TABLE);
+	$tbl_link = Database :: get_course_table(TABLE_LINK);
+	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
 	if ($_GET['down'])
 	{
@@ -500,7 +500,7 @@ function movecatlink($catlinkid)
 */
 function get_cat($catname) // get category id (existing or make new)
 {
-	$tbl_categories = Database :: get_course_table(LINK_CATEGORY_TABLE);
+	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
 	$result = api_sql_query("SELECT `id` FROM ".$tbl_categories." WHERE `category_title`='".addslashes($catname)."'", __FILE__, __LINE__);
 
@@ -520,7 +520,7 @@ function get_cat($catname) // get category id (existing or make new)
 */
 function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 {
-	$tbl_link = Database :: get_course_table(LINK_TABLE);
+	$tbl_link = Database :: get_course_table(TABLE_LINK);
 
 	$urleq = "url='".addslashes($url)."'";
 	$cateq = "category_id=".$cat;

@@ -1,4 +1,4 @@
-<?php // $Id: exercise.class.php 9986 2006-11-15 01:14:12Z pcool $
+<?php // $Id: exercise.class.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -323,8 +323,8 @@ class Exercise
 	function updateSound($sound,$delete)
 	{
 		global $audioPath, $documentPath,$_course, $_user;
-        $TBL_DOCUMENT = Database::get_course_table(DOCUMENT_TABLE);
-        $TBL_ITEM_PROPERTY = Database::get_course_table(ITEM_PROPERTY_TABLE);
+        $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+        $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 		if($sound['size'] && (strstr($sound['type'],'audio') || strstr($sound['type'],'video')))
 		{

@@ -88,8 +88,8 @@ Display::display_header(get_lang('MyAgenda'));
 // setting the database variables
 $TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLEAGENDA = Database :: get_course_table(AGENDA_TABLE);
-$TABLE_ITEMPROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE);
+$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
+$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $TABLE_PERSONAL_AGENDA = Database :: get_user_personal_table(PERSONAL_AGENDA);
 
 // the variables for the days and the months
@@ -327,8 +327,8 @@ function get_agendaitems($courses_dbs, $month, $year)
 	foreach ($courses_dbs as $key => $array_course_info)
 	{
 		//databases of the courses
-		$TABLEAGENDA = Database :: get_course_table(AGENDA_TABLE, $array_course_info["db"]);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE, $array_course_info["db"]);
+		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db"]);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db"]);
 
 		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
 		// if the user is administrator of that course we show all the agenda items
@@ -709,8 +709,8 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 	foreach ($courses_dbs as $key => $array_course_info)
 	{
 		//databases of the courses
-		$TABLEAGENDA = Database :: get_course_table(AGENDA_TABLE, $array_course_info["db"]);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE, $array_course_info["db"]);
+		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db"]);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db"]);
 
 		// getting all the groups of the user for the current course
 		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
@@ -857,8 +857,8 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 	foreach ($courses_dbs as $key => $array_course_info)
 	{
 		//databases of the courses
-		$TABLEAGENDA = Database :: get_course_table(AGENDA_TABLE, $array_course_info["db"]);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE, $array_course_info["db"]);
+		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db"]);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db"]);
 
 		// getting all the groups of the user for the current course
 		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);

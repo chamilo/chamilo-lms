@@ -63,7 +63,7 @@ if(isset($_POST['activeExtension'])){
 			$rs = api_sql_query($sql);
 			while($row = mysql_fetch_array($rs)){
 				
-				$sql = 'INSERT INTO '.$row['db_name'].'.'.TOOL_LIST_TABLE.' SET 
+				$sql = 'INSERT INTO '.$row['db_name'].'.'.TABLE_TOOL_LIST.' SET 
 						name="visio",
 						link="conf/",
 						image="visio.gif",

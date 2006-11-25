@@ -20,7 +20,7 @@ include('../inc/global.inc.php');
 
 
 
-$TABLEAGENDA 		= Database::get_course_table(AGENDA_TABLE);
+$TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
 
 $sql 			= "SELECT * FROM $TABLEAGENDA WHERE id IN($id) ORDER BY start_date DESC";
 $result			= api_sql_query($sql,__FILE__,__LINE__);
@@ -38,7 +38,7 @@ $result			= api_sql_query($sql,__FILE__,__LINE__);
 <body style="margin: 15px; padding: 0px;">
 
 <center>
-<input type="button" value="<?php echo htmlentities(get_lang('Print')); ?>" onclick="javascript:window.print();" />
+<input type="button" value="<?php echo htmlentities(get_lang('Print')); ?>" onClick="javascript:window.print();" />
 </center>
 <br /><br />
 
@@ -75,7 +75,7 @@ while($row=mysql_fetch_array($result))
 
 <br /><br />
 <center>
-<input type="button" value="<?php echo htmlentities(get_lang('Print')); ?>" onclick="javascript:window.print();" />
+<input type="button" value="<?php echo htmlentities(get_lang('Print')); ?>" onClick="javascript:window.print();" />
 </center>
 
 </body>

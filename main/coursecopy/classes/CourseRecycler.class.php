@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseRecycler.class.php 10190 2006-11-24 00:23:20Z pcool $
+// $Id: CourseRecycler.class.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -53,7 +53,7 @@ class CourseRecycler
 	function recycle()
 	{
 		$table_linked_resources = Database :: get_course_table(LINKED_RESOURCES_TABLE, $this->course->destination_db);
-		$table_item_properties = Database::get_course_table(ITEM_PROPERTY_TABLE);
+		$table_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
 		foreach ($this->course->resources as $type => $resources)
 		{
 			foreach ($resources as $id => $resource)
@@ -82,7 +82,7 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_DOCUMENT))
 		{
-			$table = Database :: get_course_table(DOCUMENT_TABLE);
+			$table = Database :: get_course_table(TABLE_DOCUMENT);
 			foreach ($this->course->resources[RESOURCE_DOCUMENT] as $id => $document)
 			{
 				rmdirr($this->course->backup_path.'/'.$document->path);
@@ -99,7 +99,7 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_LINK))
 		{
-			$table = Database :: get_course_table(LINK_TABLE);
+			$table = Database :: get_course_table(TABLE_LINK);
 			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_LINK])));
 			$sql = "DELETE FROM ".$table." WHERE id IN(".$ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
@@ -157,8 +157,8 @@ class CourseRecycler
 	 */
 	function recycle_link_categories()
 	{
-		$link_cat_table = Database :: get_course_table(LINK_CATEGORY_TABLE);
-		$link_table = Database :: get_course_table(LINK_TABLE);
+		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
+		$link_table = Database :: get_course_table(TABLE_LINK);
 		$sql = "SELECT lc.id FROM ".$link_cat_table." lc LEFT JOIN ".$link_table." l ON lc.id=l.category_id WHERE l.id IS NULL";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		while ($obj = mysql_fetch_object($res))
@@ -174,7 +174,7 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_EVENT))
 		{
-			$table = Database :: get_course_table(AGENDA_TABLE);
+			$table = Database :: get_course_table(TABLE_AGENDA);
 			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_EVENT])));
 			$sql = "DELETE FROM ".$table." WHERE id IN(".$ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
@@ -187,7 +187,7 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT))
 		{
-			$table = Database :: get_course_table(ANNOUNCEMENT_TABLE);
+			$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_ANNOUNCEMENT])));
 			$sql = "DELETE FROM ".$table." WHERE id IN(".$ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
@@ -219,7 +219,7 @@ class CourseRecycler
 			$table_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE);
 			$table_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
 			$table_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
-			$table_tool = Database::get_course_table(TOOL_LIST_TABLE);
+			$table_tool = Database::get_course_table(TABLE_TOOL_LIST);
 			foreach($this->course->resources[RESOURCE_LEARNPATH] as $id => $learnpath)
 			{
 				$sql = "DELETE FROM $table_tool WHERE link='".mysql_real_escape_string('learnpath/learnpath_handler.php?learnpath_id='.$id)."'";
@@ -252,7 +252,7 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION))
 		{
-			$table = Database :: get_course_table(COURSE_DESCRIPTION_TABLE);
+			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
 			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_COURSEDESCRIPTION])));
 			$sql = "DELETE FROM ".$table." WHERE id IN(".$ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);

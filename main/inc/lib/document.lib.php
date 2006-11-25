@@ -314,8 +314,7 @@ class DocumentManager
 		}
 		else
 		{
-			//$document_table = Database::get_course_document_table();
-			$tbl_document = $this_course.'document';
+			$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 			$tbl_item_property = $this_course.'item_property';
 			//$doc_url = addslashes($doc_url);
 			$query = "SELECT 1 FROM `$tbl_document` AS docs,`$tbl_item_property` AS props WHERE props.tool = 'document' AND docs.id=props.ref AND props.visibility <> '1' AND docs.path = '$doc_url'";
@@ -408,8 +407,8 @@ class DocumentManager
 	*/
 	function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false)
 	{
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(ITEM_PROPERTY_TABLE, $_course['dbName']);
-		$TABLE_DOCUMENT = Database :: get_course_table(DOCUMENT_TABLE, $_course['dbName']);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
+		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 
 		//if to_user_id = NULL -> change query (IS NULL)
 		//$to_user_id = (is_null($to_user_id))?'IS NULL':'= '.$to_user_id;
@@ -479,8 +478,8 @@ class DocumentManager
 	 */
 	function get_all_document_folders($_course, $to_group_id = '0', $can_see_invisible = false)
 	{
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(ITEM_PROPERTY_TABLE, $_course['dbName']);
-		$TABLE_DOCUMENT = Database :: get_course_table(DOCUMENT_TABLE, $_course['dbName']);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
+		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		if(empty($to_group_id)){$to_group_id = '0';} //avoid empty strings in $to_group_id
 		if ($can_see_invisible)
 		{
@@ -587,8 +586,8 @@ class DocumentManager
 	 */
 	function delete_document($_course, $path, $base_work_dir)
 	{
-		$TABLE_DOCUMENT = Database :: get_course_table(DOCUMENT_TABLE);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(LAST_TOOL_EDIT_TABLE);
+		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 		//first, delete the actual document...
 		$document_id = DocumentManager :: get_document_id($_course, $path);
@@ -688,7 +687,7 @@ class DocumentManager
 	 */
 	function get_document_id($_course, $path)
 	{
-		$TABLE_DOCUMENT = Database :: get_course_table(DOCUMENT_TABLE, $_course['dbName']);
+		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 
 		$sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path = '$path'";
 

@@ -73,25 +73,25 @@ define('STATISTIC_TRACK_E_COURSE_ACCESS_TABLE', 'track_e_course_access');
 define('SCORM_MAIN_TABLE', 'scorm_main');
 define('SCORM_SCO_DATA_TABLE', 'scorm_sco_data');
 //course tables
-define('AGENDA_TABLE', 'calendar_event');
-define('ANNOUNCEMENT_TABLE', 'announcement');
-define('CHAT_CONNECTED_TABLE', 'chat_connected');
-define('COURSE_DESCRIPTION_TABLE', 'course_description');
-define('DOCUMENT_TABLE', 'document');
-define('LAST_TOOL_EDIT_TABLE', 'item_property');
-define('LINK_TABLE', 'link');
-define('LINK_CATEGORY_TABLE', 'link_category');
-define('TOOL_LIST_TABLE', 'tool');
-define('TOOL_INTRO_TABLE', 'tool_intro');
-define('SCORMDOC_TABLE', 'scormdocument');
-define('STUDENT_PUBLICATION_TABLE', 'student_publication');
+define('TABLE_AGENDA', 'calendar_event');
+define('TABLE_ANNOUNCEMENT', 'announcement');
+define('TABLE_CHAT_CONNECTED', 'chat_connected'); // @todo: probably no longer in use !!!
+define('TABLE_COURSE_DESCRIPTION', 'course_description');
+define('TABLE_DOCUMENT', 'document');
+define('TABLE_ITEM_PROPERTY', 'item_property');
+define('TABLE_LINK', 'link');
+define('TABLE_LINK_CATEGORY', 'link_category');
+define('TABLE_TOOL_LIST', 'tool');
+define('TABLE_TOOL_INTRO', 'tool_intro');
+define('TABLE_SCORMDOC', 'scormdocument');
+define('TABLE_STUDENT_PUBLICATION', 'student_publication');
 //course forum tables
 define('TABLE_FORUM_CATEGORY','forum_category');
 define('TABLE_FORUM','forum_forum');
 define('TABLE_FORUM_THREAD','forum_thread');
 define('TABLE_FORUM_POST','forum_post');
 //course group tables
-define('GROUP_TABLE', 'group_info');
+define('TABLE_GROUP', 'group_info');
 define('GROUP_USER_TABLE', 'group_rel_user');
 define('GROUP_TUTOR_TABLE', 'group_rel_tutor');
 define('GROUP_CATEGORY_TABLE', 'group_category');
@@ -130,8 +130,6 @@ define('BLOGS_TASKS_PERMISSIONS', 'permission_task');
 // user information tables
 define('USER_INFO_TABLE', 'userinfo_def');
 define('USER_INFO_CONTENT_TABLE', 'userinfo_content');
-// item property table
-define('ITEM_PROPERTY_TABLE', 'item_property');
 // course settings table
 define('COURSE_SETTING_TABLE', 'course_setting');
 // course online tables
@@ -254,7 +252,7 @@ class Database
 		so the queries can look cleaner.
 		
 		Example:
-		$table = Database::get_course_document_table();
+		$table = Database::get_course_table(TABLE_DOCUMENT);
 		$sql_query = "SELECT * FROM $table WHERE $condition";
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 		$result = mysql_fetch_array($sql_result);
@@ -603,7 +601,7 @@ class Database
 	{
 		$database_name_with_glue = Database::fix_database_parameter($database_name);
 		
-		return Database::format_glued_course_table_name($database_name_with_glue, TOOL_LIST_TABLE);
+		return Database::format_glued_course_table_name($database_name_with_glue, TABLE_TOOL_LIST);
 	}
 }
 //end class Database

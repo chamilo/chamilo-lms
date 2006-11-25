@@ -41,7 +41,7 @@ function display_action_links($always_show_tool_options, $always_show_upload_for
 function display_tool_options($uploadvisibledisabled, $origin)
 {
 	$is_allowed_to_edit = api_is_allowed_to_edit();
-	$work_table = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	
 	if (! $is_allowed_to_edit) return;
 
@@ -126,8 +126,8 @@ function display_default_visibility_form($uploadvisibledisabled, $origin)
 function display_student_publications_list($currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin)
 {
 	//init
-	$work_table = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
-	$iprop_table = Database::get_course_table(ITEM_PROPERTY_TABLE);
+	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$is_allowed_to_edit = api_is_allowed_to_edit();
 	$user_id = api_get_user_id();
 	$publications_list = array();

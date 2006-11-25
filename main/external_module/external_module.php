@@ -43,7 +43,7 @@ $iconForInactiveImportedTools='external_inactive.gif';
 
 include('../inc/global.inc.php');
 
-$tbl_courseHome = Database::get_course_table(TOOL_LIST_TABLE);
+$tbl_courseHome = Database::get_course_table(TABLE_TOOL_LIST);
 $toolid = $_GET['id'];  // RH: all lines with $toolid added/changed by me
 
 if($toolid)

@@ -1,5 +1,5 @@
 <?php
-// $Id: course_information.php 10191 2006-11-24 08:09:14Z pcool $
+// $Id: course_information.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -59,19 +59,19 @@ function get_course_usage($course_code)
 	$table = Database :: get_course_table(QUIZ_TEST_TABLE, $course->db_name);
 	$usage[] = array (get_lang(TOOL_QUIZ), Database::count_rows($table));
 	// Documents
-	$table = Database :: get_course_table(DOCUMENT_TABLE, $course->db_name);
+	$table = Database :: get_course_table(TABLE_DOCUMENT, $course->db_name);
 	$usage[] = array (get_lang(TOOL_DOCUMENT), Database::count_rows($table));
 	// Groups
-	$table = Database :: get_course_table(GROUP_TABLE, $course->db_name);
+	$table = Database :: get_course_table(TABLE_GROUP, $course->db_name);
 	$usage[] = array (get_lang(TOOL_GROUP), Database::count_rows($table));
 	// Calendar
-	$table = Database :: get_course_table(AGENDA_TABLE, $course->db_name);
+	$table = Database :: get_course_table(TABLE_AGENDA, $course->db_name);
 	$usage[] = array (get_lang(TOOL_CALENDAR_EVENT), Database::count_rows($table));
 	// Link
-	$table = Database::get_course_table(LINK_TABLE, $course->db_name);
+	$table = Database::get_course_table(TABLE_LINK, $course->db_name);
 	$usage[] = array(get_lang(TOOL_LINK), Database::count_rows($table));
 	// Announcements
-	$table = Database::get_course_table(ANNOUNCEMENT_TABLE, $course->db_name);
+	$table = Database::get_course_table(TABLE_ANNOUNCEMENT, $course->db_name);
 	$usage[] = array(get_lang(TOOL_ANNOUNCEMENT), Database::count_rows($table));
 	return $usage;
 }

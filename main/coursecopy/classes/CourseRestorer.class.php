@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 10190 2006-11-24 00:23:20Z pcool $
+// $Id: CourseRestorer.class.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -104,7 +104,7 @@ class CourseRestorer
 		$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
 		$this->restore_learnpaths();
 		// Restore the item properties
-		$table = Database :: get_course_table(ITEM_PROPERTY_TABLE, $this->course->destination_db);
+		$table = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
 		foreach ($this->course->resources as $type => $resources)
 		{
 			foreach ($resources as $id => $resource)
@@ -161,7 +161,7 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_DOCUMENT))
 		{
-			$table = Database :: get_course_table(DOCUMENT_TABLE, $this->course->destination_db);
+			$table = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document)
 			{
@@ -427,7 +427,7 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_LINK))
 		{
-			$link_table = Database :: get_course_table(LINK_TABLE, $this->course->destination_db);
+			$link_table = Database :: get_course_table(TABLE_LINK, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_LINK] as $id => $link)
 			{
@@ -448,7 +448,7 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_TOOL_INTRO))
 		{
-			$tool_intro_table = Database :: get_course_table(TOOL_INTRO_TABLE, $this->course->destination_db);
+			$tool_intro_table = Database :: get_course_table(TABLE_TOOL_INTRO, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro)
 			{
@@ -469,7 +469,7 @@ class CourseRestorer
 	{
 		if ($id == 0)
 			return 0;
-		$link_cat_table = Database :: get_course_table(LINK_CATEGORY_TABLE, $this->course->destination_db);
+		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY, $this->course->destination_db);
 		$resources = $this->course->resources;
 		$link_cat = $resources[RESOURCE_LINKCATEGORY][$id];
 		if (!$link_cat->is_restored())
@@ -493,7 +493,7 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_EVENT))
 		{
-			$table = Database :: get_course_table(AGENDA_TABLE, $this->course->destination_db);
+			$table = Database :: get_course_table(TABLE_AGENDA, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_EVENT] as $id => $event)
 			{
@@ -510,7 +510,7 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION))
 		{
-			$table = Database :: get_course_table(COURSE_DESCRIPTION_TABLE, $this->course->destination_db);
+			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_COURSEDESCRIPTION] as $id => $cd)
 			{
@@ -527,7 +527,7 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT))
 		{
-			$table = Database :: get_course_table(ANNOUNCEMENT_TABLE, $this->course->destination_db);
+			$table = Database :: get_course_table(TABLE_ANNOUNCEMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement)
 			{
@@ -546,7 +546,7 @@ class CourseRestorer
 		{
 			$table_qui = Database :: get_course_table(QUIZ_TEST_TABLE, $this->course->destination_db);
 			$table_rel = Database :: get_course_table(QUIZ_TEST_QUESTION_TABLE, $this->course->destination_db);
-			$table_doc = Database :: get_course_table(DOCUMENT_TABLE, $this->course->destination_db);
+			$table_doc = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz)
 			{
@@ -615,7 +615,7 @@ class CourseRestorer
 			$table_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE, $this->course->destination_db);
 			$table_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE, $this->course->destination_db);
 			$table_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE, $this->course->destination_db);
-			$table_tool = Database::get_course_table(TOOL_LIST_TABLE, $this->course->destination_db);
+			$table_tool = Database::get_course_table(TABLE_TOOL_LIST, $this->course->destination_db);
 
 			$resources = $this->course->resources;
 			$prereq_old = array ();

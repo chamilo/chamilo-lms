@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 10191 2006-11-24 08:09:14Z pcool $
+<?php // $Id: userLog.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -131,8 +131,8 @@ $TABLETRACK_DOWNLOADS   	= $_configuration['statistics_database']."`.`track_e_do
 $TABLETRACK_UPLOADS     	= $_configuration['statistics_database']."`.`track_e_uploads";
 $TABLETRACK_EXERCICES   	= $_configuration['statistics_database']."`.`track_e_exercices";
 
-$TABLECOURSE_LINKS			= Database::get_course_table(LINK_TABLE);
-$TABLECOURSE_WORK       	= Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+$TABLECOURSE_LINKS			= Database::get_course_table(TABLE_LINK);
+$TABLECOURSE_WORK       	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 $TABLECOURSE_GROUPSUSER 	= Database::get_course_table(GROUP_USER_TABLE);
 $TABLECOURSE_EXERCICES  	= Database::get_course_table(QUIZ_TEST_TABLE);
 $TBL_TRACK_HOTPOTATOES  	= Database::get_statistic_table(STATISTIC_TRACK_E_HOTPOTATOES_TABLE);

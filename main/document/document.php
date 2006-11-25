@@ -1,4 +1,4 @@
-<?php // $Id: document.php 10147 2006-11-23 07:56:16Z elixir_inter $
+<?php // $Id: document.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -317,7 +317,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 		//this is needed for the update_db_info function
 		//$dbTable = $_course['dbNameGlu']."document";
-		$dbTable = Database::get_course_table(DOCUMENT_TABLE);
+		$dbTable = Database::get_course_table(TABLE_DOCUMENT);
 
 		//security fix: make sure they can't move files that are not in the document table
 		if(DocumentManager::get_document_id($_course,$_POST['move_file'])) {

@@ -1,5 +1,5 @@
 <?php
-// $Id: btf_functions.php 10191 2006-11-24 08:09:14Z pcool $
+// $Id: btf_functions.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,7 +43,7 @@ function showtools2($cat)
 {
 	GLOBAL $_user;
 
-	$TBL_ACCUEIL = Database :: get_course_tool_list_table();
+	$TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);
 	$TABLE_TOOLS = Database :: get_main_table(TABLE_MAIN_COURSE_MODULE);
 
 	$numcols = 3;
@@ -91,8 +91,8 @@ function showtools2($cat)
 	// grabbing all the links that have the property on_homepage set to 1
 	if ($cat == "External")
 	{
-		$tbl_link = Database :: get_course_table(LINK_TABLE);
-		$tbl_item_property = Database :: get_course_table(ITEM_PROPERTY_TABLE);
+		$tbl_link = Database :: get_course_table(TABLE_LINK);
+		$tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 		if (api_is_allowed_to_edit())
 		{
 			$sql_links = "SELECT tl.*, tip.visibility

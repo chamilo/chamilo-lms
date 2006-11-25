@@ -1,5 +1,5 @@
 <?php
-// $Id: slideshow.php 9972 2006-11-14 14:44:37Z pcool $
+// $Id: slideshow.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -298,7 +298,7 @@ if ($slide_id !== "all")
 
 	// showing the comment of the image, Patrick Cool, 8 april 2005
 	// this is done really quickly and should be cleaned up a little bit using the API functions
-	$tbl_documents = Database::get_course_table(DOCUMENT_TABLE);
+	$tbl_documents = Database::get_course_table(TABLE_DOCUMENT);
 	if ($path=='/')
 	{
 		$pathpart='/';

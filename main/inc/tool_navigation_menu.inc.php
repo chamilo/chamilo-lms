@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 9319 2006-10-04 12:31:07Z bmol $
+// $Id: tool_navigation_menu.inc.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,7 +48,7 @@ function get_navigation_items($include_admin_tools = false)
 	{
 		$user_id = api_get_user_id();
 
-		$course_tools_table = Database :: get_course_table(TOOL_LIST_TABLE);
+		$course_tools_table = Database :: get_course_table(TABLE_TOOL_LIST);
 
 		/*
 		--------------------------------------------------------------

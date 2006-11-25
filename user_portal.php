@@ -547,8 +547,8 @@ function get_logged_user_course_html($my_course)
 	
 	// Table definitions
 	//$statistic_database = Database::get_statistic_database();
-	$course_tool_table 			= Database :: get_course_table(TOOL_LIST_TABLE, $course_database);
-	$tool_edit_table 			= Database :: get_course_table(LAST_TOOL_EDIT_TABLE, $course_database);
+	$course_tool_table 			= Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
+	$tool_edit_table 			= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_database);
 	$course_group_user_table 	= Database :: get_course_table(TOOL_USER, $course_database);	
 	
 	$user_id = api_get_user_id();
@@ -777,8 +777,8 @@ function show_notification($my_course)
 	$statistic_database = Database :: get_statistic_database();
 	$user_id = api_get_user_id();
 	$course_database = $my_course['db'];
-	$course_tool_table = Database::get_course_table(TOOL_LIST_TABLE, $course_database);
-	$tool_edit_table = Database::get_course_table(LAST_TOOL_EDIT_TABLE, $course_database);
+	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST, $course_database);
+	$tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_database);
 	$course_group_user_table = Database :: get_course_table(GROUP_USER_TABLE, $course_database);
 	// get the user's last access dates to all tools of this course
 	$sqlLastTrackInCourse = "SELECT * FROM $statistic_database.track_e_lastaccess
@@ -968,7 +968,7 @@ else
 		-----------------------------------------------------------
 		*/
 		$course_database = $my_course['db'];
-		$course_tool_table = Database::get_course_table(TOOL_LIST_TABLE, $course_database);
+		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST, $course_database);
 		$query = "SELECT visibility FROM $course_tool_table WHERE link = 'announcements/announcements.php' AND visibility = 1";
 		$result = api_sql_query($query);
 		// collect from announcements, but only if tool is visible for the course
@@ -976,7 +976,7 @@ else
 		{
 			//Search announcements table
 			//Take the entries listed at the top of advalvas/announcements tool
-			$course_announcement_table = Database :: get_course_announcement_table($thisCourseDbName);
+			$course_announcement_table = Database::get_course_table(TABLE_ANNOUNCEMENT);
 			$sqlGetLastAnnouncements = "SELECT end_date publicationDate, content
 									                            FROM ".$course_announcement_table;
 			switch (CONFVAL_limitPreviewTo)
@@ -1011,7 +1011,7 @@ else
 		-----------------------------------------------------------
 		*/
 		$course_database = $my_course['db'];
-		$course_tool_table = Database :: get_course_table(TOOL_LIST_TABLE,$course_database);
+		$course_tool_table = Database :: get_course_table(TABLE_TOOL_LIST,$course_database);
 		$query = "SELECT visibility FROM $course_tool_table WHERE link = 'calendar/agenda.php' AND visibility = 1";
 		$result = api_sql_query($query);
 		$thisAgenda = $maxCourse - $nbDigestEntries; // new max entries for agenda

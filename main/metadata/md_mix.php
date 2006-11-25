@@ -40,8 +40,8 @@ function mdobject($_course, $eid)
     if ($type == 'Document' || $type == 'Scorm')
     {
         $table = $type == 'Scorm' ? 
-            Database::get_course_table(SCORMDOC_TABLE) :
-            Database::get_course_table(DOCUMENT_TABLE);
+            Database::get_course_table(TABLE_SCORMDOC) :
+            Database::get_course_table(TABLE_DOCUMENT);
     
         if (($dotpos = strpos($id, '.')))
         {
@@ -75,7 +75,7 @@ function mdobject($_course, $eid)
     }
     elseif ($type == 'Link')
     {
-        $link_table = Database::get_course_table(LINK_TABLE);
+        $link_table = Database::get_course_table(TABLE_LINK);
         if (($linkinfo = @mysql_fetch_array(api_sql_query(
                 "SELECT url,title,description,category_id FROM 
                  $link_table WHERE id='" . addslashes($id) . 

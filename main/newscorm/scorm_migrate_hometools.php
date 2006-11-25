@@ -20,7 +20,7 @@ while ($row = Database::fetch_array($res))
 	$courses_list[] = $row['db_name'];
 	
 	//TODO add check for learnpath element. If not exist, create one.
-	$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE,$row['db_name']);
+	$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
 	$sql_t = "UPDATE $tbl_tool SET link = 'newscorm/lp_controller.php' WHERE name='learnpath'";
 	$res_t = api_sql_query($sql_t,__FILE__,__LINE__);
 	if(!$res_t){

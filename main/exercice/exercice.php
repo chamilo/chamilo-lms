@@ -63,8 +63,8 @@ require_once('hotpotatoes.lib.php');
 $is_allowedToEdit = is_allowed_to_edit();
 
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
-$TBL_DOCUMENT          	= Database::get_course_table(DOCUMENT_TABLE);
-$TBL_ITEM_PROPERTY      = Database::get_course_table(ITEM_PROPERTY_TABLE);
+$TBL_DOCUMENT          	= Database::get_course_table(TABLE_DOCUMENT);
+$TBL_ITEM_PROPERTY      = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $TBL_EXERCICE_QUESTION	= Database::get_course_table(QUIZ_TEST_QUESTION_TABLE);
 $TBL_EXERCICES			= Database::get_course_table(QUIZ_TEST_TABLE);
 $TBL_QUESTIONS			= Database::get_course_table(QUIZ_QUESTION_TABLE);

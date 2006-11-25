@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 10085 2006-11-21 20:42:52Z pcool $
+<?php // $Id: edit_document.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -136,7 +136,7 @@ if(!is_dir($filepath))
 
 $nameTools = get_lang('EditDocument');
 
-$dbTable = Database::get_course_table(DOCUMENT_TABLE);
+$dbTable = Database::get_course_table(TABLE_DOCUMENT);
 
 if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
 {

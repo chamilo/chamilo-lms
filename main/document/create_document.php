@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 9985 2006-11-15 00:43:47Z pcool $
+// $Id: create_document.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -228,7 +228,7 @@ if ($form->validate())
 			$new_title = isset ($_POST['title']) ? trim($_POST['title']) : '';
 			if ($new_comment || $new_title)
 			{
-				$TABLE_DOCUMENT = Database::get_course_table(DOCUMENT_TABLE);
+				$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 				$ct = '';
 				if ($new_comment)
 					$ct .= ", comment='$new_comment'";

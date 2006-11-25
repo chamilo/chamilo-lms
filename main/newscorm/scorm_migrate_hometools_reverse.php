@@ -20,7 +20,7 @@ while ($row = Database::fetch_array($res))
 	$courses_list[] = $row['db_name'];
 	
 	//TODO add check for learnpath element. If not exist, create one.
-	$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE,$row['db_name']);
+	$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
 	$sql_t = "UPDATE $tbl_tool SET link = 'scorm/scormdocument.php' WHERE name='learnpath'";
 	$res_t = @mysql_query($sql_t);
 	if(!$res_t){

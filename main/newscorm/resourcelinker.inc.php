@@ -107,8 +107,8 @@ function show_documents($folder)
 		$visibility="visibility='1'";
 	}
 	
-	$item_property_table = Database::get_course_table(ITEM_PROPERTY_TABLE);
-	$document_table = Database::get_course_table(DOCUMENT_TABLE);
+	$item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$document_table = Database::get_course_table(TABLE_DOCUMENT);
 	$sql="SELECT * from $document_table, $item_property_table WHERE id=ref AND tool = '".TOOL_DOCUMENT."' AND $visibility AND to_group_id = 0 AND to_user_id IS NULL  ORDER BY path ASC";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=mysql_fetch_array($result))
@@ -1200,7 +1200,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			break;
 
 		case "Ad_Valvas":
-			$tbl_announcement = Database::get_course_announcement_table();
+			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 			$result = api_sql_query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
@@ -1710,20 +1710,20 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 	switch ($type)
 	{
 		case TOOL_CALENDAR_EVENT:
-			$TABLEAGENDA = Database::get_course_table(AGENDA_TABLE,$_course['database']);
+			$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $TABLEAGENDA WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = '<img src="../img/agenda.gif" align="middle" /> <a href="../calendar/agenda.php"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case TOOL_ANNOUNCEMENT:
-			$tbl_announcement = Database::get_course_table(ANNOUNCEMENT_TABLE,$_course['database']);
+			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = '<img src="../img/valves.gif" align="middle" /> <a href="../announcements/announcements.php"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case TOOL_LINK:
 			//doesn't take $target into account
-			$TABLETOOLLINK = Database::get_course_table(LINK_TABLE,$_course['database']);
+			$TABLETOOLLINK = Database::get_course_table(TABLE_LINK,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $TABLETOOLLINK WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url'])."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
@@ -1772,7 +1772,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 			$output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$post['thread_id'].'&forum='.$post['forum_id'].'"'.$styling.' '.$target.'>'.$post['post_title']."</a><br />\n";
 			break;
 		case TOOL_DOCUMENT:
-			$tbl_doc = Database::get_course_table(DOCUMENT_TABLE,$_course['database']);
+			$tbl_doc = Database::get_course_table(TABLE_DOCUMENT,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $tbl_doc WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$pathname = explode('/',$myrow['path']); // making a correct name for the link
@@ -1850,7 +1850,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			break;
 
 		case TOOL_LINK:
-			$TABLETOOLLINK = Database::get_course_table(LINK_TABLE,$_course['database']);
+			$TABLETOOLLINK = Database::get_course_table(TABLE_LINK,$_course['database']);
 			$result= api_sql_query("SELECT * FROM $TABLETOOLLINK WHERE id=$id",__FILE__,__LINE__);
 			$myrow=Database::fetch_array($result);
 			$thelink=$myrow["url"];
@@ -1869,7 +1869,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 
 		case "hotpotatoes": //lowercase because of strtolower above
 
-			$TBL_DOCUMENT  = Database::get_course_table(DOCUMENT_TABLE);
+			$TBL_DOCUMENT  = Database::get_course_table(TABLE_DOCUMENT);
 			$result = api_sql_query("SELECT * FROM ".$TBL_DOCUMENT." WHERE id=$id",__FILE__,__LINE__);
 			$myrow= Database::fetch_array($result);
 			$path=$myrow["path"];
@@ -1911,7 +1911,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			break;
 
 		case TOOL_DOCUMENT:
-			$tbl_doc = Database::get_course_table(DOCUMENT_TABLE,$_course['database']);
+			$tbl_doc = Database::get_course_table(TABLE_DOCUMENT,$_course['database']);
 			$sql = "SELECT * FROM $tbl_doc WHERE id=$id";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 			$myrow=Database::fetch_array($result);
@@ -1975,20 +1975,20 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 	switch ($type)
 	{
 		case TOOL_CALENDAR_EVENT:
-			$TABLEAGENDA = Database::get_course_table(AGENDA_TABLE,$_course['database']);
+			$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $TABLEAGENDA WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = $myrow['title'];
 			break;
 		case TOOL_ANNOUNCEMENT:
-			$tbl_announcement = Database::get_course_table(ANNOUNCEMENT_TABLE,$_course['database']);
+			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = $myrow['title'];
 			break;
 		case TOOL_LINK:
 			//doesn't take $target into account
-			$TABLETOOLLINK = Database::get_course_table(LINK_TABLE,$_course['database']);
+			$TABLETOOLLINK = Database::get_course_table(TABLE_LINK,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $TABLETOOLLINK WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = $myrow['title'];
@@ -2038,7 +2038,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 			break;
 		case TOOL_DOCUMENT:
 		case 'hotpotatoes':
-			$tbl_doc = Database::get_course_table(DOCUMENT_TABLE,$_course['database']);
+			$tbl_doc = Database::get_course_table(TABLE_DOCUMENT,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $tbl_doc WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$pathname = explode('/',$myrow['path']); // making a correct name for the link

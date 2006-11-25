@@ -60,7 +60,7 @@ require('md_phpdig.php');
 
 if (isset($workWith))  // explicit in URL, or selected at bottom of screen
 {
-    $scormdocument = Database::get_course_table(SCORMDOC_TABLE);
+    $scormdocument = Database::get_course_table(TABLE_SCORMDOC);
     $result = api_sql_query("SELECT id FROM $scormdocument WHERE path='" . 
         addslashes($workWith) . "'", __FILE__, __LINE__);
     

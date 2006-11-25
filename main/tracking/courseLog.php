@@ -83,7 +83,7 @@ $TABLETRACK_DOWNLOADS   = Database::get_statistic_table(STATISTIC_TRACK_E_DOWNLO
 $TABLETRACK_ACCESS_2    = Database::get_statistic_table("track_e_access");
 $TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
-$TABLECOURSE_LINKS      = Database::get_course_table(LINK_TABLE);
+$TABLECOURSE_LINKS      = Database::get_course_table(TABLE_LINK);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 //$table_scormdata = Database::get_scorm_table(SCORM_SCO_DATA_TABLE);

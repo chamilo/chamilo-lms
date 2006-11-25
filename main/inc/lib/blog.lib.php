@@ -139,7 +139,7 @@ class Blog
 
 		// Tabel definitions
 		$tbl_blogs 			= Database::get_course_table(BLOGS_TABLE);
-		$tbl_tool 			= Database::get_course_table(TOOL_LIST_TABLE);
+		$tbl_tool 			= Database::get_course_table(TABLE_TOOL_LIST);
 		$tbl_blogs_posts 	= Database::get_course_table(BLOGS_POSTS_TABLE);
 		$tbl_blogs_tasks 	= Database::get_course_table(BLOGS_TASKS);
 		
@@ -178,7 +178,7 @@ class Blog
 		
 		// Table definitions
 		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
-		$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE);
+		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 		
 		// Update the blog
 		$sql = "UPDATE $tbl_blogs SET blog_name = '$title',	blog_subtitle = '$subtitle' WHERE blog_id =$blog_id LIMIT 1";
@@ -206,7 +206,7 @@ class Blog
 		$tbl_blogs 	= Database::get_course_table(BLOGS_TABLE);
 		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
 		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
-		$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE);
+		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 		$tbl_blogs_rating = Database::get_course_table(BLOGS_RATING);
 		
 		// Delete posts
@@ -626,7 +626,7 @@ class Blog
 	{
 		// Init
 		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
-		$tbl_tool = Database::get_course_table(TOOL_LIST_TABLE);
+		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 		
 		// Get blog properties
 		$sql = "SELECT blog_name, visibility FROM $tbl_blogs WHERE blog_id=$blog_id";

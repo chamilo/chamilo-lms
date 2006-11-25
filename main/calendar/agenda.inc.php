@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 10082 2006-11-21 19:08:15Z pcool $
+<?php //$Id: agenda.inc.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -66,8 +66,8 @@ function get_kalender_items($month, $year)
 	global $is_allowedToEdit;
 
 	// database variables
-	$TABLEAGENDA=Database::get_course_table(AGENDA_TABLE);
-	$TABLE_ITEM_PROPERTY=Database::get_course_table(LAST_TOOL_EDIT_TABLE);
+	$TABLEAGENDA=Database::get_course_table(TABLE_AGENDA);
+	$TABLE_ITEM_PROPERTY=Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 
@@ -661,8 +661,8 @@ return $last_id;
  * @return	integer		New announcement item's ID
  */
 function store_agenda_item_as_announcement($item_id){
-	$table_agenda = Database::get_course_table(AGENDA_TABLE);
-	$table_ann = Database::get_course_table(ANNOUNCEMENT_TABLE); 
+	$table_agenda = Database::get_course_table(TABLE_AGENDA);
+	$table_ann = Database::get_course_table(TABLE_ANNOUNCEMENT); 
 	//check params 
 	if(empty($item_id) or $item_id != strval(intval($item_id))){return -1;}
 	//get the agenda item
@@ -688,7 +688,7 @@ function store_agenda_item_as_announcement($item_id){
 			$ann_id = Database::get_last_insert_id();
 			//Now also get the list of item_properties rows for this agenda_item (calendar_event)
 			//and copy them into announcement item_properties
-			$table_props = Database::get_course_table(ITEM_PROPERTY_TABLE);
+			$table_props = Database::get_course_table(TABLE_ITEM_PROPERTY);
 			$sql_props = "SELECT * FROM $table_props WHERE tool = 'calendar_event' AND ref='$item_id'";
 			$res_props = api_sql_query($sql_props,__FILE__,__LINE__);
 			if(Database::num_rows($res_props)>0)
@@ -761,7 +761,7 @@ return $send_to;
 function sent_to($tool, $id)
 {
 global $_course;
-$TABLE_ITEM_PROPERTY = Database::get_course_table(LAST_TOOL_EDIT_TABLE);
+$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".$tool."' AND ref='".$id."'";
 $result=api_sql_query($sql,__FILE__,__LINE__);
@@ -967,7 +967,7 @@ function show_user_group_filter_form()
 function load_edit_users($tool, $id)
 {
 global $_course;
-$TABLE_ITEM_PROPERTY = Database::get_course_table(LAST_TOOL_EDIT_TABLE);
+$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='$tool' AND ref='$id'";
 $result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
@@ -1001,7 +1001,7 @@ return $to;
 function change_visibility($tool,$id)
 {
 	global $_course;
-	$TABLE_ITEM_PROPERTY = Database::get_course_table(LAST_TOOL_EDIT_TABLE);
+	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".TOOL_CALENDAR_EVENT."' AND ref='$id'";
 	$result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
@@ -1111,7 +1111,7 @@ function store_edited_agenda_item()
 	global $_user;
 
 	// database definitions
-	$TABLE_ITEM_PROPERTY = Database::get_course_table(LAST_TOOL_EDIT_TABLE);
+	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	// STEP 1: editing the calendar_event table
 	// 1.a.  some filtering of the input data
@@ -1173,7 +1173,7 @@ function store_edited_agenda_item()
 */
 function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 {
-	$TABLEAGENDA 		= Database::get_course_table(AGENDA_TABLE);
+	$TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
 
 	// store the modifications in the table calendar_event
 	$sql = "UPDATE ".$TABLEAGENDA."

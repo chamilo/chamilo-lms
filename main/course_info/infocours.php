@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 10191 2006-11-24 08:09:14Z pcool $
+// $Id: infocours.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -64,15 +64,15 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 */
 define("MODULE_HELP_NAME", "Settings");
 define("COURSE_CHANGE_PROPERTIES", "COURSE_CHANGE_PROPERTIES");
-$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
-$TABLEFACULTY = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$TABLECOURSEHOME = Database :: get_course_table(TOOL_LIST_TABLE);
-$TABLELANGUAGES = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-$TABLEBBCONFIG = Database :: get_course_table(TOOL_FORUM_CONFIG_TABLE);
-$currentCourseID = $_course['sysCode'];
-$currentCourseRepository = $_course["path"];
-$is_allowedToEdit = $is_courseAdmin;
-$course_setting_table = Database::get_course_table(COURSE_SETTING_TABLE);
+$TABLECOURSE 				= Database :: get_main_table(TABLE_MAIN_COURSE);
+$TABLEFACULTY 				= Database :: get_main_table(TABLE_MAIN_CATEGORY);
+$TABLECOURSEHOME 			= Database :: get_course_table(TABLE_TOOL_LIST);
+$TABLELANGUAGES 			= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+$TABLEBBCONFIG 				= Database :: get_course_table(TOOL_FORUM_CONFIG_TABLE);
+$currentCourseID 			= $_course['sysCode'];
+$currentCourseRepository 	= $_course["path"];
+$is_allowedToEdit 			= $is_courseAdmin;
+$course_setting_table 		= Database::get_course_table(COURSE_SETTING_TABLE);
 /*
 ==============================================================================
 		LOGIC FUNCTIONS

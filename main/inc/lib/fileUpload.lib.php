@@ -572,8 +572,8 @@ function dir_total_space($dirPath)
 
 function documents_total_space($to_group_id='0')
 {
-	$TABLE_ITEMPROPERTY = Database::get_course_table(LAST_TOOL_EDIT_TABLE);
-	$TABLE_DOCUMENT = Database::get_course_table(DOCUMENT_TABLE);
+	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 	
 	$sql = "SELECT SUM(size) 
 	FROM  ".$TABLE_ITEMPROPERTY."  AS props, ".$TABLE_DOCUMENT."  AS docs
@@ -1075,7 +1075,7 @@ function clean_up_path(&$path)
  */
 function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL)
 {
-	$table_document = Database::get_course_table(DOCUMENT_TABLE,$_course['dbName']);
+	$table_document = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
 	$sql="INSERT INTO $table_document
 	(`path`,`filetype`,`size`,`title`, `comment`)
 	VALUES ('$path','$filetype','$filesize','$title', '$comment')";
@@ -1110,7 +1110,7 @@ function get_document_id() moved to document.lib.php
  */
 function update_existing_document($_course,$document_id,$filesize)
 {
-	$document_table = Database::get_course_table(DOCUMENT_TABLE,$_course['dbName']);
+	$document_table = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
 	$sql="UPDATE $document_table SET `size`='$filesize' WHERE id='$document_id'";
 	if(api_sql_query($sql,__FILE__,__LINE__))
 	{
@@ -1141,7 +1141,7 @@ function item_property_update_on_folder($_course,$path,$user_id)
 	$endchar=substr($path,strlen($path)-1,1);
 	if($endchar=='/')
 	$path=substr($path,0,strlen($path)-1);
-	$TABLE_ITEMPROPERTY = Database::get_course_table(ITEM_PROPERTY_TABLE,$_course['dbName']);
+	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
 		
 	//get the time
 	$time = date("Y-m-d H:i:s", time());

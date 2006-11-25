@@ -1,4 +1,4 @@
-<?php // $Id: adminhp.php 9665 2006-10-24 10:43:48Z elixir_inter $
+<?php // $Id: adminhp.php 10195 2006-11-25 15:26:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -84,7 +84,7 @@ $TBL_EXERCICE_QUESTION		= Database::get_course_table(QUIZ_TEST_QUESTION_TABLE);
 $TBL_EXERCICES								= Database::get_course_table(QUIZ_TEST_TABLE);
 $TBL_QUESTIONS								= Database::get_course_table(QUIZ_QUESTION_TABLE);
 $TBL_REPONSES									= Database::get_course_table(QUIZ_ANSWER_TABLE);
-$TBL_DOCUMENT									= Database::get_course_table(DOCUMENT_TABLE);
+$TBL_DOCUMENT									= Database::get_course_table(TABLE_DOCUMENT);
 //$dbTable     = $_course['dbNameGlu']."document";
 $dbTable												= $TBL_DOCUMENT;
 

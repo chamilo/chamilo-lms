@@ -165,7 +165,7 @@ $tbl_course_quiz = 'quiz';
 $course_quiz_question = 'quiz_question';
 $course_quiz_rel_question = 'quiz_rel_question';
 $course_quiz_answer = 'quiz_answer';
-$course_student_publication = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+$course_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 api_display_tool_title($nameTools);
 

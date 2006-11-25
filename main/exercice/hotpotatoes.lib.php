@@ -30,7 +30,7 @@
 ============================================================================== 
 */
 
-	$dbTable     = Database::get_course_table(DOCUMENT_TABLE);
+	$dbTable     = Database::get_course_table(TABLE_DOCUMENT);
 
 /**
  * Creates a hotpotato directory

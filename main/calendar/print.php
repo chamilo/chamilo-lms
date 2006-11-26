@@ -1,7 +1,6 @@
 <?php
-// setting the language file
-$langFile = "agenda";
-
+// name of the language file that needs to be included
+$language_file = 'agenda';
 $id=$_GET['id'];
 
 if(strstr($id,','))

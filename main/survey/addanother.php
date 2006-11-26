@@ -31,7 +31,7 @@
 ==============================================================================
 */
 
-$langFile = 'survey';
+$language_file = 'survey';
 
 require_once ('../inc/global.inc.php');
 //api_protect_admin_script();

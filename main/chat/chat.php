@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 10141 2006-11-23 05:12:52Z gmludo $
+<?php // $Id: chat.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,7 +37,8 @@
 	Init section
 -----------------------------------------------------------
 */
-$langFile='chat';
+// name of the language file that needs to be included
+$language_file='chat';
 include('../inc/global.inc.php');
 
 $this_section=SECTION_COURSES;

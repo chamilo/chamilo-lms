@@ -1,5 +1,5 @@
 <?php 
-// $Id: inbox.php 9859 2006-10-31 11:14:49Z evie_em $
+// $Id: inbox.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,7 +26,8 @@
 		INIT SECTION
 ==============================================================================
 */ 
-$langFile= "messages";
+// name of the language file that needs to be included 
+$language_file= "messages";
 $cidReset=true;
 include('../../main/inc/global.inc.php');
 include('./functions.inc.php');

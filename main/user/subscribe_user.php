@@ -38,7 +38,8 @@
 		INIT SECTION
 ============================================================================== 
 */
-$langFile = 'registration';
+// name of the language file that needs to be included 
+$language_file = 'registration';
 include ("../inc/global.inc.php");
 $this_section = SECTION_COURSES;
 

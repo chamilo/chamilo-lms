@@ -1,5 +1,5 @@
 <?php
-// $Id: course_information.php 10197 2006-11-26 18:45:33Z pcool $
+// $Id: course_information.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -33,7 +33,9 @@
 		INIT SECTION
 ==============================================================================
 */
-$langFile = 'admin';
+
+// name of the language file that needs to be included 
+$language_file = 'admin';
 $cidReset = true;
 require ('../inc/global.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'sortabletable.class.php');

@@ -1,5 +1,6 @@
 <?php
-$langFile = 'survey';
+// name of the language file that needs to be included 
+$language_file = 'survey';
 
 $temp = $_REQUEST['temp'];
 require ('../inc/global.inc.php');

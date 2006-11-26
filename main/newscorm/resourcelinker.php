@@ -38,7 +38,8 @@
 		INIT SECTION
 ==============================================================================
 */
-$langFile = 'resourcelinker';
+// name of the language file that needs to be included 
+$language_file = 'resourcelinker';
 require_once('back_compat.inc.php');
 $this_section=SECTION_COURSES;
 

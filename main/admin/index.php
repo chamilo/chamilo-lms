@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10191 2006-11-24 08:09:14Z pcool $
+<?php // $Id: index.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -28,8 +28,8 @@
 *	@package dokeos.admin
 ==============================================================================
 */
-
-$langFile=array('admin','tracking');
+// name of the language file that needs to be included <br />
+$language_file=array('admin','tracking');
 
 $cidReset=true;
 

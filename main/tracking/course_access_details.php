@@ -40,7 +40,8 @@
 $reqdate = $_REQUEST['reqdate'];
 $period = $_REQUEST['period'];
 $displayType = $_REQUEST['displayType'];
-$langFile = "tracking";
+// name of the language file that needs to be included 
+$language_file = "tracking";
 include('../inc/global.inc.php');
 
 $interbreadcrumb[]= array ("url"=>"courseLog.php", "name"=> get_lang('ToolName'));

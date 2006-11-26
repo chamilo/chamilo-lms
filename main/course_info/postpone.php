@@ -1,4 +1,4 @@
-<?php  // $Id: postpone.php 10190 2006-11-24 00:23:20Z pcool $
+<?php  // $Id: postpone.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -47,7 +47,8 @@
 ==============================================================================
 */ 
 
-$langFile = "postpone";
+// name of the language file that needs to be included 
+$language_file = "postpone";
 //$interbreadcrumb[]= array ("url"=>"index.php", "name"=> get_lang('Admin'));
 $htmlHeadXtra[] = "
 <style type=\"text/css\">

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_edit.php 10191 2006-11-24 08:09:14Z pcool $
+// $Id: course_edit.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,7 +34,9 @@
 		INIT SECTION
 ==============================================================================
 */
-$langFile = 'admin';
+
+// name of the language file that needs to be included 
+$language_file = 'admin';
 $cidReset = true;
 include ('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;

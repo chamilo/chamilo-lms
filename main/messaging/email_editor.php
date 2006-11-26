@@ -26,7 +26,8 @@
  * @author	Yannick Warnier <ywarnier@beeznest.org> 
  */
 
-$langFile = "index";
+// name of the language file that needs to be included 
+$language_file = "index";
 
 include_once("../inc/global.inc.php");
 

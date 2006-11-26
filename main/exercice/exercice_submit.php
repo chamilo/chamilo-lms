@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 10110 2006-11-22 15:20:46Z develop-it $
+<?php // $Id: exercice_submit.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,7 +62,8 @@ define('FREE_ANSWER', 5);
 define('HOT_SPOT', 			6);
 define('HOT_SPOT_ORDER', 	7);
 
-$langFile='exercice';
+// name of the language file that needs to be included 
+$language_file='exercice';
 
 include_once('../inc/global.inc.php');
 $this_section=SECTION_COURSES;

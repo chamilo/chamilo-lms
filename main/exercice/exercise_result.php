@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10197 2006-11-26 18:45:33Z pcool $
+<?php // $Id: exercise_result.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -56,7 +56,8 @@ define('MATCHING',		4);
 define('FREE_ANSWER', 5);
 define('HOT_SPOT', 6);
 global $_cid;
-$langFile='exercice';
+// name of the language file that needs to be included 
+$language_file='exercice';
 
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;

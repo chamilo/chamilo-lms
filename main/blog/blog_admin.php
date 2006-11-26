@@ -30,8 +30,8 @@
 ============================================================================== 
 */
 
-// Init
-$langFile = "blog";
+// name of the language file that needs to be included
+$language_file = "blog";
 
 include('../inc/global.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . "blog.lib.php");

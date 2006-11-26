@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 10191 2006-11-24 08:09:14Z pcool $
+// $Id: copy_course.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -36,7 +36,8 @@
 		INIT SECTION
 ==============================================================================
 */ 
-$langFile = 'coursebackup';
+// name of the language file that needs to be included 
+$language_file = 'coursebackup';
 include ('../inc/global.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 require_once ('classes/CourseBuilder.class.php');

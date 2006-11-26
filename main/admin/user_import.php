@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 10190 2006-11-24 00:23:20Z pcool $
+// $Id: user_import.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -274,8 +274,8 @@ function parse_xml_data($file)
 	xml_parser_free($parser);
 	return $users;
 }
-
-$langFile = array ('admin', 'registration');
+// name of the language file that needs to be included
+$language_file = array ('admin', 'registration');
 
 $cidReset = true;
 include ('../inc/global.inc.php');

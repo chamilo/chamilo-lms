@@ -933,17 +933,17 @@ function get_lang($variable, $notrans = 'DLTT')
 	}
 	if (!is_string($variable))
 		return '[=get_lang(?)=]';
-	global $language_interface, $langFile;
+	global $language_interface, $language_file;
 	//language file specified in tool
-	if (isset ($langFile))
+	if (isset ($language_file))
 	{
-		if (!is_array($langFile))
+		if (!is_array($language_file))
 		{
-			include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$langFile.".inc.php");
+			include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_file.".inc.php");
 		}
 		else
 		{
-			foreach ($langFile as $index => $language_file)
+			foreach ($language_file as $index => $language_file)
 			{
 				include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_file.".inc.php");
 			}
@@ -965,7 +965,7 @@ function get_lang($variable, $notrans = 'DLTT')
 	}
 	if ($notrans != 'DLTT')
 		return '[='.$variable.'=]';
-	return '[='.$variable."=]<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".$langFile.".inc.php&amp;variable=$".$variable."&amp;language=".$language_interface."\" style=\"color:#FF0000\"><strong>#</strong></a>";
+	return '[='.$variable."=]<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".$language_file.".inc.php&amp;variable=$".$variable."&amp;language=".$language_interface."\" style=\"color:#FF0000\"><strong>#</strong></a>";
 }
 
 /*

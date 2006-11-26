@@ -8,9 +8,10 @@
 /**
  * Script
  */
-$langFile[] = "scormdocument";
-$langFile[] = "scorm";
-$langFile[] = "learnpath";
+// name of the language file that needs to be included 
+$language_file[] = "scormdocument";
+$language_file[] = "scorm";
+$language_file[] = "learnpath";
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
 require_once('scorm.class.php');

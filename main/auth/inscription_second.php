@@ -1,4 +1,4 @@
-<?php // $Id: inscription_second.php 10190 2006-11-24 00:23:20Z pcool $ 
+<?php // $Id: inscription_second.php 10204 2006-11-26 20:46:53Z pcool $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -35,8 +35,8 @@
 /*==========================
              INIT
   ==========================*/
-
-$langFile = "registration";
+// name of the language file that needs to be included
+$language_file = "registration";
 require("../inc/global.inc.php");
 
 $TABLEUSER      = Database::get_main_table(TABLE_MAIN_USER);

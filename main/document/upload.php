@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 10195 2006-11-25 15:26:00Z pcool $
+<?php // $Id: upload.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -61,9 +61,9 @@
 ==============================================================================
 */
 
-// name of the language file which needs to be included
-// 'inc.php' is automatically appended to the file name
-$langFile = "document";
+// name of the language file that needs to be included
+$language_file = 'document';
+
 
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)

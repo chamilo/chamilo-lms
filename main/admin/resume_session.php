@@ -33,7 +33,9 @@
 		INIT SECTION
 ==============================================================================
 */
-$langFile = 'admin';
+
+// name of the language file that needs to be included
+$language_file = 'admin';
 $cidReset = true;
 require ('../inc/global.inc.php');
 api_protect_admin_script();

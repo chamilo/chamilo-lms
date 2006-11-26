@@ -28,7 +28,8 @@
 *	@package dokeos.admin
 ==============================================================================
 */
-$langFile='survey';
+// name of the language file that needs to be included 
+$language_file='survey';
 $cidReset=true;
 session_start();
 $_SESSION["user_language_choice"]='english';

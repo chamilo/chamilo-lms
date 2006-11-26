@@ -1,4 +1,4 @@
-<?php // $Id: quota.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: quota.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,9 +36,9 @@
 ==============================================================================
 */ 
 
-// name of the language file which needs to be included 
-// 'inc.php' is automatically appended to the file name 
-$langFile = "document"; 
+// name of the language file that needs to be included
+$language_file = 'document';
+ 
 
 // global settings initialisation 
 // also provides access to main api (inc/lib/main_api.lib.php)

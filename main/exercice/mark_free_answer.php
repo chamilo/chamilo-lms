@@ -46,7 +46,8 @@ define('FILL_IN_BLANKS',	3);
 define('MATCHING',		4);
 define('FREE_ANSWER', 5);
 
-$langFile='exercice';
+// name of the language file that needs to be included 
+$language_file='exercice';
 
 include('../inc/global.inc.php');
 

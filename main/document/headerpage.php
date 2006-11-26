@@ -4,7 +4,9 @@
 *	@package dokeos.document
 ==============================================================================
 */
-	$langFile = "document";
+	// name of the language file that needs to be included 
+$language_file = 'document';
+
 
 	include('../inc/global.inc.php');
 

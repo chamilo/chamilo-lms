@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 10197 2006-11-26 18:45:33Z pcool $
+<?php // $Id: userLog.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,7 +36,8 @@
 */
 $uInfo = $_REQUEST['uInfo'];
 $view = $_REQUEST['view'];
-$langFile = 'tracking';
+// name of the language file that needs to be included 
+$language_file = 'tracking';
 
 include('../inc/global.inc.php');
 

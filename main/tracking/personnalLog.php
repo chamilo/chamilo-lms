@@ -38,7 +38,8 @@
 ==============================================================================
 */
 
-$langFile = "tracking";
+// name of the language file that needs to be included 
+$language_file = "tracking";
 include('../inc/global.inc.php');
 
 $interbreadcrumb[]= array ("url"=>"../auth/profile.php", "name"=> get_lang('ModifyProfile'));

@@ -7,9 +7,10 @@
 /**
  * Script
  */
-$langFile[] = "learnpath";
-$langFile[] = "scormdocument";
-$langFile[] = "scorm";
+// name of the language file that needs to be included 
+$language_file[] = "learnpath";
+$language_file[] = "scormdocument";
+$language_file[] = "scorm";
 
 $show_description_field = false; //for now
 $nameTools = get_lang("Doc");

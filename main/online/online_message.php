@@ -1,4 +1,4 @@
-<?php // $Id: online_message.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: online_message.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -32,7 +32,8 @@
 
 define('FRAME','message');
 
-$langFile='chat';
+// name of the language file that needs to be included 
+$language_file='chat';
 
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;

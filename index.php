@@ -62,7 +62,8 @@ define("SCRIPTVAL_NewEntriesOfTheDayOfLastLogin", 5);
 define("SCRIPTVAL_NoTimeLimit", 6);
 // End 'don't change' section
 
-$langFile = array ('courses', 'index');
+// name of the language file that needs to be included 
+$language_file = array ('courses', 'index');
 $cidReset = true; /* Flag forcing the 'current course' reset,
                    as we're not inside a course anymore  */
 /*

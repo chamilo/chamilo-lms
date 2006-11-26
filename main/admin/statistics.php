@@ -1,4 +1,4 @@
-<?php // $Id: statistics.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: statistics.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -32,8 +32,8 @@
 		INIT SECTION
 ==============================================================================
 */
-
-$langFile='admin';
+// name of the language file that needs to be included
+$language_file='admin';
 $cidReset=true;
 include('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;

@@ -5,7 +5,9 @@
  * @todo variables are sometimes in cammelcase, or even worse a mixture of CammelCase and udnerscoring: $a_userList
  * 
  */
-$langFile = "index";
+ 
+// name of the language file that needs to be included 
+$language_file = "index";
 
 include_once("./main/inc/global.inc.php");
 api_block_anonymous_users();

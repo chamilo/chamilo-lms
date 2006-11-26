@@ -1,4 +1,4 @@
-<?php // $Id: resourcelinker.inc.php 10197 2006-11-26 18:45:33Z pcool $
+<?php // $Id: resourcelinker.inc.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,7 +39,8 @@
 ==============================================================================
 */
 
-#$langFile = "resourcelinker";
+// name of the language file that needs to be included 
+$language_file = "resourcelinker";
 
 include($clarolineRepositorySys.'lang/english/resourcelinker.inc.php');
 include($clarolineRepositorySys.'lang/'.$_course['language'].'/resourcelinker.inc.php');

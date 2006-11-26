@@ -1,5 +1,6 @@
 <?php
-$langFile = array('resourcelinker');
+// name of the language file that needs to be included 
+$language_file = array('resourcelinker');
 include('../../../../../../inc/global.inc.php');
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -22,10 +23,10 @@ include('../../../../../../inc/global.inc.php');
 							<tr>
 							<td valign="top" width="100%">								
 								<span fckLang="DlgMP3URL">URL</span><br>
-								<input id="mpUrl" onblur="updatePreview();" style="WIDTH: 100%" type="text">
+								<input id="mpUrl" onBlur="updatePreview();" style="WIDTH: 100%" type="text">
 							</td>
 							<td id="tdBrowse" valign="bottom" nowrap>
-								<input type="button" fckLang="DlgMP3BtnBrowse" value="Browse Server" onclick="BrowseServer();" id="btnBrowse">
+								<input type="button" fckLang="DlgMP3BtnBrowse" value="Browse Server" onClick="BrowseServer();" id="btnBrowse">
 							</td>
 						</tr>
 						</table>
@@ -46,7 +47,7 @@ include('../../../../../../inc/global.inc.php');
 		$loader = new Loader('frmUpload');
 		$loader->init();
 		?>
-		<form id="frmUpload" name="frmUpload" method="post" target="UploadWindow" enctype="multipart/form-data" action="" onsubmit="return CheckUpload();">
+		<form id="frmUpload" name="frmUpload" method="post" target="UploadWindow" enctype="multipart/form-data" action="" onSubmit="return CheckUpload();">
 			<!--<span id="eUploadMessage">Upload</span>--><br />
 			<table cellspacing="1" cellpadding="1" border="0" width="90%" align="center">
 			<tr><td><input id="txtUploadFile" style="WIDTH: 100%" type="file" size="40" name="NewFile" /></td></tr>

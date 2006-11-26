@@ -25,8 +25,8 @@
 * @package dokeos.statistics
 ==============================================================================
 */
-
-$langFile=array('admin','tracking');
+// name of the language file that needs to be included
+$language_file=array('admin','tracking');
 $cidReset = true;
 
 include('../../inc/global.inc.php');

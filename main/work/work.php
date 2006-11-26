@@ -80,7 +80,8 @@
 ==============================================================================
 */
 
-$langFile = "work";
+// name of the language file that needs to be included 
+$language_file = "work";
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 

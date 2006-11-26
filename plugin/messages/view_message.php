@@ -1,4 +1,4 @@
-<?php // $Id: view_message.php 9930 2006-11-10 08:45:40Z evie_em $
+<?php // $Id: view_message.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,7 +26,8 @@
 =========================================================================5====
 */
 
-$langFile= "messages";
+// name of the language file that needs to be included 
+$language_file= "messages";
 include('../../main/inc/global.inc.php');
 api_block_anonymous_users();
 include('./functions.inc.php');

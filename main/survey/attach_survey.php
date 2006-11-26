@@ -30,7 +30,8 @@
 		INIT SECTION
 ==============================================================================
 */
-$langFile = 'survey';
+// name of the language file that needs to be included 
+$language_file = 'survey';
 
 require_once ('../inc/global.inc.php');
 //api_protect_admin_script();

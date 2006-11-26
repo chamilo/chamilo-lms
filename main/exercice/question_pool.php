@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: question_pool.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,7 +39,8 @@ include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
 
-$langFile='exercice';
+// name of the language file that needs to be included 
+$language_file='exercice';
 
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;

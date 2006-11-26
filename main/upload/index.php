@@ -39,11 +39,10 @@
  * INIT SECTION
 */
 
-// name of the language file which needs to be included
-// 'inc.php' is automatically appended to the file name
-$langFile[] = "document";
-$langFile[] = "scorm";
-$langFile[] = "scormdocument";
+// name of the language file that needs to be included
+$language_file[] = "document";
+$language_file[] = "scorm";
+$language_file[] = "scormdocument";
 
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)

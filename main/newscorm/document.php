@@ -35,7 +35,8 @@
 /**
  * Script
  */
-$langFile = "scormdocument";
+// name of the language file that needs to be included 
+$language_file = "scormdocument";
 
 
 require('back_compat.inc.php');

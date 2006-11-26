@@ -11,9 +11,10 @@
  */
 $debug = 0;
 if($debug>0) error_log('New LP -+- Entered lp_controller.php -+-',0);
-$langFile[] = "scormdocument";
-$langFile[] = "scorm";
-$langFile[] = "learnpath";
+// name of the language file that needs to be included 
+$language_file[] = "scormdocument";
+$language_file[] = "scorm";
+$language_file[] = "learnpath";
 
 //include class definitions before session_start() to ensure availability when touching
 //session vars containing learning paths

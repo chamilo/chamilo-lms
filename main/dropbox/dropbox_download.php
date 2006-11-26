@@ -28,7 +28,8 @@
 */
 // we cannot use dropbox_init.inc.php because this one already outputs data.
 //name of langfile
-$langFile = "dropbox";
+// name of the language file that needs to be included 
+$language_file = "dropbox";
 
 // including the basic Dokeos initialisation file
 require("../inc/global.inc.php");

@@ -1,4 +1,4 @@
-<?php // $Id: toolaccess_details.php 10082 2006-11-21 19:08:15Z pcool $
+<?php // $Id: toolaccess_details.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,7 +41,8 @@
 $tool = $_REQUEST['tool'];
 $period = $_REQUEST['period'];
 $reqDate = $_REQUEST['reqDate'];
-$langFile = "tracking";
+// name of the language file that needs to be included 
+$language_file = "tracking";
 
 include('../inc/global.inc.php');
 

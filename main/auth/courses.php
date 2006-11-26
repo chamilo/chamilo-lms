@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 10197 2006-11-26 18:45:33Z pcool $
+<?php // $Id: courses.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,8 +34,8 @@
 		INIT SECTION
 ==============================================================================
 */
-// including the relevant language file
-$langFile = 'courses';
+// name of the language file that needs to be included
+$language_file = 'courses';
 
 // including the global file
 include('../inc/global.inc.php');

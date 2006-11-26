@@ -4,8 +4,9 @@
  * Created on 30 mai 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
 
-// language file
-$langFile = array ('courses', 'index');
+
+// name of the language file that needs to be included 
+$language_file = array ('courses', 'index');
 
 // including necessary files
 include_once('main/inc/global.inc.php');

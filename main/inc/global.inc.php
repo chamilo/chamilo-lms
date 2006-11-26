@@ -374,15 +374,15 @@ if ($_course['language'])
 $language_files = array();
 $language_files[] = 'trad4all';
 $language_files[] = 'notification';
-if( isset($langFile) )
+if( isset($language_file) )
 {
-	if( !is_array($langFile))
+	if( !is_array($language_file))
 	{
-		$language_files[] = $langFile;
+		$language_files[] = $language_file;
 	}
 	else
 	{
-		$language_files = array_merge($language_files,$langFile);
+		$language_files = array_merge($language_files,$language_file);
 	}
 }
 // Include all files (first english and then current interface language)

@@ -35,7 +35,8 @@
  * Script init
  */
 
-$langFile = "scormdocument";
+// name of the language file that needs to be included 
+$language_file = "scormdocument";
 $uncompress=1; //this variable shouldn't be found here (find its usage before removal)
 
 require_once('back_compat.inc.php');

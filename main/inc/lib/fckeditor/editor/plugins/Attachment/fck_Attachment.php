@@ -1,5 +1,7 @@
 <?php
-$langFile = "document";
+// name of the language file that needs to be included 
+$language_file = 'document';
+
 include('../../../../../../inc/global.inc.php');
 include_once(api_get_path(INCLUDE_PATH)."lib/fileUpload.lib.php");
 include(api_get_path(SYS_CODE_PATH).'document/document.inc.php');

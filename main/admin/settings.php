@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 10191 2006-11-24 08:09:14Z pcool $
+// $Id: settings.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -40,8 +40,8 @@
 		INIT SECTION
 ==============================================================================
 */
-// stating the language file
-$langFile = 'admin';
+// name of the language file that needs to be included
+$language_file = 'admin';
 
 // including some necessary dokeos files
 include_once ('../inc/global.inc.php');

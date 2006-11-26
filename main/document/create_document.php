@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 10195 2006-11-25 15:26:00Z pcool $
+// $Id: create_document.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,7 +38,9 @@
 ==============================================================================
 */
 
-$langFile = "document";
+// name of the language file that needs to be included 
+$language_file = 'document';
+
 
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;

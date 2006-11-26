@@ -28,7 +28,8 @@
 *	@package dokeos.help
 ==============================================================================
 */
-$langFile = 'help';
+// name of the language file that needs to be included 
+$language_file = 'help';
 include ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/Rule/HTML.php');

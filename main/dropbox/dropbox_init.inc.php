@@ -52,7 +52,8 @@
 ==============================================================================
 */ 
 //name of langfile
-$langFile = "dropbox";	
+// name of the language file that needs to be included 
+$language_file = "dropbox";	
 
 //this var disables the link in the breadcrumps on top of the page
 //$noPHP_SELF = TRUE;	

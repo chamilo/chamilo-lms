@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: whoisonline.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,8 +39,9 @@ else
 	$cidReset = true;
 }
 
-// language files
-$langFile = array('index','registration');
+
+// name of the language file that needs to be included 
+$language_file = array('index','registration');
 
 // including necessary files
 require_once('./main/inc/global.inc.php');

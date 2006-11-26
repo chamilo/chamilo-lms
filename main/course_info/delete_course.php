@@ -1,5 +1,5 @@
 <?php
-// $Id: delete_course.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: delete_course.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -33,8 +33,8 @@
 *	@package dokeos.course_info
 ==============================================================================
 */
-
-$langFile = 'course_info';
+// name of the language file that needs to be included
+$language_file = 'course_info';
 
 include ('../inc/global.inc.php');
 include (api_get_path(LIBRARY_PATH).'course.lib.php');

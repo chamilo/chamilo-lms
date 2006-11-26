@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 10197 2006-11-26 18:45:33Z pcool $
+// $Id: infocours.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -44,7 +44,8 @@
 	   INIT SECTION
 ==============================================================================
 */
-$langFile = array ('create_course', 'course_info');
+// name of the language file that needs to be included
+$language_file = array ('create_course', 'course_info');
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
 

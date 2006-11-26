@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 10197 2006-11-26 18:45:33Z pcool $
+<?php //$Id: agenda.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,8 +26,8 @@
 	   INIT SECTION
 ============================================================================== 
 */
-// setting the language file
-$langFile = 'agenda';
+// name of the language file that needs to be included
+$language_file = 'agenda';
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
 include('../inc/global.inc.php');

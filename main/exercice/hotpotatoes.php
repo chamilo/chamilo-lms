@@ -34,7 +34,8 @@ $finish 		= (!empty($_POST['finish'])?$_POST['finish']:0);
 $imgcount		= (!empty($_POST['imgcount'])?$_POST['imgcount']:null);
 $fld					= (!empty($_POST['fld'])?$_POST['fld']:null);
 
-$langFile='exercice';
+// name of the language file that needs to be included 
+$language_file ='exercice';
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 

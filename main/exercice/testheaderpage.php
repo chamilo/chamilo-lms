@@ -29,7 +29,8 @@
 *	@package dokeos.exercise
 ============================================================================== 
 */
-	$langFile='exercice';
+	// name of the language file that needs to be included 
+$language_file='exercice';
 	include('../inc/global.inc.php');
 	
 	require_once($_configuration['root_sys'].'main/exercice/hotpotatoes.lib.php'); 

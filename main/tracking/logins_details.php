@@ -48,7 +48,8 @@ if(!isset($_REQUEST['view']))
 else
 	$view = $_REQUEST['view'];
 
-$langFile = "tracking";
+// name of the language file that needs to be included 
+$language_file = "tracking";
 include('../inc/global.inc.php');
 
 $interbreadcrumb[]= array ("url"=>"../user/user.php", "name"=> get_lang('Users'));

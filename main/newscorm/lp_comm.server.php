@@ -9,7 +9,8 @@
 /**
  * Script
  */
-$langFile[] = 'learnpath';
+// name of the language file that needs to be included 
+$language_file[] = 'learnpath';
 require_once('back_compat.inc.php');
 /**
  * Backup an item's values into the javascript API as "old" values (so we still have them at hand)

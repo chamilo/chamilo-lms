@@ -35,7 +35,8 @@
 	INIT
 ==============================================================================
 */
-$langFile = "blog";
+// name of the language file that needs to be included
+$language_file = "blog";
 $blog_id = intval($_GET['blog_id']);
 
 include ('../inc/global.inc.php');

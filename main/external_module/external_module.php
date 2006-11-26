@@ -36,7 +36,8 @@
 ==============================================================================
 */
 
-$langFile='external_module';
+// name of the language file that needs to be included 
+$language_file='external_module';
 
 $iconForImportedTools='external.gif';
 $iconForInactiveImportedTools='external_inactive.gif';

@@ -4,7 +4,8 @@
 /*
  * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
-$langFile = array ('admin','create_course', 'course_info', 'coursebackup');
+// name of the language file that needs to be included 
+$language_file = array ('admin','create_course', 'course_info', 'coursebackup');
 
 require ('../inc/global.inc.php');
 

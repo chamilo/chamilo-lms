@@ -1,5 +1,5 @@
 <?php
-// $Id: class_list.php 10191 2006-11-24 08:09:14Z pcool $
+// $Id: class_list.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,9 @@
 *	@package dokeos.admin
 ==============================================================================
 */
-$langFile = 'admin';
+
+// name of the language file that needs to be included 
+$language_file = 'admin';
 $cidReset = true;
 require ('../inc/global.inc.php');
 $this_section = SECTION_PLATFORM_ADMIN;

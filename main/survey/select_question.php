@@ -5,7 +5,8 @@ if(isset($_POST['add_question']))
 	$surveyid=$_REQUEST['surveyid'];
 	$cidReq=$_REQUEST['cidReq'];
 	$curr_dbname = $_REQUEST['curr_dbname'];
-	$langFile = 'survey';
+	// name of the language file that needs to be included 
+$language_file = 'survey';
 	require_once ('../inc/global.inc.php');
     $add_question=$_REQUEST['add_question'];
 	switch ($_POST['add_question'])

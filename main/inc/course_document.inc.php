@@ -5,7 +5,8 @@ include_once('global.inc.php');
 		INIT SECTION
 ==============================================================================
 */
-$langFile = 'document';
+// name of the language file that needs to be included 
+$language_file = 'document';
 include(api_get_path(SYS_CODE_PATH).'document/document.inc.php');
 api_protect_course_script();
 

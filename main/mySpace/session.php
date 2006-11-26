@@ -4,7 +4,8 @@
  */
 ob_start();
  $nameTools= 'Sessions';
- $langFile = array ('registration', 'index','trad4all','tracking');
+ // name of the language file that needs to be included 
+$language_file = array ('registration', 'index','trad4all','tracking');
  $cidReset=true;
  require ('../inc/global.inc.php');
  

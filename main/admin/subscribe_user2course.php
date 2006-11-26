@@ -1,5 +1,5 @@
 <?php
-// $Id: subscribe_user2course.php 10190 2006-11-24 00:23:20Z pcool $
+// $Id: subscribe_user2course.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,8 +39,8 @@
 		INIT SECTION
 ==============================================================================
 */
-
-$langFile = 'admin';
+// name of the language file that needs to be included
+$language_file = 'admin';
 
 $cidReset = true;
 

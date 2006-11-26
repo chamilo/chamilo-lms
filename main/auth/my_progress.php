@@ -1,5 +1,6 @@
 <?php
-$langFile = array('registration','tracking');
+// name of the language file that needs to be included
+$language_file = array('registration','tracking');
 
 $cidReset = true;
 

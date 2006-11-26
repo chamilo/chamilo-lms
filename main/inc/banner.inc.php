@@ -50,7 +50,7 @@ if (isset ($_cid))
 	}
 	echo "</a></div>";
 }
-elseif (isset ($nameTools) && $langFile != 'course_home')
+elseif (isset ($nameTools) && $language_file != 'course_home')
 {
 	//Put the name of the user-tools in the header
 	if (!isset ($_user['user_id']))
@@ -318,7 +318,7 @@ if (is_array($interbreadcrumb))
 }
 // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
 // is the same as the first part of the breadcrumbs (see part 1)
-if (isset ($nameTools) AND $langFile<>"course_home")
+if (isset ($nameTools) AND $language_file<>"course_home")
 {
 	$navigation_item['url'] = '#';
 	$navigation_item['title'] = $nameTools;

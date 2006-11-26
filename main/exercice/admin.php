@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 9972 2006-11-14 14:44:37Z pcool $
+<?php // $Id: admin.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,7 +76,8 @@ include('answer.class.php');
 
 
 
-$langFile='exercice';
+// name of the language file that needs to be included 
+$language_file='exercice';
 
 include("../inc/global.inc.php");
 include('exercise.lib.php');

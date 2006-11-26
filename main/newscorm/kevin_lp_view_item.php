@@ -41,10 +41,6 @@
 ==============================================================================
 */ 
 
-// setting the language file
-//$langFile = "learnpath";
-
-//require_once('back_compat.inc.php');
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();
@@ -61,7 +57,8 @@ include('learnpath_functions.inc.php');
 //include('../resourcelinker/resourcelinker.inc.php');
 include('resourcelinker.inc.php');
 //rewrite the language file, sadly overwritten by resourcelinker.inc.php
-$langFile = "learnpath";
+// name of the language file that needs to be included 
+$language_file = "learnpath";
 
 /*
 -----------------------------------------------------------

@@ -7,8 +7,6 @@
 /**
  * Script initialisations
  */
-//$langFile = "scormdocument";
-
 require_once('back_compat.inc.php');
 $course_dir  = api_get_course_path().'/scorm';
 $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_dir;

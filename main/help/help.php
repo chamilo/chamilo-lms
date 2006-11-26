@@ -30,7 +30,8 @@
 *	@package dokeos.help
 ==============================================================================
 */
-$langFile='help';
+// name of the language file that needs to be included 
+$language_file='help';
 $helpName=$_GET['open'];
 include('../inc/global.inc.php');
 $language_code = Database::get_language_isocode($language_interface);

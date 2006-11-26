@@ -1,5 +1,6 @@
 <?php 
-$langFile='survey';
+// name of the language file that needs to be included 
+$language_file='survey';
 $cidReset=true;
 require_once ('../inc/global.inc.php');
 //api_protect_admin_script();

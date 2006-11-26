@@ -35,7 +35,8 @@
        DOKEOS INIT SETTINGS
 ===============================================================================
 */
-$langFile = "group";
+// name of the language file that needs to be included 
+$language_file = "group";
 require_once ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
 

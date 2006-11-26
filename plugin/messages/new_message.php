@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 10175 2006-11-23 13:25:10Z evie_em $
+<?php // $Id: new_message.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -33,7 +33,8 @@
 		INIT SECTION
 ==============================================================================
 */ 
-$langFile= "messages";
+// name of the language file that needs to be included 
+$language_file= "messages";
 $cidReset=true;
 include_once('../../main/inc/global.inc.php');
 echo $_SESSION['prueba'];

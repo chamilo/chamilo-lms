@@ -36,7 +36,8 @@ if (LFN != 'md_' . strtolower(TYPE))     $urlp .= '&lfn=' . urlencode(LFN);
 if (HTT != 'mds_' . strtolower(TYPE))    $urlp .= '&htt=' . urlencode(HTT);
 if (DBG)                     $urlp .= '&dbg=' . urlencode(DBG);
 
-$langFile = LFN; require("../inc/global.inc.php");
+// name of the language file that needs to be included 
+$language_file = LFN; require("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 
 $nameTools = get_lang('Tool');

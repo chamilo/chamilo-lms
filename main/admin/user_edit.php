@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: user_edit.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,8 +27,8 @@
 *	@package dokeos.admin
 ==============================================================================
 */
-
-$langFile=array('admin','registration');
+// name of the language file that needs to be included
+$language_file=array('admin','registration');
 $cidReset=true;
 include('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;

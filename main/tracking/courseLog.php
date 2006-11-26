@@ -39,7 +39,8 @@
 ==============================================================================
 */
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
-$langFile = "tracking";
+// name of the language file that needs to be included 
+$language_file = "tracking";
 
 include('../inc/global.inc.php');
 //includes for SCORM and LP

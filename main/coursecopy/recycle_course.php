@@ -1,4 +1,4 @@
-<?php // $Id: recycle_course.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: recycle_course.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -35,7 +35,8 @@
 		INIT SECTION
 ==============================================================================
 */ 
-$langFile = 'coursebackup';
+// name of the language file that needs to be included 
+$language_file = 'coursebackup';
 include ('../inc/global.inc.php');
 $nameTools = get_lang('RecycleCourse');
 Display::display_header($nameTools);

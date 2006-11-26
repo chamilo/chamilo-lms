@@ -156,8 +156,8 @@ function parse_csv_data($file)
 	$courses = Import :: csv_to_array($file);
 	return $courses;
 }
-
-$langFile = array ('admin', 'registration');
+// name of the language file that needs to be included 
+$language_file = array ('admin', 'registration');
 
 $cidReset = true;
 

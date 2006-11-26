@@ -5,7 +5,8 @@ include('answer.class.php');
 
 include('exercise.lib.php');
 
-$langFile='exercice';
+// name of the language file that needs to be included 
+$language_file='exercice';
 
 include("../inc/global.inc.php");
 $this_section=SECTION_COURSES;

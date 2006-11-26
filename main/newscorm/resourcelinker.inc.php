@@ -39,7 +39,7 @@
 ==============================================================================
 */
 
-#$langFile = "resourcelinker";
+#$language_file = "resourcelinker";
 
 require_once('back_compat.inc.php');
 include(api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php');

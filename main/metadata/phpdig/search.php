@@ -27,7 +27,8 @@ If you modify code and redistribute, you may ADD your copyright to this notice.
 ============================================================================== 
 */
 
-$langFile = "md_mix";
+// name of the language file that needs to be included 
+$language_file = "md_mix";
 include('../../../main/inc/global.inc.php');
 if (! $is_allowed_in_course) api_not_allowed();
 	

@@ -1,7 +1,8 @@
 <?php
-// including the relevant language file
-$langFile = "agenda";
-// including the claroline global 
+// name of the language file that needs to be included
+$language_file = 'agenda'; 
+
+// including the global 
 include('../inc/claro_init_global.inc.php');
 
 // the variables for the days and the months
@@ -123,7 +124,7 @@ foreach($DaysShort as $index => $day)
 //-->
 </script>
 </head>
-<body onload="initCalendar();">
+<body onLoad="initCalendar();">
 <div id="calendar_data"></div>
 <div id="clock_data"></div>
 </body>

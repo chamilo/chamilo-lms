@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 10195 2006-11-25 15:26:00Z pcool $
+<?php // $Id: course_home.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -71,8 +71,8 @@ if(!isset($cidReq))
 // is this needed?????
 $section = "course";
 
-// The langauge file
-$langFile = "course_home";
+// name of the language file that needs to be included
+$language_file = "course_home";
 
 // inlcuding the global file
 include('../../main/inc/global.inc.php');

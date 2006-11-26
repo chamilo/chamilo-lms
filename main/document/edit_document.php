@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 10195 2006-11-25 15:26:00Z pcool $
+<?php // $Id: edit_document.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -56,7 +56,9 @@
 ==============================================================================
 */
 
-$langFile = "document";
+// name of the language file that needs to be included 
+$language_file = 'document';
+
 
 /*
 ------------------------------------------------------------------------------
@@ -91,7 +93,9 @@ $baseServUrl = $_configuration['url_append']."/";
 $courseDir   = $_course['path']."/document";
 $baseWorkDir = $baseServDir.$courseDir;
 $group_document = false;
-$langFile = "document";
+// name of the language file that needs to be included 
+$language_file = 'document';
+
 $use_document_title = (get_setting('use_document_title')=='true')?true:false;
 $noPHP_SELF=true;
 

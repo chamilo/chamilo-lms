@@ -28,7 +28,8 @@
 *	@package dokeos.admin
 ============================================================================== 
 */
-$langFile = 'admin';
+// name of the language file that needs to be included 
+$language_file = 'admin';
 
 require ('../inc/global.inc.php');
 api_protect_admin_script();

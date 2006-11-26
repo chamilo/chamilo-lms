@@ -45,7 +45,8 @@
 		INIT SECTION
 ==============================================================================
 */
-$langFile = "link";
+// name of the language file that needs to be included 
+$language_file = "link";
 include("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 

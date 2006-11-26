@@ -29,7 +29,8 @@
 ==============================================================================
 */
 
-$langFile='survey_answer';
+// name of the language file that needs to be included 
+$language_file='survey_answer';
 $cidReset=true;
 session_start();
 $lang = $_REQUEST['lang'];

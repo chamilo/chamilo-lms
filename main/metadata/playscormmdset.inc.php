@@ -49,7 +49,8 @@ if (HTT != 'mdp_' . strtolower(EID_TYPE))   $urlp .= '&lfn=' . urlencode(HTT);
 if (WHF != '0')                             $urlp .= '&whf=' . urlencode(WHF);
 if (RNG != '*')                             $urlp .= '&rng=' . urlencode(RNG);
 
-$langFile = LFN;
+// name of the language file that needs to be included 
+$language_file = LFN;
 require($drs . 'main/inc/global.inc.php');
 $nameTools = get_lang('Tool');
 

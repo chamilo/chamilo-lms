@@ -23,12 +23,13 @@ define('OF_EID_TYPE', "eid LIKE '" . EID_TYPE . ".%'");
 
 require('md_' . strtolower(EID_TYPE) . '.php');
 
-$langFile = 'md_' . strtolower(EID_TYPE);
+// name of the language file that needs to be included 
+$language_file = 'md_' . strtolower(EID_TYPE);
 include('../inc/global.inc.php');
 $nameTools = get_lang('Tool');
 
 ($nameTools && get_lang('Sorry')) or give_up( 
-    'Language file ' . $langFile . " doesn't define 'Tool' and 'Sorry'");
+    'Language file ' . $language_file . " doesn't define 'Tool' and 'Sorry'");
 
 $_course = api_get_course_info(); isset($_course) or give_up(get_lang('Sorry'));
 

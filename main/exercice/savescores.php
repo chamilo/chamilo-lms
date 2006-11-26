@@ -29,7 +29,8 @@
 *	@package dokeos.exercise
 ============================================================================== 
 */
-$langFile = 'learnpath';
+// name of the language file that needs to be included 
+$language_file = 'learnpath';
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 

@@ -43,7 +43,8 @@
 */
 $editMainUserInfo = $_REQUEST['editMainUserInfo'];
 $uInfo = intval($_REQUEST['uInfo']);
-$langFile = array ('registration', 'userInfo');
+// name of the language file that needs to be included 
+$language_file = array ('registration', 'userInfo');
 
 include ("../inc/global.inc.php");
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');

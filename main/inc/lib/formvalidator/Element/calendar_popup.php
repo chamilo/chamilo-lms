@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar_popup.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: calendar_popup.php 10204 2006-11-26 20:46:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -22,7 +22,8 @@
 ==============================================================================
 */
 // including the relevant language file
-$langFile = "agenda";
+// name of the language file that needs to be included 
+$language_file = 'agenda';
 // including the claroline global 
 require ('../../../global.inc.php');
 

@@ -15,7 +15,7 @@ if ($_POST['StoreRolePermissions'])
 {
 	if (!empty($_POST['role_name']))
 	{
-		$table_role=Database::get_course_table(ROLE_TABLE);
+		$table_role=Database::get_course_table(TABLE_ROLE);
 		$sql="INSERT INTO $table_role (role_name, role_comment, default_role) 
 					VALUES ('".mysql_real_escape_string($_POST['role_name'])."','".mysql_real_escape_string($_POST['role_comment'])."','".mysql_real_escape_string($_POST['default_role'])."')";
 		$result=mysql_query($sql) or die(mysql_error());
@@ -40,22 +40,22 @@ if (isset($_GET['action']) AND isset($_GET['permission']) AND isset($_GET['tool'
 if (isset($_GET['action']) AND isset($_GET['role_id']) AND $_GET['action']=='delete')
 {
 	//deleting the assignments fo this role: users
-	$table=Database::get_course_table(ROLE_USER_TABLE);
+	$table=Database::get_course_table(TABLE_ROLE_USER);
 	$sql="DELETE FROM $table WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
 	
 	// deleting the assignments of this role: groups
-	$table=Database::get_course_table(ROLE_GROUP_TABLE);
+	$table=Database::get_course_table(TABLE_ROLE_GROUP);
 	$sql="DELETE FROM $table WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
 	
 	// deleting the permissions of this role
-	$table=Database::get_course_table(ROLE_PERMISSION_TABLE);
+	$table=Database::get_course_table(TABLE_ROLE_PERMISSION);
 	$sql="DELETE FROM $table WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
 	
 	// deleting the role
-	$table_role=Database::get_course_table(ROLE_TABLE);
+	$table_role=Database::get_course_table(TABLE_ROLE);
 	$sql="DELETE FROM $table_role WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
 	

@@ -184,7 +184,7 @@ class Statistics
 	 */
 	function print_login_stats($type)
 	{
-		$table = Database::get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 		switch($type)
 		{
 			case 'month':
@@ -214,7 +214,7 @@ class Statistics
 	function print_recent_login_stats()
 	{
 		$total_logins = array();
-		$table = Database::get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 		$sql[get_lang('Thisday')] = "SELECT count(login_user_id) AS number FROM $table WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW()";
 		$sql[get_lang('Last7days')] = "SELECT count(login_user_id) AS number  FROM $table WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW()";
 		$sql[get_lang('Last31days')] = "SELECT count(login_user_id) AS number  FROM $table WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW()";
@@ -232,7 +232,7 @@ class Statistics
 	 */
 	function print_tool_stats()
 	{
-		$table = Database::get_statistic_table(STATISTIC_TRACK_E_ACCESS_TABLE);
+		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 		$tools = array('announcement','assignment','calendar_event','chat','conference','course_description','document','dropbox','group','learnpath','link','quiz','student_publication','user','bb_forum');
 		$sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM $table WHERE access_tool IN ('".implode("','",$tools)."') GROUP BY access_tool ";
 		$res = api_sql_query($sql,__FILE__,__LINE__);

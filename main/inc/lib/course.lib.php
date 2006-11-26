@@ -249,15 +249,15 @@ class CourseManager
 		$sql = "SELECT * FROM $table_course WHERE code = '".$course_code."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$course = mysql_fetch_object($res);
-		$table_group = Database :: get_course_table(GROUP_USER_TABLE, $course->db_name);
+		$table_group = Database :: get_course_table(TABLE_GROUP_USER, $course->db_name);
 		$sql = "DELETE FROM $table_group WHERE user_id IN (".$user_ids.")";
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		// Unsubscribe user from all blogs in the course
-		$table_blog_user = Database::get_course_table(BLOGS_REL_USER_TABLE, $course->db_name);
+		$table_blog_user = Database::get_course_table(TABLE_BLOGS_REL_USER, $course->db_name);
 		$sql = "DELETE FROM  ".$table_blog_user." WHERE user_id IN (".$user_ids.")";
 		api_sql_query($sql,__FILE__,__LINE__);
-		$table_blogtask_user = Database::get_course_table(BLOGS_TASKS_REL_USER, $course->db_name);
+		$table_blogtask_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER, $course->db_name);
 		$sql = "DELETE FROM  ".$table_blogtask_user." WHERE user_id IN (".$user_ids.")";
 		api_sql_query($sql,__FILE__,__LINE__);
 
@@ -1084,7 +1084,7 @@ class CourseManager
 		$course_info = Database :: get_course_info($course_code);
 		$database_name = $course_info['db_name'];
 		$group_table = Database :: get_course_table(TABLE_GROUP, $database_name);
-		$group_user_table = Database :: get_course_table(GROUP_USER_TABLE, $database_name);
+		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $database_name);
 
 		$sql = "SELECT g.id, g.name, COUNT(gu.id) userNb
 								FROM $group_table AS g LEFT JOIN $group_user_table gu

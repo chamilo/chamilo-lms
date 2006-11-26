@@ -38,7 +38,7 @@ include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
 $tbl_user=Database::get_main_table(TABLE_MAIN_USER);
-$tbl_online_connected=Database::get_course_table(ONLINE_CONNECTED_TABLE);
+$tbl_online_connected=Database::get_course_table(TABLE_ONLINE_CONNECTED);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=api_sql_query($query,__FILE__,__LINE__);

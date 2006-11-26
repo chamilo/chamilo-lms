@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10191 2006-11-24 08:09:14Z pcool $
+<?php // $Id: exercise_result.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -72,7 +72,7 @@ $TABLETRACK_EXERCICES 	= $_configuration['statistics_database']."`.`track_e_exer
 $TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt"; 
 $main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$table_ans 				= Database :: get_course_table(QUIZ_ANSWER_TABLE);
+$table_ans 				= Database :: get_course_table(TABLE_QUIZ_ANSWER);
 					
 //temp values to move to AWACS
 $dsp_percent = false; //false to display total score as absolute values

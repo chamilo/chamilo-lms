@@ -332,7 +332,7 @@ else
 {
 	$task_id = 0;
 
-	$tbl_blogs_tasks_rel_user = Database :: get_course_table(BLOGS_TASKS_REL_USER);
+	$tbl_blogs_tasks_rel_user = Database :: get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 
 	$sql = "
 							SELECT COUNT(*) as `number`

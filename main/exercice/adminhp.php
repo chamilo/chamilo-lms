@@ -1,4 +1,4 @@
-<?php // $Id: adminhp.php 10195 2006-11-25 15:26:00Z pcool $
+<?php // $Id: adminhp.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,19 +74,13 @@ $audioPath=$documentPath.'/audio';
 
 
 
-// tables used in the exercise tool
-//$TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_test_question';
-//$TBL_EXERCICES         = $_course['dbNameGlu'].'quiz_test';
-//$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
-//$TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
-//$TBL_DOCUMENT          = $_course['dbNameGlu']."document";
-$TBL_EXERCICE_QUESTION		= Database::get_course_table(QUIZ_TEST_QUESTION_TABLE);
-$TBL_EXERCICES								= Database::get_course_table(QUIZ_TEST_TABLE);
-$TBL_QUESTIONS								= Database::get_course_table(QUIZ_QUESTION_TABLE);
-$TBL_REPONSES									= Database::get_course_table(QUIZ_ANSWER_TABLE);
-$TBL_DOCUMENT									= Database::get_course_table(TABLE_DOCUMENT);
-//$dbTable     = $_course['dbNameGlu']."document";
-$dbTable												= $TBL_DOCUMENT;
+// Database table definitions
+$TBL_EXERCICE_QUESTION		= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCICES				= Database::get_course_table(TABLE_QUIZ_TEST);
+$TBL_QUESTIONS				= Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES				= Database::get_course_table(TABLE_QUIZ_ANSWER);
+$TBL_DOCUMENT				= Database::get_course_table(TABLE_DOCUMENT);
+$dbTable					= $TBL_DOCUMENT;
 
 if(!$is_allowedToEdit)
 {

@@ -428,7 +428,7 @@ function api_get_course_path()
  */
 function api_get_course_setting($setting_name)
 {
-	$table = Database::get_course_table(COURSE_SETTING_TABLE);
+	$table = Database::get_course_table(TABLE_COURSE_SETTING);
 	$setting_name = mysql_real_escape_string($setting_name);
 	$sql = "SELECT * FROM $table WHERE variable = '$setting_name'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);

@@ -60,9 +60,9 @@ include ('resourcelinker.inc.php');
 $link_table = Database :: get_course_table(TABLE_LINK);
 $item_property_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-//$tbl_learnpath_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE);
-//$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
-//$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
+//$tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
+//$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
+//$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
 $tbl_lp = Database::get_course_table('lp');
 $tbl_lp_item = Database::get_course_table('lp_item');
 
@@ -313,7 +313,7 @@ if ($add)
 					case 'Exercise':
 						$addedresource_item = TOOL_QUIZ;
 						//get title from tool-type table
-						$tooltable = Database::get_course_table(QUIZ_TEST_TABLE);
+						$tooltable = Database::get_course_table(TABLE_QUIZ_TEST);
 						$result = api_sql_query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i],__FILE__,__LINE__);
 						$myrow=mysql_fetch_array($result);
 						$title = $myrow['title'];
@@ -967,7 +967,7 @@ if ($content == "Link")
 */
 if (($content == "Exercise") or ($content == "HotPotatoes"))
 {
-	$TBL_EXERCICES = Database::get_course_table(QUIZ_TEST_TABLE);
+	$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 	$result = api_sql_query("SELECT * FROM ".$TBL_EXERCICES." WHERE active='1' ORDER BY id ASC");
 	while ($myrow = mysql_fetch_array($result))
 	{

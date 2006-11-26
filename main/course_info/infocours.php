@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 10195 2006-11-25 15:26:00Z pcool $
+// $Id: infocours.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -72,7 +72,7 @@ $TABLEBBCONFIG 				= Database :: get_course_table(TOOL_FORUM_CONFIG_TABLE);
 $currentCourseID 			= $_course['sysCode'];
 $currentCourseRepository 	= $_course["path"];
 $is_allowedToEdit 			= $is_courseAdmin;
-$course_setting_table 		= Database::get_course_table(COURSE_SETTING_TABLE);
+$course_setting_table 		= Database::get_course_table(TABLE_COURSE_SETTING);
 /*
 ==============================================================================
 		LOGIC FUNCTIONS
@@ -219,7 +219,7 @@ if ($form->validate() && is_settings_editable())
 									WHERE code = '".$course_code."'";
 	api_sql_query($sql, __FILE__, __LINE__);
 	//update course_settings table
-	$table_course_setting = Database::get_course_table(COURSE_SETTING_TABLE);
+	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
 	if($update_values['email_alert_manager_on_new_doc'] != $values['email_alert_manager_on_new_doc']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_manager_on_new_doc']." WHERE variable = 'email_alert_manager_on_new_doc'' ";
 		api_sql_query($sql,__FILE__,__LINE__);

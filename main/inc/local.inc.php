@@ -486,7 +486,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
             api_session_register('_course');
 
             //We add a new record in the course tracking table
-            $course_tracking_table = Database :: get_statistic_table(STATISTIC_TRACK_E_COURSE_ACCESS_TABLE);        
+            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);        
 
             $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
 					"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
@@ -529,7 +529,7 @@ else // continue with the previous values
 		$_cid 		= $_SESSION['_cid'   ];
    		$_course    = $_SESSION['_course'];
 
-   		$course_tracking_table = Database :: get_statistic_table(STATISTIC_TRACK_E_COURSE_ACCESS_TABLE);
+   		$course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
    		//We select the last record for the current course in the course tracking table
    		$sql="SELECT course_access_id FROM $course_tracking_table WHERE user_id='".$_user ['user_id']."' ORDER BY login_course_date DESC LIMIT 0,1";

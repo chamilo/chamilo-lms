@@ -59,7 +59,7 @@ include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php'); //necessary for 
 //Create default category if it doesn't exist when group categories aren't allowed
 if( api_get_setting('allow_group_categories') == 'false')
 {
-	$cat_table = Database::get_course_table(GROUP_CATEGORY_TABLE);
+	$cat_table = Database::get_course_table(TABLE_GROUP_CATEGORY);
 	$sql = "SELECT * FROM $cat_table WHERE id = '".DEFAULT_GROUP_CATEGORY."'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$num = mysql_num_rows($res);

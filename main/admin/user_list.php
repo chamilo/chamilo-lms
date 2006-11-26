@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 10190 2006-11-24 00:23:20Z pcool $
+// $Id: user_list.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -54,7 +54,7 @@ function login_user($user_id)
 
 	$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-	$track_e_login_table = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+	$track_e_login_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 	//logic --------------------------------------------------------------------
 	//unset($_user['user_id']); // uid not in session ? prevent any hacking

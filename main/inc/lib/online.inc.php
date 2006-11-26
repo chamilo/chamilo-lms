@@ -43,7 +43,7 @@ function LoginCheck($uid,$statistics_database)
 {
 	global $_course;
 	
-	$online_table = Database::get_statistic_table(STATISTIC_TRACK_E_ONLINE_TABLE);
+	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	if ($uid!="")
 	{
 		LoginDelete($uid,$statistics_database);
@@ -74,7 +74,7 @@ function LoginCheck($uid,$statistics_database)
  */
 function LoginDelete($user_id)
 {
-	$online_table = Database::get_statistic_table(STATISTIC_TRACK_E_ONLINE_TABLE);
+	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".mysql_real_escape_string($user_id)."'";
 	@api_sql_query($query,__FILE__,__LINE__);
 }
@@ -84,7 +84,7 @@ function LoginDelete($user_id)
 */
 function WhoIsOnline($uid,$statistics_database,$valid)
 {				
-	$track_online_table = Database::get_statistic_table(STATISTIC_TRACK_E_ONLINE_TABLE);
+	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW()  ";	
 	$result = @api_sql_query($query,__FILE__,__LINE__);							
 	if (count($result)>0)
@@ -246,7 +246,7 @@ function chatcall() {
 */
 function who_is_online_in_this_course($uid, $valid, $coursecode)
 {				
-	$track_online_table = Database::get_statistic_table(STATISTIC_TRACK_E_ONLINE_TABLE);
+	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";	
 	$result = api_sql_query($query,__FILE__,__LINE__);							
 	if (count($result)>0)

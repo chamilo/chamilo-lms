@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 10195 2006-11-25 15:26:00Z pcool $
+// $Id: CourseRestorer.class.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -136,7 +136,7 @@ class CourseRestorer
 			}
 		}
 		// Restore the linked-resources
-		$table = Database :: get_course_table(LINKED_RESOURCES_TABLE, $this->course->destination_db);
+		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES, $this->course->destination_db);
 		foreach ($this->course->resources as $type => $resources)
 		{
 			foreach ($resources as $id => $resource)
@@ -544,8 +544,8 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_QUIZ))
 		{
-			$table_qui = Database :: get_course_table(QUIZ_TEST_TABLE, $this->course->destination_db);
-			$table_rel = Database :: get_course_table(QUIZ_TEST_QUESTION_TABLE, $this->course->destination_db);
+			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST, $this->course->destination_db);
+			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION, $this->course->destination_db);
 			$table_doc = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz)
@@ -590,8 +590,8 @@ class CourseRestorer
 			{
 				return $question->destination_id;
 			}
-			$table_que = Database :: get_course_table(QUIZ_QUESTION_TABLE, $this->course->destination_db);
-			$table_ans = Database :: get_course_table(QUIZ_ANSWER_TABLE, $this->course->destination_db);
+			$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION, $this->course->destination_db);
+			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER, $this->course->destination_db);
 			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."'";
 			api_sql_query($sql, __FILE__, __LINE__);
 			$new_id = mysql_insert_id();
@@ -612,10 +612,10 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_LEARNPATH))
 		{
-			$table_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE, $this->course->destination_db);
-			$table_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE, $this->course->destination_db);
-			$table_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE, $this->course->destination_db);
-			$table_tool = Database::get_course_table(TABLE_TOOL_LIST, $this->course->destination_db);
+			$table_main 	= Database :: get_course_table(TABLE_LEARNPATH_MAIN, $this->course->destination_db);
+			$table_chapter 	= Database :: get_course_table(TABLE_LEARNPATH_CHAPTER, $this->course->destination_db);
+			$table_item 	= Database :: get_course_table(TABLE_LEARNPATH_ITEM, $this->course->destination_db);
+			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST, $this->course->destination_db);
 
 			$resources = $this->course->resources;
 			$prereq_old = array ();

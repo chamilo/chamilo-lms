@@ -1146,7 +1146,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 	global $added_resources; 
 	
 	$table_users = Database :: get_main_table(TABLE_MAIN_USER);
-	$table_added_resources = Database::get_course_table(LINKED_RESOURCES_TABLE);
+	$table_added_resources = Database::get_course_table(TABLE_LINKED_RESOURCES);
 	
 	
 	$post_counter=0;
@@ -1217,7 +1217,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 */
 function get_added_resources()
 {
-	$table_added_resources = Database::get_course_table(LINKED_RESOURCES_TABLE);
+	$table_added_resources = Database::get_course_table(TABLE_LINKED_RESOURCES);
 	$return_array=array();
 
 	// TODO: now we also migrate the added resources. 

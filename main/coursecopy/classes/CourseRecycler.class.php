@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseRecycler.class.php 10195 2006-11-25 15:26:00Z pcool $
+// $Id: CourseRecycler.class.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -52,7 +52,7 @@ class CourseRecycler
 	 */
 	function recycle()
 	{
-		$table_linked_resources = Database :: get_course_table(LINKED_RESOURCES_TABLE, $this->course->destination_db);
+		$table_linked_resources = Database :: get_course_table(TABLE_LINKED_RESOURCES, $this->course->destination_db);
 		$table_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
 		foreach ($this->course->resources as $type => $resources)
 		{
@@ -200,8 +200,8 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_QUIZ))
 		{
-			$table_qui = Database :: get_course_table(QUIZ_TEST_TABLE);
-			$table_rel = Database :: get_course_table(QUIZ_TEST_QUESTION_TABLE);
+			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
+			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_QUIZ])));
 			$sql = "DELETE FROM ".$table_qui." WHERE id IN(".$ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
@@ -216,9 +216,9 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_LEARNPATH))
 		{
-			$table_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE);
-			$table_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
-			$table_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
+			$table_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
+			$table_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
+			$table_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
 			$table_tool = Database::get_course_table(TABLE_TOOL_LIST);
 			foreach($this->course->resources[RESOURCE_LEARNPATH] as $id => $learnpath)
 			{

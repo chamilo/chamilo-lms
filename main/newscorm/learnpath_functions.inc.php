@@ -55,8 +55,8 @@
  **/
 function deleteitem($id)
 {
-	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
-	$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 	//get the display order for this item before it is deleted
 	$sql = "SELECT display_order, parent_item_id FROM $tbl_lp_item WHERE id=$id";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -92,8 +92,8 @@ function deleteitem($id)
 function deletemodule($parent_item_id)
 {
 	global $learnpath_id;
-	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
-	$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	//Added for multi-level behaviour - slightly recursive
 	$sql = "SELECT * FROM $tbl_learnpath_chapter WHERE lp_id=$learnpath_id";
@@ -146,9 +146,9 @@ function deletemodule($parent_item_id)
  **/
 function deletepath($path_id)
 {
-	$tbl_learnpath_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE);
-	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
-	$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+	$tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
+	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	$sql = "DELETE FROM $tbl_learnpath_main WHERE lp_id='$path_id'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -175,8 +175,8 @@ function deletepath($path_id)
 function moveitem($direction, $id, $moduleid, $type = 'item')
 {
 	global $learnpath_id;
-	$tbl_learnpath_item     = Database::get_course_table(LEARNPATH_ITEM_TABLE);
-	$tbl_learnpath_chapter  = Database::get_course_table(LEARNPATH_CHAPTER_TABLE);
+	$tbl_learnpath_item     = Database::get_course_table(TABLE_LEARNPATH_ITEM);
+	$tbl_learnpath_chapter  = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	$tree = get_learnpath_tree($learnpath_id);
 	$orig_order = 0;
@@ -326,8 +326,8 @@ function movemodule($direction, $id)
  */
 function insert_item($type = 'item', $name, $chapter_description = '', $parent_id = 0, $learnpath_id = 0, $params = null)
 {
-	$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
-	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
+	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
+	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
 
 	// getting the last order number from the chapters table, in this learnpath, for the parent chapter given
 	$sql = "SELECT * FROM $tbl_learnpath_chapter 
@@ -388,7 +388,7 @@ function array_learnpath_categories()
 {
 	#global $tbl_learnpath_chapter; 
 	global $learnpath_id;
-	$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	$sql = "SELECT * FROM  $tbl_learnpath_chapter  WHERE (lp_id=$learnpath_id) ORDER BY display_order ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -654,7 +654,7 @@ function display_all_learnpath()
 {
 	global $tbl_tool, $color2;
 	global $xml_output, $lang_edit_learnpath, $lang_delete_learnpath, $lang_publish, $lang_no_publish, $lang_add_learnpath_chapter_to_path;
-	$tbl_learnpath_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE);
+	$tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
 
 	$sql = "SELECT * FROM  $tbl_learnpath_main  ORDER BY learnpath_name";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -819,7 +819,7 @@ function display_learnpath_items($categoryid)
 function learnpath_items($itemid)
 {
 	global $xml_output;
-	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
+	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
 
 	$sql_items = "SELECT parent_item_id FROM $tbl_lp_item WHERE id='$itemid'";
 	$moduleid_sql = api_sql_query($sql_items);
@@ -846,7 +846,7 @@ function learnpath_items($itemid)
 function learnpath_chapters($learnpath_id)
 {
 	global $xml_output, $learnpath_id;
-	//$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+	//$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 	$tbl_lp_item = Database::get_course_table('lp_item');
 	
 
@@ -903,9 +903,9 @@ function prereqcheck($id_in_path)
 	//1 Initialise and import working vars
 	global $learnpath_id, $_user;
 	global $langPrereqToEnter, $langPrereqTestLimit1, $langPrereqTestLimit2, $langPrereqTestLimitNow, $langPrereqFirstNeedTo, $langPrereqModuleMinimum1, $langPrereqModuleMinimum2;
-	$tbl_learnpath_user = Database :: get_course_table(LEARNPATH_USER_TABLE);
-	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
-	$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+	$tbl_learnpath_user = Database :: get_course_table(TABLE_LEARNPATH_USER);
+	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	//2 Initialise return value
 	$prereq = false;
@@ -1050,8 +1050,8 @@ function get_learnpath_tree($learnpath_id)
 	//init elems
 	#global $tbl_learnpath_item, $tbl_learnpath_chapter; 
 	/*
-	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
-	$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 	*/
 	$tbl_lp_item = Database::get_course_table('lp_item');
 
@@ -1153,7 +1153,7 @@ function get_ordered_items_list($tree, $chapter = 0, $include_chapters = false)
 function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id, $uid, $wrap, $level = 0)
 {
 		#global $tbl_learnpath_user;
-	$tbl_learnpath_user = Database :: get_course_table(LEARNPATH_USER_TABLE);
+	$tbl_learnpath_user = Database :: get_course_table(TABLE_LEARNPATH_USER);
 	$num = 0;
 	$num_completed = 0;
 	foreach ($tree[$parent_item_id] as $order => $elem)
@@ -1334,8 +1334,8 @@ function get_tracking_table($learnpath_id, $user_id, $parent_item_id = 0, $tree 
  */
 function is_empty($id)
 {
-	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
-	$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	$sql = "SELECT * FROM $tbl_learnpath_chapter WHERE lp_id=$id ORDER BY display_order ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -1422,7 +1422,7 @@ function export_exercise($item_id)
 
 	include_once (api_get_path(LIBRARY_PATH).'/text.lib.php');
 
-	$TBL_EXERCISES = Database :: get_course_table(QUIZ_TEST_TABLE);
+	$TBL_EXERCISES = Database :: get_course_table(TABLE_QUIZ_TEST);
 
 	/*******************************/
 	/* Clears the exercise session */
@@ -2211,9 +2211,9 @@ function exportpath($learnpath_id)
 	//1 Initialise variables
 	global $_course, $circle1_files, $LPnamesafe, $LPname, $expdir;
 	//$tbl_learnpath_main, $tbl_learnpath_chapter, $tbl_learnpath_item, 
-	$tbl_learnpath_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE);
-	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
-	$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+	$tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
+	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	//where applicable, add a scorm "Done" button at the end of all contents
 	$add_scorm_button = true;
@@ -2433,9 +2433,9 @@ function createimsmanifest($circle1_files, $learnpath_id)
 {
 	global $_course, $LPname, $expdir, $LPnamesafe;
 	//$tbl_learnpath_main, $tbl_learnpath_chapter, $tbl_learnpath_item, 
-	$tbl_learnpath_main = Database :: get_course_table(LEARNPATH_MAIN_TABLE);
-	$tbl_learnpath_item = Database :: get_course_table(LEARNPATH_ITEM_TABLE);
-	$tbl_learnpath_chapter = Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
+	$tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
+	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	include_once ('../metadata/md_funcs.php'); // RH: export metadata
 

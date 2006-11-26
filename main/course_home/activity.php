@@ -168,7 +168,7 @@ function show_tools_category($course_tool_category)
 			if($toolsRow['image'] == 'blog.gif')
 			{
 				// Init
-				$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
+				$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 
 				// Get blog id
 				$blog_id = substr($toolsRow['link'], strrpos($toolsRow['link'], '=') + 1, strlen($toolsRow['link']));

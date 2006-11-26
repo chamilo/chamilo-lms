@@ -150,7 +150,7 @@ class UserManager
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		while ($course = mysql_fetch_object($res))
 		{
-			$table_group = Database :: get_course_table(GROUP_USER_TABLE, $course->db_name);
+			$table_group = Database :: get_course_table(TABLE_GROUP_USER, $course->db_name);
 			$sql = "DELETE FROM $table_group WHERE user_id = '".$user_id."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
@@ -172,7 +172,7 @@ class UserManager
 		}
 
 		// Delete the personal course categories
-		$course_cat_table = Database::get_user_personal_table(USER_COURSE_CATEGORY_TABLE);
+		$course_cat_table = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 		$sql = "DELETE FROM $course_cat_table WHERE user_id = '".$user_id."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 
@@ -185,7 +185,7 @@ class UserManager
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		// Delete the personal agenda-items from this user
-		$agenda_table = Database :: get_user_personal_table(PERSONAL_AGENDA);
+		$agenda_table = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 		$sql = "DELETE FROM $agenda_table WHERE user = '".$user_id."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 

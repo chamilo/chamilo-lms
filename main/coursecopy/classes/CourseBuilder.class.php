@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 10195 2006-11-25 15:26:00Z pcool $
+<?php // $Id: CourseBuilder.class.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -82,7 +82,7 @@ class CourseBuilder
 		$this->build_quizzes();
 		$this->build_learnpaths();
 		$this->build_scorm_documents();
-		$table = Database :: get_course_table(LINKED_RESOURCES_TABLE);
+		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 		foreach ($this->course->resources as $type => $resources)
 		{
 			foreach ($resources as $id => $resource)
@@ -240,8 +240,8 @@ class CourseBuilder
 	 */
 	function build_quizzes()
 	{
-		$table_qui = Database :: get_course_table(QUIZ_TEST_TABLE);
-		$table_rel = Database :: get_course_table(QUIZ_TEST_QUESTION_TABLE);
+		$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
+		$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
 		$sql = 'SELECT * FROM '.$table_qui;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
@@ -268,8 +268,8 @@ class CourseBuilder
 	 */
 	function build_quiz_questions()
 	{
-		$table_que = Database :: get_course_table(QUIZ_QUESTION_TABLE);
-		$table_ans = Database :: get_course_table(QUIZ_ANSWER_TABLE);
+		$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+		$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 		$sql = 'SELECT * FROM '.$table_que;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
@@ -331,9 +331,9 @@ class CourseBuilder
 	 */
 	function build_learnpaths()
 	{
-		$table_main 	= Database :: get_course_table(LEARNPATH_MAIN_TABLE);
-		$table_chapter 	= Database :: get_course_table(LEARNPATH_CHAPTER_TABLE);
-		$table_item 	= Database :: get_course_table(LEARNPATH_ITEM_TABLE);
+		$table_main 	= Database :: get_course_table(TABLE_LEARNPATH_MAIN);
+		$table_chapter 	= Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
+		$table_item 	= Database :: get_course_table(TABLE_LEARNPATH_ITEM);
 		$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST);
 
 		$sql = 'SELECT * FROM '.$table_main;

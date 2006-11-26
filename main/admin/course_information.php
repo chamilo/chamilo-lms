@@ -1,5 +1,5 @@
 <?php
-// $Id: course_information.php 10195 2006-11-25 15:26:00Z pcool $
+// $Id: course_information.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,13 +50,13 @@ function get_course_usage($course_code)
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$course = mysql_fetch_object($res);
 	// Learnpaths
-	$table = Database :: get_course_table(LEARNPATH_MAIN_TABLE, $course->db_name);
+	$table = Database :: get_course_table(TABLE_LEARNPATH_MAIN, $course->db_name);
 	$usage[] = array (get_lang(TOOL_LEARNPATH), Database::count_rows($table));
 	// Forums
 	$table = Database :: get_course_table(TABLE_FORUM, $course->db_name);
 	$usage[] = array (get_lang(TOOL_BB_FORUM), Database::count_rows($table));
 	// Quizzes
-	$table = Database :: get_course_table(QUIZ_TEST_TABLE, $course->db_name);
+	$table = Database :: get_course_table(TABLE_QUIZ_TEST, $course->db_name);
 	$usage[] = array (get_lang(TOOL_QUIZ), Database::count_rows($table));
 	// Documents
 	$table = Database :: get_course_table(TABLE_DOCUMENT, $course->db_name);

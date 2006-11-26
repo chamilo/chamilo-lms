@@ -1,4 +1,4 @@
-<?php // $Id: online_whoisonline.php 10191 2006-11-24 08:09:14Z pcool $
+<?php // $Id: online_whoisonline.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,9 +39,9 @@ $this_section=SECTION_COURSES;
 
 $showPic=intval($_GET['showPic']);
 
-$tbl_user=Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_online_connected=Database::get_course_table(ONLINE_CONNECTED_TABLE);
+$tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course_user 		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_online_connected	= Database::get_course_table(TABLE_ONLINE_CONNECTED);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=api_sql_query($query,__FILE__,__LINE__);

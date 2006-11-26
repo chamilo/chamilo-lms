@@ -1,4 +1,4 @@
-<?php // $Id: resourcelinker.inc.php 10195 2006-11-25 15:26:00Z pcool $
+<?php // $Id: resourcelinker.inc.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -234,7 +234,7 @@ function file_or_folder($filefolder)
 function store_resources($source_type, $source_id)
 {
 	global $_course;
-	$resource_table = Database::get_course_table(LINKED_RESOURCES_TABLE);
+	$resource_table = Database::get_course_table(TABLE_LINKED_RESOURCES);
 
 	$addedresource = $_SESSION['addedresource'];
 	$addedresourceid = $_SESSION['addedresourceid'];

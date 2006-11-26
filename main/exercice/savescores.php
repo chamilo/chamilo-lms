@@ -41,7 +41,7 @@ $full_file_path = $documentPath.$test;
 my_delete($full_file_path.$_user['user_id'].".t.html");
 
 $TABLETRACK_HOTPOTATOES = $_configuration['statistics_database']."`.`track_e_hotpotatoes";
-$tbl_learnpath_user = Database::get_course_table(LEARNPATH_USER_TABLE);
+$tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
 //$_course['dbNameGlu']."learnpath_user";
 $_cid = $cid;
 $test = mysql_real_escape_string($_REQUEST['test']);

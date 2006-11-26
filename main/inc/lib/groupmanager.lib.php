@@ -103,7 +103,7 @@ class GroupManager
 		$table_group = Database :: get_course_table(TABLE_GROUP, $course_db);
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$table_group_user = Database :: get_course_table(GROUP_USER_TABLE, $course_db);
+		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
 		$sql = "SELECT  g.id ,
 						g.name ,
 						g.description ,
@@ -208,7 +208,7 @@ class GroupManager
 	{
 		GroupManager :: delete_category(VIRTUAL_COURSE_CATEGORY);
 		$id = GroupManager :: create_category(get_lang('GroupsFromVirtualCourses'), '', TOOL_NOT_AVAILABLE, TOOL_NOT_AVAILABLE, 0, 0, 1, 1);
-		$table_group_cat = Database :: get_course_table(GROUP_CATEGORY_TABLE);
+		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "UPDATE ".$table_group_cat." SET id=".VIRTUAL_COURSE_CATEGORY." WHERE id=$id";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$course = api_get_course_info();
@@ -286,7 +286,7 @@ class GroupManager
 		
 		// Database table definitions
 		$group_table 			= Database :: get_course_table(TABLE_GROUP, $course_db);
-		$group_user_table 		= Database :: get_course_table(GROUP_USER_TABLE, $course_db);
+		$group_user_table 		= Database :: get_course_table(TABLE_GROUP_USER, $course_db);
 		$forum_table 			= Database :: get_course_table(TABLE_FORUM, $course_db);
 		$forum_post_table 		= Database :: get_course_table(TABLE_FORUM_POST, $course_db);
 		$forum_post_text_table 	= Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE, $course_db);
@@ -407,7 +407,7 @@ class GroupManager
 			$course_info = Database :: get_course_info($course_code);
 			$course_db = $course_info['database'];
 		}
-		$table_group_cat = Database :: get_course_table(GROUP_CATEGORY_TABLE, $course_db);
+		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY, $course_db);
 		$sql = "SELECT * FROM $table_group_cat ORDER BY display_order";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$cats = array ();
@@ -430,7 +430,7 @@ class GroupManager
 			$course_info = Database :: get_course_info($course_code);
 			$course_db = $course_info['database'];
 		}
-		$table_group_cat = Database :: get_course_table(GROUP_CATEGORY_TABLE, $course_db);
+		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY, $course_db);
 		$sql = "SELECT * FROM $table_group_cat WHERE id = $id";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		return mysql_fetch_array($res);
@@ -451,7 +451,7 @@ class GroupManager
 			$course_db = $course_info['database'];
 		}
 		$table_group = Database :: get_course_table(TABLE_GROUP, $course_db);
-		$table_group_cat = Database :: get_course_table(GROUP_CATEGORY_TABLE, $course_db);
+		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY, $course_db);
 		$sql = "SELECT gc.* FROM $table_group_cat gc, $table_group g WHERE gc.id = g.category_id AND g.id=$group_id";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$cat = mysql_fetch_array($res);
@@ -472,7 +472,7 @@ class GroupManager
 			$course_db = $course_info['database'];
 		}
 		$table_group = Database :: get_course_table(TABLE_GROUP, $course_db);
-		$table_group_cat = Database :: get_course_table(GROUP_CATEGORY_TABLE, $course_db);
+		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY, $course_db);
 		$sql = "SELECT id FROM $table_group WHERE category_id='".$cat_id."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		if (mysql_num_rows($res) > 0)
@@ -498,7 +498,7 @@ class GroupManager
 	 */
 	function create_category($title, $description, $doc_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
 	{
-		$table_group_category = Database :: get_course_table(GROUP_CATEGORY_TABLE);
+		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "SELECT MAX(display_order)+1 as new_order FROM $table_group_category ";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$obj = mysql_fetch_object($res);
@@ -536,7 +536,7 @@ class GroupManager
 	 */
 	function update_category($id, $title, $description, $doc_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user)
 	{
-		$table_group_category = Database :: get_course_table(GROUP_CATEGORY_TABLE);
+		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "UPDATE ".$table_group_category."
 				SET title='".mysql_real_escape_string($title)."',
 				description='".mysql_real_escape_string($description)."',
@@ -561,7 +561,7 @@ class GroupManager
 			$course_db = $course_info['database'];
 		}
 		$group_table = Database :: get_course_table(TABLE_GROUP, $course_db);
-		$group_user_table = Database :: get_course_table(GROUP_USER_TABLE, $course_db);
+		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
 		$sql = 'SELECT COUNT(gu.group_id) AS current_max FROM '.$group_user_table.' gu, '.$group_table.' g WHERE gu.group_id = g.id ';
 		if ($category_id != null)
 			$sql .= ' AND g.category_id = '.$category_id;
@@ -577,7 +577,7 @@ class GroupManager
 	 */
 	function swap_category_order($id1, $id2)
 	{
-		$table_group_cat = Database :: get_course_table(GROUP_CATEGORY_TABLE);
+		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "SELECT id,display_order FROM $table_group_cat WHERE id IN ($id1,$id2)";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$cat1 = mysql_fetch_object($res);
@@ -601,7 +601,7 @@ class GroupManager
 	 */
 	function get_users($group_id)
 	{
-		$group_user_table = Database :: get_course_table(GROUP_USER_TABLE, $course_db);
+		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
 		$sql = "SELECT user_id FROM $group_user_table WHERE group_id = $group_id";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$users = array ();
@@ -643,7 +643,7 @@ class GroupManager
 		$groups_per_user = $category['groups_per_user'];
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$group_table = Database :: get_course_table(TABLE_GROUP);
-		$group_user_table = Database :: get_course_table(GROUP_USER_TABLE);
+		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
 		$complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['sysCode']);
 		$number_groups_per_user = ($groups_per_user == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $groups_per_user);
 		/*
@@ -735,7 +735,7 @@ class GroupManager
 	 */
 	function number_of_students($group_id)
 	{
-		$table_group_user = Database :: get_course_table(GROUP_USER_TABLE);
+		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 		$db_result = api_sql_query('SELECT  COUNT(*) AS number_of_students FROM '.$table_group_user.' WHERE group_id = '.$group_id);
 		$db_object = mysql_fetch_object($db_result);
 		return $db_object->number_of_students;
@@ -763,7 +763,7 @@ class GroupManager
 	 */
 	function user_in_number_of_groups($user_id, $cat_id)
 	{
-		$table_group_user = Database :: get_course_table(GROUP_USER_TABLE);
+		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$sql = 'SELECT  COUNT(*) AS number_of_groups FROM '.$table_group_user.' gu, '.$table_group.' g WHERE gu.user_id = \''.$user_id.'\' AND g.id = gu.group_id AND g.category_id=  \''.$cat_id.'\'';
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
@@ -809,7 +809,7 @@ class GroupManager
 	 */
 	function is_subscribed($user_id, $group_id)
 	{
-		$table_group_user = Database :: get_course_table(GROUP_USER_TABLE);
+		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 		$db_result = api_sql_query('SELECT 1 FROM '.$table_group_user.' WHERE group_id = '.$group_id.' AND user_id = '.$user_id);
 		return mysql_num_rows($db_result) > 0;
 	}
@@ -856,7 +856,7 @@ class GroupManager
 	function get_subscribed_users($group_id)
 	{
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$table_group_user = Database :: get_course_table(GROUP_USER_TABLE);
+		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 		$sql = "SELECT `ug`.`id`, `u`.`user_id`, `u`.`lastname`, `u`.`firstname`, `u`.`email`
 					FROM ".$table_user." u, ".$table_group_user." ug
 					WHERE `ug`.`group_id`='".$group_id."'
@@ -885,7 +885,7 @@ class GroupManager
 	function get_subscribed_tutors($group_id,$id_only=false)
 	{
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$table_group_tutor = Database :: get_course_table(GROUP_TUTOR_TABLE);
+		$table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
 		$sql = "SELECT `tg`.`id`, `u`.`user_id`, `u`.`lastname`, `u`.`firstname`, `u`.`email`
 					FROM ".$table_user." u, ".$table_group_tutor." tg
 					WHERE `tg`.`group_id`='".$group_id."'
@@ -922,7 +922,7 @@ class GroupManager
 		$result = true;
 		foreach ($user_ids as $index => $user_id)
 		{
-			$table_group_user = Database :: get_course_table(GROUP_USER_TABLE);
+			$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 			$sql = "INSERT INTO ".$table_group_user." (user_id, group_id) VALUES ('".$user_id."', '".$group_id."')";
 			$result &= api_sql_query($sql,__FILE__,__LINE__);
 		}
@@ -943,7 +943,7 @@ class GroupManager
 		$result = true;
 		foreach ($user_ids as $index => $user_id)
 		{
-			$table_group_tutor = Database :: get_course_table(GROUP_TUTOR_TABLE);
+			$table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
 			$sql = "INSERT INTO ".$table_group_tutor." (user_id, group_id) VALUES ('".$user_id."', '".$group_id."')";
 			$result &= api_sql_query($sql,__FILE__,__LINE__);
 		}
@@ -959,7 +959,7 @@ class GroupManager
 	function unsubscribe_users($user_ids, $group_id)
 	{
 		$user_ids = is_array($user_ids) ? $user_ids : array ($user_ids);
-		$table_group_user = Database :: get_course_table(GROUP_USER_TABLE);
+		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 		$result &= api_sql_query('DELETE FROM '.$table_group_user.' WHERE group_id = '.$group_id.' AND user_id IN ('.implode(',', $user_ids).')');
 	}
 	/**
@@ -972,7 +972,7 @@ class GroupManager
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
 		if( count($group_ids) > 0)
 		{
-			$table_group_user = Database :: get_course_table(GROUP_USER_TABLE);
+			$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 			$sql = 'DELETE FROM '.$table_group_user.' WHERE group_id IN ('.implode(',', $group_ids).')';
 			$result = api_sql_query($sql,__FILE__,__LINE__);
 			return $result;
@@ -991,7 +991,7 @@ class GroupManager
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
 		if( count($group_ids) > 0)
 		{
-			$table_group_tutor = Database :: get_course_table(GROUP_TUTOR_TABLE);
+			$table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
 			$sql = 'DELETE FROM '.$table_group_tutor.' WHERE group_id IN ('.implode(',', $group_ids).')';
 			$result = api_sql_query($sql,__FILE__,__LINE__);
 			return $result;
@@ -1010,7 +1010,7 @@ class GroupManager
 	{
 		global $_course;
 
-		$table_group_tutor = Database :: get_course_table(GROUP_TUTOR_TABLE);
+		$table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
 		$sql = "SELECT * FROM ".$table_group_tutor." WHERE user_id='".$user_id."' AND group_id='".$group_id."'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		if (mysql_num_rows($result)>0)
@@ -1103,7 +1103,7 @@ class GroupManager
 	 */
 	function get_group_ids($course_db,$user_id)
 	{
-	$tbl_group = Database::get_course_table(GROUP_USER_TABLE,$course_db);
+	$tbl_group = Database::get_course_table(TABLE_GROUP_USER,$course_db);
 
 	$sql = "SELECT group_id FROM $tbl_group WHERE user_id = '$user_id'";
 	$groupres = api_sql_query($sql);

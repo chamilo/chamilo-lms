@@ -1,4 +1,4 @@
-<?php // $Id: exercise.class.php 10195 2006-11-25 15:26:00Z pcool $
+<?php // $Id: exercise.class.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -78,10 +78,10 @@ class Exercise
 		#$TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
 		#$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
 		#$TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
-    $TBL_EXERCICE_QUESTION  = Database::get_course_table(QUIZ_TEST_QUESTION_TABLE);
-    $TBL_EXERCICES          = Database::get_course_table(QUIZ_TEST_TABLE);
-    $TBL_QUESTIONS          = Database::get_course_table(QUIZ_QUESTION_TABLE);
-    #$TBL_REPONSES           = Database::get_course_table(QUIZ_ANSWER_TABLE);
+    $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+    $TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
+    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    #$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 		$sql="SELECT title,description,sound,type,random,active FROM $TBL_EXERCICES WHERE id='$id'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -413,8 +413,8 @@ class Exercise
 	 */
 	function save()
 	{
-		$TBL_EXERCICES = Database::get_course_table(QUIZ_TEST_TABLE);
-        $TBL_QUESTIONS = Database::get_course_table(QUIZ_QUESTION_TABLE);
+		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
 		$id=$this->id;
 		$exercise=addslashes($this->exercise);
@@ -597,8 +597,8 @@ class Exercise
 	 */
 	function delete()
 	{
-		$TBL_EXERCICE_QUESTION = Database::get_course_table(QUIZ_TEST_QUESTION_TABLE);
-		$TBL_EXERCICES = Database::get_course_table(QUIZ_TEST_TABLE);
+		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 
 		$id=$this->id;
 

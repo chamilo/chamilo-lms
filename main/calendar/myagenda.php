@@ -90,7 +90,7 @@ $TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
 $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-$TABLE_PERSONAL_AGENDA = Database :: get_user_personal_table(PERSONAL_AGENDA);
+$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 
 // the variables for the days and the months
 // Defining the shorts for the days
@@ -114,7 +114,7 @@ if (get_setting("allow_personal_agenda") == "true")
 	// the main dokeos database by changing $DATABASE_USER_TOOLS above to $_configuration['main_database']
 	$sql_create_database = "CREATE DATABASE IF NOT EXISTS `$DATABASE_USER_TOOLS`";
 	$result = api_sql_query($sql_create_database);
-	$sql_create_table = "CREATE TABLE IF NOT EXISTS $TABLE_PERSONAL_AGENDA (
+	$sql_create_table = "CREATE TABLE IF NOT EXISTS $tbl_personal_agenda (
 					`id` int(11) NOT NULL auto_increment,
 					`user` int(11),
 					`title` text,
@@ -944,7 +944,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 function show_new_item_form($id = "")
 {
 	global $year, $MonthsLong;
-	global $TABLE_PERSONAL_AGENDA;
+	global $tbl_personal_agenda;
 	global $_user;
 	// we construct the default time and date data (used if we are not editing a personal agenda item)
 	$today = getdate();
@@ -958,7 +958,7 @@ function show_new_item_form($id = "")
 	// to overwrite the default information)
 	if ($id <> "")
 	{
-		$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' AND id='".$id."'";
+		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$aantal = mysql_num_rows($result);
 		if ($aantal <> 0)
@@ -1112,17 +1112,17 @@ function show_new_item_form($id = "")
 // This function shows all the forms that are needed form adding a new personal agenda item
 function store_personal_item($day, $month, $year, $hour, $minute, $title, $content, $id = "")
 {
-	global $TABLE_PERSONAL_AGENDA;
+	global $tbl_personal_agenda;
 	global $_user;
 	//constructing the date
 	$date = $year."-".$month."-".$day." ".$hour.":".$minute.":00";
 	if ($id <> "")
 	{ // we are updating
-		$sql = "UPDATE ".$TABLE_PERSONAL_AGENDA." SET user='".$_user['user_id']."', title='".$title."', text='".$content."', date='".$date."' WHERE id='".$id."'";
+		$sql = "UPDATE ".$tbl_personal_agenda." SET user='".$_user['user_id']."', title='".$title."', text='".$content."', date='".$date."' WHERE id='".$id."'";
 	}
 	else
 	{ // we are adding a new item
-		$sql = "INSERT INTO $TABLE_PERSONAL_AGENDA (user, title, text, date) VALUES ('".$_user['user_id']."','$title', '$content', '$date')";
+		$sql = "INSERT INTO $tbl_personal_agenda (user, title, text, date) VALUES ('".$_user['user_id']."','$title', '$content', '$date')";
 	}
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 }
@@ -1156,13 +1156,13 @@ function get_courses_of_user()
 // This function retrieves all the personal agenda items and add them to the agenda items found by the other functions.
 function get_personal_agendaitems($agendaitems, $day = "", $month = "", $year = "", $week = "", $type)
 {
-	global $TABLE_PERSONAL_AGENDA;
+	global $tbl_personal_agenda;
 	global $_user;
 	global $_configuration;
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
 	if ($type == "month_view" or $type == "") // we are in month view
 	{
-		$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
+		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
 	}
 	// 2. creating the SQL statement for getting the personal agenda items in WEEK view
 	if ($type == "week_view") // we are in week view
@@ -1177,7 +1177,7 @@ function get_personal_agendaitems($agendaitems, $day = "", $month = "", $year = 
 		// in sql statements you have to use year-month-day for date calculations
 		$start_filter = $start_year."-".$start_month."-".$start_day;
 		$end_filter = $end_year."-".$end_month."-".$end_day;
-		$sql = " SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."'
+		$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."'
 								AND date>='".$start_filter."' AND date<='".$end_filter."'";
 	}
 	// 3. creating the SQL statement for getting the personal agenda items in DAY view
@@ -1186,7 +1186,7 @@ function get_personal_agendaitems($agendaitems, $day = "", $month = "", $year = 
 		// we could use mysql date() function but this is only available from 4.1 and higher
 		$start_filter = $year."-".$month."-".$day." 00:00:01";
 		$end_filter = $year."-".$month."-".$day." 23:59:59";
-		$sql = " SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
+		$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
 	}
 	//echo "day:".$day."/";
 	//echo "month:".$month."/";
@@ -1247,11 +1247,11 @@ function get_personal_agendaitems($agendaitems, $day = "", $month = "", $year = 
 // these items in one list (ordered by date and grouped by month (the month_bar)
 function show_personal_agenda()
 {
-	global $TABLE_PERSONAL_AGENDA;
+	global $tbl_personal_agenda;
 	global $MonthsLong;
 	global $_user;
 	// The SQL statement that retrieves all the personal agenda items of this user
-	$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' ORDER BY date DESC";
+	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' ORDER BY date DESC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	// variable initialisation
 	$month_bar = "";
@@ -1338,16 +1338,16 @@ function show_personal_agenda()
 // does not belong to him/her
 function delete_personal_agenda($id)
 {
-	global $TABLE_PERSONAL_AGENDA;
+	global $tbl_personal_agenda;
 	global $_user;
 	if ($id <> '')
 	{
-		$sql = "SELECT * FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' AND id='".$id."'";
+		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$aantal = mysql_num_rows($result);
 		if ($aantal <> 0)
 		{
-			$sql = "DELETE FROM ".$TABLE_PERSONAL_AGENDA." WHERE user='".$_user['user_id']."' AND id='".$id."'";
+			$sql = "DELETE FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 		}
 	}

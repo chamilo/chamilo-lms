@@ -1,4 +1,4 @@
-<?php // $Id: answer.class.php 10110 2006-11-22 15:20:46Z develop-it $
+<?php // $Id: answer.class.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -264,7 +264,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 	  */
 	 function getQuestionType()
 	 {
-	 	$TBL_QUESTIONS = Database::get_course_table(QUIZ_QUESTION_TABLE);
+	 	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 	 	$sql = "SELECT * FROM $TBL_QUESTIONS WHERE id = '".$this->questionId."'";
 	 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	 	if(Database::num_rows($res)<=0){

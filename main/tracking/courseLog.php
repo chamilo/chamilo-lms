@@ -78,8 +78,8 @@ $htmlHeadXtra[] = "<style type='text/css'>
 */
 // regroup table names for maintenance purpose
 $TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-$TABLETRACK_LINKS       = Database::get_statistic_table(STATISTIC_TRACK_E_LINKS_TABLE);
-$TABLETRACK_DOWNLOADS   = Database::get_statistic_table(STATISTIC_TRACK_E_DOWNLOADS_TABLE);
+$TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
+$TABLETRACK_DOWNLOADS   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 $TABLETRACK_ACCESS_2    = Database::get_statistic_table("track_e_access");
 $TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -87,10 +87,10 @@ $TABLECOURSE_LINKS      = Database::get_course_table(TABLE_LINK);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 //$table_scormdata = Database::get_scorm_table(SCORM_SCO_DATA_TABLE);
-//$table_scormmain = Database::get_scorm_table(SCORM_MAIN_TABLE);
-//$tbl_learnpath_main = Database::get_course_table(LEARNPATH_MAIN_TABLE);
-//$tbl_learnpath_item = Database::get_course_table(LEARNPATH_ITEM_TABLE);
-//$tbl_learnpath_chapter = Database::get_course_table(LEARNPATH_CHAPTER_TABLE);
+//$table_scormmain = Database::get_scorm_table(TABLE_SCORM_MAIN);
+//$tbl_learnpath_main = Database::get_course_table(TABLE_LEARNPATH_MAIN);
+//$tbl_learnpath_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);
+//$tbl_learnpath_chapter = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 $tbl_learnpath_main = Database::get_course_table('lp');
 $tbl_learnpath_item = Database::get_course_table('lp_item');

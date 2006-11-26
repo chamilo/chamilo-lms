@@ -96,7 +96,7 @@ if ($_GET['logout'])
 	}
 	
 	
-	$tbl_track_login = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 	
 	$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_GET["uid"]."' ORDER BY login_date DESC LIMIT 0,1";
 
@@ -123,7 +123,7 @@ if ($_GET['logout'])
 */
 $main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 $main_category_table 	= Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$track_login_table 		= Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+$track_login_table 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 /*
 -----------------------------------------------------------
 	Constants and CONFIGURATION parameters

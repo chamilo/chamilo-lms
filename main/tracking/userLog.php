@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 10195 2006-11-25 15:26:00Z pcool $
+<?php // $Id: userLog.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -133,9 +133,9 @@ $TABLETRACK_EXERCICES   	= $_configuration['statistics_database']."`.`track_e_ex
 
 $TABLECOURSE_LINKS			= Database::get_course_table(TABLE_LINK);
 $TABLECOURSE_WORK       	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-$TABLECOURSE_GROUPSUSER 	= Database::get_course_table(GROUP_USER_TABLE);
-$TABLECOURSE_EXERCICES  	= Database::get_course_table(QUIZ_TEST_TABLE);
-$TBL_TRACK_HOTPOTATOES  	= Database::get_statistic_table(STATISTIC_TRACK_E_HOTPOTATOES_TABLE);
+$TABLECOURSE_GROUPSUSER 	= Database::get_course_table(TABLE_GROUP_USER);
+$TABLECOURSE_EXERCICES  	= Database::get_course_table(TABLE_QUIZ_TEST);
+$TBL_TRACK_HOTPOTATOES  	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 
 
 if(api_get_setting('use_session_mode') == "true") {
@@ -201,7 +201,7 @@ function myEnc($isostring,$supposed_encoding='ISO-8859-15')
 function display_login_tracking_info($view, $user_id, $course_id)
 {
 	$MonthsLong = $GLOBALS['MonthsLong'];
-	$track_access_table = Database::get_statistic_table(STATISTIC_TRACK_E_ACCESS_TABLE);
+	$track_access_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 	$tempView = $view;
 	if(substr($view,0,1) == '1')
 	{
@@ -535,7 +535,7 @@ function display_links_tracking_info($view, $user_id, $course_id)
 */
 function display_document_tracking_info($view, $user_id, $course_id)
 {
-	$downloads_table = Database::get_statistic_table(STATISTIC_TRACK_E_DOWNLOADS_TABLE);
+	$downloads_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 	if(substr($view,4,1) == '1')
 	{
 		$new_view = substr_replace($view,'0',4,1);

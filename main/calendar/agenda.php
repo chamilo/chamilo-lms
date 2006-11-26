@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 10195 2006-11-25 15:26:00Z pcool $
+<?php //$Id: agenda.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -206,7 +206,7 @@ $TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 $tbl_user       		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_courseUser 		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_group      		= Database::get_course_table(TABLE_GROUP);
-$tbl_groupUser  		= Database::get_course_table(GROUP_USER_TABLE);
+$tbl_groupUser  		= Database::get_course_table(TABLE_GROUP_USER);
 $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 

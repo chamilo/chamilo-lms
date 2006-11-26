@@ -779,7 +779,7 @@ function show_notification($my_course)
 	$course_database = $my_course['db'];
 	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST, $course_database);
 	$tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_database);
-	$course_group_user_table = Database :: get_course_table(GROUP_USER_TABLE, $course_database);
+	$course_group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $course_database);
 	// get the user's last access dates to all tools of this course
 	$sqlLastTrackInCourse = "SELECT * FROM $statistic_database.track_e_lastaccess
 									 USE INDEX (access_cours_code, access_user_id)
@@ -840,7 +840,7 @@ function get_user_course_categories()
 {
 	global $_user;
 	
-	$table_category = Database::get_user_personal_table(USER_COURSE_CATEGORY_TABLE);
+	$table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_user['user_id']."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while ($row = mysql_fetch_array($result))

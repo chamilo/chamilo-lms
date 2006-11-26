@@ -1,4 +1,4 @@
-<?php // $Id: online_links.php 10190 2006-11-24 00:23:20Z pcool $
+<?php // $Id: online_links.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,7 +43,7 @@ $action=$_GET['action'];
 $link=intval($_GET['link']);
 
 $tbl_user=Database::get_main_table(TABLE_MAIN_USER);
-$tbl_online_link=Database::get_course_table(ONLINE_LINK_TABLE);
+$tbl_online_link=Database::get_course_table(TABLE_ONLINE_LINK);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=api_sql_query($query,__FILE__,__LINE__);

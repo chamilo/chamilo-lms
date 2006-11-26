@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 10191 2006-11-24 08:09:14Z pcool $
+<?php // $Id: courses.php 10197 2006-11-26 18:45:33Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -643,7 +643,7 @@ function move_category($direction, $category2move)
 {
 	global $_user;
 	// the database definition of the table that stores the user defined course categories
-	$table_user_defined_category = Database::get_user_personal_table(USER_COURSE_CATEGORY_TABLE);
+	$table_user_defined_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
 	$user_coursecategories=get_user_course_categories();
 
@@ -1053,7 +1053,7 @@ function get_courses_of_user($user_id)
 function get_user_course_categories()
 {
 	global $_user;
-	$table_category = Database::get_user_personal_table(USER_COURSE_CATEGORY_TABLE);
+	$table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while ($row = mysql_fetch_array($result))

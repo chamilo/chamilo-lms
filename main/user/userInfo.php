@@ -52,8 +52,8 @@ $this_section = SECTION_COURSES;
 $nameTools = get_lang("Users");
 api_protect_course_script();
 
-$TBL_USERINFO_DEF = Database :: get_course_table(USER_INFO_TABLE);
-$TBL_USERINFO_CONTENT = Database :: get_course_table(USER_INFO_CONTENT_TABLE);
+$TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
+$TBL_USERINFO_CONTENT 	= Database :: get_course_table(TABLE_USER_INFO_CONTENT);
 
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang('Users'));
 

@@ -236,7 +236,7 @@ function file_or_folder($filefolder)
 function store_resources($source_type, $source_id)
 {
 	global $_course;
-	$resource_table = Database::get_course_table(LINKED_RESOURCES_TABLE);
+	$resource_table = Database::get_course_table(TABLE_LINKED_RESOURCES);
 
 	$addedresource = $_SESSION['addedresource'];
 	$addedresourceid = $_SESSION['addedresourceid'];
@@ -1729,7 +1729,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 			$output = '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url'])."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case TOOL_QUIZ:
-			$TBL_EXERCICES = Database::get_course_table(QUIZ_TEST_TABLE,$_course['database']);
+			$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $TBL_EXERCICES WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercice_submit.php?exerciseId='.$myrow['id'].'"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
@@ -1858,7 +1858,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			break;
 
 		case TOOL_QUIZ:
-			$TBL_EXERCICES = Database::get_course_table(QUIZ_TEST_TABLE,$_course['database']);
+			$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
 			$sql = "SELECT * FROM $TBL_EXERCICES WHERE id=$id";
 			$result= api_sql_query($sql,__FILE__,__LINE__);
 			$myrow=Database::fetch_array($result);
@@ -1994,7 +1994,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 			$output = $myrow['title'];
 			break;
 		case TOOL_QUIZ:
-			$TBL_EXERCICES = Database::get_course_table(QUIZ_TEST_TABLE,$_course['database']);
+			$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $TBL_EXERCICES WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = $myrow['title'];

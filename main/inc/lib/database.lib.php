@@ -60,18 +60,21 @@ define('TABLE_MAIN_SESSION_COURSE_USER', 'session_rel_course_rel_user');
 define('TABLE_MAIN_COURSE_SURVEY', 'course_rel_survey');
 define('TABLE_MAIN_SURVEY_USER', 'survey_user_info');
 define('TABLE_MAIN_SURVEY_REMINDER','survey_reminder');
+
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');
-define('STATISTIC_TRACK_E_ACCESS_TABLE', 'track_e_access');
-define('STATISTIC_TRACK_E_LOGIN_TABLE', 'track_e_login');
-define('STATISTIC_TRACK_E_DOWNLOADS_TABLE', 'track_e_downloads');
-define('STATISTIC_TRACK_E_LINKS_TABLE', 'track_e_links');
-define('STATISTIC_TRACK_E_ONLINE_TABLE', 'track_e_online');
-define('STATISTIC_TRACK_E_HOTPOTATOES_TABLE', 'track_e_hotpotatoes');
-define('STATISTIC_TRACK_E_COURSE_ACCESS_TABLE', 'track_e_course_access');
+define('TABLE_STATISTIC_TRACK_E_ACCESS', 'track_e_access');
+define('TABLE_STATISTIC_TRACK_E_LOGIN', 'track_e_login');
+define('TABLE_STATISTIC_TRACK_E_DOWNLOADS', 'track_e_downloads');
+define('TABLE_STATISTIC_TRACK_E_LINKS', 'track_e_links');
+define('TABLE_STATISTIC_TRACK_E_ONLINE', 'track_e_online');
+define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES', 'track_e_hotpotatoes');
+define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS', 'track_e_course_access');
+
 //scorm database tables
-define('SCORM_MAIN_TABLE', 'scorm_main');
+define('TABLE_SCORM_MAIN', 'scorm_main');
 define('SCORM_SCO_DATA_TABLE', 'scorm_sco_data');
+
 //course tables
 define('TABLE_AGENDA', 'calendar_event');
 define('TABLE_ANNOUNCEMENT', 'announcement');
@@ -92,56 +95,57 @@ define('TABLE_FORUM_THREAD','forum_thread');
 define('TABLE_FORUM_POST','forum_post');
 //course group tables
 define('TABLE_GROUP', 'group_info');
-define('GROUP_USER_TABLE', 'group_rel_user');
-define('GROUP_TUTOR_TABLE', 'group_rel_tutor');
-define('GROUP_CATEGORY_TABLE', 'group_category');
+define('TABLE_GROUP_USER', 'group_rel_user');
+define('TABLE_GROUP_TUTOR', 'group_rel_tutor');
+define('TABLE_GROUP_CATEGORY', 'group_category');
 //course quiz tables
-define('QUIZ_QUESTION_TABLE', 'quiz_question');
-define('QUIZ_TEST_TABLE', 'quiz');
-define('QUIZ_ANSWER_TABLE', 'quiz_answer');
-define('QUIZ_TEST_QUESTION_TABLE', 'quiz_rel_question');
+define('TABLE_QUIZ_QUESTION', 'quiz_question');
+define('TABLE_QUIZ_TEST', 'quiz');
+define('TABLE_QUIZ_ANSWER', 'quiz_answer');
+define('TABLE_QUIZ_TEST_QUESTION', 'quiz_rel_question');
 //linked resource table
-define('LINKED_RESOURCES_TABLE', 'resource');
+define('TABLE_LINKED_RESOURCES', 'resource');
 //learnpath tables
-define('LEARNPATH_MAIN_TABLE', 'learnpath_main');
-define('LEARNPATH_CHAPTER_TABLE', 'learnpath_chapter');
-define('LEARNPATH_ITEM_TABLE', 'learnpath_item');
-define('LEARNPATH_USER_TABLE', 'learnpath_user');
+define('TABLE_LEARNPATH_MAIN', 'learnpath_main');
+define('TABLE_LEARNPATH_CHAPTER', 'learnpath_chapter');
+define('TABLE_LEARNPATH_ITEM', 'learnpath_item');
+define('TABLE_LEARNPATH_USER', 'learnpath_user');
 // Smartblogs (Kevin Van Den Haute::kevin@develop-it.be)
 // permission tables
-define('PERMISSION_USER_TABLE', 'permission_user');
-define('PERMISSION_TASK_TABLE', 'permission_task');
-define('PERMISSION_GROUP_TABLE', 'permission_group');
+define('TABLE_PERMISSION_USER', 'permission_user');
+define('TABLE_PERMISSION_TASK', 'permission_task');
+define('TABLE_PERMISSION_GROUP', 'permission_group');
 // roles tables
-define('ROLE_TABLE', 'role');
-define('ROLE_PERMISSION_TABLE', 'role_permissions');
-define('ROLE_USER_TABLE', 'role_user');
-define('ROLE_GROUP_TABLE', 'role_group');
+define('TABLE_ROLE', 'role');
+define('TABLE_ROLE_PERMISSION', 'role_permissions');
+define('TABLE_ROLE_USER', 'role_user');
+define('TABLE_ROLE_GROUP', 'role_group');
 // blogs tables
-define('BLOGS_TABLE', 'blogs');
-define('BLOGS_POSTS_TABLE', 'blogs_posts');
-define('BLOGS_COMMENTS_TABLE', 'blogs_comments');
-define('BLOGS_REL_USER_TABLE', 'blogs_rel_user');
-define('BLOGS_TASKS', 'blogs_tasks');
-define('BLOGS_TASKS_REL_USER', 'blogs_tasks_rel_user');
-define('BLOGS_RATING', 'blogs_rating');
-define('BLOGS_TASKS_PERMISSIONS', 'permission_task');
+define('TABLE_BLOGS', 'blogs');
+define('TABLE_BLOGS_POSTS', 'blogs_posts');
+define('TABLE_BLOGS_COMMENTS', 'blogs_comments');
+define('TABLE_BLOGS_REL_USER', 'blogs_rel_user');
+define('TABLE_BLOGS_TASKS', 'blogs_tasks');
+define('TABLE_BLOGS_TASKS_REL_USER', 'blogs_tasks_rel_user');
+define('TABLE_BLOGS_RATING', 'blogs_rating');
+define('TABLE_BLOGS_TASKS_PERMISSIONS', 'permission_task');
 //end of Smartblogs
 // user information tables
-define('USER_INFO_TABLE', 'userinfo_def');
-define('USER_INFO_CONTENT_TABLE', 'userinfo_content');
+define('TABLE_USER_INFO', 'userinfo_def');
+define('TABLE_USER_INFO_CONTENT', 'userinfo_content');
 // course settings table
-define('COURSE_SETTING_TABLE', 'course_setting');
+define('TABLE_COURSE_SETTING', 'course_setting');
 // course online tables
-define('ONLINE_LINK_TABLE', 'online_link');
-define('ONLINE_CONNECTED_TABLE', 'online_connected');
+define('TABLE_ONLINE_LINK', 'online_link');
+define('TABLE_ONLINE_CONNECTED', 'online_connected');
 // dokeos_user database
-define('PERSONAL_AGENDA', 'personal_agenda');
-define('USER_COURSE_CATEGORY_TABLE', 'user_course_category');
+define('TABLE_PERSONAL_AGENDA', 'personal_agenda');
+define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
 //Survey
-define('MAIN_SURVEY_TABLE', 'survey');
-define('MAIN_GROUP_TABLE', 'survey_group');
-define('MAIN_SURVEYQUESTION_TABLE', 'questions');
+// @todo: are these MAIN tables or course tables ? 
+define('TABLE_MAIN_SURVEY', 'survey');
+define('TABLE_MAIN_GROUP', 'survey_group');
+define('TABLE_MAIN_SURVEYQUESTION', 'questions');
 /*
 ============================================================================== 
 		DATABASE CLASS
@@ -342,11 +346,11 @@ class Database
 
 	/**
 	* Returns the name of the main table of the SCORM database.
-	* @deprecated use Database::get_scorm_table(SCORM_MAIN_TABLE);
+	* @deprecated use Database::get_scorm_table(TABLE_SCORM_MAIN);
 	*/
 	function get_scorm_main_table()
 	{
-		return Database::get_scorm_table(SCORM_MAIN_TABLE);
+		return Database::get_scorm_table(TABLE_SCORM_MAIN);
 	}
 	/**
 	* Returns the name of the data table of the SCORM database.

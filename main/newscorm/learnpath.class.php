@@ -4682,7 +4682,7 @@ class learnpath {
 	function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
 	{
 		$tbl_lp_item = Database::get_course_table('lp_item');
-		$tbl_quiz = Database::get_course_table(QUIZ_TEST_TABLE);
+		$tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
 		
 		if($id != 0 && is_array($extra_info))
 		{
@@ -6250,7 +6250,7 @@ class learnpath {
 	 */
 	function get_exercises()
 	{
-		$tbl_quiz = Database::get_course_table(QUIZ_TEST_TABLE);
+		$tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
 			
 		$sql_quiz = "
 			SELECT *

@@ -43,7 +43,7 @@ Display::display_header($tool_name);
 
 <?php
 
-$group_table = Database :: get_main_table(MAIN_GROUP_TABLE);
+$group_table = Database :: get_main_table(TABLE_MAIN_GROUP);
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = addslashes($_GET['keyword']);

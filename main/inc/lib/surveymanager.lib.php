@@ -90,7 +90,7 @@ class SurveyManager
 	/*function getsurveyid($existing)
 	{
 			 
-		$survey_table = Database :: get_course_table(MAIN_SURVEY_TABLE);
+		$survey_table = Database :: get_course_table(TABLE_MAIN_SURVEY);
 		$sql = "SELECT survey_id FROM $survey_table WHERE title='$existing'" ;
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		$i=0;
@@ -297,7 +297,7 @@ class SurveyManager
 			  $ansd = implode(", " ,$answerD);
 			
 			
-			$table_question = Database :: get_course_table(MAIN_SURVEYQUESTION_TABLE);
+			$table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 			$sql = "INSERT INTO  $table_question (gid,type,caption,ans1,ans2,ans3,ans4,ans5,ans6,ans7,ans8,ans9,ans10,open_ans,anst,ansd,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('$gid','$type','$caption',$x'$open_ans','$anst','$ansd',$y)";
 			$result = api_sql_query($sql);
 			return mysql_insert_id();
@@ -306,7 +306,7 @@ class SurveyManager
 			
 	 function get_question($questionid)
 	 {
-	  $table_question = Database :: get_course_table(MAIN_SURVEYQUESTION_TABLE);
+	  $table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 	  $sql = "SELECT * FROM $table_question where qid='$questionid'";
 			$res=api_sql_query($sql);
 			$code=@mysql_result($res,0,'caption');
@@ -446,9 +446,9 @@ function get_question_data($qid,$curr_dbname)
 	/*
 	function join_survey($question_type)
 		{
-		  $table_survey = Database :: get_course_table(MAIN_SURVEY_TABLE);
-		  $table_group =  Database :: get_course_table(MAIN_GROUP_TABLE);
-		  $table_question = Database :: get_course_table(MAIN_SURVEYQUESTION_TABLE);
+		  $table_survey = Database :: get_course_table(TABLE_MAIN_SURVEY);
+		  $table_group =  Database :: get_course_table(TABLE_MAIN_GROUP);
+		  $table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 		  echo $sql="select t1.title as stitle, t3.type as type, t3.caption as caption, t2.groupname as groupname from $table_survey t1, $table_group t2, $table_question t3  where t1.survey_id=t2.survey_id  and t3.gid=t2.group_id and t3.type='$question_type'"; 
 		  $sql_result = api_sql_query($sql,__FILE__,__LINE__);
 		  $result = mysql_fetch_object($sql_result);
@@ -1778,7 +1778,7 @@ function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGU
 	
 	function listGroups($id_survey, $fields = '*'){
 		
-		$groups_table = Database :: get_course_table(MAIN_GROUP_TABLE);
+		$groups_table = Database :: get_course_table(TABLE_MAIN_GROUP);
 		
 		$sql = 'SELECT '.$fields.' FROM '.$groups_table.'
 				WHERE survey_id='.$id_survey.' ORDER BY sortby';
@@ -1795,7 +1795,7 @@ function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGU
 	
 	function listQuestions($id_survey, $fields = '*'){
 		
-		$questions_table = Database :: get_course_table(MAIN_SURVEYQUESTION_TABLE);
+		$questions_table = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 		$groups_table = Database :: get_course_table('survey_group');
 		
 		$sql = 'SELECT '.$fields.' 

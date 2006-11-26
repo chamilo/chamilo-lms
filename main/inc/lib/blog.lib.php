@@ -52,7 +52,7 @@ class Blog
 		if(is_numeric($blog_id))
 		{
 			// init
-			$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
+			$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 			
 			$sql = "
 				SELECT `blog_name`
@@ -78,7 +78,7 @@ class Blog
 	function get_blog_subtitle($blog_id)
 	{
 		// init
-		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
+		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		$sql = "SELECT `blog_subtitle` FROM $tbl_blogs WHERE `blog_id` =$blog_id";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$blog = mysql_fetch_array($result);
@@ -99,8 +99,8 @@ class Blog
 	{
 		// Database table definitions
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
-		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
+		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 		
 		// Get blog members
 		$sql = "
@@ -138,10 +138,10 @@ class Blog
 		global $_user; 
 
 		// Tabel definitions
-		$tbl_blogs 			= Database::get_course_table(BLOGS_TABLE);
+		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool 			= Database::get_course_table(TABLE_TOOL_LIST);
-		$tbl_blogs_posts 	= Database::get_course_table(BLOGS_POSTS_TABLE);
-		$tbl_blogs_tasks 	= Database::get_course_table(BLOGS_TASKS);
+		$tbl_blogs_posts 	= Database::get_course_table(TABLE_BLOGS_POSTS);
+		$tbl_blogs_tasks 	= Database::get_course_table(TABLE_BLOGS_TASKS);
 		
 		// Create the blog
 		$sql = "INSERT INTO $tbl_blogs (`blog_name`, `blog_subtitle`, `date_creation`, `visibility` ) VALUES ('$title', '$subtitle', NOW(), '1');";
@@ -177,7 +177,7 @@ class Blog
 		global $_user;
 		
 		// Table definitions
-		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
+		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 		
 		// Update the blog
@@ -203,11 +203,11 @@ class Blog
 	function delete_blog($blog_id)
 	{
 		// Init
-		$tbl_blogs 	= Database::get_course_table(BLOGS_TABLE);
-		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
-		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-		$tbl_blogs_rating = Database::get_course_table(BLOGS_RATING);
+		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
+		$tbl_blogs_posts 	= Database::get_course_table(TABLE_BLOGS_POSTS);
+		$tbl_blogs_tasks 	= Database::get_course_table(TABLE_BLOGS_TASKS);
+		$tbl_tool 			= Database::get_course_table(TABLE_TOOL_LIST);
+		$tbl_blogs_rating 	= Database::get_course_table(TABLE_BLOGS_RATING);
 		
 		// Delete posts
 		$sql = "DELETE FROM $tbl_blogs_posts WHERE blog_id = $blog_id";
@@ -247,7 +247,7 @@ class Blog
 		global $_user; 
 		
 		// Table Definitions
-		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
+		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		
 		// Create the post
 		$sql = "INSERT INTO " . $tbl_blogs_posts." (`title`, `full_text`, `date`, `blog_id`, `author` ) VALUES ('$title', '$full_text', NOW(), '$blog_id', '".$_user['user_id']."');";
@@ -270,7 +270,7 @@ class Blog
 	function edit_post($post_id, $title, $full_text, $blog_id)
 	{
 		// Init
-		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
+		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		
 		// Create the post
 		$sql = "UPDATE $tbl_blogs_posts SET title = '" . $title."', full_text = '" . $full_text."' WHERE post_id =$post_id AND blog_id =$blog_id LIMIT 1 ;";
@@ -291,9 +291,9 @@ class Blog
 	function delete_post($blog_id, $post_id)
 	{
 		// Init
-		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
-		$tbl_blogs_comments = Database::get_course_table(BLOGS_COMMENTS_TABLE);
-		$tbl_blogs_rating = Database::get_course_table(BLOGS_RATING);
+		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
+		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
+		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
 		
 		// Delete ratings on this comment
 		$sql = "DELETE FROM $tbl_blogs_rating WHERE blog_id = $blog_id AND item_id = $post_id AND rating_type = 'post'";
@@ -327,7 +327,7 @@ class Blog
 		global $_user; 
 		
 		// Table Definition
-		$tbl_blogs_comments = Database::get_course_table(BLOGS_COMMENTS_TABLE);
+		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		
 		// Create the comment
 		$sql = "INSERT INTO $tbl_blogs_comments (`title`, `comment`, `author`, `date`, `blog_id`, `post_id`, `parent_comment_id`, `task_id` ) VALUES ('$title', '$full_text', '".$_user['user_id']."', NOW(), '$blog_id', '$post_id', '$parent_id', $task_id)";
@@ -352,8 +352,8 @@ class Blog
 	function delete_comment($blog_id, $comment_id)
 	{
 		// Init
-		$tbl_blogs_comments = Database::get_course_table(BLOGS_COMMENTS_TABLE);
-		$tbl_blogs_rating = Database::get_course_table(BLOGS_RATING);
+		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
+		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
 
 		// Delete ratings on this comment
 		$sql = "DELETE FROM $tbl_blogs_rating WHERE blog_id = $blog_id AND item_id = $comment_id AND rating_type = 'comment'";
@@ -390,8 +390,8 @@ class Blog
 	function create_task($blog_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color)
 	{
 		// Init
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
-		$tbl_tasks_permissions = Database::get_course_table(BLOGS_TASKS_PERMISSIONS);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
+		$tbl_tasks_permissions = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
 		
 		// Create the task
 		$sql = "INSERT INTO $tbl_blogs_tasks (`blog_id`, `title`, `description`, `color`, `system_task` ) VALUES ('$blog_id', '" . $title."', '" . $description."', '" . $color."', '0');";
@@ -465,8 +465,8 @@ class Blog
 	function edit_task($blog_id, $task_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color)
 	{
 		// Init
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
-		$tbl_tasks_permissions = Database::get_course_table(BLOGS_TASKS_PERMISSIONS);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
+		$tbl_tasks_permissions = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
 		
 		// Create the task
 		$sql = "UPDATE $tbl_blogs_tasks SET title = '$title', description = '$description', color = '$color' WHERE task_id =$task_id LIMIT 1";
@@ -540,7 +540,7 @@ class Blog
 	function delete_task($blog_id, $task_id)
 	{
 		// Init
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		
 		// Delete posts
 		$sql = "DELETE FROM $tbl_blogs_tasks WHERE `blog_id` = $blog_id AND `task_id` = $task_id";
@@ -558,7 +558,7 @@ class Blog
 	function delete_assigned_task($blog_id, $assignment_id)
 	{
 		// Init
-		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);
+		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 		$parameters = explode('|',$assignment_id);
 		$task_id = $parameters[0];
 		$user_id = $parameters[1];
@@ -581,9 +581,9 @@ class Blog
 		global $_user; 
 		
 		// Init
-		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
-		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
+		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		
 		if($_user['user_id'])
 		{
@@ -625,7 +625,7 @@ class Blog
 	function change_blog_visibility($blog_id)
 	{
 		// Init
-		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
+		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 		
 		// Get blog properties
@@ -667,8 +667,8 @@ class Blog
 	function display_blog_posts($blog_id, $filter = '1=1', $max_number_of_posts = 20)
 	{
 		// Init
-		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
-		$tbl_blogs_comments = Database::get_course_table(BLOGS_COMMENTS_TABLE);
+		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
+		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		global $dateFormatLong;
 		
@@ -793,8 +793,8 @@ class Blog
 	function display_post($blog_id, $post_id)
 	{
 		// Init
-		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
-		$tbl_blogs_comments = Database::get_course_table(BLOGS_COMMENTS_TABLE);
+		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
+		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		
 		global $dateFormatLong;
@@ -868,7 +868,7 @@ class Blog
 		global $_user; 
 		
 		// Init
-		$tbl_blogs_rating = Database::get_course_table(BLOGS_RATING);
+		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
 		
 		// Check if the user has already rated this post/comment
 		$sql = "SELECT rating_id FROM $tbl_blogs_rating WHERE blog_id = $blog_id AND item_id = $item_id AND rating_type = '$type' AND user_id = '".$_user['user_id']."'";
@@ -889,7 +889,7 @@ class Blog
 	
 	function display_rating($type, $blog_id, $item_id)
 	{
-		$tbl_blogs_rating = Database::get_course_table(BLOGS_RATING);
+		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
 		
 		// Calculate rating
 		$sql = "SELECT AVG(rating) as rating FROM $tbl_blogs_rating WHERE blog_id = $blog_id AND item_id = $item_id AND rating_type = '$type' ";
@@ -913,7 +913,7 @@ class Blog
 		global $_user; 
 		
 		// Init
-		$tbl_blogs_rating = Database::get_course_table(BLOGS_RATING);
+		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
 		
 		if($type == 'post')
 		{
@@ -958,9 +958,9 @@ class Blog
 	function get_threaded_comments($current = 0, $current_level = 0, $blog_id, $post_id, $task_id = 0)
 	{
 		// Init
-		$tbl_blogs_comments = Database::get_course_table(BLOGS_COMMENTS_TABLE);
+		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		global $dateFormatLong;
 		
 		// Select top level comments
@@ -1145,7 +1145,7 @@ class Blog
 	function display_form_edit_post($blog_id, $post_id)
 	{
 		// Init
-		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
+		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		
 		// Get posts and author
@@ -1198,7 +1198,7 @@ class Blog
 		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_add'))
 		{
 			// Init
-			$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
+			$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 			$counter = 0;
 			global $color2;
 			
@@ -1269,8 +1269,8 @@ class Blog
 	{
 		// Init
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
-		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
+		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 		$counter = 0;
 		global $color2;
 		
@@ -1398,7 +1398,7 @@ class Blog
 	function display_edit_task_form($blog_id, $task_id)
 	{
 		// Init
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$colors = array('FFFFFF','FFFF99','FFCC99','FF9933','FF6699','CCFF99','CC9966','66FF00', '9966FF', 'CF3F3F', '990033','669933','0033FF','003366','000000');
 		
 		$sql = "SELECT blog_id, task_id, title, description, color FROM $tbl_blogs_tasks WHERE task_id = $task_id";
@@ -1422,7 +1422,7 @@ class Blog
 						</tr>';
 						
 						/* edit by Kevin Van Den Haute (kevin@develop-it.be) */
-						$tbl_tasks_permissions = Database::get_course_table(BLOGS_TASKS_PERMISSIONS);
+						$tbl_tasks_permissions = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
 						
 						$sql = "
 							SELECT
@@ -1494,8 +1494,8 @@ class Blog
 	{
 		// Init
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
+		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$day	= date("d");
 		$month	= date("m");
 		$year	= date("Y");
@@ -1616,10 +1616,10 @@ class Blog
 		
 		/* ------------- */
 		// Init
-		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
-		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);
+		$tbl_users 					= Database::get_main_table(TABLE_MAIN_USER);
+		$tbl_blogs_rel_user 		= Database::get_course_table(TABLE_BLOGS_REL_USER);
+		$tbl_blogs_tasks 			= Database::get_course_table(TABLE_BLOGS_TASKS);
+		$tbl_blogs_tasks_rel_user 	= Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 		
 		$year	= date("Y");
 		global $MonthsLong;
@@ -1779,7 +1779,7 @@ class Blog
 	function assign_task($blog_id, $user_id, $task_id, $target_date)
 	{
 		// Init
-		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);
+		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 		
 		$sql = "
 			SELECT COUNT(*) as 'number'
@@ -1815,7 +1815,7 @@ class Blog
 	function edit_assigned_task($blog_id, $user_id, $task_id, $target_date, $old_user_id, $old_task_id, $old_target_date)
 	{
 		// Init
-		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);
+		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 		
 		$sql = "
 			SELECT COUNT(*) as 'number'
@@ -1857,8 +1857,8 @@ class Blog
 	function display_select_task_post($blog_id, $task_id)
 	{
 		// Init
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
-		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
+		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		
 		$sql = "
@@ -1905,8 +1905,8 @@ class Blog
 	function set_user_subscribed($blog_id,$user_id)
 	{
 		// Init
-		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
-		$tbl_user_permissions = Database::get_course_table(PERMISSION_USER_TABLE);
+		$tbl_blogs_rel_user 	= Database::get_course_table(TABLE_BLOGS_REL_USER);
+		$tbl_user_permissions 	= Database::get_course_table(TABLE_PERMISSION_USER);
 		
 		// Subscribe the user
 		$sql = "INSERT INTO $tbl_blogs_rel_user ( `blog_id`, `user_id` ) VALUES ('$blog_id', '$user_id');";
@@ -1929,8 +1929,8 @@ class Blog
 	function set_user_unsubscribed($blog_id, $user_id)
 	{
 		// Init
-		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
-		$tbl_user_permissions = Database::get_course_table(PERMISSION_USER_TABLE);
+		$tbl_blogs_rel_user 	= Database::get_course_table(TABLE_BLOGS_REL_USER);
+		$tbl_user_permissions 	= Database::get_course_table(TABLE_PERMISSION_USER);
 
 		// Unsubscribe the user
 		$sql = "DELETE FROM $tbl_blogs_rel_user WHERE `blog_id` = $blog_id AND `user_id` = $user_id";
@@ -1955,9 +1955,9 @@ class Blog
 		// Init
 		global $_course;
 		$currentCourse = $_course['sysCode'];
-		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
-		$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
+		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
+		$table_course_user 	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 		echo '<span class="blogpost_title">' . get_lang('SubscribeMembers') . '</span>';
 		$properties["width"] = "100%";
 		
@@ -2042,8 +2042,8 @@ class Blog
 		global $_user; 
 		
 		// Init
-		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
+		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
+		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 		
 		echo '<span class="blogpost_title">' . get_lang('UnsubscribeMembers') . '</span>';
 		
@@ -2077,8 +2077,8 @@ class Blog
 			$row[] = Display::encrypted_mailto_link($myrow["email"]);
 			
 			$sql = "SELECT bt.title task
-			FROM " . Database::get_course_table(BLOGS_TASKS_REL_USER) . " `btu`
-			INNER JOIN " . Database::get_course_table(BLOGS_TASKS) . " `bt` ON `btu`.`task_id` = `bt`.`task_id`
+			FROM " . Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER) . " `btu`
+			INNER JOIN " . Database::get_course_table(TABLE_BLOGS_TASKS) . " `bt` ON `btu`.`task_id` = `bt`.`task_id`
 			WHERE btu.blog_id = $blog_id AND btu.user_id = " . $myrow['user_id'] . "";
 			
 			$sql_res = mysql_query($sql) or die(mysql_error());
@@ -2142,8 +2142,8 @@ class Blog
 	function display_form_user_rights($blog_id)
 	{
 		// Init
-		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_blogs_rel_user = Database::get_course_table(BLOGS_REL_USER_TABLE);
+		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
+		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 		
 		echo '<span class="blogpost_title">' . get_lang('RightsManager') . '</span>';
 		
@@ -2227,10 +2227,10 @@ class Blog
 		$tasks = array();
 		
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_blogs_posts = Database::get_course_table(BLOGS_POSTS_TABLE);
-		$tbl_blogs_tasks = Database::get_course_table(BLOGS_TASKS);
-		$tbl_blogs_tasks_rel_user = Database::get_course_table(BLOGS_TASKS_REL_USER);
-		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
+		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
+		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
+		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 
 		//Handle leap year
 		$numberofdays = array (0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -2395,7 +2395,7 @@ class Blog
 	function display_edit_blog_form($blog_id)
 	{
 		// Init
-		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
+		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		
 		$sql = "SELECT blog_id, blog_name, blog_subtitle FROM $tbl_blogs WHERE blog_id = $blog_id";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -2433,7 +2433,7 @@ class Blog
 	{
 		// Init
 		$counter = 0;
-		$tbl_blogs = Database::get_course_table(BLOGS_TABLE);
+		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		
 		
 		$sql = "SELECT `blog_id`, `blog_name`, `blog_subtitle`, `visibility` FROM $tbl_blogs ORDER BY `blog_name`";

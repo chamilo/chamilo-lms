@@ -9,7 +9,7 @@ function updateCourseTracking($i_user_id){
 	
 	
 	
-	$course_tracking_table = Database :: get_statistic_table(STATISTIC_TRACK_E_COURSE_ACCESS_TABLE);
+	$course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 	
 	//We select the last record for the current course in the course tracking table
 	$sql="SELECT course_access_id FROM $course_tracking_table WHERE user_id='$i_user_id' ORDER BY login_course_date DESC LIMIT 0,1";

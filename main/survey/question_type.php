@@ -42,9 +42,11 @@ require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-$table_survey = Database :: get_main_table(MAIN_SURVEY_TABLE);
-$table_group =  Database :: get_main_table(MAIN_GROUP_TABLE);
-$table_question = Database :: get_main_table(MAIN_SURVEYQUESTION_TABLE);
+
+// Database table definitions
+$table_survey = Database :: get_main_table(TABLE_MAIN_SURVEY);
+$table_group =  Database :: get_main_table(TABLE_MAIN_GROUP);
+$table_question = Database :: get_main_table(TABLE_MAIN_SURVEYQUESTION);
 $tool_name = get_lang('SelectQuestionByType');
 $interbredcrump[] = array ("url" => "index.php", "name" => get_lang('Survey'));
 //$questtype=$_POST['add_question'];

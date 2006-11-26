@@ -812,7 +812,7 @@ if(!empty($_GET['student']))
 					 * Calcul du temps passé sur le cours courant
 					 */
 					
-					$tbl_track_lcourse_access = Database :: get_statistic_table(STATISTIC_TRACK_E_COURSE_ACCESS_TABLE);
+					$tbl_track_lcourse_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 					
 					$s_sql_connection_time="SELECT login_course_date, logout_course_date FROM $tbl_track_lcourse_access WHERE user_id ='".$_GET['student']."' AND logout_course_date <> 'null' AND course_code='".$a_cours['code']."'";
 

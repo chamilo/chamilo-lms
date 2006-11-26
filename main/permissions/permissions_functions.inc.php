@@ -26,17 +26,17 @@ function store_permissions($content, $id)
 	// Which database are we using (depending on the $content parameter)
 	if($content=='user')
 	{
-		$table=Database::get_course_table(PERMISSION_USER_TABLE);
+		$table=Database::get_course_table(TABLE_PERMISSION_USER);
 		$id_field = user_id;
 	}
 	if($content=='group')
 	{
-		$table=Database::get_course_table(PERMISSION_GROUP_TABLE);
+		$table=Database::get_course_table(TABLE_PERMISSION_GROUP);
 		$id_field = group_id;
 	}
 	if($content=='role')
 	{
-		$table=Database::get_course_table(ROLE_PERMISSION_TABLE);
+		$table=Database::get_course_table(TABLE_ROLE_PERMISSION);
 		$id_field = role_id;
 	}
 	
@@ -83,17 +83,17 @@ function store_one_permission($content, $action, $id, $tool,$permission)
 	// Which database are we using (depending on the $content parameter)
 	if($content=='user')
 	{
-		$table=Database::get_course_table(PERMISSION_USER_TABLE);
+		$table=Database::get_course_table(TABLE_PERMISSION_USER);
 		$id_field = user_id;
 	}
 	if($content=='group')
 	{
-		$table=Database::get_course_table(PERMISSION_GROUP_TABLE);
+		$table=Database::get_course_table(TABLE_PERMISSION_GROUP);
 		$id_field = group_id;
 	}
 	if($content=='role')
 	{
-		$table=Database::get_course_table(ROLE_PERMISSION_TABLE);
+		$table=Database::get_course_table(TABLE_ROLE_PERMISSION);
 		$id_field = role_id;
 	}
 	
@@ -133,27 +133,27 @@ function get_permissions($content, $id)
 	
 	if($content == 'user')
 	{
-		$table=Database::get_course_table(PERMISSION_USER_TABLE);
+		$table=Database::get_course_table(TABLE_PERMISSION_USER);
 		$id_field = user_id;
 	}
 	elseif($content == 'group')
 	{
-		$table=Database::get_course_table(PERMISSION_GROUP_TABLE);
+		$table=Database::get_course_table(TABLE_PERMISSION_GROUP);
 		$id_field = group_id;
 	}
 	elseif($content == 'role')
 	{
-		$table=Database::get_course_table(ROLE_PERMISSION_TABLE);
+		$table=Database::get_course_table(TABLE_ROLE_PERMISSION);
 		$id_field = role_id;
 	}
 	elseif($content == 'platform_role')
 	{
-		$table=Database::get_main_table(ROLE_PERMISSION_TABLE);
+		$table=Database::get_main_table(TABLE_ROLE_PERMISSION);
 		$id_field = role_id;
 	}
 	elseif($content == 'task')
 	{
-		$table=Database::get_course_table(BLOGS_TASKS_PERMISSIONS);
+		$table=Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
 		$id_field = task_id;
 	}
 	
@@ -413,8 +413,8 @@ function display_role_list($current_course_roles, $current_platform_roles)
 {
 	global $setting_visualisation; 
 	
-	$coures_roles_table=Database::get_course_table(ROLE_TABLE);
-	$platform_roles_table=Database::get_main_table(ROLE_TABLE);
+	$coures_roles_table=Database::get_course_table(TABLE_ROLE);
+	$platform_roles_table=Database::get_main_table(TABLE_ROLE);
 	
 	// platform roles
 	$sql="SELECT * FROM $platform_roles_table";
@@ -490,15 +490,15 @@ function get_roles($content,$id, $scope='course')
 {
 	if($content=='user')
 	{
-		$table=Database::get_course_table(ROLE_USER_TABLE);
+		$table=Database::get_course_table(TABLE_ROLE_USER);
 		$id_field = user_id;
 	}
 	if($content=='group')
 	{
-		$table=Database::get_course_table(ROLE_GROUP_TABLE);
+		$table=Database::get_course_table(TABLE_ROLE_GROUP);
 		$id_field = group_id;
 	}
-	$table_role=Database::get_course_table(ROLE_TABLE);
+	$table_role=Database::get_course_table(TABLE_ROLE);
 	
 	$current_roles=array();
 	//$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";
@@ -522,11 +522,11 @@ function get_all_roles($content='course')
 {
 	if($content=='course')
 	{
-		$table_role=Database::get_course_table(ROLE_TABLE);
+		$table_role=Database::get_course_table(TABLE_ROLE);
 	}
 	if($content=='platform')
 	{
-		$table_role=Database::get_main_table(ROLE_TABLE);
+		$table_role=Database::get_main_table(TABLE_ROLE);
 	}
 	
 	$current_roles=array();
@@ -554,27 +554,27 @@ function get_roles_permissions($content,$id, $scope='course')
 {
 	if($content == 'user')
 	{
-		$table=Database::get_course_table(ROLE_USER_TABLE);
+		$table=Database::get_course_table(TABLE_ROLE_USER);
 		$id_field = user_id;
 	}
 	
 	if($content == 'group')
 	{
-		$table = Database::get_course_table(ROLE_GROUP_TABLE);
+		$table = Database::get_course_table(TABLE_ROLE_GROUP);
 		$id_field = group_id;
 	}
 	
 	// course roles or platform roles
 	if($scope == 'course')
 	{
-		$table_role = Database::get_course_table(ROLE_TABLE);
-		$table_role_permissions = Database::get_course_table(ROLE_PERMISSION_TABLE);
+		$table_role = Database::get_course_table(TABLE_ROLE);
+		$table_role_permissions = Database::get_course_table(TABLE_ROLE_PERMISSION);
 	}
 	
 	if($scope == 'platform')
 	{
-		$table_role = Database::get_main_table(ROLE_TABLE);
-		$table_role_permissions = Database::get_main_table(ROLE_PERMISSION_TABLE);
+		$table_role = Database::get_main_table(TABLE_ROLE);
+		$table_role_permissions = Database::get_main_table(TABLE_ROLE_PERMISSION);
 	}
 	
 	$current_roles = array();
@@ -613,12 +613,12 @@ function assign_role($content, $action, $id, $role_id, $scope='course')
 	// Which database are we using (depending on the $content parameter)
 	if($content=='user')
 	{
-		$table=Database::get_course_table(ROLE_USER_TABLE);
+		$table=Database::get_course_table(TABLE_ROLE_USER);
 		$id_field = user_id;
 	}
 	elseif($content=='group')
 	{
-		$table=Database::get_course_table(ROLE_GROUP_TABLE);
+		$table=Database::get_course_table(TABLE_ROLE_GROUP);
 		$id_field = group_id;
 	}
 	else 

@@ -395,7 +395,7 @@ foreach($language_files as $index => $language_file)
 
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
-$tbl_track_login = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 	
 $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
 

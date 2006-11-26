@@ -479,7 +479,7 @@ function event_exercice($exo_id, $score, $weighting)
 			   '".$weighting."',
 			   FROM_UNIXTIME(".$reallyNow.")
 			  )";
-	$tbl_learnpath_user = Database::get_course_table(LEARNPATH_USER_TABLE);
+	$tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
 	if ($origin == 'learnpath')
 	{
 		if ($user_id == "NULL")
@@ -539,7 +539,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 			   '".$j."'
 			  
 			   			    )";
-	$tbl_learnpath_user = Database::get_course_table(LEARNPATH_USER_TABLE);
+	$tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
 	if ($origin == 'learnpath')
 	{
 		if ($user_id == "NULL")

@@ -234,7 +234,7 @@ class Database
 	function get_database_name_prefix()
 	{
 		global $_configuration; 
-		return $_configuration['db_prefix'] 
+		return $_configuration['db_prefix'];
 	}
 	/**
 	*	Returns the course table prefix for single database.

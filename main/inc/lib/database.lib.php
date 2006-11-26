@@ -233,7 +233,8 @@ class Database
 	*/
 	function get_database_name_prefix()
 	{
-		return $GLOBALS["dbNamePrefix"];
+		global $_configuration; 
+		return $_configuration['db_prefix'] 
 	}
 	/**
 	*	Returns the course table prefix for single database.
@@ -243,7 +244,8 @@ class Database
 	*/
 	function get_course_table_prefix()
 	{
-		return $GLOBALS["courseTablePrefix"];
+		global $_configuration;
+		return $_configuration['table_prefix']; 
 	}
 	/*
 	-----------------------------------------------------------------------------

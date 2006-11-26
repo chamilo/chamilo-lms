@@ -2020,7 +2020,6 @@ class learnpath {
 	 * @return	string	'scorm','aicc','scorm2004','dokeos' or '' if the package cannot be recognized
 	 */
 	function get_package_type($file_path,$file_name){
-     	//error_log('In learnpath::get_package_type("'.$file_path.'","'.$file_name.'")',0);
      	
      	//get name of the zip file without the extension
 		$file_info = pathinfo($file_name);
@@ -2054,10 +2053,10 @@ class learnpath {
 				$package_type = 'scorm';
 				break;//exit the foreach loop
 			}
-			elseif(stristr($thisContent['filename'],'AICC')!==FALSE)
-			{
+			elseif(preg_match('/aicc\//i',$thisContent['filename'])!==FALSE)
+			{//if found an aicc directory...
 				$package_type='aicc';
-				break;//exit the foreach loop
+				//break;//don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC
 			}
 			else
 			{

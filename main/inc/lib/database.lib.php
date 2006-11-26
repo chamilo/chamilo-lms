@@ -591,17 +591,6 @@ class Database
 	{
 		return mysql_num_rows($res);
 	}
-	
-	/**
-	*	Returns the name of the tool table of a course.
-	*	If no database parameter is present, the function works on the current course.
-	*/
-	function get_course_tool_list_table($database_name = '')
-	{
-		$database_name_with_glue = Database::fix_database_parameter($database_name);
-		
-		return Database::format_glued_course_table_name($database_name_with_glue, TABLE_TOOL_LIST);
-	}
 }
 //end class Database
 ?>

@@ -74,7 +74,7 @@ foreach($courses_list as $db)
 {
 	$incoherences = 0;
 	echo "Now starting migration of learnpath tables from $db database...<br />\n";
-	$lp_main = Database::get_course_learnpath_main_table($db);
+	$lp_main = Database::get_course_table(TABLE_LEARNPATH_MAIN),$db);
 	$lp_ids = array();
 	$lp_user = Database::get_course_learnpath_user_table($db);
 	$lp_users = array();
@@ -528,7 +528,7 @@ fwrite($fh_res,"-- Recording resulting course homepages links changes for SCORM\
 echo "<br/><br/>Now starting migration of scorm tables from global SCORM database<br />\n";
 $scorm_main = Database::get_scorm_main_table($db);
 $scorm_item = Database::get_scorm_sco_data_table($db);
-$lp_main 	= Database::get_course_learnpath_main_table($db);
+$lp_main 	= Database::get_course_table(TABLE_LEARNPATH_MAIN,$db);
 $course_pref = Database::get_course_table_prefix();
 $lp_ids 	= array();
 $lp_item_ids 	= array();

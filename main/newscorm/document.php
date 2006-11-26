@@ -50,7 +50,7 @@ require_once('learnpathItem.class.php');
 
 // storing the tables names in variables.
 $tbl_document           = Database::get_course_table(TABLE_SCORMDOC);
-$tbl_learnpath_main     = Database::get_course_learnpath_main_table();
+$tbl_learnpath_main     = Database::get_course_table(TABLE_LEARNPATH_MAIN);
 $tbl_tool               = Database::get_course_table(TABLE_TOOL_LIST);
 
 $default_visibility="v";

@@ -23,6 +23,7 @@ function my_get_time($time){
 	else return 0;
 }
 
+//@todo shouldn't the dokeos header not be used here?
 echo "<html><body>";
 
 /**
@@ -65,7 +66,7 @@ foreach($courses_list as $db)
 {
 	$incoherences = 0;
 	echo "Now starting migration of learnpath tables from $db database...<br />\n";
-	$lp_main = Database::get_course_learnpath_main_table($db);
+	$lp_main = Database::get_course_table(TABLE_LEARNPATH_MAIN,$db);
 	$lp_ids = array();
 	$lp_user = Database::get_course_learnpath_user_table($db);
 	$lp_users = array();
@@ -459,15 +460,19 @@ unset($parent_lps);
  * The migration needs to take all data from the scorm.scorm_main and scorm.scorm_sco_data tables
  * and add them to the new lp, lp_view, lp_item and lp_item_view tables.
  */
-echo "<br/><br/>Now starting migration of scorm tables from global SCORM database<br />\n";
-$scorm_main = Database::get_scorm_main_table($db);
-$scorm_item = Database::get_scorm_sco_data_table($db);
-$lp_main 	= Database::get_course_learnpath_main_table($db);
-$course_pref = Database::get_course_table_prefix();
-$lp_ids 	= array();
+echo '<br/><br/>'.get_lang('NowStartingMigration')."<br />\n";
+
+// Database table definitions
+$scorm_main 	= Database::get_scorm_main_table($db);
+$scorm_item 	= Database::get_scorm_sco_data_table($db);
+$lp_main 		= Database::get_course_table(TABLE_LEARNPATH_MAIN,$db);
+$course_pref 	= Database::get_course_table_prefix();
+
+// initialisations
+$lp_ids 		= array();
 $lp_item_ids 	= array();
 $lp_item_refs 	= array();
-$lp_course = array();
+$lp_course 		= array();
 $lp_course_code = array();
 $scorm_lp_paths = array();
 

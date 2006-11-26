@@ -86,7 +86,7 @@ $TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSE_LINKS      = Database::get_course_table(TABLE_LINK);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
-//$table_scormdata = Database::get_scorm_table(SCORM_SCO_DATA_TABLE);
+//$table_scormdata = Database::get_scorm_table(TABLE_SCORM_SCO_DATA);
 //$table_scormmain = Database::get_scorm_table(TABLE_SCORM_MAIN);
 //$tbl_learnpath_main = Database::get_course_table(TABLE_LEARNPATH_MAIN);
 //$tbl_learnpath_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);

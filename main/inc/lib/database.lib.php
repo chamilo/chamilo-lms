@@ -73,7 +73,7 @@ define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS', 'track_e_course_access');
 
 //scorm database tables
 define('TABLE_SCORM_MAIN', 'scorm_main');
-define('SCORM_SCO_DATA_TABLE', 'scorm_sco_data');
+define('TABLE_SCORM_SCO_DATA', 'scorm_sco_data');
 
 //course tables
 define('TABLE_AGENDA', 'calendar_event');
@@ -344,23 +344,6 @@ class Database
 		return $result;
 	}
 
-	/**
-	* Returns the name of the main table of the SCORM database.
-	* @deprecated use Database::get_scorm_table(TABLE_SCORM_MAIN);
-	*/
-	function get_scorm_main_table()
-	{
-		return Database::get_scorm_table(TABLE_SCORM_MAIN);
-	}
-	/**
-	* Returns the name of the data table of the SCORM database.
-	* @deprecated use Database::get_scorm_table(SCORM_SCO_DATA_TABLE);
-	*/
-	function get_scorm_sco_data_table()
-	{
-		return Database::get_scorm_table(SCORM_SCO_DATA_TABLE);
-	}
-	
 	/*
 	-----------------------------------------------------------------------------
 		Query Functions

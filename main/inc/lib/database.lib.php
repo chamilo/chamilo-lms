@@ -355,6 +355,7 @@ class Database
 	
 	/**
 	*	@return a list (array) of all courses.
+	* 	@todo shouldn't this be in the course.lib.php script? 
 	*/
 	function get_course_list()
 	{
@@ -369,6 +370,7 @@ class Database
 	*	Returns an array with all database fields for the specified course.
 	*
 	*	@param the real (system) code of the course (key of the main course table)
+	* 	@todo shouldn't this be in the course.lib.php script? 
 	*/
 	function get_course_info($course_code)
 	{
@@ -386,6 +388,7 @@ class Database
 	*	@author Roan Embrechts, first version + converted to Database API
 	*	@version 30 September 2004
 	*	@desc find all the information about a specified user. Without parameter this is the current user.
+	* 	@todo shouldn't this be in the user.lib.php script? 
 	*/
 	function get_user_info_from_id($user_id = '')
 	{
@@ -412,6 +415,10 @@ class Database
 	*
 	*	@todo	add more array entries to abstract course info from field names
 	*	@author	Roan Embrechts
+	* 
+	* 	@todo what's the use of this function. I think this is better removed.
+	* 		  There should be consistency in the variable names and the use throughout the scripts
+	* 		  for the database name we should consistently use or db_name or database (db_name probably being the better one)
 	*/
 	function generate_abstract_course_field_names($result_array)
 	{
@@ -455,6 +462,9 @@ class Database
 	*	@todo add more array entries to abstract user info from field names
 	*	@author Roan Embrechts
 	*	@author Patrick Cool
+	* 
+	* 	@todo what's the use of this function. I think this is better removed.
+	* 		  There should be consistency in the variable names and the use throughout the scripts
 	*/
 	function generate_abstract_user_field_names($result_array)
 	{

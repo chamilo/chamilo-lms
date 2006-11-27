@@ -14,28 +14,50 @@ font-size: small;
 background-color: white;
 height: 310px;
 width: 180px;
-border:none;
+border-right: 1px none;
 }
 .inner_lp_toc{
 overflow: auto;
 background-color: white;
 height: 290px;
-width: 180px;
-border:none;
+width: 99%;
+border-right: 1px #999999 solid;
 }
 .inner_lp_toc .scorm_item{
-font-size: smaller;
+font-size: 11px;
 margin-left: 10px;
 margin-right:10px;
+padding-bottom: 2px;
 text-decoration: none;
 }
+
+	.inner_lp_toc .scorm_item A{
+		font-weight: normal;
+	}
+	
+		.inner_lp_toc .scorm_item A.chapter_module{
+			font-weight: normal;
+		}
+
 .inner_lp_toc .scorm_item_highlight{
-font-size: smaller;
+font-size: 11px;
 margin-left: 10px;
 margin-right: 10px;
-background-color: #e2e2e2;
-text-decoration: underline;
+padding-bottom: 2px;
+text-decoration: none;
+background:#F8F8F8; border:1px dashed #999999;
 }
+
+	.inner_lp_toc .scorm_item_highlight A{
+		font-weight: normal;
+	}
+	
+.inner_lp_toc .scorm_item_highlight .highlight{
+	font-weight: normal;
+	background:#F3F3F3; border:1px dashed #949494;
+	margin-right: 1px;
+}
+
 .inner_lp_toc .scorm_status_img{
 margin:0px;
 margin-left: -10px;

@@ -58,7 +58,7 @@ class presentation extends learnpath {
 		 * - ftppassword if required
 		 * The program fills $files with the list of slides created
 		 */
-		$cmd = 'cd '.api_get_path(LIBRARY_PATH).'ppt2png && ./launch_ppt2png.sh java localhost 2002 "'.$file.'" "'.$base_work_dir.$created_dir.'"';
+		$cmd = 'cd '.api_get_path(LIBRARY_PATH).'ppt2png && ./launch_ppt2png.sh java '.api_get_setting('service_ppt2lp','host').' 2002 "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
 		
 		chmod ($base_work_dir.$created_dir,0777);
 		
@@ -66,7 +66,8 @@ class presentation extends learnpath {
 		
 		chmod ($base_work_dir.$created_dir,0744);
 		if($return != 0) { //if the java application returns an error code
-			DocumentManager::delete_document($_course, $dir_name, $base_work_dir);	    	
+			DocumentManager::delete_document($_course, $dir_name, $base_work_dir);	 
+			return false;   	
 	    }
 	    
 	    else {
@@ -90,11 +91,12 @@ class presentation extends learnpath {
 					
 					$slide_name = 'slide'.str_repeat('0',2-strlen($i)).$i;
 					
-					$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, 0);
+					$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
 					
 				}
 			}
 	    }
+	    return true;   	
 	    
     }
 		

@@ -79,8 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 		case 'ppt':
 			require_once('presentation.class.php');
 			$o_ppt = new presentation();
-			$o_ppt -> convert_presentation($_FILES['user_file']);
-				
+			$ppt2lp_success = $o_ppt -> convert_presentation($_FILES['user_file']);				
 			break;
 		case '':
 		default:

@@ -14,6 +14,25 @@ $langFile = "document"; //the document file is loaded because most of the upload
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)
 include("../inc/global.inc.php");
+require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
+require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
+
+
+if(isset($_POST['convert'])){
+	$cwdir = getcwd();
+	require('../newscorm/lp_upload.php');
+	if(isset($o_ppt)){
+		header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&action=build&lp_id='.$o_ppt->lp_id);
+	}
+	else {
+		$errorMessage = get_lang('Ppt2lpError');
+	}
+}
+
+event_access_tool(TOOL_UPLOAD);
+
+
 
 $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang(TOOL_LEARNPATH));
 $nameTools = get_lang("FileUpload");
@@ -39,8 +58,17 @@ Display::display_normal_message($message);
 
 echo '<br><br>';
 
-echo '<form method="POST" action="">';
-echo '<img src="../img/powerpoint_big.gif" align="absbottom">&nbsp;&nbsp;<input type="file" name="user_file"><br><br><input type="submit" name="submit" value="'.get_lang('ConvertToLP').'">&nbsp;&nbsp;<img src="../img/scormbuilder.gif" align="absmiddle">';
+if(!empty($errorMessage)){
+	Display::display_error_message($errorMessage);
+}
+
+echo '<form enctype="multipart/form-data" method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+echo '<img src="../img/powerpoint_big.gif" align="absbottom">
+		&nbsp;&nbsp;<input type="file" name="user_file">
+		<br><br>
+		<input type="submit" name="convert" value="'.get_lang('ConvertToLP').'">
+		&nbsp;&nbsp;
+		<img src="../img/scormbuilder.gif" align="absmiddle">';
 echo '</form>';
 
 

@@ -119,8 +119,11 @@ if(api_is_allowed_to_edit())
       UPLOAD SECTION - displays file upload box
      --------------------------------------*/
 		'<a href="../upload/index.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/file_zip.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("UploadScorm").'</a>'.
-       '</td>' . 
-       '<td>'.str_repeat('&nbsp',10).'<a href="../upload/upload_ppt.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a></td>'.
+       '</td>';
+       if(api_get_setting('service_ppt2lp','active')==true){
+       		echo  '<td>'.str_repeat('&nbsp',10).'<a href="../upload/upload_ppt.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a></td>';
+       }
+       echo 
     "</tr>
   </table>";
   

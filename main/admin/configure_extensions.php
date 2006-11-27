@@ -61,7 +61,7 @@ if(isset($_POST['activeExtension'])){
 			// select all the courses and insert the tool inside
 			$sql = 'SELECT db_name FROM '.Database::get_main_table(TABLE_MAIN_COURSE);
 			
-			$rs = api_sql_query($sql);
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
 			while($row = mysql_fetch_array($rs)){
 				
 				$sql = 'INSERT INTO '.$row['db_name'].'.'.TABLE_TOOL_LIST.' SET 
@@ -74,7 +74,7 @@ if(isset($_POST['activeExtension'])){
 						target="_self",
 						category="authoring"';
 				
-				api_sql_query($sql);
+				api_sql_query($sql, __FILE__, __LINE__);
 
 			}
 			
@@ -85,9 +85,31 @@ if(isset($_POST['activeExtension'])){
 					selected_value="true"
 					WHERE variable="service_ppt2lp"
 					AND subkey="active"';
+					
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			
 			if(mysql_affected_rows()>0){
 				$message = get_lang('ServiceActivated');
 			}
+			
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['ppt2lp_host']).'"
+					WHERE variable="service_ppt2lp"
+					AND subkey="host"';
+			api_sql_query($sql, __FILE__, __LINE__);
+			
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['ppt2lp_ftp_password']).'"
+					WHERE variable="service_ppt2lp"
+					AND subkey="ftp_password"';
+			api_sql_query($sql, __FILE__, __LINE__);
+			
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['ppt2lp_user']).'"
+					WHERE variable="service_ppt2lp"
+					AND subkey="user"';
+			api_sql_query($sql, __FILE__, __LINE__);
+				
 			break;		
 	}
 	
@@ -230,7 +252,7 @@ Display::display_header($nameTool);
 			<table width="100%">
 				<tr>
 					<td width="50%">
-						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_ppt2lp.jpg' ?>" />
+						<img width="90%" src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_ppt2lp.jpg' ?>" />
 					</td>
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
@@ -240,8 +262,26 @@ Display::display_header($nameTool);
 						}
 						else {
 								echo '
-									<input type="hidden" name="extension_code" value="ppt2lp" />
-									<input type="submit" name="activeExtension" value="'.get_lang('ActiveExtension').'" />';
+									<table>
+										<tr>
+											<td align="left">'.get_lang('Host').' : </td>
+											<td><input type="text" size="25" name="ppt2lp_host" /></td>
+										</tr>
+										<tr>
+											<td align="left">'.get_lang('UserOnHost').' : </td>
+											<td><input type="text" size="25" name="ppt2lp_user" /></td>
+										</tr>
+										<tr>
+											<td align="left">'.get_lang('FtpPassword').' : </td>
+											<td><input type="text" size="25" name="ppt2lp_ftp_password" /></td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<input type="hidden" name="extension_code" value="ppt2lp" />
+												<input type="submit" name="activeExtension" value="'.get_lang('ActiveExtension').'" />
+											</td>
+										</tr>
+									</table>';
 						}
 						?>
 						</form>

@@ -782,12 +782,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 #message textarea {margin: 10px 0;}
 #message td {padding: 4px;}
 
-/* Course info text in grey*/
-
-#grey{
-	color:#808080;
-}
-
 /**********************************************
  *  DOCUMENT MODULE                           *
  **********************************************/

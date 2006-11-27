@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: courses.php 10216 2006-11-27 14:05:58Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -880,8 +880,7 @@ function display_course_icons($key, $number_of_courses, $course, $user_courses)
 		Display::display_icon('edit.gif',get_lang('Edit'));
 		echo "</a></td>";
 	}
-	//ed: id grey added
-	echo "<td rowspan=\"2\" valign=\"top\" id=\"grey\">";
+	echo "<td rowspan=\"2\" valign=\"top\" class=\"invisible\">";
 	if ($course['status'] != 1)
 	{
 		if ($course['unsubscr'] == 1)

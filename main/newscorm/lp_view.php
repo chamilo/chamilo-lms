@@ -24,8 +24,6 @@
 if($lp_controller_touched!=1){
 	header('location: lp_controller.php?action=view&item_id='.$_REQUEST['item_id']);
 }
-$language_file[] = "scormdocument";
-$language_file[] = "learnpath";
 
 /*
 -----------------------------------------------------------

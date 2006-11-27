@@ -1,5 +1,5 @@
 <?php
-// $Id$
+// $Id:$
 /*
 ===================================================================================
     Dokeos - elearning and course management software

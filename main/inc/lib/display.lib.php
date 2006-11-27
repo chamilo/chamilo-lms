@@ -304,7 +304,7 @@ class Display {
 		}
 		echo '<div class="normal-message">';
 		Display :: display_icon('message_normal.png', '', array ('style' => 'float:left; margin-right:10px;'));
-		echo $message.'</div>';
+		echo "<div style='margin-left: 43px'>".$message.'</div></div>';
 	}
 
 	/**

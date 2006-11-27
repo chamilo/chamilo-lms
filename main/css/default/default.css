@@ -330,8 +330,8 @@ a.invisible:visited {
 }
 
 #header3 #current {
-	background-color: #e9a151;
-	border-bottom: 1px solid #4171b5;
+	background-color: #fff;
+	border-bottom: 1px solid #fff;
 }
 
 #header3 #current A {

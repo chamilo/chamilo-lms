@@ -1,5 +1,4 @@
 <?php
-// $Id: addanother.php 10221 2006-11-27 14:25:22Z pcool $
 /*
 ===================================================================================
     Dokeos - elearning and course management software
@@ -12,7 +11,11 @@
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
  
-    Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+    Contact: 
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 ===================================================================================
 */
 
@@ -20,7 +23,7 @@
 ==============================================================================
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: addanother.php 10221 2006-11-27 14:25:22Z pcool $
+* 	@version $Id: addanother.php 10223 2006-11-27 14:45:59Z pcool $
 ==============================================================================
 */
 

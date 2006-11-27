@@ -1,6 +1,28 @@
-#!/usr/local/bin/php
-
 <?php
+/*
+    DOKEOS - elearning and course management software
+
+    For a full list of contributors, see documentation/credits.html
+   
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
+ 
+    Contact: 
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
+*/
+
+/**
+*	@package dokeos.survey
+* 	@author 
+* 	@version $Id: send_mail.php 10223 2006-11-27 14:45:59Z pcool $
+*/
+
 $cidReset=true;
 require_once ('/home/dokeos/portal/user_161/main/inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');

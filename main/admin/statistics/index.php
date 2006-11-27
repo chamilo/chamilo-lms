@@ -32,7 +32,7 @@ $cidReset = true;
 include('../../inc/global.inc.php');
 api_protect_admin_script();
 
-$interbreadcrumb[] = array ("url" => "../index.php", "name" => get_lang('AdministrationTools'));
+$interbreadcrumb[] = array ("url" => "../index.php", "name" => get_lang('PlatformAdmin'));
 
 $tool_name = get_lang('ToolName');
 Display::display_header($tool_name);

@@ -58,8 +58,8 @@ $nbr_results=sizeof($Sessions);
 
 $tool_name = htmlentities($session_name).' : '.get_lang('CourseListInSession');
 
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
-$interbreadcrumb[]=array("url" => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
 Display::display_header($tool_name);
 

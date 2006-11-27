@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: index.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -31,15 +31,26 @@
 // name of the language file that needs to be included <br />
 $language_file=array('admin','tracking');
 
+// resetting the course id
 $cidReset=true;
 
+// including some necessary dokeos files
 include('../inc/global.inc.php');
 include_once('../inc/installedVersion.inc.php');
+
+// setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 
+// Access restrictions
 api_protect_admin_script();
+
+// setting breadcrumbs
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+
+// setting the name of the tool
 $tool_name=get_lang("PlatformAdmin");
 
+// Displaying the header
 Display::display_header();
 
 /*

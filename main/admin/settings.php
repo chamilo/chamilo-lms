@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: settings.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -45,11 +45,10 @@ $language_file = 'admin';
 
 // including some necessary dokeos files
 include_once ('../inc/global.inc.php');
-
-// setting the section
-$this_section = SECTION_PLATFORM_ADMIN;
-
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+// setting the section (for the tabs)
+$this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_admin_script();
@@ -62,11 +61,11 @@ if ($_POST['submit_stylesheets'])
 	exit;
 }
 
-// Table definitions
+// Database Table Definitions
 $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 // setting the name of the tool
 $tool_name = get_lang('DokeosConfigSettings');

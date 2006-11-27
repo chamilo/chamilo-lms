@@ -54,7 +54,7 @@ $archiveURL=api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
 $tool_name=get_lang('ExportSessionListXMLCSV');
 
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 

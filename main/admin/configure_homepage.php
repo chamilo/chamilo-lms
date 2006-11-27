@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: configure_homepage.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,7 +39,7 @@ $tbl_category=Database::get_main_table(TABLE_MAIN_CATEGORY);
 
 $tool_name=get_lang('ConfigureHomePage');
 
-//$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
 $menu_language=$_SESSION['user_language_choice'];
 

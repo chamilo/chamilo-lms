@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: user_import.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -296,7 +296,7 @@ if (is_array($extAuthSource))
 
 $tool_name = get_lang('ImportUserListXMLCSV');
 
-//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 

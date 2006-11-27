@@ -40,8 +40,8 @@ $cidReset = true;
 require ('../inc/global.inc.php');
 api_protect_admin_script();
 $tool_name = get_lang('SessionOverview');
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
-$interbreadcrumb[]=array("url" => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
 // Database Table Definitions
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);

@@ -1,5 +1,5 @@
 <?php
-// $Id: system_announcements.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: system_announcements.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -35,24 +35,30 @@
 */
 // name of the language file that needs to be included
 $language_file = array ('admin', 'agenda');
+
+// resetting the course id
 $cidReset = true;
+
+// including some necessary dokeos files
 include ('../inc/global.inc.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+include (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
+
+// setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+// Access restrictions
 api_protect_admin_script();
+
+// setting breadcrumbs
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+
+$tool_name = get_lang('SystemAnnouncements');
+
 if(empty($_GET['lang']))
 {
     $_GET['lang']=$_SESSION['user_language_choice'];
 }
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
-include (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
-$tool_name = get_lang('SystemAnnouncements');
-//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
 
 /*
 -----------------------------------------------------------
@@ -60,7 +66,7 @@ $tool_name = get_lang('SystemAnnouncements');
 -----------------------------------------------------------
 */
 Display :: display_header($tool_name);
-//api_display_tool_title($tool_name);
+
 /*
 ==============================================================================
 		MAIN CODE

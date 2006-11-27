@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_edit.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: course_edit.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,7 +48,7 @@ $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_code = isset($_GET['course_code']) ? $_GET['course_code'] : $_POST['code'];
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyCourseInfo');
-//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => "course_list.php", "name" => get_lang('AdminCourses'));
 /*
 -----------------------------------------------------------

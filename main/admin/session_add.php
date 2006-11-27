@@ -17,8 +17,8 @@ $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 
 $tool_name = get_lang('AddSession');
 
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
-$interbreadcrumb[]=array("url" => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
 if($_POST['formSent'])
 {

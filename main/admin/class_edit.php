@@ -1,5 +1,5 @@
 <?php
-// $Id: class_edit.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: class_edit.php 10215 2006-11-27 13:57:17Z pcool $
 
 /*
 ==============================================================================
@@ -32,15 +32,29 @@
 // name of the language file that needs to be included 
 $language_file = 'admin';
 
+// resetting the course id
 $cidReset = true;
+
+// including some necessary dokeos files
 include ('../inc/global.inc.php');
-$this_section=SECTION_PLATFORM_ADMIN;
 require_once(api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+// setting the section (for the tabs)
+$this_section=SECTION_PLATFORM_ADMIN;
+
+// Access restrictions
 api_protect_admin_script();
-$tool_name = get_lang('ModifyClassInfo');
-//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+
+// setting breadcrumbs
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => "class_list.php", "name" => get_lang('AdminClasses'));
+
+// setting the name of the tool
+$tool_name = get_lang("AddClasses");
+
+
+$tool_name = get_lang('ModifyClassInfo');
 $class_id = intval($_GET['idclass']);
 $class = ClassManager :: get_class_info($class_id);
 $form = new FormValidator('edit_class','post','class_edit.php?idclass='.$class_id);
@@ -53,8 +67,8 @@ if($form->validate())
 	ClassManager :: set_name($values['name'], $class_id);
 	header('Location: class_list.php');
 }
-$tool_name = get_lang("AddClasses");
-//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+
+
 Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 $form->display();

@@ -50,7 +50,7 @@ $nbr_results=sizeof($Sessions);
 
 $tool_name = get_lang('ListSession');
 
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
 Display::display_header($tool_name);
 

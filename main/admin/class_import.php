@@ -1,5 +1,5 @@
 <?php
-// $Id: class_import.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: class_import.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,7 +27,7 @@
 ==============================================================================
 *   This     tool allows platform admins to add classes by uploading a CSV file
 * @todo Add some langvars to DLTT
-	@package dokeos.admin
+*	@package dokeos.admin
 ==============================================================================
 */
 /**
@@ -79,18 +79,31 @@ function save_data($classes)
 // name of the language file that needs to be included 
 $language_file = array ('admin', 'registration');
 
+// resetting the course id
 $cidReset = true;
 
+// including some necessary dokeos files
 include ('../inc/global.inc.php');
-api_protect_admin_script();
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'import.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
+// setting the section (for the tabs)
+$this_section = SECTION_PLATFORM_ADMIN;
+
+// Access restrictions
+api_protect_admin_script();
+
+// setting breadcrumbs
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+
+// Database Table Definitions
+
+// setting the name of the tool
 $tool_name = get_lang('ImportClassListCSV');
 
-//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+// Displaying the header
 Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 $form = new FormValidator('import_classes');

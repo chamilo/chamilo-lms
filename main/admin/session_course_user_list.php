@@ -56,9 +56,9 @@ $nbr_results=sizeof($Sessions);
 
 $tool_name = "Liste des utilisateurs inscrits au cours &quot;".htmlentities($course_title)."&quot; pour la session &quot;".htmlentities($session_name)."&quot;";
 
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
-$interbreadcrumb[]=array("url" => "session_list.php","name" => "Liste des sessions");
-$interbreadcrumb[]=array("url" => "session_course_list.php?id_session=$id_session","name" => "Liste des cours de la session &quot;".htmlentities($session_name)."&quot;");
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => "session_list.php","name" => "Liste des sessions");
+$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" => "Liste des cours de la session &quot;".htmlentities($session_name)."&quot;");
 
 Display::display_header($tool_name);
 

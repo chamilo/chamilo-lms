@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: user_edit.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -55,8 +55,8 @@ $user_id=isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['use
 $noPHP_SELF=true;
 $tool_name=get_lang('ModifyUserInfo');
 
-//$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array("url" => "user_list.php","name" => get_lang('UserList'));
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => "user_list.php","name" => get_lang('UserList'));
 
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);

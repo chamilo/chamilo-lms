@@ -30,18 +30,21 @@
 // name of the language file that needs to be included 
 $language_file='admin';
 
+// resetting the course id
 $cidReset=true;
 
+// including some necessary dokeos files
 require('../inc/global.inc.php');
 
+// setting the section (for the tabs)
+$this_section = SECTION_PLATFORM_ADMIN;
+
+// Access restrictions
 api_protect_admin_script();
 
-$id_session=intval($_GET['id_session']);
-
-$formSent=0;
-$errorMsg=$firstLetterCourse=$firstLetterSession='';
-$CourseList=$SessionList=array();
-$courses=$sessions=array();
+// setting breadcrumbs
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -50,12 +53,20 @@ $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 
-$noPHP_SELF=true;
-
+// setting the name of the tool
 $tool_name= get_lang('SubscribeCoursesToSession');
 
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
-$interbreadcrumb[]=array("url" => "session_list.php","name" => "Liste des sessions");
+$id_session=intval($_GET['id_session']);
+
+$formSent=0;
+$errorMsg=$firstLetterCourse=$firstLetterSession='';
+$CourseList=$SessionList=array();
+$courses=$sessions=array();
+$noPHP_SELF=true;
+
+
+
+
 
 if($_POST['formSent'])
 {
@@ -87,12 +98,15 @@ if($_POST['formSent'])
 	foreach($CourseList as $enreg_course)
 	{
 		$exists = false;
-		foreach($existingCourses as $existingCourse){
-			if($enreg_course == $existingCourse['course_code']){
+		foreach($existingCourses as $existingCourse)
+		{
+			if($enreg_course == $existingCourse['course_code'])
+			{
 				$exists=true;
 			}
 		}		
-		if(!$exists){				
+		if(!$exists)
+		{				
 			api_sql_query("INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')",__FILE__,__LINE__);
 			
 			

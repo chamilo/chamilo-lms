@@ -30,18 +30,21 @@
 // name of the language file that needs to be included 
 $language_file='admin';
 
+// resetting the course id
 $cidReset=true;
 
+// including some necessary dokeos files
 require('../inc/global.inc.php');
 
+// setting the section (for the tabs)
+$this_section = SECTION_PLATFORM_ADMIN;
+
+// Access restrictions
 api_protect_admin_script();
 
-$id_session=intval($_GET['id_session']);
-
-$formSent=0;
-$errorMsg=$firstLetterUser=$firstLetterSession='';
-$UserList=$SessionList=array();
-$users=$sessions=array();
+// setting breadcrumbs
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => "session_list.php","name" => "Liste des sessions");
 
 // Database Table Definitions
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -54,12 +57,18 @@ $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_class							= Database::get_main_table(TABLE_MAIN_CLASS);
 $tbl_class_user						= Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
-$noPHP_SELF=true;
-
+// setting the name of the tool
 $tool_name=get_lang('SubscribeUsersToSession');
 
-$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
-$interbreadcrumb[]=array("url" => "session_list.php","name" => "Liste des sessions");
+$id_session=intval($_GET['id_session']);
+$formSent=0;
+$errorMsg=$firstLetterUser=$firstLetterSession='';
+$UserList=$SessionList=array();
+$users=$sessions=array();
+$noPHP_SELF=true;
+
+
+
 
 if($_POST['formSent'])
 {

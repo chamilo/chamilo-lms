@@ -1,5 +1,5 @@
 <?php
-// $Id: class_add.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: class_add.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -32,12 +32,26 @@
 // name of the language file that needs to be included 
 $language_file = 'admin';
 
+// resetting the course id
 $cidReset = true;
-include ('../inc/global.inc.php');
-$this_section=SECTION_PLATFORM_ADMIN;
+
+// including some necessary dokeos files
+require_once('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+// setting the section (for the tabs)
+$this_section = SECTION_PLATFORM_ADMIN;
+
+// Access restrictions
 api_protect_admin_script();
+
+// setting breadcrumbs
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+
+// setting the name of the tool
+$tool_name = get_lang("AddClasses");
+
 $form = new FormValidator('add_class');
 $form->add_textfield('name',get_lang('ClassName'));
 $form->addElement('submit','submit',get_lang('Ok'));
@@ -47,10 +61,11 @@ if($form->validate())
 	ClassManager :: create_class($values['name']);
 	header('Location: class_list.php');
 }
-$tool_name = get_lang("AddClasses");
-//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+
+// Displaying the header
 Display :: display_header($tool_name);
-//api_display_tool_title($tool_name);
+
+// Displaying the form
 $form->display();
 /*
 ==============================================================================

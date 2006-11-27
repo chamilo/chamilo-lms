@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: user_information.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,7 +41,7 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
 if( ! isset($_GET['user_id']))
 {

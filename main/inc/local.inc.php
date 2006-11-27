@@ -156,8 +156,6 @@ The course id is stored in $_cid session variable.
 ==============================================================================
 */
 
-$_SESSION["_uid"]=1;
-
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? $_GET["gidReq"] : '';

@@ -119,7 +119,8 @@ if(api_is_allowed_to_edit())
       UPLOAD SECTION - displays file upload box
      --------------------------------------*/
 		'<a href="../upload/index.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/download_manager.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("UploadScorm").'</a>'.
-       '</td>' .
+       '</td>' . 
+       '<td>'.str_repeat('&nbsp',10).'<a href="../upload/upload_ppt.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a></td>'.
     "</tr>
   </table>";
   

@@ -2702,12 +2702,10 @@ class learnpath {
 					
 					
     		}
-    		elseif($item['type']=='dokeos_module'){
+    		elseif($item['type']=='dokeos_module' || $item['type']=='dokeos_chapter'){
     				$html .= "<img align='absbottom' width='13' height='13' src='img/lp_dokeos_module.png'>&nbsp;".$title;
     		}
-    		elseif($item['type']=='dokeos_chapter'){
-    				$html .= "<img align='absbottom' width='13' height='13' src='img/lp_dokeos_chapter.png'>&nbsp;".$title;
-    		}
+    		
     		elseif($item['type']=='dir'){
     				$html .= $title;
     		}

@@ -157,11 +157,6 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				
 				echo '<p class="lp_action">';
 				
-					echo '<img align="left" alt="New module" src="img/lp_dokeos_module_add.png" title="New module" /><strong style="color:#999999">New module</strong>';
-				
-				echo '</p>';
-				echo '<p class="lp_action">';
-				
 					echo '<img align="left" alt="New chapter" src="img/lp_dokeos_chapter_add.png" title="New chapter" /><strong style="color:#999999">New chapter</strong>';
 						
 				echo '</p>';

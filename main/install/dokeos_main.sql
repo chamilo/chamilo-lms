@@ -192,9 +192,10 @@ INSERT INTO `course_module` VALUES
 (17,'AddedLearnpath','','scormbuilder.gif',0,0,'external'),
 (18,'conference','online/online.php','conf.gif',0,0,'external'),
 (19,'learnpath','newscorm/lp_controller.php','scorm.gif',5,1,'basic'),
-(20,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
-(21,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
-(22,'TOOL_SURVEY','survey/survey_list.php','survey.gif',2,1,'courseadmin');
+(20,'blog','blog/blog.php','blog.gif',1,2,'basic'),
+(21,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
+(22,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
+(23,'TOOL_SURVEY','survey/survey_list.php','survey.gif',2,1,'courseadmin');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `course_module` ENABLE KEYS */;
 

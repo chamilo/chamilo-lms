@@ -103,21 +103,6 @@ api_display_tool_title($nameTools);
 	echo "</table>";
 
 
-// The footer is displayed only if we are not in the learnpath
-if ($_GET['origin'] != 'learnpath') 
-{ 
-	include($includePath."/claro_init_footer.inc.php");
-}
-
-
-
-
-
-/*
-==============================================================================
-	FUNCTIONS
-============================================================================== 
-*/
-
-
+// Display the footer
+Display::display_footer();
 ?>

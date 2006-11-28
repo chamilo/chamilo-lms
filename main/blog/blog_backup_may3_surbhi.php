@@ -369,9 +369,6 @@ switch ($current_page)
 </table>
 
 <?php
-// The footer is displayed only if we are not in the learnpath
-if ($_GET['origin'] != 'learnpath') 
-{ 
-	include($includePath."/claro_init_footer.inc.php");
-}
+// Display the footer
+Display::display_footer();
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 9859 2006-10-31 11:14:49Z evie_em $
+<?php // $Id: index.php 10243 2006-11-28 15:34:50Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,7 +74,6 @@ if(api_get_user_id())
 	echo '<script language="javascript" type="text/javascript" src="'.api_get_path(WEB_PLUGIN_PATH).'messages/cookies.js"> </script> ';
 	echo '<script language="javascript" type="text/javascript">set_url("'.api_get_path(WEB_PLUGIN_PATH).'messages/notify.php") ; notificar()</script> ';
 		
-	echo "- ";
 	echo "<a href=$e>".$inb."(<span id=\"nuevos\" style=\"none\">".get_new_messages()."</span>)</a>";
 	echo " - ";
 	echo "<a href=$e2>".$newm."</a>";

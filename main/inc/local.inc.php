@@ -189,10 +189,10 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 
 
 
-if (isset($_SESSION['_uid']) && $_SESSION['_uid'] && ! ($login || $logout))
+if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout))
 {
     // uid is in session => login already done, continue with this value
-    $_user['user_id'] = $_SESSION['_uid'];
+    $_user['user_id'] = $_SESSION['_user']['user_id'];
 
 
 }
@@ -241,9 +241,9 @@ else
                 		// check if the expiration date has not been reached
                 		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00')
                 		{
+                			
 							$_user['user_id'] = $uData['user_id'];
-							api_session_register('_uid');
-
+							api_session_register('_user');
 							if(!function_exists('event_login')){
 								include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
 								event_login();

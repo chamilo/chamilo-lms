@@ -52,7 +52,7 @@ if(!$is_allowed_to_edit){
 
 <?
 
-$message="Welcome to Oogie PowerPoint converter<br>1. Browse your hard disk to find any .ppt or .odp file<br>2. Upload it to Oogie. It will tranform it into a Scorm learning path.<br>3. You will then be allowed to add audio comments on each slide and inserts test between slides for evaluation";
+$message=get_lang("WelcomeOogieConverter");
 
 Display::display_normal_message($message);
 

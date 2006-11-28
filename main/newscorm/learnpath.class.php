@@ -5941,7 +5941,15 @@ class learnpath {
 			
 			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" src="../img/delete.gif" title="Delete the current item" /> Delete</a>';
 		
+		ob_start();
+		if(api_get_setting('service_ppt2lp','active')=='true'){
+			include('audiorecorder.inc.php');
+		}
+		$return .= ob_get_contents();
+		ob_end_clean();
+		
 		$return .= '</div>';
+		
 
 		return $return;
 	}

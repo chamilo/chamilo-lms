@@ -109,6 +109,12 @@ if(isset($_POST['activeExtension'])){
 					WHERE variable="service_ppt2lp"
 					AND subkey="user"';
 			api_sql_query($sql, __FILE__, __LINE__);
+			
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['ppt2lp_path_to_lzx']).'"
+					WHERE variable="service_ppt2lp"
+					AND subkey="path_to_lzx"';
+			api_sql_query($sql, __FILE__, __LINE__);
 				
 			break;		
 	}
@@ -274,6 +280,10 @@ Display::display_header($nameTool);
 										<tr>
 											<td align="left">'.get_lang('FtpPassword').' : </td>
 											<td><input type="text" size="25" name="ppt2lp_ftp_password" /></td>
+										</tr>
+										<tr>
+											<td align="left">'.get_lang('PathToLzx').' : </td>
+											<td><input type="text" size="25" name="ppt2lp_path_to_lzx" /></td>
 										</tr>
 										<tr>
 											<td colspan="2">

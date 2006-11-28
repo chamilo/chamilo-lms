@@ -161,6 +161,7 @@ $langUseExistantQuestion = "Existierende Fragen benutzen";
 $freeAnswer = "Freie Antwort";
 $notCorrectedYet = "Diese Antwort wurde noch nicht nachgesehen. Bosher wurde Ihr Ergebnis für diese Frage auf 0 gesetzt, wodurch das Gesamtergebnis beeinflußt wird.";
 $adminHP = "Hot Potatoes Admin";
+$NewQu = "Neue Frage";
 $NoImage = "Bitte ein Bild auswählen";
 $langAnswerHotspot = "Beschreibung und Gewichtung sind notwendig für jeden Hotspot - Kommentar ist optional";
 $langMinHotspot = "Sie müssen zumindest einen (1) Hotspot erstellen";

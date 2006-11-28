@@ -87,4 +87,5 @@ $langItemMissing1 = "Volt itt egy ";
 $langItemMissing2 = "oldal.";
 $langDone = "Kész";
 $langNoItemSelected = "A megjelnítéshez válassz ki egy elemet az oldalsó menüb&#337;l";
+$langUploadScorm = "SCORM, AICC és PowerPoint importálása";
 ?>

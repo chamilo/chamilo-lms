@@ -87,4 +87,5 @@ $langItemMissing1 = "C\'era una";
 $langItemMissing2 = "pagina (elemento) in questa posizione nel percorso originale Dokeos";
 $langDone = "Fatto!";
 $langNoItemSelected = "Per visualizzare qualcosa in questa posizione, seleziona una voce dal menù laterale";
+$langUploadScorm = "Importa SCORM, AICC o Powerpoint";
 ?>

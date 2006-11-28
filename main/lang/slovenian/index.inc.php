@@ -68,6 +68,7 @@ $langOpenarea = "Osebna interesna podroèja";
 $langProductions = "Rezultati dela";
 $langSendChatRequest = "Pošlji vabilo za klepet tej osebi";
 $langRequestDenied = "Poziv je bil zavrnjen.";
+$UsageDatacreated = "Uporabniški podatki so bili ustvarjeni";
 $SessionView = "Prikaži teèaje razvršèene po sejah";
 $CourseView = "Prikaži popoln seznam teèajev";
 ?>

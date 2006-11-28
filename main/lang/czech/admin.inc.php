@@ -166,6 +166,8 @@ $langConfig  = "Konfigurace systému";
 $AddRight = "P&#345;idat";
 $langSysInfo = "Informace o systému";
 $langDataBase = "Databáze";
+$langtitulary = "Vlastník";
+$langUpgradeBase = "Aktualizovat databázi";
 $langUpgrade = "Aktualizace Dokeos";
 $langWebsite = "Webová stránka Dokeos";
 $langExampleXMLFile = "P&#345;íklad XML souboru";
@@ -173,4 +175,5 @@ $langExampleCSVFile = "P&#345;íklad CSV souboru";
 $langAddCourse = "Vytvo&#345;it kurz";
 $langAdminManageVirtualCourses = "Spravovat virtuální kurz";
 $langStatistics = "Statistika";
+$langGuest = "Host";
 ?>

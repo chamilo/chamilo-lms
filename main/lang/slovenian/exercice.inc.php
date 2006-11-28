@@ -161,6 +161,7 @@ $langUseExistantQuestion = "Uporabi obstojeèe vprašanje";
 $freeAnswer = "Prost odgovor";
 $notCorrectedYet = "Ta odgovor še ni bil valuiran. Do ocenitve je vrednost odgovora v skupnem rezultatu testa postavljena na 0.";
 $adminHP = "Upravljanje Hot Potatoes";
+$NewQu = "Novo vprašanje";
 $NoImage = "Izberite, prosim, sliko na dnu strani.";
 $langAnswerHotspot = "Opis in utež sta zahtevana za vsako izmed vroèih toèk (hotspot) - komentar je opcijski";
 $langMinHotspot = "Kreirati morate najmanj eno (1) vroèo toèko (hotspot).";

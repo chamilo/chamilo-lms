@@ -161,6 +161,7 @@ $langUseExistantQuestion = "Usa un quesito esistente";
 $freeAnswer = "Risposta libera";
 $notCorrectedYet = "La risposta non è stata ancora corretta. Il punteggio per la risposta è posto temporaneamente a 0, con conseguenze sul punteggio totale.";
 $adminHP = "Amministra test Hot Potatoes";
+$NewQu = "Nuova domanda";
 $NoImage = "Scegli un\'immagine";
 $langAnswerHotspot = "E\' richiesta la descizione e la determinazione del peso per ogni zona attiva - il commento è facoltativo";
 $langMinHotspot = "Devi creare almeno una (1) zona attiva";

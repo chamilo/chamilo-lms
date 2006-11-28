@@ -161,6 +161,7 @@ $langUseExistantQuestion = "Már létez&#337; kérdés felhasználása";
 $freeAnswer = "Szabad válasz";
 $notCorrectedYet = "Ez a válasz nem lett kijavítva. Ugyanakkor a kérdés nulla ponttal beszámításra került pontszámába.";
 $adminHP = "Hot Potatoes adminisztrátor";
+$NewQu = "Új kérdés";
 $NoImage = "Válasszon képet!";
 $langDescription = "Leírás";
 $langNextQuestion = "Kövekez&#337; kérdés";

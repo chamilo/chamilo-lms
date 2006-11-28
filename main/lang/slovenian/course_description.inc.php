@@ -13,4 +13,5 @@ $langAdd  = "Dodaj";
 $langValid  = "Uveljavi";
 $langBackAndForget  = "Preklièi";
 $langOkSent = "Tvoja stran je bila poslana.<p>Sedaj je povezana s teèajem <a href=../..//index.php>Domaèa stran</a>";
+$Content = "Vsebina";
 ?>

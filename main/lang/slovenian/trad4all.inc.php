@@ -268,6 +268,7 @@ $SeeAllRightsAllLocationsForSpecificRole = "Glede na vloge";
 $SeeAllRolesAllLocationsForSpecificRight = "Glede na pravice";
 $RightValueModified = "Vrednost je bila spremenjena";
 $course_rights = "Pregled vlog in pravic";
+$visio = "Visio konference";
 $CourseAdminRoleDescription = "Upravitelj teèaja";
 $languser = "Uporabniki";
 $NoSearchResults = "Iskanje je bilo neuspešno";

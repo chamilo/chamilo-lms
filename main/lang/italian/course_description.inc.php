@@ -13,4 +13,5 @@ $langAdd  = "Aggiungi";
 $langValid  = "Conferma";
 $langBackAndForget  = "Annulla";
 $langOkSent = "La pagina è stata inviata.<p>Sarà accessibile dalla <a href=../../DOKEOSDEV/index.php>Pagina principale</a> del corso";
+$Content = "Contenuto";
 ?>

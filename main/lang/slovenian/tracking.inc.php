@@ -140,7 +140,13 @@ $Visited = "Obiskani";
 $Name = "Naziv";
 $FirstAccess = "Prvi dostop";
 $LastAccess = "Zadnji dostop";
+$langProbationers = "Pripravniki";
+$MoyenneTest = "Povpreèje : test";
 $exportExcel = "Izvoz v Excel obliki";
+$MoyCourse = "Povpreèje : teèaj";
+$MoySession = "Povpreèje : seja";
 $Administrators = "Upravitelji";
+$Tracks = "Sledenje";
+$Success = "Uspešnost";
 $ExcelFormat = "Excel oblika";
 ?>

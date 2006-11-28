@@ -140,6 +140,7 @@ $Visited = "besucht";
 $Name = "Name";
 $FirstAccess = "Erster Zugriff";
 $LastAccess = "Letzter Zugriff";
+$langProbationers = "Lernende";
 $MoyenneTest = "Testdurchschnitt";
 $exportExcel = "Export im Excel Format";
 $MoyCourse = "Kursdurchschnitt";

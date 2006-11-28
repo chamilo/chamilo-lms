@@ -268,6 +268,7 @@ $SeeAllRightsAllLocationsForSpecificRole = "Função";
 $SeeAllRolesAllLocationsForSpecificRight = "Permissão";
 $RightValueModified = "O valor foi alterado.";
 $course_rights = "Visão geral das funções e permissões";
+$visio = "Vídeo-Conferência";
 $CourseAdminRoleDescription = "O administrador do curso";
 $languser = "Utilizadores";
 $NoSearchResults = "Nenhum resultado";

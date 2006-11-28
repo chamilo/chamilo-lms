@@ -87,4 +87,5 @@ $langItemMissing1 = "Hier gab es ";
 $langItemMissing2 = "eine Seite (Schritt) im ursprünglichen Lernpfad";
 $langDone = "Fertig";
 $langNoItemSelected = "Um hier etwas anzuzeigen, bitte eine Auswahl aus dem Seitenmenu treffen";
+$langUploadScorm = "Import von SCORM, AICC und PowerPoint";
 ?>

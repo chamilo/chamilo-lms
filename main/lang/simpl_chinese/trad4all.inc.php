@@ -268,6 +268,7 @@ $SeeAllRightsAllLocationsForSpecificRole = "以角色为准";
 $SeeAllRolesAllLocationsForSpecificRight = "&#20197;&#26435;&#38480;&#20026;&#20934;";
 $RightValueModified = "值已修改.";
 $course_rights = "查看角色和权限";
+$visio = "&#35270;&#39057;&#20250;&#35758;";
 $CourseAdminRoleDescription = "课程管理员";
 $languser = "用户";
 $NoSearchResults = "未搜索到任何结果";
@@ -281,4 +282,9 @@ $AddRight = "&#21152;&#20837;";
 $bb_post = "&#35770;&#22363;&#24086;&#23376;";
 $bb_thread = "&#35770;&#22363;&#25991;&#31456;";
 $CampusHomepage = "&#26657;&#22253;&#39318;&#39029;";
+$Tutors = "&#23548;&#24072;";
+$Tel = "&#30005;&#35805;";
+$NoTel = "&#27809;&#26377;&#30005;&#35805;";
+$From = "&#30001;";
+$To = "&#33267;";
 ?>

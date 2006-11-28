@@ -268,6 +268,7 @@ $SeeAllRightsAllLocationsForSpecificRole = "Fokus auf Rolle";
 $SeeAllRolesAllLocationsForSpecificRight = "Fokus auf Recht";
 $RightValueModified = "Der Wert wurde geändert";
 $course_rights = "Rollen & Rechte Überblick";
+$visio = "Visioconference";
 $CourseAdminRoleDescription = "Kurs Admin";
 $languser = "Benutzer";
 $NoSearchResults = "Kein Suchergebnis";

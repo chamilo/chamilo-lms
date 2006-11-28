@@ -11,4 +11,11 @@ $Subtitle = "Alcím";
 $ThisBlog = "Ez a blog";
 $NewPost = "Új cikk";
 $TaskManager = "Feladatkezelés";
+$Home = "Kezd&#337;lap";
+$Email = "E-mail";
+$Task = "Feladat";
+$Tasks = "Feladatok";
+$EditBlog = "Blog szerkesztése";
+$DeleteBlog = "Blog törlése";
+$Comment = "Hozzászólás";
 ?>

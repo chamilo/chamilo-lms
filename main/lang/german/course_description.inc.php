@@ -13,4 +13,5 @@ $langAdd  = "hinzufügen";
 $langValid  = "gültig";
 $langBackAndForget  = "Zurück und vergessen";
 $langOkSent = "Ihre Seite wurde gesendet.<p>Sie ist nun mit der <a href=../..//index.php>Seminarhomepage</a> verknüpft";
+$Content = "Inhalt";
 ?>

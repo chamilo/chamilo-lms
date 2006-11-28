@@ -87,4 +87,6 @@ $langItemMissing1 = "Trenutno obstaja";
 $langItemMissing2 = "strani (korakov) v prvotni Dokeos uèni poti.";
 $langDone = "Konèaj";
 $langNoItemSelected = "Za prikaz vsebine izberite možnost iz stranskega menija";
+$langUploadScorm = "SCORM, AICC in PowerPoint uvoz";
+$langPowerPointConvert = "Power Point pretvorba";
 ?>

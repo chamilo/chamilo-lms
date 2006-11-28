@@ -140,6 +140,7 @@ $Visited = "Visitado";
 $Name = "Nombre";
 $FirstAccess = "Primer acceso";
 $LastAccess = "Último acceso";
+$langProbationers = "Usuarios";
 $MoyenneTest = "Media de test";
 $exportExcel = "Exportar en formato Excel";
 $MoyCourse = "Media de curso";

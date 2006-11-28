@@ -88,4 +88,5 @@ $langItemMissing1 = "Había una";
 $langItemMissing2 = "página (paso) aquí en el Itinerario de aprendizaje original de Dokeos.";
 $langDone = "Finalizado";
 $langNoItemSelected = "Para mostrar algo aquí, seleccione un elemento del menú lateral";
+$langUploadScorm = "Importación SCORM, AICC y PowerPoint";
 ?>

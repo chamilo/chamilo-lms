@@ -174,7 +174,7 @@ if ($_GET['action']=='editcategory' and isset($_GET['id']))
 {
 	if (!$_POST)
 	{
-		display_addcategory_form('',$id);
+		display_addcategory_form('',$_GET['id']);
 	}
 }
 

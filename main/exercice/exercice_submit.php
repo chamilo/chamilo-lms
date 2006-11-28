@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: exercice_submit.php 10234 2006-11-28 13:43:34Z develop-it $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -402,6 +402,9 @@ if(!empty($exerciseSound))
 $number_of_hotspot_questions = 0;
 $onsubmit = '';
 $i=0;
+
+var_dump($questionList);
+
 foreach($questionList as $questionId)
 {
 	$i++;
@@ -433,6 +436,8 @@ foreach($questionList as $questionId)
 		}
 	}
 }
+
+echo ':' . $number_of_hotspot_questions;
 
 if($number_of_hotspot_questions > 0)
 {

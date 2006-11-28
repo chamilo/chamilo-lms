@@ -42,8 +42,6 @@
 	$userId        = $_user['user_id'];
 	$questionId    = $_GET['modifyAnswers'];
 	
-	$questionId = 7;
-	
 	$objQuestion   = new Question();
 	$objQuestion->read($questionId);
 	
@@ -115,9 +113,18 @@
 		$output2 .= $coordinate."|";
 	}
 	
-	var_dump($_SESSION['exerciseResultCoordinates']);
+	//var_dump($_SESSION['exerciseResultCoordinates']);
 	// Output
 	$output .= "&p_hotspot_answers=".substr($output2,0,-1)."&done=done";
 	
+	$explode = explode('&', $output);
+	
+	/*echo '<pre>';
+	
+	var_dump($explode);
+	
+	echo '</pre>';*/
+	
 	echo $output;
+	
 ?>

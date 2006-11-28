@@ -109,5 +109,11 @@
 	
 	// Output
 	echo $output."&nmbrTries=".$nmbrTries."&done=done";
+	
+	/*echo '<pre>';
+	
+	var_dump($explode);
+	
+	echo '</pre>';*/
 
 ?>

@@ -10,10 +10,10 @@ function validateFlashVar(counter, lang_1, lang_2)
 	//alert(counter);
 	//alert(flashVar);
 	
-	if(counter!=flashVar)
+	if(counter == flashVar)
 	{
 		//alert (lang_1 + counter + lang_2);
-		alert (lang_1);
+		alert(lang_1);
 		return false;
 	}
 	else
@@ -24,7 +24,7 @@ function validateFlashVar(counter, lang_1, lang_2)
 
 function updateFlashVar()
 {
-	//alert('updateFlashVar: ' + flashVar);
+	alert('updateFlashVar: ' + flashVar);
 	flashVar++;
 }
 

@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 9665 2006-10-24 10:43:48Z elixir_inter $
+<?php // $Id: question.class.php 10234 2006-11-28 13:43:34Z develop-it $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -80,15 +80,15 @@ class Question
 	 */
 	function read($id)
 	{
-	
 		global $_course;
+		
 		$TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
 		$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
 		$TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
-
 		$sql="SELECT question,description,ponderation,position,type,picture FROM `$TBL_QUESTIONS` WHERE id='$id'";
+		
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-
+		
 		// if the question has been found
 		if($object=mysql_fetch_object($result))
 		{
@@ -306,11 +306,99 @@ class Question
 			$Extension=$PictureName[sizeof($PictureName)-1];
 
 	  		$this->picture='quiz-'.$this->id.'.'.$Extension;
-	  		
-	  		return move_uploaded_file($Picture,$picturePath.'/'.$this->picture);
+
+	  		return move_uploaded_file($Picture,$picturePath.'/'.$this->picture)?true:false;
 		}
 
 		return false;
+	}
+	
+	/**
+	 * Resizes a picture || Warning!: can only be called after uploadPicture, or if picture is already available in object.
+	 *
+	 * @author - Toon Keppens
+	 * @param - string $Dimension - Resizing happens proportional according to given dimension: height|width|any
+	 * @param - integer $Max - Maximum size
+	 * @return - boolean - true if success, false if failed
+	 */
+	function resizePicture($Dimension, $Max)
+	{
+		global $picturePath;
+		
+		// if the question has an ID
+		if($this->id)
+		{
+	  		// Get dimensions from current image.
+	  		$current_img = imagecreatefromjpeg($picturePath.'/'.$this->picture);
+			
+	  		$current_image_size = getimagesize($picturePath.'/'.$this->picture);
+	  		$current_height = imagesy($current_img);
+			$current_width = imagesx($current_img);
+			
+			if($current_image_size[0] < $Max && $current_image_size[1] <$Max)
+				return true;
+			elseif($current_height == "")
+				return false;
+			
+			// Resize according to height.
+			if ($Dimension == "height")
+			{
+				$resize_scale = $current_height / $Max;
+				$new_height = $Max;
+				$new_width = ceil($current_width / $resize_scale);
+			}
+			
+			// Resize according to width
+			if ($Dimension == "width")
+			{
+				$resize_scale = $current_width / $Max;
+				$new_width = $Max;
+				$new_height = ceil($current_height / $resize_scale);
+			}
+			
+			// Resize according to height or width, both should not be larger than $Max after resizing.
+			if ($Dimension == "any")
+			{
+				if ($current_height > $current_width || $current_height == $current_width)
+				{
+					$resize_scale = $current_height / $Max;
+					$new_height = $Max;
+					$new_width = ceil($current_width / $resize_scale);
+				}
+				if ($current_height < $current_width)
+				{
+					$resize_scale = $current_width / $Max;
+					$new_width = $Max;
+					$new_height = ceil($current_height / $resize_scale);
+				}
+			}
+			
+			// Create new image
+		    $new_img = imagecreatetruecolor($new_width, $new_height);
+			$bgColor = imagecolorallocate($new_img, 255,255,255);
+			imagefill($new_img , 0,0 , $bgColor);
+			
+			// Resize image
+			imagecopyresized($new_img, $current_img, 0, 0, 0, 0, $new_width, $new_height, $current_width, $current_height);
+			
+			// Write image to file
+		    $result = imagejpeg($new_img, $picturePath.'/'.$this->picture, 100);
+		    
+		    // Delete temperory images, clear memory
+			imagedestroy($current_img);
+			imagedestroy($new_img);
+			
+			if ($result)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		
 	}
 
 	/**
@@ -427,7 +515,7 @@ class Question
 	 */
 	function save($exerciseId=0)
 	{
-		global $TBL_QUESTIONS;
+		global $TBL_QUESTIONS, $_course;
 
 		$id=$this->id;
 		$question=addslashes($this->question);
@@ -448,8 +536,16 @@ class Question
 		{
 			$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,position,type,picture) VALUES('$question','$description','$weighting','$position','$type','$picture')";
 			api_sql_query($sql,__FILE__,__LINE__);
-
+			
 			$this->id=mysql_insert_id();
+			
+			// If hotspot, create first answer
+			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
+				$TBL_ANSWERS = $_course['dbNameGlu'].'quiz_answer';
+				
+				$sql="INSERT INTO `$TBL_ANSWERS` (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '$this->id', '', NULL , '', NULL , '1', '0;0|0|0', 'square')";
+				api_sql_query($sql,__FILE__,__LINE__);
+			}
 		}
 
 		// if the question is created in an exercise

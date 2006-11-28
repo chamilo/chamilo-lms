@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: exercise_result.php 10234 2006-11-28 13:43:34Z develop-it $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -214,7 +214,21 @@ function display_free_answer($answer)
 
 function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment)
 {
-	global $hotspot_colors;
+	//global $hotspot_colors;
+	$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
+            						"#4271B5",
+									"#FE8E16",
+									"#3B3B3B",
+									"#BCD631",
+									"#D63173",
+									"#D7D7D7",
+									"#90AFDD",
+									"#AF8640",
+									"#4F9242",
+									"#F4EB24",
+									"#ED2024",
+									"#45C7F0",
+									"#F7BDE2");
 	?>		
 		<tr>
 				<td width="25%" valign="top">
@@ -258,13 +272,17 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$exeId =mysql_result($res,0,"id");
 	$exeId=$exeId+1;
+	
+	var_dump($questionList);
+	
 	foreach($questionList as $questionId)
 	{
 		// gets the student choice for this question
 		$choice=$exerciseResult[$questionId];
 		// creates a temporary Question object
 		$objQuestionTmp=new Question();
-
+		
+		echo $questionId;
 		$objQuestionTmp->read($questionId);
 
 		$questionName=$objQuestionTmp->selectTitle();
@@ -344,6 +362,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		}
 		elseif($answerType == HOT_SPOT)
 		{
+			echo $questionId;
 			?>			
 				<tr>
 					<td width="40%">
@@ -583,6 +602,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				}
 				elseif($answerType == HOT_SPOT)
 				{
+					echo $answerId . ':' . $answer . ':' . $studentChoice . ':' . $answerComment;
 					display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
 				}
 				else

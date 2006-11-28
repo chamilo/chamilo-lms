@@ -1,4 +1,4 @@
-<?php // $Id: statement_admin.inc.php 9972 2006-11-14 14:44:37Z pcool $
+<?php // $Id: statement_admin.inc.php 10234 2006-11-28 13:43:34Z develop-it $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -61,11 +61,26 @@ if($submitQuestion)
     $questionName=trim(stripslashes($_POST['questionName']));
     $questionDescription=trim(stripslashes($_POST['questionDescription']));
     $_FILES['imageUpload']['name']=strtolower($_FILES['imageUpload']['name']);
-
+    
+    $hotspotErr = false;
+    
     // no name given
-    if(empty($questionName))
+    if(!$modifyQuestion && (empty($questionName) || ($answerType == HOT_SPOT && ($_FILES['imageUpload']['type'] != 'image/jpeg' && $_FILES['imageUpload']['type'] != 'image/pjpeg' && $_FILES['imageUpload']['type'] != 'image/jpg'))  || ($answerType == HOT_SPOT && empty($_FILES['imageUpload']['name']))))
     {
-        $msgErr=get_lang('GiveQuestion');
+    	if(($_FILES['imageUpload']['type'] != 'image/jpeg' && $_FILES['imageUpload']['type'] != 'image/pjpeg' && $_FILES['imageUpload']['type'] != 'image/jpg') && !$modifyQuestion)
+    	{
+    		$msgErr = get_lang('langOnlyJPG');
+    		$hotspotErr = true;
+    	}
+    	if(empty($_FILES['imageUpload']['name']) && !$modifyQuestion)
+    	{
+    		$msgErr=get_lang('NoImage');
+    		$hotspotErr = true;
+    	}
+    	if(empty($questionName))
+    	{
+    		$msgErr=get_lang('GiveQuestion');
+    	}
     }
     // checks if the question is used in several exercises
     elseif($exerciseId && !$modifyIn && $objQuestion->selectNbrExercises() > 1)
@@ -139,39 +154,58 @@ if($submitQuestion)
                 else
                 {
                     $objQuestion->uploadPicture($_FILES['imageUpload']['tmp_name'],$_FILES['imageUpload']['name']);
+                	
+                    if(!$objQuestion->resizePicture("any", 350))
+                    {
+                    	$msgErr = get_lang('langHotspotBadMetadata');
+    					$hotspotErr = true;
+    					
+    					$objQuestion->removePicture();
+                    }
                 }
             }
-
-            $objQuestion->save($exerciseId);
-        }
-
-        $questionId=$objQuestion->selectId();
-
-        if($exerciseId)
-        {
-            // adds the question ID into the question list of the Exercise object
-            if($objExercise->addToList($questionId))
+            
+            if($hotspotErr === false)
             {
-                $objExercise->save();
-
-                $nbrQuestions++;
+            	$objQuestion->save($exerciseId);
+            }
+            else
+            {
+            	if($newQuestion)
+            		$objQuestion->removeFromList($exerciseId);
             }
         }
-
-        if($newQuestion)
+        
+        if($hotspotErr === false)
         {
-            // goes to answer administration
-            // -> answer_admin.inc.php
-            $modifyAnswers=$questionId;
-        }
-        else
-        {
-            // goes to exercise viewing
-            $editQuestion=$questionId;
-        }
+        	$questionId=$objQuestion->selectId();
 
-        // avoids displaying the following form in case we're editing the answer
-        unset($newQuestion,$modifyQuestion);
+	        if($exerciseId)
+	        {
+	            // adds the question ID into the question list of the Exercise object
+	            if($objExercise->addToList($questionId))
+	            {
+	                $objExercise->save();
+	
+	                $nbrQuestions++;
+	            }
+	        }
+
+	        if($newQuestion)
+	        {
+	            // goes to answer administration
+	            // -> answer_admin.inc.php
+	            $modifyAnswers=$questionId;
+	        }
+	        else
+	        {
+	            // goes to exercise viewing
+	            $editQuestion=$questionId;
+	        }
+
+        	// avoids displaying the following form in case we're editing the answer
+        	unset($newQuestion,$modifyQuestion);
+        }
     }
     if($debug>0){echo str_repeat('&nbsp;',2).'$submitQuestion is true - end'."<br />\n";}
 

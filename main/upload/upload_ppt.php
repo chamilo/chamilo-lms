@@ -18,6 +18,10 @@ require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 
+$htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+	var myUpload = new upload(0);
+</script>';
 
 if(isset($_POST['convert'])){
 	$cwdir = getcwd();
@@ -62,7 +66,11 @@ if(!empty($errorMessage)){
 	Display::display_error_message($errorMessage);
 }
 
-echo '<form enctype="multipart/form-data" method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
+
+echo '<div id="upload_form_div" name="form_div" style="display:block;">';
+
+echo '<form enctype="multipart/form-data" method="POST" action="'.$_SERVER['PHP_SELF'].'" onsubmit="myUpload.start(\'dynamic_div\',\'../img/progress_bar.gif\',\''.get_lang("Uploading").'\',\'upload_form_div\');">';
 echo '<img src="../img/powerpoint_big.gif" align="absbottom">
 		&nbsp;&nbsp;<input type="file" name="user_file">
 		<br><br>
@@ -71,6 +79,7 @@ echo '<img src="../img/powerpoint_big.gif" align="absbottom">
 		<img src="../img/scormbuilder.gif" align="absmiddle">';
 echo '</form>';
 
+echo '</div>';
 
 /*
 ==============================================================================

@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10234 2006-11-28 13:43:34Z develop-it $
+<?php // $Id: exercise_result.php 10237 2006-11-28 14:54:07Z develop-it $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -214,8 +214,8 @@ function display_free_answer($answer)
 
 function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment)
 {
-	//global $hotspot_colors;
-	$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
+	global $hotspot_colors;
+	$lhotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
             						"#4271B5",
 									"#FE8E16",
 									"#3B3B3B",
@@ -570,6 +570,31 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 											$matching[$answerId]=$answer;
 										}
 										break;
+				// for hotspot with no order
+				case HOT_SPOT :			$studentChoice=$choice[$answerId];
+
+										if($studentChoice)
+										{
+											$questionScore+=$answerWeighting;
+											$totalScore+=$answerWeighting;
+										}
+
+										break;
+				// for hotspot with fixed order
+				case HOT_SPOT_ORDER :	$studentChoice=$choice['order'][$answerId];
+
+										if($studentChoice == $answerId)
+										{
+											$questionScore+=$answerWeighting;
+											$totalScore+=$answerWeighting;
+											$studentChoice = true;
+										}
+										else
+										{
+											$studentChoice = false;
+										}
+
+										break;
 			} // end switch Answertype
 
 			if($answerType != MATCHING || $answerCorrect)
@@ -602,8 +627,11 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				}
 				elseif($answerType == HOT_SPOT)
 				{
-					echo $answerId . ':' . $answer . ':' . $studentChoice . ':' . $answerComment;
 					display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
+				}
+				elseif($answerType == HOT_SPOT_ORDER)
+				{
+					display_hotspot_order_answer($answerId, $answer, $studentChoice, $answerComment);
 				}
 				else
 				{

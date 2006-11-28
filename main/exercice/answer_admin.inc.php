@@ -1,4 +1,4 @@
-<?php // $Id: answer_admin.inc.php 10110 2006-11-22 15:20:46Z develop-it $
+<?php // $Id: answer_admin.inc.php 10237 2006-11-28 14:54:07Z develop-it $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -579,9 +579,9 @@ if($submitAnswers || $buttonBack)
 					{
 						$questionWeighting+=$weighting[$i];
 					}
-		
+					
 					// creates answer
-					$objAnswer->createAnswer($reponse[$i],'',$comment[$i],$weighting[$i],$i,$hotspot_coordinates[$i],$hotspot_type[$i]);
+					$objAnswer->createAnswer($reponse[$i], '',$comment[$i],$weighting[$i],$i,$hotspot_coordinates[$i],$hotspot_type[$i]);
 		        }  // end for()
 				// saves the answers into the data base
 				$objAnswer->save();

@@ -12,7 +12,7 @@ function validateFlashVar(counter, lang_1, lang_2)
 	
 	if(counter == flashVar)
 	{
-		//alert (lang_1 + counter + lang_2);
+		alert (lang_1 + counter + lang_2);
 		alert(lang_1);
 		return false;
 	}

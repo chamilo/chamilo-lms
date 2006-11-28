@@ -1,4 +1,4 @@
-<?php // $Id: answer.class.php 10197 2006-11-26 18:45:33Z pcool $
+<?php // $Id: answer.class.php 10237 2006-11-28 14:54:07Z develop-it $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -364,7 +364,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		$this->new_nbrAnswers++;
 
 		$id=$this->new_nbrAnswers;
-
+		
 		$this->new_answer[$id]=$answer;
 		$this->new_correct[$id]=$correct;
 		$this->new_comment[$id]=$comment;

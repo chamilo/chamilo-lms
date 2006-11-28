@@ -1,24 +1,27 @@
-<?php // $Id: functions.inc.php 10082 2006-11-21 19:08:15Z pcool $
+<?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)
+    For a full list of contributors, see documentation/credits.html
+   
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
+ 
+    Contact: 
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
+*/
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
+/**
+*	@package dokeos.survey
+* 	@author 
+* 	@version $Id: functions.inc.php 10241 2006-11-28 15:31:43Z pcool $
+* 	@todo use database library 
 */
 
 include_once(api_get_path(LIBRARY_PATH).'/online.inc.php');

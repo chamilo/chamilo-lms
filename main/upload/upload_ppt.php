@@ -39,7 +39,7 @@ event_access_tool(TOOL_UPLOAD);
 
 
 $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang(TOOL_LEARNPATH));
-$nameTools = get_lang("FileUpload");
+$nameTools = get_lang("OogieConversionPowerPoint");
 Display :: display_header($nameTools);
 
 
@@ -52,15 +52,16 @@ if(!$is_allowed_to_edit){
 
 ?>
 
-<img src="../img/oogie.gif">
+<img src="../img/oogie.gif"><br>
+<span style="color: #999999; font-style: italic; font-size: 15px; font-weight: bold; margin-left: 65px;"><? echo get_lang("WelcomeOogieSubtitle");?></span><br>
 
 <?
 
 $message=get_lang("WelcomeOogieConverter");
 
-Display::display_normal_message($message);
+echo '<br>';
 
-echo '<br><br>';
+Display::display_normal_message($message);
 
 if(!empty($errorMessage)){
 	Display::display_error_message($errorMessage);
@@ -80,6 +81,8 @@ echo '<img src="../img/powerpoint_big.gif" align="absbottom">
 echo '</form>';
 
 echo '</div>';
+
+echo "<br><br><br><br>";
 
 /*
 ==============================================================================

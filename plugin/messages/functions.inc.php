@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,9 +19,9 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: functions.inc.php 10241 2006-11-28 15:31:43Z pcool $
-* 	@todo use database library 
+* 	@author
+* 	@version $Id: functions.inc.php 10244 2006-11-29 09:40:41Z bmol $
+* 	@todo use database library
 */
 
 include_once(api_get_path(LIBRARY_PATH).'/online.inc.php');
@@ -53,7 +53,7 @@ function get_online_user_list($current_user_id)
 		$receiver_id = $row[0];
 		$online_user_list[$receiver_id] = GetFullUserName($receiver_id).($current_user_id==$receiver_id?("&nbsp;(".get_lang('Myself').")"):(""));
 	}
-	
+
 	return $online_user_list;
 }
 
@@ -138,7 +138,7 @@ function get_new_messages()
 }
 
 /**
-* Get the list of user_ids of users who are online. 
+* Get the list of user_ids of users who are online.
 */
 function users_connected_by_id()
 {
@@ -157,7 +157,7 @@ function users_connected_by_id()
  */
 function get_number_of_messages()
 {
-	$sql_query = "SELECT COUNT(*) as number_messages FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid'];
+	$sql_query = "SELECT COUNT(*) as number_messages FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_user']['user_id'];
 	$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 	$result = mysql_fetch_array($sql_result);
 	return $result['number_messages'];
@@ -171,7 +171,7 @@ function get_number_of_messages()
  */
 function get_message_data($from, $number_of_items, $column, $direction)
 {
-	$sql_query = "SELECT id as col0, id_sender as col1, title as col2, date as col3 FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid']." ORDER BY col$column $direction LIMIT $from,$number_of_items";
+	$sql_query = "SELECT id as col0, id_sender as col1, title as col2, date as col3 FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_user']['user_id']." ORDER BY col$column $direction LIMIT $from,$number_of_items";
 	$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 	$i = 0;
 	$message_list = array ();
@@ -211,7 +211,7 @@ function inbox_display()
 				break;
 		}
 	}
-	
+
 	// display sortable table with messages of the current user
 	$table = new SortableTable('messages', 'get_number_of_messages', 'get_message_data', 1);
 	$table->set_header(0, '', false);

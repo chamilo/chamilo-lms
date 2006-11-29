@@ -1920,13 +1920,13 @@ class learnpath {
 
     			  '      <div class="buttons">'."\n" .
 
-    			  '        <a href="lp_controller.php?action=stats" target="content_name" title="stats"><img border="0" src="../img/scormstatus.gif" title="'.get_lang('ScormMystatus').'"></a>&nbsp;'."\n" .
+    			  '        <a href="lp_controller.php?action=stats" target="content_name" title="stats"><img border="0" src="../img/lp_stats.gif" title="'.get_lang('ScormMystatus').'"></a>&nbsp;'."\n" .
 
-    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous"><img border="0" src="../img/previous.gif" title="'.get_lang('ScormPrevious').'"></a>&nbsp;'."\n" .
+    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="'.get_lang('ScormPrevious').'"></a>&nbsp;'."\n" .
 
-    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/next.gif" title="'.get_lang('ScormNext').'"></a>&nbsp;'."\n" .
+    			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang('ScormNext').'"></a>&nbsp;'."\n" .
 
-				  '        <a href="lp_controller.php?action=switch_view_mode" target="_top" title="fullscreen"><img border="0" src="../img/scormfullscreen.jpg" title="'.get_lang('ScormFullScreen').'"></a>'."\n" .
+				  '        <a href="lp_controller.php?action=switch_view_mode" target="_top" title="fullscreen"><img border="0" src="../img/view_fullscreen.gif" width="18" height="18" title="'.get_lang('ScormFullScreen').'"></a>'."\n" .
 
 				  '      </div>'."\n" .
 
@@ -2638,10 +2638,16 @@ class learnpath {
     {
 		if($this->debug>0){error_log('New LP - In learnpath::get_html_toc()',0);}
     	$list = $this->get_toc();
+    	
+    	
+    	
     	//echo $this->current;
     	//$parent = $this->items[$this->current]->get_parent();
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
-    	$html = '<div class="inner_lp_toc">'."\n" ;
+    	$html .= '<div class="inner_lp_toc">'."\n" ;
+    	if($_SESSION["is_courseAdmin"]==1){
+    		$html.="<a style='font-size: 11px' href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".get_lang("BasicOverview")."</a>&nbsp;<a href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".get_lang("Advanced")."</a><br><br>";
+    	}
     	//		" onchange=\"javascript:document.getElementById('toc_$parent').focus();\">\n";
 		require_once('resourcelinker.inc.php');
 		
@@ -2668,14 +2674,14 @@ class learnpath {
     		
     		if($item['type']!='dokeos_module' AND $item['type']!='dokeos_chapter'){
     		
-	    		$html .= '<a name="atoc_'.$item['id'].'" /><div class="'.$style.'" style="padding-left: '.($item['level']*2).'em; padding-right:'.($item['level']/2).'em" id="toc_'.$item['id'].'" >' .
+	    		$html .= '<a name="atoc_'.$item['id'].'" /><div class="'.$style.'" style="padding-left: '.($item['level']*1.5).'em; padding-right:'.($item['level']/2).'em" id="toc_'.$item['id'].'" >' .
 	    				'';
     		
     		}
     		
     		else{
     			
-    			$html .= '<div class="'.$style.'" style="padding-left: '.($item['level']*2).'em; padding-right:'.($item['level']*2).'em" id="toc_'.$item['id'].'" >' .
+    			$html .= '<div class="'.$style.'" style="padding-left: '.($item['level']*2).'em; padding-right:'.($item['level']*1.5).'em" id="toc_'.$item['id'].'" >' .
 	    				'';
     			
     		}
@@ -2698,16 +2704,16 @@ class learnpath {
 					$html .= '<a href="" onclick="dokeos_xajax_handler.switch_item(' .
 							$mycurrentitemid.',' .
 							$item['id'].');' .
-							'return false;" ><img align="absbottom" width="13" height="13" src="img/lp_document.png">&nbsp;'.$title.'</a>' ;
+							'return false;" ><img align="absbottom" width="13" height="13" src="img/lp_document.png">&nbsp;'.stripslashes($title).'</a>' ;
 					
 					
     		}
     		elseif($item['type']=='dokeos_module' || $item['type']=='dokeos_chapter'){
-    				$html .= "<img align='absbottom' width='13' height='13' src='img/lp_dokeos_module.png'>&nbsp;".$title;
+    				$html .= "<img align='absbottom' width='13' height='13' src='img/lp_dokeos_module.png'>&nbsp;".stripslashes($title);
     		}
     		
     		elseif($item['type']=='dir'){
-    				$html .= $title;
+    				$html .= stripslashes($title);
     		}
     		$html .= "<img id='toc_img_".$item['id']."' src='".$icon_name[$item['status']]."' alt='".substr($item['status'],0,1)."' /></div>\n";
     	}
@@ -4224,7 +4230,7 @@ class learnpath {
 		unset($this->arrMenu);
 		
 		if(api_is_allowed_to_edit())
-			$return .= '<p><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">Advanced</a></p>';
+			$return .= '<p><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.get_lang("Advanced").'</a>&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.get_lang("Display").'</a></p>';
 		
 		$return .= '<table cellpadding="0" cellspacing="2" class="lp_overview">' . "\n";
 		

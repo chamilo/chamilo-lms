@@ -51,17 +51,6 @@ include_once('../inc/reduced_header.inc.php');
 ?>
 
 <body>
-	<div id="audiorecorder">	
-		<?php
-		// get the audiorecorder. 
-		$audio_recorder_studentview = true;
-		$audio_recorder_item_id = $_SESSION['oLP']->current;
-		if(api_get_setting('service_ppt2lp','active')=='true' && api_get_setting('service_ppt2lp','path_to_lzx')!=''){
-			include('audiorecorder.inc.php');
-		}
-		// end of audiorecorder include
-		?>
-	</div>
 	<div class="lp_navigation_elem">
 	  <?php echo $_SESSION['oLP']->get_progress_bar(); ?>
 	  <?php echo $_SESSION['oLP']->get_navigation_bar(); ?>

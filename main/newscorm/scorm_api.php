@@ -823,6 +823,12 @@ function switch_item(current_item, next_item){
 	if(lms_lp_type==1 || lms_item_type=='asset'){
 		xajax_start_timer();
 	}	
+	
+	//(4) refresh the audiorecorder if needed
+	if(document.getElementById('audiorecorder_id')){
+		document.getElementById('audiorecorder_id').location.reload();
+	}
+	
 	return true;
 }
 //addEvent(window,'load',addListeners,false);

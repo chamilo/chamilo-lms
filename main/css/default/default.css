@@ -841,7 +841,10 @@ input.liteoption {
 #agenda_list .text,
 #agenda_list .data_hidden,
 #agenda_list .datanotbold_hidden,
-#agenda_list .text_hidden {
+#agenda_list .text_hidden,
+#agenda_list .datanow,
+#agenda_list .datanotboldnow,
+#agenda_list .textnow {
 	border: 0px solid #4171B5; 
  	border-collapse: collapse;
  	padding: 2px 10px;
@@ -884,87 +887,158 @@ input.liteoption {
 }
 
 /*text in the cells: display of agenda items (highlighted)*/
-#agenda_list .datanow {background-color: #FFCC00; text-align: left; padding: 2px 10px;
- font-weight: bold; border: 0px solid #4171B5; border-collapse: collapse;}
-#agenda_list .datanotboldnow {background-color: #FFCC00; text-align: left; padding: 2px 10px;
- font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;}
-#agenda_list .textnow {background-color: #fff; text-align: left; padding: 2px 10px;
- font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;}
+#agenda_list .datanow {
+	background-color: #FFCC00; 
+	font-weight: bold; 
+}
 
-/* ---------------------------------------------------
-	styles for the mini agenda
------------------------------------------------------*/
-#smallcalendar {width: 100%; margin: 0 auto; border: 1px solid #fff;
- border-collapse: collapse;}
-#smallcalendar .weekdays {background-color: #D3DFF1; text-align: center;
- font-size: 11px; font-weight: bold; border: 1px solid #fff; border-collapse: collapse;}
-#smallcalendar .days_week {background-color: #f5f5f5; text-align: center;
- font-size: 11px; border-collapse: collapse;}
-#smallcalendar .days_weekend {background-color: #e6e6e6; text-align: center;
- font-size: 11px; border: 1px solid #fff; border-collapse: collapse;}
-#smallcalendar .days_today {width: 12%; text-align: center;
- font-size: 11px;  border: 1px solid #FA8500; border-collapse: collapse; background-color: #FFCA8D;}
+#agenda_list .datanotboldnow {
+	background-color: #FFCC00; 
+	font-weight: normal; 
+}
 
-/* ---------------------------------------------------
-	styles for the personal agenda
------------------------------------------------------*/
-.personal_agenda {color: #008000; }
-.personal_agenda a:link, .personal_agenda a:visited {color: #008000; }
-a.personal_agenda:link, a.personal_agenda:visited {color: #008000; }
-.personal_agenda a:hover, .personal_agenda a:hover {color: #666666; }
-a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
+#agenda_list .textnow {
+	background-color: #fff; 
+	font-weight: normal; 
+}
+
+/*
+------------------------------------------------------------------------------
+    styles for the mini agenda
+------------------------------------------------------------------------------
+*/
+#smallcalendar {
+	border: 1px solid #fff;
+ 	border-collapse: collapse;
+	margin: 0 auto; 
+	width: 100%; 
+}
+
+#smallcalendar .weekdays {
+	background-color: #D3DFF1;
+	border: 1px solid #fff; 
+ 	border-collapse: collapse;
+	font-size: 11px; 
+ 	font-weight: bold; 
+ 	text-align: center;
+}
+
+#smallcalendar .days_week {
+	background-color: #f5f5f5; 
+	border-collapse: collapse;
+	font-size: 11px; 
+	text-align: center;
+}
+
+#smallcalendar .days_weekend {
+	background-color: #e6e6e6;
+	border: 1px solid #fff; 
+ 	border-collapse: collapse; 
+	font-size: 11px; 
+	text-align: center;
+}
+
+#smallcalendar .days_today {
+	background-color: #FFCA8D;
+ 	border: 1px solid #FA8500; 
+ 	border-collapse: collapse; 
+ 	font-size: 11px; 
+	text-align: center;
+	width: 12%; 	
+}
+
+/*
+------------------------------------------------------------------------------
+    styles for the personal agenda
+------------------------------------------------------------------------------
+*/
+.personal_agenda, 
+.personal_agenda a:link,
+.personal_agenda a:visited,
+a.personal_agenda:link,
+a.personal_agenda:visited{
+	color: #008000; 
+}
+
+.personal_agenda a:hover,
+a.personal_agenda:hover  {
+	color: #666666; 
+}
 
 
 
-/*****************************************************
- *  DISPLAY MESSAGES	                             *
- *****************************************************/
+/*
+==============================================================================
+    DISPLAY MESSAGES
+==============================================================================
+*/
+
 /* Common message styles */
 .normal-message,
 .warning-message,
 .confirmation-message,
 .error-message {
-	position: relative;
-	margin: 10px auto;
-	margin-left: -250px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
 	border-width: 1px;
 	border-style: solid;
-	padding: 5px;
+	left: 50%;
+	margin: 10px auto;
+	margin-left: -250px;
 	min-height: 30px;
+	padding: 5px;
+	position: relative;
+	right: 50%;
+	width: 500px;
 }
+
 /* Specific message styles */
 .normal-message {
+	background-color: #E5EDF9;
 	border-color: #4171B5;
 	color: #000;
-	background-color: #E5EDF9;
 }
+
 .warning-message {
+	background-color: #FFEFA7;
 	border-color: #FFB30F;
 	color: #000;
-	background-color: #FFEFA7;
 }
+
 .confirmation-message {
+	background-color: #CAF0C7;
 	border-color: #1F8323;
 	color: #000;
-	background-color: #CAF0C7;
 }
+
 .error-message {
+	background-color: #FFD1D1;
 	border-color: #FF0000;
 	color: #000;
-	background-color: #FFD1D1;
 }
 
-#message {margin: 0 auto; text-align: center;}
-#message select {margin: 10px 0; width: 220px;}
-#message textarea {margin: 10px 0;}
-#message td {padding: 4px;}
+#message {
+	margin: 0 auto; 
+	text-align: center;
+}
 
-/**********************************************
- *  DOCUMENT MODULE                           *
- **********************************************/
+#message select {
+	margin: 10px 0; 
+	width: 220px;
+}
+
+#message textarea {
+	margin: 10px 0;
+}
+
+#message td {
+	padding: 4px;
+}
+
+/*
+==============================================================================
+    DOCUMENT MODULE 
+==============================================================================
+*/
+
 /* styles from the document.php file */
 .comment { margin-left: 30px; }
 

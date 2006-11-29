@@ -5896,21 +5896,18 @@ class learnpath {
 				case 'chapter':
 					
 					$lang = get_lang('TitleManipulateChapter');
-					/* temp */ $lang = 'Manipulate the current chapter';
 					break;
 					
 				case 'dokeos_module':
 				case 'module':
 					
 					$lang = get_lang('TitleManipulateModule');
-					/* temp */ $lang = 'Manipulate the current module';
 					
 					break;
 					
 				case TOOL_DOCUMENT:
 					
 					$lang = get_lang('TitleManipulateDocument');
-					/* temp */ $lang = 'Manipulate the current document';
 					
 					break;
 				
@@ -5918,34 +5915,31 @@ class learnpath {
 				case 'link':
 					
 					$lang = get_lang('TitleManipulateLink');
-					/* temp */ $lang = 'Manipulate the current link';
 					
 					break;
 				
 				case TOOL_QUIZ:
 					
 					$lang = get_lang('TitleManipulateQuiz');
-					/* temp */ $lang = 'Manipulate the current exercise';
 					
 					break;
 				
 				case TOOL_STUDENTPUBLICATION:
 					
 					$lang = get_lang('TitleManipulateStudentPublication');
-					/* temp */ $lang = 'Manipulate the current student publication';
 					
 					break;
 			}
 			
 			$return .= '<p class="lp_title">' . $lang . '</p>';
 			
-			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> Edit</a>';
-			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img alt="Move the current item" src="../img/move.gif" title="Move the current item" /> Move</a>';
+			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
+			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img alt="Move the current item" src="../img/move.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
 			
 			if($item_type != 'chapter' && $item_type != 'dokeos_chapter' && $item_type != 'module' && $item_type != 'dokeos_module')
-				$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the prerequisites of the current item"><img alt="Edit the prerequisites of the current item" src="../img/edit.gif" title="Edit the prerequisites of the current item" /> Prerequisites</a>';
+				$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang("langEditPrerequisites").'"><img alt="'.get_lang("langEditPrerequisites").'" src="../img/edit.gif" title="'.get_lang("langEditPrerequisites").'" /> '.get_lang("Prerequisites").'</a>';
 			
-			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" src="../img/delete.gif" title="Delete the current item" /> Delete</a>';
+			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
 		
 		
 		// get the audiorecorder. Use of ob_* functions since there are echos in the file

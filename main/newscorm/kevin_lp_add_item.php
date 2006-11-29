@@ -187,12 +187,12 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				
 				echo '<p class="lp_action">';
 				
-					echo '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="New chapter"><img align="left" alt="New chapter" src="img/lp_dokeos_chapter_add.png" title="New chapter" />New chapter</a>';
+					echo '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img align="left" alt="'.get_lang("NewChapter").'" src="img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
 						
 				echo '</p>';
 				echo '<p class="lp_action">';
 				
-					echo '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="New step"><img align="left" alt="CNew step" src="img/lp_dokeos_step_add.png" title="New step" />New step</a>';
+					echo '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img align="left" alt="'.get_lang("NewStep").'" src="img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
 				
 				echo '</p>';
 				

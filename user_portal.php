@@ -608,7 +608,7 @@ function get_logged_user_course_html($my_course)
 
 	//display course entry
 	$result.="\n\t";
-	$result .= '<li style="list-style-type: none; margin-bottom: 5px;"><div style="border:0px solid #000; width: auto; float:left;padding-right: 5px;">'.$s_htlm_status_icon.'</div>';
+	$result .= '<li id="courses"><div id="coursestatusicons">'.$s_htlm_status_icon.'</div>';
 	//show a hyperlink to the course, unless the course is closed and user is not course admin
 	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)
 	{

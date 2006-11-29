@@ -5941,12 +5941,17 @@ class learnpath {
 			
 			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" src="../img/delete.gif" title="Delete the current item" /> Delete</a>';
 		
+		
+		// get the audiorecorder. Use of ob_* functions since there are echos in the file
 		ob_start();
-		if(api_get_setting('service_ppt2lp','active')=='true'){
+		$audio_recorder_studentview = false;
+		$audio_recorder_item_id = $item_id;
+		if(api_get_setting('service_ppt2lp','active')=='true' && api_get_setting('service_ppt2lp','path_to_lzx')!=''){
 			include('audiorecorder.inc.php');
 		}
 		$return .= ob_get_contents();
 		ob_end_clean();
+		// end of audiorecorder include
 		
 		$return .= '</div>';
 		

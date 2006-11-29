@@ -159,7 +159,7 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	<frameset rows="150,600">
 		<frame id="header" src="lp_header.php" border="0" frameborder="0" />
 		<frameset cols="180,*">
-			<frameset rows="310,44,80,*">
+			<frameset rows="310,150,80,*">
 				<frame id="toc_id" name="toc_name" class="lp_toc" src="lp_toc.php" border="0" frameborder="0" scrolling="no"/>
 				<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" />
 				<frame id="message_id" name="message_name" class="message" src="lp_message.php" border="0" frameborder="0" />

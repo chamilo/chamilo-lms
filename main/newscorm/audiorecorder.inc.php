@@ -6,12 +6,13 @@
  * @author Eric Marguin <e.marguin@elixir-interactive.com>
  */
  
-/**
- * this url should be removed with a path to another Application
- */
+ 
 
-$params = "?lzt=swf&lzr=swf8&document_id=".$_GET['id']."&dbName=".$_SESSION["_course"]["dbName"]."&user_id=".$_SESSION["_user"]["user_id"] ;     
+
+$params = "?lzt=swf&lzr=swf8&document_id=".$audio_recorder_item_id."&dbName=".$_SESSION["_course"]["dbName"]."&user_id=".$_SESSION["_user"]["user_id"].'?studentview='.$audio_recorder_studentview ;     
 $path_to_lzx = api_get_setting('service_ppt2lp','path_to_lzx');
+
+
 if(!empty($path_to_lzx)){
 
 	$path_to_lzx .= $params;
@@ -29,7 +30,7 @@ if(!empty($path_to_lzx)){
 			 	bgcolor='#ffffff'  WIDTH='540px' HEIGHT='140px' ALIGN='center' TYPE='application/x-shockwave-flash' 
 			 	PLUGINSPAGE='http://www.macromedia.com/go/getflashplayer'>
 			 </embed>
-			 </object>", $path_to_lzx,Database::get_course_table('lp_item'),$_course["dbName"],$_user["user_id"],$path_to_lzx);
+			 </object>", $path_to_lzx,$audio_recorder_item_id,$_course["dbName"],$_user["user_id"],$path_to_lzx);
 }
 
 ?>

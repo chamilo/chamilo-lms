@@ -736,54 +736,152 @@ input.liteoption {
 }
 
 
-#smallcalendar .title {background-color: #4171B5; font-weight: bold; padding: 2px;
- color: #fff; text-align: center; font-size: 11px;}
-#smallcalendar .title a { color: #fff;}
-#agenda_select {list-style: none; border: 0px solid green;
- margin: 30px 0 0 0; padding: 0 0 0 10px;}
+#smallcalendar .title {
+	background-color: #4171B5; 
+	color: #fff; 
+	font-size: 11px;
+ 	font-weight: bold; 
+	padding: 2px;
+ 	text-align: center; 	
+}
+
+#smallcalendar .title a { 
+	color: #fff;
+}
+
+#agenda_select {
+	border: 0px solid green;
+	list-style: none; 
+ 	margin: 30px 0 0 0; 
+ 	padding: 0 0 0 10px;
+ }
 
 
-/* ---------------------------------------------------
-	styles for the agenda (day, week, month view)
------------------------------------------------------*/
-#agenda_list {width: 100%; margin: 0 auto; border: 1px solid #fff;
- border-collapse: collapse;}
+/*
+------------------------------------------------------------------------------
+    styles for the agenda (day, week, month view)
+------------------------------------------------------------------------------
+*/
+
+#agenda_list {
+	border: 1px solid #fff;
+ 	border-collapse: collapse;
+	margin: 0 auto; 
+	width: 100%; 
+}
 
 /*The caption of the calendar (displays the month and the << and >> links*/
-#agenda_list .title {background-color: #4171B5; font-weight: bold;
- font-size: 12px; color: #fff; text-align: left; padding: 2px 10px; text-align: center; border: 1px solid #264269;}
-#agenda_list .title a:link, #agenda_list #title a:visited {background-color: #4171B5; font-weight: bold;
- font-size: 12px; color: #fff; text-align: left; padding: 2px 10px;text-align: center;}
-#agenda_list .title a:hover {background-color: #4171B5; font-weight: bold;
- font-size: 12px; color: #ff0000; text-align: left; padding: 2px 10px;text-align: center;}
+#agenda_list .title {
+	background-color: #4171B5; 
+ 	border: 1px solid #264269;	
+ 	color: #fff; 
+ 	font-size: 12px; 
+	font-weight: bold;
+ 	padding: 2px 10px; 
+ 	text-align: center; 
+
+}
+
+#agenda_list .title a:link,
+#agenda_list #title a:visited {
+	background-color: #4171B5;
+	color: #fff; 
+	font-size: 12px; 
+	font-weight: bold;
+ 	padding: 2px 10px;
+ 	text-align: center;
+ }
+ 
+#agenda_list .title a:hover {
+	background-color: #4171B5; 
+	color: #ff0000; 
+	font-size: 12px; 
+	font-weight: bold;
+	padding: 2px 10px;
+ 	text-align: center;
+ }
 
 /* The cells with the name of the days of the weeks (mon->sun)*/
-#agenda_list .weekdays {background-color: #D3DFF1; text-align: center;
- font-weight: bold; border: 1px solid #264269; border-collapse: collapse;}
+#agenda_list .weekdays {
+	background-color: #D3DFF1;
+	border: 1px solid #264269; 
+ 	border-collapse: collapse; 
+	font-weight: bold; 
+	text-align: center;	
+}
+
+#agenda_list .days_week,
+#agenda_list .days_weekend,
+#agenda_list .days_today {
+	border: 1px solid #264269; 
+ 	border-collapse: collapse; 
+ 	height: 40px; 
+	text-align: left; 
+	vertical-align: top;
+	width: 12%; 	
+}
 
 /* The cells for the days (1->31) */
-#agenda_list .days_week {height: 40px; width: 12%; text-align: left; vertical-align: top;
- border: 1px solid #264269; border-collapse: collapse; background-color: #f5f5f5;}
-#agenda_list .days_weekend {height: 40px; width: 12%; text-align: left; vertical-align: top;
- border: 1px solid #264269; border-collapse: collapse; background-color: #e6e6e6;}
-#agenda_list .days_today {height: 40px; width: 12%; text-align: left; vertical-align: top;
- border: 1px solid #264269; border-collapse: collapse; background-color: #FFCA8D;color: #CC3300;font-weight: bold;}
+#agenda_list .days_week {
+	background-color: #f5f5f5;
+}
+
+#agenda_list .days_weekend {
+	background-color: #e6e6e6;	
+}
+ 
+#agenda_list .days_today {
+	background-color: #FFCA8D;
+ 	color: #CC3300;
+ 	font-weight: bold; 
+}
+
+#agenda_list .data,
+#agenda_list .datanotbold,
+#agenda_list .text,
+#agenda_list .data_hidden,
+#agenda_list .datanotbold_hidden,
+#agenda_list .text_hidden {
+	border: 0px solid #4171B5; 
+ 	border-collapse: collapse;
+ 	padding: 2px 10px;
+	text-align: left; 
+}
 
 /* text in the cells: display of agenda items (visible)*/
-#agenda_list .data {background-color: #eee; text-align: left; padding: 2px 10px;
- font-weight: bold; border: 0px solid #4171B5; border-collapse: collapse;}
-#agenda_list .datanotbold {background-color: #eee; text-align: left; padding: 2px 10px;
- font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;}
-#agenda_list .text {background-color: #fff; text-align: left; padding: 2px 10px;
- font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;}
+#agenda_list .data {
+	background-color: #eee; 
+	font-weight: bold; 
+}
+
+#agenda_list .datanotbold {
+	background-color: #eee; 
+	font-weight: normal; 
+}
+
+#agenda_list .text {
+	background-color: #fff; 
+	font-weight: normal; 
+}
 
 /*text in the cells: display of agenda items (invisible)*/
-#agenda_list .data_hidden {background-color: #eee; text-align: left; padding: 2px 10px;
- font-weight: bold; border: 0px solid #4171B5; border-collapse: collapse; color: #999999;}
-#agenda_list .datanotbold_hidden {background-color: #eee; text-align: left; padding: 2px 10px;
- font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse; color: #999999;}
-#agenda_list .text_hidden {background-color: #fff; text-align: left; padding: 2px 10px;
- font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse; color: #999999;}
+#agenda_list .data_hidden {
+	background-color: #eee; 
+	color: #999999;
+	font-weight: bold; 
+}
+
+#agenda_list .datanotbold_hidden {
+	background-color: #eee; 
+	color: #999999;
+	font-weight: normal; 
+}
+
+#agenda_list .text_hidden {
+	background-color: #fff; 
+	color: #999999;
+	font-weight: normal; 
+}
 
 /*text in the cells: display of agenda items (highlighted)*/
 #agenda_list .datanow {background-color: #FFCC00; text-align: left; padding: 2px 10px;

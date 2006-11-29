@@ -180,7 +180,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			
 		echo '<td class="tree">';
 		
-			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">Basic overview</a></p>';
+			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("BasicOverview").'</a>&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.get_lang("Display").'</a></p>';
 			
 			//links for adding a module, chapter or step
 			echo '<div class="lp_actions">';
@@ -273,20 +273,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						break;
 					
-					case TOOL_DOCUMENT:
 					
-						//if(isset($_GET['file']) && (is_numeric($_GET['file'])) || $_GET['file'] == 'new')
-						//{
-							$msg = '<div class="lp_message" style="margin-bottom:10px;">';
-							
-								$msg .= 'The new document has been created.';
-							
-							$msg .= '</div>';
-							
-							echo $_SESSION['oLP']->display_item($new_item_id, true, $msg);
-						//}
-						
-						break;
 				}
 			}
 			else

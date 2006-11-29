@@ -174,6 +174,7 @@ foreach($list as $my_item_id){
 		$extend_link = '<a href="lp_controller.php?action=stats&fold_id='.$my_item_id.'"><img src="../img/visible.gif" alt="fold_view" border="0"></a>'."\n";
 		
 		$title=$row['mytitle'];
+		$title=stripslashes($title);
 		if(empty($title)){
 			$title = rl_get_resource_name(api_get_course_id(),$lp_id,$row['myid']);
 		}
@@ -294,6 +295,7 @@ foreach($list as $my_item_id){
 		$time=learnpathItem::get_scorm_time('php',$subtotal_time);
 		$scoIdentifier=$row['myid'];
 		$title=$row['mytitle'];
+		$title=stripslashes($title);
 		if($score==0){
 			$maxscore = 0;
 		}else{

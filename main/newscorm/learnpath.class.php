@@ -4709,10 +4709,10 @@ class learnpath {
 			$return .= $this->get_exercises();
 				
 			/* get al links */
-			$return .= $this->get_links();
+			//$return .= $this->get_links();
 				
 		/* get al the student publications */
-			$return .= $this->get_student_publications();
+			//$return .= $this->get_student_publications();
 		
 		$return .= '</div>' . "\n";
 		
@@ -6365,8 +6365,8 @@ class learnpath {
 			ORDER BY title ASC";
 		$res_quiz = api_sql_query($sql_quiz, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />Exercises</div>';
-		$return .= '<div class="lp_resource_elements" id="resExercise">';
+		$return .= '<div class="lp_resource_header_end"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />Exercises</div>';
+		$return .= '<div class="lp_resource_elements_end" id="resExercise">';
 		
 			while($row_quiz = Database::fetch_array($res_quiz))
 			{

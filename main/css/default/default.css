@@ -1040,49 +1040,117 @@ a.personal_agenda:hover  {
 */
 
 /* styles from the document.php file */
-.comment { margin-left: 30px; }
+.comment { 
+	margin-left: 30px; 
+}
 
 /* styles from the upload.php file */
-dl.upload_option {margin: 1em 0; padding: 0;}
-.upload_option dt {font-weight:bold; margin:0;}
-.upload_option dd {margin:0;}
+dl.upload_option {
+	margin: 1em 0; 
+	padding: 0;
+}
 
-/**********************************************
- *  DROPBOX MODULE                            *
- **********************************************/
+.upload_option dt {
+	font-weight:bold; 
+	margin:0;
+}
+
+.upload_option dd {
+	margin:0;
+}
+
+/*
+==============================================================================
+    DROPBOX MODULE
+==============================================================================
+*/
+
 /* styles from dropbox.php file */
-.dropbox_detail {font-size: small}
-.dropbox_date {font-style: italic}
-.dropbox_person {font-weight: bold}
-.dropbox_listTitle { color: #000000;}
-.dropbox_feedback {font-size: x-small; height: 50px; width: 200px; overflow: auto}
-.dropbox_feedbacks {height: 250px; width: 100%; overflow: auto}
+.dropbox_detail {
+	font-size: small
+}
 
-/**********************************************
- *  CHAT MODULE                               *
- **********************************************/
+.dropbox_date {
+	font-style: italic
+}
+
+.dropbox_person {
+	font-weight: bold
+}
+
+.dropbox_listTitle { 
+	color: #000000;
+}
+
+.dropbox_feedback {
+	font-size: x-small; 
+	height: 50px; 
+	overflow: auto
+	width: 200px; 
+}
+
+.dropbox_feedbacks {
+	height: 250px; 
+	width: 100%; 
+	overflow: auto
+}
+
+/*
+==============================================================================
+    CHAT MODULE
+==============================================================================
+*/
+
 /* styles for chat / conference tools */
 #chat_entermessage {
-background-color: #D6E5FA; border-top: 1px solid #4171B5;
- padding: 5px; margin: 0;}
+	background-color: #D6E5FA; 
+	border-top: 1px solid #4171B5;
+ 	padding: 5px; margin: 0;
+}
 
 /* the following for the greyed out elements */
-a.nobold:link, a.nobold:visited, a.nobold:active { font-weight: normal; color: #999; margin: 0 0 0 25px;}
-a.nobold:hover { font-weight: normal; color: #999; text-decoration: underline; margin: 0 0 0 25px;}
+a.nobold:link, 
+a.nobold:visited, 
+a.nobold:active { 
+	font-weight: normal; 
+	color: #999; 
+	margin: 0 0 0 25px;
+}
 
-.note {	margin: 6px; font-size: 12px; line-height: 14px;
-	font-family: verdana, arial, helvetica, sans-serif; background-color: #FFF089;
-	color: #4171B5; border: 1px solid #4171B5;	padding: 4px;}
+a.nobold:hover { 
+	font-weight: normal; 
+	color: #999; 
+	text-decoration: underline; 
+	margin: 0 0 0 25px;
+}
 
-.alternativeBgLight { background-color: #f5f5f5;
- border: 1px solid #4171B5; border-collapse: collapse;}
-.alternativeBgDark { background-color: #ccf;
- border: 1px solid #4171B5; border-collapse: collapse;}
+.note {	
+	background-color: #FFF089;
+	border: 1px solid #4171B5;	
+	color: #4171B5; 
+	font-size: 12px; 
+	font-family: verdana, arial, helvetica, sans-serif;
+	line-height: 14px; 
+	margin: 6px; 
+	padding: 4px;}
+
+.alternativeBgLight { 
+	background-color: #f5f5f5;
+ 	border: 1px solid #4171B5; 
+ 	border-collapse: collapse;
+ }
+ 
+.alternativeBgDark { 
+	background-color: #ccf;
+ 	border: 1px solid #4171B5; 
+ 	border-collapse: collapse;
+}
+ 
 .myagendatoday {
 	background-color: #FFCA8D;
 	border-collapse: collapse;
-	font-family: verdana, arial, helvetica, sans-serif;
 	color: #CC3300;
+	font-family: verdana, arial, helvetica, sans-serif;
 	font-weight: bold;
  }
 

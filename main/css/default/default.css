@@ -449,11 +449,11 @@ a.invisible:visited {
 */
 
 .menu {
-	float: right;
-	width: 20%;
-	padding: 0 0 6px 0;
 	background-color: #E5EDF9;
 	border: 1px solid #4171B5;
+	float: right;	
+	padding: 0 0 6px 0;
+	width: 20%;	
 }
 
 .menucaption {
@@ -463,18 +463,18 @@ a.invisible:visited {
 }
 
 .menusection {
-	width: auto;
+	border: 1px solid #4171B5;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #4171B5;
+	width: auto;	
 }
 
 .menusectioncaption {
-	position: relative;
-	top: -9px;
 	background-color: #E5EDF9;
 	font-size: 12px;
 	padding: 0 8px 0 4px;
+	position: relative;
+	top: -9px;
 }
 
 .menulist {
@@ -495,11 +495,18 @@ a.invisible:visited {
 	*/
 }
 
-#center { margin: 0 190px 0 0; padding: 10px 0 40px 0;
- min-height: 300px; }
+#center { 
+	margin: 0 190px 0 0; 
+	min-height: 300px; 
+	padding: 10px 0 40px 0;
+}
 
-#toolnav { float: right; width: 180px; padding: 0; margin: 0;
- margin-left: -5%; /* the difference to make the left colum appear flush left */
+#toolnav { 
+	float: right;
+	margin: 0;
+ 	margin-left: -5%;  /* the difference to make the left colum appear flush left */
+ 	padding: 0;
+ 	width: 180px;	
 }
 
 /* Hide from IE5-mac. Only IE-win sees this. \*/
@@ -507,42 +514,60 @@ a.invisible:visited {
 * html #center { height: 1%; margin-left: 0; }
  /* End hide from IE5/mac */
 
+/*
+this lets the navigation menu appear to the left:
+#center { 
+	margin: 0 0 0 180px;
+	min-height: 300px; 
+ 	padding: 10px 0 40px 0;
+}
 
-/* --- course navigation menu as a definition list  --- */
+#toolnav { 
+	float: left; 
+	width: 180px; 
+	padding: 20px 0 0 0;
+ 	margin-left: -5%;
+}
+*/
+
+
+/*
+------------------------------------------------------------------------------
+    course navigation menu as a definition list
+------------------------------------------------------------------------------
+*/
+
 #toolnavbox {
-	margin: 0 0 0 10px;
-	padding: 0;
-	float: left;
 	border: 1px solid #4271b5;
+	float: left;
+	margin: 0 0 0 10px;
+	padding: 0;	
 }
 
 #toolnavbox dl {
-	width: 160px;
-	margin: 0 auto;
-	padding: 0;
 	background: transparent;
 	font-size: 12px;
+	margin: 0 auto;
 	text-align: center;
+	width: 160px;
 }
 
 #toolnavbox dt {
-	margin: 0;
-	padding: 0;
-	font-weight: bold;
-	font-size: 12px;
-	text-align: center;
-	color: #000;
-	border-bottom: 1px solid #fff;
 	background: transparent;
+	border-bottom: 1px solid #fff;
+	color: #000;
+	font-size: 12px;
+	font-weight: bold;
+	margin: 0;
+	text-align: center;
 }
 
 #toolnavbox dd {
-	margin: 0;
-	padding: 0;
-	color: #009;
-	text-align: left;
-	border-bottom:1px solid #fff;
 	background: #E5EDF9;
+	border-bottom:1px solid #fff;
+	color: #009;
+	margin: 0;
+	text-align: left;
 }
 
 #toolnav img {
@@ -552,13 +577,14 @@ a.invisible:visited {
 	margin: 0 4px 0 0;
 }
 
-#toolnavlist a, #toolnavlist a:link {
+#toolnavlist a, 
+#toolnavlist a:link {
 	background: #E5EDF9;
 	color: #4171b5;
-	padding: 5px 5px 5px 10px;
-	margin: 0;
-	text-decoration: none;
 	display: block;
+	margin: 0;
+	padding: 5px 5px 5px 10px;
+	text-decoration: none;
 }
 
 #toolnavlist a:hover {
@@ -570,36 +596,26 @@ a.invisible:visited {
 	background: #fff;
 	color:#4171b5;
 }
+
 /* --- end of course navigation menu section  --- */
 
+
+
 /*
-this lets the navigation menu appear to the left:
-#center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
- min-height: 300px; }
-
-#toolnav { float: left; width: 180px; padding: 20px 0 0 0;
- margin-left: -5%;
-}
-#toolnav { float: right; width: 180px; padding: 0; margin: 0;
- margin-left: -5%; /* the difference to make the left colum appear flush left
-}*/
-
-/* Hide from IE5-mac. Only IE-win sees this. \*/
-* html #toolnav { margin-right: 0px;}
-* html #center { height: 1%; margin-left: 0; }
- /* End hide from IE5/mac */
+==============================================================================
+    LOGIN AND LANGUAGE FORM
+==============================================================================
 */
 
-/*****************************************************
- *  LOGIN AND LANGUAGE FORM                          *
- *****************************************************/
 #lang_form {
-	text-align: left;
 	font-size: 12px;
 	margin: 2px 0 10px 0;
 	padding: 2px;
+	text-align: left;
 }
-#lang_form input, #lang_form select{
+
+#lang_form input, 
+#lang_form select{
 	font-size: 12px;
 }
 
@@ -607,69 +623,119 @@ this lets the navigation menu appear to the left:
 	font-size: 12px;
 	margin: 4px 6px;
 }
+
 #formLogin input {
 	font-size: 13px;
 	margin: 4px 6px;
 }
+
 #login_fail {
+	background-color: #fff;
+	border: 1px solid #f00;
+	color: #f00;
+	font-size: 12px;
 	margin: 0 6px 6px 6px;
 	padding: 4px;
-	border: 1px solid #f00;
-	background-color: #fff;
-	font-size: 12px;
-	color: #f00;
 }
+
 input.mainoption {
 	font-weight : bold;
 }
+
 input.liteoption {
 	font-weight : normal;
 }
 
 
 
+/*
+==============================================================================
+    COURSE HOMEPAGE
+==============================================================================
+*/
 
-
-/*****************************************************
- * COURSE HOMEPAGE			                         *
- *****************************************************/
 /* various sections in course-home.php file  */
 #toolremove {
-	width: 40%;
+	border: 2px solid #f00;	
 	color: #f00;
 	font-weight: bold;
 	margin: 10px auto;
 	padding: 10px;
-	border: 2px solid #f00;
+	width: 40%;
 }
 
-#courseintro { clear: both; width: 80%; margin: 10px auto;
- padding: 10px; border-bottom: 1px solid #4171B5;}
-#courseintro_icons { clear: both; width: 80%; margin: 10px auto;}
+#courseintro { 
+	border-bottom: 1px solid #4171B5;
+ 	clear: both;
+ 	margin: 10px auto;
+ 	padding: 10px; 
+ 	width: 80%;
+}
 
-.everybodyview { position: relative; /* to avoid the IE peekabo bug ?*/
- width: 80%; margin: 10px auto; padding: 10px;}
+#courseintro_icons { 
+	clear: both; 
+	margin: 10px auto;
+	width: 80%; 
+}
 
-.Authoringview,.courseadminview, .platformadminview {position: relative; width: 80%;
- margin: 25px auto 10px; padding: 10px; border: 1px solid #4171B5;}
+.everybodyview { 
+	margin: 10px auto; 
+ 	padding: 10px;
+ 	position: relative; /* to avoid the IE peekabo bug ?*/
+ 	width: 80%; 	
+}
 
-.viewcaption {position: relative; top: -20px; font-size: 12px;
- font-weight: bold; color: #4171B5; background-color: #fff; padding: 0 4px;}
-/***********************************/
+.Authoringview,
+.courseadminview, 
+.platformadminview {
+	border: 1px solid #4171B5;
+	margin: 25px auto 10px; 
+ 	padding: 10px; 
+	position: relative; 
+	width: 80%;
+ }
 
-/*****************************************************
- *  			AGENDA                               *
- *****************************************************/
+.viewcaption {
+	background-color: #fff; 
+ 	color: #4171B5; 
+ 	font-size: 12px;
+ 	font-weight: bold; 
+	padding: 0 4px;
+	position: relative; 
+	top: -20px; 
+}
+ 	
+ 	
+/*
+==============================================================================
+    AGENDA
+==============================================================================
+*/
+
 #agenda {
 	width: 100%;
 	margin: 0 auto;
 	border: 1px solid #4171B5;
 	border-collapse: collapse;
 }
-.agenda_month_divider {background-color: #4171B5; font-weight: bold;
- font-size: 12px; color: #fff; text-align: center;}
-#agenda .title a { color: #fff;}
-#agenda .agendaitem {font-size: 12px;}
+
+#agenda .title a { 
+	color: #fff;
+}
+
+#agenda .agendaitem {
+	font-size: 12px;
+}
+
+.agenda_month_divider {
+	background-color: #4171B5; 
+	color: #fff; 
+	font-size: 12px; 
+	font-weight: bold;
+ 	text-align: center;
+}
+
+
 #smallcalendar .title {background-color: #4171B5; font-weight: bold; padding: 2px;
  color: #fff; text-align: center; font-size: 11px;}
 #smallcalendar .title a { color: #fff;}

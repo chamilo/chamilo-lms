@@ -67,6 +67,8 @@ $langTocDown  = "Nach unten";
 $langTocUp  = "Nach oben";
 $lang_cut_paste_link = "Nur Text-Ansicht";
 $langCreatePath = "Pfad erstellen";
+$langOogieConversionPowerPoint = "Oopie : PowerPoint Umwandlung";
+$langWelcomeOogieSubtitle = "Umwandler für PowerPoint zu Lernpfad";
 $langAddMetadata = "Metadata anschauen/aktualisieren";
 $langGoMetadata = "Los!";
 $langQuotaForThisCourseIs = "Der verfügbare Speicher für diesen Kurs ist";
@@ -113,5 +115,8 @@ $DocumentsOverview = "Überblick Dokumente";
 $ViewSlideshow = "Bilder Slideshow ansehen";
 $Options = "Optionen";
 $Type = "Typ";
+$WelcomeOogieConverter = "Willkommen beim Oogie PowerPoint Umwandler<br>
+1. Auf der Festplatte nach einer .ppt oder .odp Datei suchen<br>2. In Oogie importieren; die Datei wird in einen Scorm Lernpfad umgewandelt.<br>3. Dann ist es möglich, jedem Bild Audio Kommentare und zwischen Bildern Tests zur Überprüfung hinzuzufügen ";
+$ConvertToLP = "In einen Lernpfad umwandeln";
 $Content = "Inhalt";
 ?>

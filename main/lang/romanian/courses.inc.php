@@ -63,4 +63,5 @@ $CourseSortingDone = "Sortarea cursurilor a fost finalizata";
 $ExistingCourseCategories = "Categoriile existente de cursuri";
 $YouAreNowUnsubscribed = "Ai renuntat la acest curs.";
 $AddRight = "Adauga";
+$ViewOpenCourses = "Vizualizeaza cursurile deschise";
 ?>

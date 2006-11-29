@@ -67,7 +67,7 @@ $langScormBuilder = "Créer un parcours";
 $langCreateDoc = "Créer un document";
 $langOrganiseDocuments = "Créer une table des matières";
 $langUncompress = "Décompresser";
-$ExportShort = "Exporter au format SCORM";
+$ExportShort = "Export SCORM";
 $Description = "Description";
 $progress = "Progression";
 ?>

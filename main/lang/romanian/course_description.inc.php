@@ -13,4 +13,5 @@ $langAdd  = "Adauga";
 $langValid  = "Valid";
 $langBackAndForget  = "Inapoi si uita";
 $langOkSent = "Pagina dumneavoastra a fost transferata. Este legata acum la <a href=../../$dbname/index.php>Pagina principala</a>";
+$Content = "Continut";
 ?>

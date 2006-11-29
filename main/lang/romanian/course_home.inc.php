@@ -17,4 +17,13 @@ $langCombinedCourse = "Curs mix";
 $ToolIsNowVisible = "Unealta este acum vizibila";
 $ToolIsNowHidden = "Unealta este acum invizibila";
 $EditLink = "Schimba link";
+$blog_management = "Administrarea blogului";
+$forum = "Forumuri";
+$course_maintenance = "Administrarea cursului";
+$TOOL_SURVEY = "Sondaje";
+$visio = "Conferinte in timp real - Dokeos";
+$GreyIcons = "Unelte";
+$Interaction = "Interactiune";
+$Authoring = "Creator";
+$Administration = "Administratie";
 ?>

@@ -74,4 +74,17 @@ $dropbox_lang["filingRefile"] = "Wiederablage";
 $dropbox_lang["filingSelected"] = "ausgewählt";
 $dropbox_lang["filingOtherAs"] = "nicht ausgewählt als";
 $dropbox_lang["filingName"] = "Name";
+$ReceivedFiles = "Empfangene Dateien";
+$SentFiles = "Abgeschickte Dateien";
+$Type = "Typ";
+$ReceivedTitle = "Titel";
+$SentTitle = "Titel";
+$Authors = "Autoren";
+$Author = "Autor";
+$Size = "Größe";
+$LastResent = "Zuletzt verschickt am ";
+$kB = "kb";
+$Root = "Root";
+$NoSentFilesHere = "hier gibt es keine <b>versendeten</b> Dateien zum Ansehen";
+$NoReceivedFilesHere = "Hier gibt es keine <b>empfangene</b> Dateien zur Ansicht";
 ?>

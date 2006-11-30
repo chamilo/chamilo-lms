@@ -1492,6 +1492,7 @@ div.system_announcement{
 
 div.system_announcement_title{
 }
+
 div.system_announcement_content{
 	margin-left: 20px;
 	border-left: 1px solid gray;
@@ -1503,112 +1504,154 @@ div.system_announcement_content{
 
 
 
-/*****************************************************
- *  THE NEW FORUM					     *
- *****************************************************/
-/* **** FORUM CATEGORY **** */
+/*
+==============================================================================
+    THE NEW FORUM
+==============================================================================
+*/
+
+/*
+------------------------------------------------------------------------------
+    FORUM CATEGORY
+------------------------------------------------------------------------------
+*/
+
 .forum_category {
 	background-color: #0066CC;
 	color: #fff;
 }
-.forum_category a{
+
+.forum_category a {
 	color: #fff;
 }
+
 .forum_category_header {
 	background-color: #0066CC;
 	color: #fff;
 }
-tr.forum_category_header a{
+
+tr.forum_category_header a {
 	color: #fff;
 }
 
-/* **** FORUM **** */
-.forum_header{
+/*
+------------------------------------------------------------------------------
+    FORUM 
+------------------------------------------------------------------------------
+*/
+.forum_header {
 	background-color: #EFEFEF;
 }
 
-/* **** THREAD **** */
-.forum_threadheader{
-	color: #aaa;
+/*
+------------------------------------------------------------------------------
+   THREAD
+------------------------------------------------------------------------------
+*/
+
+.forum_threadheader {
 	background-color: #F7F7F7;
+	color: #aaa;
 }
+
 tr.forum_threadheader td{
 }
 
-/* **** POST **** */
+/*
+------------------------------------------------------------------------------
+    POST
+------------------------------------------------------------------------------
+*/
 .quote{
 	background-color: #EFEFEF;
 }
+
 .forum_message_left {
-	width: 150px;
-	vertical-align: top;
+	background-color: #F7F7F7;
 	/*border-bottom: 1px solid #666666;*/
 	border-right: 1px solid #aaa;
-	background-color: #F7F7F7;
+	vertical-align: top;
+	width: 150px;	
 }
+
 .forum_message_left_2_be_approved {
-	width: 150px;
-	vertical-align: top;
+	background-color: #F7F7F7;
 	/*border-bottom: 1px solid #666666;*/
 	border-right: 1px solid #aaa;
-	background-color: #F7F7F7;
 	color: #999;
+	vertical-align: top;
+	width: 150px;
 }
+
 .forum_message_post_title{
+	background-color: #F7F7F7;
 	/*border-bottom: 1px solid #666666;*/
 	font-weight: bold;
-	background-color: #F7F7F7;
 	height: 20px;
 }
+
 .forum_message_post_title_2_be_approved{
+	background-color: #F7F7F7;
 	/*border-bottom: 1px solid #666666;*/
 	color: #999;
 	font-weight: bold;
-	background-color: #F7F7F7;
 	height: 20px;
 }
+
 .forum_message_post_text{
 	/*border-bottom: 1px solid #666666;*/
 	margin-bottom: 10px;
 	vertical-align: top;
 }
+
 .forum_message_post_text_2_be_approved{
 	/*border-bottom: 1px solid #666666;*/
 	color: #999;
 	margin-bottom: 10px;
 	vertical-align: top;
 }
+
 .current{
 	font-weight: bold;
 }
+
 .structure{
+	background-color: #F7F7F7;
 	/*border-bottom: 1px solid #666666;*/
 	font-weight: bold;
-	background-color: #F7F7F7;
 	height: 20px;
 }
+
 a.forum_group_link {
-	font-weight: lighter;
 	display:inline;
+	font-weight: lighter;
 }
 
-/* **** BLOG **** */
+/*
+------------------------------------------------------------------------------
+    BLOG 
+------------------------------------------------------------------------------
+*/
 span.blog_title {
+ 	color: #1657A9;
  	font-size: 20px;
  	font-weight: bold;
- 	color: #1657A9;
 }
+
 span.blog_subttitle {
  	font-size: 12px;
 }
+
 td.blog_left {
+ 	border-right: 1px solid #dddddd;
  	margin-right: 5px;
  	padding-right: 5px;
- 	border-right: 1px solid #dddddd;
 }
+
 td.blog_right {
 	padding-left: 10px;
 }
+
 td.blog_menu_title {
 	background-color: #dddddd;
 	color: #1657A9;
@@ -1616,154 +1659,186 @@ td.blog_menu_title {
 	font-size: 11px;
 	padding: 2px;
 }
+
 td.blog_menu {
 	border-bottom: 1px dashed #dddddd;
-	border-right: 1px dashed #dddddd;
 	border-left: 1px dashed #dddddd;
+	border-right: 1px dashed #dddddd;
 	padding: 10px;
 }
+
 td.blog_menu ul {
-	margin-top: 0;
-	margin-right: 0;
-	margin-bottom: 0;
-	margin-left: 15px;
+	margin: 0 0 0 15px;
 	padding: 0;
 }
+
 td.blog_menu ul li {
 }
+
 span.blogpost_title {
+ 	color: #1657A9;
  	display: block;
  	font-size: 18px;
  	font-weight: bold;
- 	color: #1657A9;
  	padding-bottom: 5px;
 }
+
 span.blogpost_date {
+ 	color: #333333;
  	display: block;
  	font-size: 12px;
  	font-weight: bold;
- 	color: #333333;
  	padding-bottom: 10px;
 }
+
 span.blogpost_info {
- 	display: block;
- 	color: #333333;
  	border-top: 1px solid #dddddd;
+ 	color: #333333;
+ 	display: block;
  	margin-top: 5px;
 }
+
 table.newBlog {
+	background-color: #f6f6f6;
 	border: 1px solid #dddddd;
 	margin-bottom: 10px;
 	margin-top: 10px;
 	padding: 10px;
-	background-color: #f6f6f6;
 }
+
 table.newTask {
-	border: 1px solid #dddddd;
-	margin-bottom: 10px;
-	margin-top: 10px;
-	padding: 10px;
 	background-color: #f6f6f6;
-}
-table.new_comment {
 	border: 1px solid #dddddd;
 	margin-bottom: 10px;
 	margin-top: 10px;
 	padding: 10px;
-	background-color: #F4F4F4;
 }
+
+table.new_comment {
+	background-color: #F4F4F4;
+	border: 1px solid #dddddd;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	padding: 10px;
+}
+
 div.blogpost_comment {
-	border-top: 1px dashed #dddddd;
-	border-right: 1px dashed #dddddd;
-	border-bottom: 1px dashed #dddddd;
-	border-left: 1px dashed #dddddd;
+	background-color: white;
+	border: 1px dashed #dddddd;
 	margin-bottom: 10px;
 	padding: 10px;
-	background-color: white;
 }
+
 span.blogpost_comment_title {
+ 	color: #1657A9;
  	display: block;
  	font-size: 14px;
  	font-weight: bold;
- 	color: #1657A9;
  	padding-bottom: 5px;
 }
+
 span.blogpost_comment_date {
+ 	color: #333333;
  	display: block;
  	font-size: 10px;
  	font-weight: bold;
- 	color: #333333;
  	padding-bottom: 10px;
 }
+
 span.blogpost_comment_info {
-	font-size: 10px;
- 	display: block;
- 	color: #333333;
  	border-top: 1px solid #dddddd;
+	color: #333333;
+ 	display: block;
+ 	font-size: 10px;
  	margin-top: 10px;
 }
+
 div.blogpost {
-	border: 1px solid #DDDDDD;
 	background-color: #ECECEC;
+	border: 1px solid #DDDDDD;
 	margin-bottom: 15px;
 	padding: 10px;
 }
+
 div.comments {
+	background-color: #F4F4F4;
 	border: 1px solid #dddddd;
 	margin-bottom: 10px;
 	margin-top: 10px;
 	padding: 10px;
-	background-color: #F4F4F4;
 }
 
-.link {text-decoration: none; font-weight : bold; color : #1657A9; cursor: pointer}
-.link:hover {text-decoration: none; color: #abd9f1; font-weight: bold; cursor: pointer}
+.link {
+	color : #1657A9; 
+	cursor: pointer
+	font-weight : bold; 
+	text-decoration: none; 
+}
 
-/*****************************************************
- *  INSTALLATION								     *
- *****************************************************/
-#installation_steps{
-	float:left;
+.link:hover {
+	color: #abd9f1; 
+	cursor: pointer
+	font-weight: bold; 
+	text-decoration: none; 
+}
+
+
+/*
+==============================================================================
+    INSTALLATION
+==============================================================================
+*/
+
+#installation_steps {
 	background-color: #EFEFEF;
+	float:left;
 }
+
 .current_step{
 	font-weight: bold;
-
 }
+
 .RequirementHeading{
 	margin-right:10px;
 }
+
 .RequirementHeading h1{
+	border-bottom: 1px solid #0066CC;
 	color:#0066CC;
 	font-size:1.2em;
 	font-weight: bold;
-	border-bottom: 1px solid #0066CC;
 }
+
 .RequirementText{
 	color:#666;
+	float:right;
 	font-size:1.0em;
 	font-weight: normal;
-	float:right;
 	width:200px;
 }
+
 .RequirementContent{
 	color:#000;
 	font-size:1.0em;
 	font-weight: normal;
 }
+
 .RequirementContent table{
 	border: 1px solid #ccc;
 	width: 400px;
 }
+
 .RequirementContent table th{
 	border-bottom: 1px solid #ccc;
 	text-align: left;
 }
+
 .requirements-item{
-	width: 50%;
 	background-color:#f7f7f7;
 	padding-left:2px;
+	width: 50%;
 }
+
 .requirements-value{
 
 }
@@ -1781,117 +1856,149 @@ div.comments {
 
 
 
-
-/************************************************************
-  styles below here are not necessarily used in the current
+/*
+==============================================================================
+    styles below here are not necessarily used in the current
 	release and the CVS files, they are from earlier versions,
 	and have been left untouched for anyone needing them in
 	their own platform ...
-*************************************************************/
-.topBanner a:link, .topBanner a:active, .topBanner a:visited {
-	text-decoration:none;
+==============================================================================
+*/
+
+.topBanner a:link,
+.topBanner a:active,
+.topBanner a:visited {
 	color:white;
+	text-decoration:none;
 }
+
 .topBanner table {
 	text-decoration:none;
 }
+
 .topBanner a:hover {
 	text-decoration:underline;
 }
+
 .topBanner td {
 	border-top: solid White 1px;
 }
+
 .alternativeBgLight {
 	background-color: #f5f5f5;
 }
+
 .alternativeBgDark 	{
 	background-color: #e6e6e6
 }
+
 .forms {
 	letter-spacing: normal;
+	padding: 2px 5px;
 	text-align: justify;
 	text-indent: 3pt;
 	word-spacing: normal;
-	padding: 2px 5px;
 }
+
 .formsTips	{
-text-align: justify;
-text-indent: 15pt;
-word-spacing: normal;
+	text-align: justify;
+	text-indent: 15pt;
+	word-spacing: normal;
 }
+
 /*
-input.forms	{ letter-spacing: normal; text-align: justify; text-indent: 3pt;	word-spacing: normal;
-padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
+input.forms	{
+	letter-spacing: normal; 
+	padding-top: 0px;	
+	padding-right: 0px;	
+	padding-bottom: 0px;	
+	padding-left: 0px;
+	text-align: justify; 
+	text-indent: 3pt;	
+	word-spacing: normal;
+}
 */
+
 .warn {
 	border: thin double Silver;
+	color: Red;
+	font-family: serif;
 	margin-left: 15px;
 	margin-right: 15px;
-	font-family: serif;
-	color: Red;
 	padding-left: 25px;
 }
+
 .small {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px
 }
+
 .xsmall {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px
 }
+
 .xxsmall {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 9px
 }
 
-
 /*
- * TABBED INTERFACE
- */
-#tabbed_menu
-{
-	width: 100%;
-	height: 20px;
+------------------------------------------------------------------------------
+    TABBED INTERFACE
+------------------------------------------------------------------------------
+*/
+
+#tabbed_menu {
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #666666;
+	height: 20px;
 	margin-bottom: 20px;
+	width: 100%;
 }
-#tabbed_menu #tabbed_menu_tabs li
-{
-	margin: 0 10;
-	padding: 0;
+
+#tabbed_menu #tabbed_menu_tabs li {
 	display: inline;
 	list-style-type: none;
+	margin: 0 10;
+	padding: 0;
 }
-#tabbed_menu #tabbed_menu_tabs a:link, #tabbed_menu_tabs a:visited
-{
-	float: left;
+
+#tabbed_menu #tabbed_menu_tabs a:link, #tabbed_menu_tabs a:visited {
 	background: #f3f3f3;
-	font-weight: bold;
-	padding: 2px 10px 2px 10px;
-	margin-right: 4px;
 	border: 1px solid #cccccc;
 	border-bottom: 1px solid #666666;
-	text-decoration: none;
 	color: #666;
+	float: left;
+	font-weight: bold;
+	margin-right: 4px;
+	padding: 2px 10px 2px 10px;
+	text-decoration: none;
 }
-#tabbed_menu #tabbed_menu_tabs a:link.active, #tabbed_menu_tabs a:visited.active
-{
+
+#tabbed_menu #tabbed_menu_tabs a:link.active,
+#tabbed_menu_tabs a:visited.active {
+	background: #fff;
 	border: 1px solid #666666;
 	border-bottom: 1px solid #fff;
-	background: #fff;
 	color: #000;
-
 }
 
-/* FCKeditor */
-#content___Frame, #forum_category_comment___Frame, #forum_comment___Frame, #post_text___Frame, #texte___Frame, #questionDescription___Frame
-{
+/*
+------------------------------------------------------------------------------
+    FCKeditor
+------------------------------------------------------------------------------
+*/
+
+#content___Frame,
+#forum_category_comment___Frame,
+#forum_comment___Frame,
+#post_text___Frame,
+#texte___Frame, #questionDescription___Frame{
 	margin-left: -200px;
 }
 
-#intro_content___Frame
-{
+#intro_content___Frame{
 	margin-left: -100px;
 }

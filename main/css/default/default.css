@@ -1153,39 +1153,52 @@ a.nobold:hover {
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-weight: bold;
  }
+ 
+ 
+/*
+==============================================================================
+    FORM STYLES
+==============================================================================
+*/
 
-/*****************************************************
- *  FORM STYLES                                      *
- *****************************************************/
 div.row {
 	clear: both;
 	padding-top: 5px;
 }
+
 div.row div.form_header {
-	white-space: nowrap;
-	padding: 2px;
 	background-color: #E5EDF9;
 	border: 1px solid #4271B5;
+	padding: 2px;
+	white-space: nowrap;
 }
+
 div.row div.label {
 	float: left;
-	width: 18%;
 	text-align: right;
+	width: 18%;
 }
+
 div.row div.formw {
 	width: 80%;
 }
-[dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
+
+[dir=ltr] div.row div.label,
+[dir=rtl] div.row div.formw {
 	float: left;
 	text-align: right;
 }
-[dir=rtl] div.row div.label, [dir=ltr] div.row div.formw {
+
+[dir=rtl] div.row div.label,
+[dir=ltr] div.row div.formw {
 	float: right;
 	text-align: left;
 }
+
 span.form_required {
 	color: #f00;
 }
+
 span.form_error {
 	color: #f00;
 	font-size: x-small;
@@ -1193,13 +1206,15 @@ span.form_error {
 }
 
 
-/*****************************************************
- *  ACCORDION STYLES                                *
- *****************************************************/
+/*
+==============================================================================
+    ACCORDION STYLES
+==============================================================================
+*/
 
 .accordion_header {
-  	border: 1px  solid gray;
   	background-color: #E5EDF9;
+  	border: 1px  solid gray;
   	cursor: pointer;
   	margin-top: 10px;
   	padding: 5px;
@@ -1207,109 +1222,167 @@ span.form_error {
 }
 
 .accordion_content {
-  	border: 1px  solid gray;
   	background-color: #fafafa;
-  	padding: 5px;
-  	width: 770px;
+  	border: 1px  solid gray;
   	display: none;
+  	padding: 5px;
   	text-align: left;
+	width: 770px;
 }
 
-/*****************************************************
- *  DATA TABLE STYLES                                *
- *****************************************************/
 
+/*
+==============================================================================
+    DATA TABLE STYLES
+==============================================================================
+*/
 
-.cell_header {background-color: #EEEEFF;font-weight:bold;text-align:left;padding-left:5px;}   /* header cell in data table in tools */
+.cell_header {  /* header cell in data table in tools */
+	background-color: #EEEEFF;
+	font-weight:bold;
+	padding-left:5px;
+    text-align:left;
+}	
 
-.data_table{
+.data_table {
   	border-collapse: collapse;
-	width: 100%;
-	padding: 5px;
-	margin-top: 5px;
 	margin-bottom: 5px;
+	margin-top: 5px;
+	padding: 5px;
+	width: 100%;
 }
-.data_table th{
-	padding-right: 20px;
-  	border: 1px  solid gray;
-  	background-color: #E5EDF9;
+
+.data_table th {
+	background-color: #E5EDF9;
+	border: 1px  solid gray;
+  	padding-right: 20px;
 }
-.data_table tr.row_odd{
+
+.data_table tr.row_odd {
   	background-color: #fafafa;
-  }
-.data_table tr.row_odd:hover, .data_table tr.row_even:hover{
+}
+  
+.data_table tr.row_odd:hover,
+.data_table tr.row_even:hover{
   	background-color: #f0f0f0;
 }
-.data_table tr.row_even{
+
+.data_table tr.row_even {
   	background-color: #fff;
 }
-.data_table td{
+
+.data_table td {
+  	border-bottom: 1px solid #b0b0b0;
+  	border-left: 1px dotted #e1e1e1;
+  	border-right: 1px dotted #e1e1e1;
   	padding: 5px;
 	vertical-align: top;
-  	border-bottom: 1px solid #b0b0b0;
-  	border-right: 1px dotted #e1e1e1;
-  	border-left: 1px dotted #e1e1e1;
 }
-.data_table td.border{
-  	padding: 5px;
-	  vertical-align: top;
-  	border: 1px solid gray;
 
-}
-.data_table td.none{
+.data_table td.border {
+  	border: 1px solid gray;
   	padding: 5px;
-	  vertical-align: top;
-	border-right:none;
-	border-bottom: none;
-	border-left:none;
+	vertical-align: top;
 }
-.data_table td.redText{
+
+.data_table td.none {
+  	border-bottom: none;
+	border-left:none;
+	border-right:none;
+	padding: 5px;
+	vertical-align: top;
+}
+
+.data_table td.redText {
 	color:red;
 }
-.data_table td.borderRight{
-	border-right:1px solid gray;
+
+.data_table td.borderRight {
 	border-bottom: none;
 	border-left:none;
+	border-right:1px solid gray;
 }
-.data_table td.borderLeft{
-	border-left:1px solid gray;
+
+.data_table td.borderLeft {
 	border-bottom: none;
+	border-left:1px solid gray;
 	border-right:none;
 }
+
 .data_table td.noLink {
 	color:grey;
 }
-.data_table tr.tableName{
-	padding: 5px;
-  	border: 1px  solid gray;
+
+.data_table tr.tableName {
+	border: 1px  solid gray;
   	background-color: #e6e6ff;
-	text-align:left;
-}
-.data_table tr.total{
 	padding: 5px;
-  	border: 1px  solid gray;
-  	background-color: #ffffcc;
-	text-align:left;
+  	text-align:left;
 }
-.data_table th.head{
+
+.data_table tr.total {
+	background-color: #ffffcc;
+	border: 1px  solid gray;
+  	padding: 5px;
+  	text-align:left;
+}
+
+.data_table th.head {
+  	background-color: #ffffcc;
+	border: 1px  solid gray;
 	padding-right: 20px;
-  	border: 1px  solid gray;
-  	background-color: #ffffcc;
 }
-/* admin page tool list definitions */
-.tool_list dt { font-weight: bold; }
-.tool_list dd { margin: 0; padding: 4px 0 0 10px;}
 
-/* divs for category list / platform news on home page */
-.home_cats {width: 45%; float: left; position: relative;
-	margin: 0; padding: 0px; padding-top: 8px; background: #fff;}
+/*
+==============================================================================
+    admin page tool list definitions
+==============================================================================
+*/
 
-.home_news {width: 45%; float: right; position: relative;
-	margin: 0; padding: 0px; padding-top: 8px; background: #fff;}
+.tool_list dt { 
+	font-weight: bold; 
+}
 
+.tool_list dd { 
+	margin: 0; 
+	padding: 4px 0 0 10px;
+}
 
-label.left { float: left; width: 15em; margin: 0 0 0.5em 0; }
-form br { clear: both; }
+/*
+==============================================================================
+    divs for category list / platform news on home page
+==============================================================================
+*/
+
+.home_cats {
+	background: #fff;
+	float: left; 
+	margin: 0; 
+	padding: 0px; 
+	padding-top: 8px; 
+	position: relative;
+	width: 45%;
+}
+
+.home_news {
+	background: #fff;
+	float: right; 
+	margin: 0; 
+	padding: 0px; 
+	padding-top: 8px; 
+	position: relative;
+	width: 45%; 
+}
+
+label.left { 
+	float: left; 
+	width: 15em; 
+	margin: 0 0 0.5em 0; 
+}
+
+form br { 
+	clear: both; 
+}
 
 /* Fix for alignment problem in IE-Win browsers  */
 /*  Hide from IE5-mac. Only IE-win sees this. \*/
@@ -1317,76 +1390,106 @@ form br { clear: both; }
 * html .data { height: 1%; margin-left: 0;}
 /* End hide from IE5/mac */
 
-.radio, .checkbox { margin: 0; padding: 0; border: none; background-color: transparent;}
-
-.required { color: #f00; font-weight: bold;}
-
-/* Admin section */
-div.admin_section {
-	width: 40%;
-	float: left;
-	padding: 5px;
-	margin: 10px 20px;
+.radio,
+.checkbox { 
+	background-color: transparent;
+	border: none; 
+	margin: 0; 
+	padding: 0; 
 }
+
+.required { 
+	color: #f00; 
+	font-weight: bold;
+}
+
+/*
+==============================================================================
+    Admin section
+==============================================================================
+*/
+
+div.admin_section {
+	float: left;
+	margin: 10px 20px;
+	padding: 5px;
+	width: 40%;
+}
+
 div.admin_section h4 {
-  margin: 0;
-	border-bottom: 1px solid gray;
+  	border-bottom: 1px solid gray;
+	margin: 0;
 	width: 100%;
 }
+
 .user_course_category {
 	background-color: #efefef;
 	border: 1px solid #666;
-	font-weight: bold;
 	color: #666;
+	font-weight: bold;
 	list-style-type: none;
 	margin: 5px;
 	padding: 5px;
 }
-/***************************************************************
- *  DOKEOS CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION 	   *
- ***************************************************************/
+
+/*
+==============================================================================
+    DOKEOS CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION
+==============================================================================
+*/
+
 .settingtitle{
 	background-color: #EFEFEF;
 	border: 1px solid #cccccc;
-	font-weight: bold;
 	color: #666666;
+	font-size: 11px;
+	font-weight: bold;
 	list-style-type: none;
 	margin: 5px;
 	padding: 5px;
-	font-size: 11px;
-	}
+}
+
 .settingcomment{
 	color: #000000;
+	font-size: 11px;
 	margin: 5px;
 	padding: 5px;
-	font-size: 11px;
 }
+
 .settingvalue{
 	list-style-type: none;
 	margin: 5px;
 	padding: 5px;
 }
 
-/*****************************************************
- *  ANNOUNCEMENTS									 *
- *****************************************************/
-.announcements_datum
-{
+/*
+==============================================================================
+    ANNOUNCEMENTS
+==============================================================================
+*/
+
+.announcements_datum {
+   color: #666666;
    font-size: 12px;
    font-style: italic;
-   color: #666666;
 }
-/*****************************************************
- *  SYSTEM ANNOUNCEMENTS						     *
- *****************************************************/
+
+/*
+==============================================================================
+    SYSTEM ANNOUNCEMENTS
+==============================================================================
+*/
+
 div.system_announcements{
 }
-div.system_announcements h3{
 
+div.system_announcements h3{
 }
+
 div.system_announcement{
 	margin: 5px;
 }
+
 div.system_announcement_title{
 }
 div.system_announcement_content{

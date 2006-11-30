@@ -14,7 +14,7 @@
  * @param	integer	Item View ID
  * @return	integer	Number of interactions
  */
-function get_interactions_count_from_db($lp_iv_id){
+function get_interactions_count_from_db($lp_iv_id=0){
 	$table = Database::get_course_table('lp_iv_interaction');
 	$sql = "SELECT count(*) FROM $table WHERE lp_iv_id = $lp_iv_id";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -27,7 +27,7 @@ function get_interactions_count_from_db($lp_iv_id){
  * @param	integer	Learnpath Item View ID
  * @return	array
  */
-function get_iv_interactions_array($lp_iv_id){
+function get_iv_interactions_array($lp_iv_id=0){
 	$list = array();
 	$table = Database::get_course_table('lp_iv_interaction');
 	$sql = "SELECT * FROM $table WHERE lp_iv_id = $lp_iv_id ORDER BY order_id ASC";

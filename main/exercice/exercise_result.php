@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10276 2006-11-30 15:10:57Z develop-it $
+<?php // $Id: exercise_result.php 10278 2006-11-30 15:18:23Z develop-it $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -214,8 +214,8 @@ function display_free_answer($answer)
 
 function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment)
 {
-	global $hotspot_colors;
-	$lhotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
+	//global $hotspot_colors;
+	$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
             						"#4271B5",
 									"#FE8E16",
 									"#3B3B3B",

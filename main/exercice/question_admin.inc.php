@@ -104,6 +104,18 @@ if($usedInSeveralExercises)
 
 <?php
 		}
+		elseif ( $answerType == HOT_SPOT)
+		{
+?>
+	<input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>">
+	<input type="hidden" name="reponse" value="<?php echo htmlentities(serialize($reponse)); ?>">
+	<input type="hidden" name="comment" value="<?php echo htmlentities(serialize($comment)); ?>">
+	<input type="hidden" name="weighting" value="<?php echo htmlentities(serialize($weighting)); ?>">
+	<input type="hidden" name="hotspot_coordinates" value="<?php echo htmlentities(serialize($hotspot_coordinates)); ?>">
+	<input type="hidden" name="hotspot_type" value="<?php echo htmlentities(serialize($hotspot_type)); ?>">
+
+<?php
+		}
 		elseif ( $answerType == FREE_ANSWER)
 		{
 ?>
@@ -172,7 +184,7 @@ else
 
 <?php
 	// show the picture of the question
-	if($okPicture)
+	if($okPicture && $questionType != HOT_SPOT)
 	{
 ?>
 

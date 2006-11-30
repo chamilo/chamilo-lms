@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 10276 2006-11-30 15:10:57Z develop-it $
+<?php // $Id: exercice_submit.php 10280 2006-11-30 23:02:34Z develop-it $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -538,7 +538,8 @@ $s="</table>
   {
 	$s.=get_lang('Next').' &gt;';
   }
-  $s.='\'&gt;';
+  //$s.='\'&gt;';
+  $s.= '\' />';
   $s.="</td></tr></form></table>";
 
 $b=2;

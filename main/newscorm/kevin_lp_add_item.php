@@ -219,7 +219,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						echo '<div class="lp_message" style="margin:3px 10px;">';
 						
-							echo 'The new chapter has been created. You can now add an other chapter or a step to it.';
+							echo get_lang("NewChapterCreated");
 						
 						echo '</div>';
 						
@@ -231,7 +231,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						echo '<div class="lp_message" style="margin:3px 10px;">';
 						
-							echo 'The new link has been created.';
+							echo get_lang("NewLinksCreated");
 						
 						echo '</div>';
 						
@@ -243,7 +243,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						echo '<div class="lp_message" style="margin:3px 10px;">';
 						
-							echo 'The new student publication has been created.';
+							echo get_lang("NewStudentPublicationCreated");
 						
 						echo '</div>';
 						
@@ -255,7 +255,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						echo '<div class="lp_message" style="margin:3px 10px;">';
 						
-							echo 'The new module has been created. You can now add a chapter or a step to it.';
+							echo get_lang("NewModuleCreated");
 						
 						echo '</div>';
 						
@@ -267,7 +267,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						echo '<div class="lp_message" style="margin:3px 10px;">';
 						
-							echo 'The new exercise has been created.';
+							echo get_lang("NewExerciseCreated");
 						
 						echo '</div>';
 						
@@ -280,7 +280,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						//{
 							$msg = '<div class="lp_message" style="margin-bottom:10px;">';
 							
-								$msg .= 'The new document has been created.';
+								$msg .= get_lang("NewDocumentCreated");
 							
 							$msg .= '</div>';
 							
@@ -297,13 +297,13 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				{
 					case 'chapter':
 						
-						echo $_SESSION['oLP']->display_item_form($_GET['type'], 'Enter the data of the new chapter');
+						echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang("EnterDataNewChapter"));
 						
 						break;
 						
 					case 'module':
 					
-						echo $_SESSION['oLP']->display_item_form($_GET['type'], 'Enter the data of the new module');
+						echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang("EnterDataNewModule"));
 						
 						break;
 						

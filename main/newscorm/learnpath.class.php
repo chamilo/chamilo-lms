@@ -4616,11 +4616,11 @@ class learnpath {
 					if(isset($_GET['view']) && $_GET['view'] == 'build')
 					{
 						$return .= $this->display_manipulate($item_id, $row['item_type']);
-						$return .= $this->display_item_form($row['item_type'], 'Edit the current chapter:', 'edit', $item_id, $row);
+						$return .= $this->display_item_form($row['item_type'], get_lang("EditCurrentChapter").' :', 'edit', $item_id, $row);
 					}
 					else
 					{
-						$return .= $this->display_item_small_form($row['item_type'], 'Edit the current chapter:', $row);
+						$return .= $this->display_item_small_form($row['item_type'], get_lang("EditCurrentChapter").' :', $row);
 					}
 					
 					break;
@@ -4657,11 +4657,11 @@ class learnpath {
 					if(isset($_GET['view']) && $_GET['view'] == 'build')
 					{
 						$return .= $this->display_manipulate($item_id, $row['item_type']);
-						$return .= $this->display_item_form($row['item_type'], 'Edit the current module:', 'edit', $item_id, $row);
+						$return .= $this->display_item_form($row['item_type'], get_lang("EditCurrentModule").' :', 'edit', $item_id, $row);
 			}
 					else
 					{
-						$return .= $this->display_item_small_form($row['item_type'], 'Edit the current module:', $row);
+						$return .= $this->display_item_small_form($row['item_type'], get_lang("EditCurrentModule").' :', $row);
 		}
 		
 					break;
@@ -4696,11 +4696,11 @@ class learnpath {
 		
 		$return = '<div style="margin:3px 10px;">' . "\n";
 		
-			$return .= '<p class="lp_title" style="margin-top:0;">Create a new step:</p>';
+			$return .= '<p class="lp_title" style="margin-top:0;">'.get_lang("CreateNewStep").'</p>';
 		
-			$return .= '<div><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">New document</a></div>';
+			$return .= '<div><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("NewDocument").'</a></div>';
 		
-			$return .= '<p class="lp_title" style="margin-top:10px;">Or use an existing resource:</p>';
+			$return .= '<p class="lp_title" style="margin-top:10px;">'.get_lang("UseAnExistingResource").'</p>';
 			
 			/* get al the docs */
 			$return .= $this->get_documents(); 
@@ -4842,18 +4842,18 @@ class learnpath {
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">Create the exercise:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("CreateTheExercise").' :</p>' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">Move the current exercise:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentExercise").' :</p>' . "\n";
 			else
-				$return .= '<p class="lp_title">Edit the current exercise:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentExecice").' :</p>' . "\n";
 			
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
 				$return .= '<div class="lp_message" style="margin-bottom:15px;">';
 				
-					$return .= '<p class="lp_title">Warning !</p>';
-					$return .= 'When you edit an existing document in the Learning Path, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool.';
+					$return .= '<p class="lp_title">'.get_lang("Warning").' !</p>';
+					$return .= get_lang("WarningEditingDocument");
 				
 				$return .= '</div>';
 			}
@@ -4864,7 +4864,7 @@ class learnpath {
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
-						$return .= "\t\t\t" . '<td class="label"><label for="idParent">Parent:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
@@ -4903,7 +4903,7 @@ class learnpath {
 									
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">Position:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
@@ -4935,14 +4935,14 @@ class learnpath {
 					{
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
@@ -5056,7 +5056,7 @@ class learnpath {
 					{
 						$return .= "\t\t" . '<tr>' . "\n";
 						
-							$return .= "\t\t\t" . '<td class="label"><label for="idParent">Parent:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input">' . "\n";
 							
 								$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
@@ -5096,7 +5096,7 @@ class learnpath {
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">Position:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
@@ -5128,14 +5128,14 @@ class learnpath {
 					{
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
@@ -5251,18 +5251,18 @@ class learnpath {
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">Create the document:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("CreateTheDocument").' :</p>' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">Move the current document:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentDocument").' :</p>' . "\n";
 			else
-				$return .= '<p class="lp_title">Edit the current document:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditTheCurrentDocument").' :</p>' . "\n";
 			
 			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
 			{
 				$return .= '<div class="lp_message" style="margin-bottom:15px;">';
 				
-					$return .= '<p class="lp_title">Warning !</p>';
-					$return .= 'When you edit an existing document in the Learning Path, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool.';
+					$return .= '<p class="lp_title">'.get_lang("Warning").' !</p>';
+					$return .= get_lang("WarningEditingDocument");
 				
 				$return .= '</div>';
 			}
@@ -5273,7 +5273,7 @@ class learnpath {
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
-						$return .= "\t\t\t" . '<td class="label"><label for="idParent">Parent:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
@@ -5312,7 +5312,7 @@ class learnpath {
 									
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">Position:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
@@ -5344,14 +5344,14 @@ class learnpath {
 					{
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
@@ -5362,7 +5362,7 @@ class learnpath {
 							{
 								$return .= "\t\t" . '<tr>' . "\n";
 								
-									$return .= "\t\t\t" . '<td class="label"><label for="idDir">Directory:</label></td>' . "\n";
+									$return .= "\t\t\t" . '<td class="label"><label for="idDir">'.get_lang("Directory").' :</label></td>' . "\n";
 									$return .= "\t\t\t" . '<td class="input">';
 									
 									$sql_doc = "
@@ -6316,7 +6316,7 @@ class learnpath {
 			ORDER BY path ASC";
 		$res_doc = api_sql_query($sql_doc, __FILE__, __LINE__);
 		
-		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_DOCUMENT . '.png" style="margin-right:5px;" title="" />Document</div>';
+		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_DOCUMENT . '.png" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 		
 			while($row_doc = Database::fetch_array($res_doc))
@@ -6359,7 +6359,7 @@ class learnpath {
 			ORDER BY title ASC";
 		$res_quiz = api_sql_query($sql_quiz, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header_end"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />Exercises</div>';
+		$return .= '<div class="lp_resource_header_end"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />'.get_lang("Exercise").'</div>';
 		$return .= '<div class="lp_resource_elements_end" id="resExercise">';
 		
 			while($row_quiz = Database::fetch_array($res_quiz))

@@ -18,7 +18,7 @@ if(!empty($path_to_lzx)){
 	$path_to_lzx .= $params;
 	printf ("<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'
 				codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0'
-			 WIDTH='540px' HEIGHT='140px'>
+			 WIDTH='322px' HEIGHT='48px'>
 			 <param name='movie' VALUE='%s'>
 			 <param name='quality' VALUE='high'>
 			 <param name='scale' VALUE='scale'>
@@ -27,7 +27,7 @@ if(!empty($path_to_lzx)){
 			 <param name='salign' value='lt' />
 			 <param name='bgcolor' VALUE='#ffffff'> 
 			 <embed src='%s' quality='high' scale='noscale' salign='lb' 
-			 	bgcolor='#ffffff'  WIDTH='540px' HEIGHT='140px' ALIGN='center' TYPE='application/x-shockwave-flash' 
+			 	bgcolor='#ffffff'  WIDTH='322px' HEIGHT='48px' ALIGN='center' TYPE='application/x-shockwave-flash' 
 			 	PLUGINSPAGE='http://www.macromedia.com/go/getflashplayer'>
 			 </embed>
 			 </object>", $path_to_lzx,$audio_recorder_item_id,$_course["dbName"],$_user["user_id"],$path_to_lzx);

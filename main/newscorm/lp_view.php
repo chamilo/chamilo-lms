@@ -155,12 +155,16 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	/*]]>*/
 	</style>';
 	include_once('../inc/reduced_header.inc.php');
+	$displayAudioRecorder = (api_get_setting('service_ppt2lp','active')=='true' && api_get_setting('service_ppt2lp','path_to_lzx')!='') ? true : false;
 	?>
 	<frameset rows="150,600">
 		<frame id="header" src="lp_header.php" border="0" frameborder="0" />
 		<frameset cols="180,*">
-			<frameset rows="50,310,150,80,*">
-				<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php" border="0" frameborder="0" scrolling="no"/>
+			<frameset rows="<?php if($displayAudioRecorder) echo '50,';?>310,150,80,*">
+				<?php
+				if($displayAudioRecorder)
+					echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php" border="0" frameborder="0" scrolling="no"/>';
+				?>				
 				<frame id="toc_id" name="toc_name" class="lp_toc" src="lp_toc.php" border="0" frameborder="0" scrolling="no"/>
 				<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" />
 				<frame id="message_id" name="message_name" class="message" src="lp_message.php" border="0" frameborder="0" />

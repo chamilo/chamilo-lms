@@ -4420,7 +4420,7 @@ class learnpath {
 		
 		$title		= replace_dangerous_char($_POST['title']);
 		$filename	= $title;
-		$content	= $_POST['content'];
+		$content	= $_POST['content_lp'];
 		
 		$tmp_filename = $filename;
 									

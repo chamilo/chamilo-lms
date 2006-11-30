@@ -209,7 +209,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			{
 				echo '<div class="lp_message" style="margin:3px 10px;">';
 			
-					echo 'Prerequisites to the current step have been added.';
+					echo get_lang("PrerequisitesAdded");
 			
 				echo '</div>';
 			}

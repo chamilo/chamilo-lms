@@ -4236,10 +4236,10 @@ class learnpath {
 		
 			$return .= "\t" . '<tr class="header">' . "\n";
 			
-				$return .= "\t" . '<th>Title</th>' . "\n";
-				$return .= "\t" . '<th>Description</th>' . "\n";
-				$return .= "\t" . '<th>Move</th>' . "\n";
-				$return .= "\t" . '<th>Actions</th>' . "\n";
+				$return .= "\t" . '<th>'.get_lang("Title").'</th>' . "\n";
+				$return .= "\t" . '<th>'.get_lang("Description").'</th>' . "\n";
+				$return .= "\t" . '<th>'.get_lang("Move").'</th>' . "\n";
+				$return .= "\t" . '<th>'.get_lang("Actions").'</th>' . "\n";
 			
 			$return .= "\t" . '</tr>' . "\n";
 			
@@ -4305,7 +4305,7 @@ class learnpath {
 			if(count($arrLP) == 0)
 			{
 				$return .= "\t" . '<tr>' . "\n";
-					$return .= "\t\t" . '<td colspan="4">There are no items in the learning path for this moment. Click on "Advanced" for creating your learning path items.</td>' . "\n";
+					$return .= "\t\t" . '<td colspan="4">'.get_lang("NoItemsInLp").'</td>' . "\n";
 				$return .= "\t" . '</tr>' . "\n";
 			}
 		
@@ -6191,7 +6191,7 @@ class learnpath {
 		
 		$return .= '<div style="margin:3px 10px;">';
 		
-			$return .= '<p class="lp_title">Add/edit prerequisites</p>';
+			$return .= '<p class="lp_title">'.get_lang("AddEditPrerequisites").'</p>';
 			
 			$return .= '<form method="POST">';
 			
@@ -6200,8 +6200,8 @@ class learnpath {
 					$return .= '<tr>';
 					
 						$return .= '<th></th>';
-						$return .= '<th class="exercise">Minimum</th>';
-						$return .= '<th class="exercise">Maximum</th>';
+						$return .= '<th class="exercise">'.get_lang("Minimum").'</th>';
+						$return .= '<th class="exercise">'.get_lang("Maximum").'</th>';
 						
 					$return .= '</tr>';
 					
@@ -6210,7 +6210,7 @@ class learnpath {
 						$return .= '<td class="radio" colspan="3">';
 						
 							$return .= '<input checked="checked" id="idNone" name="prerequisites" style="margin-left:0; margin-right:10px;" type="radio" />';
-							$return .= '<label for="idNone">None</label>';
+							$return .= '<label for="idNone">'.get_lang("None").'</label>';
 						
 						$return .= '</td>';
 					
@@ -6337,7 +6337,7 @@ class learnpath {
 			}
 
 			if(Database::num_rows($res_doc) == 0)
-				$return .= '<div class="lp_resource_element">No documents</div>';
+				$return .= '<div class="lp_resource_element">'.get_lang("NoDocuments").'</div>';
 		
 		$return .= '</div>';
 		
@@ -6374,7 +6374,7 @@ class learnpath {
 			}
 			
 			if(Database::num_rows($res_quiz) == 0)
-				$return .= '<div class="lp_resource_element">No exercises available</div>';
+				$return .= '<div class="lp_resource_element">'.get_lang("NoExercisesAvailable").'</div>';
 		
 		$return .= '</div>';
 		
@@ -6410,7 +6410,7 @@ class learnpath {
 			}
 			
 			if(Database::num_rows($res_link) == 0)
-				$return .= '<div class="lp_resource_element">No links available</div>';
+				$return .= '<div class="lp_resource_element">'.get_lang("NoLinksAvailable").'</div>';
 		
 		$return .= '</div>';
 		

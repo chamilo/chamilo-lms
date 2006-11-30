@@ -229,7 +229,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			{
 				echo '<div class="lp_message" style="margin:3px 10px;">';
 			
-					echo 'The item has been removed.';
+					echo get_lang("ItemRemoved");
 			
 				echo '</div>';
 			}
@@ -239,12 +239,18 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				{
 					echo '<div class="lp_message" style="margin:3px 10px;">';
 				
-						echo 'Your learning path has been succesfully created and has been added to the left menu. You can now add modules and steps to your learning path. The usage of chapters is optional for a subtler structure.';
+						echo get_lang("LearnPathAdded");
 				
 					echo '</div>';
 				}
 				
-				echo '<p style="font-weight:bold; text-align:center;">' . ($is_new ? 'To continue you' : 'You') . ' can add a module, chapter or step to your learning path from the left menu.</p>';
+				if($is_new){
+					echo '<p style="font-weight:bold; text-align:center;">'.get_lang("LPCreatedToContinue").'</p>';
+				}
+				else{
+					echo '<p style="font-weight:bold; text-align:center;">'.get_lang("LPCreatedAddChapterStep").'</p>';
+				}
+								
 			}
 		
 		echo '</td>';

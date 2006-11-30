@@ -164,8 +164,6 @@ function confirmation (name)
 </script>
 <?php
 
-//echo $admin_output;
-
 /*
 -----------------------------------------------------------
 	DISPLAY SECTION
@@ -180,7 +178,7 @@ switch($_GET['action'])
 		{
 			echo '<div class="lp_message">';
 			
-				echo 'The item has been edited.';
+				echo get_lang("_learnpath_item_edited");
 			
 			echo '</div>';
 		}
@@ -197,7 +195,7 @@ switch($_GET['action'])
 		{
 			echo '<div class="lp_message">';
 			
-				echo 'The item has been deleted.';
+				echo get_lang("_learnpath_item_deleted");
 			
 			echo '</div>';
 		}

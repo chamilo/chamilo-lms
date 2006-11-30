@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10237 2006-11-28 14:54:07Z develop-it $
+<?php // $Id: exercise_result.php 10276 2006-11-30 15:10:57Z develop-it $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -273,8 +273,6 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 	$exeId =mysql_result($res,0,"id");
 	$exeId=$exeId+1;
 	
-	var_dump($questionList);
-	
 	foreach($questionList as $questionId)
 	{
 		// gets the student choice for this question
@@ -282,7 +280,6 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		// creates a temporary Question object
 		$objQuestionTmp=new Question();
 		
-		echo $questionId;
 		$objQuestionTmp->read($questionId);
 
 		$questionName=$objQuestionTmp->selectTitle();
@@ -300,6 +297,11 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		elseif($answerType == MATCHING || $answerType == FREE_ANSWER)
 		{
 			$colspan=2;
+		}
+		elseif($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER)
+		{
+			$colspan=4;
+			$rowspan=$nbrAnswers+1;
 		}
 		else
 		{
@@ -362,7 +364,6 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		}
 		elseif($answerType == HOT_SPOT)
 		{
-			echo $questionId;
 			?>			
 				<tr>
 					<td width="40%">
@@ -653,6 +654,12 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				}
 			}
 		} // end for that loops over all answers of the current question
+		
+		if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER)
+			{
+				// We made an extra table for the answers
+				echo "</table></td></tr>";
+			}
 		?>	
 			<tr>
 			<td colspan="<?php echo $colspan; ?>" align="right">

@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 10279 2006-11-30 22:28:30Z develop-it $
+<?php // $Id: exercise.lib.php 10281 2006-11-30 23:06:46Z develop-it $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -335,8 +335,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 		$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 		//$tes = isset($_GET['modifyAnswers']) ? '0' : '1';
 		//echo $tes;
-		$s .= "<script type=\"text/javascript\" src=\"../js/JavaScriptFlashGateway.js\"></script>
-						<script src=\"../js/hotspot.js\" type=\"text/javascript\"></script>					   
+		$s .= "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
+						<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>					   
 						<script language=\"JavaScript\" type=\"text/javascript\">
 						<!--
 						// -----------------------------------------------------------------------------

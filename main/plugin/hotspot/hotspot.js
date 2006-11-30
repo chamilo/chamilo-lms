@@ -1,19 +1,20 @@
 // in je FORM-tag voor de hotspots:  onSubmit="return validateFlashVar('MINIMUM_AANTAL_CLICKS');
 
-var flashVar = 0;
+var flashVar = 1;
 
 var lcId = new Date().getTime();
 //var flashProxy = new FlashProxy(lcId, "JavaScriptFlashGateway.swf");
 
 function validateFlashVar(counter, lang_1, lang_2)
 {
+	return true;
 	//alert(counter);
 	//alert(flashVar);
 	
-	if(counter == flashVar)
+	if(counter != flashVar)
 	{
-		alert (lang_1 + counter + lang_2);
-		alert(lang_1);
+		alert(lang_1 + counter + lang_2);
+		
 		return false;
 	}
 	else
@@ -24,7 +25,7 @@ function validateFlashVar(counter, lang_1, lang_2)
 
 function updateFlashVar()
 {
-	alert('updateFlashVar: ' + flashVar);
+	//alert('updateFlashVar: ' + flashVar);
 	flashVar++;
 }
 

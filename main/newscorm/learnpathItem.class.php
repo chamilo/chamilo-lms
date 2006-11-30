@@ -926,6 +926,7 @@ class learnpathItem{
 			$this->interactions_count = 0;
 			$this->interactions = array();
 			$this->lesson_location = '';
+			$this->write_to_db();
 		}else{ 
 			//restart current element is allowed (because it's not finished yet), 
 			// reinit current
@@ -1260,20 +1261,21 @@ class learnpathItem{
 	function status_is($list=array())
 	{
    		if($this->debug>1){error_log('New LP - In learnpathItem::status_is('.print_r($list,true).')',0);}
-		if(empty($this->status)){
+		$mystatus = $this->get_status(true);
+		if(empty($mystatus)){
 			return false;
 		}
 		$found = false;
 		foreach($list as $status)
 		{
-			if(preg_match('/^'.$status.'$/i',$this->status))
+			if(preg_match('/^'.$status.'$/i',$mystatus))
 			{
 				if($this->debug>2){error_log('New LP - learnpathItem::status_is() - Found status '.$status.' corresponding to current status',0);}
 				$found = true;
 				return $found;
 			}
 		}
-		if($this->debug>2){error_log('New LP - learnpathItem::status_is() - Status '.$this->status.' did not match request',0);}
+		if($this->debug>2){error_log('New LP - learnpathItem::status_is() - Status '.$mystatus.' did not match request',0);}
 		return $found;
 	}
     /**
@@ -1338,6 +1340,7 @@ class learnpathItem{
 	     	$check_res = api_sql_query($check);
 	     	//depending on what we want (really), we'll update or insert a new row
 	     	//now save into DB
+	     	$res = 0;
 	     	if(Database::num_rows($check_res)<1){
 		     	$sql = "INSERT INTO $item_view_table " .
 		     			"(total_time, " .
@@ -1360,6 +1363,8 @@ class learnpathItem{
 		     			"'".$this->current_data."'," .
 		     			"'".$this->lesson_location."')";
 		     	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view: '.$sql,0);}
+		     	$res = api_sql_query($sql,__FILE__,__LINE__);
+		     	$this->db_item_view_id = Database::get_last_insert_id();
 	     	}else{
 		     	$sql = "UPDATE $item_view_table " .
 		     			"SET total_time = ".$this->get_total_time().", " .
@@ -1372,8 +1377,8 @@ class learnpathItem{
 		     			"AND lp_view_id = ".$this->view_id." " .
 		     			"AND view_count = ".$this->attempt_id;
 	    	 	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Updating item_view: '.$sql,0);}
+		     	$res = api_sql_query($sql,__FILE__,__LINE__);
 	     	}
-	     	$res = api_sql_query($sql,__FILE__,__LINE__);
 	     	if(!$res)
 	     	{
 	     		$this->error = 'Could not update item_view table...'.mysql_error();

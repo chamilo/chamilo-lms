@@ -317,10 +317,10 @@ foreach ($group_cats as $index => $category)
 			// edit-links
 			if (api_is_allowed_to_edit())
 			{
-				$edit_actions = '<a href="group_edit.php?gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'"><img src="../img/edit.gif" alt="'.get_lang("Edit").'"/></a>';
-				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?category='.$category['id'].'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('Delete').'"><img src="../img/delete.gif" alt="'.get_lang("Delete").'"/></a>';
-				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?category='.$category['id'].'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('EmptyGroup').'"><img src="../img/deluser.gif" alt="'.get_lang("EmptyGroup").'"/></a>';
-				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('FillGroup').'"><img src="../img/adduser.gif" alt="'.get_lang("FillGroup").'"/></a>';
+				$edit_actions = '<a href="group_edit.php?gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'"><img src="../img/edit.gif" alt="'.get_lang("Edit").'"/></a>&nbsp;';
+				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?category='.$category['id'].'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('Delete').'"><img src="../img/delete.gif" alt="'.get_lang("Delete").'"/></a>&nbsp;';
+				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?category='.$category['id'].'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('EmptyGroup').'"><img src="../img/group_delete.gif" alt="'.get_lang("EmptyGroup").'"/></a>&nbsp;';
+				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('FillGroup').'"><img src="../img/group_add.gif" alt="'.get_lang("FillGroup").'"/></a>';
 				$row[] = $edit_actions;
 			}
 			$totalRegistered = $totalRegistered + $this_group[nbMember];

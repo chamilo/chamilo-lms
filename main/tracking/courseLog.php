@@ -147,49 +147,49 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 		//Synthesis view
 		echo "<div class='admin_section'>
 			<h4>
-				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000001' class='specialLink'>".get_lang('SynthesisView')."</a>
+				<img src='../img/synthese_view.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000001' class='specialLink'>".get_lang('SynthesisView')."</a>
 			</h4>
 		 </div>";
 		 
 		 //Course Stats
 		 echo "<div class='admin_section'>
 			<h4>
-				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=1000000' class='specialLink'>".get_lang('CourseStats')."</a>
+				<img src='../img/stats_access.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=1000000' class='specialLink'>".get_lang('CourseStats')."</a>
 			</h4>
 		 </div>";
 		 
 		 //Access to this course
 		 echo "<div class='admin_section'>
 			<h4>
-				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0100000' class='specialLink'>".get_lang('CourseAccess')."</a>
+				<img src='../img/course.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0100000' class='specialLink'>".get_lang('CourseAccess')."</a>
 			</h4>
 		 </div>";
 		 
 		 //Access to tools
 		 echo "<div class='admin_section'>
 			<h4>
-				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0010000' class='specialLink'>".get_lang('ToolsAccess')."</a>
+				<img src='../img/acces_tool.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0010000' class='specialLink'>".get_lang('ToolsAccess')."</a>
 			</h4>
 		 </div>";
 		 
 		 //Links
 		 echo "<div class='admin_section'>
 			<h4>
-				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0001000' class='specialLink'>".get_lang('LinksAccess')."</a>
+				<img src='../img/links.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0001000' class='specialLink'>".get_lang('LinksAccess')."</a>
 			</h4>
 		 </div>";
 		 
 		 //Documents
 		 echo "<div class='admin_section'>
 			<h4>
-				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000100' class='specialLink'>".get_lang('DocumentsAccess')."</a>
+				<img src='../img/documents.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000100' class='specialLink'>".get_lang('DocumentsAccess')."</a>
 			</h4>
 		 </div>";
 		 
 		 //Learning path - Scorm format courses
 		 echo "<div class='admin_section'>
 			<h4>
-				<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000010' class='specialLink'>".get_lang('ScormAccess')."</a>
+				<img src='../img/scormbuilder.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000010' class='specialLink'>".get_lang('ScormAccess')."</a>
 			</h4>
 		 </div>";
 		 

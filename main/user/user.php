@@ -292,10 +292,10 @@ Display::display_introduction_section(TOOL_USER, $is_allowed);
  if( api_is_allowed_to_edit())
 {
 	echo "<div align=\"right\">";
-	echo '<a href="user.php?action=export&type=csv">'.get_lang('ExportAsCSV').'</a> | ';
-	echo '<a href="user.php?action=export&type=xls">'.get_lang('ExportAsXLS').'</a> | ';
-	echo "<a href=\"subscribe_user.php\">".get_lang("SubscribeUserToCourse")."</a> | ";
-	echo "<a href=\"../group/group.php?".api_get_cidreq()."\">".get_lang("GroupUserManagement")."</a>";
+	echo '<a href="user.php?action=export&type=csv"><img align="absbottom" src="../img/file_xls.gif">&nbsp;'.get_lang('ExportAsCSV').'</a> | ';
+	echo '<a href="user.php?action=export&type=xls"><img align="absbottom" src="../img/file_xls.gif">&nbsp;'.get_lang('ExportAsXLS').'</a> | ';
+	echo "<a href=\"subscribe_user.php\"><img align='absbottom' src='../img/add_user_big.gif'>&nbsp;".get_lang("SubscribeUserToCourse")."</a> | ";
+	echo "<a href=\"../group/group.php?".api_get_cidreq()."\"><img align='absbottom' src='../img/edit_group.gif'>&nbsp;".get_lang("GroupUserManagement")."</a>";
 	if(api_get_setting('use_session_mode')=='false')
 	{
 		echo ' | <a href="class.php">'.get_lang('Classes').'</a>';
@@ -437,12 +437,18 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			$columns[] = "'".get_lang('CourseManager')."'";
 		}
 		$columns[] = 'u.user_id';
+		/*$sql = "SELECT  ".implode(',',$columns)."
+               FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." c
+               WHERE `u`.`user_id`= c.`id_coach`
+               AND c.`course_code`='".$_SESSION['_course']['id']."'
+				AND c.id_session='".$_SESSION['id_session']."'";*/
+		
 		$sql = "SELECT  ".implode(',',$columns)."
                FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." c
                WHERE `u`.`user_id`= c.`id_coach`
                AND c.`course_code`='".$_SESSION['_course']['id']."'
-				AND c.id_session='".$_SESSION['id_session']."'";
-
+				";
+		
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$users = array ();
 		while ($user = mysql_fetch_row($res))
@@ -466,12 +472,18 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			$columns[] = "''";
 		}
 		$columns[] = 'u.user_id';
+		/*$sql = "SELECT  ".implode(',',$columns)."
+				FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." c
+               WHERE `u`.`user_id`= c.`id_user`
+               AND c.`course_code`='".$_SESSION['_course']['id']."'
+				AND c.id_session='".$_SESSION['id_session']."'";*/
+		
 		$sql = "SELECT  ".implode(',',$columns)."
 				FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." c
                WHERE `u`.`user_id`= c.`id_user`
                AND c.`course_code`='".$_SESSION['_course']['id']."'
-				AND c.id_session='".$_SESSION['id_session']."'";
-
+				";
+		
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		while ($user = mysql_fetch_row($res))
@@ -485,12 +497,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	                    LEFT JOIN ".Database::get_course_table(TABLE_GROUP)." sg
 	                    ON ug.group_id = sg.id
 	                    WHERE ug.user_id IN ('".implode("','", $user_ids)."')";
+
 	    $res = api_sql_query($sql,__FILE__,__LINE__);
 	    while($group = mysql_fetch_object($res))
 	    {
 	    	$users[''.$group->user_id][5] .= $group->name.'<br />';
 	    }
 	}
+
 	return $users;
 }
 /**
@@ -503,15 +517,15 @@ function modify_filter($user_id)
 	global $origin,$_user,$is_allowed_to_track;
 
 	// info
-	$result = '<a href="userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/info_small.gif" /></a>';
+	$result = '<a href="userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/info_small.gif" /></a>&nbsp;';
 	if(api_is_allowed_to_edit())
 	{
 		if($is_allowed_to_track)
 		{
-			$result .= '<a href="../tracking/userLog.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>';
+			$result .= '<a href="../tracking/userLog.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
 		}
 		// edit
-		$result .= '<a href="userInfo.php?origin='.$origin.'&amp;editMainUserInfo='.$user_id.'"><img border="0" alt="'.get_lang('Edit').'" src="../img/edit.gif" /></a>';
+		$result .= '<a href="userInfo.php?origin='.$origin.'&amp;editMainUserInfo='.$user_id.'"><img border="0" alt="'.get_lang('Edit').'" src="../img/edit.gif" /></a>&nbsp;';
 		// unregister
 		 if( $user_id != $_user['user_id'])
 		{

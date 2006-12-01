@@ -72,7 +72,8 @@ class presentation extends learnpath {
 	    
 	    else {
 			// create lp
-			$learnpath_name = basename($file);
+			$learnpath_name = 'lp_';
+			$learnpath_name .= basename($file);
 			$learnpath_name = substr($learnpath_name,0, strrpos($learnpath_name,'.'));
 			
 			$this->lp_id = learnpath::add_lp($_course['id'], $learnpath_name,'','guess','manual');

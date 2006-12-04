@@ -33,6 +33,7 @@ class presentation extends learnpath {
     	global $_course, $_user;
     	
     	
+		$file['name'] = replace_dangerous_char($file['name']);
 		// get properties of ppt file
 		$document_datas = DocumentManager::get_all_document_data($_course, $file);
 		$to_group_id = (empty($document_datas['to_group_id'])) ? 0 : $document_datas['to_group_id'];
@@ -43,6 +44,7 @@ class presentation extends learnpath {
 		$dir_name = $added_slash.substr($file['name'], 0, strrpos($file['name'],'.'));
 		$base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 		$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name);
+		
 		
 		move_uploaded_file($file['tmp_name'],$base_work_dir.$file['name']);
 		$file = $base_work_dir.$file['name'];

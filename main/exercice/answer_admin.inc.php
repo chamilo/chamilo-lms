@@ -1,4 +1,4 @@
-<?php // $Id: answer_admin.inc.php 10237 2006-11-28 14:54:07Z develop-it $
+<?php // $Id: answer_admin.inc.php 10285 2006-12-04 09:52:39Z develop-it $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1371,7 +1371,7 @@ if($modifyAnswers)
 ?>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 	<tr>
-		<td colspan="2" style="border:1px solid #4271b5; border-bottom:none;"><?php echo get_lang('HotspotChoose'); ?></td>
+		<td colspan="2" style="border:1px solid #4271b5; border-bottom:none;"><?php echo stripslashes(get_lang('HotspotChoose')); ?></td>
 	</tr>
 	<tr>
 		<td width="550" valign="top">

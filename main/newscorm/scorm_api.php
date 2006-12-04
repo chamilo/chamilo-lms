@@ -825,9 +825,10 @@ function switch_item(current_item, next_item){
 	}	
 	
 	//(4) refresh the audiorecorder if needed
-	if(document.getElementById('audiorecorder_id')){
-		document.getElementById('audiorecorder_id').location.reload();
+	if(frames['audiorecorder_name']){
+		frames['audiorecorder_name'].location.reload();
 	}
+	
 	
 	return true;
 }

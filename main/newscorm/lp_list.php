@@ -263,11 +263,11 @@ if (is_array($flat_list))
 			/* Default view mode settings (fullscreen/embedded) */
 			if($details['lp_view_mode'] == 'fullscreen'){
 				$dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
-						'<img src="../img/view_fullscreen.gif" border="0" alt="View mode: embedded" title="Make mode embedded"/>' .
+						'<img src="../img/view_fullscreen.gif" border="0" alt="'.get_lang("ViewModeEmbedded").'" title="'.get_lang("ViewModeEmbedded").'"/>' .
 						'</a>&nbsp;';
 			}else{
 				$dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
-						'<img src="../img/view_choose.gif" border="0" alt="View mode: fullscreen" title="Make mode fullscreen"/>' .
+						'<img src="../img/view_choose.gif" border="0" alt="'.get_lang("ViewModeFullScreen").'" title="'.get_lang("ViewModeFullScreen").'"/>' .
 						'</a>&nbsp;';
 			}
 			/* Increase SCORM recording */
@@ -290,7 +290,7 @@ if (is_array($flat_list))
 						'</a>&nbsp;';
 			}
 			if($details['lp_type']==1){
-				$dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/wizard.gif" border="0" title="Build"></a>&nbsp;';
+				$dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/wizard.gif" border="0" title="'.get_lang("Build").'"></a>&nbsp;';
 			}else{
 				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="Build">&nbsp;';
 			}

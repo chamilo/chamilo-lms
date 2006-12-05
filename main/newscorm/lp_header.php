@@ -22,7 +22,7 @@ $header_hide_main_div = true;
 $interbreadcrumb[]= array ("url"=>"./lp_controller.php?action=list", "name"=> get_lang('Doc'));
 //$interbreadcrumb[]= array ("url"=>"./lp_controller.php?action=view&lp_id=".$_SESSION['oLP']->get_id(), "name"=> $nameTools);
 $noPHP_SELF = true;
-Display::display_header($nameTools,"Path");
+Display::display_header($nameTools,"Path", null);
 ?>
 </div>
 </body>

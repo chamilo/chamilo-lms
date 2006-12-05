@@ -31,17 +31,28 @@ class presentation extends learnpath {
     function convert_presentation($file){
     	
     	global $_course, $_user;
+    
+    	$file_name = (strrpos($file['name'],'.')>0 ? substr($file['name'], 0, strrpos($file['name'],'.')) : $file['name']);
+    	$file_extension = substr($file['name'], strrpos($file['name'],'.'),10);
     	
     	
-		$file['name'] = replace_dangerous_char($file['name']);
+    	$file_name = remove_accents($file_name);
+		$file_name = replace_dangerous_char($file_name,'strict');	
+		$file_name = strtolower($file_name);
+		
+		$file['name'] = $file_name.$file_extension;
+		
+		
+		$dir_name = '/'.$file_name.'_dir';
+		
+		
 		// get properties of ppt file
 		$document_datas = DocumentManager::get_all_document_data($_course, $file);
 		$to_group_id = (empty($document_datas['to_group_id'])) ? 0 : $document_datas['to_group_id'];
 		$to_user_id = (empty($document_datas['to_user_id'])) ? null : $document_datas['to_user_id'];
 	
 		//create the directory
-		$added_slash = '/';
-		$dir_name = $added_slash.substr($file['name'], 0, strrpos($file['name'],'.'));
+		
 		$base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 		$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name);
 		

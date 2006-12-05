@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 	$extension = $info['extension'];
 	$file_base_name = str_replace('.'.$extension,'',$filename);
 	
+	
 	$new_dir = replace_dangerous_char(trim($file_base_name),'strict');
 
 	require_once('learnpath.class.php');
@@ -79,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 		case 'ppt':
 			require_once('presentation.class.php');
 			$o_ppt = new presentation();
-			$ppt2lp_success = $o_ppt -> convert_presentation($_FILES['user_file']);				
+			$first_item_id = $o_ppt -> convert_presentation($_FILES['user_file']);				
 			break;
 		case '':
 		default:

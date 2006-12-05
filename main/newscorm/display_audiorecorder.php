@@ -31,8 +31,15 @@ echo '<html>
 
 echo '<div id="audiorecorder">	';
 	
-// get the audiorecorder. 
-$audio_recorder_studentview = true;
+// get the audiorecorder.
+$course_id=$_SESSION["_course"]["id"];
+if($_SESSION["status"][$course_id]==5){
+	$audio_recorder_studentview = true;
+}
+else{
+	$audio_recorder_studentview = false;
+}
+
 $audio_recorder_item_id = $_SESSION['oLP']->current;
 if(api_get_setting('service_ppt2lp','active')=='true' && api_get_setting('service_ppt2lp','path_to_lzx')!=''){
 	include('audiorecorder.inc.php');

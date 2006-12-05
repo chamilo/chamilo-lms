@@ -159,8 +159,19 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	?>
 	<frameset rows="150,600">
 		<frame id="header" src="lp_header.php" border="0" frameborder="0" />
-		<frameset cols="180,*">
-			<frameset rows="<?php if($displayAudioRecorder) echo '185,';?>310,150,80,*">
+		<frameset cols="195,*">
+			
+			<?php
+				$course_id=$_SESSION["_course"]["id"];
+				if($_SESSION["status"][$course_id]==5){
+					$audio_recorder_studentview = true;
+				}
+				else{
+					$audio_recorder_studentview = false;
+				}
+			?>
+			
+			<frameset rows="<?php if($displayAudioRecorder && $audio_recorder_studentview==false) echo '205,'; else{echo '120,';}?>475,95,80,*">
 				<?php
 				if($displayAudioRecorder)
 					echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php" border="0" frameborder="0" scrolling="no"/>';

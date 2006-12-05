@@ -11,7 +11,7 @@
 
 $params = "?lzt=swf&lzr=swf8&document_id=".$audio_recorder_item_id."&dbName=".$_SESSION["_course"]["dbName"]."&user_id=".$_SESSION["_user"]["user_id"].'?studentview='.$audio_recorder_studentview ;     
 
-list($width, $height) = $audio_recorder_studentview ? array(220, 185) : array(220,140);
+list($width, $height) = $audio_recorder_studentview ? array(220, 67) : array(220,185);
 
 $path_to_lzx = api_get_setting('service_ppt2lp','path_to_lzx');
 

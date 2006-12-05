@@ -46,7 +46,6 @@ $langProfessor = "Pengajar";
 $langGroups  = "Group";
 $langChat  = "Diskusi";
 $langDescriptionCours   = "Deskripsi mata kuliah";
-$langArchive = "Arsip";
 $langArchiveCourse  = "Backup mata kuliah";
 $langRestoreCourse  = "Restore mata kuliah";
 $langRestore = "Restore";

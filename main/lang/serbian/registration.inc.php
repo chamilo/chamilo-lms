@@ -108,7 +108,6 @@ $langWorks = "Publikacije polaznika";
 $langAdminOfCourse = "Administrator kursa";
 $langSimpleUserOfCourse = "Korisnik kursa";
 $langIsTutor = "Mentor";
-$langCourseCode = "Šifra kursa";
 $langParamInTheCourse = "Status na kursu";
 $langMember = "&#269;lan";
 $langLock = "zaklju&#269;ano";

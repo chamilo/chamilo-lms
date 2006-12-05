@@ -67,6 +67,8 @@ $langTocDown  = "Kebawah";
 $langTocUp  = "keatas";
 $lang_cut_paste_link = "No frames";
 $langCreatePath = "Buat path";
+$langOogieConversionPowerPoint = "Oogie : Konversi PowerPoint";
+$langWelcomeOogieSubtitle = "Pengkonversi dari PowerPoint ke Learning Path";
 $langAddMetadata = "Lihat/Edit Metadata";
 $langGoMetadata = "Jalankan";
 $langQuotaForThisCourseIs = "Kuota pada mata kuliah ini adalah";
@@ -113,5 +115,7 @@ $DocumentsOverview = "overview dokumen";
 $ViewSlideshow = "Lihat  gambar slideshow";
 $Options = "Opsi";
 $Type = "Type";
+$WelcomeOogieConverter = "Selamat datang di Pengkonversi PowerPoing Oogie <br>1.  Browse hard disk anda untuk mencari file .ppt atau .odp <br>2.  Upload ke Oogie.  Ini akan di transformasi ke Scorm learning path. <br>3. Anda akan dapat menambah komentar audio pada tiap slide dan memasukkan test/quiz antar slide untuk evaluasi";
+$ConvertToLP = "Konversi ke Learning Path";
 $Content = "Konten";
 ?>

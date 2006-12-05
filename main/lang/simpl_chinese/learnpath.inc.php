@@ -69,6 +69,8 @@ $lang_short_help = "Ìí¼ÓÒ»¸ö²½Öè, µã»÷Ê®×Ö; Ìí¼ÓÐÂµÄ±êÌâ/¼ò½é, µã»÷Ç¦±Ê; µã»÷ÓÐÁ
 $lang_prereq_not_complete = "Ç°ÌáÌõ¼þÎ´Íê³É";
 $lang_author = "×÷Õß";
 $lang_date = "ÈÕÆÚ";
+$langNewStep = "&#26032;&#27493;&#39588;";
+$langNewDocument = "&#26032;&#25991;&#20214;";
 $lang_prerequisites_limit = "Ç°ÌáÌõ¼þ (ÏÞÖÆ)";
 $lang_loading = "Ò³ÃæÔØÈë, ÇëµÈ´ý ...";
 $lang_empty = "´ËÂ·¾¶²»°üº¬ÈÎºÎ²½Öè.";
@@ -87,4 +89,6 @@ $langItemMissing1 = "ÓÐÒ»¸ö";
 $langItemMissing2 = "ÔÚÔ­ÏÈDokeosÑ§Ï°Â·¾¶ÖÐµÄÒ³Ãæ(²½Öè).";
 $langDone = "Íê³É";
 $langNoItemSelected = "ÒªÔÚÕâÀïÏÔÊ¾, Çë´ÓÅÔ±ßµÄ²Ëµ¥ÖÐÑ¡ÔñÏîÄ¿";
+$langMinimum = "&#26368;&#23569;";
+$langNone = "&#27809;&#26377;";
 ?>

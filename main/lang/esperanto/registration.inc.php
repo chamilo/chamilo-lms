@@ -109,7 +109,6 @@ $langWorks = "Studentaj publika&#309;oj ";
 $langAdminOfCourse = "Kursadministranto ";
 $langSimpleUserOfCourse = "Uzulo de &#265;i-kurso ";
 $langIsTutor = "Guvernanto ";
-$langCourseCode = "Kurskodo ";
 $langParamInTheCourse = "Rolo en la kurso";
 $langMember = "membro ";
 $langLock = "&#349;losita ";

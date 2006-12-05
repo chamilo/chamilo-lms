@@ -98,7 +98,6 @@ $langName = "Επίθετο";
 $langRegistration = "Εγγραφή";
 $langEmail = "Email";
 $langWorks = "Εργασίες Μαθητών";
-$langCourseCode = "Κωδικός";
 $langModify = "Τροποποίηση";
 $langEdit = "Διόρθωση";
 $langDelete = "Διαγραφή";

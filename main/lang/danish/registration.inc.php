@@ -116,7 +116,6 @@ $langWorks = "Studerendes Opgaver";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "tutor";
-$langCourseCode = "Kursus";
 $langParamInTheCourse = "Status";
 $langMember = "registreret";
 $langLock = "låse";

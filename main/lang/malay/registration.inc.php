@@ -99,7 +99,6 @@ $langWorks = "Tugasan";
 $langAdminOfCourse = "Pentadbir";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "tutor";
-$langCourseCode = "Subjek";
 $langParamInTheCourse = "Status";
 $langMember = "berdaftar";
 $langLock = "kunci";

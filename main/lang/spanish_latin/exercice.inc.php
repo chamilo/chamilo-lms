@@ -161,4 +161,50 @@ $langUseExistantQuestion = "Usar una pregunta existente";
 $freeAnswer = "Respuesta libre";
 $notCorrectedYet = "Esta respuesta no ha sido corregida. Mientras, su puntaje para esta pregunta es de 0, afectando el puntaje total.";
 $adminHP = "Administración Hot Potatoes ";
+$NewQu = "Nueva pregunta";
+$NoImage = "Seleccione una imagen en el inferior de la página.";
+$langAnswerHotspot = "La descripción y el valor son requeridos para cada hotspot - el comentario es opcional";
+$langMinHotspot = "Tiene que crear, al menos, un (1) hotspot.";
+$langMaxHotspot = "El máximo de hotspots que puede crear es doce (12)";
+$langHotspotError = "Por favor, proporcione una descripción y un valor a cada hotspot.";
+$langMoreHotspots = "+hotspot";
+$langLessHotspots = "-hotspot";
+$langHotspotZones = "Hotspots";
+$langDescription = "Descripción";
+$langNextQuestion = "Siguiente pregunta";
+$langCorrectAnswer = "Respuesta correcta";
+$langHotspotHit = "Su respuesta era";
+$langOnlyJPG = "Para los hotspots, sólo puede usar imágenes JPG (o JPEG)";
+$langFinishThisTest = "Mostrar las respuestas correctas a cada pregunta y la puntuación del examen";
+$langAllQuestions = "Todas las preguntas";
+$langModifyTitleDescription = "Editar título y comentarios";
+$langModifyHotspots = "Editar respuestas/hotspots";
+$langHotspotNotDrawn = "Todavía no ha dibujado todos los hotspots";
+$langHotspotWeightingError = "Debe dar un valor (>0) positivo a todos los hotspots";
+$langHotspotValidateError1 = "Debe contestar completamente a la pregunta (";
+$langHotspotValidateError2 = "click(s) required on the image) before seeing the results";
+$langHotspotRequired = "La descripción y el valor son requeridos en cada hotspot. El comentario es opcional.";
+$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; 
+Para crear un hotspot: seleccionar una forma junto al color, y después dibujar el hotspot.</div>
+<div style=\\\"padding:2px 3px;\\\">&bull; 
+Para mover un hotspot, seleccionar el color, hacer clic en otro punto de la imagen, y después dibujar el hotspot.</div>
+<div style=\\\"padding:2px 3px;\\\">&bull; 
+Para añadir un hotspot: hacer clic en el botón [+hotspot].</div>
+<div style=\\\"padding:2px 3px;\\\">&bull; 
+Para cerrar una forma poligonal: clic derecho y seleccionar \\\"Cerrar polígono\\\".</div>
+";
+$Fault = "Incorrecto";
+$Hotspot = "Hotspot";
+$ClickNumber = "Número de clicks";
+$HotspotGiveAnswers = "Por favor, responda";
+$Addlimits = "Añadir límites";
+$AreYouSure = "Está seguro";
+$StudentScore = "Puntuación del estudiante";
+$backtoTesthome = "Volver a la página principal del examen";
+$Feedback = "Feedback";
+$MarkIsUpdated = "La nota ha sido actualizada";
+$MarkInserted = "Nota insertada";
+$PleaseGiveAMark = "Por favor, proporcione una nota";
+$EditCommentsAndMarks = "Editar comentarios y notas";
+$AddComments = "Añadir comentarios";
 ?>

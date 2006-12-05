@@ -110,7 +110,6 @@ $langWorks = "作业论文";
 $langAdminOfCourse = "课程管理员";
 $langSimpleUserOfCourse = "课程用户";
 $langIsTutor = "教师";
-$langCourseCode = "课程代码";
 $langParamInTheCourse = "状态";
 $langMember = "成员";
 $langLock = "锁定";

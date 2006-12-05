@@ -49,7 +49,6 @@ $langProfessor = "Underviser";
 $langGroups  = "Grupper";
 $langChat  = "Chat";
 $langDescriptionCours   = "kursusbeskrivelse";
-$langArchive = "Arkiv";
 $langArchiveCourse  = "Sikkerhedskopi af kurset";
 $langRestoreCourse  = "Geopret et kursus";
 $langRestore = "Genopret";

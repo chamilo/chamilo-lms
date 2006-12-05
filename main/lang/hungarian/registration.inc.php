@@ -117,7 +117,6 @@ $langWorks = "Beadandók";
 $langAdminOfCourse = "Kurzus adminisztrátor";
 $langSimpleUserOfCourse = "Kurzus felhasználója";
 $langIsTutor = "Konzulens";
-$langCourseCode = "Kurzus kód";
 $langParamInTheCourse = "Állapota a kurzusban";
 $langMember = "tag";
 $langLock = "zárolva";

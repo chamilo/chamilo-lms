@@ -117,7 +117,6 @@ $langWorks = "Elaborati";
 $langAdminOfCourse = "amministratore";
 $langSimpleUserOfCourse = "normale";
 $langIsTutor = "tutor";
-$langCourseCode = "Corso";
 $langParamInTheCourse = "Stato";
 $langMember = "registrato";
 $langLock = "blocca";

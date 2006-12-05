@@ -42,7 +42,6 @@ $langBackupCourse = "Arxiva aquest curs";
 $langModifGroups = "Grups";
 $langGroups  = "Grups";
 $langChat  = "Discusions";
-$langArchive = "Arxiu";
 $langArchiveCourse  = "Creació de copies de seguretat del curs ";
 $langRestoreCourse  = "Restaurar el curs";
 $langRestore = "Restaurar";

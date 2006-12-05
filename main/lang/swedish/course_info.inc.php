@@ -48,7 +48,6 @@ $langProfessor = "Professor";
 $langGroups  = "Grupper";
 $langChat  = "Diskussion";
 $langDescriptionCours   = "Kursbeskrivning";
-$langArchive = "Arkiv";
 $langArchiveCourse  = "Kursbackup ";
 $langRestoreCourse  = "Återställ en kurs";
 $langRestore = "Återställ";

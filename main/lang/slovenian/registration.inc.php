@@ -117,7 +117,6 @@ $langWorks = "Objave teèajnikov";
 $langAdminOfCourse = "Upravitelj teèaja";
 $langSimpleUserOfCourse = "Uporabnik teèaja";
 $langIsTutor = "Tutor";
-$langCourseCode = "Koda teèaja";
 $langParamInTheCourse = "Staus v teèaju";
 $langMember = "èlan";
 $langLock = "zaklenjeno";

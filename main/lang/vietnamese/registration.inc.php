@@ -99,7 +99,6 @@ $langWorks = "Bài làm";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "giáo viên";
-$langCourseCode = "Khoá học";
 $langParamInTheCourse = "Trạng thái";
 $langMember = "đã đăng ký";
 $langLock = "khoá";

@@ -110,7 +110,6 @@ $langWorks = "Studentski radovi";
 $langAdminOfCourse = "Nadzornik kolegija";
 $langSimpleUserOfCourse = "Korisnik kolegija";
 $langIsTutor = "Tutor";
-$langCourseCode = "Šifra kolegija";
 $langParamInTheCourse = "Status u kolegiju";
 $langMember = "&#269;lan";
 $langLock = "zaklju&#269;ano";

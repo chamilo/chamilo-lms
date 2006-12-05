@@ -46,7 +46,6 @@ $langProfessor = "Преподавател";
 $langGroups  = "Групи";
 $langChat  = "Дискусия";
 $langDescriptionCours   = "Описание на курса";
-$langArchive = "Архивиране";
 $langArchiveCourse  = "Архивиране на курс";
 $langRestoreCourse  = "Възстановяване на курса";
 $langRestore = "Възстановяване";

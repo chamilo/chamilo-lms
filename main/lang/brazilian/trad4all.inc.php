@@ -270,6 +270,7 @@ $RightValueModified = "O valor foi modificado com sucesso.";
 $course_rights = "Visão geral das funções e permissões";
 $CourseAdminRoleDescription = "O Administrador do Curso";
 $languser = "Usuários";
+$Delete = "Apagar";
 $NoSearchResults = "Nenhum resultado encontrado";
 $CreateNewGlobalRole = "Criar novo papel global";
 $CreateNewLocalRole = "Criar novo papel local";

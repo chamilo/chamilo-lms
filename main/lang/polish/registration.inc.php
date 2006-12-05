@@ -112,7 +112,6 @@ $langWorks = "Prace Studentów";
 $langAdminOfCourse = "Administrator kursu";
 $langSimpleUserOfCourse = "U&#380;ytkownik kursu";
 $langIsTutor = "Wychowawca (opiekun)";
-$langCourseCode = "kod kursu";
 $langParamInTheCourse = "Status w ramach kursu";
 $langMember = "cz&#322;onek";
 $langLock = "zamkni&#281;te";

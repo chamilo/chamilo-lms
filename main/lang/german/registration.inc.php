@@ -115,7 +115,6 @@ $langWorks = "Dokumente für die Teilnehmer/innen";
 $langAdminOfCourse = "Administrator";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "Trainer/in";
-$langCourseCode = "Kurscode";
 $langParamInTheCourse = "Status";
 $langMember = "registriert";
 $langLock = "geschlossen";

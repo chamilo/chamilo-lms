@@ -140,4 +140,8 @@ $Visited = "已访问";
 $Name = "名称";
 $FirstAccess = "首次使用";
 $LastAccess = "最后使用";
+$MoyenneTest = "&#27979;&#39564;&#24179;&#22343;";
+$Trainers = "&#23548;&#24072;";
+$Administrators = "&#31649;&#29702;&#21592;";
+$ExcelFormat = "Excel &#26684;&#24335;";
 ?>

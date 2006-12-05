@@ -44,7 +44,6 @@ $langProfessor = "Giáo viên";
 $langGroups  = "Nhóm";
 $langChat  = "Thảo luận";
 $langDescriptionCours   = "Mô tả khoá học";
-$langArchive = "Lưu trữ";
 $langArchiveCourse  = "Course backup";
 $langRestoreCourse  = "Restore a course";
 $langRestore = "Restore";

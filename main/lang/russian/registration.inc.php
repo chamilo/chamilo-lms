@@ -104,7 +104,6 @@ $langWorks = "Работы студентов";
 $langAdminOfCourse = "администратор";
 $langSimpleUserOfCourse = "пользователь";
 $langIsTutor = "тьютор";
-$langCourseCode = "Курс";
 $langParamInTheCourse = "Параметры курса";
 $langMember = "зарегистрирован";
 $langLock = "заблокировать";

@@ -115,7 +115,6 @@ $langWorks = "Tugas-tugas";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "tutor";
-$langCourseCode = "Mata Kuliah";
 $langParamInTheCourse = "Status";
 $langMember = "terdaftar";
 $langLock = "kunci";

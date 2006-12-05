@@ -24,4 +24,8 @@ $langNoLinkName = "Va rog introduceti numele legaturi";
 $langEditLink = "Editeaza linkul paginii principale a cursului";
 $langChangePress = "Schimba si apasa tasta OK";
 $langLinkChanged = "Linkul spre pagina principala a cursului a fost modificat. Folositi meniul de sus pentru a va reintoarce la pagina principala.";
+$NoLinkName = "Fara nume de legatura";
+$NoLinkURL = "Fara legatura URL";
+$LinkChanged = "Legatura modificata";
+$OkSentLink = "Legatura a fost trimisa";
 ?>

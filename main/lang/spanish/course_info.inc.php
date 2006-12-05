@@ -47,7 +47,6 @@ $langProfessor = "Profesor";
 $langGroups  = "Grupos";
 $langChat  = "Debate";
 $langDescriptionCours   = "Descripción del curso";
-$langArchive = "Archivo";
 $langArchiveCourse  = "Copia de seguridad del curso";
 $langRestoreCourse  = "Restaurar un curso";
 $langRestore = "Restaurar";

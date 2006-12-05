@@ -80,4 +80,6 @@ $DokeosLicenseInfo = "Dokeos es un software libre distribuido bajo licencia GNU 
 $IAccept = "Acepto";
 $ConfigSettingsInfo = "Los siguientes valores serán escritos en su archivo de configuración <b>main/inc/conf/claro_main.conf.php</b>:";
 $InstallDokeos = "Instalar Dokeos";
+$GoToYourNewlyCreatedPortal = "Ir al portal que acaba de crear.";
+$FirstUseTip = "Cuando entra en su campus por primera vez, la mejor manera de entenderlo es registrarse con la opción \"Crear el sitio de un curso\" y seguir el camino.";
 ?>

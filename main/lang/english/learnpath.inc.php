@@ -96,6 +96,7 @@ $langNewModuleCreated = "The new module has been created. You can now add a chap
 $langNewExerciseCreated = "The new exercise has been created.";
 $langItemRemoved = "The item has been removed";
 $langLearnPathAdded = "Your learning path has been succesfully created adnd has been added to the left menu. You can now ad modules and steps to your learning path. The usage of chapters is optional for a subtler structure.";
+$langConverting = "Converting...";
 $lang_prerequisites_limit = "Prerequisities (limit)";
 $lang_loading = "Loading page, please wait ...";
 $lang_empty = "This path does not contain any steps.";

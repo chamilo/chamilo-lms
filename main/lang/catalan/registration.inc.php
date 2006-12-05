@@ -96,7 +96,6 @@ $langWorks = "Treballs dels estudiants";
 $langAdminOfCourse = "administrador";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "tutor";
-$langCourseCode = "Curs";
 $langParamInTheCourse = "Estat";
 $langMember = "enregistrat";
 $langLock = "activat";

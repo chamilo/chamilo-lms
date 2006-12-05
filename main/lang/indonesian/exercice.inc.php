@@ -161,6 +161,7 @@ $langUseExistantQuestion = "Gunakan pertanyaan yang sudah ada";
 $freeAnswer = "Jawaban bebas";
 $notCorrectedYet = "Jawaban ini belum diperiksa.  Sementara, skor anda untuk pertanyaan ini dianggap 0, mempengaruhi skor total.";
 $adminHP = "Administrator Hot Potatoes";
+$NewQu = "Pertanyaan baru";
 $NoImage = "Silahkan pilih sebua gambar pada bagian bawah halaman.";
 $langAnswerHotspot = "Deskripsi dan bobot dibutuhkan untuk setiap \'hotspot - komentar adalah opsional";
 $langMinHotspot = "Anda setidaknya harus membuat satu (1) hotspot.";

@@ -46,7 +46,6 @@ $langProfessor = "Lesgever";
 $langGroups  = "Groepen";
 $langChat  = "Discussie";
 $langDescriptionCours   = "Cursusbeschrijving";
-$langArchive = "Archief";
 $langArchiveCourse  = "Cursusback-up";
 $langRestoreCourse  = "Herstel een cursussite";
 $langRestore = "Herstellen";

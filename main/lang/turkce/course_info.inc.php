@@ -48,7 +48,6 @@ $langProfessor = "Ö&#287;retmen";
 $langGroups  = "Gruplar";
 $langChat  = "Tart&#305;&#351;ma - Sohbet";
 $langDescriptionCours   = "Ders açýklamasý";
-$langArchive = "Ar&#351;iv";
 $langArchiveCourse  = "Ders yedekleme ";
 $langRestoreCourse  = "Ar&#351;ivden ders yükle";
 $langRestore = "Geri Yükle";

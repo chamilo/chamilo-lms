@@ -46,7 +46,6 @@ $langProfessor = "Profesor";
 $langGroups  = "Grupos";
 $langChat  = "Charlar";
 $langDescriptionCours   = "Descripción del Curso";
-$langArchive = "Archivo";
 $langArchiveCourse  = "Resguardo del Curso ";
 $langRestoreCourse  = "Restaurar un curso";
 $langRestore = "Restaurar";
@@ -90,4 +89,25 @@ $langDescription = "Descripción";
 $langCourseVisibilityClosed = "Completamente cerrado; el curso está accesible solamente para el administrador.";
 $CourseVisibilityClosed = "Cerrado - no hay acceso a este curso";
 $CourseVisibilityModified = "Modificado (ajustes más detallados especificados a través del sistema roles-permisos)";
+$WorkEmailAlert = "Avisar por correo electrónico cuando se envía un trabajo";
+$WorkEmailAlertActivate = "Activar el aviso por correo electrónico del envío de un nuevo trabajo";
+$WorkEmailAlertDeactivate = "Desactivar el aviso por correo electrónico del envío de un nuevo trabajo";
+$DropboxEmailAlert = "Avisar por correo electrónico cuando hay un envío en el baúl de tareas";
+$DropboxEmailAlertActivate = "Activar el aviso por correo electrónico de un nuevo envío al baúl de tareas";
+$DropboxEmailAlertDeactivat = "Desactivar el aviso por correo electrónico de un nuevo envío al baúl de tareas";
+$AllowUserEditAgenda = "Permitir a los usuarios editar la agenda del curso";
+$AllowUserEditAgendaActivate = "Activar la edición por los usuarios de la agenda del curso";
+$AllowUserEditAgendaDeactivate = "Desactivar la edición por los usuarios de la agenda del curso";
+$AllowUserEditAnnouncement = "Permitir a los usuarios editar los anuncios del curso";
+$AllowUserEditAnnouncementActivate = "Permitir la edición por los usuarios";
+$AllowUserEditAnnouncementDeactivate = "Desactivar la edición por los usuarios";
+$OrInTime = "o dentro";
+$CourseRegistrationPassword = "Contraseña de registro en el curso";
+$langDescriptionDeleteCourse = "Haga clic en este enlace para eliminar cualquier rastro del curso en el servidor...
+<br><br>
+¡ Esta funcionalidad debe ser usada con extrema precaución !";
+$langDescriptionCopyCourse = "Dokeos introduce la posibilidad de copiar, en parte o completamente, un curso en otro que inicialmente debe estar vacío.
+<br><br>
+La única condición es tener un curso que contenga algunos documentos, anuncios, foros... y un segundo curso que no contenga los elementos del primero !";
+$DescriptionRecycleCourse = "Esta herramienta vacía el curso de los elementos seleccionados, o todo el conjunto de los elementos que contiene. Quita los documentos, los foros, enlaces… Este procedimiento puede realizarse al final de una formación, o de un año académico. ¡ Por supuesto, antes de “reciclar”, debe tener la precaución de realizar una copia de seguridad completa de su curso!";
 ?>

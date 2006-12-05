@@ -161,4 +161,8 @@ $langUseExistantQuestion = "用一个现有问题";
 $freeAnswer = "自由回答";
 $notCorrectedYet = "答案没有改正. 同时, 此问题的分数设置为0, 影响您的总分.";
 $adminHP = "Hot Potatoes 管理";
+$NewQu = "&#26032;&#38382;&#39064;";
+$langDescription = "&#24418;&#23481;";
+$langCorrectAnswer = "&#27491;&#30830;&#31572;&#26696;";
+$AreYouSure = "&#20320;&#32943;&#23450;&#21527;";
 ?>

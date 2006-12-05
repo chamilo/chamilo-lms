@@ -110,7 +110,6 @@ $langWorks = "Elevarbeten";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "lärare";
-$langCourseCode = "Kurskod";
 $langParamInTheCourse = "Status";
 $langMember = "registrerad";
 $langLock = "lås";

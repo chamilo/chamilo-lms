@@ -46,7 +46,6 @@ $langProfessor = "&#44368;&#49324;";
 $langGroups  = "&#44536;&#47353;";
 $langChat  = "&#53664;&#47200;";
 $langDescriptionCours   = "&#44284;&#51221; &#49444;&#47749;";
-$langArchive = "&#48372;&#44288;";
 $langArchiveCourse  = "&#44284;&#51221; &#48177;&#50629;";
 $langRestoreCourse  = "&#44284;&#51221; &#48373;&#44396;";
 $langRestore = "&#48373;&#44396;";

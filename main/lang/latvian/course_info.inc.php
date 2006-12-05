@@ -46,7 +46,6 @@ $langProfessor = "Doc&#275;t&#257;js";
 $langGroups  = "Grupas";
 $langChat  = "Diskusijas";
 $langDescriptionCours   = "Kursa apraksts";
-$langArchive = "Arh&#299;vs";
 $langArchiveCourse  = "Kursa rezerves kopija";
 $langRestoreCourse  = "Atjaunot kursu";
 $langRestore = "Atjaunot";

@@ -67,6 +67,8 @@ $langTocDown  = "Jos";
 $langTocUp  = "Sus";
 $lang_cut_paste_link = "Fara cadre";
 $langCreatePath = "Creaza o cale";
+$langOogieConversionPowerPoint = "Oogie : conversie PowerPoint";
+$langWelcomeOogieSubtitle = "Un convertor PowerPoint la Calea de Invatare";
 $langAddMetadata = "Vezi/Editeaza Metadata";
 $langGoMetadata = "Du-te";
 $langQuotaForThisCourseIs = "Cota pentru acest curs este";
@@ -113,5 +115,7 @@ $DocumentsOverview = "Sumarul documentelor";
 $ViewSlideshow = "Vezi imaginile in slideshow";
 $Options = "Optiuni";
 $Type = "Tip";
+$WelcomeOogieConverter = "Bine ati venit la Convertorul PowerPoint Oogie<br>1.Rasfoieste hard diskul pentru a gasi orice fisier .ppt sau .odp<br>2.Incarca-l in Oogie. Il va transforma in calea de invatare Scorm.<br>3.Apoi veti putea adauga comentarii audio la fiecare slide si introduce un test intre slide-uri pentru evaluare";
+$ConvertToLP = "Converteste la Calea de Invatare";
 $Content = "Continut";
 ?>

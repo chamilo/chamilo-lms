@@ -1,4 +1,14 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Search = "Procurar";
+$MyTasks = "Minhas tarefas";
+$FavoriteBlogs = "Meus blogs favoritos";
+$Navigation = "Navegação";
+$TopTen = "10 melhores blogs";
+$Title = "Título";
+$Subtitle = "Subtítulo";
+$ThisBlog = "Este blog";
+$NewPost = "Novo artigo";
+$TaskManager = "Gestão de tarefas";
 ?>

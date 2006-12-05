@@ -111,7 +111,6 @@ $langWorks = "Студентски работи";
 $langAdminOfCourse = "Администратор на курса";
 $langSimpleUserOfCourse = "Потребител на курса";
 $langIsTutor = "Преподавател";
-$langCourseCode = "Код на курса";
 $langParamInTheCourse = "Статус в курса";
 $langMember = "член";
 $langLock = "заключен";

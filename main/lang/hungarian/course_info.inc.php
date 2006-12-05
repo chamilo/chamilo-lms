@@ -46,7 +46,6 @@ $langProfessor = "Vezetõ";
 $langGroups  = "Csoportok";
 $langChat  = "Vita";
 $langDescriptionCours   = "Kurzus leírás";
-$langArchive = "Archív";
 $langArchiveCourse  = "Biztonsági másolat készítése";
 $langRestoreCourse  = "Kurzus visszaállítása";
 $langRestore = "Visszaállít";

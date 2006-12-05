@@ -115,7 +115,6 @@ $langWorks = "Studentenpublicaties";
 $langAdminOfCourse = "Cursusbeheerder";
 $langSimpleUserOfCourse = "Gebruiker van deze cursus";
 $langIsTutor = "Leraar";
-$langCourseCode = "Cursuscode";
 $langParamInTheCourse = "Rol binnen de cursus";
 $langMember = "lid";
 $langLock = "gesloten";

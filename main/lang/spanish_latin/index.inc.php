@@ -65,4 +65,7 @@ $langOpenarea = "Area personal abierta";
 $langProductions = "Producciones";
 $langSendChatRequest = "Enviar una solicitud de chat a esta persona";
 $langRequestDenied = "La llamada ha sido denegada";
+$UsageDatacreated = "Datos de uso creados";
+$SessionView = "Mostrar los cursos ordenados por sesiones";
+$CourseView = "Mostrar toda la lista de cursos";
 ?>

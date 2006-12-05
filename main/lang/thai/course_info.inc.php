@@ -46,7 +46,6 @@ $langProfessor = "อาจารย์ผู้สอน";
 $langGroups  = "กลุ่มเรียน";
 $langChat  = "การอภิปราย";
 $langDescriptionCours   = "คำอธิบายรายวิชา";
-$langArchive = "รวมเอกสาร";
 $langArchiveCourse  = "สำรองข้อมูลรายวิชา";
 $langRestoreCourse  = "กู้คืนรายวิชา";
 $langRestore = "กู้คืน";

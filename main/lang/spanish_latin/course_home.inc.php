@@ -17,4 +17,13 @@ $langCombinedCourse = "Curso combinado";
 $ToolIsNowVisible = "La herramienta es ahora visible";
 $ToolIsNowHidden = "La herramienta es ahora invisible";
 $EditLink = "Editar enlace";
+$blog_management = "Administración de blogs";
+$forum = "Foros";
+$course_maintenance = "Mantenimiento del curso";
+$TOOL_SURVEY = "Encuestas";
+$visio = "Dokeos Live Conferencing";
+$GreyIcons = "Caja de herramientas";
+$Interaction = "Interacción";
+$Authoring = "Creación de contenidos";
+$Administration = "Administración";
 ?>

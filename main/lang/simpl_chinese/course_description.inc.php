@@ -13,4 +13,5 @@ $langAdd  = "添加";
 $langValid  = "可用的";
 $langBackAndForget  = "返回和取消记忆";
 $langOkSent = "你的页面已经上传. <p>现在链接<a href=\"../..//index.php\">首页</a>";
+$Content = "&#20869;&#23481;";
 ?>

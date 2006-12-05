@@ -13,4 +13,5 @@ $langAdd  = "Adicionar";
 $langValid  = "Validar";
 $langBackAndForget  = "Voltar e abandonar";
 $langOkSent = "Sua página foi enviada.<p>Ela agora está relacionada na <a href=../../$dbname/index.php>Homepage</a>";
+$Content = "Conteúdo";
 ?>

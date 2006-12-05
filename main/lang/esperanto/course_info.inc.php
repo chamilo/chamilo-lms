@@ -46,7 +46,6 @@ $langProfessor = "Instruisto ";
 $langGroups  = "Grupoj";
 $langChat  = "Babilejo";
 $langDescriptionCours   = "Priskribo de la kurso";
-$langArchive = "Arkivejo";
 $langArchiveCourse  = "Kursa resta&#365;rokopio";
 $langRestoreCourse  = "Ripari kursan TTTn ";
 $langRestore = "Ripari ";

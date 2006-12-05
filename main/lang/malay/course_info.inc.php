@@ -44,7 +44,6 @@ $langProfessor = "Pensyarah";
 $langGroups  = "Kumpulan";
 $langChat  = "Perbincangan";
 $langDescriptionCours   = "Penerangan Subjek";
-$langArchive = "Arkib";
 $langArchiveCourse  = "Backup Subjek";
 $langRestoreCourse  = "Guna semula Subjek";
 $langRestore = "Guna Semula";

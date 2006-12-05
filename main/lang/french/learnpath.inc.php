@@ -96,6 +96,7 @@ $langNewModuleCreated = "Le nouveau module a bien été créé. Vous pouvez maintena
 $langNewExerciseCreated = "Le nouveau test a bien été créé.";
 $langItemRemoved = "L\'étape a bien été supprimée";
 $langLearnPathAdded = "Votre parcours pédagogique a bien été créé et il a été ajouté dans le menu de gauche. Vous pouvez maintenant ajouter des étapes à votre parcours. L\'utilisation des chapitres est optionnel pour une structure plus élaborée.";
+$langConverting = "Conversion en cours...";
 $lang_prerequisites_limit = "Prérequis";
 $lang_loading = "Chargement, veuillez patienter svp...";
 $lang_empty = "Ce parcours ne contient aucune étape.";

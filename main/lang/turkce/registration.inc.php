@@ -115,7 +115,6 @@ $langWorks = "Öðrenci belgeleri";
 $langAdminOfCourse = "Ders Yetkilisi";
 $langSimpleUserOfCourse = "Ders kullan&#305;c&#305;s&#305;";
 $langIsTutor = "Özel Ders";
-$langCourseCode = "Ders kodu";
 $langParamInTheCourse = "Dersteki statü";
 $langMember = "üye";
 $langLock = "kilitli";

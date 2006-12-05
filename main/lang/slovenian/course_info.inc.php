@@ -46,7 +46,6 @@ $langProfessor = "Uèitelj";
 $langGroups  = "Skupine";
 $langChat  = "Razprava";
 $langDescriptionCours   = "Opis teèaja";
-$langArchive = "Arhiviraj";
 $langArchiveCourse  = "Rezervna kopija teèaja";
 $langRestoreCourse  = "Obnovi teèaj";
 $langRestore = "Obnovi";

@@ -67,6 +67,8 @@ $langTocDown  = "Abajo";
 $langTocUp  = "Arriba";
 $lang_cut_paste_link = "Abrir en una nueva ventana";
 $langCreatePath = "Crear un itinerario";
+$langOogieConversionPowerPoint = "Oogie: conversión PowerPoint";
+$langWelcomeOogieSubtitle = "Un conversor de PowerPoint a Itinerarios de aprendizaje";
 $langAddMetadata = "Ver/Editar metadatos";
 $langGoMetadata = "Ir";
 $langQuotaForThisCourseIs = "La cuota de espacio de este curso en el servidor es de";
@@ -113,5 +115,7 @@ $DocumentsOverview = "lista de documentos";
 $ViewSlideshow = "Ver presentación de imágenes";
 $Options = "Opciones";
 $Type = "Tipo";
+$WelcomeOogieConverter = "Bienvenido al conversor de PowerPoint Oogie<br>1. Explore su disco duro y busque cualquier archivo con las extensiones *.ppt u *.odp<br>2. Envíelo a Oogie. Este lo transformará en un Itinerario de aprendizaje Scorm.<br>3.  Vd. ahora podrá añadir comentarios de audio en cada diapositiva e insertar test entre diapositivas para la elavaluación.";
+$ConvertToLP = "Convertir a un Itinerario de aprendizaje";
 $Content = "Contenido";
 ?>

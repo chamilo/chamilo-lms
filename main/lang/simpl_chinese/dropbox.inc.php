@@ -74,4 +74,8 @@ $dropbox_lang["filingRefile"] = "选定文件重新投递为";
 $dropbox_lang["filingSelected"] = "已收/已发 (原始文件夹)";
 $dropbox_lang["filingOtherAs"] = "(新文件夹名)==>";
 $dropbox_lang["filingName"] = "名称";
+$ReceivedFiles = "&#25910;&#21040;&#30340;&#25991;&#20214;";
+$SentFiles = "&#24050;&#21457;&#20986;&#30340;&#25991;&#20214;";
+$Authors = "&#20316;&#32773;";
+$Author = "&#20316;&#32773;";
 ?>

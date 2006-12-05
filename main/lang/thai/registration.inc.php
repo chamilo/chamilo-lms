@@ -109,7 +109,6 @@ $langWorks = "การส่งผลงาน/การบ้านของผู้เรียน";
 $langAdminOfCourse = "ผู้บริหารรายวิชา";
 $langSimpleUserOfCourse = "ผู้ใช้ในรายวิชา";
 $langIsTutor = "ผู้ช่วยสอน";
-$langCourseCode = "รหัสวิชา";
 $langParamInTheCourse = "สถานะในวิชา";
 $langMember = "สมาชิก";
 $langLock = "ล็อค";

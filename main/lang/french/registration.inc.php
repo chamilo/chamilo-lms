@@ -127,7 +127,6 @@ $langWorks = "Travaux";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "modérateur";
-$langCourseCode = "Cours";
 $langParamInTheCourse = "Statut";
 $langMember = "inscrit";
 $langLock = "bloquer";

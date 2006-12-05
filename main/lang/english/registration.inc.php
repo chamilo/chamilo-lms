@@ -118,7 +118,6 @@ $langWorks = "Student publications";
 $langAdminOfCourse = "Course Admin";
 $langSimpleUserOfCourse = "User of course";
 $langIsTutor = "Tutor";
-$langCourseCode = "Course code";
 $langParamInTheCourse = "Status in course";
 $langMember = "member";
 $langLock = "locked";

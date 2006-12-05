@@ -105,7 +105,6 @@ $langWorks = "Studentu publik&#257;cijas";
 $langAdminOfCourse = "Kursa administrators";
 $langSimpleUserOfCourse = "Kursa lietot&#257;js";
 $langIsTutor = "Metodi&#311;e/is";
-$langCourseCode = "Kursa kods";
 $langParamInTheCourse = "Statuss kursa ietvaros";
 $langMember = "dal&#299;bnieks";
 $langLock = "nosl&#275;gts";

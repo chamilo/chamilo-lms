@@ -143,4 +143,17 @@ $Visited = "Vizitari";
 $Name = "Nume";
 $FirstAccess = "Acces prioritar";
 $LastAccess = "Acces secundar";
+$langProbationers = "Candidati";
+$MoyenneTest = "Test mediu";
+$exportExcel = "Exporta in format Excel";
+$MoyCourse = "Curs mediu";
+$MoyenneExamen = "Examen mediu";
+$MoySession = "Sesiune medie";
+$TakenSessions = "Sesiuni luate";
+$FollowUp = "Urmator";
+$Trainers = "Indrumatori";
+$Administrators = "Administratori";
+$Tracks = "Urme";
+$Success = "Succes";
+$ExcelFormat = "Format Excel";
 ?>

@@ -46,7 +46,6 @@ $langProfessor = "Predava&#269;";
 $langGroups  = "Grupe";
 $langChat  = "Diskusija";
 $langDescriptionCours   = "Opis kursa";
-$langArchive = "Arhiva";
 $langArchiveCourse  = "Backup kursa";
 $langRestoreCourse  = "Obnovi kurs";
 $langRestore = "Obnovi";

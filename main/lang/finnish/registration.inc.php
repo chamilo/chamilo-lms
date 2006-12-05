@@ -70,7 +70,6 @@ $langWorks = "Oppilaiden tehtävät";
 $langAdminOfCourse = "Kurssin ylläpitäjä";
 $langSimpleUserOfCourse = "Kurssin opiskelija";
 $langIsTutor = "Tutor";
-$langCourseCode = "Kurssikoodi";
 $langParamInTheCourse = "Rooli kurssilla";
 $langMember = "jäsen";
 $langLock = "lukittu";

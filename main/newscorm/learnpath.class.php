@@ -5182,8 +5182,40 @@ class learnpath {
 	 */
 	function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
 	{
+		
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
+		
+		$path_parts = pathinfo($extra_info[16]);
+		
+		//If action==edit document
+		//We don't display the document form if it's not an editable document (html or txt file)
+		if($action=="edit"){
+			if(is_array($extra_info)){
+				if($path_parts['extension']!="txt" && $path_parts['extension']!="html"){
+					return "&nbsp;";
+				}
+			}
+		}
+		
+		$no_display=false;
+		
+		//If action==add an existing document
+		//We don't display the document form if it's not an editable document (html or txt file)
+		if($action=="add"){
+			if(is_numeric($extra_info)){
+				
+				$sql_doc = "SELECT path FROM " . $tbl_doc . "WHERE id = " . $extra_info;
+				$result=api_sql_query($sql_doc);
+				$path_file=mysql_result($result,0,0);				
+				
+				$path_parts = pathinfo($path_file);
+				
+				if($path_parts['extension']!="txt" && $path_parts['extension']!="html"){
+					$no_display=true;
+				}
+			}
+		}
 		
 		if($id != 0 && is_array($extra_info))
 		{
@@ -5265,6 +5297,13 @@ class learnpath {
 					$return .= get_lang("WarningEditingDocument");
 				
 				$return .= '</div>';
+			}
+			
+			if($no_display==true){
+				$return .= '<div class="lp_message" style="margin-bottom:15px;">';
+				$return .= get_lang("CantEditDocument");
+				$return .= '</div>';
+				return $return;
 			}
 			
 			$return .= '<form method="POST">' . "\n";

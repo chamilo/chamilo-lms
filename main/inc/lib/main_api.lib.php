@@ -1308,20 +1308,30 @@ function api_is_allowed($tool, $action, $task_id = 0)
 function api_not_allowed()
 {
 	$home_url = api_get_path(WEB_PATH);
-	include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-	$form = new FormValidator('formLogin');
-	$form->addElement('static',null,null,'Username');
-	$form->addElement('text','login','',array('size'=>15));
-	$form->addElement('static',null,null,'Password');
-	$form->addElement('password','password','',array('size'=>15));
-	$form->addElement('submit','submitAuth',get_lang('Ok'));
-	$test = $form->return_form();
-	Display :: display_error_message("<p>Either you are not allowed here or your session has expired.<br/><br/>Please try to login again using the following form: <br/>".$test);
-	echo '<div align="center">';
-	echo '</div>';
-	$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-	Display::display_footer();
-	die();
+	if(!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq'])){
+		//only display form and return to the previous URL if there was a course ID included
+		include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+		$form = new FormValidator('formLogin');
+		$form->addElement('static',null,null,'Username');
+		$form->addElement('text','login','',array('size'=>15));
+		$form->addElement('static',null,null,'Password');
+		$form->addElement('password','password','',array('size'=>15));
+		$form->addElement('submit','submitAuth',get_lang('Ok'));
+		$test = $form->return_form();
+		echo '<div align="center">';
+		Display :: display_error_message("<p>Either you are not allowed here or your session has expired.<br/><br/>Please try to login again using the following form: <br/>".$test);
+		echo '</div>';
+		$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+		Display::display_footer();
+		die();
+	}else{
+		//if no course ID was included in the requested URL, redirect to homepage
+		echo '<div align="center">';
+		Display :: display_error_message('<p>Either you are not allowed here or your session has expired.<br/><br/><a href="'.$home_url.'">Please try to login again from the homepage</a><br/>');
+		echo '</div>';
+		Display::display_footer();
+		die();
+	}
 }
 /**
 * Returns true if student view option is enabled, false otherwise. If it is

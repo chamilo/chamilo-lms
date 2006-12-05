@@ -8,7 +8,7 @@ div.lp_small_form{background:#F8F8F8; border:1px solid #999999; padding:10px;}
 div.lp_small_form input{font-size:10px;}
 
 
-div.lp_manipulate{background:#F8F8F8; border-bottom:1px dotted #999999; margin-bottom:10px; padding:3px 0 3px 10px;}
+div.lp_manipulate{background:#F8F8F8; border-bottom:1px dotted #999999; margin-bottom:0px; padding:3px 0 3px 10px;}
 
 div.lp_manipulate a{padding-right:10px;}
 

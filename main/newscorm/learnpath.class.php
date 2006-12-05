@@ -2647,7 +2647,7 @@ class learnpath {
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
     	$html .= '<div class="inner_lp_toc">'."\n" ;
     	if($_SESSION["is_courseAdmin"]==1){
-    		$html.="<a style='font-size: 11px' href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".get_lang("BasicOverview")."</a>-<a href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".get_lang("Advanced")."</a><br><br>";
+    		$html.="<a style='font-size: 11px' href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".get_lang("BasicOverview")."</a> - <a href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".get_lang("Advanced")."</a><br><br>";
     	}
     	//		" onchange=\"javascript:document.getElementById('toc_$parent').focus();\">\n";
 		require_once('resourcelinker.inc.php');
@@ -4572,9 +4572,9 @@ class learnpath {
 						$return .= $msg;
 					
 					$return .= '<p class="lp_title">' . stripslashes($row['title']) . '</p>';
-					$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
+					//$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
 					
-					$return .= '<hr />';
+					//$return .= '<hr />';
 					
 					if($row['item_type'] == TOOL_DOCUMENT)
 						$return .= $this->display_document($row['path'], true, true);
@@ -4755,7 +4755,7 @@ class learnpath {
 		$row_doc = Database::fetch_array($res_doc);
 		
 		if($show_title)
-			$return .= '<p class="lp_title">' . $row_doc['title'] . ($edit_link ? ' [ <a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $_GET['file'] . '&amp;edit=true&amp;lp_id=' . $_GET['lp_id'] . '">Edit this document</a> ]' : '') . '</p>';
+			//$return .= '<p class="lp_title">' . $row_doc['title'] . ($edit_link ? ' [ <a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $_GET['file'] . '&amp;edit=true&amp;lp_id=' . $_GET['lp_id'] . '">Edit this document</a> ]' : '') . '</p>';
 		
 		//TODO: add a path filter
 		if($iframe)
@@ -5928,59 +5928,75 @@ class learnpath {
 	 */
 	function display_manipulate($item_id, $item_type = TOOL_DOCUMENT)
 	{
-		$return = '<div class="lp_manipulate">';
+		$return = '<div class="lp_manipulate"><table border="0" width="100%"><tr><td valign="top" width="400">';
 		
-			switch($item_type)
-			{
-				case 'dokeos_chapter':
-				case 'chapter':
-					
-					$lang = get_lang('TitleManipulateChapter');
-					break;
-					
-				case 'dokeos_module':
-				case 'module':
-					
-					$lang = get_lang('TitleManipulateModule');
-					
-					break;
-					
-				case TOOL_DOCUMENT:
-					
-					$lang = get_lang('TitleManipulateDocument');
-					
-					break;
+		switch($item_type)
+		{
+			case 'dokeos_chapter':
+			case 'chapter':
 				
-				case TOOL_LINK:
-				case 'link':
-					
-					$lang = get_lang('TitleManipulateLink');
-					
-					break;
+				$lang = get_lang('TitleManipulateChapter');
+				break;
 				
-				case TOOL_QUIZ:
-					
-					$lang = get_lang('TitleManipulateQuiz');
-					
-					break;
+			case 'dokeos_module':
+			case 'module':
 				
-				case TOOL_STUDENTPUBLICATION:
-					
-					$lang = get_lang('TitleManipulateStudentPublication');
-					
-					break;
-			}
+				$lang = get_lang('TitleManipulateModule');
+				
+				break;
+				
+			case TOOL_DOCUMENT:
+				
+				$lang = get_lang('TitleManipulateDocument');
+				
+				break;
 			
-			$return .= '<p class="lp_title">' . $lang . '</p>';
+			case TOOL_LINK:
+			case 'link':
+				
+				$lang = get_lang('TitleManipulateLink');
+				
+				break;
 			
-			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
-			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
+			case TOOL_QUIZ:
+				
+				$lang = get_lang('TitleManipulateQuiz');
+				
+				break;
 			
-			if($item_type != 'chapter' && $item_type != 'dokeos_chapter' && $item_type != 'module' && $item_type != 'dokeos_module')
-				$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang("langEditPrerequisites").'"><img align="absbottom" alt="'.get_lang("langEditPrerequisites").'" src="../img/asterisk_prerequisites.gif" title="'.get_lang("langEditPrerequisites").'" /> '.get_lang("Prerequisites").'</a>';
-			
-			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
+			case TOOL_STUDENTPUBLICATION:
+				
+				$lang = get_lang('TitleManipulateStudentPublication');
+				
+				break;
+		}
 		
+		$tbl_lp_item	= Database::get_course_table('lp_item');
+		
+		$sql = "
+			SELECT
+				description 
+			FROM " . $tbl_lp_item . " as lp
+			WHERE
+				lp.id = " . $item_id;
+
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		
+		$s_description=mysql_result($result,0,0);
+		
+		$return .= '<p class="lp_title">' . $lang . '</p>';
+		
+		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
+		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
+		
+		if($item_type != 'chapter' && $item_type != 'dokeos_chapter' && $item_type != 'module' && $item_type != 'dokeos_module')
+			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang("langEditPrerequisites").'"><img align="absbottom" alt="'.get_lang("langEditPrerequisites").'" src="../img/asterisk_prerequisites.gif" title="'.get_lang("langEditPrerequisites").'" /> '.get_lang("Prerequisites").'</a>';
+		
+		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
+		
+		$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
+		
+		$return.="</td><td valign='top'>";
 		
 		// get the audiorecorder. Use of ob_* functions since there are echos in the file
 		ob_start();
@@ -5992,6 +6008,8 @@ class learnpath {
 		$return .= ob_get_contents();
 		ob_end_clean();
 		// end of audiorecorder include
+		
+		$return.="</td></tr></table>";
 		
 		$return .= '</div>';
 		

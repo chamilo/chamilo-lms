@@ -33,7 +33,7 @@ if(!empty($path_to_lzx)){
 			 	bgcolor='#ffffff'  WIDTH='".$width."px' HEIGHT='".$height."px' ALIGN='center' TYPE='application/x-shockwave-flash' 
 			 	PLUGINSPAGE='http://www.macromedia.com/go/getflashplayer'>
 			 </embed>
-			 </object>", $path_to_lzx,$audio_recorder_item_id,$_course["dbName"],$_user["user_id"],$audio_recorder_studentview,$path_to_lzx);
+			 </object>", $path_to_lzx,$audio_recorder_item_id,$_SESSION["_course"]["dbName"],$_SESSION["_user"]["user_id"],$audio_recorder_studentview,$path_to_lzx);
 }
 
 ?>

@@ -600,15 +600,16 @@ class learnpathItem{
 	{
 		if($this->debug>2){error_log('New LP - In learnpathItem::is_restart_allowed()',0);}
 		$restart = 1;
+		$mystatus = $this->get_status(true);
 		if($this->get_prevent_reinit() > 0){ //if prevent_reinit == 1 (or more)
 			//if status is not attempted or incomplete, authorize retaking (of the same) anyway. Otherwise:
-			if($this->status != $this->possible_status[0] AND $this->status != $this->possible_status[1]){
+			if($mystatus != $this->possible_status[0] AND $mystatus != $this->possible_status[1]){
 				$restart = -1;
 			}else{
 				$restart = 0;
 			}
 		}else{
-			if($this->status == $this->possible_status[0] OR $this->status == $this->possible_status[1]){
+			if($mystatus == $this->possible_status[0] OR $mystatus == $this->possible_status[1]){
 				$restart = -1;
 			}
 		}

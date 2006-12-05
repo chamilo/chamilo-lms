@@ -87,7 +87,7 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 //we hope in the future to add the ability to upgrade from 1.5.x versions
 //to 1.8 as well.
 $old_update_from_version=array('1.5','1.5.4','1.5.5','1.6');
-$update_from_version=array('1.6','1.6.1','1.6.2','1.6.3');
+$update_from_version=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
 
 /*
 ==============================================================================

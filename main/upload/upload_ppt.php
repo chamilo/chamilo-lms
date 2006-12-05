@@ -71,7 +71,7 @@ echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px
 
 echo '<div id="upload_form_div" name="form_div" style="display:block;">';
 
-echo '<form enctype="multipart/form-data" method="POST" action="'.$_SERVER['PHP_SELF'].'" onsubmit="myUpload.start(\'dynamic_div\',\'../img/progress_bar.gif\',\''.get_lang("Uploading").'\',\'upload_form_div\');">';
+echo '<form enctype="multipart/form-data" method="POST" action="'.$_SERVER['PHP_SELF'].'" onsubmit="myUpload.start(\'dynamic_div\',\'../img/progress_bar.gif\',\''.get_lang("Converting").'\',\'upload_form_div\');">';
 echo '<img src="../img/powerpoint_big.gif" align="absbottom">
 		&nbsp;&nbsp;<input type="file" name="user_file">
 		<br><br>

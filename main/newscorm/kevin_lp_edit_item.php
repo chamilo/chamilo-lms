@@ -219,7 +219,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			}
 			else
 			{
-				echo $_SESSION['oLP']->display_edit_item($_GET['id']);
+				//echo $_SESSION['oLP']->display_edit_item($_GET['id']);
 			}
 		
 		echo '</td>';

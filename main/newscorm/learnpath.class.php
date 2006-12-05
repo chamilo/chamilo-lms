@@ -2646,7 +2646,7 @@ class learnpath {
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
     	$html .= '<div class="inner_lp_toc">'."\n" ;
     	if($_SESSION["is_courseAdmin"]==1){
-    		$html.="<a style='font-size: 11px' href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".get_lang("BasicOverview")."</a>&nbsp;<a href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".get_lang("Advanced")."</a><br><br>";
+    		$html.="<a style='font-size: 11px' href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".get_lang("BasicOverview")."</a>-<a href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".get_lang("Advanced")."</a><br><br>";
     	}
     	//		" onchange=\"javascript:document.getElementById('toc_$parent').focus();\">\n";
 		require_once('resourcelinker.inc.php');
@@ -5933,13 +5933,13 @@ class learnpath {
 			
 			$return .= '<p class="lp_title">' . $lang . '</p>';
 			
-			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
-			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img alt="Move the current item" src="../img/move.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
+			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
+			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
 			
 			if($item_type != 'chapter' && $item_type != 'dokeos_chapter' && $item_type != 'module' && $item_type != 'dokeos_module')
-				$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang("langEditPrerequisites").'"><img alt="'.get_lang("langEditPrerequisites").'" src="../img/edit.gif" title="'.get_lang("langEditPrerequisites").'" /> '.get_lang("Prerequisites").'</a>';
+				$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang("langEditPrerequisites").'"><img align="absbottom" alt="'.get_lang("langEditPrerequisites").'" src="../img/asterisk_prerequisites.gif" title="'.get_lang("langEditPrerequisites").'" /> '.get_lang("Prerequisites").'</a>';
 			
-			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
+			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
 		
 		
 		// get the audiorecorder. Use of ob_* functions since there are echos in the file

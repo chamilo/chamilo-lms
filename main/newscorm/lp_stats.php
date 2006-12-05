@@ -97,10 +97,10 @@ else
 $extend_all_link = '';
 $extend_all = 0;
 if(!empty($_GET['extend_all'])){
-	$extend_all_link = '<a href="lp_controller.php?action=stats"><img src="../img/visible.gif" alt="fold_view" border="0"></a>';
+	$extend_all_link = '<a href="lp_controller.php?action=stats"><img src="../img/view_less_stats.gif" alt="fold_view" border="0"></a>';
 	$extend_all = 1;
 }else{
-	$extend_all_link = '<a href="lp_controller.php?action=stats&extend_all=1"><img src="../img/invisible.gif" alt="extend_view" border="0"></a>';
+	$extend_all_link = '<a href="lp_controller.php?action=stats&extend_all=1"><img src="../img/view_more_stats.gif" alt="extend_view" border="0"></a>';
 }
 
 $output .="<tr><td><div class='title'>".htmlentities(get_lang('ScormMystatus'),ENT_QUOTES,$dokeos_charset)."</div></td></tr>"

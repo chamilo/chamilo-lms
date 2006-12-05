@@ -5990,7 +5990,7 @@ class learnpath {
 		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
 		
 		if($item_type != 'chapter' && $item_type != 'dokeos_chapter' && $item_type != 'module' && $item_type != 'dokeos_module')
-			$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang("langEditPrerequisites").'"><img align="absbottom" alt="'.get_lang("langEditPrerequisites").'" src="../img/asterisk_prerequisites.gif" title="'.get_lang("langEditPrerequisites").'" /> '.get_lang("Prerequisites").'</a>';
+			//$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang("langEditPrerequisites").'"><img align="absbottom" alt="'.get_lang("langEditPrerequisites").'" src="../img/asterisk_prerequisites.gif" title="'.get_lang("langEditPrerequisites").'" /> '.get_lang("Prerequisites").'</a>';
 		
 		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
 		

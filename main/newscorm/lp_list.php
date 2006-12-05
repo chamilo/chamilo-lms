@@ -292,15 +292,15 @@ if (is_array($flat_list))
 			if($details['lp_type']==1){
 				$dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/wizard.gif" border="0" title="'.get_lang("Build").'"></a>&nbsp;';
 			}else{
-				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="Build">&nbsp;';
+				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="'.get_lang("build").'">&nbsp;';
 			}
 			if($details['lp_scorm_debug']==1){
 				$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
-						'<img src="../img/bug.gif" border="0" alt="Hide debug" title="Hide debug"/>' .
+						'<img src="../img/bug.gif" border="0" alt="'.get_lang("HideDebug").'" title="'.get_lang("HideDebug").'"/>' .
 						'</a>&nbsp;';
 			}else{
 				$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
-						'<img src="../img/bug_gray.gif" border="0" alt="Show debug" title="Show debug"/>' .
+						'<img src="../img/bug_gray.gif" border="0" alt="'.get_lang("ShowDebug").'" title="'.get_lang("ShowDebug").'"/>' .
 						'</a>&nbsp;';
 			}
 		

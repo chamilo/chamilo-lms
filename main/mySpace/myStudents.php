@@ -246,9 +246,23 @@ if(!empty($_GET['student']))
 											</td>
 										 ';
 								}
+								else{
+									echo '	<td class="borderRight">
+												<img src="../img/unknown.jpg" />
+											</td>
+										 '; 
+								}
+								
+								if(!empty($_GET['details'])){
+									$widthCellInfos="60%";
+								}
+								else{
+									$widthCellInfos="85%";
+								}
+								
 							?>
 						
-						<td class="none" width="60%">
+						<td class="none" width="<?php echo $widthCellInfos;?>">
 							<table>
 								<tr>
 									<td class="none">
@@ -306,7 +320,7 @@ if(!empty($_GET['student']))
 							$sendMail = Display::encrypted_mailto_link($a_infosUser['email'], ' '.get_lang('SendMail'));
 						
 					?>
-						<td class="borderLeft">
+						<td class="borderLeft" width="25%">
 							<table width="100%">
 								<tr>
 									<th>
@@ -343,7 +357,7 @@ if(!empty($_GET['student']))
 								</tr>
 								<tr>
 									<td class="none">
-										<?php echo "<img align='absbottom' src='../img/chat.gif'><a href=''>".'&nbsp; '.get_lang('Chat')."</a>"; ?>
+										<?php echo "<img align='absbottom' src='../img/chat.gif'><a href=''>".'&nbsp; '.get_lang('chat')."</a>"; ?>
 									</td>
 								</tr>
 								<tr>
@@ -398,7 +412,7 @@ if(!empty($_GET['student']))
 			$a_date_end = explode('-',$a_infosCours['date_end']);
 			$date_end = $a_date_end[2].'/'.$a_date_end[1].'/'.$a_date_end[0];
 			$dateSession = get_lang('Du').' '.$date_start.' '.get_lang('Au').' '.$date_end;
-			$tableTitle = $a_infosCours['title'].'. '.get_lang('Tutor').' : '.$a_infosCours['tutor_name'].'. '.get_lang('Session').' : '.$dateSession;
+			$tableTitle = $a_infosCours['title'].'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.$a_infosCours['tutor_name'];
 				
 				
 ?>
@@ -467,7 +481,7 @@ if(!empty($_GET['student']))
 				?>
 					<tr class="<?php echo $s_css_class;?>">
 						<td>
-							<?php echo $a_learnpath['name']; ?>
+							<?php echo stripslashes($a_learnpath['name']); ?>
 						</td>
 						<td colspan="2">
 						

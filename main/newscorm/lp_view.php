@@ -160,7 +160,7 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	<frameset rows="150,600">
 		<frame id="header" src="lp_header.php" border="0" frameborder="0" />
 		<frameset cols="180,*">
-			<frameset rows="<?php if($displayAudioRecorder) echo '50,';?>310,150,80,*">
+			<frameset rows="<?php if($displayAudioRecorder) echo '75,';?>310,150,80,*">
 				<?php
 				if($displayAudioRecorder)
 					echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php" border="0" frameborder="0" scrolling="no"/>';

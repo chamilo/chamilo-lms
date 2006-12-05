@@ -26,8 +26,8 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 if(isset($_POST['convert'])){
 	$cwdir = getcwd();
 	require('../newscorm/lp_upload.php');
-	if(isset($o_ppt)){
-		header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&action=build&lp_id='.$o_ppt->lp_id);
+	if(isset($o_ppt) && $first_item_id != 0){
+		header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_ppt->lp_id.'&action=view_item&id='.$first_item_id);
 	}
 	else {
 		$errorMessage = get_lang('Ppt2lpError');
@@ -74,6 +74,7 @@ echo '<div id="upload_form_div" name="form_div" style="display:block;">';
 echo '<form enctype="multipart/form-data" method="POST" action="'.$_SERVER['PHP_SELF'].'" onsubmit="myUpload.start(\'dynamic_div\',\'../img/progress_bar.gif\',\''.get_lang("Converting").'\',\'upload_form_div\');">';
 echo '<img src="../img/powerpoint_big.gif" align="absbottom">
 		&nbsp;&nbsp;<input type="file" name="user_file">
+		<input type="hidden" name="ppt2lp" value="true" />
 		<br><br>
 		<input type="submit" name="convert" value="'.get_lang('ConvertToLP').'">
 		&nbsp;&nbsp;

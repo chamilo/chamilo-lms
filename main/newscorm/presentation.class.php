@@ -68,6 +68,7 @@ class presentation extends learnpath {
 		
 		chmod ($base_work_dir.$created_dir,0744);
 		if($return != 0) { //if the java application returns an error code
+			api_send_mail('e.marguin@elixir-interactive.com','problème de conversion ppt2lp','fichier '.$file);
 			DocumentManager::delete_document($_course, $dir_name, $base_work_dir);	 
 			return false;   	
 	    }
@@ -80,6 +81,7 @@ class presentation extends learnpath {
 			$this->lp_id = learnpath::add_lp($_course['id'], $learnpath_name,'','guess','manual');
 			$previous = 0;
 			$i = 0;
+			$first_item = 0;
 			foreach($files as $file){
 				$i++;
 				$document_id = add_document($_course,$created_dir.'/'.$file,'file',filesize($base_work_dir.$created_dir.'/'.$file),$file);
@@ -93,11 +95,13 @@ class presentation extends learnpath {
 					$slide_name = 'slide'.str_repeat('0',2-strlen($i)).$i;
 					
 					$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
-					
+					if($first_item == 0){
+						$first_item = $previous;
+					}
 				}
 			}
 	    }
-	    return true;   	
+	    return $first_item;   	
 	    
     }
 		

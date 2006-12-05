@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: profile.php 10306 2006-12-05 13:42:14Z edwandos $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -588,7 +588,7 @@ echo '<img '.$img_attributes.'/>';
 
 $form->display();
 
-echo '<div style="clear:both; border-top:thin solid; padding-top:2px;">
+echo '<div id="myprofilefooter">
 	<a href="'.api_get_path(WEB_CODE_PATH).'tracking/personnalLog.php">'.get_lang('MyStats').'</a>
 	| <a href="'.api_get_path(WEB_CODE_PATH).'auth/courses.php">'.get_lang('MyCourses').'</a></div>';
 

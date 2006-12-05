@@ -441,6 +441,12 @@ a.invisible:visited {
 	float: right;
 }
 
+#myprofilefooter {
+	clear:both; 
+	border-top:thin solid; 
+	padding-top:2px;
+}
+
 
 /*
 ==============================================================================

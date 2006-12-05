@@ -2026,10 +2026,11 @@ class learnpath {
 		$filename = $file_info['basename'];//name including extension
 		$extension = $file_info['extension'];//extension only
 		
-		if(in_array($extension,array('ppt','odp')))
+		if(!empty($_POST['ppt2lp']) && !in_array($extension,array('dll','exe')))
 		{
 			return 'ppt';
 		}
+		
 		
 		$file_base_name = str_replace('.'.$extension,'',$filename); //filename without its extension
 	
@@ -4379,9 +4380,9 @@ class learnpath {
 			if($menu < $arrLP[$i]['id'])
 				$menu = $arrLP[$i]['id'];
 		}
-			
-		$return .= "\n\tdocument.write(m);\n";
 		
+		$return .= "\n\tdocument.write(m);\n";
+		$return .= "\t if(!m.selectedNode) m.s(1);";
 		$return .= "</script>\n";
 		
 		return $return;

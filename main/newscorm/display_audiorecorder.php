@@ -32,7 +32,7 @@ echo '<html>
 echo '<div id="audiorecorder">	';
 	
 
-$audio_recorder_studentview = false;
+$audio_recorder_studentview = 'true';
 
 
 $audio_recorder_item_id = $_SESSION['oLP']->current;

@@ -16,6 +16,7 @@ $langTodo = "Predlogi";
 $Hide = "Skrij";
 $langArchive = "arhiv";
 $langCourseCode = "Koda teèaja";
+$langNoDescription = "Brez opisa";
 $iso639_2_code = "sl";
 $iso639_1_code = "slv";
 $charset = "windows-1250";

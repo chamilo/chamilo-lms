@@ -71,6 +71,7 @@ $lang_author = "Avthor";
 $lang_date = "Datum";
 $langBasicOverview = "Osnoven naèin";
 $langAdvanced = "Napreden naèin";
+$langDisplay = "Predogled";
 $langNewChapter = "Novo poglavje";
 $langNewStep = "Nov korak";
 $langPrerequisites = "Predzahteve";

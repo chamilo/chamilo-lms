@@ -14,6 +14,7 @@ $TheListIsEmpty = "La liste est vide.";
 $langCourseCreate = "Créer un cours";
 $langTodo = "Suggestions";
 $Hide = "Cacher";
+$langNoDescription = "Aucune description";
 $iso639_2_code = "fr";
 $iso639_1_code = "fre";
 $charset = "iso-8859-1";

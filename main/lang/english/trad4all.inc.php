@@ -16,6 +16,7 @@ $langTodo = "To do";
 $Hide = "Hide";
 $langArchive = "archive ";
 $langCourseCode = "Course code";
+$langNoDescription = "No description";
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 $charset = "iso-8859-1";

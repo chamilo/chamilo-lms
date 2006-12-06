@@ -296,7 +296,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 	echo '<h2>'.display_step_sequence().get_lang('Requirements')."</h2>\n";
 
 	echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
-	echo get_lang('MoreDetails').' <a href="../../installation_guide.html" target="_blank">read the installation guide</a>.<br />'."\n";
+	echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">read the installation guide</a>.<br />'."\n";
 
 	//	SERVER REQUIREMENTS
 	echo '<div class="RequirementHeading"><h1>'.get_lang('ServerRequirements').'</h1>';
@@ -533,7 +533,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 			?>
 				<div style="color:#cc0033; background-color:white; font-weight:bold; text-align:center;">
 				Warning:<br />
-				Some files or folders don't have writing permission. To be able to install Dokeos you should first change their permissions (using CHMOD). Please read the</font> <a href="../../installation_guide.html" target="blank">installation guide</a> <font color="#cc0033">.
+				Some files or folders don't have writing permission. To be able to install Dokeos you should first change their permissions (using CHMOD). Please read the</font> <a href="../../documentation/installation_guide.html" target="blank">installation guide</a> <font color="#cc0033">.
 				<?php
 				if (is_array($notwritable) AND count($notwritable)>0)
 				{

@@ -343,14 +343,18 @@ a.invisible:visited {
 }
 
 #header3 #current {
-	background-color: #fff;
-	border-bottom: 1px solid #fff;
+	background-color: #e9a151;
+	border-bottom: 1px solid #4171b5;
 }
 
 #header3 #current a {
-	border-bottom: 1px solid #fff;
-	color: #fff
+	border-bottom: 0px solid #4171b5;
+	color: rgb(39,84,175)
 }
+
+	#header3 #current a:hover {
+		color: #333;
+	}
 
 #header3 .banner_links {
 	margin: 0;

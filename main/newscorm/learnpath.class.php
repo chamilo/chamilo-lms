@@ -4237,8 +4237,8 @@ class learnpath {
 		
 			$return .= "\t" . '<tr class="header">' . "\n";
 			
-				$return .= "\t" . '<th>'.get_lang("Title").'</th>' . "\n";
-				$return .= "\t" . '<th>'.get_lang("Description").'</th>' . "\n";
+				$return .= "\t" . '<th width="75%">'.get_lang("Title").'</th>' . "\n";
+				//$return .= "\t" . '<th>'.get_lang("Description").'</th>' . "\n";
 				$return .= "\t" . '<th>'.get_lang("Move").'</th>' . "\n";
 				$return .= "\t" . '<th>'.get_lang("Actions").'</th>' . "\n";
 			
@@ -4252,7 +4252,7 @@ class learnpath {
 				$return .= "\t" . '<tr>' . "\n";
 					
 					$return .= "\t\t" . '<td class="title" style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:3px;" />' . stripslashes($arrLP[$i]['title']) . '</td>' . "\n";
-					$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>' . "\n";
+					//$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>' . "\n";
 					
 					if(api_is_allowed_to_edit())
 					{
@@ -4759,7 +4759,7 @@ class learnpath {
 		
 		//TODO: add a path filter
 		if($iframe)
-			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path'] . '" style="background:#FFFFFF; border:1px solid #CCCCCC; height:475px; width:100%;"></iframe>';
+			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path'] . '" style="background:#FFFFFF; border:1px solid #CCCCCC; height:490px; width:100%;"></iframe>';
 		else
 			$return .= file_get_contents(api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path']);
 			
@@ -5189,17 +5189,19 @@ class learnpath {
 		
 		$path_parts = pathinfo($extra_info[16]);
 		
+		$no_display_edit_textarea=false;
+		
 		//If action==edit document
 		//We don't display the document form if it's not an editable document (html or txt file)
 		if($action=="edit"){
 			if(is_array($extra_info)){
 				if($path_parts['extension']!="txt" && $path_parts['extension']!="html"){
-					return "&nbsp;";
+					$no_display_edit_textarea=true;
 				}
 			}
 		}
 		
-		$no_display=false;
+		$no_display_add=false;
 		
 		//If action==add an existing document
 		//We don't display the document form if it's not an editable document (html or txt file)
@@ -5213,7 +5215,7 @@ class learnpath {
 				$path_parts = pathinfo($path_file);
 				
 				if($path_parts['extension']!="txt" && $path_parts['extension']!="html"){
-					$no_display=true;
+					$no_display_add=true;
 				}
 			}
 		}
@@ -5300,7 +5302,7 @@ class learnpath {
 				$return .= '</div>';
 			}
 			
-			if($no_display==true){
+			if($no_display_add==true){
 				$return .= '<div class="lp_message" style="margin-bottom:15px;">';
 				$return .= get_lang("CantEditDocument");
 				$return .= '</div>';

@@ -62,10 +62,39 @@ $message=get_lang("WelcomeOogieConverter");
 
 echo '<br>';
 
-Display::display_normal_message($message);
+$s_style="border-width: 1px;
+		 border-style: solid;
+		 margin-left: 0;
+		 margin-top: 10px;
+		 margin-bottom: 10px;
+		 min-height: 30px;
+		 padding: 5px;
+		 position: relative;
+		 width: 500px;
+		 background-color: #E5EDF9;
+		 border-color: #4171B5;
+		 color: #000;";
+
+$s_style_error="border-width: 1px;
+		 border-style: solid;
+		 margin-left: 0;
+		 margin-top: 10px;
+		 margin-bottom: 10px;
+		 min-height: 30px;
+		 padding: 5px;
+		 position: relative;
+		 width: 500px;
+		 background-color: #FFD1D1;
+		 border-color: #FF0000;
+		 color: #000;";
+
+//Display::display_normal_message($message);
+
+echo '<div style="'.$s_style.'"><div style="float:left; margin-right:10px;"><img src="'.api_get_path(WEB_IMG_PATH)."message_normal.gif".'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$message.'</div></div>';
 
 if(!empty($errorMessage)){
-	Display::display_error_message($errorMessage);
+	//Display::display_error_message($errorMessage);
+	echo '<div style="'.$s_style_error.'"><div style="float:left; margin-right:10px;"><img src="'.api_get_path(WEB_IMG_PATH)."message_error.gif".'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$errorMessage.'</div></div>';
 }
 
 echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';

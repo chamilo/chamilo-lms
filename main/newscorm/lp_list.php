@@ -249,14 +249,14 @@ if (is_array($flat_list))
 			if ($details['lp_visibility'] == "i")
 			{
 		        $dsp_visible =	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=v\">" .
-				"<img src=\"../img/invisible.gif\" border=\"0\" title=\"".get_lang('_publish')."\" />" .
+				"<img src=\"../img/invisible_LP_list.gif\" border=\"0\" title=\"".get_lang('_publish')."\" />" .
 				"</a>" .
 				"";
 			}
 			else
 			{
 				$dsp_visible =	"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=i'>" .
-				"<img src=\"../img/visible.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />" .
+				"<img src=\"../img/visible_LP_list.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />" .
 				"</a>".
 				"";
 			}
@@ -306,7 +306,8 @@ if (is_array($flat_list))
 		
 	    }	// end if($is_allowedToEdit)
 	    //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
-	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete;
+	    //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete;
+	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_delete;
 	    echo	"</tr>\n";
       
 	}	// end foreach ($flat_list)

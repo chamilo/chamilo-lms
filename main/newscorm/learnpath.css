@@ -71,10 +71,10 @@ table.lp_overview{font-size:12px; width:100%;}
 
 table.lp_overview td{border-bottom:1px solid #999999; border-top:1px solid #999999; height:20px; padding:3px; vertical-align:middle; width:auto;}
 table.lp_overview td.title{width:200px;}
-table.lp_overview td.actions{text-align:right; width:100px;}
+table.lp_overview td.actions{text-align:center; width:100px;}
 table.lp_overview td.move{text-align:center; width:50px;}
 
-table.lp_overview th{background:#FFFFFF; padding-left:3px; text-align:left;}
+table.lp_overview th{background:#FFFFFF; padding-left:3px; text-align:center;}
 
 table.lp_overview tr{background:#F8F8F8;}
 table.lp_overview tr:hover{background:#E5EDF9;}

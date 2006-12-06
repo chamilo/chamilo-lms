@@ -128,14 +128,14 @@ define('CONFVAL_dateFormatForInfosFromCourses', get_lang('dateFormatLong'));
 define("CONFVAL_limitPreviewTo", SCRIPTVAL_NewEntriesOfTheDayOfLastLogin);
 
 
-if(api_is_allowed_to_create_course() && !isset($_GET['sessionview'])){
+/*if(api_is_allowed_to_create_course() && !isset($_GET['sessionview'])){
 	$nosession = true;
 }
 else {
 	$nosession = false;
-}
+}*/
 
-
+$nosession=false;
 
 if(api_get_setting('use_session_mode')=='true' && !$nosession)
 {
@@ -232,6 +232,8 @@ function get_personal_course_list($user_id)
 	
 	$personal_course_list = array ();
 	
+	
+	//Courses in which we suscribed out of any session
 	$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
 										course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
 										course_rel_user.user_course_cat user_course_cat
@@ -287,17 +289,32 @@ function get_personal_course_list($user_id)
 function get_personal_session_course_list($user_id, $list_sessions)
 {
 	// Database Table Definitions
+	$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 	$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
 	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	$tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 
 	// variable initialisation
 	$personal_course_list_sql = '';
 	$personal_course_list = array();
+	
+	//Courses in which we suscribed out of any session
+	$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
+										course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
+										course_rel_user.user_course_cat user_course_cat
+										FROM    ".$tbl_course."       course,".$main_course_user_table."   course_rel_user
+										WHERE course.code = course_rel_user.course_code"."
+										AND   course_rel_user.user_id = '".$user_id."'
+										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,course.title,course.code";
+	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
+	
+	while ($result_row = mysql_fetch_array($course_list_sql_result))
+	{
+		$personal_course_list[] = $result_row;
+	}
 
 	// get the list of sessions where the user is subscribed as student
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 5 as s
@@ -387,6 +404,8 @@ function get_personal_session_course_list($user_id, $list_sessions)
 			}
 		}
 	}
+	
+	//print_r($personal_course_list);
 
 	return $personal_course_list;
 }
@@ -566,7 +585,7 @@ function get_logged_user_course_html($my_course)
 	$course_visibility = $course_access_settings['visibility'];
 	$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
 	//function logic - act on the data
-	$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['c']);
+	$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['k']);
 	if ($is_virtual_course)
 	{
 		// If the current user is also subscribed in the real course to which this
@@ -750,9 +769,9 @@ function get_logged_user_course_html($my_course)
 		if(!empty($my_course['session_name']))
 		{
 			$session = $my_course['session_name'];
-			if($date_start=='0000-00-00')
+			if($my_course['date_start']=='0000-00-00')
 			{
-				$session .= ' - '.get_lang('Without time limits');
+				$session .= ' - '.get_lang('WithoutTimeLimits');
 				$active = true;
 			}
 			else 
@@ -827,7 +846,7 @@ function show_notification($my_course)
 			$type = $notification['lastedit_type'];
 			//$notification[image]=str_replace(".png","gif",$notification[image]);
 			//$notification[image]=str_replace(".gif","_s.gif",$notification[image]);
-			$retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$my_course['k'].'&amp;ref='.$notification['ref'].'">'.'<img title="-- '.get_lang($notification['tool']).' -- '.get_lang('_title_notification').": $type ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="middle" /></a>&nbsp;';
+			$retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$my_course['k'].'&amp;ref='.$notification['ref'].'">'.'<img title="-- '.get_lang($notification['tool']).' -- '.get_lang('_title_notification').": $type ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
 		}
 	}
 	return $retvalue;
@@ -896,14 +915,14 @@ if ($maxCourse > 0)
 echo "<div class=\"maincontent\">"; // start of content for logged in users
 
 // link to see the session view or course view
-if(api_get_setting('use_session_mode')=='true' && api_is_allowed_to_create_course()) {
+/*if(api_get_setting('use_session_mode')=='true' && api_is_allowed_to_create_course()) {
 	if(isset($_GET['sessionview'])){
 		echo '<a href="'.$_SERVER['PHP_SELF'].'">'.get_lang('CourseView').'</a>';
 	}
 	else {
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?sessionview=true">'.get_lang('SessionView').'</a>';
 	}
-}
+}*/
 
 /*
 -----------------------------------------------------------------------------
@@ -926,15 +945,19 @@ else
 	   --------------------------------------*/
 
 	$list = '';
-
-	if(api_get_setting('use_session_mode')=='true' && !$nosession)
+	
+	$personal_course_list = get_personal_session_course_list($_user['user_id']);
+	
+	/*if(api_get_setting('use_session_mode')=='true' && !$nosession)
 	{
+		echo "bouh";
 		$personal_course_list = get_personal_session_course_list($_user['user_id']);
 	}
 	else
 	{
 		$personal_course_list = get_personal_course_list($_user['user_id']);
-	}
+	}*/
+	
 	foreach ($personal_course_list as $my_course)
 	{
 		$thisCourseDbName = $my_course['db'];
@@ -1053,7 +1076,100 @@ else
 
 if (is_array($list))
 {
-	if(api_get_setting('use_session_mode')=='true' && !$nosession)
+	//print_r($list);
+	
+	//Courses whithout sessions
+	foreach($list as $key=>$value){
+		
+		if($value[2]==0){
+			
+			$old_user_category = 0;
+			$userdefined_categories = get_user_course_categories();
+			echo "<ul>\n";
+			
+			if ($old_user_category<>$value[0])
+			{
+				if ($key<>0 OR $value[0]<>0) // there are courses in the previous category
+				{
+					echo "\n</ul>";
+				}
+				echo "\n\n\t<ul class=\"user_course_category\"><li>".$userdefined_categories[$value[0]]."</li></ul>\n";
+				if ($key<>0 OR $value[0]<>0) // there are courses in the previous category
+				{
+					echo "<ul>";
+				}
+				$old_user_category=$value[0];
+
+			}
+			echo $value[1];
+			
+			echo "</ul>\n";
+				
+		}
+		
+	}
+	
+	
+	$listActives = $listInactives = $listCourses = array();
+	foreach($list as $key=>$value){
+		if($value['active'])
+			$listActives[] = $value;
+		else if(!empty($value[2]))
+			$listInactives[] = $value;
+	}
+	$old_user_category = 0;
+	$userdefined_categories = get_user_course_categories();
+	
+	if(count($listActives)>0 && $display_actives){
+		echo "<ul style=\"line-height: 20px; margin-top: 20px;\">\n";
+
+		foreach ($listActives as $key => $value)
+		{
+			if(!empty($value[2])){
+				if($old_session != $value[2]){
+					$old_session = $value[2];
+					if($key != 0){
+						echo "\n</ul>";
+					}
+					echo "\n\n\t<ul class=\"user_course_category\"><li>".$value[3]."</li></ul>\n";
+
+					echo "<ul>";
+				}
+			}
+			echo $value[1];
+
+		}
+
+		echo "\n</ul></ul><br /><br />\n";
+
+	}
+
+	if(count($listInactives)>0 && !$display_actives){
+		echo "<ul style=\"line-height: 20px;\">";
+
+		foreach ($listInactives as $key => $value)
+		{
+			if(!empty($value[2])){
+				if($old_session != $value[2]){
+					$old_session = $value[2];
+					if($key != 0){
+						echo "\n</ul>";
+					}
+				echo "\n\n\t<ul class=\"user_course_category\"><li>".$value[3]."</li></ul>\n";
+
+				echo "<ul>";
+
+				}
+			}
+			echo $value[1];
+
+		}
+
+		echo "\n</ul><br /><br />\n";
+	}
+		
+	
+	/*if(api_get_setting('use_session_mode')=='true' && !$nosession)
 	{
 		$listActives = $listInactives = $listCourses = array();
 		foreach($list as $key=>$value){
@@ -1142,7 +1258,7 @@ if (is_array($list))
 
 		}
 		echo "\n</ul>\n";
-	}
+	}*/
 }
 echo "</div>"; // end of content section
 // Register whether full admin or null admin course

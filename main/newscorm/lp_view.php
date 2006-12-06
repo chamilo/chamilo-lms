@@ -158,7 +158,7 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	$displayAudioRecorder = (api_get_setting('service_ppt2lp','active')=='true' && api_get_setting('service_ppt2lp','path_to_lzx')!='') ? true : false;
 	?>
 	<frameset rows="150,600">
-		<frame id="header" src="lp_header.php" border="0" frameborder="0" />
+		<frame id="header" src="lp_header.php" border="0" frameborder="0" scrolling="no" />
 		<frameset cols="195,*">
 			
 			<?php

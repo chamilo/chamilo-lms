@@ -391,11 +391,6 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 				<td class="requirements-value">'.check_php_setting('register_globals','OFF').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">Output Buffering</td>
-				<td class="requirements-recommended">ON</td>
-				<td class="requirements-value">'.check_php_setting('output_buffering','ON').'</td>
-			</tr>
-			<tr>
 				<td class="requirements-item">Session auto start</td>
 				<td class="requirements-recommended">OFF</td>
 				<td class="requirements-value">'.check_php_setting('session.auto_start','OFF').'</td>

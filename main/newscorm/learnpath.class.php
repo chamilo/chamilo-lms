@@ -4922,7 +4922,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">After "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
 									}
 								}
 								
@@ -5115,7 +5115,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">After "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
 									}
 								}
 								
@@ -5372,7 +5372,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">After "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
 									}
 								}
 								
@@ -5660,7 +5660,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">After "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
 									}
 								}
 								
@@ -5873,7 +5873,7 @@ class learnpath {
 										else
 											$selected = '';
 										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">After "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
 									}
 								}
 								
@@ -6071,7 +6071,7 @@ class learnpath {
 		
 		while($row_zero = Database::fetch_array($res_zero))
 		{
-			$return .= 'child_name[0][' . $i . '] = "After \"' . $row_zero['title'] . '\"";' . "\n";
+			$return .= 'child_name[0][' . $i . '] = "'.get_lang("After").' \"' . $row_zero['title'] . '\"";' . "\n";
 			$return .= 'child_value[0][' . $i++ . '] = "' . $row_zero['id'] . '";' . "\n";
 		}
 		
@@ -6100,7 +6100,7 @@ class learnpath {
 			
 			while($row_parent = Database::fetch_array($res_parent))
 			{
-				$return .= 'child_name[' . $row['id'] . '][' . $i . '] = "After \"' . $row_parent['title'] . '\"";' . "\n";
+				$return .= 'child_name[' . $row['id'] . '][' . $i . '] = "'.get_lang("After").' \"' . $row_parent['title'] . '\"";' . "\n";
 				$return .= 'child_value[' . $row['id'] . '][' . $i++ . '] = "' . $row_parent['id'] . '";' . "\n";
 			}
 			

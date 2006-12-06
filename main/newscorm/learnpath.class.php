@@ -4754,7 +4754,7 @@ class learnpath {
 		$res_doc = api_sql_query($sql_doc, __FILE__, __LINE__);	
 		$row_doc = Database::fetch_array($res_doc);
 		
-		if($show_title)
+		//if($show_title)
 			//$return .= '<p class="lp_title">' . $row_doc['title'] . ($edit_link ? ' [ <a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $_GET['file'] . '&amp;edit=true&amp;lp_id=' . $_GET['lp_id'] . '">Edit this document</a> ]' : '') . '</p>';
 		
 		//TODO: add a path filter
@@ -4762,7 +4762,7 @@ class learnpath {
 			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path'] . '" style="background:#FFFFFF; border:1px solid #CCCCCC; height:490px; width:100%;"></iframe>';
 		else
 			$return .= file_get_contents(api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path']);
-			
+		
 		return $return;
 	}
 	
@@ -5438,20 +5438,30 @@ class learnpath {
 								
 									if(isset($_POST['content']))
 										$content = stripslashes($_POST['content']);
-									elseif(is_array($extra_info))
-										$content = $this->display_document($extra_info['path'], false, false);
+									elseif(is_array($extra_info)){
+										//If it's an html document or a text file
+										if(!$no_display_edit_textarea){
+											$content = $this->display_document($extra_info['path'], false, false);
+										}
+									}
 									elseif(is_numeric($extra_info))
 										$content = $this->display_document($extra_info, false, false);
 									else
 										$content = '';
 									
-									$oFCKeditor = new FCKeditor('content_lp') ;
-									$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-									$oFCKeditor->Height		= '400';
-									$oFCKeditor->Width		= '100%';
-									$oFCKeditor->Value		= $content;
 									
-									$return .=	$oFCKeditor->CreateHtml();
+									if(!$no_display_edit_textarea){
+										$oFCKeditor = new FCKeditor('content_lp') ;
+										$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+										$oFCKeditor->Height		= '400';
+										$oFCKeditor->Width		= '100%';
+										$oFCKeditor->Value		= $content;
+										
+										$return .=	$oFCKeditor->CreateHtml();
+									}
+									else{
+										$return .= $this->display_document($extra_info['path'], false, true);
+									}
 								
 								$return .= "\t\t\t" . '</td>' . "\n";
 							

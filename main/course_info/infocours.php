@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: infocours.php 10385 2006-12-06 16:10:39Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,6 +49,9 @@ $language_file = array ('create_course', 'course_info');
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
 
+$nameTools = get_lang("ModifInfo");
+Display :: display_header($nameTools, MODULE_HELP_NAME);
+
 /*
 -----------------------------------------------------------
 	Libraries
@@ -72,7 +75,7 @@ $TABLELANGUAGES 			= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $TABLEBBCONFIG 				= Database :: get_course_table(TOOL_FORUM_CONFIG_TABLE);
 $currentCourseID 			= $_course['sysCode'];
 $currentCourseRepository 	= $_course["path"];
-$is_allowedToEdit 			= $is_courseAdmin;
+$is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
 $course_setting_table 		= Database::get_course_table(TABLE_COURSE_SETTING);
 /*
 ==============================================================================
@@ -249,8 +252,7 @@ if ($form->validate() && is_settings_editable())
 	Header
 -----------------------------------------------------------
 */
-$nameTools = get_lang("ModifInfo");
-Display :: display_header($nameTools, MODULE_HELP_NAME);
+
 //api_display_tool_title($nameTools);
 if (isset ($_GET['action']) && $_GET['action'] == 'show_message')
 	{

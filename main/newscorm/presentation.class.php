@@ -33,7 +33,7 @@ class presentation extends learnpath {
     	global $_course, $_user;
     
     	$file_name = (strrpos($file['name'],'.')>0 ? substr($file['name'], 0, strrpos($file['name'],'.')) : $file['name']);
-    	$file_extension = substr($file['name'], strrpos($file['name'],'.'),10);
+    	$file_extension = (strrpos($file['name'],'.')>0 ? substr($file['name'], strrpos($file['name'],'.'),10) : '');
     	
     	
     	$file_name = remove_accents($file_name);
@@ -86,8 +86,7 @@ class presentation extends learnpath {
 	    
 	    else {
 			// create lp
-			$learnpath_name .= basename($file);
-			$learnpath_name = substr($learnpath_name,0, strrpos($learnpath_name,'.'));
+			$learnpath_name .= $file_name;
 			
 			$this->lp_id = learnpath::add_lp($_course['id'], $learnpath_name,'','guess','manual');
 			$previous = 0;

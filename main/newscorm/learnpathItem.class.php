@@ -1215,7 +1215,7 @@ class learnpathItem{
     function set_time($scorm_time,$format='scorm')
     {
    		if($this->debug>0){error_log('New LP - In learnpathItem::set_time('.$scorm_time.')',0);}
-     	if($scorm_time == 0 and ($this->type=='asset' or $this->type=='doc') and $this->current_start_time!=0){
+     	if($scorm_time == 0 and ($this->type!='sco') and $this->current_start_time!=0){
      		$my_time = time() - $this->current_start_time;
      		if($my_time > 0){
      			$this->update_time($my_time);
@@ -1326,7 +1326,7 @@ class learnpathItem{
    		if($this->debug>0){error_log('New LP - In learnpathItem::write_to_db()',0);}
    		$mode = $this->get_lesson_mode();
    		$credit = $this->get_credit();
-   		if($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse')
+   		if(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse'))
    		{
    			//this info shouldn't be saved as the credit or lesson mode info prevent it
    			if($this->debug>1){error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!',0);}

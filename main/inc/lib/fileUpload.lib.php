@@ -1804,4 +1804,10 @@ $handle=opendir($path);
 	}
 }
 
+// could be usefull in some cases...
+function remove_accents($string){
+	$string = strtr ( $string, "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ", "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn");
+	return $string;
+}
+
 ?>

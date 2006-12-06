@@ -307,7 +307,7 @@ if (is_array($flat_list))
 	    }	// end if($is_allowedToEdit)
 	    //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
 	    //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete;
-	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_delete;
+	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_force_commit.$dsp_delete;
 	    echo	"</tr>\n";
       
 	}	// end foreach ($flat_list)

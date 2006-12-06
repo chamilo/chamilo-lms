@@ -86,7 +86,7 @@ class scorm extends learnpath {
 	     		if(!$doc)
 	     		{
 		     		if($this->debug>1){error_log('New LP - File '.$file.' is not an XML file',0);}
-		     		//$this->setErrorMsg("File $file is not an XML file");
+		     		//$this->set_error_msg("File $file is not an XML file");
 	     			return null;
 	     		}else{
 	     			if($this->debug>1){error_log('New LP - File '.$file.' is XML',0);}
@@ -335,12 +335,12 @@ class scorm extends learnpath {
 		     	unset($doc);
 			}else{
 		    	if($this->debug>0){error_log('In scorm::parse_manifest() - PHP version is not 4 nor 5, cannot parse',0);}
-	     		$this->setErrorMsg("Parsing impossible because PHP version is not 4 nor 5");
+	     		$this->set_error_msg("Parsing impossible because PHP version is not 4 nor 5");
 		    	return null;
 			}
      	}else{
      		if($this->debug>1){error_log('New LP - Could not open/read file '.$file,0);}
-     		$this->setErrorMsg("File $file could not be read");
+     		$this->set_error_msg("File $file could not be read");
      		return null;
      	}
      	//TODO close the DOM handler
@@ -482,33 +482,26 @@ class scorm extends learnpath {
      	$maxFilledSpace = 1000000000;
      	$zip_file_path = $zip_file_info['tmp_name'];
      	$zip_file_name = $zip_file_info['name'];
-     	if($this->debug==1){error_log('New LP - import_package() - zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name,0);}
+     	if($this->debug>1){error_log('New LP - import_package() - zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name,0);}
      	$course_rel_dir  = api_get_course_path().'/scorm'; //scorm dir web path starting from /courses
 		$course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; //absolute system path for this course
 		$current_dir = replace_dangerous_char(trim($current_dir),'strict'); //current dir we are in, inside scorm/
-     	if($this->debug==1){error_log('New LP - import_package() - current_dir = '.$current_dir,0);}
+     	if($this->debug>1){error_log('New LP - import_package() - current_dir = '.$current_dir,0);}
      	
  		//$uploaded_filename = $_FILES['userFile']['name'];
 		//get name of the zip file without the extension
-		if($this->debug==1){error_log('New LP - Received zip file name: '.$zip_file_path,0);}
+		if($this->debug>1){error_log('New LP - Received zip file name: '.$zip_file_path,0);}
 		$file_info = pathinfo($zip_file_name);
 		$filename = $file_info['basename'];
 		$extension = $file_info['extension'];
 		$file_base_name = str_replace('.'.$extension,'',$filename); //filename without its extension
 		$this->zipname = $file_base_name; //save for later in case we don't have a title
 		
-		if($this->debug==1){error_log("New LP - base file name is : ".$file_base_name,0);}
+		if($this->debug>1){error_log("New LP - base file name is : ".$file_base_name,0);}
 		$new_dir = replace_dangerous_char(trim($file_base_name),'strict');
 		$this->subdir = $new_dir;
-		if($this->debug==1){error_log("New LP - subdir is first set to : ".$this->subdir,0);}
+		if($this->debug>1){error_log("New LP - subdir is first set to : ".$this->subdir,0);}
 	
-/*		
-		if( check_name_exist($course_sys_dir.$current_dir."/".$new_dir) )
-		{
-			$dialogBox = get_lang('FileExists');
-			$stopping_error = true;
-		}
-*/
 		$zipFile = new pclZip($zip_file_path);
 	
 		// Check the zip content (real size and file extension)
@@ -518,53 +511,49 @@ class scorm extends learnpath {
 		$package_type='';
 		$at_root = false;
 		$manifest = '';
+		$manifest_list = array();
 
 		//the following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?)
 		foreach($zipContentArray as $thisContent)
 		{
+			//error_log('Looking at  '.$thisContent['filename'],0);
 			if ( preg_match('~.(php.*|phtml)$~i', $thisContent['filename']) )
 			{
-				return api_failure::set_failure('php_file_in_zip_file');
+	     		$this->set_error_msg("File $file contains a PHP script");
+				//return api_failure::set_failure('php_file_in_zip_file');
 			}
 			elseif(stristr($thisContent['filename'],'imsmanifest.xml'))
 			{
+				//error_log('Found imsmanifest at '.$thisContent['filename'],0);
 				if($thisContent['filename'] == basename($thisContent['filename'])){
 					$at_root = true;
 				}else{
-					$this->subdir .= '/'.dirname($thisContent['filename']);
-					if($this->debug==1){error_log("New LP - subdir is now ".$this->subdir,0);}
+					//$this->subdir .= '/'.dirname($thisContent['filename']);
+					if($this->debug>2){error_log("New LP - subdir is now ".$this->subdir,0);}
 				}
-				$manifest = $thisContent['filename']; //just the relative directory inside scorm/
 				$package_type = 'scorm';
-				break;//exit the foreach loop
+				$manifest_list[] = $thisContent['filename'];
+				$manifest = $thisContent['filename']; //just the relative directory inside scorm/
 			}
-			/*
-			elseif(stristr($thisContent['filename'],'LMS'))
-			{
-				$package_type = 'scorm_plantyn';
-				break;//exit the foreach loop
-			}
-			elseif(stristr($thisContent['filename'],'REF'))
-			{
-				$package_type='scorm_plantyn2';
-				break;//exit the foreach loop
-			}
-			elseif(stristr($thisContent['filename'],'SCO'))
-			{
-				$package_type='scorm_plantyn3';
-				break;//exit the foreach loop
-			}
-			elseif(stristr($thisContent['filename'],'AICC'))
-			{
-				$package_type='aicc';
-				break;//exit the foreach loop
-			}*/
 			else
 			{
-				$package_type = '';
+				//do nothing, if it has not been set as scorm somewhere else, it stays as '' default
 			}
 			$realFileSize += $thisContent['size'];
 		}
+		//now get the shortest path (basically, the imsmanifest that is the closest to the root)
+		$shortest_path = $manifest_list[0];
+		$slash_count = substr_count($shortest_path,'/');
+		foreach($manifest_list as $manifest_path){
+			$tmp_slash_count = substr_count($manifest_path,'/'); 
+			if($tmp_slash_count<$slash_count){
+				$shortest_path = $manifest_path;
+				$slash_count = $tmp_slash_count;
+			}
+		}
+		$this->subdir .= '/'.dirname($shortest_path); //do not concatenate because already done above
+		$manifest = $shortest_path;
+		
 		if($this->debug>1){error_log('New LP - Package type is now '.$package_type,0);}
 	
 		if($package_type== '')

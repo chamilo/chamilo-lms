@@ -16,6 +16,7 @@ $langTodo = "De efectuat";
 $Hide = "Ascunde";
 $langArchive = "arhiva";
 $langCourseCode = "Codul cursului";
+$langNoDescription = "Fara descriere";
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 $charset = "iso-8859-1";

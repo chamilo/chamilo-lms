@@ -99,6 +99,14 @@ $langItemRemoved = "Obiectul a fost inlaturat";
 $langLearnPathAdded = "Calea dumneavoastra de invatare a fost creata cu succes si a fost adaugata la meniul din partea stanga. Puteti acum sa adaugati module si pasii caii de invatare. 
 Folosirea capitolelor este optionala pentru o structura mai subtila.";
 $langConverting = "Convertire...";
+$langPpt2lpError = "Eroare in timpul conversiei PowerPoint";
+$langBuild = "Construieste";
+$langViewModeEmbedded = "Mod de vedere: incorporat";
+$langViewModeFullScreen = "Mod de vizualizare: ecran plin";
+$langShowDebug = "Arata debug";
+$langHideDebug = "Ascunde debug";
+$langCantEditDocument = "Acest document nu este editabil";
+$langAreYouSureToDelete = "Sunteti sigur ca stergeti?";
 $lang_prerequisites_limit = "Prerechizite (limita)";
 $lang_loading = "Incarca pagina, te rog asteapta ...";
 $lang_empty = "Aceasta cale nu contine nici un pas.";

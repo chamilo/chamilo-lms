@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_survey.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: create_new_survey.php 10332 2006-12-06 00:36:22Z yannoo $
 */
 
 /*
@@ -241,7 +241,7 @@ if($surveyid = $_REQUEST['surveyid'])
 	december -->
 	<select name="fmonth">
 		<?
-			for($i=1;$i<count($MonthsLong);$i++)
+			for($i=1;$i<=count($MonthsLong);$i++)
 			{
 				if($i<=9)
 				$val = "0".$i;

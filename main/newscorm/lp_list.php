@@ -107,26 +107,15 @@ if(api_is_allowed_to_edit())
   }
 
   include('content_makers.inc.php');
-  echo	'<table border="0" cellspacing="2" cellpadding="4">
-    <tr>
-      <td >' .
-      	'<a href="'.$_SERVER['PHP_SELF'].'?action=add_lp">'.
+  echo	'<a href="'.$_SERVER['PHP_SELF'].'?action=add_lp">'.
 		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="scormbuilder">&nbsp;'.get_lang('_add_learnpath').
 		'</a>' .
-		str_repeat('&nbsp',10).'</td>'.
-       "<td>" .
-   /*--------------------------------------
-      UPLOAD SECTION - displays file upload box
-     --------------------------------------*/
-		'<a href="../upload/index.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/file_zip.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("UploadScorm").'</a>'.
-       '</td>';
-       if(api_get_setting('service_ppt2lp','active')==true){
-       		echo  '<td>'.str_repeat('&nbsp',10).'<a href="../upload/upload_ppt.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a></td>';
+		str_repeat('&nbsp',3).
+		'<a href="../upload/index.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/file_zip.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("UploadScorm").'</a>';
+		if(api_get_setting('service_ppt2lp','active')==true)
+		{
+			echo  str_repeat('&nbsp',3).'<a href="../upload/upload_ppt.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a>';
        }
-       echo 
-    "</tr>
-  </table>";
-  
 }
 
 echo '<table width="100%" border="0" cellspacing="2" class="data_table">';

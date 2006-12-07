@@ -284,7 +284,7 @@ if ($dropbox_cnf['sent_received_tabs'])
 
 if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false)
 {
-	echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
+	//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
 	
 	// This is for the categories
 	if (isset($_GET['view_received_category']) AND $_GET['view_received_category']<>'')
@@ -431,7 +431,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 */ 
 if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 {
-	echo '<h3>'.get_lang('SentFiles').'</h3>';
+	//echo '<h3>'.get_lang('SentFiles').'</h3>';
 	
 	// This is for the categories
 	if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category']<>'')

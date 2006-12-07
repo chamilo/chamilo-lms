@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 10280 2006-11-30 23:02:34Z develop-it $
+<?php // $Id: exercice_submit.php 10421 2006-12-07 16:33:46Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -264,6 +264,7 @@ if(!$questionNum || $_POST['questionNum'])
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
+
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
 					<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>					   
 					<script language=\"JavaScript\" type=\"text/javascript\">
@@ -381,6 +382,13 @@ $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/Java
 else
 {
 	?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	</head>
+	
+	<body>
 	<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/frames.css" />
 
 <?php
@@ -550,6 +558,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 } else {
 	?>
 	<link rel="stylesheet" type="text/css" href="<?php echo $clarolineRepositoryWeb ?>css/frames.css" />
+	</body></html>
 <?php
 }
 ?>

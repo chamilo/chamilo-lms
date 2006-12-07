@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 10421 2006-12-07 16:33:46Z elixir_inter $
+<?php // $Id: exercice_submit.php 10422 2006-12-07 16:44:39Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -381,15 +381,34 @@ $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/Java
 }
 else
 {
-	?>
-	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-	<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	</head>
+	if(empty($charset))
+	{
+		$charset = 'ISO-8859-15';
+	}
+	header('Content-Type: text/html; charset='. $charset);	
 	
-	<body>
-	<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/frames.css" />
+	@$document_language = Database::get_language_isocode($language_interface);
+	if(empty($document_language))
+	{
+	  //if there was no valid iso-code, use the english one
+	  $document_language = 'en';
+	}
+	
+	/*
+	 * HTML HEADER
+	 */
+
+?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $document_language; ?>" lang="<?php echo $document_language; ?>">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+</head>
+
+<body>
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/frames.css" />
 
 <?php
 }

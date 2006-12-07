@@ -187,8 +187,6 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 ==============================================================================
 */
 
-
-
 if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout))
 {
     // uid is in session => login already done, continue with this value
@@ -444,6 +442,8 @@ else // continue with the previous values
 
 if (isset($cidReset) && $cidReset) // course session data refresh requested or empty data
 {
+	api_session_unregister('id_session');
+	api_session_unregister('session_name');
     if ($cidReq)
     {
     	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -633,7 +633,16 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 		        	$_courseUser['role'] = 'Professor';
 		            $is_courseMember     = true;
 		            $is_courseTutor      = true;
-		            $is_courseAdmin      = true;
+		            
+		            $sql="SELECT status FROM `".$_configuration['main_database']."`.`user` WHERE user_id = ".$_user['user_id']."";
+
+		  			$result=api_sql_query($sql);
+		  			if(mysql_result($result,0,0)==1){
+		  				$is_courseAdmin = true;
+		  			}
+		  			else{
+		  				$is_courseAdmin = false;
+		  			}	           
 
 		            api_session_register('_courseUser');
 		        }
@@ -777,4 +786,5 @@ if(isset($_cid))
 	$sql="UPDATE $tbl_course SET last_visit=NOW() WHERE code='$_cid'";
 	api_sql_query($sql,__FILE__,__LINE__);
 }
+
 ?>

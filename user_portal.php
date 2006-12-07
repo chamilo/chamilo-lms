@@ -317,7 +317,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 	}
 
 	// get the list of sessions where the user is subscribed as student
-	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 5 as s
+	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 							FROM session_rel_user, session
 							WHERE id_session=id AND id_user=$user_id ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 	
@@ -326,7 +326,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 	$Sessions = array_merge($Sessions , api_store_result($result));
 	
 	// get the list of sessions where the user is subscribed as coach in a course
-	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 2 as s
+	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 							FROM $tbl_session as session
 							INNER JOIN $tbl_session_course as session_rel_course
 								ON session_rel_course.id_coach = $user_id
@@ -338,7 +338,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 	$Sessions = array_merge($Sessions , $sessionIsCoach);
 	
 	// get the list of sessions where the user is subscribed as coach
-	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end, 2 as s
+	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 							FROM $tbl_session as session
 							WHERE session.id_coach = $user_id
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
@@ -378,11 +378,11 @@ function get_personal_session_course_list($user_id, $list_sessions)
 	foreach($Sessions as $enreg)
 	{
 		$id_session = $enreg['id'];
-		$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name
+		$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')
 									 FROM $tbl_session_course as session_course
 									 INNER JOIN $tbl_course AS course
 									 	ON course.code = session_course.course_code
-									 LEFT JOIN $tbl_user as user
+									 INNER JOIN $tbl_user as user
 										ON user.user_id = session_course.id_coach
 									 INNER JOIN $tbl_session_course_user
 										ON $tbl_session_course_user.id_session = $id_session
@@ -391,13 +391,14 @@ function get_personal_session_course_list($user_id, $list_sessions)
 										ON session_course.id_session = session.id
 									 WHERE session_course.id_session = $id_session
 									 ORDER BY i";
-
+	
 		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-
+				
 		while ($result_row = mysql_fetch_array($course_list_sql_result))
 		{
 			$key = $result_row['id_session'].' - '.$result_row['k'];
-			$result_row['s'] = $enreg['s'];
+			$result_row['s'] = $result_row['14'];
+			
 			if(!isset($personal_course_list[$key]))	
 			{
 				$personal_course_list[$key] = $result_row;

@@ -47,23 +47,25 @@
 */
 // name of the language file that needs to be included 
 $language_file = "link";
+
+// including libraries
 include("../inc/global.inc.php");
+include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
+include("linkfunctions.php");
+
+
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();
 
+// Database Table definitions
 $tbl_link = Database::get_course_table(TABLE_LINK);
 $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
-$nameTools = get_lang("Links");
-
 //statistics
-include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 event_access_tool(TOOL_LINK);
 
-Display::display_header($nameTools,"Links");
-
-$is_allowedToEdit 	= is_allowed_to_edit();
+Display::display_header('', 'Links');
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -81,13 +83,13 @@ function MM_popupMsg(msg) { //v1.0
 /*
 -----------------------------------------------------------
 	Introduction section
-	(editable by course admins)
 -----------------------------------------------------------
 */
 Display::display_introduction_section(TOOL_LINK);
 
-include("linkfunctions.php");
 
+// @todo change the $_REQUEST into $_POST or $_GET
+// @todo remove this code
 $link_submitted = $_POST["submitLink"];
 $category_submitted = $_POST["submitCategory"];
 $urlview = $_GET["urlview"];
@@ -106,10 +108,16 @@ $action = $_REQUEST['action'];
 $category_title = $_REQUEST['category_title'];
 $submitCategory = $_REQUEST['submitCategory'];
 
-// treating the post date by calling the relevant function depending of the action querystring.
+
+/*
+-----------------------------------------------------------
+	Action Handling
+-----------------------------------------------------------
+*/
 switch($_GET['action'])
 {
-	case "addlink":			if($link_submitted)
+	case "addlink":
+		if($link_submitted)
 							{
 								if(!addlinkcategory("link"))	// here we add a link
 								{
@@ -117,7 +125,8 @@ switch($_GET['action'])
 								}
 							}
 							break;
-	case "addcategory":		if($category_submitted)
+	case "addcategory":
+		if($category_submitted)
 							{
 								if(!addlinkcategory("category"))	// here we add a category
 								{
@@ -125,39 +134,38 @@ switch($_GET['action'])
 								}
 							}
 							break;
-	case "importcsv":		if($submitImport) import_csvfile();
+	case "importcsv":
+		if($_POST["submitImport"])
+		{
+			import_csvfile();
+		}
 							break;
-	case "deletelink":		deletelinkcategory("link"); // here we delete a link
+	case "deletelink":
+		deletelinkcategory("link"); // here we delete a link
 							break;
-	case "deletecategory":	deletelinkcategory("category"); // here we delete a category
+	case "deletecategory":
+		deletelinkcategory("category"); // here we delete a category
 							break;
-	case "editlink":		editlinkcategory("link"); // here we edit a link
+	case "editlink":
+		editlinkcategory("link"); // here we edit a link
 							break;
-	case "editcategory":	editlinkcategory("category"); // here we edit a category
+	case "editcategory":
+		editlinkcategory("category"); // here we edit a category
 							break;
-	case "visible":			change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
+	case "visible":
+		change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
 							break;	
-	case "invisible":		change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
+	case "invisible":
+		change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
 							break;								
 }
 
-if($is_allowedToEdit)
+
+
+
+
+if (is_allowed_to_edit())
 {
-	echo "<ul>\n";
-	echo "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&amp;category=".$category."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a></li>\n",
-		"<li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a></li>\n",
-	   /* "<li><a href=\"".$_SERVER['PHP_SELF']."?action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a></li>\n", // RH*/
-		"</ul>\n\n";
-
-	//displaying the error / status messages if there is one
-	if (!empty($catlinkstatus) or !empty($msgErr))
-	{
-			Display :: display_normal_message($catlinkstatus.$msgErr);
-
-		unset($catlinkstatus);
-		unset($msgErr);
-	}
-
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
 	// has been submitted yet, hence !isset($submitLink)
 	if (($_GET['action']=="addlink" or $_GET['action']=="editlink") and !$_POST['submitLink'])
@@ -246,27 +254,7 @@ if($is_allowedToEdit)
 		     "</form>";
 		echo get_lang('CsvExplain');
 	}*/
-	echo "<hr/>";
 }
-
-
-//making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
-//number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
-$resultcategories=api_sql_query($sqlcategories);
-$aantalcategories = @mysql_num_rows($resultcategories);
-echo "<a href=\"".$_SERVER['PHP_SELF']."?urlview=";
-	for($j = 1; $j <= $aantalcategories; $j++)
-	{
-	echo "0";
-	}
-echo "\">$shownone</a>";
-echo " | <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
-	for($j = 1; $j <= $aantalcategories; $j++)
-	{
-	echo "1";
-	}
-echo "\">$showall</a>";
 
 
 if (isset($down))
@@ -277,6 +265,40 @@ if (isset($up))
 	{
 	movecatlink($up);
 	}
+
+
+
+
+/*
+-----------------------------------------------------------
+	Action Links
+-----------------------------------------------------------
+*/
+if(is_allowed_to_edit())
+{
+	echo Display::return_icon('linksnew.gif')." <a href=\"".$_SERVER['PHP_SELF']."?action=addlink&amp;category=".$category."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
+	echo Display::return_icon('folder_new.gif')." <a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
+	   /* "<a href=\"".$_SERVER['PHP_SELF']."?action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
+}
+//making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
+//number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
+$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
+$resultcategories=api_sql_query($sqlcategories);
+$aantalcategories = @mysql_num_rows($resultcategories);
+echo Display::return_icon('remove.gif')." <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+for($j = 1; $j <= $aantalcategories; $j++)
+{
+	echo "0";
+}
+echo "\">$shownone</a>";
+echo Display::return_icon('add.gif')." <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+for($j = 1; $j <= $aantalcategories; $j++)
+{
+echo "1";
+}
+echo "\">$showall</a>";
+
+
 
 $sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 $resultcategories=api_sql_query($sqlcategories);
@@ -318,7 +340,7 @@ while ($myrow=@mysql_fetch_array($resultcategories))
 		$newurlview[$i]="0";
 		echo "<tr>",
 			"<td bgcolor=\"#e6e6e6\"><b>- <a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".htmlentities($myrow["category_title"])."</a></b><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
-		if ($is_allowedToEdit)
+		if (is_allowed_to_edit())
 		{
 		showcategoryadmintools($myrow["id"]);
 		}
@@ -337,7 +359,7 @@ while ($myrow=@mysql_fetch_array($resultcategories))
 		echo "\">".htmlentities($myrow["category_title"])."</a></b><br>&nbsp;&nbsp;&nbsp;";
 		echo $myrow["description"];
 
-		if ($is_allowedToEdit)
+		if (is_allowed_to_edit())
 		{
 			showcategoryadmintools($myrow["id"]);
 		}

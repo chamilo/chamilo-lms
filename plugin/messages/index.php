@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10243 2006-11-28 15:34:50Z pcool $
+<?php // $Id: index.php 10419 2006-12-07 15:55:34Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -38,38 +38,6 @@ if(api_get_user_id())
 		"INDEX ( `id`,`id_receiver` )". 
 		") TYPE = MYISAM ;";
 	@api_sql_query($query,__FILE__,__LINE__);
-	?>
-<style type="text/css">
-		#box.aviso
-			{
-				
-				position:absolute;
-				width:200px;
-				height:60px;
-				z-index:3;				
-				
-				visibility:hidden;
-				top:85px;
-				left:10px;
-				margin: 0px;
-				padding: 0px;
-			}
-		#table.content
-		{
-		border: 1px solid #4171B5;
-		height:60px;
-		background-color:#DBEAF5;
-		filter:alpha(opacity=90);
-		opacity: 0.90;
-		}
-		#ref.content
-		{
-			text-align:center;
-		}
-
-
-	</style>
-<?php
 
 	echo '<script language="javascript" type="text/javascript" src="'.api_get_path(WEB_PLUGIN_PATH).'messages/cookies.js"> </script> ';
 	echo '<script language="javascript" type="text/javascript">set_url("'.api_get_path(WEB_PLUGIN_PATH).'messages/notify.php") ; notificar()</script> ';

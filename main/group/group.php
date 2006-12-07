@@ -53,9 +53,9 @@ $nameTools = get_lang("GroupManagement");
 	Libraries
 -----------------------------------------------------------
 */
-include_once (api_get_path(LIBRARY_PATH).'course.lib.php'); //necessary
+include_once (api_get_path(LIBRARY_PATH).'course.lib.php'); 
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php'); //necessary for statistics
+include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php'); 
 
 //Create default category if it doesn't exist when group categories aren't allowed
 if( api_get_setting('allow_group_categories') == 'false')
@@ -185,21 +185,19 @@ if (api_is_allowed_to_edit())
 		}
 	}
 	// Show admin-panel
-	echo '<ul>';
-	echo '<li><a href="group_creation.php"><img src="../img/group_add_big.gif" align="absbottom">&nbsp;'.get_lang("NewGroupCreate").'</a></li>';
+	echo '<a href="group_creation.php"><img src="../img/group_add_big.gif" align="absbottom">&nbsp;'.get_lang("NewGroupCreate").'</a>&nbsp;';
 	if (get_setting('allow_group_categories') == 'true')
 	{
-		echo '<li><a href="group_category.php?action=add_category">'.get_lang("AddCategory").'</a></li>';
+		echo '<a href="group_category.php?action=add_category">'.get_lang("AddCategory").'</a>&nbsp;';
 	}
 	else
 	{
-		echo '<li><a href="group_category.php?id=2"><img src="../img/edit_group.gif" align="absbottom">&nbsp;'.get_lang('PropModify').'</a></li>';
+		echo '<a href="group_category.php?id=2"><img src="../img/edit_group.gif" align="absbottom">&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
 	}
 	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0)
 	{
-		echo '<li><a href="group_overview.php"><img src="../img/group_view.gif" align="absbottom">&nbsp;'.get_lang('GroupOverview').'</a></li>';
+		echo '<a href="group_overview.php"><img src="../img/group_view.gif" align="absbottom">&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
 	}
-	echo '</ul>';
 }
 $group_cats = GroupManager :: get_categories();
 if (get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)

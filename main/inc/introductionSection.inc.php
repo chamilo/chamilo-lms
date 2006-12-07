@@ -91,6 +91,7 @@ if ($intro_editAllowed)
 			{
 				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".mysql_real_escape_string($intro_content)."'";
 				api_sql_query($sql,__FILE__,__LINE__);
+				Display::display_confirmation_message('IntroductionTextUpdated');
 			}
 			else
 			{
@@ -108,6 +109,7 @@ if ($intro_editAllowed)
 	if($intro_cmdDel)
 	{
 		api_sql_query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'",__FILE__,__LINE__);
+		Display::display_confirmation_message('IntroductionTextDeleted');
 	}
 }
 

@@ -1,26 +1,30 @@
 <?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) Dokeos S.A.
-	Copyright (c) Ghent University (UGent)
-	Copyright (c) Universite catholique de Louvain (UCL)
-	Copyright (c) Patrick Cool
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    For a full list of contributors, see documentation/credits.html
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
 
-	See the GNU General Public License for more details.
+    Contact: 
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
+*/
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
+/**
+*	@package dokeos.studentpublications
+* 	@author Thomas, Hugues, Christophe - original version
+* 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
+* 	@author Roan Embrechts, code refactoring and virtual course support
+* 	@version $Id: work.php 10418 2006-12-07 15:48:25Z pcool $
+* 
+* 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
 /**
 ==============================================================================
@@ -65,12 +69,6 @@
  *
  *	We now use the show_score field since this is not used.
  *
- *	@author Thomas, Hugues, Christophe - original version
- *	@author Patrick Cool, ability for course admins to specify wether uploaded documents
- *		are visible or invisible by default.
- *	@author Roan Embrechts, code refactoring and virtual course support
- *	@package dokeos.work
- * @todo refactor more code into functions
 ==============================================================================
  */
 
@@ -82,46 +80,54 @@
 
 // name of the language file that needs to be included 
 $language_file = "work";
-include('../inc/global.inc.php');
+
+// Section (for the tabs)
 $this_section=SECTION_COURSES;
 
+// @todo why is this needed? 
 //session
 if(isset($_GET['id_session']))
+{
 	$_SESSION['id_session'] = $_GET['id_session'];
-	
-api_protect_course_script();
+}
 
+	
 /*
 -----------------------------------------------------------
-	Libraries
+	Including necessary files
 -----------------------------------------------------------
 */ 
-//the main_api.lib.php, database.lib.php and display.lib.php
-//libraries are included by default
+include('../inc/global.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . "course.lib.php");
 include_once(api_get_path(LIBRARY_PATH) . "debug.lib.inc.php");
 include_once(api_get_path(LIBRARY_PATH) . "events.lib.inc.php");
 include_once('work.lib.php');
 /*
 -----------------------------------------------------------
-	Constants and variables
+	Table definitions
 -----------------------------------------------------------
 */
 $tool_name = get_lang(TOOL_STUDENTPUBLICATION);
 $main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+$work_table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+$iprop_table 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+/*
+-----------------------------------------------------------
+	Constants and variables
+-----------------------------------------------------------
+*/
+
 
 $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $_SESSION['id_session']);
-
-$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $currentCourseRepositorySys =  api_get_path(SYS_COURSE_PATH) . $_course["path"]."/";
 $currentCourseRepositoryWeb =  api_get_path(WEB_COURSE_PATH) . $_course["path"]."/";
 $currentUserFirstName       = $_user['firstName'];
 $currentUserLastName        = $_user['lastName'];
 
-$authors = $_REQUEST['authors'];
+$authors = $_POST['authors'];
 $delete = $_REQUEST['delete'];
 $description = $_REQUEST['description'];
 $display_tool_options = $_REQUEST['display_tool_options'];
@@ -144,8 +150,16 @@ $id = (int) $_REQUEST['id'];
 $link_target_parameter = ""; //or e.g. "target=\"_blank\"";
 $always_show_tool_options = false;
 $always_show_upload_form = false;
-if ($always_show_tool_options) $display_tool_options = true;
-if ($always_show_upload_form) $display_upload_form = true;
+if ($always_show_tool_options)
+{
+	$display_tool_options = true;
+}
+if ($always_show_upload_form)
+{
+	$display_upload_form = true;
+}
+
+api_protect_course_script();
 
 /*
 -----------------------------------------------------------
@@ -240,7 +254,6 @@ else
 /*
 -----------------------------------------------------------
 	Introduction section
-	(editable by course admins)
 -----------------------------------------------------------
 */
 Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
@@ -552,13 +565,13 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 	$message = get_lang('DocAdd');
     if ($uploadvisibledisabled && !$is_allowed_to_edit)
 	{
-		$message .= "<br>".get_lang('_doc_unvisible')."<br>";
+		$message .= "<br />".get_lang('_doc_unvisible')."<br />";
 	}
 
 	//stats
 	if(!$Id) { $Id = $insertId; }
     event_upload($Id);
-	$submit_success_message	= $message . "<br>\n";
+	$submit_success_message	= $message . "<br />\n";
 	Display::display_normal_message($submit_success_message);
 }
 

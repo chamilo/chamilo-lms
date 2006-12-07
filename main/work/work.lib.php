@@ -1,17 +1,26 @@
-<?php // $Id$
+<?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
-	Copyright (c) Dokeos S.A.
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    DOKEOS - elearning and course management software
+
+    For a full list of contributors, see documentation/credits.html
+   
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	See the GNU General Public License for more details.
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
+    See "documentation/licence.html" more details.
+ 
+    Contact: 
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
+*/
+
+/**
+*	@package dokeos.studentpublications
+* 	@author 
+* 	@version $Id$
 */
 
 function display_action_links($always_show_tool_options, $always_show_upload_form)
@@ -19,14 +28,17 @@ function display_action_links($always_show_tool_options, $always_show_upload_for
 	$display_output = "";
 	if (! $always_show_upload_form )
 	{
-		$display_output .= "<li><strong>" . "<a href=\"".$_SERVER['PHP_SELF']."?display_upload_form=true\">". get_lang("UploadADocument") . "</strong></a></li>";
+		$display_output .= "<a href=\"".$_SERVER['PHP_SELF']."?display_upload_form=true\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";
 	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit() )
 	{
-		$display_output .=	"<li><strong>" . "<a href=\"".$_SERVER['PHP_SELF']."?display_tool_options=true\">" . get_lang("EditToolOptions") . "</a>" . "</strong></a></li>";
+		$display_output .=	"<a href=\"".$_SERVER['PHP_SELF']."?display_tool_options=true\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";
 	}
 	
-	if ($display_output != "") echo "<ul>$display_output</ul>";
+	if ($display_output != "")
+	{
+		echo $display_output;
+	}
 }
 
 /**
@@ -102,13 +114,13 @@ function display_default_visibility_form($uploadvisibledisabled, $origin)
 	?>
 	<form method="post" action="<?php echo $_SERVER['PHP_SELF']."?origin=$origin"; ?>">
 	<tr><td align="left">
-		<strong><?php echo get_lang("_default_upload"); ?><br></strong>
+		<strong><?php echo get_lang("_default_upload"); ?><br /></strong>
 		<input class="checkbox" type="radio" name="uploadvisibledisabled" value="0"
 			<?php if($uploadvisibledisabled==0) echo "checked";  ?>>
-		<?php echo get_lang("_new_visible");?><br>
+		<?php echo get_lang("_new_visible");?><br />
 		<input class="checkbox" type="radio" name="uploadvisibledisabled" value="1"
 			<?php if($uploadvisibledisabled==1) echo "checked";  ?>>
-		<?php echo get_lang("_new_unvisible"); ?><br>
+		<?php echo get_lang("_new_unvisible"); ?><br />
 		<input type="submit" name="changeProperties" value="<?php echo get_lang("Ok"); ?>">
 	</td></tr>
 	</form>

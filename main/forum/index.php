@@ -158,11 +158,10 @@ if(is_array($all_groups))
 //if (api_is_allowed_to_edit() and !$_GET['action'])
 if (api_is_allowed_to_edit())
 {
-	echo '<a href="'.$_SERVER['PHP_SELF'].'?action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a>';
+	echo '<a href="'.$_SERVER['PHP_SELF'].'?action=add&amp;content=forumcategory"> '.Display::return_icon('forum_category_new.gif').' '.get_lang('AddForumCategory').'</a> ';
 	if (is_array($forum_categories_list))
 	{
-		echo ' | ';
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?action=add&amp;content=forum">'.get_lang('AddForum').'</a>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?action=add&amp;content=forum"> '.Display::return_icon('forum_new.gif').' '.get_lang('AddForum').'</a>';
 	}
 	//echo ' | <a href="forum_migration.php">'.get_lang('MigrateForum').'</a>';
 }
@@ -172,26 +171,26 @@ if (api_is_allowed_to_edit())
 	Display Forum Categories and the Forums in it
 ------------------------------------------------------------------------------------------------------
 */
-echo "<table width='100%'>\n";
+echo "<table class='data_table' width='100%'>\n";
 // Step 3: we display the forum_categories first
 foreach ($forum_categories_list as $forum_category_key => $forum_category)
 {
-	echo "\t<tr class=\"forum_category_header\">\n\t\t<td colspan=\"5\">";
+	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";
 	echo '<a href="viewforumcategory.php?forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).'</a><br />';
 	if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;')
 	{
 		echo '<span>'.prepare4display($forum_category['cat_comment']).'</span>';
 	}
-	echo "</td>\n";
+	echo "</th>\n";
 	if (api_is_allowed_to_edit())
 	{
-		echo "\t\t<td>";
+		echo "\t\t<th>";
 		echo "<a href=\"".$_SERVER['PHP_SELF']."?action=edit&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 		echo "<a href=\"".$_SERVER['PHP_SELF']."?action=delete&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForumCategory")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 		display_visible_invisible_icon('forumcategory', prepare4display($forum_category['cat_id']), prepare4display($forum_category['visibility']));
 		display_lock_unlock_icon('forumcategory',prepare4display($forum_category['cat_id']), prepare4display($forum_category['locked']));
 		display_up_down_icon('forumcategory',prepare4display($forum_category['cat_id']), $forum_categories_list);
-		echo "</td>\n";
+		echo "</th>\n";
 	}
 	echo "\t</tr>\n";
 	

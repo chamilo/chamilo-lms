@@ -220,13 +220,13 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 	// we are getting all the information about the current forum and forum category. 
 	// note pcool: I tried to use only one sql statement (and function) for this
 	// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-	echo "<table width='100%'>\n";
+	echo "<table class=\"data_table\" width='100%'>\n";
 	
 	// the forum category
-	echo "\t<tr class=\"forum_category\">\n\t\t<td colspan=\"6\">";
+	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
 	echo '<a href="index.php" '.class_visible_invisible($current_forum_category['visibility']).'>'.prepare4display($current_forum_category['cat_title']).'</a><br />';
 	echo '<span>'.prepare4display($current_forum_category['cat_comment']).'</span>';
-	echo "</td>\n";
+	echo "</th>\n";
 	echo "\t</tr>\n";
 	
 	// the forum 

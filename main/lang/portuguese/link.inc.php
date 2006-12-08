@@ -11,7 +11,6 @@ $langLinkDel = "Apagar ligação";
 $langLinkDeleted = "A ligação foi apagada";
 $langLinkDelconfirm = "Quer mesmo apagar esta ligação?";
 $langAllLinksDel = "Apagar todas as ligações desta categoria";
-$langCategory = "Categoria";
 $langCategoryName = "Nome da categoria";
 $langCategoryAdd = "Acrescentar categoria";
 $langCategoryAdded = "A categoria foi acrescentada";

@@ -28,7 +28,6 @@ $langVideo = "Video";
 $langWorks = "Studentenpublicaties";
 $langCourseProgram = "Takenprogramma";
 $langAnnouncements = "Aankondigingen";
-$langUsers = "Gebruikers";
 $langForums = "Forums";
 $langExercices = "Oefeningen";
 $langStatistics = "Statistieken";

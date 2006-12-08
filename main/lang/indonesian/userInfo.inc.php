@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langUsers = "User";
 $langLineNumber = "Jumlah Baris";
 $langLine = "baris";
 $langLines = "baris";

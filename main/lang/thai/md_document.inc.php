@@ -28,7 +28,6 @@ $langRights = "ใช้สิทธิ์ Usage Rights";
 $langRightsTip = "อธิบายความ describe in words";
 $langVersion = "รุ่น Version";
 $langVersionTip = "หรือคำบรรยาย number or description";
-$langStatus = "สถานะ Status";
 $langStatusTip = "เลือกจากรายการ select from list";
 $langCreatedSize = "สร้างแล้ว ขนาด Created, size";
 $langCreatedSizeTip = "พศ.-เดือน-วัน when created, size in octets (bytes)";

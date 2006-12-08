@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langEnter2passToChange = "Pre zmenenie zadajte svoje nové heslo dva krát. Inak nechajte polí&#269;ka prázdne.";
-$langOfficialCode = "Oficiálny pridelený kód";
 $langDelImage = "Odstráni&#357; obrázok";
 $langUpdateImage = "Zmeni&#357; obrázok";
 $langCourseManager = "Lektor";
@@ -10,7 +9,6 @@ $lang_enter_email_and_well_send_you_password = "Zadajte e-mailovú adresu, ktorú 
 $langLogin = "Prihlásenie";
 $langTutor = "Tútor";
 $UserPicture = "Obrázok";
-$langUsers = "Užívatelia";
 $langProfileReg = "Váš nový profil bol uložený";
 $langModifProfile = "Upravi&#357; profil";
 $langConfirmation = "Potvrdenie hesla";

@@ -18,7 +18,6 @@ $langVideo = "Video";
 $langWorks = "Studentu publik&#257;cijas";
 $langCourseProgram = "Kursa programma";
 $langAnnouncements = "Pazi&#326;ojumi";
-$langUsers = "Lietot&#257;ji";
 $langForums = "Forumi";
 $langExercices = "Kontroldarbi";
 $langStatistics = "Izsekošana";

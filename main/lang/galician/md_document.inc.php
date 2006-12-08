@@ -27,7 +27,6 @@ $langRights = "Dereitos de uso";
 $langRightsTip = "describir con palabras";
 $langVersion = "Versión";
 $langVersionTip = "número ou descrición";
-$langStatus = "Estado";
 $langStatusTip = "seleccione da lista";
 $langCreatedSize = "Creado, tamaño";
 $langCreatedSizeTip = "AAAA-MM-DD cando se creou, tamaño en octetos (bytes)";

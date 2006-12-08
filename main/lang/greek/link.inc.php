@@ -11,7 +11,6 @@ $langLinkDel = "Διαγραφή συνδέσμου";
 $langLinkDeleted = "Ο σύνδεσμος διαγράφτηκε";
 $langLinkDelconfirm = "Θέλετε να διαγράψετε το σύνδεσμο;";
 $langAllLinksDel = "Διαγραφή όλων συνδέσμων αυτής της κατηγορίας";
-$langCategory = "Κατηγορία";
 $langCategoryName = "Όνομα κατηγορίας";
 $langCategoryAdd = "Προσθήκη κατηγορίας";
 $langCategoryAdded = "Η κατηγορία προστέθηκε";

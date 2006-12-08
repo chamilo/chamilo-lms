@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langUsers = "Deltagere";
 $langLineNumber = "Antal linier";
 $langLine = "linie";
 $langLines = "linier";

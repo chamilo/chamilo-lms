@@ -11,7 +11,6 @@ $langLinkDel = "Link dihapus";
 $langLinkDeleted = "Link tersebut telah dihapus";
 $langLinkDelconfirm = "Anda yakin akan menghapus link ini?";
 $langAllLinksDel = "Hapus semua link pada kategori ini ";
-$langCategory = "Kategori";
 $langCategoryName = "Nama Kategori";
 $langCategoryAdd = "Tambah kategori";
 $langCategoryAdded = "Kategori telah ditambahkan";

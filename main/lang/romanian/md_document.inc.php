@@ -27,7 +27,6 @@ $langRights = "Drepturi de utilizare";
 $langRightsTip = "descrie-ti in cuvinte";
 $langVersion = "Versiune";
 $langVersionTip = "numar sau descriere";
-$langStatus = "Status";
 $langStatusTip = "selectare din lista";
 $langCreatedSize = "Creat, marime";
 $langCreatedSizeTip = "AAAA-LL-ZZ creata, marime in octeti (biti)";

@@ -11,7 +11,6 @@ $langLinkDel = "Hivatkozás törlése";
 $langLinkDeleted = "A hivatkozás törölve lett";
 $langLinkDelconfirm = "El akarja távolítani ezt a hivatkozást ?";
 $langAllLinksDel = "Az összes hivatkozás törlése ebben a kategóriában ";
-$langCategory = "Kategória";
 $langCategoryName = "Kategória neve";
 $langCategoryAdd = "Kategória hozzáadása";
 $langCategoryAdded = "A kategória hozzá lett adva";

@@ -11,7 +11,6 @@ $langLinkDel = "Länk raderad";
 $langLinkDeleted = "Länken har raderats";
 $langLinkDelconfirm = "Vill du radera denna länk?";
 $langAllLinksDel = "Radera alla länkar i denna kategori";
-$langCategory = "Kategori";
 $langCategoryName = "Kategori namn";
 $langCategoryAdd = "Lägg till kategori";
 $langCategoryAdded = "Kategorin har lagts till.";

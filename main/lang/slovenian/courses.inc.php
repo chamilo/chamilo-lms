@@ -29,6 +29,7 @@ $langCourseList  = "Teèaji";
 $Subscribe = "Vpiši";
 $AlreadySubscribed = "Že vpisan";
 $CourseCategoryStored = "Kategorija teèaja je bila ustvarjena";
+$langWithoutTimeLimits = "Brez èasovnih omejitev";
 $lang_back_to_main_category_list = "Povratek na osnovni seznam kategorij";
 $langAdded = "Dodano";
 $langDeleted = "Odstranjeno";

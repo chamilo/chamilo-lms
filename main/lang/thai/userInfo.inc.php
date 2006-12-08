@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langUsers = "ผู้ใช้ในระบบ";
 $langLineNumber = "บรรทัดที่";
 $langLine = "บรรทัด";
 $langLines = "บรรทัด";

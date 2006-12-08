@@ -26,7 +26,6 @@ $langVideo = "Video";
 $langWorks = "Beadványok";
 $langCourseProgram = "Kurzus program";
 $langAnnouncements = "Hirdetmények";
-$langUsers = "Felhasználók";
 $langForums = "Fórumok";
 $langExercices = "Tesztek";
 $langStatistics = "Naplózás";

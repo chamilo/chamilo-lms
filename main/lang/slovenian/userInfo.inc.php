@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langUsers = "Uporabniki";
 $langLineNumber = "Število vrstic";
 $langLine = "vrstica";
 $langLines = "vrstic";

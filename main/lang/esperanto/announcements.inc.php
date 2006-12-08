@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Unue elektu uzulojn, al kiuj la mesa&#285;o estu send
 $Teachersubject = "Anonco sendita al studentoj ";
 $langMessages  = "Mesa&#285;oj ";
 $langMessageToSelectedUsers  = "Mesa&#285;oj al specifaj uzuloj a&#365; grupoj ";
-$langUsers  = "uzuloj ";
 $langIntroText  = "Unue el la maldekstraflanka listo elektu grupojn (kun komenclitero G) a&#365; uzulojn, al kiuj la mesa&#285;o estas sendota. Uzu la stirklavon por samtempe indiki plurajn uzulojn. Sekve klaku sur la butonon \'>>\'.";
 $langDown = "Malsupren ";
 $langMsgSent = "La mesa&#285;o estas sendita. ";

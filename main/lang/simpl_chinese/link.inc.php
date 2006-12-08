@@ -11,7 +11,6 @@ $langLinkDel = "删除链接";
 $langLinkDeleted = "链接已经被删除";
 $langLinkDelconfirm = "你要删除这个链接吗?";
 $langAllLinksDel = "删除这个分类中的所有链接";
-$langCategory = "分类";
 $langCategoryName = "分类名称";
 $langCategoryAdd = "添加分类";
 $langCategoryAdded = "分类已添加.";

@@ -11,4 +11,7 @@ $ThisBlog = "Ta blog";
 $NewPost = "Nov èlanek";
 $TaskManager = "Upravljanje opravil";
 $MemberManager = "Upravljanje z uporabniki";
+$blog_management = "Upravljanje blogov";
+$langAuthor = "Avtor";
+$langWelcome = "Dobrodošli !";
 ?>

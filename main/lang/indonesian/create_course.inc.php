@@ -26,7 +26,6 @@ $langVideo = "Video";
 $langWorks = "Tugas-tugas";
 $langCourseProgram = "Program Mata Kuliah ";
 $langAnnouncements = "Pengumuman";
-$langUsers = "User";
 $langForums = "Forum";
 $langExercices = "Latihan";
 $langStatistics = "Statistik";

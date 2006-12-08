@@ -11,7 +11,6 @@ $langLinkDel = "Sterge linkul";
 $langLinkDeleted = "linkul a fost sters.";
 $langLinkDelconfirm = "Doresti sa stergi acest link?";
 $langAllLinksDel = "Sterge toate linkurile din aceasta categorie";
-$langCategory = "Categorie";
 $langCategoryName = "Numele categoriei";
 $langCategoryAdd = "Adauga o categorie";
 $langCategoryAdded = "Categoria a fost adaugata";

@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Néhány felhasználót ki kell választania.";
 $Teachersubject = "Üzenet elküdve a diákjainak ";
 $langMessages  = "Üzenetek";
 $langMessageToSelectedUsers  = "Üzenetek a kiválasztott felhasználóknak";
-$langUsers  = "felhasználók";
 $langIntroText  = "Üzenet küldéséhez válasszon ki felhasználói csoportokat (elöl egy G jelöli)
  vagy egyéni felhasználókat a bal oldali listából.";
 $langDown = "lent";

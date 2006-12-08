@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Es müssen einige Nutzer ausgewählt werden.";
 $Teachersubject = "Mitteilung wurde an Teilnehmer verschickt";
 $langMessages  = "Mitteilungen";
 $langMessageToSelectedUsers  = "Mitteilung an ausgewählte Teilnehmer";
-$langUsers  = "Nutzer";
 $langIntroText  = "Um eine Mitteilung zu verschicken, wählen Sie Gruppen von Nutzern (mit einem <i>G</i> gekennzeichnet) oder einzelne Nutzer aus der Liste auf der linken Seite aus.";
 $langDown = "Nach unten";
 $langMsgSent = "Die Mitteilung wurde an die ausgewählten Teilnehmer gesandt.";

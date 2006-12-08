@@ -11,7 +11,6 @@ $langVideo = "Video";
 $langWorks = "Publikácie študentov";
 $langCourseProgram = "Program kurzu";
 $langAnnouncements = "Oznámenia";
-$langUsers = "Užívatelia";
 $langForums = "Fórum";
 $langExercices = "Testy";
 $langStatistics = "Štatistika";

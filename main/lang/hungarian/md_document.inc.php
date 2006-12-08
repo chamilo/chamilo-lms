@@ -41,7 +41,6 @@ $langRights = "Használati jogok";
 $langRightsTip = "leírás szavakkal";
 $langVersion = "Verzió";
 $langVersionTip = "szám vagy leírás";
-$langStatus = "Állapot";
 $langStatusTip = "kiválasztás a listából";
 $langCreatedSize = "Létrehozva, méret";
 $langCreatedSizeTip = "YYYY-MM-DD mikor jött létre, méret (bájtokban)";

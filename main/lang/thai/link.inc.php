@@ -11,7 +11,6 @@ $langLinkDel = "ลบรายการเชื่อมโยง ";
 $langLinkDeleted = "ลบการเชื่อมโยงแล้ว";
 $langLinkDelconfirm = "คุณต้องการที่จะลบการเชื่อมโยงนี้";
 $langAllLinksDel = "ลบการเชื่อมโยงในประเภทนี้ทั้งหมด";
-$langCategory = "ประเภท";
 $langCategoryName = "ชือประเภท";
 $langCategoryAdd = "เพิ่มประเภท";
 $langCategoryAdded = "เพิ่มประเภทแล้ว";

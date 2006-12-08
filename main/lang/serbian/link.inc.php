@@ -11,7 +11,6 @@ $langLinkDel = "Obriši link";
 $langLinkDeleted = "Link je obrisan";
 $langLinkDelconfirm = "Da li želite da obrišete ovaj link?";
 $langAllLinksDel = "Obriši sve linkove iz ove kategorije";
-$langCategory = "Kategorija";
 $langCategoryName = "Ime kategorije";
 $langCategoryAdd = "Dodaj kategoriju";
 $langCategoryAdded = "Kategorija je dodata.";

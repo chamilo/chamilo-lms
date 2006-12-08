@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langUsers = "Användare";
 $langLineNumber = "Radnummer";
 $langLine = "rad";
 $langLines = "rader";

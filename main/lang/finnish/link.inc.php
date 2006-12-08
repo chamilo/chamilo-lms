@@ -11,7 +11,6 @@ $langLinkDel = "Linkki on poistettu";
 $langLinkDeleted = "Linkki on poistettu";
 $langLinkDelconfirm = "Haluatko poistaa t‰m‰n linkin?";
 $langAllLinksDel = "Poista kaikki linkit t‰st‰ aihealueesta";
-$langCategory = "Aihealue";
 $langCategoryName = "Aihealueen nimi";
 $langCategoryAdd = "Lis‰‰ aihealue";
 $langCategoryAdded = "Aihealue on lis‰tty";

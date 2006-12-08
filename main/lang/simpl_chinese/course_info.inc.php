@@ -88,5 +88,6 @@ $langDescription = "简介";
 $langCourseVisibilityClosed = "完全关闭; 课程仅对课程管理员开放访问.";
 $CourseVisibilityClosed = "关闭 －仅允许管理员和助教访问这门课程";
 $CourseVisibilityModified = "修改 (角色 - 权限系统有更多详细设定)";
+$OrInTime = "&#25110;&#22312;";
 $CourseRegistrationPassword = "&#35838;&#31243;&#27880;&#20876;&#23494;&#30721;";
 ?>

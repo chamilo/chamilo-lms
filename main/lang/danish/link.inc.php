@@ -11,7 +11,6 @@ $langLinkDel = "Link er slettet";
 $langLinkDeleted = "Linket er ændret";
 $langLinkDelconfirm = "Vil du slette dette link?";
 $langAllLinksDel = "Slet alle links i denne kategori?";
-$langCategory = "Kategori";
 $langCategoryName = "Kategorinavn";
 $langCategoryAdd = "Tilføj en kategori";
 $langCategoryAdded = "Kategorien er tilføjet";

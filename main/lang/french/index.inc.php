@@ -1,8 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langInvalidId = "Cet identifiant n\'est pas valide. Si vous n\'êtes pas encore inscrit,
-remplissez le <a href=\'claroline/auth/inscription.php\'>formulaire d\'inscription</a></font color>";
+$langInvalidId = "Cet identifiant n\'est pas valide.";
 $langWelcome = "cours sont en libre accès ci-dessous. Les autres cours existants
 nécessitent un identifiant et un mot de passe que l\'on peut
 obtenir en cliquant sur la mention \'inscription\'. Il est possible aux

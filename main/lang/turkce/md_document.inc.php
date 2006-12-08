@@ -27,7 +27,6 @@ $langRights = "Kullan&#305;m Haklar&#305;";
 $langRightsTip = "describe in words";
 $langVersion = "Version";
 $langVersionTip = "number or description";
-$langStatus = "Durum";
 $langStatusTip = "listeden seç";
 $langCreatedSize = "Olu&#351;turuldu, boyutu";
 $langCreatedSizeTip = "YYYY-MM-DD when created, size in octets (bytes)";

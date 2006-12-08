@@ -37,7 +37,6 @@ $langRights = "Gebruiksvoorwaarden";
 $langRightsTip = "omschrijf met woorden";
 $langVersion = "Versie";
 $langVersionTip = "getal of omschrijving";
-$langStatus = "Status";
 $langStatusTip = "kies uit de lijst";
 $langCreatedSize = "Gemaakt op, grootte";
 $langCreatedSizeTip = "gemaakt op JJJJ-MM-DD, grootte in bytes";

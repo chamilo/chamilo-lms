@@ -28,6 +28,7 @@ $langCourseList  = "Courses";
 $Subscribe = "Subscribe";
 $AlreadySubscribed = "Already subscribed";
 $CourseCategoryStored = "Course category is created";
+$langWithoutTimeLimits = "Without time limits";
 $lang_back_to_main_category_list = "Back to the main category list";
 $langAdded = "Added";
 $langDeleted = "Deleted";

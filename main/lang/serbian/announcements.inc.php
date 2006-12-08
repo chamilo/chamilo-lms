@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Morate selektovati neke korisnike.";
 $Teachersubject = "Poruka poslata vašim polaznicima.";
 $langMessages  = "Poruke";
 $langMessageToSelectedUsers  = "Poruke selektovanim korisnicima";
-$langUsers  = "korisnici";
 $langIntroText  = "Da biste poslali poruku, selektujte grupe korisnika (obeležene sa G napred) ili po jednog korisnika sa liste levo.";
 $langDown = "dole";
 $langMsgSent = "Poruka je poslata selektovanim polaznicima";

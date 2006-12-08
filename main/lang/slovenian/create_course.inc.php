@@ -26,7 +26,6 @@ $langVideo = "Video";
 $langWorks = "Objave teèajnikov";
 $langCourseProgram = "Program teèaja";
 $langAnnouncements = "Obvestila";
-$langUsers = "Uporabniki";
 $langForums = "Forumi";
 $langExercices = "Vaje";
 $langStatistics = "Statistike";

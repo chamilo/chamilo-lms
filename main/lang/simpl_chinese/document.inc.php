@@ -67,6 +67,7 @@ $langTocDown  = "向下";
 $langTocUp  = "向上";
 $lang_cut_paste_link = "没有框架";
 $langCreatePath = "新建路径";
+$langOogieConversionPowerPoint = "Oogie : PowerPoint &#36716;&#25442;&#21151;&#33021;";
 $langAddMetadata = "查看/编辑元数据";
 $langGoMetadata = "转到";
 $langQuotaForThisCourseIs = "这门课程的磁盘配额是";

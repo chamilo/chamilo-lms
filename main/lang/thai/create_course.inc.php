@@ -26,7 +26,6 @@ $langVideo = "วิดีทัศน์";
 $langWorks = "ผลงาน/การบ้านของผู้เรียน";
 $langCourseProgram = "ปฏิทินการศึกษา";
 $langAnnouncements = "ประกาศ";
-$langUsers = "บัญชีชื่อผู้ใช้ในระบบ";
 $langForums = "กลุ่มอภิปราย";
 $langExercices = "แบบทดสอบ";
 $langStatistics = "ระบบการติดตามผล";

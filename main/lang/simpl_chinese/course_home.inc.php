@@ -17,4 +17,5 @@ $langCombinedCourse = "合并的课程";
 $ToolIsNowVisible = "工具当前可用.";
 $ToolIsNowHidden = "工具当前不可用.";
 $EditLink = "编辑链接";
+$blog_management = "&#21338;&#23458;&#31649;&#29702;";
 ?>

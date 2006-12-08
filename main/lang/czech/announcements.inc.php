@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Musíte zvolit užívatele.";
 $Teachersubject = "Správa byla odeslána Vašim student&#367;m";
 $langMessages  = "Správy";
 $langMessageToSelectedUsers  = "Správy vybraným uživatel&#367;m";
-$langUsers  = "uživatelé";
 $langIntroText  = "Pro odeslání správy zvolte skupinu uživatel&#367; (ozna&#269;enou s G na za&#269;átku) nebo jednotlivé uživatele se seznamu v levo.";
 $langDown = "dol&#367;";
 $langMsgSent = "Správa byla odeslána vybraným student&#367;m";

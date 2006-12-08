@@ -33,7 +33,6 @@ $langPleaseSelectUsers  = "Du må velge noen brukere";
 $Teachersubject = "Melding sendt til dine studenter";
 $langMessages  = "Meldinger";
 $langMessageToSelectedUsers  = "Meldinger til valgte brukere";
-$langUsers  = "brukere";
 $langDown = "ned";
 $langGrouplist = "liste grupper";
 $langSelectedGroups = "valgte grupper";

@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langUsers = "Потребител";
 $langLineNumber = "Номер на ред";
 $langLine = "ред";
 $langLines = "редове";

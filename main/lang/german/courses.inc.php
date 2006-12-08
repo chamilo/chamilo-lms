@@ -28,6 +28,7 @@ $langCourseList  = "Kurse";
 $Subscribe = "Belegen";
 $AlreadySubscribed = "Bereits belegt";
 $CourseCategoryStored = "Kurskategorie wurde angelegt";
+$langWithoutTimeLimits = "Ohne zeitliche Beschränkung";
 $lang_back_to_main_category_list = "Zurück zur Haupt-Kategorieliste";
 $langAdded = "Hinzugefügt";
 $langDeleted = "Gelöscht";

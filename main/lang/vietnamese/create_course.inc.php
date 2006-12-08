@@ -25,7 +25,6 @@ $langVideo = "Video";
 $langWorks = "Bài làm";
 $langCourseProgram = "Chương trình khoá học";
 $langAnnouncements = "Thông báo";
-$langUsers = "Người dùng";
 $langForums = "Diễn đàn";
 $langExercices = "Bài tập";
 $langStatistics = "Thống kê";

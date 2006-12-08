@@ -11,7 +11,6 @@ $langLinkDel = "Ba&#287;lant&#305; sil";
 $langLinkDeleted = "Ba&#287;lant&#305; silindi";
 $langLinkDelconfirm = "Ba&#287;lant&#305;y&#305; silmek istiyormusunuz?";
 $langAllLinksDel = "Bu kategorideki bütün ba&#287;lant&#305;lar&#305; sil";
-$langCategory = "Kategori";
 $langCategoryName = "Kategori ismi";
 $langCategoryAdd = "Kategori ekle";
 $langCategoryAdded = "Kategori eklendi.";

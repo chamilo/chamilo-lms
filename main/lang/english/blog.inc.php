@@ -11,4 +11,7 @@ $Subtitle = "Subtitle";
 $ThisBlog = "This blog";
 $NewPost = "New article";
 $TaskManager = "Task management";
+$blog_management = "Blog management";
+$langAuthor = "Author";
+$langWelcome = "Welcome !";
 ?>

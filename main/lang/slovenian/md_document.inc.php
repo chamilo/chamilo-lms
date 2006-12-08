@@ -27,7 +27,6 @@ $langRights = "Pravice uporabe";
 $langRightsTip = "opiši v besedah";
 $langVersion = "Verzija";
 $langVersionTip = "število ali opis";
-$langStatus = "Status";
 $langStatusTip = "izberi iz seznama";
 $langCreatedSize = "Ustvarjeno, velikost";
 $langCreatedSizeTip = "LLLL-MM-DD nastanka, velikost v oktetih (bytes)";

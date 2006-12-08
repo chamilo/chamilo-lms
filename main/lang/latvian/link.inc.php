@@ -11,7 +11,6 @@ $langLinkDel = "Dz&#275;st hipersaiti";
 $langLinkDeleted = "Hipersaite tika dz&#275;sta";
 $langLinkDelconfirm = "Vai J&#363;s v&#275;laties dz&#275;st šo hipersaiti?";
 $langAllLinksDel = "Dz&#275;st visas hipersaites šaj&#257; direktorij&#257;";
-$langCategory = "Kategorija";
 $langCategoryName = "Kategorijas nosaukums";
 $langCategoryAdd = "Pievienot kategoriju";
 $langCategoryAdded = "Kategorija tika pievienota.";

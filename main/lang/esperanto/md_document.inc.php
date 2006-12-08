@@ -27,7 +27,6 @@ $langRights = "Uzokondi&#265;oj ";
 $langRightsTip = "priskribu per vortoj ";
 $langVersion = "Versio ";
 $langVersionTip = "nombro a&#365; priskribo ";
-$langStatus = "Statuso ";
 $langStatusTip = "elektu el la listo ";
 $langCreatedSize = "Farite je, grando ";
 $langCreatedSizeTip = "farita je JJJJ-MM-TT, grando en bajtoj ";

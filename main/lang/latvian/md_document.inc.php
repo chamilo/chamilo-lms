@@ -27,7 +27,6 @@ $langRights = "Lietošanas noteikumi";
 $langRightsTip = "aprakstiet ar v&#257;rdiem";
 $langVersion = "Versija";
 $langVersionTip = "numurs vai apraksts";
-$langStatus = "Statuss";
 $langStatusTip = "izv&#275;lieties no saraksta";
 $langCreatedSize = "Izveidots, izm&#275;rs";
 $langCreatedSizeTip = "GGGG-MM-DD, kad tika izveidots, izm&#275;rs oktetos (baitos)";

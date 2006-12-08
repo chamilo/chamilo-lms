@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Jums j&#257;izv&#275;las vismaz daži lietot&#257;ji";
 $Teachersubject = "Zi&#326;a tika nos&#363;t&#299;ts J&#363;su studentiem";
 $langMessages  = "Zi&#326;as";
 $langMessageToSelectedUsers  = "Zi&#326;as atz&#299;m&#275;tajiem lietot&#257;jiem";
-$langUsers  = "lietot&#257;ji";
 $langIntroText  = "Lai nos&#363;t&#299;tu zi&#326;u, iez&#299;m&#275; lietot&#257;ju grupas (G priekš&#257;) vai atseviš&#311;iem lietot&#257;jiem no saraksta kreisaj&#257; pus&#275;";
 $langDown = "lej&#257;";
 $langMsgSent = "Zi&#326;a tika nos&#363;t&#299;ta atz&#299;m&#275;tajiem studentiem";

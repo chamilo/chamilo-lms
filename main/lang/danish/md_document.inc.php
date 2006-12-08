@@ -35,7 +35,6 @@ $langRights = "Rights";
 $langRightsTip = "beskriv i ord";
 $langVersion = "Version";
 $langVersionTip = "nummer eller beskrivelse";
-$langStatus = "Status";
 $langStatusTip = "vælg fra liste";
 $langCreatedSize = "Oprettet, størrelse";
 $langCreatedSizeTip = "oprettet ÅÅÅÅ-MM-DD , størrelse i bytes";

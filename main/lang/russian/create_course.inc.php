@@ -30,7 +30,6 @@ $langVideo = "Видео";
 $langWorks = "Задания";
 $langCourseProgram = "Программа курса";
 $langAnnouncements = "Объявления";
-$langUsers = "Пользователи";
 $langForums = "Форумы";
 $langExercices = "Тесты";
 $langStatistics = "Статистика";

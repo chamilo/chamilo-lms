@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Valitse ainakin yksi k‰ytt‰j‰";
 $Teachersubject = "Viesti l‰hetetty opiskelijoillesi";
 $langMessages  = "Viestit";
 $langMessageToSelectedUsers  = "Viesti valituille k‰ytt‰jille";
-$langUsers  = "k‰ytt‰j‰t";
 $langIntroText  = "L‰hett‰‰ksesi viesti, valitse ryhm‰ (merkitty G -kirjaimella) tai yksitt‰isi‰ k‰ytt‰ji‰ vasemmalla olevasta listasta.";
 $langDown = "alas";
 $langMsgSent = "Viesti on l‰hetetty valituille k‰ytt‰jille";

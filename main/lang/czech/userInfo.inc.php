@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langUsers = "Uživatelé";
 $langLineNumber = "&#268;íslo &#345;ádku";
 $langLine = "&#345;ádek";
 $langLines = "&#345;ádky";

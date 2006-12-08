@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Sélectionnez des membres.";
 $Teachersubject = "Message envoyé aux membres ";
 $langMessages  = "Messages";
 $langMessageToSelectedUsers  = "Message pour certains membres";
-$langUsers  = "membres";
 $langIntroText  = "Pour envoyer un message, sélectionnez des groupes (précédés de G) et/ou des membres dans la liste de gauche. CTRL+clic pour sélectionner plusieurs éléments. Puis cliquez sur la flèche \"droite\" entre les deux listes, introduisez votre message et validez.";
 $langDown = "descendre";
 $langMsgSent = "le message est envoyé aux membres sélectionnés.";

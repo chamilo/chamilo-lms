@@ -29,7 +29,6 @@ $langRights = "使用权限";
 $langRightsTip = "用语言描述";
 $langVersion = "版本";
 $langVersionTip = "数字或简介";
-$langStatus = "状态";
 $langStatusTip = "从列表中选择";
 $langCreatedSize = "已创建, 大小";
 $langCreatedSizeTip = "当创建年-月-日时, 大小应在八位字节内 ";

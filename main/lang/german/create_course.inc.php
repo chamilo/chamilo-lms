@@ -26,7 +26,6 @@ $langVideo = "Video";
 $langWorks = "Arbeiten von Kursteilnehmern";
 $langCourseProgram = "Kursprogramm";
 $langAnnouncements = "Ankündigung";
-$langUsers = "Benutzer/in";
 $langForums = "Foren";
 $langExercices = "Übungen";
 $langStatistics = "Statistiken";

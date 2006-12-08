@@ -26,7 +26,6 @@ $langVideo = "Video";
 $langWorks = "Tehtäväpalautus";
 $langCourseProgram = "Kurssiohjelma";
 $langAnnouncements = "Ajankohtaista";
-$langUsers = "Käyttäjät";
 $langForums = "Foorumit";
 $langExercices = "Harjoitukset";
 $langStatistics = "Käytön seuranta";

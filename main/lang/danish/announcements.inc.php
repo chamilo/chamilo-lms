@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Du skal vælge nogle brugere.";
 $Teachersubject = "Besked sendt til dine studerende";
 $langMessages  = "Beskeder";
 $langMessageToSelectedUsers  = "Beskeder til valgte brugere";
-$langUsers  = "brugere";
 $langIntroText  = "For at afsende en besked, vælg de grupper af brugere (markeret med et G foran) eller enkelte brugere fra listen til venstre.";
 $langDown = "ned";
 $langMsgSent = "Beskeden er afsendt til de valgte studerende";

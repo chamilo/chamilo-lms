@@ -26,7 +26,6 @@ $langVideo = "Vidbendo ";
 $langWorks = "Studentaj publika&#309;oj ";
 $langCourseProgram = "Taskprogramo ";
 $langAnnouncements = "Anoncoj ";
-$langUsers = "Uzuloj ";
 $langForums = "Forumoj ";
 $langExercices = "Ekzercoj ";
 $langStatistics = "Statistikoj ";

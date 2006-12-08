@@ -11,7 +11,6 @@ $langLinkDel = "Forigi ligilon ";
 $langLinkDeleted = "Ligilo estas forigita ";
 $langLinkDelconfirm = "&#264;u vi deziras forigi &#265;i-ligilon? ";
 $langAllLinksDel = "Forigi &#265;iujn ligilojn en &#265;i-kategorio ";
-$langCategory = "Kategorio ";
 $langCategoryName = "Kategoria nomo ";
 $langCategoryAdd = "Aldoni kategorion ";
 $langCategoryAdded = "Kategorio estas aldonita ";

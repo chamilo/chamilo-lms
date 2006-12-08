@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langUsers = "&#1605;&#1587;&#1578;&#1582;&#1583;&#1605;&#1610;&#1606;";
 $langLineNumber = "&#1585;&#1602;&#1605; &#1575;&#1604;&#1587;&#1591;&#1585;";
 $langLine = "&#1587;&#1591;&#1585;";
 $langLines = "&#1571;&#1587;&#1591;&#1585;";

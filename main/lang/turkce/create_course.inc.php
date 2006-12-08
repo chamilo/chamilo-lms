@@ -26,7 +26,6 @@ $langVideo = "Video";
 $langWorks = "Öðrenci Yazýlarý";
 $langCourseProgram = "Ders Programý";
 $langAnnouncements = "Duyurular";
-$langUsers = "Kullanýcýlar";
 $langForums = "Forumlar";
 $langExercices = "Alýþtýrmalar";
 $langStatistics = "Ýstatistikler";

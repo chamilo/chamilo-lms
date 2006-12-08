@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Heu de seleccionar algus usuaris";
 $Teachersubject = "Missatge enviat als estudiants";
 $langMessages  = "Missatges";
 $langMessageToSelectedUsers  = "Missatges per a usuaris seleccionats";
-$langUsers  = "Usuaris";
 $langIntroText  = "Per enviar un missatge, seleccioneu grups d\'usuaris (marcats amb una G davant) o usuaris individuals de la llista de l\'esquerra.";
 $langDown = "sota";
 $langMsgSent = "El missatge ha estat enviat als estudiants seleccionats";

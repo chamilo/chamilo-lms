@@ -26,7 +26,6 @@ $langVideo = "Video";
 $langWorks = "Studentski radovi";
 $langCourseProgram = "Program kolegija";
 $langAnnouncements = "Obavijesti";
-$langUsers = "Korisnici";
 $langForums = "Forumi";
 $langExercices = "Vježbe";
 $langStatistics = "Statistika";

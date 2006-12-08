@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Selecteer eerst gebruikers om de boodschap aan te ver
 $Teachersubject = "Aankondiging verzonden naar studenten.";
 $langMessages  = "Berichten";
 $langMessageToSelectedUsers  = "Berichten naar specifieke gebruikers of groepen";
-$langUsers  = "gebruikers";
 $langIntroText  = "Selecteer eerst groepen (met een G vooraan) of gebruikers om het bericht aan te sturen, uit de lijst aan de linkerkant. Gebruik de controltoets om meerdere gebruikers tegelijk aan te duiden. Klik vervolgens op de \'>>\'-knop.";
 $langDown = "Omlaag";
 $langMsgSent = "Het bericht is verzonden.";

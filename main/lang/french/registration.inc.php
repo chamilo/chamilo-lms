@@ -7,7 +7,6 @@ $langEnter2passToChange = "La saisie du nouveau mot de passe ainsi que sa confir
 Dans tous les autres cas, laissez ces deux champs vides.
 ";
 $langAuthInfo = "Paramètres de connexion";
-$langOfficialCode = "Code officiel (ID)";
 $langDelImage = "Supprimer la photo";
 $langUpdateImage = "Changer de photo";
 $langImageWrong = "La taille du fichier doit être inférieure à";
@@ -72,7 +71,6 @@ $langRole = "Descriptif";
 $langAll = "oui";
 $langNone = "non";
 $UserPicture = "Photo";
-$langUsers = "Membres";
 $langHome = "Retourner à l\'accueil";
 $langProfileReg = "Votre nouveau profil a été enregistré";
 $langEmailWrong = "L\'adresse email que vous avez introduite n\'est pas complète
@@ -109,7 +107,6 @@ Utilisez le bouton de retour en arrière de votre navigateur
 et recommencez.";
 $langRegAdmin = "Créer des cours";
 $langRegStudent = "M\'inscrire à des cours";
-$langStatus = "Statut";
 $langConfirmation = "Confirmation";
 $langPass = "Mot de passe";
 $langUsername = "Identifiant";
@@ -118,7 +115,6 @@ $langName = "Prénom";
 $langRegistration = "Inscription";
 $langYourAccountParam = "Voici les paramètres qui vous permettront de vous connecter sur";
 $langLoginRequest = "Demande de login";
-$langEmail = "Adresse e-mail";
 $langLastname = "Nom";
 $langFirstname = "Prénom";
 $langDefineHeadings = "Définir les intitulés";

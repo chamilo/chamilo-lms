@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "你必须选择一些用户";
 $Teachersubject = "发送给你学生的信息";
 $langMessages  = "消息";
 $langMessageToSelectedUsers  = "发送给选定组的消息";
-$langUsers  = "用户";
 $langIntroText  = "发送消息时, 请选择用户组（在前面用G标识）或在左边列表框里单个用户.";
 $langDown = "下";
 $langMsgSent = "消息已发送给选定的用户";

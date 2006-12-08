@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "คุณต้องเลือกผู้ใช้บางคน";
 $Teachersubject = "ส่งข้อความถึงผู้เรียนของท่านแล้ว";
 $langMessages  = "ข้อความ";
 $langMessageToSelectedUsers  = "ข้อความถึงผู้ใช้ที่เลือกไว้";
-$langUsers  = "ผู้ใช้ในระบบ";
 $langIntroText  = "การส่งข้อความ : เลือกคลิกทำเครื่องหมายหน้ารายการที่ต้องการส่งถึง";
 $langDown = "ลง";
 $langMsgSent = "ข้อความได้ส่งไปให้ผู้เรียนที่ท่านเลือกแล้ว";

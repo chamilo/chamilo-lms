@@ -34,7 +34,6 @@ $langPleaseSelectUsers  = "Lütfen kullan&#305;c&#305; seçin";
 $Teachersubject = "Ö&#287;rencilerine mesaj yolla";
 $langMessages  = "Mesajlar";
 $langMessageToSelectedUsers  = "Seçilen kullan&#305;c&#305;lara mesaj";
-$langUsers  = "kullan&#305;c&#305;";
 $langIntroText  = "Mesaj göndermek için, önünde G harfi bulunan kullan&#305;c&#305; guruplar&#305;n&#305; veya soldaki listeden kullan&#305;c&#305;lar&#305; seçin lütfen.";
 $langDown = "a&#351;a&#287;&#305;";
 $langMsgSent = "Mesaj&#305;n&#305;z seçilen kullan&#305;c&#305;lara gönderildi.";

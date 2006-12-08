@@ -28,9 +28,6 @@ $langPublicAccess = "ayefun gbogbo enia";
 $langPrivateAccess = "aye fun enia kan";
 $langCode = "Ena";
 $langLanguage = "Ede";
-$langCategory = "Idipo";
-$langFirstName = "Oruko e";
-$langLastName = "Oruko idile";
 $langLoginName = "wole";
 $langAddPicture = "Fi aworan si";
 ?>

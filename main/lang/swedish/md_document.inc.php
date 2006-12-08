@@ -27,7 +27,6 @@ $langRights = "Anv‰ndar r‰ttigheter";
 $langRightsTip = "beskriv i ord";
 $langVersion = "Version";
 $langVersionTip = "nummer eller beskrivning";
-$langStatus = "Status";
 $langStatusTip = "v‰lj frÂn lista";
 $langCreatedSize = "Skapad, storlek";
 $langCreatedSizeTip = "≈≈≈≈-MM-DD n‰r den skapades, storlek i octets (bytes)";

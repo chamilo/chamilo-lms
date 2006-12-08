@@ -26,7 +26,6 @@ $langVideo = "视频";
 $langWorks = "作业论文";
 $langCourseProgram = "课程大纲";
 $langAnnouncements = "公告通知";
-$langUsers = "用户";
 $langForums = "学习论坛";
 $langExercices = "测验";
 $langStatistics = "学习跟踪";

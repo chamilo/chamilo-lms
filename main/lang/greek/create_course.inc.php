@@ -26,7 +26,6 @@ $langVideo = "Βίντεο";
 $langWorks = "Εργασίες Μαθητών";
 $langCourseProgram = "Πρόγραμμα Μαθήματος";
 $langAnnouncements = "Ανακοινώσεις";
-$langUsers = "Χρήστες";
 $langForums = "Περιοχή συζητήσεων";
 $langExercices = "Ασκήσεις";
 $langStatistics = "Στατιστικά";

@@ -485,7 +485,7 @@ INSERT INTO `settings_current` VALUES
 (65, 'breadcrumbs_course_homepage', NULL, 'radio','Course','course_title', 'BreadCrumbsCourseHomepageTitle','BreadCrumbsCourseHomepageComment', NULL, NULL),
 (66, 'example_material_course_creation', NULL, 'radio','Platform','true', 'ExampleMaterialCourseCreationTitle','ExampleMaterialCourseCreationComment', NULL, NULL),
 (67,'account_valid_duration',NULL, 'textfield','Platform','3660', 'AccountValidDurationTitle','AccountValidDurationComment', NULL, NULL),
-(68, 'use_session_mode', NULL, 'radio','Platform','true', 'UseSessionModeTitle','UseSessionModeComment', NULL, NULL),
+(68, 'use_session_mode', NULL, 'radio','Platform','false', 'UseSessionModeTitle','UseSessionModeComment', NULL, NULL),
 (69, 'allow_email_editor', NULL, 'radio', 'Tools', 'false', 'AllowEmailEditorTitle', 'AllowEmailEditorComment', NULL, NULL),
 (70, 'registered', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL),
 (71, 'donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL),

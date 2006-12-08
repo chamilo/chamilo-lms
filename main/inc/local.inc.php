@@ -603,9 +603,14 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
     	{
 
 	    	// is it the session coach ?
+	    	
+	    	$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+	    	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+	    	$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	    	
 	        $sql = "SELECT 1
-					FROM `".$_configuration['main_database']."`.`session`
-					INNER JOIN `".$_configuration['main_database']."`.`session_rel_course`
+					FROM ".$tbl_session."
+					INNER JOIN ".$tbl_session_course."
 						ON session_rel_course.id_session = session.id
 						AND session_rel_course.course_code='$_cid'
 					WHERE session.id_coach = '".$_user['user_id']."'";
@@ -623,7 +628,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
         	{
 	        	// vérifier que c pas le coach du cours
 	        	$sql = "SELECT 1
-						FROM `".$_configuration['main_database']."`.`session_rel_course`
+						FROM ".$tbl_session_course."
 						WHERE session_rel_course.course_code='$_cid'
 						AND session_rel_course.id_coach = '".$_user['user_id']."'";
 
@@ -634,7 +639,9 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 		            $is_courseMember     = true;
 		            $is_courseTutor      = true;
 		            
-		            $sql="SELECT status FROM `".$_configuration['main_database']."`.`user` WHERE user_id = ".$_user['user_id']."";
+		            $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+		            
+		            $sql="SELECT status FROM ".$tbl_user." WHERE user_id = ".$_user['user_id']."";
 
 		  			$result=api_sql_query($sql);
 		  			if(mysql_result($result,0,0)==1){
@@ -649,7 +656,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 		        else
 		        {
 	        		// vérifier que c pas un élève de la session
-			        $sql = "SELECT * FROM `".$_configuration['main_database']."`.`session_rel_course_rel_user`
+			        $sql = "SELECT * FROM ".$tbl_session_course_user." 
 			        		WHERE `id_user`  = '".$_user['user_id']."'
 							AND `course_code` = '$cidReq'";
 
@@ -668,7 +675,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 					}
 					else
 					{
-			 			$sql = "SELECT * FROM `".$_configuration['main_database']."`.`course_rel_user`
+						
+						$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+						
+			 			$sql = "SELECT * FROM ".$tbl_course_user."
 			               WHERE `user_id`  = '".$_user['user_id']."'
 			               AND `course_code` = '$cidReq'";
 

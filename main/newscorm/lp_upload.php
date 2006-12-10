@@ -51,6 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			if(!empty($manifest)){
 				$oScorm->parse_manifest($manifest);
 				$oScorm->import_manifest(api_get_course_id());
+			}else{
+				//show error message stored in $oScrom->error_msg
 			}
 		
 			$proximity = '';

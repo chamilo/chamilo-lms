@@ -58,9 +58,14 @@ if($my_version=='1.8'){
 	  <td align="right"><?php echo get_lang('Origin');?></td>
 	  <td><select name="lp_maker">
 	  <?php
+	  $lp_orig = $_SESSION['oLP']->get_maker();
 	  include('content_makers.inc.php');
-	  foreach($content_origins as $indx => $origin){
-			echo '    <option value="'.$origin.'">'.$origin.'</option>' ;
+	  foreach($content_origins as $origin){
+	  		$selected = '';
+	  		if($lp_orig == $origin){
+	  			$selected = ' selected = "selected"';
+	  		}
+	  		echo '    <option value="'.$origin.'"'.$selected.'>'.$origin.'</option>' ;
 	  }
 	  ?></select></td>
 	</tr>
@@ -68,8 +73,14 @@ if($my_version=='1.8'){
 	  <td align="right"><?php echo get_lang('Location');?></td>
 	  <td><select name="lp_proximity">
 	  <?php
-		echo '    <option value="local" selected="selected">'.get_lang('Local')."</option>" .
-		'    <option value="remote">'.get_lang('Remote')."</option>";
+	  	$lp_prox = $_SESSION['oLP']->get_proximity();
+	  	if($lp_prox != 'local'){
+			echo '    <option value="local">'.get_lang('Local')."</option>" .
+			'    <option value="remote" selected="selected">'.get_lang('Remote')."</option>";
+	  	}else{
+			echo '    <option value="local" selected="selected">'.get_lang('Local')."</option>" .
+			'    <option value="remote">'.get_lang('Remote')."</option>";
+	  	}
 	  ?></select></td>
 	</tr>
 	<tr>

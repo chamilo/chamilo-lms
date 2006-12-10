@@ -31,6 +31,11 @@ $alter_lp_view = "ALTER TABLE XXX_$new_lp_view ADD COLUMN " .
 		"progress		int		unsigned	default 0" .
 		"";
 //table replacing the learnpath_user table
+$new_lp_item = 'lp_item';
+$alter_lp_item = "ALTER TABLE XXX_$new_lp_item ADD COLUMN " .
+		"parameters text null default ''" .
+		"";
+//table replacing the learnpath_user table
 $new_lp_item_view = 'lp_item_view';
 $alter_lp_item_view = "ALTER TABLE XXX_$new_lp_item_view ADD COLUMN " .
 		"lesson_location text null default ''" .
@@ -95,6 +100,12 @@ while ($row = Database::fetch_array($res))
 		if (mysql_query("SELECT progress FROM $new_lp_view")==false)
 		{
 			$create_table = str_replace('XXX_',$dbname,$alter_lp_view);
+			echo "$create_table<br />\n";
+			api_sql_query($create_table);
+		}
+		if (mysql_query("SELECT parameters FROM $new_lp_item")==false)
+		{
+			$create_table = str_replace('XXX_',$dbname,$alter_lp_item);
 			echo "$create_table<br />\n";
 			api_sql_query($create_table);
 		}

@@ -19,7 +19,7 @@ class scormItem extends learnpathItem{
 	//var $prerequisites = ''; - defined in learnpathItem.class.php
 	var $maxtimeallowed = '00:00:00';
 	var $timelimitaction = '';
-	var $datafromims = '';
+	var $datafromlms = '';
 	var $masteryscore = '';
 	var $scorm_contact;
     
@@ -80,11 +80,11 @@ class scormItem extends learnpathItem{
 						     					$this->timelimitaction = $tmp_children[0]->content;
 						     				}
 						     				break;
-										case 'datafromims':
+										case 'datafromlms':
 						     				$tmp_children = $child->children();
 						     				if(count($tmp_children)==1 and $tmp_children[0]->content!='' )
 						     				{
-						     					$this->datafromims = $tmp_children[0]->content;
+						     					$this->datafromlms = $tmp_children[0]->content;
 						     				}
 						     				break;
 										case 'masteryscore':
@@ -186,13 +186,13 @@ class scormItem extends learnpathItem{
 						     					$this->timelimitaction = $child->firstChild->nodeValue;
 						     				}
 						     				break;
-										case 'datafromims':
-										case 'adlcp:datafromims':
+										case 'datafromlms':
+										case 'adlcp:datafromlms':
 						     				$tmp_children = $child->childNodes;
 						     				//if(count($tmp_children)==1 and $tmp_children[0]->textContent!='' )
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue!='' )
 						     				{
-						     					$this->datafromims = $child->firstChild->nodeValue;
+						     					$this->datafromlms = $child->firstChild->nodeValue;
 						     				}
 						     				break;
 										case 'masteryscore':
@@ -262,7 +262,7 @@ class scormItem extends learnpathItem{
     {
     	$list[] = array(
     		'abs_order' => $abs_order,
-			'datafromims' => $this->datafromims,
+			'datafromlms' => $this->datafromlms,
 			'identifier' => $this->identifier,
 			'identifierref' => $this->identifierref,
 			'isvisible' => $this->isvisible,

@@ -2769,7 +2769,7 @@ class learnpath {
 		$lp_pref = Database::get_course_table_prefix();
 		$lp_table = $lp_db.'.'.$lp_pref.'lp';
 		$lp_item_table = $lp_db.'.'.$lp_pref.'lp_item';
-    	$sel = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath " .
+    	$sel = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams " .
     			"FROM $lp_table l, $lp_item_table li WHERE li.id = $item_id AND li.lp_id = l.id";
     	if($this->debug>2){error_log('New LP - In learnpath::get_link() - selecting item '.$sel,0);}
     	$res = api_sql_query($sel);
@@ -2781,6 +2781,11 @@ class learnpath {
     		$lp_path = $row['lpath'];
     		$lp_item_type = $row['litype'];
     		$lp_item_path = $row['lipath'];
+    		$lp_item_params = $row['liparams'];
+    		//add ? if none - left commented to give freedom to scorm implementation
+    		//if(substr($lp_item_params,0,1)!='?'){
+    		//	$lp_item_params = '?'.$lp_item_params;
+    		//}
     		if($type == 'http'){
     			$course_path = api_get_path(WEB_COURSE_PATH).api_get_course_path(); //web path
     		}else{
@@ -2826,6 +2831,8 @@ class learnpath {
     						//prerequisites did not match
     						//$file = 'blank.php';
     					//}
+    					//We want to use parameters if they were defined in the imsmanifest
+    					$file.= $lp_item_params;
     				}else{
     					$file = 'lp_content.php?type=dir';
     				}

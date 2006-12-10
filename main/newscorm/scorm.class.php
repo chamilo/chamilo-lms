@@ -438,12 +438,14 @@ class scorm extends learnpath {
 						"(lp_id,item_type,ref,title," .
 						"path,min_score,max_score, $field_add" .
 						"parent_item_id,previous_item_id,next_item_id," .
-						"prerequisite,display_order) " .
+						"prerequisite,display_order,launch_data," .
+						"parameters) " .
 						"VALUES " .
 						"($lp_id, '$type','".$identifier."','".$title."'," .
 						"'$path',0,100, $value_add" .
 						"$parent, $previous, 0, " .
-						"'$prereq', ".$item['rel_order'] .
+						"'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .
+						"'".$item['parameters']."'" .
 						")";
 				$res_item = api_sql_query($sql_item);
 				if($this->debug>1){error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.mysql_error(),0);}

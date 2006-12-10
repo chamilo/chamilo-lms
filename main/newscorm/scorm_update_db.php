@@ -62,7 +62,8 @@ $create_lp_item = "CREATE TABLE IF NOT EXISTS XXX_$new_lp_item (" .
 		"next_item_id		int unsigned	not null default 0," . //the item after this one in the sequential learning order  (MySQL id)
 		"display_order		int unsigned	not null default 0," . //this is needed for ordering items under the same parent (previous_item_id doesn't give correct order after reordering)
 		"prerequisite   char(64)    null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
-		"launch_data 	text	not null default ''" . //data from imsmanifest <item>
+		"launch_data 	text	not null default '', " . //data from imsmanifest <item adlcp:datafromlms>
+		"parameters		text	not null default ''" . //data from imsmanifest <item parameters="..."> 
 		")";
 //table replacing the learnpath_user table
 $new_lp_item_view = 'lp_item_view';

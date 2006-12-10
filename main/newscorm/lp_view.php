@@ -156,24 +156,21 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	</style>';
 	include_once('../inc/reduced_header.inc.php');
 	$displayAudioRecorder = (api_get_setting('service_ppt2lp','active')=='true' && api_get_setting('service_ppt2lp','path_to_lzx')!='') ? true : false;
+	//check if audio recorder needs to be in studentview
+	$course_id=$_SESSION["_course"]["id"];
+	if($_SESSION["status"][$course_id]==5){
+		$audio_recorder_studentview = true;
+	}
+	else{
+		$audio_recorder_studentview = false;
+	}
 	?>
 	<frameset rows="150,600">
 		<frame id="header" src="lp_header.php" border="0" frameborder="0" scrolling="no" />
 		<frameset cols="195,*">
-			
-			<?php
-				$course_id=$_SESSION["_course"]["id"];
-				if($_SESSION["status"][$course_id]==5){
-					$audio_recorder_studentview = true;
-				}
-				else{
-					$audio_recorder_studentview = false;
-				}
-			?>
-			
-			<frameset rows="<?php if($displayAudioRecorder)echo '60,';?>475,95,80,*">
+			<frameset rows="<?php echo($displayAudioRecorder?'60,':'');?>475,95,80,*">
 				<?php
-				if($displayAudioRecorder)
+				if($displayAudioRecorder) //if audio recorder is required (set a few lines above)
 					echo '<frame id="audiorecorder_id" name="audiorecorder_name" src="display_audiorecorder.php" border="0" frameborder="0" scrolling="no"/>';
 				?>				
 				<frame id="toc_id" name="toc_name" class="lp_toc" src="lp_toc.php" border="0" frameborder="0" scrolling="no"/>

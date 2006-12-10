@@ -2131,25 +2131,15 @@ class learnpath {
      }
 
     /**
-
      * Gets the progress value from the progress_db attribute
-
      * @return	integer	Current progress value
-
      */
-
     function get_progress(){
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_progress()',0);}
-
     	if(!empty($this->progress_db)){
-
     		return $this->progress_db;
-
     	}
-
     	return 0;
-
     }
     /**
      * Gets the progress value from the progress field in the database (allows use as abstract method)
@@ -2201,299 +2191,160 @@ class learnpath {
     	}
     	return $progress;
     }
-
     /**
-
      * Gets a progress bar for the learnpath by counting the number of items in it and the number of items
-
      * completed so far.
-
      * @param	string	Mode in which we want the values
-
      * @param	integer	Progress value to display (optional but mandatory if used in abstract context)
-
      * @param	string	Text to display near the progress value (optional but mandatory in abstract context)
-
      * @return	string	HTML string containing the progress bar
-
      */
-
     function get_progress_bar($mode='',$percentage=-1,$text_add='')
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
-
     	if($percentage=='-1' OR $text_add==''){
-
     		list ($percentage, $text_add) = $this->get_progress_bar_text($mode);
-
     	}
-
     	$text = $percentage.$text_add;
-
     	$output = '' 
-
     	//.htmlentities(get_lang('ScormCompstatus'),ENT_QUOTES,'ISO-8859-1')."<br />"
-
 	    .'<table border="0" cellpadding="0" cellspacing="0"><tr><td>'
-
 	    .'<img id="progress_img_limit_left" src="../img/bar_1.gif" width="1" height="12">'
-
 	    .'<img id="progress_img_full" src="../img/bar_1u.gif" width="'.$percentage.'" height="12" id="full_portion">'
-
 	    .'<img id="progress_img_limit_middle" src="../img/bar_1m.gif" width="1" height="12">';
-
 	    if($percentage <= 98){
-
 	    	$output .= '<img id="progress_img_empty" src="../img/bar_1r.gif" width="'.(100-$percentage).'" height="12" id="empty_portion">';
-
 	    }else{
-
 	    	$output .= '<img id="progress_img_empty" src="../img/bar_1r.gif" width="0" height="12" id="empty_portion">';
-
 	    }
-
 	    $output .= '<img id="progress_bar_img_limit_right" src="../img/bar_1.gif" width="1" height="12"></td></tr></table>'
-
 	    .'<div class="progresstext" id="progress_text">'.$text.'</div>';
-
 	    return $output;
-
     }
-
     /**
-
      * Gets the progress bar info to display inside the progress bar. Also used by scorm_api.php
-
      * @param	string	Mode of display (can be '%' or 'abs').abs means we display a number of completed elements per total elements
-
      * //@param	integer	Additional steps to fake as completed
-
      * @return	list	Percentage or number and symbol (% or /xx)
-
      */
-
     function get_progress_bar_text($mode='',$add=0)
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar_text()',0);}
-
     	if(empty($mode)){$mode = $this->progress_bar_mode;}
-
     	$total_items = $this->get_total_items_count();
-
     	if($this->debug>2){error_log('New LP - Total items available in this learnpath: '.$total_items,0);}
-
     	$i = $this->get_complete_items_count();
-
 		if($this->debug>2){error_log('New LP - Items completed so far: '.$i,0);}
-
     	if($add != 0){
-
     		$i += $add;
-
 			if($this->debug>2){error_log('New LP - Items completed so far (+modifier): '.$i,0);}
-
     	}
-
     	$text = '';
-
     	if($i>$total_items){
-
     		$i = $total_items;
-
     	}
-
     	if($mode == '%'){
-
 	    	$percentage = ((float)$i/(float)$total_items)*100;
-
 	    	$percentage = number_format($percentage,0);
-
 	    	$text = '%';
-
     	}elseif($mode == 'abs'){
-
 	    	$percentage = $i;
-
     		$text =  '/'.$total_items;
-
     	}
-
     	return array($percentage,$text);
-
     }
-
     /**
-
      * Gets the progress bar mode
-
      * @return	string	The progress bar mode attribute
-
      */
-
      function get_progress_bar_mode()
-
      {
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar_mode()',0);}
-
      	if(!empty($this->progress_bar_mode))
-
     	{
-
     		return $this->progress_bar_mode;
-
     	}else{
-
     		return '%';
-
     	}
-
      }
-
-    
-
     /**
-
+     * Gets the learnpath proximity (remote or local)
+     * @return	string	Learnpath proximity
+     */
+    function get_proximity()
+	{
+		if($this->debug>0){error_log('New LP - In learnpath::get_proximity()',0);}
+		if(!empty($this->proximity)){return $this->proximity;}else{return '';}
+	}    
+    /**
      * Returns a usable array of stats related to the current learnpath and user
-
      * @return array	Well-formatted array containing status for the current learnpath
-
      */
-
     function get_stats()
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_stats()',0);}
-
     	//TODO
-
     }
-
     /**
-
      * Static method. Can be re-implemented by children. Gives an array of statistics for
-
      * the given course (for all learnpaths and all users)
-
      * @param	string	Course code
-
      * @return array	Well-formatted array containing status for the course's learnpaths
-
      */
-
     function get_stats_course($course)
-
     {
-
 		//if($this->debug>0){error_log('New LP - In learnpath::get_stats_course()',0);}
-
     	//TODO
-
     }
-
     /**
-
      * Static method. Can be re-implemented by children. Gives an array of statistics for
-
      * the given course and learnpath (for all users)
-
      * @param	string	Course code
-
      * @param	integer	Learnpath ID
-
      * @return array	Well-formatted array containing status for the specified learnpath
-
      */
-
     function get_stats_lp($course,$lp)
-
     {
-
 		//if($this->debug>0){error_log('New LP - In learnpath::get_stats_lp()',0);}
-
     	//TODO
-
     }
-
     /**
-
      * Static method. Can be re-implemented by children. Gives an array of statistics for
-
      * the given course, learnpath and user.
-
      * @param	string	Course code
-
      * @param	integer	Learnpath ID
-
      * @param	integer	User ID
-
      * @return array	Well-formatted array containing status for the specified learnpath and user
-
      */
-
     function get_stats_lp_user($course,$lp,$user)
-
     {
-
 		//if($this->debug>0){error_log('New LP - In learnpath::get_stats_lp_user()',0);}
-
     	//TODO
-
     }
-
     /**
-
      * Static method. Can be re-implemented by children. Gives an array of statistics for
-
      * the given course and learnpath (for all users)
-
      * @param	string	Course code
-
      * @param	integer	User ID
-
      * @return array	Well-formatted array containing status for the user's learnpaths
-
      */
-
     function get_stats_user($course,$user)
-
     {
-
 		//if($this->debug>0){error_log('New LP - In learnpath::get_stats_user()',0);}
-
     	//TODO
-
     }
-
     /**
-
      * Gets the status list for all LP's items
-
    	 * @return	array	Array of [index] => [item ID => current status]
-
      */
-
     function get_items_status_list(){
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_items_status_list()',0);}
-
     	$list = array();
-
     	foreach($this->ordered_items as $item_id)
-
     	{
-
     		$list[]= array($item_id => $this->items[$item_id]->get_status());
-
     	}
-
     	return $list;
-
     }
     /**
      * Generate and return the table of contents for this learnpath. The (flat) table returned can be
@@ -2721,8 +2572,15 @@ class learnpath {
     	$html .= "</div>\n";
     	return $html;
     }
-    
-    
+    /**
+     * Gets the learnpath maker name - generally the editor's name
+     * @return	string	Learnpath maker name
+     */
+    function get_maker()
+	{
+		if($this->debug>0){error_log('New LP - In learnpath::get_maker()',0);}
+		if(!empty($this->maker)){return $this->maker;}else{return '';}
+	}    
     /**
      * Gets the user-friendly message stored in $this->message
      * @return	string	Message

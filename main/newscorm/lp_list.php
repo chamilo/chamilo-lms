@@ -110,11 +110,11 @@ if(api_is_allowed_to_edit())
   echo	'<a href="'.$_SERVER['PHP_SELF'].'?action=add_lp">'.
 		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="scormbuilder">&nbsp;'.get_lang('_add_learnpath').
 		'</a>' .
-		str_repeat('&nbsp',3).
+		str_repeat('&nbsp;',3).
 		'<a href="../upload/index.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/file_zip.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("UploadScorm").'</a>';
 		if(api_get_setting('service_ppt2lp','active')==true)
 		{
-			echo  str_repeat('&nbsp',3).'<a href="../upload/upload_ppt.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a>';
+			echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_ppt.php?curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="scormbuilder" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a>';
        }
 }
 

@@ -37,7 +37,7 @@ class learnpathItem{
 	var $next;
 	var $parent;
 	var $path;
-	var $possible_status = array('not attempted','incomplete','completed','passed','failed','succeeded','browsed');
+	var $possible_status = array('not attempted','incomplete','completed','passed','failed','browsed');
 	var $prereq_string = '';
 	var $prereq_alert = '';
 	var $prereqs = array();

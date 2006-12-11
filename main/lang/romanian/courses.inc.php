@@ -28,6 +28,7 @@ $langCourseList  = "Cursuri";
 $Subscribe = "Inscrie-te";
 $AlreadySubscribed = "Deja inscris";
 $CourseCategoryStored = "Categoria de cursuri a fost creata";
+$langWithoutTimeLimits = "Fara limite de timp";
 $lang_back_to_main_category_list = "Inapoi la lista principala de categorii";
 $langAdded = "Adaugat";
 $langDeleted = "Sters";

@@ -107,6 +107,7 @@ $langShowDebug = "Arata debug";
 $langHideDebug = "Ascunde debug";
 $langCantEditDocument = "Acest document nu este editabil";
 $langAreYouSureToDelete = "Sunteti sigur ca stergeti?";
+$langAfter = "Dupa";
 $lang_prerequisites_limit = "Prerechizite (limita)";
 $lang_loading = "Incarca pagina, te rog asteapta ...";
 $lang_empty = "Aceasta cale nu contine nici un pas.";

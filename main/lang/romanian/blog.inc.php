@@ -11,4 +11,12 @@ $Subtitle = "Subtitlu";
 $ThisBlog = "Acest blog";
 $NewPost = "Postare noua";
 $TaskManager = "Setari";
+$blog_management = "Administrarea blogului";
+$langAuthor = "Autor";
+$langWelcome = "Bine ati venit !";
+$langModule = "Modul";
+$langUserHasPermissionNot = "Utilizatorul nu are drepturi";
+$langUserHasPermission = "Utilizatorul are drepturi";
+$langLegend = "Legenda";
+$langUserHasPermissionByRoleGroup = "Utilizatorul are drepturi asupra grupului sau";
 ?>

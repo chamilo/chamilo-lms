@@ -14,4 +14,9 @@ $TaskManager = "Task management";
 $blog_management = "Blog management";
 $langAuthor = "Author";
 $langWelcome = "Welcome !";
+$langModule = "Module";
+$langUserHasPermissionNot = "The user hasn\'t rights";
+$langUserHasPermission = "The user has rights";
+$langLegend = "Legend";
+$langUserHasPermissionByRoleGroup = "The user has rights of its group";
 ?>

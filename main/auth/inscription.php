@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: inscription.php 10454 2006-12-11 14:19:18Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -170,7 +170,7 @@ if ($form->validate())
 		$_user['lastName'] 	= stripslashes($values['lastname']);
 		$_user['mail'] 		= $values['email'];
 		$_user['language'] 	= $values['language'];
-		$_user['user_id']	= $values['user_id'];
+		$_user['user_id']	= $user_id;
 		$is_allowedCreateCourse = ($values['status'] == 1) ? true : false;
 		api_session_register('_user');
 		api_session_register('is_allowedCreateCourse');
@@ -229,7 +229,8 @@ if ($form->validate())
 		$actionUrl = "courses.php?action=subscribe";
 	}
 	// ?uidReset=true&uidReq=$_user['user_id']
-	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<input type=\"submit\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">\n", "</form>\n";
+	
+	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<input type=\"submit\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">\n", "</form><br>\n";
 
 }
 else

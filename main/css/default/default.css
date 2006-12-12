@@ -130,7 +130,6 @@ input.link_alike:hover {
 	width: 98%;
 }
 
-
 .maincontent {	/* for content section in main index.php file */
 	background-color: #fff;
 	float: left;
@@ -150,15 +149,9 @@ input.link_alike:hover {
 	padding: 10px 0 40px 0;
 }
 
-.invisible {
-	color: #999;
-}
-
+.invisible ,
 .invisible a:link,
-.invisible a:visited {
-	color: #999;
-}
-
+.invisible a:visited,
 a.invisible:link,
 a.invisible:visited {
 	color: #999;
@@ -167,9 +160,9 @@ a.invisible:visited {
 /* user_portal course status icon */
 #coursestatusicons{
 	border: 0px solid #000;
-	width: auto;
 	float: left;
 	padding-right: 5px;
+	width: auto;
 }
 
 /* user_portal course list */

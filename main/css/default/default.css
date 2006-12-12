@@ -39,30 +39,26 @@ h3 {
 	padding-top:0px;
 }
 
-
 /* the following for regular <a> elements */
-a:link {
-	color : #4171b5;
+a:link,
+a:visited,
+a:hover,
+a:active {
 	font-weight : bold;
 	text-decoration: none;
 }
 
+a:link,
 a:visited {
 	color : #4171b5;
-	font-weight : bold;
-	text-decoration: none;
 }
 
 a:hover {
 	color: red;
-	font-weight: bold;
-	text-decoration: none;
 }
 
 a:active {
 	color : #f00;
-	font-weight : bold;
-	text-decoration: none;
 }
 
 select, textarea {
@@ -79,7 +75,8 @@ input[type=checkbox],
 input[type=radio],
 input[type=button],
 input[type=submit] {
-	cursor:	pointer; font-size: 12px;
+	cursor:	pointer; 
+	font-size: 12px;
 }
 
 input[text] {

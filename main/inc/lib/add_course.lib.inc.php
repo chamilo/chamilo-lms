@@ -1102,6 +1102,7 @@ api_sql_query($sql, __FILE__, __LINE__);
 		"next_item_id		int unsigned	not null default 0," . //the item after this one in the sequential learning order (MySQL id)
 		"display_order		int unsigned	not null default 0," . //this is needed for ordering items under the same parent (previous_item_id doesn't give correct order after reordering)
 		"prerequisite  char(64)  null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
+		"parameters  text  null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
 		"launch_data 	text	not null default '')"; //data from imsmanifest <item>
 	if(!api_sql_query($sql)){
 		error_log($sql,0);

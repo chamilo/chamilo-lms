@@ -6,7 +6,7 @@
 
 body {
 	background-color: #fff;
-	color: #000000;
+	color: #000;
 	font-family: arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	margin: 0;
@@ -20,7 +20,8 @@ img {
 p,
 blockquote,
 ol,
-ul {
+ul,
+h4 {
 	font-size: 12px;
 }
 
@@ -38,14 +39,6 @@ h3 {
 	padding-top:0px;
 }
 
-h4 {
-	font-size: 12px;
-}
-
-h5,
-h6 {
-	font-family: verdana, arial, helvetica, sans-serif;
-}
 
 /* the following for regular <a> elements */
 a:link {

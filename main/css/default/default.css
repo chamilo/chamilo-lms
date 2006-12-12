@@ -61,13 +61,10 @@ a:active {
 	color : #f00;
 }
 
-select, textarea {
+select,
+textarea {
 	border: 1px solid #000;
 	color : #000;
-}
-
-input.checkbox {
-	border-width: 0;
 }
 
 select,
@@ -75,16 +72,21 @@ input[type=checkbox],
 input[type=radio],
 input[type=button],
 input[type=submit] {
-	cursor:	pointer; 
+	cursor:	pointer;
 	font-size: 12px;
 }
 
-input[text] {
+input[type=text] {
 	font-size: 12px;
 }
 
-input.link_alike {
-	background-color: #FFFFFF;
+input.checkbox {
+	border-width: 0;
+}
+
+input.link_alike,
+input.link_alike:hover {
+	background-color: #FFF;
 	border-width: 0px;
  	color: #4171b5;
  	font-weight: bold;
@@ -93,14 +95,12 @@ input.link_alike {
  	text-align: left;
 }
 
+input.link_alike{
+	color: #4171b5;	
+}
+
 input.link_alike:hover {
-	background-color: #FFFFFF;
-	border-width: 0px;
- 	color: #FF0000;
- 	font-weight: bold;
- 	margin: 0px;
- 	padding: 0px;
- 	text-align: left;
+	color: #FF0000;
 }
 
 

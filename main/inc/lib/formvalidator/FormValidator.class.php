@@ -226,7 +226,7 @@ EOT;
 	 */
 	function add_real_progress_bar($upload_id, $delay=2)
 	{
-		if(phpversion()<'5.2')
+		if(function_exists('uploadprogress_get_info'))
 		{
 			$this -> add_progress_bar($delay);
 			return;

@@ -224,7 +224,7 @@ EOT;
 	 * @param upload_id the value of the field UPLOAD_IDENTIFIER
 	 * @param delay the frequency of the xajax call
 	 */
-	function add_real_progress_bar($upload_id, $delay=2)
+	function add_real_progress_bar($upload_id, $delay=2,$waitAfterupload=false)
 	{
 		if(!function_exists('uploadprogress_get_info'))
 		{
@@ -246,9 +246,9 @@ EOT;
 		
 		// add the div where the progress bar will be displayed
 		$this->addElement('html','
-		<div id="dynamic_div_container" style="display:none">
+		<div id="dynamic_div_container" style="display:none;">
 			<div id="dynamic_div_label"></div>
-			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey">
+			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_frame.gif);background-position:center;">
 				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_step.gif);background-repeat:repeat-x"></div>
 			</div>
 		</div>');
@@ -262,7 +262,7 @@ EOT;
 		
 		
 		// add the upload event
-		$this->updateAttributes("onsubmit=\"myUpload.startRealUpload('dynamic_div','".$upload_id."','".$label."','".$this->getAttribute('id')."')\"");
+		$this->updateAttributes("onsubmit=\"myUpload.startRealUpload('dynamic_div','".$upload_id."','".$this->getAttribute('id')."',".$waitAfterupload.")\"");
 		
 		
 	}

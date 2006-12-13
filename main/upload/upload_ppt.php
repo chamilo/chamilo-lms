@@ -109,7 +109,7 @@ if(!empty($errorMessage)){
 }
 
 $form = new FormValidator('update_course');
-$form -> add_real_progress_bar('ppt2lp',1);
+$form -> add_real_progress_bar('ppt2lp',1, true);
 // build the form
 $form -> addElement ('html','<br /><br />');
 $form -> addElement('file', 'user_file','<img src="../img/powerpoint_big.gif" />');

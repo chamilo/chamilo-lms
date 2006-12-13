@@ -25,18 +25,22 @@ function upload(latency){
 	/**
 	 * Starts the timer of the real upload progress
 	 */
-	function startRealUpload(domid, upload_id){
+	function startRealUpload(domid, upload_id, formid, waitAfterUpload){
 		__progress_bar_domid = domid;
 		__progress_bar_uploadid = upload_id;
-		__progress_bar_interval = setInterval(__refreshUpload,latency);
+		__progress_bar_waitAfterUpload = waitAfterUpload;
+		__upload_form_domid  = formid;
+		__progress_bar_interval = setInterval(__refreshUpload,latency);		
 		document.getElementById(domid+'_container').style.display = 'block';
+		
+		
 	}
 	
 	/**
 	 * Function called by a timer to update every x seconds the progress bar
 	 */
 	function __refreshUpload(){
-		xajax_updateProgress(__progress_bar_domid, __progress_bar_uploadid);
+		xajax_updateProgress(__progress_bar_domid, __progress_bar_uploadid, __progress_bar_waitAfterUpload);
 	}
 	
 	/**

@@ -21,6 +21,24 @@ function upload(latency){
 		__progress_bar_interval = setTimeout(__display_progress_bar,latency);
 		__upload_form_domid  = formid;
 	}
+	
+	/**
+	 * Starts the timer of the real upload progress
+	 */
+	function startRealUpload(domid, upload_id){
+		__progress_bar_domid = domid;
+		__progress_bar_uploadid = upload_id;
+		__progress_bar_interval = setInterval(__refreshUpload,latency);
+		document.getElementById(domid+'_container').style.display = 'block';
+	}
+	
+	/**
+	 * Function called by a timer to update every x seconds the progress bar
+	 */
+	function __refreshUpload(){
+		xajax_updateProgress(__progress_bar_domid, __progress_bar_uploadid);
+	}
+	
 	/**
 	 * Displays the progress bar in the given DOM element
 	 */
@@ -32,6 +50,7 @@ function upload(latency){
 		}
 	}
 	this.start = start;
+	this.startRealUpload = startRealUpload;
 	var __progress_bar_domid = '';
 	var __progress_bar_img = '../img/progress_bar.gif';
 	var __progress_bar_text = 'Uploading... Please wait';

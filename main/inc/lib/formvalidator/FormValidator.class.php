@@ -23,6 +23,8 @@
 
 require_once ('HTML/QuickForm.php');
 require_once ('HTML/QuickForm/advmultiselect.php');
+
+
 /**
  * Filter
  */
@@ -204,13 +206,67 @@ EOT;
 	 * @param int $delay The number of seconds between the moment the user
 	 * submits the form and the start of the progress bar.
 	 */
-	function add_progress_bar($delay = 2)
+	function add_progress_bar($delay = 2, $label='')
 	{
+		if(empty($label))
+		{
+			$label = get_lang('PleaseStandBy');
+		}
 		$this->with_progress_bar = true;
-		$this->updateAttributes("onsubmit=\"myUpload.start('dynamic_div','".api_get_path(WEB_CODE_PATH)."img/progress_bar.gif','".get_lang('PleaseStandBy')."','".$this->getAttribute('id')."')\"");
+		$this->updateAttributes("onsubmit=\"myUpload.start('dynamic_div','".api_get_path(WEB_CODE_PATH)."img/progress_bar.gif','".$label."','".$this->getAttribute('id')."')\"");
 		$this->addElement('html','<script language="javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>');
 		$this->addElement('html','<script type="text/javascript">var myUpload = new upload('.(abs(intval($delay))*1000).');</script>');
 	}
+	
+	
+	/**
+	 * Use the new functions (php 5.2) allowing to display a real upload progress.
+	 * @param upload_id the value of the field UPLOAD_IDENTIFIER
+	 * @param delay the frequency of the xajax call
+	 */
+	function add_real_progress_bar($upload_id, $delay=2)
+	{
+		if(phpversion()<'5.2')
+		{
+			$this -> add_progress_bar($delay);
+			return;
+		}
+		
+		if(!class_exists('xajax')) {
+			require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';		
+		}
+		
+		$xajax_upload = new xajax(api_get_path(WEB_CODE_PATH).'inc/lib/upload.xajax.php');
+		
+		$xajax_upload -> registerFunction ('updateProgress');
+		
+	
+		// IMPORTANT : must be the first element of the form (that's why we don't use addElement(hidden...)
+		$this->addElement('html','<input name="UPLOAD_IDENTIFIER" type="hidden" value="'.$upload_id.'" />');
+		
+		// add the div where the progress bar will be displayed
+		$this->addElement('html','
+		<div id="dynamic_div_container" style="display:none">
+			<div id="dynamic_div_label"></div>
+			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey">
+				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_step.gif);background-repeat:repeat-x"></div>
+			</div>
+		</div>');
+		
+		// get the xajax code
+		$this->addElement('html',$xajax_upload -> getJavascript(api_get_path(WEB_CODE_PATH).'inc/lib/xajax'));
+		
+		// get the upload code
+		$this->addElement('html','<script language="javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>');
+		$this->addElement('html','<script type="text/javascript">var myUpload = new upload('.(abs(intval($delay))*1000).');</script>');
+		
+		
+		// add the upload event
+		$this->updateAttributes("onsubmit=\"myUpload.startRealUpload('dynamic_div','".$upload_id."','".$label."','".$this->getAttribute('id')."')\"");
+		
+		
+	}
+	
 	/**
 	 * Display the form.
 	 * If an element in the form didn't validate, an error message is showed
@@ -254,6 +310,7 @@ EOT;
 		return $return_value;
 	}
 }
+
 
 /**
  * Clean HTML

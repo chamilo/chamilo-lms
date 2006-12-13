@@ -18,11 +18,23 @@ include("../inc/global.inc.php");
 require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'events.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+		
+
+//$xajax_upload -> debugOn();
+
+$form_style= '
+<style>
+.row {
+	width: 200px;
+}
+</style>';
 
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 	var myUpload = new upload(0);
 </script>';
+$htmlHeadXtra[] = $form_style;
 
 if(isset($_POST['convert'])){
 	$cwdir = getcwd();
@@ -36,7 +48,6 @@ if(isset($_POST['convert'])){
 }
 
 event_access_tool(TOOL_UPLOAD);
-
 
 
 $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang(TOOL_LEARNPATH));
@@ -97,21 +108,22 @@ if(!empty($errorMessage)){
 	echo '<div style="'.$s_style_error.'"><div style="float:left; margin-right:10px;"><img src="'.api_get_path(WEB_IMG_PATH)."message_error.gif".'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$errorMessage.'</div></div>';
 }
 
-echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
+$form = new FormValidator('update_course');
+$form -> add_real_progress_bar('ppt2lp',1);
+// build the form
+$form -> addElement ('html','<br /><br />');
+$form -> addElement('file', 'user_file','<img src="../img/powerpoint_big.gif" />');
+$form -> addGroup ($elements, null, null, '&nbsp;&nbsp;');
+$form -> addElement ('hidden', 'ppt2lp', 'true');
+$form -> addElement ('html','<br /><br />');
+$form -> addElement ('submit', 'convert', get_lang('ConvertToLP'));
 
-echo '<div id="upload_form_div" name="form_div" style="display:block;">';
 
-echo '<form enctype="multipart/form-data" method="POST" action="'.$_SERVER['PHP_SELF'].'" onsubmit="myUpload.start(\'dynamic_div\',\'../img/progress_bar.gif\',\''.get_lang("Converting").'\',\'upload_form_div\');">';
-echo '<img src="../img/powerpoint_big.gif" align="absbottom">
-		&nbsp;&nbsp;<input type="file" name="user_file">
-		<input type="hidden" name="ppt2lp" value="true" />
-		<br><br>
-		<input type="submit" name="convert" value="'.get_lang('ConvertToLP').'">
-		&nbsp;&nbsp;
-		<img src="../img/scormbuilder.gif" align="absmiddle">';
-echo '</form>';
 
-echo '</div>';
+// display the form
+$form -> display();
+
+
 
 echo "<br><br><br><br>";
 

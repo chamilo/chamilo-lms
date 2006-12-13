@@ -78,6 +78,10 @@ $nameTools=get_lang('Forum');
 include('forumconfig.inc.php');
 include('forumfunction.inc.php');
 
+$fck_attribute['Width'] = '600';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Middle';
+
 //error_reporting(E_ALL);
 /*
 ==============================================================================

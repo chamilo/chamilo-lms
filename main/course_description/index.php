@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: index.php 10479 2006-12-13 12:42:20Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -132,6 +132,11 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 			$default_description_titles[$description_id] = $description['title'];
 			$description_content = $description['content'];
 		}
+		
+		$fck_attribute['Width'] = '600';
+		$fck_attribute['Height'] = '400';
+		$fck_attribute['ToolbarSet'] = 'Middle';
+		
 		// Build the form
 		$form = new FormValidator('course_description');
 		$form->addElement('hidden', 'description_id');
@@ -224,7 +229,9 @@ if ($show_description_list)
 		$group[] = $cat_form->createElement('select', 'description_id', get_lang('AddCat'), $categories);
 		$group[] = $cat_form->createElement('submit', null, get_lang('Ok'));
 		$cat_form->addGroup($group, 'cat', get_lang('AddCat'), null, false);
+		
 		$cat_form->display();
+		
 	}
 	if (count($descriptions) > 0)
 	{

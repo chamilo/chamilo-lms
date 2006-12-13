@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 10204 2006-11-26 20:46:53Z pcool $
+<?php //$Id: agenda.php 10479 2006-12-13 12:42:20Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -271,7 +271,9 @@ if ($_GET['origin']!='learnpath')
 	echo "<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>";
 }
 	
-
+$fck_attribute['Width'] = '600';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Middle';
 
 
 // THE RIGHT PART

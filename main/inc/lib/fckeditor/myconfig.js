@@ -1,6 +1,7 @@
 //FCKConfig.SmileyWindowWidth		= 500 ;
 //FCKConfig.SmileyWindowHeight	= 500 ;
 //FCKConfig.ImageUpload = false ;
+
 FCKConfig.ToolbarSets["PluginTest"] = [
 	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
 	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
@@ -28,6 +29,11 @@ FCKConfig.ToolbarSets["Question"] = [
 	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
 	'/',
 	['Style','FontFormat','FontName','FontSize'],['Attachment']
+] ;
+
+
+FCKConfig.ToolbarSets["Middle"] = [
+	['FontSize'],['Bold','Italic','TextColor'],['OrderedList','UnorderedList'],['Rule','Link','Table'],['Image','Flash']
 ] ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;

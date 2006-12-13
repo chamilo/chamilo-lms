@@ -1,5 +1,5 @@
 <?php
-// $Id: system_announcements.php 10215 2006-11-27 13:57:17Z pcool $
+// $Id: system_announcements.php 10479 2006-12-13 12:42:20Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -176,6 +176,11 @@ if ($action_todo)
 	for($i=0; $i<count($language_list['name']) ; $i++) {
 		$language_list_with_keys[$language_list['folder'][$i]] = $language_list['name'][$i];
 	}
+	
+	$fck_attribute['Width'] = '600';
+	$fck_attribute['Height'] = '400';
+	$fck_attribute['ToolbarSet'] = 'Middle';
+	
 	$form->addElement('select', 'lang',get_lang('Language'),$language_list_with_keys);
 	$form->add_html_editor('content', get_lang('Content'));
 	$form->add_timewindow('start','end',get_lang('StartTimeWindow'),get_lang('EndTimeWindow'));

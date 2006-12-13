@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 10195 2006-11-25 15:26:00Z pcool $
+<?php //$Id: agenda.inc.php 10479 2006-12-13 12:42:20Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -2132,7 +2132,21 @@ function show_add_form($id = '')
 
 	<tr>
 		<td colspan="7">
-			<?php api_disp_html_area('content',$content,'300px'); ?><br />
+		
+			<?php 
+			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+			
+			$oFCKeditor = new FCKeditor('content') ;
+			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+			$oFCKeditor->Height		= '300';
+			$oFCKeditor->Width		= '600';
+			$oFCKeditor->Value		= $content;
+			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+			$oFCKeditor->ToolbarSet = "Middle";
+			$return =	$oFCKeditor->CreateHtml();
+			
+			echo "<div style='margin-left: 200px'>".$return."</div>";
+ ?><br />
 		</td>
 	</tr>
 	<?php /* ADDED BY UGENT, Patrick Cool, march 2004 */ ?>

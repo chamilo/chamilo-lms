@@ -33,7 +33,12 @@ FCKConfig.ToolbarSets["Question"] = [
 
 
 FCKConfig.ToolbarSets["Middle"] = [
-	['FontSize'],['Bold','Italic','TextColor'],['OrderedList','UnorderedList'],['Rule','Link','Table'],['Image','Flash']
+	['FontSize'],['Bold','Italic','TextColor'],['OrderedList','UnorderedList'],
+	['Rule','Link','Table'],['Image','Flash']
+] ;
+
+FCKConfig.ToolbarSets["Full"] = [
+	['Save','Templates','PasteWord','Link','-','Image','Flash','Video','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;

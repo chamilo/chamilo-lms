@@ -5321,6 +5321,8 @@ class learnpath {
 										$oFCKeditor->Height		= '400';
 										$oFCKeditor->Width		= '100%';
 										$oFCKeditor->Value		= $content;
+										$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+										$oFCKeditor->ToolbarSet = "Full";
 										
 										$return .=	$oFCKeditor->CreateHtml();
 									}

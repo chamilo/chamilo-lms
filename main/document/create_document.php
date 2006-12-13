@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: create_document.php 10485 2006-12-13 15:52:15Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -51,6 +51,11 @@ include (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 include (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $nameTools = get_lang('CreateDocument');
+
+$fck_attribute['Width'] = '800';
+$fck_attribute['Height'] = '450';
+$fck_attribute['ToolbarSet'] = 'Full';
+
 /*
 -----------------------------------------------------------
 	Constants and variables

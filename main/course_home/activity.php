@@ -60,8 +60,7 @@ function show_tools_category($course_tool_category)
 	switch ($course_tool_category)
 	{
 		case TOOL_STUDENT_VIEW:
-
-				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE category = 'authoring' OR category = 'interaction' AND visibility = '1' ORDER BY id",__FILE__,__LINE__);
+				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 				

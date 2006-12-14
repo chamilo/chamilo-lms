@@ -1,6 +1,6 @@
 <?php
 
-// $Id: lostPassword.php 10204 2006-11-26 20:46:53Z pcool $ 
+// $Id: lostPassword.php 10494 2006-12-14 09:11:15Z elixir_inter $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -44,7 +44,7 @@ $language_file = "registration";
 require ('../inc/global.inc.php');
 require_once ('lost_password.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-$tool_name = get_lang('_lost_password');
+$tool_name = get_lang('LostPassword');
 Display :: display_header($tool_name);
 
 // Forbidden to retrieve the lost password

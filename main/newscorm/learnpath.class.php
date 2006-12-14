@@ -4384,8 +4384,7 @@ class learnpath {
 			WHERE id = " . $_POST['path'];
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_array($res);
-		
-		$content	= stripslashes($_POST['content']);
+		$content	= stripslashes($_POST['content_lp']);
 		$file		= $filepath . $row['path'];
 		
 		
@@ -4623,10 +4622,12 @@ class learnpath {
 			//$return .= '<p class="lp_title">' . $row_doc['title'] . ($edit_link ? ' [ <a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $_GET['file'] . '&amp;edit=true&amp;lp_id=' . $_GET['lp_id'] . '">Edit this document</a> ]' : '') . '</p>';
 		
 		//TODO: add a path filter
-		if($iframe)
+		if($iframe){
 			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path'] . '" style="background:#FFFFFF; border:1px solid #CCCCCC; height:490px; width:100%;"></iframe>';
-		else
+		}
+		else{
 			$return .= file_get_contents(api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path']);
+		}
 		
 		return $return;
 	}

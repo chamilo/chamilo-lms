@@ -310,7 +310,7 @@ switch($_REQUEST['action'])
 			{
 				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description']);
 				
-				if(isset($_POST['content']))
+				if(isset($_POST['content_lp']))
 				{
 					$_SESSION['oLP']->edit_document($_course);
 				}

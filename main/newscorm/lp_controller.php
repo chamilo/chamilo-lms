@@ -42,7 +42,8 @@ if ($is_allowed_in_course == false){
 	Display::display_footer();
 }
 
-require_once(api_get_path(LIBRARY_PATH) . "/fckeditor.lib.php");
+//require_once(api_get_path(LIBRARY_PATH) . "/fckeditor.lib.php");
+require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 $lpfound = false;
 
 $myrefresh = 0;

@@ -31,10 +31,13 @@ FCKConfig.ToolbarSets["Question"] = [
 	['Style','FontFormat','FontName','FontSize'],['Attachment']
 ] ;
 
-
 FCKConfig.ToolbarSets["Middle"] = [
 	['FontSize'],['Bold','Italic','TextColor'],['OrderedList','UnorderedList'],
 	['Rule','Link','Table'],['Image','Flash']
+] ;
+
+FCKConfig.ToolbarSets["Small"] = [
+	['Bold','Italic','Underline','StrikeThrough','Link','Image','Flash','OrderedList','UnorderedList','Table','OrderedList','UnorderedList']
 ] ;
 
 FCKConfig.ToolbarSets["Full"] = [

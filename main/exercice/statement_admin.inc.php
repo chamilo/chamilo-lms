@@ -1,4 +1,4 @@
-<?php // $Id: statement_admin.inc.php 10234 2006-11-28 13:43:34Z develop-it $
+<?php // $Id: statement_admin.inc.php 10514 2006-12-15 16:13:53Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,6 +49,9 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 //debug var. Set to 0 if you don't want any debug display
 $debug = 0;
 
+$fck_attribute['Width'] = '700';
+$fck_attribute['Height'] = '300';
+$fck_attribute['ToolbarSet'] = 'Small';
 
 // the question form has been submitted
 // this question form is the one below.
@@ -256,9 +259,7 @@ $user = array("questionDescription"=>$questionDescription,
                     "questionName"=>$questionName,
                     "answerType"=>$defaultType);
 
-$fck_attribute['Width'] = '600';
-$fck_attribute['Height'] = '300';
-$fck_attribute['ToolbarSet'] = 'Question';
+
 $form = new FormValidator('introduction_text','post',$_SERVER['PHP_SELF']."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
 //$renderer =&$form->defaultRenderer();
 //$renderer->setElementTemplate('<div align ="left">{element}</div>');
@@ -271,8 +272,8 @@ $form = new FormValidator('introduction_text','post',$_SERVER['PHP_SELF']."?modi
 //$form->addelement('static','label1',get_lang('Question'));
 $form->addelement('text','questionName',get_lang('Question'));
 $form->addelement('hidden','myid',$_REQUEST['myid']);
-//$form->add_html_editor('questionDescription',get_lang('QuestionDescription'),false);
-$form->addElement('html_editor','questionDescription',get_lang('QuestionDescription'),false);
+$form->add_html_editor('questionDescription', get_lang('questionDescription'));
+//$form->addElement('html_editor','questionDescription',get_lang('QuestionDescription'),false);
 if($okPicture)
 	{
 	$form->addelement('checkbox','deletePicture',get_lang('DeletePicture'));

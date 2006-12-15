@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 10281 2006-11-30 23:06:46Z develop-it $
+<?php // $Id: exercise.lib.php 10514 2006-12-15 16:13:53Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -101,9 +101,10 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			{
 	        #$comment = $objAnswerTmp->selectComment(1);
 	        //
+	
 	$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
 	$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
-	$oFCKeditor->BasePath = api_get_path(WEB_LIBRARY_PATH)."fckeditor/";
+	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 	//$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(WEB_PATH)."claroline/inc/lib/fckeditor_new/myconfig.js?".time(); //to clear cache we use time() but always clear history manually
 	/*
 	$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Image&Connector=connectors/php/connector.php&ServerPath=/$upload_path/";
@@ -136,6 +137,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
 
 	$oFCKeditor->ToolbarSet = 'Comment' ;*/
+	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+	$oFCKeditor->ToolbarSet = "Small";
 	$oFCKeditor->Width  = '800';
 	$oFCKeditor->Height = '300';
 	$oFCKeditor->Value	= '' ;

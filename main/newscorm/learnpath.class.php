@@ -5053,8 +5053,7 @@ class learnpath {
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 		
-		$path_parts = pathinfo($extra_info[16]);
-		
+		$path_parts = pathinfo($extra_info['dir']);		
 		$no_display_edit_textarea=false;
 		
 		//If action==edit document
@@ -5317,6 +5316,7 @@ class learnpath {
 									
 									
 									if(!$no_display_edit_textarea){
+										
 										$oFCKeditor = new FCKeditor('content_lp') ;
 										$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 										$oFCKeditor->Height		= '400';

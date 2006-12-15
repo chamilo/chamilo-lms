@@ -136,6 +136,7 @@ $Visited = "Doorlopen";
 $Name = "Naam";
 $FirstAccess = "Eerste toegang";
 $LastAccess = "Laatste toegang";
+$langProbationers = "Leerders";
 $MoyenneTest = "Testgemiddelde";
 $exportExcel = "Export in Excel-formaat";
 $MoyCourse = "Cursusgemiddelde";

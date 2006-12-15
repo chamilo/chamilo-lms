@@ -14,4 +14,5 @@ $langValid  = "Ok";
 $langBackAndForget  = "Annuleren";
 $langOkSent = "Uw pagina werd opgestuurd.<br /><br />
 Die is toegankelijk vanaf uw <a href=\"../../index.php\">cursusstartpagina</a>.";
+$Content = "Inhoud";
 ?>

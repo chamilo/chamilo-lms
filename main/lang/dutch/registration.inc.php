@@ -108,6 +108,7 @@ $langFirstname = "Voornaam";
 $langDefineHeadings = "Definieer aanvullende informatie";
 $langCourseAdministratorOnly = "Enkel voor cursusbeheerders";
 $langWorks = "Studentenpublicaties";
+$langLostPassword = "Wachtwoord vergeten";
 $langAdminOfCourse = "Cursusbeheerder";
 $langSimpleUserOfCourse = "Gebruiker van deze cursus";
 $langIsTutor = "Leraar";

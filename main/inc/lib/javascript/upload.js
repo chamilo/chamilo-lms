@@ -32,6 +32,9 @@ function upload(latency){
 		__upload_form_domid  = formid;
 		__progress_bar_interval = setInterval(__refreshUpload,latency);		
 		document.getElementById(domid+'_container').style.display = 'block';
+		if(waitAfterUpload){
+			document.getElementById(domid+'_waiter_container').style.display = 'block';
+		}
 		
 		
 	}

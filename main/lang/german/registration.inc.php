@@ -108,6 +108,7 @@ $langFirstname = "Vorname";
 $langDefineHeadings = "Überschriften definieren";
 $langCourseAdministratorOnly = "Nur für Kursleiter";
 $langWorks = "Dokumente für die Teilnehmer/innen";
+$langLostPassword = "Passwort vergessen?";
 $langAdminOfCourse = "Administrator";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "Trainer/in";

@@ -66,4 +66,7 @@ $langOpenarea = "Area terbuka personal";
 $langProductions = "Produksi";
 $langSendChatRequest = "Kirim permintaan chat ke orang ini";
 $langRequestDenied = "Panggilan ditolak.";
+$UsageDatacreated = "Penggunaan data yang dibuat";
+$SessionView = "Tampilkan mata kuliah diurut menurut sesi";
+$CourseView = "Tampilkan daftar lengkap mata kuliah";
 ?>

@@ -29,6 +29,7 @@ $langCourseList  = "Corsi";
 $Subscribe = "Iscriviti";
 $AlreadySubscribed = "Sei già iscritto";
 $CourseCategoryStored = "La categoria di corso è stata creata";
+$langWithoutTimeLimits = "Senza limiti di tempo";
 $lang_back_to_main_category_list = "Categorie";
 $langAdded = "Aggiunto";
 $langDeleted = "Eliminato";

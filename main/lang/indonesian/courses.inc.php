@@ -29,6 +29,7 @@ $langCourseList  = "Mata Kuliah";
 $Subscribe = "Daftar";
 $AlreadySubscribed = "Sudah terdaftar";
 $CourseCategoryStored = "Kategori Mata Kuliah dibuat";
+$langWithoutTimeLimits = "Tanpa batasan waktu";
 $lang_back_to_main_category_list = "Kembali ke daftar kategori utama";
 $langAdded = "Ditambahkan";
 $langDeleted = "Dihapus";

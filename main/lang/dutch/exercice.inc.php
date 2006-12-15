@@ -163,6 +163,7 @@ $langUseExistantQuestion = "Gebruik bestaande vraag";
 $freeAnswer = "Open antwoord";
 $notCorrectedYet = "Dit antwoord is nog niet verbeterd. Tot dit gebeurt, wordt uw score voor deze vraag als 0 gerekend.";
 $adminHP = "Hot Potatoes Admin";
+$NewQu = "Nieuwe vraag";
 $NoImage = "Gelieve een afbeelding te selecteren.";
 $langAnswerHotspot = "Beschrijving en gewist zijn verplicht voor elke hotspot - commentaar is optioneel";
 $langMinHotspot = "Je dient ten minste één (1) hotspot aan te maken";

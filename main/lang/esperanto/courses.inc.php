@@ -28,6 +28,7 @@ $langCourseList  = "Kursoj ";
 $Subscribe = "Ali&#285;i ";
 $AlreadySubscribed = "Jam ali&#285;intaj ";
 $CourseCategoryStored = "La nova kurskategorio estas kreita ";
+$langWithoutTimeLimits = "Sen templimo";
 $lang_back_to_main_category_list = "Reiri al supervido de kategorioj ";
 $langAdded = "Aldonite ";
 $langDeleted = "Forigite ";

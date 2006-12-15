@@ -9,5 +9,8 @@ $langEnter = "Entrer";
 $langHelp = "へルプ";
 $langReg = "登録";
 $langMenu  = "メニュ";
+$langCourseDoesntExist = "警告：このコースは存在しません。";
 $langHelpMaj = "へルプ";
+$langAdmin = "管理者";
+$langCourseCreate = "コース作成";
 ?>

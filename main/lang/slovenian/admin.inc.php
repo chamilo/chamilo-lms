@@ -490,7 +490,7 @@ $ImportCSVFileLocation = "Lokacija CVS datoteke za uvoz";
 $ClassesCreated = "Razredi so bili ustvarjeni";
 $ErrorsWhenImportingFile = "Napaka pri uvozu datoteke";
 $ServiceActivated = "Storitev je bila aktivirana";
-$ActiveExtension = "Aktivne storitve";
+$ActiveExtension = "Aktiviraj storitev";
 $InvalidExtension = "Nepravilna razširitev";
 $VersionCheckExplanation = "Da bi omogoèili avtomatièno preverjanje razlièice, morate registrirati namestitev pri dokeos.com. Informacije pridobljene s to registracijo se bodo uporabile zgolj v interne namene, javno bodo predstavljeni le akumulirani povzetki ( skupno število namestitev, skupno število Dokeos teèajev v vseh namestitvah po svetu, ...) (glej <a href=\" http://www.dokeos.com/stats/\"> http://www.dokeos.com/stats/</a>. Z registracijo se hkrati pojavite tudi v seznamu namestitev (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>) V primeru, da se na tem spisku ne želite pojaviti, odkljukajte potrditveno polje spodaj. Registracijski postopek je preprost: samo kliknite na tale gumb: <br />";
 ?>

@@ -28,6 +28,7 @@ $langCourseList  = "Cursussen";
 $Subscribe = "Inschrijven";
 $AlreadySubscribed = "Reeds ingeschreven";
 $CourseCategoryStored = "De nieuwe cursuscategorie is aangemaakt";
+$langWithoutTimeLimits = "Zonder tijdslimiet";
 $lang_back_to_main_category_list = "Terug naar overzicht van categorieën";
 $langAdded = "Toegevoegd";
 $langDeleted = "Verwijderd";

@@ -99,6 +99,7 @@ $langLearnPathAdded = "Vaša uèna pot je bila uspešno ustvarjena in dodana v menu
 $langConverting = "Pretvarjam...";
 $langPpt2lpError = "Napaka pri pretvorbi iz PowerPoint datoteke";
 $langCantEditDocument = "Tega dokumenta ni možno urejati";
+$langAreYouSureToDelete = "Ste preprièani, da želite odstraniti ?";
 $lang_prerequisites_limit = "Predzahteve (omejitve)";
 $lang_loading = "Po&#269;akaj, nalagam stran ...";
 $lang_empty = "Ta pot ne vsebuje nobenih korakov.";

@@ -110,6 +110,7 @@ $langFirstname = "Ime";
 $langDefineHeadings = "Definiraj naslove";
 $langCourseAdministratorOnly = "le uèitelj";
 $langWorks = "Objave teèajnikov";
+$langLostPassword = "Izgubljeno geslo";
 $langAdminOfCourse = "Upravitelj teèaja";
 $langSimpleUserOfCourse = "Uporabnik teèaja";
 $langIsTutor = "Tutor";

@@ -1,4 +1,16 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Search = "Sök";
+$FavoriteBlogs = "Mina favorit bloggar";
+$Navigation = "Navigation";
+$Title = "Titel";
+$ThisBlog = "Denna blog";
+$NewPost = "Ny artikel";
+$blog_management = "Blog hantering";
+$langAuthor = "Författare";
+$langWelcome = "Välkommen!";
+$langModule = "Modul";
+$langUserHasPermissionNot = "Användaren har inga rättigheter";
+$langUserHasPermission = "Användaren har rättigheter";
 ?>

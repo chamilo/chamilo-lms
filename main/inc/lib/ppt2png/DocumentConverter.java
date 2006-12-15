@@ -1,3 +1,5 @@
+import java.awt.Event;
+
 import sun.text.Normalizer;
 
 import com.enterprisedt.net.ftp.FTPClient;
@@ -19,8 +21,6 @@ import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.presentation.XPresentation;
-import com.sun.star.presentation.XPresentationSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
@@ -48,23 +48,25 @@ public class DocumentConverter {
 	 */
 	public static void main(String args[]) {
 		
-		String cnx, host, port, url, ftpPasswd, destinationFolder, remoteFolderFullPath, remoteFolder;
+		String cnx, ftpuser, host, port, url, ftpPasswd, destinationFolder, remoteFolderFullPath, remoteFolder;
 		
 		try {
 			host = args[0];
 			port = args[1];
 			url = args[2];
-			destinationFolder = args[3];		
-			if(args.length == 5){
-				ftpPasswd = args[4];
+			destinationFolder = args[3];
+			if(args.length == 6){
+				ftpuser = args[4];
+				ftpPasswd = args[5];
 			}
 			else{
+				ftpuser = "";
 				ftpPasswd = "";
 			}
 			if(host.equals("localhost")){
 				url = "file://"+url;
 				remoteFolder = destinationFolder;
-				remoteFolderFullPath = "file:///";
+				remoteFolderFullPath = "file://";
 			}
 			else {
 				remoteFolderFullPath = "file:///home/elixir/";					
@@ -99,7 +101,6 @@ public class DocumentConverter {
 			XBridgeFactory xBridgeFactory = (XBridgeFactory) UnoRuntime
 					.queryInterface(XBridgeFactory.class, x);
 			
-			
 			// this is the bridge that you will dispose
 			XBridge bridge = xBridgeFactory.createBridge("", "urp", connection,null);
 			
@@ -121,19 +122,10 @@ public class DocumentConverter {
 			xComponentContext = (XComponentContext) UnoRuntime.queryInterface(
 					XComponentContext.class, oDefaultContext);
 			
-			/*Object objectUrlResolver = xMultiComponentFactory
-					.createInstanceWithContext(
-							"com.sun.star.bridge.UnoUrlResolver",
-							xComponentContext);*/
 			
-			//System.out.print("Trying to connect");
 			while (xcomponentloader == null) {
 				try {	
 					
-					//System.out.print(".");
-					//Object objectInitial = xurlresolver.resolve(cnx);
-					//System.out.println("\r\nConnection opened");
-
 					xcomponentloader = (XComponentLoader) UnoRuntime
 							.queryInterface(
 									XComponentLoader.class,
@@ -149,34 +141,55 @@ public class DocumentConverter {
 						//ftp connexion						
 						ftp.setRemoteHost(host);
 						ftp.connect();
-						ftp.login("elixir", ftpPasswd);
+						ftp.login(ftpuser, ftpPasswd);
 						ftp.setConnectMode(FTPConnectMode.PASV);
-			            ftp.setType(FTPTransferType.ASCII);
+						ftp.setType(FTPTransferType.BINARY);
 			            try{
 			            	ftp.mkdir(remoteFolder);
 			            }catch(Exception e){}
 			            ftp.chdir(remoteFolder);
 			            ftp.put(url,"presentation.ppt");			            
 			            url = remoteFolderFullPath+"/"+remoteFolder+"/presentation.ppt";
-			            ftp.setType(FTPTransferType.BINARY);
+			            
 			            
 					}
 					
-					PropertyValue[] loadProps = new PropertyValue[1];
+					PropertyValue[] loadProps = new PropertyValue[2];
 					loadProps[0] = new PropertyValue();
 				    loadProps[0].Name = "Hidden";
 				    loadProps[0].Value = new Boolean(true);
+				    
 					// open the document
 					XComponent component = xcomponentloader
 							.loadComponentFromURL(url,
 									"_blank", 0, loadProps);
+					
+		          
 					//System.out.println("Document Opened");
 					
 					// filter
-					loadProps = new PropertyValue[2];
+					loadProps = new PropertyValue[4];
+					
+					// type of image
 					loadProps[0] = new PropertyValue();
 					loadProps[0].Name = "MediaType";
 					loadProps[0].Value = "image/png";
+					
+					// Height and width
+					PropertyValue[] filterDatas = new PropertyValue[4];
+					for(int i = 0; i<4 ; i++){
+						filterDatas[i] = new PropertyValue();
+					}
+					
+					filterDatas[0].Name = "PixelWidth";
+					filterDatas[0].Value = new Integer(600);
+					filterDatas[1].Name = "PixelHeight";
+					filterDatas[1].Value = new Integer(450);
+					filterDatas[2].Name = "LogicalWidth";
+					filterDatas[2].Value = new Integer(2000);
+					filterDatas[3].Name = "LogicalHeight";
+					filterDatas[3].Value = new Integer(2000);
+					
 					
 					XDrawPagesSupplier pagesSupplier = (XDrawPagesSupplier) UnoRuntime
 							.queryInterface(XDrawPagesSupplier.class, component);
@@ -192,8 +205,10 @@ public class DocumentConverter {
 										.getByIndex(i));
 						
 						XNamed xPageName = (XNamed)UnoRuntime.queryInterface(XNamed.class,page);
-						xPageName.setName(xPageName.getName().replace(' ','_'));
-						xPageName.setName(removeAccents(xPageName.getName()));
+						
+						xPageName.setName("slide"+(i+1));
+						//if(!xPageName.getName().equals("slide"+(i+1)) && !xPageName.getName().equals("page"+(i+1)))
+							//xPageName.setName((i+1)+"-"+xPageName.getName());
 						Object GraphicExportFilter = xMultiComponentFactory
 								.createInstanceWithContext(
 										"com.sun.star.drawing.GraphicExportFilter",
@@ -206,14 +221,20 @@ public class DocumentConverter {
 								.queryInterface(XComponent.class, page);
 
 						xExporter.setSourceDocument(xComp);
-
 						loadProps[1] = new PropertyValue();
 						loadProps[1].Name = "URL";
-						loadProps[1].Value = remoteFolderFullPath+remoteFolder+"/"+(i+1) + "-"+xPageName.getName()+".png";
+						loadProps[1].Value = remoteFolderFullPath+remoteFolder+"/"+xPageName.getName()+".png";
+						loadProps[2] = new PropertyValue();
+						loadProps[2].Name = "FilterData";
+						loadProps[2].Value = filterDatas;
+						loadProps[3] = new PropertyValue(); 
+						loadProps[3].Name = "Quality"; 
+						loadProps[3].Value = new Integer(100);
+						
 						XFilter xFilter = (XFilter) UnoRuntime.queryInterface(XFilter.class, GraphicExportFilter);
 
 						xFilter.filter(loadProps);
-						System.out.println((i+1) + "-"+xPageName.getName()+".png");
+						System.out.println(xPageName.getName()+".png");
 						//System.out.println("Page saved to url "+loadProps[1].Value);
 						
 					}
@@ -259,7 +280,34 @@ public class DocumentConverter {
 	}
 	
 	public static String removeAccents(String text) {
-	    return Normalizer.decompose(text, false, 0)
+	    String newText =  Normalizer.decompose(text, false, 0)
 	                     .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+	    /*
+	    newText = newText.replace('\u00B4','_');
+	    newText = newText.replace('\u02CA','_');
+	    newText = newText.replace('\u02B9','_');
+	    newText = newText.replace('\u02BC','_');	    
+	    newText = newText.replace('\u02B9','_');
+	    newText = newText.replace('\u03D8','_');
+	    newText = newText.replace('\u0374','_');
+	    newText = newText.replace('\u0384','_');
+	    newText = newText.replace('\u055A','_');
+	    */
+	    newText = newText.replace('\u2019','_');
+	    newText = newText.replace('\u00B4','_');
+	    newText = newText.replace('\u055A','_');
+	    newText = newText.replace('?','_');
+	    newText = newText.replace('\'','_');
+	    newText = newText.replace(' ','_');
+	    return newText;
 	}
+	
+	public boolean handleEvent(Event evt) {
+        // Traitement de l'evenement de fin de programme
+         if ( evt.id == evt.WINDOW_DESTROY ) {
+              System.exit(0) ;
+              return true ;
+         }
+         return false ;
+  }
 }

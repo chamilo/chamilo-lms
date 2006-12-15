@@ -44,5 +44,6 @@ $Local = "Lokaal";
 $Remote = "Op afstand";
 $FileToUpload = "Op te laden bestand";
 $ContentMaker = "Auteur van de inhoud";
+$ContentProximity = "Situatie van het leerpad";
 $UploadLocalFileFromGarbageDir = "Lokaal bestand uit de main/garbage folder opladen";
 ?>

@@ -17,4 +17,7 @@ $langCombinedCourse = "Kombinerad kurs";
 $ToolIsNowVisible = "Verktyget är nu synligt";
 $ToolIsNowHidden = "Verktyget är nu osynligt";
 $EditLink = "Ändra länk";
+$visio = "Dokeos Live konferens";
+$GreyIcons = "Verktygslåda";
+$Administration = "Administrering";
 ?>

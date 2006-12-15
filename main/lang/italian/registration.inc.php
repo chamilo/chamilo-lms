@@ -110,6 +110,7 @@ $langFirstname = "Nome";
 $langDefineHeadings = "Definisci le intestazioni";
 $langCourseAdministratorOnly = "solo docenti";
 $langWorks = "Elaborati";
+$langLostPassword = "Password dimenticata";
 $langAdminOfCourse = "amministratore";
 $langSimpleUserOfCourse = "normale";
 $langIsTutor = "tutor";

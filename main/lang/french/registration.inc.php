@@ -120,6 +120,7 @@ $langFirstname = "Prénom";
 $langDefineHeadings = "Définir les intitulés";
 $langCourseAdministratorOnly = "Réservé au responsable";
 $langWorks = "Travaux";
+$langLostPassword = "Mot de passe perdu";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "modérateur";

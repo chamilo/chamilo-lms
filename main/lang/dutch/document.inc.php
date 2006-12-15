@@ -67,6 +67,8 @@ $langTocDown  = "Omlaag";
 $langTocUp  = "Omhoog";
 $lang_cut_paste_link = "Geen frames";
 $langCreatePath = "Nieuw leerpad";
+$langOogieConversionPowerPoint = "Oogie : powerpoint conversie";
+$langWelcomeOogieSubtitle = "Een conversie applicatie die een Powerpoint presentatie omzet in een leerpad.";
 $langAddMetadata = "Metadata bekijken/veranderen";
 $langGoMetadata = "Go";
 $langQuotaForThisCourseIs = "Het quotum voor deze cursus is";
@@ -113,5 +115,10 @@ $DocumentsOverview = "documentenoverzicht";
 $ViewSlideshow = "Bekijk afbeeldingen als diavoorstelling";
 $Options = "Opties";
 $Type = "Type";
+$WelcomeOogieConverter = "Welkom in de conversie applicatie Oogie<br />
+1. Kies een .ppt of .odp bestand <br/>
+2. Verstuur dit bestan naar Oogie. Het word omgezet in een Scorm leerpad <br />
+3. U kunt nu audiocommentaar toevoegen aan elke slide en testen tussen de verschillende slides plaatsen";
+$ConvertToLP = "Converteer in leerpad";
 $Content = "Inhoud";
 ?>

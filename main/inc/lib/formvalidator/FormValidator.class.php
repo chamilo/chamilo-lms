@@ -246,12 +246,26 @@ EOT;
 		
 		// add the div where the progress bar will be displayed
 		$this->addElement('html','
-		<div id="dynamic_div_container" style="display:none;">
-			<div id="dynamic_div_label"></div>
-			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_frame.gif);background-position:center;">
-				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_step.gif);background-repeat:repeat-x"></div>
+		<div id="dynamic_div_container" style="display:none;"><br /><br />
+			<div id="dynamic_div_label">'.get_lang('UploadFile').'</div>
+			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_frame.gif);">
+				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_step.gif);background-repeat:repeat-x;background-position:center;"></div>
 			</div>
 		</div>');
+		
+		if($waitAfterupload){
+			$this->addElement('html','
+			<div id="dynamic_div_waiter_container" style="display:none;">
+				<div id="dynamic_div_waiter_label">
+					'.get_lang('SlideshowConversion').'
+				</div>			
+				<div id="dynamic_div_waiter_frame">
+					<img src="'.api_get_path(WEB_CODE_PATH).'img/real_upload_frame.gif" />
+				</div>		
+			</div>
+
+		');
+		}
 		
 		// get the xajax code
 		$this->addElement('html',$xajax_upload -> getJavascript(api_get_path(WEB_CODE_PATH).'inc/lib/xajax'));

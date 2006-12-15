@@ -13,4 +13,5 @@ $langAdd  = "Aldoni";
 $langValid  = "En ordo ";
 $langBackAndForget  = "Nuligi ";
 $langOkSent = "Via pa&#285;o estas sendita..<p>&#284;i estas alirebla de el la <a href=../..//index.php>Homepage</a> de via kursa retejo. ";
+$Content = "Enhavo";
 ?>

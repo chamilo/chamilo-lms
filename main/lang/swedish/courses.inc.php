@@ -28,6 +28,7 @@ $langCourseList  = "Kurser";
 $Subscribe = "Prenumerera";
 $AlreadySubscribed = "Prenumeration pågår redan";
 $CourseCategoryStored = "Kurskategorin är skapad";
+$langWithoutTimeLimits = "Utan tidsbegränsningar";
 $lang_back_to_main_category_list = "Tillbaka till huvudkategorilistan";
 $langAdded = "Tillagd";
 $langDeleted = "Raderad";

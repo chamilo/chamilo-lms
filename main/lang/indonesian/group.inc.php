@@ -92,6 +92,7 @@ $GroupTutors = "Tutor";
 $GroupWork = "Kerja";
 $GroupCalendar = "Agenda";
 $GroupAnnouncements = "Pengumuman";
+$NoCategoriesDefined = "Tidak terdapat kategori";
 $GroupsFromClasses = "Kelompok dari klas";
 $GroupsFromClassesInfo = "Menggunakan opsi ini, anda dapat membuat kelompok berdasarkan kelas-kelas yang terdaftar di mata kuliah anda.";
 ?>

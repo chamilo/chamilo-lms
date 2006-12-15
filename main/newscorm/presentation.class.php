@@ -60,6 +60,8 @@ class presentation extends learnpath {
 		move_uploaded_file($file['tmp_name'],$base_work_dir.$file['name']);
 		$file = $base_work_dir.$file['name'];
 		chmod($file,0777);
+		
+		
 		/*
 		 * exec java application
 		 * the parameters of the program are :
@@ -71,7 +73,11 @@ class presentation extends learnpath {
 		 * - ftppassword if required
 		 * The program fills $files with the list of slides created
 		 */
-		$cmd = 'cd '.api_get_path(LIBRARY_PATH).'ppt2png && ./launch_ppt2png.sh java '.api_get_setting('service_ppt2lp','host').' 2002 "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
+		$classpath = '-cp .:ridl.jar:js.jar:juh.jar:jurt.jar:jut.jar:java_uno.jar:java_uno_accessbridge.jar:edtftpj-1.5.2.jar:unoil.jar';
+		if(strpos($_ENV['OS'],'Windows') !== false)
+			$classpath = str_replace(':',';',$classpath);
+		
+		$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
 		
 		chmod ($base_work_dir.$created_dir,0777);
 		

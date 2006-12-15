@@ -67,6 +67,8 @@ $langTocDown  = "Giù";
 $langTocUp  = "Su";
 $lang_cut_paste_link = "Senza frames";
 $langCreatePath = "Crea un percorso";
+$langOogieConversionPowerPoint = "Oogie: conversione da PowerPoint";
+$langWelcomeOogieSubtitle = "Strumento di conversione da PowerPoint a percorso didattico";
 $langAddMetadata = "Vedi/Modifica i Metadati";
 $langGoMetadata = "Vai ai Metadati";
 $langQuotaForThisCourseIs = "Le dimensioni massime del corso sono ";
@@ -113,5 +115,7 @@ $DocumentsOverview = "Elenco dei documenti";
 $ViewSlideshow = "Vedi le immagini come presentazione";
 $Options = "Opzioni";
 $Type = "Tipo";
+$WelcomeOogieConverter = "Benvenuti a Oogie, strumento di conversione da PowerPoint<br>1. Esplora il tuo disco rigido e cerca un file .ppt o .odp<br>2. Caricalo su Oogie: verrà trasformato in pacchetto SCORM<br>3. Naviga nel pacchetto: portai aggiungere in ogni pagina commenti audio ed inserire pagine con test.";
+$ConvertToLP = "Converti in percorso didattico";
 $Content = "Contenuto";
 ?>

@@ -222,9 +222,11 @@ EOT;
 	/**
 	 * Use the new functions (php 5.2) allowing to display a real upload progress.
 	 * @param upload_id the value of the field UPLOAD_IDENTIFIER
+	 * @param elementAfter the first element of the form (to place at first UPLOAD_IDENTIFIER
 	 * @param delay the frequency of the xajax call
+	 * @param waitAfterUpload
 	 */
-	function add_real_progress_bar($upload_id, $delay=2,$waitAfterupload=false)
+	function add_real_progress_bar($upload_id, $elementAfter, $delay=2,$waitAfterUpload=false)
 	{
 		if(!function_exists('uploadprogress_get_info'))
 		{
@@ -241,19 +243,19 @@ EOT;
 		$xajax_upload -> registerFunction ('updateProgress');
 		
 	
-		// IMPORTANT : must be the first element of the form (that's why we don't use addElement(hidden...)
-		$this->addElement('html','<input name="UPLOAD_IDENTIFIER" type="hidden" value="'.$upload_id.'" />');
-		
+		// IMPORTANT : must be the first element of the form
+		$el = $this->insertElementBefore(FormValidator::createElement('html','<input type="hidden" name="UPLOAD_IDENTIFIER" value="'.$upload_id.'" />'), $elementAfter);
+
 		// add the div where the progress bar will be displayed
 		$this->addElement('html','
-		<div id="dynamic_div_container" style="display:none;"><br /><br />
+		<div id="dynamic_div_container" style="display:none;"><br />
 			<div id="dynamic_div_label">'.get_lang('UploadFile').'</div>
 			<div id="dynamic_div_frame" style="width:214px; height:12px; border:1px solid grey; background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_frame.gif);">
 				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_step.gif);background-repeat:repeat-x;background-position:center;"></div>
 			</div>
 		</div>');
 		
-		if($waitAfterupload){
+		if($waitAfterUpload){
 			$this->addElement('html','
 			<div id="dynamic_div_waiter_container" style="display:none;">
 				<div id="dynamic_div_waiter_label">
@@ -276,7 +278,7 @@ EOT;
 		
 		
 		// add the upload event
-		$this->updateAttributes("onsubmit=\"myUpload.startRealUpload('dynamic_div','".$upload_id."','".$this->getAttribute('id')."',".$waitAfterupload.")\"");
+		$this->updateAttributes("onsubmit=\"myUpload.startRealUpload('dynamic_div','".$upload_id."','".$this->getAttribute('id')."',".$waitAfterUpload.")\"");
 		
 		
 	}

@@ -107,17 +107,38 @@ if(!empty($errorMessage)){
 	//Display::display_error_message($errorMessage);
 	echo '<div style="'.$s_style_error.'"><div style="float:left; margin-right:10px;"><img src="'.api_get_path(WEB_IMG_PATH)."message_error.gif".'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$errorMessage.'</div></div>';
 }
+echo '
+<style>
+.row{
+	width:300px;
+}
+div.row div.label {
+	width: 100%;
+}
 
+div.row div.formw {
+	width: 100%;
+}
+</style>';
 $form = new FormValidator('update_course');
-$form -> add_real_progress_bar('ppt2lp',1, true);
-// build the form
-$form -> addElement ('html','<br /><br />');
-$form -> addElement('file', 'user_file','<img src="../img/powerpoint_big.gif" />');
-$form -> addGroup ($elements, null, null, '&nbsp;&nbsp;');
-$form -> addElement ('hidden', 'ppt2lp', 'true');
-$form -> addElement ('html','<br /><br />');
-$form -> addElement ('submit', 'convert', get_lang('ConvertToLP'));
 
+// build the form
+
+
+$form -> addElement ('html','<br />');
+
+$group = array();
+$group[] = FormValidator::createElement ('image','ppt_img','../img/powerpoint_big.gif','align="absbottom"');
+$group[] = FormValidator::createElement ('file', 'user_file',null);
+$form -> addGroup($group);
+
+$form -> addElement ('html','<br /><br />');
+$form -> addElement ('hidden', 'ppt2lp', 'true');
+
+$form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), null);
+
+$form -> addElement ('html','<br />');
+$form -> add_real_progress_bar('ppt2lp', 'user_file', 1, true);
 
 
 // display the form

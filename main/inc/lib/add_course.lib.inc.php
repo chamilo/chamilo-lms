@@ -563,27 +563,6 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	api_sql_query($sql, __FILE__, __LINE__);
 	
-	
-	/*
-    -----------------------------------------------------------
-        Audirecorder tool
-    ----------------------------------------------------------- 
-    */
-    
-    $sql = "CREATE TABLE `".$TABLEAUDIORECORDER."` (
-                  id int(11) NOT NULL auto_increment,
-                  lp_item int(11) NOT NULL default '0',
-                  name varchar(255) NOT NULL default '', 
-                  inserted bigint(20) NOT NULL default '0',
-                  insertedby int(11) NOT NULL default '0',
-                  `order` tinyint(4) NOT NULL default '0',
-                  deleted int(11) NOT NULL default '0', 
-                  PRIMARY KEY  (`id`)
-                )";
-
-    api_sql_query($sql,__FILE__,__LINE__);
-	
-
 	/*
 	-----------------------------------------------------------
 		Forum tool

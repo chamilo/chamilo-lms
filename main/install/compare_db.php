@@ -1,4 +1,4 @@
-<?php // $Id: compare_db.php 10520 2006-12-18 23:14:27Z yannoo $
+<?php // $Id: compare_db.php 10527 2006-12-19 11:01:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -241,7 +241,7 @@ foreach($all_db_changes as $base => $changes){
 			foreach($myold as $myname){
 				//column lost, display DROP command
 				$myname = str_replace('--','',$myname);
-				echo "ALTER TABLE ".$mytable." DROP COLUMN ".$myname."<br/>";
+				echo "ALTER TABLE ".$mytable." DROP ".$myname."<br/>";
 			}
 			foreach($mychanged as $myname=>$myprop){
 				//field changed, display SET command
@@ -251,12 +251,12 @@ foreach($all_db_changes as $base => $changes){
 					$myprop = str_replace('~+~','',$myprop);
 					$myprops_string .= $myprop." ";
 				}
-				echo "ALTER TABLE ".$mytable." SET COLUMN $myname $myprops_string<br/>";
+				echo "ALTER TABLE ".$mytable." CHANGE $myname $myname $myprops_string<br/>";
 			}
 			foreach($mynew as $myname){
 				//column created, display ADD command
 				$myname = str_replace('++','',$myname);
-				echo "ALTER TABLE ".$mytable." ADD COLUMN $myname...<br/>";
+				echo "ALTER TABLE ".$mytable." ADD $myname...<br/>";
 			}
 		}else{
 			//we have a table-level difference

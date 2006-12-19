@@ -330,14 +330,14 @@ mysql_query("CREATE TABLE `track_e_exercices` (
 			) TYPE=MyISAM") or die(mysql_error());
 			
 mysql_query("CREATE TABLE `track_e_attempt` (
-		    `exe_id` int(10) default NULL,
-		    `user_id` int(10) NOT NULL default '0',
-		    `question_id` int(10) NOT NULL default '0',
+		    `exe_id` int default NULL,
+		    `user_id` int NOT NULL default '0',
+		    `question_id` int NOT NULL default '0',
 		    `answer` text NOT NULL,
 		    `teacher_comment` text NOT NULL,
-		    `marks` int(10) NOT NULL default '0',
-		    `course_code` varchar(10) NOT NULL default '',
-		    `position` int(10) default '0'
+		    `marks` int NOT NULL default '0',
+		    `course_code` varchar(40) NOT NULL default '',
+		    `position` int default '0'
 			) TYPE=MyISAM") or die(mysql_error());
 
 mysql_query("CREATE TABLE `track_e_hotpotatoes` (

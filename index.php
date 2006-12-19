@@ -587,19 +587,27 @@ if (!empty ($_GET['include']) && !strstr($_GET['include'], '/') && strstr($_GET[
 }
 else
 {
-	if(!file_exists('home/home_news_'.$user_selected_language.'.html'))
+	if(file_exists('home/home_top_'.$user_selected_language.'.html'))
 	{
-		include ('home/home_top.html');
+		include('home/home_top_'.$user_selected_language.'.html');
 	}
 	else
 	{
-		include('home/home_top_'.$user_selected_language.'.html');
+		$platform_language=api_get_setting("platformLanguage");
+		if(file_exists('home/home_top_'.$platform_language.'.html')){
+			include('home/home_top_'.$platform_language.'.html');
+		}
+		else{
+			include ('home/home_top.html');
+		}
 	}
 }
 
 // Display System announcements
 $announcement = $_GET['announcement'] ? $_GET['announcement'] : -1;
 SystemAnnouncementManager :: display_announcements(VISIBLE_GUEST, $announcement);
+
+echo "<br><br><br>";
 
 // Display courses and category list
 if (!$pageIncluded)
@@ -611,18 +619,25 @@ if (!$pageIncluded)
 		display_anonymous_course_list();
 	}
 	echo '</div>';
-/*
+
 	echo '<div class="home_news">';
-	if(!file_exists('home/home_news_'.$user_selected_language.'.html'))
+
+	if(file_exists('home/home_news_'.$user_selected_language.'.html'))
 	{
-		include ('home/home_news.html');
+		include ('home/home_news_'.$user_selected_language.'.html');
 	}
 	else
 	{
-		include('home/home_news_'.$user_selected_language.'.html');
+		$platform_language=api_get_setting("platformLanguage");
+		if(file_exists('home/home_news_'.$platform_language.'.html')){
+			include('home/home_news_'.$platform_language.'.html');
+		}
+		else{
+			include ('home/home_news.html');
+		}
 	}
 	echo '</div>';
-*/
+
 }
 echo '</div>';
 

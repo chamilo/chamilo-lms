@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10215 2006-11-27 13:57:17Z pcool $
+<?php // $Id: configure_homepage.php 10526 2006-12-19 10:38:42Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -102,11 +102,63 @@ if(!empty($action))
 				fclose($fp);
 			}
 		}
+		
+		//NEWS
 		elseif($action == 'edit_news')
 		{
+			
+			$s_languages_news=$_POST["news_languages"];
+			//echo "langue choisie : ".$s_languages_news;
 			$home_news=trim(stripslashes($_POST['home_news']));
+			
+			if($s_languages_news!="all"){
+				
+				if(file_exists("'../../home/home_news_".$s_languages_news.".html")){
+					if(is_writable("../../home/home_news_".$s_languages_news.".html")){
+						$fp=fopen("../../home/home_news_".$s_languages_news.".html","w");
+						fputs($fp,$home_news);
+						fclose($fp);
+					}
+					else{
+						$errorMsg=get_lang('HomePageFilesNotWritable');
+					}
+				}
+				//File not exists
+				else{
+					$fp=fopen("../../home/home_news_".$s_languages_news.".html","w");
+					fputs($fp,$home_news);
+					fclose($fp);
+				}
+			}
+			
+			//we update all the news file
+			else{
+				$_languages=api_get_languages();
+			
+				foreach($_languages["name"] as $key => $value){
+					
+					$english_name=$_languages["folder"][$key];
+					
+					if(file_exists("'../../home/home_news_".$english_name.".html")){
+						if(is_writable("../../home/home_news_".$english_name.".html")){
+							$fp=fopen("../../home/home_news_".$english_name.".html","w");
+							fputs($fp,$home_news);
+							fclose($fp);
+						}
+						else{
+							$errorMsg=get_lang('HomePageFilesNotWritable');
+						}
+					}
+					//File not exists
+					else{
+						$fp=fopen("../../home/home_news_".$english_name.".html","w");
+						fputs($fp,$home_news);
+						fclose($fp);
+					}
+				}
+			}
 
-			if(!is_writable('../../home/home_news.html'))
+			/*if(!is_writable('../../home/home_news.html'))
 			{
 				$errorMsg=get_lang('HomePageFilesNotWritable');
 			}
@@ -117,7 +169,7 @@ if(!empty($action))
 				fputs($fp,$home_news);
 
 				fclose($fp);
-			}
+			}*/
 		}
 		elseif($action == 'insert_link' || $action == 'edit_link')
 		{
@@ -295,9 +347,25 @@ if(!empty($action))
 	}
 	elseif($action == 'edit_news')
 	{
-		$home_news=file('../../home/home_news.html');
+		//$home_news=file('../../home/home_news.html');
 
-		$home_news=implode('',$home_news);
+		//$home_news=implode('',$home_news);
+		
+		if(file_exists("'../../home/home_news_".$menu_language.".html")){
+			if(is_readable("../../home/home_news_".$menu_language.".html")){
+				$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
+				$home_news=implode('',$home_news);
+			}
+			else{
+				$errorMsg=get_lang('HomePageFilesNotReadable');
+			}
+		}
+		//File not exists
+		else{
+			$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
+			$home_news=implode('',$home_news);
+		}
+		
 	}
 	elseif($action == 'insert_link')
 	{
@@ -526,11 +594,29 @@ elseif($action == 'edit_top' || $action == 'edit_news')
 {
 	if($action == 'edit_top')
 	{
-		$open='home_top';
+		$name="home_news";
 	}
 	else
 	{
-		$open='home_news';
+		$name="home_news";
+
+		if(!file_exists("../../home/home_news_".$_SESSION["user_language_choice"].".html")){
+			$platform_language=api_get_setting("platformLanguage");
+			$open='../../home/home_news_'.$platform_language.'.html';
+		}
+		else{
+			$open='../../home/home_news_'.$_SESSION["user_language_choice"].'.html';
+		}
+		
+		if(isset($_SESSION["user_language_choice"])){
+			$language=$_SESSION["user_language_choice"];
+		}
+		else{
+			$language=api_get_setting("platformLanguage");
+		}
+
+		$open=file_get_contents($open);
+
 	}
 ?>
 
@@ -546,6 +632,21 @@ if(!empty($errorMsg))
 {
 	Display::display_normal_message($errorMsg); //main API
 }
+
+if($action == 'edit_news'){
+	$_languages=api_get_languages();
+	echo get_lang("ChooseNewsLanguage")." : <select name='news_languages'><option value='all'>".get_lang("AllLanguages")."</option>";
+	foreach($_languages["name"] as $key => $value){
+		$english_name=$_languages["folder"][$key];
+		if($language==$english_name){
+			echo "<option value='$english_name' selected=selected>$value</option>";
+		}
+		else{
+			echo "<option value='$english_name'>$value</option>";
+		}
+	}
+	echo "</select>";
+}
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
@@ -553,7 +654,17 @@ if(!empty($errorMsg))
   <td>
 
 <?php
-    api_disp_html_area($open,isset($_POST[$open])?trim(stripslashes($_POST[$open])):${$open},'400px');
+    //api_disp_html_area($open,isset($_POST[$open])?trim(stripslashes($_POST[$open])):${$open},'400px');
+    require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+    $oFCKeditor = new FCKeditor($name) ;
+	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+	$oFCKeditor->Height		= '400';
+	$oFCKeditor->Width		= '100%';
+	$oFCKeditor->Value		= $open;
+	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+	$oFCKeditor->ToolbarSet = "Middle";
+	
+	echo $oFCKeditor->CreateHtml();
 ?>
 
   </td>

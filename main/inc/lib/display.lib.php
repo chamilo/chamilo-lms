@@ -303,7 +303,7 @@ class Display {
 						</style>';
 		}
 		echo '<div class="normal-message">';
-		Display :: display_icon('message_normal.png', '', array ('style' => 'float:left; margin-right:10px;'));
+		Display :: display_icon('message_normal.gif', '', array ('style' => 'float:left; margin-right:10px;'));
 		echo "<div style='margin-left: 43px'>".$message.'</div></div>';
 	}
 

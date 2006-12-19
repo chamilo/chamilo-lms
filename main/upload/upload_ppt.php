@@ -21,8 +21,6 @@ require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 		
 
-//$xajax_upload -> debugOn();
-
 $form_style= '
 <style>
 .row {
@@ -65,7 +63,7 @@ if(!$is_allowed_to_edit){
 ?>
 
 <img src="../img/oogie.gif"><br>
-<span style="color: #999999; font-style: italic; font-size: 15px; font-weight: bold; margin-left: 65px;"><? echo get_lang("WelcomeOogieSubtitle");?></span><br>
+<span style="color: #ff6434; font-size: 16px; font-family: Arial; margin-left: 10px;"><? echo get_lang("WelcomeOogieSubtitle");?></span><br>
 
 <?
 
@@ -113,7 +111,7 @@ echo '
 	width:300px;
 }
 div.row div.label {
-	width: 100%;
+	width: 0%;
 }
 
 div.row div.formw {
@@ -123,7 +121,6 @@ div.row div.formw {
 $form = new FormValidator('update_course');
 
 // build the form
-
 
 $form -> addElement ('html','<br />');
 

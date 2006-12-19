@@ -1135,15 +1135,15 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_comments . "` (
-			`comment_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
+			`comment_id` int NOT NULL AUTO_INCREMENT ,
 			`title` varchar( 250 ) NOT NULL default '',
 			`comment` longtext NOT NULL ,
-			`author` int( 11 ) NOT NULL default '0',
-			`date` datetime NOT NULL default '0000-00-00 00:00:00',
-			`blog_id` mediumint( 9 ) NOT NULL default '0',
-			`post_id` int( 11 ) NOT NULL default '0',
-			`task_id` int( 11 ) default NULL ,
-			`parent_comment_id` int( 11 ) NOT NULL default '0',
+			`author_id` int NOT NULL default '0',
+			`date_creation` datetime NOT NULL default '0000-00-00 00:00:00',
+			`blog_id` mediumint NOT NULL default '0',
+			`post_id` int NOT NULL default '0',
+			`task_id` int default NULL ,
+			`parent_comment_id` int NOT NULL default '0',
 			PRIMARY KEY ( `comment_id` )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with comments on posts in a blog';";
 
@@ -1152,12 +1152,12 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_posts . "` (
-			`post_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
+			`post_id` int NOT NULL AUTO_INCREMENT ,
 			`title` varchar( 250 ) NOT NULL default '',
 			`full_text` longtext NOT NULL ,
-			`date` datetime NOT NULL default '0000-00-00 00:00:00',
-			`blog_id` mediumint( 9 ) NOT NULL default '0',
-			`author` int( 11 ) NOT NULL default '0',
+			`date_creation` datetime NOT NULL default '0000-00-00 00:00:00',
+			`blog_id` mediumint NOT NULL default '0',
+			`author_id` int NOT NULL default '0',
 			PRIMARY KEY ( `post_id` )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with posts / blog.';";
 
@@ -1166,12 +1166,12 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_rating . "` (
-			`rating_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
-			`blog_id` int( 11 ) NOT NULL default '0',
+			`rating_id` int NOT NULL AUTO_INCREMENT ,
+			`blog_id` int NOT NULL default '0',
 			`rating_type` enum( 'post', 'comment' ) NOT NULL default 'post',
-			`item_id` int( 11 ) NOT NULL default '0',
-			`user_id` int( 11 ) NOT NULL default '0',
-			`rating` mediumint( 9 ) NOT NULL default '0',
+			`item_id` int NOT NULL default '0',
+			`user_id` int NOT NULL default '0',
+			`rating` mediumint NOT NULL default '0',
 			PRIMARY KEY ( `rating_id` )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with ratings for post/comments in a certain blog';";
 
@@ -1180,8 +1180,8 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_rel_user . "` (
-			`blog_id` int( 11 ) NOT NULL default '0',
-			`user_id` int( 11 ) NOT NULL default '0',
+			`blog_id` int NOT NULL default '0',
+			`user_id` int NOT NULL default '0',
 			PRIMARY KEY ( `blog_id` , `user_id` )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table representing users subscribed to a blog';";
 
@@ -1190,8 +1190,8 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_tasks . "` (
-			`task_id` mediumint( 9 ) NOT NULL AUTO_INCREMENT ,
-			`blog_id` mediumint( 9 ) NOT NULL default '0',
+			`task_id` mediumint NOT NULL AUTO_INCREMENT ,
+			`blog_id` mediumint NOT NULL default '0',
 			`title` varchar( 250 ) NOT NULL default '',
 			`description` text NOT NULL ,
 			`color` varchar( 10 ) NOT NULL default '',
@@ -1204,9 +1204,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_tasks_rel_user . "` (
-			`blog_id` mediumint( 9 ) NOT NULL default '0',
-			`user_id` int( 11 ) NOT NULL default '0',
-			`task_id` mediumint( 9 ) NOT NULL default '0',
+			`blog_id` mediumint NOT NULL default '0',
+			`user_id` int NOT NULL default '0',
+			`task_id` mediumint NOT NULL default '0',
 			`target_date` date NOT NULL default '0000-00-00',
 			PRIMARY KEY ( `blog_id` , `user_id` , `task_id` )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with tasks assigned to a user in a blog';";

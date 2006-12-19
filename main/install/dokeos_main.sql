@@ -308,28 +308,18 @@ UNLOCK TABLES;
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
 
 --
--- Table structure for table `sess`
+-- Table structure for table `php_session`
 --
 
-DROP TABLE IF EXISTS `sess`;
-CREATE TABLE `sess` (
-  `sess_id` varchar(32) NOT NULL default '',
-  `sess_name` varchar(10) NOT NULL default '',
-  `sess_time` int(11) NOT NULL default '0',
-  `sess_start` int(11) NOT NULL default '0',
-  `sess_value` text NOT NULL,
+DROP TABLE IF EXISTS php_session;
+CREATE TABLE php_session (
+  session_id varchar(32) NOT NULL default '',
+  session_name varchar(10) NOT NULL default '',
+  session_time int(11) NOT NULL default '0',
+  session_start int(11) NOT NULL default '0',
+  session_value text NOT NULL,
   PRIMARY KEY  (`sess_id`)
 );
-
---
--- Dumping data for table `sess`
---
-
-
-/*!40000 ALTER TABLE `sess` DISABLE KEYS */;
-LOCK TABLES `sess` WRITE;
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `sess` ENABLE KEYS */;
 
 --
 -- Table structure for table `session`

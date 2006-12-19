@@ -685,7 +685,7 @@ CREATE TABLE `course_rel_survey` (
   `db_name` varchar(200) default NULL,
   `survey_id` varchar(200) default NULL,
   PRIMARY KEY  (`id`)
-) AUTO_INCREMENT=90 ;
+);
 
 -- --------------------------------------------------------
 
@@ -724,5 +724,5 @@ CREATE TABLE `survey_user_info` (
   `registered` char(1) default NULL,
   `attempted` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) AUTO_INCREMENT=98 ;
+);
 

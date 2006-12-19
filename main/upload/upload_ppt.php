@@ -138,7 +138,7 @@ $form -> addElement ('hidden', 'ppt2lp', 'true');
 $form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), null);
 
 $form -> addElement ('html','<br />');
-$form -> add_real_progress_bar('ppt2lp', 'user_file', 1, true);
+$form -> add_real_progress_bar('ppt2lp', 'qf_group_1', 1, true);
 
 
 // display the form

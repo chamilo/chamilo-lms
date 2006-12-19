@@ -85,7 +85,6 @@ class presentation extends learnpath {
 		
 		chmod ($base_work_dir.$created_dir,0744);
 		if($return != 0) { //if the java application returns an error code
-			api_send_mail('e.marguin@elixir-interactive.com','problème de conversion ppt2lp','fichier '.$file);
 			DocumentManager::delete_document($_course, $dir_name, $base_work_dir);	 
 			return false;   	
 	    }

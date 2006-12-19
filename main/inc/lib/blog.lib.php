@@ -149,7 +149,7 @@ class Blog
 		$this_blog_id = Database::get_last_insert_id();
 		
 		// Make first post. :)
-		$sql = "INSERT INTO $tbl_blogs_posts (`title`, `full_text`, `date`, `blog_id`, `author` ) VALUES ('Welkom!', '" . get_lang('FirstPostText')."', NOW(), '$this_blog_id', '".$_user['user_id']."');";
+		$sql = "INSERT INTO $tbl_blogs_posts (`title`, `full_text`, `date_creation`, `blog_id`, `author_id` ) VALUES ('Welkom!', '" . get_lang('FirstPostText')."', NOW(), '$this_blog_id', '".$_user['user_id']."');";
 		api_sql_query($sql, __FILE__, __LINE__);
 		
 		// Put it on course homepage
@@ -250,7 +250,7 @@ class Blog
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		
 		// Create the post
-		$sql = "INSERT INTO " . $tbl_blogs_posts." (`title`, `full_text`, `date`, `blog_id`, `author` ) VALUES ('$title', '$full_text', NOW(), '$blog_id', '".$_user['user_id']."');";
+		$sql = "INSERT INTO " . $tbl_blogs_posts." (`title`, `full_text`, `date_creation`, `blog_id`, `author_id` ) VALUES ('$title', '$full_text', NOW(), '$blog_id', '".$_user['user_id']."');";
 		api_sql_query($sql, __FILE__, __LINE__);
 		
 		return void;
@@ -330,7 +330,7 @@ class Blog
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		
 		// Create the comment
-		$sql = "INSERT INTO $tbl_blogs_comments (`title`, `comment`, `author`, `date`, `blog_id`, `post_id`, `parent_comment_id`, `task_id` ) VALUES ('$title', '$full_text', '".$_user['user_id']."', NOW(), '$blog_id', '$post_id', '$parent_id', $task_id)";
+		$sql = "INSERT INTO $tbl_blogs_comments (`title`, `comment`, `author_id`, `date_creation`, `blog_id`, `post_id`, `parent_comment_id`, `task_id` ) VALUES ('$title', '$full_text', '".$_user['user_id']."', NOW(), '$blog_id', '$post_id', '$parent_id', $task_id)";
 		api_sql_query($sql, __FILE__, __LINE__);
 		
 		// Empty post values, or they are shown on the page again
@@ -673,7 +673,7 @@ class Blog
 		global $dateFormatLong;
 		
 		// Get posts and authors
-		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post INNER JOIN $tbl_users user ON post.author = user.user_id WHERE post.blog_id = $blog_id AND $filter ORDER BY post_id DESC LIMIT 0,$max_number_of_posts";
+		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post INNER JOIN $tbl_users user ON post.author_id = user.user_id WHERE post.blog_id = $blog_id AND $filter ORDER BY post_id DESC LIMIT 0,$max_number_of_posts";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		
 		// Display
@@ -689,8 +689,8 @@ class Blog
 				// Prepare data
 				$blog_post_id = $blog_post['post_id'];
 				$blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
-				$blog_post_date = ucfirst(format_locale_date($dateFormatLong,strtotime($blog_post['date'])));
-				$blog_post_time = date('H:m',strtotime($blog_post['date']));
+				$blog_post_date = ucfirst(format_locale_date($dateFormatLong,strtotime($blog_post['date_creation'])));
+				$blog_post_time = date('H:m',strtotime($blog_post['date_creation']));
 				
 				// Create an introduction text (but keep FULL sentences)
 				$limit = 100; //nmbr of words in introduction text
@@ -773,7 +773,7 @@ class Blog
 		// Init
 		$date_output = $query_string;
 		$date = explode('-',$query_string);
-		$query_string = ' DAYOFMONTH(`date`) =' . $date[2] . ' AND MONTH(`date`) =' . $date[1] . ' AND YEAR(`date`) =' . $date[0];
+		$query_string = ' DAYOFMONTH(`date_creation`) =' . $date[2] . ' AND MONTH(`date_creation`) =' . $date[1] . ' AND YEAR(`date_creation`) =' . $date[0];
 		global $dateFormatLong;
 		
 		// Put date in correct output format
@@ -800,7 +800,7 @@ class Blog
 		global $dateFormatLong;
 		
 		// Get posts and author
-		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post INNER JOIN $tbl_users user ON post.author = user.user_id WHERE post.blog_id = $blog_id AND post.post_id = $post_id ORDER BY post_id DESC";
+		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post INNER JOIN $tbl_users user ON post.author_id = user.user_id WHERE post.blog_id = $blog_id AND post.post_id = $post_id ORDER BY post_id DESC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$blog_post = mysql_fetch_array($result);
 		
@@ -811,8 +811,8 @@ class Blog
 		
 		// Prepare data
 		$blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
-		$blog_post_date = ucfirst(format_locale_date($dateFormatLong,strtotime($blog_post['date'])));
-		$blog_post_time = date('H:m',strtotime($blog_post['date']));
+		$blog_post_date = ucfirst(format_locale_date($dateFormatLong,strtotime($blog_post['date_creation'])));
+		$blog_post_time = date('H:m',strtotime($blog_post['date_creation']));
 		$blog_post_actions = "";
 		
 		$task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
@@ -967,7 +967,7 @@ class Blog
 		$next_level = $current_level + 1;
 		$sql = "SELECT comments.*, user.lastname, user.firstname, task.color 
 					FROM $tbl_blogs_comments comments
-						INNER JOIN $tbl_users user ON comments.author = user.user_id 
+						INNER JOIN $tbl_users user ON comments.author_id = user.user_id 
 						LEFT JOIN $tbl_blogs_tasks task ON comments.task_id = task.task_id 
 					WHERE parent_comment_id = $current 
 						AND comments.blog_id = $blog_id 
@@ -977,7 +977,7 @@ class Blog
 		while($comment = mysql_fetch_array($result))
 		{
 			// Select the children recursivly
-			$tmp = "SELECT comments.*, user.lastname, user.firstname FROM $tbl_blogs_comments comments INNER JOIN $tbl_users user ON comments.author = user.user_id WHERE comment_id = $current AND blog_id = $blog_id AND post_id = $post_id";
+			$tmp = "SELECT comments.*, user.lastname, user.firstname FROM $tbl_blogs_comments comments INNER JOIN $tbl_users user ON comments.author_id = user.user_id WHERE comment_id = $current AND blog_id = $blog_id AND post_id = $post_id";
 			$tmp = api_sql_query($tmp, __FILE__, __LINE__);
 			$tmp = mysql_fetch_array($tmp);
 			$parent_cat = $tmp['parent_comment_id'];
@@ -985,8 +985,8 @@ class Blog
 			
 			// Prepare data
 			$comment_text = make_clickable(stripslashes($comment['comment']));
-			$blog_comment_date = ucfirst(format_locale_date($dateFormatLong,strtotime($comment['date'])));
-			$blog_comment_time = date('H:m',strtotime($comment['date']));
+			$blog_comment_date = ucfirst(format_locale_date($dateFormatLong,strtotime($comment['date_creation'])));
+			$blog_comment_time = date('H:m',strtotime($comment['date_creation']));
 			$blog_comment_actions = "";
 			if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_comment&amp;comment_id=' . $comment['comment_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
 			if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_comments_rate')) { $rating_select = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']); }
@@ -1149,7 +1149,7 @@ class Blog
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		
 		// Get posts and author
-		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post INNER JOIN $tbl_users user ON post.author = user.user_id WHERE post.blog_id = $blog_id AND post.post_id = $post_id ORDER BY post_id DESC";
+		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post INNER JOIN $tbl_users user ON post.author_id = user.user_id WHERE post.blog_id = $blog_id AND post.post_id = $post_id ORDER BY post_id DESC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$blog_post = mysql_fetch_array($result);
 		
@@ -1875,7 +1875,7 @@ class Blog
 				user.lastname,
 				user.firstname
 			FROM $tbl_blogs_posts post
-			INNER JOIN $tbl_users user ON post.author = user.user_id
+			INNER JOIN $tbl_users user ON post.author_id = user.user_id
 			WHERE post.blog_id = $blog_id
 			ORDER BY post_id DESC
 			LIMIT 0, 100";
@@ -2248,7 +2248,7 @@ class Blog
 		$forewardsURL = $_SERVER['PHP_SELF']."?blog_id=" . $_GET['blog_id']."&amp;filter=" . $_GET['filter']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 		
 		// Get posts for this month
-		$sql = "SELECT post.*, DAYOFMONTH(`date`) as post_day, user.lastname, user.firstname FROM $tbl_blogs_posts post INNER JOIN $tbl_users user ON post.author = user.user_id WHERE post.blog_id = $blog_id AND MONTH(date) = '$month' AND YEAR(date) = '$year' ORDER BY date";
+		$sql = "SELECT post.*, DAYOFMONTH(`date_creation`) as post_day, user.lastname, user.firstname FROM $tbl_blogs_posts post INNER JOIN $tbl_users user ON post.author_id = user.user_id WHERE post.blog_id = $blog_id AND MONTH(date_creation) = '$month' AND YEAR(date_creation) = '$year' ORDER BY date_creation";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		
 		// We will create an array of days on which there are posts.

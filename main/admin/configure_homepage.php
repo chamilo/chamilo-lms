@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10526 2006-12-19 10:38:42Z elixir_inter $
+<?php // $Id: configure_homepage.php 10533 2006-12-19 14:48:35Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -32,6 +32,8 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+
+require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 
 $action=$_GET['action'];
 
@@ -569,7 +571,18 @@ foreach($home_menu as $key=>$enreg)
   <td>
 
 <?php
-    api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
+    //api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
+    
+    $oFCKeditor = new FCKeditor('link_html') ;
+	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+	$oFCKeditor->Height		= '400';
+	$oFCKeditor->Width		= '100%';
+	$oFCKeditor->Value		= isset($_POST['link_html'])?$_POST['link_html']:$link_html;
+	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+	$oFCKeditor->ToolbarSet = "Small";
+	
+	echo $oFCKeditor->CreateHtml();
+    
 ?>
 
   </td>
@@ -599,17 +612,17 @@ elseif($action == 'edit_top' || $action == 'edit_news')
 	else
 	{
 		$name="home_news";
-
-		if(!file_exists("../../home/home_news_".$_SESSION["user_language_choice"].".html")){
+		$user_selected_language = $_SESSION["_user"]["language"];
+		if(!file_exists("../../home/home_news_".$user_selected_language.".html")){
 			$platform_language=api_get_setting("platformLanguage");
 			$open='../../home/home_news_'.$platform_language.'.html';
 		}
 		else{
-			$open='../../home/home_news_'.$_SESSION["user_language_choice"].'.html';
+			$open='../../home/home_news_'.$user_selected_language.'.html';
 		}
 		
 		if(isset($_SESSION["user_language_choice"])){
-			$language=$_SESSION["user_language_choice"];
+			$language=$user_selected_language;
 		}
 		else{
 			$language=api_get_setting("platformLanguage");
@@ -655,14 +668,14 @@ if($action == 'edit_news'){
 
 <?php
     //api_disp_html_area($open,isset($_POST[$open])?trim(stripslashes($_POST[$open])):${$open},'400px');
-    require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+
     $oFCKeditor = new FCKeditor($name) ;
 	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 	$oFCKeditor->Height		= '400';
 	$oFCKeditor->Width		= '100%';
 	$oFCKeditor->Value		= $open;
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-	$oFCKeditor->ToolbarSet = "Middle";
+	$oFCKeditor->ToolbarSet = "Small";
 	
 	echo $oFCKeditor->CreateHtml();
 ?>
@@ -744,7 +757,22 @@ else
 	  <td width="50%" valign="top">
 
 	<?php
-		include('../../home/home_news.html');
+	
+		$user_selected_language = $_SESSION["_user"]["language"];
+		if(file_exists('../../home/home_news_'.$user_selected_language.'.html'))
+		{
+			include ('../../home/home_news_'.$user_selected_language.'.html');
+		}
+		else
+		{
+			$platform_language=api_get_setting("platformLanguage");
+			if(file_exists('../../home/home_news_'.$platform_language.'.html')){
+				include('../../home/home_news_'.$platform_language.'.html');
+			}
+			else{
+				include ('../../home/home_news.html');
+			}
+		}
 	?>
 
 	  </td>

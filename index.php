@@ -621,7 +621,7 @@ if (!$pageIncluded)
 	echo '</div>';
 
 	echo '<div class="home_news">';
-
+	$user_selected_language = $_SESSION["_user"]["language"];
 	if(file_exists('home/home_news_'.$user_selected_language.'.html'))
 	{
 		include ('home/home_news_'.$user_selected_language.'.html');

@@ -461,7 +461,7 @@ api_sql_query($sql, __FILE__, __LINE__);
 		content mediumtext,
 		end_date date default NULL,
 		display_order mediumint NOT NULL default 0,
-		email_sent int(1),
+		email_sent tinyint,
 		PRIMARY KEY (id)
 		) TYPE=MyISAM";
 	api_sql_query($sql, __FILE__, __LINE__);

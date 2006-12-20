@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: course_home.php 10537 2006-12-20 10:33:36Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -56,6 +56,20 @@
 		INIT SECTION
 ==============================================================================
 */
+
+$htmlHeadXtra[] = "
+		<style>
+.row{
+width:100%;
+}
+div.row div.label {
+width: 0%;
+}
+		
+div.row div.formw {
+width: 100%;
+}
+		</style>";
 
 if(!isset($cidReq))
 {
@@ -199,6 +213,12 @@ $reqdate="&reqdate=$temps";
 	(editable by course admins)
 -----------------------------------------------------------
 */
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Full';
+
+
 Display::display_introduction_section(TOOL_COURSE_HOMEPAGE);
 
 /*

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10479 2006-12-13 12:42:20Z elixir_inter $
+<?php // $Id: index.php 10537 2006-12-20 10:33:36Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -133,29 +133,43 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 			$description_content = $description['content'];
 		}
 		
-		$fck_attribute['Width'] = '600';
+		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '400';
 		$fck_attribute['ToolbarSet'] = 'Middle';
 		
+		echo '
+		<style>
+		.row{
+			width:100%;
+		}
+		div.row div.label {
+			width: 60px;
+		}
+		
+		div.row div.formw {
+			width: 100%;
+		}
+		</style>';
+		
 		// Build the form
-		$form = new FormValidator('course_description');
+		$form = new FormValidator('course_description','POST','index.php','','style="width: 100%;"');
 		$form->addElement('hidden', 'description_id');
 		if (($description_id == ADD_BLOCK) || $default_description_title_editable[$description_id])
 		{
 			$form->add_textfield('title', get_lang('Title'));
 		}
-		$form->add_html_editor('content', get_lang('Content'));
+		$form->add_html_editor('contentDescription', get_lang('Content'));
 		$form->addElement('submit', null, get_lang('Ok'));
 		// Set some default values
 		$default['title'] = $default_description_titles[$description_id];
-		$default['content'] = $description_content;
+		$default['contentDescription'] = $description_content;
 		$default['description_id'] = $description_id;
 		$form->setDefaults($default);
 		// If form validates: save the description block
 		if ($form->validate())
 		{
 			$description = $form->exportValues();
-			$content = $description['content'];
+			$content = $description['contentDescription'];
 			$title = $description['title'];
 			if ($description['description_id'] == ADD_BLOCK)
 			{

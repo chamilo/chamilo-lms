@@ -31,7 +31,7 @@ FCKConfig.FullPage = false ;
 FCKConfig.Debug = false ;
 FCKConfig.AllowQueryStringDebug = true ;
 
-FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/office2003/' ;
+FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/silver/' ;
 
 FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
 

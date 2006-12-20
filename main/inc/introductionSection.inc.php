@@ -61,15 +61,11 @@ $intro_cmdUpdate = $_POST['intro_cmdUpdate'];
 $intro_cmdDel= $_GET['intro_cmdDel'];
 $intro_cmdAdd= $_GET['intro_cmdAdd'];
 
-
-$fck_attribute['Width'] = '800';
-$fck_attribute['Height'] = '400';
-$fck_attribute['ToolbarSet'] = 'PluginTest';
-
 $form = new FormValidator('introduction_text');
-$renderer =& $form->defaultRenderer();
-$renderer->setElementTemplate('<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error --><div>{element}</div>');
-$form->add_html_editor('intro_content',null,false);
+//$renderer =& $form->defaultRenderer();
+//$renderer->setElementTemplate('<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error --><div>{element}</div>');
+
+$form->add_html_editor('intro_content',null,null,false);
 $form->addElement('submit','intro_cmdUpdate',get_lang('Ok'));
 
 /*=========================================================
@@ -171,7 +167,8 @@ if ($intro_dispDefault)
 		/*echo	"<div id=\"courseintro\"><p>\n",
 				$intro_content,"\n",
 				"</p>\n</div>";*/
-		echo "<table align='center' style='width: 80%;'><tr><td width='110'><img src='../../main/img/mr_dokeos.png'></td><td>$intro_content</td></tr></table>";
+		echo "<table align='center' style='width: 80%;'><tr><td>$intro_content</td></tr></table>";
+
 	}
 }
 

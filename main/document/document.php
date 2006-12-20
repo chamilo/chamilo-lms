@@ -1,4 +1,4 @@
-<?php // $Id: document.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: document.php 10539 2006-12-20 14:11:07Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -294,7 +294,7 @@ if($to_group_id !=0) //add group name after for group documents
 -----------------------------------------------------------
 */
 
-Display::display_introduction_section(TOOL_DOCUMENT);
+Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid']);
 
 /*============================================================================*/
 

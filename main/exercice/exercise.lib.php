@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 10514 2006-12-15 16:13:53Z elixir_inter $
+<?php // $Id: exercise.lib.php 10545 2006-12-21 15:09:31Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -139,9 +139,16 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 	$oFCKeditor->ToolbarSet = 'Comment' ;*/
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 	$oFCKeditor->ToolbarSet = "Small";
-	$oFCKeditor->Width  = '800';
+	$oFCKeditor->Width  = '80%';
 	$oFCKeditor->Height = '300';
 	$oFCKeditor->Value	= '' ;
+	
+	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+	$result_sql=api_sql_query($sql);
+	$isocode_language=mysql_result($result_sql,0,0);
+	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+	
 	$s .= "<tr><td colspan='2'>".$oFCKeditor->CreateHtml()."</td></tr>";
 			//$s.="<tr><td colspan='2'><textarea cols='80' rows='10' name='choice[".$questionId."]'>$answer</textarea></td></tr>";
 

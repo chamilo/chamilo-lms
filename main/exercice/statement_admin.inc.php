@@ -1,4 +1,4 @@
-<?php // $Id: statement_admin.inc.php 10514 2006-12-15 16:13:53Z elixir_inter $
+<?php // $Id: statement_admin.inc.php 10545 2006-12-21 15:09:31Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,7 +49,7 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 //debug var. Set to 0 if you don't want any debug display
 $debug = 0;
 
-$fck_attribute['Width'] = '700';
+$fck_attribute['Width'] = '80%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Small';
 

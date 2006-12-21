@@ -1,4 +1,4 @@
-<?php // $Id: exercise_admin.inc.php 9972 2006-11-14 14:44:37Z pcool $
+<?php // $Id: exercise_admin.inc.php 10545 2006-12-21 15:09:31Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -91,7 +91,7 @@ if($modifyExercise)
 ?>
 
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?modifyExercise=<?php echo $modifyExercise; ?>" style="margin:0px;" enctype="multipart/form-data">
-<table border="0" cellpadding="5">
+<table border="0" cellpadding="5" width="75%">
 
 <?php
 if(!empty($msgErr))
@@ -119,10 +119,24 @@ if(!empty($msgErr))
 <tr>
   <td valign="top"><?php echo get_lang('ExerciseDescription'); ?> :</td>
   <td>
-<textarea name="exerciseDescription" rows="4" cols="48"><?php echo $exerciseDescription; ?></textarea>
 <?php
-    
-	//api_disp_html_area('exerciseDescription',$exerciseDescription,'250px');
+    	
+	$oFCKeditor = new FCKeditor('exerciseDescription');
+	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+	$oFCKeditor->Height		= '250';
+	$oFCKeditor->Width		= '100%';
+	$oFCKeditor->Value		= $exerciseDescription;
+	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+	$oFCKeditor->ToolbarSet = "NewTest";
+	
+	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+	$result_sql=api_sql_query($sql);
+	$isocode_language=mysql_result($result_sql,0,0);
+	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+	
+	$oFCKeditor->Create() ;
+	
 ?>
 
   </td>

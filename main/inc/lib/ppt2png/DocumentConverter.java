@@ -69,7 +69,7 @@ public class DocumentConverter {
 				remoteFolderFullPath = "file://";
 			}
 			else {
-				remoteFolderFullPath = "file:///home/elixir/";					
+				remoteFolderFullPath = "file:///home/"+ftpuser+"/";					
 				remoteFolder = url.replace('/','_');
 				remoteFolder = removeAccents(remoteFolder);
 			}			
@@ -182,9 +182,9 @@ public class DocumentConverter {
 					}
 					
 					filterDatas[0].Name = "PixelWidth";
-					filterDatas[0].Value = new Integer(600);
+					filterDatas[0].Value = new Integer(540);
 					filterDatas[1].Name = "PixelHeight";
-					filterDatas[1].Value = new Integer(450);
+					filterDatas[1].Value = new Integer(405);
 					filterDatas[2].Name = "LogicalWidth";
 					filterDatas[2].Value = new Integer(2000);
 					filterDatas[3].Name = "LogicalHeight";

@@ -23,7 +23,6 @@ include('../inc/global.inc.php');
 
 $this_section=SECTION_COURSES;
 api_protect_course_script();
-include(api_get_path(LIBRARY_PATH).'text.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 // Database table definitions
@@ -211,6 +210,39 @@ function display_free_answer($answer,$id,$questionId)
 	
    </td> <?php }?>		
 		</tr>			
+	<?php
+}
+
+function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment)
+{
+	//global $hotspot_colors;
+	$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
+            						"#4271B5",
+									"#FE8E16",
+									"#3B3B3B",
+									"#BCD631",
+									"#D63173",
+									"#D7D7D7",
+									"#90AFDD",
+									"#AF8640",
+									"#4F9242",
+									"#F4EB24",
+									"#ED2024",
+									"#45C7F0",
+									"#F7BDE2");
+	?>		
+		<tr>
+				<td width="50%" valign="top">
+					<div style="width:100%;">
+						<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; float:left; margin:3px;"></div>
+						<div><?php echo $answer ?></div>						
+					</div>
+				</td>
+				<td width="25%" valign="top"><?php echo $answerId; ?></td>
+				<td width="25%" valign="top">
+					<?php $studentChoice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $studentChoice; ?>
+				</td>
+		</tr>
 	<?php
 }
 
@@ -608,7 +640,72 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		
 		}?>
 			</table>
-	<?php }?>
+	<?php }
+	else if($answerType == HOTSPOT){
+		
+		
+		?>
+		
+		<table width="355" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+			<td>&nbsp;</td>
+			</tr>
+			<tr>
+			<td><i><?php echo get_lang("Answer"); ?></i> </td>
+			</tr>
+			<tr>
+			<td>&nbsp;</td>
+			</tr>
+
+			<?php 
+			$objAnswerTmp=new Answer($questionId);
+			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+			$questionScore=0;
+			echo '
+			<tr>
+				<td>
+					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'" width="380" height="400">
+						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'" />
+					</object>
+				</td><td valign="top"><table style="border: 1px solid" width="200">';
+			for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
+			{
+				$answer=$objAnswerTmp->selectAnswer($answerId);
+				$answerComment=$objAnswerTmp->selectComment($answerId);
+				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
+				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+				$queryfree = "select marks from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
+				$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
+				$questionScore= mysql_result($resfree,0,"marks");
+				//to assign marks to open question
+				$totalScore+=$questionScore;
+				$query = "select answer from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
+				$resq=api_sql_query($query);
+				$choice = mysql_result($resq,0,"answer");
+				
+				display_hotspot_answer($answerId,$answer,$choice,$answerComment);
+				
+				$i++;	
+		 	}
+		 	?>
+			</table></td></tr></table>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	<?php	
+	}
+	?>
 
 
 		 </td>

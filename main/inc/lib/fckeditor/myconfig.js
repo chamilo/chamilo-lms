@@ -39,8 +39,17 @@ FCKConfig.ToolbarSets["Small"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','Image','Flash','OrderedList','UnorderedList','Table']
 ] ;
 
+
+FCKConfig.ToolbarSets["Announcements"] = [
+	['Bold','Italic','Underline','StrikeThrough','Link','Image','OrderedList','UnorderedList','Table']
+] ;
+
 FCKConfig.ToolbarSets["Full"] = [
 	['Save','Templates','PasteWord','Link','-','Image','Flash','Video','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
+] ;
+
+FCKConfig.ToolbarSets["Comment"] = [
+	['Bold','Italic','Underline','StrikeThrough']
 ] ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;

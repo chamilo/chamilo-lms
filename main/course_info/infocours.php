@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 10385 2006-12-06 16:10:39Z elixir_inter $
+// $Id: infocours.php 10546 2006-12-22 09:29:40Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,7 +50,6 @@ include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang("ModifInfo");
-Display :: display_header($nameTools, MODULE_HELP_NAME);
 
 /*
 -----------------------------------------------------------
@@ -222,6 +221,7 @@ if ($form->validate() && is_settings_editable())
 										 registration_code = '".$update_values['course_registration_password']."'
 									WHERE code = '".$course_code."'";
 	api_sql_query($sql, __FILE__, __LINE__);
+
 	//update course_settings table
 	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
 	if($update_values['email_alert_manager_on_new_doc'] != $values['email_alert_manager_on_new_doc']){
@@ -252,6 +252,8 @@ if ($form->validate() && is_settings_editable())
 	Header
 -----------------------------------------------------------
 */
+
+Display :: display_header($nameTools, MODULE_HELP_NAME);
 
 //api_display_tool_title($nameTools);
 if (isset ($_GET['action']) && $_GET['action'] == 'show_message')

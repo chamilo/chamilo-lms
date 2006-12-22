@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10280 2006-11-30 23:02:34Z develop-it $
+<?php // $Id: exercise_result.php 10547 2006-12-22 15:03:14Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -679,6 +679,9 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		//added by priya saini
 		if($_configuration['tracking_enabled'])
 		{
+			if(empty($choice)){
+				$choice = 0;
+			}
 			if ($answerType==2 )
 			{
 				$reply = array_keys($choice);
@@ -689,33 +692,35 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				}
 			}
 			elseif ($answerType==4)
-			{	
+			{
 				$j=3;
 				for ($i=0;$i<sizeof($choice);$i++,$j++)
 				{
-						$val = $choice[$j];
-						if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
-							$val = $arr1[1][0];
-						$sql = "select position from $table_ans where question_id=$questionId and answer='$val'";	
-						$res = api_sql_query($sql, __FILE__, __LINE__);
-						$answer = mysql_result($res,0,"position");
-						exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
+					
+					$val = $choice[$j];
+					if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
+						$val = $arr1[1][0];
+					$sql = "select position from $table_ans where question_id=$questionId and answer='$val'";	
+					$res = api_sql_query($sql, __FILE__, __LINE__);
+					$answer = mysql_result($res,0,"position");
+					
+					exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
 						
 				}
-			}				
-			elseif ($answerType==5)	
+			}
+			elseif ($answerType==5)
 			{
 				$answer = $choice;
 				exercise_attempt($questionScore,$answer,$quesId,$exeId);
 			}
 			elseif ($answerType==1)
 			{
-				$sql = "select id from $table_ans where question_id=$questionId and position=$choice";	
+				$sql = "select id from $table_ans where question_id=$questionId and position=$choice";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
 				$answer = mysql_result($res,0,"id");
 				exercise_attempt($questionScore,$answer,$quesId,$exeId);
 			}
-			else					
+			else
 			{
 				exercise_attempt($questionScore,$answer,$quesId,$exeId);
 			}

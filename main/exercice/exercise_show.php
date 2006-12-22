@@ -674,11 +674,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				$answerComment=$objAnswerTmp->selectComment($answerId);
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-				$queryfree = "select marks from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
-				$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
-				$questionScore= mysql_result($resfree,0,"marks");
-				//to assign marks to open question
-				$totalScore+=$questionScore;
+				
 				$query = "select answer from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
 				$resq=api_sql_query($query);
 				$choice = mysql_result($resq,0,"answer");
@@ -687,6 +683,10 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				
 				$i++;	
 		 	}
+		 	$queryfree = "select marks from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
+			$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
+			$questionScore= mysql_result($resfree,0,"marks");
+			$totalScore+=$questionScore;
 		 	?>
 			</table></td></tr></table>
 		

@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 10422 2006-12-07 16:44:39Z elixir_inter $
+<?php // $Id: exercice_submit.php 10547 2006-12-22 15:03:14Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -78,6 +78,7 @@ $TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
 $TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
 
 // general parameters passed via POST/GET
+
 if ( empty ( $origin ) ) {
     $origin = $_REQUEST['origin'];
 }
@@ -221,6 +222,9 @@ if(!isset($_SESSION['objExercise']))
 
 }
 
+if(!isset($objExcercise) && isset($_SESSION['objExercise'])){	
+	$objExercise = $_SESSION['objExercise'];
+}
 if(!is_object($objExercise))
 {
 	header('Location: exercice.php');
@@ -241,6 +245,9 @@ if(!isset($_SESSION['questionList']))
     // saves the question list into the session
     api_session_register('questionList');
     if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset - set now - end'."<br />\n";}
+}
+if(!isset($objExcercise) && isset($_SESSION['objExercise'])){	
+	$questionList = $_SESSION['questionList'];
 }
 
 $nbrQuestions=sizeof($questionList);

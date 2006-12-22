@@ -743,6 +743,7 @@ if($_configuration['tracking_enabled'])
 					$from = $_SESSION[_user]['mail'];
 					$from_name = $_SESSION[_user]['firstName']." ".$_SESSION[_user]['lastName'];
 					$url = $_SESSION['checkDokeosURL'].'claroline/exercice/exercice.php?'.api_get_cidreq().'&show=result';
+					print_r($_POST);
 					foreach ($_POST as $key=>$v)
 						{
 						$keyexp = explode('_',$key);
@@ -755,7 +756,9 @@ if($_configuration['tracking_enabled'])
 							$query = "update `$TABLETRACK_ATTEMPT` set marks = '$v' where question_id = $keyexp[1] and exe_id=$id";
 							api_sql_query($query, __FILE__, __LINE__);
 							
-							$qry = "select sum(marks) as tot from `".$TABLETRACK_ATTEMPT."` where exe_id = $id";
+							$qry = 'SELECT sum(marks) as tot 
+									FROM `'.$TABLETRACK_ATTEMPT.'` where exe_id = '.intval($id).'
+									GROUP BY question_id';
 							
 							$res = api_sql_query($qry,__FILE__,__LINE__);
 							$tot = mysql_result($res,0,'tot');
@@ -773,7 +776,7 @@ if($_configuration['tracking_enabled'])
 						
 						}
 				$subject = "Examsheet viewed/corrected/commented by teacher";
-				/*$message = "<html>
+				$message = "<html>
 <head>
 <style type='text/css'>
 <!--
@@ -814,7 +817,7 @@ color: #000000;
   </DIV>
   </body>
   </html>
-";*/
+";
 $message = "<p>You attempt for the test #test# has been viewed/commented/corrected by the teacher. Click the link below to access  your account and view your Examsheet. <A href='#url#'>#url#</A></p>
     <BR>";
 				$mess= str_replace("#test#",$test,$message);
@@ -826,7 +829,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 				$headers .= "Content-Transfer-Encoding: 7bit";
 				$headers .= 'From: '.$from_name.' <'.$from.'>' . "\r\n";
 				$headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=iso-8859-15";
-			
+				echo 'envoi d\'un mail à '.$emailid;
 			//mail($emailid, $subject, $mess,$headers);
 			
 								

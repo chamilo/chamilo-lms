@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: surveytemp_white.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: surveytemp_white.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -134,7 +134,7 @@ if(isset($_POST['saveandexit']) || isset($_POST['next']) || isset($_POST['finish
 
 
 
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
 $tool_name = $o_survey->title;
 Display::display_header($tool_name);
 api_display_tool_title("Survey Name : ".$o_survey->title);
@@ -365,7 +365,7 @@ echo $content;
 						}
 						
 						if($group_offset < $nbGroups){	
-							echo '<input type="submit" name="saveandexit" value="'.get_lang('saveandexit').'" onclick="return confirm(\'Are you sure ?\')">';					
+							echo '<input type="submit" name="saveandexit" value="'.get_lang('SaveAndExit').'" onclick="return confirm(\''.get_lang('AreYouSure').'\')">';					
 							echo '<input type="submit" name="next" value="'.get_lang('Next').'">&nbsp;';						
 						}
 						else {

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: yesno_edit.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: yesno_edit.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -36,11 +36,11 @@ require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 $status = surveymanager::get_status();
 if($status==5)
 {
-api_protect_admin_script();
+	api_protect_admin_script();
 }
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 $n=$_REQUEST['n'];
-$interbredcrump[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
 $cidReq = $_REQUEST['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $groupid=$_REQUEST['groupid'];
@@ -48,8 +48,8 @@ $surveyid=$_REQUEST['surveyid'];
 $qid=$_REQUEST['qid'];
 $qtype=$_REQUEST['qtype'];
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("updatequestiontype");
-$Multi = get_lang("yesno");
+$Add = get_lang("UpdateQuestionType");
+$Multi = get_lang("YesNo");
 $tool_name = $Add.$Multi;
 $rs=SurveyManager::get_question_data($qid,$curr_dbname);
 if(isset($_REQUEST['questtype']))
@@ -423,12 +423,12 @@ if( isset($error_message) )
 			}
 
 ?>
-						<input type="submit"  name="back" value="<?php echo get_lang("back");?>">
-						<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('yesno','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
-						<input type="submit"  name="update" value="<?php echo get_lang("update");?>">
-						<!--<input name="preview" value="<?php echo get_lang("preview");?>" type="submit" onClick="return changeAction()" > -->
+						<input type="submit"  name="back" value="<?php echo get_lang("Back");?>">
+						<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('yesno','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
+						<input type="submit"  name="update" value="<?php echo get_lang("Update");?>">
+						<!--<input name="preview" value="<?php echo get_lang("Preview");?>" type="submit" onClick="return changeAction()" > -->
 
-						<!--<input type="submit"  name="next" value="<?php echo get_lang("next");?>"> -->
+						<!--<input type="submit"  name="next" value="<?php echo get_lang("Next");?>"> -->
 			</div>
 <!--this partcular field helps in identify the item to be add at the itemadd.php-->			
 </form>

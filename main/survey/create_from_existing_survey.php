@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_from_existing_survey.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: create_from_existing_survey.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -43,9 +43,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 $cidReq = $_REQUEST['cidReq'];
 $db_name = $_REQUEST['db_name'];
 $table_survey = Database :: get_course_table('survey');
-//$interbredcrump[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
-//$interbredcrump[] = array ("url" => "survey.php", "name" => get_lang('a_survey'));
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $n='e';
 $tool_name = get_lang('CreateFromExistingSurveys');
 $surveyid=$_GET['surveyid'];
@@ -148,12 +146,12 @@ if( isset($error_message) )
 		$table_header[] = array (' ', false);
 		$table_header[] = array (get_lang('QuesGroup'), true);
 		$table_header[] = array (get_lang('NoOfQuestions'), true);
-		$table_header[] = array (get_lang('author'), true);
+		$table_header[] = array (get_lang('Author'), true);
 		Display :: display_sortable_table($table_header, $surveys, array (), array (), $parameters);
 		?>		
 		<table>
 		<tr>
-		<td><input type="submit" name="back" value="<?php  echo get_lang('back');?>"></td>
+		<td><input type="submit" name="back" value="<?php  echo get_lang('Back');?>"></td>
 		<td><input type="submit" name="view" value="<?php echo get_lang('ViewQues');?>"></td>
 		<td><input type="submit" name="import" value="<?php echo get_lang('ImportGroups');?>"></td>
 		</tr>

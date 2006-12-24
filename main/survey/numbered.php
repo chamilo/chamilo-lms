@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: numbered.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: numbered.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -51,18 +51,13 @@ $surveyid = $_REQUEST['surveyid'];
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("addnewquestiontype");
-$Multi = get_lang("numbered");
+$Add = get_lang("AddNewQuestionType");
+$Multi = get_lang("Numbered");
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
-$interbredcrump[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
-//$interbredcrump[] = array ("url" => "survey.php?cidReq=$cidReq&n=$n", "name" => get_lang('CreateSurvey'));
-/*
-if($n=="n")
-$interbredcrump[] = array ("url" => "create_new_survey.php?cidReq=$cidReq&n=$n", "name" => get_lang('New_survey'));
-else
-$interbredcrump[] = array ("url" => "create_from_existing.php?cidReq=$cidReq&n=$n", "name" => get_lang('New_survey'));
-*/
+$interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
+
+
 //$n=$_REQUEST['n'];
 if ($_POST['action'] == 'addquestion')
 {
@@ -545,7 +540,7 @@ function checkLength(form){
 ?>
 						<input type="submit"  name="back" value="<?php echo get_lang('Back'); ?>">
 						<input type="submit"  name="saveandexit" value="<?php echo get_lang('SaveAndExit'); ?>">
-						<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('numbered','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
+						<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('numbered','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
 						<input type="submit"  name="next" value="<?php echo get_lang('Next'); ?>"> 
 			</div>
 <!--this partcular field helps in identify the item to be add at the itemadd.php-->

@@ -23,7 +23,7 @@
 ==============================================================================
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: addanother.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: addanother.php 10549 2006-12-24 16:08:47Z pcool $
 ==============================================================================
 */
 
@@ -59,10 +59,10 @@ $curr_dbname = $_REQUEST['curr_dbname'];
 $group_id=$_GET['newgroupid'];
 $table_survey = Database :: get_course_table('survey');
 //$table_group=Database::get_course_table('survey_group');
-$tool_name = get_lang('New_survey');
+$tool_name = get_lang('CreateNewSurvey');
 $tool_name1 = get_lang('AddAnotherQuestion');
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
-//$interbredcrump[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+
 $course_id = $_SESSION['_course']['id'];
 if(isset($_REQUEST['surveyid']))
 $surveyid=$_REQUEST['surveyid'];
@@ -86,9 +86,10 @@ if(isset($_POST['next']))
 			$groupid=$_POST['exiztinggroup'];
 			$add_question=$_POST['add_question'];
 			$curr_dbname = $_REQUEST['curr_dbname'];
+			/** @todo it seems a bad idea to use language strings for switch statements and $_POST variables */
 			switch ($_POST['add_question'])
 			{
-				case get_lang('yesno'):
+				case get_lang('YesNo'):
 				header("location:yesno.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
 				break;
 				case get_lang('MultipleChoiceSingle'):
@@ -100,7 +101,7 @@ if(isset($_POST['next']))
 				case get_lang('Open'):
 				header("location:open.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
 				break;
-				case get_lang('numbered'):
+				case get_lang('Numbered'):
 				header("location:numbered.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
 				break;
 				default :
@@ -152,11 +153,12 @@ if(isset($group_id))
 <td>
 
 <select name="add_question" >	
-	<option value="<?php echo get_lang('yesno'); ?>" ><?php echo get_lang('yesno');?></option>
+	<?php /** @todo it seems a bad idea to use language strings for switch statements and $_POST variables */ ?>
+	<option value="<?php echo get_lang('YesNo'); ?>" ><?php echo get_lang('YesNo');?></option>
 	<option value="<?php echo get_lang('MultipleChoiceSingle'); ?>"  ><?php echo get_lang('MultipleChoiceSingle');?></option>
 	<option value="<?php echo get_lang('MultipleChoiceMulti'); ?>" ><?php echo get_lang('MultipleChoiceMulti');?></option>
 	<option value="<?php echo get_lang('Open');?>" ><?php echo get_lang('Open');?></option>
-	<option value="<?php echo get_lang('numbered');?>"><?php echo get_lang('numbered');?></option>
+	<option value="<?php echo get_lang('Numbered');?>"><?php echo get_lang('Numbered');?></option>
 </select>
 </td>
 </tr>
@@ -199,8 +201,8 @@ if(isset($group_id))
 <tr>
 <td>&nbsp;</td>
 <td>
-	<input type="submit" name="back" value="<?php echo get_lang("back");?>">
-	<input type="submit" name="next" value="<?php echo get_lang("next");?>">
+	<input type="submit" name="back" value="<?php echo get_lang('Back');?>">
+	<input type="submit" name="next" value="<?php echo get_lang('Next');?>">
 </tr>
 
 </table>

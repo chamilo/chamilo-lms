@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_group.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: create_new_group.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -47,10 +47,10 @@ $cidReq=$_GET['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $table_group = Database :: get_course_table('survey_group');
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$tool_name1 = get_lang('createnewgroup1');
-$tool_name = get_lang('createnewgroup');
+$tool_name1 = get_lang('CreateNewGroup');
+$tool_name = get_lang('CreateNewGroup');
 $header1 = get_lang('GroupList');
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $surveyid = $_GET['surveyid'];
 $surveyname = SurveyManager::pick_surveyname($surveyid);
 
@@ -187,11 +187,9 @@ $table_group =  Database :: get_course_table('survey_group');
                $i++;
 		
 		}
-		//$table_header[] = array (' ', false);
-		//$table_header[] = array (get_lang('SNo'), true);
 		$table_header[] = array (get_lang('QuesGroup'), true);
-		$table_header[] = array (get_lang('SurveyName1'), true);
-		$table_header[] = array (get_lang('author'), true);
+		$table_header[] = array (get_lang('SurveyName'), true);
+		$table_header[] = array (get_lang('Author'), true);
 		$table_header[] = array (get_lang('OrderBy'), true);
 		$table_header[] = array (' ', false);
 		Display :: display_sortable_table($table_header, $surveys, array ('column'=>get_lang('OrderBy')), array (), $parameters);
@@ -212,7 +210,7 @@ api_display_tool_title($tool_name);
 <!--<input type="hidden" name="cidReq" value="<?php echo $_REQUEST['cidReq']; ?>">-->
 <table>
 <tr>
-  <td><?php echo get_lang('groupname'); ?></td>
+  <td><?php echo get_lang('GroupName'); ?></td>
   <td><input type="text" name="groupname" size="40" maxlength="39" value="<?php echo $code ?>"></td>
 </tr>
 	   <tr><td valign="top"><?php echo get_lang('GroupIntroduction'); ?>&nbsp;</td>
@@ -226,9 +224,9 @@ api_display_tool_title($tool_name);
 </table>
 <tr>
   <td>&nbsp;</td>
-  <td><input type="submit" name="back" value="<?php echo get_lang('back'); ?>"></td>
-  <td><input type="submit" name="saveandexit" value="<?php echo get_lang('saveandexit'); ?>"></td>
-  <td><input type="submit" name="next" value="<?php echo get_lang('next'); ?>"></td>
+  <td><input type="submit" name="back" value="<?php echo get_lang('Back'); ?>"></td>
+  <td><input type="submit" name="saveandexit" value="<?php echo get_lang('SaveAndExit'); ?>"></td>
+  <td><input type="submit" name="next" value="<?php echo get_lang('Next'); ?>"></td>
 </tr>
 </form>
 <?php

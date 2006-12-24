@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: open.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: open.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -44,14 +44,14 @@ if($status==5)
 api_protect_admin_script();
 }
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-$interbredcrump[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
 $cidReq=$_GET['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("addnewquestiontype");
-$Multi = get_lang("open");
+$Add = get_lang("AddNewQuestionType");
+$Multi = get_lang("Open");
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
 if ($_POST['action'] == 'addquestion')
@@ -223,8 +223,8 @@ border=0>
 <BR>
 <DIV align=center> 
 	<input type="submit"  name="back" value="<?php echo get_lang('Back');?>">
-	<input type="submit"  name="saveandexit" value="<?php echo get_lang("saveandexit"); ?>">
-	<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('this.form','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
+	<input type="submit"  name="saveandexit" value="<?php echo get_lang("SaveAndExit"); ?>">
+	<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('this.form','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
 	<input type="submit"  name="next" value="<?php echo get_lang('Next'); ?>">  
 </DIV></FORM></DIV>
 <DIV id=bottomnav align=center></DIV>

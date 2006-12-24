@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_edit.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: group_edit.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -46,9 +46,9 @@ $cidReq=$_GET['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $table_group = Database :: get_course_table('survey_group');
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$tool_name1 = get_lang('createnewgroup1');
+$tool_name1 = get_lang('CreateNewGroup');
 $tool_name = get_lang('ModifyGroupInformation');
-$interbredcrump[] = array ("url" => "survey_list.php?", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php?", "name" => get_lang('Survey'));
 $coursePathWeb = api_get_path(WEB_COURSE_PATH);
 $coursePathSys = api_get_path(SYS_COURSE_PATH);
 $groupid = $_GET['groupid'];
@@ -130,7 +130,7 @@ $introduction = $obj->introduction;
 <!--<input type="hidden" name="cidReq" value="<?php echo $_REQUEST['cidReq']; ?>">-->
 <table>
 <tr>
-  <td><?php echo get_lang('groupname'); ?></td>
+  <td><?php echo get_lang('GroupName'); ?></td>
   <td><input type="text" name="groupname" size="40" value="<?php echo $groupname ?>"></td>
 </tr>
 	   <tr><td valign="top"><?php echo get_lang('GroupIntroduction'); ?>&nbsp;</td>
@@ -144,9 +144,9 @@ $introduction = $obj->introduction;
 </table>
 <tr>
   <td>&nbsp;</td>
-  <td><input type="submit" name="back" value="<?php echo get_lang('back'); ?>"></td>
-  <td><input type="submit" name="saveandexit" value="<?php echo get_lang('saveandexit'); ?>"></td>
-  <td><input type="submit" name="next" value="<?php echo get_lang('next'); ?>"></td>
+  <td><input type="submit" name="back" value="<?php echo get_lang('Back'); ?>"></td>
+  <td><input type="submit" name="saveandexit" value="<?php echo get_lang('SaveAndExit'); ?>"></td>
+  <td><input type="submit" name="next" value="<?php echo get_lang('Next'); ?>"></td>
 </tr>
 </form>
 <?php

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: select_question.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 if(isset($_POST['add_question']))
@@ -35,7 +35,7 @@ $language_file = 'survey';
     $add_question=$_REQUEST['add_question'];
 	switch ($_POST['add_question'])
 	{
-		case get_lang('yesno'):
+		case get_lang('YesNo'):
 		header("location:yesno.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
 		break;
 		case get_lang('MultipleChoiceSingle'):
@@ -47,7 +47,7 @@ $language_file = 'survey';
 		case get_lang('Open'):
 		header("location:open.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
 		break;
-		case get_lang('numbered'):
+		case get_lang('Numbered'):
 		header("location:numbered.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
 		break;
 		default :
@@ -89,11 +89,11 @@ if( isset($error_message) )
 <td>
 <select name="add_question" onChange="javascript:this.form.submit();">
 	<option value="0"><?php echo get_lang('Select');?></option>
-	<option value="<?php echo get_lang('YesNo'); ?>" <?php if($add_question12==get_lang('yesno'))echo "selected";?>><?php echo get_lang('yesno');?></option>
+	<option value="<?php echo get_lang('YesNo'); ?>" <?php if($add_question12==get_lang('YesNo'))echo "selected";?>><?php echo get_lang('YesNo');?></option>
 	<option value="<?php echo get_lang('MultipleChoiceSingle'); ?>" <?php if($add_question12==get_lang('MultipleChoiceSingle')) { echo " selected ";}?>><?php echo get_lang('MultipleChoiceSingle');?></option>
 	<option value="<?php echo get_lang('MultipleChoiceMulti'); ?>" <?php if($add_question12==get_lang('MultipleChoiceMulti')) { echo " selected ";}?>><?php echo get_lang('MultipleChoiceMulti');?></option>
 	<option value="<?php echo get_lang('Open'); ?>" <?php if($add_question12==get_lang('Open')) { echo "selected";}?>><?php echo get_lang('Open');?></option>
-	<option value="<?php echo get_lang('Numbered'); ?>" <?php if($add_question12==get_lang('numbered')) { echo "selected";}?>><?php echo get_lang('numbered');?></option>
+	<option value="<?php echo get_lang('Numbered'); ?>" <?php if($add_question12==get_lang('Numbered')) { echo "selected";}?>><?php echo get_lang('Numbered');?></option>
 </select>
 </td>
 </tr>

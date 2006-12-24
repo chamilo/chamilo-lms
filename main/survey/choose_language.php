@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: choose_language.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: choose_language.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -37,7 +37,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-//$tool_name=get_lang("AdministrationTools");
+
 $surveyid = $_REQUEST['surveyid'];
 $uid = $_REQUEST['uid'];
 $uid1 = $_REQUEST['uid1'];
@@ -72,17 +72,18 @@ $code_survey = mysql_result($res_sname, 0, 'code');
 mysql_data_seek($res_sname,0);
 
 $surveyname = '';
-while($obj_sname = mysql_fetch_object($res_sname)){
+while($obj_sname = mysql_fetch_object($res_sname))
+{
 	$surveyname .= $obj_sname->title.'<br>';
 }
 mysql_data_seek($res_sname,0);
 
 Display::display_header($tool_name);
-?><center><?api_display_tool_title($surveyname);?></center><?
+api_display_tool_title($surveyname);
 api_display_tool_title($tool_name);
 if($error_message)
 {
-Display::display_error_message($error_message);	
+	Display::display_error_message($error_message);	
 }
 ?>
 <link href="../css/survey_white.css" rel="stylesheet" type="text/css">

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: preview_mcma.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: preview_mcma.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -47,7 +47,7 @@ $tool_name = get_lang('ViewQuestions');
 $header1 = get_lang('SurveyName');
 $header2 = get_lang('GroupName');
 $header3 = get_lang('Type');
-$interbredcrump[] = array ("url" => "index.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('Survey'));
 $coursePathWeb = api_get_path(WEB_COURSE_PATH);
 $coursePathSys = api_get_path(SYS_COURSE_PATH);
 $questionid = '1';
@@ -103,13 +103,13 @@ Display::display_header($tool_name);
      <td><?php api_display_tool_title($qid)?></td>
   </tr>
 <tr>
-  <td><?php echo get_lang('question'); ?></td>
+  <td><?php echo get_lang('Question'); ?></td>
   </tr>
 <tr>
 <td><textarea  cols="50" rows="6" name="questions"> <?echo $enterquestion;?></textarea></td>
 </tr>
 <tr>
-  <td></br><?php echo get_lang('answer'); ?></td>
+  <td></br><?php echo get_lang('Answer'); ?></td>
   </tr>
   <tr>
   <?
@@ -119,8 +119,8 @@ Display::display_header($tool_name);
 <?		
 	}  
   ?>
-<td></br><input type="button" name="back" value="<?php  echo get_lang('back'); ?>" onClick="javascript:history.go(-1);"></td>
- <!-- <td></br><input type="submit" value="<?php  echo get_lang('import'); ?>"></td>-->
+<td></br><input type="button" name="back" value="<?php  echo get_lang('Back'); ?>" onClick="javascript:history.go(-1);"></td>
+ <!-- <td></br><input type="submit" value="<?php  echo get_lang('Import'); ?>"></td>-->
 </tr>
 </table>
 </form>

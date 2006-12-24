@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcsa.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: mcsa.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -50,19 +50,12 @@ $add_question = $_REQUEST['add_question'];
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("addnewquestiontype");
+$Add = get_lang("AddNewQuestionType");
 $Multi = get_lang("MultipleChoiceSingle");
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
-$interbredcrump[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
-//$interbredcrump[] = array ("url" => "survey.php?cidReq=$cidReq", "name" => get_lang('CreateSurvey'));
-/*
-if($n=="n")
-$interbredcrump[] = array ("url" => "create_new_survey.php?cidReq=$cidReq&n=$n", "name" => get_lang('New_survey'));
-else
-$interbredcrump[] = array ("url" => "create_from_existing.php?cidReq=$cidReq&n=$n", "name" => get_lang('New_survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
 
-*/
 //$n=$_REQUEST['n'];
 if ($_POST['action'] == 'addquestion')
 {
@@ -384,7 +377,7 @@ $start=1;$end=5;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 				else
 			    {
 				  $end=10;
-				  $error_message = get_lang('YouCanntAddmorethanTen')."<br>";
+				  $error_message = get_lang('YouCantAddmorethanTen')."<br>";
 				if( isset($error_message) )
                   {
 	                  Display::display_error_message($error_message);	
@@ -514,7 +507,7 @@ $start=1;$end=5;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 ?>
 						<input type="submit"  name="back" value="<?php echo get_lang('Back'); ?>">
 						<input type="submit"  name="saveandexit" value="<?php echo get_lang('SaveAndExit');?>">
-						<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('mcsa','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
+						<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('mcsa','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
 						<input type="submit"  name="next" value="<?php echo get_lang('Next'); ?>"> 
 			</div>
 <!--this partcular field helps in identify the item to be add at the itemadd.php-->

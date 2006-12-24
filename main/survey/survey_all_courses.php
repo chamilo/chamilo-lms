@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_all_courses.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: survey_all_courses.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -156,8 +156,8 @@ function displayTemplate(url) {
 				
 			}
         }
-		$table_header[] = array (get_lang('SurveyName1'), true);
-		$table_header[] = array (get_lang('author'), true);
+		$table_header[] = array (get_lang('SurveyName'), true);
+		$table_header[] = array (get_lang('Author'), true);
 		$table_header[] = array (get_lang('CourseName'), true);
 		$table_header[] = array (get_lang('Language'), true);
 		$table_header[] = array (get_lang('AvailableFrom'), true);

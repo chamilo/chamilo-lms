@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_survey.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: create_survey.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -40,35 +40,11 @@ require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 //$table_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $table_survey = Database :: get_main_table(MAIN_SURVEY_IFA_TABLE);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tool_name = get_lang('a_survey');
-$interbredcrump[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
+$tool_name = get_lang('CreateSurvey');
+$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
 $coursePathWeb = api_get_path(WEB_COURSE_PATH);
 $coursePathSys = api_get_path(SYS_COURSE_PATH);
-//define("NEW_SURVEY", 1);
-//define("EXISTING_SURVEY", 2);
 $newsurvey = '0';
-//$existingsurvey = '1';
-
-
-/*
-if ($_POST['action'] == 'add_survey')
-{
-	$sql = "SELECT * FROM $table_survey WHERE id='".intval($_POST['id'])."'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$id = mysql_fetch_object($res);
-	$code = trim(strtoupper(stripslashes($_POST['code'])));
-	//$author_name = $_POST['author'];
-	//$title = $_POST['title'];
-	//$language = trim(stripslashes($_POST['lang']));
-	//$datefrom = $_POST['datefrom'];
-	//$datetill = $_POST['datetill'];
-	
-	if (empty ($code))
-		$error_message = get_lang('PleaseEnterSurveyCode');
-
-	}
-*/
-
 
 if ($_POST['action'] == 'add_survey')
 {
@@ -104,7 +80,7 @@ api_display_tool_title($tool_name);
 <td>
 <input class="checkbox" checked type="radio" name="survey" id="new_survey" value="<?php echo $newsurvey ?>"> <label for="visibility_open_world"><?php echo get_lang("Newsurvey") ?></label>
 <br/>
-<input class="checkbox" type="radio" name="survey" id="Existing_survey" value="<?php echo $existingsurvey ?>"  > <label for="visibility_open_platform"><?php echo  get_lang("Existingsurvey") ?></label><?php SurveyManager::select_survey_list();?>
+<input class="checkbox" type="radio" name="survey" id="Existing_survey" value="<?php echo $existingsurvey ?>"  > <label for="visibility_open_platform"><?php echo  get_lang('CreateFromExistingSurveys'); ?></label><?php SurveyManager::select_survey_list();?>
 
 
 </td></tr>

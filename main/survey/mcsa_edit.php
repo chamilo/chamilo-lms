@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcsa_edit.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: mcsa_edit.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -41,7 +41,7 @@ api_protect_admin_script();
 }
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 $n=$_REQUEST['n'];
-$interbredcrump[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
 $cidReq = $_REQUEST['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $groupid=$_REQUEST['groupid'];
@@ -49,7 +49,7 @@ $surveyid=$_REQUEST['surveyid'];
 $qid=$_REQUEST['qid'];
 $qtype=$_REQUEST['qtype'];
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("updatequestiontype");
+$Add = get_lang("UpdateQuestionType");
 $Multi = get_lang("MultipleChoiceSingle");
 $tool_name = $Add.$Multi;
 $rs=SurveyManager::get_question_data($qid,$curr_dbname);
@@ -269,7 +269,7 @@ $start=1;$end=$check;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 				else
 				{
 				  $end=10;
-				  $error_message = get_lang('YouCanntAddmorethanTen')."<br>";
+				  $error_message = get_lang('YouCantAddmorethanTen')."<br>";
 				if( isset($error_message) )
                   {
 	                  Display::display_error_message($error_message);	
@@ -394,7 +394,7 @@ $start=1;$end=$check;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 
 ?>
 						<input type="submit"  name="back" value="<?php echo get_lang('Back'); ?>">
-						<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('mcsa','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
+						<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('mcsa','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
 						<input type="submit"  name="update" value="<?php echo get_lang('Update'); ?>"> 
 			</div>
 <!--this partcular field helps in identify the item to be add at the itemadd.php-->

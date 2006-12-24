@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_survey_in_another_language.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: create_survey_in_another_language.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -60,7 +60,7 @@ if(isset($_POST['submit'])){
 }
 
 $tool_name = get_lang('CreateInAnotherLanguage');
-$interbredcrump[] = array('url'=>'survey_list.php','name'=>get_lang('SurveyList'));
+$interbreadcrumb[] = array('url'=>'survey_list.php','name'=>get_lang('SurveyList'));
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 

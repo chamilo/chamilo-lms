@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_edit.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: survey_edit.php 10549 2006-12-24 16:08:47Z pcool $
 */
 /*
 ==============================================================================
@@ -54,7 +54,7 @@ $table_survey = Database :: get_course_table('survey');
 $tbl_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifySurveyInformation');
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $coursePathWeb = api_get_path(WEB_COURSE_PATH);
 $coursePathSys = api_get_path(SYS_COURSE_PATH);
 $maxFilledSpace = get_setting('default_document_quotum');
@@ -158,19 +158,19 @@ $lang=$obj->lang;
 <input type="hidden" name="action" value="update_survey">
 <table>
 <tr>
- <td><?php echo get_lang('surveycode'); ?></td>
+ <td><?php echo get_lang('SurveyCode'); ?></td>
  <td><input type="text" name="survey_code" size="20"   maxlength="19" value="<?php if($formSent){echo $surveycode;}else {echo $obj->code;} ?>"></td>
 </tr>
 <tr>
-  <td><?php echo get_lang('surveytitle'); ?></td>
+  <td><?php echo get_lang('SurveyTitle'); ?></td>
   <td><input type="text" name="survey_title" size="40"  maxlength="79" value="<?php if($formSent){echo $surveytitle;}else {echo $obj->title;} ?>"></td>
 </tr>
 <tr>
-  <td><?php echo get_lang('surveysubtitle'); ?></td>
+  <td><?php echo get_lang('SurveySubtitle'); ?></td>
   <td><input type="text" name="survey_subtitle" size="40"   maxlength="79" value="<?php if($formSent){echo $surveysubtitle;}else {echo $obj->subtitle;} ?>"></td>
 </tr>
 <tr>
-  <td><?php echo get_lang('author'); ?></td>
+  <td><?php echo get_lang('Author'); ?></td>
   <td>
   	<?php
 	UserManager::get_teacher_list($cidReq,$obj->author);
@@ -178,7 +178,7 @@ $lang=$obj->lang;
   </td>
 </tr>
 <tr>
-  <td><?php echo get_lang('surveylanguage'); ?>&nbsp;</td>
+  <td><?php echo get_lang('SurveyLanguage'); ?>&nbsp;</td>
   <td>
 	<select name="survey_language">
     <option value="english" <?if($lang=='english') echo "selected";?>>English</option>
@@ -188,7 +188,7 @@ $lang=$obj->lang;
   </td>
 </tr>
 <tr id="subtitle">
-  <td><?php echo get_lang('availablefrom'); ?>&nbsp;</td>
+  <td><?php echo get_lang('AvailableFrom'); ?>&nbsp;</td>
   <td>	
         <select name="fday">
 		<?php for($i=1;$i<=31;$i++){
@@ -233,7 +233,7 @@ december -->
 	</tr>
 				
 <tr id="subtitle">
-  <td><?php echo get_lang('availabletill'); ?>&nbsp;</td>
+  <td><?php echo get_lang('AvailableTill'); ?>&nbsp;</td>
   <td>
   	  <select name="end_fday">
 		<?php for($i=1;$i<=31;$i++){
@@ -283,7 +283,7 @@ december -->
 </td>
 </tr>
 
-<tr><td valign="top"><?php echo get_lang('surveyintroduction'); ?>&nbsp;</td>
+<tr><td valign="top"><?php echo get_lang('SurveyIntroduction'); ?>&nbsp;</td>
 <td>
 <?php
    api_disp_html_area('content',$obj->intro,'300px');
@@ -301,7 +301,7 @@ december -->
  </tr>
  <tr>
  <td></td>
- <td><input type="submit" name="back" value="<?php echo get_lang('back'); ?>">&nbsp;<input type="submit" name="updateandreturn" value="<?php echo get_lang('saveandexit'); ?>">&nbsp;<input type="submit" name="next" value="<?php echo get_lang('next'); ?>"></td>
+ <td><input type="submit" name="back" value="<?php echo get_lang('Back'); ?>">&nbsp;<input type="submit" name="updateandreturn" value="<?php echo get_lang('SaveAndExit'); ?>">&nbsp;<input type="submit" name="next" value="<?php echo get_lang('Next'); ?>"></td>
  </tr>
 </table>
 </form>

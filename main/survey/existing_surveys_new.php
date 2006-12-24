@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: existing_surveys_new.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: existing_surveys_new.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -46,9 +46,7 @@ $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
 $table_course_survey_rel = Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
-//$interbredcrump[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
-//$interbredcrump[] = array ("url" => "survey.php", "name" => get_lang('a_survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $n='e';
 $tool_name = get_lang('ImportFromExisting');
 $tool_name1 = get_lang('SurveysOfAllCourses');
@@ -120,8 +118,8 @@ function displayTemplate(url) {
 				$surveys[] = $survey;				
 			}
         }
-		$table_header[] = array (get_lang('SurveyName1'), true);
-		$table_header[] = array (get_lang('author'), true);
+		$table_header[] = array (get_lang('SurveyName'), true);
+		$table_header[] = array (get_lang('Author'), true);
 		$table_header[] = array (get_lang('CourseName'), true);
 		$table_header[] = array (get_lang('Language'), true);
 		$table_header[] = array (get_lang('AvailableFrom'), true);

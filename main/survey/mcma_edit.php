@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcma_edit.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: mcma_edit.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -40,7 +40,7 @@ api_protect_admin_script();
 }
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 $n=$_REQUEST['n'];
-$interbredcrump[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
 $cidReq = $_REQUEST['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $groupid=$_REQUEST['groupid'];
@@ -50,7 +50,7 @@ $qtype=$_REQUEST['qtype'];
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("updatequestiontype");
+$Add = get_lang("UpdateQuestionType");
 $Multi = get_lang("MultipleChoiceMulti");
 $tool_name = $Add.$Multi;
 $rs=SurveyManager::get_question_data($qid,$curr_dbname);
@@ -418,7 +418,7 @@ if( isset($error_message) )
 
 ?>
 						<input type="submit"  name="back" value="<?php echo get_lang('Back'); ?>">
-						<input type="button" value="<?php echo get_lang('preview');?>" onClick="preview('mcma','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
+						<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('mcma','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
 						<input type="submit"  name="update" value="<?php echo get_lang('Update'); ?>">
 						
 			</div>

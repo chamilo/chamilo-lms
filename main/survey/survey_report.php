@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_report.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: survey_report.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -48,7 +48,7 @@ if($_SESSION['status']==5)
 $screen = isset($_POST['screen']) ? $_POST['screen'] : '1' ;
 
 $tool_name = get_lang('SurveyReporting');
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 Display::display_header($tool_name);
 
 switch($screen) {

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: import.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: import.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -36,10 +36,10 @@ api_protect_admin_script();
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 $cidReq = $_REQUEST['cidReq'];
-$interbredcrump[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
+$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
 $tool_name = get_lang('SelectQuestion');
 $Sname = get_lang('SurveyName');
-$GName = get_lang('groupname');
+$GName = get_lang('GroupName');
 $Author = get_lang('Author');
 $surveyid=$_REQUEST['surveyid'];
 $newgroupid = $_REQUEST['newgroupid'];

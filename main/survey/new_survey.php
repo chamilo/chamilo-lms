@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: new_survey.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: new_survey.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -31,8 +31,8 @@ api_protect_admin_script();
 
 require_once(api_get_path(LIBRARY_PATH).'/usermanager.lib.php');
 
-$interbredcrump[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
-$interbredcrump[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
+$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
+$interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
 $tool_name = get_lang('Survey');
 Display::display_header($tool_name);
 ?>
@@ -65,7 +65,7 @@ $group_table = Database :: get_main_table(TABLE_MAIN_GROUP);
 			$group[] = $group;
 		}
 		$table_header[] = array('',false);
-		$table_header[] = array (get_lang('serialno'), true);
+		$table_header[] = array (get_lang('SerialNo'), true);
 		$table_header[] = array (get_lang('FirstName'), true);
 		$table_header[] = array (get_lang('LastName'), true);
 		$table_header[] = array (get_lang('LoginName'), true);

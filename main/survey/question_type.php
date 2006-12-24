@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_type.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: question_type.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -45,7 +45,7 @@ $table_survey = Database :: get_main_table(TABLE_MAIN_SURVEY);
 $table_group =  Database :: get_main_table(TABLE_MAIN_GROUP);
 $table_question = Database :: get_main_table(TABLE_MAIN_SURVEYQUESTION);
 $tool_name = get_lang('SelectQuestionByType');
-$interbredcrump[] = array ("url" => "index.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('Survey'));
 //$questtype=$_POST['add_question'];
 
 Display::display_header($tool_name);
@@ -83,11 +83,11 @@ if( isset($error_message) )
 
 <select name="add_question">
 	<option value="0"><?php  echo get_lang('Select');?></option>
-	<option value="<?php  echo get_lang('yesno');?>" <?php  if(isset($_POST['add_question'])){if($_POST['add_question']=="1")echo "selected";}?>><?php echo get_lang('yesno');?></option>
+	<option value="<?php  echo get_lang('YesNo');?>" <?php  if(isset($_POST['add_question'])){if($_POST['add_question']=="1")echo "selected";}?>><?php echo get_lang('YesNo');?></option>
 	<option value="<?php  echo get_lang('MultipleChoiceSingle');?>" <?php  if(isset($_POST['add_question'])){if($_POST['add_question']=="2")echo "selected";}?>><?php echo get_lang('MultipleChoiceSingle');?></option>
 	<option value="<?php  echo get_lang('MultipleChoiceMulti');?>" <?php  if(isset($_POST['add_question'])){if($_POST['add_question']=="3")echo "selected";}?>><?php echo get_lang('MultipleChoiceMulti');?></option>
 	<option value="<?php  echo get_lang('Open');?>" <?php  if(isset($_POST['add_question'])){if($_POST['add_question']=="4")echo "selected";}?>><?php echo get_lang('Open');?></option>
-	<option value="<?php echo get_lang('numbered');?>" <?php if(isset($_POST['add_question'])){if($_POST['add_question']=="5")echo "selected";}?>><?php echo get_lang('numbered');?></option>
+	<option value="<?php echo get_lang('Numbered');?>" <?php if(isset($_POST['add_question'])){if($_POST['add_question']=="5")echo "selected";}?>><?php echo get_lang('Numbered');?></option>
 </select>
 </td>
 </tr>
@@ -95,7 +95,7 @@ if( isset($error_message) )
 <tr>
 <td></td>
 <td>
-<input type="submit" name= 'next' value="<?php echo get_lang('next');?>">
+<input type="submit" name= 'next' value="<?php echo get_lang('Next');?>">
 </td>
 </tr>
 </table>

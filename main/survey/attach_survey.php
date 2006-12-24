@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: attach_survey.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: attach_survey.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -60,9 +60,9 @@ $table_group = Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_course_survey_rel = Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
-$tool_name = get_lang('New_survey');
-$tool_name1 = get_lang('Newsurvey');
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$tool_name = get_lang('CreateNewSurvey');
+$tool_name1 = get_lang('CreateNewSurvey');
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $course_id = $_SESSION['_course']['id'];
 $oldsurveyid=$_REQUEST['surveyid'];
 $gids = $_REQUEST['gids'];
@@ -113,7 +113,7 @@ if ($_POST['action'] == 'add_survey')
 				
 		if(!empty($result))
 		{
-			$error_message=get_lang('thiscodealradyexist');
+			$error_message=get_lang('ThisCodeAlradyExists');
 		}
 		else
 		{
@@ -181,15 +181,15 @@ window.open(inf+".htm", 'popup', 'width=900,height=800,toolbar = no, status = no
 <input type="hidden" name="gids" value="<?php echo $gids; ?>">
 <table>
 <tr>
- <td><?php echo get_lang('surveycode'); ?></td>
+ <td><?php echo get_lang('SurveyCode'); ?></td>
  <td><input type="text" name="survey_code" size="20" maxlength="39" value="<?php echo $surveycode; ?>"></td>
 </tr>
 <tr>
-  <td><?php echo get_lang('surveytitle'); ?></td>
+  <td><?php echo get_lang('SurveyTitle'); ?></td>
   <td><input type="text" name="survey_title" size="40" maxlength="79" value="<?php echo $surveytitle ?>"></td>
 </tr>
 <tr>
-  <td><?php echo get_lang('surveysubtitle'); ?></td>
+  <td><?php echo get_lang('SurveySubtitle'); ?></td>
   <td><input type="text" name="survey_subtitle" size="40" maxlength="79" value="<?php echo $surveysubtitle ?>"></td>
 </tr>
 <tr>
@@ -197,7 +197,7 @@ window.open(inf+".htm", 'popup', 'width=900,height=800,toolbar = no, status = no
    if($_SESSION['is_platformAdmin']=='1'||$_SESSION['is_courseAdmin'])
    {
  echo "<td>";
- echo get_lang('author'); 
+ echo get_lang('Author'); 
  echo "</td>";
  echo "<td>";  	
  UserManager::get_teacher_list($course_id, $author_id);
@@ -206,7 +206,7 @@ window.open(inf+".htm", 'popup', 'width=900,height=800,toolbar = no, status = no
 ?>  
 </tr>
 <tr>
-  <td><?php echo get_lang('surveylanguage'); ?>&nbsp;</td>
+  <td><?php echo get_lang('SurveyLanguage'); ?>&nbsp;</td>
   <td>
 	<select name="survey_language">
     <option value="english"  selected="selected">English</option>
@@ -216,7 +216,7 @@ window.open(inf+".htm", 'popup', 'width=900,height=800,toolbar = no, status = no
   </td>
 </tr>
 <tr id="subtitle">
-  <td><?php echo get_lang('availablefrom'); ?>&nbsp;</td>
+  <td><?php echo get_lang('AvailableFrom'); ?>&nbsp;</td>
   <td>	
 <select name="fday">
 <?php 
@@ -260,7 +260,7 @@ december -->
 	</tr>
 				
 <tr id="subtitle">
-  <td><?php echo get_lang('availabletill'); ?>&nbsp;</td>
+  <td><?php echo get_lang('AvailableTill'); ?>&nbsp;</td>
   <td>
 <select name="end_fday">
 	<?php for($i=1;$i<=31;$i++){
@@ -310,7 +310,7 @@ december -->
 </td>
 </tr>
  <tr>
-  <td><?php echo get_lang('surveytemplate'); ?>&nbsp;</td>
+  <td><?php echo get_lang('SurveyTemplate'); ?>&nbsp;</td>
 <td>
 <select name="template">
 <option value="template1">OFO_nl</option>
@@ -319,10 +319,10 @@ december -->
 <option value="template4">FOD P&O_NL</option>
 <option value="template5">Blank</option>
 </select>
-<input type="button" value="<?php echo get_lang('preview');?>" onClick="displayTemplate(new_calendar_item)">
+<input type="button" value="<?php echo get_lang('Preview');?>" onClick="displayTemplate(new_calendar_item)">
 </td>
 </tr>
-<tr><td valign="top"><?php echo get_lang('surveyintroduction'); ?>&nbsp;</td>
+<tr><td valign="top"><?php echo get_lang('SurveyIntroduction'); ?>&nbsp;</td>
  <td>
    <?php
          api_disp_html_area('content',$content,'300px');
@@ -346,14 +346,14 @@ december -->
  </td>
  </tr>
   <tr>
- <td><?php echo get_lang('surveyattached');?>&nbsp;&nbsp;<?php echo $survey_name;?></td>
+ <td><?php echo get_lang('SurveyAttached');?>&nbsp;&nbsp;<?php echo $survey_name;?></td>
  </tr>
  </table>
  <tr>
   <td>&nbsp;</td>
-  <td><input type="submit" name="back" value="<?php echo get_lang('back');?>"></td>
-  <td><input type="submit" name="saveandexit" value="<?php echo get_lang('createlater'); ?>"></td>
-  <td><input type="submit" name="next" value="<?php echo get_lang('next'); ?>"></td>
+  <td><input type="submit" name="back" value="<?php echo get_lang('Back');?>"></td>
+  <td><input type="submit" name="saveandexit" value="<?php echo get_lang('CreateLater'); ?>"></td>
+  <td><input type="submit" name="next" value="<?php echo get_lang('Next'); ?>"></td>
 </tr>
 </table>
 </form>

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question_type.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: select_question_type.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -36,7 +36,7 @@ $language_file = 'survey';
 	require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 	$cidReq=$_GET['cidReq'];
 	$tool_name = get_lang('AddQuestion');
-	$interbredcrump[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
+	$interbreadcrumb[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
 	$group_name=$_GET['groupname'];
 	$surveyid=$_REQUEST['surveyid'];
 	$groupid=$_REQUEST['groupid'];

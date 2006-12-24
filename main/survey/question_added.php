@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_added.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: question_added.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -42,7 +42,7 @@ $cidReq=$_GET['cidReq'];
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$interbredcrump[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
+$interbreadcrumb[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
 $groupid=$_REQUEST['groupid'];
 $surveyid=$_REQUEST['surveyid'];
 $qdeleted=0;
@@ -94,7 +94,7 @@ if (isset($_POST['finish']))
 	$tool_name = get_lang('QuestionsAdded');
 	Display :: display_header($tool_name);
 	$survey_name=get_lang('SurveyName').$survey_name;
-	$author=get_lang('author').$author;	
+	$author=get_lang('Author').$author;	
 	api_display_tool_title($survey_name);	
 	api_display_tool_title($tool_name);	
 if($qdeleted)
@@ -115,8 +115,8 @@ if($qdeleted)
 	$table_header[] = array (' ', false);
 	//$table_header[] = array (get_lang('SNo'), true);
 	$table_header[] = array (get_lang('questions'), true);
-	$table_header[] = array (get_lang('group'), true);
-	$table_header[] = array (get_lang('type'), true);	
+	$table_header[] = array (get_lang('Group'), true);
+	$table_header[] = array (get_lang('Type'), true);	
 	$courses = array ();
 	for($i=0;$i<$num;$i++)
 	{
@@ -143,7 +143,7 @@ if($qdeleted)
 	<input type="submit" name="delete" value="<?php  echo get_lang("Delete");?>">
 	<input type="submit" name="addanother" value="<?php echo get_lang("AddAnotherQuestion");?>">
 	<input type="submit" name="addanotherg" value="<?php echo get_lang("AddAnotherGroup");?>">
-	<input type="submit" name="finish" value="<?php echo get_lang("finishsurvey");?>">
+	<input type="submit" name="finish" value="<?php echo get_lang("FinishSurvey");?>">
 </form>	
 <?
 /*

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_white.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: survey_white.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -56,8 +56,8 @@ $sql = 'select * from '.$db_name.'.survey where survey_id='.$surveyid;
 
 $rs = api_sql_query($sql,__FILE__,__LINE__);
 $o_survey = mysql_fetch_object($rs);
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
-$tool_name = get_lang('preview');
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
+$tool_name = get_lang('Preview');
 Display::display_header($tool_name);
 api_display_tool_title("Survey Name : ".$o_survey->title);
 

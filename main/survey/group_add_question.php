@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_add_question.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: group_add_question.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -41,9 +41,9 @@ require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 $cidReq=$_GET['cidReq'];
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 //$table_survey = Database :: get_main_table(MAIN_SURVEY_IFA_TABLE);
-$tool_name1 = get_lang('AddQuestion1');
+$tool_name1 = get_lang('AddQuestion');
 $tool_name = get_lang('AddQuestion');
-$interbredcrump[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
+$interbreadcrumb[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
 $coursePathWeb = api_get_path(WEB_COURSE_PATH);
 $coursePathSys = api_get_path(SYS_COURSE_PATH);
 $surveyid=$_GET['surveyid'];
@@ -79,7 +79,7 @@ if(isset($_POST['next']))
 	}
 }
 Display::display_header($tool_name1);
-$GName = get_lang('groupname');
+$GName = get_lang('GroupName');
 api_display_tool_title($tool_name);
 $name = surveymanager :: get_groupname($gid);
 ?>
@@ -129,8 +129,8 @@ if( isset($error_message) )
 </tr>
 <tr>
 <td>
-<input type="submit" name= 'back' value="<?php echo get_lang('back');?>">
-<input type="submit" name= 'next' value="<?php echo get_lang('next');?>"></td>
+<input type="submit" name= 'back' value="<?php echo get_lang('Back');?>">
+<input type="submit" name= 'next' value="<?php echo get_lang('Next');?>"></td>
 </tr>
 </table>
 </form>

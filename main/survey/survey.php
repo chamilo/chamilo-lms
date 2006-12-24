@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: survey.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 
@@ -136,7 +136,7 @@ api_display_tool_title($tool_name);
 <input class="checkbox" checked type="radio" name="survey" id="new_survey" value="<?php echo $newsurvey; ?>" /> <label for="new_survey"><?php echo get_lang("Newsurvey"); ?></label><br/>
 <input class="checkbox" type="radio" name="survey" id="existing_survey" value="<?php echo $existingsurvey; ?>" /> <label for="existing_survey"><?php echo  get_lang("Existingsurvey"); ?></label><br />
 <input type="submit" name="back" value="<?php echo get_lang('Back');?>" />&nbsp;
-<input type="submit" name="action" value="<?php echo get_lang('Ok1'); ?>" />
+<input type="submit" name="action" value="<?php echo get_lang('Ok'); ?>" />
 </form>
 <?php
 /*

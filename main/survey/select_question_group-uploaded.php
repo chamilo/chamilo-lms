@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question_group-uploaded.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: select_question_group-uploaded.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 
@@ -56,16 +56,16 @@ $cidReq = $_GET['cidReq'];
 $db_name = $_REQUEST['db_name'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 //$table_survey = Database :: get_course_table('survey');
-$tool_name1 = get_lang('selectquestiongroup1');
-$tool_name = get_lang('selectquestiongroup');
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$tool_name1 = get_lang('AddQuestionGroup');
+$tool_name = get_lang('AddQuestionGroup');
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 /*if($page = $_REQUEST['page'])
 {
- $interbredcrump[] = array ("url" => "create_new_survey.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname&page=$page", "name" => get_lang('CreateNewSurvey'));
+ $interbreadcrumb[] = array ("url" => "create_new_survey.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname&page=$page", "name" => get_lang('CreateNewSurvey'));
 }
 else
 {
- $interbredcrump[] = array ("url" => "create_new_survey.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname&page=$page", "name" => get_lang('CreateFromExistingSurvey'));
+ $interbreadcrumb[] = array ("url" => "create_new_survey.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname&page=$page", "name" => get_lang('CreateFromExistingSurvey'));
 }*/
 $coursePathWeb = api_get_path(WEB_COURSE_PATH);
 $coursePathSys = api_get_path(SYS_COURSE_PATH);
@@ -288,7 +288,7 @@ if(isset($messege) && $messege )
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><input type="submit" name="question_group" value="<?php echo get_lang("importquestionsfromexistinggroup"); ?>"></td>
+  <td><input type="submit" name="question_group" value="<?php echo get_lang('ImportQuestionsFromExistingGroup'); ?>"></td>
 </tr>
 </table>
 </form>
@@ -303,10 +303,10 @@ $result=api_sql_query($query);*/
 	$parameters['cidReq']=$cidReq;
 	//$table_header[] = array (' ', false);
 	//$table_header[] = array (get_lang('SNo'), true);
-	$table_header[] = array (get_lang('questions1'), true);
+	$table_header[] = array (get_lang('Questions'), true);
     $table_header[] = array (get_lang('ChangeOrder'), true);
-	$table_header[] = array (get_lang('group'), true);
-	$table_header[] = array (get_lang('type1'), true);	
+	$table_header[] = array (get_lang('Group'), true);
+	$table_header[] = array (get_lang('Type'), true);	
 	$table_header[]=array('',true);
 	$courses = array ();
 	if($num){
@@ -359,13 +359,13 @@ if(!empty($courses))
 	<!--<input type=button value="Back" onClick="history.go(-1)">-->
 	<input type="submit" name="addanother" value="<?php echo get_lang("AddAnotherQuestion");?>">
 	<input type="submit" name="addanotherg" value="<?php echo get_lang("AddNewGroup");?>">
-	<input type="submit" name="finish" value="<?php echo get_lang("finishsurvey");?>">
+	<input type="submit" name="finish" value="<?php echo get_lang("FinishSurvey");?>">
 <?
 }
 else
 {
 ?>
-    <input type="submit" name="back" value="<?echo get_lang("back");?>">
+    <input type="submit" name="back" value="<?echo get_lang("Back");?>">
 	<input type="submit" name="addanother" value="<?echo get_lang("AddAnotherQuestion");?>">
 	<input type="submit" name="addanotherg" value="<?echo get_lang("AddNewGroup");?>">
 <?

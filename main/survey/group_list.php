@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_list.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: group_list.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 /*
@@ -46,7 +46,7 @@ $curr_dbname = $_REQUEST['curr_dbname'];
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $tool_name = get_lang('GroupList');
 //Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
@@ -117,14 +117,14 @@ $table_group =  Database :: get_course_table('survey_group');
 		//$table_header[] = array (get_lang('SNo'), true);
 		$table_header[] = array (get_lang('QuesGroup'), true);
 		$table_header[] = array (get_lang('NoOfQuestions'), true);
-		$table_header[] = array (get_lang('SurveyName1'), true);
-		$table_header[] = array (get_lang('author'), true);
+		$table_header[] = array (get_lang('SurveyName'), true);
+		$table_header[] = array (get_lang('Author'), true);
 		//echo '<form method="post" action="course_list.php">';
 		Display :: display_sortable_table($table_header, $surveys, array (), array (), $parameters);
 		?>		
 		<table>
 		<tr>
-		<td><input type="submit" name="back1" value="<?php echo get_lang('back');?>"></td>
+		<td><input type="submit" name="back1" value="<?php echo get_lang('Back');?>"></td>
 		<td><input type="submit" name="view" value="<?php echo get_lang('ViewQues');?>"></td>
 		<td><input type="submit" name="import" value="<?php echo get_lang('Import');?>"></td>
 		</tr>

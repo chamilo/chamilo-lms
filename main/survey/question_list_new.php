@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_list_new.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: question_list_new.php 10549 2006-12-24 16:08:47Z pcool $
 */
 
 
@@ -41,13 +41,13 @@ if($status==5)
 {
 api_protect_admin_script();
 }
-$interbredcrump[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $cidReq = $_REQUEST['cidReq'];
 $db_name = $_REQUEST['db_name'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $tool_name = get_lang('SelectQuestion');
 $Sname = get_lang('SurveyName');
-$GName = get_lang('groupname');
+$GName = get_lang('GroupName');
 $Author = get_lang('Author');
 $surveyid=$_REQUEST['surveyid'];
 $groupid=$_REQUEST['groupid'];
@@ -223,9 +223,9 @@ function displayTemplate(url) {
 		}
 		$table_header[] = array (' ', false);
 		$table_header[] = array (get_lang('Question'), true);
-		$table_header[] = array (get_lang('QuestionType1'), true);
+		$table_header[] = array (get_lang('QuestionType'), true);
 		$table_header[] = array (get_lang('Group'),true);
-		$table_header[] = array	(get_lang('surveyname'),true);
+		$table_header[] = array	(get_lang('SurveyName'),true);
 		$table_header[] = array('', false);
 		if($datacount>0)
 		Display :: display_sortable_table($table_header, $questions, array (), array (), $parameters);
@@ -237,7 +237,7 @@ function displayTemplate(url) {
 ?>
 		<table>
 		<tr>		
-		<td><input type="submit" name="back" value="<?echo get_lang("back");?>"></td>
+		<td><input type="submit" name="back" value="<?echo get_lang("Back");?>"></td>
 		<td><input type="submit" name="importquestion" value="<?php echo get_lang('ImportQuestion');?>"></td>
 		</tr>
 		</table>

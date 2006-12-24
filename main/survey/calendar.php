@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: calendar.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: calendar.php 10550 2006-12-24 16:17:25Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -30,11 +30,11 @@ include('../inc/global.inc.php');
 
 // the variables for the days and the months
 // Defining the shorts for the days
-$DaysShort = array(get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort")); 
+$DaysShort = array(get_lang('SundayShort'), get_lang('MondayShort'), get_lang('TuesdayShort'), get_lang('WednesdayShort'), get_lang('ThursdayShort'), get_lang('FridayShort'), get_lang('SaturdayShort')); 
 // Defining the days of the week to allow translation of the days
-$DaysLong = array(get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong")); 
+$DaysLong = array(get_lang('SundayLong'), get_lang('MondayLong'), get_lang('TuesdayLong'), get_lang('WednesdayLong'), get_lang('ThursdayLong'), get_lang('FridayLong'), get_lang('SaturdayLong')); 
 // Defining the months of the year to allow translation of the months
-$MonthsLong = array(get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong")); 
+$MonthsLong = array(get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('"MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong')); 
 
 ?>
 <html>

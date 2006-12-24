@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: yesno_edit.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: yesno_edit.php 10550 2006-12-24 16:17:25Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -428,7 +428,7 @@ if( isset($error_message) )
 						<input type="submit"  name="update" value="<?php echo get_lang("Update");?>">
 						<!--<input name="preview" value="<?php echo get_lang("Preview");?>" type="submit" onClick="return changeAction()" > -->
 
-						<!--<input type="submit"  name="next" value="<?php echo get_lang("Next");?>"> -->
+						<!--<input type="submit"  name="next" value="<?php echo get_lang('Next');?>"> -->
 			</div>
 <!--this partcular field helps in identify the item to be add at the itemadd.php-->			
 </form>

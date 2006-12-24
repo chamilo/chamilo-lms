@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_survey.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: create_new_survey.php 10550 2006-12-24 16:17:25Z pcool $
 */
 
 /*
@@ -75,7 +75,7 @@ api_protect_admin_script();
 -----------------------------------------------------------
 */
 // an api function for this would be nice since this is used in a lot of places in Dokeos
-$MonthsLong = array(get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong")); 
+$MonthsLong = array(get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('"MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong')); 
 $tool_name = get_lang('CreateNewSurvey');
 $tool_name1 = get_lang('CreateNewSurvey');
 

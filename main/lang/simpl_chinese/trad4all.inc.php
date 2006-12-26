@@ -23,6 +23,7 @@ $langFirstName = "&#22995;";
 $langLastName = "&#21517;";
 $langStatus = "&#29366;&#24577;";
 $langEmail = "&#30005;&#37038;";
+$UploadFile = "&#19978;&#36733;&#25991;&#20214;";
 $iso639_2_code = "zh";
 $iso639_1_code = "zho";
 $charset = "gb2312";

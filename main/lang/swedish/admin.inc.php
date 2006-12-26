@@ -464,6 +464,7 @@ $langDateEnd = "Slut datum";
 $langNoTimeLimits = "Ingen tidsbegränsning";
 $NextStep = "Nästa steg";
 $keyword = "Nyckelord";
+$Confirm = "Bekräfta";
 $ErrorsWhenImportingFile = "Fel vid filimportering";
 $ServiceActivated = "Tjänst aktiverad";
 $ActiveExtension = "Aktiva tjänster";

@@ -115,6 +115,7 @@ $langFirstname = "Primeiro nome";
 $langDefineHeadings = "Definir cabeçalhos";
 $langCourseAdministratorOnly = "Reservado a professores";
 $langWorks = "Trabalhos";
+$langLostPassword = "Senha perdida";
 $langAdminOfCourse = "Administrador do curso";
 $langSimpleUserOfCourse = "Utilizador do curso";
 $langIsTutor = "É tutor";

@@ -56,4 +56,15 @@ $CheckDatabaseConnection = "Kontroli datumbankan konekton";
 $PrintOverview = "Montri supervidon";
 $Installing = "Instali";
 $of = "de ";
+$Step = "Pa&#349;o";
+$Of = "de";
+$MoreDetails = "Por pliaj detaloj";
+$ServerRequirements = "Servilaj bezonoj";
+$ServerRequirementsInfo = "Funkciaj bibliotekoj kaj funkciaroj provizendaj de la servilo por igi Dokeos-on plene uzebla ";
+$PHPVersion = "PHP-versio";
+$support = "subteno";
+$PHPVersionOK = "PHP-versio estas en ordo";
+$OK = "En ordo";
+$RecommendedSettings = "Rekomenditaj aran&#285;oj";
+$RecommendedSettingsInfo = "Rekomendindaj aran&#285;oj por via servilo. Eblas &#349;an&#285;i tiujn aran&#285;ojn en la php.ini konfigura dosiero en via servilo.";
 ?>

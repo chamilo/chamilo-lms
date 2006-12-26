@@ -28,6 +28,7 @@ $langCourseList  = "Kurzusok";
 $Subscribe = "Feliratkozás";
 $AlreadySubscribed = "Már feliratkozott!";
 $CourseCategoryStored = "Kurzus kategória létrehozva.";
+$langWithoutTimeLimits = "Id&#337;korlátozások nélkül";
 $lang_back_to_main_category_list = "Vissza a f&#337; kategórialistához";
 $langAdded = "Hozzáadva";
 $langDeleted = "Törölve";

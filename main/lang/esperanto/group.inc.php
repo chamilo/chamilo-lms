@@ -91,5 +91,7 @@ $GroupTutors = "Mentoro";
 $GroupWork = "Laboroj";
 $GroupCalendar = "Agendo";
 $GroupAnnouncements = "Anoncoj";
+$NoCategoriesDefined = "Neniu kategorio estas difinita";
 $GroupsFromClasses = "Grupoj sur bazo de klasoj";
+$GroupsFromClassesInfo = "Uzante &#265;i tiun opcion vi povas ekfari grupojn sur bazo de klasoj enskribitaj en via kurso";
 ?>

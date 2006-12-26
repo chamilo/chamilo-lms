@@ -28,6 +28,7 @@ $langCourseList  = "课程";
 $Subscribe = "注册";
 $AlreadySubscribed = "已注册";
 $CourseCategoryStored = "课程分类已经创建";
+$langWithoutTimeLimits = "&#27809;&#26377;&#26102;&#38388;&#38480;&#21046;";
 $lang_back_to_main_category_list = "返回主分类列表";
 $langAdded = "添加";
 $langDeleted = "删除";

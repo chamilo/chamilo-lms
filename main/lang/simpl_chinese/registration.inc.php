@@ -103,6 +103,7 @@ $langFirstname = "名";
 $langDefineHeadings = "定义标题";
 $langCourseAdministratorOnly = "只可教师使用";
 $langWorks = "作业论文";
+$langLostPassword = "&#23494;&#30721;&#36951;&#22833;";
 $langAdminOfCourse = "课程管理员";
 $langSimpleUserOfCourse = "课程用户";
 $langIsTutor = "教师";

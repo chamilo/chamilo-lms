@@ -65,4 +65,7 @@ $langOpenarea = "Persona areo ";
 $langProductions = "Produkta&#309;oj ";
 $langSendChatRequest = "Sendi babilpeton al tiu persono ";
 $langRequestDenied = "La peto estas malakceptita. ";
+$UsageDatacreated = "Uzulaj datumoj kreitaj";
+$SessionView = "Prezenti la kursojn la&#365; sesioj";
+$CourseView = "Prezenti la kompletan liston da kursoj";
 ?>

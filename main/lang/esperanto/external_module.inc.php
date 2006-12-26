@@ -24,4 +24,8 @@ $langNoLinkName = "Bonvolu atribui nomon al la ligilo. ";
 $langEditLink = "&#348;an&#285;i kursan ligilon en hejmpa&#285;o ";
 $langChangePress = "&#348;an&#285;u kaj klaku sur \'en ordo\'";
 $langLinkChanged = "Kurs&#265;efpa&#285;a ligilo &#349;an&#285;ita. Uzu la supran paneran menuon por reiri al la &#265;efpa&#285;o. ";
+$NoLinkName = "Ligila nomo mankas";
+$NoLinkURL = "Ne ligila URL";
+$LinkChanged = "Ligilo &#349;an&#285;ita";
+$OkSentLink = "La ligilo estas sendita";
 ?>

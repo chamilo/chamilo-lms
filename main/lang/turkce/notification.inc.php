@@ -14,5 +14,5 @@ $lang_new_link = "yeni ba&#287;lant&#305; eklendi";
 $lang_new_forum_topic = "yeni ba&#351;l&#305;k eklendi";
 $lang_new_groupforum_topic = "grup forumuna yeni ba&#351;l&#305;k eklendi";
 $lang_new_dropbox_file = "yeni dosya al&#305;nd&#305;";
-$lang_update_dropbox_file = "gelen kutusundaki dosyan&#305;z g�ncellendi";
+$lang_update_dropbox_file = "gelen kutusundaki dosyanız güncellendi";
 ?>

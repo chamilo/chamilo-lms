@@ -179,54 +179,7 @@ event_access_tool(TOOL_QUIZ);
 // need functions of statsutils lib to display previous exercices scores
 include_once(api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php');
 
-if($is_allowedToEdit)
-{
-	include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-	if(!is_dir($audioPath))
-	{
-		if(is_file($audioPath))
-		{
-			@unlink($audioPath);
-		}
 
-		@mkdir($audioPath);
-
-		//$query="INSERT INTO $TBL_DOCUMENT (path,filetype) VALUES('".str_replace($documentPath,'',$audioPath)."','folder')";
-		//api_sql_query($query,__FILE__,__LINE__);
-		//$id = Database::get_last_insert_id();
-		$id = add_document($_course,str_replace($documentPath,'',$audioPath),'folder',0,'Audio');
-		//$time = time();
-		//$time = date("Y-m-d H:i:s", $time);
-		
-		//$query = "INSERT INTO $TBL_ITEM_PROPERTY (tool, ref, insert_user_id, insert_date, lastedit_type) VALUES ('".TOOL_DOCUMENT."', $id, $_user['user_id'], '$time', 'DocumentAdded' )";
-		//api_sql_query($query,__FILE__,__LINE__);
-		api_item_property_update($_course,TOOL_DOCUMENT,$id,'FolderCreated',$_user['user_id']);
-	}
-
-	if(!is_dir($picturePath))
-	{
-		if(is_file($picturePath))
-		{
-			@unlink($picturePath);
-		}
-
-		@mkdir($picturePath);
-
-		//$query="INSERT INTO $TBL_DOCUMENT (path, filetype) VALUES('".str_replace($documentPath,'',$picturePath)."','folder')";
-		//api_sql_query($query,__FILE__,__LINE__);
-		//$id = Database::get_last_insert_id();
-		$id = add_document($_course,str_replace($documentPath,'',$picturePath),'folder',0,'Pictures');
-		//$time = time();
-		//$time = date("Y-m-d H:i:s", $time);
-		
-		//$query = "INSERT INTO $TBL_ITEM_PROPERTY (tool, ref, insert_user_id, insert_date, lastedit_type) VALUES ('".TOOL_DOCUMENT."', $id, $_user['user_id'], '$time', 'DocumentAdded' )";
-		//api_sql_query($query,__FILE__,__LINE__);
-		api_item_property_update($_course,TOOL_DOCUMENT,$id,'FolderCreated',$_user['user_id']);
-	}
-}
-if($origin != 'learnpath'){
-	//api_display_tool_title($nameTools);
-}
 /*
 -----------------------------------------------------------
 	Introduction section

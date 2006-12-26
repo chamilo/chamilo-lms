@@ -213,6 +213,9 @@ function prepare_course_repository($courseRepository, $courseId)
 	umask(0);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/audio", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/flash", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/dropbox", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/group", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/page", 0777);
@@ -1516,7 +1519,18 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		//we need to add the document properties too!
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,1)");
-
+		
+		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images','".get_lang('Images')."','folder','0')");
+		$example_doc_id = Database :: get_last_insert_id();
+		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
+		
+		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/audio','".get_lang('Audio')."','folder','0')");
+		$example_doc_id = Database :: get_last_insert_id();
+		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
+		
+		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/flash','".get_lang('Flash')."','folder','0')");
+		$example_doc_id = Database :: get_last_insert_id();
+		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
 		/*
 		-----------------------------------------------------------

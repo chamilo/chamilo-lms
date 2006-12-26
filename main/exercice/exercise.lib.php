@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 10545 2006-12-21 15:09:31Z elixir_inter $
+<?php // $Id: exercise.lib.php 10556 2006-12-26 15:35:00Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -105,39 +105,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 	$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
 	$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
 	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-	//$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(WEB_PATH)."claroline/inc/lib/fckeditor_new/myconfig.js?".time(); //to clear cache we use time() but always clear history manually
-	/*
-	$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Image&Connector=connectors/php/connector.php&ServerPath=/$upload_path/";
-
-	$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Image&ServerPath=/$upload_path/" ;
-
-			//for Link/File
-			$oFCKeditor->Config['LinkBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-			$oFCKeditor->Config['LinkUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?ServerPath=$upload_path" ;
-
-			//for image
-			$oFCKeditor->Config['ImageBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Image&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-			$oFCKeditor->Config['ImageUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Image&ServerPath=$upload_path" ;
-
-			//for flash
-			$oFCKeditor->Config['FlashBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-			$oFCKeditor->Config['FlashUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-
-			//for MP3
-			$oFCKeditor->Config['MP3BrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-			$oFCKeditor->Config['MP3UploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
-
-			//for other media
-			$oFCKeditor->Config['VideoBrowserURL'] = $oFCKeditor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-			$oFCKeditor->Config['VideoUploadURL'] = $oFCKeditor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
-
-	$oFCKeditor->ToolbarSet = 'Comment' ;*/
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+	$oFCKeditor->Config['IMUploadPath'] = 'upload/test/';
 	$oFCKeditor->ToolbarSet = "Small";
 	$oFCKeditor->Width  = '80%';
 	$oFCKeditor->Height = '300';

@@ -1117,6 +1117,7 @@ class Blog
 									$oFCKeditor->Width		= '98%';
 									$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
 									$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+									$oFCKeditor->Config['IMUploadPath'] = "upload/blog/";
 									$oFCKeditor->ToolbarSet = "Blog";
 									
 									$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
@@ -1181,6 +1182,7 @@ class Blog
 								$oFCKeditor->Width		= '98%';
 								$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
 								$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+								$oFCKeditor->Config['IMUploadPath'] = "upload/blog/";
 								$oFCKeditor->ToolbarSet = "Blog";
 								
 								$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
@@ -2198,6 +2200,7 @@ class Blog
 									$oFCKeditor->Width		= '97%';
 									$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
 									$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+									$oFCKeditor->Config['IMUploadPath'] = "upload/blog/";
 									$oFCKeditor->ToolbarSet = "Blog";
 									
 									$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);

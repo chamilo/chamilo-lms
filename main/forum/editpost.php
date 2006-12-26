@@ -58,6 +58,12 @@
 		INIT SECTION
 ==============================================================================
 */
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Middle';
+$fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
+
 /*
 -----------------------------------------------------------
 	Language Initialisation

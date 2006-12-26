@@ -729,6 +729,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								$fck_attribute['Width'] = '400';
 								$fck_attribute['Height'] = '150';
 								$fck_attribute['ToolbarSet'] = 'Comment';
+								$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
 								$$questionId = new FormValidator('frmcomments'.$questionId,'post','');													
 								$renderer =& $$questionId->defaultRenderer();
 								$renderer->setFormTemplate(

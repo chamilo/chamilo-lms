@@ -1,4 +1,4 @@
-<?php // $Id: exercise_admin.inc.php 10545 2006-12-21 15:09:31Z elixir_inter $
+<?php // $Id: exercise_admin.inc.php 10556 2006-12-26 15:35:00Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -127,6 +127,7 @@ if(!empty($msgErr))
 	$oFCKeditor->Width		= '100%';
 	$oFCKeditor->Value		= $exerciseDescription;
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+	$oFCKeditor->Config['IMUploadPath'] = "/upload/test/";
 	$oFCKeditor->ToolbarSet = "NewTest";
 	
 	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);

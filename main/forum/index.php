@@ -78,9 +78,10 @@ $nameTools=get_lang('Forum');
 include('forumconfig.inc.php');
 include('forumfunction.inc.php');
 
-$fck_attribute['Width'] = '600';
+$fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Middle';
+$fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
 
 //error_reporting(E_ALL);
 /*
@@ -107,6 +108,7 @@ Display::display_introduction_section(TOOL_FORUM);
 */
 if (api_is_allowed_to_edit())
 {
+	$fck_attribute['ToolbarSet'] = 'ForumLight';
 	handle_forum_and_forumcategories();
 }
 get_whats_new();

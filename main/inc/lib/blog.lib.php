@@ -1116,6 +1116,15 @@ class Blog
 									$oFCKeditor->Height		= '400';
 									$oFCKeditor->Width		= '98%';
 									$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
+									$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+									$oFCKeditor->ToolbarSet = "Blog";
+									
+									$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+									$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+									$result_sql=api_sql_query($sql);
+									$isocode_language=mysql_result($result_sql,0,0);
+									$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+									
 									$oFCKeditor->Create() ;
 			echo '			 <br /></td>
 							</tr>
@@ -1171,6 +1180,15 @@ class Blog
 								$oFCKeditor->Height		= '400';
 								$oFCKeditor->Width		= '98%';
 								$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
+								$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+								$oFCKeditor->ToolbarSet = "Blog";
+								
+								$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+								$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+								$result_sql=api_sql_query($sql);
+								$isocode_language=mysql_result($result_sql,0,0);
+								$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+								
 								$oFCKeditor->Create() ;
 		echo '			 <br /></td>
 						</tr>
@@ -2179,6 +2197,15 @@ class Blog
 									$oFCKeditor->Height		= '200';
 									$oFCKeditor->Width		= '97%';
 									$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
+									$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+									$oFCKeditor->ToolbarSet = "Blog";
+									
+									$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+									$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+									$result_sql=api_sql_query($sql);
+									$isocode_language=mysql_result($result_sql,0,0);
+									$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+									
 									$oFCKeditor->Create() ;
 		echo '			 <br /></td>
 						</tr>

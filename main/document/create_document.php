@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 10485 2006-12-13 15:52:15Z elixir_inter $
+// $Id: create_document.php 10557 2006-12-26 15:36:59Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -52,8 +52,8 @@ include (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $nameTools = get_lang('CreateDocument');
 
-$fck_attribute['Width'] = '800';
-$fck_attribute['Height'] = '450';
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Full';
 
 /*
@@ -167,7 +167,7 @@ if (get_setting('use_document_title') == 'true')
 // HTML-editor
 $form->add_html_editor('content', get_lang('Content'), false, true);
 // Comment-field
-$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
+//$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
 $form->addElement('submit', 'submit', get_lang('Ok'));
 $form->setDefaults($default);
 // If form validates -> save the new document

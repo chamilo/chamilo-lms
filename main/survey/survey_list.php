@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_list.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: survey_list.php 10558 2006-12-27 09:43:17Z pcool $
 */
 
 /*
@@ -277,7 +277,7 @@ else
 		echo get_lang('NoSearchResults') ;
 		}
 		else{
-			$nosurvey=get_lang("NoSurveyAvailableinthelist");
+			$nosurvey=get_lang('NoSurveyAvailable');
 			api_display_tool_title($nosurvey);		
 		}
 	}

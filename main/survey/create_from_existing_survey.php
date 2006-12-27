@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_from_existing_survey.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: create_from_existing_survey.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 /*
@@ -69,7 +69,7 @@ if(isset($_POST['import']))
   $selectcount=count($_POST['course']);	
   if($selectcount<=0)
    {
-	  	 $error_message=get_lang("PleaseSelectAChoice");		
+	  	 $error_message=get_lang('PleaseSelectAChoice');
    }
  else
   {
@@ -89,7 +89,7 @@ if(isset($_POST['view']))
  $selectcount=count($_POST['course']);	
   if($selectcount<=0)
    {
-	  	 $error_message=get_lang("PleaseSelectAChoice");		
+	  	 $error_message=get_lang('PleaseSelectAChoice');		
    }
  else
   {    
@@ -152,7 +152,7 @@ if( isset($error_message) )
 		<table>
 		<tr>
 		<td><input type="submit" name="back" value="<?php  echo get_lang('Back');?>"></td>
-		<td><input type="submit" name="view" value="<?php echo get_lang('ViewQues');?>"></td>
+		<td><input type="submit" name="view" value="<?php echo get_lang('ViewQuestions');?>"></td>
 		<td><input type="submit" name="import" value="<?php echo get_lang('ImportGroups');?>"></td>
 		</tr>
 		</table>

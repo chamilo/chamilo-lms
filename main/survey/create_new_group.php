@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_group.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: create_new_group.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 /*
@@ -181,7 +181,7 @@ $table_group =  Database :: get_course_table('survey_group');
 				$directions .= '</tr></table>';
 				$survey[] = $directions;
 				$survey[] =  '<a href="group_edit.php?groupid='.$obj->group_id.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'
-				.'<a href="create_new_group.php?cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&delete=1&group_delete='.$gid.'&surveyid='.$surveyid.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>'
+				.'<a href="create_new_group.php?cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&delete=1&group_delete='.$gid.'&surveyid='.$surveyid.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>'
 				;
                $surveys[] = $survey;
                $i++;

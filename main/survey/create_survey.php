@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_survey.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: create_survey.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 /*
@@ -78,7 +78,7 @@ api_display_tool_title($tool_name);
 <tr>
 <td valign="top"></td>
 <td>
-<input class="checkbox" checked type="radio" name="survey" id="new_survey" value="<?php echo $newsurvey ?>"> <label for="visibility_open_world"><?php echo get_lang("Newsurvey") ?></label>
+<input class="checkbox" checked type="radio" name="survey" id="new_survey" value="<?php echo $newsurvey ?>"> <label for="visibility_open_world"><?php echo get_lang('NewSurvey') ?></label>
 <br/>
 <input class="checkbox" type="radio" name="survey" id="Existing_survey" value="<?php echo $existingsurvey ?>"  > <label for="visibility_open_platform"><?php echo  get_lang('CreateFromExistingSurveys'); ?></label><?php SurveyManager::select_survey_list();?>
 

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: yesno_edit.php 10550 2006-12-24 16:17:25Z pcool $
+* 	@version $Id: yesno_edit.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -48,8 +48,8 @@ $surveyid=$_REQUEST['surveyid'];
 $qid=$_REQUEST['qid'];
 $qtype=$_REQUEST['qtype'];
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("UpdateQuestionType");
-$Multi = get_lang("YesNo");
+$Add = get_lang('UpdateQuestionType');
+$Multi = get_lang('YesNo');
 $tool_name = $Add.$Multi;
 $rs=SurveyManager::get_question_data($qid,$curr_dbname);
 if(isset($_REQUEST['questtype']))
@@ -423,10 +423,10 @@ if( isset($error_message) )
 			}
 
 ?>
-						<input type="submit"  name="back" value="<?php echo get_lang("Back");?>">
+						<input type="submit"  name="back" value="<?php echo get_lang('Back');?>">
 						<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('yesno','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
-						<input type="submit"  name="update" value="<?php echo get_lang("Update");?>">
-						<!--<input name="preview" value="<?php echo get_lang("Preview");?>" type="submit" onClick="return changeAction()" > -->
+						<input type="submit"  name="update" value="<?php echo get_lang('Update');?>">
+						<!--<input name="preview" value="<?php echo get_lang('Preview');?>" type="submit" onClick="return changeAction()" > -->
 
 						<!--<input type="submit"  name="next" value="<?php echo get_lang('Next');?>"> -->
 			</div>

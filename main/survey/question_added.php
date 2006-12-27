@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_added.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: question_added.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 /*
@@ -140,10 +140,10 @@ if($qdeleted)
 			Display :: display_sortable_table($table_header, $courses, array (), array (), $parameters);
 		//echo '</form>';	
 ?>	
-	<input type="submit" name="delete" value="<?php  echo get_lang("Delete");?>">
-	<input type="submit" name="addanother" value="<?php echo get_lang("AddAnotherQuestion");?>">
-	<input type="submit" name="addanotherg" value="<?php echo get_lang("AddAnotherGroup");?>">
-	<input type="submit" name="finish" value="<?php echo get_lang("FinishSurvey");?>">
+	<input type="submit" name="delete" value="<?php  echo get_lang('Delete');?>">
+	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
+	<input type="submit" name="addanotherg" value="<?php echo get_lang('AddAnotherGroup');?>">
+	<input type="submit" name="finish" value="<?php echo get_lang('FinishSurvey');?>">
 </form>	
 <?
 /*

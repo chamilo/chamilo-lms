@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question_group-uploaded.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: select_question_group-uploaded.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 
@@ -335,7 +335,7 @@ $result=api_sql_query($query);*/
 				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&curr_dbname='.$curr_dbname.'&cidReq='.$cidReq.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down><img src="../img/down.gif" border="0" title="lang_move_down"></a>&nbsp;'.$sort.'&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&curr_dbname='.$curr_dbname.'&cidReq='.$cidReq.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up><img src="../img/up.gif" border="0" title="lang_move_up"></a>';										
 				$course[] = @mysql_result($res,$i,'groupname');
 				$course[] = mysql_result($res1,$k,'qtype');//$obj->qtype;	
-				/*$course[]='<a href="question_edit.php?qid='.$obj->qid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&qtype='.$obj->qtype.'&groupid='.$groupid.'&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="select_question_group.php?delete=1&qid[]='.$obj->qid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&qtype='.$obj->qtype.'&groupid='.$groupid.'&surveyid='.$surveyid.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>';
+				/*$course[]='<a href="question_edit.php?qid='.$obj->qid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&qtype='.$obj->qtype.'&groupid='.$groupid.'&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="select_question_group.php?delete=1&qid[]='.$obj->qid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&qtype='.$obj->qtype.'&groupid='.$groupid.'&surveyid='.$surveyid.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>';
 				*/
 				$courses[] = $course;
 				$x++;
@@ -355,19 +355,19 @@ if(!empty($courses))
 				SurveyManager :: display_sortable_table($groupid,$surveyid,$curr_dbname,$table_header, $courses, array (), array (), $parameters);
 
 ?>	
-	<!--<input type="submit" name="delete" value="<?php  echo get_lang("Delete");?>">-->
+	<!--<input type="submit" name="delete" value="<?php  echo get_lang('Delete');?>">-->
 	<!--<input type=button value="Back" onClick="history.go(-1)">-->
-	<input type="submit" name="addanother" value="<?php echo get_lang("AddAnotherQuestion");?>">
-	<input type="submit" name="addanotherg" value="<?php echo get_lang("AddNewGroup");?>">
-	<input type="submit" name="finish" value="<?php echo get_lang("FinishSurvey");?>">
+	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
+	<input type="submit" name="addanotherg" value="<?php echo get_lang('AddNewGroup');?>">
+	<input type="submit" name="finish" value="<?php echo get_lang('FinishSurvey');?>">
 <?
 }
 else
 {
 ?>
-    <input type="submit" name="back" value="<?echo get_lang("Back");?>">
-	<input type="submit" name="addanother" value="<?echo get_lang("AddAnotherQuestion");?>">
-	<input type="submit" name="addanotherg" value="<?echo get_lang("AddNewGroup");?>">
+    <input type="submit" name="back" value="<?echo get_lang('Back');?>">
+	<input type="submit" name="addanother" value="<?echo get_lang('AddAnotherQuestion');?>">
+	<input type="submit" name="addanotherg" value="<?echo get_lang('AddNewGroup');?>">
 <?
 }	
 ?>

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_list.php 10558 2006-12-27 09:43:17Z pcool $
+* 	@version $Id: survey_list.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 /*
@@ -149,7 +149,7 @@ else
 	if(isset($published))
 	{
 	$sname = surveymanager::pick_surveyname($surveyid);
-	$error_message = get_lang('YourSurveyhasbeenPublished');
+	$error_message = get_lang('YourSurveyHasBeenPublished');
 	Display::display_error_message("Survey "."'".$sname."'"." ".$error_message);	
 	}
 	if (isset ($_GET['delete_course']))
@@ -249,7 +249,7 @@ else
 			$survey[] = $ratio;
 			//$NoOfQuestion=surveymanager::no_of_question($gid);
 			//$language=surveymanager::no_of_question($sid);
-			$survey[] = '<a href="survey_edit.php?surveyid='.$obj->survey_id.'&cidReq='.$cidReq.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="survey_list.php?cidReq='.$cidReq.'&action=delete_surveys&survey_delete[]='.$obj->survey_id.'&delete_survey='.$obj->survey_id.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>'.'<a href="create_survey_in_another_language.php?cidReq='.$cidReq.'&id_survey='.$obj->survey_id.'"><img width="28" src="../img/copy.gif" border="0" align="absmiddle" alt="'.get_lang('CreateInAnotherLanguage').'" title="'.get_lang('CreateInAnotherLanguage').'" /></a>'.'<a href="survey_white.php?surveyid='.$surveyid.'&db_name='.$db_name.'&cidReq='.$cidReq.'&temp='.$template.'">&nbsp;<img src="../img/visible.gif" border="0" align="absmiddle" alt="'.get_lang('ViewSurvey').'"></a>'.'<a href="../announcements/announcements.php?action=add&cidReq='.$cidReq.'&db_name='.$db_name.'&publish_survey='.$obj->survey_id.'">&nbsp;<img src="../img/survey_publish.gif" border="0" align="absmiddle" alt="'.get_lang('Publish').'"></a>'.'<a href="reporting.php?action=reporting&cidReq='.$cidReq.'&db_name='.$db_name.'&surveyid='.$obj->survey_id.'">&nbsp;<img src="../img/surveyreporting.gif" border="0" align="absmiddle" alt="'.get_lang('Reporting').'"></a>';
+			$survey[] = '<a href="survey_edit.php?surveyid='.$obj->survey_id.'&cidReq='.$cidReq.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="survey_list.php?cidReq='.$cidReq.'&action=delete_surveys&survey_delete[]='.$obj->survey_id.'&delete_survey='.$obj->survey_id.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>'.'<a href="create_survey_in_another_language.php?cidReq='.$cidReq.'&id_survey='.$obj->survey_id.'"><img width="28" src="../img/copy.gif" border="0" align="absmiddle" alt="'.get_lang('CreateInAnotherLanguage').'" title="'.get_lang('CreateInAnotherLanguage').'" /></a>'.'<a href="survey_white.php?surveyid='.$surveyid.'&db_name='.$db_name.'&cidReq='.$cidReq.'&temp='.$template.'">&nbsp;<img src="../img/visible.gif" border="0" align="absmiddle" alt="'.get_lang('ViewSurvey').'"></a>'.'<a href="../announcements/announcements.php?action=add&cidReq='.$cidReq.'&db_name='.$db_name.'&publish_survey='.$obj->survey_id.'">&nbsp;<img src="../img/survey_publish.gif" border="0" align="absmiddle" alt="'.get_lang('Publish').'"></a>'.'<a href="reporting.php?action=reporting&cidReq='.$cidReq.'&db_name='.$db_name.'&surveyid='.$obj->survey_id.'">&nbsp;<img src="../img/surveyreporting.gif" border="0" align="absmiddle" alt="'.get_lang('Reporting').'"></a>';
 			$surveys[] = $survey;
 		}
 		$table_header[] = array (' ', false);

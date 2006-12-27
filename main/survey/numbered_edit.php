@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: numbered_edit.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: numbered_edit.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -42,8 +42,8 @@ $surveyid=$_REQUEST['surveyid'];
 $qid=$_REQUEST['qid'];
 $qtype=$_REQUEST['qtype'];
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("UpdateQuestionType");
-$Multi = get_lang("Numbered");
+$Add = get_lang('UpdateQuestionType');
+$Multi = get_lang('Numbered');
 $tool_name = $Add.$Multi;
 $rs=SurveyManager::get_question_data($qid,$curr_dbname);
 $sql = "SELECT * FROM $curr_dbname.questions WHERE qid = '$qid'";
@@ -250,7 +250,7 @@ $start=1;$end=$check;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 				else
 				{
 				  $end=10;
-				  $error_message = get_lang('YouCanntAddmorethanTen')."<br>";
+				  $error_message = get_lang('YouCantAddMoreThanTen')."<br>";
 				if( isset($error_message) )
                   {
 	                  Display::display_error_message($error_message);	

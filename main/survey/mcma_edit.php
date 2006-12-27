@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcma_edit.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: mcma_edit.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -50,8 +50,8 @@ $qtype=$_REQUEST['qtype'];
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("UpdateQuestionType");
-$Multi = get_lang("MultipleChoiceMulti");
+$Add = get_lang('UpdateQuestionType');
+$Multi = get_lang('MultipleChoiceMulti');
 $tool_name = $Add.$Multi;
 $rs=SurveyManager::get_question_data($qid,$curr_dbname);
 $sql = "SELECT * FROM $curr_dbname.questions WHERE qid = '$qid'";
@@ -275,7 +275,7 @@ if( isset($error_message) )
 				else
 				{
 				  $end=10;
-				  $error_message = get_lang('YouCanntAddmorethanTen')."<br>";
+				  $error_message = get_lang('YouCantAddMoreThanTen')."<br>";
 				if( isset($error_message) )
                   {
 	                  Display::display_error_message($error_message);	

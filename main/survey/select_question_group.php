@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question_group.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: select_question_group.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 
@@ -357,7 +357,7 @@ $result=api_sql_query($query);*/
 				}				
 				$course[] = mysql_result($res1,$k,'qtype');//$obj->qtype;
 				$course[] = @mysql_result($res,$i,'groupname');	
-				$course[]='<a href="question_edit.php?qid='.$qid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&qtype='.$q_type.'&groupid='.$groupid.'&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="select_question_group.php?delete=1&qid[]='.$qid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&qtype='.$q_type.'&groupid='.$groupid.'&surveyid='.$surveyid.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>';
+				$course[]='<a href="question_edit.php?qid='.$qid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&qtype='.$q_type.'&groupid='.$groupid.'&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="select_question_group.php?delete=1&qid[]='.$qid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&qtype='.$q_type.'&groupid='.$groupid.'&surveyid='.$surveyid.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>';
 				
 				$courses[] = $course;
 				$x++;
@@ -377,19 +377,19 @@ if(!empty($courses))
 				SurveyManager :: display_sortable_table($groupid,$surveyid,$curr_dbname,$table_header, $courses, array (), array (), $parameters);
 
 ?>	
-	<!--<input type="submit" name="delete" value="<?php echo get_lang("Delete");?>">-->
+	<!--<input type="submit" name="delete" value="<?php echo get_lang('Delete');?>">-->
 	<!--<input type=button value="Back" onClick="history.go(-1)">-->
-	<input type="submit" name="addanother" value="<?php echo get_lang("AddAnotherQuestion");?>">
-	<input type="submit" name="addanotherg" value="<?php echo get_lang("AddNewGroup");?>">
-	<input type="submit" name="finish" value="<?php echo get_lang("finishsurvey");?>">
+	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
+	<input type="submit" name="addanotherg" value="<?php echo get_lang('AddNewGroup');?>">
+	<input type="submit" name="finish" value="<?php echo get_lang('FinishSurvey');?>">
 <?
 }
 else
 {
 ?>
-    <input type="submit" name="back" value="<?echo get_lang("Back");?>">
-	<input type="submit" name="addanother" value="<?echo get_lang("AddAnotherQuestion");?>">
-	<input type="submit" name="addanotherg" value="<?echo get_lang("AddNewGroup");?>">
+    <input type="submit" name="back" value="<?echo get_lang('Back');?>">
+	<input type="submit" name="addanother" value="<?echo get_lang('AddAnotherQuestion');?>">
+	<input type="submit" name="addanotherg" value="<?echo get_lang('AddNewGroup');?>">
 <?
 }	
 ?>

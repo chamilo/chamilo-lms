@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_list_new.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: question_list_new.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 
@@ -134,7 +134,7 @@ if(isset($_POST['importquestion']))
   $selectcount=count($_POST['question']);	
   if($selectcount<=0)
    {
-	  	 $error_message=get_lang("PleaseSelectAChoice");
+	  	 $error_message=get_lang('PleaseSelectAChoice');
    }
  else
   {
@@ -231,13 +231,13 @@ function displayTemplate(url) {
 		Display :: display_sortable_table($table_header, $questions, array (), array (), $parameters);
 		else
 		{
-			$noquestions=get_lang("NoQuestionAvailableInThisGroup");
+			$noquestions=get_lang('NoQuestionAvailableInThisGroup');
 			api_display_tool_title($noquestions);
 		}
 ?>
 		<table>
 		<tr>		
-		<td><input type="submit" name="back" value="<?echo get_lang("Back");?>"></td>
+		<td><input type="submit" name="back" value="<?echo get_lang('Back');?>"></td>
 		<td><input type="submit" name="importquestion" value="<?php echo get_lang('ImportQuestion');?>"></td>
 		</tr>
 		</table>

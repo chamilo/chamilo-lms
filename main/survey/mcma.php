@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcma.php 10550 2006-12-24 16:17:25Z pcool $
+* 	@version $Id: mcma.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -51,19 +51,19 @@ $surveyid = $_REQUEST['surveyid'];
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("AddNewQuestionType");
-$Multi = get_lang("MultipleChoiceMulti");
+
 $interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
 
 //$n=$_REQUEST['n'];
 if ($_POST['action'] == 'addquestion')
 {
-   $groupid = $_REQUEST['groupid'];
-   $surveyid = $_REQUEST['surveyid'];
-   $questtype = $_REQUEST['questtype'];   
-   $enter_question=$_POST['enterquestion'];
-    if(isset($_POST['next']))
-	{
+   $groupid 		= $_REQUEST['groupid'];
+   $surveyid 		= $_REQUEST['surveyid'];
+   $questtype 		= $_REQUEST['questtype'];   
+   $enter_question	=$_POST['enterquestion'];
+   
+   if(isset($_POST['next']))
+   {
 		$enter_question=$_POST['enterquestion'];
 		$answers=$_POST['mutlichkboxtext'];
 		$rating=$_POST['chkboxpoint'];	
@@ -201,10 +201,10 @@ select_question_type($add_question12,$groupid,$surveyid,$cidReq,$curr_dbname);
 <table>
 <tr>
 <td>
-<?php api_display_tool_title($Add);?>
+<?php api_display_tool_title(get_lang('AddNewQuestionType'));?>
 </td>
 <td>
-<?php api_display_tool_title($Multi);?>
+<?php api_display_tool_title(get_lang('MultipleChoiceMulti'));?>
 </td>
 </tr>
 </table>
@@ -407,7 +407,7 @@ function checkLength(form){
 				else
 				 {
 				  $end=10;
-				  $error_message = get_lang('YouCantAddmorethanTen')."<br>";
+				  $error_message = get_lang('YouCantAddMoreThanTen')."<br>";
 				if( isset($error_message) )
                   {
 	                  Display::display_error_message($error_message);	
@@ -561,7 +561,7 @@ function checkLength(form){
 ?>
 						<input type="submit"  name="back" value="<?php echo get_lang('Back'); ?>">
 						<input type="submit"  name="saveandexit" value="<?php echo get_lang('SaveAndExit');?>">
-						<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('mcma','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
+						<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('mcma','<?php echo $temp; ?>','<?php echo get_lang('MultipleChoiceMulti'); ?>')">
 						<input type="submit"  name="next" value="<?php echo get_lang('Next'); ?>"> 
 			</div>
 <!--this partcular field helps in identify the item to be add at the itemadd.php-->

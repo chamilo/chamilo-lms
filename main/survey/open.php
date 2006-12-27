@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: open.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: open.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -50,8 +50,8 @@ $curr_dbname = $_REQUEST['curr_dbname'];
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("AddNewQuestionType");
-$Multi = get_lang("Open");
+$Add = get_lang('AddNewQuestionType');
+$Multi = get_lang('Open');
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
 if ($_POST['action'] == 'addquestion')
@@ -223,7 +223,7 @@ border=0>
 <BR>
 <DIV align=center> 
 	<input type="submit"  name="back" value="<?php echo get_lang('Back');?>">
-	<input type="submit"  name="saveandexit" value="<?php echo get_lang("SaveAndExit"); ?>">
+	<input type="submit"  name="saveandexit" value="<?php echo get_lang('SaveAndExit'); ?>">
 	<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('this.form','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
 	<input type="submit"  name="next" value="<?php echo get_lang('Next'); ?>">  
 </DIV></FORM></DIV>

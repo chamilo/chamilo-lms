@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_list.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: group_list.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 /*
@@ -57,7 +57,7 @@ if(isset($_REQUEST['pls']))
 	$pls=$_REQUEST['pls'];
 	if($pls==1)
 	{
-		$error_message=$error_message=get_lang("PleaseSelectAChoice");
+		$error_message=$error_message=get_lang('PleaseSelectAChoice');
 		Display::display_error_message($error_message);	
 	}
 }
@@ -125,7 +125,7 @@ $table_group =  Database :: get_course_table('survey_group');
 		<table>
 		<tr>
 		<td><input type="submit" name="back1" value="<?php echo get_lang('Back');?>"></td>
-		<td><input type="submit" name="view" value="<?php echo get_lang('ViewQues');?>"></td>
+		<td><input type="submit" name="view" value="<?php echo get_lang('ViewQuestions');?>"></td>
 		<td><input type="submit" name="import" value="<?php echo get_lang('Import');?>"></td>
 		</tr>
 		</table>

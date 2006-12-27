@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: numbered.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: numbered.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -51,8 +51,8 @@ $surveyid = $_REQUEST['surveyid'];
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("AddNewQuestionType");
-$Multi = get_lang("Numbered");
+$Add = get_lang('AddNewQuestionType');
+$Multi = get_lang('Numbered');
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
 $interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
@@ -381,7 +381,7 @@ function checkLength(form){
 				else
 				 {
 				  $end=10;
-				  $error_message = get_lang('YouCanntAddmorethanTen')."<br>";
+				  $error_message = get_lang('YouCantAddMoreThanTen')."<br>";
 				if( isset($error_message) )
                   {
 	                  Display::display_error_message($error_message);	

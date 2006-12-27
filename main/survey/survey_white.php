@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_white.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: survey_white.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -133,6 +133,7 @@ while($o_group = mysql_fetch_object($rsGroups) ){
 			echo '<table><tr><td valign="top">'.$indiceQuestion.'- </td><td valign="top">'.stripslashes($o_question->caption).'</td></tr></table>';
 			
 			$sel1 = $sel2 = "";
+			/** @todo hardcode language strings ahead in a switch statement => won't work for any language other than English */
 			switch ($o_question -> qtype) {
 				
 				

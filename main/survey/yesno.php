@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: yesno.php 10550 2006-12-24 16:17:25Z pcool $
+* 	@version $Id: yesno.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -50,8 +50,8 @@ api_protect_admin_script();
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 $interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("AddNewQuestionType");
-$Multi = get_lang("YesNo");
+$Add = get_lang('AddNewQuestionType');
+$Multi = get_lang('YesNo');
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
 //$tool_name = get_lang('QuestionType');
@@ -427,8 +427,8 @@ function checkLength(form){
 					break;
 			}
 ?>
-						<input type="submit"  name="back" value="<?php echo get_lang("Back");?>">
-						<input type="submit"  name="saveandexit" value="<?php echo get_lang("SaveAndExit");?>">
+						<input type="submit"  name="back" value="<?php echo get_lang('Back');?>">
+						<input type="submit"  name="saveandexit" value="<?php echo get_lang('SaveAndExit');?>">
 						<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('yesno','<?php echo $temp;?>','<?php echo $Multi; ?>')">
 						<input type="submit"  name="next" value="<?php echo get_lang('Next');?>"> 
 			</div>

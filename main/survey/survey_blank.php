@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_blank.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: survey_blank.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -35,8 +35,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-//$tool_name=get_lang("AdministrationTools");
-$phpself=$_SERVER['PHP_SELF'];
+
 $surveyid = $_REQUEST['surveyid'];
 $uid = $_REQUEST['uid'];
 $uid1 = $_REQUEST['uid1'];
@@ -79,7 +78,7 @@ if(isset($_POST['Back'])){
 	//echo $sql ="Insert into";
 	$back=$num-2;
 	$cidReq = $_REQUEST['cidReq'];
-	header("location:$phpself?num=$back&cidReq=$cidReq");
+	header("location:".$_SERVER['PHP_SELF']."?num=$back&cidReq=$cidReq");
 	exit;
 }
 
@@ -782,7 +781,7 @@ if ($numb=mysql_num_rows($res) > 0)
 				 <td align="center">
 					<?php if($num > "1"){
 								
-							   echo "<input type=\"button\" name=\"Back\" value=\"Back\" onClick=\"location.href('".$phpself."?temp=$temp&cidReq=$cidReq&db_name=$db_name&surveyid=$surveyid&num=".($num-1)."');\">";
+							   echo "<input type=\"button\" name=\"Back\" value=\"Back\" onClick=\"location.href('".$_SERVER['PHP_SELF']."?temp=$temp&cidReq=$cidReq&db_name=$db_name&surveyid=$surveyid&num=".($num-1)."');\">";
 					} else{
 							echo "<input type=\"button\" name=\"Back\" value=\"Back\" onClick=\"location.href('survey_list.php?cidReq=$cidReq&db_name=$db_name&uid1=$uid1&mail=$mail&sid=$surveyid');\">";
 					}

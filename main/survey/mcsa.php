@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcsa.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: mcsa.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -50,8 +50,8 @@ $add_question = $_REQUEST['add_question'];
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("AddNewQuestionType");
-$Multi = get_lang("MultipleChoiceSingle");
+$Add = get_lang('AddNewQuestionType');
+$Multi = get_lang('MultipleChoiceSingle');
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
 $interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
@@ -377,7 +377,7 @@ $start=1;$end=5;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 				else
 			    {
 				  $end=10;
-				  $error_message = get_lang('YouCantAddmorethanTen')."<br>";
+				  $error_message = get_lang('YouCantAddMoreThanTen')."<br>";
 				if( isset($error_message) )
                   {
 	                  Display::display_error_message($error_message);	

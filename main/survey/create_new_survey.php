@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_survey.php 10550 2006-12-24 16:17:25Z pcool $
+* 	@version $Id: create_new_survey.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 /*
@@ -404,7 +404,7 @@ else
 					
 			if(!empty($result))
 				{
-				$error_message=get_lang('ThisCodeAlradyExist');
+				$error_message=get_lang('ThisCodeAlradyExists');
 			}
 			else
 			{

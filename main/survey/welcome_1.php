@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: welcome_1.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: welcome_1.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -39,7 +39,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-//$tool_name=get_lang("AdministrationTools");
+
 $surveyid = $_REQUEST['surveyid'];
 $uid = $_REQUEST['uid'];
 $uid1 = $_REQUEST['uid1'];

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: open_edit.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: open_edit.php 10559 2006-12-27 10:52:50Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -51,8 +51,8 @@ $curr_dbname = $_REQUEST['curr_dbname'];
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$Add = get_lang("UpdateQuestionType");
-$Multi = get_lang("Open");
+$Add = get_lang('UpdateQuestionType');
+$Multi = get_lang('Open');
 $tool_name = $Add.$Multi;
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];

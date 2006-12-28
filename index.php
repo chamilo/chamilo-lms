@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10548 2006-12-24 11:11:17Z pcool $
+* 	@version $Id: index.php 10564 2006-12-28 19:55:32Z pcool $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -77,9 +77,9 @@ if ($_GET['logout'])
 	Table definitions
 -----------------------------------------------------------
 */
-$main_course_table 		= Database :: get_main_table(MAIN_COURSE_TABLE);
-$main_category_table 	= Database :: get_main_table(MAIN_CATEGORY_TABLE);
-$track_login_table 		= Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+$main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
+$main_category_table 	= Database :: get_main_table(TABLE_MAIN_CATEGORY);
+$track_login_table 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 /*
 -----------------------------------------------------------

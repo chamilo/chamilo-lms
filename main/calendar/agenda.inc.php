@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 10479 2006-12-13 12:42:20Z elixir_inter $
+<?php //$Id: agenda.inc.php 10562 2006-12-28 15:35:50Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -2121,13 +2121,9 @@ function show_add_form($id = '')
 
 	<tr class="subtitle">
 		<td colspan="3" valign="top"><hr noshade="noshade" color="#cccccc" /><?php echo get_lang('ItemTitle'); ?> :
-			<textarea name="title" cols="50" rows="2" wrap="virtual" style="vertical-align:top; width:75%; height:50px;"><?php  if (isset($title)) echo $title; ?></textarea>
+			<div style='margin-left: 80px'><textarea name="title" cols="50" rows="2" wrap="virtual" style="vertical-align:top; width:75%; height:50px;"><?php  if (isset($title)) echo $title; ?></textarea></div>
 			<!-- <input type="text" size="60" name="title" value="<?php  if (isset($title)) echo $title; ?>" /> -->
 		</td>
-	</tr>
-
-	<tr>
-		<td colspan="7"><?php echo get_lang('Detail'); ?> :</td>
 	</tr>
 
 	<tr>
@@ -2139,13 +2135,22 @@ function show_add_form($id = '')
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 			$oFCKeditor->Height		= '300';
-			$oFCKeditor->Width		= '600';
+			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Value		= $content;
 			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 			$oFCKeditor->ToolbarSet = "Middle";
+			
+			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+			$result_sql=api_sql_query($sql);
+			$isocode_language=mysql_result($result_sql,0,0);
+			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+			
 			$return =	$oFCKeditor->CreateHtml();
 			
-			echo "<div style='margin-left: 200px'>".$return."</div>";
+			echo get_lang('Detail')." :";
+			
+			echo "<div style='margin-left: 80px'>".$return."</div>";
  ?><br />
 		</td>
 	</tr>

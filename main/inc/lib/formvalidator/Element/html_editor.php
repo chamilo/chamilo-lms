@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 10479 2006-12-13 12:42:20Z elixir_inter $
+// $Id: html_editor.php 10560 2006-12-28 15:28:08Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -113,18 +113,42 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$fck_editor->Width = $fck_attribute['Width'] ? $fck_attribute['Width'] : '990';
 		$fck_editor->Height = $fck_attribute['Height'] ? $fck_attribute['Height'] : '400';
 		$fck_editor->Value = $this->getValue();
-
+		$fck_editor->Config = $fck_attribute['Config'] ? $fck_attribute['Config'] : array();
+		
+		
+		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+		
+		//We are in a course
+		if(isset($_SESSION["_course"]["language"])){
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+		}
+		
+		
+		elseif(isset($_SESSION["_user"]["language"])){
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
+		}
+		
+		else{
+			$platform_language=api_get_setting("platformLanguage");
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='$platform_language'";
+		}
+		
+		$result_sql=api_sql_query($sql);
+		$isocode_language=mysql_result($result_sql,0,0);
+		$fck_editor->Config['DefaultLanguage'] = $isocode_language;
+		
+		
 		if($_SESSION['_course']['path']!=''){
 			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
 
 		}else{
 			$upload_path = api_get_path(REL_PATH)."main/upload/";
 		}
-
+		
 		$fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 
 		$fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'] ;
-
+		
 		$fck_editor->Config['LinkBrowserURL'] = $fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Connector=connectors/php/connector.php&ServerPath=$upload_path";
 
 		//for image

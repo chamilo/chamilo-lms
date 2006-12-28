@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10533 2006-12-19 14:48:35Z elixir_inter $
+<?php // $Id: configure_homepage.php 10563 2006-12-28 15:43:43Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -581,6 +581,12 @@ foreach($home_menu as $key=>$enreg)
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 	$oFCKeditor->ToolbarSet = "Small";
 	
+	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
+	$result_sql=api_sql_query($sql);
+	$isocode_language=mysql_result($result_sql,0,0);
+	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+	
 	echo $oFCKeditor->CreateHtml();
     
 ?>
@@ -676,6 +682,12 @@ if($action == 'edit_news'){
 	$oFCKeditor->Value		= $open;
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 	$oFCKeditor->ToolbarSet = "Small";
+	
+	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
+	$result_sql=api_sql_query($sql);
+	$isocode_language=mysql_result($result_sql,0,0);
+	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 	
 	echo $oFCKeditor->CreateHtml();
 ?>

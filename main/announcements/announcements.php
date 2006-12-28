@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 10204 2006-11-26 20:46:53Z pcool $
+<?php //$Id: announcements.php 10563 2006-12-28 15:43:43Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1056,7 +1056,24 @@ if ($message == true)
 											'.get_lang('OrCopyPasteUrl').' <br />
 											'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name&nbsp';
 		}
-	            api_disp_html_area('newContent',$content_to_modify,'250px');
+	            //api_disp_html_area('newContent',$content_to_modify,'250px');
+	            
+	            require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+	            $oFCKeditor = new FCKeditor('newContent') ;
+				$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+				$oFCKeditor->Height		= '250';
+				$oFCKeditor->Width		= '100%';
+				$oFCKeditor->Value		= $content_to_modify;
+				$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+				$oFCKeditor->ToolbarSet = "Announcements";
+				
+				$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+				$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+				$result_sql=api_sql_query($sql);
+				$isocode_language=mysql_result($result_sql,0,0);
+				$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+				
+				echo $oFCKeditor->CreateHtml();
 
 				  echo "<br /><table>",
 			           "<tr>",

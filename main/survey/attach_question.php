@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: attach_question.php 10550 2006-12-24 16:17:25Z pcool $
+* 	@version $Id: attach_question.php 10567 2006-12-28 23:10:27Z pcool $
 */
 
 /*
@@ -31,43 +31,68 @@
 // name of the language file that needs to be included 
 $language_file = 'survey';
 
+// including the global dokeos file
 require_once ('../inc/global.inc.php');
-//api_protect_admin_script();
+
+// including additional libraries
+/** @todo check if these are all needed */
+/** @todo check if the starting / is needed. api_get_path probably ends with an / */
 require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
-require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+
+/** @todo replace this with the correct code */
 $status = surveymanager::get_status();
 if($status==5)
 {
-api_protect_admin_script();
+	api_protect_admin_script();
 }
-require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+
+// Database table definitions
+/** @todo use database constants for the survey tables */
+$table_user 				= Database :: get_main_table(TABLE_MAIN_USER);
+$table_survey 				= Database :: get_course_table('survey');
+$table_group 				= Database :: get_course_table('survey_group');
+$table_question 			= Database :: get_course_table('questions');
+$table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
+$table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
+
+// Path variables
+/** @todo these variables are probably not used here */
+$coursePathWeb = api_get_path(WEB_COURSE_PATH);
+$coursePathSys = api_get_path(SYS_COURSE_PATH);
+
+// Language variables
 $MonthsLong = array(get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('"MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong')); 
+$tool_name = get_lang('CreateNewSurvey');
+$tool_name1 = get_lang('CreateNewSurvey');
+
+// breadcrumbs
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+
+// Variables
 $arr_date = explode("-",date("Y-m-d"));
 $curr_year = $arr_date[0];
 $curr_month = $arr_date[1];
 $curr_day = $arr_date[2];
-$coursePathWeb = api_get_path(WEB_COURSE_PATH);
-$coursePathSys = api_get_path(SYS_COURSE_PATH);
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+/** @todo use $_course array */
+$course_id = $_SESSION['_course']['id'];
+
+// $_GET and $_POST
+/** @todo replace $_REQUEST with $_GET or $_POST */
 $cidReq = $_REQUEST['cidReq'];
 $db_name = $_REQUEST['db_name'];
-$table_survey = Database :: get_course_table('survey');
-$table_group = Database :: get_course_table('survey_group');
-$table_question = Database :: get_course_table('questions');
-$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_course_survey_rel = Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
-$tool_name = get_lang('CreateNewSurvey');
-$tool_name1 = get_lang('CreateNewSurvey');
-$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
-$course_id = $_SESSION['_course']['id'];
 $oldsurveyid = $_REQUEST['surveyid'];
-$survey_name = surveymanager::get_surveyname($db_name,$oldsurveyid);
 $qids=$_REQUEST['qid'];
 $groupid=$_REQUEST['groupid'];
+
+$survey_name = surveymanager::get_surveyname($db_name,$oldsurveyid);
+
+/** @todo this piece of code is duplicated in many scripts. Find out where it is used and remove all other occurences */
 if ($_POST['action'] == 'add_survey')
 {
 	$surveycode=$_POST['survey_code'];

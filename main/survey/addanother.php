@@ -23,7 +23,7 @@
 ==============================================================================
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: addanother.php 10565 2006-12-28 20:02:15Z pcool $
+* 	@version $Id: addanother.php 10567 2006-12-28 23:10:27Z pcool $
 ==============================================================================
 */
 
@@ -57,26 +57,33 @@ if($status==5)
 }
 
 // Database table definitions
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$table_survey = Database :: get_course_table('survey');
+/** @todo use database constants for the survey tables */
+$table_user 		= Database :: get_main_table(TABLE_MAIN_USER);
+$table_survey 		= Database :: get_course_table('survey');
+$table_group 		= Database :: get_course_table('survey_group');
 
 // Path variables
 /** @todo these variables are probably not used here */
 $coursePathWeb = api_get_path(WEB_COURSE_PATH);
 $coursePathSys = api_get_path(SYS_COURSE_PATH);
 
-// Variables
-//$cidReq = $_SESSION[_course][id];
-$cidReq = $_GET['cidReq'];
-$curr_dbname = $_REQUEST['curr_dbname'];
-$group_id=$_GET['newgroupid'];
-
-
+// Language variables
 $tool_name = get_lang('CreateNewSurvey');
 $tool_name1 = get_lang('AddAnotherQuestion');
+
+// breadcrumbs
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 
+// Variables
+/** @todo use $_course array */
 $course_id = $_SESSION['_course']['id'];
+
+// $_GET and $_POST
+/** @todo replace $_REQUEST with $_GET or $_POST */
+$cidReq = $_GET['cidReq'];
+/** @todo use $_course array */
+$curr_dbname 	= $_REQUEST['curr_dbname'];
+$group_id		= $_GET['newgroupid'];
 if(isset($_REQUEST['surveyid']))
 $surveyid=$_REQUEST['surveyid'];
 if(isset($_REQUEST['groupid']))
@@ -85,6 +92,11 @@ if(isset($_REQUEST['cidReq']))
 $cidReq=$_REQUEST['cidReq'];
 if(isset($_REQUEST['newgroupid']))
 $groupid=$_REQUEST['newgroupid'];
+
+
+
+
+
 if(isset($_POST['back']))
 { 
 	header("location:select_question_group.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
@@ -142,7 +154,7 @@ if(isset($error_message))
 Display::display_error_message($error_message);
 if(isset($group_id))
 {
- $table_group =  Database :: get_course_table('survey_group');
+ 
  $sql = "SELECT * FROM $table_group WHERE group_id='$group_id'";
  $res = api_sql_query($sql, __FILE__, __LINE__);
  $obj= mysql_fetch_object($res);

@@ -23,7 +23,7 @@
 ==============================================================================
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: addanother.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: addanother.php 10565 2006-12-28 20:02:15Z pcool $
 ==============================================================================
 */
 
@@ -32,33 +32,46 @@
 		INIT SECTION
 ==============================================================================
 */
-
+// name of the language file that needs to be included 
 $language_file = 'survey';
 
+// including the global dokeos file
 require_once ('../inc/global.inc.php');
-//api_protect_admin_script();
+
+// including additional libraries
+/** @todo check if these are all needed */
+/** @todo check if the starting / is needed. api_get_path probably ends with an / */
 require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
-require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+
+/** @todo replace this with the correct code */
 $status = surveymanager::get_status();
 if($status==5)
 {
-api_protect_admin_script();
+	api_protect_admin_script();
 }
-require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-//require_once ('../inc/global.inc.php');
+
+// Database table definitions
+$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+$table_survey = Database :: get_course_table('survey');
+
+// Path variables
+/** @todo these variables are probably not used here */
 $coursePathWeb = api_get_path(WEB_COURSE_PATH);
 $coursePathSys = api_get_path(SYS_COURSE_PATH);
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+
+// Variables
 //$cidReq = $_SESSION[_course][id];
 $cidReq = $_GET['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $group_id=$_GET['newgroupid'];
-$table_survey = Database :: get_course_table('survey');
-//$table_group=Database::get_course_table('survey_group');
+
+
 $tool_name = get_lang('CreateNewSurvey');
 $tool_name1 = get_lang('AddAnotherQuestion');
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));

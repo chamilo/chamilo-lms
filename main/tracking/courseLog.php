@@ -218,6 +218,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         $sql = "SELECT visual_code FROM $TABLECOURSE WHERE code = '".$_cid."'";
         $_course['visual_code'] = getOneResult($sql);
 
+        echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000001'>export CSV</a>]";
         if (is_array($results))
         {
         	
@@ -309,6 +310,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
                     WHERE course_code = '".$_cid."'";
         $count = getOneResult($sql);
         
+        echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=1000000'>export CSV</a>]";        
         echo '<table class="data_table">';
         
         echo "<tr><td class='secLine'>".get_lang('CountUsers')." : ".$count."</td></tr>";
@@ -329,6 +331,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     	
         $tempView[1] = '0';
                 
+        echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0100000'>export CSV</a>]";                
         echo '<table class="data_table">';
         
         echo "<tr><td class='secLine'>".get_lang('ConnectionsToThisCourse')."</td></tr>";
@@ -418,7 +421,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 	if($view[2] == '1'){
 		
 	    $tempView[2] = '0';
-	    
+	    echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0010000'>export CSV</a>]";
 	    echo '<table class="data_table">';
 	    
 	    echo "<tr>
@@ -478,6 +481,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
                     
 		$results = getManyResultsXCol($sql,4);
 		
+	    echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0001000'>export CSV</a>]";		
 		echo '<table class="data_table">';
 		
 		echo "<tr>
@@ -528,6 +532,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         
         $results = getManyResults3Col($sql);
         
+	    echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000100'>export CSV</a>]";
         echo '<table class="data_table">';
         
         echo "<tr>
@@ -577,6 +582,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 		
 	    $ar=Database::fetch_array($result);
 	    
+	    echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000010'>export CSV</a>]";
 	    echo '<table class="data_table">';
 	    
 	    echo "<tr>

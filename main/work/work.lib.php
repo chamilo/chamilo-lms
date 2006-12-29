@@ -16,11 +16,13 @@
 		B-1030 Brussels - Belgium
 		Tel. +32 (2) 211 34 56
 */
-
 /**
 *	@package dokeos.studentpublications
-* 	@author 
-* 	@version $Id$
+* 	@author Thomas, Hugues, Christophe - original version
+* 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
+* 	@author Roan Embrechts, code refactoring and virtual course support
+* 	@author Frederic Vauthier, directories management
+* 	@version $Id: $
 */
 /**
  * Displays action links (for admins, authorized groups members and authorized students)

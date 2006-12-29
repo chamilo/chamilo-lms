@@ -22,7 +22,8 @@
 * 	@author Thomas, Hugues, Christophe - original version
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
-* 	@version $Id: work.php 10568 2006-12-29 13:51:42Z fvauthier $
+* 	@author Frederic Vauthier, directories management
+*  	@version $Id: work.php 10570 2006-12-29 13:57:25Z fvauthier $
 * 
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */

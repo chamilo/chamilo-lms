@@ -20,7 +20,9 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: calendar.php 10550 2006-12-24 16:17:25Z pcool $
+* 	@version $Id: calendar.php 10572 2006-12-29 15:38:44Z pcool $
+* 	@todo this is a copy of the calendar.php file from the calendar folder. This file should be removed
+* 		  and all the links should use the existing calendar file. 
 */
 
 // name of the language file that needs to be included 

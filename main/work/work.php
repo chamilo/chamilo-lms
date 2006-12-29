@@ -22,7 +22,7 @@
 * 	@author Thomas, Hugues, Christophe - original version
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
-* 	@version $Id: work.php 10418 2006-12-07 15:48:25Z pcool $
+* 	@version $Id: work.php 10568 2006-12-29 13:51:42Z fvauthier $
 * 
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -79,7 +79,8 @@
 */
 
 // name of the language file that needs to be included 
-$language_file = "work";
+$language_file[] = "work";
+$language_file[] = "document";
 
 // Section (for the tabs)
 $this_section=SECTION_COURSES;
@@ -142,6 +143,38 @@ $title = $_REQUEST['title'];
 $uploadvisibledisabled = $_REQUEST['uploadvisibledisabled'];
 $id = (int) $_REQUEST['id'];
 
+//directories management
+$sys_course_path = api_get_path(SYS_COURSE_PATH);
+$course_dir   = $sys_course_path.$_course['path'];
+$base_work_dir = $course_dir.'/work';
+$http_www = api_get_path('WEB_COURSE_PATH').$_course['path'].'/work';
+
+if(isset($_GET['curdirpath']) && $_GET['curdirpath']!='')
+{
+	$cur_dir_path = preg_replace('#/\.\./#','/',$_GET['curdirpath']); //escape '..' hack attempts
+}
+elseif (isset($_POST['curdirpath']) && $_POST['curdirpath']!='')
+{
+	$cur_dir_path = preg_replace('#/\.\./#','/',$_POST['curdirpath']); //escape '..' hack attempts
+}
+else 
+{
+	$cur_dir_path = '/';
+}
+if (!is_subdir_of($cur_dir_path,$base_work_dir) or ($cur_dir_path == '.'))
+{
+	$cur_dir_path='/';
+}
+$cur_dir_path_url = urlencode($cur_dir_path);
+
+
+//prepare a form of path that can easily be added at the end of any url ending with "work/"
+$my_cur_dir_path = $cur_dir_path;
+if($my_cur_dir_path == '/'){
+	$my_cur_dir_path = '';
+}elseif(substr($my_cur_dir_path,-1,1)!='/'){
+	$my_cur_dir_path = $my_cur_dir_path.'/';
+}
 /*
 -----------------------------------------------------------
 	Configuration settings
@@ -290,10 +323,10 @@ if ($is_allowed_to_edit)
 			{
 				// check the url really points to a file in the work area
 				// (some work links can come from groups area...)
-
-				if (substr (dirname($thisUrl['url']), -4) == "work")
+				//if (substr (dirname($thisUrl['url']), -4) == "work")
+				if(strstr($thisUrl['url'],"work/$my_cur_dir_path")!==false)
 				{
-					@unlink($currentCourseRepositorySys."work/".$thisWork);
+					@unlink($currentCourseRepositorySys.$thisUrl['url']);
 				}
 			}
 		}
@@ -305,7 +338,7 @@ if ($is_allowed_to_edit)
 
 	if ($edit)
 	{
-		$sql    = "SELECT * FROM  ".$work_table."  WHERE id='".$edit."'";
+		$sql    = "SELECT * FROM  ".$work_table."  WHERE id='".mysql_real_escape_string($edit)."'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 
 		if ($result)
@@ -379,7 +412,152 @@ if ($is_allowed_to_edit)
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 	}
+	/*--------------------
+	 * Create dir command
+	 ---------------------*/
+	if(!empty($_REQUEST['create_dir']) && !empty($_REQUEST['new_dir'])){
+		//create the directory
+		//needed for directory creation
+		include_once(api_get_path(LIBRARY_PATH) . "fileUpload.lib.php");
+		$added_slash = (substr($cur_dir_path,-1,1)=='/')?'':'/';
+		$dir_name = $cur_dir_path.$added_slash.replace_dangerous_char($_POST['new_dir']);
+		$created_dir = create_unexisting_work_directory($base_work_dir,$dir_name);
+		if($created_dir)
+		{
+			//Display::display_normal_message("<strong>".$created_dir."</strong> was created!");
+			Display::display_normal_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>');
+			//uncomment if you want to enter the created dir
+			//$curdirpath = $created_dir;
+			//$curdirpathurl = urlencode($curdirpath);
+		}
+		else
+		{
+			Display::display_error_message(get_lang('CannotCreateDir'));
+		}
+	}
+	/* -------------------
+	 * Delete dir command
+	 --------------------*/
+	if(!empty($_REQUEST['delete_dir'])){
+		//TODO implement
+		del_dir($base_work_dir.'/',$_REQUEST['delete_dir']);
+		Display::display_normal_message($_REQUEST['delete_dir'].' '.get_lang('DirDeleted'));
+	}
+	/* ----------------------
+	 * Move file form request
+	 ----------------------- */
+	if(!empty($_REQUEST['move'])){
+		$folders = get_subdirs_list($base_work_dir,1);
+		Display::display_normal_message(build_move_to_selector($folders,$cur_dir_path,$_REQUEST['move']));
+	}
+	/* ------------------
+	 * Move file command 
+	 ------------------- */
+	if (isset($_POST['move_to']) && isset($_POST['move_file']))
+	{
+		include_once(api_get_path(LIBRARY_PATH) . "/fileManage.lib.php");
+		$move_to = $_POST['move_to'];
+		if($move_to == '/' or empty($move_to))
+		{
+			$move_to = '';
+		}elseif(substr($move_to,-1,1)!='/')
+		{
+			$move_to = $move_to.'/';
+		}
 
+		//security fix: make sure they can't move files that are not in the document table
+		if($path = get_work_path($_POST['move_file']))
+		{
+			//echo "got path $path";
+			//Display::display_normal_message('We want to move '.$_POST['move_file'].' to '.$_POST['move_to']);
+			if ( move($course_dir.'/'.$path,$base_work_dir.'/'.$move_to) )
+			{
+				//update db
+				update_work_url($_POST['move_file'],'work/'.$move_to);
+				//set the current path
+				$cur_dir_path = $move_to;
+				$cur_dir_path_url = urlencode($move_to);
+				Display::display_normal_message(get_lang('DirMv'));
+}
+			else
+			{
+				Display::display_error_message(get_lang('Impossible'));
+			}
+		}
+		else
+		{
+			Display::display_error_message(get_lang('Impossible'));
+		}
+	}
+}
+/*
+-----------------------------------------------------------
+	COMMANDS SECTION (reserved for others - check they're authors each time)
+-----------------------------------------------------------
+*/
+else{
+	$iprop_table = Database::get_course_table(ITEM_PROPERTY_TABLE);
+	$user_id = api_get_user_id();
+	/*-------------------------------------------
+				DELETE WORK COMMAND
+	-----------------------------------------*/
+	if ($delete)
+	{	
+		if ($delete == "all"){/*not authorized to this user */}
+		else
+		{
+			//Get the author ID for that document from the item_property table
+			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=".mysql_real_escape_string($delete);
+			$author_qry = api_sql_query($author_sql,__FILE__,__LINE__);
+			if(Database::num_rows($author_qry)==1)
+			{
+				//we found the current user is the author 
+				$queryString1 = "SELECT url FROM  ".$work_table."  WHERE id = '$delete'";
+				$queryString2 = "DELETE FROM  ".$work_table."  WHERE id='$delete'";
+				$result1 = api_sql_query($queryString1,__FILE__,__LINE__);
+				$result2 = api_sql_query($queryString2,__FILE__,__LINE__);
+				if ($result1)
+				{
+					item_property_update($_course,'work',$delete,get_lang('DocumentDeleted'),$user_id);
+					while ($thisUrl = mysql_fetch_array($result1))
+					{
+						// check the url really points to a file in the work area
+						// (some work links can come from groups area...)
+						if (substr (dirname($thisUrl['url']), -4) == "work")
+						{
+							@unlink($currentCourseRepositorySys."work/".$thisWork);
+						}
+					}
+				}
+			}
+		}
+	}
+	/*-------------------------------------------
+	           EDIT COMMAND WORK COMMAND
+	  -----------------------------------------*/
+
+	if ($edit)
+	{
+		//Get the author ID for that document from the item_property table
+		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=".mysql_real_escape_string($edit);
+		$author_qry = api_sql_query($author_sql,__FILE__,__LINE__);
+		if(Database::num_rows($author_qry)==1)
+		{
+			//we found the current user is the author 
+			$sql    = "SELECT * FROM  ".$work_table."  WHERE id='".$edit."'";
+			$result = api_sql_query($sql,__FILE__,__LINE__);
+	
+			if ($result)
+			{
+				$row = mysql_fetch_array($result);
+	
+				$workTitle       = $row ['title'      ];
+				$workAuthor      = $row ['author'     ];
+				$workDescription = $row ['description'];
+				$workUrl         = $row ['url'        ];
+			}
+		}
+	}
 }
 
 /*
@@ -426,10 +604,9 @@ if($submitWork && $is_course_member)
 		else{$post_group_id = '0';}
 		//if we come from the group tools the groupid will be saved in $work_table
 
-		move_uploaded_file($_FILES['file']['tmp_name'],$updir.$new_file_name);
+		move_uploaded_file($_FILES['file']['tmp_name'],$updir.$my_cur_dir_path.$new_file_name);
 
-		$url = "work/".$new_file_name;
-
+		$url = "work/".$my_cur_dir_path.$new_file_name;
 		$result = api_sql_query("SHOW FIELDS FROM ".$work_table." LIKE 'sent_date'",__FILE__,__LINE__);
 
 		if(!mysql_num_rows($result))
@@ -580,7 +757,7 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 		 Display links to upload form and tool options
 	  =======================================*/
 	
-	display_action_links($always_show_tool_options, $always_show_upload_form);
+	display_action_links($cur_dir_path,$always_show_tool_options, $always_show_upload_form);
 
 	/*=======================================
 		 Display form to upload document
@@ -601,8 +778,7 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 				}
 			}
 
-			echo	"<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?origin=$origin\" enctype=\"multipart/form-data\" >\n",
-					
+			echo	"<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?curdirpath=$cur_dir_path&origin=$origin\" enctype=\"multipart/form-data\" >\n",
 					"<table>\n";
 	
 			if(!empty($error_message)) Display::display_error_message($error_message);
@@ -722,6 +898,19 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 	
 					"<p>&nbsp;</p>";
 		}
+		//show them the form for the directory name
+		if(isset($_REQUEST['createdir']) && $is_allowed_to_edit)
+		{
+			//create the form that asks for the directory name
+			$new_folder_text = '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
+			$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'"/>';
+			$new_folder_text .= get_lang('NewDir') .' ';
+			$new_folder_text .= '<input type="text" name="new_dir"/>';
+			$new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'"/>';
+			$new_folder_text .= '</form>';
+			//show the form
+			echo $new_folder_text;
+	}
 	}
 	else
 	{
@@ -737,7 +926,7 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 
 	if ($display_tool_options)
 	{
-		display_tool_options($uploadvisibledisabled, $origin);
+		display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cur_dir_path,$cur_dir_path_url);
 	}
 
 /*
@@ -745,8 +934,8 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 		Display list of student publications
 ==============================================================================
 */
-
-	/*if ( ! $id )*/ display_student_publications_list($currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin);
+	if($cur_dir_path =='/'){$my_cur_dir_path = '';}else{$my_cur_dir_path = $cur_dir_path;} 
+	display_student_publications_list($base_work_dir.'/'.$my_cur_dir_path,'work/'.$my_cur_dir_path,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin);
 //}
 
 /*

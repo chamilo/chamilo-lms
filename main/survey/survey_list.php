@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_list.php 10559 2006-12-27 10:52:50Z pcool $
+* 	@version $Id: survey_list.php 10582 2006-12-31 17:27:50Z pcool $
 */
 
 /*
@@ -30,32 +30,48 @@
 */
 // name of the language file that needs to be included 
 $language_file = 'survey';
+
+// including the global dokeos file
 require ('../inc/global.inc.php');
-//require_once('../survey/send_mail.php');
+
+// including additional libraries
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
+
+/** @todo replace this with the correct code */
 $status = surveymanager::get_status();
 api_protect_course_script();
 if($status==5)
 {
-api_protect_admin_script();
+	api_protect_admin_script();
 }
-$cidReq = $_SESSION[_course][id];
-require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
-$table_survey = Database :: get_course_table('survey');
-$table_group =  Database :: get_course_table('survey_group');
+
+// Database table definitions
+/** @todo use database constants for the survey tables */
+$table_survey 	= Database :: get_course_table('survey');
+$table_group 	=  Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
-$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
+$table_course 	= Database :: get_main_table(TABLE_MAIN_COURSE);
+
+// $_GET and $_POST
+/** @todo replace $_REQUEST with $_GET or $_POST */
+$published 	= $_REQUEST['published'];
+$surveyid	= $_REQUEST['surveyid'];
+
+$cidReq = $_SESSION[_course][id];
+
+/** @todo not needed, use $_course array*/
+/*$sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 $obj=@mysql_fetch_object($res);
-$db_name = $obj->db_name ;
-$published = $_REQUEST['published'];
-$surveyid=$_REQUEST['surveyid'];
-//$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
+*/
+$db_name = $_course['dbName'];
+
+
 if (isset ($_REQUEST['action']))
 {
 	 $cidReq=$_REQUEST['cidReq'];
-	 $table_survey = Database :: get_course_table('survey');
+	 
 	switch ($_REQUEST['action'])
 	{		
 		case 'delete_surveys' :
@@ -87,8 +103,6 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	{
 		$titles[] = $title;
 	}
-	//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('Survey'));
-	//$interbreadcrumb[] = array ("url" => 'survey_list.php', "name" => get_lang('SurveyList'));
 	$tool_name = get_lang('SearchASurvey');
 	Display :: display_header($tool_name);
 	api_display_tool_title($tool_name);
@@ -142,7 +156,6 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	}
 else
 {
-	//$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('Survey'));
 	$tool_name = get_lang('Survey');
 	Display :: display_header($tool_name);
 	api_display_tool_title($tool_name);

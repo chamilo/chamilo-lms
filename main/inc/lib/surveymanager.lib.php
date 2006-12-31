@@ -34,31 +34,7 @@ class SurveyManager
 {
 	/**
 	  * Creates a new survey for the platform
-	  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
-	  * 		Roan Embrechts <roan_embrechts@yahoo.com>
-	  *
-	  * @param string $firstName
-	  *        string $lastName
-	  *        int    $status
-	  *        string $email
-	  *        string $loginName
-	  *        string $password
-	  *        string $official_code	(optional)
-	  *        string $phone		(optional)
-	  *        string $picture_uri	(optional)
-	  *        string $auth_source	(optional)
-	  *
-	  * @return int     new user id - if the new user creation succeeds
-	  *         boolean false otherwise
-	  *
-	  * @desc The function tries to retrieve $tbl_user and $_user['user_id'] from the global space.
-	  *       if it exists, $_user['user_id'] is the creator id
-	  *       If a problem arises, it stores the error message in global $api_failureList
-	  
-	  * @todo	rework to use Database API
-	  * @todo	bugfix: I believe the password always becomes placeholder, need tot test
 	  */
-	//function select_survey_list()
 	function select_survey_list($seleced_surveyid='', $extra_script='')
 	{
 		$survey_table = Database :: get_course_table('survey');
@@ -1525,11 +1501,18 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 
 
 
-
+/**
+ * Enter description here...
+ *
+ * @return unknown
+ * @todo remove this function because this is of no use and should not be used. 
+ */
 function get_status()
 {
+	global $_user; 
+	
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
-	$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '$_SESSION[_uid]'";
+	$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".mysql_real_escape_string($_user['user_id'])."'";
 	$resm = api_sql_query($sqlm,__FILE__,__LINE__);
 	$objm=@mysql_fetch_object($resm);
 	$ss = $objm->status ;

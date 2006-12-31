@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10579 2006-12-31 17:08:33Z pcool $
+* 	@version $Id: index.php 10580 2006-12-31 17:13:48Z pcool $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -67,8 +67,6 @@ include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
  */
 if ($_GET['logout'])
 {
-	echo 'test';
-	exit;
 	logout();
 }
 

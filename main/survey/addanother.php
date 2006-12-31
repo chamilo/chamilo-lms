@@ -23,7 +23,7 @@
 ==============================================================================
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: addanother.php 10571 2006-12-29 15:35:13Z pcool $
+* 	@version $Id: addanother.php 10578 2006-12-31 17:01:58Z pcool $
 ==============================================================================
 */
 
@@ -231,5 +231,6 @@ if(isset($group_id))
 </table>
 </form>
 <?php 
-	Display :: display_footer();
+// Display the footer
+Display :: display_footer();
 ?>

@@ -20,30 +20,52 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: choose_language.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: choose_language.php 10578 2006-12-31 17:01:58Z pcool $
+* 	@todo check if this file is used
 */
 
 // name of the language file that needs to be included 
 $language_file='survey';
-$cidReset=true;
-session_start();
-$_SESSION["user_language_choice"]='english';
+
+// including the global dokeos file
 require_once ('../inc/global.inc.php');
-//api_protect_admin_script();
+
+// including additional libraries
+/** @todo check if these are all needed */
+/** @todo check if the starting / is needed. api_get_path probably ends with an / */
 require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
-require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 
+// Database table definitions
+/** @todo use database constants for the survey tables */
+
+// Path variables
+/** @todo these variables are probably not used here */
+
+// breadcrumbs
+
+// $_GET and $_POST
+/** @todo replace $_REQUEST with $_GET or $_POST */
 $surveyid = $_REQUEST['surveyid'];
 $uid = $_REQUEST['uid'];
 $uid1 = $_REQUEST['uid1'];
 $db_name = $_REQUEST['db_name'];
 $temp = $_REQUEST['temp'];
 $mail = $_REQUEST['mail'];
+
+
+/** @todo is this needed? Session probably started in global.inc.php */
+session_start();
+
+/** @todo is this needed? */
+$_SESSION["user_language_choice"]='english';
+
+
 
 
 if(isset($_GET['next'])){
@@ -61,13 +83,12 @@ if(isset($_GET['next'])){
 	header('Location:template1.php?'.$_SERVER['QUERY_STRING'].'&surveyid='.$surveyid);
 }
 
+/** @todo use correct database calls */
 $sql_sname = "	SELECT survey2.* FROM $db_name.survey as survey1
 				INNER JOIN $db_name.survey as survey2
 					ON survey1.code = survey2.code
 				WHERE survey1.survey_id='$surveyid'";
-
 $res_sname = api_sql_query($sql_sname,__FILE__,__LINE__);
-
 $code_survey = mysql_result($res_sname, 0, 'code');
 mysql_data_seek($res_sname,0);
 
@@ -128,10 +149,6 @@ if($error_message)
   </tr>
 </table>
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+// Display the footer
 Display::display_footer();
 ?>

@@ -20,47 +20,58 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: complete_report.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: complete_report.php 10578 2006-12-31 17:01:58Z pcool $
 */
 
 // name of the language file that needs to be included 
 $language_file = 'survey';
 
+// including the global dokeos file
 require_once ('../inc/global.inc.php');
+
+
+// including additional libraries
+/** @todo check if these are all needed */
+/** @todo check if the starting / is needed. api_get_path probably ends with an / */
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
-require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
-$cidReq = $_REQUEST['cidReq'];
-$tbl_user_survey = Database::get_main_table(TABLE_MAIN_SURVEY_USER);
-$tbl_questions = Database::get_course_table('questions');
-$tbl_questions_groups = Database::get_course_table('survey_group');
-$tbl_answers = Database::get_course_table('survey_report');
+require_once (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+
+/** @todo replace this with the correct code */
 $status = surveymanager::get_status();
-$surveyid=$_REQUEST['surveyid'];
-$db_name = $_REQUEST['db_name'];
 if($status==5)
 {
-api_protect_admin_script();
+	api_protect_admin_script();
 }
-$tool_name = get_lang('SurveyReporting');
-$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
-Display::display_header($tool_name);
-/*
-$sql = 'SELECT  *
-		FROM '.$tbl_user_survey.' as user_survey,'.$tbl_questions.' as questions, '.$tbl_answers.' as answers, '.$tbl_questions_groups.' as groups 
-		WHERE answers.qid = questions.qid
-		AND answers.user_id = user_survey.user_id 
-		AND user_survey.survey_id='.$surveyid.'
-		AND user_survey.db_name="'.$db_name.'" 
-		AND groups.group_id = questions.gid
-		ORDER BY email, groups.sortby, questions.sortby';
 
-$rs = api_sql_query($sql, __FILE__, __LINE__);
-$answers = api_store_result($rs);
-*/
+// Database table definitions
+/** @todo use database constants for the survey tables */
+$tbl_user_survey 		= Database::get_main_table(TABLE_MAIN_SURVEY_USER);
+$tbl_questions 			= Database::get_course_table('questions');
+$tbl_questions_groups 	= Database::get_course_table('survey_group');
+$tbl_answers 			= Database::get_course_table('survey_report');
+
+// Path variables
+/** @todo these variables are probably not used here */
+
+// Language variables
+
+// breadcrumbs
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+
+// $_GET and $_POST
+/** @todo replace $_REQUEST with $_GET or $_POST */
+$cidReq 	= $_REQUEST['cidReq'];
+$surveyid	= $_REQUEST['surveyid'];
+$db_name 	= $_REQUEST['db_name'];
+
+$tool_name = get_lang('SurveyReporting');
+
+Display::display_header($tool_name);
+
 $users = SurveyManager::listUsers($surveyid, $db_name);
 
 $questions = SurveyManager::listQuestions($surveyid);
@@ -157,5 +168,6 @@ fwrite($handle, $excel_content);
 fclose($handle);
 chmod($archivePath.$excel_file_name, 0755);
 
+// Display the footer
 Display :: display_footer();
 ?>

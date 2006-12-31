@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10564 2006-12-28 19:55:32Z pcool $
+* 	@version $Id: index.php 10579 2006-12-31 17:08:33Z pcool $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -254,7 +254,7 @@ function logout()
 	}
 	
 	// Database table definition
-	$tbl_track_login = Database :: get_statistic_table(STATISTIC_TRACK_E_LOGIN_TABLE);
+	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 	
 	// selecting the last login of the user
 	$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_GET["uid"]."' ORDER BY login_date DESC LIMIT 0,1";
@@ -282,7 +282,7 @@ function logout()
  */
 function category_has_open_courses($category)
 {
-	$main_course_table = Database :: get_main_table(MAIN_COURSE_TABLE);
+	$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql_query = "SELECT * FROM $main_course_table WHERE category_code='$category'";
 	$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 	while ($course = mysql_fetch_array($sql_result))
@@ -448,8 +448,8 @@ function display_anonymous_course_list()
 	$category = $_GET["category"];
 	
 	// Database table definitions
-	$main_course_table 		= Database :: get_main_table(MAIN_COURSE_TABLE);
-	$main_category_table 	= Database :: get_main_table(MAIN_CATEGORY_TABLE);
+	$main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
+	$main_category_table 	= Database :: get_main_table(TABLE_MAIN_CATEGORY);
 	
 	$platformLanguage = api_get_setting('platformLanguage');
 

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_all_courses.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: survey_all_courses.php 10583 2007-01-02 14:47:19Z pcool $
 */
 
 /*
@@ -54,11 +54,24 @@ $table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY)
 	some permissions stuff (?)
 -----------------------------------------------------------
 */
+/** @todo replace this with the correct code */
+/*
 $status = surveymanager::get_status();
+api_protect_course_script();
 if($status==5)
 {
-api_protect_admin_script();
+	api_protect_admin_script();
 }
+*/
+/** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
+if (!api_is_allowed_to_edit())
+{
+	Display :: display_header();
+	Display :: display_error_message(get_lang('NotAllowedHere'));
+	Display :: display_footer();
+	exit;
+}
+
 $cidReq = $_REQUEST['cidReq'];
 
 

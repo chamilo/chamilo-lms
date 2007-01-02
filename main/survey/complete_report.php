@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: complete_report.php 10578 2006-12-31 17:01:58Z pcool $
+* 	@version $Id: complete_report.php 10583 2007-01-02 14:47:19Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -41,10 +41,21 @@ require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 
 /** @todo replace this with the correct code */
+/*
 $status = surveymanager::get_status();
+api_protect_course_script();
 if($status==5)
 {
 	api_protect_admin_script();
+}
+*/
+/** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
+if (!api_is_allowed_to_edit())
+{
+	Display :: display_header();
+	Display :: display_error_message(get_lang('NotAllowedHere'));
+	Display :: display_footer();
+	exit;
 }
 
 // Database table definitions

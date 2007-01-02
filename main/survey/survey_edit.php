@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_edit.php 10550 2006-12-24 16:17:25Z pcool $
+* 	@version $Id: survey_edit.php 10583 2007-01-02 14:47:19Z pcool $
 */
 /*
 ==============================================================================
@@ -34,12 +34,26 @@ include ('../inc/global.inc.php');
 //api_protect_admin_script();
 include (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+
+/** @todo replace this with the correct code */
+/*
 $status = surveymanager::get_status();
+api_protect_course_script();
 if($status==5)
 {
-api_protect_admin_script();
+	api_protect_admin_script();
 }
-require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+*/
+/** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
+if (!api_is_allowed_to_edit())
+{
+	Display :: display_header();
+	Display :: display_error_message(get_lang('NotAllowedHere'));
+	Display :: display_footer();
+	exit;
+}
+
 // the variables for the days and the months
 // Defining the months of the year to allow translation of the months
 $MonthsLong = array(get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('"MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong')); 

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcsa_view.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: mcsa_view.php 10583 2007-01-02 14:47:19Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -28,13 +28,27 @@ $language_file = 'survey';
 
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
+
+/** @todo replace this with the correct code */
+/*
 $status = surveymanager::get_status();
+api_protect_course_script();
 if($status==5)
 {
-api_protect_admin_script();
+	api_protect_admin_script();
 }
+*/
+/** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
+if (!api_is_allowed_to_edit())
+{
+	Display :: display_header();
+	Display :: display_error_message(get_lang('NotAllowedHere'));
+	Display :: display_footer();
+	exit;
+}
+
 $cidReq = $_REQUEST['cidReq'];
-require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 $table_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $table_survey = Database :: get_course_table('survey');
 $table_group =  Database :: get_course_table('survey_group');

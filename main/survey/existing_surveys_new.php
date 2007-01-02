@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: existing_surveys_new.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: existing_surveys_new.php 10583 2007-01-02 14:47:19Z pcool $
 */
 
 /*
@@ -33,13 +33,26 @@ $language_file = 'survey';
 
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
+
+/** @todo replace this with the correct code */
+/*
 $status = surveymanager::get_status();
+api_protect_course_script();
 if($status==5)
 {
-api_protect_admin_script();
+	api_protect_admin_script();
 }
-//api_protect_admin_script();
-require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
+*/
+/** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
+if (!api_is_allowed_to_edit())
+{
+	Display :: display_header();
+	Display :: display_error_message(get_lang('NotAllowedHere'));
+	Display :: display_footer();
+	exit;
+}
+
 $cidReq = $_REQUEST['cidReq'];
 $curr_dbname = $_REQUEST['curr_dbname'];
 $table_survey = Database :: get_course_table('survey');

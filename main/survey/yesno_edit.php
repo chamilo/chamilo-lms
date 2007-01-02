@@ -20,25 +20,44 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: yesno_edit.php 10559 2006-12-27 10:52:50Z pcool $
+* 	@version $Id: yesno_edit.php 10584 2007-01-02 15:09:21Z pcool $
 */
 
 // name of the language file that needs to be included 
 $language_file = 'survey';
 
+// including the global dokeos file
 require_once ('../inc/global.inc.php');
-//api_protect_admin_script();
+
+// including additional libraries
+/** @todo check if these are all needed */
+/** @todo check if the starting / is needed. api_get_path probably ends with an / */
 require_once ("select_question.php");
 require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+
+/** @todo replace this with the correct code */
+/*
 $status = surveymanager::get_status();
+api_protect_course_script();
 if($status==5)
 {
 	api_protect_admin_script();
 }
-require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+*/
+/** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
+if (!api_is_allowed_to_edit())
+{
+	Display :: display_header();
+	Display :: display_error_message(get_lang('NotAllowedHere'));
+	Display :: display_footer();
+	exit;
+}
+
+
 $n=$_REQUEST['n'];
 $interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
 $cidReq = $_REQUEST['cidReq'];

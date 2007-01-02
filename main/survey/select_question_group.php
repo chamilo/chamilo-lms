@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question_group.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: select_question_group.php 10584 2007-01-02 15:09:21Z pcool $
 */
 
 
@@ -32,8 +32,12 @@
 // name of the language file that needs to be included 
 $language_file = 'survey';
 
+// including the global dokeos file
 require_once ('../inc/global.inc.php');
-//api_protect_admin_script();
+
+// including additional libraries
+/** @todo check if these are all needed */
+/** @todo check if the starting / is needed. api_get_path probably ends with an / */
 require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");

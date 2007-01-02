@@ -20,18 +20,21 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question.php 10549 2006-12-24 16:08:47Z pcool $
+* 	@version $Id: select_question.php 10584 2007-01-02 15:09:21Z pcool $
 */
+// including the global dokeos file
+require_once ('../inc/global.inc.php');
 
 if(isset($_POST['add_question']))
 {
+	
 	$groupid=$_REQUEST['groupid'];
 	$surveyid=$_REQUEST['surveyid'];
 	$cidReq=$_REQUEST['cidReq'];
 	$curr_dbname = $_REQUEST['curr_dbname'];
 	// name of the language file that needs to be included 
 $language_file = 'survey';
-	require_once ('../inc/global.inc.php');
+	
     $add_question=$_REQUEST['add_question'];
 	switch ($_POST['add_question'])
 	{

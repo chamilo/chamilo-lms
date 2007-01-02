@@ -20,22 +20,18 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_all_courses.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: survey_all_courses.php 10584 2007-01-02 15:09:21Z pcool $
 */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
 // name of the language file that needs to be included 
 $language_file = 'survey';
-/*
------------------------------------------------------------
-	Including necessary files
------------------------------------------------------------
-*/
+
+// including the global dokeos file
 require_once ('../inc/global.inc.php');
+
+// including additional libraries
+/** @todo check if these are all needed */
+/** @todo check if the starting / is needed. api_get_path probably ends with an / */
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 

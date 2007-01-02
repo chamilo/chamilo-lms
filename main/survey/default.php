@@ -20,10 +20,18 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: default.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: default.php 10584 2007-01-02 15:09:21Z pcool $
 */
 
+// including the global dokeos file
 require_once ('../inc/global.inc.php');
+
+// including additional libraries
+/** @todo check if these are all needed */
+/** @todo check if the starting / is needed. api_get_path probably ends with an / */
+
+
+
 $surveyid = $_GET['surveyid'];
 $groupid = $_GET['groupid'];
 $cidReq = $_GET['cidReq'];

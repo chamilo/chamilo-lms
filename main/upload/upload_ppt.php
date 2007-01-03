@@ -65,7 +65,7 @@ if(!$is_allowed_to_edit){
 <img src="../img/oogie.gif"><br>
 <span style="color: #ff6434; font-size: 16px; font-family: Arial; margin-left: 10px;"><? echo get_lang("WelcomeOogieSubtitle");?></span><br>
 
-<?
+<?php
 
 $message=get_lang("WelcomeOogieConverter");
 

@@ -221,6 +221,10 @@ function prepare_course_repository($courseRepository, $courseId)
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/page", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/scorm", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/temp", 0777);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload", 0777);
+		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/forum", 0777);
+		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/test", 0777);
+		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/blog", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/work", 0777);
 
 	//create .htaccess in dropbox

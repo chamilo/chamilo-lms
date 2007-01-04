@@ -28,7 +28,8 @@ var FCKConfig	= oEditor.FCKConfig ;
 if ( FCKConfig.FlashUpload )
 	window.parent.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
 
-window.parent.AddTab( 'Info', oEditor.FCKLang.DlgInfoTab ) ;
+if(FCKConfig.UserStatus=="teacher")
+	window.parent.AddTab( 'Info', oEditor.FCKLang.DlgInfoTab ) ;
 
 
 //if ( !FCKConfig.FlashDlgHideAdvanced )
@@ -67,8 +68,9 @@ window.onload = function()
 	GetE('tdBrowse').style.display = FCKConfig.FlashBrowser	? '' : 'none' ;
 
 	// Set the actual uploader URL.
-	if ( FCKConfig.FlashUpload )
-		GetE('frmUpload').action = FCKConfig.FlashUploadURL ;
+	if ( FCKConfig.FlashUpload ){
+		GetE('frmUpload').action = FCKConfig.FlashUploadURL+"&uploadPath="+FCKConfig.FlashUploadPath ;
+	}
 
 	window.parent.SetAutoSize( true ) ;
 
@@ -143,7 +145,7 @@ function Ok()
 		oEditor.FCKUndo.SaveUndoStep() ;
 	
 	oEditor.FCKFlashProcessor.RefreshView( oFakeImage, oEmbed ) ;
-
+	window.parent.close();
 	return true ;
 }
 
@@ -194,14 +196,14 @@ function UpdatePreview()
 	if ( !ePreview )
 		return ;
 		
-	while ( ePreview.firstChild )
-		ePreview.removeChild( ePreview.firstChild ) ;
+	//while ( ePreview.firstChild )
+		//ePreview.removeChild( ePreview.firstChild ) ;
 
 	if ( GetE('txtUrl').value.length == 0 )
 		ePreview.innerHTML = '&nbsp;' ;
 	else
 	{
-		window.parent.SetSelectedTab( 'Info' ) ;
+		//window.parent.SetSelectedTab( 'Info' ) ;
 		var oDoc	= ePreview.ownerDocument || ePreview.document ;
 		var e		= oDoc.createElement( 'EMBED' ) ;
 		
@@ -214,7 +216,6 @@ function UpdatePreview()
 	}
 }
 
-// <embed id="ePreview" src="fck_flash/claims.swf" width="100%" height="100%" style="visibility:hidden" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
 
 function BrowseServer()
 {
@@ -234,8 +235,8 @@ function SetUrl( url, width, height )
 	UpdatePreview() ;
 
 	//window.parent.SetSelectedTab( 'Info' ) ;
-	Ok();
-	window.parent.close();
+	//Ok();
+	//window.parent.close();
 
 }
 
@@ -245,6 +246,7 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 	{
 		case 0 :	// No errors
 			//alert( 'Your file has been successfully uploaded' ) ;
+			document.getElementById("loader").style.display="none";
 			break ;
 		case 1 :	// Custom error
 			alert( customMsg ) ;

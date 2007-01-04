@@ -133,7 +133,7 @@ ImageManager.prototype.insert = function(outparam)
 	// show image manager
 	else
 	{
-		var manager = FCKConfig.PluginsPath+'ImageManager/manager.php';
+		var manager = FCKConfig.PluginsPath+'ImageManager/manager.php?uploadPath='+FCKConfig.IMUploadPath;
 
 		
 		Dialog(manager, function(param) {

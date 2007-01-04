@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Show a list of images in a long horizontal table.
  * @author $Author: Wei Zhuo $
@@ -14,7 +14,7 @@ $relative = '/';
 $manager = new ImageManager($IMConfig);
 
 //process any file uploads
-$manager->processUploads();
+$upload_result=$manager->processUploads();
 
 $manager->deleteFiles();
 
@@ -55,6 +55,7 @@ function drawFiles($list, &$manager)
 	{ ?>
 		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
 		<a href="javascript:;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);"title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php echo $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
+		<!--<iframe src="<?php echo $manager->getThumbnail($file['relative']); ?>"></iframe>-->
 		</td></tr><tr><td class="edit">
 		<?php if($IMConfig['allow_delete'] == true) { ?>
 			<a href="images.php?dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
@@ -100,7 +101,7 @@ function drawNoResults()
     <td class="noResult">No Images Found</td>
   </tr>
 </table>
-<?	
+<?php	
 }
 
 /**
@@ -114,7 +115,7 @@ function drawErrorBase(&$manager)
     <td class="error">Invalid base directory: <?php echo $manager->config['base_dir']; ?></td>
   </tr>
 </table>
-<?	
+<?php	
 }
 
 ?>
@@ -189,6 +190,11 @@ function drawErrorBase(&$manager)
 			}
 		}, null);		
 	}
+	
+	function closeWindowAfterUpload(path, name, width, height){
+		selectImage(path, name, width, height);	
+		window.parent.onOK();
+	}
 
 /*]]>*/
 </script>
@@ -202,8 +208,30 @@ function drawErrorBase(&$manager)
 	<tr>
 	<?php drawDirs($list[0], $manager); ?>
 	<?php drawFiles($list[1], $manager); ?>
+	<?php closeWindowAfterUpload($list[1]); ?>
 	</tr>
 </table>
-<?php } else { drawNoResults(); } ?>
+<?php
+} 
+else {
+	drawNoResults();
+}
+
+function closeWindowAfterUpload($list){
+	if(!api_is_allowed_to_edit() && isset($_FILES['upload'])){
+		foreach($list as $entry => $file) {
+			echo "<script>closeWindowAfterUpload('".$file['relative']."','".$entry."','".$file['image'][0]."','".$file['image'][1]."');</script>";
+			return;
+		}
+	}
+}
+
+if(api_is_allowed_to_edit() && isset($_FILES['upload']) && !is_int($upload_result)){
+	$width=$list[1][$upload_result]['image'][0];
+	$height=$list[1][$upload_result]['image'][1];
+	echo "<script text='text/javascript'>selectImage('$relative$upload_result','$upload_result', '$width', '$height');</script>";
+}
+
+?>
 </body>
 </html>

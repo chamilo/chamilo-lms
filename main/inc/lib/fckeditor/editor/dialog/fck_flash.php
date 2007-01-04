@@ -13,7 +13,7 @@ include('../../../../../inc/global.inc.php');
 		<script src="fck_flash/fck_flash.js" type="text/javascript"></script>
 		<link href="common/fck_dialog_common.css" type="text/css" rel="stylesheet">
 	</head>
-	<body> <!--scroll="no" style="OVERFLOW: hidden"-->
+	<body><!--scroll="no" style="OVERFLOW: hidden"-->
 		<div id="divInfo">
 		  <div id="divExtra1"  style="DISPLAY: none">
 			<table cellspacing="1" cellpadding="1" border="0" width="100%">
@@ -23,7 +23,7 @@ include('../../../../../inc/global.inc.php');
 							<tr>
 								<td width="100%"><span fckLang="DlgImgURL">URL</span>
 								</td>
-								<td id="tdBrowse" style="DISPLAY: none" nowrap rowspan="2"><br><input id="btnBrowse" onClick="BrowseServer();" type="button" value="Browse Server" fckLang="DlgBtnBrowseServer">
+								<td id="tdBrowse" style="DISPLAY: block" nowrap rowspan="2"><br><input id="btnBrowse" onClick="BrowseServer();" type="button" value="Browse Server" fckLang="DlgBtnBrowseServer">
 								</td>
 							</tr>
 							<tr>
@@ -45,7 +45,7 @@ include('../../../../../inc/global.inc.php');
 		  
 		  ?>
 		</div>
-		<div id="divExtra"  style="DISPLAY: none"> <!--added by shiv -->
+		<div id="divExtra"> <!--added by shiv -->
 			<table cellSpacing="1" cellPadding="1" width="100%" border="0">
 				<TR>
 					<TD>
@@ -93,8 +93,7 @@ include('../../../../../inc/global.inc.php');
 			<form id="frmUpload" name="frmUpload" method="post" target="UploadWindow" enctype="multipart/form-data" action="" onSubmit="return CheckUpload();">
 				<!--<span fckLang="DlgLnkUpload">Upload</span>--><br />
 				<table cellspacing="1" cellpadding="1" border="0" width="90%" align="center">
-				<tr><td><input id="txtUploadFile" style="WIDTH: 100%" type="file" size="40" name="NewFile" /></td></tr>
-				<tr><td><input id="btnUpload" type="submit" value="Send it to the Server" fckLang="DlgLnkBtnUpload" /></td></tr>
+				<tr><td><input id="txtUploadFile" type="file" size="40" name="NewFile" />&nbsp;<input id="btnUpload" type="submit" value="Send it to the Server" fckLang="DlgLnkBtnUpload" /></td></tr>
 				</table>
 				<iframe name="UploadWindow" style="DISPLAY: none" src="../fckblank.html"></iframe>
 			</form>
@@ -133,21 +132,24 @@ include('../../../../../inc/global.inc.php');
 			&nbsp;
 			<table cellSpacing="0" cellPadding="0" width="100%" align="center" border="0">
 				<tr>
-					<td vAlign="top" width="50%"><span fckLang="DlgGenId">Id</span><br>
+					<td valign="top" width="50%"><span fckLang="DlgGenId">Id</span><br>
 						<input id="txtAttId" style="WIDTH: 100%" type="text">
 					</td>
 					<td>&nbsp;&nbsp;</td>
-					<td vAlign="top" nowrap><span fckLang="DlgGenClass">Stylesheet Classes</span><br>
+					<td valign="top" nowrap><span fckLang="DlgGenClass">Stylesheet Classes</span><br>
 						<input id="txtAttClasses" style="WIDTH: 100%" type="text">
 					</td>
 					<td>&nbsp;&nbsp;</td>
-					<td vAlign="top" nowrap width="50%">&nbsp;<span fckLang="DlgGenTitle">Advisory Title</span><br>
+					<td valign="top" nowrap width="50%">&nbsp;<span fckLang="DlgGenTitle">Advisory Title</span><br>
 						<input id="txtAttTitle" style="WIDTH: 100%" type="text">
 					</td>
 				</tr>
 			</table>
 			<span fckLang="DlgGenStyle">Style</span><br>
 			<input id="txtAttStyle" style="WIDTH: 100%" type="text">
+		</div>
+		<div style="text-align: center;">
+		<input type="button" value="<?php echo get_lang("Validate");?>" onclick="Ok();">
 		</div>
 	</body>
 </html>

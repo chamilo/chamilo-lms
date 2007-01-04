@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Image Manager configuration file.
  * @author $Author: Wei Zhuo $
@@ -26,11 +26,31 @@
  for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
  in this directory and its subdirectories.
 */
-require_once('../../../../../conf/configuration.php');
 
-$IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
-//$IMConfig['base_dir'] = $_SERVER['DOCUMENT_ROOT'].$IMConfig['base_url'];
-$IMConfig['base_dir'] = $_configuration['root_sys'].'main/img/gallery/';
+include ('../../../../../../inc/global.inc.php');
+
+//The user is in a course
+if(isset($_SESSION["_course"]["sysCode"])){
+	if(api_is_allowed_to_edit()){
+		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/document/images/";
+		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/document/images/";
+	}
+	elseif(isset($_GET['uploadPath']) && $_GET['uploadPath']!=""){
+		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/".$_GET['uploadPath'];
+		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/".$_GET['uploadPath'];
+	}
+	else{
+		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).$_SESSION["_course"]["path"]."/upload/";
+		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).$_SESSION["_course"]["path"]."/upload/";
+	}
+}
+
+//Out of any course (admin)
+else{
+	$IMConfig['base_dir'] = $_configuration['root_sys'].'main/img/fckeditor/';
+	$IMConfig['base_url'] = $_configuration['root_web'].'main/img/fckeditor/';
+}
+
 $IMConfig['server_name'] = $_SERVER['SERVER_NAME'];
 
 /*

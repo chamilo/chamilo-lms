@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Image Editor. Editing tools, crop, rotate, scale and save.
  * @author $Author: Wei Zhuo $

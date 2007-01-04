@@ -34,8 +34,8 @@ include('../../../../../../inc/global.inc.php');
 				</tr>
 			</table>
 		  </div>
-		  <?php 
-		  
+		  <?php
+
 		  $sType = "MP3";
 		  include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
 		  

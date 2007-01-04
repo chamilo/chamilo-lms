@@ -29,7 +29,7 @@ class FCKeditor
 	var $Height ;
 	var $ToolbarSet ;
 	var $Value ;
-	var $Config ;
+	var $Config;
 
 	// PHP 5 Constructor (by Marcus Bointon <coolbru@users.sourceforge.net>)
 	function __construct( $instanceName )

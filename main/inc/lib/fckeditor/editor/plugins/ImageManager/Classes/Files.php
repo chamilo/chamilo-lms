@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * File Utilities.
  * @author $Author: Wei Zhuo $
@@ -34,6 +34,11 @@ class Files
 	 */
 	function copyFile($source, $destination_dir, $destination_file, $unique=true) 
 	{
+		
+		$destination_file=utf8_decode($destination_file);
+		$destination_file= strtr($destination_file,"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ","aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+		$destination_file=Files::escape($destination_file);
+		
 		if(!(file_exists($source) && is_file($source))) 
 			return FILE_ERROR_NO_SOURCE;
 

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * The main GUI for the ImageManager.
  * @author $Author: Wei Zhuo $
@@ -6,11 +6,11 @@
  * @package ImageManager
  */
 
-	require_once('config.inc.php');
-	require_once('Classes/ImageManager.php');
-	
-	$manager = new ImageManager($IMConfig);
-	$dirs = $manager->getDirs();
+require_once('config.inc.php');
+require_once('Classes/ImageManager.php');
+
+$manager = new ImageManager($IMConfig);
+$dirs = $manager->getDirs();
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -22,13 +22,21 @@
 <link href="assets/manager.css" rel="stylesheet" type="text/css" />	
 
 <script type="text/javascript">
-/*<![CDATA[*/
+
 
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getBaseURL(); ?>";
 	var server_name = "<?php echo $IMConfig['server_name']; ?>";
-
-	window.resizeTo(600, 330);
+	
+	<?php
+	//It's a teacher
+		if(api_is_allowed_to_edit()){
+			echo "window.resizeTo(600, 430);";
+		}
+		else{
+			echo "window.resizeTo(600, 125);";
+		}
+	?>
 
 	if(window.opener.ImageManager && window.opener.ImageManager.I18N)
 	{
@@ -41,12 +49,19 @@
 		// Read it now - copy in next script block
 		document.write('<script type="text/javascript" src="lang/' + window.opener._editor_lang + '.js"><\/script>');
 	}
-
-/*]]>*/
+	
+	function showAdvancedSettings(){
+		if(document.getElementById("advanced_settings").style.display=="none"){
+			document.getElementById("advanced_settings").style.display="block";
+		}
+		else{
+			document.getElementById("advanced_settings").style.display="none";
+		}
+	}
+	
 </script>
 
 <script type="text/javascript">
-/*<![CDATA[*/
 
 	// now copy the language object of the included script - needed a seperate new script block to be able to do so
 	if (!this.I18N)
@@ -54,7 +69,6 @@
 		I18N = this.ImageManager.I18N;
 	}
 
-/*]]>*/
 </script>
 
 <script type="text/javascript" src="assets/popup.js"></script>
@@ -65,8 +79,9 @@
 
 <body>
 <div class="title">Insert Image</div>
-<form action="images.php" id="uploadForm" method="post" enctype="multipart/form-data">
-<fieldset><legend>Image Manager</legend>
+<form action="images.php<?php if(isset($_GET['uploadPath']) && $_GET['uploadPath']!="") echo "?uploadPath=".$_GET['uploadPath']; ?>" id="uploadForm" method="post" enctype="multipart/form-data">
+
+<fieldset <?php if(!api_is_allowed_to_edit()) echo "style='display: none;'"; ?>><legend>Image Manager</legend>
 <div class="dirs">
 	<label for="dirPath">Directory</label>
 	<select name="dir" class="dirWidth" id="dirPath" onchange="updateDir(this)">
@@ -80,16 +95,27 @@
 	<a href="#" onclick="newFolder();" title="New Folder"><img src="img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
 <?php } ?>
 	<div id="messages" style="display: none;"><span id="message"></span><img SRC="img/dots.gif" width="22" height="12" alt="..." /></div>
-	<iframe src="images.php" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
+	<iframe src="images.php<?php if(isset($_GET['uploadPath']) && $_GET['uploadPath']!="") echo "?uploadPath=".$_GET['uploadPath']; ?>" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
 </div>
 </fieldset>
+
+
 <!-- image properties -->
 <input type="file" name="upload" id="upload"/>&nbsp;<button type="submit" name="submit" onclick="doUpload();"/>Upload</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		  <button type="button" class="buttons" onclick="return refresh();" style="visibility:hidden;">Refresh</button>
+		  <button type="button" class="buttons" onclick="return refresh();" style="display: none">Refresh</button>
           <button type="button" class="buttons" onclick="return onOK();">OK</button>
           <button type="button" class="buttons" onclick="return onCancel();">Cancel</button>
-
-	<table class="inputTable" style="display:none;">
+		  <?php
+		  
+		  if(api_is_allowed_to_edit()){
+		  ?>
+		  	<span style="cursor: pointer" onclick="showAdvancedSettings();"><?php echo get_lang("AdvancedSettings");?></span>
+		  	
+		  <?php
+		  }
+		  ?>
+		  
+	<table class="inputTable" style="display: none" id="advanced_settings">
 		<tr>
 			<td align="right"><label for="f_url">Image File</label></td>
 			<td><input type="text" id="f_url" class="largelWidth" value="" /></td>
@@ -111,15 +137,7 @@
 		</tr>
 		<tr>
 <?php if($IMConfig['allow_upload'] == true) { ?>
-			<td align="right"><label for="upload">Upload</label></td>
-			<td>
-				<table cellpadding="0" cellspacing="0" border="0">
-                  <tr>
-                    <td><input type="file" name="upload" id="upload"/></td>
-                    <td>&nbsp;<button type="submit" name="submit" onclick="doUpload();"/>Upload</button></td>
-                  </tr>
-                </table>
-			</td>
+			
 <?php } else { ?>
 			<td colspan="2"></td>
 <?php } ?>
@@ -150,10 +168,7 @@
           <td colspan="5"><label for="constrain_prop">Constrain Proportions</label></td>
       </tr>
 	</table>
-<!--// image properties -->	
-	<div style="text-align: right;"> 
-          <hr />
-    </div>
+
 	<input type="hidden" id="f_file" name="f_file" />
 </form>
 </body>

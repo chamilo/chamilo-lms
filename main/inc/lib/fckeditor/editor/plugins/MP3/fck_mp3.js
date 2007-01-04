@@ -41,8 +41,9 @@ function window_onload()
 	GetE('tdBrowse').style.display = FCKConfig.MP3Browser ? '' : 'none' ;
 
 	// Set the actual uploader URL.
-	if ( FCKConfig.MP3Upload )
+	if ( FCKConfig.MP3Upload ){
 		GetE('frmUpload').action = FCKConfig.MP3UploadURL ;
+	}
 
 	window.parent.SetAutoSize( true ) ;
 
@@ -307,6 +308,7 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 			window.location.href=FCKConfig.PluginsPath + 'MP3/fck_mp3.php';
 			return ;
 	}
+	document.getElementById("loader").style.display="none";
 
 	SetUrl( fileUrl ) ;
 	GetE('frmUpload').reset() ;
@@ -336,7 +338,7 @@ function CheckUpload()
 		return false ;
 	}
 
-	document.getElementById('eUploadMessage').innerHTML = 'Upload in progress, please wait...' ;
+	//document.getElementById('eUploadMessage').innerHTML = 'Upload in progress, please wait...' ;
 	document.getElementById('btnUpload').disabled = true ;
 	
 	return true ;

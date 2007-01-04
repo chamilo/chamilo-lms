@@ -17,6 +17,7 @@
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
+
 include('../../../../../../global.inc.php');
 include_once(api_get_path(INCLUDE_PATH)."lib/fileUpload.lib.php");
 
@@ -69,72 +70,86 @@ $sFileUrl		= '' ;
 $iCounter = 0 ;
 
 
-/*
-// Get the "UserFiles" path.
-$GLOBALS["UserFilesPath"] = '' ;
-
-if ( isset( $Config['UserFilesPath'] ) )
-	$GLOBALS["UserFilesPath"] = $Config['UserFilesPath'] ;
-else if ( isset( $_GET['ServerPath'] ) )
-	$GLOBALS["UserFilesPath"] = $_GET['ServerPath'] ;
-else
-	$GLOBALS["UserFilesPath"] = '/UserFiles/' ;
-
-if ( ! ereg( '/$', $GLOBALS["UserFilesPath"] ) )
-	$GLOBALS["UserFilesPath"] .= '/' ;
-
-// The the target directory.
-//$sServerDir = GetRootPath() . $GLOBALS["UserFilesPath"];
-*/
-
 $currentCourseRepositorySys =  api_get_path(SYS_COURSE_PATH) . $_course["path"]."/";
 $currentCourseRepositoryWeb =  api_get_path(WEB_COURSE_PATH) . $_course["path"]."/";
 
-$sServerDir = $currentCourseRepositorySys.'document/';
+$sType=strtolower($sType);
 
-
-
-	// Compose the file path.
-	if(!is_dir($sServerDir.$sType))
-	{
-		mkdir($sServerDir.$sType, 0777);
-	}
-
-	// Try to add an extension to the file if it has'nt one
-	$sFileName = add_ext_on_mime(stripslashes($oFile['name']),$oFile['type']);
-
-	// Replace dangerous characters
-	$sFileName = replace_dangerous_char($sFileName,'strict');
-
-	// Transform any .php file in .phps fo security
-	$sFileName = php2phps($sFileName);
-	
-	
-	$sFilePath = $sServerDir.$sType."/" . $sFileName ;
-
-	// If a file with that name already exists.
-	/*if ( is_file( $sFilePath ) )
-	{
-		$iCounter++ ;
-		$sFileName = RemoveExtension( $sFileName ) . '(' . $iCounter . ').' . $sExtension ;
-		$sErrorNumber = '201' ;
-	}
-	else
-	{*/
-
-		if(!move_uploaded_file( $oFile['tmp_name'], $sFilePath )) $sErrorNumber = '203' ; //check php.ini setting
-
-		if ( is_file( $sFilePath ) )
-		{
-			$oldumask = umask(0) ;
-			chmod( $sFilePath, 0777 ) ;
-			umask( $oldumask ) ;
+if(isset($_SESSION["_course"]["sysCode"])){
+	if(api_is_allowed_to_edit()){
+		//En fonction du type, mettre dans audio, flash ou images
+		if($sType=="mp3"){
+			$sServerDir = $currentCourseRepositorySys.'document/audio/';
+			$sserverWebath=$currentCourseRepositoryWeb.'document/audio/';
+			$sType="audio";
 		}
+		elseif($sType=="flash"){
+			$sServerDir = $currentCourseRepositorySys.'document/flash/';
+			$sserverWebath=$currentCourseRepositoryWeb.'document/flash/';
+		}
+		else{
+			$sServerDir = $currentCourseRepositorySys.'document/';
+			$sserverWebath=$currentCourseRepositoryWeb.'document/';
+		}
+	}
+	elseif(isset($_REQUEST['uploadPath']) && $_REQUEST['uploadPath']!=""){
+		$sServerDir = $currentCourseRepositorySys.$_REQUEST['uploadPath'];
+		$sserverWebath=$currentCourseRepositoryWeb.$_REQUEST['uploadPath'];
+	}
+	
+	else{
+		$sServerDir = $currentCourseRepositorySys.'upload/';
+		$sserverWebath=$currentCourseRepositoryWeb.'upload/';
+	}
+	
+}
+
+// Try to add an extension to the file if it has'nt one
+$sFileName = add_ext_on_mime(stripslashes($oFile['name']),$oFile['type']);
+
+// Replace dangerous characters
+$sFileName = replace_dangerous_char($sFileName,'strict');
+
+// Transform any .php file in .phps for security
+$sFileName = php2phps($sFileName);
+
+
+//$sFilePath = $sServerDir.$sType."/" . $sFileName ;
+
+
+if(!move_uploaded_file( $oFile['tmp_name'], $sServerDir.$sFileName )) $sErrorNumber = '203' ; //check php.ini setting
+
+if ( is_file( $sServerDir.$sFileName ) )
+{
+	$oldumask = umask(0) ;
+	chmod( $sFilePath, 0777 ) ;
+	umask( $oldumask ) ;
+}
+
+//If we are in a course and if it's a teacher who did the upload, we record the uploaded file in database
+if(isset($_SESSION["_course"]["sysCode"]) && api_is_allowed_to_edit()){
+	
+	$document_name=utf8_decode($oFile["name"]);
+	$document_name= strtr($document_name,"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ","aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+	$document_name=preg_replace('/[^\w\._]/', '_', $document_name);
+	$document_size=$oFile["size"];
+	
+	include_once(api_get_path(LIBRARY_PATH)."fileUpload.lib.php");
+	
+	if($sType=="flash"){
+		$path = "/flash/";
+	}
+	
+	if($sType=="audio"){
+		$path = "/audio/";
+	}
+	
+	$doc_id = add_document($_course, $path.$document_name, 'file', $document_size, $document_name);
 		
-		$sFileUrl = $currentCourseRepositoryWeb . 'document/' . $sType . "/" . $sFileName ;
+	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentCreated', $_user['user_id']);
+	
+}
 
-		//break ;
-	//}
+SendResults( $sErrorNumber, $sserverWebath.$sFileName, $sFileName ) ;
 
-SendResults( $sErrorNumber, $sFileUrl, $sFileName ) ;
 ?>

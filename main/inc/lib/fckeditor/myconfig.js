@@ -1,25 +1,13 @@
 //FCKConfig.SmileyWindowWidth		= 500 ;
 //FCKConfig.SmileyWindowHeight	= 500 ;
 //FCKConfig.ImageUpload = false ;
-
-FCKConfig.ToolbarSets["PluginTest"] = [
-	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
-	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
-	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['OrderedList','UnorderedList','-','Outdent','Indent'],
-	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Link','Unlink','Anchor'],
-	['Image','Flash','Video','MP3','Table','Rule','Smiley','SpecialChar','UniversalKey'],
-	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
-	'/',
-	['Style','FontFormat','FontName','FontSize'],
-	['TextColor','BGColor'],
-	['About'],['Attachment']
-] ;
+FCKConfig.IMUploadPath = '';
+FCKConfig.FlashUploadPath = '' ;
+FCKConfig.AudioUploadPath = '' ;
+FCKConfig.UserStatus = 'teacher' ;
 
 FCKConfig.ToolbarSets["Question"] = [
-	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
+	['Source','DocProps','-','NewPage','Preview','-','Templates'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
@@ -32,24 +20,35 @@ FCKConfig.ToolbarSets["Question"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Middle"] = [
-	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','Image','Flash']
+	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager','Flash']
 ] ;
 
 FCKConfig.ToolbarSets["Small"] = [
-	['Bold','Italic','Underline','StrikeThrough','Link','Image','Flash','OrderedList','UnorderedList','Table']
+	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','Flash','OrderedList','UnorderedList','Table']
 ] ;
 
+FCKConfig.ToolbarSets["Blog"] = [
+	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','OrderedList','UnorderedList','Table']
+] ;
 
 FCKConfig.ToolbarSets["Announcements"] = [
-	['Bold','Italic','Underline','StrikeThrough','Link','Image','OrderedList','UnorderedList','Table']
+	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','OrderedList','UnorderedList','Table']
 ] ;
 
 FCKConfig.ToolbarSets["Full"] = [
-	['Save','Templates','PasteWord','Link','-','Image','Flash','Video','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
+	['Templates','PasteWord','Link','-','ImageManager','Flash','Video','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Comment"] = [
 	['Bold','Italic','Underline','StrikeThrough']
+] ;
+
+FCKConfig.ToolbarSets["ForumLight"] = [
+	['Bold','Italic','Underline','StrikeThrough']
+] ;
+
+FCKConfig.ToolbarSets["NewTest"] = [
+	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','Flash','MP3','OrderedList','UnorderedList','Table']
 ] ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;

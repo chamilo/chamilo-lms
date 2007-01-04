@@ -29,7 +29,7 @@ if ( !$Config['Enabled'] )
 
 // Get the "UserFiles" path.
 $GLOBALS["UserFilesPath"] = '' ;
-
+exit;
 if ( isset( $Config['UserFilesPath'] ) )
 	$GLOBALS["UserFilesPath"] = $Config['UserFilesPath'] ;
 else if ( isset( $_GET['ServerPath'] ) )

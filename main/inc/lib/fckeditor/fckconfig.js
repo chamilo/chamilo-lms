@@ -42,8 +42,8 @@ FCKConfig.ProtectedSource.Add( /<script[\s\S]*?\/script>/gi ) ;	// <SCRIPT> tags
 // FCKConfig.ProtectedSource.Add( /<\?[\s\S]*?\?>/g ) ;	// PHP style server side code <?...?>
 // FCKConfig.ProtectedSource.Add( /(<asp:[^\>]+>[\s|\S]*?<\/asp:[^\>]+>)|(<asp:[^\>]+\/>)/gi ) ;	// ASP.Net style tags <asp:control>
 
-FCKConfig.AutoDetectLanguage	= true ;
-FCKConfig.DefaultLanguage		= 'en' ;
+FCKConfig.AutoDetectLanguage	= false ;
+FCKConfig.DefaultLanguage		= 'fr' ;
 FCKConfig.ContentLangDirection	= 'ltr' ;
 
 FCKConfig.EnableXHTML		= true ;	// Unsupported: Do not change.
@@ -200,7 +200,7 @@ FCKConfig.FlashUploadAllowedExtensions	= ".(swf)$" ;		// empty for all
 FCKConfig.FlashUploadDeniedExtensions	= "" ;					// empty for no one
 
 FCKConfig.MP3Upload = true ;
-FCKConfig.MP3UploadURL = FCKConfig.BasePath + 'filemanager/upload/' + FCKConfig.QuickUploadLanguage + '/upload.' + _QuickUploadLanguage + '?Type=MP3' ;
+//FCKConfig.MP3UploadURL = FCKConfig.BasePath + 'filemanager/upload/' + FCKConfig.QuickUploadLanguage + '/upload.' + _QuickUploadLanguage + '?Type=MP3' ;
 FCKConfig.MP3UploadAllowedExtensions	= ".(mp3)$" ;		// empty for all
 FCKConfig.MP3UploadDeniedExtensions	= "" ;					// empty for no one
 

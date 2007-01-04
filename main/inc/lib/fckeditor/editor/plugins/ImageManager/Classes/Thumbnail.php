@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Create thumbnails.
  * @author $Author: Wei Zhuo $

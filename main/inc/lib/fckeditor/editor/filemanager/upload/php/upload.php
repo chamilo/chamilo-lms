@@ -76,8 +76,9 @@ $currentCourseRepositoryWeb =  api_get_path(WEB_COURSE_PATH) . $_course["path"].
 $sType=strtolower($sType);
 
 if(isset($_SESSION["_course"]["sysCode"])){
+	//It's a teacher, so the uoploaded document will be put in course documents
 	if(api_is_allowed_to_edit()){
-		//En fonction du type, mettre dans audio, flash ou images
+		//set the upload path according to the file type
 		if($sType=="mp3"){
 			$sServerDir = $currentCourseRepositorySys.'document/audio/';
 			$sserverWebath=$currentCourseRepositoryWeb.'document/audio/';
@@ -92,11 +93,12 @@ if(isset($_SESSION["_course"]["sysCode"])){
 			$sserverWebath=$currentCourseRepositoryWeb.'document/';
 		}
 	}
+	//It's a student, we get the upload path in parameters 
 	elseif(isset($_REQUEST['uploadPath']) && $_REQUEST['uploadPath']!=""){
 		$sServerDir = $currentCourseRepositorySys.$_REQUEST['uploadPath'];
 		$sserverWebath=$currentCourseRepositoryWeb.$_REQUEST['uploadPath'];
 	}
-	
+	//Default
 	else{
 		$sServerDir = $currentCourseRepositorySys.'upload/';
 		$sserverWebath=$currentCourseRepositoryWeb.'upload/';

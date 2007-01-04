@@ -285,7 +285,7 @@
 		if ($_GET['action'] == "watermark")
 		{?>
 				dd.elements.floater.show();
-		<?php}
+		<?php }
 	}
 ?>
 	}

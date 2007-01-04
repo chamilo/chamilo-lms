@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * The PHP Image Editor user interface.
  * @author $Author: Wei Zhuo $
@@ -229,7 +229,7 @@ $editor = new ImageEditor($manager, $IMConfig);
 			<input type="hidden" id="save_filename" value="<?php echo basename($_GET['img']); ?>" />
 	<?php } ?>
 
-	<?
+	<?php
 	$pos = strrpos($_GET['img'], ".");
 	$ext = substr($_GET['img'], $pos + 1);
 	?>

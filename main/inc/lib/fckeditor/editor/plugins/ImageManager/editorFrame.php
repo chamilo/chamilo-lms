@@ -1,4 +1,4 @@
-<?
+<?php
 	/**
 	 * The frame that contains the image to be edited.
 	 * @author $Author: Wei Zhuo $
@@ -120,7 +120,7 @@
 </script>
 
 <script type="text/javascript">
-<?
+<?php
 	if ($editor->isFileSaved() == 1)
 	{
 ?>
@@ -159,22 +159,22 @@
 
 	// save message
 	var message = i18n('File saved.');
-<?
+<?php
 	if ($editor->forcedNewName != false)
 	{
 ?>
 	message += '\n' + i18n('File name was changed into ') +  '<?php echo $editor->forcedNewName; ?>';
-<?
+<?php
 	}
 ?>
 	alert(message);
-<?
+<?php
 	}
 	else if ($editor->isFileSaved() == -1)
 	{
 ?>
 	alert(i18n('File was not saved.'));
-<?
+<?php
 	}
 ?>
 
@@ -193,7 +193,7 @@
 	imagesArray = new Array();
 	// first clear all its options
 	watermarkBox.options.length = 0;
-<?
+<?php
 	foreach($IMConfig['watermarks'] as $watermark)
 	{
 		$watermarkInfo = @getImageSize($IMConfig['base_dir'] . $watermark);
@@ -279,13 +279,13 @@
 		verifyBounds();
 		dd.elements.floater.nimg.style.behavior = "url('assets/pngbehavior.htc')";
 
-<?
+<?php
 	if (isset($_GET['action']))
 	{
 		if ($_GET['action'] == "watermark")
 		{?>
 				dd.elements.floater.show();
-		<?}
+		<?php}
 	}
 ?>
 	}

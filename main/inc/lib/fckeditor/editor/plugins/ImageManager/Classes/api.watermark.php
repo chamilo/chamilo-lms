@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Watermarking API
  * @author $Author: Brian Vaughn $ http://boynamedbri.com/  -  http://portfolio.boynamedbri.com/ -  @ devshed http://www.devshed.com/c/a/PHP/Dynamic-Watermarking-with-PHP/

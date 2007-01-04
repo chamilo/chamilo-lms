@@ -147,6 +147,10 @@ if($debug>0) error_log('New LP - Passed oLP creation check',0);
 $_SESSION['oLP']->update_queue = array(); //reinitialises array used by javascript to update items in the TOC
 $_SESSION['oLP']->message = ''; //should use ->clear_message() method but doesn't work
 
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '400';
+$fck_attribute['ToolbarSet'] = 'Full';
+
 if($_GET['isStudentView'] == 'true')
 	$_REQUEST['action'] = 'view';
 
@@ -162,7 +166,7 @@ switch($_REQUEST['action'])
 			$_SESSION['refresh'] = 1;
 				
 			if(isset($_POST['submit_button']) && !empty($_POST['title']))
-			{
+			{				
 				if(isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time'])
 				{
 					require('kevin_lp_add_item.php');

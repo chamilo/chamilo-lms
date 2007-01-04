@@ -439,7 +439,7 @@ class learnpath {
     	//echo $sql_ins; // for debug
     	
     	if($this->debug>2){error_log('New LP - Inserting dokeos_chapter: '.$sql_ins,0);}
-    	
+
     	$res_ins = api_sql_query($sql_ins, __FILE__, __LINE__);
     	
     	if($res_ins > 0)
@@ -4523,11 +4523,11 @@ class learnpath {
 					{
 						$return .= $this->display_manipulate($item_id, $row['item_type']);
 						$return .= $this->display_item_form($row['item_type'], get_lang("EditCurrentModule").' :', 'edit', $item_id, $row);
-			}
+					}
 					else
 					{
 						$return .= $this->display_item_small_form($row['item_type'], get_lang("EditCurrentModule").' :', $row);
-		}
+					}
 		
 					break;
 				
@@ -4623,7 +4623,7 @@ class learnpath {
 		
 		//TODO: add a path filter
 		if($iframe){
-			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path'] . '" style="background:#FFFFFF; border:1px solid #CCCCCC; height:490px; width:100%;"></iframe>';
+			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path'] . '" style="background:#FFFFFF; border:1px solid #CCCCCC; height:490px; width:100%; margin-top: 20px;"></iframe>';
 		}
 		else{
 			$return .= file_get_contents(api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path']);
@@ -4914,129 +4914,103 @@ class learnpath {
 			unset($this->arrMenu);
 			
 			$return .= '<p class="lp_title">' . $title . '</p>' . "\n";
+
+			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			
-			$return .= '<form method="POST">' . "\n";
+			$form = new FormValidator('form','POST',$_SERVER["PHP_SELF"]."?".$_SERVER["QUERY_STRING"]);
 			
-				$return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
-				
-					if($item_type != 'module' && $item_type != 'dokeos_module')
-					{
-						$return .= "\t\t" . '<tr>' . "\n";
+			$defaults["title"]=$item_title;
+			$defaults["description"]=$item_description;
+			
+			$form->addElement('html',$return);
 						
-							$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input">' . "\n";
-							
-								$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
-								
-									$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
-									
-									$arrHide = array($id);
-									
-									for($i = 0; $i < count($arrLP); $i++)
-									{
-										if($action != 'add')
-										{
-											if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] != 'dokeos_chapter' && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
-											{
-												$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
-											}
-											else
-											{
-												$arrHide[] = $arrLP[$i]['id'];
-											}
-										}
-										else
-										{
-											if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter')
-												$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
-										}
-									}
-									
-									reset($arrLP);
-									
-								$return .= "\t\t\t\t" . '</select>';
-							
-							$return .= "\t\t\t" . '</td>' . "\n";
-						
-						$return .= "\t\t" . '</tr>' . "\n";
-					}
-					
-					$return .= "\t\t" . '<tr>' . "\n";
-						
-						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
-						$return .= "\t\t\t" . '<td class="input">' . "\n";
-						
-							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
-							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
-								
-								for($i = 0; $i < count($arrLP); $i++)
-								{
-									if($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id)
-									{
-										if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
-											$selected = 'selected="selected" ';
-										elseif($action == 'add')
-											$selected = 'selected="selected" ';
-										else
-											$selected = '';
-										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
-									}
-								}
-								
-							$return .= "\t\t\t\t" . '</select>';
-						
-						$return .= "\t\t\t" . '</td>' . "\n";
-					
-					$return .= "\t\t" . '</tr>' . "\n";
-					
-					if($action != 'move')
-					{
-						$return .= "\t\t" . '<tr>' . "\n";
-							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
-						
-						$return .= "\t\t" . '</tr>' . "\n";
-						
-						$return .= "\t\t" . '<tr>' . "\n";
-							
-							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
-						
-						$return .= "\t\t" . '</tr>' . "\n";
-					}
-					
-					$return .= "\t\t" . '<tr>' . "\n";
-						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
-					
-					$return .= "\t\t" . '</tr>' . "\n";
-				
-				$return .= "\t" . '</table>' . "\n";	
-				
-				if($item_type == 'module' || $item_type == 'dokeos_module')
-					$return .= "\t" . '<input name="parent" type="hidden" value="0" />' . "\n";
-				
-				if($action == 'move')
+			//$arrHide = array($id);
+			
+			$arrHide[0]['value']=$this->name;
+			$arrHide[0]['padding']=3;
+			
+			if($item_type != 'module' && $item_type != 'dokeos_module')
+			{
+				for($i = 0; $i < count($arrLP); $i++)
 				{
-					$return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
-					$return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+					if($action != 'add'){
+						if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
+							$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+							$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
+							if($parent == $arrLP[$i]['id']){
+								$s_selected_parent=$arrHide[$arrLP[$i]['id']];
+							}
+						}
+					}
+					else{
+						if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter'){
+							$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+							$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
+							if($parent == $arrLP[$i]['id']){
+								$s_selected_parent=$arrHide[$arrLP[$i]['id']];
+							}
+						}
+					}
 				}
-				/*if($id != 0 && is_array($extra_info))
+				
+				$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
+
+				foreach($arrHide as $key => $value){
+					$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
+				}
+				$parent_select -> setSelected($s_selected_parent);
+				
+			}
+			
+			reset($arrLP);
+			
+			$arrHide=array();
+
+			//POSITION
+			for($i = 0; $i < count($arrLP); $i++)
+			{
+				if($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id)
 				{
-					$return .= "\t" . '<input name="old_previous" type="hidden" value="' . $extra_info['parent_item_id'] . '" />' . "\n";	
-					$return .= "\t" . '<input name="old_next" type="hidden" value="' . $extra_info['previous_item_id'] . '" />' . "\n";	
-				}*/
+					if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+						$s_selected_position=$arrLP[$i]['id'];
+					elseif($action == 'add')
+						$s_selected_position=$arrLP[$i]['id'];
+					
+					$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title']));
+					
+				}
+			}
+			
+			$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
+
+			foreach($arrHide as $key => $value){
+				$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
+			}
+			$position -> setSelected($s_selected_position);
+			reset($arrLP);
+			
+			if($action != 'move'){
+				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
+				$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 				
-				$return .= "\t" . '<input name="type" type="hidden" value="dokeos_' . $item_type . '" />' . "\n";
-				$return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
-				
-			$return .= '</form>' . "\n";
-		$return .= '</div>' . "\n";
+			}
+			
+			$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
+			
+			if($item_type == 'module' || $item_type == 'dokeos_module')
+			{
+				$form->addElement('hidden', 'parent', '0');
+			}
+			
+			
+			$form->addElement('hidden', 'type', 'dokeos_'.$item_type);
+			$form->addElement('hidden', 'post_time', time());
+			
+		$form->addElement('html','</div>');
 		
-		return $return;
+		$form->setDefaults($defaults);
+		
+		return $form->return_form();
 	}
 	
 	/**
@@ -5050,6 +5024,20 @@ class learnpath {
 	function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
 	{
 		
+		echo '
+		<style>
+		.row{
+			width:100%;
+		}
+		div.row div.label {
+			width: 75px;
+		}
+		
+		div.row div.formw {
+			width: 85%;
+		}
+		</style>';
+			
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 		
@@ -5174,217 +5162,159 @@ class learnpath {
 				return $return;
 			}
 			
-			$return .= '<form method="POST">' . "\n";
+			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			
-				$return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
-				
-					$return .= "\t\t" . '<tr>' . "\n";
-					
-						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
-						$return .= "\t\t\t" . '<td class="input">' . "\n";
+			$form = new FormValidator('form','POST',$_SERVER["PHP_SELF"]."?".$_SERVER["QUERY_STRING"]);
+			
+			$defaults["title"]=$item_title;
+			$defaults["description"]=$item_description;
+			
+			$form->addElement('html',$return);
 						
-							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
-							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
-								
-								$arrHide = array($id);
-								
-								for($i = 0; $i < count($arrLP); $i++)
-								{
-									if($action != 'add')
-									{
-										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
-										{
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
-										}
-										else
-										{
-											$arrHide[] = $arrLP[$i]['id'];
-										}
-									}
-									else
-									{
-										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter')
-											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
-									}
-								}
-								
-								reset($arrLP);
-								
-							$return .= "\t\t\t\t" . '</select>';
-						
-						$return .= "\t\t\t" . '</td>' . "\n";
-					
-					$return .= "\t\t" . '</tr>' . "\n";
-									
-					$return .= "\t\t" . '<tr>' . "\n";
-						
-						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
-						$return .= "\t\t\t" . '<td class="input">' . "\n";
-						
-							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
-							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
-								
-								for($i = 0; $i < count($arrLP); $i++)
-								{
-									if($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id)
-									{
-										if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
-											$selected = 'selected="selected" ';
-										elseif($action == 'add')
-											$selected = 'selected="selected" ';
-										else
-											$selected = '';
-										
-										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
-									}
-								}
-								
-							$return .= "\t\t\t\t" . '</select>';
-						
-						$return .= "\t\t\t" . '</td>' . "\n";
-					
-					$return .= "\t\t" . '</tr>' . "\n";
-					
-					if($action != 'move')
-					{
-						$return .= "\t\t" . '<tr>' . "\n";
-							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
-						
-						$return .= "\t\t" . '</tr>' . "\n";
-						
-						$return .= "\t\t" . '<tr>' . "\n";
-							
-							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
-						
-						$return .= "\t\t" . '</tr>' . "\n";
-						
-						if(($extra_info == 'new' || $extra_info['item_type'] == TOOL_DOCUMENT || $_GET['edit'] == 'true'))
-						{
-							if($action == 'add' || $_GET['edit'] == 'true')
-							{
-								$return .= "\t\t" . '<tr>' . "\n";
-								
-									$return .= "\t\t\t" . '<td class="label"><label for="idDir">'.get_lang("Directory").' :</label></td>' . "\n";
-									$return .= "\t\t\t" . '<td class="input">';
-									
-									$sql_doc = "
-										SELECT *
-										FROM " . $tbl_doc . "
-										WHERE
-											filetype = 'folder'
-										ORDER BY path ASC";
-									
-									$result = api_sql_query($sql_doc, __FILE__, __LINE__);
-									
-										$return .= "\t\t\t\t" . '<select id="idDir" name="dir" size="1">' . "\n";
-										
-											$return .= "\t\t\t\t\t" . '<option value="/">/ ( root )</option>' . "\n";
-											
-											while($row_doc = Database::fetch_array($result))
-											{
-												$return .= "\t\t\t\t\t" . '<option value="' . $row_doc['path'] . '">' . $row_doc['path'] . '</option>' . "\n";
-											}
-											
-										$return .= "\t\t\t\t" . '</select>' . "\n";
-										
-									$return .= "\t\t\t" . '</td>' . "\n";
-							
-								$return .= "\t\t" . '</tr>' . "\n";
-							}
-							
-							$return .= "\t\t" . '<tr>' . "\n";
-							
-								$return .= "\t\t\t" . '<td colspan="2">' . "\n";
-								
-									if(isset($_POST['content']))
-										$content = stripslashes($_POST['content']);
-									elseif(is_array($extra_info)){
-										//If it's an html document or a text file
-										if(!$no_display_edit_textarea){
-											$content = $this->display_document($extra_info['path'], false, false);
-										}
-									}
-									elseif(is_numeric($extra_info))
-										$content = $this->display_document($extra_info, false, false);
-									else
-										$content = '';
-									
-									
-									if(!$no_display_edit_textarea){
-										
-										$oFCKeditor = new FCKeditor('content_lp') ;
-										$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-										$oFCKeditor->Height		= '400';
-										$oFCKeditor->Width		= '100%';
-										$oFCKeditor->Value		= $content;
-										$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-										$oFCKeditor->ToolbarSet = "Full";
-
-										$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-										$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
-										$result_sql=api_sql_query($sql);
-										$isocode_language=mysql_result($result_sql,0,0);
-										$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-										
-										$return .=	$oFCKeditor->CreateHtml();
-									}
-									else{
-										$return .= $this->display_document($extra_info['path'], false, true);
-									}
-								
-								$return .= "\t\t\t" . '</td>' . "\n";
-							
-							$return .= "\t\t" . '</tr>' . "\n";
-						}
-						elseif(is_numeric($extra_info))
-						{
-							$return .= "\t\t" . '<tr>' . "\n";
-							
-								$return .= "\t\t\t" . '<td colspan="2" style="background:#F8F8F8; border:1px solid #999999;">' . "\n";	
-							
-									$return .= $this->display_document($extra_info, true, true, true);
-							
-								$return .= "\t\t\t" . '</td>' . "\n";
-							
-							$return .= "\t\t" . '</tr>' . "\n";
+			//$arrHide = array($id);
+			
+			$arrHide[0]['value']=$this->name;
+			$arrHide[0]['padding']=3;
+			
+			for($i = 0; $i < count($arrLP); $i++)
+			{
+				if($action != 'add'){
+					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
+						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
+						if($parent == $arrLP[$i]['id']){
+							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
 						}
 					}
+				}
+				else{
+					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter'){
+						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
+						if($parent == $arrLP[$i]['id']){
+							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
+						}
+					}
+				}
+			}
+			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
+
+			foreach($arrHide as $key => $value){
+				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
+			}
+			$parent_select -> setSelected($s_selected_parent);
+			reset($arrLP);
+			
+			$arrHide=array();
+			
+			//POSITION
+			for($i = 0; $i < count($arrLP); $i++)
+			{
+				if($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id)
+				{
+					if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+						$s_selected_position=$arrLP[$i]['id'];
+					elseif($action == 'add')
+						$s_selected_position=$arrLP[$i]['id'];
 					
-					$return .= "\t\t" . '<tr>' . "\n";
+					$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title']));
+					
+				}
+			}
+			
+			$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
+
+			foreach($arrHide as $key => $value){
+				$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
+			}
+			$position -> setSelected($s_selected_position);
+			reset($arrLP);
+			
+			if($action != 'move'){
+				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
+				$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
+				
+				if(($extra_info == 'new' || $extra_info['item_type'] == TOOL_DOCUMENT || $_GET['edit'] == 'true'))
+				{
+					if($action == 'add' || $_GET['edit'] == 'true')
+					{
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+						$directory_select = &$form->addElement('select', 'dir', get_lang("Directory")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
+						
+						$sql_doc = "
+							SELECT *
+							FROM " . $tbl_doc . "
+							WHERE
+								filetype = 'folder'
+							ORDER BY path ASC";
+						
+						$result = api_sql_query($sql_doc, __FILE__, __LINE__);
+						
+						$directory_select->addOption(get_lang('root'),'/');
+						
+						while($row_doc = Database::fetch_array($result)){
+							$directory_select->addOption($row_doc['path'],$row_doc['path']);
+						}
+						
+					}
 					
-					$return .= "\t\t" . '</tr>' . "\n";
-				
-				$return .= "\t" . '</table>' . "\n";	
-				
-				if($action == 'move')
-				{
-					$return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
-					$return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+					if(isset($_POST['content']))
+						$content = stripslashes($_POST['content']);
+					elseif(is_array($extra_info)){
+						//If it's an html document or a text file
+						if(!$no_display_edit_textarea){
+							$content = $this->display_document($extra_info['path'], false, false);
+						}
+					}
+					elseif(is_numeric($extra_info))
+						$content = $this->display_document($extra_info, false, false);
+					else
+						$content = '';
+					
+					
+					if(!$no_display_edit_textarea){
+						$form->addElement('html_editor','content_lp',get_lang("Content")." :");
+						$defaults["content_lp"]=$content;
+					}
+					else{
+						$return = $this->display_document($extra_info['path'], false, true);
+						$form->addElement('html',$return);
+					}
+					
 				}
 				
-				if(is_numeric($extra_info))
+				elseif(is_numeric($extra_info))
 				{
-					$return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />' . "\n";
-				}
-				elseif(is_array($extra_info))
-				{
-					$return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />' . "\n";
+					$return = $this->display_document($extra_info, true, true, true);
+					$form->addElement('html',$return);
 				}
 				
-				$return .= "\t" . '<input name="type" type="hidden" value="'.TOOL_DOCUMENT.'" />' . "\n";
-				$return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
-				
-			$return .= '</form>' . "\n";
-		$return .= '</div>' . "\n";
+			}
+			
+			$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
+			
+			if($action == 'move')
+			{
+				$form->addElement('hidden', 'title', $item_title);
+				$form->addElement('hidden', 'description', $item_description);
+			}
+			if(is_numeric($extra_info))
+			{
+				$form->addElement('hidden', 'path', $extra_info);
+			}
+			elseif(is_array($extra_info))
+			{
+				$form->addElement('hidden', 'path', $extra_info['path']);
+			}
+			
+			$form->addElement('hidden', 'type', TOOL_DOCUMENT);
+			$form->addElement('hidden', 'post_time', time());
+			
+		$form->addElement('html','</div>');
 		
-		return $return;
+		$form->setDefaults($defaults);
+		
+		return $form->return_form();
 	}
 	
 	/**

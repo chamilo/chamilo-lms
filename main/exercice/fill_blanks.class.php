@@ -58,25 +58,56 @@ class FillBlanks extends Question {
 	 */
 	function createAnswersForm ($form) {
 		
+		
+		
+		$defaults = array();
+		
+		if(!empty($this->id))
+		{
+			$objAnswer = new answer($this->id);
+			$a_answer = explode('::', $objAnswer->selectAnswer(1));
+			$defaults['answer'] = $a_answer[0];
+			$a_weightings = explode(',',$a_answer[1]);			
+		}
+		else
+		{
+			$defaults['answer'] = get_lang('DefaultTextInBlanks');
+		}
+		
 		// javascript
 		echo '
 		<script type="text/javascript">
+		var firstTime = true;
 		function updateBlanks() {
 			field = document.getElementById("answer");
 			var answer = field.value;
 			var blanks = answer.match(/\[[^\]]*\]/g);
 			
 			var fields = "<div class=\"row\"><div class=\"label\">'.get_lang('Weighting').'</div><div class=\"formw\"><table>";
-			for(i=0 ; i<blanks.length ; i++){
-				if(document.getElementById("weighting["+i+"]"))
-					value = document.getElementById("weighting["+i+"]").value;
-				else
-					value = "1";
-				fields += "<tr><td>"+blanks[i]+"</td><td><input size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
-			
+			if(blanks!=null){
+				for(i=0 ; i<blanks.length ; i++){
+					if(document.getElementById("weighting["+i+"]"))
+						value = document.getElementById("weighting["+i+"]").value;
+					else
+						value = "1";
+					fields += "<tr><td>"+blanks[i]+"</td><td><input size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
+				
+				}
 			}
 			document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";
-			
+			if(firstTime){
+				firstTime = false;
+			';
+		
+		if(count($a_weightings)>0)
+		{	
+			foreach($a_weightings as $i=>$weighting)
+			{
+				echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
+				
+			}
+		}
+		echo '}
 		}
 		window.onload = updateBlanks;
 		</script>
@@ -89,17 +120,6 @@ class FillBlanks extends Question {
 		$form -> addRule ('answer',get_lang('GiveText'),'required');
 		$form -> addRule ('answer',get_lang('DefineBlanks'),'regex','/\[.*\]/');
 		
-		$defaults = array();
-		
-		if(!empty($this->id))
-		{
-			$objAnswer = new answer($this->id);
-			$defaults['answer'] = $objAnswer->selectAnswer(1);
-		}
-		else
-		{
-			$defaults['answer'] = get_lang('DefaultTextInBlanks');
-		}
 		
 		$form -> addElement('html','<div id="blanks_weighting"></div>');
 		

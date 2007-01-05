@@ -1113,7 +1113,7 @@ class Blog
 						   <td>';
 									$oFCKeditor = new FCKeditor('post_full_text') ;
 									$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-									$oFCKeditor->Height		= '400';
+									$oFCKeditor->Height		= '350';
 									$oFCKeditor->Width		= '98%';
 									$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
 									$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
@@ -1178,7 +1178,7 @@ class Blog
 					   <td>';
 								$oFCKeditor = new FCKeditor('post_full_text') ;
 								$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-								$oFCKeditor->Height		= '400';
+								$oFCKeditor->Height		= '350';
 								$oFCKeditor->Width		= '98%';
 								$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
 								$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";

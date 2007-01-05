@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 10560 2006-12-28 15:28:08Z elixir_inter $
+// $Id: html_editor.php 10595 2007-01-05 14:05:42Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -109,10 +109,10 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$fck_editor = new FCKeditor($name);
 		$fck_editor->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
 
-		//$fck_editor->Width = '990';
 		$fck_editor->Width = $fck_attribute['Width'] ? $fck_attribute['Width'] : '990';
 		$fck_editor->Height = $fck_attribute['Height'] ? $fck_attribute['Height'] : '400';
 		$fck_editor->Value = $this->getValue();
+		//We get the optionnals config parameters in $fck_attribute array
 		$fck_editor->Config = $fck_attribute['Config'] ? $fck_attribute['Config'] : array();
 		
 		
@@ -123,11 +123,12 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 		}
 		
-		
+		//Else, we get the current session language
 		elseif(isset($_SESSION["_user"]["language"])){
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
 		}
 		
+		//Else we get the default platform language
 		else{
 			$platform_language=api_get_setting("platformLanguage");
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='$platform_language'";
@@ -174,24 +175,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 
 		$result .=$fck_editor->CreateHtml();
 
-		/*
-		$result .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/fckeditor.js"></script>';
-		$result .= '<script type="text/javascript">';*/
-		//$result .= "\n/* <![CDATA[ */\n";
-		/*
-		$result .= 'var oFCKeditor = new FCKeditor( \''.$name.'\' ) ;';
-		$result .= 'oFCKeditor.BasePath = "'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/";';
-		$result .= 'oFCKeditor.Width = 650;';
-		$result .= 'oFCKeditor.Height = '. ($this->fullPage ? '500' : '300').';';
-		$result .= 'oFCKeditor.Config[ "FullPage" ] = '. ($this->fullPage ? 'true' : 'false').';';
-		$result .= 'oFCKeditor.Config[ "DefaultLanguage" ] = "'.$editor_lang.'" ;';
-		$result .= 'oFCKeditor.Value = "'.str_replace('"', '\"', str_replace(array ("\r\n", "\n", "\r", "/"), array (' ', ' ', ' ', '\/'), $this->getValue())).'" ;';
-		$result .= 'oFCKeditor.Create();';*/
-		//$result .= "\n/* ]]> */\n";
-		/*
-		$result .= '</script>';
-		$result .= '<noscript>'.parent :: toHTML().'</noscript>';
-		*/
+
 		$result .= '<small><a href="#" onclick="MyWindow=window.open('."'".api_get_path(WEB_CODE_PATH)."help/allowed_html_tags.php?fullpage=". ($this->fullPage ? '1' : '0')."','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=500,height=600,left=200,top=20'".'); return false;">'.get_lang('AllowedHTMLTags').'</a></small>';
 		return $result;
 	}

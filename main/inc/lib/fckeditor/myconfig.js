@@ -1,6 +1,3 @@
-//FCKConfig.SmileyWindowWidth		= 500 ;
-//FCKConfig.SmileyWindowHeight	= 500 ;
-//FCKConfig.ImageUpload = false ;
 FCKConfig.IMUploadPath = '';
 FCKConfig.FlashUploadPath = '' ;
 FCKConfig.AudioUploadPath = '' ;
@@ -36,7 +33,7 @@ FCKConfig.ToolbarSets["Announcements"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Full"] = [
-	['Templates','PasteWord','Link','-','ImageManager','Flash','Video','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
+	['Templates','PasteWord','Link','-','ImageManager','Flash','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Comment"] = [
@@ -49,6 +46,10 @@ FCKConfig.ToolbarSets["ForumLight"] = [
 
 FCKConfig.ToolbarSets["NewTest"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','Flash','MP3','OrderedList','UnorderedList','Table']
+] ;
+
+FCKConfig.ToolbarSets["Survey"] = [
+	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager']
 ] ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;

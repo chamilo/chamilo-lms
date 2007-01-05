@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 10557 2006-12-26 15:36:59Z elixir_inter $
+// $Id: create_document.php 10595 2007-01-05 14:05:42Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,7 +53,7 @@ include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $nameTools = get_lang('CreateDocument');
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
+$fck_attribute['Height'] = '350';
 $fck_attribute['ToolbarSet'] = 'Full';
 
 /*

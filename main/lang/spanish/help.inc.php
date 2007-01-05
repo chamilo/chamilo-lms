@@ -23,7 +23,7 @@ Por último, cada foro puede tener una descripción que puede consistir en la list
 Los foros de los grupos no deben crearse a través de la herramienta \'Foros\', sino mediante la herramienta \'Grupos\'; en esta última podrá decidir si los foros del grupo serán privados o públicos.</p>
 <p>
 <b>Uso pedagógico avanzado</b><p>Algunos profesores utilizan el foro para realizar correcciones.  Un estudiante publica un documento. El profesor lo corrige usando el botón marcador del editor HTML (marca con un color la corrección o los errores), de manera que otros estudiantes y profesores podrán beneficiarse de ellas.</p>";
-$langHDropbox = "Ayuda: Baúl de tareas";
+$langHDropbox = "Ayuda: Buzón";
 $langDropboxContent = "<p>Esta herramienta permite compartir una zona de archivo de ficheros con el resto de los miembros 
 
 del curso, no pudiendo ser accesible de forma anónima desde la página principal de la plataforma. 
@@ -33,9 +33,7 @@ Dentro del curso, no todos los miembros tendrán acceso a lo que otro haya coloca
 lo verán aquellos a los que se les ha enviado. En cierta manera recuerda el funcionamiento de las 
 
 utilidades P2P. 
-La estructura se asemeja a dos bandejas: una de entrada y otra de salida. El baúl de tareas 
-
-muestra en la parte superior los archivos que le han enviado (ARCHIVOS RECIBIDOS), mientras que 
+La estructura se asemeja a dos bandejas: una de entrada y otra de salida. El buzón muestra en la parte superior los archivos que le han enviado (ARCHIVOS RECIBIDOS), mientras que 
 
 en la parte inferior aparecen los archivos que envió a otros miembros de la actividad (ARCHIVOS 
 

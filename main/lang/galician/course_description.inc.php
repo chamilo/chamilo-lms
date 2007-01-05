@@ -13,4 +13,5 @@ $langAdd  = "engadir";
 $langValid  = "Validar";
 $langBackAndForget  = "Volver e descartar";
 $langOkSent = "A súa páxina enviouse ó servidor.<p>É accesible desde a <a href=../..//index.php>páxina principal</a> do seu curso";
+$Content = "Contido";
 ?>

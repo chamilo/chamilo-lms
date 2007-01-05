@@ -25,7 +25,6 @@ $dateTimeFormatLong = "%B %d, %Y at %I:%M %p";
 $timeNoSecFormat = "%I:%M %p";
 $langYes = "&#50696;";
 $langNo = "&#50500;&#45768;&#50724;";
-$langBack = "&#51060;&#51204;";
 $langNext = "&#45796;&#51020;";
 $langAllowed = "&#54728;&#50857;";
 $langDenied = "&#44144;&#48512;";

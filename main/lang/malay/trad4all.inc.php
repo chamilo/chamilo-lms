@@ -23,7 +23,6 @@ $dateTimeFormatLong = "Tarikh hari ini :%d %B %Y Masa:%I:%M %p";
 $timeNoSecFormat = "%I:%M %p";
 $langYes = "Ya";
 $langNo = "Tidak";
-$langBack = "Kembali";
 $langNext = "Seterusnya";
 $langAllowed = "Dibenarkan";
 $langDenied = "Tidak dibenarkan";

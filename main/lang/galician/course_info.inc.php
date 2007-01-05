@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$ModifInfo = "Modifica-las Características do curso";
+$ModifInfo = "Modificar a configuración do curso";
 $langModifDone = "As características foron modificadas";
 $langHome = "Volver á páxina principal";
 $langCode = "Código do curso";
@@ -92,4 +92,7 @@ $langDescription = "Descrición";
 $langCourseVisibilityClosed = "Totalmente pechado; o curso só é accesible para o administrador do curso.";
 $CourseVisibilityClosed = "Pechado -non hai acceso a este curso";
 $CourseVisibilityModified = "Modificado (axustes máis detallados especificados a través de roles-permisos do sistema)";
+$WorkEmailAlert = "Avisar por e-mail cando for enviado un traballo";
+$WorkEmailAlertActivate = "Activar o aviso por e-mail cando se envía un traballo";
+$WorkEmailAlertDeactivate = "Desactivar o aviso por e-mail cando se envía un traballo";
 ?>

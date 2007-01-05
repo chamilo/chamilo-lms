@@ -21,7 +21,6 @@ $dateTimeFormatLong = "%d - %m, %Y - %I:%M %p";
 $timeNoSecFormat = "%I:%M %p";
 $langYes = "Có";
 $langNo = "Không";
-$langBack = "Quay lại";
 $langNext = "Tiếp";
 $langAllowed = "Được phép";
 $langDenied = "Bị cấm";

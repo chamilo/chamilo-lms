@@ -457,8 +457,8 @@ $ShowEmailAddressesComment = "แสดงชื่อที่อยู่อีเมล";
 $langphone = "โทรศัพท์";
 $langActiveExtensions = "เปิดใช้งาน";
 $langVisioconf = "กรประชุมสัมมนาออนไลน์";
-$langServerStatistics = "สถิติของเครื่องแม่ข่ายบริการ";
+$ServerStatistics = "สถิติของเครื่องแม่ข่ายบริการ";
 $langNbCourses = "&#3619;&#3627;&#3633;&#3626;&#3585;&#3619;&#3632;&#3610;&#3623;&#3609;&#3623;&#3636;&#3594;&#3634;";
-$langDateStart = "เริ่มวันที่";
-$langDateEnd = "ถึงวันที่";
+$DateStart = "เริ่มวันที่";
+$DateEnd = "ถึงวันที่";
 ?>

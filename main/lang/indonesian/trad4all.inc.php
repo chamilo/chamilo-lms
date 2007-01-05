@@ -28,7 +28,6 @@ $dateTimeFormatLong = "%d %B, %Y pada %I:%M %p";
 $timeNoSecFormat = "%I:%M %p";
 $langYes = "Ya";
 $langNo = "Tidak";
-$langBack = "Kembali";
 $langNext = "Berikutnya";
 $langAllowed = "Diijinkan";
 $langDenied = "Terlarang";

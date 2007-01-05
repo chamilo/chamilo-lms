@@ -27,7 +27,6 @@ $dateTimeFormatLong = "%A, %d de %B del %Y a les %I:%M %p";
 $timeNoSecFormat = "%I:%M %p";
 $langYes = "Si";
 $langNo = "No";
-$langBack = "Enrera";
 $langNext = "Seguent";
 $langAllowed = "Permés";
 $langDenied = "Denegat";

@@ -28,7 +28,6 @@ $dateTimeFormatLong = "%d %B %Y Saat %I:%M %p";
 $timeNoSecFormat = "%I:%M %p";
 $langYes = "Evet";
 $langNo = "Hay&#305;r";
-$langBack = "Geri";
 $langNext = "Sonraki";
 $langAllowed = "EVET";
 $langDenied = "HAYIR";

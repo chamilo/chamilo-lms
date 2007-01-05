@@ -27,7 +27,6 @@ $dateTimeFormatLong = "%d.%m.%Y klo %H:%M";
 $timeNoSecFormat = "%H:%M";
 $langYes = "Kyllä";
 $langNo = "Ei";
-$langBack = "Takaisin";
 $langNext = "Seuraava";
 $langAllowed = "Sallittu";
 $langDenied = "Kielletty";

@@ -28,7 +28,6 @@ $dateTimeFormatLong = "%A %Y %B %d je la %H:%M";
 $timeNoSecFormat = "%H:%M";
 $langYes = "Jes";
 $langNo = "Ne";
-$langBack = "Ree";
 $langNext = "Venonta";
 $langAllowed = "Permesita";
 $langDenied = "Malpermesita";

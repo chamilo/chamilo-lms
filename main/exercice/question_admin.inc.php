@@ -1,4 +1,4 @@
-<? // $Id: question_admin.inc.php 10594 2007-01-05 13:54:24Z elixir_inter $
+<? // $Id: question_admin.inc.php 10597 2007-01-05 14:14:29Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -75,11 +75,6 @@ if(is_object($objQuestion))
 	}
 	div.row div.formw{
 		width: 85%;
-	}
-	[dir=ltr] div.row div.label,
-	[dir=rtl] div.row div.formw {
-		float: left;
-		text-align: left;
 	}
 	</style>
 	';

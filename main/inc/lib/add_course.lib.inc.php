@@ -341,13 +341,13 @@ function update_Db_course($courseDbName)
 	$TABLELPIVINTERACTION		= $courseDbName . "lp_iv_interaction";
 
 	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
-	$tbl_blogs					= $courseDbName . 'blogs';
-	$tbl_blogs_comments			= $courseDbName . 'blogs_comments';
-	$tbl_blogs_posts			= $courseDbName . 'blogs_posts';
-	$tbl_blogs_rating			= $courseDbName . 'blogs_rating';
-	$tbl_blogs_rel_user			= $courseDbName . 'blogs_rel_user';
-	$tbl_blogs_tasks			= $courseDbName . 'blogs_tasks';
-	$tbl_blogs_tasks_rel_user	= $courseDbName . 'blogs_tasks_rel_user';
+	$tbl_blogs					= $courseDbName . 'blog';
+	$tbl_blogs_comments			= $courseDbName . 'blog_comment';
+	$tbl_blogs_posts			= $courseDbName . 'blog_post';
+	$tbl_blogs_rating			= $courseDbName . 'blog_rating';
+	$tbl_blogs_rel_user			= $courseDbName . 'blog_rel_user';
+	$tbl_blogs_tasks			= $courseDbName . 'blog_task';
+	$tbl_blogs_tasks_rel_user	= $courseDbName . 'blog_task_rel_user';
 
 	//Smartblogs permissions (Kevin Van Den Haute :: kevin@develop-it.be)
 	$tbl_permission_group		= $courseDbName . 'permission_group';
@@ -1305,10 +1305,15 @@ api_sql_query($sql, __FILE__, __LINE__);
 		CREATE TABLE `".$TABLESETTING . "` (
 		id 			int unsigned NOT NULL auto_increment,
 		variable 	varchar(255) NOT NULL default '',
+		subkey		varchar(255) default NULL,
+		type 		varchar(255) default NULL,
+		category	varchar(255) default NULL,
 		value		varchar(255) NOT NULL default '',
-		tool_scope varchar(255) default '',
+		title 		varchar(255) NOT NULL default '',
+		comment 	varchar(255) default NULL,
+		subkeytext 	varchar(255) default NULL,
 		PRIMARY KEY (id)
-		)");
+ 		)");
 
 	return 0;
 };
@@ -1523,11 +1528,11 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		//we need to add the document properties too!
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,1)");
-		
+
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images','".get_lang('Images')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
-		
+
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/audio','".get_lang('Audio')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
@@ -1762,9 +1767,9 @@ function readPropertiesInArchive($archive, $isCompressed = TRUE)
 	printVar(dirname($archive), "Zip : ");
 	/*
 	string tempnam ( string dir, string prefix)
-	tempnam() cr� un fichier temporaire unique dans le dossier dir. Si le dossier n'existe pas, tempnam() va g��er un nom de fichier dans le dossier temporaire du syst�e.
-	Avant PHP 4.0.6, le comportement de tempnam() d�endait de l'OS sous-jacent. Sous Windows, la variable d'environnement TMP remplace le param�re dir; sous Linux, la variable d'environnement TMPDIR a la priorit� tandis que pour les OS en syst�e V R4, le param�re dir sera toujours utilis� si le dossier qu'il repr�ente existe. Consultez votre documentation pour plus de d�ails.
-	tempnam() retourne le nom du fichier temporaire, ou la cha�e NULL en cas d'�hec.
+	tempnam() cree un fichier temporaire unique dans le dossier dir. Si le dossier n'existe pas, tempnam() va generer un nom de fichier dans le dossier temporaire du systeme.
+	Avant PHP 4.0.6, le comportement de tempnam() dependait de l'OS sous-jacent. Sous Windows, la variable d'environnement TMP remplace le parametre dir; sous Linux, la variable d'environnement TMPDIR a la priorite tandis que pour les OS en systeme V R4, le parametre dir sera toujours utilise si le dossier qu'il represente existe. Consultez votre documentation pour plus de details.
+	tempnam() retourne le nom du fichier temporaire, ou la chaine NULL en cas d'echec.
 	*/
 	$zipFile = new pclZip($archive);
 	$tmpDirName = dirname($archive) . "/tmp".$uid.uniqid($uid);

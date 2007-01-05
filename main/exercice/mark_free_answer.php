@@ -100,8 +100,7 @@ if(!$is_courseTutor)
 	api_not_allowed();
 }
 
-$obj_question=new Question();
-$obj_question->read($my_qst);
+$obj_question = Question :: read($my_qst);
 
 $nameTools=get_lang('Exercice');
 

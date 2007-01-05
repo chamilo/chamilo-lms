@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 10234 2006-11-28 13:43:34Z develop-it $
+<?php // $Id: question.class.php 10594 2007-01-05 13:54:24Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -32,6 +32,17 @@
 
 if(!class_exists('Question')):
 
+// answer types
+define(UNIQUE_ANSWER,	1);
+define(MULTIPLE_ANSWER,	2);
+define(FILL_IN_BLANKS,	3);
+define(MATCHING,		4);
+define(FREE_ANSWER,     5);
+define(HOT_SPOT, 		6);
+define(HOT_SPOT_ORDER, 	7);
+
+
+
 /**
 	CLASS QUESTION
  *	
@@ -41,7 +52,7 @@ if(!class_exists('Question')):
  *	@author Patrick Cool, LaTeX support
  *	@package dokeos.exercise
  */
-class Question
+abstract class Question
 {
 	var $id;
 	var $question;
@@ -52,6 +63,16 @@ class Question
 	var $picture;
 
 	var $exerciseList;  // array with the list of exercises which this question is in
+	
+	// list
+	static $questionTypes = array(
+							UNIQUE_ANSWER => array('unique_answer.class.php' , 'UniqueAnswer'),
+							MULTIPLE_ANSWER => array('multiple_answer.class.php' , 'MultipleAnswer'),
+							FILL_IN_BLANKS => array('fill_blanks.class.php' , 'FillBlanks'),
+							MATCHING => array('matching.class.php' , 'Matching'),
+							FREE_ANSWER => array('freeanswer.class.php' , 'FreeAnswer'),
+							HOT_SPOT => array('hotspot.class.php' , 'HotSpot')
+							);
 
 	/**
 	 * constructor of the class
@@ -78,7 +99,7 @@ class Question
 	 * @param - integer $id - question ID
 	 * @return - boolean - true if question exists, otherwise false
 	 */
-	function read($id)
+	static function read($id)
 	{
 		global $_course;
 		
@@ -92,24 +113,25 @@ class Question
 		// if the question has been found
 		if($object=mysql_fetch_object($result))
 		{
-			$this->id=$id;
-			$this->question=$object->question;
-			$this->description=$object->description;
-			$this->weighting=$object->ponderation;
-			$this->position=$object->position;
-			$this->type=$object->type;
-			$this->picture=$object->picture;
+			$objQuestion = Question::getInstance($object->type);
+			$objQuestion->id=$id;
+			$objQuestion->question=$object->question;
+			$objQuestion->description=$object->description;
+			$objQuestion->weighting=$object->ponderation;
+			$objQuestion->position=$object->position;
+			$objQuestion->type=$object->type;
+			$objQuestion->picture=$object->picture;
 
-			$sql="SELECT exercice_id FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
+			$sql="SELECT exercice_id FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='".intval($id)."'";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 
 			// fills the array with the exercises which this question is in
 			while($object=mysql_fetch_object($result))
 			{
-				$this->exerciseList[]=$object->exercice_id;
+				$objQuestion->exerciseList[]=$object->exercice_id;
 			}
 
-			return true;
+			return $objQuestion;
 		}
 
 		// question not found
@@ -306,7 +328,6 @@ class Question
 			$Extension=$PictureName[sizeof($PictureName)-1];
 
 	  		$this->picture='quiz-'.$this->id.'.'.$Extension;
-
 	  		return move_uploaded_file($Picture,$picturePath.'/'.$this->picture)?true:false;
 		}
 
@@ -574,6 +595,7 @@ class Question
 			$this->exerciseList[]=$exerciseId;
 
 			$sql="INSERT INTO `$TBL_EXERCICE_QUESTION`(question_id,exercice_id) VALUES('$id','$exerciseId')";
+			
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 	}
@@ -675,7 +697,101 @@ class Question
 
 		return $id;
 	}
+	
+	/**
+	 * Returns an instance of the class corresponding to the type
+	 * @param integer $type the type of the question
+	 * @return an instance of a Question subclass (or of Questionc class by default)
+	 */
+	static function getInstance ($type) {
+		
+		list($file_name,$class_name) = self::$questionTypes[$type];
+
+		include_once ($file_name);
+		
+		
+		if(class_exists($class_name))
+		{
+			return new $class_name();
+		}
+		else
+		{
+			echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * Creates the form to create / edit a question
+	 * A subclass can redifine this function to add fields...
+	 * @param FormValidator $form the formvalidator instance (by reference)
+	 */
+	function createForm (&$form) {
+		
+		// question name
+		$form->addElement('text','questionName',get_lang('Question'),'size="60"');
+		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
+		
+		// question type
+		$answerType= intval($_REQUEST['answerType']);
+		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
+		
+		
+		// html editor
+		global $fck_attribute;
+		$fck_attribute = array();
+		$fck_attribute['Width'] = '100%';
+		$fck_attribute['Height'] = '150';
+		$fck_attribute['ToolbarSet'] = 'Small';
+		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
+		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
+		if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
+		
+		$form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false);
+		
+		// hidden values
+		$form->addElement('hidden','myid',$_REQUEST['myid']);	
+		
+		
+		// default values
+		$defaults = array();
+		$defaults['questionName'] = $this -> question;
+		$defaults['questionDescription'] = $this -> description;
+		$form -> setDefaults($defaults);
+	}
+	
+	/**
+	 * function which process the creation of answers
+	 * @param FormValidator $form the formvalidator instance
+	 * @param Exercise $objExercise the objExercise number to display
+	 */
+	function processCreation ($form, $objExercise) {
+		   
+		$this -> updateTitle($form->getSubmitValue('questionName'));
+	    $this -> updateDescription($form->getSubmitValue('questionDescription'));
+	    $this -> save($objExercise -> id);
+	    
+	    // modify the exercise
+	    $objExercise->addToList($this -> id);
+	    $objExercise->save();
+	    
+	}
+	
+	/**
+	 * abstract function which creates the form to create / edit the answers of the question
+	 * @param the formvalidator instance
+	 */
+	abstract function createAnswersForm ($form);
+	
+	/**
+	 * abstract function which process the creation of answers
+	 * @param the formvalidator instance 
+	 */
+	abstract function processAnswersCreation ($form);
 }
 
 endif;
+
+
 ?>

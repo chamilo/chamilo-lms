@@ -285,8 +285,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				$k++;
 				$choice=$exerciseResult[$questionId];
 				// creates a temporary Question object
-				$objQuestionTmp=new Question();
-				$objQuestionTmp->read($questionId);
+				$objQuestionTmp = Question::read($questionId);
 				$questionName=$objQuestionTmp->selectTitle();
 				$questionWeighting=$objQuestionTmp->selectWeighting();
 				$answerType=$objQuestionTmp->selectType();

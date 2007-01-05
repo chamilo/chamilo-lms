@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 10547 2006-12-22 15:03:14Z elixir_inter $
+<?php // $Id: exercice_submit.php 10594 2007-01-05 13:54:24Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -442,8 +442,7 @@ $i=0;
 foreach($questionList as $questionId)
 {
 	$i++;
-	$objQuestionTmp=new Question();
-	$objQuestionTmp->read($questionId);
+	$objQuestionTmp = Question :: read($questionId);
 	
 	// for sequential exercises
 	if($exerciseType == 2)
@@ -519,10 +518,7 @@ foreach($questionList as $questionId)
 			if(isset($exerciseResult[$questionId]))
 			{
 				// construction of the Question object
-				$objQuestionTmp=new Question();
-
-				// reads question informations
-				$objQuestionTmp->read($questionId);
+				$objQuestionTmp = Question::read($questionId);
 
 				$questionName=$objQuestionTmp->selectTitle();
 

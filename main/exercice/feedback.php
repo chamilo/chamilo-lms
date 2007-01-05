@@ -24,8 +24,7 @@ Display::display_header($nameTools,"Exercise");
 </h4>
 <?php
 	$id = $_REQUEST['question'];
-	$objQuestionTmp=new Question();
-	$objQuestionTmp->read($id);
+	$objQuestionTmp = Question::read($id);
 	echo "<tr><td><b>".get_lang('Question')." : </b>";
 	echo $objQuestionTmp->selectTitle();
 	echo "</td></tr>";

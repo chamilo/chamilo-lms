@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10547 2006-12-22 15:03:14Z elixir_inter $
+<?php // $Id: exercise_result.php 10594 2007-01-05 13:54:24Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -280,9 +280,8 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		// gets the student choice for this question
 		$choice=$exerciseResult[$questionId];
 		// creates a temporary Question object
-		$objQuestionTmp=new Question();
 		
-		$objQuestionTmp->read($questionId);
+		$objQuestionTmp = Question :: read($questionId);
 
 		$questionName=$objQuestionTmp->selectTitle();
 		$questionWeighting=$objQuestionTmp->selectWeighting();

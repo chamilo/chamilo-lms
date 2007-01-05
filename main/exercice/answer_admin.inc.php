@@ -1,4 +1,4 @@
-<?php // $Id: answer_admin.inc.php 10285 2006-12-04 09:52:39Z develop-it $
+<?php // $Id: answer_admin.inc.php 10594 2007-01-05 13:54:24Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,10 +37,15 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 {
 	exit();
 }
+if(!is_object($objQuestion))
+{
+	$objQuestion = Question :: read($_GET['modifyAnswers']);
+}
 
 $questionName=$objQuestion->selectTitle();
 $answerType=$objQuestion->selectType();
 $pictureName=$objQuestion->selectPicture();
+
 $debug = 0; // debug variable to get where we are
 
 $okPicture=empty($pictureName)?false:true;
@@ -65,9 +70,7 @@ if($modifyIn)
         $objExercise->addToList($questionId);
 
         // construction of the duplicated Question
-        $objQuestion=new Question();
-
-        $objQuestion->read($questionId);
+        $objQuestion = Question::read($questionId);
 
         // adds the exercise ID into the exercise list of the Question object
         $objQuestion->addToList($exerciseId);
@@ -609,6 +612,7 @@ if($modifyAnswers)
     // construction of the Answer object
     $objAnswer=new Answer($questionId);
     
+    
     api_session_register('objAnswer');
 
     if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
@@ -811,6 +815,7 @@ if($modifyAnswers)
         
 		if(!$nbrAnswers)
         {
+        	
             $nbrAnswers=$objAnswer->selectNbrAnswers();
 
             $reponse=Array();

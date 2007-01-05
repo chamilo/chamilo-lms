@@ -42,8 +42,7 @@
 	$userId        = $_user['user_id'];
 	$questionId    = $_GET['modifyAnswers'];
 	
-	$objQuestion   = new Question();
-	$objQuestion->read($questionId);
+	$objQuestion = Question :: read($questionId);
 	
 	$TBL_ANSWERS   = $_course['dbNameGlu'].'quiz_answer';
 

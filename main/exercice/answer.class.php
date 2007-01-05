@@ -1,4 +1,4 @@
-<?php // $Id: answer.class.php 10237 2006-11-28 14:54:07Z develop-it $
+<?php // $Id: answer.class.php 10594 2007-01-05 13:54:24Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -396,6 +396,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 				"`position` = '$position' " .
 				"WHERE `id` =$position " .
 				"AND `question_id` =$questionId";
+		
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
 
@@ -418,7 +419,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		$sql="INSERT INTO `$TBL_REPONSES`" .
 				"(id,question_id,answer,correct,comment," .
 				"ponderation,position,hotspot_coordinates,hotspot_type) VALUES";
-
+		
 		for($i=1;$i <= $this->new_nbrAnswers;$i++)
 		{
 			$answer=addslashes($this->new_answer[$i]);
@@ -434,6 +435,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		}
 		
 		$sql = substr($sql,0,-1);
+		
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		// moves $new_* arrays

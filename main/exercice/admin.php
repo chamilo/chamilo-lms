@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: admin.php 10594 2007-01-05 13:54:24Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -75,7 +75,6 @@ include('question.class.php');
 include('answer.class.php');
 
 
-
 // name of the language file that needs to be included 
 $language_file='exercice';
 
@@ -141,14 +140,7 @@ $objExercise = $_SESSION['objExercise'];
 $objQuestion = $_SESSION['objQuestion'];
 $objAnswer   = $_SESSION['objAnswer'];
 
-// answer types
-define(UNIQUE_ANSWER,	1);
-define(MULTIPLE_ANSWER,	2);
-define(FILL_IN_BLANKS,	3);
-define(MATCHING,		4);
-define(FREE_ANSWER,     5);
-define(HOT_SPOT, 		6);
-define(HOT_SPOT_ORDER, 	7);
+
 
 // allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);
@@ -214,20 +206,17 @@ if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers)
 {
 	if($editQuestion || $newQuestion)
 	{
-		// construction of the Question object
-		$objQuestion=new Question();
-
-		// saves the object into the session
-		api_session_register('objQuestion');
 
 		// reads question data
 		if($editQuestion)
 		{
 			// question not found
-			if(!$objQuestion->read($editQuestion))
+			if(!$objQuestion = Question::read($editQuestion))
 			{
 				die(get_lang('QuestionNotFound'));
 			}
+			// saves the object into the session
+			api_session_register('objQuestion');
 		}
 	}
 
@@ -236,11 +225,6 @@ if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers)
 	{
 		// gets the question ID
 		$questionId=$objQuestion->selectId();
-	}
-	// question not found
-	else
-	{
-		die(get_lang('QuestionNotFound'));
 	}
 }
 
@@ -432,7 +416,7 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 }
 // -->
 </script>";
-
+$interbreadcrumb[] = array ("url"=>"exercice.php", "name"=> get_lang('Exercices'));
 Display::display_header($nameTools,"Exercise");
 ?>
 
@@ -441,39 +425,20 @@ Display::display_header($nameTools,"Exercise");
 </h4>
 
 <?php
-if($newQuestion || $modifyQuestion)
+if($newQuestion || $editQuestion)
 {
 	// statement management
 	$type = $_REQUEST['answerType'];
-	?><input type="hidden" name="Type" value=" <?php echo $type; ?>" /> 
+	?><input type="hidden" name="Type" value="<?php echo $type; ?>" /> 
 	<?php
-	include("statement_admin.inc.php");
-}
-
-
-
-/*if($modifyAnswers && !$_REQUEST['setWeighting'])
-{ // this might be loaded after statement_admin (second step of answers writing)
-  // and $modifyAnswers is then set within statement_admin.inc.php
-	// answer management
-	include('answer_admin.inc.php');
-}
-*/
-
-if($modifyAnswers)
-{ // this might be loaded after statement_admin (second step of answers writing)
-  // and $modifyAnswers is then set within statement_admin.inc.php
-	// answer management
-	include('answer_admin.inc.php');
-}
-
-
-if($editQuestion || $usedInSeveralExercises)
-{
-	// question management
 	include('question_admin.inc.php');
 }
-if(!$newQuestion && !$modifyQuestion && !$editQuestion && !$modifyAnswers)
+if(isset($_GET['hotspotadmin']))
+{
+	include('hotspot_admin.inc.php');
+}
+
+if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin']))
 {
 	// exercise management
 	include('exercise_admin.inc.php');

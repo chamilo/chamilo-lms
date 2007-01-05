@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 10109 2006-11-22 15:20:01Z gmludo $
+<?php // $Id: question_list_admin.inc.php 10594 2007-01-05 13:54:24Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -56,11 +56,9 @@ if($moveDown)
 // deletes a question from the exercise (not from the data base)
 if($deleteQuestion)
 {
-	// construction of the Question object
-	$objQuestionTmp=new Question();
 
 	// if the question exists
-	if($objQuestionTmp->read($deleteQuestion))
+	if($objQuestionTmp = Question::read($deleteQuestion))
 	{
 		$objQuestionTmp->delete($exerciseId);
 
@@ -104,9 +102,8 @@ if($nbrQuestions)
 	$i=1;
 	foreach($questionList as $id)
 	{
-		$objQuestionTmp=new Question();
 
-		$objQuestionTmp->read($id);
+		$objQuestionTmp = Question :: read($id);
 		//showQuestion($id);
 
 ?> 

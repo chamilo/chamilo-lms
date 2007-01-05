@@ -1,4 +1,4 @@
-<?php // $Id: exercise.lib.php 10556 2006-12-26 15:35:00Z elixir_inter $
+<?php // $Id: exercise.lib.php 10594 2007-01-05 13:54:24Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,11 +39,8 @@
 require("../inc/lib/fckeditor/fckeditor.php") ;
 function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 {
-	// construction of the Question object
-	$objQuestionTmp=new Question();
-
 	// reads question informations
-	if(!$objQuestionTmp->read($questionId))
+	if(!$objQuestionTmp = Question::read($questionId))
 	{
 		// question not found
 		return false;

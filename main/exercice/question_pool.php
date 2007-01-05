@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: question_pool.php 10594 2007-01-05 13:54:24Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -77,10 +77,8 @@ if($is_allowedToEdit)
 	if($delete)
 	{
 		// construction of the Question object
-		$objQuestionTmp=new Question();
-
 		// if the question exists
-		if($objQuestionTmp->read($delete))
+		if($objQuestionTmp = Question::read($delete))
 		{
 			// deletes the question from all exercises
 			$objQuestionTmp->delete();
@@ -92,11 +90,8 @@ if($is_allowedToEdit)
 	// gets an existing question and copies it into a new exercise
 	elseif($recup && $fromExercise)
 	{
-		// construction of the Question object
-		$objQuestionTmp=new Question();
-
 		// if the question exists
-		if($objQuestionTmp->read($recup))
+		if($objQuestionTmp = Question :: read($recup))
 		{
 			// adds the exercise ID represented by $fromExercise into the list of exercises for the current question
 			$objQuestionTmp->addToList($fromExercise);

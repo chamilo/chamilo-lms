@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_survey.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: create_new_survey.php 10596 2007-01-05 14:09:55Z elixir_inter $
 */
 
 // name of the language file that needs to be included 
@@ -28,7 +28,6 @@ $language_file = 'survey';
 
 // including the global dokeos file
 require_once ('../inc/global.inc.php');
-
 // including additional libraries
 /** @todo check if these are all needed */
 /** @todo check if the starting / is needed. api_get_path probably ends with an / */
@@ -120,7 +119,7 @@ if($surveyid = $_REQUEST['surveyid'])
 		$availabletill = $_POST['end_fyear']."-".$_POST['end_fmonth']."-".$_POST['end_fday'];
 		$isshare = $_POST['isshare'];
 		$surveytemplate = $_POST['template'];
-		$surveyintroduction = $_POST['content'];
+		$surveyintroduction = $_POST['introduction'];
 	    $surveythanks = $_POST['thanks'];
 		$savailablefrom=mktime(0,0,0,$_POST['fmonth'],$_POST['fday'], $_POST['fyear']); 
 	    $savailabletill=mktime(0,0,0,$_POST['end_fmonth'],$_POST['end_fday'], $_POST['end_fyear']); 
@@ -321,7 +320,23 @@ if($surveyid = $_REQUEST['surveyid'])
 	<tr><td valign="top"><?php echo get_lang('SurveyIntroduction'); ?>&nbsp;</td>
 	<td>
 	<?php
-	   api_disp_html_area('content',$obj->intro,'300px');
+	   require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+		$oFCKeditor = new FCKeditor('introduction') ;
+		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+		$oFCKeditor->Height		= '300';
+		$oFCKeditor->Width		= '600';
+		$oFCKeditor->Value		= $obj->intro;
+		$oFCKeditor->Config		= Array("Survey");
+		
+		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+		$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+		$result_sql=api_sql_query($sql);
+		$isocode_language=mysql_result($result_sql,0,0);
+		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+		
+		$return =	$oFCKeditor->CreateHtml();
+		
+		echo $return;
 	?>
 	 <br>
 	 </td>
@@ -329,7 +344,21 @@ if($surveyid = $_REQUEST['surveyid'])
 	<tr><td valign="top"><?php echo get_lang('Thanks'); ?>&nbsp;</td>
 	<td>
 	<?php
-	   api_disp_html_area('thanks',$obj->surveythanks,'200px');
+	   $oFCKeditor = new FCKeditor('thanks') ;
+		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+		$oFCKeditor->Height		= '300';
+		$oFCKeditor->Width		= '600';
+		$oFCKeditor->Value		= $obj->surveythanks;
+		
+		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+		$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+		$result_sql=api_sql_query($sql);
+		$isocode_language=mysql_result($result_sql,0,0);
+		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+		
+		$return =	$oFCKeditor->CreateHtml();
+		
+		echo $return; 
 	?>
 	 <br>
 	 </td>
@@ -376,7 +405,7 @@ else
 		$availabletill = $_POST['end_fyear']."-".$_POST['end_fmonth']."-".$_POST['end_fday'];
 		$isshare = $_POST['isshare'];
 		$surveytemplate = $_POST['template'];
-		$surveyintroduction = $_POST['content'];
+		$surveyintroduction = $_POST['introduction'];
 		$surveythanks = $_POST['thanks'];
 		$savailablefrom=mktime(0,0,0,$_POST['fmonth'],$_POST['fday'], $_POST['fyear']); 
 	    $savailabletill=mktime(0,0,0,$_POST['end_fmonth'],$_POST['end_fday'], $_POST['end_fyear']); 
@@ -648,11 +677,53 @@ else
 	
 	<tr>
 		<td valign="top"><?php echo get_lang('SurveyIntroduction'); ?>&nbsp;</td>
-		<td><?php api_disp_html_area('content',$content); ?></td>
+		<td>
+		<?php 
+			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+			$oFCKeditor = new FCKeditor('introduction') ;
+			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+			$oFCKeditor->Height		= '300';
+			$oFCKeditor->Width		= '600';
+			$oFCKeditor->Value		= $surveyintroduction;
+			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+			$oFCKeditor->ToolbarSet = "Survey";
+			
+			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+			$result_sql=api_sql_query($sql);
+			$isocode_language=mysql_result($result_sql,0,0);
+			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+			
+			$return =	$oFCKeditor->CreateHtml();
+			
+			echo $return;
+		?>
+		</td>
 	 </tr>
 	 <tr>
 	 	<td valign="top"><?php echo get_lang('Thanks'); ?>&nbsp;</td>
-	 	<td><?php api_disp_html_area('thanks',$thanks); ?></td>
+	 	<td>
+	 	<?php
+	 	require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+			$oFCKeditor = new FCKeditor('thanks') ;
+			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+			$oFCKeditor->Height		= '300';
+			$oFCKeditor->Width		= '600';
+			$oFCKeditor->Value		= $surveythanks;
+			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+			$oFCKeditor->ToolbarSet = "Survey";
+			
+			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+			$result_sql=api_sql_query($sql);
+			$isocode_language=mysql_result($result_sql,0,0);
+			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+			
+			$return =	$oFCKeditor->CreateHtml();
+			
+			echo $return; 
+ 		?>
+ 		</td>
 	 </tr>
 	 </table>
 	 <tr>

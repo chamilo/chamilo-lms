@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_group.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: create_new_group.php 10596 2007-01-05 14:09:55Z elixir_inter $
 */
 
 /*
@@ -234,7 +234,24 @@ api_display_tool_title($tool_name);
 	   <tr><td valign="top"><?php echo get_lang('GroupIntroduction'); ?>&nbsp;</td>
         <td>
    <?php
-         api_disp_html_area('content',$content,'300px');
+          require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+		$oFCKeditor = new FCKeditor('content') ;
+		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+		$oFCKeditor->Height		= '300';
+		$oFCKeditor->Width		= '600';
+		$oFCKeditor->Value		= $content;
+		$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+		$oFCKeditor->ToolbarSet = "Survey";
+		
+		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+		$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+		$result_sql=api_sql_query($sql);
+		$isocode_language=mysql_result($result_sql,0,0);
+		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+		
+		$return =	$oFCKeditor->CreateHtml();
+		
+		echo $return;
    ?>
           <br>
         </td>

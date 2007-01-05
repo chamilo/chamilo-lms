@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: open.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: open.php 10596 2007-01-05 14:09:55Z elixir_inter $
 */
 
 // name of the language file that needs to be included 
@@ -195,11 +195,31 @@ align=center border=0>
   <TR class=white_bg>
     <TD height=30>Enter the question. </TD>
   </TR>
-  <TR class=form_bg>
-    <TD width=542 height=30><?php  api_disp_html_area('enterquestion','','200px');?><!-- <textarea name="enterquestion" id="enterquestion" cols="50" rows="6" class="text_field" style="width:100%;" ><?
-					if(isset($_POST['enterquestion']))
-						echo $_POST['enterquestion'];
-					?></textarea>--></TD></TR>
+  <tr class="form_bg"> 
+					<td width="542" height="30" colspan="2" >
+					<?php
+
+						require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+						$oFCKeditor = new FCKeditor('enterquestion') ;
+						$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+						$oFCKeditor->Height		= '300';
+						$oFCKeditor->Width		= '400';
+						$oFCKeditor->Value		= "";
+						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+						$oFCKeditor->ToolbarSet = "Survey";
+						
+						$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+						$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+						$result_sql=api_sql_query($sql);
+						$isocode_language=mysql_result($result_sql,0,0);
+						$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+						
+						$return =	$oFCKeditor->CreateHtml();
+		
+						echo $return;
+					?>
+					</td>
+				</tr>
  </TBODY></TABLE><BR>
 <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
   <TBODY>

@@ -121,13 +121,13 @@ define('TABLE_ROLE_PERMISSION', 'role_permissions');
 define('TABLE_ROLE_USER', 'role_user');
 define('TABLE_ROLE_GROUP', 'role_group');
 // blogs tables
-define('TABLE_BLOGS', 'blogs');
-define('TABLE_BLOGS_POSTS', 'blogs_posts');
-define('TABLE_BLOGS_COMMENTS', 'blogs_comments');
-define('TABLE_BLOGS_REL_USER', 'blogs_rel_user');
-define('TABLE_BLOGS_TASKS', 'blogs_tasks');
-define('TABLE_BLOGS_TASKS_REL_USER', 'blogs_tasks_rel_user');
-define('TABLE_BLOGS_RATING', 'blogs_rating');
+define('TABLE_BLOGS', 'blog');
+define('TABLE_BLOGS_POSTS', 'blog_post');
+define('TABLE_BLOGS_COMMENTS', 'blog_comment');
+define('TABLE_BLOGS_REL_USER', 'blog_rel_user');
+define('TABLE_BLOGS_TASKS', 'blog_task');
+define('TABLE_BLOGS_TASKS_REL_USER', 'blog_task_rel_user');
+define('TABLE_BLOGS_RATING', 'blog_rating');
 define('TABLE_BLOGS_TASKS_PERMISSIONS', 'permission_task');
 //end of Smartblogs
 // user information tables

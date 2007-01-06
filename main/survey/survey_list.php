@@ -19,8 +19,13 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: survey_list.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@author unknown
+* 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+* 	@version $Id: survey_list.php 10604 2007-01-06 17:03:13Z pcool $
+* 
+* 	@todo handle the search stuff
+* 	@todo The ansTarget column is not done
+* 	@todo try to understand the white, blue, ... template stuff. 
 */
 
 /*
@@ -62,114 +67,223 @@ $table_survey 	= Database :: get_course_table('survey');
 $table_group 	= Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
 $table_course 	= Database :: get_main_table(TABLE_MAIN_COURSE);
+$table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
+$user_info 		= Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 
-// $_GET and $_POST
-/** @todo replace $_REQUEST with $_GET or $_POST */
-$published 	= $_REQUEST['published'];
-$surveyid	= $_REQUEST['surveyid'];
-
-$cidReq = $_SESSION[_course][id];
-
-/** @todo not needed, use $_course array*/
-/*$sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
-$res = api_sql_query($sql,__FILE__,__LINE__);
-$obj=@mysql_fetch_object($res);
-*/
-$db_name = $_course['dbName'];
-
-
-if (isset ($_REQUEST['action']))
-{
-	 $cidReq=$_REQUEST['cidReq'];
-	 
-	switch ($_REQUEST['action'])
-	{		
-		case 'delete_surveys' :
-
-			$survey_codes = $_REQUEST['survey_delete'];
-			if (count($survey_codes) > 0)
-			{
-				foreach ($survey_codes as $index => $survey_code)
-				{
-					SurveyManager::delete_survey($survey_code,$table_survey,$table_group,$table_question);
-				}
-			}
-			break;
-	}
-	
-   if (isset($_POST['newsurvey']))
-      {
-	    header("Location:survey.php");
-	    exit;
-      }
-}
+// language variables
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 {
-	$db_name = $_GET['db_name'];
-	$sql = "SELECT * FROM $db_name.survey";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$titles = array ();
-	while ($title = mysql_fetch_array($res, MYSQL_ASSOC))
-	{
-		$titles[] = $title;
-	}
 	$tool_name = get_lang('SearchASurvey');
-	Display :: display_header($tool_name);
-	api_display_tool_title($tool_name);
-?>
-	<form method="get" action="survey_list.php">
-	<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">
-	<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
-	<table>
-	<tr>
-	<td>
-	<?php echo get_lang('Title'); ?>
-	</td>
-	<td>
-	<input type="text" name="keyword_title"/>
-	</td>
-	</tr>
-	<tr>
-	<td>
-	<?php echo get_lang('Code'); ?>
-	</td>
-	<td>
-	<input type="text" name="keyword_code"/>
-	</td>
-	</tr>	
-	<tr>
-	<td>
-	<?php echo get_lang('Language'); ?>
-	</td>
-	<td>
-	<select name="keyword_language">
-	<option value="%"><?php echo get_lang('All') ?></option>
-	<?php
+}
+else
+{
+	$tool_name = get_lang('Survey');
+}
+
+// Header
+Display :: display_header($tool_name);
+//api_display_tool_title($tool_name);
+
+// Action handling: searching
+if (isset ($_GET['search']) AND $_GET['search'] == 'advanced')
+{
+	display_survey_search_form();
+}
+// Action handling: deleting a survey
+if (isset($_GET['action']) AND $_GET['action'] == 'delete' AND isset($_GET['survey_id']) AND is_numeric($_GET['survey_id']))
+{
+	$return = SurveyManager::delete_survey($_GET['survey_id']);
+	if ($return)
+	{
+		Display :: display_confirmation_message(get_lang('SurveyDeleted'));	
+	}
+	else 
+	{
+		Display :: display_error_message(get_lang('ErrorOccurred'));
+	}
+}
+
+// Action handling: performing the same action on multiple surveys
+if ($_POST['action'])
+{
+	if (is_array($_POST['id']))
+	{
+		foreach ($_POST['id'] as $key=>$value) 
+		{
+			SurveyManager::delete_survey($value);
+		}
+		Display :: display_confirmation_message(get_lang('SurveyDeleted'));	
+	}
+	else 
+	{
+		Display :: display_error_message(get_lang('NoSurveysSelected'));
+	}
+}
+
+
+// Action links
+echo '<a href="survey.php">'.get_lang('CreateSurvey').'</a> | ';
+echo '<a href="'.$_SERVER['PHP_SELF'].'?search=advanced">'.get_lang('Search').'</a>';
+
+
+// Main content
+display_survey_list();
+
+// Footer
+Display :: display_footer();
+
+
+
+/**
+ * This function displays the form for searching a survey
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @return html code
+ * 
+ * @todo use quickforms
+ */
+function display_survey_search_form()
+{
+	echo '<form method="get" action="survey_list.php?search=advanced">';
+	echo '<table>
+			<tr>
+				<td>'.get_lang('Title').'</td>
+				<td><input type="text" name="keyword_title"/></td>
+			</tr>
+			<tr>
+				<td>'.get_lang('Code').'</td>
+				<td><input type="text" name="keyword_code"/></td>
+			</tr>
+			<tr>
+				<td>'.get_lang('Language').'</td>
+				<td>
+					<select name="keyword_language"><option value="%">'.get_lang('All').'</option>';
 	$languages = api_get_languages();
 	foreach ($languages['name'] as $index => $name)
 	{
 		echo '<option value="'.$languages['folder'][$index].'">'.$name.'</option>';
 	}
-?>
-	</select>
-	</td>
-	</tr>	
-	<tr>
-	<td>
-	</td>
-	<td>
-	<input type="submit" value="<?php echo get_lang('Ok'); ?>"/>
-	</td>
-	</table>
-	</form>
-	<?php
-	}
-else
+	echo '			</select>
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td><input type="submit" name="do_search" value="'.get_lang('Ok').'"/></td>
+			</tr>
+		</table>
+	</form>';
+}
+
+/**
+ * This function displays the sortable table with all the surveys
+ *
+ * @return html code
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version January 2007
+ */
+function display_survey_list()
 {
-	$tool_name = get_lang('Survey');
-	Display :: display_header($tool_name);
-	api_display_tool_title($tool_name);
-	if(isset($published))
+	// Create a sortable table with survey-data
+	$table = new SortableTable('surveys', 'get_number_of_surveys', 'get_survey_data',2);
+	$table->set_additional_parameters($parameters);
+	$table->set_header(0, '', false);
+	$table->set_header(1, get_lang('SurveyName'));
+	$table->set_header(2, get_lang('SurveyCode'));
+	$table->set_header(3, get_lang('Author'));
+	$table->set_header(4, get_lang('Language'));
+	$table->set_header(5, get_lang('AvailableFrom'));
+	$table->set_header(6, get_lang('AvailableUntill'));
+	$table->set_header(7, get_lang('AnsTarget'));
+	$table->set_header(8, get_lang('Modify'), false);
+	$table->set_column_filter(8, 'modify_filter');
+	$table->set_form_actions(array ('delete' => get_lang('DeleteSurvey')));
+	$table->display();
+	
+}
+
+/**
+ * This function calculates the total number of surveys
+ * 
+ * @return integer
+ * @todo take the search restriction into account
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version January 2007
+ */
+function get_number_of_surveys()
+{
+	global $table_survey; 
+	
+	$sql = "SELECT count(survey_id) AS total_number_of_items FROM ".$table_survey;
+	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$obj = mysql_fetch_object($res);
+	return $obj->total_number_of_items;
+	
+}
+
+/**
+ * This function gets all the survey data that is to be displayed in the sortable table
+ *
+ * @param unknown_type $from
+ * @param unknown_type $number_of_items
+ * @param unknown_type $column
+ * @param unknown_type $direction
+ * @return unknown
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version January 2007
+ */
+function get_survey_data($from, $number_of_items, $column, $direction)
+{
+	global $table_survey;
+	global $table_user;
+	
+	$sql = "SELECT  
+				survey.survey_id							AS col0,
+                survey.title								AS col1,
+				survey.code									AS col2,
+                CONCAT(user.firstname, ' ', user.lastname)	AS col3,
+                survey.lang									AS col4,
+				survey.avail_from							AS col5,
+                survey.avail_till							AS col6, 
+                ''				AS col7,
+                survey.survey_id							AS col8
+             FROM $table_survey survey, $table_user user
+             WHERE survey.author = user.user_id";
+	$sql .= " ORDER BY col$column $direction ";
+	$sql .= " LIMIT $from,$number_of_items";
+	
+	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$surveys = array ();
+	while ($survey = mysql_fetch_row($res))
+	{
+		$surveys[] = $survey;
+	}
+	return $surveys;	
+}
+
+
+/**
+ * This function changes the modify column of the sortable table
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version January 2007
+ */
+function modify_filter($survey_id)
+{
+	$return = '<a href="survey_edit.php?survey_id='.$survey_id.'">'.Display::return_icon('edit.gif').'</a>';
+	$return .= '<a href="survey_list.php?action=delete&amp;survey_id='.$survey_id.'">'.Display::return_icon('delete.gif').'</a>';
+	$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif').'</a>';
+	$return .= '<a href="survey_white.php?survey_id='.$survey_id.'">'.Display::return_icon('preview.gif').'</a>';
+	$return .= '<a href="../announcements/announcements.php?action=add&amp;publish_survey='.$survey_id.'">'.Display::return_icon('survey_publish.gif').'</a>';
+	$return .= '<a href="reporting.php?action=reporting&amp;surveyid='.$survey_id.'">'.Display::return_icon('surveyreporting.gif').'</a>';
+	return $return; 
+}
+
+
+
+
+
+/*	if(isset($published))
 	{
 	$sname = surveymanager::pick_surveyname($surveyid);
 	$error_message = get_lang('YourSurveyHasBeenPublished');
@@ -179,16 +293,6 @@ else
 	{
 		CourseManager :: delete_course($_GET['delete_course']);
 	}
-?>
-	<form method="get" action="survey_list.php?cidReq=<?php echo $cidReq; ?>">
-	<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">
-	<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
-	<input type="text" name="keyword" value="<?php echo $_GET['keyword']; ?>"/>
-	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
-	<a href="survey_list.php?cidReq=<?php echo $cidReq; ?>&search=advanced&db_name=<?php echo $db_name; ?>"><?php echo get_lang('AdvancedSearch'); ?></a>
-	</form>
-<?php
-	$table_survey = Database :: get_course_table('survey');
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = addslashes($_GET['keyword']);
@@ -222,7 +326,7 @@ else
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if (mysql_num_rows($res) > 0)
 	{
-		$user_info = Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+		
 		$courses = array ();
 		while ($obj = mysql_fetch_object($res))
 		{
@@ -250,11 +354,6 @@ else
 			$res_attempt=api_sql_query($sqlAttempt);
 			$attempted=mysql_num_rows($res_attempt);
 			
-			/*while($object=mysql_fetch_object($res_attempt))
-			{
-				if($object->access=='1' && $object->sid==$obj->survey_id)
-					$attempted++;
-			}*/
 			if($sent=='0')
 			{$ratio=$attempted."/".$sent." "."(Not Published)";}
 			else
@@ -305,58 +404,5 @@ else
 		}
 	}
 }
-if(!isset ($_GET['search']))
-{
-?>
-<form action="survey.php?cidReq=<?php echo $_SESSION[_course][id]; ?>" method="post">
-<input type="submit" name="newsurvey" value="<?php echo get_lang('CreateSurvey'); ?>">
-<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">
-<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
-</form>
-<?php 
-}
-/*
-==============================================================================
-		FOOTER 
-==============================================================================
 */
-Display :: display_footer();
 ?>
-<script language="javascript">
-function validate(form)
-{
-	var count = 0;
-	if(typeof eval("document."+form+"['survey_delete[]'].length")=="undefined")
-	{
-		if(eval("document."+form+"['survey_delete[]'].checked"))
-		{
-			count=1;
-		}
-		else
-		{
-			count=0;
-		}
-	}
-	else
-	for(i=0;i<eval("document."+form+"['survey_delete[]'].length");i++)
-	{
-		var box = (eval("document."+form+"['survey_delete[]']["+i+"]"));
-		if (box.checked == true) 
-		{
-			count++;
-		}
-	}
-	if(count<1)
-	{
-			alert("Please Select at least one Survey for deletion");
-			return false;
-	}
-	else
-	{
-		if(!confirm("Please Confirm Your Choice"))
-			return false;
-		else
-			return true;
-	}
-}
-</script>

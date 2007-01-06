@@ -1,4 +1,4 @@
-<?
+<?php 
 /*
     DOKEOS - elearning and course management software
 
@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: exp.php 10223 2006-11-27 14:45:59Z pcool $
+* 	@version $Id: exp.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 $filename = 'account_history_'.date('mdY').'.csv';

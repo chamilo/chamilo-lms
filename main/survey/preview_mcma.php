@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: preview_mcma.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: preview_mcma.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 /*
@@ -109,17 +109,17 @@ Display::display_header($tool_name);
   <td><?php echo get_lang('Question'); ?></td>
   </tr>
 <tr>
-<td><textarea  cols="50" rows="6" name="questions"> <?echo $enterquestion;?></textarea></td>
+<td><textarea  cols="50" rows="6" name="questions"> <?php echo $enterquestion;?></textarea></td>
 </tr>
 <tr>
   <td></br><?php echo get_lang('Answer'); ?></td>
   </tr>
   <tr>
-  <?
+  <?php
 	for($i=1;$i<=10;$i++)
 	{	
-		?><tr><td><textarea name="yes" cols="50" rows="3"><?echo $mutlichkboxtext[$i];?></textarea></td></tr>
-<?		
+		?><tr><td><textarea name="yes" cols="50" rows="3"><?php echo $mutlichkboxtext[$i];?></textarea></td></tr>
+<?php		
 	}  
   ?>
 <td></br><input type="button" name="back" value="<?php  echo get_lang('Back'); ?>" onClick="javascript:history.go(-1);"></td>

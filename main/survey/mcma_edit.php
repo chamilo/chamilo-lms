@@ -1,4 +1,4 @@
-<?
+<?php 
 /*
     DOKEOS - elearning and course management software
 
@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcma_edit.php 10596 2007-01-05 14:09:55Z elixir_inter $
+* 	@version $Id: mcma_edit.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -161,10 +161,10 @@ if( isset($error_message) )
 	  <td valign="top"><strong><?php echo get_lang('SelectDisplayType'); ?></strong>&nbsp;</td>
 	  </tr>
 	  <tr><td>
-         <input type="radio" name="alignment" value="horizontal" <?if($rs->alignment=='horizontal' || $_POST['alignment']=='horizontal'){?>checked<?}?>>Horizontal</td>
+         <input type="radio" name="alignment" value="horizontal" <?php if($rs->alignment=='horizontal' || $_POST['alignment']=='horizontal'){?>checked<?php }?>>Horizontal</td>
       </tr>
 	  <tr><td>
-		 <input type="radio" name="alignment" value="vertical" <?if($rs->alignment=='vertical' || $_POST['alignment']=='vertical'){?>checked<?}?>>Vertical</td>
+		 <input type="radio" name="alignment" value="vertical" <?php if($rs->alignment=='vertical' || $_POST['alignment']=='vertical'){?>checked<?php }?>>Vertical</td>
 		 </tr>
 
 </td></tr>
@@ -360,33 +360,34 @@ if( isset($error_message) )
 					</td>
 					<td width="30" align="center" class="form_text">&nbsp; 
              		</td>
-<?					if($i>$start)
+<?php 
+					if($i>$start)
 					{
 ?>
 					<td width="30" align="center" class="form_text1"> 
 						<input type="image" src="../img/up.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?echo "up".$i;?>" style="cursor:hand"> 
 					</td>
-<?					}
+<?php 				}
 					else
 					{
 ?>						<td width="30" align="center" class="form_text1"> 
 						</td>
-<?					}
+<?php 				}
 					$sn++;
 ?>
 
-<?					if($i<$end)
+<?php 				if($i<$end)
 					{
 ?>
 					<td width="30" align="center" class="form_text"> 
 						<input type="image" src="../img/down.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?echo "down".$i;?>" style="cursor:hand"> 
 					</td>
-<?					}
+<?php 				}
 					else
 					{
 ?>						<td width="30" align="center" class="form_text1"> 
 						</td>
-<?					}
+<?php 				}
 ?>
 					<td width="30" align="center" class="form_text">
 
@@ -394,7 +395,7 @@ if( isset($error_message) )
 					
 					<input type="image" src="../img/delete.gif" width="24" height="24" border="0" style="cursor:hand" name="<?php echo "id".$i;?>" value="<?php echo $end; ?>" onclick="this.form.submit();">					
 			</tr>
-<?		}	
+<?php 	}	
 	}
 	
 ?>   
@@ -428,11 +429,11 @@ if( isset($error_message) )
 						
 			<input type="HIDDEN" name="end1" value="<?php echo $end; ?>">
 
-
-<?			if(isset($_POST['add_question']))
+<?php 
+			if(isset($_POST['add_question']))
 			{
-?>				<input type="hidden" name="add_question" value="<?php echo $_POST['add_question'];?>" >
-<?			}
+				echo '<input type="hidden" name="add_question" value="'.$_POST['add_question'].'" />';
+			}
 			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);
 			$obj=mysql_fetch_object($res);

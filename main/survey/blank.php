@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: blank.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: blank.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -69,7 +69,7 @@ Display :: display_header();
 
 <table width="707" border="0" cellspacing="0" cellpadding="0">
 	<tr>
-    <?
+    <?php 
 		switch ($qtype)
 		{
 			/** @todo switch statement with hard coded language string => won't work in a language that is not English */
@@ -79,14 +79,14 @@ Display :: display_header();
 				<td width="100%" bgcolor="F6F5F5"><p><strong><?php echo get_lang('Question'); ?>: </strong><br />
 	            <?php echo html_entity_decode($ques);?><br />
 	            <strong><?php echo get_lang('Answers'); ?>:</strong>><br />
-				<textarea cols="50" rows="3" disabled='true'><?echo $answers[0];?></textarea>
+				<textarea cols="50" rows="3" disabled='true'><?php echo $answers[0];?></textarea>
 	            <input name="radiobutton" type="radio" value="radiobutton">
-				<textarea cols="50" rows="3" disabled='true'><?echo $answers[1];?></textarea>
+				<textarea cols="50" rows="3" disabled='true'><?php echo $answers[1];?></textarea>
 	            <input name="radiobutton" type="radio" value="radiobutton">
 				</td>
 				
 				<td width="10" height="161" bgcolor="F6F5F5">&nbsp;</td>
-				<?
+				<?php 
 				break;
 			}
 			
@@ -98,7 +98,7 @@ Display :: display_header();
 	            <?php echo $ques;?><br />
 				<br />
 				<strong><?php echo get_lang('Answers'); ?>: </strong><br />
-				<?
+				<?php 
 				$i=0;
 				for($p=1;$p<$count;$i++,$p++)
 				{
@@ -106,12 +106,12 @@ Display :: display_header();
 					<textarea cols="50" rows="3" disabled="true"><?php echo $answers[$i]; ?></textarea>
 					<input type="checkbox" name="checkbox" value="checkbox">
 					<br />
-				<?
+				<?php 
 				}
 				?>
 				</td>
 	          	<td width="8" height="161" bgcolor="F6F5F5">&nbsp;</td> 
-	          	<?
+	          	<?php 
 				break;
 			}
 			
@@ -123,7 +123,7 @@ Display :: display_header();
 	                <?php echo $ques;?><br />
 	                <br />
 	                <strong><?php echo get_lang('Answers'); ?>:</strong><br />
-					<?
+					<?php 
 					$i=0;
 					for($p=1;$p<$count;$i++,$p++)
 					{
@@ -131,12 +131,12 @@ Display :: display_header();
 	              		<textarea cols="50" rows="3" disabled='true'><?php echo $answers[$i]; ?></textarea>
 	              		<input name="radiobutton" type="radio" value="radiobutton">
 	              		<br />
-	              	<?
+	              	<?php 
 					}
 					?>
 	          		</td>
 	          		<td width="8" height="161" bgcolor="F6F5F5">&nbsp;</td>
-	          		<?
+	          		<?php 
 					break;
 			}
 			
@@ -150,7 +150,7 @@ Display :: display_header();
 	            <strong><?php echo get_lang('Answers'); ?>:</strong><br />
 	            <textarea  style="width: 100%" name="defaultext" rows=3 cols=60></textarea>
 	          	</td>
-	          	<?
+	          	<?php 
 				break;
 			}
 			
@@ -162,7 +162,7 @@ Display :: display_header();
 				<?php echo $ques;?><br />
 	            <br />
 	            <strong><?php echo get_lang('Answers'); ?>: </strong><br />
-				<?
+				<?php 
 				$i=0;
 				for($p=1;$p<$count;$i++,$p++)
 				{
@@ -182,7 +182,7 @@ Display :: display_header();
 		                <option value="<?php echo $i; ?>">10</option>
 					</select>
 					<br />
-		            <?
+		            <?php 
 				}
 	          	echo '</td>';
 				break;		

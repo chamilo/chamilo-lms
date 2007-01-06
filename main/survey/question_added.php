@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_added.php 10559 2006-12-27 10:52:50Z pcool $
+* 	@version $Id: question_added.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 /*
@@ -145,7 +145,7 @@ if($qdeleted)
 	<input type="submit" name="addanotherg" value="<?php echo get_lang('AddAnotherGroup');?>">
 	<input type="submit" name="finish" value="<?php echo get_lang('FinishSurvey');?>">
 </form>	
-<?
+<?php
 /*
 ==============================================================================
 		FOOTER 

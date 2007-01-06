@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_all_courses.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: survey_all_courses.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -180,7 +180,7 @@ function displayTemplate(url) {
 		{$flag=1;}
 		?>		
 		</form>
-<?	
+<?php	
     }
 	else
 	{
@@ -192,7 +192,7 @@ function displayTemplate(url) {
 	<form action="survey.php?cidReq=<?php echo $cidReq; ?>&db_name=<?php echo $db_name; ?>" method="post">
     <input type="submit" name="back1" value="<?php echo get_lang('Back'); ?>">
     </form>
-<?
+<?php
 /*
 -----------------------------------------------------------
 	Footer

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_from_existing_survey.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: create_from_existing_survey.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 /*
@@ -170,7 +170,7 @@ if( isset($error_message) )
 		</tr>
 		</table>
 		</form>
-<?	
+<?php 	
     }
 	else
 	{

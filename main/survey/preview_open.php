@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: preview_open.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: preview_open.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 /*
@@ -106,13 +106,13 @@ Display::display_header($tool_name);
   <td><?php echo get_lang('Question'); ?></td>
   </tr>
 <tr>
-<td><textarea  cols="50" rows="6" name="questions"> <?echo $enterquestion;?></textarea></td>
+<td><textarea  cols="50" rows="6" name="questions"> <?php echo $enterquestion;?></textarea></td>
 </tr>
 <tr>
   <td></br><?php echo get_lang('Answer'); ?></td>
   </tr>
   <tr>
-<td><textarea  cols="50" rows="3" name="questions"> <?echo $enterquestion;?></textarea></td>
+<td><textarea  cols="50" rows="3" name="questions"> <?php echo $enterquestion;?></textarea></td>
 </tr>
   <td></br><input type="submit" value="<?php  echo get_lang('Back'); ?> "></td>
  <!-- <td></br><input type="submit" value="<?php  echo get_lang('Import'); ?>"></td>-->

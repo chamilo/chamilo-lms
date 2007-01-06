@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: preview_yesno.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: preview_yesno.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 /*
@@ -129,17 +129,17 @@ $ques_type = $_GET['qtype'];
   <td><?php echo get_lang('Question'); ?></td>
   </tr>
 <tr>
-<td><textarea  cols="50" rows="6" name="questions"> <?echo $enterquestion;?></textarea></td>
+<td><textarea  cols="50" rows="6" name="questions"> <?php echo $enterquestion;?></textarea></td>
 </tr>
 <tr>
   <td></br><?php echo get_lang('Answer'); ?></td>
   </tr>
    <tr>
-  <?
+  <?php
 	for($i=1;$i<=2;$i++)
 	{	
-		?><tr><td><textarea cols="50" rows="3" name="yes"><?echo $mutlichkboxtext[$i];?></textarea></td></tr>
-<?		
+		?><tr><td><textarea cols="50" rows="3" name="yes"><?php echo $mutlichkboxtext[$i];?></textarea></td></tr>
+<?php		
 	}  
   ?>
 <tr>

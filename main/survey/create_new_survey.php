@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_survey.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: create_new_survey.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -294,7 +294,7 @@ if($surveyid = $_REQUEST['surveyid'])
 	    <!-- month: january ->
 	december -->
 	<select name="end_fmonth">
-		<?
+		<?php 
 			for($i=1;$i<=count($MonthsLong);$i++)
 			{
 				if($i<=9)

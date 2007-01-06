@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: attach_existingsurvey.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: attach_existingsurvey.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 /*
@@ -255,7 +255,7 @@ window.open(inf+".htm", 'popup', 'width=600,height=600,toolbar = no, status = no
 <!-- month: january ->
 december -->
 <select name="fmonth">
-<?
+<?php 
 		for($i=1;$i<count($MonthsLong);$i++)
 		{
 			if($i<=9)
@@ -300,7 +300,7 @@ december -->
     <!-- month: january ->
 december -->
 <select name="end_fmonth">
-<?
+<?php 
 		for($i=1;$i<count($MonthsLong);$i++)
 		{
 			if($i<=9)

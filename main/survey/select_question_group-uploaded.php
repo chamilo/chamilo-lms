@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question_group-uploaded.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: select_question_group-uploaded.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 
@@ -268,14 +268,14 @@ api_display_tool_title($tool_name);
 if($flag==1)
 {
 ?>
-<div align="center"><strong><font color="#FF0000"><?echo get_lang('AlreadyImported');?></font></strong></div>
-<?
+<div align="center"><strong><font color="#FF0000"><?php echo get_lang('AlreadyImported');?></font></strong></div>
+<?php
 }
 if(isset($messege) && $messege )
 {
 ?>
 <div align="center"><strong><font color="#FF0000">Already Imported !</font></strong></div>
-<?
+<?php
 }
 ?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
@@ -359,7 +359,7 @@ $result=api_sql_query($query);*/
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname;?>">
 <input type="hidden" name="page" value="<?php echo $page; ?>">
-<?
+<?php
 if(!empty($courses))
 {
 	/** @todo remove $curr_dbname from the parameters. This is not used. */
@@ -371,15 +371,15 @@ if(!empty($courses))
 	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
 	<input type="submit" name="addanotherg" value="<?php echo get_lang('AddNewGroup');?>">
 	<input type="submit" name="finish" value="<?php echo get_lang('FinishSurvey');?>">
-<?
+<?php
 }
 else
 {
 ?>
-    <input type="submit" name="back" value="<?echo get_lang('Back');?>">
-	<input type="submit" name="addanother" value="<?echo get_lang('AddAnotherQuestion');?>">
-	<input type="submit" name="addanotherg" value="<?echo get_lang('AddNewGroup');?>">
-<?
+    <input type="submit" name="back" value="<?php echo get_lang('Back');?>">
+	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
+	<input type="submit" name="addanotherg" value="<?php echo get_lang('AddNewGroup');?>">
+<?phps
 }	
 ?>
 </form>

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: numbered.php 10596 2007-01-05 14:09:55Z elixir_inter $
+* 	@version $Id: numbered.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -186,8 +186,7 @@ if ($_POST['action'] == 'addquestion')
 		}
 	}
 }
-?>
-<?
+
 $tool = get_lang('AddAnotherQuestion');
 Display::display_header($tool);
 select_question_type($add_question12,$groupid,$surveyid,$cidReq,$curr_dbname);
@@ -481,33 +480,33 @@ function checkLength(form){
 					<td width="10" class="form_text"><img src="../img/blank.gif" width="10" height="8">
 					</td>
 					
-<?					if($i>$start)
+<?php				if($i>$start)
 					{
 ?>
 					<td width="30" align="center" class="form_text1"> 
-						<input type="image" src="../img/up.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?echo "up".$i;?>" style="cursor:hand"> 
+						<input type="image" src="../img/up.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?php echo "up".$i;?>" style="cursor:hand"> 
 					</td>
-<?					}
+<?php				}
 					else
 					{
 ?>						<td width="30" align="center" class="form_text1"> 
 						</td>
-<?					}
+<?php				}
 					$sn++;
 ?>
 
-<?					if($i<$end)
+<?php				if($i<$end)
 					{
 ?>
 					<td width="30" align="center" class="form_text"> 
-						<input type="image" src="../img/down.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?echo "down".$i;?>" style="cursor:hand"> 
+						<input type="image" src="../img/down.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?php echo "down".$i;?>" style="cursor:hand"> 
 					</td>
-<?					}
+<?php				}
 					else
 					{
 ?>						<td width="30" align="center" class="form_text1"> 
 						</td>
-<?					}
+<?php				}
 ?>
 					<td width="30" align="center" class="form_text">
 
@@ -516,49 +515,38 @@ function checkLength(form){
 					<input type="image" src="../img/delete.gif" width="24" height="24" border="0" style="cursor:hand" name="<?php echo "id".$i;?>" value="<?php echo $end; ?>" onclick="this.form.submit();">
 					
 			</tr>
-<?		}	
+<?php	}	
 	}
 	
 ?>
-    
-		
 			</table>
-					
 											
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr class="white_bg"> 
 					  <td height="30"><span class="form_text1">Add&nbsp;&nbsp;</span>
 							<select name="addnewrows" class="text_field_small" style="width:100px" onChange="this.form.submit();">
-								
-							
 								<option value="0" >0</option>
 								<option value="1" >1</option>
 								<option value="2" >2</option>
 								<option value="3" >3</option>
 								<option value="4" >4</option>
 								<option value="5" >5</option>
-								
 							</select>
 						  <a class="form_text1">New Answer</a>
-						  
 						<span class="form_text"><span class="form_text1">
-						
-						
 					</td>
 				</tr>
 			</table>
 
-	        <br>
-			<br>
+	        <br />
+			<br />
 			<div align="center">
-						
+			<input type="hidden" name="end1" value="<?php echo $end; ?>">
 
-			<input type="HIDDEN" name="end1" value="<?php echo $end; ?>">
-
-<?			if(isset($_POST['add_question']))
+<?php		if(isset($_POST['add_question']))
 			{
-?>				<input type="hidden" name="add_question" value="<?php echo $_POST['add_question'];?>" >
-<?			}
+				echo '<input type="hidden" name="add_question" value="'.$_POST['add_question'].'" />';
+			}
 
 			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question_group.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: select_question_group.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 
@@ -372,7 +372,7 @@ if(isset($messege) && $messege )
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="page" value="<?php echo $page; ?>">
-<?
+<?php
 if(!empty($courses))
 {
 
@@ -385,7 +385,7 @@ if(!empty($courses))
 	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
 	<input type="submit" name="addanotherg" value="<?php echo get_lang('AddNewGroup');?>">
 	<input type="submit" name="finish" value="<?php echo get_lang('FinishSurvey');?>">
-<?
+<?php
 }
 else
 {
@@ -393,7 +393,7 @@ else
     <input type="submit" name="back" value="<?php echo get_lang('Back');?>">
 	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
 	<input type="submit" name="addanotherg" value="<?php echo get_lang('AddNewGroup');?>">
-<?
+<?php
 }	
 ?>
 </form>

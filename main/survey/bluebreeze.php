@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: bluebreeze.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: bluebreeze.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -83,11 +83,11 @@ Display :: display_header();
 			<td height="39" background="images_white/left.gif">&nbsp;</td>
           	<td><strong><?php echo get_lang('Question'); ?>: </strong><br />
           	<?php echo $ques;?><br /><br /><strong><?php echo get_lang('Answers'); ?>: </strong><br />
-          	<textarea cols="50" rows="3" disabled='true'><?echo $answers[0];?></textarea>
-          	<input name="radiobutton" type="radio" value="radiobutton"><br /><textarea cols="50" rows="3" disabled='true'><?echo $answers[1];?></textarea>
+          	<textarea cols="50" rows="3" disabled='true'><?php echo $answers[0];?></textarea>
+          	<input name="radiobutton" type="radio" value="radiobutton"><br /><textarea cols="50" rows="3" disabled='true'><?php echo $answers[1];?></textarea>
           	<input name="radiobutton" type="radio" value="radiobutton"></td>
           	<td background="images_white/right.gif">&nbsp;</td>
-			<?
+			<?php 
 			break;
 		}
 		
@@ -99,19 +99,19 @@ Display :: display_header();
         	<td><strong><?php echo get_lang('Question'); ?>: </strong><br />
         	<?php echo $ques;?><br />
         	<br /><strong><?php echo get_lang('Answers'); ?>: </strong><br />
-			<?
+			<?php 
 			$i=0;
 			for($p=1;$p<$count;$i++,$p++)
 			{
 			?>
 				<textarea cols="50" rows="3" disabled='true'><?php echo $answers[$i]; ?></textarea>
 				<input type="checkbox" name="checkbox" value="checkbox"><br />
-			<?
+			<?php 
 			}
 			?>
 			</td>
         	<td background="images_white/right.gif">&nbsp;</td>
-			<?
+			<?php 
 			break;
 		}
 		
@@ -120,19 +120,19 @@ Display :: display_header();
 		{?>
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
         <td><strong><?php echo get_lang('Question'); ?>: </strong><br /><?php echo $ques;?><br /><br /><strong><?php echo get_lang('Answers'); ?>: </strong><br />
-		<?
+		<?php 
 		$i=0;
 		for($p=1;$p<$count;$i++,$p++)
 		{
 		?>
 		<textarea cols="50" rows="3" disabled='true'><?php echo $answers[$i]; ?></textarea>
 		<input name="radiobutton" type="radio" value="radiobutton"><br />
-		<?
+		<?php 
 		}
 		?>
 		</td>
         <td background="../survey/images_white/right.gif">&nbsp;</td>
-		<?
+		<?php 
 		break;
 		}
 		case "Open":
@@ -143,14 +143,14 @@ Display :: display_header();
         </TEXTAREA> 	
 		</td>
         <td background="../survey/images_white/right.gif">&nbsp;</td>
-		<?
+		<?php 
 		break;
 		}
 		case "Numbered":
 		{?>
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
         <td><strong><?php echo get_lang('Question'); ?>: </strong><br /><?php echo $ques;?><br /><br /><strong><?php echo get_lang('Answers'); ?>: </strong><br />
-		<?
+		<?php 
 		$i=0;
 		for($p=1;$p<$count;$i++,$p++)
 		{
@@ -169,12 +169,12 @@ Display :: display_header();
 		<option value="$i">9</option>
 		<option value="$i">10</option>
 		</select><br />
-		<?
+		<?php 
 		}
 		?>
 		</td>
         <td background="../survey/images_white/right.gif">&nbsp;</td>
-		<?
+		<?php 
 		break;		
 		}
 		}

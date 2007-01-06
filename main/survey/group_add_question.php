@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_add_question.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: group_add_question.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 /*
@@ -96,7 +96,7 @@ $name = surveymanager :: get_groupname($gid);
 <td><?php api_display_tool_title($GName);?></td> 
 <td><?php api_display_tool_title($name);?></td>
 </tr>
-<?
+<?php 
 if( isset($error_message) )
 {
 	Display::display_error_message($error_message);	
@@ -168,12 +168,12 @@ function g_redirect($url,$mode)
        header("Refresh: 0; URL=\"$url\""); 
        exit;
      case 'META':
-       ?><meta http-equiv="refresh" content="0;url=<?php echo $url; ?>" /><?
+       ?><meta http-equiv="refresh" content="0;url=<?php echo $url; ?>" /><?php 
        exit;
      default: /* -- JavaScript */
        ?><script type="text/javascript">
        window.location.href='<?php echo $url; ?>';
-       </script><?
+       </script><?php 
   }
   exit;
 } 

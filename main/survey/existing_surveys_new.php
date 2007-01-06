@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: existing_surveys_new.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: existing_surveys_new.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 /*
@@ -76,7 +76,7 @@ function displayTemplate(url) {
 <table>
 <tr>
 <td>
-<?echo get_lang('SurveyName');?>&nbsp;<?echo $sname;?>
+<?php echo get_lang('SurveyName');?>&nbsp;<?php echo $sname;?>
 </td>
 </tr>
 <tr>
@@ -146,7 +146,7 @@ function displayTemplate(url) {
 		{$flag=1;}
 		?>		
 		</form>
-<?	
+<?php 	
     }
 	else
 	{
@@ -158,6 +158,6 @@ function displayTemplate(url) {
 <form action="select_question_group.php?cidReq=<?php echo $cidReq; ?>&db_name=<?php echo $db_name; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>" method="post">
 <input type="submit" name="back1" value="<?php echo get_lang('Back'); ?>">
 </form>
-<?
+<?php 
 Display :: display_footer();
 ?> 

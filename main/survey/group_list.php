@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_list.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: group_list.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 /*
@@ -100,7 +100,7 @@ $table_group =  Database :: get_course_table('survey_group');
 		<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
 		<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
 		<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname;?>">
-	<?	
+	<?php 	
 		$gnames = array();
 		while ($obj = mysql_fetch_object($res))
 		{
@@ -143,7 +143,8 @@ $table_group =  Database :: get_course_table('survey_group');
 		</tr>
 		</table>
 		</form>
-<?	}
+<?php 
+	}
 	else
 	{
 		echo get_lang('NoSearchResults');

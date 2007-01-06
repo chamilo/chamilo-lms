@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: select_question.php 10605 2007-01-06 17:55:20Z pcool $
 */
 // including the global dokeos file
 require_once ('../inc/global.inc.php');
@@ -73,7 +73,7 @@ function select_question_type($add_question12,$groupid,$surveyid,$cidReq,$curr_d
 <td><?php api_display_tool_title($group_name); ?></td>
 </tr>
 </table>
-<?
+<?php
 if( isset($error_message) )
 {
 	Display::display_error_message($error_message);	
@@ -102,6 +102,6 @@ if( isset($error_message) )
 </tr>
 </table>
 </form>
-<?
+<?php
 }
 ?>

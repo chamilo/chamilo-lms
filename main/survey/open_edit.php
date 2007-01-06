@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: open_edit.php 10596 2007-01-05 14:09:55Z elixir_inter $
+* 	@version $Id: open_edit.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -184,14 +184,14 @@ border=0>
     <TD height=30>Default Text </TD></TR>
   <TR>
     <TD width=192 height=30><TEXTAREA style="WIDTH: 100%" name="defaultext" rows=3 cols=60>
-	<?
+	<?php
 	if(isset($_POST['defaultext']))
 	echo $_POST['defaultext'];
 	else
 	echo $rs->ad;
 	?></TEXTAREA> 
     </TD></TR></TBODY></TABLE>--><BR>
-		<?
+		<?php
 			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);
 			$obj=mysql_fetch_object($res);

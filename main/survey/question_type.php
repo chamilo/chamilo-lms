@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_type.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: question_type.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 /*
@@ -64,12 +64,12 @@ api_display_tool_title($tool_name);
 <tr>
 
 <td>
-<?api_display_tool_title($group_name);?>
+<?php api_display_tool_title($group_name);?>
 </td>
 </tr>
 </table>
 
-<?
+<?php
 if( isset($error_message) )
 {
 	Display::display_error_message($error_message);	

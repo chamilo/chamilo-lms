@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_blank.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: survey_blank.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -104,7 +104,7 @@ $res = api_sql_query($sql,__FILE__,__LINE__);
 ?>
 <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#F6F5F5">
 
-<?
+<?php
 if ($numb=mysql_num_rows($res) > 0)
 	{	
 		?>
@@ -125,7 +125,7 @@ if ($numb=mysql_num_rows($res) > 0)
 		      <input type="hidden" name="mail" value="<?php echo $mail;?>">
 			  <input type="hidden" name="username" value="<?php echo $username;?>">
 	   <table width="100%"  border="0" cellpadding="0" cellspacing="0">
-		<?
+		<?php
 		$users = array ();
 		$i=$lower+1;
 		$group_array=array();
@@ -792,12 +792,12 @@ if ($numb=mysql_num_rows($res) > 0)
 					if($num >= $page) {echo "";
 					?>
 					<input type="button" value="Print" onClick="printpage()">
-					<?}
+					<?php }
 					else{ $sub_name = "Next";
 					?>			
 					<input type="submit" name="submit" value="<?php echo $sub_name; ?>">&nbsp;<input type="button"
 value="Print" onClick="printpage()"></td>
-					<?}?>
+					<?php }?>
 				  </tr>
 		</table>
 	  </form>

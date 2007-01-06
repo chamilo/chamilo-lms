@@ -23,7 +23,7 @@
 ==============================================================================
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: addanother.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: addanother.php 10605 2007-01-06 17:55:20Z pcool $
 ==============================================================================
 */
 
@@ -217,7 +217,7 @@ if(isset($group_id))
 		$gname=mysql_result($result,$i,'groupname');
 		*/
 ?>
-		<!--<option value="<?echo $groupid;?>" ><?php echo $gname;?></option>-->
+		<!--<option value="<?php echo $groupid;?>" ><?php echo $gname;?></option>-->
 <?php 	//}
 ?>
 

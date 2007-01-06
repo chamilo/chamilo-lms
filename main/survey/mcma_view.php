@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcma_view.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: mcma_view.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -104,7 +104,7 @@ body {
 		
 		<td height="39" background="../survey/images_white/left.gif">&nbsp;</td>
         <td><strong>Question: </strong><br><?php echo $obj->caption;?><br><br><strong>Answers: </strong><br>
-		<?
+		<?php 
 		for($i=1;$i<10;$i++)
 		{
 			$temp = "a".$i;
@@ -115,7 +115,7 @@ body {
 		?>
 		<textarea cols="50" rows="3" disabled='true'><?php echo $obj->$temp; ?></textarea> 
 		<input type="checkbox" name="checkbox" value="checkbox"><br>
-		<?
+		<?php 
 			}
 		}
 		?>

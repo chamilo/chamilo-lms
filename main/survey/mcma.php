@@ -1,4 +1,4 @@
-<?
+<?php 
 /*
     DOKEOS - elearning and course management software
 
@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcma.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: mcma.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 // name of the language file that needs to be included 

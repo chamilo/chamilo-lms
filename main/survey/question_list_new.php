@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_list_new.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: question_list_new.php 10605 2007-01-06 17:55:20Z pcool $
 */
 
 
@@ -182,7 +182,7 @@ function displayTemplate(url) {
 <table>
 <tr>
 <td><strong><?php echo get_lang('SurveyName'); ?></strong></td>
-<td><?echo $sname;?></td>
+<td><?php echo $sname;?></td>
 </tr>
 <tr><td></td></tr>
 <tr><td></td></tr>
@@ -251,7 +251,7 @@ function displayTemplate(url) {
 ?>
 		<table>
 		<tr>		
-		<td><input type="submit" name="back" value="<?echo get_lang('Back');?>"></td>
+		<td><input type="submit" name="back" value="<?php echo get_lang('Back');?>"></td>
 		<td><input type="submit" name="importquestion" value="<?php echo get_lang('ImportQuestion');?>"></td>
 		</tr>
 		</table>

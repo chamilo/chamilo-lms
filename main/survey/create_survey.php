@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_survey.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: create_survey.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 /*
@@ -60,14 +60,13 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-
-//$table_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
+// Database table definitions
+/** @todo use database constants for the survey tables */
 $table_survey = Database :: get_main_table(MAIN_SURVEY_IFA_TABLE);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+
 $tool_name = get_lang('CreateSurvey');
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('AdministrationTools'));
-$coursePathWeb = api_get_path(WEB_COURSE_PATH);
-$coursePathSys = api_get_path(SYS_COURSE_PATH);
 $newsurvey = '0';
 
 if ($_POST['action'] == 'add_survey')

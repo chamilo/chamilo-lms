@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcma.php 10596 2007-01-05 14:09:55Z elixir_inter $
+* 	@version $Id: mcma.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -207,7 +207,7 @@ if ($_POST['action'] == 'addquestion')
 	}
 }
 ?>
-<?
+<?php
 $tool = get_lang('AddAnotherQuestion');
 Display::display_header($tool);
 ?>
@@ -219,7 +219,7 @@ function changeAction()
 	return true;
 }
 </script>
-<?
+<?php
 select_question_type($add_question12,$groupid,$surveyid,$cidReq,$curr_dbname);
 ?>
 <table>
@@ -499,33 +499,34 @@ function checkLength(form){
 					</td>
 					<td width="10" class="form_text"><img src="../img/blank.gif" width="10" height="8">
 					</td>					
-<?					if($i>$start)
+<?php
+					if($i>$start)
 					{
 ?>
 					<td width="30" align="center" class="form_text1"> 
-						<input type="image" src="../img/up.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?echo "up".$i;?>" style="cursor:hand"> 
+						<input type="image" src="../img/up.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?php echo "up".$i;?>" style="cursor:hand"> 
 					</td>
-<?					}
+<?php					}
 					else
 					{
 ?>						<td width="30" align="center" class="form_text1"> 
 						</td>
-<?					}
+<?php					}
 					$sn++;
 ?>
 
-<?					if($i<$end)
+<?php					if($i<$end)
 					{
 ?>
 					<td width="30" align="center" class="form_text"> 
-						<input type="image" src="../img/down.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?echo "down".$i;?>" style="cursor:hand"> 
+						<input type="image" src="../img/down.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?php echo "down".$i;?>" style="cursor:hand"> 
 					</td>
-<?					}
+<?php					}
 					else
 					{
 ?>						<td width="30" align="center" class="form_text1"> 
 						</td>
-<?					}
+<?php					}
 ?>
 					<td width="30" align="center" class="form_text">
 
@@ -533,7 +534,7 @@ function checkLength(form){
 					
 					<input type="image" src="../img/delete.gif" width="24" height="24" border="0" style="cursor:hand" name="<?php echo "id".$i;?>" value="<?php echo $end;?>" onclick="this.form.submit();">					
 			</tr>
-<?		}	
+<?php		}	
 	}
 	
 ?>   
@@ -544,11 +545,11 @@ function checkLength(form){
 					  <td height="30"><span class="form_text1">Add&nbsp;&nbsp;</span>
 							<select name="addnewrows" class="text_field_small" style="width:100px" onChange="this.form.submit();">
 								
-								<!--<option value="1" <?if(isset($_POST['addnewrows'])){if($_POST['addnewrows']=="1")echo "selected";}?>>1</option>
-								<option value="2" <?if(isset($_POST['addnewrows'])){if($_POST['addnewrows']=="2")echo "selected";}?>>2</option>
-								<option value="3" <?if(isset($_POST['addnewrows'])){if($_POST['addnewrows']=="3")echo "selected";}?>>3</option>
-								<option value="4" <?if(isset($_POST['addnewrows'])){if($_POST['addnewrows']=="4")echo "selected";}?>>4</option>
-								<option value="5" <?if(isset($_POST['addnewrows'])){if($_POST['addnewrows']=="5")echo "selected";}?>>5</option>-->
+								<!--<option value="1" <?php if(isset($_POST['addnewrows'])){if($_POST['addnewrows']=="1")echo "selected";}?>>1</option>
+								<option value="2" <?php if(isset($_POST['addnewrows'])){if($_POST['addnewrows']=="2")echo "selected";}?>>2</option>
+								<option value="3" <?php if(isset($_POST['addnewrows'])){if($_POST['addnewrows']=="3")echo "selected";}?>>3</option>
+								<option value="4" <?php if(isset($_POST['addnewrows'])){if($_POST['addnewrows']=="4")echo "selected";}?>>4</option>
+								<option value="5" <?php if(isset($_POST['addnewrows'])){if($_POST['addnewrows']=="5")echo "selected";}?>>5</option>-->
 								
 								<option value="0" >0</option>
 								<option value="1" >1</option>
@@ -576,10 +577,10 @@ function checkLength(form){
 			<input type="HIDDEN" name="end1" value="<?php echo $end; ?>">
 
 
-<?			if(isset($_POST['add_question']))
+<?php 			if(isset($_POST['add_question']))
 			{
 ?>				<input type="hidden" name="add_question" value="<?php echo $_POST['add_question'];?>" >
-<?			}
+<?php 			}
 
 			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);

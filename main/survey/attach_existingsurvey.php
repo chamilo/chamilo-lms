@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: attach_existingsurvey.php 10596 2007-01-05 14:09:55Z elixir_inter $
+* 	@version $Id: attach_existingsurvey.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 /*
@@ -71,11 +71,6 @@ $table_group 				= Database :: get_course_table('survey_group');
 $table_question 			= Database :: get_course_table('questions');
 $table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_course_survey_rel	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
-
-// Path variables
-/** @todo these variables are probably not used here */
-$coursePathWeb = api_get_path(WEB_COURSE_PATH);
-$coursePathSys = api_get_path(SYS_COURSE_PATH);
 
 // Language variables
 $MonthsLong = array(get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('"MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong')); 

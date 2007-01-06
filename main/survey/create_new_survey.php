@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_survey.php 10596 2007-01-05 14:09:55Z elixir_inter $
+* 	@version $Id: create_new_survey.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -28,6 +28,7 @@ $language_file = 'survey';
 
 // including the global dokeos file
 require_once ('../inc/global.inc.php');
+
 // including additional libraries
 /** @todo check if these are all needed */
 /** @todo check if the starting / is needed. api_get_path probably ends with an / */
@@ -240,17 +241,25 @@ if($surveyid = $_REQUEST['surveyid'])
 	        <!-- month: january ->
 	december -->
 	<select name="fmonth">
-		<?
+		<?php
 			for($i=1;$i<=count($MonthsLong);$i++)
 			{
 				if($i<=9)
-				$val = "0".$i;
+				{
+					$val = "0".$i;
+				}
 				else
-				$val = $i;
+				{
+					$val = $i;
+				}
 				if($val == $avail_month_from)
-				echo   "<option value=\"$val\" selected>".$MonthsLong[$i-1]."</option>\n";
+				{
+					echo   "<option value=\"$val\" selected>".$MonthsLong[$i-1]."</option>\n";
+				}
 				else
-				echo   "<option value=\"$val\">".$MonthsLong[$i-1]."</option>\n";
+				{
+					echo   "<option value=\"$val\">".$MonthsLong[$i-1]."</option>\n";
+				}
 			}
 		?>
 	</select>
@@ -558,26 +567,27 @@ else
 	<!-- month: january ->
 	december -->
 	<select name="fmonth">
-	<?
-			for($i=1;$i<=count($MonthsLong);$i++)
+	<?php
+			for($i=1; $i<=12; $i++)
 			{
 				if($i<=9)
-		{
-				$val = "0".$i;
-		}
+				{
+					$val = "0".$i;
+				}
 				else
-		{
-				$val = $i;
-		}
+				{
+					$val = $i;
+				}
+				
 				if($val == $curr_month)
-		{
-				echo   "<option value=\"$val\" selected>".$MonthsLong[$i-1]."</option>\n";
-		}
+				{
+					echo   "<option value=\"$val\" selected>".$MonthsLong[$i-1]."</option>\n";
+				}
 				else
-		{
-				echo   "<option value=\"$val\">".$MonthsLong[$i-1]."</option>\n";
+				{
+					echo   "<option value=\"$val\">".$MonthsLong[$i-1]."y</option>\n";
+				}
 			}
-	}
 	?>
 	</select>
 	<select name="fyear">
@@ -628,7 +638,7 @@ else
 	    <!-- month: january ->
 	december -->
 	<select name="end_fmonth">
-	<?
+	<?php
 			for($i=1;$i<=count($MonthsLong);$i++)
 			{
 				if($i<=9)

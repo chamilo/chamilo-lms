@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: preview_yesno.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: preview_yesno.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 /*
@@ -72,8 +72,6 @@ $header1 = get_lang('SurveyName');
 $header2 = get_lang('GroupName');
 $header3 = get_lang('Type');
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('Survey'));
-$coursePathWeb = api_get_path(WEB_COURSE_PATH);
-$coursePathSys = api_get_path(SYS_COURSE_PATH);
 $questionid = '1';
 $surveyid = $_REQUEST['surveyid'];
 $groupid = $_REQUEST['groupid'];

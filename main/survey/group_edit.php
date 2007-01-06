@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_edit.php 10596 2007-01-05 14:09:55Z elixir_inter $
+* 	@version $Id: group_edit.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 /*
@@ -68,8 +68,6 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $tool_name1 = get_lang('CreateNewGroup');
 $tool_name = get_lang('ModifyGroupInformation');
 $interbreadcrumb[] = array ("url" => "survey_list.php?", "name" => get_lang('Survey'));
-$coursePathWeb = api_get_path(WEB_COURSE_PATH);
-$coursePathSys = api_get_path(SYS_COURSE_PATH);
 $groupid = $_GET['groupid'];
 $surveyid = $_GET['surveyid'];
 if($_POST['action'] == 'new_group')

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: existing_surveys_new.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: existing_surveys_new.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 /*
@@ -140,7 +140,7 @@ function displayTemplate(url) {
 		$table_header[] = array (' ', false);
 		if(!empty($surveys))
 		{
-		Display :: display_sortable_table($table_header, $surveys, array (), array (), $parameters);
+			Display :: display_sortable_table($table_header, $surveys, array (), array (), $parameters);
 		}
 		else
 		{$flag=1;}

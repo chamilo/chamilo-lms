@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_group.php 10596 2007-01-05 14:09:55Z elixir_inter $
+* 	@version $Id: create_new_group.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 /*
@@ -41,6 +41,7 @@ require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
+require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 
 /** @todo replace this with the correct code */
 /*
@@ -60,11 +61,17 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+// Database table definitions
+/** @todo use database constants for the survey tables */
+$table_survey 		= Database :: get_course_table('survey');
+$table_group 		= Database :: get_course_table('survey_group');
+$table_question 	= Database :: get_course_table('questions');
+$table_course 		= Database :: get_main_table(TABLE_MAIN_COURSE);
+$table_survey_group = Database :: get_course_table('survey_group');
+
+
+
 $cidReq=$_GET['cidReq'];
-$curr_dbname = $_REQUEST['curr_dbname'];
-$table_group = Database :: get_course_table('survey_group');
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $tool_name1 = get_lang('CreateNewGroup');
 $tool_name = get_lang('CreateNewGroup');
 $header1 = get_lang('GroupList');
@@ -98,20 +105,18 @@ if(isset($_REQUEST['delete']))
  {
    $group_id = $_REQUEST['group_delete'];
    $surveyid = $_REQUEST['surveyid'];
-   $curr_dbname = $_REQUEST['curr_dbname'];
-   SurveyManager::delete_group($group_id,$curr_dbname);
-   header("Location:create_new_group.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+   SurveyManager::delete_group($group_id);
+   header("Location:create_new_group.php?surveyid=$surveyid&cidReq=$cidReq");
    exit;		
  }
 if ($_POST['action'] == 'new_group')
 {
 	$surveyid = $_POST['surveyid'];
 	$groupname = $_POST['groupname'];
-	$curr_dbname = $_REQUEST['curr_dbname'];
 	$surveyintroduction = $_POST['content'];
 	 if(isset($_POST['back']))
 	   { 
-		 header("location:select_question_group.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		 header("location:select_question_group.php?surveyid=$surveyid&cidReq=$cidReq");
 		 exit;
 	   } 
 	
@@ -128,7 +133,7 @@ if ($_POST['action'] == 'new_group')
 		if(isset($_POST['next']) && $groupid)
 		{ 
 		
-		 header("location:addanother.php?surveyid=$surveyid&newgroupid=$groupid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		 header("location:addanother.php?surveyid=$surveyid&newgroupid=$groupid&cidReq=$cidReq");
 		 exit;
 		
 		}elseif(isset($_POST['saveandexit']) && $groupid){
@@ -150,18 +155,17 @@ Display::display_header($tool_name1);
 <tr>
 <td><?php api_display_tool_title($header1); ?></td>
 </tr>
-<?
+<?php
 if( isset($error_message) )
 {
 	Display::display_error_message($error_message);	
 }
 
-$table_group =  Database :: get_course_table('survey_group');
+
 		
-		$sql = "SELECT * FROM $curr_dbname.survey_group Where survey_id='$surveyid' ORDER BY sortby ASC";
+		$sql = "SELECT * FROM $table_survey_group WHERE survey_id='$surveyid' ORDER BY sortby ASC";
 		
 		$parameters = array ();
-		$parameters['curr_dbname']=$curr_dbname;
         $parameters['surveyid']=$surveyid;
 		$parameters['groupid']=$groupid;
 		$parameters['cidReq']=$cidReq;		
@@ -185,21 +189,21 @@ $table_group =  Database :: get_course_table('survey_group');
 				$survey[] = $author;
 				$directions = '<table cellpadding="0" cellspacing="0" border="0" style="border:0px"><tr>';
 				if($i < $countGroups-1){
-					$directions .= '<td><a href="'.$_SERVER['PHP_SELF'].'?surveyid='.$surveyid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&direction=down&id_group='.$gid.'"><img src="../img/down.gif" border="0" title="lang_move_down"></a></td>';
+					$directions .= '<td><a href="'.$_SERVER['PHP_SELF'].'?surveyid='.$surveyid.'&cidReq='.$cidReq.'&direction=down&id_group='.$gid.'"><img src="../img/down.gif" border="0" title="lang_move_down"></a></td>';
 				}
 				else {
 					$directions .= '<td width="20"></td>';
 				}
 				if($i > 0){
-					$directions .= '<td><a href="'.$_SERVER['PHP_SELF'].'?surveyid='.$surveyid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&direction=up&id_group='.$gid.'"><img src="../img/up.gif" border="0" title="lang_move_up"></a></td>';
+					$directions .= '<td><a href="'.$_SERVER['PHP_SELF'].'?surveyid='.$surveyid.'&cidReq='.$cidReq.'&direction=up&id_group='.$gid.'"><img src="../img/up.gif" border="0" title="lang_move_up"></a></td>';
 				}
 				else {
 					$directions .= '<td></td>';
 				}
 				$directions .= '</tr></table>';
 				$survey[] = $directions;
-				$survey[] =  '<a href="group_edit.php?groupid='.$obj->group_id.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'
-				.'<a href="create_new_group.php?cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'&delete=1&group_delete='.$gid.'&surveyid='.$surveyid.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>'
+				$survey[] =  '<a href="group_edit.php?groupid='.$obj->group_id.'&cidReq='.$cidReq.'&&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'
+				.'<a href="create_new_group.php?cidReq='.$cidReq.'&delete=1&group_delete='.$gid.'&surveyid='.$surveyid.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>'
 				;
                $surveys[] = $survey;
                $i++;
@@ -216,7 +220,7 @@ $table_group =  Database :: get_course_table('survey_group');
 	{
 		echo get_lang('NoSearchResults');
 	}
-	echo '<a href="select_question_group.php?surveyid='.$surveyid.'&cidReq='.$cidReq.'&curr_dbname='.$curr_dbname.'">'.get_lang('BackToQuestions').'</a><br><br>';
+	echo '<a href="select_question_group.php?surveyid='.$surveyid.'&cidReq='.$cidReq.'">'.get_lang('BackToQuestions').'</a><br><br>';
 api_display_tool_title($tool_name);
 ?>
 <script src=tbl_change.js type="text/javascript" language="javascript"></script>
@@ -224,7 +228,6 @@ api_display_tool_title($tool_name);
 <input type="hidden" name="action" value="new_group">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
-<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
 <!--<input type="hidden" name="cidReq" value="<?php echo $_REQUEST['cidReq']; ?>">-->
 <table>
 <tr>

@@ -23,7 +23,7 @@
 ==============================================================================
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: addanother.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: addanother.php 10603 2007-01-06 17:01:47Z pcool $
 ==============================================================================
 */
 
@@ -73,11 +73,6 @@ $table_user 		= Database :: get_main_table(TABLE_MAIN_USER);
 $table_survey 		= Database :: get_course_table('survey');
 $table_group 		= Database :: get_course_table('survey_group');
 
-// Path variables
-/** @todo these variables are probably not used here */
-$coursePathWeb = api_get_path(WEB_COURSE_PATH);
-$coursePathSys = api_get_path(SYS_COURSE_PATH);
-
 // Language variables
 $tool_name = get_lang('CreateNewSurvey');
 $tool_name1 = get_lang('AddAnotherQuestion');
@@ -91,18 +86,19 @@ $course_id = $_SESSION['_course']['id'];
 
 // $_GET and $_POST
 /** @todo replace $_REQUEST with $_GET or $_POST */
-$cidReq = $_GET['cidReq'];
-/** @todo use $_course array */
-$curr_dbname 	= $_REQUEST['curr_dbname'];
-$group_id		= $_GET['newgroupid'];
-if(isset($_REQUEST['surveyid']))
-$surveyid=$_REQUEST['surveyid'];
+$group_id	= $_GET['newgroupid'];
 if(isset($_REQUEST['groupid']))
-$groupid=$_REQUEST['groupid'];
-if(isset($_REQUEST['cidReq']))
-$cidReq=$_REQUEST['cidReq'];
+{
+	$groupid=$_REQUEST['groupid'];
+}
+if(isset($_GET['cidReq']))
+{
+	$cidReq=$_GET['cidReq'];
+}
 if(isset($_REQUEST['newgroupid']))
-$groupid=$_REQUEST['newgroupid'];
+{
+	$groupid=$_REQUEST['newgroupid'];
+}
 
 
 
@@ -110,7 +106,7 @@ $groupid=$_REQUEST['newgroupid'];
 
 if(isset($_POST['back']))
 { 
-	header("location:select_question_group.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+	header("location:select_question_group.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
 }
 
 if(isset($_POST['next']))
@@ -121,24 +117,23 @@ if(isset($_POST['next']))
 		{
 			$groupid=$_POST['exiztinggroup'];
 			$add_question=$_POST['add_question'];
-			$curr_dbname = $_REQUEST['curr_dbname'];
 			/** @todo it seems a bad idea to use language strings for switch statements and $_POST variables */
 			switch ($_POST['add_question'])
 			{
 				case get_lang('YesNo'):
-				header("location:yesno.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+				header("location:yesno.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
 				break;
 				case get_lang('MultipleChoiceSingle'):
-				header("location:mcsa.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+				header("location:mcsa.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
 				break;
 				case get_lang('MultipleChoiceMulti'):
-				header("location:mcma.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+				header("location:mcma.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
 				break;
 				case get_lang('Open'):
-				header("location:open.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+				header("location:open.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
 				break;
 				case get_lang('Numbered'):
-				header("location:numbered.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+				header("location:numbered.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
 				break;
 				default :
 				header("location:select_question_type.php?cidReq=$cidReq");
@@ -155,7 +150,7 @@ if(isset($_POST['next']))
 	$error_message=get_lang('PleaseSelectQuestionAndGroup');
 }
 Display::display_header($tool_name1);
-$query="SELECT * FROM $table_survey WHERE survey_id='$surveyid'";
+$query="SELECT * FROM $table_survey WHERE survey_id='".mysql_real_escape_string($_GET['surveyid'])."'";
 $result=api_sql_query($query);
 $surveyname=mysql_result($result,0,'title');
 //$surveyname=get_lang('SurveyName').$surveyname;
@@ -171,16 +166,14 @@ if(isset($group_id))
  $obj= mysql_fetch_object($res);
  ?>
  <div align="center"><strong><font color="#FF0000"><?php echo "Group";?>&nbsp;&nbsp;<font color="#0000CC"><u><?php echo $obj->groupname;?></u>&nbsp;&nbsp;</font><?php echo get_lang('GroupCreated');?></font></strong></div>
-<?
+<?php
 }
 
 ?>
 <form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
-<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $_GET['surveyid']; ?>">
 <input type="hidden" name="newgroupid" value="<?php echo $group_id; ?>">
-<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
-<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">-->
 <table>
 <tr>
 <td>
@@ -208,12 +201,12 @@ if(isset($group_id))
 </td>
 <td>
 <?php 
-	echo SurveyManager::select_group_list($surveyid, $groupid, $extra_script);
+	echo SurveyManager::select_group_list($_GET['surveyid'], $groupid, $extra_script);
 ?>
 <!--<select name="select_group" >-->
 
 <?php 
-	/*$query="SELECT * FROM $table_group WHERE survey_id='$surveyid'";
+	/*$query="SELECT * FROM $table_group WHERE survey_id='$_GET['surveyid']'";
 	//echo $query;
 	$result=api_sql_query($query);
 	$num=mysql_num_rows($result);

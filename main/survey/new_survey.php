@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: new_survey.php 10559 2006-12-27 10:52:50Z pcool $
+* 	@version $Id: new_survey.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -72,6 +72,7 @@ $group_table = Database :: get_main_table(TABLE_MAIN_GROUP);
 		$table_header[] = array ('', false);
 
 echo '<form method="post" action="new_survey.php">';
+		/** @todo remove $curr_dbname from the parameters. This is not used. */
 		Display :: display_sortable_table($table_header, $users, array (), array (), $parameters);
 		echo '<input type="submit" value="'.get_lang('Ok').'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"/>';
 		echo '</form>';

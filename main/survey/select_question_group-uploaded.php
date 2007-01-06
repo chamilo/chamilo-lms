@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question_group-uploaded.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: select_question_group-uploaded.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 
@@ -80,8 +80,6 @@ else
 {
  $interbreadcrumb[] = array ("url" => "create_new_survey.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname&page=$page", "name" => get_lang('CreateFromExistingSurvey'));
 }*/
-$coursePathWeb = api_get_path(WEB_COURSE_PATH);
-$coursePathSys = api_get_path(SYS_COURSE_PATH);
 $default_group = '0';
 $new_group = '1';
 $existing_group = '2';
@@ -364,8 +362,8 @@ $result=api_sql_query($query);*/
 <?
 if(!empty($courses))
 {
-
-				SurveyManager :: display_sortable_table($groupid,$surveyid,$curr_dbname,$table_header, $courses, array (), array (), $parameters);
+	/** @todo remove $curr_dbname from the parameters. This is not used. */
+	SurveyManager :: display_sortable_table($groupid,$surveyid,$curr_dbname,$table_header, $courses, array (), array (), $parameters);
 
 ?>	
 	<!--<input type="submit" name="delete" value="<?php  echo get_lang('Delete');?>">-->

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_add_question.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: group_add_question.php 10603 2007-01-06 17:01:47Z pcool $
 */
 
 /*
@@ -50,8 +50,6 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $tool_name1 = get_lang('AddQuestion');
 $tool_name = get_lang('AddQuestion');
 $interbreadcrumb[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
-$coursePathWeb = api_get_path(WEB_COURSE_PATH);
-$coursePathSys = api_get_path(SYS_COURSE_PATH);
 $surveyid=$_GET['surveyid'];
 $groupid = $_GET['groupid'];
 if (isset($_POST['back']))

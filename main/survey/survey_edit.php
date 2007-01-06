@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_edit.php 10596 2007-01-05 14:09:55Z elixir_inter $
+* 	@version $Id: survey_edit.php 10603 2007-01-06 17:01:47Z pcool $
 */
 /*
 ==============================================================================
@@ -30,9 +30,11 @@
 // name of the language file that needs to be included 
 $language_file = 'survey';
 
+// including the global dokeos file
 include ('../inc/global.inc.php');
-//api_protect_admin_script();
-include (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
+
+// including additional libraries
+require_once (api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 
@@ -54,32 +56,33 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-// the variables for the days and the months
-// Defining the months of the year to allow translation of the months
+// Database table definitions
+/** @todo use database constants for the survey tables */
+$table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
+$table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
+$table_survey 				= Database :: get_course_table('survey');
+$tbl_category 				= Database :: get_main_table(TABLE_MAIN_CATEGORY);
+
+// language variables
 $MonthsLong = array(get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('"MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong')); 
+$tool_name = get_lang('ModifySurveyInformation');
+
+
+
 $arr_date = explode("-",date("Y-m-d"));
 $curr_year = $arr_date[0];
 $curr_month = $arr_date[1];
 $curr_day = $arr_date[2];
-$cidReq=$_GET['cidReq'];
-$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_course_survey_rel = Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
-$table_survey = Database :: get_course_table('survey');
-$tbl_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
+
 $noPHP_SELF = true;
-$tool_name = get_lang('ModifySurveyInformation');
+
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
-$coursePathWeb = api_get_path(WEB_COURSE_PATH);
-$coursePathSys = api_get_path(SYS_COURSE_PATH);
 $maxFilledSpace = get_setting('default_document_quotum');
 $course_code = $id; //note confusion again: int id - string id - string code...
-$surveyid = $_REQUEST['surveyid'];
 $formSent=0;
 if ($_POST['action'] == 'update_survey')
 {
 	$formSent=1;
-	$cidReq=$_GET['cidReq'];
-    $surveyid=$_REQUEST['surveyid'];
 	$surveycode=$_POST['survey_code'];
 	$surveytitle = $_POST['survey_title'];
 	$surveysubtitle = $_POST['survey_subtitle'];	
@@ -95,9 +98,10 @@ if ($_POST['action'] == 'update_survey')
     $savailabletill=mktime(0,0,0,$_POST['end_fmonth'],$_POST['end_fday'], $_POST['end_fyear']); 
 	$surveytitle=trim($surveytitle);
 	$surveycode=trim($surveycode);
-	if(isset($_POST['back'])){
-	header("location:survey_list.php?cidReq=$cidReq");
-	exit;
+	if(isset($_POST['back']))
+	{
+		header('location:survey_list.php');
+		exit;
 	}
 	if(empty ($surveytitle))
 	{
@@ -111,16 +115,15 @@ if ($_POST['action'] == 'update_survey')
 	}
 	else
     {		
-	  $cidReq = $_GET['cidReq'];
-	  $table_survey = Database :: get_course_table('survey');	   $curr_dbname=SurveyManager::update_survey($surveyid,$surveycode,$surveytitle,$surveysubtitle,$author,$survey_language,$availablefrom,$availabletill,$isshare,$surveytemplate,$surveyintroduction,$surveythanks,$cidReq,$table_course);	  
+	  $curr_dbname=SurveyManager::update_survey($_GET['survey_id'],$surveycode,$surveytitle,$surveysubtitle,$author,$survey_language,$availablefrom,$availabletill,$isshare,$surveytemplate,$surveyintroduction,$surveythanks,$cidReq,$table_course);	  
 		if(isset($_POST['next']))
 		{
-			header("location:select_question_group.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+			header("location:select_question_group.php?surveyid=".$_GET['survey_id']."&cidReq=$cidReq&curr_dbname=$curr_dbname");
 			exit;
 		}
 		else
 		{
-		header("location:survey_list.php?cidReq=$cidReq");
+		header('location:survey_list.php');
 	    exit;
 		}
 	}	
@@ -151,7 +154,11 @@ window.open(inf+".htm", 'popup', 'width=600,height=600,toolbar = no, status = no
 </script>
 <script src=tbl_change.js type="text/javascript" language="javascript"></script>
 <?php
-$sql = "select * from $table_survey where survey_id='$surveyid'";
+/**
+ * Finding the survey we are editing
+ * @todo use a function for this because this is probably a very common functionality 
+ */
+$sql = "SELECT * FROM $table_survey WHERE survey_id='".$_GET['survey_id']."'";
 $res = api_sql_query($sql);
 $obj = mysql_fetch_object($res);
 $arr_avail_from = explode("-",$obj->avail_from);
@@ -167,8 +174,8 @@ $template = $obj->template;
 $lang=$obj->lang;
 
 ?>
-<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
-<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
+<input type="hidden" name="surveyid" value="<?php echo $_GET['survey_id']; ?>">
 <input type="hidden" name="action" value="update_survey">
 <table>
 <tr>
@@ -195,9 +202,9 @@ $lang=$obj->lang;
   <td><?php echo get_lang('SurveyLanguage'); ?>&nbsp;</td>
   <td>
 	<select name="survey_language">
-    <option value="english" <?if($lang=='english') echo "selected";?>>English</option>
-    <option value="french" <?if($lang=='french') echo "selected";?>>Fran&ccedil;ais</option>
-    <option value="dutch" <?if($lang=='dutch') echo "selected";?>>Nederlands</option>
+    <option value="english" <?php if($lang=='english') echo "selected";?>>English</option>
+    <option value="french" <?php if($lang=='french') echo "selected";?>>Fran&ccedil;ais</option>
+    <option value="dutch" <?php if($lang=='dutch') echo "selected";?>>Nederlands</option>
     </select>
   </td>
 </tr>
@@ -219,7 +226,7 @@ $lang=$obj->lang;
         <!-- month: january ->
 december -->
 <select name="fmonth">
-	<?
+	<?php
 		for($i=1;$i<count($MonthsLong);$i++)
 		{
 			if($i<=9)
@@ -264,7 +271,7 @@ december -->
     <!-- month: january ->
 december -->
 <select name="end_fmonth">
-	<?
+	<?php
 		for($i=1;$i<count($MonthsLong);$i++)
 		{
 			if($i<=9)

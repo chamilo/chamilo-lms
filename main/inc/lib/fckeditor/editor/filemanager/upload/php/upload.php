@@ -115,9 +115,6 @@ $sFileName = replace_dangerous_char($sFileName,'strict');
 // Transform any .php file in .phps for security
 $sFileName = php2phps($sFileName);
 
-
-//$sFilePath = $sServerDir.$sType."/" . $sFileName ;
-
 if ( is_file( $sServerDir.$sFileName ) ){
 	$dotIndex = strrpos($sFileName, '.');
 	$ext = '';

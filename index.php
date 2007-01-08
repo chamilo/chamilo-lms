@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10580 2006-12-31 17:13:48Z pcool $
+* 	@version $Id: index.php 10606 2007-01-08 07:58:55Z elixir_inter $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -31,7 +31,7 @@
 define('DOKEOS_HOMEPAGE', true);
 
 // the language file
-$langFile = array ('courses', 'index');
+$language_file = array ('courses', 'index');
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore  */
 // maybe we should change this into an api function? an example: Coursemanager::unset();

@@ -6240,7 +6240,7 @@ class learnpath {
 			{
 				$return .= '<div class="lp_resource_element">';
 				
-					$return .= '<img align="left" alt="" src="img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />';
+					$return .= '<img alt="" src="img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />';
 					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_quiz['title'] . '</a>';
 					//$return .= $row_quiz['title'];
 				

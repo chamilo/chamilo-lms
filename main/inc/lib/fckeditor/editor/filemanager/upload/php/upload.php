@@ -118,9 +118,24 @@ $sFileName = php2phps($sFileName);
 
 //$sFilePath = $sServerDir.$sType."/" . $sFileName ;
 
+if ( is_file( $sServerDir.$sFileName ) ){
+	$dotIndex = strrpos($sFileName, '.');
+	$ext = '';
+	if(is_int($dotIndex)) 
+	{
+		$ext = substr($sFileName, $dotIndex);
+		$base = substr($sFileName, 0, $dotIndex);
+	}
+	$counter = 0;
+	while(is_file($sServerDir.$sFileName)) 
+	{
+		$counter++;
+		$sFileName = $base.'_'.$counter.$ext;
+	}
+}
 
 if(!move_uploaded_file( $oFile['tmp_name'], $sServerDir.$sFileName )) $sErrorNumber = '203' ; //check php.ini setting
-
+	
 if ( is_file( $sServerDir.$sFileName ) )
 {
 	$oldumask = umask(0) ;
@@ -131,8 +146,7 @@ if ( is_file( $sServerDir.$sFileName ) )
 //If we are in a course and if it's a teacher who did the upload, we record the uploaded file in database
 if(isset($_SESSION["_course"]["sysCode"]) && api_is_allowed_to_edit()){
 	
-	$document_name=utf8_decode($oFile["name"]);
-	$document_name= strtr($document_name,"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ","aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+	$document_name= strtr($sFileName,"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ","aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
 	$document_name=preg_replace('/[^\w\._]/', '_', $document_name);
 	$document_size=$oFile["size"];
 	

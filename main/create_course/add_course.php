@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: add_course.php 10614 2007-01-08 10:41:23Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,6 +39,7 @@
 // name of the language file that needs to be included 
 $language_file = "create_course";
 include ('../inc/global.inc.php');
+
 $this_section=SECTION_COURSES;
 
 include (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');

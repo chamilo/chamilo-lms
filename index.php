@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10606 2007-01-08 07:58:55Z elixir_inter $
+* 	@version $Id: index.php 10611 2007-01-08 09:44:43Z elixir_inter $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -262,8 +262,6 @@ function logout()
 	$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 	api_sql_query($s_sql_update_logout_date);
 	
-
-	//LoginDelete(".$_user['user_id'].", $_configuration['statistics_database']);
 	LoginDelete($_GET["uid"], $_configuration['statistics_database']);
 	
 	api_session_destroy();

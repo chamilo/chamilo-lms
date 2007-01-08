@@ -58,7 +58,6 @@ $arAllowed	= $Config['AllowedExtensions'][$sType] ;
 $arDenied	= $Config['DeniedExtensions'][$sType] ;
 
 // Check if it is an allowed extension.
-// echo "<script>alert('".$sType."')</script>";
 if ( ( count($arAllowed) > 0 && !in_array( $sExtension, $arAllowed ) )  || ( count($arDenied) > 0 && in_array( $sExtension, $arDenied ) )){
 	SendResults( '202' ) ;
 }

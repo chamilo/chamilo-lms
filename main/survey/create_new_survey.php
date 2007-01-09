@@ -20,7 +20,10 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_new_survey.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+* 	@version $Id: create_new_survey.php 10632 2007-01-09 18:52:29Z pcool $
+* 	@todo use quickform for the forms
+* 	@todo the page contains code for adding and for editing. Both are almost the same and the edit code is not used because it (currently) uses a different file (survey_edit.php);
 */
 
 // name of the language file that needs to be included 
@@ -39,7 +42,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 /*
 -----------------------------------------------------------
 	Table definitions
@@ -70,38 +73,204 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-/*
------------------------------------------------------------
-	some language stuff 
------------------------------------------------------------
-*/
+// 	some language stuff 
 // an api function for this would be nice since this is used in a lot of places in Dokeos
 $MonthsLong = array(get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('"MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong')); 
 $tool_name = get_lang('CreateNewSurvey');
-$tool_name1 = get_lang('CreateNewSurvey');
 
+/** @todo see if this is used, if not, remove it */
+$page = $_REQUEST['page'];
+
+/** @todo us the $_course arrray */
+$course_id = $_SESSION['_course']['id'];
+$todate=date('j');	
+
+// breadcrumbs
+$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+
+// Displaying the header
+Display::display_header($tool_name);
+
+// Displaying the tool title
+api_display_tool_title($tool_name);
+
+// initiate the object
+$form = new FormValidator('forumcategory');
+
+// settting the form elements
+if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET['survey_id']))
+{
+	$form->addElement('hidden', 'survey_id');
+	
+}
+$form->addElement('text', 'survey_code', get_lang('SurveyCode'));
+$form->addElement('text', 'survey_title', get_lang('SurveyTitle'));
+$form->addElement('text', 'survey_subtitle', get_lang('SurveySubTitle'));
+// author: won't do since we can use $_user
+/** @todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter) */
+$lang_array = api_get_languages();
+foreach ($lang_array['name'] as $key=>$value) 
+{
+	$languages[$lang_array['folder'][$key]] = $value; 
+}
+$form->addElement('select', 'survey_language', get_lang('Language'), $languages);
+$form->addElement('datepicker', 'start_date', get_lang('StartDate'));
+$form->addElement('datepicker', 'end_date', get_lang('EndDate'));
+$group='';
+$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('Yes'),1);
+$group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('No'),0);
+$form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');	
+$form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'));
+$form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'));
+$form->addElement('submit', 'submit_survey', get_lang('Ok'));
+
+// setting the rules
+$form->addRule('survey_code', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('survey_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('start_date', get_lang('InvalidDate'), 'date');
+$form->addRule('end_date', get_lang('InvalidDate'), 'date');
+/** @todo add a rule that checks if the end_date > start_date */
+
+// setting the default values
+if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET['survey_id']))
+{
+	$defaults['survey_id'] = $_GET['survey_id'];
+}
+else 
+{
+	$defaults['survey_language'] = $_course['language'];
+	$defaults['start_date']['d'] = date('d');
+	$defaults['start_date']['F'] = date('F');
+	$defaults['start_date']['Y'] = date('Y');
+	$defaults['start_date']['H'] = date('H');
+	$defaults['start_date']['i'] = date('i');
+	$defaults['end_date']['d'] = date('d');
+	$defaults['end_date']['F'] = date('F');
+	$defaults['end_date']['Y'] = date('Y');
+	$defaults['end_date']['H'] = date('H');
+	$defaults['end_date']['i'] = date('i');
+	$defaults['survey_share']['survey_share'] = 0;
+}
+$form->setDefaults($defaults);
+
+// The validation or display
+if( $form->validate() )
+{
+   $values = $form->exportValues();
+   $return = store_survey($values);
+   Display::display_confirmation_message($return['message']);
+}
+else
+{
+	$form->display();
+}
+
+
+
+
+
+// Footer
+Display :: display_footer();
+
+/**
+ * This function stores a survey in the database
+ *
+ * @param array $values
+ * @return array $return the type of return message that has to be displayed and the message in it
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version januari 2007
+ * 
+ * @todo move this function to surveymanager.inc.lib.php
+ */
+function store_survey($values)
+{
+	global $_user; 
+	
+	if (!$values['survey_id'] OR !is_numeric($values['survey_id']))
+	{
+		$table_survey = Database :: get_course_table('survey');
+		$sql = "INSERT INTO $table_survey (code,title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date) VALUES (
+					'".mysql_real_escape_string($values['survey_code'])."',
+					'".mysql_real_escape_string($values['survey_title'])."',
+					'".mysql_real_escape_string($values['survey_subtitle'])."',
+					'".mysql_real_escape_string($_user['user_id'])."',
+					'".mysql_real_escape_string($values['survey_language'])."',
+					'".mysql_real_escape_string($values['start_date'])."',
+					'".mysql_real_escape_string($values['end_date'])."',
+					'".mysql_real_escape_string($values[''])."',
+				
+				
+				','$surveytitle','$surveysubtitle','$author','$survey_language','$availablefrom','$availabletill','$isshare','$surveytemplate','$surveyintroduction','$surveythanks',curdate())";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$survey_id = mysql_insert_id();
+		
+		$table_survey_group = Database :: get_course_table('survey_group');
+		$sql = "INSERT INTO $table_survey_group (group_id,survey_id,groupname,introduction) values('','$survey_id','No Group','This is your Default Group')";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		
+		$return['message'] = 'insert';
+		$return['type'] = 'confirmation';
+	}
+	else 
+	{
+		$return['message'] = 'update';
+		$return['type'] = 'confirmation';
+	}
+	
+	return $return;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// finding the current day, month, year
 $arr_date = explode("-",date("Y-m-d"));
 $curr_year = $arr_date[0];
 $curr_month = $arr_date[1];
 $curr_day = $arr_date[2];
-
-//$cidReq = $_SESSION[_course][id];
-$cidReq = $_GET['cidReq'];
-$page = $_REQUEST['page'];
-$course_id = $_SESSION['_course']['id'];
+// number of days in current month
 $todate=date('j');	
-
 /*
 -----------------------------------------------------------
-	Breadcrumbs
------------------------------------------------------------
-*/
-$interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
-$interbreadcrumb[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
-
-/*
------------------------------------------------------------
-
+	Editing a survey
 -----------------------------------------------------------
 */
 if($surveyid = $_REQUEST['surveyid'])
@@ -109,7 +278,6 @@ if($surveyid = $_REQUEST['surveyid'])
 	if ($_POST['action'] == 'update_survey')
 	{
 		// @todo: replace the $_REQUEST by $_POST or $_GE
-		$cidReq=$_GET['cidReq'];
 	    $surveyid=$_REQUEST['surveyid'];
 		$surveycode=$_POST['survey_code'];
 		$surveytitle = $_POST['survey_title'];
@@ -136,17 +304,16 @@ if($surveyid = $_REQUEST['surveyid'])
 		}
 		else
 	    {		
-		  $cidReq = $_GET['cidReq'];
-		  $table_survey = Database :: get_course_table('survey');	   $curr_dbname=SurveyManager::update_survey($surveyid,$surveycode,$surveytitle,$surveysubtitle,$author,$survey_language,$availablefrom,$availabletill,$isshare,$surveytemplate,$surveyintroduction,$surveythanks,$cidReq,$table_course);	  
+		  /** @todo remove the unused parameters) */
+		  $curr_dbname=SurveyManager::update_survey($surveyid,$surveycode,$surveytitle,$surveysubtitle,$author,$survey_language,$availablefrom,$availabletill,$isshare,$surveytemplate,$surveyintroduction,$surveythanks,$_GET['cidReq'],$table_course);	  
 			if(isset($_POST['next']))
-				header("location:select_question_group.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+				header("location:select_question_group.php?surveyid=$surveyid&curr_dbname=$curr_dbname");
 			else
-				header("location:survey_list.php?cidReq=$cidReq");
+				header("location:survey_list.php");
 			exit;
 		}	
 	}
-	Display::display_header($tool_name);
-	api_display_tool_title($tool_name);
+
 	if( isset($error_message) )
 	{
 		Display::display_error_message($error_message);	
@@ -186,7 +353,7 @@ if($surveyid = $_REQUEST['surveyid'])
 	$template = $obj->template;
 	
 	?>
-	<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+	<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 	<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>" />
 	<input type="hidden" name="action" value="update_survey" />
 	<table>
@@ -206,7 +373,8 @@ if($surveyid = $_REQUEST['surveyid'])
 	  <td><?php echo get_lang('Author'); ?></td>
 	  <td>
 	  	<?php
-		UserManager::get_teacher_list($cidReq,$obj->author);
+	  	/** @todo remove the unused parameters */
+		UserManager::get_teacher_list($_GET['cidReq'],$obj->author);
 		?>  	
 	  </td>
 	</tr>
@@ -214,9 +382,13 @@ if($surveyid = $_REQUEST['surveyid'])
 	  <td><?php echo get_lang('SurveyLanguage'); ?>&nbsp;</td>
 	  <td>
 		<select name="survey_language">
-	    <option value="english"  selected="selected">English</option>
-	    <option value="french" >Fran&ccedil;ais</option>
-	    <option value="dutch" >Nederlands</option>
+			<?php
+				$languages = api_get_languages();
+				foreach ($languages['name'] as $index => $name)
+				{
+					echo '<option value="'.$languages['folder'][$index].'">'.$name.'</option>';
+				}
+			?>
 	    </select>
 	
 	  </td>
@@ -385,16 +557,15 @@ if($surveyid = $_REQUEST['surveyid'])
 	}
 /*
 -----------------------------------------------------------
-	
+	Adding a survey
 -----------------------------------------------------------
 */
 else
 {
 	if($_POST['back'])
 	{
-	 $cidReq=$_GET['cidReq'];
-	 header("location:survey.php?cidReq=$cidReq");
-	 exit;
+		header("location:survey.php");
+		exit;
 	}
 	/*
 	-----------------------------------------------------------
@@ -407,7 +578,6 @@ else
 		$surveycode=$_POST['survey_code'];
 		$surveytitle = $_POST['survey_title'];
 		$surveysubtitle = $_POST['survey_subtitle'];
-		//$cidReq = $_configuration['db_prefix'].$_POST['cidReq'];
 		$author = $_POST['author'];
 		$survey_language = $_POST['survey_language'];
 		$availablefrom = $_POST['fyear']."-".$_POST['fmonth']."-".$_POST['fday'];
@@ -448,18 +618,17 @@ else
 			else
 			{
 		$survey_id = SurveyManager::create_survey($surveycode, $surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill, $isshare, $surveytemplate, $surveyintroduction, $surveythanks, $table_survey, $table_group);
-	    $cidReq=$_GET['cidReq'];
-		$curr_dbname=SurveyManager::create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course_survey_rel);
+		/** @todo remove the unused parameters */
+		$curr_dbname=SurveyManager::create_course_survey_rel($_GET['cidReq'],$survey_id,$table_course,$table_course_survey_rel);
 		if (isset($_POST['next']))
 		{
-			$cidReq=$_GET['cidReq'];
-			$page = $_REQUEST['page']; header("location:select_question_group.php?surveyid=$survey_id&cidReq=$cidReq&curr_dbname=$curr_dbname&page=$page");
-			 exit;
+			$page = $_REQUEST['page']; 
+			header("location:select_question_group.php?surveyid=$survey_id&curr_dbname=$curr_dbname&page=$page");
+			exit;
 		}
 		else
 		{
-			 $cidReq=$_GET['cidReq'];
-			 header("location:survey_list.php?&cidReq=$cidReq");
+			 header("location:survey_list.php");
 			 exit;
 		}
 		}
@@ -472,7 +641,7 @@ else
 	-----------------------------------------------------------
 	*/	
 	Display::display_header($tool_name);
-	api_display_tool_title($tool_name1);
+	//api_display_tool_title($tool_name);
 	if( isset($error_message) )
 	{
 		Display::display_error_message($error_message);	
@@ -497,10 +666,9 @@ else
 	</script>
 	
 	<script src=tbl_change.js type="text/javascript" language="javascript"></script>
-	<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+	<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 	<input type="hidden" name="action" value="add_survey" />
 	<input type="hidden" name="page" value="<?php echo $page; ?>" />
-	<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>" />-->
 	<table>
 	<tr>
 	 <td><?php echo get_lang('SurveyCode'); ?></td>
@@ -528,13 +696,22 @@ else
 	?>  
 	</tr>
 	<tr>
-	  <td><?php echo get_lang('SurveyLanguage'); ?>&nbsp;</td>
+	  <td><?php echo get_lang('SurveyLanguage');?>&nbsp;</td>
 	   <td>
 		<select name="survey_language">
-	    <option value="english"  selected="selected">English</option>
-	    <option value="french" >Fran&ccedil;ais</option>
-	    <option value="dutch" >Nederlands</option>
-	    </select>
+			<?php
+				$languages = api_get_languages();
+				foreach ($languages['name'] as $index => $name)
+				{
+					echo '<option value="'.$languages['folder'][$index];
+					if ($languages['folder'][$index] == $_course['language'])
+					{
+						echo ' selected = "selected"';
+					}
+					echo '">'.$name.'</option>';
+				}
+			?>
+		</select>
 	</td>
 	</tr>
 	<tr>

@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: whoisonline.php 10625 2007-01-09 13:39:43Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -29,7 +29,7 @@
 * Who is online list
 ==============================================================================
 */
-// @todo: is this necessary? 
+// @todo: is this necessary?
 if(isset($_GET['cidReq']))
 {
 	$course_code = $_GET['cidReq'];
@@ -40,7 +40,7 @@ else
 }
 
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array('index','registration');
 
 // including necessary files
@@ -51,7 +51,7 @@ require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 
 
-if ($_GET['chatid'] != '') 
+if ($_GET['chatid'] != '')
 {
 	//send out call request
 	$time = time();
@@ -101,7 +101,7 @@ function display_user_list($user_list, $_plugins)
 			{
 				$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
 			}
-			if ( api_is_plugin_installed($_plugins, 'messages') )
+			if ( api_is_plugin_installed($_plugins, 'messages') && isset($_SESSION['_user']) )
 			{
 				$table_row[] = '<a href="' . api_get_path(WEB_PLUGIN_PATH).'messages/new_message.php?send_to_user=' . $uid. '"><img src="./main/img/forum.gif" alt="'.get_lang("ComposeMessage").'" align="middle"></img></a>';
 			}
@@ -114,7 +114,7 @@ function display_user_list($user_list, $_plugins)
 		{
 			$table_header[] = array(get_lang('Email'),true);
 		}
-		if ( api_is_plugin_installed($_plugins, 'messages') )
+		if ( api_is_plugin_installed($_plugins, 'messages') && isset($_SESSION['_user']))
 		{
 			$table_header[] = array(get_lang('SendMessage'),true);
 		}
@@ -129,7 +129,7 @@ function display_user_list($user_list, $_plugins)
 function display_individual_user($user_id)
 {
 	global $interbreadcrumb;
-	
+
 	// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
 	$user_table=Database::get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT * FROM $user_table WHERE user_id='".mysql_real_escape_string($user_id)."'";

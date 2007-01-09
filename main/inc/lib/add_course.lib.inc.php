@@ -291,7 +291,6 @@ function update_Db_course($courseDbName)
 
 	// Student Publication
 	$TABLETOOLWORKS 			= $courseDbName . "student_publication";
-	$TABLETOOLWORKSUSER 		= $courseDbName . "stud_pub_rel_user";
 
 	// Document
 	$TABLETOOLDOCUMENT 			= $courseDbName . "document";
@@ -377,7 +376,7 @@ function update_Db_course($courseDbName)
   -----------------------------------------------------------
 	*/
   $sql = "CREATE TABLE `".$TABLETOOLSURVEY . "` (
-      survey_id int(10) unsigned NOT NULL auto_increment,
+      survey_id int unsigned NOT NULL auto_increment,
       code varchar(20) default NULL,
       title varchar(80) default NULL,
       subtitle varchar(80) default NULL,
@@ -386,74 +385,74 @@ function update_Db_course($courseDbName)
       avail_from date default NULL,
       avail_till date default NULL,
       is_shared char(1) default 1,
-			template varchar(20) default NULL,
+	  template varchar(20) default NULL,
       intro text,
-			surveythanks text,
+	  surveythanks text,
       creation_date datetime NOT NULL default '0000-00-00 00:00:00',
-      PRIMARY KEY (`survey_id`),
-      UNIQUE KEY `id` (`survey_id`)
+      PRIMARY KEY (survey_id),
+      UNIQUE KEY id (survey_id)
       )";
   api_sql_query($sql, __FILE__, __LINE__);
 
 
   $sql = "CREATE TABLE `".$TABLETOOLSURVEYGROUP . "` (
-      `group_id` int(10) NOT NULL auto_increment,
-      `survey_id` int(10) NOT NULL default '0',
-      `groupname` varchar(100) NOT NULL default '',
-      `introduction` text NOT NULL,
-		  `imported_group` int(11) NOT NULL default '0',
-		  `db_name` varchar(100) NULL default '',
-		  `sortby` int(11) NOT NULL default '1',
-      PRIMARY KEY (`group_id`)
+      group_id int NOT NULL auto_increment,
+      survey_id int NOT NULL default 0,
+      groupname varchar(100) NOT NULL default '',
+      introduction text NOT NULL,
+	  imported_group int NOT NULL default 0,
+	  db_name varchar(100) NULL default '',
+	  sortby int NOT NULL default 1,
+      PRIMARY KEY (group_id)
       )";
   api_sql_query($sql, __FILE__, __LINE__);
 
 
  $sql = "CREATE TABLE `".$TABLETOOLSURVEYQUESTION . "` (
-		`qid` int(10) unsigned NOT NULL auto_increment,
-		`gid` int(11) NOT NULL default '0',
-		`survey_id` int(11) NOT NULL default '0',
-		`qtype` varchar(50) NOT NULL default '',
-		`caption` text NOT NULL,
-		`alignment` varchar(100) NOT NULL default '',
-		`sortby` int(11) NOT NULL default '1',
-		`a1` text NOT NULL,
-		`a2` text NOT NULL,
-		`a3` text NOT NULL,
-		`a4` text NOT NULL,
-		`a5` text NOT NULL,
-		`a6` text NOT NULL,
-		`a7` text NOT NULL,
-		`a8` text NOT NULL,
-		`a9` text NOT NULL,
-		`a10` text NOT NULL,
-		`at` varchar(200) NOT NULL default '',
-		`ad` varchar(200) NOT NULL default '',
-		`alt_text` text NOT NULL,
-		`r1` int(11) NOT NULL default '0',
-		`r2` int(11) NOT NULL default '0',
-		`r3` int(11) NOT NULL default '0',
-		`r4` int(11) NOT NULL default '0',
-		`r5` int(11) NOT NULL default '0',
-		`r6` int(11) NOT NULL default '0',
-		`r7` int(11) NOT NULL default '0',
-		`r8` int(11) NOT NULL default '0',
-		`r9` int(11) NOT NULL default '0',
-		`r10` int(11) NOT NULL default '0',
-		`imported_question` int(11) NOT NULL default '0',
-		`db_name` varchar(100) NULL default '',
-		PRIMARY KEY (`qid`)
+		qid int unsigned NOT NULL auto_increment,
+		gid int NOT NULL default 0,
+		survey_id int NOT NULL default 0,
+		qtype varchar(50) NOT NULL default '',
+		caption text NOT NULL,
+		alignment varchar(100) NOT NULL default '',
+		sortby int NOT NULL default 1,
+		a1 text NOT NULL,
+		a2 text NOT NULL,
+		a3 text NOT NULL,
+		a4 text NOT NULL,
+		a5 text NOT NULL,
+		a6 text NOT NULL,
+		a7 text NOT NULL,
+		a8 text NOT NULL,
+		a9 text NOT NULL,
+		a10 text NOT NULL,
+		at varchar(200) NOT NULL default '',
+		ad varchar(200) NOT NULL default '',
+		alt_text text NOT NULL,
+		r1 int NOT NULL default 0,
+		r2 int NOT NULL default 0,
+		r3 int NOT NULL default 0,
+		r4 int NOT NULL default 0,
+		r5 int NOT NULL default 0,
+		r6 int NOT NULL default 0,
+		r7 int NOT NULL default 0,
+		r8 int NOT NULL default 0,
+		r9 int NOT NULL default 0,
+		r10 int NOT NULL default 0,
+		imported_question int NOT NULL default 0,
+		db_name varchar(100) NULL default '',
+		PRIMARY KEY (qid)
 		)";
  api_sql_query($sql, __FILE__, __LINE__);
 
 
  $sql= "CREATE TABLE `".$TABLETOOLSURVEYREPORT . "` (
-		`id` int(10) NOT NULL auto_increment,
-		`qid` int(10) NOT NULL default '0',
-		`answer` text NOT NULL,
-		`survey_id` int(8) NOT NULL default '0',
-		`user_id` int(8) NOT NULL default '0',
-		PRIMARY KEY (`id`)
+		id int NOT NULL auto_increment,
+		qid int NOT NULL default 0,
+		answer text NOT NULL,
+		survey_id int NOT NULL default 0,
+		user_id int NOT NULL default 0,
+		PRIMARY KEY (id)
 		)";
 api_sql_query($sql, __FILE__, __LINE__);
 	/*
@@ -486,59 +485,6 @@ api_sql_query($sql, __FILE__, __LINE__);
 		resource_type varchar(50) default NULL,
 		resource_id int unsigned default NULL,
 		UNIQUE KEY id (id)
-		) TYPE=MyISAM";
-	api_sql_query($sql, __FILE__, __LINE__);
-
-	/*
-	-----------------------------------------------------------
-		Learning path
-	-----------------------------------------------------------
-	*/
-	$sql = "
-		CREATE TABLE `".$TABLELEARNPATHITEMS . "` (
-		id int unsigned NOT NULL auto_increment,
-		chapter_id int unsigned default NULL,
-		item_type varchar(50) default NULL,
-		item_id int unsigned default NULL,
-		display_order smallint default NULL,
-		title varchar(255) default NULL,
-		description text,
-		prereq_id int unsigned default NULL,
-		prereq_type char(1) default NULL,
-		prereq_completion_limit varchar(10) default NULL,
-		UNIQUE KEY id (id)
-		) TYPE=MyISAM";
-	api_sql_query($sql, __FILE__, __LINE__);
-
-	$sql = "
-		CREATE TABLE `".$TABLELEARNPATHCHAPTERS . "` (
-		id int unsigned NOT NULL auto_increment,
-		learnpath_id int unsigned default NULL,
-		chapter_name varchar(255) default NULL,
-		chapter_description text,
-	 	parent_chapter_id int unsigned default 0 NOT NULL,
-		display_order mediumint unsigned NOT NULL default 0,
-		PRIMARY KEY (id)
-		) TYPE=MyISAM";
-	api_sql_query($sql, __FILE__, __LINE__);
-
-	$sql = "
-		CREATE TABLE `".$TABLELEARNPATHMAIN . "` (
-		learnpath_id int unsigned NOT NULL auto_increment,
-		learnpath_name varchar(255) default NULL,
-		learnpath_description text,
-		PRIMARY KEY (learnpath_id)
-		) TYPE=MyISAM";
-	api_sql_query($sql, __FILE__, __LINE__);
-
-	$sql = "
-		CREATE TABLE `".$TABLELEARNPATHUSERS . "` (
-		user_id int unsigned NOT NULL,
-		learnpath_id int unsigned NOT NULL,
-		learnpath_item_id int unsigned default NULL,
-		status varchar(15) default NULL,
-		score smallint default NULL,
-		time varchar(20) default NULL
 		) TYPE=MyISAM";
 	api_sql_query($sql, __FILE__, __LINE__);
 
@@ -591,24 +537,24 @@ api_sql_query($sql, __FILE__, __LINE__);
 	// Forum
 	$sql = "
 		CREATE TABLE `".$TABLETOOLFORUM . "` (
-		 forum_id int(11) NOT NULL auto_increment,
+		 forum_id int NOT NULL auto_increment,
 		 forum_title varchar(255) NOT NULL default '',
 		 forum_comment text,
-		 forum_threads int(11) default '0',
-		 forum_posts int(11) default '0',
-		 forum_last_post int(11) default '0',
-		 forum_category int(11) default NULL,
-		 allow_anonymous int(11) default NULL,
-		 allow_edit int(11) default NULL,
+		 forum_threads int default 0,
+		 forum_posts int default 0,
+		 forum_last_post int default 0,
+		 forum_category int default NULL,
+		 allow_anonymous int default NULL,
+		 allow_edit int default NULL,
 		 approval_direct_post varchar(20) default NULL,
-		 allow_attachments int(11) default NULL,
-		 allow_new_threads int(11) default NULL,
+		 allow_attachments int default NULL,
+		 allow_new_threads int default NULL,
 		 default_view varchar(20) default NULL,
 		 forum_of_group varchar(20) default NULL,
 		 forum_group_public_private varchar(20) default 'public',
-		 forum_order int(11) default NULL,
-		 locked int(5) NOT NULL default '0',
-		 PRIMARY KEY (`forum_id`)
+		 forum_order int default NULL,
+		 locked int NOT NULL default 0,
+		 PRIMARY KEY (forum_id)
 		) TYPE=MyISAM";
 
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -616,19 +562,19 @@ api_sql_query($sql, __FILE__, __LINE__);
 	// Forum Threads
 	$sql = "
 		CREATE TABLE `".$TABLETOOLFORUMTHREAD . "` (
-		 thread_id int(11) NOT NULL auto_increment,
+		 thread_id int NOT NULL auto_increment,
 		 thread_title varchar(255) default NULL,
-		 forum_id int(11) default NULL,
-		 thread_replies int(11) default '0',
-		 thread_poster_id int(11) default NULL,
-		 thread_poster_name int(11) default '0',
-		 thread_views int(11) default '0',
-		 thread_last_post int(11) default NULL,
+		 forum_id int default NULL,
+		 thread_replies int default 0,
+		 thread_poster_id int default NULL,
+		 thread_poster_name int default 0,
+		 thread_views int default 0,
+		 thread_last_post int default NULL,
 		 thread_date datetime default '0000-00-00 00:00:00',
-		 thread_sticky int(2) default '0',
-		 locked int(5) NOT NULL default '0',
-		 PRIMARY KEY (`thread_id`),
-		 KEY `thread_id` (`thread_id`)
+		 thread_sticky tinyint unsigned default 0,
+		 locked int NOT NULL default 0,
+		 PRIMARY KEY (thread_id),
+		 KEY thread_id (thread_id)
 		) TYPE=MyISAM";
 
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -636,20 +582,20 @@ api_sql_query($sql, __FILE__, __LINE__);
 	// Forum Posts
 	$sql = "
 		CREATE TABLE `".$TABLETOOLFORUMPOST . "` (
-		 post_id int(11) NOT NULL auto_increment,
+		 post_id int NOT NULL auto_increment,
 		 post_title varchar(250) default NULL,
 		 post_text text,
-		 thread_id int(11) default '0',
-		 forum_id int(11) default '0',
-		 poster_id int(11) default '0',
+		 thread_id int default 0,
+		 forum_id int default 0,
+		 poster_id int default 0,
 		 poster_name varchar(100) default '',
 		 post_date datetime default '0000-00-00 00:00:00',
-		 post_notification int(2) default '0',
-		 post_parent_id int(2) default '0',
-		 visible int(2) default '1',
-		 PRIMARY KEY (`post_id`),
-		 KEY `poster_id` (`poster_id`),
-		 KEY `forum_id` (`forum_id`)
+		 post_notification tinyint default 0,
+		 post_parent_id tinyint default 0,
+		 visible tinyint default 1,
+		 PRIMARY KEY (post_id),
+		 KEY poster_id (poster_id),
+		 KEY forum_id (forum_id)
 		) TYPE=MyISAM";
 
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -657,9 +603,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 	// Forum Mailcue
 	$sql = "
 		CREATE TABLE `".$TABLETOOLFORUMMAILCUE . "` (
-		 thread_id int(11) default NULL,
-		 user_id int(11) default NULL,
-		 post_id int(11) default NULL
+		 thread_id int default NULL,
+		 user_id int default NULL,
+		 post_id int default NULL
 		) TYPE=MyISAM";
 
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -679,7 +625,7 @@ api_sql_query($sql, __FILE__, __LINE__);
 		sound varchar(50) default NULL,
 		type tinyint unsigned NOT NULL default 1,
 		random smallint(6) NOT NULL default 0,
-		active enum('0','1') NOT NULL default '0',
+		active tinyint NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -708,8 +654,8 @@ api_sql_query($sql, __FILE__, __LINE__);
 		comment text default NULL,
 		ponderation smallint default NULL,
 		position mediumint unsigned NOT NULL default 1,
-	    `hotspot_coordinates` tinytext,
-	    `hotspot_type` enum('square','circle','poly') default NULL,
+	    hotspot_coordinates tinytext,
+	    hotspot_type enum('square','circle','poly') default NULL,
 		PRIMARY KEY (id, question_id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -751,7 +697,7 @@ api_sql_query($sql, __FILE__, __LINE__);
 		visibility tinyint unsigned default 0,
 		admin varchar(200) default NULL,
 		address varchar(120) default NULL,
-		added_tool enum('0','1') default 1,
+		added_tool tinyint unsigned default 1,
 		target enum('_self','_blank') NOT NULL default '_self',
 		category enum('authoring','interaction','admin') NOT NULL default 'authoring',
 		PRIMARY KEY (id)
@@ -781,12 +727,12 @@ api_sql_query($sql, __FILE__, __LINE__);
 	*/
 	$sql = "
 		CREATE TABLE `".$TABLETOOLDOCUMENT . "` (
-			`id` int(10) unsigned NOT NULL auto_increment,
-			`path` varchar(255) NOT NULL default '',
-			`comment` text,
-			`title` varchar(255) default NULL,
-			`filetype` set('file','folder') NOT NULL default 'file',
-			`size` int(16) NOT NULL default '0',
+			id int unsigned NOT NULL auto_increment,
+			path varchar(255) NOT NULL default '',
+			comment text,
+			title varchar(255) default NULL,
+			filetype set('file','folder') NOT NULL default 'file',
+			size int NOT NULL default 0,
 			PRIMARY KEY (`id`)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -822,22 +768,12 @@ api_sql_query($sql, __FILE__, __LINE__);
 		author varchar(200) default NULL,
 		active tinyint default NULL,
 		accepted tinyint default 0,
-		post_group_id INT DEFAULT '0' NOT NULL,
+		post_group_id int DEFAULT 0 NOT NULL,
 		sent_date datetime NOT NULL default '0000-00-00 00:00:00',
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
 
-	// No reference to this table in code - commented temporarily
-	/*
-	$sql ="
-	CREATE TABLE `".$TABLETOOLWORKSUSER . "` (
-	stud_pub_id int unsigned NOT NULL,
-	user_id int unsigned NOT NULL,
-	PRIMARY KEY (stud_pub_id,user_id)
-	)";
-	api_sql_query($sql,__FILE__,__LINE__);
-	*/
 	/*
 	-----------------------------------------------------------
 		Links tool
@@ -907,13 +843,14 @@ api_sql_query($sql, __FILE__, __LINE__);
 		category_id int unsigned NOT NULL default 0,
 		description text,
 		max_student smallint unsigned NOT NULL default 8,
-		doc_state enum('0','1','2') NOT NULL default 1,
-		calendar_state enum('0','1','2') NOT NULL default 0,
-		work_state enum('0','1','2') NOT NULL default 0,
-		announcements_state enum('0','1','2') NOT NULL default 0,
+		forum_state tinyint unsigned NOT NULL default 1,
+		doc_state tinyint unsigned NOT NULL default 1,
+		calendar_state tinyint unsigned NOT NULL default 0,
+		work_state tinyint unsigned NOT NULL default 0,
+		announcements_state tinyint unsigned NOT NULL default 0,
 		secret_directory varchar(255) default NULL,
-		self_registration_allowed enum('0','1') NOT NULL default '0',
-		self_unregistration_allowed enum('0','1') NOT NULL default '0',
+		self_registration_allowed tinyint unsigned NOT NULL default '0',
+		self_unregistration_allowed tinyint unsigned NOT NULL default '0',
 		PRIMARY KEY (id)
 		)");
 
@@ -921,13 +858,14 @@ api_sql_query($sql, __FILE__, __LINE__);
 		id int unsigned NOT NULL auto_increment,
 		title varchar(255) NOT NULL default '',
 		description text NOT NULL,
+		forum_state tinyint unsigned NOT NULL default 1,
 		doc_state tinyint unsigned NOT NULL default 1,
 		calendar_state tinyint unsigned NOT NULL default 1,
 		work_state tinyint unsigned NOT NULL default 1,
 		announcements_state tinyint unsigned NOT NULL default 1,
 		max_student smallint unsigned NOT NULL default 8,
-		self_reg_allowed enum('0','1') NOT NULL default '0',
-		self_unreg_allowed enum('0','1') NOT NULL default '0',
+		self_reg_allowed tinyint unsigned NOT NULL default '0',
+		self_unreg_allowed tinyint unsigned NOT NULL default '0',
 		groups_per_user smallint unsigned NOT NULL default 0,
 		display_order smallint unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
@@ -972,7 +910,7 @@ api_sql_query($sql, __FILE__, __LINE__);
 	*/
 	api_sql_query("
 		CREATE TABLE `".$TABLEINTROS . "` (
-		`id` varchar(50) NOT NULL,
+		id varchar(50) NOT NULL,
 		intro_text text NOT NULL,
 		PRIMARY KEY (id))");
 
@@ -1013,24 +951,24 @@ api_sql_query($sql, __FILE__, __LINE__);
 		)");
 	
 	$sql = "CREATE TABLE `".$TABLETOOLDROPBOXCATEGORY."` (
-  			`cat_id` int(11) NOT NULL auto_increment,
-			`cat_name` text NOT NULL,
-  			`received` enum('0','1') NOT NULL default '0',
-  			`sent` enum('0','1') NOT NULL default '0',
-  			`user_id` int(11) NOT NULL default '0',
-  			PRIMARY KEY  (`cat_id`)
+  			cat_id int NOT NULL auto_increment,
+			cat_name text NOT NULL,
+  			received tinyint unsigned NOT NULL default 0,
+  			sent tinyint unsigned NOT NULL default 0,
+  			user_id int NOT NULL default 0,
+  			PRIMARY KEY  (cat_id)
   			)";
 	api_sql_query($sql, __FILE__, __LINE__);
 	
 	$sql = "CREATE TABLE `".$TABLETOOLDROPBOXFEEDBACK."` (
-			  `feedback_id` int(11) NOT NULL auto_increment,
-			  `file_id` int(11) NOT NULL default '0',
-			  `author_user_id` int(11) NOT NULL default '0',
-			  `feedback` text NOT NULL,
-			  `feedback_date` datetime NOT NULL default '0000-00-00 00:00:00',
-			  PRIMARY KEY  (`feedback_id`),
-			  KEY `file_id` (`file_id`),
-			  KEY `author_user_id` (`author_user_id`)
+			  feedback_id int NOT NULL auto_increment,
+			  file_id int NOT NULL default 0,
+			  author_user_id int NOT NULL default 0,
+			  feedback text NOT NULL,
+			  feedback_date datetime NOT NULL default '0000-00-00 00:00:00',
+			  PRIMARY KEY  (feedback_id),
+			  KEY file_id (file_id),
+			  KEY author_user_id (author_user_id)
   			)";
 	api_sql_query($sql, __FILE__, __LINE__);
 	
@@ -1129,12 +1067,12 @@ api_sql_query($sql, __FILE__, __LINE__);
 	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs . "` (
-			`blog_id` smallint( 6 ) NOT NULL AUTO_INCREMENT ,
-			`blog_name` varchar( 250 ) NOT NULL default '',
-			`blog_subtitle` varchar( 250 ) default NULL ,
-			`date_creation` datetime NOT NULL default '0000-00-00 00:00:00',
-			`visibility` enum( '0', '1' ) NOT NULL default '0',
-			PRIMARY KEY ( `blog_id` )
+			blog_id smallint NOT NULL AUTO_INCREMENT ,
+			blog_name varchar( 250 ) NOT NULL default '',
+			blog_subtitle varchar( 250 ) default NULL ,
+			date_creation datetime NOT NULL default '0000-00-00 00:00:00',
+			visibility tinyint unsigned NOT NULL default 0,
+			PRIMARY KEY ( blog_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with blogs in this course';";
 
 	if(!api_sql_query($sql))
@@ -1142,16 +1080,16 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_comments . "` (
-			`comment_id` int NOT NULL AUTO_INCREMENT ,
-			`title` varchar( 250 ) NOT NULL default '',
-			`comment` longtext NOT NULL ,
-			`author_id` int NOT NULL default '0',
-			`date_creation` datetime NOT NULL default '0000-00-00 00:00:00',
-			`blog_id` mediumint NOT NULL default '0',
-			`post_id` int NOT NULL default '0',
-			`task_id` int default NULL ,
-			`parent_comment_id` int NOT NULL default '0',
-			PRIMARY KEY ( `comment_id` )
+			comment_id int NOT NULL AUTO_INCREMENT ,
+			title varchar( 250 ) NOT NULL default '',
+			comment longtext NOT NULL ,
+			author_id int NOT NULL default 0,
+			date_creation datetime NOT NULL default '0000-00-00 00:00:00',
+			blog_id mediumint NOT NULL default 0,
+			post_id int NOT NULL default 0,
+			task_id int default NULL ,
+			parent_comment_id int NOT NULL default 0,
+			PRIMARY KEY ( comment_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with comments on posts in a blog';";
 
 	if(!api_sql_query($sql))
@@ -1159,13 +1097,13 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_posts . "` (
-			`post_id` int NOT NULL AUTO_INCREMENT ,
-			`title` varchar( 250 ) NOT NULL default '',
-			`full_text` longtext NOT NULL ,
-			`date_creation` datetime NOT NULL default '0000-00-00 00:00:00',
-			`blog_id` mediumint NOT NULL default '0',
-			`author_id` int NOT NULL default '0',
-			PRIMARY KEY ( `post_id` )
+			post_id int NOT NULL AUTO_INCREMENT ,
+			title varchar( 250 ) NOT NULL default '',
+			full_text longtext NOT NULL ,
+			date_creation datetime NOT NULL default '0000-00-00 00:00:00',
+			blog_id mediumint NOT NULL default 0,
+			author_id int NOT NULL default 0,
+			PRIMARY KEY ( post_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with posts / blog.';";
 
 	if(!api_sql_query($sql))
@@ -1173,13 +1111,13 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_rating . "` (
-			`rating_id` int NOT NULL AUTO_INCREMENT ,
-			`blog_id` int NOT NULL default '0',
-			`rating_type` enum( 'post', 'comment' ) NOT NULL default 'post',
-			`item_id` int NOT NULL default '0',
-			`user_id` int NOT NULL default '0',
-			`rating` mediumint NOT NULL default '0',
-			PRIMARY KEY ( `rating_id` )
+			rating_id int NOT NULL AUTO_INCREMENT ,
+			blog_id int NOT NULL default 0,
+			rating_type enum( 'post', 'comment' ) NOT NULL default 'post',
+			item_id int NOT NULL default 0,
+			user_id int NOT NULL default 0,
+			rating mediumint NOT NULL default 0,
+			PRIMARY KEY ( rating_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with ratings for post/comments in a certain blog';";
 
 	if(!api_sql_query($sql))
@@ -1187,9 +1125,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_rel_user . "` (
-			`blog_id` int NOT NULL default '0',
-			`user_id` int NOT NULL default '0',
-			PRIMARY KEY ( `blog_id` , `user_id` )
+			blog_id int NOT NULL default 0,
+			user_id int NOT NULL default 0,
+			PRIMARY KEY ( blog_id , user_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table representing users subscribed to a blog';";
 
 	if(!api_sql_query($sql))
@@ -1197,13 +1135,13 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_tasks . "` (
-			`task_id` mediumint NOT NULL AUTO_INCREMENT ,
-			`blog_id` mediumint NOT NULL default '0',
-			`title` varchar( 250 ) NOT NULL default '',
-			`description` text NOT NULL ,
-			`color` varchar( 10 ) NOT NULL default '',
-			`system_task` enum( '0', '1' ) NOT NULL default '0',
-			PRIMARY KEY ( `task_id` )
+			task_id mediumint NOT NULL AUTO_INCREMENT ,
+			blog_id mediumint NOT NULL default 0,
+			title varchar( 250 ) NOT NULL default '',
+			description text NOT NULL ,
+			color varchar( 10 ) NOT NULL default '',
+			system_task tinyint unsigned NOT NULL default 0,
+			PRIMARY KEY ( task_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with tasks for a blog';";
 
 	if(!api_sql_query($sql))
@@ -1211,11 +1149,11 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_tasks_rel_user . "` (
-			`blog_id` mediumint NOT NULL default '0',
-			`user_id` int NOT NULL default '0',
-			`task_id` mediumint NOT NULL default '0',
-			`target_date` date NOT NULL default '0000-00-00',
-			PRIMARY KEY ( `blog_id` , `user_id` , `task_id` )
+			blog_id mediumint NOT NULL default 0,
+			user_id int NOT NULL default 0,
+			task_id mediumint NOT NULL default 0,
+			target_date date NOT NULL default '0000-00-00',
+			PRIMARY KEY ( blog_id , user_id , task_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with tasks assigned to a user in a blog';";
 
 	if(!api_sql_query($sql))
@@ -1223,11 +1161,11 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_permission_group . "` (
-			`id` int( 11 ) NOT NULL AUTO_INCREMENT ,
-			`group_id` int( 11 ) NOT NULL default '0',
-			`tool` varchar( 250 ) NOT NULL default '',
-			`action` varchar( 250 ) NOT NULL default '',
-			PRIMARY KEY ( `id` )
+			id int NOT NULL AUTO_INCREMENT ,
+			group_id int NOT NULL default 0,
+			tool varchar( 250 ) NOT NULL default '',
+			action varchar( 250 ) NOT NULL default '',
+			PRIMARY KEY (id)
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
@@ -1235,11 +1173,11 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_permission_user . "` (
-			`id` int( 11 ) NOT NULL AUTO_INCREMENT ,
-			`user_id` int( 11 ) NOT NULL default '0',
-			`tool` varchar( 250 ) NOT NULL default '',
-			`action` varchar( 250 ) NOT NULL default '',
-			PRIMARY KEY ( `id` )
+			id int NOT NULL AUTO_INCREMENT ,
+			user_id int NOT NULL default 0,
+			tool varchar( 250 ) NOT NULL default '',
+			action varchar( 250 ) NOT NULL default '',
+			PRIMARY KEY ( id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
@@ -1247,11 +1185,11 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_permission_task . "` (
-			`id` int( 11 ) NOT NULL AUTO_INCREMENT ,
-			`task_id` int( 11 ) NOT NULL default '0',
-			`tool` varchar( 250 ) NOT NULL default '',
-			`action` varchar( 250 ) NOT NULL default '',
-			PRIMARY KEY ( `id` )
+			id int NOT NULL AUTO_INCREMENT ,
+			task_id int NOT NULL default 0,
+			tool varchar( 250 ) NOT NULL default '',
+			action varchar( 250 ) NOT NULL default '',
+			PRIMARY KEY ( id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
@@ -1259,11 +1197,11 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_role . "` (
-			`role_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
-			`role_name` varchar( 250 ) NOT NULL default '',
-			`role_comment` text,
-			`default_role` int( 2 ) default '0',
-			PRIMARY KEY ( `role_id` )
+			role_id int NOT NULL AUTO_INCREMENT ,
+			role_name varchar( 250 ) NOT NULL default '',
+			role_comment text,
+			default_role tinyint default 0,
+			PRIMARY KEY ( role_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
@@ -1271,9 +1209,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_role_group . "` (
-			`role_id` int( 11 ) NOT NULL default '0',
-			`scope` varchar( 20 ) NOT NULL default 'course',
-			`group_id` int( 11 ) NOT NULL default '0'
+			role_id int NOT NULL default 0,
+			scope varchar( 20 ) NOT NULL default 'course',
+			group_id int NOT NULL default 0
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
@@ -1281,10 +1219,10 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_role_permissions . "` (
-			`role_id` int( 11 ) NOT NULL default '0',
-			`tool` varchar( 250 ) NOT NULL default '',
-			`action` varchar( 50 ) NOT NULL default '',
-			`default` int( 2 ) NOT NULL default '0'
+			role_id int NOT NULL default 0,
+			tool varchar( 250 ) NOT NULL default '',
+			action varchar( 50 ) NOT NULL default '',
+			default_perm tinyint NOT NULL default 0
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
@@ -1292,9 +1230,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `" . $tbl_role_user . "` (
-			`role_id` int( 11 ) NOT NULL default '0',
-			`scope` varchar( 20 ) NOT NULL default 'course',
-			`user_id` int( 11 ) NOT NULL default '0'
+			role_id int NOT NULL default 0,
+			scope varchar( 20 ) NOT NULL default 'course',
+			user_id int NOT NULL default 0
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))

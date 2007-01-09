@@ -722,8 +722,8 @@ class Blog
 				echo '<div class="blogpost">'."\n";
 					echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>'."\n";
 					echo '<span class="blogpost_date">' . $blog_post_date . ' (' . $blog_post_time . ')</span>'."\n";
-					echo '<span id="blogpost_introduction_' . $blog_post_id . '">' . $introduction_text . $readMoreLink . '</span>'."\n";
-					echo '<span id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</span>'."\n";
+					echo '<span class="blogpost_introduction" id="blogpost_introduction_' . $blog_post_id . '">' . $introduction_text . $readMoreLink . '</span>'."\n";
+					echo '<span class="blogpost_text" id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</span>'."\n";
 					echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
 				echo '</div>'."\n";
 			}

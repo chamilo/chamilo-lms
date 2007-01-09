@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_all_courses.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: survey_all_courses.php 10631 2007-01-09 18:47:47Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -77,7 +77,6 @@ $cidReq = $_REQUEST['cidReq'];
 -----------------------------------------------------------
 */
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
-$interbreadcrumb[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
 
 /*
 -----------------------------------------------------------

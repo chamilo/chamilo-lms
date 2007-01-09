@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10594 2007-01-05 13:54:24Z elixir_inter $
+<?php // $Id: exercise_result.php 10621 2007-01-09 08:50:29Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -741,7 +741,14 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		<tr>
 		<td>
 		<br />
+			<?php
+			if ($origin != 'learnpath')
+			{
+			?>
 			<input type="submit" value="<?php echo get_lang('Ok'); ?>" />
+			<?php
+			}
+			?>
 		</td>
 		</tr>
 		</table>

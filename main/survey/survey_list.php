@@ -21,18 +21,13 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 10604 2007-01-06 17:03:13Z pcool $
+* 	@version $Id: survey_list.php 10630 2007-01-09 18:39:29Z pcool $
 * 
-* 	@todo handle the search stuff
 * 	@todo The ansTarget column is not done
 * 	@todo try to understand the white, blue, ... template stuff. 
+* 	@todo use quickforms for the forms
 */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
 // name of the language file that needs to be included 
 $language_file = 'survey';
 
@@ -68,7 +63,7 @@ $table_group 	= Database :: get_course_table('survey_group');
 $table_question = Database :: get_course_table('questions');
 $table_course 	= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
-$user_info 		= Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+$user_info 		= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 
 // language variables
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
@@ -122,7 +117,8 @@ if ($_POST['action'])
 
 
 // Action links
-echo '<a href="survey.php">'.get_lang('CreateSurvey').'</a> | ';
+echo '<a href="create_new_survey.php">'.get_lang('CreateNewSurvey').'</a> | ';
+echo '<a href="survey_all_courses.php">'.get_lang('CreateexistingSurvey').'</a> | ';
 echo '<a href="'.$_SERVER['PHP_SELF'].'?search=advanced">'.get_lang('Search').'</a>';
 
 
@@ -183,6 +179,13 @@ function display_survey_search_form()
  */
 function display_survey_list()
 {
+	if ($_GET['do_search'])
+	{
+		$message = get_lang('DisplaySearchResults').'<br />'; 
+		$message .= '<a href="'.$_SERVER['PHP_SELF'].'">'.get_lang('DisplayAll').'</a>';
+		Display::display_normal_message($message);
+	}
+	
 	// Create a sortable table with survey-data
 	$table = new SortableTable('surveys', 'get_number_of_surveys', 'get_survey_data',2);
 	$table->set_additional_parameters($parameters);
@@ -213,7 +216,13 @@ function get_number_of_surveys()
 {
 	global $table_survey; 
 	
-	$sql = "SELECT count(survey_id) AS total_number_of_items FROM ".$table_survey;
+	$search_restriction = survey_search_restriction();
+	if ($search_restriction)
+	{
+		$search_restriction = 'WHERE '.$search_restriction;
+	}
+	
+	$sql = "SELECT count(survey_id) AS total_number_of_items FROM ".$table_survey.' '.$search_restriction;
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$obj = mysql_fetch_object($res);
 	return $obj->total_number_of_items;
@@ -237,6 +246,13 @@ function get_survey_data($from, $number_of_items, $column, $direction)
 	global $table_survey;
 	global $table_user;
 	
+	// searching
+	$search_restriction = survey_search_restriction();
+	if ($search_restriction)
+	{
+		$search_restriction = ' AND '.$search_restriction;
+	}
+	
 	$sql = "SELECT  
 				survey.survey_id							AS col0,
                 survey.title								AS col1,
@@ -248,7 +264,9 @@ function get_survey_data($from, $number_of_items, $column, $direction)
                 ''				AS col7,
                 survey.survey_id							AS col8
              FROM $table_survey survey, $table_user user
-             WHERE survey.author = user.user_id";
+             WHERE survey.author = user.user_id
+             $search_restriction
+             ";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 	
@@ -280,48 +298,45 @@ function modify_filter($survey_id)
 }
 
 
+/**
+ * this function handles the search restriction for the SQL statements
+ * 
+ * 
+ */
+function survey_search_restriction()
+{
+	if ($_GET['do_search'])
+	{
+		if ($_GET['keyword_title']<>'')
+		{
+			$search_term[] = 'title =\''.mysql_real_escape_string($_GET['keyword_title']).'\'';
+		}
+		if ($_GET['keyword_code']<>'')
+		{
+			$search_term[] = 'code =\''.mysql_real_escape_string($_GET['keyword_code']).'\'';
+		}
+		if ($_GET['keyword_language']<>'%')
+		{
+			$search_term[] = 'lang =\''.mysql_real_escape_string($_GET['keyword_language']).'\'';
+		}
+		
+		$search_restriction = implode(' AND ', $search_term);
+		return $search_restriction;
+	}
+	else 
+	{
+		return false;
+	}
+}
+
 
 
 
 /*	if(isset($published))
 	{
-	$sname = surveymanager::pick_surveyname($surveyid);
-	$error_message = get_lang('YourSurveyHasBeenPublished');
-	Display::display_error_message("Survey "."'".$sname."'"." ".$error_message);	
-	}
-	if (isset ($_GET['delete_course']))
-	{
-		CourseManager :: delete_course($_GET['delete_course']);
-	}
-	if (isset ($_GET['keyword']))
-	{
-		$keyword = addslashes($_GET['keyword']);
-		$sql = "SELECT * FROM ".$table_survey." WHERE title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%'";
-		$parameters = array ('keyword' => $_GET['keyword']);
-		$parameters['surveyid']=$surveyid;
-		$parameters['newgroupid']=$groupid;
-		$parameters['cidReq']=$cidReq;
-	}
-	elseif (isset ($_GET['keyword_title']))
-	{
-		$keyword_title = addslashes($_GET['keyword_title']);
-		$keyword_code = addslashes($_GET['keyword_code']);
-		$keyword_language = addslashes($_GET['keyword_language']);
-		$sql = "SELECT * FROM ".$table_survey." WHERE title LIKE '%".$keyword_title."%' AND code LIKE '%".$keyword_code."%' AND lang LIKE '%".$keyword_language."%'";
-		$parameters['keyword_title'] = $_GET['keyword_title'];
-		$parameters['keyword_code'] = $_GET['keyword_code'];
-		$parameters['keyword_language'] = $_GET['keyword_language'];
-		$parameters['surveyid']=$surveyid;
-		$parameters['newgroupid']=$groupid;
-		$parameters['cidReq']=$cidReq;
-	}
-	else
-	{
-		$sql = "SELECT * FROM ".$table_survey;
-		$parameters = array ();
-		$parameters['surveyid']=$surveyid;
-		$parameters['newgroupid']=$groupid;
-		$parameters['cidReq']=$cidReq;
+		$sname = surveymanager::pick_surveyname($surveyid);
+		$error_message = get_lang('YourSurveyHasBeenPublished');
+		Display::display_error_message("Survey "."'".$sname."'"." ".$error_message);	
 	}
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if (mysql_num_rows($res) > 0)

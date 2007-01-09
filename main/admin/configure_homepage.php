@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10563 2006-12-28 15:43:43Z elixir_inter $
+<?php // $Id: configure_homepage.php 10619 2007-01-09 08:27:30Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -22,7 +22,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='admin';
 
 $cidReset=true;
@@ -104,17 +104,17 @@ if(!empty($action))
 				fclose($fp);
 			}
 		}
-		
+
 		//NEWS
 		elseif($action == 'edit_news')
 		{
-			
+
 			$s_languages_news=$_POST["news_languages"];
 			//echo "langue choisie : ".$s_languages_news;
 			$home_news=trim(stripslashes($_POST['home_news']));
-			
+
 			if($s_languages_news!="all"){
-				
+
 				if(file_exists("'../../home/home_news_".$s_languages_news.".html")){
 					if(is_writable("../../home/home_news_".$s_languages_news.".html")){
 						$fp=fopen("../../home/home_news_".$s_languages_news.".html","w");
@@ -132,15 +132,15 @@ if(!empty($action))
 					fclose($fp);
 				}
 			}
-			
+
 			//we update all the news file
 			else{
 				$_languages=api_get_languages();
-			
+
 				foreach($_languages["name"] as $key => $value){
-					
+
 					$english_name=$_languages["folder"][$key];
-					
+
 					if(file_exists("'../../home/home_news_".$english_name.".html")){
 						if(is_writable("../../home/home_news_".$english_name.".html")){
 							$fp=fopen("../../home/home_news_".$english_name.".html","w");
@@ -352,7 +352,7 @@ if(!empty($action))
 		//$home_news=file('../../home/home_news.html');
 
 		//$home_news=implode('',$home_news);
-		
+
 		if(file_exists("'../../home/home_news_".$menu_language.".html")){
 			if(is_readable("../../home/home_news_".$menu_language.".html")){
 				$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
@@ -367,7 +367,7 @@ if(!empty($action))
 			$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
 			$home_news=implode('',$home_news);
 		}
-		
+
 	}
 	elseif($action == 'insert_link')
 	{
@@ -572,7 +572,7 @@ foreach($home_menu as $key=>$enreg)
 
 <?php
     //api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
-    
+
     $oFCKeditor = new FCKeditor('link_html') ;
 	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 	$oFCKeditor->Height		= '400';
@@ -580,15 +580,15 @@ foreach($home_menu as $key=>$enreg)
 	$oFCKeditor->Value		= isset($_POST['link_html'])?$_POST['link_html']:$link_html;
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 	$oFCKeditor->ToolbarSet = "Small";
-	
+
 	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
 	$result_sql=api_sql_query($sql);
 	$isocode_language=mysql_result($result_sql,0,0);
 	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-	
+
 	echo $oFCKeditor->CreateHtml();
-    
+
 ?>
 
   </td>
@@ -613,7 +613,8 @@ elseif($action == 'edit_top' || $action == 'edit_news')
 {
 	if($action == 'edit_top')
 	{
-		$name="home_news";
+		$name="home_top";
+		$open = $home_top;
 	}
 	else
 	{
@@ -626,7 +627,7 @@ elseif($action == 'edit_top' || $action == 'edit_news')
 		else{
 			$open='../../home/home_news_'.$user_selected_language.'.html';
 		}
-		
+
 		if(isset($_SESSION["user_language_choice"])){
 			$language=$user_selected_language;
 		}
@@ -682,13 +683,13 @@ if($action == 'edit_news'){
 	$oFCKeditor->Value		= $open;
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 	$oFCKeditor->ToolbarSet = "Small";
-	
+
 	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
 	$result_sql=api_sql_query($sql);
 	$isocode_language=mysql_result($result_sql,0,0);
 	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-	
+
 	echo $oFCKeditor->CreateHtml();
 ?>
 
@@ -769,7 +770,7 @@ else
 	  <td width="50%" valign="top">
 
 	<?php
-	
+
 		$user_selected_language = $_SESSION["_user"]["language"];
 		if(file_exists('../../home/home_news_'.$user_selected_language.'.html'))
 		{

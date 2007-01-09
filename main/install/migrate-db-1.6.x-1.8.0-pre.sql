@@ -91,9 +91,8 @@ CREATE TABLE permission_group(id int NOT NULL AUTO_INCREMENT, group_id int NOT N
 CREATE TABLE permission_user(id int NOT NULL AUTO_INCREMENT, user_id int NOT NULL default 0, tool varchar( 250 ) NOT NULL default '', action varchar( 250 ) NOT NULL default '', PRIMARY KEY ( id ));
 CREATE TABLE permission_task(id int NOT NULL AUTO_INCREMENT, task_id int NOT NULL default 0, tool varchar( 250 ) NOT NULL default '', action varchar( 250 ) NOT NULL default '', PRIMARY KEY ( id ));
 
-CREATE TABLE questions();
-ALTER TABLE quiz_answer ADD COLUMN hotspot_coordinates...
-ALTER TABLE quiz_answer ADD COLUMN hotspot_type...
+ALTER TABLE quiz_answer ADD COLUMN hotspot_coordinates tinytext;
+ALTER TABLE quiz_answer ADD COLUMN hotspot_type enum('square','circle','poly') default NULL;
 
 
 CREATE TABLE role(role_id int NOT NULL AUTO_INCREMENT , role_name varchar( 250 ) NOT NULL default '', role_comment text, default_role tinyint default 0,	PRIMARY KEY ( role_id ));
@@ -106,5 +105,6 @@ ALTER TABLE student_publication ADD COLUMN post_group_id int DEFAULT 0 NOT NULL;
 CREATE TABLE survey(survey_id int unsigned NOT NULL auto_increment, code varchar(20) default NULL, title varchar(80) default NULL, subtitle varchar(80) default NULL, author varchar(20) default NULL, lang varchar(20) default NULL, avail_from date default NULL, avail_till date default NULL, is_shared char(1) default 1, template varchar(20) default NULL, intro text, surveythanks text, creation_date datetime NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (survey_id), UNIQUE KEY id (survey_id));
 CREATE TABLE survey_group(group_id int NOT NULL auto_increment, survey_id int NOT NULL default 0, groupname varchar(100) NOT NULL default '', introduction text NOT NULL, imported_group int NOT NULL default 0, db_name varchar(100) NULL default '', sortby int NOT NULL default 1, PRIMARY KEY (group_id));
 CREATE TABLE survey_report(id int NOT NULL auto_increment, qid int NOT NULL default 0, answer text NOT NULL, survey_id int NOT NULL default 0, user_id int NOT NULL default 0, PRIMARY KEY (id));
+CREATE TABLE questions(qid int unsigned NOT NULL auto_increment,gid int NOT NULL default 0,	survey_id int NOT NULL default 0,qtype varchar(50) NOT NULL default '',	caption text NOT NULL,alignment varchar(100) NOT NULL default '',sortby int NOT NULL default 1,a1 text NOT NULL,a2 text NOT NULL,a3 text NOT NULL,a4 text NOT NULL,a5 text NOT NULL,a6 text NOT NULL,a7 text NOT NULL,a8 text NOT NULL,a9 text NOT NULL,a10 text NOT NULL,at varchar(200) NOT NULL default '',ad varchar(200) NOT NULL default '',alt_text text NOT NULL,	r1 int NOT NULL default 0,r2 int NOT NULL default 0,r3 int NOT NULL default 0,r4 int NOT NULL default 0,r5 int NOT NULL default 0,r6 int NOT NULL default 0,r7 int NOT NULL default 0,r8 int NOT NULL default 0,r9 int NOT NULL default 0,r10 int NOT NULL default 0,	imported_question int NOT NULL default 0,db_name varchar(100) NULL default '',PRIMARY KEY (qid));
 
 ALTER TABLE tool ADD COLUMN category enum('authoring','interaction','admin') NOT NULL default 'authoring';

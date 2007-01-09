@@ -220,10 +220,12 @@ input[text] {font-size: 12px; }
 	COLOR: rgb(39,84,175);
 	PADDING-TOP: 5px;
 	TEXT-DECORATION: none;
+	border: 0;
 }
 #header3 A:hover {
 	COLOR: #333;
 	BACKGROUND:  url(../../img/tab_right_hover.gif) no-repeat right top;
+	border: 0;
 }
 #header3 UL {
 	PADDING-RIGHT: 10px;
@@ -241,6 +243,7 @@ input[text] {font-size: 12px; }
 	PADDING-BOTTOM: 0px;
 	MARGIN: 0px;
 	PADDING-TOP: 0px;
+	border: 0;
 	/*border-bottom: 1px solid #4171b5;*/
 }
 #header3 LI:hover {
@@ -250,14 +253,17 @@ input[text] {font-size: 12px; }
 	PADDING-BOTTOM: 0px;
 	MARGIN: 0px;
 	PADDING-TOP: 0px
+	border: 0;
 }
 #header3 #current {
 	BACKGROUND-IMAGE:  url(../../img/tab_left_active.gif);
 	border-bottom: 1px solid #fff;
+	background-color: transparent;
 }
 #header3 #current A {
 	BACKGROUND-IMAGE:  url(../../img/tab_right_active.gif);
 	COLOR: #333
+	background-color: transparent;
 }
 
 #header3 .banner_links {
@@ -1328,7 +1334,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 }
 #tabbed_menu #tabbed_menu_tabs li
 {
-	margin: 0 10; 
+	margin: 0 10;
 	padding: 0;
 	display: inline;
 	list-style-type: none;

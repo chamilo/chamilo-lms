@@ -63,7 +63,7 @@ function show_tools_category($course_tool_category)
 				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
-				
+
 		case TOOL_AUTHORING:
 
 				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE category = 'authoring' ORDER BY id",__FILE__,__LINE__);
@@ -87,7 +87,7 @@ function show_tools_category($course_tool_category)
 				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE category = 'admin' ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
-				
+
 	}
 
 	while ($temp_row = mysql_fetch_array($result))
@@ -115,10 +115,13 @@ function show_tools_category($course_tool_category)
 			break;
 
 			case TOOL_INTERACTION:
+			$sql_links = null;
+			/*
 			$sql_links="SELECT tl.*, tip.visibility
 				FROM $course_link_table tl
 				LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
 						WHERE tl.on_homepage='1' ";
+			*/
 			break;
 
 			case TOOL_STUDENT_VIEW:
@@ -127,7 +130,7 @@ function show_tools_category($course_tool_category)
 				LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
 						WHERE tl.on_homepage='1'";
 			break;
-			
+
 			case TOOL_ADMIN:
 				$sql_links="SELECT tl.*, tip.visibility
 				FROM $course_link_table tl
@@ -154,7 +157,7 @@ function show_tools_category($course_tool_category)
 			$properties['visibility'] = $links_row['visibility'];
 			$properties['image'] = ($links_row['visibility']== '0') ? "external_na.gif" : "external.gif";
 			$properties['adminlink'] = api_get_path(WEB_CODE_PATH) . "link/link.php?action=editlink&id=".$links_row['id'];
-			
+
 			$tmp_all_tools_list[] = $properties;
 		}
 	}
@@ -163,7 +166,7 @@ function show_tools_category($course_tool_category)
 	{
 		foreach($tmp_all_tools_list as $toolsRow)
 		{
-			
+
 			if($toolsRow['image'] == 'blog.gif')
 			{
 				// Init
@@ -251,13 +254,13 @@ function show_tools_category($course_tool_category)
 				foreach($lnk as $this_link)
 				{
 					if(!$toolsRow['adminlink'])
-						{				
+						{
 							echo "<a href=\"" . $_SERVER['PHP_SELF'] . "?".api_get_cidreq()."&amp;id=" . $toolsRow["id"] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
-						}			
+						}
 				}
 			}
 			else{ echo '&nbsp;&nbsp;&nbsp;&nbsp;';}
-			
+
 			// Allow editing of invisible homepage links (modified external_module)
 			if($toolsRow["added_tool"] == 1 &&
 					api_is_allowed_to_edit() && !$toolsRow["visibility"])
@@ -266,7 +269,7 @@ function show_tools_category($course_tool_category)
 						"?".api_get_cidreq()."&amp;id=".$toolsRow["id"]."\">". get_lang("Edit"). "</a>";
 
 
-		
+
 
 			// NOTE : table contains only the image file name, not full path
 			if(!stristr($toolsRow['link'], 'http://') && !stristr($toolsRow['link'], 'https://') && !stristr($toolsRow['link'],'ftp://'))
@@ -277,7 +280,7 @@ function show_tools_category($course_tool_category)
 			  	$class="class=\"invisible\"";
 			  	$info = pathinfo($toolsRow['image']);
 			  	$basename = basename ($toolsRow['image'],'.'.$info['extension']); // $file is set to "index"
-				$toolsRow['image'] = $basename.'_na.'.$info['extension'];			
+				$toolsRow['image'] = $basename.'_na.'.$info['extension'];
 			}
  			else
 				$class='';
@@ -413,7 +416,7 @@ if(api_is_platform_admin())
 
 /*
 ==============================================================================
-		COURSE ADMIN ONLY VIEW 
+		COURSE ADMIN ONLY VIEW
 ==============================================================================
 */
 
@@ -450,7 +453,7 @@ if(api_is_allowed_to_edit() && !api_is_platform_admin())
 
 elseif(api_is_platform_admin() || api_is_allowed_to_edit())
 {
-	?>	
+	?>
 	<div class="courseadminview">
 		<span class="viewcaption"><font size="3" style="color:#FF9900;"><?php echo get_lang("Authoring") ?></font></span>
 		<table width="100%">
@@ -480,7 +483,7 @@ elseif(api_is_platform_admin() || api_is_allowed_to_edit())
 else{
 ?>
 	<div class="Authoringview">
-		
+
 		<table width="100%">
 			<?php show_tools_category(TOOL_STUDENT_VIEW) ?>
 		</table>

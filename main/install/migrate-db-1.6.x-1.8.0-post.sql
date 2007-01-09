@@ -13,42 +13,43 @@
 -- This first part is for the main database
 -- xxMAINxx
 
-ALTER TABLE session DROP COLUMN sess_id
-ALTER TABLE session DROP COLUMN sess_name
-ALTER TABLE session DROP COLUMN sess_time
-ALTER TABLE session DROP COLUMN sess_start
-ALTER TABLE session DROP COLUMN sess_value
+ALTER TABLE session DROP COLUMN sess_id;
+ALTER TABLE session DROP COLUMN sess_name;
+ALTER TABLE session DROP COLUMN sess_time;
+ALTER TABLE session DROP COLUMN sess_start;
+ALTER TABLE session DROP COLUMN sess_value;
 
 -- xxSTATSxx
 
 -- xxUSERxx
 
 -- xxSCORMxx
-DROP TABLE scorm_main();
-DROP TABLE scorm_sco_data();
+DROP TABLE scorm_main;
+DROP TABLE scorm_sco_data;
 
 -- xxCOURSExx
+ALTER TABLE group_category DROP COLUMN forum_state;
 
-ALTER TABLE group_info DROP COLUMN tutor_id
-ALTER TABLE group_info DROP COLUMN forum_state
-ALTER TABLE group_info DROP COLUMN forum_id
+ALTER TABLE group_info DROP COLUMN tutor_id;
+ALTER TABLE group_info DROP COLUMN forum_state;
+ALTER TABLE group_info DROP COLUMN forum_id;
 
-DROP TABLE bb_access();
-DROP TABLE bb_banlist();
-DROP TABLE bb_categories();
-DROP TABLE bb_config();
-DROP TABLE bb_disallow();
-DROP TABLE bb_forum_access();
-DROP TABLE bb_forum_mods();
-DROP TABLE bb_forums();
-DROP TABLE bb_headermetafooter();
-DROP TABLE bb_posts();
-DROP TABLE bb_posts_text();
-DROP TABLE bb_priv_msgs();
-DROP TABLE bb_ranks();
-DROP TABLE bb_sessions();
-DROP TABLE bb_themes();
-DROP TABLE bb_topics();
-DROP TABLE bb_users();
-DROP TABLE bb_whosonline();
-DROP TABLE bb_words();
+DROP TABLE bb_access;
+DROP TABLE bb_banlist;
+DROP TABLE bb_categories;
+DROP TABLE bb_config;
+DROP TABLE bb_disallow;
+DROP TABLE bb_forum_access;
+DROP TABLE bb_forum_mods;
+DROP TABLE bb_forums;
+DROP TABLE bb_headermetafooter;
+DROP TABLE bb_posts;
+DROP TABLE bb_posts_text;
+DROP TABLE bb_priv_msgs;
+DROP TABLE bb_ranks;
+DROP TABLE bb_sessions;
+DROP TABLE bb_themes;
+DROP TABLE bb_topics;
+DROP TABLE bb_users;
+DROP TABLE bb_whosonline;
+DROP TABLE bb_words;

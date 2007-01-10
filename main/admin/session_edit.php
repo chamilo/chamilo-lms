@@ -6,6 +6,9 @@ $cidReset=true;
 
 include('../inc/global.inc.php');
 
+// setting the section (for the tabs)
+$this_section=SECTION_PLATFORM_ADMIN;
+
 api_protect_admin_script();
 
 $id=intval($_GET['id']);

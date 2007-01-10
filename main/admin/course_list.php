@@ -1,5 +1,5 @@
 <?php
-// $Id: course_list.php 10215 2006-11-27 13:57:17Z pcool $
+// $Id: course_list.php 10637 2007-01-10 10:07:32Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -113,9 +113,10 @@ function get_course_data($from, $number_of_items, $column, $direction)
 function modify_filter($code)
 {
 	return
-		'<a href="course_information.php?code='.$code.'"><img src="../img/info_small.gif" border="0" style="vertical-align: middle" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>'.
-		'<a href="../course_home/course_home.php?cidReq='.$code.'"><img src="../img/home_small.gif" border="0" style="vertical-align: middle" title="'.get_lang('CourseHomepage').'" alt="'.get_lang('CourseHomepage').'"/></a>'.
-		'<a href="course_edit.php?course_code='.$code.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>'.
+		'<a href="course_information.php?code='.$code.'"><img src="../img/info_small.gif" border="0" style="vertical-align: middle" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;'.
+		'<a href="../course_home/course_home.php?cidReq='.$code.'"><img src="../img/home_small.gif" border="0" style="vertical-align: middle" title="'.get_lang('CourseHomepage').'" alt="'.get_lang('CourseHomepage').'"/></a>&nbsp;'.
+		'<a href="../tracking/courseLog.php?cidReq='.$code.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle" title="'.get_lang('Tracking').'" alt="'.get_lang('Tracking').'"/></a>&nbsp;'.
+		'<a href="course_edit.php?course_code='.$code.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.
 		'<a href="course_list.php?delete_course='.$code.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';	
 }
 if (isset ($_POST['action']))

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 10215 2006-11-27 13:57:17Z pcool $
+// $Id: user_list.php 10637 2007-01-10 10:07:32Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -250,9 +250,21 @@ function email_filter($email)
  */
 function modify_filter($user_id,$url_params)
 {
-	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/info_small.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>';
-	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'"><img src="../img/loginas.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>';
-	$result .= '<a href="user_edit.php?user_id='.$user_id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
+	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/info_small.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;';
+	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'"><img src="../img/loginas.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
+	
+	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$sql="SELECT status FROM ".$tbl_user." WHERE user_id='".$user_id."'";
+	$result_sql=api_sql_query($sql);
+	
+	if(mysql_result($result_sql,0,"status")=="1"){
+		$result .= '<a href="../mySpace/teachers.php?teacher_id='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
+	}
+	if(mysql_result($result_sql,0,"status")=="5"){
+		$result .= '<a href="../mySpace/student.php?user_id='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
+	}
+	
+	$result .= '<a href="user_edit.php?user_id='.$user_id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;';
 	$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';
 	return $result;
 }

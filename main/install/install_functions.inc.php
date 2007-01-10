@@ -117,16 +117,17 @@ function trueFalse($var)
 function get_config_param($param)
 {
 	global $configFile, $updateFromConfigFile;
+	$updatePath = realpath($_POST['updatePath']);
 
 	if(empty($updateFromConfigFile)) //if update from previous install was requested
 	{
 		//try to recover old config file from dokeos 1.6.x
-		if(file_exists(str_replace('../','',$_POST['updatePath']).'main/inc/claro_main.conf.php'))
+		if(file_exists($updatePath.'main/inc/claro_main.conf.php'))
 		{
 			$updateFromConfigFile='main/inc/claro_main.conf.php';
 		}
 		//try to recover old config file from dokeos 1.8.x
-		elseif(file_exists(str_replace('../','',$_POST['updatePath']).'main/inc/conf/configuration.php'))
+		elseif(file_exists($updatePath.'main/inc/conf/configuration.php'))
 		{
 			$updateFromConfigFile='main/inc/conf/configuration.php';
 		}
@@ -136,19 +137,19 @@ function get_config_param($param)
 			return null;
 		}
 	}
-
+	//look if we already have the queried param
 	if(is_array($configFile) && isset($configFile[$param]))
 	{
 		return $configFile[$param];
 	}
-	elseif(file_exists($_POST['updatePath'].$updateFromConfigFile))
+	//the param was not found in global vars, so look into the old config file
+	elseif(file_exists($updatePath.$updateFromConfigFile))
 	{
 		$configFile=array();
-
-		$temp=file($_POST['updatePath'].$updateFromConfigFile);
-
+		$temp=file($updatePath.$updateFromConfigFile);
 		$val='';
 
+		//parse the config file (TODO clarify why it has to be so complicated)
 		foreach($temp as $enreg)
 		{
 			if(strstr($enreg,'='))

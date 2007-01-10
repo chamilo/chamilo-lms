@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 10630 2007-01-09 18:39:29Z pcool $
+* 	@version $Id: survey_list.php 10660 2007-01-10 22:43:25Z pcool $
 * 
 * 	@todo The ansTarget column is not done
 * 	@todo try to understand the white, blue, ... template stuff. 
@@ -117,10 +117,9 @@ if ($_POST['action'])
 
 
 // Action links
-echo '<a href="create_new_survey.php">'.get_lang('CreateNewSurvey').'</a> | ';
-echo '<a href="survey_all_courses.php">'.get_lang('CreateexistingSurvey').'</a> | ';
+echo '<a href="create_new_survey.php?action=add">'.get_lang('CreateNewSurvey').'</a> | ';
+echo '<a href="survey_all_courses.php">'.get_lang('CreateExistingSurvey').'</a> | ';
 echo '<a href="'.$_SERVER['PHP_SELF'].'?search=advanced">'.get_lang('Search').'</a>';
-
 
 // Main content
 display_survey_list();
@@ -133,10 +132,13 @@ Display :: display_footer();
 /**
  * This function displays the form for searching a survey
  *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @return html code
  * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version January 2007
+ * 
  * @todo use quickforms
+ * @todo consider moving this to surveymanager.inc.lib.php
  */
 function display_survey_search_form()
 {
@@ -174,6 +176,7 @@ function display_survey_search_form()
  * This function displays the sortable table with all the surveys
  *
  * @return html code
+ * 
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version January 2007
  */
@@ -208,7 +211,7 @@ function display_survey_list()
  * This function calculates the total number of surveys
  * 
  * @return integer
- * @todo take the search restriction into account
+ * 
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version January 2007
  */
@@ -283,12 +286,16 @@ function get_survey_data($from, $number_of_items, $column, $direction)
 /**
  * This function changes the modify column of the sortable table
  * 
+ * @param integer $survey_id the id of the survey
+ * @return html code that are the actions that can be performed on any survey
+ * 
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version January 2007
  */
 function modify_filter($survey_id)
 {
-	$return = '<a href="survey_edit.php?survey_id='.$survey_id.'">'.Display::return_icon('edit.gif').'</a>';
+	$return = '<a href="create_new_survey.php?action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif').'</a>';
+	$return .= '<a href="survey_question.php?action=add&amp;survey_id='.$survey_id.'">'.Display::return_icon('add.gif').'</a>';
 	$return .= '<a href="survey_list.php?action=delete&amp;survey_id='.$survey_id.'">'.Display::return_icon('delete.gif').'</a>';
 	$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif').'</a>';
 	$return .= '<a href="survey_white.php?survey_id='.$survey_id.'">'.Display::return_icon('preview.gif').'</a>';
@@ -301,7 +308,10 @@ function modify_filter($survey_id)
 /**
  * this function handles the search restriction for the SQL statements
  * 
+ * @return false or a part of a SQL statement
  * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version January 2007
  */
 function survey_search_restriction()
 {

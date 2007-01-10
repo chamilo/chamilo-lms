@@ -19,8 +19,12 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: survey_all_courses.php 10631 2007-01-09 18:47:47Z pcool $
+* 	@author unknown
+* 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
+* 	@version $Id: survey_all_courses.php 10661 2007-01-10 22:44:31Z pcool $
+* 
+* 	@todo 	check if this page has to display all the shared surveys of the courses where the user is a teacher or only 
+* 			the shared surveys of this course?
 */
 
 // name of the language file that needs to be included 
@@ -35,21 +39,13 @@ require_once ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 
-/*
------------------------------------------------------------
-	Table definitions
------------------------------------------------------------
-*/
+// Database table definitions
+/** @todo use database constants for the survey tables */
 $table_survey 				= Database :: get_course_table('survey');
 $table_group 				= Database :: get_course_table('survey_group');
 $table_question 			= Database :: get_course_table('questions');
 $table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
 
-/*
------------------------------------------------------------
-	some permissions stuff (?)
------------------------------------------------------------
-*/
 /** @todo replace this with the correct code */
 /*
 $status = surveymanager::get_status();
@@ -68,51 +64,25 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-$cidReq = $_REQUEST['cidReq'];
-
-
-/*
------------------------------------------------------------
-	Breadcrumbs
------------------------------------------------------------
-*/
+// breadcrumbs
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 
-/*
------------------------------------------------------------
-	some variables
------------------------------------------------------------
-*/
-$tool_name = get_lang('CreateFromExistingSurveys');
-$tool_name1 = get_lang('SurveysOfAllCourses');
-$surveyid=$_GET['surveyid'];
+// Displaying the header
+Display::display_header(get_lang('CreateFromExistingSurveys'));
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
-Display :: display_header($tool_name);
-api_display_tool_title($tool_name1);
+// Displaying the tool title
+//api_display_tool_title(get_lang('CreateFromExistingSurveys'));
+
 ?>
-<SCRIPT LANGUAGE="JavaScript">
-function displayTemplate(url) {
-	window.open(url, 'popup', 'width=600,height=600,toolbar = no, status = no');
-}
-</script>
-<table>
-<tr>
-<td>
-</td>
-</tr>
-</table>		
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="action" value="add_survey">
-<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
+<input type="hidden" name="surveyid" value="<?php echo $_GET['survey_id']; ?>">
 <?php 	
 		$rsDbs = mysql_list_dbs();
 		$db_list = array();
-		while($db = mysql_fetch_array($rsDbs)){
+		while($db = mysql_fetch_array($rsDbs))
+		{
 			$db_list[] = $db[0];
 		}
    		$nameTools=get_lang('CreateFromExistingSurveys');
@@ -122,9 +92,8 @@ function displayTemplate(url) {
 				INNER JOIN ".Database::get_main_table(TABLE_MAIN_COURSE)." as course
 				ON course_survey.course_code = course.code";
 		$parameters = array ();
-		$parameters['surveyid']=$surveyid;
+		$parameters['surveyid']=$_GET['survey_id'];
 		$parameters['newgroupid']=$groupid;
-		$parameters['cidReq']=$cidReq;
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 	if (mysql_num_rows($res) > 0)
 	{		
@@ -147,9 +116,7 @@ function displayTemplate(url) {
 				{
 					//$survey[] = '<input type="checkbox" name="course[]" value="'.$obj->group_id.'">';
 					$survey[] = $object->title;
-					//$surveyid = $object->survey_id;
 					//$groupid=$obj->group_id;
-					//$surveyid=surveymanager::get_surveyid($groupid);
 					$authorid=surveymanager::get_author($db_name,$survey_id);
 					$author=surveymanager::get_survey_author($authorid);
 					//$NoOfQuestion=surveymanager::no_of_question($groupid);
@@ -158,7 +125,7 @@ function displayTemplate(url) {
 					$survey[] = $object->lang;
 					$survey[] = $object->avail_from ;
 					$survey[] = $object->avail_till ;	
-					$survey[] = "<a href=create_from_existing_survey.php?cidReq=$cidReq&surveyid=$survey_id&db_name=$db_name><img src=\"../img/info_small.gif\" border=\"0\" align=\"absmiddle\" alt=view></a>";
+					$survey[] = "<a href=create_from_existing_survey.php?surveyid=$survey_id&db_name=$db_name><img src=\"../img/info_small.gif\" border=\"0\" align=\"absmiddle\" alt=view></a>";
 					$surveys[] = $survey;				
 				}
 				
@@ -173,10 +140,12 @@ function displayTemplate(url) {
 		$table_header[] = array (' ', false);
 		if(!empty($surveys))
 		{
-		Display :: display_sortable_table($table_header, $surveys, array (), array (), $parameters);
+			Display :: display_sortable_table($table_header, $surveys, array (), array (), $parameters);
 		}
 		else
-		{$flag=1;}
+		{
+			$flag=1;
+		}
 		?>		
 		</form>
 <?php	
@@ -186,9 +155,11 @@ function displayTemplate(url) {
 		echo get_lang('NoSearchResults');
 	}
 	if($flag=='1')
-	{echo get_lang('SurveyNotShared');}
+	{
+		echo get_lang('SurveyNotShared');
+	}
 	?>
-	<form action="survey.php?cidReq=<?php echo $cidReq; ?>&db_name=<?php echo $db_name; ?>" method="post">
+	<form action="survey_list.php" method="post">
     <input type="submit" name="back1" value="<?php echo get_lang('Back'); ?>">
     </form>
 <?php

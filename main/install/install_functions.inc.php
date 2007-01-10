@@ -120,17 +120,13 @@ function get_config_param($param)
 
 	if(empty($updateFromConfigFile))
 	{
-		if(file_exists($_POST['updatePath'].'main/include/config.inc.php'))
-		{
-			$updateFromConfigFile='main/include/config.inc.php';
-		}
-		elseif(file_exists($_POST['updatePath'].'main/inc/conf/configuration.php'))
+		if(file_exists($_POST['updatePath'].'main/inc/conf/configuration.php'))
 		{
 			$updateFromConfigFile='main/inc/conf/configuration.php';
 		}
 		else
 		{
-			return;
+			return false;
 		}
 	}
 

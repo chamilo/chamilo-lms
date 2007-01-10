@@ -15,13 +15,14 @@ function step_active($param)
 
 /**
  * This function displays the Step X of Y -
+ * @return	string	String that says 'Step X of Y' with the right values
  */
 function display_step_sequence()
 {
 	global $current_step;
 	global $total_steps;
 
-	return get_lang('Step').' '.$current_step.' '.get_lang('Of').' '.$total_steps.' &ndash; ';
+	return get_lang('Step'.$current_step).' &ndash; ';
 }
 /**
  * this function checks if a php extension exists or not
@@ -241,8 +242,6 @@ function get_language_folder_list($dirname)
 */
 function display_language_selection_box()
 {
-	$langNameOfLang = get_lang('NameOfLang');
-
 	//get language list
 	$dirname = '../lang/';
 	$language_list = get_language_folder_list($dirname);
@@ -272,12 +271,12 @@ function display_language_selection_box()
  */
 function display_language_selection()
 { ?>
-	<h1>Welcome to the Dokeos installer!</h1>
-	<h2><?php echo display_step_sequence(); ?>Installation Language</h2>
-	<p>Please select the language you'd like to use while installing:</p>
+	<h1><?php get_lang('WelcomeToTheDokeosInstaller');?></h1>
+	<h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage');?></h2>
+	<p><?php echo get_lang('PleaseSelectInstallationProcessLanguage');?>:</p>
 	<form id="lang_form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <?php display_language_selection_box(); ?>
-		<input type="submit" name="step1" value="Next &gt;" />
+		<input type="submit" name="step1" value="<?php get_lang('Next');?> &gt;" />
 	</form>
 <?php }
 
@@ -296,7 +295,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 	echo '<h2>'.display_step_sequence().get_lang('Requirements')."</h2>\n";
 
 	echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
-	echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">read the installation guide</a>.<br />'."\n";
+	echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
 
 	//	SERVER REQUIREMENTS
 	echo '<div class="RequirementHeading"><h1>'.get_lang('ServerRequirements').'</h1>';
@@ -810,7 +809,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	}
 
 	echo "<h2>" . display_step_sequence() . get_lang("CfgSetting") . "</h2>";
-	echo '<p>'.get_lang('ConfigSettingsInfo').'</p>';
+	echo '<p>'.get_lang('ConfigSettingsInfo').' <b>main/inc/conf/configuration.php</b></p>';
 
 	echo "</td></tr>\n<tr><td>";
 	echo "<table width=\"100%\">";
@@ -939,11 +938,11 @@ function display_after_install_message($installType, $nbr_courses)
 
 	<?php if($installType == 'update' && $nbr_courses > MAX_COURSE_TRANSFER): ?>
 	<br><br>
-	<font color="red"><b>Warning :</b> You have more than <?php echo MAX_COURSE_TRANSFER; ?> courses on your Dokeos platform ! Only <?php echo MAX_COURSE_TRANSFER; ?> courses have been updated. To update the other courses, <a href="update_courses.php"><font color="red">click here</font></a>.</font>
+	<font color="red"><b><?php echo get_lang('Warning');?> :</b> <?php printf(get_lang('YouHaveMoreThanXCourses'),MAX_COURSE_TRANSFER,MAX_COURSE_TRANSFER,'<a href="update_courses.php"><font color="red">','</font></a>');?></font>
 	<?php endif; ?>
 
 	<br><br>
-	<b>Security advice :</b> To protect your site, make read-only (CHMOD 444) 'main/inc/conf/configuration.php' and 'main/install/index.php'.
+	<b><?php echo get_lang('SecurityAdvice');?> :</b> <?php printf(get_lang('ToProtectYourSiteMakeReadOnlyXAndY'),'main/inc/conf/configuration.php','main/install/index.php');?>
 	<br><br><br><br>
 
 	</form>

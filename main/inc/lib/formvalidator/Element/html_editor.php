@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 10595 2007-01-05 14:05:42Z elixir_inter $
+// $Id: html_editor.php 10649 2007-01-10 15:50:58Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -175,8 +175,8 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 
 		$result .=$fck_editor->CreateHtml();
 
-
-		$result .= '<small><a href="#" onclick="MyWindow=window.open('."'".api_get_path(WEB_CODE_PATH)."help/allowed_html_tags.php?fullpage=". ($this->fullPage ? '1' : '0')."','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=500,height=600,left=200,top=20'".'); return false;">'.get_lang('AllowedHTMLTags').'</a></small>';
+		//Add a link to open the allowed html tags window 
+		//$result .= '<small><a href="#" onclick="MyWindow=window.open('."'".api_get_path(WEB_CODE_PATH)."help/allowed_html_tags.php?fullpage=". ($this->fullPage ? '1' : '0')."','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=500,height=600,left=200,top=20'".'); return false;">'.get_lang('AllowedHTMLTags').'</a></small>';
 		return $result;
 	}
 }

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: survey.php 10662 2007-01-10 22:45:19Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -39,12 +39,8 @@ require_once (api_get_path(CONFIGURATION_PATH)."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 
-$cidReq = $_GET['cidReq'];
-/*
------------------------------------------------------------
-	Table definitions
------------------------------------------------------------
-*/
+// Database table definitions
+/** @todo use database constants for the survey tables */
 $table_survey = Database :: get_course_table('survey');
 
 /** @todo replace this with the correct code */
@@ -86,9 +82,8 @@ $aaa = '11';
 //$page1= 'ex';
 if($_POST['back'])
 {
- $cidReq=$_GET['cidReq'];
- header("location:survey_list.php?cidReq=$cidReq");
- exit;
+	header("location:survey_list.php");
+	exit;
 }
 
 /*
@@ -100,24 +95,23 @@ if (!empty($_POST['action']))
 {	
 	$surveyid=$_POST['exiztingsurvey'];
 	$survey = $_POST['survey'];
-	$cidReq=$_REQUEST['cidReq'];
     //$existingsurvey = trim(stripslashes($_POST['exiztingsurvey']));
 	if ($survey==0)
 	{
-		 header("location:create_new_survey.php?cidReq=$cidReq");
+		 header("location:create_new_survey.php");
 		 exit;
 	}
 	else
 	{		
-		 //header("location:create_from_existing_survey.php?surveyid=$surveyid&cidReq=$cidReq");
-		 header("location:survey_all_courses.php?cidReq=$cidReq");
+		 //header("location:create_from_existing_survey.php?surveyid=$surveyid");
+		 header("location:survey_all_courses.php");
 		 exit;
 	}
 }
 //$survey_list=SurveyManager::select_survey_list('',$extra_script);
 /*
 if(!$survey_list){
-		 header("location:create_new_survey.php?cidReq=$cidReq");
+		 header("location:create_new_survey.php");
 		 exit;
 }
 */
@@ -132,8 +126,7 @@ Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>" name="mainForm">
-<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>" />
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?" name="mainForm">
 <input type="hidden" name="newsurveyid" value="<?php echo $newsurvey_id; ?>" />
 <input class="checkbox" checked type="radio" name="survey" id="new_survey" value="<?php echo $newsurvey; ?>" /> <label for="new_survey"><?php echo get_lang('NewSurvey'); ?></label><br/>
 <input class="checkbox" type="radio" name="survey" id="existing_survey" value="<?php echo $existingsurvey; ?>" /> <label for="existing_survey"><?php echo  get_lang('Existingsurvey'); ?></label><br />

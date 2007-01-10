@@ -120,13 +120,17 @@ function get_config_param($param)
 
 	if(empty($updateFromConfigFile))
 	{
-		if(file_exists($_POST['updatePath'].'main/inc/conf/configuration.php'))
+		if(file_exists(str_replace('../','',$_POST['updatePath']).'main/inc/claro_main.conf.php'))
+		{
+			$updateFromConfigFile='main/inc/claro_main.conf.php';
+		}
+		elseif(file_exists(str_replace('../','',$_POST['updatePath']).'main/inc/conf/configuration.php'))
 		{
 			$updateFromConfigFile='main/inc/conf/configuration.php';
 		}
 		else
 		{
-			return false;
+			return null;
 		}
 	}
 

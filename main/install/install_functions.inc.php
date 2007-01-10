@@ -118,16 +118,19 @@ function get_config_param($param)
 {
 	global $configFile, $updateFromConfigFile;
 
-	if(empty($updateFromConfigFile))
+	if(empty($updateFromConfigFile)) //if update from previous install was requested
 	{
+		//try to recover old config file from dokeos 1.6.x
 		if(file_exists(str_replace('../','',$_POST['updatePath']).'main/inc/claro_main.conf.php'))
 		{
 			$updateFromConfigFile='main/inc/claro_main.conf.php';
 		}
+		//try to recover old config file from dokeos 1.8.x
 		elseif(file_exists(str_replace('../','',$_POST['updatePath']).'main/inc/conf/configuration.php'))
 		{
 			$updateFromConfigFile='main/inc/conf/configuration.php';
 		}
+		//give up recovering
 		else
 		{
 			return null;

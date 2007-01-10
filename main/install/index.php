@@ -268,7 +268,7 @@ elseif ($_POST['step5'])
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').$dokeos_version; ?></title>
+	<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version').$dokeos_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
 		@import "../css/default/default.css";
@@ -279,7 +279,7 @@ elseif ($_POST['step5'])
 
 
 <div id="header">
-	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').$dokeos_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').implode('|',$updateFromVersion); ?></div>
+	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version').$dokeos_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').implode('|',$updateFromVersion); ?></div>
 	<div class="clear"></div>
 	<div id="header2">&nbsp;</div>
 	<div id="header3">&nbsp;</div>

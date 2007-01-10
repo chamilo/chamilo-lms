@@ -148,7 +148,7 @@ $IMConfig['allow_replace'] = false;
 
   FALSE - No deleting allowed
 */
-$IMConfig['allow_delete'] = false;
+$IMConfig['allow_delete'] = true;
 
 /*
   Possible values: true, false

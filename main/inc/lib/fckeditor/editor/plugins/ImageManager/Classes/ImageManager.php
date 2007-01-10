@@ -408,6 +408,28 @@ class ImageManager
 		
 	}
 	
+	function _deletePictureInDatabase($relative){
+		
+		$path = "/images/".substr($relative,1);
+		
+		$dbDocumentTable = Database::get_course_table(TABLE_DOCUMENT);
+		$dbItemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
+		
+		//Select the id of the picture to delete
+		$sql="SELECT id FROM ".$dbDocumentTable." WHERE path='".$path."'";
+		$result=api_sql_query($sql);
+		$image_id=mysql_result($result,0,0);
+		
+		//Delete the picture in the documents table
+		$sql="DELETE FROM ".$dbDocumentTable." WHERE id='".$image_id."'";
+		$result=api_sql_query($sql);
+		
+		//Delete the picture in the item_property table
+		$sql="DELETE FROM ".$dbItemPropertyTable." WHERE ref='".$image_id."'";
+		$result=api_sql_query($sql);
+		
+	}
+	
 
 	/**
 	 * Process upload files. The file must be an 
@@ -561,8 +583,10 @@ class ImageManager
 	 */
 	function deleteFiles() 
 	{
-		if(isset($_GET['delf']))
+		if(!empty($_GET['delf'])){
 			$this->_delFile(rawurldecode($_GET['delf']));
+			$this->_deletePictureInDatabase(rawurldecode($_GET['delf']));
+		}
 	}
 
 	/**

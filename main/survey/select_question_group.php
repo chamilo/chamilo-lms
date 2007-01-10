@@ -20,15 +20,10 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question_group.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
+* 	@version $Id: select_question_group.php 10663 2007-01-10 22:49:09Z pcool $
 */
 
-
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
 // name of the language file that needs to be included 
 $language_file = 'survey';
 
@@ -69,13 +64,76 @@ $table_question 	= Database :: get_course_table('questions');
 $table_course 		= Database::get_main_table(TABLE_MAIN_COURSE);
 $table_survey_group = Database :: get_course_table('survey_group');
 
-$cidReq = $_GET['cidReq'];
-$db_name = $_REQUEST['db_name'];
-
-
-$tool_name1 = get_lang('AddQuestionGroup');
-$tool_name = get_lang('AddQuestionGroup');
+// breadcrumbs
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
+
+// Displaying the header
+Display::display_header(get_lang('AddQuestionGroup'));
+
+// Displaying the tool title
+// api_display_tool_title(get_lang('AddQuestionGroup'));
+
+// The survey we are working on
+$survey_data = get_survey($_GET['survey_id']);
+api_display_tool_title(get_lang('SurveyTitle').': '.$survey_data['survey_title']);
+
+// Footer
+Display :: display_footer();
+
+
+
+
+
+
+
+
+
+/**
+ * This function retrieves all the survey information 
+ * This is a DUPLICATE of the one in create_new_survey.php
+ *
+ * @param integer $survey_id the id of the survey
+ * @return array
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version januari 2007
+ * 
+ * @todo move this function to surveymanager.inc.lib.php
+ */
+function get_survey($survey_id)
+{
+	$tbl_survey = Database :: get_course_table('survey');
+	
+	$sql = "SELECT * FROM $tbl_survey WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$return = mysql_fetch_assoc($result);
+	
+	// we do this (temporarily) to have the array match the quickform elements immediately
+	// idealiter the fields in the db match the quickform fields
+	$return['survey_code'] 			= $return['code'];
+	$return['survey_title'] 		= $return['title'];
+	$return['survey_subtitle'] 		= $return['subtitle'];
+	$return['survey_language'] 		= $return['lang'];
+	$return['start_date'] 			= $return['avail_from'];
+	$return['end_date'] 			= $return['avail_till'];
+	$return['survey_share'] 		= $return['is_shared'];
+	$return['survey_introduction'] 	= $return['intro'];
+	$return['survey_thanks'] 		= $return['surveythanks'];
+	return $return;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 $default_group = '0';
 $new_group = '1';
 $existing_group = '2';
@@ -102,66 +160,7 @@ else
 	$per_page = $_REQUEST['per_page'];
 }
 
-/*
-$sql="SELECT * FROM $table_question WHERE gid='$groupid' AND survey_id = '$surveyid'";
-$res=api_sql_query($sql,__FILE__,__LINE__);
-$obj=mysql_fetch_object($res);
-$number=mysql_num_rows($res);
-for($i=1;$i<=$number;$i++)
-	{		
-		$up="up";
-		$down="down";		
-		if(isset($_POST[$up])||isset($_POST[$down]))
-		{			
-			$flag=0;
-			if(isset($_POST[$up]))
-			{
-				$tempmutlichkboxtext=$_POST['boxtext'];
-				if($tempradiodefault==$i)
-					$tempradiodefault--;
-				elseif($tempradiodefault==$i-1)
-					$tempradiodefault++;
-				$tempchkboxpoint=$_POST['chkboxpoint'];
-				if($tempradiotrue==$i)
-					$tempradiotrue--;
-				elseif($tempradiotrue==$i-1)
-					$tempradiotrue++;										
-				$tempm=	$tempmutlichkboxtext[$i-2];
-				$tempchkboxp=$tempchkboxpoint[$i-2];			
-				$tempmutlichkboxtext[$i-2]=$tempmutlichkboxtext[$i-1];
-				$tempchkboxpoint[$i-2]=$tempchkboxpoint[$i-1];
-				$tempmutlichkboxtext[$i-1]=$tempm;
-				$tempchkboxpoint[$i-1]=$tempchkboxp;
-				$_POST['mutlichkboxtext']=$tempmutlichkboxtext;
-				$_POST['chkboxpoint']=$tempchkboxpoint;
-			}
-			if(isset($_POST[$down]))
-			{
-				$tempmutlichkboxtext=$_POST['mutlichkboxtext'];
-				if($tempradiodefault==$i)
-					$tempradiodefault++;
-				elseif($tempradiodefault==$i+1)
-					$tempradiodefault--;
-				$tempchkboxpoint=$_POST['chkboxpoint'];
-				if($tempradiotrue==$i)
-					$tempradiotrue++;
-				elseif($tempradiotrue==$i+1)
-					$tempradiotrue--;
-				$tempm=	$tempmutlichkboxtext[$i];
-				$tempchkboxp=$tempchkboxpoint[$i];
-				$tempmutlichkboxtext[$i]=$tempmutlichkboxtext[$i-1];
-				$tempchkboxpoint[$i]=$tempchkboxpoint[$i-1];
-				$tempmutlichkboxtext[$i-1]=$tempm;
-				$tempchkboxpoint[$i-1]=$tempchkboxp;
-				$_POST['mutlichkboxtext']=$tempmutlichkboxtext;
-				$_POST['chkboxpoint']=$tempchkboxpoint;
-			}
-			//echo ",while checking up/down end=".$end;
-			$jd=0;
-			break;		
-		}
-	}
-*/
+
 
 if ($_POST['action'] == 'selectquestion_group')
 {
@@ -169,9 +168,8 @@ if ($_POST['action'] == 'selectquestion_group')
 	$questiongroup = $_POST['question_group'];
 	if (isset($questiongroup))
 	{	 
-	     $cidReq=$_REQUEST['cidReq'];
 		 $exiztinggroup = $_POST['exiztinggroup'];
-		 header("Location:existing_surveys_new.php?cidReq=$cidReq&surveyid=$surveyid");	
+		 header("Location:existing_surveys_new.php?surveyid=$surveyid");	
 		 exit;	
 	}
 }
@@ -181,10 +179,9 @@ if (isset($_POST['back']))
 {
 	    $groupid = $_POST['groupid'];
 	    $surveyid = $_POST['surveyid'];
-		$cidReq=$_REQUEST['cidReq'];
 		$page = $_REQUEST['page'];
-		header("Location:create_new_survey.php?surveyid=$surveyid&cidReq=$cidReq&page=$page");
-		//header("Location:select_question_type.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq");
+		header("Location:create_new_survey.php?surveyid=$surveyid&page=$page");
+		//header("Location:select_question_type.php?groupid=$groupid&surveyid=$surveyid");
 	    exit;
 }
 
@@ -192,17 +189,15 @@ if (isset($_POST['addanother']))
 {
 	    $groupid = $_POST['groupid'];
 	    $surveyid = $_POST['surveyid'];
-		$cidReq=$_REQUEST['cidReq'];
-		header("Location:addanother.php?surveyid=$surveyid&cidReq=$cidReq");
-		//header("Location:select_question_type.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq");
+		header("Location:addanother.php?surveyid=$surveyid");
+		//header("Location:select_question_type.php?groupid=$groupid&surveyid=$surveyid");
 	    exit;
 }
 if (isset($_POST['addanotherg']))
 {
 	    //$groupid = $_POST['groupid'];
 	    $surveyid = $_POST['surveyid'];
-		$cidReq=$_REQUEST['cidReq'];
-		header("Location:create_new_group.php?surveyid=$surveyid&cidReq=$cidReq");
+		header("Location:create_new_group.php?surveyid=$surveyid");
 	    exit;
 }
 if(isset($_REQUEST['delete']))
@@ -216,7 +211,7 @@ if(isset($_REQUEST['delete']))
 			$qid2=$qid1[$i];
 			$query="DELETE FROM $table_question WHERE qid='$qid2'";
 			api_sql_query($query);
-			header("Location:select_question_group.php?surveyid=$surveyid&cidReq=$cidReq");
+			header("Location:select_question_group.php?surveyid=$surveyid");
 			exit;
 		}
 	}
@@ -224,8 +219,7 @@ if(isset($_REQUEST['delete']))
 
 if (isset($_POST['finish']))
 {
-		$cidReq=$_REQUEST['cidReq'];
-	    header("Location:survey_list.php?cidReq=$cidReq");
+	    header("Location:survey_list.php");
 	    exit;
 }	
 
@@ -257,9 +251,9 @@ if(isset($action1))
  	//surveymanager::move_question($direction,$qid,$pre_sort,$sort,$post_sort,$curr_dbname);
 }
 
-Display::display_header($tool_name1);
+Display::display_header(get_lang('AddQuestionGroup'));
 api_display_tool_title("Survey Name : ".$sname);
-api_display_tool_title($tool_name);
+api_display_tool_title(get_lang('AddQuestionGroup'));
 if($flag==1)
 {
 	?>
@@ -274,10 +268,9 @@ if(isset($messege) && $messege )
 }
 ?>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="action" value="selectquestion_group">
 <input type="hidden" name="newsurveyid" value="<?php echo $surveyid;?>">
-<input type="hidden" name="cidReq" value="<?php echo $_REQUEST['cidReq']; ?>">
 <!--<input type="hidden" name="qid" value="<?php echo $_REQUEST['qid']; ?>">
 <input type="hidden" name="direction" value="<?php echo $_REQUEST['direction']; ?>">-->
 <table>
@@ -303,7 +296,6 @@ if(isset($messege) && $messege )
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$num=mysql_num_rows($res);	
 	$parameters['surveyid']=$surveyid;
-	$parameters['cidReq']=$cidReq;
 	//$table_header[] = array (' ', false);
 	//$table_header[] = array (get_lang('SNo'), true);
 	
@@ -348,19 +340,19 @@ if(isset($messege) && $messege )
 				$course[] = $question_number.' - '.$question;
 				if($num1==1)
 				{
-				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&cidReq='.$cidReq.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down></a>&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&cidReq='.$cidReq.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up></a>';				
+				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down></a>&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up></a>';				
 				}
 				elseif($k==0){
-				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&cidReq='.$cidReq.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down><img src="../img/down.gif" border="0" title="lang_move_down"></a>&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&cidReq='.$cidReq.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up></a>';
+				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down><img src="../img/down.gif" border="0" title="lang_move_down"></a>&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up></a>';
 				}elseif($k==$num1-1){
-				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&cidReq='.$cidReq.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&cidReq='.$cidReq.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up><img src="../img/up.gif" border="0" title="lang_move_up"></a>';
+				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up><img src="../img/up.gif" border="0" title="lang_move_up"></a>';
 				}
 				else{
-				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&cidReq='.$cidReq.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down><img src="../img/down.gif" border="0" title="lang_move_down"></a>&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&cidReq='.$cidReq.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up><img src="../img/up.gif" border="0" title="lang_move_up"></a>';
+				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down><img src="../img/down.gif" border="0" title="lang_move_down"></a>&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up><img src="../img/up.gif" border="0" title="lang_move_up"></a>';
 				}				
 				$course[] = mysql_result($res1,$k,'qtype');//$obj->qtype;
 				$course[] = @mysql_result($res,$i,'groupname');	
-				$course[]='<a href="question_edit.php?qid='.$qid.'&cidReq='.$cidReq.'&qtype='.$q_type.'&groupid='.$groupid.'&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="select_question_group.php?delete=1&qid[]='.$qid.'&cidReq='.$cidReq.'&qtype='.$q_type.'&groupid='.$groupid.'&surveyid='.$surveyid.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>';
+				$course[]='<a href="question_edit.php?qid='.$qid.'&qtype='.$q_type.'&groupid='.$groupid.'&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="select_question_group.php?delete=1&qid[]='.$qid.'&qtype='.$q_type.'&groupid='.$groupid.'&surveyid='.$surveyid.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>';
 				
 				$courses[] = $course;
 				$x++;
@@ -368,7 +360,7 @@ if(isset($messege) && $messege )
 		}
 	}
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="page" value="<?php echo $page; ?>">

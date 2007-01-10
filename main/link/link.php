@@ -64,8 +64,8 @@ $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
 //statistics
 event_access_tool(TOOL_LINK);
-
-Display::display_header('', 'Links');
+$nameTools = get_lang("Links");
+Display::display_header($nameTools, 'Links');
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -76,9 +76,6 @@ function MM_popupMsg(msg) { //v1.0
 </script>
 
 <?php
-
-
-//api_display_tool_title($nameTools);
 
 /*
 -----------------------------------------------------------

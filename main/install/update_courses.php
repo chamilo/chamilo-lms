@@ -49,6 +49,8 @@ require('../inc/lib/main_api.lib.php');
 require('../lang/english/trad4all.inc.php');
 require('../lang/english/install.inc.php');
 
+//load for get_config_param()
+require_once('install_functions.inc.php');
 
 define('DOKEOS_COURSE_UPDATE',1);
 define('MAX_COURSE_TRANSFER',100);
@@ -228,109 +230,3 @@ else
 
 </body>
 </html>
-
-<?php
-/*
-==============================================================================
-		FUNCTIONS
-==============================================================================
-*/
-
-/**
- * this function returns a the value of a parameter from the configuration file
- *
- * @param string  $param  the parameter which the value is returned for
- * @return  string  the value of the parameter
- * @author Olivier Brouckaert
- */
-
-function get_config_param($param)
-{
-	global $configFile, $updateFromConfigFile;
-
-	if(empty($updateFromConfigFile))
-	{
-		if(file_exists($_POST['updatePath'].'main/include/config.inc.php.old'))
-		{
-			$updateFromConfigFile='main/include/config.inc.php.old';
-		}
-		elseif(file_exists($_POST['updatePath'].'main/inc/conf/configuration.php.old'))
-		{
-			$updateFromConfigFile='main/inc/conf/configuration.php.old';
-		}
-		else
-		{
-			return;
-		}
-	}
-
-	if(is_array($configFile) && isset($configFile[$param]))
-	{
-		return $configFile[$param];
-	}
-	elseif(file_exists($_POST['updatePath'].$updateFromConfigFile))
-	{
-		$configFile=array();
-
-		$temp=file($_POST['updatePath'].$updateFromConfigFile);
-
-		$val='';
-
-		foreach($temp as $enreg)
-		{
-			if(strstr($enreg,'='))
-			{
-				$enreg=explode('=',$enreg);
-
-				if($enreg[0][0] == '$')
-				{
-					list($enreg[1])=explode(' //',$enreg[1]);
-
-					$enreg[0]=trim(str_replace('$','',$enreg[0]));
-					$enreg[1]=str_replace('\"','"',ereg_replace('(^"|"$)','',substr(trim($enreg[1]),0,-1)));
-
-					if(strtolower($enreg[1]) == 'true')
-					{
-						$enreg[1]=1;
-					}
-					if(strtolower($enreg[1]) == 'false')
-					{
-						$enreg[1]=0;
-					}
-					else
-					{
-						$implode_string=' ';
-
-						if(!strstr($enreg[1],'." ".') && strstr($enreg[1],'.$'))
-						{
-							$enreg[1]=str_replace('.$','." ".$',$enreg[1]);
-							$implode_string='';
-						}
-
-						$tmp=explode('." ".',$enreg[1]);
-
-						foreach($tmp as $tmp_key=>$tmp_val)
-						{
-							if(eregi('^\$[a-z_][a-z0-9_]*$',$tmp_val))
-							{
-								$tmp[$tmp_key]=get_config_param(str_replace('$','',$tmp_val));
-							}
-						}
-
-						$enreg[1]=implode($implode_string,$tmp);
-					}
-
-					$configFile[$enreg[0]]=$enreg[1];
-
-					if($enreg[0] == $param)
-					{
-						$val=$enreg[1];
-					}
-				}
-			}
-		}
-
-		return $val;
-	}
-}
-?>

@@ -320,6 +320,8 @@ class SystemAnnouncementManager
 		}
 		$start = $date_start[0]."-".$date_start[1]."-".$date_start[2]." ".$date_start[3].":".$date_start[4].":".$date_start[5];
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
+		$title = mysql_real_escape_string($title);
+		$content = mysql_real_escape_string($content);
 		$sql = "INSERT INTO ".$db_table." (`title`,`content`,`date_start`,`date_end`,`visible_teacher`,`visible_student`,`visible_guest`, `lang`) 
 												VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."','".$lang."')";
 		
@@ -364,6 +366,8 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		}
 		$start = $date_start[0]."-".$date_start[1]."-".$date_start[2]." ".$date_start[3].":".$date_start[4].":".$date_start[5];
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
+		$title = mysql_real_escape_string($title);
+		$content = mysql_real_escape_string($content);
 		$sql = "UPDATE ".$db_table." SET lang='$lang',title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
 		return api_sql_query($sql,__FILE__,__LINE__);

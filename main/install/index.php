@@ -268,7 +268,7 @@ elseif ($_POST['step5'])
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>&mdash; Dokeos installation &mdash; version <?php echo $dokeos_version; ?></title>
+	<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').$dokeos_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
 		@import "../css/default/default.css";
@@ -279,7 +279,7 @@ elseif ($_POST['step5'])
 
 
 <div id="header">
-	<div id="header1">Dokeos installation &ndash; version <?php echo $dokeos_version; ?><?php if($installType == 'new') echo ' &ndash; New installation'; else if($installType == 'update') echo ' &ndash; Update from Dokeos '.implode('|',$updateFromVersion); ?></div>
+	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').$dokeos_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').implode('|',$updateFromVersion); ?></div>
 	<div class="clear"></div>
 	<div id="header2">&nbsp;</div>
 	<div id="header3">&nbsp;</div>
@@ -363,9 +363,9 @@ elseif($_POST['step5'])
 
 	<h2><?php echo display_step_sequence().get_lang('LastCheck'); ?></h2>
 
-	Here are the values you entered
+	<?php echo get_lang('HereAreTheValuesYouEntered');?>
 	<br>
-	<b>Print this page to remember your password and other settings</b>
+	<b><?php echo get_lang('PrintThisPageToRememberPassAndOthers');?></b>
 
 	<blockquote>
 
@@ -375,11 +375,11 @@ elseif($_POST['step5'])
 	<?php echo $langDBLogin.' : '.$dbUsernameForm; ?><br>
 	<?php echo $langDBPassword.' : '.$dbPassForm; ?><br>
 	<?php if(!empty($dbPrefixForm)) echo $langDbPrefixForm.' : '.$dbPrefixForm.'<br>'; ?>
-	<?php echo $langMainDB.' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">read warning below</font>)'; ?><br>
+	<?php echo $langMainDB.' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
 	<?php if(!$singleDbForm) { ?>
-		<?php echo $langStatDB.' : <b>'.$dbStatsForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">read warning below</font>)'; ?><br>
-		<?php echo $langScormDB.' : <b>'.$dbScormForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">read warning below</font>)'; ?><br>
-		<?php echo $langUserDB.' : <b>'.$dbUserForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">read warning below</font>)'; ?><br>
+		<?php echo $langStatDB.' : <b>'.$dbStatsForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
+		<?php echo $langScormDB.' : <b>'.$dbScormForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
+		<?php echo $langUserDB.' : <b>'.$dbUserForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
 	<?php } ?>
 	<?php echo $langEnableTracking.' : '.($enableTrackingForm?$langYes:$langNo); ?><br>
 	<?php echo $langSingleDb.' : '.($singleDbForm?$langOne:$langSeveral); ?><br><br>
@@ -409,8 +409,8 @@ elseif($_POST['step5'])
 	<?php if($installType == 'new'): ?>
 	<div style="background-color:#FFFFFF">
 	<p align="center"><b><font color="red">
-	Warning !<br>
-	The install script will erase all tables of the selected databases. We heavily recommend you do a full backup of them before confirming this last install step.
+	<?php echo get_lang('Warning');?> !<br>
+	<?php echo get_lang('TheInstallScriptWillEraseAllTables');?>
 	</font></b></p>
 	</div>
 	<?php endif; ?>
@@ -418,7 +418,7 @@ elseif($_POST['step5'])
 	<table width="100%">
 	<tr>
 	  <td><input type="submit" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" /></td>
-	  <td align="right"><input type="submit" name="step6" value="<?php echo get_lang('InstallDokeos'); ?> &gt;" onclick="javascript:if(this.value == 'Please Wait...') return false; else this.value='Please Wait...';" /></td>
+	  <td align="right"><input type="submit" name="step6" value="<?php echo get_lang('InstallDokeos'); ?> &gt;" onclick="javascript:if(this.value == '<?php echo get_lang('PleaseWait');?>...') return false; else this.value='<?php echo get_lang('PleaseWait');?>...';" /></td>
 	</tr>
 	</table>
 
@@ -462,7 +462,7 @@ else
 </form>
 <br style="clear:both;" />
 <div id="footer">
-	<div class="copyright">Platform <a href="http://www.dokeos.com"> Dokeos <?php echo $dokeos_version ?></a> &copy; 2006 </div>
+	<div class="copyright"><?php echo get_lang('Platform');?> <a href="http://www.dokeos.com"> Dokeos <?php echo $dokeos_version ?></a> &copy; <?php echo date('Y'); ?> </div>
 	&nbsp;
 </div>
 </body>

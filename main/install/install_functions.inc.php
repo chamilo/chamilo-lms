@@ -105,12 +105,12 @@ function trueFalse($var)
 }
 
 /**
- * this function returns a the value of a parameter from the configuration file
+ * This function returns the value of a parameter from the configuration file
  *
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
  * and $configFile, and also changes these globals. This can be rewritten.
  *
- * @param string  $param  the parameter which the value is returned for
+ * @param 	string  $param  the parameter of which the value is returned
  * @return  string  the value of the parameter
  * @author Olivier Brouckaert
  */
@@ -442,8 +442,8 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 		if($badUpdatePath)
 		{ ?>
 			<div style="color:red; background-color:white; font-weight:bold; text-align:center;">
-				Error!<br />
-				Dokeos <?php echo implode('|',$update_from_version); ?> has not been found in that directory.
+				<?php echo get_lang('Error');?>!<br />
+				Dokeos <?php echo implode('|',$update_from_version).get_lang('HasNotBeenFoundInThatDir'); ?>.
 			</div>
 		<?php }
 		else
@@ -453,13 +453,13 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 		?>
 			<table border="0" cellpadding="5" align="center">
 			<tr>
-			<td>Old version root path:</td>
+			<td><?php echo get_lang('OldVersionRootPath');?>:</td>
 			<td><input type="text" name="updatePath" size="50" value="<?php echo $badUpdatePath?htmlentities($_POST['updatePath']):$_SERVER['DOCUMENT_ROOT'].'/old_version/'; ?>" /></td>
 			</tr>
 			<tr>
 			<td colspan="2" align="center">
-				<input type="submit" name="step1" value="&lt; Back" />
-				<input type="submit" name="step2_update" value="Next &gt;" />
+				<input type="submit" name="step1" value="&lt; <?php echo get_lang('Back');?>" />
+				<input type="submit" name="step2_update" value="<?php echo get_lang('Next');?> &gt;" />
 			</td>
 			</tr>
 			</table>
@@ -471,6 +471,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 
 		//First, attempt to set writing permissions if we don't have them yet
 		//0xxx is an octal number, this is the required format
+		$notwritable = array();
 		if(!is_writable('../inc/conf'))
 		{
 			$notwritable[]='../inc/conf';
@@ -515,33 +516,19 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 
 		//Second, if this fails, report an error
 		//--> the user will have to adjust the permissions manually
-		if(!is_writable('../inc/conf') ||
-		!is_writable('../garbage') ||
-		!is_writable('../upload') ||
-		!is_writable('../../archive') ||
-		!is_writable('../../courses') ||
-		!is_writable('../../home') ||
-		(file_exists('../inc/conf/configuration.php') && !is_writable('../inc/conf/configuration.php')))
+		if(count($notwritable)>0)
 		{
 			$error=true;
-			?>
-				<div style="color:#cc0033; background-color:white; font-weight:bold; text-align:center;">
-				Warning:<br />
-				Some files or folders don't have writing permission. To be able to install Dokeos you should first change their permissions (using CHMOD). Please read the</font> <a href="../../documentation/installation_guide.html" target="blank">installation guide</a> <font color="#cc0033">.
-				<?php
-				if (is_array($notwritable) AND count($notwritable)>0)
-				{
-					echo '<ul>';
-					foreach ($notwritable as $value)
-					{
-						echo '<li>'.$value.'</li>';
-					}
-
-					echo '<ul>';
-				}
-				?>
-				</div>
-			<?php
+			echo '<div style="color:#cc0033; background-color:white; font-weight:bold; text-align:center;">';
+			echo get_lang('Warning').':<br />';
+			printf(get_lang('NoWritePermissionPleaseReadInstallGuide'),'</font><a href="../../documentation/installation_guide.html" target="blank">','</a> <font color="#cc0033">');
+			echo '<ul>';
+			foreach ($notwritable as $value)
+			{
+				echo '<li>'.$value.'</li>';
+			}
+			echo '</ul>';
+			echo '</div>';			
 		}
 		// check wether a Dokeos configuration file already exists.
 		elseif(file_exists('../inc/conf/configuration.php'))
@@ -550,15 +537,16 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 				echo get_lang('WarningExistingDokeosInstallationDetected');
 				echo '</div>';
 		}
+		//and now display the choice buttons (go back or install)
 		?>
-			<p align="center">
-			<input type="submit" name="step1" onclick="window.location='index.php';return false;" value="&lt; <?php echo get_lang('Previous'); ?>"/>
-			<input type="submit" name="step2_install" value="<?php echo get_lang("NewInstallation"); ?>" <?php if($error) echo 'disabled="disabled"'; ?> />
+		<p align="center">
+		<input type="submit" name="step1" onclick="window.location='index.php';return false;" value="&lt; <?php echo get_lang('Previous'); ?>"/>
+		<input type="submit" name="step2_install" value="<?php echo get_lang("NewInstallation"); ?>" <?php if($error) echo 'disabled="disabled"'; ?> />
 
 		<?php
 		//real code
-/*		echo '<input type="submit" name="step2_update" value="Upgrade from Dokeos ' . implode(', ',$update_from_version) . '"';
-		if($error) echo ' disabled="disabled"';*/
+		//echo '<input type="submit" name="step2_update" value="Upgrade from Dokeos ' . implode(', ',$update_from_version) . '"';
+		//if($error) echo ' disabled="disabled"';
 		//temporary code for alpha version, disabling upgrade
 		echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
 		echo ' disabled="disabled"';

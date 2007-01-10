@@ -1143,11 +1143,11 @@ div.row div.form_header {
 div.row div.label {
 	float: left;
 	text-align: right;
-	width: 18%;
+	width: 14%;
 }
 
 div.row div.formw {
-	width: 80%;
+	width: 83%;
 }
 
 [dir=ltr] div.row div.label,

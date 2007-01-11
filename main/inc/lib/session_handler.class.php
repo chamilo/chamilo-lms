@@ -1,9 +1,9 @@
-<?php // $Id: session_handler.class.php 10082 2006-11-21 19:08:15Z pcool $
+<?php // $Id: session_handler.class.php 10683 2007-01-11 22:35:50Z yannoo $
 /*
 ===============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2007 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Hugues Peeters
@@ -110,7 +110,7 @@ class session_handler
 	{
 		if($this->sqlConnect())
 		{
-			$result=$this->sqlQuery("SELECT sess_value FROM ".$this->connexion['base'].".session WHERE sess_id='$sess_id'");
+			$result=$this->sqlQuery("SELECT sess_value FROM ".$this->connexion['base'].".php_session WHERE sess_id='$sess_id'");
 
 			if($row=mysql_fetch_assoc($result))
 			{
@@ -127,11 +127,11 @@ class session_handler
 
 		if($this->sqlConnect())
 		{
-			$result=$this->sqlQuery("INSERT INTO ".$this->connexion['base'].".session(sess_id,sess_name,sess_time,sess_start,sess_value) VALUES('$sess_id','".$this->sessionName."','$time','$time','".addslashes($sess_value)."')",false);
+			$result=$this->sqlQuery("INSERT INTO ".$this->connexion['base'].".php_session(sess_id,sess_name,sess_time,sess_start,sess_value) VALUES('$sess_id','".$this->sessionName."','$time','$time','".addslashes($sess_value)."')",false);
 
 			if(!$result)
 			{
-				$this->sqlQuery("UPDATE ".$this->connexion['base'].".session SET sess_name='".$this->sessionName."',sess_time='$time',sess_value='".addslashes($sess_value)."' WHERE sess_id='$sess_id'");
+				$this->sqlQuery("UPDATE ".$this->connexion['base'].".php_session SET sess_name='".$this->sessionName."',sess_time='$time',sess_value='".addslashes($sess_value)."' WHERE sess_id='$sess_id'");
 			}
 
 			return true;
@@ -144,7 +144,7 @@ class session_handler
 	{
 		if($this->sqlConnect())
 		{
-			$this->sqlQuery("DELETE FROM ".$this->connexion['base'].".session WHERE sess_id='$sess_id'");
+			$this->sqlQuery("DELETE FROM ".$this->connexion['base'].".php_session WHERE sess_id='$sess_id'");
 
 			return true;
 		}
@@ -156,13 +156,13 @@ class session_handler
 	{
 		if($this->sqlConnect())
 		{
-			$result=$this->sqlQuery("SELECT COUNT(sess_id) FROM ".$this->connexion['base'].".session");
+			$result=$this->sqlQuery("SELECT COUNT(sess_id) FROM ".$this->connexion['base'].".php_session");
 
 			list($nbr_results)=mysql_fetch_row($result);
 
 			if($nbr_results > 5000)
 			{
-				$this->sqlQuery("DELETE FROM ".$this->connexion['base'].".session WHERE sess_time<'".strtotime('-'.$this->lifetime.' minutes')."'");
+				$this->sqlQuery("DELETE FROM ".$this->connexion['base'].".php_session WHERE sess_time<'".strtotime('-'.$this->lifetime.' minutes')."'");
 			}
 
 			$this->sqlClose();

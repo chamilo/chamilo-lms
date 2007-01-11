@@ -280,7 +280,7 @@ elseif ($_POST['step5'])
 
 
 <div id="header">
-	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version').' '.$dokeos_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').implode('|',$updateFromVersion); ?></div>
+	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version').' '.$dokeos_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').implode('|',$update_from_version); ?></div>
 	<div class="clear"></div>
 	<div id="header2">&nbsp;</div>
 	<div id="header3">&nbsp;</div>
@@ -375,6 +375,7 @@ elseif($_POST['step4'])
 		if(!empty($tmp)) $institutionForm = $tmp;
 		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'InstitutionUrl');
 		if(!empty($tmp)) $institutionUrlForm = $tmp;
+		$urlForm = get_config_param('rootWeb');
 		$encryptPassForm = get_config_param('userPasswordCrypted');
 		$allowSelfReg = get_config_param('allowSelfReg');
 		$allowSelfRegProf = get_config_param('allowSelfRegProf');
@@ -394,40 +395,40 @@ elseif($_POST['step5'])
 
 	<blockquote>
 
-	<?php echo $langMainLang.' : '.$languageForm; ?><br><br>
+	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br><br>
 
-	<?php echo $langDBHost.' : '.$dbHostForm; ?><br>
-	<?php echo $langDBLogin.' : '.$dbUsernameForm; ?><br>
-	<?php echo $langDBPassword.' : '.$dbPassForm; ?><br>
-	<?php if(!empty($dbPrefixForm)) echo $langDbPrefixForm.' : '.$dbPrefixForm.'<br>'; ?>
-	<?php echo $langMainDB.' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
+	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br>
+	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br>
+	<?php echo get_lang('DBPassword').' : '.$dbPassForm; ?><br>
+	<?php if(!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br>'; ?>
+	<?php echo get_lang('MainDB').' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
 	<?php if(!$singleDbForm) { ?>
-		<?php echo $langStatDB.' : <b>'.$dbStatsForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
-		<?php echo $langScormDB.' : <b>'.$dbScormForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
-		<?php echo $langUserDB.' : <b>'.$dbUserForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
+		<?php echo get_lang('StatDB').' : <b>'.$dbStatsForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
+		<?php echo get_lang('ScormDB').' : <b>'.$dbScormForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
+		<?php echo get_lang('UserDB').' : <b>'.$dbUserForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
 	<?php } ?>
-	<?php echo $langEnableTracking.' : '.($enableTrackingForm?$langYes:$langNo); ?><br>
-	<?php echo $langSingleDb.' : '.($singleDbForm?$langOne:$langSeveral); ?><br><br>
+	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm?$langYes:$langNo); ?><br>
+	<?php echo get_lang('SingleDb').' : '.($singleDbForm?$langOne:$langSeveral); ?><br><br>
 
-	<?php echo $langAllowSelfReg.' : '.($allowSelfReg?$langYes:$langNo); ?><br>
-	<?php echo $langEncryptUserPass.' : '.($encryptPassForm?$langYes:$langNo); ?><br><br>
+	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg?$langYes:$langNo); ?><br>
+	<?php echo get_lang('EncryptUserPass').' : '.($encryptPassForm?$langYes:$langNo); ?><br><br>
 
-	<?php echo $langAdminEmail.' : '.$emailForm; ?><br>
-	<?php echo $langAdminLastName.' : '.$adminLastName; ?><br>
-	<?php echo $langAdminFirstName.' : '.$adminFirstName; ?><br>
-	<?php echo $langAdminPhone.' : '.$adminPhoneForm; ?><br>
+	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br>
+	<?php echo get_lang('AdminLastName').' : '.$adminLastName; ?><br>
+	<?php echo get_lang('AdminFirstName').' : '.$adminFirstName; ?><br>
+	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br>
 
 	<?php if($installType == 'new'): ?>
-	<?php echo $langAdminLogin.' : <b>'.$loginForm; ?></b><br>
-	<?php echo $langAdminPass.' : <b>'.$passForm; ?></b><br><br>
+	<?php echo get_lang('AdminLogin').' : <b>'.$loginForm; ?></b><br>
+	<?php echo get_lang('AdminPass').' : <b>'.$passForm; ?></b><br><br>
 	<?php else: ?>
 	<br>
 	<?php endif; ?>
 
-	<?php echo $langCampusName.' : '.$campusForm; ?><br>
-	<?php echo $langInstituteShortName.' : '.$institutionForm; ?><br>
-	<?php echo $langInstituteURL.' : '.$institutionUrlForm; ?><br>
-	<?php echo $langDokeosURL.' : '.$urlForm; ?><br>
+	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br>
+	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br>
+	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br>
+	<?php echo get_lang('DokeosURL').' : '.$urlForm; ?><br>
 
 	</blockquote>
 

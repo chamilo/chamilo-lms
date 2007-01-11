@@ -20,6 +20,13 @@ ALTER TABLE course_rel_class CHANGE class_id class_id mediumint unsigned NOT NUL
 ALTER TABLE course_rel_user CHANGE user_id user_id int unsigned NOT NULL default '0';
 -- Rename table session into php_session
 RENAME TABLE session TO php_session;
+ALTER TABLE php_session DROP PRIMARY KEY;
+ALTER TABLE php_session CHANGE sess_id session_id varchar(32) NOT NULL default '';
+ALTER TABLE php_session CHANGE sess_name session_name varchar(10) NOT NULL default '';
+ALTER TABLE php_session CHANGE sess_time session_time int NOT NULL default '0';
+ALTER TABLE php_session CHANGE sess_start session_start int NOT NULL default '0';
+ALTER TABLE php_session CHANGE sess_value session_value text NOT NULL;
+ALTER TABLE php_session ADD PRIMARY KEY (session_id);
 -- We might want to review the following table structure --
 CREATE TABLE session (id smallint unsigned NOT NULL auto_increment, id_coach int unsigned NOT NULL default '0', name char(50) NOT NULL default '', nbr_courses smallint unsigned NOT NULL default '0', nbr_users mediumint unsigned NOT NULL default '0', nbr_classes mediumint unsigned NOT NULL default '0', date_start date NOT NULL default '0000-00-00', date_end date NOT NULL default '0000-00-00', PRIMARY KEY  (id),  UNIQUE KEY name (name));
 -- We might want to review the following table structure --

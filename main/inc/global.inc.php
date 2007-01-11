@@ -11,12 +11,12 @@
 * - include of language files.
 *
 * @package dokeos.include
-* @todo isn't configuration.php renamed to configuration.inc.php yet? 
+* @todo isn't configuration.php renamed to configuration.inc.php yet?
 * @todo use the $_configuration array for all the needed variables
 * @todo remove the code that displays the button that links to the install page
 * 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
 * @todo make it possible to enable / disable the tracking through the Dokeos config page.
-* 
+*
 ==============================================================================
 */
 
@@ -25,7 +25,7 @@
 
 $includePath = dirname(__FILE__);
 
-// @todo isn't this file renamed to configuration.inc.php yet? 
+// @todo isn't this file renamed to configuration.inc.php yet?
 // include the main Dokeos platform configuration file
 $main_configuration_file_path = $includePath . "/conf/configuration.php";
 
@@ -45,7 +45,7 @@ require_once($includePath.'/lib/main_api.lib.php');
 
 api_session_start($already_installed);
 
-if (!$already_installed) 
+if (!$already_installed)
 {
 	require('installedVersion.inc.php');
 	$error_message = <<<EOM
@@ -66,12 +66,12 @@ if (!$already_installed)
 				<div id="header2">&nbsp;</div>
 				<div id="header3">&nbsp;</div>
 			</div>
-			
+
 			<div style="text-align: center;"><br /><br />
 					<form action="main/install/index.php" method="get"><input type="submit" value="&nbsp;&nbsp; Click to INSTALL DOKEOS &nbsp;&nbsp;" /></form><br />
 					or <a href="installation_guide.html" target="_blank">read the installation guide</a><br /><br />
 			</div>
-			
+
 			<div id="footer">
 				<div class="copyright">Platform <a href="http://www.dokeos.com"> Dokeos $dokeos_version</a> &copy; 2006 </div>
 				&nbsp;
@@ -120,8 +120,8 @@ $result=mysql_query($sql) or die(mysql_error());
 while ($row=mysql_fetch_array($result))
 {
 	if ($row['subkey']==NULL)
-	{ 
-		$_setting[$row['variable']]=$row['selected_value']; 
+	{
+		$_setting[$row['variable']]=$row['selected_value'];
 	}
 	else
 	{
@@ -130,21 +130,21 @@ while ($row=mysql_fetch_array($result))
 }
 // we have to store the settings for the plugins differently because it expects an array
 $sql="SELECT * FROM settings_current WHERE category='plugins'";
-$result=mysql_query($sql) or die(mysql_error()); 
+$result=mysql_query($sql) or die(mysql_error());
 $_plugins=array();
 while ($row=mysql_fetch_array($result))
-{ 
-	$key= $row['variable']; 
+{
+	$key= $row['variable'];
 	if (is_string($_setting[$key]))
 	{
 		$_setting[$key]=array();
 	}
-	$_setting[$key][]=$row['selected_value']; 
-	$_plugins[$key][]=$row['selected_value']; 
+	$_setting[$key][]=$row['selected_value'];
+	$_plugins[$key][]=$row['selected_value'];
 }
 
-		
-		
+
+
 // include the local (contextual) parameters of this course or section
 require($includePath."/local.inc.php");
 
@@ -152,9 +152,9 @@ require($includePath."/local.inc.php");
 
 include_once($includePath."/lib/online.inc.php");
 // check and modify the date of user in the track.e.online table
-if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php')) 
-{ 
-	LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '',$_configuration['statistics_database']); 
+if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php'))
+{
+	LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '',$_configuration['statistics_database']);
 }
 
 // ===== end "who is logged in?" module section =====
@@ -263,7 +263,7 @@ else
 			}
 		}
 	}
-	
+
 
 	if(sizeof($HTTP_POST_FILES))
 	{
@@ -328,8 +328,8 @@ if ($_POST["language_list"])
 {
 	$user_language = str_replace("index.php?language=","",$_POST["language_list"]);
 }
-	
-// Checking if we have a valid language. If not we set it to the platform language. 
+
+// Checking if we have a valid language. If not we set it to the platform language.
 $valid_languages=api_get_languages();
 if (!in_array($user_language,$valid_languages['folder']))
 {
@@ -396,7 +396,7 @@ foreach($language_files as $index => $language_file)
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
 $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-	
+
 $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
 
 $q_last_connection=mysql_query($sql_last_connection);

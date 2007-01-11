@@ -181,8 +181,8 @@ function api_protect_admin_script()
 */
 function api_block_anonymous_users()
 {
-	global $_user; 
-	
+	global $_user;
+
 	if (!(isset ($_user['user_id']) && $_user['user_id']))
 	{
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");
@@ -250,7 +250,7 @@ function api_is_self_registration_allowed()
 *	REL_COURSE_PATH, REL_CLARO_PATH, WEB_CODE_PATH, SYS_CODE_PATH,
 *	SYS_LANG_PATH, WEB_IMG_PATH, GARBAGE_PATH, PLUGIN_PATH, SYS_ARCHIVE_PATH,
 *	INCLUDE_PATH, LIBRARY_PATH, CONFIGURATION_PATH
-* 
+*
 * 	@example assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
 * 	The other configuration paramaters have not been changed.
 * 	The different api_get_paths will give
@@ -274,42 +274,42 @@ function api_is_self_registration_allowed()
 */
 function api_get_path($path_type)
 {
-	global $_configuration; 
-	
+	global $_configuration;
+
 	switch ($path_type)
 	{
 		case WEB_PATH :
 			// example: http://www.mydokeos.com
 			return $_configuration['root_web'];
 			break;
-			
+
 		case SYS_PATH :
 			// example: /var/www/
 			return $_configuration['root_sys'];
 			break;
-			
+
 		case REL_PATH :
 			// example: dokeos/
 			if (substr($_configuration['url_append'], -1) === '/')
 			{
 				return $_configuration['url_append'];
 			}
-			else 
+			else
 			{
 				return $_configuration['url_append'].'/';
 			}
 			break;
-			
+
 		case WEB_COURSE_PATH :
 			// example: http://www.mydokeos.com/courses/
 			return $_configuration['root_web'].$_configuration['course_folder'];
 			break;
-			
+
 		case SYS_COURSE_PATH :
 			// example: /var/www/dokeos/courses/
 			return $_configuration['root_sys'].$_configuration['course_folder'];
 			break;
-			
+
 		case REL_COURSE_PATH :
 			return api_get_path(REL_PATH).$GLOBALS['coursesRepositoryAppend'];
 			break;
@@ -359,9 +359,9 @@ function api_get_path($path_type)
 }
 
 /**
-* This function returns the id of the user which is stored in the $_user array. 
-* 
-* @example The function can be used to check if a user is logged in 
+* This function returns the id of the user which is stored in the $_user array.
+*
+* @example The function can be used to check if a user is logged in
 * 			if (api_get_user_id())
 * @return integer the id of the current user
 */
@@ -492,7 +492,7 @@ function api_get_course_info()
 function api_sql_query($query, $file = '', $line = 0)
 {
 	$result = mysql_query($query);
-	
+
 	if ($line && !$result)
 	{
 		if (api_get_setting('server_type') !== 'test')
@@ -968,6 +968,16 @@ function get_lang($variable, $notrans = 'DLTT')
 	return '[='.$variable."=]<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".$language_file.".inc.php&amp;variable=$".$variable."&amp;language=".$language_interface."\" style=\"color:#FF0000\"><strong>#</strong></a>";
 }
 
+/**
+ * Gets the current interface language
+ * @return string The current language of the interface
+ */
+function api_get_interface_language()
+{
+	global 	$language_interface;
+	return $language_interface;
+}
+
 /*
 ==============================================================================
 		USER PERMISSIONS
@@ -1007,7 +1017,7 @@ function api_is_coach()
 {
 	global $_user;
 	global $sessionIsCoach;
-	
+
 	$sql = "SELECT DISTINCT id, name, date_start, date_end
 							FROM session
 							INNER JOIN session_rel_course
@@ -1663,7 +1673,7 @@ function api_is_plugin_installed($plugin_list, $plugin_name)
  * Apply parsing to content to parse tex commandos that are seperated by [tex]
  * [/tex] to make it readable for techexplorer plugin.
  * @param string $text The text to parse
- * @return string The text after parsing. 
+ * @return string The text after parsing.
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version June 2004
 */

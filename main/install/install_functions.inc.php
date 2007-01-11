@@ -117,14 +117,19 @@ function trueFalse($var)
 function get_config_param($param)
 {
 	global $configFile, $updateFromConfigFile;
-	$updatePath = realpath($_POST['updatePath']);
+	$updatePath = realpath($_POST['updatePath']).'/';
+	$updateFromInstalledVersionFile = '';
 
 	if(empty($updateFromConfigFile)) //if update from previous install was requested
 	{
 		//try to recover old config file from dokeos 1.6.x
-		if(file_exists($updatePath.'main/inc/claro_main.conf.php'))
+		if(file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php'))
 		{
-			$updateFromConfigFile='main/inc/claro_main.conf.php';
+			$updateFromConfigFile='claroline/inc/conf/claro_main.conf.php';
+			if(file_exists($updatePath.'claroline/inc/installedVersion.inc.php'))
+			{
+				$updateFromInstalledVersionFile = 'claroline/inc/installedVersion.inc.php';
+			}
 		}
 		//try to recover old config file from dokeos 1.8.x
 		elseif(file_exists($updatePath.'main/inc/conf/configuration.php'))
@@ -148,6 +153,11 @@ function get_config_param($param)
 		$configFile=array();
 		$temp=file($updatePath.$updateFromConfigFile);
 		$val='';
+		if(file_exists($updatePath.$updateFromInstalledVersionFile))
+		{
+			$temp2 = file($updatePath.$updateFromInstalledVersionFile);
+			$temp = array_merge($temp,$temp2);
+		}
 
 		//parse the config file (TODO clarify why it has to be so complicated)
 		foreach($temp as $enreg)
@@ -206,6 +216,31 @@ function get_config_param($param)
 
 		return $val;
 	}
+}
+
+/**
+ * Get the config param from the database. If not found, return null
+ * @param	string	DB Host
+ * @param	string	DB login
+ * @param	string	DB pass
+ * @param	string	DB name
+ * @param	string 	Name of param we want
+ * @return	mixed	The parameter value or null if not found
+ */
+function get_config_param_from_db($host,$login,$pass,$db_name,$param='')
+{
+	$mydb = mysql_connect($host,$login,$pass);
+	$myconnect = mysql_select_db($db_name);
+	$sql = "SELECT * FROM settings_current WHERE variable = '$param'";
+	$res = mysql_query($sql);
+	if($res===false){return null;}
+	if(mysql_num_rows($res)>0)
+	{
+		$row = mysql_fetch_array($res);
+		$value = $row['selected_value'];
+		return $value;
+	}
+	return null;
 }
 
 /**
@@ -653,11 +688,13 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 		{
 			$dbUserForm=$dbPrefixForm.'dokeos_user';
 		}
+		echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
+		echo get_lang("DBSettingUpgradeIntro");
+	}else{
+		echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
+		echo get_lang("DBSettingIntro");
 	}
-
-	echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
-	echo get_lang("DBSettingIntro");
-
+	
 	?>
 	<br /><br />
 	</td>
@@ -781,21 +818,9 @@ function display_configuration_parameter($install_type, $parameter_name, $form_f
 /**
  * Displays step 4 of the installation - configuration settings about Dokeos itself.
  */
-function display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $loginForm, $passForm)
+function display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm)
 {
-	if($installType == 'update')
-	{
-		$languageForm=get_config_param('platformLanguage');
-		$emailForm=get_config_param('emailAdministrator');
-		list($adminFirstName,$adminLastName)=explode(' ',get_config_param('administrator["name"]'));
-		$adminPhoneForm=get_config_param('administrator["phone"]');
-		$campusForm=get_config_param('siteName');
-		$institutionForm=get_config_param('institution["name"]');
-		$institutionUrlForm=get_config_param('institution["url"]');
-		$encryptPassForm=get_config_param('userPasswordCrypted');
-		$allowSelfReg=get_config_param('allowSelfReg');
-	}
-	else
+	if($installType != 'update')
 	{
 		$languageForm = $_SESSION['install_language'];
 	}

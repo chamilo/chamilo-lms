@@ -13,12 +13,6 @@
 -- This first part is for the main database
 -- xxMAINxx
 
-ALTER TABLE session DROP COLUMN sess_id;
-ALTER TABLE session DROP COLUMN sess_name;
-ALTER TABLE session DROP COLUMN sess_time;
-ALTER TABLE session DROP COLUMN sess_start;
-ALTER TABLE session DROP COLUMN sess_value;
-
 -- xxSTATSxx
 
 -- xxUSERxx

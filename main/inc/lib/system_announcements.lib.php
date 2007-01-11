@@ -41,8 +41,7 @@ class SystemAnnouncementManager
 	 */
 	function display_announcements($visible, $id = -1)
 	{
-		$user_selected_language = $_SESSION["user_language_choice"] ? $_SESSION["user_language_choice"] : get_setting('platformLanguage');
-
+		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table." WHERE (lang='$user_selected_language' OR lang IS NULL) AND (NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00' ";
 		switch ($visible)
@@ -58,7 +57,6 @@ class SystemAnnouncementManager
 				break;
 		}
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
-
 		$announcements = api_sql_query($sql,__FILE__,__LINE__);
 		if (mysql_num_rows($announcements))
 		{
@@ -119,13 +117,12 @@ class SystemAnnouncementManager
 	function display_all_announcements($visible, $id = -1,$start = 0,$user_id)
 	{
 
-		$user_selected_language = $_SESSION["user_language_choice"] ? $_SESSION["user_language_choice"] : get_setting('platformLanguage');
+		$user_selected_language = api_get_interface_language();
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table."
 				WHERE (lang='$user_selected_language' OR lang IS NULL) AND (NOW() BETWEEN date_start AND date_end)
 				OR date_end='0000-00-00'";
-
 		switch ($visible)
 		{
 			case VISIBLE_GUEST :
@@ -226,7 +223,7 @@ class SystemAnnouncementManager
 	function count_nb_announcement($start = 0,$user_id = '')
 	{
 		$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
-		$user_selected_language = $_SESSION["user_language_choice"] ? $_SESSION["user_language_choice"] : get_setting('platformLanguage');
+		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = 'SELECT id
 				FROM '.$db_table.'
@@ -328,7 +325,7 @@ class SystemAnnouncementManager
 	 * @param array $date_start: start date of announcement (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
 	 * @param array $date_end : end date of announcement (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
 	 */
-	function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 'false', $visible_student = 'false', $visible_guest = 'false',$lang='dutch')
+	function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 'false', $visible_student = 'false', $visible_guest = 'false',$lang=null)
 	{
 
 		$a_dateS = explode(' ',$date_start);
@@ -340,7 +337,7 @@ class SystemAnnouncementManager
 		$a_arrayED = explode('-',$a_dateE[0]);
 		$a_arrayEH = explode(':',$a_dateE[1]);
 		$date_end = array_merge($a_arrayED,$a_arrayEH);
-
+		$lang = is_null($lang) ? 'NULL' : "'".mysql_real_escape_string($lang)."'";
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		{
@@ -361,7 +358,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
 		$title = mysql_real_escape_string($title);
 		$content = mysql_real_escape_string($content);
-		$sql = "UPDATE ".$db_table." SET lang='$lang',title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
+		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
 		return api_sql_query($sql,__FILE__,__LINE__);
 	}

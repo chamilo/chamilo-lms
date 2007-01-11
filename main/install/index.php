@@ -95,6 +95,7 @@ $update_from_version=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
 ==============================================================================
 */
 $badUpdatePath=false;
+$emptyUpdatePath=true;
 
 if($_POST['step2_install'] || $_POST['step2_update'])
 {
@@ -107,13 +108,13 @@ if($_POST['step2_install'] || $_POST['step2_update'])
 	else
 	{
 		$installType='update';
-
 		if(empty($_POST['updatePath']))
 		{
 			$_POST['step1']=1;
 		}
 		else
 		{
+			$emptyUpdatePath = false;
 			if($_POST['updatePath'][strlen($_POST['updatePath'])-1] != '/')
 			{
 				$_POST['updatePath'].='/';
@@ -239,11 +240,11 @@ if (!$_POST)
 {
 	$current_step=1;
 }
-elseif ($_POST['language_list'])
+elseif ($_POST['language_list'] or $_POST['step1'] or ($_POST['step2_update'] && ($emptyUpdatePath or $badUpdatePath)))
 {
 	$current_step=2;
 }
-elseif ($_POST['step2'])
+elseif ($_POST['step2'] or $_POST['step2_update'])
 {
 	$current_step=3;
 }
@@ -354,7 +355,31 @@ elseif($_POST['step3'])
 elseif($_POST['step4'])
 {
 	//STEP 5 : CONFIGURATION SETTINGS
-	display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $loginForm, $passForm);
+	//if update, try getting settings from the database...
+	if($installType == 'update')
+	{
+		$db_name = $dbNameForm;
+		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'platformLanguage');
+		if(!empty($tmp)) $languageForm = $tmp;
+		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'emailAdministrator');
+		if(!empty($tmp)) $emailForm = $tmp;
+		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'administratorName');
+		if(!empty($tmp)) $adminFirstName = $tmp;
+		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'administratorSurname');
+		if(!empty($tmp)) $adminLastName = $tmp;
+		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'administratorTelephone');
+		if(!empty($tmp)) $adminPhoneForm = $tmp;
+		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'siteName');
+		if(!empty($tmp)) $campusForm = $tmp;
+		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'Institution');
+		if(!empty($tmp)) $institutionForm = $tmp;
+		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'InstitutionUrl');
+		if(!empty($tmp)) $institutionUrlForm = $tmp;
+		$encryptPassForm = get_config_param('userPasswordCrypted');
+		$allowSelfReg = get_config_param('allowSelfReg');
+		$allowSelfRegProf = get_config_param('allowSelfRegProf');
+	}	
+	display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm);
 }
 elseif($_POST['step5'])
 {

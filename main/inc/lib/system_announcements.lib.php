@@ -315,7 +315,7 @@ class SystemAnnouncementManager
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
 		$title = mysql_real_escape_string($title);
 		$content = mysql_real_escape_string($content);
-		$lang = is_null($lang) ? 'NULL' : "\'".mysql_real_escape_string($lang)."\'";
+		$lang = is_null($lang) ? 'NULL' : "'".mysql_real_escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (`title`,`content`,`date_start`,`date_end`,`visible_teacher`,`visible_student`,`visible_guest`, `lang`)
 												VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
 		return api_sql_query($sql,__FILE__,__LINE__);

@@ -19,7 +19,7 @@ ALTER TABLE course 		ADD registration_code		varchar(255) NOT NULL default '';
 ALTER TABLE course_rel_class CHANGE class_id class_id mediumint unsigned NOT NULL default '0';
 ALTER TABLE course_rel_user CHANGE user_id user_id int unsigned NOT NULL default '0';
 -- Rename table session into php_session
-RENAME TABLE sess TO php_session;
+RENAME TABLE session TO php_session;
 -- We might want to review the following table structure --
 CREATE TABLE session (id smallint unsigned NOT NULL auto_increment, id_coach int unsigned NOT NULL default '0', name char(50) NOT NULL default '', nbr_courses smallint unsigned NOT NULL default '0', nbr_users mediumint unsigned NOT NULL default '0', nbr_classes mediumint unsigned NOT NULL default '0', date_start date NOT NULL default '0000-00-00', date_end date NOT NULL default '0000-00-00', PRIMARY KEY  (id),  UNIQUE KEY name (name));
 -- We might want to review the following table structure --

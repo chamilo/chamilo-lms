@@ -23,7 +23,7 @@
 ==============================================================================
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: addanother.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: addanother.php 10680 2007-01-11 21:26:23Z pcool $
 ==============================================================================
 */
 
@@ -70,8 +70,8 @@ if (!api_is_allowed_to_edit())
 // Database table definitions
 /** @todo use database constants for the survey tables */
 $table_user 		= Database :: get_main_table(TABLE_MAIN_USER);
-$table_survey 		= Database :: get_course_table('survey');
-$table_group 		= Database :: get_course_table('survey_group');
+$table_survey 		= Database :: get_course_table(TABLE_SURVEY);
+$table_group 		= Database :: get_course_table(TABLE_SURVEY_GROUP);
 
 // Language variables
 $tool_name = get_lang('CreateNewSurvey');
@@ -91,10 +91,6 @@ if(isset($_REQUEST['groupid']))
 {
 	$groupid=$_REQUEST['groupid'];
 }
-if(isset($_GET['cidReq']))
-{
-	$cidReq=$_GET['cidReq'];
-}
 if(isset($_REQUEST['newgroupid']))
 {
 	$groupid=$_REQUEST['newgroupid'];
@@ -106,7 +102,7 @@ if(isset($_REQUEST['newgroupid']))
 
 if(isset($_POST['back']))
 { 
-	header("location:select_question_group.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
+	header("location:select_question_group.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']);
 }
 
 if(isset($_POST['next']))
@@ -121,22 +117,22 @@ if(isset($_POST['next']))
 			switch ($_POST['add_question'])
 			{
 				case get_lang('YesNo'):
-				header("location:yesno.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
+				header("location:yesno.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']);
 				break;
 				case get_lang('MultipleChoiceSingle'):
-				header("location:mcsa.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
+				header("location:mcsa.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']);
 				break;
 				case get_lang('MultipleChoiceMulti'):
-				header("location:mcma.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
+				header("location:mcma.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']);
 				break;
 				case get_lang('Open'):
-				header("location:open.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
+				header("location:open.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']);
 				break;
 				case get_lang('Numbered'):
-				header("location:numbered.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']."&cidReq=$cidReq");
+				header("location:numbered.php?add_question=$add_question&groupid=$groupid&surveyid=".$_GET['surveyid']);
 				break;
 				default :
-				header("location:select_question_type.php?cidReq=$cidReq");
+				header("location:select_question_type.php");
 				break;
 			}	
 		}
@@ -170,7 +166,7 @@ if(isset($group_id))
 }
 
 ?>
-<form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
 <input type="hidden" name="surveyid" value="<?php echo $_GET['surveyid']; ?>">
 <input type="hidden" name="newgroupid" value="<?php echo $group_id; ?>">

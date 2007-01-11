@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcsa.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: mcsa.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -66,17 +66,15 @@ else
 {
 	$add_question12=$_REQUEST['add_question'];
 }
-$cidReq=$_GET['cidReq'];
-$curr_dbname = $_REQUEST['curr_dbname'];
 $add_question = $_REQUEST['add_question'];
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
-$table_question = Database :: get_course_table('questions');
+$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $Add = get_lang('AddNewQuestionType');
 $Multi = get_lang('MultipleChoiceSingle');
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
-$interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
+$interbreadcrumb[] = array ("url" => "survey_list.php?n=$n", "name" => get_lang('Survey'));
 
 //$n=$_REQUEST['n'];
 if ($_POST['action'] == 'addquestion')
@@ -120,10 +118,9 @@ if ($_POST['action'] == 'addquestion')
 		{
 			 $groupid = $_POST['groupid'];
 			 $questtype = $_REQUEST['questtype'];	 
-			 $curr_dbname = $_REQUEST['curr_dbname'];
 			 $surveyid = $_REQUEST['surveyid'];	
 			 $enter_question = addslashes($enter_question); SurveyManager::create_question($groupid,$surveyid,$questtype,$enter_question,$alignment,$answers,$open_ans,$answerT,$answerD,$rating,$curr_dbname);
-			 $cidReq = $_GET['cidReq'];			 header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+			 header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid");
 			 exit;
 		}
 	}
@@ -131,9 +128,7 @@ if ($_POST['action'] == 'addquestion')
 	{
 	   $groupid = $_REQUEST['groupid'];
 	   $surveyid = $_REQUEST['surveyid'];
-	   $cidReq = $_GET['cidReq'];
-	   $curr_dbname = $_REQUEST['curr_dbname'];
-	   header("location:addanother.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+	   header("location:addanother.php?groupid=$groupid&surveyid=$surveyid");
 	   exit;
 	}
 	elseif(isset($_POST['saveandexit']))
@@ -177,10 +172,8 @@ if ($_POST['action'] == 'addquestion')
 	     $groupid = $_REQUEST['groupid'];
 	     $surveyid = $_REQUEST['surveyid'];
 	     $questtype = $_REQUEST['questtype'];
-		 $curr_dbname = $_REQUEST['curr_dbname'];
 		 $enter_question = addslashes($enter_question);		 SurveyManager::create_question($groupid,$surveyid,$questtype,$enter_question,$alignment,$answers,$open_ans,$answerT,$answerD,$rating,$curr_dbname);		
-	     $cidReq = $_GET['cidReq'];
-	     header("location:survey_list.php?cidReq=$cidReq&n=$n");
+	     header("location:survey_list.php?n=$n");
 	     exit;
 		}
 	}
@@ -236,12 +229,10 @@ function checkLength(form){
     return true;
 }
 </SCRIPT>
-<form method="POST" name="mcsa" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>&add_question=<?php echo $add_question; ?>&groupid=<?php echo $groupid; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>">
+<form method="POST" name="mcsa" action="<?php echo $_SERVER['PHP_SELF'];?>?add_question=<?php echo $add_question; ?>&groupid=<?php echo $groupid; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>">
 <input type="hidden" name="action" value="addquestion">
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
-<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
-<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">-->
 <input type="hidden" name="questtype" value="<?php echo $add_question12; ?>">
 
 	  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
@@ -527,7 +518,7 @@ $start=1;$end=5;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 ?>				<input type="hidden" name="add_question" value="<?php echo $_POST['add_question'];?>" >
 <?php			}
 
-			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";
+			$sql = "SELECT * FROM survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);
 			$obj=mysql_fetch_object($res);
 			switch($obj->template)

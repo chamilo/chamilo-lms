@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_report.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: survey_report.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -41,11 +41,9 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 
-$table_survey = Database :: get_course_table('survey');
+$table_survey = Database :: get_course_table(TABLE_SURVEY);
 
 $surveyid=$_REQUEST['surveyid'];
- $cidReq=$_REQUEST['cidReq'];
- $db_name = $_REQUEST['db_name'];
 if($_SESSION['status']==5)
 {
 	api_protect_admin_script();
@@ -256,9 +254,9 @@ switch($screen) {
 		
 		$params = array_merge($_POST['left'] , $_POST['right']);
 		
-		$tbl_user_survey = Database::get_main_table(TABLE_MAIN_SURVEY_USER);
-		$tbl_questions = Database::get_course_table('questions');
-		$tbl_answers = Database::get_course_table('survey_report');
+		$tbl_user_survey 	= Database::get_main_table(TABLE_MAIN_SURVEY_USER);
+		$tbl_questions 		= Database::get_course_table(TABLE_SURVEY_QUESTION);
+		$tbl_answers 		= Database::get_course_table(TABLE_SURVEY_REPORT);
 		
 		
 		//$which_answers = 'WHERE qid';

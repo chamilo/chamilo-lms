@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_edit.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: group_edit.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -61,9 +61,7 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-$cidReq=$_GET['cidReq'];
-$curr_dbname = $_REQUEST['curr_dbname'];
-$table_group = Database :: get_course_table('survey_group');
+$table_group = Database :: get_course_table(TABLE_SURVEY_GROUP);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $tool_name1 = get_lang('CreateNewGroup');
 $tool_name = get_lang('ModifyGroupInformation');
@@ -74,10 +72,8 @@ if($_POST['action'] == 'new_group')
 {
 	if(isset($_POST['back']))
    { 
-	 $cidReq = $_REQUEST['cidReq'];
 	 $surveyid = $_REQUEST['surveyid'];	
-	 $curr_dbname = $_REQUEST['curr_dbname'];
-     header("location:create_new_group.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+     header("location:create_new_group.php?surveyid=$surveyid");
 	 exit;
    } 
 }
@@ -92,11 +88,8 @@ if ($_POST['action'] == 'new_group')
 			$error_message = get_lang('PleaseEnterGroupName');      
 	}
 	$introduction = $_REQUEST['content'];
-	$curr_dbname = $_REQUEST['curr_dbname'];
   if(isset($_POST['next']))
     {
-	$cidReq = $_GET['cidReq'];
-	$curr_dbname = $_REQUEST['curr_dbname'];
 	$groupname=trim($groupname);
 	if(empty ($groupname))
 	{
@@ -105,13 +98,12 @@ if ($_POST['action'] == 'new_group')
 	else
 	{
     SurveyManager::update_group($groupid,$surveyid,$groupname,$introduction,$curr_dbname);
-	header("location:select_question_group.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+	header("location:select_question_group.php?surveyid=$surveyid");
 	exit;
 	}
 	} 
    if(isset($_POST['saveandexit']))
    { 
-	 $cidReq = $_GET['cidReq'];
 	 $groupname=trim($groupname);
 	 if(empty ($groupname))
 	 {
@@ -120,7 +112,7 @@ if ($_POST['action'] == 'new_group')
 	 else
 	 {
 	 SurveyManager::update_group($groupid,$surveyid,$groupname,$introduction,$curr_dbname);
-     header("location:survey_list.php?cidReq=$cidReq");
+     header("location:survey_list.php");
 	 exit;
 	 }
    }  	
@@ -139,12 +131,10 @@ $obj = mysql_fetch_object($res);
 $groupname= $obj->groupname;
 $introduction = $obj->introduction;
 ?>
-<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="action" value="new_group">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
-<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
-<!--<input type="hidden" name="cidReq" value="<?php echo $_REQUEST['cidReq']; ?>">-->
 <table>
 <tr>
   <td><?php echo get_lang('GroupName'); ?></td>

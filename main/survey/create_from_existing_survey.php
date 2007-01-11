@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_from_existing_survey.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: create_from_existing_survey.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -53,31 +53,24 @@ if (!api_is_allowed_to_edit())
 }
 
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
-$cidReq = $_REQUEST['cidReq'];
-$db_name = $_REQUEST['db_name'];
-$table_survey = Database :: get_course_table('survey');
+$table_survey = Database :: get_course_table(TABLE_SURVEY);
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $n='e';
 $tool_name = get_lang('CreateFromExistingSurveys');
 $surveyid=$_GET['surveyid'];
 if(isset($_POST['importexistingsurvey']))
 {
-	$db_name = $_POST['db_name'];
-	$cidReq = $_REQUEST['cidReq'];
 	$surveyid=$_REQUEST['surveyid'];
-    header("location:attach_existingsurvey.php?cidReq=$cidReq&surveyid=$surveyid&n=$n&db_name=$db_name");
+    header("location:attach_existingsurvey.php?surveyid=$surveyid&n=$n");
 	exit;
 }
 if(isset($_POST['back']))
 {
-	$db_name = $_POST['db_name'];
-	$cidReq = $_REQUEST['cidReq'];
-	header("location:survey_all_courses.php?cidReq=$cidReq&db_name=$db_name&n=$n");
+	header("location:survey_all_courses.php?n=$n");
 	exit;
 }
 if(isset($_POST['import']))
 {
-  $cidReq = $_REQUEST['cidReq'];
   $surveyid=$_REQUEST['surveyid'];
   $selectcount=count($_POST['course']);	
   if($selectcount<=0)
@@ -86,18 +79,14 @@ if(isset($_POST['import']))
    }
  else
   {
-	$db_name = $_POST['db_name'];
-	$cidReq = $_REQUEST['cidReq'];
 	$gid_arr = $_REQUEST['course']; 
 	$gids = implode(",",$gid_arr);	
-    header("location:attach_survey.php?cidReq=$cidReq&surveyid=$surveyid&gids=$gids&db_name=$db_name");
+    header("location:attach_survey.php?surveyid=$surveyid&gids=$gids");
 	exit;
   }
 }
 if(isset($_POST['view']))
 {
- $db_name = $_POST['db_name'];
- $cidReq = $_REQUEST['cidReq'];
  $surveyid=$_REQUEST['surveyid'];
  $selectcount=count($_POST['course']);	
   if($selectcount<=0)
@@ -107,7 +96,7 @@ if(isset($_POST['view']))
  else
   {    
    $course=implode(",",$_REQUEST['course']);
-   header("location:question_list.php?cidReq=$cidReq&surveyid=$surveyid&course=$course&n=$n&db_name=$db_name");
+   header("location:question_list.php?surveyid=$surveyid&course=$course&n=$n");
    exit;
   }
 }
@@ -119,25 +108,23 @@ if( isset($error_message) )
 }
 
 ?>
-<form action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>" method="POST" name="frm1">
+<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" name="frm1">
 <input type="submit" name="importexistingsurvey" value="<?php echo get_lang('ImportExistingSurvey'); ?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
 </form>
-<form method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>" name="frm2">
+<form method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>" name="frm2">
 <input type="hidden" name="action" value="add_survey">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
 <?php 	
    		$nameTools=get_lang('CreateFromExistingSurveys');
-		$table_group = Database :: get_course_table('survey_group');
+		$table_group = Database :: get_course_table(TABLE_SURVEY_GROUP);
 		$sql = "SELECT * FROM $db_name.survey_group WHERE survey_id='$surveyid'";
 		$parameters = array ();
 			$parameters['surveyid']=$surveyid;
 			$parameters['newgroupid']=$groupid;
-			$parameters['cidReq']=$cidReq;
-			$parameters['db_name']=$db_name;
-
+			
 		$res = api_sql_query($sql,__FILE__,__LINE__);	
 	if (mysql_num_rows($res) > 0)
 	{		

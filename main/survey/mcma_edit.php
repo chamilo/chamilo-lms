@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: mcma_edit.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: mcma_edit.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -57,22 +57,23 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
+
+$table_survey 	= Database :: get_course_table(TABLE_SURVEY);
+$table_group 	= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+
 $n=$_REQUEST['n'];
-$interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
-$cidReq = $_REQUEST['cidReq'];
-$curr_dbname = $_REQUEST['curr_dbname'];
+$interbreadcrumb[] = array ("url" => "survey_list.php?n=$n", "name" => get_lang('Survey'));
 $groupid=$_REQUEST['groupid'];
 $surveyid=$_REQUEST['surveyid'];
 $qid=$_REQUEST['qid'];
 $qtype=$_REQUEST['qtype'];
-$table_survey = Database :: get_course_table('survey');
-$table_group =  Database :: get_course_table('survey_group');
-$table_question = Database :: get_course_table('questions');
+
 $Add = get_lang('UpdateQuestionType');
 $Multi = get_lang('MultipleChoiceMulti');
 $tool_name = $Add.$Multi;
 $rs=SurveyManager::get_question_data($qid,$curr_dbname);
-$sql = "SELECT * FROM $curr_dbname.questions WHERE qid = '$qid'";
+$sql = "SELECT * FROM questions WHERE qid = '$qid'";
 $res = api_sql_query($sql);
 $obj = mysql_fetch_object($res);
 for($i=0,$check=0;$i<10;$i++)
@@ -121,21 +122,19 @@ if(isset($_POST['update']))
          $surveyid = $_POST['surveyid'];
          $questtype = $_POST['questtype'];
 		 $qid=$_POST['qid']; 
-		 $curr_dbname = $_REQUEST['curr_dbname'];
 		 $enter_question = addslashes($enter_question);
 		 SurveyManager::update_question($qid,$questtype,$enter_question,$alignment,$answers,$open_ans,$curr_dbname);
-		 $cidReq = $_GET['cidReq'];		 		 header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		 header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid");
 		 exit;
 		}
 }
 
 if(isset($_POST['back']))
 {
-   $groupid = $_REQUEST['groupid'];
-   $surveyid = $_REQUEST['surveyid'];
-   $cidReq = $_GET['cidReq'];
-   $curr_dbname = $_REQUEST['curr_dbname'];		 	header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
-   exit;
+	$groupid = $_REQUEST['groupid'];
+	$surveyid = $_REQUEST['surveyid'];
+	header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid");
+	exit;
 }
 
 Display::display_header($tool_name);
@@ -147,13 +146,11 @@ if( isset($error_message) )
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <div id=content>
-<form method="POST" name="mcma"" id="myForm" action="<?php echo $_SERVER['PHP_SELF'];?>?qid=<?php echo $qid; ?>&cidReq=<?php echo $cidReq; ?>&groupid=<?php echo $groupid; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>">
+<form method="POST" name="mcma"" id="myForm" action="<?php echo $_SERVER['PHP_SELF'];?>?qid=<?php echo $qid; ?>&groupid=<?php echo $groupid; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="questtype" value="<?php echo $add_question12; ?>">
 <input type="hidden" name="qid" value="<?php echo $qid; ?>">
-<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
-<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">-->
 <input type="hidden" name="action" value="addquestion" >
 	  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
 	  <tr><td>
@@ -434,7 +431,7 @@ if( isset($error_message) )
 			{
 				echo '<input type="hidden" name="add_question" value="'.$_POST['add_question'].'" />';
 			}
-			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";
+			$sql = "SELECT * FROM survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);
 			$obj=mysql_fetch_object($res);
 			switch($obj->template)

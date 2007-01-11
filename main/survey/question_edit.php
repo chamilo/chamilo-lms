@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_edit.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: question_edit.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -53,43 +53,41 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-$cidReq = $_REQUEST['cidReq'];
-$curr_dbname = $_REQUEST['curr_dbname'];
 $groupid=$_REQUEST['groupid'];
 $surveyid=$_REQUEST['surveyid'];
 $qid=$_REQUEST['qid'];
 $qtype=$_REQUEST['qtype'];
 
-$table_survey = Database :: get_course_table('survey');
-$table_group =  Database :: get_course_table('survey_group');
-$table_question = Database :: get_course_table('questions');
+$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+$table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 
 if($qtype=="Yes/No")
 {
-	header("location:yesno_edit.php?qid=$qid&cidReq=$cidReq&qtype=$qtype&groupid=$groupid&surveyid=$surveyid&curr_dbname=$curr_dbname");
+	header("location:yesno_edit.php?qid=$qid&qtype=$qtype&groupid=$groupid&surveyid=$surveyid&curr_dbname=$curr_dbname");
 	exit;
 }
 if($qtype=="Numbered")
 {
-	header("location:numbered_edit.php?qid=$qid&cidReq=$cidReq&qtype=$qtype&groupid=$groupid&surveyid=$surveyid&curr_dbname=$curr_dbname");
+	header("location:numbered_edit.php?qid=$qid&qtype=$qtype&groupid=$groupid&surveyid=$surveyid&curr_dbname=$curr_dbname");
 	exit;
 }
 
 if($qtype=="Multiple Choice (single answer)")
 {
-	header("location:mcsa_edit.php?qid=$qid&cidReq=$cidReq&qtype=$qtype&groupid=$groupid&surveyid=$surveyid&curr_dbname=$curr_dbname");
+	header("location:mcsa_edit.php?qid=$qid&qtype=$qtype&groupid=$groupid&surveyid=$surveyid&curr_dbname=$curr_dbname");
 	exit;
 }
 
 if($qtype=="Multiple Choice (multiple answer)")
 {
-	header("location:mcma_edit.php?qid=$qid&cidReq=$cidReq&qtype=$qtype&groupid=$groupid&surveyid=$surveyid&curr_dbname=$curr_dbname");
+	header("location:mcma_edit.php?qid=$qid&qtype=$qtype&groupid=$groupid&surveyid=$surveyid&curr_dbname=$curr_dbname");
 	exit;
 }
 
 if($qtype=="Open Answer")
 {
- header("location:open_edit.php?qid=$qid&cidReq=$cidReq&qtype=$qtype&groupid=$groupid&surveyid=$surveyid&curr_dbname=$curr_dbname");
+ header("location:open_edit.php?qid=$qid&qtype=$qtype&groupid=$groupid&surveyid=$surveyid&curr_dbname=$curr_dbname");
 	exit;
 }
 

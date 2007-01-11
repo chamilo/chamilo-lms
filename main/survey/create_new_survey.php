@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 10659 2007-01-10 22:41:53Z pcool $
+* 	@version $Id: create_new_survey.php 10680 2007-01-11 21:26:23Z pcool $
 * 
 * 	@todo rename this file to survey.php
 * 	@todo try to understand the template stuff and implement it (if needed)
@@ -49,8 +49,8 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 
 // Database table definitions
 /** @todo use database constants for the survey tables */
-$table_survey 				= Database :: get_course_table('survey');
-$table_group 				= Database :: get_course_table('survey_group');
+$table_survey 				= Database :: get_course_table(TABLE_SURVEY);
+$table_group 				= Database :: get_course_table(TABLE_SURVEY_GROUP);
 $table_user 				= Database :: get_main_table(TABLE_MAIN_USER);
 $table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
@@ -185,8 +185,8 @@ function store_survey($values)
 	global $_user; 
 	
 	// table defnitions
-	$table_survey 		= Database :: get_course_table('survey');
-	$table_survey_group = Database :: get_course_table('survey_group');
+	$table_survey 		= Database :: get_course_table(TABLE_SURVEY);
+	$table_survey_group = Database :: get_course_table(TABLE_SURVEY_GROUP);
 	
 	if (!$values['survey_id'] OR !is_numeric($values['survey_id']))
 	{
@@ -253,7 +253,7 @@ function store_survey($values)
  */
 function get_survey($survey_id)
 {
-	$tbl_survey = Database :: get_course_table('survey');
+	$tbl_survey = Database :: get_course_table(TABLE_SURVEY);
 	
 	$sql = "SELECT * FROM $tbl_survey WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);

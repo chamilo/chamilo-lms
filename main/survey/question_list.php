@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_list.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: question_list.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -55,8 +55,6 @@ if (!api_is_allowed_to_edit())
 }
 
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
-$cidReq = $_REQUEST['cidReq'];
-$db_name = $_REQUEST['db_name'];
 $tool_name = get_lang('SelectQuestion');
 $Sname = get_lang('SurveyName');
 $GName = get_lang('GroupName');
@@ -66,7 +64,7 @@ $groupid=$_REQUEST['groupid'];
 //$sname =surveymanager::get_surveyname($surveyid);
 $gide=$_REQUEST['course'];
 $gid1=explode(",",$gide);
-$table_question = Database :: get_course_table('questions');
+$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 if($gide)
 {
 	$gid1=$gid1;
@@ -85,14 +83,11 @@ for($r=0;$r<count($gid1);$r++)
 }
 if(isset($_POST['back']))
 {
-	$db_name = $_POST['db_name'];
-	$cidReq=$_GET['cidReq'];
-    header("location:create_from_existing_survey.php?cidReq=$cidReq&db_name=$db_name&surveyid=$surveyid");
+    header("location:create_from_existing_survey.php?surveyid=$surveyid");
 }
 if(isset($_POST['importquestion']))
 {
   $surveyid = $_POST['surveyid'];
-  $cidReq=$_GET['cidReq'];
   $selectcount=count($_POST['question']);	
   if($selectcount<=0)
    {
@@ -101,9 +96,8 @@ if(isset($_POST['importquestion']))
  else
   {
 	$qid = $_POST['question'];
-	$db_name = $_POST['db_name'];
 	$qids = implode(",",$qid);
-	header("location:attach_question.php?surveyid=$surveyid&qid=$qids&cidReq=$cidReq&db_name=$db_name");
+	header("location:attach_question.php?surveyid=$surveyid&qid=$qids");
 	exit;
   }
 }
@@ -121,7 +115,7 @@ function displayTemplate(url){
 <?php	
 	api_display_tool_title($tool_name);
 ?>
-		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?cidReq=<?php echo $cidReq; ?>">
+		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 		<input type="hidden" name="action" value="add_survey"/>
 		<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 		<input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
@@ -129,14 +123,11 @@ function displayTemplate(url){
 		<input type="hidden" name="db_name" value="<?php echo $db_name; ?>">
 <?php 
 		$questions = array ();
-		$cidReq=$_GET['cidReq'];
 		$endloop=count($gid1);
 		$datacount=0;
 		$parameters = array (); 
 		$parameters['surveyid']=$surveyid;
 		$parameters['groupid']=$groupid;
-		$parameters['cidReq']=$cidReq;
-		$parameters['db_name']=$db_name;
 		$parameters['gid1']=$str;
 		for($i=0;$i<$endloop;$i++)
 		{
@@ -147,9 +138,7 @@ function displayTemplate(url){
 			$parameters = array ('gidi' => $gidi); 
 			$parameters['surveyid']=$surveyid;
 			$parameters['groupid']=$groupid;
-			$parameters['cidReq']=$cidReq;
 			$parameters['course']=$_REQUEST['course'];
-			$parameters['db_name']=$db_name;
 			*/
 			$res = api_sql_query($sql,__FILE__,__LINE__);			
 			while ($obj = mysql_fetch_object($res))
@@ -165,7 +154,7 @@ function displayTemplate(url){
 				$sname = surveymanager::get_surveyname($db_name,$sid);
 				$question[] = $sname;
 				/**********for displaying the 'edit' 'delete' etc. buttons***********/
-				$url = "default.php?qid=".$obj->qid."&qtype=".$obj->qtype."&cidReq=".$cidReq."&surveyid=".$surveyid."&groupid=".$groupid."&db_name=".$db_name;
+				$url = "default.php?qid=".$obj->qid."&qtype=".$obj->qtype."&surveyid=".$surveyid."&groupid=".$groupid."&db_name=".$db_name;
 				$question[] = "<a href=\"#\" onClick=\"displayTemplate('".$url."')\"><img src=\"../img/info_small.gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang('ViewQues')."\" /></a>";
 				$questions[] = $question;
 				$datacount++;

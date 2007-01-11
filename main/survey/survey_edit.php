@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_edit.php 10603 2007-01-06 17:01:47Z pcool $
+* 	@version $Id: survey_edit.php 10680 2007-01-11 21:26:23Z pcool $
 */
 /*
 ==============================================================================
@@ -60,7 +60,7 @@ if (!api_is_allowed_to_edit())
 /** @todo use database constants for the survey tables */
 $table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
-$table_survey 				= Database :: get_course_table('survey');
+$table_survey 				= Database :: get_course_table(TABLE_SURVEY);
 $tbl_category 				= Database :: get_main_table(TABLE_MAIN_CATEGORY);
 
 // language variables
@@ -118,7 +118,7 @@ if ($_POST['action'] == 'update_survey')
 	  $curr_dbname=SurveyManager::update_survey($_GET['survey_id'],$surveycode,$surveytitle,$surveysubtitle,$author,$survey_language,$availablefrom,$availabletill,$isshare,$surveytemplate,$surveyintroduction,$surveythanks,$cidReq,$table_course);	  
 		if(isset($_POST['next']))
 		{
-			header("location:select_question_group.php?surveyid=".$_GET['survey_id']."&cidReq=$cidReq&curr_dbname=$curr_dbname");
+			header("location:select_question_group.php?surveyid=".$_GET['survey_id']);
 			exit;
 		}
 		else

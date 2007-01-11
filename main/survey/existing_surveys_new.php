@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: existing_surveys_new.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: existing_surveys_new.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -53,12 +53,10 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-$cidReq = $_REQUEST['cidReq'];
-$curr_dbname = $_REQUEST['curr_dbname'];
-$table_survey = Database :: get_course_table('survey');
-$table_group =  Database :: get_course_table('survey_group');
-$table_question = Database :: get_course_table('questions');
-$table_course_survey_rel = Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
+$table_survey 				= Database :: get_course_table(TABLE_SURVEY);
+$table_group 				= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question 		= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+$table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $n='e';
 $tool_name = get_lang('ImportFromExisting');
@@ -85,19 +83,17 @@ function displayTemplate(url) {
 </td>
 </tr>
 </table>		
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="action" value="add_survey">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <?php 	
    		$surveyid=$_REQUEST['surveyid'];
 		$nameTools=get_lang('CreateFromExistingSurveys');
-		$table_group = Database :: get_course_table('survey_group');
+		$table_group = Database :: get_course_table(TABLE_SURVEY_GROUP);
 		$sql = "SELECT * FROM $table_course_survey_rel";
 		$parameters = array ();
 		$parameters['surveyid']=$surveyid;
 		$parameters['newgroupid']=$groupid;
-		$parameters['cidReq']=$cidReq;
-		$parameters['curr_dbname']=$curr_dbname;
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 	if (mysql_num_rows($res) > 0)
 	{		
@@ -127,7 +123,7 @@ function displayTemplate(url) {
 				$survey[] = $object->lang;
 				$survey[] = $object->avail_from ;
 				$survey[] = $object->avail_till ;	
-				$survey[] = "<a href=group_list.php?cidReq=$cidReq&sid=$survey_id&db_name=$db_name&surveyid=$surveyid&curr_dbname=$curr_dbname><img src=\"../img/info_small.gif\" border=\"0\" align=\"absmiddle\" alt=view></a>";
+				$survey[] = "<a href=group_list.php?sid=$survey_id&surveyid=$surveyid&curr_dbname=$curr_dbname><img src=\"../img/info_small.gif\" border=\"0\" align=\"absmiddle\" alt=view></a>";
 				$surveys[] = $survey;				
 			}
         }
@@ -155,7 +151,7 @@ function displayTemplate(url) {
 	if($flag=='1')
 	{echo get_lang('SurveyNotShared');}
 ?>
-<form action="select_question_group.php?cidReq=<?php echo $cidReq; ?>&db_name=<?php echo $db_name; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>" method="post">
+<form action="select_question_group.php?db_name=<?php echo $db_name; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>" method="post">
 <input type="submit" name="back1" value="<?php echo get_lang('Back'); ?>">
 </form>
 <?php 

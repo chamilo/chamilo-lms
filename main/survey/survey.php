@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey.php 10662 2007-01-10 22:45:19Z pcool $
+* 	@version $Id: survey.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -41,7 +41,7 @@ require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 
 // Database table definitions
 /** @todo use database constants for the survey tables */
-$table_survey = Database :: get_course_table('survey');
+$table_survey = Database :: get_course_table(TABLE_SURVEY);
 
 /** @todo replace this with the correct code */
 /*

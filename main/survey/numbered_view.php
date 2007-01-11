@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: numbered_view.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: numbered_view.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -49,11 +49,11 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-$cidReq = $_REQUEST['cidReq'];
-$table_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$table_survey = Database :: get_course_table('survey');
-$table_group =  Database :: get_course_table('survey_group');
-$table_question = Database :: get_course_table('questions');
+$table_category 		= Database :: get_main_table(TABLE_MAIN_CATEGORY);
+$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+$table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+
 $tool_name = get_lang('ViewQuestions');
 $header2 = get_lang('GroupName');
 $header3 = get_lang('Type');

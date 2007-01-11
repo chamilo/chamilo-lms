@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: open_edit.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: open_edit.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -68,12 +68,10 @@ else
 }
 //if(!$add_question12)
 //$add_question12=$_REQUEST['questtype'];
-$interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
-$cidReq=$_GET['cidReq'];
-$curr_dbname = $_REQUEST['curr_dbname'];
-$table_survey = Database :: get_course_table('survey');
-$table_group =  Database :: get_course_table('survey_group');
-$table_question = Database :: get_course_table('questions');
+$interbreadcrumb[] = array ("url" => "survey_list.php?n=$n", "name" => get_lang('Survey'));
+$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+$table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $Add = get_lang('UpdateQuestionType');
 $Multi = get_lang('Open');
 $tool_name = $Add.$Multi;
@@ -106,13 +104,11 @@ if (isset($_POST['update']))
 		{
 		 $groupid = $_POST['groupid'];		 
 		 $qid = $_POST['qid'];		 
-		 $cidReq = $_GET['cidReq'];
 		 $questtype=$_POST['questtype'];
 		 $answerD=$defaultext;
-		 $curr_dbname = $_REQUEST['curr_dbname'];
 		 $enter_question = addslashes($enter_question);
 		 SurveyManager::update_question($qid,$questtype,$enter_question,$alignment,$answers,$open_ans,$curr_dbname);
-		 $cidReq = $_GET['cidReq'];		 		 header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		 header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid");
 		 exit;
 		}
 }
@@ -121,8 +117,7 @@ if(isset($_POST['back']))
 {
    $groupid = $_REQUEST['groupid'];
    $surveyid = $_REQUEST['surveyid'];
-   $cidReq = $_GET['cidReq'];
-   $curr_dbname = $_REQUEST['curr_dbname'];		 	header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+	header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid");
    exit;
 }
 Display::display_header($tool_name);
@@ -136,7 +131,7 @@ if( isset($error_message) )
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <BODY id=surveys>
 <DIV id=content>
-<FORM name="frmitemchkboxmulti" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>" method=post>
+<FORM name="frmitemchkboxmulti" action="<?php echo $_SERVER['PHP_SELF'];?>" method=post>
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="questtype" value="<?php echo $add_question12; ?>">
@@ -192,7 +187,7 @@ border=0>
 	?></TEXTAREA> 
     </TD></TR></TBODY></TABLE>--><BR>
 		<?php
-			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";
+			$sql = "SELECT * FROM survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);
 			$obj=mysql_fetch_object($res);
 			switch($obj->template)

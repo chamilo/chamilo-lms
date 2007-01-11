@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: create_survey_in_another_language.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: create_survey_in_another_language.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -62,14 +62,13 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-$cidReq = $_REQUEST['cidReq'];
 $id_survey = intval($_GET['id_survey']);
 
 
 if(isset($_POST['submit'])){
 	
 	SurveyManager::create_survey_in_another_language($id_survey, addslashes($_POST['language_choosen']));	
-	header('Location:survey_list.php?cidReq='.$cidReq);
+	header('Location:survey_list.php');
 	exit;
 	
 }
@@ -83,7 +82,7 @@ $survey_language = SurveyManager::get_data($id_survey, 'lang');
 $platform_languages = api_get_languages();
 
 echo '
-<form method="POST" action="'.$_SERVER['PHP_SELF'].'?cidReq='.$cidReq.'&id_survey='.$id_survey.'">
+<form method="POST" action="'.$_SERVER['PHP_SELF'].'?id_survey='.$id_survey.'">
 <table><tr><td>
 '.get_lang('SelectWhichLanguage').'
 <select name="language_choosen">

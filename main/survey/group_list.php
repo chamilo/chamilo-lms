@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_list.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: group_list.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -54,11 +54,9 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-$cidReq = $_REQUEST['cidReq'];
-$curr_dbname = $_REQUEST['curr_dbname'];
-$table_survey = Database :: get_course_table('survey');
-$table_group =  Database :: get_course_table('survey_group');
-$table_question = Database :: get_course_table('questions');
+$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+$table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $tool_name = get_lang('GroupList');
 //Display :: display_header($tool_name);
@@ -79,21 +77,19 @@ $surveyid=$_GET['surveyid'];
 $sid = $_REQUEST['sid'];
 $groupid = $_REQUEST['newgroupid'];
 $db_name = $_REQUEST['db_name'];
-$table_group =  Database :: get_course_table('survey_group');
+$table_group =  Database :: get_course_table(TABLE_SURVEY_GROUP);
 
-    $sql = "SELECT * FROM $db_name.survey_group where survey_id='$sid'";
+    $sql = "SELECT * FROM $table_group WHERE survey_id='$sid'";
 	$parameters = array ();
         $parameters['surveyid']=$surveyid;
 		$parameters['sid']=$sid;
 		$parameters['newgroupid']=$groupid;
-		$parameters['cidReq']=$cidReq;
-		$parameters['db_name']=$db_name;
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 	if (mysql_num_rows($res) > 0)
 	{
 		$surveys = array ();
 		?>		
-		<form method="POST" action="question_list_new.php?cidReq=<?php echo $cidReq; ?>">
+		<form method="POST" action="question_list_new.php">
 		<input type="hidden" name="action" value="add_survey">
 		<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 		<input type="hidden" name="sid" value="<?php echo $sid; ?>">

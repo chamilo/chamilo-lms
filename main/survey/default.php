@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: default.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: default.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // including the global dokeos file
@@ -34,10 +34,8 @@ require_once ('../inc/global.inc.php');
 
 $surveyid = $_GET['surveyid'];
 $groupid = $_GET['groupid'];
-$cidReq = $_GET['cidReq'];
 $qtype = $_GET['qtype'];
 $qid = $_GET['qid'];
-$db_name = $_REQUEST['db_name'];
 switch($qtype)
 {
 case "Yes/No":

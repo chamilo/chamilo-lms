@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_list_new.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: question_list_new.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 
@@ -56,9 +56,6 @@ if (!api_is_allowed_to_edit())
 }
 
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
-$cidReq = $_REQUEST['cidReq'];
-$db_name = $_REQUEST['db_name'];
-$curr_dbname = $_REQUEST['curr_dbname'];
 $tool_name = get_lang('SelectQuestion');
 $Sname = get_lang('SurveyName');
 $GName = get_lang('GroupName');
@@ -67,8 +64,8 @@ $surveyid=$_REQUEST['surveyid'];
 $groupid=$_REQUEST['groupid'];
 $sid = $_REQUEST['sid'];
 //$sname =surveymanager::get_surveyname($surveyid,$db_name);
-$table_group =  Database :: get_course_table('survey_group');
-$table_question = Database :: get_course_table('questions');
+$table_group =  Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $gide=$_POST['course'];
 $arraycount=0;
 $arraycount=count($_REQUEST['course']);
@@ -91,8 +88,7 @@ $arraycount=0;
 $arraycount=count($_REQUEST['course']);
 if(isset($_POST['back1']))
   {
-	$db_name = $_REQUEST['db_name'];
-    $curr_dbname = $_REQUEST['curr_dbname'];		header("location:existing_surveys_new.php?cidReq=$cidReq&db_name=$db_name&surveyid=$surveyid&groupid=$groupid&curr_dbname=$curr_dbname");
+    header("location:existing_surveys_new.php?surveyid=$surveyid&groupid=$groupid");
 	exit;
   }
 if(isset($_POST['view']))
@@ -100,8 +96,7 @@ if(isset($_POST['view']))
      if($arraycount<=0)
       {
 		$pls=1;
-		$db_name = $_REQUEST['db_name'];
-	    $curr_dbname = $_REQUEST['curr_dbname'];		header("location:group_list.php?cidReq=$cidReq&surveyid=$surveyid&groupid=$groupid&pls=$pls&db_name=$db_name&sid=$sid");
+		header("location:group_list.php?surveyid=$surveyid&groupid=$groupid&pls=$pls&sid=$sid");
 		exit;	
       }
    }
@@ -109,9 +104,8 @@ if(isset($_POST['back']))
 {	
 	$pls=0;
 	$sid = $_REQUEST['sid'];
-	$db_name = $_REQUEST['db_name'];
 	$surveyid=$_REQUEST['surveyid'];
-    $curr_dbname = $_REQUEST['curr_dbname'];	header("location:group_list.php?cidReq=$cidReq&db_name=$db_name&curr_dbname=$curr_dbname&surveyid=$surveyid&sid=$sid&pls=$pls");
+	header("location:group_list.php?surveyid=$surveyid&sid=$sid&pls=$pls");
 	exit;
 }
 if(isset($_POST['import']))
@@ -119,22 +113,17 @@ if(isset($_POST['import']))
  if($arraycount<=0)
   {
 		$pls=1;
-		$db_name = $_REQUEST['db_name'];	
-	    $curr_dbname = $_REQUEST['curr_dbname'];	header("location:group_list.php?cidReq=$cidReq&surveyid=$surveyid&groupid=$groupid&pls=$pls&db_name=$db_name&sid=$sid&curr_dbname=$curr_dbname");
+		header("location:group_list.php?surveyid=$surveyid&groupid=$groupid&pls=$pls&sid=$sid");
 		exit;	
   }
  else
   {
 	$gid_arr = $_REQUEST['course'];
-	$db_name = $_REQUEST['db_name'];
-	$curr_dbname = $_REQUEST['curr_dbname'];
 	$gids = implode(",",$gid_arr);
 	$surveyid = $_POST['surveyid'];
 	$groupid = $_POST['groupid'];
-	//$flag = surveymanager::insert_old_groups($surveyid,$gids,$table_group,$table_question,$db_name,$cidReq);
-	//$message_me = surveymanager::import_group($surveyid,$gids,$db_name,$curr_dbname);
 	$flag = surveymanager::import_group($surveyid,$gids,$db_name,$curr_dbname);
-	header("location:select_question_group.php?surveyid=$surveyid&cidReq=$cidReq&flag=$flag&curr_dbname=$curr_dbname");
+	header("location:select_question_group.php?surveyid=$surveyid&flag=$flag");
 	exit;
   }
 }
@@ -143,8 +132,6 @@ if(isset($_POST['importquestion']))
   $gidnext=$_POST['gid1'];
   $surveyid = $_POST['surveyid'];
   $groupid = $_POST['groupid'];
-  $db_name = $_REQUEST['db_name'];
-  $curr_dbname = $_REQUEST['curr_dbname'];
   $selectcount=count($_POST['question']);	
   if($selectcount<=0)
    {
@@ -157,12 +144,12 @@ if(isset($_POST['importquestion']))
 	$message_me=surveymanager::question_import($surveyid,$qids,$db_name,$curr_dbname);
 	if(isset($message_me) && $message_me)
 	  {
-		 header("location:select_question_group.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname&messege=$message_me");
+		 header("location:select_question_group.php?surveyid=$surveyid&messege=$message_me");
 	     exit;
 	  }
 	  else
       {		
-     	header("location:select_question_group.php?surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname&messege=$message_me");
+     	header("location:select_question_group.php?surveyid=$surveyid&messege=$message_me");
 	    exit;
 	  }
   }
@@ -190,7 +177,7 @@ function displayTemplate(url) {
 <?php	
 	echo get_lang('SelectQuestion');
 ?>
-		<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+		<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 		<input type="hidden" name="action" value="add_survey"/>
 		<input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 		<input type="hidden" name="sid" value="<?php echo $sid; ?>">
@@ -200,16 +187,12 @@ function displayTemplate(url) {
 		<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname;?>">
 <?php 
 		$questions = array ();	
-		$cidReq=$_GET['cidReq'];
 		$endloop=count($gid1);
 		$datacount=0;
 		$parameters = array (); 
 		$parameters['surveyid']=$surveyid;
 		$parameters['sid']=$sid;
 		$parameters['groupid']=$groupid;
-		$parameters['cidReq']=$cidReq;
-		$parameters['db_name']=$db_name;
-		$parameters['curr_dbname']=$curr_dbname;
 		$parameters['gid1']=$str;
 		for($i=0;$i<$endloop;$i++)
 		{
@@ -229,7 +212,7 @@ function displayTemplate(url) {
 				$sname = surveymanager::get_surveyname($db_name,$sid);
 				$question[] = $sname;
 				/**********for displaying the 'edit' 'delete' etc. buttons***********/
-				$url = "default.php?qid=".$obj->qid."&qtype=".$obj->qtype."&cidReq=".$cidReq."&surveyid=".$surveyid."&groupid=".$groupid."&db_name=".$db_name;
+				$url = "default.php?qid=".$obj->qid."&qtype=".$obj->qtype."&surveyid=".$surveyid."&groupid=".$groupid."&db_name=".$db_name;
 				$question[] = "<a href=\"#\" onClick=\"displayTemplate('".$url."')\"><img src=\"../img/info_small.gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang('Info')."\" /></a>";
 				$questions[] = $question;
 				$datacount++;

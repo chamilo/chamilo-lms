@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author 
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: select_question_group.php 10663 2007-01-10 22:49:09Z pcool $
+* 	@version $Id: select_question_group.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -58,11 +58,11 @@ if (!api_is_allowed_to_edit())
 
 // Database table definitions
 /** @todo use database constants for the survey tables */
-$table_survey 		= Database :: get_course_table('survey');
-$table_group 		= Database :: get_course_table('survey_group');
-$table_question 	= Database :: get_course_table('questions');
-$table_course 		= Database::get_main_table(TABLE_MAIN_COURSE);
-$table_survey_group = Database :: get_course_table('survey_group');
+$table_survey 		= Database :: get_course_table(TABLE_SURVEY);
+$table_group 		= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+$table_course 		= Database :: get_main_table(TABLE_MAIN_COURSE);
+$table_survey_group = Database :: get_course_table(TABLE_SURVEY_GROUP);
 
 // breadcrumbs
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
@@ -102,7 +102,7 @@ Display :: display_footer();
  */
 function get_survey($survey_id)
 {
-	$tbl_survey = Database :: get_course_table('survey');
+	$tbl_survey = Database :: get_course_table(TABLE_SURVEY);
 	
 	$sql = "SELECT * FROM $tbl_survey WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -209,7 +209,7 @@ if(isset($_REQUEST['delete']))
 		for($i=0;$i<$endloop;$i++)
 		{
 			$qid2=$qid1[$i];
-			$query="DELETE FROM $table_question WHERE qid='$qid2'";
+			$query="DELETE FROM $table_survey_question WHERE qid='$qid2'";
 			api_sql_query($query);
 			header("Location:select_question_group.php?surveyid=$surveyid");
 			exit;
@@ -236,16 +236,16 @@ if(isset($action1))
 	$post_sort = $_GET['post_sort'];
  	if($direction=="up")
  	{
-		$sql_update2="UPDATE $table_question SET sortby='".$sort."' WHERE qid='".$pre_qid."'";
+		$sql_update2="UPDATE $table_survey_question SET sortby='".$sort."' WHERE qid='".$pre_qid."'";
 		mysql_query($sql_update2);
-		$sql_update1="UPDATE $table_question SET sortby='".$pre_sort."' WHERE qid='".$qid."'";
+		$sql_update1="UPDATE $table_survey_question SET sortby='".$pre_sort."' WHERE qid='".$qid."'";
 		mysql_query($sql_update1);
 	}
 	else
 	{
-	$sql_update1="UPDATE $table_question SET sortby='".$sort."' WHERE qid='".$post_qid."'";
+	$sql_update1="UPDATE $table_survey_question SET sortby='".$sort."' WHERE qid='".$post_qid."'";
 	mysql_query($sql_update1);
-	$sql_update2="UPDATE $table_question SET sortby='".$post_sort."' WHERE qid='".$qid."'";
+	$sql_update2="UPDATE $table_survey_question SET sortby='".$post_sort."' WHERE qid='".$qid."'";
 	mysql_query($sql_update2);
 	}
  	//surveymanager::move_question($direction,$qid,$pre_sort,$sort,$post_sort,$curr_dbname);
@@ -312,7 +312,7 @@ if(isset($messege) && $messege )
 		{
 			$groupid=@mysql_result($res,$i,'group_id');
 			$gname=@mysql_result($res,$i,'groupname');
-			$sql="SELECT * FROM $table_question WHERE gid='$groupid' AND survey_id = '$surveyid' order by `sortby` asc";
+			$sql="SELECT * FROM $table_survey_question WHERE gid='$groupid' AND survey_id = '$surveyid' order by `sortby` asc";
 			
 			$res1=api_sql_query($sql,__FILE__,__LINE__);
 			$num1=mysql_num_rows($res1);

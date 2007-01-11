@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: complete_report.php 10583 2007-01-02 14:47:19Z pcool $
+* 	@version $Id: complete_report.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -60,10 +60,10 @@ if (!api_is_allowed_to_edit())
 
 // Database table definitions
 /** @todo use database constants for the survey tables */
-$tbl_user_survey 		= Database::get_main_table(TABLE_MAIN_SURVEY_USER);
-$tbl_questions 			= Database::get_course_table('questions');
-$tbl_questions_groups 	= Database::get_course_table('survey_group');
-$tbl_answers 			= Database::get_course_table('survey_report');
+$tbl_user_survey 		= Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
+$tbl_questions 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+$tbl_questions_groups 	= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$tbl_answers 			= Database :: get_course_table(TABLE_SURVEY_REPORT);
 
 // Path variables
 /** @todo these variables are probably not used here */
@@ -75,9 +75,7 @@ $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Surv
 
 // $_GET and $_POST
 /** @todo replace $_REQUEST with $_GET or $_POST */
-$cidReq 	= $_REQUEST['cidReq'];
 $surveyid	= $_REQUEST['surveyid'];
-$db_name 	= $_REQUEST['db_name'];
 
 $tool_name = get_lang('SurveyReporting');
 

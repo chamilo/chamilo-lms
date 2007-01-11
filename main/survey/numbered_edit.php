@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: numbered_edit.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: numbered_edit.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -38,19 +38,18 @@ require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-$interbreadcrumb[] = array ("url" => "survey_list.php?cidReq=$cidReq&n=$n", "name" => get_lang('Survey'));
-$$cidReq = $_REQUEST['cidReq'];
-$curr_dbname = $_REQUEST['curr_dbname'];
+$interbreadcrumb[] = array ("url" => "survey_list.php?n=$n", "name" => get_lang('Survey'));
+
 $groupid=$_REQUEST['groupid'];
 $surveyid=$_REQUEST['surveyid'];
 $qid=$_REQUEST['qid'];
 $qtype=$_REQUEST['qtype'];
-$table_question = Database :: get_course_table('questions');
+$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $Add = get_lang('UpdateQuestionType');
 $Multi = get_lang('Numbered');
 $tool_name = $Add.$Multi;
 $rs=SurveyManager::get_question_data($qid,$curr_dbname);
-$sql = "SELECT * FROM $curr_dbname.questions WHERE qid = '$qid'";
+$sql = "SELECT * FROM questions WHERE qid = '$qid'";
 $res = api_sql_query($sql);
 $obj = mysql_fetch_object($res);
 for($i=0,$check=0;$i<10;$i++)
@@ -107,10 +106,9 @@ if (isset($_POST['update']))
 		{
 			
 			$questtype=$rs->qtype; 
-			$curr_dbname = $_REQUEST['curr_dbname'];
 			$enter_question = addslashes($enter_question);
 			SurveyManager::update_question($qid,$questtype,$enter_question,$alignment,$answers,$open_ans,$curr_dbname);
-            $cidReq = $_GET['cidReq'];		 		 header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+            header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid");
 		    exit;
 		}
 
@@ -119,8 +117,7 @@ if(isset($_POST['back']))
 {
 		   $groupid = $_REQUEST['groupid'];
 		   $surveyid = $_REQUEST['surveyid'];
-		   $cidReq = $_REQUEST['cidReq'];
-		   $curr_dbname = $_REQUEST['curr_dbname'];		 	header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		   header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid");
            exit;
 }
 
@@ -133,13 +130,11 @@ if( isset($error_message) )
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <div id=content>
-<form method="POST" name='numbered' action="<?php echo $_SERVER['PHP_SELF'];?>?qid=<?php echo $qid; ?>&cidReq=<?php echo $cidReq; ?>&groupid=<?php echo $groupid; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>" name="frmitemchkboxmulti">
+<form method="POST" name='numbered' action="<?php echo $_SERVER['PHP_SELF'];?>?qid=<?php echo $qid; ?>&groupid=<?php echo $groupid; ?>&surveyid=<?php echo $surveyid; ?>&curr_dbname=<?php echo $curr_dbname; ?>" name="frmitemchkboxmulti">
 <input type="hidden" name="action" value="addquestion">
 <input type="hidden" name="qid" value="<?php echo $qid; ?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
-<input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
-<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">-->
 <input type="hidden" name="questtype" value="<?php echo $add_question12; ?>">
 
 	  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
@@ -361,7 +356,7 @@ $start=1;$end=$check;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 			<br>
 			<div align="center">	
 			<?php
-			$sql = "SELECT * FROM $curr_dbname.survey WHERE survey_id='$surveyid'";
+			$sql = "SELECT * FROM survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);
 			$obj=mysql_fetch_object($res);
 			switch($obj->template)

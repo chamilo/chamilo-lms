@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: select_question.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: select_question.php 10680 2007-01-11 21:26:23Z pcool $
 */
 // including the global dokeos file
 require_once ('../inc/global.inc.php');
@@ -30,39 +30,36 @@ if(isset($_POST['add_question']))
 	
 	$groupid=$_REQUEST['groupid'];
 	$surveyid=$_REQUEST['surveyid'];
-	$cidReq=$_REQUEST['cidReq'];
-	$curr_dbname = $_REQUEST['curr_dbname'];
 	// name of the language file that needs to be included 
-$language_file = 'survey';
+	$language_file = 'survey';
 	
     $add_question=$_REQUEST['add_question'];
 	switch ($_POST['add_question'])
 	{
 		case get_lang('YesNo'):
-		header("location:yesno.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		header("location:yesno.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid");
 		break;
 		case get_lang('MultipleChoiceSingle'):
-		header("location:mcsa.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		header("location:mcsa.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid");
 		break;
 		case get_lang('MultipleChoiceMulti'):
-		header("location:mcma.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		header("location:mcma.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid");
 		break;
 		case get_lang('Open'):
-		header("location:open.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		header("location:open.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid");
 		break;
 		case get_lang('Numbered'):
-		header("location:numbered.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq&curr_dbname=$curr_dbname");
+		header("location:numbered.php?add_question=$add_question&groupid=$groupid&surveyid=$surveyid");
 		break;
 		default :
-		header("location:select_question_type.php?cidReq=$cidReq");
+		header("location:select_question_type.php");
 		break;
 	}	
 	exit;
 }
 function select_question_type($add_question12,$groupid,$surveyid,$cidReq,$curr_dbname)
 {	
-		//$group_table = Database :: get_course_table('survey_group');
-		$sql = "SELECT groupname FROM $curr_dbname.survey_group WHERE group_id='$groupid'";
+		$sql = "SELECT groupname FROM survey_group WHERE group_id='$groupid'";
 		$sql_result = api_sql_query($sql,__FILE__,__LINE__);
 		$group_name = @mysql_result($sql_result,0,'groupname');
 ?>
@@ -79,11 +76,10 @@ if( isset($error_message) )
 	Display::display_error_message($error_message);	
 }
 ?>
-<form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<form name="question" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid?>">
 <input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname?>">
-<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq?>">-->
 <table>
 <tr>
 <td>

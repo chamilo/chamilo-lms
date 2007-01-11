@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: surveytemp_white.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: surveytemp_white.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -350,7 +350,7 @@ echo '</td></tr></table><br /><br />';
 
 $content = ob_get_contents();
 ob_end_clean();
-$content = '<form method="post" action="'.$_SERVER['PHP_SELF'].'?surveyid='.$surveyid.'&db_name='.$db_name.'&temp='.$temp.'&uid1='.$uid1.'&mail='.$mail.'&group_offset='.$group_offset.'&question_offset='.$question_offset.'&indiceQuestion='.$indiceQuestion.'&cidReq='.$cidReq.'&lang='.$lang.'">'.$content;
+$content = '<form method="post" action="'.$_SERVER['PHP_SELF'].'?surveyid='.$surveyid.'&temp='.$temp.'&uid1='.$uid1.'&mail='.$mail.'&group_offset='.$group_offset.'&question_offset='.$question_offset.'&indiceQuestion='.$indiceQuestion.'&&lang='.$lang.'">'.$content;
 echo $content;
 ?>
 

@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: survey_all_courses.php 10661 2007-01-10 22:44:31Z pcool $
+* 	@version $Id: survey_all_courses.php 10680 2007-01-11 21:26:23Z pcool $
 * 
 * 	@todo 	check if this page has to display all the shared surveys of the courses where the user is a teacher or only 
 * 			the shared surveys of this course?
@@ -41,9 +41,9 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 
 // Database table definitions
 /** @todo use database constants for the survey tables */
-$table_survey 				= Database :: get_course_table('survey');
-$table_group 				= Database :: get_course_table('survey_group');
-$table_question 			= Database :: get_course_table('questions');
+$table_survey 				= Database :: get_course_table(TABLE_SURVEY);
+$table_group 				= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question		= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
 
 /** @todo replace this with the correct code */
@@ -86,7 +86,7 @@ Display::display_header(get_lang('CreateFromExistingSurveys'));
 			$db_list[] = $db[0];
 		}
    		$nameTools=get_lang('CreateFromExistingSurveys');
-		$table_group = Database :: get_course_table('survey_group');
+		$table_group = Database :: get_course_table(TABLE_SURVEY_GROUP);
 		$sql = "SELECT course_survey.*, visual_code 
 				FROM $table_course_survey_rel as course_survey
 				INNER JOIN ".Database::get_main_table(TABLE_MAIN_COURSE)." as course

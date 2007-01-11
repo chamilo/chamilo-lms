@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_blank.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: survey_blank.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -43,8 +43,7 @@ require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 $surveyid = $_REQUEST['surveyid'];
 $uid = $_REQUEST['uid'];
 $uid1 = $_REQUEST['uid1'];
-$db_name = $_REQUEST['db_name'];
-$cidReq = $_REQUEST['cidReq'];
+
 $temp = $_REQUEST['temp'];
 $mail = $_REQUEST['mail'];
 $username = $_REQUEST['username'];
@@ -81,8 +80,7 @@ $lower = $num*4-4;
 if(isset($_POST['Back'])){
 	//echo $sql ="Insert into";
 	$back=$num-2;
-	$cidReq = $_REQUEST['cidReq'];
-	header("location:".$_SERVER['PHP_SELF']."?num=$back&cidReq=$cidReq");
+	header("location:".$_SERVER['PHP_SELF']."?num=$back");
 	exit;
 }
 
@@ -771,11 +769,9 @@ if ($numb=mysql_num_rows($res) > 0)
   <tr>
     <td class="form-left">&nbsp;</td>
     <td valign="top">
-	<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?num=<?php echo $num+1; ?>&cidReq=<?php echo $cidReq; ?>">
+	<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?num=<?php echo $num+1; ?>">
 			  <input type="hidden" name="uid1" value="<?php echo $uid1;?>">
 		      <input type="hidden" name="surveyid" value="<?php echo $surveyid;?>">
-		      <input type="hidden" name="db_name" value="<?php echo $db_name;?>">
-			  <input type="hidden" name="cidReq" value="<?php echo $cidReq;?>">
 		      <input type="hidden" name="temp" value="<?php echo $temp;?>">
 		      <input type="hidden" name="mail" value="<?php echo $mail;?>">
 			  <input type="hidden" name="username" value="<?php echo $username;?>">
@@ -785,9 +781,9 @@ if ($numb=mysql_num_rows($res) > 0)
 				 <td align="center">
 					<?php if($num > "1"){
 								
-							   echo "<input type=\"button\" name=\"Back\" value=\"Back\" onClick=\"location.href('".$_SERVER['PHP_SELF']."?temp=$temp&cidReq=$cidReq&db_name=$db_name&surveyid=$surveyid&num=".($num-1)."');\">";
+							   echo "<input type=\"button\" name=\"Back\" value=\"Back\" onClick=\"location.href('".$_SERVER['PHP_SELF']."?temp=$temp&&surveyid=$surveyid&num=".($num-1)."');\">";
 					} else{
-							echo "<input type=\"button\" name=\"Back\" value=\"Back\" onClick=\"location.href('survey_list.php?cidReq=$cidReq&db_name=$db_name&uid1=$uid1&mail=$mail&sid=$surveyid');\">";
+							echo "<input type=\"button\" name=\"Back\" value=\"Back\" onClick=\"location.href('survey_list.php?uid1=$uid1&mail=$mail&sid=$surveyid');\">";
 					}
 					if($num >= $page) {echo "";
 					?>

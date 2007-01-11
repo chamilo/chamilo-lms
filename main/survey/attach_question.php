@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: attach_question.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: attach_question.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -66,9 +66,9 @@ if (!api_is_allowed_to_edit())
 // Database table definitions
 /** @todo use database constants for the survey tables */
 $table_user 				= Database :: get_main_table(TABLE_MAIN_USER);
-$table_survey 				= Database :: get_course_table('survey');
-$table_group 				= Database :: get_course_table('survey_group');
-$table_question 			= Database :: get_course_table('questions');
+$table_survey 				= Database :: get_course_table(TABLE_SURVEY);
+$table_group 				= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question		= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
 
@@ -90,8 +90,6 @@ $course_id = $_SESSION['_course']['id'];
 
 // $_GET and $_POST
 /** @todo replace $_REQUEST with $_GET or $_POST */
-$cidReq = $_REQUEST['cidReq'];
-$db_name = $_REQUEST['db_name'];
 $oldsurveyid = $_REQUEST['surveyid'];
 $qids=$_REQUEST['qid'];
 $groupid=$_REQUEST['groupid'];
@@ -104,7 +102,6 @@ if ($_POST['action'] == 'add_survey')
 	$surveycode=$_POST['survey_code'];
 	$surveytitle = $_POST['survey_title'];
 	$surveysubtitle = $_POST['survey_subtitle'];
-	//$cidReq = $_configuration['db_prefix'].$_POST['cidReq'];
 	$author = $_POST['author'];
 	$survey_language = $_POST['survey_language'];
 	$availablefrom = $_POST['fyear']."-".$_POST['fmonth']."-".$_POST['fday'];
@@ -115,16 +112,12 @@ if ($_POST['action'] == 'add_survey')
 	$surveythanks = $_POST['thanks'];
 	$savailablefrom=mktime(0,0,0,$_POST['fmonth'],$_POST['fday'], $_POST['fyear']); 
     $savailabletill=mktime(0,0,0,$_POST['end_fmonth'],$_POST['end_fday'], $_POST['end_fyear']); 
-	$cidReq=$_REQUEST['cidReq'];
 	$qids=$_REQUEST['qids'];
-	$db_name = $_REQUEST['db_name'];
 	$surveyid = $_REQUEST['surveyid'];
 	if(isset($_POST['back']))
 	{
-		$cidReq = $_REQUEST['cidReq'];
 		$surveyid = $_REQUEST['surveyid'];
-		$db_name = $_REQUEST['db_name'];
-		header("location:create_from_existing_survey.php?cidReq=$cidReq&surveyid=$surveyid&db_name=$db_name");
+		header("location:create_from_existing_survey.php?surveyid=$surveyid");
 	
 	}
 	$surveytitle=trim($surveytitle);
@@ -150,29 +143,25 @@ if ($_POST['action'] == 'add_survey')
 		else
 		{
 	$survey_id = SurveyManager::create_survey($surveycode, $surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill, $isshare, $surveytemplate, $surveyintroduction, $surveythanks, $table_survey, $table_group);
-	$cidReq=$_GET['cidReq'];
 	$curr_dbname=SurveyManager::create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course_survey_rel);
 	$qids=$_REQUEST['qids'];
-    //surveymanager::import_existing_question($survey_id,$qids,$table_group,$table_question,"no");
-	$db_name = $_REQUEST['db_name'];
 	$message_me=surveymanager::question_import($survey_id,$qids,$db_name,$curr_dbname);
 	if (isset($_POST['next']))
 	{
 		if(isset($message_me) && $message_me)
 	  {
-		 header("location:select_question_group.php?surveyid=$survey_id&cidReq=$cidReq&curr_dbname=$curr_dbname&message=$message_me");
+		 header("location:select_question_group.php?surveyid=$survey_id&message=$message_me");
 	     exit;
 	  }
 	  else
       {		
-     	header("location:select_question_group.php?surveyid=$survey_id&cidReq=$cidReq&curr_dbname=$curr_dbname&message=$message_me");
+     	header("location:select_question_group.php?surveyid=$survey_id&message=$message_me");
 	    exit;
 	  }
 	}
 	else
 	{
-		 $cidReq=$_GET['cidReq'];
-		 header("location:survey_list.php?&cidReq=$cidReq");
+		 header("location:survey_list.php");
 		 exit;
 	}
 	}
@@ -207,7 +196,7 @@ window.open(inf+".htm", 'popup', 'width=900,height=800,toolbar = no, status = no
 </script>
 
 <script src=tbl_change.js type="text/javascript" language="javascript"></script>
-<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<form name="new_calendar_item" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="action" value="add_survey">
 <input type="hidden" name="qids" value="<?php echo $qids; ?>">
 <input type="hidden" name="db_name" value="<?php echo $db_name; ?>">

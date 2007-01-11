@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: group_add_question.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: group_add_question.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -44,7 +44,6 @@ require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 
 
-$cidReq=$_GET['cidReq'];
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 //$table_survey = Database :: get_main_table(MAIN_SURVEY_IFA_TABLE);
 $tool_name1 = get_lang('AddQuestion');
@@ -56,18 +55,16 @@ if (isset($_POST['back']))
 {
 	$surveyid=$_POST['surveyid'];
 	$groupid=$_POST['groupid'];	
-	$cidReq=$_REQUEST['cidReq'];
-	header("Location:create_new_group.php?surveyid=$surveyid&cidReq=$cidReq");
+	header("Location:create_new_group.php?surveyid=$surveyid");
 	exit;
 }
 if(isset($_POST['next']))
 {	
-	$cidReq=$_REQUEST['cidReq'];
 	if($_POST['radiobutton']=="1")
 	{
 	    $surveyid=$_POST['surveyid'];
 		$groupid=$_POST['groupid'];		
-		header("Location:select_question_type.php?surveyid=$surveyid&groupid=$groupid&cidReq=$cidReq");
+		header("Location:select_question_type.php?surveyid=$surveyid&groupid=$groupid");
 		exit;
 	}
 	elseif($_POST['radiobutton']=="2")
@@ -79,7 +76,7 @@ if(isset($_POST['next']))
 	{	
         $sid=$_POST['newsurveyid'];
 		$gid=$_POST['newgroupid'];	
-		header("Location:group_list.php?surveyid=$surveyid&groupid=$groupid&cidReq=$cidReq");
+		header("Location:group_list.php?surveyid=$surveyid&groupid=$groupid");
 	}
 }
 Display::display_header($tool_name1);
@@ -87,7 +84,7 @@ $GName = get_lang('GroupName');
 api_display_tool_title($tool_name);
 $name = surveymanager :: get_groupname($gid);
 ?>
-<form name="radiobutton" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<form name="radiobutton" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
 <!--<input type="hidden" name="cidReq" value="<?php echo $_REQUEST['cidReq']; ?>">-->

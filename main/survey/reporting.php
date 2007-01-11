@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: reporting.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: reporting.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -40,11 +40,10 @@ require_once ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 require (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 
-$table_survey = Database :: get_course_table('survey');
+$table_survey = Database :: get_course_table(TABLE_SURVEY);
 
 $surveyid=intval($_REQUEST['surveyid']);
- $cidReq=stripslashes($_REQUEST['cidReq']);
- $db_name = stripslashes($_REQUEST['db_name']);
+
 if($_SESSION['status']==5)
 {
 	api_protect_admin_script();
@@ -56,12 +55,12 @@ Display::display_header($tool_name);
 
 echo '<table align="center">
 		<tr>
-			<td><a href="complete_report.php?action=reporting&cidReq='.$cidReq.'&db_name='.$db_name.'&surveyid='.$surveyid.'"">'.get_lang('CompleteReport').'</a><br />
+			<td><a href="complete_report.php?action=reporting&surveyid='.$surveyid.'"">'.get_lang('CompleteReport').'</a><br />
 			'.get_lang('CompleteReportDetails').'<br /><br />
 			</td>
 		</tr>
 		<tr>
-			<td><a href="survey_report.php?action=reporting&cidReq='.$cidReq.'&db_name='.$db_name.'&surveyid='.$surveyid.'">'.get_lang('AdvancedReport').'</a><br />
+			<td><a href="survey_report.php?action=reporting&surveyid='.$surveyid.'">'.get_lang('AdvancedReport').'</a><br />
 			'.get_lang('AdvancedReportDetails').'</td>
 		</tr>
 	  </table>';

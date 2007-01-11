@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_white.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: survey_white.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -278,7 +278,7 @@ echo '</td></tr></table>';
 					if($group_offset < $nbGroups)
 						echo '<input type="submit" name="submit" value="Next">&nbsp;';
 					else
-						echo '<input type="button" value="Finish" onclick="document.location=\'survey_list.php?cidReq='.$cidReq.'\'">&nbsp;';
+						echo '<input type="button" value="Finish" onclick="document.location=\'survey_list.php\'">&nbsp;';
 					?>
 					<input type="button" value="Print" onclick="window.print()"></td>
 					

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: preview_mcma.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: preview_mcma.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -43,10 +43,10 @@ require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 
 // Database table definitions
-$table_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$table_survey 	= Database :: get_main_table(TABLE_MAIN_SURVEY);
-$table_group 	=  Database :: get_main_table(TABLE_MAIN_GROUP);
-$table_question = Database :: get_main_table(TABLE_MAIN_SURVEYQUESTION);
+$table_category 		= Database :: get_main_table(TABLE_MAIN_CATEGORY);
+$table_survey 			= Database :: get_main_table(TABLE_MAIN_SURVEY);
+$table_group 			= Database :: get_main_table(TABLE_MAIN_GROUP);
+$table_survey_question 	= Database :: get_main_table(TABLE_MAIN_SURVEYQUESTION);
 
 $tool_name = get_lang('ViewQuestions');
 $header1 = get_lang('SurveyName');

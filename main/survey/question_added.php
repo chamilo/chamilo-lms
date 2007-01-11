@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_added.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: question_added.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -38,31 +38,26 @@ require_once (api_get_path(CONFIGURATION_PATH) ."/add_course.conf.php");
 require_once (api_get_path(LIBRARY_PATH)."/add_course.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
-$cidReq=$_GET['cidReq'];
-$table_survey = Database :: get_course_table('survey');
-$table_group =  Database :: get_course_table('survey_group');
-$table_question = Database :: get_course_table('questions');
+$table_survey = Database :: get_course_table(TABLE_SURVEY);
+$table_group =  Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $interbreadcrumb[] = array ("url" => "survey.php", "name" => get_lang('CreateSurvey'));
 $groupid=$_REQUEST['groupid'];
 $surveyid=$_REQUEST['surveyid'];
 $qdeleted=0;
-//$cidReqdb = $_configuration['db_prefix'].$_REQUEST['cidReq'];
-//echo "dsfgdsgfsdgdsfg".$groupid;
 if (isset($_POST['addanother']))
 {
 	    $groupid = $_POST['groupid'];
 	    $surveyid = $_POST['surveyid'];
-		$cidReq=$_REQUEST['cidReq'];
-		header("Location:addanother.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq");
-		//header("Location:select_question_type.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq");
+		header("Location:addanother.php?groupid=$groupid&surveyid=$surveyid");
+		//header("Location:select_question_type.php?groupid=$groupid&surveyid=$surveyid");
 	    exit;
 }
 if (isset($_POST['addanotherg']))
 {
 	    $groupid = $_POST['groupid'];
 	    $surveyid = $_POST['surveyid'];
-		$cidReq=$_REQUEST['cidReq'];
-		header("Location:create_new_group.php?groupid=$groupid&surveyid=$surveyid&cidReq=$cidReq");
+		header("Location:create_new_group.php?groupid=$groupid&surveyid=$surveyid");
 	    exit;
 }
 if(isset($_POST['delete']))
@@ -74,7 +69,7 @@ if(isset($_POST['delete']))
 		for($i=0;$i<$endloop;$i++)
 		{
 			$qid2=$qid1[$i];
-			$query="DELETE FROM $table_question WHERE qid='$qid2'";
+			$query="DELETE FROM $table_survey_question WHERE qid='$qid2'";
 			api_sql_query($query);
 		}
 		$qdeleted=1;
@@ -83,8 +78,7 @@ if(isset($_POST['delete']))
 }
 if (isset($_POST['finish']))
       {
-		$cidReq=$_REQUEST['cidReq'];
-	    header("Location:survey_list.php?cidReq=$cidReq");
+	    header("Location:survey_list.php");
 	    exit;
       }	
 	$query="SELECT * FROM $table_survey WHERE survey_id='$surveyid'";
@@ -104,10 +98,9 @@ if($qdeleted)
 <?php
 }
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>?cidReq=<?php echo $cidReq; ?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
 <input type="hidden" name="groupid" value="<?php echo $groupid; ?>">
 <input type="hidden" name="surveyid" value="<?php echo $surveyid; ?>">
-<!--<input type="hidden" name="cidReq" value="<?php echo $cidReq; ?>">-->
 <?php
     $sql="SELECT * FROM $table_group WHERE survey_id='$surveyid'";	
 	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -122,7 +115,7 @@ if($qdeleted)
 	{
 		$groupid=@mysql_result($res,$i,'group_id');
 		$gname=@mysql_result($res,$i,'groupname');
-		$sql="SELECT * FROM $table_question WHERE gid='$groupid'";
+		$sql="SELECT * FROM $table_survey_question WHERE gid='$groupid'";
 		$res1=api_sql_query($sql,__FILE__,__LINE__);		
 		while ($obj = mysql_fetch_object($res1))
 		{

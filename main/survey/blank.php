@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: blank.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: blank.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -55,7 +55,6 @@ if (!api_is_allowed_to_edit())
 
 // $_GET and $_POST
 /** @todo replace $_REQUEST with $_GET or $_POST */
-$cidReq = $_REQUEST['cidReq'];
 $temp = $_REQUEST['temp'];
 $ques = $_REQUEST['ques'];
 $ans = $_REQUEST['ans'];

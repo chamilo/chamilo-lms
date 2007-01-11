@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: white.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@version $Id: white.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -50,7 +50,6 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
-$cidReq = $_REQUEST['cidReq'];
 
 $ques = $_REQUEST['ques'];
 $ans = $_REQUEST['ans'];

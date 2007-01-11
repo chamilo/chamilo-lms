@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_type.php 10605 2007-01-06 17:55:20Z pcool $
+* 	@version $Id: question_type.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 /*
@@ -47,7 +47,8 @@ require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 // Database table definitions
 $table_survey = Database :: get_main_table(TABLE_MAIN_SURVEY);
 $table_group =  Database :: get_main_table(TABLE_MAIN_GROUP);
-$table_question = Database :: get_main_table(TABLE_MAIN_SURVEYQUESTION);
+$table_survey_question = Database :: get_main_table(TABLE_MAIN_SURVEYQUESTION);
+
 $tool_name = get_lang('SelectQuestionByType');
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('Survey'));
 //$questtype=$_POST['add_question'];

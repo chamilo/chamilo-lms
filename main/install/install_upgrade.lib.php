@@ -378,4 +378,79 @@ function split_sql_file(&$ret, $sql)
     return TRUE;
 } // end of the 'PMA_splitSqlFile()' function
 
+/**
+ * Get an SQL file's contents
+ * 
+ * This function bases its parsing on the pre-set format of the specific SQL files in
+ * the install/upgrade procedure:
+ * Lines starting with "--" are comments (but need to be taken into account as they also hold sections names)
+ * Other lines are considered to be one-line-per-query lines (this is checked quickly by this function)
+ * @param	string	File to parse (in the current directory)
+ * @param	string	Section to return
+ * @param	boolean	Print (true) or hide (false) error texts when they occur
+ */
+function get_sql_file_contents($file,$section,$print_errors=true)
+{
+	//check given parameters
+	if(empty($file))
+	{
+		$error = "Missing name of file to parse in get_sql_file_contents()";
+		if($print_errors) echo $error;
+		return false;
+	}
+	if(!in_array($section,array('main','user','stats','scorm','course')))
+	{
+		$error = "Section '$section' is not authorized in get_sql_file_contents()";
+		if($print_errors) echo $error;
+		return false;
+	}
+	$filepath = getcwd().$file;
+	if(!is_file($filepath) or !is_readable($filepath))
+	{
+		$error = "File $filepath not found or not readable in get_sql_file_contents()";
+		if($print_errors) echo $error;
+		return false;
+	}
+	//read the file in an array
+	$file_contents = file(getcwd().$file);
+	if(!is_array($file_contents) or count($file_contents)<1)
+	{
+		$error = "File $filepath looks empty in get_sql_file_contents()";
+		if($print_errors) echo $error;
+		return false;
+	}
+	//prepare the resulting array
+	$section_contents = array();
+	$record = false;
+	foreach($file_contents as $index => $line)
+	{
+		if(substr($line,0,2) == '--')
+		{
+			//This is a comment. Check if section name, otherwise ignore
+			$result = array();
+			if(preg_match('/^-- xx([A-B]*)xx/',$line,$result))
+			{	//we got a section name here
+				if($result[1] == strtoupper($section))
+				{	//we have the section we are looking for, start recording 
+					$record = true;
+				}
+				else
+				{	//we have another section's header. If we were recording, stop now and exit loop
+					if($record == true)
+					{
+						break;
+					}
+					$record = false;
+				}
+			}
+		}else{
+			if($record == true)
+			{
+				$section_contents[] = $line;
+			}
+		}
+	}
+	//now we have our section's SQL statements group ready, return
+	return $section_contents;
+}
 ?>

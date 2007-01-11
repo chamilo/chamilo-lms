@@ -1,0 +1,11 @@
+<>Search for anything<hr/>
+<scheme-kw>Slide with scheme
+<graph-kw>Slide with graph
+<table-kw>Slide with table
+<map-kw>Slide with map<hr/>
+<scorm-level-0 -allrefs>Only complete presentations<hr/>
+<scorm-level-2>Only literature references<b> - </b> 
+<txt-sep -scorm-level-2>exclude literature references
+<link-type>Only useful links<b> - </b> 
+<link-type>exclude useful links 
+<txt-sep -scorm-level-2 -link-type>Exclude references and links

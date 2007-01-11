@@ -1,7 +1,7 @@
 <?php /*                          <!-- md_link.php for Dokeos metadata/*.php -->
-                                                             <!-- 2005/09/20 -->
+                                                             <!-- 2006/12/15 -->
 
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
+<!-- Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
 
 */
 
@@ -36,11 +36,9 @@ function mdo_define_htt() { return new xhtdoc(<<<EOD
 
 Title: {-V metadata/lom/general/title/string-} txt-sep
 Keyword(s): {-R metadata/lom/general/keyword C KWTEXT-} txt-sep
-Category: {-V metadata/lom/general/coverage/string-}
+Category: {-V metadata/lom/general/coverage/string-} txt-sep
  {-V metadata/lom/general/description[1]/string-} txt-end
  link-type
- {-V metadata/lom/lifeCycle/contribute[1]/entity-}
- {-V metadata/lom/lifeCycle/contribute[1]/date/dateTime-}
 
 
 <!-- {-KWTEXT-} -->
@@ -178,6 +176,7 @@ function mdo_storeback(&$xmlDoc)  // by ref!
 function mdo_add_breadcrump_nav()
 {
     global $interbreadcrumb;
+    
     $regs = array(); // for use with ereg()
     
     $docurl = $_SERVER['PHP_SELF'];  // should be .../main/xxx/yyy.php
@@ -219,10 +218,10 @@ function mdobject($_course, $id)
 
 function _find_keywords($d)
 {
-	$dd = new xmddoc($d); if ($dd->error) return NULL;
-
-	$regs = array(); // for use with ereg()
-
+    $dd = new xmddoc($d); if ($dd->error) return NULL;
+    
+    $regs = array(); // for use with ereg()
+    
     foreach ($dd->attributes[0] as $name => $value)
         if ($name == 'kw' && ereg('^<?([^>]+)>?$', $value, $regs))
         {

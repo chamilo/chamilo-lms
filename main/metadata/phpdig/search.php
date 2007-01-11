@@ -1,7 +1,7 @@
 <?php /*                                       <!-- Dokeos phpdig/search.php -->
-                                                             <!-- 2005/05/02 -->
+                                                             <!-- 2006/12/14 -->
 
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
+<!-- Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
 
 --------------------------------------------------------------------------------
 PhpDig Version 1.8.6 is provided WITHOUT warranty under the GNU/GPL license.
@@ -19,11 +19,11 @@ If you modify code and redistribute, you may ADD your copyright to this notice.
 
 /**
 ============================================================================== 
-*	Dokeos Metadata: search Dokeos course objects via PhpDig 1.8.6
+*   Dokeos Metadata: search Dokeos course objects via PhpDig 1.8.6
 *
 *   customized search.php 1.8.6 for Dokeos 1.6 assumes $template == "array"
 *
-*	@package dokeos.metadata
+*   @package dokeos.metadata
 ============================================================================== 
 */
 
@@ -31,7 +31,7 @@ If you modify code and redistribute, you may ADD your copyright to this notice.
 $language_file = "md_mix";
 include('../../../main/inc/global.inc.php');
 if (! $is_allowed_in_course) api_not_allowed();
-	
+    
 // start of part copied (with some changes) from standard PhpDig search.php
 $relative_script_path = '.';
 $no_connect = 0;
@@ -91,18 +91,26 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="../../../main/metadata/md
 $htmlHeadXtra[] = '
     <script type="text/javascript">
     /* <![CDATA[ */
-        var kwdswere = "' . $kwdswere_string . '";
+    function mdscSet(s)
+    {
+        var mdsc = getObj("mdsc");
+        if (!mdsc) { alert("? Form does not contain mdsc"); return false; }
         
-        function selakw(word)
-        {
-            pU_select(word); return false;
-        }
+        mdsc.value = s; return true;
+    }
+    function checkEnter(ev)
+    {
+        if (!ev) ev = window.event;
         
-        function seladw(word)
+        if (ev.altKey) {alert(document.getElementById("kwds_string").value); return;}
+        
+        if (ev.keyCode == 13)
         {
-            document.getElementById("mdsc").value += "\n" + word;
-            return false;
+            document.getElementById("kwdswere_string").value = 
+                document.getElementById("kwds_string").value; 
+            if (prepSearch(ev)) getObj("form_submit").form.submit();
         }
+    }
     /* ]]> */
     </script>';
 
@@ -112,15 +120,15 @@ echo '<table width="100%"><tr><td><h3>', get_lang('Search'), '</h3></td>',
     '<td align="right"><a href="http://www.phpdig.net"><img src="phpdig_powered_2.gif"/></a></td></tr></table>';
 
 
-// Store new extra criteria (see below), or execute PhpDig Search 
-// and echo result message, table with results, pages bar
+// Store new extra criteria (course manager only, see below), or execute 
+// PhpDig Search and echo result message + table with results + pages bar
 
 if (!$query_string) $query_string = trim($mdsc);
 
 $ckwcdt = file_exists($ckwc = KEYWORDS_CACHE . 'c') ? 
     date('Y/m/d H:i:s', filemtime($ckwc)) : '?'; $pkwc = '';
 
-if (strpos($query_string, '>') && api_is_allowed_to_edit())
+if (substr($query_string, 0, 2) == '<>' && api_is_allowed_to_edit())
 {
     if ($ckwcdt{0} != '?')
     {
@@ -174,7 +182,7 @@ if ($phpdigSearchResults['results']) foreach ($phpdigSearchResults['results'] as
         $thumburl = "tpl_img/link.gif";
     }
 
-    echo '<tr><td><a target="_blank" href="', $url, '"><img src="', $thumburl, 
+    echo '<tr><td align="center"><a target="_blank" href="', $url, '"><img src="', $thumburl, 
         '"/></a></td><td><a target="_blank" href="', $url, '">', $searchResult['link_title'], 
         '</a><br>', $searchResult['text'], '</td></tr>', "\n";
 }
@@ -185,64 +193,72 @@ if ($result_message && ($hits > 10))
     echo "Results page ", str_replace('?template_demo=', 
         '?kwdswere_string=' . urlencode($kwdswere_string), $pages_bar), '<br><br>';
 
-/* Extra criteria: course manager types in the descriptive zone (Advanced):
-
-keyword=k>
- -
-keyword=k>label
-<br/>
-descriptive-word=d>label for dword
+/*  Extra criteria: A course manager can define and edit them in the TEXTAREA.
+    If he types in something as in the example below, and clicks 'Go', the new 
+    criteria are stored and the old ones are displayed. So it is easy to 
+    restore the old ones. To confirm the new ones, empty the TEXTAREA.
+    
+<>This selection empties extra criteria
+<searchword>Label
+<keyword-kw>Descriptive text
 
 */
 
 $tdhtm = '';
 
-function tdhtm($xc, $pp, $type = 'k')
+function tdhtm($xc)
 {
-    $value = substr($xc, 0, $pp);
-    if (!($label = trim(substr($xc, $pp + 2 + strlen($type))))) $label = $value;
+    $eol = '<br/>'; if ($xc{0} == '<') $xc = substr($xc, 1);
     
-    return '<a href="." onClick="return sela' . 
-        $type . 'w(\'' . $value . '\')">' . $label . '</a>';
+    if (($eov = strpos($xc, '>')) === FALSE)
+            $value = $label = $xc;
+    else
+    {
+        $value = substr($xc, 0, $eov); $label = substr($xc, $eov+1);
+        
+        if (($eot = strpos($label, '<')) !== FALSE)
+        {
+            $eol = substr($label, $eot); $label = substr($label, 0, $eot);
+        }
+    }
+    
+    return '<input type="radio" name="xc" onclick="mdscSet(' . "'" . 
+        htmlspecialchars($value) . "'" . ')">' . 
+        htmlspecialchars($label) . '</input>' . $eol;
 }
 
 if ($ckwcdt{0} != '?')  // there is a file with extra criteria
 {
     $fckwc = fopen($ckwc, 'rb');
     foreach (explode("\n", fread($fckwc, filesize($ckwc))) as $xc)
-        $tdhtm .= "\n" . (($pp = strpos($xc, '=k>')) ? tdhtm($xc, $pp) :
-            (($pp = strpos($xc, '=d>')) ? tdhtm($xc, $pp, 'd') : $xc));
+        $tdhtm .= "\n" . tdhtm($xc);
     fclose($fckwc); unset($fckwc);
 }
-
-/* Sample result for the above extra criteria:
-
-<a href="." onClick="return selakw('keyword')">keyword</a> -
-<a href="." onClick="return selakw('keyword')">label</a><br/>
-<a href="." onClick="return seladw('descriptive-word')">label for dword</a>
-
-*/
 
 // Search criteria form and keywords tree
 ?>
 
 <div onMouseUp="if ((kw = pU_clicked(event))) pU_select(kw); else pU_hide();">
 
-<input type="text" id="kwds_string" class="kwl" onKeyUp="takeTypeIn(this, 150, -100, '60%'); return true;"/>
+<input type="text" id="kwds_string" class="kwl" onKeyUp="takeTypeIn(this, 150, -100, '60%'); checkEnter(event); return true;"/>
 
 <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-
-<div id="descriptive_words" class="dvc">
-    <?php echo get_lang('SearchCrit')?>:<br/>
-    <table><tr>
-    <td><textarea rows=10 name="mdsc" id="mdsc"><?php echo htmlspecialchars($pkwc) ?></textarea></td>
-    <td><?php echo $tdhtm ?></td>
-    </tr></table>
-</div>
-
-<input type="hidden" id="kwdswere_string" name="kwdswere_string"/>
-<button onClick="document.getElementById('descriptive_words').className='dvo'; this.style.display='none'; return false;"><?php echo get_lang('Advanced') ?></button>
-<input type="submit" onClick="document.getElementById('kwdswere_string').value = document.getElementById('kwds_string').value; return prepSearch(event);" value="<?php echo phpdigMsg('go')?>"/>
+<table>
+<tr>
+    <td><?php echo $tdhtm, '&nbsp;'; ?>
+    </td>
+    <td>
+    <?php if (api_is_allowed_to_edit())
+               echo '<textarea name="mdsc" id="mdsc" rows="10" cols="60">', htmlspecialchars($pkwc), '</textarea>';
+          else echo '<textarea name="mdsc" id="mdsc" class="dvc"> </textarea>';
+    ?>
+    </td>
+    <td>
+        <input type="hidden" id="kwdswere_string" name="kwdswere_string"/>
+        <input type="submit" id="form_submit" onClick="document.getElementById('kwdswere_string').value = document.getElementById('kwds_string').value; return prepSearch(event);" value="<?php echo phpdigMsg('go')?>"/>
+    </td>
+</tr>
+</table>
 
 <div id="popup" noWrap="1" class="pup">
     Working...
@@ -250,8 +266,12 @@ if ($ckwcdt{0} != '?')  // there is a file with extra criteria
 
 </form>
 
+<div>
+</div>
+
 <div noWrap="1" id="maindiv">
     <?php if ($keywordscache == '') { ?> &#xa0; <?php } else { ?>
+    <input type="checkbox" id="restricttokwds">Keywords-restrictive search<br>
     <input type="button" class="btn" value="+" onClick="if (this.value == '+') deselectAll(event, this); openOrClose(this);"/>
     <input type="button" class="btm" id="btnOpenOrCloseAll" value="++" onClick="openOrCloseAll(this);"/>
     <input type="button" class="btn" value="?" onClick="openOrCloseHelp(this)"/>

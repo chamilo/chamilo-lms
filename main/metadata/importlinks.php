@@ -1,7 +1,7 @@
 <?php /*                                <!-- Dokeos metadata/importlinks.php -->
-                                                             <!-- 2005/09/20 -->
+                                                             <!-- 2006/12/15 -->
 
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
+<!-- Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
 
 */
 
@@ -228,6 +228,25 @@ elseif ($slo == get_lang('Index') && file_exists($phpDigIncCn) && count($mceids)
                 echo '<table>', "\n";
                 index_words($site_id, $path, $file, 
                     get_first_words($text, $url . $path, $file), 
+                    get_keywords($text));
+                echo '</table>', "\n";
+            }
+            else
+            {
+                echo '<table>', "\n";
+                echo '<tr><td>', htmlspecialchars($url), 
+                    '</td><td>', htmlspecialchars($path), 
+                    '</td><td>', htmlspecialchars($file), '</td></tr>';
+                echo '</table>', "\n";
+            }
+        }
+        elseif (isset($pu['scheme']) && $pu['scheme'] == 'mailto' && isset($pu['path']))
+        {
+            if ($site_id = remove_engine_entries($url = 'mailto:' . $pu['path'], ''))
+            {
+                echo '<table>', "\n";
+                index_words($site_id, '', '', 
+                    get_first_words($text, $url, ''), 
                     get_keywords($text));
                 echo '</table>', "\n";
             }

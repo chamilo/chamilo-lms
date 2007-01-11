@@ -1,5 +1,5 @@
 <!-- {-md_link.htt-} -->                  <!-- for Dokeos metadata/index.php -->
-                                                             <!-- 2005/03/15 -->
+                                                             <!-- 2006/05/16 -->
 
 <!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
 
@@ -87,7 +87,7 @@
         <td>{-D xpath metadata/lom/general/language-}{-C LANGSELECT-}</td>
         <td>{-D xpath metadata/lom/general/identifier/catalog-}{-D iclass disabled class="wd2" -}{-C INPUT-}</td>
         <td>{-D label Identifier-}{-C LABEL-}</td>
-        <td>{-D xpath metadata/lom/general/identifier/entry-}{-D iclass class="wd2" onKeyPress="return isValidChar(event, '[a-z0-9\x08\x25\*\.\'\(\)_!-]', 'i');" -}{-C INPUT-}</td>
+        <td>{-D xpath metadata/lom/general/identifier/entry-}{-D iclass class="wd2" onKeyPress="return isValidChar(event, '[a-z0-9\x08\x25\x27\*\.\'\(\)_!-]', 'i');" -}{-C INPUT-}</td>
     </tr>
     <tr>
         <td>{-D label Title-}{-C LABEL-}</td>
@@ -119,6 +119,16 @@
 
 
 <!-- {-METADATA_INDEXABLETEXT-} -->
+
+Title: {-V metadata/lom/general/title/string-} txt-sep
+Keyword(s): {-R metadata/lom/general/keyword C KWTEXT-} txt-sep
+Category: {-V metadata/lom/general/coverage/string-}
+ {-V metadata/lom/general/description[1]/string-} txt-end
+ link-type
+ {-V metadata/lom/lifeCycle/contribute[1]/entity-}
+ {-V metadata/lom/lifeCycle/contribute[1]/date/dateTime-}
+
+<!-- {-METADATA_INDEXABLETEXT_PREVIOUS_VERSION-} -->
 
  {-V metadata/lom/general/identifier/entry-}
  {-V metadata/lom/general/title/string-}
@@ -172,7 +182,7 @@
 <input type="text" title="{-X metadata/lom/general/description/string/@language-}" 
  id="kwds_string" class="wide" value="{-X metadata/lom/general/keyword/string , -}" 
  onKeyUp="takeTypeIn(this, 150, -100, '60%'); return true;" 
- onKeyPress="return isValidChar(event, '[0-9a-z\xC0-\xFF\.\x08\x25, -]', 'i');" />
+ onKeyPress="return isValidChar(event, '[0-9a-z\xC0-\xFF\.\x08\x25\x27, -]', 'i');" />
 
 
 <!-- {-HEAD-} -->

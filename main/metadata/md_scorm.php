@@ -1,5 +1,5 @@
 <?php /*                         <!-- md_scorm.php for Dokeos metadata/*.php -->
-                                                             <!-- 2005/09/20 -->
+                                                             <!-- 2006/12/15 -->
 
 <!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
 
@@ -34,11 +34,13 @@ function mdo_define_htt() { return new xhtdoc(<<<EOD
 
 <!-- {-INDEXABLETEXT-} -->
 
+{-D scormlevel {-V @level-}-}{-D two 2-}
 Title: {-V metadata/lom/general/title/string-} txt-sep
+{-T scormlevel == two Author(s): {-V metadata/lom/lifeCycle/contribute[1]/entity-} txt-sep-}
 Keyword(s): {-R metadata/lom/general/keyword C KWTEXT-} txt-sep
  {-V metadata/lom/general/description[1]/string-}
  {-V metadata/lom/technical/location-} txt-end
- {-V metadata/lom/general/description[2]/string-} scorm-level-{-V @level-}
+ {-V metadata/lom/general/description[2]/string-} scorm-level-{-P scormlevel-}
  {-V metadata/lom/lifeCycle/contribute[1]/entity-}
  {-V metadata/lom/lifeCycle/contribute[1]/date/dateTime-}
 

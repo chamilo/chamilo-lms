@@ -1,7 +1,7 @@
 <?php /*                             <!-- Dokeos metadata/importmanifest.php -->
-                                                             <!-- 2005/09/20 -->
+                                                             <!-- 2006/12/15 -->
 
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
+<!-- Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
 
 */
 
@@ -12,9 +12,7 @@
 *	@package dokeos.metadata
 ============================================================================== 
 */
-/**
- * @todo $rootSys is replaced with $_configuration['root_sys'] except here because I do not understand this code. 
- */
+
 
 // PRELIMS -------------------------------------------------------------------->
 
@@ -31,12 +29,12 @@ $nameTools = get_lang('Tool');
 
 if (!isset($sdisub)) $sdisub = '';
 $sdisub = substr(ereg_replace("[^0-9A-Za-z]", "", $sdisub), 0, 4);
+// $sdisub is for split manifests - Scorm.NNN.$sdisub_xxx e.g. Scorm.3.1979_12
 
 define('MFFNAME', 'imsmanifest'); define('MFFDEXT', '.xml');
-define('MFF', MFFNAME . $sdisub . MFFDEXT);
 define('HTF', 'mdp_scorm.htt');
 
-// $sdisub is for split manifests - Scorm.NNN.$sdisub_xxx e.g. Scorm.3.1979_12
+$regs = array();
 
 ($nameTools && get_lang('Sorry')) or give_up( 
     'Language file ' . $language_file . " doesn't define 'Tool' and 'Sorry'");
@@ -46,13 +44,13 @@ $_course = api_get_course_info(); isset($_course) or give_up(get_lang('Sorry'));
 $is_allowed_to_edit = isset($_user['user_id']) && $is_courseMember && is_allowed_to_edit();
 if (!$is_allowed_to_edit) give_up(get_lang('Denied'));
 
+$baseWorkDir = get_course_path() . ($courseDir = $_course['path'] . '/scorm');
+
 $mdStore = new mdstore($is_allowed_to_edit);  // create table if needed
 
 require(api_get_path(LIBRARY_PATH) . 'xmd.lib.php');
 require(api_get_path(LIBRARY_PATH) . 'xht.lib.php');
 require(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
-
-$baseWorkDir = get_course_path() . ($courseDir = $_course['path'] . '/scorm');
 
 require('md_phpdig.php');
 
@@ -84,34 +82,49 @@ else
         ': ' . get_lang('NotInDB') . ')'; unset($workWith);
 }
 
+define('UZYX', 'UZYX');  // magic word to repeat for all $sdisub
+
+if (($sdiall = ($sdisub == UZYX)))
+{
+	$sdisub = ''; $sdiall = array();
+	
+	if (($dh = opendir($baseWorkDir . $workWith)))
+    {
+        while (FALSE !== ($file = readdir($dh)))
+            if (ereg('^'.MFFNAME.'(.+)\\'.MFFDEXT .'$', $file, $regs))
+            	$sdiall[] = $regs[1]; 
+        closedir($dh);
+    }
+    sort($sdiall);
+}	
+
 $originalHdrInfo = $hdrInfo;
+
+function slurpmanifest()
+{
+    global $baseWorkDir, $workWith, $sdisub, $mfContents, $xht_doc;
+    
+    if (file_exists($fmff = $baseWorkDir . $workWith . '/' . MFFNAME . $sdisub . MFFDEXT))
+    {
+        if (($mfContents = @fgc($fmff)))
+        {
+            set_time_limit(120);  // for analyzing the manifest file
+            $xht_doc = new xmddoc(explode("\n", $mfContents));
+            if (!$xht_doc->error) return '';  // keeping $mfContents and $xht_doc
+            
+            unset($mfContents);
+            return get_lang('ManifestSyntax') . ' ' . htmlspecialchars($xht_doc->error);
+        }
+        else return get_lang('EmptyManifest');
+    }
+    else return get_lang('NoManifest');
+}
 
 if (isset($workWith))  // now checked to be a valid path in scormdocument
 {
     if ($mdObj->mdo_filetype == 'folder')  // a folder with a manifest?
     {
-        if (file_exists($fmff = $baseWorkDir . $workWith . '/' . MFF))
-        {
-            if (($mfContents = @fgc($fmff)))
-            {
-                set_time_limit(120);  // for analyzing the manifest file
-                $xht_doc = new xmddoc(explode("\n", $mfContents));
-                if ($xht_doc->error)
-                {
-                    $hdrInfo .= ' ' . get_lang('ManifestSyntax') . ' ' .  
-                        htmlspecialchars($xht_doc->error);
-                    unset($mfContents);
-                }   // else keep $mfContents, meaning manifest file is OK
-            }
-            else
-            {
-                $hdrInfo .= ' ' . get_lang('EmptyManifest');
-            }
-        }
-        else
-        {
-            $hdrInfo .= ' ' . get_lang('NoManifest');
-        }
+    	if (($errmsg = slurpmanifest())) $hdrInfo .= ' ' . $errmsg;
     }
     else
     {
@@ -122,9 +135,10 @@ if (isset($workWith))  // now checked to be a valid path in scormdocument
 $mdObj->mdo_add_breadcrump_nav();  // see 'md_' . EID_TYPE . '.php'
 if (isset($sdi)) $interbreadcrumb[]= array(
     'url' => $_SERVER['PHP_SELF'] . '?sdi=' . urlencode($sdi) . 
-        ($sdisub ? '&sdisub=' . urlencode($sdisub) : ''), 
+        ($sdisub ? '&sdisub=' . urlencode($sdisub) : 
+        	($sdiall ? '&sdisub='.UZYX : '')), 
     'name'=> get_lang('Continue') . ' ' . $sdi . 
-        ($sdisub ? ' (' . $sdisub . ')' : ''));
+        ($sdisub ? ' (' . $sdisub . ')' : ($sdiall ? ' ('.UZYX.')' : '')));
 
 $htmlHeadXtra[] = '
 <link rel="stylesheet" type="text/css" href="md_styles.css">
@@ -145,34 +159,11 @@ if ($smo == get_lang('UploadMff'))
         fclose($myFile);
         
         if (move_uploaded_file($filespec, 
-                $baseWorkDir . $workWith . '/' . MFF))
+                $baseWorkDir . $workWith . '/' . MFFNAME . $sdisub . MFFDEXT))
         { 
             echo get_lang('MffOk'); $hdrInfo = $originalHdrInfo;
             
-            // note: duplicate code below: remove or put in function?
-            
-            if (file_exists($fmff = $baseWorkDir . $workWith . '/' . MFF))
-            {
-                if (($mfContents = @fgc($fmff)))
-                {
-                    set_time_limit(120);  // for analyzing the manifest file
-                    $xht_doc = new xmddoc(explode("\n", $mfContents));
-                    if ($xht_doc->error)
-                    {
-                        $hdrInfo .= ' ' . get_lang('ManifestSyntax') . ' ' .  
-                            htmlspecialchars($xht_doc->error);
-                        unset($mfContents);
-                    }   // else keep $mfContents, meaning manifest file is OK
-                }
-                else
-                {
-                    $hdrInfo .= ' ' . get_lang('EmptyManifest');
-                }
-            }
-            else
-            {
-                $hdrInfo .= ' ' . get_lang('NoManifest');
-            }
+            if (($errmsg = slurpmanifest())) $hdrInfo .= ' ' . $errmsg;
         }
         else echo get_lang('MffNotOk');
     }
@@ -301,7 +292,7 @@ elseif ($smo == get_lang('Import'))
             $mdStore->mds_put(EID_TYPE . '.' . $mfdocId, $ixt, 'indexabletext');
         }
         
-        echo htmlspecialchars($level.'/ '.$itemId), '<br>';
+        echo $level <= 1 ? '<br>'.$level.'/ ' : ' ', htmlspecialchars($itemId);
         flush(); $loopctr = 0;
         
         foreach ($xht_doc->xmd_select_elements(SUBITEM, $treeElem) as $subElem)
@@ -337,29 +328,41 @@ elseif ($smo == get_lang('Import'))
             $fp = fopen($thf, "rb"); fpassthru($fp); fclose($fp);
         }
 '
-            . str_replace($_configuration['root_sys'], api_get_path(SYS_PATH), 
-                str_replace('$scid', $scid, 
+            . str_replace('<SYS_PATH-placeholder>', api_get_path(SYS_PATH), 
+                str_replace('<scid>', $scid,  // 2 * replace in $drs-line below
 '
         else
         {
-            $drs = "$rootSys"; 
-            $scormid = "$scid";
-            require($drs. "main/metadata/playscormmdset.inc.php");
+            $drs = "<SYS_PATH-placeholder>"; $scormid = "<scid>";
+            require($drs. "claroline/metadata/playscormmdset.inc.php");
         }
 '           )) . '?' . '>';
     }
     
     if ($mfContents)
     {
-        store_md_and_traverse_subitems($sdi, 0, 1, 0, 
-            $xht_doc->xmd_select_single_element(TREETOP), -1);
+        if ($sdiall)
+        {
+        	foreach ($sdiall as $sdisub)
+        	{
+		        if (($errmsg = slurpmanifest()))
+		        	echo '? ', $sdisub, ': ', $errmsg, '<br>';
+		        else
+			        store_md_and_traverse_subitems($sdi, 0, 1, 0, 
+			            $xht_doc->xmd_select_single_element(TREETOP), -1);
+		    }
+		    $sdisub = '';
+		}
+        else  // just once, slurpmanifest() has already been done
+	        store_md_and_traverse_subitems($sdi, 0, 1, 0, 
+	            $xht_doc->xmd_select_single_element(TREETOP), -1);
     	
         $playIt = $baseWorkDir . $workWith . '/index.php';
         $fileHandler = @fopen($playIt, 'w');
         @fwrite($fileHandler, content_for_index_php($sdi));
         @fclose($fileHandler);
         
-    	echo htmlspecialchars($workWith);
+    	echo '<br>', htmlspecialchars($workWith);
     	if (file_exists($playIt)) echo '/index.php ', 
     	    htmlspecialchars(date('Y/m/d H:i:s', filemtime($playIt)));
 	}
@@ -370,7 +373,7 @@ elseif ($smo == get_lang('Remove') && $sdisub)
     $mdStore->mds_delete_offspring($screm, '\_');  // SQL LIKE underscore
     echo htmlspecialchars($screm . '_*: ' . mysql_affected_rows()), '<br>';
 }
-elseif ($smo == get_lang('Remove'))
+elseif ($smo == get_lang('Remove'))  // remove all, regardless of $sdiall
 {
     $mdStore->mds_delete($screm = EID_TYPE . '.' . $sdi);
     echo htmlspecialchars($screm . ': ' . mysql_affected_rows()), '<br>';
@@ -383,7 +386,8 @@ elseif ($smo == get_lang('Index') && file_exists($phpDigIncCn) &&
 {
     $result = $mdStore->mds_get_many('eid,mdxmltext,indexabletext', 
         "eid LIKE '" . EID_TYPE . "." . $sdi . 
-        ($sdisub ? "." . $sdisub . "\_%'" : ".%'"));  // SQL LIKE underscore
+        ($sdisub ? "." . $sdisub . "\_%'" : ".%'") . 
+        ($sdiall ? "" : " AND NOT INSTR(eid,'_')"));  // SQL LIKE underscore
     
     while ($row = mysql_fetch_array($result))  // load indexabletexts in memory
     {
@@ -484,7 +488,7 @@ if (count($perId))
     foreach ($pathId as $pth => $id) if ($wwl == 0 || 
             ($wwl < strlen($pth) && substr($pth, 0, $wwl) == $workWith))
     {
-        $tmfdt = file_exists($tfmff = $baseWorkDir . $pth . '/' . MFF) ? 
+        $tmfdt = file_exists($tfmff = $baseWorkDir . $pth . '/' . MFFNAME . $sdisub . MFFDEXT) ? 
             date('Y/m/d H:i:s', filemtime($tfmff)) : '-';
         echo '<tr><td>', htmlspecialchars($tmfdt), '</td>', 
             '<td>', htmlspecialchars($pth), 
@@ -496,7 +500,7 @@ if (count($perId))
 
 if ($mfContents)
 {
-    echo $workWith, '/', MFF, ': ', 
+    echo $workWith, '/', MFFNAME . $sdisub . MFFDEXT, ': ', 
         htmlspecialchars(date('Y/m/d H:i:s', filemtime($fmff))) , ", \n", 
         substr_count($mfContents, "\n") + 1, 
         ' ' . get_lang('Lines') . '.', "\n";
@@ -504,7 +508,7 @@ if ($mfContents)
     if (!$sdisub && ($dh = opendir($baseWorkDir . $workWith)))
     {
         $nsplit = array();
-        while (FALSE !== ($file = readdir($dh))) 
+        while (FALSE !== ($file = readdir($dh)))
             if (ereg('^'.MFFNAME.'(.+)\\'.MFFDEXT .'$', $file, $regs))
             { 
                 $nsplit []= $regs[1]; 
@@ -542,7 +546,7 @@ if ($mfContents || $xht_doc->error)
 {
     echo '<h3>', get_lang('UploadMff'), "</h3>\n\n", 
         '<form action="' . $_SERVER['PHP_SELF'] . '?sdi=' . urlencode($sdi) . 
-                ($sdisub ? '&sdisub=' . urlencode($sdisub) : '') .
+                ($sdisub ? '&sdisub=' . urlencode($sdisub) : ($sdiall ? '&sdisub='.UZYX : '')) .
                 '" enctype="multipart/form-data" method="post">', "\n",
             '<input type="hidden" name="MAX_FILE_SIZE" value="32768">', "\n", 
             '<input type="file" name="import_file" size="30">', "\n", 
@@ -554,7 +558,7 @@ echo '<h3>', get_lang('UploadHtt'), file_exists($fhtf) ?
     (' + ' . get_lang('RemoveHtt')) : '', "</h3>\n\n", 
 
     '<form action="' . $_SERVER['PHP_SELF'] . '?sdi=' . urlencode($sdi) . 
-            ($sdisub ? '&sdisub=' . urlencode($sdisub) : '') .
+            ($sdisub ? '&sdisub=' . urlencode($sdisub) : ($sdiall ? '&sdisub='.UZYX : '')) .
             '" enctype="multipart/form-data" method="post">', "\n",
         '<input type="hidden" name="MAX_FILE_SIZE" value="32768">', "\n", 
         '<input type="file" name="import_file" size="30">', "\n", 
@@ -568,7 +572,7 @@ echo '<h3>', $nameTools, $hdrInfo, '</h3>', "\n";
 if ($mfContents || $perId[$sdi])  // buttons for manifest operations
 {
     echo '<form action="' . $_SERVER['PHP_SELF'] . '?sdi=' . urlencode($sdi) . 
-        ($sdisub ? '&sdisub=' . urlencode($sdisub) : '') .
+        ($sdisub ? '&sdisub=' . urlencode($sdisub) : ($sdiall ? '&sdisub='.UZYX : '')) .
         '" method="post">', "\n";
     if ($mfContents) echo 
     '<input type="submit" name="smo" value="', get_lang('Import'), '">', "\n";
@@ -634,7 +638,7 @@ showSelectForm('SDI',
     '<input type="text" size="5" name="sdi" value="' . 
         htmlspecialchars($sdi) . '" />' . 
     '(<input type="text" size="4" name="sdisub" value="' . 
-        htmlspecialchars($sdisub) . '" />)' . "\n");
+        ($sdiall ? UZYX : htmlspecialchars($sdisub)) . '" />)' . "\n");
         
 echo '</table>', "\n";
 

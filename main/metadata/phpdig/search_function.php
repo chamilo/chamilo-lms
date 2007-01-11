@@ -342,7 +342,7 @@ if ($ncrit && is_array($strings)) {
         reset($final_result);
         $query_for_phrase_array = explode(" ",$query_for_phrase);
         $reg_strings = str_replace('@#@',' ',phpdigPregQuotes(str_replace('\\','',implode('@#@',$query_for_phrase_array))));
-        $stop_regs = "[][(){}[:blank:]=&?!&#%\$*@+%:;,/\.'\"]";
+        $stop_regs = "[][(){}[:blank:]=&?!&#%\$£*@+%:;,/\.'\"]";
         $reg_strings = "($stop_regs{1}|^)($reg_strings)($stop_regs{1}|\$)";
         while (list($spider_id,$weight) = each($final_result)) {
           $content_file = $relative_script_path.'/'.TEXT_CONTENT_PATH.$spider_id.'.txt';
@@ -416,7 +416,7 @@ if ((is_array($final_result)) && (count($final_result) > 0)) {
     else {
         $reg_strings = str_replace('@#@','|',phpdigPregQuotes(str_replace('\\','',implode('@#@',$strings))));
     }
-    $stop_regs = "[][(){}[:blank:]=&?!&#%\$*@+%:;,/\.'\"]";
+    $stop_regs = "[][(){}[:blank:]=&?!&#%\$£*@+%:;,/\.'\"]";
 
     switch($option) {
         case 'any':

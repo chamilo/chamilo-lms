@@ -1,13 +1,13 @@
 <?php /*                                   <!-- Dokeos metadata/md_funcs.php -->
-                                                             <!-- 2005/09/20 -->
+                                                             <!-- 2006/12/15 -->
 
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be - see note at end of text    -->
+<!-- Copyright (C) 2006 rene.haentjens@UGent.be - see note at end of text    -->
 
 */
 
 /**
 ============================================================================== 
-*	Dokeos Metadata: common functions and mdstore class
+*   Dokeos Metadata: common functions and mdstore class
 *
 *   This script requires xmd.lib.php and xht.lib.php (Dokeos inc/lib).
 *
@@ -25,7 +25,7 @@
 *   path1,path2,...;subpath=value   for all elements in path1, path2, ...
 *                   assign value to subpath (see also xmd_update_many)
 *
-*	@package dokeos.metadata
+*   @package dokeos.metadata
 ============================================================================== 
 */
 
@@ -49,8 +49,8 @@ function fgc($filename)
 
 function give_up($msg)
 {
-	echo '<p align="center">MetaData:<br><b>? ', 
-	    htmlspecialchars($msg), '</b></p>'; exit;
+    echo '<p align="center">MetaData:<br><b>? ', 
+        htmlspecialchars($msg), '</b></p>'; exit;
 } 
 
 
@@ -108,8 +108,8 @@ function define_htt($htt_file, $urlp, $course_path)
 
 function make_uri()
 {
-	$regs = array(); // for use with ereg()
-	
+    $regs = array(); // for use with ereg()
+    
     $uri = strtr(ereg_replace(
         "[^0-9A-Za-z\xC0-\xD6\xD8-\xF6\xF8-\xFF\*\(\('!_.-]", "_", 
         api_get_setting('siteName')), "\\", "_");  // allow letdigs, and _-.()'!*
@@ -206,87 +206,32 @@ $ieee_dcmap_v = array(
 
 // KEYWORD TREE --------------------------------------------------------------->
 
-/* NOTE about NESTED_DIVS_FOR_KEYWORDTREE and NESTED_DIV:
-
-    The 'document.write' + 'replace's are just a compression mechanism, 
-    they reduce 100K of HTML to an insertable JS file of 25K...
-    
-    Special characters & combinations: " " " < > <>
-    
-    Read NESTED_DIV as follows:
-    
-    {-D bcv class="lfn" value=" "-}
-    {-R * P empty-}
-    {-T number >= 1 D bcv class="btn" value="+" onClick="openOrClose(this);"-}
-    
-    <div noWrap="1" class="dvc" level="{-L NLevel-}">
-        <input type="button" {-P bcv}/>
-        &#xa0;
-        <span class="lbl" onClick="spanClick(this, event);">{-L NName-}</span>
-        <br/>
-        {-R * C NESTED_DIV-}
-    </div>
-*/
-
-function define_kwds_htt() { return new xhtdoc(<<<EOD
-
-<!-- {-NESTED_DIVS_FOR_KEYWORDTREE-} -->
-document.write((''
-{-R * C NESTED_DIV-})
-.replace(/"/g,   '<div noWrap="1" class="dvc" level="')
-.replace(/"/g,'"><input type="button" class="btn" value="+" onClick="openOrClose(this);"/>&#xa0;<span class="lbl" onClick="spanClick(this, event);"')
-.replace(/"/g, '"><input type="button" class="lfn" value=" "/>&#xa0;<span class="lbl" onClick="spanClick(this, event);"')
-.replace(/<>/g, ' title="').replace(/<>/g, '</span><br/>')
-.replace(/</g, '</span><i>').replace(/>/g, '</i><br/>')
-.replace(//g, '</div>')
-);
-
-<!-- {-NESTED_DIV-} -->
-+'"{-L NLevel-}"{-R * P empty-}{-T number >= 1 -}{-L NPost-}>{-L NName-}'
-{-R * C NESTED_DIV-}+''
-
-<!-- {--} -->
-EOD
-);
-}
-
 function define_kwds($mdo) 
 {
-    global $xhtDocKw;  // only used here and in the inner function
-    
-    function not_get_lang($word, $node)  // only for the above templates
-    {
-        global $xhtDocKw;
-        
-        if ($word == 'NLevel')  // e.g. 001003002
-        {
-            $result = '';
-            for ($k = 1; $k <= $xhtDocKw->xht_param['rdepth']; $k++) 
-                $result .= substr('00' . $xhtDocKw->xht_param['rdepth'.$k], -3);
-            return $result;
-        }
-        
-        if ($word == 'NPost')
-        {
-            $postit = $xhtDocKw->xht_xmldoc->attributes[$node]['postit'];
-            return $postit ? '<>' . str_replace("'", "\'", $postit) . '"' : '';
-        }
-        
-        if ($word == 'NName')  // replace _ by , in nodename
-            return str_replace('_', ', ', $xhtDocKw->xht_xmldoc->name[$node]) . 
-                '<'. str_replace("'", "\'", 
-                    $xhtDocKw->xht_xmldoc->attributes[$node]['comment']) .'>';
-        
-        return get_lang($word);
-    }
-    
     if (!($newtext = trim(@fgc(get_course_path() . $mdo->mdo_course['path'] . 
             '/document' . $mdo->mdo_path ))))
     {
         unlink(KEYWORDS_CACHE); return;
     }
+                                    // templates to define the tree as JScript object
+    $xhtDocKw = new xhtdoc(<<<EOD
     
-    $xhtDocKw = define_kwds_htt();
+<!-- {-KWTREE_OBJECT-} -->
+
+KWTREE_OBJECT = {n:"", ti:"{-X @title-}"
+, c:[{-R * C DOWN_THE_KWTREE-}]};
+
+document.write(traverseKwObj(KWTREE_OBJECT, '', 0)); KWDS_ARRAY.sort();
+
+<!-- {-DOWN_THE_KWTREE-} -->
+{-T number > 1 , -}{n:"{-V @.-}"{-D cm {-X @comment-}-}{-T cm != empty , cm:"{-P cm-}"-}{-D pt {-X @postit-}-}{-T pt != empty , pt:"{-P pt-}"-}{-R * P empty-}{-T number >= 1 
+, c:[-}{-T number >= 1 R * C DOWN_THE_KWTREE-}{-R * P empty-}{-T number >= 1 ]-}}
+
+<!-- {--} -->
+EOD
+    );  // traverseKwObj (md_script) generates clickable tree and populates KWDS_ARRAY
+
+    
     if ($xhtDocKw->htt_error) 
         give_up('KwdTree template (metadata/md_funcs): ' . $xhtDocKw->htt_error);
     
@@ -300,12 +245,9 @@ function define_kwds($mdo)
         unlink(KEYWORDS_CACHE); return;
     }
     
-    $xhtDocKw->xht_get_lang = 'not_get_lang';
-    
-    $newtext = $xhtDocKw->xht_fill_template('NESTED_DIVS_FOR_KEYWORDTREE');
-    
     $fileHandler = @fopen(KEYWORDS_CACHE, 'w');
-    @fwrite($fileHandler, $newtext); @fclose($fileHandler);
+    @fwrite($fileHandler, $xhtDocKw->xht_fill_template('KWTREE_OBJECT'));
+    @fclose($fileHandler);
 }
 
 

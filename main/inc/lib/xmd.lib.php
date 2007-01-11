@@ -1,5 +1,5 @@
 <?php /*                                                    <!-- xmd.lib.php -->
-                                                <!-- XML MiniDom, 2005/07/28 -->
+                                                <!-- XML MiniDom, 2006/12/13 -->
 
 <!-- Copyright (C) 2005 rene.haentjens@UGent.be - see note at end of text    -->
 <!-- Released under the GNU GPL V2, see http://www.gnu.org/licenses/gpl.html -->
@@ -799,8 +799,8 @@ class xmddoc
             if ($pcs && strlen($data) == 1) $this->_concat = TRUE;
             // expat parser puts &xx; in a separate cData, try to re-assemble
             
-            if ($pcs && $data{0} == 'й') $this->_concat = TRUE;
-            // PHP5 expat breaks before й (but not before икл…бунъ...)
+            if ($pcs && $data{0} > '~') $this->_concat = TRUE;
+            // PHP5 expat breaks before 8-bit characters
             
             if ($this->_concat)
             {

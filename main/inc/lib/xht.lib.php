@@ -1,7 +1,7 @@
 <?php /*                                                    <!-- xht.lib.php -->
-                                         <!-- XML HTML Templates, 2005/03/16 -->
+                                         <!-- XML HTML Templates, 2006/12/14 -->
 
-<!-- Copyright (C) 2005 rene.haentjens@UGent.be - see note at end of text    -->
+<!-- Copyright (C) 2006 rene.haentjens@UGent.be - see note at end of text    -->
 <!-- Released under the GNU GPL V2, see http://www.gnu.org/licenses/gpl.html -->
 
 */
@@ -29,8 +29,8 @@
 function xht_htmlwchars($s)  // use only where ISO-8859-1 is not required!
 {
     return ereg_replace('\[((/?(b|big|i|small|sub|sup|u))|br/)\]', '<\\1>', 
-        str_replace('@@', '&', 
-        htmlspecialchars(ereg_replace('&#([0-9]+);', '@@#\\1;', $s))));
+        str_replace('@§@', '&', 
+        htmlspecialchars(ereg_replace('&#([0-9]+);', '@§@#\\1;', $s))));
     // replaces htmlspecialchars for double-escaped xml chars like '&amp;#nnn;'
     // and                       when html tags <...> are represented as [...]
 }

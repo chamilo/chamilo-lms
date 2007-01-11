@@ -1,5 +1,5 @@
 // md_script.js                               <!-- for Dokeos metadata/*.php -->
-//                                                           <!-- 2006/01/18 -->
+//                                                           <!-- 2006/05/16 -->
 
 //   Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
 
@@ -31,7 +31,7 @@
         {
             if (!document.getElementById)
                 alert('Sorry, the buttons only work with W3C browsers. ' +
-                    'Use Moz1.7 or IE6 or NN7 or type in keywords manually...');
+                    'Use FireFox or IE6 or Moz1.7 or type in keywords manually...');
             return !document.getElementById;
         }
         
@@ -184,8 +184,8 @@
         {
             if (isNotW3C()) return false;
             
-        	if (!ev) var ev = window.event;
-        	
+            if (!ev) var ev = window.event;
+            
             var kws = document.getElementById('kwds_string');
             
             for (var s in selspans) selspans[s].className = "lbl";
@@ -195,7 +195,7 @@
             
             if (!ev.altKey) { kws.value = ''; return; }
             
-            // md_script: calling HTML should define var kwdswere!
+            // md_script: the calling HTML should define var kwdswere!
             // in SelKwds.xsl, they are   typed in by user or fetched from PPT
             
             var kwdsarray = kwdswere.split(','), allKwds = '';
@@ -275,7 +275,7 @@
     
         var KWDS_ARRAY = new Array, nkw = 0, pU;  // alphabetic list popup
         
-        function makeAlphaList(div)
+        function makeAlphaList(div)  // md_script: not used (hopefully)
         {
             var ch = div.childNodes;
             for (var i = 0; i < ch.length; i++)
@@ -329,11 +329,17 @@
             if (!pU)
             {
                 pU = document.getElementById('popup');
-                makeAlphaList(document.getElementById('maindiv'));
-                KWDS_ARRAY.sort();
+                
+                if (!KWDS_ARRAY.length)
+                {
+                    makeAlphaList(document.getElementById('maindiv'));
+                    KWDS_ARRAY.sort();
+                }
             }
             
-            var curValue = kws.value.toLowerCase(), kwLines = '';
+            if (!(curValue = kws.value.toLowerCase())) return;
+            
+            var kwLines = '';
             
             for (pos = 0; pos < KWDS_ARRAY.length; pos++)
                 if (KWDS_ARRAY[pos].toLowerCase().indexOf(curValue) == 0)
@@ -402,44 +408,44 @@
             var fieldColor = (new RegExp(pattern, flags)).test(inputField.value) ? '#000000' : '#D8366C';
             var fieldStyle = (document.getElementById || document.all) ? 
                 inputField.style : inputField;
-        	if (fieldStyle) fieldStyle.color = fieldColor;
-        	
-        	// OK for all browsers (see devedge.netscape.com
-        	//          /library/xref/2003/css-support/css1/mastergrid.html):
-        	// color, background-color (not on NN4), display block/none (NN4?),
-        	// overflow hidden/scroll/auto (not on NN4),
-        	// position relative/static, 
-        	// text-align left/right/center, text-indent,
-        	// font-style normal/italic, font-weight normal/bold,
-        	// font-family serif/sans-serif/monospace,
-        	// border-style none/solid/double/groove/ridge/inset/outset.
+            if (fieldStyle) fieldStyle.color = fieldColor;
+            
+            // OK for all browsers (see devedge.netscape.com
+            //          /library/xref/2003/css-support/css1/mastergrid.html):
+            // color, background-color (not on NN4), display block/none (NN4?),
+            // overflow hidden/scroll/auto (not on NN4),
+            // position relative/static, 
+            // text-align left/right/center, text-indent,
+            // font-style normal/italic, font-weight normal/bold,
+            // font-family serif/sans-serif/monospace,
+            // border-style none/solid/double/groove/ridge/inset/outset.
         }
         
         function getObj(name)  // PPK
         {
             return (document.getElementById) ? document.getElementById(name)
             : (document.all) ?                 document.all[name]        // IE4
-        	: (document.layers) ?              document.layers[name]     // NS4
-        	: null;  // With NS4, nested layers are not supported!
+            : (document.layers) ?              document.layers[name]     // NS4
+            : null;  // With NS4, nested layers are not supported!
         }
         
         function spc(path, value)  // set pending change in form field mda
         {
-        	var mda = getObj("mda");
-        	if (mda) mda.value += "\n" + path + '=' + value;
+            var mda = getObj("mda");
+            if (mda) mda.value += "\n" + path + '=' + value;
         }
         
         function spcSel(path, selbox)  // set pending change, language selection
         {
-        	var mda = getObj("mda");
-        	if (mda) mda.value += "\n" + path + '=' + 
-        	    selbox.options[selbox.selectedIndex].value;
+            var mda = getObj("mda");
+            if (mda) mda.value += "\n" + path + '=' + 
+                selbox.options[selbox.selectedIndex].value;
         }
         
         function checkBeforeSubmit(ev)
         {
-        	if (!ev) var ev = window.event;
-        	
+            if (!ev) var ev = window.event;
+            
             if (ev.ctrlKey && ev.altKey)
             {
                 var mdt = getObj("mdt"); if (!mdt) return false;
@@ -454,79 +460,116 @@
                 return false;
             }
             
-        	var kwdsnow = getObj("kwds_string"); if (!kwdsnow) return true;
-        	if (kwdsnow.value == kwdswere) return true;  // unchanged
-        	// note: calling HTML should define var kwdswere!
-        	
-        	var language = kwdsnow.title;
-        	
-        	var mda = getObj("mda");
-        	if (!mda) { alert('? Form does not contain mda'); return false; }
-        	
-        	var kwdsarray = kwdswere.split(',');
-        	
-        	for (var k = 0; k < kwdsarray.length; k++)  // delete old
-        	    if (kwdsarray[k].trim() != '') 
-                	mda.value += "\nmetadata/lom/general/keyword[-1]~";
-        	
-        	kwdsarray = kwdsnow.value.split(',');
-        	
-        	for (k = 0; k < kwdsarray.length; k++)
-        	{
-            	var newkw = kwdsarray[k].trim();
-            	if (newkw != '') mda.value += 
-            	    "\nmetadata/lom/general!keyword" + 
-            	    "\nmetadata/lom/general/keyword[-1]!string=" + newkw + 
-            	    "\nmetadata/lom/general/keyword[-1]/string/@language=" + language;
+            var kwdsnow = getObj("kwds_string"); if (!kwdsnow) return true;
+            if (kwdsnow.value == kwdswere) return true;  // unchanged
+            // note: calling HTML should define var kwdswere!
+            
+            var language = kwdsnow.title;
+            
+            var mda = getObj("mda");
+            if (!mda) { alert('? Form does not contain mda'); return false; }
+            
+            var kwdsarray = kwdswere.split(',');
+            
+            for (var k = 0; k < kwdsarray.length; k++)  // delete old
+                if (kwdsarray[k].trim() != '') 
+                    mda.value += "\nmetadata/lom/general/keyword[-1]~";
+            
+            kwdsarray = kwdsnow.value
+                .replace(/[!-,:-@\[-\^{-~\s]+/g, ',').split(',');
+            
+            for (k = 0; k < kwdsarray.length; k++)
+            {
+                var newkw = kwdsarray[k].trim();
+                if (newkw != '') mda.value += 
+                    "\nmetadata/lom/general!keyword" + 
+                    "\nmetadata/lom/general/keyword[-1]!string=" + newkw + 
+                    "\nmetadata/lom/general/keyword[-1]/string/@language=" + language;
             }
-        	
-        	return true;
-       	
+            
+            return true;
+        
         }
         
         function setPendingOperation(op, ev)
         {
-        	if (!ev) var ev = window.event;
-        	
-        	var mda = getObj("mda");
-        	if (!mda) { alert('? Form does not contain mda'); return false; }
-        	
-        	if (op == '!!' || (op == '~~' && confirm(mda.title)))
-        	{
-            	mda.value = op; return true;
-        	}
-        	
-        	return false;
+            if (!ev) var ev = window.event;
+            
+            var mda = getObj("mda");
+            if (!mda) { alert('? Form does not contain mda'); return false; }
+            
+            if (op == '!!' || (op == '~~' && confirm(mda.title)))
+            {
+                mda.value = op; return true;
+            }
+            
+            return false;
         }
         
         function prepSearch(ev)
         {
-        	if (!ev) var ev = window.event;
-        	
-        	var mdsc = getObj("mdsc");
-        	if (!mdsc) { alert('? Form does not contain mdsc'); return false; }
+            if (!ev) var ev = window.event;
             
-        	var kwdsnow = getObj("kwds_string"); if (!kwdsnow) return true;
-        	if (kwdsnow.value == '') return true;
-        	
-        	var kwdsarray = kwdsnow.value.split(',');
-        	
-        	for (var k = 0; k < kwdsarray.length; k++)
-        	{
-            	var newkw = kwdsarray[k].trim().toLowerCase();
-            	
-            	if (newkw != '')
-            	{
-                	var realkw = false;
-                	
-                    for (pos = 0; pos < KWDS_ARRAY.length; pos++)
-                        if (KWDS_ARRAY[pos].toLowerCase() == newkw)
-                            realkw = true;
-                	mdsc.value += "\n" + newkw + (realkw ? '-kw' : '');
-            	}
+            var mdsc = getObj("mdsc");
+            if (!mdsc) { alert('? Form does not contain mdsc'); return false; }
+            
+            var kwdsnow = getObj("kwds_string"); if (!kwdsnow) return true;
+            if (kwdsnow.value == '') return true;
+            
+            if (!KWDS_ARRAY.length)
+            {
+                makeAlphaList(getObj('maindiv'));
+                KWDS_ARRAY.sort();
             }
-        	
-        	return true;
+            
+            var restricttokwds = false, checkbox = getObj("restricttokwds");
+            if (checkbox) restricttokwds = checkbox.checked;
+            
+            var kwdsarray = kwdsnow.value
+                .replace(/[!-,:-@\[-\^{-~\s]+/g, ',').split(',');
+            
+            for (var k = 0; k < kwdsarray.length; k++)
+            {
+                var newkw = kwdsarray[k].trim().toLowerCase();
+                
+                if (newkw != '')
+                {
+                    var realkw = false;
+                    
+                    if (restricttokwds)
+                        for (pos = 0; pos < KWDS_ARRAY.length; pos++)
+                            if (KWDS_ARRAY[pos].toLowerCase() == newkw)
+                                { realkw = true; break; }
+                    mdsc.value += "\n" + newkw + (realkw ? '-kw' : '');
+                    
+                }
+            }
+            
+            return true;
+        }
+        
+        var CRLF = "\n";  // generates clickable tree and populates KWDS_ARRAY
+        
+        function traverseKwObj(node, parlev, num)  // see KWTREE_OBJECT in md_funcs
+        {
+            var curlev = parlev + ('00' + (num+1)).substr(-3), kwn = '', html = '';
+            
+            for (i in (names = node.n.split("_"))) 
+                if (nn = names[i]) { KWDS_ARRAY.push(nn); kwn += ', ' + nn; }
+            
+            for (j in node.c) html += traverseKwObj(node.c[j], curlev, Math.abs(j));
+            
+            return (parlev == '') ? html : 
+                '<div noWrap="1" class="dvc" level="' + curlev + '">' + CRLF + 
+                    '<input type="button" class="' + 
+                        (html ? 'btn" value="+" onClick="openOrClose(this);"/>' : 
+                                'lfn" value=" "/>') + '&#xa0;' + CRLF + 
+                    '<span class="lbl" onClick="spanClick(this, event);"' + 
+                        (node.pt ? ' title="' + node.pt + '">' : '>') + 
+                        kwn.substr(2) + '</span>' + CRLF + 
+                    (node.cm ? '<i>' + node.cm + '</i>' : '') + 
+                    html + 
+                '</div>' + CRLF;
         }
 
 

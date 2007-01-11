@@ -1,5 +1,5 @@
 <?php
-// $Id: system_announcements.php 10479 2006-12-13 12:42:20Z elixir_inter $
+// $Id: system_announcements.php 10667 2007-01-11 09:36:29Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,17 +73,8 @@ Display :: display_header($tool_name);
 ==============================================================================
 */
 
-if($_GET['action'] != 'add' && $_GET['action'] != 'edit'){
-
-	$form = new FormValidator('languagechange','GET');
-	$language_list = api_get_languages();
-	$language_list_with_keys = array();
-	for($i=0; $i<count($language_list['name']) ; $i++) {
-		$language_list_with_keys[$language_list['folder'][$i]] = $language_list['name'][$i];
-	}
-	$form->addElement('select', 'lang',get_lang('Language'),$language_list_with_keys);
-	$form->addElement('submit', 'submit', get_lang('Ok'));
-	$form->display();
+if($_GET['action'] != 'add' && $_GET['action'] != 'edit')
+{
 	echo '<a href="?action=add">'.get_lang('AddAnnouncement').'</a>';
 }
 $form_action = "";
@@ -136,7 +127,7 @@ if (isset ($_POST['action']) && $_POST['action'] == 'delete_selected')
 {
 	foreach($_POST['id'] as $index => $id)
 	{
-		SystemAnnouncementManager :: delete_announcement($id);	
+		SystemAnnouncementManager :: delete_announcement($id);
 	}
 	Display :: display_normal_message(get_lang('AnnouncementDeleted'));
 	$action_todo = false;
@@ -173,14 +164,15 @@ if ($action_todo)
 	$form->add_textfield('title', get_lang('Title'));
 	$language_list = api_get_languages();
 	$language_list_with_keys = array();
+	$language_list_with_keys['all'] = get_lang('All');
 	for($i=0; $i<count($language_list['name']) ; $i++) {
 		$language_list_with_keys[$language_list['folder'][$i]] = $language_list['name'][$i];
 	}
-	
+
 	$fck_attribute['Width'] = '600';
 	$fck_attribute['Height'] = '400';
 	$fck_attribute['ToolbarSet'] = 'Middle';
-	
+
 	$form->addElement('select', 'lang',get_lang('Language'),$language_list_with_keys);
 	$form->add_html_editor('content', get_lang('Content'));
 	$form->add_timewindow('start','end',get_lang('StartTimeWindow'),get_lang('EndTimeWindow'));
@@ -196,15 +188,19 @@ if ($action_todo)
 		$values = $form->exportValues();
 		if( !isset($values['visible_teacher']))
 		{
-			$values['visible_teacher'] = false;	
+			$values['visible_teacher'] = false;
 		}
 		if( !isset($values['visible_student']))
 		{
-			$values['visible_student'] = false;	
+			$values['visible_student'] = false;
 		}
 		if( !isset($values['visible_guest']))
 		{
-			$values['visible_guest'] = false;	
+			$values['visible_guest'] = false;
+		}
+		if($values['lang'] == 'all')
+		{
+			$values['lang'] = null;
 		}
 		switch($values['action'])
 		{
@@ -224,7 +220,7 @@ if ($action_todo)
 					$form->display();
 				}
 				break;
-			default:	
+			default:
 				break;
 		}
 		$show_announcement_list = true;
@@ -237,7 +233,7 @@ if ($action_todo)
 }
 if ($show_announcement_list)
 {
-	$announcements = SystemAnnouncementManager :: get_all_announcements($_GET['lang']);
+	$announcements = SystemAnnouncementManager :: get_all_announcements();
 	$announcement_data = array ();
 	foreach ($announcements as $index => $announcement)
 	{
@@ -250,6 +246,7 @@ if ($show_announcement_list)
 		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_STUDENT."&amp;action=". ($announcement->visible_student  ? 'make_invisible' : 'make_visible')."\"><img src=\"../img/". ($announcement->visible_student ? 'visible.gif' : 'invisible.gif')."\" border=\"0\"></a>";
 		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\"><img src=\"../img/". ($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif')."\" border=\"0\"></a>";
 		$row[] = $announcement->title;
+		$row[] = $announcement->lang;
 		$row[] = "<a href=\"?action=edit&id=".$announcement->id."\"><img src=\"../img/edit.gif\" border=\"0\"/></a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\"><img src=\"../img/delete.gif\" border=\"0\"/></a>";
 		$announcement_data[] = $row;
 	}
@@ -262,7 +259,8 @@ if ($show_announcement_list)
 	$table->set_header(5,get_lang('Student'));
 	$table->set_header(6,get_lang('Guest'));
 	$table->set_header(7,get_lang('Title'));
-	$table->set_header(8,get_lang('Modify'), false);
+	$table->set_header(8,get_lang('Language'));
+	$table->set_header(9,get_lang('Modify'), false);
 	$form_actions = array();
 	$form_actions['delete_selected'] = get_lang('Delete');
 	$table->set_form_actions($form_actions);
@@ -270,7 +268,7 @@ if ($show_announcement_list)
 }
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

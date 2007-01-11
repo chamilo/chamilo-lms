@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10611 2007-01-08 09:44:43Z elixir_inter $
+* 	@version $Id: index.php 10671 2007-01-11 10:14:46Z bmol $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -35,7 +35,7 @@ $language_file = array ('courses', 'index');
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore  */
 // maybe we should change this into an api function? an example: Coursemanager::unset();
-$cidReset = true; 
+$cidReset = true;
 
 // the section (for the tabs)
 $this_section = SECTION_CAMPUS;
@@ -60,10 +60,10 @@ include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 	Action Handling
 -----------------------------------------------------------
 */
-/** @todo 	wouldn't it make more sense if this would be done in local.inc.php so that local.inc.php become the only place where authentication is done? 
+/** @todo 	wouldn't it make more sense if this would be done in local.inc.php so that local.inc.php become the only place where authentication is done?
  * 			by doing this you could logout from any page instead of only from index.php. From the moment there is a logout=true in the url you will be logged out
  * 			this can be usefull when you are on an open course and you need to log in to edit something and you immediately want to check how anonymous users
- * 			will see it. 
+ * 			will see it.
  */
 if ($_GET['logout'])
 {
@@ -91,7 +91,7 @@ $_setting['display_courses_to_anonymous_users'] = 'true';
 $_setting['show_empty_course_categories'] = 'true';
 /** defines weither the number of open courses has to appear after the course category (faculty) */
 /** remark: actually count are only for direct children */
-$_setting['show_number_of_courses'] = 'false'; 
+$_setting['show_number_of_courses'] = 'false';
 /** Show the back link on top of the tree */
 $_setting['show_back_link_on_top_of_tree'] = 'false';
 /** Show the course language if it is not the same as the platform lanugage */
@@ -110,7 +110,7 @@ if (isset ($_user['user_id']))
 ==============================================================================
 */
 /**
- * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled. 
+ * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled.
  * @todo consider removing this piece of code because does nothing.
  */
 if ($_GET["submitAuth"] == 1)
@@ -122,14 +122,14 @@ if ($_GET["submitAuth"] == 1)
 }
 
 /**
- * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled. 
+ * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
  * @todo check if this code is used. I think this code is never executed because after clicking the submit button
  * 		 the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
  * 		 on api_get_setting('page_after_login')
  */
 if ($_POST["submitAuth"])
 {
-	// the user is already authenticated, we now find the last login of the user. 
+	// the user is already authenticated, we now find the last login of the user.
 	if (isset ($_user['user_id']))
 	{
 		$sql_last_login = "SELECT UNIX_TIMESTAMP(login_date)
@@ -145,7 +145,7 @@ if ($_POST["submitAuth"])
 				api_session_register('user_last_login_datetime');
 			}
 		mysql_free_result($result_last_login);
-		
+
 		//event_login();
 		if (api_is_platform_admin())
 		{
@@ -206,7 +206,7 @@ SystemAnnouncementManager :: display_announcements(VISIBLE_GUEST, $announcement)
 // Display courses and category list
 if (!$page_included)
 {
-	
+
 	if (api_get_setting('display_courses_to_anonymous_users') == 'true')
 	{
 		echo '<div class="home_cats">';
@@ -245,29 +245,29 @@ function logout()
 {
 	// variable initialisation
 	$query_string='';
-	
+
 	if(!empty($_SESSION['user_language_choice']))
 	{
 		$query_string='?language='.$_SESSION['user_language_choice'];
 	}
-	
+
 	// Database table definition
 	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-	
+
 	// selecting the last login of the user
 	$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_GET["uid"]."' ORDER BY login_date DESC LIMIT 0,1";
 	$q_last_connection=mysql_query($sql_last_connection);
 	$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
-	
+
 	$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 	api_sql_query($s_sql_update_logout_date);
-	
+
 	LoginDelete($_GET["uid"], $_configuration['statistics_database']);
-	
+
 	api_session_destroy();
 
 	header("Location: index.php$query_string");
-	exit();	
+	exit();
 }
 
 /**
@@ -336,7 +336,7 @@ function display_anonymous_right_menu()
 	echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
 	 echo "<ul class=\"menulist\">";
 
-	$user_selected_language = $_SESSION["user_language_choice"];
+	$user_selected_language = api_get_interface_language();
 	if (!isset ($user_selected_language))
 		$user_selected_language = $platformLanguage;
 
@@ -442,11 +442,11 @@ function display_anonymous_course_list()
 	//init
 	$web_course_path = api_get_path(WEB_COURSE_PATH);
 	$category = $_GET["category"];
-	
+
 	// Database table definitions
 	$main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 	$main_category_table 	= Database :: get_main_table(TABLE_MAIN_CATEGORY);
-	
+
 	$platformLanguage = api_get_setting('platformLanguage');
 
 	//get list of courses in category $category
@@ -550,9 +550,9 @@ function display_anonymous_course_list()
 			echo "<li>\n";
 			echo "<a href=\"".$web_course_path.$course['directory'], "/\">", $course['title'], "</a>";
 			echo "<br/>", $course['visual_code'], " - ", $course['tutor_name'];
-			if ($_setting['show_different_course_language'] == 'true' && $course['course_language'] <> api_get_setting('platformLanguage')) 
+			if ($_setting['show_different_course_language'] == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
 			{
-				echo ' - '.$course['course_language']; 
+				echo ' - '.$course['course_language'];
 			}
 			echo "</li>\n";
 		}

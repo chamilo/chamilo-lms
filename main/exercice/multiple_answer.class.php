@@ -59,6 +59,15 @@ class MultipleAnswer extends Question {
 	 */
 	function createAnswersForm ($form) {
 		
+		global $fck_attribute;
+		
+		$fck_attribute = array();
+		$fck_attribute['Width'] = '300px';
+		$fck_attribute['Height'] = '100px';
+		$fck_attribute['ToolbarSet'] = 'Small';
+		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
+		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
+		
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;		
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 		
@@ -71,19 +80,19 @@ class MultipleAnswer extends Question {
 				<table cellpadding="0" cellspacing="5">
 					<tr bgcolor="#e6e6e6">
 						<td>
-							N°
+							'.get_lang('Number').'
 						</td>
 						<td>
-							True
+							'.get_lang('True').'
 						</td>
 						<td>
-							Answer
+							'.get_lang('Answer').'
 						</td>
 						<td>
-							Comment
+							'.get_lang('Comment').'
 						</td>
 						<td>
-							Weighting
+							'.get_lang('Weighting').'
 						</td>
 						<td width="0"></td>
 					</tr>';
@@ -120,8 +129,8 @@ class MultipleAnswer extends Question {
 			$puce->freeze();			
 			$group[] = $puce;
 			$group[] = FormValidator :: createElement ('checkbox', 'correct['.$i.']', null, null, $i);			
-			$group[] = FormValidator :: createElement ('textarea', 'answer['.$i.']',null, 'style="vertical-align:middle" cols="30"');
-			$group[] = FormValidator :: createElement ('textarea', 'comment['.$i.']',null, 'style="vertical-align:middle" cols="30"');
+			$group[] = FormValidator :: createElement ('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle" cols="30"');
+			$group[] = FormValidator :: createElement ('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle" cols="30"');
 			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, 'style="vertical-align:middle" size="5" value="0"');
 			$form -> addGroup($group, null, null, '</td><td width="0">');
 						

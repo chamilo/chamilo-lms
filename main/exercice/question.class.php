@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 10594 2007-01-05 13:54:24Z elixir_inter $
+<?php // $Id: question.class.php 10672 2007-01-11 10:40:16Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -762,9 +762,9 @@ abstract class Question
 	}
 	
 	/**
-	 * function which process the creation of answers
+	 * function which process the creation of questions
 	 * @param FormValidator $form the formvalidator instance
-	 * @param Exercise $objExercise the objExercise number to display
+	 * @param Exercise $objExercise the Exercise instance
 	 */
 	function processCreation ($form, $objExercise) {
 		   

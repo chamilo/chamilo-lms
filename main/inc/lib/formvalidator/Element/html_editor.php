@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 10649 2007-01-10 15:50:58Z elixir_julian $
+// $Id: html_editor.php 10672 2007-01-11 10:40:16Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -32,6 +32,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 	 * Full page
 	 */
 	var $fullPage;
+	var $fck_editor;
 	/**
 	 * Class constructor
 	 * @param   string  HTML editor name/id
@@ -40,10 +41,91 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 	 */
 	function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null)
 	{
+		global $language_interface, $fck_attribute;
 		HTML_QuickForm_element :: HTML_QuickForm_element($elementName, $elementLabel, $attributes);
 		$this->_persistantFreeze = true;
 		$this->_type = 'html_editor';
 		$this->fullPage = false;
+		
+		
+		@ $editor_lang = Database :: get_language_isocode($language_interface);
+		$language_file = api_get_path(WEB_PATH).'/main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
+		if (empty ($editor_lang) || !file_exists($language_file))
+		{
+			//if there was no valid iso-code, use the english one
+			$editor_lang = 'en';
+		}
+		$name = $this->getAttribute('name');
+		
+		$this -> fck_editor = new FCKeditor($name);
+		$this -> fck_editor->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
+
+		$this -> fck_editor->Width = $fck_attribute['Width'] ? $fck_attribute['Width'] : '990';
+		$this -> fck_editor->Height = $fck_attribute['Height'] ? $fck_attribute['Height'] : '400';
+		
+		//We get the optionnals config parameters in $fck_attribute array
+		$this -> fck_editor->Config = $fck_attribute['Config'] ? $fck_attribute['Config'] : array();
+		
+
+		
+		
+		
+		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+		
+		//We are in a course
+		if(isset($_SESSION["_course"]["language"])){
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+		}
+		
+		//Else, we get the current session language
+		elseif(isset($_SESSION["_user"]["language"])){
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
+		}
+		
+		//Else we get the default platform language
+		else{
+			$platform_language=api_get_setting("platformLanguage");
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='$platform_language'";
+		}
+		
+		$result_sql=api_sql_query($sql);
+		$isocode_language=mysql_result($result_sql,0,0);
+		$this -> fck_editor->Config['DefaultLanguage'] = $isocode_language;
+		
+		
+		if($_SESSION['_course']['path']!=''){
+			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
+
+		}else{
+			$upload_path = api_get_path(REL_PATH)."main/upload/";
+		}
+		
+		$this -> fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+
+		$this -> fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'] ;
+		
+		$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+		//for image
+		$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Image&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+		$this -> fck_editor->Config['ImageUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Image&ServerPath=$upload_path" ;
+
+		//for flash
+		$this -> fck_editor->Config['FlashBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+		$this -> fck_editor->Config['FlashUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
+
+		//for MP3
+		$this -> fck_editor->Config['MP3BrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+		$this -> fck_editor->Config['MP3UploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
+
+		//for other media
+		$this -> fck_editor->Config['VideoBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
+
+		$this -> fck_editor->Config['VideoUploadURL'] = $this -> fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
+		
 	}
 	/**
 	 * Check if the browser supports FCKeditor
@@ -92,88 +174,12 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 	 */
 	function build_FCKeditor()
 	{
-		global $language_interface, $fck_attribute;
 		if(! FCKeditor :: IsCompatible())
 		{
 			return parent::toHTML();
 		}
-		@ $editor_lang = Database :: get_language_isocode($language_interface);
-		$language_file = api_get_path(WEB_PATH).'/main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
-		if (empty ($editor_lang) || !file_exists($language_file))
-		{
-			//if there was no valid iso-code, use the english one
-			$editor_lang = 'en';
-		}
-		$name = $this->getAttribute('name');
-
-		$fck_editor = new FCKeditor($name);
-		$fck_editor->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
-
-		$fck_editor->Width = $fck_attribute['Width'] ? $fck_attribute['Width'] : '990';
-		$fck_editor->Height = $fck_attribute['Height'] ? $fck_attribute['Height'] : '400';
-		$fck_editor->Value = $this->getValue();
-		//We get the optionnals config parameters in $fck_attribute array
-		$fck_editor->Config = $fck_attribute['Config'] ? $fck_attribute['Config'] : array();
-		
-		
-		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-		
-		//We are in a course
-		if(isset($_SESSION["_course"]["language"])){
-			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
-		}
-		
-		//Else, we get the current session language
-		elseif(isset($_SESSION["_user"]["language"])){
-			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-		}
-		
-		//Else we get the default platform language
-		else{
-			$platform_language=api_get_setting("platformLanguage");
-			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='$platform_language'";
-		}
-		
-		$result_sql=api_sql_query($sql);
-		$isocode_language=mysql_result($result_sql,0,0);
-		$fck_editor->Config['DefaultLanguage'] = $isocode_language;
-		
-		
-		if($_SESSION['_course']['path']!=''){
-			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
-
-		}else{
-			$upload_path = api_get_path(REL_PATH)."main/upload/";
-		}
-		
-		$fck_editor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-
-		$fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'] ;
-		
-		$fck_editor->Config['LinkBrowserURL'] = $fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-		//for image
-		$fck_editor->Config['ImageBrowserURL'] = $fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Image&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-		$fck_editor->Config['ImageUploadURL'] = $fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Image&ServerPath=$upload_path" ;
-
-		//for flash
-		$fck_editor->Config['FlashBrowserURL'] = $fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Flash&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-		$fck_editor->Config['FlashUploadURL'] = $fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Flash&ServerPath=$upload_path" ;
-
-		//for MP3
-		$fck_editor->Config['MP3BrowserURL'] = $fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=MP3&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-		$fck_editor->Config['MP3UploadURL'] = $fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=MP3&ServerPath=$upload_path" ;
-
-		//for other media
-		$fck_editor->Config['VideoBrowserURL'] = $fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Video&Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
-		$fck_editor->Config['VideoUploadURL'] = $fck_editor->BasePath . "editor/filemanager/upload/php/upload.php?Type=Video&ServerPath=$upload_path" ;
-
-
-		$result .=$fck_editor->CreateHtml();
+		$this -> fck_editor->Value = $this->getValue();
+		$result .=$this -> fck_editor->CreateHtml();
 
 		//Add a link to open the allowed html tags window 
 		//$result .= '<small><a href="#" onclick="MyWindow=window.open('."'".api_get_path(WEB_CODE_PATH)."help/allowed_html_tags.php?fullpage=". ($this->fullPage ? '1' : '0')."','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=500,height=600,left=200,top=20'".'); return false;">'.get_lang('AllowedHTMLTags').'</a></small>';

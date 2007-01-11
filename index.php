@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10671 2007-01-11 10:14:46Z bmol $
+* 	@version $Id: index.php 10677 2007-01-11 13:32:00Z bmol $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -37,8 +37,7 @@ $language_file = array ('courses', 'index');
 // maybe we should change this into an api function? an example: Coursemanager::unset();
 $cidReset = true;
 
-// the section (for the tabs)
-$this_section = SECTION_CAMPUS;
+
 
 /*
 -----------------------------------------------------------
@@ -54,6 +53,8 @@ include_once (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
+// the section (for the tabs)
+$this_section = SECTION_CAMPUS;
 
 /*
 -----------------------------------------------------------

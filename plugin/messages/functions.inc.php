@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author
-* 	@version $Id: functions.inc.php 10674 2007-01-11 12:37:20Z bmol $
+* 	@version $Id: functions.inc.php 10675 2007-01-11 13:03:10Z bmol $
 * 	@todo use database library
 */
 
@@ -28,20 +28,7 @@ include_once(api_get_path(LIBRARY_PATH).'/online.inc.php');
 
 define ("MESSAGES_DATABASE", "messages");
 
-/**
-* Displays a select list containing the users
-* who are currently online. Used when composing a message.
-*/
-function display_select_user_list($user_id,$_name,$width,$size)
-{
-	$MINUTE=30;
-	global $_configuration;
-	$userlist = WhoIsOnline($user_id,$_configuration['statistics_database'],$MINUTE);
-	echo '<select  size="'.$size.'" style="width: '.$width.'px;" name="'.$_name.'">';
-	foreach($userlist as $row)
-		echo "<option value=\"$row[0]\">".GetFullUserName($row[0]).($user_id==$row[0]?("&nbsp;(".get_lang('Myself').")"):(""))."</option>\n";
-	echo "</select>";
-}
+
 
 function get_online_user_list($current_user_id)
 {
@@ -207,7 +194,7 @@ function inbox_display()
 				$number_of_selected_messages = count($_POST['id']);
 				foreach ($_POST['id'] as $index => $message_id)
 				{
-					$query = "DELETE FROM ".MESSAGES_DATABASE." WHERE id_receiver=".$_SESSION['_uid']." AND id='$message_id'";
+					$query = "DELETE FROM ".MESSAGES_DATABASE." WHERE id_receiver=".api_get_user_id()." AND id='".mysql_real_escape_string($message_id)."'";
 					api_sql_query($query,__FILE__,__LINE__);
 				}
 				Display :: display_normal_message(get_lang('SelectedMessagesDeleted'));

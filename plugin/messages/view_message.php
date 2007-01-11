@@ -1,4 +1,4 @@
-<?php // $Id: view_message.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: view_message.php 10675 2007-01-11 13:03:10Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,7 +26,7 @@
 =========================================================================5====
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file= "messages";
 include('../../main/inc/global.inc.php');
 api_block_anonymous_users();
@@ -35,10 +35,10 @@ $nameTools = get_lang("Messages");
 $interbredcrump[]=array("url" => "inbox.php","name" => get_lang("Inbox"));
 Display::display_header($nameTools,"messages");
 
-$query = "UPDATE `".MESSAGES_DATABASE."` SET `status` = '0' WHERE `id_receiver`=".$_SESSION['_uid']." AND `id`='".mysql_real_escape_string($_GET['id'])."';";
+$query = "UPDATE `".MESSAGES_DATABASE."` SET `status` = '0' WHERE `id_receiver`=".api_get_user_id()." AND `id`='".mysql_real_escape_string($_GET['id'])."';";
 $result = api_sql_query($query,__FILE__,__LINE__);
 
-$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid']." AND id='".mysql_real_escape_string($_GET['id'])."';";
+$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".api_get_user_id()." AND id='".mysql_real_escape_string($_GET['id'])."';";
 $result = api_sql_query($query,__FILE__,__LINE__);
 $row = mysql_fetch_array($result);
 

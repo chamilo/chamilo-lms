@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author
-* 	@version $Id: functions.inc.php 10244 2006-11-29 09:40:41Z bmol $
+* 	@version $Id: functions.inc.php 10674 2007-01-11 12:37:20Z bmol $
 * 	@todo use database library
 */
 
@@ -129,11 +129,14 @@ function display_html_editor_area($name,$resp)
 */
 function get_new_messages()
 {
-	if (! isset($_SESSION['_uid'])) return false;
+	if (!api_get_user_id())
+	{
+		return false;
+	}
 	$i=0;
-	$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".$_SESSION['_uid']." AND status=1;";
+	$query = "SELECT * FROM `".MESSAGES_DATABASE."` WHERE id_receiver=".api_get_user_id()." AND status=1;";
 	$result = api_sql_query($query,__FILE__,__LINE__);
-	while ($result_row = mysql_fetch_array($result)) $i++;
+	$i = mysql_num_rows($result);
 	return $i;
 }
 

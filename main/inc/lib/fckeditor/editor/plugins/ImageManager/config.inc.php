@@ -26,7 +26,7 @@
  for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
  in this directory and its subdirectories.
 */
-
+$language_file = array('document');
 include ('../../../../../../inc/global.inc.php');
 
 //The user is in a course

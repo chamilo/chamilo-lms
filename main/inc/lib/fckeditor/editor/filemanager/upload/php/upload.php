@@ -87,6 +87,10 @@ if(isset($_SESSION["_course"]["sysCode"])){
 			$sServerDir = $currentCourseRepositorySys.'document/flash/';
 			$sserverWebath=$currentCourseRepositoryWeb.'document/flash/';
 		}
+		elseif($sType=="video"){
+			$sServerDir = $currentCourseRepositorySys.'document/video/';
+			$sserverWebath=$currentCourseRepositoryWeb.'document/video/';
+		}
 		else{
 			$sServerDir = $currentCourseRepositorySys.'document/';
 			$sserverWebath=$currentCourseRepositoryWeb.'document/';

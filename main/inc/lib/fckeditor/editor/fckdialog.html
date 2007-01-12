@@ -96,9 +96,9 @@ function RefreshSize()
 		if ( iDiff > 0 )
 		{
 			if ( document.all )
-				window.dialogHeight = ( parseInt( window.dialogHeight ) + iDiff ) + 'px' ;
+				window.dialogHeight = ( parseInt( window.dialogHeight ) + iDiff ) + 20 + 'px' ;
 			else
-				window.resizeBy( 0, iDiff ) ;
+				window.resizeBy( 0, iDiff+20 ) ;
 		}
 	}
 }

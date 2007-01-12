@@ -184,7 +184,7 @@ FCKConfig.VideoBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
 FCKConfig.VideoBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	//70% ;
 
 
-FCKConfig.LinkUpload = true ;
+FCKConfig.LinkUpload = false ;
 FCKConfig.LinkUploadURL = FCKConfig.BasePath + 'filemanager/upload/' + FCKConfig.QuickUploadLanguage + '/upload.' + _QuickUploadLanguage ;
 FCKConfig.LinkUploadAllowedExtensions	= "" ;			// empty for all
 FCKConfig.LinkUploadDeniedExtensions	= ".(php|php3|php5|phtml|asp|aspx|ascx|jsp|cfm|cfc|pl|bat|exe|dll|reg|cgi)$" ;	// empty for no one
@@ -206,7 +206,8 @@ FCKConfig.MP3UploadDeniedExtensions	= "" ;					// empty for no one
 
 FCKConfig.VideoUpload = true ;
 FCKConfig.VideoUploadURL = FCKConfig.BasePath + 'filemanager/upload/' + FCKConfig.QuickUploadLanguage + '/upload.' + _QuickUploadLanguage + '?Type=Video' ;
-FCKConfig.VideoUploadAllowedExtensions	= ".(avi|mpg|mpeg|mov|wmv|rm)$" ;		// empty for all
+//FCKConfig.VideoUploadAllowedExtensions	= ".(avi|mpg|mpeg|mov|wmv|rm)$" ;		// empty for all
+FCKConfig.VideoUploadAllowedExtensions	= ".(mov|wmv|rm)$" ;
 FCKConfig.VideoUploadDeniedExtensions	= "" ;					// empty for no one
 
 FCKConfig.SmileyPath	= FCKConfig.BasePath + 'images/smiley/msn/' ;

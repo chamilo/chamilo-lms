@@ -1,4 +1,4 @@
-﻿/*
+/*
  * FCKeditor - The text editor for internet
  * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
@@ -41,7 +41,7 @@ function OnDialogTabChange( tabCode )
 {
 	ShowE('divInfo'		, ( tabCode == 'Info' ) ) ;
 	ShowE('divTarget'	, ( tabCode == 'Target' ) ) ;
-	ShowE('divUpload'	, ( tabCode == 'Upload' ) ) ;
+	//ShowE('divUpload'	, ( tabCode == 'Upload' ) ) ;
 	ShowE('divAttribs'	, ( tabCode == 'Advanced' ) ) ;
 }
 

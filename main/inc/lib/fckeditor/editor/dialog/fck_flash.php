@@ -1,6 +1,6 @@
 <?php
 // name of the language file that needs to be included 
-$language_file = array('resourcelinker');
+$language_file = array('resourcelinker','document');
 include('../../../../../inc/global.inc.php');
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">

@@ -1,5 +1,5 @@
 // Flash Dialog
-FCKLang["DlgMP3Title"] = "MP3 Dialog";
+FCKLang["DlgMP3Title"] = "Import MP3";
 FCKLang["DlgMP3URL"] = "URL" ;
 FCKLang["DlgMP3BtnBrowse"]    = "Browse Server" ;
 FCKLang["DlgMP3Width"]                        = "Width" ;
@@ -28,5 +28,5 @@ FCKLang["DlgMP3ScaleShowAll"] = "Show all" ;
 FCKLang["DlgMP3ScaleNoBorder"]        = "No border" ;
 FCKLang["DlgMP3ScaleExactFit"]        = "Exact fit" ;
 FCKLang["DlgMP3BgColor"]      = "Bg Color";
-FCKLang["DlgMP3Upload"]      = "From my computer";
-FCKLang["DlgMP3Tab"]      = "From the course";
+FCKLang["DlgMP3Upload"]      = "From my PC";
+FCKLang["DlgMP3Tab"]      = "From course";

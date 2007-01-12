@@ -33,7 +33,7 @@ FCKConfig.ToolbarSets["Announcements"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Full"] = [
-	['Templates','PasteWord','Link','-','ImageManager','Flash','MP3','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
+	['Templates','PasteWord','Link','-','ImageManager','Flash','MP3','Video','Table','Rule','-','Subscript', 'Superscript','-','OrderedList','UnorderedList','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],'/',['FontName','FontSize','Bold','Italic','Underline','StrikeThrough','TextColor', 'BGColor','-','Source']
 ] ;
 
 FCKConfig.ToolbarSets["Comment"] = [

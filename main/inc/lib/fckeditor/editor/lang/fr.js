@@ -112,7 +112,7 @@ TableDelete			: "Delete Table",	//MISSING
 CellProperties		: "Propriétés de Cellule",
 TableProperties		: "Propriétés de Tableau",
 ImageProperties		: "Propriétés d'Image",
-FlashProperties		: "Propriétés d'Animation Flash",
+FlashProperties		: "Importer une animation Flash",
 
 AnchorProp			: "Propriétés d'Ancre",
 ButtonProp			: "Propriétés de Bouton",
@@ -147,7 +147,7 @@ DlgBtnClose			: "Fermer",
 DlgBtnBrowseServer	: "Parcourir le Serveur",
 DlgAdvancedTag		: "Avancé",
 DlgOpOther			: "&lt;Autre&gt;",
-DlgInfoTab			: "Info",
+DlgInfoTab			: "Depuis le cours",
 DlgAlertUrl			: "Veuillez saisir l'URL",
 
 // General Dialogs Labels
@@ -196,7 +196,7 @@ DlgImgAlertUrl		: "Veuillez saisir l'URL de l'image",
 DlgImgLinkTab		: "Lien",
 
 // Flash Dialog
-DlgFlashTitle		: "Propriétés d'animation Flash",
+DlgFlashTitle		: "Importer une animation Flash",
 DlgFlashChkPlay		: "Lecture automatique",
 DlgFlashChkLoop		: "Boucle",
 DlgFlashChkMenu		: "Activer menu Flash",
@@ -224,7 +224,7 @@ DlgLnkNoAnchors		: "&lt;Pas d'ancre disponible dans le document&gt;",
 DlgLnkEMail			: "Adresse E-Mail",
 DlgLnkEMailSubject	: "Sujet du Message",
 DlgLnkEMailBody		: "Corps du Message",
-DlgLnkUpload		: "Upload",
+DlgLnkUpload		: "Depuis mon PC",
 DlgLnkBtnUpload		: "Envoyer au Serveur",
 
 DlgLnkTarget		: "Destination",

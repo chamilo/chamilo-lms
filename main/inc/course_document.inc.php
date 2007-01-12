@@ -1,4 +1,5 @@
 <?php
+$language_file = 'document';
 include_once('global.inc.php');
 /*
 ==============================================================================
@@ -6,7 +7,7 @@ include_once('global.inc.php');
 ==============================================================================
 */
 // name of the language file that needs to be included 
-$language_file = 'document';
+
 include(api_get_path(SYS_CODE_PATH).'document/document.inc.php');
 api_protect_course_script();
 
@@ -215,8 +216,8 @@ if($docs_and_folders)
 }
 else 
 {
-	$sortable_data='';
-	$table_footer='<div style="text-align:center;"><strong>'.get_lang('NoDocsInFolder').'</strong></div>';
+	$sortable_data=array();
+	//$table_footer='<div style="text-align:center;"><strong>'.get_lang('NoDocsInFolder').'</strong></div>';
 }
 
 
@@ -237,7 +238,7 @@ if ($is_allowed_to_edit AND count($docs_and_folders)>1)
 }
 */
 $table->set_header($column++,get_lang('Type'));
-$table->set_header($column++,get_lang('Name'));
+$table->set_header($column++,get_lang('Title'));
 
 //$column_header[] = array(get_lang('Comment'),true);  => display comment under the document name
 $table->set_header($column++,get_lang('Size'));

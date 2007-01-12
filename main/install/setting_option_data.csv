@@ -65,3 +65,5 @@
 77,'use_session_mode', 'false', 'No',
 78,'allow_email_editor', 'true' ,'Yes',
 79,'allow_email_editor', 'false', 'No',
+80,'wai_public_pages', 'true', 'Yes',
+81,'wai_public_pages', 'false', 'No',

@@ -68,3 +68,4 @@
 69, 'allow_email_editor', NULL, 'radio', 'Tools', 'false', 'AllowEmailEditorTitle', 'AllowEmailEditorComment', NULL, NULL,
 70, 'registered', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL,
 71, 'donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL,
+72, 'wai_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAI','PublicPagesComplyToWAIComment', NULL, NULL,

@@ -308,7 +308,6 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 			window.location.href=FCKConfig.PluginsPath + 'MP3/fck_mp3.php';
 			return ;
 	}
-	document.getElementById("loader").style.display="none";
 
 	SetUrl( fileUrl ) ;
 	GetE('frmUpload').reset() ;

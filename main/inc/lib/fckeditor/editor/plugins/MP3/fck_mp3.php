@@ -42,22 +42,30 @@ include('../../../../../../inc/global.inc.php');
 		  ?>
 		</div>
 		<div id="divUpload" style="DISPLAY: none">
+		
 		<?php
-		require("../loader.class.php");
-		$loader = new Loader('frmUpload');
-		$loader->init();
+		
+			include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+			$form = new FormValidator('frmUpload','POST','','UploadWindow','id="frmUpload" enctype="multipart/form-data" onSubmit="return CheckUpload();"');
+			
+			$form->addElement('html','<table cellspacing="1" cellpadding="1" border="0" width="90%" align="center">');
+			
+			$form->addElement('html','<tr><td>');
+			$form->addElement('file','NewFile','','id="txtUploadFile" style="WIDTH: 100%" size="40"');
+			$form->addElement('html','</td></tr>');
+			
+			$form->addElement('html','<tr><td>');
+			$form->addElement('submit','','Send it to the Server','id="btnUpload" fckLang="DlgLnkBtnUpload"');
+			$form->addElement('html','</td></tr></table>');
+			
+			$form->addElement('html','<iframe name="UploadWindow" style="DISPLAY: none" src="../fckblank.html"></iframe>');
+			
+			$form->add_real_progress_bar('fckMP3','NewFile');
+			
+			$form->display();
+			
 		?>
-		<form id="frmUpload" name="frmUpload" method="post" target="UploadWindow" enctype="multipart/form-data" action="" onSubmit="return CheckUpload();">
-			<!--<span id="eUploadMessage">Upload</span>--><br />
-			<table cellspacing="1" cellpadding="1" border="0" width="90%" align="center">
-			<tr><td><input id="txtUploadFile" style="WIDTH: 100%" type="file" size="40" name="NewFile" /></td></tr>
-			<tr><td><input id="btnUpload" type="submit" value="Send it to the Server" fckLang="DlgLnkBtnUpload" /></td></tr>
-			</table>
-			<iframe name="UploadWindow" style="DISPLAY: none" src="../fckblank.html"></iframe>
-		</form>
-		<?php
-		$loader->close();
-		?>
+		
 		</div>
 		<script language="javascript">window_onload();</script>
 	</body>

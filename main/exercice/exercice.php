@@ -386,7 +386,7 @@ if($show == 'test'){
 	{
 	?>
   <tr bgcolor="#e6e6e6">
-    <td align="center"><?php echo get_lang("ExerciseName");?></td>
+    <td align="center" colspan="2"><?php echo get_lang("ExerciseName");?></td>
      <td align="center"><?php echo get_lang("Description");?></td>
 	 <td align="center"><?php echo get_lang("Modify");?></td>
    
@@ -429,7 +429,7 @@ if($show == 'test'){
 			if($is_allowedToEdit)
 			{
 				?>
-  <td width="27%"><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <td width="27%" colspan="2"><table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
       <td width="30" align="left"><img src="../img/test.gif"></td>
       <td width="15" valign="left" align="center"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>

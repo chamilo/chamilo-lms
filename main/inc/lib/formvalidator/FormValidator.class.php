@@ -276,7 +276,10 @@ EOT;
 		$this->addElement('html','<script language="javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>');
 		$this->addElement('html','<script type="text/javascript">var myUpload = new upload('.(abs(intval($delay))*1000).');</script>');
 		
-		
+		if(!$waitAfterUpload)
+		{
+			$waitAfterUpload = 0;
+		}
 		// add the upload event
 		$this->updateAttributes("onsubmit=\"myUpload.startRealUpload('dynamic_div','".$upload_id."','".$this->getAttribute('id')."',".$waitAfterUpload.")\"");
 		

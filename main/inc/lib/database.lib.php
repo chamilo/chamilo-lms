@@ -146,6 +146,11 @@ define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
 define('TABLE_MAIN_SURVEY', 'survey');
 define('TABLE_MAIN_GROUP', 'survey_group');
 define('TABLE_MAIN_SURVEYQUESTION', 'questions');
+// SURVEY
+define('TABLE_SURVEY', 'survey');
+define('TABLE_SURVEY_GROUP', 'survey_group');
+define('TABLE_SURVEY_QUESTION', 'survey_question');
+
 /*
 ============================================================================== 
 		DATABASE CLASS

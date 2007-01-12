@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,11 +19,11 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: open.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@author
+* 	@version $Id: open.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'survey';
 
 // including the global dokeos file
@@ -56,6 +56,14 @@ if (!api_is_allowed_to_edit())
 	Display :: display_footer();
 	exit;
 }
+
+// Database table definitions
+/** @todo use database constants for the survey tables */
+$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+$table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+$table_languages 		= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+
 if(isset($_REQUEST['questtype']))
 {
 	$add_question12=$_REQUEST['questtype'];
@@ -66,9 +74,9 @@ else
 }
 $n=$_REQUEST['n'];
 $interbreadcrumb[] = array ("url" => "survey_list.php?n=$n", "name" => get_lang('Survey'));
-$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
-$table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
-$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+
+
+
 $Add = get_lang('AddNewQuestionType');
 $Multi = get_lang('Open');
 $groupid = $_REQUEST['groupid'];
@@ -76,7 +84,7 @@ $surveyid = $_REQUEST['surveyid'];
 if ($_POST['action'] == 'addquestion')
 {
 	  $enter_question=$_POST['enterquestion'];
-	  
+
      if(isset($_POST['next']))
 	{
         $questtype = $_REQUEST['questtype'];
@@ -84,19 +92,19 @@ if ($_POST['action'] == 'addquestion')
 		$defaultext=$_POST['defaultext'];
 		$alignment='';
 		$open_ans="";
-		
+
 		$enter_question=trim($enter_question);
 		if(empty($enter_question))
-		$error_message = get_lang('PleaseEnterAQuestion')."<br>";		  
-		
+		$error_message = get_lang('PleaseEnterAQuestion')."<br>";
+
 		//if(empty($defaultext))
 		//$error_message = $error_message."<br>".get_lang('PleaseFillDefaultText');
-		
+
 		if(isset($error_message));
-		//Display::display_error_message($error_message);	
+		//Display::display_error_message($error_message);
 		else
 		{
-		 $groupid = $_POST['groupid'];		 
+		 $groupid = $_POST['groupid'];
 		 $surveyid = $_REQUEST['surveyid'];			 SurveyManager::create_question($groupid,$surveyid,$questtype,$enter_question,$alignment,$answers,$open_ans,$answerT,$answerD,$rating,$curr_dbname);	  header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid");
 		 exit;
 		}
@@ -113,19 +121,19 @@ if ($_POST['action'] == 'addquestion')
 	  $questtype = $_REQUEST['questtype'];
 		$enter_question=$_POST['enterquestion'];
 		$defaultext=$_POST['defaultext'];
-	
+
 		$alignment='';
 		$open_ans="";
-		
+
 		$enter_question=trim($enter_question);
 		if(empty($enter_question))
-		$error_message = get_lang('PleaseEnterAQuestion')."<br>";		  
-		
+		$error_message = get_lang('PleaseEnterAQuestion')."<br>";
+
 		//if(empty($defaultext))
 		//$error_message = $error_message."<br>".get_lang('PleaseFillDefaultText');
-		
+
 		if(isset($error_message));
-		//Display::display_error_message($error_message);	
+		//Display::display_error_message($error_message);
 		else
 		{
 	     $groupid = $_REQUEST['groupid'];
@@ -141,7 +149,7 @@ $tool = get_lang('AddAnotherQuestion');
 Display::display_header($tool);
 if( isset($error_message) )
 {
-	Display::display_error_message($error_message);	
+	Display::display_error_message($error_message);
 }
 
 select_question_type($add_question12,$groupid,$surveyid,$cidReq,$curr_dbname);
@@ -175,19 +183,19 @@ function checkLength(form){
 <input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
 <input type="hidden" name="action" value="addquestion" >
   <BR>
-<TABLE class=outerBorder_innertable cellSpacing=0 cellPadding=0 width="100%" 
+<TABLE class=outerBorder_innertable cellSpacing=0 cellPadding=0 width="100%"
 border=0>
   <TBODY>
   <TR>
     <TD class=pagedetails_heading>&nbsp;</TD>
   </TR></TBODY></TABLE>
-<TABLE class=outerBorder_innertable cellSpacing=0 cellPadding=0 width="100%" 
+<TABLE class=outerBorder_innertable cellSpacing=0 cellPadding=0 width="100%"
 align=center border=0>
   <TBODY>
   <TR class=white_bg>
     <TD height=30>Enter the question. </TD>
   </TR>
-  <tr class="form_bg"> 
+  <tr class="form_bg">
 					<td width="542" height="30" colspan="2" >
 					<?php
 
@@ -199,15 +207,14 @@ align=center border=0>
 						$oFCKeditor->Value		= "";
 						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 						$oFCKeditor->ToolbarSet = "Survey";
-						
-						$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-						$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+
+						$sql="SELECT isocode FROM ".$table_languages." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 						$result_sql=api_sql_query($sql);
 						$isocode_language=mysql_result($result_sql,0,0);
 						$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-						
+
 						$return =	$oFCKeditor->CreateHtml();
-		
+
 						echo $return;
 					?>
 					</td>
@@ -218,17 +225,17 @@ align=center border=0>
   <TR class=white_bg>
     <TD class=pagedetails_heading>&nbsp;</TD>
   </TR></TBODY></TABLE>
-<!-- <TABLE class=outerBorder_innertable cellSpacing=0 cellPadding=0 width="100%" 
+<!-- <TABLE class=outerBorder_innertable cellSpacing=0 cellPadding=0 width="100%"
 border=0>
   <TBODY>
  <TR>
     <TD height=30>Default Text </TD></TR>
   <TR>
     <TD width=192 height=30><TEXTAREA onkeyup="this.value = this.value.slice(0, 200)" style="WIDTH: 100%" name="defaultext" rows=3 cols=60>
-	<?php if(isset($_POST['defaultext']))echo $_POST['defaultext'];?></TEXTAREA> 
+	<?php if(isset($_POST['defaultext']))echo $_POST['defaultext'];?></TEXTAREA>
     </TD></TR></TBODY></TABLE><BR>-->
 	<?php
-	$sql = "SELECT * FROM survey WHERE survey_id='$surveyid'";
+	$sql = "SELECT * FROM $table_survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);
 			$obj=mysql_fetch_object($res);
 			switch($obj->template)
@@ -244,21 +251,21 @@ border=0>
 					break;
 				case "template4":
 					$temp = 'grey';
-					break;	
+					break;
 				case "template5":
 					$temp = 'blank';
 					break;
 			}
-		
+
 	?>
 
 
 <BR>
-<DIV align=center> 
+<DIV align=center>
 	<input type="submit"  name="back" value="<?php echo get_lang('Back');?>">
 	<input type="submit"  name="saveandexit" value="<?php echo get_lang('SaveAndExit'); ?>">
 	<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('this.form','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
-	<input type="submit"  name="next" value="<?php echo get_lang('Next'); ?>">  
+	<input type="submit"  name="next" value="<?php echo get_lang('Next'); ?>">
 </DIV></FORM></DIV>
 <DIV id=bottomnav align=center></DIV>
 </BODY></HTML>

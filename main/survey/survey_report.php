@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_report.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@version $Id: survey_report.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
 /*
@@ -254,9 +254,9 @@ switch($screen) {
 		
 		$params = array_merge($_POST['left'] , $_POST['right']);
 		
-		$tbl_user_survey 	= Database::get_main_table(TABLE_MAIN_SURVEY_USER);
-		$tbl_questions 		= Database::get_course_table(TABLE_SURVEY_QUESTION);
-		$tbl_answers 		= Database::get_course_table(TABLE_SURVEY_REPORT);
+		$tbl_user_survey 		= Database::get_main_table(TABLE_MAIN_SURVEY_USER);
+		$table_survey_question 	= Database::get_course_table(TABLE_SURVEY_QUESTION);
+		$tbl_answers 			= Database::get_course_table(TABLE_SURVEY_REPORT);
 		
 		
 		//$which_answers = 'WHERE qid';
@@ -286,7 +286,7 @@ switch($screen) {
 					break;
 				case 'question' : 					
 					$questions[]='"'.$param[1].'"';
-					$sql = 'SELECT caption FROM '.$tbl_questions.' WHERE qid='.$param[1];
+					$sql = 'SELECT caption FROM '.$table_survey_question.' WHERE qid='.$param[1];
 					$rs = api_sql_query($sql);
 					if($row = mysql_fetch_array($rs)){
 						$row[0] = eregi_replace('^<p[^>]*>(.*)</p>','\\1', $row[0]);
@@ -302,7 +302,7 @@ switch($screen) {
 					break;
 				case 'answer' : 
 					$answers_required[] = $param;
-					$sql = 'SELECT caption FROM '.$tbl_questions.' as questions
+					$sql = 'SELECT caption FROM '.$table_survey_question.' as questions
 							INNER JOIN '.$tbl_answers.' as answers
 								ON answers.qid = questions.qid
 								AND answers.qid='.$param[1];
@@ -366,7 +366,7 @@ switch($screen) {
 		$excel .="\r\n";
 		
 		$sql = 'SELECT  user_survey.id as id_user_survey, '.implode(',',$select).'
-				FROM '.$tbl_answers.' as answers,'.$tbl_user_survey.' as user_survey,'.$tbl_questions.' as questions
+				FROM '.$tbl_answers.' as answers,'.$tbl_user_survey.' as user_survey,'.$table_survey_question.' as questions
 				WHERE answers.qid = questions.qid
 				AND answers.user_id = user_survey.user_id 
 				AND user_survey.survey_id='.$surveyid.'
@@ -412,7 +412,7 @@ switch($screen) {
 		foreach($answers_to_keep as $answer) {
 			if(in_array($answer['answer'],array('a1','a2','a3','a4','a5','a6','a7','a8','a9','a10',))){
 				$sql = 'SELECT '.$answer['answer'].' 
-						FROM '.$db_name.'.questions 
+						FROM '.$table_survey_question.' 
 						WHERE survey_id = '.$surveyid.'
 						AND questions.qid='.$answer['qid'];
 			

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: open_view.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@version $Id: open_view.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -60,7 +60,7 @@ $header3 = get_lang('Type');
 $ques_id = $_GET['qid'];
 $gname=surveymanager::ques_id_group_name($ques_id);
 $ques_type = $_GET['qtype'];
-$sql = "SELECT * FROM $db_name.questions where qid='$ques_id'";
+$sql = "SELECT * FROM $table_survey_question where qid='$ques_id'";
 $res = api_sql_query($sql);
 $obj = mysql_fetch_object($res);	
 ?>

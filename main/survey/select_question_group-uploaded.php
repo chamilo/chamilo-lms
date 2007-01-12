@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,8 +19,8 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: select_question_group-uploaded.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@author
+* 	@version $Id: select_question_group-uploaded.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
 
@@ -29,7 +29,7 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'survey';
 
 // including the global dokeos file
@@ -94,16 +94,16 @@ $column = $_REQUEST['column'];
 $per_page = $_REQUEST['per_page'];
 }
 /*
-$sql="SELECT * FROM questions WHERE gid='$groupid' AND survey_id = '$surveyid'";
+$sql="SELECT * FROM $table_survey_question WHERE gid='$groupid' AND survey_id = '$surveyid'";
 $res=api_sql_query($sql,__FILE__,__LINE__);
 $obj=mysql_fetch_object($res);
 $number=mysql_num_rows($res);
 for($i=1;$i<=$number;$i++)
-	{		
+	{
 		$up="up";
-		$down="down";		
+		$down="down";
 		if(isset($_POST[$up])||isset($_POST[$down]))
-		{			
+		{
 			$flag=0;
 			if(isset($_POST[$up]))
 			{
@@ -116,9 +116,9 @@ for($i=1;$i<=$number;$i++)
 				if($tempradiotrue==$i)
 					$tempradiotrue--;
 				elseif($tempradiotrue==$i-1)
-					$tempradiotrue++;										
+					$tempradiotrue++;
 				$tempm=	$tempmutlichkboxtext[$i-2];
-				$tempchkboxp=$tempchkboxpoint[$i-2];			
+				$tempchkboxp=$tempchkboxpoint[$i-2];
 				$tempmutlichkboxtext[$i-2]=$tempmutlichkboxtext[$i-1];
 				$tempchkboxpoint[$i-2]=$tempchkboxpoint[$i-1];
 				$tempmutlichkboxtext[$i-1]=$tempm;
@@ -149,19 +149,19 @@ for($i=1;$i<=$number;$i++)
 			}
 			//echo ",while checking up/down end=".$end;
 			$jd=0;
-			break;		
+			break;
 		}
 	}
 */
 if ($_POST['action'] == 'selectquestion_group')
 {
-	$surveyid = $_POST['newsurveyid'];	
+	$surveyid = $_POST['newsurveyid'];
 	 $questiongroup = $_POST['question_group'];
 if (isset($questiongroup))
-	{	 
+	{
 		 $exiztinggroup = $_POST['exiztinggroup'];
 		 header("Location:existing_surveys_new.php?surveyid=$surveyid");
-		 exit;	
+		 exit;
 	}
 }
 //from question_added
@@ -198,7 +198,7 @@ if(isset($_REQUEST['delete']))
 		for($i=0;$i<$endloop;$i++)
 		{
 			$qid2=$qid1[$i];
-			$query="DELETE FROM questions WHERE qid='$qid2'";
+			$query="DELETE FROM $table_survey_question WHERE qid='$qid2'";
 			api_sql_query($query);
 			header("Location:select_question_group.php?surveyid=$surveyid");
 			exit;
@@ -209,7 +209,7 @@ if (isset($_POST['finish']))
 {
 	    header("Location:survey_list.php");
 	    exit;
-}	
+}
 
 if(isset($action1))
 {
@@ -224,17 +224,17 @@ if(isset($action1))
  $post_sort = $_GET['post_sort'];
  if($direction=="up")
  {
-	$sql_update2="UPDATE questions SET sortby='".$sort."' WHERE qid='".$pre_qid."'";
+	$sql_update2="UPDATE $table_survey_question SET sortby='".$sort."' WHERE qid='".$pre_qid."'";
 	mysql_query($sql_update2);
-	$sql_update1="UPDATE questions SET sortby='".$pre_sort."' WHERE qid='".$qid."'";
+	$sql_update1="UPDATE $table_survey_question SET sortby='".$pre_sort."' WHERE qid='".$qid."'";
 	mysql_query($sql_update1);
-		 
+
  }
 else
 {
-$sql_update2="UPDATE questions SET sortby='".$post_sort."' WHERE qid='".$qid."'";
+$sql_update2="UPDATE $table_survey_question SET sortby='".$post_sort."' WHERE qid='".$qid."'";
 mysql_query($sql_update2);
-$sql_update1="UPDATE questions SET sortby='".$sort."' WHERE qid='".$post_qid."'";
+$sql_update1="UPDATE $table_survey_question SET sortby='".$sort."' WHERE qid='".$post_qid."'";
 mysql_query($sql_update1);
 }
 
@@ -273,7 +273,7 @@ if(isset($messege) && $messege )
 <td></td>
 </tr>
 <tr>
-<td></td>  
+<td></td>
 </tr>
 <tr>
   <td>&nbsp;</td>
@@ -282,11 +282,9 @@ if(isset($messege) && $messege )
 </table>
 </form>
 <?php
-/*$query="SELECT * FROM survey WHERE survey_id='$surveyid'";
-$result=api_sql_query($query);*/
-    $sql="SELECT * FROM survey_group WHERE survey_id='$surveyid'";	
+    $sql="SELECT * FROM survey_group WHERE survey_id='$surveyid'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$num=mysql_num_rows($res);	
+	$num=mysql_num_rows($res);
 	$parameters['surveyid']=$surveyid;
 
 	//$table_header[] = array (' ', false);
@@ -294,35 +292,35 @@ $result=api_sql_query($query);*/
 	$table_header[] = array (get_lang('Questions'), true);
     $table_header[] = array (get_lang('ChangeOrder'), true);
 	$table_header[] = array (get_lang('Group'), true);
-	$table_header[] = array (get_lang('Type'), true);	
+	$table_header[] = array (get_lang('Type'), true);
 	$table_header[]=array('',true);
 	$courses = array ();
 	if($num){
-		
+
 		for($i=0;$i<$num;$i++)
 		{
 			$groupid=@mysql_result($res,$i,'group_id');
 			$gname=@mysql_result($res,$i,'groupname');
-			$sql="SELECT * FROM questions WHERE gid='$groupid' AND survey_id = '$surveyid' order by `sortby` asc";
+			$sql="SELECT * FROM $table_survey_question WHERE gid='$groupid' AND survey_id = '$surveyid' order by `sortby` asc";
 			$res1=api_sql_query($sql,__FILE__,__LINE__);
 			$num1=mysql_num_rows($res1);
 			$x=1;
 			for($k=0;$k<$num1;$k++)
 			//while ($obj = mysql_fetch_object($res1))
-			{	
-			  		
+			{
+
 				$qid=mysql_result($res1,$k,'qid');//$obj->qid;
 				$pre_qid=mysql_result($res1,$k-1,'qid');
 				$post_qid=mysql_result($res1,$k+1,'qid');
 				$question=mysql_result($res1,$k,'caption');//$obj->caption;
-				$sort=mysql_result($res1,$k,'sortby');//$obj->sortby;				
+				$sort=mysql_result($res1,$k,'sortby');//$obj->sortby;
 				$pre_sort=$k==0?mysql_result($res1,$k,'sortby'):mysql_result($res1,$k-1,'sortby');//$obj->sortby;
-				$post_sort=$k==$num1?mysql_result($res1,$k,'sortby'):mysql_result($res1,$k+1,'sortby');//$obj->sortby;				
+				$post_sort=$k==$num1?mysql_result($res1,$k,'sortby'):mysql_result($res1,$k+1,'sortby');//$obj->sortby;
 				$course = array ();
 				$course[] = $question;
-				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down><img src="../img/down.gif" border="0" title="lang_move_down"></a>&nbsp;'.$sort.'&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up><img src="../img/up.gif" border="0" title="lang_move_up"></a>';										
+				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down><img src="../img/down.gif" border="0" title="lang_move_down"></a>&nbsp;'.$sort.'&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up><img src="../img/up.gif" border="0" title="lang_move_up"></a>';
 				$course[] = @mysql_result($res,$i,'groupname');
-				$course[] = mysql_result($res1,$k,'qtype');//$obj->qtype;	
+				$course[] = mysql_result($res1,$k,'qtype');//$obj->qtype;
 				/*$course[]='<a href="question_edit.php?qid='.$obj->qid.'&qtype='.$obj->qtype.'&groupid='.$groupid.'&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="select_question_group.php?delete=1&qid[]='.$obj->qid.'&qtype='.$obj->qtype.'&groupid='.$groupid.'&surveyid='.$surveyid.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>';
 				*/
 				$courses[] = $course;
@@ -342,7 +340,7 @@ if(!empty($courses))
 	/** @todo remove $curr_dbname from the parameters. This is not used. */
 	SurveyManager :: display_sortable_table($groupid,$surveyid,$curr_dbname,$table_header, $courses, array (), array (), $parameters);
 
-?>	
+?>
 	<!--<input type="submit" name="delete" value="<?php  echo get_lang('Delete');?>">-->
 	<!--<input type=button value="Back" onClick="history.go(-1)">-->
 	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
@@ -357,14 +355,14 @@ else
 	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
 	<input type="submit" name="addanotherg" value="<?php echo get_lang('AddNewGroup');?>">
 <?phps
-}	
+}
 ?>
 </form>
 <!-- question_added-->
 <?php
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

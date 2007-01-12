@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,8 +19,8 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: group_edit.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@author
+* 	@version $Id: group_edit.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
 /*
@@ -28,7 +28,7 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'survey';
 
 // including the global dokeos file
@@ -61,8 +61,12 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
+// Database table definitions
+/** @todo use database constants for the survey tables */
 $table_group = Database :: get_course_table(TABLE_SURVEY_GROUP);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+$table_languages 			= Database::get_main_table(TABLE_MAIN_LANGUAGE);
+
 $tool_name1 = get_lang('CreateNewGroup');
 $tool_name = get_lang('ModifyGroupInformation');
 $interbreadcrumb[] = array ("url" => "survey_list.php?", "name" => get_lang('Survey'));
@@ -71,11 +75,11 @@ $surveyid = $_GET['surveyid'];
 if($_POST['action'] == 'new_group')
 {
 	if(isset($_POST['back']))
-   { 
-	 $surveyid = $_REQUEST['surveyid'];	
+   {
+	 $surveyid = $_REQUEST['surveyid'];
      header("location:create_new_group.php?surveyid=$surveyid");
 	 exit;
-   } 
+   }
 }
 if ($_POST['action'] == 'new_group')
 {
@@ -85,7 +89,7 @@ if ($_POST['action'] == 'new_group')
 	$groupname=trim($groupname);
 	if(empty ($groupname))
 	{
-			$error_message = get_lang('PleaseEnterGroupName');      
+			$error_message = get_lang('PleaseEnterGroupName');
 	}
 	$introduction = $_REQUEST['content'];
   if(isset($_POST['next']))
@@ -93,7 +97,7 @@ if ($_POST['action'] == 'new_group')
 	$groupname=trim($groupname);
 	if(empty ($groupname))
 	{
-			$error_message = get_lang('PleaseEnterGroupName');      
+			$error_message = get_lang('PleaseEnterGroupName');
 	}
 	else
 	{
@@ -101,13 +105,13 @@ if ($_POST['action'] == 'new_group')
 	header("location:select_question_group.php?surveyid=$surveyid");
 	exit;
 	}
-	} 
+	}
    if(isset($_POST['saveandexit']))
-   { 
+   {
 	 $groupname=trim($groupname);
 	 if(empty ($groupname))
 	 {
-			$error_message = get_lang('PleaseEnterGroupName');      
+			$error_message = get_lang('PleaseEnterGroupName');
 	 }
 	 else
 	 {
@@ -115,13 +119,13 @@ if ($_POST['action'] == 'new_group')
      header("location:survey_list.php");
 	 exit;
 	 }
-   }  	
+   }
 }
 Display::display_header($tool_name1);
 api_display_tool_title($tool_name);
 if( isset($error_message) )
 {
-	Display::display_error_message($error_message);	
+	Display::display_error_message($error_message);
 }
 ?>
 <?php
@@ -151,15 +155,14 @@ $introduction = $obj->introduction;
 		$oFCKeditor->Value		= $introduction;
 		$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 		$oFCKeditor->ToolbarSet = "Survey";
-		
-		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+
+		$sql="SELECT isocode FROM ".$table_languages." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 		$result_sql=api_sql_query($sql);
 		$isocode_language=mysql_result($result_sql,0,0);
 		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-		
+
 		$return =	$oFCKeditor->CreateHtml();
-		
+
 		echo $return;
    ?>
           <br>

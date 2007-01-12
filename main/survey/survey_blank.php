@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: survey_blank.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@version $Id: survey_blank.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -62,7 +62,7 @@ $attempt[$obj->qid] = $obj->answer;
 
 
 $surveyid = $_REQUEST['surveyid'];
-$rs=mysql_query("select * from $db_name.questions where survey_id='$surveyid'");
+$rs=mysql_query("SELECT * FROM $table_survey_question WHERE survey_id='$surveyid'");
 $row=mysql_num_rows($rs);
 $page=ceil($row/4);
 
@@ -96,7 +96,7 @@ window.print();
 <link href="../css/survey_white.css" rel="stylesheet" type="text/css">
 <?php
 $ques=$lower;
-$sql = "SELECT * FROM $db_name.questions where survey_id='$_REQUEST[surveyid]' ORDER BY gid, sortby limit $lower,4";
+$sql = "SELECT * FROM $table_survey_question WHERE survey_id='$_REQUEST[surveyid]' ORDER BY gid, sortby limit $lower,4";
 $parameters = array ();
 $res = api_sql_query($sql,__FILE__,__LINE__);
 ?>

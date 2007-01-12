@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,12 +19,12 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: choose_language.php 10578 2006-12-31 17:01:58Z pcool $
+* 	@author
+* 	@version $Id: choose_language.php 10705 2007-01-12 22:40:01Z pcool $
 * 	@todo check if this file is used
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='survey';
 
 // including the global dokeos file
@@ -43,9 +43,7 @@ require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 
 // Database table definitions
 /** @todo use database constants for the survey tables */
-
-// Path variables
-/** @todo these variables are probably not used here */
+$table_survey 		= Database :: get_course_table(TABLE_SURVEY);
 
 // breadcrumbs
 
@@ -69,17 +67,17 @@ $_SESSION["user_language_choice"]='english';
 
 
 if(isset($_GET['next'])){
-	
+
 	$lang = $_REQUEST['lang'];
 	$code_survey = $_REQUEST['code_survey'];
-	
-	$sql = 'SELECT survey.survey_id 
-			FROM '.$db_name.'.survey as survey 
-			WHERE survey.code="'.addslashes($code_survey).'" 
+
+	$sql = 'SELECT survey.survey_id
+			FROM '.$db_name.'.survey as survey
+			WHERE survey.code="'.addslashes($code_survey).'"
 			AND survey.lang="'.addslashes($lang).'"';
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
 	$surveyid = mysql_result($rs,0,'survey_id');
-	
+
 	header('Location:template1.php?'.$_SERVER['QUERY_STRING'].'&surveyid='.$surveyid);
 }
 
@@ -104,7 +102,7 @@ api_display_tool_title($surveyname);
 api_display_tool_title($tool_name);
 if($error_message)
 {
-	Display::display_error_message($error_message);	
+	Display::display_error_message($error_message);
 }
 ?>
 <link href="../css/survey_white.css" rel="stylesheet" type="text/css">
@@ -127,10 +125,10 @@ if($error_message)
 		    <input type="hidden" name="mail" value="<?php echo $mail;?>">
 			<input type="hidden" name="uid1" value="<?php echo $uid1;?>">
 			<input type="hidden" name="code_survey" value="<?php echo $code_survey;?>">
-			Select in which language you want to see this survey : 
+			Select in which language you want to see this survey :
 			<select name="lang">
 			<?php
-			while($survey = mysql_fetch_object($res_sname)){				
+			while($survey = mysql_fetch_object($res_sname)){
 				echo '<option value="'.$survey->lang.'">'.$survey->lang.'</option>';
 			}
 			?>

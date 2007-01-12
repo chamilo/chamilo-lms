@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,11 +19,11 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: open_edit.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@author
+* 	@version $Id: open_edit.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'survey';
 
 // including the global dokeos file
@@ -58,6 +58,13 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
+// Database table definitions
+/** @todo use database constants for the survey tables */
+$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+$table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+$table_languages 		= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+
 if(isset($_REQUEST['questtype']))
 {
 	$add_question12=$_REQUEST['questtype'];
@@ -69,9 +76,9 @@ else
 //if(!$add_question12)
 //$add_question12=$_REQUEST['questtype'];
 $interbreadcrumb[] = array ("url" => "survey_list.php?n=$n", "name" => get_lang('Survey'));
-$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
-$table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
-$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+
+
+
 $Add = get_lang('UpdateQuestionType');
 $Multi = get_lang('Open');
 $tool_name = $Add.$Multi;
@@ -87,7 +94,7 @@ $add_question12=$rs->qtype;
 if (isset($_POST['update']))
 {
 	  $enter_question=$_POST['enterquestion'];
-	  
+
         $questtype = $_REQUEST['questtype'];
 		$enter_question=$_POST['enterquestion'];
 		$defaultext=$_POST['defaultext'];
@@ -95,15 +102,15 @@ if (isset($_POST['update']))
 		$open_ans="";
 		$enter_question=trim($enter_question);
 		if(empty($enter_question))
-		$error_message = get_lang('PleaseEnterAQuestion')."<br>";		  
+		$error_message = get_lang('PleaseEnterAQuestion')."<br>";
 		//if(empty($defaultext))
 		//$error_message = $error_message."<br>".get_lang('PleaseFillDefaultText');
 		if(isset($error_message));
-		//Display::display_error_message($error_message);	
+		//Display::display_error_message($error_message);
 		else
 		{
-		 $groupid = $_POST['groupid'];		 
-		 $qid = $_POST['qid'];		 
+		 $groupid = $_POST['groupid'];
+		 $qid = $_POST['qid'];
 		 $questtype=$_POST['questtype'];
 		 $answerD=$defaultext;
 		 $enter_question = addslashes($enter_question);
@@ -125,7 +132,7 @@ api_display_tool_title($tool_name);
 
 if( isset($error_message) )
 {
-	Display::display_error_message($error_message);	
+	Display::display_error_message($error_message);
 }
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -139,14 +146,14 @@ if( isset($error_message) )
 <input type="hidden" name="qid" value="<?php echo $qid; ?>">
 <input type="hidden" name="curr_dbname" value="<?php echo $curr_dbname; ?>">
 <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="outerBorder_innertable">
-				<tr class="white_bg"> 
-					<td height="30" class="form_text1"> 
-						Enter the question.        
+				<tr class="white_bg">
+					<td height="30" class="form_text1">
+						Enter the question.
 					</td>
 					<td class="form_text1" align="right">&nbsp;
 					</td>
 				</tr>
-				<tr class="form_bg"> 
+				<tr class="form_bg">
 					<td width="542" height="30" colspan="2" >
 					<?php
 
@@ -158,21 +165,20 @@ if( isset($error_message) )
 						$oFCKeditor->Value		= $rs->caption;
 						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 						$oFCKeditor->ToolbarSet = "Survey";
-						
-						$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-						$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+
+						$sql="SELECT isocode FROM ".$table_languages." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 						$result_sql=api_sql_query($sql);
 						$isocode_language=mysql_result($result_sql,0,0);
 						$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-						
+
 						$return =	$oFCKeditor->CreateHtml();
-		
+
 						echo $return;
 					?>
 					</td>
 				</tr>
 </TABLE><BR>
-<!-- <TABLE class=outerBorder_innertable cellSpacing=0 cellPadding=0 width="100%" 
+<!-- <TABLE class=outerBorder_innertable cellSpacing=0 cellPadding=0 width="100%"
 border=0>
   <TBODY>
  <TR>
@@ -184,10 +190,10 @@ border=0>
 	echo $_POST['defaultext'];
 	else
 	echo $rs->ad;
-	?></TEXTAREA> 
+	?></TEXTAREA>
     </TD></TR></TBODY></TABLE>--><BR>
 		<?php
-			$sql = "SELECT * FROM survey WHERE survey_id='$surveyid'";
+			$sql = "SELECT * FROM $table_survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);
 			$obj=mysql_fetch_object($res);
 			switch($obj->template)
@@ -203,21 +209,21 @@ border=0>
 					break;
 				case "template4":
 					$temp = 'grey';
-					break;	
+					break;
 				case "template5":
 					$temp = 'blank';
 					break;
 			}
-		
+
 	?>
 
 
 <BR>
-<DIV align=center> 
+<DIV align=center>
 	<input type="submit"  name="back" value="<?php echo get_lang('Back');?>">
 	<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('this.form','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
-	<input type="submit"  name="update" value="<?php echo get_lang('Update'); ?>">  
-	
+	<input type="submit"  name="update" value="<?php echo get_lang('Update'); ?>">
+
 </DIV></FORM></DIV>
 <DIV id=bottomnav align=center></DIV>
 </BODY></HTML>

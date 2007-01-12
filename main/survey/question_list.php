@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_list.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@version $Id: question_list.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
 /*
@@ -132,7 +132,7 @@ function displayTemplate(url){
 		for($i=0;$i<$endloop;$i++)
 		{
 			$gidi=$gid1[$i];
-			$sql = "SELECT * FROM $db_name.questions WHERE gid='$gidi'";		
+			$sql = "SELECT * FROM $table_survey_question WHERE gid='$gidi'";		
 			
 			/*
 			$parameters = array ('gidi' => $gidi); 

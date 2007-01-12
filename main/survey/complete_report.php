@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: complete_report.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@version $Id: complete_report.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -61,7 +61,7 @@ if (!api_is_allowed_to_edit())
 // Database table definitions
 /** @todo use database constants for the survey tables */
 $tbl_user_survey 		= Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
-$tbl_questions 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $tbl_questions_groups 	= Database :: get_course_table(TABLE_SURVEY_GROUP);
 $tbl_answers 			= Database :: get_course_table(TABLE_SURVEY_REPORT);
 

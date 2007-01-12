@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: surveytemp_white.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@version $Id: surveytemp_white.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
 // name of the language file that needs to be included 
@@ -151,7 +151,7 @@ ob_start();
 if(!isset($_POST['printall'])){
 	$sql = 'SELECT DISTINCT survey_group.* 
 			FROM '.$db_name.'.survey_group 		
-			INNER JOIN '.$db_name.'.questions
+			INNER JOIN '.$table_survey_question.'
 			ON  survey_group.group_id = questions.gid
 			AND questions.survey_id = survey_group.survey_id
 			WHERE survey_group.survey_id='.$surveyid.'
@@ -161,7 +161,7 @@ else {
 	$indiceQuestion = 1;
 	$sql = 'SELECT DISTINCT survey_group.* 
 			FROM '.$db_name.'.survey_group 		
-			INNER JOIN '.$db_name.'.questions
+			INNER JOIN '.$table_survey_question.'
 			ON  survey_group.group_id = questions.gid
 			AND questions.survey_id = survey_group.survey_id
 			WHERE survey_group.survey_id='.$surveyid.'
@@ -172,7 +172,7 @@ $rsGroups = api_sql_query($sql);
 
 $sql = 'SELECT COUNT(DISTINCT survey_group.group_id) 
 		FROM '.$db_name.'.survey_group 
-		INNER JOIN '.$db_name.'.questions
+		INNER JOIN '.$table_survey_question.'
 		ON  survey_group.group_id = questions.gid
 		AND questions.survey_id = survey_group.survey_id
 		WHERE survey_group.survey_id='.$surveyid;
@@ -203,7 +203,7 @@ while($o_group = mysql_fetch_object($rsGroups) ){
 	}
 	
 	$sql = 'SELECT * 
-			FROM '.$db_name.'.questions 
+			FROM '.$table_survey_question.'
 			WHERE survey_id='.$surveyid.' 
 			AND gid='.intval($o_group->group_id).'
 			ORDER BY sortby

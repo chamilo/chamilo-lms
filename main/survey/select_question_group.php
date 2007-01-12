@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,12 +19,12 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
+* 	@author
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: select_question_group.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@version $Id: select_question_group.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'survey';
 
 // including the global dokeos file
@@ -58,11 +58,11 @@ if (!api_is_allowed_to_edit())
 
 // Database table definitions
 /** @todo use database constants for the survey tables */
-$table_survey 		= Database :: get_course_table(TABLE_SURVEY);
-$table_group 		= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+$table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
 $table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-$table_course 		= Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_survey_group = Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
+$table_survey_group 	= Database :: get_course_table(TABLE_SURVEY_GROUP);
 
 // breadcrumbs
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
@@ -89,25 +89,25 @@ Display :: display_footer();
 
 
 /**
- * This function retrieves all the survey information 
+ * This function retrieves all the survey information
  * This is a DUPLICATE of the one in create_new_survey.php
  *
  * @param integer $survey_id the id of the survey
  * @return array
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version januari 2007
- * 
+ *
  * @todo move this function to surveymanager.inc.lib.php
  */
 function get_survey($survey_id)
 {
 	$tbl_survey = Database :: get_course_table(TABLE_SURVEY);
-	
+
 	$sql = "SELECT * FROM $tbl_survey WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$return = mysql_fetch_assoc($result);
-	
+
 	// we do this (temporarily) to have the array match the quickform elements immediately
 	// idealiter the fields in the db match the quickform fields
 	$return['survey_code'] 			= $return['code'];
@@ -164,13 +164,13 @@ else
 
 if ($_POST['action'] == 'selectquestion_group')
 {
-	$surveyid = $_POST['newsurveyid'];	
+	$surveyid = $_POST['newsurveyid'];
 	$questiongroup = $_POST['question_group'];
 	if (isset($questiongroup))
-	{	 
+	{
 		 $exiztinggroup = $_POST['exiztinggroup'];
-		 header("Location:existing_surveys_new.php?surveyid=$surveyid");	
-		 exit;	
+		 header("Location:existing_surveys_new.php?surveyid=$surveyid");
+		 exit;
 	}
 }
 
@@ -221,7 +221,7 @@ if (isset($_POST['finish']))
 {
 	    header("Location:survey_list.php");
 	    exit;
-}	
+}
 
 if(isset($action1))
 {
@@ -283,7 +283,7 @@ if(isset($messege) && $messege )
 <td></td>
 </tr>
 <tr>
-<td></td>  
+<td></td>
 </tr>
 <tr>
   <td>&nbsp;</td>
@@ -292,16 +292,16 @@ if(isset($messege) && $messege )
 </table>
 </form>
 <?php
-    $sql="SELECT * FROM $table_survey_group WHERE survey_id='$surveyid' ORDER BY sortby";	
+    $sql="SELECT * FROM $table_survey_group WHERE survey_id='$surveyid' ORDER BY sortby";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$num=mysql_num_rows($res);	
+	$num=mysql_num_rows($res);
 	$parameters['surveyid']=$surveyid;
 	//$table_header[] = array (' ', false);
 	//$table_header[] = array (get_lang('SNo'), true);
-	
+
 	$table_header[] = array (get_lang('Questions'), true);
-    $table_header[] = array (get_lang('ChangeOrder'), true);	
-	$table_header[] = array (get_lang('Type'), true);	
+    $table_header[] = array (get_lang('ChangeOrder'), true);
+	$table_header[] = array (get_lang('Type'), true);
 	$table_header[] = array (get_lang('Group'), true);
 	$table_header[]=array('',true);
 	$courses = array ();
@@ -313,34 +313,34 @@ if(isset($messege) && $messege )
 			$groupid=@mysql_result($res,$i,'group_id');
 			$gname=@mysql_result($res,$i,'groupname');
 			$sql="SELECT * FROM $table_survey_question WHERE gid='$groupid' AND survey_id = '$surveyid' order by `sortby` asc";
-			
+
 			$res1=api_sql_query($sql,__FILE__,__LINE__);
 			$num1=mysql_num_rows($res1);
 			$x=1;
 			for($k=0;$k<$num1;$k++)
 			//while ($obj = mysql_fetch_object($res1))
-			{	
+			{
 				$question_number++;
 				$qid=mysql_result($res1,$k,'qid');//$obj->qid;
 				$q_type=mysql_result($res1,$k,'qtype');//$obj->qid;
 				$pre_qid=mysql_result($res1,$k-1,'qid');
 				$post_qid=mysql_result($res1,$k+1,'qid');
 				$question=stripslashes(mysql_result($res1,$k,'caption'));//$obj->caption;
-				
+
 				$question = eregi_replace('^<p[^>]*>(.*)</p>','\\1', $question);
 				$question = eregi_replace('(<[^ ]*) (style=."."[^>]*)(>)','\\1\\3', $question);
 				$question = eregi_replace('(<[^ ]*) (style=""[^>]*)(>)','\\1\\3', $question);
 				$question = eregi_replace('(<[^ ]*)( style=."[^"]*")([^>]*)(>)','\\1\\2\\4', $question);
-				
-				$sort=mysql_result($res1,$k,'sortby');//$obj->sortby;				
+
+				$sort=mysql_result($res1,$k,'sortby');//$obj->sortby;
 				$pre_sort=$k==0?mysql_result($res1,$k,'sortby'):mysql_result($res1,$k-1,'sortby');//$obj->sortby;
-				$post_sort=$k==$num1?mysql_result($res1,$k,'sortby'):mysql_result($res1,$k+1,'sortby');//$obj->sortby;				
+				$post_sort=$k==$num1?mysql_result($res1,$k,'sortby'):mysql_result($res1,$k+1,'sortby');//$obj->sortby;
 				$course = array ();
-				
+
 				$course[] = $question_number.' - '.$question;
 				if($num1==1)
 				{
-				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down></a>&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up></a>';				
+				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down></a>&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up></a>';
 				}
 				elseif($k==0){
 				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down><img src="../img/down.gif" border="0" title="lang_move_down"></a>&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up></a>';
@@ -349,11 +349,11 @@ if(isset($messege) && $messege )
 				}
 				else{
 				$course[] = '<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=down><img src="../img/down.gif" border="0" title="lang_move_down"></a>&nbsp;&nbsp;&nbsp;'.'<a href='.$_SERVER['PHP_SELF'].'?gid='.$groupid.'&pre_sort='.$pre_sort.'&sortby='.$sort.'&post_sort='.$post_sort.'&surveyid='.$surveyid.'&pre_qid='.$pre_qid.'&qid='.$qid.'&post_qid='.$post_qid.'&page_nr='.$page_nr.'&per_page='.$per_page.'&column='.$column.'&action1=moveitem&direction=up><img src="../img/up.gif" border="0" title="lang_move_up"></a>';
-				}				
+				}
 				$course[] = mysql_result($res1,$k,'qtype');//$obj->qtype;
-				$course[] = @mysql_result($res,$i,'groupname');	
+				$course[] = @mysql_result($res,$i,'groupname');
 				$course[]='<a href="question_edit.php?qid='.$qid.'&qtype='.$q_type.'&groupid='.$groupid.'&surveyid='.$surveyid.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="select_question_group.php?delete=1&qid[]='.$qid.'&qtype='.$q_type.'&groupid='.$groupid.'&surveyid='.$surveyid.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>';
-				
+
 				$courses[] = $course;
 				$x++;
 			}
@@ -371,7 +371,7 @@ if(!empty($courses))
 	/** @todo remove $curr_dbname from the parameters. This is not used. */
 	SurveyManager :: display_sortable_table($groupid,$surveyid,$curr_dbname,$table_header, $courses, array (), array (), $parameters);
 
-?>	
+?>
 	<!--<input type="submit" name="delete" value="<?php echo get_lang('Delete');?>">-->
 	<!--<input type=button value="Back" onClick="history.go(-1)">-->
 	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
@@ -386,7 +386,7 @@ else
 	<input type="submit" name="addanother" value="<?php echo get_lang('AddAnotherQuestion');?>">
 	<input type="submit" name="addanotherg" value="<?php echo get_lang('AddNewGroup');?>">
 <?php
-}	
+}
 ?>
 </form>
 <?php

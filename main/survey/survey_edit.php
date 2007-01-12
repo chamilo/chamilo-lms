@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,15 +19,16 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: survey_edit.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@author
+* 	@version $Id: survey_edit.php 10705 2007-01-12 22:40:01Z pcool $
+* 	@todo check if this file is still used. With the rewriting the file is probably no longer in use
 */
 /*
 ==============================================================================
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'survey';
 
 // including the global dokeos file
@@ -62,9 +63,10 @@ $table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
 $table_survey 				= Database :: get_course_table(TABLE_SURVEY);
 $tbl_category 				= Database :: get_main_table(TABLE_MAIN_CATEGORY);
+$table_languages 			= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 
 // language variables
-$MonthsLong = array(get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('"MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong')); 
+$MonthsLong = array(get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('"MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong'));
 $tool_name = get_lang('ModifySurveyInformation');
 
 
@@ -85,7 +87,7 @@ if ($_POST['action'] == 'update_survey')
 	$formSent=1;
 	$surveycode=$_POST['survey_code'];
 	$surveytitle = $_POST['survey_title'];
-	$surveysubtitle = $_POST['survey_subtitle'];	
+	$surveysubtitle = $_POST['survey_subtitle'];
 	$author = $_POST['author'];
 	$survey_language = $_POST['survey_language'];
 	$availablefrom = $_POST['fyear']."-".$_POST['fmonth']."-".$_POST['fday'];
@@ -94,8 +96,8 @@ if ($_POST['action'] == 'update_survey')
 	$surveytemplate = $_POST['template'];
 	$surveyintroduction = $_POST['content'];
 	$surveythanks = $_POST['thanks'];
-    $savailablefrom=mktime(0,0,0,$_POST['fmonth'],$_POST['fday'], $_POST['fyear']); 
-    $savailabletill=mktime(0,0,0,$_POST['end_fmonth'],$_POST['end_fday'], $_POST['end_fyear']); 
+    $savailablefrom=mktime(0,0,0,$_POST['fmonth'],$_POST['fday'], $_POST['fyear']);
+    $savailabletill=mktime(0,0,0,$_POST['end_fmonth'],$_POST['end_fday'], $_POST['end_fyear']);
 	$surveytitle=trim($surveytitle);
 	$surveycode=trim($surveycode);
 	if(isset($_POST['back']))
@@ -105,7 +107,7 @@ if ($_POST['action'] == 'update_survey')
 	}
 	if(empty ($surveytitle))
 	{
-		$error_message = get_lang('PleaseEnterSurveyTitle');      
+		$error_message = get_lang('PleaseEnterSurveyTitle');
 	}
 	elseif ($savailabletill<=$savailablefrom){
 	$error_message = get_lang('PleaseEnterValidDate');
@@ -114,8 +116,8 @@ if ($_POST['action'] == 'update_survey')
 	$error_message = get_lang('PleaseEnterValidCode');
 	}
 	else
-    {		
-	  $curr_dbname=SurveyManager::update_survey($_GET['survey_id'],$surveycode,$surveytitle,$surveysubtitle,$author,$survey_language,$availablefrom,$availabletill,$isshare,$surveytemplate,$surveyintroduction,$surveythanks,$cidReq,$table_course);	  
+    {
+	  $curr_dbname=SurveyManager::update_survey($_GET['survey_id'],$surveycode,$surveytitle,$surveysubtitle,$author,$survey_language,$availablefrom,$availabletill,$isshare,$surveytemplate,$surveyintroduction,$surveythanks,$cidReq,$table_course);
 		if(isset($_POST['next']))
 		{
 			header("location:select_question_group.php?surveyid=".$_GET['survey_id']);
@@ -126,13 +128,13 @@ if ($_POST['action'] == 'update_survey')
 		header('location:survey_list.php');
 	    exit;
 		}
-	}	
+	}
 }
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 if( isset($error_message) )
 {
-	Display::display_error_message($error_message);	
+	Display::display_error_message($error_message);
 }
 ?>
 <SCRIPT LANGUAGE="JavaScript">
@@ -156,7 +158,7 @@ window.open(inf+".htm", 'popup', 'width=600,height=600,toolbar = no, status = no
 <?php
 /**
  * Finding the survey we are editing
- * @todo use a function for this because this is probably a very common functionality 
+ * @todo use a function for this because this is probably a very common functionality
  */
 $sql = "SELECT * FROM $table_survey WHERE survey_id='".$_GET['survey_id']."'";
 $res = api_sql_query($sql);
@@ -195,7 +197,7 @@ $lang=$obj->lang;
   <td>
   	<?php
 	UserManager::get_teacher_list($cidReq,$obj->author);
-	?>  	
+	?>
   </td>
 </tr>
 <tr>
@@ -210,7 +212,7 @@ $lang=$obj->lang;
 </tr>
 <tr id="subtitle">
   <td><?php echo get_lang('AvailableFrom'); ?>&nbsp;</td>
-  <td>	
+  <td>
         <select name="fday">
 		<?php for($i=1;$i<=31;$i++){
 			if($i<=9)
@@ -241,7 +243,7 @@ december -->
 	?>
 </select>
 <select name="fyear">
-<?php 
+<?php
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $avail_year_from)
 		echo   "<option value=\"$i\" selected>$i</option>\n";
@@ -252,7 +254,7 @@ december -->
 </select>
 <a title="Calendar" href="javascript:openCalendar('new_calendar_item', 'f')"><img src="../img/calendar_select.gif" border="0" align="absmiddle"/></a></td>
 	</tr>
-				
+
 <tr id="subtitle">
   <td><?php echo get_lang('AvailableTill'); ?>&nbsp;</td>
   <td>
@@ -286,7 +288,7 @@ december -->
 	?>
 </select>
 <select name="end_fyear">
-<?php 
+<?php
 	for($i=$curr_year;$i<=$curr_year+10;$i++){
 		if($i == $avail_year_till)
 		echo   "<option value=\"$i\" selected>$i</option>\n";
@@ -316,15 +318,14 @@ december -->
 	$oFCKeditor->Value		= $obj->intro;
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 	$oFCKeditor->ToolbarSet = "Survey";
-	
-	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+
+	$sql="SELECT isocode FROM ".$table_languages." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 	$result_sql=api_sql_query($sql);
 	$isocode_language=mysql_result($result_sql,0,0);
 	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-	
+
 	$return =	$oFCKeditor->CreateHtml();
-	
+
 	echo $return;
 ?>
  <br>
@@ -343,7 +344,7 @@ december -->
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 	$oFCKeditor->ToolbarSet = "Survey";
 	$return =	$oFCKeditor->CreateHtml();
-	
+
 	echo $return;
 ?>
  <br>

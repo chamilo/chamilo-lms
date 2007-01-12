@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,8 +19,8 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: create_new_group.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@author
+* 	@version $Id: create_new_group.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
 /*
@@ -28,7 +28,7 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'survey';
 
 // including the global dokeos file
@@ -68,7 +68,7 @@ $table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
 $table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_survey_group 	= Database :: get_course_table(TABLE_SURVEY_GROUP);
-
+$table_languages 		= Database::get_main_table(TABLE_MAIN_LANGUAGE);
 
 
 $tool_name1 = get_lang('CreateNewGroup');
@@ -79,21 +79,21 @@ $surveyid = $_GET['surveyid'];
 $surveyname = SurveyManager::pick_surveyname($surveyid);
 
 if(isset($_GET['direction'])){
-	$sql = 'SELECT * 
-			FROM '.$table_group.' 
+	$sql = 'SELECT *
+			FROM '.$table_group.'
 			WHERE group_id='.intval($_GET['id_group']);
-	
+
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
 	$group = mysql_fetch_object($rs);
 	if(is_object($group)){
 		$_GET['direction'] == 'up' ? $operateur = '-' : $operateur = '+';
-		
-		$sql = 'UPDATE '.$table_group.' SET 
+
+		$sql = 'UPDATE '.$table_group.' SET
 				sortby='.$group->sortby.'
 				WHERE sortby='.$group->sortby.$operateur.'1' ;
-		
+
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
-		$sql = 'UPDATE '.$table_group.' SET 
+		$sql = 'UPDATE '.$table_group.' SET
 				sortby='.$group->sortby.$operateur.'1'.'
 				WHERE group_id='.intval($_GET['id_group']);
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
@@ -106,7 +106,7 @@ if(isset($_REQUEST['delete']))
    $surveyid = $_REQUEST['surveyid'];
    SurveyManager::delete_group($group_id);
    header("Location:create_new_group.php?surveyid=$surveyid");
-   exit;		
+   exit;
  }
 if ($_POST['action'] == 'new_group')
 {
@@ -114,39 +114,39 @@ if ($_POST['action'] == 'new_group')
 	$groupname = $_POST['groupname'];
 	$surveyintroduction = $_POST['content'];
 	 if(isset($_POST['back']))
-	   { 
+	   {
 		 header("location:select_question_group.php?surveyid=$surveyid");
 		 exit;
-	   } 
-	
+	   }
+
 	$groupname=trim($groupname);
 	if(empty ($groupname))
 	{
-			$error_message = get_lang('PleaseEnterGroupName');      
-	}	
+			$error_message = get_lang('PleaseEnterGroupName');
+	}
 	else
 	{
 		$groupid = SurveyManager::create_group($surveyid,$groupname,$surveyintroduction,$table_group);
 
 		if(isset($_POST['next']) && $groupid)
-		{ 
-		
+		{
+
 		 header("location:addanother.php?surveyid=$surveyid&newgroupid=$groupid");
 		 exit;
-		
+
 		}elseif(isset($_POST['saveandexit']) && $groupid){
-		
+
 		 header("location:survey_list.php");
 		 exit;
-		
+
 		}
 		else
-		{ 
-		
+		{
+
 		  $error_message = "This Group Already Exists !";
-		
-		} 
-	}	
+
+		}
+	}
 }
 Display::display_header($tool_name1);
 ?>
@@ -156,22 +156,22 @@ Display::display_header($tool_name1);
 <?php
 if( isset($error_message) )
 {
-	Display::display_error_message($error_message);	
+	Display::display_error_message($error_message);
 }
 
 
-		
+
 		$sql = "SELECT * FROM $table_survey_group WHERE survey_id='$surveyid' ORDER BY sortby ASC";
-		
+
 		$parameters = array ();
         $parameters['surveyid']=$surveyid;
 		$parameters['groupid']=$groupid;
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$countGroups = mysql_num_rows($res);
 	if ($countGroups > 0)
-	{	
+	{
 		$i=0;
-		//$surveys = array ();		
+		//$surveys = array ();
 	while ($obj = mysql_fetch_object($res))
 		{
 			$gid=$obj->group_id;
@@ -204,7 +204,7 @@ if( isset($error_message) )
 				;
                $surveys[] = $survey;
                $i++;
-		
+
 		}
 		$table_header[] = array (get_lang('QuesGroup'), true);
 		$table_header[] = array (get_lang('SurveyName'), true);
@@ -242,15 +242,14 @@ api_display_tool_title($tool_name);
 		$oFCKeditor->Value		= $content;
 		$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 		$oFCKeditor->ToolbarSet = "Survey";
-		
-		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+
+		$sql="SELECT isocode FROM ".$table_languages." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 		$result_sql=api_sql_query($sql);
 		$isocode_language=mysql_result($result_sql,0,0);
 		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-		
+
 		$return =	$oFCKeditor->CreateHtml();
-		
+
 		echo $return;
    ?>
           <br>
@@ -267,7 +266,7 @@ api_display_tool_title($tool_name);
 <?php
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

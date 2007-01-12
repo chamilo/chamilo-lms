@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,11 +19,11 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: numbered.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@author
+* 	@version $Id: numbered.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'survey';
 
 // including the global dokeos file
@@ -58,6 +58,12 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
+// Database table definitions
+$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+$table_group 			= Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+$table_languages 		= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+
 if(isset($_REQUEST['questtype']))
 {
 	$add_question12=$_REQUEST['questtype'];
@@ -69,9 +75,9 @@ else
 $add_question = $_REQUEST['add_question'];
 $groupid = $_REQUEST['groupid'];
 $surveyid = $_REQUEST['surveyid'];
-$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
-$table_group 			=  Database :: get_course_table(TABLE_SURVEY_GROUP);
-$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+
+
+
 $Add = get_lang('AddNewQuestionType');
 $Multi = get_lang('Numbered');
 $groupid = $_REQUEST['groupid'];
@@ -87,40 +93,40 @@ if ($_POST['action'] == 'addquestion')
 	{
 		$enter_question=$_POST['enterquestion'];
 		$answers=$_POST['mutlichkboxtext'];
-		$rating=$_POST['chkboxpoint'];	
+		$rating=$_POST['chkboxpoint'];
 		$answerT=$_POST['radiotrue'];
 		$answerD=$_POST['radiodefault'];
 		$alignment='';
 		$open_ans="";
-		$count=count($_POST['mutlichkboxtext']);		
+		$count=count($_POST['mutlichkboxtext']);
 		$noans=0;
 		$nopoint=0;
 		for($i=0;$i<$count;$i++)
-		{			
-			
+		{
+
 			$answers[$i]=trim($answers[$i]);
 			if(empty($answers[$i]))
 				$noans++;
 			if($rating[$i]<1||$rating[$i]>5)
 				$nopoint++;
-			
+
 		}
 		$enter_question=trim($enter_question);
 		if(empty($enter_question))
-		$error_message = get_lang('PleaseEnterAQuestion')."<br>";		
+		$error_message = get_lang('PleaseEnterAQuestion')."<br>";
 		if ($noans)
 		$error_message = $error_message."<br>".get_lang('PleasFillAllAnswer');
 		//if($nopoint)
-		//$error_message = $error_message."<br>".get_lang('PleaseFillAllPoints');	
+		//$error_message = $error_message."<br>".get_lang('PleaseFillAllPoints');
 		//if(empty($_POST['radiotrue']))
 		//	$error_message=$error_message."<br>".get_lang('PleaseSelectOneTrue');
 		//if(empty($_POST['radiodefault']))
 			//$error_message=$error_message."<br>".get_lang('PleaseSelectOneDefault');
 		if(isset($error_message));
-		//Display::display_error_message($error_message);	
+		//Display::display_error_message($error_message);
 		else
 		{
-		 $groupid = $_POST['groupid'];	
+		 $groupid = $_POST['groupid'];
 		 $questtype = $_REQUEST['questtype'];
 		 $surveyid = $_REQUEST['surveyid'];
 		 $enter_question = addslashes($enter_question); SurveyManager::create_question($groupid,$surveyid,$questtype,$enter_question,$alignment,$answers,$open_ans,$answerT,$answerD,$rating,$curr_dbname);	  header("location:select_question_group.php?groupid=$groupid&surveyid=$surveyid");
@@ -138,16 +144,16 @@ if ($_POST['action'] == 'addquestion')
 	{
 	  $enter_question=$_POST['enterquestion'];
 		$answers=$_POST['mutlichkboxtext'];
-		$rating=$_POST['chkboxpoint'];	
+		$rating=$_POST['chkboxpoint'];
 		$answerT=$_POST['radiotrue'];
 		$answerD=$_POST['radiodefault'];
 		$alignment='';
 		$open_ans="";
-		$count=count($_POST['mutlichkboxtext']);		
+		$count=count($_POST['mutlichkboxtext']);
 		$noans=0;
 		$nopoint=0;
 		for($i=0;$i<$count;$i++)
-		{			
+		{
 			$answers[$i]=trim($answers[$i]);
 			if(empty($answers[$i]))
 				$noans++;
@@ -156,22 +162,22 @@ if ($_POST['action'] == 'addquestion')
 		}
 		$enter_question=trim($enter_question);
 		if(empty($enter_question))
-		$error_message = get_lang('PleaseEnterAQuestion')."<br>";		
+		$error_message = get_lang('PleaseEnterAQuestion')."<br>";
 		if ($noans)
 		$error_message = $error_message."<br>".get_lang('PleasFillAllAnswer');
 		//if($nopoint)
-		//$error_message = $error_message."<br>".get_lang('PleaseFillAllPoints');	
+		//$error_message = $error_message."<br>".get_lang('PleaseFillAllPoints');
 		//if(empty($_POST['radiotrue']))
 		//	$error_message=$error_message."<br>".get_lang('PleaseSelectOneTrue');
 		//if(empty($_POST['radiodefault']))
 			//$error_message=$error_message."<br>".get_lang('PleaseSelectOneDefault');
 		if(isset($error_message));
-		//Display::display_error_message($error_message);	
+		//Display::display_error_message($error_message);
 		else
 		{
 	     $groupid = $_REQUEST['groupid'];
 	     $questtype = $_REQUEST['questtype'];
-		 $surveyid = $_REQUEST['surveyid'];	
+		 $surveyid = $_REQUEST['surveyid'];
 		 $enter_question = addslashes($enter_question); SurveyManager::create_question($groupid,$surveyid,$questtype,$enter_question,$alignment,$answers,$open_ans,$answerT,$answerD,$rating,$curr_dbname);
 	     header("location:survey_list.php?n=$n");
 	     exit;
@@ -196,7 +202,7 @@ select_question_type($add_question12,$groupid,$surveyid,$cidReq,$curr_dbname);
 <?php
 if( isset($error_message) )
 {
-	Display::display_error_message($error_message);	
+	Display::display_error_message($error_message);
 }
 ?>
 <SCRIPT LANGUAGE="JAVASCRIPT">
@@ -216,19 +222,19 @@ function checkLength(form){
 <input type="hidden" name="action" value="addquestion" >
 
 	  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
-				<tr> 
+				<tr>
 					<td class="pagedetails_heading"><a class="form_text_bold"><strong>Question</strong></a></td>
 				</tr>
 	  </table>
 	<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="outerBorder_innertable">
-				<tr class="white_bg"> 
-					<td height="30" class="form_text1"> 
-						Enter the question.        
+				<tr class="white_bg">
+					<td height="30" class="form_text1">
+						Enter the question.
 					</td>
 					<td class="form_text1" align="right">&nbsp;
 					</td>
 				</tr>
-				<tr class="form_bg"> 
+				<tr class="form_bg">
 					<td width="542" height="30" colspan="2" >
 					<?php
 
@@ -240,64 +246,63 @@ function checkLength(form){
 						$oFCKeditor->Value		= stripslashes($enter_question);
 						$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 						$oFCKeditor->ToolbarSet = "Survey";
-						
-						$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-						$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+
+						$sql="SELECT isocode FROM ".$table_languages." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 						$result_sql=api_sql_query($sql);
 						$isocode_language=mysql_result($result_sql,0,0);
 						$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-						
+
 						$return =	$oFCKeditor->CreateHtml();
-		
+
 						echo $return;
 					?>
 					</td>
 				</tr>
 			</table>
 			<br>
-			
+
 			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
-			<tr> 
+			<tr>
 				<td class="pagedetails_heading"><a class="form_text_bold"><strong>Answer</strong></a></td>
 			</tr>
 			</table>
 
 			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="outerBorder_innertable">
-				<tr class="white_bg"> 
+				<tr class="white_bg">
 					<td height="30"><span class="form_text1">Enter the answers</span>.
 					</td>
 					<td>&nbsp;</td>
 					<td width="192" align="right">&nbsp; </td>
 				</tr>
 			</table>
-			
-			
-  
+
+
+
 				  <!--table for adding the multiple answers-->
-						  
+
 						<!--<a name="tbl">-->
-										
+
 			<table ID="tblFields" width="70%" border="0" cellpadding="0" cellspacing="0" class="outerBorder_innertable">
 <?php
 	$start=1;$end=5;$upx=2;$upy=1;$dwnx=0;$dwny=1;$jd=0;$sn=1;
 	$id="id";
 	$tempmutlichkboxtext="jkjk";
-		
+
 	if(isset($_POST['radiodefault']))
 	$tempradiodefault=$_POST['radiodefault'];
 	else
 	$tempradiodefault=1;
 
 	$tempchkboxpoint="jkjk";
-	
+
 	$up="up";
 	$down="down";
 	$flag=1;
 	if(isset($_POST['mutlichkboxtext']))
 	$end=count($_POST['mutlichkboxtext']);
-	
+
 	for($i=$start;$i<=$end;$i++)
-	{	
+	{
 		$id="id".$i."_x";
 		//echo ",".$id;
 		if(isset($_POST[$id]))
@@ -317,16 +322,16 @@ function checkLength(form){
 		}
 
 	}
-	
+
 	for($i=$start;$i<=$end;$i++)
 	{
-		
+
 		$up="up".$i."_x";
 		$down="down".$i."_x";
-		
+
 		if(isset($_POST[$up])||isset($_POST[$down]))
 		{
-			
+
 			$flag=0;
 			if(isset($_POST[$up]))
 			{
@@ -364,7 +369,7 @@ function checkLength(form){
 			if(isset($_POST[$down]))
 			{
 				$tempmutlichkboxtext=$_POST['mutlichkboxtext'];
-				
+
 
 
 				if($tempradiodefault==$i)
@@ -372,7 +377,7 @@ function checkLength(form){
 				elseif($tempradiodefault==$i+1)
 					$tempradiodefault--;
 				$tempchkboxpoint=$_POST['chkboxpoint'];
-	
+
 				$tempm=	$tempmutlichkboxtext[$i];
 
 				$tempchkboxp=$tempchkboxpoint[$i];
@@ -395,18 +400,18 @@ function checkLength(form){
 			}
 			//echo ",while checking up/down end=".$end;
 			$jd=0;
-			break;		
+			break;
 		}
 	}
-	
+
 	if($flag==1)
 	{
 		if(isset($_POST['addnewrows']))
 		{
-			
-								
+
+
 				$end=count($_POST['mutlichkboxtext']);
-							
+
 				if($end<10)
 				{
 					$end=$end+$_POST['addnewrows'];
@@ -419,7 +424,7 @@ function checkLength(form){
 				  $error_message = get_lang('YouCantAddMoreThanTen')."<br>";
 				if( isset($error_message) )
                   {
-	                  Display::display_error_message($error_message);	
+	                  Display::display_error_message($error_message);
                   }
 				}
 			//echo ",while checking select end=".$end;
@@ -427,14 +432,14 @@ function checkLength(form){
 			$end=$end+$_POST['addnewrows'];*/
 		}
 	}
-	
-		
+
+
 	//echo ",after select end=".$end;
-				
-	
+
+
 	for($i=$start;$i<=$end;$i++)
 	{
-		
+
 
 		if($i==$jd)
 		/*{
@@ -447,8 +452,8 @@ function checkLength(form){
 		}
 		else
 		{
-			
-			
+
+
 
 			$k=$i-1;
 			$post_text = $_POST['mutlichkboxtext'];
@@ -456,32 +461,32 @@ function checkLength(form){
 			$post_point=$_POST['chkboxpoint'];
 			//$post_true=$_POST['radiotrue'];
 
-		
-	
-?>			
-			
-			<tr class="form_bg" id="0"  > 
-					
-					<td width="16" height="30" align="left" class="form_text"> 
+
+
+?>
+
+			<tr class="form_bg" id="0"  >
+
+					<td width="16" height="30" align="left" class="form_text">
 					  <?php echo $sn;?>
 					</td>
-					
+
 					<td class="form_bg"><textarea name="mutlichkboxtext[]" cols="50" rows="3" class="text_field" style="width:100%;"><?php echo $post_text[$k]; ?></textarea>
 					</td>
-					
+
 					<td width="10" class="form_text"><img src="../img/blank.gif" width="10" height="8">
 					</td>
-					
+
 <?php				if($i>$start)
 					{
 ?>
-					<td width="30" align="center" class="form_text1"> 
-						<input type="image" src="../img/up.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?php echo "up".$i;?>" style="cursor:hand"> 
+					<td width="30" align="center" class="form_text1">
+						<input type="image" src="../img/up.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?php echo "up".$i;?>" style="cursor:hand">
 					</td>
 <?php				}
 					else
 					{
-?>						<td width="30" align="center" class="form_text1"> 
+?>						<td width="30" align="center" class="form_text1">
 						</td>
 <?php				}
 					$sn++;
@@ -490,31 +495,31 @@ function checkLength(form){
 <?php				if($i<$end)
 					{
 ?>
-					<td width="30" align="center" class="form_text"> 
-						<input type="image" src="../img/down.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?php echo "down".$i;?>" style="cursor:hand"> 
+					<td width="30" align="center" class="form_text">
+						<input type="image" src="../img/down.gif" width="24" height="24" border="0" onclick="this.form.submit();" name="<?php echo "down".$i;?>" style="cursor:hand">
 					</td>
 <?php				}
 					else
 					{
-?>						<td width="30" align="center" class="form_text1"> 
+?>						<td width="30" align="center" class="form_text1">
 						</td>
 <?php				}
 ?>
 					<td width="30" align="center" class="form_text">
 
-					
-					
+
+
 					<input type="image" src="../img/delete.gif" width="24" height="24" border="0" style="cursor:hand" name="<?php echo "id".$i;?>" value="<?php echo $end; ?>" onclick="this.form.submit();">
-					
+
 			</tr>
-<?php	}	
+<?php	}
 	}
-	
+
 ?>
 			</table>
-											
+
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr class="white_bg"> 
+				<tr class="white_bg">
 					  <td height="30"><span class="form_text1">Add&nbsp;&nbsp;</span>
 							<select name="addnewrows" class="text_field_small" style="width:100px" onChange="this.form.submit();">
 								<option value="0" >0</option>
@@ -540,7 +545,7 @@ function checkLength(form){
 				echo '<input type="hidden" name="add_question" value="'.$_POST['add_question'].'" />';
 			}
 
-			$sql = "SELECT * FROM survey WHERE survey_id='$surveyid'";
+			$sql = "SELECT * FROM $table_survey WHERE survey_id='$surveyid'";
 			$res=api_sql_query($sql);
 			$obj=mysql_fetch_object($res);
 			switch($obj->template)
@@ -556,7 +561,7 @@ function checkLength(form){
 					break;
 				case "template4":
 					$temp = 'grey';
-					break;		
+					break;
 				case "template5":
 					$temp = 'blank';
 					break;
@@ -565,13 +570,13 @@ function checkLength(form){
 						<input type="submit"  name="back" value="<?php echo get_lang('Back'); ?>">
 						<input type="submit"  name="saveandexit" value="<?php echo get_lang('SaveAndExit'); ?>">
 						<input type="button" value="<?php echo get_lang('Preview');?>" onClick="preview('numbered','<?php echo $temp; ?>','<?php echo $Multi; ?>')">
-						<input type="submit"  name="next" value="<?php echo get_lang('Next'); ?>"> 
+						<input type="submit"  name="next" value="<?php echo get_lang('Next'); ?>">
 			</div>
 <!--this partcular field helps in identify the item to be add at the itemadd.php-->
-			
+
 </form>
 </div>
-  
+
 <div id=bottomnav align="center"></DIV>
 </body>
 </html>

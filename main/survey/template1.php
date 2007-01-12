@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -19,11 +19,11 @@
 
 /**
 *	@package dokeos.survey
-* 	@author 
-* 	@version $Id: template1.php 10584 2007-01-02 15:09:21Z pcool $
+* 	@author
+* 	@version $Id: template1.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='survey';
 
 // including the global dokeos file
@@ -40,23 +40,31 @@ require_once (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/surveymanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 
+// Database table definitions
+/** @todo use database constants for the survey tables */
+$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+$table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
+$survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
+$table_reminder 		= Database:: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+
+
 $surveyid = $_REQUEST['surveyid'];
 $uid = $_REQUEST['uid'];
 $uid1 = $_REQUEST['uid1'];
 $db_name = $_REQUEST['db_name'];
 $temp = $_REQUEST['temp'];
 $mail = $_REQUEST['mail'];
-$survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 
-$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-$sql_sname = "select * from $db_name.survey where survey_id='$surveyid'";
+
+
+$sql_sname = "SELECT * FROM $db_name.survey where survey_id='$surveyid'";
 $res_sname = api_sql_query($sql_sname,__FILE__,__LINE__);
 $obj_sname = mysql_fetch_object($res_sname);
 $surveyname = $obj_sname->title;
-$survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 
 
-$sql_check="SELECT 1 
+
+$sql_check="SELECT 1
 			FROM $survey_user_info_table as survey_user_info
 			INNER JOIN $db_name.survey as survey
 				ON survey.survey_id = survey_user_info.survey_id
@@ -78,7 +86,7 @@ if(mysql_num_rows($res_check)>0)
 if(isset($mail))
 {
 
-$table_reminder = Database:: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+
 $sql_update = "UPDATE $table_reminder SET access='1' WHERE db_name='$db_name' AND sid='$surveyid' AND email='$mail'";
 api_sql_query($sql_update);
 
@@ -97,17 +105,21 @@ if(isset($_POST['Next']))
  $organization = $_REQUEST['organization'];
  $age = $_REQUEST['age'];
  if($uid!='')
-	{$registered='Y';}
- else{$registered='N';}
- $user_table = Database :: get_main_table(TABLE_MAIN_USER);
- $survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
+{
+	$registered='Y';
+}
+ else
+ {
+ 	$registered='N';
+ }
+
  $sql="SELECT * FROM $survey_user_info_table WHERE email = '$mail'";
  $result=api_sql_query($sql);
  $obj=mysql_fetch_object($result);
  $new_mail=$obj->email;
  $user_id=$obj->user_id;
  if($new_mail!='')
- { 	
+ {
  $uid1=$user_id;
  $sql_ins = "update $survey_user_info_table set user_id='$uid1', survey_id='$surveyid', db_name='$db_name', firstname='$firstname', lastname='$lastname', organization='$organization', age='$age'  where user_id='$uid1'";
  $result=api_sql_query($sql_ins);
@@ -126,38 +138,42 @@ if(isset($_POST['Next']))
  exit;
   }
 }
-if($uid==''){
-$survey_user_info_table = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
-$sql_u="Select * from $survey_user_info_table where user_id='$uid1' or email='$mail'";
+if($uid=='')
+{
+	$sql_u="SELECT * FROM $survey_user_info_table WHERE user_id='$uid1' or email='$mail'";
 }
 else{
-	$sql_u="Select * from $user_table where user_id='$uid'";
+	$sql_u="SELECT * FROM $table_user WHERE user_id='$uid'";
 }
 $res = api_sql_query($sql_u,__FILE__,__LINE__);
 $obj=@mysql_fetch_object($res);
 $email=$obj->email;
 $user_idd=$obj->user_id;
-$rs=mysql_query("select * from $db_name.questions");
+$rs=mysql_query("SELECT * FROM $table_survey_question");
 $row=mysql_num_rows($rs);
 $page=ceil($row/4);
 
-if(isset($_GET[num])){
+if(isset($_GET[num]))
+{
 	$num=$_GET[num];
-	if($num>$page){
+	if($num>$page)
+	{
 		header("Location:test.php");
 		exit;
 	}
-}else{
+}
+else
+{
 	$num = 1;
 }
 $lower = $num*4-4;
 
 Display::display_header($tool_name);
-?><center><?api_display_tool_title($surveyname);?></center><?
+api_display_tool_title($surveyname);
 api_display_tool_title($tool_name);
 if($error_message)
 {
-Display::display_error_message($error_message);	
+	Display::display_error_message($error_message);
 }
 ?>
 <link href="../css/survey_white.css" rel="stylesheet" type="text/css">
@@ -191,7 +207,7 @@ Display::display_error_message($error_message);
               <td><input name="lastname" type="text" id="lastname"  maxlength="40" value="<?php echo mysql_result($res,0,"lastname");?>"></td>
             </tr>
             <tr>
-               <td class="text"><?if($lang=='french')echo 'Email :'; else if($lang=='dutch')echo 'Email :'; else echo 'EMail :' ;?></td>					
+               <td class="text"><?if($lang=='french')echo 'Email :'; else if($lang=='dutch')echo 'Email :'; else echo 'EMail :' ;?></td>
 			   <td  class="text"><?php echo $mail;?></td>
             </tr>
             <tr>
@@ -245,7 +261,7 @@ Display::display_error_message($error_message);
 			  <?php echo $names[$i];?>
 			  </option>
 			  <?
-			  }			  
+			  }
 			  }
 			  else
 			  {
@@ -256,7 +272,7 @@ Display::display_error_message($error_message);
 			  <option value='<?php echo $name;?>'>
 			  <?php echo $names[$i];?>
 			  </option><?
-			  }			  
+			  }
 			  }
 			  ?>
   			  </select></td>

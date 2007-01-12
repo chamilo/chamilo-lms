@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author 
-* 	@version $Id: question_list_new.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@version $Id: question_list_new.php 10705 2007-01-12 22:40:01Z pcool $
 */
 
 
@@ -55,6 +55,9 @@ if (!api_is_allowed_to_edit())
 	exit;
 }
 
+$table_group 			=  Database :: get_course_table(TABLE_SURVEY_GROUP);
+$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('Survey'));
 $tool_name = get_lang('SelectQuestion');
 $Sname = get_lang('SurveyName');
@@ -63,9 +66,7 @@ $Author = get_lang('Author');
 $surveyid=$_REQUEST['surveyid'];
 $groupid=$_REQUEST['groupid'];
 $sid = $_REQUEST['sid'];
-//$sname =surveymanager::get_surveyname($surveyid,$db_name);
-$table_group =  Database :: get_course_table(TABLE_SURVEY_GROUP);
-$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+
 $gide=$_POST['course'];
 $arraycount=0;
 $arraycount=count($_REQUEST['course']);
@@ -197,7 +198,7 @@ function displayTemplate(url) {
 		for($i=0;$i<$endloop;$i++)
 		{
 			$gidi=$gid1[$i];
-	        $sql = "SELECT * FROM $db_name.questions WHERE gid='$gidi' AND survey_id = '$sid'";
+	        $sql = "SELECT * FROM $table_survey_question WHERE gid='$gidi' AND survey_id = '$sid'";
 			$res = api_sql_query($sql,__FILE__,__LINE__);	
 			while ($obj = mysql_fetch_object($res))
 			{

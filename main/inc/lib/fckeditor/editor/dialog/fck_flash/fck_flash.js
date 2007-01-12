@@ -246,7 +246,12 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 	{
 		case 0 :	// No errors
 			//alert( 'Your file has been successfully uploaded' ) ;
-			document.getElementById("loader").style.display="none";
+			if(document.getElementById("dynamic_div")){
+				document.getElementById("dynamic_div").style.display="none";
+			}
+			else if(document.getElementById("dynamic_div_container")){
+				document.getElementById("dynamic_div_container").style.display="none";
+			}
 			break ;
 		case 1 :	// Custom error
 			alert( customMsg ) ;

@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 10215 2006-11-27 13:57:17Z pcool $
+// $Id: settings.php 10703 2007-01-12 15:53:36Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -321,7 +321,7 @@ function handle_plugins()
 					{
 						$value = '<strong>'.$value.'</strong>';
 					}
-					echo get_lang($key).': '.$value.'<br />';
+					echo get_lang(ucwords($key)).': '.$value.'<br />';
 				}
 			}
 			if (file_exists(api_get_path(SYS_PLUGIN_PATH).$testplugin.'/readme.txt'))

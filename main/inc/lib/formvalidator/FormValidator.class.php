@@ -142,12 +142,12 @@ EOT;
 		{
 			$html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML_FULLPAGE : STUDENT_HTML_FULLPAGE;
 			//First *filter* the HTML (markup, indenting, ...)
-			$this->applyFilter($name,'html_filter_teacher_fullpage');
+			//$this->applyFilter($name,'html_filter_teacher_fullpage');
 		}
 		else
 		{
 			//First *filter* the HTML (markup, indenting, ...)
-			$this->applyFilter($name,'html_filter_teacher');
+			//$this->applyFilter($name,'html_filter_teacher');
 		}
 		if($required)
 		{
@@ -159,7 +159,7 @@ EOT;
 			$el->fullPage = true;
 		}
 		//Add rule to check not-allowed HTML
-		$this->addRule($name,get_lang('SomeHTMLNotAllowed'),'html',$html_type);
+		//$this->addRule($name,get_lang('SomeHTMLNotAllowed'),'html',$html_type);
 	}
 
 	/**

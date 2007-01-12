@@ -436,10 +436,8 @@ class learnpath {
     			" . ($display_order + 1) . "
     		)";
     	
-    	//echo $sql_ins; // for debug
-    	
     	if($this->debug>2){error_log('New LP - Inserting dokeos_chapter: '.$sql_ins,0);}
-
+		echo "$sql_ins<br>";
     	$res_ins = api_sql_query($sql_ins, __FILE__, __LINE__);
     	
     	if($res_ins > 0)
@@ -5225,7 +5223,8 @@ class learnpath {
 			}
 			
 			$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
-
+			$position->addOption(get_lang("FirstPosition"),0,'style="padding-left:3px;"');
+			
 			foreach($arrHide as $key => $value){
 				$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}

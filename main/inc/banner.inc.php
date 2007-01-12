@@ -234,15 +234,8 @@ if ($_user['user_id'])
 	$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/myagenda.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
 	$navigation['myagenda']['title'] = get_lang('MyAgenda');*/
 	
-	if(api_get_setting('use_session_mode')=='true')
-	{
-		//It's now in the reporting
-		/*if(api_is_coach())
-		{
-			// Link to my students
-			$navigation['session_my_students']['url'] = api_get_path(WEB_PATH).'myStudents.php';
-			$navigation['session_my_students']['title'] = get_lang('MyStudents');
-		}*/
+	//if(api_get_setting('use_session_mode')=='true'){
+		
 		if(api_is_allowed_to_create_course())
 		{
 			// Link to my space
@@ -255,7 +248,7 @@ if ($_user['user_id'])
 			$navigation['session_my_progress']['url'] = api_get_path(WEB_PATH).'main/auth/my_progress.php';
 			$navigation['session_my_progress']['title'] = get_lang('MyProgress');
 		}
-	}
+	//}
 	if (api_is_platform_admin())
 	{
 		// Link to platform admin

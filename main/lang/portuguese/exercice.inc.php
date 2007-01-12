@@ -199,4 +199,6 @@ $MarkInserted = "Classificação inserida";
 $PleaseGiveAMark = "Atribuir classificação, por favor";
 $EditCommentsAndMarks = "Editar comentários e classificações";
 $AddComments = "Acrescentar comentários";
+$Number = "Nº";
+$Weighting = "Pontuação";
 ?>

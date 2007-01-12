@@ -199,4 +199,6 @@ $MarkInserted = "Mark inserted";
 $PleaseGiveAMark = "Please give a mark";
 $EditCommentsAndMarks = "Edit comments and marks";
 $AddComments = "Add comments";
+$Number = "N°";
+$Weighting = "Weighting";
 ?>

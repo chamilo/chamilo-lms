@@ -69,6 +69,7 @@ $langChat  = "Chat";
 $langDropbox  = "Baúl de tarefas";
 $langOnly  = "Só";
 $langRandomLanguage  = "Escoller selección nos idiomas dispoñibles";
+$langImages = "Imaxes";
 $langForumLanguage = "inglés";
 $langNewCourse = "Novo Curso";
 $langAddNewCourse = "Crear un curso novo";

@@ -14,6 +14,7 @@ $TheListIsEmpty = "A lista está valeira";
 $langCourseCreate = "Crear o sitio dun curso";
 $langTodo = "Suxestións";
 $Hide = "Agochar";
+$TrueFalse = "Verdadeiro / Falso";
 $iso639_2_code = "gl";
 $iso639_1_code = "spa";
 $charset = "iso-8859-1";

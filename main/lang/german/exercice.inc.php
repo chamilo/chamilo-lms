@@ -199,4 +199,6 @@ $MarkInserted = "Markierung wurde eingefügt";
 $PleaseGiveAMark = "Bitte eine Markierung angeben";
 $EditCommentsAndMarks = "Markierungen und Kommentare editieren";
 $AddComments = "Kommentare hinzufügen";
+$Number = "Nr";
+$Weighting = "Gewicht";
 ?>

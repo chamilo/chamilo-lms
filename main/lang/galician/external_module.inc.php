@@ -24,4 +24,5 @@ $langNoLinkName = "Introduza o nome da ligazón";
 $langEditLink = "Modificar a ligazón da páxina inicial do curso";
 $langChangePress = "Cambiar e pulsar OK";
 $langLinkChanged = "A ligazón da páxina inicial do curso cambiou. Emprega o menú de arriba para volver a páxina inicial. ";
+$LinkChanged = "Ligazón modificada";
 ?>

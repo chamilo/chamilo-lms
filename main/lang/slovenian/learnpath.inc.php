@@ -98,6 +98,7 @@ $langItemRemoved = "Element je bil odstranjen";
 $langLearnPathAdded = "Vaša uèna pot je bila uspešno ustvarjena in dodana v menu na levi strani. Sedaj lahko dodate module in korake k vaši uèni poti. Raba poglavij je opcijska.";
 $langConverting = "Pretvarjam...";
 $langPpt2lpError = "Napaka pri pretvorbi iz PowerPoint datoteke";
+$langBuild = "Zgradi/spremeni";
 $langViewModeEmbedded = "Pogled : okno";
 $langViewModeFullScreen = "Pogled : celozaslonski";
 $langShowDebug = "Prikaži razhrošèevanje";

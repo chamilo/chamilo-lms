@@ -74,4 +74,5 @@ $dropbox_lang["filingRefile"] = "Reclasificar";
 $dropbox_lang["filingSelected"] = "seleccionado";
 $dropbox_lang["filingOtherAs"] = "non seleccionado como";
 $dropbox_lang["filingName"] = "Nome";
+$ReceivedFiles = "Arquivos recibidos";
 ?>

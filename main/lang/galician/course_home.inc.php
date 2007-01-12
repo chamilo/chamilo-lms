@@ -17,4 +17,8 @@ $langCombinedCourse = "Curso combinado";
 $ToolIsNowVisible = "A ferramenta é agora visible";
 $ToolIsNowHidden = "A ferramenta é agora invisible";
 $EditLink = "Editar ligazón";
+$blog_management = "Xestión do blog";
+$course_maintenance = "Mantemento do curso";
+$visio = "Videoconferencia";
+$Authoring = "Creación de contidos";
 ?>

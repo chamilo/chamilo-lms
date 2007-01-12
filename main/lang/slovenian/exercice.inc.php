@@ -201,4 +201,6 @@ $MarkInserted = "Ocena je bila dodana";
 $PleaseGiveAMark = "Prosim, podajte oceno";
 $EditCommentsAndMarks = "Uredi komentarje in ocene";
 $AddComments = "Dodaj komentarje";
+$Number = "Št.";
+$Weighting = "Utež";
 ?>

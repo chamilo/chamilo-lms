@@ -69,6 +69,7 @@ $lang_short_help = "Para engadir un paso, fai clic na cruz; para engadir un novo
 $lang_prereq_not_complete = "Prerequisitos non completados.";
 $lang_author = "Autor";
 $lang_date = "Data";
+$langNewDocument = "Novo documento";
 $lang_prerequisites_limit = "Prerrequisitos (límite)";
 $lang_loading = "Cargando páxina, por favor, espere...";
 $lang_empty = "Este itinerario non contén ningún paso.";

@@ -118,4 +118,6 @@ $Type = "Vrsta";
 $WelcomeOogieConverter = "Dobrodošli v OOgie, pretvornik za datoteke v PowerPoint obliki <br />1. Prebrskajte za datotekami .ppt ali .odp<br />2. Prenesite jih v Oogie. Ta jih bo pretvoril v Scorm obliko uène poti.<br />3. Po prenosu imate vsakemu diapozitivu možnost dodati zvoène (avdio) komentarje, dodati besedilo oziroma vprašanja za sprotno preverjanje.";
 $ConvertToLP = "Pretvori v Uèno pot";
 $Content = "Vsebina";
+$AdvancedSettings = "Napredne nastavitve";
+$AdvancedSettings = "Napredne nastavitve";
 ?>

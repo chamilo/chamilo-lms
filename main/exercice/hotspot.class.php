@@ -69,9 +69,9 @@ class HotSpot extends Question {
 		if(!empty($file_info['tmp_name']))
 		{
 			$this->uploadPicture($file_info['tmp_name'], $file_info['name']);
+			$this->resizePicture('any',350);
 			$this->save();
-		}
-		echo '<script type="text/javascript">window.location.href="admin.php?hotspotadmin='.$this->id.'"</script>';
+		}		
 	}
 
 	function createAnswersForm ($form) {

@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 10594 2007-01-05 13:54:24Z elixir_inter $
+<?php // $Id: question_list_admin.inc.php 10691 2007-01-12 12:16:28Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -39,6 +39,7 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 	exit();
 }
 
+
 // moves a question up in the list
 if($moveUp)
 {
@@ -74,8 +75,7 @@ if($deleteQuestion)
 }
 ?>
 
-<hr size="1" noshade="noshade">
-  <a href="question_pool.php?fromExercise=<?php echo $exerciseId; ?>"><?php echo get_lang('GetExistingQuestion'); ?></a> &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;&nbsp; <!--<a href="exercice.php?<?php echo api_get_cidreq(); ?>"><?php echo get_lang('backtoTesthome'); ?></a>--><br />
+ <a href="question_pool.php?fromExercise=<?php echo $exerciseId; ?>"><?php echo get_lang('GetExistingQuestion'); ?></a> &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;&nbsp; <!--<a href="exercice.php?<?php echo api_get_cidreq(); ?>"><?php echo get_lang('backtoTesthome'); ?></a>--><br />
 <br /><?php echo get_lang('NewQu').' : ';?><a href="admin.php?newQuestion=yes&answerType=1"><?php echo get_lang('UniqueSelect'); ?></a> | <a href="admin.php?newQuestion=yes&answerType=2"><?php echo get_lang('MultipleSelect'); ?></a> | <a href="admin.php?newQuestion=yes&answerType=3"><?php echo get_lang('FillBlanks'); ?></a> | <a href="admin.php?newQuestion=yes&answerType=4"><?php echo get_lang('Matching'); ?></a> | <a href="admin.php?newQuestion=yes&answerType=5"><?php echo get_lang('freeAnswer'); ?></a> | <a href="admin.php?newQuestion=yes&answerType=6"><?php echo get_lang('Hotspot'); ?></a>
 &nbsp;&nbsp;
 <br /><br />

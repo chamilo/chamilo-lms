@@ -158,8 +158,6 @@ class FillBlanks extends Question {
         $objAnswer->createAnswer($answer,0,'',0,'');
         $objAnswer->save();
         
-        echo '<script type="text/javascript">window.location.href="admin.php"</script>';
-        
 	}
 	
 }

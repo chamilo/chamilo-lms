@@ -198,7 +198,7 @@ class UniqueAnswer extends Question {
         // sets the total weighting of the question
         $this -> updateWeighting($questionWeighting);
         $this -> save();
-        echo '<script type="text/javascript">window.location.href="admin.php"</script>';
+        
 	}
 	
 }

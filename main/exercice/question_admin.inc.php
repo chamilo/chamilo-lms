@@ -1,4 +1,4 @@
-<? // $Id: question_admin.inc.php 10597 2007-01-05 14:14:29Z elixir_inter $
+<? // $Id: question_admin.inc.php 10691 2007-01-12 12:16:28Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -108,6 +108,12 @@ if(is_object($objQuestion))
 	    
 	    // answers
 	    $objQuestion -> processAnswersCreation($form,$nb_answers);
+	    
+	    // redirect
+	    if($objQuestion -> type != HOT_SPOT)
+	    	echo '<script type="text/javascript">window.location.href="admin.php"</script>';
+	    else
+	    	echo '<script type="text/javascript">window.location.href="admin.php?hotspotadmin='.$objQuestion->id.'"</script>';
 	}
 	else 
 	{	

@@ -1,4 +1,4 @@
-<?php // $Id: exercise.class.php 10197 2006-11-26 18:45:33Z pcool $
+<?php // $Id: exercise.class.php 10691 2007-01-12 12:16:28Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -60,7 +60,6 @@ class Exercise
 		$this->type=1;
 		$this->random=0;
 		$this->active=1;
-
 		$this->questionList=array();
 	}
 
@@ -607,6 +606,66 @@ class Exercise
 
 		$sql="DELETE FROM $TBL_EXERCICES WHERE id='$id'";
 		api_sql_query($sql,__FILE__,__LINE__);
+	}
+	
+	/**
+	 * Creates the form to create / edit an exercise
+	 * @param FormValidator $form the formvalidator instance (by reference)
+	 */
+	function createForm ($form) 
+	{
+		
+		// title
+		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName').' : ');
+		
+		// fck editor
+		global $fck_attribute;
+		$fck_attribute = array();
+		$fck_attribute['Height'] = '250';
+		$fck_attribute['Width'] = '100%';
+		$fck_attribute['ToolbarSet'] = 'NewTest';
+		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription').' : ');
+		
+		// type
+		$radios = array();
+		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
+		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
+		$form -> addGroup($radios, null, get_lang('ExerciseType').' : ', '<br />');
+		
+		// submit
+		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
+		
+		// rules
+		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');
+		
+		// defaults
+		$defaults = array();
+		if($this -> id > 0)
+		{
+			$defaults['exerciseType'] = $this -> selectType();
+			$defaults['exerciseTitle'] = $this -> selectTitle();
+			$defaults['exerciseDescription'] = $this -> selectDescription();
+		}
+		$defaults['exerciseType'] = '1';
+		
+		$form -> setDefaults($defaults);
+		
+		
+	}
+	
+	
+	/**
+	 * function which process the creation of exercises
+	 * @param FormValidator $form the formvalidator instance
+	 */
+	function processCreation($form) 
+	{
+		
+		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
+		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
+		$this -> updateType($form -> getSubmitValue('exerciseType'));
+		$this -> save();
+		
 	}
 }
 

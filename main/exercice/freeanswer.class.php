@@ -80,8 +80,6 @@ class FreeAnswer extends Question {
 		
 		$this->save();
         
-        echo '<script type="text/javascript">window.location.href="admin.php"</script>';
-        
 	}
 	
 }

@@ -135,7 +135,7 @@ class Matching extends Question {
 				<table cellpadding="0" cellspacing="5">
 					<tr bgcolor="#e6e6e6">
 						<td>
-							N°
+							Nï¿½
 						</td>
 						<td>
 							'.get_lang('Answer').'
@@ -188,7 +188,7 @@ class Matching extends Question {
 				<table cellpadding="0" cellspacing="5">
 					<tr bgcolor="#e6e6e6">
 						<td>
-							N°
+							Nï¿½
 						</td>
 						<td>
 							'.get_lang('Answer').'
@@ -261,8 +261,6 @@ class Matching extends Question {
 		
 		$objAnswer->save();
 		$this->save();
-        
-        echo '<script type="text/javascript">window.location.href="admin.php"</script>';
         
 	}
 	

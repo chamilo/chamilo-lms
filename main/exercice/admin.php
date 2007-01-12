@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 10594 2007-01-05 13:54:24Z elixir_inter $
+<?php // $Id: admin.php 10691 2007-01-12 12:16:28Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -133,7 +133,6 @@ if ( empty ( $questionId ) ) {
 if ( empty ( $modifyExercise ) ) {
     $modifyExercise = $_GET['modifyExercise'];
 }
-
 
 // get from session
 $objExercise = $_SESSION['objExercise'];
@@ -437,18 +436,13 @@ if(isset($_GET['hotspotadmin']))
 {
 	include('hotspot_admin.inc.php');
 }
-
 if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin']))
 {
-	// exercise management
-	include('exercise_admin.inc.php');
-
-	if(!$modifyExercise)
-	{
-		// question list management
-		include('question_list_admin.inc.php');
-	}
+	// question list management
+	include('question_list_admin.inc.php');
+	
 }
+
 
 api_session_register('objExercise');
 api_session_register('objQuestion');

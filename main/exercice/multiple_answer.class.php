@@ -192,7 +192,6 @@ class MultipleAnswer extends Question {
         $this -> updateWeighting($questionWeighting);
         $this -> save();
         
-        echo '<script type="text/javascript">window.location.href="admin.php"</script>';
 	}
 	
 }

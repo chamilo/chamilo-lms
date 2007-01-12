@@ -315,10 +315,10 @@ if($show == 'test'){
 	{
 		//error_log('is_allowedToEdit and origin<> learnpath',0);
 		echo "<td width=\"50%\" nowrap=\"nowrap\">",
-			"<img src=\"../img/quiz.gif\" alt=\"new test\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"admin.php\">".get_lang("NewEx")."</a> | ",
+			"<img src=\"../img/quiz.gif\" alt=\"new test\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"exercise_admin.php\">".get_lang("NewEx")."</a>",
 			
 			//"<img src=\"../img/quiz_na.gif\" alt=\"new test\" valign=\"ABSMIDDLE\"><a href=\"question_pool.php\">".get_lang("QuestionPool")."</a> | ",
-			"<img src=\"../img/jqz.jpg\" alt=\"HotPotatoes\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"hotpotatoes.php\">".get_lang("ImportHotPotatoesQuiz")."</a>",
+			//" | <img src=\"../img/jqz.jpg\" alt=\"HotPotatoes\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"hotpotatoes.php\">".get_lang("ImportHotPotatoesQuiz")."</a>",
 			"</td>",
 			"<td width=\"50%\" align=\"right\">";
 	}
@@ -388,8 +388,6 @@ if($show == 'test'){
   <tr bgcolor="#e6e6e6">
     <td align="center"><?php echo get_lang("ExerciseName");?></td>
      <td align="center"><?php echo get_lang("Description");?></td>
-	 <td width="13%" align="center"><b><?php echo get_lang('Addlimits'); ?> </b><br /> 
-    (time,attempts)</td>
 	 <td align="center"><?php echo get_lang("Modify");?></td>
    
   </tr>
@@ -445,8 +443,7 @@ if($show == 'test'){
  $sqlresult =mysql_query($sqlquery);
  $rowi = mysql_result($sqlresult,0);
  echo $rowi.' Questions'; ?> </td>
- <td  width="13%" align="center"><a href="addlimits.php?exercise_id=<?php echo $exid; ?>"> <img src="../img/test_prop.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Addlimits'); ?>" /></a>&nbsp;<img src="../img/test_add_limit.gif" align="absbottom"> </td>
-      <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row[id]; ?>"> <img src="../img/edit.gif" border="0" alt="<?php echo htmlentities(get_lang('Modify')); ?>" /></a> 
+       <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row[id]; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build')); ?>" alt="<?php echo htmlentities(get_lang('Build')); ?>" /></a><a href="exercise_admin.php?modifyExercise=yes&exerciseId=<?php echo $row[id]; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>" alt="<?php echo htmlentities(get_lang('Modify')); ?>" /></a> 
     <a href="exercice.php?choice=delete&exerciseId=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('areYouSure'))); echo $row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete')); ?>" /></a> 
     <?php
 				// if active
@@ -782,7 +779,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 				$headers .= "Content-Transfer-Encoding: 7bit";
 				$headers .= 'From: '.$from_name.' <'.$from.'>' . "\r\n";
 				$headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=iso-8859-15";
-				echo 'envoi d\'un mail à '.$emailid;
+				echo 'envoi d\'un mail ï¿½ '.$emailid;
 			//mail($emailid, $subject, $mess,$headers);
 			
 								

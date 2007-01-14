@@ -5,8 +5,9 @@ $hotspot_lang_file = api_get_path(SYS_LANG_PATH);
 
 if(isset($_GET['lang']))
 {
-	if(file_exists($hotspot_lang_file . $_GET['lang'] . '/hotspot.inc.php'))
-		$hotspot_lang_file .= $_GET['lang'] . '/hotspot.inc.php';
+	$lang = str_replace('../','',urldecode($_GET['lang']));
+	if(file_exists($hotspot_lang_file . $lang . '/hotspot.inc.php'))
+		$hotspot_lang_file .= $lang . '/hotspot.inc.php';
 	else
 		$hotspot_lang_file .= 'english/hotspot.inc.php';
 }

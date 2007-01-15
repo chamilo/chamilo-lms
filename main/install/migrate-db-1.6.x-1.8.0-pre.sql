@@ -147,10 +147,15 @@ INSERT INTO course_module(name,link,image,row,column,position) VALUES ('course_m
 INSERT INTO course_module(name,link,image,row,column,position) VALUES ('survey','survey/survey_list.php','survey.gif',2,1,'courseadmin');
 
 -- xxSTATSxx
-CREATE TABLE track_e_attempt(exe_id int default NULL, user_id int NOT NULL default '0', question_id int NOT NULL default '0', answer text NOT NULL, teacher_comment text NOT NULL, marks int NOT NULL default '0', course_code varchar(40) NOT NULL default '', position int default '0');
+CREATE TABLE track_e_attempt(exe_id int default NULL, user_id int NOT NULL default 0, question_id int NOT NULL default 0, answer text NOT NULL, teacher_comment text NOT NULL, marks int NOT NULL default 0, course_code varchar(40) NOT NULL default '', position int default 0);
 CREATE TABLE track_e_course_access(course_access_id int NOT NULL auto_increment, course_code varchar(40) NOT NULL, user_id int NOT NULL, login_course_date datetime NOT NULL default '0000-00-00 00:00:00', logout_course_date datetime default NULL, counter int NOT NULL, PRIMARY KEY (course_access_id));
+ALTER TABLE track_e_access CHANGE access_cours_code access_cours_code varchar(40) NOT NULL default '';
 ALTER TABLE track_e_lastaccess CHANGE access_id access_id bigint NOT NULL auto_increment;
+ALTER TABLE track_e_lastaccess CHANGE acces_cours_code access_cours_code varchar(40) NOT NULL default '';
 ALTER TABLE track_e_lastaccess ADD access_session_id int unsigned default NULL;
+ALTER TABLE track_e_downloads CHANGE down_cours_id down_cours_id varchar(20) NOT NULL default '';
+ALTER TABLE track_e_downloads CHANGE down_doc_path down_doc_path varchar(255) NOT NULL default '';
+ALTER TABLE track_e_links CHANGE links_cours_id links_cours_id varchar(40) NOT NULL default '';
 ALTER TABLE track_e_login ADD logout_date datetime NULL default NULL;
 ALTER TABLE track_e_online ADD course varchar(40) default NULL;
 -- xxUSERxx

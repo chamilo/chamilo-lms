@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 10306 2006-12-05 13:42:14Z edwandos $
+// $Id: profile.php 10726 2007-01-15 12:56:39Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -105,6 +105,10 @@ if ($result)
 		$user_data['language'] = api_get_setting('platformLanguage');
 }
 
+$fck_attribute['Height'] = "150";
+$fck_attribute['Width'] = "450";
+$fck_attribute['ToolbarSet'] = "Profil";
+
 /*
  * Initialize the form.
  */
@@ -193,14 +197,14 @@ if (api_get_setting('extended_profile') == 'true')
 	$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
 
 	//	MY COMPETENCES
-	$form->addElement('textarea', 'competences', get_lang('MyCompetences'), array('cols' => 30, 'rows' => 2));
-
+	$form->add_html_editor('competences', get_lang('MyCompetences'), false);
+	
 	//	MY DIPLOMAS
-	$form->addElement('textarea', 'diplomas', get_lang('MyDiplomas'), array('cols' => 30, 'rows' => 2));
-
+	$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false);
+	
 	//	WHAT I AM ABLE TO TEACH
-	$form->addElement('textarea', 'teach', get_lang('MyTeach'), array('cols' => 30, 'rows' => 2));
-
+	$form->add_html_editor('teach', get_lang('MyTeach'), false);
+	
 	//	MY PRODUCTIONS
 	$form->addElement('file', 'production', get_lang('MyProductions'));
 	if ($production_list = build_production_list($_user['user_id']))

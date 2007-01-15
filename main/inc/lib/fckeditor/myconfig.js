@@ -24,6 +24,10 @@ FCKConfig.ToolbarSets["Small"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','Flash','OrderedList','UnorderedList','Table']
 ] ;
 
+FCKConfig.ToolbarSets["Profil"] = [
+	['Bold','Italic','Underline','StrikeThrough','Link','OrderedList','UnorderedList']
+] ;
+
 FCKConfig.ToolbarSets["Blog"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','OrderedList','UnorderedList','Table']
 ] ;

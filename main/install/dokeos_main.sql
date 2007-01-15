@@ -83,7 +83,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE `course` (
-  `code` varchar(40) NOT NULL default '',
+  `code` varchar(40) NOT NULL,
   `directory` varchar(40) default NULL,
   `db_name` varchar(40) default NULL,
   `course_language` varchar(20) default NULL,

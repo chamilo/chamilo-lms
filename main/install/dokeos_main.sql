@@ -205,8 +205,8 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `course_rel_class`;
 CREATE TABLE `course_rel_class` (
-  `course_code` char(40) NOT NULL default '',
-  `class_id` mediumint(8) unsigned NOT NULL default '0',
+  `course_code` char(40) NOT NULL,
+  `class_id` mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (`course_code`,`class_id`)
 );
 

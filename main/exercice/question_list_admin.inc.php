@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 10738 2007-01-15 16:53:22Z elixir_inter $
+<?php // $Id: question_list_admin.inc.php 10739 2007-01-15 16:56:47Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -74,6 +74,7 @@ if($deleteQuestion)
 	unset($objQuestionTmp);
 }
 
+echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">'.get_lang('GetExistingQuestion').'</a>';
 Question :: display_type_menu ();
 ?>
 

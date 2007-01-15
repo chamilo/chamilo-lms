@@ -61,7 +61,7 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
 $update_path=trim(stripslashes($_GET['update_path']));
 
-$updateFromVersion=array('1.5','1.5.4','1.5.5');
+$update_from_version=array('1.5','1.5.4','1.5.5');
 
 /*
 ==============================================================================
@@ -94,7 +94,7 @@ if($_POST['step2'])
 
 			$_POST['step2']=0;
 		}
-		elseif(!in_array(get_config_param('clarolineVersion'),$updateFromVersion))
+		elseif(!in_array(get_config_param('clarolineVersion'),$update_from_version))
 		{
 			$badUpdatePath=true;
 
@@ -189,9 +189,9 @@ else
 	?>
 		<h2>Step 1 of 2 &ndash; Configuration</h2>
 
-		Please enter the path where the older version of Dokeos is installed (<?php echo implode('&nbsp;|&nbsp;',$updateFromVersion); ?>). The courses will be moved from that location to the Dokeos path.
+		Please enter the path where the older version of Dokeos is installed (<?php echo implode('&nbsp;|&nbsp;',$update_from_version); ?>). The courses will be moved from that location to the Dokeos path.
 		<br /><br />
-		<b>Notice:</b> Please run this update script only if you've just updated (incompletely) Dokeos <?php echo implode('&nbsp;|&nbsp;',$updateFromVersion); ?> to Dokeos <?php echo $dokeos_version; ?>!
+		<b>Notice:</b> Please run this update script only if you've just updated (incompletely) Dokeos <?php echo implode('&nbsp;|&nbsp;',$update_from_version); ?> to Dokeos <?php echo $dokeos_version; ?>!
 		<br /><br />
 	<?php
 	if($badUpdatePath)
@@ -200,7 +200,7 @@ else
 			<br /><br />
 			<div style="background-color:white; color:red; text-align:center; font-weight:bold;">
 			Error!<br />
-			Dokeos <?php echo implode('|',$updateFromVersion); ?> has not been found in that directory.
+			Dokeos <?php echo implode('|',$update_from_version); ?> has not been found in that directory.
 			</div>
 		<?php
 	}

@@ -404,7 +404,7 @@ function get_sql_file_contents($file,$section,$print_errors=true)
 		if($print_errors) echo $error;
 		return false;
 	}
-	$filepath = getcwd().$file;
+	$filepath = getcwd().'/'.$file;
 	if(!is_file($filepath) or !is_readable($filepath))
 	{
 		$error = "File $filepath not found or not readable in get_sql_file_contents()";
@@ -412,7 +412,7 @@ function get_sql_file_contents($file,$section,$print_errors=true)
 		return false;
 	}
 	//read the file in an array
-	$file_contents = file(getcwd().$file);
+	$file_contents = file($filepath);
 	if(!is_array($file_contents) or count($file_contents)<1)
 	{
 		$error = "File $filepath looks empty in get_sql_file_contents()";
@@ -428,7 +428,7 @@ function get_sql_file_contents($file,$section,$print_errors=true)
 		{
 			//This is a comment. Check if section name, otherwise ignore
 			$result = array();
-			if(preg_match('/^-- xx([A-B]*)xx/',$line,$result))
+			if(preg_match('/^-- xx([A-Z]*)xx/',$line,$result))
 			{	//we got a section name here
 				if($result[1] == strtoupper($section))
 				{	//we have the section we are looking for, start recording 

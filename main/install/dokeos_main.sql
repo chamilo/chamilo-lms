@@ -156,8 +156,8 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `course_module`;
 CREATE TABLE `course_module` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(100) NOT NULL default '',
-  `link` varchar(255) NOT NULL default '',
+  `name` varchar(100) NOT NULL,
+  `link` varchar(255) NOT NULL,
   `image` varchar(100) default NULL,
   `row` int(10) unsigned NOT NULL default '0',
   `column` int(10) unsigned NOT NULL default '0',

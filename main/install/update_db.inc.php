@@ -49,7 +49,7 @@ require_once("install_upgrade.lib.php");
 if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 {
 	//check if the current Dokeos install is elligible for update
-	if (empty ($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile) || !in_array(get_config_param('clarolineVersion'), $updateFromVersion))
+	if (empty ($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile) || !in_array(get_config_param('clarolineVersion'), $update_from_version))
 	{
 		echo '<b>'.get_lang('Error').' !</b> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br><br>
 								'.get_lang('PleasGoBackToStep1').'.
@@ -103,26 +103,107 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	/*
 	-----------------------------------------------------------
 		Normal upgrade procedure:
-		start by updating main, statistic, scorm, user databases
+		start by updating main, statistic, user databases
 	-----------------------------------------------------------
 	*/
-	if (defined('DOKEOS_INSTALL'))
+	//if this script has been included by index.php, not update_courses.php, so
+	// that we want to change the main databases as well...
+	$only_test = true;
+	if (defined('DOKEOS_INSTALL')) 
 	{
-		/*
-		-----------------------------------------------------------
-			Update the main Dokeos database
-		-----------------------------------------------------------
-		*/
+		/**
+		 * Update the databases "pre" migration
+		 */
 		include ("../lang/english/create_course.inc.php");
 
 		if ($languageForm != 'english')
 		{
+			//languageForm has been escaped in index.php
 			include ("../lang/$languageForm/create_course.inc.php");
 		}
 
 		//TODO deal with migrate-db-1.6.x-1.8.0-pre.sql here
+		//get the main queries list (m_q_list)
+		$m_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','main');
+		if(count($m_q_list)>0)
+		{
+			//now use the $m_q_list
+			/**
+			 * We connect to the right DB first to make sure we can use the queries
+			 * without a database name
+			 */
+			mysql_select_db($dbNameForm);
+			foreach($m_q_list as $query){
+				if($only_test){
+					echo "mysql_query($dbNameForm,$query)<br/>";
+				}else{
+					$res = mysql_query($query);
+				}
+			}
+		}
+		//manual updates in here
+		//update all users with auth_source 'claroline' to auth_source 'platform'
+		//$sql_upd = "UPDATE user SET auth_source='platform' WHERE auth_source='claroline'";
+		//$res_upd = mysql_query($sql_upd);
+		//update all registration_date, expiration_date and active fields
+		//$sql_upd = "UPDATE user SET registration_date=NOW()";
+		//$res_upd = mysql_query($sql_upd);
+		//update all sys_announcement.visible_* fields to become tinyint
+		//$sql_upd = "UPDATE sys_announcement SET visible_teacher = 0 WHERE visible_teacher_temp='false'";    
+		//$res_upd = mysql_query($sql_upd);
+		//$sql_upd = "UPDATE sys_announcement SET visible_teacher = 1 WHERE visible_teacher_temp='true'";    
+		//$res_upd = mysql_query($sql_upd);
+		//$sql_upd = "UPDATE sys_announcement SET visible_student = 0 WHERE visible_student_temp='false'";    
+		//$res_upd = mysql_query($sql_upd);
+		//$sql_upd = "UPDATE sys_announcement SET visible_student = 1 WHERE visible_student_temp='true'";    
+		//$res_upd = mysql_query($sql_upd);
+		//$sql_upd = "UPDATE sys_announcement SET visible_guest = 0 WHERE visible_guest_temp='false'";    
+		//$res_upd = mysql_query($sql_upd);
+		//$sql_upd = "UPDATE sys_announcement SET visible_guest = 1 WHERE visible_guest_temp='true'";    
+		//$res_upd = mysql_query($sql_upd);
+		//end of manual updates
 		
+		//get the stats queries list (s_q_list)
+		$s_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
+		if(count($s_q_list)>0)
+		{
+			//now use the $s_q_list
+			/**
+			 * We connect to the right DB first to make sure we can use the queries
+			 * without a database name
+			 */
+			mysql_select_db($dbStatsForm);
+			foreach($s_q_list as $query){
+				if($only_test){
+					echo "mysql_query($dbStatsForm,$query)<br/>";
+				}else{
+					$res = mysql_query($query);
+				}
+			}
+		}
+		//get the user queries list (u_q_list)
+		$u_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','user');
+		if(count($u_q_list)>0)
+		{
+			//now use the $u_q_list
+			/**
+			 * We connect to the right DB first to make sure we can use the queries
+			 * without a database name
+			 */
+			mysql_select_db($dbUserForm);
+			foreach($u_q_list as $query){
+				if($only_test){
+					echo "mysql_query($dbUserForm,$query)<br/>";
+				}else{
+					$res = mysql_query($query);
+				}
+			}
+		}
+		//the SCORM database doesn't need a change in the pre-migrate part - ignore
+
+		die();
 		//TODO only update this table
+		/*
 		$language_table = "`$dbNameForm`.`language`";
 		fill_language_table($language_table);
 		
@@ -154,7 +235,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		//								('".TOOL_RECYCLE_COURSE."', 'coursecopy/recycle_course.php' , 'recycle.gif', 2, 3, 'courseadmin')");
 		//...
 		//mysql_query("UPDATE `$dbNameForm`.`course_module` SET name='".TOOL_LEARNPATH."' WHERE link LIKE 'scorm/%'");
-		
+		*/
+	}
 
 	/*
 	-----------------------------------------------------------
@@ -168,6 +250,46 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		MAX_COURSE_TRANSFER courses are upgraded.
 	-----------------------------------------------------------
 	*/
+
+	//get the courses databases queries list (c_q_list)
+	$c_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','course');
+	if(count($c_q_list)>0)
+	{
+		//get the courses list
+		mysql_select_db($dbNameForm);
+		$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+		if($res===false){die('Error while querying the courses list in update_db.inc.php');}
+		if(mysql_num_rows($res)>0)
+		{
+			while($row = mysql_fetch_array($res))
+			{
+				$list[] = $row;
+			}
+			foreach($list as $row)
+			{
+				//now use the $c_q_list
+				/**
+				 * We connect to the right DB first to make sure we can use the queries
+				 * without a database name
+				 */
+				mysql_select_db($row['db_name']);
+				foreach($c_q_list as $query)
+				{
+					if($only_test)
+					{
+						echo "mysql_query(".$row['db_name'].",$query)<br/>";
+					}else{
+						$res = mysql_query($query);
+					}
+				}
+			}
+		}
+	}
+
+
+
+
+
 	$newPath = str_replace('\\', '/', realpath('../..')).'/';
 
 	$coursePath = array ();
@@ -515,7 +637,4 @@ function get_forumcategory_id_by_name($forum_category_name)
 	//echo $row['cat_id'];
 	return $row['cat_id'];
 }
-
-
-
 ?>

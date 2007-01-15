@@ -12,12 +12,22 @@
 --
 -- This first part is for the main database
 -- xxMAINxx
-ALTER TABLE admin 		CHANGE user_id 	user_id 	int unsigned NOT NULL default '0';
-ALTER TABLE class_user 	CHANGE class_id class_id 	mediumint unsigned NOT NULL default '0';
-ALTER TABLE class_user 	CHANGE user_id 	user_id 	int unsigned NOT NULL default '0';
+ALTER TABLE admin 		CHANGE user_id 	user_id 	int unsigned NOT NULL default 0;
+
+ALTER TABLE class_user 	CHANGE class_id class_id 	mediumint unsigned NOT NULL default 0;
+ALTER TABLE class_user 	CHANGE user_id 	user_id 	int unsigned NOT NULL default 0;
+
 ALTER TABLE course 		ADD registration_code		varchar(255) NOT NULL default '';
-ALTER TABLE course_rel_class CHANGE class_id class_id mediumint unsigned NOT NULL default '0';
-ALTER TABLE course_rel_user CHANGE user_id user_id int unsigned NOT NULL default '0';
+
+ALTER TABLE course_rel_user CHANGE user_id user_id int unsigned NOT NULL default 0;
+ALTER TABLE course_rel_user CHANGE sort sort int default NULL;
+
+ALTER TABLE user CHANGE auth_source auth_source varchar(50) default 'platform';
+ALTER TABLE user ADD language varchar(40) default NULL;
+ALTER TABLE user ADD registration_date datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE user ADD expiration_date datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE user ADD active enum('0','1') NOT NULL default '1';
+
 -- Rename table session into php_session
 RENAME TABLE session TO php_session;
 ALTER TABLE php_session DROP PRIMARY KEY;
@@ -27,28 +37,36 @@ ALTER TABLE php_session CHANGE sess_time session_time int NOT NULL default '0';
 ALTER TABLE php_session CHANGE sess_start session_start int NOT NULL default '0';
 ALTER TABLE php_session CHANGE sess_value session_value text NOT NULL;
 ALTER TABLE php_session ADD PRIMARY KEY (session_id);
+
 -- We might want to review the following table structure --
 CREATE TABLE session (id smallint unsigned NOT NULL auto_increment, id_coach int unsigned NOT NULL default '0', name char(50) NOT NULL default '', nbr_courses smallint unsigned NOT NULL default '0', nbr_users mediumint unsigned NOT NULL default '0', nbr_classes mediumint unsigned NOT NULL default '0', date_start date NOT NULL default '0000-00-00', date_end date NOT NULL default '0000-00-00', PRIMARY KEY  (id),  UNIQUE KEY name (name));
+
 -- We might want to review the following table structure --
 CREATE TABLE session_rel_course(id_session smallint unsigned NOT NULL default '0', course_code char(40) NOT NULL default '', id_coach int unsigned NOT NULL default '0', nbr_users smallint(5) unsigned NOT NULL default '0', PRIMARY KEY  (id_session,course_code), KEY course_code (course_code));
+
 -- We might want to review the following table structure --
 CREATE TABLE session_rel_course_rel_user(id_session smallint unsigned NOT NULL default '0', course_code char(40) NOT NULL default '', id_user int unsigned NOT NULL default '0', PRIMARY KEY  (id_session,course_code,id_user), KEY id_user (id_user), KEY course_code (course_code));
+
 -- We might want to review the following table structure --
 CREATE TABLE session_rel_user(id_session mediumint unsigned NOT NULL default '0', id_user mediumint unsigned NOT NULL default '0', PRIMARY KEY  (id_session,id_user));
+
 -- We might want to review the following table structure --
 CREATE TABLE course_rel_survey (id int NOT NULL auto_increment, course_code varchar(200) default NULL, db_name varchar(200) default NULL,  survey_id varchar(200) default NULL,  PRIMARY KEY  (id));
+
 -- We might want to review the following table structure --
 CREATE TABLE survey_reminder(sid int NOT NULL default '0', db_name varchar(100) NOT NULL default '', email varchar(100) NOT NULL default '', access int NOT NULL default '0', subject text NOT NULL, content text NOT NULL, reminder_choice int NOT NULL default '0', reminder_time text NOT NULL, avail_till date NOT NULL default '0000-00-00');
+
 -- We might want to review the following table structure --
 CREATE TABLE survey_user_info(id int NOT NULL auto_increment, user_id int NOT NULL default '0', survey_id int NOT NULL default '0', db_name varchar(200) default NULL, firstname varchar(200) default NULL, lastname varchar(200) default NULL, email varchar(200) default NULL, organization  text, age int default NULL, registered char(1) default NULL, attempted varchar(10) NOT NULL default '', PRIMARY KEY (id));
--- ALTER TABLE sys_announcement CHANGE visible_student visible_student enum('0','1') NOT NULL default '0';
--- ALTER TABLE sys_announcement CHANGE visible_guest visible_guest enum('0','1') NOT NULL default '0';
+
+ALTER TABLE sys_announcement CHANGE visible_teacher visible_teacher_temp enum('true','false') NOT NULL DEFAULT 'false';
+ALTER TABLE sys_announcement CHANGE visible_student visible_student_temp enum('true','false') NOT NULL DEFAULT 'false';
+ALTER TABLE sys_announcement CHANGE visible_guest visible_guest_temp enum('true','false') NOT NULL DEFAULT 'false';
+ALTER TABLE sys_announcement ADD COLUMN visible_teacher tinyint NOT NULL DEFAULT 0;
+ALTER TABLE sys_announcement ADD COLUMN visible_student tinyint NOT NULL DEFAULT 0;
+ALTER TABLE sys_announcement ADD COLUMN visible_guest tinyint NOT NULL DEFAULT 0;
 ALTER TABLE sys_announcement ADD lang varchar(70) NULL;
-ALTER TABLE user CHANGE auth_source auth_source varchar(50) default 'platform';
-ALTER TABLE user ADD language varchar(40) default NULL;
-ALTER TABLE user ADD registration_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE user ADD expiration_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE user ADD active enum('0','1') NOT NULL default '1';
+
 -- xxSTATSxx
 CREATE TABLE track_e_attempt(exe_id int default NULL, user_id int NOT NULL default '0', question_id int NOT NULL default '0', answer text NOT NULL, teacher_comment text NOT NULL, marks int NOT NULL default '0', course_code varchar(40) NOT NULL default '', position int default '0');
 CREATE TABLE track_e_course_access(course_access_id int NOT NULL auto_increment, course_code varchar(40) NOT NULL, user_id int NOT NULL, login_course_date datetime NOT NULL default '0000-00-00 00:00:00', logout_course_date datetime default NULL, counter int NOT NULL, PRIMARY KEY (course_access_id));

@@ -13,6 +13,11 @@
 -- This first part is for the main database
 -- xxMAINxx
 
+ALTER TABLE sys_announcement DROP COLUMN visible_teacher_temp;
+ALTER TABLE sys_announcement DROP COLUMN visible_student_temp;
+ALTER TABLE sys_announcement DROP COLUMN visible_guest_temp;
+
+
 -- xxSTATSxx
 
 -- xxUSERxx

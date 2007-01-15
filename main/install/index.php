@@ -52,9 +52,10 @@ require('../inc/lib/main_api.lib.php');
 require('../lang/english/trad4all.inc.php');
 require('../lang/english/install.inc.php');
 
-if ( isset($_POST['language_list']) && $_POST['language_list'] )
+if (!empty($_POST['language_list']))
 {
-	$install_language = $_POST['language_list'];
+	$search = array('../','\\0');
+	$install_language = str_replace($search,'',urldecode($_POST['language_list']));
 	include_once("../lang/$install_language/trad4all.inc.php");
 	include_once("../lang/$install_language/install.inc.php");
 	api_session_register('install_language');
@@ -240,23 +241,23 @@ if (!$_POST)
 {
 	$current_step=1;
 }
-elseif ($_POST['language_list'] or $_POST['step1'] or ($_POST['step2_update'] && ($emptyUpdatePath or $badUpdatePath)))
+elseif (!empty($_POST['language_list']) or !empty($_POST['step1']) or (!empty($_POST['step2_update']) && ($emptyUpdatePath or $badUpdatePath)))
 {
 	$current_step=2;
 }
-elseif ($_POST['step2'] or $_POST['step2_update'])
+elseif (!empty($_POST['step2']) or !empty($_POST['step2_update']))
 {
 	$current_step=3;
 }
-elseif ($_POST['step3'])
+elseif (!empty($_POST['step3']))
 {
 	$current_step=4;
 }
-elseif ($_POST['step4'])
+elseif (!empty($_POST['step4']))
 {
 	$current_step=5;
 }
-elseif ($_POST['step5'])
+elseif (!empty($_POST['step5']))
 {
 	$current_step=6;
 }

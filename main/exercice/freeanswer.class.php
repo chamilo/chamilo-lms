@@ -44,6 +44,9 @@ if(!class_exists('FreeAnswer')):
  
 class FreeAnswer extends Question {
 	
+	static $typePicture = 'open_answer.png';
+	static $explanationLangVar = 'freeAnswer';
+	
 	/**
 	 * Constructor
 	 */

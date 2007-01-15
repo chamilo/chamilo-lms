@@ -43,6 +43,10 @@ if(!class_exists('HotSpot')):
  **/
 
 class HotSpot extends Question {
+	
+	static $typePicture = 'hotspot.png';
+	static $explanationLangVar = 'Hotspot';
+	
 
 	function HotSpot(){
 		parent::question();

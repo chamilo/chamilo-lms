@@ -434,7 +434,10 @@ if($show == 'test'){
       <td width="30" align="left"><img src="../img/test.gif"></td>
       <td width="15" valign="left" align="center"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
       <?php $row['title']=api_parse_tex($row['title']); ?>
-      <td><a href="exercice_submit.php?<?php echo api_get_cidreq()."&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id"; ?>&exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a></td>
+      <td>
+      	<a href="exercice_submit.php?<?php echo api_get_cidreq()."&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id"; ?>&exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a>
+      	<a href="exercise_admin.php?modifyExercise=yes&exerciseId=<?php echo $row[id]; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>" alt="<?php echo htmlentities(get_lang('Modify')); ?>" /></a>
+      </td>
     </tr>
   </table></td>
  <td width="8%" align="center"> <?php 
@@ -443,7 +446,7 @@ if($show == 'test'){
  $sqlresult =mysql_query($sqlquery);
  $rowi = mysql_result($sqlresult,0);
  echo $rowi.' Questions'; ?> </td>
-       <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row[id]; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build')); ?>" alt="<?php echo htmlentities(get_lang('Build')); ?>" /></a><a href="exercise_admin.php?modifyExercise=yes&exerciseId=<?php echo $row[id]; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>" alt="<?php echo htmlentities(get_lang('Modify')); ?>" /></a> 
+       <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row[id]; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build')); ?>" alt="<?php echo htmlentities(get_lang('Build')); ?>" /></a> 
     <a href="exercice.php?choice=delete&exerciseId=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('areYouSure'))); echo $row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete')); ?>" /></a> 
     <?php
 				// if active

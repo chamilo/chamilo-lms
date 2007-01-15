@@ -44,6 +44,9 @@ if(!class_exists('UniqueAnswer')):
  
 class UniqueAnswer extends Question {
 	
+	static $typePicture = 'mcua.png';
+	static $explanationLangVar = 'UniqueSelect';
+	
 	/**
 	 * Constructor
 	 */

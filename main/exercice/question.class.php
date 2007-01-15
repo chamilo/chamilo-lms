@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 10672 2007-01-11 10:40:16Z elixir_inter $
+<?php // $Id: question.class.php 10738 2007-01-15 16:53:22Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -60,11 +60,13 @@ abstract class Question
 	var $weighting;
 	var $position;
 	var $type;
+	
 	var $picture;
 
 	var $exerciseList;  // array with the list of exercises which this question is in
 	
-	// list
+	static $typePicture = 'new_question.png';
+	static $explanationLangVar = '';
 	static $questionTypes = array(
 							UNIQUE_ANSWER => array('unique_answer.class.php' , 'UniqueAnswer'),
 							MULTIPLE_ANSWER => array('multiple_answer.class.php' , 'MultipleAnswer'),
@@ -73,7 +75,7 @@ abstract class Question
 							FREE_ANSWER => array('freeanswer.class.php' , 'FreeAnswer'),
 							HOT_SPOT => array('hotspot.class.php' , 'HotSpot')
 							);
-
+	
 	/**
 	 * constructor of the class
 	 *
@@ -789,6 +791,42 @@ abstract class Question
 	 * @param the formvalidator instance 
 	 */
 	abstract function processAnswersCreation ($form);
+	
+	
+	/**
+	 * Displays the menu of question types
+	 */
+	static function display_type_menu ()
+	{
+		?>
+		<script type="text/javascript">
+			function explain(explanation){
+				document.getElementById('answer_type_explanation').innerHTML = explanation;
+			}
+			function hideExplanation(){
+				document.getElementById('answer_type_explanation').innerHTML = '<?php echo get_lang('ChooseQuestionType') ?>';
+			}
+		</script>
+		<?php
+		echo '<div onmouseout="hideExplanation()">';
+		foreach(self::$questionTypes as $i=>$a_type)
+		{
+			include_once($a_type[0]);
+			eval('$img = '.$a_type[1].'::$typePicture;');
+			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
+			
+			echo '
+			<div id="answer_type_'.$i.'" style="display: inline">
+				<a href="admin.php?newQuestion=yes&answerType=1" onmouseover="explain(\''.$explanation.'\')"><img src="'.api_get_path(WEB_IMG_PATH).'/'.$img.'" /></a>
+			</div>';
+		}
+		echo '
+		<div id="answer_type_explanation" class="accordion_content" style="display:block">'.get_lang('ChooseQuestionType').' :</div></div>';
+		
+		
+		
+		
+	}
 }
 
 endif;

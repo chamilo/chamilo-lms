@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 10691 2007-01-12 12:16:28Z elixir_inter $
+<?php // $Id: question_list_admin.inc.php 10738 2007-01-15 16:53:22Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -73,19 +73,11 @@ if($deleteQuestion)
 	// destruction of the Question object
 	unset($objQuestionTmp);
 }
+
+Question :: display_type_menu ();
 ?>
 
- <a href="question_pool.php?fromExercise=<?php echo $exerciseId; ?>"><?php echo get_lang('GetExistingQuestion'); ?></a> &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;&nbsp; <!--<a href="exercice.php?<?php echo api_get_cidreq(); ?>"><?php echo get_lang('backtoTesthome'); ?></a>--><br />
-<br /><?php echo get_lang('NewQu').' : ';?><a href="admin.php?newQuestion=yes&answerType=1"><?php echo get_lang('UniqueSelect'); ?></a> | <a href="admin.php?newQuestion=yes&answerType=2"><?php echo get_lang('MultipleSelect'); ?></a> | <a href="admin.php?newQuestion=yes&answerType=3"><?php echo get_lang('FillBlanks'); ?></a> | <a href="admin.php?newQuestion=yes&answerType=4"><?php echo get_lang('Matching'); ?></a> | <a href="admin.php?newQuestion=yes&answerType=5"><?php echo get_lang('freeAnswer'); ?></a> | <a href="admin.php?newQuestion=yes&answerType=6"><?php echo get_lang('Hotspot'); ?></a>
-&nbsp;&nbsp;
-<br /><br />
 
-
-<!--<form method="get" action="exercice.php" style="margin:10px; margin-left:0px;">
-<input type="submit" value="<?php //echo htmlentities(get_lang('FinishTest')); ?>">
-</form>-->
-
-<?php //echo get_lang('QuestionList'); ?>
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
 <tr  bgcolor='#e6e6e6'><td width="20%" align="center"><b><?php echo get_lang('Question'); ?></b></td>
 <td width="20%" align="center"><b><?php echo get_lang('Type');?></b></td>

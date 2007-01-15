@@ -1275,6 +1275,16 @@ function fill_course_repository($courseRepository)
 
 		fputs($fp, $enreg);
 	}
+	
+	$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
+	$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/';
+	
+	$handle = opendir($img_code_path);
+	
+	while (false !== ($file = readdir($handle))) {
+        copy($img_code_path.$file,$course_documents_folder.$file);
+        chmod($course_documents_folder.$file,"0777");
+   	}
 
 	fclose($fp);
 	return 0;
@@ -1481,7 +1491,23 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/video','".get_lang('Video')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
-
+		
+		//FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
+		$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
+		$sys_course_path = api_get_path(SYS_COURSE_PATH);
+		
+		$handle = opendir($img_code_path);
+		while (false !== ($file = readdir($handle))) {
+			if($file!="." && $file!=".."){
+				$file_size=filesize($img_code_path.$file);
+				$file=lang2db($file);
+				api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images/','$file','file','$file_size')");
+				$image_id = Database :: get_last_insert_id();
+				api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
+			}
+	   	}
+		
+		
 		/*
 		-----------------------------------------------------------
 			Agenda tool

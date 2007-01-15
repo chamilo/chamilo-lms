@@ -479,6 +479,7 @@ function event_exercice($exo_id, $score, $weighting)
 			   '".$weighting."',
 			   FROM_UNIXTIME(".$reallyNow.")
 			  )";
+	/* SEE WHAT WE DO WITH THAT
 	$tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
 	if ($origin == 'learnpath')
 	{
@@ -489,6 +490,7 @@ function event_exercice($exo_id, $score, $weighting)
 		$sql2 = "update $tbl_learnpath_user set score='$score' where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
 		$res2 = api_sql_query($sql2,__FILE__,__LINE__);
 	}
+	*/
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	//$mysql_query($sql);
 	//return 0;
@@ -539,6 +541,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 			   '".$j."'
 			  
 			   			    )";
+	/* SEE WHAT WE DO WITH THAT
 	$tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
 	if ($origin == 'learnpath')
 	{
@@ -549,6 +552,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		$sql2 = "update $tbl_learnpath_user set score='$score' where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
 		$res2 = api_sql_query($sql2,__FILE__,__LINE__);
 	}
+	*/
 	//$res = api_sql_query($sql,__FILE__,__LINE__);
 	$res = mysql_query($sql) or die(mysql_error());
 	//return 0;

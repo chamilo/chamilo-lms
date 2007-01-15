@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10621 2007-01-09 08:50:29Z elixir_inter $
+<?php // $Id: exercise_result.php 10719 2007-01-15 08:56:03Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -152,7 +152,35 @@ if ($origin != 'learnpath')
 }
 else
 {
-	?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css"> <?php
+	
+	if(empty($charset))
+	{
+		$charset = 'ISO-8859-15';
+	}
+	header('Content-Type: text/html; charset='. $charset);	
+	
+	@$document_language = Database::get_language_isocode($language_interface);
+	if(empty($document_language))
+	{
+	  //if there was no valid iso-code, use the english one
+	  $document_language = 'en';
+	}
+	
+	/*
+	 * HTML HEADER
+	 */
+
+?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $document_language; ?>" lang="<?php echo $document_language; ?>">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+</head>
+
+<body>
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/frames.css" />
 }
 
 

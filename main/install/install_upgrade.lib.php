@@ -254,6 +254,27 @@ function load_main_database($installation_settings)
 }
 
 /**
+* Creates the structure of the stats database
+* @param	string	Name of the file containing the SQL script inside the install directory
+*/
+function load_database_script($db_script)
+{
+	$dokeos_sql_file_string = file_get_contents($db_script);
+	
+	//split in array of sql strings
+	$sql_instructions = array();
+	$success = split_sql_file($sql_instructions, $dokeos_sql_file_string);
+	
+	//execute the sql instructions
+	$count = count($sql_instructions);
+	for ($i = 0; $i < $count; $i++)
+	{
+		$this_sql_query = $sql_instructions[$i]['query'];
+		mysql_query($this_sql_query);
+	}
+}
+
+/**
  * Function copied and adapted from phpMyAdmin 2.6.0 PMA_splitSqlFile (also GNU GPL)
  * 
  * Removes comment lines and splits up large sql files into individual queries

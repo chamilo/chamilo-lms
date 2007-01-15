@@ -16,6 +16,7 @@
 ALTER TABLE sys_announcement DROP COLUMN visible_teacher_temp;
 ALTER TABLE sys_announcement DROP COLUMN visible_student_temp;
 ALTER TABLE sys_announcement DROP COLUMN visible_guest_temp;
+-- DELETE FROM settings_options WHERE variable='showonline';
 
 
 -- xxSTATSxx

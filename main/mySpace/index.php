@@ -313,7 +313,7 @@ if(api_is_platform_admin())
 	 </div>';
 }
  
-if(api_is_platform_admin() || $is_allowedCreateCourse)
+if((api_is_platform_admin() || $is_allowedCreateCourse) && api_get_setting('use_session_mode')=='true')
 {
 	 echo '<div class="admin_section">
 		<h4>
@@ -339,11 +339,18 @@ if(api_is_platform_admin() || $is_allowedCreateCourse)
 		<?php echo "<a href='cours.php'><img src='".api_get_path(WEB_IMG_PATH)."courses.gif'>&nbsp;".get_lang('Course').' ('.$nbCours.')'."</a>"; ?>
 	</h4>
  </div>
+ 
+ <?php
+ if(api_get_setting('use_session_mode')=='true'){
+ ?>
  <div class="admin_section">
 	<h4>
 		<?php echo "<a href='session.php'><img src='".api_get_path(WEB_IMG_PATH)."sessions.gif'>&nbsp;".get_lang('Sessions').' ('.$nbSessions.')'."</a>"; ?>
 	</h4>
  </div>
+ <?php
+ }
+ ?>
 
  <div class="admin_section">
 	<h4>

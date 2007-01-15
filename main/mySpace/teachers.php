@@ -6,7 +6,7 @@
  
 ob_start(); 
 
-// name of the language file that needs to be included 
+// names of the language file that needs to be included 
 $language_file = array ('registration', 'index','trad4all', 'tracking', 'admin');
 $cidReset=true;
 require ('../inc/global.inc.php');
@@ -83,17 +83,21 @@ function exportCsv($a_header,$a_data)
  */
 
 
-/*
- * liste nominative avec coordonnées et lien vers les cours et
-les stagiaires dont il est le
-responsable. 
-*/
-
-$sqlFormateurs = "	SELECT user_id,lastname,firstname,email
-					FROM $tbl_user
-					WHERE status = 1
-					ORDER BY lastname ASC
-				  ";
+if(isset($_GET["teacher_id"]) && $_GET["teacher_id"]!=0){
+	$i_teacher_id=$_GET["teacher_id"];
+	$sqlFormateurs = "	SELECT user_id,lastname,firstname,email
+						FROM $tbl_user
+						WHERE user_id='$i_teacher_id' 
+						ORDER BY lastname ASC
+					  ";
+}
+else{
+	$sqlFormateurs = "	SELECT user_id,lastname,firstname,email
+						FROM $tbl_user
+						WHERE status = 1
+						ORDER BY lastname ASC
+					  ";
+}
 
 $resultFormateurs = api_sql_query($sqlFormateurs);
 

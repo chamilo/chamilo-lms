@@ -12,13 +12,13 @@ $language_file = array ('registration', 'index','trad4all', 'tracking');
  
  $nameTools=get_lang("MyStudents");
  
+ $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+ 
  if(isset($_GET["user_id"]) && $_GET["user_id"]!="" && !isset($_GET["type"])){
- 	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
  	$interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
  }
  
  if(isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"]=="coach"){
- 	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
  	$interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
  }
  
@@ -205,7 +205,9 @@ if(!empty($_GET['student']))
 					;
 	$resultInfosUser = api_sql_query($sqlInfosUser);
 	$a_infosUser = mysql_fetch_array($resultInfosUser);
-
+	
+	if(api_get_setting('use_session_mode')=='true'){
+		//REFAIRE LA REQUETE AFIN QU'ELLE MARCHE EN MODE NO-SESSION
 	$sqlCours = " 	SELECT DISTINCT course.title,
 									course.code,
 									course.db_name,
@@ -220,6 +222,22 @@ if(!empty($_GET['student']))
 					AND sessionCourse.id_coach = user.user_id
 					ORDER BY course.title ASC
 				";
+	}
+	else{
+		$sqlCours = " 	SELECT DISTINCT course.title,
+									course.code,
+									course.db_name,
+									CONCAT(user.firstname,' ',user.lastname) as tutor_name,
+									sessionCourse.id_coach
+					FROM $tbl_user as user,$tbl_course AS course
+					INNER JOIN $tbl_session_course_user AS course_user
+						ON course_user.course_code = course.code
+					INNER JOIN $tbl_session_course as sessionCourse
+							ON sessionCourse.course_code = course.code
+					WHERE course_user.id_user = ".$_GET['student']."
+					AND sessionCourse.id_coach = user.user_id
+					ORDER BY course.title ASC";
+	}
 		$resultCours = api_sql_query($sqlCours);
 		
 ?>

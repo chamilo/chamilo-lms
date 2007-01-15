@@ -290,6 +290,26 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 		}
 	}
 	
+	elseif(api_is_platform_admin() && isset($_GET["user_id"])){
+		
+		$sqlStudent = "	SELECT user_id,lastname,firstname,email
+						FROM $tbl_user
+						WHERE user_id='".$_GET["user_id"]."'
+						ORDER BY lastname ASC
+					  ";
+
+		$resultStudent = api_sql_query($sqlStudent);
+		
+		$a_current_student[]=mysql_result($resultStudent,0,"user_id");
+		$a_current_student[]=mysql_result($resultStudent,0,"lastname");
+		$a_current_student[]=mysql_result($resultStudent,0,"firstname");
+		$a_current_student[]=mysql_result($resultStudent,0,"email");
+		
+		$a_students[$_GET["user_id"]]=$a_current_student;
+		$a_students[$_GET["user_id"]]["teacher"]=true;
+
+	}
+	
 	else{
 
 		if(isset($_GET["user_id"])){
@@ -423,9 +443,11 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 			
 			
 			if($a_current_student["teacher"]==true){
-							
-				echo '<td align="center"><a href="coaches.php?id_student='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'coachs.gif" alt="'.get_lang("StudentTutors").'" title="'.get_lang("StudentTutors").'"></a>&nbsp;<a href="cours.php?type=student&user_id='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'course.gif" alt="'.get_lang("StudentCourses").'" title="'.get_lang("StudentCourses").'"></a>&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_current_student[0].'#sessionSuivie"><img src="'.api_get_path(WEB_IMG_PATH).'agenda.gif" alt="'.get_lang("StudentSessions").'" title="'.get_lang("StudentSessions").'"></a>';
-				
+				echo '<td align="center">';
+				if(api_get_setting('use_session_mode')=='true'){
+					echo '<a href="coaches.php?id_student='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'coachs.gif" alt="'.get_lang("StudentTutors").'" title="'.get_lang("StudentTutors").'"></a>&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_current_student[0].'#sessionSuivie"><img src="'.api_get_path(WEB_IMG_PATH).'agenda.gif" alt="'.get_lang("StudentSessions").'" title="'.get_lang("StudentSessions").'"></a>&nbsp;';
+				}		
+				echo '<a href="cours.php?type=student&user_id='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'course.gif" alt="'.get_lang("StudentCourses").'" title="'.get_lang("StudentCourses").'"></a>';				
 			}
 			else{
 				echo '<td></td>';

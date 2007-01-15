@@ -62,13 +62,14 @@ $objExercise = new Exercise();
 /*********************
  * INIT FORM
  *********************/
-$form = new FormValidator('exercise_admin');
 if(isset($_GET['exerciseId']))
 {
+	$form = new FormValidator('exercise_admin', 'post', $_SERVER['PHP_SELF'].'?exerciseId='.$_GET['exerciseId']);
 	$objExercise -> read (intval($_GET['exerciseId']));
 	$form -> addElement ('hidden','edit','true');
 }else
 {
+	$form = new FormValidator('exercise_admin');
 	$form -> addElement ('hidden','edit','false');
 }
 $objExercise -> createForm ($form);

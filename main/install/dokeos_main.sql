@@ -226,7 +226,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `course_rel_user`;
 CREATE TABLE `course_rel_user` (
-  `course_code` varchar(40) NOT NULL default '',
+  `course_code` varchar(40) NOT NULL,
   `user_id` int(10) unsigned NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '5',
   `role` varchar(60) default NULL,

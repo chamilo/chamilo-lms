@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10719 2007-01-15 08:56:03Z elixir_inter $
+<?php // $Id: exercise_result.php 10720 2007-01-15 08:59:26Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -181,6 +181,7 @@ else
 
 <body>
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/frames.css" />
+<?php
 }
 
 

@@ -300,9 +300,9 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	if ($view_dropbox_category_received<>0)
 	{
 		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong><br />';
-		echo '<img src="../img/parent.gif" alt="'.get_lang('up').'" /><a href="'.$_SERVER['PHP_SELF'].'?view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
+		echo '<img src="../img/parent.gif" alt="'.get_lang('up').'" align="absmiddle" /><a href="'.$_SERVER['PHP_SELF'].'?view_received_category=0&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
 	}
-	echo "<a href=\"".$_SERVER['PHP_SELF']."?action=addreceivedcategory\"><img src=\"../img/new_folder.gif\" alt=\"".get_lang('NewFolder')."\" align=\"middle\"/> ".get_lang('AddNewCategory')."</a>\n";
+	echo "<a href=\"".$_SERVER['PHP_SELF']."?action=addreceivedcategory\"><img src=\"../img/folder_new.gif\" alt=\"".get_lang('NewFolder')."\" align=\"absmiddle\"/> ".get_lang('AddNewCategory')."</a>\n";
 	
 	
 	echo '<form name="recieved_files" method="post" action="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action='.$_GET['action'].'&amp;id='.$_GET['id'].'">';
@@ -344,22 +344,22 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 			// new icon
 			if ($dropbox_file->last_upload_date > $last_access AND !in_array($dropbox_file->id,$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX]))
 			{
-				$new_icon='<img src="../img/new.gif"  align="middle" alt="'.get_lang('New').'" />';
+				$new_icon='<img src="../img/new.gif" align="absmiddle alt="'.get_lang('New').'" />';
 			}
 			else 
 			{
 				$new_icon='';
 			}
 			$dropbox_file_data[]=build_document_icon_tag('file',$dropbox_file->title).$new_icon;
-			$dropbox_file_data[]='<a href="dropbox_download.php?id='.$dropbox_file->id.'&amp;action=download"><img src="../img/save.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="dropbox_download.php?id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>';
+			$dropbox_file_data[]='<a href="dropbox_download.php?id='.$dropbox_file->id.'&amp;action=download"><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="dropbox_download.php?id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>';
 			$dropbox_file_data[]=$dropbox_file->author;
 			$dropbox_file_data[]=$dropbox_file->description;
 			$dropbox_file_data[]=ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');
 			$dropbox_file_data[]=$dropbox_file->last_upload_date;
 			$action_icons=check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'	
-									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'"><img src="../img/comment.gif" alt="'.get_lang('Comment').'"/></a> 						
-									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=movereceived&amp;move_id='.$dropbox_file->id.'"><img src="../img/deplacer.gif" alt="'.get_lang('Move').'"/></a> 
-									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'" onclick="return confirmation(\''.$dropbox_file->title.'\');"><img src="../img/delete.gif" alt="'.get_lang('Delete').'" /></a>';
+									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'"><img src="../img/comment_bubble.gif" alt="'.get_lang('Comment').'" align="absmiddle" /></a> 						
+									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=movereceived&amp;move_id='.$dropbox_file->id.'"><img src="../img/deplacer_fichier.gif" alt="'.get_lang('Move').'" align="absmiddle"/></a> 
+									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'" onclick="return confirmation(\''.$dropbox_file->title.'\');"><img src="../img/delete.gif" alt="'.get_lang('Delete').'" align="absmiddle" /></a>';
 			//$action_icons='		<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;action=movereceived&amp;move_id='.$dropbox_file->id.'"><img src="../img/deplacer.gif"  alt="'.get_lang('Move').'"/></a>
 			//						<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'" onclick="return confirmation(\''.$dropbox_file->title.'\');"><img src="../img/delete.gif"  alt="'.get_lang('Delete').'"/></a>';
 			// this is a hack to have an additional row in a sortable table
@@ -387,7 +387,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 				$dropbox_category_data[]=''; // this is where the checkbox icon for the files appear
 				// the icon of the category
 				$dropbox_category_data[]=build_document_icon_tag('folder',$category['cat_name']);
-				$dropbox_category_data[]='<a href="dropbox_download.php?cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=received"><img src="../img/save_zip.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$category['cat_id'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.$category['cat_name'].'</a>';
+				$dropbox_category_data[]='<a href="dropbox_download.php?cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=received"><img width="16" height="16" src="../img/folder_zip.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$category['cat_id'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.$category['cat_name'].'</a>';
 				$dropbox_category_data[]='';
 				$dropbox_category_data[]='';
 				$dropbox_category_data[]='';
@@ -447,10 +447,10 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 	if ($view_dropbox_category_sent<>0)
 	{
 		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong><br />';
-		echo '<img src="../img/parent.gif" alt="'.get_lang('Up').'" /><a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category=0&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
+		echo '<img src="../img/parent.gif" alt="'.get_lang('Up').'" align="absmiddle" /><a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category=0&amp;view='.$_GET['view'].'">'.get_lang('Root')."</a>\n";
 	}
-	echo "<a href=\"".$_SERVER['PHP_SELF']."?view=".$_GET['view']."&amp;action=add\"><img src=\"../img/upload.gif\" alt=\"".get_lang('Upload')."\" align=\"middle\"/> ".get_lang('UploadNewFile')."</a>\n";
-	echo "<a href=\"".$_SERVER['PHP_SELF']."?view=".$_GET['view']."&amp;action=addsentcategory\"><img src=\"../img/new_folder.gif\" alt=\"".get_lang('NewFolder')."\" align=\"middle\" /> ".get_lang('AddNewCategory')."</a>\n";
+	echo "<a href=\"".$_SERVER['PHP_SELF']."?view=".$_GET['view']."&amp;action=add\"><img src=\"../img/submit_file.gif\" alt=\"".get_lang('Upload')."\" align=\"absmiddle\"/> ".get_lang('UploadNewFile')."</a>&nbsp;\n";
+	echo "<a href=\"".$_SERVER['PHP_SELF']."?view=".$_GET['view']."&amp;action=addsentcategory\"><img src=\"../img/folder_new.gif\" alt=\"".get_lang('NewFolder')."\" align=\"absmiddle\" /> ".get_lang('AddNewCategory')."</a>\n";
 	
 	//echo '<form name="sent_files" method="post" action="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'">';
 	echo '<form name="recieved_files" method="post" action="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action='.$_GET['action'].'&amp;id='.$_GET['id'].'">';
@@ -490,7 +490,7 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 		{
 			$dropbox_file_data[]=display_file_checkbox($dropbox_file->id, 'sent'); ;
 			$dropbox_file_data[]=build_document_icon_tag('file',$dropbox_file->title);
-			$dropbox_file_data[]='<a href="dropbox_download.php?id='.$dropbox_file->id.'&amp;action=download"><img src="../img/save.gif" style="float:right;" alt="'.get_lang('Save').'" /></a><a href="dropbox_download.php?id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>';
+			$dropbox_file_data[]='<a href="dropbox_download.php?id='.$dropbox_file->id.'&amp;action=download"><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" /></a><a href="dropbox_download.php?id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>';
 			$dropbox_file_data[]=$dropbox_file->author;
 			$dropbox_file_data[]=$dropbox_file->description;
 			$dropbox_file_data[]=ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');
@@ -504,9 +504,9 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 			$dropbox_file_data[]=$receivers_celldata;
 			$receivers_celldata='';
 			$action_icons=check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'	
-									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'"><img src="../img/comment.gif" alt="'.get_lang('Comment').'"/></a> 						
-									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=movesent&amp;move_id='.$dropbox_file->id.'"><img src="../img/deplacer.gif" alt="'.get_lang('Move').'"/></a> 
-									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=deletesentfile&amp;id='.$dropbox_file->id.'" onclick="return confirmation(\''.$dropbox_file->title.'\');"><img src="../img/delete.gif" alt="'.get_lang('Delete').'" /></a>';
+									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'"><img src="../img/comment_bubble.gif" alt="'.get_lang('Comment').'" align="absmiddle" /></a> 						
+									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=movesent&amp;move_id='.$dropbox_file->id.'"><img src="../img/deplacer_fichier.gif" alt="'.get_lang('Move').'" align="absmiddle"/></a> 
+									<a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action=deletesentfile&amp;id='.$dropbox_file->id.'" onclick="return confirmation(\''.$dropbox_file->title.'\');"><img src="../img/delete.gif" alt="'.get_lang('Delete').'" align="absmiddle" /></a>';
 			// this is a hack to have an additional row in a sortable table
 			if($_GET['action']=='viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id==$_GET['id'])
 			{
@@ -533,7 +533,7 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 			{
 				$dropbox_category_data[]=''; // this is where the checkbox icon for the files appear
 				$dropbox_category_data[]=build_document_icon_tag('folder',$category['cat_name']);
-				$dropbox_category_data[]='<a href="dropbox_download.php?cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=sent"><img src="../img/save_zip.gif" style="float:right;" alt="'.get_lang('Save').'" /></a><a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.$_GET['view'].'">'.$category['cat_name'].'</a>';
+				$dropbox_category_data[]='<a href="dropbox_download.php?cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=sent"><img width="16" height="16" src="../img/folder_zip.gif" style="float:right;" alt="'.get_lang('Save').'" /></a><a href="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.$_GET['view'].'">'.$category['cat_name'].'</a>';
 				$dropbox_category_data[]='';
 				$dropbox_category_data[]='';
 				$dropbox_category_data[]='';

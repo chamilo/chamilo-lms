@@ -67,6 +67,85 @@ ALTER TABLE sys_announcement ADD COLUMN visible_student tinyint NOT NULL DEFAULT
 ALTER TABLE sys_announcement ADD COLUMN visible_guest tinyint NOT NULL DEFAULT 0;
 ALTER TABLE sys_announcement ADD lang varchar(70) NULL;
 
+-- update contents of the main db tables
+UPDATE TABLE settings_current SET selected_value = 'activity' WHERE variable='homepage_view';
+UPDATE TABLE settings_current SET subkey = 'world', type = 'checkbox', subkeytext = 'ShowOnlineWorld' WHERE variable='showonline';
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('showonline','users','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineUsers');
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('showonline','course','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineCourse');
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('profile','language','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'Language');
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('registration','language','checkbox','User','true','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Language');
+-- UPDATE TABLE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='announcements';
+-- UPDATE TABLE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='forums';
+-- UPDATE TABLE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='dropbox';
+-- UPDATE TABLE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='quiz';
+-- UPDATE TABLE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='users';
+-- UPDATE TABLE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='groups';
+-- UPDATE TABLE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='chat';
+-- UPDATE TABLE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='online_conference';
+-- UPDATE TABLE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='student_publications';
+-- UPDATE TABLE settings_current SET selected_value = 'true' WHERE variable='use_document_title';
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('student_view_enabled',NULL,'radio','Platform','true','StudentViewEnabledTitle','StudentViewEnabledComment',NULL,NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_navigation_menu',NULL,'radio','Course','false','ShowNavigationMenuTitle','ShowNavigationMenuComment',NULL,NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('enable_tool_introduction',NULL,'radio','course','false','EnableToolIntroductionTitle','EnableToolIntroductionComment',NULL,NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('page_after_login', NULL, 'radio','Platform','user_portal.php', 'PageAfterLoginTitle','PageAfterLoginComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('time_limit_whosonline', NULL, 'textfield','Platform','30', 'TimeLimitWhosonlineTitle','TimeLimitWhosonlineComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('breadcrumbs_course_homepage', NULL, 'radio','Course','course_title', 'BreadCrumbsCourseHomepageTitle','BreadCrumbsCourseHomepageComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('example_material_course_creation', NULL, 'radio','Platform','true', 'ExampleMaterialCourseCreationTitle','ExampleMaterialCourseCreationComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('account_valid_duration',NULL, 'textfield','Platform','3660', 'AccountValidDurationTitle','AccountValidDurationComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('use_session_mode', NULL, 'radio','Platform','false', 'UseSessionModeTitle','UseSessionModeComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('allow_email_editor', NULL, 'radio', 'Tools', 'false', 'AllowEmailEditorTitle', 'AllowEmailEditorComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('registered', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('profile','phone','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'phone');
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('Ajax_course_tracking_refresh', NULL, 'textfield','Course','0', 'Ajax_course_tracking_refresh','Ajax_course_tracking_refresh_comment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'active', 'radio',NULL,'false', 'visio_actived','', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'url', 'textfield',NULL,'', 'visio_url','', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'active', 'radio',NULL,'false', 'ppt2lp_actived','', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'host', NULL, NULL, NULL, 'Host', NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'user', NULL, NULL, NULL, 'UserOnHost', NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'ftp_password', NULL, NULL, NULL, 'FtpPassword', NULL, NULL, NULL);
+
+UPDATE settings_options SET value = 'activity', display_text='HomepageViewActivity' WHERE variable = 'homepage_view' AND value = 'default';
+UPDATE settings_options SET value = '2column', display_text='HomepageView2column' WHERE variable = 'homepage_view' AND value = 'basic_tools_fixed';
+INSERT INTO settings_options(variable,value,display_text) VALUES ('homepage_view','3column','HomepageView3column');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('allow_registration','approval','AfterApproval');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('student_view_enabled','true','Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('student_view_enabled','false','No');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_navigation_menu','false','No');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_navigation_menu','icons','IconsOnly');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_navigation_menu','text','TextOnly');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_navigation_menu','iconstext','IconsText');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('enable_tool_introduction','true','Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('enable_tool_introduction','false','No');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('page_after_login', 'index.php', 'CampusHomepage');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('page_after_login', 'user_portal.php', 'MyCourses');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('breadcrumbs_course_homepage', 'get_lang', 'CourseHomepage');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('breadcrumbs_course_homepage', 'course_code', 'CourseCode');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('breadcrumbs_course_homepage', 'course_title', 'CourseTitle');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('example_material_course_creation', 'true', 'Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('example_material_course_creation', 'false', 'No');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('use_session_mode', 'true', 'Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('use_session_mode', 'false', 'No');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('allow_email_editor', 'true' ,'Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('allow_email_editor', 'false', 'No');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_email_addresses','true','Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_email_addresses','false','No');
+
+UPDATE course_module SET image = 'links.gif' WHERE image='liens.gif';
+UPDATE course_module SET image = 'members.gif' WHERE image = 'membres.gif';
+UPDATE course_module SET link = 'forum/index.php' WHERE link = 'phpbb/index.php';
+UPDATE course_module SET image = 'statistics.gif' WHERE image = 'statistiques.gif';
+UPDATE course_module SET image = 'reference.gif', column = '1' WHERE image = 'referencement.gif';
+DELETE FROM course_module WHERE link = 'coursecopy/backup.php';
+DELETE FROM course_module WHERE link = 'coursecopy/copy_course.php';
+DELETE FROM course_module WHERE link = 'coursecopy/recycle_course.php';
+UPDATE course_module SET link = 'newscorm/lp_controller.php' WHERE link = 'scorm/scormdocument.php';
+INSERT INTO course_module(name,link,image,row,column,position) VALUES ('blog','blog/blog.php','blog.gif',1,2,'basic'); 
+INSERT INTO course_module(name,link,image,row,column,position) VALUES ('blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'); 
+INSERT INTO course_module(name,link,image,row,column,position) VALUES ('course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'); 
+INSERT INTO course_module(name,link,image,row,column,position) VALUES ('survey','survey/survey_list.php','survey.gif',2,1,'courseadmin');
+
 -- xxSTATSxx
 CREATE TABLE track_e_attempt(exe_id int default NULL, user_id int NOT NULL default '0', question_id int NOT NULL default '0', answer text NOT NULL, teacher_comment text NOT NULL, marks int NOT NULL default '0', course_code varchar(40) NOT NULL default '', position int default '0');
 CREATE TABLE track_e_course_access(course_access_id int NOT NULL auto_increment, course_code varchar(40) NOT NULL, user_id int NOT NULL, login_course_date datetime NOT NULL default '0000-00-00 00:00:00', logout_course_date datetime default NULL, counter int NOT NULL, PRIMARY KEY (course_access_id));
@@ -133,3 +212,16 @@ CREATE TABLE survey_report(id int NOT NULL auto_increment, qid int NOT NULL defa
 CREATE TABLE questions(qid int unsigned NOT NULL auto_increment,gid int NOT NULL default 0,	survey_id int NOT NULL default 0,qtype varchar(50) NOT NULL default '',	caption text NOT NULL,alignment varchar(100) NOT NULL default '',sortby int NOT NULL default 1,a1 text NOT NULL,a2 text NOT NULL,a3 text NOT NULL,a4 text NOT NULL,a5 text NOT NULL,a6 text NOT NULL,a7 text NOT NULL,a8 text NOT NULL,a9 text NOT NULL,a10 text NOT NULL,at varchar(200) NOT NULL default '',ad varchar(200) NOT NULL default '',alt_text text NOT NULL,	r1 int NOT NULL default 0,r2 int NOT NULL default 0,r3 int NOT NULL default 0,r4 int NOT NULL default 0,r5 int NOT NULL default 0,r6 int NOT NULL default 0,r7 int NOT NULL default 0,r8 int NOT NULL default 0,r9 int NOT NULL default 0,r10 int NOT NULL default 0,	imported_question int NOT NULL default 0,db_name varchar(100) NULL default '',PRIMARY KEY (qid));
 
 ALTER TABLE tool ADD COLUMN category enum('authoring','interaction','admin') NOT NULL default 'authoring';
+
+UPDATE tool SET image = 'links.gif' WHERE image = 'liens.gif';
+UPDATE tool SET image = 'members.gif' WHERE image = 'membres.gif';
+UPDATE tool SET link = 'forum/index.php' WHERE link = 'phpbb/index.php';
+UPDATE tool SET image = 'statistics.gif' WHERE image = 'statistiques.gif';
+UPDATE tool SET image = 'reference.gif' WHERE image = 'referencement.gif';
+-- UPDATE tool SET column = '1' WHERE image = 'reference.gif';
+DELETE FROM tool WHERE link = 'coursecopy/backup.php';
+DELETE FROM tool WHERE link = 'coursecopy/copy_course.php';
+DELETE FROM tool WHERE link = 'coursecopy/recycle_course.php';
+UPDATE tool SET link = 'newscorm/lp_controller.php' WHERE link = 'scorm/scormdocument.php';
+INSERT INTO tool() VALUES (); 
+ 

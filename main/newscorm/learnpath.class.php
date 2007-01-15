@@ -4809,8 +4809,9 @@ class learnpath {
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
+							//Remove temporaly the test description
+							//$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
+							//$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 					}

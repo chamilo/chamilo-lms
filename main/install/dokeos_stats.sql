@@ -48,7 +48,7 @@ CREATE TABLE track_e_access (
   access_id int NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL default 0,
+  access_cours_code varchar(40) NOT NULL default '',
   access_tool varchar(30) default NULL,
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
@@ -56,10 +56,10 @@ CREATE TABLE track_e_access (
 );
 
 CREATE TABLE track_e_lastaccess (
-  access_id bigint(20) NOT NULL auto_increment,
+  access_id bigint NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL default 0,
+  access_cours_code varchar(40) NOT NULL default ,
   access_tool varchar(30) default NULL,
   access_session_id int unsigned default NULL,
   PRIMARY KEY  (access_id),
@@ -82,8 +82,8 @@ CREATE TABLE track_e_downloads (
   down_id int NOT NULL auto_increment,
   down_user_id int unsigned default NULL,
   down_date datetime NOT NULL default '0000-00-00 00:00:00',
-  down_cours_id varchar(20) NOT NULL default 0,
-  down_doc_path varchar(255) NOT NULL default 0,
+  down_cours_id varchar(20) NOT NULL default '',
+  down_doc_path varchar(255) NOT NULL default '',
   PRIMARY KEY  (down_id)
 );
 
@@ -122,7 +122,7 @@ CREATE TABLE track_e_links (
   links_id int NOT NULL auto_increment,
   links_user_id int unsigned default NULL,
   links_date datetime NOT NULL default '0000-00-00 00:00:00',
-  links_cours_id varchar(20) NOT NULL default 0,
+  links_cours_id varchar(40) NOT NULL default ,
   links_link_id int NOT NULL default 0,
   PRIMARY KEY  (links_id)
 );
@@ -160,7 +160,7 @@ CREATE TABLE track_e_uploads (
   upload_id int NOT NULL auto_increment,
   upload_user_id int unsigned default NULL,
   upload_date datetime NOT NULL default '0000-00-00 00:00:00',
-  upload_cours_id varchar(20) NOT NULL default 0,
+  upload_cours_id varchar(20) NOT NULL default '',
   upload_work_id int NOT NULL default 0,
   PRIMARY KEY  (upload_id)
 );

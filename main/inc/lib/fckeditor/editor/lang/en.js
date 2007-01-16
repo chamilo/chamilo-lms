@@ -267,7 +267,7 @@ DlgSmileyTitle		: "Insert a Smiley",
 DlgSpecialCharTitle	: "Select Special Character",
 
 // Table Dialog
-DlgTableTitle		: "Table Properties",
+DlgTableTitle		: "Table",
 DlgTableRows		: "Rows",
 DlgTableColumns		: "Columns",
 DlgTableBorder		: "Border size",

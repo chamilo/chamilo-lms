@@ -267,7 +267,7 @@ DlgSmileyTitle		: "Insérer Smiley",
 DlgSpecialCharTitle	: "Insérer Caractère Spécial",
 
 // Table Dialog
-DlgTableTitle		: "Propriétés de Tableau",
+DlgTableTitle		: "Tableau",
 DlgTableRows		: "Lignes",
 DlgTableColumns		: "Colonnes",
 DlgTableBorder		: "Bordure",

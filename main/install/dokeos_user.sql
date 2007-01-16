@@ -12,8 +12,8 @@ CREATE TABLE personal_agenda (
   id int NOT NULL auto_increment,
   user int unsigned,
   title text,
-  text text,
-  date datetime default NULL,
+  `text` text,
+  `date` datetime default NULL,
   enddate datetime default NULL,
   course varchar(255),
   UNIQUE KEY id (id)

@@ -525,12 +525,12 @@ api_sql_query($sql, __FILE__, __LINE__);
 	// Forum Category
 	$sql = "
 		CREATE TABLE `".$TABLETOOLFORUMCATEGORY . "` (
-		 cat_id int(11) NOT NULL auto_increment,
+		 cat_id int NOT NULL auto_increment,
 		 cat_title varchar(255) NOT NULL default '',
 		 cat_comment text,
-		 cat_order int(11) NOT NULL default '0',
-		 locked int(5) NOT NULL default '0',
-		 PRIMARY KEY (`cat_id`)
+		 cat_order int NOT NULL default 0,
+		 locked int NOT NULL default 0,
+		 PRIMARY KEY (cat_id)
 		) TYPE=MyISAM";
 
 	api_sql_query($sql, __FILE__, __LINE__);
@@ -568,7 +568,7 @@ api_sql_query($sql, __FILE__, __LINE__);
 		 forum_id int default NULL,
 		 thread_replies int default 0,
 		 thread_poster_id int default NULL,
-		 thread_poster_name int default 0,
+		 thread_poster_name varchar(100) default '',
 		 thread_views int default 0,
 		 thread_last_post int default NULL,
 		 thread_date datetime default '0000-00-00 00:00:00',
@@ -592,7 +592,7 @@ api_sql_query($sql, __FILE__, __LINE__);
 		 poster_name varchar(100) default '',
 		 post_date datetime default '0000-00-00 00:00:00',
 		 post_notification tinyint default 0,
-		 post_parent_id tinyint default 0,
+		 post_parent_id int default 0,
 		 visible tinyint default 1,
 		 PRIMARY KEY (post_id),
 		 KEY poster_id (poster_id),
@@ -863,8 +863,8 @@ api_sql_query($sql, __FILE__, __LINE__);
 		work_state tinyint unsigned NOT NULL default 1,
 		announcements_state tinyint unsigned NOT NULL default 1,
 		max_student smallint unsigned NOT NULL default 8,
-		self_reg_allowed tinyint unsigned NOT NULL default '0',
-		self_unreg_allowed tinyint unsigned NOT NULL default '0',
+		self_reg_allowed tinyint unsigned NOT NULL default 0,
+		self_unreg_allowed tinyint unsigned NOT NULL default 0,
 		groups_per_user smallint unsigned NOT NULL default 0,
 		display_order smallint unsigned NOT NULL default 0,
 		PRIMARY KEY (id)

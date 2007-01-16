@@ -29,10 +29,15 @@ DROP TABLE scorm_sco_data;
 
 -- xxCOURSExx
 ALTER TABLE group_category DROP COLUMN forum_state;
+ALTER TABLE group_category DROP COLUMN self_reg_allowed_temp;
+ALTER TABLE group_category DROP COLUMN self_unreg_allowed_temp;
 
 ALTER TABLE group_info DROP COLUMN tutor_id;
 ALTER TABLE group_info DROP COLUMN forum_state;
 ALTER TABLE group_info DROP COLUMN forum_id;
+ALTER TABLE group_info DROP COLUMN self_registration_allowed_temp;
+ALTER TABLE group_info DROP COLUMN self_unregistration_allowed_temp;
+ALTER TABLE group_info DROP COLUMN doc_state_temp;
 
 DROP TABLE bb_access;
 DROP TABLE bb_banlist;

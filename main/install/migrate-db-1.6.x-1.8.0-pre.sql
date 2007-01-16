@@ -158,38 +158,53 @@ ALTER TABLE track_e_downloads CHANGE down_doc_path down_doc_path varchar(255) NO
 ALTER TABLE track_e_links CHANGE links_cours_id links_cours_id varchar(40) NOT NULL default '';
 ALTER TABLE track_e_login ADD logout_date datetime NULL default NULL;
 ALTER TABLE track_e_online ADD course varchar(40) default NULL;
+
 -- xxUSERxx
 ALTER TABLE user_course_category ADD sort int;
--- xxSCORMxx
+
 -- xxCOURSExx
 ALTER TABLE announcement CHANGE content content mediumtext;
 ALTER TABLE announcement ADD email_sent tinyint;
-CREATE TABLE blog(blog_id smallint NOT NULL AUTO_INCREMENT , blog_name varchar(250) NOT NULL default '', blog_subtitle varchar( 250 ) default NULL , date_creation datetime NOT NULL default '0000-00-00 00:00:00', visibility enum( '0', '1' ) NOT NULL default '0', PRIMARY KEY (blog_id));
-CREATE TABLE blog_comment(comment_id int NOT NULL AUTO_INCREMENT , title varchar(250) NOT NULL default '', comment longtext NOT NULL , author_id int NOT NULL default '0', date_creation datetime NOT NULL default '0000-00-00 00:00:00', blog_id mediumint NOT NULL default '0', post_id int NOT NULL default '0', task_id int default NULL , parent_comment_id int NOT NULL default '0', PRIMARY KEY (comment_id));
-CREATE TABLE blog_post(post_id int NOT NULL AUTO_INCREMENT, title varchar(250) NOT NULL default '', full_text longtext NOT NULL, date_creation datetime NOT NULL default '0000-00-00 00:00:00', blog_id mediumint NOT NULL default '0', author_id int NOT NULL default '0', PRIMARY KEY (post_id));
-CREATE TABLE blog_rating(rating_id int NOT NULL AUTO_INCREMENT, blog_id int NOT NULL default '0', rating_type enum( 'post', 'comment' ) NOT NULL default 'post', item_id int NOT NULL default '0', user_id int NOT NULL default '0', rating mediumint NOT NULL default '0', PRIMARY KEY (rating_id));
-CREATE TABLE blog_rel_user(blog_id int NOT NULL default '0', user_id int NOT NULL default '0', PRIMARY KEY (blog_id,user_id));
-CREATE TABLE blog_task(task_id mediumint NOT NULL AUTO_INCREMENT,blog_id mediumint NOT NULL default '0',title varchar( 250 ) NOT NULL default '',description text NOT NULL ,color varchar( 10 ) NOT NULL default '', system_task enum( '0', '1' ) NOT NULL default '0',PRIMARY KEY (task_id));
-CREATE TABLE blog_task_rel_user(blog_id mediumint NOT NULL default '0',user_id int NOT NULL default '0',task_id mediumint NOT NULL default '0',target_date date NOT NULL default '0000-00-00',PRIMARY KEY (blog_id,user_id,task_id));
-CREATE TABLE course_setting(id int unsigned NOT NULL auto_increment, variable varchar(255) NOT NULL default '', value varchar(255) NOT NULL default '', tool_scope varchar(255) default '', PRIMARY KEY (id));
-CREATE TABLE dropbox_category(cat_id int NOT NULL auto_increment, cat_name text NOT NULL, received enum('0','1') NOT NULL default '0', sent enum('0','1') NOT NULL default '0', user_id int NOT NULL default '0', PRIMARY KEY  (cat_id));
-CREATE TABLE dropbox_feedback(feedback_id int NOT NULL auto_increment, file_id int NOT NULL default '0', author_user_id int NOT NULL default '0', feedback text NOT NULL, feedback_date datetime NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY  (feedback_id), KEY file_id (file_id), KEY author_user_id (author_user_id));
-CREATE TABLE forum_category(cat_id int NOT NULL auto_increment, cat_title varchar(255) NOT NULL default '', cat_comment text, cat_order int(11) NOT NULL default '0', locked int(5) NOT NULL default '0', PRIMARY KEY (cat_id));
-CREATE TABLE forum_forum(forum_id int NOT NULL auto_increment, forum_title varchar(255) NOT NULL default '', forum_comment text, forum_threads int default '0', forum_posts int default '0', forum_last_post int default '0', forum_category int default NULL, allow_anonymous int default NULL, allow_edit int default NULL, approval_direct_post varchar(20) default NULL, allow_attachments int default NULL, allow_new_threads int default NULL, default_view varchar(20) default NULL, forum_of_group varchar(20) default NULL, forum_group_public_private varchar(20) default 'public', forum_order int default NULL,  locked int NOT NULL default '0', PRIMARY KEY (forum_id));
+CREATE TABLE blog(blog_id smallint NOT NULL AUTO_INCREMENT , blog_name varchar(250) NOT NULL default '', blog_subtitle varchar( 250 ) default NULL , date_creation datetime NOT NULL default '0000-00-00 00:00:00', visibility tinyint unsigned NOT NULL default 0, PRIMARY KEY (blog_id));
+CREATE TABLE blog_comment(comment_id int NOT NULL AUTO_INCREMENT , title varchar(250) NOT NULL default '', comment longtext NOT NULL , author_id int NOT NULL default 0, date_creation datetime NOT NULL default '0000-00-00 00:00:00', blog_id mediumint NOT NULL default 0, post_id int NOT NULL default 0, task_id int default NULL , parent_comment_id int NOT NULL default 0, PRIMARY KEY (comment_id));
+CREATE TABLE blog_post(post_id int NOT NULL AUTO_INCREMENT, title varchar(250) NOT NULL default '', full_text longtext NOT NULL, date_creation datetime NOT NULL default '0000-00-00 00:00:00', blog_id mediumint NOT NULL default 0, author_id int NOT NULL default 0, PRIMARY KEY (post_id));
+CREATE TABLE blog_rating(rating_id int NOT NULL AUTO_INCREMENT, blog_id int NOT NULL default 0, rating_type enum( 'post', 'comment' ) NOT NULL default 'post', item_id int NOT NULL default 0, user_id int NOT NULL default 0, rating mediumint NOT NULL default 0, PRIMARY KEY (rating_id));
+CREATE TABLE blog_rel_user(blog_id int NOT NULL default 0, user_id int NOT NULL default 0, PRIMARY KEY (blog_id,user_id));
+CREATE TABLE blog_task(task_id mediumint NOT NULL AUTO_INCREMENT,blog_id mediumint NOT NULL default 0,title varchar( 250 ) NOT NULL default '',description text NOT NULL ,color varchar( 10 ) NOT NULL default '', system_task tinyint unsigned NOT NULL default 0,PRIMARY KEY (task_id));
+CREATE TABLE blog_task_rel_user(blog_id mediumint NOT NULL default 0,user_id int NOT NULL default 0,task_id mediumint NOT NULL default 0,target_date date NOT NULL default '0000-00-00',PRIMARY KEY (blog_id,user_id,task_id));
+
+CREATE TABLE course_setting(id int unsigned NOT NULL auto_increment, variable varchar(255) NOT NULL default '', subkey varchar(255) default NULL, type varchar(255) default NULL,category varchar(255) default NULL,value varchar(255) NOT NULL default '', title varchar(255) NOT NULL default '',comment varchar(255) default NULL, subkeytext varchar(255) default NULL, PRIMARY KEY (id));
+
+CREATE TABLE dropbox_category(cat_id int NOT NULL auto_increment, cat_name text NOT NULL, received tinyint unsigned NOT NULL default 0, sent tinyint unsigned NOT NULL default 0, user_id int NOT NULL default 0, PRIMARY KEY  (cat_id));
+CREATE TABLE dropbox_feedback(feedback_id int NOT NULL auto_increment, file_id int NOT NULL default 0, author_user_id int NOT NULL default 0, feedback text NOT NULL, feedback_date datetime NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY  (feedback_id), KEY file_id (file_id), KEY author_user_id (author_user_id));
+
+CREATE TABLE forum_category(cat_id int NOT NULL auto_increment, cat_title varchar(255) NOT NULL default '', cat_comment text, cat_order int NOT NULL default 0, locked int NOT NULL default 0, PRIMARY KEY (cat_id));
+CREATE TABLE forum_forum(forum_id int NOT NULL auto_increment, forum_title varchar(255) NOT NULL default '', forum_comment text, forum_threads int default 0, forum_posts int default 0, forum_last_post int default 0, forum_category int default NULL, allow_anonymous int default NULL, allow_edit int default NULL, approval_direct_post varchar(20) default NULL, allow_attachments int default NULL, allow_new_threads int default NULL, default_view varchar(20) default NULL, forum_of_group varchar(20) default NULL, forum_group_public_private varchar(20) default 'public', forum_order int default NULL,  locked int NOT NULL default 0, PRIMARY KEY (forum_id));
+CREATE TABLE forum_thread(thread_id int NOT NULL auto_increment,thread_title varchar(255) default NULL, forum_id int default NULL, thread_replies int default 0, thread_poster_id int default NULL, thread_poster_name varchar(100) default '', thread_views int default 0, thread_last_post int default NULL, thread_date datetime default '0000-00-00 00:00:00', thread_sticky tinyint unsigned default 0, locked int NOT NULL default 0, PRIMARY KEY (thread_id), KEY thread_id (thread_id));
+CREATE TABLE forum_post(post_id int NOT NULL auto_increment, post_title varchar(250) default NULL, post_text text, thread_id int default 0, forum_id int default 0, poster_id int default 0, poster_name varchar(100) default '', post_date datetime default '0000-00-00 00:00:00', post_notification tinyint default 0, post_parent_id int default 0, visible tinyint default 1, PRIMARY KEY (post_id), KEY poster_id (poster_id), KEY forum_id (forum_id));
 CREATE TABLE forum_mailcue(thread_id int default NULL, user_id int default NULL, post_id int default NULL);
-CREATE TABLE forum_post(post_id int NOT NULL auto_increment, post_title varchar(250) default NULL, post_text text, thread_id int default '0', forum_id int default '0', poster_id int default '0', poster_name varchar(100) default '', post_date datetime default '0000-00-00 00:00:00', post_notification int default '0', post_parent_id int default '0', visible int default '1', PRIMARY KEY (post_id), KEY poster_id (poster_id), KEY forum_id (forum_id));
-CREATE TABLE forum_thread(thread_id int NOT NULL auto_increment,thread_title varchar(255) default NULL, forum_id int default NULL, thread_replies int default '0', thread_poster_id int default NULL, thread_poster_name int default '0', thread_views int default '0', thread_last_post int default NULL, thread_date datetime default '0000-00-00 00:00:00', thread_sticky int default '0', locked int NOT NULL default '0', PRIMARY KEY (thread_id), KEY thread_id (thread_id));
 
 ALTER TABLE group_category ADD COLUMN calendar_state tinyint unsigned NOT NULL default 1;
 ALTER TABLE group_category ADD COLUMN work_state tinyint unsigned NOT NULL default 1;
 ALTER TABLE group_category ADD COLUMN announcements_state tinyint unsigned NOT NULL default 1;
+ALTER TABLE group_category CHANGE self_reg_allowed self_reg_allowed_temp enum('0','1') NOT NULL default '0';
+ALTER TABLE group_category CHANGE self_unreg_allowed self_unreg_allowed_temp enum('0','1') NOT NULL default '0';
+ALTER TABLE group_category ADD COLUMN self_reg_allowed tinyint unsigned NOT NULL default 0;
+ALTER TABLE group_category ADD COLUMN self_unreg_allowed tinyint unsigned NOT NULL default 0;
 
 ALTER TABLE group_info MODIFY secret_directory varchar(255) default NULL;
 ALTER TABLE group_info ADD COLUMN calendar_state tinyint unsigned NOT NULL default 0;
 ALTER TABLE group_info ADD COLUMN work_state tinyint unsigned NOT NULL default 0;
 ALTER TABLE group_info ADD COLUMN announcements_state tinyint unsigned NOT NULL default 0;
+ALTER TABLE group_info CHANGE self_registration_allowed self_registration_allowed_temp enum('0','1') NOT NULL default '0';
+ALTER TABLE group_info CHANGE self_unregistration_allowed self_unregistration_allowed_temp enum('0','1') NOT NULL default '0';
+ALTER TABLE group_info ADD COLUMN self_registration_allowed tinyint unsigned NOT NULL default 0;
+ALTER TABLE group_info ADD COLUMN self_unregistration_allowed tinyint unsigned NOT NULL default 0;
+ALTER TABLE group_info CHANGE doc_state doc_state_temp enum('0','1','2') NOT NULL default '1';
+ALTER TABLE group_info ADD COLUMN doc_state tinyint unsigned NOT NULL default 1;
 
 CREATE TABLE group_rel_tutor(id int NOT NULL auto_increment, user_id int NOT NULL, group_id int NOT NULL default 0, PRIMARY KEY (id));
+
 CREATE TABLE lp(id int	unsigned primary key auto_increment, lp_type	smallint unsigned not null, name tinytext not null, ref tinytext null, description text null, path text	not null, force_commit  tinyint	unsigned not null default 0, default_view_mod char(32) not null default 'embedded', default_encoding char(32)	not null default 'ISO-8859-1', display_order int		unsigned	not null default 0, content_maker tinytext  not null default '', content_local 	varchar(32)  not null default 'local', content_license	text not null default '', prevent_reinit tinyint unsigned not null default 1, js_lib tinytext    not null default '', debug tinyint unsigned not null default 0);
 CREATE TABLE lp_view(id	int	unsigned primary key auto_increment, lp_id int	unsigned not null, user_id int unsigned not null, view_count smallint unsigned not null default 0, last_item int	unsigned not null default 0, progress int	unsigned default 0);
 CREATE TABLE lp_item(id	int	unsigned primary key auto_increment, lp_id int unsigned	not null, item_type	char(32) not null default 'dokeos_document', ref tinytext not null default '', title tinytext not null, description	tinytext not null default '', path text	 not null, min_score float unsigned	not null default 0, max_score float unsigned not null default 100, mastery_score float unsigned null, parent_item_id		int unsigned	not null default 0, previous_item_id	int unsigned	not null default 0, next_item_id		int unsigned	not null default 0, display_order		int unsigned	not null default 0, prerequisite  char(64)  null, parameters  text  null, launch_data text not null default '');

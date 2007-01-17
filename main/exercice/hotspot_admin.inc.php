@@ -83,7 +83,7 @@ if($modifyIn)
         $objAnswer->duplicate($questionId);
 
         // construction of the duplicated Answers
-        
+
         $objAnswer=new Answer($questionId);
     }
 
@@ -94,7 +94,7 @@ if($modifyIn)
     $weighting=unserialize($weighting);
     $hotspot_coordinates=unserialize($hotspot_coordinates);
     $hotspot_type=unserialize($hotspot_type);
-        
+
 
     unset($buttonBack);
 }
@@ -103,7 +103,7 @@ if($modifyIn)
 if($submitAnswers || $buttonBack)
 {
     if($debug>0){echo '$submitAnswers or $buttonBack was set'."<br />\n";}
-    
+
     $questionWeighting=$nbrGoodAnswers=0;
 
     for($i=1;$i <= $nbrAnswers;$i++)
@@ -124,32 +124,32 @@ if($submitAnswers || $buttonBack)
 
             break;
         }
-        
+
         if($weighting[$i] <= 0)
         {
         	$msgErr=get_lang('HotspotWeightingError');
-        	
+
         	// clears answers already recorded into the Answer object
             $objAnswer->cancel();
 
-            break;	
+            break;
         }
         if($hotspot_coordinates[$i] == '0;0|0|0' || empty($hotspot_coordinates[$i]))
         {
         	$msgErr=get_lang('HotspotNotDrawn');
-        	
+
         	// clears answers already recorded into the Answer object
             $objAnswer->cancel();
 
-            break;	
+            break;
         }
-        
+
     }  // end for()
-   
+
 
     if(empty($msgErr))
     {
-        
+
     	for($i=1;$i <= $nbrAnswers;$i++)
         {
             if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
@@ -161,13 +161,13 @@ if($submitAnswers || $buttonBack)
 			{
 				$questionWeighting+=$weighting[$i];
 			}
-			
+
 			// creates answer
 			$objAnswer->createAnswer($reponse[$i], '',$comment[$i],$weighting[$i],$i,$hotspot_coordinates[$i],$hotspot_type[$i]);
         }  // end for()
 		// saves the answers into the data base
 		$objAnswer->save();
-        
+
         // sets the total weighting of the question
         $objQuestion->updateWeighting($questionWeighting);
         $objQuestion->save($exerciseId);
@@ -175,9 +175,9 @@ if($submitAnswers || $buttonBack)
         $editQuestion=$questionId;
 
         unset($modifyAnswers);
-        
+
         echo '<script type="text/javascript">window.location.href="admin.php"</script>';
-        
+
     }
     if($debug>0){echo '$modifyIn was set - end'."<br />\n";}
 
@@ -186,21 +186,21 @@ if($submitAnswers || $buttonBack)
 if($modifyAnswers)
 {
 
-	
+
     if($debug>0){echo str_repeat('&nbsp;',0).'$modifyAnswers is set'."<br />\n";}
-    
+
     // construction of the Answer object
     $objAnswer=new Answer($objQuestion -> id);
-   
+
     api_session_register('objAnswer');
 
 	if($debug>0){echo str_repeat('&nbsp;',2).'$answerType is HOT_SPOT'."<br />\n";}
-	
-	$TBL_ANSWERS = $_course['dbNameGlu'].'quiz_answer';
-    
+
+	$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
+
 	if(!$nbrAnswers)
     {
-    	
+
         $nbrAnswers=$objAnswer->selectNbrAnswers();
 
         $reponse=Array();
@@ -218,10 +218,10 @@ if($modifyAnswers)
             $hotspot_coordinates[$i]=$objAnswer->selectHotspotCoordinates($i);
             $hotspot_type[$i]=$objAnswer->selectHotspotType($i);
         }
-        
-        
+
+
     }
-   
+
     $_SESSION['tmp_answers'] = array();
     $_SESSION['tmp_answers']['answer'] = $reponse;
     $_SESSION['tmp_answers']['comment'] = $comment;
@@ -233,9 +233,9 @@ if($modifyAnswers)
     {
     	// At least 1 answer
     	if ($nbrAnswers > 1) {
-			
+
             $nbrAnswers--;
-            
+
             // Remove the last answer
 			$tmp = array_pop($_SESSION['tmp_answers']['answer']);
 			$tmp = array_pop($_SESSION['tmp_answers']['comment']);
@@ -254,7 +254,7 @@ if($modifyAnswers)
     	if ($nbrAnswers < 12)
     	{
             $nbrAnswers++;
-            
+
             // Add a new answer
             $_SESSION['tmp_answers']['answer'][]='';
 			$_SESSION['tmp_answers']['comment'][]='';
@@ -266,13 +266,13 @@ if($modifyAnswers)
     	{
     		$msgErr=get_lang('MaxHotspot');
     	}
-        
+
 
     }
 
         if($debug>0){echo str_repeat('&nbsp;',2).'$usedInSeveralExercises is untrue'."<br />\n";}
-    
-       
+
+
         if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
         $hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
         						"#4271B5",
@@ -306,11 +306,11 @@ if($modifyAnswers)
 	<tr>
 		<td width="550" valign="top">
 			<script type="text/javascript">
-				<!-- 
+				<!--
 				// Version check based upon the values entered above in "Globals"
 				var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
-				
-				
+
+
 				// Check to see if the version meets the requirements for playback
 				if (hasReqestedVersion) {  // if we've detected an acceptable version
 				    var oeTags = '<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_admin.swf?modifyAnswers=<?php echo $modifyAnswers ?>" width="550" height="377">'
@@ -343,12 +343,12 @@ if($modifyAnswers)
 					  <td style="border-bottom: 1px solid #4271b5"><?php echo get_lang('Comment'); ?></td>
 					  <td style="width: 60px; border-bottom: 1px solid #4271b5"><?php echo get_lang('QuestionWeighting'); ?>*</td>
 					</tr>
-					
+
 					<?php
 								for($i=1;$i <= $nbrAnswers;$i++)
 								{
 					?>
-					
+
 					<tr>
 					  <td valign="top"><div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div></td>
 					  <td valign="top" align="left"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo htmlentities($reponse[$i]); ?>" size="12" /></td>
@@ -357,11 +357,11 @@ if($modifyAnswers)
 					  <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
 					  <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" /></td>
 					</tr>
-					
+
 					<?php
 					  			}
 					?>
-					
+
 					<tr>
 					  <td colspan="5">
 						<input type="submit" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" />
@@ -387,7 +387,7 @@ if($modifyAnswers)
 
 
 <?php
-    
+
     if($debug>0){echo str_repeat('&nbsp;',0).'$modifyAnswers was set - end'."<br />\n";}
 }
 ?>

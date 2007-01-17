@@ -4,7 +4,7 @@
  * @todo use the Database:: functions
  * @todo small letters for table variables
  */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='exercice';
 
 // including the global dokeos file
@@ -34,21 +34,21 @@ api_protect_course_script();
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= $_course['dbNameGlu'].'quiz_rel_question';
 $TBL_EXERCICES         	= $_course['dbNameGlu'].'quiz';
-$TBL_QUESTIONS         	= $_course['dbNameGlu'].'quiz_question';
-$TBL_REPONSES          	= $_course['dbNameGlu'].'quiz_answer';
+$TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES          	= Database::get_course_table(TABLE_QUIZ_ANSWER);
 $main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt"; 
+$TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt";
 $TABLETRACK_EXERCICES 	= $_configuration['statistics_database']."`.`track_e_exercices";
 
-$dsp_percent = false; 
+$dsp_percent = false;
 $debug=0;
 if($debug>0)
 {
 	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);
 }
 // general parameters passed via POST/GET
-if ( empty ( $origin ) ) 
+if ( empty ( $origin ) )
 {
     $origin = $_REQUEST['origin'];
 }
@@ -72,7 +72,7 @@ if ( empty ( $choice ) ) {
 }
 if ( empty ( $questionNum ) ) {
     $questionNum    = mysql_real_escape_string($_REQUEST['questionNum']);
-} 
+}
 if ( empty ( $nbrQuestions ) ) {
     $nbrQuestions   = mysql_real_escape_string($_REQUEST['nbrQuestions']);
 }
@@ -82,7 +82,7 @@ if ( empty ( $questionList ) ) {
 if ( empty ( $objExercise ) ) {
     $objExercise = $_SESSION['objExercise'];
 }
-$is_allowedToEdit=$is_courseAdmin;	
+$is_allowedToEdit=$is_courseAdmin;
 $nameTools=get_lang('Exercice');
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
@@ -122,33 +122,33 @@ function getFCK(vals,marksid){
   var f=document.getElementById('myform');
 
   var m_id = marksid.split(',');
-  for(var i=0;i<m_id.length;i++){ 
+  for(var i=0;i<m_id.length;i++){
   var oHidn = document.createElement("input");
 			oHidn.type = "hidden";
 			var selname = oHidn.name = "marks_"+m_id[i];
-			var selid = document.forms['marksform_'+m_id[i]].marks.selectedIndex;			
+			var selid = document.forms['marksform_'+m_id[i]].marks.selectedIndex;
 			oHidn.value = document.forms['marksform_'+m_id[i]].marks.options[selid].text;
 			f.appendChild(oHidn);
-	}  
+	}
 
 	var ids = vals.split(',');
-	for(var k=0;k<ids.length;k++){  
+	for(var k=0;k<ids.length;k++){
 			var oHidden = document.createElement("input");
 			oHidden.type = "hidden";
 			oHidden.name = "comments_"+ids[k];
 			oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
 			oHidden.value = oEditor.GetXHTML(true);
-			f.appendChild(oHidden);  
+			f.appendChild(oHidden);
 	}
 //f.submit();
 }
 </script>
 <?php
-		
+
 //functions
 function get_comments($id,$question_id)
 	{
-	global $TABLETRACK_ATTEMPT;				
+	global $TABLETRACK_ATTEMPT;
 	$sql = "select teacher_comment from `".$TABLETRACK_ATTEMPT."` where exe_id=$id and question_id = '$question_id' order by question_id";
 	$sqlres = api_sql_query($sql, __FILE__, __LINE__);
 	$comm = mysql_result($sqlres,0,"teacher_comment");
@@ -180,42 +180,42 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 }
 function display_fill_in_blanks_answer($answer,$id,$questionId)
 {
-	
-	?>					
+
+	?>
 		<tr>
 		<td>
 			<?php echo nl2br($answer); ?>
-		</td><?php 
+		</td><?php
 		if(!$is_allowedToEdit) {?>
 		<td>
-		<?php 
+		<?php
 		$comm = get_comments($id,$questionId);
 		//echo $comm;
 		?>
 		</td>
-		</tr>					
+		</tr>
 	<?php }
 }
 
 function display_free_answer($answer,$id,$questionId)
 {
-	?>					
+	?>
 		<tr>
 		<td>
 			<?php echo nl2br(stripslashes($answer)); ?>
 		</td> <?php if(!$is_allowedToEdit) {?>
    <td>
-    <?php 
-	
+    <?php
+
 	$comm = get_comments($id,$questionId);
 	/*if ($comm!='')
 	echo $comm;
 	else
 	echo  get_lang('notCorrectedYet');
 	*/?>
-	
-   </td> <?php }?>		
-		</tr>			
+
+   </td> <?php }?>
+		</tr>
 	<?php
 }
 
@@ -236,12 +236,12 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 									"#ED2024",
 									"#45C7F0",
 									"#F7BDE2");
-	?>		
+	?>
 		<tr>
 				<td width="50%" valign="top">
 					<div style="width:100%;">
 						<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; float:left; margin:3px;"></div>
-						<div><?php echo $answer ?></div>						
+						<div><?php echo $answer ?></div>
 					</div>
 				</td>
 				<td width="25%" valign="top"><?php echo $answerId; ?></td>
@@ -266,12 +266,12 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 	<?php $exerciseTitle=api_parse_tex($test);
 $query = "select * from `".$TABLETRACK_ATTEMPT."` where exe_id='$id' group by question_id";
 $result =api_sql_query($query, __FILE__, __LINE__);
-?>	
+?>
 	<h3><?php echo $test ?>: <?php echo get_lang("Result"); ?></h3>
-	
+
 	 </td>
   </tr>
-  <?php 
+  <?php
 
 
 	$i=$totalScore=$totalWeighting=0;
@@ -296,11 +296,11 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				$questionWeighting=$objQuestionTmp->selectWeighting();
 				$answerType=$objQuestionTmp->selectType();
 				$quesId =$objQuestionTmp->selectId(); //added by priya saini
-				
+
 				// destruction of the Question object
 					unset($objQuestionTmp);
 
-				
+
 
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 				{
@@ -342,7 +342,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			// construction of the Answer object
 				$objAnswerTmp=new Answer($questionId);
 				$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-				$questionScore=0; 
+				$questionScore=0;
 				for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 					{
 						$answer=$objAnswerTmp->selectAnswer($answerId);
@@ -362,10 +362,10 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 							$questionScore+=$answerWeighting;
 							$totalScore+=$answerWeighting;
 							}
-					
+
 				?>
 			<tr>
-			<td> <?php 
+			<td> <?php
 			if($answerId==1)
 					display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
 			else
@@ -373,7 +373,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				?>
 			</td>
 			</tr>
-			<?php 
+			<?php
 		$i++;
 		 }?>
 			</table>
@@ -392,7 +392,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			<tr>
 			<td>&nbsp;</td>
 			</tr>
-			<?php 
+			<?php
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
@@ -422,7 +422,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			</tr><?php
 		$i++;
 
-		
+
 		}?>
 			</table>
 	<?php  }
@@ -438,7 +438,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			<tr>
 			<td>&nbsp;</td>
 			</tr>
-			<?php 
+			<?php
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
@@ -467,7 +467,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				// the loop will stop at the end of the text
 				$i=0;
 				while(1)
-					{ 
+					{
 					// quits the loop if there are no more blanks
 					if(($pos = strpos($temp,'[')) === false)
 						{
@@ -505,10 +505,10 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 ?>
 			<tr>
 			<td> <?php display_fill_in_blanks_answer($answer,$id,$questionId); ?> </td>
-			</tr><?php 
+			</tr><?php
 		$i++;
 
-	
+
 		}?>
 			</table>
 	<?php  }
@@ -525,7 +525,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			<td>&nbsp;</td>
 			</tr>
 
-			<?php 
+			<?php
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
@@ -548,12 +548,12 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			<tr>
 			<td><i><?php echo get_lang("ElementList"); ?></i> </td>
 			<td><i><?php echo get_lang("CorrespondsTo"); ?></i></td>
-			
+
 			</tr>
 			<tr>
 			<td>&nbsp;</td>
 			</tr>
-			<?php 
+			<?php
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
@@ -571,7 +571,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 					$answ = $row['answer'];
 					$choice[$ind] = $answ;
 					}
-					
+
 				 if($answerCorrect)
 				{
 					if($answerCorrect == $choice[$answerId])
@@ -595,19 +595,19 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				}
 				 ?>
 			<tr>
-			
-			
+
+
 							  <?php
 								$answer=api_parse_tex($answer);
 								//echo $answer; ?>
-						     
-							  <?php 
+
+							  <?php
 						$query = "select position from `".$TABLETRACK_ATTEMPT."` where question_id = $questionId and exe_id=$id";
 						$resapp = api_sql_query($query, __FILE__, __LINE__);
 						while($row = mysql_fetch_array($resapp))
 							{
 							 $tp = $row['position'];
-						     }											
+						     }
 						foreach($choice as $key => $v)
 							{
 							if($key==$answerId)
@@ -615,28 +615,28 @@ $result =api_sql_query($query, __FILE__, __LINE__);
                                  echo "<td>".$answer."</td>";
 								 echo "<td>";
 								 echo $v.'/';
-								
-								}								
+
+								}
 							}
-									
+
 							?>  <font color="green"><b>
 							<?php
 							 $matching[$answerCorrect]=api_parse_tex($matching[$answerCorrect]);
 							 echo $matching[$answerCorrect]; ?></b></font>
 			</td>
-			
-			</tr><?php 
+
+			</tr><?php
 		$i++;
 
-		
+
 		}?>
 			</table>
 	<?php }
 	else if($answerType == HOTSPOT){
-		
-		
+
+
 		?>
-		
+
 		<table width="355" border="0" cellspacing="0" cellpadding="0">
 			<tr>
 			<td>&nbsp;</td>
@@ -648,7 +648,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			<td>&nbsp;</td>
 			</tr>
 
-			<?php 
+			<?php
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
@@ -665,14 +665,14 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				$answerComment=$objAnswerTmp->selectComment($answerId);
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-				
+
 				$query = "select answer from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
 				$resq=api_sql_query($query);
 				$choice = mysql_result($resq,0,"answer");
-				
+
 				display_hotspot_answer($answerId,$answer,$choice,$answerComment);
-				
-				$i++;	
+
+				$i++;
 		 	}
 		 	$queryfree = "select marks from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
 			$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
@@ -680,21 +680,21 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$totalScore+=$questionScore;
 		 	?>
 			</table></td></tr></table>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	<?php	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<?php
 	}
 	?>
 
@@ -702,7 +702,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		 </td>
 		<td width="346" valign = "top"><i>
 		<?php echo get_lang("Comment"); ?></i>
-			 <?php if($is_allowedToEdit) 
+			 <?php if($is_allowedToEdit)
 					 		{
 							//if (isset($_REQUEST['showdiv']) && $questionId==$_REQUEST['ques_id'])
 								//{
@@ -721,7 +721,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								$fck_attribute['Height'] = '150';
 								$fck_attribute['ToolbarSet'] = 'Comment';
 								$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
-								$$questionId = new FormValidator('frmcomments'.$questionId,'post','');													
+								$$questionId = new FormValidator('frmcomments'.$questionId,'post','');
 								$renderer =& $$questionId->defaultRenderer();
 								$renderer->setFormTemplate(
 	'<form{attributes}><div align="left">{content}</div></form>');
@@ -735,22 +735,22 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								//$$questionId->addElement('submit','submitQuestion',get_lang('Ok'));
 								$$questionId->setDefaults(${user.$questionId});
 								$$questionId->display();
-								?>	
+								?>
 								</div>
 							<?php
-							
-							
+
+
 								}
 							else
 								{
-							
+
 							$comnt = get_comments($id,$questionId);
 							echo "<br> <br>".$comnt;
 								}
-					?>  
+					?>
 
 		 </td>
-	</tr>	
+	</tr>
   <tr>
   <td></td>
   <td align= "left" >
@@ -764,9 +764,9 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								?>
 							 <div id="<?php echo $marksname; ?>" style="visibility:hidden">
 							 <form name="marksform_<?php echo $questionId; ?>" method="post" action="">
-														 
-								  
-								  <?php 
+
+
+								  <?php
 								  $arrmarks[] = $questionId;
 								 echo "Assign Marks ";
 								  echo "<select name='marks' id='marks'>";
@@ -777,10 +777,10 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 											?></option>
     									<?php } ?>
 								  </select>
-								  </form></div><?php 
+								  </form></div><?php
 								 }
 						}?>
-				
+
   </td><tr><td></td><td align="right"><b><?php echo get_lang('Score')." : $questionScore/$questionWeighting"; ?></b></td>
   </tr>
 	<?php  unset($objAnswerTmp);
@@ -788,7 +788,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 $totalWeighting+=$questionWeighting;
 		}
 ?>
-<tr><td></td><td align=right><b><?php 
+<tr><td></td><td align=right><b><?php
 			$query = "update `".$TABLETRACK_EXERCICES."` set exe_result = $totalScore where exe_id = '$id'";
 			api_sql_query($query,__FILE__,__LINE__);
 			echo get_lang('YourTotalScore')." ";
@@ -810,9 +810,9 @@ $totalWeighting+=$questionWeighting;
 			if($is_allowedToEdit)
 			{
 		?>
-			
+
 			 <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid=<?php echo $id; ?>&test=<?php echo $test; ?>&emailid=<?php echo $emailId;?>" method="post">
-			 <input type="submit" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"/> 
+			 <input type="submit" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"/>
 			 </form>
 		<?php } ?>
 		</td>

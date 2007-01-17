@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 10748 2007-01-17 08:22:39Z elixir_inter $
+<?php // $Id: question_pool.php 10774 2007-01-17 21:24:24Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,7 +39,7 @@ include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='exercice';
 
 include('../inc/global.inc.php');
@@ -49,8 +49,8 @@ $is_allowedToEdit=$is_courseAdmin;
 
 $TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
 $TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
-$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
-$TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
+$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 if ( empty ( $delete ) ) {
     $delete = $_GET['delete'];

@@ -1,38 +1,38 @@
-<?php // $Id: exercise.class.php 10691 2007-01-12 12:16:28Z elixir_inter $
+<?php // $Id: exercise.class.php 10774 2007-01-17 21:24:24Z pcool $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 
 if(!class_exists('Exercise')):
- 
+
 /**
-============================================================================== 
+==============================================================================
 	CLASS EXERCISE
 *
 *	This class allows to instantiate an object of type Exercise
 *
 *	@author Olivier Brouckaert
 *	@package dokeos.exercise
-============================================================================== 
+==============================================================================
 */
 class Exercise
 {
@@ -73,14 +73,11 @@ class Exercise
 	function read($id)
 	{
 		global $_course;
-		#$TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
-		#$TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
-		#$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
-		#$TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
-    $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-    $TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
-    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
-    #$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
+
+	    $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+    	$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
+	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 		$sql="SELECT title,description,sound,type,random,active FROM $TBL_EXERCICES WHERE id='$id'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -607,17 +604,17 @@ class Exercise
 		$sql="DELETE FROM $TBL_EXERCICES WHERE id='$id'";
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
-	
+
 	/**
 	 * Creates the form to create / edit an exercise
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
-	function createForm ($form) 
+	function createForm ($form)
 	{
-		
+
 		// title
 		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName').' : ');
-		
+
 		// fck editor
 		global $fck_attribute;
 		$fck_attribute = array();
@@ -625,19 +622,19 @@ class Exercise
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['ToolbarSet'] = 'NewTest';
 		$form -> addElement ('html_editor', 'exerciseDescription', get_lang('ExerciseDescription').' : ');
-		
+
 		// type
 		$radios = array();
 		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
 		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
 		$form -> addGroup($radios, null, get_lang('ExerciseType').' : ', '<br />');
-		
+
 		// submit
 		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
-		
+
 		// rules
 		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');
-		
+
 		// defaults
 		$defaults = array();
 		if($this -> id > 0)
@@ -647,25 +644,25 @@ class Exercise
 			$defaults['exerciseDescription'] = $this -> selectDescription();
 		}
 		$defaults['exerciseType'] = '1';
-		
+
 		$form -> setDefaults($defaults);
-		
-		
+
+
 	}
-	
-	
+
+
 	/**
 	 * function which process the creation of exercises
 	 * @param FormValidator $form the formvalidator instance
 	 */
-	function processCreation($form) 
+	function processCreation($form)
 	{
-		
+
 		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
 		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
 		$this -> updateType($form -> getSubmitValue('exerciseType'));
 		$this -> save();
-		
+
 	}
 }
 

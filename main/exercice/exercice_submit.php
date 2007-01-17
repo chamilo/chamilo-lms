@@ -1,4 +1,4 @@
-<?php // $Id: exercice_submit.php 10594 2007-01-05 13:54:24Z elixir_inter $
+<?php // $Id: exercice_submit.php 10774 2007-01-17 21:24:24Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,7 +62,7 @@ define('FREE_ANSWER', 5);
 define('HOT_SPOT', 			6);
 define('HOT_SPOT_ORDER', 	7);
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='exercice';
 
 include_once('../inc/global.inc.php');
@@ -74,8 +74,8 @@ $is_allowedToEdit=$is_courseAdmin;
 
 $TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
 $TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
-$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
-$TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
+$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 // general parameters passed via POST/GET
 
@@ -160,7 +160,7 @@ if($formSent)
             // $exerciseResult receives the content of the form.
             // Each choice of the student is stored into the array $choice
             $exerciseResult=$choice;
-            
+
             if (isset($_POST['hotspot']))
             {
             	$exerciseResultCoordinates = $_POST['hotspot'];
@@ -176,7 +176,7 @@ if($formSent)
             {
                 // stores the user answer into the array
                 $exerciseResult[$key]=$choice[$key];
-                
+
                 if (isset($_POST['hotspot']))
                 {
                 	$exerciseResultCoordinates[$key] = $_POST['hotspot'][$key];
@@ -222,7 +222,7 @@ if(!isset($_SESSION['objExercise']))
 
 }
 
-if(!isset($objExcercise) && isset($_SESSION['objExercise'])){	
+if(!isset($objExcercise) && isset($_SESSION['objExercise'])){
 	$objExercise = $_SESSION['objExercise'];
 }
 if(!is_object($objExercise))
@@ -246,7 +246,7 @@ if(!isset($_SESSION['questionList']))
     api_session_register('questionList');
     if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset - set now - end'."<br />\n";}
 }
-if(!isset($objExcercise) && isset($_SESSION['objExercise'])){	
+if(!isset($objExcercise) && isset($_SESSION['objExercise'])){
 	$questionList = $_SESSION['questionList'];
 }
 
@@ -273,7 +273,7 @@ $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices')
 if ($origin != 'learnpath') { //so we are not in learnpath tool
 
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
-					<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>					   
+					<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
 					<script language=\"JavaScript\" type=\"text/javascript\">
 					<!--
 					// -----------------------------------------------------------------------------
@@ -295,7 +295,7 @@ $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/Java
 					  on error resume next
 					  Dim swControl, swVersion
 					  swVersion = 0
-					  
+
 					  set swControl = CreateObject(\"ShockwaveFlash.ShockwaveFlash.\" + CStr(i))
 					  if (IsObject(swControl)) then
 					    swVersion = swControl.GetVariable(\"\$version\")
@@ -304,7 +304,7 @@ $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/Java
 					End Function
 					// -->
 					</script>
-					
+
 					<script language=\"JavaScript1.1\" type=\"text/javascript\">
 					<!-- // Detect Client Browser type
 					var isIE  = (navigator.appVersion.indexOf(\"MSIE\") != -1) ? true : false;
@@ -341,46 +341,46 @@ $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/Java
 						else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
 						// Can't detect in all other cases
 						else {
-							
+
 							flashVer = -1;
 						}
 						return flashVer;
-					} 
+					}
 					// When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
-					function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) 
+					function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 					{
 					 	reqVer = parseFloat(reqMajorVer + \".\" + reqRevision);
-					   	// loop backwards through the versions until we find the newest version	
-						for (i=25;i>0;i--) {	
+					   	// loop backwards through the versions until we find the newest version
+						for (i=25;i>0;i--) {
 							if (isIE && isWin && !isOpera) {
 								versionStr = VBGetSwfVer(i);
 							} else {
 								versionStr = JSGetSwfVer(i);
 							}
-							if (versionStr == -1 ) { 
+							if (versionStr == -1 ) {
 								return false;
 							} else if (versionStr != 0) {
 								if(isIE && isWin && !isOpera) {
 									tempArray         = versionStr.split(\" \");
 									tempString        = tempArray[1];
-									versionArray      = tempString .split(\",\");				
+									versionArray      = tempString .split(\",\");
 								} else {
 									versionArray      = versionStr.split(\".\");
 								}
 								versionMajor      = versionArray[0];
 								versionMinor      = versionArray[1];
 								versionRevision   = versionArray[2];
-								
+
 								versionString     = versionMajor + \".\" + versionRevision;   // 7.0r24 == 7.24
 								versionNum        = parseFloat(versionString);
 					        	// is the major.revision >= requested major.revision AND the minor version >= requested minor
 								if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
 									return true;
 								} else {
-									return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );	
+									return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
 								}
 							}
-						}	
+						}
 					}
 					// -->
 					</script>";
@@ -392,15 +392,15 @@ else
 	{
 		$charset = 'ISO-8859-15';
 	}
-	header('Content-Type: text/html; charset='. $charset);	
-	
+	header('Content-Type: text/html; charset='. $charset);
+
 	@$document_language = Database::get_language_isocode($language_interface);
 	if(empty($document_language))
 	{
 	  //if there was no valid iso-code, use the english one
 	  $document_language = 'en';
 	}
-	
+
 	/*
 	 * HTML HEADER
 	 */
@@ -443,7 +443,7 @@ foreach($questionList as $questionId)
 {
 	$i++;
 	$objQuestionTmp = Question :: read($questionId);
-	
+
 	// for sequential exercises
 	if($exerciseType == 2)
 	{

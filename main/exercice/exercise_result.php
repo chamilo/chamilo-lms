@@ -1,29 +1,29 @@
-<?php // $Id: exercise_result.php 10750 2007-01-17 08:43:53Z pcool $
+<?php // $Id: exercise_result.php 10774 2007-01-17 21:24:24Z pcool $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
-*	EXERCISE RESULT  
+==============================================================================
+*	EXERCISE RESULT
 *
 *	This script gets informations from the script "exercise_submit.php",
 *	through the session, and calculates the score of the student for
@@ -36,7 +36,7 @@
 *	@package dokeos.exercise
 *	@todo	split more code up in functions, move functions to library?
 * 	@todo 	use database library
-============================================================================== 
+==============================================================================
 */
 
 /*
@@ -58,7 +58,7 @@ define('HOT_SPOT', 6);
 define('HOT_SPOT_ORDER', 	7);
 
 global $_cid;
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='exercice';
 
 include('../inc/global.inc.php');
@@ -69,14 +69,14 @@ include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= $_course['dbNameGlu'].'quiz_rel_question';
 $TBL_EXERCICES         	= $_course['dbNameGlu'].'quiz';
-$TBL_QUESTIONS         	= $_course['dbNameGlu'].'quiz_question';
-$TBL_REPONSES          	= $_course['dbNameGlu'].'quiz_answer';
+$TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES          	= Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TABLETRACK_EXERCICES 	= $_configuration['statistics_database']."`.`track_e_exercices";
-$TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt"; 
+$TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt";
 $main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_ans 				= Database :: get_course_table(TABLE_QUIZ_ANSWER);
-					
+
 //temp values to move to AWACS
 $dsp_percent = false; //false to display total score as absolute values
 //debug param. 0: no display - 1: debug display
@@ -106,7 +106,7 @@ if ( empty ( $choice ) ) {
 }
 if ( empty ( $questionNum ) ) {
    $questionNum    = mysql_real_escape_string($_REQUEST['questionNum']);
-} 
+}
 if ( empty ( $nbrQuestions ) ) {
     $nbrQuestions   = mysql_real_escape_string($_REQUEST['nbrQuestions']);
 }
@@ -152,20 +152,20 @@ if ($origin != 'learnpath')
 }
 else
 {
-	
+
 	if(empty($charset))
 	{
 		$charset = 'ISO-8859-15';
 	}
-	header('Content-Type: text/html; charset='. $charset);	
-	
+	header('Content-Type: text/html; charset='. $charset);
+
 	@$document_language = Database::get_language_isocode($language_interface);
 	if(empty($document_language))
 	{
 	  //if there was no valid iso-code, use the english one
 	  $document_language = 'en';
 	}
-	
+
 	/*
 	 * HTML HEADER
 	 */
@@ -193,7 +193,7 @@ else
 
 function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect)
 {
-	?>	
+	?>
 	<tr>
 	<td width="5%" align="center">
 		<img src="../img/<?php echo ($answerType == UNIQUE_ANSWER)?'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
@@ -219,27 +219,27 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 
 function display_fill_in_blanks_answer($answer)
 {
-	?>					
+	?>
 		<tr>
 		<td>
 			<?php echo nl2br($answer); ?>
 		</td>
-		</tr>					
+		</tr>
 	<?php
 }
 
 function display_free_answer($answer)
 {
-	?>					
+	?>
 		<tr>
 		<td width="55%">
 			<?php echo nl2br(stripslashes($answer)); ?>
 		</td>
    <td width="45%">
     <?php echo get_lang('notCorrectedYet');?>
-	
+
    </td>
-		</tr>					
+		</tr>
 	<?php
 }
 
@@ -260,7 +260,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 									"#ED2024",
 									"#45C7F0",
 									"#F7BDE2");
-	?>		
+	?>
 		<tr>
 				<td width="25%" valign="top">
 					<div style="float:left; padding-left:5px;">
@@ -278,15 +278,15 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		</tr>
 	<?php
 }
-					
+
 /*
 ==============================================================================
 		MAIN CODE
 ==============================================================================
 */
 $exerciseTitle=api_parse_tex($exerciseTitle);
-	
-?>	
+
+?>
 	<h3><?php echo $exerciseTitle ?>: <?php echo get_lang("Result"); ?></h3>
 	<form method="get" action="exercice.php">
 	<input type="hidden" name="origin" value="<?php echo $origin; ?>" />
@@ -296,20 +296,20 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 <?php
 	$i=$totalScore=$totalWeighting=0;
 	if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionList: ";var_dump($questionList);}
- 
+
 
 	// added by Priya Saini
 	$sql = "select max(exe_Id) as id from `".$TABLETRACK_EXERCICES."`";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$exeId =mysql_result($res,0,"id");
 	$exeId=$exeId+1;
-	
+
 	foreach($questionList as $questionId)
 	{
 		// gets the student choice for this question
 		$choice=$exerciseResult[$questionId];
 		// creates a temporary Question object
-		
+
 		$objQuestionTmp = Question :: read($questionId);
 
 		$questionName=$objQuestionTmp->selectTitle();
@@ -371,7 +371,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		}
 		elseif($answerType == FILL_IN_BLANKS)
 		{
-			?>			
+			?>
 				<tr>
 				<td>
 					<i><?php echo get_lang("Answer"); ?></i>
@@ -381,7 +381,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		}
 		elseif($answerType == FREE_ANSWER)
 		{
-			?>			
+			?>
 				<tr>
 				<td width="55%">
 					<i><?php echo get_lang("Answer"); ?></i>
@@ -394,7 +394,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		}
 		elseif($answerType == HOT_SPOT)
 		{
-			?>			
+			?>
 				<tr>
 					<td width="40%">
 						<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
@@ -449,7 +449,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			switch($answerType)
 			{
 				// for unique answer
-				case UNIQUE_ANSWER :	
+				case UNIQUE_ANSWER :
 										$studentChoice=($choice == $answerId)?1:0;
 
 										if($studentChoice)
@@ -457,12 +457,12 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 										  	$questionScore+=$answerWeighting;
 											$totalScore+=$answerWeighting;
 										}
-										
+
 
 										break;
 				// for multiple answers
-				case MULTIPLE_ANSWER :	
-										
+				case MULTIPLE_ANSWER :
+
 										$studentChoice=$choice[$answerId];
 
 										if($studentChoice)
@@ -470,20 +470,20 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 											$questionScore+=$answerWeighting;
 											$totalScore+=$answerWeighting;
 										}
-										
+
 										break;
 				// for fill in the blanks
-				case FILL_IN_BLANKS :	// splits text and weightings that are joined with the character '::'									
-										
+				case FILL_IN_BLANKS :	// splits text and weightings that are joined with the character '::'
+
 										list($answer,$answerWeighting)=explode('::',$answer);
 
 										// splits weightings that are joined with a comma
 										$answerWeighting=explode(',',$answerWeighting);
 
 										// we save the answer because it will be modified
-										
+
 										$temp=$answer;
-								
+
 										// TeX parsing
 										// 1. find everything between the [tex] and [/tex] tags
 										 $startlocations=strpos($temp,'[tex]');
@@ -491,7 +491,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 										if($startlocations !== false && $endlocations !== false)
 										{
-											
+
 											$texstring=substr($temp,$startlocations,$endlocations-$startlocations+6);
 											// 2. replace this by {texcode}
 											$temp=str_replace($texstring,'{texcode}',$temp);
@@ -499,13 +499,13 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 										$answer='';
 
-				
+
 										$j=0;
 
 										// the loop will stop at the end of the text
 										while(1)
-										{ 
-												
+										{
+
 											// quits the loop if there are no more blanks
 											if(($pos = strpos($temp,'[')) === false)
 											{
@@ -524,14 +524,14 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 											// quits the loop if there are no more blanks
 											if(($pos = strpos($temp,']')) === false)
 											{
-												
+
 												// adds the end of the text
 												$answer.=$temp;
 												break;
 											}
 
 											$choice[$j]=trim($choice[$j]);
-						
+
 											// if the word entered by the student IS the same as the one defined by the professor
 											if(strtolower(substr($temp,0,$pos)) == stripslashes(strtolower($choice[$j])))
 											{
@@ -566,7 +566,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 										break;
 				// for free answer
-				case FREE_ANSWER :	   
+				case FREE_ANSWER :
 										$studentChoice=$choice;
 
 										if($studentChoice)
@@ -574,11 +574,11 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 										  	$questionScore=0;
 											$totalScore+=0;
 										}
-										
+
 
 										break;
 				// for matching
-				case MATCHING :			
+				case MATCHING :
 										if($answerCorrect)
 										{
 											if($answerCorrect == $choice[$answerId])
@@ -641,7 +641,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				elseif($answerType == FREE_ANSWER)
 				{
 					// to store the details of open questions in an array to be used in mail
-					
+
 					$arrques[] = $questionName;
 					$arrans[]  = $choice;
 					$firstName =   $_SESSION['_user']['firstName'];
@@ -666,7 +666,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				}
 				else
 				{
-					?>					
+					?>
 						<tr>
 						<td width="50%">
 							<?php
@@ -679,18 +679,18 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 							$matching[$answerCorrect]=api_parse_tex($matching[$answerCorrect]);
 							echo $matching[$answerCorrect]; ?></b></font>
 						</td>
-						</tr>		
+						</tr>
 					<?php
 				}
 			}
 		} // end for that loops over all answers of the current question
-		
+
 		if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER)
 			{
 				// We made an extra table for the answers
 				echo "</table></td></tr>";
 			}
-		?>	
+		?>
 			<tr>
 			<td colspan="<?php echo $colspan; ?>" align="right">
 				<b><?php echo get_lang('Score')." : $questionScore/$questionWeighting"; ?></b>
@@ -716,7 +716,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				for ($i=0;$i<sizeof($reply);$i++)
 				{
 					$ans = $reply[$i];
-					exercise_attempt($questionScore,$ans,$quesId,$exeId);			
+					exercise_attempt($questionScore,$ans,$quesId,$exeId);
 				}
 			}
 			elseif ($answerType==4)
@@ -724,16 +724,16 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				$j=3;
 				for ($i=0;$i<sizeof($choice);$i++,$j++)
 				{
-					
+
 					$val = $choice[$j];
 					if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
 						$val = $arr1[1][0];
-					$sql = "select position from $table_ans where question_id=$questionId and answer='$val'";	
+					$sql = "select position from $table_ans where question_id=$questionId and answer='$val'";
 					$res = api_sql_query($sql, __FILE__, __LINE__);
 					$answer = mysql_result($res,0,"position");
-					
+
 					exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
-						
+
 				}
 			}
 			elseif ($answerType==5)
@@ -781,14 +781,14 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		</td>
 		</tr>
 		</table>
-		
+
 		</form>
-		
+
 		<br />
 	<?php
 /*
 ==============================================================================
-		Tracking of results 
+		Tracking of results
 ==============================================================================
 */
 
@@ -796,7 +796,7 @@ if($_configuration['tracking_enabled'])
 {
 	//include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 	event_exercice($objExercise->selectId(),$totalScore,$totalWeighting,$answer,$question_id);
-	
+
 }
 
 if ($origin != 'learnpath')
@@ -822,15 +822,15 @@ if (!empty($arrques))
 	$msg = "<html><head>
 	 <link rel='stylesheet' href='http://www.dokeos.com/styles.css' type='text/css'>
   <meta content='text/html; charset=ISO-8859-1' http-equiv='content-type'>";
-  
+
 
 /*<style type='text/css'>
 
 <!--
 .body{
-font-family: Verdana, Arial, Helvetica, sans-serif; 
-font-weight: Normal; 
-color: #000000; 
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-weight: Normal;
+color: #000000;
 }
 .style8 {font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: #006699; }
 .style10 {
@@ -881,7 +881,7 @@ color: #000000;
     <td width='220' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Answer </span></td>
     <td valign='top' bgcolor='F3F3F3'><span class='style16'> #answer#</span></td>
   	</tr>";
-					
+
 	$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
 	$msg= str_replace("#firstName#",$firstName,$msg1);
 	$msg1= str_replace("#lastName#",$lastName,$msg);
@@ -890,7 +890,7 @@ color: #000000;
 	$msg= str_replace("#answer#",$arrans[$i],$msg1);
 	$msg1= str_replace("#i#",$i,$msg);
 	$msg= str_replace("#course#",$courseName,$msg1);
-			
+
 	}
 	$msg.="</table><br>*/
 	//
@@ -932,7 +932,7 @@ color: #000000;
     <td width='220' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Answer </span></td>
     <td valign='top' bgcolor='F3F3F3'><span class='style16'> #answer#</span></td>
   	</tr>";
-					
+
 	$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
 	$msg= str_replace("#firstName#",$firstName,$msg1);
 	$msg1= str_replace("#lastName#",$lastName,$msg);
@@ -941,7 +941,7 @@ color: #000000;
 	$msg= str_replace("#answer#",$arrans[$i],$msg1);
 	$msg1= str_replace("#i#",$i,$msg);
 	$msg= str_replace("#course#",$courseName,$msg1);
-			
+
 	}
 	$msg.="</table><br>
  	<span class='style16'>Click the following links tp check the answer and give feedbacks,<br>

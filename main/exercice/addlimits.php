@@ -1,6 +1,6 @@
 <?php
 /**
- * @todo use database library 
+ * @todo use database library
  */
 /*
 -----------------------------------------------------------
@@ -35,7 +35,7 @@ define('FREE_ANSWER', 5);
 	Language
 -----------------------------------------------------------
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='exercice';
 
 /*
@@ -49,58 +49,71 @@ api_protect_course_script();
 
 /*
 -----------------------------------------------------------
-	Table definitions 
+	Table definitions
 	@todo: use the Database :: get_course_table functions
 -----------------------------------------------------------
 */
 $TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
 $TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
-$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
-$TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
+$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES          = Database::get_course_table('quiz_answer');
 $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt"; 
+$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt";
 $TABLETRACK_EXERCICES = $_configuration['statistics_database']."`.`track_e_exercices";
 
-$dsp_percent = false; 
+$dsp_percent = false;
 $debug=0;
-if($debug>0){echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);}
+if($debug>0)
+{
+	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);
+}
 // general parameters passed via POST/GET
-if ( empty ( $origin ) ) {
+if ( empty ( $origin ) )
+{
     $origin = $_REQUEST['origin'];
 }
-if ( empty ( $learnpath_id ) ) {
+if ( empty ( $learnpath_id ) )
+{
     $learnpath_id       = mysql_real_escape_string($_REQUEST['learnpath_id']);
 }
-if ( empty ( $learnpath_item_id ) ) {
+if ( empty ( $learnpath_item_id ) )
+{
     $learnpath_item_id  = mysql_real_escape_string($_REQUEST['learnpath_item_id']);
 }
-if ( empty ( $formSent ) ) {
+if ( empty ( $formSent ) )
+{
     $formSent= $_REQUEST['formSent'];
 }
-if ( empty ( $exerciseResult ) ) {
+if ( empty ( $exerciseResult ) )
+{
     $exerciseResult = $_SESSION['exerciseResult'];
 }
-if ( empty ( $questionId ) ) {
+if ( empty ( $questionId ) )
+{
     $questionId = $_REQUEST['questionId'];
 }
 if ( empty ( $choice ) ) {
     $choice = $_REQUEST['choice'];
 }
-if ( empty ( $questionNum ) ) {
+if ( empty ( $questionNum ) )
+{
     $questionNum    = mysql_real_escape_string($_REQUEST['questionNum']);
-} 
-if ( empty ( $nbrQuestions ) ) {
+}
+if ( empty ( $nbrQuestions ) )
+{
     $nbrQuestions   = mysql_real_escape_string($_REQUEST['nbrQuestions']);
 }
-if ( empty ( $questionList ) ) {
+if ( empty ( $questionList ) )
+{
     $questionList = $_SESSION['questionList'];
 }
-if ( empty ( $objExercise ) ) {
+if ( empty ( $objExercise ) )
+{
     $objExercise = $_SESSION['objExercise'];
 }
 $exercise_id = $_GET['exercise_id'];
-$is_allowedToEdit=$is_courseAdmin;	
+$is_allowedToEdit=$is_courseAdmin;
 
 
 $nameTools=get_lang('Exercice');
@@ -117,7 +130,7 @@ Display::display_header($nameTools,"Exercise");
 include('../inc/global.inc.php');
 if (isset($_POST['ok']))
 {
-	$message = "Test limits added";
+	$message = get_lang('TestLimitsAdded');
 	Display::display_normal_message($message);
 }
 ?>
@@ -127,26 +140,23 @@ if (isset($_POST['ok']))
   <script type="text/javascript">
   function selectlimited()
   {
-  document.getElementById('limited').checked="checked";
+  	document.getElementById('limited').checked="checked";
   }
    function selectattempts()
   {
-  document.getElementById('attemptlimited').checked="checked";
+  	document.getElementById('attemptlimited').checked="checked";
   }
   </script>
-  <h3>
-  <?php 
-  echo "AddLimits"; ?>
-</h3>
+  <h3><?php  echo get_lang('AddLimits'); ?></h3>
 <br>
 <form action="addlimits.php" name="frmlimit" method="post">
 <h4>
 Time :
 </h4>
 <input type="hidden" name="exe_id" value="<?php echo $exercise_id; ?>" />
-<input type="radio" name="limit" checked="checked" value="0" id="unlimit"> Unlimited
+<input type="radio" name="limit" checked="checked" value="0" id="unlimit"><?php echo get_lang('Unlimited'); ?>
 <br>
-<input type="radio" name="limit" value="1" id="limited"> Limited: Each question of the test should be answered in
+<input type="radio" name="limit" value="1" id="limited"><?php echo get_lang('LimitedTime'); ?>
 <select name="minutes" onfocus="selectlimited();" >
   <option selected="selected">1</option>
   <option>2</option>
@@ -165,13 +175,13 @@ Time :
   <option>40</option>
   <option>50</option>
   <option>60</option>
-</select> minute(s).
+</select><?php echo get_lang('Minutes'); ?>.
 <h4>
-Attempts :
+<?php echo get_lang('Attempts'); ?>:
 </h4>
-<input type="radio" name="attempt" checked="checked" value="0" id="attemptunlimited"> Unlimited
+<input type="radio" name="attempt" checked="checked" value="0" id="attemptunlimited"><?php echo get_lang('Unlimited'); ?>
 <br>
-<input type="radio" name="attempt" value="1" id="attemptlimited"> Limited: The test can be taken only
+<input type="radio" name="attempt" value="1" id="attemptlimited"><?php echo get_lang('LimitedAttempts'); ?>
 <select name="attempts" onfocus="selectattempts();">
   <option selected="selected">1</option>
   <option>2</option>
@@ -183,10 +193,10 @@ Attempts :
   <option>8</option>
   <option>9</option>
   <option>10</option>
-  </select> time(s).
+  </select><?php echo get_lang('Times'); ?>.
 
 <br> <br>
-<input type="submit" name="ok" value="Ok">
+<input type="submit" name="ok" value="<?php echo get_lang('Ok'); ?>">
 </form>
 <?php
 /**

@@ -1,25 +1,25 @@
-<?php // $Id: answer.class.php 10594 2007-01-05 13:54:24Z elixir_inter $
+<?php // $Id: answer.class.php 10774 2007-01-17 21:24:24Z pcool $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 
 if(!class_exists('Answer')):
@@ -112,13 +112,13 @@ class Answer
 	function read()
 	{
 		global $_course;
-		$TBL_ANSWER = Database::get_course_table('quiz_answer');
+		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
-				
-		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type FROM $TBL_ANSWER WHERE question_id='$questionId' ORDER BY position";			
-		
+
+		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type FROM $TBL_ANSWER WHERE question_id='$questionId' ORDER BY position";
+
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		$i=1;
@@ -147,24 +147,24 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 	 */
 	function readOrderedBy($field,$order=ASC)
 	{
-		global $_course;		
+		global $_course;
 		$field = mysql_real_escape_string($field);
 		if(empty($field)){
 			$field = 'position';
 		}
 		if($order != 'ASC' and $order!='DESC'){
 			$order = 'ASC';
-		}		
+		}
 		$TBL_ANSWER = Database::get_course_table('quiz_answer');
 
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
-		
+
 		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type " .
 				"FROM $TBL_ANSWER " .
 				"WHERE question_id='$questionId' " .
 				"ORDER BY $field $order";
-	
+
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		$i=1;
@@ -217,7 +217,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 	{
 		return $this->answer[$id];
 	}
-	
+
 	/**
 	 * Returns a list of answers
 	 * @author Yannick Warnier <ywarnier@beeznest.org>
@@ -256,7 +256,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 	 	}
 	 	return $list;
 	 }
-	 
+
 	 /**
 	  * Returns the question type
 	  * @author	Yannick Warnier <ywarnier@beeznest.org>
@@ -273,7 +273,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 	 	$row = Database::fetch_array($res);
 	 	return $row['type'];
 	 }
-	 
+
 
 	/**
 	 * tells if answer is correct or not
@@ -364,7 +364,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		$this->new_nbrAnswers++;
 
 		$id=$this->new_nbrAnswers;
-		
+
 		$this->new_answer[$id]=$answer;
 		$this->new_correct[$id]=$correct;
 		$this->new_comment[$id]=$comment;
@@ -373,7 +373,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		$this->new_hotspot_coordinates[$id]=$new_hotspot_coordinates;
 		$this->new_hotspot_type[$id]=$new_hotspot_type;
 	}
-	
+
 	/**
 	 * updates an answer
 	 *
@@ -386,9 +386,9 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 	function updateAnswers($answer,$comment,$weighting,$position)
 	{
 		global $TBL_REPONSES;
-		
+
 		$questionId=$this->questionId;
-		
+
 		$sql = "UPDATE `$TBL_REPONSES` SET " .
 				"`answer` = '$answer', " .
 				"`comment` = '$comment', " .
@@ -396,7 +396,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 				"`position` = '$position' " .
 				"WHERE `id` =$position " .
 				"AND `question_id` =$questionId";
-		
+
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
 
@@ -419,7 +419,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		$sql="INSERT INTO `$TBL_REPONSES`" .
 				"(id,question_id,answer,correct,comment," .
 				"ponderation,position,hotspot_coordinates,hotspot_type) VALUES";
-		
+
 		for($i=1;$i <= $this->new_nbrAnswers;$i++)
 		{
 			$answer=addslashes($this->new_answer[$i]);
@@ -433,9 +433,9 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 			$sql.="('$i','$questionId','$answer','$correct','$comment',
 					'$weighting','$position','$hotspot_coordinates','$hotspot_type'),";
 		}
-		
+
 		$sql = substr($sql,0,-1);
-		
+
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		// moves $new_* arrays

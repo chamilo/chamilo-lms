@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 10691 2007-01-12 12:16:28Z elixir_inter $
+<?php // $Id: admin.php 10774 2007-01-17 21:24:24Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -75,7 +75,7 @@ include('question.class.php');
 include('answer.class.php');
 
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='exercice';
 
 include("../inc/global.inc.php");
@@ -109,28 +109,36 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 
 // get vars from GET
-if ( empty ( $exerciseId ) ) {
+if ( empty ( $exerciseId ) )
+{
     $exerciseId = mysql_real_escape_string($_GET['exerciseId']);
 }
-if ( empty ( $newQuestion ) ) {
+if ( empty ( $newQuestion ) )
+{
     $newQuestion = $_GET['newQuestion'];
 }
-if ( empty ( $modifyAnswers ) ) {
+if ( empty ( $modifyAnswers ) )
+{
     $modifyAnswers = $_GET['modifyAnswers'];
 }
-if ( empty ( $editQuestion ) ) {
+if ( empty ( $editQuestion ) )
+{
     $editQuestion = $_GET['editQuestion'];
 }
-if ( empty ( $modifyQuestion ) ) {
+if ( empty ( $modifyQuestion ) )
+{
     $modifyQuestion = $_GET['modifyQuestion'];
 }
-if ( empty ( $deleteQuestion ) ) {
+if ( empty ( $deleteQuestion ) )
+{
     $deleteQuestion = $_GET['deleteQuestion'];
 }
-if ( empty ( $questionId ) ) {
+if ( empty ( $questionId ) )
+{
     $questionId = $_SESSION['questionId'];
 }
-if ( empty ( $modifyExercise ) ) {
+if ( empty ( $modifyExercise ) )
+{
     $modifyExercise = $_GET['modifyExercise'];
 }
 
@@ -161,8 +169,8 @@ $aType=array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillB
 // tables used in the exercise tool
 $TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
 $TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
-$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
-$TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
+$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TBL_DOCUMENT          = $_course['dbNameGlu']."document";
 
 if(!$is_allowedToEdit)
@@ -179,8 +187,7 @@ if(!is_object($objExercise))
 	// creation of a new exercise if wrong or not specified exercise ID
 	if($exerciseId)
 	{
-	
-    $objExercise->read($exerciseId);
+	    $objExercise->read($exerciseId);
 	}
 
 	// saves the object into the session
@@ -282,12 +289,12 @@ else
 	$nameTools=get_lang('ExerciseManagement');
 }
 
-$interbreadcrump[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 
 // shows a link to go back to the question pool
 if(!$exerciseId && $nameTools != get_lang('ExerciseManagement'))
 {
-	$interbreadcrump[]=array("url" => "question_pool.php?fromExercise=$fromExercise","name" => get_lang('QuestionPool'));
+	$interbreadcrumb[]=array("url" => "question_pool.php?fromExercise=$fromExercise","name" => get_lang('QuestionPool'));
 }
 
 // if the question is duplicated, disable the link of tool name
@@ -326,7 +333,7 @@ Function VBGetSwfVer(i)
   on error resume next
   Dim swControl, swVersion
   swVersion = 0
-  
+
   set swControl = CreateObject(\"ShockwaveFlash.ShockwaveFlash.\" + CStr(i))
   if (IsObject(swControl)) then
     swVersion = swControl.GetVariable(\"\$version\")
@@ -372,46 +379,46 @@ function JSGetSwfVer(i){
 	else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
 	// Can't detect in all other cases
 	else {
-		
+
 		flashVer = -1;
 	}
 	return flashVer;
-} 
+}
 // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
-function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) 
+function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 {
  	reqVer = parseFloat(reqMajorVer + \".\" + reqRevision);
-   	// loop backwards through the versions until we find the newest version	
-	for (i=25;i>0;i--) {	
+   	// loop backwards through the versions until we find the newest version
+	for (i=25;i>0;i--) {
 		if (isIE && isWin && !isOpera) {
 			versionStr = VBGetSwfVer(i);
 		} else {
 			versionStr = JSGetSwfVer(i);
 		}
-		if (versionStr == -1 ) { 
+		if (versionStr == -1 ) {
 			return false;
 		} else if (versionStr != 0) {
 			if(isIE && isWin && !isOpera) {
 				tempArray         = versionStr.split(\" \");
 				tempString        = tempArray[1];
-				versionArray      = tempString .split(\",\");				
+				versionArray      = tempString .split(\",\");
 			} else {
 				versionArray      = versionStr.split(\".\");
 			}
 			versionMajor      = versionArray[0];
 			versionMinor      = versionArray[1];
 			versionRevision   = versionArray[2];
-			
+
 			versionString     = versionMajor + \".\" + versionRevision;   // 7.0r24 == 7.24
 			versionNum        = parseFloat(versionString);
         	// is the major.revision >= requested major.revision AND the minor version >= requested minor
 			if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
 				return true;
 			} else {
-				return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );	
+				return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
 			}
 		}
-	}	
+	}
 }
 // -->
 </script>";
@@ -428,7 +435,7 @@ if($newQuestion || $editQuestion)
 {
 	// statement management
 	$type = $_REQUEST['answerType'];
-	?><input type="hidden" name="Type" value="<?php echo $type; ?>" /> 
+	?><input type="hidden" name="Type" value="<?php echo $type; ?>" />
 	<?php
 	include('question_admin.inc.php');
 }
@@ -440,7 +447,7 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 {
 	// question list management
 	include('question_list_admin.inc.php');
-	
+
 }
 
 

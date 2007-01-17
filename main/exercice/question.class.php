@@ -1,33 +1,33 @@
-<?php // $Id: question.class.php 10748 2007-01-17 08:22:39Z elixir_inter $
+<?php // $Id: question.class.php 10774 2007-01-17 21:24:24Z pcool $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	File containing the Question class.
 *
 *	@author Olivier Brouckaert
 *	@package dokeos.exercise
-============================================================================== 
+==============================================================================
 */
 
 if(!class_exists('Question')):
@@ -45,7 +45,7 @@ define(HOT_SPOT_ORDER, 	7);
 
 /**
 	CLASS QUESTION
- *	
+ *
  *	This class allows to instantiate an object of type Question
  *
  *	@author Olivier Brouckaert, original author
@@ -60,11 +60,11 @@ abstract class Question
 	var $weighting;
 	var $position;
 	var $type;
-	
+
 	var $picture;
 
 	var $exerciseList;  // array with the list of exercises which this question is in
-	
+
 	static $typePicture = 'new_question.png';
 	static $explanationLangVar = '';
 	static $questionTypes = array(
@@ -75,7 +75,7 @@ abstract class Question
 							FREE_ANSWER => array('freeanswer.class.php' , 'FreeAnswer'),
 							HOT_SPOT => array('hotspot.class.php' , 'HotSpot')
 							);
-	
+
 	/**
 	 * constructor of the class
 	 *
@@ -104,14 +104,14 @@ abstract class Question
 	static function read($id)
 	{
 		global $_course;
-		
+
 		$TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
-		$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
+		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
 		$sql="SELECT question,description,ponderation,position,type,picture FROM `$TBL_QUESTIONS` WHERE id='$id'";
-		
+
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		
+
 		// if the question has been found
 		if($object=mysql_fetch_object($result))
 		{
@@ -335,7 +335,7 @@ abstract class Question
 
 		return false;
 	}
-	
+
 	/**
 	 * Resizes a picture || Warning!: can only be called after uploadPicture, or if picture is already available in object.
 	 *
@@ -347,22 +347,22 @@ abstract class Question
 	function resizePicture($Dimension, $Max)
 	{
 		global $picturePath;
-		
+
 		// if the question has an ID
 		if($this->id)
 		{
 	  		// Get dimensions from current image.
 	  		$current_img = imagecreatefromjpeg($picturePath.'/'.$this->picture);
-			
+
 	  		$current_image_size = getimagesize($picturePath.'/'.$this->picture);
 	  		$current_height = imagesy($current_img);
 			$current_width = imagesx($current_img);
-			
+
 			if($current_image_size[0] < $Max && $current_image_size[1] <$Max)
 				return true;
 			elseif($current_height == "")
 				return false;
-			
+
 			// Resize according to height.
 			if ($Dimension == "height")
 			{
@@ -370,7 +370,7 @@ abstract class Question
 				$new_height = $Max;
 				$new_width = ceil($current_width / $resize_scale);
 			}
-			
+
 			// Resize according to width
 			if ($Dimension == "width")
 			{
@@ -378,7 +378,7 @@ abstract class Question
 				$new_width = $Max;
 				$new_height = ceil($current_height / $resize_scale);
 			}
-			
+
 			// Resize according to height or width, both should not be larger than $Max after resizing.
 			if ($Dimension == "any")
 			{
@@ -395,22 +395,22 @@ abstract class Question
 					$new_height = ceil($current_height / $resize_scale);
 				}
 			}
-			
+
 			// Create new image
 		    $new_img = imagecreatetruecolor($new_width, $new_height);
 			$bgColor = imagecolorallocate($new_img, 255,255,255);
 			imagefill($new_img , 0,0 , $bgColor);
-			
+
 			// Resize image
 			imagecopyresized($new_img, $current_img, 0, 0, 0, 0, $new_width, $new_height, $current_width, $current_height);
-			
+
 			// Write image to file
 		    $result = imagejpeg($new_img, $picturePath.'/'.$this->picture, 100);
-		    
+
 		    // Delete temperory images, clear memory
 			imagedestroy($current_img);
 			imagedestroy($new_img);
-			
+
 			if ($result)
 			{
 				return true;
@@ -421,7 +421,7 @@ abstract class Question
 			}
 		}
 
-		
+
 	}
 
 	/**
@@ -559,13 +559,13 @@ abstract class Question
 		{
 			$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,position,type,picture) VALUES('$question','$description','$weighting','$position','$type','$picture')";
 			api_sql_query($sql,__FILE__,__LINE__);
-			
+
 			$this->id=mysql_insert_id();
-			
+
 			// If hotspot, create first answer
 			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
-				$TBL_ANSWERS = $_course['dbNameGlu'].'quiz_answer';
-				
+				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
+
 				$sql="INSERT INTO `$TBL_ANSWERS` (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '$this->id', '', NULL , '', NULL , '1', '0;0|0|0', 'square')";
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
@@ -597,7 +597,7 @@ abstract class Question
 			$this->exerciseList[]=$exerciseId;
 
 			$sql="INSERT INTO `$TBL_EXERCICE_QUESTION`(question_id,exercice_id) VALUES('$id','$exerciseId')";
-			
+
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 	}
@@ -699,19 +699,19 @@ abstract class Question
 
 		return $id;
 	}
-	
+
 	/**
 	 * Returns an instance of the class corresponding to the type
 	 * @param integer $type the type of the question
 	 * @return an instance of a Question subclass (or of Questionc class by default)
 	 */
 	static function getInstance ($type) {
-		
+
 		list($file_name,$class_name) = self::$questionTypes[$type];
 
 		include_once ($file_name);
-		
-		
+
+
 		if(class_exists($class_name))
 		{
 			return new $class_name();
@@ -721,25 +721,25 @@ abstract class Question
 			echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
 			return null;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Creates the form to create / edit a question
 	 * A subclass can redifine this function to add fields...
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
 	function createForm (&$form) {
-		
+
 		// question name
 		$form->addElement('text','questionName',get_lang('Question'),'size="60"');
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
-		
+
 		// question type
 		$answerType= intval($_REQUEST['answerType']);
 		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
-		
-		
+
+
 		// html editor
 		global $fck_attribute;
 		$fck_attribute = array();
@@ -749,50 +749,50 @@ abstract class Question
 		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
 		if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
-		
+
 		$form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false);
-		
+
 		// hidden values
-		$form->addElement('hidden','myid',$_REQUEST['myid']);	
-		
-		
+		$form->addElement('hidden','myid',$_REQUEST['myid']);
+
+
 		// default values
 		$defaults = array();
 		$defaults['questionName'] = $this -> question;
 		$defaults['questionDescription'] = $this -> description;
 		$form -> setDefaults($defaults);
 	}
-	
+
 	/**
 	 * function which process the creation of questions
 	 * @param FormValidator $form the formvalidator instance
 	 * @param Exercise $objExercise the Exercise instance
 	 */
 	function processCreation ($form, $objExercise) {
-		   
+
 		$this -> updateTitle($form->getSubmitValue('questionName'));
 	    $this -> updateDescription($form->getSubmitValue('questionDescription'));
 	    $this -> save($objExercise -> id);
-	    
+
 	    // modify the exercise
 	    $objExercise->addToList($this -> id);
 	    $objExercise->save();
-	    
+
 	}
-	
+
 	/**
 	 * abstract function which creates the form to create / edit the answers of the question
 	 * @param the formvalidator instance
 	 */
 	abstract function createAnswersForm ($form);
-	
+
 	/**
 	 * abstract function which process the creation of answers
-	 * @param the formvalidator instance 
+	 * @param the formvalidator instance
 	 */
 	abstract function processAnswersCreation ($form);
-	
-	
+
+
 	/**
 	 * Displays the menu of question types
 	 */
@@ -814,7 +814,7 @@ abstract class Question
 			include_once($a_type[0]);
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
-			
+
 			echo '
 			<div id="answer_type_'.$i.'" style="display: inline">
 				<a href="admin.php?newQuestion=yes&answerType='.$i.'" onmouseover="explain(\''.$explanation.'\')"><img src="'.api_get_path(WEB_IMG_PATH).'/'.$img.'" /></a>
@@ -822,7 +822,7 @@ abstract class Question
 		}
 		echo '
 		<div id="answer_type_explanation" class="accordion_content" style="display:block">'.get_lang('ChooseQuestionType').'</div></div>';
-		
+
 	}
 }
 

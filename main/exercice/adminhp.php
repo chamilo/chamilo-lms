@@ -1,4 +1,4 @@
-<?php // $Id: adminhp.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: adminhp.php 10774 2007-01-17 21:24:24Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,7 +34,7 @@ include('answer.class.php');
 
 include('exercise.lib.php');
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='exercice';
 
 include('../inc/global.inc.php');
@@ -44,7 +44,7 @@ if(isset($_REQUEST["cancel"]))
 {
 	if($_REQUEST["cancel"]==get_lang('Cancel'))
 	{
-				header("Location: exercice.php");		
+				header("Location: exercice.php");
 	}
 }
 
@@ -57,7 +57,7 @@ define(UNIQUE_ANSWER,	1);
 define(MULTIPLE_ANSWER,	2);
 define(FILL_IN_BLANKS,	3);
 define(MATCHING,		4);
-define(FREE_ANSWER,     5); 
+define(FREE_ANSWER,     5);
 
 // allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);
@@ -94,6 +94,7 @@ $nameTools = get_lang('adminHP');
 
 Display::display_header($nameTools,"Exercise");
 
+/** @todo probably wrong !!!! */
 require_once(api_get_path(SYS_PATH).'claroline/exercice/hotpotatoes.lib.php');
 
 ?>
@@ -105,12 +106,12 @@ require_once(api_get_path(SYS_PATH).'claroline/exercice/hotpotatoes.lib.php');
 <?php
 if(isset($newName))
 {
-		if($newName!="")		
+		if($newName!="")
 		{
 			//alter database record for that test
 			SetComment($hotpotatoesName,$newName);
 			echo "<script language='Javascript' type='text/javascript'> window.location='exercice.php'; </script>";
-		}		
+		}
 }
 
 echo "<form action=\"{$_SERVER['PHP_SELF']}\" method='post' name='form1'>";
@@ -125,7 +126,7 @@ if($lstrComment=="")
 if($lstrComment=="")
 	$lstrComment = GetFileName($hotpotatoesName,$documentPath);
 
-echo $lstrComment;	
+echo $lstrComment;
 echo "\" size=40>&nbsp;";
 echo "<input type=\"submit\" name=\"submit\" value=\"".get_lang('Ok')."\">&nbsp;";
 echo "<input type=\"button\" name=\"cancel\" value=\"".get_lang('Cancel')."\" onclick=\"javascript:document.form1.newName.value='';\">";

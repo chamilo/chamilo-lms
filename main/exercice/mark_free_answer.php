@@ -1,35 +1,35 @@
 <?php // $Id: mark_free_answer.php,v 1.1.2.1 2005/08/30 01:47:37 yannoo Exp $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2005 Yannick Warnier <yannick.warnier@dokeos.com>
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
-*	FREE ANSWER MARKING SCRIPT  
+==============================================================================
+*	FREE ANSWER MARKING SCRIPT
 *
 *	This script allows a course tutor to mark a student's free answer.
 *	@author Yannick Warnier <yannick.warnier@dokeos.com>
 *	@package dokeos.exercise
-* 
+*
 * 	@todo use the Database:: functions
 * 	@todo respect coding guidelines
-============================================================================== 
+==============================================================================
 */
 
 /*
@@ -37,10 +37,10 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='exercice';
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 include('../inc/global.inc.php');
 
 // including additional libraries
@@ -62,8 +62,8 @@ define('FREE_ANSWER', 5);
 /** @todo use the Database:: functions */
 $TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
 $TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
-$TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';
-$TBL_REPONSES          = $_course['dbNameGlu'].'quiz_answer';
+$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 //debug param. 0: no display - 1: debug display
 $debug=0;
@@ -111,23 +111,23 @@ $obj_question = Question :: read($my_qst);
 
 $nameTools=get_lang('Exercice');
 
-$interbreadcrump[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 
 $my_msg = 'No change.';
 
 if($action == 'mark'){
 	if (!empty($_POST['score']) AND $_POST['score'] < $obj_question->selectWeighting() AND $_POST['score'] >= 0){
-		
+
 		//mark the user mark into the database using something similar to the following function:
 		global $_configuration;
-		
+
 		if($_configuration['tracking_enabled'])
 		{
 			$exercise_table = Database::get_statistic_table('track_e_exercices');
 			#$tbl_learnpath_user = Database::get_course_table('learnpath_user');
 			#global $origin, $tbl_learnpath_user, $learnpath_id, $learnpath_item_id;
-			$sql = "SELECT * FROM $exercise_table 
-				WHERE exe_user_id = '$my_usr' AND exe_cours_id = '$my_cid' AND exe_exo_id = '$my_exe' 
+			$sql = "SELECT * FROM $exercise_table
+				WHERE exe_user_id = '$my_usr' AND exe_cours_id = '$my_cid' AND exe_exo_id = '$my_exe'
 				ORDER BY exe_date DESC";
 			#echo $sql;
 			$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -136,7 +136,7 @@ if($action == 'mark'){
 				//@todo Check that just summing past score and the new free answer mark doesn't come up
 				// with a score higher than the possible score for that exercise
 				$my_score = $row['exe_result'] + $_POST['score'];
-				$sql = "UPDATE $exercise_table SET exe_result = '$my_score' 
+				$sql = "UPDATE $exercise_table SET exe_result = '$my_score'
 					WHERE exe_id = '".$row['exe_id']."'";
 				#echo $sql;
 				$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -153,7 +153,7 @@ if($action == 'mark'){
 						   `exe_weighting`,
 						   `exe_date`
 						  )
-				
+
 						  VALUES
 						  (
 						  ".$my_usr.",
@@ -196,7 +196,7 @@ if($action == 'mark'){
 	echo $my_msg.'<br />
 		<a href="exercice.php?cidReq='.$cidReq.'">'.get_lang('Back').'</a>';
 }else{
-	
+
 
 	echo '<h2>'.$obj_question->question .':</h2>
 		'.$obj_question->selectTitle().'<br /><br />

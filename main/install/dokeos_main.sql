@@ -585,8 +585,8 @@ INSERT INTO `settings_options` VALUES
 (79,'allow_email_editor', 'false', 'No'),
 (80,'show_email_addresses','true','Yes'),
 (81,'show_email_addresses','false','No'),
-(82,'wacg_anysurfer_public_pages', 'true', 'Yes'),
-(83,'wacg_anysurfer_public_pages', 'false', 'No');
+(82,'wcag_anysurfer_public_pages', 'true', 'Yes'),
+(83,'wcag_anysurfer_public_pages', 'false', 'No');
 UNLOCK TABLES;
 
 

@@ -487,7 +487,8 @@ INSERT INTO `settings_current` VALUES
 (78, 'service_ppt2lp', 'active', 'radio',NULL,'false', 'ppt2lp_actived','', NULL, NULL),
 (79, 'service_ppt2lp', 'host', NULL, NULL, NULL, 'Host', NULL, NULL, NULL),
 (80, 'service_ppt2lp', 'user', NULL, NULL, NULL, 'UserOnHost', NULL, NULL, NULL),
-(81, 'service_ppt2lp', 'ftp_password', NULL, NULL, NULL, 'FtpPassword', NULL, NULL, NULL);
+(81, 'service_ppt2lp', 'ftp_password', NULL, NULL, NULL, 'FtpPassword', NULL, NULL, NULL),
+(82, 'wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL);
 
 
 UNLOCK TABLES;

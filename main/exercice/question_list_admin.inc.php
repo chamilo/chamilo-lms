@@ -1,4 +1,4 @@
-<?php // $Id: question_list_admin.inc.php 10739 2007-01-15 16:56:47Z elixir_inter $
+<?php // $Id: question_list_admin.inc.php 10748 2007-01-17 08:22:39Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -41,16 +41,16 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 
 
 // moves a question up in the list
-if($moveUp)
+if(isset($_GET['moveUp']))
 {
-	$objExercise->moveUp($moveUp);
+	$objExercise->moveUp(intval($_GET['moveUp']));
 	$objExercise->save();
 }
 
 // moves a question down in the list
-if($moveDown)
+if(isset($_GET['moveDown']))
 {
-	$objExercise->moveDown($moveDown);
+	$objExercise->moveDown(intval($_GET['moveDown']));
 	$objExercise->save();
 }
 
@@ -80,11 +80,9 @@ Question :: display_type_menu ();
 
 
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
-<tr  bgcolor='#e6e6e6'><td width="20%" align="center"><b><?php echo get_lang('Question'); ?></b></td>
+<tr  bgcolor='#e6e6e6'><td width="65%" align="center"><b><?php echo get_lang('Question'); ?></b></td>
 <td width="20%" align="center"><b><?php echo get_lang('Type');?></b></td>
-<!--<td width="20%" align="center"><b><?php echo get_lang('Addlimits'); ?> </b><br /> (time,attempts)</td>-->
-<td width="20%" align="center"><b><?php echo get_lang('Feedback'); ?> </b></td>
-<td width="20%" align="center"><b><?php echo get_lang('Modify'); ?></b></td>
+<td width="15%" align="center"><b><?php echo get_lang('Modify'); ?></b></td>
 </tr>
 
 <?php 
@@ -102,8 +100,7 @@ if($nbrQuestions)
 ?> 
 
 <tr>
-  <td  width="20%"><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td> <td width="20%"><?php echo $aType[$objQuestionTmp->selectType()-1]; ?></td>
-<!--<td  width="20%" align="center"><a href="#"> <img src="../img/test_prop.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Addlimits'); ?>" /></a> </td>--> <td width="20%" align="center"> <a href="feedback.php?question=<?php echo $id;?>"><img src="../img/feedback.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Feedback'); ?>" /></a> </td>
+  <td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td> <td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
   <td> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
           
 	<?php
@@ -140,76 +137,7 @@ if($nbrQuestions)
 </table>
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
 
-<?php /*
-if($nbrQuestions)
-{
-	
-	$questionList=$objExercise->selectQuestionList();
-
-	$i=1;
- //echo "<pre>";
-//	print_r($questionList);
-//echo "</pre>";
-	foreach($questionList as $id)
-	{
-		$objQuestionTmp=new Question();
-
-		$objQuestionTmp->read($id);
-$s="<tr bgcolor='#e6e6e6'>
-	 <td valign='top' colspan='2'>
-		".get_lang('Question')." ";
-	$s.=$i;
-	if($exerciseType == 2) $s.=' / '.$nbrQuestions;
-	//$s.="<a href=".$_SERVER['PHP_SELF']."?editQuestion=".$id."><img src='../img/edit.gif' border='0' align='absmiddle' alt=".get_lang('Modify')."></a>";
-	
-	$s.='</td></tr>';
-
-	echo $s;
-showQuestion($id);
-
-?> <!--<tr>
-  <td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?><br><?php echo $aType[$objQuestionTmp->selectType()-1]; ?></td>
-</tr>
-<tr>-->
-  
-  <tr><td><table>
-      <tr>
-        <td><a href="<?php echo $_SERVER['PHP_SELF']; ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a></td>
-        <td><a href="<?php echo $_SERVER['PHP_SELF']; ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a></td>
-          
-	
-
-<?php
-		if($i != 1)
-		{
-?>
-
-	<td><a href="<?php echo $_SERVER['PHP_SELF']; ?>?moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveUp'); ?>"></a></td>
-
-<?php
-		}
-
-		if($i != $nbrQuestions)
-		{
-?>
-<td>
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveDown'); ?>"></a></td>
-
-<?php
-		}
-?>
-</tr>
-    </table>
- </td>
-</tr>
-
-<?php
-		$i++;
-
-		unset($objQuestionTmp);
-	}
-}
-*/
+<?php 
 if(!$i)
 {
 ?>

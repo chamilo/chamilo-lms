@@ -1,4 +1,4 @@
-<?php // $Id: question_pool.php 10594 2007-01-05 13:54:24Z elixir_inter $
+<?php // $Id: question_pool.php 10748 2007-01-17 08:22:39Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -105,7 +105,7 @@ if($is_allowedToEdit)
 
 		api_session_register('objExercise');
 
-		header("Location: admin.php?editQuestion=$recup");
+		header("Location: admin.php");
 		exit();
 	}
 }

@@ -152,12 +152,12 @@ else {
 	if($is_allowedToEdit)
 	{
 	$nameTools="Student Score";
-	$interbreadcrump[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+	$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 	}
 	else
 	{
 	$nameTools="Your result";
-	$interbreadcrump[]=array("url" => "index.php","name" => get_lang('Exercices'));
+	$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('Exercices'));
 	}
 }
 

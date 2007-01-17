@@ -51,7 +51,6 @@ class UniqueAnswer extends Question {
 	 * Constructor
 	 */
 	function UniqueAnswer(){
-		parent::question();
 		$this -> type = UNIQUE_ANSWER;
 	}
 	

@@ -1,4 +1,4 @@
-<?php // $Id: question.class.php 10738 2007-01-15 16:53:22Z elixir_inter $
+<?php // $Id: question.class.php 10748 2007-01-17 08:22:39Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -817,14 +817,11 @@ abstract class Question
 			
 			echo '
 			<div id="answer_type_'.$i.'" style="display: inline">
-				<a href="admin.php?newQuestion=yes&answerType=1" onmouseover="explain(\''.$explanation.'\')"><img src="'.api_get_path(WEB_IMG_PATH).'/'.$img.'" /></a>
+				<a href="admin.php?newQuestion=yes&answerType='.$i.'" onmouseover="explain(\''.$explanation.'\')"><img src="'.api_get_path(WEB_IMG_PATH).'/'.$img.'" /></a>
 			</div>';
 		}
 		echo '
-		<div id="answer_type_explanation" class="accordion_content" style="display:block">'.get_lang('ChooseQuestionType').' :</div></div>';
-		
-		
-		
+		<div id="answer_type_explanation" class="accordion_content" style="display:block">'.get_lang('ChooseQuestionType').'</div></div>';
 		
 	}
 }

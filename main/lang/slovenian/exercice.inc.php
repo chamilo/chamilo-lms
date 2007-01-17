@@ -184,9 +184,7 @@ $langHotspotWeightingError = "Podati morate pozitivno (>0) utež za vsako izmed v
 $langHotspotValidateError1 = "Vprašanje zahteva popoln odgovor (";
 $langHotspotValidateError2 = "klikov je potrebnih na sliki) predenj si lahko ogledate rezultate.";
 $langHotspotRequired = "Opis in utež sta zahtevana za vsako izmed vroèih toèk. Komentar je opcijski.";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Vroèo toèko ustvarimo: izberemo obliko poleg barve, nato narišemo vroèo toèko.</div><div style=\\\"padding:2px 3px;\\\">&bull; Premik vroèe toèke: izberemo barvo, kliknemo drugo želeno mesto na sliki in narišemo vroèo toèko.</div><div style=\\\"padding:2px 3px;\\\">&bull; Dodajanje vroèe toèke: kliknemo na gumb [+vroèa toèka].</div><div style=\\\"padding:2px 3px;\\\">&bull; Zapiranje poligonske oblike: desni klik in izberemo \\\"Zapri poligon\\\".</div>
-
-";
+$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Vroèo toèko ustvarimo: izberemo obliko poleg barve, nato narišemo vroèo toèko.</div><div style=\\\"padding:2px 3px;\\\">&bull; Premik vroèe toèke: izberemo barvo, kliknemo drugo želeno mesto na sliki in narišemo vroèo toèko.</div><div style=\\\"padding:2px 3px;\\\">&bull; Dodajanje vroèe toèke: kliknemo na gumb [+vroèa toèka].</div><div style=\\\"padding:2px 3px;\\\">&bull; Zapiranje poligonske oblike: desni klik in izberemo \\\"Zapri poligon\\\".</div>";
 $Fault = "Nepravilno";
 $Hotspot = "Vroèa toèka";
 $ClickNumber = "Klikni številko";
@@ -203,4 +201,5 @@ $EditCommentsAndMarks = "Uredi komentarje in ocene";
 $AddComments = "Dodaj komentarje";
 $Number = "Št.";
 $Weighting = "Utež";
+$ChooseQuestionType = "Za kreiranje novega vprašanja, izberite vrsto vprašanja iz zgonjega";
 ?>

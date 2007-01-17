@@ -214,6 +214,7 @@ function prepare_course_repository($courseRepository, $courseId)
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images", 0777);
+		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/default_course_img/", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/audio", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/flash", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/video", 0777);
@@ -1275,18 +1276,41 @@ function fill_course_repository($courseRepository)
 
 		fputs($fp, $enreg);
 	}
+	fclose($fp);
 	
 	$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
-	$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/';
+	$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/default_course_img/';
 	
+	mkdir($course_documents_folder,'0777');
+	
+	$dirs=array();
 	$handle = opendir($img_code_path);
 	
 	while (false !== ($file = readdir($handle))) {
-        copy($img_code_path.$file,$course_documents_folder.$file);
-        chmod($course_documents_folder.$file,"0777");
+		if(is_dir($img_code_path.$file) && $file!=".svn" && $file!="." && $file!=".."){
+			mkdir($course_documents_folder.$file,'0777');
+			$dirs[]=$file.'/';
+		}
+		elseif(is_file($img_code_path.$file) && $file!="." && $file!=".." && $file!=".svn"){
+	        copy($img_code_path.$file,$course_documents_folder.$file);
+	        chmod($course_documents_folder.$file,"0777");
+		}
    	}
-
-	fclose($fp);
+   	closedir($handle);
+   	
+   	foreach($dirs as $current_dir){
+   		$handle = opendir($img_code_path.$current_dir);
+   		
+		while (false !== ($file = readdir($handle))) {
+			if(is_file($img_code_path.$current_dir.$file) && $file!="." && $file!=".."){
+		        copy($img_code_path.$current_dir.$file,$course_documents_folder.$current_dir.$file);
+		        chmod($course_documents_folder.$current_dir.$file,"0777");
+			}
+	   	}
+	   	
+	   	closedir($handle);
+   	}
+   	
 	return 0;
 };
 
@@ -1479,7 +1503,11 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images','".get_lang('Images')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
-
+		
+		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images/default_course_img','".get_lang('DefaultCourseImages')."','folder','0')");
+		$example_doc_id = Database :: get_last_insert_id();
+		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
+		
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/audio','".get_lang('Audio')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
@@ -1495,18 +1523,55 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		//FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
 		$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
-		
+	
+	   	
+	   	$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
+		$img_documents='/images/default_course_img/';
+	   	
+	   	$dirs=array();
 		$handle = opendir($img_code_path);
+		
 		while (false !== ($file = readdir($handle))) {
-			if($file!="." && $file!=".."){
-				$file_size=filesize($img_code_path.$file);
-				$file=lang2db($file);
-				api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images/','$file','file','$file_size')");
+			$file=lang2db($file);
+			
+			if(is_dir($img_code_path.$file) && $file!=".svn" && $file!="." && $file!=".."){
+				
+				api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents$file','$file','folder','0')");
 				$image_id = Database :: get_last_insert_id();
 				api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
+				$dirs[]=$file.'/';
+				
+			}
+			
+			elseif(is_file($img_code_path.$file) && $file!="." && $file!=".." && $file!=".svn"){
+				$file_size=filesize($img_code_path.$file);
+		        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents$file','$file','file','$file_size')");
+				$image_id = Database :: get_last_insert_id();
+				api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
+		        
 			}
 	   	}
-		
+	   	closedir($handle);
+	   	
+	   	$img_documents='/images/default_course_img/';
+	   	foreach($dirs as $current_dir){
+	   		
+	   		$handle = opendir($img_code_path.$current_dir);
+	   		
+			while (false !== ($file = readdir($handle))) {
+				if(is_file($img_code_path.$current_dir.$file) && $file!="." && $file!=".."){
+			        
+			        $file_size=filesize($img_code_path.$current_dir.$file);			        
+			        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents$current_dir$file','$langTitle','file','$file_size')");
+					$image_id = Database :: get_last_insert_id();
+					api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
+			        
+				}
+		   	}
+		   	
+		   	closedir($handle);
+	   	}
+	   			
 		
 		/*
 		-----------------------------------------------------------

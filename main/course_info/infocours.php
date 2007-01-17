@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 10546 2006-12-22 09:29:40Z elixir_inter $
+// $Id: infocours.php 10776 2007-01-17 22:55:49Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -222,7 +222,7 @@ if ($form->validate() && is_settings_editable())
 									WHERE code = '".$course_code."'";
 	api_sql_query($sql, __FILE__, __LINE__);
 
-	//update course_settings table
+	//update course_settings table - this assumes those records exist, otherwise triggers an error
 	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
 	if($update_values['email_alert_manager_on_new_doc'] != $values['email_alert_manager_on_new_doc']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_manager_on_new_doc']." WHERE variable = 'email_alert_manager_on_new_doc'' ";

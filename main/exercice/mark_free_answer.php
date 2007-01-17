@@ -24,8 +24,11 @@
 *	FREE ANSWER MARKING SCRIPT  
 *
 *	This script allows a course tutor to mark a student's free answer.
-*@author Yannick Warnier <yannick.warnier@dokeos.com>
+*	@author Yannick Warnier <yannick.warnier@dokeos.com>
 *	@package dokeos.exercise
+* 
+* 	@todo use the Database:: functions
+* 	@todo respect coding guidelines
 ============================================================================== 
 */
 
@@ -34,10 +37,17 @@
 		INIT SECTION
 ==============================================================================
 */
+// name of the language file that needs to be included 
+$language_file='exercice';
 
+// name of the language file that needs to be included 
+include('../inc/global.inc.php');
+
+// including additional libraries
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
+include_once(api_get_library_path().'/text.lib.php');
 
 // answer types
 define('UNIQUE_ANSWER',	1);
@@ -46,13 +56,10 @@ define('FILL_IN_BLANKS',	3);
 define('MATCHING',		4);
 define('FREE_ANSWER', 5);
 
-// name of the language file that needs to be included 
-$language_file='exercice';
 
-include('../inc/global.inc.php');
 
-include(api_get_library_path().'/text.lib.php');
 
+/** @todo use the Database:: functions */
 $TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
 $TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
 $TBL_QUESTIONS         = $_course['dbNameGlu'].'quiz_question';

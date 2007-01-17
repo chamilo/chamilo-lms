@@ -4,9 +4,17 @@
  * @todo use the Database:: functions
  * @todo small letters for table variables
  */
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
+// name of the language file that needs to be included 
+$language_file='exercice';
+
+// including the global dokeos file
+include('../inc/global.inc.php');
+
+// including additional libraries
+include_once('exercise.class.php');
+include_once('question.class.php');
+include_once('answer.class.php');
+include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 // answer types
 define('UNIQUE_ANSWER',	1);
@@ -16,14 +24,12 @@ define('MATCHING',		4);
 define('FREE_ANSWER', 5);
 define('HOTSPOT', 6);
 
-// name of the language file that needs to be included 
-$language_file='exercice';
 
-include('../inc/global.inc.php');
+
 
 $this_section=SECTION_COURSES;
 api_protect_course_script();
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
 
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= $_course['dbNameGlu'].'quiz_rel_question';

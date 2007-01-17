@@ -480,15 +480,15 @@ INSERT INTO `settings_current` VALUES
 (70, 'registered', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL),
 (71, 'donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL),
 (72, 'show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL),
-(74,'profile','phone','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'phone'),
-(75, 'Ajax_course_tracking_refresh', NULL, 'textfield','Course','0', 'Ajax_course_tracking_refresh','Ajax_course_tracking_refresh_comment', NULL, NULL),
-(76, 'service_visio', 'active', 'radio',NULL,'false', 'visio_actived','', NULL, NULL),
-(77, 'service_visio', 'url', 'textfield',NULL,'', 'visio_url','', NULL, NULL),
-(78, 'service_ppt2lp', 'active', 'radio',NULL,'false', 'ppt2lp_actived','', NULL, NULL),
-(79, 'service_ppt2lp', 'host', NULL, NULL, NULL, 'Host', NULL, NULL, NULL),
-(80, 'service_ppt2lp', 'user', NULL, NULL, NULL, 'UserOnHost', NULL, NULL, NULL),
-(81, 'service_ppt2lp', 'ftp_password', NULL, NULL, NULL, 'FtpPassword', NULL, NULL, NULL),
-(82, 'wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL);
+(73,'profile','phone','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'phone'),
+(74, 'Ajax_course_tracking_refresh', NULL, 'textfield','Course','0', 'Ajax_course_tracking_refresh','Ajax_course_tracking_refresh_comment', NULL, NULL),
+(75, 'service_visio', 'active', 'radio',NULL,'false', 'visio_actived','', NULL, NULL),
+(76, 'service_visio', 'url', 'textfield',NULL,'', 'visio_url','', NULL, NULL),
+(77, 'service_ppt2lp', 'active', 'radio',NULL,'false', 'ppt2lp_actived','', NULL, NULL),
+(78, 'service_ppt2lp', 'host', NULL, NULL, NULL, 'Host', NULL, NULL, NULL),
+(79, 'service_ppt2lp', 'user', NULL, NULL, NULL, 'UserOnHost', NULL, NULL, NULL),
+(80, 'service_ppt2lp', 'ftp_password', NULL, NULL, NULL, 'FtpPassword', NULL, NULL, NULL),
+(81, 'wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL);
 
 
 UNLOCK TABLES;

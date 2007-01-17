@@ -5218,7 +5218,7 @@ class learnpath {
 					elseif($action == 'add')
 						$s_selected_position=$arrLP[$i]['id'];
 					
-					$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title']));
+					$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])).'"';
 					
 				}
 			}
@@ -5234,7 +5234,7 @@ class learnpath {
 			
 			if($action != 'move'){
 				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
-				$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
+				//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 				
 				if(($extra_info == 'new' || $extra_info['item_type'] == TOOL_DOCUMENT || $_GET['edit'] == 'true'))
 				{
@@ -5252,7 +5252,7 @@ class learnpath {
 						
 						$result = api_sql_query($sql_doc, __FILE__, __LINE__);
 						
-						$directory_select->addOption(get_lang('root'),'/');
+						$directory_select->addOption(get_lang('Root'),'/');
 						
 						while($row_doc = Database::fetch_array($result)){
 							$directory_select->addOption($row_doc['path'],$row_doc['path']);
@@ -5809,7 +5809,7 @@ class learnpath {
 		
 		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
 		
-		$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
+		//$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
 		
 		$return.="</td><td valign='top'>";
 		

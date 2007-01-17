@@ -1880,7 +1880,7 @@ class learnpath {
 
 		$mycurrentitemid = $this->get_current_item_id();
 
-		if($this->mode == 'fullscreen'){    			  
+		if($this->mode == 'fullscreen'){
 
 			$navbar = '<table cellpadding="0" cellspacing="0" align="left">'."\n".
 
@@ -4563,21 +4563,19 @@ class learnpath {
 		
 			$return .= '<div><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("NewDocument").'</a></div>';
 			
-			$return .= '<div><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("NewQuiz").'</a></div>';
-		
 			$return .= '<p class="lp_title" style="margin-top:10px;">'.get_lang("UseAnExistingResource").'</p>';
 			
-			/* get al the docs */
+			/* get all the docs */
 			$return .= $this->get_documents(); 
 			
-			/* get al the exercises */
+			/* get all the exercises */
 			$return .= $this->get_exercises();
-				
-			/* get al links */
-			//$return .= $this->get_links();
-				
-		/* get al the student publications */
-			//$return .= $this->get_student_publications();
+			
+			/* get all the links */
+			$return .= $this->get_links();
+			
+			/* get al the student publications */
+			$return .= $this->get_student_publications();
 		
 		$return .= '</div>' . "\n";
 		
@@ -4642,6 +4640,7 @@ class learnpath {
 	 */
 	function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
 	{
+		
 		$tbl_lp_item = Database::get_course_table('lp_item');
 		$tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
 		
@@ -4845,7 +4844,6 @@ class learnpath {
 			$return .= '</form>' . "\n";
 		
 		$return .= '</div>' . "\n";
-		
 		return $return;
 	}
 	

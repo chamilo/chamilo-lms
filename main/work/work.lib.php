@@ -520,7 +520,7 @@ function del_dir($base_work_dir,$dir){
 	$dir = str_replace('./','',$dir);
 	$dir = str_replace('.','',$dir);
 	if(!is_dir($base_work_dir.$dir)) {return -1;}
-	$table = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "DELETE FROM $table WHERE url LIKE 'work/".$dir."/%'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	require_once(api_get_library_path().'/fileManage.lib.php');
@@ -532,7 +532,7 @@ function del_dir($base_work_dir,$dir){
  * @return	string	Path (or -1 on error)
  */
 function get_work_path($id){
-	$table = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "SELECT * FROM $table WHERE id=$id";
 	$res = api_sql_query($sql);
 	if(Database::num_rows($res)!=1){
@@ -550,7 +550,7 @@ function get_work_path($id){
  */
 function update_work_url($id,$new_path){
 	if(empty($id)) return -1;
-	$table = Database::get_course_table(STUDENT_PUBLICATION_TABLE);
+	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "SELECT * FROM $table WHERE id=$id";
 	$res = api_sql_query($sql);
 	if(Database::num_rows($res)!=1){

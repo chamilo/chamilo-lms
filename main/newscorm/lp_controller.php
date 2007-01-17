@@ -385,7 +385,6 @@ switch($_REQUEST['action'])
 		break;
 		
 	case 'view_item':
-		
 		if($debug>0) error_log('New LP - view_item action triggered', 0);
 		
 		if(!$lp_found){ error_log('New LP - No learnpath given for view item', 0); require('lp_list.php'); }

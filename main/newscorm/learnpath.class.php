@@ -1894,7 +1894,7 @@ class learnpath {
 
     			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/next.gif" title="'.get_lang('ScormNext').'"></a>&nbsp;'."\n" .
 
-				  '        <a href="lp_controller.php?action=switch_view_mode" target="_top" title="embedded mode"><img border="0" src="../img/scormexitfullscreen.jpg" title="'.get_lang('ScormExitFullScreen').'"></a>'."\n" .
+				  '        <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/scormexitfullscreen.jpg" title="'.get_lang('ScormExitFullScreen').'"></a>'."\n" .
 
 				  '        <a href="lp_controller.php?action=list" target="_top" title="learnpaths list"><img border="0" src="../img/exit.png" title="Exit"></a>'."\n" .
 
@@ -1924,7 +1924,7 @@ class learnpath {
 
     			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang('ScormNext').'"></a>&nbsp;'."\n" .
 
-				  //'        <a href="lp_controller.php?action=switch_view_mode" target="_top" title="fullscreen"><img border="0" src="../img/view_fullscreen.gif" width="18" height="18" title="'.get_lang('ScormFullScreen').'"></a>'."\n" .
+				  //'        <a href="lp_controller.php?action=mode&mode=fullscreen" target="_top" title="fullscreen"><img border="0" src="../img/view_fullscreen.gif" width="18" height="18" title="'.get_lang('ScormFullScreen').'"></a>'."\n" .
 
 				  '      </div>'."\n" .
 

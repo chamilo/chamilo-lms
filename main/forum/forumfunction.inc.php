@@ -1578,12 +1578,12 @@ function store_thread($values)
 	if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())
 	{
 		$message.=get_lang('MessageHasToBeApproved').'<br />';
-		$message.=get_lang('ReturnTo').'<a href="viewforum.php?forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
+		$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
 	}
 	else 
 	{
-		$message.=get_lang('ReturnTo').'<a href="viewforum.php?forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
-		$message.=get_lang('ReturnTo').'<a href="viewthread.php?forum='.$values['forum_id'].'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
+		$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
+		$message.=get_lang('ReturnTo').' <a href="viewthread.php?forum='.$values['forum_id'].'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
 	}
 	
 	session_unregister('formelements');
@@ -1751,8 +1751,8 @@ function store_reply($values)
 	{
 		$message.=get_lang('MessageHasToBeApproved').'<br />';
 	}
-	$message.=get_lang('ReturnTo').'<a href="viewforum.php?forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
-	$message.=get_lang('ReturnTo').'<a href="viewthread.php?forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'">'.get_lang('Message').'</a>';
+	$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
+	$message.=get_lang('ReturnTo').' <a href="viewthread.php?forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'">'.get_lang('Message').'</a>';
 	
 	send_notification_mails($values['thread_id'], $values);
 	
@@ -1885,8 +1885,8 @@ function store_edit_post($values)
 	//update_added_resources('forum_post',$values['post_id']);
 	
 	$message=get_lang('EditPostStored').'<br />';
-	$message.=get_lang('ReturnTo').'<a href="viewforum.php?forum='.$_GET['forum'].'">'.get_lang('Forum').'</a><br />';
-	$message.=get_lang('ReturnTo').'<a href="viewthread.php?forum='.$_GET['forum'].'&amp;thread='.$values['thread_id'].'&amp;post='.$_GET['post'].'">'.get_lang('Message').'</a>';
+	$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$_GET['forum'].'">'.get_lang('Forum').'</a><br />';
+	$message.=get_lang('ReturnTo').' <a href="viewthread.php?forum='.$_GET['forum'].'&amp;thread='.$values['thread_id'].'&amp;post='.$_GET['post'].'">'.get_lang('Message').'</a>';
 	
 	session_unregister('formelements');
 	session_unregister('origin');

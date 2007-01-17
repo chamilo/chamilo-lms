@@ -495,13 +495,15 @@ if($show == 'test'){
 	$row = mysql_fetch_array($qryres);
 	$percentage = ($row['exe_result']/$row['exe_weighting'])*100;
 	if ($num>0)
-		{	
-			echo "Attempted (Score:";
-			printf("%1.2f\n",$percentage);
-			echo " %)";
-		}
-			else
-		echo "Not Attempted"
+	{	
+		echo get_lang('Attempted').' ('.get_lang('Score').':';
+		printf("%1.2f\n",$percentage);
+		echo " %)";
+	}
+	else
+	{
+		echo get_lang('NotAttempted');
+	}
 	?></td>
   </tr>
   <tr>

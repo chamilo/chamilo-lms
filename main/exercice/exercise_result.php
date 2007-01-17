@@ -1,4 +1,4 @@
-<?php // $Id: exercise_result.php 10720 2007-01-15 08:59:26Z elixir_inter $
+<?php // $Id: exercise_result.php 10750 2007-01-17 08:43:53Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -845,7 +845,7 @@ color: #000000;
 /*$msg .= "</head>
 <body>
 <br>
-<p><span class='style8'>Open Question(s) Attempted
+<p><span class='style8'>".get_lang('OpenQuestionsAttempted')."
 </span></p>
 <p><span class='style8'>Attempt Details : </span><br>
 </p>
@@ -855,7 +855,7 @@ color: #000000;
     <td width='469' valign='top' bgcolor='#F3F3F3'><span class='style16'>#course#</span></td>
   </tr>
   <tr>
-    <td width='229' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Test Attempted</span></td>
+    <td width='229' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>".get_lang('TestAttempted')."</span></td>
     <td width='469' valign='top' bgcolor='#F3F3F3'><span class='style16'> #exercise#</span></td>
   </tr>
   <tr>
@@ -867,7 +867,7 @@ color: #000000;
     <td valign='top' bgcolor='#F3F3F3'><span class='style16'> #mail#</span></td>
 </tr></table>
 <p><br>
-<span class='style8'>Open Questions Attempted are :</span></p>
+<span class='style8'>".get_lang('OpenQuestionsAttemptedAre')." :</span></p>
 
  <table width='730' height='136' border='0' cellpadding='3' cellspacing='3'>";
   for($i=0;$i<sizeof($arrques);$i++)
@@ -896,7 +896,7 @@ color: #000000;
 	//
 	$msg .= "</head>
 <body><br>
-<p>Open Question(s) Attempted
+<p>".get_lang('OpenQuestionsAttempted')."
 </p>
 <p>Attempt Details : ><br>
 </p>
@@ -906,7 +906,7 @@ color: #000000;
     <td width='469' valign='top'  class='mybody'>#course#</td>
   </tr>
   <tr>
-    <td width='229' valign='top' class='outerframe'>&nbsp;&nbsp;Test Attempted</span></td>
+    <td width='229' valign='top' class='outerframe'>&nbsp;&nbsp;".get_lang('TestAttempted')."Test Attempted</span></td>
     <td width='469' valign='top' class='outerframe'>#exercise#</td>
   </tr>
   <tr>
@@ -918,7 +918,7 @@ color: #000000;
     <td valign='top'> #mail#</td>
 </tr></table>
 <p><br>
-Open Questions Attempted are :</p>
+".get_lang('OpenQuestionsAttemptedAre')." :</p>
 
  <table width='730' height='136' border='0' cellpadding='3' cellspacing='3'>";
   for($i=0;$i<sizeof($arrques);$i++)
@@ -951,10 +951,8 @@ Open Questions Attempted are :</p>
 	$msg1= str_replace("#url#",$url,$msg);
 	$mail_content = stripslashes($msg1);
 	$student_name = $_SESSION[_user][firstName].' '.$_SESSION[_user][lastName];
-	$subject = "Open Questions Attempted.";
+	$subject = get_lang('OpenQuestionsAttempted');
 	$headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=iso-8859-15";
 	api_mail($student_name, $to, $subject, $mail_content, $from_name, $from, $headers);
-	
-	//mail($to,'Open questions attempted',$mail_content,$headers);
 }
 ?>

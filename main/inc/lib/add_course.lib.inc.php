@@ -1281,19 +1281,19 @@ function fill_course_repository($courseRepository)
 	$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
 	$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/default_course_img/';
 	
-	mkdir($course_documents_folder,'0777');
+	mkdir($course_documents_folder,0777);
 	
 	$dirs=array();
 	$handle = opendir($img_code_path);
 	
 	while (false !== ($file = readdir($handle))) {
 		if(is_dir($img_code_path.$file) && $file!=".svn" && $file!="." && $file!=".."){
-			mkdir($course_documents_folder.$file,'0777');
+			mkdir($course_documents_folder.$file,0777);
 			$dirs[]=$file.'/';
 		}
 		elseif(is_file($img_code_path.$file) && $file!="." && $file!=".." && $file!=".svn"){
 	        copy($img_code_path.$file,$course_documents_folder.$file);
-	        chmod($course_documents_folder.$file,"0777");
+	        chmod($course_documents_folder.$file,0777);
 		}
    	}
    	closedir($handle);
@@ -1304,7 +1304,7 @@ function fill_course_repository($courseRepository)
 		while (false !== ($file = readdir($handle))) {
 			if(is_file($img_code_path.$current_dir.$file) && $file!="." && $file!=".."){
 		        copy($img_code_path.$current_dir.$file,$course_documents_folder.$current_dir.$file);
-		        chmod($course_documents_folder.$current_dir.$file,"0777");
+		        chmod($course_documents_folder.$current_dir.$file,0777);
 			}
 	   	}
 	   	

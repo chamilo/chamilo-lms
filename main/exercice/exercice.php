@@ -698,7 +698,7 @@ if($_configuration['tracking_enabled'])
 					$from = $_SESSION[_user]['mail'];
 					$from_name = $_SESSION[_user]['firstName']." ".$_SESSION[_user]['lastName'];
 					$url = $_SESSION['checkDokeosURL'].'claroline/exercice/exercice.php?'.api_get_cidreq().'&show=result';
-					print_r($_POST);
+					
 					foreach ($_POST as $key=>$v)
 						{
 						$keyexp = explode('_',$key);
@@ -730,6 +730,21 @@ if($_configuration['tracking_enabled'])
 						
 						
 						}
+						
+						$qry = 'SELECT DISTINCT question_id, marks 
+								FROM `'.$TABLETRACK_ATTEMPT.'` where exe_id = '.intval($id).'
+								GROUP BY question_id';
+						
+						$res = api_sql_query($qry,__FILE__,__LINE__);
+						$tot = 0;
+						while($row = mysql_fetch_assoc($res))
+						{
+							$tot += $row ['marks'];
+						}
+						
+						$totquery = "update `$TBL_TRACK_EXERCICES` set exe_result = $tot where exe_Id=$id";
+						
+						api_sql_query($totquery, __FILE__, __LINE__);
 				$subject = "Examsheet viewed/corrected/commented by teacher";
 				$message = "<html>
 <head>
@@ -784,7 +799,6 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 				$headers .= "Content-Transfer-Encoding: 7bit";
 				$headers .= 'From: '.$from_name.' <'.$from.'>' . "\r\n";
 				$headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=iso-8859-15";
-				echo 'envoi d\'un mail � '.$emailid;
 			//mail($emailid, $subject, $mess,$headers);
 			
 								
@@ -815,7 +829,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 				  FROM $TBL_EXERCICES AS ce , `$TBL_TRACK_EXERCICES` AS te, $TBL_USER AS user
 				  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `user_id`=`te`.`exe_user_id` AND `te`.`exe_cours_id`='$_cid'
 				  ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
-		
+			
 			$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name, 
 						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date)
 					FROM `$TBL_TRACK_HOTPOTATOES` tth, $TBL_USER tu

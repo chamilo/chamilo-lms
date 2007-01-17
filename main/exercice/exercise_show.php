@@ -529,28 +529,14 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
-			for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-				{
-				$answer=$objAnswerTmp->selectAnswer($answerId);
-				$answerComment=$objAnswerTmp->selectComment($answerId);
-				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-				$queryfree = "select marks from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
-				$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
-				$questionScore= mysql_result($resfree,0,"marks");
-				//to assign marks to open question
-				$totalScore+=$questionScore;
-				$query = "select answer from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
-				$resq=api_sql_query($query);
-				$choice = mysql_result($resq,0,"answer");
-				?>	
+			$query = "select answer, marks from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
+			$resq=api_sql_query($query);
+			$choice = mysql_result($resq,0,"answer");
+			$questionScore = mysql_result($resq,0,"marks");
+			?>
 			<tr>
-			<td valign="top"><?php display_free_answer($choice,$id,$questionId);?> </td>
-			</tr><?php 
-		$i++;
-
-		
-		 }?>
+			<td valign="top"><?php display_free_answer($choice, $id, $questionId);?> </td>
+			</tr>
 			</table>
 	<?php  }
 		elseif($answerType == MATCHING)

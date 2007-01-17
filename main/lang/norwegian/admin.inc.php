@@ -370,4 +370,13 @@ $PleaseVisitDokeos = "Vennligst besøk Dokeos";
 $VersionUpToDate = "Din versjon er gjeldende versjon";
 $ShowEmailAddresses = "Vis e-postadresser";
 $ShowEmailAddressesComment = "Vis e-postadresser til brukere";
+$title = "Tittel";
+$comment = "Kommentar";
+$Version = "Versjon";
+$LoginPageMainArea = "Hovedområde for påloggingssiden";
+$LoginPageMenu = "Meny for påloggingssiden";
+$CampusHomepageMainArea = "Campus Hjemmesidens hoveområde";
+$CampusHomepageMenu = "Hjemmesidemeny for Campus";
+$MyCoursesMainArea = "Kursenes hovedområde";
+$MyCoursesMenu = "Meny for kursene";
 ?>

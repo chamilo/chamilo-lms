@@ -201,4 +201,5 @@ $EditCommentsAndMarks = "Editar comentários e classificações";
 $AddComments = "Acrescentar comentários";
 $Number = "Nº";
 $Weighting = "Pontuação";
+$ChooseQuestionType = "Para criar um novo teste, escolha o tipo de perguntas acima";
 ?>

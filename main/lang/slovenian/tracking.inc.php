@@ -142,6 +142,7 @@ $exportExcel = "Izvoz v Excel obliki";
 $MoyCourse = "Povpreèje : teèaj";
 $MoySession = "Povpreèje : seja";
 $TakenSessions = "Vpisane seje";
+$Trainers = "U&#269;itelji (trainers)";
 $Administrators = "Upravitelji";
 $Tracks = "Sledenje";
 $Success = "Uspešnost";

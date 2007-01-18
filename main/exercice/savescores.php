@@ -1,35 +1,31 @@
 <?php
 /*
-============================================================================== 
-	Dokeos - elearning and course management software
-	
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Istvan Mandak
-	
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-	
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-	
-	See the GNU General Public License for more details.
-	
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+    DOKEOS - elearning and course management software
+
+    For a full list of contributors, see documentation/credits.html
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
+
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-============================================================================== 
-*	Code library for HotPotatoes integration.
-*
-*	@author Istvan Mandak
+*	Saving the scores.
 *	@package dokeos.exercise
-============================================================================== 
+* 	@author
+* 	@version $Id: savescores.php 10789 2007-01-18 19:18:27Z pcool $
 */
-// name of the language file that needs to be included 
+
+// name of the language file that needs to be included
 $language_file = 'learnpath';
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
@@ -43,7 +39,6 @@ my_delete($full_file_path.$_user['user_id'].".t.html");
 
 $TABLETRACK_HOTPOTATOES = $_configuration['statistics_database']."`.`track_e_hotpotatoes";
 $tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
-//$_course['dbNameGlu']."learnpath_user";
 $_cid = $cid;
 $test = mysql_real_escape_string($_REQUEST['test']);
 $score = mysql_real_escape_string($_REQUEST['score']);
@@ -51,8 +46,8 @@ $origin = $_REQUEST['origin'];
 
 function save_scores($file, $score)
 {
-	global $_configuration, $origin, $tbl_learnpath_user, 
-		$learnpath_id, $learnpath_item_id, $_user, $_cid, 
+	global $_configuration, $origin, $tbl_learnpath_user,
+		$learnpath_id, $learnpath_item_id, $_user, $_cid,
 		$TABLETRACK_HOTPOTATOES;
 	// if tracking is disabled record nothing
 	$weighting = 100; // 100%
@@ -75,17 +70,17 @@ function save_scores($file, $score)
 	$sql = "INSERT INTO `".$TABLETRACK_HOTPOTATOES."`
 			  (`exe_name`,
 			   `exe_user_id`,
-			   `exe_date`,		   
+			   `exe_date`,
 			   `exe_cours_id`,
 			   `exe_result`,
-			   `exe_weighting`		   
+			   `exe_weighting`
 			  )
-	
+
 			  VALUES
 			  (
 			   '".$file."',
-			   ".$user_id.",		   
-				 '".$date."',	
+			   ".$user_id.",
+				 '".$date."',
 			   '".$_cid."',
 			   '".$score."',
 			   '".$weighting."'
@@ -97,8 +92,8 @@ function save_scores($file, $score)
 		{
 			$user_id = '0';
 		}
-		$sql2 = "update $tbl_learnpath_user 
-			set score='$score' 
+		$sql2 = "update $tbl_learnpath_user
+			set score='$score'
 			where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
 		error_log($sql,0);
 		$res2 = api_sql_query($sql2,__FILE__,__LINE__);

@@ -1,35 +1,31 @@
-<?php // $Id: mark_free_answer.php,v 1.1.2.1 2005/08/30 01:47:37 yannoo Exp $
+<?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2005 Yannick Warnier <yannick.warnier@dokeos.com>
+    For a full list of contributors, see documentation/credits.html
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-==============================================================================
-*	FREE ANSWER MARKING SCRIPT
-*
-*	This script allows a course tutor to mark a student's free answer.
-*	@author Yannick Warnier <yannick.warnier@dokeos.com>
+*	Free answer marking script
+* 	This script allows a course tutor to mark a student's free answer.
 *	@package dokeos.exercise
+* 	@author Yannick Warnier <yannick.warnier@dokeos.com>
+* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 *
-* 	@todo use the Database:: functions
 * 	@todo respect coding guidelines
-==============================================================================
 */
 
 /*
@@ -60,8 +56,8 @@ define('FREE_ANSWER', 5);
 
 
 /** @todo use the Database:: functions */
-$TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
-$TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
+$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 

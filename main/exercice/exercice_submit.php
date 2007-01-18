@@ -1,49 +1,44 @@
-<?php // $Id: exercice_submit.php 10774 2007-01-17 21:24:24Z pcool $
+<?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Denes Nagy
+    For a full list of contributors, see documentation/credits.html
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-==============================================================================
-	EXERCISE SUBMISSION
- *
- * This script allows to run an exercise. According to the exercise type, questions
- * can be on an unique page, or one per page with a Next button.
- *
- * One exercise may contain different types of answers (unique or multiple selection,
- * matching and fill in blanks).
- *
- * Questions are selected randomly or not.
- *
- * When the user has answered all questions and clicks on the button "Ok",
- * it goes to exercise_result.php
- *
- * Notice : This script is also used to show a question before modifying it by
- * the administrator
- *
- *	@author Olivier Brouckaert
- *	@package dokeos.exercise
-==============================================================================
- */
+*	Exercise submission
+* 	This script allows to run an exercise. According to the exercise type, questions
+* 	can be on an unique page, or one per page with a Next button.
+*
+* 	One exercise may contain different types of answers (unique or multiple selection,
+* 	matching and fill in blanks).
+*
+* 	Questions are selected randomly or not.
+*
+* 	When the user has answered all questions and clicks on the button "Ok",
+* 	it goes to exercise_result.php
+*
+* 	Notice : This script is also used to show a question before modifying it by
+* 	the administrator
+*	@package dokeos.exercise
+* 	@author Olivier Brouckaert
+* 	@version $Id: exercice_submit.php 10789 2007-01-18 19:18:27Z pcool $
+*/
+
+
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
@@ -72,8 +67,8 @@ include_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
 $is_allowedToEdit=$is_courseAdmin;
 
-$TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
-$TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
+$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 

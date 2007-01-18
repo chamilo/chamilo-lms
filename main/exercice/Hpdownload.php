@@ -1,36 +1,31 @@
-<?php 
+<?php
 /*
-============================================================================== 
-	Dokeos - elearning and course management software
-	
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Istvan Mandak
-	
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-	
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-	
-	See the GNU General Public License for more details.
-	
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+    DOKEOS - elearning and course management software
+
+    For a full list of contributors, see documentation/credits.html
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
+
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-============================================================================== 
-*	EXERCISE LIST  
-*
 *	This script shows the list of exercises for administrators and students.
-*
-*	@author Istvan Mandak
 *	@package dokeos.exercise
-============================================================================== 
+* 	@author Istvan Mandak
+* 	@version $Id: Hpdownload.php 10789 2007-01-18 19:18:27Z pcool $
 */
+
+
 session_cache_limiter('public');
 
 include('../inc/global.inc.php');
@@ -38,7 +33,7 @@ $this_section=SECTION_COURSES;
 
 include(api_get_path(LIBRARY_PATH)."events.lib.inc.php");
 
-$tbl_document=$_course['dbNameGlu']."document";
+$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 
 $doc_url=urldecode($_GET['doc_url']);
 
@@ -53,12 +48,12 @@ if (isset($_course['path']))
 }
 else
 {
-//$full_file_name=$_configuration['root_sys']."courses/".$cid.'/document'.$doc_url;	
-$full_file_name = api_get_path(SYS_COURSE_PATH).$cid.'/document'.$doc_url;	
+//$full_file_name=$_configuration['root_sys']."courses/".$cid.'/document'.$doc_url;
+$full_file_name = api_get_path(SYS_COURSE_PATH).$cid.'/document'.$doc_url;
 }
 
 if(!is_file($full_file_name))
-{	
+{
 	exit();
 }
 
@@ -102,7 +97,7 @@ if($content_type == 'text/html')
 {
 	include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 	$directory_name = dirname($full_file_name);
-	
+
 	$dir=str_replace(array('\\',$_configuration['root_sys']."courses/".$_course['path'].'/document'),array('/',''),$directory_name);
 
 	if($dir[strlen($dir)-1] != '/')
@@ -110,14 +105,14 @@ if($content_type == 'text/html')
 		$dir.='/';
 	}
 
-	
+
 	//Parse whole file at one
 	$fp = fopen($full_file_name, "r");
 	$file_content = fread ($fp, filesize ($full_file_name));
 	fclose($fp);
 	//$file_content = api_replace_parameter($dir, $file_content, "src");
 	//$file_content = api_replace_parameter($dir, $file_content, "href");
-	
+
 	/*
 	//parse line per line
 	$file_content_array = file($full_file_name);
@@ -129,14 +124,14 @@ if($content_type == 'text/html')
 		$file_content .= $line;
 	}
 	*/
-	
+
 
 		$exercicePath = $_SERVER['PHP_SELF'];
   	$exfile = explode('/',$exercicePath);
   	$exfile = $exfile[sizeof($exfile)-1];
   	$exercicePath = substr($exercicePath,0,strpos($exercicePath,$exfile));
   	$exercicePath = $exercicePath;
-	
+
 		$content = $file_content;
 		$mit = "function Finish(){";
 
@@ -147,7 +142,7 @@ if($content_type == 'text/html')
 "		{\n".
 "			SaveScoreVariable = 1;\n".
 "			if (C.ie)\n".
-"			{\n". 
+"			{\n".
 "				document.location.href = \"".$exercicePath."savescores.php?origin=$origin&time=$time&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
 "				//window.alert(Score);\n".
 "			}\n".
@@ -159,22 +154,22 @@ if($content_type == 'text/html')
 "// Must be included \n".
 "function Finish(){\n".
 " mySaveScore();";
-		$newcontent = str_replace($mit,$js_content,$content);	
-		
+		$newcontent = str_replace($mit,$js_content,$content);
+
 		$prehref="javascript:void(0);";
 		$posthref=$_configuration['root_web']."main/exercice/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
-		$newcontent = str_replace($prehref,$posthref,$newcontent);	
-		
-		
+		$newcontent = str_replace($prehref,$posthref,$newcontent);
+
+
 		$prehref="class=\"GridNum\" onclick=";
 		$posthref="class=\"GridNum\" onMouseover=";
-		$newcontent = str_replace($prehref,$posthref,$newcontent);	
-		
-		
+		$newcontent = str_replace($prehref,$posthref,$newcontent);
+
+
 		header('Content-length: '.strlen($newcontent));
 		// Dipsp.
 		echo $newcontent;
-		
+
 	exit();
 }
 
@@ -182,7 +177,7 @@ if($content_type == 'text/html')
 //header('Content-length: '.filesize($full_file_name));
 
 $fp=fopen($full_file_name,'rb');
-				
+
 	fpassthru($fp);
 
 fclose($fp);

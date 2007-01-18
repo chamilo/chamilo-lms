@@ -1,36 +1,41 @@
-<?php // $Id: question_list_admin.inc.php 10748 2007-01-17 08:22:39Z elixir_inter $
+<?php
 /*
-============================================================================== 
-	Dokeos - elearning and course management software
-	
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-	
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-	
-	See the GNU General Public License for more details.
-	
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+    DOKEOS - elearning and course management software
+
+    For a full list of contributors, see documentation/credits.html
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
+
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-============================================================================== 
-*	QUESTION LIST ADMINISTRATION 
+*	Code library for HotPotatoes integration.
+*	@package dokeos.exercise
+* 	@author
+* 	@version $Id: question_list_admin.inc.php 10789 2007-01-18 19:18:27Z pcool $
+*/
+
+
+/**
+==============================================================================
+*	QUESTION LIST ADMINISTRATION
 *
 *	This script allows to manage the question list
 *	It is included from the script admin.php
 *
 *	@author Olivier Brouckaert
 *	@package dokeos.exercise
-============================================================================== 
+==============================================================================
 */
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
@@ -85,7 +90,7 @@ Question :: display_type_menu ();
 <td width="15%" align="center"><b><?php echo get_lang('Modify'); ?></b></td>
 </tr>
 
-<?php 
+<?php
 if($nbrQuestions)
 	{
 	$questionList=$objExercise->selectQuestionList();
@@ -97,12 +102,12 @@ if($nbrQuestions)
 		$objQuestionTmp = Question :: read($id);
 		//showQuestion($id);
 
-?> 
+?>
 
 <tr>
   <td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td> <td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
   <td> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
-          
+
 	<?php
 		if($i != 1)
 		{
@@ -133,11 +138,11 @@ if($nbrQuestions)
 </tr>
 	<?php }
 }
-?>	
+?>
 </table>
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
 
-<?php 
+<?php
 if(!$i)
 {
 ?>

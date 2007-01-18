@@ -1,41 +1,32 @@
-<?php // $Id: exercise.lib.php 10594 2007-01-05 13:54:24Z elixir_inter $
+<?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
+    For a full list of contributors, see documentation/credits.html
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-==============================================================================
-		EXERCISE TOOL LIBRARY
- *
- * shows a question and its answers
- *
- * @returns 'number of answers' if question exists, otherwise false
- *
- * @author Olivier Brouckaert <oli.brouckaert@skynet.be>
- *
- * @param integer	$questionId		ID of the question to show
- * @param boolean	$onlyAnswers	set to true to show only answers
- *	@package dokeos.exercise
- ==============================================================================
- */
+*	Exercise library
+* 	shows a question and its answers
+*	@package dokeos.exercise
+* 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
+* 	@version $Id: exercise.lib.php 10789 2007-01-18 19:18:27Z pcool $
+*/
+
+
 require("../inc/lib/fckeditor/fckeditor.php") ;
 function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 {
@@ -98,7 +89,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			{
 	        #$comment = $objAnswerTmp->selectComment(1);
 	        //
-	
+
 	$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
 	$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
 	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
@@ -108,13 +99,13 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 	$oFCKeditor->Width  = '80%';
 	$oFCKeditor->Height = '300';
 	$oFCKeditor->Value	= '' ;
-	
+
 	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 	$result_sql=api_sql_query($sql);
 	$isocode_language=mysql_result($result_sql,0,0);
 	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-	
+
 	$s .= "<tr><td colspan='2'>".$oFCKeditor->CreateHtml()."</td></tr>";
 			//$s.="<tr><td colspan='2'><textarea cols='80' rows='10' name='choice[".$questionId."]'>$answer</textarea></td></tr>";
 
@@ -312,7 +303,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 		//$tes = isset($_GET['modifyAnswers']) ? '0' : '1';
 		//echo $tes;
 		$s .= "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
-						<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>					   
+						<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
 						<script language=\"JavaScript\" type=\"text/javascript\">
 						<!--
 						// -----------------------------------------------------------------------------
@@ -334,7 +325,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 						  on error resume next
 						  Dim swControl, swVersion
 						  swVersion = 0
-						  
+
 						  set swControl = CreateObject(\"ShockwaveFlash.ShockwaveFlash.\" + CStr(i))
 						  if (IsObject(swControl)) then
 						    swVersion = swControl.GetVariable(\"\$version\")
@@ -343,7 +334,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 						End Function
 						// -->
 						</script>
-						
+
 						<script language=\"JavaScript1.1\" type=\"text/javascript\">
 						<!-- // Detect Client Browser type
 						var isIE  = (navigator.appVersion.indexOf(\"MSIE\") != -1) ? true : false;
@@ -379,48 +370,48 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 							// older WebTV supports Flash 2
 							else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
 							// Can't detect in all other cases
-							else {
-								
+							else 
+							{
 								flashVer = -1;
 							}
 							return flashVer;
-						} 
+						}
 						// When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
-						
-						function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) 
+
+						function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 						{
 						 	reqVer = parseFloat(reqMajorVer + \".\" + reqRevision);
-						   	// loop backwards through the versions until we find the newest version	
-							for (i=25;i>0;i--) {	
+						   	// loop backwards through the versions until we find the newest version
+							for (i=25;i>0;i--) {
 								if (isIE && isWin && !isOpera) {
 									versionStr = VBGetSwfVer(i);
 								} else {
 									versionStr = JSGetSwfVer(i);
 								}
-								if (versionStr == -1 ) { 
+								if (versionStr == -1 ) {
 									return false;
 								} else if (versionStr != 0) {
 									if(isIE && isWin && !isOpera) {
 										tempArray         = versionStr.split(\" \");
 										tempString        = tempArray[1];
-										versionArray      = tempString .split(\",\");				
+										versionArray      = tempString .split(\",\");
 									} else {
 										versionArray      = versionStr.split(\".\");
 									}
 									versionMajor      = versionArray[0];
 									versionMinor      = versionArray[1];
 									versionRevision   = versionArray[2];
-									
+
 									versionString     = versionMajor + \".\" + versionRevision;   // 7.0r24 == 7.24
 									versionNum        = parseFloat(versionString);
 						        	// is the major.revision >= requested major.revision AND the minor version >= requested minor
 									if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
 										return true;
 									} else {
-										return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );	
+										return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
 									}
 								}
-							}	
+							}
 						}
 						// -->
 						</script>";

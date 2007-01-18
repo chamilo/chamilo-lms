@@ -1,34 +1,30 @@
-<?php // $Id: hotspot.class.php 10234 2006-12-26
+<?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
+    For a full list of contributors, see documentation/credits.html
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-==============================================================================
 *	File containing the HotSpot class.
-*
-*	@author Eric Marguin
 *	@package dokeos.exercise
-==============================================================================
+* 	@author Eric Marguin
+* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
+
 
 if(!class_exists('HotSpot')):
 
@@ -43,10 +39,10 @@ if(!class_exists('HotSpot')):
  **/
 
 class HotSpot extends Question {
-	
+
 	static $typePicture = 'hotspot.png';
 	static $explanationLangVar = 'Hotspot';
-	
+
 
 	function HotSpot(){
 		parent::question();
@@ -75,7 +71,7 @@ class HotSpot extends Question {
 			$this->uploadPicture($file_info['tmp_name'], $file_info['name']);
 			$this->resizePicture('any',350);
 			$this->save();
-		}		
+		}
 	}
 
 	function createAnswersForm ($form) {

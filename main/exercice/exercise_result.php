@@ -1,43 +1,37 @@
-<?php // $Id: exercise_result.php 10774 2007-01-17 21:24:24Z pcool $
+<?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
+    For a full list of contributors, see documentation/credits.html
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-==============================================================================
-*	EXERCISE RESULT
-*
+*	Exercise result
 *	This script gets informations from the script "exercise_submit.php",
 *	through the session, and calculates the score of the student for
 *	that exercise.
-*
 *	Then it shows the results on the screen.
-*
+*	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-*	@package dokeos.exercise
+* 	@version $Id: exercise_result.php 10789 2007-01-18 19:18:27Z pcool $
+*
 *	@todo	split more code up in functions, move functions to library?
-* 	@todo 	use database library
-==============================================================================
 */
+
 
 /*
 ==============================================================================
@@ -67,8 +61,8 @@ include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 // Database table definitions
-$TBL_EXERCICE_QUESTION 	= $_course['dbNameGlu'].'quiz_rel_question';
-$TBL_EXERCICES         	= $_course['dbNameGlu'].'quiz';
+$TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          	= Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TABLETRACK_EXERCICES 	= $_configuration['statistics_database']."`.`track_e_exercices";

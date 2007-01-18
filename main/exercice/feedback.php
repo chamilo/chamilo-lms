@@ -1,11 +1,36 @@
-<?php 
+<?php
+/*
+    DOKEOS - elearning and course management software
+
+    For a full list of contributors, see documentation/credits.html
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
+
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
+*/
+
+
+/**
+*	Feedback
+*	@package dokeos.exercise
+* 	@author
+* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
+*/
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
 
 include('exercise.lib.php');
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='exercice';
 
 include("../inc/global.inc.php");

@@ -1,9 +1,34 @@
 <?php
+/*
+    DOKEOS - elearning and course management software
+
+    For a full list of contributors, see documentation/credits.html
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
+
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
+*/
+
+
 /**
- * @todo remove the debug code and use the general debug library
- * @todo use the Database:: functions
- * @todo small letters for table variables
- */
+*
+*	@package dokeos.exercise
+* 	@author
+* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
+*
+* 	@todo remove the debug code and use the general debug library
+* 	@todo use the Database:: functions
+* 	@todo small letters for table variables
+*/
+
 // name of the language file that needs to be included
 $language_file='exercice';
 
@@ -32,8 +57,8 @@ api_protect_course_script();
 
 
 // Database table definitions
-$TBL_EXERCICE_QUESTION 	= $_course['dbNameGlu'].'quiz_rel_question';
-$TBL_EXERCICES         	= $_course['dbNameGlu'].'quiz';
+$TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          	= Database::get_course_table(TABLE_QUIZ_ANSWER);
 $main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);

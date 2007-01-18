@@ -1,46 +1,42 @@
-<?php // $Id: GC.php 10083 2006-11-21 19:43:29Z pcool $
+<?php
 /*
-============================================================================== 
-	Dokeos - elearning and course management software
-	
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Istvan Mandak
-	
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-	
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-	
-	See the GNU General Public License for more details.
-	
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+    DOKEOS - elearning and course management software
+
+    For a full list of contributors, see documentation/credits.html
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
+
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-============================================================================== 
 *	Code library for HotPotatoes integration.
-*
-*	@author Istvan Mandak
 *	@package dokeos.exercise
-============================================================================== 
-*/	
-		
+* 	@author Istvan Mandak
+* 	@version $Id: GC.php 10789 2007-01-18 19:18:27Z pcool $
+*/
+
+
 		// usage:  HotPotGC($_configuration['root_sys'],$flag);
 		// working recursively, flag[0,1] print or delete the HotPotatoes temp files (.t.html)
 
 		echo "Garbage Collector<BR>";
 		HotPotGC($_configuration['root_sys'],1,1);
-		
-		
-		// functions 
-	
+
+
+		// functions
+
 		function HotPotGC($root_sys,$flag,$userID)
-		{	
+		{
 			// flag[0,1] - print or delete the HotPotatoes temp files (.t.html)
 			$documentPath = $root_sys."courses";
 			require_once(api_get_path(LIBRARY_PATH)."fileManage.lib.php");
@@ -57,9 +53,9 @@
       				{
             	 $full_name = $folder."/".$file;
         			  if (is_dir($full_name))
-									{								
+									{
 										HotPotGCt($folder."/".$file,$flag);
-									}	
+									}
 								else
 								 {
                 		$filelist[] = $file;
@@ -69,12 +65,12 @@
         }
       	closedir($dir);
     	}
-			while (list ($key, $val) = each ($filelist)) 
+			while (list ($key, $val) = each ($filelist))
 			{
 				 if (stristr($val,$userID.".t.html"))
 				 { if ($flag == 1)
 				 		{
-								my_delete($folder."/".$val);		 		
+								my_delete($folder."/".$val);
 						}
 					 else
 					  {

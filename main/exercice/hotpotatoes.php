@@ -1,50 +1,49 @@
 <?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Istvan Mandak
+    For a full list of contributors, see documentation/credits.html
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-==============================================================================
 *	Code for Hotpotatoes integration.
-*
-*	@author Istvan Mandak
 *	@package dokeos.exercise
-==============================================================================
+* 	@author Istvan Mandak
+* 	@version $Id: hotpotatoes.php 10789 2007-01-18 19:18:27Z pcool $
 */
+
+
+// name of the language file that needs to be included
+$language_file ='exercice';
+
+include('../inc/global.inc.php');
+
+$this_section=SECTION_COURSES;
+
 
 $finish 		= (!empty($_POST['finish'])?$_POST['finish']:0);
 $imgcount		= (!empty($_POST['imgcount'])?$_POST['imgcount']:null);
 $fld					= (!empty($_POST['fld'])?$_POST['fld']:null);
 
-// name of the language file that needs to be included 
-$language_file ='exercice';
-include('../inc/global.inc.php');
-$this_section=SECTION_COURSES;
 
 include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 $interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
 $is_allowedToEdit=(!empty($is_courseAdmin)?$is_courseAdmin:false);
 
-//$dbTable     = '`'.$_course['dbNameGlu']."document`";
 $dbTable				= Database::get_course_table(TABLE_DOCUMENT);
 $baseServDir = $_configuration['root_sys'];
 $baseServUrl = $_configuration['url_append']."/";
@@ -57,7 +56,7 @@ if ($is_allowedToEdit)
 	include("hotpotatoes.lib.php");
 	//disable document parsing(?) - obviously deprecated
 	$enableDocumentParsing=false;
-	
+
 	if(hotpotatoes_init($document_sys_path.$uploadPath))
 	{//if the directory doesn't exist
 		//create the "HotPotatoes" directory
@@ -82,7 +81,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 		//check that the submit button was pressed when the button had the "Download" value
 		//This should be updated to "upload" here and on the button, and it would be better to
 		// check something else than a string displayd on a button
-		if (strcmp($_POST['submit'],get_lang('Download'))===0) 
+		if (strcmp($_POST['submit'],get_lang('Download'))===0)
 		{
 			/** el kell tarolni <- english please */
 			include_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
@@ -90,13 +89,13 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 				FILEMANAGER BASIC VARIABLES DEFINITION
 				======================================*/
 			include_once(api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
-			
+
 			//@todo: this value should be moved to the platform admin section
 			$maxFilledSpace = 100000000;
-			
+
 			//initialise $finish
 			if (!isset($finish)) {$finish = 0;}
-		
+
 			//if the size is not defined, it's probably because there has been an error or no file was submitted
 			if(!$_FILES['userFile']['size'])
 			{
@@ -118,7 +117,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 				}
 				if ($finish==0)
 				{		//generate new test folder if on first step of file upload
-					$filename = replace_dangerous_char(trim($_FILES['userFile']['name']),'strict');	
+					$filename = replace_dangerous_char(trim($_FILES['userFile']['name']),'strict');
 					$fld = GenerateHpFolder($document_sys_path.$uploadPath."/");
 					@mkdir($document_sys_path.$uploadPath."/".$fld);
 					$doc_id = add_document($_course, '/HotPotatoes_files/'.$fld,'folder',0,$fld);
@@ -126,22 +125,22 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 				}
 				else
 				{ //it is not the first step... get the filename directly from the system params
-					$filename = $_FILES['userFile']['name'];	
-				}						
-				
+					$filename = $_FILES['userFile']['name'];
+				}
+
 				/*if (treat_uploaded_file($_FILES['userFile'], $document_sys_path,
 							$uploadPath."/".$fld, $maxFilledSpace, $unzip))*/
 				$allow_output_on_success = false;
 				if (handle_uploaded_document($_course,$_FILES['userFile'],$document_sys_path,$uploadPath."/".$fld,$_user['user_id'],null,null,$maxFilledSpace,$unzip,'',$allow_output_on_success))
 				{
-					
+
 					if ($finish==2)
 					{
 						$checked = CheckImageName($imgparams,$filename);
 						if ($checked)
 						{ $imgcount = $imgcount-1; }
 						else
-						{ 
+						{
 							$dialogBox .= $filename." ".get_lang('NameNotEqual');
 							my_delete($document_sys_path.$uploadPath."/".$fld."/".$filename);
 							update_db_info("delete", $uploadPath."/".$fld."/".$filename);
@@ -154,7 +153,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 					else
 					{ //if we are (still) on the first step of the upload process
 						if ($finish==0)
-						{ 
+						{
 							$finish = 2;
 							// get number and name of images from the files contents
 							GetImgParams("/".$filename,$document_sys_path.$uploadPath."/".$fld,$imgparams,$imgcount);
@@ -165,10 +164,10 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 						}
 					}
 					$newComment = "";
-	
-					$query = "UPDATE $dbTable SET comment='$newComment' WHERE path=\"".$uploadPath."/".$fld."/".$filename."\""; 
+
+					$query = "UPDATE $dbTable SET comment='$newComment' WHERE path=\"".$uploadPath."/".$fld."/".$filename."\"";
 					/*, visibility='v' */
-	
+
 					api_sql_query($query,__FILE__,__LINE__);
 					api_item_property_update($_course, TOOL_QUIZ, $id, "QuizAdded", $_user['user_id']);
 				}
@@ -180,7 +179,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 						//$dialogBox .= get_lang('NoImg');
 					}
 					$finish = 0;	// error
-	
+
 					if (api_failure::get_last_failure() == 'not_enough_space')
 					{
 						$dialogBox .= get_lang('NoSpace');
@@ -189,9 +188,9 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 					{
 						$dialogBox .= get_lang('ZipNoPhp');
 					}
-	
+
 				}
-	
+
 				/*		if ($oke==1)
 				{ $enableDocumentParsing=true;  $oke=0;}
 				*/
@@ -202,8 +201,8 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 	{ /** ok -> send to main exercises page */
 		header("Location: exercice.php");
 		exit;
-	} 
-	
+	}
+
 	Display::display_header($nameTools,"Exercise");
 	$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 	/* -----*/
@@ -226,7 +225,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 	{
 	 $dialogBox.= get_lang('ImgNote_st').$imgcount.get_lang('ImgNote_en')."<br>";
 		while(list($key,$string)=each($imgparams))
-		{ 
+		{
 			$dialogBox.=$string."; ";
 		}
 	}
@@ -274,7 +273,7 @@ else
 	{ // ok
 		//include("exercice.php");
 		header("Location: exercice.php");
-	} 
+	}
 	else
 	{
 	}

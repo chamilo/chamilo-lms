@@ -1,35 +1,30 @@
-<? // $Id: question_admin.inc.php 10691 2007-01-12 12:16:28Z elixir_inter $
+<?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
+    For a full list of contributors, see documentation/credits.html
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-==============================================================================
-*	STATEMENT ADMINISTRATION
+*	Statement (?) administration
 *	This script allows to manage the statements of questions.
-*	It is included from the script admin.php
-*
-*	@author Olivier Brouckaert
+* 	It is included from the script admin.php
 *	@package dokeos.exercise
-==============================================================================
+* 	@author Olivier Brouckaert
+* 	@version $Id: question_admin.inc.php 10789 2007-01-18 19:18:27Z pcool $
 */
 
 /*
@@ -79,65 +74,63 @@ if(is_object($objQuestion))
 	</style>
 	';
 	echo $styles;
-	
-	
+
+
 	/*********************
 	 * INIT FORM
 	 *********************/
 	$form = new FormValidator('question_admin_form','post',$action);
-	
-	
+
+
 	/*********************
 	 * FORM CREATION
 	 *********************/
-	
-	$objQuestion -> createForm ($form);	
-	
-	$objQuestion -> createAnswersForm ($form);	
-	
+
+	$objQuestion -> createForm ($form);
+
+	$objQuestion -> createAnswersForm ($form);
+
 	$form->addElement('submit','submitQuestion',get_lang('Ok'));
-	
-	
+
+
 	/**********************
-	 * FORM VALIDATION  
+	 * FORM VALIDATION
 	 **********************/
 	if(isset($_POST['submitQuestion']) && $form->validate())
-	{        
+	{
 		// question
 	    $objQuestion -> processCreation($form,$objExercise);
-	    
+
 	    // answers
 	    $objQuestion -> processAnswersCreation($form,$nb_answers);
-	    
+
 	    // redirect
 	    if($objQuestion -> type != HOT_SPOT)
 	    	echo '<script type="text/javascript">window.location.href="admin.php"</script>';
 	    else
 	    	echo '<script type="text/javascript">window.location.href="admin.php?hotspotadmin='.$objQuestion->id.'"</script>';
 	}
-	else 
-	{	
-	
+	else
+	{
+
 		/******************
 		 * FORM DISPLAY
 		 ******************/
 		echo '<h3>'.$questionName.'</h3>';
-		
-		
+
+
 		if(!empty($pictureName)){
 			echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';
 		}
-		
+
 		if(!empty($msgErr))
 		{
 			Display::display_normal_message($msgErr); //main API
 		}
-		
-		
+
+
 		// display the form
 		$form->display();
-		
 	}
 }
-
 ?>

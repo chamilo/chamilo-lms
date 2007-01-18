@@ -1,34 +1,30 @@
-<?php // $Id: question.class.php 10774 2007-01-17 21:24:24Z pcool $
+<?php
 /*
-==============================================================================
-	Dokeos - elearning and course management software
+    DOKEOS - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
+    For a full list of contributors, see documentation/credits.html
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+    See "documentation/licence.html" more details.
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
+    Contact:
+		Dokeos
+		Rue des Palais 44 Paleizenstraat
+		B-1030 Brussels - Belgium
+		Tel. +32 (2) 211 34 56
 */
+
+
 /**
-==============================================================================
 *	File containing the Question class.
-*
-*	@author Olivier Brouckaert
 *	@package dokeos.exercise
-==============================================================================
+* 	@author Olivier Brouckaert
+* 	@version $Id: question.class.php 10789 2007-01-18 19:18:27Z pcool $
 */
+
 
 if(!class_exists('Question')):
 
@@ -105,9 +101,9 @@ abstract class Question
 	{
 		global $_course;
 
-		$TBL_EXERCICES         = $_course['dbNameGlu'].'quiz';
+		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
-		$TBL_EXERCICE_QUESTION = $_course['dbNameGlu'].'quiz_rel_question';
+		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$sql="SELECT question,description,ponderation,position,type,picture FROM `$TBL_QUESTIONS` WHERE id='$id'";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);

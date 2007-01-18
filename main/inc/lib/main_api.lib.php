@@ -1640,6 +1640,19 @@ function string_2_boolean($string)
 }
 
 /**
+ * Determines the number of plugins installed for a given location
+ */
+function api_number_of_plugins($location)
+{
+	global $_plugins;
+	if (is_array($_plugins[$location]))
+	{
+		return count($_plugins[$location]);
+	}
+	return 0;
+}
+
+/**
  * including the necessary plugins
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */

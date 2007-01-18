@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10677 2007-01-11 13:32:00Z bmol $
+* 	@version $Id: index.php 10781 2007-01-18 13:15:58Z bmol $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -328,9 +328,12 @@ function display_anonymous_right_menu()
 			}
 			echo '</ul></div>';
 		}
-		echo '<div class="note" style="background: none">';
-		api_plugin('loginpage_menu');
-		echo '</div>';
+		if(api_number_of_plugins('loginpage_menu') > 0)
+		{
+			echo '<div class="note" style="background: none">';
+			api_plugin('loginpage_menu');
+			echo '</div>';
+		}
 	}
 
 	/*** hide right menu "general" and other parts on anonymous right menu  *****/
@@ -340,7 +343,6 @@ function display_anonymous_right_menu()
 	$user_selected_language = api_get_interface_language();
 	if (!isset ($user_selected_language))
 		$user_selected_language = $platformLanguage;
-
 	if(!file_exists('home/home_menu_'.$user_selected_language.'.html'))
 	{
 		include ('home/home_menu.html');

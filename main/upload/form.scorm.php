@@ -36,61 +36,55 @@ $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "
 Display::display_header($nameTools,"Path");
 //show the title
 api_display_tool_title(get_lang("learnpath")." - ".$nameTools.$add_group_to_title);
+
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+include('../newscorm/content_makers.inc.php');
+
+$form = new FormValidator('','POST','upload.php','','id="upload_form" enctype="multipart/form-data"');
+
+$form->addElement('hidden', 'curdirpath', $path);
+$form->addElement('hidden', 'tool', $my_tool);
+
+$form->addElement('file','user_file',get_lang('FileToUpload'));
+
+$select_content_marker = &$form->addElement('select','content_maker',get_lang('ContentMaker'));
+
+foreach($content_origins as $index => $origin){
+	$select_content_marker->addOption($origin,$origin);
+	if($index == 1){
+		$select_content_marker -> setSelected($origin);
+	}
+}
+
+$select_content_proximity = &$form->addElement('select','content_proximity',get_lang('ContentProximity'));
+	$select_content_proximity->addOption(get_lang('Local'),"local");
+	$select_content_proximity->addOption(get_lang('Remote'),"remote");
+	$select_content_proximity -> setSelected("local");
+
+$form->addElement('submit', 'submit', get_lang('Download'));
+
+$form->addElement('html', '<br><br><br>');
+$list = get_zip_files_in_garbage();
+if(count($list)>0){
+	$select_file_name = &$form->addElement('select','file_name',get_lang('Or').' '.strtolower(get_lang('UploadLocalFileFromGarbageDir')));
+	foreach($list as $file){
+		$select_file_name->addOption($file,$file);
+	}
+	$form->addElement('submit', 'submit', get_lang('Download'));
+}
+else{
+	$text_empty = &$form->addElement('text', 'empty', get_lang('Or').' '.strtolower(get_lang('UploadLocalFileFromGarbageDir')));
+	$defaults["empty"] = get_lang('Empty');
+	$text_empty->freeze();
+}
+
+$form->add_real_progress_bar('uploadScorm','user_file');
+
+$form->setDefaults($defaults);
+$form->display();
+
 ?>
 
-<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;">
-</div>
-<div id="upload_form_div" name="form_div" style="display:block;">
-	<table border="0">
-	<form method="POST" action="upload.php" id="upload_form" enctype="multipart/form-data" onsubmit="myUpload.start('dynamic_div','../img/progress_bar.gif','<?php echo(get_lang('Uploading'));?>','upload_form_div');">
-		<input type="hidden" name="curdirpath" value="<?php echo $path; ?>">
-		<input type="hidden" name="tool" value="<?php echo $my_tool; ?>">
-		<tr>
-<?php
-	echo '<td>'.get_lang('FileToUpload').'</td>'."\n";
-	echo '<td><input type="file" name="user_file"></td>'."\n";
-	echo '</tr><tr>'."\n";
-	echo '<td>'.get_lang('ContentMaker').'</td>'."\n";
-	include('../newscorm/content_makers.inc.php');
-	echo	'<td><select name="content_maker">'."\n";
-  	foreach($content_origins as $indx => $origin){
-  		if($indx == 1){
-			echo '			<option value="'.$origin.'" selected="selected">'.$origin.'</option>';
-  		}else{
-			echo '			<option value="'.$origin.'">'.$origin.'</option>';
-  		}
-	}
-	echo 	"  </<select></td>\n";
-	echo '</tr><tr>'."\n";
-	echo '<td>'.get_lang('ContentProximity').'</td>'."\n";
-	echo 	'  <td><select name="content_proximity">'."\n" .
-			'    <option value="local" selected="selected">'.get_lang('Local').'</option>' .
-			'    <option value="remote">'.get_lang('Remote').'</option>' .
-			"  </select></td>\n" ;
-	echo '</tr><tr>'."\n";
-	echo '<td colspan="2" align="right"><input type="submit" name="submit" value="'.get_lang('Download').'"></td>';
-	echo '</tr><tr>'."\n";
-	echo '<td colspan="2">&nbsp;</td>'."\n";
-	echo '</tr><tr>'."\n";
-	echo '<td>'.get_lang('Or').' '.strtolower(get_lang('UploadLocalFileFromGarbageDir')).'</td>'."\n";
-	$list = get_zip_files_in_garbage();
-	if(count($list)>0){
-		echo '<td><select name="file_name">'."\n";
-		foreach($list as $file){
-			echo '  <option value="'.$file.'">'.$file.'</option>'."\n";
-		}
-		echo '</select></td>'."\n";	
-		echo '</tr><tr>'."\n";
-		echo '<td colspan="2" align="right"><input type="submit" name="submit" value="'.get_lang('Download').'"></td>';
-		echo '<td></td>'."\n";
-	}else{
-		echo '<td align="center">{'.get_lang('Empty').'}</td>';
-	}
-	echo '</tr>'."\n";
-?>
-	</form>
-	</table>
-</div>
 <br/>
 <?php
 /*

@@ -39,8 +39,6 @@
 	'Skillsoft',
 	'Thomson-NETg',
 	'U&I Learning',
-	'WebCT',
-	'Microsoft Powerpoint',
-	'Open Office Impress'
+	'WebCT'
   );
 ?>

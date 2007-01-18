@@ -92,7 +92,7 @@ if(!is_dir($chatPath))
 
 	$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
 
-	item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
+	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
 }
 
 $chat_size=0;

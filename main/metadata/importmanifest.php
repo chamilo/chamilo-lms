@@ -181,15 +181,24 @@ if ($smo == get_lang('UploadMff'))
 }
 elseif ($smo == get_lang('UploadHtt'))
 {
-    if (is_uploaded_file($filespec = $_FILES['import_file']['tmp_name']) &&
-            filesize($filespec) && ($myFile = @fopen($filespec, 'r')))
+	$filespec = $_FILES['import_file']['tmp_name'];
+    if (is_uploaded_file($filespec) && filesize($filespec) && ($myFile = @fopen($filespec, 'r')))
     {
-        fclose($myFile); if (move_uploaded_file($filespec,
-                $baseWorkDir . $workWith . '/' . HTF))
-             echo get_lang('HttOk');
-        else echo get_lang('HttNotOk');
+        fclose($myFile);
+        $htt_file = $baseWorkDir .'/'. $workWith . '/' . HTF;
+        if (move_uploaded_file($filespec,$htt_file))
+        {
+        	echo get_lang('HttOk');
+        }
+        else
+        {
+       		echo get_lang('HttNotOk');
+        }
     }
-    else echo get_lang('HttFileNotFound');
+    else
+    {
+    	echo get_lang('HttFileNotFound');
+    }
 }
 elseif ($smo == get_lang('RemoveHtt'))
 {
@@ -344,7 +353,7 @@ elseif ($smo == get_lang('Import'))
         else
         {
             $drs = "<SYS_PATH-placeholder>"; $scormid = "<scid>";
-            require($drs. "claroline/metadata/playscormmdset.inc.php");
+            require($drs. "main/metadata/playscormmdset.inc.php");
         }
 '           )) . '?' . '>';
     }
@@ -367,7 +376,7 @@ elseif ($smo == get_lang('Import'))
 	        store_md_and_traverse_subitems($sdi, 0, 1, 0,
 	            $xht_doc->xmd_select_single_element(TREETOP), -1);
 
-        $playIt = $baseWorkDir . $workWith . '/index.php';
+        $playIt = $baseWorkDir .'/'. $workWith . '/index.php';
         $fileHandler = @fopen($playIt, 'w');
         @fwrite($fileHandler, content_for_index_php($sdi));
         @fclose($fileHandler);

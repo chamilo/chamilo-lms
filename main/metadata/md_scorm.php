@@ -102,7 +102,7 @@ function mdobject($_course, $id)
         $this->mdo_filetype = ($docinfo['lp_type'] == 2 ? 'folder' : 'xxx');
 
         $this->mdo_url =  get_course_web() . $this->mdo_course['path'] .
-            '/scorm' . $this->mdo_path . '/index.php';
+            '/scorm/' . $this->mdo_path . '/index.php';
     }
 }
 

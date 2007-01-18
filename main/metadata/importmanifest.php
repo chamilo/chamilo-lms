@@ -60,11 +60,16 @@ require('md_phpdig.php');
 if (isset($workWith))  // explicit in URL, or selected at bottom of screen
 {
     $scormdocument = Database::get_course_table('lp');
-    $sql = "SELECT id FROM $scormdocument WHERE path='". mysql_real_escape_string(substr($workWith,1)) . "'";
+    $sql = "SELECT id FROM $scormdocument WHERE path='". mysql_real_escape_string(substr($workWith,1)) . "' OR path='". mysql_real_escape_string(substr($workWith,1)) . "/.'";
     $result = api_sql_query($sql, __FILE__, __LINE__);
 
     if (mysql_num_rows($result) == 1)
-        if (($row = mysql_fetch_array($result))) $sdi = $row['id'];
+    {
+        if (($row = mysql_fetch_array($result)))
+        {
+        	$sdi = $row['id'];
+        }
+    }
 }
 
 if (isset($sdi) && is_numeric($sdi) && $sdi > 0 && $sdi == (int) $sdi)
@@ -102,8 +107,8 @@ $originalHdrInfo = $hdrInfo;
 function slurpmanifest()
 {
     global $baseWorkDir, $workWith, $sdisub, $mfContents, $xht_doc;
-
-    if (file_exists($fmff = $baseWorkDir . $workWith . '/' . MFFNAME . $sdisub . MFFDEXT))
+    $fmff = $baseWorkDir .'/'. $workWith . '/' . MFFNAME . $sdisub . MFFDEXT;
+    if (file_exists($fmff))
     {
         if (($mfContents = @fgc($fmff)))
         {
@@ -114,9 +119,15 @@ function slurpmanifest()
             unset($mfContents);
             return get_lang('ManifestSyntax') . ' ' . htmlspecialchars($xht_doc->error);
         }
-        else return get_lang('EmptyManifest');
+        else
+        {
+        	return get_lang('EmptyManifest');
+        }
     }
-    else return get_lang('NoManifest');
+    else
+    {
+    	return get_lang('NoManifest');
+    }
 }
 
 if (isset($workWith))  // now checked to be a valid path in scormdocument

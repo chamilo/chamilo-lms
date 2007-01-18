@@ -6,11 +6,11 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Dokeos Metadata: class mdobject for Scorm-type objects
 *
 *	@package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 class mdobject
@@ -71,7 +71,7 @@ function mdo_add_breadcrump_nav()
 	if (ereg('^(.+[^/\.]+)/[^/\.]+/[^/\.]+.[^/\.]+$', $docurl, $regs))
 		$docurl = $regs[1] . '/scorm/scormdocument.php';
 
-	$interbreadcrumb[] = array ('url' => $docurl, 
+	$interbreadcrumb[] = array ('url' => $docurl,
 		'name' => get_lang('MdCallingTool'));
 }
 
@@ -79,24 +79,29 @@ function mdo_add_breadcrump_nav()
 function mdobject($_course, $id)
 {
     global $ieee_dcmap_e, $ieee_dcmap_v;  // md_funcs
-    
-    $scormdocument = Database::get_course_table(TABLE_SCORMDOC);
-    
+
+    $scormdocument = Database::get_course_table('lp');
+
     $this->mdo_course = $_course; $this->mdo_type = 'Scorm';
     $this->mdo_id = $id; $this->mdo_eid = $this->mdo_type . '.' . $id;
-    
+
     $this->mdo_dcmap_e = $ieee_dcmap_e; $this->mdo_dcmap_v = $ieee_dcmap_v;
-    
-    if (($docinfo = @mysql_fetch_array(api_sql_query(
-            "SELECT path,comment,filetype FROM $scormdocument
-             WHERE id='" . addslashes($id) . "'", 
-            __FILE__, __LINE__))))
+	$sql = "SELECT path,description,lp_type FROM $scormdocument WHERE id='" . addslashes($id) . "'";
+    if (($docinfo = @mysql_fetch_array(api_sql_query($sql,__FILE__, __LINE__))))
     {
         $this->mdo_path =     $docinfo['path'];
-        $this->mdo_comment =  $docinfo['comment'];
-        $this->mdo_filetype = $docinfo['filetype'];
-    
-        $this->mdo_url =  get_course_web() . $this->mdo_course['path'] . 
+		//Sometimes the new scorm-tool adds '/.' at the end of a directory name, so remove this before continue
+		//the process -- bmol
+    	if(substr($this->mdo_path,-2) == '/.')
+    	{
+    		$this->mdo_path = substr($this->mdo_path,0, strlen($this->mdo_path)-2);
+    	}
+        $this->mdo_comment =  $docinfo['description'];
+ 		//Don't think the next line is correct. There used to be a 'type' field in the scormdocument table.
+ 		//This metadata tool only works on folder types -- bmol
+        $this->mdo_filetype = ($docinfo['lp_type'] == 2 ? 'folder' : 'xxx');
+
+        $this->mdo_url =  get_course_web() . $this->mdo_course['path'] .
             '/scorm' . $this->mdo_path . '/index.php';
     }
 }

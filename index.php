@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10781 2007-01-18 13:15:58Z bmol $
+* 	@version $Id: index.php 10787 2007-01-18 15:28:02Z bmol $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -354,7 +354,7 @@ function display_anonymous_right_menu()
 	echo '</ul>';
 	echo '</div>';
 
-	if ($_user['user_id'])
+	if ($_user['user_id'] && api_number_of_plugins('campushomepage_menu') > 0)
 	{
 		echo '<div class="note" style="background: none">';
 		api_plugin('campushomepage_menu');

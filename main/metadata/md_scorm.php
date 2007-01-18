@@ -69,7 +69,7 @@ function mdo_add_breadcrump_nav()
 
 	$docurl = $_SERVER['PHP_SELF'];  // should be .../main/xxx/yyy.php
 	if (ereg('^(.+[^/\.]+)/[^/\.]+/[^/\.]+.[^/\.]+$', $docurl, $regs))
-		$docurl = $regs[1] . '/scorm/scormdocument.php';
+		$docurl = $regs[1] . '/newscorm/index.php';
 
 	$interbreadcrumb[] = array ('url' => $docurl,
 		'name' => get_lang('MdCallingTool'));

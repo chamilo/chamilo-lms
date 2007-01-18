@@ -1,0 +1,3 @@
+These smileys have been developed by Lim Chee Aun and ported to PHPFreeChat by Robin Monks.
+
+They have been released under http://creativecommons.org/licenses/by-nc/2.5/ .

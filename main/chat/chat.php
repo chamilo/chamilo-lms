@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: chat.php 10780 2007-01-18 12:55:38Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -25,27 +25,15 @@
 ==============================================================================
 *	Frameset of the Chat tool
 *
-*	@author Ludovic Gasc
+*	@author Olivier Brouckaert
 *	@package dokeos.chat
-*	@todo improve multi-language support
-*	@todo stock each chat text file into each course
-*	@todo remove duplicate libs (XAJAX, PEAR...)
 ==============================================================================
 */
-/*
------------------------------------------------------------
-	Init section
------------------------------------------------------------
-*/
-// name of the language file that needs to be included
-$language_file='chat';
+
+$language_file = array ('chat');
 include('../inc/global.inc.php');
-
-$this_section=SECTION_COURSES;
-
 $nameTools=get_lang('Chat');
-if ($_GET["origin"] != 'whoisonline')
-{
+if ($_GET["origin"] != 'whoisonline') {
 	api_protect_course_script();
 }
 else
@@ -55,51 +43,31 @@ else
 	$_SESSION['origin']=$_GET["origin"];
 	$_SESSION['target']=$_GET["target"];
 }
-
-/*
------------------------------------------------------------
-	Tracking
------------------------------------------------------------
-*/
+/* ============================================================================== 
+  			TRACKING
+==============================================================================  */
 include('../inc/lib/events.lib.inc.php');
 event_access_tool(TOOL_CHAT);
 
-/*
------------------------------------------------------------
-	Main section
------------------------------------------------------------
-*/
-
-require_once './phpfreechat/src/phpfreechat.class.php';
-
-
-// initialisation of phpfreechat
-$courseinfo = api_get_course_info();
-//print_r($courseinfo);
-$params['serverid'] = (string) $courseinfo['id']; // used to identify the chat
-$params['nick'] = $_SESSION['_user']['firstName'].' '.$_SESSION['_user']['lastName'];
-$params['title'] = $courseinfo['name'];
-//$params['channel'] = $courseinfo['name'];
-$params['frozen_nick'] = true;
-$params['max_nick_len'] = 100;
-$params['height'] = "300px";
-$params['refresh_delay'] = 2000;
-$params['xajaxpath'] = api_get_path(LIBRARY_PATH).'xajax/';
-echo $params['xajaxpath'];
-// $params['debug'] = true;
-// $params['debugxajax'] = true;
-
-$params['language'] = Database::get_language_isocode($courseinfo['language']).'_'.strtoupper(Database::get_language_isocode($courseinfo['language']));
-// In phpfreechat, some translations depends of the country
-
-$chat = new phpFreeChat($params);
-
-$htmlHeadXtra[] = $chat->printJavascript();
-$htmlHeadXtra[] = $chat->printStyle();
-
-	Display::display_header($nameTools,"Chat");
-
-	$chat->printChat();
-
-	Display::display_footer();
 ?>
+
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Chat</title>
+</head>
+
+<frameset rows="115,*" border="1" frameborder="1" framespacing="1">
+	<frame src="chat_banner.php" name="chat_banner" scrolling="no">
+	<frameset cols="200,*,0" border="1" frameborder="1" framespacing="1">
+		<frame src="chat_whoisonline.php" name="chat_whoisonline" scrolling="auto">
+		<frameset rows="*,40" border="1" frameborder="1" framespacing="1">
+			<frame src="chat_chat.php?origin=<?php echo $_GET["origin"]; ?>&target=<?php echo $_GET["target"]; ?>" name="chat_chat" scrolling="auto">
+			<frame src="chat_message.php" name="chat_message" scrolling="no">
+		</frameset>
+		<frame src="chat_hidden.php" name="chat_hidden" scrolling="no">
+	</frameset>
+</frameset>
+
+</html>

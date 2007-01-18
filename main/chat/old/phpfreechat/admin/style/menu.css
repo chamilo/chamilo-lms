@@ -1,0 +1,63 @@
+/* --- MENU --- */
+div.menu {
+  position: absolute;
+  top: 55px;
+  left: 0.5em;
+/*  float: left;
+  margin-top: 0.5em;
+  margin-left: 0.4em;*/
+  color: #FFF;
+  width: 11em;
+  text-align: center;
+}
+div.menu * { font-size: 95%; }
+div.menu ul {
+  background-color: #99cc33;
+  border: 1px #acd233 solid;
+  text-align: left;
+  list-style: none;
+}
+div.menu li {
+  display: inline;
+}
+div.menu img { margin-top: 10px; }
+div.menu .title {
+    padding: 4px;
+    text-align: center;
+    color: #888;
+    background-color: #FFF;
+}
+div.menu li.sub {
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  display: block;
+}
+div.menu li a {
+    display: block;
+    margin: 0px;
+    padding: 4px;
+    padding-left: 10px;
+    width: auto; 
+}
+div.menu li.item {
+  display: inline;
+}
+div.menu a:link, div.menu a:visited, div.menu a:hover { color: #FFF; }
+div.menu a:visited { color: #FFF; }
+div.menu li.item a:hover, div.menu ul.sub li.item a:hover {
+    display: block; 
+    background-color: #acd233;
+    text-decoration: none;
+}
+
+div.menu .partner {
+  margin-top: 5px;
+}
+div.menu div.rating {
+  margin-top: 10px;
+}
+div.menu div.rating table, div.menu div.rating table td {
+  text-align: center;
+  margin: auto;
+}

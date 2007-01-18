@@ -88,6 +88,8 @@ define('TABLE_TOOL_LIST', 'tool');
 define('TABLE_TOOL_INTRO', 'tool_intro');
 define('TABLE_SCORMDOC', 'scormdocument');
 define('TABLE_STUDENT_PUBLICATION', 'student_publication');
+define('CHAT_CONNECTED_TABLE', 'chat_connected');
+
 //course forum tables
 define('TABLE_FORUM_CATEGORY','forum_category');
 define('TABLE_FORUM','forum_forum');
@@ -596,6 +598,14 @@ class Database
 	{
 		return mysql_num_rows($res);
 	}
+	
+	function get_course_chat_connected_table($database_name = '')
+	{
+		$database_name_with_glue = Database::fix_database_parameter($database_name);
+		return Database::format_glued_course_table_name($database_name_with_glue, CHAT_CONNECTED_TABLE);
+	}
+	
+	
 }
 //end class Database
 ?>

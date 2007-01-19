@@ -59,7 +59,7 @@ CREATE TABLE track_e_lastaccess (
   access_id bigint NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL default ,
+  access_cours_code varchar(40) NOT NULL,
   access_tool varchar(30) default NULL,
   access_session_id int unsigned default NULL,
   PRIMARY KEY  (access_id),
@@ -97,7 +97,7 @@ CREATE TABLE track_e_exercices (
   exe_weighting smallint NOT NULL default 0,
   PRIMARY KEY  (exe_id)
 );
-			
+
 CREATE TABLE track_e_attempt (
   exe_id int default NULL,
   user_id int NOT NULL default 0,
@@ -142,7 +142,7 @@ CREATE TABLE track_e_online (
   login_user_id int unsigned NOT NULL default 0,
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
   login_ip varchar(39) NOT NULL default '',
-  course varchar(40) default NULL, 
+  course varchar(40) default NULL,
   PRIMARY KEY  (login_id),
   KEY login_user_id (login_user_id)
 );

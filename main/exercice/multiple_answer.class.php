@@ -138,8 +138,8 @@ class MultipleAnswer extends Question {
 
 		$form -> addElement ('html', '</table></div></div>');
 		$group = array();
-		$group[] = FormValidator :: createElement ('submit', 'lessAnswers', '-answ');
-		$group[] = FormValidator :: createElement ('submit', 'moreAnswers', '+answ');
+		$group[] = FormValidator :: createElement ('submit', 'lessAnswers', get_lang('LessAnswer'));
+		$group[] = FormValidator :: createElement ('submit', 'moreAnswers', get_lang('PlusAnswer'));
 		$form -> addGroup($group);
 
 		$form -> setDefaults($defaults);

@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 10793 2007-01-19 09:17:15Z elixir_inter $
+* 	@version $Id: question.class.php 10800 2007-01-19 13:24:39Z elixir_julian $
 */
 
 
@@ -562,7 +562,7 @@ abstract class Question
 			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-				$sql="INSERT INTO `$TBL_ANSWERS` (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '$this->id', '', NULL , '', NULL , '1', '0;0|0|0', 'square')";
+				$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '$this->id', '', NULL , '', NULL , '1', '0;0|0|0', 'square')";
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
 		}

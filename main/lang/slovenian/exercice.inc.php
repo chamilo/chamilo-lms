@@ -205,4 +205,8 @@ $Number = "Št.";
 $Weighting = "Utež";
 $ChooseQuestionType = "Za kreiranje novega vprašanja, izberite vrsto vprašanja iz zgonjega";
 $MatchesTo = "Ustreza";
+$CorrectTest = "Oceni to vajo";
+$ViewTest = "Poglej to vajo";
+$State = "Stanje";
+$NotAttempted = "Brez poskusa";
 ?>

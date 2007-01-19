@@ -49,4 +49,5 @@ $AnnouncementDeletedAll = "Vsa obvestila so bila odstranjena";
 $AnnouncementMoved = "Obvestilo je bilo prestavljeno";
 $NoAnnouncements = "Tu ni nobenih obvestil";
 $SelectEverybody = "Izberi vse";
+$SelectedUsersGroups = "izbrani uporabniki, skupine";
 ?>

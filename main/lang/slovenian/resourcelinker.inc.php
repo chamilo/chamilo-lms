@@ -59,4 +59,5 @@ $ForumAddNewTopic = "Forum: dodaj novo temo";
 $ForumEditTopic = "Forum : uredi temo";
 $ExerciseAnswers = "Vaje & testi : Odgovori";
 $ForumReply = "Forum: odgovor";
+$AgendaSortChronologicallyDown = "Uredi zapise agende kronološko (padajoèe)";
 ?>

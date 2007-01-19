@@ -65,4 +65,14 @@ $EditPostStored = "Objava je bila spremenjena";
 $NewForumPost = "Nova objava v forumu";
 $YouWantedToStayInformed = "Izjavljate, da želiti biti obvešèeni preko e-pošte vsakiè, kadar nekdo objavi sporoèilo v tej tematski niti";
 $MessageHasToBeApproved = "Vaše sporoèilo mora biti odobreno pred javno objavo.";
+$AllowAttachments = "Dovoli priponke";
+$EditForumCategory = "Uredi kategorijo foruma";
+$MovePost = "Premakni objavo";
+$MoveToThread = "Premakni v nit";
+$ANewThread = "Nova nit";
+$Reply = "Odgovor";
+$DeleteForum = "Odstranim forum ? ";
+$DeleteForumCategory = "Odstranim kategorijo foruma ?";
+$Lock = "Zakleni";
+$Unlock = "Odkleni";
 ?>

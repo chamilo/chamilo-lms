@@ -205,10 +205,10 @@ $ChooseQuestionType = "Pour créer une nouvelle question, choisissez le type ci-d
 $MatchesTo = "Correspond à";
 $CorrectTest = "Corriger le test";
 $ViewTest = "Voir ce test";
-$+answ = "+ réponse";
-$-answ = "- réponse";
-$+elem = "+ élément";
-$-elem = "- élément";
 $State = "Etat";
 $NotAttempted = "Non tenté";
+$AddElem = "+ élément";
+$DelElem = "+ élément";
+$PlusAnswer = "+ réponse";
+$LessAnswer = "- réponse";
 ?>

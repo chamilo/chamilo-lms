@@ -162,4 +162,5 @@ $AccountExternalAuthSource = "Dokeos ne more te zahteve servisirati avtomatièno,
 $AccountsExternalAuthSource = "Dokeos ne more servisirati te izjeme avtomatièno, ker je vsaj eden od uporabniških raèunov avtoriziran preko zunanjega izvora. Izvedite odgovarjajoèe mere za vse uporabniške raèune (vklju&#269;no s tistimi, ki jih avtorizira platforma) in ibvestite uporabnike.";
 $RequestSentToPlatformAdmin = "Dokeos ne more servisirati zahteve avtomati&#269;no za to vrsto uporabniškega raèuna. Vaša zahteva je bila posredovana upravitelju platforme, ki bo izvedel odgovarjajoèe mere in vas naknadno obvestil o rezultatih izvedbe zahteve.";
 $langphone = "Tel.";
+$Unreg = "Odjavi";
 ?>

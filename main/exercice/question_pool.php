@@ -24,7 +24,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 10791 2007-01-19 09:02:48Z elixir_inter $
+* 	@version $Id: question_pool.php 10793 2007-01-19 09:17:15Z elixir_inter $
 */
 
 // name of the language file that needs to be included
@@ -152,19 +152,19 @@ if($is_allowedToEdit)
 	// if we have selected an exercise in the list-box 'Filter'
 	if($exerciseId > 0)
 	{
-		$sql="SELECT id,question,type FROM `$TBL_EXERCICE_QUESTION`,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='$exerciseId' ORDER BY position LIMIT $from,".($limitQuestPage+1);
+		$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='$exerciseId' ORDER BY position LIMIT $from,".($limitQuestPage+1);
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 	}
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 	elseif($exerciseId == -1)
 	{
-		$sql="SELECT id,question,type FROM $TBL_QUESTIONS LEFT JOIN `$TBL_EXERCICE_QUESTION` ON question_id=id WHERE exercice_id IS NULL ORDER BY question LIMIT $from,".($limitQuestPage+1);
+		$sql="SELECT id,question,type FROM $TBL_QUESTIONS LEFT JOIN $TBL_EXERCICE_QUESTION ON question_id=id WHERE exercice_id IS NULL ORDER BY question LIMIT $from,".($limitQuestPage+1);
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 	}
 	// if we have not selected any option in the list-box 'Filter'
 	else
 	{
-		$sql="SELECT id,question,type FROM $TBL_QUESTIONS LEFT JOIN `$TBL_EXERCICE_QUESTION` ON question_id=id WHERE exercice_id IS NULL OR exercice_id<>'$fromExercise' GROUP BY id ORDER BY question LIMIT $from,".($limitQuestPage+1);
+		$sql="SELECT id,question,type FROM $TBL_QUESTIONS LEFT JOIN $TBL_EXERCICE_QUESTION ON question_id=id WHERE exercice_id IS NULL OR exercice_id<>'$fromExercise' GROUP BY id ORDER BY question LIMIT $from,".($limitQuestPage+1);
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		// forces the value to 0

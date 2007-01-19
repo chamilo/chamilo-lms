@@ -23,7 +23,7 @@
 *	5 arrays are created to receive the attributes of each answer belonging to a specified question
 * 	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer.class.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: answer.class.php 10793 2007-01-19 09:17:15Z elixir_inter $
 */
 
 
@@ -384,7 +384,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 
 		$questionId=$this->questionId;
 
-		$sql = "UPDATE `$TBL_REPONSES` SET " .
+		$sql = "UPDATE $TBL_REPONSES SET " .
 				"`answer` = '$answer', " .
 				"`comment` = '$comment', " .
 				"`ponderation` = '$weighting', " .
@@ -407,11 +407,11 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		$questionId=$this->questionId;
 
 		// removes old answers before inserting of new ones
-		$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='$questionId'";
+		$sql="DELETE FROM $TBL_REPONSES WHERE question_id='$questionId'";
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		// inserts new answers into data base
-		$sql="INSERT INTO `$TBL_REPONSES`" .
+		$sql="INSERT INTO $TBL_REPONSES" .
 				"(id,question_id,answer,correct,comment," .
 				"ponderation,position,hotspot_coordinates,hotspot_type) VALUES";
 
@@ -462,7 +462,7 @@ $this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 		if($this->nbrAnswers)
 		{
 			// inserts new answers into data base
-			$sql="INSERT INTO `$TBL_REPONSES`" .
+			$sql="INSERT INTO $TBL_REPONSES" .
 					"(id,question_id,answer,correct,comment," .
 					"ponderation,position,hotspot_coordinates,hotspot_type) VALUES";
 

@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 10791 2007-01-19 09:02:48Z elixir_inter $
+* 	@version $Id: question.class.php 10793 2007-01-19 09:17:15Z elixir_inter $
 */
 
 
@@ -120,7 +120,7 @@ abstract class Question
 			$objQuestion->type=$object->type;
 			$objQuestion->picture=$object->picture;
 
-			$sql="SELECT exercice_id FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='".intval($id)."'";
+			$sql="SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE question_id='".intval($id)."'";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 
 			// fills the array with the exercises which this question is in
@@ -299,7 +299,7 @@ abstract class Question
 			if(!in_array($this->type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)) || !in_array($type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)))
 			{
 				// removes old answers
-				$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='".$this->id."'";
+				$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".$this->id."'";
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
 
@@ -592,7 +592,7 @@ abstract class Question
 		{
 			$this->exerciseList[]=$exerciseId;
 
-			$sql="INSERT INTO `$TBL_EXERCICE_QUESTION`(question_id,exercice_id) VALUES('$id','$exerciseId')";
+			$sql="INSERT INTO $TBL_EXERCICE_QUESTION(question_id,exercice_id) VALUES('$id','$exerciseId')";
 
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
@@ -624,7 +624,7 @@ abstract class Question
 			// deletes the position in the array containing the wanted exercise ID
 			unset($this->exerciseList[$pos]);
 
-			$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id' AND exercice_id='$exerciseId'";
+			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE question_id='$id' AND exercice_id='$exerciseId'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			return true;
@@ -648,13 +648,13 @@ abstract class Question
 		// if the question must be removed from all exercises
 		if(!$deleteFromEx)
 		{
-			$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
+			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE question_id='$id'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$sql="DELETE FROM $TBL_QUESTIONS WHERE id='$id'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
-			$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='$id'";
+			$sql="DELETE FROM $TBL_REPONSES WHERE question_id='$id'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$this->removePicture();

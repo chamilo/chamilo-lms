@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: exercice.php 10793 2007-01-19 09:17:15Z elixir_inter $
 */
 
 
@@ -717,7 +717,7 @@ if($_configuration['tracking_enabled'])
 							$res = api_sql_query($qry,__FILE__,__LINE__);
 							$tot = mysql_result($res,0,'tot');
 
-							$totquery = "update `$TBL_TRACK_EXERCICES` set exe_result = $tot where exe_Id=$id";
+							$totquery = "update $TBL_TRACK_EXERCICES set exe_result = $tot where exe_Id=$id";
 							api_sql_query($totquery, __FILE__, __LINE__);
 
 							}
@@ -741,7 +741,7 @@ if($_configuration['tracking_enabled'])
 							$tot += $row ['marks'];
 						}
 
-						$totquery = "update `$TBL_TRACK_EXERCICES` set exe_result = $tot where exe_Id=$id";
+						$totquery = "update $TBL_TRACK_EXERCICES set exe_result = $tot where exe_Id=$id";
 
 						api_sql_query($totquery, __FILE__, __LINE__);
 				$subject = "Examsheet viewed/corrected/commented by teacher";
@@ -825,7 +825,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
 			$sql="SELECT CONCAT(`lastname`,' ',`firstname`),`ce`.`title`, `te`.`exe_result` ,
 						`te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`),`te`.`exe_Id`,email
-				  FROM $TBL_EXERCICES AS ce , `$TBL_TRACK_EXERCICES` AS te, $TBL_USER AS user
+				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
 				  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `user_id`=`te`.`exe_user_id` AND `te`.`exe_cours_id`='$_cid'
 				  ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
 
@@ -839,7 +839,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 		else
 		{ // get only this user's results
 			  $sql="SELECT '',`ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`),`te`.`exe_Id`
-				  FROM $TBL_EXERCICES AS ce , `$TBL_TRACK_EXERCICES` AS te
+				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te
 				  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `te`.`exe_user_id`='".$_user['user_id']."' AND `te`.`exe_cours_id`='$_cid'
 				  ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
 

@@ -1101,7 +1101,7 @@ function zip_download ($array)
 	global $files;
 
 	// zip library for creation of the zipfile
-	include(api_get_library_path()."/pclzip/pclzip.lib.php");
+	include(api_get_path(LIBRARY_PATH)."/pclzip/pclzip.lib.php");
 
 	// place to temporarily stash the zipfiles
 	$temp_zip_dir = api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/";

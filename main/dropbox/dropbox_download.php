@@ -28,7 +28,7 @@
 */
 // we cannot use dropbox_init.inc.php because this one already outputs data.
 //name of langfile
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "dropbox";
 
 // including the basic Dokeos initialisation file
@@ -391,7 +391,7 @@ if ( !is_file( $path))
 		SEND HEADERS
 ==============================================================================
 */
-require_once(api_get_library_path() . '/document.lib.php');
+require_once(api_get_path(LIBRARY_PATH) . '/document.lib.php');
 $mimetype = DocumentManager::file_get_mime_type(TRUE);
 
 $fileparts = explode( '.', $file);

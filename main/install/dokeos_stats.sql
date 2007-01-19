@@ -122,7 +122,7 @@ CREATE TABLE track_e_links (
   links_id int NOT NULL auto_increment,
   links_user_id int unsigned default NULL,
   links_date datetime NOT NULL default '0000-00-00 00:00:00',
-  links_cours_id varchar(40) NOT NULL default ,
+  links_cours_id varchar(40) NOT NULL default '' ,
   links_link_id int NOT NULL default 0,
   PRIMARY KEY  (links_id)
 );

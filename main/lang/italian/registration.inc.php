@@ -162,4 +162,5 @@ $AccountExternalAuthSource = "La piattaforma non può trattare direttamente la ri
 $AccountsExternalAuthSource = "La piattaforma non può trattare direttamente la richiesta perché è attiva un\'autenticazione esterna per almeno un account. Prendi i provvedimenti adeguati e avvisa gli utenti.";
 $RequestSentToPlatformAdmin = "La piattaforma non può trattare direttamente la richiesta. La richiesta è stata nviata all\'amministratore che prenderà i provvedimenti adeguati e ti avviserà dei risultati.";
 $langphone = "Telefono";
+$Unreg = "Cancella l\'iscrizione";
 ?>

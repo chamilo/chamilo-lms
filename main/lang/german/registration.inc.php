@@ -160,4 +160,5 @@ $AccountExternalAuthSource = "Dieser Wunsch kann nicht automatisch bearbeitet we
 $AccountsExternalAuthSource = "Dieser Wunsch kann nicht automatisch bearbeitet werden, da zumindest eines der Benutzerkonten extern verwaltet wird. Bitte unternehmen Sie notwendige Schritte für alle Konten, um den Benutzer zu informieren.";
 $RequestSentToPlatformAdmin = "Der Wunsch kann für diese Art von Benutzer Konto nicht automatisch bearbeitet werden. Ihr Wunsch wurde an den Plattform Administrator weitergeleitet, der entsprechende Schritte in die Wege leiten wird, um Ihnen weiter Informationen zukommen zu lassen.";
 $langphone = "Telefon";
+$Unreg = "Abmelden";
 ?>

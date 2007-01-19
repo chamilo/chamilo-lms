@@ -203,4 +203,12 @@ $Number = "N°";
 $Weighting = "Punteggio";
 $ChooseQuestionType = "Per creare un quesito, indica la tipologia qui sopra";
 $MatchesTo = "Corrisponde a";
+$CorrectTest = "Correggi il test";
+$ViewTest = "Vedi il test";
+$State = "Stato";
+$NotAttempted = "Non affrontato";
+$AddElem = "+ elementi";
+$DelElem = "- elementi";
+$PlusAnswer = "+ risposte";
+$LessAnswer = "- risposte";
 ?>

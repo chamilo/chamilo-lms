@@ -149,4 +149,8 @@ $Administrators = "Administrateurs";
 $Tracks = "Parcours";
 $Success = "Réussite";
 $ExcelFormat = "Format Excel";
+$MyLearnpath = "Mes parcours";
+$Time = "Temps";
+$Score = "Score";
+$LastConnexion = "Dernière connexion";
 ?>

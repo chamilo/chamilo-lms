@@ -527,4 +527,19 @@ $Header = "Header";
 $Footer = "Footer";
 $PublicPagesComplyToWAITitle = "Public pages compliance to WAI";
 $PublicPagesComplyToWAIComment = "WAI (Web Accessibility Initiative) is an initiative to make the web more accessible. By selecting this option, the public pages of Dokeos will become more accessible. This also means that some content on the portal\'s public pages might appear differently.";
+$VersionCheck = "Version check";
+$Active = "Active";
+$Inactive = "Inactive";
+$SessionOverview = "Session overview";
+$SubscribeUserIfNotAllreadySubscribed = "Subscribe user if he has\'nt allready subscribed";
+$UnsubscribeUserIfSubscriptionIsNotInFile = "Unsubscribe user if subscription is not in file";
+$DeleteSelectedSessions = "Delete selected sessions";
+$CourseListInSession = "Course list in this session";
+$UnsubscribeCoursesFromSession = "Unsubscribe selected courses from this session
+";
+$NbUsers = "Users";
+$SubscribeUsersToSession = "Subscribe users to this session";
+$UserListInPlatform = "User list in the platform";
+$UserListInSession = "User list subscribed in this session";
+$CourseListInPlatform = "Course list in the platform";
 ?>

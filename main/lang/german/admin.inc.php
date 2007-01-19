@@ -528,4 +528,7 @@ $Header = "Kopfteil";
 $Footer = "Fußzeile";
 $PublicPagesComplyToWAITitle = "Öffentliche Seiten, entsprechen dem WAI Standard";
 $PublicPagesComplyToWAIComment = "WAI (Web Accessibility Initiative) ist eine Initiative, um Webseiten besser zugänglich zu machen. Durch Auswahl dieser Option werdendie öffentlichen Dokeos Seiten besser zugänglich. Das bedeutet auch, dass einige Inhalte auf den öffentlichen Seiten des Portals unterschiedlich angezeit werden können.";
+$VersionCheck = "Check für Version ";
+$Active = "Aktiv";
+$Inactive = "Inaktiv";
 ?>

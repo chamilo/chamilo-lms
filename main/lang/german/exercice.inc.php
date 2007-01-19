@@ -203,4 +203,15 @@ $Number = "Nr";
 $Weighting = "Gewicht";
 $ChooseQuestionType = "Zum Erstellen einer neuen Frage oben einen Typ auswählen";
 $MatchesTo = "Stimmt überein mit";
+$CorrectTest = "Diesen Test korrigieren";
+$ViewTest = "Diesen Test ansehen";
+$State = "Status";
+$NotAttempted = "Nicht versucht";
+$AddElem = "+ Element";
+$DelElem = "- Element";
+$PlusAnswer = "+ Antwort";
+$LessAnswer = "- Antwort
+";
+$YourScore = "Ihre Quelle";
+$Attempted = "Versucht ";
 ?>

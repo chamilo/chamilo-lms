@@ -65,4 +65,14 @@ $EditPostStored = "Betrag wurde geändert";
 $NewForumPost = "Neuer Beitrag in diesem Forum";
 $YouWantedToStayInformed = "Sie haben angegeben, dass Sie per E-Mail informiert werden wollen, wenn jemand zu diesem Thema antwortet";
 $MessageHasToBeApproved = "Ihr Beitrag muss zunächst genehmigt werden, bevor andere ihn lesen können";
+$AllowAttachments = "Dateianhang erlauben";
+$EditForumCategory = "Forum Kategorie bearbeiten";
+$MovePost = "Nachricht verschieben";
+$MoveToThread = "Zu einem Thema verschieben";
+$ANewThread = "Ein neues Thema";
+$Reply = "Antwort";
+$DeleteForum = "Forum löschen?";
+$DeleteForumCategory = "Forum-Kategorie löschen";
+$Lock = "Sperren";
+$Unlock = "Entsperren";
 ?>

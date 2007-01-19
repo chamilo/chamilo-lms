@@ -204,11 +204,13 @@ $Weighting = "Points";
 $ChooseQuestionType = "Pour créer une nouvelle question, choisissez le type ci-dessus";
 $MatchesTo = "Correspond à";
 $CorrectTest = "Corriger le test";
-$ViewTest = "Voir ce test";
+$ViewTest = "Voir";
 $State = "Etat";
 $NotAttempted = "Non tenté";
 $AddElem = "+ élément";
 $DelElem = "+ élément";
 $PlusAnswer = "+ réponse";
 $LessAnswer = "- réponse";
+$YourScore = "Votre score";
+$Attempted = "Tenté";
 ?>

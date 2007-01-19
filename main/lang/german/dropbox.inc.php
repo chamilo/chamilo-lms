@@ -124,4 +124,5 @@ $mailingNonMailingError = "Mailing kann nicht von Non-Mailing (oder umgekehrt) ü
 $MailingSelectNoOther = "Mailing kann nicht mit anderen Empfängern kombiniert werden ";
 $mailingJustUploadSelectNoOther = "Hochladen kann nicht mit anderen Empfängern kombiniert werden";
 $NoFilesHere = "Hier gibt es keine Dateien";
+$NoFilesHere = "Hier gibt es keine Dateien ";
 ?>

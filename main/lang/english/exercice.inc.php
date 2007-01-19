@@ -204,11 +204,13 @@ $Weighting = "Weighting";
 $ChooseQuestionType = "To create a new question, choose the type above";
 $MatchesTo = "Matches To";
 $CorrectTest = "Correct this test";
-$ViewTest = "View this test";
+$ViewTest = "View";
 $State = "State";
 $NotAttempted = "Not attempted";
 $AddElem = "+ element";
 $DelElem = "- element";
 $PlusAnswer = "+ answer";
 $LessAnswer = "- answer";
+$YourScore = "Your score";
+$Attempted = "Attempted";
 ?>

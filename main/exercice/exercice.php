@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 10793 2007-01-19 09:17:15Z elixir_inter $
+* 	@version $Id: exercice.php 10794 2007-01-19 09:47:04Z elixir_julian $
 */
 
 
@@ -813,7 +813,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 		  <td width="<?php if($is_allowedToEdit) echo '35'; else echo '55'; ?>%"><?php echo get_lang("Exercice"); ?></td>
 		  <td width="30%"><?php echo get_lang("Date"); ?></td>
 		  <td width="15%"><?php echo get_lang("Result"); ?></td>
-		  <td width="15%"><?php echo $is_allowedToEdit?"Correct Test":"View Test"; ?></td>
+		  <td width="15%"><?php echo $is_allowedToEdit?get_lang("CorrectTest"):get_lang("ViewTest"); ?></td>
 
 
 		 </tr>

@@ -609,7 +609,7 @@ CREATE TABLE `sys_announcement` (
   `visible_guest` enum('0','1') NOT NULL default '0',
   `title` varchar(250) NOT NULL default '',
   `content` text NOT NULL,
-  `lang` varchar(70) NOT NULL default '',
+  `lang` varchar(70) NULL default NULL,
   PRIMARY KEY  (`id`)
 );
 

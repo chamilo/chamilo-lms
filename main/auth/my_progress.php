@@ -4,7 +4,7 @@ $language_file = array('registration','tracking');
 
 $cidReset = true;
 
-$nameTools="Ma progression";
+$nameTools=get_lang('MyProgress');
 
 require ('../inc/global.inc.php');
 
@@ -61,7 +61,7 @@ if($id_session)
 							AND session_course.id_coach=user.user_id
 							ORDER BY title",__FILE__,__LINE__);
 	*/
-			
+
 	$sql = "SELECT DISTINCT code,title, CONCAT(lastname, ' ',firstname) coach, username, date_start, date_end, db_name
 			FROM $tbl_course , $tbl_session_course
 			LEFT JOIN $tbl_user
@@ -75,23 +75,23 @@ if($id_session)
 			ORDER BY title";
 
 	$result=api_sql_query($sql);
-	
+
 	$Courses=api_store_result($result);
 }
 
 api_display_tool_title($nameTools);
 
 $now=date('Y-m-d');
-?>
 
-Commencez par sélectionner une session de cours ci-dessous.<br><br>
-Vous pourrez ensuite suivre votre progression pour chaque cours auquel vous êtes inscrit.<br><br>
+echo get_lang('ProgressIntroduction');
+?>
+<br /><br />
 
 <form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>" style="margin: 0px;">
 <center>
 Session de cours :
 <select name="id_session">
-<option value="0">---------- Choisissez ----------</option>
+<option value="0">---------- <?php echo get_lang('Select'); ?> ----------</option>
 
 <?php
 $date_start=$date_end=$now;
@@ -108,10 +108,10 @@ foreach($Sessions as $enreg)
 
 	$enreg['date_end']=explode('-',$enreg['date_end']);
 	$enreg['date_end']=$enreg['date_end'][2].'/'.$enreg['date_end'][1].'/'.$enreg['date_end'][0];
-	
+
 ?>
 
-<option value="<?php echo $enreg['id']; ?>" <?php if($enreg['id'] == $id_session) echo 'selected="selected"'; ?> ><?php echo htmlentities($enreg['name']); if($date_start!='0000-00-00') { ?> (du <?php echo $enreg['date_start']; ?> au <?php echo $enreg['date_end']; ?>)<?php } ?></option>
+<option value="<?php echo $enreg['id']; ?>" <?php if($enreg['id'] == $id_session) echo 'selected="selected"'; ?> ><?php echo htmlentities($enreg['name']); if($date_start!='0000-00-00') { ?> (<?php echo get_lang('From'); ?> <?php echo $enreg['date_start']; ?> <?php echo get_lang('Until'); ?> <?php echo $enreg['date_end']; ?>)<?php } ?></option>
 
 <?php
 }
@@ -161,13 +161,13 @@ foreach($Courses as $enreg)
 	{
 		//print_r($totalTime);
 	}
-	
+
 	$sqlScore = "SELECT exe_result,exe_weighting
 				 FROM $tbl_stats_exercices
 				 WHERE exe_user_id = ".$_user['user_id']."
 				 AND exe_cours_id = '".$enreg['code']."'
 				";
-				
+
 	$resultScore = api_sql_query($sqlScore);
 	$i = 0;
 	$score = 0;
@@ -177,14 +177,14 @@ foreach($Courses as $enreg)
 		$weighting = $weighting + $a_score['exe_weighting'];
 		$i++;
 	}
-	
+
 	$totalScore = $totalScore + $score;
 	$totalWeighting = $totalWeighting + $weighting;
-	
+
 	$pourcentageScore = round(($score*100)/$weighting);
-	
+
 	$weighting = 0;
-	
+
 	$sqlLastAccess = "	SELECT access_date
 						FROM $tbl_stats_lastaccess
 						WHERE access_user_id = ".$_user['user_id']."
@@ -193,7 +193,7 @@ foreach($Courses as $enreg)
 					;
 	$result = api_sql_query($sqlLastAccess);
 	$lastAccess = mysql_fetch_array($result);
-	
+
 	if(!empty($lastAccess['access_date']))
 	{
 		$a_lastConnexion = explode(' ',$lastAccess['access_date']);
@@ -214,17 +214,17 @@ foreach($Courses as $enreg)
 					";
 	$resultProgress = api_sql_query($sqlProgress);
 	$a_nbItem = mysql_fetch_array($resultProgress);
-	
+
 	$table = $enreg['db_name'].'.'.$tbl_course_lp_item;
 	$nbTotalItem = Database :: count_rows($table);
 
 	$totalItem = $totalItem + $nbTotalItem;
 	$totalProgress = $totalProgress + $a_nbItem['nbItem'];
-	
+
 	$progress = round(($a_nbItem['nbItem'] * 100)/$nbTotalItem);
-	
+
 	/*$time = $lastAccessTms - $firstAccessTms;
-	
+
 	if($time >= 60)
 	{
 		$minute = round($time/60);
@@ -254,7 +254,7 @@ foreach($Courses as $enreg)
   	<td>
 		<?php echo htmlentities($enreg['title']); ?>
   	</td>
-  
+
   	<td align='center'>
 		<?php echo $temps; ?>
   	</td>
@@ -297,13 +297,13 @@ unset($Courses);
 		{
 			$minute = '00';
 		}
-			
+
 	}
 	else
 	{
 		$heure = 0;
 	}
-	
+
 	$totalTemps = $heure.'h'.$minute;
 }
 else
@@ -319,7 +319,7 @@ $progress = round(($totalProgress*100)/$totalItem);
   	<td>
 		<strong><?php echo get_lang('Total'); ?></strong>
   	</td>
-  
+
   	<td align='center'>
 		<?php echo $totalTemps; ?>
   	</td>
@@ -345,9 +345,9 @@ $progress = round(($totalProgress*100)/$totalItem);
 <?php
 /*
  * **********************************************************************************************
- * 	
+ *
  * 	Details for one course
- * 
+ *
  * **********************************************************************************************
  */
 	if(isset($_GET['course']))
@@ -359,14 +359,14 @@ $progress = round(($totalProgress*100)/$totalItem);
 							WHERE sessionCourse.id_coach = user.user_id
 							AND course.code= '".$_GET['course']."'
 						 ";
-		
+
 		$resultInfosCourse = api_sql_query($sqlInfosCourse);
-		
+
 		$a_infosCours = mysql_fetch_array($resultInfosCourse);
 		$tableTitle = $a_infosCours['title'].' - '.get_lang('Tutor').' : '.$a_infosCours['tutor_infos'];
-		
-		
-		
+
+
+
 		?>
 		<table class="data_table" width="100%">
 			<tr class="tableName">
@@ -386,7 +386,7 @@ $progress = round(($totalProgress*100)/$totalItem);
 								";
 
 				$resultLearnpath = api_sql_query($sqlLearnpath);
-				
+
 				if(mysql_num_rows($resultLearnpath)>0)
 				{
 					while($a_learnpath = mysql_fetch_array($resultLearnpath))
@@ -401,17 +401,17 @@ $progress = round(($totalProgress*100)/$totalItem);
 										";
 						$resultProgress = api_sql_query($sqlProgress);
 						$a_nbItem = mysql_fetch_array($resultProgress);
-		
+
 						$sqlTotalItem = "	SELECT	COUNT(item_type) AS totalItem
-											FROM ".$a_infosCours['db_name'].".".$tbl_course_lp_item." 
+											FROM ".$a_infosCours['db_name'].".".$tbl_course_lp_item."
 											WHERE lp_id = ".$a_learnpath['id']
 										;
 						$resultItem = api_sql_query($sqlTotalItem);
 						$a_totalItem = mysql_fetch_array($resultItem);
-						
+
 						$progress = round(($a_nbItem['nbItem'] * 100)/$a_totalItem['totalItem']);
-						
-						
+
+
 						echo "<tr>
 								<td>
 							 ";
@@ -431,20 +431,20 @@ $progress = round(($totalProgress*100)/$totalItem);
 							  </tr>
 							 ";
 					}
-					
+
 				}
 				else
 				{
-					echo "	<tr>	
+					echo "	<tr>
 								<td colspan='4'>
 									".get_lang('NoLearnpath')."
 								</td>
 							</tr>
 						 ";
 				}
-				
-				
-			
+
+
+
 			?>
 			<tr>
 			  <th class="head"><?php echo get_lang('Exercices'); ?></th>
@@ -452,14 +452,14 @@ $progress = round(($totalProgress*100)/$totalItem);
 			  <th class="head"><?php echo get_lang('Essais'); ?></th>
 			  <th class="head"><?php echo get_lang('Correction'); ?></th>
 			</tr>
-			
+
 			<?php
-			
+
 				$sqlExercices = "	SELECT quiz.title,id
 								FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
 							";
-		
-					
+
+
 				$resuktExercices = api_sql_query($sqlExercices);
 				while($a_exercices = mysql_fetch_array($resuktExercices))
 				{
@@ -470,25 +470,25 @@ $progress = round(($totalProgress*100)/$totalItem);
 								 ;
 					$resultEssais = api_sql_query($sqlEssais);
 					$a_essais = mysql_fetch_array($resultEssais);
-					
+
 					$sqlScore = "SELECT exe_result,exe_weighting
 								 FROM $tbl_stats_exercices
 								 WHERE exe_user_id = ".$_user['user_id']."
 								 AND exe_cours_id = '".$a_infosCours['code']."'
 								 AND exe_exo_id = ".$a_exercices['id']
 									;
-							
+
 					$resultScore = api_sql_query($sqlScore);
-					$score = 0; 
+					$score = 0;
 					while($a_score = mysql_fetch_array($resultScore))
 					{
 						$score = $score + $a_score['exe_result'];
 						$weighting = $weighting + $a_score['exe_weighting'];
 					}
 					$pourcentageScore = round(($score*100)/$weighting);
-	
+
 					$weighting = 0;
-					
+
 					echo "<tr>
 							<td>
 						 ";
@@ -499,7 +499,7 @@ $progress = round(($totalProgress*100)/$totalItem);
 						  ";
 					echo $pourcentageScore.'%';
 					echo "	</td>
-					
+
 							<td align='center'>
 						 ";
 					echo 		$a_essais['essais'];
@@ -510,8 +510,8 @@ $progress = round(($totalProgress*100)/$totalItem);
 						  </tr>
 						 ";
 				}
-				
-			
+
+
 			?>
 		</table>
 		<?php

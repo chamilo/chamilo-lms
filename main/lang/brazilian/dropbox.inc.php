@@ -95,4 +95,5 @@ $NotMovedError = "O(s) arquivo(s) não podem ser movidos.";
 $AddNewCategory = "Adicionar uma nova categoria";
 $EditCategory = "Editar esta categoria";
 $CurrentlySeeing = "Você está atualmente vendo a categoria";
+$NoFilesHere = "Nenhum arquivo aqui";
 ?>

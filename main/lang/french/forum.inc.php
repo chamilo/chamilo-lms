@@ -65,4 +65,14 @@ $EditPostStored = "L\'article a été modifié";
 $NewForumPost = "Nouvel article dans le forum";
 $YouWantedToStayInformed = "Vous avez exprimé le désir d\'être informé par courriel à chaque fois qu\'une réponse est ajoutée à la discussion.";
 $MessageHasToBeApproved = "Votre message devra être approuvé par le modérateur avanr d\'être publié.";
+$AllowAttachments = "Autoriser les pièces jointes";
+$EditForumCategory = "Editer la catégorie de forum";
+$MovePost = "Déplacer le post";
+$MoveToThread = "Déplacer dans un sujet";
+$ANewThread = "Un nouveau sujet";
+$Reply = "Répondre";
+$DeleteForum = "Supprimer le forum ?";
+$DeleteForumCategory = "Supprimer la catégorie de forum ?";
+$Lock = "Verrouiller";
+$Unlock = "Déverrouiller";
 ?>

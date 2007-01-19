@@ -365,4 +365,9 @@ $InCourse = "im Kurs";
 $UserOnlineListSession = "Liste der online Benutzer - Session";
 $From = "von ";
 $To = "an";
+$Content = "Inhalt";
+$year = "Jahr";
+$Years = "Jahre";
+$Day = "Tag";
+$Days = "Tage";
 ?>

@@ -49,4 +49,5 @@ $AnnouncementDeletedAll = "All announcements have been deleted";
 $AnnouncementMoved = "The announcement has been moved";
 $NoAnnouncements = "There are no announcements.";
 $SelectEverybody = "Select Everybody";
+$SelectedUsersGroups = "selected user groups";
 ?>

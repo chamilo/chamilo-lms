@@ -123,4 +123,6 @@ $FileUploadSucces = "The file has successfully been uploaded.";
 $mailingNonMailingError = "Mailing cannot be overwritten by non-mailing and vice-versa";
 $MailingSelectNoOther = "Mailing cannot be combined with other recipients";
 $mailingJustUploadSelectNoOther = "Just Upload cannot be combined with other recipients";
+$NoFilesHere = "No files here";
+$NoFilesHere = "No files here";
 ?>

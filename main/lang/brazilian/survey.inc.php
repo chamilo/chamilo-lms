@@ -6,6 +6,7 @@ $Survey = "Enquete";
 $AddQuestionGroup = "Adicionar Questão/Grupo";
 $NotPublished = "Não publicado";
 $Reporting = "Relatório";
+$AddNewGroup = "Adicionar novo grupo / editar grupo";
 $IsShareSurvey = "Compartilhar enquete com outros";
 $ViewQuestions = "Visualizar questões";
 $PleaseEnterAQuestion = "Por favor, escreva uma questão";

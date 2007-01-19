@@ -492,4 +492,14 @@ $ServiceActivated = "Service actief";
 $ActiveExtension = "Actieve services";
 $InvalidExtension = "Ongeldige extensie";
 $VersionCheckExplanation = "Om de automatische versiecontrole te activeren dient u uw campus te registreren op dokeos.com. De bekomen informatie is enkel voor intern gebruik en enkel geaggregeerde informatie zal publiekelijk beschikbaar zijn (totaal aantal campussen, totaal aantal Dokeos cursussen van alle campussen samen, totaal aantal studenten die dokeos gebruiken, ...) zie  hiervoor see <a href=\"see http://www.dokeos.com/stats/\">see http://www.dokeos.com/stats/</a>. Als u uw campus registreert verschijnt deze ook in de lijst met campussen (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>.. Als u dit  niet wilt dient u onderstaande checkbox aan te vinken. Registreren is heel gemakkelijk: u dient enkel op onderstaande knop te klikken.";
+$AfterApproval = "Na goedkeuring";
+$StudentViewEnabledTitle = "Studentenzicht inschakelen";
+$StudentViewEnabledComment = "Wanneer studentenzicht is ingeschakeld, kan een cursusbeheerder of platformbeheerder de cursusinhoud bekijken zoals een student deze ziet.";
+$TimeLimitWhosonlineTitle = "Tijdslimiet gebruikers online";
+$TimeLimitWhosonlineComment = "Deze tijdslimiet bepaalt hoeveel seconden een gebruiker \'online\' beschouwd wordt sinds zijn of haar laatste actie.";
+$ExampleMaterialCourseCreationTitle = "Voorbeeld inhoud bij aanmaken cursus";
+$ExampleMaterialCourseCreationComment = "Automatisch voorbeeld inhoud aanmaken wanneer een nieuwe cursus aangemaakt wordt.";
+$IconsOnly = "Enkel iconen";
+$Version = "Versie";
+$Header = "Hoofding";
 ?>

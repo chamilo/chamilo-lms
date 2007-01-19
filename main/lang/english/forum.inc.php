@@ -65,4 +65,14 @@ $EditPostStored = "The post has been modified";
 $NewForumPost = "New Post in the forum";
 $YouWantedToStayInformed = "You stated that you wanted to be informed by e-mail whenever somebody replies on the thread";
 $MessageHasToBeApproved = "Your message has to be approved before people can view it.";
+$AllowAttachments = "Allow attachments";
+$EditForumCategory = "Edit forum category";
+$MovePost = "Move post";
+$MoveToThread = "Move to a thread";
+$ANewThread = "A new thread";
+$Reply = "Reply";
+$DeleteForum = "Delete forum ?";
+$DeleteForumCategory = "Delete forum category ?";
+$Lock = "Lock";
+$Unlock = "Unlock";
 ?>

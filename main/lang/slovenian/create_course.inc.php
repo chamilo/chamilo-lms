@@ -102,4 +102,5 @@ $langTitle = "naziv";
 $AnnouncementExampleTitle = "Tole je primer obvestila";
 $Wikipedia = "Online Enciklopedija";
 $DefaultGroupCategory = "Privzete skupine";
+$DefaultCourseImages = "Privzete slike";
 ?>

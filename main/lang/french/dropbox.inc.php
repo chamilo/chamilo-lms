@@ -119,4 +119,6 @@ $InvalidGroupDetected = "Groupe non valide détecté";
 $DropboxFileTooBig = "Le fichier dropbox est trop grand.";
 $TheFileIsNotUploaded = "Le fichier n\'a pas été envoyé.";
 $FileUploadSucces = "Le fichier a été envoyé avec succès.";
+$NoFilesHere = "Pas de fichiers ici";
+$NoFilesHere = "Aucun fichier";
 ?>

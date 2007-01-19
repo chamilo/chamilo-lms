@@ -147,4 +147,6 @@ $langNoDocuments = "Ni nobenega dokumenta";
 $langNoExercisesAvailable = "Ni dostopne vaje";
 $langNoLinksAvailable = "Nobena povezava ni na voljo";
 $langNoItemsInLp = "Trenutni ni elementov v tekoèi uèni poti. Klinite \"Napredno\" za njihovo kreiranje.";
+$FirstPosition = "Zaèetek";
+$NewQuiz = "Nova vaja";
 ?>

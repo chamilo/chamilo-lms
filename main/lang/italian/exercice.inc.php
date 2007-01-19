@@ -199,4 +199,8 @@ $MarkInserted = "Voto inserito";
 $PleaseGiveAMark = "Assegna un voto";
 $EditCommentsAndMarks = "Modifica voto e commenti";
 $AddComments = "Aggiungi commenti";
+$Number = "N°";
+$Weighting = "Punteggio";
+$ChooseQuestionType = "Per creare un quesito, indica la tipologia qui sopra";
+$MatchesTo = "Corrisponde a";
 ?>

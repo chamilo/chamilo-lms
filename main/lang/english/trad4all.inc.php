@@ -365,4 +365,10 @@ $InCourse = "in course";
 $UserOnlineListSession = "User online list - Session";
 $From = "from";
 $To = "to";
+$Content = "Content";
+$year = "year";
+$Years = "years";
+$Day = "day";
+$Days = "days";
+$PleaseStandBy = "Please stand by...";
 ?>

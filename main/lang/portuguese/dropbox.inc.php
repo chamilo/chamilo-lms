@@ -123,4 +123,5 @@ $FileUploadSucces = "O ficheiro foi carregado com sucesso!";
 $mailingNonMailingError = "Um email não poderá ser reescrito por um não correio e vice-versa.";
 $MailingSelectNoOther = "O correio electrónico não pode ser combinado com outros destinatários.";
 $mailingJustUploadSelectNoOther = "O envio de ficheiros para si mesmo não pode ser combinado com outros destinatários.";
+$NoFilesHere = "Nenhum ficheiro";
 ?>

@@ -102,4 +102,5 @@ $langTitle = "title";
 $AnnouncementExampleTitle = "This is an announcement example";
 $Wikipedia = "Free online encyclopedia";
 $DefaultGroupCategory = "Default groups";
+$DefaultCourseImages = "Default images";
 ?>

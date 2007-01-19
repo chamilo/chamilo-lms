@@ -103,4 +103,5 @@ $langTitle = "titolo";
 $AnnouncementExampleTitle = "Esempio di avviso";
 $Wikipedia = "Libera Enciclopedia online";
 $DefaultGroupCategory = "Gruppi di default";
+$DefaultCourseImages = "Immagini di default";
 ?>

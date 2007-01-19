@@ -59,4 +59,5 @@ $ForumAddNewTopic = "Forum: ajouter un nouveau message";
 $ForumEditTopic = "Forum: éditer le message";
 $ExerciseAnswers = "Exercice: Réponses";
 $ForumReply = "Forum: répondre";
+$AgendaSortChronologicallyDown = "Afficher les évènements (du plus récent au plus ancien)";
 ?>

@@ -202,4 +202,5 @@ $AddComments = "Kommentare hinzufügen";
 $Number = "Nr";
 $Weighting = "Gewicht";
 $ChooseQuestionType = "Zum Erstellen einer neuen Frage oben einen Typ auswählen";
+$MatchesTo = "Stimmt überein mit";
 ?>

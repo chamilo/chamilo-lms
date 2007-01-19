@@ -105,4 +105,5 @@ $langTitle = "titel";
 $AnnouncementExampleTitle = "Dit is een voorbeeldbericht.";
 $Wikipedia = "Gratis online-encyclopedie";
 $DefaultGroupCategory = "Standaardgroepen";
+$DefaultCourseImages = "Standaard afbeeldingen";
 ?>

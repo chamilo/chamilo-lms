@@ -123,4 +123,5 @@ $FileUploadSucces = "Datoteka je bila uspešno prenešena.";
 $mailingNonMailingError = "Pošiljanje ne more biti prepisano z drugimi metodami prenosa in obratno.";
 $MailingSelectNoOther = "Pošiljanje ne more biti kombinirano z drugimi prejemniki.";
 $mailingJustUploadSelectNoOther = "Le Prenos (v lasten nabiralnik) se ne more izvršiti v kombinaciji z ostalimi prejemniki";
+$NoFilesHere = "Tu trenutno ni nobenih datotek";
 ?>

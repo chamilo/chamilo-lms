@@ -365,4 +365,5 @@ $InCourse = "v teèaju";
 $UserOnlineListSession = "Seznam trenutno aktivnih teèajnikov - Seja";
 $From = "od";
 $To = "do";
+$Content = "Vsebina";
 ?>

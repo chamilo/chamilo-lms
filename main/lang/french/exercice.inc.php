@@ -203,4 +203,12 @@ $Number = "N°";
 $Weighting = "Points";
 $ChooseQuestionType = "Pour créer une nouvelle question, choisissez le type ci-dessus";
 $MatchesTo = "Correspond à";
+$CorrectTest = "Corriger le test";
+$ViewTest = "Voir ce test";
+$+answ = "+ réponse";
+$-answ = "- réponse";
+$+elem = "+ élément";
+$-elem = "- élément";
+$State = "Etat";
+$NotAttempted = "Non tenté";
 ?>

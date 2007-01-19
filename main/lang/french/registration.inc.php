@@ -172,4 +172,5 @@ $AccountExternalAuthSource = "Dokeos ne peut prendre cette requête en charge aut
 $AccountsExternalAuthSource = "Dokeos ne peut prendre cette requête en charge automatiquement car au moins l\'un des comptes utilise une source d\'authentification externe. Veuillez prendre les mesures appropriées pour tous les comptes (incluant ceux utilisant l\'authentification interne) et avertir les utilisateurs, svp.";
 $RequestSentToPlatformAdmin = "Dokeos ne peut prendre la requête en charge automatiquement pour ce type de compte. Votre requête a été envoyée à un administrateur de la plateforme qui prendra les mesures appropriées et vous avertira du résultat.";
 $langphone = "Téléphone";
+$Unreg = "Désinscrire";
 ?>

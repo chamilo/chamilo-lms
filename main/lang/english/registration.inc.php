@@ -163,4 +163,5 @@ $AccountExternalAuthSource = "Dokeos can\'t handle the request automatically bec
 $AccountsExternalAuthSource = "Dokeos can\'t handle the request automatically because at least one of the accounts has an external authentication source. Please take appropriate measures for all accounts (including those with platform authentication) and notify the user.";
 $RequestSentToPlatformAdmin = "Dokeos can\'t handle the request automatically for this type of account. Your request has been sent to the platform administrator, who will take appropriate measures and notify you of the result.";
 $langphone = "Phone";
+$Unreg = "Unregister";
 ?>

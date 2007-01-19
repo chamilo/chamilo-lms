@@ -202,4 +202,6 @@ $EditCommentsAndMarks = "Editar comentarios y notas";
 $AddComments = "Añadir comentarios";
 $Number = "Nº";
 $Weighting = "Puntuación";
+$ChooseQuestionType = "Para crear una nueva pregunta, seleccione el tipo arriba";
+$MatchesTo = "Corresponde a";
 ?>

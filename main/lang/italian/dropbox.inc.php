@@ -123,4 +123,5 @@ $FileUploadSucces = "Il file è stato caricato correttamente.";
 $mailingNonMailingError = "Le lite di distribuzione non possono essere sovrascritte da singoli indirizzi e viceversa";
 $MailingSelectNoOther = "Le liste di distribuzione non possono essere combinate con altri destinatari";
 $mailingJustUploadSelectNoOther = "Il semplice caricamento non può essere combinato con l\'invio a destinatari";
+$NoFilesHere = "Non ci sono files in questa sezione";
 ?>

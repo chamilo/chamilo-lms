@@ -121,4 +121,6 @@ $WelcomeOogieConverter = "Welkom in de conversie applicatie Oogie<br />
 3. U kunt nu audiocommentaar toevoegen aan elke slide en testen tussen de verschillende slides plaatsen";
 $ConvertToLP = "Converteer in leerpad";
 $Content = "Inhoud";
+$Validate = "Valideer";
+$AdvancedSettings = "Geavanceerde instellingen";
 ?>

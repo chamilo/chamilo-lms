@@ -492,4 +492,7 @@ $ServiceActivated = "Serviço ativado";
 $ActiveExtension = "Ativar serviços";
 $InvalidExtension = "Extenção Inválida";
 $VersionCheckExplanation = "Para habilitar a verificação automática da versão do Dokeos é necessário realizar o registro no campus Dokeos.com. A informação obtida ao clicar neste botão é somente para uso interno e apenas os dados acrescentados estarão disponíveis publicamente (número total de usuários do campus, número total de cursos dokeos, número total de estudantes dokeos,...) (ver http://www.dokeos.com/pt/stats/.) Quando tiver efetuado o registro, seu campus aparecerá também nesta lista mundial (http://www.dokeos.com/community.php.) Se não desejar aparecer nesta lista mundial, tem de selecionar a opção abaixo. O registro é bastante fácil: basta somente clicar neste botão:";
+$AfterApproval = "Após a aprovação";
+$StudentViewEnabledTitle = "Permitir visualização do aluno";
+$title = "Título";
 ?>

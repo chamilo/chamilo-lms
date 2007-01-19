@@ -123,4 +123,5 @@ $FileUploadSucces = "Die Datei wurde erfolgreich hochgeladen";
 $mailingNonMailingError = "Mailing kann nicht von Non-Mailing (oder umgekehrt) überschrieben werden";
 $MailingSelectNoOther = "Mailing kann nicht mit anderen Empfängern kombiniert werden ";
 $mailingJustUploadSelectNoOther = "Hochladen kann nicht mit anderen Empfängern kombiniert werden";
+$NoFilesHere = "Hier gibt es keine Dateien";
 ?>

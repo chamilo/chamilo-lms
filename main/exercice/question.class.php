@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: question.class.php 10791 2007-01-19 09:02:48Z elixir_inter $
 */
 
 
@@ -104,7 +104,7 @@ abstract class Question
 		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-		$sql="SELECT question,description,ponderation,position,type,picture FROM `$TBL_QUESTIONS` WHERE id='$id'";
+		$sql="SELECT question,description,ponderation,position,type,picture FROM $TBL_QUESTIONS WHERE id='$id'";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -460,7 +460,7 @@ abstract class Question
 			$Extension=$picture[sizeof($picture)-1];
 			$picture='quiz-'.$questionId.'.'.$Extension;
 
-			$sql="UPDATE `$TBL_QUESTIONS` SET picture='$picture' WHERE id='$questionId'";
+			$sql="UPDATE $TBL_QUESTIONS SET picture='$picture' WHERE id='$questionId'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			return @copy($picturePath.'/'.$this->picture,$picturePath.'/'.$picture)?true:false;
@@ -547,13 +547,13 @@ abstract class Question
 		// question already exists
 		if($id)
 		{
-			$sql="UPDATE `$TBL_QUESTIONS` SET question='$question',description='$description',ponderation='$weighting',position='$position',type='$type',picture='$picture' WHERE id='$id'";
+			$sql="UPDATE $TBL_QUESTIONS SET question='$question',description='$description',ponderation='$weighting',position='$position',type='$type',picture='$picture' WHERE id='$id'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 		// creates a new question
 		else
 		{
-			$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,position,type,picture) VALUES('$question','$description','$weighting','$position','$type','$picture')";
+			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture) VALUES('$question','$description','$weighting','$position','$type','$picture')";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$this->id=mysql_insert_id();
@@ -651,7 +651,7 @@ abstract class Question
 			$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
-			$sql="DELETE FROM `$TBL_QUESTIONS` WHERE id='$id'";
+			$sql="DELETE FROM $TBL_QUESTIONS WHERE id='$id'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='$id'";
@@ -685,7 +685,7 @@ abstract class Question
 		$position=$this->position;
 		$type=$this->type;
 
-		$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,position,type) VALUES('$question','$description','$weighting','$position','$type')";
+		$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type) VALUES('$question','$description','$weighting','$position','$type')";
 		api_sql_query($sql,__FILE__,__LINE__);
 
 		$id=mysql_insert_id();

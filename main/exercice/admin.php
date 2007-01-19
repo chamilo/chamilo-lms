@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: admin.php 10791 2007-01-19 09:02:48Z elixir_inter $
 */
 
 
@@ -416,7 +416,6 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 }
 // -->
 </script>";
-$interbreadcrumb[] = array ("url"=>"exercice.php", "name"=> get_lang('Exercices'));
 Display::display_header($nameTools,"Exercise");
 ?>
 

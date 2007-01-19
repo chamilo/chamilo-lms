@@ -60,6 +60,7 @@ $dateNow=date('Y-m-d');
 
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 $chatPath=$documentPath.'chat_files/';
+$TABLEITEMPROPERTY= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 if(!is_dir($chatPath))
 {
@@ -73,7 +74,8 @@ if(!is_dir($chatPath))
 
 	$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
 
-	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
+	api_sql_query("INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)");
+	
 }
 
 if(!file_exists($chatPath.'messages-'.$dateNow.'.log'))

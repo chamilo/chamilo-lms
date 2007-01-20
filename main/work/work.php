@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 10808 2007-01-20 19:59:25Z pcool $
+*  	@version $Id: work.php 10809 2007-01-20 20:04:39Z pcool $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -525,7 +525,7 @@ else
 				$result2 = api_sql_query($queryString2,__FILE__,__LINE__);
 				if ($result1)
 				{
-					item_property_update($_course,'work',$delete,get_lang('DocumentDeleted'),$user_id);
+					api_item_property_update($_course,'work',$delete,get_lang('DocumentDeleted'),$user_id);
 					while ($thisUrl = mysql_fetch_array($result1))
 					{
 						// check the url really points to a file in the work area

@@ -10,7 +10,7 @@
 	of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
 
-    Contact: 
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -23,8 +23,8 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 10570 2006-12-29 13:57:25Z fvauthier $
-* 
+*  	@version $Id: work.php 10808 2007-01-20 19:59:25Z pcool $
+*
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
 /**
@@ -58,14 +58,14 @@
  * usually /var/www/html
  *
  *	Modified by Patrick Cool, february 2004:
- *	Allow course managers to specify wether newly uploaded documents should 
+ *	Allow course managers to specify wether newly uploaded documents should
  *	be visible or unvisible by default
- *	This is ideal for reviewing the uploaded documents before the document 
+ *	This is ideal for reviewing the uploaded documents before the document
  *	is available for everyone.
- *	
- *	note: maybe the form to change the behaviour should go into the course 
+ *
+ *	note: maybe the form to change the behaviour should go into the course
  *	properties page?
- *	note 2: maybe a new field should be created in the course table for 
+ *	note 2: maybe a new field should be created in the course table for
  *	this behaviour.
  *
  *	We now use the show_score field since this is not used.
@@ -79,38 +79,39 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file[] = "work";
 $language_file[] = "document";
 
 // Section (for the tabs)
 $this_section=SECTION_COURSES;
 
-// @todo why is this needed? 
+// @todo why is this needed?
 //session
 if(isset($_GET['id_session']))
 {
 	$_SESSION['id_session'] = $_GET['id_session'];
 }
 
-	
+
 /*
 -----------------------------------------------------------
 	Including necessary files
 -----------------------------------------------------------
-*/ 
+*/
 include('../inc/global.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . "course.lib.php");
 include_once(api_get_path(LIBRARY_PATH) . "debug.lib.inc.php");
 include_once(api_get_path(LIBRARY_PATH) . "events.lib.inc.php");
 include_once('work.lib.php');
+
+
 /*
 -----------------------------------------------------------
 	Table definitions
 -----------------------------------------------------------
 */
-$tool_name = get_lang(TOOL_STUDENTPUBLICATION);
-$main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+$main_course_table 	= Database::get_main_table(TABLE_MAIN_COURSE);
 $work_table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 $iprop_table 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -119,8 +120,7 @@ $iprop_table 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
 	Constants and variables
 -----------------------------------------------------------
 */
-
-
+$tool_name 			= get_lang('StudentPublication');
 $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $_SESSION['id_session']);
@@ -139,7 +139,6 @@ $make_invisible = $_REQUEST['make_invisible'];
 $make_visible = $_REQUEST['make_visible'];
 $origin = $_REQUEST['origin'];
 $submitGroupWorkUrl = $_REQUEST['submitGroupWorkUrl'];
-$submitWork = $_REQUEST['submitWork'];
 $title = $_REQUEST['title'];
 $uploadvisibledisabled = $_REQUEST['uploadvisibledisabled'];
 $id = (int) $_REQUEST['id'];
@@ -158,7 +157,7 @@ elseif (isset($_POST['curdirpath']) && $_POST['curdirpath']!='')
 {
 	$cur_dir_path = preg_replace('#/\.\./#','/',$_POST['curdirpath']); //escape '..' hack attempts
 }
-else 
+else
 {
 	$cur_dir_path = '/';
 }
@@ -171,9 +170,12 @@ $cur_dir_path_url = urlencode($cur_dir_path);
 
 //prepare a form of path that can easily be added at the end of any url ending with "work/"
 $my_cur_dir_path = $cur_dir_path;
-if($my_cur_dir_path == '/'){
+if($my_cur_dir_path == '/')
+{
 	$my_cur_dir_path = '';
-}elseif(substr($my_cur_dir_path,-1,1)!='/'){
+}
+elseif(substr($my_cur_dir_path,-1,1)!='/')
+{
 	$my_cur_dir_path = $my_cur_dir_path.'/';
 }
 /*
@@ -207,7 +209,7 @@ if(isset($_POST['cancelForm']) && !empty($_POST['cancelForm']))
 	exit();
 }
 
-if ($submitWork || $submitGroupWorkUrl)
+if ($_POST['submitWork'] || $submitGroupWorkUrl)
 {
 	// these libraries are only used for upload purpose
 	// so we only include them when necessary
@@ -233,7 +235,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && !sizeof($_POST))
 }
 //toolgroup comes from group. the but of tis variable is to limit post to the group of the student
 if (!api_is_course_admin()){
-	if (!empty($_GET['toolgroup'])){
+	if (!empty($_GET['toolgroup']))
+	{
 		$toolgroup=$_GET['toolgroup'];
 		api_session_register('toolgroup');
 	}
@@ -256,18 +259,14 @@ else
 //stats
 event_access_tool(TOOL_STUDENTPUBLICATION);
 
-
-
 $is_allowed_to_edit = api_is_allowed_to_edit(); //has to come after display_tool_view_option();
 //api_display_tool_title($tool_name);
-
-
 
 /*
 ==============================================================================
 		MAIN CODE
 ==============================================================================
-*/ 
+*/
 
 if (isset($_POST['changeProperties']))
 {
@@ -296,14 +295,14 @@ Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
 -----------------------------------------------------------
 	COMMANDS SECTION (reserved for course administrator)
 -----------------------------------------------------------
-*/ 
-if ($is_allowed_to_edit)
+*/
+if (api_is_allowed_to_edit())
 {
 	/*-------------------------------------------
 				DELETE WORK COMMAND
 	-----------------------------------------*/
 	if ($delete)
-	{	
+	{
 		if ($delete == "all")
 		{
 			$queryString1 = "SELECT url FROM ".$work_table."";
@@ -439,7 +438,8 @@ if ($is_allowed_to_edit)
 	/* -------------------
 	 * Delete dir command
 	 --------------------*/
-	if(!empty($_REQUEST['delete_dir'])){
+	if(!empty($_REQUEST['delete_dir']))
+	{
 		//TODO implement
 		del_dir($base_work_dir.'/',$_REQUEST['delete_dir']);
 		Display::display_normal_message($_REQUEST['delete_dir'].' '.get_lang('DirDeleted'));
@@ -447,12 +447,13 @@ if ($is_allowed_to_edit)
 	/* ----------------------
 	 * Move file form request
 	 ----------------------- */
-	if(!empty($_REQUEST['move'])){
+	if(!empty($_REQUEST['move']))
+	{
 		$folders = get_subdirs_list($base_work_dir,1);
 		Display::display_normal_message(build_move_to_selector($folders,$cur_dir_path,$_REQUEST['move']));
 	}
 	/* ------------------
-	 * Move file command 
+	 * Move file command
 	 ------------------- */
 	if (isset($_POST['move_to']) && isset($_POST['move_file']))
 	{
@@ -461,7 +462,8 @@ if ($is_allowed_to_edit)
 		if($move_to == '/' or empty($move_to))
 		{
 			$move_to = '';
-		}elseif(substr($move_to,-1,1)!='/')
+		}
+		elseif(substr($move_to,-1,1)!='/')
 		{
 			$move_to = $move_to.'/';
 		}
@@ -496,15 +498,19 @@ if ($is_allowed_to_edit)
 	COMMANDS SECTION (reserved for others - check they're authors each time)
 -----------------------------------------------------------
 */
-else{
-	$iprop_table = Database::get_course_table(ITEM_PROPERTY_TABLE);
+else
+{
+	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$user_id = api_get_user_id();
 	/*-------------------------------------------
 				DELETE WORK COMMAND
 	-----------------------------------------*/
 	if ($delete)
-	{	
-		if ($delete == "all"){/*not authorized to this user */}
+	{
+		if ($delete == "all")
+		{
+			/*not authorized to this user */
+		}
 		else
 		{
 			//Get the author ID for that document from the item_property table
@@ -512,7 +518,7 @@ else{
 			$author_qry = api_sql_query($author_sql,__FILE__,__LINE__);
 			if(Database::num_rows($author_qry)==1)
 			{
-				//we found the current user is the author 
+				//we found the current user is the author
 				$queryString1 = "SELECT url FROM  ".$work_table."  WHERE id = '$delete'";
 				$queryString2 = "DELETE FROM  ".$work_table."  WHERE id='$delete'";
 				$result1 = api_sql_query($queryString1,__FILE__,__LINE__);
@@ -536,7 +542,6 @@ else{
 	/*-------------------------------------------
 	           EDIT COMMAND WORK COMMAND
 	  -----------------------------------------*/
-
 	if ($edit)
 	{
 		//Get the author ID for that document from the item_property table
@@ -544,14 +549,14 @@ else{
 		$author_qry = api_sql_query($author_sql,__FILE__,__LINE__);
 		if(Database::num_rows($author_qry)==1)
 		{
-			//we found the current user is the author 
+			//we found the current user is the author
 			$sql    = "SELECT * FROM  ".$work_table."  WHERE id='".$edit."'";
 			$result = api_sql_query($sql,__FILE__,__LINE__);
-	
+
 			if ($result)
 			{
 				$row = mysql_fetch_array($result);
-	
+
 				$workTitle       = $row ['title'      ];
 				$workAuthor      = $row ['author'     ];
 				$workDescription = $row ['description'];
@@ -565,11 +570,11 @@ else{
 ==============================================================================
 		FORM SUBMIT PROCEDURE
 ==============================================================================
-*/ 
+*/
 
 $error_message="";
 
-if($submitWork && $is_course_member)
+if($_POST['submitWork'] && $is_course_member)
 {
 	if($_FILES['file']['size'])
 	{
@@ -597,12 +602,15 @@ if($submitWork && $is_course_member)
 		// compose a unique file name to avoid any conflict
 
 		$new_file_name = uniqid('').$new_file_name;
-		
+
 		if (isset($_SESSION['toolgroup']))
 		{
 			$post_group_id = $_SESSION['toolgroup'];
 		}
-		else{$post_group_id = '0';}
+		else
+		{
+			$post_group_id = '0';
+		}
 		//if we come from the group tools the groupid will be saved in $work_table
 
 		move_uploaded_file($_FILES['file']['tmp_name'],$updir.$my_cur_dir_path.$new_file_name);
@@ -628,7 +636,7 @@ if($submitWork && $is_course_member)
 		api_sql_query($sql_add_publication,__FILE__,__LINE__);
 
         $Id = mysql_insert_id();
-        api_item_property_update($_course,'work',$Id,get_lang('DocumentAdded'),$user_id);       
+        api_item_property_update($_course,'work',$Id,get_lang('DocumentAdded'),$user_id);
 		$succeed = true;
 	}
 
@@ -682,20 +690,20 @@ if($submitWork && $is_course_member)
 		{
 			$is_author=true;
 		}
-		
+
 		if ($id && ($is_allowed_to_edit or $is_author))
 		{
 			if( ! $title )
 			{
 				$title = basename($newWorkUrl);
 			}
-	
+
 			$sql = "UPDATE  ".$work_table."
 			        SET	title       = '".$title."',
 			            description = '".$description."',
 			            author      = '".$authors."'
 			        WHERE id        = '".$id."'";
-	
+
 			api_sql_query($sql,__FILE__,__LINE__);
 	        $insertId = $id;
 	        api_item_property_update($_course,'work',$insertId,get_lang('DocumentUpdated'),$user_id);
@@ -707,7 +715,7 @@ if($submitWork && $is_course_member)
 		}
 	}
 }
-if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" an edit
+if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is not "just" an edit
 {
 		//YW Tis part serve to send a e-mail to the tutors when a new file is send
 	// Lets predefine some variables. Be sure to change the from address!
@@ -726,17 +734,17 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 		$emailfromaddr = get_setting('emailAdministrator');
 		$emailfromname = get_setting('siteName');
 		$emailsubject  = "[".get_setting('siteName')."] ";
-	
+
 		// The body can be as long as you wish, and any combination of text and variables
-	
+
 		//$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." ($title)\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
 		$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." ($title)\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-	
+
 		// Here we are forming one large header line
 		// Every header must be followed by a \n except the last
 		$emailheaders = "From: ".get_setting('administratorSurname')." ".get_setting('administratorName')." <".get_setting('emailAdministrator').">\n";
 		$emailheaders .= "Reply-To: ".get_setting('emailAdministrator');
-	
+
 		// Because I predefined all of my variables, this api_send_mail() function looks nice and clean hmm?
 		@api_send_mail( $emailto, $emailsubject, $emailbody, $emailheaders);
 	}
@@ -757,13 +765,13 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 	/*=======================================
 		 Display links to upload form and tool options
 	  =======================================*/
-	
+
 	display_action_links($cur_dir_path,$always_show_tool_options, $always_show_upload_form);
 
 	/*=======================================
 		 Display form to upload document
 	  =======================================*/
-	  
+
 	if($is_course_member)
 	{
 		if ($display_upload_form || $edit)
@@ -781,15 +789,15 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 
 			echo	"<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?curdirpath=$cur_dir_path&origin=$origin\" enctype=\"multipart/form-data\" >\n",
 					"<table>\n";
-	
+
 			if(!empty($error_message)) Display::display_error_message($error_message);
-	
+
 			if ($submitGroupWorkUrl) // For user comming from group space to publish his work
 			{
 				$realUrl = str_replace ($_configuration['root_sys'], $_configuration['root_web'], str_replace("\\", "/", realpath($submitGroupWorkUrl) ) ) ;
-	
+
 				echo	"<tr>\n",
-	
+
 						"<td align=\"right\">",
 						"<input type=\"hidden\" name=\"newWorkUrl\" value=\"",$submitGroupWorkUrl,"\">",
 						get_lang("Document")," : ",
@@ -797,76 +805,76 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 						"<td align=\"right\">",
 						"<a href=\"",format_url($submitGroupWorkUrl),"\">",$realUrl,"</a>",
 						"</td>\n",
-	
+
 						"</tr>\n";
 			}
 			elseif ($edit && ($is_allowed_to_edit or $is_author))
 			{
 				$workUrl = $currentCourseRepositoryWeb.$workUrl;
-	
+
 				echo	"<tr>\n",
-	
+
 						"<td>",
 						"<input type=\"hidden\" name=\"id\" value=\"",$edit,"\">\n",
 						get_lang('Document')," : ",
 						"</td>\n",
-	
+
 						"<td>",
 						"<a href=\"",$workUrl,"\">",$workUrl,"</a>",
 						"</td>\n",
-	
+
 						"</tr>\n";
 			}
 			else // else standard upload option
 			{
 				echo	"<tr>\n",
-	
+
 						"<td  align=\"right\"><strong>",
 						get_lang("DownloadFile"),"</strong>&nbsp;&nbsp;",
 						"</td>\n",
-	
+
 						"<td>",
 						"<input type=\"file\" name=\"file\" size=\"20\">",
 						"</td>\n",
-	
+
 						"</tr>\n";
 			}
-	
+
 			if(empty($authors))
 			{
 				$authors=$_user['lastName']." ".$_user['firstName'];
 			}
-	
+
 			echo	"<tr>\n",
-	
+
 					"<td  align=\"right\"><strong>",
 					get_lang("TitleWork"),"</strong>&nbsp;&nbsp;",
 					"</td>\n",
-	
+
 					"<td>",
 					"<input type=\"text\" name=\"title\" value=\"",($edit?htmlentities(stripslashes($workTitle)):htmlentities(stripslashes($title))),"\" size=\"30\">",
 					"</td>\n",
-	
+
 					"</tr>\n",
-	
+
 					"<tr>\n",
-	
+
 					"<td valign=\"top\"  align=\"right\"><strong>",
 					get_lang("Authors")."</strong>&nbsp;&nbsp;",
 					"</td>\n",
-	
+
 					"<td>",
 					"<input type=\"text\" name=\"authors\" value=\"",($edit?htmlentities(stripslashes($workAuthor)):htmlentities(stripslashes($authors))),"\" size=\"30\">\n",
 					"</td>\n",
-	
+
 					"</tr>\n",
-	
+
 					"<tr>\n",
-	
+
 					"<td valign=\"top\"  align=\"right\">",
 					get_lang("Description"),"&nbsp;&nbsp;",
 					"</td>\n",
-	
+
 					"<td>",
 					"<textarea name=\"description\" cols=\"30\" rows=\"3\">",
 					($edit?htmlentities(stripslashes($workDescription)):htmlentities(stripslashes($description))),
@@ -874,29 +882,29 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 					"<input type=\"hidden\" name=\"active\" value=\"1\">",
 					"<input type=\"hidden\" name=\"accepted\" value=\"1\">",
 					"</td>\n",
-	
+
 					"</tr>\n",
-	
+
 					"<tr>\n",
-	
+
 					"<td></td>",
-	
+
 					"<td>",
 					"<input type=\"submit\" name=\"submitWork\" value=\"".get_lang('Ok')."\">";
-	
-			if($submitWork || $edit)
+
+			if($_POST['submitWork'] || $edit)
 			{
 				echo "&nbsp;&nbsp;<input type=\"submit\" name=\"cancelForm\" value=\"".get_lang('Cancel')."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">";
 			}
-	
+
 			echo	"</td>\n",
-	
+
 					"</tr>\n",
-	
+
 					"</table>\n",
-	
+
 					"</form>\n",
-	
+
 					"<p>&nbsp;</p>";
 		}
 		//show them the form for the directory name
@@ -935,15 +943,15 @@ if ($submitWork && $succeed &&!$id) //last value is to check this is not "just" 
 		Display list of student publications
 ==============================================================================
 */
-	if($cur_dir_path =='/'){$my_cur_dir_path = '';}else{$my_cur_dir_path = $cur_dir_path;} 
+	if($cur_dir_path =='/'){$my_cur_dir_path = '';}else{$my_cur_dir_path = $cur_dir_path;}
 	display_student_publications_list($base_work_dir.'/'.$my_cur_dir_path,'work/'.$my_cur_dir_path,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin);
 //}
 
 /*
 ==============================================================================
-		Footer 
+		Footer
 ==============================================================================
-*/ 
+*/
 if ($origin != 'learnpath')
 {
 	//we are not in the learning path tool

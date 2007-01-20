@@ -46,7 +46,7 @@
 	   INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array('registration','admin');
 require_once ("../inc/global.inc.php");
 $this_section = SECTION_COURSES;
@@ -173,9 +173,18 @@ function show_users_in_virtual_courses()
 */
  if( $origin != 'learnpath')
 {
-	//so we are not in learnpath tool
-	$nameTools = get_lang("Users");
-	Display::display_header($nameTools, "User");
+	if (isset($_GET['keyword']))
+	{
+		$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
+		$tool_name = get_lang('SearchResults');
+	}
+	else
+	{
+		$tool_name = get_lang('Users');
+	}
+
+
+	Display::display_header($tool_name, "User");
 }
 else
 {
@@ -244,7 +253,7 @@ if(api_is_allowed_to_edit())
 					$course = api_get_course_info();
 					$sql = "SELECT official_code,firstname,lastname,email FROM $table_user u, $table_course_user cu WHERE cu.user_id = u.user_id AND cu.course_code = '".$course['sysCode']."' ORDER BY lastname ASC";
 				}
-				else 
+				else
 				{
 					$sql = "SELECT `user`.`user_id`, `user`.`lastname`, `user`.`firstname`,
 				                      `user`.`email`, `user`.`official_code`, session.name
@@ -360,13 +369,13 @@ function get_number_of_users()
 function get_user_data($from, $number_of_items, $column, $direction)
 {
 	global $is_allowed_to_track;
-	
+
 	//print_r($_SESSION);
 	//echo $_SESSION["id_session"];
-	
+
 	//It's a teacher in the current course; We display all the students of the course (as if the course belong to no sessions)
 	if($_SESSION["is_courseAdmin"] || $_SESSION["is_platformAdmin"]){
-		
+
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
 		$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -383,8 +392,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		$sql = "SELECT ";
 
 		foreach( $columns as $index => $sqlcolumn)
+		{
 			$columns[$index] = ' '.$sqlcolumn.' AS col'.$index.' ';
-
+		}
 		$sql .= implode(" , ", $columns);
 		$sql .= "FROM $user_table u,$course_user_table cu WHERE u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 
@@ -397,7 +407,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from, $number_of_items";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
-		
+
 		$users = array();
 		$user_ids = array();
 
@@ -415,16 +425,17 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			FROM " . Database::get_course_table(TABLE_GROUP_USER) . " ug
 			LEFT JOIN " . Database::get_course_table(TABLE_GROUP) . " sg ON ug.group_id = sg.id
 			WHERE ug.user_id IN ('".implode("','", $user_ids)."')";
-		
+
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 
 	    while($group = mysql_fetch_object($res))
+	    {
 	    	$users[''.$group->user_id][5] .= $group->name.'<br />';
-	    
+	    }
+
 	    //Sessions
-	    
 	    $columns=array();
-	    
+
 	    $columns[] = 'u.user_id';
 		$columns[] = 'u.official_code';
 		$columns[] = 'u.lastname';
@@ -434,19 +445,19 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		$columns[] = "''";
 		$columns[] = "''";
 		$columns[] = 'u.user_id';
-	    
+
 	    $sql = "SELECT  ".implode(',',$columns)."
 				FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." c
                WHERE `u`.`user_id`= c.`id_user`
                AND c.`course_code`='".$_SESSION['_course']['id']."'
 				";
-		
+
 		if( isset ($_GET['keyword']))
 		{
 			$keyword = mysql_real_escape_string($_GET['keyword']);
 			$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 		}
-		
+
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		while ($user = mysql_fetch_row($res))
@@ -466,17 +477,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	    {
 	    	$users[''.$group->user_id][5] .= $group->name.'<br />';
 	    }
-	    	    
-	    //print_r($users);
-		
 	}
-	
+
 	//Sudent or coach
-	else{
-			
+	else
+	{
 		//We are coach
 		if($_SESSION["is_courseTutor"]){
-			
+
 			$columns = array();
 			if(api_is_allowed_to_edit())
 			{
@@ -493,17 +501,17 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$columns[] = "''";
 			}
 			$columns[] = 'u.user_id';
-			
-			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-		 	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 
-	 		$sql="SELECT ".implode(',',$columns)." 
-							FROM $tbl_session_course_user as srcru, $tbl_user as u   
-							WHERE srcru.course_code='".$_SESSION['_course']['id']."' AND srcru.id_user=u.user_id 
+			$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		 	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		 	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+		 	$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+
+	 		$sql="SELECT ".implode(',',$columns)."
+							FROM $tbl_session_course_user as srcru, $tbl_user as u
+							WHERE srcru.course_code='".$_SESSION['_course']['id']."' AND srcru.id_user=u.user_id
 							";
-							
+
 	 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 			while ($user = mysql_fetch_array($res))
@@ -511,11 +519,10 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$users[''.$user["user_id"]] = $user;
 				$user_ids[] = $user["user_id"];
 			}
-		
+
 		}
-		
-		else{
-			
+		else
+		{
 			$columns = array();
 			if(api_is_allowed_to_edit())
 			{
@@ -532,36 +539,51 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$columns[] = "''";
 			}
 			$columns[] = 'u.user_id';
-			
-			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-		 	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-			
-			if(empty($_SESSION["id_session"])){
-				$sql="SELECT ".implode(',',$columns)." 
-					FROM $tbl_course_user as cu, $tbl_user as u   
-					WHERE cu.course_code='".$_SESSION['_course']['id']."' AND cu.user_id=u.user_id 
+
+			$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		 	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		 	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+		 	$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+
+			if(empty($_SESSION["id_session"]))
+			{
+				$sql="SELECT ";
+				foreach( $columns as $index => $sqlcolumn)
+				{
+					$columns[$index] = ' '.$sqlcolumn.' AS col'.$index.' ';
+				}
+				$sql .= implode(" , ", $columns);
+				$sql .= "FROM $tbl_course_user as cu, $tbl_user as u
+					WHERE cu.course_code='".$_SESSION['_course']['id']."' AND cu.user_id=u.user_id
 					";
 			}
-			
-			else{
-				$sql="SELECT ".implode(',',$columns)." 
-					FROM $tbl_session_course_user as srcru, $tbl_user as u   
-					WHERE srcru.course_code='".$_SESSION['_course']['id']."' AND srcru.id_user=u.user_id 
-					";
+			else
+			{
+				$sql="SELECT ";
+				foreach( $columns as $index => $sqlcolumn)
+				{
+					$columns[$index] = ' '.$sqlcolumn.' AS col'.$index.' ';
+				}
+				$sql .= implode(" , ", $columns);
+				$sql .= "FROM $tbl_session_course_user as srcru, $tbl_user as u
+					WHERE srcru.course_code='".$_SESSION['_course']['id']."' AND srcru.id_user=u.user_id";
 			}
-						
+
+			if( isset ($_GET['keyword']))
+			{
+				$keyword = mysql_real_escape_string($_GET['keyword']);
+				$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
+			}
+			$sql .= " ORDER BY col$column $direction ";
+			$sql .= " LIMIT $from, $number_of_items";
 	 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 			while ($user = mysql_fetch_array($res))
 			{
-				$users[''.$user["user_id"]] = $user;
+				$users[''.$user[0]] = $user;
 				$user_ids[] = $user["user_id"];
 			}
-			
 		}
-	
 	}
 
 	/*if(api_get_setting('use_session_mode')!='true')
@@ -648,13 +670,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
                WHERE `u`.`user_id`= c.`id_coach`
                AND c.`course_code`='".$_SESSION['_course']['id']."'
 				AND c.id_session='".$_SESSION['id_session']."'";*/
-		
+
 		/*$sql = "SELECT  ".implode(',',$columns)."
                FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." c
                WHERE `u`.`user_id`= c.`id_coach`
                AND c.`course_code`='".$_SESSION['_course']['id']."'
 				";
-		
+
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$users = array ();
 		while ($user = mysql_fetch_row($res))
@@ -683,13 +705,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
                WHERE `u`.`user_id`= c.`id_user`
                AND c.`course_code`='".$_SESSION['_course']['id']."'
 				AND c.id_session='".$_SESSION['id_session']."'";*/
-		
+
 		/*$sql = "SELECT  ".implode(',',$columns)."
 				FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." c
                WHERE `u`.`user_id`= c.`id_user`
                AND c.`course_code`='".$_SESSION['_course']['id']."'
 				";
-		
+
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		while ($user = mysql_fetch_row($res))
@@ -721,20 +743,20 @@ function get_user_data($from, $number_of_items, $column, $direction)
 function modify_filter($user_id)
 {
 	global $origin,$_user,$is_allowed_to_track;
-	
+
 	$result="<div style='text-align: center'>";
-	
+
 	// info
 	$result .= '<a href="userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/info_small.gif" /></a>&nbsp;';
-	
+
 	if($is_allowed_to_track)
 	{
 		$result .= '<a href="../tracking/userLog.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
 	}
-	
+
 	if(api_is_allowed_to_edit())
 	{
-		
+
 		// edit
 		$result .= '<a href="userInfo.php?origin='.$origin.'&amp;editMainUserInfo='.$user_id.'"><img border="0" alt="'.get_lang('Edit').'" src="../img/edit.gif" /></a>&nbsp;';
 		// unregister

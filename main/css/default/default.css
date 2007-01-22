@@ -1958,3 +1958,52 @@ input.forms	{
 ------------------------------------------------------------------------------
 */
 
+/* modif pvdm-NOCTIS */
+#WCAG-editor {
+	border: 1px #4171B5 solid;
+	background-color: #E5EDF9;
+	width: 590px;	
+}
+
+#WCAG-editor .title {
+	padding: 2px;
+	
+	background-color: #4171B5;
+	
+	text-align: center;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+#WCAG-editor .body {
+	padding: 3px;
+}
+
+#WCAG-editor textarea {
+	margin-left: 0px;
+	margin-right: 0px;
+	width: 581px;
+	height: 240px;
+	
+	border: 1px #7F9DB9 solid;
+}
+
+#WCAG-editor input {
+	width: 580px;
+}
+
+#WCAG-home img {
+	float: left;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+#WCAG-home p {
+	text-align: justify;
+}
+
+.skip {
+	display: none;
+}
+/* end modif pvdm-NOCTIS */
+

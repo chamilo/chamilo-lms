@@ -142,24 +142,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			}
 		}
 		//manual updates in here
-		//update all users with auth_source 'claroline' to auth_source 'platform'
-		//$sql_upd = "UPDATE user SET auth_source='platform' WHERE auth_source='claroline'";
-		//$res_upd = mysql_query($sql_upd);
 		//update all registration_date, expiration_date and active fields
 		//$sql_upd = "UPDATE user SET registration_date=NOW()";
-		//$res_upd = mysql_query($sql_upd);
-		//update all sys_announcement.visible_* fields to become tinyint
-		//$sql_upd = "UPDATE sys_announcement SET visible_teacher = 0 WHERE visible_teacher_temp='false'";    
-		//$res_upd = mysql_query($sql_upd);
-		//$sql_upd = "UPDATE sys_announcement SET visible_teacher = 1 WHERE visible_teacher_temp='true'";    
-		//$res_upd = mysql_query($sql_upd);
-		//$sql_upd = "UPDATE sys_announcement SET visible_student = 0 WHERE visible_student_temp='false'";    
-		//$res_upd = mysql_query($sql_upd);
-		//$sql_upd = "UPDATE sys_announcement SET visible_student = 1 WHERE visible_student_temp='true'";    
-		//$res_upd = mysql_query($sql_upd);
-		//$sql_upd = "UPDATE sys_announcement SET visible_guest = 0 WHERE visible_guest_temp='false'";    
-		//$res_upd = mysql_query($sql_upd);
-		//$sql_upd = "UPDATE sys_announcement SET visible_guest = 1 WHERE visible_guest_temp='true'";    
 		//$res_upd = mysql_query($sql_upd);
 		//end of manual updates
 		

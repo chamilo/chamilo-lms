@@ -38,33 +38,29 @@ ALTER TABLE php_session CHANGE sess_start session_start int NOT NULL default '0'
 ALTER TABLE php_session CHANGE sess_value session_value text NOT NULL;
 ALTER TABLE php_session ADD PRIMARY KEY (session_id);
 
--- We might want to review the following table structure --
 CREATE TABLE session (id smallint unsigned NOT NULL auto_increment, id_coach int unsigned NOT NULL default '0', name char(50) NOT NULL default '', nbr_courses smallint unsigned NOT NULL default '0', nbr_users mediumint unsigned NOT NULL default '0', nbr_classes mediumint unsigned NOT NULL default '0', date_start date NOT NULL default '0000-00-00', date_end date NOT NULL default '0000-00-00', PRIMARY KEY  (id),  UNIQUE KEY name (name));
-
--- We might want to review the following table structure --
 CREATE TABLE session_rel_course(id_session smallint unsigned NOT NULL default '0', course_code char(40) NOT NULL default '', id_coach int unsigned NOT NULL default '0', nbr_users smallint(5) unsigned NOT NULL default '0', PRIMARY KEY  (id_session,course_code), KEY course_code (course_code));
-
--- We might want to review the following table structure --
 CREATE TABLE session_rel_course_rel_user(id_session smallint unsigned NOT NULL default '0', course_code char(40) NOT NULL default '', id_user int unsigned NOT NULL default '0', PRIMARY KEY  (id_session,course_code,id_user), KEY id_user (id_user), KEY course_code (course_code));
-
--- We might want to review the following table structure --
 CREATE TABLE session_rel_user(id_session mediumint unsigned NOT NULL default '0', id_user mediumint unsigned NOT NULL default '0', PRIMARY KEY  (id_session,id_user));
-
--- We might want to review the following table structure --
 CREATE TABLE course_rel_survey (id int NOT NULL auto_increment, course_code varchar(200) default NULL, db_name varchar(200) default NULL,  survey_id varchar(200) default NULL,  PRIMARY KEY  (id));
-
--- We might want to review the following table structure --
 CREATE TABLE survey_reminder(sid int NOT NULL default '0', db_name varchar(100) NOT NULL default '', email varchar(100) NOT NULL default '', access int NOT NULL default '0', subject text NOT NULL, content text NOT NULL, reminder_choice int NOT NULL default '0', reminder_time text NOT NULL, avail_till date NOT NULL default '0000-00-00');
-
--- We might want to review the following table structure --
 CREATE TABLE survey_user_info(id int NOT NULL auto_increment, user_id int NOT NULL default '0', survey_id int NOT NULL default '0', db_name varchar(200) default NULL, firstname varchar(200) default NULL, lastname varchar(200) default NULL, email varchar(200) default NULL, organization  text, age int default NULL, registered char(1) default NULL, attempted varchar(10) NOT NULL default '', PRIMARY KEY (id));
 
 ALTER TABLE sys_announcement CHANGE visible_teacher visible_teacher_temp enum('true','false') NOT NULL DEFAULT 'false';
-ALTER TABLE sys_announcement CHANGE visible_student visible_student_temp enum('true','false') NOT NULL DEFAULT 'false';
-ALTER TABLE sys_announcement CHANGE visible_guest visible_guest_temp enum('true','false') NOT NULL DEFAULT 'false';
 ALTER TABLE sys_announcement ADD COLUMN visible_teacher tinyint NOT NULL DEFAULT 0;
+UPDATE sys_announcement SET visible_teacher = 0 WHERE visible_teacher_temp = 'false';
+UPDATE sys_announcement SET visible_teacher = 1 WHERE visible_teacher_temp = 'true';
+
+ALTER TABLE sys_announcement CHANGE visible_student visible_student_temp enum('true','false') NOT NULL DEFAULT 'false';
 ALTER TABLE sys_announcement ADD COLUMN visible_student tinyint NOT NULL DEFAULT 0;
+UPDATE sys_announcement SET visible_student = 0 WHERE visible_student_temp = 'false';
+UPDATE sys_announcement SET visible_student = 1 WHERE visible_student_temp = 'true';
+
+ALTER TABLE sys_announcement CHANGE visible_guest visible_guest_temp enum('true','false') NOT NULL DEFAULT 'false';
 ALTER TABLE sys_announcement ADD COLUMN visible_guest tinyint NOT NULL DEFAULT 0;
+UPDATE sys_announcement SET visible_guest = 0 WHERE visible_guest_temp = 'false';
+UPDATE sys_announcement SET visible_guest = 1 WHERE visible_guest_temp = 'true';
+
 ALTER TABLE sys_announcement ADD lang varchar(70) NULL;
 
 -- update contents of the main db tables
@@ -186,6 +182,8 @@ CREATE TABLE forum_mailcue(thread_id int default NULL, user_id int default NULL,
 -- quiz table
 ALTER TABLE quiz CHANGE active active_temp enum('true','false') NOT NULL DEFAULT 'false';
 ALTER TABLE quiz ADD COLUMN active tinyint NOT NULL DEFAULT 0;
+UPDATE quiz SET active = 1 WHERE active_temp = 'true';
+UPDATE quiz SET active = 0 WHERE active_temp = 'false';
 -- quiz_question table
 ALTER TABLE quiz_answer ADD COLUMN hotspot_coordinates tinytext;
 ALTER TABLE quiz_answer ADD COLUMN hotspot_type enum('square','circle','poly') default NULL;
@@ -195,6 +193,8 @@ ALTER TABLE quiz_answer ADD COLUMN hotspot_type enum('square','circle','poly') d
 -- tool table (see insert/update queries after tables alterations)
 ALTER TABLE tool CHANGE added_tool added_tool_temp enum('0','1') NOT NULL DEFAULT 1;
 ALTER TABLE tool ADD COLUMN added_tool tinyint NOT NULL DEFAULT 1;
+UPDATE tool SET added_tool = 0 WHERE added_tool_temp = '0';
+UPDATE tool SET added_tool = 1 WHERE added_tool_temp = '1';
 ALTER TABLE tool ADD COLUMN category enum('authoring','interaction','admin') NOT NULL default 'authoring';
 -- calendar_event table
 -- document table
@@ -213,19 +213,34 @@ ALTER TABLE group_info ADD COLUMN calendar_state tinyint unsigned NOT NULL defau
 ALTER TABLE group_info ADD COLUMN work_state tinyint unsigned NOT NULL default 0;
 ALTER TABLE group_info ADD COLUMN announcements_state tinyint unsigned NOT NULL default 0;
 ALTER TABLE group_info CHANGE self_registration_allowed self_registration_allowed_temp enum('0','1') NOT NULL default '0';
-ALTER TABLE group_info CHANGE self_unregistration_allowed self_unregistration_allowed_temp enum('0','1') NOT NULL default '0';
 ALTER TABLE group_info ADD COLUMN self_registration_allowed tinyint unsigned NOT NULL default 0;
+UPDATE group_info SET self_registration_allowed = 0 WHERE self_registration_allowed_temp = '0';
+UPDATE group_info SET self_registration_allowed = 1 WHERE self_registration_allowed_temp = '1';
+
+ALTER TABLE group_info CHANGE self_unregistration_allowed self_unregistration_allowed_temp enum('0','1') NOT NULL default '0';
 ALTER TABLE group_info ADD COLUMN self_unregistration_allowed tinyint unsigned NOT NULL default 0;
+UPDATE group_info SET self_unregistration_allowed = 0 WHERE self_unregistration_allowed_temp = '0';
+UPDATE group_info SET self_unregistration_allowed = 1 WHERE self_unregistration_allowed_temp = '1';
+
 ALTER TABLE group_info CHANGE doc_state doc_state_temp enum('0','1','2') NOT NULL default '1';
 ALTER TABLE group_info ADD COLUMN doc_state tinyint unsigned NOT NULL default 1;
+UPDATE group_info SET doc_state = 0 WHERE doc_state_temp = '0';
+UPDATE group_info SET doc_state = 1 WHERE doc_state_temp = '1';
+UPDATE group_info SET doc_state = 2 WHERE doc_state_temp = '2';
 
 ALTER TABLE group_category ADD COLUMN calendar_state tinyint unsigned NOT NULL default 1;
 ALTER TABLE group_category ADD COLUMN work_state tinyint unsigned NOT NULL default 1;
 ALTER TABLE group_category ADD COLUMN announcements_state tinyint unsigned NOT NULL default 1;
+
 ALTER TABLE group_category CHANGE self_reg_allowed self_reg_allowed_temp enum('0','1') NOT NULL default '0';
-ALTER TABLE group_category CHANGE self_unreg_allowed self_unreg_allowed_temp enum('0','1') NOT NULL default '0';
 ALTER TABLE group_category ADD COLUMN self_reg_allowed tinyint unsigned NOT NULL default 0;
+UPDATE group_category SET self_reg_allowed = 0 WHERE self_reg_allowed_temp = '0';
+UPDATE group_category SET self_reg_allowed = 1 WHERE self_reg_allowed_temp = '1';
+
+ALTER TABLE group_category CHANGE self_unreg_allowed self_unreg_allowed_temp enum('0','1') NOT NULL default '0';
 ALTER TABLE group_category ADD COLUMN self_unreg_allowed tinyint unsigned NOT NULL default 0;
+UPDATE group_category SET self_unreg_allowed = 0 WHERE self_unreg_allowed_temp = '0';
+UPDATE group_category SET self_unreg_allowed = 1 WHERE self_unreg_allowed_temp = '1';
 
 -- group_rel_user table
 
@@ -277,7 +292,6 @@ DELETE FROM tool WHERE link = 'coursecopy/backup.php';
 DELETE FROM tool WHERE link = 'coursecopy/copy_course.php';
 DELETE FROM tool WHERE link = 'coursecopy/recycle_course.php';
 DELETE FROM tool WHERE link = 'link/link.php?action=addlink';
-DELETE FROM tool WHERE link = '';
 UPDATE tool SET link = 'newscorm/lp_controller.php' WHERE link = 'scorm/scormdocument.php';
 -- INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('visio','conf/','visio.gif',0,'0','squaregrey.gif',0,'_self','authoring');
 INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('blog_management','blog/blog_admin.php','blog_admin.gif',0,'1','squaregrey.gif',0,'_self','admin');

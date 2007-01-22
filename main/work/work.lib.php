@@ -3,14 +3,14 @@
     DOKEOS - elearning and course management software
 
     For a full list of contributors, see documentation/credits.html
-   
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
     See "documentation/licence.html" more details.
- 
-    Contact: 
+
+    Contact:
 		Dokeos
 		Rue des Palais 44 Paleizenstraat
 		B-1030 Brussels - Belgium
@@ -42,7 +42,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	{
 		$display_output .=	"<a href=\"".$_SERVER['PHP_SELF']."?curdirpath=".$cur_dir_path."&display_tool_options=true\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";
 	}
-	
+
 	if ($display_output != "")
 	{
 		echo $display_output;
@@ -62,14 +62,14 @@ function display_tool_options($uploadvisibledisabled, $origin)
 {
 	$is_allowed_to_edit = api_is_allowed_to_edit();
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	
+
 	if (! $is_allowed_to_edit) return;
 
 	echo	"<table cellpadding=\"5\" cellspacing=\"2\" border=\"0\">\n";
-		
+
 	echo	"<tr>\n",
 			"<td colspan=\"2\">\n",
-	
+
 			"<table cellspacing=\"0\" cellpadding=\"5\" border=\"1\" bordercolor\"gray\">\n",
 			"<tr>\n",
 			"<td>",
@@ -104,7 +104,7 @@ function display_tool_options($uploadvisibledisabled, $origin)
 	echo "</td></tr>";
 
 	display_default_visibility_form($uploadvisibledisabled, $origin);
-	
+
 	echo '</table>';
 	echo '</td></tr><tr><td>';
 	/*
@@ -117,7 +117,7 @@ function display_tool_options($uploadvisibledisabled, $origin)
 	$folders = get_subdirs_list($base_work_dir,1);
 	echo '<div id="folderselector">';
 	echo(build_directory_selector($folders,$cur_dir_path,''));
-	echo '</div>';	
+	echo '</div>';
 	echo '</td></tr><tr><td>';
 	if ($cur_dir_path!= '/' && $cur_dir_path!=$group_properties['directory'])
 	{
@@ -125,7 +125,7 @@ function display_tool_options($uploadvisibledisabled, $origin)
 				'<img src="../img/parent.gif" border="0" align="absbottom" hspace="5" alt="" />'.
 				get_lang("Up").'</a>&nbsp;'."\n";
 }
-	echo '<!-- create directory -->' .			
+	echo '<!-- create directory -->' .
 			'<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$cur_dir_path.'&amp;createdir=1"><img src="../img/new_folder.gif" border="0" align="absmiddle" alt ="" /></a>'.
 			'<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$cur_dir_path.'&amp;createdir=1">'.get_lang("CreateDir").'</a>&nbsp;'."\n";
 
@@ -189,12 +189,12 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	if( isset($_GET['direction']))
 	{
 		$sort_params[] = 'direction='.$_GET['direction'];
-	}	
+	}
 	$sort_params = implode('&amp;',$sort_params);
-			
+
 	if(substr($sub_course_dir,-1,1)!='/' && !empty($sub_course_dir)){$sub_course_dir = $sub_course_dir.'/';}
 	if($sub_course_dir == '/'){$sub_course_dir='';}
-	
+
 	//Get list from database
 	if($is_allowed_to_edit)
 	{
@@ -210,7 +210,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		{
 			$group_query = " WHERE post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
 		}
-		else { 
+		else {
 			$group_query = '';
 		}
 		$sql_get_publications_list =	"SELECT * " .
@@ -220,7 +220,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	}
 	//echo $sql_get_publications_list;
 	$sql_result = api_sql_query($sql_get_publications_list,__FILE__,__LINE__);
-	
+
 	$table_header[] = array(get_lang('Title'),true);
 	$table_header[] = array(get_lang('Description'),true);
 	$table_header[] = array(get_lang('Authors'),true);
@@ -230,7 +230,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$table_header[] = array(get_lang('Modify'),true);
 	//}
 	$table_data = array();
-	
+
 	$dirs_list = get_subdirs_list($work_dir);
 
 	$my_sub_dir = str_replace('work/','',$sub_course_dir);
@@ -248,7 +248,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				'&curdirpath='.$mydir.'"'.$class.'><img src="../img/dossier.gif" alt="dir" height="20" width="20" valign="bottom"/>'.$dir.'</a>';
 			$row[] = '';
 			$row[] = '';
-			$row[] = '';	
+			$row[] = '';
 			if( $is_allowed_to_edit)
 			{
 				//$action .= '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.api_get_course_id().
@@ -257,10 +257,10 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					'delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('DirDelete').'"></a>';
 				$row[] = $action;
 			}else{
-				$row[] = ""; 
+				$row[] = "";
 	}
 			$table_data[] = $row;
-		}			
+		}
 	}
 	while( $work = mysql_fetch_object($sql_result))
 	{
@@ -271,16 +271,16 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		if(Database::num_rows($author_qry)==1){
 			$is_author = true;
 		}
-		
+
 		//display info depending on the permissions
 		if( $work->accepted == '1' || $is_allowed_to_edit)
 		{
 			$row = array();
 			if($work->accepted == '0')
-			{	
+			{
 				$class='class="invisible"';
 			}
-			else 
+			else
 			{
 				$class='';
 			}
@@ -288,14 +288,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$row[] = '<a href="'.$currentCourseRepositoryWeb.$url.'"'.$class.'>'.$work->title.'</a>';
 			$row[] = $work->description;
 			$row[] = $work->author;
-			$row[] = $work->sent_date;	
+			$row[] = $work->sent_date;
 			if( $is_allowed_to_edit)
 			{
 				$action = '';
 				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
 				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&move='.$work->id.'"><img src="../img/deplacer.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
-				if($work->accepted == '1')	
+				if($work->accepted == '1')
 				{
 					$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&make_invisible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/visible.gif" alt="'.get_lang('Invisible').'"></a>';
 				}
@@ -305,16 +305,16 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				}
 				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
-	
+
 				$row[] = $action;
 			}elseif($is_author){
 				$action = '';
 				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
-	
-				$row[] = $action;			
+
+				$row[] = $action;
 			}else{
-				$row[] = " "; 
+				$row[] = " ";
 			}
 			$table_data[] = $row;
 		}
@@ -325,14 +325,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	}
 }
 /**
- * Returns a list of subdirectories found in the given directory. 
- * 
- * The list return starts from the given base directory. 
+ * Returns a list of subdirectories found in the given directory.
+ *
+ * The list return starts from the given base directory.
  * If you require the subdirs of /var/www/ (or /var/www), you will get 'abc/', 'def/', but not '/var/www/abc/'...
  * @param	string	Base dir
  * @param	integer	0 if we only want dirs from this level, 1 if we want to recurse into subdirs
  * @return	strings_array	The list of subdirs in 'abc/' form, -1 on error, and 0 if none found
- * @todo	Add a session check to see if subdirs_list doesn't exist yet (cached copy) 
+ * @todo	Add a session check to see if subdirs_list doesn't exist yet (cached copy)
  */
 function get_subdirs_list($basedir='',$recurse=0){
 	//echo "Looking for subdirs of $basedir";
@@ -354,7 +354,7 @@ function get_subdirs_list($basedir='',$recurse=0){
 	return $dirs_list;
 }
 /**
- * Builds the form thats enables the user to 
+ * Builds the form thats enables the user to
  * select a directory to browse/upload in
  * This function has been copied from the document/document.inc.php library
  *
@@ -368,7 +368,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='')
 	$form = '<form name="selector" action="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'" method="POST">'."\n";
 	$form .= get_lang('CurrentDirectory').' <select name="curdirpath" onchange="javascript:document.selector.submit()">'."\n";
 	//group documents cannot be uploaded in the root
-	if($group_dir=='') 
+	if($group_dir=='')
 	{
 		$form .= '<option value="/">/ ('.get_lang('Root').')</option>';
 		if(is_array($folders))
@@ -398,7 +398,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='')
 	return $form;
 }
 /**
- * Builds the form thats enables the user to 
+ * Builds the form thats enables the user to
  * move a document from one directory to another
  * This function has been copied from the document/document.inc.php library
  *
@@ -412,9 +412,9 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 	$form = '<form name="move_to" action="'.$_SERVER['PHP_SELF'].'" method="POST">'."\n";
 	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'">'."\n";
 	$form .= get_lang('MoveTo').' <select name="move_to">'."\n";
-	
+
 	//group documents cannot be uploaded in the root
-	if($group_dir=='') 
+	if($group_dir=='')
 	{
 		if($curdirpath!='/')
 		{
@@ -423,7 +423,7 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 		if(is_array($folders))
 		{
 			foreach ($folders as $folder)
-			{	
+			{
 				//you cannot move a file to:
 				//1. current directory
 				//2. inside the folder you want to move
@@ -442,7 +442,7 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 			$form .= '<option value="/">/ ('.get_lang('Root').')</option>';
 		}
 		foreach ($folders as $folder)
-		{	
+		{
 			if(($curdirpath!=$folder) && ($folder!=$move_file) && (substr($folder,0,strlen($move_file)+1) != $move_file.'/'))//cannot copy dir into his own subdir
 			{
 				$display_folder = substr($folder,strlen($group_dir));
@@ -510,7 +510,7 @@ function create_unexisting_work_directory($base_work_dir,$desired_dir_name)
  * Delete a work-tool directory
  * @param	string	Base "work" directory for this course as /var/www/dokeos/courses/ABCD/work/
  * @param	string	The directory name as the bit after "work/", without trailing slash
- * @return	integer	-1 on error 
+ * @return	integer	-1 on error
  */
 function del_dir($base_work_dir,$dir){
 	if(empty($dir) or $dir=='/'){return -1;}//not authorized
@@ -523,7 +523,7 @@ function del_dir($base_work_dir,$dir){
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "DELETE FROM $table WHERE url LIKE 'work/".$dir."/%'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	require_once(api_get_library_path().'/fileManage.lib.php');
+	require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 	my_delete($base_work_dir.$dir);
 }
 /**
@@ -562,6 +562,6 @@ function update_work_url($id,$new_path){
 		$sql2 = "UPDATE $table SET url = '$new_url' WHERE id=$id";
 		$res2 = api_sql_query($sql2);
 		return $res2;
-	}	
+	}
 }
 ?>

@@ -283,23 +283,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					}
 				}
 				//update course manually
-				//update group_category.self_reg_allowed
-				//update group_category.self_unreg_allowed
 				//update group_category.forum_state
 				//update group_info.tutor_id (put it in group_tutor table?)
 				//update group_info.forum_state, forum_id
-				//update group_info.self_registration_allowed
-				//update group_info.self_unregistration_allowed
-				//update group_info.doc_state_temp
-				
 				
 			}
 		}
 	}
-
-
-
-
 
 	$newPath = str_replace('\\', '/', realpath('../..')).'/';
 

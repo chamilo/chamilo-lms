@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 10811 2007-01-22 08:26:40Z elixir_julian $
+// $Id: user_list.php 10815 2007-01-22 13:07:40Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,8 +49,7 @@ api_protect_admin_script();
 function login_user($user_id)
 {
 	//init ---------------------------------------------------------------------
-	global $uidReset, $loginFailed, $uidReset, $_configuration, $_user;
-	global $is_platformAdmin, $is_allowedCreateCourse;
+	global $uidReset, $loginFailed, $_configuration;
 
 	$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
@@ -58,7 +57,6 @@ function login_user($user_id)
 
 	//logic --------------------------------------------------------------------
 	//unset($_user['user_id']); // uid not in session ? prevent any hacking
-
 	if (!isset ($user_id))
 	{
 		$uidReset = true;
@@ -75,9 +73,6 @@ function login_user($user_id)
 
 	$message = "Attempting to login as ".$firstname." ".$lastname." (id ".$user_id.")";
 
-	//bug: this only works if $_uid is global
-	api_session_register('_uid');
-
 	$loginFailed = false;
 	$uidReset = false;
 
@@ -92,7 +87,7 @@ function login_user($user_id)
 				ON user.user_id = a.user_id
 				LEFT JOIN $track_e_login_table login
 				ON user.user_id = login.login_user_id
-				WHERE user.user_id = '".$_user['user_id']."'
+				WHERE user.user_id = '".$user_id."'
 				ORDER BY login.login_date DESC LIMIT 1";
 		}
 		else
@@ -101,7 +96,7 @@ function login_user($user_id)
 				FROM $main_user_table
 				LEFT JOIN $main_admin_table a
 				ON user.user_id = a.user_id
-				WHERE user.user_id = '".$_user['user_id']."'";
+				WHERE user.user_id = '".$user_id."'";
 		}
 
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
@@ -112,6 +107,13 @@ function login_user($user_id)
 
 			$user_data = mysql_fetch_array($sql_result);
 
+			// Cleaning session variables
+			unset($_SESSION['_user']);
+			unset($_SESSION['is_platformAdmin']);
+			unset($_SESSION['is_allowedCreateCourse']);
+			unset($_SESSION['_uid']);
+
+
 			$_user['firstName'] 	= $user_data['firstname'];
 			$_user['lastName'] 		= $user_data['lastname'];
 			$_user['mail'] 			= $user_data['email'];
@@ -119,16 +121,17 @@ function login_user($user_id)
 			$_user['official_code'] = $user_data['official_code'];
 			$_user['picture_uri'] 	= $user_data['picture_uri'];
 			$_user['user_id']		= $user_data['user_id'];
-			
+
 			$is_platformAdmin = (bool) (!is_null($user_data['is_admin']));
 			$is_allowedCreateCourse = (bool) ($user_data['status'] == 1);
-			
+
 			LoginDelete($_SESSION["_user"]["user_id"], $_configuration['statistics_database']);
-			
-			//bug: this only works if $_user is global
-			api_session_register('_user');
-			api_session_register('is_platformAdmin');
-			api_session_register('is_allowedCreateCourse');
+
+			// Filling session variables with new data
+			$_SESSION['_uid'] = $user_id;
+			$_SESSION['_user'] = $_user;
+			$_SESSION['is_platformAdmin'] = $is_platformAdmin;
+			$_SESSION['is_allowedCreateCourse'] = $is_allowedCreateCourse;
 
 			$target_url = api_get_path(WEB_PATH)."user_portal.php";
 			$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";
@@ -252,18 +255,18 @@ function modify_filter($user_id,$url_params)
 {
 	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/info_small.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;';
 	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'"><img src="../img/loginas.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
-	
+
 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql="SELECT status FROM ".$tbl_user." WHERE user_id='".$user_id."'";
 	$result_sql=api_sql_query($sql);
-	
+
 	if(mysql_result($result_sql,0,"status")=="1"){
 		$result .= '<a href="../mySpace/teachers.php?teacher_id='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
 	}
 	if(mysql_result($result_sql,0,"status")=="5"){
 		$result .= '<a href="../mySpace/student.php?user_id='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
 	}
-	
+
 	$result .= '<a href="user_edit.php?user_id='.$user_id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;';
 	$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';
 	return $result;

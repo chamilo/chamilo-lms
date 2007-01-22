@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10787 2007-01-18 15:28:02Z bmol $
+* 	@version $Id: index.php 10816 2007-01-22 14:42:24Z pvandermaesen $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -170,7 +170,7 @@ Display :: display_header('', 'dokeos');
 		MAIN CODE
 ==============================================================================
 */
-echo '<div class="maincontent">';
+echo '<div class="maincontent" id="content">';
 
 // Plugins for loginpage_main AND campushomepage_main
 if (!api_get_user_id())
@@ -218,7 +218,7 @@ if (!$page_included)
 echo '</div>';
 
 // display right menu: language form, login section + useful weblinks
-echo '<div class="menu">';
+echo '<div class="menu" id="menu">';
 display_anonymous_right_menu();
 echo '</div>';
 

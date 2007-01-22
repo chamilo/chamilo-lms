@@ -124,7 +124,13 @@ include(api_get_path(LIBRARY_PATH).'/javascript/email_links.lib.js.php');
 <body dir="<?php echo  $text_dir ?>" <?php
  if(defined('DOKEOS_HOMEPAGE') && DOKEOS_HOMEPAGE)
  echo 'onload="javascript:if(document.formLogin) { document.formLogin.login.focus(); }"'; ?>>
-
+<div class="skip">
+<ul>
+<li><a href="#menu"><?php echo ( get_lang('WCAGGoMenu') )?></a></li>
+<li><a href="#content" accesskey="2"><?php echo ( get_lang('WCAGGoContent') )?></a></li>
+</ul>
+</div>
+		
 <!-- #outerframe container to control some general layout of all pages -->
 <div id="outerframe">
 

@@ -881,24 +881,23 @@ api_sql_query($sql, __FILE__, __LINE__);
 		)");
 
 	api_sql_query("CREATE TABLE `".$TABLEGROUPTUTOR . "` (
-		id int(11) NOT NULL auto_increment,
-		user_id int(11) NOT NULL,
-		group_id int(11) NOT NULL default 0,
+		id int NOT NULL auto_increment,
+		user_id int NOT NULL,
+		group_id int NOT NULL default 0,
 		PRIMARY KEY (id)
 		)");
-
 
 	api_sql_query("CREATE TABLE `".$TABLEITEMPROPERTY . "` (
 		tool varchar(100) NOT NULL default '',
 		insert_user_id int unsigned NOT NULL default '0',
 		insert_date datetime NOT NULL default '0000-00-00 00:00:00',
 		lastedit_date datetime NOT NULL default '0000-00-00 00:00:00',
-		ref int(10) NOT NULL default '0',
+		ref int NOT NULL default '0',
 		lastedit_type varchar(100) NOT NULL default '',
 		lastedit_user_id int unsigned NOT NULL default '0',
-		to_group_id int(10) unsigned default NULL,
+		to_group_id int unsigned default NULL,
 		to_user_id int unsigned default NULL,
-		visibility tinyint(1) NOT NULL default '1',
+		visibility tinyint NOT NULL default '1',
 		start_visible datetime NOT NULL default '0000-00-00 00:00:00',
 		end_visible datetime NOT NULL default '0000-00-00 00:00:00'
 		) TYPE=MyISAM;");

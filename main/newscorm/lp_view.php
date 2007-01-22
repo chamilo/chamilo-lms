@@ -69,8 +69,8 @@ $lp_item_id = $_SESSION['oLP']->get_current_item_id();
 $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();
 //reinit exercises variables to avoid spacename clashes (see exercise tool)
 api_session_unregister($exerciseResult);
-api_session_unregister($objExercise);
-api_session_unregister($questionList);
+unset($_SESSION['objExercise']);
+unset($_SESSION['questionList']);
 /**
  * Get a link to the corresponding document
  */

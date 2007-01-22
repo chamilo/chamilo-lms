@@ -22,23 +22,23 @@
 */
 
 /**
-*	These files are a complete rework of the forum. The database structure is 
+*	These files are a complete rework of the forum. The database structure is
 *	based on phpBB but all the code is rewritten. A lot of new functionalities
 *	are added:
 * 	- forum categories and forums can be sorted up or down, locked or made invisible
 *	- consistent and integrated forum administration
-* 	- forum options: 	are students allowed to edit their post? 
+* 	- forum options: 	are students allowed to edit their post?
 * 						moderation of posts (approval)
 * 						reply only forums (students cannot create new threads)
 * 						multiple forums per group
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*	
+*
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
-* 
+*
 * 	@package dokeos.forum
 */
 
@@ -50,7 +50,7 @@
  * merge files and test it all over again. So for the moment, please do not
  * touch the code
  * 							-- Patrick Cool <patrick.cool@UGent.be>
- ************************************************************************** 
+ **************************************************************************
  */
 
 /*
@@ -58,6 +58,16 @@
 		INIT SECTION
 ==============================================================================
 */
+/*
+-----------------------------------------------------------
+	Language Initialisation
+-----------------------------------------------------------
+*/
+// name of the language file that needs to be included
+$language_file = 'forum';
+require ('../inc/global.inc.php');
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
@@ -66,19 +76,10 @@ $fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
 if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
 
-/*
------------------------------------------------------------
-	Language Initialisation
------------------------------------------------------------
-*/
-// name of the language file that needs to be included 
-$language_file = 'forum';
-require ('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+
 $nameTools=get_lang('Forum');
 ?>
-<!DOCTYPE html 
+<!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -112,20 +113,20 @@ include('forumfunction.inc.php');
 	Retrieving forum and forum categorie information
 -----------------------------------------------------------
 */
-// we are getting all the information about the current forum and forum category. 
+// we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
 $current_thread=get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
-$current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum. 
+$current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 
 /*
 -----------------------------------------------------------
-	Is the user allowed here? 
+	Is the user allowed here?
 -----------------------------------------------------------
 */
 // if the user is not a course administrator and the forum is hidden
-// then the user is not allowed here. 
+// then the user is not allowed here.
 if (!api_is_allowed_to_edit() AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0))
 {
 	forum_not_allowed_here();
@@ -136,7 +137,7 @@ if (!api_is_allowed_to_edit() AND ($current_forum['visibility']==0 OR $current_t
 	Display Forum Category and the Forum information
 -----------------------------------------------------------
 */
-// we are getting all the information about the current forum and forum category. 
+// we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
 /*
@@ -149,7 +150,7 @@ echo '<span>'.$current_forum_category['cat_comment'].'</span>';
 echo "</td>\n";
 echo "\t</tr>\n";
 
-// the forum 
+// the forum
 echo "\t<tr class=\"forum_header\">\n";
 echo "\t\t<td colspan=\"6\"><a href=\"viewforum.php?forum=".$current_forum['forum_id']."\" ".class_visible_invisible($current_forum['visibility']).">".$current_forum['forum_title']."</a><br />";
 echo '<span>'.$current_forum['forum_comment'].'</span>';
@@ -158,8 +159,8 @@ echo "\t</tr>\n";
 echo "</table>";
 */
 
-$sql="SELECT * FROM $table_posts posts, $table_users users 
-		WHERE posts.thread_id='".$current_thread['thread_id']."' 
+$sql="SELECT * FROM $table_posts posts, $table_users users
+		WHERE posts.thread_id='".$current_thread['thread_id']."'
 		AND posts.poster_id=users.user_id
 		ORDER BY posts.post_id ASC";
 $result=api_sql_query($sql, __FILE__, __LINE__);
@@ -173,20 +174,20 @@ while ($row=mysql_fetch_array($result))
 	{
 		$name=$row['poster_name'];
 	}
-	else 
+	else
 	{
 		$name=$row['firstname'].' '.$row['lastname'];
-	}	
+	}
 	echo display_user_link($row['user_id'], $name).'<br />';
 	echo $row['post_date'].'<br /><br />';
 
 	echo "</td>\n";
 	echo "\t\t<td class=\"forum_message_post_title\">".$row['post_title']."</td>\n";
-	echo "\t</tr>\n";	
-	
+	echo "\t</tr>\n";
+
 	echo "\t<tr>\n";
 	echo "\t\t<td class=\"forum_message_post_text\">".$row['post_text']."</td>\n";
-	echo "\t</tr>\n";		
+	echo "\t</tr>\n";
 }
 echo "</table>";
 

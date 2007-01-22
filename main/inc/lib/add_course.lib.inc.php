@@ -1391,26 +1391,9 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		Course homepage tools
 	-----------------------------------------------------------
 	*/
-	/*
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langCourseDesc) . "','course_description/','info.gif','".string2binary(api_get_setting('course_create_active_tools','course_description')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langAgenda) . "','calendar/agenda.php','agenda.gif','".string2binary(api_get_setting('course_create_active_tools','agenda')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langDoc) . "','document/document.php','documents.gif','".string2binary(api_get_setting('course_create_active_tools','documents')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langScormtool) . "','scorm/scormdocument.php','scorm.gif','".string2binary(api_get_setting('course_create_active_tools','learning_path')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langLinks) . "','link/link.php','links.gif','".string2binary(api_get_setting('course_create_active_tools','links')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langAnnouncements) . "','announcements/announcements.php','valves.gif','".string2binary(api_get_setting('course_create_active_tools','announcements')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langForums) . "','forum/index.php','forum.gif','".string2binary(api_get_setting('course_create_active_tools','forums')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langDropbox) . "','dropbox/index.php','dropbox.gif','".string2binary(api_get_setting('course_create_active_tools','dropbox')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langExercices) . "','exercice/exercice.php','quiz.gif','".string2binary(api_get_setting('course_create_active_tools','quiz')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langUsers) . "','user/user.php','members.gif','".string2binary(api_get_setting('course_create_active_tools','users')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langGroups) . "','group/group.php','group.gif','".string2binary(api_get_setting('course_create_active_tools','groups')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langChat) . "','chat/chat.php','chat.gif','".string2binary(api_get_setting('course_create_active_tools','chat')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langOnlineConference) . "','online/online.php','conf.gif','".string2binary(api_get_setting('course_create_active_tools','online_conference')) . "','0','squaregrey.gif','NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langWorks) . "','work/work.php','works.gif','0','0','squaregrey.gif','NO','_self')");
-	*/
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_COURSE_DESCRIPTION . "','course_description/','info.gif','".string2binary(api_get_setting('course_create_active_tools', 'course_description')) . "','0','squaregrey.gif','NO','_self','authoring')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_CALENDAR_EVENT . "','calendar/agenda.php','agenda.gif','".string2binary(api_get_setting('course_create_active_tools', 'agenda')) . "','0','squaregrey.gif','NO','_self','interaction')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_DOCUMENT . "','document/document.php','documents.gif','".string2binary(api_get_setting('course_create_active_tools', 'documents')) . "','0','squaregrey.gif','NO','_self','authoring')");
-	//api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_LEARNPATH . "','scorm/scormdocument.php','scorm.gif','".string2binary(api_get_setting('course_create_active_tools', 'learning_path')) . "','0','squaregrey.gif','NO','_self')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_LEARNPATH . "','newscorm/lp_controller.php','scorm.gif','".string2binary(api_get_setting('course_create_active_tools', 'learning_path')) . "','0','squaregrey.gif','NO','_self','authoring')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_LINK . "','link/link.php','links.gif','".string2binary(api_get_setting('course_create_active_tools', 'links')) . "','0','squaregrey.gif','NO','_self','authoring')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_ANNOUNCEMENT . "','announcements/announcements.php','valves.gif','".string2binary(api_get_setting('course_create_active_tools', 'announcements')) . "','0','squaregrey.gif','NO','_self','interaction')");
@@ -1420,7 +1403,6 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_USER . "','user/user.php','members.gif','".string2binary(api_get_setting('course_create_active_tools', 'users')) . "','0','squaregrey.gif','NO','_self','interaction')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_GROUP . "','group/group.php','group.gif','".string2binary(api_get_setting('course_create_active_tools', 'groups')) . "','0','squaregrey.gif','NO','_self','interaction')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction')");
-	/*api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_CONFERENCE . "','online/online.php','conf.gif','".string2binary(api_get_setting('course_create_active_tools', 'online_conference')) . "','0','squaregrey.gif','NO','_self')");*/
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction')");
 	
 	
@@ -1429,20 +1411,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 	}
 	
 	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
-	$sql = "
-		INSERT INTO `" . $tbl_course_homepage . "`
-		VALUES (
-			'',
-			'" . TOOL_BLOGS . "',
-			'blog/blog_admin.php',
-			'blog_admin.gif',
-			'" . string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "',
-			'1',
-			'squaregrey.gif',
-			'NO',
-			'_self',
-			'admin'
-		)";
+	$sql = "INSERT INTO `" . $tbl_course_homepage . "` VALUES ('','" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin')";
 	api_sql_query($sql);
 	// end of Smartblogs
 
@@ -1451,23 +1420,10 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		Course homepage tools for course admin only
 	-----------------------------------------------------------
 	*/
-	/*
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langStatistics) . "','tracking/courseLog.php','statistics.gif','$visible4AdminOfCourse','1','', 'NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langLinkSite) . "','link/link.php?action=addlink','npage.gif','$visible4AdminOfCourse','1','', 'NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langModifyInfo) . "','course_info/infocours.php','reference.gif','$visible4AdminOfCourse','1','', 'NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langBackup) . "','coursecopy/backup.php','backup.gif','$visible4AdminOfCourse','1','', 'NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langCopy) . "','coursecopy/copy_course.php','copy.gif','$visible4AdminOfCourse','1','', 'NO','_self')");
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '".addslashes($langRecycle) . "','coursecopy/recycle_course.php','recycle.gif','$visible4AdminOfCourse','1','', 'NO','_self')");
-	*/
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible4AdminOfCourse','1','', 'NO','_self','admin')");
-	/*api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_HOMEPAGE_LINK . "','link/link.php?action=addlink','npage.gif','$visible4AdminOfCourse','1','', 'NO','_self')");*/
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible4AdminOfCourse','1','', 'NO','_self','admin')");
 	api_sql_query("INSERT INTO `".$tbl_course_homepage."` VALUES ('','".TOOL_SURVEY."','survey/survey_list.php','survey.gif','$visible4AdminOfCourse','1','','NO','_self','admin')");
 	api_sql_query("INSERT INTO `".$tbl_course_homepage."` VALUES ('','".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible4AdminOfCourse','1','','NO','_self', 'admin')");
-	//api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_BACKUP . "','coursecopy/backup.php','backup.gif','$visible4AdminOfCourse','1','', 'NO','_self')");
-	//api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_COPY_COURSE_CONTENT . "','coursecopy/copy_course.php','copy.gif','$visible4AdminOfCourse','1','', 'NO','_self')");
-	//api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_RECYCLE_COURSE . "','coursecopy/recycle_course.php','recycle.gif','$visible4AdminOfCourse','1','', 'NO','_self')");
-
 
 	/*
 	-----------------------------------------------------------

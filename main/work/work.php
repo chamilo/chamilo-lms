@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 10809 2007-01-20 20:04:39Z pcool $
+*  	@version $Id: work.php 10814 2007-01-22 10:20:48Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -80,8 +80,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file[] = "work";
-$language_file[] = "document";
+$language_file = array('work','document','admin');
 
 // Section (for the tabs)
 $this_section=SECTION_COURSES;
@@ -120,7 +119,7 @@ $iprop_table 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
 	Constants and variables
 -----------------------------------------------------------
 */
-$tool_name 			= get_lang('StudentPublication');
+$tool_name 			= get_lang('StudentPublications');
 $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $_SESSION['id_session']);

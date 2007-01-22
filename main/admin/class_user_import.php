@@ -162,12 +162,12 @@ $errorMsg = '';
 
 $tool_name = get_lang('AddUsersToAClass').' CSV';
 
-$interbredcrump[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 $form = new FormValidator('class_user_import');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreaySubscribed'));
+$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
 $form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
 $form->addElement('submit', 'submit', get_lang('Ok'));
 if ($form->validate())

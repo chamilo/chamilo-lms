@@ -1,5 +1,5 @@
 <?php
-// $Id: class_list.php 10215 2006-11-27 13:57:17Z pcool $
+// $Id: class_list.php 10811 2007-01-22 08:26:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -95,7 +95,7 @@ require (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $tool_name = get_lang('ClassList');
-//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);

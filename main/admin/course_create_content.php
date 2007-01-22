@@ -1,5 +1,5 @@
 <?php
-// $Id: course_create_content.php 10215 2006-11-27 13:57:17Z pcool $
+// $Id: course_create_content.php 10811 2007-01-22 08:26:40Z elixir_julian $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -44,7 +44,7 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 $tool_name = get_lang('DummyCourseCreator');
-//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 Display::display_header($tool_name);
 //api_display_tool_title($tool_name);
 if( get_setting('server_type') != 'test')

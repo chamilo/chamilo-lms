@@ -1,5 +1,5 @@
 <?php
-// $Id: course_list.php 10637 2007-01-10 10:07:32Z elixir_julian $
+// $Id: course_list.php 10811 2007-01-22 08:26:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -147,7 +147,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	{
 		$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
 	}
-	//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 	$interbreadcrumb[] = array ("url" => 'course_list.php', "name" => get_lang('CourseList'));
 	$tool_name = get_lang('SearchACourse');
 	Display :: display_header($tool_name);
@@ -179,7 +179,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 }
 else
 {
-	//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 	$tool_name = get_lang('CourseList');
 	Display :: display_header($tool_name);
 	//api_display_tool_title($tool_name);

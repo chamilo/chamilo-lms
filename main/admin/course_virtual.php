@@ -1,4 +1,4 @@
-<?php // $Id: course_virtual.php 10215 2006-11-27 13:57:17Z pcool $ 
+<?php // $Id: course_virtual.php 10811 2007-01-22 08:26:40Z elixir_julian $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -84,7 +84,7 @@ define ("COURSE_CATEGORY_FORM_NAME" , "course_category");
 
 $tool_name = get_lang('AdminManageVirtualCourses'); // title of the page (should come from the language file) 
 
-//$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
 Display::display_header($tool_name);
 

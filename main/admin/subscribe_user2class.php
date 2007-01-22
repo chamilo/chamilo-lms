@@ -1,5 +1,5 @@
 <?php
-// $Id: subscribe_user2class.php 10215 2006-11-27 13:57:17Z pcool $
+// $Id: subscribe_user2class.php 10811 2007-01-22 08:26:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,7 +62,7 @@ $noPHP_SELF = true;
 
 $tool_name = get_lang('AddUsersToAClass').' ('.$class_name.')';
 
-//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => "class_list.php?filtreCours=".urlencode($course), "name" => get_lang('AdminClasses'));
 
 if ($_POST['formSent'])

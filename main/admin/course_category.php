@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 10215 2006-11-27 13:57:17Z pcool $
+<?php // $Id: course_category.php 10811 2007-01-22 08:26:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -104,7 +104,7 @@ if(!empty($action))
 
 $tool_name=get_lang('AdminCategories');
 
-//$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
 Display::display_header($tool_name);
 

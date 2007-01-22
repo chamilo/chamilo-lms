@@ -173,7 +173,7 @@ $errorMsg = '';
 
 $tool_name = get_lang('AddUsersToACourse').' CSV';
 
-$interbredcrump[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 $form = new FormValidator('course_user_import');

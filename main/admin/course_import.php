@@ -159,7 +159,7 @@ if (is_array($extAuthSource))
 
 $tool_name = get_lang('AddCourse').' CSV';
 
-$interbredcrump[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 Display :: display_header($tool_name);

@@ -1,4 +1,4 @@
-<?php // $Id: statistics.php 10215 2006-11-27 13:57:17Z pcool $
+<?php // $Id: statistics.php 10811 2007-01-22 08:26:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,7 +42,7 @@ api_protect_admin_script();
 
 include_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 
-//$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
 

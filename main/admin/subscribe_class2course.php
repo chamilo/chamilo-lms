@@ -1,6 +1,6 @@
 <?php
 
-// $Id: subscribe_class2course.php 10215 2006-11-27 13:57:17Z pcool $
+// $Id: subscribe_class2course.php 10811 2007-01-22 08:26:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -52,7 +52,7 @@ $tbl_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 
 $tool_name = get_lang('AddClassesToACourse');
 
-//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 Display :: display_header($tool_name);
 

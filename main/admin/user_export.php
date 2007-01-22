@@ -1,5 +1,5 @@
 <?php
-// $Id: user_export.php 10215 2006-11-27 13:57:17Z pcool $
+// $Id: user_export.php 10811 2007-01-22 08:26:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,7 +48,7 @@ $course_user_table 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 $tool_name = get_lang('ExportUserListXMLCSV');
 
-//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 

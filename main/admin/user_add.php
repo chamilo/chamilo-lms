@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 10215 2006-11-27 13:57:17Z pcool $
+<?php // $Id: user_add.php 10811 2007-01-22 08:26:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -63,7 +63,7 @@ if(!empty($_GET['message'])){
 	$message = urldecode($_GET['message']);
 }
 
-//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $tool_name = get_lang('AddUsers');
 // Create the form
 $form = new FormValidator('user_add');

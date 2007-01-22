@@ -1,4 +1,4 @@
-<?php // $Id: class_information.php 10215 2006-11-27 13:57:17Z pcool $
+<?php // $Id: class_information.php 10811 2007-01-22 08:26:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,7 +48,7 @@ if( !isset($_GET['id']))
 {
 	api_not_allowed();	
 }
-//$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'class_list.php', "name" => get_lang('AdminClasses'));
 $class_id = $_GET['id'];
 $class = ClassManager::get_class_info($class_id);

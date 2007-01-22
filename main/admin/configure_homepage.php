@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10811 2007-01-22 08:26:40Z elixir_julian $
+<?php // $Id: configure_homepage.php 10817 2007-01-22 14:44:17Z pvandermaesen $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,6 +26,8 @@
 $language_file='admin';
 
 $cidReset=true;
+
+include('../WCAG/WCAG_rendering.php');
 
 include('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -62,8 +64,27 @@ if(!empty($action))
 	if($_POST['formSent'])
 	{
 		if($action == 'edit_top')
+		
 		{
-			$home_top=trim(stripslashes($_POST['home_top']));
+			
+			$home_top='';
+			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+				$text = $_POST['text'];
+				$imageFile = $_POST['imagefile'];				
+				$imageLabel = $_POST['imageLabel'];
+				$link = $_POST['link'];				
+				$linkLabel = $_POST['linkLabel'];
+				if (strlen($linkLabel) == 0) {
+					$linkLabel = $link;
+				}
+				$home_top='<div id="WCAG-home"><img src="'.$imageFile.'" alt="'.$imageLabel.'" />'.'<p>'.$text.'</p>';
+				if (strlen($link) > 0) {
+					$home_top = $home_top.'<a href="'.$link.'">'.$linkLabel.'</a>';
+				}
+				$home_top=$home_top."<div style=\"clear:both;\"><span></span></div></div>";
+			} else {
+				$home_top=trim(stripslashes($_POST['home_top']));
+			}
 
 			if(!is_writable('../../home/home_top.html'))
 			{
@@ -573,7 +594,7 @@ foreach($home_menu as $key=>$enreg)
 <?php
     //api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
 
-    $oFCKeditor = new FCKeditor('link_html') ;
+	$oFCKeditor = new FCKeditor('link_html') ;
 	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 	$oFCKeditor->Height		= '400';
 	$oFCKeditor->Width		= '100%';
@@ -588,7 +609,7 @@ foreach($home_menu as $key=>$enreg)
 	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
 
 	echo $oFCKeditor->CreateHtml();
-
+	
 ?>
 
   </td>
@@ -674,23 +695,31 @@ if($action == 'edit_news'){
   <td>
 
 <?php
-    //api_disp_html_area($open,isset($_POST[$open])?trim(stripslashes($_POST[$open])):${$open},'400px');
-
-    $oFCKeditor = new FCKeditor($name) ;
-	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-	$oFCKeditor->Height		= '400';
-	$oFCKeditor->Width		= '100%';
-	$oFCKeditor->Value		= $open;
-	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-	$oFCKeditor->ToolbarSet = "Small";
-
-	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-	$result_sql=api_sql_query($sql);
-	$isocode_language=mysql_result($result_sql,0,0);
-	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-
-	echo $oFCKeditor->CreateHtml();
+    //api_disp_html_area($open,isset($_POST[$open])?trim(stripslashes($_POST[$open])):${$open},'400px'); ?>
+	
+<?php
+	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+		echo ('<div id="WCAG-editor"><div class="title">WCAG editor</div><div class="body">');
+		WCAG_Rendering::prepare_admin_form($open)->display();
+		/*echo ('<iframe src=' . api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/'.'editor/plugins/ImageManager/manager.php" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>');*/
+		echo ("</div></div>");
+	} else {
+		$oFCKeditor = new FCKeditor($name) ;
+		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+		$oFCKeditor->Height		= '400';
+		$oFCKeditor->Width		= '100%';
+		$oFCKeditor->Value		= $open;
+		$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+		$oFCKeditor->ToolbarSet = "Small";
+	
+		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+		$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
+		$result_sql=api_sql_query($sql);
+		$isocode_language=mysql_result($result_sql,0,0);
+		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+	
+		echo $oFCKeditor->CreateHtml();
+	}
 ?>
 
   </td>

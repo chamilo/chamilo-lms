@@ -325,6 +325,18 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						echo $_SESSION['oLP']->display_quiz_form('add', 0, $_GET['file']);
 						
 						break;
+						
+					case 'forum':
+						
+						echo $_SESSION['oLP']->display_forum_form('add', 0, $_GET['forum_id']);
+						
+						break;
+						
+					case 'thread':
+						
+						echo $_SESSION['oLP']->display_thread_form('add', 0, $_GET['thread_id']);
+						
+						break;
 					
 					case 'link':
 						

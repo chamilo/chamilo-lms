@@ -1318,7 +1318,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			}
 			else
 			{
-				$link .= "../phpbb/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
+				$link .= "../forum/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
 			}
 			break;
 
@@ -1879,20 +1879,20 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			break;
 
 		case TOOL_FORUM:
-			$link .= $main_dir_path.'phpbb/viewforum.php?forum='.$id.'&lp=true';
+			$link .= $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&origin=learnpath';
 			break;
 
 		case TOOL_THREAD:  //forum post
-			$tbl_topics = Database::get_course_table(TOOL_FORUM_THREAD,$_course['database']);
+			$tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD,$_course['database']);
 			$sql="SELECT * FROM $tbl_topics where thread_id=$id";
 			$result= api_sql_query($sql,__FILE__,__LINE__);
 			$myrow=Database::fetch_array($result);
-			$link .= $main_dir_path.'phpbb/viewtopic.php?topic='.$id.'' .
+			$link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.'' .
 					'&forum='.$myrow['forum_id'].'&lp=true';
 			break;
 
 		case TOOL_POST:
-			$tbl_post = Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
+			$tbl_post = Database::get_course_table(TABLE_FORUM_THREAD,$_course['database']);
 			$result= api_sql_query("SELECT * FROM $tbl_post where post_id=$id",__FILE__,__LINE__);
 			$myrow=Database::fetch_array($result);
 			$title=$myrow['post_title'];

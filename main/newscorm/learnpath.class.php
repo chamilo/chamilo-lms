@@ -4576,6 +4576,9 @@ class learnpath {
 			
 			/* get al the student publications */
 			$return .= $this->get_student_publications();
+			
+			/* get al the forums */
+			$return .= $this->get_forums();
 		
 		$return .= '</div>' . "\n";
 		
@@ -4847,6 +4850,404 @@ class learnpath {
 		return $return;
 	}
 	
+/**
+	 * Enter description here...
+	 *
+	 * @param unknown_type $action
+	 * @param unknown_type $id
+	 * @param unknown_type $extra_info
+	 * @return unknown
+	 */
+	function display_forum_form($action = 'add', $id = 0, $extra_info = '')
+	{
+		
+		$tbl_lp_item = Database::get_course_table('lp_item');
+		$tbl_forum = Database::get_course_table(TABLE_FORUM);
+		
+		if($id != 0 && is_array($extra_info))
+		{
+			$item_title			= stripslashes($extra_info['title']);
+		}
+		elseif(is_numeric($extra_info))
+		{
+			$sql_forum = "
+				SELECT
+					forum_title as title
+				FROM " . $tbl_forum . "
+				WHERE forum_id = " . $extra_info;
+			
+			$result = api_sql_query($sql_forum, __FILE__, __LINE__);
+			$row = Database::fetch_array($result);
+			
+			$item_title = $row['title'];
+		}
+		else
+		{
+			$item_title			= '';
+		}
+				
+		$return = '<div style="margin:3px 10px;">';
+			
+			if($id != 0 && is_array($extra_info))
+				$parent = $extra_info['parent_item_id'];
+			else
+				$parent = 0;
+			
+			$sql = "
+				SELECT *
+				FROM " . $tbl_lp_item . "
+				WHERE
+					lp_id = " . $this->lp_id;
+			
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			
+			$arrLP = array();
+			
+			while($row = Database::fetch_array($result))
+			{
+				$arrLP[] = array(
+					'id' => $row['id'],
+					'item_type' => $row['item_type'],
+					'title' => $row['title'],
+					'path' => $row['path'],
+					'description' => $row['description'],
+					'parent_item_id' => $row['parent_item_id'],
+					'previous_item_id' => $row['previous_item_id'],
+					'next_item_id' => $row['next_item_id'],
+					'display_order' => $row['display_order']);
+			}
+			
+			$this->tree_array($arrLP);
+			
+			$arrLP = $this->arrMenu;
+			
+			unset($this->arrMenu);
+			
+			if($action == 'add')
+				$return .= '<p class="lp_title">'.get_lang("CreateTheForum").' :</p>' . "\n";
+			elseif($action == 'move')
+				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentForum").' :</p>' . "\n";
+			else
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentForum").' :</p>' . "\n";
+			
+			$return .= '<form method="POST">' . "\n";
+			
+				$return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
+				
+					$return .= "\t\t" . '<tr>' . "\n";
+					
+						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="input">' . "\n";
+						
+							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
+							
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
+								
+								$arrHide = array($id);
+								
+								for($i = 0; $i < count($arrLP); $i++)
+								{
+									if($action != 'add')
+									{
+										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+										{
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+										}
+										else
+										{
+											$arrHide[] = $arrLP[$i]['id'];
+										}
+									}
+									else
+									{
+										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter')
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+									}
+								}
+								
+								reset($arrLP);
+								
+							$return .= "\t\t\t\t" . '</select>';
+						
+						$return .= "\t\t\t" . '</td>' . "\n";
+					
+					$return .= "\t\t" . '</tr>' . "\n";
+									
+					$return .= "\t\t" . '<tr>' . "\n";
+						
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="input">' . "\n";
+						
+							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
+							
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
+								
+								for($i = 0; $i < count($arrLP); $i++)
+								{
+									if($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id)
+									{
+										if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+											$selected = 'selected="selected" ';
+										elseif($action == 'add')
+											$selected = 'selected="selected" ';
+										else
+											$selected = '';
+										
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+									}
+								}
+								
+							$return .= "\t\t\t\t" . '</select>';
+						
+						$return .= "\t\t\t" . '</td>' . "\n";
+					
+					$return .= "\t\t" . '</tr>' . "\n";
+					
+					if($action != 'move')
+					{
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+						
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							//Remove temporaly the test description
+							//$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
+							//$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+					}
+					
+					$return .= "\t\t" . '<tr>' . "\n";
+						
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+					
+					$return .= "\t\t" . '</tr>' . "\n";
+				
+				$return .= "\t" . '</table>' . "\n";	
+				
+				if($action == 'move')
+				{
+					$return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
+					$return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+				}
+				
+				if(is_numeric($extra_info))
+				{
+					$return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />' . "\n";
+				}
+				elseif(is_array($extra_info))
+				{
+					$return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />' . "\n";
+				}
+				
+				$return .= "\t" . '<input name="type" type="hidden" value="'.TOOL_FORUM.'" />' . "\n";
+				$return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
+				
+			$return .= '</form>' . "\n";
+		
+		$return .= '</div>' . "\n";
+		return $return;
+	}
+	
+function display_thread_form($action = 'add', $id = 0, $extra_info = '')
+	{
+		
+		$tbl_lp_item = Database::get_course_table('lp_item');
+		$tbl_forum = Database::get_course_table(TABLE_FORUM_THREAD);
+		
+		if($id != 0 && is_array($extra_info))
+		{
+			$item_title			= stripslashes($extra_info['title']);
+		}
+		elseif(is_numeric($extra_info))
+		{
+			$sql_forum = "
+				SELECT
+					thread_title as title
+				FROM " . $tbl_forum . "
+				WHERE thread_id = " . $extra_info;
+			
+			$result = api_sql_query($sql_forum, __FILE__, __LINE__);
+			$row = Database::fetch_array($result);
+			
+			$item_title = $row['title'];
+		}
+		else
+		{
+			$item_title			= '';
+		}
+				
+		$return = '<div style="margin:3px 10px;">';
+			
+			if($id != 0 && is_array($extra_info))
+				$parent = $extra_info['parent_item_id'];
+			else
+				$parent = 0;
+			
+			$sql = "
+				SELECT *
+				FROM " . $tbl_lp_item . "
+				WHERE
+					lp_id = " . $this->lp_id;
+			
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			
+			$arrLP = array();
+			
+			while($row = Database::fetch_array($result))
+			{
+				$arrLP[] = array(
+					'id' => $row['id'],
+					'item_type' => $row['item_type'],
+					'title' => $row['title'],
+					'path' => $row['path'],
+					'description' => $row['description'],
+					'parent_item_id' => $row['parent_item_id'],
+					'previous_item_id' => $row['previous_item_id'],
+					'next_item_id' => $row['next_item_id'],
+					'display_order' => $row['display_order']);
+			}
+			
+			$this->tree_array($arrLP);
+			
+			$arrLP = $this->arrMenu;
+			
+			unset($this->arrMenu);
+			
+			if($action == 'add')
+				$return .= '<p class="lp_title">'.get_lang("CreateTheForum").' :</p>' . "\n";
+			elseif($action == 'move')
+				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentForum").' :</p>' . "\n";
+			else
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentForum").' :</p>' . "\n";
+			
+			$return .= '<form method="POST">' . "\n";
+			
+				$return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
+				
+					$return .= "\t\t" . '<tr>' . "\n";
+					
+						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="input">' . "\n";
+						
+							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
+							
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
+								
+								$arrHide = array($id);
+								
+								for($i = 0; $i < count($arrLP); $i++)
+								{
+									if($action != 'add')
+									{
+										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+										{
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+										}
+										else
+										{
+											$arrHide[] = $arrLP[$i]['id'];
+										}
+									}
+									else
+									{
+										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter')
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+									}
+								}
+								
+								reset($arrLP);
+								
+							$return .= "\t\t\t\t" . '</select>';
+						
+						$return .= "\t\t\t" . '</td>' . "\n";
+					
+					$return .= "\t\t" . '</tr>' . "\n";
+									
+					$return .= "\t\t" . '<tr>' . "\n";
+						
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="input">' . "\n";
+						
+							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
+							
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
+								
+								for($i = 0; $i < count($arrLP); $i++)
+								{
+									if($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id)
+									{
+										if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+											$selected = 'selected="selected" ';
+										elseif($action == 'add')
+											$selected = 'selected="selected" ';
+										else
+											$selected = '';
+										
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+									}
+								}
+								
+							$return .= "\t\t\t\t" . '</select>';
+						
+						$return .= "\t\t\t" . '</td>' . "\n";
+					
+					$return .= "\t\t" . '</tr>' . "\n";
+					
+					if($action != 'move')
+					{
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+						
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							//Remove temporaly the test description
+							//$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
+							//$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+					}
+					
+					$return .= "\t\t" . '<tr>' . "\n";
+						
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+					
+					$return .= "\t\t" . '</tr>' . "\n";
+				
+				$return .= "\t" . '</table>' . "\n";	
+				
+				if($action == 'move')
+				{
+					$return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
+					$return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+				}
+				
+				if(is_numeric($extra_info))
+				{
+					$return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />' . "\n";
+				}
+				elseif(is_array($extra_info))
+				{
+					$return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />' . "\n";
+				}
+				
+				$return .= "\t" . '<input name="type" type="hidden" value="'.TOOL_THREAD.'" />' . "\n";
+				$return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
+				
+			$return .= '</form>' . "\n";
+		
+		$return .= '</div>' . "\n";
+		return $return;
+	}
+	
 	/**
 	 * Enter description here...
 	 *
@@ -5075,12 +5476,17 @@ class learnpath {
 		if($id != 0 && is_array($extra_info))
 		{
 			$item_title			= stripslashes($extra_info['title']);
-			$item_description	= stripslashes($extra_info['description']);
+			$item_description	= stripslashes($extra_info['description']);	
+			if(empty($item_title))
+			{				
+				$path_parts = pathinfo($extra_info['path']);
+				$item_title = stripslashes($path_parts['filename']);
+			}
 		}
 		elseif(is_numeric($extra_info))
 		{
 			$sql_doc = "
-				SELECT title
+				SELECT path, title
 				FROM " . $tbl_doc . "
 				WHERE id = " . $extra_info;
 			
@@ -5093,12 +5499,19 @@ class learnpath {
 				$item_title .= $explode[$i];
 			
 			$item_title = str_replace('_', ' ', $item_title);
+			if(empty($item_title))
+			{				
+				$path_parts = pathinfo($row['path']);
+				$item_title = stripslashes($path_parts['filename']);
+			}
+			
 		}
 		else
 		{
 			$item_title			= '';
 			$item_description	= '';
 		}
+		
 				
 		$return = '<div style="margin:3px 10px;">';
 			
@@ -6320,6 +6733,51 @@ class learnpath {
 				$return .= '<div class="lp_resource_element">No student publications available</div>';
 		
 		$return .= '</div>';
+		
+		return $return;
+	}
+	
+	function get_forums()
+	{
+		include ('../forum/forumfunction.inc.php');
+		include ('../forum/forumconfig.inc.php');
+		global $table_forums, $table_threads,$table_posts, $table_item_property, $table_users;
+		$table_forums = Database :: get_course_table(TABLE_FORUM);
+		$table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
+		$table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+		$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+		$table_users = Database :: get_main_table(TABLE_MAIN_USER);
+		$a_forums = get_forums();
+		
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_FORUM . '.png" style="margin-right:5px;" title="" />'.get_lang('Forums').'</div>';
+		$return .= '<div class="lp_resource_elements" id="forums" style="border-bottom:1px solid #999999; border-top:0;">';
+		
+		foreach($a_forums as $forum)
+		{
+			$return .= '<div class="lp_resource_element">';
+			$return .= '<script type="text/javascript">
+						function toggle_forum(forum_id){
+							if(document.getElementById("forum_"+forum_id+"_content").style.display == "none"){
+								document.getElementById("forum_"+forum_id+"_content").style.display = "block";
+								document.getElementById("forum_"+forum_id+"_opener").src = "'.api_get_path(WEB_IMG_PATH).'remove.gif";
+							}
+							else {
+								document.getElementById("forum_"+forum_id+"_content").style.display = "none";
+								document.getElementById("forum_"+forum_id+"_opener").src = "'.api_get_path(WEB_IMG_PATH).'add.gif";
+							}
+						}
+						</script>
+						';
+			$return .= '<img align="left" alt="" src="img/lp_' . TOOL_FORUM . '.png" style="margin-right:5px;" title="" />';
+			$return .= '<a style="cursor:hand" onclick="toggle_forum('.$forum['forum_id'].')" style="vertical-align:middle"><img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" /></a>
+						<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_'.$forum['forum_id'].'_content">';
+			$a_threads = get_threads($forum['forum_id']);
+			foreach($a_threads as $thread)
+			{
+				$return .=  '<li><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . $thread['thread_title'] . '</a></li>';
+			}
+			$return .= '</ul></div>';
+		}
 		
 		return $return;
 	}

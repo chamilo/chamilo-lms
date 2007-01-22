@@ -84,20 +84,27 @@ foreach ($rows as $row)
 	{
 		$name=$row['firstname'].' '.$row['lastname'];
 	}
-	echo display_user_link($row['user_id'], $name).'<br />';
+	if($origin!='learnpath')
+	{
+		echo display_user_link($row['user_id'], $name).'<br />';
+	}
+	else 
+	{
+		echo $name. '<br />';
+	}
 	echo $row['post_date'].'<br /><br />';
 	// The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 	// The course admin him/herself can do this off course always
 	if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or api_is_allowed_to_edit())
 	{
-		echo "<a href=\"editpost.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;post=".$row['post_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
+		echo "<a href=\"editpost.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
 	}
 	if (api_is_allowed_to_edit())
 	{
-		echo "<a href=\"".$_SERVER['PHP_SELF']."?forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=delete&amp;content=post&amp;id=".$row['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
-		display_visible_invisible_icon('post', $row['post_id'], $row['visible'],array('forum'=>$_GET['forum'],'thread'=>$_GET['thread'] ));
+		echo "<a href=\"".$_SERVER['PHP_SELF']."?forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=delete&amp;content=post&amp;id=".$row['post_id']."&origin=".$origin."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
+		display_visible_invisible_icon('post', $row['post_id'], $row['visible'],array('forum'=>$_GET['forum'],'thread'=>$_GET['thread'], 'origin'=>$origin ));
 		echo "\n";
-		echo "<a href=\"viewthread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=move&amp;post=".$row['post_id']."\">".icon('../img/forummovepost.gif',get_lang('Edit'))."</a>";
+		echo "<a href=\"viewthread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=move&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/forummovepost.gif',get_lang('Edit'))."</a>";
 	}
 	echo '<br /><br />';
 	//if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())
@@ -105,8 +112,8 @@ foreach ($rows as $row)
 	{
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 		{
-			echo '<a href="reply.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;post='.$row['post_id'].'&amp;action=replymessage">'.get_lang('ReplyToMessage').'</a><br />';
-			echo '<a href="reply.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;post='.$row['post_id'].'&amp;action=quote">'.get_lang('QuoteMessage').'</a><br /><br />';
+			echo '<a href="reply.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;post='.$row['post_id'].'&amp;action=replymessage&origin='.$origin.'">'.get_lang('ReplyToMessage').'</a><br />';
+			echo '<a href="reply.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;post='.$row['post_id'].'&amp;action=quote&origin='.$origin.'">'.get_lang('QuoteMessage').'</a><br /><br />';
 		}
 	}
 	else 

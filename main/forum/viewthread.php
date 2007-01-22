@@ -80,6 +80,14 @@ include('forumconfig.inc.php');
 include('forumfunction.inc.php');
 
 
+//are we in a lp ?
+$origin = '';
+if(isset($_GET['origin']))
+{
+	$origin =  $_GET['origin'];
+}
+
+
 /*
 ==============================================================================
 		MAIN DISPLAY SECTION
@@ -104,16 +112,23 @@ $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 	Header and Breadcrumbs
 -----------------------------------------------------------
 */
-$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
-$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
-$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" => prepare4display($current_forum['forum_title']));
-if ($message<>'PostDeletedSpecial')
+if($origin=='learnpath')
 {
-	$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
+	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+} else 
+{
+	
+	$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
+	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
+	$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" => prepare4display($current_forum['forum_title']));
+	if ($message<>'PostDeletedSpecial')
+	{
+		$interbreadcrumb[]=array("url" => "viewthread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
+	}
+	Display :: display_header();
+	api_display_tool_title($nameTools);
+	
 }
-
-Display :: display_header();
-api_display_tool_title($nameTools);
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 
 /*
@@ -171,9 +186,9 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 	-----------------------------------------------------------
 	*/
 	echo '<div style="float:right;">';
-	echo '<a href="viewthread.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;view=flat">'.get_lang('FlatView').'</a> | ';
-	echo '<a href="viewthread.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;view=threaded">'.get_lang('ThreadedView').'</a> | ';
-	echo '<a href="viewthread.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;view=nested">'.get_lang('NestedView').'</a>';
+	echo '<a href="viewthread.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;view=flat&origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
+	echo '<a href="viewthread.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;view=threaded&origin='.$origin.'">'.get_lang('ThreadedView').'</a> | ';
+	echo '<a href="viewthread.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;view=nested&origin='.$origin.'">'.get_lang('NestedView').'</a>';
 	echo '</div>';
 	// the reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
 	// if one of the three levels is locked then the link should not be displayed
@@ -182,7 +197,7 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 		// The link should only appear when the user is logged in or when anonymous posts are allowed. 
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 		{
-			echo '<a href="reply.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;action=replythread">'.get_lang('ReplyToThread').'</a>';
+			echo '<a href="reply.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
 		}
 	}
 	// note: this is to prevent that some browsers display the links over the table (FF does it but Opera doesn't)
@@ -223,11 +238,14 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 	echo "<table class=\"data_table\" width='100%'>\n";
 	
 	// the forum category
-	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
-	echo '<a href="index.php" '.class_visible_invisible($current_forum_category['visibility']).'>'.prepare4display($current_forum_category['cat_title']).'</a><br />';
-	echo '<span>'.prepare4display($current_forum_category['cat_comment']).'</span>';
-	echo "</th>\n";
-	echo "\t</tr>\n";
+	if($origin!='learnpath')
+	{
+		echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
+		echo '<a href="index.php" '.class_visible_invisible($current_forum_category['visibility']).'>'.prepare4display($current_forum_category['cat_title']).'</a><br />';
+		echo '<span>'.prepare4display($current_forum_category['cat_comment']).'</span>';
+		echo "</th>\n";
+		echo "\t</tr>\n";
+	}
 	
 	// the forum 
 	echo "\t<tr class=\"forum_header\">\n";
@@ -266,8 +284,8 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 		FOOTER
 ==============================================================================
 */
-
-Display :: display_footer();
+if($origin!='learnpath')
+	Display :: display_footer();
 ?>
 
 

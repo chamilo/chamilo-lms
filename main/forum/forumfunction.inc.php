@@ -1293,7 +1293,7 @@ function get_threads($forum_id)
 				AND thread.thread_id=item_properties.ref 
 				AND item_properties.visibility='1' 
 				AND item_properties.tool='".TOOL_FORUM_THREAD."'
-				ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";	
+				ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
 	if (is_allowed_to_edit())
 	{
 		// important note: 	it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
@@ -1519,6 +1519,7 @@ function store_thread($values)
 	global $_user; 
 	global $_course; 
 	global $current_forum; 
+	global $origin;
 	
 	$post_date=date('Y-m-d H:i:s');
 	
@@ -1582,8 +1583,8 @@ function store_thread($values)
 	}
 	else 
 	{
-		$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
-		$message.=get_lang('ReturnTo').' <a href="viewthread.php?forum='.$values['forum_id'].'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
+		$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+		$message.=get_lang('ReturnTo').' <a href="viewthread.php?forum='.$values['forum_id'].'&origin='.$origin.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
 	}
 	
 	session_unregister('formelements');
@@ -1610,9 +1611,10 @@ function show_add_post_form($action='', $id='', $form_values='')
 	global $forum_setting; 
 	global $current_forum; 
 	global $_user; 
+	global $origin;
 	
 	// initiate the object
-	$form = new FormValidator('thread', 'post', $_SERVER['PHP_SELF'].'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post'].'&action='.$_GET['action']);
+	$form = new FormValidator('thread', 'post', $_SERVER['PHP_SELF'].'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post'].'&action='.$_GET['action'].'&origin='.$origin);
 	$form->setConstants(array('forum' => '5'));
 	
 	// settting the form elements
@@ -2352,8 +2354,10 @@ function send_mail($user_info=array(), $thread_information=array())
 */
 function move_thread_form()
 {
+	global $origin;
+	
 	// initiate the object
-	$form = new FormValidator('movepost', 'post', $_SERVER['PHP_SELF'].'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&action='.$_GET['action']);
+	$form = new FormValidator('movepost', 'post', $_SERVER['PHP_SELF'].'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&action='.$_GET['action'].'&origin='.$origin);
 	// the header for the form
 	$form->addElement('header', '', get_lang('MoveThread'));
 	// invisible form: the thread_id

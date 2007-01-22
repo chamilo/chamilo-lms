@@ -70,6 +70,15 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('Forum');
 
+
+//are we in a lp ?
+$origin = '';
+if(isset($_GET['origin']))
+{
+	$origin =  $_GET['origin'];
+	$origin_string = '&origin='.$origin;
+}
+
 /*
 -----------------------------------------------------------
 	Including necessary files
@@ -107,9 +116,15 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 $interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
 $interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" => prepare4display($current_forum['forum_title']));
+if($origin=='learnpath')
+{
+	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+} else 
+{
+	Display :: display_header();
+	api_display_tool_title($nameTools);
+}
 
-Display :: display_header();
-api_display_tool_title($nameTools);
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 
 /*
@@ -171,7 +186,7 @@ if (isset($message))
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
 if (api_is_allowed_to_edit() OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1))
 {
-	echo '<a href="newthread.php?forum='.$_GET['forum'].'">'.Display::return_icon('forumthread_new.gif').' '.get_lang('NewTopic').'</a>';
+	echo '<a href="newthread.php?forum='.$_GET['forum'].$origin_string.'">'.Display::return_icon('forumthread_new.gif').' '.get_lang('NewTopic').'</a>';
 }
 
 /*
@@ -182,11 +197,14 @@ if (api_is_allowed_to_edit() OR ($current_forum['allow_new_threads']==1 AND isse
 echo "<table class=\"data_table\" width='100%'>\n";
 
 // the forum category
-echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"7\">";
-echo '<a href="index.php" '.class_visible_invisible($current_forum_category['visibility']).'>'.prepare4display($current_forum_category['cat_title']).'</a><br />';
-echo '<span>'.prepare4display($current_forum_category['cat_comment']).'</span>';
-echo "</th>\n";
-echo "\t</tr>\n";
+if($origin != 'learnpath')
+{
+	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"7\">";
+	echo '<a href="index.php" '.class_visible_invisible($current_forum_category['visibility']).'>'.prepare4display($current_forum_category['cat_title']).'</a><br />';
+	echo '<span>'.prepare4display($current_forum_category['cat_comment']).'</span>';
+	echo "</th>\n";
+	echo "\t</tr>\n";
+}
 
 // the forum 
 echo "\t<tr class=\"forum_header\">\n";
@@ -235,7 +253,7 @@ foreach ($threads as $row)
 			echo icon('../img/exclamation.gif');
 		}
 		echo "</td>\n";
-		echo "\t\t<td><a href=\"viewthread.php?forum=".$_GET['forum']."&amp;thread=".$row['thread_id']."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
+		echo "\t\t<td><a href=\"viewthread.php?forum=".$_GET['forum']."&amp;thread=".$row['thread_id'].$origin_string."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
 		echo "\t\t<td>".$row['thread_replies']."</td>\n";
 		if ($row['user_id']=='0')
 		{
@@ -245,7 +263,14 @@ foreach ($threads as $row)
 		{
 			$name=$row['firstname'].' '.$row['lastname'];
 		}
-		echo "\t\t<td>".display_user_link($row['user_id'], $name)."</td>\n";
+		if($origin != 'learnpath')
+		{
+			echo "\t\t<td>".display_user_link($row['user_id'], $name)."</td>\n";
+		}
+		else 
+		{
+			echo "\t\t<td>".$name."</td>\n";
+		}
 		echo "\t\t<td>".$row['thread_views']."</td>\n";
 		if ($row['last_poster_user_id']=='0')
 		{
@@ -256,11 +281,11 @@ foreach ($threads as $row)
 			$name=$row['last_poster_firstname'].' '.$row['last_poster_lastname'];
 		}
 		// if the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread
-		if ($row['visible']=='1' OR api_is_allowed_to_edit())
-		{		
+		if (($row['visible']=='1' OR api_is_allowed_to_edit()) && $origin!='learnpath')
+		{
 			$last_post=$row['thread_date']." ".get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
 		}
-		else 
+		else if($origin!='learnpath')
 		{
 			$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
 			$last_post_result=api_sql_query($last_post_sql, __LINE__, __FILE__);
@@ -268,14 +293,22 @@ foreach ($threads as $row)
 			$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
 			$last_post=$last_post_row['post_date']." ".get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
 		}
+		else 
+		{
+			$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
+			$last_post_result=api_sql_query($last_post_sql, __LINE__, __FILE__);
+			$last_post_row=mysql_fetch_array($last_post_result);
+			$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
+			$last_post=$last_post_row['post_date']." ".get_lang('By').' '.$name;
+		}
 		echo "\t\t<td>".$last_post."</td>\n";
 		if (api_is_allowed_to_edit())
 		{
 			echo "\t\t<td>";
-			echo "<a href=\"".$_SERVER['PHP_SELF']."?forum=".$_GET['forum']."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
-			display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$_GET['forum']));
-			display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$_GET['forum']));
-			echo "<a href=\"viewforum.php?forum=".$_GET['forum']."&amp;action=move&amp;thread=".$row['thread_id']."\">".icon('../img/forummovepost.gif',get_lang('MoveThread'))."</a>";
+			echo "<a href=\"".$_SERVER['PHP_SELF']."?forum=".$_GET['forum']."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+			display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$_GET['forum'],'origin'=>$origin));
+			display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$_GET['forum'],'origin'=>$origin));
+			echo "<a href=\"viewforum.php?forum=".$_GET['forum']."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/forummovepost.gif',get_lang('MoveThread'))."</a>";
 			echo "</td>\n";
 		}
 		echo "\t</tr>\n";
@@ -289,8 +322,8 @@ echo "</table>";
 		FOOTER
 ==============================================================================
 */
-
-Display :: display_footer();
+if($origin != 'learnpath')
+	Display :: display_footer();
 ?>
 
 

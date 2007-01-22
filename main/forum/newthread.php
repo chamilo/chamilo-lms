@@ -88,6 +88,14 @@ include('forumconfig.inc.php');
 include('forumfunction.inc.php');
 
 
+//are we in a lp ?
+$origin = '';
+if(isset($_GET['origin']))
+{
+	$origin =  $_GET['origin'];
+}
+
+
 /*
 ==============================================================================
 		MAIN DISPLAY SECTION
@@ -129,8 +137,14 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resour
 	Header
 -----------------------------------------------------------
 */
-Display :: display_header($nameTools);
-api_display_tool_title($nameTools);
+if($origin=='learnpath')
+{
+	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+} else 
+{
+	Display :: display_header();
+	api_display_tool_title($nameTools);
+}
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 /*
 -----------------------------------------------------------
@@ -179,11 +193,14 @@ handle_forum_and_forumcategories();
 echo "<table class=\"data_table\" width='100%'>\n";
 
 // the forum category
-echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\"  colspan=\"2\">";
-echo '<a href="index.php" '.class_visible_invisible($current_forum_category['visibility']).'>'.$current_forum_category['cat_title'].'</a><br />';
-echo '<span>'.$current_forum_category['cat_comment'].'</span>';
-echo "</th>\n";
-echo "\t</tr>\n";
+if($origin != 'learnpath')
+{
+	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\"  colspan=\"2\">";
+	echo '<a href="index.php?origin='.$origin.'" '.class_visible_invisible($current_forum_category['visibility']).'>'.$current_forum_category['cat_title'].'</a><br />';
+	echo '<span>'.$current_forum_category['cat_comment'].'</span>';
+	echo "</th>\n";
+	echo "\t</tr>\n";
+}
 
 // the forum 
 echo "\t<tr class=\"forum_header\">\n";

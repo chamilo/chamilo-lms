@@ -4,9 +4,10 @@ $language_file = array('registration','tracking');
 
 $cidReset = true;
 
+require ('../inc/global.inc.php');
+
 $nameTools=get_lang('MyProgress');
 
-require ('../inc/global.inc.php');
 
 if(isset($_GET['id_session']))
 {

@@ -99,10 +99,10 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'active', 'radio',NULL,'false', 'visio_actived','', NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'url', 'textfield',NULL,'', 'visio_url','', NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'active', 'radio',NULL,'false', 'ppt2lp_actived','', NULL, NULL);
-INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'host', NULL, NULL, NULL, 'Host', NULL, NULL, NULL);
-INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'user', NULL, NULL, NULL, 'UserOnHost', NULL, NULL, NULL);
-INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'ftp_password', NULL, NULL, NULL, 'FtpPassword', NULL, NULL, NULL);
-INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'path_to_lzx', NULL, NULL, NULL, '', NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'host', 'textfield', NULL, NULL, 'Host', NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'user', 'textfield', NULL, NULL, 'UserOnHost', NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'ftp_password', 'textfield', NULL, NULL, 'FtpPassword', NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL);
 
 UPDATE settings_options SET value = 'activity', display_text='HomepageViewActivity' WHERE variable = 'homepage_view' AND value = 'default';

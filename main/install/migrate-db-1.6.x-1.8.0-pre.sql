@@ -102,6 +102,8 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'host', NULL, NULL, NULL, 'Host', NULL, NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'user', NULL, NULL, NULL, 'UserOnHost', NULL, NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'ftp_password', NULL, NULL, NULL, 'FtpPassword', NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'path_to_lzx', NULL, NULL, NULL, '', NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL);
 
 UPDATE settings_options SET value = 'activity', display_text='HomepageViewActivity' WHERE variable = 'homepage_view' AND value = 'default';
 UPDATE settings_options SET value = '2column', display_text='HomepageView2column' WHERE variable = 'homepage_view' AND value = 'basic_tools_fixed';

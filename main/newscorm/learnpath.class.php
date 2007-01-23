@@ -5674,27 +5674,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				
 				if(($extra_info == 'new' || $extra_info['item_type'] == TOOL_DOCUMENT || $_GET['edit'] == 'true'))
 				{
-					if($action == 'add' || $_GET['edit'] == 'true')
-					{
-						
-						$directory_select = &$form->addElement('select', 'dir', get_lang("Directory")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
-						
-						$sql_doc = "
-							SELECT *
-							FROM " . $tbl_doc . "
-							WHERE
-								filetype = 'folder'
-							ORDER BY path ASC";
-						
-						$result = api_sql_query($sql_doc, __FILE__, __LINE__);
-						
-						$directory_select->addOption(get_lang('Root'),'/');
-						
-						while($row_doc = Database::fetch_array($result)){
-							$directory_select->addOption($row_doc['path'],$row_doc['path']);
-						}
-						
-					}
 					
 					if(isset($_POST['content']))
 						$content = stripslashes($_POST['content']);

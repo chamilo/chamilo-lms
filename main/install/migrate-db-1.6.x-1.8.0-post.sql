@@ -62,5 +62,4 @@ DROP TABLE bb_users;
 DROP TABLE bb_whosonline;
 DROP TABLE bb_words;
 
--- ?
-DROP TABLE stud_pub_rel_user;
+-- ? DROP TABLE stud_pub_rel_user;

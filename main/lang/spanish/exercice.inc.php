@@ -204,4 +204,5 @@ $Number = "Nº";
 $Weighting = "Puntuación";
 $ChooseQuestionType = "Para crear una nueva pregunta, seleccione el tipo arriba";
 $MatchesTo = "Corresponde a";
+$ViewTest = "Ver";
 ?>

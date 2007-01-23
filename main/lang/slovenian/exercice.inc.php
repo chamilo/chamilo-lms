@@ -209,4 +209,10 @@ $CorrectTest = "Oceni to vajo";
 $ViewTest = "Poglej to vajo";
 $State = "Stanje";
 $NotAttempted = "Brez poskusa";
+$AddElem = "+ element";
+$DelElem = "- element";
+$PlusAnswer = "+ odgovor";
+$LessAnswer = "- odgovor";
+$YourScore = "Tvoj rezultat";
+$Attempted = "Poskusov";
 ?>

@@ -163,4 +163,12 @@ $AccountsExternalAuthSource = "La piattaforma non può trattare direttamente la r
 $RequestSentToPlatformAdmin = "La piattaforma non può trattare direttamente la richiesta. La richiesta è stata nviata all\'amministratore che prenderà i provvedimenti adeguati e ti avviserà dei risultati.";
 $langphone = "Telefono";
 $Unreg = "Cancella l\'iscrizione";
+$MyProgress = "I miei progressi";
+$ProgressIntroduction = "Inizia selezionando qui sotto una sessione del corso.<br />Puoi controllare i progressi effettuati in ciascun corso cui sei iscritto.";
+$Select = "Seleziona";
+$NeverExpires = "Senza data di scadenza";
+$On = "Il";
+$HourMinuteDivider = "h";
+$ExpirationDate = "Data di scadenza";
+$ActiveAccount = "Attiva l\'account";
 ?>

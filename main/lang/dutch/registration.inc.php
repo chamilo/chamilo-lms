@@ -160,4 +160,7 @@ $AccountExternalAuthSource = "Dokeos kan de aanvraag niet automatisch behandelen
 $AccountsExternalAuthSource = "Dokeos kan de aanvraag niet automatisch behandelen omdat minstens een van de accounts een externe authenticatiebron gebruikt. Gelieve de gepaste maatregelen te nemen voor alle accounts (ook die met platformauthenticatie) en de gebruiker hierover in te lichten.";
 $RequestSentToPlatformAdmin = "Dokeos kan de aanvraag niet automatisch behandelen voor dit accounttype. Uw aanvraag is verzonden naar de platformbeheerder, die de gepaste maatregelen zal nemen en u zal inlichten over het resultaat.";
 $langphone = "Telefoonnumer";
+$MyProgress = "Mijn vooruitgang";
+$ProgressIntroduction = "Start met het kiezen van een cursus sessie.<br />U kunt daarna uw vooruitgang volgen voor alle cursussen waarvoor u ingeschreven bent.";
+$Select = "Kies";
 ?>

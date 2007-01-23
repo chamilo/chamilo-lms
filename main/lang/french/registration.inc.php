@@ -173,4 +173,9 @@ $AccountsExternalAuthSource = "Dokeos ne peut prendre cette requête en charge au
 $RequestSentToPlatformAdmin = "Dokeos ne peut prendre la requête en charge automatiquement pour ce type de compte. Votre requête a été envoyée à un administrateur de la plateforme qui prendra les mesures appropriées et vous avertira du résultat.";
 $langphone = "Téléphone";
 $Unreg = "Désinscrire";
+$NeverExpires = "N\'expire jamais";
+$On = "Le";
+$HourMinuteDivider = "h";
+$ExpirationDate = "Date d\'expiration";
+$ActiveAccount = "Activation du compte";
 ?>

@@ -211,4 +211,6 @@ $AddElem = "+ elementi";
 $DelElem = "- elementi";
 $PlusAnswer = "+ risposte";
 $LessAnswer = "- risposte";
+$YourScore = "Il tuo punteggio";
+$Attempted = "Affrontato";
 ?>

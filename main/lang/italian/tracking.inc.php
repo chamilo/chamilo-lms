@@ -149,4 +149,8 @@ $Administrators = "Amministratori";
 $Tracks = "Sequenza";
 $Success = "Successo";
 $ExcelFormat = "Formato .csv";
+$MyLearnpath = "I miei percorsi";
+$Time = "Tempi";
+$Score = "Punteggi";
+$LastConnexion = "Ultimo collegamento";
 ?>

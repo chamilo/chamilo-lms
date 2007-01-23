@@ -75,4 +75,5 @@ $DeleteForum = "Forum löschen?";
 $DeleteForumCategory = "Forum-Kategorie löschen";
 $Lock = "Sperren";
 $Unlock = "Entsperren";
+$MoveThread = "Thema verschieben";
 ?>

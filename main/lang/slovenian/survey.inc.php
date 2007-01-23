@@ -95,4 +95,16 @@ $MultipleChoiceMultih = "Veèkratna izbira (veè odgovorov) horizontalno";
 $MultipleChoiceSingleh = "Veèkratna izbira (En odgovor) horizontalno";
 $ThisCodeAlradyExists = "Ta koda že obstaja";
 $SaveAndExit = "Shrani in izstopi";
+$CreateExistingSurvey = "Ustvari iz obstojeèega vprašalnika";
+$SurveyName = "Naziv eval. vprašalnika";
+$Language = "Jezik";
+$AvailableUntill = "Na voljo do";
+$SurveySubTitle = "Podnaslov vprašalnika";
+$ShareSurvey = "Skupna raba vprašalnika";
+$HourMinuteDivider = ":";
+$EditSurvey = "Uredi vprašalnik";
+$NoSurveysSelected = "Noben vprašalnik ni izbran";
+$YouCanNowAddQuestionToYourSurvey = "Sedaj lahko dodate vprašanja k vprašalniku";
+$Here = "tule";
+$OrReturnToSurveyOverview = "Ali se vrni na splošen pregled";
 ?>

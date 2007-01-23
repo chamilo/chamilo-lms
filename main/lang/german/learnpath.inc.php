@@ -151,4 +151,5 @@ $langNoLinksAvailable = "Es sind keine Links verfügbar";
 $langNoItemsInLp = "Im Augenblick gibt es keine Schritte im Lernpfad. Auf \"Fortgeschrittene\" klicken, um Lernpfad Schritte zu erstellen";
 $FirstPosition = "Erste Stelle";
 $NewQuiz = "Neues Quiz";
+$CreateTheForum = "Forum hinzufügen";
 ?>

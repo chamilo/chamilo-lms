@@ -151,4 +151,5 @@ $langNoLinksAvailable = "Aucun lien disponible";
 $langNoItemsInLp = "Il n\'y a pas d\'étapes dans ce parcours pour le moment.  Cliquez sur \"avancée\" pour créer une étape.";
 $FirstPosition = "Première position";
 $NewQuiz = "Nouveau test";
+$CreateTheForum = "Ajouter le forum";
 ?>

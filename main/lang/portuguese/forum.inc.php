@@ -65,4 +65,15 @@ $EditPostStored = "A mensagem foi alterada";
 $NewForumPost = "Nova mensagem publicada no fórum";
 $YouWantedToStayInformed = "Disse que queria ser informado todas as vezes que alguém publicasse uma mensagem neste fórum";
 $MessageHasToBeApproved = "A mensagem tem de ser aprovada para ser publicada.";
+$AllowAttachments = "Permitir anexos";
+$EditForumCategory = "Editar categoria do fórum";
+$MovePost = "Mover mensagem";
+$MoveToThread = "Mover para o assunto";
+$ANewThread = "Novo assunto";
+$Reply = "Responder";
+$DeleteForum = "Apagar fórum?";
+$DeleteForumCategory = "Apagar categoria do fórum?";
+$Lock = "Bloquear";
+$Unlock = "Desbloquear";
+$MoveThread = "Mover tópico";
 ?>

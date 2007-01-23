@@ -121,4 +121,5 @@ $Content = "Contenuto";
 $Validate = "Valida";
 $AdvancedSettings = "Configurazione avanzata";
 $AdvancedSettings = "Configurazione avanzata";
+$File = "File";
 ?>

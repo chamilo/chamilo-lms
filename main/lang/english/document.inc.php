@@ -121,4 +121,6 @@ $Content = "Content";
 $Validate = "Validate";
 $AdvancedSettings = "Advanced settings";
 $AdvancedSettings = "Advanced settings";
+$File = "File";
+$DocDeleteError = "Error during the delete of document";
 ?>

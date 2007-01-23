@@ -75,4 +75,5 @@ $DeleteForum = "Supprimer le forum ?";
 $DeleteForumCategory = "Supprimer la catégorie de forum ?";
 $Lock = "Verrouiller";
 $Unlock = "Déverrouiller";
+$MoveThread = "Déplacer le topic";
 ?>

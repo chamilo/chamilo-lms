@@ -152,4 +152,5 @@ $langNoLinksAvailable = "No hay enlaces disponibles";
 $langNoItemsInLp = "En este momento no hay items en el itinerario de aprendizaje. Haga clic en \"Avanzado\" para crear los items de su itinerario de aprendizaje.";
 $FirstPosition = "Primera posición";
 $NewQuiz = "Nuevo ejercicio";
+$CreateTheForum = "Añadir el foro";
 ?>

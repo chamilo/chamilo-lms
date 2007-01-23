@@ -75,4 +75,5 @@ $DeleteForum = "Odstranim forum ? ";
 $DeleteForumCategory = "Odstranim kategorijo foruma ?";
 $Lock = "Zakleni";
 $Unlock = "Odkleni";
+$MoveThread = "Prestavi nit";
 ?>

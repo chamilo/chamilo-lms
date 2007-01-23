@@ -532,4 +532,12 @@ $Header = "Cabecera";
 $Footer = "Pie";
 $PublicPagesComplyToWAITitle = "Páginas públicas conformes a WAI";
 $PublicPagesComplyToWAIComment = "WAI (Web Accessibility Initiative) es una iniciativa para hacer la web más accesible. Seleccionando esta opción, las páginas públicas de Dokeos serán más accesibles. Esto también significará que algunos contenidos de las páginas públicas puedan mostrarse de forma diferente.";
+$VersionCheck = "Comprobar versión";
+$Active = "Activo";
+$Inactive = "No activo";
+$DeleteSelectedSessions = "Borrar las sesiones seleccionadas";
+$NbUsers = "Usuarios";
+$Host = "Servidor";
+$UserOnHost = "Nombre de usuario";
+$FtpPassword = "Contraseña FTP";
 ?>

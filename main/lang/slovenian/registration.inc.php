@@ -163,4 +163,9 @@ $AccountsExternalAuthSource = "Dokeos ne more servisirati te izjeme avtomatièno,
 $RequestSentToPlatformAdmin = "Dokeos ne more servisirati zahteve avtomati&#269;no za to vrsto uporabniškega raèuna. Vaša zahteva je bila posredovana upravitelju platforme, ki bo izvedel odgovarjajoèe mere in vas naknadno obvestil o rezultatih izvedbe zahteve.";
 $langphone = "Tel.";
 $Unreg = "Odjavi";
+$MyProgress = "Moj napredek";
+$ProgressIntroduction = "Prièni z izbiro teèaja seje spodaj.<br />Na predek je viden za vsak teèaj v katerega je teèajnik vpisan.";
+$Select = "Izberi";
+$HourMinuteDivider = ":";
+$ExpirationDate = "Datum poteka";
 ?>

@@ -542,4 +542,8 @@ $SubscribeUsersToSession = "Subscribe users to this session";
 $UserListInPlatform = "User list in the platform";
 $UserListInSession = "User list subscribed in this session";
 $CourseListInPlatform = "Course list in the platform";
+$Host = "Host";
+$UserOnHost = "Username";
+$FtpPassword = "FTP password";
+$PathToLzx = "Path to LZX files";
 ?>

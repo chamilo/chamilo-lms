@@ -151,4 +151,5 @@ $langNoLinksAvailable = "Não há ligações disponíveis";
 $langNoItemsInLp = "De momento não existem itens na Sequência de Aprendizagem. Clique em <b>Avançado</b> para acrescentar itens à sua Sequência de Aprendizagem.";
 $FirstPosition = "Primeira posição";
 $NewQuiz = "Novo Quiz";
+$CreateTheForum = "Acrescentar o fórum";
 ?>

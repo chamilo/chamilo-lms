@@ -75,4 +75,5 @@ $DeleteForum = "Delete forum ?";
 $DeleteForumCategory = "Delete forum category ?";
 $Lock = "Lock";
 $Unlock = "Unlock";
+$MoveThread = "Move Thread";
 ?>

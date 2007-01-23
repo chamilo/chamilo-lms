@@ -370,4 +370,5 @@ $year = "año";
 $Years = "años";
 $Day = "día";
 $Days = "días";
+$PleaseStandBy = "Por favor, espere...";
 ?>

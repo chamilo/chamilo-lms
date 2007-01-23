@@ -320,5 +320,6 @@ $Documents = "Dokumenty";
 $UserPicture = "Obrázek";
 $UserPassword = "Heslo";
 $Classes = "T&#345;ídy";
+$langActiveExtensions = "Aktivuj toto rozší&#345;ení";
 $ActiveExtension = "Aktivuj slu&#382;by";
 ?>

@@ -161,4 +161,12 @@ $AccountsExternalAuthSource = "Dieser Wunsch kann nicht automatisch bearbeitet w
 $RequestSentToPlatformAdmin = "Der Wunsch kann für diese Art von Benutzer Konto nicht automatisch bearbeitet werden. Ihr Wunsch wurde an den Plattform Administrator weitergeleitet, der entsprechende Schritte in die Wege leiten wird, um Ihnen weiter Informationen zukommen zu lassen.";
 $langphone = "Telefon";
 $Unreg = "Abmelden";
+$MyProgress = "Mein Fortschritt";
+$ProgressIntroduction = "Beginnen Sie unten mit der Auswahl einer Kurs Session.<br/>Die können dann Ihren Fortschritt für jeden Kurs sehen, den Sie belegt haben.";
+$Select = "Auswählen";
+$NeverExpires = "Läuft nie ab";
+$On = "An";
+$HourMinuteDivider = "h";
+$ExpirationDate = "Ablaufdatum";
+$ActiveAccount = "Aktiver Account";
 ?>

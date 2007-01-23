@@ -123,4 +123,5 @@ $ConvertToLP = "Converteer in leerpad";
 $Content = "Inhoud";
 $Validate = "Valideer";
 $AdvancedSettings = "Geavanceerde instellingen";
+$AdvancedSettings = "Geavanceerde instellingen";
 ?>

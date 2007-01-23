@@ -151,4 +151,5 @@ $langNoLinksAvailable = "No links available";
 $langNoItemsInLp = "There are no items in the learning path for this moment. Click on \"Advanced\" for creating your learning path items.";
 $FirstPosition = "First position";
 $NewQuiz = "New quiz";
+$CreateTheForum = "Add the forum";
 ?>

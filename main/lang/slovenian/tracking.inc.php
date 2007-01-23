@@ -147,4 +147,7 @@ $Administrators = "Upravitelji";
 $Tracks = "Sledenje";
 $Success = "Uspešnost";
 $ExcelFormat = "Excel oblika";
+$MyLearnpath = "Moja uèna pot";
+$Score = "Rezultat";
+$LastConnexion = "Zadnja povezava";
 ?>

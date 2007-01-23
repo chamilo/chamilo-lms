@@ -164,4 +164,12 @@ $AccountsExternalAuthSource = "Dokeos can\'t handle the request automatically be
 $RequestSentToPlatformAdmin = "Dokeos can\'t handle the request automatically for this type of account. Your request has been sent to the platform administrator, who will take appropriate measures and notify you of the result.";
 $langphone = "Phone";
 $Unreg = "Unregister";
+$MyProgress = "My progress";
+$ProgressIntroduction = "Start with selecting a course session below.<br />You can then see your progress for every course you are subscribed to.";
+$Select = "Select";
+$NeverExpires = "Never expires";
+$On = "On";
+$HourMinuteDivider = "h";
+$ExpirationDate = "Expiration date";
+$ActiveAccount = "Active account";
 ?>

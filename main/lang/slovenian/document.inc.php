@@ -120,4 +120,5 @@ $ConvertToLP = "Pretvori v Uèno pot";
 $Content = "Vsebina";
 $AdvancedSettings = "Napredne nastavitve";
 $AdvancedSettings = "Napredne nastavitve";
+$File = "Datoteka";
 ?>

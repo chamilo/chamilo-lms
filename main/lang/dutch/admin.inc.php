@@ -500,6 +500,9 @@ $TimeLimitWhosonlineComment = "Deze tijdslimiet bepaalt hoeveel seconden een geb
 $ExampleMaterialCourseCreationTitle = "Voorbeeld inhoud bij aanmaken cursus";
 $ExampleMaterialCourseCreationComment = "Automatisch voorbeeld inhoud aanmaken wanneer een nieuwe cursus aangemaakt wordt.";
 $IconsOnly = "Enkel iconen";
+$title = "Titel";
 $Version = "Versie";
 $Header = "Hoofding";
+$Active = "Actief";
+$Inactive = "Inactief";
 ?>

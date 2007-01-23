@@ -271,6 +271,68 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				//update group_info.tutor_id (put it in group_tutor table?)
 				//update group_info.forum_state, forum_id
 				
+				//update forum tables (migrate from bb_ tables to forum_ tables)
+				//migrate categories
+				$sql_orig = "SELECT * FROM bb_categories";
+				$res_orig = mysql_query($sql_orig);
+				while($row = mysql_fetch_array($res_orig)){
+					$sql = "INSERT INTO forum_category " .
+							"(cat_id,cat_title,cat_comment,cat_order,locked) VALUES " .
+							"('".$row['cat_id']."','".$row['cat_title']."','','".$row['cat_order']."',0)";
+					$res = mysql_query($sql);
+				}
+				$sql_orig = "SELECT * FROM bb_forums ORDER BY forum_last_post_id desc";
+				$res_orig = mysql_query($sql_orig);
+				$order = 1;
+				while($row = mysql_fetch_array($res_orig)){
+					$sql = "INSERT INTO forum_forum " .
+							"(forum_id,forum_category,allow_edit,forum_comment," .
+							"forum_title," .
+							"forum_last_post, forum_threads," .
+							"locked, forum_posts, " .
+							"allow_new_threads, forum_order) VALUES " .
+							"('".$row['forum_id']."','".$row['cat_id']."',1,'".$row['forum_desc']."'," .
+							"'".$row['forum_name']."'," .
+							"'".$row['forum_last_post_id']."','".$row['forum_topics']."'," .
+							"0,'".$row['forum_posts']."'," .
+							"1,$order)";
+					$res = mysql_query($sql);
+					$order++;
+				}
+				$sql_orig = "SELECT * FROM bb_topics";
+				$res_orig = mysql_query($sql_orig);
+				while($row = mysql_fetch_array($res_orig)){
+					//convert time from varchar to datetime
+					$time = $row['topic_time'];
+					$name = $row['prenom']." ".$row['nom'];
+					$sql = "INSERT INTO forum_thread " .
+							"(thread_id,forum_id,thread_poster_id," .
+							"locked,thread_replies,thread_sticky,thread_title," .
+							"thread_poster_name, thread_date, thread_last_post," .
+							"thread_views) VALUES " .
+							"('".$row['topic_id']."','".$row['forum_id']."','".$row['topic_poster']."'," .
+							"0,'".$row['topic_replies']."',0,'".$row['topic_title']."'," .
+							"'$name','$time','".$row['topic_last_post_id']."'," .
+							"'".$row['topic_views']."')";
+					$res = mysql_query($sql);
+				}
+				$sql_orig = "SELECT * FROM bb_posts, bb_posts_text WHERE bb_posts.post_id = bb_posts_text.post_id";
+				$res_orig = mysql_query($sql_orig);
+				while($row = mysql_fetch_array($res_orig)){
+					//convert time from varchar to datetime
+					$time = $row['post_time'];
+					$name = $row['prenom']." ".$row['nom'];
+					$sql = "INSERT INTO forum_post " .
+							"(post_id,forum_id,thread_id," .
+							"poster_id,post_parent_id,visible, " .
+							"post_title,poster_name, post_text, " .
+							"post_date, post_notification) VALUES " .
+							"('".$row['post_id']."','".$row['forum_id']."','".$row['topic_id']."'," .
+							"'".$row['poster_id']."','".$row['parent_id']."',1," .
+							"'".$row['post_title']."','$name', '".$row['post_text']."'," .
+							"'$time',0)";
+					$res = mysql_query($sql);
+				}
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 10849 2007-01-23 15:45:04Z elixir_julian $
+<?php //$Id: announcements.php 10851 2007-01-23 15:57:46Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -175,7 +175,7 @@ if ($_POST['To'])
 $setting_select_groupusers=true;
 if (!$_POST['To'] and !$_SESSION['select_groupusers'])
 {
-	$_SESSION['select_groupusers']="show";
+	$_SESSION['select_groupusers']="hide";
 }
 $select_groupusers_status=$_SESSION['select_groupusers'];
 if ($_POST['To'] and ($select_groupusers_status=="hide"))
@@ -540,7 +540,7 @@ if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announce
 	
 				    store_resources($_SESSION['source_type'],$insert_id);
 	
-				    $_SESSION['select_groupusers']="show";
+				    $_SESSION['select_groupusers']="hide";
 	
 				    $message = get_lang('AnnouncementAdded');
 				}
@@ -616,7 +616,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 				    							MAIL FUNCTION
 				===================================================================*/
 
-				if (empty($_POST['onlyThoseMails']))
+				if ($_POST['email_ann'] && empty($_POST['onlyThoseMails']))
 				{
 				  	$sent_to=sent_to("announcement", $insert_id);
 
@@ -631,6 +631,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 							$sql = "SELECT user_id
 									FROM $tbl_groupUser gu
 									WHERE gu.group_id IN (".$grouplist.")";
+
 
 							$groupMemberResult = api_sql_query($sql,__FILE__,__LINE__);
 
@@ -653,7 +654,6 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 						    $sqlmail = "SELECT user_id, lastname, firstname, email
 							       					 FROM $tbl_user
 							       					 WHERE user_id IN (".$userlist.")";
-
 					    }
 				    	else if(empty($_POST['not_selected_form']))
 				    	{
@@ -1013,7 +1013,7 @@ if ($message == true)
 			echo "</td><td>";
 			echo get_lang('SelectedUsersGroups');
 			echo '</td><td>';
-			echo "<input type=\"button\" name=\"To\" value=\"".get_lang("SelectEverybody")."\" style=\"float:left\"  onclick=\"selectAll(this.form.elements[1],this.form.elements[4]);move(this.form.elements[1],this.form.elements[4])\">" ;
+			echo "<input type=\"submit\" name=\"To\" value=\"".get_lang("SelectEverybody")."\" style=\"float:left\">" ;
 			echo "</td></tr></table>";
 			show_to_form($to);
 		}
@@ -1024,7 +1024,7 @@ if ($message == true)
 		if ($announcement_to_modify=='')
 		{
 			($email_ann=='1')?$checked='checked':$checked='';
-			//echo "<input class=\"checkbox\" type=checkbox value=\"1\" name=\"email_ann\" $checked> ".get_lang('EmailOption')," : ",
+			echo "<input class=\"checkbox\" type=checkbox value=\"1\" name=\"email_ann\" $checked> ".get_lang('EmailOption')," : ",
 			"<br /><br />";
 		}
 	}else{
@@ -1056,7 +1056,8 @@ if ($message == true)
 											'.get_lang('OrCopyPasteUrl').' <br />
 											'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name&nbsp';
 		}
-
+	            //api_disp_html_area('newContent',$content_to_modify,'250px');
+	            
 	            require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 	            $oFCKeditor = new FCKeditor('newContent') ;
 				$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;

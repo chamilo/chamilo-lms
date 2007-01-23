@@ -2,6 +2,7 @@ var oEditor = window.parent.InnerDialogLoaded() ;
 var FCK		= oEditor.FCK ;
 var FCKLang		= oEditor.FCKLang ;
 var FCKConfig	= oEditor.FCKConfig ;
+var mp3_url="";
 
 // Set the language direction.
 window.document.dir = oEditor.FCKLang.Dir ;
@@ -259,17 +260,7 @@ Media.prototype.getOuterHTML = function (objectId){
  * Devuelve el codigo HTML interno del elemento
  */
 Media.prototype.getInnerHTML = function (objectId){
-	var s = "";
-
-	s+= '<object ';
-	s+= this.createAttribute('type',"application/x-shockwave-flash");
-	s+= this.createAttribute('data',getObjData(this.url));
-	if (this.width > 0) 	s+= this.createAttribute('width',this.width);
-	else s+= this.createAttribute('width','200');
-	if (this.height > 0) 	s+= this.createAttribute('height',this.height);
-	else s+= this.createAttribute('height','20');
-	s+= '><param name="movie" value="'+getObjData(this.url)+'"></object>';
-
+	var s='<object id="mp3player" type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" width="220" height="30" style="vertical-align: bottom;"><!-- MP3 Flash player. Credits, license, contact & examples: http://pyg.keonox.com/flashmp3player/ --><param name="type" value="application/x-shockwave-flash" /><param name="codebase" value="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" /><param name="movie" value="'+getObjData(this.url)+'" /><param name="FlashVars" value="file='+getSoundUrl()+'" /></object>';
 	return s;
 };
 
@@ -344,11 +335,22 @@ function CheckUpload()
 }
 
 function getObjData(mpUrl){ // to create data attribute for object
-		var url=mpUrl;
-		var cor_indx = url.indexOf("courses/")+8;
+		var url=mpUrl;		
+		var configBasePath = FCKConfig.BasePath;
+		var cor_indx=configBasePath.indexOf("inc/")+4;
+		var objdata = configBasePath.substring(0, cor_indx)+"lib/mp3player/player_mp3.swf";
 		
-		var objdata = url.substring(0, cor_indx)+'dewplayer.swf?son='+GetE('mpUrl').value;
+		setSoundUrl(GetE('mpUrl').value);
+		
 		return objdata;
+}
+
+function setSoundUrl(url){
+	mp3_url=url;
+}
+
+function getSoundUrl(){
+	return mp3_url;
 }
 
 function getObjUrl(mpUrl2){ // to get source url

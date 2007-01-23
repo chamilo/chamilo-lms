@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: upload.php 10839 2007-01-23 09:35:28Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -314,50 +314,35 @@ echo(build_directory_selector($folders,$path,$group_properties['directory']));
 </div>
 
 <!-- start upload form -->
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" name="upload" enctype="multipart/form-data">
-<!-- <input type="hidden" name="MAX_FILE_SIZE" value="5400"> -->
-<input type="hidden" name="curdirpath" value="<?php echo $path; ?>">
-<table>
-<tr>
-<td valign="top">
-<?php echo get_lang('File'); ?>
-</td>
-<td>
-<input type="file" name="user_upload"/> 
-</td>
-</tr>
+
 <?php
+
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+$form = new FormValidator('upload','POST',$_SERVER['PHP_SELF'],'','enctype="multipart/form-data"');
+
+$form->addElement('hidden','curdirpath',$path);
+
+$form->addElement('file','user_upload',get_lang('File'),'');
+
 if(get_setting('use_document_title')=='true')
 {
-	?>
-    <tr>
-    <td><?php echo get_lang('Title');?></td>
-    <td><input type="text" size="20" name="title" style="width:300px;"></td>
-    </tr>
-	<?php 
+	$form->addElement('text','title',get_lang('Title'),'size="20" style="width:300px;"');
+	$form->addElement('textarea','comment',get_lang('Comment'),'wrap="virtual" style="width:300px;"');
 }
+
+$form->addElement('checkbox','unzip',get_lang('Options'),get_lang('Uncompress'),'onclick="check_unzip()" value="1"');
+
+$form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'value="nothing"');
+$form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'value="overwrite"');
+$form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'value="rename"');
+
+$form->addElement('submit', null, get_lang('Ok'));
+
+$form->display();
+
 ?>
-    <tr>
-    <td valign="top"><?php echo get_lang('Comment');?></td>
-    <td><textarea rows="3" cols="20" name="comment" wrap="virtual" style="width:300px;"></textarea></td>
-    </tr>
-    <tr>
-<td valign="top">
-<?php echo get_lang('Options'); ?>
-</td>
-<td>
-- <input type="checkbox" name="unzip" value="1" onclick="check_unzip()"/> <?php echo(get_lang('Uncompress'));?><br/>
-- <?php echo (get_lang('UplWhatIfFileExists'));?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="nothing" title="<?php echo (get_lang('UplDoNothingLong'));?>" checked="checked"/>  <?php echo (get_lang('UplDoNothing'));?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="overwrite" title="<?php echo (get_lang('UplOverwriteLong'));?>"/> <?php echo (get_lang('UplOverwrite'));?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="rename" title="<?php echo (get_lang('UplRenameLong'));?>"/> <?php echo (get_lang('UplRename'));?>
 
-</td>
-</tr>
-</table>
-
-<input type="submit" value="<?php echo(get_lang('Ok'));?>">
-</form>
 <!-- end upload form -->
 
  <!-- so they can get back to the documents   --> 	 

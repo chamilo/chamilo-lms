@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 10195 2006-11-25 15:26:00Z pcool $
+<?php // $Id: document.inc.php 10839 2007-01-23 09:35:28Z elixir_julian $
 
 /*
 ==============================================================================
@@ -19,7 +19,7 @@
  * @param string $group_dir
  * @return string html form
  */
-function build_directory_selector($folders,$curdirpath,$group_dir='')
+function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRenderer)
 {
 	$folder_titles = array();
 	if(get_setting('use_document_title') == 'true')
@@ -43,13 +43,21 @@ function build_directory_selector($folders,$curdirpath,$group_dir='')
 			$folder_titles[$folder] = basename($folder);	
 		}	
 	}
-	$form = '<form name="selector" action="'.$_SERVER['PHP_SELF'].'" method="post">'."\n";
-	$form .= get_lang('CurrentDirectory').' <select name="curdirpath" onchange="javascript:document.selector.submit()">'."\n";
-
+	
+	require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+	$form = new FormValidator('selector','POST',$_SERVER['PHP_SELF']);
+	
+	$parent_select = $form->addElement('select', 'curdirpath', get_lang('CurrentDirectory'),'','onchange="javascript:document.selector.submit()"');
+	
+	if($changeRenderer==true){
+		$renderer = $form->defaultRenderer();
+		$renderer->setElementTemplate('<span>{label} : {element}</span> ','curdirpath');
+	}
+	
 	//group documents cannot be uploaded in the root
-	if($group_dir=='') 
+	if($group_dir=='')
 	{
-		$form .= '<option value="/">/ ('.get_lang('Root').')</option>';
+		$parent_select -> addOption(get_lang('Root'),'/');
 		if(is_array($folders))
 		{
 			foreach ($folders AS $folder)
@@ -57,7 +65,8 @@ function build_directory_selector($folders,$curdirpath,$group_dir='')
 				$selected = ($curdirpath==$folder)?' selected="selected"':'';
 				$path_parts = explode('/',$folder);
 				$label = str_repeat('&nbsp;&nbsp;&nbsp;',count($path_parts)-2).' &mdash; '.$folder_titles[$folder];
-				$form .= '<option'.$selected.' value="'.$folder.'">'.$label.'</option>'."\n";
+				$parent_select -> addOption($label,$folder);
+				if($selected!='') $parent_select->setSelected($folder);
 			}
 		}
 	}
@@ -76,13 +85,12 @@ function build_directory_selector($folders,$curdirpath,$group_dir='')
 				$path_parts = explode('/',str_replace($group_dir,'',$folder));
 				$label = str_repeat('&nbsp;&nbsp;&nbsp;',count($path_parts)-2).' &mdash; '.$label;			
 			}
-			$form .= '<option'.$selected.' value="'.$folder.'">'.$label.'</option>'."\n";
+			$parent_select -> addOption($label,$folder);
+			if($selected!='') $parent_select->setSelected($folder);
 		}
 	}
-
-	$form .= '</select>'."\n";
-	$form .= '<noscript><input type="submit" name="change_path" value="'.get_lang('Ok').'" /></noscript>'."\n";
-	$form .= '</form>';
+	
+	$form=$form->toHtml();
 
 	return $form;
 }

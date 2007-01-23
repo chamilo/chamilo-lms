@@ -2554,12 +2554,12 @@ class learnpath {
 					$html .= '<a href="" onclick="dokeos_xajax_handler.switch_item(' .
 							$mycurrentitemid.',' .
 							$item['id'].');' .
-							'return false;" ><img align="absbottom" width="13" height="13" src="img/lp_document.png">&nbsp;'.stripslashes($title).'</a>' ;
+							'return false;" ><img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;'.stripslashes($title).'</a>' ;
 					
 					
     		}
     		elseif($item['type']=='dokeos_module' || $item['type']=='dokeos_chapter'){
-    				$html .= "<img align='absbottom' width='13' height='13' src='img/lp_dokeos_module.png'>&nbsp;".stripslashes($title);
+    				$html .= "<img align='absbottom' width='13' height='13' src='../img/lp_dokeos_module.png'>&nbsp;".stripslashes($title);
     		}
     		
     		elseif($item['type']=='dir'){
@@ -4114,7 +4114,7 @@ class learnpath {
 				
 				$return .= "\t" . '<tr>' . "\n";
 					
-					$return .= "\t\t" . '<td class="title" style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:3px;" />' . stripslashes($arrLP[$i]['title']) . '</td>' . "\n";
+					$return .= "\t\t" . '<td class="title" style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:3px;" />' . stripslashes($arrLP[$i]['title']) . '</td>' . "\n";
 					//$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>' . "\n";
 					
 					if(api_is_allowed_to_edit())
@@ -4128,7 +4128,7 @@ class learnpath {
 								$return .= '</a>' . "\n";
 							}
 							else
-								$return .= "\t\t\t" . '<img alt="" src="img/blanco.png" title="" />' . "\n";
+								$return .= "\t\t\t" . '<img alt="" src="../img/blanco.png" title="" />' . "\n";
 							
 							if($arrLP[$i]['next_item_id'] != 0)
 							{
@@ -4137,7 +4137,7 @@ class learnpath {
 								$return .= '</a>' . "\n";
 							}
 							else
-								$return .= "\t\t\t" . '<img alt="" src="img/blanco.png" title="" />' . "\n";
+								$return .= "\t\t\t" . '<img alt="" src="../img/blanco.png" title="" />' . "\n";
 							
 						$return .= "\t\t" . '</td>' . "\n";
 						
@@ -4237,9 +4237,18 @@ class learnpath {
 		for($i = 0; $i < count($arrLP); $i++)
 		{
 			$menu_page = $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $_SESSION['oLP']->lp_id;
-			
-			$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $arrLP[$i]['title'] . "', '" . $menu_page . "', '', '', 'img/lp_" . $arrLP[$i]['item_type'] . ".png', 'img/lp_" . $arrLP[$i]['item_type'] . ".png');\n";
-			
+			if(file_exists("../img/lp_" . $arrLP[$i]['item_type'] . ".png"))
+			{
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $arrLP[$i]['title'] . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".png', '../img/lp_" . $arrLP[$i]['item_type'] . ".png');\n";
+			}
+			else if(file_exists("../img/lp_" . $arrLP[$i]['item_type'] . ".gif"))
+			{
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $arrLP[$i]['title'] . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif');\n";
+			}
+			else
+			{
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $arrLP[$i]['title'] . "', '" . $menu_page . "', '', '', '../img/lp_document.png', '../img/lp_document.png');\n";
+			}
 			if($menu < $arrLP[$i]['id'])
 				$menu = $arrLP[$i]['id'];
 		}
@@ -4540,6 +4549,20 @@ class learnpath {
 					
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_student_publication_form('edit', $item_id, $row);
+					
+					break;
+					
+				case TOOL_FORUM:
+					
+					$return .= $this->display_manipulate($item_id, $row['item_type']);
+					$return .= $this->display_forum_form('edit', $item_id, $row);
+					
+					break;
+					
+				case TOOL_THREAD:
+					
+					$return .= $this->display_manipulate($item_id, $row['item_type']);
+					$return .= $this->display_thread_form('edit', $item_id, $row);
 					
 					break;
 			}
@@ -6539,7 +6562,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ) ? ' colspan="3"' : '') . '>';
 							
 								$return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
-								$return .= '<img alt="" src="img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:5px;" title="" />';
+								$return .= '<img alt="" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:5px;" title="" />';
 								$return .= '<label for="id' . $arrLP[$i]['id'] . '">' . stripslashes($arrLP[$i]['title']) . '</label>';
 							
 							$return .= '</td>';
@@ -6600,7 +6623,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			ORDER BY path ASC";
 		$res_doc = api_sql_query($sql_doc, __FILE__, __LINE__);
 		
-		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_DOCUMENT . '.png" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
+		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_DOCUMENT . '.png" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 		
 			while($row_doc = Database::fetch_array($res_doc))
@@ -6610,7 +6633,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				
 				$return .= '<div class="lp_resource_element">';
 				
-					$return .= '<img align="left" alt="" src="img/lp_' . (($row_doc['filetype'] == 'file') ? TOOL_DOCUMENT : 'folder') . '.png" style="margin-left:' . ($num * 20) . 'px;margin-right:5px;" title="" />';
+					$return .= '<img align="left" alt="" src="../img/lp_' . (($row_doc['filetype'] == 'file') ? TOOL_DOCUMENT : 'folder') . '.png" style="margin-left:' . ($num * 20) . 'px;margin-right:5px;" title="" />';
 					
 					if($row_doc['filetype'] == 'file')
 						$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $row_doc['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_doc['title'] . '</a>';
@@ -6643,14 +6666,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			ORDER BY title ASC";
 		$res_quiz = api_sql_query($sql_quiz, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header_end"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />'.get_lang("Exercise").'</div>';
+		$return .= '<div class="lp_resource_header_end"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />'.get_lang("Exercise").'</div>';
 		$return .= '<div class="lp_resource_elements_end" id="resExercise">';
 		
 			while($row_quiz = Database::fetch_array($res_quiz))
 			{
 				$return .= '<div class="lp_resource_element">';
 				
-					$return .= '<img alt="" src="img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />';
+					$return .= '<img alt="" src="../img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />';
 					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_quiz['title'] . '</a>';
 					//$return .= $row_quiz['title'];
 				
@@ -6680,14 +6703,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			ORDER BY title ASC";
 		$res_link = api_sql_query($sql_link, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_LINK . '.png" style="margin-right:5px;" title="" />Links</div>';
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_LINK . '.png" style="margin-right:5px;" title="" />Links</div>';
 		$return .= '<div class="lp_resource_elements" id="resLink">';
 		
 			while($row_link = Database::fetch_array($res_link))
 			{
 				$return .= '<div class="lp_resource_element">';
 				
-					$return .= '<img align="left" alt="" src="img/lp_' . TOOL_LINK . '.png" style="margin-right:5px;" title="" />';
+					$return .= '<img align="left" alt="" src="../img/lp_' . TOOL_LINK . '.png" style="margin-right:5px;" title="" />';
 					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
 				
 				$return .= '</div>';
@@ -6716,14 +6739,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			ORDER BY title ASC";
 		$res_student = api_sql_query($sql_student, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />Student Publications</div>';
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />Student Publications</div>';
 		$return .= '<div class="lp_resource_elements" id="resStudent" style="border-bottom:1px solid #999999; border-top:0;">';
 		
 			while($row_student = Database::fetch_array($res_student))
 			{
 				$return .= '<div class="lp_resource_element">';
 				
-					$return .= '<img align="left" alt="" src="img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />';
+					$return .= '<img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />';
 					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;file=' . $row_student['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_student['title'] . '</a>';
 					
 				$return .= '</div>';
@@ -6749,7 +6772,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$table_users = Database :: get_main_table(TABLE_MAIN_USER);
 		$a_forums = get_forums();
 		
-		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="img/lp_' . TOOL_FORUM . '.png" style="margin-right:5px;" title="" />'.get_lang('Forums').'</div>';
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />'.get_lang('Forums').'</div>';
 		$return .= '<div class="lp_resource_elements" id="forums" style="border-bottom:1px solid #999999; border-top:0;">';
 		
 		foreach($a_forums as $forum)
@@ -6768,7 +6791,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						}
 						</script>
 						';
-			$return .= '<img align="left" alt="" src="img/lp_' . TOOL_FORUM . '.png" style="margin-right:5px;" title="" />';
+			$return .= '<img align="left" alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a style="cursor:hand" onclick="toggle_forum('.$forum['forum_id'].')" style="vertical-align:middle"><img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" /></a>
 						<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_'.$forum['forum_id'].'_content">';
 			$a_threads = get_threads($forum['forum_id']);

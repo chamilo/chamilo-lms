@@ -157,12 +157,12 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				
 				echo '<p class="lp_action">';
 				
-					echo '<img align="left" alt="'.get_lang("NewChapter").'" src="img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" /><strong style="color:#999999">'.get_lang("NewChapter").'</strong>';
+					echo '<img align="left" alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" /><strong style="color:#999999">'.get_lang("NewChapter").'</strong>';
 						
 				echo '</p>';
 				echo '<p class="lp_action">';
 				
-					echo '<img align="left" alt="'.get_lang("NewStep").'" src="img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" /><strong style="color:#999999">'.get_lang("NewStep").'</strong>';
+					echo '<img align="left" alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" /><strong style="color:#999999">'.get_lang("NewStep").'</strong>';
 				
 				echo '</p>';
 				

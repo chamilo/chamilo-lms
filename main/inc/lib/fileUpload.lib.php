@@ -116,7 +116,7 @@ function php2phps ($fileName)
  * Renames .htaccess & .HTACCESS tot htaccess.txt
  *
  * @param string $filename
- * @return string 
+ * @return string
  */
 function htaccess2txt($filename)
 {
@@ -160,7 +160,7 @@ function unique_name($path,$name)
 	$name_no_ext = substr($name, 0, strlen($name) - strlen(strstr($name,$ext)));
 	$n = 0;
 	$unique = '';
-	while(file_exists($path . $name_no_ext . $unique . $ext)) 
+	while(file_exists($path . $name_no_ext . $unique . $ext))
 	{
 		$unique = '_' . ++$n;
 	}
@@ -201,32 +201,32 @@ $phpversion = intval(str_replace(".", "", phpversion()));
 /* as of version 4.2.0 php gives error codes if something went wrong with the upload */
 if ($phpversion >= 420)
 {
-	//0; There is no error, the file uploaded with success. 
-	//1; The uploaded file exceeds the upload_max_filesize directive in php.ini. 
-	if ($uploaded_file['error'] == 1) 
+	//0; There is no error, the file uploaded with success.
+	//1; The uploaded file exceeds the upload_max_filesize directive in php.ini.
+	if ($uploaded_file['error'] == 1)
 	{
 		Display::display_error_message(get_lang('UplExceedMaxServerUpload'). ini_get('upload_max_filesize')); //server config
 		return false;
 	}
-	//2; The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form. 
+	//2; The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
 	//not used at the moment, but could be handy if we want to limit the size of an upload (e.g. image upload in html editor).
-	elseif ($uploaded_file['error'] == 2) 
+	elseif ($uploaded_file['error'] == 2)
 	{
 		Display::display_error_message(get_lang('UplExceedMaxPostSize'). round($_POST['MAX_FILE_SIZE']/1024) ." KB");
 		return false;
 	}
-	//3; The uploaded file was only partially uploaded. 
-	elseif ($uploaded_file['error'] == 3) 
+	//3; The uploaded file was only partially uploaded.
+	elseif ($uploaded_file['error'] == 3)
 	{
 		Display::display_error_message(get_lang('$UplPartialUpload')." ".get_lang('PleaseTryAgain'));
 		return false;
 	}
-	//4; No file was uploaded. 
-	elseif ($uploaded_file['error'] == 4) 
+	//4; No file was uploaded.
+	elseif ($uploaded_file['error'] == 4)
 	{
 		Display::display_error_message(get_lang('UplNoFileUploaded')." ". get_lang('UplSelectFileFirst'));
 		return false;
-	}	
+	}
 }
 /* older php versions */
 else {
@@ -238,13 +238,13 @@ else {
 	}
 	/* file upload size limitations */
 	$max_upload_file_size = (ini_get('upload_max_filesize')*1024*1024);
-	if (($uploaded_file['size'])>$max_upload_file_size) 
+	if (($uploaded_file['size'])>$max_upload_file_size)
 	{
 		Display::display_error_message(get_lang('UplFileTooBig'));
 		return false;
 	}
 	/* tmp_name gets set to none if something went wrong */
-	if ($uploaded_file['tmp_name'] == "none") 
+	if ($uploaded_file['tmp_name'] == "none")
 	{
 		Display::display_error_message(get_lang('UplUploadFailed'));
 		return false;
@@ -259,7 +259,7 @@ return true;
  * this function does the save-work for the documents.
  * it handles the uploaded file and adds the properties to the database
  * if unzip=1 and the file is a zipfile, it is extracted
- * if we decide to save ALL kinds of documents in one database, 
+ * if we decide to save ALL kinds of documents in one database,
  * we could extend this with a $type='document', 'scormdocument',...
  *
  * @param array $_course
@@ -278,12 +278,12 @@ return true;
 function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload_path,$user_id,$to_group_id=0,$to_user_id=NULL,$maxFilledSpace='',$unzip=0,$what_if_file_exists='',$output=true)
 {
 	if(!$user_id) die("Not a valid user.");
-	
+
 	//strip slashes
 	$uploaded_file['name']=stripslashes($uploaded_file['name']);
 	//add extension to files without one (if possible)
 	$uploaded_file['name']=add_ext_on_mime($uploaded_file['name'],$uploaded_file['type']);
-	
+
 	//check if there is enough space to save the file
 	if (!enough_space($uploaded_file['size'], $maxFilledSpace))
 	{
@@ -312,7 +312,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	//echo "<br/>clean name = ".$clean_name;
 	//echo "<br/>upload_path = ".$upload_path;
 	//if the upload path differs from / (= root) it will need a slash at the end
-	if ($upload_path!='/') 
+	if ($upload_path!='/')
 		$upload_path = $upload_path.'/';
 	//echo "<br/>upload_path = ".$upload_path;
 	$file_path = $upload_path.$clean_name;
@@ -332,7 +332,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 			{
 			//overwrite the file if it exists
 			case 'overwrite':
-				
+
 				//check if the target file exists, so we can give another message
 				if (file_exists($store_path))
 				{
@@ -349,7 +349,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						//UPDATE DATABASE!
 						$document_id = DocumentManager::get_document_id($_course,$file_path);
 						if ($document_id)
-						{	
+						{
 							//update filesize
 							update_existing_document($_course,$document_id,$uploaded_file['size']);
 							//update document item_property
@@ -368,7 +368,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						//put the document data in the database
 						$document_id = add_document($_course,$file_path,'file',$file_size,$document_name);
 						if ($document_id)
-						{	
+						{
 							//put the document in item_property update
 							api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
 						}
@@ -385,7 +385,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 					return false;
 				}
 				break;
-				
+
 			//rename the file if it exists
 			case 'rename':
 				$new_name = unique_name($where_to_save, $clean_name);
@@ -397,7 +397,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 					//put the document data in the database
 					$document_id = add_document($_course,$new_file_path,'file',$file_size,$document_name);
 					if ($document_id)
-					{	
+					{
 						//update document item_property
 						api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
 					}
@@ -415,9 +415,9 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 					return false;
 				}
 				break;
-				
+
 			//only save the file if it doesn't exist or warn user if it does exist
-			default: 
+			default:
 				if (file_exists($store_path))
 				{
 					Display::display_error_message($clean_name.get_lang('UplAlreadyExists'));
@@ -430,7 +430,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						//put the document data in the database
 						$document_id = add_document($_course,$file_path,'file',$file_size,$document_name);
 						if ($document_id)
-						{	
+						{
 							//update document item_property
 							api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
 						}
@@ -574,18 +574,18 @@ function documents_total_space($to_group_id='0')
 {
 	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-	
-	$sql = "SELECT SUM(size) 
+
+	$sql = "SELECT SUM(size)
 	FROM  ".$TABLE_ITEMPROPERTY."  AS props, ".$TABLE_DOCUMENT."  AS docs
-	WHERE docs.id = props.ref 
-	AND props.tool = '".TOOL_DOCUMENT."' 
-	AND props.to_group_id='".$to_group_id."' 
+	WHERE docs.id = props.ref
+	AND props.tool = '".TOOL_DOCUMENT."'
+	AND props.to_group_id='".$to_group_id."'
 	AND props.visibility <> 2";
 
 	$result = api_sql_query($sql,__FILE__,__LINE__);
-		
+
 	if($result && mysql_num_rows($result)!=0)
-	{	
+	{
 		$row = mysql_fetch_row($result);
 
 		return $row[0];
@@ -593,7 +593,7 @@ function documents_total_space($to_group_id='0')
 	else
 	{
 		return 0;
-	} 
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -881,7 +881,7 @@ function unzip_uploaded_file($uploadedFile, $uploadPath, $baseWorkDir, $maxFille
  * @param  string $baseWorkDir  - base working directory of the module
  * @param  int $maxFilledSpace  - amount of bytes to not exceed in the base
  *                                working directory
- * @param		boolean	Output switch. Optional. If no output not wanted on success, set to false. 
+ * @param		boolean	Output switch. Optional. If no output not wanted on success, set to false.
  *
  * @return boolean true if it succeeds false otherwise
  */
@@ -892,13 +892,12 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	global $_user;
 	global $to_user_id;
 	global $to_group_id;
-	
+
 	$zip_file = new pclZip($uploaded_file['tmp_name']);
 
 	// Check the zip content (real size and file extension)
 
 	$zip_content_array = $zip_file->listContent();
-
 
 	foreach((array) $zip_content_array as $this_content)
 	{
@@ -910,7 +909,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 		Display::display_error_message(get_lang('UplNotEnoughSpace'));
 		return false;
 	}
-	
+
 	// it happens on Linux that $uploadPath sometimes doesn't start with '/'
 	if($upload_path[0] != '/')
 	{
@@ -926,6 +925,10 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	chdir($base_work_dir.$upload_path);
 	//we extract using a callback function that "cleans" the path
 	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip');
+	// Add all documents in the unzipped folder to the database
+	add_all_documents_in_folder_to_database($_course,$_user['user_id'],$base_work_dir,$upload_path == '/' ? '' : $upload_path);
+	return true;
+	/*
 	if ($upload_path != '/')
 		$upload_path = $upload_path.'/';
 	if($unzipping_state!=0)
@@ -941,7 +944,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 			//if(is_dir($filename))
 			if($state['folder']==1)
 			{
-				$filetype="folder";	
+				$filetype="folder";
 				$endchar=substr($filename,strlen($filename)-1,1);
 				if($endchar=="\\" || $endchar=="/")
 					$filename=substr($filename,0,strlen($filename)-1);
@@ -953,8 +956,8 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 				//echo $base_work_dir.$upload_path.clean_up_path($state["stored_filename"])." (".$filetype.")<br/>";
 				$cleaned_up_filename = clean_up_path($filename);
 				$file_path = $upload_path.$cleaned_up_filename;
-				//echo("file path = ".$file_path."<br>");
-				
+				echo("file path = ".$file_path."<br>");
+
 				//this is a quick fix for zipfiles that have files in folders but the folder is not stored in the zipfile
 				//if the path has folders, check if they already are in the database
 				if(dirname('/'.$cleaned_up_filename)!='/' AND dirname('/'.$cleaned_up_filename)!='\\')
@@ -962,7 +965,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 					$folder_id=DocumentManager::get_document_id($_course,$upload_path.dirname($cleaned_up_filename));
 					if(!$folder_id)
 					{
-						//echo($upload_path.dirname($cleaned_up_filename).' not found in database!<br>');
+						echo($upload_path.dirname($cleaned_up_filename).' not found in database!<br>');
 						$folder_id = add_document($_course,$upload_path.dirname($cleaned_up_filename),'folder',0,basename(dirname($cleaned_up_filename)));
 						if($folder_id)
 						{
@@ -970,8 +973,8 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 							//echo('folder '.$upload_path.dirname($cleaned_up_filename)." added<br>\n");
 						}
 					}
-				}	
-				
+				}
+
 				$store_path = $base_work_dir.$file_path;
 				//echo("store path = ".$store_path."<br>");
 				$document_name = get_document_title(basename($filename));
@@ -985,14 +988,14 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 				{
 				$document_id = add_document($_course,$file_path,$filetype,$state['size'],$document_name);
 					if ($document_id)
-					{	
+					{
 						$lastedit_type = ($filetype=='folder')?'FolderAdded':'DocumentAdded';
 						//update item property for document
 						api_item_property_update($_course,TOOL_DOCUMENT,$document_id,$lastedit_type,$_user['user_id'],$to_group_id,$to_user_id);
-					}		
+					}
 				}
 				//file/dir exists -> update
-				else 
+				else
 				{
 					$lastedit_type = ($filetype=='folder')?'FolderUpdated':'DocumentUpdated';
 					//update the document in item_property
@@ -1016,6 +1019,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 		Display::display_error_message(get_lang('UplZipCorrupt'));
 		return false;
 	}
+	*/
 }
 
 //------------------------------------------------------------------------------
@@ -1047,7 +1051,7 @@ function clean_up_files_in_zip($p_event, &$p_header)
  */
 function clean_up_path(&$path)
 {
-	//split the path in folders and files    
+	//split the path in folders and files
     $path_array = explode('/',$path);
     //clean up every foler and filename in the path
     foreach($path_array as $key => $val)
@@ -1088,7 +1092,7 @@ function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL)
 	{
 		//display_error("The uploaded file could not be added to the database (".mysql_error().")!");
 		return false;
-	} 	
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -1119,7 +1123,7 @@ function update_existing_document($_course,$document_id,$filesize)
 	else
 	{
 		return false;
-	} 	
+	}
 }
 
 
@@ -1133,36 +1137,36 @@ function update_existing_document($_course,$document_id,$filesize)
 function item_property_update_on_folder($_course,$path,$user_id)
 {
 	//display_message("Start update_lastedit_on_folder");
-	//if we are in the root, just return... no need to update anything	
+	//if we are in the root, just return... no need to update anything
 	if ($path=='/')
 		return;
-		
+
 	//if the given path ends with a / we remove it
 	$endchar=substr($path,strlen($path)-1,1);
 	if($endchar=='/')
 	$path=substr($path,0,strlen($path)-1);
 	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
-		
+
 	//get the time
 	$time = date("Y-m-d H:i:s", time());
-	
+
 	//get all paths in the given path
 	// /folder/subfolder/subsubfolder/file
 	// if file is updated, subsubfolder, subfolder and folder are updated
-	
+
 	$exploded_path = explode('/',$path);
-	
+
 	foreach ($exploded_path as $key => $value) {
 		//we don't want a slash before our first slash
 		if($key!=0){
-			$newpath .= "/".$value;	
+			$newpath .= "/".$value;
 
 			//echo "path= ".$newpath."<br>";
 			//select ID of given folder
 			$folder_id = DocumentManager::get_document_id($_course,$newpath);
-		
+
 			if($folder_id)
-			{	
+			{
 				$sql = "UPDATE $TABLE_ITEMPROPERTY SET `lastedit_date`='$time',`lastedit_type`='DocumentInFolderUpdated', `lastedit_user_id`='$user_id' WHERE tool='".TOOL_DOCUMENT."' AND ref='$folder_id'";
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
@@ -1301,7 +1305,7 @@ function search_img_from_html($htmlFile)
  * @author Bert Vanderkimpen
  * @param array $_course current course information
  * @param int $user_id current user id
- * @param string $desiredDirName complete path of the desired name 
+ * @param string $desiredDirName complete path of the desired name
  * @return string actual directory name if it succeeds,
  *         boolean false otherwise
  */
@@ -1321,7 +1325,7 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 	{
 		$document_id = add_document($_course, $desired_dir_name.$nb,'folder',0,$title);
 		if ($document_id)
-		{	
+		{
 		//update document item_property
 		api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id);
 		return $desired_dir_name.$nb;
@@ -1350,7 +1354,7 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 
 function move_uploaded_file_collection_into_directory($_course, $uploaded_file_collection, $base_work_dir, $missing_files_dir,$user_id,$to_group_id,$to_user_id,$max_filled_space)
 {
-	$number_of_uploaded_images = count($uploaded_file_collection['name']);	
+	$number_of_uploaded_images = count($uploaded_file_collection['name']);
 	for ($i=0; $i < $number_of_uploaded_images; $i++)
 		{
 		$missing_file['name'] = $uploaded_file_collection['name'][$i];
@@ -1764,30 +1768,30 @@ $path = $base_work_dir.$current_path;
 //open dir
 $handle=opendir($path);
 	//run trough
-	while($file=readdir($handle)) 
+	while($file=readdir($handle))
 	{
 	   if ($file=='.' || $file=='..') continue;
-	   
+
 	   $completepath="$path/$file";
 	   //directory?
-	   if (is_dir($completepath)) 
+	   if (is_dir($completepath))
 	   {
 	   	$title=get_document_title($file);
 	   	$safe_file=replace_dangerous_char($file);
 		@rename($path.'/'.$file, $path.'/'.$safe_file);
-		//if we can't find the file, add it	
+		//if we can't find the file, add it
 		if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))
 		{
 			$document_id=add_document($_course,$current_path.'/'.$safe_file,'folder',0,$title);
 			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id);
 			//echo $current_path.'/'.$safe_file." added!<br/>";
-			
+
 		}
 		//recursive
 		add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path.'/'.$safe_file);
-	    } 
+	    }
 	    //file!
-	    else 
+	    else
 		{
 			//rename
 			$safe_file=disable_dangerous_file(replace_dangerous_char($file));

@@ -4439,16 +4439,27 @@ class learnpath {
 				
 				$return .= '<div style="padding:10px;">';
 				
-					if($msg != '')
-						$return .= $msg;
+				if($msg != '')
+					$return .= $msg;
+				
+				$return .= '<p class="lp_title">' . stripslashes($row['title']) . '</p>';
+				//$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
+				
+				//$return .= '<hr />';
+				
+				if($row['item_type'] == TOOL_DOCUMENT)
+				{
+					$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+					$sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = " . $row['path'];
+					$result=api_sql_query($sql_doc);
+					$path_file=mysql_result($result,0,0);					
+					$path_parts = pathinfo($path_file);
 					
-					$return .= '<p class="lp_title">' . stripslashes($row['title']) . '</p>';
-					//$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
-					
-					//$return .= '<hr />';
-					
-					if($row['item_type'] == TOOL_DOCUMENT)
+					if(in_array($path_parts['extension'],array('html','txt')))
+					{
 						$return .= $this->display_document($row['path'], true, true);
+					}
+				}
 					
 				$return .= '</div>';
 			}
@@ -5591,14 +5602,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				
 				$return .= '</div>';
 			}
-			
+			/*
 			if($no_display_add==true){
 				$return .= '<div class="lp_message" style="margin-bottom:15px;">';
 				$return .= get_lang("CantEditDocument");
 				$return .= '</div>';
 				return $return;
 			}
-			
+			*/
 			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			
 			$form = new FormValidator('form','POST',$_SERVER["PHP_SELF"]."?".$_SERVER["QUERY_STRING"]);
@@ -5671,39 +5682,37 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			if($action != 'move'){
 				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 				//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
-				
-				if(($extra_info == 'new' || $extra_info['item_type'] == TOOL_DOCUMENT || $_GET['edit'] == 'true'))
+				if(!$no_display_add)
 				{
-					
-					if(isset($_POST['content']))
-						$content = stripslashes($_POST['content']);
-					elseif(is_array($extra_info)){
-						//If it's an html document or a text file
-						if(!$no_display_edit_textarea){
-							$content = $this->display_document($extra_info['path'], false, false);
+					if(($extra_info == 'new' || $extra_info['item_type'] == TOOL_DOCUMENT || $_GET['edit'] == 'true'))
+					{
+						
+						if(isset($_POST['content']))
+							$content = stripslashes($_POST['content']);
+						elseif(is_array($extra_info)){
+							//If it's an html document or a text file
+							if(!$no_display_edit_textarea){
+								$content = $this->display_document($extra_info['path'], false, false);
+							}
 						}
+						elseif(is_numeric($extra_info))
+							$content = $this->display_document($extra_info, false, false);
+						else
+							$content = '';
+						
+						
+						if(!$no_display_edit_textarea){
+							$form->addElement('html_editor','content_lp',get_lang("Content")." :");
+							$defaults["content_lp"]=$content;
+						}
+						
 					}
+					
 					elseif(is_numeric($extra_info))
-						$content = $this->display_document($extra_info, false, false);
-					else
-						$content = '';
-					
-					
-					if(!$no_display_edit_textarea){
-						$form->addElement('html_editor','content_lp',get_lang("Content")." :");
-						$defaults["content_lp"]=$content;
-					}
-					else{
-						$return = $this->display_document($extra_info['path'], false, true);
+					{
+						$return = $this->display_document($extra_info, true, true, true);
 						$form->addElement('html',$return);
 					}
-					
-				}
-				
-				elseif(is_numeric($extra_info))
-				{
-					$return = $this->display_document($extra_info, true, true, true);
-					$form->addElement('html',$return);
 				}
 				
 			}

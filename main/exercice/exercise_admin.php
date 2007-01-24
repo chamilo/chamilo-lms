@@ -23,7 +23,7 @@
 *	This script allows to manage an exercise. It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
+* 	@version $Id$
 */
 
 
@@ -40,7 +40,6 @@ include('answer.class.php');
 include('../inc/global.inc.php');
 include('exercise.lib.php');
 $this_section=SECTION_COURSES;
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 if(!api_is_allowed_to_edit())
 {
@@ -52,6 +51,7 @@ if(!api_is_allowed_to_edit())
  * INIT EXERCISE
  *********************/
 
+include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $objExercise = new Exercise();
 
 

@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 10791 2007-01-19 09:02:48Z elixir_inter $
+* 	@version $Id: admin.php 10878 2007-01-24 17:05:21Z elixir_inter $
 */
 
 
@@ -417,13 +417,19 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 // -->
 </script>";
 Display::display_header($nameTools,"Exercise");
-?>
 
-<h4>
-  <?php echo $nameTools; ?>
-</h4>
+$description = $objExercise->selectDescription();
+echo '<h3 style="display:inline">'.$objExercise->selectTitle().'</h3>&nbsp;';
+if(!empty($description))
+{
+	echo '
+	<a href="#" onclick="if(document.getElementById(\'description_box\').style.display==\'block\') document.getElementById(\'description_box\').style.display=\'none\'; else document.getElementById(\'description_box\').style.display=\'block\' ;">
+		('.get_lang('SeeDescription').')
+	</a>
+	<div id="description_box" style="display:none">'.$description.'</div>';
+}
+echo '<br /><br />';
 
-<?php
 if($newQuestion || $editQuestion)
 {
 	// statement management

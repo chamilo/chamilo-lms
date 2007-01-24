@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 10862 2007-01-24 09:03:15Z elixir_inter $
+* 	@version $Id: question.class.php 10878 2007-01-24 17:05:21Z elixir_inter $
 */
 
 
@@ -819,7 +819,7 @@ abstract class Question
 			</div>';
 			
 		}
-		echo '</div>';
+		echo '</div><div style="clear:both"></div>';
 
 	}
 }

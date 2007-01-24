@@ -2,21 +2,21 @@
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
@@ -31,14 +31,14 @@
 *	@package dokeos.tracking
 ==============================================================================
 */
- 
+
 /*
 ==============================================================================
 		INIT SECTION
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "tracking";
 include('../inc/global.inc.php');
 
@@ -63,7 +63,8 @@ td {border-bottom: thin dashed gray;}
 	Constants and variables
 -----------------------------------------------------------
 */
-$view = $_REQUEST['view'];
+//Remove all characters different than 0 and 1 from $view parameter
+$view = preg_replace('/[^01]/','',$_REQUEST['view']);
 
 $TABLECOURSUSER			= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLETRACK_ACCESS 		= $_configuration['statistics_database']."`.`track_e_access";
@@ -84,7 +85,7 @@ api_display_tool_title($nameTools);
 ==============================================================================
 		MAIN SECTION
 ==============================================================================
-*/ 
+*/
 if ( $_configuration['tracking_enabled'] )
 {
         // show all : view must be equal to the sum of all view values (1024+512+...+64)
@@ -221,7 +222,7 @@ if ( $_configuration['tracking_enabled'] )
         ";
     }
 
-    
+
     /***************************************************************************
      *
      *		Exercices
@@ -245,8 +246,8 @@ if ( $_configuration['tracking_enabled'] )
                     WHERE `te`.`exe_user_id` = '".$_user['user_id']."'
                         AND `te`.`exe_exo_id` = `ce`.`id`
                     ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
-    
-        echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";  
+
+        echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
         $results = getManyResultsXCol($sql,4);
         echo "<table cellpadding='2' cellspacing='1' border='0' align='center'>";
         echo "<tr>
@@ -268,25 +269,25 @@ if ( $_configuration['tracking_enabled'] )
                     $scoreColor = "red";
                 elseif( $results[$i][1] > ($results[$i][2]/100*60) )
                     $scoreColor = "green";
-                else 
+                else
                     $scoreColor = "#FF8C00";
-                echo "<tr>"; 
+                echo "<tr>";
                 echo "<td class='content'>".$results[$i][0]."</td>";
                 echo "<td class='content'>".$results[$i][3]."</td>";
                 echo "<td valign='top' align='right' class='content'><font color=$scoreColor>".$results[$i][1]." / ".$results[$i][2]."</font></td>";
                 echo"</tr>";
             }
-        
+
         }
         else
         {
-            echo "<tr>"; 
+            echo "<tr>";
             echo "<td colspan='2' align='center'>".get_lang('NoResult')."</td>";
             echo"</tr>";
         }
         echo "</table>";
         echo "</td></tr>";
-        
+
     }
     else
     {

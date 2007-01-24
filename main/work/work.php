@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 10814 2007-01-22 10:20:48Z elixir_julian $
+*  	@version $Id: work.php 10875 2007-01-24 15:37:27Z bmol $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -150,16 +150,17 @@ $http_www = api_get_path('WEB_COURSE_PATH').$_course['path'].'/work';
 
 if(isset($_GET['curdirpath']) && $_GET['curdirpath']!='')
 {
-	$cur_dir_path = preg_replace('#/\.\./#','/',$_GET['curdirpath']); //escape '..' hack attempts
+	$cur_dir_path = preg_replace('#[\.]+/#','',$_GET['curdirpath']); //escape '..' hack attempts
 }
 elseif (isset($_POST['curdirpath']) && $_POST['curdirpath']!='')
 {
-	$cur_dir_path = preg_replace('#/\.\./#','/',$_POST['curdirpath']); //escape '..' hack attempts
+	$cur_dir_path = preg_replace('#[\.]+/#','/',$_POST['curdirpath']); //escape '..' hack attempts
 }
 else
 {
 	$cur_dir_path = '/';
 }
+
 if (!is_subdir_of($cur_dir_path,$base_work_dir) or ($cur_dir_path == '.'))
 {
 	$cur_dir_path='/';

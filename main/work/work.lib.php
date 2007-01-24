@@ -34,6 +34,11 @@
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)
 {
 	$display_output = "";
+	if(strlen($cur_dir_path) > 0 && $cur_dir_path != '/')
+	{
+		$parent_dir = dirname($cur_dir_path);
+		$display_output .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$parent_dir.'">'.Display::return_icon('parent.gif').' '.get_lang('Up').'</a> ';
+	}
 	if (! $always_show_upload_form )
 	{
 		$display_output .= "<a href=\"".$_SERVER['PHP_SELF']."?curdirpath=".$cur_dir_path."&display_upload_form=true\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";

@@ -1,4 +1,4 @@
-<?php //$id$
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 10883 2007-01-24 23:40:15Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software

@@ -1,4 +1,4 @@
-<?php // $Id: online_goto.php 2809 2004-11-22 10:22:11Z olivierb78 $
+<?php // $Id: online_goto.php 10863 2007-01-24 09:40:14Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,6 +42,6 @@ $url=$_GET['url'];
 <head>
 </head>
 <body style="margin:0px; padding:0px;">
-<iframe src="<?php echo $url; ?>" width="100%" height="100%" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+<iframe src="<?php echo htmlspecialchars($url); ?>" width="100%" height="100%" marginwidth="0" marginheight="0" frameborder="0"></iframe>
 </body>
 </html>

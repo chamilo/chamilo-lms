@@ -76,7 +76,7 @@ $nameTools = get_lang('MyAgenda');
 // in the breadcrumbs
 if (!empty ($_GET['coursePath']))
 {
-	$interbreadcrumb[] = array ('url' => api_get_path(WEB_COURSE_PATH).$_GET['coursePath'].'/index.php', 'name' => $_GET['courseCode']);
+	$interbreadcrumb[] = array ('url' => api_get_path(WEB_COURSE_PATH).urlencode($_GET['coursePath']).'/index.php', 'name' => $_GET['courseCode']);
 }
 // this loads the javascript that is needed for the date popup selection
 $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
@@ -321,7 +321,7 @@ function get_agendaitems($courses_dbs, $month, $year)
 {
 	global $_user;
 	global $_configuration;
-	
+
 	$items = array ();
 	// get agenda-items for every course
 	foreach ($courses_dbs as $key => $array_course_info)
@@ -417,8 +417,8 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
 	//Start the week on monday
 	$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-	$backwardsURL = $_SERVER['PHP_SELF']."?coursePath=".htmlentities($_GET['coursePath'])."&amp;courseCode=".htmlentities($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-	$forewardsURL = $_SERVER['PHP_SELF']."?coursePath=".htmlentities($_GET['coursePath'])."&amp;courseCode=".htmlentities($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+	$backwardsURL = $_SERVER['PHP_SELF']."?coursePath=".urlencode($_GET['coursePath'])."&amp;courseCode=".htmlentities($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+	$forewardsURL = $_SERVER['PHP_SELF']."?coursePath=".urlencode($_GET['coursePath'])."&amp;courseCode=".htmlentities($_GET['courseCode'])."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 	echo "<table id=\"agenda_list\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">«</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">»</a></td>\n", "</tr>\n";
 
@@ -480,8 +480,8 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 	$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
 	//Start the week on monday
 	$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-	$backwardsURL = $_SERVER['PHP_SELF']."?coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-	$forewardsURL = $_SERVER['PHP_SELF']."?coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+	$backwardsURL = $_SERVER['PHP_SELF']."?coursePath=".urlencode($_GET['coursePath'])."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+	$forewardsURL = $_SERVER['PHP_SELF']."?coursePath=".urlencode($_GET['coursePath'])."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 	echo "<table id=\"smallcalendar\">\n", "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">«</a></td>\n", "<td width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</td>\n", "<td width=\"10%\"><a href=\"", $forewardsURL, "\">»</a></td>\n", "</tr>\n";
 
@@ -561,8 +561,8 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	$day_of_the_week = date("w", $today); // Numeric representation of the day of the week	0 (for Sunday) through 6 (for Saturday) of today
 	$timestamp_first_date_of_week = $today - (($day_of_the_week -1) * 24 * 60 * 60); // timestamp of the monday of this week
 	$timestamp_last_date_of_week = $today + ((7 - $day_of_the_week) * 24 * 60 * 60); // timestamp of the sunday of this week
-	$backwardsURL = $_SERVER['PHP_SELF']."?coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=week&amp;week=". ($week_number -1);
-	$forewardsURL = $_SERVER['PHP_SELF']."?coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=week&amp;week=". ($week_number +1);
+	$backwardsURL = $_SERVER['PHP_SELF']."?coursePath=".urlencode($_GET['coursePath'])."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=week&amp;week=". ($week_number -1);
+	$forewardsURL = $_SERVER['PHP_SELF']."?coursePath=".urlencode($_GET['coursePath'])."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=week&amp;week=". ($week_number +1);
 	echo "<table id=\"agenda_list\">\n";
 	// The title row containing the the week information (week of the year (startdate of week - enddate of week)
 	echo "<tr class=\"title\">\n";
@@ -653,8 +653,8 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	// we are loading all the calendar items of all the courses for today
 	echo "<table id=\"agenda_list\">\n";
 	// the forward and backwards url
-	$backwardsURL = $_SERVER['PHP_SELF']."?coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=day&amp;day=".date("j", $previousday)."&amp;month=".date("n", $previousday)."&amp;year=".date("Y", $previousday);
-	$forewardsURL = $_SERVER['PHP_SELF']."?coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=day&amp;day=".date("j", $nextday)."&amp;month=".date("n", $nextday)."&amp;year=".date("Y", $nextday);
+	$backwardsURL = $_SERVER['PHP_SELF']."?coursePath=".urlencode($_GET['coursePath'])."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=day&amp;day=".date("j", $previousday)."&amp;month=".date("n", $previousday)."&amp;year=".date("Y", $previousday);
+	$forewardsURL = $_SERVER['PHP_SELF']."?coursePath=".urlencode($_GET['coursePath'])."&amp;courseCode=".$_GET['courseCode']."&amp;action=view&amp;view=day&amp;day=".date("j", $nextday)."&amp;month=".date("n", $nextday)."&amp;year=".date("Y", $nextday);
 	// The title row containing the day
 	echo "<tr class=\"title\">\n", "<td width=\"10%\"><a href=\"", $backwardsURL, "\">«</a></td>\n", "<td>";
 	echo $DaysLong[$day_of_the_week]." ".date("j", $today)." ".$MonthsLong[date("n", $today) - 1]." ".date("Y", $today);
@@ -701,7 +701,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 {
 	global $_user;
 	global $_configuration;
-	
+
 	$items = array ();
 
 	// get agenda-items for every course

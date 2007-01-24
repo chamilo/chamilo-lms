@@ -386,21 +386,25 @@ function api_get_user_info($user_id = '')
 	}
 	else
 	{
-		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id=$user_id";
+		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".mysql_real_escape_string($user_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$result_array = mysql_fetch_array($result);
-		// this is done so that it returns the same array-index-names
-		// ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
-		// $_user should also contain every field of the user table (except password maybe). This would make the
-		// following lines obsolete (and the code cleaner and slimmer !!!
-		$user_info['firstName'] = $result_array['firstname'];
-		$user_info['lastName'] = $result_array['lastname'];
-		$user_info['mail'] = $result_array['email'];
-		$user_info['picture_uri'] = $result_array['picture_uri'];
-		$user_info['user_id'] = $result_array['user_id'];
-		$user_info['official_code'] = $result_array['official_code'];
-		$user_info['status'] = $result_array['status'];
-		return $user_info;
+		if(mysql_num_rows($result) > 0)
+		{
+			$result_array = mysql_fetch_array($result);
+			// this is done so that it returns the same array-index-names
+			// ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
+			// $_user should also contain every field of the user table (except password maybe). This would make the
+			// following lines obsolete (and the code cleaner and slimmer !!!
+			$user_info['firstName'] = $result_array['firstname'];
+			$user_info['lastName'] = $result_array['lastname'];
+			$user_info['mail'] = $result_array['email'];
+			$user_info['picture_uri'] = $result_array['picture_uri'];
+			$user_info['user_id'] = $result_array['user_id'];
+			$user_info['official_code'] = $result_array['official_code'];
+			$user_info['status'] = $result_array['status'];
+			return $user_info;
+		}
+		return false;
 	}
 }
 /**

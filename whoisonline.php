@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 10625 2007-01-09 13:39:43Z bmol $
+<?php // $Id: whoisonline.php 10859 2007-01-24 08:36:15Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -268,7 +268,7 @@ else
 {
 	Display::display_error_message(get_lang('AccessNotAllowed'));
 }
-$referer = empty($_GET['referer'])?'index.php':$_GET['referer'];
+$referer = empty($_GET['referer'])?'index.php':urlencode($_GET['referer']);
 echo '<a href="'.($_GET['id']?'javascript:window.history.back();':$referer).'">&lt; '.get_lang('Back').'</a>';
 
 /*

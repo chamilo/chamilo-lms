@@ -456,8 +456,8 @@ elseif($_POST['step6'])
 	//STEP 6 : INSTALLATION PROCESS
 	if($installType == 'update')
 	{
-		include('update_db.inc.php');
-		include('update_files.inc.php');
+		include('update-db-1.6.x-1.8.0.inc.php');
+		include('update-files-1.6.x-1.8.0.inc.php');
 	}
 	else
 	{

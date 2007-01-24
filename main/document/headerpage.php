@@ -4,21 +4,21 @@
 *	@package dokeos.document
 ==============================================================================
 */
-	// name of the language file that needs to be included 
+	// name of the language file that needs to be included
 $language_file = 'document';
 
 
 	include('../inc/global.inc.php');
 
-	$nameTools = $_GET['file'];
-
 	$noPHP_SELF=true;
 
 	$path_array=explode('/',str_replace('\\','/',$_GET['file']));
 
-	$path_array=array_map('urlencode',$path_array);
+	$path_array = array_map('urlencode',$path_array);
 
 	$_GET['file']=implode('/',$path_array);
+
+	$nameTools = $_GET['file'];
 
 	if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
 	{

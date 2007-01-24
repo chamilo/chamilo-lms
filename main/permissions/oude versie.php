@@ -1,14 +1,18 @@
- (<a href="<?php echo $_SERVER['PHP_SELF']."?cidReq=".$_GET['cidReq']."&uInfo=".$_GET['uInfo']; ?>">Hide</a>)
+<?php
+$cidReq = urlencode($_GET['cidReq']);
+$uInfo = intval($_GET['uInfo']);
+?>
+ (<a href="<?php echo $_SERVER['PHP_SELF']."?cidReq=".$cidReq."&uInfo=".$uInfo; ?>">Hide</a>)
 
 <?php
 
 foreach ($allpermissions as $tool=>$toolpermissions)
 {
-	echo "\t<tr>\n";	
+	echo "\t<tr>\n";
 	echo "\t\t<td>\n";
 	echo $tool;
 	echo "\t\t</td>\n";
-	
+
 	foreach ($possiblepermissions as $key=>$value)
 	{
 		echo "\t\t<td align='center'>\n";
@@ -24,7 +28,7 @@ foreach ($allpermissions as $tool=>$toolpermissions)
 		}
 		echo "\t\t</td>\n";
 	}
-	
+
 	echo "\t</tr>\n";
 }
 echo "</table>\n";

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10537 2006-12-20 10:33:36Z elixir_inter $
+<?php // $Id: index.php 10876 2007-01-24 16:03:00Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,6 +53,18 @@ include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 	Header
 -----------------------------------------------------------
 */
+
+$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('CourseProgram'));
+
+if(isset($_GET['description_id']) && $_GET['description_id']==1) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('GeneralDescription'));
+if(isset($_GET['description_id']) && $_GET['description_id']==2) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Objectives'));
+if(isset($_GET['description_id']) && $_GET['description_id']==3) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Topics'));
+if(isset($_GET['description_id']) && $_GET['description_id']==4) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Methodology'));
+if(isset($_GET['description_id']) && $_GET['description_id']==5) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('CourseMaterial'));
+if(isset($_GET['description_id']) && $_GET['description_id']==6) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('HumanAndTechnicalResources'));
+if(isset($_GET['description_id']) && $_GET['description_id']==7) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Assessment'));
+if(isset($_GET['description_id']) && $_GET['description_id']==8) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('NewBloc'));
+
 Display :: display_header($nameTools, "Description");
 api_display_tool_title($nameTools);
 
@@ -66,12 +78,10 @@ api_protect_course_script();
 */
 $nameTools = get_lang(TOOL_COURSE_DESCRIPTION);
 
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('CourseProgram'));
-
 $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 $show_description_list = true;
 $show_peda_suggest = true;
-define('ADD_BLOCK', 0);
+define('ADD_BLOCK', 8);
 // Default descriptions
 $default_description_titles = array();
 $default_description_titles[1]= get_lang('GeneralDescription');
@@ -81,6 +91,15 @@ $default_description_titles[4]= get_lang('Methodology');
 $default_description_titles[5]= get_lang('CourseMaterial');
 $default_description_titles[6]= get_lang('HumanAndTechnicalResources');
 $default_description_titles[7]= get_lang('Assessment');
+$default_description_icon = array();
+$default_description_icon[1]= api_get_path(WEB_IMG_PATH).'/edu_miscellaneous.gif';
+$default_description_icon[2]= api_get_path(WEB_IMG_PATH).'/spire.gif';
+$default_description_icon[3]= api_get_path(WEB_IMG_PATH).'/kcmdf_big.gif';
+$default_description_icon[4]= api_get_path(WEB_IMG_PATH).'/misc.gif';
+$default_description_icon[5]= api_get_path(WEB_IMG_PATH).'/laptop.gif';
+$default_description_icon[6]= api_get_path(WEB_IMG_PATH).'/personal.gif';
+$default_description_icon[7]= api_get_path(WEB_IMG_PATH).'/korganizer.gif';
+$default_description_icon[8]= api_get_path(WEB_IMG_PATH).'/ktip.gif';
 $question = array();
 $question[1]= get_lang('GeneralDescriptionQuestions');
 $question[2]= get_lang('ObjectivesQuestions');
@@ -120,7 +139,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 	{
 		$sql = "DELETE FROM $tbl_course_description WHERE id='$description_id'";
 		api_sql_query($sql, __FILE__, __LINE__);
-		Display :: display_normal_message(get_lang('CourseDescriptionDeleted'));
+		Display :: display_confirmation_message(get_lang('CourseDescriptionDeleted'));
 	}
 	// Add or edit a description block
 	else
@@ -134,7 +153,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		}
 		
 		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '400';
+		$fck_attribute['Height'] = '350';
 		$fck_attribute['ToolbarSet'] = 'Middle';
 		
 		echo '
@@ -164,6 +183,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		$default['title'] = $default_description_titles[$description_id];
 		$default['contentDescription'] = $description_content;
 		$default['description_id'] = $description_id;
+		if($description_id == ADD_BLOCK) $default['description_id'] = ADD_BLOCK;
 		$form->setDefaults($default);
 		// If form validates: save the description block
 		if ($form->validate())
@@ -175,9 +195,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 			{
 				$sql = "SELECT MAX(id) FROM $tbl_course_description";
 				$result = api_sql_query($sql, __FILE__, __LINE__);
-				list ($new_id) = mysql_fetch_row($result);
-				$new_id = max(sizeof($default_description_titles), $new_id);
-				$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$new_id."', title = '".mysql_real_escape_string($title)."', content = '".mysql_real_escape_string($content)."'";
+				$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".mysql_real_escape_string($title)."', content = '".mysql_real_escape_string($content)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 			else
@@ -191,7 +209,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 				$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".mysql_real_escape_string($title)."', content = '".mysql_real_escape_string($content)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
-			Display :: display_normal_message(get_lang('CourseDescriptionUpdated'));
+			Display :: display_confirmation_message(get_lang('CourseDescriptionUpdated'));
 		}
 		// Show the form
 		else
@@ -216,6 +234,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		}
 	}
 }
+
 // Show the list of all description blocks
 if ($show_description_list)
 {
@@ -228,24 +247,32 @@ if ($show_description_list)
 	}
 	if (api_is_allowed_to_edit())
 	{
+		echo '<div style="position: relative;width: 500px;">';
+		Display::display_normal_message(get_lang('CourseDescriptionIntro'));
+		echo "</div>";
 		$categories = array ();
+		
 		foreach ($default_description_titles as $id => $title)
 		{
-			if (!array_key_exists($id, $descriptions))
-			{
-				$categories[$id] = $title;
-			}
+			$categories[$id] = $title;
 		}
 		$categories[ADD_BLOCK] = get_lang('NewBloc');
-
-		$cat_form = new FormValidator('category', 'get');
-		$group = array ();
-		$group[] = $cat_form->createElement('select', 'description_id', get_lang('AddCat'), $categories);
-		$group[] = $cat_form->createElement('submit', null, get_lang('Ok'));
-		$cat_form->addGroup($group, 'cat', get_lang('AddCat'), null, false);
 		
-		$cat_form->display();
+		$i=1;
+		foreach ($categories as $id => $title){
+			if($i==1 || $i==5){
+				echo '<div style="padding-bottom: 5px;margin-bottom: 0px;">';
+			}
+			echo '<div style="float: left;width:150px; text-align:center; margin-right: 5px;">
+	            	<a href="'.$_SERVER["PHP_SELF"].'?description_id='.$id.'"><img src="'.$default_description_icon[$id].'" /><br>'.$title.'</a>
+	        	</div>';
+        	if($i==4 || $i==8){
+				echo '<div style="clear: both"></div></div>';
+			}
+			$i++;
+		}
 		
+		echo '<br>';
 	}
 	if (count($descriptions) > 0)
 	{
@@ -255,9 +282,6 @@ if ($show_description_list)
 			echo '<div>';
 			if (api_is_allowed_to_edit())
 			{
-				echo '<a href="'.$_SERVER['PHP_SELF'].'?description_id='.$description->id.'">';
-				echo '<img src="../img/edit.gif" alt="'.get_lang('Modify').'" border="0"  style="vertical-align:middle;float:right;margin:2px;" />';
-				echo '</a> ';
 				echo '<a href="'.$_SERVER['PHP_SELF'].'?action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;">';
 				echo '<img src="../img/delete.gif" alt="'.get_lang("Delete").'" border="0" style="vertical-align:middle;float:right;margin:2px;" />';
 				echo '</a> ';

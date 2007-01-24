@@ -152,4 +152,5 @@ $langNoItemsInLp = "There are no items in the learning path for this moment. Cli
 $FirstPosition = "First position";
 $NewQuiz = "New quiz";
 $CreateTheForum = "Add the forum";
+$Forums = "Forums";
 ?>

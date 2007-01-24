@@ -123,4 +123,5 @@ $Validate = "Validieren";
 $AdvancedSettings = "Weitere Einstellungen";
 $AdvancedSettings = "Weitere Einstellungen";
 $File = "Datei";
+$DocDeleteError = "Fehler beim Löschen des Dokuments";
 ?>

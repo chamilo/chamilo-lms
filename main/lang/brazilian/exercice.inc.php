@@ -200,4 +200,17 @@ $PleaseGiveAMark = "Atribuia uma nota, por favor";
 $EditCommentsAndMarks = "Editar comentários e notas";
 $AddComments = "Adicionar comentários";
 $Number = "Nº";
+$Weighting = "Pontuação";
+$ChooseQuestionType = "Para criar um novo teste, escolha o tipo de perguntas acima";
+$MatchesTo = "Corresponde a";
+$CorrectTest = "Corrigir este teste";
+$ViewTest = "Ver";
+$State = "Estado";
+$NotAttempted = "Não tentado";
+$AddElem = "+ elemento";
+$DelElem = "- elemento";
+$PlusAnswer = "+ resposta";
+$LessAnswer = "- resposta";
+$YourScore = "Sua pontuação";
+$Attempted = "Tentado";
 ?>

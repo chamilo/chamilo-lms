@@ -166,6 +166,9 @@ $Unreg = "Odjavi";
 $MyProgress = "Moj napredek";
 $ProgressIntroduction = "Prièni z izbiro teèaja seje spodaj.<br />Na predek je viden za vsak teèaj v katerega je teèajnik vpisan.";
 $Select = "Izberi";
+$NeverExpires = "Nikoli ne poteèe";
+$On = "Dne";
 $HourMinuteDivider = ":";
 $ExpirationDate = "Datum poteka";
+$ActiveAccount = "Aktiven raèun";
 ?>

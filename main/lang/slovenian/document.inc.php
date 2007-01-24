@@ -121,4 +121,5 @@ $Content = "Vsebina";
 $AdvancedSettings = "Napredne nastavitve";
 $AdvancedSettings = "Napredne nastavitve";
 $File = "Datoteka";
+$DocDeleteError = "Napaka med brisanjem dokumenta";
 ?>

@@ -14,4 +14,7 @@ $langValid  = "gültig";
 $langBackAndForget  = "Zurück und vergessen";
 $langOkSent = "Ihre Seite wurde gesendet.<p>Sie ist nun mit der <a href=../..//index.php>Seminarhomepage</a> verknüpft";
 $Content = "Inhalt";
+$CourseDescriptionUpdated = "Die Kursbeschreibung wurde aktualisiert";
+$CourseDescriptionDeleted = "Die Kursbeschreibung wurde gelöscht";
+$CourseDescriptionIntro = "Um eine Kursbeschreibung zu erstellen, klicken Sie auf ein Thema oder füllen Sie das richtige Formular Feld aus.<br/><br/>Klicken Sie dann OK und füllen ein weiteres Thema aus.";
 ?>

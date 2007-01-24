@@ -122,4 +122,5 @@ $Validate = "Validar";
 $AdvancedSettings = "Configurações avançadas";
 $AdvancedSettings = "Configurações avançadas";
 $File = "Ficheiro";
+$DocDeleteError = "Ocorreu um erro durante a supressão do documento";
 ?>

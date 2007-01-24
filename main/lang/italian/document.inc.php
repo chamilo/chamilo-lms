@@ -122,4 +122,5 @@ $Validate = "Valida";
 $AdvancedSettings = "Configurazione avanzata";
 $AdvancedSettings = "Configurazione avanzata";
 $File = "File";
+$DocDeleteError = "Errore nel corso dell\'eliminazione del documento";
 ?>

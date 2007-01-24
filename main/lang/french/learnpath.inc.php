@@ -152,4 +152,5 @@ $langNoItemsInLp = "Il n\'y a pas d\'étapes dans ce parcours pour le moment.  Cl
 $FirstPosition = "Première position";
 $NewQuiz = "Nouveau test";
 $CreateTheForum = "Ajouter le forum";
+$Forums = "Forums";
 ?>

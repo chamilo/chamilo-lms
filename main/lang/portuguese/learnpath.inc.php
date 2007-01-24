@@ -152,4 +152,5 @@ $langNoItemsInLp = "De momento não existem itens na Sequência de Aprendizagem. C
 $FirstPosition = "Primeira posição";
 $NewQuiz = "Novo Quiz";
 $CreateTheForum = "Acrescentar o fórum";
+$Forums = "Fóruns";
 ?>

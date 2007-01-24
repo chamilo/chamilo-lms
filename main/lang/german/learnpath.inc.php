@@ -152,4 +152,5 @@ $langNoItemsInLp = "Im Augenblick gibt es keine Schritte im Lernpfad. Auf \"Fort
 $FirstPosition = "Erste Stelle";
 $NewQuiz = "Neues Quiz";
 $CreateTheForum = "Forum hinzufügen";
+$Forums = "Forums";
 ?>

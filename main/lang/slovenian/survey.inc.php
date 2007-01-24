@@ -102,9 +102,12 @@ $AvailableUntill = "Na voljo do";
 $SurveySubTitle = "Podnaslov vprašalnika";
 $ShareSurvey = "Skupna raba vprašalnika";
 $HourMinuteDivider = ":";
+$SurveyThanks = "Zahvala za sodelovanje";
 $EditSurvey = "Uredi vprašalnik";
 $NoSurveysSelected = "Noben vprašalnik ni izbran";
+$SurveyUpdatedSuccesfully = "eval. vprašalnik je bil uspešno ažuriran";
 $YouCanNowAddQuestionToYourSurvey = "Sedaj lahko dodate vprašanja k vprašalniku";
 $Here = "tule";
 $OrReturnToSurveyOverview = "Ali se vrni na splošen pregled";
+$ImportQuestionsFromExistingGroup = "Uvozi vprašanja iz obstojeèih skupin";
 ?>

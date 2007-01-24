@@ -152,4 +152,5 @@ $langNoItemsInLp = "Non ci sono elementi nel percorso, per ora. Clicca su \"Avan
 $FirstPosition = "Prima posizione";
 $NewQuiz = "Nuova domanda";
 $CreateTheForum = "Crea il Forum";
+$Forums = "Forum";
 ?>

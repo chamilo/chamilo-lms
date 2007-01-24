@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 10800 2007-01-19 13:24:39Z elixir_julian $
+* 	@version $Id: question.class.php 10862 2007-01-24 09:03:15Z elixir_inter $
 */
 
 
@@ -794,30 +794,32 @@ abstract class Question
 	 */
 	static function display_type_menu ()
 	{
-		?>
-		<script type="text/javascript">
-			function explain(explanation){
-				document.getElementById('answer_type_explanation').innerHTML = explanation;
-			}
-			function hideExplanation(){
-				document.getElementById('answer_type_explanation').innerHTML = '<?php echo get_lang('ChooseQuestionType') ?>';
-			}
-		</script>
-		<?php
-		echo '<div onmouseout="hideExplanation()">';
+		
+		echo '<div>';
 		foreach(self::$questionTypes as $i=>$a_type)
 		{
-			include_once($a_type[0]);
+			
+			// include the class of the type
+			include_once($a_type[0]); 
+			
+			 // get the picture of the type and the langvar which describes it
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 
 			echo '
-			<div id="answer_type_'.$i.'" style="display: inline">
-				<a href="admin.php?newQuestion=yes&answerType='.$i.'" onmouseover="explain(\''.$explanation.'\')"><img src="'.api_get_path(WEB_IMG_PATH).'/'.$img.'" /></a>
+			<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">
+				<a href="admin.php?newQuestion=yes&answerType='.$i.'">
+					<div>
+						<img src="'.api_get_path(WEB_IMG_PATH).'/'.$img.'" />
+					</div>
+					<div>
+						'.$explanation.'
+					</div>
+				</a>
 			</div>';
+			
 		}
-		echo '
-		<div id="answer_type_explanation" class="accordion_content" style="display:block">'.get_lang('ChooseQuestionType').'</div></div>';
+		echo '</div>';
 
 	}
 }

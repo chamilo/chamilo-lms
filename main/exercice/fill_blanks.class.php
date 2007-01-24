@@ -40,7 +40,7 @@ if(!class_exists('FillBlanks')):
 
 class FillBlanks extends Question {
 
-	static $typePicture = 'fill_in_blanks.png';
+	static $typePicture = 'fill_in_blanks.gif';
 	static $explanationLangVar = 'FillBlanks';
 
 	/**

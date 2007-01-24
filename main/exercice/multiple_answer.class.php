@@ -39,7 +39,7 @@ if(!class_exists('MultipleAnswer')):
 
 class MultipleAnswer extends Question {
 
-	static $typePicture = 'mcma.png';
+	static $typePicture = 'mcma.gif';
 	static $explanationLangVar = 'MultipleSelect';
 
 	/**

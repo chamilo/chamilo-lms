@@ -41,7 +41,7 @@ if(!class_exists('Matching')):
 class Matching extends Question {
 
 
-	static $typePicture = 'matching.png';
+	static $typePicture = 'matching.gif';
 	static $explanationLangVar = 'Matching';
 
 	/**

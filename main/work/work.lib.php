@@ -303,8 +303,6 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				{
 					$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&make_visible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/invisible.gif" alt="'.get_lang('Visible').'"></a>';
 				}
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
 
 				$row[] = $action;
 			}elseif($is_author){

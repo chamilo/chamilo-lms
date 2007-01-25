@@ -602,15 +602,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_announcement`;
 CREATE TABLE `sys_announcement` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `date_start` datetime NOT NULL default '0000-00-00 00:00:00',
-  `date_end` datetime NOT NULL default '0000-00-00 00:00:00',
-  `visible_teacher` enum('0','1') NOT NULL default '0',
-  `visible_student` enum('0','1') NOT NULL default '0',
-  `visible_guest` enum('0','1') NOT NULL default '0',
-  `title` varchar(250) NOT NULL default '',
-  `content` text NOT NULL,
-  `lang` varchar(70) NULL default NULL,
+  id int(10) unsigned NOT NULL auto_increment,
+  date_start datetime NOT NULL default '0000-00-00 00:00:00',
+  date_end datetime NOT NULL default '0000-00-00 00:00:00',
+  visible_teacher tinyint NOT NULL default 0,
+  visible_student tinyint NOT NULL default 0,
+  visible_guest tinyint NOT NULL default 0,
+  title varchar(250) NOT NULL default '',
+  content text NOT NULL,
+  lang varchar(70) NULL default NULL,
   PRIMARY KEY  (`id`)
 );
 

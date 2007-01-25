@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 10777 2007-01-17 23:08:54Z yannoo $
+// $Id: infocours.php 10902 2007-01-25 14:44:35Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -132,7 +132,8 @@ while ($cat = mysql_fetch_array($res))
 
 // Build the form
 $form = new FormValidator('update_course');
-$form->add_textfield('visual_code', get_lang('Code'));
+$visual_code=$form->addElement('text','visual_code', get_lang('Code'));
+	$visual_code->freeze();
 $form->applyFilter('visual_code', 'strtoupper');
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
 $prof = &$form->addElement('select', 'tutor_name', get_lang('Professors'), $a_profs);

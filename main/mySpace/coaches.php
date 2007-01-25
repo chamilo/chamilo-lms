@@ -7,7 +7,7 @@
 ob_start(); 
 
 // name of the language file that needs to be included 
-$language_file = array ('registration', 'index','trad4all', 'tracking', 'admin');
+$language_file = array ('registration', 'index', 'tracking', 'admin');
 $cidReset=true;
 require ('../inc/global.inc.php');
 

@@ -136,7 +136,7 @@ $therow=Database::fetch_array($result);
 
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
 
-$interbreadcrumb[]= array ("url"=>$_SERVER['PHP_SELF']."?action=admin_view&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
+$interbreadcrumb[]= array ("url"=>$_SERVER['PHP_SELF']."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
 
 Display::display_header(null,'Path');
 //api_display_tool_title($therow['name']);

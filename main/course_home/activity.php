@@ -155,7 +155,7 @@ function show_tools_category($course_tool_category)
 			$properties['name'] = $links_row['title'];
 			$properties['link'] = $links_row['url'];
 			$properties['visibility'] = $links_row['visibility'];
-			$properties['image'] = ($links_row['visibility']== '0') ? "external_na.gif" : "external.gif";
+			$properties['image'] = ($links_row['visibility']== '0') ? "links.gif" : "links.gif";
 			$properties['adminlink'] = api_get_path(WEB_CODE_PATH) . "link/link.php?action=editlink&id=".$links_row['id'];
 
 			$tmp_all_tools_list[] = $properties;
@@ -293,7 +293,7 @@ function show_tools_category($course_tool_category)
 					echo "\t" . ' &nbsp <a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">&nbsp;&nbsp;';
 				}
 					echo '<img src="' . $web_code_path . 'img/' . $toolsRow['image'] . '" align="absmiddle" border="0" alt="' . $toolsRow['image'] . '" /> &nbsp;&nbsp;';
-					echo ($toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif' || $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif') ? '  '.stripslashes($toolsRow['name']) : '  '.get_lang($toolsRow['name']);
+					echo ($toolsRow['image'] == 'links.gif' || $toolsRow['image'] == 'links_na.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif' || $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif') ? '  '.stripslashes($toolsRow['name']) : '  '.get_lang($toolsRow['name']);
 				echo "\t" . '</a>';
 				echo '</td>';
 			if($i%2)

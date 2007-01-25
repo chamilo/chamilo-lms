@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 10901 2007-01-25 14:00:04Z elixir_inter $
+*  	@version $Id: work.php 10902 2007-01-25 14:44:35Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -248,7 +248,15 @@ if (!api_is_course_admin()){
 */
 if ($origin != 'learnpath')
 {
-	Display::display_header($tool_name,"Work");
+	if($display_upload_form){
+		$tool_name = get_lang("UploadADocument");
+		$interbreadcrumb[] = array ("url" => "work.php", "name" => get_lang('StudentPublications'));
+	}
+	if($display_tool_options){
+		$tool_name = get_lang("EditToolOptions");
+		$interbreadcrumb[] = array ("url" => "work.php", "name" => get_lang('StudentPublications'));
+	}
+	Display::display_header($tool_name);
 }
 else
 {

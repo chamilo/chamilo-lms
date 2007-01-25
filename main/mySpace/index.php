@@ -3,7 +3,7 @@
  * @todo use constant for $this_section
  */
 // name of the language file that needs to be included 
-$language_file = array ('registration', 'index','trad4all','tracking');
+$language_file = array ('registration', 'index','tracking');
 $cidReset=true;
 
 require ('../inc/global.inc.php');

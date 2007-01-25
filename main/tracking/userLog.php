@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 10577 2006-12-29 16:15:54Z fvauthier $
+<?php // $Id: userLog.php 10902 2007-01-25 14:44:35Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -89,7 +89,7 @@ $interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=$_gid", "name
 
 if($uInfo)
 {
-	$interbreadcrumb[]= array ("url"=>"../user/userInfo.php?uInfo=$uInfo", "name"=> get_lang('BredCrumpUsers'));
+	$interbreadcrumb[]= array ("url"=>"../user/userInfo.php?uInfo=$uInfo", "name"=> ucfirst(get_lang('Users')));
 }
 
 $nameTools = get_lang('ToolName');

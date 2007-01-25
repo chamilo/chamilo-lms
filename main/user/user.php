@@ -747,7 +747,7 @@ function modify_filter($user_id)
 	$result="<div style='text-align: center'>";
 
 	// info
-	$result .= '<a href="userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/info_small.gif" /></a>&nbsp;';
+	$result .= '<a href="userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/user_info.gif" /></a>&nbsp;';
 
 	if($is_allowed_to_track)
 	{

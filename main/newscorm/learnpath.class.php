@@ -5988,12 +5988,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$row = Database::fetch_array($result);
 			
 			$item_title = $row['title'];
-			$item_description = $row['description'];
 		}
 		else
 		{
 			$item_title			= '';
-			$item_description	= '';
 		}
 				
 		$return = '<div style="margin:3px 10px;">';
@@ -6119,13 +6117,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title:</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
-						
-						$return .= "\t\t" . '</tr>' . "\n";
-						
-						$return .= "\t\t" . '<tr>' . "\n";
-							
-							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description:</label></td>' . "\n";
-							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 					}
@@ -6729,22 +6720,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			ORDER BY title ASC";
 		$res_student = api_sql_query($sql_student, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />Student Publications</div>';
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />'.get_lang('Assignments').'</div>';
 		$return .= '<div class="lp_resource_elements" id="resStudent" style="border-bottom:1px solid #999999; border-top:0;">';
-		
-			while($row_student = Database::fetch_array($res_student))
-			{
-				$return .= '<div class="lp_resource_element">';
-				
-					$return .= '<img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />';
-					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;file=' . $row_student['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_student['title'] . '</a>';
-					
-				$return .= '</div>';
-			}
-			
-			if(Database::num_rows($res_student) == 0)
-				$return .= '<div class="lp_resource_element">No student publications available</div>';
-		
+		$return .= '<div class="lp_resource_element">';
+		$return .= '<img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />';
+		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
+		$return .= '</div>';
 		$return .= '</div>';
 		
 		return $return;

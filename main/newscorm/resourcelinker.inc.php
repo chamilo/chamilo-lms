@@ -1942,9 +1942,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			$link .= $main_dir_path.'user/user.php?origin='.$origin;
 			break;
 		case 'student_publication' : 
-			include_once '../work/work.lib.php';
-			$path =  get_work_path(1);
-			$link .= $main_course_path.$path;
+			$link .= $main_dir_path.'work/work.php?origin=learnpath';
 			break;
 	}//end switch
     return $link;

@@ -153,4 +153,5 @@ $FirstPosition = "Primeira posição";
 $NewQuiz = "Novo Quiz";
 $CreateTheForum = "Acrescentar o fórum";
 $Forums = "Fóruns";
+$AddLpIntro = "<strong>Bem-Vindo(a)</strong> à ferramenta de autoria da Sequência de Aprendizagem Dokeos";
 ?>

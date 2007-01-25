@@ -96,17 +96,14 @@ $ThisCodeAlradyExists = "Ce code existe déjà";
 $SaveAndExit = "Sauvegarder et quitter";
 $CreateExistingSurvey = "Créer à partir d\'une enquête existante";
 $SurveyName = "Nom de l\'enquête";
-$Language = "Langue";
 $AvailableUntill = "Valable jusqu\'au";
 $SurveySubTitle = "Sous-titre de l\'enquête";
 $ShareSurvey = "Partager l\'enquête";
-$HourMinuteDivider = "h";
 $SurveyThanks = "Remerciements";
 $EditSurvey = "Editer l\'enquête";
 $NoSurveysSelected = "Aucune enquête n\'a été sélectionnée";
 $SurveyUpdatedSuccesfully = "L\'enquête a bien été mise à jour";
 $YouCanNowAddQuestionToYourSurvey = "Vous pouvez maintenant ajouter des questions à votre enquête";
-$Here = "ici";
 $OrReturnToSurveyOverview = "Ou retourner à la liste des enquêtes";
 $ImportQuestionsFromExistingGroup = "Importer des questions à partir de groupes existants";
 ?>

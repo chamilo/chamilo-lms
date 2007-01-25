@@ -97,17 +97,14 @@ $ThisCodeAlradyExists = "This code already exist";
 $SaveAndExit = "Save and exit";
 $CreateExistingSurvey = "Create from an existing survey";
 $SurveyName = "Survey name";
-$Language = "Language";
 $AvailableUntill = "Available untill";
 $SurveySubTitle = "Survey subtitle";
 $ShareSurvey = "Share survey";
-$HourMinuteDivider = "h";
 $SurveyThanks = "Survey thanks";
 $EditSurvey = "Edit survey";
 $NoSurveysSelected = "No surveys selected";
 $SurveyUpdatedSuccesfully = "the survey has been succesfully updated";
 $YouCanNowAddQuestionToYourSurvey = "You can now add questions to your survey";
-$Here = "here";
 $OrReturnToSurveyOverview = "Or return to survey overview";
 $ImportQuestionsFromExistingGroup = "Import questions from existing groups";
 ?>

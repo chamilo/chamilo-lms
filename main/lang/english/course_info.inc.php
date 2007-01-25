@@ -12,7 +12,7 @@ $langConfidentiality = "Confidentiality";
 $langPublic = "Public access from portal home page even without login";
 $langUnsubscription = "Unsubscribe";
 $langPrivOpen = "Private access, registration open";
-$langPrivate = "Private access - site accessible only to course members (see the <a href=../user/user.php>User list</a>)";
+$langPrivate = "Private access - site accessible only to course members (see the <a href=../user/user.php>Users list</a>)";
 $langForbidden = "Not allowed";
 $langLanguage = "Language";
 $langConfTip = "By default your course is public. But you can define the level of confidentiality above.";

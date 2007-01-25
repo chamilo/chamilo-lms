@@ -371,4 +371,7 @@ $Years = "anos";
 $Day = "dia";
 $Days = "dias";
 $PleaseStandBy = "Esperar, por favor ...";
+$Language = "Linguagem";
+$HourMinuteDivider = "h";
+$Here = "aqui";
 ?>

@@ -50,7 +50,7 @@ $langUserAddExplanation = "Chaque ligne du fichier à envoyer
 $langUserMany = "Importer une liste de membres via un fichier CSV / XML";
 $langOneByOne = "Ajouter manuellement un utilisateur";
 $langNow = "actuellement";
-$langTutor = "Modérateur";
+$langTutor = "Coach";
 $langTitular = "Responsable";
 $langAddHereSomeCourses = "<font size=2 face=\'arial, helvetica\'><big>Mes cours</big><br><br>
 			Cochez les cours auxquels vous souhaitez participer et décochez ceux auxquels vous

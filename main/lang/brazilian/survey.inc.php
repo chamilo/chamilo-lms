@@ -97,17 +97,14 @@ $ThisCodeAlradyExists = "Este código já existe";
 $SaveAndExit = "Gravar e sair";
 $CreateExistingSurvey = "Criar a partir de um questionário existente";
 $SurveyName = "Nome do Questionário";
-$Language = "Idioma";
 $AvailableUntill = "Disponível até";
 $SurveySubTitle = "Subtítulo do questionário";
 $ShareSurvey = "Compartilhar questionário";
-$HourMinuteDivider = "h";
 $SurveyThanks = "Agradecimentos";
 $EditSurvey = "Editar questionário";
 $NoSurveysSelected = "Nenhum questionário selecionado";
 $SurveyUpdatedSuccesfully = "o questionário foi atualizado com sucesso";
 $YouCanNowAddQuestionToYourSurvey = "Agora pode acrescentar questões ao seu questionário";
-$Here = "aqui";
 $OrReturnToSurveyOverview = "Ou voltar à lista de questionários";
 $ImportQuestionsFromExistingGroup = "Importar questões de grupos existentes";
 ?>

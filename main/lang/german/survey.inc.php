@@ -97,17 +97,14 @@ $ThisCodeAlradyExists = "Dieser Code existiert bereits";
 $SaveAndExit = "Speichern und beenden";
 $CreateExistingSurvey = "Umfrage von einer bestehenden Umfrage erstellen";
 $SurveyName = "Umfrage Titel";
-$Language = "Sprache";
 $AvailableUntill = "Verfügbar bis ";
 $SurveySubTitle = "Umfrage Untertitel";
 $ShareSurvey = "Umfrage veröffentlichen";
-$HourMinuteDivider = "h";
 $SurveyThanks = "Dank für Umfrage";
 $EditSurvey = "Umfrage bearbeiten";
 $NoSurveysSelected = "Es wurden keine Umfragen ausgewählt";
 $SurveyUpdatedSuccesfully = "Die Umfrage wurde erfolgreich aktualisiert";
 $YouCanNowAddQuestionToYourSurvey = "Sie können nun Fragen zu Ihrer Umfrage hinzufügen";
-$Here = "hier";
 $OrReturnToSurveyOverview = "oder zum Überblick der Umfragen zurück gehen";
 $ImportQuestionsFromExistingGroup = "Fragen aus bestehenden Gruppen importieren";
 ?>

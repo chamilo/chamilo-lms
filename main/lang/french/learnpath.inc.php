@@ -153,4 +153,7 @@ $FirstPosition = "Première position";
 $NewQuiz = "Nouveau test";
 $CreateTheForum = "Ajouter le forum";
 $Forums = "Forums";
+$AddLpIntro = "<strong>Binevenue</strong> dans ";
+$AddLpIntro = "<strong>Bienvenue</strong> dans l\'outil de création de parcours de Dokeos.<br />Vous pourrez créer votre parcouts étape par étape. La structure de votre parcours apparaîtra dans le menu sur la gauche";
+$AddLpToStart = "Pour commencer, choisissez un titre pour votre parcours";
 ?>

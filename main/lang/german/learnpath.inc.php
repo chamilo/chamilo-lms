@@ -153,4 +153,8 @@ $FirstPosition = "Erste Stelle";
 $NewQuiz = "Neues Quiz";
 $CreateTheForum = "Forum hinzufügen";
 $Forums = "Forums";
+$AddLpIntro = "<strong>Willkommen</strong> zum Dokeos Lernpfad Erstellungstool
+";
+$AddLpIntro = "<strong>Willkommen</strong> zum Dokeos Lernpfad Erstellungstool.<br />Sie können Ihren Lernpfad Schritt für Schritt erstellen.  Die Struktur Ihres Lernpfads erscheint links in dem Menu.";
+$AddLpToStart = "Beginnen Sie damit, Ihrem Lernpfad einen Titel zu geben";
 ?>

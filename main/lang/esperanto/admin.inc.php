@@ -492,4 +492,16 @@ $ServiceActivated = "Servo aktivas";
 $ActiveExtension = "Aktivaj servoj";
 $InvalidExtension = "Nevalida fina&#309;o";
 $VersionCheckExplanation = "Por aktivigi la a&#365;tomatan versian kontrolon vi registru vian terenon &#265;e dokeos.com. La ricevita informo estas nur por interna uzo kaj nur agregita informo estos publike disponebla (entuta nombro da terenoj, entuta nombro da Dokeo-kursoj de &#265;iuj terenoj kune, entuta nombro da studentoj uzantaj Dokeos-kursojn, ...) por tio vidu see <a href=\"see http://www.dokeos.com/stats/\">see http://www.dokeos.com/stats/</a>.  Kiam vi registras vian terenon anka&#365; tiu informo aperos en la listo de terenoj (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>. Se vi ne deziras tion, vi marku tion en la markobutonon. La registrado estas tre facila: vi nur musklaku sur la &#265;i-suban butonon.";
+$AfterApproval = "Post aprobo";
+$StudentViewEnabledTitle = "Ebligi studentan vidon";
+$StudentViewEnabledComment = "Kiam studenta vido estas &#349;altata, kursestro a&#365; platformestro povas vidi la kursan enhavon tiel, kiel studenta vidan &#285;in.";
+$TimeLimitWhosonlineTitle = "Templimigo de &#349;altitaj uzantoj";
+$TimeLimitWhosonlineComment = "La templimigo difinas dum kiom da sekundoj uzanto konsideri&#285;as en&#349;altata post &#349;lia lasta ago.";
+$ExampleMaterialCourseCreationTitle = "Enhava ekzemplo pri kurspreparo";
+$ExampleMaterialCourseCreationComment = "Krei aron da ekzemploj dum preparo de nova kurso";
+$AccountValidDurationTitle = "Tempoda&#365;ro de konta valideco ";
+$AccountValidDurationComment = "Uzanta konto validas dum tiom da tagoj post sia krei&#285;o";
+$UseSessionModeTitle = "Utiligi sesian modon";
+$UseSessionModeComment = "Sesio ebligas alian manieron de kursmastrumado, per kiu kursoj havas kurspreparanton, kursgvidanton kaj studentojn. &#264;iu kursgvidanto gvidas kurson dum difinita tempo, nomata sesio, al difinita grupo da studentoj.";
+$IconsOnly = "Kelkaj ikonoj";
 ?>

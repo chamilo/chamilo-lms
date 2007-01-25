@@ -97,10 +97,7 @@ $MultipleChoiceSingleh = "Selección múltiple (respuesta única) horizontal";
 $ThisCodeAlradyExists = "Este código ya existe";
 $SaveAndExit = "Guardar y salir";
 $SurveyName = "Nombre de la encuesta";
-$Language = "Idioma";
 $SurveySubTitle = "Subtítulo de la encuesta";
 $ShareSurvey = "Compartir la encuesta";
-$HourMinuteDivider = "h";
 $EditSurvey = "Editar la encuesta";
-$Here = "aquí";
 ?>

@@ -365,4 +365,12 @@ $InCourse = "in de cursus";
 $UserOnlineListSession = "Gebruikers online - Sessie";
 $From = "Van";
 $To = "aan";
+$Content = "Inhoud";
+$year = "jaar";
+$Years = "jaren";
+$Day = "dag";
+$Days = "dagen";
+$PleaseStandBy = "Even geduld aub";
+$HourMinuteDivider = "u";
+$Here = "Hier";
 ?>

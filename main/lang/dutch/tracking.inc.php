@@ -149,4 +149,9 @@ $Administrators = "Beheerders";
 $Tracks = "Leertrajecten (tracks)";
 $Success = "Succes";
 $ExcelFormat = "Excel-formaat";
+$MyLearnpath = "Mijn traject";
+$Time = "Tijd";
+$Score = "Score";
+$LastConnexion = "Laatste connectie";
+$ConnectionTime = "connectietijd";
 ?>

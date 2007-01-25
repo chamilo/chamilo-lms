@@ -50,7 +50,7 @@ $langUserAddExplanation = "every line of file to send will necessarily an only
 $langUserMany = "Import a user list through a CSV / XML file";
 $langOneByOne = "Add user manually";
 $langNow = "now";
-$langTutor = "Tutor";
+$langTutor = "Coach";
 $langTitular = "Author";
 $langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Modify courses list</big><br><br>Check the courses you want to follow.<br>Uncheck the ones you don\'t want to follow anymore.<br> Then click Ok at the bottom of the list";
 $langStudent = "student";

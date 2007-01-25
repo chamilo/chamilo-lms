@@ -367,4 +367,7 @@ $From = "od";
 $To = "do";
 $Content = "Vsebina";
 $PleaseStandBy = "Prosim poèakajte ...";
+$Language = "Jezik";
+$HourMinuteDivider = ":";
+$Here = "tule";
 ?>

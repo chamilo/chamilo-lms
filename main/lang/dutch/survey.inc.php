@@ -95,4 +95,5 @@ $MultipleChoiceMultih = "Meerkeuze (meerdere antwoorden) horizontaal";
 $MultipleChoiceSingleh = "Meerkeuze (één enkel antwoord) horizontaal";
 $ThisCodeAlradyExists = "Deze code bestaat reeds";
 $SaveAndExit = "Bewaren en beeindigen";
+$SurveyName = "Enquetenaam";
 ?>

@@ -653,7 +653,7 @@ CREATE TABLE `user` (
   `language` varchar(40) default NULL,
   `registration_date` datetime NOT NULL default '0000-00-00 00:00:00',
   `expiration_date` datetime NOT NULL default '0000-00-00 00:00:00',
-  `active` enum('0','1') NOT NULL default '1',
+  `active` tinyint unsigned NOT NULL default 1,
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `username` (`username`)
 );

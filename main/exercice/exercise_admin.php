@@ -99,3 +99,5 @@ else
 	$form -> display ();
 }
 
+Display::display_footer();
+

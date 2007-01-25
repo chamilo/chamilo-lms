@@ -8,11 +8,19 @@
 /**
  * Include mandatory libraries
  */
-require_once('back_compat.inc.php');
-require_once('learnpath.class.php');
-require_once('scorm.class.php');
+require_once('../inc/lib/main_api.lib.php');
+require_once('../inc/lib/database.lib.php');
+require_once('../inc/lib/document.lib.php');
+//require_once('../inc/lib/fileDisplay.lib.php');
+//require_once('../inc/lib/fileUpload.lib.php'); //replace_dangerous_char()
+require_once('../inc/lib/fileManage.lib.php'); //check_name_exists()
+//include_once('../inc/lib/pclzip/pclzip.lib.php');
+require_once('../newscorm/learnpath.class.php');
+require_once('../newscorm/scorm.class.php');
 
 ini_set('max_execution_time',0);
+
+$loglevel = 0;
 
 function my_get_time($time){
 	$matches = array();
@@ -34,7 +42,7 @@ fwrite($fh,"-- Recording course homepages links changes to enable reverting\n");
 fwrite($fh_revert,"-- Recording reverted course homepages links changes to enable reverting\n");
 fwrite($fh_res,"-- Recording resulting course homepages links changes\n");
 
-echo "<html><body>";
+//echo "<html><body>";
 
 /**
  * New tables definition:
@@ -60,7 +68,7 @@ while ($row = Database::fetch_array($res))
 	$courses_id_list[$row['code']] = $row['db_name'];
 	$courses_dir_list[$row['code']] = $row['directory']; 
 }
-echo "Tables created/deleted for all courses<br />\n";
+if($loglevel>0){error_log("Tables created/deleted for all courses",0);}
 
 /**
  * The migration needs to take all data from the original learnpath tables and add them to the new
@@ -72,7 +80,7 @@ echo "Tables created/deleted for all courses<br />\n";
 foreach($courses_list as $db)
 {
 	$incoherences = 0;
-	echo "Now starting migration of learnpath tables from $db database...<br />\n";
+	if($loglevel>0){error_log("Now starting migration of learnpath tables from $db database...",0);}
 	$lp_main = Database::get_course_table(TABLE_LEARNPATH_MAIN,$db);
 	$lp_ids = array();
 	$lp_user = Database::get_course_learnpath_user_table($db);
@@ -96,12 +104,14 @@ foreach($courses_list as $db)
 	$sql_test = "SELECT * FROM $my_new_lp";
 	$res_test = mysql_query($sql_test);
 	$sql_lp = "SELECT * FROM $lp_main";
-	echo "$sql_lp<br />\n";
+	if($loglevel>1){error_log("$sql_lp",0);}
 	$res_lp = mysql_query($sql_lp);//using mysql_query to avoid dying on failure
 	if(!$res_lp or !$res_test){
-		echo "+++Problem querying DB $lp_main+++ skipping (".mysql_error().")<br />\n";
-		if(!$res_test){
-			echo "This might be due to no existing table in the destination course<br />\n";
+		if($loglevel>1){
+			error_log("+++Problem querying DB $lp_main+++ skipping (".mysql_error().")",0);
+			if(!$res_test){
+				error_log("This might be due to no existing table in the destination course",0);
+			}
 		}
 		continue;
 	}
@@ -249,13 +259,13 @@ foreach($courses_list as $db)
 				case 'c':
 					//chapter-type prereq
 					$prereq_id = $lp_chap_items[$row['prereq_id']];
-					if(empty($prereq_id)){echo "Could not find prereq chapter ".$row['prereq_id']."<br/>\n";}
+					if(empty($prereq_id) && $loglevel>1){error_log("Could not find prereq chapter ".$row['prereq_id'],0);}
 					break;
 				case 'i':
 				default:
 					//item type prereq
 					$prereq_id = $lp_items[$parent_lps[$row['chapter_id']]][$row['prereq_id']];
-					if(empty($prereq_id)){echo "Could not find prereq item ".$row['prereq_id']."<br/>\n";}
+					if(empty($prereq_id) && $loglevel>1){error_log("Could not find prereq item ".$row['prereq_id'],0);}
 					break;
 			}
 		}
@@ -502,9 +512,9 @@ foreach($courses_list as $db)
 	
 	
 		
-	echo "Done!".$msg."<br/>\n";
-	flush();
-	ob_flush();
+	if($loglevel>0){error_log("Done!".$msg,0);}
+	//flush();
+	//ob_flush();
 }
 unset($lp_ids);
 unset($lp_users);
@@ -524,7 +534,7 @@ fwrite($fh_res,"-- Recording resulting course homepages links changes for SCORM\
  * The migration needs to take all data from the scorm.scorm_main and scorm.scorm_sco_data tables
  * and add them to the new lp, lp_view, lp_item and lp_item_view tables.
  */
-echo "<br/><br/>Now starting migration of scorm tables from global SCORM database<br />\n";
+if($loglevel>0){error_log("Now starting migration of scorm tables from global SCORM database",0);}
 $scorm_main = Database::get_scorm_main_table($db);
 $scorm_item = Database::get_scorm_sco_data_table($db);
 $lp_main 	= Database::get_course_table(TABLE_LEARNPATH_MAIN,$db);
@@ -539,7 +549,7 @@ $scorm_lp_paths = array();
 //avoid empty dokeosCourse fields as they potentially break the rest
 $course_main = Database::get_main_table(TABLE_MAIN_COURSE);
 $sql_crs = "SELECT * FROM $course_main WHERE target_course_code IS NULL";
-echo "$sql_crs<br />\n";
+if($loglevel>0){error_log("$sql_crs",0);}
 $res_crs = api_sql_query($sql_crs,__FILE__,__LINE__);
 $num = Database::num_rows($res_crs);
 
@@ -549,7 +559,7 @@ $course_code_swap = '';
 $scormdocuments_lps = array();
 while($course_row = Database::fetch_array($res_crs)){
 
-	echo "<br/>\nNow dealing with course ".$course_row['code']."... <br/>\n";
+	if($loglevel>0){error_log("Now dealing with course ".$course_row['code']."...",0);}
 	//check the validity of this new course		
 	$my_course_code = $course_row['code'];
 
@@ -558,14 +568,14 @@ while($course_row = Database::fetch_array($res_crs)){
 	$db_name = $courses_id_list[$my_course_code];
 	$tblscodoc = Database::get_course_table(TABLE_SCORMDOC,$db_name);		
 	$sql_scodoc = "SELECT path FROM $tblscodoc WHERE path IS NOT NULL AND path != ''";
-	echo "$sql_scodoc<br/>";
+	if($loglevel>1){error_log("$sql_scodoc",0);}
 	$res_scodoc = api_sql_query($sql_scodoc,__FILE__,__LINE__);
 	while($row_scodoc = Database::fetch_array($res_scodoc)){
 		
 		//check if there's more than one slash in total
 		if(strpos($row_scodoc['path'],'/',1)===false){
 			$tmp_path = $row_scodoc['path'];
-			echo "++Now opening $tmp_path<br/>";
+			if($loglevel>1){error_log("++Now opening $tmp_path",0);}
 			
 			//add a prefixing slash if there is none
 			if(substr($tmp_path,0,1)!='/'){
@@ -587,17 +597,17 @@ while($course_row = Database::fetch_array($res_crs)){
 				//avoid if contentTitle is not the name of an existing directory
 			}elseif(!is_file($courses_dir."/imsmanifest.xml")){
 				//if the imsmanifest file was not found there
-				echo "  !!imsmanifest.xml  not found at scormdocument's $courses_dir/imsmanifest.xml, skipping<br/>\n";
+				if($loglevel>2){error_log("  !!imsmanifest.xml  not found at scormdocument's $courses_dir/imsmanifest.xml, skipping",0);}
 				//try subdirectories on one level depth
-				echo "  Trying subdirectories...<br/>";
+				if($loglevel>2){error_log("  Trying subdirectories...",0);}
 				$dh = opendir($courses_dir);
 				while($entry = readdir($dh)){
 					if(substr($entry,0,1)!='.'){
 						if(is_dir($courses_dir."/".$entry)){
 							if(is_file($courses_dir."/".$entry."/imsmanifest.xml")){
-								echo ".  .. and found $courses_dir/$entry/imsmanifest.xml!<br/>";
+								if($loglevel>2){error_log(".  .. and found $courses_dir/$entry/imsmanifest.xml!",0);}
 								if(!in_array($tmp_path."/".$entry."/imsmanifest.xml",$scormdocuments_lps)){
-									echo "  Recording.<br/>";
+									if($loglevel>2){error_log("  Recording.<br/>",0);}
 									$scormdocuments_lps[] = $tmp_path."/".$entry;
 								}
 							}
@@ -605,7 +615,7 @@ while($course_row = Database::fetch_array($res_crs)){
 					}
 				}
 			}else{
-				echo "  Found scormdocument $tmp_path in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm, treating it.<br/>\n";
+				if($loglevel>2){error_log("  Found scormdocument $tmp_path in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm, treating it.",0);}
 				$scormdocuments_lps[] = $tmp_path;
 			}
 		}
@@ -615,7 +625,7 @@ while($course_row = Database::fetch_array($res_crs)){
 	$scorms[$my_course_code] = array();
 
 	$sql_paths = "SELECT * FROM $scorm_main WHERE dokeosCourse = '".$my_course_code."'";
-	echo "$sql_paths<br/>";
+	if($loglevel>0){error_log("$sql_paths",0);}
 	$res_paths = api_sql_query($sql_paths,__FILE__,__LINE__);
 	$num = Database::num_rows($res_paths);
 	while($scorm_row = Database::fetch_array($res_paths)){
@@ -628,16 +638,16 @@ while($course_row = Database::fetch_array($res_crs)){
 		if($my_path=='/'){
 			$my_path='';
 		}
-		echo "++++Now opening $my_path<br/>";
+		if($loglevel>1){error_log("++++Now opening $my_path",0);}
 		if(!is_dir($courses_dir = api_get_path(SYS_COURSE_PATH).''.$courses_dir_list[$my_course_code].'/scorm'.$my_path)){
-			echo "Path $my_content_id: $my_path doesn't exist in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm, skipping<br/>\n";
+			if($loglevel>1){error_log("Path $my_content_id: $my_path doesn't exist in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm, skipping",0);}
 			continue;
 			//avoid if contentTitle is not the name of an existing directory
 		}elseif(!is_file(api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml")){
-			echo "!!imsmanifest.xml not found at ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml, skipping<br/>\n";
+			if($loglevel>1){error_log("!!imsmanifest.xml not found at ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml, skipping",0);}
 			continue;
 		}else{
-			echo "Found $my_path in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm".$mypath."/imsmanifest.xml, keeping it.<br/>\n";
+			if($loglevel>1){error_log("Found $my_path in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm".$mypath."/imsmanifest.xml, keeping it.",0);}
 			$scorms[$my_course_code][$my_path] = $my_content_id;
 		}
 	}
@@ -646,7 +656,7 @@ while($course_row = Database::fetch_array($res_crs)){
 	foreach($scormdocuments_lps as $path){
 		if(!in_array($path,array_keys($scorms[$my_course_code]))){
 			//add it (-1 means no ID)
-			echo "** Scormdocument path $path wasn't recorded yet. Added.<br/>\n";
+			if($loglevel>1){error_log("** Scormdocument path $path wasn't recorded yet. Added.",0);}
 			$scorms[$my_course_code][$path] = -1;
 		}
 	}
@@ -660,7 +670,7 @@ $my_count = 0;
 foreach($scorms as $mycourse => $my_paths){
 	$my_count += count($my_paths);
 }
-echo "<br/>\n---- Scorms array now contains ".$mycount." paths to migrate. Starting migration...<br />\n";
+if($loglevel>0){error_log("---- Scorms array now contains ".$mycount." paths to migrate. Starting migration...",0);}
 
 /**
  * Looping through the SCO_MAIN table for SCORM learnpath attached to courses
@@ -673,7 +683,7 @@ foreach($scorms as $my_course_code => $paths_list )
   $course_lp_done = array();
   $db_name = $courses_id_list[$my_course_code].'.'.$course_pref;
   foreach($paths_list as $my_path => $old_id){
-  	echo "Migrating lp $my_path from course $my_course_code...<br>\n";
+  	if($loglevel>1){error_log("Migrating lp $my_path from course $my_course_code...",0);}
 	$i_count ++;
 	//error_log('New LP - Migration script - Content '.$i_count.' on '.$num.' (course '.$scorm['dokeosCourse'].')',0);
 	//check if there is no embedded learnpaths into other learnpaths (one root-level and another embedded)
@@ -686,7 +696,7 @@ foreach($scorms as $my_course_code => $paths_list )
 			//let it be
 		}else{
 			//this lp is embedded inside another lp who's imsmanifest exists, so prevent from parsing
-			echo "LP $my_path is embedded into $tmp_lp, ignoring...<br/>\n";
+			if($loglevel>1){error_log("LP $my_path is embedded into $tmp_lp, ignoring...",0);}
 			$embedded = true;
 			continue;
 		}
@@ -700,7 +710,7 @@ foreach($scorms as $my_course_code => $paths_list )
 	$my_path = $my_path;
 	$my_name = basename($my_path);
 	
-	echo "Try importing LP $my_path from imsmanifest first as it is more reliable<br/>\n";
+	if($loglevel>1){error_log("Try importing LP $my_path from imsmanifest first as it is more reliable",0);}
 
 	//Setup the ims path (path to the imsmanifest.xml file)
 	//echo "Looking for course with code ".$lp_course_code[$my_content_id]." (using $my_content_id)<br />\n";
@@ -713,7 +723,7 @@ foreach($scorms as $my_course_code => $paths_list )
 		$oScorm = new scorm();
 		//check if imsmanifest.xml exists at this location. If not, ignore the imsmanifest.
 		//That should have been done before already, now.
-		echo "Found imsmanifest ($ims), importing...<br />\n";
+		if($loglevel>1){error_log("Found imsmanifest ($ims), importing...",0);}
 		if(!empty($sco_middle_path)){$oScorm->subdir = $sco_middle_path;} //this sets the subdir for the scorm package inside the scorm dir
 		//parse manifest file
 		$manifest = $oScorm->parse_manifest($ims);
@@ -722,7 +732,7 @@ foreach($scorms as $my_course_code => $paths_list )
 		//TODO add code to update the path in that new lp created, as it probably uses / where
 		//$sco_path_temp should be used... 
 		$lp_ids[$my_content_id] = $oScorm->lp_id; //contains the old LP ID => the new LP ID
-		echo " @@@ Created scorm lp ".$oScorm->lp_id." from imsmanifest [".$ims."] in course $my_course_code<br/>\n";
+		if($loglevel>1){error_log(" @@@ Created scorm lp ".$oScorm->lp_id." from imsmanifest [".$ims."] in course $my_course_code",0);}
 		$lp_course[$my_content_id] = $courses_id_list[$my_course_code]; //contains the old learnpath ID => the course DB name
 		$lp_course_code[$my_content_id] = $my_course_code;
 		$max_dsp_lp++;
@@ -804,7 +814,7 @@ foreach($scorms as $my_course_code => $paths_list )
 
 	}		
 	else{
-		echo "This is a normal SCORM path<br/>\n";
+		if($loglevel>1){error_log("This is a normal SCORM path",0);}
 		$scorm_lp_paths[$my_content_id]['path'] = $my_path;
 		//$scorm_lp_paths[$my_content_id]['ims'] = '';
 		$table_name = $db_name.$new_lp;
@@ -831,7 +841,7 @@ foreach($scorms as $my_course_code => $paths_list )
 				"'Unknown'," .
 				"'scorm_api.php'" .
 				")";
-		echo "$sql_ins<br />\n";
+		if($loglevel>1){error_log("$sql_ins",0);}
 		$sql_res = api_sql_query($sql_ins,__FILE__,__LINE__);
 		$in_id = Database::get_last_insert_id();
 		if(empty($in_id) or $in_id == false) die('Could not insert scorm lp: '.$sql_ins);
@@ -853,7 +863,7 @@ foreach($scorms as $my_course_code => $paths_list )
 		//check if imsmanifest.xml exists at this location. If not, ignore the imsmanifest.
 		//That should have been done before already, now.
 		if(!is_file($scorm_lp_paths[$my_content_id]['ims'])){
-			echo "!!! imsmanifest file not found at ".$scorm_lp_paths[$my_content_id]['ims'].' for old lp '.$my_content_id.' and new '.$lp_ids[$my_content_id]."<br />\n";
+			if($loglevel>1){error_log("!!! imsmanifest file not found at ".$scorm_lp_paths[$my_content_id]['ims'].' for old lp '.$my_content_id.' and new '.$lp_ids[$my_content_id],0);}
 			$manifest = false;
 		}else{
 			//echo "Parsing ".$scorm_lp_paths[$my_content_id]['ims']."<br>\n";
@@ -868,7 +878,7 @@ foreach($scorms as $my_course_code => $paths_list )
 						"SET name = '$my_lp_title', " .
 						"default_encoding = '".strtoupper($oScorm->manifest_encoding)."' " .
 						"WHERE id = ".$lp_ids[$my_content_id];
-				echo "Updating title and encoding: ".$my_sql."<br/>\n";
+				if($loglevel>1){error_log("Updating title and encoding: ".$my_sql,0);}
 				$my_res = api_sql_query($my_sql,__FILE__,__LINE__);	
 			}
 		}
@@ -1138,9 +1148,9 @@ foreach($scorms as $my_course_code => $paths_list )
 	flush();
   }
 }
-echo "All done!";
-echo "</body></html>";
 fclose($fh);
 fclose($fh_revert);
 fclose($fh_res);
+if($loglevel>0){error_log("All done!",0);}
+//echo "</body></html>";
 ?>

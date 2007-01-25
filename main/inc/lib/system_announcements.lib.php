@@ -47,13 +47,13 @@ class SystemAnnouncementManager
 		switch ($visible)
 		{
 			case VISIBLE_GUEST :
-				$sql .= " AND visible_guest = '1'";
+				$sql .= " AND visible_guest = 1 ";
 				break;
 			case VISIBLE_STUDENT :
-				$sql .= " AND visible_student = '1'";
+				$sql .= " AND visible_student = 1 ";
 				break;
 			case VISIBLE_TEACHER :
-				$sql .= " AND visible_teacher = '1'";
+				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
@@ -126,13 +126,13 @@ class SystemAnnouncementManager
 		switch ($visible)
 		{
 			case VISIBLE_GUEST :
-				$sql .= " AND visible_guest = 'true'";
+				$sql .= " AND visible_guest = 1 ";
 				break;
 			case VISIBLE_STUDENT :
-				$sql .= " AND visible_student = 'true'";
+				$sql .= " AND visible_student = 1 ";
 				break;
 			case VISIBLE_TEACHER :
-				$sql .= " AND visible_teacher = 'true'";
+				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
 
@@ -233,13 +233,13 @@ class SystemAnnouncementManager
 			switch ($visibility)
 			{
 				case VISIBLE_GUEST :
-					$sql .= " AND visible_guest = 'true'";
+					$sql .= " AND visible_guest = 1 ";
 					break;
 				case VISIBLE_STUDENT :
-					$sql .= " AND visible_student = 'true'";
+					$sql .= " AND visible_student = 1 ";
 					break;
 				case VISIBLE_TEACHER :
-					$sql .= " AND visible_teacher = 'true'";
+					$sql .= " AND visible_teacher = 1 ";
 					break;
 			}
  		}
@@ -278,7 +278,7 @@ class SystemAnnouncementManager
 	 * @param string $date_start Start date (YYYY-MM-DD HH:II: SS)
 	 * @param string $date_end End date (YYYY-MM-DD HH:II: SS)
 	 */
-	function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 'false', $visible_student = 'false', $visible_guest = 'false', $lang = null)
+	function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null)
 	{
 
 		$a_dateS = explode(' ',$date_start);
@@ -313,7 +313,7 @@ class SystemAnnouncementManager
 		$title = mysql_real_escape_string($title);
 		$content = mysql_real_escape_string($content);
 		$lang = is_null($lang) ? 'NULL' : "'".mysql_real_escape_string($lang)."'";
-		$sql = "INSERT INTO ".$db_table." (`title`,`content`,`date_start`,`date_end`,`visible_teacher`,`visible_student`,`visible_guest`, `lang`)
+		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
 												VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
 		return api_sql_query($sql,__FILE__,__LINE__);
 	}
@@ -325,7 +325,7 @@ class SystemAnnouncementManager
 	 * @param array $date_start: start date of announcement (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
 	 * @param array $date_end : end date of announcement (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
 	 */
-	function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 'false', $visible_student = 'false', $visible_guest = 'false',$lang=null)
+	function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0,$lang=null)
 	{
 
 		$a_dateS = explode(' ',$date_start);

@@ -308,7 +308,7 @@ foreach ($threads as $row)
 			echo "<a href=\"".$_SERVER['PHP_SELF']."?forum=".$_GET['forum']."&amp;action=delete&amp;content=thread&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteCompleteThread")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 			display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$_GET['forum'],'origin'=>$origin));
 			display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$_GET['forum'],'origin'=>$origin));
-			echo "<a href=\"viewforum.php?forum=".$_GET['forum']."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/forummovepost.gif',get_lang('MoveThread'))."</a>";
+			echo "<a href=\"viewforum.php?forum=".$_GET['forum']."&amp;action=move&amp;thread=".$row['thread_id'].$origin_string."\">".icon('../img/deplacer_fichier.gif',get_lang('MoveThread'))."</a>";
 			echo "</td>\n";
 		}
 		echo "\t</tr>\n";

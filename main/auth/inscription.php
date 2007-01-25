@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 10454 2006-12-11 14:19:18Z elixir_inter $
+// $Id: inscription.php 10906 2007-01-25 15:33:23Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -95,7 +95,12 @@ if (get_setting('allow_registration_as_teacher') <> 'false')
 	$form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
 }
 $form->addElement('submit', 'submit', get_lang('Ok'));
-//$defaults['language'] = api_get_setting('platformLanguage');
+if(isset($_SESSION["user_language_choice"]) && $_SESSION["user_language_choice"]!=""){
+	$defaults['language'] = $_SESSION["user_language_choice"];
+}
+else{
+	$defaults['language'] = api_get_setting('platformLanguage');
+}
 $defaults['status'] = STUDENT;
 $form->setDefaults($defaults);
 

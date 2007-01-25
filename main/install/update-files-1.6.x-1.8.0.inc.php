@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 10883 2007-01-24 23:40:15Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 10892 2007-01-25 00:58:30Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,8 +41,8 @@
 ==============================================================================
 */
 
-include("../inc/lib/main_api.lib.php");
-include("../inc/lib/fileUpload.lib.php");
+require_once("../inc/lib/main_api.lib.php");
+require_once("../inc/lib/fileUpload.lib.php");
 
 /*
 ==============================================================================

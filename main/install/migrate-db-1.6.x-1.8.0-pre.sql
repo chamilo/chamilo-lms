@@ -26,8 +26,9 @@ ALTER TABLE user CHANGE auth_source auth_source varchar(50) default 'platform';
 ALTER TABLE user ADD language varchar(40) default NULL;
 ALTER TABLE user ADD registration_date datetime NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE user ADD expiration_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE user ADD active enum('0','1') NOT NULL default '1';
+ALTER TABLE user ADD active tinyint unsigned NOT NULL default 1;
 UPDATE user SET auth_source='platform' WHERE auth_source='claroline';
+UPDATE user SET registration_date=NOW();
 
 -- Rename table session into php_session
 RENAME TABLE session TO php_session;

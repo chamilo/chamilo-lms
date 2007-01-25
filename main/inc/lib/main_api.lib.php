@@ -312,7 +312,7 @@ function api_get_path($path_type)
 			break;
 
 		case REL_COURSE_PATH :
-			return api_get_path(REL_PATH).$GLOBALS['coursesRepositoryAppend'];
+			return api_get_path(REL_PATH).$_configuration['course_folder'];
 			break;
 		case REL_CLARO_PATH :
 			return api_get_path(REL_PATH).$_configuration['code_append'];

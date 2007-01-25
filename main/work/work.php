@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 10875 2007-01-24 15:37:27Z bmol $
+*  	@version $Id: work.php 10901 2007-01-25 14:00:04Z elixir_inter $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -253,7 +253,7 @@ if ($origin != 'learnpath')
 else
 {
 	//we are in the learnpath tool
-	?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css"> <?php
+	include api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 }
 
 //stats

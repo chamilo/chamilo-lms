@@ -122,7 +122,6 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			include ("../lang/$languageForm/create_course.inc.php");
 		}
 
-		//TODO deal with migrate-db-1.6.x-1.8.0-pre.sql here
 		//get the main queries list (m_q_list)
 		$m_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','main');
 		if(count($m_q_list)>0)
@@ -141,11 +140,6 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				}
 			}
 		}
-		//manual updates in here
-		//update all registration_date, expiration_date and active fields
-		//$sql_upd = "UPDATE user SET registration_date=NOW()";
-		//$res_upd = mysql_query($sql_upd);
-		//end of manual updates
 		
 		//get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
@@ -184,42 +178,6 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			}
 		}
 		//the SCORM database doesn't need a change in the pre-migrate part - ignore
-
-		die();
-		//TODO only update this table
-		/*
-		$language_table = "`$dbNameForm`.`language`";
-		fill_language_table($language_table);
-		
-		//set the settings from the form or the old config into config settings. 
-		//These settings are considered "safe" because they are entered by the admin
-		$installation_settings['institution_form'] = $institutionForm;
-		$installation_settings['institution_url_form'] = $institutionUrlForm;
-		$installation_settings['campus_form'] = $campusForm;
-		$installation_settings['email_form'] = $emailForm;
-		$installation_settings['admin_last_name'] = $adminLastName;
-		$installation_settings['admin_first_name'] = $adminFirstName;
-		$installation_settings['language_form'] = $languageForm;
-		$installation_settings['allow_self_registration'] = $allowSelfReg;
-		$installation_settings['allow_teacher_self_registration'] = $allowSelfRegProf;
-		$installation_settings['admin_phone_form'] = $adminPhoneForm;
-		
-		//put the settings into the settings table (taken from CSV file)
-		$current_settings_table = "`$dbNameForm`.`settings_current`";
-		fill_current_settings_table($current_settings_table, $installation_settings);
-		
-		//put the options into the options table (taken from CSV file)
-		$settings_options_table = "`$dbNameForm`.`settings_options`";
-		fill_settings_options_table($settings_options_table);
-
-		//mysql_query("INSERT INTO `$dbNameForm`.`course_module` (`name`,`link`,`image`,`row`,`column`,`position`) VALUES
-		//								('AddedLearnpath', NULL, 'scormbuilder.gif', 0, 0, 'external'),
-		//								('".TOOL_BACKUP."', 'coursecopy/backup.php' , 'backup.gif', 2, 1, 'courseadmin'),
-		//								('".TOOL_COPY_COURSE_CONTENT."', 'coursecopy/copy_course.php' , 'copy.gif', 2, 2, 'courseadmin'),
-		//								('".TOOL_RECYCLE_COURSE."', 'coursecopy/recycle_course.php' , 'recycle.gif', 2, 3, 'courseadmin')");
-		//...
-		//mysql_query("UPDATE `$dbNameForm`.`course_module` SET name='".TOOL_LEARNPATH."' WHERE link LIKE 'scorm/%'");
-		*/
 	}
 
 	/*
@@ -246,7 +204,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		if(mysql_num_rows($res)>0)
 		{
 			$i=0;
-			while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
+			//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
+			while($row = mysql_fetch_array($res))
 			{
 				$list[] = $row;
 				$i++;
@@ -269,9 +228,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					}
 				}
 				//update course manually
-				//update group_category.forum_state
-				//update group_info.tutor_id (put it in group_tutor table?)
-				//update group_info.forum_state, forum_id
+				//update group_category.forum_state ?
+				//update group_info.tutor_id (put it in group_tutor table?) ?
+				//update group_info.forum_state, forum_id ?
 				
 				//update forum tables (migrate from bb_ tables to forum_ tables)
 				//migrate categories
@@ -338,6 +297,107 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			}
 		}
 	}
+	//load the old-scorm to new-scorm migration script
+	//TODO: deal with the fact that this should only act on MAX_COURSE_TRANSFER courses
+	include('update-db-scorm-1.6.x-1.8.0.inc.php');
+	if (defined('DOKEOS_INSTALL')) 
+	{
+		//deal with migrate-db-1.6.x-1.8.0-post.sql
+		//get the main queries list (m_q_list)
+		$m_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','main');
+		if(count($m_q_list)>0)
+		{
+			//now use the $m_q_list
+			/**
+			 * We connect to the right DB first to make sure we can use the queries
+			 * without a database name
+			 */
+			mysql_select_db($dbNameForm);
+			foreach($m_q_list as $query){
+				if($only_test){
+					echo "mysql_query($dbNameForm,$query)<br/>";
+				}else{
+					$res = mysql_query($query);
+				}
+			}
+		}
+		
+		//get the stats queries list (s_q_list)
+		$s_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','stats');
+		if(count($s_q_list)>0)
+		{
+			//now use the $s_q_list
+			/**
+			 * We connect to the right DB first to make sure we can use the queries
+			 * without a database name
+			 */
+			mysql_select_db($dbStatsForm);
+			foreach($s_q_list as $query){
+				if($only_test){
+					echo "mysql_query($dbStatsForm,$query)<br/>";
+				}else{
+					$res = mysql_query($query);
+				}
+			}
+		}
+		//get the user queries list (u_q_list)
+		$u_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','user');
+		if(count($u_q_list)>0)
+		{
+			//now use the $u_q_list
+			/**
+			 * We connect to the right DB first to make sure we can use the queries
+			 * without a database name
+			 */
+			mysql_select_db($dbUserForm);
+			foreach($u_q_list as $query){
+				if($only_test){
+					echo "mysql_query($dbUserForm,$query)<br/>";
+				}else{
+					$res = mysql_query($query);
+				}
+			}
+		}
+		//the SCORM database should need a drop in the post-migrate part. However, we will keep these tables a bit more, just in case...
+	}
+	//get the courses databases queries list (c_q_list)
+	$c_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','course');
+	if(count($c_q_list)>0)
+	{
+		//get the courses list
+		mysql_select_db($dbNameForm);
+		$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+		if($res===false){die('Error while querying the courses list in update_db.inc.php');}
+		if(mysql_num_rows($res)>0)
+		{
+			$i=0;
+			//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
+			while($row = mysql_fetch_array($res))
+			{
+				$list[] = $row;
+				$i++;
+			}
+			foreach($list as $row)
+			{
+				//now use the $c_q_list
+				/**
+				 * We connect to the right DB first to make sure we can use the queries
+				 * without a database name
+				 */
+				mysql_select_db($row['db_name']);
+				foreach($c_q_list as $query)
+				{
+					if($only_test)
+					{
+						echo "mysql_query(".$row['db_name'].",$query)<br/>";
+					}else{
+						$res = mysql_query($query);
+					}
+				}
+			}
+		}
+	}
+	
 }
 else
 {

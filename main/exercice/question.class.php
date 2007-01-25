@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 10878 2007-01-24 17:05:21Z elixir_inter $
+* 	@version $Id: question.class.php 10897 2007-01-25 12:45:10Z elixir_inter $
 */
 
 
@@ -794,7 +794,7 @@ abstract class Question
 	 */
 	static function display_type_menu ()
 	{
-		
+		global $exerciseId;
 		echo '<div>';
 		foreach(self::$questionTypes as $i=>$a_type)
 		{
@@ -819,7 +819,19 @@ abstract class Question
 			</div>';
 			
 		}
-		echo '</div><div style="clear:both"></div>';
+		echo '
+			<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">
+				<a href="question_pool.php?fromExercise='.$exerciseId.'">
+			<div>
+				<img src="'.api_get_path(WEB_IMG_PATH).'/questionsdb.gif" />
+			</div>
+			<div>
+				'.get_lang('GetExistingQuestion').'
+			</div>				
+			</a>
+			</div>
+		</div>
+		<div style="clear:both"></div>';
 
 	}
 }

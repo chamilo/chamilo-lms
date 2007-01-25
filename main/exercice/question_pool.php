@@ -24,17 +24,18 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 10793 2007-01-19 09:17:15Z elixir_inter $
+* 	@version $Id: question_pool.php 10897 2007-01-25 12:45:10Z elixir_inter $
 */
 
 // name of the language file that needs to be included
 $language_file='exercice';
 
-include('../inc/global.inc.php');
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
+
+include('../inc/global.inc.php');
+
 
 
 $this_section=SECTION_COURSES;
@@ -127,8 +128,8 @@ if($is_allowedToEdit)
 	<option value="0">-- <?php echo get_lang('AllExercises'); ?> --</option>
 	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>>-- <?php echo get_lang('OrphanQuestions'); ?> --</option>
 
-<?php
-	$sql="SELECT id,title FROM `$TBL_EXERCICES` WHERE id<>'$fromExercise' ORDER BY id";
+<?php 
+	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'$fromExercise' ORDER BY id";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 	// shows a list-box allowing to filter questions

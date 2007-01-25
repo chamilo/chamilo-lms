@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: question_list_admin.inc.php 10897 2007-01-25 12:45:10Z elixir_inter $
 */
 
 
@@ -79,7 +79,6 @@ if($deleteQuestion)
 	unset($objQuestionTmp);
 }
 
-echo '<a href="question_pool.php?fromExercise='.$exerciseId.'">'.get_lang('GetExistingQuestion').'</a>';
 Question :: display_type_menu ();
 ?>
 

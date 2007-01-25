@@ -1,0 +1,1406 @@
+/*
+==============================================================================
+							BABY STYLESHEET
+==============================================================================
+*/ 
+/*
+==============================================================================
+	GLOBAL STYLES - REDEFINED HTML TAGS
+==============================================================================
+*/
+
+a {
+	text-decoration: none;
+	font: bold 100% Arial, sans-serif, sans;
+	color: #9a0;
+}
+
+a:hover,a:focus {
+	color: #470;
+}
+
+blockquote {
+	font: 1.1em arial, sans, sans-serif;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-size: .85em;
+	font-family: 'Lucida Grande', verdana, Arial, sans-serif, sans;
+	color: #000;
+	background-color: #fff;
+}
+
+h3 {
+	font: bold 1.3em Arial, sans-serif, sans;
+}
+
+h4 {
+	font: bold 1.2em Arial, sans-serif, sans;
+}
+
+img {
+	border: 0;
+}
+
+input {
+	margin-left: 1em;
+	border-color: #aa1;
+	border-width: 1px;
+	background-color: #fff;
+	font: normal 90% Georgia, verdana, Arial, sans, sans-serif;
+}
+
+p {
+	clear: both;
+	width: 90%;
+}
+
+select,textarea {
+	font: normal 90% Georgia, verdana, Arial, sans, sans-serif;
+	border: 1px solid #aa1;
+}
+
+small {
+	font-size: .9em;
+}
+
+table {
+	clear: both;
+	padding: 0;
+}
+
+tr,td {
+	padding: .35em;
+}
+
+ul {
+	list-style: none;
+}
+
+/*
+==============================================================================
+	PAGE STRUCTURE
+==============================================================================
+*/ 
+
+/* user_portal course status icon */
+#coursestatusicons {
+	float: left;
+	clear: left;
+	margin-right: .5em;
+}
+
+/* user_portal course list */
+#courses {
+	font-weight: bold;
+	list-style: none;
+	margin-bottom: .2em;
+	font-family: arial, sans-serif, sans;
+	font-size: 110%;
+}
+
+#main {
+	font-size: 89%;
+	width: 96%;
+	padding: 0 1% 15px 3%;
+	background: transparent url('images/bg.jpg') no-repeat 100% 100%;
+	/* min-height hack for ie6 or older*/
+	min-height: 400px;
+	height: auto !important;
+	height: 400px;
+	clear: both;
+	float: left;
+}
+
+/* For ie6 browsers or older*/
+* html #main {
+	padding: 0 1% 15px 2.96%;
+}
+
+.maincontent {
+	margin: 0 0 1em 1em;
+	width: 69%;
+	float: right;
+	clear: right;
+}
+
+#outerframe {
+	background-color: #fff;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+==============================================================================
+	HEADER STYLES
+==============================================================================
+*/
+
+#header {
+	background: transparent url('images/bgheader.jpg') repeat-y top right;
+	font: bold .85em Arial, sans-serif, sans;
+	width: 100%;
+	line-height: .8em;
+	float: left;
+	clear: both;
+	margin-bottom: .5em;
+}
+
+#header a {
+	color: #ed2;
+	text-decoration: none;
+}
+
+#header li#current a,#header a:hover,header a:focus {
+	color: #fe0;
+	text-decoration: none;
+}
+
+/*
+------------------------------------------------------------------------------
+	HEADER 1: Title, portal, organisation, course title
+------------------------------------------------------------------------------
+*/
+
+#header1 {
+	width: 30%;
+	float: left;
+	clear: left;
+	margin: .5em 0 0 0;
+}
+
+#header1 a:hover,#header1 a:focus {
+	text-decoration: none;
+}
+
+#header1 #my_courses {
+	display: none;
+	visibility: hidden;
+}
+
+#institution {
+	margin: 0 0 0 3.9em;
+}
+
+/*
+------------------------------------------------------------------------------
+	HEADER 2: Users online, help, student/teacher view
+------------------------------------------------------------------------------
+*/
+
+#header2 {
+	width: 60%;
+	text-align: right;
+	float: right;
+	clear: right;
+	margin: .5em 0 0 0;
+	padding: 0;;
+	text-align: right;
+}
+
+#header2 a {
+	color: #470;
+}
+
+#header2 a:hover,#header2 a:focus {
+	color: #9a0;
+}
+
+#header2 ul {
+	list-style: none;
+	margin: 0 1.9em 0 0;
+	padding: 0;
+}
+
+#header2 ul li {
+	display: inline;
+	width: auto;
+	margin: 0 .1em 0 .2em;
+	padding: 0;
+}
+
+#Header2Right li a img {
+	margin: -.4em 0 0 0;
+	padding: 0;
+}
+
+/*
+------------------------------------------------------------------------------
+	HEADER 3: Main menu
+------------------------------------------------------------------------------
+*/
+
+#header3 {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	float: left;
+	clear: both;
+}
+
+#header3 input.logout {
+	/* makes an input appear like a link in this header */
+	background-color: transparent;
+	border: none;
+	color: #a90;
+	height: auto;
+	display: inline;
+	line-height: 1em;
+	font: bold 1em Arial, sans-serif, sans;
+	margin: -.3em 0 0 2em;
+	padding: 0;
+}
+
+#header3 form {
+	margin: 0;
+	padding: 0;
+}
+
+#header3 #logout {
+	display: inline;
+	float: right;
+	clear: right;
+	margin: 0 1.5em 0 0;
+	padding: 0;
+	width: 10%;
+}
+
+#header3 #logout li {
+	display: block;
+	margin: 0;
+	padding: 0;
+	float: right;
+	clear: right;
+}
+
+#header3 ul {
+	list-style: none;
+	margin: 0 0 0 3.9em;
+	padding: 0;
+	width: 80%;
+}
+
+#header3 ul li {
+	float: left;
+	display: inline;
+	list-style: none;
+	margin: 0 1em 0 0;
+	padding: 0;
+	width: auto;
+}
+
+#header3 ul li a {
+	display: inline;
+}
+
+/*
+------------------------------------------------------------------------------
+    HEADER 4:
+------------------------------------------------------------------------------
+*/
+
+#header4 {
+	margin-top: .9em;
+	text-indent: 3.9em;
+	width: 100%;
+	float: left;
+	clear: both;
+	line-height: .9em;
+	height: auto;
+	background: #fff none;
+	position: relative;
+	padding: 0;
+}
+
+/* Solves the IE inherited margin bug */ /* IE-7*/
+* :first-child+html #header4 {
+	margin-top: 0;
+}
+
+/*IE-6 or older*/
+* html #header4 {
+	margin-top: 0;
+}
+
+#header4 a {
+	color: #a90;
+	font-size: 120%;
+	letter-spacing: -.05em;
+}
+
+#header4 a:hover,a:focus {
+	color: #eb2;
+	text-decoration: none;
+}
+
+#header4 .clear {
+	width: 100%;
+	background: url('images/shadowheader.jpg') no-repeat bottom right;
+	clear: both;
+	position: absolute;
+	top: -.9em;
+	right: 0;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+==============================================================================
+    FOOTER STYLES
+==============================================================================
+*/
+
+#footer {
+	font-family: bold .7em Arial, sans-serif, sans;
+	width: 95%;
+	float: left;
+	clear: both;
+	padding: 0 0 0 5%;
+	color: #cb1;
+	margin-top: -1em;
+}
+
+#footer a {
+	color: #470;
+}
+
+#footer a:hover,footer a:focus {
+	text-decoration: none;
+	color: #9a0;
+}
+
+#footer .copyright {
+	float: right;
+	clear: right;
+	margin: 0 6em 0 0;
+}
+
+/*
+==============================================================================
+    NAVIGATION MENU
+==============================================================================
+*/
+
+#lang_form select {
+	font-family: sans-serif, sans, arial;
+	margin: 1em 18px;
+	width: 179px;
+	text-align: center;
+}
+
+.menu {
+	background: url('images/bglogin.jpg') repeat-y top center;
+	float: left;
+	clear: left;
+	width: 215px;
+	border: 1px solid #3F3A00;
+	margin: 0 0 1em 0;
+	padding: 0 0 .3em 0;
+	font-family: Arial, sans-serif, sans;
+}
+
+.menu a {
+	color: #470;
+}
+
+.menu a:hover,.menu a:focus {
+	color: #813207;
+}
+
+.menu #formLogin {
+	text-align: center;
+	color: #813207;
+	font-weight: bold;
+	margin-bottom: .8em;
+}
+
+.menu #formLogin input {
+	margin: .3em auto;
+}
+
+.menusection {
+	width: 100%;
+	margin: .3em 0 .3em 0;
+}
+
+.menusection .menulist {
+	float: left;
+	clear: both;
+	margin: 0;
+	padding: 0;
+	text-indent: 1.2em;
+	width: 100%;
+	list-style: none;
+}
+
+.menusection .menulist li {
+	margin: .4em .5em .4em 0;
+}
+
+.menusectioncaption {
+	font: bold 1.2em Arial, sans-serif, sans;
+	color: #111;
+	margin: 0 0 .5em 1em;
+}
+
+/* Specific for administration section*/
+.menu img {
+	margin: 0 0 0 1.2em;
+	vertical-align: baseline;
+}
+
+.menu label {
+	display: block;
+	clear: both;
+	font: bold 1.2em Arial, sans-serif, sans;
+	color: #111;
+	text-align: center;
+	margin: .3em 0;
+	padding: 0;
+	width: 100%
+}
+
+.menu #loginform {
+	text-align: center;
+	color: #813207;
+	font-weight: bold;
+	margin-bottom: .8em;
+}
+
+.menu #loginform input {
+	margin: .3em auto;
+	display: block;
+}
+
+.menu .note {
+	margin: .3em 0 .3em .5em;
+}
+
+td #lang_form select {
+	margin: 1em 31px;
+}
+
+td .menu {
+	background: url('images/bgloginconf.jpg') repeat-y top left;
+	width: 244px;
+	margin: 0 auto;
+}
+
+/*
+==============================================================================
+    DOCUMENT MODULE AND DATA TABLES
+==============================================================================
+*/ 
+
+/* Data tables */
+.data_table {
+	margin: 0 auto;
+	width: 98%;
+	clear: both;
+	font: bold 100% Arial, sans, sans-serif;
+}
+
+.data_table a {
+	font: bold 100% Arial, sans, sans-serif;
+	text-decoration: none;
+}
+
+.data_table .row_even a,.data_table .row_odd a {
+	color: #001B41;
+}
+
+.data_table .row_odd a:hover,.data_table .row_odd:focus,.data_table .row_even a:hover,.data_table .row_odd a:focus
+	{
+	color: #fff;
+}
+
+/* Hack to improve readability in Ie6 or older*/
+* html .data_table .row_odd a:hover,* html .data_table .row_odd:focus,* html .data_table .row_even a:hover,* html .data_table .row_odd a:focus
+	{
+	color: #fff;
+}
+
+.data_table .row_even td {
+	border-right: 1px solid #fff;
+	background: #FFF15F;
+	padding: .2em;
+	color: #3F3A00;
+	margin: 0;
+}
+
+.data_table .row_odd td {
+	border-right: 1px solid #fff;
+	background: #FFE900;
+	padding: .2em;
+	color: #3F3A00;
+	margin: 0;
+}
+
+.data_table .row_even:hover td,.data_table .row_odd:hover td {
+	background: #BFAF00 none;
+	color: #fff;
+}
+
+.data_table th,.data_table .row_odd th,.row_odd th {
+	font: bold 100% sans, sans-serif, arial;
+	text-transform: capitalize;
+	padding: .2em;
+	background: #ebc41f url('images/headertables.jpg') repeat-x;
+	color: #fff;
+}
+
+.data_table .row_odd th a {
+	color: #fff;
+	text-decoration: none;
+	font-size: 110%;
+}
+
+.data_table .row_odd th a:hover,.data_table .row_odd th a:focus {
+	color: #FFF79F;
+}
+
+.data_table tr th,.data_table tr th a {
+	color: #813207;
+}
+
+.data_table tr th a:hover,.data_table tr th a:focus {
+	color: #fff;
+}
+
+.row_odd img,.row_even img {
+	margin: 0 1em 0 1em;
+}
+
+/* Document links */
+#doc_links {
+	margin-left: .5em;
+}
+
+#doc_links a,#folderselector {
+	font: bold 100% Arial, sans-serif, sans;
+	text-decoration: none;
+}
+
+#doc_links a:hover,#doc_links a:focus {
+	color: #3F3A00;
+}
+
+#folderselector {
+	color: #3F3A00;
+}
+
+#folderselector select {
+	margin: 0 .2em;
+}
+
+/*
+==============================================================================
+    FORM STYLES
+==============================================================================
+*/
+
+div.row {
+	clear: both;
+	padding-top: 5px;
+	margin-left: 1em;
+}
+
+div.row div.label {
+	float: left;
+	text-align: left;
+	font: bold 115% Arial, sans-serif, sans;
+	width: 25%;
+	margin: 0;
+}
+
+div.row div.formw {
+	width: 73%;
+	margin: 0;
+}
+
+.row .formw input {
+	margin: 0;
+}
+
+.label {
+	margin-right: 1em;
+}
+
+.formw {
+	margin-top: .2em;
+	padding-left: .6em;
+}
+
+/* Solves the IE inherited margin bug */ /* IE-7*/
+* :first-child+html .row .formw input {
+	margin-left: -1em;
+}
+
+/*IE-6 or older*/
+* html .row .formw input {
+	margin-left: -1em;
+}
+
+[dir=ltr] div.row div.label,[dir=rtl] div.row div.formw {
+	float: left;
+	text-align: right;
+}
+
+[dir=rtl] div.row div.label,[dir=ltr] div.row div.formw {
+	float: right;
+	text-align: left;
+}
+
+/* Specific forms: profile,add course,advanced search,advanced course search,etc.. */
+#add_course,#profile,#advanced_course_search,#advanced_search,#category,#course_user_import,#export_users,#update_course,#user_add,#user_import
+	{
+	border: 1px solid #ddd;
+	background: transparent url("images/headerform.jpg") no-repeat top left;
+	width: 550px;
+	position: relative;
+	padding: 60px 0 1em 0;
+}
+
+#advanced_search,#category,#course_user_import {
+	background: transparent url("images/headerform2.jpg") no-repeat top left
+		;
+}
+
+#export_users,#update_course,#user_add,#user_import {
+	background: transparent url("images/headerform3.jpg") no-repeat top left
+		;
+}
+
+#add_course,#advanced_course_search,#advanced_search,#course_user_import,#export_users,#update_course,#user_add,#user_import
+	{
+	width: 650px;
+	float: left;
+	clear: left;
+	padding-top: 50px;
+	margin-bottom: 1em;
+}
+
+#add_course .label,#advanced_course_search .label,#advanced_search .label,#category .label,#course_user_import .label,#export_users .label,#user_import .label
+	{
+	text-align: left;
+}
+
+#advanced_search,#course_user_import,#export_users,#user_import {
+	width: 550px;
+}
+
+#category {
+	clear: both;
+}
+
+#category select {
+	margin-right: .8em;
+}
+
+#export_users .label,#user_import .label {
+	width: 45%;
+	text-align: left;
+}
+
+#export_users .formw,#user_import .formw {
+	width: 53%;
+}
+
+#myprofilefooter {
+	float: left;
+	clear: both;
+	width: 50%;
+	margin: 3em auto;
+	background: #fff url("images/tinydivider.jpg") no-repeat bottom center;
+	font-size: 110%;
+	text-align: center;
+	height: 3.5em;
+	width: 550px;
+}
+
+#profile .clear {
+	position: absolute;
+	background: transparent url("images/divider.jpg") no-repeat top center;
+	top: 30px;
+	left: 1em;
+	height: 55px;
+	width: 100%;
+}
+
+#profile .label,#update_course .label,#user_add .label {
+	text-align: right;
+}
+
+#profile .formw,#profile .label {
+	position: relative;
+	left: 20%;
+}
+
+#update_course {
+	width: 90%;
+}
+
+#update_course .formw {
+	margin-top: .7em;
+}
+
+#update_course .label {
+	margin-top: .6em;
+}
+
+#user_add {
+	width: 80%;
+}
+
+#user_add input {
+	margin-left: .3em;
+}
+
+/*
+==============================================================================
+    ADMIN SECTION
+==============================================================================
+*/
+
+.admin_section {
+	float: left;
+	margin: 1em 1em;
+	width: 40%;
+	border: 1px solid #BFAF00;
+	padding: .5em .7em .5em .7em;
+	line-height: 120%;
+}
+
+.admin_section h4 {
+	margin: 0;
+	width: 100%;
+	font-size: 120%;
+	font-family: Arial, sans, sans-serif;
+	font-weight: bold;
+}
+
+.admin_section input {
+	margin: .5em;
+}
+
+/*
+==============================================================================
+    COURSE ADMIN
+==============================================================================
+*/
+
+.courseadminview {
+	width: 80%;
+	text-align: center;
+	border: 1px solid #BFAF00;
+	margin: 1.5em auto;
+}
+
+.courseadminview a {
+	text-decoration: none;
+	margin: 0 auto;
+	text-align: center;
+	font: bold 100% Arial, sans-serif, sans;
+	color: #9a0;
+}
+
+.courseadminview a:hover,.courseadminview a:focus {
+	color: #470;
+}
+
+.courseadminview table td {
+	text-align: left;
+}
+
+#courseintro_icons {
+	margin: 1em auto;
+	clear: both;
+	width: 80%;
+}
+
+.viewcaption {
+	font: bold 110% arial, sans, sans-serif;
+	position: relative;
+	background-color: #fff;
+	float: left;
+	clear: left;
+	top: -1.1em;
+	padding: 0 .2em;
+	margin: 0;
+}
+
+/*
+==============================================================================
+    AGENDA
+==============================================================================
+*/
+
+#agenda_list {
+	margin: 0 auto;
+	width: 95%;
+}
+
+#agenda_list .datanow {
+	background: #ebc41f url('images/headertables.jpg') repeat-x;
+	border: 1px solid #BFAF00;
+	vertical-align: top;
+}
+
+#agenda_list img {
+	margin-right: .8em;
+}
+
+#agenda_list td.data img,#agenda_list td.datanow img {
+	margin-bottom: -.6em;
+	margin-top: -.3em;
+}
+
+#agenda_list td.textnow {
+	border: 1px solid #5F5700;
+	background-color: #eee;
+	padding: .5em;
+}
+
+#agenda_list tr,#agenda_list td {
+	width: auto;
+	border: none;
+}
+
+#agenda_list tr.data,#agenda_list td.data,.data {
+	background: #DFCC00 url('images/headertables.jpg') repeat-x top center;
+	vertical-align: top;
+	border: 1px solid #5F5700;
+	color: #FFFCDF;
+}
+
+#agenda_list tr.text,#agenda_list td.text,.text {
+	border: 1px solid #5F5700;
+}
+
+.agenda_month_divider,.title {
+	font: bold 1.2em Arial, sans-serif, sans;
+	color: #FFF79F;
+	text-align: center;
+}
+
+.agenda_month_divider {
+	text-align: center;
+	background: transparent url("images/divider2.jpg") no-repeat 50% 1.3em;
+	height: 2.8em;
+	color: #5F5700;
+}
+
+#agenda_select img {
+	margin-right: .2em;
+}
+
+#agenda_select li {
+	margin-bottom: .6em;
+	font: bold 1em Arial, sans-serif, sans;
+}
+
+#agenda_select li a {
+	color: #4170b4;
+	font: bold 1em Arial, sans-serif, sans;
+	text-decoration: none;
+	color: #9a0;
+}
+
+#agenda_select li a:hover,#agenda_select li a:hover {
+	color: #3F3A00;
+}
+
+.alternativeBgLight {
+	background-color: #FFF15F;
+}
+
+.announcements_datum {
+	color: #7F7400;
+	border: 1px solid #5F5700;
+	background-color: #FFF15F;
+}
+
+.data,.announcements_datum,.datanow {
+	font: bold 1em Arial, sans-serif, sans;
+}
+
+.datanotbold {
+	font-weight: normal;
+}
+
+span.agendaitem {
+	text-align: center;
+	display: block;
+	font-size: 95%;
+	width: 90%;
+	margin: 0 auto;
+	font-size: .9em;
+}
+
+span.agendaitem i {
+	font: bold 97% Arial, sans-serif, sans;
+	color: #a9a;
+}
+
+/* Calendar */
+.days_today {
+	font: bold 1em Arial, sans-serif, sans;
+	text-decoration: none;
+	color: #3F3A00;
+}
+
+.days_week {
+	background-color: #FFEF3F;
+}
+
+.days_week,.days_weekend,.days_today {
+	text-align: center;
+}
+
+.days_weekend {
+	background-color: #DFCC00;
+}
+
+.days_week a,.days_weekend a {
+	font: bold 1em Arial, sans-serif, sans;
+	color: #7F7400;
+}
+
+.days_week a:hover,.days_weekend a:hover,.days_week a:focus,.days_weekend a:focus
+	{
+	text-decoration: none;
+	color: #3F3A00;
+}
+
+.days_week .agendaitem i,.days_weekend .agendaitem i {
+	color: #3F3A00;
+}
+
+.title {
+	background: #ebc41f url('images/headertables.jpg') repeat-x;
+}
+
+.title a {
+	color: #FFF79F;
+}
+
+.title a:hover,.title a:focus {
+	color: #1F1C00;
+}
+
+.weekdays {
+	font: bold 1.1em Arial, sans-serif, sans;
+	color: #fff;
+	background-color: #7F7400;
+	text-align: center;
+}
+
+/*
+==============================================================================
+    DOKEOS CONFIG SETTINGS 
+==============================================================================
+*/
+
+#settings {
+	width: 70%;
+	margin: .5em auto;
+	border: 1px solid #BFAF00;
+	padding: .2em;
+}
+
+.settingtitle {
+	text-align: left;
+	text-indent: .5em;
+	font: bold 130% Arial, sans-serif, sans;
+	color: #fff;
+	margin: .1em auto .1em auto;
+	padding: .1em;
+	border: 1px solid #BFAF00;
+	background: #DFCC00 url('images/headertables.jpg') repeat-x top center;
+	width: 99.5%;
+	letter-spacing: -.03em;
+}
+
+.settingcomment {
+	margin: .5em 0 .5em .5em;
+	font: bold 110% Arial, sans-serif, sans;
+}
+
+.settingvalue {
+	margin: .5em 0 2em .5em;
+}
+
+/*
+==============================================================================
+    BLOG
+==============================================================================
+*/
+
+.blog_left,.blog_right {
+	background: #fff url("images/vertdivider.jpg") no-repeat top left;
+	padding-left: 10px;
+}
+
+.blog_right {
+	text-align: justify;
+	padding-left: 1em;
+	background-color: transparent;
+}
+
+.blog_right a img {
+	margin-right: .2em;
+}
+
+.blog_right table {
+	margin-left: .8em;
+}
+
+.blog_menu_title,.blogpost_title {
+	color: #fff;
+	font: bold 110% Arial, sans-serif, sans;
+}
+
+.blog_menu_title {
+	width: 99%;
+	border-bottom: 1px solid #7F7400;
+	background: #DFCC00 url('images/headertables.jpg') repeat-x top center;
+}
+
+.blogpost {
+	margin: .2em 1.5em;
+	background: transparent url("images/tinydivider.jpg") no-repeat bottom
+		center;
+	padding-bottom: 2em;
+	text-indent: 1em;
+}
+
+.blogpost_actions img {
+	margin: 0 0 0 .8em;
+	vertical-align: bottom;
+}
+
+.blogpost_comment {
+	text-indent: 2em;
+	margin-top: .5em;
+}
+
+.blogpost_date,.blog_subtitle,.blog_menu_title,.blogpost_comment_date {
+	color: #fff;
+	font: bold 110% Arial, sans-serif, sans;
+}
+
+.blogpost_date,.blogpost_comment_date {
+	border: none;
+	margin-left: 1em;
+}
+
+.blogpost_info,.blogpost_comment_info {
+	margin-left: 1em;
+	font: bold 100% Arial, sans-serif, sans;
+}
+
+.blogpost_introduction,.blogpost_text {
+	display: block;
+	clear: both;
+	margin: .5em 0;
+	text-indent: 2em;
+}
+
+.blogpost_title {
+	font: bold 130% Arial, sans-serif, sans;
+	margin: 0 0 .5em 1em;
+	color: #7F7400;
+}
+
+.blogpost_title a {
+	color: #7F7400;
+}
+
+.blogpost_title a:hover,.blogpost_title a:focus {
+	color: #813207;
+}
+
+.blog_subtitle {
+	position: relative;
+	top: .8em;
+	padding: .2em;
+	witdh: 100%;
+	border: 1px solid #BFAF00;
+	background: #ebc41f url('images/headertables.jpg') repeat-x top center;
+}
+
+.blog_title {
+	padding: .1em 1em;
+	font: bold 130% Arial, sans-serif, sans;
+	color: #fff;
+	background-color: #5F5700;
+	margin-bottom: .2em;
+}
+
+.comments,.new_comment {
+	margin-left: 1em;
+}
+
+.blogpost_comment {
+	background: transparent url('images/thindivider.jpg') no-repeat bottom
+		center;
+	padding-bottom: 25px;
+	margin-bottom: 2em;
+}
+
+.blogpost_comment_title {
+	font-size: 95%;
+	background: transparent url('images/headertables.jpg') repeat-x top
+		center;
+	padding: 0.4em;
+	border: 1px solid #BFAF00;
+}
+
+.blogpost_comment_date {
+	font-size: 95%;
+}
+
+.blogpost_comment .blogpost_text {
+	border: 1px solid #BFAF00;
+	padding: .6em;
+}
+
+#title {
+	font: bold 1.2em Arial, sans-serif, sans;
+	color: #9F9100;
+	text-align: center;
+}
+
+/*
+==============================================================================
+    TRACKING
+==============================================================================
+*/
+
+a.specialLink {
+	font: bold 100% Arial, sans-serif, sans;
+	color: #9F9100;
+}
+
+a.specialLink:hover,a.specialLink:focus {
+	color: #813207;
+}
+
+/*
+==============================================================================
+    FORUM
+==============================================================================
+*/
+
+.forum {
+	border: 1px solid #BFAF00;
+	padding: 1px;
+}
+
+.forum_header td {
+	background: transparent url('images/line.jpg') repeat-x bottom center;
+}
+
+/*
+------------------------------------------------------------------------------
+    POST
+------------------------------------------------------------------------------
+*/
+
+.forum_message_post_title {
+	text-align: left;
+	font: bold 95% Arial, sans-serif, sans;
+	background: transparent url('images/headertables.jpg') repeat-x top
+		center;
+	padding: 0.2em;
+	vertical-align: top;
+	height: 20px;
+	border: 1px solid #BFAF00;
+}
+
+.forum_message_left {
+	background: #ebc41f url('images/bglogin.jpg') repeat-y top center;
+	border-right: 1px solid #BFAF00;
+	vertical-align: top;
+	width: 15em;
+	border-collapse: collapse;
+}
+
+.forum_message_left a {
+	color: #470;
+}
+
+.forum_message_left a:hover,.forum_message_left a:focus {
+	color: #813207;
+}
+
+.forum_message_post_text {
+	margin-bottom: 10px;
+	vertical-align: top;
+}
+
+/*
+==============================================================================
+    DISPLAY MESSAGES
+==============================================================================
+*/ 
+
+/* Common message styles */
+.normal-message,.warning-message,.confirmation-message,.error-message {
+	border: 1px solid #BFAF00;
+	margin: 1em auto;
+	padding: 40px .3em .5em .3em;
+	position: relative;
+	width: 500px;
+	color: #813207;
+	background: transparent url('images/alert.jpg') no-repeat 54px 0px;
+	font: bold 110% Arial, sans-serif, sans;
+	text-align: left;
+}
+
+.normal-message img,.warning-message img,.confirmation-message img,.error-message img
+	{
+	position: absolute;
+	top: 0;
+	left: 238px;
+}
+
+#message {
+	margin: 0 auto;
+	text-align: center;
+}
+
+#message select {
+	margin: 10px 0;
+	width: 220px;
+}
+
+#message textarea {
+	margin: 10px 0;
+}
+
+#message td {
+	padding: 4px;
+}
+
+/*
+==============================================================================
+    DROPBOX
+==============================================================================
+*/
+
+#tabbed_menu {
+	border: 1px solid #BFAF00;
+	background: transparent url('images/dropbox.jpg') no-repeat top left;
+	width: 10em;
+	margin: 0 0 1em 0;
+}
+
+#tabbed_menu_tabs {
+	width: 90%;
+	margin: 15px .2em 0 .2em;
+	padding: 0;
+}
+
+#tabbed_menu_tabs li {
+	padding: 0;
+	margin: 0 .8em;
+}
+
+/*
+==============================================================================
+    SYSTEM ANNOUNCEMENTS
+==============================================================================
+*/
+
+div.system_announcement {
+	padding: .2em;
+	border: 1px solid #BFAF00;
+}
+
+.system_announcement a,.system_announcement_title {
+	color: #FFF79F;
+}
+
+.system_announcement a:hover,.system_announcement a:focus {
+	color: #FFF15F;
+}
+
+.system_announcements {
+	background: transparent url('images/systemenouvelles.gif') no-repeat top
+		left;
+	padding-top: 30px;
+	width: 50%;
+}
+
+.system_announcements h3 {
+	text-align: center;
+}
+
+.system_announcement {
+	background: #ebc41f url('images/headertables.jpg') repeat-x;
+	font: bold 100% arial, sans-serif, sans;
+}
+
+.system_announcement_content {
+	font: normal 100% 'Lucida Grande', verdana, Arial, sans-serif, sans;
+}
+
+/*
+==============================================================================
+    INSTALLATION
+==============================================================================
+*/
+
+#installation_steps {
+	background-color: #EFEFEF;
+	float: left;
+}
+
+.current_step {
+	font-weight: bold;
+}
+
+.RequirementHeading {
+	margin-right: 10px;
+}
+
+.RequirementHeading h1 {
+	border-bottom: 1px solid #0066CC;
+	color: #0066CC;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+.RequirementText {
+	color: #666;
+	float: right;
+	font-size: 1.0em;
+	font-weight: normal;
+	width: 200px;
+}
+
+.RequirementContent {
+	color: #000;
+	font-size: 1.0em;
+	font-weight: normal;
+}
+
+.RequirementContent table {
+	border: 1px solid #ccc;
+	width: 400px;
+}
+
+.RequirementContent table th {
+	border-bottom: 1px solid #ccc;
+	text-align: left;
+}
+
+.requirements-item {
+	background-color: #f7f7f7;
+	padding-left: 2px;
+	width: 50%;
+}

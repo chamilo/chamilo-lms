@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 10614 2007-01-08 10:41:23Z elixir_inter $
+// $Id: add_course.php 10907 2007-01-25 15:42:27Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -90,8 +90,15 @@ $titular= &$form->add_textfield('tutor_name', get_lang('Professors'),true,array(
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->addElement('submit', null, get_lang('Ok'));
 $form->add_progress_bar();
+
 // Set default values
-$values['course_language'] = get_setting('platformLanguage');
+if(isset($_user["language"]) && $_user["language"]!=""){
+	$values['course_language'] = $_user["language"];
+}
+else{
+	$values['course_language'] = get_setting('platformLanguage');
+}
+
 $values['tutor_name'] = $_user['lastName']." ".$_user['firstName'];
 $form->setDefaults($values);
 // Validate the form

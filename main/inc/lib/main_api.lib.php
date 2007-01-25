@@ -315,7 +315,7 @@ function api_get_path($path_type)
 			return api_get_path(REL_PATH).$GLOBALS['coursesRepositoryAppend'];
 			break;
 		case REL_CLARO_PATH :
-			return api_get_path(REL_PATH).$GLOBALS['clarolineRepositoryAppend'];
+			return api_get_path(REL_PATH).$_configuration['code_append'];
 			break;
 		case WEB_CODE_PATH :
 			return $GLOBALS['clarolineRepositoryWeb'];

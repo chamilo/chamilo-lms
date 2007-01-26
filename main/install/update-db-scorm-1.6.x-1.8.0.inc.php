@@ -60,9 +60,10 @@ $new_lp_type = 'lp_type';
 $max_dsp_lp = 0;
 $courses_list = array();
 $courses_id_list = array();
+$courses_id_full_table_prefix_list = array();
 $courses_dir_list = array();
 mysql_select_db($dbNameForm);
-$sql = "SELECT * FROM main";
+$sql = "SELECT * FROM course";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 while ($row = Database::fetch_array($res))
 {
@@ -70,6 +71,7 @@ while ($row = Database::fetch_array($res))
 	$dbname = $row['db_name'].'.'.$course_pref;
 	$courses_list[] = $row['db_name'];
 	$courses_id_list[$row['code']] = $row['db_name'];
+	$courses_id_full_table_prefix_list[$row['code']] = $dbname;
 	$courses_dir_list[$row['code']] = $row['directory']; 
 }
 if($loglevel>0){error_log("Tables created/deleted for all courses",0);}
@@ -81,7 +83,7 @@ if($loglevel>0){error_log("Tables created/deleted for all courses",0);}
 //MIGRATING LEARNPATHS
 //test only one course
 //$courses_list = array('fadtest_BLA');
-foreach($courses_list as $db)
+foreach($courses_id_full_table_prefix_list as $course_code => $db)
 {
 	$incoherences = 0;
 	if($loglevel>0){error_log("Now starting migration of learnpath tables from $db database...",0);}
@@ -567,7 +569,7 @@ while($course_row = Database::fetch_array($res_crs)){
 
 	//reinit the scormdocuments list
 	//$scormdocuments_lps = array();
-	$db_name = $courses_id_list[$my_course_code];
+	$db_name = $courses_id_full_table_prefix_list[$my_course_code];
 	$tblscodoc = $db_name.TABLE_SCORMDOC;		
 	$sql_scodoc = "SELECT path FROM $tblscodoc WHERE path IS NOT NULL AND path != ''";
 	if($loglevel>1){error_log("$sql_scodoc",0);}
@@ -683,7 +685,7 @@ foreach($scorms as $my_course_code => $paths_list )
 {
   $max_dsp_lp = 0;
   $course_lp_done = array();
-  $db_name = $courses_id_list[$my_course_code].'.'.$course_pref;
+  $db_name = $courses_id_full_table_prefix_list[$my_course_code];
   foreach($paths_list as $my_path => $old_id){
   	if($loglevel>1){error_log("Migrating lp $my_path from course $my_course_code...",0);}
 	$i_count ++;

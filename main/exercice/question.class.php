@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 10897 2007-01-25 12:45:10Z elixir_inter $
+* 	@version $Id: question.class.php 10933 2007-01-26 16:36:33Z elixir_inter $
 */
 
 
@@ -795,7 +795,7 @@ abstract class Question
 	static function display_type_menu ()
 	{
 		global $exerciseId;
-		echo '<div>';
+		echo '<h4>'.get_lang('AddQ').' :</h4> <div>';
 		foreach(self::$questionTypes as $i=>$a_type)
 		{
 			

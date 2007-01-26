@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 10878 2007-01-24 17:05:21Z elixir_inter $
+* 	@version $Id: admin.php 10918 2007-01-26 10:00:17Z elixir_inter $
 */
 
 
@@ -422,11 +422,7 @@ $description = $objExercise->selectDescription();
 echo '<h3 style="display:inline">'.$objExercise->selectTitle().'</h3>&nbsp;';
 if(!empty($description))
 {
-	echo '
-	<a href="#" onclick="if(document.getElementById(\'description_box\').style.display==\'block\') document.getElementById(\'description_box\').style.display=\'none\'; else document.getElementById(\'description_box\').style.display=\'block\' ;">
-		('.get_lang('SeeDescription').')
-	</a>
-	<div id="description_box" style="display:none">'.$description.'</div>';
+	echo '<div id="description_box">'.$description.'</div>';
 }
 echo '<br /><br />';
 

@@ -11,7 +11,7 @@ api_protect_course_script();
 //Display::display_header($nameTool);
 
 
-$visio_link = api_get_path(WEB_PATH).api_get_setting('service_visio','url');
+$visio_link = api_get_setting('service_visio','url');
 
 ?>
 <span align="center">

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 10815 2007-01-22 13:07:40Z bmol $
+// $Id: user_list.php 10920 2007-01-26 10:55:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -253,7 +253,7 @@ function email_filter($email)
  */
 function modify_filter($user_id,$url_params)
 {
-	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/info_small.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;';
+	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;';
 	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'"><img src="../img/loginas.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
 
 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);

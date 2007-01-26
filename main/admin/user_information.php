@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 10811 2007-01-22 08:26:40Z elixir_julian $
+// $Id: user_information.php 10920 2007-01-26 10:55:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -94,8 +94,8 @@ if (mysql_num_rows($res) > 0)
 		$row[] = $course->code;
 		$row[] = $course->title;
 		$row[] = $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher');
-		$tools = '<a href="course_information.php?code='.$course->code.'"><img src="../img/info_small.gif" border="0" style="vertical-align: middle" /></a>'.
-				'<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'"><img src="../img/home_small.gif" border="0" style="vertical-align: middle" /></a>' .
+		$tools = '<a href="course_information.php?code='.$course->code.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle" /></a>'.
+				'<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'"><img src="../img/course_home.gif" border="0" style="vertical-align: middle" /></a>' .
 				'<a href="course_edit.php?course_code='.$course->code.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
 		if( $course->status == STUDENT )
 		{
@@ -131,7 +131,7 @@ if (mysql_num_rows($res) > 0)
 	{
 		$row = array();
 		$row[] = $class->name;
-		$row[] = '<a href="class_information.php?id='.$class->id.'"><img src="../img/info_small.gif" border="0" style="vertical-align: middle" /></a>';
+		$row[] = '<a href="class_information.php?id='.$class->id.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle" /></a>';
 		$data[] = $row;
 	}
 	echo '<p><b>'.get_lang('Classes').'</b></p>';

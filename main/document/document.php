@@ -1,4 +1,4 @@
-<?php // $Id: document.php 10839 2007-01-23 09:35:28Z elixir_julian $
+<?php // $Id: document.php 10920 2007-01-26 10:55:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -475,7 +475,7 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 	{
 	?>
 		 <a href="<?php echo $_SERVER['PHP_SELF']; ?>?curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)) ?>">
-				<img src="../img/parent.gif" border="0" align="absbottom" hspace="5" alt="" />
+				<img src="../img/folder_up.gif" border="0" align="absbottom" hspace="5" alt="" />
 				<?php echo get_lang("Up"); ?></a>&nbsp;
 	<?php
 	}

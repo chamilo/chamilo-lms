@@ -247,7 +247,7 @@ if ($curDirName) /* if the $curDirName is empty, we're in the root point
   ?>
   <!-- parent dir -->
   <a href="<?php echo $_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&openDir='.$cmdParentDir.'&subdirs=yes'; ?>">
-  <img src="../img/parent.gif" border="0" align="absbottom" hspace="5" alt="parent" />
+  <img src="../img/folder_up.gif" border="0" align="absbottom" hspace="5" alt="parent" />
   <?php echo get_lang("Up"); ?></a>&nbsp;
   <?php
 }

@@ -37,7 +37,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	if(strlen($cur_dir_path) > 0 && $cur_dir_path != '/')
 	{
 		$parent_dir = dirname($cur_dir_path);
-		$display_output .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$parent_dir.'">'.Display::return_icon('parent.gif').' '.get_lang('Up').'</a> ';
+		$display_output .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif').' '.get_lang('Up').'</a> ';
 	}
 	if (! $always_show_upload_form )
 	{
@@ -131,7 +131,7 @@ function display_tool_options($uploadvisibledisabled, $origin)
 				get_lang("Up").'</a>&nbsp;'."\n";
 }
 	echo '<!-- create directory -->' .
-			'<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$cur_dir_path.'&amp;createdir=1"><img src="../img/new_folder.gif" border="0" align="absmiddle" alt ="" /></a>'.
+			'<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$cur_dir_path.'&amp;createdir=1"><img src="../img/folder_new.gif" border="0" align="absmiddle" alt ="" /></a>'.
 			'<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$cur_dir_path.'&amp;createdir=1">'.get_lang("CreateDir").'</a>&nbsp;'."\n";
 
 	echo "</td></tr></table>";

@@ -109,7 +109,7 @@ else
 		$session[] = htmlentities($enreg['date_start']);
 		$session[] = htmlentities($enreg['date_end']);
 		$session[] = '<a href="add_users_to_session.php?page=session_list.php&id_session='.$enreg['id'].'"><img src="../img/group_small.gif" border="0" align="absmiddle" title="'.get_lang('SubscribeUsersToSession').'"></a>
-					<a href="add_courses_to_session.php?page=session_list.php&id_session='.$enreg['id'].'"><img src="../img/info_small.gif" border="0" align="absmiddle" title="'.get_lang('SubscribeCoursesToSession').'"></a>
+					<a href="add_courses_to_session.php?page=session_list.php&id_session='.$enreg['id'].'"><img src="../img/synthese_view.gif" border="0" align="absmiddle" title="'.get_lang('SubscribeCoursesToSession').'"></a>
 					<a href="session_edit.php?page=session_list.php&id='.$enreg['id'].'"><img src="../img/edit.gif" border="0" align="absmiddle" title="'.get_lang('Edit').'"></a>
 					<a href="'.$PHP_SELF.'?sort='.$sort.'&action=delete&idChecked='.$enreg['id'].'" onclick="javascript:if(!confirm(\''.get_lang('Confirm').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>';
 		$sessions[] = $session;

@@ -1,5 +1,5 @@
 <?php
-// $Id: course_information.php 10811 2007-01-22 08:26:40Z elixir_julian $
+// $Id: course_information.php 10920 2007-01-26 10:55:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -94,7 +94,7 @@ Display::display_header($tool_name);
 //api_display_tool_title($tool_name);
 ?>
 <p>
-<a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><img src="../img/home_small.gif" border="0" /> <?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?></a>
+<a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><img src="../img/course_home.gif" border="0" /> <?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?></a>
 <br/>
 <?php
 if( get_setting('server_type') == 'test')
@@ -136,7 +136,7 @@ if (mysql_num_rows($res) > 0)
 		$user[] = $obj->lastname;
 		$user[] = Display :: encrypted_mailto_link($obj->email, $obj->email);
 		$user[] = $obj->course_status == 5 ? get_lang('Student') : get_lang('Teacher');
-		$user[] = '<a href="user_information.php?user_id='.$obj->user_id.'"><img src="../img/info_small.gif" border="0" /></a>';
+		$user[] = '<a href="user_information.php?user_id='.$obj->user_id.'"><img src="../img/synthese_view.gif" border="0" /></a>';
 		$users[] = $user;
 	}
 	$table = new SortableTableFromArray($users,0,20,'user_table');
@@ -169,7 +169,7 @@ if (mysql_num_rows($res) > 0)
 	{
 		$row = array ();
 		$row[] = $class->name;
-		$row[] = '<a href="class_information.php?id='.$class->id.'"><img src="../img/info_small.gif" border="0" /></a>';
+		$row[] = '<a href="class_information.php?id='.$class->id.'"><img src="../img/synthese_view.gif" border="0" /></a>';
 		$data[] = $row;
 	}
 	echo '<p><b>'.get_lang('AdminClasses').'</b></p>';

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_list.php 10811 2007-01-22 08:26:40Z elixir_julian $
+// $Id: class_list.php 10920 2007-01-26 10:55:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -83,7 +83,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
  */
 function modify_filter($class_id)
 {
-	$result = '<a href="class_information.php?id='.$class_id.'"><img src="../img/info_small.gif" border="0" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>';
+	$result = '<a href="class_information.php?id='.$class_id.'"><img src="../img/synthese_view.gif" border="0" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>';
 	$result .= '<a href="class_edit.php?idclass='.$class_id.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
 	$result .= '<a href="class_list.php?action=delete_class&amp;class_id='.$class_id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';
 	$result .= '<a href="subscribe_user2class.php?idclass='.$class_id.'"><img src="../img/group_small.gif" border="0" alt="'.get_lang('AddUsersToAClass').'" title="'.get_lang('AddUsersToAClass').'"/></a>';

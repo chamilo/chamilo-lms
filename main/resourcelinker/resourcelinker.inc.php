@@ -1,4 +1,4 @@
-<?php // $Id: resourcelinker.inc.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: resourcelinker.inc.php 10920 2007-01-26 10:55:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,7 +73,7 @@ function show_folder_up()
 
 	if ($level == 1)
 	{
-		echo "<a href='".$_SERVER['PHP_SELF']."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/parent.gif' border='0' />".get_lang('LevelUp')."</a>";
+		echo "<a href='".$_SERVER['PHP_SELF']."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang('LevelUp')."</a>";
 	}
 	if ($level and $level != 0 and $level != 1)
 	{
@@ -82,7 +82,7 @@ function show_folder_up()
 		$last=count($folder_temp)-1;
 		unset($folder_temp[$last]);
 		$folder_up=implode('/',$folder_temp);
-		echo "<a href='".$_SERVER['PHP_SELF']."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;folder=$folder_up&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/parent.gif' border='0' />".get_lang('LevelUp')."</a>";
+		echo "<a href='".$_SERVER['PHP_SELF']."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;folder=$folder_up&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang('LevelUp')."</a>";
 	}
 }
 

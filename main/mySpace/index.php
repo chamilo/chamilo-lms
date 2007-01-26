@@ -317,7 +317,7 @@ if((api_is_platform_admin() || $is_allowedCreateCourse) && api_get_setting('use_
 {
 	 echo '<div class="admin_section">
 		<h4>
-			<a href="coaches.php"><img src="'.api_get_path(WEB_IMG_PATH).'coachs.gif">&nbsp;'.get_lang("Tutor").' ('.$nbCoachs.')</a>
+			<a href="coaches.php"><img src="'.api_get_path(WEB_IMG_PATH).'coachs.gif">&nbsp;'.get_lang("Tutors").' ('.$nbCoachs.')</a>
 		</h4>
 	 </div>';
 }
@@ -336,7 +336,7 @@ if((api_is_platform_admin() || $is_allowedCreateCourse) && api_get_setting('use_
  </div>
  <div class="admin_section">
 	<h4>
-		<?php echo "<a href='cours.php'><img src='".api_get_path(WEB_IMG_PATH)."courses.gif'>&nbsp;".get_lang('Course').' ('.$nbCours.')'."</a>"; ?>
+		<?php echo "<a href='cours.php'><img src='".api_get_path(WEB_IMG_PATH)."courses.gif'>&nbsp;".get_lang('Courses').' ('.$nbCours.')'."</a>"; ?>
 	</h4>
  </div>
  

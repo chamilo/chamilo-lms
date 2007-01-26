@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10816 2007-01-22 14:42:24Z pvandermaesen $
+* 	@version $Id: index.php 10919 2007-01-26 10:02:38Z bmol $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -52,6 +52,8 @@ include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+$loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
 
 // the section (for the tabs)
 $this_section = SECTION_CAMPUS;

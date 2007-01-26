@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 10811 2007-01-22 08:26:40Z elixir_julian $
+<?php // $Id: course_category.php 10926 2007-01-26 14:34:47Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -199,7 +199,7 @@ else
 ?>
 
   <li>
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($enreg['code']); ?>"><img src="../img/opendir.gif" border="0" title="<?php echo get_lang("OpenNode"); ?>" alt="" /></a>
+	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($enreg['code']); ?>"><img src="../img/folder_document.gif" border="0" title="<?php echo get_lang("OpenNode"); ?>" alt="" align="absbottom" /></a>
 	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($category); ?>&amp;action=edit&amp;id=<?php echo urlencode($enreg['code']); ?>"><img src="../img/edit.gif" border="0" title="<?php echo get_lang("EditNode"); ?>" alt ="" /></a>
 	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($category); ?>&amp;action=delete&amp;id=<?php echo urlencode($enreg['code']); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" title="<?php echo get_lang("DeleteNode"); ?>" alt="" /></a>
 	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($category); ?>&amp;action=moveUp&amp;id=<?php echo urlencode($enreg['code']); ?>&amp;tree_pos=<?php echo $enreg['tree_pos']; ?>"><img src="../img/up.gif" border="0" title="<?php echo get_lang("UpInSameLevel"); ?>" alt="" /></a>

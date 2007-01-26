@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 10920 2007-01-26 10:55:37Z elixir_julian $
+// $Id: user_list.php 10926 2007-01-26 14:34:47Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -31,7 +31,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file = 'admin';
+$language_file = array ('registration','admin');
 $cidReset = true;
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
@@ -254,7 +254,7 @@ function email_filter($email)
 function modify_filter($user_id,$url_params)
 {
 	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;';
-	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'"><img src="../img/loginas.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
+	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'"><img src="../img/login_as.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
 
 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql="SELECT status FROM ".$tbl_user." WHERE user_id='".$user_id."'";

@@ -221,10 +221,10 @@ else
 {
 	foreach($tutors as $index => $tutor)
 	{
-		$tutor_info .= "<li><a href='../user/userInfo.php?origin=".$origin."&amp;uInfo=".$tutor['user_id']."'>".$tutor['firstname']." ".$tutor['lastname']."</a></li>";
+		$tutor_info .= "<div style='margin-bottom: 5px;'><a href='../user/userInfo.php?origin=".$origin."&amp;uInfo=".$tutor['user_id']."'><img src='../img/coachs.gif' align='absbottom'>&nbsp;".$tutor['firstname']." ".$tutor['lastname']."</a></div>";
 	}
 }
-echo '<b>'.get_lang("GroupTutors").':</b><blockquote><ol>'.$tutor_info.'</ol></blockquote>';
+echo '<b>'.get_lang("GroupTutors").':</b><blockquote>'.$tutor_info.'</blockquote>';
 
 
 
@@ -241,10 +241,10 @@ else
 {
 	foreach($tutors as $index => $member)
 	{
-		$member_info .= "<li><a href='../user/userInfo.php?origin=".$origin."&amp;uInfo=".$member['user_id']."'>".$member['firstname']." ".$member['lastname']."</a></li>";
+		$member_info .= "<div style='margin-bottom: 5px;'><a href='../user/userInfo.php?origin=".$origin."&amp;uInfo=".$member['user_id']."'><img src='../img/members.gif' align='absbottom'>&nbsp;".$member['firstname']." ".$member['lastname']."</a></div>";
 	}
 }
-echo '<b>'.get_lang("GroupMembers").':</b><blockquote><ol>'.$member_info.'</ol></blockquote>';
+echo '<b>'.get_lang("GroupMembers").':</b><blockquote>'.$member_info.'</blockquote>';
 /*
 ============================================================================== 
 		FOOTER 

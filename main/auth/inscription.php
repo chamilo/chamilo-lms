@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 10915 2007-01-26 09:27:18Z bmol $
+// $Id: inscription.php 10916 2007-01-26 09:30:12Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -143,7 +143,6 @@ if ($form->validate())
 			// 1. set account inactive
 			$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
 						SET active='0' WHERE user_id='".$user_id."'";
-			echo $sql;
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			// 2. send mail to the platform admin

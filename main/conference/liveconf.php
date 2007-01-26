@@ -10,8 +10,15 @@ api_protect_course_script();
 //$nameTool = get_lang('conference');
 //Display::display_header($nameTool);
 
+if($_GET['type'] == 'classroom')
+{
+	$visio_link = api_get_setting('service_visio','visioclassroom_url');
+}
+else if($_GET['type'] == 'conference')
+{
+	$visio_link = api_get_setting('service_visio','visioconference_url');
+}
 
-$visio_link = api_get_setting('service_visio','url');
 
 ?>
 <span align="center">

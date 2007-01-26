@@ -115,6 +115,8 @@ define('TOOL_COURSE_RIGHTS_OVERVIEW', 'course_rights');
 define('TOOL_UPLOAD','file_upload');
 define('TOOL_COURSE_MAINTENANCE','course_maintenance');
 define('TOOL_VISIO','visio');
+define('TOOL_VISIO_CONFERENCE','visio_conference');
+define('TOOL_VISIO_CLASSROOM','visio_classroom');
 define('TOOL_SURVEY','survey');
 
 // CONSTANTS defining dokeos sections

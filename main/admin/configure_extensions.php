@@ -63,17 +63,34 @@ if(isset($_POST['activeExtension'])){
 				$rs = api_sql_query($sql, __FILE__, __LINE__);
 				while($row = mysql_fetch_array($rs)){
 					
-					$sql = 'INSERT INTO '.$row['db_name'].'.'.TABLE_TOOL_LIST.' SET 
-							name="visio",
-							link="conference/",
-							image="visio.gif",
-							visibility="1",
-							admin="0",
-							address="squaregrey.gif",
-							target="_self",
-							category="authoring"';
-					
-					api_sql_query($sql, __FILE__, __LINE__);
+					if(!empty($_POST['visioconference_url']))
+					{
+						$sql = 'INSERT INTO '.$row['db_name'].'.'.TABLE_TOOL_LIST.' SET 
+								name="visio",
+								link="conference/index.php?type=conference",
+								image="visio.gif",
+								visibility="1",
+								admin="0",
+								address="squaregrey.gif",
+								target="_self",
+								category="authoring"';
+								
+						api_sql_query($sql, __FILE__, __LINE__);		
+					}
+					if(!empty($_POST['visioclassroom_url']))
+					{
+						$sql = 'INSERT INTO '.$row['db_name'].'.'.TABLE_TOOL_LIST.' SET 
+								name="visio",
+								link="conference/index.php?type=classroom",
+								image="visio.gif",
+								visibility="1",
+								admin="0",
+								address="squaregrey.gif",
+								target="_self",
+								category="authoring"';
+								
+						api_sql_query($sql, __FILE__, __LINE__);
+					}					
 	
 				}
 				$message = get_lang('ServiceActivated');

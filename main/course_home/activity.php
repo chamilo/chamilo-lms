@@ -286,7 +286,7 @@ function show_tools_category($course_tool_category)
 				$class='';
 
 			$qm_or_amp = ((strpos($toolsRow['link'], '?') === FALSE) ? '?' : '&amp;');
-				if($toolsRow['name']=='visio'){
+				if(strpos($toolsRow['name'],'visio_')!==false){
 					echo "\t" . ' &nbsp <a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+(screen.height)+\', width=\'+(screen.width-20)+\', toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">&nbsp;&nbsp;';
 				}
 				else {

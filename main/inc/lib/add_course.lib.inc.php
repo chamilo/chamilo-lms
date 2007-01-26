@@ -1403,10 +1403,13 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_GROUP . "','group/group.php','group.gif','".string2binary(api_get_setting('course_create_active_tools', 'groups')) . "','0','squaregrey.gif','NO','_self','interaction')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction')");
-	
+
 	
 	if(api_get_setting('service_visio','active')=='true'){
-		api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_VISIO . "','conference/','visio.gif','1','0','squaregrey.gif','NO','_self','authoring')");
+		if(api_get_setting('service_visio','visioconference_url'))
+			api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio.gif','1','0','squaregrey.gif','NO','_self','authoring')");
+		if(api_get_setting('service_visio','visioclassroom_url'))
+			api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring')");
 	}
 	
 	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)

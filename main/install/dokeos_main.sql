@@ -190,12 +190,13 @@ INSERT INTO `course_module` VALUES
 (15,'course_setting','course_info/infocours.php','reference.gif',1,1,'courseadmin'),
 (16,'External','','external.gif',0,0,'external'),
 (17,'AddedLearnpath','','scormbuilder.gif',0,0,'external'),
-(18,'conference','conference/index.php','conf.gif',0,0,'external'),
-(19,'learnpath','newscorm/lp_controller.php','scorm.gif',5,1,'basic'),
-(20,'blog','blog/blog.php','blog.gif',1,2,'basic'),
-(21,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
-(22,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
-(23,'survey','survey/survey_list.php','survey.gif',2,1,'courseadmin');
+(18,'conference','conference/index.php?type=conference','conf.gif',0,0,'external'),
+(19,'conference','conference/index.php?type=classroom','conf.gif',0,0,'external'),
+(20,'learnpath','newscorm/lp_controller.php','scorm.gif',5,1,'basic'),
+(21,'blog','blog/blog.php','blog.gif',1,2,'basic'),
+(22,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
+(23,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
+(24,'survey','survey/survey_list.php','survey.gif',2,1,'courseadmin');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `course_module` ENABLE KEYS */;
 

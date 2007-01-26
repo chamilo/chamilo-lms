@@ -86,12 +86,10 @@ foreach($courses_list as $db)
 	$lp_items = array();
 	$lp_ordered_items = array();
 	$parent_lps = array(); //keeps a track of chapter's learnpath ids
-	$course_pref = Database::get_course_table_prefix();
-	$db_name = $db.'.'.$course_pref;
-	$my_new_lp = $db_name.$new_lp;
-	$my_new_lp_item = $db_name.$new_lp_item;
-	$my_new_lp_view = $db_name.$new_lp_view;
-	$my_new_lp_item_view = $db_name.$new_lp_item_view;
+	$my_new_lp = $db.$new_lp;
+	$my_new_lp_item = $db.$new_lp_item;
+	$my_new_lp_view = $db.$new_lp_view;
+	$my_new_lp_item_view = $db.$new_lp_item_view;
 	
 	//migrate learnpaths
 	$sql_test = "SELECT * FROM $my_new_lp";

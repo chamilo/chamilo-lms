@@ -22,6 +22,10 @@ ini_set('max_execution_time',0);
 
 $loglevel = 0;
 
+//TODO get table prefix from config file dynamically
+$table_prefix = '';
+$sys_course_path = $pathForm.'courses/';
+
 function my_get_time($time){
 	$matches = array();
 	if(preg_match('/(\d{1,4}):(\d{2})(:(\d{2})(\.\d*)?)?/',$time,$matches)){
@@ -57,12 +61,12 @@ $max_dsp_lp = 0;
 $courses_list = array();
 $courses_id_list = array();
 $courses_dir_list = array();
-$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
+mysql_select_db($dbNameForm);
+$sql = "SELECT * FROM main";
 $res = api_sql_query($sql,__FILE__,__LINE__);
 while ($row = Database::fetch_array($res))
 {
-	//TODO change this db name construction to use DB instead of configuration.php settings
-	$course_pref = Database::get_course_table_prefix();
+	$course_pref = $table_prefix;
 	$dbname = $row['db_name'].'.'.$course_pref;
 	$courses_list[] = $row['db_name'];
 	$courses_id_list[$row['code']] = $row['db_name'];
@@ -74,31 +78,29 @@ if($loglevel>0){error_log("Tables created/deleted for all courses",0);}
  * The migration needs to take all data from the original learnpath tables and add them to the new
  * lp, lp_view, lp_item and lp_item_view tables
  */
-	//MIGRATING LEARNPATHS
+//MIGRATING LEARNPATHS
 //test only one course
 //$courses_list = array('fadtest_BLA');
 foreach($courses_list as $db)
 {
 	$incoherences = 0;
 	if($loglevel>0){error_log("Now starting migration of learnpath tables from $db database...",0);}
-	$lp_main = Database::get_course_table(TABLE_LEARNPATH_MAIN,$db);
+	$lp_main = $db.TABLE_LEARNPATH_MAIN;
 	$lp_ids = array();
-	$lp_user = Database::get_course_learnpath_user_table($db);
+	$lp_user = $db.TABLE_LEARNPATH_USER;
 	$lp_users = array();
-	$lp_chap = Database::get_course_learnpath_chapter_table($db);
+	$lp_chap = $db.TABLE_LEARNPATH_CHAPTER;
 	$parent_chaps = array();
 	$lp_chap_items = array();
 	$ordered_chaps = array();
-	$lp_item = Database::get_course_learnpath_item_table($db);
+	$lp_item = $db.TABLE_LEARNPATH_ITEM;
 	$lp_items = array();
 	$lp_ordered_items = array();
 	$parent_lps = array(); //keeps a track of chapter's learnpath ids
-	$course_pref = Database::get_course_table_prefix();
-	$db_name = $db.'.'.$course_pref;
-	$my_new_lp = $db_name.$new_lp;
-	$my_new_lp_item = $db_name.$new_lp_item;
-	$my_new_lp_view = $db_name.$new_lp_view;
-	$my_new_lp_item_view = $db_name.$new_lp_item_view;
+	$my_new_lp = $db.$new_lp;
+	$my_new_lp_item = $db.$new_lp_item;
+	$my_new_lp_view = $db.$new_lp_view;
+	$my_new_lp_item_view = $db.$new_lp_item_view;
 	
 	//migrate learnpaths
 	$sql_test = "SELECT * FROM $my_new_lp";
@@ -144,7 +146,7 @@ foreach($courses_list as $db)
 		
 		//TODO build path for this chapter (although there is no real path for any chapter)
 		//TODO find out how to calculate the "next_item_id" with the "ordre" field
-		$my_lp_item = Database::get_course_table($new_lp_item);
+		$my_lp_item = $my_new_lp_item;
 		$myname = mysql_real_escape_string($row['chapter_name']);
 		$mydesc = mysql_real_escape_string($row['chapter_description']);
 		$ins_lp_sql = "INSERT INTO $my_new_lp_item (" .
@@ -269,7 +271,6 @@ foreach($courses_list as $db)
 					break;
 			}
 		}
-		$my_lp_item = Database::get_course_table($new_lp_item);
 		$ins_lp_sql = "INSERT INTO $my_new_lp_item (" .
 				"lp_id," .
 				"item_type," .
@@ -301,7 +302,6 @@ foreach($courses_list as $db)
 	}
 	//echo "<pre>lp_items:".print_r($lp_items,true)."</pre>\n";
 	// complete next_item_id field by going through the new table and looking at parent_id and display_order
-	$my_lp_item = Database::get_course_table($new_lp_item);
 	$order_sql = "SELECT * FROM $my_new_lp_item ORDER by lp_id ASC, parent_item_id ASC, display_order ASC";
 	//echo "$order_sql<br />\n";
 	$order_res = api_sql_query($order_sql,__FILE__,__LINE__);
@@ -460,7 +460,7 @@ foreach($courses_list as $db)
 	 * Only normal learnpaths were visible from the homepage so we only need to update here
 	 */
 	//MIGRATING LEARNPATH LINKS ON COURSES HOMEPAGES
-	$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST,$db);
+	$tbl_tool = $db.TABLE_TOOL_LIST;
 	$sql_tool = "SELECT * FROM $tbl_tool WHERE image='scormbuilder.gif' AND link LIKE '%learnpath_handler%'";
 	$res_tool = api_sql_query($sql_tool,__FILE__,__LINE__);
 	while($row_tool = Database::fetch_array($res_tool)){
@@ -485,7 +485,7 @@ foreach($courses_list as $db)
 	/**
 	 * Update course description (intro page) to use new links instead of learnpath/learnpath_handler.php
 	 */
-	$tbl_intro = Database::get_course_table(TABLE_TOOL_INTRO,$db);
+	$tbl_intro = $db.TABLE_TOOL_INTRO;
 	$sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
 	$res_i = api_sql_query($sql_i,__FILE__,__LINE__);
 	//$link_to_course1 = 'scorm/scormdocument.php'; 
@@ -535,10 +535,11 @@ fwrite($fh_res,"-- Recording resulting course homepages links changes for SCORM\
  * and add them to the new lp, lp_view, lp_item and lp_item_view tables.
  */
 if($loglevel>0){error_log("Now starting migration of scorm tables from global SCORM database",0);}
-$scorm_main = Database::get_scorm_main_table($db);
-$scorm_item = Database::get_scorm_sco_data_table($db);
-$lp_main 	= Database::get_course_table(TABLE_LEARNPATH_MAIN,$db);
-$course_pref = Database::get_course_table_prefix();
+
+$scorm_main = $dbScormForm.'.'.TABLE_SCORM_MAIN;
+$scorm_item = $dbScormForm.'.'.TABLE_SCORM_SCO_DATA;
+//$lp_main 	= Database::get_course_table(TABLE_LEARNPATH_MAIN,$db);
+$course_pref = $table_prefix;
 $lp_ids 	= array();
 $lp_item_ids 	= array();
 $lp_item_refs 	= array();
@@ -547,7 +548,8 @@ $lp_course_code = array();
 $scorm_lp_paths = array();
 
 //avoid empty dokeosCourse fields as they potentially break the rest
-$course_main = Database::get_main_table(TABLE_MAIN_COURSE);
+mysql_select_db($dbNameForm);
+$course_main = TABLE_MAIN_COURSE;
 $sql_crs = "SELECT * FROM $course_main WHERE target_course_code IS NULL";
 if($loglevel>0){error_log("$sql_crs",0);}
 $res_crs = api_sql_query($sql_crs,__FILE__,__LINE__);
@@ -566,7 +568,7 @@ while($course_row = Database::fetch_array($res_crs)){
 	//reinit the scormdocuments list
 	//$scormdocuments_lps = array();
 	$db_name = $courses_id_list[$my_course_code];
-	$tblscodoc = Database::get_course_table(TABLE_SCORMDOC,$db_name);		
+	$tblscodoc = $db_name.TABLE_SCORMDOC;		
 	$sql_scodoc = "SELECT path FROM $tblscodoc WHERE path IS NOT NULL AND path != ''";
 	if($loglevel>1){error_log("$sql_scodoc",0);}
 	$res_scodoc = api_sql_query($sql_scodoc,__FILE__,__LINE__);
@@ -590,9 +592,9 @@ while($course_row = Database::fetch_array($res_crs)){
 			//there is only one 'slash' sign at the beginning, 
 			//or none at all, so we assume
 			//it is a main directory that should be taken as path
-			$courses_dir = api_get_path(SYS_COURSE_PATH).''.$courses_dir_list[$my_course_code].'/scorm'.$tmp_path;
+			$courses_dir = $sys_course_path.''.$courses_dir_list[$my_course_code].'/scorm'.$tmp_path;
 			if(!is_dir($courses_dir)){
-				//echo "Scormdocument path $my_content_id: $tmp_path doesn't exist in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm, skipping<br/>\n";
+				//echo "Scormdocument path $my_content_id: $tmp_path doesn't exist in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, skipping<br/>\n";
 				continue;
 				//avoid if contentTitle is not the name of an existing directory
 			}elseif(!is_file($courses_dir."/imsmanifest.xml")){
@@ -615,7 +617,7 @@ while($course_row = Database::fetch_array($res_crs)){
 					}
 				}
 			}else{
-				if($loglevel>2){error_log("  Found scormdocument $tmp_path in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm, treating it.",0);}
+				if($loglevel>2){error_log("  Found scormdocument $tmp_path in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, treating it.",0);}
 				$scormdocuments_lps[] = $tmp_path;
 			}
 		}
@@ -639,15 +641,15 @@ while($course_row = Database::fetch_array($res_crs)){
 			$my_path='';
 		}
 		if($loglevel>1){error_log("++++Now opening $my_path",0);}
-		if(!is_dir($courses_dir = api_get_path(SYS_COURSE_PATH).''.$courses_dir_list[$my_course_code].'/scorm'.$my_path)){
-			if($loglevel>1){error_log("Path $my_content_id: $my_path doesn't exist in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm, skipping",0);}
+		if(!is_dir($courses_dir = $sys_course_path.''.$courses_dir_list[$my_course_code].'/scorm'.$my_path)){
+			if($loglevel>1){error_log("Path $my_content_id: $my_path doesn't exist in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, skipping",0);}
 			continue;
 			//avoid if contentTitle is not the name of an existing directory
-		}elseif(!is_file(api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml")){
-			if($loglevel>1){error_log("!!imsmanifest.xml not found at ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml, skipping",0);}
+		}elseif(!is_file($sys_course_path.$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml")){
+			if($loglevel>1){error_log("!!imsmanifest.xml not found at ".$sys_course_path.$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml, skipping",0);}
 			continue;
 		}else{
-			if($loglevel>1){error_log("Found $my_path in ".api_get_path(SYS_COURSE_PATH).$courses_dir_list[$my_course_code]."/scorm".$mypath."/imsmanifest.xml, keeping it.",0);}
+			if($loglevel>1){error_log("Found $my_path in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm".$mypath."/imsmanifest.xml, keeping it.",0);}
 			$scorms[$my_course_code][$my_path] = $my_content_id;
 		}
 	}
@@ -714,7 +716,7 @@ foreach($scorms as $my_course_code => $paths_list )
 
 	//Setup the ims path (path to the imsmanifest.xml file)
 	//echo "Looking for course with code ".$lp_course_code[$my_content_id]." (using $my_content_id)<br />\n";
-	$courses_dir = api_get_path(SYS_COURSE_PATH).''.$courses_dir_list[$my_course_code];
+	$courses_dir = $sys_course_path.$courses_dir_list[$my_course_code];
 	$sco_path_temp = ($my_path=='/')?'':$my_path;
 	$sco_middle_path = (empty($sco_path_temp)?'':(substr($sco_path_temp,0,1)=='/')?substr($sco_path_temp,1).'/':$sco_path_temp.'/'); //same thing as sco_path_temp but with reversed slashes
 	$ims = $courses_dir.'/scorm'.$sco_path_temp.'/imsmanifest.xml'; 
@@ -853,7 +855,7 @@ foreach($scorms as $my_course_code => $paths_list )
 	
 		//Setup the ims path (path to the imsmanifest.xml file)
 		//echo "Looking for course with code ".$lp_course_code[$my_content_id]." (using $my_content_id)<br />\n";
-		$courses_dir = api_get_path(SYS_COURSE_PATH).''.$courses_dir_list[$lp_course_code[$my_content_id]];
+		$courses_dir = $sys_course_path.$courses_dir_list[$lp_course_code[$my_content_id]];
 		//$scorm_lp_paths[$my_content_id]['path'] = str_replace(' ','\\ ',$scorm_lp_paths[$my_content_id]['path']);
 		$sco_path_temp = ($scorm_lp_paths[$my_content_id]['path']=='/')?'':$scorm_lp_paths[$my_content_id]['path'];
 		$scorm_lp_paths[$my_content_id]['ims'] = $courses_dir.'/scorm'.$sco_path_temp.'/imsmanifest.xml'; 

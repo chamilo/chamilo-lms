@@ -4455,7 +4455,7 @@ class learnpath {
 					$path_file=mysql_result($result,0,0);					
 					$path_parts = pathinfo($path_file);
 					
-					if(in_array($path_parts['extension'],array('html','txt')))
+					if(in_array($path_parts['extension'],array('html','txt','png', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'swf')))
 					{
 						$return .= $this->display_document($row['path'], true, true);
 					}

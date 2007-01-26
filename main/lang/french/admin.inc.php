@@ -547,4 +547,11 @@ $Host = "Hôte";
 $UserOnHost = "Nom d\'utilisateur";
 $FtpPassword = "Mot de passe FTP";
 $PathToLzx = "Chemin vers les fichiers LZX";
+$SubscribeCoursesToSession = "Ajouter des cours à cette session";
+$DateStartSession = "Date de début de la session";
+$DateEndSession = "Date de fin de la session";
+$EditSession = "Editer la session";
+$VideoConferenceUrl = "Chemin vers la visioconférence";
+$VideoClassroomUrl = "Chemin vers la visio conférence de classe";
+$ReconfigureExtension = "Reconfigurer l\'extension";
 ?>

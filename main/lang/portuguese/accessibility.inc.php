@@ -3,4 +3,8 @@ for more information: see languages.txt in the lang folder.
 */
 $WCAGContent = "texto";
 $test = "Exercício";
+$WCAGImage = "imagem";
+$WCAGLabel = "etiqueta da imagem";
+$WCAGLink = "ligação";
+$WCAGLinkLabel = "etiqueta da ligação";
 ?>

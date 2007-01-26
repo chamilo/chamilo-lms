@@ -129,7 +129,7 @@ $langAllRight = "Tout va bien.";
 $langDefcon = "Aie , cas particuliers détectés !";
 $langNULLValue = "Vide (ou <i>NULL</i>)";
 $langTrafficDetails = "Détails du trafic";
-$langSeeIndividualTracking = "Pour le suivi individuel, voir l\'outil <a href=../user/user.php>Membres</a>.";
+$langSeeIndividualTracking = "Pour le suivi individuel, voir l\'outil <a href=../user/user.php>Utilisateurs</a>.";
 $langPathNeverOpenedByAnybody = "Ce parcours n\'a jamais été ouvert.";
 $SynthesisView = "Vue de synthèse";
 $Visited = "Visité";

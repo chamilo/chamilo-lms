@@ -546,4 +546,11 @@ $Host = "Host";
 $UserOnHost = "Username";
 $FtpPassword = "FTP password";
 $PathToLzx = "Path to LZX files";
+$SubscribeCoursesToSession = "Subscribe courses to this session";
+$DateStartSession = "Start date session";
+$DateEndSession = "End date session";
+$EditSession = "Edit this session";
+$VideoConferenceUrl = "Path to live conferencing";
+$VideoClassroomUrl = "Path to classroom live conferencing";
+$ReconfigureExtension = "Reconfigure extension";
 ?>

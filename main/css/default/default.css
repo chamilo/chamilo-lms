@@ -1958,7 +1958,6 @@ input.forms	{
 ------------------------------------------------------------------------------
 */
 
-/* modif pvdm-NOCTIS */
 #WCAG-editor {
 	border: 1px #4171B5 solid;
 	background-color: #E5EDF9;
@@ -2005,5 +2004,4 @@ input.forms	{
 .skip {
 	display: none;
 }
-/* end modif pvdm-NOCTIS */
 

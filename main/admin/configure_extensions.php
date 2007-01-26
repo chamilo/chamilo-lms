@@ -28,6 +28,8 @@ $language_file='admin';
 $cidReset=true;
 
 include('../inc/global.inc.php');
+
+
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -39,9 +41,13 @@ $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 $message = '';
 
+require api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+
+
+
 if(isset($_POST['activeExtension'])){
-	
-	switch ($_POST['extension_code']){
+
+	switch ($_POST['extension_code']){		
 		
 		case 'visio' :
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
@@ -50,35 +56,48 @@ if(isset($_POST['activeExtension'])){
 					AND subkey="active"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);			
 			if(mysql_affected_rows()>0){
-				$sql = 'UPDATE '.$tbl_settings_current.' SET
-						selected_value="'.addslashes($_POST['visio_url']).'"
-						WHERE variable="service_visio"
-						AND subkey="url"';
-				$rs = api_sql_query($sql, __FILE__, __LINE__);	
+				
+				// select all the courses and insert the tool inside
+				$sql = 'SELECT db_name FROM '.Database::get_main_table(TABLE_MAIN_COURSE);
+				
+				$rs = api_sql_query($sql, __FILE__, __LINE__);
+				while($row = mysql_fetch_array($rs)){
+					
+					$sql = 'INSERT INTO '.$row['db_name'].'.'.TABLE_TOOL_LIST.' SET 
+							name="visio",
+							link="conference/",
+							image="visio.gif",
+							visibility="1",
+							admin="0",
+							address="squaregrey.gif",
+							target="_self",
+							category="authoring"';
+					
+					api_sql_query($sql, __FILE__, __LINE__);
+	
+				}
 				$message = get_lang('ServiceActivated');
+				
 			}
-			
-			
-			
-			// select all the courses and insert the tool inside
-			$sql = 'SELECT db_name FROM '.Database::get_main_table(TABLE_MAIN_COURSE);
-			
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['visioconference_url']).'"
+					WHERE variable="service_visio"
+					AND subkey="visioconference_url"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
-			while($row = mysql_fetch_array($rs)){
-				
-				$sql = 'INSERT INTO '.$row['db_name'].'.'.TABLE_TOOL_LIST.' SET 
-						name="visio",
-						link="conf/",
-						image="visio.gif",
-						visibility="1",
-						admin="0",
-						address="squaregrey.gif",
-						target="_self",
-						category="authoring"';
-				
-				api_sql_query($sql, __FILE__, __LINE__);
-
+			
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['visioclassroom_url']).'"
+					WHERE variable="service_visio"
+					AND subkey="visioclassroom_url"';
+			$rs = api_sql_query($sql, __FILE__, __LINE__);	
+			
+			if(empty($message))
+			{
+				$message = get_lang('ServiceReconfigured');
 			}
+			
+			
+			
 			
 			break;	
 			
@@ -231,19 +250,34 @@ Display::display_header($nameTool);
 						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_conf.jpg' ?>" />
 					</td>
 					<td align="center" width="50%">
-						<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
 						<?php 
-						if(in_array('service_visio',$listActiveServices)){
-							echo get_lang('ExtensionActivedButNotYetOperational');
+						$form = new FormValidator('visio');						
+						$form -> addElement('text', 'visioconference_url', get_lang('VideoConferenceUrl'));
+						$form -> addElement('html','<br /><br />');
+						$form -> addElement('text', 'visioclassroom_url', get_lang('VideoClassroomUrl'));
+						$form -> addElement('hidden', 'extension_code', 'visio');
+						$defaults = array();
+						$renderer = $form -> defaultRenderer();
+						$renderer -> setElementTemplate('<div style="text-align:left">{label}</div><div style="text-align:left">{element}</div>');
+						$form -> addElement('html','<br /><br />');
+						if(in_array('service_visio',$listActiveServices))
+						{
+							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.' 
+									WHERE variable = "service_visio"
+									AND (subkey = "visioconference_url" OR subkey = "visioclassroom_url")';
+							$rs = api_sql_query($sql, __FILE__, __LINE__);
+							while($row = mysql_fetch_assoc($rs))
+							{
+								$defaults[$row['subkey']] = $row['selected_value'];
+							}							
+							$form -> addElement('submit', 'activeExtension', get_lang('ReconfigureExtension'));
 						}
 						else {
-								echo get_lang('URL').' : 
-									<input type="text" size="30" name="visio_url" /><br /><br />
-									<input type="hidden" name="extension_code" value="visio" />
-									<input type="submit" name="activeExtension" value="'.get_lang('ActiveExtension').'" />';
+							$form -> addElement('submit', 'activeExtension', get_lang('ActiveExtension'));
 						}
+						$form -> setDefaults($defaults);
+						$form -> display();
 						?>
-						</form>
 					</td>
 				</tr>
 			</table>

@@ -190,7 +190,7 @@ INSERT INTO `course_module` VALUES
 (15,'course_setting','course_info/infocours.php','reference.gif',1,1,'courseadmin'),
 (16,'External','','external.gif',0,0,'external'),
 (17,'AddedLearnpath','','scormbuilder.gif',0,0,'external'),
-(18,'conference','online/online.php','conf.gif',0,0,'external'),
+(18,'conference','conference/index.php','conf.gif',0,0,'external'),
 (19,'learnpath','newscorm/lp_controller.php','scorm.gif',5,1,'basic'),
 (20,'blog','blog/blog.php','blog.gif',1,2,'basic'),
 (21,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
@@ -483,13 +483,14 @@ INSERT INTO `settings_current` VALUES
 (73,'profile','phone','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'phone'),
 (74, 'Ajax_course_tracking_refresh', NULL, 'textfield','Course','0', 'Ajax_course_tracking_refresh','Ajax_course_tracking_refresh_comment', NULL, NULL),
 (75, 'service_visio', 'active', 'radio',NULL,'false', 'visio_actived','', NULL, NULL),
-(76, 'service_visio', 'url', 'textfield',NULL,'', 'visio_url','', NULL, NULL),
-(77, 'service_ppt2lp', 'active', 'radio',NULL,'false', 'ppt2lp_actived','', NULL, NULL),
-(78, 'service_ppt2lp', 'host', 'textfield', NULL, NULL, 'Host', NULL, NULL, NULL),
-(79, 'service_ppt2lp', 'user', 'textfield', NULL, NULL, 'UserOnHost', NULL, NULL, NULL),
-(80, 'service_ppt2lp', 'ftp_password', 'textfield', NULL, NULL, 'FtpPassword', NULL, NULL, NULL),
-(81, 'service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL),
-(82, 'wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL);
+(76, 'service_visio', 'visioconference_url', 'textfield',NULL,'', 'visio_url','', NULL, NULL),
+(77, 'service_visio', 'visioclassroom_url', 'textfield',NULL,'', 'visio_url','', NULL, NULL),
+(78, 'service_ppt2lp', 'active', 'radio',NULL,'false', 'ppt2lp_actived','', NULL, NULL),
+(79, 'service_ppt2lp', 'host', 'textfield', NULL, NULL, 'Host', NULL, NULL, NULL),
+(80, 'service_ppt2lp', 'user', 'textfield', NULL, NULL, 'UserOnHost', NULL, NULL, NULL),
+(81, 'service_ppt2lp', 'ftp_password', 'textfield', NULL, NULL, 'FtpPassword', NULL, NULL, NULL),
+(82, 'service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL),
+(83, 'wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL);
 
 
 UNLOCK TABLES;

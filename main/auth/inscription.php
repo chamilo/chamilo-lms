@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 10906 2007-01-25 15:33:23Z elixir_julian $
+// $Id: inscription.php 10915 2007-01-26 09:27:18Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -110,41 +110,42 @@ if ($form->validate())
 	  STORE THE NEW USER DATA INSIDE THE MAIN DOKEOS DATABASE
 	  -----------------------------------------------------*/
 	$values = $form->exportValues();
-	
+
 	if (get_setting('allow_registration_as_teacher') == 'false')
 	{
-		$values['status'] = STUDENT;	
+		$values['status'] = STUDENT;
 	}
 
 	// creating a new user
 	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language']);
-	
 
-	
+
+
 	if ($user_id)
 	{
 		// TODO: add language to parameter list of UserManager::create_user(...)
 		$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
 		             SET language	= '".mysql_real_escape_string($values['language'])."'
-					WHERE user_id = '".$_user['user_id']."'	 ";
+					WHERE user_id = '".$user_id."'	 ";
 		//api_sql_query($sql,__FILE__,__LINE__);
-		
+
 		// if there is a default duration of a valid account then we have to change the expiration_date accordingly
 		if (get_setting('account_valid_duration')<>'')
 		{
 			$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
-						SET expiration_date='registration_date+1' WHERE user_id='".$_user['user_id']."'";
+						SET expiration_date='registration_date+1' WHERE user_id='".$user_id."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
-		
+
 		// if the account has to be approved then we set the account to inactive, sent a mail to the platform admin and exit the page.
 		if (get_setting('allow_registration')=='approval')
 		{
 			// 1. set account inactive
 			$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
-						SET active='0' WHERE user_id='".$_user['user_id']."'";
+						SET active='0' WHERE user_id='".$user_id."'";
+			echo $sql;
 			api_sql_query($sql,__FILE__,__LINE__);
-			
+
 			// 2. send mail to the platform admin
 			$emailfromaddr 	= api_get_setting('emailAdministrator');
 			$emailfromname 	= api_get_setting('siteName');
@@ -159,15 +160,15 @@ if ($form->validate())
 			$emailbody		.=get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;
 			$emailheaders = "From: ".get_setting('administratorSurname')." ".get_setting('administratorName')." <".get_setting('emailAdministrator').">\n";
 			$emailheaders .= "Reply-To: ".get_setting('emailAdministrator');
-			@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);			
-			
+			@ api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+
 			// 3. exit the page
-			unset($_user['user_id']);
+			unset($user_id);
 			Display :: display_footer();
-			exit; 
+			exit;
 		}
-		
-		
+
+
 		/*--------------------------------------
 		          SESSION REGISTERING
 		  --------------------------------------*/
@@ -234,7 +235,7 @@ if ($form->validate())
 		$actionUrl = "courses.php?action=subscribe";
 	}
 	// ?uidReset=true&uidReq=$_user['user_id']
-	
+
 	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<input type=\"submit\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">\n", "</form><br>\n";
 
 }

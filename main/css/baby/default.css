@@ -1404,3 +1404,6 @@ div.system_announcement {
 	padding-left: 2px;
 	width: 50%;
 }
+.skip {
+	display: none;
+}

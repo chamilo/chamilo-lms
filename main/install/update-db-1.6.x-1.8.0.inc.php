@@ -137,6 +137,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log("mysql_query($dbNameForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
+					error_log("In $dbNameForm, executed: $query",0);
 				}
 			}
 		}
@@ -156,6 +157,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log("mysql_query($dbStatsForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
+					error_log("In $dbStatsForm, executed: $query",0);
 				}
 			}
 		}
@@ -172,6 +174,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			foreach($u_q_list as $query){
 				if($only_test){
 					error_log("mysql_query($dbUserForm,$query)",0);
+					error_log("In $dbUserForm, executed: $query",0);
 				}else{
 					$res = mysql_query($query);
 				}
@@ -225,6 +228,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						error_log("mysql_query(".$row['db_name'].",$query)",0);
 					}else{
 						$res = mysql_query($query);
+						error_log("In ".$row['db_name'].", executed: $query",0);
 					}
 				}
 				//update course manually
@@ -299,7 +303,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	}
 	//load the old-scorm to new-scorm migration script
 	//TODO: deal with the fact that this should only act on MAX_COURSE_TRANSFER courses
-	include('update-db-scorm-1.6.x-1.8.0.inc.php');
+	if(!$only_test){
+		include('update-db-scorm-1.6.x-1.8.0.inc.php');
+	}
 	if (defined('DOKEOS_INSTALL')) 
 	{
 		//deal with migrate-db-1.6.x-1.8.0-post.sql
@@ -318,6 +324,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log("mysql_query($dbNameForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
+					error_log("In $dbNameForm, executed: $query",0);
 				}
 			}
 		}
@@ -337,6 +344,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log("mysql_query($dbStatsForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
+					error_log("In $dbStatsForm, executed: $query",0);
 				}
 			}
 		}
@@ -355,6 +363,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log("mysql_query($dbUserForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
+					error_log("In $dbUserForm, executed: $query",0);
 				}
 			}
 		}
@@ -392,6 +401,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						error_log("mysql_query(".$row['db_name'].",$query)",0);
 					}else{
 						$res = mysql_query($query);
+						error_log("In ".$row['db_name'].", executed: $query",0);
 					}
 				}
 			}

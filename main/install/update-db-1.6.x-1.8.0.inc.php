@@ -134,7 +134,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			mysql_select_db($dbNameForm);
 			foreach($m_q_list as $query){
 				if($only_test){
-					echo "mysql_query($dbNameForm,$query)<br/>";
+					error_log("mysql_query($dbNameForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
 				}
@@ -153,7 +153,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			mysql_select_db($dbStatsForm);
 			foreach($s_q_list as $query){
 				if($only_test){
-					echo "mysql_query($dbStatsForm,$query)<br/>";
+					error_log("mysql_query($dbStatsForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
 				}
@@ -171,7 +171,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			mysql_select_db($dbUserForm);
 			foreach($u_q_list as $query){
 				if($only_test){
-					echo "mysql_query($dbUserForm,$query)<br/>";
+					error_log("mysql_query($dbUserForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
 				}
@@ -222,7 +222,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				{
 					if($only_test)
 					{
-						echo "mysql_query(".$row['db_name'].",$query)<br/>";
+						error_log("mysql_query(".$row['db_name'].",$query)",0);
 					}else{
 						$res = mysql_query($query);
 					}
@@ -315,7 +315,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			mysql_select_db($dbNameForm);
 			foreach($m_q_list as $query){
 				if($only_test){
-					echo "mysql_query($dbNameForm,$query)<br/>";
+					error_log("mysql_query($dbNameForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
 				}
@@ -334,7 +334,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			mysql_select_db($dbStatsForm);
 			foreach($s_q_list as $query){
 				if($only_test){
-					echo "mysql_query($dbStatsForm,$query)<br/>";
+					error_log("mysql_query($dbStatsForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
 				}
@@ -352,7 +352,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			mysql_select_db($dbUserForm);
 			foreach($u_q_list as $query){
 				if($only_test){
-					echo "mysql_query($dbUserForm,$query)<br/>";
+					error_log("mysql_query($dbUserForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
 				}
@@ -389,7 +389,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				{
 					if($only_test)
 					{
-						echo "mysql_query(".$row['db_name'].",$query)<br/>";
+						error_log("mysql_query(".$row['db_name'].",$query)",0);
 					}else{
 						$res = mysql_query($query);
 					}

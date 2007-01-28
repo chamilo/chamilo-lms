@@ -326,7 +326,7 @@ function update_Db_course($courseDbName)
 	$TABLETOOLDROPBOXFILE 		= $courseDbName . 'dropbox_file';
 	$TABLETOOLDROPBOXPERSON 	= $courseDbName . 'dropbox_person';
 	$TABLETOOLDROPBOXCATEGORY 	= $courseDbName . 'dropbox_category';
-	$TABLETOOLDROPBOXFEEDBACK 	= $courseDbName . 'dropbox_feedback';	
+	$TABLETOOLDROPBOXFEEDBACK 	= $courseDbName . 'dropbox_feedback';
 
 	// Learning Path
 	$TABLELEARNPATHITEMS 		= $courseDbName . "learnpath_item";
@@ -362,101 +362,18 @@ function update_Db_course($courseDbName)
 	$tbl_role_user				= $courseDbName . 'role_user';
 
 	//Survey variables for course homepage;
-	$TABLETOOLSURVEY = $courseDbName . "survey";
-	$TABLETOOLSURVEYGROUP = $courseDbName . "survey_group";
-	$TABLETOOLSURVEYQUESTION = $courseDbName . "questions";
-	$TABLETOOLSURVEYREPORT = $courseDbName . "survey_report";
-	
+	$TABLESURVEY 				= $courseDbName . 'survey';
+	$TABLESURVEYQUESTION		= $courseDbName . 'survey_question';
+	$TABLESURVEYQUESTIONOPTION	= $courseDbName . 'survey_question_option';
+	$TABLESURVEYINVITATION		= $courseDbName . 'survey_invitation';
+	$TABLESURVEYANSWER			= $courseDbName . 'survey_answer';
+
 	// audiorecorder
 	$TABLEAUDIORECORDER = $courseDbName.'audiorecorder';
 
 	// Course settings
 	$TABLESETTING = $courseDbName . "course_setting";
-	/*
-	-----------------------------------------------------------
-     Survey Tool
-  -----------------------------------------------------------
-	*/
-  $sql = "CREATE TABLE `".$TABLETOOLSURVEY . "` (
-      survey_id int unsigned NOT NULL auto_increment,
-      code varchar(20) default NULL,
-      title varchar(80) default NULL,
-      subtitle varchar(80) default NULL,
-      author varchar(20) default NULL,
-      lang varchar(20) default NULL,
-      avail_from date default NULL,
-      avail_till date default NULL,
-      is_shared char(1) default 1,
-	  template varchar(20) default NULL,
-      intro text,
-	  surveythanks text,
-      creation_date datetime NOT NULL default '0000-00-00 00:00:00',
-      PRIMARY KEY (survey_id),
-      UNIQUE KEY id (survey_id)
-      )";
-  api_sql_query($sql, __FILE__, __LINE__);
 
-
-  $sql = "CREATE TABLE `".$TABLETOOLSURVEYGROUP . "` (
-      group_id int NOT NULL auto_increment,
-      survey_id int NOT NULL default 0,
-      groupname varchar(100) NOT NULL default '',
-      introduction text NOT NULL,
-	  imported_group int NOT NULL default 0,
-	  db_name varchar(100) NULL default '',
-	  sortby int NOT NULL default 1,
-      PRIMARY KEY (group_id)
-      )";
-  api_sql_query($sql, __FILE__, __LINE__);
-
-
- $sql = "CREATE TABLE `".$TABLETOOLSURVEYQUESTION . "` (
-		qid int unsigned NOT NULL auto_increment,
-		gid int NOT NULL default 0,
-		survey_id int NOT NULL default 0,
-		qtype varchar(50) NOT NULL default '',
-		caption text NOT NULL,
-		alignment varchar(100) NOT NULL default '',
-		sortby int NOT NULL default 1,
-		a1 text NOT NULL,
-		a2 text NOT NULL,
-		a3 text NOT NULL,
-		a4 text NOT NULL,
-		a5 text NOT NULL,
-		a6 text NOT NULL,
-		a7 text NOT NULL,
-		a8 text NOT NULL,
-		a9 text NOT NULL,
-		a10 text NOT NULL,
-		at varchar(200) NOT NULL default '',
-		ad varchar(200) NOT NULL default '',
-		alt_text text NOT NULL,
-		r1 int NOT NULL default 0,
-		r2 int NOT NULL default 0,
-		r3 int NOT NULL default 0,
-		r4 int NOT NULL default 0,
-		r5 int NOT NULL default 0,
-		r6 int NOT NULL default 0,
-		r7 int NOT NULL default 0,
-		r8 int NOT NULL default 0,
-		r9 int NOT NULL default 0,
-		r10 int NOT NULL default 0,
-		imported_question int NOT NULL default 0,
-		db_name varchar(100) NULL default '',
-		PRIMARY KEY (qid)
-		)";
- api_sql_query($sql, __FILE__, __LINE__);
-
-
- $sql= "CREATE TABLE `".$TABLETOOLSURVEYREPORT . "` (
-		id int NOT NULL auto_increment,
-		qid int NOT NULL default 0,
-		answer text NOT NULL,
-		survey_id int NOT NULL default 0,
-		user_id int NOT NULL default 0,
-		PRIMARY KEY (id)
-		)";
-api_sql_query($sql, __FILE__, __LINE__);
 	/*
 	-----------------------------------------------------------
 		Announcement tool
@@ -517,7 +434,7 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) TYPE=MyISAM";
 
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	/*
 	-----------------------------------------------------------
 		Forum tool
@@ -948,7 +865,7 @@ api_sql_query($sql, __FILE__, __LINE__);
 		user_id int unsigned NOT NULL default 0,
 		PRIMARY KEY (file_id,user_id)
 		)");
-	
+
 	$sql = "CREATE TABLE `".$TABLETOOLDROPBOXCATEGORY."` (
   			cat_id int NOT NULL auto_increment,
 			cat_name text NOT NULL,
@@ -958,7 +875,7 @@ api_sql_query($sql, __FILE__, __LINE__);
   			PRIMARY KEY  (cat_id)
   			)";
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	$sql = "CREATE TABLE `".$TABLETOOLDROPBOXFEEDBACK."` (
 			  feedback_id int NOT NULL auto_increment,
 			  file_id int NOT NULL default 0,
@@ -970,7 +887,7 @@ api_sql_query($sql, __FILE__, __LINE__);
 			  KEY author_user_id (author_user_id)
   			)";
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	/*
 	-----------------------------------------------------------
 		New learning path
@@ -994,7 +911,8 @@ api_sql_query($sql, __FILE__, __LINE__);
 		"js_lib         tinytext    not null default ''," . //the JavaScript library to load for this lp
 		"debug 			tinyint		unsigned not null default 0" . //stores the default behaviour regarding items re-initialisation when viewed a second time after success
 		")";
-	if(!api_sql_query($sql)){
+	if(!api_sql_query($sql))
+	{
 		error_log($sql,0);
 	}
 
@@ -1005,7 +923,8 @@ api_sql_query($sql, __FILE__, __LINE__);
 		"view_count		smallint unsigned	not null default 0," . //integer counting the amount of times this learning path has been attempted
 		"last_item		int		unsigned	not null default 0," . //last item seen in this view
 		"progress		int		unsigned	default 0 )"; //lp's progress for this user
-	if(!api_sql_query($sql)){
+	if(!api_sql_query($sql))
+	{
 		error_log($sql,0);
 	}
 
@@ -1027,7 +946,8 @@ api_sql_query($sql, __FILE__, __LINE__);
 		"prerequisite  char(64)  null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
 		"parameters  text  null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
 		"launch_data 	text	not null default '')"; //data from imsmanifest <item>
-	if(!api_sql_query($sql)){
+	if(!api_sql_query($sql))
+	{
 		error_log($sql,0);
 	}
 
@@ -1042,10 +962,11 @@ api_sql_query($sql, __FILE__, __LINE__);
 		"status			char(32) not null default 'Not attempted'," . //status for this item (SCORM)
 		"suspend_data	text null default ''," .
 		"lesson_location text null default '')";
-	if(!api_sql_query($sql)){
+	if(!api_sql_query($sql))
+	{
 		error_log($sql,0);
 	}
-	
+
 	$sql = "CREATE TABLE IF NOT EXISTS `$TABLELPIVINTERACTION`(" .
 		"id				bigint	unsigned 		primary key auto_increment," .
 		"order_id		smallint	unsigned	not null default 0,". //internal order (0->...) given by Dokeos
@@ -1059,11 +980,16 @@ api_sql_query($sql, __FILE__, __LINE__);
 		"result			varchar(255) not null default ''," . //textual result
 		"latency		varchar(16)	not null default ''" . //time necessary for completion of the interaction
 		")";
-	if(!api_sql_query($sql)){
+	if(!api_sql_query($sql))
+	{
 		error_log($sql,0);
 	}
 
-	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
+	/*
+	-----------------------------------------------------------
+		Smart Blogs
+	-----------------------------------------------------------
+	*/
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs . "` (
 			blog_id smallint NOT NULL AUTO_INCREMENT ,
@@ -1075,7 +1001,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with blogs in this course';";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_comments . "` (
@@ -1092,7 +1020,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with comments on posts in a blog';";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_posts . "` (
@@ -1106,7 +1036,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with posts / blog.';";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_rating . "` (
@@ -1120,7 +1052,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with ratings for post/comments in a certain blog';";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_rel_user . "` (
@@ -1130,7 +1064,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table representing users subscribed to a blog';";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_tasks . "` (
@@ -1144,7 +1080,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with tasks for a blog';";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_tasks_rel_user . "` (
@@ -1156,7 +1094,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with tasks assigned to a user in a blog';";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_permission_group . "` (
@@ -1168,7 +1108,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_permission_user . "` (
@@ -1180,7 +1122,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_permission_task . "` (
@@ -1192,7 +1136,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_role . "` (
@@ -1204,7 +1150,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_role_group . "` (
@@ -1214,7 +1162,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_role_permissions . "` (
@@ -1225,7 +1175,9 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 
 	$sql = "
 		CREATE TABLE `" . $tbl_role_user . "` (
@@ -1235,9 +1187,16 @@ api_sql_query($sql, __FILE__, __LINE__);
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
 	if(!api_sql_query($sql))
+	{
 		error_log($sql, 0);
+	}
 	//end of Smartblogs
 
+	/*
+	-----------------------------------------------------------
+		Course Config Settings
+	-----------------------------------------------------------
+	*/
 	api_sql_query("
 		CREATE TABLE `".$TABLESETTING . "` (
 		id 			int unsigned NOT NULL auto_increment,
@@ -1252,8 +1211,110 @@ api_sql_query($sql, __FILE__, __LINE__);
 		PRIMARY KEY (id)
  		)");
 
+	/*
+	-----------------------------------------------------------
+		Survey
+	-----------------------------------------------------------
+	*/
+	$sql = "CREATE TABLE `".$TABLESURVEY."` (
+			  `survey_id` int(10) unsigned NOT NULL auto_increment,
+			  `code` varchar(20) default NULL,
+			  `title` varchar(80) default NULL,
+			  `subtitle` varchar(80) default NULL,
+			  `author` varchar(20) default NULL,
+			  `lang` varchar(20) default NULL,
+			  `avail_from` date default NULL,
+			  `avail_till` date default NULL,
+			  `is_shared` char(1) default '1',
+			  `template` varchar(20) default NULL,
+			  `intro` text,
+			  `surveythanks` text,
+			  `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
+			  `invited` int(11) NOT NULL,
+			  `answered` int(11) NOT NULL,
+			  `invite_mail` text NOT NULL,
+			  `reminder_mail` text NOT NULL,
+			  PRIMARY KEY  (`survey_id`),
+			  UNIQUE KEY `id` (`survey_id`)
+			)";
+
+	$result = mysql_query($sql) or die(mysql_error($sql));
+	/*
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	*/
+
+	$sql = "CREATE TABLE `".$TABLESURVEYANSWER."` (
+			  `answer_id` int(11) NOT NULL auto_increment,
+			  `survey_id` int(11) NOT NULL,
+			  `question_id` int(11) NOT NULL,
+			  `option_id` int(11) NOT NULL,
+			  `user` varchar(250) NOT NULL,
+			  PRIMARY KEY  (`answer_id`)
+			)";
+	$result = mysql_query($sql) or die(mysql_error($sql));
+	/*
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	*/
+
+	$sql = "CREATE TABLE `".$TABLESURVEYINVITATION."` (
+			  `survey_invitation_id` int(11) NOT NULL auto_increment,
+			  `survey_id` int(11) NOT NULL,
+			  `user` varchar(250) NOT NULL,
+			  `invitation_code` varchar(250) NOT NULL,
+			  `invitation_date` datetime NOT NULL,
+			  `reminder_date` datetime NOT NULL,
+			  PRIMARY KEY  (`survey_invitation_id`)
+			)";
+	$result = mysql_query($sql) or die(mysql_error($sql));
+	/*
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	*/
+
+	$sql = "CREATE TABLE `".$TABLESURVEYQUESTION."` (
+			  `question_id` int(11) NOT NULL auto_increment,
+			  `survey_id` int(11) NOT NULL,
+			  `survey_question` text NOT NULL,
+			  `survey_question_comment` text NOT NULL,
+			  `type` varchar(250) NOT NULL,
+			  `display` varchar(10) NOT NULL,
+			  `sort` int(11) NOT NULL,
+			  PRIMARY KEY  (`question_id`)
+			)";
+	$result = mysql_query($sql) or die(mysql_error($sql));
+	/*
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	*/
+
+	$sql ="CREATE TABLE `".$TABLESURVEYQUESTIONOPTION."` (
+	  `question_option_id` int(11) NOT NULL auto_increment,
+	  `question_id` int(11) NOT NULL,
+	  `survey_id` int(11) NOT NULL,
+	  `option_text` text NOT NULL,
+	  `sort` int(11) NOT NULL,
+	  PRIMARY KEY  (`question_option_id`)
+	)";
+	$result = mysql_query($sql) or die(mysql_error($sql));
+	/*
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	*/
+
 	return 0;
-};
+}
 
 /**
 *	Fills the course repository with some
@@ -1276,18 +1337,17 @@ function fill_course_repository($courseRepository)
 		fputs($fp, $enreg);
 	}
 	fclose($fp);
-	
+
 	if(api_get_setting('example_material_course_creation')<>'false')
 	{
-	
 		$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
 		$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/default_course_img/';
-		
+
 		mkdir($course_documents_folder,0777);
-		
+
 		$dirs=array();
 		$handle = opendir($img_code_path);
-		
+
 		while (false !== ($file = readdir($handle))) {
 			if(is_dir($img_code_path.$file) && $file!=".svn" && $file!="." && $file!=".."){
 				mkdir($course_documents_folder.$file,0777);
@@ -1299,17 +1359,17 @@ function fill_course_repository($courseRepository)
 			}
 	   	}
 	   	closedir($handle);
-	   	
+
 	   	foreach($dirs as $current_dir){
 	   		$handle = opendir($img_code_path.$current_dir);
-	   		
+
 			while (false !== ($file = readdir($handle))) {
 				if(is_file($img_code_path.$current_dir.$file) && $file!="." && $file!=".."){
 			        copy($img_code_path.$current_dir.$file,$course_documents_folder.$current_dir.$file);
 			        chmod($course_documents_folder.$current_dir.$file,0777);
 				}
 		   	}
-		   	
+
 		   	closedir($handle);
 	   	}
 	}
@@ -1404,14 +1464,14 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction')");
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction')");
 
-	
+
 	if(api_get_setting('service_visio','active')=='true'){
 		if(api_get_setting('service_visio','visioconference_url'))
 			api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio.gif','1','0','squaregrey.gif','NO','_self','authoring')");
 		if(api_get_setting('service_visio','visioclassroom_url'))
 			api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES ('', '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring')");
 	}
-	
+
 	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
 	$sql = "INSERT INTO `" . $tbl_course_homepage . "` VALUES ('','" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin')";
 	api_sql_query($sql);
@@ -1464,76 +1524,76 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images','".get_lang('Images')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
-		
+
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images/default_course_img','".get_lang('DefaultCourseImages')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
-		
+
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/audio','".get_lang('Audio')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
-		
+
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/flash','".get_lang('Flash')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
-		
+
 		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/video','".get_lang('Video')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
-		
+
 		//FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
 		$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
-	
-	   	
+
+
 	   	$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
 		$img_documents='/images/default_course_img/';
-	   	
+
 	   	$dirs=array();
 		$handle = opendir($img_code_path);
-		
+
 		while (false !== ($file = readdir($handle))) {
 			$file=lang2db($file);
-			
+
 			if(is_dir($img_code_path.$file) && $file!=".svn" && $file!="." && $file!=".."){
-				
+
 				api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents$file','$file','folder','0')");
 				$image_id = Database :: get_last_insert_id();
 				api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
 				$dirs[]=$file.'/';
-				
+
 			}
-			
+
 			elseif(is_file($img_code_path.$file) && $file!="." && $file!=".." && $file!=".svn"){
 				$file_size=filesize($img_code_path.$file);
 		        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents$file','$file','file','$file_size')");
 				$image_id = Database :: get_last_insert_id();
 				api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
-		        
+
 			}
 	   	}
 	   	closedir($handle);
-	   	
+
 	   	$img_documents='/images/default_course_img/';
 	   	foreach($dirs as $current_dir){
-	   		
+
 	   		$handle = opendir($img_code_path.$current_dir);
-	   		
+
 			while (false !== ($file = readdir($handle))) {
 				if(is_file($img_code_path.$current_dir.$file) && $file!="." && $file!=".."){
-			        
-			        $file_size=filesize($img_code_path.$current_dir.$file);			        
+
+			        $file_size=filesize($img_code_path.$current_dir.$file);
 			        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents$current_dir$file','$langTitle','file','$file_size')");
 					$image_id = Database :: get_last_insert_id();
 					api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
-			        
+
 				}
 		   	}
-		   	
+
 		   	closedir($handle);
 	   	}
-	   			
-		
+
+
 		/*
 		-----------------------------------------------------------
 			Agenda tool

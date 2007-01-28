@@ -1,42 +1,42 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004-2005 Dokeos S.A.
 	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
 	Copyright (c) Patrick Cool, Ghent University
 	Copyright (c) Yannick Warnier, Dokeos S.A.
 	Copyright (c) Bart Mollet, Hogeschool Gent
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	This is the main database library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
 *	@package dokeos.library
-* 	@todo the table constants have all to start with TABLE_ 
+* 	@todo the table constants have all to start with TABLE_
 * 		  This is because of the analogy with the tool constants TOOL_
-============================================================================== 
+==============================================================================
 */
 /*
-============================================================================== 
+==============================================================================
 		CONSTANTS
-============================================================================== 
+==============================================================================
 */
 //main database tables
 define('TABLE_MAIN_COURSE', 'course');
@@ -144,20 +144,23 @@ define('TABLE_ONLINE_CONNECTED', 'online_connected');
 define('TABLE_PERSONAL_AGENDA', 'personal_agenda');
 define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
 //Survey
-// @todo: are these MAIN tables or course tables ? 
+// @todo: are these MAIN tables or course tables ?
 define('TABLE_MAIN_SURVEY', 'survey');
 define('TABLE_MAIN_GROUP', 'survey_group');
 define('TABLE_MAIN_SURVEYQUESTION', 'questions');
 // SURVEY
 define('TABLE_SURVEY', 'survey');
-define('TABLE_SURVEY_GROUP', 'survey_group');
 define('TABLE_SURVEY_QUESTION', 'survey_question');
+define('TABLE_SURVEY_QUESTION_OPTION', 'survey_question_option');
+define('TABLE_SURVEY_INVITATION', 'survey_invitation');
+define('TABLE_SURVEY_ANSWER', 'survey_answer');
+
 
 /*
-============================================================================== 
+==============================================================================
 		DATABASE CLASS
 		the class and its functions
-============================================================================== 
+==============================================================================
 */
 /**
  *	@package dokeos.library
@@ -184,7 +187,7 @@ class Database
 	*/
 	function get_statistic_database()
 	{
-		global $_configuration;		
+		global $_configuration;
 		return $_configuration['statistics_database'];
 	}
 	/**
@@ -234,13 +237,13 @@ class Database
 	/**
 	*	Returns the database prefix.
 	*	All created COURSE databases are prefixed with this string.
-	*	
+	*
 	*	TIP: this can be convenient e.g. if you have multiple Dokeos installations
 	*	on the same physical server.
 	*/
 	function get_database_name_prefix()
 	{
-		global $_configuration; 
+		global $_configuration;
 		return $_configuration['db_prefix'];
 	}
 	/**
@@ -252,18 +255,18 @@ class Database
 	function get_course_table_prefix()
 	{
 		global $_configuration;
-		return $_configuration['table_prefix']; 
+		return $_configuration['table_prefix'];
 	}
 	/*
 	-----------------------------------------------------------------------------
 		Table Name functions
-		use these functions to get a table name for queries, 
+		use these functions to get a table name for queries,
 		instead of constructing them yourself.
-		
+
 		Backticks automatically surround the result,
 		e.g. `COURSE_NAME`.`link`
 		so the queries can look cleaner.
-		
+
 		Example:
 		$table = Database::get_course_table(TABLE_DOCUMENT);
 		$sql_query = "SELECT * FROM $table WHERE $condition";
@@ -303,7 +306,7 @@ class Database
 	}
 	/**
 	 * This generic function returns the correct and complete name of any statistic table
-	 * of which you pass the short name as a parameter. 
+	 * of which you pass the short name as a parameter.
 	 * Please define table names as constants in this library and use them
 	 * instead of directly using magic words in your tool code.
 	 *
@@ -359,10 +362,10 @@ class Database
 		these execute a query and return the result(s).
 	-----------------------------------------------------------------------------
 	*/
-	
+
 	/**
 	*	@return a list (array) of all courses.
-	* 	@todo shouldn't this be in the course.lib.php script? 
+	* 	@todo shouldn't this be in the course.lib.php script?
 	*/
 	function get_course_list()
 	{
@@ -372,12 +375,12 @@ class Database
 		$result = api_store_result($sql_result);
 		return $result;
 	}
-	
+
 	/**
 	*	Returns an array with all database fields for the specified course.
 	*
 	*	@param the real (system) code of the course (key of the main course table)
-	* 	@todo shouldn't this be in the course.lib.php script? 
+	* 	@todo shouldn't this be in the course.lib.php script?
 	*/
 	function get_course_info($course_code)
 	{
@@ -395,7 +398,7 @@ class Database
 	*	@author Roan Embrechts, first version + converted to Database API
 	*	@version 30 September 2004
 	*	@desc find all the information about a specified user. Without parameter this is the current user.
-	* 	@todo shouldn't this be in the user.lib.php script? 
+	* 	@todo shouldn't this be in the user.lib.php script?
 	*/
 	function get_user_info_from_id($user_id = '')
 	{
@@ -422,7 +425,7 @@ class Database
 	*
 	*	@todo	add more array entries to abstract course info from field names
 	*	@author	Roan Embrechts
-	* 
+	*
 	* 	@todo what's the use of this function. I think this is better removed.
 	* 		  There should be consistency in the variable names and the use throughout the scripts
 	* 		  for the database name we should consistently use or db_name or database (db_name probably being the better one)
@@ -439,7 +442,7 @@ class Database
 		//$result_array["directory"] = $result_array["directory"];
 		/*
 		still to do: (info taken from local.inc.php)
-		
+
 		$_course['id'          ]         = $cData['cours_id'         ]; //auto-assigned integer
 		$_course['name'        ]         = $cData['title'            ];
 		$_course['official_code']        = $cData['visual_code'        ]; // use in echo
@@ -453,7 +456,7 @@ class Database
 		$_course['extLink'     ]['name'] = $cData['department_name'];
 		$_course['categoryCode']         = $cData['faCode'           ];
 		$_course['categoryName']         = $cData['faName'           ];
-		
+
 		$_course['visibility'  ]         = (bool) ($cData['visibility'] == 2 || $cData['visibility'] == 3);
 		$_course['registrationAllowed']  = (bool) ($cData['visibility'] == 1 || $cData['visibility'] == 2);
 		*/
@@ -469,7 +472,7 @@ class Database
 	*	@todo add more array entries to abstract user info from field names
 	*	@author Roan Embrechts
 	*	@author Patrick Cool
-	* 
+	*
 	* 	@todo what's the use of this function. I think this is better removed.
 	* 		  There should be consistency in the variable names and the use throughout the scripts
 	*/
@@ -482,8 +485,8 @@ class Database
 		#$result_array ['user_id'  ] 	= $result_array['user_id'   ];
 		return $result_array;
 	}
-	
-	
+
+
 	/*
 	-----------------------------------------------------------------------------
 		Private Functions
@@ -598,14 +601,14 @@ class Database
 	{
 		return mysql_num_rows($res);
 	}
-	
+
 	function get_course_chat_connected_table($database_name = '')
 	{
 		$database_name_with_glue = Database::fix_database_parameter($database_name);
 		return Database::format_glued_course_table_name($database_name_with_glue, CHAT_CONNECTED_TABLE);
 	}
-	
-	
+
+
 }
 //end class Database
 ?>

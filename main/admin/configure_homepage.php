@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10975 2007-01-29 21:54:57Z pvandermaesen $
+<?php // $Id: configure_homepage.php 10982 2007-01-29 22:14:31Z pvandermaesen $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -121,7 +121,13 @@ if(!empty($action))
 
 			$s_languages_news=$_POST["news_languages"];
 			//echo "langue choisie : ".$s_languages_news;
-			$home_news=trim(stripslashes($_POST['home_news']));
+			if (api_get_setting('wcag_anysurfer_public_pages')=='true')
+			{
+				$home_news=WCAG_rendering::prepareXHTML();
+			} else
+			{ 
+				$home_news=trim(stripslashes($_POST['home_news']));
+			}
 
 			if($s_languages_news!="all"){
 
@@ -587,7 +593,6 @@ foreach($home_menu as $key=>$enreg)
 
 <?php
     //api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
-	
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 		echo WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html);
 	} else {
@@ -696,9 +701,7 @@ if($action == 'edit_news'){
 	
 <?php
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-		echo (WCAG_Rendering::editor_header());
-		WCAG_Rendering::prepare_admin_form($open)->display();
-		echo (WCAG_Rendering::editor_footer());
+		echo WCAG_Rendering::create_xhtml($open);
 	} else {
 		$oFCKeditor = new FCKeditor($name) ;
 		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;

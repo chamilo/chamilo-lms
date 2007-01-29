@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10817 2007-01-22 14:44:17Z pvandermaesen $
+<?php // $Id: configure_homepage.php 10956 2007-01-29 09:39:46Z pvandermaesen $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -23,7 +23,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file='admin';
+$language_file = array ('admin', 'accessibility');
 
 $cidReset=true;
 

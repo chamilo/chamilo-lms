@@ -56,6 +56,18 @@ class WCAG_Rendering {
 		return $home_top;
 	}
 	
+	/**
+	* this method validate the content of current request (from WCAG editor).
+	* this function return the error msg.
+	*/
+	function request_validation() {
+		$imageFile = $_POST['imagefile'];				
+		$imageLabel = $_POST['imageLabel'];
+		if ((strlen($imageFile) > 0) and (strlen($imageLabel) == 0)) {
+			return get_lang('errorNoLabel');
+		}
+		return '';
+	}
 	
 /**
 * Converter Plaintext to (x)HTML

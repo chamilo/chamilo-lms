@@ -467,7 +467,7 @@ function get_sql_file_contents($file,$section,$print_errors=true)
 		}else{
 			if($record == true)
 			{
-				if(!empty(trim($line))){
+				if(!empty($line)){
 					$section_contents[] = $line;
 				}
 			}

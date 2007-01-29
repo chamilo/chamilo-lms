@@ -279,10 +279,9 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 				echo "			<td align='center'".$lpath_pct_completed_color.">".$lpath_pct_completed."</td>";
 				echo "		</tr>";
 				//--------------------------------END presentation of data
-				
-				echo "</table>";
-				
+								
             }
+            echo "</table>";
 
         }
         else

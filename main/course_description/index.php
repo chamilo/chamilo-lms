@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10876 2007-01-24 16:03:00Z elixir_julian $
+<?php // $Id: index.php 10977 2007-01-29 21:56:12Z pvandermaesen $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,13 +41,14 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array ('course_description', 'pedaSuggest');
+$language_file = array ('course_description', 'pedaSuggest', 'accessibility');
 
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
 
 include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
+include_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
 /*
 -----------------------------------------------------------
 	Header
@@ -177,7 +178,12 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		{
 			$form->add_textfield('title', get_lang('Title'));
 		}
-		$form->add_html_editor('contentDescription', get_lang('Content'));
+		
+		if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+			WCAG_rendering::prepare_admin_form($description_content, $form);
+		} else {
+			$form->add_html_editor('contentDescription', get_lang('Content'));
+		}
 		$form->addElement('submit', null, get_lang('Ok'));
 		// Set some default values
 		$default['title'] = $default_description_titles[$description_id];
@@ -189,7 +195,11 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		if ($form->validate())
 		{
 			$description = $form->exportValues();
-			$content = $description['contentDescription'];
+			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+				$content = WCAG_Rendering::prepareXHTML();
+			} else {
+				$content = $description['contentDescription'];
+			}
 			$title = $description['title'];
 			if ($description['description_id'] == ADD_BLOCK)
 			{
@@ -229,7 +239,9 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 				}
 				echo '</dl>';
 			}
+			echo (WCAG_Rendering::editor_header());
 			$form->display();
+			echo (WCAG_Rendering::editor_footer());
 			$show_description_list = false;
 		}
 	}

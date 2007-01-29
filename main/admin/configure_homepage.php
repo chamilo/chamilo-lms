@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10956 2007-01-29 09:39:46Z pvandermaesen $
+<?php // $Id: configure_homepage.php 10959 2007-01-29 10:48:41Z pvandermaesen $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -70,6 +70,7 @@ if(!empty($action))
 			$home_top='';
 			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 				$text = $_POST['text'];
+				$text = WCAG_Rendering::text2HTML ( $text );
 				$imageFile = $_POST['imagefile'];				
 				$imageLabel = $_POST['imageLabel'];
 				$link = $_POST['link'];				

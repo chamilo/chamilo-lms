@@ -29,6 +29,21 @@ include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 * @version     1.0
 */
 class WCAG_Rendering {
+	
+	
+/**
+* Converter Plaintext to (x)HTML
+*/
+function text2HTML ($Text)
+{
+		$t = $Text;
+		$t = stripslashes($t);
+		$t = htmlentities($t);
+
+		$t = preg_replace("/(\015\012)|(\015)|(\012)/", "<br />\n", $t);
+		$t = str_replace("  ", " &nbsp;", $t);
+        return $t;
+}
 
 /**
 *	add a form for set WCAG content (replace FCK)
@@ -39,6 +54,9 @@ function &prepare_admin_form( $xhtml )
 	$startP = stripos ($xhtml, "<p>");
 	$endP =  stripos ($xhtml, "</p>");	
 	$text = substr ($xhtml, $startP+3, $endP-$startP-3 );
+	// convert HTML to text.
+	$text = str_replace("<br />", "", $text);
+	$text = str_replace("&nbsp;", " ", $text);
 	
 	$startImgURL = stripos ($xhtml, "src=\"");
 	$endImgURL = stripos ($xhtml, "\" ");

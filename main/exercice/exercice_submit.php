@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: exercice_submit.php 10957 2007-01-29 10:16:23Z elixir_julian $
 */
 
 
@@ -264,6 +264,7 @@ if(!$questionNum || $_POST['questionNum'])
 //$nameTools=get_lang('Exercice');
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[]=array("url" => "#","name" => $exerciseTitle);
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
 

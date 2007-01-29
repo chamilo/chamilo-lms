@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 10918 2007-01-26 10:00:17Z elixir_inter $
+* 	@version $Id: admin.php 10957 2007-01-29 10:16:23Z elixir_julian $
 */
 
 
@@ -284,6 +284,7 @@ else
 }
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[]=array("url" => "admin.php?exerciseId=".$objExercise->id,"name" => $objExercise->exercise);
 
 // shows a link to go back to the question pool
 if(!$exerciseId && $nameTools != get_lang('ExerciseManagement'))

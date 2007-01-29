@@ -5821,11 +5821,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">Create the link:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("CreateTheLink").' :</p>' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">Move the current link:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveCurrentLink").' :</p>' . "\n";
 			else
-				$return .= '<p class="lp_title">Edit the current link:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentLink").' :</p>' . "\n";
 			
 			$return .= '<form method="POST">' . "\n";
 			
@@ -5833,7 +5833,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
-						$return .= "\t\t\t" . '<td class="label"><label for="idParent">Parent:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
@@ -5872,12 +5872,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">Position:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
 							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang("FirstPosition").'</option>';
 								
 								for($i = 0; $i < count($arrLP); $i++)
 								{
@@ -5904,21 +5904,21 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					{
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">Description:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idURL">URL:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idURL">'.get_lang("Url").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input' . (is_numeric($extra_info) ? ' disabled="disabled"' : '') . ' id="idURL" name="url" type="text" value="' . $item_url . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
@@ -5926,7 +5926,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang("Ok").'" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -6032,11 +6032,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">Create the student publication:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("student_publication").' :</p>' . "\n";
 			elseif($action == 'move')
-				$return .= '<p class="lp_title">Move the current student publication:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("MoveCurrentStudentPublication").' :</p>' . "\n";
 			else
-				$return .= '<p class="lp_title">Edit the current student publication:</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentStudentPublication").' :</p>' . "\n";
 			
 			$return .= '<form method="POST">' . "\n";
 			
@@ -6044,7 +6044,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				
 					$return .= "\t\t" . '<tr>' . "\n";
 					
-						$return .= "\t\t\t" . '<td class="label"><label for="idParent">Parent:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
@@ -6083,12 +6083,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">Position:</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
 						$return .= "\t\t\t" . '<td class="input">' . "\n";
 						
 							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
 							
-								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">'.get_lang("FirstPosition").'</option>';
 								
 								for($i = 0; $i < count($arrLP); $i++)
 								{
@@ -6115,7 +6115,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					{
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">Title:</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
@@ -6123,7 +6123,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					
 					$return .= "\t\t" . '<tr>' . "\n";
 						
-						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="'.get_lang("Ok").'" /></td>' . "\n";
 					
 					$return .= "\t\t" . '</tr>' . "\n";
 				
@@ -6570,7 +6570,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							
 						$return .= '<td colspan="3">';
 						
-							$return .= '<input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+							$return .= '<input class="button" name="submit_button" type="submit" value="'.get_lang("Ok").'" /></td>' . "\n";
 						
 						$return .= '</td>';
 							

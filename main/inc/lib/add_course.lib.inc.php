@@ -214,7 +214,7 @@ function prepare_course_repository($courseRepository, $courseId)
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images", 0777);
-		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/default_course_img/", 0777);
+		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/examples/", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/audio", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/flash", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/video", 0777);
@@ -1341,7 +1341,7 @@ function fill_course_repository($courseRepository)
 	if(api_get_setting('example_material_course_creation')<>'false')
 	{
 		$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
-		$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/default_course_img/';
+		$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/examples/';
 
 		mkdir($course_documents_folder,0777);
 
@@ -1525,7 +1525,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
-		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images/default_course_img','".get_lang('DefaultCourseImages')."','folder','0')");
+		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images/examples','".get_lang('DefaultCourseImages')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
@@ -1547,7 +1547,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 
 
 	   	$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
-		$img_documents='/images/default_course_img/';
+		$img_documents='/images/examples/';
 
 	   	$dirs=array();
 		$handle = opendir($img_code_path);
@@ -1574,7 +1574,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 	   	}
 	   	closedir($handle);
 
-	   	$img_documents='/images/default_course_img/';
+	   	$img_documents='/images/examples/';
 	   	foreach($dirs as $current_dir){
 
 	   		$handle = opendir($img_code_path.$current_dir);

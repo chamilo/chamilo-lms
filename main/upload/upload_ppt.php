@@ -76,7 +76,7 @@ $s_style="border-width: 1px;
 		 border-style: solid;
 		 margin-left: 0;
 		 margin-top: 10px;
-		 margin-bottom: 10px;
+		 margin-bottom: 0px;
 		 min-height: 30px;
 		 padding: 5px;
 		 position: relative;
@@ -142,9 +142,6 @@ $form -> add_real_progress_bar('ppt2lp', 'qf_group_1', 1, true);
 // display the form
 $form -> display();
 
-
-
-echo "<br><br><br><br>";
 
 /*
 ==============================================================================

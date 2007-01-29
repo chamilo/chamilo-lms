@@ -168,6 +168,7 @@ function save_invitations($users_array, $invitation_title, $invitation_text)
 {
 	global $_user;
 	global $_course;
+	global $_configuration;
 
 	// Database table definition
 	$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
@@ -193,7 +194,7 @@ function save_invitations($users_array, $invitation_title, $invitation_text)
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 
 				// replacing the **link** part with a valid link for the user
-				$survey_link = 'http://fillsurvey.php?course='.$_course['code'].'&invitationcode='.$invitation_code;
+				$survey_link = $_configuration['root_web'].$_configuration['code_append'].'survey/'.'fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$invitation_code;
 				$invitation_text = str_ireplace('**link**', $survey_link ,$invitation_text, $replace_count);
 				if ($replace_count < 1)
 				{

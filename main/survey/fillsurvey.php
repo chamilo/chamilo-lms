@@ -37,14 +37,18 @@ require ('../inc/global.inc.php');
 // including additional libraries
 //require_once (api_get_path(LIBRARY_PATH)."/survey.lib.php");
 require_once('survey.lib.php');
+require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
+
+// getting all the course information
+$_course = CourseManager::get_course_information($_GET['course']);
 
 // Database table definitions
-$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
-$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_survey 					= Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
+$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION, $_course['db_name']);
+$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $_course['db_name']);
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
+$table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION, $_course['db_name']);
 
 // breadcrumbs
 // $interbreadcrumb[] = array ("url" => 'survey_list.php', 'name' => get_lang('SurveyList'));
@@ -205,8 +209,10 @@ Display :: display_footer();
  */
 function store_answer($user, $survey_id, $question_id, $option_id)
 {
+	global $_course;
+
 	// table definition
-	$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
+	$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
 
 	$sql = "INSERT INTO $table_survey_answer (user, survey_id, question_id, option_id) VALUES (
 			'".mysql_real_escape_string($user)."',

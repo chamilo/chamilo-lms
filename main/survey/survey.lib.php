@@ -47,7 +47,10 @@ class survey_manager
 	 */
 	function get_survey($survey_id)
 	{
-		$tbl_survey = Database :: get_course_table(TABLE_SURVEY);
+		global $_course;
+
+		// table definition
+		$tbl_survey = Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
 
 		$sql = "SELECT * FROM $tbl_survey WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -219,9 +222,11 @@ class survey_manager
 	 */
 	function save_question($form_content)
 	{
+		global $_course;
+
 		// table definitions
-		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
-		$tbl_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		$table_survey 			= Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
+		$tbl_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION, $_course['db_name']);
 
 		// storing a new question
 		if ($form_content['question_id'] == '' OR !is_numeric($form_content['question_id']))

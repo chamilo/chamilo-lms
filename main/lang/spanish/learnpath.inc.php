@@ -153,4 +153,5 @@ $langNoItemsInLp = "En este momento no hay items en el itinerario de aprendizaje
 $FirstPosition = "Primera posición";
 $NewQuiz = "Nuevo ejercicio";
 $CreateTheForum = "Añadir el foro";
+$Forums = "Foros";
 ?>

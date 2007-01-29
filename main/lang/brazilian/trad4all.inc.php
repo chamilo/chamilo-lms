@@ -374,4 +374,5 @@ $PleaseStandBy = "Aguarde, por favor...";
 $Language = "Idioma";
 $HourMinuteDivider = "h";
 $Here = "aqui";
+$visio_classroom = "Sala de Videoconferência";
 ?>

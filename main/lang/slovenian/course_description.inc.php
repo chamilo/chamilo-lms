@@ -14,4 +14,7 @@ $langValid  = "Uveljavi";
 $langBackAndForget  = "Preklièi";
 $langOkSent = "Tvoja stran je bila poslana.<p>Sedaj je povezana s teèajem <a href=../..//index.php>Domaèa stran</a>";
 $Content = "Vsebina";
+$CourseDescriptionUpdated = "Opis teèaja je bil ažuriran";
+$CourseDescriptionDeleted = "Opis teèaja je bil odstranjen";
+$CourseDescriptionIntro = "Da bi opisali teèaj, kliknite na ustrezen naslov in vnesite želene podatke v vnosna polja.<br /><br />Zakljuèite s klikom na OK, nato ponovite za naslednji želen naslov.";
 ?>

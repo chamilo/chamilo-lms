@@ -374,4 +374,5 @@ $PleaseStandBy = "Bitte warten ... ";
 $Language = "Sprache";
 $HourMinuteDivider = "h";
 $Here = "hier";
+$visio_classroom = "LiveConference (Klassenzimmer)";
 ?>

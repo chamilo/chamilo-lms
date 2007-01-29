@@ -156,4 +156,10 @@ $Forums = "Forums";
 $AddLpIntro = "<strong>Welcome</strong> to Dokeos Learning path authoring tool";
 $AddLpIntro = "<strong>Welcome</strong> to Dokeos Learning path authoring tool.<br />You will be able to create your learning path step by step. The structure of your learning path will appear in a menu on the left.";
 $AddLpToStart = "To start, give a title to your learning path";
+$CreateTheLink = "Import a link";
+$MoveCurrentLink = "Move the current link";
+$EditCurrentLink = "Edit the current link";
+$Url = "Url";
+$MoveCurrentStudentPublication = "Move the current student publication";
+$EditCurrentStudentPublication = "Edit the current student publication";
 ?>

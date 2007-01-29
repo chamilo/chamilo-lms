@@ -166,6 +166,7 @@ $AccountsExternalAuthSource = "Dokeos no puede gestionar automáticamente la peti
 $RequestSentToPlatformAdmin = "Dokeos no puede gestionar automáticamente la petición para este tipo de cuenta.  Su petición se ha enviado al administrador de la plataforma, que tomará las medidas apropiadas y le notificará del resultado. ";
 $langphone = "Teléfono";
 $Select = "Seleccionar";
+$NeverExpires = "Nunca expira";
 $HourMinuteDivider = "h";
 $ExpirationDate = "Fecha de expiración";
 ?>

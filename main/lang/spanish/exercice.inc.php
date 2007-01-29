@@ -204,5 +204,10 @@ $Number = "Nº";
 $Weighting = "Puntuación";
 $ChooseQuestionType = "Para crear una nueva pregunta, seleccione el tipo arriba";
 $MatchesTo = "Corresponde a";
+$CorrectTest = "Corregir este ejercicio";
 $ViewTest = "Ver";
+$State = "Estado";
+$AddElem = "+ elemento";
+$DelElem = "- elemento";
+$YourScore = "Su puntuación";
 ?>

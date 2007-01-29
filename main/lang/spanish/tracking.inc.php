@@ -153,4 +153,5 @@ $MyLearnpath = "Mi itinerario de aprendizaje";
 $Time = "Tiempo";
 $Score = "Puntuación";
 $LastConnexion = "Última conexión";
+$ConnectionTime = "Tiempo de conexión";
 ?>

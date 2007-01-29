@@ -366,8 +366,13 @@ $UserOnlineListSession = "Seznam trenutno aktivnih teèajnikov - Seja";
 $From = "od";
 $To = "do";
 $Content = "Vsebina";
+$year = "leto";
+$Years = "let";
+$Day = "dan";
+$Days = "dni";
 $PleaseStandBy = "Prosim poèakajte ...";
 $Language = "Jezik";
 $HourMinuteDivider = ":";
 $Here = "tule";
+$visio_classroom = "Konferenca v živo (uèilnica)";
 ?>

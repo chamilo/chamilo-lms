@@ -554,4 +554,5 @@ $EditSession = "Editer la session";
 $VideoConferenceUrl = "Chemin vers la visioconférence";
 $VideoClassroomUrl = "Chemin vers la visio conférence de classe";
 $ReconfigureExtension = "Reconfigurer l\'extension";
+$ServiceReconfigured = "Service reconfiguré";
 ?>

@@ -65,7 +65,9 @@ $EditPostStored = "El mensaje ha sido modificado";
 $NewForumPost = "Nuevo mensaje en el foro";
 $YouWantedToStayInformed = "Ha indicado que desea ser informado por e-mail cuando alguien conteste al tema";
 $MessageHasToBeApproved = "Su mensaje debe ser aprobado antes de ser publicado.";
+$AllowAttachments = "Permitir adjuntos";
 $MoveToThread = "Mover a un tema";
+$Reply = "Responder";
 $Lock = "Bloquear";
 $Unlock = "Desbloquear";
 ?>

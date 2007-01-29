@@ -7,7 +7,7 @@ $langHome = "Voltar para a Home Page";
 $langName = "Nome";
 $langLink = "Link";
 $langAddPage            = "Adicionar uma página";
-$langSendPage           = "Página a ser enviada";
+$langSendPage           = "Página a ser publicada";
 $langCouldNot           = "O arquivo não pode ser enviado";
 $langOkSentPage         = "Sua página foi enviada.<p>Ela agora está referenciada a partir da <a href=\\\"../../\".$_course[\'path\'].\"/index.php\\\">Homepage do Curso</a>";
 $langOkSentLink         = "Seu link foi adicionado. Ele está acessível a partir da <a href=\\\"../../\".$_course[\'path\'].\"/index.php\\\">Homepage do Curso</a>";

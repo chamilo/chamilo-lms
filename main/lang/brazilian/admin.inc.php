@@ -545,4 +545,12 @@ $Host = "Servidor";
 $UserOnHost = "Nome de Usuário";
 $FtpPassword = "Senha de FTP";
 $PathToLzx = "Caminho para arquivos LZX";
+$SubscribeCoursesToSession = "Criar cursos para esta sessão";
+$DateStartSession = "Iniciar Encontro virtual";
+$DateEndSession = "Fim do encontro virtual";
+$EditSession = "Editar esta sessão";
+$VideoConferenceUrl = "link para Vídeoconferência";
+$VideoClassroomUrl = "Link para a Sala de Videoconferência";
+$ReconfigureExtension = "Reconfigurar extensão";
+$ServiceReconfigured = "Serviço Reconfigurado";
 ?>

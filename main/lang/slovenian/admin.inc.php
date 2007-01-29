@@ -547,4 +547,12 @@ $Host = "Strežnik";
 $UserOnHost = "Uporabniško ime";
 $FtpPassword = "geslo za FTP";
 $PathToLzx = "Pot do LZX datotek";
+$SubscribeCoursesToSession = "Vpiši teèaje v to sejo";
+$DateStartSession = "Datum zaèetka seje";
+$DateEndSession = "Datum zakljuèka seje";
+$EditSession = "Uredi to sejo";
+$VideoConferenceUrl = "Pot do konference v živo";
+$VideoClassroomUrl = "Pot do konference v živo (uèilnica) ";
+$ReconfigureExtension = "Prekonfiguriraj razširitev";
+$ServiceReconfigured = "Storitev je bila prekonfigurirana";
 ?>

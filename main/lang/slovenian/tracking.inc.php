@@ -148,6 +148,8 @@ $Tracks = "Sledenje";
 $Success = "Uspešnost";
 $ExcelFormat = "Excel oblika";
 $MyLearnpath = "Moja uèna pot";
+$Time = "Èas";
 $Score = "Rezultat";
 $LastConnexion = "Zadnja povezava";
+$ConnectionTime = "Èas povezave";
 ?>

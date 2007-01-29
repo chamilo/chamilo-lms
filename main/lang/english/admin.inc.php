@@ -553,4 +553,5 @@ $EditSession = "Edit this session";
 $VideoConferenceUrl = "Path to live conferencing";
 $VideoClassroomUrl = "Path to classroom live conferencing";
 $ReconfigureExtension = "Reconfigure extension";
+$ServiceReconfigured = "Service reconfigured";
 ?>

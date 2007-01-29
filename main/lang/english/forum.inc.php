@@ -76,4 +76,6 @@ $DeleteForumCategory = "Delete forum category ?";
 $Lock = "Lock";
 $Unlock = "Unlock";
 $MoveThread = "Move Thread";
+$PostVisibilityChanged = "Post visibility changed";
+$PostDeleted = "Post has been deleted";
 ?>

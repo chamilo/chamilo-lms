@@ -536,8 +536,16 @@ $VersionCheck = "Comprobar versión";
 $Active = "Activo";
 $Inactive = "No activo";
 $DeleteSelectedSessions = "Borrar las sesiones seleccionadas";
+$CourseListInSession = "Lista de cursos en esta sesión";
 $NbUsers = "Usuarios";
+$UserListInPlatform = "Lista de usuarios de la plataforma";
+$UserListInSession = "Lista de usuarios inscritos en esta sesión";
+$CourseListInPlatform = "Lista de cursos de la plataforma";
 $Host = "Servidor";
 $UserOnHost = "Nombre de usuario";
 $FtpPassword = "Contraseña FTP";
+$DateStartSession = "Fecha de comienzo de sesión";
+$DateEndSession = "Fecha de terminación de sesión";
+$EditSession = "Editar esta sesión";
+$ServiceReconfigured = "Servicio reconfigurado";
 ?>

@@ -30,9 +30,17 @@ include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 */
 class WCAG_Rendering {
 	
+	function editor_header() {
+		return '<div id="WCAG-editor"><div class="title">WCAG editor</div><div class="body">';
+	}
+	
+	function editor_footer() {
+		return '</div></div>';
+	}
+	
 	function prepareXHTML() {
 		$text = $_POST['text'];
-		$text = WCAG_Rendering::text2HTML ( $text );
+		$text = WCAG_Rendering::text_to_HTML ( $text );
 		$imageFile = $_POST['imagefile'];				
 		$imageLabel = $_POST['imageLabel'];
 		$link = $_POST['link'];				
@@ -52,15 +60,24 @@ class WCAG_Rendering {
 /**
 * Converter Plaintext to (x)HTML
 */
-function text2HTML ($Text)
+function text_to_HTML ($Text)
 {
 		$t = $Text;
 		$t = stripslashes($t);
-		$t = htmlentities($t);
+		$t = str_replace(">", "&gt;", $t);
+		$t = str_replace("<", "&lt;", $t);
 
 		$t = preg_replace("/(\015\012)|(\015)|(\012)/", "<br />\n", $t);
 		$t = str_replace("  ", " &nbsp;", $t);
         return $t;
+}
+
+function HTML_to_text ($xhtml) {
+	// convert HTML to text.
+	$text = str_replace("<br />", "", $xhtml);
+	$text = str_replace("<br/>", "", $text);
+	$text = str_replace("&nbsp;", " ", $text);
+	return $text;
 }
 
 function extract_data ($xhtml) {
@@ -68,8 +85,7 @@ function extract_data ($xhtml) {
 	$endP =  stripos ($xhtml, "</p>");	
 	$text = substr ($xhtml, $startP+3, $endP-$startP-3 );
 	// convert HTML to text.
-	$text = str_replace("<br />", "", $text);
-	$text = str_replace("&nbsp;", " ", $text);
+	$text = WCAG_Rendering::HTML_to_text($text);
 	
 	$startImgURL = stripos ($xhtml, "src=\"");
 	$endImgURL = stripos ($xhtml, "\" ");

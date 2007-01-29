@@ -93,15 +93,26 @@ function HTML_to_text ($xhtml) {
 }
 
 function extract_data ($xhtml) {
-	$startP = stripos ($xhtml, "<p>");
-	$endP =  stripos ($xhtml, "</p>");	
-	$text = substr ($xhtml, $startP+3, $endP-$startP-3 );
+	$text = $xhtml;
+	if (stripos($xhtml, '<p>')) {
+		$startP = stripos ($xhtml, "<p>");
+		$endP =  stripos ($xhtml, "</p>");
+		$text = substr ($xhtml, $startP+3, $endP-$startP-3 );
+	}	
+	
 	// convert HTML to text.
 	$text = WCAG_Rendering::HTML_to_text($text);
-	
-	$startImgURL = stripos ($xhtml, "src=\"");
-	$endImgURL = stripos ($xhtml, "\" ");
-	$url = substr ($xhtml, $startImgURL+5, $endImgURL-$startImgURL-5 );
+
+	$url='';
+	if (stripos($xhtml, '<img')) {	
+		$startImgURL = stripos ($xhtml, "src=\"");
+		$endImgURL = stripos ($xhtml, "\" ");
+		$url = substr ($xhtml, $startImgURL+5, $endImgURL-$startImgURL-5 );
+		$subxhtml = substr ($xhtml, $endImgURL+2, $startP);
+		$startImgLabel = stripos ($subxhtml, "alt=\"");
+		$endImgLabel = stripos ($subxhtml, "\" ");
+		$label = substr ($subxhtml, $startImgLabel+5, $endImgLabel-$startImgLabel-5 );
+	}
 	
 	$subxhtml = substr ($xhtml, $endImgURL+2, $startP);
 	$startImgLabel = stripos ($subxhtml, "alt=\"");

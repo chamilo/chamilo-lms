@@ -372,7 +372,9 @@ $Day = "dia";
 $Days = "dias";
 $PleaseStandBy = "Esperar, por favor ...";
 $Language = "Linguagem";
+$AvailableUntill = "Disponível até";
 $HourMinuteDivider = "h";
 $Here = "aqui";
 $visio_classroom = "Vídeo-Conferência (sala de aula)";
+$survey = "Questionários";
 ?>

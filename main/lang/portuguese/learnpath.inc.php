@@ -156,4 +156,10 @@ $Forums = "Fóruns";
 $AddLpIntro = "<strong>Bem-Vindo(a)</strong> à ferramenta de autoria da Sequência de Aprendizagem Dokeos";
 $AddLpIntro = "<strong>Bem-Vindo(a)</strong> à ferramenta de autoria Sequência de Aprendizagem Dokeos.<br />Poderá criar a sua Sequência de Aprendizagem passo a passo. A estrutura da Sequência de Aprendizagem aparecerá no menu do lado esquerdo.";
 $AddLpToStart = "Para começar, dê um título à Sequência de Aprendizagem";
+$CreateTheLink = "Importar uma ligação";
+$MoveCurrentLink = "Mover ligação";
+$EditCurrentLink = "Editar a ligação";
+$Url = "Url";
+$MoveCurrentStudentPublication = "Mover trabalho do aluno";
+$EditCurrentStudentPublication = "Editar trabalho do estudante";
 ?>

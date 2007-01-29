@@ -107,4 +107,8 @@ $AnnouncementExampleTitle = "Exemple d\'annonce";
 $Wikipedia = "Encyclopédie en ligne gratuite";
 $DefaultGroupCategory = "Groupes par défaut";
 $DefaultCourseImages = "Exemples";
+$ExampleForumCategory = "Example de catégorie";
+$ExampleForum = "Example de forum";
+$ExampleThread = "Example de sujet";
+$ExampleThreadContent = "Example de contenu";
 ?>

@@ -76,4 +76,6 @@ $DeleteForumCategory = "Forum-Kategorie löschen";
 $Lock = "Sperren";
 $Unlock = "Entsperren";
 $MoveThread = "Thema verschieben";
+$PostVisibilityChanged = "Sichtbarkeit der Nachricht wurde geändert";
+$PostDeleted = "Nachricht wurde gelöscht";
 ?>

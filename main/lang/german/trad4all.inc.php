@@ -372,7 +372,10 @@ $Day = "Tag";
 $Days = "Tage";
 $PleaseStandBy = "Bitte warten ... ";
 $Language = "Sprache";
+$AvailableUntill = "Verfügbar bis ";
 $HourMinuteDivider = "h";
 $Here = "hier";
 $visio_classroom = "LiveConference (Klassenzimmer)";
+$survey = "Umfragen";
+$More = "weitere";
 ?>

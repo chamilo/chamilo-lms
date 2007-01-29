@@ -371,6 +371,17 @@ $Years = "jaren";
 $Day = "dag";
 $Days = "dagen";
 $PleaseStandBy = "Even geduld aub";
+$Language = "Taal";
+$AvailableUntill = "Beschikbaar tot";
 $HourMinuteDivider = "u";
 $Here = "Hier";
+$survey = "Enquetes";
+$More = "Meer";
+$ClickHere = "Klik hier";
+$Here = "hier";
+$ReturnTo = "terugkeren naar";
+$Horizontal = "Horizontaal";
+$Vertical = "Vertikaal";
+$DisplaySearchResults = "Zoekresultaten weergeven";
+$DisplayAll = "Alles weergeven";
 ?>

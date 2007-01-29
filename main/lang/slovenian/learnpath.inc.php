@@ -158,4 +158,6 @@ $CreateTheLink = "Uvozi povezavo";
 $MoveCurrentLink = "Premakni trenutno povezavo";
 $EditCurrentLink = "Uredi trenutno povezavo";
 $Url = "URL";
+$MoveCurrentStudentPublication = "Premakni trenutno objavo teèajnikov";
+$EditCurrentStudentPublication = "Uredi trenutno objavo teèajnikov";
 ?>

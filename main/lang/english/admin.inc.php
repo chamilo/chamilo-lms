@@ -554,4 +554,5 @@ $VideoConferenceUrl = "Path to live conferencing";
 $VideoClassroomUrl = "Path to classroom live conferencing";
 $ReconfigureExtension = "Reconfigure extension";
 $ServiceReconfigured = "Service reconfigured";
+$ChooseNewsLanguage = "Choose news language";
 ?>

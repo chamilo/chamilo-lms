@@ -157,4 +157,10 @@ $AddLpIntro = "<strong>Willkommen</strong> zum Dokeos Lernpfad Erstellungstool
 ";
 $AddLpIntro = "<strong>Willkommen</strong> zum Dokeos Lernpfad Erstellungstool.<br />Sie können Ihren Lernpfad Schritt für Schritt erstellen.  Die Struktur Ihres Lernpfads erscheint links in dem Menu.";
 $AddLpToStart = "Beginnen Sie damit, Ihrem Lernpfad einen Titel zu geben";
+$CreateTheLink = "Link importieren";
+$MoveCurrentLink = "Diesen Link verschieben";
+$EditCurrentLink = "Diesen Link bearbeiten";
+$Url = "URL";
+$MoveCurrentStudentPublication = "Diese Schülerarbeit verschieben";
+$EditCurrentStudentPublication = "Diese Schülerarbeit bearbeiten";
 ?>

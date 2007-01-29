@@ -554,4 +554,5 @@ $VideoConferenceUrl = "Pfad zu LiveConference";
 $VideoClassroomUrl = "Pfad zum Klassenzimmer der LiveConference";
 $ReconfigureExtension = "Erweiterung erneut konfigurieren";
 $ServiceReconfigured = "Service neu konfiguriert";
+$ChooseNewsLanguage = "Sprache für Nachrichten wählen";
 ?>

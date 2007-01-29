@@ -372,7 +372,10 @@ $Day = "dan";
 $Days = "dni";
 $PleaseStandBy = "Prosim poèakajte ...";
 $Language = "Jezik";
+$AvailableUntill = "Na voljo do";
 $HourMinuteDivider = ":";
 $Here = "tule";
 $visio_classroom = "Konferenca v živo (uèilnica)";
+$survey = "Evalvacijski vprašalniki";
+$More = "Veè";
 ?>

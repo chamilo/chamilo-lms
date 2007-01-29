@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 10953 2007-01-29 02:39:31Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 10973 2007-01-29 17:50:42Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -130,6 +130,24 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(!is_dir($currentCourseRepositorySys."upload/test")){
 				mkdir($currentCourseRepositorySys."upload/test",0777);
 			}
+			
+			//Updating index file in courses directories to change claroline/ into main/
+			$content = '<?php'."\n".
+					'$cidReq="'.$courses_directories['code'].'";'."\n" .
+					'$dbname="'.$courses_directories['db_name'].'";'."\n" .
+					'include("../../main/course_home/course_home.php");'."\n" .
+					'?>';
+			unlink($currentCourseRepositorySys.'index.php');
+			$fp = @ fopen($currentCourseRepositorySys.'index.php', 'w');
+			if ($fp)
+			{
+				error_log('Writing redirection file in '.$currentCourseRepositorySys.'index.php',0);			
+				fwrite($fp, $content);
+				fclose($fp);
+			}else{
+				error_log('Could not open file '.$currentCourseRepositorySys.'index.php',0);
+			}
+			
 		
 	}
 	// Write the Dokeos config file

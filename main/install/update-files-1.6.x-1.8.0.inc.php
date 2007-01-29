@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 10892 2007-01-25 00:58:30Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 10950 2007-01-29 02:30:27Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,6 +43,7 @@
 
 require_once("../inc/lib/main_api.lib.php");
 require_once("../inc/lib/fileUpload.lib.php");
+require_once('../inc/lib/database.lib.php');
 
 /*
 ==============================================================================
@@ -66,16 +67,26 @@ function insert_db($db_name, $folder_name, $text){
 
 if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 {
-	$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	
-	$sql="SELECT directory, db_name FROM ".$tbl_course;
-	
-	$result=api_sql_query($sql);
+	$sys_course_path = $pathForm.'courses/';
+	//$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+	mysql_select_db($dbNameForm);
+	$db_name = $dbNameForm;
+	$sql = "SELECT * FROM course";
+	error_log('Getting courses for files updates: '.$sql,0);
+	$result=mysql_query($sql);
 	
 	while($courses_directories=mysql_fetch_array($result)){
 		
-		$currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courses_directories["directory"]."/";
+		$currentCourseRepositorySys = $sys_course_path.$courses_directories["directory"]."/";
 		$db_name = $courses_directories["db_name"];
+		
+		//move everything to the new hierarchy (from old path to new path)
+		error_log('Renaming '.$updatePath.'courses/'.$courses_directories["directory"].' to '.$sys_course_path.$courses_directories["directory"],0);
+		rename($updatePath.'courses/'.$courses_directories["directory"],$sys_course_path.$courses_directories["directory"]);
+		
+		error_log('Creating dirs in '.$currentCourseRepositorySys,0);
+		
+		
 		
 		//FOLDER DOCUMENT
 		

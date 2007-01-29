@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10971 2007-01-29 17:40:20Z pvandermaesen $
+<?php // $Id: configure_homepage.php 10975 2007-01-29 21:54:57Z pvandermaesen $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -696,9 +696,9 @@ if($action == 'edit_news'){
 	
 <?php
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-		echo ('<div id="WCAG-editor"><div class="title">WCAG editor</div><div class="body">');
+		echo (WCAG_Rendering::editor_header());
 		WCAG_Rendering::prepare_admin_form($open)->display();
-		echo ("</div></div>");
+		echo (WCAG_Rendering::editor_footer());
 	} else {
 		$oFCKeditor = new FCKeditor($name) ;
 		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;

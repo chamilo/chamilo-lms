@@ -30,6 +30,24 @@ include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 */
 class WCAG_Rendering {
 	
+	function prepareXHTML() {
+		$text = $_POST['text'];
+		$text = WCAG_Rendering::text2HTML ( $text );
+		$imageFile = $_POST['imagefile'];				
+		$imageLabel = $_POST['imageLabel'];
+		$link = $_POST['link'];				
+		$linkLabel = $_POST['linkLabel'];
+		if (strlen($linkLabel) == 0) {
+			$linkLabel = $link;
+		}
+		$home_top='<div id="WCAG-home"><img src="'.$imageFile.'" alt="'.$imageLabel.'" />'.'<p>'.$text.'</p>';
+		if (strlen($link) > 0) {
+			$home_top = $home_top.'<a href="'.$link.'">'.$linkLabel.'</a>';
+		}
+		$home_top=$home_top."<div style=\"clear:both;\"><span></span></div></div>";
+		return $home_top;
+	}
+	
 	
 /**
 * Converter Plaintext to (x)HTML
@@ -45,12 +63,7 @@ function text2HTML ($Text)
         return $t;
 }
 
-/**
-*	add a form for set WCAG content (replace FCK)
-*	@version 1.1
-*/
-function &prepare_admin_form( $xhtml )
-{
+function extract_data ($xhtml) {
 	$startP = stripos ($xhtml, "<p>");
 	$endP =  stripos ($xhtml, "</p>");	
 	$text = substr ($xhtml, $startP+3, $endP-$startP-3 );
@@ -68,20 +81,39 @@ function &prepare_admin_form( $xhtml )
 	$label = substr ($subxhtml, $startImgLabel+5, $endImgLabel-$startImgLabel-5 );
 	
 	$subxhtml = substr ($xhtml, $endP+2, 9999999999);
-	$startLinkURL = stripos ($subxhtml, "ref=\"");
-	$endLinkURL = stripos ($subxhtml, "\">");
-	$link = substr ($subxhtml, $startLinkURL+5, $endLinkURL-$startLinkURL-5 );
-	
-	$endLinkLabel = stripos ($subxhtml, "</a>");
-	$linkLabel = substr ( $subxhtml, $endLinkURL+2, $endLinkLabel-$endLinkURL-2 );
+	$link="";
+	$linkLabel="";
+	if (stripos($subxhtml, '<a href')) {
+		$startLinkURL = stripos ($subxhtml, "ref=\"");
+		$endLinkURL = stripos ($subxhtml, "\">");
+		$link = substr ($subxhtml, $startLinkURL+5, $endLinkURL-$startLinkURL-5 );
+		
+		$endLinkLabel = stripos ($subxhtml, "</a>");
+		$linkLabel = substr ( $subxhtml, $endLinkURL+2, $endLinkLabel-$endLinkURL-2 );
+	}
 	
 	$values = array("text"=>$text,
                     "imagefile"=>$url,
                     "imageLabel"=>$label,
                     "link"=>$link,
 					"linkLabel"=>$linkLabel);
+	return $values;
+}
 
-	$form = new FormValidator('waiForm');
+/**
+*	add a form for set WCAG content (replace FCK)
+*	@version 1.1
+*/
+function &prepare_admin_form( $xhtml, &$form )
+{
+	$values = WCAG_Rendering::extract_data($xhtml);
+
+	if ($form == null) {
+		$form = new FormValidator('waiForm');
+		echo("form creation");
+	} else {
+		echo("no form creation");
+	}
 	$form->addElement('textarea','text',get_lang('WCAGContent'));
 	$file =& $form->addElement('text','imagefile',get_lang('WCAGImage'));
 	$form->addElement('text','imageLabel',get_lang('WCAGLabel'));
@@ -98,5 +130,23 @@ function &prepare_admin_form( $xhtml )
 	return $form;
 }
 
-} // end class WAI_Renderin
+function &create_xhtml($xhtml) {
+	$values = WCAG_Rendering::extract_data($xhtml);
+	$xhtml = '<div id="WCAG-editor"><div class="title">WCAG editor</div><div class="body">';
+	$xhtml .= get_lang('WCAGContent').'<br />';
+	$xhtml .= '<textarea name="text">'.$values['text'].'</textarea>';
+	$xhtml .= get_lang('WCAGImage').'<br />';
+	$xhtml .= '<input type="text" name="imagefile" value="'.$values['imagefile'].'"/>';
+	$xhtml .= get_lang('WCAGLabel').'<br />';
+	$xhtml .= '<input type="text" name="imageLabel" value="'.$values['imageLabel'].'"/>';
+	$xhtml .= get_lang('WCAGLink').'<br />';
+	$xhtml .= '<input type="text" name="link" value="'.$values['link'].'"/>';
+	$xhtml .= get_lang('WCAGLinkLabel').'<br />';
+	$xhtml .= '<input type="text" name="linkLabel" value="'.$values['linkLabel'].'"/>';
+
+	$xhtml .= '</div></div>';
+	return $xhtml;
+}
+
+} // end class WAI_Rendering
 ?>

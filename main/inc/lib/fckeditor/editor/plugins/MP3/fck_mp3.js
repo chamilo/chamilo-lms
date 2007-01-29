@@ -260,7 +260,7 @@ Media.prototype.getOuterHTML = function (objectId){
  * Devuelve el codigo HTML interno del elemento
  */
 Media.prototype.getInnerHTML = function (objectId){
-	var s='<object id="mp3player" type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" width="220" height="30" style="vertical-align: bottom;"><!-- MP3 Flash player. Credits, license, contact & examples: http://pyg.keonox.com/flashmp3player/ --><param name="type" value="application/x-shockwave-flash" /><param name="codebase" value="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" /><param name="movie" value="'+getObjData(this.url)+'" /><param name="FlashVars" value="file='+getSoundUrl()+'" /></object>';
+	var s='<object id="mp3player" type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" width="220" height="30" style="vertical-align: bottom;"><!-- MP3 Flash player. Credits, license, contact & examples: http://pyg.keonox.com/flashmp3player/ --><param name="type" value="application/x-shockwave-flash" /><param name="codebase" value="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" /><param name="movie" value="'+getObjData(this.url)+'" /><param name="FlashVars" value="file='+getSoundUrl()+'&amp;autolaunch=false" /></object>';
 	return s;
 };
 

@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10959 2007-01-29 10:48:41Z pvandermaesen $
+<?php // $Id: configure_homepage.php 10971 2007-01-29 17:40:20Z pvandermaesen $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -27,12 +27,13 @@ $language_file = array ('admin', 'accessibility');
 
 $cidReset=true;
 
-include('../WCAG/WCAG_rendering.php');
-
 include('../inc/global.inc.php');
+
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+include_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
+
 include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 
 require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
@@ -69,20 +70,7 @@ if(!empty($action))
 			
 			$home_top='';
 			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-				$text = $_POST['text'];
-				$text = WCAG_Rendering::text2HTML ( $text );
-				$imageFile = $_POST['imagefile'];				
-				$imageLabel = $_POST['imageLabel'];
-				$link = $_POST['link'];				
-				$linkLabel = $_POST['linkLabel'];
-				if (strlen($linkLabel) == 0) {
-					$linkLabel = $link;
-				}
-				$home_top='<div id="WCAG-home"><img src="'.$imageFile.'" alt="'.$imageLabel.'" />'.'<p>'.$text.'</p>';
-				if (strlen($link) > 0) {
-					$home_top = $home_top.'<a href="'.$link.'">'.$linkLabel.'</a>';
-				}
-				$home_top=$home_top."<div style=\"clear:both;\"><span></span></div></div>";
+				$home_top=WCAG_Rendering::prepareXHTML();
 			} else {
 				$home_top=trim(stripslashes($_POST['home_top']));
 			}
@@ -201,7 +189,12 @@ if(!empty($action))
 			$insert_where=intval($_POST['insert_where']);
 			$link_name=trim(stripslashes($_POST['link_name']));
 			$link_url=trim(stripslashes($_POST['link_url']));
-			$link_html=trim(stripslashes($_POST['link_html']));
+			// WCAG
+			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+				$link_html=WCAG_Rendering::prepareXHTML();
+			} else {
+				$link_html=trim(stripslashes($_POST['link_html']));
+			}
 			$filename=trim(stripslashes($_POST['filename']));
 			$target_blank=$_POST['target_blank']?true:false;
 
@@ -594,22 +587,25 @@ foreach($home_menu as $key=>$enreg)
 
 <?php
     //api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
-
-	$oFCKeditor = new FCKeditor('link_html') ;
-	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-	$oFCKeditor->Height		= '400';
-	$oFCKeditor->Width		= '100%';
-	$oFCKeditor->Value		= isset($_POST['link_html'])?$_POST['link_html']:$link_html;
-	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-	$oFCKeditor->ToolbarSet = "Small";
-
-	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-	$result_sql=api_sql_query($sql);
-	$isocode_language=mysql_result($result_sql,0,0);
-	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-
-	echo $oFCKeditor->CreateHtml();
+	
+	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+		echo WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html);
+	} else {
+		$oFCKeditor = new FCKeditor('link_html') ;
+		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+		$oFCKeditor->Height		= '400';
+		$oFCKeditor->Width		= '100%';
+		$oFCKeditor->Value		= isset($_POST['link_html'])?$_POST['link_html']:$link_html;
+		$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+		$oFCKeditor->ToolbarSet = "Small";
+	
+		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+		$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
+		$result_sql=api_sql_query($sql);
+		$isocode_language=mysql_result($result_sql,0,0);
+		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+		echo $oFCKeditor->CreateHtml();
+	}
 	
 ?>
 
@@ -702,7 +698,6 @@ if($action == 'edit_news'){
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 		echo ('<div id="WCAG-editor"><div class="title">WCAG editor</div><div class="body">');
 		WCAG_Rendering::prepare_admin_form($open)->display();
-		/*echo ('<iframe src=' . api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/'.'editor/plugins/ImageManager/manager.php" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>');*/
 		echo ("</div></div>");
 	} else {
 		$oFCKeditor = new FCKeditor($name) ;

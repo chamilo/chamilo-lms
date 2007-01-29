@@ -584,11 +584,11 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 
 		<?php
 		//real code
-		//echo '<input type="submit" name="step2_update" value="Upgrade from Dokeos ' . implode(', ',$update_from_version) . '"';
-		//if($error) echo ' disabled="disabled"';
+		echo '<input type="submit" name="step2_update" value="Not stable yet - Upgrade from Dokeos ' . implode(', ',$update_from_version) . '"';
+		if($error) echo ' disabled="disabled"';
 		//temporary code for alpha version, disabling upgrade
-		echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
-		echo ' disabled="disabled"';
+		//echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
+		//echo ' disabled="disabled"';
 		//end temp code
 		echo ' />';
 		echo '</p>';
@@ -615,7 +615,7 @@ function display_license_agreement()
 		<table width="100%">
 			<tr>
 				<td></td>
-				<td align="right">
+				<td align="center">
 					<input type="submit" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" />
 					<input type="submit" name="step3" value="<?php echo get_lang('IAccept'); ?> &gt;" />
 				</td>

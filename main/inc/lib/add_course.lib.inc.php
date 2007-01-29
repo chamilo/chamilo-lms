@@ -1423,7 +1423,14 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 	$TABLEQUIZQUESTION = $courseDbName . "quiz_rel_question";
 	$TABLEQUIZQUESTIONLIST = $courseDbName . "quiz_question";
 	$TABLEQUIZANSWERSLIST = $courseDbName . "quiz_answer";
-	$TABLESETTING = $courseDbName . "course_setting";
+	$TABLESETTING = $courseDbName . "course_setting";	
+	
+	$TABLEFORUMCATEGORIES = $courseDbName . "forum_category";
+	$TABLEFORUMS = $courseDbName . "forum_forum";
+	$TABLEFORUMTHREADS = $courseDbName . "forum_thread";
+	$TABLEFORUMPOSTS = $courseDbName . "forum_post";
+		
+		
 	$nom = $_user['lastName'];
 	$prenom = $_user['firstName'];
 
@@ -1666,6 +1673,27 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		-----------------------------------------------------------
 		*/
 		api_sql_query("INSERT INTO `".$TABLEGROUPCATEGORIES . "` ( id , title , description , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');");
+	
+				
+		/*
+		-----------------------------------------------------------
+			Forum tool
+		-----------------------------------------------------------
+		*/
+		api_sql_query("INSERT INTO `$TABLEFORUMCATEGORIES` VALUES (1,'".lang2db(get_lang('ExampleForumCategory'))."', '', 1, 0)");
+		$insert_id = Database :: get_last_insert_id();
+		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('forum_category',1,NOW(),NOW(),$insert_id,'ForumCategoryAdded',1,0,NULL,1)");
+			
+		api_sql_query("INSERT INTO `$TABLEFORUMS` VALUES (1,'".lang2db(get_lang('ExampleForum'))."', '', 0, 0, 0, 1, 0, 1, '0', 1, 1, 'flat', '0', 'public', 1, 0)");
+		$insert_id = Database :: get_last_insert_id();
+		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_FORUM . "',1,NOW(),NOW(),$insert_id,'ForumAdded',1,0,NULL,1)");
+		
+		api_sql_query("INSERT INTO `$TABLEFORUMTHREADS` VALUES (1, '".lang2db(get_lang('ExampleThread'))."', 1, 0, 1, '', 0, 1, NOW(), 0, 0)");
+		$insert_id = Database :: get_last_insert_id();
+		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('forum_thread',1,NOW(),NOW(),$insert_id,'ForumThreadAdded',1,0,NULL,1)");
+				
+		api_sql_query("INSERT INTO `$TABLEFORUMPOSTS` VALUES (1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)");
+				
 	}
 
 	return 0;

@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 10950 2007-01-29 02:30:27Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 10953 2007-01-29 02:39:31Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -132,6 +132,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			}
 		
 	}
+	// Write the Dokeos config file
+	write_dokeos_config_file('../inc/conf/configuration.php');
+	// Write a distribution file with the config as a backup for the admin
+	write_dokeos_config_file('../inc/conf/configuration.dist.php');
+	// Write a .htaccess file in the course repository
+	write_courses_htaccess_file($urlAppendPath);
+	
 	/*
 	if (defined('DOKEOS_INSTALL'))
 	{

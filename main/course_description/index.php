@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10977 2007-01-29 21:56:12Z pvandermaesen $
+<?php // $Id: index.php 10986 2007-01-29 23:57:37Z pvandermaesen $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -239,9 +239,13 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 				}
 				echo '</dl>';
 			}
-			echo (WCAG_Rendering::editor_header());
+			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+				echo (WCAG_Rendering::editor_header());
+			}
 			$form->display();
-			echo (WCAG_Rendering::editor_footer());
+			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+				echo (WCAG_Rendering::editor_footer());
+			}
 			$show_description_list = false;
 		}
 	}

@@ -405,8 +405,8 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 			</tr>
 			<tr>
 				<td class="requirements-item">Display Errors</td>
-				<td class="requirements-recommended">ON</td>
-				<td class="requirements-value">'.check_php_setting('display_errors','ON').'</td>
+				<td class="requirements-recommended">OFF</td>
+				<td class="requirements-value">'.check_php_setting('display_errors','OFF').'</td>
 			</tr>
 			<tr>
 				<td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.file-uploads">File Uploads</a></td>

@@ -1981,13 +1981,9 @@ input.forms	{
 	padding-bottom: 5px;
 }
 
-#WCAG-editor form {
-	border: 1px red solid;
-}
-
 #WCAG-editor textarea {
 	width: 100%;
-	height: 240px;
+	height: 180px;
 	
 	border: 1px #7F9DB9 solid;
 }

@@ -1,5 +1,5 @@
 <?php
-// $Id: system_announcements.php 10667 2007-01-11 09:36:29Z bmol $
+// $Id: system_announcements.php 10976 2007-01-29 21:55:28Z pvandermaesen $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,6 +43,7 @@ $cidReset = true;
 include ('../inc/global.inc.php');
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 include (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
+include_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -174,7 +175,11 @@ if ($action_todo)
 	$fck_attribute['ToolbarSet'] = 'Middle';
 
 	$form->addElement('select', 'lang',get_lang('Language'),$language_list_with_keys);
-	$form->add_html_editor('content', get_lang('Content'));
+	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+		$form->addElement('textarea', 'content', get_lang('Content'));
+	} else {
+		$form->add_html_editor('content', get_lang('Content'));
+	}
 	$form->add_timewindow('start','end',get_lang('StartTimeWindow'),get_lang('EndTimeWindow'));
 	$form->addElement('checkbox', 'visible_teacher', get_lang('Visible'), get_lang('Teacher'));
 	$form->addElement('checkbox', 'visible_student', null, get_lang('Student'));
@@ -182,6 +187,10 @@ if ($action_todo)
 	$form->addElement('hidden', 'action');
 	$form->addElement('hidden', 'id');
 	$form->addElement('submit', 'submit', get_lang('Ok'));
+	if (api_get_setting('wcag_anysurfer_public_pages')=='true')
+	{
+		$values['content'] = WCAG_Rendering::HTML_to_text($values['content']);
+	}
 	$form->setDefaults($values);
 	if($form->validate())
 	{
@@ -201,6 +210,10 @@ if ($action_todo)
 		if($values['lang'] == 'all')
 		{
 			$values['lang'] = null;
+		}
+		if (api_get_setting('wcag_anysurfer_public_pages')=='true')
+		{
+			$values['content'] = WCAG_Rendering::text_to_HTML($values['content']);
 		}
 		switch($values['action'])
 		{
@@ -227,7 +240,15 @@ if ($action_todo)
 	}
 	else
 	{
+		if (api_get_setting('wcag_anysurfer_public_pages')=='true')
+		{
+			echo('<div class="WCAG-form">');
+		}
 		$form->display();
+		if (api_get_setting('wcag_anysurfer_public_pages')=='true')
+		{
+			echo('</div>');
+		}
 		$show_announcement_list = false;
 	}
 }

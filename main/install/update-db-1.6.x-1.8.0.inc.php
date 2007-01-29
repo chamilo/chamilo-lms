@@ -108,7 +108,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	*/
 	//if this script has been included by index.php, not update_courses.php, so
 	// that we want to change the main databases as well...
-	$only_test = true;
+	$only_test = false;
 	if (defined('DOKEOS_INSTALL')) 
 	{
 		/**

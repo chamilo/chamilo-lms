@@ -314,6 +314,7 @@ $Save = "Shrani";
 $Error = "Napaka";
 $Anonymous = "Anonimno";
 $NoSearchResults = "Iskanje je bilo neuspešno";
+$h = "ur";
 $CreateNewGlobalRole = "Ustvari novo globalno vlogo";
 $CreateNewLocalRole = "Ustvari novo lokalno vlogo";
 $Actions = "Akcija";

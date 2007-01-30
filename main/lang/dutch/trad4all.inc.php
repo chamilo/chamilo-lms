@@ -314,6 +314,7 @@ $Save = "Opslaan";
 $Error = "Fout";
 $Anonymous = "Anoniem";
 $NoSearchResults = "Niks gevonden";
+$h = "u";
 $CreateNewGlobalRole = "Nieuwe globale rol creëren";
 $CreateNewLocalRole = "Nieuwe lokale rol creëren";
 $Actions = "Acties";

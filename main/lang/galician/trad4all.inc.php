@@ -271,6 +271,7 @@ $course_rights = "Vista de roles e permisos";
 $CourseAdminRoleDescription = "Administrador do curso";
 $languser = "Usuarios";
 $NoSearchResults = "Non se atoparon resultados";
+$h = "h";
 $CreateNewGlobalRole = "Crear un rol global novo";
 $CreateNewLocalRole = "Crear un rol local novo";
 $Actions = "Acción";

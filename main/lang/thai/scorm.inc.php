@@ -37,5 +37,4 @@ $langRemote = "ควบคุมระยะไกล";
 $langAutodetect = "ตรวจหาอัตโนมัติ";
 $langAccomplishedStepsTotal = "รวมขั้นตอนทั้งหมด";
 $langUnknown = "ไม่รู้จัก";
-$h = "ช.ม.";
 ?>

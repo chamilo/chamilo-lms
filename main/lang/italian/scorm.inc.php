@@ -37,7 +37,6 @@ $langRemote = "Remoto";
 $langAutodetect = "Rileva automaticamente";
 $langAccomplishedStepsTotal = "Totale delle parti completate";
 $langUnknown = "Sconosciuto";
-$h = "h";
 $AreYouSureToDeleteSteps = "Sei sicuro di voler eliminare questi elementi?";
 $Origin = "Origine";
 $Local = "Locale";

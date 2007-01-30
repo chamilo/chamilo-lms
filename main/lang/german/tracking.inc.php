@@ -154,4 +154,5 @@ $Time = "Zeit";
 $Score = "Ergebnis";
 $LastConnexion = "Letzte Verbindung";
 $ConnectionTime = "Verbindungszeit";
+$ConnectionsToThisCourse = "Verbindung zu diesem Kurs";
 ?>

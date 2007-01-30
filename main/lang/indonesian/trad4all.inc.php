@@ -270,6 +270,7 @@ $course_rights = "Peran & overview hak-hak";
 $CourseAdminRoleDescription = "Admin Mata Kuliah";
 $languser = "User/Pengguna";
 $NoSearchResults = "Pencarian tidak ditemukan";
+$h = "h";
 $CreateNewGlobalRole = "Buat role/peran global baru";
 $CreateNewLocalRole = "Buat role/peran lokal baru";
 ?>

@@ -557,4 +557,6 @@ $ServiceReconfigured = "Service reconfigured";
 $ChooseNewsLanguage = "Choose news language";
 $AllLanguages = "all languages";
 $MyTextHere = "my text here";
+$Ajax_course_tracking_refresh = "Sum of the time spent in a course";
+$Ajax_course_tracking_refresh_comment = "This option is used to calculate in real time the time that a user spend in a course. The value in the field is the refresh interval in seconds. To desactivate this option, let the default value 0 in the field.";
 ?>

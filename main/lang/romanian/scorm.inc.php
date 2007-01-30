@@ -37,7 +37,6 @@ $langRemote = "La distanta";
 $langAutodetect = "Auto-detectare";
 $langAccomplishedStepsTotal = "Totalul pasilor indepliniti";
 $langUnknown = "Necunoscut";
-$h = "o";
 $AreYouSureToDeleteSteps = "Sunteti sigur ca doriti sa stergeti acesti pasi?";
 $Origin = "Origine";
 $Local = "Local";

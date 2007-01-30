@@ -270,6 +270,7 @@ $course_rights = "แสดงสิทธิและบทบาทสมาชิกทั้งหมด";
 $CourseAdminRoleDescription = "ผู้จัดการวิชา";
 $languser = "ผู้ใช้/สมาชิก";
 $NoSearchResults = "ไม่พบรายการที่ค้นหา";
+$h = "ช.ม.";
 $CreateNewGlobalRole = "สร้างกฏระเบียบทั่วไป";
 $CreateNewLocalRole = "สร้างกฏระเบียบใหม่";
 $Actions = "ปฏิบัติ";

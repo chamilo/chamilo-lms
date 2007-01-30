@@ -37,7 +37,6 @@ $langRemote = "Távoli";
 $langAutodetect = "Automatikus felismerés";
 $langAccomplishedStepsTotal = "Az összes eddig megtett lépés";
 $langUnknown = "Ismeretlen";
-$h = "ó";
 $AreYouSureToDeleteSteps = "Biztos, hogy törölni kívánja ezeket a lépéseket?";
 $Origin = "Számazási hely";
 $Local = "Helyi";

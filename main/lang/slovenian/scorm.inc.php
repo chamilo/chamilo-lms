@@ -37,7 +37,6 @@ $langRemote = "Oddaljeno";
 $langAutodetect = "Samodejna zaznava";
 $langAccomplishedStepsTotal = "Zbir (Total of accomplished steps)";
 $langUnknown = "Neznano";
-$h = "ur";
 $AreYouSureToDeleteSteps = "Ste preprièani, da želite odstraniti te korake ?";
 $Origin = "Izvor";
 $Local = "Lokalna";

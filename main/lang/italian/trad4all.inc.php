@@ -314,6 +314,7 @@ $Save = "Salva";
 $Error = "Errore";
 $Anonymous = "Anonimo";
 $NoSearchResults = "La ricerca non ha fornito risultati";
+$h = "h";
 $CreateNewGlobalRole = "Crea un nuovo ruolo globale";
 $CreateNewLocalRole = "Crea un nuovo ruolo locale";
 $Actions = "Azione";

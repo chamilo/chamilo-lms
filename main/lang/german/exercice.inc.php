@@ -214,4 +214,5 @@ $LessAnswer = "- Antwort
 ";
 $YourScore = "Ihre Quelle";
 $Attempted = "Versucht ";
+$AssignMarks = "Eine Markierung zuweisen";
 ?>

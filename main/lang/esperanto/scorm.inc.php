@@ -37,5 +37,4 @@ $langRemote = "Fora";
 $langAutodetect = "A&#365;tomate trovi";
 $langAccomplishedStepsTotal = "Nombro da finitaj pa&#349;oj";
 $langUnknown = "Nekonata";
-$h = "h";
 ?>

@@ -37,7 +37,6 @@ $langRemote = "远程";
 $langAutodetect = "自动侦测";
 $langAccomplishedStepsTotal = "已完成步骤的总数";
 $langUnknown = "不详";
-$h = "时";
 $AreYouSureToDeleteSteps = "&#20320;&#32943;&#23450;&#35201;&#21462;&#28040;&#36825;&#20123;&#27493;&#39588;&#21527;&#65311;";
 $Origin = "&#21407;&#22987;";
 $Local = "&#26412;&#22320;";

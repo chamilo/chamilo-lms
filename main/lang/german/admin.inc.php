@@ -555,4 +555,8 @@ $VideoClassroomUrl = "Pfad zum Klassenzimmer der LiveConference";
 $ReconfigureExtension = "Erweiterung erneut konfigurieren";
 $ServiceReconfigured = "Service neu konfiguriert";
 $ChooseNewsLanguage = "Sprache für Nachrichten wählen";
+$AllLanguages = "alle Sprachen";
+$MyTextHere = "mein Text folgt hier ";
+$Ajax_course_tracking_refresh = "Summe der in einem Kurs verbrachten Zeit";
+$Ajax_course_tracking_refresh_comment = "Diese Option wird benutzt, um in Realzeit die Zeit zu ermitteln, die ein Benutzer in einem Kurs zugebracht hat. Der Wert in dem Feld ist das Interval zum Auffrischen in Sekunden. Um die Option zu deaktivieren, bitte den Wert 0 eingeben";
 ?>

@@ -270,6 +270,7 @@ $course_rights = "Supervido pri roloj kaj rajtoj";
 $CourseAdminRoleDescription = "La kursadministranto";
 $languser = "Uzuloj";
 $NoSearchResults = "Neniu rezulto";
+$h = "h";
 $CreateNewGlobalRole = "Krei novajn rolojn";
 $CreateNewLocalRole = "Krei novajn lokajn rolojn";
 $Actions = "Agadoj";

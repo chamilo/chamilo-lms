@@ -37,5 +37,4 @@ $langRemote = "Remote/jauh";
 $langAutodetect = "Auto-detect";
 $langAccomplishedStepsTotal = "Jumlah total langkah yang telah dilakukan";
 $langUnknown = "Tidak diketahui";
-$h = "h";
 ?>

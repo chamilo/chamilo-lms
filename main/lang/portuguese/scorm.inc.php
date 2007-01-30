@@ -37,7 +37,6 @@ $langRemote = "Remoto";
 $langAutodetect = "Detectar automaticamente";
 $langAccomplishedStepsTotal = "Total de etapas completas";
 $langUnknown = "Desconhecido";
-$h = "h";
 $AreYouSureToDeleteSteps = "Tem a certeza que deseja apagar estas etapas?";
 $Origin = "Origem";
 $Local = "Local";

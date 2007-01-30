@@ -37,7 +37,6 @@ $langRemote = "Op afstand";
 $langAutodetect = "Automatische detectie";
 $langAccomplishedStepsTotal = "Aantal afgeronde stappen";
 $langUnknown = "Onbekend";
-$h = "u";
 $AreYouSureToDeleteSteps = "Bent u zeker dat u deze stappen wil verwijderen?";
 $Origin = "Oorsprong";
 $Local = "Lokaal";

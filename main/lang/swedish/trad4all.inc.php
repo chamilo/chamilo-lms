@@ -269,6 +269,7 @@ $course_rights = "Översikt roller & rättigheter";
 $CourseAdminRoleDescription = "Kursadministratören";
 $languser = "Användare";
 $NoSearchResults = "Inga sök resultat";
+$h = "t";
 $CreateNewGlobalRole = "Skapa ny global rättighet";
 $CreateNewLocalRole = "Skapa ny lokal rättighet";
 ?>

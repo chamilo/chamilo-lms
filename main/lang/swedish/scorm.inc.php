@@ -37,5 +37,4 @@ $langRemote = "Fjärr";
 $langAutodetect = "Automatisk";
 $langAccomplishedStepsTotal = "Totalt antal slutförda steg";
 $langUnknown = "Okänd";
-$h = "t";
 ?>

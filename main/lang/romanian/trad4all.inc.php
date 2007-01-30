@@ -293,6 +293,7 @@ $Save = "Salveaza";
 $Error = "Eroare";
 $Anonymous = "Anonim";
 $NoSearchResults = "Nici un rezultat al cautarii";
+$h = "o";
 $CreateNewGlobalRole = "Creaza rol global nou";
 $CreateNewLocalRole = "Creaza rol local nou";
 $Actions = "Actiune";

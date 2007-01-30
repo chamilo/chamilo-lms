@@ -290,6 +290,7 @@ $Save = "Guardar";
 $Error = "Error";
 $Anonymous = "Anónimo";
 $NoSearchResults = "Búsqueda sin resultados";
+$h = "h";
 $CreateNewGlobalRole = "Crear un nuevo rol global";
 $CreateNewLocalRole = "Crear un nuevo rol local";
 $Actions = "Acción";

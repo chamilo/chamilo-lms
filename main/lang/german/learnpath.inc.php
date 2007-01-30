@@ -163,4 +163,8 @@ $EditCurrentLink = "Diesen Link bearbeiten";
 $Url = "URL";
 $MoveCurrentStudentPublication = "Diese Schülerarbeit verschieben";
 $EditCurrentStudentPublication = "Diese Schülerarbeit bearbeiten";
+$AllowMultipleAttempts = "Mehrere Versuche gestatten";
+$PreventMultipleAttempts = "Mehrere Versuche ausschliessen";
+$MakeScormRecordingExtra = "SCORM Aufzeichnungen extra behandeln";
+$MakeScormRecordingNormal = "SCORM Aufzeichnungen normal behandeln";
 ?>

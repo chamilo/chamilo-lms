@@ -289,6 +289,7 @@ $Save = "Mentés";
 $Error = "Hiba";
 $Anonymous = "Névtelen";
 $NoSearchResults = "Eredménytelen keresés";
+$h = "ó";
 $CreateNewGlobalRole = "Új globális szerep létrehozása";
 $CreateNewLocalRole = "Új helyi szerep létrehozása";
 $Actions = "Akció";

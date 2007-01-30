@@ -291,6 +291,7 @@ $Save = "&#23384;";
 $Error = "&#38169;&#35823;";
 $Anonymous = "&#21311;&#21517;";
 $NoSearchResults = "未搜索到任何结果";
+$h = "时";
 $CreateNewGlobalRole = "新建全局角色";
 $CreateNewLocalRole = "新建本地角色";
 $Actions = "&#21160;&#20316;";

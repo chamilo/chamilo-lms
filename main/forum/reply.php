@@ -223,8 +223,8 @@ if (!empty($values) AND $_POST['SubmitPost'])
 		FOOTER
 ==============================================================================
 */
-
-Display :: display_footer();
+if($origin!='learnpath')
+	Display :: display_footer();
 ?>
 
 

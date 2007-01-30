@@ -22,8 +22,8 @@ ini_set('max_execution_time',0);
 
 $loglevel = 0;
 
-//TODO get table prefix from config file dynamically
-$table_prefix = '';
+//get table prefix from $prefix variable declared in update-db-....inc.php
+$table_prefix = $prefix;
 $sys_course_path = $pathForm.'courses/';
 
 function my_get_time($time){

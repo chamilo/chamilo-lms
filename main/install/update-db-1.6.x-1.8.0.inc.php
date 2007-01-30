@@ -111,6 +111,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	$only_test = false;
 	if (defined('DOKEOS_INSTALL')) 
 	{
+		if ($singleDbForm)
+		{
+			$dbStatsForm = $dbNameForm;
+			$dbScormForm = $dbNameForm;
+			$dbUserForm = $dbNameForm;
+		}
 		/**
 		 * Update the databases "pre" migration
 		 */
@@ -196,6 +202,11 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	-----------------------------------------------------------
 	*/
 
+	$prefix = ''; 
+	if ($singleDbForm)
+	{
+		$prefix = $_configuration['table_prefix'];
+	}
 	//get the courses databases queries list (c_q_list)
 	$c_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','course');
 	if(count($c_q_list)>0)
@@ -220,9 +231,17 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				 * We connect to the right DB first to make sure we can use the queries
 				 * without a database name
 				 */
-				mysql_select_db($row['db_name']);
+				if (!$singleDbForm) //otherwise just use the main one
+				{
+					mysql_select_db($row['db_name']);
+				}
 				foreach($c_q_list as $query)
 				{
+					if ($singleDbForm) //otherwise just use the main one
+					{
+						$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix$2$3",$query);
+					}
+					
 					if($only_test)
 					{
 						error_log("mysql_query(".$row['db_name'].",$query)",0);
@@ -238,12 +257,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				
 				//update forum tables (migrate from bb_ tables to forum_ tables)
 				//migrate categories
-				$sql_orig = "SELECT * FROM bb_categories";
+				$sql_orig = "SELECT * FROM ".$prefix."bb_categories";
 				$res_orig = mysql_query($sql_orig);
 				$order = 1;
 				while($row = mysql_fetch_array($res_orig)){
 					$myorder = (empty($row['cat_order'])?$order:$row['cat_order']);
-					$sql = "INSERT INTO forum_category " .
+					$sql = "INSERT INTO ".$prefix."forum_category " .
 							"(cat_id,cat_title,cat_comment,cat_order,locked) VALUES " .
 							"('".$row['cat_id']."','".mysql_real_escape_string($row['cat_title'])."','','".$myorder."',0)";
 					$res = mysql_query($sql);
@@ -251,16 +270,16 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log($sql,0);
 					$order ++;
 					//add item_property - forum categories were not put into item_properties before
-					$sql = "INSERT INTO item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+					$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 							"VALUES ('forum_category','1','$lastcatid','ForumCategoryAdded','1','1')";
 					$res = mysql_query($sql);
 					error_log($sql,0);
 				}
-				$sql_orig = "SELECT * FROM bb_forums ORDER BY forum_last_post_id desc";
+				$sql_orig = "SELECT * FROM ".$prefix."bb_forums ORDER BY forum_last_post_id desc";
 				$res_orig = mysql_query($sql_orig);
 				$order = 1;
 				while($row = mysql_fetch_array($res_orig)){
-					$sql = "INSERT INTO forum_forum " .
+					$sql = "INSERT INTO ".$prefix."forum_forum " .
 							"(forum_id,forum_category,allow_edit,forum_comment," .
 							"forum_title," .
 							"forum_last_post, forum_threads," .
@@ -277,19 +296,19 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					$order++;
 
 					//add item_property - forums were not put into item_properties before
-					$sql = "INSERT INTO item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+					$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 							"VALUES ('forum','1','$lastforumid','ForumAdded','1','1')";
 					$res = mysql_query($sql);
 					error_log($sql,0);
 				}
-				$sql_orig = "SELECT * FROM bb_topics";
+				$sql_orig = "SELECT * FROM ".$prefix."bb_topics";
 				$res_orig = mysql_query($sql_orig);
 				while($row = mysql_fetch_array($res_orig)){
 					//convert time from varchar to datetime
 					$time = $row['topic_time'];
 					$poster_id = ($row['topic_poster']==-1?1:$row['topic_poster']);
 					$name = mysql_real_escape_string($row['prenom']." ".$row['nom']);
-					$sql = "INSERT INTO forum_thread " .
+					$sql = "INSERT INTO ".$prefix."forum_thread " .
 							"(thread_id,forum_id,thread_poster_id," .
 							"locked,thread_replies,thread_sticky,thread_title," .
 							"thread_poster_name, thread_date, thread_last_post," .
@@ -303,19 +322,19 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					$lastthreadid = mysql_insert_id();
 					
 					//add item_property - forum threads were not put into item_properties before
-					$sql = "INSERT INTO item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+					$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 							"VALUES ('forum_thread','1','$lastthreadid','ForumThreadAdded','1','1')";
 					$res = mysql_query($sql);
 					error_log($sql,0);
 				}
-				$sql_orig = "SELECT * FROM bb_posts, bb_posts_text WHERE bb_posts.post_id = bb_posts_text.post_id";
+				$sql_orig = "SELECT * FROM ".$prefix."bb_posts bp, ".$prefix."bb_posts_text bpt WHERE bp.post_id = bpt.post_id";
 				$res_orig = mysql_query($sql_orig);
 				while($row = mysql_fetch_array($res_orig)){
 					//convert time from varchar to datetime
 					$time = $row['post_time'];
 					$poster_id = ($row['topic_poster']==-1?1:$row['topic_poster']);
 					$name = mysql_real_escape_string($row['prenom']." ".$row['nom']);
-					$sql = "INSERT INTO forum_post " .
+					$sql = "INSERT INTO ".$prefix."forum_post " .
 							"(post_id,forum_id,thread_id," .
 							"poster_id,post_parent_id,visible, " .
 							"post_title,poster_name, post_text, " .
@@ -329,7 +348,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					$lastpostid = mysql_insert_id();
 					
 					//add item_property - forum threads were not put into item_properties before
-					$sql = "INSERT INTO item_property(tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+					$sql = "INSERT INTO ".$prefix."item_property(tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 							"VALUES ('forum_post','1','$lastpostid','ForumPostAdded','1','1')";
 					$res = mysql_query($sql);
 					error_log($sql,0);
@@ -344,6 +363,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	}
 	if (defined('DOKEOS_INSTALL')) 
 	{
+		if ($singleDbForm)
+		{
+			$dbStatsForm = $dbNameForm;
+			$dbScormForm = $dbNameForm;
+			$dbUserForm = $dbNameForm;
+		}
 		//deal with migrate-db-1.6.x-1.8.0-post.sql
 		//get the main queries list (m_q_list)
 		$m_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','main');
@@ -432,6 +457,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				mysql_select_db($row['db_name']);
 				foreach($c_q_list as $query)
 				{
+					if ($singleDbForm) //otherwise just use the main one
+					{
+						$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix$2$3",$query);
+					}
 					if($only_test)
 					{
 						error_log("mysql_query(".$row['db_name'].",$query)",0);

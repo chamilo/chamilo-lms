@@ -72,7 +72,7 @@ echo get_setting('siteName');
 <style type="text/css" media="screen, projection">
 /*<![CDATA[*/
 <?php
-$my_style = api_get_setting('stylesheet');
+$my_style = api_get_setting('stylesheets');
 $my_code_path = api_get_path(WEB_CODE_PATH);
 if(empty($my_style)){$my_style = 'default';}
 echo '@import "'.$my_code_path.'css/'.$my_style.'/default.css";'."\n";

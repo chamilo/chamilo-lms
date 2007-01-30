@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: exercise_result.php 11023 2007-01-30 12:48:38Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -432,7 +432,8 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 		$questionScore=0;
-
+		if($answerType == FREE_ANSWER)
+			$nbrAnswers = 1;
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
 			$answer=$objAnswerTmp->selectAnswer($answerId);
@@ -621,7 +622,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 										break;
 			} // end switch Answertype
-
+			
 			if($answerType != MATCHING || $answerCorrect)
 			{
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)

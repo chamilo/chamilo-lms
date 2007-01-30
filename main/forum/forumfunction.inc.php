@@ -1713,6 +1713,7 @@ function store_reply($values)
 	global $_user; 
 	global $_course; 
 	global $current_forum;
+	global $origin;
 	
 	$post_date=date('Y-m-d H:i:s');
 	if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())
@@ -1753,8 +1754,8 @@ function store_reply($values)
 	{
 		$message.=get_lang('MessageHasToBeApproved').'<br />';
 	}
-	$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
-	$message.=get_lang('ReturnTo').' <a href="viewthread.php?forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'">'.get_lang('Message').'</a>';
+	$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+	$message.=get_lang('ReturnTo').' <a href="viewthread.php?forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&origin='.$origin.'">'.get_lang('Message').'</a>';
 	
 	send_notification_mails($values['thread_id'], $values);
 	

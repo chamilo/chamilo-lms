@@ -1224,7 +1224,7 @@ function is_allowed_to_edit()
 */
 function api_is_allowed_to_edit()
 {
-	$is_courseAdmin = api_is_course_admin();
+	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
 
 	if(is_student_view_enabled())
 	{

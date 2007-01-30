@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 10973 2007-01-29 17:50:42Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 11030 2007-01-30 13:39:26Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -156,6 +156,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	write_dokeos_config_file('../inc/conf/configuration.dist.php');
 	// Write a .htaccess file in the course repository
 	write_courses_htaccess_file($urlAppendPath);
+	copy($updatePath.'claroline/inc/conf/add_course.conf.php',$pathForm.'main/inc/conf/add_course.conf.php');
+	copy($updatePath.'claroline/inc/conf/course_info.conf.php',$pathForm.'main/inc/conf/course_info.conf.php');
+	copy($updatePath.'claroline/inc/conf/mail.conf.php',$pathForm.'main/inc/conf/mail.conf.php');
+	copy($updatePath.'claroline/inc/conf/profile.conf.inc.php',$pathForm.'main/inc/conf/profile.conf.inc.php');
 	
 	/*
 	if (defined('DOKEOS_INSTALL'))

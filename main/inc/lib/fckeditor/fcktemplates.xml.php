@@ -1,10 +1,10 @@
 <?php header('Content-Type: text/xml; charset=utf-8');
-echo '<?xml version="1.0" encoding="utf-8" ?>';
-require_once('../../conf/configuration.php');
 
+require_once('../../global.inc.php');
+echo '<?xml version="1.0" encoding="utf-8" ?>';
 $IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
 
-$template_css = '<style type="text/css">'.file_get_contents($_configuration['root_sys'].'main/course_home/css/dokeos_corporate.css').'</style>';
+$template_css = '<style type="text/css">'.file_get_contents($_configuration['root_sys'].'main/css/'.api_get_setting('stylesheets').'/course.css').'</style>';
 
 ?>
 <Templates imagesBasePath="fck_template/images/">

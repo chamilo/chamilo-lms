@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 10672 2007-01-11 10:40:16Z elixir_inter $
+// $Id: html_editor.php 11004 2007-01-30 10:20:01Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -105,7 +105,9 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$this -> fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'] ;
 		
 		$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Connector=connectors/php/connector.php&ServerPath=$upload_path";
-
+		
+		$this -> fck_editor->Config['EditorAreaCSS'] = api_get_path(SYS_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css';
+		
 		//for image
 		$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Image&Connector=connectors/php/connector.php&ServerPath=$upload_path";
 

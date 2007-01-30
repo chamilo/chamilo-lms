@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 10595 2007-01-05 14:05:42Z elixir_inter $
+// $Id: create_document.php 10989 2007-01-30 08:21:34Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -144,7 +144,7 @@ $form = new FormValidator('create_document');
 $form->addElement('hidden', 'dir');
 $default['dir'] = $dir;
 // Filename
-$form->add_textfield('filename', get_lang('FileName'));
+$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles"');
 $form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
 /**
  * Check if a document width the choosen filename allready exists
@@ -162,7 +162,7 @@ $renderer->setElementTemplate($filename_template, 'filename');
 // If allowed, add element for document title
 if (get_setting('use_document_title') == 'true')
 {
-	$form->add_textfield('title', get_lang('Title'));
+	$form->add_textfield('title', get_lang('Title'),true,'class="input_titles"');
 }
 // HTML-editor
 $form->add_html_editor('content', get_lang('Content'), false, true);

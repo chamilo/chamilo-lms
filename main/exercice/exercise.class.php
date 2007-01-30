@@ -22,7 +22,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: exercise.class.php 10989 2007-01-30 08:21:34Z elixir_julian $
 */
 
 
@@ -607,7 +607,7 @@ class Exercise
 	{
 
 		// title
-		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName').' : ');
+		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName').' : ','class="input_titles"');
 
 		// fck editor
 		global $fck_attribute;

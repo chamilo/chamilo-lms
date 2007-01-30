@@ -149,7 +149,7 @@ function show_add_forumcategory_form($inputvalues=array())
 	
 	// settting the form elements
 	$form->addElement('header', '', get_lang('AddForumCategory'));
-	$form->addElement('text', 'forum_category_title', get_lang('Title'));
+	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
 	$form->addElement('submit', 'SubmitForumCategory', 'OK');
 	
@@ -195,7 +195,7 @@ function show_add_forum_form($inputvalues=array())
 	}
 
 	// The title of the forum
-	$form->addElement('text', 'forum_title', get_lang('Title'));
+	$form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles"');
 	
 	// The comment of the forum
 	$form->addElement('html_editor', 'forum_comment', get_lang('Comment'));
@@ -357,7 +357,7 @@ function show_edit_forumcategory_form($inputvalues=array())
 	// settting the form elements
 	$form->addElement('header', '', get_lang('EditForumCategory'));
 	$form->addElement('hidden', 'forum_category_id');
-	$form->addElement('text', 'forum_category_title', get_lang('Title'));
+	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'));
 	$form->addElement('submit', 'SubmitEditForumCategory', 'OK');
 	
@@ -1627,7 +1627,7 @@ function show_add_post_form($action='', $id='', $form_values='')
 		$form->addElement('text', 'poster_name', get_lang('Name'));
 	}
 	
-	$form->addElement('text', 'post_title', get_lang('Title'));
+	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
 
 	if ($forum_setting['allow_post_notificiation'] AND isset($_user['user_id']))
@@ -1792,7 +1792,7 @@ function show_edit_post_form($current_post, $current_thread, $form_values='')
 	{
 		$form->addElement('hidden', 'is_first_post_of_thread', '1');
 	}
-	$form->addElement('text', 'post_title', get_lang('Title'));
+	$form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
 	$form->addElement('html_editor', 'post_text', get_lang('Text'));
 
 	if ($forum_setting['allow_post_notificiation'])

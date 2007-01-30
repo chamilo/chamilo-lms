@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 10902 2007-01-25 14:44:35Z elixir_julian $
+*  	@version $Id: work.php 11011 2007-01-30 11:51:14Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -632,10 +632,10 @@ if($_POST['submitWork'] && $is_course_member)
 		}
 
 		$sql_add_publication = "INSERT INTO ".$work_table."
-		               SET url         = '".mysql_real_escape_string($url)."',
-					       title       = '".mysql_real_escape_string($title)."',
-		                   description = '".mysql_real_escape_string($description)."',
-		                   author      = '".mysql_real_escape_string($authors)."',
+		               SET url         = '".$url."',
+					       title       = '".$title."',
+		                   description = '".$description."',
+		                   author      = '".$authors."',
 						   active		= '".$active."',
 						   accepted		= '".(!$uploadvisibledisabled)."',
 						   post_group_id = '".$post_group_id."',

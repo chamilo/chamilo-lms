@@ -27,6 +27,16 @@
     </ol>
     </p>
     <h2><a name="requirements">1. Requirements</a></h2>
+    <p>As from Dokeos 1.8 additional plugins can be enabled. Two of these plug-ins needs a set of prerequirements and additional installation of 
+    software modules. The basic requirements have to be met by the core or basic Dokeos modules. Both additional plugins do need a jdk (java development 
+    environment). The additional packages may be installed on an other computer as the DokeosServer.</p>
+    <ul>
+	    <li><a href="#Basicreq">Basic requirements</a></li>
+	    <li><a href="#Javareq">Java requirements (only needed when adding convertions or videoconferencing</a></li>
+	    <li><a href="#OOConversion">Powerpoint and Presenter convertions to Learnpath</a></li>
+	    <li><a href="#Videoconferencing">Videoconferencing</a></li>
+    </ul>
+    <h3><a name="Basicreq">1.1 Basic Requirements</a></h3>
     <p>Dokeos is a web application which requires some other software to function:</p>
     <ul>
       <li>A web server - we recommend <strong>Apache</strong></li>
@@ -35,12 +45,12 @@
     </ul>
     <p> These software packages have to be installed on the computer where you will install Dokeos. <br/>
       You can install all these software packages separately, which often gives the best results. However, beginning users who want to test Dokeos can use a <i>combination package</i> that installs all these software packages in one simple install. If you want to use a combination package, we recommend Wamp (Download at <a href="http://www.wampserver.com/en/index.php">the WAMP5 website</a>, you also need the <a href="http://www.wampserver.com/en/add-ons.php">PHP4 add-on</a>) or <a href="http://www.apachefriends.org/en/index.html">XAMP</a>. </p>
-    <h3>1.1. A web server</h3>
+    <h4>1.1.1. A web server</h4>
     <p> The Apache web server is recommended, and Dokeos is configured to use some Apache security enhancements if possible. However, other web servers will work too. For best security results, you need to have the Apache module mod_rewrite activated. The mod_rewrite rules for Dokeos are read from a .htaccess file in the courses folder, so Apache needs to allow this (AllowOverride FileInfo in httpd.conf). <br/>
       <br/>
       <a href="http://httpd.apache.org/download.cgi">Download Apache web server</a><br/>
       <a href="http://httpd.apache.org/docs-project/">Apache web server manual</a> </p>
-    <h3>1.2. PHP</h3>
+    <h4>1.1.2. PHP</h4>
     <p> You need PHP version 4.3.2 or later (4.x versions), configured with the following modules : mysql, zlib, preg, xml. PHP versions 5 or later are not supported by Dokes yet.
       You need the ldap module too if you want to use ldap with Dokeos.
       Most of the PHP4 compiled distributions are provided with these modules.
@@ -67,7 +77,7 @@
       <li>php-xml</li>
       <li>(optional) php-ldap if you want to be able to use LDAP authentication</li>
     </ul>
-    <h3>1.3. The MySQL database server</h3>
+    <h4>1.1.3. The MySQL database server</h4>
     <p> You will need a login and password allowing to administrate
       and create at least one database. By default, Dokeos will create a new
       database for each course created. It means your host should allow you to
@@ -80,13 +90,143 @@
       It seems the backticks characters (`) inserted inside most of
       the Dokeos SQL queries since version 1.3 don't work with MySQL
       versions before 3.23.6. </p>
-    <h3>1.4. Permissions</h3>
-    <p> Furthermore, you need web Write access to web directory where Dokeos has been moved
+    <h4>1.1.4. Permissions</h4>
+    <p> Furthermore, Dokeos needs to have write access to specific directories. The best way to deal with these permission is to give the webserver user
+    read/ write access on the specified directories. The other directories can work with read access. The specific directories are <a href="#protections">listed in the installation section.</a>
       or unzipped to. On a Windows machine locally, this
       is not a problem. Remotely, you need to be allowed to CHMOD
       through FTP, telnet or any means. </p>
-    <hr>
-    <h2><a name="install_new_version">2. Installing a new version of Dokeos</a></h2>
+      
+      
+      <h3><a name="Javareq">1.2 Java Requirements</a></h3>
+      <p>Install a java jdk on the system where you will install the conversiontool and the videoconferencing modules. Depending on the system this 
+      environment have to be installed</p>
+      <a href="http://www.java.com/getjava/">Download Java runtime environment and install</a></br>
+      
+      <h3><a name="OOConversion">1.3 Requirements for Powerpoint and Presenter imports</a></h3>
+      <p>For the basic conversion of a presentation to Dokeos on neede the installation of openoffice.org.<br/>
+	 <br/>
+	 <a href="http://download.openoffice.org/">Download openoffice.org and install</a></br>
+	 </p>
+	 <p>Once the latest version of OpenOffice.org is installed, edit the configuration file (Setup.xcu) and add the following property&nbsp;:
+
+<pre>&lt;prop oor:name="ooSetupConnectionURL"&gt;
+&lt;value&gt;
+socket,host=localhost,port=2002;urp;StarOffice.ServiceManager
+&lt;/value&gt;
+&lt;/prop&gt;
+</pre>
+	 (ex on Debian /usr/lib/openoffice/share/registry/data/org/openoffice/Setup.xcu)
+	 </p>
+	 <p>For the basic convertion of a presentation to Dokeos one need to run the openoffice server in headless mode. On linux systems this is
+	 done via the X framebuffer (xvfb package). When your server does not contain an x-window system, additional fonts and basic x-window libraries have to be installed for
+	 not running into problems.</p>
+	 <p>
+	 If during the conversion sets one need additional recording of sound, then the installation of the 
+	 <a href="#Openlaszlo">Openlaszlo and tomcat modules</a>are needed.
+	 </p>
+	 <p>
+	 The startup from the Openoffice server at startup from the computer van be done via the file oooserver.init. Additional description is found 
+	 on the Dokeos wiki<a href="http://www.dokeos.com/wiki/index.php/MakeOOOListening">http://www.dokeos.com/wiki/index.php/MakeOOOListening</a>
+	 </p>
+	 <p>
+	 Configuration in dokeos platform admin, Configure the services,  Configure PowerPoint2LearningPath
+	 <ul>
+		 <li>host:<b>localhost</b></li>
+		 <li>Username:</li>
+	         <li>Ftp password:</li>
+		 <li>Path to LZX Files:</li>
+		 When the openofficeserver runs on the same server as Dokeos. Host is localhost. Otherwise the remote parameters have to be entered.
+		 When a recording of audio is needed then the path to the lzx files is needed. When the openlaszlo server is installed on an other
+		 server the host has to be added otherwise.<b>/lps-latest/dokeos/videoconference/ppt2lprecorder.lzx</b>
+	 </ul>
+	 </p>
+	 <h3><a name="VideoConferencing">1.4 Requirements for VideoConferencing</a></h3>
+	 <p>The set-up and usage of the videoconferencing and recording functionality in Dokeos is provided by patched external
+	 packages. These patches are at this moment not yet available in the latest stable release of the packages. The following
+	 4 packages are used. Openlaszlo comes in a packages with the tomcat server 5.0.24. The red5 streaming servers is packaged with the
+	 jetty servlet engine. In order to be able to correctly identify the usercontext from Dokeos into Openlaszlo and Red5 the
+	 connection between the apache webserver and the tomcat servlet engine is needed.
+	 <ul>
+		 <li>OpenLaszlo: <a href="http://www.openlaszlo.org/">http://www.openlaszlo.org/</a></li>
+		 <li>Apache Tomcat: <a href="http://tomcat.apache.org/">http://tomcat.apache.org/</a></li>
+		 <li>Red5: <a href="http://osflash.org/red5">http://osflash.org/red5</a></li>
+		 <li>Jetty: <a href="http://www.mortbay.org/">http://www.mortbay.org/</a></li>
+
+	 </ul>
+	 Download of the additional packages from the Dokeos site.
+	 <ul>
+		 <li>The packages Openlaszlo and tomcat can be downloaded at 
+		 <a href="http://www.dokeos.com/download.../dokeosopenlaszlo_1_8.tar.gz">http://www.dokeos.com/download/... dokeosopenlaszlo_1_8.tar.gz</a>
+		 </li>
+		 <li>
+		 The Red5 packages can be downloaded at 
+		 <a href="http://www.dokeos.com/download.../dokeosred5_1_8.tar.gz">http://www.dokeos.com/download/... dokeosred5_1_8.tar.gz</a>
+		 </li>
+	 </ul>
+	 </p>
+	 <h4><a name="Openlaszlo">1.4.1 Requirements and installation of OpenLaszlo</a></h4>
+	 <p>Depending if the Openlaszlo server is installed on the same server as the webserver of dokeos, different parameters have to be changed</p>
+	 <ul>
+		 <li>Installation of the Openlaszlo server tar -xzvf dokeosopenlaszlo_1_8.tar.gz</li>
+		 <li>Check the path to the JAVA_HOME in <b>$yourinst/lps-latest/Server/tomcat-5.0.24/bin/startup.bin(bat)</b></li>
+		 <li>If on a different server then the file should be edited <b>$yourinst/lps-latest/Server/lps-latest/videoconference/videoconference.lzx</b> (rmtphost should change to the host of dokeosserver, rmtphostlocal local tomcatserver)</li>
+		 <li>Start server with <b>$yourinst/lps-latest/Server/tomcat-5.0.24/bin/startup.bin(bat)</b></li>
+	 </ul>
+	 <h4><a name="Red5">1.4.2 Requirements and installation of Red5 Server</a></h4>
+	 <p>Installation and set-up of the Red5 Server</p>
+	 <ul>
+		 <li>Installation tar -xzvf dokeosred5_1_8.tar.gz</li>
+		 <li>Check the path to the JAVA_HOME<b>$yourinst/dist/red5.sh(bat)</b></li>
+		 <li>Start the server with <b>$yourinst/dist/red5.sh(bat)</b></li>
+	 </ul>
+	 <h4><a name="ApacheConfig">1.4.3 Requirements for the connection of Tomcat with Apache</a></h4>
+	 <p>The mod-jk or mod-jk module for apache(2) has to be installed in order to transfer the sessiondata from the Dokeos to the
+	 additional plugins. For the installation of the additional modules see the installation guide of the webserver.</p>
+	 <ul>
+		 <li>Apache2 with mod-jk module</li>
+		 <ul>
+			 <li>Install mod-jk</li>
+			 <li>Configure the workers.properties file</li>
+			 <ul>
+				 <li>edit file /etc/libapache2-mod-jk/workers.properties (ubuntu)</li>
+				 <li>workers.java_home=/usr/lib/j2sdk1.5-sun (path to the java sdk)</li>
+				 <li>workers.tomcat_home=$yourInstallation/lps-latest/Server/tomcat-5.0.24 (path to tomcat of Openlaszlo)</li>
+			 </ul>
+			 <li>Configure the file jk.load</li>
+			 <ul>
+				 <li>edit file /etc/apache2/mods-enabled/jk.load (ubuntu)</li>
+				 <li>JkLogFile /var/log/apache2/mod_jk.log</li>
+				 <li>JkLogLevel info</li>
+				 <li>JkLogStampFormat "[%a %b %d %H:%M:%S %Y]"</li>
+				 <li>JkMount /lps-latest ajp13</li>
+				 <li>JkMount /lps-latest/dokeos/* ajp13</li>
+			 </ul>
+			 <li>Restart/Reload Apache2</li>
+		 </ul>
+		 <li>Apache2 with mod-jk2 module</li>
+		 <ul>
+			 <li>Install mod-jk2</li>
+			 <li>copy a default workers2.properties to /etc/apache2/</li>
+			 <li>edit jk2.load remove comment lines</li>
+			 <li>Restart/reload Apache2</li>
+		 </ul>
+	 </ul>
+	 <h4><a name="DokeosVideo">1.4.4 Configuration of DokeosVideoServerving plugin</a></h4>
+	 <p>The configuration of the videoServing is done via de admin pages of Dokeos</p>
+	 <p>Configuration in dokeos platform admin, Configure the services,  Configure VideoConferencingServer</p>
+	 <p>This contains the URL to the videoserver the example is for a localversion </p>
+	 <ul>
+		 <li>url:<b>/lps-latest/videoconferencing/videoconferencing.html</b></li>
+	 </ul>
+		 <b>Bandwidth calculation</b>
+	 <p>Outgoing Stream:7KB Incoming Stream: 12KB</p>
+	 <p>1 one2four VideoConference: 4 outgoing streams from every client: 4*7KB=28KB incoming traffic on server-side
+12 incoming streams to every client: 12*12KB=144KB outgoing traffic from server-side</p>
+<p>1 one2many Conference (up to 50 seats) 1 outgoing streams -&gt; 7KB incoming traffic 50 incoming streams -&gt; 
+50*12KB = 524KB outgoing traffic</p>
+
+   <h2><a name="install_new_version">2. Installing a new version of Dokeos</a></h2>
     <p> 2.1. Download the Dokeos 1.8 install package (.zip for Windows users or .tar.gz for all others) from the <a href="http://www.dokeos.com/download.php">Dokeos download page</a>. </p>
     <p> 2.2. Unzip or untar the downloaded install package. 
       Most current operating systems
@@ -101,7 +241,7 @@
       <li><strong>WAMP</strong> - C:\Program Files\wamp\www\
       <li><strong>XAMP</strong> - C:\Program Files\xamp\www\</li>
     </ul>
-    <p> 2.4. The following directories need to be readable, writeable and executable for everyone: </p>
+    <p><a name="protections"> 2.4. The following directories need to be readable, writeable and executable for the owner of the apache webservice: </a></p>
     <ul>
       <li>dokeos/main/inc/conf/</li>
       <li>dokeos/main/garbage/</li>
@@ -169,7 +309,7 @@
       <li>go to next step</li>
     </ul>
     </p>
-    <p> 3.4. The following files need to be readable and writeable for everyone:
+    <p> 3.4. The following files need to be readable and writeable by the web server:
     <ul>
       <li>dokeos/main/inc/conf/configuration.php (if present)</li>
       <li>dokeos/home/*.html</li>
@@ -180,7 +320,7 @@
     <p> <b>NOTE:</b><br/>
       Do not modify the home_*.html files directly. Instead,
       choose "Configure the homepage" in the Dokeos administration section. </p>
-    <p> 3.5. The following directories need to be readable, writeable and executable for everyone:
+    <p> 3.5. The following directories need to be readable, writeable and executable by the web server:
     <ul>
       <li>dokeos/main/inc/conf/</li>
       <li>dokeos/main/garbage/</li>
@@ -193,11 +333,10 @@
     In Windows, you may need to check the properties of the folders.
     </p>
     <p> 3.6. Open a web browser and go to
-      http://www.yourserver.org/yoursite/dokeos/index.php
-      
-      Windows locally, with e.g easyphp or another combination package, open:
+      http://www.yourserver.org/yoursite/dokeos/index.php<br />
+      On Windows, locally, with e.g easyphp or another combination package, open:
       http://localhost/dokeos/index.php </p>
-    <p> 3.7. Click on the install button, then click on "Update from Dokeos 1.6, 1.6.1, 1.6.2, 1.6.3" and follow the instructions. </p>
+    <p> 3.7. Click on the install button, then click on "Upgrade from Dokeos 1.6, 1.6.1, 1.6.2, 1.6.3, 1.6.4, 1.6.5" and follow the instructions. </p>
     <h2><a name="troubleshooting">4. Troubleshooting</a></h2>
     <p> In the future we will also provide instructions on how to do a "manual" install
       of Dokeos, by creating the database tables yourself.
@@ -259,7 +398,65 @@
       Some LDAP servers do not support anonymous use of the directory services
       In this case, you need code that binds with a name and password - this code has already been provided,
       just ask on a forum or email for this. </p>
-    <p>
+      <p>
+<h2>7 Debian based linux distribution (ubuntu)</h2>
+      <p>The following packages have to be installed</p>
+      <ul>
+	      <li>Apache(2)</li>
+	      <ul>
+		      <li>apt-get install apache2</li>
+		      <li>apt-get install apache2-common</li>
+		      <li>apt-get install apache2-utils</li>
+		      <li>apt-get install apache2-utils</li>
+		      <li>apt-get install libapache2-mod-jk</li>
+	      </ul>
+	      <li>Mysql</li>
+	      <ul>
+		     <li>apt-get install mysql-server</li>
+		     <li>apt-get install mysql-common</li>
+	      </ul>
+	      <li>php4</li>
+	      <ul>
+		      <li>apt-get install php4</li>
+		      <li>apt-get install php4-common</li>
+		      <li>apt-get install php4-mysql</li>
+		      <li>apt-get install apache2-mod-php4</li>
+	      </ul>
+	      <li>Java</li>
+	      <ul>	
+		      <li>apt-get install sun-java5-jdk</li>
+	      </ul>
+	      <li>Powerpoint and Presenter conversiontool</li>
+	      <ul>
+		      <li>apt-get install openoffice.org</li>
+		      <li>apt-get install xvfb xbase-clients</li>
+		      <li>Install basic fonts and x-window when a headless server is used</li>
+		      <li>copy the oooserver.init file</li>
+		      <li>start the openoffice server with /etc/init.d/oooserver start</li>
+	      </ul>
+	      <li>Install Openlaszlo and tomcat</li>
+	      <ul>
+		      <li>downlooad dokeosopenlaszlo_1_8.tar.gz</li>
+		      <li>tar -xvzf dokeosopenlaszlo_1_8.tar.gz</li>
+		      <li>change if needed the references to java_home</li>
+		      <li>start the server with $installdir/lps-latest/Server/tomcat-5.0.24/bin/startup.sh</li>
+	      </ul>
+	      <li>Install Red5 server</li>
+	      <ul>
+		      <li>download dokeosred5_1_8.tar.gz</li>
+		      <li>tar -xvzf dokeosred5_1_8.tar.gz</li>
+		      <li>change if needed the references to java_home</li>
+		      <li>start the server with $installdir/dist/red5.sh</li>
+	      </ul>
+	      <li>Install Dokeos</li>
+	      <ul>
+		      <li>download dokeos.tar.gz</li>
+		      <li>tar -xvzf dokeos.tar.gz</li>
+		      <li>change the apache setting</li>
+		      <li>restart your web-server</li>
+		      <li>goto your dokeos homepage</li>
+	      </ul>
+      </ul> 
     <hr>
     Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium<br/>
     Mail: info@dokeos.com

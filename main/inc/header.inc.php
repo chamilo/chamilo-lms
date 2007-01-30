@@ -70,28 +70,23 @@ echo get_setting('siteName');
 ?>
 </title>
 <style type="text/css" media="screen, projection">
-/*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/default/default.css";
-@import "<?php echo api_get_path(WEB_CODE_PATH); ?>course_home/css/dokeos_corporate.css";
-/*]]>*/
+  /*<![CDATA[*/
+<?php
+$my_style = api_get_setting('stylesheet');
+$my_code_path = api_get_path(WEB_CODE_PATH);
+if(empty($my_style)){$my_style = 'default';}
+echo '  @import '.$my_code_path.'css/'.$my_style.'/default.css'."\n";
+echo '  @import '.$my_code_path.'css/'.$my_style.'/course.css'."\n";
+?>
+  /*]]>*/
 </style>
 <style type="text/css" media="print">
-/*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/default/print.css";
-/*]]>*/
-</style>
+  /*<![CDATA[*/
 <?php
-if(api_get_setting('stylesheets')<>'')
-{
+  echo '@import '.$my_code_path.'css/'.$my_style.'/print.css'."\n";
 ?>
-<style type="text/css" media="screen, projection">
-/*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo api_get_setting('stylesheets');?>/default.css";
-/*]]>*/
+  /*]]>*/
 </style>
-<?php
-}
-?>
 
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
 <link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/courses.php" title="<?php echo htmlentities(get_lang('OtherCourses')); ?>" />

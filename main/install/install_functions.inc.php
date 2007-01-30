@@ -584,7 +584,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 
 		<?php
 		//real code
-		echo '<input type="submit" name="step2_update" value="Not stable yet - Upgrade from Dokeos ' . implode(', ',$update_from_version) . '"';
+		echo '<input type="submit" name="step2_update" value="Upgrade from Dokeos ' . implode(', ',$update_from_version) . '"';
 		if($error) echo ' disabled="disabled"';
 		//temporary code for alpha version, disabling upgrade
 		//echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';

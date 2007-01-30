@@ -81,6 +81,13 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('Forum');
 
+$origin = '';
+if(isset($_GET['origin']))
+{
+	$origin =  $_GET['origin'];
+	$origin_string = '&origin='.$origin;
+}
+
 /*
 -----------------------------------------------------------
 	Including necessary files
@@ -130,13 +137,21 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resour
 	header("Location: ../resourcelinker/resourcelinker.php");
 }
 
+
+
 /*
 -----------------------------------------------------------
 	Header
 -----------------------------------------------------------
 */
-Display :: display_header();
-api_display_tool_title($nameTools);
+if($origin=='learnpath')
+{
+	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+} else 
+{
+	Display :: display_header();
+	api_display_tool_title($nameTools);
+}
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 
 /*

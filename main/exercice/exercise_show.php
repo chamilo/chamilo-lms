@@ -793,7 +793,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 
 								  <?php
 								  $arrmarks[] = $questionId;
-								 echo "Assign Marks ";
+								 echo get_lang("AssignMarks");
 								  echo "<select name='marks' id='marks'>";
 								  for($i=0;$i<=$questionWeighting;$i++)
 									{?>

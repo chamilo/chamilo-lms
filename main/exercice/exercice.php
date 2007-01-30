@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 10801 2007-01-19 14:07:20Z elixir_inter $
+* 	@version $Id: exercice.php 11005 2007-01-30 10:24:08Z elixir_julian $
 */
 
 
@@ -152,7 +152,7 @@ else
 	else
 	{
 		$nameTools=get_lang('YourScore');
-		$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('Exercices'));
+		$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 	}
 }
 
@@ -869,7 +869,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 		  <td class="content"><?php $test = $results[$i][1]; echo $results[$i][1]; ?></td>
 		  <td class="content" align="center"><?php $dt = strftime($dateTimeFormatLong,$results[$i][4]); echo strftime($dateTimeFormatLong,$results[$i][4]); ?></td>
 		  <td class="content" align="center"><?php $res = $results[$i][2]; echo $results[$i][2]; ?> / <?php echo $results[$i][3]; ?></td>
-		 <td class="content" align="center"><?php echo $is_allowedToEdit?"<a href='exercise_show.php?user=$user&test=$test&dt=$dt&res=$res&id=$id&email=$mailid'>Edit</a>":"<a href='exercise_show.php?test=$test&dt=$dt&res=$res&id=$id'>Show</a>"?></td>
+		 <td class="content" align="center"><?php echo $is_allowedToEdit?"<a href='exercise_show.php?user=$user&test=$test&dt=$dt&res=$res&id=$id&email=$mailid'>Edit</a>":"<a href='exercise_show.php?test=$test&dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>"?></td>
 
 		 </tr>
 

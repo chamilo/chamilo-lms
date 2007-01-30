@@ -4124,7 +4124,7 @@ class learnpath {
 							if($arrLP[$i]['previous_item_id'] != 0)
 							{
 								$return .= "\t\t\t" . '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
-									$return .= '<img alt="" src="img/arrow_up_' . ($arrLP[$i]['depth'] % 3) . '.gif" />';
+									$return .= '<img alt="" src="../img/arrow_up_' . ($arrLP[$i]['depth'] % 3) . '.gif" />';
 								$return .= '</a>' . "\n";
 							}
 							else
@@ -4133,7 +4133,7 @@ class learnpath {
 							if($arrLP[$i]['next_item_id'] != 0)
 							{
 								$return .= "\t\t\t" . '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=down&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
-									$return .= '<img src="img/arrow_down_' . ($arrLP[$i]['depth'] % 3) . '.gif" />';
+									$return .= '<img src="../img/arrow_down_' . ($arrLP[$i]['depth'] % 3) . '.gif" />';
 								$return .= '</a>' . "\n";
 							}
 							else

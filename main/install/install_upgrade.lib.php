@@ -173,6 +173,17 @@ function write_dokeos_config_file($path)
 	global $urlAppendPath;
 	global $languageForm;
 	global $encryptPassForm;
+	global $installType;
+	global $updatePath;
+	$rootSys = realpath($pathForm).'/';
+	$garbageDir = realpath('../garbage/').'/';
+	//change paths if updating
+	//if($installType=='update'){
+	//	$rootSys = $updatePath;
+	//	$garbageDir = realpath($updatePath.'claroline/garbage/').'/';
+	//	$urlAppendPath = '';	
+	//}
+	
 	$file_path = dirname(__FILE__).'/'.DOKEOS_CONFIG_FILENAME;
 	$content = file_get_contents($file_path);
 	$config['{DATE_GENERATED}'] = date('r');
@@ -189,9 +200,9 @@ function write_dokeos_config_file($path)
 	$config['{DATABASE_SCORM}'] = ($singleDbForm ? $dbNameForm : $dbScormForm);
 	$config['{DATABASE_PERSONAL}'] =($singleDbForm ?  $dbNameForm : $dbUserForm);
 	$config['{ROOT_WEB}'] = $urlForm;
-	$config['{ROOT_SYS}'] = str_replace('\\', '/', realpath($pathForm).'/');
+	$config['{ROOT_SYS}'] = str_replace('\\', '/', $rootSys);
 	$config['{URL_APPEND_PATH}'] = $urlAppendPath;
-	$config['{GARBAGE_DIR}'] = str_replace("\\", "/", realpath("../garbage/")."/");
+	$config['{GARBAGE_DIR}'] = str_replace("\\", '/', $garbageDir);
 	$config['{PLATFORM_LANGUAGE}'] = $languageForm;
 	$config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
 	$config['{ENCRYPT_PASSWORD}'] = trueFalse($encryptPassForm);

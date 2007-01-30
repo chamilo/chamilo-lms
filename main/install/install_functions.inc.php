@@ -342,9 +342,9 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 	echo '<div class="RequirementContent">';
 	echo '<table class="requirements">
 			<tr>
-				<td class="requirements-item">'.get_lang('PHPVersion').'>= 4.1.0</td>
+				<td class="requirements-item">'.get_lang('PHPVersion').'>= 5.0</td>
 				<td class="requirements-value">';
-					if (phpversion() < '4.1')
+					if (phpversion() < '5.0')
 					{
 						echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
 					}

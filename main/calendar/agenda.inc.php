@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 10562 2006-12-28 15:35:50Z elixir_inter $
+<?php //$Id: agenda.inc.php 11022 2007-01-30 12:44:24Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -2121,8 +2121,8 @@ function show_add_form($id = '')
 
 	<tr class="subtitle">
 		<td colspan="3" valign="top"><hr noshade="noshade" color="#cccccc" /><?php echo get_lang('ItemTitle'); ?> :
-			<div style='margin-left: 80px'><textarea name="title" cols="50" rows="2" wrap="virtual" style="vertical-align:top; width:75%; height:50px;"><?php  if (isset($title)) echo $title; ?></textarea></div>
-			<!-- <input type="text" size="60" name="title" value="<?php  if (isset($title)) echo $title; ?>" /> -->
+			<!--<div style='margin-left: 80px'><textarea name="title" cols="50" rows="2" wrap="virtual" style="vertical-align:top; width:75%; height:50px;"><?php  if (isset($title)) echo $title; ?></textarea></div>-->
+			<input type="text" size="60" name="title" value="<?php  if (isset($title)) echo $title; ?>" />
 		</td>
 	</tr>
 
@@ -2134,7 +2134,7 @@ function show_add_form($id = '')
 			
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-			$oFCKeditor->Height		= '300';
+			$oFCKeditor->Height		= '175';
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Value		= $content;
 			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
@@ -2148,9 +2148,8 @@ function show_add_form($id = '')
 			
 			$return =	$oFCKeditor->CreateHtml();
 			
-			echo get_lang('Detail')." :";
+			echo $return;
 			
-			echo "<div style='margin-left: 80px'>".$return."</div>";
  ?><br />
 		</td>
 	</tr>

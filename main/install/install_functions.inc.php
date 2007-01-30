@@ -959,7 +959,7 @@ function display_after_install_message($installType, $nbr_courses)
 	<?php endif; ?>
 
 	<br><br>
-	<b><?php echo get_lang('SecurityAdvice');?> :</b> <?php printf(get_lang('ToProtectYourSiteMakeReadOnlyXAndY'),'main/inc/conf/configuration.php','main/install/index.php');?>
+	<b><?php echo get_lang('SecurityAdvice');?> :</b> <?php printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'),'main/inc/conf/configuration.php','main/install/index.php');?>
 	<br><br><br><br>
 
 	</form>

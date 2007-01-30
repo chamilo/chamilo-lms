@@ -131,6 +131,8 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('allow_email_e
 INSERT INTO settings_options(variable,value,display_text) VALUES ('allow_email_editor', 'false', 'No');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('show_email_addresses','true','Yes');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('show_email_addresses','false','No');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('wcag_anysurfer_public_pages', 'true', 'Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('wcag_anysurfer_public_pages', 'false', 'No');
 
 UPDATE course_module SET image = 'links.gif' WHERE image='liens.gif';
 UPDATE course_module SET image = 'members.gif' WHERE image = 'membres.gif';

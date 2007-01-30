@@ -1217,43 +1217,26 @@ function update_Db_course($courseDbName)
 	-----------------------------------------------------------
 	*/
 	$sql = "CREATE TABLE `".$TABLESURVEY."` (
-			  `survey_id` int(10) unsigned NOT NULL auto_increment,
-			  `code` varchar(20) default NULL,
-			  `title` varchar(80) default NULL,
-			  `subtitle` varchar(80) default NULL,
-			  `author` varchar(20) default NULL,
-			  `lang` varchar(20) default NULL,
-			  `avail_from` date default NULL,
-			  `avail_till` date default NULL,
-			  `is_shared` char(1) default '1',
-			  `template` varchar(20) default NULL,
-			  `intro` text,
-			  `surveythanks` text,
-			  `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
-			  `invited` int(11) NOT NULL,
-			  `answered` int(11) NOT NULL,
-			  `invite_mail` text NOT NULL,
-			  `reminder_mail` text NOT NULL,
-			  PRIMARY KEY  (`survey_id`),
-			  UNIQUE KEY `id` (`survey_id`)
+			  survey_id int unsigned NOT NULL auto_increment,
+			  code varchar(20) default NULL,
+			  title varchar(80) default NULL,
+			  subtitle varchar(80) default NULL,
+			  author varchar(20) default NULL,
+			  lang varchar(20) default NULL,
+			  avail_from date default NULL,
+			  avail_till date default NULL,
+			  is_shared char(1) default '1',
+			  template varchar(20) default NULL,
+			  intro text,
+			  surveythanks text,
+			  creation_date datetime NOT NULL default '0000-00-00 00:00:00',
+			  invited int NOT NULL,
+			  answered int NOT NULL,
+			  invite_mail text NOT NULL,
+			  reminder_mail text NOT NULL,
+			  PRIMARY KEY  (survey_id)
 			)";
 
-	$result = mysql_query($sql) or die(mysql_error($sql));
-	/*
-	if(!api_sql_query($sql))
-	{
-		error_log($sql,0);
-	}
-	*/
-
-	$sql = "CREATE TABLE `".$TABLESURVEYANSWER."` (
-			  `answer_id` int(11) NOT NULL auto_increment,
-			  `survey_id` int(11) NOT NULL,
-			  `question_id` int(11) NOT NULL,
-			  `option_id` int(11) NOT NULL,
-			  `user` varchar(250) NOT NULL,
-			  PRIMARY KEY  (`answer_id`)
-			)";
 	$result = mysql_query($sql) or die(mysql_error($sql));
 	/*
 	if(!api_sql_query($sql))
@@ -1263,13 +1246,13 @@ function update_Db_course($courseDbName)
 	*/
 
 	$sql = "CREATE TABLE `".$TABLESURVEYINVITATION."` (
-			  `survey_invitation_id` int(11) NOT NULL auto_increment,
-			  `survey_id` int(11) NOT NULL,
-			  `user` varchar(250) NOT NULL,
-			  `invitation_code` varchar(250) NOT NULL,
-			  `invitation_date` datetime NOT NULL,
-			  `reminder_date` datetime NOT NULL,
-			  PRIMARY KEY  (`survey_invitation_id`)
+			  survey_invitation_id int unsigned NOT NULL auto_increment,
+			  survey_id int unsigned NOT NULL,
+			  user varchar(250) NOT NULL,
+			  invitation_code varchar(250) NOT NULL,
+			  invitation_date datetime NOT NULL,
+			  reminder_date datetime NOT NULL,
+			  PRIMARY KEY  (survey_invitation_id)
 			)";
 	$result = mysql_query($sql) or die(mysql_error($sql));
 	/*
@@ -1280,14 +1263,14 @@ function update_Db_course($courseDbName)
 	*/
 
 	$sql = "CREATE TABLE `".$TABLESURVEYQUESTION."` (
-			  `question_id` int(11) NOT NULL auto_increment,
-			  `survey_id` int(11) NOT NULL,
-			  `survey_question` text NOT NULL,
-			  `survey_question_comment` text NOT NULL,
-			  `type` varchar(250) NOT NULL,
-			  `display` varchar(10) NOT NULL,
-			  `sort` int(11) NOT NULL,
-			  PRIMARY KEY  (`question_id`)
+			  question_id int unsigned NOT NULL auto_increment,
+			  survey_id int unsigned NOT NULL,
+			  survey_question text NOT NULL,
+			  survey_question_comment text NOT NULL,
+			  type varchar(250) NOT NULL,
+			  display varchar(10) NOT NULL,
+			  sort int NOT NULL,
+			  PRIMARY KEY  (question_id)
 			)";
 	$result = mysql_query($sql) or die(mysql_error($sql));
 	/*
@@ -1298,13 +1281,29 @@ function update_Db_course($courseDbName)
 	*/
 
 	$sql ="CREATE TABLE `".$TABLESURVEYQUESTIONOPTION."` (
-	  `question_option_id` int(11) NOT NULL auto_increment,
-	  `question_id` int(11) NOT NULL,
-	  `survey_id` int(11) NOT NULL,
-	  `option_text` text NOT NULL,
-	  `sort` int(11) NOT NULL,
-	  PRIMARY KEY  (`question_option_id`)
+	  question_option_id int unsigned NOT NULL auto_increment,
+	  question_id int unsigned NOT NULL,
+	  survey_id int unsigned NOT NULL,
+	  option_text text NOT NULL,
+	  sort int NOT NULL,
+	  PRIMARY KEY  (question_option_id)
 	)";
+	$result = mysql_query($sql) or die(mysql_error($sql));
+	/*
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	*/
+
+	$sql = "CREATE TABLE `".$TABLESURVEYANSWER."` (
+			  answer_id int unsigned NOT NULL auto_increment,
+			  survey_id int unsigned NOT NULL,
+			  question_id int unsigned NOT NULL,
+			  option_id int unsigned NOT NULL,
+			  user varchar(250) NOT NULL,
+			  PRIMARY KEY  (answer_id)
+			)";
 	$result = mysql_query($sql) or die(mysql_error($sql));
 	/*
 	if(!api_sql_query($sql))

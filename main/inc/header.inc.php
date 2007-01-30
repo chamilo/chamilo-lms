@@ -70,22 +70,22 @@ echo get_setting('siteName');
 ?>
 </title>
 <style type="text/css" media="screen, projection">
-  /*<![CDATA[*/
+/*<![CDATA[*/
 <?php
 $my_style = api_get_setting('stylesheet');
 $my_code_path = api_get_path(WEB_CODE_PATH);
 if(empty($my_style)){$my_style = 'default';}
-echo '  @import "'.$my_code_path.'css/'.$my_style.'/default.css"'."\n";
-echo '  @import "'.$my_code_path.'css/'.$my_style.'/course.css"'."\n";
+echo '@import "'.$my_code_path.'css/'.$my_style.'/default.css";'."\n";
+echo '@import "'.$my_code_path.'css/'.$my_style.'/course.css";'."\n";
 ?>
-  /*]]>*/
+/*]]>*/
 </style>
 <style type="text/css" media="print">
-  /*<![CDATA[*/
+/*<![CDATA[*/
 <?php
-  echo '@import "'.$my_code_path.'css/'.$my_style.'/print.css"'."\n";
+  echo '@import "'.$my_code_path.'css/'.$my_style.'/print.css";'."\n";
 ?>
-  /*]]>*/
+/*]]>*/
 </style>
 
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />

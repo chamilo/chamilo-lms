@@ -77,7 +77,6 @@ $langTask1Desc = "Descrizione 1° Compito";
 $langTask2Desc = "Descrizione 2° Compito";
 $langTask3Desc = "Descrizione 3° Compito";
 $blog_management = "Gestione Blog";
-$langAuthor = "Autore";
 $langWelcome = "Benvenuti!";
 $langModule = "Modulo";
 $langUserHasPermissionNot = "L\'utente non ha i permessi necessari";

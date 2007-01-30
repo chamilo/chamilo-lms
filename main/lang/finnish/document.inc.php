@@ -112,5 +112,4 @@ $fileModified = "Tiedostoa on muokattu";
 $DocumentsOverview = "dokumenttien esikatselu";
 $ViewSlideshow = "Katso kuvat diaesityksenä";
 $Options = "Vaihtoehdot";
-$Type = "Järjestä";
 ?>

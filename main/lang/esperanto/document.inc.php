@@ -114,7 +114,6 @@ $fileModified = "La dosiero estas &#349;an&#285;ita ";
 $DocumentsOverview = "Dokumenta supervido ";
 $ViewSlideshow = "Rigardi al bildoprojekcio ";
 $Options = "Opcioj ";
-$Type = "Formato   XX";
 $WelcomeOogieConverter = "Bonvenon en la konversaplikado Oogie<br /> 1. Elektu .ppt a&#365; .odp -dosieron <br/> 2. Sendu tiun dosieron al Oogie. &#284;i estos transformata en Scorm-lernopadon <br /> 3. Vi povas aldoni a&#365;dan komentarion al &#265;i bildo kaj intermeti testojn inter la diversaj bildoj";
 $ConvertToLP = "Konverti en lernopadon";
 $Content = "Enhavo";

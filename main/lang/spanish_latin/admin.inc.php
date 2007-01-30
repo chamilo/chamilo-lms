@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Administrado por ";
+$AdminBy  = "Administrado por ";
 $AdministrationTools  = " Herramientas de administración";
 $State  = "Estado del Sistema";
 $Statistiques  = "Estadísticas";
@@ -211,7 +211,7 @@ $langContent = "Contenido";
 $langStartDate = "Fecha de inicio";
 $langEndDate = "Fecha de termino";
 $langStudent = "Estudiante";
-$langGuest = "Invitado";
+$Guest = "Invitado";
 $langLoginAsThisUserColumnName = "Entrar como";
 $langLoginAsThisUser = "Entrar como";
 $DontResetPassword = "No resetear contraseña";

@@ -103,4 +103,8 @@ $AnnouncementExampleTitle = "Dies ist ein Beispiel für eine Ankündigung";
 $Wikipedia = "Freie Online Enzyklopädie";
 $DefaultGroupCategory = "Voreingestellte Gruppen";
 $DefaultCourseImages = "Default Bilder";
+$ExampleForumCategory = "Beispielkategorie für Forum";
+$ExampleForum = "Forumbeispiel";
+$ExampleThread = "Themenbeispiel";
+$ExampleThreadContent = "Beispielinhalt";
 ?>

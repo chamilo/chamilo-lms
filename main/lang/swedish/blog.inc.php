@@ -8,7 +8,6 @@ $Title = "Titel";
 $ThisBlog = "Denna blog";
 $NewPost = "Ny artikel";
 $blog_management = "Blog hantering";
-$langAuthor = "Författare";
 $langWelcome = "Välkommen!";
 $langModule = "Modul";
 $langUserHasPermissionNot = "Användaren har inga rättigheter";

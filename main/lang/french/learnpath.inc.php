@@ -162,4 +162,8 @@ $EditCurrentLink = "Editer le lien";
 $Url = "Url";
 $MoveCurrentStudentPublication = "Déplacer le travail d\'étudiant courant";
 $EditCurrentStudentPublication = "Editer le travail d\'étudiant courant";
+$AllowMultipleAttempts = "Autoriser plusieurs essais";
+$PreventMultipleAttempts = "Interdire plusieurs essais";
+$MakeScormRecordingExtra = "ajouter des évènements SCORM supplémentaires";
+$MakeScormRecordingNormal = "pas d\'évènements SCORM supplémentaires";
 ?>

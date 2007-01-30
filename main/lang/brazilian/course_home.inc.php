@@ -21,7 +21,6 @@ $blog_management = "Gestão dos blogs";
 $forum = "Fóruns";
 $course_maintenance = "Administrar Curso";
 $TOOL_SURVEY = "Enquetes";
-$visio = "Video Conferência Dokeos";
 $GreyIcons = "Ferramentas";
 $Interaction = "Interação";
 $Authoring = "Autoria";

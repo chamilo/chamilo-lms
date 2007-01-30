@@ -116,7 +116,6 @@ $fileModified = "El archivo ha sido modificado";
 $DocumentsOverview = "Sumario del documento";
 $ViewSlideshow = "Ver presentación de imágenes";
 $Options = "Opciones";
-$Type = "Tipo";
 $WelcomeOogieConverter = "Bienvenido al conversor de PowerPoint Oogie<br>
 1. Explore su disco duro y busque cualquier archivo con las extensiones *.ppt u *.odp<br>
 2. Envíelo a Oogie. Este lo transformará en un Itinerario de aprendizaje Scorm.<br>

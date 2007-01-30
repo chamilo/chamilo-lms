@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Ditadbir oleh ";
+$AdminBy  = "Ditadbir oleh ";
 $AdministrationTools  = "Alat Bantu Pentadbiran";
 $State  = "Status Sistem";
 $Statistiques  = "Statistik";

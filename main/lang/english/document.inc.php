@@ -114,7 +114,6 @@ $fileModified = "The file is modified";
 $DocumentsOverview = "documents overview";
 $ViewSlideshow = "Images slideshow";
 $Options = "Options";
-$Type = "Type";
 $WelcomeOogieConverter = "Welcome to Oogie PowerPoint converter<ul type=\\\"1\\\"><li>Browse your hard disk to find any .ppt or .odp file<li>Upload it to Oogie. It will tranform it into a Scorm learning path.<li>You will then be allowed to add audio comments on each slide and inserts test between slides for evaluation";
 $ConvertToLP = "Convert to Learning Path";
 $Content = "Content";

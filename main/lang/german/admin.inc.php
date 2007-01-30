@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Verwaltet von";
+$AdminBy  = "Verwaltet von";
 $AdministrationTools  = "Administration";
 $State  = "Status des Systems";
 $Statistiques  = "Statistik";
@@ -211,7 +211,7 @@ $langContent = "Inhalt";
 $langStartDate = "Anfangsdatum";
 $langEndDate = "Enddatum";
 $langStudent = "Teilnehmer";
-$langGuest = "Gast";
+$Guest = "Gast";
 $langLoginAsThisUserColumnName = "Login als";
 $langLoginAsThisUser = "Login als dieser Nutzer ";
 $DontResetPassword = "Passwort nicht zurücksetzen";
@@ -515,8 +515,8 @@ $EnableToolIntroductionTitle = "Tool Einleitungstext aktivieren";
 $EnableToolIntroductionComment = "Ermöglicht Einleitungstext für jede Tool Homepage";
 $BreadCrumbsCourseHomepageTitle = "Kurs Homepage Breadcrumbs";
 $BreadCrumbsCourseHomepageComment = "Die \"Breadcrumb\" Zeile ist die horizontale Navigationszeile, die normalerweise am linken oberen Teil der Seite angezeigt wird. Mit dieser Option wählt man aus, was in den Breadcrumbs auf der Kurs Homepage angezeigt werden soll. ";
-$title = "Titel";
-$comment = "Kommentar";
+$Title = "Titel";
+$Comment = "Kommentar";
 $Version = "Version";
 $LoginPageMainArea = "Login Seite Hauptteil";
 $LoginPageMenu = "Login Seite Menu";

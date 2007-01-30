@@ -215,4 +215,5 @@ $PlusAnswer = "+ odgovor";
 $LessAnswer = "- odgovor";
 $YourScore = "Tvoj rezultat";
 $Attempted = "Poskusov";
+$AssignMarks = "Oceni / dodeli oceno";
 ?>

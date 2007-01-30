@@ -103,4 +103,8 @@ $AnnouncementExampleTitle = "Tole je primer obvestila";
 $Wikipedia = "Online Enciklopedija";
 $DefaultGroupCategory = "Privzete skupine";
 $DefaultCourseImages = "Privzete slike";
+$ExampleForumCategory = "Primer kategorije forumov";
+$ExampleForum = "Primer foruma";
+$ExampleThread = "Primer niti";
+$ExampleThreadContent = "Primer vsebine";
 ?>

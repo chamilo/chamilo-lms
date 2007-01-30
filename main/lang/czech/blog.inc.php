@@ -19,7 +19,6 @@ $langTask1Desc = "Úloha 1 - popis";
 $langTask2Desc = "Úloha 2 - popis";
 $langTask3Desc = "Úloha 3 - popis";
 $blog_management = "Blog management";
-$langAuthor = "Autor";
 $langWelcome = "Vítejte !";
 $langModule = "Modul";
 $langUserHasPermissionNot = "Uživatel nemá práva";

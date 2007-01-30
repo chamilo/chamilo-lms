@@ -114,7 +114,6 @@ $fileModified = "Fisierul este modificat";
 $DocumentsOverview = "Sumarul documentelor";
 $ViewSlideshow = "Vezi imaginile in slideshow";
 $Options = "Optiuni";
-$Type = "Tip";
 $WelcomeOogieConverter = "Bine ati venit la Convertorul PowerPoint Oogie<br>1.Rasfoieste hard diskul pentru a gasi orice fisier .ppt sau .odp<br>2.Incarca-l in Oogie. Il va transforma in calea de invatare Scorm.<br>3.Apoi veti putea adauga comentarii audio la fiecare slide si introduce un test intre slide-uri pentru evaluare";
 $ConvertToLP = "Converteste la Calea de Invatare";
 $Content = "Continut";

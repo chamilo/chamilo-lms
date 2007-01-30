@@ -29,7 +29,6 @@ $ReplyToMessage = "Raspunde acestui mesaj";
 $QuoteMessage = "Citeaza acest mesaj";
 $NewTopic = "Discutie noua";
 $Replies = "Raspunsuri";
-$Author = "Autor";
 $Views = "Vizualizari";
 $LastPost = "Ultimul mesaj";
 $Quoting = "Citeaza";

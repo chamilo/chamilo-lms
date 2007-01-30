@@ -114,7 +114,6 @@ $fileModified = "Het bestand is gewijzigd.";
 $DocumentsOverview = "documentenoverzicht";
 $ViewSlideshow = "Bekijk afbeeldingen als diavoorstelling";
 $Options = "Opties";
-$Type = "Type";
 $WelcomeOogieConverter = "Welkom in de conversie applicatie Oogie<br />
 1. Kies een .ppt of .odp bestand <br/>
 2. Verstuur dit bestan naar Oogie. Het word omgezet in een Scorm leerpad <br />

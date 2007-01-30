@@ -21,7 +21,6 @@ $blog_management = "Blogs management";
 $forum = "Forums";
 $course_maintenance = "Course Maintenance";
 $TOOL_SURVEY = "Surveys";
-$visio = "Dokeos Live Conferencing";
 $GreyIcons = "Toolbox";
 $Interaction = "Interaction";
 $Authoring = "Authoring";

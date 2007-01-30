@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Správce";
+$AdminBy  = "Správce";
 $AdministrationTools  = "Administrace";
 $State  = "Stav systému";
 $Statistiques  = "Statistika";
@@ -211,7 +211,7 @@ $langContent = "Obsah";
 $langStartDate = "Po&#269;áte&#269;ní datum";
 $langEndDate = "Kone&#269;né datum";
 $langStudent = "Student";
-$langGuest = "Host";
+$Guest = "Host";
 $langLoginAsThisUserColumnName = "P&#345;ihlásit jako";
 $langLoginAsThisUser = "P&#345;ihlásit";
 $DontResetPassword = "Neresetovat heslo";

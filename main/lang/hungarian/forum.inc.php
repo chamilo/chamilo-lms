@@ -29,7 +29,6 @@ $ReplyToMessage = "Válasz erre az üzenetre";
 $QuoteMessage = "Üzenet idézése";
 $NewTopic = "Új téma";
 $Replies = "Válaszok";
-$Author = "Szerz&#337;";
 $Views = "Nézetek";
 $LastPost = "Utolsó üzenet";
 $Quoting = "Idézve";

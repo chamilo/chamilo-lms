@@ -30,7 +30,6 @@ $langVersionTip = "numurs vai apraksts";
 $langStatusTip = "izv&#275;lieties no saraksta";
 $langCreatedSize = "Izveidots, izm&#275;rs";
 $langCreatedSizeTip = "GGGG-MM-DD, kad tika izveidots, izm&#275;rs oktetos (baitos)";
-$langAuthor = "Autors";
 $langAuthorTip = "VCARD form&#257;t&#257;";
 $langFormat = "Form&#257;ts";
 $langFormatTip = "izv&#275;lieties no saraksta";

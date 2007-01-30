@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Administreret af ";
+$AdminBy  = "Administreret af ";
 $AdministrationTools  = "Administrative værktøjer";
 $State  = "Systemets tilstand";
 $Statistiques  = "Statistikker";
@@ -204,7 +204,7 @@ $langContent = "Indhold";
 $langStartDate = "Start dato";
 $langEndDate = "Slut dato";
 $langStudent = "Studerende";
-$langGuest = "Gæst";
+$Guest = "Gæst";
 $langLoginAsThisUserColumnName = "Log ind som";
 $langLoginAsThisUser = "Log ind";
 $langCourseAdmin = "kursusleder";

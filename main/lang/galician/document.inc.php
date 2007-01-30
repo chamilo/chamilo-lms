@@ -112,6 +112,5 @@ $fileModified = "O ficheiro foi modificado";
 $DocumentsOverview = "Visión xeral dos documentos";
 $ViewSlideshow = "Ver presentación de imaxes";
 $Options = "Opcións";
-$Type = "Tipo";
 $Content = "Contido";
 ?>

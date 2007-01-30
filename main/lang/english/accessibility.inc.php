@@ -1,10 +1,12 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$WCAGContent = "text";
+$WCAGContent = "Text";
 $test = "test";
-$WCAGImage = "image";
-$WCAGLabel = "image label";
-$WCAGLink = "link";
-$WCAGLinkLabel = "link label ";
+$WCAGImage = "Image";
+$WCAGLabel = "Image label";
+$WCAGLink = "Link";
+$WCAGLinkLabel = "Link label ";
+$errorNoLabel = "No label on the picture.";
+$WCAGEditor = "WCAG Editor";
 ?>

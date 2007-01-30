@@ -31,7 +31,6 @@ $langVersionTip = "หรือคำบรรยาย number or description";
 $langStatusTip = "เลือกจากรายการ select from list";
 $langCreatedSize = "สร้างแล้ว ขนาด Created, size";
 $langCreatedSizeTip = "พศ.-เดือน-วัน when created, size in octets (bytes)";
-$langAuthor = "ผู้เขียน Author";
 $langAuthorTip = "in VCARD format";
 $langFormat = "รูปแบบ Format";
 $langFormatTip = "เลือกจากรายการ select from list";

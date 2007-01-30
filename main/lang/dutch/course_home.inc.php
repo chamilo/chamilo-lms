@@ -21,7 +21,6 @@ $blog_management = "Beheer van blogs";
 $forum = "Forums";
 $course_maintenance = "Cursusbeheer";
 $TOOL_SURVEY = "Enquêtes";
-$visio = "Dokeos Live Conferencing";
 $GreyIcons = "Modules";
 $Interaction = "Interactie";
 $Authoring = "Opstellen";

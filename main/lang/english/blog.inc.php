@@ -19,7 +19,6 @@ $langTask1Desc = "Task 1 description";
 $langTask2Desc = "Task 2 description";
 $langTask3Desc = "Task 3 description";
 $blog_management = "Blog management";
-$langAuthor = "Author";
 $langWelcome = "Welcome !";
 $langModule = "Module";
 $langUserHasPermissionNot = "The user hasn\'t rights";

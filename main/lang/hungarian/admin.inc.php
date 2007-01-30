@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Adminisztrálja";
+$AdminBy  = "Adminisztrálja";
 $AdministrationTools  = "Adminisztráció";
 $State  = "Rendszer állapota";
 $Statistiques  = "Statisztikák";
@@ -211,7 +211,7 @@ $langContent = "Tartalom";
 $langStartDate = "Kezd&#337; dátum";
 $langEndDate = "Befejez&#337; dátum";
 $langStudent = "Diák";
-$langGuest = "Vendég";
+$Guest = "Vendég";
 $langLoginAsThisUserColumnName = "Belépés, mint";
 $langLoginAsThisUser = "Belépés";
 $DontResetPassword = "Ne módosítsa a jelszót";

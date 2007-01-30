@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "&#31649;&#29702;&#32773;";
+$AdminBy  = "&#31649;&#29702;&#32773;";
 $AdministrationTools  = "&#31649;&#29702;&#12484;&#12540;&#12523;";
 $State  = "&#12471;&#12473;&#12486;&#12512;&#29366;&#27841;";
 $Statistiques  = "&#32113;&#35336;";

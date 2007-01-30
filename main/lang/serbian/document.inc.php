@@ -112,5 +112,4 @@ $fileModified = "Fajl je modifikovan";
 $DocumentsOverview = "Pregled dokumenata";
 $ViewSlideshow = "Pogledaj slideshow slika";
 $Options = "Opcije";
-$Type = "Tip fajla";
 ?>

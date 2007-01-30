@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Quản trị bởi ";
+$AdminBy  = "Quản trị bởi ";
 $AdministrationTools  = "Các công cụ quản trị";
 $State  = "Tình trạng hệ thống";
 $Statistiques  = "Thống kê";

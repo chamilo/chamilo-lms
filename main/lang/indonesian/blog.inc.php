@@ -12,7 +12,6 @@ $ThisBlog = "Blog ini";
 $NewPost = "Artikel baru";
 $TaskManager = "Pengelolaan Tugas/task";
 $blog_management = "Pengelolaan Blog";
-$langAuthor = "Pengarang";
 $langWelcome = "Selamat Datang !";
 $langModule = "Modul";
 $langUserHasPermissionNot = "User tersebut tidak punya hak";

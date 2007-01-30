@@ -112,6 +112,5 @@ $fileModified = "Dosya düzenlendi";
 $DocumentsOverview = "belgelere genel bak&#305;&#351;";
 $ViewSlideshow = "Resimleri slayt göster";
 $Options = "Seçenekler";
-$Type = "Tür";
 $Content = "&#304;çerik";
 ?>

@@ -44,7 +44,6 @@ $langVersionTip = "szám vagy leírás";
 $langStatusTip = "kiválasztás a listából";
 $langCreatedSize = "Létrehozva, méret";
 $langCreatedSizeTip = "YYYY-MM-DD mikor jött létre, méret (bájtokban)";
-$langAuthor = "Szerz&#337;";
 $langAuthorTip = "VCARD formátumban";
 $langFormat = "Formátum";
 $langFormatTip = "kiválasztás a listáról";

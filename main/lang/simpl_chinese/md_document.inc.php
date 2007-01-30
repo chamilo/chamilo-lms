@@ -32,7 +32,6 @@ $langVersionTip = "数字或简介";
 $langStatusTip = "从列表中选择";
 $langCreatedSize = "已创建, 大小";
 $langCreatedSizeTip = "当创建年-月-日时, 大小应在八位字节内 ";
-$langAuthor = "作者";
 $langAuthorTip = "VCARD格式";
 $langFormat = "格式";
 $langFormatTip = "从列表中选择";

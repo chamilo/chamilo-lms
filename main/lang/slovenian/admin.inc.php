@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Upravlja";
+$AdminBy  = "Upravlja";
 $AdministrationTools  = "Upravljanje";
 $State  = "Stanje sistema";
 $Statistiques  = "Statistika";
@@ -211,7 +211,7 @@ $langContent = "Vsebina";
 $langStartDate = "Zaèetni datum";
 $langEndDate = "Konèni datum";
 $langStudent = "Teèajnik";
-$langGuest = "Gost";
+$Guest = "Gost";
 $langLoginAsThisUserColumnName = "Prijavi se kot";
 $langLoginAsThisUser = "Prijava";
 $DontResetPassword = "Ne ponastavi gesla";
@@ -516,8 +516,8 @@ $EnableToolIntroductionTitle = "Omogoèi uvodno sekcijo orodij";
 $EnableToolIntroductionComment = "Omogoèi uvodno besedilo za posamezno orodje na vsaki posamezni domaèi starani vsakega orodja";
 $BreadCrumbsCourseHomepageTitle = "Pasica domaèe strani teèaja";
 $BreadCrumbsCourseHomepageComment = "Pasica je horizontalni navigacijski sistem povezav, obièajno na levi zgornji strani strani. Opcija omogoèa izbiro vsebine, ki se pojavlja v pasici na teèajevi domaèi strani.";
-$title = "Naslov";
-$comment = "Komentar";
+$Title = "Naslov";
+$Comment = "Komentar";
 $Version = "Razlièica";
 $LoginPageMainArea = "Osnovno podroèje prijavne strani";
 $LoginPageMenu = "Menu prijavne strani";
@@ -555,4 +555,7 @@ $VideoConferenceUrl = "Pot do konference v živo";
 $VideoClassroomUrl = "Pot do konference v živo (uèilnica) ";
 $ReconfigureExtension = "Prekonfiguriraj razširitev";
 $ServiceReconfigured = "Storitev je bila prekonfigurirana";
+$ChooseNewsLanguage = "Izberi nov jezik";
+$AllLanguages = "vsi jeziki";
+$MyTextHere = "moje besedilo tule";
 ?>

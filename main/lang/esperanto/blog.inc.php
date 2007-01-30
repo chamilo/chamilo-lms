@@ -79,7 +79,6 @@ $langTask1Desc = "Priskribo de tasko 1";
 $langTask2Desc = "Priskribo de tasko 2";
 $langTask3Desc = "Priskribo de tasko 3";
 $blog_management = "Bloga mastrumado";
-$langAuthor = "A&#365;toro";
 $langWelcome = "Bonvenon!";
 $langModule = "Modulo";
 $langUserHasPermissionNot = "La uzanto ne havas la rajtojn.";

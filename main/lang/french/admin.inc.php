@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Administration  par";
+$AdminBy  = "Administration  par";
 $AdministrationTools  = "Outils d\'administration";
 $State  = "Etat du système";
 $Statistiques  = "Statistiques";
@@ -211,7 +211,7 @@ $langContent = "Contenu";
 $langStartDate = "Date de début";
 $langEndDate = "Date de fin";
 $langStudent = "Étudiant";
-$langGuest = "Invité";
+$Guest = "Invité";
 $langLoginAsThisUserColumnName = "S\'authentifier en tant que";
 $langLoginAsThisUser = "S\'authentifier";
 $DontResetPassword = "Ne pas réinitialiser le mot de passe";
@@ -516,8 +516,8 @@ $EnableToolIntroductionTitle = "Activer les introductions d\'outils";
 $EnableToolIntroductionComment = "Activer les introductions sur la page d\'accueil de chaque outil";
 $BreadCrumbsCourseHomepageTitle = "Breadcrumb de la page d\'accueil de cours";
 $BreadCrumbsCourseHomepageComment = "Le breadcrumb est la navigation horizontale par liens qui s\'affiche généralement en haut à gauche de la page. Cette option vous permet de choisir ce que ce lien affichera.";
-$title = "Titre";
-$comment = "Commentaire";
+$Title = "Titre";
+$Comment = "Commentaire";
 $Version = "Version";
 $LoginPageMainArea = "Zone principale page login";
 $LoginPageMenu = "Menu page de login";
@@ -556,4 +556,6 @@ $VideoClassroomUrl = "Chemin vers la visio conférence de classe";
 $ReconfigureExtension = "Reconfigurer l\'extension";
 $ServiceReconfigured = "Service reconfiguré";
 $ChooseNewsLanguage = "Choix d\'un nouveau langage";
+$AllLanguages = "tout les langages";
+$MyTextHere = "votre texte içi";
 ?>

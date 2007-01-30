@@ -29,7 +29,6 @@ $ReplyToMessage = "ตอบกลับข้อความ";
 $QuoteMessage = "คัดลอกข้อความ";
 $NewTopic = "กระทู้ที่ตั้งเข้า";
 $Replies = "มีผู้ตอบ";
-$Author = "ผู้เขียน";
 $Views = "มีผู้อ่าน";
 $LastPost = "กระทู้ล่าสุด";
 $Quoting = "Quoting";

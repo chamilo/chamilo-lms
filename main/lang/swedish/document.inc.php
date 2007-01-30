@@ -114,6 +114,5 @@ $fileModified = "Filen är ändrad";
 $DocumentsOverview = "dokument översikt";
 $ViewSlideshow = "Visa bildspel";
 $Options = "Val";
-$Type = "Typ";
 $Content = "innehåll";
 ?>

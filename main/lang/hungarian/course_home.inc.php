@@ -21,7 +21,6 @@ $blog_management = "Blogok kezelése";
 $forum = "Fórumok";
 $course_maintenance = "Kurzus karbantartás";
 $TOOL_SURVEY = "Kérd&#337;ívek";
-$visio = "Videó-konferencia";
 $GreyIcons = "Eszközök";
 $Authoring = "Létrehozás";
 $Administration = "Adminisztráció";

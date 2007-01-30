@@ -30,7 +30,6 @@ $langVersionTip = "number or description";
 $langStatusTip = "listeden seç";
 $langCreatedSize = "Olu&#351;turuldu, boyutu";
 $langCreatedSizeTip = "YYYY-MM-DD when created, size in octets (bytes)";
-$langAuthor = "Yazan";
 $langAuthorTip = "in VCARD format";
 $langFormat = "Format";
 $langFormatTip = "listeden seç";

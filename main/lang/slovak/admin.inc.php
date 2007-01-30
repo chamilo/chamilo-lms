@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Správca";
+$AdminBy  = "Správca";
 $AdministrationTools  = "Administrácia";
 $State  = "Stav systému";
 $Statistiques  = "Štatistika";
@@ -88,7 +88,7 @@ $langIsVirtualCourse = "Vvirtuálny kurz";
 $langSystemAnnouncements = "Oznamy systému";
 $langAnnouncementDeleted = "Oznam bol vymazaný";
 $langStudent = "Študent";
-$langGuest = "Návštevník";
+$Guest = "Návštevník";
 $langLoginAsThisUserColumnName = "Prihlási&#357; sa ako";
 $langLoginAsThisUser = "Prihlásenie";
 $DontResetPassword = "Nezmeni&#357; heslo";

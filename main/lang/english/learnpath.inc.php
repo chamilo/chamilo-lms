@@ -162,4 +162,8 @@ $EditCurrentLink = "Edit the current link";
 $Url = "Url";
 $MoveCurrentStudentPublication = "Move the current student publication";
 $EditCurrentStudentPublication = "Edit the current student publication";
+$AllowMultipleAttempts = "Allow multiple attempts";
+$PreventMultipleAttempts = "Prevent multiple attempts";
+$MakeScormRecordingExtra = "Make SCORM recordings extra";
+$MakeScormRecordingNormal = "Make SCORM recordings normal";
 ?>

@@ -115,7 +115,6 @@ $fileModified = "Le fichier est modifié";
 $DocumentsOverview = "l\'outil Documents";
 $ViewSlideshow = "Gallerie d\'images";
 $Options = "Options";
-$Type = "Type";
 $WelcomeOogieConverter = "Bienvenue dans le convertisseur de Power Point Oogie<ul type=\\\"1\\\"><li>Choisissez un fichier .ppt ou .odp<li>Envoyez ce fichier à Oogie. Il sera converti en parcours Scorm<li>Vous allez maintenant pouvoir ajouter des commentaires audios sur chaque slide et insérer des tests entres les diapos pour une évaluation</ul>";
 $ConvertToLP = "Convertir en parcours";
 $Content = "Contenu";

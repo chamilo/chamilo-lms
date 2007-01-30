@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Administrado por: ";
+$AdminBy  = "Administrado por: ";
 $AdministrationTools  = "Administración";
 $State  = "Estado del sistema";
 $Statistiques  = "Estadísticas";
@@ -211,7 +211,7 @@ $langContent = "Contenido";
 $langStartDate = "Fecha de inicio";
 $langEndDate = "Fecha de finalización";
 $langStudent = "Estudiante";
-$langGuest = "Invitado";
+$Guest = "Invitado";
 $langLoginAsThisUserColumnName = "Entrar como";
 $langLoginAsThisUser = "Entrar";
 $DontResetPassword = "No reiniciar contraseña";
@@ -519,8 +519,8 @@ $EnableToolIntroductionTitle = "Activar introducción a las herramientas";
 $EnableToolIntroductionComment = "Habilitar las introducciones en cada herramienta de la página principal";
 $BreadCrumbsCourseHomepageTitle = "Camino de la página principal del curso";
 $BreadCrumbsCourseHomepageComment = "El camino es el sistema de navegación horizontal mediante enlaces que generalmente se sitúa en la zona superior izquierda de su página. Esta opción selecciona lo que desee que aparezca en el camino de las páginas principales de los cursos";
-$title = "Título";
-$comment = "Comentario";
+$Title = "Título";
+$Comment = "Comentario";
 $Version = "Versión";
 $LoginPageMainArea = "Area principal de la página de acceso";
 $LoginPageMenu = "Menú de la página de acceso";

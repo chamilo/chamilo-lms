@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Administreres av";
+$AdminBy  = "Administreres av";
 $AdministrationTools  = "Administrasjon";
 $State  = "Systemstatus";
 $Statistiques  = "Statistikk";
@@ -209,7 +209,7 @@ $langContent = "Innhold";
 $langStartDate = "Startdato";
 $langEndDate = "Sluttdato";
 $langStudent = "Student";
-$langGuest = "Gjest";
+$Guest = "Gjest";
 $langLoginAsThisUserColumnName = "Logg inn som";
 $langLoginAsThisUser = "Logg inn";
 $DontResetPassword = "Ikke tilbakestill passord";
@@ -370,8 +370,8 @@ $PleaseVisitDokeos = "Vennligst besøk Dokeos";
 $VersionUpToDate = "Din versjon er gjeldende versjon";
 $ShowEmailAddresses = "Vis e-postadresser";
 $ShowEmailAddressesComment = "Vis e-postadresser til brukere";
-$title = "Tittel";
-$comment = "Kommentar";
+$Title = "Tittel";
+$Comment = "Kommentar";
 $Version = "Versjon";
 $LoginPageMainArea = "Hovedområde for påloggingssiden";
 $LoginPageMenu = "Meny for påloggingssiden";

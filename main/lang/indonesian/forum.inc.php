@@ -29,7 +29,6 @@ $ReplyToMessage = "Tanggapi pesan ini";
 $QuoteMessage = "Kutip pesan ini";
 $NewTopic = "Thread baru";
 $Replies = "Tanggapi";
-$Author = "Pengarang";
 $Views = "Lihat";
 $LastPost = "Posting terakhir";
 $Quoting = "Mengkutip";

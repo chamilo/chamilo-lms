@@ -21,7 +21,6 @@ $blog_management = "Bloga mastrumado";
 $forum = "Forumoj";
 $course_maintenance = "Kursmastrumado";
 $TOOL_SURVEY = "Enketoj";
-$visio = "Dokeos Videokonferenco";
 $GreyIcons = "Moduloj";
 $Interaction = "Interago";
 $Authoring = "Redakti";

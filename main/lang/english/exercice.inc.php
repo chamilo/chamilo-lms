@@ -186,7 +186,7 @@ $langHotspotValidateError2 = " click(s) required on the image) before seeing the
 $langHotspotRequired = "Description and weighing are required for each hotspot. Comment is optional.";
 $langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; To create a hotspot: select a shape next to the color, and then draw the hotspot.</div><div style=\\\"padding:2px 3px;\\\">&bull; To move a hotspot, select the color, click another spot in the image, and then draw the hotspot.</div><div style=\\\"padding:2px 3px;\\\">&bull; To add a hotspot: click the [+hotspot] button.</div><div style=\\\"padding:2px 3px;\\\">&bull; To close a polygon shape: right click and select \\\"Close polygon\\\".</div>";
 $Fault = "Incorrect";
-$Hotspot = "Hotspot";
+$Hotspot = "Image zones";
 $ClickNumber = "Click number";
 $HotspotGiveAnswers = "Please give an answer";
 $Addlimits = "Add limits";
@@ -213,4 +213,5 @@ $PlusAnswer = "+ answer";
 $LessAnswer = "- answer";
 $YourScore = "Your score";
 $Attempted = "Attempted";
+$AssignMarks = "Assign a mark";
 ?>

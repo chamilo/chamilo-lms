@@ -112,5 +112,4 @@ $fileModified = "Plik jest zmodyfikowany";
 $DocumentsOverview = "podgl&#261;d dokumentów";
 $ViewSlideshow = "Poka&#380; obrazki (slajdy)";
 $Options = "Opcje";
-$Type = "Typ";
 ?>

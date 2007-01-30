@@ -29,7 +29,6 @@ $ReplyToMessage = "Respondi al tiu mesa&#285;o";
 $QuoteMessage = "Citi tiun mesa&#285;on";
 $NewTopic = "Nova temo";
 $Replies = "Respondoj";
-$Author = "A&#365;toro";
 $Views = "Nombro da vizitoj";
 $LastPost = "Lasta mesa&#285;o";
 $Quoting = "Cito";

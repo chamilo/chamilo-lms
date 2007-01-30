@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Beheer door";
+$AdminBy  = "Beheer door";
 $AdministrationTools  = "Administratietools";
 $State  = "Overzicht";
 $Statistiques  = "Statistieken";
@@ -211,7 +211,7 @@ $langContent = "Boodschap";
 $langStartDate = "Startdatum";
 $langEndDate = "Einddatum";
 $langStudent = "Student";
-$langGuest = "Gast";
+$Guest = "Gast";
 $langLoginAsThisUserColumnName = "Inloggen als";
 $langLoginAsThisUser = "Inloggen";
 $DontResetPassword = "Paswoord niet resetten";
@@ -509,12 +509,15 @@ $TextOnly = "enkel tekst";
 $IconsText = "Iconen en tekst";
 $EnableToolIntroductionTitle = "Inleidingen van de modules activeren";
 $BreadCrumbsCourseHomepageTitle = "Broodkruimel naar de startpagina van de cursus";
-$title = "Titel";
-$comment = "commentaar";
+$Title = "Titel";
+$Comment = "commentaar";
 $Version = "Versie";
 $CampusHomepageMenu = "Menu van de campus startpagina";
 $Header = "Hoofding";
 $Footer = "Voettekst";
 $Active = "Actief";
 $Inactive = "Inactief";
+$ChooseNewsLanguage = "Kiezen nieuws taal";
+$AllLanguages = "Al talen";
+$MyTextHere = "Mijn tekst hier";
 ?>

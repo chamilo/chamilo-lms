@@ -29,7 +29,6 @@ $ReplyToMessage = "Responder a este mensaje";
 $QuoteMessage = "Citar este mensaje";
 $NewTopic = "Nuevo tema";
 $Replies = "Respuestas";
-$Author = "Autor";
 $Views = "Vistas";
 $LastPost = "Último mensaje";
 $Quoting = "Citando";

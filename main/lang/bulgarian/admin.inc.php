@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Администриран от ";
+$AdminBy  = "Администриран от ";
 $AdministrationTools  = "Инструменти за администрация";
 $State  = "Състояние";
 $Statistiques  = "Статистика";

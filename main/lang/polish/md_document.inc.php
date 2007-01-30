@@ -31,7 +31,6 @@ $langVersionTip = "numer lub opis";
 $langStatusTip = "wybierz z listy";
 $langCreatedSize = "Utworzony, rozmiar";
 $langCreatedSizeTip = "RRRR-MM-DD (rok-miesi&#261;c-dzie&#324;) utworzenia, rozmiar (w bajtach)";
-$langAuthor = "Autor";
 $langAuthorTip = "w formacie VCARD";
 $langFormat = "Format";
 $langFormatTip = "wybierz z listy";

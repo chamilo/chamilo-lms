@@ -31,7 +31,6 @@ $langVersionTip = "jumlah deskripsi";
 $langStatusTip = "pilih dari daftar";
 $langCreatedSize = "Dibuat, ukuran";
 $langCreatedSizeTip = "YYYY-MM-DD waktu dibuat, ukuran dalam octets (bytes)";
-$langAuthor = "Pengarang";
 $langAuthorTip = "dalam format VCARD ";
 $langFormat = "Format";
 $langFormatTip = "pilih dari daftar";

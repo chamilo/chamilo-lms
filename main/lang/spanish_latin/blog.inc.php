@@ -70,7 +70,6 @@ $PostsOf = "Artículos de";
 $SearchResults = "Resultados";
 $NoArticleMatches = "No se encuentran artículos que se ajusten a sus criterios de búsqueda. Probablemente haya escrito incorrectamente algo o su búsqueda es poco concreta. Realice las modificaciones que estime oportunas y ejecute una nueva búsqueda.";
 $blog_management = "Administrar blogs";
-$langAuthor = "Autor";
 $langWelcome = "Bienvenido !";
 $langModule = "Módulo";
 $langUserHasPermissionNot = "El usuario no posee los privilegios";

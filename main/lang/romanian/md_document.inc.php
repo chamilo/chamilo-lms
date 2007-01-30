@@ -30,7 +30,6 @@ $langVersionTip = "numar sau descriere";
 $langStatusTip = "selectare din lista";
 $langCreatedSize = "Creat, marime";
 $langCreatedSizeTip = "AAAA-LL-ZZ creata, marime in octeti (biti)";
-$langAuthor = "Autor";
 $langAuthorTip = "in format VCARD";
 $langFormat = "Format";
 $langFormatTip = "selectare din lista";

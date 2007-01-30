@@ -30,7 +30,6 @@ $langVersionTip = "nombro a&#365; priskribo ";
 $langStatusTip = "elektu el la listo ";
 $langCreatedSize = "Farite je, grando ";
 $langCreatedSizeTip = "farita je JJJJ-MM-TT, grando en bajtoj ";
-$langAuthor = "A&#365;toro ";
 $langAuthorTip = "en VCARD-formato ";
 $langFormat = "Formato ";
 $langFormatTip = "elektu el la listo ";

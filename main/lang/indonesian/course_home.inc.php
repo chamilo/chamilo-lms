@@ -21,7 +21,6 @@ $blog_management = "Pengelolaan Blog";
 $forum = "Forum";
 $course_maintenance = "Perawatan Mata kuliah";
 $TOOL_SURVEY = "Survai";
-$visio = "Dokeos Live Conferencing";
 $GreyIcons = "Kotak Tool";
 $Interaction = "Interaksi";
 $Authoring = "Authoring";

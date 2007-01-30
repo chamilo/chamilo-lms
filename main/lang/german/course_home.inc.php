@@ -21,7 +21,6 @@ $blog_management = "Blogs verwalten";
 $forum = "Foren";
 $course_maintenance = "Kurs verwalten";
 $TOOL_SURVEY = "Umfrage";
-$visio = "Dokeos Live Conferencing";
 $GreyIcons = "Werkzeuge";
 $Interaction = "Interaktion";
 $Authoring = "Erstellen";

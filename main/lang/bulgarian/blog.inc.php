@@ -13,7 +13,6 @@ $NewPost = "Нова статия";
 $TaskManager = "Управление на задачите";
 $NewComment = "Нов коментар";
 $blog_management = "Управление на блога";
-$langAuthor = "Автор";
 $langWelcome = "Добре дошли!";
 $langModule = "Модул";
 $langUserHasPermissionNot = "Потребителят няма права";

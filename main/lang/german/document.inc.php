@@ -114,7 +114,6 @@ $fileModified = "Die Datei wurde verändert";
 $DocumentsOverview = "Überblick Dokumente";
 $ViewSlideshow = "Bilder Slideshow ansehen";
 $Options = "Optionen";
-$Type = "Typ";
 $WelcomeOogieConverter = "Willkommen beim Oogie PowerPoint Umwandler<br>
 1. Auf der Festplatte nach einer .ppt oder .odp Datei suchen<br>2. In Oogie importieren; die Datei wird in einen Scorm Lernpfad umgewandelt.<br>3. Dann ist es möglich, jedem Bild Audio Kommentare und zwischen Bildern Tests zur Überprüfung hinzuzufügen ";
 $ConvertToLP = "In einen Lernpfad umwandeln";

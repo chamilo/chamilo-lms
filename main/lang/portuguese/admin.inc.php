@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Administrado por";
+$AdminBy  = "Administrado por";
 $AdministrationTools  = "Gerir Dokeos";
 $State  = "Estado do sistema";
 $Statistiques  = "Estatísticas";
@@ -211,7 +211,7 @@ $langContent = "Conteúdo";
 $langStartDate = "Data inicial";
 $langEndDate = "Data final";
 $langStudent = "Estudante";
-$langGuest = "Convidado";
+$Guest = "Convidado";
 $langLoginAsThisUserColumnName = "Aceder como";
 $langLoginAsThisUser = "Aceder";
 $DontResetPassword = "Não alterar a senha";
@@ -516,8 +516,8 @@ $EnableToolIntroductionTitle = "Permitir as introduções das ferramentas";
 $EnableToolIntroductionComment = "Permitir introduções em cada ferramenta da página principal";
 $BreadCrumbsCourseHomepageTitle = "Breadcrumb da página principal do curso";
 $BreadCrumbsCourseHomepageComment = "O breadcrumb é o sistema horizontal de ligações de navegação, normalmente localizado na parte esquerda do topo da página. Esta opção selecciona aquilo que deseja que apareça no breadcrumb das páginas principais dos cursos.";
-$title = "Título";
-$comment = "Comentário";
+$Title = "Título";
+$Comment = "Comentário";
 $Version = "Versão";
 $LoginPageMainArea = "Área principal da página de acesso";
 $LoginPageMenu = "Menu página de acesso";

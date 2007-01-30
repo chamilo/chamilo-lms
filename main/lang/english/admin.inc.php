@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Administration by";
+$AdminBy  = "Administration by";
 $AdministrationTools  = "Administration";
 $State  = "State of system";
 $Statistiques  = "Statistics";
@@ -211,7 +211,7 @@ $langContent = "Content";
 $langStartDate = "Start date";
 $langEndDate = "End date";
 $langStudent = "Student";
-$langGuest = "Guest";
+$Guest = "Guest";
 $langLoginAsThisUserColumnName = "Login as";
 $langLoginAsThisUser = "Login";
 $DontResetPassword = "Don\'t reset password";
@@ -514,8 +514,8 @@ $EnableToolIntroductionTitle = "Enable tool introduction";
 $EnableToolIntroductionComment = "Enable introductions on each tool\'s homepage";
 $BreadCrumbsCourseHomepageTitle = "Course homepage\'s breadcrumb";
 $BreadCrumbsCourseHomepageComment = "The breadcrumb is the horizontal links navigation system usually in the top left of your page. This option selects what you want to appear in the breadcrumb on courses\' homepages";
-$title = "Title";
-$comment = "Comment";
+$Title = "Title";
+$Comment = "Comment";
 $Version = "Version";
 $LoginPageMainArea = "Login page main area";
 $LoginPageMenu = "Login page menu";
@@ -555,4 +555,6 @@ $VideoClassroomUrl = "Path to classroom live conferencing";
 $ReconfigureExtension = "Reconfigure extension";
 $ServiceReconfigured = "Service reconfigured";
 $ChooseNewsLanguage = "Choose news language";
+$AllLanguages = "all languages";
+$MyTextHere = "my text here";
 ?>

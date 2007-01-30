@@ -112,5 +112,4 @@ $fileModified = "L\'arxiu està modificat";
 $DocumentsOverview = " visió de conjunt de documents";
 $ViewSlideshow = "Veure presentació de les imatges";
 $Options = "Opcions";
-$Type = "Tipus";
 ?>

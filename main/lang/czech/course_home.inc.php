@@ -21,7 +21,6 @@ $blog_management = "Administrace Blog&#367;";
 $forum = "Fóra";
 $course_maintenance = "Spravovat kurz";
 $TOOL_SURVEY = "Pr&#367;zkum";
-$visio = "Dokeos Live Konference";
 $GreyIcons = "Sada nástroj&#367;";
 $Interaction = "Interakce";
 $Authoring = "Auto&#345;i";

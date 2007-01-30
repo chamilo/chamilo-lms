@@ -29,7 +29,6 @@ $ReplyToMessage = "Odgovori na to sporoèilo";
 $QuoteMessage = "Navedi to sporoèilo";
 $NewTopic = "Nova tematska nit";
 $Replies = "Odgovori";
-$Author = "Avtor";
 $Views = "Pogledi";
 $LastPost = "Zadnja objava";
 $Quoting = "Navajanje";

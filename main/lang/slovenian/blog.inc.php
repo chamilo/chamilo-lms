@@ -30,7 +30,6 @@ $langTask1Desc = "Opravilo 1 (opis)";
 $langTask2Desc = "Opravilo 2 (opis)";
 $langTask3Desc = "Opravilo 3 (opis)";
 $blog_management = "Upravljanje blogov";
-$langAuthor = "Avtor";
 $langWelcome = "Dobrodošli !";
 $langModule = "Modul";
 $langUserHasPermissionNot = "Uporabnik nima dovoljenja";

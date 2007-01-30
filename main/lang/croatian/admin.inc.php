@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Upravljano : ";
+$AdminBy  = "Upravljano : ";
 $AdministrationTools  = "Alati za nadzor";
 $State  = "Stanja";
 $Statistiques  = "Statistika";
@@ -206,7 +206,7 @@ $langContent = "Sadržaj";
 $langStartDate = "Datum po&#269;etka";
 $langEndDate = "Datum svršetka";
 $langStudent = "Student";
-$langGuest = "Gost";
+$Guest = "Gost";
 $langLoginAsThisUserColumnName = "Upiši se kao";
 $langLoginAsThisUser = "Korisni&#269;ko ime";
 $langCourseAdmin = "upravitelj kolegija";

@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Amministrato da";
+$AdminBy  = "Amministrato da";
 $AdministrationTools  = "Amministrazione";
 $State  = "Stato del Sistema";
 $Statistiques  = "Statistiche";
@@ -211,7 +211,7 @@ $langContent = "Contenuto";
 $langStartDate = "Dal ";
 $langEndDate = "Al ";
 $langStudent = "Corsista";
-$langGuest = "Ospite";
+$Guest = "Ospite";
 $langLoginAsThisUserColumnName = "Entra come";
 $langLoginAsThisUser = "Entra";
 $DontResetPassword = "Non riassegnare la password";
@@ -516,8 +516,8 @@ $EnableToolIntroductionTitle = "Abilita i testi introduttivi";
 $EnableToolIntroductionComment = "Abilita brevi indicazioni nella pagina iniziale dei diversi strumenti";
 $BreadCrumbsCourseHomepageTitle = "Barra di navigazione nella pagina principale del corso";
 $BreadCrumbsCourseHomepageComment = "La barra di navigazione indica il percorso necessario per raggiungere la pagina da quella principale (es. Corso > Forum > Assistenza)";
-$title = "Titolo";
-$comment = "Commento";
+$Title = "Titolo";
+$Comment = "Commento";
 $Version = "Versione";
 $LoginPageMainArea = "Area principale della pagina di accesso";
 $LoginPageMenu = "Menù della pagina d\'accesso";

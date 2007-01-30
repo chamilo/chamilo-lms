@@ -29,7 +29,6 @@ $ReplyToMessage = "Antwoorden op dit bericht";
 $QuoteMessage = "Dit bericht aanhalen";
 $NewTopic = "Nieuwe discussie";
 $Replies = "Antwoorden";
-$Author = "Auteur";
 $Views = "aantal keer bekeken";
 $LastPost = "Laatste bericht";
 $Quoting = "Quote";

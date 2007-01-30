@@ -40,7 +40,6 @@ $langVersionTip = "getal of omschrijving";
 $langStatusTip = "kies uit de lijst";
 $langCreatedSize = "Gemaakt op, grootte";
 $langCreatedSizeTip = "gemaakt op JJJJ-MM-DD, grootte in bytes";
-$langAuthor = "Auteur";
 $langAuthorTip = "in vCard-formaat";
 $langFormat = "Formaat";
 $langFormatTip = "kies uit de lijst";

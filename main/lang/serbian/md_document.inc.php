@@ -30,7 +30,6 @@ $langVersionTip = "broj opisa";
 $langStatusTip = "selektuj sa liste";
 $langCreatedSize = "Kreirano, veli&#269;ina";
 $langCreatedSizeTip = "YYYY-MM-DD  kada je kreirano, veli&#269;ina u oktetima (bajtovi)";
-$langAuthor = "Autor";
 $langAuthorTip = "u VCARD formatu";
 $langFormat = "Format";
 $langFormatTip = "selektuj sa liste";

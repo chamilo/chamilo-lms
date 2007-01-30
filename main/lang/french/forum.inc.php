@@ -29,7 +29,6 @@ $ReplyToMessage = "Répondre à ce message";
 $QuoteMessage = "Donner une note à ce message";
 $NewTopic = "Nouveau sujet";
 $Replies = "Réponses";
-$Author = "Auteur";
 $Views = "Vues";
 $LastPost = "Dernier article";
 $Quoting = "Notation";

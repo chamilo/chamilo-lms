@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "Ylläpito";
+$AdminBy  = "Ylläpito";
 $AdministrationTools  = "Ylläpito";
 $State  = "Syteemin valtio";
 $Statistiques  = "Tilastot";

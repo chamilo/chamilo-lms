@@ -30,7 +30,6 @@ $langVersionTip = "broj ili opis";
 $langStatusTip = "odaberi s popisa";
 $langCreatedSize = "Izra&#273;eno, veli&#269;ina";
 $langCreatedSizeTip = "GGGG-MM-DD izrade, veli&#269;ina u oktetima (bajtima)";
-$langAuthor = "Izradio";
 $langAuthorTip = "u formatu VCARD";
 $langFormat = "Format";
 $langFormatTip = "odaberi s popisa";

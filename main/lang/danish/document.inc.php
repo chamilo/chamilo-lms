@@ -112,5 +112,4 @@ $fileModified = "Filen er ændret";
 $DocumentsOverview = "dokument oversigt";
 $ViewSlideshow = "Se billede-dias show";
 $Options = "Indstillinger";
-$Type = "Type";
 ?>

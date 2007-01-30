@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langAdminBy  = "&#44288;&#47532;&#51088;";
+$AdminBy  = "&#44288;&#47532;&#51088;";
 $AdministrationTools  = "&#44288;&#47532;";
 $State  = "&#49884;&#49828;&#53596; &#49345;&#53468;";
 $Statistiques  = "&#53685;&#44228;";
@@ -204,7 +204,7 @@ $langContent = "&#45236;&#50857;";
 $langStartDate = "&#49884;&#51089;&#51068;";
 $langEndDate = "&#51333;&#47308;&#51068;";
 $langStudent = "&#54617;&#49373;";
-$langGuest = "&#49552;&#45784;(Guest)";
+$Guest = "&#49552;&#45784;(Guest)";
 $langLoginAsThisUserColumnName = "&#47196;&#44536;&#51064; as";
 $langLoginAsThisUser = "&#47196;&#44536;&#51064;";
 $langCourseAdmin = "&#44284;&#51221; &#44288;&#47532;&#51088;";

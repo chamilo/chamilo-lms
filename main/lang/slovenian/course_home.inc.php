@@ -21,7 +21,6 @@ $blog_management = "Upravljanje blogov";
 $forum = "Forumi";
 $course_maintenance = "Upravljanje teèajev";
 $TOOL_SURVEY = "Evalvacijski vprašalniki";
-$visio = "Dokeos Live Conferencing";
 $GreyIcons = "Orodjarna";
 $Interaction = "Interakcija";
 $Authoring = "Avtorska orodja (Authoring)";

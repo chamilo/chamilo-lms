@@ -31,7 +31,7 @@ include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 class WCAG_Rendering {
 	
 	function editor_header() {
-		return '<div id="WCAG-editor"><div class="title">WCAG editor</div><div class="body">';
+		return '<div id="WCAG-editor"><div class="title">'.get_lang('WCAGEditor').'</div><div class="body">';
 	}
 	
 	function editor_footer() {
@@ -171,7 +171,7 @@ function &prepare_admin_form( $xhtml, &$form )
 
 function &create_xhtml($xhtml) {
 	$values = WCAG_Rendering::extract_data($xhtml);
-	$xhtml = '<div id="WCAG-editor"><div class="title">WCAG editor</div><div class="body">';
+	$xhtml = WCAG_Rendering::editor_header();
 	$xhtml .= get_lang('WCAGContent').'<br />';
 	$xhtml .= '<textarea name="text">'.$values['text'].'</textarea>';
 	$xhtml .= get_lang('WCAGImage').'<br />';
@@ -183,7 +183,7 @@ function &create_xhtml($xhtml) {
 	$xhtml .= get_lang('WCAGLinkLabel').'<br />';
 	$xhtml .= '<input type="text" name="linkLabel" value="'.$values['linkLabel'].'"/>';
 
-	$xhtml .= '</div></div>';
+	$xhtml .= WCAG_Rendering::editor_footer();;
 	return $xhtml;
 }
 

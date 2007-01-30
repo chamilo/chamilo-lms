@@ -261,16 +261,6 @@ function show_tools_category($course_tool_category)
 			}
 			else{ echo '&nbsp;&nbsp;&nbsp;&nbsp;';}
 
-			// Allow editing of invisible homepage links (modified external_module)
-			if($toolsRow["added_tool"] == 1 &&
-					api_is_allowed_to_edit() && !$toolsRow["visibility"])
-				echo	"<a class=\"nobold\" href=\"" . api_get_path(WEB_PATH) .
-						'main/external_module/external_module.php' .
-						"?".api_get_cidreq()."&amp;id=".$toolsRow["id"]."\">". get_lang("Edit"). "</a>";
-
-
-
-
 			// NOTE : table contains only the image file name, not full path
 			if(!stristr($toolsRow['link'], 'http://') && !stristr($toolsRow['link'], 'https://') && !stristr($toolsRow['link'],'ftp://'))
 				$toolsRow['link'] = $web_code_path . $toolsRow['link'];

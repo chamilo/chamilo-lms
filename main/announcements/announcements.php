@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 10851 2007-01-23 15:57:46Z elixir_julian $
+<?php //$Id: announcements.php 10996 2007-01-30 09:14:28Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1075,7 +1075,7 @@ if ($message == true)
 				
 				echo $oFCKeditor->CreateHtml();
 
-				  echo "<br /><table>",
+				  /*echo "<br /><table>",
 			           "<tr>",
 			           "<td colspan=7>";
 			            if ($_SESSION['select_groupusers']=="show")
@@ -1102,7 +1102,7 @@ if ($message == true)
 				            echo "</td></tr>";
 			          	}
 			          }
-					  echo "</table>";
+					  echo "</table>";*/
 
 		?>
                 <br /><input type="Submit" name="submitAnnouncement" value="<?php echo get_lang('Ok') ?>" onclick="selectAll(this.form.elements[4],true)" /><br /><br />

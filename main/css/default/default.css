@@ -1988,6 +1988,10 @@ input.forms	{
 	border: 1px #7F9DB9 solid;
 }
 
+#WCAG-editor #course_description textarea {
+	height: 360px;
+}
+
 #WCAG-editor input {
 	width: 100%;
 }

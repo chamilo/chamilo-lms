@@ -7,7 +7,7 @@
  */
  
 // name of the language file that needs to be included 
-$language_file = "index";
+$language_file = array ('index', 'chat', 'tracking');
 
 include_once("./main/inc/global.inc.php");
 api_block_anonymous_users();

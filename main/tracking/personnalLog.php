@@ -100,7 +100,7 @@ if ( $_configuration['tracking_enabled'] )
             </td>
         </tr>
         ";
-    if(!isset($view)) $view ="0000000";
+    if(empty($view)) $view ="0000000";
 
     /***************************************************************************
      *

@@ -4,7 +4,7 @@
  */
  
  // name of the language file that needs to be included 
-$language_file = array ('registration', 'index','trad4all', 'tracking');
+$language_file = array ('registration', 'index', 'tracking', 'exercice');
  $cidReset=true;
  include ('../inc/global.inc.php');
  
@@ -120,23 +120,34 @@ function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataEx
 function calculHours($seconds)
 {
 	
-  //combien d'heures ?
+  //How many hours ?
   $hours = floor($seconds / 3600);
 
-  //combien de minutes ?
+  //How many minutes ?
   $min = floor(($seconds - ($hours * 3600)) / 60);
   if ($min < 10)
     $min = "0".$min;
 
-  //combien de secondes
+  //How many seconds
   $sec = $seconds - ($hours * 3600) - ($min * 60);
   if ($sec < 10)
     $sec = "0".$sec;
-        
-  //echo $hours."h".$min."m".$sec."s";
 
-	return $hours."h".$min."m".$sec."s" ;
+  return $hours."h".$min."m".$sec."s" ;
 
+}
+
+function is_teacher($course_code){
+	global $_user;
+	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$sql="SELECT 1 FROM $tbl_course_user WHERE user_id='".$_user["user_id"]."' AND course_code='".$course_code."' AND status='1'";
+	$result=api_sql_query($sql);
+	if(mysql_result($result)!=1){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 
@@ -153,7 +164,7 @@ $tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_stats_exercices 		= Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
+$tbl_stats_exercices 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 //$tbl_course_lp_view 		= Database :: get_course_table('lp_view');
 //$tbl_course_lp_view_item = Database :: get_course_table('lp_item_view');
 //$tbl_course_lp_item 		= Database :: get_course_table('lp_item');
@@ -168,7 +179,6 @@ $course_quiz_rel_question = 'quiz_rel_question';
 $course_quiz_answer = 'quiz_answer';
 $course_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-api_display_tool_title($nameTools);
 
 if(isset($_GET["user_id"]) && $_GET["user_id"]!="")
 {
@@ -207,7 +217,6 @@ if(!empty($_GET['student']))
 	$a_infosUser = mysql_fetch_array($resultInfosUser);
 	
 	if(api_get_setting('use_session_mode')=='true'){
-		//REFAIRE LA REQUETE AFIN QU'ELLE MARCHE EN MODE NO-SESSION
 	$sqlCours = " 	SELECT DISTINCT course.title,
 									course.code,
 									course.db_name,
@@ -224,19 +233,9 @@ if(!empty($_GET['student']))
 				";
 	}
 	else{
-		$sqlCours = " 	SELECT DISTINCT course.title,
-									course.code,
-									course.db_name,
-									CONCAT(user.firstname,' ',user.lastname) as tutor_name,
-									sessionCourse.id_coach
-					FROM $tbl_user as user,$tbl_course AS course
-					INNER JOIN $tbl_session_course_user AS course_user
-						ON course_user.course_code = course.code
-					INNER JOIN $tbl_session_course as sessionCourse
-							ON sessionCourse.course_code = course.code
-					WHERE course_user.id_user = ".$_GET['student']."
-					AND sessionCourse.id_coach = user.user_id
-					ORDER BY course.title ASC";
+					
+		$sqlCours = "SELECT course.title,course.code,course.db_name FROM $tbl_course as course, $tbl_course_user as cru WHERE cru.course_code=course.code AND cru.user_id='".$_GET['student']."'";			
+
 	}
 		$resultCours = api_sql_query($sqlCours);
 		
@@ -778,8 +777,8 @@ if(!empty($_GET['student']))
 			{
 				while($a_cours = mysql_fetch_array($resultCours))
 				{
-				
-				if($i_user_id == $a_cours['id_coach']){
+
+				if((api_get_setting("use_session_mode")=="true" && $i_user_id == $a_cours['id_coach']) || (api_get_setting("use_session_mode")=="false") && is_teacher($a_cours['code'])){
 						if($i%2==0){
 							$s_css_class="row_odd";
 					}
@@ -870,31 +869,28 @@ if(!empty($_GET['student']))
 						$s_connection_time="";
 					}
 					
+					echo '<tr class="'.$s_css_class.'">';
+						
+					if(api_get_setting("use_session_mode")=="true"){
+						echo '<td>'.$a_cours['title'].'&nbsp;-&nbsp;'.get_lang('Tutor').' : '.$a_cours['tutor_name'].'</td>';
+					}
+					else{
+						echo '<td>'.$a_cours['title'].'</td>';
+					}
 					
-	?>			
-					<tr class="<?php echo $s_css_class;?>">
-						<td>
-							<?php echo $a_cours['title'].' - '.get_lang('Tutor').' : '.$a_cours['tutor_name']; ?>
-						</td>
-						<td align="center">
-							<?php echo $s_connection_time;?>
-						</td>
-						<td align="center">
-							<?php echo $progress.'%'; ?>
-						</td>
-						<td align="center">
-							<?php echo $pourcentageScore.'%'; ?>
-						</td>
-						<td align="center">
-							<?php 
-								
-								echo '<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$a_cours['code'].'#infosStudent"> -> </a>';
-								
-							?>
-						</td>
-					</tr>
-<?php				}
+					echo '<td align="center">'.$s_connection_time.'</td>';
+					
+					echo '<td align="center">'.$progress.'%</td>';
+					
+					echo '<td align="center">'.$pourcentageScore.'%</td>';
+					
+					echo '<td align="center"><a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$a_cours['code'].'#infosStudent"> -> </a></td>';
+					
+					echo '</tr>';
+					
 				}
+					
+			}
 			
 			$totalPourcentageScore = round(($totalScore*100)/$totalWeighting);
 			$progress = round(($totalProgress*100)/$totalItem);

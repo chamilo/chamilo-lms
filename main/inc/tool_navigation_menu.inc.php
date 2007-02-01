@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 10904 2007-01-25 14:59:25Z bmol $
+// $Id: tool_navigation_menu.inc.php 11044 2007-02-01 08:50:39Z bmol $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -124,7 +124,6 @@ function get_navigation_items($include_admin_tools = false)
 function show_navigation_menu()
 {
 	$navigation_items = get_navigation_items(true);
-	echo api_get_setting('show_navigation_menu');
 	if(api_get_setting('show_navigation_menu') == 'icons')
 	{
 		echo '<div style="float:right;width: 40px;position:absolute;right:10px;top:10px;">';

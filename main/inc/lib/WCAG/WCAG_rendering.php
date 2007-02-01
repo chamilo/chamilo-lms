@@ -149,9 +149,6 @@ function &prepare_admin_form( $xhtml, &$form )
 
 	if ($form == null) {
 		$form = new FormValidator('waiForm');
-		echo("form creation");
-	} else {
-		echo("no form creation");
 	}
 	$form->addElement('textarea','text',get_lang('WCAGContent'));
 	$file =& $form->addElement('text','imagefile',get_lang('WCAGImage'));

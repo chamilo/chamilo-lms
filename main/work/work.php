@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 11011 2007-01-30 11:51:14Z elixir_julian $
+*  	@version $Id: work.php 11045 2007-02-01 10:46:48Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -795,125 +795,66 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 				}
 			}
 
-			echo	"<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?curdirpath=$cur_dir_path&origin=$origin\" enctype=\"multipart/form-data\" >\n",
-					"<table>\n";
-
+			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+			require_once (api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
+			
+			$form = new FormValidator('form','POST',$_SERVER['PHP_SELF']."?curdirpath=$cur_dir_path&origin=$origin",'','enctype="multipart/form-data"');
+			
 			if(!empty($error_message)) Display::display_error_message($error_message);
 
 			if ($submitGroupWorkUrl) // For user comming from group space to publish his work
 			{
 				$realUrl = str_replace ($_configuration['root_sys'], $_configuration['root_web'], str_replace("\\", "/", realpath($submitGroupWorkUrl) ) ) ;
-
-				echo	"<tr>\n",
-
-						"<td align=\"right\">",
-						"<input type=\"hidden\" name=\"newWorkUrl\" value=\"",$submitGroupWorkUrl,"\">",
-						get_lang("Document")," : ",
-						"</td>\n",
-						"<td align=\"right\">",
-						"<a href=\"",format_url($submitGroupWorkUrl),"\">",$realUrl,"</a>",
-						"</td>\n",
-
-						"</tr>\n";
+				$form->addElement('hidden', 'newWorkUrl', $submitGroupWorkUrl);
+				$text_document = &$form->addElement('text', 'document', get_lang("Document"));
+				$defaults["document"] = '<a href="'.format_url($submitGroupWorkUrl).'">'.$realUrl.'</a>';
+				$text_document->freeze();
 			}
+			
 			elseif ($edit && ($is_allowed_to_edit or $is_author))
 			{
 				$workUrl = $currentCourseRepositoryWeb.$workUrl;
-
-				echo	"<tr>\n",
-
-						"<td>",
-						"<input type=\"hidden\" name=\"id\" value=\"",$edit,"\">\n",
-						get_lang('Document')," : ",
-						"</td>\n",
-
-						"<td>",
-						"<a href=\"",$workUrl,"\">",$workUrl,"</a>",
-						"</td>\n",
-
-						"</tr>\n";
+				$form->addElement('hidden', 'id', $edit);
+				$text_document=$form->addElement('text', 'document', get_lang("Document"));
+				$defaults["document"] = '<a href="'.$workUrl.'">'.$workUrl.'</a>';
+				$form->applyFilter('document','strtoupper');
+				$text_document->freeze();
 			}
+			
 			else // else standard upload option
 			{
-				echo	"<tr>\n",
-
-						"<td  align=\"right\"><strong>",
-						get_lang("DownloadFile"),"</strong>&nbsp;&nbsp;",
-						"</td>\n",
-
-						"<td>",
-						"<input type=\"file\" name=\"file\" size=\"20\">",
-						"</td>\n",
-
-						"</tr>\n";
+				$form->addElement('file','file',get_lang('DownloadFile'));
 			}
-
+			
+			$titleWork=$form->addElement('text', 'title', get_lang("TitleWork"));
+			$defaults["title"] = ($edit?stripslashes($workTitle):stripslashes($title));
+			
+			$titleAuthors=$form->addElement('text', 'authors', get_lang("Authors"));
+			$defaults["authors"] = ($edit?stripslashes($workAuthor):stripslashes($authors));
+			
+			$titleAuthors=$form->addElement('textarea', 'description', get_lang("Description"));
+			$defaults["description"] = ($edit?stripslashes($workDescription):stripslashes($description));
+			
+			$form->addElement('hidden', 'active', 1);
+			$form->addElement('hidden', 'accepted', 1);
+			
+			$form->addElement('submit', 'submitWork', get_lang('Ok'));
+			
 			if(empty($authors))
 			{
 				$authors=$_user['lastName']." ".$_user['firstName'];
 			}
-
-			echo	"<tr>\n",
-
-					"<td  align=\"right\"><strong>",
-					get_lang("TitleWork"),"</strong>&nbsp;&nbsp;",
-					"</td>\n",
-
-					"<td>",
-					"<input type=\"text\" name=\"title\" value=\"",($edit?htmlentities(stripslashes($workTitle)):htmlentities(stripslashes($title))),"\" size=\"30\">",
-					"</td>\n",
-
-					"</tr>\n",
-
-					"<tr>\n",
-
-					"<td valign=\"top\"  align=\"right\"><strong>",
-					get_lang("Authors")."</strong>&nbsp;&nbsp;",
-					"</td>\n",
-
-					"<td>",
-					"<input type=\"text\" name=\"authors\" value=\"",($edit?htmlentities(stripslashes($workAuthor)):htmlentities(stripslashes($authors))),"\" size=\"30\">\n",
-					"</td>\n",
-
-					"</tr>\n",
-
-					"<tr>\n",
-
-					"<td valign=\"top\"  align=\"right\">",
-					get_lang("Description"),"&nbsp;&nbsp;",
-					"</td>\n",
-
-					"<td>",
-					"<textarea name=\"description\" cols=\"30\" rows=\"3\">",
-					($edit?htmlentities(stripslashes($workDescription)):htmlentities(stripslashes($description))),
-					"</textarea>",
-					"<input type=\"hidden\" name=\"active\" value=\"1\">",
-					"<input type=\"hidden\" name=\"accepted\" value=\"1\">",
-					"</td>\n",
-
-					"</tr>\n",
-
-					"<tr>\n",
-
-					"<td></td>",
-
-					"<td>",
-					"<input type=\"submit\" name=\"submitWork\" value=\"".get_lang('Ok')."\">";
-
+			
 			if($_POST['submitWork'] || $edit)
 			{
-				echo "&nbsp;&nbsp;<input type=\"submit\" name=\"cancelForm\" value=\"".get_lang('Cancel')."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">";
+				$form->addElement('submit', 'cancelForm', get_lang('Cancel'));
 			}
-
-			echo	"</td>\n",
-
-					"</tr>\n",
-
-					"</table>\n",
-
-					"</form>\n",
-
-					"<p>&nbsp;</p>";
+			
+			$form->add_real_progress_bar('uploadWork','DownloadFile');
+			
+			$form->setDefaults($defaults);
+			$form->display();
+			
 		}
 		//show them the form for the directory name
 		if(isset($_REQUEST['createdir']) && $is_allowed_to_edit)

@@ -1315,6 +1315,33 @@ function update_Db_course($courseDbName)
 	return 0;
 }
 
+function browse_folders($path, $files){
+	$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
+	if(is_dir($path)){
+		$handle = opendir($path);
+		while (false !== ($file = readdir($handle))) {
+			if(is_dir($path.$file) && strpos($file,'.')!==0){
+				$files[]["dir"] = str_replace($img_code_path,"",$path.$file."/");
+				$files = browse_folders($path.$file."/",$files);
+			}
+			elseif(is_file($path.$file) && strpos($file,'.')!==0){
+		        $files[]["file"] = str_replace($img_code_path,"",$path.$file);
+			}
+		}
+	}
+	return $files;
+}
+
+function sort_pictures($files,$type){
+	$pictures=array();
+	foreach($files as $key => $value){
+		if($value[$type]!=""){
+			$pictures[][$type]=$value[$type];
+		}
+	}
+	return $pictures;
+}
+
 /**
 *	Fills the course repository with some
 *	example content.
@@ -1341,39 +1368,33 @@ function fill_course_repository($courseRepository)
 	{
 		$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
 		$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/examples/';
+	   	
+	   	$files=array();
 
+		$files=browse_folders($img_code_path,$files);
+		
+		$pictures_array = sort_pictures($files,"dir");
+		$pictures_array = array_merge($pictures_array,sort_pictures($files,"file"));
+		
 		mkdir($course_documents_folder,0777);
-
-		$dirs=array();
+		
 		$handle = opendir($img_code_path);
-
-		while (false !== ($file = readdir($handle))) {
-			if(is_dir($img_code_path.$file) && $file!=".svn" && $file!="." && $file!=".."){
-				mkdir($course_documents_folder.$file,0777);
-				$dirs[]=$file.'/';
+		
+		foreach($pictures_array as $key => $value){
+			
+			if($value["dir"]!=""){
+				mkdir($course_documents_folder.$value["dir"],0777);
 			}
-			elseif(is_file($img_code_path.$file) && $file!="." && $file!=".." && $file!=".svn"){
-		        copy($img_code_path.$file,$course_documents_folder.$file);
-		        chmod($course_documents_folder.$file,0777);
+			if($value["file"]!=""){
+				copy($img_code_path.$value["file"],$course_documents_folder.$value["file"]);
+				chmod($course_documents_folder.$value["file"],0777);
 			}
-	   	}
-	   	closedir($handle);
-
-	   	foreach($dirs as $current_dir){
-	   		$handle = opendir($img_code_path.$current_dir);
-
-			while (false !== ($file = readdir($handle))) {
-				if(is_file($img_code_path.$current_dir.$file) && $file!="." && $file!=".."){
-			        copy($img_code_path.$current_dir.$file,$course_documents_folder.$current_dir.$file);
-			        chmod($course_documents_folder.$current_dir.$file,0777);
-				}
-		   	}
-
-		   	closedir($handle);
-	   	}
+			
+		}
+	   	
 	}
-	return 0;
-};
+	return $pictures_array;
+}
 
 /**
  * Function to convert a string from the Dokeos language files to a string ready
@@ -1392,7 +1413,7 @@ function lang2db($string)
 *	Fills the course database with some required content and example content.
 *	@version 1.2
 */
-function fill_Db_course($courseDbName, $courseRepository, $language)
+function fill_Db_course($courseDbName, $courseRepository, $language,$pictures_array)
 {
 	global $_configuration, $clarolineRepositoryWeb, $clarolineRepositorySys, $_user;
 
@@ -1548,57 +1569,29 @@ function fill_Db_course($courseDbName, $courseRepository, $language)
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
 		//FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
-		$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
 
-
-	   	$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
 		$img_documents='/images/examples/';
-
-	   	$dirs=array();
-		$handle = opendir($img_code_path);
-
-		while (false !== ($file = readdir($handle))) {
-			$file=lang2db($file);
-
-			if(is_dir($img_code_path.$file) && $file!=".svn" && $file!="." && $file!=".."){
-
-				api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents$file','$file','folder','0')");
+	
+		$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/examples/';
+		
+		foreach($pictures_array as $key => $value){
+			if($value["dir"]!=""){
+				$folder_path=substr($value["dir"],0,strlen($value["dir"])-1);
+				$temp=explode("/",$folder_path);
+				api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents".$folder_path."','".$temp[count($temp)-1]."','folder','0')");
 				$image_id = Database :: get_last_insert_id();
 				api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
-				$dirs[]=$file.'/';
-
 			}
-
-			elseif(is_file($img_code_path.$file) && $file!="." && $file!=".." && $file!=".svn"){
-				$file_size=filesize($img_code_path.$file);
-		        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents$file','$file','file','$file_size')");
+			if($value["file"]!=""){
+				$temp=explode("/",$value["file"]);
+				$file_size=filesize($course_documents_folder.$value["file"]);
+		        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents".$value["file"]."','".$temp[count($temp)-1]."','file','$file_size')");
 				$image_id = Database :: get_last_insert_id();
 				api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
-
 			}
-	   	}
-	   	closedir($handle);
-
-	   	$img_documents='/images/examples/';
-	   	foreach($dirs as $current_dir){
-
-	   		$handle = opendir($img_code_path.$current_dir);
-
-			while (false !== ($file = readdir($handle))) {
-				if(is_file($img_code_path.$current_dir.$file) && $file!="." && $file!=".."){
-
-			        $file_size=filesize($img_code_path.$current_dir.$file);
-			        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents$current_dir$file','$langTitle','file','$file_size')");
-					$image_id = Database :: get_last_insert_id();
-					api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
-
-				}
-		   	}
-
-		   	closedir($handle);
-	   	}
-
+			
+		}
 
 		/*
 		-----------------------------------------------------------

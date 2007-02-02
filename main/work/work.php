@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 11045 2007-02-01 10:46:48Z elixir_julian $
+*  	@version $Id: work.php 11052 2007-02-02 10:51:17Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -815,10 +815,15 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 			{
 				$workUrl = $currentCourseRepositoryWeb.$workUrl;
 				$form->addElement('hidden', 'id', $edit);
-				$text_document=$form->addElement('text', 'document', get_lang("Document"));
-				$defaults["document"] = '<a href="'.$workUrl.'">'.$workUrl.'</a>';
-				$form->applyFilter('document','strtoupper');
-				$text_document->freeze();
+				
+				$html='<div class="row">
+					<div class="label">'.get_lang("Document").'
+					</div>
+					<div class="formw">	
+						<a href="'.$workUrl.'">'.$workUrl.'</a>
+					</div>
+				</div>';
+				$form->addElement('html', $html);
 			}
 			
 			else // else standard upload option

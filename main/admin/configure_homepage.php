@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 11050 2007-02-02 10:48:43Z elixir_julian $
+<?php // $Id: configure_homepage.php 11054 2007-02-02 13:48:49Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,11 +48,23 @@ $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'
 
 if(isset($_GET["action"])){
 	$interbreadcrumb[]=array('url' => 'configure_homepage.php',"name" => get_lang('ConfigureHomePage'));
-	if($_GET["action"]=="edit_top") $tool_name=get_lang("EditHomePage");
-	if($_GET["action"]=="edit_news") $tool_name=get_lang("EditNews");
-	if($_GET["action"]=="edit_notice") $tool_name=get_lang("EditNotice");
-	if($_GET["action"]=="insert_link") $tool_name=get_lang("InsertLink");
-	if($_GET["action"]=="edit_link") $tool_name=get_lang("EditLink");
+	switch($_GET["action"]){
+		case "edit_top":
+			$tool_name=get_lang("EditHomePage");
+			break;
+		case "edit_news":
+			$tool_name=get_lang("EditNews");
+			break;
+		case "edit_notice":
+			$tool_name=get_lang("EditNotice");
+			break;
+		case "insert_link":
+			$tool_name=get_lang("InsertLink");
+			break;
+		case "edit_link":
+			$tool_name=get_lang("EditLink");
+			break;
+	}
 }
 
 $menu_language=$_SESSION['user_language_choice'];

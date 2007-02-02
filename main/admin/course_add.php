@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 10811 2007-01-22 08:26:40Z elixir_julian $
+// $Id: course_add.php 11050 2007-02-02 10:48:43Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -130,8 +130,8 @@ if( $form->validate())
 		$expiration_date = time() + $firstExpirationDelay;
 		prepare_course_repository($currentCourseRepository, $currentCourseId);
 		update_Db_course($currentCourseDbName);
-		fill_course_repository($currentCourseRepository);
-		fill_Db_course($currentCourseDbName, $currentCourseRepository, $course_language);
+		$pictures_array=fill_course_repository($currentCourseRepository);
+		fill_Db_course($currentCourseDbName, $currentCourseRepository, $course_language,$pictures_array);
 		register_course($currentCourseId, $currentCourseCode, $currentCourseRepository, $currentCourseDbName, $tutor_name, $category, $title, $course_language, $teacher_id, $expiration_date);
 		$sql = "UPDATE $table_course SET disk_quota = '".$disk_quota."', visibility = '".mysql_real_escape_string($course['visibility'])."', subscribe = '".mysql_real_escape_string($course['subscribe'])."', unsubscribe='".mysql_real_escape_string($course['unsubscribe'])."' WHERE code = '".$currentCourseId."'";
 		api_sql_query($sql,__FILE__,__LINE__);

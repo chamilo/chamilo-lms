@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 10983 2007-01-29 22:29:10Z pvandermaesen $
+<?php // $Id: configure_homepage.php 11050 2007-02-02 10:48:43Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -45,6 +45,15 @@ $tbl_category=Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tool_name=get_lang('ConfigureHomePage');
 
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+
+if(isset($_GET["action"])){
+	$interbreadcrumb[]=array('url' => 'configure_homepage.php',"name" => get_lang('ConfigureHomePage'));
+	if($_GET["action"]=="edit_top") $tool_name=get_lang("EditHomePage");
+	if($_GET["action"]=="edit_news") $tool_name=get_lang("EditNews");
+	if($_GET["action"]=="edit_notice") $tool_name=get_lang("EditNotice");
+	if($_GET["action"]=="insert_link") $tool_name=get_lang("InsertLink");
+	if($_GET["action"]=="edit_link") $tool_name=get_lang("EditLink");
+}
 
 $menu_language=$_SESSION['user_language_choice'];
 
@@ -462,20 +471,12 @@ if($action == 'open_link')
 {
 ?>
 
-<div style="margin-bottom: 10px;">
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>">&lt;&lt; <?php echo get_lang('Back'); ?></a>
-</div>
-
 <?php
 	include('../../home/'.$link);
 }
 elseif($action == 'edit_notice')
 {
 ?>
-
-<div style="margin-bottom: 10px;">
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>">&lt;&lt; <?php echo get_lang('Back'); ?></a>
-</div>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
 <input type="hidden" name="formSent" value="1"/>
@@ -523,9 +524,6 @@ elseif($action == 'insert_link' || $action == 'edit_link')
 {
 ?>
 
-<div style="margin-bottom: 10px;">
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>">&lt;&lt; <?php echo get_lang('Back'); ?></a>
-</div>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
 <input type="hidden" name="formSent" value="1"/>
@@ -666,9 +664,6 @@ elseif($action == 'edit_top' || $action == 'edit_news')
 	}
 ?>
 
-<div style="margin-bottom: 10px;">
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>">&lt;&lt; <?php echo get_lang('Back'); ?></a>
-</div>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
 <input type="hidden" name="formSent" value="1"/>

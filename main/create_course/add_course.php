@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 10907 2007-01-25 15:42:27Z elixir_julian $
+// $Id: add_course.php 11050 2007-02-02 10:48:43Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -120,8 +120,8 @@ if($form->validate())
 		$expiration_date = time() + $firstExpirationDelay;
 		prepare_course_repository($directory, $code);
 		update_Db_course($db_name);
-		fill_course_repository($directory);
-		fill_Db_course($db_name, $directory, $course_language);
+		$pictures_array=fill_course_repository($directory);
+		fill_Db_course($db_name, $directory, $course_language,$pictures_array);
 		register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $_user['user_id'], $expiration_date);
 	}
 	$message = get_lang('JustCreated');

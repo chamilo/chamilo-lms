@@ -62,8 +62,8 @@ $intro_cmdDel= $_GET['intro_cmdDel'];
 $intro_cmdAdd= $_GET['intro_cmdAdd'];
 
 $form = new FormValidator('introduction_text');
-//$renderer =& $form->defaultRenderer();
-//$renderer->setElementTemplate('<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error --><div>{element}</div>');
+$renderer =& $form->defaultRenderer();
+$renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto;">{element}</div>');
 
 $form->add_html_editor('intro_content',null,null,false);
 $form->addElement('submit','intro_cmdUpdate',get_lang('Ok'));

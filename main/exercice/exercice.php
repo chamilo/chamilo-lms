@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 11005 2007-01-30 10:24:08Z elixir_julian $
+* 	@version $Id: exercice.php 11057 2007-02-05 08:56:17Z elixir_julian $
 */
 
 
@@ -379,15 +379,15 @@ if($show == 'test'){
 			"</table>";
 
 ?>
-<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+<table class="data_table">
   <?php
 	if (($is_allowedToEdit) and ($origin != 'learnpath'))
 	{
 	?>
-  <tr bgcolor="#e6e6e6">
-    <td align="center" colspan="2"><?php echo get_lang("ExerciseName");?></td>
-     <td align="center"><?php echo get_lang("Description");?></td>
-	 <td align="center"><?php echo get_lang("Modify");?></td>
+  <tr class="row_odd">
+    <th colspan="2"><?php echo get_lang("ExerciseName");?></th>
+     <th><?php echo get_lang("Description");?></th>
+	 <th><?php echo get_lang("Modify");?></th>
 
   </tr>
   <?php
@@ -395,9 +395,9 @@ if($show == 'test'){
   else
 	{
 	 ?> <tr bgcolor="#e6e6e6">
-    <td align="center"><?php echo get_lang("ExerciseName");?></td>
-     <td align="center"><?php echo get_lang("Description");?></td>
-	 <td align="center"><?php echo get_lang("State");?></td>
+    <th><?php echo get_lang("ExerciseName");?></th>
+     <th><?php echo get_lang("Description");?></th>
+	 <th><?php echo get_lang("State");?></th>
 
   </tr>
 	<?php }
@@ -422,7 +422,8 @@ if($show == 'test'){
 		{
 
 			//error_log($row[0],0);
-			echo "<tr>\n";
+			if($i%2==0) $s_class="row_odd"; else $s_class="row_even";
+			echo "<tr class='$s_class'>\n";
 
 			// prof only
 			if($is_allowedToEdit)
@@ -505,9 +506,7 @@ if($show == 'test'){
 	}
 	?></td>
   </tr>
-  <tr>
-    <td>&nbsp;</td>
-  </tr>
+ 
   <?php
 			}
 
@@ -518,7 +517,7 @@ if($show == 'test'){
 			}
 
 			$i++;
-			echo "<tr><td colspan = '5'><hr></td></tr>";
+			
 		}	// end while()
 
 		$ind = $i;
@@ -806,14 +805,14 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 				}
 		?>
 
-		<table cellpadding="2" cellspacing="2" border="0" width="100%">
-		 <tr bgcolor="#E6E6E6" align="center">
+		<table class="data_table">
+		 <tr class="row_odd">
 		  <?php if($is_allowedToEdit): ?>
-			<td width="20%"><?php echo get_lang("User"); ?></td><?php endif; ?>
-		  <td width="<?php if($is_allowedToEdit) echo '35'; else echo '55'; ?>%"><?php echo get_lang("Exercice"); ?></td>
-		  <td width="30%"><?php echo get_lang("Date"); ?></td>
-		  <td width="15%"><?php echo get_lang("Result"); ?></td>
-		  <td width="15%"><?php echo $is_allowedToEdit?get_lang("CorrectTest"):get_lang("ViewTest"); ?></td>
+			<th><?php echo get_lang("User"); ?></th><?php endif; ?>
+		  <th><?php echo get_lang("Exercice"); ?></th>
+		  <th><?php echo get_lang("Date"); ?></th>
+		  <th><?php echo get_lang("Result"); ?></th>
+		  <th><?php echo $is_allowedToEdit?get_lang("CorrectTest"):get_lang("ViewTest"); ?></th>
 
 
 		 </tr>
@@ -863,13 +862,13 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 				$id = $results[$i][5];
 				$mailid = $results[$i][6];
 		?>
-		 <tr>
+		 <tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
 		  <?php if($is_allowedToEdit): ?>
-			<td class="content"><?php $user = $results[$i][0]; echo $results[$i][0]; ?></td><?php endif; ?>
-		  <td class="content"><?php $test = $results[$i][1]; echo $results[$i][1]; ?></td>
-		  <td class="content" align="center"><?php $dt = strftime($dateTimeFormatLong,$results[$i][4]); echo strftime($dateTimeFormatLong,$results[$i][4]); ?></td>
-		  <td class="content" align="center"><?php $res = $results[$i][2]; echo $results[$i][2]; ?> / <?php echo $results[$i][3]; ?></td>
-		 <td class="content" align="center"><?php echo $is_allowedToEdit?"<a href='exercise_show.php?user=$user&test=$test&dt=$dt&res=$res&id=$id&email=$mailid'>Edit</a>":"<a href='exercise_show.php?test=$test&dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>"?></td>
+			<td><?php $user = $results[$i][0]; echo $results[$i][0]; ?></td><?php endif; ?>
+		  <td><?php $test = $results[$i][1]; echo $results[$i][1]; ?></td>
+		  <td><?php $dt = strftime($dateTimeFormatLong,$results[$i][4]); echo strftime($dateTimeFormatLong,$results[$i][4]); ?></td>
+		  <td><?php $res = $results[$i][2]; echo $results[$i][2]; ?> / <?php echo $results[$i][3]; ?></td>
+		 <td><?php echo $is_allowedToEdit?"<a href='exercise_show.php?user=$user&test=$test&dt=$dt&res=$res&id=$id&email=$mailid'>Edit</a>":"<a href='exercise_show.php?test=$test&dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>"?></td>
 
 		 </tr>
 

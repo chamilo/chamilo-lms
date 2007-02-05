@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 10897 2007-01-25 12:45:10Z elixir_inter $
+* 	@version $Id: question_list_admin.inc.php 11057 2007-02-05 08:56:17Z elixir_julian $
 */
 
 
@@ -83,10 +83,10 @@ Question :: display_type_menu ();
 ?>
 
 
-<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
-<tr  bgcolor='#e6e6e6'><td width="65%" align="center"><b><?php echo get_lang('Question'); ?></b></td>
-<td width="20%" align="center"><b><?php echo get_lang('Type');?></b></td>
-<td width="15%" align="center"><b><?php echo get_lang('Modify'); ?></b></td>
+<table class="data_table">
+<tr class="row_odd" bgcolor='#e6e6e6'><th><b><?php echo get_lang('Question'); ?></b></th>
+<th><b><?php echo get_lang('Type');?></b></th>
+<th ><b><?php echo get_lang('Modify'); ?></b></th>
 </tr>
 
 <?php
@@ -103,7 +103,7 @@ if($nbrQuestions)
 
 ?>
 
-<tr>
+<tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
   <td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td> <td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
   <td> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
 

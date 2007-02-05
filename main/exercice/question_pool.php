@@ -24,7 +24,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 10897 2007-01-25 12:45:10Z elixir_inter $
+* 	@version $Id: question_pool.php 11057 2007-02-05 08:56:17Z elixir_julian $
 */
 
 // name of the language file that needs to be included
@@ -121,7 +121,7 @@ if($is_allowedToEdit)
 
 <form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <input type="hidden" name="fromExercise" value="<?php echo $fromExercise; ?>">
-<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+<table class="data_table">
 <tr>
   <td colspan="<?php echo $fromExercise?2:3; ?>" align="right">
 	<?php echo get_lang('Filter'); ?> : <select name="exerciseId">
@@ -251,8 +251,8 @@ if($is_allowedToEdit)
 	{
 ?>
 
-  <td width="80%" align="center"><?php echo get_lang('Question'); ?></td>
-  <td width="20%" align="center"><?php echo get_lang('Reuse'); ?></td>
+  <th><?php echo get_lang('Question'); ?></th>
+  <th><?php echo get_lang('Reuse'); ?></th>
 
 <?php
 	}
@@ -280,9 +280,9 @@ if($is_allowedToEdit)
 		{
 ?>
 
-<tr>
+<tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
   <td><a href="admin.php?editQuestion=<?php echo $row[id]; ?>&fromExercise=<?php echo $fromExercise; ?>"><?php echo $row[question]; ?></a></td>
-  <td align="center">
+  <td>
 
 <?php
 			if(!$fromExercise)

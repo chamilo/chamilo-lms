@@ -71,6 +71,7 @@ define('TABLE_STATISTIC_TRACK_E_ONLINE', 'track_e_online');
 define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES', 'track_e_hotpotatoes');
 define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS', 'track_e_course_access');
 define('TABLE_STATISTIC_TRACK_E_EXERCICES', 'track_e_exercices');
+define('TABLE_STATISTIC_TRACK_E_ATTEMPT', 'track_e_attempt');
 
 //scorm database tables
 define('TABLE_SCORM_MAIN', 'scorm_main');

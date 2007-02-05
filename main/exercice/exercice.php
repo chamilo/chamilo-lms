@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 11057 2007-02-05 08:56:17Z elixir_julian $
+* 	@version $Id: exercice.php 11058 2007-02-05 13:25:41Z elixir_julian $
 */
 
 
@@ -447,7 +447,7 @@ if($show == 'test'){
  $rowi = mysql_result($sqlresult,0);
  echo $rowi.' Questions'; ?> </td>
        <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row[id]; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build')); ?>" alt="<?php echo htmlentities(get_lang('Build')); ?>" /></a>
-    <a href="exercice.php?choice=delete&exerciseId=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('areYouSure'))); echo $row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete')); ?>" /></a>
+    <a href="exercice.php?choice=delete&exerciseId=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSureToDelete'))); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete')); ?>" /></a>
     <?php
 				// if active
 				if($row['active'])

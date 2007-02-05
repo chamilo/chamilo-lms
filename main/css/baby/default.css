@@ -524,7 +524,6 @@ td .menu {
 }
 
 .data_table .row_even td {
-	border-right: 1px solid #fff;
 	background: #FFF15F;
 	padding: .2em;
 	color: #3F3A00;
@@ -532,7 +531,6 @@ td .menu {
 }
 
 .data_table .row_odd td {
-	border-right: 1px solid #fff;
 	background: #FFE900;
 	padding: .2em;
 	color: #3F3A00;

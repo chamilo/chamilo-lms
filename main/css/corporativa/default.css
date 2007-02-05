@@ -504,14 +504,12 @@ td .menu {
 }
 
 .data_table .row_even {
-	border-right: 1px solid #fff;
 	background-color: #eee;
 	padding: .2em;
 	color: #777;
 }
 
 .data_table .row_odd {
-	border-right: 1px solid #fff;
 	background-color: #ddd;
 	padding: .2em;
 	color: #333;

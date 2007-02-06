@@ -75,9 +75,14 @@ class presentation extends learnpath {
 		 */
 		$classpath = '-cp .:ridl.jar:js.jar:juh.jar:jurt.jar:jut.jar:java_uno.jar:java_uno_accessbridge.jar:edtftpj-1.5.2.jar:unoil.jar';
 		if(strpos($_ENV['OS'],'Windows') !== false)
+		{
 			$classpath = str_replace(':',';',$classpath);
-		
+		}
 		$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
+		if(strpos($_ENV['OS'],'Windows') !== false)
+		{			
+			$cmd = str_replace('/','\\',$cmd);
+		}
 		
 		chmod ($base_work_dir.$created_dir,0777);
 		

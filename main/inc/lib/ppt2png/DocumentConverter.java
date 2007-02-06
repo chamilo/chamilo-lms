@@ -64,8 +64,10 @@ public class DocumentConverter {
 				ftpPasswd = "";
 			}
 			if(host.equals("localhost")){
+				if(url.charAt(0)!='/')
+					url = '/'+url;
 				url = "file://"+url;
-				remoteFolder = destinationFolder;
+				remoteFolder = destinationFolder; 
 				remoteFolderFullPath = "file://";
 			}
 			else {

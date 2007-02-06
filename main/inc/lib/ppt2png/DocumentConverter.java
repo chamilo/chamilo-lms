@@ -64,11 +64,12 @@ public class DocumentConverter {
 				ftpPasswd = "";
 			}
 			if(host.equals("localhost")){
+				String prefix = "file://";
 				if(url.charAt(0)!='/')
-					url = '/'+url;
-				url = "file://"+url;
+					prefix += '/';
+				url = prefix+url;
 				remoteFolder = destinationFolder; 
-				remoteFolderFullPath = "file://";
+				remoteFolderFullPath = prefix;
 			}
 			else {
 				remoteFolderFullPath = "file:///home/"+ftpuser+"/";					
@@ -237,6 +238,7 @@ public class DocumentConverter {
 
 						xFilter.filter(loadProps);
 						System.out.println(xPageName.getName()+".png");
+
 						//System.out.println("Page saved to url "+loadProps[1].Value);
 						
 					}

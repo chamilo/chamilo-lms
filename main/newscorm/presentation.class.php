@@ -53,7 +53,7 @@ class presentation extends learnpath {
 	
 		//create the directory
 		
-		$base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+		$base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 		$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name);
 		
 		
@@ -78,12 +78,16 @@ class presentation extends learnpath {
 		{
 			$classpath = str_replace(':',';',$classpath);
 		}
-		$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
+		
+		
 		if(strpos($_ENV['OS'],'Windows') !== false)
 		{			
-			$cmd = str_replace('/','\\',$cmd);
+			$cmd = 'cd '.str_replace('/','\\',api_get_path(SYS_PATH)).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
 		}
-		
+		else
+		{
+			$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
+		}
 		chmod ($base_work_dir.$created_dir,0777);
 		
 		$shell = exec($cmd, $files, $return);

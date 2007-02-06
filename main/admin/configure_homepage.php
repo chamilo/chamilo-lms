@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 11054 2007-02-02 13:48:49Z elixir_julian $
+<?php // $Id: configure_homepage.php 11061 2007-02-06 13:43:07Z pvandermaesen $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -708,10 +708,27 @@ if($action == 'edit_news'){
 
 <?php
     //api_disp_html_area($open,isset($_POST[$open])?trim(stripslashes($_POST[$open])):${$open},'400px'); ?>
-	
 <?php
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+		
+		?>
+		<script type="text/javascript">
+			function OpenFileBrowser( url, width, height )
+			{
+
+				var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes" ;
+				sOptions += ",width=" + width ;
+				sOptions += ",height=" + height ;
+			
+				window.open( url, 'FCKBrowseWindow', sOptions ) ;
+			}
+		</script>
+
+		<?php
+		
 		echo WCAG_Rendering::create_xhtml($open);
+		//echo ('<a href="http://localhost/dokeos/dokeos/main/inc/lib/fckeditor/editor/plugins/ImageManager/manager.php?uploadPath=\" target="_blank">image</a>');
+		
 	} else {
 		$oFCKeditor = new FCKeditor($name) ;
 		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;

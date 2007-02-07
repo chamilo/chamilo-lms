@@ -252,8 +252,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
             	// calculation & bgcolor setting
             	$lpath_pct_completed = empty($total_lpath_items) ? "-" : round(($total_lpath_items_completed / $total_lpath_items) * 100);
-            	$lpath_pct_completed_color = $lpath_pct_completed < 75 ? " bgcolor='#CC3333'" : " bgcolor='#99CC66'";
-            	//--------------------------------END % visited
+               	//--------------------------------END % visited
 
 
 
@@ -276,7 +275,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 				echo "			<td>".$results[$j][1]." ".$results[$j][2]."</td>";
 				echo "			<td>".$first_access."</td>";
 				echo "			<td>".$last_access."</td>";
-				echo "			<td align='center'".$lpath_pct_completed_color.">".$lpath_pct_completed."</td>";
+				echo "			<td align='center'>".$lpath_pct_completed."</td>";
 				echo "		</tr>";
 				//--------------------------------END presentation of data
 								

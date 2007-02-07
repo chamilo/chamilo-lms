@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10215 2006-11-27 13:57:17Z pcool $
+<?php // $Id: index.php 11070 2007-02-07 15:28:51Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -310,11 +310,11 @@ function check_dokeos_version2()
 
 		if ($dokeos_version<>$version_info)
 		{
-			$output='<span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Dokeos '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$dokeos_version. '</b>. '.str_replace('http://www.dokeos.com','<a href="http://www.dokeos.com">http://www.dokeos.com</a>',get_lang('PleaseVisitDokeos')).'</span>';
+			$output='<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Dokeos '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$dokeos_version. '</b>. '.str_replace('http://www.dokeos.com','<a href="http://www.dokeos.com">http://www.dokeos.com</a>',get_lang('PleaseVisitDokeos')).'</span>';
 		}
 		else
 		{
-			$output = '<span style="color:green">'.get_lang('VersionUpToDate').': Dokeos '.$version_info.'</span>';
+			$output = '<br /><span style="color:green">'.get_lang('VersionUpToDate').': Dokeos '.$version_info.'</span>';
 		}
 	}
 	else

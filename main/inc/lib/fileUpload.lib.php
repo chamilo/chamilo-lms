@@ -319,6 +319,11 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	//echo "<br/>file path = ".$file_path;
 	//full path to where we want to store the file with trailing slash
 	$where_to_save = $base_work_dir.$upload_path;
+	//at least if the directory doesn't exist, tell so
+	if(!is_dir($where_to_save)){
+		Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+		return false;
+	}
 	//echo "<br/>where to save = ".$where_to_save;
 	// full path of the destination
 	$store_path = $where_to_save.$clean_name;

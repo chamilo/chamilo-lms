@@ -24,7 +24,7 @@
 * 	It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: question_admin.inc.php 11066 2007-02-07 09:39:47Z elixir_julian $
 */
 
 /*
@@ -91,6 +91,8 @@ if(is_object($objQuestion))
 	$objQuestion -> createAnswersForm ($form);
 
 	$form->addElement('submit','submitQuestion',get_lang('Ok'));
+	$renderer = $form->defaultRenderer();
+	$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
 
 
 	/**********************
@@ -98,9 +100,9 @@ if(is_object($objQuestion))
 	 **********************/
 	if(isset($_POST['submitQuestion']) && $form->validate())
 	{
+		
 		// question
 	    $objQuestion -> processCreation($form,$objExercise);
-
 	    // answers
 	    $objQuestion -> processAnswersCreation($form,$nb_answers);
 

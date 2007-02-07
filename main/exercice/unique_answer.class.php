@@ -92,7 +92,7 @@ class UniqueAnswer extends Question {
 						<td>
 							'.get_lang('Weighting').'
 						</td>
-						<td width="0"></td>
+						
 					</tr>';
 		$form -> addElement ('html', $html);
 
@@ -112,7 +112,7 @@ class UniqueAnswer extends Question {
 
 		for($i = 1 ; $i <= $nb_answers ; ++$i)
 		{
-
+			$form -> addElement ('html', '<tr>');
 			if(is_object($answer))
 			{
 				if($answer -> correct[$i])
@@ -123,29 +123,27 @@ class UniqueAnswer extends Question {
 				$defaults['comment['.$i.']'] = $answer -> comment[$i];
 				$defaults['weighting['.$i.']'] = $answer -> weighting[$i];
 			}
-
-			$form -> addElement ('html', '<tr><td>');
-
-			$group = array();
-			$puce = FormValidator :: createElement ('text', null,null,'value="'.$i.'"');
-			$puce->freeze();
-			$group[] = $puce;
-			$group[] = FormValidator :: createElement ('radio', 'correct', null, null, $i);
-
-			$group[] = FormValidator :: createElement ('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"');
-			$group[] = FormValidator :: createElement ('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"');
-			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, 'style="vertical-align:middle" size="5" value="0"');
-			$form -> addGroup($group, null, null, '</td><td width="0">');
-
-			$form -> addElement ('html', '</td></tr>');
-
+			
+			$renderer = & $form->defaultRenderer();
+			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
+			
+			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
+			$answer_number->freeze();
+			
+			$form->addElement('radio', 'correct', null, null, $i);
+			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"');
+			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+			$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"');
+			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle" size="5" value="0"');
+			$form -> addElement ('html', '</tr>');
 		}
+		$form -> addElement ('html', '</table>');
 
-		$form -> addElement ('html', '</table></div></div>');
-		$group = array();
-		$group[] = FormValidator :: createElement ('submit', 'lessAnswers', get_lang('LessAnswer'));
-		$group[] = FormValidator :: createElement ('submit', 'moreAnswers', get_lang('PlusAnswer'));
-		$form -> addGroup($group);
+		$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'));
+		$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'));
+		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
+		$renderer->setElementTemplate('{element}','moreAnswers');
+		$form -> addElement ('html', '</div></div>');
 
 		$defaults['correct'] = $correct;
 		$form -> setDefaults($defaults);

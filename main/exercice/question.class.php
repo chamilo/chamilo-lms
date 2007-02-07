@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 10934 2007-01-26 16:37:26Z elixir_inter $
+* 	@version $Id: question.class.php 11066 2007-02-07 09:39:47Z elixir_julian $
 */
 
 
@@ -84,7 +84,6 @@ abstract class Question
 		$this->description='';
 		$this->weighting=0;
 		$this->position=1;
-		$this->type=2;
 		$this->picture='';
 
 		$this->exerciseList=array();
@@ -728,7 +727,9 @@ abstract class Question
 	function createForm (&$form) {
 
 		// question name
-		$form->addElement('text','questionName',get_lang('Question'),'size="60"');
+		$test=$form->addElement('text','questionName',get_lang('Question'),'size="60"');
+		$renderer = $form->defaultRenderer();
+		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionName');
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
 		// question type
@@ -747,6 +748,7 @@ abstract class Question
 		if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
 
 		$form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false);
+		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionDescription');
 
 		// hidden values
 		$form->addElement('hidden','myid',$_REQUEST['myid']);

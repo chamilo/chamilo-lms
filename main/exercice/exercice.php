@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 11058 2007-02-05 13:25:41Z elixir_julian $
+* 	@version $Id: exercice.php 11066 2007-02-07 09:39:47Z elixir_julian $
 */
 
 
@@ -187,10 +187,6 @@ include_once(api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php');
 */
 //Display::display_introduction_section(TOOL_QUIZ);
 
-
-// defines answer type for previous versions of Claroline, may be removed in Claroline 1.5
-$sql="UPDATE $TBL_QUESTIONS SET position='1',type='2' WHERE position IS NULL OR position<'1' OR type='0'";
-api_sql_query($sql,__FILE__,__LINE__);
 
 // selects $limitExPage exercises at the same time
 $from=$page*$limitExPage;

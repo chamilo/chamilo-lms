@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 11022 2007-01-30 12:44:24Z elixir_julian $
+<?php //$Id: agenda.inc.php 11073 2007-02-07 15:48:24Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -2150,10 +2150,10 @@ function show_add_form($id = '')
 			
 			echo $return;
 			
- ?><br />
+ ?>
 		</td>
 	</tr>
-	<?php /* ADDED BY UGENT, Patrick Cool, march 2004 */ ?>
+	<!--<?php /* ADDED BY UGENT, Patrick Cool, march 2004 */ ?>
 	<tr>
 		<td colspan="7">
 	    <?php
@@ -2165,7 +2165,7 @@ function show_add_form($id = '')
 			$form_elements=$_SESSION['formelements'];
 		?>
 		</td>
-	</tr>
+	</tr>-->
 	<?php
 	   //if ($_SESSION['addedresource'])
 	   echo "\t<tr>\n";

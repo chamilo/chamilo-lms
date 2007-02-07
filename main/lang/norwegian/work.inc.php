@@ -11,7 +11,6 @@ $langDocDel = "Filen slettet";
 $langTitleWork = "Dokumenttittel";
 $langAuthors = "Forfattere";
 $langDelList = "Slett hele listen";
-$langDocument = "Dokument";
 $langWorkDelete = "Slett";
 $langWorkModify = "Rediger";
 $langWorkConfirmDelete = "Ønsker du å slette denne filen?";

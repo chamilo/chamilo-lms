@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Odno&#347;nik do strony";
 $langSubTitle = "Dodanie odno&#347;nika do zewn&#281;trzego adresu URL na Stronie g&#322;ównej kursu. Uwaga: Je&#347;li chcesz pod&#322;&#261;czy&#263; jak&#261;&#347; stron&#281; z Internetu, wejd&#378; na t&#281; stron&#281;, skopiuj jej adres z pola Adres okienka przegl&#261;darki a nast&#281;pnie wklej ten adres do pola \"Odno&#347;nik\" pon&#380;ej.";
-$langHome = "Powrót do strony g&#322;ównej";
-$langName = "Nazwa";
-$langLink = "Odno&#347;nik";
 $langAddPage            = "Dodaj stron&#281;";
 $langSendPage           = "Strona do wys&#322;ania";
 $langCouldNot           = "Plik nie mo¿e byæ przes³any";

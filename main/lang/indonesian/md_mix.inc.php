@@ -9,7 +9,6 @@ $langKwHelp = "<br/> Klik tombol \'+\' untuk membuka, tombol \'-\'  untuk menutu
 $langAdvanced = "Tingkat lanjut";
 $langSearch = "Cari";
 $langSearchCrit = "Gunakan area di bawah ini kata deskripsi, satu kata per baris!";
-$langStatistics = "Statistik";
 $langNoKeywords = "Mata kuliah ini tidak memiliki kata kunci";
 $langKwCacheProblem = "Cache Kata kunci tidak dapat dibuka";
 $langCourseKwds = "Kata kunci mata kuliah";

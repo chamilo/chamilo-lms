@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "&#924;&#949;&#964;&#945;&#954;&#943;&#957;&#951;&#963;&#951; &#963;&#964;&#959;";
-$langDoc = "Εγγραφα";
 $langDownloadFile = "Ανέβασμα αρχείου στον εξυπηρέτη";
-$langDownload = "Ανέβασμα";
 $langCreateDir = "Δημιουργία καταλόγου";
-$langName = "Όνομα";
 $langNameDir = "Όνομα του καινούριου καταλόγου";
 $langSize = "Μέγεθος";
 $langRename = "Μετονομασία";
@@ -15,7 +12,6 @@ $langTo = "στο";
 $langNoSpace = "Το ανέβασμα του αρχείου απότυχε. Δεν υπάρχει αρκετός χώρος στον κατάλογο σας";
 $langDownloadEnd = "Ολοκληρώθηκε το ανέβασμα";
 $langFileExists = "Δεν είναι δυνατή η λειτουργία.<br>Υπάρχει ήδη ένα αρχείο με το ίδιο όνομα.";
-$langIn = "στο";
 $langNewDir = "όνομα του καινούριου καταλόγου";
 $langImpossible = "Δεν είναι δυνατή η λειτουργία";
 $langAddComment = "Προσθήκη / αλλαγή σχολίου στο";
@@ -26,7 +22,6 @@ $langDirCr = "Ο κατάλογος δημιουργήθηκε";
 $langDirMv = "Ο κατάλογος μετακινήθηκε";
 $langComMod = "Τα σχόλια τροποποιήθηκαν";
 $langViMod = "Η ορατότητα του εγγράφου άλλαξε";
-$langGroupManagement = "Διαχείριση Ομάδας Χρηστών";
 $langGroupSpace = "Περιοχή ομάδας χρηστών";
 $langGroupSpaceLink = "Ομάδα χρηστών";
 $langGroupForumLink = "Περιοχή συζητήσεων ομάδας χρηστών";

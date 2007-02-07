@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Csoportok";
 $langNewGroupCreate = "Új csoport(ok) létrehozása";
 $langGroupCreation = "Új csoport(ok) létrehozása";
 $langCreate = "Létre kívánok hozni";
@@ -10,7 +9,6 @@ $langMax = "Maximum";
 $langGroupPlacesThis = "fér&#337;hely (opcionális)";
 $langGroupsAdded = "csoport létrehozva";
 $langGroupDel = "Csoport törölve";
-$langForums = "Fórum";
 $langDocuments = "Dokumentumok";
 $langExistingGroups = "Csoportok";
 $langRegistered = "Résztvev&#337;k";
@@ -50,7 +48,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Egy felhasználó maximum ";
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " csoport tagja lehet";
 $langGroupLimit = "Korlátozás";
 $langStudentRegAllowed = "Azon tanulók, akik feliratkozhatnak a csoportokba";
-$langAll = "bármennyi";
 $langGroupAllowStudentUnregistration = "A tanulók leiratkozhatnak a csoportokból";
 $langAllGroups = "Minden csoport";
 $langStudentUnsubscribe = "Leiratkozom err&#337;l a csoportról.";

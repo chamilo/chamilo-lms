@@ -22,7 +22,6 @@ $langImport = "Izveidot MDEs no izdodam&#257;";
 $langRemove = "Dz&#275;st MDEs";
 $langAllRemovedFor = "Tika dz&#275;sti visi ieraksti";
 $langIndex = "Veikt indeks&#275;šanu ar <i>PhpDig</i>";
-$langStatistics = "Statistikas";
 $langTotalMDEs = "<i>Scorm</i> MD ierakstu kop&#275;jais skaits:";
 $langMainMD = "Atv&#275;rt galveno MDE";
 $langLines = "rindas";

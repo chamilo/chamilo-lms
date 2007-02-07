@@ -9,7 +9,6 @@ $langUsed       = "used";
 $langPresent   = "Ok";
 $langMissing    = "missing";
 $langExist      = "exists";
-$langLanguage = "Bahasa";
 $langAddAdminInApache  = "Tambah Pentadbir Sistem";
 $langAddFaculties  = "Tambah Pusat Pengajian";
 $langSearchACourse   = "Cari Subjek";

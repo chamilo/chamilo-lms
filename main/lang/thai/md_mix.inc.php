@@ -9,7 +9,6 @@ $langKwHelp = "<br/>คลิกเครื่องหมายบวก \'+\' เพื่อเปิด, \'-\' คลิกเครื่องหมายลบเ
 $langAdvanced = "ขั้นสูง";
 $langSearch = "ค้นหา";
 $langSearchCrit = "ใช้พื้นที่นี้อธิบายความหมายของคำ หนึ่งคำต่อหนึ่งบรรทัด";
-$langStatistics = "ค่าสถิติ";
 $langNoKeywords = "วิชานี้ไม่มีคำสำคัญ";
 $langKwCacheProblem = "แคชคำสำคัญไม่สามารถเปิดได้";
 $langCourseKwds = "คำสำคัญของวิชา";

@@ -22,7 +22,6 @@ $langImport = "Creaza MDE din fisierul manifest";
 $langRemove = "Elimina MDE";
 $langAllRemovedFor = "Toate intrarile sterse pentru";
 $langIndex = "Indexul Termenilor cu PhpDig";
-$langStatistics = "Statistici";
 $langTotalMDEs = "Numarul total de intrari Scorm MD:";
 $langMainMD = "Deschide Pagina Principala MDE";
 $langLines = "linii";

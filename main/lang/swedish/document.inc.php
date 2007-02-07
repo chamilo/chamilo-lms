@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Flytta till";
-$langDoc = "Dokument";
 $langDownloadFile = "Ladda filen till servern";
-$langDownload = "Ladda upp";
 $langCreateDir = "Skapa ny mapp";
-$langName = "Namn";
 $langNameDir = "Namn på den nya mappen";
 $langSize = "Storlek";
 $langRename = "Byt namn";
@@ -15,7 +12,6 @@ $langTo = "till";
 $langNoSpace = "Uppladdningen har misslyckats. Det finns inte tillräckligt med diskutrymme i din mapp.";
 $langDownloadEnd = "Uppladdningen är klar.";
 $langFileExists = "Operationen är omöjlig.<br>En fil med detta namn existerar redan.";
-$langIn = "i";
 $langNewDir = "namn på ny mapp";
 $langImpossible = "Operation omöjlig";
 $langAddComment = "lägg till/modifiera kommentar till";
@@ -26,7 +22,6 @@ $langDirCr = "mapp skapad";
 $langDirMv = "mapp flyttad";
 $langComMod = "kommentar modifierades";
 $langViMod = "Synlighet modifierad";
-$langGroupManagement = "Grupphantering";
 $langGroupSpace = "Grupparea";
 $langGroupSpaceLink = "Grupparea";
 $langGroupForumLink = "Gruppforum";

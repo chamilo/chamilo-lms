@@ -22,7 +22,6 @@ $langImport = "从manifest 创建 MDE";
 $langRemove = "删除 MDE";
 $langAllRemovedFor = "移去所有条目";
 $langIndex = "有PhpDig的索引词";
-$langStatistics = "统计";
 $langTotalMDEs = "全部Scorm MD条目的数数量:";
 $langMainMD = "开启主要 MDE";
 $langLines = "行";

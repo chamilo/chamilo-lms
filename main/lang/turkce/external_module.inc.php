@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Bir siteye baðlantý";
 $langSubTitle = "Adds to your Course Homepage Main Menu a link to a site, a page or any URL. Tip: if you want to add a link to a page, go to that page, cut and paste its address in the URL bar on the top of your browser and insert it into the \"link\" field below.";
-$langHome = "Ana Sayfaya dön";
-$langName = "Baðlantý adý";
-$langLink = "Baðlantý adresi";
 $langAddPage            = "Sayfa ekle";
 $langSendPage           = "Gönderilecek sayfa";
 $langCouldNot           = "Dosya gönderilemedi";

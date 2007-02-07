@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Ligação a uma página web";
 $langSubTitle = "Acrescenta uma ligação de uma página web na página principal do curso. Para fazer isso, vá a essa página web, copie o endereço da URL na barra do browser e cole-o no campo \"Ligação\" aqui em baixo.";
-$langHome = "Voltar à página principal";
-$langName = "Nome";
-$langLink = "Ligação";
 $langAddPage            = "Acrescentar página";
 $langSendPage           = "Página a enviar";
 $langCouldNot           = "O ficheiro não pode ser enviado";

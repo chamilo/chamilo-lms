@@ -1,14 +1,21 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Remove = "Xoá";
 $Description = "Mô tả tóm tắt";
+$Links = "Liên kết";
+$Forums = "Diễn đ� n";
+$langExercices = "B� i tập";
+$Name = "Tên";
 $langComment = "Ghi chú";
 $langVisible = "Hiển thị/không hiển thị";
 $langGroup = "Group";
 $langEdit = "Edit";
+$Language = "Language";
 $langUp = "Up";
 $langCourseCreate = "Khởi tạo khoá học mới";
 $langTodo = "Kiến nghị";
+$UserName = "Tên truy cập";
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 $left_font_family = "verdana, helvetica, arial, geneva, sans-serif";
@@ -30,8 +37,7 @@ $langMaj = "Cập nhật";
 $langModify = "Modify";
 $langDelete = "Delete";
 $langMove = "Di chuyển";
-$langTitle = "Tiêu đề";
-$langHelp = "Help";
+$Help = "Help";
 $langOk = "Ok";
 $langAdd = "Thêm";
 $langAddIntro = "Lời giới thiệu";

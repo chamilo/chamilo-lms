@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "\'Forum\'";
-$langClose = "Chiudi la finestra";
 $langForContent = "Il forum è uno strumento di discussione in forma scritta svolto in modalità asincrona.
  Mentre l\'e-mail consente il dialogo tra due persone (uno-a-uno), il forum colloca la discussione in uno spazio pubblico o semi-pubblico (molti-a-molti).</p>
  <p>Per usare il forum del campus, i corsisti necessitano unicamente di un browser web (Netscape, Explorer...).</P>
@@ -220,7 +219,6 @@ Il campo \'Docente\' è del tutto indipendente dall\'Elenco Utenti.</p>
 <b>Aggiungere un utente</b>
 <p>Per aggiungere un utente al corso, utilizzate il pulsante \'Aggiungi un utente\' nello strumento \'Utenti\', compilate il modulo e confermate l\'operazione.
 Il nuovo utente riceverà un messaggio via e-mail di conferma dell\'avvenuta iscrizione contenente il suo nome utente e la password</p>";
-$langGroupManagement = "\'Gruppi\'";
 $langGroupContent = "<p><b>Introduzione</b></p>
 <p>Questo strumento consente di creare e gestire i gruppi di lavoro.
 Al momento della loro creazione, effettuata utilizzando il pulsante \'Crea nuovi gruppi\', i gruppi sono vuoti. 

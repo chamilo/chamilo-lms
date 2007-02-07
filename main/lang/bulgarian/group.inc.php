@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Групи";
 $langNewGroupCreate = "Създай нова група(и)";
 $langGroupCreation = "Създаване на нова група(и)";
 $langCreate = "създай";
@@ -10,7 +9,6 @@ $langMax = "макс.";
 $langGroupPlacesThis = "места (не задължително)";
 $langGroupsAdded = "групата(те) е (са) добавени";
 $langGroupDel = "Групата изтрита";
-$langForums = "Форуми";
 $langDocuments = "Документи";
 $langExistingGroups = "Групи";
 $langRegistered = "Регистрирани";
@@ -50,7 +48,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Потребител може да бъде член най
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " групи";
 $langGroupLimit = "Лимит";
 $langStudentRegAllowed = "Разрешено е на студентите да се саморегистрират в група";
-$langAll = "всички";
 $langGroupAllowStudentUnregistration = "На потребителите е разрешено да се отписват от групите";
 $langAllGroups = "Всички групи";
 $langStudentUnsubscribe = "Отпиши ме от тази група.";

@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Úôèòòý";
 $langNewGroupCreate = "Õðÿäâæû ïðþèá(ýå) úôèòòè(ý)";
 $langGroupCreation = "Õðÿäâïêå úôèòò";
 $langCreate = "õðÿäâæû";
@@ -10,7 +9,6 @@ $langMax = "îâìõêîèî";
 $langGroupPlacesThis = "îåõæ (òð ãåíâïêá)";
 $langGroupsAdded = "úôèòòâ(ý) äð÷âþíåïâ(ý)";
 $langGroupDel = "Úôèòòâ èäâíåïâ";
-$langForums = "Öðôèî";
 $langDocuments = "Èàå÷ïýå îâæåôêâíý";
 $langExistingGroups = "Úôèòòý";
 $langRegistered = "ßâòêõâïý";

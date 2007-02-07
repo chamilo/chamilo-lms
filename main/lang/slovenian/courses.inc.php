@@ -41,8 +41,6 @@ $langShowAndSubscribeClosed = "Vidno / Zaprto";
 $langAdminThisUser = "Povratek na uporabnika";
 $langManage = "Upravljanje portala";
 $langEnrollToCourseSuccessful = "Vpisan si v teèaj";
-$langCourses = "teèaji";
-$langIn = "v";
 $langSubCat = "podkategorije";
 $langUnsubscribeNotAllowed = "Izpis za ta teèaj ni dovoljen.";
 $langCourseAdminUnsubscribeNotAllowed  = "Si upravitelj tega teèaja.";
@@ -64,6 +62,5 @@ $SubscribingNotAllowed = "Vpis ni dovoljen";
 $CourseSortingDone = "Razvršèanje teèajev konèano";
 $ExistingCourseCategories = "Obstojeèe kategorije teèajev";
 $YouAreNowUnsubscribed = "Sedaj si izpisan iz teèaja";
-$AddRight = "Dodaj";
 $ViewOpenCourses = "Poglej odprte teèaje";
 ?>

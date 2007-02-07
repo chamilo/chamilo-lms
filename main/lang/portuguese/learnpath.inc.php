@@ -144,7 +144,6 @@ $langPrerequisitesAdded = "Os pré-requisitos para a presente etapa foram acresce
 $langAddEditPrerequisites = "Acrescentar/editar pré-requisitos";
 $langMinimum = "Mínimo";
 $langMaximum = "Máximo";
-$langNone = "Nenhum";
 $langNoDocuments = "Nenhum documento";
 $langNoExercisesAvailable = "Não há exercícios disponíveis";
 $langNoLinksAvailable = "Não há ligações disponíveis";
@@ -162,4 +161,8 @@ $EditCurrentLink = "Editar a ligação";
 $Url = "Url";
 $MoveCurrentStudentPublication = "Mover trabalho do aluno";
 $EditCurrentStudentPublication = "Editar trabalho do estudante";
+$AllowMultipleAttempts = "Permitir várias tentativas";
+$PreventMultipleAttempts = "Impedir várias tentativas";
+$MakeScormRecordingExtra = "Fazer gravações SCORM extra";
+$MakeScormRecordingNormal = "Fazer gravações SCORM normais";
 ?>

@@ -3,14 +3,12 @@ for more information: see languages.txt in the lang folder.
 */
 $langActivate = "显示";
 $langDeactivate = "隐藏";
-$langRemove = "移除";
 $langInLnk  = "隐藏工具和链接";
 $langDelLk = "确实要删除此链接吗? ";
 $langEnter  = "进入";
 $langCourseCreate  = "创建课程站点";
 $langNameOfTheLink  = "链接名称";
 $lang_main_categories_list                  = "主分类列表";
-$langHelp = "帮助";
 $langCourseAdminOnly = "仅仅教师";
 $PlatformAdminOnly = "仅平台管理员";
 $langCombinedCourse = "合并的课程";

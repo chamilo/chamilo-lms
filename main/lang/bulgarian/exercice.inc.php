@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Тестове";
 $langExercice = "Тест";
 $langActivate = "Активирай";
 $langDeactivate = "Дезактивирай";
@@ -105,7 +104,6 @@ $langIntroduction = "Въведение";
 $langTitleAssistant = "Асистент за създаване на тестове";
 $langQuesList = "Списък с въпроси";
 $langSaveEx = "Запиши тестовете";
-$langClose = "Затвори";
 $langFinish = "Край";
 $langCancel = "Анулирай";
 $langQImage = "Въпрос-картинка";
@@ -133,7 +131,6 @@ $langImportHotPotatoesQuiz = "Импортиране на тестове от HotPotatoes";
 $langHotPotatoesTests = "Импортиране на тестове от HotPotatoes";
 $langDownloadFile = "Качване на HotPotatoes (html или zip) на сървъра";
 $langDownloadImg = "Качване на картинка на сървъра";
-$langDownload = "Качване";
 $langDownloadEnd = "Качването на html завърши.";
 $langNoSpace = "Качването отказа. Няма свободно място на диска във вашата директория.";
 $langZipNoPhp = "Zip файлът не може да съдържа .PHP файлове";
@@ -169,7 +166,6 @@ $langHotspotError = "Моля въведете описание и тегло за всяка точка.";
 $langMoreHotspots = "+точка";
 $langLessHotspots = "-точка";
 $langHotspotZones = "Точки";
-$langDescription = "Описание";
 $langNextQuestion = "Следващ въпрос";
 $langCorrectAnswer = "Правилен отговор";
 $langHotspotHit = "Вашият отговор е";

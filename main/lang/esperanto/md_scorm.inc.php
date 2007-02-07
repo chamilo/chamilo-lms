@@ -22,7 +22,6 @@ $langImport = "Fari MDE-jn por la Manifest-dosiero ";
 $langRemove = "Forigi MDEjn";
 $langAllRemovedFor = "&#264;io forigita anta&#365;  XX";
 $langIndex = "Indeksvortoj kun PhpDig ";
-$langStatistics = "Statistikoj ";
 $langTotalMDEs = "Entuta nombro da Scorm-MD-datumoj: ";
 $langMainMD = "Malfermi &#265;ef-MDEn";
 $langLines = "Linioj";

@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Niew&#322;a&#347;ciwa nazwa u&#380;ytkownika. Je&#347;li nie jeste&#347; zarejestowany, wype&#322;nij <a href=\'claroline/auth/inscription.php\'>formularz rejestracyjny</a></font color>";
 $langWelcome = "kursów dost&#281;pnych bez ogranicze&#324; znajduje si&#281; poni&#380;ej. Inne kursy wymagaj&#261; podania Nazwy u&#380;ytkownika i has&#322;a. Nowy u&#380;ytkownik musi zarejestrowa&#263; si&#281; w serwerze (Rejestracja). Prowadz&#261;cy zaj&#281;cia mog&#261; utworzy&#263; serwis kursu klikaj&#261;c na &#322;&#261;cze \'Rejestracja\' i wybieraj&#261;c opcj&#281; \'Tworzenie kursu\'.";
-$langUserName = "Nazwa u&#380;ytkownika";
 $langPass = "Has&#322;o";
 $langEnter = "Wej&#347;cie";
-$langHelp = "Pomoc";
 $langReg = "Rejestracja";
 $langMenu  = "Menu";
-$langDoc = "Dokumentacja";
 $langAdvises = "Wskazówki";
 $langCourseDoesntExist = "<b>Uwaga :</b> Ten kurs nie istnieje";
 $langOtherCourses = "Lista kursów";
@@ -26,8 +23,6 @@ $langCatList  = "Kategorie";
 $langCourseList  = "Kursy";
 $email = "e-mail";
 $langInvalidForSelfRegistration = "Niepoprawna nazwa u&#380;ytkownika - je&#347;li nie jeste&#347; zarejestrowany(-a), zrób to za pomoc&#261;  <a href=claroline/auth/inscription.php>formularza rejestracyjnego</a>";
-$langCourses = "kursów";
-$langIn = "w";
 $langSubCat = "podkategoriach";
 $langMenuGeneral = "Ogólna";
 $langMenuUser = "U&#380;ytkownik";

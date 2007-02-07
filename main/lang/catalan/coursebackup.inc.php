@@ -11,9 +11,7 @@ $langImportFullBackup = "Importar la còpia de seguretat completa";
 $langImportFinished = "Importació finalitzada";
 $langEvents = "Agenda";
 $langAnnouncements = "Taulell  d\'anuncis";
-$langLinks = "Enllaços";
 $langDocuments  = "Documents";
-$langForums = "Forums";
 $langTests = "Exercicis";
 $langCopyFinished = "La copia ha finalitzat";
 ?>

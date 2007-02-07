@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Áthelyez";
-$langDoc = "Dokumentumok";
 $langDownloadFile = "Fájl feltöltése a szerverre";
-$langDownload = "Feltöltés";
 $langCreateDir = "Könyvtár létrehozása";
-$langName = "Név";
 $langNameDir = "Az új könyvtár neve";
 $langSize = "Méret";
 $langRename = "Átnevez";
@@ -15,7 +12,6 @@ $langTo = "ide";
 $langNoSpace = "A feltöltés sikertelen. Nincs elég hely a könyvtárban";
 $langDownloadEnd = "A feltöltés befejezõdött";
 $langFileExists = "Végrehajthatatlan m&#369;velet.<br>Már van ilyen nev&#369; fájl.";
-$langIn = "itt";
 $langNewDir = "Az új könyvtár neve";
 $langImpossible = "Végrehajthatatlan m&#369;velet";
 $langAddComment = "Hozzáadni/módosítani egy megjegyzést";
@@ -26,7 +22,6 @@ $langDirCr = "Könyvtár létrehozva";
 $langDirMv = "Elem áthelyezve";
 $langComMod = "Megjegyzés módosítva";
 $langViMod = "Láthatóság módosult";
-$langGroupManagement = "Csoportok menedszelése";
 $langGroupSpace = "Csoportok";
 $langGroupSpaceLink = "Csoportok";
 $langGroupForumLink = "Csoport fórumok";
@@ -117,4 +112,9 @@ $Options = "Beállítások";
 $WelcomeOogieConverter = "Üdvözöljük az Oogie PowerPoint konverter használójaként!<br>1. Böngéssze merevlemezét, hogy megtalálja .ppt vagy .odp állományait<br>2. Töltse fel at Oogie-hoz. Az eszköz az állományt Scorm típusú tanösvénnyé alakítja.<br>3. A konvertálás után hangot rögzíthet az egyes diákhoz és a diák közé értékel&#337; teszteket illeszthet.";
 $ConvertToLP = "Konvertálás tanösvénnyé";
 $Content = "Tartalom";
+$Validate = "Érvényesít";
+$AdvancedSettings = "Haladó beállítások";
+$AdvancedSettings = "Haladó beállítások";
+$File = "Állomány";
+$DocDeleteError = "Hiba történt a dokumentum törlése során";
 ?>

@@ -11,7 +11,6 @@ $langDocDel = "Treball esborrat";
 $langTitleWork = "Títol del treball";
 $langAuthors = "Autors";
 $langDelList = "Esborra la llista sencera";
-$langDocument = "Document";
 $langWorkDelete = "Eliminar";
 $langWorkModify = "Modificar";
 $langWorkConfirmDelete = "Segur que vols esborrar aquest arxiu";

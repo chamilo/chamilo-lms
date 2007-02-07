@@ -22,7 +22,6 @@ $langImport = "Buat MDE dari manifest";
 $langRemove = "Hapus MDE";
 $langAllRemovedFor = "Semua item dihapus untuk";
 $langIndex = "Index kata-kata dengan PhpDig";
-$langStatistics = "Statistik";
 $langTotalMDEs = "Jumlah total entri Scorm MD :";
 $langMainMD = "Buka MDE Utama";
 $langLines = "baris";

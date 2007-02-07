@@ -5,7 +5,6 @@ $Exercise = "Tester";
 $Link = "Lenke";
 $Forum = "Forum";
 $Document = "Dokument";
-$Agenda = "Agenda";
 $ShowDelete = "Vis / Slett";
 $IntroductionText = "Introduksjonstekst";
 $CourseDescription = "Kursbeskrivelse";
@@ -17,7 +16,6 @@ $StepDeleted1 = "Denne";
 $Modify = "Modifiser";
 $Chapter = "Kapitell";
 $AgendaAdd = "Legg til en kalenderoppføring";
-$HourMinuteDivider = ":";
 $ItemTitle = "Tittel";
 $Detail = "Detaljer";
 ?>

@@ -119,7 +119,6 @@ $langPowerPointConvert = "PowerPoint &#36716;&#25442;";
 $langAddEditPrerequisites = "&#22686;&#21152;/&#32534;&#36753; prerequisites";
 $langMinimum = "&#26368;&#23569;";
 $langMaximum = "&#39030;&#38480;";
-$langNone = "&#27809;&#26377;";
 $langNoDocuments = "&#26080;&#25991;&#20214;";
 $langNoExercisesAvailable = "&#27809;&#26377;&#27979;&#39564;";
 $langNoLinksAvailable = "&#27809;&#26377;&#36830;&#25509;";

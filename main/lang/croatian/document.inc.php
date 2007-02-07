@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Premjesti u";
-$langDoc = "Dokumenti";
 $langDownloadFile = "U&#269;itavanje datoteke na poslužitelj";
-$langDownload = "U&#269;itavanje";
 $langCreateDir = "Izrada mape";
-$langName = "Naziv";
 $langNameDir = "Naziv mape";
 $langSize = "Veli&#269;ina";
 $langRename = "Preimenuj";
@@ -15,7 +12,6 @@ $langTo = "u";
 $langNoSpace = "U&#269;itavanje nije uspjelo. Prešli ste svoju maksimalnu kvotu ili nema dovoljno diskovnog prostora.";
 $langDownloadEnd = "U&#269;itavanje dovršeno";
 $langFileExists = "Greška.<br>Ve&#263; postoji datoteka s istim imenom";
-$langIn = "u";
 $langNewDir = "Ime nove mape";
 $langImpossible = "Greška. Nemogu&#263;a operacija";
 $langAddComment = "Dodaj/izmijeni opasku";
@@ -26,7 +22,6 @@ $langDirCr = "Mapa izra&#273;ena";
 $langDirMv = "Element premješten";
 $langComMod = "Opaska izmijenjena";
 $langViMod = "Vidljivost izmijenjena";
-$langGroupManagement = "Upravljanje skupinama";
 $langGroupSpace = "Okruženje skupine";
 $langGroupSpaceLink = "Okruženje skupine";
 $langGroupForumLink = "Forum skupine";

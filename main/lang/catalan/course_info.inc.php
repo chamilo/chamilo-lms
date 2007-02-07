@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Modifica la informació del curs";
 $langModifDone = "La informació ha estat modificada";
-$langHome = "Retorna a la plana principal";
 $langCode = "Codi del curs";
 $langDelCourse = "Esborra el lloc web sencer del curs";
 $langProfessors = "Professors";
@@ -13,14 +12,10 @@ $langPublic = "Accés públic des de la plana principal del campus fins i tot sens
 $langPrivOpen = "Accés privat, enregistrament obert";
 $langPrivate = "Accés privat, enregistrament tancat (lloc accessible només a gent de la <a href=../user/user.php>llista d\'usuaris</a>)";
 $langForbidden = "No és permés";
-$langLanguage = "Llenguatge";
 $langConfTip = "Per dedfecte, el teu curs només és accessible per tu perquè ets l\'únic usuari enregistrat. Si vols una mica de confidencialitat,
 la manera més simple és obrir l\'enregistrament durant
 una setmana, demanar als estudiants que s\'enregistrin ells sols, llavors tancar l\'enregistrament i buscar els possibles intrussos en la llista d\'usuaris.";
 $langTipLang  = "Aquest llenguatge serà vàlid per cada visitant del lloc web del teu curs.";
-$Agenda = "Agenda";
-$langLink = "Enllasos";
-$langDocument = "Documents";
 $langVid = "Video";
 $langWork = "Treballs dels estudiants";
 $langProgramMenu = "Programa del curs";
@@ -41,7 +36,6 @@ $langDepartmentUrlName  = "Departament";
 $langBackupCourse = "Arxiva aquest curs";
 $langModifGroups = "Grups";
 $langGroups  = "Grups";
-$langChat  = "Discusions";
 $langArchiveCourse  = "Creació de copies de seguretat del curs ";
 $langRestoreCourse  = "Restaurar el curs";
 $langRestore = "Restaurar";
@@ -66,7 +60,6 @@ $langLastEdit  = "Darrera edicó";
 $langLastVisit  = "Darrera visita";
 $langSubscription = "Subscripció";
 $langCourseAccess = "Accés al curs";
-$langDownload = "Descarregar";
 $langConfirmBackup = "Vol realment fer una copia de seguretat del curs";
 $langCreateSite = "Crear el lloc web del curs";
 $langRestoreDescription = "El curs és a l\'arxiu que vosté pot seleccionar a sota.<br><br>
@@ -82,7 +75,6 @@ $langBackH = "Tornar a la pàgina d\'inici";
 $langOtherCategory = "Altre de categoria";
 $langAllowedToUnsubscribe = "Els usuaris poden retirar-se d\'aques curs";
 $langNotAllowedToUnsubscribe = "Els usuaris no poden retirar-se d\'aquest curs";
-$langDescription = "Descripció";
 $langCourseVisibilityClosed = "Completament tancat; el curs és únicament accessible a l\'adminstrador del curs";
 $CourseVisibilityClosed = "Tancat - no hi ha accès al curs";
 ?>

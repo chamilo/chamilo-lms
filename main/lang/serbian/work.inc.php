@@ -11,7 +11,6 @@ $langDocDel = "Fajl je obrisan";
 $langTitleWork = "Naslov fajla";
 $langAuthors = "Autori";
 $langDelList = "Obriši celu listu";
-$langDocument = "Dokument";
 $langWorkDelete = "Obriši";
 $langWorkModify = "Izmeni";
 $langWorkConfirmDelete = "Da li zaista želite da obrišete ovaj fajl?";

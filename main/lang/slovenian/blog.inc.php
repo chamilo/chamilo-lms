@@ -6,7 +6,6 @@ $MyTasks = "Moja opravila";
 $FavoriteBlogs = "Moji priljubljeni blogi";
 $Navigation = "Navigacija";
 $TopTen = "Najpogosteje obiskani blogi";
-$Title = "Naslov";
 $Subtitle = "Podnaslov";
 $ThisBlog = "Ta blog";
 $NewPost = "Nov èlanek";

@@ -11,7 +11,6 @@ $langDocDel = "La dokumento estas forigita ";
 $langTitleWork = "Plena titolo de la verko";
 $langAuthors = "a&#365;toroj";
 $langDelList = "Forigi la tutan liston ";
-$langDocument = "Dokumento ";
 $langWorkDelete = "Forigu ";
 $langWorkModify = "Modifi ";
 $langWorkConfirmDelete = "&#264;u certe, ke vi volas vi&#349;i &#265;i-dosieron? ";

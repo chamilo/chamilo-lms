@@ -11,7 +11,6 @@ $langDocDel = "Dokument je odstranjen";
 $langTitleWork = "Naziv dokumenta";
 $langAuthors = "Avtor(ji)";
 $langDelList = "Briši celoten seznam";
-$langDocument = "Dokument";
 $langWorkDelete = "Odstrani";
 $langWorkModify = "Spremeni";
 $langWorkConfirmDelete = "Resnièno želiš odstraniti ta dokument";

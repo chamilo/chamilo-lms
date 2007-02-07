@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Pieteikties neizdev&#257;s - nepareizs lietot&#257;jv&#257;rds vai parole.";
 $langWelcome = "Br&#299;vi pieejamo kursu saraksts.  P&#257;r&#275;jiem kursiem ir nepieciešams lietot&#257;jv&#257;rds un parole, kuru J&#363;s varat ieg&#363;t  noklikš&#311;inot uz  \'re&#291;istr&#275;ties\'. Doc&#275;t&#257;ji var izveidot kursus re&#291;istr&#275;joties, p&#275;c tam izv&#275;loties \'Izveidot jaunu kursu\'.";
-$langUserName = "Lietot&#257;jv&#257;rds";
 $langPass = "Parole";
 $langEnter = "Pieteikties (Enter)";
-$langHelp = "Pal&#299;dz&#299;ba";
 $langReg = "Re&#291;istr&#257;cija";
 $langMenu  = "Izv&#275;lne";
-$langDoc = "Dokument&#257;cija";
 $langAdvises = "Padomi";
 $langCourseDoesntExist = "<b>Uzman&#299;bu :</b> Šis kurss neeksist&#275;";
 $langGetCourseFromOldPortal = "Klikš&#311;ini šeit, lai sav&#257;ktu šo kursu no vec&#257; port&#257;la";
@@ -33,8 +30,6 @@ $email = "e-pasts";
 $Intranet = "Iekšt&#299;kls";
 $Englin = "Ang&#316;u valoda";
 $langInvalidForSelfRegistration = "Neveiksm&#299;ga pieteikšan&#257;s - ja neesat re&#291;istr&#275;jies, J&#363;s to varat izdar&#299;t aizpildot <a href=claroline/auth/inscription.php>re&#291;istr&#257;cijas formu</a>";
-$langCourses = "kursi";
-$langIn = "iekš";
 $langSubCat = "apakšnoda&#316;as";
 $langMenuGeneral = "Galven&#257; Izv&#275;lne";
 $langMenuUser = "Lietot&#257;js";

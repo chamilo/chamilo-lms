@@ -6,7 +6,6 @@ $MyTasks = "Mijn taken";
 $FavoriteBlogs = "Mijn favoriete blogs";
 $Navigation = "Navigatie";
 $TopTen = "Blogs top tien";
-$Title = "Titel";
 $Subtitle = "Ondertitel";
 $ThisBlog = "Deze blog";
 $NewPost = "Nieuw artikel";

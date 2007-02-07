@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Hulpforums";
-$langClose = "Venster sluiten";
 $langForContent = "<p>Het forum is een module waarin gesprekken in de vorm van een geschreven asynchrone tekst kunnen worden gevoerd. Een forum verschilt van e-mails, omdat het gesprek gebeurt in een ruimte met een openbaar of semi-openbaar karakter, waarin in principe een onbeperkt aantal mensen actief kan zijn.</p>
 <p>Om het forum van Dokeos te gebruiken, is enkel een webbrowser nodig.</p>
 <p>Om de forums te organiseren, moet u op \'beheren\' klikken. De posts zijn hiërarchisch georganiseerd:</p>
@@ -127,7 +126,6 @@ $langUserContent = "<b>Beheersrechten</b>
 <hr />
 <b>Gebruiker toevoegen</b>
 <p>Om een gebruiker toe te voegen aan uw cursus, vul de velden in en klik op \'Ok\'. De persoon zal zijn gebruikersnaam en wachtwoord krijgen via e-mail, met de bevestiging van zijn registratie, behalve als u geen e-mailadres hebt ingegeven.</p>";
-$langGroupManagement = "Hulp bij groepenbeheer";
 $langGroupContent = "<p><b>Inleiding</b></p>
 <p>Deze functie maakt het u mogelijk werk- of studiegroepen aan te maken en te beheren. Deze groepen zijn leeg bij de aanmaak. De lesgever kan de groepen op verschillende manieren invullen:
 <ul>

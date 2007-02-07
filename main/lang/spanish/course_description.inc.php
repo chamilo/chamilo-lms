@@ -14,4 +14,7 @@ $langValid  = "Validar";
 $langBackAndForget  = "Volver y descartar";
 $langOkSent = "Su página ha sido enviada al servidor.<p>Es accesible desde la <a href=../..//index.php>página principal</a> de su curso";
 $Content = "Contenido";
+$CourseDescriptionUpdated = "La descripción del curso ha sido actualizada";
+$CourseDescriptionDeleted = "La descripción del curso ha sido borrada";
+$CourseDescriptionIntro = "Para crear la descripción de un curso, haga clic en un apartado y rellene el campo correcto del formulario.<br><br>Después haga clic en Ok y rellene otro apartado.";
 ?>

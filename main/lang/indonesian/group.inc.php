@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Group";
 $langNewGroupCreate = "Buat group baru";
 $langGroupCreation = "Pembuatan group baru";
 $langCreate = "buat";
@@ -10,7 +9,6 @@ $langMax = "max.";
 $langGroupPlacesThis = "tempat (optional";
 $langGroupsAdded = "group telah ditambahkan";
 $langGroupDel = "Group dihapus";
-$langForums = "Forum";
 $langDocuments = "Dokumen";
 $langExistingGroups = "Group-group";
 $langRegistered = "Terdaftar";
@@ -50,7 +48,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Seorang user dapat menjadi anggo
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " group";
 $langGroupLimit = "Batas";
 $langStudentRegAllowed = "Siswa diijinkan untuk mendaftar sendiri dalam group";
-$langAll = "semua";
 $langGroupAllowStudentUnregistration = "User diijinkan mengundurkan diri dari group";
 $langAllGroups = "Semua group";
 $langStudentUnsubscribe = "Hapus saya dari group ini";

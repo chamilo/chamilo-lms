@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Setkan Subjek";
 $langModifDone = "Maklumat telah diubahsuai";
-$langHome = "Kembali ke Homepage";
 $langCode = "Kod Subjek";
 $langDelCourse = "Gugurkan Subjek dari Pangkalan Data";
 $langProfessors = "Pensyarah";
@@ -13,14 +12,10 @@ $langPublic = "Capaian Umum (Subjek boleh dicapai tanpa proses <i>login</i>)";
 $langPrivOpen = "Capaian Peribadi, Pendaftaran Terbuka";
 $langPrivate = "Capaian terhad (Subjek hanya boleh dicapai oleh pengguna berikut sahaja <a href=../user/user.php>Senarai Pengguna</a>)";
 $langForbidden = "Tidak dibenarkan";
-$langLanguage = "Bahasa";
 $langConfTip = "Secara lalai, subjek anda hanya boleh diakses jika anda pengguna berdaftar. Jika anda inginkan kerahsian,
 cara terbaik ialah membuka pendaftaran
 selama seminggu, dan arahkan Pelajar anda untuk mendaftar sendiri, kemudian tutup Pendaftaran dan periksa samada terdapat Pengguna yang tidak dikenali.";
 $langTipLang  = "Sila pilih bahasa yang anda kehendaki untuk Laman Subjek.";
-$Agenda = "Agenda";
-$langLink = "Pautan";
-$langDocument = "Dokumen";
 $langVid = "Video";
 $langWork = "Tugasan";
 $langProgramMenu = "Program Subjek";
@@ -42,7 +37,6 @@ $langBackupCourse = "Backup Subjek Anda";
 $langModifGroups = "Kumpulan";
 $langProfessor = "Pensyarah";
 $langGroups  = "Kumpulan";
-$langChat  = "Perbincangan";
 $langDescriptionCours   = "Penerangan Subjek";
 $langArchiveCourse  = "Backup Subjek";
 $langRestoreCourse  = "Guna semula Subjek";
@@ -68,7 +62,6 @@ $langLastEdit  = "Ubahsuai kali terakhir";
 $langLastVisit  = "Lawatan kali terakhir";
 $langSubscription = "Langganan";
 $langCourseAccess = "Capaian Subjek";
-$langDownload = "Muat turun";
 $langConfirmBackup = "Anda pasti untuk backup subjek ";
 $langCreateSite = "Bila Laman Subjek";
 $langRestoreDescription = "The course is in an archive file which you can select below.<br><br>

@@ -1,11 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langDoc = "Учебные материалы";
 $langDownloadFile = "Разместить файл на сервере";
-$langDownload = "Разместить";
 $langCreateDir = "Создать папку";
-$langName = "Название";
 $langNameDir = "Название новой папки";
 $langSize = "Размер";
 $langRename = "Переименовать";
@@ -15,7 +12,6 @@ $langNoSpace = "Размещение файла не удалось. В вашей папке недостаточно места";
 $langDownloadEnd = "Размещение файла завершено";
 $langFileExists = "Невозможно осуществить операцию.
 <br>Файл с таким именем уже существует.";
-$langIn = "в";
 $langNewDir = "название новой папки";
 $langImpossible = "Невозможно осуществить операцию";
 $langAddComment = "добавить/изменить комментарий к";
@@ -26,7 +22,6 @@ $langDirCr = "папка создана";
 $langDirMv = "элемент перемещен";
 $langComMod = "комментарий изменен";
 $langViMod = "Функция видимый / скрытый изменена";
-$langGroupManagement = "Управление группами";
 $langGroupSpace = "Пространство группы";
 $langGroupSpaceLink = "Пространство группы";
 $langGroupForumLink = "Форум группы";

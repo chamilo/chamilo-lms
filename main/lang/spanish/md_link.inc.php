@@ -11,7 +11,6 @@ $langTool = "Metadatos de los enlaces";
 $langSorry = "Seleccione primero un curso";
 $langDenied = "Esta funcionalidad sólo está disponible para los administradores del curso";
 $langNoScript = "Su navegador no permite scripts, por favor ignore la parte inferior de la pantalla. No funcionará... ";
-$langLanguage = "Idioma";
 $langLanguageTip = "idioma en el que fue hecho este objeto de aprendizaje";
 $langIdentifier = "Identificador";
 $langIdentifierTip = "identificador único para este objeto de aprendizaje, compuesto por letras, números, _-.()\\\'!*";
@@ -41,13 +40,10 @@ $langRemove = "Borrar entradas de metadatos (MDE)";
 $langAllRemovedFor = "Todas las entradas han sido retiradas de la categoría";
 $langRemainingFor = "entradas obsoletas quitadas por categoría";
 $langIndex = "Indice de palabras";
-$langStatistics = "Estadísticas";
 $langTotalMDEs = "Total de entradas de metadatos (MD) de enlaces";
 $langMainMD = "Abrir la página principal de entradas de metadatos (MDE)";
 $langOrElse = "Seleccionar una categoría de enlaces";
 $langWarningDups = "¡ - los nombres de categoría duplicados serán retirados de la lista !";
 $langSLC = "Trabajar con la categoría de enlace nombrada
 ";
-$langTitle = "Título";
-$langDescription = "Descripción";
 ?>

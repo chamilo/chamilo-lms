@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Verplaats naar";
-$langDoc = "Documenten";
 $langDownloadFile = "Upload volgend bestand naar de server";
-$langDownload = "Uploaden";
 $langCreateDir = "Nieuwe map";
-$langName = "Naam";
 $langNameDir = "Naam van nieuwe map";
 $langSize = "Grootte";
 $langRename = "Naam veranderen";
@@ -15,7 +12,6 @@ $langTo = "naar";
 $langNoSpace = "Het uploaden is niet geslaagd. Het opslagquotum voor uw cursus is overschreden, of er is niet genoeg ruimte op de harde schijf.";
 $langDownloadEnd = "Het uploaden is geslaagd.";
 $langFileExists = "Onmogelijk.<br />Er bestaat al een bestand met dezelfde naam.";
-$langIn = "in";
 $langNewDir = "Naam van nieuwe map";
 $langImpossible = "Onmogelijk";
 $langAddComment = "Commentaar toevoegen/wijzigen";
@@ -26,7 +22,6 @@ $langDirCr = "Map is aangemaakt.";
 $langDirMv = "Map/bestand is verplaatst.";
 $langComMod = "Commentaar is gewijzigd.";
 $langViMod = "Zichtbaarheid is gewijzigd.";
-$langGroupManagement = "Groepenbeheer";
 $langGroupSpace = "Groepsruimte";
 $langGroupSpaceLink = "Groepsruimte";
 $langGroupForumLink = "Groepsforum";

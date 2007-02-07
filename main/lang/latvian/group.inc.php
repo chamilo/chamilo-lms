@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Grupas";
 $langNewGroupCreate = "Izveidot jaunu grupu(as)";
 $langGroupCreation = "Jaunas grupas izveide";
 $langCreate = "izveidot";
@@ -10,7 +9,6 @@ $langMax = "maks.";
 $langGroupPlacesThis = "vietas (nav oblig&#257;ti)";
 $langGroupsAdded = "grupa(s) tika izveidota(s)";
 $langGroupDel = "Grupa izdz&#275;sta";
-$langForums = "Diskusija";
 $langDocuments = "Dokumenti";
 $langExistingGroups = "Grupas";
 $langRegistered = "Re&#291;istr&#275;ts";
@@ -49,7 +47,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Lietot&#257;js var b&#363;t loce
 $langQtyOfUserCanSubscribe_PartAfterNumber  = "grupas";
 $langGroupLimit = "Limits";
 $langStudentRegAllowed = "Lietot&#257;ji var sevi piere&#291;istr&#275;t grup&#257;s";
-$langAll = "visi";
 $langGroupAllowStudentUnregistration = "Lietot&#257;ji var atteikt sevi no grup&#257;m";
 $langAllGroups = "Visas grupas";
 $langStudentUnsubscribe = "V&#275;los atteikties no š&#299;s grupas";

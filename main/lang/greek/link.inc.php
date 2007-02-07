@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "Σύνδεσμοι";
 $langLinkName = "Όνομα συνδέσμου";
 $langLinkAdd = "Προσθήκη συνδέσμου ";
 $langLinkAdded = "Ο σύνδεσμος προστέθηκε";

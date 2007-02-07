@@ -43,4 +43,6 @@ $Local = "Helyi";
 $Remote = "Távoli";
 $FileToUpload = "Feltöltend&#337; állomány";
 $ContentMaker = "Tartalom készít&#337;";
+$ContentProximity = "Kapcsolódó tartalom";
+$UploadLocalFileFromGarbageDir = "Helyi állomány feltöltése a f&#337;/lomtár könyvtárból ";
 ?>

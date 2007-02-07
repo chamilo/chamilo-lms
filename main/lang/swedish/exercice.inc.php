@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Övningar";
 $langExercice = "Övning";
 $langActivate = "aktivera";
 $langDeactivate = "inaktivera";
@@ -105,7 +104,6 @@ $langIntroduction = "Introduktion";
 $langTitleAssistant = "Assistans med skapandet av övningar";
 $langQuesList = "frågelista";
 $langSaveEx = "spara övningar";
-$langClose = "stäng";
 $langFinish = "Avsluta";
 $langCancel = "Avbryt";
 $langQImage = "Fråga med en bild";
@@ -133,7 +131,6 @@ $langImportHotPotatoesQuiz = "Importera HotPotatoes övningar";
 $langHotPotatoesTests = "Importera HotPotatoes övningar";
 $langDownloadFile = "Ladda upp HotPotatoes (html eller zip) till servern";
 $langDownloadImg = "Ladda upp bildfil till servern";
-$langDownload = "Ladda upp";
 $langDownloadEnd = "Uppladdningen av html fil är avslutad.";
 $langNoSpace = "Uppladdningen har misslyckats. Det finns inte tillräckligt med utrymme i din katalog";
 $langZipNoPhp = "Zip filen kan inte innehålla .PHP filer";

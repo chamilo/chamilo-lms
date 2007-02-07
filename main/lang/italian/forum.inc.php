@@ -75,4 +75,6 @@ $DeleteForumCategory = "Eliminare la Categoria dei Forum ?";
 $Lock = "Blocca";
 $Unlock = "Sblocca";
 $MoveThread = "Sposta l\'argomento";
+$PostVisibilityChanged = "Cambiata la visibilità del messaggio";
+$PostDeleted = "Messaggio eliminato";
 ?>

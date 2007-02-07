@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "&#28204;&#39511;";
 $langExercice = "&#28204;&#39511;";
 $langNoEx = "&#30446;&#21069;&#27794;&#26377;&#28204;&#39511;";
 $langNewEx = "&#26032;&#28204;&#39511;";

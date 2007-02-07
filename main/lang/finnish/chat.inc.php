@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "Chat";
 $langOnlineConference  = "Konferenssi";
 $langWash  = "Pese";
 $langReset  = "Tyhjennä";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "Merkitse tämä laatikko vain, jos sinulla o
 $langQuestion = "kysymys";
 $langClearList = "Tyhjennä lista";
 $langWhiteBoard = "Liitutaulu";
-$langHome = "Koti";
 $langTextEditorDefault = "<h2>Tekstin käsittelijä</h2>Kopioi ja liitä tähän Ms-Word® -ohjelmasta ja editoi. Osanottajat näkevät muutoksesi livenä.";
-$langLinks = "Linkit";
 $langStreaming = "Virtaava";
 $langStreamURL = "Virta URL";
 $langStreamType = "Virtatyyppi";

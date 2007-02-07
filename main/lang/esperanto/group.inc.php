@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Grupoj";
 $langNewGroupCreate = "Krei nova(j)n grupo(j)n";
 $langGroupCreation = "Kreo de novaj grupoj";
 $langCreate = "krei";
@@ -10,7 +9,6 @@ $langMax = "maks.";
 $langGroupPlacesThis = "sidlokoj (nedeviga)";
 $langGroupsAdded = "grupo(j) estas aldonita(j)";
 $langGroupDel = "Grupo forigita";
-$langForums = "Forumoj";
 $langDocuments = "Dokumentoj";
 $langExistingGroups = "Grupoj";
 $langRegistered = "Registritaj";
@@ -49,7 +47,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Uzulo rajtas membri al maksimume
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " grupoj";
 $langGroupLimit = "Limo";
 $langStudentRegAllowed = "Lernantoj rajtas sin registri en grupojn";
-$langAll = "&#265;iu(j)";
 $langGroupAllowStudentUnregistration = "Lernantoj rajtas sin malregistri el grupoj";
 $langAllGroups = "&#264;iuj grupoj";
 $langStudentUnsubscribe = "Malregistri min el tiu &#265;i grupo.";

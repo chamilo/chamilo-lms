@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "ย้ายไป";
-$langDoc = "เอกสารประกอบการเรียน";
 $langDownloadFile = "อัพโหลดข้อมูลไปที่เครื่องแม่ข่าย";
-$langDownload = "การโอนย้ายไฟล์ขึ้น(upload)";
 $langCreateDir = "สร้างแฟ้มเก็บไฟล์";
-$langName = "ชื่อเอกสาร";
 $langNameDir = "ชื่อแฟ้มเก็บไฟล์ใหม่";
 $langSize = "ขนาด";
 $langRename = "เปลี่ยนชื่อ";
@@ -15,7 +12,6 @@ $langTo = "ไปยัง";
 $langNoSpace = "การอัพโหลดล้มเหลว มีเนื้อที่ไม่พอในไดเร็กทอรีของท่าน";
 $langDownloadEnd = "สิ้นสุดการอัพโหลด";
 $langFileExists = "ไม่สามารถปฏิบัติได้<br>มีไฟล์ชื่อนี้อยู่แล้ว";
-$langIn = "เป็น";
 $langNewDir = "ชื่อแฟ้มเอกสารใหม่";
 $langImpossible = "ไม่สามารถปฏิบัติได้";
 $langAddComment = "เพิ่ม/ปรับปรุงหมายเหตุที่";
@@ -26,7 +22,6 @@ $langDirCr = "สร้างdirectory เรียบร้อย";
 $langDirMv = "ย้ายdirectory เรียบร้อย";
 $langComMod = "แก้ไขข้อคิดเห็นแล้ว";
 $langViMod = "ปรับปรุงการให้เห็นเอกสารแล้ว";
-$langGroupManagement = "ระบบจัดการกลุ่ม";
 $langGroupSpace = "พื้นที่กลุ่ม";
 $langGroupSpaceLink = "พื้นที่กลุ่ม";
 $langGroupForumLink = "กลุ่มอภิปราย";

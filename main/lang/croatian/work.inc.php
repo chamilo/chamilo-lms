@@ -11,7 +11,6 @@ $langDocDel = "Datoteka izbrisana";
 $langTitleWork = "Naziv datoteke";
 $langAuthors = "Autori";
 $langDelList = "Izbriši cijeli popis";
-$langDocument = "Dokument";
 $langWorkDelete = "Brisanje";
 $langWorkModify = "Izmjena";
 $langWorkConfirmDelete = "Želite li doista izbrisati ovu datoteku";

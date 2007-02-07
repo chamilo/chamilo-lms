@@ -6,7 +6,6 @@ $MyTasks = "Miaj taskoj";
 $FavoriteBlogs = "Mia &#349;atataj blogoj";
 $Navigation = "Navigado";
 $TopTen = "Precipa deko el la blogaro";
-$Title = "Titolo";
 $Subtitle = "Subtitolo";
 $ThisBlog = "&#264;i-blogo";
 $NewPost = "Nova artikolo";

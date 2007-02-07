@@ -40,8 +40,6 @@ $langShowAndSubscribeClosed = "Zichtbaar / Gesloten";
 $langAdminThisUser = "Terug naar gebruiker";
 $langManage = "Portaalbeheer";
 $langEnrollToCourseSuccessful = "U bent ingeschreven voor de cursus";
-$langCourses = "cursussen";
-$langIn = "in";
 $langSubCat = "subcategorieën";
 $langUnsubscribeNotAllowed = "Uitschrijven is niet toegelaten voor deze cursus";
 $langCourseAdminUnsubscribeNotAllowed  = "U bent cursusbeheerder van deze cursus";
@@ -63,6 +61,5 @@ $SubscribingNotAllowed = "Inschrijven niet toegelaten";
 $CourseSortingDone = "De cursus werd herschikt";
 $ExistingCourseCategories = "Reeds bestaande cursuscategorieën";
 $YouAreNowUnsubscribed = "U bent nu uitgeschreven voor de cursus";
-$AddRight = "Toevoegen";
 $ViewOpenCourses = "Bekijk open cursussen";
 ?>

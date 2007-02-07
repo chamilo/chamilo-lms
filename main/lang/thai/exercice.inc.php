@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "แบบทดสอบทั้งหมด";
 $langExercice = "แบบทดสอบ";
 $langActivate = "เปิด";
 $langDeactivate = "ปิด";
@@ -105,7 +104,6 @@ $langIntroduction = "คำนำ";
 $langTitleAssistant = "ตัวช่วยสร้างแบบทดสอบ";
 $langQuesList = "รายการคำถาม";
 $langSaveEx = "บันทึกแบบทดสอบ";
-$langClose = "ปิด";
 $langFinish = "เสร็จสิ้น";
 $langCancel = "ยกเลิก";
 $langQImage = "รูปภาพ-คำถาม";
@@ -133,7 +131,6 @@ $langImportHotPotatoesQuiz = "นำเข้าแบบทดสอบจาก HotPotatoes Tests";
 $langHotPotatoesTests = "นำเข้าแบบทดสอบ HotPotatoes Tests";
 $langDownloadFile = "โอนย้ายไฟล์ข้อสอบของHotPotatoesที่เป็นไฟล์ html หรือ zip ขึ้นสู่เครื่องแม่ข่าย";
 $langDownloadImg = "โอนย้ายไฟล์รูปภาพขึ้นสู่เครื่องแม่ข่าย";
-$langDownload = "โอนย้ายไฟล์";
 $langDownloadEnd = "โอนย้ายไฟล์ html เรียบร้อย";
 $langNoSpace = "การโอนไฟล์ล้มเหลว มีพื้นที่ไม่พอเก็บไฟล์งาน";
 $langZipNoPhp = "ไฟล์ zip ไม่สามารถใส่ในไฟล์ phpได้";

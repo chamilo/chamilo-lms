@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Poveznica na stranicu";
 $langSubTitle = "Dodajte po&#269;etnoj stranici kolegija link, stranicu ili bilo koju URL. Napomena: Ako želite dodati link za stanicu, po&#273;ite na tu stranicu, u&#269;itajte adresu  s adresne trake na vrhu vašeg preglednika i umetnite je u \"link\" polje.";
-$langHome = "Povratak na po&#269;etnu stranicu";
-$langName = "Ime";
-$langLink = "Poveznica";
 $langAddPage            = "Dodaj stranicu";
 $langSendPage           = "Stranica za predaju";
 $langCouldNot           = "Predaja datoteke nije bila mogu&#263;a";

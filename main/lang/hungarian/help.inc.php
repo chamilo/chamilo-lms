@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Fórum Súgók";
-$langClose = "Bezár";
 $langForContent = "A fórum egy írott, szinkronizálatlan vita-eszköz.
  Elektronikus levelek írása két fél közti kapcsolatot jelent, amíg fórumok nyilvánosak
  vagy fél-nyilvánosak.</p><p>A gyakorlatban tehát a felhasználóknak csak a
@@ -276,7 +275,6 @@ $langUserContent = "<b>Leírás</b><p>A leírásnak nincs számítógéphez kötött funkc
  \'Kurzus beállítások\'-at. Ez a módosítás nem regisztrálja a segéd-oktatót, mint
  kurzusának egy felhasználóját. A \'Vezetõk\' mezõ teljesen független a 
  Felhasználói Listától.</p><hr>";
-$langGroupManagement = "Csoport Súgó";
 $langGroupContent = "<p><b>Bevezetés</b></p>
 <p>Ezzel az eszközzel munkacsoportokat hozhat létre és kezelhet.
 Létrehozáskor a csoportok üresek. Több módon is fel lehet tölteni

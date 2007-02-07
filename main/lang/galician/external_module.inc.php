@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Ligazón a unha web";
 $langSubTitle = "Engadir ó menú principal da súa páxina principal unha ligazón a unha páxina, no interior ou exterior da súa web";
-$langHome = "Volver á páxina principal";
-$langName = "Nome";
-$langLink = "Ligazón";
 $langAddPage            = "Engadir páxina";
 $langSendPage           = "Páxina para enviar";
 $langCouldNot           = "O arquivo non se pode enviar";

@@ -10,7 +10,6 @@ $langTool = "Document Metadata";
 $langSorry = "Kies eerst een cursus";
 $langNoScript = "Script is niet beschikbaar in de browser, hou geen rekening met de rest van het scherm, het zal niet werken&hellip;";
 $langPressAgain = "Druk nogmaals op \"Bewaren\"&hellip;";
-$langLanguage = "Taal";
 $langLanguageTip = "de taal waarin dit leerobject gemaakt is";
 $langIdentifier = "Identificatie";
 $langIdentifierTip = "unieke identificatie van dit leerobject, bestaande uit letters, cijfers, _-.()\'!*";
@@ -51,8 +50,6 @@ $langConfirmDelete = "Wil u *echt* alle metadata verwijderen?";
 $langCourseKwds = "Dit document bevat de sleutelwoorden van de cursus";
 $langSearch = "Zoek";
 $langSearchCrit = "Eén woord per regel!";
-$langDescription = "Beschrijving";
-$langTitle = "Titel";
 $langStatuses = ":draft:kladversie,, 
      final:finale versie,, 
      revised:herziene versie,, 

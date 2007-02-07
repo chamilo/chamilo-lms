@@ -15,7 +15,6 @@ Alt-click keyword negates the keyword.<br/>";
 $langAdvanced = "Advanced";
 $langSearch = "Search";
 $langSearchCrit = "Use the area below for descriptive words, one word per line!";
-$langStatistics = "Statistics";
 $langNoKeywords = "This course has no keywords";
 $langKwCacheProblem = "The keyword cache cannot be opened";
 $langCourseKwds = "course keywords";

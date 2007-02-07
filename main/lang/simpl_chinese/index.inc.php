@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "登录失败 - 用户名/密码错误";
 $langWelcome = "下面的课程免费提供，其他课程需要用户名和密码。可以通过点击右侧“注册”按钮注册， 老师通过注册可以创建新的课程，请在填写注册表单时请选择\'创建课程(教师)\'。";
-$langUserName = "用户名";
 $langPass = "密码";
 $langEnter = "进入";
-$langHelp = "帮助";
 $langReg = "注册";
 $langMenu  = "菜单";
-$langDoc = "文档";
 $langAdvises = "建议";
 $langCourseDoesntExist = "<B>警告：</B>这门课程不存在";
 $langGetCourseFromOldPortal = "点击这里从旧平台得到这门课程";
@@ -33,8 +30,6 @@ $email = "电子邮件";
 $Intranet = "局域网";
 $Englin = "英语";
 $langInvalidForSelfRegistration = "登录失败－如果你还没有注册，你可以点击<A href=\"claroline/auth/inscription.php\">注册用户</A>";
-$langCourses = "课程";
-$langIn = "在";
 $langSubCat = "下一级分类";
 $langMenuGeneral = "通用功能";
 $langMenuUser = "用户";

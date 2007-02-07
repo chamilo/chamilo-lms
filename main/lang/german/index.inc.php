@@ -4,13 +4,10 @@ for more information: see languages.txt in the lang folder.
 $langInvalidId = "Login ist ungültig; Benutzername / Passwort sind inkorrekt.";
 $langWelcome = "Die unten aufgeführten Kurse sind frei zugänglich. Andere Kurse setzen ein Login und Passwort voraus.
 Diese können Sie durch anklicken von \'Registrierung\' erhalten. Die Trainer/innen können neue Kurse anlegen, wenn sie auf \'Einschreiben\' klicken. Sie müssen nur anschliessend den Punkt \'Kurswebsite anlegen (Trainer/in)\' auswählen.";
-$langUserName = "Benutzername";
 $langPass = "Passwort";
 $langEnter = "Eingabe";
-$langHelp = "Hilfe";
 $langReg = "Einschreibung";
 $langMenu  = "Menü";
-$langDoc = "Dokumentation";
 $langAdvises = "Hinweise";
 $langCourseDoesntExist = "<b>Warnung :</b> Dieser Kurs existiert nicht";
 $langGetCourseFromOldPortal = "Klicken Sie hier, um den Kurs von ihrem alten Portal zu übernehmen";
@@ -34,8 +31,6 @@ $email = "E-Mail";
 $Intranet = "Intranet";
 $Englin = "...";
 $langInvalidForSelfRegistration = "Login ist ungültig - falls Sie noch nicht registriert sind, melden Sie sich bitte über <a href=claroline/auth/inscription.php>Einschreibung</a> an.";
-$langCourses = "Kurse";
-$langIn = "in";
 $langSubCat = "Unterkategorien";
 $langMenuGeneral = "Allgemein";
 $langMenuUser = "Benutzer";

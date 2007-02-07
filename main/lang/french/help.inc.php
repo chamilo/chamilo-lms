@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Aide Forums";
-$langClose = "Fermer la fenêtre";
 $langForContent = "<p>Le forum est un outil de discussion asynchrone par écrit.
  A la différence de l\'email, le forum situe la discussion dans un espace
  public ou semi-public (à plusieurs).</p><p>Pour utiliser l\'outil de forum
@@ -327,7 +326,6 @@ Vous pouvez aussi, dans la page Membres, inscrire des membres à votre cours (ne 
  cours, utilisez la page \'Propriétés de ce cours\' (dans les outils orange
  sur la page d\'accueil de votre cours). Cette modification de l\'en-tête
  du cours n\'inscrit pas automatiquement ce co-responsable comme membre du cours. Ce sont deux actions distinctes.</p>";
-$langGroupManagement = "Aide Gestion des groupes";
 $langGroupContent = "<p><b>Introduction</b></p>
 	<p>Cet outil permet de créer et de gérer des groupes de travail.
 	A la création, les groupes sont vides. Le responsable dispose de

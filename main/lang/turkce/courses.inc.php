@@ -39,8 +39,6 @@ $langShowAndSubscribeClosed = "Görülür / Kapal&#305;";
 $langAdminThisUser = "Kullan&#305;c&#305;ya dön";
 $langManage = "Portal Yönetimi";
 $langEnrollToCourseSuccessful = "Derse kayd&#305;n&#305;z yap&#305;ld&#305;";
-$langCourses = "ders";
-$langIn = "içinde";
 $langSubCat = "alt kategori";
 $langUnsubscribeNotAllowed = "Bu ders için kay&#305;t silme izni bulunmuyor";
 $langCourseAdminUnsubscribeNotAllowed  = "Bu dersin Yetkilisisiniz.";
@@ -62,6 +60,5 @@ $SubscribingNotAllowed = "Kay&#305;t silme i&#351;lemine izin verilmiyor.";
 $CourseSortingDone = "Ders s&#305;ralamas&#305; tamamland&#305;";
 $ExistingCourseCategories = "Mevcut ders kategorileri";
 $YouAreNowUnsubscribed = "Ders kayd&#305;n&#305;z silindi.";
-$AddRight = "Ekle";
 $ViewOpenCourses = "Kullan&#305;labilen dersleri göster";
 ?>

@@ -5,7 +5,6 @@ $langPgTitle = "Tajuk <i>page</i>";
 $langExplanation = "<i>Page<i/> anda mestilah dalam format HTML (e.g. \"my_page.htm\"). Ia akan dipautkan dari laman subjeke. Jika anda ingin menghantar fail  yang bukan dalam format HTML seperti (PDF, Word, Power Point, Video, etc.), sila gunakan <a href=../document/document.php>Alat bantu dokumen</a>";
 $langTooBig = "Anda tidak memilih sebarang fail untuk dihantar, atau fail anda terlalu besar";
 $langCouldNot = "Fail tidak dapat dihantar";
-$langExercices = "Latihan";
 $langNotAllowed = "Tidak dibenarkan";
 $langAddPageToSite = "Tambah <i>page<i/> ke laman anda";
 $langCouldNotSendPage = "Fail ini bukan dalam format HTML dan tidak dapat dihantar. Jika anda ingin menghantar fail  yang bukan dalam format HTML seperti (PDF, Word, Power Point, Video, etc.), sila gunakan <a href=../document/document.php>Alat bantu dokumen</a>";

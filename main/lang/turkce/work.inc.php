@@ -11,7 +11,6 @@ $langDocDel = "Belge silindi";
 $langTitleWork = "Belge ba&#351;l&#305;&#287;&#305;";
 $langAuthors = "Yazarlar";
 $langDelList = "Tüm listeyi sil";
-$langDocument = "Belgeler";
 $langWorkDelete = "sil";
 $langWorkModify = "Düzenle";
 $langWorkConfirmDelete = "bu dosyay&#305; silmek istediginizden emin misiniz?";

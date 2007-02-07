@@ -18,7 +18,6 @@ $langDocumentsDetails = "Kullan&#305;c&#305;lar&#305;n indirdi&#287;i dosyalar";
 $langExercicesDetails = "Test sonuçlar&#305;";
 $langBackToList = "Kullan&#305;c&#305; listesine dön";
 $langDetails = "Detaylar";
-$langClose = "Kapat";
 $langStatsOfCourse = "Ders &#304;statistikleri";
 $langStatsOfUser = "Kullan&#305;c&#305; &#304;statistikleri";
 $langStatsOfCampus = "Portal &#304;statistikleri";
@@ -48,7 +47,6 @@ $langWorkTitle = "Ba&#351;l&#305;k";
 $langWorkAuthors = "Yazan";
 $langWorkDescription = "Aç&#305;klama";
 $informationsAbout = "&#304;zleme sonuçlar&#305; görüntülenen=>";
-$langUserName = "Kullan&#305;c&#305; ismi";
 $langNoEmail = "Herhangi bir E-Posta adresi belirtilmemi&#351;.";
 $langNoResult = "Herhangi bir sonuç bulunmuyor.";
 $langCourse = "Ders";
@@ -109,7 +107,6 @@ $langCountCourseByVisibility = "Görülebilirli&#287;e göre ders say&#305;s&#305;"
 $langCountUsersByCourse = "Derse göre kullan&#305;c&#305; say&#305;s&#305;";
 $langCountUsersByFaculte = "Kategoriya göre kullan&#305;c&#305; say&#305;s&#305;";
 $langCountUsersByStatus = "Statüye göre kullan&#305;c&#305; say&#305;s&#305;";
-$langCourses = "Ders";
 $langAccess = "Eri&#351;imler";
 $langCountries = "Ülkeler";
 $langProviders = "Servis Sa&#287;lay&#305;c&#305;lar";
@@ -133,7 +130,6 @@ $langSeeIndividualTracking = "Tek bir izleme için <a href=../user/user.php>Kulla
 $langPathNeverOpenedByAnybody = "Bu yol hiçkimse taraf&#305;ndan aç&#305;lmad&#305;.";
 $SynthesisView = "Birle&#351;tirilmi&#351; görünüm";
 $Visited = "ziyaret edildi";
-$Name = "&#304;sim";
 $FirstAccess = "&#304;lk eri&#351;im";
 $LastAccess = "Son Eri&#351;im";
 ?>

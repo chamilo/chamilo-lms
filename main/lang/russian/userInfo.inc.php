@@ -5,7 +5,6 @@ $langLineNumber = "Количество строк";
 $langLine = "строка";
 $langLines = "строки";
 $langLineOrLines = "строка(и)";
-$langRemove = "удалить";
 $langMoveUp = "Вверх";
 $langMoveDown = "Вниз";
 $langAddNewHeading = "Добавить название";
@@ -14,5 +13,4 @@ $langDefineHeadings = "Определить заголовки";
 $langBackToUsersList = "Вернуться к списку пользователей";
 $langTracking = "Действия пользователей";
 $langCourseManager = "Менеджер курса";
-$langUserName = "Имя пользователя";
 ?>

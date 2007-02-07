@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "Ligiloj ";
 $langLinkName = "Ligila nomo ";
 $langLinkAdd = "Aldoni ligilon ";
 $langLinkAdded = "Ligilo estas aldonita ";

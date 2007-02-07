@@ -11,7 +11,6 @@ $langDocDel = "Borrouse o traballo";
 $langTitleWork = "Título do traballo";
 $langAuthors = "Autores";
 $langDelList = "Borrar completamente a lista";
-$langDocument = "Documento";
 $langWorkDelete = "Borrar";
 $langWorkModify = "Modificar";
 $langWorkConfirmDelete = "Realmente queres borrar este documento";

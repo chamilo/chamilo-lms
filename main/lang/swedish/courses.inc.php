@@ -40,8 +40,6 @@ $langShowAndSubscribeClosed = "Synlig / Stängd";
 $langAdminThisUser = "Tillbaka till användare";
 $langManage = "Portal hantering";
 $langEnrollToCourseSuccessful = "Du har blivit registrerad till kursen";
-$langCourses = "kurser";
-$langIn = "i";
 $langSubCat = "underkategorier";
 $langUnsubscribeNotAllowed = "Otillåtet att prenumerera på denna kurs.";
 $langCourseAdminUnsubscribeNotAllowed  = "Du är kursadministratör för denna kurs.";
@@ -63,6 +61,5 @@ $SubscribingNotAllowed = "Prenumeration ej tillåten";
 $CourseSortingDone = "Kurssortering avslutad";
 $ExistingCourseCategories = "Existerande kurskategorier";
 $YouAreNowUnsubscribed = "Du har nu avslutat din prenumeration på kursen";
-$AddRight = "Lägg till";
 $ViewOpenCourses = "Visa öppna kurser";
 ?>

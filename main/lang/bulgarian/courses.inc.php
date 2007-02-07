@@ -39,8 +39,6 @@ $langShowAndSubscribeClosed = "Видим / Затворен";
 $langAdminThisUser = "Обратно към потребителя";
 $langManage = "Управление на портала";
 $langEnrollToCourseSuccessful = "Вие сте регистриран за курса";
-$langCourses = "курсове";
-$langIn = "в";
 $langSubCat = "&#1087;&#1086;&#1076;&#1082;&#1072;&#1090;&#1077;&#1075;&#1086;&#1088;&#1080;&#1080;";
 $langUnsubscribeNotAllowed = "Отписването не е разрешено за този курс";
 $langCourseAdminUnsubscribeNotAllowed  = "Вие сте администратор на този курс";
@@ -62,6 +60,5 @@ $SubscribingNotAllowed = "Записването не е позволено";
 $CourseSortingDone = "Сортирането на курсовете е завършено";
 $ExistingCourseCategories = "Съществуващи категории курсове";
 $YouAreNowUnsubscribed = "Вие вече сте отписан от курса";
-$AddRight = "Добавяне";
 $ViewOpenCourses = "Преглед на отворен курс";
 ?>

@@ -22,7 +22,6 @@ $langImport = "Utwórz MDE z pokazanego";
 $langRemove = "Usu&#324; MDE";
 $langAllRemovedFor = "Wszystkie wpisy usuni&#281;te z powodu";
 $langIndex = "Indeksuj s&#322;owa za pomoc&#261; PhpDig";
-$langStatistics = "Statystyki";
 $langTotalMDEs = "Ogólna liczba wpisów Scorm MD";
 $langMainMD = "Otwórz g&#322;owny MDE";
 $langLines = "linie";

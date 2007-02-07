@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Link ke situs";
 $langSubTitle = "Tambahkan link ke menu utama situs mata kuliah anda. Tip: jika anda ingin menambahkan link ke suatu halaman, kunjungi halaman tersebut, cut dan paste alamatnya dalam bar URL di bagian atas browser dan insert-kan kedalam field \"link\" di bawah ini.";
-$langHome = "Kembali ke Home Page";
-$langName = "Nama";
-$langLink = "Link";
 $langAddPage            = "Tambahkan halaman";
 $langSendPage           = "Halaman untuk dikirim";
 $langCouldNot           = "File tidak dapat dikirim";

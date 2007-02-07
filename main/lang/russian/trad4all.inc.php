@@ -1,14 +1,21 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Remove = "&#x0423;&#x0434;&#x0430;&#x043B;&#x0438;&#x0442;&#x044C;";
 $Description = "Описание";
+$Links = "Ссылки";
+$Forums = "Форумы";
+$langExercices = "Тесты";
+$Name = "Название";
 $langComment = "Комментарий";
 $langVisible = "Видимая/скрытая";
 $langGroup = "зТХРРБ";
 $langEdit = "тЕДБЛФЙТПЧБФШ";
+$Language = "&#1103;&#1079;&#1099;&#1082;";
 $langUp = "вверх";
 $langCourseCreate = "Создать сайт курса";
 $langTodo = "Предложения";
+$UserName = "Имя пользователя";
 $iso639_2_code = "ru";
 $iso639_1_code = "rus";
 $charset = "KOI8-R";
@@ -32,8 +39,7 @@ $langMaj = "Обновление";
 $langModify = "Изменить";
 $langDelete = "Удалить";
 $langMove = "Переместить";
-$langTitle = "Заголовок";
-$langHelp = "Помощь";
+$Help = "Помощь";
 $langOk = "ОК";
 $langAdd = "Добавить";
 $langAddIntro = "Добавить вводный текст";
@@ -62,4 +68,8 @@ $langMyCourses = "Список моих курсов";
 $langModifyProfile = "Изменить мои настройки";
 $langLogout = "Выйти";
 $localLangName = "русский";
+$Home = "&#x0418;&#x043D;&#x0444;&#x043E;&#x0440;&#x043C;&#x0430;&#x0446;&#x0438;&#x044F;";
+$All = "&#x0412;&#x0441;&#x0435;";
+$None = "&#x043D;&#x0438; &#x043E;&#x0434;&#x043D;&#x043E;&#x0433;&#x043E;";
+$Description = "&#x041E;&#x043F;&#x0438;&#x0441;&#x0430;&#x043D;&#x0438;&#x0435;";
 ?>

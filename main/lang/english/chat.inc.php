@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "Chat";
 $langOnlineConference  = "Conference";
 $langWash  = "Wash";
 $langReset  = "Reset";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "Please check this box only to ask an impor
 $langQuestion = "question";
 $langClearList = "Clear the list";
 $langWhiteBoard = "White board";
-$langHome = "Home";
 $langTextEditorDefault = "<h2>Word processor</h2>Cut and paste here from Ms-Word® then edit. Participants will see your modifications live.";
-$langLinks = "Links";
 $langStreaming = "Streaming";
 $langStreamURL = "Stream URL";
 $langStreamType = "Stream type";

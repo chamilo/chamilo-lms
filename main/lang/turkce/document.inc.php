@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Ta&#351;&#305;naca&#287;&#305; Yer";
-$langDoc = "Belgeler";
 $langDownloadFile = "Sunucuya dosya yükle";
-$langDownload = "Yükle";
 $langCreateDir = "Dizin yarat";
-$langName = "&#304;sim";
 $langNameDir = "Yeni dizin adý";
 $langSize = "Boyut";
 $langRename = "Yeniden isimlendir";
@@ -15,7 +12,6 @@ $langTo = "kopyalanaca&#287;&#305; yer";
 $langNoSpace = "Yükleme baþarýsýz. Yeterli alan yok.";
 $langDownloadEnd = "Yükleme tamamlandý";
 $langFileExists = "Ýþlem yapýlamýyor.<br>Ayný isimde bir dosya var.";
-$langIn = "içinde";
 $langNewDir = "Yeni dizin adý";
 $langImpossible = "Ýþlem yapýlamýyor";
 $langAddComment = "Yorum ekle/deðiþtir";
@@ -26,7 +22,6 @@ $langDirCr = "Dizin yaratýldý";
 $langDirMv = "Dosya taþýndý";
 $langComMod = "Yorum deðiþtirildi";
 $langViMod = "Görünürlük deðiþtirildi";
-$langGroupManagement = "Grup yönetimi";
 $langGroupSpace = "Grup alaný";
 $langGroupSpaceLink = "Grup alaný";
 $langGroupForumLink = "Grup forumu";

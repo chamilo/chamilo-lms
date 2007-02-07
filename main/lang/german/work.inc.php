@@ -11,7 +11,6 @@ $langDocDel = "Dokument entfernt";
 $langTitleWork = "Titel des Dokuments";
 $langAuthors = "Autoren";
 $langDelList = "Die gesamte Liste löschen";
-$langDocument = "Dokument";
 $langWorkDelete = "Löschen";
 $langWorkModify = "Bearbeiten";
 $langWorkConfirmDelete = "Wollen Sie dieses Dokument wirklich löschen";

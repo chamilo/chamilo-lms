@@ -22,7 +22,6 @@ $langImport = "Listeden MDE olu&#351;tur";
 $langRemove = "MDE sil";
 $langAllRemovedFor = "All entries removed for";
 $langIndex = "Index Words with PhpDig";
-$langStatistics = "Istatistikler";
 $langTotalMDEs = "Scorm MD giri&#351;leri toplam say&#305;s&#305;:";
 $langMainMD = "Ana MDE aç";
 $langLines = "sat&#305;r";

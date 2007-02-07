@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "移到";
-$langDoc = "文档";
 $langDownloadFile = "上传本地文件";
-$langDownload = "上传";
 $langCreateDir = "创建目录";
-$langName = "名称";
 $langNameDir = "新建目录名称";
 $langSize = "大小";
 $langRename = "重命名";
@@ -15,7 +12,6 @@ $langTo = "到";
 $langNoSpace = "上传失败! 超过最大上传文件大小或磁盘空间不足. ";
 $langDownloadEnd = "上传结束";
 $langFileExists = "操作失败, 同名文件已存在.";
-$langIn = "在";
 $langNewDir = "新建目录名称";
 $langImpossible = "操作失败";
 $langAddComment = "添加/修改摘要";
@@ -26,7 +22,6 @@ $langDirCr = "目录已创建";
 $langDirMv = "目录已移动";
 $langComMod = "简介已更新";
 $langViMod = "\'显示/隐藏\' 属性已更新";
-$langGroupManagement = "小组管理";
 $langGroupSpace = "小组空间";
 $langGroupSpaceLink = "小组空间";
 $langGroupForumLink = "小组论坛";

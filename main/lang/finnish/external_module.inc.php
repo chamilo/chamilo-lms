@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Lis‰‰ linkki sivustoon";
 $langSubTitle = "Lis‰‰ linkki kurssin kotisivulle.";
-$langHome = "Takaisin kotisivulle";
-$langName = "Nimi";
-$langLink = "Linkki";
 $langAddPage            = "Lis‰‰ sivu";
 $langSendPage           = "Tallennettava sivu";
 $langCouldNot           = "Tiedostoa ei voitu tallentaa";

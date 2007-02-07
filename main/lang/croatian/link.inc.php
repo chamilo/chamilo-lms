@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "Poveznice";
 $langLinkName = "Ime poveznice";
 $langLinkAdd = "Dodaj poveznicu";
 $langLinkAdded = "Poveznica je dodana.";

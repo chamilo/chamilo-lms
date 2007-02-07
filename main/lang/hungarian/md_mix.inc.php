@@ -9,7 +9,6 @@ $langKwHelp = "<br/> KAttintson a \'+\' gombra a megnyitáshoz, a \'-\' gombra a 
 $langAdvanced = "Haladó";
 $langSearch = "Keresés";
 $langSearchCrit = "Soronként egy szóval írja le az alábbi területre a kulcsszavait.";
-$langStatistics = "Statisztikák";
 $langNoKeywords = "A kurzusnak nincsenek kulcsszavai";
 $langKwCacheProblem = "A kulcsszó-gyorsítótárat nem lehet megnyitni";
 $langCourseKwds = "A kurzus kulcsszavai";

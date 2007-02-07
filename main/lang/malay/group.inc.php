@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Kumpulan";
 $langNewGroupCreate = "Bina kumpulan baru";
 $langGroupCreation = "Bina Kumpulan Baru";
 $langCreate = "Bina";
@@ -10,7 +9,6 @@ $langMax = "Keahlian Maksimum ";
 $langGroupPlacesThis = "orang pelajar";
 $langGroupsAdded = "Kumpulan baru telah dibina";
 $langGroupDel = "Satu kumpulan dipadam";
-$langForums = "Forum";
 $langDocuments = "Dokumen";
 $langExistingGroups = "Nama Kumpulan";
 $langRegistered = "Bilangan Ahli Semasa";

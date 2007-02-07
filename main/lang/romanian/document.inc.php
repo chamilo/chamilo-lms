@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Muta la";
-$langDoc = "Documente";
 $langDownloadFile = "Transfera fisierul catre server";
-$langDownload = "Transfera";
 $langCreateDir = "Creaza director";
-$langName = "Nume";
 $langNameDir = "Numele noului director";
 $langSize = "Marime";
 $langRename = "Redenumeste";
@@ -15,7 +12,6 @@ $langTo = "la";
 $langNoSpace = "Transferul a esuat. Nu este destul spatiu pe disc.";
 $langDownloadEnd = "Transferul este finalizat";
 $langFileExists = "Operatia este imposibila, un fisier cu acelasi nume deja exista.";
-$langIn = "în";
 $langNewDir = "Numele noului director";
 $langImpossible = "Operatie imposibila";
 $langAddComment = "Adauga/modifica un comentariu catre";
@@ -26,7 +22,6 @@ $langDirCr = "Director creat";
 $langDirMv = "Element mutat";
 $langComMod = "Comentariu modificat";
 $langViMod = "Vizibilitate modificata";
-$langGroupManagement = "Administrarea grupurilor";
 $langGroupSpace = "Zona grupului";
 $langGroupSpaceLink = "Zona grupului";
 $langGroupForumLink = "Forumul grupului";

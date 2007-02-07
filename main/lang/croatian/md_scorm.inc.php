@@ -22,7 +22,6 @@ $langImport = "Izradi datoteke MDE iz manifesta";
 $langRemove = "Ukloni datoteke MDE";
 $langAllRemovedFor = "Uklonjeni svi unosi iz";
 $langIndex = "Ozna&#269;i rije&#269;i s PhpDig";
-$langStatistics = "Statistika";
 $langTotalMDEs = "Ukupan broja unosa definicijskih podataka Scorm:";
 $langMainMD = "Otvori glavnu datoteku MDE";
 $langLines = "redci";

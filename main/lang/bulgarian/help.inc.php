@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Форуми за помощ";
-$langClose = "Затвори прозореца";
 $langForContent = "Форум е писмено средство за дискусия. 
  докато чрез email се осъществява диалог между двама, форумите позволяват открита или полуоткрита дискуция за всички .</p><p>Погледнато от техническа гледна точка, за да използват форумите, студентите се нуждаят от браузър.</P><p>За да организирате форумите, натиснете върху
  \'Administer\'. Дикусиите са организирани в групи и подгрупи както следва:</p><p><b>Category > Forum > Topic > Answers</b></p>За да структурирате дискусиите на студентите ви, е необходимо да организирате форумите предварително, като оставите те да създават темите и отговорите. По подразбиране, форумите съдържат само категорията \'Public\', примерен форум и примерна тема.</p><p>Първото което трябва да направите е да изтриете примерната тема и да измените името на първия форум. След това може да създадете, в \'public\' категорията, други форуми, по групи или по тематика, които да отговарят на изискванията на схемата ви на обучение.</p><p>Не смесвайте Категориите с форумите и не забравяйте, че една празна категория (без форуми) няма да бъде видима за студентите.</p><p>Описанието на един форум може да бъде списък на членовете му, определение на целта му или задача, тематика...";
@@ -179,7 +178,6 @@ $langUserContent = "<b>Roles</b><p>Roles have no computer related function.
 <p>To add a user for your course, fill the fields and validate. The person
 will receive an email telling him/her you have registered him/her and telling
 him/her or reminding him/her his/her login and  password.</p>";
-$langGroupManagement = "Help groups";
 $langGroupContent = "<p><b>Introduction</b></p>
 <p>This tool allows to create and manage work groups. 
 At creation (Create groups), groups are emtpy. There are 

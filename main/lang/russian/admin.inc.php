@@ -12,7 +12,6 @@ $langExist      = "существует";
 $ConfigureHomePage = "Конфигурировать домашнюю страницу";
 $langCourseTitular = "Преподаватель";
 $langCourseLanguage = "&#1103;&#1079;&#1099;&#1082;";
-$langLanguage = "&#1103;&#1079;&#1099;&#1082;";
 $langMailTo  = "Контакт : ";
 $lang_no_access_here  = "Нет доступа ";
 $lang_php_info  = "Информация о системе php";

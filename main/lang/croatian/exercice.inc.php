@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Vježbe";
 $langExercice = "Vježba";
 $langActivate = "Omogu&#263;i";
 $langDeactivate = "Onemogu&#263;i";
@@ -105,7 +104,6 @@ $langIntroduction = "Uvod";
 $langTitleAssistant = "Pomo&#263;nik za izradu vježbi";
 $langQuesList = "Popis pitanja";
 $langSaveEx = "Spremite vježbe";
-$langClose = "Zatvorite";
 $langFinish = "Kraj";
 $langCancel = "Odustani";
 $langQImage = "Pitanje sa slikom";
@@ -133,7 +131,6 @@ $langImportHotPotatoesQuiz = "Prijenos vježbi HotPotatoes";
 $langHotPotatoesTests = "Prijenos vježbi HotPotatoes";
 $langDownloadFile = "Predaja datoteka HotPotatoes (html ili zip) na poslužitelj";
 $langDownloadImg = "Predaja slikovne datoteke na poslužitelj";
-$langDownload = "Predaja";
 $langDownloadEnd = "Predaja datoteke html je dovršena.";
 $langNoSpace = "Predaja nije uspjela. U vašoj mapi nema dovoljno diskovnoga prostora";
 $langZipNoPhp = "Datoteka zip ne smije sadržavati datoteke .PHP";

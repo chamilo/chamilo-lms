@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Apua - foorumit";
-$langClose = "Sulje ikkuna";
 $langForContent = "<p>Foorumi on työkalu keskustelua varten, kirjoitettua ja ajasta riippumatonta. Sähköposti on kahden henkilön välistä keskustelua, sitä vastoin foorumi mahdollistaa julkisen tai puolijulkisen keskustelun.</p>
 <p>Teknisestä näkökulmasta katsoen oppilaat tarvitsevat vain selaimen osallistuakseen Clarolinen foorumeihin.<p>
 <p>Voit organisoida foorumin, klikkaa ylläpito-työkalua. Keskustelut on organisoitu sarjaksi seuraavalla tavalla:</p>

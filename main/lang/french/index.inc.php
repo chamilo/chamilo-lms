@@ -7,13 +7,10 @@ nécessitent un identifiant et un mot de passe que l\'on peut
 obtenir en cliquant sur la mention \'inscription\'. Il est possible aux
 responsables de créer un nouveau cours en cliquant sur la
 mention \'inscription\'.";
-$langUserName = "Identifiant";
 $langPass = "Mot de passe";
 $langEnter = "Entrer";
-$langHelp = "Aide";
 $langReg = "Inscription";
 $langMenu  = "Menu";
-$langDoc = "Documentation";
 $langAdvises = "Suggestions";
 $langCourseDoesntExist = "<b>Attention :</b> Ce cours n\'existe pas";
 $langGetCourseFromOldPortal = "cliquez ici pour récupérer ce cours dans votre ancien portail";
@@ -37,8 +34,6 @@ $email = "courriel";
 $Intranet = "Intranet";
 $Englin = "Anglais";
 $langInvalidForSelfRegistration = "Échec du login - si vous n\'êtes pas enregistré, vous pouvez le faire en utilisant le <a href=claroline/auth/inscription.php>formulaire d\'enregistrement</a>";
-$langCourses = "cours";
-$langIn = "dans";
 $langSubCat = "sous-catégories";
 $langMenuGeneral = "Général";
 $langMenuUser = "Utilisateur";

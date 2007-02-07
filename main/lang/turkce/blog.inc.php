@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Search = "Arama";
 $MyTasks = "Görevlerim";
 $FavoriteBlogs = "Gözde günlüklerim";
-$Title = "Başlık";
 $Subtitle = "Altbaşlık";
 $ThisBlog = "Bu günlük";
 $NewPost = "Yeni makale";

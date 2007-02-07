@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Enllasa un lloc";
 $langSubTitle = "Afegeix un enllas a un lloc en el Menú Principal de la Plana d\'Inici del teu Curs, a una plana o qualsevol URL. Consell: si vols afegir un enllas a una plana, ves a aquella plana, copia i enganxa la seva adresa de la barra \'URL\' a la part superior del teu navegador i inserta-la en el camp enllas de sota.";
-$langHome = "Retorna a la Plana d\'Inici";
-$langName = "Nom";
-$langLink = "Enllas";
 $langAddPage            = "Afegir una pagina";
 $langSendPage           = "Pagina a enviar";
 $langCouldNot           = "El arxiu no ha sigut trobat";

@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "&#264;i-identigilo ne validas (misa ensaluto a&#365; pasvorto). ";
 $langWelcome = "kursa(j) TTT(oj) &#265;i-suba(j) estas libere alirebla(j). La alaij kursoj postulas uzulan nomon kaj pasvorton. Tiujn vi povas ricevi per musklako sur \'Registri\'. Instruistoj povas indiki dum registrado, ke ili deziras krei kursajn TTTjn. ";
-$langUserName = "Ensalutnomo";
 $langPass = "Pasvorto";
 $langEnter = "Ensaluti ";
-$langHelp = "Helpo";
 $langReg = "Registrado ";
 $langMenu  = "Menuo";
-$langDoc = "Dokumenta&#309;o ";
 $langAdvises = "Konsilo ";
 $langCourseDoesntExist = "<b>Atenton:</b> &#264;i-kurso ne ekzistas ";
 $langGetCourseFromOldPortal = "Musklaku &#265;i tien por el&#349;uti la kurson el la malnova portala TTT. ";
@@ -33,8 +30,6 @@ $email = "Retpo&#349;to  XX";
 $Intranet = "Interna reto  XX";
 $Englin = "angla ";
 $langInvalidForSelfRegistration = "Se vi ankora&#365; ne ali&#285;is, bonvolu plenigi la <a href=\'claroline/auth/inscription.php\'>registran formularon </a>.";
-$langCourses = "kursoj";
-$langIn = "en ";
 $langSubCat = "sub-kategorioj ";
 $langMenuGeneral = "&#284;enerala ";
 $langMenuUser = "Uzulo ";

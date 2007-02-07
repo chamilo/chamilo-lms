@@ -22,7 +22,6 @@ $langImport = "Maak MDE\'s voor het manifestbestand";
 $langRemove = "Verwijder MDE\'s";
 $langAllRemovedFor = "Alles verwijderd voor";
 $langIndex = "Indexeer woorden met PhpDig";
-$langStatistics = "Statistieken";
 $langTotalMDEs = "Totaal aantal SCORM-MD-gegevens:";
 $langMainMD = "Open hoofd-MDE";
 $langLines = "lijnen";

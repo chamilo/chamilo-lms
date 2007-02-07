@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "ÁÄÌì";
 $langOnlineConference  = "»áÒé";
 $langWash  = "Ï´Ë¢";
 $langReset  = "ÖØÉè";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "µ±ÒªÌá³öÖØÒªÎÊÌâÊ±, ÇëÑ¡ÖÐ´Ë¿ò!";
 $langQuestion = "ÎÊÌâ";
 $langClearList = "Çå³ýÁÐ±í";
 $langWhiteBoard = "Ð´×Ö°×°å";
-$langHome = "Ö÷Ò³";
 $langTextEditorDefault = "<H2>ÎÄ×Ö´¦Àí</H2>´ÓÎ¢ÈíWord®ÖÐ¼ôÇÐºÍÕ³Ìùµ½ÕâÀïÈ»ºó±à¼­. ³ÉÔ±½«»á¿´µ½ÄãµÄÔÚÏßÐÞ¸Ä.";
-$langLinks = "Á´½Ó";
 $langStreaming = "Á÷Ã½Ìå";
 $langStreamURL = "Á÷Ã½ÌåÁ´½Ó";
 $langStreamType = "Á÷Ã½ÌåÀàÐÍ";

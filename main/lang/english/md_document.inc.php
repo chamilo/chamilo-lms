@@ -10,7 +10,6 @@ $langTool = "Document Metadata";
 $langSorry = "Select a course first";
 $langNoScript = "Script is not enabled in your browser, please ignore the screen part below this text, it won\'t work...";
 $langPressAgain = "Press \'Store\' again...";
-$langLanguage = "Language";
 $langLanguageTip = "the language in which this learning object was made";
 $langIdentifier = "Identifier";
 $langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()\'!*";
@@ -53,8 +52,6 @@ $langConfirmDelete = "Do you *really* want to delete all metadata?";
 $langCourseKwds = "This document contains the course keywords";
 $langSearch = "Search";
 $langSearchCrit = "One word per line!";
-$langDescription = "Description";
-$langTitle = "Title";
 $langStatuses = ":draft:draft,, 
      final:final,, 
      revised:revised,, 

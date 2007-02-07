@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Hilfe für die Foren";
-$langClose = "Fenster schliessen";
 $langForContent = "Ein Forum ist ein schriftliches asynchrones Diskussionswerkzeug. Wo Email nur einen Eins-zu Eins Dialog ermöglicht, bieten Foren die Gelegenheit öffentliche bzw. semi-öffentliche Diskussionen zu führen.</p><p>Die Studenten benötigen nur ihren Browser, um die Clarolineforen zu benutzen.</P>
 <p>Um Foren einzurichten, klicken Sie auf \'admin\'. Diskussionen sind wie folgt aufgeteilt:</p>
 <p><b>Kategorie > Forum > Überschrift > Antworten</b></p>
@@ -88,7 +87,6 @@ $langUserContent = "<b>Rollen</b><p>Rollen haben keine computerbezogenen Funktio
 <p>Um im Header eines Kurses den Namen eines Mitverantwortlichen zu nennen, benutzen Sie \'Seminarinformation ändern\' (orangene Werkzeuge). Diese Änderung registriert Ihren Mitverantwortlichen nicht als Benutzer des Kurses. Das Feld \'Trainer/in\' ist völlig unabhängig von der Teilnehmerliste.</p><hr>
 <b>Teilnehmer/innen hinzufügen</b>
 <p>Um eine/n Teilnehmer/in Ihrem Kurs hinzuzufügen prüfen Sie zuerst, ob er/sie nicht bereits registriert ist. Sollte er/sie bereits registriert sein, prüfen Sie die Fläche neben seinem Namen und klicken Sie \'Ok\'. Ansonsten fügen Sie ihn manuell hinzu. In beiden Fällen wird die Person eine E-Mail erhalten, die sie über die Aufnahme und das zugehörige Login und Passwort in Kenntnis setzt.</p>";
-$langGroupManagement = "Hilfe für Gruppen";
 $langGroupContent = "<p><b>Einführung</b></p>
 <p>Dieses Tool erlaubt das Erstellen und Bearbeiten von Gruppen.
 Beim Erstellen (Gruppen einrichten) sind diese leer. Es gibt verschiedene Möglichlichkeutne, die sezu füllen:

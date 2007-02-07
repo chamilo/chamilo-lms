@@ -11,7 +11,6 @@ $langDocDel = "Dokumen dihapus";
 $langTitleWork = "Judul Dokumen";
 $langAuthors = "Pengarang";
 $langDelList = "Hapus seluruh daftar";
-$langDocument = "Dokumen";
 $langWorkDelete = "Hapus";
 $langWorkModify = "Ubah";
 $langWorkConfirmDelete = "Apakah anda benar-benar akan menghapus dokumen ini";

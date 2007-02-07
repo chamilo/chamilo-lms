@@ -1,14 +1,21 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Remove = "Padam";
 $Description = "Penerangan";
+$Links = "Pautan";
+$Forums = "Forum";
+$langExercices = "Latihan";
+$Name = "Nama";
 $langComment = "Komen";
 $langVisible = "Papar/Tidak Papar";
 $langGroup = "Kumpulan";
 $langEdit = "Ubahsuai";
+$Language = "Bahasa";
 $langUp = "Atas";
 $langCourseCreate = "Bina Laman Subjek";
 $langTodo = "Cadangan Penambahbaikan";
+$UserName = "ID Pengguna";
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 $charset = "iso-8859-1";
@@ -32,8 +39,7 @@ $langMaj = "Kemaskini";
 $langModify = "Ubahsuai";
 $langDelete = "Padam";
 $langMove = "Pindah";
-$langTitle = "Tajuk";
-$langHelp = "Bantuan";
+$Help = "Bantuan";
 $langOk = "Proses";
 $langAdd = "Tambah";
 $langAddIntro = "Tambah pengenalan";

@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Flyt til";
-$langDoc = "Dokumenter";
 $langDownloadFile = "Læg filen ud på serveren";
-$langDownload = "Læg ud";
 $langCreateDir = "Opret en mappe";
-$langName = "Navn";
 $langNameDir = "Navn på den nye mappe";
 $langSize = "Størrelse";
 $langRename = "Omdøb";
@@ -15,7 +12,6 @@ $langTo = "til";
 $langNoSpace = "Udlægningen mislykkedes. Der er ikke plads i din mappe.";
 $langDownloadEnd = "Udlægning er afsluttet";
 $langFileExists = "Udlægningen kan ikke gennemføres.<br>Der er allerede en fil med samme navn.";
-$langIn = "i";
 $langNewDir = "Navn på den nye mappe";
 $langImpossible = "Umulig handling";
 $langAddComment = "Tilføj/ret kommentar til";
@@ -26,7 +22,6 @@ $langDirCr = "Mappen er oprettet";
 $langDirMv = "Elementet er flyttet";
 $langComMod = "Kommentar er ændret";
 $langViMod = "synlighed ændret";
-$langGroupManagement = "Gruppestyring";
 $langGroupSpace = "Gruppeområde";
 $langGroupSpaceLink = "Gruppeområde";
 $langGroupForumLink = "Gruppe diskussionsforum";

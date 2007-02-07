@@ -11,7 +11,6 @@ $langDocDel = "Arquivo deletado";
 $langTitleWork = "Título do Arquivo";
 $langAuthors = "Autores";
 $langDelList = "Deletar a lista toda";
-$langDocument = "Documento";
 $langWorkDelete = "Deletar";
 $langWorkModify = "Modificar";
 $langWorkConfirmDelete = "Você realmente quer apagar esse arquivo";

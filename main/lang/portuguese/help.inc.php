@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Ajuda Fóruns";
-$langClose = "Fechar janela";
 $langForContent = "O fórum é uma ferramenta de discussão escrita e assíncrona.
  Da mesma forma que o e-mail permite o diálogo um-a-um, os fóruns permitem
  diálogos públicos ou semi-públicos (grupo).</p><p>Tecnicamente falando,
@@ -262,7 +261,6 @@ $langUserContent = "<p><b>Adicionando usuários</b></p>
  O campo \\\'Professores\\\' é completamente independente da lista de Usuários.</p>
  <p><b>Acompanhamento e Home Pages Pessoais</b></p>
  <p>Em complemento à exibição d lista de usuários e modificação de seus direitos, a ferramenta Usuários também exibe o acompanhamento individual e permite ao professor definir cabeçalhos para páginas pessoais que podem ser preencidas pelos estudantes.</p>";
-$langGroupManagement = "Ajuda de grupos";
 $langGroupContent = "<p><b>Introdução</b></p>
 <p>Essa ferramenta permite a criação e gerenciamento de grupos de trabalho.
 Na criação (Criar grupos), os grupos estão vazios. Existem várias formas

@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Foros de axuda";
-$langClose = "Pechar xanela";
 $langForContent = "O foro de detabe é unha ferramenta de comunicación asincrónica.
  Mentres que o e-mail permite o diálogo persoa-persoa, os foros permiten un diálogo públicos ou semi-público.</p>
 <p>Tecnicamente falando, os alumnos so precisan un navegador de Internet para utilizar os foros de Dokeos.</P>
@@ -249,7 +248,6 @@ Esta modificación da cabeceira do curso non inscribe automaticamente a este co-t
  está inscrito engádao á mano. Nos dous casos, a persoa recibirá
   un correo electrónico de confirmación da súa inscripción
    contendo o seu nome de usuario e contrasinal, excepto no caso de que vostede non introducira o seu correo electrónico.</p>";
-$langGroupManagement = "Axuda de Grupos";
 $langGroupContent = "<p><b>Introducción</b></p>
 <p>Esta ferramenta permite crear e xestionar grupos de traballo.
 Cando se crea o curso (Crear Grupos), os grupos están vacíos.

@@ -9,7 +9,6 @@ $langKwHelp = "<br/> Clique no botão \'+\' para abrir, botão \'-\' para fechar, 
 $langAdvanced = "Avançado";
 $langSearch = "Procurar";
 $langSearchCrit = "Uma palavra por linha";
-$langStatistics = "Estatísticas";
 $langNoKeywords = "Este curso não possui nenhuma palavra-chave";
 $langKwCacheProblem = "O Cache de palavras-chave não pode ser aberto";
 $langCourseKwds = "Palavra-chave do curso";

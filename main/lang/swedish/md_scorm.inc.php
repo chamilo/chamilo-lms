@@ -22,7 +22,6 @@ $langImport = "Skapa MDEs från manifest";
 $langRemove = "Ta bort MDEs";
 $langAllRemovedFor = "All inmatning borttagen för";
 $langIndex = "Index ord med PhpDig";
-$langStatistics = "Statistik";
 $langTotalMDEs = "Totalt antal Scorm MD inmatningar:";
 $langMainMD = "Öppna huvud MDE";
 $langLines = "rader";

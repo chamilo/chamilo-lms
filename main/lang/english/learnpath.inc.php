@@ -144,7 +144,6 @@ $langPrerequisitesAdded = "Prerequisites to the current step have been added.";
 $langAddEditPrerequisites = "Add/edit prerequisites";
 $langMinimum = "Minimum";
 $langMaximum = "Maximum";
-$langNone = "None";
 $langNoDocuments = "No documents";
 $langNoExercisesAvailable = "No exercises available";
 $langNoLinksAvailable = "No links available";

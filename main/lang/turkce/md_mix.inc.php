@@ -9,7 +9,6 @@ $langKwHelp = "<br/> Click \'+\' button to open, \'-\' button to close, \'++\' b
 $langAdvanced = "Geli&#351;mi&#351;";
 $langSearch = "Ara&#351;t&#305;rma";
 $langSearchCrit = "aç&#305;klay&#305;c&#305; kelimeler için a&#351;a&#287;&#305;daki alan&#305; kullan&#305;n, her sat&#305;ra bir kelime !";
-$langStatistics = "Istatistikler";
 $langNoKeywords = "Bu ders için anahtar kelime yok";
 $langKwCacheProblem = "Anahtar kelime ön belle&#287;i aç&#305;lam&#305;yor.";
 $langCourseKwds = "ders anahtar kelimeleri";

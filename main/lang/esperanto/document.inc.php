@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Translokigi al ";
-$langDoc = "Dokumentoj ";
 $langDownloadFile = "Al&#349;uti sekvantan dosieron al la servilo ";
-$langDownload = "Al&#349;uti ";
 $langCreateDir = "Nova dosierujo ";
-$langName = "Nomo ";
 $langNameDir = "Nomo de nova dosierujo ";
 $langSize = "Grando ";
 $langRename = "&#348;an&#285;i nomon ";
@@ -15,7 +12,6 @@ $langTo = "al ";
 $langNoSpace = "La al&#349;uto malsukcesis. La konservokvoto por via kurso estas superita a&#365; ne estas sufi&#265;a spaco sur via fiksita disko. ";
 $langDownloadEnd = "La al&#349;uto sukcesis.";
 $langFileExists = "Neeblas. <br>Jam ekzistas samnoma dosiero. ";
-$langIn = "en ";
 $langNewDir = "Nomo de nova dosierujo ";
 $langImpossible = "Maleblas ";
 $langAddComment = "Aldoni/ modifi komentarion ";
@@ -26,7 +22,6 @@ $langDirCr = "Dosierujo estas kreita ";
 $langDirMv = "Dosierujo/ dosiero estas translokita ";
 $langComMod = "Komentario estas &#349;an&#285;ita ";
 $langViMod = "La videblo estas &#349;an&#285;ita. ";
-$langGroupManagement = "Grupmastrumado ";
 $langGroupSpace = "Grupspaco ";
 $langGroupSpaceLink = "Spaco de &#265;i-grupo ";
 $langGroupForumLink = "Forumo de &#265;i-grupo ";

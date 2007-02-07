@@ -40,8 +40,6 @@ $langShowAndSubscribeClosed = "Látható / Zárt";
 $langAdminThisUser = "Vissza a felhasználóhoz";
 $langManage = "Portál menedzsment";
 $langEnrollToCourseSuccessful = "Ön regisztrálva van a kurzusra.";
-$langCourses = "kurzusok";
-$langIn = "itt";
 $langSubCat = "al-kategóriák";
 $langUnsubscribeNotAllowed = "Err&#337;l a kurzosról a leiratkozás nem engedélyezet.";
 $langCourseAdminUnsubscribeNotAllowed  = "Ön a kurzus adminisztrátora ennek a kurzusnak!";
@@ -63,6 +61,5 @@ $SubscribingNotAllowed = "A feliratkozás nem engedélyezett";
 $CourseSortingDone = "Kurzusok sorbarendezve";
 $ExistingCourseCategories = "A jelenlegi kurzus kategóriák";
 $YouAreNowUnsubscribed = "Ön sikeresen leiratkozott a kurzusról";
-$AddRight = "Hozzáad";
 $ViewOpenCourses = "Nyitott kurzusok megtekintése";
 ?>

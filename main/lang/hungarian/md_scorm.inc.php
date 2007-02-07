@@ -22,7 +22,6 @@ $langImport = "Metaadatok létrehozása az imsmanifest.xml alapján";
 $langRemove = "Metaadat bejegyzések törlése";
 $langAllRemovedFor = "Az összes bejegyzés törölve ";
 $langIndex = "Szavak indexelése a PhpDig-gel";
-$langStatistics = "Statisztikák";
 $langTotalMDEs = "SCORM Metaadat bejegyzések száma összesen:";
 $langMainMD = "F&#337; metaadat bejegyzés megnyitása";
 $langLines = "sor";

@@ -6,7 +6,6 @@ $MyTasks = "Моите задачи";
 $FavoriteBlogs = "Предпочитани блогове";
 $Navigation = "Навигация";
 $TopTen = "10те върховни блога ";
-$Title = "Име";
 $Subtitle = "Подиме";
 $ThisBlog = "Този блог";
 $NewPost = "Нова статия";

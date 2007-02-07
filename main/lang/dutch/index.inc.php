@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Deze identificatie is niet geldig (verkeerde log-in of wachtwoord). ";
 $langWelcome = "Cursussites hieronder hebben vrije toegang. De andere cursussen vereisen een gebruikersnaam en een wachtwoord. Die kunt u krijgen door een klik op \'Registratie\'. Lesgevers kunnen bij registratie aangeven dat ze cursussites wensen aan te maken.";
-$langUserName = "Gebruikersnaam (\'log-in\')";
 $langPass = "Wachtwoord";
 $langEnter = "Log in";
-$langHelp = "Hoe starten?";
 $langReg = "Registratie";
 $langMenu  = "Menu";
-$langDoc = "Documentatie";
 $langAdvises = "Advies";
 $langCourseDoesntExist = "<b>Opgepast:</b> Deze cursus bestaat niet.";
 $langGetCourseFromOldPortal = "Klik hier om de cursus op te halen uit de oude portaalsite";
@@ -33,8 +30,6 @@ $email = "E-mail";
 $Intranet = "Intranet";
 $Englin = "Engels";
 $langInvalidForSelfRegistration = "Indien u nog niet ingeschreven bent, gelieve het <a href=\"claroline/auth/inscription.php\">registratieformulier</a> in te vullen.";
-$langCourses = "cursussen";
-$langIn = "in";
 $langSubCat = "subcategorieën";
 $langMenuGeneral = "Algemeen";
 $langMenuUser = "Gebruiker";

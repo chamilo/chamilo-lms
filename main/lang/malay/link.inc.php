@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "Pautan";
 $langLinkName = "Nama Pautan";
 $langLinkAdd = "Pautan ditambah";
 $langLinkMod = "Pautan diubahsuai";

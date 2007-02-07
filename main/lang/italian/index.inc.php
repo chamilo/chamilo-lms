@@ -4,13 +4,10 @@ for more information: see languages.txt in the lang folder.
 $langInvalidId = "Identificativo non valido";
 $langWelcome = " corsi qui sotto sono di libero accesso. Gli altri corsi richiedono
 un Nome utente e una Password che si può ottenere cliccando sulla opzione \'iscrizione\'. I docenti e i collaboratori non iscritti possono creare un nuovo corso cliccando sull\'opzione \'iscrizione\' e poi \"Crea un corso\' (se la funzione è anilitata.";
-$langUserName = "Nome Utente";
 $langPass = "Password";
 $langEnter = "Entra";
-$langHelp = "Aiuto";
 $langReg = "Iscrizione";
 $langMenu  = "Menu";
-$langDoc = "Documentazione";
 $langAdvises = "Annunci";
 $langCourseDoesntExist = "<b>Attenzione!</b> Il corso non esiste";
 $langGetCourseFromOldPortal = "clicca qui per prelevare il corso dal vecchio portale";
@@ -34,8 +31,6 @@ $email = "e-mail";
 $Intranet = "Intranet";
 $Englin = "Inglese";
 $langInvalidForSelfRegistration = "Login fallito - se non sei registrato, puoi farlo usando il <a href=claroline/auth/inscription.php>modulo di registrazione</a>";
-$langCourses = "corsi";
-$langIn = "in";
 $langSubCat = "sotto-categorie";
 $langMenuGeneral = "In evidenza";
 $langMenuUser = "Utente";

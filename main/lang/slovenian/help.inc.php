@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Pomoè: Forumi (diskusije)";
-$langClose = "Zapri okno";
 $langForContent = "<p>Forum je pisno, asinhrono orodje za razpravo.
  Medtem ko e-posta omogoèa pogovor ena proti ena, omogoèajo forumi javen ali napol javen
 razgovor.</p><p>V tehniènem smislu potrebujejo teèajniki za uporabo forumov DokeOS le svoj brkljalnik
@@ -360,7 +359,6 @@ $langUserContent = "<p><b>Dodajanje uporabnikov</b></p>
  <p><b>Sledenje in osebna domaèa stran</b></p>
  <p>Dodatno k prikazu seznama uporabnikov in spremembi njihovih pravic, orodje Uporabniki omogoèa prikaz sledenja 
  posameznega teèajnika in zapolnjevanje vsebin domaèe strani teèaja s strani teèajnikov.</p>";
-$langGroupManagement = "Pomoè: Skupine";
 $langGroupContent = "<p><b>Uvod</b></p>
 <p>To orodje omogoèa tvorbo in upravljanje delovnih skupin.
 Ob tvorbi (Tvorba novih skupin), so skupine prazne. Napolnimo jih lahko na veè naèinov:

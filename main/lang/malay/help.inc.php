@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Bantuan Pengguna - Forum";
-$langClose = "Tutup tetingkap";
 $langForContent = "Forum merupakan perbincangan secara bertulis serta merupakan alat bantu perbincangan yang selaras.Ia akan berfungsi apabila email dihantar dan dibalas untuk tujuan berdialog.Forum akan membenarkan sesi dialog secara umum dan juga secara khusus.
 </p><p>Secara teknikalnya, para pelajar hanya memerlukan pelayar web untuk menggunakan forum.</P><p>Bagi pengurus forum pula, anda hanya perlu klik pada butang \'Pentadbir\'. Perbincangan diuruskan dalam sesi yang telah ditetapkan atau sesi yang baru diwujudkan, contohnya seperti berikut:</p><p><b>Kategori > Forum > Topik > Jawapan</b></p>Untuk menstrukturkan perbincangan para pelajar, anda perlu menstrukturkan kategori dan forum terlebih dahulu. Caranya ialah dengan mencipta topik dan jawapan terlebih dahulu. Secara umumnya, forum ini mengandungi kategori \'Public\', contoh forum dan contoh topik.
 </p><p>Perkara utama yang anda perlu lakukan ialah memadam sampel topik dan mengubahsuai nama forum yang pertama. Kemudian anda boleh membina pada Kategori \'Public\' satu forum lain mengikut kumpulan dan <i>themes</i> yang bertujuan untuk disesuaikan dengan keperluan pembelajaran anda.
@@ -135,7 +134,6 @@ $langUserContent = "<b>Peranan</b><p>Ahli tidak mempunyai sebarang peranan yang 
  Lajur <i>Pensyarah</i> bergantung kepada senarai ahli subjek sepenuhnya</p><hr>
 <b>Tambah Ahli</b>
 <p>Untuk menambah ahli ke laman subjek anda, sila isikan lajur yang terlibat dengan senarai ahli yang ingin ditambah dan sahkan lajur tersebut. Pengguna yang ditambah keahlian ke dalam subjek anda akan menerima email yang memaklumkan keahlian mereka berserta ID Pengguna dan katalaluan.</p>";
-$langGroupManagement = "Bantuan Pengguna - Kumpulan";
 $langGroupContent = "<p><b>Pengenalan</b></p>
 <p>Alat bantu ini membenarkan anda membina dan mengurus kumpulan kerja pelajar.
 Pada permulaan (Bina kumpulan), tiada senarai ahli kumpulan. Terdapat pelbagai cara untuk mengisi keahlian kumpulan iaitu:

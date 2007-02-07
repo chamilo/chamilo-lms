@@ -6,13 +6,10 @@ $langWelcome = "Prosto dosegljivi teèaji so spodaj. Ostali teèaji zahtevajo
 uporabniško ime in geslo, ki ga lahko dobiš s klikom na opcijo \'registracija\'. Uèitelji
 lahko tvorijo spletne teèajev s klikom na registracijo in z izbiro
 \'Tvori spletno stran teèaja (uèitelji)\'.";
-$langUserName = "Uporabniško ime";
 $langPass = "Geslo";
 $langEnter = "Vstop";
-$langHelp = "Zaènimo";
 $langReg = "Registracija";
 $langMenu  = "Menu";
-$langDoc = "Dokumentacija";
 $langAdvises = "Nasveti";
 $langCourseDoesntExist = "<b>Opozorilo :</b> Ta teèaj ne obstaja";
 $langGetCourseFromOldPortal = "kliknite tukaj za prenos teèaja iz starega portala";
@@ -36,8 +33,6 @@ $email = "e-pošta";
 $Intranet = "Intranet";
 $Englin = "English";
 $langInvalidForSelfRegistration = "Vstop ni uspel - èe nisi registriran, lahko to storiš s pomoèjo <a href=claroline/auth/inscription.php>registracijskega obrazca</a>";
-$langCourses = "teèaj-ev";
-$langIn = "v";
 $langSubCat = "podkategorijah";
 $langMenuGeneral = "Splošno";
 $langMenuUser = "Uporabnik";

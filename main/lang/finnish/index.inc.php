@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Sisäänkirjautuminen epäonnistui. Jos et ole rekisteröitynyt, niin täytä <a href=\'../auth/inscription.php\'>rekisteröitymislomake</a></font color>";
 $langWelcome = "Tervetuloa.";
-$langUserName = "Käyttäjä";
 $langPass = "Salasana";
 $langEnter = "Sisään";
-$langHelp = "Apua";
 $langReg = "Rekisteröinti";
 $langMenu  = "Menu";
-$langDoc = "Ohjeet(eng)";
 $langCourseDoesntExist = "<b>Varoitus:</b>Tätä kurssia ei enää ole";
 $langOtherCourses = "Kurssit";
 $langSupportForum = "Tukifoorumi(eng)";
@@ -25,7 +22,6 @@ $langHelptwo = "Apua";
 $email = "sähköposti";
 $langInvalidForSelfRegistration = "Kirjautuminen epäonnistui - jos et ole vielä rekisteröitynyt, tee se
 <a href=claroline/auth/inscription.php>rekisteröintilomake</a>";
-$langCourses = "kurssit";
 $langSubCat = "aihealueet";
 $langMenuGeneral = "Yleiset";
 $langMenuUser = "Käyttäjä";

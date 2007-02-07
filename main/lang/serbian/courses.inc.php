@@ -39,8 +39,6 @@ $langShowAndSubscribeClosed = "Vidljivo/Zatvoreno";
 $langAdminThisUser = "Nazad na korisnika";
 $langManage = "Administracija portala";
 $langEnrollToCourseSuccessful = "Prijavljeni ste na kurs";
-$langCourses = "kursevi";
-$langIn = "u";
 $langSubCat = "Podkategorije";
 $langUnsubscribeNotAllowed = "Odjava nije dozvoljena za ovaj kurs.";
 $langCourseAdminUnsubscribeNotAllowed  = "Vi ste administrator ovog kursa.";
@@ -62,5 +60,4 @@ $SubscribingNotAllowed = "Prijava nije dozvoljena";
 $CourseSortingDone = "Sortiranje kursa završeno";
 $ExistingCourseCategories = "Postoje&#263;e kategorija kurseva";
 $YouAreNowUnsubscribed = "Sada ste odjavljeni sa kursa";
-$AddRight = "Dodavanje";
 ?>

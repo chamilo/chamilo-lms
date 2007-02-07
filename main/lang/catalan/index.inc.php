@@ -6,13 +6,10 @@ $langWelcome = "cursos son lliurement accessibles a sota. Altres cursos requerei
 un nom d\'usuari i un password, que pots obtenir en fer click sobre \'Enregistrament\'. Els professors
 poden crear llocs web de cursos en fer click sobre \'Enregistrament\' també, però seleccionant llavors
 \'Professor.";
-$langUserName = "Nom d\'usuari";
 $langPass = "Password";
 $langEnter = "Entrar";
-$langHelp = "Ajuda d\'inici";
 $langReg = "Enregistrar un alumne";
 $langMenu  = "Menú";
-$langDoc = "Documentació";
 $langAdvises = "Advertiments";
 $langCourseDoesntExist = "<b>Atenció :</b> Aquest curs no existeix";
 $langOtherCourses = "Llista de cursos";
@@ -35,8 +32,6 @@ $email = "dsuesta@hotmail.com";
 $Intranet = "Intranet de l\'EUSS";
 $Englin = "Enginyeria en linia";
 $langInvalidForSelfRegistration = "Accès denegat. Si no està registrat ompli el el formulari de registre <a href=claroline/auth/inscription.php>registration form</a>";
-$langCourses = "Cursos";
-$langIn = "en";
 $langSubCat = "subcategories";
 $langMenuGeneral = "General";
 $langMenuUser = "Usuari";

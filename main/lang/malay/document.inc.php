@@ -1,11 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langDoc = "Dokumen";
 $langDownloadFile = "Muatnaik fail ke server";
-$langDownload = "Muatnaik";
 $langCreateDir = "Bina Direktori";
-$langName = "Nama";
 $langNameDir = "Nama direktori baru";
 $langSize = "Saiz";
 $langRename = "Tukar Nama";
@@ -14,7 +11,6 @@ $langTo = "ke";
 $langNoSpace = "Proses muatnaik gagal. Ruang tidak mencukupi";
 $langDownloadEnd = "Proses muatnaik selesai";
 $langFileExists = "Permintaan tidak dapat diproses<br>Nama fail telah wujud.";
-$langIn = "kepada";
 $langNewDir = "Nama direktori baru";
 $langImpossible = "Permintaan tidak dapat diproses";
 $langAddComment = "Tambah/ubahsuai komen ke";
@@ -25,7 +21,6 @@ $langDirCr = "Direktori dibina";
 $langDirMv = "Dokumen berjaya dipindahkan";
 $langComMod = "Komen ditambah/ubahsuai";
 $langViMod = "Ubahsuai mod Paparan";
-$langGroupManagement = "Pengurusan Kumpulan";
 $langGroupSpace = "Ruangan Kumpulan";
 $langGroupSpaceLink = "Ruangan Kumpulan";
 $langGroupForumLink = "Forum Kumpulan";

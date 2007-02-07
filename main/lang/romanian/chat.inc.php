@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "Chat";
 $langOnlineConference  = "Conferinta";
 $langWash  = "Wash";
 $langReset  = "Restart";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "Te rog bifeaza aceasta casuta pentru o int
 $langQuestion = "intrebare";
 $langClearList = "Curata lista";
 $langWhiteBoard = "Tabla alba";
-$langHome = "Acasa";
 $langTextEditorDefault = "<h2>Word processor</h2> Taie si lipeste aici din Ms-Word® apoi editeaza. Participanti vor vedea modificarile live.";
-$langLinks = "Linkuri";
 $langStreaming = "Streaming";
 $langStreamURL = "URL de rulare";
 $langStreamType = "Tipul de rulare";

@@ -10,7 +10,6 @@ $nameTools = "Utgåtte språkvariabler";
 $langTool = "Lenkers metadata";
 $langSorry = "Velg et kurs først";
 $langDenied = "Denne funksjonen er kun tilgjengelig for kursadministrasjonen";
-$langLanguage = "Språk";
 $langIdentifier = "Identifikasjon";
 $langKeyword = "Nøkkelord";
 $langCoverage = "Kategori";
@@ -22,9 +21,6 @@ $langRemove = "Fjern MDE\'er";
 $langAllRemovedFor = "Alle poster slettet for kategori";
 $langRemainingFor = "Utgåtte poster slettet for kategori";
 $langIndex = "Indeksord";
-$langStatistics = "Statistikk";
 $langMainMD = "Åpne hoved-MDE";
 $langOrElse = "Velg en kategori for lenker";
-$langTitle = "Tittel";
-$langDescription = "Beskrivelse";
 ?>

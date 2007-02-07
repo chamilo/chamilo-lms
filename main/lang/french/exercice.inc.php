@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Tests";
 $langExercice = "Test";
 $langActivate = "Activer";
 $langDeactivate = "Désactiver";
@@ -85,6 +84,7 @@ $langScore = "Points";
 $langCorrespondsTo = "Correspond à";
 $langExpectedChoice = "Choix attendu";
 $langYourTotalScore = "Vous avez obtenu un total de";
+$Build = "Constuire";
 $langEvalSet = "Paramètres d\'évaluation";
 $langActive = "actif";
 $langInactive = "inactif";
@@ -105,7 +105,6 @@ $langIntroduction = "Introduction";
 $langTitleAssistant = "Assistant à la création d\'exercices";
 $langQuesList = "Liste des questions";
 $langSaveEx = "Sauvegarder les exercices";
-$langClose = "Fermer";
 $langFinish = "Terminer";
 $langCancel = "Annuler";
 $langQImage = "Question avec image";
@@ -133,7 +132,6 @@ $langImportHotPotatoesQuiz = "Importer les quiz HotPotatoes";
 $langHotPotatoesTests = "Importer des tests HotPotatoes";
 $langDownloadFile = "Envoyer un HotPotatoes (html ou zip) sur le serveur";
 $langDownloadImg = "Envoyer une image sur le serveur";
-$langDownload = "Téléchargement";
 $langDownloadEnd = "Téléchargement terminé.";
 $langNoSpace = "L\'envoi a échoué. Il n\'y a plus assez d\'espace disque dans votre répertoire";
 $langZipNoPhp = "Le fichier zip ne peut pas contenir de fichiers .PHP";
@@ -170,7 +168,6 @@ $langHotspotError = "Veuillez remplir une description et pondération pour chaque
 $langMoreHotspots = "+hotspot";
 $langLessHotspots = "-hotspot";
 $langHotspotZones = "Zones sur image";
-$langDescription = "Description";
 $langNextQuestion = "Question suivante";
 $langCorrectAnswer = "Réponse correcte";
 $langHotspotHit = "Votre réponse était";

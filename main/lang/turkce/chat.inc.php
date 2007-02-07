@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "Sohbet";
 $langOnlineConference  = "Konferans";
 $langWash  = "Temizle";
 $langReset  = "S&#305;f&#305;rla";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "Bu kutuyu sadece ÖNEML&#304; bir soru sora
 $langQuestion = "soru";
 $langClearList = "Listeyi temizle";
 $langWhiteBoard = "Beyaz Tahta";
-$langHome = "AnaSayfa";
 $langTextEditorDefault = "<h2>Kelime &#304;&#351;lemci</h2>MS Word dosyas&#305;ndan kesip buraya yap&#305;&#351;t&#305;r&#305;n ve düzenleyin.Kat&#305;l&#305;mc&#305;lar de&#287;i&#351;iklikleri canl&#305; olarak izleyecektir. ";
-$langLinks = "Ba&#287;lant&#305;lar";
 $langStreaming = "Veri ak&#305;&#351;&#305;";
 $langStreamURL = "Veri ak&#305;&#351;&#305; URL";
 $langStreamType = "Veri ak&#305;&#351; türü";

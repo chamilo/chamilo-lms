@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Esercizi";
 $langExercice = "Esercizio";
 $langActivate = "Attiva";
 $langDeactivate = "Disattiva";
@@ -85,6 +84,7 @@ $langScore = "Punteggio";
 $langCorrespondsTo = "Corrisponde a";
 $langExpectedChoice = "Scelta richiesta";
 $langYourTotalScore = "Il tuo punteggio totale è";
+$Build = "Crea";
 $langEvalSet = "parametri di valutazione";
 $langActive = "attivo";
 $langInactive = "inattivo";
@@ -105,7 +105,6 @@ $langIntroduction = "Introduzione";
 $langTitleAssistant = "Assistente per la creazione di esercizi";
 $langQuesList = "Elenco delle domande";
 $langSaveEx = "Salva gli esercizi";
-$langClose = "chiudi";
 $langFinish = "Concludi";
 $langCancel = "Annulla";
 $langQImage = "Domanda con immagine";
@@ -133,7 +132,6 @@ $langImportHotPotatoesQuiz = "Importa un test da HotPotatoes";
 $langHotPotatoesTests = "Importa test da HotPotatoes";
 $langDownloadFile = "Carica il file HotPotatoes (html o zip) sul server";
 $langDownloadImg = "Carica immagini sul server";
-$langDownload = "Carica";
 $langDownloadEnd = "Il documento html è stato caricato";
 $langNoSpace = "Il caricamento è fallito. Non c\'è abbastanza spazio a disposizione";
 $langZipNoPhp = "Il file .zip non può contenere files .php";
@@ -168,9 +166,8 @@ $langMinHotspot = "Devi creare almeno una (1) zona attiva";
 $langMaxHotspot = "Possono essere create al massimo dodici (12) zone attive";
 $langHotspotError = "Fornisci una descrizione ed un peso per ogni zona attiva.";
 $langMoreHotspots = "+ zone attive";
-$langLessHotspots = "+ zone attive";
+$langLessHotspots = "- zone attive";
 $langHotspotZones = "Zone attive";
-$langDescription = "Descrizione";
 $langNextQuestion = "Prossimo quesito";
 $langCorrectAnswer = "Risposta corretta";
 $langHotspotHit = "La rua risposta è stata ";
@@ -213,4 +210,5 @@ $PlusAnswer = "+ risposte";
 $LessAnswer = "- risposte";
 $YourScore = "Il tuo punteggio";
 $Attempted = "Affrontato";
+$AssignMarks = "Dai un voto";
 ?>

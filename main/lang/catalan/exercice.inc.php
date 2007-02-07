@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Exercicis";
 $langExercice = "Exercici";
 $langActivate = "Activa";
 $langDeactivate = "Desactiva";
@@ -105,7 +104,6 @@ $langIntroduction = "Introducció";
 $langTitleAssistant = "Assitent de creació d\'exercicis";
 $langQuesList = "Llista de preguntes";
 $langSaveEx = "Guarda exercici";
-$langClose = "Tanca";
 $langFinish = "Finalitza";
 $langCancel = "Cancela";
 $langQImage = "Pregunta-imatge";
@@ -131,7 +129,6 @@ $langImportHotPotatoesQuiz = "Importar preguntes HotPotatoes";
 $langHotPotatoesTests = "Importar tests HotPotatoes";
 $langDownloadFile = "Enviar un fitxer HotPotatoes (HTML o ZIP) al servidor";
 $langDownloadImg = "Enviar una imatge al servidor";
-$langDownload = "Enviar";
 $langDownloadEnd = "L\'enviament HTML ha finalitzat.";
 $langNoSpace = "L\'enviament no s\'ha pogut realitzar. No hi ha suficient espai en disc dins la seva carpeta";
 $langZipNoPhp = "El fitxer ZIP no pot contenir fitxers .PHP";

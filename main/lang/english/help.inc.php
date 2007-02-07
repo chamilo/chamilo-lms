@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Help Forums";
-$langClose = "Close window";
 $langForContent = "The forum is a written and asynchronous discussion tool.
  Where email allows one-to-one dialogue, forums allow public or semi-public (group) 
  dialogue.</p><p>Technically speaking, the users need only their
@@ -348,7 +347,6 @@ $langUserContent = "<p><b>Adding users</b></p>
  list.</p>
  <p><b>Tracking and Personal Home Pages</b></p>
  <p>In addition to showing the users list and modifying their rights, the Users tool also shows individual tracking and allows the teacher define headings for personal home pages to be filled-in by students.</p>";
-$langGroupManagement = "Help groups";
 $langGroupContent = "<p><b>Introduction</b></p>
 <p>This tool allows to create and manage workgroups.
 At creation (Create groups), groups are empty. There are

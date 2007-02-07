@@ -24,5 +24,4 @@ $Link = "Link";
 $Forum = "Forum";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
-$Agenda = "Agenda";
 ?>

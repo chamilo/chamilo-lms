@@ -22,7 +22,6 @@ $langImport = "Créer les entrées de Métadonnées depuis un fichier manifeste";
 $langRemove = "Supprimer les entrées de Métadonnées";
 $langAllRemovedFor = "Toutes les entrées ont été supprimées pour";
 $langIndex = "Index avec PhpDig";
-$langStatistics = "Statistiques";
 $langTotalMDEs = "Nombre total d\'entrées de Métadonnées SCORM";
 $langMainMD = "Ouvrir le MDE principal";
 $langLines = "lignes";

@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Mover para";
-$langDoc = "Documentos";
 $langDownloadFile = "Enviar arquivo para o servidor";
-$langDownload = "Enviar";
 $langCreateDir = "Criar um diretório";
-$langName = "Nome";
 $langNameDir = "Nome do novo diretório";
 $langSize = "Tamanho";
 $langRename = "Renomear";
@@ -15,7 +12,6 @@ $langTo = "para";
 $langNoSpace = "O envio falhou. Não há espaço em disco suficiente em seu diretório";
 $langDownloadEnd = "O envio terminou";
 $langFileExists = "Operação impossível.<br>Um arquivo com o mesmo nome já existe.";
-$langIn = "em";
 $langNewDir = "Nome do novo diretório";
 $langImpossible = "Operação impossível";
 $langAddComment = "Adicionar/modificar um comentário para";
@@ -26,7 +22,6 @@ $langDirCr = "Diretório criado";
 $langDirMv = "Elemento movido";
 $langComMod = "Comentário modificado";
 $langViMod = "Visibilidade modificada";
-$langGroupManagement = "Gerenciamento dos grupos";
 $langGroupSpace = "Área do grupo";
 $langGroupSpaceLink = "Área do grupo";
 $langGroupForumLink = "Fórum do grupo";

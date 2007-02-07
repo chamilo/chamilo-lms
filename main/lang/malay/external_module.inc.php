@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Tambah Pautan ke Laman Subjek";
 $langSubTitle = "Tambah Pautan pada Muka Utama Laman Subjek anda,sila nyatakan URL dan nama Pautan.";
-$langHome = "Kembali ke Laman Subjek";
-$langName = "Nama Pautan";
-$langLink = "URL";
 $langAddPage            = "Tambah <i>Page</i> ke Laman Subjek";
 $langSendPage           = "<i>Page</i> yang ingin ditambah";
 $langCouldNot           = "Fail tidak dapat dimuatnaik";

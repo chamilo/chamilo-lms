@@ -22,7 +22,6 @@ $langImport = "Criar MDEs apartir do manifesto";
 $langRemove = "Remover MDEs";
 $langAllRemovedFor = "Todas as entradas removidas para";
 $langIndex = "Indexar Palavras com o PhpDig";
-$langStatistics = "Estatísticas";
 $langTotalMDEs = "Número total de entradas MD Scorm:";
 $langMainMD = "Abrir MDE Principal";
 $langLines = "linhas";

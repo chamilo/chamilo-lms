@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Sikertelen belépés - helytelen felhasználói név vagy jelszó.";
 $langWelcome = "Az alábbi kurzusok szabadon elérhet&#337;ek. Más kurzusokhoz felhasználónév és jelszó szükséges, amit a \'regisztráció\'-ra kattintva lehet megszerezni. Oktatók  regisztrációk után is létrehozhatnak kurzusokat, amennyiben az oktató számára a \"kurzus létrehozás\" funkció engedélyezve van.";
-$langUserName = "Felhasználói név";
 $langPass = "Jelszó";
 $langEnter = "Belépés";
-$langHelp = "Indulás";
 $langReg = "Regisztráció";
 $langMenu  = "Menü";
-$langDoc = "Dokumentáció";
 $langAdvises = "Tanácsok";
 $langCourseDoesntExist = "<b>Figyelem :</b> Ez a kurzus nem létezik";
 $langGetCourseFromOldPortal = "kattintson ide, ha ezt a kurzust a Claroline 1.4.2-bõl akarja betölteni";
@@ -33,8 +30,6 @@ $email = "e-mail";
 $Intranet = "Intranet";
 $Englin = "Angol";
 $langInvalidForSelfRegistration = "Belépés sikertelen - ha még nem regisztrálta magát, megteheti a <a href=claroline/auth/inscription.php>regisztrációs &#369;rlap</a> kitöltésével.";
-$langCourses = "kurzusok";
-$langIn = "itt:";
 $langSubCat = "al-kategóriák";
 $langMenuGeneral = "Általános";
 $langMenuUser = "Felhasználó";

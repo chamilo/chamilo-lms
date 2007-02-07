@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Testy";
 $langExercice = "Test";
 $langActivate = "W&#322;&#261;czone";
 $langDeactivate = "Wy&#322;&#261;czone";
@@ -94,7 +93,6 @@ $langIntroduction = "Wprowadzenie";
 $langTitleAssistant = "Asystent utworzonych &#263;wicze&#324;";
 $langQuesList = "lista pyta&#324;";
 $langSaveEx = "zapisz &#263;wiczenia";
-$langClose = "zamknij";
 $langFinish = "Zako&#324;cz";
 $langCancel = "Anuluj";
 $langQImage = "Pytania z obrazkiem";
@@ -108,7 +106,6 @@ $langImportHotPotatoesQuiz = "Importuj Testy (HotPotatoes)";
 $langHotPotatoesTests = "Importuj Testy (HotPotatoes)";
 $langDownloadFile = "Za&#322;aduj HotPotatoes w pliku html lub zip do serwera";
 $langDownloadImg = "Za&#322;&#261;duj obraz do serwera";
-$langDownload = "Za&#322;aduj";
 $langDownloadEnd = "&#321;adowanie (upload) html zako&#324;czone.";
 $langNoSpace = "&#321;adowanie zoko&#324;czone niepowodzeniem. Brak miejsca w twoim katalogu.";
 $langZipNoPhp = "Archiwa zip nie mog&#261; zaiera&#263; plików PHP.";

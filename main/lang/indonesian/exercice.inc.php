@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Latihan-Latihan";
 $langExercice = "Latihan";
 $langActivate = "Aktifkan";
 $langDeactivate = "Non-aktifkan";
@@ -105,7 +104,6 @@ $langIntroduction = "Pendahuluan";
 $langTitleAssistant = "Asisten untuk membuat latihan";
 $langQuesList = "daftar pertanyaan";
 $langSaveEx = "simpan latihan";
-$langClose = "tutup";
 $langFinish = "Selesai";
 $langCancel = "Cancel";
 $langQImage = "Pertanyaan dengan sebuah gambar";
@@ -133,7 +131,6 @@ $langImportHotPotatoesQuiz = "Import HotPotatoes Tests";
 $langHotPotatoesTests = "Import HotPotatoes Tests";
 $langDownloadFile = "Upload HotPotatoes (html atau zip) ke server";
 $langDownloadImg = "Upload file gambar ke server";
-$langDownload = "Upload";
 $langDownloadEnd = "Upload html selesai";
 $langNoSpace = "Upload gagal.  Tempat tidak cukup di direktory anda";
 $langZipNoPhp = "File zip tidak dapat berisi file .PHP";
@@ -170,7 +167,6 @@ $langHotspotError = "Silahkan isi deskripsi dan bobot tiap hotspot.";
 $langMoreHotspots = "+hotspot";
 $langLessHotspots = "-hotspot";
 $langHotspotZones = "Hotspot";
-$langDescription = "Deskripsi";
 $langNextQuestion = "Pertanyaan berikutnya";
 $langCorrectAnswer = "Jawaban benar";
 $langHotspotHit = "Jawaban anda adalah";

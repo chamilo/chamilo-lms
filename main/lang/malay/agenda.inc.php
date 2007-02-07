@@ -10,7 +10,6 @@ $Month = "Month";
 $Year = "Year";
 $Hour = "Hour";
 $Minutes = "Minutes";
-$Title = "Title";
 $Detail = "Detail";
 $EditSuccess = "The agenda item has been edited";
 $AddSuccess = "Agenda item added";

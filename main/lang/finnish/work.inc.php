@@ -11,7 +11,6 @@ $langDocDel = "Tehtävä on poistettu";
 $langTitleWork = "Tehtävän otsikko";
 $langAuthors = "Tekijät";
 $langDelList = "Poista koko lista";
-$langDocument = "Dokumentit";
 $langWorkDelete = "Poista";
 $langWorkModify = "Muokkaa";
 $langWorkConfirmDelete = "Haluatko varmasti poistaa tämän";

@@ -22,7 +22,6 @@ $langImport = "Crea MDE dal manifest";
 $langRemove = "Elimina gli MDE";
 $langAllRemovedFor = "Tutte le voci sono state eliminate";
 $langIndex = "Indicizza le parole con PhpDig";
-$langStatistics = "Statistica";
 $langTotalMDEs = "Numero totale di voci metadata dello Scorm";
 $langMainMD = "Apri ik MDE principale";
 $langLines = "linee";

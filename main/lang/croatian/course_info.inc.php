@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Postavke kolegija";
 $langModifDone = "Podatci su izmijenjeni";
-$langHome = "Povratak na po&#269;etnu stranicu";
 $langCode = "Šifra kolegija";
 $langDelCourse = "Izbriši cijeli website kolegija?";
 $langProfessors = "Predava&#269;i";
@@ -14,7 +13,6 @@ $langUnsubscription = "Ispiši";
 $langPrivOpen = "Privatni pristup, slobodna registracija";
 $langPrivate = "Privatni pristup (prijava ograni&#269;ena na osobe iz   <a href=../user/user.php>Popis korisnika</a>)";
 $langForbidden = "Zabranjeno";
-$langLanguage = "Jezik";
 $langConfTip = "U standardnoj postavi po&#269;etni i jedini korisnik je onaj koji je otvorio web stranice kolegija.
 Najjednostavniji na&#269;in je da otvorite stranice na tjedan dana i dopustite studentima da se sami prijave, a potom zaklju&#269;ate pristup
 i pregledate popis zbog mogu&#263;ih nezvanih korisnika.";
@@ -22,9 +20,6 @@ $langOpenToTheWorld = "Otvoreno - pristup omogu&#263;en svima";
 $OpenToThePlatform = "Otvoreno - pristup omogu&#263;en korisnicima registriranima na platformu";
 $langOpenToThePlatform = "Otvoreno - pristup omogu&#263;en korisnicima registriranima na platformu";
 $langTipLang  = "Ovaj &#263;e jezik vrijediti za sve posjetioce web stranica kolegija";
-$Agenda = "Raspored";
-$langLink = "Poveznice";
-$langDocument = "Dokumenti";
 $langVid = "Video";
 $langWork = "Studentski radovi";
 $langProgramMenu = "Program kolegija";
@@ -46,7 +41,6 @@ $langBackupCourse = "Pohrani kolegij";
 $langModifGroups = "Grupe";
 $langProfessor = "Predava&#269;";
 $langGroups  = "Skupine";
-$langChat  = "Rasprava";
 $langDescriptionCours   = "Opis kolegija";
 $langArchiveCourse  = "Pri&#269;uvni primjerak kolegija ";
 $langRestoreCourse  = "Obnovi kolegij";
@@ -72,7 +66,6 @@ $langLastEdit  = "Posljednje izmjene";
 $langLastVisit  = "Posljednja posjeta";
 $langSubscription = "Upis";
 $langCourseAccess = "Pristup kolegiju";
-$langDownload = "Prijenos";
 $langConfirmBackup = "Želite li doista izraditi pri&#269;uvni primjerak kolegija?";
 $langCreateSite = "Izradi kolegij";
 $langRestoreDescription = "Kolegij je pohranjen u jednoj od datoteka koje možete odabrati niže.<br><br> Kada kliknete na \"Obnovi\", pohranjena datoteka &#263;e biti dekomprimirana i kolegij &#263;e biti obnovljen.";
@@ -86,7 +79,6 @@ $langBackH = "natrag na po&#269;etnu stranicu";
 $langOtherCategory = "Druge kategorije";
 $langAllowedToUnsubscribe = "Korisnicima je omogu&#263;eno ispisati se s kolegija";
 $langNotAllowedToUnsubscribe = "Korisnicima nije omogu&#263;en ispis s kolegija";
-$langDescription = "Opis";
 $langCourseVisibilityClosed = "Potpuno zatvoreno; kolegiju pristup ima samo njegov nadzornik.";
 $CourseVisibilityClosed = "Zatvoreno - kolegiju nema pristupa";
 ?>

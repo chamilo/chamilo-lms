@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Prijavljivanje nije uspelo – pogrešno korisni&#269;ko ime ili lozinka";
 $langWelcome = "kursevi koji su navedeni dole su besplatni. Za ostale kurseve morate da imate korisni&#269;ko ime i lozinku, koju možete da dobijete klikom na \'registracija\'. Predava&#269;i mogu da kreiraju okruženje kursa klikom na registracija tako&#273;e, ali selektovanjem posle \'Kreiraj okruženje kursa\'. ";
-$langUserName = "Korisni&#269;ko ime";
 $langPass = "Lozinka";
 $langEnter = "U&#273;i";
-$langHelp = "Pomo&#263;";
 $langReg = "Registracija";
 $langMenu  = "Meni";
-$langDoc = "Dokumentacija";
 $langAdvises = "Saveti";
 $langCourseDoesntExist = "<b>Upozorenje:</b> Ovaj kurs ne postoji";
 $langGetCourseFromOldPortal = "kliknite ovde da dobijete ovaj kurs sa vašeg starog portala";
@@ -33,8 +30,6 @@ $email = "e-mail";
 $Intranet = "Intranet";
 $Englin = "engleski";
 $langInvalidForSelfRegistration = "Prijava nije uspela – ako se niste registrovali to možete u&#269;initi preko <a href=claroline/auth/inscription.php>Formulara za prijavu</a>";
-$langCourses = "kursevi";
-$langIn = "u";
 $langSubCat = "podkategorije";
 $langMenuGeneral = "Opšte";
 $langMenuUser = "Korisnik";

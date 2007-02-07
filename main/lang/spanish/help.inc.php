@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Ayuda: Foros";
-$langClose = "Cerrar ventana";
 $langForContent = "<p>  
 Un foro es una herramienta de debate asíncrona. Mientras que un correo electrónico permite un diálogo privado entre dos personas, en los foros este diálogo será público o semipúblico y podrán intervenir más personas. 
 </p><p>
@@ -283,7 +282,6 @@ $langUserContent = "<p><b>Añadir usuarios</b></p><p>La opción \'Inscribir usuari
 <b><p>Seguimiento y áreas personales de los usuarios.</b></p>
 
 <p>Además de ofrecer un listado de usuarios y modificar sus permisos, la herramineta \'Usuarios\' también ofrece un seguimiento individual y permite al profesor definir cabeceras adicionales a la ficha de cada estudiante, para que éstos las rellenen. Estos datos adicionales sólo estarán vinculados al curso en cuestión.</p>";
-$langGroupManagement = "Ayuda: Grupos";
 $langGroupContent = "<p><b>Introducción</b></p>
 <p>Esta herramienta permite crear y gestionar grupos dentro de su curso.
 Cuando se crea el curso (Crear Grupos), los grupos están vacios. Hay muchas formas de rellenarlos:

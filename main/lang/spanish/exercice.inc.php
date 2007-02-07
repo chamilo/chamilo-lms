@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Exámenes";
 $langExercice = "Examen";
 $langActivate = "Activar";
 $langDeactivate = "Desactivar";
@@ -85,6 +84,7 @@ $langScore = "Puntuación";
 $langCorrespondsTo = "Correspondencias con";
 $langExpectedChoice = "Elección esperada";
 $langYourTotalScore = "¡ Su puntuación final es";
+$Build = "Construir";
 $langEvalSet = "Parámetros de evaluación";
 $langActive = "activo";
 $langInactive = "inactivo";
@@ -105,7 +105,6 @@ $langIntroduction = "Introducción";
 $langTitleAssistant = "Asistente para la creación de exámenes";
 $langQuesList = "Lista de preguntas";
 $langSaveEx = "guardar exámenes";
-$langClose = "cerrar";
 $langFinish = "Terminar";
 $langCancel = "Cancelar";
 $langQImage = "Pregunta con una imagen";
@@ -133,7 +132,6 @@ $langImportHotPotatoesQuiz = "Importar exámenes HotPotatoes";
 $langHotPotatoesTests = "Importar exámenes HotPotatoes";
 $langDownloadFile = "Enviar un archivo HotPotatoes (html o zip) al servidor";
 $langDownloadImg = "Enviar una imagen al servidor";
-$langDownload = "Enviar";
 $langDownloadEnd = "El envío html ha finalizado.";
 $langNoSpace = "El envío ha fallado. No hay suficiente espacio en el disco en su directorio";
 $langZipNoPhp = "El archivo ZIP no puede contener archivos .PHP";
@@ -171,7 +169,6 @@ $langHotspotError = "Por favor, proporcione una descripción y un valor a cada ho
 $langMoreHotspots = "+hotspot";
 $langLessHotspots = "-hotspot";
 $langHotspotZones = "Hotspots";
-$langDescription = "Descripción";
 $langNextQuestion = "Siguiente pregunta";
 $langCorrectAnswer = "Respuesta correcta";
 $langHotspotHit = "Su respuesta era";
@@ -207,7 +204,12 @@ $MatchesTo = "Corresponde a";
 $CorrectTest = "Corregir este ejercicio";
 $ViewTest = "Ver";
 $State = "Estado";
+$NotAttempted = "Sin intentar";
 $AddElem = "+ elemento";
 $DelElem = "- elemento";
+$PlusAnswer = "+ respuesta";
+$LessAnswer = "- respuesta";
 $YourScore = "Su puntuación";
+$Attempted = "Intentado";
+$AssignMarks = "Dar una nota";
 ?>

@@ -7,13 +7,10 @@ $langWelcome = "cursos listados abaixo son de acceso libre. Os outros
 cursos requiren un nome de usuario e unha clave de acceso, que poden obterse
  mediante unha \'inscripción\'. Os profesores e axudantes
 poden crear cursos mediante \'inscripción\'.";
-$langUserName = "Nome de usuario";
 $langPass = "Clave de acceso";
 $langEnter = "Entrar";
-$langHelp = "Axuda";
 $langReg = "Inscrición";
 $langMenu  = "Menú";
-$langDoc = "Documentación";
 $langAdvises = "Suxestións";
 $langCourseDoesntExist = "<b>Aviso :</b> Este curso non existe";
 $langGetCourseFromOldPortal = "pulse aquí para acceder a este curso desde o seu antigo portal";
@@ -37,8 +34,6 @@ $email = "correo electrónico";
 $Intranet = "Intranet";
 $Englin = "Inglés";
 $langInvalidForSelfRegistration = "Fallou a entrada - se vostede non está rexistrado, pode facelo cubrindo o  <a href=claroline/auth/inscription.php>formulario de rexistro</a>";
-$langCourses = "cursos";
-$langIn = "en";
 $langSubCat = "subcategorías";
 $langMenuGeneral = "Xeral";
 $langMenuUser = "Usuario";

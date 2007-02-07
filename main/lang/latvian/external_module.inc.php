@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Nor&#257;de uz Interneta lapu";
 $langSubTitle = "Pievieno nor&#257;di uz k&#257;du konkr&#275;tu lapu no J&#363;su kursa apraksta lapas. Lai to izdar&#299;tu, nokop&#275;jiet URL p&#257;rl&#363;kprogrammas adreses lauk&#257; un ievietojiet to \"Hipersaite\" lauci&#326;&#257; zem&#257;k.";
-$langHome = "Uz s&#257;kumlapu";
-$langName = "Nosaukums";
-$langLink = "Hipersaite";
 $langAddPage            = "Pievienot lapu";
 $langSendPage           = "Lapu, kas j&#257;augšupl&#257;d&#275;";
 $langCouldNot           = "Failu nebija iesp&#275;jams augšupl&#257;d&#275;t";

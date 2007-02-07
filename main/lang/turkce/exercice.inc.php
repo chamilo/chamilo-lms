@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Alýþtýrma";
 $langExercice = "Alýþtýrma";
 $langActivate = "Etkinleþtir";
 $langDeactivate = "Etkinliðini kaldýr";
@@ -105,7 +104,6 @@ $langIntroduction = "Tanýtým";
 $langTitleAssistant = "Alýþtýrma hazýrlama yardýmcýsý";
 $langQuesList = "Soru listesi";
 $langSaveEx = "Alýþtýrmayý kaydet";
-$langClose = "Kapat";
 $langFinish = "Bitir";
 $langCancel = "Ýptal";
 $langQImage = "Resim-soru";
@@ -133,7 +131,6 @@ $langImportHotPotatoesQuiz = "HotPotatoes Testi gönder";
 $langHotPotatoesTests = "HotPotatoes Testi gönder";
 $langDownloadFile = "HotPotatoes (html veya zip) dosyas&#305;n&#305; sunucuya gönder";
 $langDownloadImg = "Resim dosyas&#305;n&#305; sunucuya gönder";
-$langDownload = "Gönder";
 $langDownloadEnd = "Html gönderimi tamamland&#305;";
 $langNoSpace = "Gönderim ba&#351;ar&#305;s&#305;z, klasörde bo&#351; yer yok";
 $langZipNoPhp = "Zip dosyas&#305;nda .php dosyas&#305; bulunmamal&#305;.";

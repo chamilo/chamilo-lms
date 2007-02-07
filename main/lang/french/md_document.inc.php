@@ -10,7 +10,6 @@ $langTool = "Métadonnées document";
 $langSorry = "Choisissez d\'abord un cours";
 $langNoScript = "Script n\'est pas disponible dans le navigateur, la partie ci-dessous de l\'écran ne marchera pas...";
 $langPressAgain = "Poussez de nouveau sur \'Enregistrer\'...";
-$langLanguage = "Langue";
 $langLanguageTip = "la langue dans laquelle cet objet a été construit";
 $langIdentifier = "Identification";
 $langIdentifierTip = "identification unique pour cet objet, lettres, chiffres, _-.()\'!*";
@@ -53,8 +52,6 @@ $langConfirmDelete = "Enlever *vraiment* toutes les métadonnées?";
 $langCourseKwds = "Ce document contient les mots clé du cours";
 $langSearch = "Cherchez";
 $langSearchCrit = "Un mot par ligne!";
-$langDescription = "Description";
-$langTitle = "Titre";
 $langStatuses = ":draft:brouillon,, 
      final:version finale,, 
      revised:version révisée,, 

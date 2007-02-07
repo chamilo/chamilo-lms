@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Search = "Sök";
 $FavoriteBlogs = "Mina favorit bloggar";
 $Navigation = "Navigation";
-$Title = "Titel";
 $ThisBlog = "Denna blog";
 $NewPost = "Ny artikel";
 $blog_management = "Blog hantering";

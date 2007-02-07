@@ -5,7 +5,6 @@ $langLineNumber = "Bilangan baris";
 $langLine = "baris";
 $langLines = "baris";
 $langLineOrLines = "baris";
-$langRemove = "Padam";
 $langMoveUp = "Ke atas";
 $langMoveDown = "Ke bawah";
 $langAddNewHeading = "Tambah Tajuk Utama baru";

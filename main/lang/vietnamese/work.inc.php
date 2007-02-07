@@ -11,7 +11,6 @@ $langDocDel = "Bài đã xoá";
 $langTitleWork = "Tên bài";
 $langAuthors = "Người gửi";
 $langDelList = "Xoá tất cả";
-$langDocument = "Tài liệu";
 $langWorkDelete = "Xoá";
 $langWorkModify = "Sửa";
 $langWorkConfirmDelete = "Bạn có chắc muốn xoá bài nàyr";

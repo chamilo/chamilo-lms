@@ -11,7 +11,6 @@ $langDocDel = "Fisierul este sters.";
 $langTitleWork = "Numele fisierului";
 $langAuthors = "Autor";
 $langDelList = "Sterge toata lista";
-$langDocument = "Document";
 $langWorkDelete = "Sterge";
 $langWorkModify = "Modifica";
 $langWorkConfirmDelete = "Sigur sterg acest fisier ?";

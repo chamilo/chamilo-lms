@@ -39,8 +39,6 @@ $langShowAndSubscribeClosed = "เห็น/ปิด";
 $langAdminThisUser = "ไปที่ผู้ใช้";
 $langManage = "ศูนย์การบริหารจัดการ";
 $langEnrollToCourseSuccessful = "คุณได้ลงทะเบียนวิชาแล้ว";
-$langCourses = "รายวิชา";
-$langIn = "ใน";
 $langSubCat = "หัวข้อย่อยในรายการ";
 $langUnsubscribeNotAllowed = "ไม่อนุญาตให้ถอนการสมัครในวิชานี้";
 $langCourseAdminUnsubscribeNotAllowed  = "คุณคือเจ้าของวิชานี้";
@@ -62,6 +60,5 @@ $SubscribingNotAllowed = "ไม่อนุญาตให้สมัคร";
 $CourseSortingDone = "แยกประเภทวิชาให้แล้ว ";
 $ExistingCourseCategories = "ประเภทวิชาที่มี";
 $YouAreNowUnsubscribed = "ได้ถอนวิชาให้คุณเรียบร้อยแล้ว";
-$AddRight = "เพิ่ม";
 $ViewOpenCourses = "ดูวิชาที่เปิดเรียน";
 ?>

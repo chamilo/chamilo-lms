@@ -40,8 +40,6 @@ $langShowAndSubscribeClosed = "Videble / Ferme ";
 $langAdminThisUser = "Reiru al uzulo ";
 $langManage = "Portalmastrumado ";
 $langEnrollToCourseSuccessful = "Vi estas aligita al la kurso";
-$langCourses = "kursoj";
-$langIn = "en ";
 $langSubCat = "sub-kategorioj ";
 $langUnsubscribeNotAllowed = "Malali&#285;o ne estas permesita por &#265;i-kurso ";
 $langCourseAdminUnsubscribeNotAllowed  = "Vi estas mastrumanto de &#265;i-kurso ";
@@ -63,6 +61,5 @@ $SubscribingNotAllowed = "Ali&#285;o ne permesita ";
 $CourseSortingDone = "La kurso estas reara&#285;ita ";
 $ExistingCourseCategories = "Jam ekzistantaj kurskategorioj ";
 $YouAreNowUnsubscribed = "Vi nun malali&#285;is al la kurso ";
-$AddRight = "Aldoni";
 $ViewOpenCourses = "Pririgardi malfermajn kursojn";
 ?>

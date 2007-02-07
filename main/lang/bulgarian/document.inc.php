@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Преместване към";
-$langDoc = "Документи";
 $langDownloadFile = "Качи файл на сървъра";
-$langDownload = "Качи";
 $langCreateDir = "Създай директория";
-$langName = "Име";
 $langNameDir = "Име на новата директория";
 $langSize = "Размер";
 $langRename = "Промени името";
@@ -15,7 +12,6 @@ $langTo = "в";
 $langNoSpace = "Качването неуспешно. Няма достатъчно свободно място в директорията";
 $langDownloadEnd = "Качването приключи";
 $langFileExists = "Операцията невъзможна.<br>Съществува файл със същото име.";
-$langIn = "в";
 $langNewDir = "Име на новата директория";
 $langImpossible = "Операцията невъзможна";
 $langAddComment = "Довави/промени коментар за";
@@ -26,7 +22,6 @@ $langDirCr = "Директорията е създадена";
 $langDirMv = "Елементът е преместен";
 $langComMod = "Коментарът е променен";
 $langViMod = "Видимостта променена";
-$langGroupManagement = "Управление на групата";
 $langGroupSpace = "Group area";
 $langGroupSpaceLink = "Group area";
 $langGroupForumLink = "Форум на групата";

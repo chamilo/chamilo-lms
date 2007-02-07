@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "Chat";
 $langOnlineConference  = "Konference";
 $langWash  = "Ryd";
 $langReset  = "Nulstil";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "Klik kun i denne boks for at stille et vig
 $langQuestion = "spørgsmål";
 $langClearList = "Ryd listen";
 $langWhiteBoard = "Opslagstavle";
-$langHome = "Hjem";
 $langTextEditorDefault = "<h2>Tekstbehandling</h2>Klip og indsæt her fra MS Word® og rediger derefter. De deltagende vil se dine ændringer live.";
-$langLinks = "Links";
 $langStreaming = "Streaming";
 $langStreamURL = "Stream URL";
 $langStreamType = "Stream type";

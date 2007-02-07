@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Harjoitukset";
 $langExercice = "Harjoitus";
 $langActivate = "Tee toimiva";
 $langDeactivate = "Piilota";
@@ -92,7 +91,6 @@ $langRecAns = "Tallenna vastaus";
 $langIntroduction = "Esittely";
 $langQuesList = "kysymyslista";
 $langSaveEx = "tallenna harjoitus";
-$langClose = "sulje";
 $langFinish = "Lopeta";
 $langCancel = "Peruuta";
 $langQImage = "Kysymys kuvan kanssa";
@@ -118,7 +116,6 @@ $langImportHotPotatoesQuiz = "Tuo harjoitus HotPotatoes -ohjelmasta";
 $langHotPotatoesTests = "Tuo harjoitus HotPotatoes -ohjelmasta";
 $langDownloadFile = "Tallenna HotPotaoes -tiedostot (html tai zip) palvelimelle";
 $langDownloadImg = "Tallenna kuvatiedosto palvelimelle";
-$langDownload = "Tallenna";
 $langDownloadEnd = "Html -tiedosto on tallennettu.";
 $langNoSpace = "Tallenneus epäonnistui. Levytilasi palvelimella on täynnä.";
 $langZipNoPhp = "Zip -tiedosto ei voi sisältää .PHP -tiedostoja";

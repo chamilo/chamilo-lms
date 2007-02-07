@@ -9,7 +9,6 @@ $langKwHelp = "<br/>Klik på \'+\' knappen for at åbne, \'-\' knappen for a lukke
 $langAdvanced = "Avanceret";
 $langSearch = "Søg";
 $langSearchCrit = "Brug området nedenfor til beskrivende ord, et ord per linie!";
-$langStatistics = "Statistikker";
 $langNoKeywords = "Dette kursus har ingen nøgleord";
 $langKwCacheProblem = "Nøgleord cache kan ikke åbnes";
 $langCourseKwds = "kursus nøgleord";

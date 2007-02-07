@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "Hipersaites";
 $langLinkName = "Hipersaites nosaukums";
 $langLinkAdd = "Pievienot hipersaiti";
 $langLinkAdded = "Hipersaite tika pievienota.";

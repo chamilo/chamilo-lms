@@ -11,7 +11,6 @@ $langDocDel = "文件已删除";
 $langTitleWork = "文件标题";
 $langAuthors = "作者";
 $langDelList = "删除整个列表";
-$langDocument = "文档";
 $langWorkDelete = "删除";
 $langWorkModify = "修改";
 $langWorkConfirmDelete = "你真的想要删除这个文件";

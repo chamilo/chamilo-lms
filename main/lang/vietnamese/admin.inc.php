@@ -11,7 +11,6 @@ $langMissing    = "missing";
 $langExist      = "exists";
 $DisplayTeacherInCourselistTitle = "Tên giáo viên trên tiêu đề khóa học";
 $DisplayTeacherInCourselistComment = "Tên Giáo viên trong chú thích danh sách khóa học";
-$langLanguage = "Language";
 $langAddAdminInApache  = "Thêm người quản trịr";
 $langAddFaculties  = "Thêm bộ môn";
 $langSearchACourse   = "Tìm giáo trình";

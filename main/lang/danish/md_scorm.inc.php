@@ -22,7 +22,6 @@ $langImport = "Opret MDE\'er ud fra manifest";
 $langRemove = "Slet MDE\'er";
 $langAllRemovedFor = "Alle posteringer fjernet for";
 $langIndex = "Indekser Ord med PhpDig";
-$langStatistics = "Statistikker";
 $langTotalMDEs = "Totalt antal Scorm MD posteringer:";
 $langMainMD = "Åbn primær MDE";
 $langLines = "linier";

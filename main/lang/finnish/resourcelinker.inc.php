@@ -24,7 +24,6 @@ $Link = "Link";
 $Forum = "Forum";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
-$Agenda = "Agenda";
 $ExportableCourseResources = "Siirrettäviä kurssimateriaaleja";
 $DokeosRelatedCourseMaterial = "Dokeokseen liittyviä kurssimateriaaleja";
 $LinkTarget = "Linkin kohde";

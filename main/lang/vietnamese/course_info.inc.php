@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Các xác lập của khoá học";
 $langModifDone = "Thông tin đã được hiệu chỉnh";
-$langHome = "Trở về trang chủ";
 $langCode = "Mã khoá học";
 $langDelCourse = "Xoá toàn bộ website của khoá học";
 $langProfessors = "Giáo viên";
@@ -13,14 +12,10 @@ $langPublic = "Truy cập không cần login";
 $langPrivOpen = "Truy cập có điều kiện hạn chế, đăng ký tự do";
 $langPrivate = "Truy cập chỉ với <a href=../user/user.php>danh sách user</a>)";
 $langForbidden = "Không có quyền";
-$langLanguage = "Ngôn ngữ";
 $langConfTip = "By default, you course is only accessible to you as its only registered user. If you want some confidentiality,
 the simplest way is to open registration during
 one week, ask the students to register themselves, then close registration and check for possible intruders in the user list.";
 $langTipLang  = "This language will be valid for every visitor of your course\'s website.";
-$Agenda = "Agenda (Lịch công tác)";
-$langLink = "Liên kết";
-$langDocument = "Tài liệu";
 $langVid = "Video";
 $langWork = "Bài viết của học sinh";
 $langProgramMenu = "Chương trình khoá học";
@@ -42,7 +37,6 @@ $langBackupCourse = "Archive this course";
 $langModifGroups = "Nhóm";
 $langProfessor = "Giáo viên";
 $langGroups  = "Nhóm";
-$langChat  = "Thảo luận";
 $langDescriptionCours   = "Mô tả khoá học";
 $langArchiveCourse  = "Course backup";
 $langRestoreCourse  = "Restore a course";
@@ -68,7 +62,6 @@ $langLastEdit  = "Last edit";
 $langLastVisit  = "Last visit";
 $langSubscription = "Subscription";
 $langCourseAccess = "Course access";
-$langDownload = "Download";
 $langConfirmBackup = "Do you really want to backup the course";
 $langCreateSite = "Tạo một Website cho khoá học mới ";
 $langRestoreDescription = "The course is in an archive file which you can select below.<br><br>

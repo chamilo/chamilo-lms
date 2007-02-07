@@ -16,7 +16,6 @@ Alt-click Parola chiave nega la parola chiave
 $langAdvanced = "Avanzata";
 $langSearch = "Cerca";
 $langSearchCrit = "Usa l\'area sottostante per la descrizione, usando una parola per linea.";
-$langStatistics = "Statistiche";
 $langNoKeywords = "Il corso non contiene Parole chiave";
 $langKwCacheProblem = "Non è possibile aprire la cache delle parole chiave";
 $langCourseKwds = "parole chiave del corso";

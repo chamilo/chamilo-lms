@@ -11,7 +11,6 @@ $langDocDel = "O trabalho foi apagado";
 $langTitleWork = "Título do trabalho";
 $langAuthors = "Autor";
 $langDelList = "Apagar toda a lista";
-$langDocument = "Documento";
 $langWorkDelete = "Apagar";
 $langWorkModify = "Alterar";
 $langWorkConfirmDelete = "Tem a certeza que quer apagar este documento?";

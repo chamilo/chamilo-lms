@@ -6,7 +6,6 @@ $langExplanation = "La pagina deve essere in formato HTML (ad es. \"my_page.htm\
 Se desiderate inviare documenti in formato diverso (PDF, Word, Power Point, Video, ecc.) utilizzate lo strumento <a href=../document/document.php>Documenti</a>";
 $langTooBig = "Non è stato selezionato nessun documento oppure la dimensione è eccessiva";
 $langCouldNot = "Non è stato possibile inviare il documento";
-$langExercices = "Esercizi";
 $langNotAllowed = "Non consentito";
 $langAddPageToSite = "Aggiungi una pagina al sito";
 $langCouldNotSendPage = "Il documento non è in formato HTML e non è stato possibile inviarlo. 

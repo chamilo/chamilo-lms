@@ -39,8 +39,6 @@ $langShowAndSubscribeClosed = "Synlig / Lukket";
 $langAdminThisUser = "Tilbake til bruker";
 $langManage = "Portaladministrasjon";
 $langEnrollToCourseSuccessful = "Du har blitt påmeldt til kurset";
-$langCourses = "kurs";
-$langIn = "i";
 $langSubCat = "Underkategorier";
 $langUnsubscribeNotAllowed = "Avmelding er ikke tillatt for dette kurset";
 $langCourseAdminUnsubscribeNotAllowed  = "Du er kursadmin for dette kurset";
@@ -62,6 +60,5 @@ $SubscribingNotAllowed = "Påmelding ikke tillatt";
 $CourseSortingDone = "Sortering av kurs foretatt";
 $ExistingCourseCategories = "Eksisterende kurskategorier";
 $YouAreNowUnsubscribed = "Du er nå avmeldt fra dette kurset";
-$AddRight = "Legg til";
 $ViewOpenCourses = "Vis åpne kurs";
 ?>

@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Grupper";
 $langNewGroupCreate = "Opret ny gruppe(r)";
 $langGroupCreation = "Oprettelse af ny gruppe";
 $langCreate = "opret";
@@ -10,7 +9,6 @@ $langMax = "max.";
 $langGroupPlacesThis = "pladser (valgfri)";
 $langGroupsAdded = "gruppe(r) er blevet tilføjet";
 $langGroupDel = "Gruppen er slettet";
-$langForums = "Diskussionsforum";
 $langDocuments = "Dokumenter";
 $langExistingGroups = "Grupper";
 $langRegistered = "Tilmeldt";
@@ -50,7 +48,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "En deltager kan højst være medle
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " gruppe";
 $langGroupLimit = "Begrænsning";
 $langStudentRegAllowed = "De studerende skal selv tilmelde sig grupperne";
-$langAll = "alle";
 $langGroupAllowStudentUnregistration = "Brugere kan afmelde sig selv fra grupperne";
 $langAllGroups = "Alle grupper";
 $langStudentUnsubscribe = "Afmeld mig fra denne gruppe.";

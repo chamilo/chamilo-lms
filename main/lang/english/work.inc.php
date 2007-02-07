@@ -11,7 +11,6 @@ $langDocDel = "File deleted";
 $langTitleWork = "File Title";
 $langAuthors = "Authors";
 $langDelList = "Delete whole list";
-$langDocument = "Document";
 $langWorkDelete = "Delete";
 $langWorkModify = "Modify";
 $langWorkConfirmDelete = "Do you really want to delete this file";

@@ -5,7 +5,6 @@ $langLineNumber = "Số dòng";
 $langLine = "dòng";
 $langLines = "dòng";
 $langLineOrLines = "dòng";
-$langRemove = "xoá";
 $langMoveUp = "Di chuyển lên";
 $langMoveDown = "Di chuyển xuống";
 $langAddNewHeading = "Add new heading";

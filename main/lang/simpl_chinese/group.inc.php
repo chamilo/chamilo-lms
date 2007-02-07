@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Ð¡×é";
 $langNewGroupCreate = "ÐÂ½¨Ð¡×é";
 $langGroupCreation = "ÐÂ½¨Ð¡×é";
 $langCreate = "ÐÂ½¨";
@@ -10,7 +9,6 @@ $langMax = "ÉÏÏÞ";
 $langGroupPlacesThis = "×ùÎ» (¿ÉÑ¡)";
 $langGroupsAdded = "Ð¡×éÒÑÌí¼Ó";
 $langGroupDel = "Ð¡×éÒÑÉ¾³ý";
-$langForums = "ÂÛÌ³";
 $langDocuments = "ÎÄµµ";
 $langExistingGroups = "Ð¡×é";
 $langRegistered = "×¢²á";
@@ -49,7 +47,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Ò»¸öÓÃ»§Ò²¿É³ÉÎª×î´ó³ÉÔ±Êý";
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " Ð¡×é";
 $langGroupLimit = "ÏÞÖÆ";
 $langStudentRegAllowed = "ÔÊÐíÑ§Éú×¢²áµ½µÄÐ¡×é";
-$langAll = "È«²¿";
 $langGroupAllowStudentUnregistration = "ÔÊÐíÓÃ»§²»ÔÚÐ¡×éÖÐ×¢²á";
 $langAllGroups = "ËùÓÐÐ¡×é";
 $langStudentUnsubscribe = "´ÓÕâ¸öÐ¡×é×¢Ïú.";

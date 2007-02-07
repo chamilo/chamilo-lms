@@ -9,4 +9,6 @@ $WCAGLink = "Link";
 $WCAGLinkLabel = "Link Bezeichnung";
 $errorNoLabel = "Das Bild hat kein Label";
 $WCAGEditor = "WCAG Editor";
+$WCAGGoMenu = "Geh zu Menu";
+$WCAGGoContent = "Geh zu Inhalt";
 ?>

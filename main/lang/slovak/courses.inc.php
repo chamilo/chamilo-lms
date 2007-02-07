@@ -39,8 +39,6 @@ $langShowAndSubscribeClosed = "Vidite&#318;ný / Zatvorený";
 $langAdminThisUser = "Spä&#357; na užívate&#318;a";
 $langManage = "Nastavenie portálu";
 $langEnrollToCourseSuccessful = "Ste zapísaný do kurzu";
-$langCourses = "kurzy";
-$langIn = "v";
 $langSubCat = "podkategórie";
 $langUnsubscribeNotAllowed = "Zruši&#357; Vašu ú&#269;ast v kurze môže len lektor.";
 $langCourseAdminUnsubscribeNotAllowed  = "Ste administrátor tohto kurzu.";
@@ -62,6 +60,5 @@ $SubscribingNotAllowed = "Prihlasovanie do kurzov je zakázané. Do kurzu sa môžet
 $CourseSortingDone = "Kurzy sú zoradené";
 $ExistingCourseCategories = "Existujúce kategórie kurzov";
 $YouAreNowUnsubscribed = "Vaša ú&#269;as&#357; v kurze bola zrušená";
-$AddRight = "Prida&#357;";
 $ViewOpenCourses = "Pozrie&#357; otvorené kurzy";
 ?>

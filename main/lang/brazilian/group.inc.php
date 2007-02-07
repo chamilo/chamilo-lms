@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Grupos";
 $langNewGroupCreate = "Criar novo(s) grupo(s)";
 $langGroupCreation = "Criação de novos grupos";
 $langCreate = "criar";
@@ -10,7 +9,6 @@ $langMax = "máx.";
 $langGroupPlacesThis = "vagas (opcional)";
 $langGroupsAdded = "o(s) grupo(s) foi (foram) adicionados";
 $langGroupDel = "Grupo apagado";
-$langForums = "Fórum";
 $langDocuments = "Documentos";
 $langExistingGroups = "Grupos";
 $langRegistered = "Registrado";
@@ -50,7 +48,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Um usuário pode ser membro de, n
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " grupos";
 $langGroupLimit = "Limite";
 $langStudentRegAllowed = "Os estudantes tem que registrar a si próprios nos grupos";
-$langAll = "todos";
 $langGroupAllowStudentUnregistration = "Usuários tem permissão para remover a si próprios dos grupos";
 $langAllGroups = "Todos os grupos";
 $langStudentUnsubscribe = "Cancelar minha inscrição para esse grupo.";

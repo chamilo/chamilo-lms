@@ -7,4 +7,8 @@ $WCAGImage = "imagem";
 $WCAGLabel = "etiqueta da imagem";
 $WCAGLink = "ligação";
 $WCAGLinkLabel = "etiqueta da ligação";
+$errorNoLabel = "A imagem não tem etiqueta";
+$WCAGEditor = "Editor WCAG";
+$WCAGGoMenu = "Ir para menu";
+$WCAGGoContent = "Ir para o conteúdo";
 ?>

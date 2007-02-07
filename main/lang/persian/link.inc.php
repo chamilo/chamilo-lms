@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "&#1662;&#1740;&#1608;&#1606;&#1583;&#1607;&#1575;";
 $langLinkName = "&#1606;&#1575;&#1605;
 &#1662;&#1740;&#1608;&#1606;&#1583;";
 $langLinkAdd = "&#1575;&#1601;&#1585;&#1608;&#1583;&#1606;

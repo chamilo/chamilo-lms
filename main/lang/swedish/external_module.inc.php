@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Länk till en sajt (webbplats)";
 $langSubTitle = "Lägger sig till menyn på kursens hemsida som en länk till en sajt, en sida eller valfri URL. Tips: om du vill lägga till en länk till en sida, gå till den sidan, kopiera och klistra sedan in länkens address, som du hittar i URL-fältet högst upp i din webbläsare, i \"länk\"-fältet nedan.";
-$langHome = "Tillbaka till hemsidan";
-$langName = "Namn";
-$langLink = "Länk";
 $langAddPage            = "Lägg till en sida";
 $langSendPage           = "Sida att sända";
 $langCouldNot           = "Filen kunde inte sändas";

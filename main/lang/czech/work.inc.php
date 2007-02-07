@@ -11,7 +11,6 @@ $langDocDel = "Soubor smazán";
 $langTitleWork = "Název souboru";
 $langAuthors = "Auto&#345;i";
 $langDelList = "Smazat celý seznam";
-$langDocument = "Dokument";
 $langWorkDelete = "Vymaž";
 $langWorkModify = "Upravit";
 $langWorkConfirmDelete = "Skute&#269;n&#283; chcete smazat tento soubor";

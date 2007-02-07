@@ -11,7 +11,6 @@ $langDocDel = "Dokuments tika izdz&#275;sts";
 $langTitleWork = "Dokumenta nosaukums";
 $langAuthors = "Autori";
 $langDelList = "Dz&#275;st visu sarakstu ";
-$langDocument = "Dokuments";
 $langWorkDelete = "Dz&#275;st";
 $langWorkModify = "Main&#299;t";
 $langWorkConfirmDelete = "Vai tieš&#257;m v&#275;laties dz&#275;st šo failu";

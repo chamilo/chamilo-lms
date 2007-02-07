@@ -41,8 +41,6 @@ $langShowAndSubscribeClosed = "Visible / Pechado";
 $langAdminThisUser = "Volver a este usuario";
 $langManage = "Xestión do LMS";
 $langEnrollToCourseSuccessful = "Foi inscrito no curso";
-$langCourses = "cursos";
-$langIn = "en";
 $langSubCat = "sub-categorías";
 $langUnsubscribeNotAllowed = "Non se permite a desubscrición deste curso.";
 $langCourseAdminUnsubscribeNotAllowed  = "Vostede é administrador deste curso";
@@ -64,6 +62,5 @@ $SubscribingNotAllowed = "Non se permite a subscrición";
 $CourseSortingDone = "Cursos ordenados";
 $ExistingCourseCategories = "Categorías de cursos existentes";
 $YouAreNowUnsubscribed = "Desubscrición do curso feita";
-$AddRight = "Engadir";
 $ViewOpenCourses = "Ver os cursos abertos";
 ?>

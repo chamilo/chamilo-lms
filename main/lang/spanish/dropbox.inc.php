@@ -122,4 +122,5 @@ $mailingNonMailingError = "Un correo no puede ser sobrescrito por un no-correo y
 $MailingSelectNoOther = "El correo no se puede combinar con otros recipientes";
 $mailingJustUploadSelectNoOther = "El envío a mi mismo no se puede combinar con otros recipientes";
 $NoFilesHere = "Aquí no hay archivos";
+$NoFilesHere = "Aquí no hay archivos";
 ?>

@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "สนทนาออนไลน์";
 $langOnlineConference  = "การสัมมนาออนไลน์";
 $langWash  = "ลบกระดานคำสนทนา";
 $langReset  = "เริ่มสนทนาใหม่";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "โปรดคลิ๊กทำเครื่องหมายในกรอบสี่เหลี่ยม หาก
 $langQuestion = "คำถามสำคัญ";
 $langClearList = "ลบข้อความสนทนาทั้งหมด คลิกที่นี่ ";
 $langWhiteBoard = "การนำเสนอ";
-$langHome = "หน้าแรก";
 $langTextEditorDefault = "<b>เนื้อหาหรือการนำเสนอ(Presenting White Board)</b> ";
-$langLinks = "เชื่อมโยง";
 $langStreaming = "สตรีมมิ่ง ";
 $langStreamURL = "ที่อยู่ไฟล์สตรีมมิ่ง ";
 $langStreamType = "ชนิดไฟล์สตรีมมิ่ง ";

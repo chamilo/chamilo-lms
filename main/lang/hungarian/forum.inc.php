@@ -64,4 +64,17 @@ $EditPostStored = "Az üzenet módosítva";
 $NewForumPost = "Új üzenet az alábbi fórumban: ";
 $YouWantedToStayInformed = "Email érteítést kért arra az esetre, ha valaki az alábbi témában reagál: ";
 $MessageHasToBeApproved = "Üzenetét engedélyezni kell, miel&#337;tt a mások is hozzáférnek.";
+$AllowAttachments = "Csatolások engedélyezése";
+$EditForumCategory = "Fórum kategória szerkesztése";
+$MovePost = "Üzenet áthelyezése";
+$MoveToThread = "Áthelyezési ebbea a szálba";
+$ANewThread = "Új szálba";
+$Reply = "Válasz";
+$DeleteForum = "Törli a fórumot?";
+$DeleteForumCategory = "Törli a fórum kategóriát?";
+$Lock = "Lezár";
+$Unlock = "Megnyit";
+$MoveThread = "Szál áthelyezése";
+$PostVisibilityChanged = "Üzenet láthatósága megváltoztatva";
+$PostDeleted = "Üzenet törölve";
 ?>

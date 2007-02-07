@@ -9,7 +9,6 @@ $langKwHelp = "<br/> Klik na \'+\' za odpiranje, \'-\' za zapiranje, \'++\' odpr
 $langAdvanced = "Napredno";
 $langSearch = "Iskanje";
 $langSearchCrit = "Le ena beseda na vrstico!";
-$langStatistics = "Statistika";
 $langNoKeywords = "Ta teèaj ne vsebuje nobenih kljuènih besed";
 $langKwCacheProblem = "Medpomnilnika kljuènih besed ni mogoèe odpreti";
 $langCourseKwds = "kljuène besede teèaja";

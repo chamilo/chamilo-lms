@@ -161,4 +161,8 @@ $EditCurrentLink = "Uredi trenutno povezavo";
 $Url = "URL";
 $MoveCurrentStudentPublication = "Premakni trenutno objavo teèajnikov";
 $EditCurrentStudentPublication = "Uredi trenutno objavo teèajnikov";
+$AllowMultipleAttempts = "Dovoli veè poskusov";
+$PreventMultipleAttempts = "Prepreèi veè poskusov";
+$MakeScormRecordingExtra = "Razširjeno beleženje SCORM(a)";
+$MakeScormRecordingNormal = "Obièajno beleženje SCORM(a)";
 ?>

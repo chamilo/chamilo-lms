@@ -11,7 +11,6 @@ $langDocDel = "Fájl törölve";
 $langTitleWork = "Fájl címe";
 $langAuthors = "Szerz&#337;k";
 $langDelList = "A teljes lista törlése";
-$langDocument = "Dokumentum";
 $langWorkDelete = "Töröl";
 $langWorkModify = "Módosít";
 $langWorkConfirmDelete = "Valóban ki akarja törölni a fájlt";

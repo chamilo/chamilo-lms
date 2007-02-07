@@ -22,7 +22,6 @@ $langImport = "Crear las entradas de metadatos (MDE) desde el fichero manifest";
 $langRemove = "Borrar las entradas de metadatos (MDE)";
 $langAllRemovedFor = "Todas las entradas han sido suprimidas para";
 $langIndex = "Indexar palabras con PhpDig";
-$langStatistics = "Estadísticas";
 $langTotalMDEs = "Número total de entradas de metadatos (MD) SCORM:";
 $langMainMD = "Abrir la página principal de entradas de metadatos (MDE)";
 $langLines = "líneas";

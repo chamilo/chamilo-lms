@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Autentificare esuata - nume de utilizator gresit sau parola incorecta.";
 $langWelcome = "Cursurile gratuite sunt listate mai jos. Celelalte cursuri necesita nume de utilizator si parola, care pot fi obtinute prin click pe \"Inregistrare\". Profesorii pot crea zone de curs prin click pe \"Inregistrare\" si apoi pe \"Creaza zona de curs\"";
-$langUserName = "Nume de utilizator";
 $langPass = "Parola";
 $langEnter = "Trimite";
-$langHelp = "Ajutor";
 $langReg = "Inregistrare";
 $langMenu  = "Meniu";
-$langDoc = "Documentatie";
 $langAdvises = "Sfaturi";
 $langCourseDoesntExist = "<b>Avertizare: </b> Cursul solicitat nu exista";
 $langGetCourseFromOldPortal = "apasa aici pentru a obtine cursul de pe portalul vechi";
@@ -34,8 +31,6 @@ $Intranet = "Intranet";
 $Englin = "Engleza";
 $langInvalidForSelfRegistration = "Autentificare esuata - daca nu esti inregistrat(a), te poti inregistra folosind 
 <a href=claroline/auth/inscription.php>formularul de inregistrare</a>";
-$langCourses = "cursuri";
-$langIn = "in";
 $langSubCat = "subcategorii";
 $langMenuGeneral = "General";
 $langMenuUser = "Utilizator";

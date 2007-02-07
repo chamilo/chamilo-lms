@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "Enllasos";
 $langLinkName = "Nom de l\'enllas";
 $langLinkAdd = "Enllas afegit";
 $langLinkMod = "Enllas modificat";

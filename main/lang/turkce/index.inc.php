@@ -7,13 +7,10 @@ dersler için kullanýcý adý ve þifre gerekmektedir. Sað taraftaki \"kayýt\" baðla
 kaydolduktan sonra bunlarý \"Dersler\" sayfasýnda görebilir ve alabilirsiniz.
 Ders açacak ö&#287;retmenler de ayn&#305; yerden kaydolmalýdýrlar. Fakat \"Statünüz:\" alaný için
 \'Ö&#287;retmen\' seçeneðini seçmelidirler.";
-$langUserName = "Kullan&#305;c&#305; ismi";
 $langPass = "&#350;ifre";
 $langEnter = "Giri&#351;";
-$langHelp = "Baþlangýç Açýklamalarý";
 $langReg = "Kay&#305;t";
 $langMenu  = "Menü";
-$langDoc = "Dökümanlar";
 $langAdvises = "Tavsiyeler";
 $langCourseDoesntExist = "<b>UYARI:</b> Bu ders mevcut de&#287;il.";
 $langGetCourseFromOldPortal = "Bu dersi eski sunucunuzdan almak için t&#305;klay&#305;n";
@@ -37,8 +34,6 @@ $email = "e-posta";
 $Intranet = "Intranet";
 $Englin = "&#304;ngilizce";
 $langInvalidForSelfRegistration = "Giri&#351; ba&#351;ar&#305;s&#305;z, kay&#305;tl&#305; de&#287;ilseniz <a href=claroline/auth/inscription.php>buradan kay&#305;t olabilirsiniz.</a>";
-$langCourses = "dersler";
-$langIn = "in";
 $langSubCat = "alt kategoriler";
 $langMenuGeneral = "Genel";
 $langMenuUser = "Kullan&#305;c&#305;";

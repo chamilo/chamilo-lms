@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Link egy honlapra";
 $langSubTitle = "Egy linket hozzáad, ami a kurzusának a honlapján lévõ egy oldalra mutat. Ehhez menjen az adott oldalra, másolja ki az URL-jét a böngészõjének a tetejébõl és illessze be a \"Link\" mezõbe lenn.";
-$langHome = "Vissza a fõoldalra";
-$langName = "Név";
-$langLink = "Link";
 $langAddPage            = "Oldalt hozzáad";
 $langSendPage           = "Oldalt feltölt";
 $langCouldNot           = "A file-t nem lehet feltölteni";

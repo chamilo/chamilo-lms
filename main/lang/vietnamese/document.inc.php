@@ -1,11 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langDoc = "Tài liệu";
 $langDownloadFile = "Upload file lên máy chủ web";
-$langDownload = "Upload";
 $langCreateDir = "Tạo thư mục";
-$langName = "Tên";
 $langNameDir = "Tên thư mục mới";
 $langSize = "Kích thước";
 $langRename = "Đổi tên";
@@ -14,7 +11,6 @@ $langTo = "đến";
 $langNoSpace = "Upload có lỗi. Không đủ chỗ trống trong thư mục";
 $langDownloadEnd = "Upload xong";
 $langFileExists = "Không được.<br>Trùng tên file.";
-$langIn = "trong";
 $langNewDir = "Tên thư mục mới";
 $langImpossible = "Không được";
 $langAddComment = "Thêm/Sửa ghi chú";
@@ -25,7 +21,6 @@ $langDirCr = "Thư mục đã tạo";
 $langDirMv = "Đã di chuyển xong";
 $langComMod = "Đã sửa phần ghi chú";
 $langViMod = "Đã thay đổi tính hiển thị";
-$langGroupManagement = "Quản lý nhóm";
 $langGroupSpace = "Khu vực nhóm";
 $langGroupSpaceLink = "Khu vực nhóm";
 $langGroupForumLink = "Diễn đàn nhóm";

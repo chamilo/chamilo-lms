@@ -148,7 +148,6 @@ $langPrerequisitesAdded = "Cerintele premergatoare ale pasului curent au fost ad
 $langAddEditPrerequisites = "Adauga/modifica cerinte premergatoare";
 $langMinimum = "Minim";
 $langMaximum = "Maxim";
-$langNone = "Nimic";
 $langNoDocuments = "Nu sunt documente";
 $langNoExercisesAvailable = "Niciun exercitiu disponibil";
 $langNoLinksAvailable = "Nici o legatura disponibila";

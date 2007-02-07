@@ -22,7 +22,6 @@ $langImport = "imsmanifest.xml importieren";
 $langRemove = "MDEs entfernen";
 $langAllRemovedFor = "Entfernte alle Einträge für ";
 $langIndex = "Wörter mit PhpDig indizieren";
-$langStatistics = "Statistik";
 $langTotalMDEs = "Gesamtzahl der SCORM MD Einträge";
 $langMainMD = "haupt MDE öffnen";
 $langLines = "Zeilen";

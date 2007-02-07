@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Grupuri";
 $langNewGroupCreate = "Creaza grup/grupuri noi";
 $langGroupCreation = "Creare de grupuri noi";
 $langCreate = "creaza";
@@ -10,7 +9,6 @@ $langMax = "max.";
 $langGroupPlacesThis = "locuri (optional)";
 $langGroupsAdded = "grupul/grupurile a/au fost adaugat/adaugate";
 $langGroupDel = "Grup sters";
-$langForums = "Forum";
 $langDocuments = "Documente";
 $langExistingGroups = "Grupuri";
 $langRegistered = "Inregistrati";
@@ -49,7 +47,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Un utilizator poate fi membru a 
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " grupuri";
 $langGroupLimit = "Limita";
 $langStudentRegAllowed = "Studentii se pot inregistra singuri la grupuri";
-$langAll = "toti";
 $langGroupAllowStudentUnregistration = "Utilizatorilor le este permis sa renunte singuri la grupuri";
 $langAllGroups = "Toate grupurile";
 $langStudentUnsubscribe = "Doresc sa renunt la acest grup.";

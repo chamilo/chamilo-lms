@@ -8,10 +8,8 @@ $langMdCoverage = "Per exemple, llicenciat en...";
 $langMdCopyright = "Per exemple, el proveidor de les fonts és desconegut";
 $langTool = "Metadades del document";
 $langSorry = "Primer seleccionar un curs";
-$langLanguage = "Idioma";
 $langIdentifier = "Identificador";
 $langRightsTip = "descriu en paraules";
 $langVersion = "Versió";
 $langSearch = "Búsqueda";
-$langTitle = "Títol";
 ?>

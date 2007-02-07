@@ -144,7 +144,6 @@ $langPrerequisitesAdded = "Vorbedingungen für aktuellen Schritt wurden hinzugefü
 $langAddEditPrerequisites = "Vorbedingungen hinzufügen/bearbeiten";
 $langMinimum = "Minimum";
 $langMaximum = "Maximum";
-$langNone = "Keine";
 $langNoDocuments = "Keine Dokumente";
 $langNoExercisesAvailable = "Es sind keine Übungen verfügbar";
 $langNoLinksAvailable = "Es sind keine Links verfügbar";

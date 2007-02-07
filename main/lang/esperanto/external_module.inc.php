@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Ligilo al retejo ";
 $langSubTitle = "Aldonas ligilon al via kursa hejmpa&#285;o. ";
-$langHome = "Reiri al hejmpa&#285;o ";
-$langName = "Nomo";
-$langLink = "Ligilo";
 $langAddPage            = "Aldoni pa&#285;on ";
 $langSendPage           = "Aldonenda pa&#285;o ";
 $langCouldNot           = "Dosiero ne povis esti sendata ";

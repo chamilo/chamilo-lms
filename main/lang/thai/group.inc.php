@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "การบริหารจัดการหมู่เรียน";
 $langNewGroupCreate = "สร้างหมู่เรียนใหม่";
 $langGroupCreation = "เปิดหมู่เรียนใหม่";
 $langCreate = "สร้าง";
@@ -10,7 +9,6 @@ $langMax = "มากที่สุด";
 $langGroupPlacesThis = "ที่นั่ง";
 $langGroupsAdded = "ได้เพิ่มกลุ่มแล้ว";
 $langGroupDel = "สร้างกลุ่ม";
-$langForums = "การอภิปราย";
 $langDocuments = "เอกสาร";
 $langExistingGroups = "กลุ่ม";
 $langRegistered = "ลงทะเบียน";
@@ -49,7 +47,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "มีสมาชิกกลุ่มได้ไม่เกิน";
 $langQtyOfUserCanSubscribe_PartAfterNumber  = "กลุ่ม";
 $langGroupLimit = "จำกัด";
 $langStudentRegAllowed = "ผู้เรียนสามารถลงทะเบียนเข้ากลุ่มได้ด้วยตัวเอง";
-$langAll = "ทั้งหมด";
 $langGroupAllowStudentUnregistration = "ผู้ใช้ที่เป็นสมาชิกกลุ่มสามารถถอนชื่อออกจากกลุ่มได้เอง";
 $langAllGroups = "ทุกกลุ่ม";
 $langStudentUnsubscribe = "ถอนชื่อเราออกจากกลุ่มนี้";

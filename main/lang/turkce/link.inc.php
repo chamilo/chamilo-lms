@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "Baðlantýlar";
 $langLinkName = "Baðlantý adý";
 $langLinkAdd = "Ba&#287;lant&#305; ekle";
 $langLinkAdded = "Ba&#287;lant&#305; eklendi";

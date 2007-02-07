@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Aktifkan";
 $langDeactivate = "Tidak aktif";
-$langRemove = "Padam";
 $langInLnk  = "Pautan yang tidak aktif";
 $langDelLk = "Anda pasti untuk padam pautan ini?";
 $langEnter  = "Masuk";

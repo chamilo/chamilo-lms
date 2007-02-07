@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Ændre kursusinformation";
 $langModifDone = "Informationen er blevet ændret";
-$langHome = "Tilbage til kursushjemmesiden";
 $langCode = "Kursuskode";
 $langDelCourse = "Slet hele kursushjemmesiden";
 $langProfessors = "Undervisere";
@@ -14,7 +13,6 @@ $langUnsubscription = "Afmeld";
 $langPrivOpen = "Fortrolig adgang, åben tilmelding";
 $langPrivate = "Fortrolig adgang, tilmeldingen er lukket (kursushjemmesiden er dermed kun åben for deltagere på <a href=../user/user.php>Deltagerlisten</a>)";
 $langForbidden = "Ikke tilladt";
-$langLanguage = "Sprog";
 $langConfTip = "Som standard er dit kursus kun tilgængeligt for dig som dets eneste registrerede bruger. Ønsker du en vis fortrolighed omkring adgang til kurset, 
 er det letteste, at du åbner for tilmeldinger i f.eks.
 en uge (vælg: Fortrolig adgang, åben tilmelding), og beder de studerende om i første lektion selv at tilmelde sig indenfor denne tid, og derefter lukker for tilmeldinger (vælg: Fortrolig adgang, tilmeldingen er lukket). Du kan nu se de tilmeldte på deltagerlisten, og slette evt. uvelkomne.
@@ -23,9 +21,6 @@ $langOpenToTheWorld = "Åben - adgang for hele verden";
 $OpenToThePlatform = "Åben - adgang tilladt for registrerede brugere af platformen";
 $langOpenToThePlatform = "Åben - adgang tilladt for brugere registreret på platformen";
 $langTipLang  = "Kursushjemmesidens sprog";
-$Agenda = "Kalenderen";
-$langLink = "Links";
-$langDocument = "Dokumenter";
 $langVid = "Multimedia";
 $langWork = "Studerendes Opgaver";
 $langProgramMenu = "Kursusprogram";
@@ -47,7 +42,6 @@ $langBackupCourse = "Arkiver dette kursus";
 $langModifGroups = "Groups";
 $langProfessor = "Underviser";
 $langGroups  = "Grupper";
-$langChat  = "Chat";
 $langDescriptionCours   = "kursusbeskrivelse";
 $langArchiveCourse  = "Sikkerhedskopi af kurset";
 $langRestoreCourse  = "Geopret et kursus";
@@ -73,7 +67,6 @@ $langLastEdit  = "Sidste redigering";
 $langLastVisit  = "Sidste besøg";
 $langSubscription = "Kursustilmelding";
 $langCourseAccess = "Kursusadgang";
-$langDownload = "Hent";
 $langConfirmBackup = "Ønsker du at sikkerhedskopiere dit kursus";
 $langCreateSite = "Opret en kursushjemmeside";
 $langRestoreDescription = "Dit kursus er i filarkivet som du kan vælge nedenfor.<br><br>
@@ -88,7 +81,6 @@ $langBackH = "tilbage til hjemmesiden";
 $langOtherCategory = "Anden kategori";
 $langAllowedToUnsubscribe = "Brugere kan afmelde dette kursus";
 $langNotAllowedToUnsubscribe = "Brugere kan ikke afmelde dette kursus";
-$langDescription = "Beskrivelse";
 $langCourseVisibilityClosed = "Fuldstændig lukket; kurset er kun tilgængeligt for kursus administratoren.";
 $CourseVisibilityClosed = "Lukket - ingen adgang til dette kursus";
 ?>

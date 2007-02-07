@@ -144,7 +144,6 @@ $langPrerequisitesAdded = "De vereisten voor deze stap zijn toegevoegd.";
 $langAddEditPrerequisites = "Vereisten toevoegen / wijzigen";
 $langMinimum = "Minimum";
 $langMaximum = "Maximum";
-$langNone = "Geen";
 $langNoDocuments = "Géén bestanden";
 $langNoExercisesAvailable = "Er is geen enkele oefening beschikbaar";
 $langNoLinksAvailable = "Er is géén link beschikbaar";

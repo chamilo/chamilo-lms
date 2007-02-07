@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Kontroldarbi";
 $langExercice = "Kontroldarbs";
 $langActivate = "Iesl&#275;gt";
 $langDeactivate = "Izsl&#275;gt";
@@ -105,7 +104,6 @@ $langIntroduction = "Ievads";
 $langTitleAssistant = "Uzdevumu izveides asistents";
 $langQuesList = "jaut&#257;jumu saraksts";
 $langSaveEx = "saglab&#257;t uzdevumus";
-$langClose = "aizv&#275;rt";
 $langFinish = "Pabeigt";
 $langCancel = "Atcelt";
 $langQImage = "Jaut&#257;jums ar att&#275;lu";
@@ -133,7 +131,6 @@ $langImportHotPotatoesQuiz = "Import&#275;t <i>HotPotatoes</i> kontroldarbus";
 $langHotPotatoesTests = " Import&#275;t <i>HotPotatoes</i> kontroldarbus";
 $langDownloadFile = "Augšupl&#257;d&#275;t <i>HotPotatoes</i> (HTML vai ZIP) uz servera";
 $langDownloadImg = "Augšupl&#257;d&#275;t att&#275;lu server&#299;";
-$langDownload = "Augšupl&#257;d&#275;t";
 $langDownloadEnd = "HTML augšupl&#257;d&#275;šana pabeigta.";
 $langNoSpace = "Augšupl&#257;d&#275;šana beidz&#257;s neveiksm&#299;gi. J&#363;su direktorij&#257; nav pietiekami daudz br&#299;vas vietas";
 $langZipNoPhp = "ZIP fail&#257; nedr&#299;kst b&#363;t iek&#316;auti .PHP faili";

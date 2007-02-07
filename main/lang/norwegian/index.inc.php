@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Innlogging feilet - ugyldig brukernavn og passord.";
 $langWelcome = "kursene nedenfor er fritt tilgjengelig. Andre kurs krever et brukernavn og et passord. Disse kan du gjøre tilgjengelig ved å klikke på \'registrering\'. Lærere kan opprette kursområder ved å klikke på registrering. Dette gjøres ved å velge \'Opprett kursområder\'.";
-$langUserName = "Brukernavn";
 $langPass = "Passord";
 $langEnter = "Logg inn";
-$langHelp = "Hjelp";
 $langReg = "Registrering";
 $langMenu  = "Meny";
-$langDoc = "Dokumentasjon";
 $langAdvises = "Rådgivning";
 $langCourseDoesntExist = "<b>Advarsel :</b> Dette kurset eksisterer ikke";
 $langGetCourseFromOldPortal = "klikk her for å hente dette kurset fra din gamle portal";
@@ -33,8 +30,6 @@ $email = "e-post";
 $Intranet = "Intranett";
 $Englin = "Engelsk";
 $langInvalidForSelfRegistration = "Innlogging feilet - dersom du ikke er registrert kan du gjøre det ved å benytte <a href=claroline/auth/inscription.php>registreringsskjemaet</a>";
-$langCourses = "kurs";
-$langIn = "i";
 $langSubCat = "underkategorier";
 $langMenuGeneral = "Generelt";
 $langMenuUser = "Bruker";

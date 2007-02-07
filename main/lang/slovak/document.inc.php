@@ -2,18 +2,14 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Presunú&#357;";
-$langDoc = "Dokumenty";
 $langDownloadFile = "Uloži&#357; súbor na server";
-$langDownload = "Uloži&#357; na server";
 $langCreateDir = "Vytvori&#357; prie&#269;inok";
-$langName = "Názov";
 $langNameDir = "Názov nového prie&#269;inku";
 $langSize = "Ve&#318;kos&#357;";
 $langRename = "Premenova&#357;";
 $langCopy = "Kopírova&#357;";
 $langTo = "do";
 $langDownloadEnd = "Ukladanie ukon&#269;ené";
-$langIn = "v";
 $langNewDir = "Meno nového prie&#269;inka";
 $langDocCopied = "Dokument bol prekopírovaný";
 $langDocDeleted = "Dokument zmazaný";

@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Groepen";
 $langNewGroupCreate = "Nieuwe groep(en) aanmaken";
 $langGroupCreation = "Nieuwe groepen aanmaken";
 $langCreate = "aanmaken";
@@ -10,7 +9,6 @@ $langMax = "Maximum";
 $langGroupPlacesThis = "plaatsen (facultatief)";
 $langGroupsAdded = "groep(en) werd(en) toegevoegd.";
 $langGroupDel = "De groep is verwijderd.";
-$langForums = "Forum";
 $langDocuments = "Documenten";
 $langExistingGroups = "Groepen";
 $langRegistered = "Ingeschreven";
@@ -49,7 +47,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Een gebruiker kan slechts deelne
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " groepen.";
 $langGroupLimit = "Begrenzing";
 $langStudentRegAllowed = "Studenten mogen zichzelf inschrijven in groepen.";
-$langAll = "ALLE";
 $langGroupAllowStudentUnregistration = "De gebruikers mogen zichzelf uitschrijven uit groepen.";
 $langAllGroups = "alle groepen";
 $langStudentUnsubscribe = "Uitschrijven uit de groep";

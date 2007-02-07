@@ -24,7 +24,6 @@ $Link = "Link";
 $Forum = "Forum";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
-$Agenda = "Agenda";
 $IntroductionText = "Εισαγωγικό κείμενο";
 $CourseDescription = "περιγραφή στο κατάλογο μαθημάτων";
 $Groups = "Ομάδες Χρηστών";

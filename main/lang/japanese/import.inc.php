@@ -5,7 +5,6 @@ $langPgTitle = "ページタイトル";
 $langExplanation = "ページはHTMLフォーマットでなければいけません。(e.g. \"my_page.htm\"). ページはホームページからリンクされます。もしHTMLではない文書を送信したい時は(PDF, Word, Power Point, Video, など) 次のツールを用いて下さい <a href";
 $langTooBig = "ファイルが大きすぎるので、選択できません。";
 $langCouldNot = "ファイルが送れませんでした。";
-$langExercices = "演習問題";
 $langNotAllowed = "このコース受講が許可されていません";
 $langAddPageToSite = "ページを加える";
 $langCouldNotSendPage = "このファイルは HTMLフォーマットではないので、遅れませんでした。PDF, Word, Power Point, Video, などの文書を送りたいのであれば次のリンクを利用下さい<a href";

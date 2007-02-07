@@ -6,13 +6,10 @@ $langWelcome = "courses are freely available below. Other  courses require
 a username and a password, which you can obtain by clicking on \'registration\'. Teachers
 can create course areas by clicking on registration too, but selecting then
 \'Create course areas\'.";
-$langUserName = "Username";
 $langPass = "Password";
 $langEnter = "Enter";
-$langHelp = "Help";
 $langReg = "Registration";
 $langMenu  = "Menu";
-$langDoc = "Documentation";
 $langAdvises = "Advises";
 $langCourseDoesntExist = "<b>Warning :</b> This course doesn\'t exist";
 $langGetCourseFromOldPortal = "click here to get this course from your old portal";
@@ -37,8 +34,6 @@ $Intranet = "Intranet";
 $Englin = "English";
 $langInvalidForSelfRegistration = "Login failed - if you are not registered, you can do so using
  the <a href=claroline/auth/inscription.php>registration form</a>";
-$langCourses = "courses";
-$langIn = "in";
 $langSubCat = "sub-categories";
 $langMenuGeneral = "General";
 $langMenuUser = "User";

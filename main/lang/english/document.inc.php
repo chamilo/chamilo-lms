@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Move to";
-$langDoc = "Documents";
 $langDownloadFile = "Upload file to the server";
-$langDownload = "Upload";
 $langCreateDir = "Create a directory";
-$langName = "Name";
 $langNameDir = "Name of the new directory";
 $langSize = "Size";
 $langRename = "Rename";
@@ -15,7 +12,6 @@ $langTo = "to";
 $langNoSpace = "The upload has failed. Either you have exceeded your maximum quotum, or there is not enough disk space.";
 $langDownloadEnd = "The upload is finished";
 $langFileExists = "The operation is impossible, a file with this name already exists.";
-$langIn = "in";
 $langNewDir = "Name of new directory";
 $langImpossible = "Operation impossible";
 $langAddComment = "Add/modify a comment to";
@@ -26,7 +22,6 @@ $langDirCr = "Directory created";
 $langDirMv = "Element moved";
 $langComMod = "Comment modified";
 $langViMod = "Visibility modified";
-$langGroupManagement = "Groups management";
 $langGroupSpace = "Group area";
 $langGroupSpaceLink = "Group area";
 $langGroupForumLink = "Group forum";

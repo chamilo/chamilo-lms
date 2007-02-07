@@ -6,7 +6,6 @@ $MyTasks = "Minhas tarefas";
 $FavoriteBlogs = "Meus blogs favoritos";
 $Navigation = "Navegação";
 $TopTen = "10 melhores blogs";
-$Title = "Título";
 $Subtitle = "Subtítulo";
 $ThisBlog = "Este blog";
 $NewPost = "Novo artigo";

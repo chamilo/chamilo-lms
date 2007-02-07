@@ -23,7 +23,6 @@ Een druk op de Alt-toets op het kernwoord deselecteert het kernwoord.
 $langAdvanced = "Meer criteria";
 $langSearch = "Zoeken";
 $langSearchCrit = "Gebruik de ruimte hieronder voor omschrijvende woorden, één woord per lijn!";
-$langStatistics = "Statistieken";
 $langNoKeywords = "De cursus heeft geen kernwoorden";
 $langKwCacheProblem = "De cache van de kernwoorden kan niet geopend worden";
 $langCourseKwds = "cursuskernwoorden";

@@ -39,8 +39,6 @@ $langShowAndSubscribeClosed = "Redzams / Aizv&#275;rts";
 $langAdminThisUser = "Atpaka&#316; pie lietot&#257;ja";
 $langManage = "Port&#257;la Administr&#275;šna";
 $langEnrollToCourseSuccessful = "J&#363;s tik&#257;t piere&#291;istr&#275;ts/a kursam";
-$langCourses = "kursu saraksts";
-$langIn = "iekš";
 $langSubCat = "apakšnoda&#316;as";
 $langUnsubscribeNotAllowed = "J&#363;s nevarat atteikties no š&#299; kursa";
 $langCourseAdminUnsubscribeNotAllowed  = "J&#363;s esat š&#299; kursa administrators";
@@ -62,5 +60,4 @@ $SubscribingNotAllowed = "Pieteikšan&#257;s nav at&#316;auta";
 $CourseSortingDone = "Kursu k&#257;rtošana pabeigta";
 $ExistingCourseCategories = "iziet no kursu noda&#316;&#257;m";
 $YouAreNowUnsubscribed = "J&#363;s tagad esat atteikusies/-cies  no kursa";
-$AddRight = "Pievienot";
 ?>

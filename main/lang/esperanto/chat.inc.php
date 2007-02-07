@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "Interreta babilado";
 $langOnlineConference  = "Interreta konferenco";
 $langWash  = "Vi&#349;i ";
 $langReset  = "Restartigi";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "Bonvolu marki &#265;i-opcion nur se vi sta
 $langQuestion = "demando ";
 $langClearList = "Vi&#349;i ";
 $langWhiteBoard = "Tabulo ";
-$langHome = "Startpa&#285;o ";
 $langTextEditorDefault = "<h2>Tekstprilaborilo</h2>  Aldonu &#265;i tie tekston, bildojn, ligilojn ... Partoprenantoj de tiu &#265;i rekta konferenco senpere vidas viajn &#349;an&#285;ojn. ";
-$langLinks = "Ligiloj ";
 $langStreaming = "Datumstriado XX";
 $langStreamURL = "Datumstria URL  XX";
 $langStreamType = "Datumstria tipo XX";

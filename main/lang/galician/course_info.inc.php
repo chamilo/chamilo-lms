@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Modificar a configuración do curso";
 $langModifDone = "As características foron modificadas";
-$langHome = "Volver á páxina principal";
 $langCode = "Código do curso";
 $langDelCourse = "Suprimir a web deste curso";
 $langProfessors = "Profesores";
@@ -14,7 +13,6 @@ $langUnsubscription = "Desinscribir";
 $langPrivOpen = "Acceso privado, inscrición aberta";
 $langPrivate = "Acceso privado, inscrición fechada (web reservada ás persoas que aparecen na lista <a href=../user/user.php>usuarios</a>)";
 $langForbidden = "Non estás rexistrado como responsable neste curso";
-$langLanguage = "Idioma";
 $langConfTip = "Por defecto, o seu curso soamente é accesible
 para vostede, vostede é o único usuario. Se vostede desexa un mínimo de confidencialidade, o más simple é abrir
 a inscripción durante unha semana, pedir ós estudiantes que se inscriban eles mesmos,
@@ -23,9 +21,6 @@ $langOpenToTheWorld = "Aberto - acceso permitido para todo o mundo";
 $OpenToThePlatform = "Aberto - acceso permitido para os usuarios rexistrados na plataforma";
 $langOpenToThePlatform = "Aberto - acceso permitido para usuarios rexistrados na plataforma";
 $langTipLang  = "Esta lingua será válida para todos os visitantes da web do seu curso.";
-$Agenda = "Axenda";
-$langLink = "Ligazóns";
-$langDocument = "Documentos";
 $langVid = "Vídeo";
 $langWork = "Traballos";
 $langProgramMenu = "Programa do Curso";
@@ -47,7 +42,6 @@ $langBackupCourse = "Garda este curso";
 $langModifGroups = "Grupos";
 $langProfessor = "Profesor";
 $langGroups  = "Grupos";
-$langChat  = "Debate";
 $langDescriptionCours   = "Descrición do Curso";
 $langArchiveCourse  = "Backup do Curso";
 $langRestoreCourse  = "Restaurar un curso";
@@ -73,7 +67,6 @@ $langLastEdit  = "Última edición";
 $langLastVisit  = "Última Visita";
 $langSubscription = "Subscrición";
 $langCourseAccess = "Acceso ó curso";
-$langDownload = "Descargar";
 $langConfirmBackup = "Realmente queres facer un backup do curso?";
 $langCreateSite = "Crear un curso";
 $langRestoreDescription = "O curso está nun arquivo que podes seleccionar de abaixo.<br><br>
@@ -88,7 +81,6 @@ $langBackH = "volver á páxina de inicio";
 $langOtherCategory = "Outra categoría";
 $langAllowedToUnsubscribe = "Permítese ós ususarios que se desubscriban do curso";
 $langNotAllowedToUnsubscribe = "Non se permite ós usuarios que se desubscriban do curso";
-$langDescription = "Descrición";
 $langCourseVisibilityClosed = "Totalmente pechado; o curso só é accesible para o administrador do curso.";
 $CourseVisibilityClosed = "Pechado -non hai acceso a este curso";
 $CourseVisibilityModified = "Modificado (axustes máis detallados especificados a través de roles-permisos do sistema)";

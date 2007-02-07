@@ -40,8 +40,6 @@ $langShowAndSubscribeClosed = "显示/关闭";
 $langAdminThisUser = "返回用户";
 $langManage = "平台管理";
 $langEnrollToCourseSuccessful = "你已经注册到这门课程";
-$langCourses = "课程";
-$langIn = "在";
 $langSubCat = "子分类";
 $langUnsubscribeNotAllowed = "不允许从这门课程注销.";
 $langCourseAdminUnsubscribeNotAllowed  = "你是这门课程的管理员.";
@@ -63,6 +61,5 @@ $SubscribingNotAllowed = "不允许注册";
 $CourseSortingDone = "课程排序完成";
 $ExistingCourseCategories = "已有课程分类";
 $YouAreNowUnsubscribed = "正从当前课程注销";
-$AddRight = "添加";
 $ViewOpenCourses = "浏览公开课程";
 ?>

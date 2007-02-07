@@ -3,14 +3,12 @@ for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Ukázat";
 $langDeactivate = "Skrýt";
-$langRemove = "Odstranit";
 $langInLnk  = "Skryté nástroje a odkazy";
 $langDelLk = "Opravdu chcete smazat tenhle odkaz?";
 $langEnter  = "Vstoupit";
 $langCourseCreate  = "Vytvo&#345;it webovou stránku kurzu";
 $langNameOfTheLink  = "Jméno odkazu";
 $lang_main_categories_list                  = "Seznam hlavních kategorií";
-$langHelp = "Pomoc";
 $langCourseAdminOnly = "Jen pro u&#269;itele";
 $PlatformAdminOnly = "Jen pro platformové Administrátory";
 $langCombinedCourse = "Kombinovaný kurz";

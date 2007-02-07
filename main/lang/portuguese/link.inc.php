@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "Ligações";
 $langLinkName = "Nome da ligação";
 $langLinkAdd = "Acrescentar ligação";
 $langLinkAdded = "A ligação foi acrescentada";

@@ -144,7 +144,6 @@ $langPrerequisitesAdded = "Os pré-requisitos para a presente etapa foram acresce
 $langAddEditPrerequisites = "Acrescentar/editar pré-requisitos";
 $langMinimum = "Mínimo";
 $langMaximum = "Máximo";
-$langNone = "Nenhum";
 $langNoDocuments = "Nenhum documento";
 $langNoExercisesAvailable = "Não há exercícios disponíveis";
 $langNoLinksAvailable = "Nenhum link disponível";
@@ -157,4 +156,10 @@ $AddLpIntro = "<strong>Bem-Vindo(a)</strong> à ferramenta de autoria da Rotas de
 $AddLpIntro = "<b>Bem-Vindo</b> a Ferramenta de criação de Rotas de Aprendizagem do Dokeos.<br>
 Você poderá criar suas rotas de aprendizagem passo a passo. A estrutura de sua rota de aprendizagem irá aparecer em um menu a esquerda.";
 $AddLpToStart = "Para iniciar, dê um nome para sua rota de aprendizagem";
+$CreateTheLink = "Importar uma ligação";
+$MoveCurrentLink = "Mover link";
+$EditCurrentLink = "Editar o link ";
+$Url = "Url";
+$MoveCurrentStudentPublication = "Mover trabalho do aluno";
+$EditCurrentStudentPublication = "Editar trabalho do estudante";
 ?>

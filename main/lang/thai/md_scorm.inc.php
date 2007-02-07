@@ -22,7 +22,6 @@ $langImport = "สร้างMDEsจากรายการที่มีอยู่";
 $langRemove = "เอา MDEsออก";
 $langAllRemovedFor = "รายการทั้งหมดเอาออกเพื่อ ";
 $langIndex = "สร้างดัชนีด้วย PhpDig";
-$langStatistics = "ค่าสถิติ";
 $langTotalMDEs = "รวมรายการทั้งหมดของScorm MDที่มีเข้ามา";
 $langMainMD = "เปิดรายการหลักMDE";
 $langLines = "บรรทัด";

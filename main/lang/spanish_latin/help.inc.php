@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Ayuda de los foros";
-$langClose = "Cerrar la ventana";
 $langForContent = "El foro es una herramienta de discusión escrita y asincrónica.
  A diferencia del email que permite un dialogo uno-a-uno, los foros permiten diálogos públicos o semi-públicos.</p><p>Hablando técnicamente, los estudiantes solo necesitan un prograama de navegación para usar los foros de Claroline.</P><p>Para organizar los foros, haga un clic en  \'Administrar\'. Las discusiones se organizan en conjuntos y subconjuntos como sigue:</p><p><b>Categoría > Foro > Tema > Respuestas</b></p>Para estructurar las discusiones de sus estudiantes, es necesario organizar categorías y los foros de antemano, dejando a ellos la creación de los temas y las respuestas. Por defecto, el foro de Claroline contiene solo la categoría  \'Público\', un foro y un tema de ejemploc.</p><p>La primera cosa que debe hacer es eliminar el foro de ejemplo y modificar el nombre del primero foro. Entonces, podrá crear, en la categoría  \'publica\', otros foros,por grupos o por temas, para colocar su requerimiento de escenario de aprendizaje.</p><p>No mezcle Categorías y foros, y no olvide que una categoría vacía (sin foros) no aparece a la vista de los estudiantes.</p><p>La descripción de un foro puede ser la lista de sus miembros, la definición de un objetivo, una tarea, un tema ...";
 $langHDropbox = "Baúl de tareas";
@@ -160,7 +159,6 @@ $langUserContent = "<b>Papeles (roles)</b><p>Los papeles (roles) no tienen ningu
 <p>Para hacer que figure el nombre de un co-titular en la cabecera de su curso, utilice la página \'Modificar la información sobre el curso\' (en las herramientas de color naranja). Esta modificación de la cabercera del curso no inscribe automáticamente a este co-titular como usuario del curso. Se trata de dos acciones distintas.</p><hr>
 <b>Ayudar a un usuario</b>
 <p>Para añadir un usuario a su curso, comprobar primero si ya está inscrito en iCampus utilizando el motor de búsqueda. Si ya está inscrito, marque la casilla que aparece al lado de su nombre y valide. Si todavía no está inscrito añadale a mano. En los dos casos, la persona recibirá un email de confirmación de su inscripción conteniendo su nombre de usuario y su password, excepto en el caso de que ustede no haya introducido su email.</p>";
-$langGroupManagement = "Ayuda de grupos";
 $langGroupContent = "<p><b>Introducción</b></p>
 <p>Esta herramienta permite crear y gestionar grupos dentro de su curso.
 Cuando se crea el curso (Crear Grupos), los grupos están vacios. Hay muchas formas de rellenarlos:

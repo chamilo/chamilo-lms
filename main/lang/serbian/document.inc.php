@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Prebaci u";
-$langDoc = "Dokumenta";
 $langDownloadFile = "U&#269;itaj fajl na server";
-$langDownload = "U&#269;itaj na server";
 $langCreateDir = "Kreiraj direktorijum";
-$langName = "Ime";
 $langNameDir = "Ime novog direktorijuma";
 $langSize = "Veli&#269;ina";
 $langRename = "Preimenuj";
@@ -15,7 +12,6 @@ $langTo = "u";
 $langNoSpace = "U&#269;itavanje na server nije uspelo. Ili ste premašili vašu maksimalnu kvotu ili nema dovoljno mesta na disku.";
 $langDownloadEnd = "U&#269;itavanje na server je završeno";
 $langFileExists = "Akcija je nemogu&#263;a, fajl sa takvim imenom ve&#263; postoji. ";
-$langIn = "u";
 $langNewDir = "Ime novog direktorijuma ";
 $langImpossible = "Akcija je nemogu&#263;a";
 $langAddComment = "Dodaj/modifikuj komentar u";
@@ -26,7 +22,6 @@ $langDirCr = "Direktorijum je kreiran";
 $langDirMv = "Element je preba&#269;en";
 $langComMod = "Komentar je modifikovan";
 $langViMod = "Vidljivost je modifikovana";
-$langGroupManagement = "Administracija grupa";
 $langGroupSpace = "Okruženje grupe";
 $langGroupSpaceLink = "Okruženje grupe";
 $langGroupForumLink = "Forum grupe";

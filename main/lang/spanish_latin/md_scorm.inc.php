@@ -22,7 +22,6 @@ $langImport = "Crear las Entradas de Meta Datos (MDE) desde el archivo Manifest 
 $langRemove = "Borrar las Entradas de Meta Datos (MDE) ";
 $langAllRemovedFor = "Todas las entradas han sido suprimidas para ";
 $langIndex = "Indexar palabras con PhpDig";
-$langStatistics = "Estadísticas";
 $langTotalMDEs = "Número total de Entradas de Meta Datos (MD) SCORM: ";
 $langMainMD = "Abrir la página principal de Entradas de Meta Datos (MDE) ";
 $langLines = "líneas";

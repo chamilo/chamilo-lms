@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Ekzercoj ";
 $langExercice = "Ekzerco ";
 $langActivate = "Aktivigi ";
 $langDeactivate = "Mal&#349;alti ";
@@ -105,7 +104,6 @@ $langIntroduction = "Enkonduko";
 $langTitleAssistant = "Asistilo por kreo de ekzercoj ";
 $langQuesList = "Demandaro ";
 $langSaveEx = "Konservi ekzercon ";
-$langClose = "Fermi ";
 $langFinish = "Fini ";
 $langCancel = "Nuligi ";
 $langQImage = "Bilddemando ";
@@ -133,7 +131,6 @@ $langImportHotPotatoesQuiz = "Importu HotPotatoes-ekzercojn ";
 $langHotPotatoesTests = "Importu HotPotatoes-testojn ";
 $langDownloadFile = "Al&#349;uti HotPotatoes (html- a&#365; zip-ajn) al la servilo ";
 $langDownloadImg = "Al&#349;uti bildon al la servilo ";
-$langDownload = "Al&#349;uti";
 $langDownloadEnd = "La al&#349;uto de html fini&#285;is. ";
 $langNoSpace = "La al&#349;uto malsukcesis. Ne estas sufi&#265;a diskspaco. ";
 $langZipNoPhp = "La zip-dosiero ne enhavu .PHP-dosierojn!";
@@ -170,7 +167,6 @@ $langHotspotError = "Vi enigu priskribon kaj pezon por &#265;iu atentilo";
 $langMoreHotspots = "+atentilo";
 $langLessHotspots = "-atentilo";
 $langHotspotZones = "Atentiloj";
-$langDescription = "Priskribo";
 $langNextQuestion = "Sekvanta demando";
 $langCorrectAnswer = "&#284;usta respondo";
 $langHotspotHit = "Via respondo estis";

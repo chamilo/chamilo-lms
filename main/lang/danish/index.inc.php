@@ -6,13 +6,10 @@ $langWelcome = "kurser er tilgængelige for alle interesserede. Andre kurser kræv
 et brugernavn og en adgangskode, som du kan få ved at klikke på \'Registrering\' og vælge \'følg kursus\'. Undervisere
 kan oprette kursushjemmesider ved ligeledes at klikke på \'Registrering\', men skal i stedet vælge 
 \'opret kursushjemmeside\'.";
-$langUserName = "Brugernavn";
 $langPass = "Adgangskode";
 $langEnter = "Login";
-$langHelp = "Kom i gang";
 $langReg = "Registrering";
 $langMenu  = "Menu";
-$langDoc = "Manualer";
 $langAdvises = "Informere";
 $langCourseDoesntExist = "<b>Advarsel :</b> Dette kursus eksisterer ikke";
 $langGetCourseFromOldPortal = "Klik her for at hente dette kursusforløb fra den gamle portal";
@@ -36,8 +33,6 @@ $email = "Email";
 $Intranet = "Intranet";
 $Englin = "Engelsk";
 $langInvalidForSelfRegistration = "Logind fejl - hvis du ikke er registreret, kan du bruge bruge denne <a href=claroline/auth/inscription.php>registreringsformular</a>";
-$langCourses = "kurser";
-$langIn = "i";
 $langSubCat = "underkategorier";
 $langMenuGeneral = "Generelt";
 $langMenuUser = "Bruger";

@@ -11,7 +11,6 @@ $langDocDel = "Het document is verwijderd.";
 $langTitleWork = "Titel van het werk voluit";
 $langAuthors = "Auteurs";
 $langDelList = "Lijst volledig verwijderen";
-$langDocument = "Document";
 $langWorkDelete = "Verwijderen";
 $langWorkModify = "Wijzigen";
 $langWorkConfirmDelete = "Bent u zeker dat u dit bestand wilt verwijderen?";

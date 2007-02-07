@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "演習問題";
 $langExercice = "演習問題";
 $langActivate = "有効にする";
 $langDeactivate = "無効化";

@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Enlazar al sitio";
 $langSubTitle = "Agregar al Menú Principal de la página de inicio de su curso un enlace a una página, o cualquier URL. Ej: si desea agregar un enlace a una página, vaya a esa página, copie y pegue su dirección en la barra dirección de su programa navegador e inserte el enlaace el el campo \'Enlace\' que está abajo.";
-$langHome = "Volver a la página principal";
-$langName = "Nombre";
-$langLink = "Enlace";
 $langAddPage            = "Agregar una página";
 $langSendPage           = "Página a enviar";
 $langCouldNot           = "El archivo no puede ser enviado";

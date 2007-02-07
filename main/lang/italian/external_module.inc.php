@@ -4,9 +4,6 @@ for more information: see languages.txt in the lang folder.
 $langLinkSite = "Aggiungi un collegamento";
 $langSubTitle = "Aggiunge alla pagina principale del Corso un collegamento a un sito, una pagina o a qualsiasi indirizzo web. <br> 
 Suggerimento: se desiderate aggiungere un collegamento a una pagina, navigate fino alla pagina richiesta, copiate l\'indirizzo dalla barra degli indirizzi del vostro browser e incollatelo nel campo \"collegamento\" sottostante.";
-$langHome = "Ritorna alla pagina principale";
-$langName = "Nome";
-$langLink = "Collegamento";
 $langAddPage            = "Aggiungi una pagina";
 $langSendPage           = "Pagina da inviare";
 $langCouldNot           = "Invio fallito";

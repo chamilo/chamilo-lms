@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Siirr‰";
-$langDoc = "Dokumentit";
 $langDownloadFile = "Lis‰‰ tiedostot palvelimelle.";
-$langDownload = "Lis‰‰";
 $langCreateDir = "Luo hakemisto";
-$langName = "Nimi";
 $langNameDir = "Uuden hakemiston nimi";
 $langSize = "Koko";
 $langRename = "Nime‰ uudelleen";
@@ -15,7 +12,6 @@ $langTo = "Hakemistoon";
 $langNoSpace = "Lataus ep‰onnistui, hakemistossa ei ole riitt‰v‰sti tilaa.";
 $langDownloadEnd = "Lataus on p‰‰ttynyt";
 $langFileExists = "Toiminto on mahdoton.<br>Samanniminen tiedosto on olemassa.";
-$langIn = "Sis‰‰n";
 $langNewDir = "Uuden hakemiston nimi";
 $langImpossible = "Toiminto on mahdoton";
 $langAddComment = "Lis‰‰ kommentti:";
@@ -26,7 +22,6 @@ $langDirCr = "Hakemisto on luotu";
 $langDirMv = "Hakemisto on siirretty";
 $langComMod = "Kommenttia on muutettu";
 $langViMod = "N‰kyvyytt‰ on muutettu";
-$langGroupManagement = "Ryhmien hallinta";
 $langGroupSpace = "Ryhm‰n alue";
 $langGroupSpaceLink = "Ryhm‰n alue";
 $langGroupForumLink = "Ryhm‰n keskustelu";

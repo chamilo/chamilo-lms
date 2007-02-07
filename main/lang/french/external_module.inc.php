@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Lier à un site";
 $langSubTitle = "Ajoute un lien vers une page sur le sommaire de votre cours. Pour ce faire, allez sur cette page, copiez son URL qui se trouve dans la barre d\'adresse de votre navigateur, et insérez-la dans le champ \"Lien\" ci-dessous.";
-$langHome = "Retour à la page d\'accueil";
-$langName = "Nom";
-$langLink = "Lien";
 $langAddPage            = "Ajouter une page";
 $langSendPage           = "Page à envoyer";
 $langCouldNot           = "Le fichier ne peut être envoyé";

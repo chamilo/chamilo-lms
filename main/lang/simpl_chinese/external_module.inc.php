@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "添加链接";
 $langSubTitle = "为课程主页菜单添加到网站, 网页或者任何的网址的链接. 提示:如果您需要增加一个到某一网页的链接,可以先访问那个网页,复制浏览器上部地址栏里的地址,然后添加到下面的\"链接\"栏. ";
-$langHome = "返回主页";
-$langName = "名称";
-$langLink = "链接";
 $langAddPage            = "增加一个页面";
 $langSendPage           = "要上传的页面";
 $langCouldNot           = "文件上传失败";

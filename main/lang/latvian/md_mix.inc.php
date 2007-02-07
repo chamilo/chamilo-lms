@@ -9,7 +9,6 @@ $langKwHelp = "<br/>Noklikš&#311;iniet \'+\' pogu, lai atv&#275;rtu, \'-\' pogu,
 $langAdvanced = "Papildus iesp&#275;jas";
 $langSearch = "Mekl&#275;t";
 $langSearchCrit = "Izmantojiet zem&#257;k esošo lauci&#326;u, lai nor&#257;d&#299;tu aprakstošus v&#257;rdus, vienu v&#257;rdu katr&#257; rind&#257;!";
-$langStatistics = "Statistika";
 $langNoKeywords = "Šim kursam nav atsl&#275;gv&#257;rdu";
 $langKwCacheProblem = "Atsl&#275;gv&#257;rdu starpkr&#257;tuvi nebija iesp&#275;jams atv&#275;rt";
 $langCourseKwds = "kursa atsl&#275;gv&#257;rdi";

@@ -1,12 +1,19 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Remove = "移動";
 $Description = "&#35500;&#26126;";
+$Links = "リンク";
+$Forums = "会議室";
+$langExercices = "演習問題";
+$Name = "名称";
 $langComment = "コメント";
 $langVisible = "見えるようにする/見えないようにする";
+$Language = "&#35328;&#35486;";
 $langUp = "Up";
 $langCourseCreate = "コースのウエブサイトを作る";
 $langTodo = "「要望」";
+$UserName = "ユーザ名";
 $iso639_2_code = "ja";
 $iso639_1_code = "jpn";
 $charset = "UTF-8";
@@ -21,8 +28,7 @@ $dateTimeFormatLong = "%Y年%B%e日 %H:%M";
 $timeNoSecFormat = "%H:%M";
 $langModify = "修正";
 $langDelete = "削除";
-$langTitle = "タイトル";
-$langHelp = "へルプ";
+$Help = "へルプ";
 $langOk = "オッケー";
 $langAddIntro = "Add introduction text";
 $langBackList = "リストに戻る";

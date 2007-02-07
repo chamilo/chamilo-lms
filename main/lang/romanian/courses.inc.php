@@ -40,8 +40,6 @@ $langShowAndSubscribeClosed = "Vizibil / Inchis";
 $langAdminThisUser = "Inapoi la utilizator";
 $langManage = "Administrarea portalului";
 $langEnrollToCourseSuccessful = "Ai fost inscris la acest curs";
-$langCourses = "cursuri";
-$langIn = "in";
 $langSubCat = "sub-categorii";
 $langUnsubscribeNotAllowed = "Nu este permisa renuntare la acest curs.";
 $langCourseAdminUnsubscribeNotAllowed  = "Esti administratorul cursului.";
@@ -63,6 +61,5 @@ $SubscribingNotAllowed = "Nu este permisa inscrierea";
 $CourseSortingDone = "Sortarea cursurilor a fost finalizata";
 $ExistingCourseCategories = "Categoriile existente de cursuri";
 $YouAreNowUnsubscribed = "Ai renuntat la acest curs.";
-$AddRight = "Adauga";
 $ViewOpenCourses = "Vizualizeaza cursurile deschise";
 ?>

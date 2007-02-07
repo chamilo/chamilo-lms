@@ -11,7 +11,6 @@ $langDocDel = "Dokumentet er slettet";
 $langTitleWork = "Dokumentets titel";
 $langAuthors = "Forfattere";
 $langDelList = "Slet hele listen";
-$langDocument = "Dokument";
 $langWorkDelete = "Slet";
 $langWorkModify = "Modificer";
 $langWorkConfirmDelete = "Ønsker du virkelig at slette denne fil";

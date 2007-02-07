@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "Bincang(secara <i>online</i>)";
 $langWash  = "Padam";
 $langSave  = "Simpan";
 $langRefresh  = "Terima Mesej";

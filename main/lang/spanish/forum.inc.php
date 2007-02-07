@@ -65,8 +65,16 @@ $NewForumPost = "Nuevo mensaje en el foro";
 $YouWantedToStayInformed = "Ha indicado que desea ser informado por e-mail cuando alguien conteste al tema";
 $MessageHasToBeApproved = "Su mensaje debe ser aprobado antes de ser publicado.";
 $AllowAttachments = "Permitir adjuntos";
+$EditForumCategory = "Editar la categoría de foros";
+$MovePost = "Mover el mensaje";
 $MoveToThread = "Mover a un tema";
+$ANewThread = "Un nuevo debate";
 $Reply = "Responder";
+$DeleteForum = "¿ Borrar el foro ?";
+$DeleteForumCategory = "¿ Borrar la categoría de foros ?";
 $Lock = "Bloquear";
 $Unlock = "Desbloquear";
+$MoveThread = "Mover debate";
+$PostVisibilityChanged = "La visibilidad del mensaje ha cambiado";
+$PostDeleted = "El mensaje ha sido borrado";
 ?>

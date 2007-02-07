@@ -39,7 +39,6 @@ $langShowAndSubscribeClosed = "Näkyvissä / Suljettu";
 $langAdminThisUser = "Takaisin";
 $langManage = "Ympäristön ylläpito";
 $langEnrollToCourseSuccessful = "Olet rekisteröitynyt kurssille";
-$langCourses = "kurssit";
 $langUnsubscribeNotAllowed = "Tältä kurssilta ei voi kirjautua pois";
 $langCourseAdminUnsubscribeNotAllowed  = "Olet tämän kurssin ylläpitäjä";
 $CourseManagement = "Kurssin ylläpito";

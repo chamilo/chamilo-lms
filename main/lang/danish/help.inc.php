@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Hjælpeforum";
-$langClose = "Luk vinduet";
 $langForContent = "Diskussionsforum er et skriftligt asynkront værktøj, 
  hvor e-mail giver adgang til en-til-en dialog, der enten har en åben eller
  lukket form. </p><p>Teknisk behøver den studerende kun sin browser for at få adgang til et
@@ -204,7 +203,6 @@ $langUserContent = "<b>Titel</b><p>Titel har ikke noget at gøre med at administr
 <p>For at tilføje en deltager på dit kursus, udfyld felterne og udfør ved at klikke \'ok\'. Personen
 vil mdotage en e-mail, der fortæller ham/hende, at du har registreret ham/hende og fortæller
 ham/hende eller minder ham/hende om sit login og sin adgangskode.</p>";
-$langGroupManagement = "Gruppehælp";
 $langGroupContent = "<p><b>Introduktion</b></p>
 <p>Dette værktøj giver dig mulighed for at oprette og styre grupper. 
 Ved oprettelsen (\'Opret gruppe\'), er grupperne tomme. Der er flere måde at udfylde dem på: 

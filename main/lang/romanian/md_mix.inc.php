@@ -9,7 +9,6 @@ $langKwHelp = "<br/> Apasa pe \"+\" pentru a deschide \"-\" pentru a inchide, \"
 $langAdvanced = "Avansat";
 $langSearch = "Cauta";
 $langSearchCrit = "Foloseste zona alaturata pentru cuvintele descriptive, un cuvant per linie!";
-$langStatistics = "Statistici";
 $langNoKeywords = "Acest curs nu are cuvinte cheie";
 $langKwCacheProblem = "Chache-ul cuvantului cheie nu poate fi deschis";
 $langCourseKwds = "cuvinte cheie ale cursului";

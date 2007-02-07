@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langHFor = "Forumi pomo&#263;";
-$langClose = "Zatvori prozor";
 $langForContent = "Forum je pisani i asinkroni diskusijski alat.
 Kako email omoguæava jedan - prema - jedan dijalog, forumi omoguæavaju javni ili polu-javni dijalog.
 </p><p> Tehnièki gledano, studenti trebaju samo svoj preglednik da bi koristili Claroline forume. .</P><p>Da bi organizirali forume, kliknite na\'Upravljanje\'. Diskusija je organizirana u setovima i podsetovima kako slijedi: </p><p><b>Kategorija > Forum > Tema > Odgovor</b></p> Da bi struktuirali vaše studentske diskusije, potrebno je, prije svega, organizirati kategorije i forume, ostavljajuæi teme i odgovore studentima da sami stvaraju. Prema standardnim postavkama forumi sadrže samo kategoriju \'Javno\', primjer foruma i rimjer jedne teme.</p><p> Prvo što morate uèiniti je izbrisati primjer teme i tako modificirate prvo ime foruma. Tada, možete stvoriti u kategoriji
@@ -151,7 +150,6 @@ $langUserContent = "<b>Uloge</b><p>Uloge nemaju raèunalno povezanu funkciju.
  Polje \'Nastavnici\' je potpuno neovisan od Korisnièke liste.</p><hr>
 <b>Dodaj korisnika</b>
 <p>Kako bi dodali korisnika na vaš predmet, popunite polje i  potvrdite. Osoba \'e primiti obavijest putem emaila o prijavi i svom korisni;kom imenu i zaporki.</p>";
-$langGroupManagement = "Pomo&#263; za skupine";
 $langGroupContent = "<p><b>Uvod</b></p>
 <p>Ovaj alat omoguæava stvaranje i upravljanje radnim grupama. Prilikom stvranja (kreiranja) grupe, grupe su prazne. Postoji mnogo naèina za njihovo popunjavanje:
 <ul><li>automatsko (\'Popuni grupe\'),</li>

@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Groups";
 $langNewGroupCreate = "Create new group(s)";
 $langGroupCreation = "New groups creation";
 $langCreate = "create";
@@ -10,7 +9,6 @@ $langMax = "max.";
 $langGroupPlacesThis = "seats (optional";
 $langGroupsAdded = "group(s) has (have) been added";
 $langGroupDel = "Group deleted";
-$langForums = "Forum";
 $langDocuments = "Documents";
 $langExistingGroups = "Groups";
 $langRegistered = "Registered";

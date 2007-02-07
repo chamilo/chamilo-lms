@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Vaje";
 $langExercice = "Vaja";
 $langActivate = "Omogoèi";
 $langDeactivate = "Prepreèi";
@@ -85,6 +84,7 @@ $langScore = "Rezultat";
 $langCorrespondsTo = "Ustreza";
 $langExpectedChoice = "Prièakovana izbira";
 $langYourTotalScore = "Tvoj skupen rezultat je";
+$Build = "Zgradi";
 $langEvalSet = "ocenjevalni parametri";
 $langActive = "aktiven";
 $langInactive = "neaktiven";
@@ -105,7 +105,6 @@ $langIntroduction = "Uvod";
 $langTitleAssistant = "Pomoènik za kreiranje vaj";
 $langQuesList = "vprašalnik";
 $langSaveEx = "shrani vaje";
-$langClose = "zapri";
 $langFinish = "Konèaj";
 $langCancel = "Preklièi";
 $langQImage = "Vprašanje s sliko";
@@ -133,7 +132,6 @@ $langImportHotPotatoesQuiz = "Uvozi HotPotatoes test(e)";
 $langHotPotatoesTests = "Uvozi HotPatatoes test(e)";
 $langDownloadFile = "Prenesi HotPotatoes (html ali zip) na strežnik";
 $langDownloadImg = "Prenesi sliko na strežnik";
-$langDownload = "Prenesi";
 $langDownloadEnd = "Prenos html datoteke je konèan.";
 $langNoSpace = "Prenos ni bil uspešen. Ni dovolj diskovnega prostora v tvoji mapi.";
 $langZipNoPhp = "Zip datoteka ne sme vsebovati .PHP datotek.";
@@ -170,7 +168,6 @@ $langHotspotError = "Podajte opis in utež za vsako izmed vroèih toèk.";
 $langMoreHotspots = "+vroèa toèka";
 $langLessHotspots = "-vroèa toèka";
 $langHotspotZones = "Vroèe toèke (hotspots)";
-$langDescription = "Opis";
 $langNextQuestion = "Naslednje vprašanje";
 $langCorrectAnswer = "Pravilen odgovor";
 $langHotspotHit = "Vaš odgovor";

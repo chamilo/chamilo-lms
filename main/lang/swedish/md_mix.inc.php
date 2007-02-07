@@ -9,7 +9,6 @@ $langKwHelp = "<br/> Klicka \'+\' knappen för att öppna, \'-\' knappen för att s
 $langAdvanced = "Avancerad";
 $langSearch = "Sök";
 $langSearchCrit = "Använd utrymmet nedan för beskrivning, ett ord per rad!";
-$langStatistics = "Statistik";
 $langNoKeywords = "Denna kurs har inget nyckelord";
 $langKwCacheProblem = "Nyckelords \"cache\" kan inte öppnas";
 $langCourseKwds = "kurs nyckelord";

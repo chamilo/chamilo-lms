@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "P&#257;rvietot uz";
-$langDoc = "Dokumenti";
 $langDownloadFile = "Augšupl&#257;d&#275;t failu server&#299;";
-$langDownload = "Augšupl&#257;d&#275;t";
 $langCreateDir = "Izveidot direktoriju";
-$langName = "V&#257;rds";
 $langNameDir = "Jaun&#257;s direktorijas nosaukums";
 $langSize = "Izm&#275;rs";
 $langRename = "P&#257;rsaukt";
@@ -15,7 +12,6 @@ $langTo = "uz";
 $langNoSpace = "Augšupiel&#257;de netika veikta. Iesp&#275;jams, ka: 1) J&#363;ms pieejam&#257; datu kvota ir p&#257;rsniegta; vai 2) ir beigusies datu vieta uz servera.";
 $langDownloadEnd = "Augšupiel&#257;de ir pabeigta";
 $langFileExists = "Veicam&#257; darb&#299;ba ir neiesp&#275;jama - fails ar t&#257;du nosaukumu jau eksist&#275;.";
-$langIn = "iekš";
 $langNewDir = "Jaun&#257;s direktorijas nosaukums";
 $langImpossible = "Darb&#299;ba ir neiesp&#275;jama";
 $langAddComment = "Pievienot/labot koment&#257;ru";
@@ -26,7 +22,6 @@ $langDirCr = "Direktorija izveidota";
 $langDirMv = "Elements p&#257;rvietots";
 $langComMod = "Koment&#257;rs papildin&#257;ts";
 $langViMod = "Pieejam&#299;ba p&#257;rskat&#299;ta";
-$langGroupManagement = "Grupu administr&#275;šana";
 $langGroupSpace = "Grupas apraksts";
 $langGroupSpaceLink = "Grupas apraksts";
 $langGroupForumLink = "Grupas diskusijas";

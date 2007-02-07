@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "Chatta";
 $langOnlineConference  = "Konferens";
 $langWash  = "Tvätta";
 $langReset  = "Återställ";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "Var vänlig markera denna box endast om du 
 $langQuestion = "Fråga";
 $langClearList = "Töm listan";
 $langWhiteBoard = "Vita tavlan";
-$langHome = "Hem";
 $langTextEditorDefault = "<h2>Ord behandlare</h2>Klipp ut och klistra in här från MS-word® sedan ändra. Deltagare kan se dina ändringar i realtid.";
-$langLinks = "Länkar";
 $langStreaming = "Strömning";
 $langStreamURL = "Strömma URL";
 $langStreamType = "Strömningstyp";

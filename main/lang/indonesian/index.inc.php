@@ -4,13 +4,10 @@ for more information: see languages.txt in the lang folder.
 $langInvalidId = "Login gagal - nama user atau password salah.";
 $langWelcome = "Beberapa mata kuliah tersedia bebas di bawah ini. Yang lainnya membutuhkan nama user dan password, yang dapat diperoleh dengan meng-klik \'pendaftaran\'. Pengajar dapat membuat situs mata kuliah dengan mengklik pendaftaran juga, tetapi dengan memilih 
 \'Buat situs mata kuliah (pengajar)\'.";
-$langUserName = "Nama user";
 $langPass = "Password";
 $langEnter = "Enter";
-$langHelp = "Memulai";
 $langReg = "Pendaftaran";
 $langMenu  = "Menu";
-$langDoc = "Dokumentasi";
 $langAdvises = "Saran";
 $langCourseDoesntExist = "<b>Peringatan:</b> Mata Kuliah ini tidak ada";
 $langGetCourseFromOldPortal = "klik di sini untuk memperoleh mata kuliah ini dari portal lama anda";
@@ -34,8 +31,6 @@ $email = "email";
 $Intranet = "Intranet";
 $Englin = "Inggris";
 $langInvalidForSelfRegistration = "Login gagal - jika anda belum terdaftar, anda dapat  melakukannya menggunakan <a href=claroline/auth/inscription.php>registration form</a>";
-$langCourses = "mata kuliah";
-$langIn = "dalam";
 $langSubCat = "sub-katagori";
 $langMenuGeneral = "Umum";
 $langMenuUser = "User";

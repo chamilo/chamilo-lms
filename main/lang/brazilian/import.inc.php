@@ -5,7 +5,6 @@ $langPgTitle = "Título da página";
 $langExplanation = "A página precisa estar em formato HTML (ex. \"minha_pagina.html\"). Ela será referenciada pela Homepage. Se você precisa enviar documentos em outros formatos (PDF, Word, Power Point, Vídeo, etc.) use a <a href=../document/document.php>ferramenta Documentos</a>";
 $langTooBig = "Você não escolheu nenhum arquivo para enviar, ou ele é muito grande.";
 $langCouldNot = "O arquivo não pode ser enviado.";
-$langExercices = "Exercícios";
 $langNotAllowed = "Não permitido";
 $langAddPageToSite = "Add a page to the area";
 $langCouldNotSendPage = "Esse arquivo não está em formato HTML e não poderá ser enviado. Se você quiser enviar documentos em outros formatos (PDF, Word, Power Point, Vídeo, etc.) use a <a href=../document/document.php>ferramenta Documentos</a>";

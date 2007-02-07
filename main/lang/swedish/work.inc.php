@@ -11,7 +11,6 @@ $langDocDel = "Filen raderad";
 $langTitleWork = "Filnamn";
 $langAuthors = "Författare";
 $langDelList = "Radera hela listan";
-$langDocument = "Dokument";
 $langWorkDelete = "Radera";
 $langWorkModify = "Modifiera";
 $langWorkConfirmDelete = "Vill du verkligen radera detta dokument";

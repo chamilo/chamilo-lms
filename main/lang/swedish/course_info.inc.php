@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Modifiera kursinformation";
 $langModifDone = "Informationen har modifierats";
-$langHome = "Tillbaka till hemsidan";
 $langCode = "Kurskod";
 $langDelCourse = "Radera hela kurswebbsajten";
 $langProfessors = "Lärare";
@@ -14,7 +13,6 @@ $langUnsubscription = "Avsluta prenumeration";
 $langPrivOpen = "Privat åtkomst, registrering öppen";
 $langPrivate = "Privat åtkomst, registrering stängd (sajt tillgänglig bara för personer på <a href=../user/user.php>Användarlistan</a>)";
 $langForbidden = "Inte tillåtet";
-$langLanguage = "Språk";
 $langConfTip = "Som standard kommer din kurs att kunna nås av alla så länge som det är registrerade användare. I händelse av att du har något konfidentiellt, 
 det enklaste är att öppna registrering under
 en vecka, och be studenterna att de registrerar sig själva, därefter stänga registreringen och kontrollera användarlistan efter obehöriga.";
@@ -22,9 +20,6 @@ $langOpenToTheWorld = "Öppen - åtkomst tillåten för hela världen";
 $OpenToThePlatform = "Öppen - access tillåten för alla registrerade på plattformen";
 $langOpenToThePlatform = "Öppen - åtkomst tillåten för användare registrerade på plattformen.";
 $langTipLang  = "Detta språk gäller för all besökare som besöker denna kurswebbsajt.";
-$Agenda = "Agenda";
-$langLink = "Länkar";
-$langDocument = "Dokument";
 $langVid = "Video";
 $langWork = "Elevarbeten";
 $langProgramMenu = "Kursprogram";
@@ -46,7 +41,6 @@ $langBackupCourse = "Arkivera denna kurs(backup)";
 $langModifGroups = "Grupper";
 $langProfessor = "Professor";
 $langGroups  = "Grupper";
-$langChat  = "Diskussion";
 $langDescriptionCours   = "Kursbeskrivning";
 $langArchiveCourse  = "Kursbackup ";
 $langRestoreCourse  = "Återställ en kurs";
@@ -72,7 +66,6 @@ $langLastEdit  = "Sista redigering";
 $langLastVisit  = "Senaste besök";
 $langSubscription = "Prenumeration";
 $langCourseAccess = "Kursaccess";
-$langDownload = "Ladda ned";
 $langConfirmBackup = "Vill du verkligen göra en backup på kursen";
 $langCreateSite = "Skapa kurswebbsajt";
 $langRestoreDescription = "Kursen finns i en arkivfil som du kan välja nedan.<br><br>När du lickat på \"Återskapa\", kommer arkivet packas upp och kursen återskapas.
@@ -87,7 +80,6 @@ $langBackH = "tillbaka till hemsidan";
 $langOtherCategory = "Annan kategori";
 $langAllowedToUnsubscribe = "Användare är tillåtna att avsluta prenumeration från denna kurs.";
 $langNotAllowedToUnsubscribe = "Användare är inte tillåtna att avsluta prenumeration från denna kurs.";
-$langDescription = "Beskrivning";
 $langCourseVisibilityClosed = "Fullständigt stängd; kursen endast åtkomlig för kurs administratör";
 $CourseVisibilityClosed = "Avstängd - ingen åtkomst till denna kurs";
 $CourseVisibilityModified = "Ändrad (mer detaljerade inställningar finns under roller-rättigheter ).";

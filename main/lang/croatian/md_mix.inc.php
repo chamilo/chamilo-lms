@@ -9,7 +9,6 @@ $langKwHelp = "<br/> Otvorite pritiskom na tipku \'+\', zatvorite pritiskom na t
 $langAdvanced = "Napredna";
 $langSearch = "Pretraga";
 $langSearchCrit = "Prostor niže uporabite za opisne rije&#269;i, jedna rije&#269; po retku!";
-$langStatistics = "Statistika";
 $langNoKeywords = "Kolegij nema klju&#269;nih rije&#269;i";
 $langKwCacheProblem = "Memorijski ure&#273;aj s klju&#269;nim rije&#269;ima ne može se otvoriti";
 $langCourseKwds = "klju&#269;ne rije&#269;i kolegija";

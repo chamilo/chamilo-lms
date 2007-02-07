@@ -8,7 +8,6 @@ $langExplanation = "Эта страница дожна быть в формете HTML (например, \"my_page.
 (PDF, Power Point, Word...) используйте средство <a href=../document/document.php> Учебные материалы</a>";
 $langTooBig = "Вы не выбрали файл для размещения на сайте или он слишком большой.";
 $langCouldNot = "Файл не был размещен";
-$langExercices = "тесты";
 $langNotAllowed = "Вы не зарегистрированы как ответственный за курс";
 $langAddPageToSite = "Добавить страницу на сайт";
 $langCouldNotSendPage = "Этот файл не в формате HTML и не может быть размещен на сайте. 

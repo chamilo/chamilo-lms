@@ -3,13 +3,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Acceso no válido.<BR>Si usted no está registrado complete el <a href=\'claroline/auth/inscription.php\'>formulario de inscripción</a></font color>";
 $langWelcome = "Los cursos listados abajo son de acceso libre. Los otros cursos requieren un nombre de usuario y una contraseña, los cuales se pueden obtener mediante una \'inscripción\'. Los profesores y asistentes pueden crear cursos mediante la opción \'Inscripción\'.";
-$langUserName = "Nombre de usuario";
 $langPass = "Contraseña";
 $langEnter = "Ingresar";
-$langHelp = "Ayuda";
 $langReg = "Inscribirse";
 $langMenu  = "Menú";
-$langDoc = "Documentación";
 $langAdvises = "Consejos";
 $langCourseDoesntExist = "<b>Alerta :</b> Este curso no existe";
 $langGetCourseFromOldPortal = "haga clic aquí para obtener este curso de su antiguo portal ";
@@ -33,8 +30,6 @@ $email = "Correo electrónico";
 $Intranet = "Intranet";
 $Englin = "Inglés";
 $langInvalidForSelfRegistration = "Acceso negado - si no está registrado utilice el <a href=claroline/auth/inscription.php>formulario de inscripción</a>";
-$langCourses = "Cursos";
-$langIn = "en";
 $langSubCat = "sub-categorías";
 $langMenuGeneral = "General";
 $langMenuUser = "Usuario";

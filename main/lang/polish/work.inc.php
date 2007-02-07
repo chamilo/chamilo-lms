@@ -11,7 +11,6 @@ $langDocDel = "Praca usuni&#281;ta";
 $langTitleWork = "Tytu&#322; pracy";
 $langAuthors = "Autorzy";
 $langDelList = "Usuñ ca³± listê";
-$langDocument = "Dokumenty";
 $langWorkDelete = "Usu&#324;";
 $langWorkModify = "Modyfikuj";
 $langWorkConfirmDelete = "Czy na pewno chcesz usun±æ tê pracê?";

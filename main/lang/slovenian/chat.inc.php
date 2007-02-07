@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "Klepetalnica";
 $langOnlineConference  = "Konferenca";
 $langWash  = "Poèisti";
 $langReset  = "Reset";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "Oznaèite le v primeru zelo pomembnega vpra
 $langQuestion = "vprašanje";
 $langClearList = "Poèisti seznam";
 $langWhiteBoard = "tabla";
-$langHome = "Domov";
 $langTextEditorDefault = "<h2>Urejevalnik besedil</h2>Izreži in prilepi sem iz Ms-Word® , potem uredi. Udeleženci bodo spremembe lahko opazovali v živo.";
-$langLinks = "Povezave";
 $langStreaming = "Prenos (streaming)";
 $langStreamURL = "URL podatkovnega toka";
 $langStreamType = "Tip podatkovnega toka";

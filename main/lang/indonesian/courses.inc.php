@@ -41,8 +41,6 @@ $langShowAndSubscribeClosed = "Nampak / Tertutup";
 $langAdminThisUser = "Kembali ke user";
 $langManage = "Manajemen kampus";
 $langEnrollToCourseSuccessful = "Anda telah terdaftar di mata kuliah tsb";
-$langCourses = "mata kuliah";
-$langIn = "dalam";
 $langSubCat = "sub-kategori";
 $langUnsubscribeNotAllowed = "Pengunduran diri tidak diijinkan dalam mata kuliah ini.";
 $langCourseAdminUnsubscribeNotAllowed  = "Anda adalah pengelola mata kuliah ini.";
@@ -64,6 +62,5 @@ $SubscribingNotAllowed = "Pendaftaran tidak diijinkan";
 $CourseSortingDone = "Pengurutan Mata Kuliah selesai";
 $ExistingCourseCategories = "Kategori Mata Kuliah yang ada";
 $YouAreNowUnsubscribed = "Anda kini tidak terdaftar di mata kuliah tsb";
-$AddRight = "Tambah";
 $ViewOpenCourses = "Tampilkan mata kuliah yang terbuka untuk umum";
 ?>

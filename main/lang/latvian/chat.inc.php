@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "P&#316;&#257;p&#257;šana";
 $langOnlineConference  = "Konference";
 $langWash  = "Dz&#275;st";
 $langReset  = "Ats&#257;kt";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "L&#363;dzu, atz&#299;m&#275; šeit ar &#311
 $langQuestion = "jaut&#257;jums";
 $langClearList = "Dz&#275;st sarakstu";
 $langWhiteBoard = "Balt&#257; t&#257;fele";
-$langHome = "M&#257;jas";
 $langTextEditorDefault = "<h2>Teksta redaktors</h2>Izgriez un iel&#299;m&#275; šeit no Writer vai MS-Word un labo. Dal&#299;bnieki redz&#275;s k&#257; J&#363;s to dar&#257;t \"dz&#299;vaj&#257;\".";
-$langLinks = "Hipersaites";
 $langStreaming = "Straum&#299;te";
 $langStreamURL = "Straum&#299;tes URL";
 $langStreamType = "Straum&#299;tes tips";

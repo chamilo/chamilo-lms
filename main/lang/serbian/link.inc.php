@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "Linkovi";
 $langLinkName = "Ime linka";
 $langLinkAdd = "Dodaj link";
 $langLinkAdded = "Link je dodat";

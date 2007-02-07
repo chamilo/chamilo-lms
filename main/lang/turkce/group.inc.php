@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Grup";
 $langNewGroupCreate = "Yeni grup(lar) yarat";
 $langGroupCreation = "Yeni grup yaratma";
 $langCreate = "yarat";
@@ -10,7 +9,6 @@ $langMax = "en çok.";
 $langGroupPlacesThis = "kiþi (seçimlik)";
 $langGroupsAdded = "grup(lar) eklendi";
 $langGroupDel = "Grup silindi";
-$langForums = "Forum";
 $langDocuments = "Belgeler";
 $langExistingGroups = "Gruplar";
 $langRegistered = "Kayýtlý";
@@ -50,7 +48,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Bir kullan&#305;c&#305; en fazla
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " gruba üye olabilir";
 $langGroupLimit = "S&#305;n&#305;r";
 $langStudentRegAllowed = "Öðrenciler gruplara kendi kendilerine kaydolabilir";
-$langAll = "hepsi";
 $langGroupAllowStudentUnregistration = "Kullan&#305;c&#305;lara gruptan kay&#305;tlar&#305;n&#305; silme izni verildi";
 $langAllGroups = "Bütün Gruplar";
 $langStudentUnsubscribe = "Bu gruptan kayd&#305;m&#305; sil";

@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Moure a";
-$langDoc = "Documents";
 $langDownloadFile = "Puja fitxer al servidor";
-$langDownload = "Puja";
 $langCreateDir = "Crea un directori";
-$langName = "Nom";
 $langNameDir = "Nom del nou directori";
 $langSize = "Mida";
 $langRename = "Reanomena";
@@ -15,7 +12,6 @@ $langTo = "a";
 $langNoSpace = "La pujada de fitxers ha fallat. No hi ha prou espai en el teu directori";
 $langDownloadEnd = "La pujada de fitxers ha finalitzat";
 $langFileExists = "Operació impossible.<br>Ja existeix un fitxer amb aquest nom.";
-$langIn = "en";
 $langNewDir = "Nom del nou directori";
 $langImpossible = "Operació impossible";
 $langAddComment = "Afegeix/modifica un comentari a";
@@ -26,7 +22,6 @@ $langDirCr = "Directori creat";
 $langDirMv = "Element mogut";
 $langComMod = "Comentari modificat";
 $langViMod = "Visibilitat modificada";
-$langGroupManagement = "Gestió de grups";
 $langGroupSpace = "espai de grups";
 $langGroupSpaceLink = "Espai delgrup";
 $langGroupForumLink = "Fòrum de grup";

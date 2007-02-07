@@ -9,7 +9,6 @@ $langKwHelp = "Kliknite na \'+\' dugme da biste otvorili, \'-\' dugme da biste z
 $langAdvanced = "Napredni";
 $langSearch = "Pretraga";
 $langSearchCrit = "Koristite oblast ispod za opisne re&#269;i, jedna re&#269; po liniji!";
-$langStatistics = "Statistike";
 $langNoKeywords = "Ovaj kurs nema klju&#269;ne re&#269;i";
 $langKwCacheProblem = "Keš klju&#269;nih re&#269;i ne može da se otvori";
 $langCourseKwds = "klju&#269;ne re&#269;i kursa";

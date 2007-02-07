@@ -11,7 +11,6 @@ $langKwHelp = "单击 \'+\' 按钮打开, \'-\' 按钮关闭, \'++\' 按钮全部打开, \'--\'
 $langAdvanced = "高级";
 $langSearch = "搜索";
 $langSearchCrit = "请在下面空格填入简介, 每行一字!";
-$langStatistics = "统计";
 $langNoKeywords = "此课程无关键词";
 $langKwCacheProblem = "关键词缓存无法打开";
 $langCourseKwds = "课程关键词";

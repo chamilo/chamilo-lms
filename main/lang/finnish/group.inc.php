@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langGroupManagement = "Ryhmät";
 $langNewGroupCreate = "Muodosta uusia ryhmiä";
 $langGroupCreation = "Uusien ryhmien muodostaminen";
 $langCreate = "muodosta";
@@ -10,7 +9,6 @@ $langMax = "maks.";
 $langGroupPlacesThis = "paikkoja (valinnainen)";
 $langGroupsAdded = "ryhmät on lisätty";
 $langGroupDel = "Ryhmä poistettu";
-$langForums = "Foorumi";
 $langDocuments = "Dokumentit";
 $langExistingGroups = "Ryhmät";
 $langRegistered = "Rekisteröityneet";
@@ -50,7 +48,6 @@ $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Käyttäjä voi kuulu maksimissaan 
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " ryhmään";
 $langGroupLimit = "Rajoitus";
 $langStudentRegAllowed = "Opiskelijat voivat itse rekisteröityä ryhmiin";
-$langAll = "kaikki";
 $langGroupAllowStudentUnregistration = "Käyttäjät on sallitu itse poistua ryhmistä";
 $langAllGroups = "Kaikki ryhmät";
 $langStudentUnsubscribe = "Poista minut tästä ryhmästä.";

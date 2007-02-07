@@ -6,7 +6,6 @@ $MyTasks = "Sarcinile mele";
 $FavoriteBlogs = "Blogurile mele favorite";
 $Navigation = "Navigare";
 $TopTen = "Topul blogurilor";
-$Title = "Titlu";
 $Subtitle = "Subtitlu";
 $ThisBlog = "Acest blog";
 $NewPost = "Postare noua";

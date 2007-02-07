@@ -2,11 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Pindah ke";
-$langDoc = "Dokumen";
 $langDownloadFile = "Upload file ke server";
-$langDownload = "Upload";
 $langCreateDir = "Buat direktori";
-$langName = "Nama";
 $langNameDir = "Nama direktori baru";
 $langSize = "Ukuran";
 $langRename = "Ganti nama";
@@ -15,7 +12,6 @@ $langTo = "ke";
 $langNoSpace = "Upload gagal. Tempat penyimpanan di direktori tidak cukup";
 $langDownloadEnd = "Upload selesai";
 $langFileExists = "Operasi tidak mungkin.<br>File dengan nama sama sudah ada terlebih dulu.";
-$langIn = "dalam";
 $langNewDir = "Nama direktori baru";
 $langImpossible = "Operasi tidak mungkin";
 $langAddComment = "Tambah/ubah komentar";
@@ -26,7 +22,6 @@ $langDirCr = "Direktori dibuat";
 $langDirMv = "Elemen dipindah";
 $langComMod = "Komentar diubah";
 $langViMod = "Kenampakan diubah";
-$langGroupManagement = "Manajemen Group";
 $langGroupSpace = "ArealGroup";
 $langGroupSpaceLink = "ArealGroup";
 $langGroupForumLink = "Forum Group";

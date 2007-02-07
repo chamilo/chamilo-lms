@@ -22,7 +22,6 @@ $langImport = "Uvozi imsmanifest.xml";
 $langRemove = "Odstrani MDE-je";
 $langAllRemovedFor = "Vsi vnosi odstranjeni za";
 $langIndex = "Indeksiraj besede z PhpDig";
-$langStatistics = "Statistika";
 $langTotalMDEs = "Skupno število Scorm MDD vnosov:";
 $langMainMD = "Odpri glavni MDE";
 $langLines = "vrstic";

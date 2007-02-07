@@ -41,8 +41,6 @@ $langShowAndSubscribeClosed = "Visível / Fechado";
 $langAdminThisUser = "Voltar para o utlizador";
 $langManage = "Gestão do portal";
 $langEnrollToCourseSuccessful = "Foi inscrito no curso";
-$langCourses = "cursos";
-$langIn = "em";
 $langSubCat = "subcategorias";
 $langUnsubscribeNotAllowed = "Não é permitido anular inscrição";
 $langCourseAdminUnsubscribeNotAllowed  = "Não é permitido anular inscrição";
@@ -64,6 +62,5 @@ $SubscribingNotAllowed = "Inscrição não autorizada!";
 $CourseSortingDone = "Ordenação dos cursos terminada";
 $ExistingCourseCategories = "Categorias de cursos que existem";
 $YouAreNowUnsubscribed = "A sua inscrição neste curso foi cancelada";
-$AddRight = "Acrescentar";
 $ViewOpenCourses = "Cer cursos abertos";
 ?>

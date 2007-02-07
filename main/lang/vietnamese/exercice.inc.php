@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Các bài tập";
 $langExercice = "Bài tập";
 $langActivate = "Enable";
 $langDeactivate = "Disable";

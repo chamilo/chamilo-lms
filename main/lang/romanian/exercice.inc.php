@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Teste";
 $langExercice = "Test";
 $langActivate = "Activeaza";
 $langDeactivate = "Dezactiveaza";
@@ -105,7 +104,6 @@ $langIntroduction = "Introducere";
 $langTitleAssistant = "Asistent pentru crearea exercitiilor";
 $langQuesList = "lista intrebarilor";
 $langSaveEx = "slaveaza exercitiile";
-$langClose = "inchide";
 $langFinish = "Termina";
 $langCancel = "Anuleaza";
 $langQImage = "Intrebare cu o imagine";
@@ -133,7 +131,6 @@ $langImportHotPotatoesQuiz = "Importa testele HotPotatoes";
 $langHotPotatoesTests = "Importa testele HotPotatoes";
 $langDownloadFile = "Transfera HotPotatoes (html or zip) la server";
 $langDownloadImg = "Transfera imaginea catre server";
-$langDownload = "Transfera";
 $langDownloadEnd = "Transferul html este finalizat.";
 $langNoSpace = "Transferul a esuat. Nu este destul spatiu liber in directorul tau.";
 $langZipNoPhp = "Arhiva zip nu poate contine fisiere .PHP";
@@ -170,7 +167,6 @@ $langHotspotError = "Va rog propuneti o descriere si valoare pentru fiecare punc
 $langMoreHotspots = "+punct de interes";
 $langLessHotspots = "-punct de interes";
 $langHotspotZones = "Puncte de interes";
-$langDescription = "Descriere";
 $langNextQuestion = "Intrebarea urmatoare";
 $langCorrectAnswer = "Raspuns corect";
 $langHotspotHit = "Raspunsul dumneavoastra a fost";

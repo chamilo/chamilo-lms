@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Povezava na stran";
 $langSubTitle = "Doda povezavo iz glavnega menuja domaèe strani teèaja na poljubno stran oziroma poljuben URL. <p>Nasvet: èe želite dodati povezavo na stran, pojdite na to stran, kopirajte \'naslov\' (URL) iz vrstice naslov vašega brskalnika in ga vstavite v polje \"Povezava\" spodaj.";
-$langHome = "Povratek na domaèo stran";
-$langName = "Ime";
-$langLink = "Povezava";
 $langAddPage            = "Dodaj stran";
 $langSendPage           = "Stran za prenos";
 $langCouldNot           = "Datoteke ni bilo mogoèe prenesti";

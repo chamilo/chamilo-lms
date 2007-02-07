@@ -11,7 +11,6 @@ $langDocDel = "Le document a été suppprimé";
 $langTitleWork = "Titre du document en toutes lettres";
 $langAuthors = "Auteurs";
 $langDelList = "Effacer complètement la liste";
-$langDocument = "Document";
 $langWorkDelete = "Effacer";
 $langWorkModify = "Modifier";
 $langWorkConfirmDelete = "Confirmez-vous cette suppression ?";

@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercices = "Exercícios";
 $langExercice = "Exercício";
 $langActivate = "Ativar";
 $langDeactivate = "Desativar";
@@ -105,7 +104,6 @@ $langIntroduction = "Introdução";
 $langTitleAssistant = "Assistente para criação de exercícios";
 $langQuesList = "lista de questões";
 $langSaveEx = "salvar exercícios";
-$langClose = "fechar";
 $langFinish = "Finalizar";
 $langCancel = "Cancelar";
 $langQImage = "Questão com uma imagem";
@@ -133,7 +131,6 @@ $langImportHotPotatoesQuiz = "Importar Exercícios do HotPotatoes";
 $langHotPotatoesTests = "Importar Exercícios do HotPotatoes";
 $langDownloadFile = "Enviar HotPotatoes (html ou zip) para o servidor";
 $langDownloadImg = "Enviar arquivo de Imagem para o servidor";
-$langDownload = "Enviar";
 $langDownloadEnd = "O upload do html está terminado.";
 $langNoSpace = "O upload falhou. Não há espaço em disco suficiente no seu diretório";
 $langZipNoPhp = "O arquivo zip não pode conter arquivos .PHP";
@@ -170,7 +167,6 @@ $langHotspotError = "Por favor atribua uma descrição e uma pontuação (peso) para
 $langMoreHotspots = "+hotspot";
 $langLessHotspots = "-hotspot";
 $langHotspotZones = "Hotspots";
-$langDescription = "Descrição";
 $langNextQuestion = "Próxima questão";
 $langCorrectAnswer = "Resposta correta";
 $langHotspotHit = "A sua resposta foi";

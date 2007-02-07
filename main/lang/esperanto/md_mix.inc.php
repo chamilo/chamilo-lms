@@ -9,7 +9,6 @@ $langKwHelp = "<br/> Klaku la butonon \'+\' por malfermi, \'-\' por fermi, \'++\
 $langAdvanced = "Altnivela";
 $langSearch = "Ser&#265;i";
 $langSearchCrit = "Uzu la suba aero por priskribemaj vortoj, po unu linie!";
-$langStatistics = "Statistikoj";
 $langNoKeywords = "Tiu &#265;i kurso ne havas &#349;losilvortojn.";
 $langKwCacheProblem = "Ne eblas malfermi la provizejon de &#349;losilvortoj";
 $langCourseKwds = "&#349;losilvortoj de la kurso";

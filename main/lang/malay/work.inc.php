@@ -11,7 +11,6 @@ $langDocDel = "Tugasan dipadam";
 $langTitleWork = "Tajuk Tugasan";
 $langAuthors = "Disediakan Oleh";
 $langDelList = "Padam semua tugasan";
-$langDocument = "Dokumen";
 $langWorkDelete = "Padam";
 $langWorkModify = "Ubahsuai";
 $langWorkConfirmDelete = "Anda pasti untuk padam tugasan ini";

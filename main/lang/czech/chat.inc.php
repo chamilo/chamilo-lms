@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChat  = "Chat";
 $langOnlineConference  = "Konference";
 $langWash  = "Vy&#269;istit";
 $langReset  = "Resetovat";
@@ -22,9 +21,7 @@ $langOnlyCheckForImportantQuestion = "Prosím zaškrtn&#283;te polí&#269;ko jenom 
 $langQuestion = "otázka";
 $langClearList = "Vy&#269;istit seznam";
 $langWhiteBoard = "Tabule na psaní";
-$langHome = "Na po&#269;átek (Home)";
 $langTextEditorDefault = "<h2>Textový editor</h2>Z programu MS-Word® zde m&#367;žete vkládat a vyjmout text, a pak upravovat. Ú&#269;astníci uvidí vaše úpravy na&#378;ivo.";
-$langLinks = "Linky (odkazy)";
 $langStreaming = "P&#345;enos (streaming)";
 $langStreamURL = "Stream-URL";
 $langStreamType = "Typ streamingu";

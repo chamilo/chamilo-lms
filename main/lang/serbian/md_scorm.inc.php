@@ -22,7 +22,6 @@ $langImport = "Kreiranje MDE-a iz manifest";
 $langRemove = "Ukloni MDE";
 $langAllRemovedFor = "Svi unosi su uklonjeni za ";
 $langIndex = "Indeks re&#269;i sa PhpDig";
-$langStatistics = "Statistike";
 $langTotalMDEs = "Kona&#269;an broj MD unosa: ";
 $langMainMD = "Otvori glavni MDE";
 $langLines = "linije";

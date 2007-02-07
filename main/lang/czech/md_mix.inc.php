@@ -9,7 +9,6 @@ $langKwHelp = "<br/> Klikn&#283;te na \'+\' tla&#269;ítko pro otev&#345;ení, \'-
 $langAdvanced = "Pokro&#269;ilé";
 $langSearch = "Vyhledat";
 $langSearchCrit = "Použijte spodní oblast pro popis slov, jedno slovo na &#345;ádek!";
-$langStatistics = "Statistika";
 $langNoKeywords = "Tento kurz nemá klí&#269;ové slová";
 $langKwCacheProblem = "Zásoba klí&#269;ových slov nem&#367;že být otev&#345;ena";
 $langCourseKwds = "klí&#269;ová slova kurzu";

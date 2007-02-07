@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Modyfikuj informacje o kursie";
 $langModifDone = "Informacje zosta&#322;y zmodyfikowane";
-$langHome = "Powrót do strony domowej";
 $langCode = "Kod kursu";
 $langDelCourse = "Usu&#324; ca&#322;y serwis kursu";
 $langProfessors = "Prowadz&#261;cy";
@@ -14,15 +13,11 @@ $langUnsubscription = "Wypisz";
 $langPrivOpen = "Dostêp autoryzowany, rejestracja otwarta";
 $langPrivate = "Dost&#281;p autoryzowany, rejestracja zamkni&#281;ta (Kurs dost&#281;pny dla zarejestrowanych <a href=../user/user.php>U&#380;ytkowników</a>)";
 $langForbidden = "Niedostêpny";
-$langLanguage = "J&#281;zyk";
 $langConfTip = "Domy&#347;lnie kurs powinien by&#263; dost&#281;pny tylko dla zarejestrowanych u&#380;ytkowników. &#379;eby upro&#347;ci&#263; rejestracj&#281; nowych u&#380;ytkowników, mo&#380;esz otworzy&#380; kurs tak, &#380;eby studenci rejestrowali si&#281; sami, a nast&#281;pnie zamkn&#261;&#263; kurs, &#380;eby unikn&#261;&#263; wpisywania si&#281; intruzów na list&#281; studentów.";
 $langOpenToTheWorld = "Dost&#281;p dla ootwarty dla ca&#322;ego &#347;wiata";
 $OpenToThePlatform = "Otwarty - dost&#281;pny dla zarejestrowanych u&#380;ytkowników platformy";
 $langOpenToThePlatform = "Dost&#281;p otwarty dla u&#380;ytkowników zarejestrowanych w platformie";
 $langTipLang  = "Ten j&#281;zyk b&#281;dzie obowi&#261;zywa&#322; wszystkich u&#380;ytkowników tego kursu.";
-$Agenda = "Agenda(Terminarz)";
-$langLink = "Odno&#347;niki";
-$langDocument = "Dokumenty";
 $langVid = "Wideo";
 $langWork = "Prace studentów";
 $langProgramMenu = "Program kursu";
@@ -44,7 +39,6 @@ $langBackupCourse = "Archiwizuj kurs";
 $langModifGroups = "Grupy";
 $langProfessor = "Nauczyciel (Prowadz&#261;cy)";
 $langGroups  = "Grupy";
-$langChat  = "Chat";
 $langDescriptionCours   = "Opis kursu";
 $langArchiveCourse  = "Archiwizowanie kursu ";
 $langRestoreCourse  = "Przywracanie kursu";
@@ -70,7 +64,6 @@ $langLastEdit  = "Ostatnio edytowany";
 $langLastVisit  = "Ostatnia wizyta";
 $langSubscription = "Zapisy";
 $langCourseAccess = "Dost&#281;p do kursu";
-$langDownload = "Za&#322;aduj";
 $langConfirmBackup = "Czy na pewno chcesz archiwizowa&#263; kurs?";
 $langCreateSite = "Tworzenie kursu";
 $langRestoreDescription = "Kursy zapisane w plikach archiwalnym, które mo&#380;esz wybra&#263; poni&#378;ej.<br><br>
@@ -85,7 +78,6 @@ $langBackH = "powrót do strony domowej";
 $langOtherCategory = "Inne kategorie";
 $langAllowedToUnsubscribe = "U&#380;ytkownicy mog&#261; wypisa&#263; si&#281; z kursu";
 $langNotAllowedToUnsubscribe = "U&#380;ytkownikom nie wolno wypisa&#263; si&#281; z kursu";
-$langDescription = "Opis";
 $langCourseVisibilityClosed = "Kurs jest dost&#281;pny jedynie dla aministratora kursu.";
 $CourseVisibilityClosed = "Brak dost&#281;pu do tego kursu";
 ?>

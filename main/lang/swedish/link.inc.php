@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLinks = "Länkar";
 $langLinkName = "Länknamn";
 $langLinkAdd = "Länken har lagts till listan";
 $langLinkAdded = "Länken har lagts till.";

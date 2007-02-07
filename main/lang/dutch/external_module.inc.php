@@ -3,9 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Link naar een site";
 $langSubTitle = "Voegt een link toe aan uw cursusstartpagina.";
-$langHome = "Terug naar startpagina";
-$langName = "Naam";
-$langLink = "Link";
 $langAddPage            = "Pagina toevoegen";
 $langSendPage           = "Pagina om toe te voegen";
 $langCouldNot           = "Het bestand kon niet verzonden worden.";

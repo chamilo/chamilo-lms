@@ -706,19 +706,6 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		 	?>
 			</table></td></tr></table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<?php
 	}
 	?>
@@ -818,8 +805,8 @@ $totalWeighting+=$questionWeighting;
 		}
 ?>
 <tr><td></td><td align=right><b><?php
-			$query = "update `".$TABLETRACK_EXERCICES."` set exe_result = $totalScore where exe_id = '$id'";
-			api_sql_query($query,__FILE__,__LINE__);
+			//$query = "update `".$TABLETRACK_EXERCICES."` set exe_result = $totalScore where exe_id = '$id'";
+			//api_sql_query($query,__FILE__,__LINE__);
 			echo get_lang('YourTotalScore')." ";
 			if($dsp_percent == true)
 				{

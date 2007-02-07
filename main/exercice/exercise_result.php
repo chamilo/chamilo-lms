@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 11023 2007-01-30 12:48:38Z elixir_inter $
+* 	@version $Id: exercise_result.php 11074 2007-02-07 15:57:38Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -267,7 +267,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 					<?php $studentChoice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $studentChoice; ?>
 				</td>
 				<td width="25%" valign="top">
-					<?php echo $answerComment ?>
+					<?php echo stripslashes($answerComment); ?>
 				</td>
 		</tr>
 	<?php
@@ -723,6 +723,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					$val = $choice[$j];
 					if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
 						$val = $arr1[1][0];
+					$val=addslashes($val);
 					$sql = "select position from $table_ans where question_id=$questionId and answer='$val'";
 					$res = api_sql_query($sql, __FILE__, __LINE__);
 					$answer = mysql_result($res,0,"position");

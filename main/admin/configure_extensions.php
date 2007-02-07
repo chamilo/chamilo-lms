@@ -131,25 +131,25 @@ if(isset($_POST['activeExtension'])){
 			}
 			
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['ppt2lp_host']).'"
+					selected_value="'.addslashes($_POST['host']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="host"';
 			api_sql_query($sql, __FILE__, __LINE__);
 			
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['ppt2lp_ftp_password']).'"
+					selected_value="'.addslashes($_POST['ftp_password']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="ftp_password"';
 			api_sql_query($sql, __FILE__, __LINE__);
 			
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['ppt2lp_user']).'"
+					selected_value="'.addslashes($_POST['user']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="user"';
 			api_sql_query($sql, __FILE__, __LINE__);
 			
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['ppt2lp_path_to_lzx']).'"
+					selected_value="'.addslashes($_POST['path_to_lzx']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="path_to_lzx"';
 			api_sql_query($sql, __FILE__, __LINE__);
@@ -316,36 +316,39 @@ Display::display_header($nameTool);
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
 						<?php 
-						if(in_array('ppt2lp',$listActiveServices)){
-							echo get_lang('ExtensionActivedButNotYetOperational');
+						
+						$form = new FormValidator('ppt2lp');						
+						$form -> addElement('text', 'host', get_lang('Host'));
+						$form -> addElement('html','<br /><br />');
+						$form -> addElement('text', 'user', get_lang('UserOnHost'));
+						$form -> addElement('html','<br /><br />');
+						$form -> addElement('text', 'ftp_password', get_lang('FtpPassword'));
+						$form -> addElement('html','<br /><br />');
+						$form -> addElement('text', 'path_to_lzx', get_lang('PathToLzx'));
+						$form -> addElement('hidden', 'extension_code', 'ppt2lp');
+						
+						$defaults = array();
+						$renderer = $form -> defaultRenderer();
+						$renderer -> setElementTemplate('<div style="text-align:left">{label}</div><div style="text-align:left">{element}</div>');
+						$form -> addElement('html','<br /><br />');
+						if(in_array('service_ppt2lp',$listActiveServices))
+						{
+							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.' 
+									WHERE variable = "service_ppt2lp"
+									AND subkey <> "active"';
+							$rs = api_sql_query($sql, __FILE__, __LINE__);
+							while($row = mysql_fetch_assoc($rs))
+							{
+								$defaults[$row['subkey']] = $row['selected_value'];
+							}							
+							$form -> addElement('submit', 'activeExtension', get_lang('ReconfigureExtension'));
 						}
 						else {
-								echo '
-									<table>
-										<tr>
-											<td align="left">'.get_lang('Host').' : </td>
-											<td><input type="text" size="25" name="ppt2lp_host" /></td>
-										</tr>
-										<tr>
-											<td align="left">'.get_lang('UserOnHost').' : </td>
-											<td><input type="text" size="25" name="ppt2lp_user" /></td>
-										</tr>
-										<tr>
-											<td align="left">'.get_lang('FtpPassword').' : </td>
-											<td><input type="text" size="25" name="ppt2lp_ftp_password" /></td>
-										</tr>
-										<tr>
-											<td align="left">'.get_lang('PathToLzx').' : </td>
-											<td><input type="text" size="25" name="ppt2lp_path_to_lzx" /></td>
-										</tr>
-										<tr>
-											<td colspan="2">
-												<input type="hidden" name="extension_code" value="ppt2lp" />
-												<input type="submit" name="activeExtension" value="'.get_lang('ActiveExtension').'" />
-											</td>
-										</tr>
-									</table>';
+							$form -> addElement('submit', 'activeExtension', get_lang('ActiveExtension'));
 						}
+						$form -> setDefaults($defaults);
+						$form -> display();
+						
 						?>
 						</form>
 					</td>

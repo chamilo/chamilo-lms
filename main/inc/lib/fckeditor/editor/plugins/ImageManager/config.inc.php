@@ -47,8 +47,8 @@ if(isset($_SESSION["_course"]["sysCode"])){
 
 //Out of any course (admin)
 else{
-	$IMConfig['base_dir'] = $_configuration['root_sys'].'main/img/fckeditor/';
-	$IMConfig['base_url'] = $_configuration['root_web'].'main/img/fckeditor/';
+	$IMConfig['base_dir'] = $_configuration['root_sys'].'main/img/default_courses_img/';
+	$IMConfig['base_url'] = $_configuration['root_web'].'main/img/default_courses_img/';
 }
 
 $IMConfig['server_name'] = $_SERVER['SERVER_NAME'];

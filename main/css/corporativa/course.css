@@ -291,13 +291,13 @@
 ------------------------------------------------------------------------------
 */ 
 #academic #box_title1{
-	background:transparent url("images/alert_academic.jpg") no-repeat top center;
+	background:transparent url("images/alert.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 	color: #00122B;
 }
 #academic #box_title1 #bottom{
-	background:transparent url("images/alert_academic.jpg") no-repeat top center;
+	background:transparent url("images/alert.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }
@@ -319,13 +319,13 @@
 ------------------------------------------------------------------------------
 */
 #academic #explanation{
-	background:transparent url("images/alert_academic.jpg") no-repeat top center;
+	background:transparent url("images/alert.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 	color: #00122B;
 }
 #academic #explanation #bottom{
-	background:transparent url("images/alert_academic.jpg") no-repeat top center;
+	background:transparent url("images/alert.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }
@@ -383,13 +383,13 @@
 */
 
 #baby #box_title1{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
+	background:transparent url("images/alert.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 	color: #00122B;
 }
 #baby #box_title1 #bottom{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
+	background:transparent url("images/alert.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }
@@ -406,13 +406,13 @@
 ------------------------------------------------------------------------------
 */
 #baby #explanation{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
+	background:transparent url("images/alert.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 	color: #3F3A00;
 }
 #baby #explanation #bottom{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
+	background:transparent url("images/alert.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }
@@ -435,13 +435,13 @@
 */
 
 #baby #box_title3{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
+	background:transparent url("images/alert.jpg") no-repeat top center;
 	border:none;
 	padding-top:10px;
 	color: #3F3A00;
 }
 #baby #box_title3 #bottom{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
+	background:transparent url("images/alert.jpg") no-repeat top center;
 	height:40px;
 	width:100%;
 }

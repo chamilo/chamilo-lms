@@ -1415,7 +1415,7 @@ function lang2db($string)
 */
 function fill_Db_course($courseDbName, $courseRepository, $language,$pictures_array)
 {
-	global $_configuration, $clarolineRepositoryWeb, $clarolineRepositorySys, $_user;
+	global $_configuration, $clarolineRepositoryWeb, $_user;
 
 	$courseDbName = $_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'];
 

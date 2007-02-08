@@ -132,21 +132,21 @@ class Matching extends Question {
 			</div>
 			<div class="formw">
 				'.get_lang('MakeCorrespond').'
-				<table cellpadding="0" cellspacing="5">
-					<tr bgcolor="#e6e6e6">
-						<td>
+				<table class="data_table">
+					<tr style="text-align: center">
+						<th>
 							'.get_lang('Number').'
-						</td>
-						<td>
+						</th>
+						<th>
 							'.get_lang('Answer').'
-						</td>
-						<td>
+						</th>
+						<th>
 							'.get_lang('MatchesTo').'
-						</td>
-						<td>
+						</th>
+						<th>
 							'.get_lang('Weighting').'
-						</td>
-						<td width="0"></td>
+						</th>
+						
 					</tr>';
 		$form -> addElement ('html', $html);
 
@@ -185,15 +185,15 @@ class Matching extends Question {
 			<div class="label">
 			</div>
 			<div class="formw"><br /><br />
-				<table cellpadding="0" cellspacing="5">
-					<tr bgcolor="#e6e6e6">
-						<td>
+				<table class="data_table">
+					<tr style="text-align: center;">
+						<th>
 							'.get_lang('Number').'						
-						</td>
-						<td>
+						</th>
+						<th>
 							'.get_lang('Answer').'
-						</td>
-						<td width="0"></td>
+						</th>
+						
 					</tr>';
 		$form -> addElement ('html', $html);
 

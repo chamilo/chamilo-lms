@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 11073 2007-02-07 15:48:24Z elixir_julian $
+<?php //$Id: agenda.inc.php 11086 2007-02-08 15:56:01Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1431,13 +1431,13 @@ function display_agenda_items()
 	/*--------------------------------------------------
 			DISPLAY: THE ITEMS
 	  --------------------------------------------------*/
-	echo "<table id=\"agenda_list\">\n";
 
 	$month_bar="";
 	$event_list="";
+	$counter=0;
 	while ($myrow=mysql_fetch_array($result))
 {
-
+	echo "<table class=\"data_table\">\n";
 /*--------------------------------------------------
 		display: the month bar
   --------------------------------------------------*/
@@ -1482,7 +1482,7 @@ function display_agenda_items()
 
 
 
-	echo "\t\t<td class=\"".$style."\">\n";
+	echo "\t\t<th>\n";
 
 	// adding an internal anchor
 	echo "\t\t\t<a name=\"".(int)date("d",strtotime($myrow["start_date"]))."\"></a>";
@@ -1490,7 +1490,7 @@ function display_agenda_items()
 	// the icons. If the message is sent to one or more specific users/groups
 	// we add the groups icon
 	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
-	echo "<img src=\"../img/agenda.gif\" border=\"0\" />";
+	echo "<img src=\"../img/agenda.gif\" align=\"absbottom\" border=\"0\" />";
 	if ($myrow['to_group_id']!=='0')
 		{
 		echo "<img src=\"../img/group.gif\" border=\"0\" />";
@@ -1499,7 +1499,7 @@ function display_agenda_items()
 	echo "\t\t</td>\n";
 
 	// the message has been sent to
-	echo "\t\t<td class=\"".$stylenotbold."\">".get_lang("SentTo").": ";
+	echo "\t\t<th>".get_lang("SentTo").": ";
 	$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
 	$sent_to_form=sent_to_form($sent_to);
 	echo $sent_to_form;
@@ -1508,7 +1508,7 @@ function display_agenda_items()
 /*--------------------------------------------------
  			display: the title
   --------------------------------------------------*/
-	echo "\t<tr class=\"".$stylenotbold."\">\n";
+	echo "<tr class='row_odd'>";
 	echo "\t\t<td>".get_lang("StartTimeWindow").": ";
 	echo ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
 	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
@@ -1529,7 +1529,8 @@ function display_agenda_items()
 	$content = $myrow['content'];
 	$content = make_clickable($content);
 	$content = text_filter($content);
-	echo "\t<tr>\n\t\t<td class=\"".$text_style."\" colspan='2'>";
+	echo "<tr class='row_even'>";
+	echo "<td colspan='2'>";
 
 	echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;"><img src="../img/print.png" border="0" title="'.htmlentities(get_lang('Print')).'" /></a>&nbsp;';
 
@@ -1557,7 +1558,7 @@ function display_agenda_items()
   
 	$event_list.=$myrow['id'].',';
   
-	echo "<tr><td>";
+	echo "<tr class='row_odd'><td>";
 			if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
 	{
 		// edit
@@ -1576,16 +1577,19 @@ function display_agenda_items()
 			$image_visibility="invisible";
 		}
 		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?origin=".$_GET['origin']."&amp;action=showhide&amp;id=".$myrow['id']."\">",
-				"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang("Visible")."\" /></a><br /><br />";
+				"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang("Visible")."\" /></a>";
 	}
 	echo "</td>";
+	
+	$counter++;
 
 /*--------------------------------------------------
 	display: jump-to-top icon
   --------------------------------------------------*/
 	echo "<td><a href=\"#top\"><img src=\"../img/top.gif\" border=\"0\" alt=\"to top\" align=\"right\" /></a></td></tr>";
+	echo "</table><br><br>";
 } // end while ($myrow=mysql_fetch_array($result))
-echo "</table>";
+
 
 if(!empty($event_list))
 {

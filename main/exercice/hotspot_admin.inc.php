@@ -325,17 +325,17 @@ if($modifyAnswers)
 			<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" name="frm_exercise">
 				<input type="hidden" name="formSent" value="1" />
 				<input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
-				<table border="0" cellpadding="3" cellspacing="0" style="border: 1px solid #4271b5; border-left:none; width: 100%; ">
+				<table class="data_table">
 					<!--
 					<tr>
 					  <td colspan="5"><?php echo get_lang('AnswerHotspot'); ?> :</td>
 					</tr>
 					-->
-					<tr style="background-color: #E6E6E6; height: 37px">
-					  <td style="width: 20px; border-bottom: 1px solid #4271b5">&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></td>
-					  <td style="width: 100px; border-bottom: 1px solid #4271b5"><?php echo get_lang('Description'); ?>*</td>
-					  <td style="border-bottom: 1px solid #4271b5"><?php echo get_lang('Comment'); ?></td>
-					  <td style="width: 60px; border-bottom: 1px solid #4271b5"><?php echo get_lang('QuestionWeighting'); ?>*</td>
+					<tr>
+					  <th >&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></th>
+					  <th ><?php echo get_lang('Description'); ?>*</th>
+					  <th ><?php echo get_lang('Comment'); ?></th>
+					  <th ><?php echo get_lang('QuestionWeighting'); ?>*</th>
 					</tr>
 
 					<?php

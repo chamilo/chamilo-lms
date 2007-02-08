@@ -74,6 +74,86 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 -----------------------------------------------------------
 */
 $currentCourseID = $_course['sysCode'];
+
+
+/*--------------------------------------
+	Unregistering a user section
+--------------------------------------
+*/
+if(api_is_allowed_to_edit())
+{
+	if(isset($_POST['action']))
+	{
+		switch($_POST['action'])
+		{
+			case 'unsubscribe' :
+				// Make sure we don't unsubscribe current user from the course
+				$user_ids = array_diff($_POST['user'],array($_user['user_id']));
+				if(count($user_ids) > 0)
+				{
+					CourseManager::unsubscribe_user($user_ids, $_SESSION['_course']['sysCode']);
+					$message = get_lang('UsersUnsubscribed');
+				}
+				break;
+		}
+	}
+}
+
+if(api_is_allowed_to_edit())
+{
+
+	if( isset ($_GET['action']))
+	{
+		switch ($_GET['action'])
+		{
+			case 'export' :
+				if(api_get_setting('use_session_mode')!="true"){
+					$table_user = Database::get_main_table(TABLE_MAIN_USER);
+					$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+					$course = api_get_course_info();
+					$sql = "SELECT official_code,firstname,lastname,email FROM $table_user u, $table_course_user cu WHERE cu.user_id = u.user_id AND cu.course_code = '".$course['sysCode']."' ORDER BY lastname ASC";
+				}
+				else
+				{
+					$sql = "SELECT `user`.`user_id`, `user`.`lastname`, `user`.`firstname`,
+				                      `user`.`email`, `user`.`official_code`, session.name
+				               FROM ".Database::get_main_table(TABLE_MAIN_USER)." `user`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." cu, ".Database::get_main_table(TABLE_MAIN_SESSION)." session
+				               WHERE `user`.`user_id`= cu.`id_user`
+				               AND cu.`course_code`='".$currentCourseID."'
+								AND session.id=cu.id_session
+								AND session.id='".$_SESSION['id_session']."'";
+				}
+				$users = api_sql_query($sql, __FILE__, __LINE__);
+				while ($user = mysql_fetch_array($users, MYSQL_ASSOC))
+				{
+					$data[] = $user;
+				}
+				switch ($_GET['type'])
+				{
+					case 'csv' :
+						Export::export_table_csv($data);
+					case 'xls' :
+						Export::export_table_xls($data);
+				}
+
+		}
+	}
+} // end if allowed to edit
+
+if(api_is_allowed_to_edit())
+{
+	// Unregister user from course
+	if($_GET['unregister'])
+	{
+		if(isset($_GET['user_id']) && is_numeric($_GET['user_id']) && $_GET['user_id'] != $_user['user_id'])
+		{
+			CourseManager::unsubscribe_user($_GET['user_id'],$_SESSION['_course']['sysCode']);
+			$message = get_lang('UserUnsubscribed');
+		}
+	}
+} // end if allowed to edit
+
+
 /*
 ==============================================================================
 		FUNCTIONS
@@ -216,82 +296,7 @@ event_access_tool(TOOL_USER);
 */
 $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) && $_configuration['tracking_enabled'];
 /*
---------------------------------------
-	Unregistering a user section
---------------------------------------
-*/
-if(api_is_allowed_to_edit())
-{
-	if(isset($_POST['action']))
-	{
-		switch($_POST['action'])
-		{
-			case 'unsubscribe' :
-				// Make sure we don't unsubscribe current user from the course
-				$user_ids = array_diff($_POST['user'],array($_user['user_id']));
-				if(count($user_ids) > 0)
-				{
-					CourseManager::unsubscribe_user($user_ids, $_SESSION['_course']['sysCode']);
-					$message = get_lang('UsersUnsubscribed');
-				}
-				break;
-		}
-	}
-}
 
-if(api_is_allowed_to_edit())
-{
-
-	if( isset ($_GET['action']))
-	{
-		switch ($_GET['action'])
-		{
-			case 'export' :
-				if(api_get_setting('use_session_mode')!="true"){
-					$table_user = Database::get_main_table(TABLE_MAIN_USER);
-					$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-					$course = api_get_course_info();
-					$sql = "SELECT official_code,firstname,lastname,email FROM $table_user u, $table_course_user cu WHERE cu.user_id = u.user_id AND cu.course_code = '".$course['sysCode']."' ORDER BY lastname ASC";
-				}
-				else
-				{
-					$sql = "SELECT `user`.`user_id`, `user`.`lastname`, `user`.`firstname`,
-				                      `user`.`email`, `user`.`official_code`, session.name
-				               FROM ".Database::get_main_table(TABLE_MAIN_USER)." `user`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." cu, ".Database::get_main_table(TABLE_MAIN_SESSION)." session
-				               WHERE `user`.`user_id`= cu.`id_user`
-				               AND cu.`course_code`='".$currentCourseID."'
-								AND session.id=cu.id_session
-								AND session.id='".$_SESSION['id_session']."'";
-				}
-				$users = api_sql_query($sql, __FILE__, __LINE__);
-				while ($user = mysql_fetch_array($users, MYSQL_ASSOC))
-				{
-					$data[] = $user;
-				}
-				switch ($_GET['type'])
-				{
-					case 'csv' :
-						Export::export_table_csv($data);
-					case 'xls' :
-						Export::export_table_xls($data);
-				}
-
-		}
-	}
-} // end if allowed to edit
-
-if(api_is_allowed_to_edit())
-{
-	// Unregister user from course
-	if($_GET['unregister'])
-	{
-		if(isset($_GET['user_id']) && is_numeric($_GET['user_id']) && $_GET['user_id'] != $_user['user_id'])
-		{
-			CourseManager::unsubscribe_user($_GET['user_id'],$_SESSION['_course']['sysCode']);
-			$message = get_lang('UserUnsubscribed');
-		}
-	}
-} // end if allowed to edit
 
 /*
 -----------------------------------------------------------

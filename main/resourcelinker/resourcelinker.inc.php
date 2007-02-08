@@ -1,4 +1,4 @@
-<?php // $Id: resourcelinker.inc.php 10920 2007-01-26 10:55:37Z elixir_julian $
+<?php // $Id: resourcelinker.inc.php 11077 2007-02-08 10:08:09Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,8 +42,8 @@
 // name of the language file that needs to be included 
 $language_file = "resourcelinker";
 
-include($clarolineRepositorySys.'lang/english/resourcelinker.inc.php');
-include($clarolineRepositorySys.'lang/'.$_course['language'].'/resourcelinker.inc.php');
+include(api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php');
+include(api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php');
 include_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 include('../exercice/hotpotatoes.lib.php');
 

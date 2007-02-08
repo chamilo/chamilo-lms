@@ -1,43 +1,43 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
 	Copyright (c) Bart Mollet, Hogeschool Gent
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	This is the export library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
 *	plusieures fonctions ci-dessous  ont été adaptées de fonctions  distribuées par www.nexen.net
 *
 *	@package dokeos.library
-============================================================================== 
+==============================================================================
 */
 require_once ('document.lib.php');
 class Export
 {
 	/**
 	 * Export tabular data to CSV-file
-	 * @param array $data 
+	 * @param array $data
 	 * @param string $filename
 	 */
 	function export_table_csv($data, $filename = 'export')
@@ -54,7 +54,7 @@ class Export
 	}
 	/**
 	 * Export tabular data to XLS-file
-	 * @param array $data 
+	 * @param array $data
 	 * @param string $filename
 	 */
 	function export_table_xls($data, $filename = 'export')
@@ -71,7 +71,7 @@ class Export
 	}
 	/**
 	 * Export tabular data to XML-file
-	 * @param array $data 
+	 * @param array $data
 	 * @param string $filename
 	 */
 	function export_table_xml($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null)
@@ -102,9 +102,9 @@ class Export
 	}
 }
 /*
-============================================================================== 
+==============================================================================
 		FUNCTIONS
-============================================================================== 
+==============================================================================
 */
 /**
  * Backup a db to a file
@@ -278,9 +278,9 @@ function copydir($origine, $destination, $verbose = false)
  * @param boolean 	$verbose_backup		def FALSE	echo  step of work
  * @param string	$ignore				def NONE 	// future param  for selected bloc to export.
  * @param string	$formats			def ALL		ALL,SQL,PHP,XML,CSV,XLS,HTML
- * 
+ *
  * @deprecated Function not in use (old backup system)
- * 
+ *
  * 1° Check if all data needed are aivailable
  * 2° Build the archive repository tree
  * 3° Build exported element and Fill  the archive repository tree
@@ -302,14 +302,14 @@ function copydir($origine, $destination, $verbose = false)
 			about "ignore"
 			 As  we don't know what is  add in course  by the local admin  of  claroline,
 			 I  prefer follow the  logic : save all except ...
-			 
+
 
  */
 function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "", $formats = "ALL")
 {
-		global $error_msg, $error_no, $db, $archiveRepositorySys, $archiveRepositoryWeb, 
-				$appendCourse, $appendMainDb, $archiveName, $_configuration, $clarolineRepositorySys, $_course, $TABLEUSER, $TABLECOURSUSER, $TABLECOURS, $TABLEANNOUNCEMENT;
-	
+		global $error_msg, $error_no, $db, $archiveRepositorySys, $archiveRepositoryWeb,
+				$appendCourse, $appendMainDb, $archiveName, $_configuration, $_course, $TABLEUSER, $TABLECOURSUSER, $TABLECOURS, $TABLEANNOUNCEMENT;
+
 	// ****** 1° 2. params.
 	$errorCode = 0;
 	$stop = FALSE;
@@ -367,13 +367,13 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 	{
 		return false;
 	}
-	
+
 	// ****** 1° 2. 2 params.optional
 	if (!isset ($verbose_backup))
 	{
 		$verbose_backup = false;
 	}
-	
+
 	// ****** 1° 3. check if course exist
 	//  not  done
 	//////////////////////////////////////////////
@@ -439,12 +439,12 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 		      |   modify it under the terms of the GNU General Public License        |
 		      |   as published by the Free Software Foundation; either version 2     |
 		*/
-		
+
 		// Dokeos Version was :  ".$dokeos_version."
 		// Source was  in ".realpath("../../".$exportedCourseId."/")."
 		// find in ".$archiveDir."/courseBase/courseBase.sql sql to rebuild the course base
 		// find in ".$archiveDir."/".$exportedCourseId." to content of directory of course
-		
+
 		/**
 		 * options
 		 ";
@@ -750,7 +750,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 		echo "
 						</LI>
 					</OL>
-				
+
 					<br>";
 	///////////////////////////////////
 	// ****** 4° Compress the tree

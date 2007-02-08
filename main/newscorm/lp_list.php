@@ -152,14 +152,14 @@ if ($curDirPath)
 
 /* CURRENT DIRECTORY */
 
-echo	'<tr bgcolor="'.$color2.'" align="center" valign="top">';
-echo	'<td width="30%"><b>'.get_lang("Name").'</b></td>'."\n" .
-		'<td width="10%"><b>'.get_lang("progress")."</b></td>\n";
+echo	'<tr>';
+echo	'<th>'.get_lang("Name").'</th>'."\n" .
+		'<th>'.get_lang("progress")."</th>\n";
 if (api_is_allowed_to_edit())
 {
-  echo "<td><b>",get_lang("Description"),"</b></td>\n" .
-  		"<td width='9%'><b>",get_lang("ExportShort"),"</b></td>\n",
-	'<td width="25%"><b>',get_lang("Modify"),"</b></td>\n";
+  echo "<th>",get_lang("Description"),"</th>\n" .
+  		"<th>",get_lang("ExportShort"),"</th>\n",
+	'<th>',get_lang("Modify"),"</th>\n";
 }
 
 echo		"</tr>\n";

@@ -4096,9 +4096,9 @@ class learnpath {
 		if(api_is_allowed_to_edit())
 			$return .= '<p><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.get_lang("Advanced").'</a>&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.get_lang("Display").'</a></p>';
 		
-		$return .= '<table cellpadding="0" cellspacing="2" class="lp_overview">' . "\n";
+		$return .= '<table class="data_table">' . "\n";
 		
-			$return .= "\t" . '<tr class="header">' . "\n";
+			$return .= "\t" . '<tr>' . "\n";
 			
 				$return .= "\t" . '<th width="75%">'.get_lang("Title").'</th>' . "\n";
 				//$return .= "\t" . '<th>'.get_lang("Description").'</th>' . "\n";
@@ -4112,14 +4112,16 @@ class learnpath {
 				if($arrLP[$i]['description'] == '')
 					$arrLP[$i]['description'] = '&nbsp;';
 				
-				$return .= "\t" . '<tr>' . "\n";
+				if (($i % 2)==0) { $oddclass="row_odd"; } else { $oddclass="row_even"; }
+				
+				$return .= "\t" . '<tr class="'.$oddclass.'">' . "\n";
 					
-					$return .= "\t\t" . '<td class="title" style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:3px;" />' . stripslashes($arrLP[$i]['title']) . '</td>' . "\n";
+					$return .= "\t\t" . '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:3px;" />' . stripslashes($arrLP[$i]['title']) . '</td>' . "\n";
 					//$return .= "\t\t" . '<td>' . stripslashes($arrLP[$i]['description']) . '</td>' . "\n";
 					
 					if(api_is_allowed_to_edit())
 					{
-						$return .= "\t\t" . '<td class="move">' . "\n";
+						$return .= "\t\t" . '<td>' . "\n";
 							
 							if($arrLP[$i]['previous_item_id'] != 0)
 							{
@@ -4141,7 +4143,7 @@ class learnpath {
 							
 						$return .= "\t\t" . '</td>' . "\n";
 						
-						$return .= "\t\t" . '<td class="actions">' . "\n";
+						$return .= "\t\t" . '<td>' . "\n";
 						
 						if($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module')
 						{

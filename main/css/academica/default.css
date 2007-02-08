@@ -594,7 +594,7 @@ div.row {
 }
 
 div.row div.formw {
-	width: 73%;
+	width: 78%;
 	margin: 0;
 }
 
@@ -602,7 +602,7 @@ div.row div.label {
 	float: left;
 	text-align: left;
 	font: bold 115% Arial, sans-serif, sans;
-	width: 25%;
+	width: 20%;
 	margin: 0;
 }
 

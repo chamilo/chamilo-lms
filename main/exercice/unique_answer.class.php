@@ -75,23 +75,23 @@ class UniqueAnswer extends Question {
 			'.get_lang('Answers').'
 			</div>
 			<div class="formw">
-				<table cellpadding="0" cellspacing="5">
-					<tr bgcolor="#e6e6e6">
-						<td>
+				<table class="data_table">
+					<tr style="text-align: center;">
+						<th>
 							'.get_lang('Number').'
-						</td>
-						<td>
+						</th>
+						<th>
 							'.get_lang('True').'
-						</td>
-						<td>
+						</th>
+						<th>
 							'.get_lang('Answer').'
-						</td>
-						<td>
+						</th>
+						<th>
 							'.get_lang('Comment').'
-						</td>
-						<td>
+						</th>
+						<th>
 							'.get_lang('Weighting').'
-						</td>
+						</th>
 						
 					</tr>';
 		$form -> addElement ('html', $html);

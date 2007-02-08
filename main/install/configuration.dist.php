@@ -40,12 +40,12 @@ install time.
  * @todo change these into a $_configuration array. $_configuration will use only the bare essential variables
  * 		for configuring the platform (paths, database connections, ...). Changing a $_configuration variable
  * 		CAN break the installation.
- * 		Besides the $_configuration array there is also a $_settings array that contains variables that 
- * 		can be changed and will not break the platform. 
+ * 		Besides the $_configuration array there is also a $_settings array that contains variables that
+ * 		can be changed and will not break the platform.
  * 		Some of the variables that are used here can move to the $_settings array (and thus be stored in the database)
  * 		example: $_configuration['tracking_enabled'] (assuming that the install script creates the necessary tables anyway.
  * 				 $phpMyAdminPath
- * 	
+ *
  * 		@todo use more obvious names for the variables and respect the code guidelines
  */
 
@@ -53,11 +53,11 @@ install time.
 //   MYSQL connection settings
 //============================================================================
 // Your MySQL server
-$_configuration['db_host']								= '{DATABASE_HOST}'; 		
+$_configuration['db_host']								= '{DATABASE_HOST}';
 // Your MySQL username
-$_configuration['db_user']								= '{DATABASE_USER}';	
+$_configuration['db_user']								= '{DATABASE_USER}';
 // Your MySQL password
-$_configuration['db_password']							= '{DATABASE_PASSWORD}'; 	
+$_configuration['db_password']							= '{DATABASE_PASSWORD}';
 
 //============================================================================
 //   Database settings
@@ -65,22 +65,22 @@ $_configuration['db_password']							= '{DATABASE_PASSWORD}';
 // Is tracking enabled?
 $_configuration['tracking_enabled'] 					= {TRACKING_ENABLED};
 // Is single database enabled (DO NOT MODIFY THIS)
-$_configuration['single_database']    					= {SINGLE_DATABASE}; 		
+$_configuration['single_database']    					= {SINGLE_DATABASE};
 // Prefix for course tables (IF NOT EMPTY, can be replaced by another prefix, else leave empty)
-$_configuration['table_prefix']  						= '{COURSE_TABLE_PREFIX}'; 	
+$_configuration['table_prefix']  						= '{COURSE_TABLE_PREFIX}';
 // Separator between database and table name (DO NOT MODIFY THIS)
-$_configuration['db_glue'] 								= '{DATABASE_GLUE}'; 
-// prefix all created bases (for courses) with this string		
-$_configuration['db_prefix']       						= '{DATABASE_PREFIX}'; 		
+$_configuration['db_glue'] 								= '{DATABASE_GLUE}';
+// prefix all created bases (for courses) with this string
+$_configuration['db_prefix']       						= '{DATABASE_PREFIX}';
 // main Dokeos database
-$_configuration['main_database']						= '{DATABASE_MAIN}'; 
+$_configuration['main_database']						= '{DATABASE_MAIN}';
 // stats Dokeos database
-$_configuration['statistics_database']        			='{DATABASE_STATS}'; 
+$_configuration['statistics_database']        			='{DATABASE_STATS}';
 // Scorm Dokeos database
-$_configuration['scorm_database']       				='{DATABASE_SCORM}'; 
-// User Personal Database (where all the personal stuff of the user is stored 
+$_configuration['scorm_database']       				='{DATABASE_SCORM}';
+// User Personal Database (where all the personal stuff of the user is stored
 // (personal agenda items, course sorting)
-$_configuration['user_personal_database']   			='{DATABASE_PERSONAL}'; 
+$_configuration['user_personal_database']   			='{DATABASE_PERSONAL}';
 
 //============================================================================
 //   Directory settings
@@ -117,8 +117,8 @@ $rootAdminWeb                							= $clarolineRepositoryWeb.$rootAdminAppend;
 // directory to store archived courses
 $archiveDirName              							= "archive";
 // change this to a place out of web if you can
-$garbageRepositorySys        							= '{GARBAGE_DIR}'; 
-// URL to your phpMyAdmin installation. 
+$garbageRepositorySys        							= '{GARBAGE_DIR}';
+// URL to your phpMyAdmin installation.
 // If not empty, a link will be available in the Platform Administration
 $phpMyAdminPath              							= '';
 
@@ -127,8 +127,8 @@ $phpMyAdminPath              							= '';
 //============================================================================
 // For new login module
 // Uncomment these lines to activate ldap
-// $extAuthSource["ldap"]["login"]=$clarolineRepositorySys."auth/ldap/login.php";
-// $extAuthSource["ldap"]["newUser"]=$clarolineRepositorySys."auth/ldap/newUser.php";
+// $extAuthSource["ldap"]["login"]=api_get_path(SYS_CODE_PATH)."auth/ldap/login.php";
+// $extAuthSource["ldap"]["newUser"]=api_get_path(SYS_CODE_PATH)."auth/ldap/newUser.php";
 
 //============================================================================
 //   Misc. settings
@@ -140,7 +140,7 @@ $_configuration['security_key']      					= '{SECURITY_KEY}';
 // Settings for new and future features
 $userPasswordCrypted          							= {ENCRYPT_PASSWORD};
 // You may have to restart your web server if you change this
-$storeSessionInDb             							= false; 
+$storeSessionInDb             							= false;
 
 
 $openoffice_conf 										= array();

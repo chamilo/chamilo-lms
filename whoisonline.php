@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 10859 2007-01-24 08:36:15Z bmol $
+<?php // $Id: whoisonline.php 11082 2007-02-08 10:24:51Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -20,7 +20,7 @@
 ==============================================================================
 */
 /**
- * @todo use the correct api_get_path instead of $clarolineRepositorySys, $clarolineRepositoryWeb
+ * @todo use the correct api_get_path instead of $clarolineRepositoryWeb
  */
 
 
@@ -186,12 +186,12 @@ function display_individual_user($user_id)
 /**
  * Display productions in whoisonline
  * @param int $user_id User id
- * @todo use the correct api_get_path instead of $clarolineRepositorySys, $clarolineRepositoryWeb
+ * @todo use the correct api_get_path instead of $clarolineRepositoryWeb
  */
 function display_productions($user_id)
 {
-	global $clarolineRepositorySys, $clarolineRepositoryWeb, $disabled_output;
-	$sysdir=$clarolineRepositorySys.'upload/users/'.$user_id;
+	global $clarolineRepositoryWeb, $disabled_output;
+	$sysdir=api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id;
 	$webdir=$clarolineRepositoryWeb.'upload/users/'.$user_id;
 	if( !is_dir($sysdir))
 	{

@@ -15,7 +15,7 @@ $langCombinedCourse = "Kombinerad kurs";
 $ToolIsNowVisible = "Verktyget är nu synligt";
 $ToolIsNowHidden = "Verktyget är nu osynligt";
 $EditLink = "Ändra länk";
-$blog_management = "Blog hantering";
+$Blog_management = "Blog hantering";
 $GreyIcons = "Verktygslåda";
 $Administration = "Administrering";
 ?>

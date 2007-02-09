@@ -136,6 +136,7 @@ $langProbationers = "Pripravniki";
 $MoyenneTest = "Povpreèje : test";
 $exportExcel = "Izvoz v Excel obliki";
 $MoyCourse = "Povpreèje : teèaj";
+$MoyenneExamen = "Povpreèje : preverjanja";
 $MoySession = "Povpreèje : seja";
 $TakenSessions = "Vpisane seje";
 $FollowUp = "Sledi";

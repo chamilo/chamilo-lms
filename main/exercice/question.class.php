@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 11066 2007-02-07 09:39:47Z elixir_julian $
+* 	@version $Id: question.class.php 11087 2007-02-09 12:57:27Z elixir_julian $
 */
 
 
@@ -742,7 +742,7 @@ abstract class Question
 		$fck_attribute = array();
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '150';
-		$fck_attribute['ToolbarSet'] = 'Small';
+		$fck_attribute['ToolbarSet'] = 'Test';
 		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
 		if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';

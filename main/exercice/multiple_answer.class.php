@@ -60,9 +60,9 @@ class MultipleAnswer extends Question {
 		global $fck_attribute;
 
 		$fck_attribute = array();
-		$fck_attribute['Width'] = '300px';
+		$fck_attribute['Width'] = '320px';
 		$fck_attribute['Height'] = '100px';
-		$fck_attribute['ToolbarSet'] = 'Small';
+		$fck_attribute['ToolbarSet'] = 'Test';
 		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
 

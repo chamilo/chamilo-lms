@@ -52,6 +52,10 @@ FCKConfig.ToolbarSets["NewTest"] = [
 	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','Flash','MP3','OrderedList','UnorderedList','Table']
 ] ;
 
+FCKConfig.ToolbarSets["Test"] = [
+	['Bold','Italic','Underline','StrikeThrough','Link','ImageManager','Flash','MP3','OrderedList','UnorderedList','Table']
+] ;
+
 FCKConfig.ToolbarSets["Survey"] = [
 	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager']
 ] ;

@@ -160,6 +160,10 @@ if(isset($_SESSION["_course"]["sysCode"]) && api_is_allowed_to_edit()){
 		$path = "/audio/";
 	}
 	
+	if($sType=="video"){
+		$path = "/video/";
+	}
+	
 	$doc_id = add_document($_course, $path.$document_name, 'file', $document_size, $document_name);
 		
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentCreated', $_user['user_id']);

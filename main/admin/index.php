@@ -1,4 +1,4 @@
-<?php // $Id: index.php 11070 2007-02-07 15:28:51Z elixir_julian $
+<?php // $Id: index.php 11095 2007-02-09 17:56:52Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -244,7 +244,7 @@ function version_check()
 		}
 		else
 		{
-			$return = 'site registered';
+			$return = 'site registered. ';
 			$return .= check_dokeos_version2();
 		}
 	}

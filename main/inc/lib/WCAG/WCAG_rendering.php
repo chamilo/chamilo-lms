@@ -174,7 +174,7 @@ function &create_xhtml($xhtml) {
 	$xhtml .= get_lang('WCAGImage').'<br />';
 	$xhtml .= '<input type="text" name="imagefile" value="'.$values['imagefile'].'"/>';
 	$xhtml .= '<br />';
-	$xhtml .= '<a href="#" onclick="OpenFileBrowser (\''.api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/'.'editor/plugins/ImageManager/genericManager.php?uploadPath=/\');">select picture...</a>';
+	$xhtml .= '<a href="#" onclick="OpenFileBrowser (\''.api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/'.'editor/plugins/ImageManagerStandalone/genericManager.php?uploadPath=/\');">'.get_lang('SelectPicture').'</a>';
 	$xhtml .= '<br />';
 	$xhtml .= get_lang('WCAGLabel').'<br />';
 	$xhtml .= '<input type="text" name="imageLabel" value="'.$values['imageLabel'].'"/>';

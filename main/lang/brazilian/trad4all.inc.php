@@ -320,7 +320,7 @@ $SeeAllRolesAllLocationsForSpecificRight = "Permissão";
 $langAdvanced = "Avançado";
 $RightValueModified = "O valor foi modificado com sucesso.";
 $course_rights = "Visão geral das funções e permissões";
-$visio_conference = "Vídeo-Conferência";
+$Visio_conference = "Vídeo-Conferência";
 $CourseAdminRoleDescription = "O Administrador do Curso";
 $Download = "Download";
 $Move = "Mover";
@@ -393,7 +393,7 @@ $Language = "Idioma";
 $AvailableUntill = "Disponível até";
 $HourMinuteDivider = "h";
 $Here = "aqui";
-$visio_classroom = "Sala de Videoconferência";
+$Visio_classroom = "Sala de Videoconferência";
 $Survey = "Questionários";
 $More = "Mais";
 ?>

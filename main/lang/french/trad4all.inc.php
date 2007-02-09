@@ -321,7 +321,7 @@ $SeeAllRolesAllLocationsForSpecificRight = "Droit :";
 $langAdvanced = "Avancée";
 $RightValueModified = "La valeur a été modifiée";
 $course_rights = "Vue d\'ensemble des rôles & droits";
-$visio_conference = "Vidéo-conférence";
+$Visio_conference = "Vidéo-conférence";
 $CourseAdminRoleDescription = "Administrateur du cours";
 $Download = "Télécharger";
 $Move = "Déplacer";
@@ -394,7 +394,7 @@ $Language = "Langue";
 $AvailableUntill = "Valable jusqu\'au";
 $HourMinuteDivider = "h";
 $Here = "ici";
-$visio_classroom = "Visioconférence (salle de classe)";
+$Visio_classroom = "Visioconférence (salle de classe)";
 $Survey = "Enquêtes";
 $More = "Plus";
 ?>

@@ -299,7 +299,7 @@ $langAdvanced = "Avansat";
 $RightValueModified = "Valoarea a fost modificata.";
 $course_rights = "Privire de ansamblu cu privire la roluri si 
 drepturi";
-$visio_conference = "Visioconferinta";
+$Visio_conference = "Visioconferinta";
 $CourseAdminRoleDescription = "Administratorul cursului";
 $Download = "Descarca";
 $Move = "Muta";

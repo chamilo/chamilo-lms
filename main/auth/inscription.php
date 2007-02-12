@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 10916 2007-01-26 09:30:12Z bmol $
+// $Id: inscription.php 11103 2007-02-12 16:27:25Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -55,8 +55,8 @@ if (get_setting('allow_registration')=='approval')
 
 $form = new FormValidator('registration');
 //	LAST NAME and FIRST NAME
-$form->addElement('text', 'lastname',  get_lang('Lastname'),  array('size' => 40));
-$form->addElement('text', 'firstname', get_lang('Firstname'), array('size' => 40));
+$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+$form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
 $form->addRule('lastname',  get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 //	EMAIL
@@ -72,7 +72,7 @@ if (CONFVAL_ASK_FOR_OFFICIAL_CODE)
 		$form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
 }
 //	USERNAME
-$form->addElement('text', 'username', get_lang('Username'), array('size' => 40));
+$form->addElement('text', 'username', get_lang('UserName'), array('size' => 40));
 $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('username', get_lang('UsernameWrong'), 'username');
 $form->addRule('username', get_lang('UserTaken'), 'username_available');

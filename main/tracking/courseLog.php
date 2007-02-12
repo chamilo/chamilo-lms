@@ -441,7 +441,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
             for($j = 0 ; $j < count($results) ; $j++)
             {
                 echo "<tr>";
-                echo "<td class='content'><a href='toolaccess_details.php?tool=".$results[$j][0]."'>".get_lang($results[$j][0])."</a></td>";
+                echo "<td class='content'><a href='toolaccess_details.php?tool=".$results[$j][0]."'>".get_lang(ucfirst($results[$j][0]))."</a></td>";
                 echo "<td align='left' class='content'>".$results[$j][1]."</td>";
                 echo "<td align='left' class='content'>".$results[$j][2]."</td>";
                 echo"</tr>";

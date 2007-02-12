@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 10726 2007-01-15 12:56:39Z elixir_julian $
+// $Id: profile.php 11097 2007-02-12 09:02:42Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -121,8 +121,8 @@ if (is_profile_editable())
 	$form->addElement('submit', null, get_lang('Ok'), array('style' => 'visibility:hidden;'));
 
 //	LAST NAME and FIRST NAME
-$form->addElement('text', 'lastname',  get_lang('Lastname'),  array('size' => 40));
-$form->addElement('text', 'firstname', get_lang('Firstname'), array('size' => 40));
+$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+$form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
 if (api_get_setting('profile', 'name') !== 'true')
 	$form->freeze(array('lastname', 'firstname'));
 $form->applyFilter(array('lastname', 'firstname'), 'stripslashes');
@@ -177,7 +177,7 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true')
 }
 
 //	USERNAME
-$form->addElement('text', 'username', get_lang('Username'), array('size' => 40));
+$form->addElement('text', 'username', get_lang('UserName'), array('size' => 40));
 if (api_get_setting('profile', 'login') !== 'true')
 	$form->freeze('username');
 $form->applyFilter('username', 'stripslashes');

@@ -232,12 +232,14 @@ $threads=get_threads($_GET['forum']); // note: this has to be cleaned first
 
 $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 
+$counter=0;
 foreach ($threads as $row)
 {
 	// thread who have no replies yet and the only post is invisible should not be displayed to students. 
 	if (api_is_allowed_to_edit() OR  !($row['thread_replies']=='0' AND $row['visible']=='0'))
 	{ 
-		echo "\t<tr>\n";
+		if($counter%2==0) $class="row_odd"; else $class="row_even";
+		echo "\t<tr class=\"$class\">\n";
 		echo "\t\t<td>";
 		if (is_array($whatsnew_post_info[$_GET['forum']][$row['thread_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']]))
 		{
@@ -313,6 +315,7 @@ foreach ($threads as $row)
 		}
 		echo "\t</tr>\n";
 	}
+	$counter++;
 }
 
 echo "</table>";

@@ -784,8 +784,8 @@ $header_nr = 0;
 	$table->set_header($header_nr++, '', false);
 }
 $table->set_header($header_nr++, get_lang('OfficialCode'));
-$table->set_header($header_nr++, get_lang('Lastname'));
-$table->set_header($header_nr++, get_lang('Firstname'));
+$table->set_header($header_nr++, get_lang('LastName'));
+$table->set_header($header_nr++, get_lang('FirstName'));
 $table->set_header($header_nr++, get_lang('Role'));
 $table->set_header($header_nr++, get_lang('Group'),false);
  if( api_is_allowed_to_edit())

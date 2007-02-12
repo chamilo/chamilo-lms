@@ -74,7 +74,7 @@ if(isset($_POST['activeExtension'])){
 								address="squaregrey.gif",
 								target="_self",
 								category="interaction"';
-								
+
 						api_sql_query($sql, __FILE__, __LINE__);		
 					}
 					if(!empty($_POST['visioclassroom_url']))

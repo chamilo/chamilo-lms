@@ -104,10 +104,10 @@ $resultFormateurs = api_sql_query($sqlFormateurs);
 echo '<table class="data_table">
 	 	<tr>
 			<th>
-				'.get_lang('Lastname').'
+				'.get_lang('LastName').'
 			</th>
 			<th>
-				'.get_lang('Firstname').'
+				'.get_lang('FirstName').'
 			</th>
 			<th>
 				'.get_lang('Email').'
@@ -121,8 +121,8 @@ echo '<table class="data_table">
 		</tr>
   	 ';
 
-$a_header[]=get_lang('Lastname');
-$a_header[]=get_lang('Firstname');
+$a_header[]=get_lang('LastName');
+$a_header[]=get_lang('FirstName');
 $a_header[]=get_lang('Email');
 
 $a_data=array();
@@ -144,10 +144,10 @@ if(mysql_num_rows($resultFormateurs)>0){
 			if($i%20==0 && $i!=0){
 				echo '<tr>
 				<th>
-					'.get_lang('Lastname').'
+					'.get_lang('LastName').'
 				</th>
 				<th>
-					'.get_lang('Firstname').'
+					'.get_lang('FirstName').'
 				</th>
 				<th>
 					'.get_lang('Email').'

@@ -162,10 +162,10 @@ $resultCoachs = api_sql_query($sqlCoachs);
 echo '<table class="data_table">
 	 	<tr>
 			<th>
-				'.get_lang('Lastname').'
+				'.get_lang('LastName').'
 			</th>
 			<th>
-				'.get_lang('Firstname').'
+				'.get_lang('FirstName').'
 			</th>
 			<th>
 				'.get_lang('ConnectionTime').'
@@ -179,8 +179,8 @@ echo '<table class="data_table">
 		</tr>
   	 ';
 
-$a_header[]=get_lang('Lastname');
-$a_header[]=get_lang('Firstname');
+$a_header[]=get_lang('LastName');
+$a_header[]=get_lang('FirstName');
 $a_header[]=get_lang('ConnectionTime');
 
 if(mysql_num_rows($resultCoachs)>0){
@@ -230,10 +230,10 @@ if(mysql_num_rows($resultCoachs)>0){
 			if($i%20==0 && $i!=0){
 				echo '<tr>
 					<th>
-						'.get_lang('Lastname').'
+						'.get_lang('LastName').'
 					</th>
 					<th>
-						'.get_lang('Firstname').'
+						'.get_lang('FirstName').'
 					</th>
 					<th>
 						'.get_lang('ConnectionTime').'

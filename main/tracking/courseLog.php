@@ -224,7 +224,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         	
         	echo '<table class="data_table">';
 			echo "<tr>
-					<td class='secLine'>".get_lang('Name')."</td>
+					<td class='secLine'>".get_lang('name')."</td>
 					<td class='secLine'>".get_lang('FirstAccess')."</td>
 					<td class='secLine'>".get_lang('LastAccess')."</td>
 					<td class='secLine'>%&nbsp;".get_lang('Visited')."</td>

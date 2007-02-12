@@ -347,8 +347,8 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 	
 	usort($a_students,"mysort");
 	
-	$a_header[]=get_lang('Lastname');
-	$a_header[]=get_lang('Firstname');
+	$a_header[]=get_lang('LastName');
+	$a_header[]=get_lang('FirstName');
 	$a_header[]=get_lang('Email');
 	
 	$a_data=array();
@@ -358,10 +358,10 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 		echo '<table class="data_table">
 			 	<tr>
 					<th>
-						'.get_lang('Lastname').'
+						'.get_lang('LastName').'
 					</th>
 					<th>
-						'.get_lang('Firstname').'
+						'.get_lang('FirstName').'
 					</th>
 					<th>
 						'.get_lang('Email').'
@@ -402,10 +402,10 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 		          	 ';*/
 		          	 echo '<tr>
 							<th>
-								'.get_lang('Lastname').'
+								'.get_lang('LastName').'
 							</th>
 							<th>
-								'.get_lang('Firstname').'
+								'.get_lang('FirstName').'
 							</th>
 							<th>
 								'.get_lang('Email').'

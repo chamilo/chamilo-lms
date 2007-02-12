@@ -1,4 +1,4 @@
-<?php // $Id: document.php 11098 2007-02-12 09:11:29Z elixir_julian $
+<?php // $Id: document.php 11102 2007-02-12 15:36:36Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -594,7 +594,7 @@ if (($is_allowed_to_edit || $group_member_with_upload_rights) AND count($docs_an
 	$table->set_header($column++,'',false);
 }
 $table->set_header($column++,get_lang('Type'));
-$table->set_header($column++,get_lang('name'));
+$table->set_header($column++,get_lang('Name'));
 
 //$column_header[] = array(get_lang('Comment'),true);  => display comment under the document name
 $table->set_header($column++,get_lang('Size'));

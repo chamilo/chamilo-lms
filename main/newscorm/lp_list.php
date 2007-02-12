@@ -153,7 +153,7 @@ if ($curDirPath)
 /* CURRENT DIRECTORY */
 
 echo	'<tr>';
-echo	'<th>'.get_lang("name").'</th>'."\n" .
+echo	'<th>'.get_lang("Name").'</th>'."\n" .
 		'<th>'.get_lang("progress")."</th>\n";
 if (api_is_allowed_to_edit())
 {

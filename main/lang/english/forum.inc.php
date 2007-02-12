@@ -77,4 +77,5 @@ $Unlock = "Unlock";
 $MoveThread = "Move Thread";
 $PostVisibilityChanged = "Post visibility changed";
 $PostDeleted = "Post has been deleted";
+$MakeInvisible = "Make invisible";
 ?>

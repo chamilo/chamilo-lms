@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $UsersOnline = "Brukere online";
 $Remove = "Fjern";
 $Description = "Beskrivelse";
-$Name = "Navn";
+$name = "Navn";
 $langComment = "Kommentar";
 $langVisible = "Synlig/usynlig";
 $langGroup = "Gruppe";
@@ -134,7 +134,7 @@ $langCheckAll = "Velg alle";
 $langNbAnnoucement = "Annonsering";
 $lang_no_access_here = "Du har ingen adgang her";
 $langOtherCourses = "Andre kurs";
-$LangDoc = "dokument";
+$Doc = "dokument";
 $LangPlataformAdmin = "Plattformadministrasjon";
 $Groups = "Grupper";
 $GroupManagement = "Gruppehåndtering";

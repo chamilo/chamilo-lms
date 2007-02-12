@@ -209,6 +209,7 @@ $langStudent = "Estudante";
 $Guest = "Convidado";
 $langLoginAsThisUserColumnName = "Aceder como";
 $langLoginAsThisUser = "Aceder";
+$SelectPicture = "Seleccionar imagem ...";
 $DontResetPassword = "Não alterar a senha";
 $ParticipateInCommunityDevelopment = "Participar no desenvolvimento";
 $langCourseAdmin = "Responsável do curso";

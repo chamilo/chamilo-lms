@@ -555,4 +555,5 @@ $MyTextHere = "votre texte içi";
 $Ajax_course_tracking_refresh = "Calcul du temps passé sur un cours";
 $Ajax_course_tracking_refresh_comment = "Cette option permet de calculer en temps réel le temps qu\'un utilisateur passe sur un cours. La valeur à remplir dans ce champs est l\'intervalle de rafraîchissement en secondes. Pour désactiver cette option, laissez la valeur 0 dans ce champs.";
 $EditLink = "Editer le lien";
+$FinishSessionCreation = "Terminer la création de session";
 ?>

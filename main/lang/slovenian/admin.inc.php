@@ -209,6 +209,7 @@ $langStudent = "Teèajnik";
 $Guest = "Gost";
 $langLoginAsThisUserColumnName = "Prijavi se kot";
 $langLoginAsThisUser = "Prijava";
+$SelectPicture = "Izberi sliko...";
 $DontResetPassword = "Ne ponastavi gesla";
 $ParticipateInCommunityDevelopment = "Sodelujte v razvoju";
 $langCourseAdmin = "upravitelj teèaja";

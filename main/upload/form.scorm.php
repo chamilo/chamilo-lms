@@ -35,7 +35,7 @@ $nameTools = get_lang("FileUpload");
 $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Doc"));
 Display::display_header($nameTools,"Path");
 //show the title
-api_display_tool_title(get_lang("learnpath")." - ".$nameTools.$add_group_to_title);
+api_display_tool_title(get_lang("Learnpath")." - ".$nameTools.$add_group_to_title);
 
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include('../newscorm/content_makers.inc.php');

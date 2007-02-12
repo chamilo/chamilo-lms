@@ -558,6 +558,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$resq=api_sql_query($query);
 			$choice = mysql_result($resq,0,"answer");
 			$questionScore = mysql_result($resq,0,"marks");
+			$totalScore+=$questionScore;
 			?>
 			<tr>
 			<td valign="top"><?php display_free_answer($choice, $id, $questionId);?> </td>
@@ -807,7 +808,7 @@ $totalWeighting+=$questionWeighting;
 <tr><td></td><td align=right><b><?php
 			//$query = "update `".$TABLETRACK_EXERCICES."` set exe_result = $totalScore where exe_id = '$id'";
 			//api_sql_query($query,__FILE__,__LINE__);
-			echo get_lang('YourTotalScore')." ";
+			echo '<br/>'.get_lang('YourTotalScore')." ";
 			if($dsp_percent == true)
 				{
 			  	echo number_format(($totalScore/$totalWeighting)*100,1,'.','')."%";

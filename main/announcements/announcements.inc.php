@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 9982 2006-11-15 00:08:08Z pcool $
+<?php //$Id: announcements.inc.php 11104 2007-02-13 09:21:38Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -152,9 +152,9 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 	// adding the individual users to the select form
 	foreach($user_list as $this_user)
 	{
-		if (!in_array("USER:".$this_user[uid],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
+		if (!in_array("USER:".$this_user["user_id"],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 		{
-			echo	"\t\t<option value=\"USER:",$this_user[uid],"\">",
+			echo	"\t\t<option value=\"USER:",$this_user["user_id"],"\">",
 				"",$this_user[lastName]," ",$this_user[firstName],
 				"</option>\n";
 		}

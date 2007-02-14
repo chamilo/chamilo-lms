@@ -20,14 +20,14 @@
 
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
 
-============================================================================== 
+==============================================================================
 
     BLOG HOMEPAGE
 
 	This file takes care of all blog navigation and displaying.
 
 	@package dokeos.blogs
-============================================================================== 
+==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -39,21 +39,21 @@ require_once(api_get_path(LIBRARY_PATH) . "blog.lib.php");
 $nameTools = get_lang("blog_management");
 
 
-// showing the header if we are not in the learning path, if we are in 
-// the learning path, we do not include the banner so we have to explicitly 
+// showing the header if we are not in the learning path, if we are in
+// the learning path, we do not include the banner so we have to explicitly
 // include the stylesheet, which is normally done in the header
-if ($_GET['origin'] != 'learnpath') 
-{ 	
+if ($_GET['origin'] != 'learnpath')
+{
 	Display::display_header($nameTools,'Blogs');
 }
-else 
+else
 {
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>";
 }
 /*
 ==============================================================================
 	PROCESSING..
-============================================================================== 
+==============================================================================
 */
 if ($_POST['new_blog_submit'])
 {
@@ -61,22 +61,22 @@ if ($_POST['new_blog_submit'])
 }
 if ($_POST['edit_blog_submit'])
 {
-	Blog::edit_blog(mysql_real_escape_string($_POST['blog_id']),mysql_real_escape_string($_POST['blog_name']),mysql_real_escape_string($_POST['blog_subtitle']));
+	Blog::edit_blog(mysql_real_escape_string((int)$_POST['blog_id']),mysql_real_escape_string($_POST['blog_name']),mysql_real_escape_string($_POST['blog_subtitle']));
 }
 if ($_GET['action'] == 'visibility')
-{	
-	Blog::change_blog_visibility(mysql_real_escape_string($_GET['blog_id']));
+{
+	Blog::change_blog_visibility(mysql_real_escape_string((int)$_GET['blog_id']));
 }
 if ($_GET['action'] == 'delete')
 {
-	Blog::delete_blog(mysql_real_escape_string($_GET['blog_id']));
+	Blog::delete_blog(mysql_real_escape_string((int)$_GET['blog_id']));
 }
 
 
 /*
 ==============================================================================
 	DISPLAY
-============================================================================== 
+==============================================================================
 */
 api_display_tool_title($nameTools);
 //api_introductionsection(TOOL_BLOG);
@@ -88,7 +88,7 @@ api_display_tool_title($nameTools);
 	}
 	if ($_GET['action'] == 'edit')
 	{
-		Blog::display_edit_blog_form(mysql_real_escape_string($_GET['blog_id']));
+		Blog::display_edit_blog_form(mysql_real_escape_string((int)$_GET['blog_id']));
 	}
 
 	echo "<a href='".$_SERVER['PHP_SELF']."?action=add'>",

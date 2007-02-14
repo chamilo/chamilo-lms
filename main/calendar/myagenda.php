@@ -207,22 +207,22 @@ if (isset ($_user['user_id']))
 	}
 	// setting and/or getting the year, month, day, week
 	$today = getdate();
-	$year = $_GET['year'];
+	$year = (int)$_GET['year'];
 	if ($year == NULL)
 	{
 		$year = $today['year'];
 	}
-	$month = $_GET['month'];
+	$month = (int)$_GET['month'];
 	if ($month == NULL)
 	{
 		$month = $today['mon'];
 	}
-	$day = $_GET['day'];
+	$day = (int)$_GET['day'];
 	if ($day == NULL)
 	{
 		$day = $today['mday'];
 	}
-	$week = $_GET['week'];
+	$week = (int)$_GET['week'];
 	if ($week == NULL)
 	{
 		$week = date("W");
@@ -289,7 +289,7 @@ if (isset ($_user['user_id']))
 			show_new_item_form();
 			break;
 		case "store_personal_agenda_item" :
-			store_personal_item($_POST['frm_day'], $_POST['frm_month'], $_POST['frm_year'], $_POST['frm_hour'], $_POST['frm_minute'], $_POST['frm_title'], $_POST['frm_content'], $_GET['id']);
+			store_personal_item($_POST['frm_day'], $_POST['frm_month'], $_POST['frm_year'], $_POST['frm_hour'], $_POST['frm_minute'], $_POST['frm_title'], $_POST['frm_content'], (int)$_GET['id']);
 			if ($_GET['id'])
 			{
 				Display :: display_normal_message(get_lang("PeronalAgendaItemEdited"));
@@ -301,10 +301,10 @@ if (isset ($_user['user_id']))
 			show_personal_agenda();
 			break;
 		case "edit_personal_agenda_item" :
-			show_new_item_form($_GET['id']);
+			show_new_item_form((int)$_GET['id']);
 			break;
 		case "delete_personal_agenda_item" :
-			delete_personal_agenda($_GET['id']);
+			delete_personal_agenda((int)$_GET['id']);
 			Display :: display_normal_message(get_lang('PeronalAgendaItemDeleted'));
 			show_personal_agenda();
 			break;
@@ -551,7 +551,7 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	if ($_GET['week'])
 	{
 		$today = mktime(0, 0, 0, 1, 1, $year);
-		$today = $today + (($_GET['week']) * (7 * 24 * 60 * 60));
+		$today = $today + (((int)$_GET['week']) * (7 * 24 * 60 * 60));
 		$week_number = date("W", $today);
 	}
 	// calculating the start date of the week

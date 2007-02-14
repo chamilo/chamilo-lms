@@ -3,449 +3,407 @@
 	GLOBAL STYLES
 ==============================================================================
 */
+#box_title {
+	text-align: right;
+	margin-left: 30%;
+	width: 65%;
+	margin: 0;
+	float: right;
+}
+
+#box_title h1 {
+	font: bold 2em Arial, sans-serif, sans;
+	color: #bbb;
+}
+
+#box_title h2 {
+	font: bold 1.5em Arial, sans-serif, sans;
+	color: #bbb;
+}
+
 .dokeos_course {
-	width:95%;
-	margin:1em auto;
-	text-align:center;
+	width: 690px;
+	margin: 0 auto;
+	padding: 0;
+	font: normal .72em verdana, 'Lucida Grande', sans-serif, sans;
+}
+
+#footer_template {
+	background: transparent url("images/footer_template.png") no-repeat top center;
+	width: 690px;
+	height: 48px;
+	clear:both;
+}
+
+#header_template {
+	width: 690px;
+	background: transparent url("images/writerheader.png") no-repeat top
+		left;
+	height: 185px;
 }
 
 /*
 ------------------------------------------------------------------------------
-	Introductory title
+	Presentation
 ------------------------------------------------------------------------------
-*/ 
+*/
 
-#box_title1,#footer1 {
-	border:1px solid #4171b5;
-	padding:1em;
-	width:99%;
-	margin:1em auto;
-}
-
-#box_title1 h1{
-	font:bold 2.5em Arial,sans-serif,sans;
-}
-
-#box_title h2{
-	font:bold 2em Arial,sans-serif,sans;
-}
-
-#content1 {
-	width:99%;
-	clear:both;
-	text-align:justify;
-}
-
-#content1 img.icon{
+#text_presentation { 
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
+	width: 690px;
 	float:left;
-	margin:0 1em 1em 1em;
-	display:block;
-	vertical-align:top;
+	text-align: justify;
+	background: transparent url("images/repeat_template.png") repeat-y top center;
+	padding-bottom: 2em;
 }
 
-#email1 {
-	float:right;
-	clear:right;
-	text-align:right;
+#text_presentation em {
+	font: normal normal bold 1em verdana, 'Lucida Grande', sans-serif, sans;
 }
 
-#email1, .manager1{
-	width:50%;
+#text_presentation img.left {
+	float: left;
+	margin: 0 2em 2em 1em;
+	clear: left;
+	display: block;
 }
 
-#footer1 {
-	font-weight:bold;
-	height: 1em;
-    line-height: 1em;
+#text_presentation p {
+	text-align: justify;
+	width: 620px;
+	margin: 0 auto 2em auto;
 }
 
-#manager1 {
+/*
+------------------------------------------------------------------------------
+	Explanation
+------------------------------------------------------------------------------
+*/
+#body_explanation {
+	background: transparent url("images/repeat_template.png") repeat-y top center;
+	padding-bottom:2em;
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
+	width: 690px;
+	float:left;
+}
+
+#explanation #header_template {
+	background: transparent url("images/teacherheader.png") no-repeat top
+		left;
+}
+
+#menu_explanation {
+	margin:1em 0 0 0;
+	padding:0;
+	width:130px;
+	margin-left:20px;
 	float:left;
 	clear:left;
-	text-align:left;
+	list-style:none;
+	height:100%;
+	background: transparent url("images/vertdivider_template.jpg") no-repeat top right;
+	padding-right:15px;
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
 }
-/*
-------------------------------------------------------------------------------
-	Explanation
-------------------------------------------------------------------------------
-*/
 
-#content2 {
-	position:absolute;
-	top:2em;
-	left:18em;
+
+#menu_explanation dd{
+	margin:1em 0 0 0;
+	padding:0;
+	list-style:none;
+	text-indent:25px;
+	font: bold 1.1em Arial, sans-serif, sans;
+	color: #aaa;
+}
+
+#menu_explanation dd a{
+	color: #aaa;
+	text-decoration:none;	
+}
+
+#menu_explanation dd a:visited {
+	color: #bbb;
+}
+
+#menu_explanation dd a:hover, #menu_explanation dd a:focus {
+	color:#000;
+}
+
+#menu_explanation dt {
+	margin:0 0 1em 10px;
+	font: bold 1.2em Arial, sans-serif, sans;
+	color: #aaa;
+}
+
+#text_explanation {
+	width:450px;
+	margin:0 0 0 10px;
 	text-align:justify;
-	margin-right:2em;
+	float:left;
+	height:250px;
+	overflow: auto;
 }
 
-#content2 h1 {
-	padding:.5em;
-	font:bold 2em Arial,sans-serif,sans;
+#text_explanation em {
+	font: normal normal bold 1em verdana, 'Lucida Grande', sans-serif, sans;
 }
 
-#content2 h2 {
-	font:normal 1.1em Arial,sans-serif,sans;
-	margin:.2em 0 3em .5em;
-}
-
-#content2 p{
-	margin:.5em;
-}
-
-#explanation {
-	text-align:center;
-	margin: 1em auto;
-	width:auto;
-	border:1px solid #4171b5;
-}
-#list2{
-	width:10em;
-	border:1px solid #4171b5;
-	margin:2em auto;
-}
-#list2 p {
-	text-align:left;
-	margin-left:.2em;
-}
-
-#list2 li {
-	margin:0 0 0 2em;
-	padding:0;
-	text-indent:.5em;
-	text-align:left;
-	list-style-position:inside;
-}
-#list2 ul{
-	margin:0 0 .5em 0;
-	padding:0;
-	text-align:left;
-	list-style-position:inside;
-}
-
-#main2 {
-	border:1px solid #4171b5;
-}
-
-
-#nav2 {
-	position:absolute;
-	left:2em;
-	top:3em;
-	width:15em;
-}
-
-.template2 {
-	position:relative;
-}
-/*
-------------------------------------------------------------------------------
-	Course objetives
-------------------------------------------------------------------------------
-*/
-#box_title3,#content3 {
-	border:1px solid #4171b5;
-	padding:1em;
-	width:99%;
+#text_explanation p{
+	width:390px;
 	margin:1em auto;
 }
-#box_title3 h1{
-	font:bold 3.5em Arial,sans-serif,sans;
+/*
+------------------------------------------------------------------------------
+	Course Objectives
+------------------------------------------------------------------------------
+*/
+
+.comment_objective {
+	color:#000;
+	font: bold .7em verdana, 'Lucida Grande', sans-serif, sans;
 }
 
-#content3 {
-	position:relative;
-	padding-bottom:50px;
-	text-align:left;
+#course_objectives #header_template {
+	background: transparent url("images/pointerheader.png") no-repeat top
+		left;
 }
-#content3 #primary {
-	font-weight:bold;
-	font-size:2em;
+
+#objectives_template {
+	margin:1em auto;
+	padding:0;
+	width:550px;
+	text-align:justify;
+	color:#4271b5;
+	font: bold 2.5em Arial, sans-serif, sans;
+	list-style:outside url("images/file_important.png");
+}
+
+#objectives_template li {
+	margin:0 0 1em 1em;
+	padding:0;
+}
+
+#text_course_objectives {
+	background: transparent url("images/repeat_template.png") repeat-y top center;
+	padding-bottom:2em;
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
+	width: 690px;
+	float:left;
+}
+/*
+------------------------------------------------------------------------------
+	Activity proposal
+------------------------------------------------------------------------------
+*/
+#activity_proposal #header_template {
+	background: transparent url("images/practicerheader.png") no-repeat top
+		left;
+}
+
+#body_proposal {
+	background: transparent url("images/repeat_template.png") repeat-y top center;
+	padding-bottom:2em;
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
+	width: 690px;
+	float:left;
+}
+
+#menu_proposal {
+	margin:1em 0 0 0;
+	padding:0;
+	width:130px;
+	margin-left:20px;
+	float:left;
+	clear:left;
+	list-style:none;
+	height:100%;
+	background: transparent url("images/vertdivider_template.jpg") no-repeat top right;
+	padding-right:15px;
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
+}
+
+
+#menu_proposal dd{
+	margin:1em 0 0 0;
+	padding:0;
+	list-style:none;
+	text-indent:25px;
+	font: bold 1.1em Arial, sans-serif, sans;
+	color: #4271b5;
+}
+
+#menu_proposal dt {
+	margin:0 0 1em 10px;
+	font: bold 1.3em Arial, sans-serif, sans;
+	color: #bbb;
+}
+
+#text_proposal {
+	width:450px;
+	margin:0 0 0 10px;
+	text-align:justify;
+	float:left;
+}
+
+#text_proposal em {
+	font: normal normal bold 1em verdana, 'Lucida Grande', sans-serif, sans;
+}
+
+#text_proposal p{
+	width:390px;
+	margin:1em auto;
+}
+/*
+------------------------------------------------------------------------------
+	Think about
+------------------------------------------------------------------------------
+*/
+
+#text_course_think {
+	background: transparent url("images/repeat_template.png") repeat-y top center;
+	padding-bottom:2em;
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
+	width: 690px;
+	float:left;
+}
+
+#think_about #header_template {
+	background: transparent url("images/thinkerheader.png") no-repeat top
+		left;
+}
+
+#think_about_list {
+	margin:1em auto;
+	padding:0;
+	width:600px;
+	text-align:justify;
+	color:#4271b5;
+	font: bold 2.5em Arial, sans-serif, sans;
+	list-style:outside url("images/list_icon_template.png");
+}
+
+#think_about_list li {
+	margin:0 0 1em 1em;
+	padding:0;
+}
+
+#think_forum {
+	width:500px;
+	margin:0 auto;
+	color:#aaa;
+	font: bold 1.2em Arial, sans-serif, sans;
+	background: transparent url("images/forum_template.png") no-repeat top right;
+	padding:20px 60px 0 0;
+	text-align:center;
+	/* Min-height hack for IE 6*/
+	min-height: 30px;
+	height: auto !important;
+	height: 30px;
+}
+
+/*
+------------------------------------------------------------------------------
+	Colaborative activity
+------------------------------------------------------------------------------
+*/
+
+#colaborative_activity #header_template {
+	background: transparent url("images/colabheader.png") no-repeat top
+		left;
+}
+
+#list_colaborative {
+	margin:1em auto;
+	padding:0;
+	width:400px;
+}
+
+#list_colaborative dt{
+	color:#4271b5;
+	font: bold 2.5em Arial, sans-serif, sans;
+}
+
+#list_colaborative dd {
 	margin:0;
 	padding:0;
+	text-align:justify;
 }
-#content3 #primary li,#content3 #secondary li{
-	margin:0 0 0 1em;
+
+#text_colaborative_activity {
+	background: transparent url("images/repeat_template.png") repeat-y top center;
+	padding-bottom:2em;
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
+	width: 690px;
+	float:left;
+}
+/*
+------------------------------------------------------------------------------
+	Unit overview
+------------------------------------------------------------------------------
+*/
+
+.content_overview {
+	color:#aaa;
+	font: bold 2.5em Arial, sans-serif, sans;
+	margin-left:1em;
+}
+
+#list_unit_overview {
+	list-style-image:url("images/list_icon_template.png");
+}
+
+#list_unit_overview li{
+	margin:.5em 0 0 1em;
 	padding:0;
-}
-#content3 #primary .secondary{
-	font-weight:normal; 
-	font-size:.8em;
-	margin:0 0 0 2em;
-	padding:0;
+	color:#4271b5;
+	font: bold 2.5em Arial, sans-serif, sans;
 }
 
-#footer3 {
-	position:absolute;
-	bottom:0;
-	right:0;
+.subunit_overview {
+	list-style-image:url("images/subunit_list_icon.png");
 }
 
-/*
-==============================================================================
-	Styles for corporative version
-==============================================================================
-*/
-#corp {
-	font:normal .85em Lucida Grande,Arial,sans-serif,sans;
-}
-#corp a {
-	text-decoration: none;
-	font: bold 100% Arial, sans-serif, sans;
-	color: #4170b4;
+#text_unit_overview {
+	background: transparent url("images/repeat_template.png") repeat-y top center;
+	padding-bottom:2em;
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
+	width: 690px;
+	float:left;
 }
 
-#corp a:hover,#corp a:focus {
-	color: #111;
+#unit_overview .subunit_overview li{
+	color:#000;
+	font: bold .7em verdana, 'Lucida Grande', sans-serif, sans;
 }
 
-/*
-------------------------------------------------------------------------------
-	Introductory title
-------------------------------------------------------------------------------
-*/ 
-
-#corp #box_title1{
-	background:transparent url("images/alert.jpg") no-repeat top center;
-	border:none;
-	padding-top:10px;
-}
-#corp #box_title1 #bottom{
-	background:transparent url("images/alert.jpg") no-repeat top center;
-	height:40px;
-	width:100%;
-}
-
-#corp #footer1 {
-	border: 1px solid #ddd;
-	background:#eee url("images/headertables.jpg") repeat-x top center;
-	line-height:.8em;
-	height:.8em;
-	padding:.5em;
-}
-/*
-------------------------------------------------------------------------------
-	Explanation
-------------------------------------------------------------------------------
-*/ 
-#corp #explanation{
-	background:transparent url("images/alert.jpg") no-repeat top center;
-	border:none;
-	padding-top:10px;
-}
-
-#corp #explanation #bottom{
-	background:transparent url("images/alert.jpg") no-repeat top center;
-	height:40px;
-	margin-top:-15px;
-	width:100%;
-}
-
-#corp #list2,#corp #main2 {
-	border:1px solid #aaa;
-}
-
-#corp #content2 #main2 h2 {
-	font:bold 1.1em Arial,sans-serif,sans;
-	margin:.2em 0 3em .5em;
-}
-/*
-------------------------------------------------------------------------------
-	Course objetives
-------------------------------------------------------------------------------
-*/
-#corp #box_title3{
-	background:transparent url("images/alert.jpg") no-repeat top center;
-	border:none;
-	padding-top:10px;
-}
-#corp #box_title3 #bottom{
-	background:transparent url("images/alert.jpg") no-repeat top center;
-	height:40px;
-	width:100%;
-}
-#corp #content3 {
-	border:1px solid #bbb;
-}
-
-/*
-==============================================================================
-	Styles for academic version
-==============================================================================
-*/
-#academic {
-	font-family:normal .85em trebuchet, verdana, Arial, sans-serif, sans;
-	color: #000915;
-}	
-#academic a {
-	text-decoration: none;
-	font: bold 100% Arial, sans-serif, sans;
-	color: #4171b5;
-}
-
-#academic a:hover,a:focus {
-	color: #000915;
-}
-/*
-------------------------------------------------------------------------------
-	Introductory title
-------------------------------------------------------------------------------
-*/ 
-#academic #box_title1{
-	background:transparent url("images/alert_academic.jpg") no-repeat top center;
-	border:none;
-	padding-top:10px;
-	color: #00122B;
-}
-#academic #box_title1 #bottom{
-	background:transparent url("images/alert_academic.jpg") no-repeat top center;
-	height:40px;
-	width:100%;
-}
-
-#academic #footer1{
-	background: #8cafe1 url('images/crystal3.png') repeat-x;
-}
-
-#academic #footer1 a{
-	color:#fff;
-}
-
-#academic #footer1 a:hover,#academic #footer1 a:focus {
-	color: #000915;
-}
-/*
-------------------------------------------------------------------------------
-	Explanation
-------------------------------------------------------------------------------
-*/
-#academic #explanation{
-	background:transparent url("images/alert_academic.jpg") no-repeat top center;
-	border:none;
-	padding-top:10px;
-	color: #00122B;
-}
-#academic #explanation #bottom{
-	background:transparent url("images/alert_academic.jpg") no-repeat top center;
-	height:40px;
-	width:100%;
-}
-
-#academic #list2,#academic #main2{
-	border: 1px solid #0049AF;
-}
-
-#academic #nav2 img {
-	margin-bottom:3em;
-}
-#academic #nav2 .logo {
-	margin-left:-1.2em;
-}
-
-#academic #nav2{
-	top:5em;
-} 
-/*
-------------------------------------------------------------------------------
-	Course objetives
-------------------------------------------------------------------------------
-*/
-#academic #box_title3 {
-	border: 1px solid #0049AF;
-	background: #b0c8eb url('images/crystal3.png') repeat-x;
-	color: #00122B;
-}
-#academic #content3{
-	border: 1px solid #0049AF;
-}
-/*
-==============================================================================
-	Styles for baby version
-==============================================================================
-*/
-#baby {
-	font:normal .85em 'Lucida Grande', verdana, Arial, sans-serif, sans;
-	color: #000;
-}
-
-#baby a {
-	text-decoration: none;
-	font: bold 100% Arial, sans-serif, sans;
-	color: #9a0;
-}
-
-#baby a:hover,a:focus {
-	color: #470;
-}
-/*
-------------------------------------------------------------------------------
-	Introductory title
-------------------------------------------------------------------------------
-*/
-
-#baby #box_title1{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
-	border:none;
-	padding-top:10px;
-	color: #00122B;
-}
-#baby #box_title1 #bottom{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
-	height:40px;
-	width:100%;
-}
-
-#baby #footer1 {
-	background-color:transparent;
-	border: 1px solid #BFAF00;
-	padding: .2em;
-	color: #3F3A00;
-}
-/*
-------------------------------------------------------------------------------
-	Explanation
-------------------------------------------------------------------------------
-*/
-#baby #explanation{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
-	border:none;
-	padding-top:10px;
-	color: #3F3A00;
-}
-#baby #explanation #bottom{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
-	height:40px;
-	width:100%;
-}
-
-#baby #list2,#baby #main2 {
-	border: 1px solid #BFAF00;
-}
-
-#baby #nav2{
-	top:0;
-}
-#baby #content2 #main2 h2 {
-	font:bold 1.1em Arial,sans-serif,sans;
-	margin:.2em 0 3em .5em;
-}
-/*
-------------------------------------------------------------------------------
-	Course objetives
-------------------------------------------------------------------------------
-*/
-
-#baby #box_title3{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
-	border:none;
-	padding-top:10px;
-	color: #3F3A00;
-}
-#baby #box_title3 #bottom{
-	background:transparent url("images/alert_baby.jpg") no-repeat top center;
-	height:40px;
-	width:100%;
-}
-
-#baby #content3 {
-	 border: 1px solid #BFAF00;
+#unit_overview #header_template {
+	background: transparent url("images/readerheader.png") no-repeat top
+		left;
 }

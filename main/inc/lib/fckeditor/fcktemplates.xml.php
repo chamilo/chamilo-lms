@@ -7,341 +7,229 @@ $IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
 function loadCSS($css_name){
 	$template_css = '<style type="text/css">'.file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/course.css').'</style>';
 	$template_css=str_replace('images/',api_get_path(WEB_PATH).'main/css/'.$css_name.'/images/',$template_css);
-	echo $template_css;
+	return $template_css;
 }
+$css = loadCSS('default');
 
 ?>
 <Templates imagesBasePath="fck_template/images/">
-	<Template title="Content" image="2.png">
+	<Template title="Content" image="1.jpg">
 		<Description>Introductory title</Description>
 		<Html>
 			<![CDATA[
-					<?php loadCSS(api_get_setting('stylesheets')); ?>
-				    <div class="dokeos_course">
-						<div id="box_title1">
-							<h1>Press here to add a title</h1>
-							<h2>Write here a subtitle</h2>
-						</div>
-						<div id="content1">
-						<p><img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/pointer-left.png" alt="Mr dokeos" class="icon" /><p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur commodo urna in justo. Nulla facilisi. Vestibulum dapibus mattis sapien. Nunc suscipit. Nulla odio urna, faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper hendrerit magna. Maecenas nec ligula. Quisque tellus tortor, semper in, blandit quis, aliquet ut, tellus. Quisque vulputate. Sed ligula ipsum, interdum vel, congue tincidunt, facilisis eget, arcu. Donec nec ligula et turpis tristique pulvinar. Integer in arcu vel ligula accumsan consectetuer. Ut a erat.</p>
-						Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Praesent consequat, lectus ac sollicitudin condimentum, nunc felis pharetra ligula, at tincidunt mauris neque vel nulla. Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis scelerisque sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Praesent convallis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tristique laoreet felis. Ut vitae est. Integer posuere lacus sed libero. Vestibulum cursus. Duis odio arcu, lobortis sed, fringilla non, egestas vel, magna. Aenean suscipit hendrerit nulla. Suspendisse potenti. Proin tincidunt vehicula eros. Quisque eleifend nisi non enim. Aenean elementum.</p>
-					    <p>Pellentesque faucibus, magna quis lobortis dapibus, lorem diam pharetra odio, vitae consectetuer nulla massa ac elit. Mauris urna massa, facilisis quis, tristique at, euismod sit amet, tortor. In orci dolor, faucibus sit amet, malesuada non, mollis vel, lacus. Quisque sit amet elit vel eros blandit consequat. Quisque ac risus. Donec accumsan. Suspendisse mauris mi, laoreet ut, pretium vel, dignissim nec, nulla. Sed malesuada facilisis lacus. Phasellus eleifend, nibh vitae pellentesque auctor, libero nunc dictum erat, non imperdiet est dolor quis orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi consectetuer euismod mi. Proin sit amet est vitae turpis fermentum sollicitudin. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos.</p>
-						</div>
-						<div id="footer1">
-							<div id="manager1">Course manager: So and So
+					<?php echo $css ?>
+				    <div class="dokeos_course" id="presentation">
+						<div id="header_template">
+							<div id="box_title">
+								<h1>Course objectives</h1>
+								<h2>Write here a subtitle</h2>
 							</div>
-							<div id="email1">E-mail:<a href="mailto:soandso@soandso.com">soandso@soandso.com</a>
-							</div>
+						</div>
+						<div id="text_presentation">
+							<p><img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/speech.png" alt="speech" class="left" />Lorem ipsum dolor sit amet, consectetuer adipiscing eddt. Curabitur commodo urna in justo. Nulla faciddsi. Vestibulum dapibus mattis sapien. <em>Keyword 1, keyword 2</em>. Nunc suscipit. Nulla odio urna, faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper hendrerit magna. Maecenas nec ddgula. Quisque tellus tortor, semper in, blandit quis, addquet ut, tellus. Quisque vulputate. Sed ddgula ipsum, interdum vel, congue tincidunt, faciddsis eget, arcu.</p>
+							<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.<em>Keyword 3, keyword 4</em>. Nulla faciddsi. Praesent consequat, lectus ac solddcitudin condimentum, nunc fedds pharetra ddgula, at tincidunt mauris neque vel nulla. Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis scelerisque sapien. Class aptent taciti sociosqu ad ddtora torquent per conubia nostra, per inceptos hymenaeos. Praesent convaldds. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tristique laoreet fedds. Ut vitae est. Integer posuere lacus sed ddbero.</p>
+					    </div>
+						<div id="footer_template">
 						</div>
 					</div>
 			]]>
 		</Html>
 	</Template>
-	<Template title="Content" image="2.png">
-		<Description>Introductory title - Corporative</Description>
-		<Html>
-			<![CDATA[
-					<?php loadCSS("corporativa");?>
-					<div class="dokeos_course" id="corp">
-						<div id="box_title1">
-							<h1>Press here to add a title</h1>
-							<h2>Write here a subtitle</h2>
-							<div id="bottom"></div>
-						</div>
-						<div id="content1">
-						<p><img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/corp.jpg" alt="Corporative icon"  class="icon" />Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur commodo urna in justo. Nulla facilisi. Vestibulum dapibus mattis sapien. Nunc suscipit. Nulla odio urna, faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper hendrerit magna. Maecenas nec ligula. Quisque tellus tortor, semper in, blandit quis, aliquet ut, tellus. Quisque vulputate. Sed ligula ipsum, interdum vel, congue tincidunt, facilisis eget, arcu. Donec nec ligula et turpis tristique pulvinar. Integer in arcu vel ligula accumsan consectetuer. Ut a erat.</p>
-						<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Praesent consequat, lectus ac sollicitudin condimentum, nunc felis pharetra ligula, at tincidunt mauris neque vel nulla. Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis scelerisque sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Praesent convallis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tristique laoreet felis. Ut vitae est. Integer posuere lacus sed libero. Vestibulum cursus. Duis odio arcu, lobortis sed, fringilla non, egestas vel, magna. Aenean suscipit hendrerit nulla. Suspendisse potenti. Proin tincidunt vehicula eros. Quisque eleifend nisi non enim. Aenean elementum.</p>
-						<p>Pellentesque faucibus, magna quis lobortis dapibus, lorem diam pharetra odio, vitae consectetuer nulla massa ac elit. Mauris urna massa, facilisis quis, tristique at, euismod sit amet, tortor. In orci dolor, faucibus sit amet, malesuada non, mollis vel, lacus. Quisque sit amet elit vel eros blandit consequat. Quisque ac risus. Donec accumsan. Suspendisse mauris mi, laoreet ut, pretium vel, dignissim nec, nulla. Sed malesuada facilisis lacus. Phasellus eleifend, nibh vitae pellentesque auctor, libero nunc dictum erat, non imperdiet est dolor quis orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi consectetuer euismod mi. Proin sit amet est vitae turpis fermentum sollicitudin. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos.</p>
-						</div>
-						<div id="footer1">
-							<div class="manager1">Course manager: So and So
-							</div>
-							<div id="email1">E-mail:<a href="mailto:soandso@soandso.com">soandso@soandso.com</a>
-							</div>
-						</div>
-					</div>
-			]]>
-		</Html>
-	</Template>
-	<Template title="Content" image="2.png">
-		<Description>Introductory title - Academic</Description>
-		<Html>
-			<![CDATA[
-					<?php loadCSS("academica");?>
-					<div class="dokeos_course" id="corp">
-						<div id="box_title1">
-							<h1>Press here to add a title</h1>
-							<h2>Write here a subtitle</h2>
-						<div id="bottom"></div>
-						</div>
-						<div id="content1">
-						<p><img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/academic.jpg" alt="Academic icon"  class="icon" />Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur commodo urna in justo. Nulla facilisi. Vestibulum dapibus mattis sapien. Nunc suscipit. Nulla odio urna, faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper hendrerit magna. Maecenas nec ligula. Quisque tellus tortor, semper in, blandit quis, aliquet ut, tellus. Quisque vulputate. Sed ligula ipsum, interdum vel, congue tincidunt, facilisis eget, arcu. Donec nec ligula et turpis tristique pulvinar. Integer in arcu vel ligula accumsan consectetuer. Ut a erat.</p>
-						<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Praesent consequat, lectus ac sollicitudin condimentum, nunc felis pharetra ligula, at tincidunt mauris neque vel nulla. Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis scelerisque sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Praesent convallis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tristique laoreet felis. Ut vitae est. Integer posuere lacus sed libero. Vestibulum cursus. Duis odio arcu, lobortis sed, fringilla non, egestas vel, magna. Aenean suscipit hendrerit nulla. Suspendisse potenti. Proin tincidunt vehicula eros. Quisque eleifend nisi non enim. Aenean elementum.</p>
-						<p>Pellentesque faucibus, magna quis lobortis dapibus, lorem diam pharetra odio, vitae consectetuer nulla massa ac elit. Mauris urna massa, facilisis quis, tristique at, euismod sit amet, tortor. In orci dolor, faucibus sit amet, malesuada non, mollis vel, lacus. Quisque sit amet elit vel eros blandit consequat. Quisque ac risus. Donec accumsan. Suspendisse mauris mi, laoreet ut, pretium vel, dignissim nec, nulla. Sed malesuada facilisis lacus. Phasellus eleifend, nibh vitae pellentesque auctor, libero nunc dictum erat, non imperdiet est dolor quis orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi consectetuer euismod mi. Proin sit amet est vitae turpis fermentum sollicitudin. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos.</p>
-						</div>
-						<div id="footer1">
-							<div class="manager1">Course manager: So and So
-							</div>
-							<div id="email1">E-mail:<a href="mailto:soandso@soandso.com">soandso@soandso.com</a>
-							</div>
-						</div>
-					</div>
-			]]>
-		</Html>
-	</Template>
-	<Template title="Content" image="2.png">
-		<Description>Introductory title - Baby</Description>
-		<Html>
-			<![CDATA[
-					<?php loadCSS("baby"); ?>
-					<div class="dokeos_course" id="baby">
-						<div id="box_title1">
-							<h1>Press here to add a title</h1>
-							<h2>Write here a subtitle</h2>
-							<div id="bottom"></div>
-						</div>
-						<div id="content1">
-						<p><img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/baby.jpg" alt="Baby icon"  class="icon" />Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur commodo urna in justo. Nulla facilisi. Vestibulum dapibus mattis sapien. Nunc suscipit. Nulla odio urna, faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper hendrerit magna. Maecenas nec ligula. Quisque tellus tortor, semper in, blandit quis, aliquet ut, tellus. Quisque vulputate. Sed ligula ipsum, interdum vel, congue tincidunt, facilisis eget, arcu. Donec nec ligula et turpis tristique pulvinar. Integer in arcu vel ligula accumsan consectetuer. Ut a erat.</p>
-						<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Praesent consequat, lectus ac sollicitudin condimentum, nunc felis pharetra ligula, at tincidunt mauris neque vel nulla. Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis scelerisque sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Praesent convallis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tristique laoreet felis. Ut vitae est. Integer posuere lacus sed libero. Vestibulum cursus. Duis odio arcu, lobortis sed, fringilla non, egestas vel, magna. Aenean suscipit hendrerit nulla. Suspendisse potenti. Proin tincidunt vehicula eros. Quisque eleifend nisi non enim. Aenean elementum.</p>
-						<p>Pellentesque faucibus, magna quis lobortis dapibus, lorem diam pharetra odio, vitae consectetuer nulla massa ac elit. Mauris urna massa, facilisis quis, tristique at, euismod sit amet, tortor. In orci dolor, faucibus sit amet, malesuada non, mollis vel, lacus. Quisque sit amet elit vel eros blandit consequat. Quisque ac risus. Donec accumsan. Suspendisse mauris mi, laoreet ut, pretium vel, dignissim nec, nulla. Sed malesuada facilisis lacus. Phasellus eleifend, nibh vitae pellentesque auctor, libero nunc dictum erat, non imperdiet est dolor quis orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi consectetuer euismod mi. Proin sit amet est vitae turpis fermentum sollicitudin. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos.</p>
-						</div>
-						<div id="footer1">
-							<div class="manager1">Course manager: So and So
-							</div>
-							<div id="email1">E-mail:<a href="mailto:soandso@soandso.com">soandso@soandso.com</a>
-							</div>
-						</div>
-					</div>
-			]]>
-		</Html>
-	</Template>
-	<Template title="Content" image="2.png">
+	<Template title="Content" image="3.jpg">
 		<Description>Explanation</Description>
 		<Html>
 			<![CDATA[
-					<?php loadCSS(api_get_setting('stylesheets'));?>
-					<div class="dokeos_course" class="template2">
-						<div id="nav2">
-							<img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/teacher.png" alt="Mr dokeos"  />
-							<div id="list2">
-							<p><i>Check out:</i></p>
-								<ul>
-									<li>web 1</li>
-									<li>web 2</li>
-									<li>Resource 1</li>
-								</ul>
+					<?php echo $css ?>
+				    <div class="dokeos_course" id="explanation">
+						<div id="header_template">
+							<div id="box_title">
+								<h1>Explanation</h1>
+								<h2>Write here a subtitle</h2>
 							</div>
 						</div>
-						<div id="content2">
-							<div id="explanation">
-							<h1>Explanation</h1>
+						<div id="body_explanation">
+							<div id="menu_explanation">
+								<dl>
+								<dt>Chek out:</dt>
+								<dd><a href="#nogo" title="Web 1">Web 1</a>
+								</dd><dd><a href="#nogo" title="Web 2">Web 2</a>
+								</dd><dd><a href="#nogo" title="Resource">Resource</a>
+								</dd><dd><a href="#nogo" title="Etc...">Etc...</a>
+								</dd></dl>
 							</div>
-							<div id="main2">
-							<h2>Enter text here for your explanation</h2>
-						    <p>Pellentesque faucibus, magna quis lobortis dapibus, lorem diam pharetra odio, vitae consectetuer nulla massa ac elit. Mauris urna massa, facilisis quis, tristique at, euismod sit amet, tortor. In orci dolor, faucibus sit amet, malesuada non, mollis vel, lacus. Quisque sit amet elit vel eros blandit consequat. Quisque ac risus. Donec accumsan. Suspendisse mauris mi, laoreet ut, pretium vel, dignissim nec, nulla. Sed malesuada facilisis lacus. Phasellus eleifend, nibh vitae pellentesque auctor, libero nunc dictum erat, non imperdiet est dolor quis orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi consectetuer euismod mi. Proin sit amet est vitae turpis fermentum sollicitudin. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos.</p>
-							</div>
+							<div id="text_explanation">
+								<p>Lorem ipsum dolor sit amet, consectetuer adipiscing eddt. Curabitur commodo urna in justo. Nulla faciddsi. Vestibulum dapibus mattis sapien. <em>Keyword 1, keyword 2</em>. Nunc suscipit. Nulla odio urna, faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper hendrerit magna. Maecenas nec ddgula. Quisque tellus tortor, semper in, blandit quis, addquet ut, tellus. Quisque vulputate. Sed ddgula ipsum, interdum vel, congue tincidunt, faciddsis eget, arcu.</p>
+								<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. <em>Keyword 3, keyword 4</em>. Nulla faciddsi. Praesent consequat, lectus ac solddcitudin condimentum, nunc fedds pharetra ddgula, at tincidunt mauris neque vel nulla. Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis scelerisque sapien. Class aptent taciti sociosqu ad ddtora torquent per conubia nostra, per inceptos hymenaeos. Praesent convaldds. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tristique laoreet fedds. Ut vitae est. Integer posuere lacus sed ddbero.</p>
+						    	<p>Donec pretium sagittis nisi. Nullam sed ipsum hendrerit arcu ornare mollis. Praesent hendrerit consectetuer magna. Aliquam dignissim. Sed aliquam. Maecenas dui. Quisque eleifend egestas diam. Curabitur sollicitudin dui ac risus. In nunc risus, rutrum eget, malesuada at, lobortis a, erat. Integer vitae nisl ac arcu nonummy ultrices. Nullam sollicitudin arcu quis nisi. Nam nec neque a urna fringilla consequat.</p>
+						    </div>
 						</div>
-				</div>
-			]]>
-		</Html>
-	</Template>
-		<Template title="Content" image="3.jpg">
-		<Description>Explanation - Corporative version</Description>
-		<Html>
-			<![CDATA[
-					<?php loadCSS("corporativa"); ?>
-					<div class="dokeos_course" class="template2" id="corp" >
-						<div id="nav2">
-							<img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/corp.jpg" alt="corporative icon"  />
-							<div id="list2">
-							<p><i>Check out:</i></p>
-								<ul>
-									<li>web 1</li>
-									<li>web 2</li>
-									<li>Resource 1</li>
-								</ul>
-							</div>
-						</div>
-						<div id="content2">
-							<div id="explanation">
-							<h1>Explanation</h1>
-							<div id="bottom"></div>
-							</div>
-							<div id="main2">
-							<h2>Enter text here for your explanation</h2>
-						    <p>Pellentesque faucibus, magna quis lobortis dapibus, lorem diam pharetra odio, vitae consectetuer nulla massa ac elit. Mauris urna massa, facilisis quis, tristique at, euismod sit amet, tortor. In orci dolor, faucibus sit amet, malesuada non, mollis vel, lacus. Quisque sit amet elit vel eros blandit consequat. Quisque ac risus. Donec accumsan. Suspendisse mauris mi, laoreet ut, pretium vel, dignissim nec, nulla. Sed malesuada facilisis lacus. Phasellus eleifend, nibh vitae pellentesque auctor, libero nunc dictum erat, non imperdiet est dolor quis orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi consectetuer euismod mi. Proin sit amet est vitae turpis fermentum sollicitudin. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos.</p>
-							</div>
-						</div>
-				</div>
-			]]>
-		</Html>
-	</Template>
-	<Template title="Content" image="3.jpg">
-		<Description>Explanation - Academic version</Description>
-		<Html>
-			<![CDATA[
-					<?php loadCSS("academica"); ?>
-					<div class="dokeos_course template2" id="academic" >
-						<div id="nav2">
-							<img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/academic.jpg" alt="Academic icon" class="logo" />
-							<div id="list2">
-							<p><i>Check out:</i></p>
-								<ul>
-									<li>web 1</li>
-									<li>web 2</li>
-									<li>Resource 1</li>
-								</ul>
-							</div>
-						</div>
-						<div id="content2">
-							<div id="explanation">
-							<h1>Explanation</h1>
-							<div id="bottom"></div>
-							</div>
-							<div id="main2">
-							<h2>Enter text here for your explanation</h2>
-						    <p>Pellentesque faucibus, magna quis lobortis dapibus, lorem diam pharetra odio, vitae consectetuer nulla massa ac elit. Mauris urna massa, facilisis quis, tristique at, euismod sit amet, tortor. In orci dolor, faucibus sit amet, malesuada non, mollis vel, lacus. Quisque sit amet elit vel eros blandit consequat. Quisque ac risus. Donec accumsan. Suspendisse mauris mi, laoreet ut, pretium vel, dignissim nec, nulla. Sed malesuada facilisis lacus. Phasellus eleifend, nibh vitae pellentesque auctor, libero nunc dictum erat, non imperdiet est dolor quis orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi consectetuer euismod mi. Proin sit amet est vitae turpis fermentum sollicitudin. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos.</p>
+						<div id="footer_template">
 						</div>
 					</div>
-			</div>
 			]]>
 		</Html>
 	</Template>
-	<Template title="Content" image="3.jpg">
-		<Description>Explanation - Baby version</Description>
+	<Template title="Content" image="2.jpg">
+		<Description>Course objectives</Description>
 		<Html>
 			<![CDATA[
-					<?php loadCSS("baby"); ?>
-					<div class="dokeos_course" class="template2" id="baby" >
-					<div id="nav2">
-						<img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/baby.jpg" alt="baby icon" class="logo" />
-						<div id="list2">
-						<p><i>Check out:</i></p>
-							<ul>
-								<li>web 1</li>
-								<li>web 2</li>
-								<li>Resource 1</li>
+					<?php echo $css ?>
+					<div class="dokeos_course" id="course_objectives">
+						<div id="header_template">
+							<div id="box_title">
+								<h1>Course objectives</h1>
+								<h2>Write here a subtitle</h2>
+							</div>
+						</div>
+						<div id="text_course_objectives">
+							<ul id="objectives_template">
+							<li>Objective 1<br />
+							<span class="comment_objective">Short comment about objective 1</span>
+							</li>
+							<li>Objective 2<br />
+							<span class="comment_objective">Short comment about objective 2</span>
+							</li>
+							<li>Objective 3<br />
+							<span class="comment_objective">Short comment about objective 3</span>
+							</li>
 							</ul>
 						</div>
-					</div>
-					<div id="content2">
-						<div id="explanation">
-						<h1>Explanation</h1>
-						<div id="bottom"></div>
+						<div id="footer_template">
 						</div>
-						<div id="main2">
-						<h2>Enter text here for your explanation</h2>
-					    <p>Pellentesque faucibus, magna quis lobortis dapibus, lorem diam pharetra odio, vitae consectetuer nulla massa ac elit. Mauris urna massa, facilisis quis, tristique at, euismod sit amet, tortor. In orci dolor, faucibus sit amet, malesuada non, mollis vel, lacus. Quisque sit amet elit vel eros blandit consequat. Quisque ac risus. Donec accumsan. Suspendisse mauris mi, laoreet ut, pretium vel, dignissim nec, nulla. Sed malesuada facilisis lacus. Phasellus eleifend, nibh vitae pellentesque auctor, libero nunc dictum erat, non imperdiet est dolor quis orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi consectetuer euismod mi. Proin sit amet est vitae turpis fermentum sollicitudin. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos.</p>
-						</div>
-					</div>
-			</div>
+					</div>		
 			]]>
 		</Html>
 	</Template>
-	<Template title="Content" image="3.png">
-		<Description>Course Objectives</Description>
+	<Template title="Content" image="3.jpg">
+		<Description>Activity proposal</Description>
 		<Html>
 			<![CDATA[
-					<?php loadCSS(api_get_setting('stylesheets')); ?>
-					<div class="dokeos_course" class="template3">
-						<div id="box_title3">
-							<h1>Course objetives</h1>
+					<?php echo $css ?>
+				    <div class="dokeos_course" id="activity_proposal">
+						<div id="header_template">	
+							<div id="box_title">				
+							<h1>Activity proposal</h1>
+							<h2>Write here a subtitle</h2>
+							</div>
+						</div>		
+					<div id="body_proposal">			
+						<div id="menu_proposal">		
+						<dl>
+							<dt>Activity`s objectives</dt>
+								<dd>1) Goal 1</dd>
+				  				<dd>2) Goal 2</dd>
+				  				<dd>3) Goal 3</dd>
+						</dl>
 						</div>
-						<div id="content3">
-						<ul id="primary">
-							<li>Objetive number 1</li>
-							<ul class="secondary"><li>Short comment of the Objective 1</li></ul>
-							<li>Objetive number 2</li>
-							<ul class="secondary"><li>Short comment of the Objective 2</li></ul>
-							<li>Objetive number 3</li>
-							<ul class="secondary"><li>Short comment of the Objective 3</li></ul>
-						</ul>
-						<div id="footer3">
-							<img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/pointer-right.png" alt="Mr dokeos" class="logo" />
-						</div> 
-						</div>	
+						<div id="text_proposal">				
+						<p>Lorem ipsum dolor sit amet, consectetuer adipiscing eddt. Curabitur commodo urna in justo. Nulla faciddsi. Vestibulum dapibus mattis
+				sapien. <em>Keyword 1, keyword 2</em>. Nunc suscipit. Nulla odio urna,
+				faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper
+				hendrerit magna. Maecenas nec ddgula. Quisque tellus tortor, semper in,
+				blandit quis, addquet ut, tellus. Quisque vulputate. Sed ddgula ipsum,
+				interdum vel, congue tincidunt, faciddsis eget, arcu.</p>
+						<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. <em>Keyword 3, keyword 4</em>.
+				Nulla faciddsi. Praesent consequat, lectus ac solddcitudin condimentum,
+				nunc fedds pharetra ddgula, at tincidunt mauris neque vel nulla.
+				Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis
+				scelerisque sapien. Class aptent taciti sociosqu ad ddtora torquent per
+				conubia nostra, per inceptos hymenaeos. Praesent convaldds. Cum sociis
+				natoque penatibus et magnis dis parturient montes, nascetur ridiculus
+				mus. In tristique laoreet fedds. Ut vitae est. Integer posuere lacus
+				sed ddbero.</p>
+						</div>
+					</div>		
+					<div id="footer_template">
+					</div>
 				</div>
 			]]>
 		</Html>
 	</Template>
 	<Template title="Content" image="3.png">
-		<Description>Course Objectives - Corporative version</Description>
+		<Description>Think about this...</Description>
 		<Html>
 			<![CDATA[
-					<?php loadCSS("corporativa"); ?>
-				<div class="dokeos_course" class="template3" id="corp">
-					<div id="box_title3">
-						<h1>Course objetives</h1>
-						<div id="bottom"></div>
-					</div>
-					<div id="content3">
-					<ul id="primary">
-						<li>Objetive number 1</li>
-						<ul class="secondary"><li>Short comment of the Objective 1</li></ul>
-						<li>Objetive number 2</li>
-						<ul class="secondary"><li>Short comment of the Objective 2</li></ul>
-						<li>Objetive number 3</li>
-						<ul class="secondary"><li>Short comment of the Objective 3</li></ul>
-					</ul>
-					<div id="footer3">
-						<img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/corp_right.jpg" alt="Corporative logo" class="logo" />
-					</div> 
-					</div>	
-			</div>
-			]]>
-		</Html>
-	</Template>
-	<Template title="Content" image="3.png">
-		<Description>Course Objectives - Academic version</Description>
-		<Html>
-			<![CDATA[
-					<?php loadCSS("academica"); ?>
-				<div class="dokeos_course" class="template3" id="academic">
-					<div id="box_title3">
-						<h1>Course objetives</h1>
-						<div id="bottom"></div>
-					</div>
-					<div id="content3">
-					<ul id="primary">
-						<li>Objetive number 1</li>
-						<ul class="secondary"><li>Short comment of the Objective 1</li></ul>
-						<li>Objetive number 2</li>
-						<ul class="secondary"><li>Short comment of the Objective 2</li></ul>
-						<li>Objetive number 3</li>
-						<ul class="secondary"><li>Short comment of the Objective 3</li></ul>
-					</ul>
-					<div id="footer3">
-						<img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/academic.jpg" alt="Academic logo" class="logo" />
-					</div> 
-					</div>	
-			</div>
-			]]>
-		</Html>
-	</Template>
-	<Template title="Content" image="3.png">
-		<Description>Course Objectives - Baby</Description>
-		<Html>
-			<![CDATA[
-					<?php loadCSS("baby"); ?>
-					<div class="dokeos_course" class="template3" id="baby">
-						<div id="box_title3">
-							<h1>Course objetives</h1>
-							<div id="bottom"></div>
+					<?php echo $css ?>
+				    <div class="dokeos_course" id="think_about">
+						<div id="header_template">			
+							<div id="box_title">	
+							<h1>Think about this</h1>				
+							<h2>Write here a subtitle</h2>
+							</div>
+						</div>		
+						<div id="text_course_think">			
+							<ul id="think_about_list">
+					  			<li>Question 1</li>
+					  			<li>Question 2</li>
+					  			<li>Question 3</li>
+							</ul>
+							<div id="think_forum">And leave your reflections at the correspondent forum
+							</div>
 						</div>
-						<div id="content3">
-						<ul id="primary">
-							<li>Objetive number 1</li>
-							<ul class="secondary"><li>Short comment of the Objective 1</li></ul>
-							<li>Objetive number 2</li>
-							<ul class="secondary"><li>Short comment of the Objective 2</li></ul>
-							<li>Objetive number 3</li>
-							<ul class="secondary"><li>Short comment of the Objective 3</li></ul>
-						</ul>
-						<div id="footer3">
-							<img src="<?php echo $_configuration['root_web']; ?>main/img/gallery/baby.jpg" alt="Baby logo" class="logo" />
-						</div> 
-						</div>	
-				</div>
+						<div id="footer_template">
+						</div>
+					</div>
+			]]>
+		</Html>
+	</Template>
+	<Template title="Content" image="1.jpg">
+		<Description>Colaborative activity</Description>
+		<Html>
+			<![CDATA[
+					<?php echo $css ?>
+				    <div class="dokeos_course" id="colaborative_activity">
+						<div id="header_template">			
+							<div id="box_title">	
+							<h1>Colaborative activity</h1>
+							<h2>Write here a subtitle</h2>
+							</div>
+						</div>
+						<div id="text_colaborative_activity">			
+							<dl id="list_colaborative">
+					  			<dt>Task:</dt>
+								<dd>
+					    		<p>Write here what you want your students to do.<br />
+								E.G. <i>"Create a blog and add comments to it about Mary Curie "</i></p>
+					  			</dd>
+								<dt>How to:</dt>
+								<dd>
+					    		<p>Write here all the indications for your students to be able to complete the task.<br />
+								E.G.<i>"Go to www.blublublog.com and set up your own account,
+					then wite your data in a paper to keep it for further updates.
+					Afterwards start writting your comments on the blog..."</i></p>
+					  			</dd>			
+							</dl>
+						</div>
+						<div id="footer_template">
+						</div>
+					</div>
+			]]>
+		</Html>
+	</Template>
+	<Template title="Content" image="1.jpg">
+		<Description>Unit overview</Description>
+		<Html>
+			<![CDATA[
+					<?php echo $css ?>
+				    <div class="dokeos_course" id="unit_overview">
+						<div id="header_template">
+							<div id="box_title">
+								<h1>Unit overview</h1>
+								<h2>Write here a subtitle</h2>
+							</div>
+						</div>
+						<div id="text_unit_overview">
+							<span class="content_overview">Contents:</span>
+							<ul id="list_unit_overview">
+								<li>Unit 1: Topic number 1
+								</li><li>Unit 2: Topic number 2
+								</li><li>Unit 3: Topic number 3<ul class="subunit_overview"><li>3.1. Subtopic 1
+																							</li><li>3.2. Subtopic 2</li></ul>
+								</li></ul>
+					    </div>
+						<div id="footer_template">
+						</div>
+					</div>
 			]]>
 		</Html>
 	</Template>

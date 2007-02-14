@@ -19,6 +19,7 @@ $Lastname = "Priimek";
 $Firstname = "Priimek";
 $Rating = "Ocene";
 $RateThis = "Oceni";
+$ExecuteThisTask = "Izvedi to opravilo";
 $WrittenBy = "Napisal";
 $SearchResults = "Rezultati iskanja";
 $langTask1 = "Opravilo 1";

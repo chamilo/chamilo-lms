@@ -1992,8 +1992,8 @@ class Blog
 		
 		// Set table headers
 		$column_header[] = array ('', false, '');
-		$column_header[] = array (get_lang('Lastname'), true, '');
-		$column_header[] = array (get_lang('Firstname'), true, '');
+		$column_header[] = array (get_lang('LastName'), true, '');
+		$column_header[] = array (get_lang('FirstName'), true, '');
 		$column_header[] = array (get_lang('Email'), true, '');
 		$column_header[] = array (get_lang('Register'), false, '');
 		
@@ -2070,8 +2070,8 @@ class Blog
 		$properties["width"] = "100%";
 		//table column titles
 		$column_header[] = array ('', false, '');
-		$column_header[] = array (get_lang('Lastname'), true, '');
-		$column_header[] = array (get_lang('Firstname'), true, '');
+		$column_header[] = array (get_lang('LastName'), true, '');
+		$column_header[] = array (get_lang('FirstName'), true, '');
 		$column_header[] = array (get_lang('Email'), true, '');
 		$column_header[] = array (get_lang('TaskManager'), true, '');
 		$column_header[] = array (get_lang('UnRegister'), false, '');

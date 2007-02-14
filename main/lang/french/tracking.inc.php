@@ -154,4 +154,15 @@ $ConnectionsToThisCourse = "Connexions à ce cours";
 $StudentTutors = "Coaches de l\'étudiant";
 $StudentSessions = "Sessions de l\'étudiant";
 $StudentCourses = "Cours de l\'étudiant";
+$NoLearnpath = "Pas de parcours";
+$Attempts = "Essais";
+$Correction = "Correction";
+$NoExercise = "Pas d\'exercices";
+$LimitDate = "Date limite";
+$SentDate = "D\'ate d\'envoi";
+$Annotate = "Annoter";
+$Comments = "Commentaires";
+$DayOfDelay = "Jours de délai";
+$NoProduction = "Pas de production";
+$NoComment = "Pas de commentaires";
 ?>

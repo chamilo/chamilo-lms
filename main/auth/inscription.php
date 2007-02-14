@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 11103 2007-02-12 16:27:25Z yannoo $
+// $Id: inscription.php 11113 2007-02-14 17:43:58Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -151,9 +151,9 @@ if ($form->validate())
 			$emailto		= api_get_setting('emailAdministrator');
 			$emailsubject	= get_lang('ApprovalForNewAccount').': '.$values['username'];
 			$emailbody		= get_lang('ApprovalForNewAccount')."\n";
-			$emailbody		.=get_lang('Username').': '.$values['username']."\n";
-			$emailbody		.=get_lang('Lastname').': '.$values['lastname']."\n";
-			$emailbody		.=get_lang('Firstname').': '.$values['firstname']."\n";
+			$emailbody		.=get_lang('UserName').': '.$values['username']."\n";
+			$emailbody		.=get_lang('LastName').': '.$values['lastname']."\n";
+			$emailbody		.=get_lang('FirstName').': '.$values['firstname']."\n";
 			$emailbody		.=get_lang('Email').': '.$values['email']."\n";
 			$emailbody		.=get_lang('Status').': '.$values['status']."\n\n";
 			$emailbody		.=get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;

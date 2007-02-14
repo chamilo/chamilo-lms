@@ -374,7 +374,7 @@ if(!empty($_GET['student']))
 								</tr>
 								<tr>
 									<td class="none">
-										<?php echo "<img align='absbottom' src='../img/chat.gif'><a href=''>".'&nbsp; '.get_lang('chat')."</a>"; ?>
+										<?php echo "<img align='absbottom' src='../img/chat.gif'><a href=''>".'&nbsp; '.get_lang('Chat')."</a>"; ?>
 									</td>
 								</tr>
 								<tr>
@@ -428,7 +428,7 @@ if(!empty($_GET['student']))
 			$date_start = $a_date_start[2].'/'.$a_date_start[1].'/'.$a_date_start[0];
 			$a_date_end = explode('-',$a_infosCours['date_end']);
 			$date_end = $a_date_end[2].'/'.$a_date_end[1].'/'.$a_date_end[0];
-			$dateSession = get_lang('Du').' '.$date_start.' '.get_lang('Au').' '.$date_end;
+			$dateSession = get_lang('From').' '.$date_start.' '.get_lang('To').' '.$date_end;
 			$tableTitle = $a_infosCours['title'].'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.$a_infosCours['tutor_name'];
 				
 				
@@ -540,17 +540,17 @@ if(!empty($_GET['student']))
 				<?php echo get_lang('Details'); ?>
 			</th>
 			<th class="head">
-				<?php echo get_lang('Essais'); ?>
+				<?php echo get_lang('Attempts'); ?>
 			</th>
 			<th class="head">
 				<?php echo get_lang('Correction'); ?>
 			</th>
 			<th class="head">
-				<?php echo get_lang('Corriger'); ?>
+				<?php echo get_lang('CorrectTest'); ?>
 			</th>
 		</tr>
 <?php
-				$a_headerExercices = array(get_lang('Exercices'),get_lang('Score'),get_lang('Essais'),get_lang('Correction'));
+				$a_headerExercices = array(get_lang('Exercices'),get_lang('Score'),get_lang('Attempts'),get_lang('Correction'));
 			$sqlExercices = "	SELECT quiz.title,id
 								FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
 							";
@@ -636,7 +636,7 @@ if(!empty($_GET['student']))
 			{
 				echo "	<tr>	
 							<td colspan='6'>
-								".get_lang('NoExercice')."
+								".get_lang('NoExercise')."
 							</td>
 						</tr>
 					 ";
@@ -651,18 +651,18 @@ if(!empty($_GET['student']))
 				<?php echo get_lang('LimitDate'); ?>
 			</th>
 			<th class="head">
-				<?php echo get_lang('RemiseDate'); ?>
+				<?php echo get_lang('SentDate'); ?>
 			</th>
 			<th class="head">
-				<?php echo get_lang('Remarques'); ?>
+				<?php echo get_lang('Comments'); ?>
 			</th>
 			<th class="head">
-				<?php echo get_lang('Annoter'); ?>
+				<?php echo get_lang('Annotate'); ?>
 			</th>
 		</tr>
 <?php
 
-				$a_headerProductions = array(get_lang('Productions'),get_lang('LimitDate'),get_lang('RemiseDate'),get_lang('Remarques'));
+				$a_headerProductions = array(get_lang('Productions'),get_lang('LimitDate'),get_lang('SentDate'),get_lang('Comments'));
 			$sqlProduction = "	SELECT title,sent_date
 								FROM ".$a_infosCours['db_name'].".".$course_student_publication."
 							 ";

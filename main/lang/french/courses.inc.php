@@ -62,4 +62,11 @@ $CourseSortingDone = "Réorganisation des cours effectuée";
 $ExistingCourseCategories = "Catégories de cours existantes";
 $YouAreNowUnsubscribed = "Vous êtes maintenant désinscrit du cours";
 $ViewOpenCourses = "Voir les cours ouverts";
+$ErrorContactPlatformAdmin = "Un erreur inconnue est survenue. Contactez l\'administrateur.";
+$CourseRegistrationCodeIncorrect = "Le code du cours est incorrect";
+$CourseRequiresPassword = "Le cours nécessite un mot de passe";
+$SubmitRegistrationCode = "Valider l\'enregistrement du code";
+$CourseCategoryDeleted = "La catégorie de cours a été supprimée";
+$CategorySortingDone = "Tri des catégories effectué";
+$CourseCategoryEditStored = "La catégorie a été mise à jour";
 ?>

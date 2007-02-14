@@ -8,7 +8,7 @@ $Description = "Opis";
 $Links = "Povezave";
 $Forums = "Forumi";
 $langExercices = "Vaje";
-$name = "Ime";
+$Name = "Ime";
 $langComment = "Komentar";
 $langVisible = "Vidno/skrito";
 $Download = "Prenesi";
@@ -404,4 +404,5 @@ $Horizontal = "Vodoravno";
 $Vertical = "Navpièno";
 $DisplaySearchResults = "Prikaži rezultate iskanja";
 $DisplayAll = "Prikaži vse";
+$File_upload = "Prepis datoteke";
 ?>

@@ -555,4 +555,5 @@ $MyTextHere = "Scrivi il testo";
 $Ajax_course_tracking_refresh = "Tempo totale trascorso in un corso";
 $Ajax_course_tracking_refresh_comment = "L\'opzione calcola il tempo totale impiegato da un utente in un corso. Il tempo (in secondi) da indicare è quello di refresh. Lo zero (0) disattiva la funzione.";
 $EditLink = "Modifica il collegamento";
+$FinishSessionCreation = "Concludi la creazione della sessione";
 ?>

@@ -161,4 +161,7 @@ $NeverExpires = "Never expires";
 $On = "On";
 $ExpirationDate = "Expiration date";
 $ActiveAccount = "Active account";
+$YourAccountHasToBeApproved = "Your account has to be approved";
+$ApprovalForNewAccount = "Approval for new account";
+$ManageUser = "Manage user";
 ?>

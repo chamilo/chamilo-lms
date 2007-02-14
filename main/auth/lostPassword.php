@@ -1,6 +1,6 @@
 <?php
 
-// $Id: lostPassword.php 10494 2006-12-14 09:11:15Z elixir_inter $ 
+// $Id: lostPassword.php 11113 2007-02-14 17:43:58Z elixir_inter $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -57,7 +57,7 @@ $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 if (isset ($_GET["reset"]) && isset ($_GET["id"]))
 {
 	$msg = reset_password($_GET["reset"], $_GET["id"]);
-	$msg .= '. <br/>'.get_lang('_your_password_has_been_emailed_to_you');
+	$msg .= '. <br/>'.get_lang('YourPasswordHasBeenEmailed');
 	$msg .= '<br/><br/><a href="'.api_get_path(WEB_PATH).'main/auth/lostPassword.php">&lt;&lt; '.get_lang('Back').'</a>';
 	echo $msg;
 }
@@ -84,7 +84,7 @@ else
 			if ($userPasswordCrypted)
 				$msg = handle_encrypted_password($user);
 			else
-				$msg = send_password_to_user($user, get_lang('_your_password_has_been_emailed_to_you'));
+				$msg = send_password_to_user($user, get_lang('YourPasswordHasBeenEmailed'));
 		}
 		else
 		{

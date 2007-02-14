@@ -118,4 +118,6 @@ $AdvancedSettings = "Options avancées";
 $AdvancedSettings = "Options avancées";
 $File = "Fichier";
 $DocDeleteError = "Erreur durant la suppression du document";
+$ViModProb = "Un problème est survenu lors du changement de visibilité";
+$DirDeleted = "Dossier supprimé";
 ?>

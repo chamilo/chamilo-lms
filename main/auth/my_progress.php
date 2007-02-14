@@ -450,7 +450,7 @@ $progress = round(($totalProgress*100)/$totalItem);
 			<tr>
 			  <th class="head"><?php echo get_lang('Exercices'); ?></th>
 			  <th class="head"><?php echo get_lang('Score'); ?></th>
-			  <th class="head"><?php echo get_lang('Essais'); ?></th>
+			  <th class="head"><?php echo get_lang('Attempts'); ?></th>
 			  <th class="head"><?php echo get_lang('Correction'); ?></th>
 			</tr>
 

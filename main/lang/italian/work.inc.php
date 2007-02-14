@@ -29,5 +29,5 @@ $langFileExists = "Il file è già esistente";
 $langDirCr = "Crea una cartella";
 $langCurrentDir = "Cartella in uso";
 $UploadADocument = "Carica un documento";
-$EditToolOptions = "Opzioni dello strumento Modifica";
+$EditToolOptions = "Modifica le opzioni";
 ?>

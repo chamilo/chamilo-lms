@@ -555,4 +555,5 @@ $MyTextHere = "moje besedilo tule";
 $Ajax_course_tracking_refresh = "Seštevek èasa porabljenega v okviru teèaja";
 $Ajax_course_tracking_refresh_comment = "Ta opcija omogoèa izraèun realnega èasa, ki ga je uporabnik porabil v okviru teèaja. Vrednost polja podaja osveževalni interval v sekundah. Za preklic te opcije uporabite privzeto vrednost 0.";
 $EditLink = "Uredi povezavo";
+$FinishSessionCreation = "Konèaj kreiranje sej";
 ?>

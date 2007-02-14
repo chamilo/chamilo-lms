@@ -283,11 +283,11 @@ if(!empty($message))
 ?>
 
 <tr>
-<td align="right"><?php echo get_lang('Lastname'); ?> :</td>
+<td align="right"><?php echo get_lang('LastName'); ?> :</td>
 <td><input type="text" size="15" name="lastname_form" value="<?php echo htmlentities(stripslashes($lastname_form)); ?>" /></td>
 </tr>
 <tr>
-<td align="right"><?php echo get_lang('Firstname'); ?> :</td>
+<td align="right"><?php echo get_lang('FirstName'); ?> :</td>
 <td><input type="text" size="15" name="firstname_form" value="<?php echo htmlentities(stripslashes($firstname_form)); ?>" /></td>
 </tr>
 <tr>
@@ -295,7 +295,7 @@ if(!empty($message))
 <td><input type="text" size="15" name="official_code_form" value="<?php echo htmlentities(stripslashes($official_code_form)); ?>" /></td>
 </tr>
 <tr>
-<td align="right"><?php echo  get_lang('Username') ?> :</td>
+<td align="right"><?php echo  get_lang('UserName') ?> :</td>
 <td><input type="text" size="15" name="username_form" value="<?php echo htmlentities(stripslashes($username_form)); ?>" /></td>
 </tr>
 <tr>

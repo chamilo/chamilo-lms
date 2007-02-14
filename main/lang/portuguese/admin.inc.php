@@ -555,4 +555,5 @@ $MyTextHere = "meu texto aqui";
 $Ajax_course_tracking_refresh = "Tempo despendido no curso";
 $Ajax_course_tracking_refresh_comment = "Esta opção é usada para calcular em tempo real o tempo que um utilizador despende num curso. O valor no campo é o intervalo em segundos em que o valor é actualizado. Para desactivar esta função, deixar 0 como valor por defeito no campo.";
 $EditLink = "Editar ligação";
+$FinishSessionCreation = "Terminar criação de sessão";
 ?>

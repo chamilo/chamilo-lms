@@ -117,4 +117,6 @@ $AdvancedSettings = "Advanced settings";
 $AdvancedSettings = "Advanced settings";
 $File = "File";
 $DocDeleteError = "Error during the delete of document";
+$ViModProb = "A problem occured while updating visibility";
+$DirDeleted = "Directory deleted";
 ?>

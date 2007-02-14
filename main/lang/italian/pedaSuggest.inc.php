@@ -2,13 +2,13 @@
 for more information: see languages.txt in the lang folder. 
 */
 $GeneralDescription = "Descrizione";
-$GeneralDescriptionQuestions = "Qual è il collocamento e quali sono le specificità del corso nel programma di studio?  Esistono dei prerequisiti al corso?  Quali sono i legami con gli altri corsi?";
-$GeneralDescriptionInformation = "Informazioni che permettono di identificare il corso (iniziali, titolo, numero di ore, aule, hands-on...) e il docente (cognome, nome, ufficio, Tel., e-mail, disponibilità).  La presentazione generale del corso comparirà nell\'area Programma.";
+$GeneralDescriptionQuestions = "Di cosa tratta il corso?  Esistono dei prerequisiti?  Quali sono i legami con gli altri corsi?";
+$GeneralDescriptionInformation = "Descrivi come è organizzato il corso (aule, orario, codice ecc.), chi sono i docenti (cognome, nome, ufficio, Tel., e-mail, disponibilità). ";
 $Objectives = "Obiettivi e Competenze";
-$ObjectivesInformation = "Presentazione degli obiettivi generali e specifici del corso e delle competenze ottenibili col raggiungimento di tali obiettivi.";
-$ObjectivesQuestions = "Quali sono gli apprendimenti che il docente intende produrre?  Al termine del corso, quali competenze, capacità e conoscenze il corsista deve essere in grado di controllare, di mobilitare?";
+$ObjectivesInformation = "Presentazione degli obiettivi generali e specifici del corso e delle competenze ottenibili.";
+$ObjectivesQuestions = "Cosa saranno in grado di fare i corsisti alla fine del corso? Cosa dovranno produrre durante il corso?";
 $Topics = "Contenuti";
-$TopicsInformation = " Presentazione dei contenuti del corso, della struttura dei contenuti, della progressione e del calendario.";
+$TopicsInformation = "Presentazione dei contenuti del corso, della struttura dei contenuti, del loro livello di difficoltà, della progressione.";
 $TopicsQuestions = "Quale sarà la sequenza degli argomenti?  Quale sarà la progressione dei contenuti? A quali punti si dovrà prestare una particolare attenzione?  Ci sono difficoltà di comprensione bene identificate? Quanto tempo bisognerà dedicare alle diverse parti del corso?
 
 ";
@@ -20,8 +20,8 @@ $CourseMaterialQuestions = "Esistono dei supporti al corso (testi, dispense, art
 $CourseMaterialInformation = "Breve presentazione dei supporti al corso.";
 $HumanAndTechnicalResources = "Risorse umane e materiali";
 $HumanAndTechnicalResourcesQuestions = "Ci sono docenti, tutor, referenti tecnici, assistenti? Ci sono aule informatiche? Quali sono le risorse umane e fisiche disponibili?";
-$HumanAndTechnicalResourcesInformation = "Presentazione degli appartenenti al gruppo docente (assistenti, ricercatori, tutors...), della disponibilità delle persone, dei locali e delle attrezzature (anche informatiche).";
-$Assessment  = "Modalità di verifica e valutazione";
+$HumanAndTechnicalResourcesInformation = "Breve descrizione del gruppo docente (assistenti, ricercatori, tutors e modalità di contatto) dei locali e delle attrezzature.";
+$Assessment  = "Modalità di verifica";
 $AssessmentQuestions = "Come avverrà la valutazione? Quali saranno le strategie di verifica approntate perché il corsista possa identificare le eventuali carenze prima della sessione d\'esame?";
 $AssessmentInformation = "Dettagli dei metodi di verifica (testi di esami scritti, orali, progetti, compiti da consegnare...). Momenti di verifica formativa previsti. Criteri di successo, Suggerimenti.";
 ?>

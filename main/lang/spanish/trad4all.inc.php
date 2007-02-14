@@ -8,7 +8,7 @@ $Description = "Descripción";
 $Links = "Enlaces";
 $Forums = "Foros";
 $langExercices = "Ejercicios";
-$name = "Nombre";
+$Name = "Nombre";
 $langComment = "Comentario";
 $langVisible = "Visible/Invisible";
 $Download = "Enviar";
@@ -404,4 +404,5 @@ $Horizontal = "Horizontal";
 $Vertical = "Vertical";
 $DisplaySearchResults = "Mostrar los resultados de la búsqueda";
 $DisplayAll = "Mostrar todos";
+$File_upload = "Enviar archivo";
 ?>

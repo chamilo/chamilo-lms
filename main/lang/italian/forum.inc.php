@@ -77,4 +77,5 @@ $Unlock = "Sblocca";
 $MoveThread = "Sposta l\'argomento";
 $PostVisibilityChanged = "Cambiata la visibilità del messaggio";
 $PostDeleted = "Messaggio eliminato";
+$MakeInvisible = "Rendi non visibile";
 ?>

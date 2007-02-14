@@ -188,7 +188,7 @@ if ( $_configuration['tracking_enabled'] )
                         if( $results2[$j][1] != 0 )
                         {
                             echo "<tr>";
-                            echo "<td width='70%' style='padding-left : 60px;'>".get_lang($results2[$j][0])."</td>";
+                            echo "<td width='70%' style='padding-left : 60px;'>".get_lang(ucfirst($results2[$j][0]))."</td>";
                             echo "<td width='30%' align='right'>".$results2[$j][1]." ".get_lang('Visits')."</td>";
                             echo "</tr>";
                         }

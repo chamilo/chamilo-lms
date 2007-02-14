@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 10957 2007-01-29 10:16:23Z elixir_julian $
+* 	@version $Id: exercice_submit.php 11107 2007-02-14 09:46:32Z elixir_julian $
 */
 
 
@@ -485,7 +485,7 @@ $s="
 <table width='100%' border='0' cellpadding='1' cellspacing='0'>
  <tr>
   <td>
-  <table width='100%' cellpadding='4' cellspacing='2' border='0'>";
+  <table width='100%' cellpadding='3' cellspacing='2' border='0'>";
 echo $s;
 /* </ERM> */
 
@@ -528,8 +528,9 @@ foreach($questionList as $questionId)
 		}
 	}
 
-	$s="<tr bgcolor='#e6e6e6'>
-	 <td valign='top' colspan='2'>
+	$s="<tr>
+	 <td width='20'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
+	 <td valign='middle' bgcolor='#e6e6e6'>
 		".get_lang('Question')." ";
 	$s.=$i;
 	if($exerciseType == 2) $s.=' / '.$nbrQuestions;

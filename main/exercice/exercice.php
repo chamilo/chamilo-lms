@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 11105 2007-02-14 08:33:43Z elixir_julian $
+* 	@version $Id: exercice.php 11107 2007-02-14 09:46:32Z elixir_julian $
 */
 
 
@@ -310,7 +310,7 @@ if($show == 'test'){
 	{
 		//error_log('is_allowedToEdit and origin<> learnpath',0);
 		echo "<td width=\"50%\" nowrap=\"nowrap\">",
-			"<img src=\"../img/quiz.gif\" alt=\"new test\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"exercise_admin.php\">".get_lang("NewEx")."</a>",
+			"<img src=\"../img/view_more_stats.gif\" alt=\"new test\" align=\"absbottom\">&nbsp;<a href=\"exercise_admin.php\">".get_lang("NewEx")."</a>",
 
 			//"<img src=\"../img/quiz_na.gif\" alt=\"new test\" valign=\"ABSMIDDLE\"><a href=\"question_pool.php\">".get_lang("QuestionPool")."</a> | ",
 			//" | <img src=\"../img/jqz.jpg\" alt=\"HotPotatoes\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"hotpotatoes.php\">".get_lang("ImportHotPotatoesQuiz")."</a>",
@@ -427,7 +427,7 @@ if($show == 'test'){
 				?>
   <td width="27%" colspan="2"><table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
-      <td width="30" align="left"><img src="../img/test.gif"></td>
+      <td width="30" align="left"><img src="../img/quiz.gif"></td>
       <td width="15" valign="left" align="center"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
       <?php $row['title']=api_parse_tex($row['title']); ?>
       <td>
@@ -925,7 +925,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 		<?php
 	}else{
 
-		echo '<p><a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.get_lang("Show").' &gt;&gt;</a></p>';
+		echo '<p><img src="'.api_get_path(WEB_IMG_PATH).'show_test_results.gif" align="absbottom">&nbsp;<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.get_lang("Show").' &gt;&gt;</a></p>';
 
 	}// end if($show == 'result')
 

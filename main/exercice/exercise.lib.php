@@ -23,7 +23,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: exercise.lib.php 11107 2007-02-14 09:46:32Z elixir_julian $
 */
 
 
@@ -49,7 +49,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$questionDescription=$objQuestionTmp->selectDescription();
 
 		$s="<tr>
-		  <td valign='top' colspan='2'>";
+		  <td valign='top' colspan='2'>&nbsp;";
 		$questionName=api_parse_tex($questionName);
 		$s.=$questionName;
 		$s.="</td>
@@ -147,10 +147,10 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			{
 			$s.="
 			<tr>
-			  <td width='5%' align='center'>
+			  <td align='center'>
 				<input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'>
 			  </td>
-			  <td width='95%'>";
+			  <td>";
 			$answer=api_parse_tex($answer);
 			$s.=$answer;
 			$s.="</td></tr>";
@@ -160,10 +160,10 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			elseif($answerType == MULTIPLE_ANSWER)
 			{
 			$s.="<tr>
-			  <td width='5%' align='center'>
+			  <td align='center'>
 			<input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
 			  </td>
-			  <td width='95%'>";
+			  <td>";
 			$answer = api_parse_tex($answer);
 			$s.=$answer;
 			$s.="</td></tr>";
@@ -284,7 +284,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 		if(!$onlyAnswers)
 		{
 			$s="<tr>
-			  <td valign='top' colspan='2'>";
+			  <td valign='top' colspan='2'>&nbsp;";
 			$questionName=api_parse_tex($questionName);
 			$s.=$questionName;
 			$s.="</td>

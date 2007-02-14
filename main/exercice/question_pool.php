@@ -24,7 +24,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 11107 2007-02-14 09:46:32Z elixir_julian $
+* 	@version $Id: question_pool.php 11110 2007-02-14 13:48:08Z elixir_julian $
 */
 
 // name of the language file that needs to be included
@@ -297,7 +297,7 @@ if($is_allowedToEdit)
 			{
 ?>
 
-	<a href="<?php echo $phpSelf; ?>?recup=<?php echo $row[id]; ?>&fromExercise=<?php echo $fromExercise; ?>"><img src="../img/PickFromQuestionsDb.gif" border="0" alt="<?php echo get_lang('Reuse'); ?>"></a>
+	<a href="<?php echo $phpSelf; ?>?recup=<?php echo $row[id]; ?>&fromExercise=<?php echo $fromExercise; ?>"><img src="../img/view_more_stats.gif" border="0" alt="<?php echo get_lang('Reuse'); ?>"></a>
 
 <?php
 			}

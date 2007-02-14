@@ -23,7 +23,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 11107 2007-02-14 09:46:32Z elixir_julian $
+* 	@version $Id: exercise.lib.php 11110 2007-02-14 13:48:08Z elixir_julian $
 */
 
 
@@ -441,6 +441,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 		echo $s;
 
 	}
+	echo "<tr><td>&nbsp;</td></tr>";
 
 	return $nbrAnswers;
 }

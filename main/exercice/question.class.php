@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 11105 2007-02-14 08:33:43Z elixir_julian $
+* 	@version $Id: question.class.php 11108 2007-02-14 10:48:51Z elixir_julian $
 */
 
 
@@ -831,7 +831,7 @@ abstract class Question
 			<div id="answer_type_'.$i.'" style="float: left; width:120px; text-align:center">
 				<a href="question_pool.php?fromExercise='.$exerciseId.'">
 			<div>
-				<img src="'.api_get_path(WEB_IMG_PATH).'/questionsdb.gif" />
+				<img src="'.api_get_path(WEB_IMG_PATH).'/database.gif" />
 			</div>
 			<div>
 				'.get_lang('GetExistingQuestion').'

@@ -980,8 +980,15 @@ class CourseManager
 		}
 		else
 		{
-			$table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-			$sql_query = "SELECT id_user as user_id FROM $table WHERE `course_code` = '$course_code' AND id_session = '".$_SESSION['id_session']."'";
+			if(!empty($_SESSION['id_session'])){
+				$table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+				$sql_query = "SELECT id_user as user_id FROM $table WHERE `course_code` = '$course_code' AND id_session = '".$_SESSION['id_session']."'";
+			}
+			else{
+				$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+				$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code' ORDER BY `status`";
+			}
+			
 		}
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 		while ($course_user_info = mysql_fetch_array($sql_result))

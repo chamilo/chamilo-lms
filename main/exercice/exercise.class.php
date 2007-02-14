@@ -22,7 +22,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 11058 2007-02-05 13:25:41Z elixir_julian $
+* 	@version $Id: exercise.class.php 11105 2007-02-14 08:33:43Z elixir_julian $
 */
 
 
@@ -585,54 +585,10 @@ class Exercise
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function delete()
-	{
-		global $_user;
-		global $_course;
-		
-		$TBL_EXERCICE_TEST_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-		$TBL_EXERCICE_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-		$TBL_EXERCICE_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+	function delete(){
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-		
-		$TBL_EXERCICES_RESULTS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$TBL_EXERCICES_ATTEMPTS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-		$id=$this->id;
-		
-		//COURSE TABLES
-		$sql="DELETE FROM $TBL_EXERCICES WHERE id='$id'";
-		api_sql_query($sql,__FILE__,__LINE__);
-		
-		$sql="SELECT question_id FROM $TBL_EXERCICE_TEST_QUESTIONS WHERE exercice_id='$id'";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
-		
-		while($a_test_questions=mysql_fetch_array($result)){
-			$question_id=$a_test_questions["question_id"];
-			
-			$sql="DELETE FROM $TBL_EXERCICE_QUESTIONS WHERE id='$question_id'";
-			api_sql_query($sql,__FILE__,__LINE__);
-			
-			$sql="DELETE FROM $TBL_EXERCICE_ANSWERS WHERE question_id='$question_id'";
-			api_sql_query($sql,__FILE__,__LINE__);
-			
-		}
-		
-		$sql="DELETE FROM $TBL_EXERCICE_TEST_QUESTIONS WHERE exercice_id='$id'";
-		api_sql_query($sql,__FILE__,__LINE__);
-		
-		//STATS TABLE
-		
-		$sql="SELECT exe_id FROM $TBL_EXERCICES_RESULTS WHERE exe_exo_id='$id' and exe_cours_id='".$_course["official_code"]."'";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$exercice_id=mysql_result($result,0,'exe_id');
-		
-		$sql="DELETE FROM $TBL_EXERCICES_ATTEMPTS WHERE exe_id='$exercice_id' AND question_id='$question_id'";
-		api_sql_query($sql,__FILE__,__LINE__);
-		
-		$sql="DELETE FROM $TBL_EXERCICES_RESULTS WHERE exe_exo_id='$id' AND exe_cours_id='".$_course["official_code"]."'";
-		api_sql_query($sql,__FILE__,__LINE__);
-		
+		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE id='".$this->id."'";
+		api_sql_query($sql);
 	}
 
 	/**

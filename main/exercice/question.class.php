@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 11087 2007-02-09 12:57:27Z elixir_julian $
+* 	@version $Id: question.class.php 11105 2007-02-14 08:33:43Z elixir_julian $
 */
 
 
@@ -533,7 +533,7 @@ abstract class Question
 	 */
 	function save($exerciseId=0)
 	{
-		global $TBL_QUESTIONS, $_course;
+		global $TBL_QUESTIONS, $TBL_EXERCICE_QUESTION, $_course;
 
 		$id=$this->id;
 		$question=addslashes($this->question);
@@ -552,6 +552,12 @@ abstract class Question
 		// creates a new question
 		else
 		{
+			$sql="SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question WHERE question.id=test_question.question_id AND test_question.exercice_id='$exerciseId'";
+			$result=api_sql_query($sql);
+			$current_position=mysql_result($result,0,0);
+			$this -> updatePosition($current_position+1);
+			$position = $this -> position;
+			
 			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture) VALUES('$question','$description','$weighting','$position','$type','$picture')";
 			api_sql_query($sql,__FILE__,__LINE__);
 

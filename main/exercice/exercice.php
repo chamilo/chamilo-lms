@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 11066 2007-02-07 09:39:47Z elixir_julian $
+* 	@version $Id: exercice.php 11105 2007-02-14 08:33:43Z elixir_julian $
 */
 
 
@@ -286,7 +286,7 @@ if($is_allowedToEdit)
 
 	if($show == 'test')
 	{
-		$sql="SELECT id,title,type,active,description FROM $TBL_EXERCICES ORDER BY title LIMIT $from,".($limitExPage+1);
+		$sql="SELECT id,title,type,active,description FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT $from,".($limitExPage+1);
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 	}
 }

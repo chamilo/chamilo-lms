@@ -292,7 +292,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 $query = "select * from `".$TABLETRACK_ATTEMPT."` where exe_id='$id' group by question_id";
 $result =api_sql_query($query, __FILE__, __LINE__);
 ?>
-	<h3><?php echo $test ?>: <?php echo get_lang("Result"); ?></h3>
+	<h3><?php echo stripslashes($test)?>: <?php echo get_lang("Result"); ?></h3>
 
 	 </td>
   </tr>

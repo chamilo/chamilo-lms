@@ -43,7 +43,9 @@ include ('../inc/global.inc.php');
 
 //session
 if(isset($_GET['id_session']))
+{
 	$_SESSION['id_session'] = $_GET['id_session'];
+}
 
 require_once (api_get_path(LIBRARY_PATH)."/display.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/text.lib.php");
@@ -72,7 +74,7 @@ if ($_POST['edit_post_submit'])
 }
 if ($_POST['new_comment_submit'])
 {
-	Blog :: create_comment(mysql_real_escape_string($_POST['comment_title']), mysql_real_escape_string($_POST['comment_text']), $blog_id, mysql_real_escape_string($_GET['post_id']), mysql_real_escape_string($_POST['comment_parent_id']));
+	Blog :: create_comment(mysql_real_escape_string($_POST['comment_title']), mysql_real_escape_string($_POST['comment_text']), $blog_id, mysql_real_escape_string((int)$_GET['post_id']), mysql_real_escape_string($_POST['comment_parent_id']));
 }
 
 if ($_POST['new_task_submit'])
@@ -94,39 +96,39 @@ if ($_POST['assign_task_edit_submit'])
 }
 if ($_POST['new_task_execution_submit'])
 {
-	Blog :: create_comment(mysql_real_escape_string($_POST['comment_title']), mysql_real_escape_string($_POST['comment_text']), $blog_id, mysql_real_escape_string($_GET['post_id']), mysql_real_escape_string($_POST['comment_parent_id']), mysql_real_escape_string($_POST['task_id']));
+	Blog :: create_comment(mysql_real_escape_string($_POST['comment_title']), mysql_real_escape_string($_POST['comment_text']), $blog_id, mysql_real_escape_string((int)$_GET['post_id']), mysql_real_escape_string($_POST['comment_parent_id']), mysql_real_escape_string($_POST['task_id']));
 }
 if ($_POST['register'])
 {
 	foreach ($_POST['user'] as $index => $user_id)
 	{
-		Blog :: set_user_subscribed(mysql_real_escape_string($_GET['blog_id']), mysql_real_escape_string($user_id));
+		Blog :: set_user_subscribed(mysql_real_escape_string((int)$_GET['blog_id']), mysql_real_escape_string($user_id));
 	}
 }
 if ($_POST['unregister'])
 {
 	foreach ($_POST['user'] as $index => $user_id)
 	{
-		Blog :: set_user_unsubscribed(mysql_real_escape_string($_GET['blog_id']), mysql_real_escape_string($user_id));
+		Blog :: set_user_unsubscribed(mysql_real_escape_string((int)$_GET['blog_id']), mysql_real_escape_string($user_id));
 	}
 }
 if ($_GET['register'])
 {
-	Blog :: set_user_subscribed(mysql_real_escape_string($_GET['blog_id']), mysql_real_escape_string($_GET['user_id']));
+	Blog :: set_user_subscribed(mysql_real_escape_string((int)$_GET['blog_id']), mysql_real_escape_string((int)$_GET['user_id']));
 	$flag = 1;
 }
 if ($_GET['unregister'])
 {
-	Blog :: set_user_unsubscribed(mysql_real_escape_string($_GET['blog_id']), mysql_real_escape_string($_GET['user_id']));
+	Blog :: set_user_unsubscribed(mysql_real_escape_string((int)$_GET['blog_id']), mysql_real_escape_string((int)$_GET['user_id']));
 }
 
 if ($_GET['action'] == 'manage_tasks')
 {
 	if ($_GET['do'] == 'delete')
-		Blog :: delete_task($blog_id, mysql_real_escape_string($_GET['task_id']));
+		Blog :: delete_task($blog_id, mysql_real_escape_string((int)$_GET['task_id']));
 
 	if ($_GET['do'] == 'delete_assignment')
-		Blog :: delete_assigned_task($blog_id, mysql_real_escape_string($_GET['assignment_id']));
+		Blog :: delete_assigned_task($blog_id, mysql_real_escape_string((int)$_GET['assignment_id']));
 }
 
 if ($_GET['action'] == 'view_post')
@@ -137,7 +139,7 @@ if ($_GET['action'] == 'view_post')
 	{
 		if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_comments_delete', $task_id))
 		{
-			Blog :: delete_comment($blog_id, mysql_real_escape_string($_GET['comment_id']));
+			Blog :: delete_comment($blog_id, mysql_real_escape_string((int)$_GET['comment_id']));
 		}
 		else
 		{
@@ -150,7 +152,7 @@ if ($_GET['action'] == 'view_post')
 	{
 		if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_delete', $task_id))
 		{
-			Blog :: delete_post($blog_id, mysql_real_escape_string($_GET['article_id']));
+			Blog :: delete_post($blog_id, mysql_real_escape_string((int)$_GET['article_id']));
 			$current_page = ''; // Article is gone, go to blog home
 		}
 		else
@@ -165,14 +167,14 @@ if ($_GET['action'] == 'view_post')
 		{
 			if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_rate'))
 			{
-				Blog :: add_rating('post', $blog_id, mysql_real_escape_string($_GET['post_id']), mysql_real_escape_string($_GET['rating']));
+				Blog :: add_rating('post', $blog_id, mysql_real_escape_string((int)$_GET['post_id']), mysql_real_escape_string((int)$_GET['rating']));
 			}
 		}
 		if ($_GET['type'] == 'comment')
 		{
 			if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_comments_add'))
 			{
-				Blog :: add_rating('comment', $blog_id, mysql_real_escape_string($_GET['comment_id']), mysql_real_escape_string($_GET['rating']));
+				Blog :: add_rating('comment', $blog_id, mysql_real_escape_string((int)$_GET['comment_id']), mysql_real_escape_string((int)$_GET['rating']));
 			}
 		}
 	}
@@ -233,8 +235,8 @@ switch ($current_page)
 		<?php
 
 
-$month = $_GET['month'] ? $_GET['month'] : (int) date('m');
-$year = $_GET['year'] ? $_GET['year'] : date('Y');
+$month = (int)$_GET['month'] ? (int)$_GET['month'] : (int) date('m');
+$year = (int)$_GET['year'] ? (int)$_GET['year'] : date('Y');
 Blog :: display_minimonthcalendar($month, $year, $blog_id);
 ?>
 		<br />
@@ -328,7 +330,7 @@ if ($flag == '1')
 $user_task = false;
 
 if (isset ($_GET['task_id']) && is_numeric($_GET['task_id']))
-	$task_id = $_GET['task_id'];
+	$task_id = (int)$_GET['task_id'];
 else
 {
 	$task_id = 0;
@@ -363,13 +365,13 @@ switch ($current_page)
 		}
 		break;
 	case 'view_post' :
-		Blog :: display_post($blog_id, mysql_real_escape_string($_GET['post_id']));
+		Blog :: display_post($blog_id, mysql_real_escape_string((int)$_GET['post_id']));
 		break;
 	case 'edit_post' :
 		$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
 		if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_edit', $task_id))
-			Blog :: display_form_edit_post($blog_id, mysql_real_escape_string($_GET['post_id']));
+			Blog :: display_form_edit_post($blog_id, mysql_real_escape_string((int)$_GET['post_id']));
 		else
 			api_not_allowed();
 
@@ -405,7 +407,7 @@ switch ($current_page)
 			}
 			if ($_GET['do'] == 'edit_assignment')
 			{
-				Blog :: display_edit_assigned_task_form($blog_id, mysql_real_escape_string($_GET['assignment_id']));
+				Blog :: display_edit_assigned_task_form($blog_id, mysql_real_escape_string((int)$_GET['assignment_id']));
 			}
 			Blog :: display_task_list($blog_id);
 			echo '<br /><br />';
@@ -424,9 +426,9 @@ switch ($current_page)
 		break;
 	case 'execute_task' :
 		if (isset ($_GET['post_id']))
-			Blog :: display_post($blog_id, mysql_real_escape_string($_GET['post_id']));
+			Blog :: display_post($blog_id, mysql_real_escape_string((int)$_GET['post_id']));
 		else
-			Blog :: display_select_task_post($blog_id, mysql_real_escape_string($_GET['task_id']));
+			Blog :: display_select_task_post($blog_id, mysql_real_escape_string((int)$_GET['task_id']));
 
 		break;
 	case 'view_search_result' :

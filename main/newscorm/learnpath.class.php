@@ -2496,7 +2496,7 @@ class learnpath {
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
     	$html .= '<div class="inner_lp_toc">'."\n" ;
     	if($_SESSION["is_courseAdmin"]==1){
-    		$html.="<a style='font-size: 11px' href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".get_lang("BasicOverview")."</a> - <a href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".get_lang("Advanced")."</a><br><br>";
+    		$html.="<a style='font-size: 11px' href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding)."</a> - <a href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".mb_convert_encoding(get_lang("Advanced"),$this->encoding)."</a><br><br>";
     	}
     	//		" onchange=\"javascript:document.getElementById('toc_$parent').focus();\">\n";
 		require_once('resourcelinker.inc.php');
@@ -6777,6 +6777,34 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		return $return;
 	}
+	
+	/**
+	 * Exports the learning path as a SCORM package. This is the main function that
+	 * gathers the content, transforms it, writes the imsmanifest.xml file, zips the
+	 * whole thing and returns the zip.
+	 * 
+	 * This method needs to be called in PHP5, as it will fail with non-adequate
+	 * XML package (like the ones for PHP4), and it is *not* a static method, so
+	 * you need to call it on a learnpath object.
+	 * @TODO The method might be redefined later on in the scorm class itself to avoid
+	 * creating a SCORM structure if there is one already. However, if the initial SCORM
+	 * path has been modified, it should use the generic method here below.
+	 * @param	string	Optional name of zip file. If none, title of learnpath is
+	 * 					domesticated and trailed with ".zip"
+	 * @return	string	Returns the zip package string, or null if error 
+	 */
+	 function scorm_export()
+	 {
+	 	//Create the zip handler (this will remain available throughout the method)
+	 	
+	 	//Build a dummy imsmanifest structure. Do not add to the zip yet (we still need it)
+	 	
+	 	//For each element, add it to the imsmanifest structure, then add it to the zip.
+	 	//Always call the learnpathItem->scorm_export() method to change it to the SCORM
+	 	//format
+	 	 
+	 	//Finalize the imsmanifest structure, add to the zip, then return the zip
+	 }
 }
 
 ?>

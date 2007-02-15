@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 10537 2006-12-20 10:33:36Z elixir_inter $
+<?php // $Id: course_home.php 11122 2007-02-15 14:51:33Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -90,6 +90,10 @@ $language_file = "course_home";
 
 // inlcuding the global file
 include('../../main/inc/global.inc.php');
+
+if(isset($_SESSION['_gid'])){
+	unset($_SESSION['_gid']);
+}
 
 // The section for the tabs
 $this_section=SECTION_COURSES;

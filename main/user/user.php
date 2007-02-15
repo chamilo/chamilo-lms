@@ -353,10 +353,17 @@ function get_number_of_users()
 		$sql = "SELECT COUNT(u.user_id) AS number_of_users FROM $user_table u,$course_user_table cu WHERE u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 	}
 	else{
-		$sql = "SELECT COUNT(id_user)+1 AS number_of_users
-				FROM $user_table u, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-				WHERE course_code= '".$_SESSION['_course']['id']."'
-				AND id_session='".$_SESSION['id_session']."'";
+		
+		if(!empty($_SESSION['id_session'])){
+			$session_course_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+			$sql = "SELECT COUNT(DISTINCT id_user) AS number_of_users
+					FROM $user_table u, $session_course_user_table
+					WHERE course_code= '".$_SESSION['_course']['id']."'
+					AND id_session='".$_SESSION['id_session']."'";
+		}
+		else{
+			$sql = "SELECT COUNT(u.user_id) AS number_of_users FROM $user_table u,$course_user_table cu WHERE u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
+		}
 	}
 	 if( isset ($_GET['keyword']))
 	{

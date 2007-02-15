@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 10902 2007-01-25 14:44:35Z elixir_julian $
+// $Id: infocours.php 11118 2007-02-15 10:47:44Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -98,17 +98,28 @@ if (!$is_allowedToEdit)
 {
 	api_not_allowed();
 }
-// Get all course categories
+
 $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
+$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+$tbl_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
+$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+
+// Get all course categories
 $sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE'  OR code = '".mysql_real_escape_string($_course['categoryCode'])."'  ORDER BY tree_pos";
 $res = api_sql_query($sql, __FILE__, __LINE__);
 
-$s_select_course_tutor_name="SELECT tutor_name FROM course WHERE code='$course_code'";
+$s_select_course_tutor_name="SELECT tutor_name FROM $tbl_course WHERE code='$course_code'";
 $q_tutor=api_sql_query($s_select_course_tutor_name, __FILE__, __LINE__);
 $s_tutor=mysql_result($q_tutor,0,"tutor_name");
 
-$s_sql_course_titular="SELECT DISTINCT username, lastname, firstname FROM user, course_rel_user WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."'";
+$s_sql_course_titular="SELECT DISTINCT username, lastname, firstname FROM $tbl_user as user, $tbl_course_user as course_rel_user WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."'";
 $q_result_titulars=api_sql_query($s_sql_course_titular, __FILE__, __LINE__);
+
+if(mysql_num_rows($q_result_titulars)==0){
+	$sql="SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin WHERE admin.user_id=user.user_id ORDER BY lastname ASC";
+	$q_result_titulars=api_sql_query($sql, __FILE__, __LINE__);
+}
 
 while($a_titulars=mysql_fetch_array($q_result_titulars)){
 		$s_username=$a_titulars["username"];

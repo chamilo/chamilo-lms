@@ -22,7 +22,7 @@ $sort=in_array($_GET['sort'],array('name','nbr_courses','date_start','date_end')
 
 if($action == 'delete')
 {
-	$idChecked = $_POST['idChecked'];
+	$idChecked = $_REQUEST['idChecked'];
 	if(is_array($idChecked))
 	{
 		$idChecked=implode(',',$idChecked);
@@ -65,7 +65,12 @@ api_display_tool_title($tool_name);
 <?php
 
 if(isset($_GET['action'])){
-	Display::display_normal_message(stripslashes($_GET['message']));
+	if($_GET['action'] == 'delete'){
+		Display::display_normal_message(get_lang('SessionDeleted'));
+	}
+	else{
+		Display::display_normal_message(stripslashes($_GET['message']));
+	}
 }
 
 ?>

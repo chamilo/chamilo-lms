@@ -310,7 +310,6 @@ Display::display_introduction_section(TOOL_USER, $is_allowed);
 {
 	echo "<div align=\"right\">";
 	echo '<a href="user.php?action=export&type=csv"><img align="absbottom" src="../img/file_xls.gif">&nbsp;'.get_lang('ExportAsCSV').'</a> | ';
-	echo '<a href="user.php?action=export&type=xls"><img align="absbottom" src="../img/file_xls.gif">&nbsp;'.get_lang('ExportAsXLS').'</a> | ';
 	echo "<a href=\"subscribe_user.php\"><img align='absbottom' src='../img/add_user_big.gif'>&nbsp;".get_lang("SubscribeUserToCourse")."</a> | ";
 	echo "<a href=\"../group/group.php?".api_get_cidreq()."\"><img align='absbottom' src='../img/edit_group.gif'>&nbsp;".get_lang("GroupUserManagement")."</a>";
 	if(api_get_setting('use_session_mode')=='false')

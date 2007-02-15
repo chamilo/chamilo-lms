@@ -1,5 +1,5 @@
 <?php
-// $Id: languages.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: languages.php 11120 2007-02-15 13:44:23Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -169,7 +169,7 @@ while ($row = mysql_fetch_array($result_select))
 	// the fourth column with the visibility icon and the edit icon
 	if ($row['available'] == 1)
 	{
-		$row_td[] = "<a href='".$_SERVER['PHP_SELF']."?action=makeinavailable&id=".$row['id']."'><img src='../img/visible.gif' border='0'></a> <a href='".$_SERVER['PHP_SELF']."?action=edit&id=".$row['id']."'><img src='../img/edit.gif' border='0'></a>";
+		$row_td[] = "<a href='".$_SERVER['PHP_SELF']."?action=makeunavailable&id=".$row['id']."'><img src='../img/visible.gif' border='0'></a> <a href='".$_SERVER['PHP_SELF']."?action=edit&id=".$row['id']."'><img src='../img/edit.gif' border='0'></a>";
 	}
 	else
 	{

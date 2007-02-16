@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 10703 2007-01-12 15:53:36Z yannoo $
+// $Id: settings.php 11137 2007-02-16 23:16:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -169,10 +169,10 @@ $resultcategories = api_sql_query($selectcategories, __FILE__, __LINE__);
 echo "\n<div><ul>";
 while ($row = mysql_fetch_array($resultcategories))
 {
-	echo "\n\t<li><a href=\"".$_SERVER['PHP_SELF']."?category=".$row['category']."\">".get_lang($row['category'])."</a></li>";
+	echo "\n\t<li><a href=\"".$_SERVER['PHP_SELF']."?category=".$row['category']."\">".ucfirst(get_lang($row['category']))."</a></li>";
 }
-echo "\n\t<li><a href=\"".$_SERVER['PHP_SELF']."?category=Plugins\">".get_lang('Plugins')."</a></li>";
-echo "\n\t<li><a href=\"".$_SERVER['PHP_SELF']."?category=stylesheets\">".get_lang('Stylesheets')."</a></li>";
+echo "\n\t<li><a href=\"".$_SERVER['PHP_SELF']."?category=Plugins\">".ucfirst(get_lang('Plugins'))."</a></li>";
+echo "\n\t<li><a href=\"".$_SERVER['PHP_SELF']."?category=stylesheets\">".ucfirst(get_lang('Stylesheets'))."</a></li>";
 echo "\n</ul></div>";
 
 if (isset ($_GET['category']))

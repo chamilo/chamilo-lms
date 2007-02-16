@@ -102,7 +102,7 @@ foreach ($rows as $post)
 		echo "<a href=\"".$_SERVER['PHP_SELF']."?forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=delete&amp;content=post&amp;id=".$post['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
 		display_visible_invisible_icon('post', $post['post_id'], $post['visible'],array('forum'=>$_GET['forum'],'thread'=>$_GET['thread'] ));
 		echo "\n";
-		echo "<a href=\"viewthread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=move&amp;post=".$post['post_id']."\">".icon('../img/forummovepost.gif',get_lang('Edit'))."</a>";
+		echo "<a href=\"viewthread.php?forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=move&amp;post=".$post['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('Edit'))."</a>";
 	}
 	echo '<br /><br />';
 	//if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())
@@ -144,7 +144,7 @@ foreach ($rows as $post)
 		$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 	}		
 	// The post title
-	echo "\t\t<td class=\"$titleclass\">".$post_image." ".prepare4display($post['post_title'])."</td>\n";
+	echo "\t\t<td class=\"$titleclass\">".prepare4display($post['post_title'])."</td>\n";
 	echo "\t</tr>\n";	
 	
 	// The post message

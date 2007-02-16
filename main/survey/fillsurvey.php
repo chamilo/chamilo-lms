@@ -19,13 +19,13 @@
 
 /**
 *	@package dokeos.survey
-* 	@author unknown
+* 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
 *
-* 	@todo The ansTarget column is not done
-* 	@todo try to understand the white, blue, ... template stuff.
 * 	@todo use quickforms for the forms
+* 	@todo check if the user already filled the survey and if this is the case then the answers have to be updated and not stored again.
+* 			alterantively we could not allow people from filling the survey twice.
 */
 
 // name of the language file that needs to be included
@@ -124,6 +124,7 @@ if (!isset($_GET['show']))
 if ($_POST['finish_survey'])
 {
 	echo '<div id="survey_content"><strong>'.get_lang('SurveyFinished').'</strong>'.$survey_data['survey_thanks'].'</div>';
+	survey_manager::update_survey_answered($survey_invitation['survey_id']);
 	Display :: display_footer();
 	exit;
 }
@@ -155,7 +156,7 @@ if (isset($_GET['show']))
 			$questions[$row['sort']]['survey_question'] = $row['survey_question'];
 			$questions[$row['sort']]['display'] = $row['display'];
 			$questions[$row['sort']]['type'] = $row['type'];
-			$questions[$row['sort']]['options'][$row['option_sort']] = $row['option_text'];
+			$questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
 		}
 		// if the type is a pagebreak we are finished loading the questions for this page
 		else
@@ -205,7 +206,7 @@ Display :: display_footer();
  * @param integer $option_id the option id
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version januari 2007
+ * @version January 2007
  */
 function store_answer($user, $survey_id, $question_id, $option_id)
 {

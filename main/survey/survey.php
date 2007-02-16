@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 10941 2007-01-28 19:03:38Z pcool $
+* 	@version $Id: survey.php 11134 2007-02-16 14:39:59Z pcool $
 *
 * 	@todo The ansTarget column is not done
 * 	@todo try to understand the white, blue, ... template stuff.
@@ -84,7 +84,7 @@ $survey_actions .= '<a href="survey_list.php?action=delete&amp;survey_id='.$_GET
 $survey_actions .= '<a href="create_survey_in_another_language.php?id_survey='.$_GET['survey_id'].'">'.Display::return_icon('copy.gif').'</a>';
 $survey_actions .= '<a href="preview.php?survey_id='.$_GET['survey_id'].'">'.Display::return_icon('preview.gif').'</a>';
 $survey_actions .= '<a href="survey_invite.php?survey_id='.$_GET['survey_id'].'">'.Display::return_icon('survey_publish.gif').'</a>';
-$survey_actions .= '<a href="reporting.php?action=reporting&amp;surveyid='.$_GET['survey_id'].'">'.Display::return_icon('surveyreporting.gif').'</a>';
+$survey_actions .= '<a href="reporting.php?survey_id='.$_GET['survey_id'].'">'.Display::return_icon('surveyreporting.gif').'</a>';
 echo '<div style="float:right;">'.$survey_actions.'</div>';
 
 echo '<a href="question.php?action=add&type=yesno&amp;survey_id='.$_GET['survey_id'].'">'.get_lang('YesNo').'</a> | ';

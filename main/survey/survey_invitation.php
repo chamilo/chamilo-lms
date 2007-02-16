@@ -63,10 +63,25 @@ $tool_name = get_lang('SurveyInvitations');
 // Displaying the header
 Display::display_header($tool_name);
 
+// Checking the parameters
+if (!is_numeric($_GET['survey_id']))
+{
+	Display::display_error_message(get_lang('Error'));
+	Display::display_footer();
+	exit;
+}
+
 // Displaying the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
 echo '<a href="survey.php?survey_id='.$survey_data['survey_id'].'">'.$survey_data['title'].'</a><br />';
 echo $survey_data['subtitle'];
+
+// Getting all the people who have filled this survey
+$answered_data = survey_manager::get_people_who_filled_survey($_GET['survey_id']);
+
+
+//
+echo 'view invited | view answered | view unanswered';
 
 // table header
 echo '<table class="data_table">';
@@ -92,18 +107,38 @@ while ($row = mysql_fetch_assoc($res))
 	{
 			echo '	<td>'.$row['user'].'</td>';
 	}
-	echo '	<td>'.$row['invitation_code'].'</td>';
+	/** @todo this is temporary to allow the developer to quickly fill a survey as a different user */
+	// echo '	<td>'.$row['invitation_code'].'</td>';
+	echo '	<td><a href="fillsurvey.php?course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'">'.$row['invitation_code'].'</td>';
 	echo '	<td>'.$row['invitation_date'].'</td>';
-	echo '	<td>todo (- or link: view answers)</td>';
+	echo '	<td>';
+	if (in_array($row['user'], $answered_data))
+	{
+		echo '<a href="reporting.php?action=userreport&amp;survey_id='.$_GET['survey_id'].'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
+	}
+	else
+	{
+		echo '-';
+	}
+	echo '	</td>';
 	echo '</tr>';
 
 }
 // closing the table
 echo '</table>';
 
+// Footer
+Display :: display_footer();
+
+
+
+
+
+
 /**
  * @todo add the additional parameters
  */
+/*
 $table = new SortableTable('survey_invitations', 'get_number_of_survey_invitations', 'get_survey_invitations_data',2);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, get_lang('User'));
@@ -112,9 +147,7 @@ $table->set_header(2, get_lang('InvitationDate'));
 $table->set_header(3, get_lang('Answered'));
 $table->set_column_filter(3, 'modify_filter');
 $table->display();
-
-// Footer
-Display :: display_footer();
+*/
 
 /**
  * Get all the information about the invitations of a certain survey
@@ -122,7 +155,7 @@ Display :: display_footer();
  * @return unknown
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version januari 2007
+ * @version January 2007
  *
  * @todo use survey_id parameter instead of $_GET
  */
@@ -156,7 +189,7 @@ function get_survey_invitations_data()
  * @todo use survey_id parameter instead of $_GET
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version januari 2007
+ * @version January 2007
  */
 function get_number_of_survey_invitations()
 {
@@ -172,7 +205,7 @@ function get_number_of_survey_invitations()
  * @todo use global array for answered or not
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version januari 2007
+ * @version January 2007
  */
 function modify_filter()
 {

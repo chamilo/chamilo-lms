@@ -19,7 +19,7 @@
 
 /**
 *	@package dokeos.survey
-* 	@author unknown
+* 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 * 	@version $Id: survey_invite.php 10680 2007-01-11 21:26:23Z pcool $
 *
@@ -140,7 +140,7 @@ Display :: display_footer();
  * @param unknown_type $mailtext
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version januari 2007
+ * @version January 2007
  */
 function save_invite_mail($mailtext)
 {
@@ -236,7 +236,7 @@ function save_invitations($users_array, $invitation_title, $invitation_text)
  * @param unknown_type $survey_id
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version januari 2007
+ * @version January 2007
  */
 function update_count_invited($survey_id)
 {
@@ -264,7 +264,7 @@ function update_count_invited($survey_id)
  * @todo consider making $defaults['additional_users'] also an array
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version januari 2007
+ * @version January 2007
  */
 function get_invitations($survey_id)
 {

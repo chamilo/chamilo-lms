@@ -19,9 +19,9 @@
 
 /**
 *	@package dokeos.survey
-* 	@author unknown
+* 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 10941 2007-01-28 19:03:38Z pcool $
+* 	@version $Id: create_new_survey.php 11134 2007-02-16 14:39:59Z pcool $
 *
 * 	@todo rename this file to survey.php
 * 	@todo try to understand the template stuff and implement it (if needed)

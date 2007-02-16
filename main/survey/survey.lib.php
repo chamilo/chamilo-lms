@@ -40,7 +40,7 @@ class survey_manager
 	 * @return array
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 *
 	 * @todo move this function to surveymanager.inc.lib.php
 	 * @todo this is the same function as in create_new_survey.php
@@ -77,7 +77,7 @@ class survey_manager
 	 * @return array $return the type of return message that has to be displayed and the message in it
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 *
 	 * @todo move this function to surveymanager.inc.lib.php
 	 */
@@ -147,7 +147,7 @@ class survey_manager
 	 */
 	function delete_survey($survey_id)
 	{
-		// table definitions
+		// Database table definitions
 		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
 
 		// deleting the survey
@@ -158,6 +158,31 @@ class survey_manager
 		survey_manager::delete_all_survey_questions($survey_id);
 
 		return true;
+	}
+
+	/**
+	 * This function recalculates the number of people who have taken the survey (=filled at least one question)
+	 *
+	 * @param $survey_id the id of the survey somebody
+	 * @return true
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version February 2007
+	 */
+	function update_survey_answered($survey_id)
+	{
+		global $_course;
+
+		// Database table definitions
+		$table_survey 			= Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
+
+		// getting a list with all the people who have filled the survey
+		$people_filled = survey_manager::get_people_who_filled_survey($survey_id);
+		$number = count($people_filled);
+
+		// storing this value
+		$sql = "UPDATE $table_survey SET answered = '".mysql_real_escape_string($number)."' WHERE survey_id = '".mysql_real_escape_string($survey_id)."'";
+		$res = api_sql_query($sql, __FILE__, __LINE__);
 	}
 
 	/******************************************************************************************************
@@ -172,16 +197,15 @@ class survey_manager
 	 * @return array
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 *
-	 * @todo write the function
-	 * @todo move to surveymanager.lib.php
-	 * @todo use table constants
+	 * @todo one sql call should do the trick
 	 */
 	function get_question($question_id)
 	{
 		// table definitions
 		$tbl_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
 		// getting the information of the question
 		$sql = "SELECT * FROM $tbl_survey_question WHERE question_id='".mysql_real_escape_string($question_id)."'";
@@ -195,11 +219,53 @@ class survey_manager
 
 	    // getting the information of the question options
 		$sql = "SELECT * FROM $table_survey_question_option WHERE question_id='".mysql_real_escape_string($question_id)."'";
-		echo $sql;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{
+			/** @todo this should be renamed to options instead of answers */
 			$return['answers'][] = $row['option_text'];
+			/** @todo this can be done more elegantly (used in reporting) */
+			$return['answersid'][] = $row['question_option_id'];
+		}
+		return $return;
+	}
+
+
+	/**
+	 * This function gets all the question of any given survey
+	 *
+	 * @param integer $survey_id the id of the survey
+	 * @return array containing all the questions of the survey
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version February 2007
+	 *
+	 * @todo one sql call should do the trick
+	 */
+	function get_questions($survey_id)
+	{
+		// table definitions
+		$tbl_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+
+		// getting the information of the question
+		$sql = "SELECT * FROM $tbl_survey_question WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($row = mysql_fetch_assoc($result))
+		{
+			$return[$row['question_id']]['survey_id'] 			= $row['survey_id'];
+		    $return[$row['question_id']]['question_id'] 		= $row['question_id'];
+		    $return[$row['question_id']]['type'] 				= $row['type'];
+	    	$return[$row['question_id']]['question'] 			= $row['survey_question'];
+		    $return[$row['question_id']]['horizontalvertical'] 	= $row['display'];
+		}
+
+	    // getting the information of the question options
+		$sql = "SELECT * FROM $table_survey_question_option WHERE question_id='".mysql_real_escape_string($question_id)."'";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($row = mysql_fetch_assoc($result))
+		{
+			$return[$row['question_id']]['answers'][] = $row['option_text'];
 		}
 		return $return;
 	}
@@ -215,7 +281,7 @@ class survey_manager
 	 * @param string $question_display how the options of the questions should be displayed
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 *
 	 * @todo move to surveymanager.lib.php
 	 * @todo return message, type and id (and display the information)
@@ -271,12 +337,12 @@ class survey_manager
 	/**
 	 * This functions moves a question of a survey up or down
 	 *
-	 * @param unknown_type $direction
-	 * @param unknown_type $survey_question_id
-	 * @param unknown_type $survey_id
+	 * @param string $direction
+	 * @param integer $survey_question_id
+	 * @param integer $survey_id
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
 	function move_survey_question($direction, $survey_question_id, $survey_id)
 	{
@@ -352,11 +418,11 @@ class survey_manager
 	/**
 	 * This function stores the options of the questions in the table
 	 *
-	 * @param unknown_type $form_content
+	 * @param array $form_content
 	 * @return
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 *
 	 * @todo writing the update statement when editing a question
 	 */
@@ -427,6 +493,35 @@ class survey_manager
 	{
 		return true;
 	}
+
+	/**
+	 * This function gets all the persons who have filled the survey
+	 *
+	 * @param integer $survey_id
+	 * @return array
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version February 2007
+	 */
+	function get_people_who_filled_survey($survey_id)
+	{
+		global $_course;
+
+		// Database table definition
+		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
+
+		// variable initialisation
+		$return = array();
+
+		$sql = "SELECT DISTINCT user FROM $table_survey_answer WHERE survey_id = '".mysql_real_escape_string($survey_id)."'";
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		while ($row = mysql_fetch_assoc($res))
+		{
+			$return[] = $row['user'];
+		}
+
+		return $return;
+	}
 }
 
 
@@ -454,7 +549,7 @@ class question
 	 * This function does the generic part of any survey question: the question field
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 *
 	 * @todo the form_text has to become a wysiwyg editor or adding a question_comment field
 	 * @todo consider adding a question_comment form element
@@ -489,7 +584,7 @@ class question
 	 * (adding a submit button, closing the table and closing the form)
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 *
 	 */
 	function render_form()
@@ -510,7 +605,7 @@ class question
 	 * @todo consider using $form_content instead of $_POST
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
 	function handle_action($form_content)
 	{
@@ -591,7 +686,7 @@ class question
 	 * @return html code
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
 	function add_remove_buttons($form_content)
 	{
@@ -617,7 +712,7 @@ class question
 	 * @param unknown_type $form_content
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
 	function render_question($form_content)
 	{
@@ -632,7 +727,7 @@ class yesno extends question
 	 * This function creates the form elements for the yesno questions
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
 	function create_form($form_content)
 	{
@@ -681,13 +776,18 @@ class yesno extends question
 	 * @param unknown_type $form_content
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
-	function render_question($form_content)
+	function render_question($form_content, $answers=array())
 	{
 		foreach ($form_content['options'] as $key=>$value)
 		{
-			$this->html .= '<label><input name="question'.$form_content['question_id'].'" type="radio" value="'.$key.'" />'.$value.'</label>';
+			$this->html .= '<label><input name="question'.$form_content['question_id'].'" type="radio" value="'.$key.'"';
+			if (in_array($key,$answers))
+			{
+				$this->html .= 'checked="checked"';
+			}
+			$this->html .= '/>'.$value.'</label>';
 			if ($form_content['display'] == 'vertical')
 			{
 				$this->html .= '<br />';
@@ -708,7 +808,7 @@ class multiplechoice extends question
 	 * This function creates the form elements for the multiple choice questions
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
 	function create_form($form_content)
 	{
@@ -772,12 +872,12 @@ class multiplechoice extends question
 	 * @todo it would make more sense to consider yesno as a special case of multiplechoice and not the other way around
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
-	function render_question($form_content)
+	function render_question($form_content, $answers=array())
 	{
 		$question = new yesno();
-		$question->render_question($form_content);
+		$question->render_question($form_content, $answers);
 	}
 }
 
@@ -789,7 +889,7 @@ class multipleresponse extends question
 	 * This function creates the form elements for the multiple response questions
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
 	function create_form($form_content)
 	{
@@ -851,13 +951,19 @@ class multipleresponse extends question
 	 * @param unknown_type $form_content
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
-	function render_question($form_content)
+	function render_question($form_content, $answers=array())
 	{
+		//print_r($form_content);
 		foreach ($form_content['options'] as $key=>$value)
 		{
-			$this->html .= '<label><input name="question'.$form_content['question_id'].'[]" type="checkbox" value="'.$key.'" />'.$value.'</label>';
+			$this->html .= '<label><input name="question'.$form_content['question_id'].'[]" type="checkbox" value="'.$key.'"';
+			if (in_array($key,$answers))
+			{
+				$this->html .= 'checked="checked"';
+			}
+			$this->html .= ' />'.$value.'</label>';
 			if ($form_content['display'] == 'vertical')
 			{
 				$this->html .= '<br />';
@@ -877,7 +983,7 @@ class dropdown extends question
 	 * This function creates the form elements for the dropdown questions
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
 	function create_form($form_content)
 	{
@@ -918,14 +1024,19 @@ class dropdown extends question
 	 * @param unknown_type $form_content
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
-	function render_question($form_content)
+	function render_question($form_content, $answers=array())
 	{
 
 		foreach ($form_content['options'] as $key=>$value)
 		{
-			$this->html .= '<option value="'.$key.'">'.$value.'</option>';
+			$this->html .= '<option value="'.$key.'" ';
+			if (in_array($key,$answers))
+			{
+				$this->html .= 'selected="selected"';
+			}
+			$this->html .= '>'.$value.'</option>';
 		}
 		echo '<div class="survey_question_wrapper">';
 		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
@@ -950,7 +1061,7 @@ class open extends question
 	 * This function creates the form elements for the open questions
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 *
 	 * @todo add a limit for the number of characters that can be type
 	 * @todo add a checkbox weither the answer is a textarea or a wysiwyg editor
@@ -966,14 +1077,14 @@ class open extends question
 	 * @param unknown_type $form_content
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
-	function render_question($form_content)
+	function render_question($form_content, $answers=array())
 	{
 		echo '<div class="survey_question_wrapper">';
 		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
 		echo '<div class="survey_question_options">';
-		echo '<label for="question'.$form_content['question_id'].'"></label><textarea name="question'.$form_content['question_id'].'" id="textarea"></textarea>';
+		echo '<label for="question'.$form_content['question_id'].'"></label><textarea name="question'.$form_content['question_id'].'" id="textarea">'.implode($answers).'</textarea>';
 		echo '</div>';
 	}
 }
@@ -985,7 +1096,7 @@ class comment extends question
 	 * A comment is nothing more than a block of text that the user can read
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 *
 	 * @param array $form_content
 	 */
@@ -1001,7 +1112,7 @@ class comment extends question
 	 * @param unknown_type $form_content
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 */
 	function render_question($form_content)
 	{
@@ -1017,7 +1128,7 @@ class pagebreak extends question
 	 * A comment is nothing more than a block of text that the user can read
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version januari 2007
+	 * @version January 2007
 	 *
 	 * @param array $form_content
 	 */

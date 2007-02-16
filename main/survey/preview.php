@@ -19,12 +19,10 @@
 
 /**
 *	@package dokeos.survey
-* 	@author unknown
+* 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
 *
-* 	@todo The ansTarget column is not done
-* 	@todo try to understand the white, blue, ... template stuff.
 * 	@todo use quickforms for the forms
 */
 

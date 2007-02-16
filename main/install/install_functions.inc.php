@@ -604,10 +604,10 @@ function display_license_agreement()
 {
 	echo '<h2>'.display_step_sequence().get_lang('Licence').'</h2>';
 	echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
-	echo '<p><a href="../license/gpl_print.txt">'.get_lang('PrintVers').'</a></p>';
+	echo '<p><a href="../../documentation/license.txt">'.get_lang('PrintVers').'</a></p>';
 	?>
 	<table><tr><td>
-		<p><textarea cols="75" rows="15" wrap="virtual"><?php include('../license/gpl.txt'); ?></textarea></p>
+		<p><textarea cols="75" rows="15" wrap="virtual"><?php include('../../documentation/license.txt'); ?></textarea></p>
 		</td>
 		</tr>
 		<tr>

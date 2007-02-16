@@ -180,7 +180,7 @@ foreach ($group_tutor_list as $index => $user)
 	$selected_tutors[] = $user['user_id'];
 }
 
-$group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users);
+$group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users, 'style="width: 225px;"');
 $group_tutors_element->setElementTemplate('
 {javascript}
 <table{class}>
@@ -202,7 +202,7 @@ foreach ($group_member_list as $index => $user)
 	//$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
 	$selected_users[] = $user['user_id'];
 }
-$group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users);
+$group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 225px;"');
 
 $group_members_element->setElementTemplate('
 {javascript}

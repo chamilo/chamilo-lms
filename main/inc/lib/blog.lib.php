@@ -151,7 +151,7 @@ class Blog
 
 		// Make first post. :)
 		$sql = "INSERT INTO $tbl_blogs_posts (`title`, `full_text`, `date_creation`, `blog_id`, `author_id` )
-					VALUES ('Welkom!', '" . get_lang('FirstPostText')."', NOW(), '".mysql_real_escape_string((int)$this_blog_id)."', '".mysql_real_escape_string((int)$_user['user_id'])."');";
+					VALUES ('".get_lang("Welcome")."', '" . get_lang('FirstPostText')."', NOW(), '".mysql_real_escape_string((int)$this_blog_id)."', '".mysql_real_escape_string((int)$_user['user_id'])."');";
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		// Put it on course homepage
@@ -686,7 +686,7 @@ class Blog
 		// Get posts and authors
 		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post
 					INNER JOIN $tbl_users user ON post.author_id = user.user_id
-					WHERE post.blog_id = '".(int)$blog_id."
+					WHERE post.blog_id = '".(int)$blog_id."'
 					AND $filter
 					ORDER BY post_id DESC LIMIT 0,".(int)$max_number_of_posts;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -919,8 +919,7 @@ class Blog
 		$sql = "SELECT AVG(rating) as rating FROM $tbl_blogs_rating WHERE blog_id = '".(int)$blog_id."' AND item_id = '".(int)$item_id."' AND rating_type = '".mysql_real_escape_string($type)."' ";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$result = mysql_fetch_array($result);
-
-		return '<img src="../img/rating.png.php?rating=' . $result['rating'] . '" alt="' . $result['rating'] . '" title="' . $result['rating'] . '" />';
+		return round($result['rating'], 2);
 	}
 
 	/**

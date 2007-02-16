@@ -1,70 +1,194 @@
-<h3>
-<font face="verdana,arial,helvetica,sans-serif" color="#000099">Example document</font>
-</h3>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<p dir="ltr" style="MARGIN-RIGHT: 0px">
-<font face="verdana,arial,helvetica,sans-serif">This page has been created online using Dokeos <i>Create a document</i> tool, a WYSIWYG (What You See Is What You Get) online web page editor. It allows you to create simple web pages without any HTML knowledge.</font>
-<font face="verdana,arial,helvetica,sans-serif">You can noticeably add :</font>
-</p>
+<html>
 
-<p dir="ltr">
-<font face="verdana,arial,helvetica,sans-serif"><strong>1. Links</strong></font>
-</p>
+<head>
 
-<blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
-<p dir="ltr">
-<font face="verdana,arial,helvetica,sans-serif">Like this one : <strong><a href="http://www.google.be/" target="_blank">Google (search)</a></strong> or this one: <strong><a href="http://www.wikipedia.org/" target="_blank">Wikipedia (encyclopedia)</a></strong>.</font>
-</p>
-</blockquote>
+<title>Example document</title>
 
-<p dir="ltr">
-<font face="verdana,arial,helvetica,sans-serif"><strong>2. Tables</strong></font>
-</p>
+<style type="text/css">
 
-<blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
-<p dir="ltr">
-<table style="WIDTH: 400px" cellspacing="0" cellpadding="4" border="1">
-<tbody>
-<tr>
-<td>
-<p align="center">
-<font face="verdana,arial,helvetica,sans-serif">Cell 1</font>
-</p>
-</td>
-<td>
-<p align="center">
-<font face="verdana,arial,helvetica,sans-serif">Cell 2</font>
-</p>
-</td>
-</tr>
-</tbody>
-</table>
-</p>
-</blockquote>
+/*
+==============================================================================
+	GLOBAL STYLES
+==============================================================================
+*/
 
-<p dir="ltr">
-<font face="verdana,arial,helvetica,sans-serif"><strong>3. Images</strong></font>
-</p>
+#box_title {
+	text-align: right;
+	margin-left: 30%;
+	width: 65%;
+	margin: 0;
+	float: right;
+}
 
-<blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
-<p dir="ltr">
-<img hspace="0" src="stones.jpg" align="baseline" border="0" />
-<br />
-<font face="verdana,arial,helvetica,sans-serif" size="2"><strong>Tip</strong> : To add an image : upload it &gt; open it &gt; copy its url &gt; enter</font><br />
-<font face="verdana,arial,helvetica,sans-serif" size="2">page editing &gt; click on image icon &gt; paste URL.</font>
-</p>
-</blockquote>
+#box_title h1 {
+	font: bold 2em Arial, sans-serif, sans;
+	color: #bbb;
+}
 
-<p dir="ltr">
-<font face="verdana,arial,helvetica,sans-serif">You can edit this page easily by clicking on the Pencil icon beside the name of this file. This online editability is an advantage of HTML files compared to Word or PDF.</font>
-</p>
-<p dir="ltr">
-<font face="verdana,arial,helvetica,sans-serif">Another advantage of HTML is that it facilitates linking things together and structuring content and activities to help your audience browse through it and understand its logic.</font>
-</p>
-<p dir="ltr">
-<font face="verdana,arial,helvetica,sans-serif">HTML files are easy for your target audience. They display inside the browser instead of opening a new application. You can cut and paste them, print them and they are usually lightweight, displaying quicker than other file types.</font>
-</p>
-<p dir="ltr">
-<font face="verdana,arial,helvetica,sans-serif">If you need help to create simple or sophisticated content and learning paths, Dokeos people will be happy to help you. We organise both online and face-to-face <strong><a href="http://www.dokeos.com" target="_blank">training</a></strong> sessions.</font>
-<font face="verdana,arial,helvetica,sans-serif">Feel free to contact <strong><a href="mailto:info@dokeos.com">info@dokeos.com</a></strong></font>
-</p>
+#box_title h2 {
+	font: bold 1.5em Arial, sans-serif, sans;
+	color: #bbb;
+}
+
+.dokeos_course {
+	width: 690px;
+	margin: 0 auto;
+	padding: 0;
+	font: normal .72em verdana, 'Lucida Grande', sans-serif, sans;
+}
+
+#footer_template {
+	background: transparent url("http://192.168.1.3/dokeos_SVN/main/css/default/images/footer_template.png") no-repeat top center;
+	width: 690px;
+	height: 48px;
+	clear:both;
+}
+
+#header_template {
+	width: 690px;
+	background: transparent url("http://192.168.1.3/dokeos_SVN/main/css/default/images/writerheader.png") no-repeat top
+		left;
+	height: 185px;
+}
+
+
+/*
+------------------------------------------------------------------------------
+	Explanation
+------------------------------------------------------------------------------
+*/
+#body_explanation {
+	background: transparent url("http://192.168.1.3/dokeos_SVN/main/css/default/images/repeat_template.png") repeat-y top center;
+	padding-bottom:2em;
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
+	width: 690px;
+	float:left;
+}
+
+#explanation #header_template {
+	background: transparent url("http://192.168.1.3/dokeos_SVN/main/css/default/images/teacherheader.png") no-repeat top
+		left;
+}
+
+#menu_explanation {
+	margin:1em 0 0 0;
+	padding:0;
+	width:130px;
+	margin-left:20px;
+	float:left;
+	clear:left;
+	list-style:none;
+	height:100%;
+	background: transparent url("http://192.168.1.3/dokeos_SVN/main/css/default/images/vertdivider_template.jpg") no-repeat top right;
+	padding-right:15px;
+	/* Min-height hack for IE 6*/
+	min-height: 250px;
+	height: auto !important;
+	height: 250px;
+}
+
+
+#menu_explanation dd{
+	margin:1em 0 0 0;
+	padding:0;
+	list-style:none;
+	text-indent:25px;
+	font: bold 1.1em Arial, sans-serif, sans;
+	color: #aaa;
+}
+
+#menu_explanation dd a{
+	color: #aaa;
+	text-decoration:none;	
+}
+
+#menu_explanation dd a:visited {
+	color: #bbb;
+}
+
+#menu_explanation dd a:hover, #menu_explanation dd a:focus {
+	color:#000;
+}
+
+#menu_explanation dt {
+	margin:0 0 1em 10px;
+	font: bold 1.2em Arial, sans-serif, sans;
+	color: #aaa;
+}
+
+#text_explanation {
+	width:450px;
+	margin:0 0 0 10px;
+	text-align:justify;
+	float:left;
+	height:250px;
+	overflow: auto;
+}
+
+#text_explanation em {
+	font: normal normal bold 1em verdana, 'Lucida Grande', sans-serif, sans;
+}
+
+#text_explanation p{
+	width:390px;
+	margin:1em auto;
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+<div id="explanation" class="dokeos_course">
+
+	<div id="header_template">
+		<div id="box_title">
+			<h1>Explanation</h1>
+			<h2>Write here a subtitle</h2>
+		</div>
+	</div>
+	
+	<div id="body_explanation">
+	
+		<div id="menu_explanation">
+			<dl>
+				<dt>Chek out:</dt>
+				<dd>
+					<a title="Web 1" href="#nogo">Web 1</a>
+				</dd>
+				<dd>
+					<a title="Web 2" href="#nogo">Web 2</a>
+				</dd>
+				<dd>
+					<a title="Resource" href="#nogo">Resource</a>
+				</dd>
+				<dd>
+					<a title="Etc..." href="#nogo">Etc...</a>
+				</dd>
+			</dl>
+		</div>
+		
+		<div id="text_explanation">
+		
+			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing eddt. Curabitur commodo urna in justo. Nulla faciddsi. Vestibulum dapibus mattis sapien. <em>Keyword 1, keyword 2</em>. Nunc suscipit. Nulla odio urna, faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper hendrerit magna. Maecenas nec ddgula. Quisque tellus tortor, semper in, blandit quis, addquet ut, tellus. Quisque vulputate. Sed ddgula ipsum, interdum vel, congue tincidunt, faciddsis eget, arcu.</p>
+			<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. <em>Keyword 3, keyword 4</em>. Nulla faciddsi. Praesent consequat, lectus ac solddcitudin condimentum, nunc fedds pharetra ddgula, at tincidunt mauris neque vel nulla. Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis scelerisque sapien. Class aptent taciti sociosqu ad ddtora torquent per conubia nostra, per inceptos hymenaeos. Praesent convaldds. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tristique laoreet fedds. Ut vitae est. Integer posuere lacus sed ddbero.</p>
+			<p>Donec pretium sagittis nisi. Nullam sed ipsum hendrerit arcu ornare mollis. Praesent hendrerit consectetuer magna. Aliquam dignissim. Sed aliquam. Maecenas dui. Quisque eleifend egestas diam. Curabitur sollicitudin dui ac risus. In nunc risus, rutrum eget, malesuada at, lobortis a, erat. Integer vitae nisl ac arcu nonummy ultrices. Nullam sollicitudin arcu quis nisi. Nam nec neque a urna fringilla consequat.</p>
+			
+		</div>
+		
+	</div>
+	
+	<div id="footer_template"></div>
+	
+</div>
+
+</body>
+
+</html>

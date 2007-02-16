@@ -480,7 +480,18 @@ class ImageManager
 		if(!is_int($result))
 		{
 			Files::delFile($file['tmp_name']);
-			$this->_insertPictureInDatabase($relative, $_FILES['upload'],$result);
+			
+			global $_course;
+			//Check if we are in a course context. Otherwise it should mean that we're
+			//uploading a file in the generic image upload folder, not into a course, so
+			//we don't need to record it into the database.
+			//In any case, if $_course['dbName'] is not defined, the database insertion
+			//will fail, so we don't loose anything compared to what we have now.
+			if(!empty($_course['dbName']))
+			{
+				$this->_insertPictureInDatabase($relative, $_FILES['upload'],$result);
+			}
+			
 			Return $result;
 		}
 		

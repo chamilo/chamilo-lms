@@ -404,7 +404,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 				<td class="requirements-value">'.check_php_setting('safe_mode','OFF').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">Display Errors</td>
+				<td class="requirements-item"><a href="http://php.net/manual/ref.errorfunc.php#ini.display-errors">Display Errors</a></td>
 				<td class="requirements-recommended">OFF</td>
 				<td class="requirements-value">'.check_php_setting('display_errors','OFF').'</td>
 			</tr>
@@ -429,14 +429,24 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 				<td class="requirements-value">'.check_php_setting('register_globals','OFF').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">Session auto start</td>
+				<td class="requirements-item"><a href="http://php.net/manual/ref.session.php#ini.session.auto-start">Session auto start</a></td>
 				<td class="requirements-recommended">OFF</td>
 				<td class="requirements-value">'.check_php_setting('session.auto_start','OFF').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">Short Open Tag</td>
+				<td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.short-open-tag">Short Open Tag</a></td>
 				<td class="requirements-recommended">ON</td>
 				<td class="requirements-value">'.check_php_setting('short_open_tag','ON').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>
+				<td class="requirements-recommended">10M-100M</td>
+				<td class="requirements-value">'.ini_get('upload_max_filesize').'</td>
+			</tr>
+			<tr>
+				<td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.post-max-size">Maximum post size</a></td>
+				<td class="requirements-recommended">10M-100M</td>
+				<td class="requirements-value">'.ini_get('post_max_size').'</td>
 			</tr>
 		  </table>';
 	echo '	</div>';
@@ -604,10 +614,10 @@ function display_license_agreement()
 {
 	echo '<h2>'.display_step_sequence().get_lang('Licence').'</h2>';
 	echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
-	echo '<p><a href="../../documentation/license.txt">'.get_lang('PrintVers').'</a></p>';
+	echo '<p><a href="../license/gpl_print.txt">'.get_lang('PrintVers').'</a></p>';
 	?>
 	<table><tr><td>
-		<p><textarea cols="75" rows="15" wrap="virtual"><?php include('../../documentation/license.txt'); ?></textarea></p>
+		<p><textarea cols="75" rows="15" wrap="virtual"><?php include('../license/gpl.txt'); ?></textarea></p>
 		</td>
 		</tr>
 		<tr>

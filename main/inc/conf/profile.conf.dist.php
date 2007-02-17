@@ -1,5 +1,4 @@
 <?php
-
 /**
 ==============================================================================
 *	This file holds the configuration constants and variables

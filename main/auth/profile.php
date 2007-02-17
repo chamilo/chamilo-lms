@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 11097 2007-02-12 09:02:42Z elixir_julian $
+// $Id: profile.php 11139 2007-02-17 15:43:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -28,7 +28,7 @@
 * This file displays the user's profile,
 * optionally it allows users to modify their profile as well.
 *
-* See inc/conf/profile.conf.inc.php to modify settings
+* See inc/conf/profile.conf.php to modify settings
 *
 * @package dokeos.auth
 ==============================================================================
@@ -70,7 +70,7 @@ if (!empty ($_GET['coursePath']))
 	Configuration file
 -----------------------------------------------------------
 */
-require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.inc.php');
+require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
 
 /*
 -----------------------------------------------------------

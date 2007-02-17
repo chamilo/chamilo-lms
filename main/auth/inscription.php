@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 11113 2007-02-14 17:43:58Z elixir_inter $
+// $Id: inscription.php 11139 2007-02-17 15:43:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,7 +36,7 @@ include ("../inc/global.inc.php");
 
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.inc.php');
+require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
 $tool_name = get_lang('Registration');
 
 Display :: display_header($tool_name);

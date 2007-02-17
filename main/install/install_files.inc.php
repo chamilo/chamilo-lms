@@ -1,4 +1,4 @@
-<?php // $Id: install_files.inc.php 11072 2007-02-07 15:35:52Z yannoo $
+<?php // $Id: install_files.inc.php 11139 2007-02-17 15:43:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,7 +48,7 @@ if(defined('DOKEOS_INSTALL'))
 	copy('../inc/conf/add_course.conf.dist.php','../inc/conf/add_course.conf.php');
 	copy('../inc/conf/course_info.conf.dist.php','../inc/conf/course_info.conf.php');
 	copy('../inc/conf/mail.conf.dist.php','../inc/conf/mail.conf.php');
-	copy('../inc/conf/profile.conf.dist.php','../inc/conf/profile.conf.inc.php');
+	copy('../inc/conf/profile.conf.dist.php','../inc/conf/profile.conf.php');
 }
 else
 {

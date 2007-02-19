@@ -1,5 +1,16 @@
 <?php
+require_once('../../../../../global.inc.php');
+require_once('../../../../security.lib.php');
+
 $filename = urldecode(stripslashes($_GET['file']));
+
+//prevent download of something outside of the course dir
+$course_dir   = $_course['path']."/document";
+$course_path = api_get_path(SYS_COURSE_PATH).$course_dir;
+$in_course = Security::check_abs_path($filename,$course_path);
+if(!$in_course){
+	$filename = "";
+}
 
 // required for IE, otherwise Content-disposition is ignored
 if(ini_get('zlib.output_compression'))

@@ -293,6 +293,8 @@ class Display {
 	*/
 	function display_normal_message($message)
 	{
+		//filter message
+		$message = htmlentities($message);
 		if (!headers_sent())
 		{
 			echo '
@@ -317,6 +319,8 @@ class Display {
 	*/
 	function display_warning_message($message)
 	{
+		//filter message
+		$message = htmlentities($message);
 		if (!headers_sent())
 		{
 			echo '
@@ -340,6 +344,8 @@ class Display {
 	*/
 	function display_confirmation_message($message)
 	{
+		//filter message
+		$message = htmlentities($message);
 		if (!headers_sent())
 		{
 			echo '
@@ -366,6 +372,8 @@ class Display {
 	*/
 	function display_error_message($message)
 	{
+		//filter message
+		$message = htmlentities($message);
 		if (!headers_sent())
 		{
 			echo '

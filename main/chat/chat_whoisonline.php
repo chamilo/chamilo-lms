@@ -77,7 +77,7 @@ foreach($Users as $enreg)
 ?>
 
 <tr>
-  <td width="1%" rowspan="2" valign="middle"><img src="../img/whoisonline.png" border="0" alt="" style="margin-right: 3px;"></td>
+  <td width="1%" rowspan="2" valign="top"><?php if($enreg['status'] == 1) echo '<img src="../img/teachers.gif" align="absbottom" border="0" alt="" style="margin: 1px;">'; else echo '<img src="../img/students.gif" align="absbottom" border="0" alt="" style="margin: 1px;">';?></td>
   <td width="99%"><a <?php if($enreg['status'] == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo $_SERVER['PHP_SELF']; ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><b><?php echo ucfirst($enreg['lastname']).' '.ucfirst($enreg['firstname']); ?></b></a></td>
 </tr>
 

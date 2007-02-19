@@ -74,7 +74,6 @@ $isMaster=$is_courseAdmin?true:false;
 	exit();
 }*/
 
-$timeNow=date('H:i');
 $dateNow=date('Y-m-d');
 
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
@@ -128,11 +127,11 @@ if($sent)
 
 		if($isMaster)
 		{
-			fputs($fp,"[$timeNow] <span class=\"master\"><b>$pseudoUser</b></span> : $message\n");
+			fputs($fp,"<span class=\"master\"><b>$pseudoUser</b></span> : $message\n");
 		}
 		else
 		{
-			fputs($fp,"[$timeNow] <b>$pseudoUser</b> : $message\n");
+			fputs($fp,"<b>$pseudoUser</b> : $message\n");
 		}
 
 		fclose($fp);
@@ -151,9 +150,7 @@ include('header_frame.inc.php');
 <input type="hidden" name="sent" value="1">
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td width="95%"><input type="text" name="message" size="50" value="" style="width: 100%;"></td>
-  
-  <td width="5%"><input type="submit" value="OK" style="width: 30px;"></td>
+  <td width="95%"><input type="text" name="message" size="50" value="" style="width: 300px">&nbsp;<input type="submit" value="OK"></td>
 </tr>
 </table>
 </form>

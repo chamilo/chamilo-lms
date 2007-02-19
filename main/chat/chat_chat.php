@@ -133,11 +133,12 @@ if ($_GET["origin"]=='whoisonlinejoin') {   //the joiner (we have to delete the 
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 }
 
-
+echo '<div style="margin-left: 5px;">';
 foreach($content as $thisLine)
 {
 	echo "$thisLine<br>";
 }
+echo '</div>';
 
 ?>
 
@@ -151,7 +152,7 @@ if($isMaster)
 
 <br>
 
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<table border="0" cellpadding="0" cellspacing="0" width="90%" style="margin-left: 5px;">
 <tr>
   <td width="1%" valign="middle"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?rand=<?php echo $rand; ?>&reset=1#bottom" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmReset'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('ClearList')); ?>"></a></td>
   <td width="99%">&nbsp;<a href="<?php echo $_SERVER['PHP_SELF']; ?>?rand=<?php echo $rand; ?>&reset=1#bottom" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmReset'))); ?>')) return false;"><?php echo get_lang('ClearList'); ?></a></td>

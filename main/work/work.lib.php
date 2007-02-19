@@ -62,8 +62,11 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 *
 * @param $uploadvisibledisabled
 * @param $origin
+* @param $base_work_dir Base working directory (up to '/work')
+* @param $cur_dir_path	Current subdirectory of 'work/'
+* @param $cur_dir_path_url Current subdirectory of 'work/', url-encoded
 */
-function display_tool_options($uploadvisibledisabled, $origin)
+function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cur_dir_path,$cur_dir_path_url)
 {
 	$is_allowed_to_edit = api_is_allowed_to_edit();
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -463,6 +466,7 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 }
 /**
  * Checks if the first given directory exists as a subdir of the second given directory
+ * This function should now be deprecated by Security::check_abs_path()
  * @param	string	Subdir
  * @param	string	Base dir
  * @return	integer	-1 on error, 0 if not subdir, 1 if subdir

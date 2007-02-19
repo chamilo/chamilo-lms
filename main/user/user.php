@@ -381,9 +381,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
 	global $is_allowed_to_track;
 
-	//print_r($_SESSION);
-	//echo $_SESSION["id_session"];
-
 	//It's a teacher in the current course; We display all the students of the course (as if the course belong to no sessions)
 	if($_SESSION["is_courseAdmin"] || $_SESSION["is_platformAdmin"]){
 
@@ -476,18 +473,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			$users[''.$user[0]] = $user;
 			$user_ids[] = $user[0];
 		}
-
-		$sql = "SELECT ug.user_id, ug.group_id group_id, sg.name
-	                    FROM ".Database::get_course_table(TABLE_GROUP_USER)." ug
-	                    LEFT JOIN ".Database::get_course_table(TABLE_GROUP)." sg
-	                    ON ug.group_id = sg.id
-	                    WHERE ug.user_id IN ('".implode("','", $user_ids)."')";
-
-	    $res = api_sql_query($sql,__FILE__,__LINE__);
-	    while($group = mysql_fetch_object($res))
-	    {
-	    	$users[''.$group->user_id][5] .= $group->name.'<br />';
-	    }
 	}
 
 	//Sudent or coach
@@ -596,153 +581,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			}
 		}
 	}
-
-	/*if(api_get_setting('use_session_mode')!='true')
-	{
-		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-		if(api_is_allowed_to_edit())
-			$columns[] = 'u.user_id';
-
-		$columns[] = 'u.official_code';
-		$columns[] = 'u.lastname';
-		$columns[] = 'u.firstname';
-		$columns[] = 'cu.role';
-		$columns[] = "''"; //placeholder for group-data
-
-		if(api_is_allowed_to_edit())
-		{
-			$columns[] = "IF(cu.tutor_id = 1,'".get_lang('Tutor')."','')";
-			$columns[] = "IF(cu.status = 1,'".get_lang('CourseManager')."','')";
-		}
-
-		$columns[] = 'u.user_id';
-		$sql = "SELECT ";
-
-		foreach( $columns as $index => $sqlcolumn)
-			$columns[$index] = ' '.$sqlcolumn.' AS col'.$index.' ';
-
-		$sql .= implode(" , ", $columns);
-		$sql .= "FROM $user_table u,$course_user_table cu WHERE u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
-
-		if( isset ($_GET['keyword']))
-		{
-			$keyword = mysql_real_escape_string($_GET['keyword']);
-			$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
-		}
-
-		$sql .= " ORDER BY col$column $direction ";
-		$sql .= " LIMIT $from, $number_of_items";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
-
-		$users = array();
-		$user_ids = array();
-
-		while($user = mysql_fetch_row($res))
-		{
-			$users[''.$user[0]] = $user;
-			$user_ids[] = $user[0];
-		}
-
-		$sql = "
-			SELECT
-				ug.user_id,
-				ug.group_id group_id,
-				sg.name
-			FROM " . Database::get_course_table(TABLE_GROUP_USER) . " ug
-			LEFT JOIN " . Database::get_course_table(TABLE_GROUP) . " sg ON ug.group_id = sg.id
-			WHERE ug.user_id IN ('".implode("','", $user_ids)."')";
-
-		$res = api_sql_query($sql,__FILE__,__LINE__);
-
-	    while($group = mysql_fetch_object($res))
-	    	$users[''.$group->user_id][5] .= $group->name.'<br />';
-	}
-	else {
-		$columns = array();
-		if(api_is_allowed_to_edit())
-		{
-			$columns[] = 'u.user_id';
-		}
-		$columns[] = 'u.official_code';
-		$columns[] = 'u.lastname';
-		$columns[] = 'u.firstname';
-		$columns[] = '"Professor"';
-		$columns[] = "''"; //placeholder for group-data
-		if(api_is_allowed_to_edit())
-		{
-			$columns[] = "'".get_lang('Tutor')."'";
-			$columns[] = "'".get_lang('CourseManager')."'";
-		}
-		$columns[] = 'u.user_id';
-		/*$sql = "SELECT  ".implode(',',$columns)."
-               FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." c
-               WHERE `u`.`user_id`= c.`id_coach`
-               AND c.`course_code`='".$_SESSION['_course']['id']."'
-				AND c.id_session='".$_SESSION['id_session']."'";*/
-
-		/*$sql = "SELECT  ".implode(',',$columns)."
-               FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." c
-               WHERE `u`.`user_id`= c.`id_coach`
-               AND c.`course_code`='".$_SESSION['_course']['id']."'
-				";
-
-		$res = api_sql_query($sql, __FILE__, __LINE__);
-		$users = array ();
-		while ($user = mysql_fetch_row($res))
-		{
-			$users[''.$user[0]] = $user;
-			$user_ids[] = $user[0];
-		}
-		$columns = array();
-		if(api_is_allowed_to_edit())
-		{
-			$columns[] = 'u.user_id';
-		}
-		$columns[] = 'u.official_code';
-		$columns[] = 'u.lastname';
-		$columns[] = 'u.firstname';
-		$columns[] = '"Professor"';
-		$columns[] = "''"; //placeholder for group-data
-		if(api_is_allowed_to_edit())
-		{
-			$columns[] = "''";
-			$columns[] = "''";
-		}
-		$columns[] = 'u.user_id';
-		/*$sql = "SELECT  ".implode(',',$columns)."
-				FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." c
-               WHERE `u`.`user_id`= c.`id_user`
-               AND c.`course_code`='".$_SESSION['_course']['id']."'
-				AND c.id_session='".$_SESSION['id_session']."'";*/
-
-		/*$sql = "SELECT  ".implode(',',$columns)."
-				FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." c
-               WHERE `u`.`user_id`= c.`id_user`
-               AND c.`course_code`='".$_SESSION['_course']['id']."'
-				";
-
-		$res = api_sql_query($sql, __FILE__, __LINE__);
-
-		while ($user = mysql_fetch_row($res))
-		{
-			$users[''.$user[0]] = $user;
-			$user_ids[] = $user[0];
-		}
-
-		$sql = "SELECT ug.user_id, ug.group_id group_id, sg.name
-	                    FROM ".Database::get_course_table(TABLE_GROUP_USER)." ug
-	                    LEFT JOIN ".Database::get_course_table(TABLE_GROUP)." sg
-	                    ON ug.group_id = sg.id
-	                    WHERE ug.user_id IN ('".implode("','", $user_ids)."')";
-
-	    $res = api_sql_query($sql,__FILE__,__LINE__);
-	    while($group = mysql_fetch_object($res))
-	    {
-	    	$users[''.$group->user_id][5] .= $group->name.'<br />';
-	    }
-	}*/
 
 	return $users;
 }

@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 11052 2007-02-02 10:51:17Z elixir_julian $
+*  	@version $Id: work.php 11152 2007-02-19 23:25:44Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -98,11 +98,12 @@ if(isset($_GET['id_session']))
 	Including necessary files
 -----------------------------------------------------------
 */
-include('../inc/global.inc.php');
-include_once(api_get_path(LIBRARY_PATH) . "course.lib.php");
-include_once(api_get_path(LIBRARY_PATH) . "debug.lib.inc.php");
-include_once(api_get_path(LIBRARY_PATH) . "events.lib.inc.php");
-include_once('work.lib.php');
+require('../inc/global.inc.php');
+require_once(api_get_path(LIBRARY_PATH) . "course.lib.php");
+require_once(api_get_path(LIBRARY_PATH) . "debug.lib.inc.php");
+require_once(api_get_path(LIBRARY_PATH) . "events.lib.inc.php");
+require_once(api_get_path(LIBRARY_PATH) . "security.lib.php");
+require_once('work.lib.php');
 
 
 /*
@@ -147,23 +148,37 @@ $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $course_dir   = $sys_course_path.$_course['path'];
 $base_work_dir = $course_dir.'/work';
 $http_www = api_get_path('WEB_COURSE_PATH').$_course['path'].'/work';
-
+$cur_dir_path = '';
 if(isset($_GET['curdirpath']) && $_GET['curdirpath']!='')
 {
-	$cur_dir_path = preg_replace('#[\.]+/#','',$_GET['curdirpath']); //escape '..' hack attempts
+	//$cur_dir_path = preg_replace('#[\.]+/#','',$_GET['curdirpath']); //escape '..' hack attempts
+	//now using common security approach with security lib
+	$in_course = Security::check_abs_path($base_work_dir.'/'.$_GET['curdirpath'],$base_work_dir);
+	if(!$in_course)
+	{
+		$cur_dir_path="/";
+	}else{
+		$cur_dir_path = $_GET['curdirpath'];
+	}
 }
 elseif (isset($_POST['curdirpath']) && $_POST['curdirpath']!='')
 {
-	$cur_dir_path = preg_replace('#[\.]+/#','/',$_POST['curdirpath']); //escape '..' hack attempts
+	//$cur_dir_path = preg_replace('#[\.]+/#','/',$_POST['curdirpath']); //escape '..' hack attempts
+	//now using common security approach with security lib
+	$in_course = Security::check_abs_path($base_work_dir.'/'.$_POST['curdirpath'],$base_work_dir);
+	if(!$in_course)
+	{
+		$cur_dir_path="/";
+	}else{
+		$cur_dir_path = $_POST['curdirpath'];
+	}
 }
 else
 {
 	$cur_dir_path = '/';
 }
-
-if (!is_subdir_of($cur_dir_path,$base_work_dir) or ($cur_dir_path == '.'))
-{
-	$cur_dir_path='/';
+if($cur_dir_path == '.'){
+	$cur_dir_path = '/';
 }
 $cur_dir_path_url = urlencode($cur_dir_path);
 
@@ -866,7 +881,7 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 		{
 			//create the form that asks for the directory name
 			$new_folder_text = '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
-			$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'"/>';
+			$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$cur_dir_path.'"/>';
 			$new_folder_text .= get_lang('NewDir') .' ';
 			$new_folder_text .= '<input type="text" name="new_dir"/>';
 			$new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'"/>';

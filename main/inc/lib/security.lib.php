@@ -68,7 +68,7 @@ class Security{
 		}
 		$abs_path = $current_path.$rel_path;
 		$true_path = realpath($abs_path);
-		$found = strpos($true_path.'/',$checker_path,strlen($checker_path));
+		$found = strpos($true_path.'/',$checker_path);
 		if($found===0)
 		{
 			return true;
@@ -85,7 +85,7 @@ class Security{
 	{
 		if(empty($checker_path)){return false;} //checker path must be set
 		$true_path = realpath($abs_path);
-		$found = strpos($true_path.'/',$checker_path,strlen($checker_path));
+		$found = strpos($true_path.'/',$checker_path);
 		if($found===0)
 		{
 			return true;

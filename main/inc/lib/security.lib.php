@@ -131,19 +131,34 @@ class Security{
 	}
 	/**
 	 * This function sets a random token to be included in a form as a hidden field
-	 * and saves it into the user's session.
+	 * and saves it into the user's session. Returns an HTML form element
 	 * This later prevents Cross-Site Request Forgeries by checking that the user is really
 	 * the one that sent this form in knowingly (this form hasn't been generated from
 	 * another website visited by the user at the same time).
 	 * Check the token with check_token()
 	 * @return	string	Hidden-type input ready to insert into a form
 	 */
-	function get_token()
+	function get_HTML_token()
 	{
 		$token = md5(uniqid(rand(),TRUE));
 		$string = '<input type="hidden" name="sec_token" value="'.$token.'"/>';
 		$_SESSION['sec_token'] = $token;
 		return $string;
+	}
+	/**
+	 * This function sets a random token to be included in a form as a hidden field
+	 * and saves it into the user's session.
+	 * This later prevents Cross-Site Request Forgeries by checking that the user is really
+	 * the one that sent this form in knowingly (this form hasn't been generated from
+	 * another website visited by the user at the same time).
+	 * Check the token with check_token()
+	 * @return	string	Token
+	 */
+	function get_token()
+	{
+		$token = md5(uniqid(rand(),TRUE));
+		$_SESSION['sec_token'] = $token;
+		return $token;
 	}
 	/**
 	 * Gets the user agent in the session to later check it with check_ua() to prevent

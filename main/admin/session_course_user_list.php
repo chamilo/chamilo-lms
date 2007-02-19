@@ -1,22 +1,17 @@
 <?php
-// name of the language file that needs to be included 
 $language_file='admin';
 
 $cidReset=true;
 
 include('../inc/global.inc.php');
 
-// setting the section (for the tabs)
-$this_section=SECTION_PLATFORM_ADMIN;
-
 api_protect_admin_script();
 
-// Database Table Definitions
-$tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_user=Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course=Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_rel_course=Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_rel_course_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $id_session=intval($_GET['id_session']);
 $course_code=trim(stripslashes($_GET['course_code']));
@@ -34,7 +29,6 @@ if(!list($session_name,$course_title)=mysql_fetch_row($result))
 
 if($action == 'delete')
 {
-	$idChecked = $_POST['idChecked'];
 	if(is_array($idChecked))
 	{
 		$idChecked=implode(',',$idChecked);
@@ -46,6 +40,8 @@ if($action == 'delete')
 		api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
 	}
 
+	header('Location: '.$PHP_SELF.'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
+	exit();
 }
 
 $limit=20;
@@ -55,32 +51,80 @@ $result=api_sql_query("SELECT user_id,lastname,firstname,username FROM $tbl_sess
 
 $Users=api_store_result($result);
 
-$nbr_results=sizeof($Sessions);
+$nbr_results=sizeof($Users);
 
 $tool_name = "Liste des utilisateurs inscrits au cours &quot;".htmlentities($course_title)."&quot; pour la session &quot;".htmlentities($session_name)."&quot;";
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => "Liste des sessions");
-$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" => "Liste des cours de la session &quot;".htmlentities($session_name)."&quot;");
+$interbredcrump[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
+$interbredcrump[]=array("url" => "session_list.php","name" => "Liste des sessions");
+$interbredcrump[]=array("url" => "session_course_list.php?id_session=$id_session","name" => "Liste des cours de la session &quot;".htmlentities($session_name)."&quot;");
 
 Display::display_header($tool_name);
 
 api_display_tool_title($tool_name);
-
-$tableHeader = array();
-$tableHeader[] = array(' ');
-$tableHeader[] = array(get_lang('LastName'));
-$tableHeader[] = array(get_lang('FirstName'));
-$tableHeader[] = array(get_lang('LoginName'));
-$tableHeader[] = array(get_lang('Actions'));
-
 ?>
 
 <div id="main">
 
+<form method="post" action="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('Veuillez confirmer votre choix.')) return false;">
+
+<div align="right">
 
 <?php
-$tableUsers = array();
+if($page)
+{
+?>
+
+<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>">Précédent</a>
+
+<?php
+}
+else
+{
+?>
+
+Précédent
+
+<?php
+}
+?>
+
+|
+
+<?php
+if($nbr_results > $limit)
+{
+?>
+
+<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>">Suivant</a>
+
+<?php
+}
+else
+{
+?>
+
+Suivant
+
+<?php
+}
+?>
+
+</div>
+
+<br>
+
+<table class="data_table" width="100%">
+<tr>
+  <th>&nbsp;</th>
+  <th><a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname">Nom</a></th>
+  <th><a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname">Prénom</a></th>
+  <th><a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=username">Identifiant</a></th>
+  <th>Actions</th>
+</tr>
+
+<?php
+$i=0;
 
 foreach($Users as $key=>$enreg)
 {
@@ -88,25 +132,84 @@ foreach($Users as $key=>$enreg)
 	{
 		break;
 	}
-	$user = array();
-	$user[] = '<input type="checkbox" name="idChecked[]" value="'.$enreg['user_id'].'">';
-	$user[] = htmlentities($enreg['lastname']);
-	$user[] = htmlentities($enreg['firstname']);
-	$user[] = htmlentities($enreg['username']);
-	$user[] = '<a href="'.$PHP_SELF.'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('Confirm').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>';
-	$tableUsers[] = $user;
+?>
+
+<tr class="<?php echo $i?'row_odd':'row_even'; ?>">
+  <td><input type="checkbox" name="idChecked[]" value="<?php echo $enreg['user_id']; ?>"></td>
+  <td><?php echo htmlentities($enreg['lastname']); ?></td>
+  <td><?php echo htmlentities($enreg['firstname']); ?></td>
+  <td><?php echo htmlentities($enreg['username']); ?></td>
+  <td>
+	<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=delete&idChecked[]=<?php echo $enreg['user_id']; ?>" onclick="javascript:if(!confirm('Veuillez confirmer votre choix.')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
+  </td>
+</tr>
+
+<?php
+	$i=$i ? 0 : 1;
 }
-echo '<form method="post" action="'.$PHP_SELF.'">';
-Display :: display_sortable_table($tableHeader, $tableUsers, array (), array ());
 
-echo '
+unset($Users);
+?>
+
+</table>
+
+<br>
+
+<div align="left">
+
+<?php
+if($page)
+{
+?>
+
+<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>">Précédent</a>
+
+<?php
+}
+else
+{
+?>
+
+Précédent
+
+<?php
+}
+?>
+
+|
+
+<?php
+if($nbr_results > $limit)
+{
+?>
+
+<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>">Suivant</a>
+
+<?php
+}
+else
+{
+?>
+
+Suivant
+
+<?php
+}
+?>
+
+</div>
+
+<br>
+
 <select name="action">
-<option value="delete">'.get_lang('UnsubscribeUsersFromCourse').'</option>
+<option value="delete">Désinscrire de la session les utilisateurs sélectionnés</option>
 </select>
-<input type="submit" value="'.get_lang('Ok').'"></form>';
+<input type="submit" value="<?php echo get_lang('Ok'); ?>">
 
+</table>
 
-echo '</div>';
+</div>
 
+<?php
 Display::display_footer();
 ?>

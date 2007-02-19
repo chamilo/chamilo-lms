@@ -289,12 +289,15 @@ class Display {
 	* @author Roan Embrechts
 	* @param string $message - include any additional html
 	*                          tags if you need them
+	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	function display_normal_message($message)
+	function display_normal_message($message,$filter=true)
 	{
-		//filter message
-		$message = htmlentities($message);
+		if($filter){
+			//filter message
+			$message = htmlentities($message);
+		}
 		if (!headers_sent())
 		{
 			echo '
@@ -315,12 +318,15 @@ class Display {
 	*
 	* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	* @param string $message
+	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	function display_warning_message($message)
+	function display_warning_message($message,$filter=true)
 	{
-		//filter message
-		$message = htmlentities($message);
+		if($filter){
+			//filter message
+			$message = htmlentities($message);
+		}
 		if (!headers_sent())
 		{
 			echo '
@@ -340,12 +346,15 @@ class Display {
 	*
 	* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	* @param string $message
+	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	function display_confirmation_message($message)
+	function display_confirmation_message($message,$filter=true)
 	{
-		//filter message
-		$message = htmlentities($message);
+		if($filter){
+			//filter message
+			$message = htmlentities($message);
+		}
 		if (!headers_sent())
 		{
 			echo '
@@ -368,12 +377,15 @@ class Display {
 	* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	* @param string $message - include any additional html
 	*                          tags if you need them
+	* @param bool	Filter (true) or not (false)
 	* @return void
 	*/
-	function display_error_message($message)
+	function display_error_message($message,$filter=true)
 	{
-		//filter message
-		$message = htmlentities($message);
+		if($filter){
+			//filter message
+			$message = htmlentities($message);
+		}
 		if (!headers_sent())
 		{
 			echo '

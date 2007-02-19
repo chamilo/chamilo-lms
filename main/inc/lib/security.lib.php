@@ -63,7 +63,7 @@ class Security{
 	{
 		if(empty($checker_path)){return false;} //checker path must be set
 		$current_path = getcwd(); //no trailing slash
-		if(substr($rel_path,0,1)!='/'){
+		if(substr($rel_path,-1,1)!='/'){
 			$rel_path = '/'.$rel_path;
 		}
 		$abs_path = $current_path.$rel_path;

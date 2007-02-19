@@ -150,7 +150,7 @@ include('header_frame.inc.php');
 <input type="hidden" name="sent" value="1">
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td width="95%"><input type="text" name="message" size="50" value="" style="width: 300px">&nbsp;<input type="submit" value="OK"></td>
+  <td width="95%"><input type="text" name="message" value="" style="width: 500px">&nbsp;<input type="submit" value="OK"></td>
 </tr>
 </table>
 </form>

@@ -150,15 +150,6 @@ if($isMaster)
 	$rand=mt_rand(1,1000);
 ?>
 
-<br>
-
-<table border="0" cellpadding="0" cellspacing="0" width="90%" style="margin-left: 5px;">
-<tr>
-  <td width="1%" valign="middle"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?rand=<?php echo $rand; ?>&reset=1#bottom" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmReset'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('ClearList')); ?>"></a></td>
-  <td width="99%">&nbsp;<a href="<?php echo $_SERVER['PHP_SELF']; ?>?rand=<?php echo $rand; ?>&reset=1#bottom" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmReset'))); ?>')) return false;"><?php echo get_lang('ClearList'); ?></a></td>
-</tr>
-</table>
-
 <?php
 }
 

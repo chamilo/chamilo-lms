@@ -40,7 +40,9 @@
 */
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 // name of the language file that needs to be included 
-$language_file = "tracking";
+
+$language_file[] = 'tracking';
+$language_file[] = 'scorm';
 
 include('../inc/global.inc.php');
 //includes for SCORM and LP
@@ -218,7 +220,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         $sql = "SELECT visual_code FROM $TABLECOURSE WHERE code = '".$_cid."'";
         $_course['visual_code'] = getOneResult($sql);
 
-        echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000001'>".get_lang('ExportAsCSV')."</a>]";
+        echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000001'>".get_lang('ExportAsCSV')."</a>";
         if (is_array($results))
         {
         	
@@ -308,7 +310,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
                     WHERE course_code = '".$_cid."'";
         $count = getOneResult($sql);
         
-        echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=1000000'>".get_lang('ExportAsCSV')."</a>]";        
+        echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=1000000'>".get_lang('ExportAsCSV')."</a>";        
         echo '<table class="data_table">';
         
         echo "<tr><td class='secLine'>".get_lang('CountUsers')." : ".$count."</td></tr>";
@@ -329,7 +331,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     	
         $tempView[1] = '0';
                 
-        echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0100000'>".get_lang('ExportAsCSV')."</a>]";                
+        echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0100000'>".get_lang('ExportAsCSV')."</a>";                
         echo '<table class="data_table">';
         
         echo "<tr><td class='secLine'>".get_lang('ConnectionsToThisCourse')."</td></tr>";
@@ -419,7 +421,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 	if($view[2] == '1'){
 		
 	    $tempView[2] = '0';
-	    echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0010000'>".get_lang('ExportAsCSV')."</a>]";
+	    echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0010000'>".get_lang('ExportAsCSV')."</a>";
 	    echo '<table class="data_table">';
 	    
 	    echo "<tr>
@@ -479,7 +481,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
                     
 		$results = getManyResultsXCol($sql,4);
 		
-	    echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0001000'>".get_lang('ExportAsCSV')."</a>]";		
+	    echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0001000'>".get_lang('ExportAsCSV')."</a>";		
 		echo '<table class="data_table">';
 		
 		echo "<tr>
@@ -530,7 +532,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         
         $results = getManyResults3Col($sql);
         
-	    echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000100'>".get_lang('ExportAsCSV')."</a>]";
+	    echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000100'>".get_lang('ExportAsCSV')."</a>";
         echo '<table class="data_table">';
         
         echo "<tr>
@@ -580,7 +582,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 		
 	    $ar=Database::fetch_array($result);
 	    
-	    echo "[<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000010'>".get_lang('ExportAsCSV')."</a>]";
+	    echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000010'>".get_lang('ExportAsCSV')."</a>";
 	    echo '<table class="data_table">';
 	    
 	    echo "<tr>
@@ -672,8 +674,18 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 									require_once('../newscorm/learnpathItem.class.php');
 									$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
 									$title = htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
+									
+									$mylanglist = array(
+										'completed' => 'ScormCompstatus',
+										'incomplete'=> 'ScormIncomplete',
+										'failed'	=> 'ScormFailed',
+										'passed'	=> 'ScormPassed',
+										'browsed'	=> 'ScormBrowsed',
+										'not attempted' => 'ScormNotAttempted',
+									);
+									
 									echo "<tr><td>";
-									echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
+									echo "$title</td><td align=right>".get_lang($mylanglist[$ar3['status']])."</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
 									echo "</tr>";
 									$ar3=Database::fetch_array($result3);
 								}

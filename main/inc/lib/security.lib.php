@@ -61,13 +61,15 @@ class Security{
 	 */
 	function check_rel_path($rel_path,$checker_path)
 	{
+		if(empty($checker_path)){return false;} //checker path must be set
 		$current_path = getcwd(); //no trailing slash
 		if(substr($rel_path,0,1)!='/'){
 			$rel_path = '/'.$rel_path;
 		}
 		$abs_path = $current_path.$rel_path;
 		$true_path = realpath($abs_path);
-		if(strpos($true_path.'/',$checker_path)===0)
+		$found = strpos($true_path.'/',$checker_path,strlen($checker_path));
+		if($found===0)
 		{
 			return true;
 		}
@@ -81,8 +83,10 @@ class Security{
 	 */
 	function check_abs_path($abs_path,$checker_path)
 	{
+		if(empty($checker_path)){return false;} //checker path must be set
 		$true_path = realpath($abs_path);
-		if(strpos($true_path.'/',$checker_path)===0)
+		$found = strpos($true_path.'/',$checker_path,strlen($checker_path));
+		if($found===0)
 		{
 			return true;
 		}

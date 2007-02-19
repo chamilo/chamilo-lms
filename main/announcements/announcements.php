@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 11104 2007-02-13 09:21:38Z elixir_julian $
+<?php //$Id: announcements.php 11143 2007-02-19 11:01:17Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1338,7 +1338,7 @@ if ($message == true)
 				// the email icon
 				if ($myrow['email_sent'] == '1')
 				{
-					echo "\t\t\t\t\t\t<img alt=\"$alt_mail\" src='../img/email.png'>\n";
+					echo "\t\t\t\t\t\t<img alt=\"$alt_mail\" src='../img/email.gif'>\n";
 				}
 				echo "\t\t\t\t\t</td>\n";
 				/*==================================================================

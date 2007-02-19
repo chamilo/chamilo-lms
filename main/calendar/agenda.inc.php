@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 11086 2007-02-08 15:56:01Z elixir_julian $
+<?php //$Id: agenda.inc.php 11143 2007-02-19 11:01:17Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1027,7 +1027,7 @@ function change_visibility($tool,$id)
 */
 function display_courseadmin_links()
 {	
-	echo "<li><a href='".$_SERVER['PHP_SELF']."?action=add&amp;origin=".$_GET['origin']."'><img src=\"../img/calendar_add.gif\" align=\"absmiddle\" border=\"0\" /> ".get_lang("AgendaAdd")."</a><br /></li>";
+	echo "<li><a href='".$_SERVER['PHP_SELF']."?action=add&amp;origin=".$_GET['origin']."'><img src=\"../img/view_more_stats.gif\" align=\"absmiddle\" border=\"0\" /> ".get_lang("AgendaAdd")."</a><br /></li>";
 	if (empty ($_SESSION['toolgroup']))
 	{
 		echo "<li>".get_lang(UserGroupFilter)."<br/>";
@@ -1532,7 +1532,7 @@ function display_agenda_items()
 	echo "<tr class='row_even'>";
 	echo "<td colspan='2'>";
 
-	echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;"><img src="../img/print.png" border="0" title="'.htmlentities(get_lang('Print')).'" /></a>&nbsp;';
+	echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;"><img src="../img/print.gif" border="0" title="'.htmlentities(get_lang('Print')).'" /></a>&nbsp;';
 
 	echo $content;
 	echo "</td></tr>";

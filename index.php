@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 10919 2007-01-26 10:02:38Z bmol $
+* 	@version $Id: index.php 11164 2007-02-20 01:41:09Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -45,7 +45,7 @@ $cidReset = true;
 -----------------------------------------------------------
 */
 /** @todo make all the library files consistent use filename.lib.php and not filename.lib.inc.php */
-include_once ('./main/inc/global.inc.php');
+require_once ('./main/inc/global.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
@@ -185,7 +185,8 @@ else
 }
 
 // Including the page for the news
-if (!empty ($_GET['include']) && !strstr($_GET['include'], '/') && strstr($_GET['include'], '.html'))
+$page_included = false;
+if (!empty ($_GET['include']) && !strstr($_GET['include'], '/') && !strstr($_GET['include'], '\\') && strstr($_GET['include'], '.html'))
 {
 	include ('./home/'.$_GET['include']);
 	$page_included = true;
@@ -204,6 +205,7 @@ else
 
 // Display System announcements
 $announcement = $_GET['announcement'] ? $_GET['announcement'] : -1;
+$announcement = intval($announcement);
 SystemAnnouncementManager :: display_announcements(VISIBLE_GUEST, $announcement);
 
 // Display courses and category list
@@ -258,14 +260,15 @@ function logout()
 	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 	// selecting the last login of the user
-	$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_GET["uid"]."' ORDER BY login_date DESC LIMIT 0,1";
+	$uid = intval($_GET['uid']);
+	$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$uid' ORDER BY login_date DESC LIMIT 0,1";
 	$q_last_connection=mysql_query($sql_last_connection);
 	$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
 
 	$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 	api_sql_query($s_sql_update_logout_date);
 
-	LoginDelete($_GET["uid"], $_configuration['statistics_database']);
+	LoginDelete($uid, $_configuration['statistics_database']);
 
 	api_session_destroy();
 

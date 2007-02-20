@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 11159 2007-02-20 01:06:22Z yannoo $
+<?php // $Id: userLog.php 11160 2007-02-20 01:07:55Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -350,7 +350,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 		{
 			for($i = 0; $i < sizeof($hpresults); $i++)
 			{
-				$title = GetQuizName($hpresults[$i][0]);
+				$title = GetQuizName($hpresults[$i][0],'');
 
 				if ($title == '')
 					$title = GetFileName($hpresults[$i][0]);

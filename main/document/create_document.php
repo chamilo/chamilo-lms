@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 10989 2007-01-30 08:21:34Z elixir_julian $
+// $Id: create_document.php 11172 2007-02-20 11:09:30Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -55,6 +55,7 @@ $nameTools = get_lang('CreateDocument');
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '350';
 $fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['Config']['FullPage'] = true;
 
 /*
 -----------------------------------------------------------

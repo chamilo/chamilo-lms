@@ -150,6 +150,7 @@ $_SESSION['oLP']->message = ''; //should use ->clear_message() method but doesn'
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '400';
 $fck_attribute['ToolbarSet'] = 'Full';
+$fck_attribute['Config']['FullPage'] = true;
 
 if($_GET['isStudentView'] == 'true')
 	$_REQUEST['action'] = 'view';

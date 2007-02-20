@@ -54,7 +54,8 @@ require_once('../newscorm/scormItem.class.php');
 if ($_GET['scormcontopen'])
 {
 	$tbl_lp = Database::get_course_table('lp');
-	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$_GET['scormcontopen'];
+	$contopen = (int) $_GET['scormcontopen'];
+	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];

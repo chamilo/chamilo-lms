@@ -358,6 +358,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
 		$title = mysql_real_escape_string($title);
 		$content = mysql_real_escape_string($content);
+		$id = intval($id);
 		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
 		return api_sql_query($sql,__FILE__,__LINE__);
@@ -370,6 +371,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 	function delete_announcement($id)
 	{
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		$id = intval($id);
 		$sql = "DELETE FROM ".$db_table." WHERE id='".$id."'";
 		return api_sql_query($sql,__FILE__,__LINE__);
 	}
@@ -381,6 +383,7 @@ if (!checkdate($date_start[1], $date_start[2], $date_start[0]))
 	function get_announcement($id)
 	{
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		$id = intval($id);
 		$sql = "SELECT * FROM ".$db_table." WHERE id='".$id."'";
 		$announcement = mysql_fetch_object(api_sql_query($sql,__FILE__,__LINE__));
 		return $announcement;

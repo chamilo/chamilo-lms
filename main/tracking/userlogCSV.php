@@ -74,7 +74,8 @@ require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 if ($_GET['scormcontopen'])
 {
 	$tbl_lp = Database::get_course_table('lp');
-	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$_GET['scormcontopen'];
+	$contopen = (int) $_GET['scormcontopen'];
+	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];
@@ -280,7 +281,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 		{
 			for($i = 0; $i < sizeof($hpresults); $i++)
 			{
-				$title = GetQuizName($hpresults[$i][0], $documentPath);
+				$title = GetQuizName($hpresults[$i][0]);
 
 				if ($title == '')
 					$title = GetFileName($hpresults[$i][0]);

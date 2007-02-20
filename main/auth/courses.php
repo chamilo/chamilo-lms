@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 10216 2006-11-27 14:05:58Z pcool $
+<?php // $Id: courses.php 11166 2007-02-20 01:53:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -340,8 +340,8 @@ function browse_courses_in_category()
 
 
 	echo "<p><b>".get_lang('CoursesInCategory')."</b>";
-
-	$sql="SELECT * FROM $tbl_course WHERE category_code".(empty($_GET['category'])?" IS NULL":"='".$_GET['category']."'");
+	$my_category = (empty($_GET['category'])?" IS NULL":"='".mysql_real_escape_string($_GET['category'])."'");
+	$sql="SELECT * FROM $tbl_course WHERE category_code".$my_category;
 	$result=api_sql_query($sql);
 	while ($row=mysql_fetch_array($result))
 	{
@@ -496,7 +496,7 @@ function delete_course_category($id)
 	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
+	$id = intval($id);
 	$sql_delete="DELETE FROM `$TABLE_USER_COURSE_CATEGORY` WHERE id='".$id."' and user_id='".$_user['user_id']."'";
 	$sql_update="UPDATE $TABLECOURSUSER SET user_course_cat='0' WHERE user_course_cat='".$id."' AND user_id='".$_user['user_id']."'";
 	mysql_query($sql_delete) or die(mysql_error());
@@ -808,7 +808,7 @@ function get_user_course_category($id)
 
 	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
-
+	$id = intval($id);
 	$sql="SELECT * FROM `".$TABLE_USER_COURSE_CATEGORY."` WHERE user_id='".$_user['user_id']."' AND id='$id'";
 	$result=mysql_query($sql) or die(mysql_error());
 	$row=mysql_fetch_array($result);
@@ -1026,6 +1026,7 @@ function get_courses_of_user($user_id)
 	$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	// Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
+	$user_id = intval($user_id);
 	$sql_select_courses="SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
 								course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
 								course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat

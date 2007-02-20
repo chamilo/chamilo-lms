@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 11137 2007-02-16 23:16:58Z yannoo $
+// $Id: settings.php 11165 2007-02-20 01:44:40Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -77,7 +77,8 @@ if ($_GET['category'] and $_GET['category'] <> "Plugins" and $_GET['category'] <
 	$renderer = & $form->defaultRenderer();
 	$renderer->setHeaderTemplate('<div class="settingtitle">{header}</div>'."\n");
 	$renderer->setElementTemplate('<div class="settingcomment">{label}</div>'."\n".'<div class="settingvalue">{element}</div>'."\n");
-	$sqlsettings = "SELECT DISTINCT * FROM $table_settings_current WHERE category='".$_GET['category']."' GROUP BY variable ORDER BY id ASC";
+	$my_category = mysql_real_escape_string($_GET['category']);
+	$sqlsettings = "SELECT DISTINCT * FROM $table_settings_current WHERE category='$my_category' GROUP BY variable ORDER BY id ASC";
 	$resultsettings = api_sql_query($sqlsettings, __FILE__, __LINE__);
 	while ($row = mysql_fetch_array($resultsettings))
 	{
@@ -129,7 +130,7 @@ if ($_GET['category'] and $_GET['category'] <> "Plugins" and $_GET['category'] <
 		// the first step is to set all the variables that have type=checkbox of the category
 		// to false as the checkbox that is unchecked is not in the $_POST data and can
 		// therefore not be set to false
-		$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='".mysql_real_escape_string($_GET['category'])."' AND type='checkbox'";
+		$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='$my_category' AND type='checkbox'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		// Save the settings
 		foreach ($values as $key => $value)

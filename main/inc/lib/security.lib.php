@@ -102,16 +102,22 @@ class Security{
 	{
 		switch($array){
 			case 'get':
-				if(isset($_SESSION['sec_token']) && isset($_GET['sec_token']) && $_SESSION['sec_token'] === $_GET['sec_token']){
+				if(isset($_SESSION['sec_token']) && isset($_GET['sec_token']) && $_SESSION['sec_token'] === $_GET['sec_token'])
+				{
 					return true;
 				}
 				return false;
 			case 'post':
-				if(isset($_SESSION['sec_token']) && isset($_POST['sec_token']) && $_SESSION['sec_token'] === $_POST['sec_token']){
+				if(isset($_SESSION['sec_token']) && isset($_POST['sec_token']) && $_SESSION['sec_token'] === $_POST['sec_token'])
+				{
 					return true;
 				}				
 				return false;
 			default:
+				if(isset($_SESSION['sec_token']) && isset($array) && $_SESSION['sec_token'] === $array)
+				{
+					return true;
+				}
 				return false;
 		}
 		return false; //just in case, don't let anything slip

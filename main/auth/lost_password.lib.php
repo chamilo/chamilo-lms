@@ -1,5 +1,5 @@
 <?php
-// $Id: lost_password.lib.php 11113 2007-02-14 17:43:58Z elixir_inter $ 
+// $Id: lost_password.lib.php 11158 2007-02-20 00:58:00Z yannoo $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -100,6 +100,7 @@ function reset_password($secret, $id)
 {
 	global $your_password_has_been_reset,$userPasswordCrypted;
 	$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+	$id = (int) $id;
 	$sql = "SELECT user_id AS uid, lastname AS lastName, firstname AS firstName, username AS loginName, password, email FROM ".$tbl_user." WHERE user_id=$id";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	if ($result && mysql_num_rows($result))

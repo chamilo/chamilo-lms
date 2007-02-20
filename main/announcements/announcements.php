@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 11143 2007-02-19 11:01:17Z elixir_julian $
+<?php //$Id: announcements.php 11162 2007-02-20 01:14:49Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -403,7 +403,8 @@ if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announce
 		$display_form = true;
 
 		// RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
-		$sql="SELECT * FROM  $tbl_announcement WHERE id='".$_GET['id']."'";
+		$id = intval(addslashes($_GET['id']));
+		$sql="SELECT * FROM  $tbl_announcement WHERE id='$id'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		$myrow = mysql_fetch_array($result);
 
@@ -442,13 +443,13 @@ if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announce
 	*/
 	if ($_GET['down'])
 	{
-		$thisAnnouncementId = $_GET['down'];
+		$thisAnnouncementId = intval($_GET['down']);
 		$sortDirection = "DESC";
 	}
 
 	if ($_GET['up'])
 	{
-		$thisAnnouncementId = $_GET['up'];
+		$thisAnnouncementId = intval($_GET['up']);
 		$sortDirection = "ASC";
 	}
 
@@ -990,7 +991,7 @@ if ($message == true)
 
 		// DISPLAY ADD ANNOUNCEMENT COMMAND
 
-		echo "<form method=\"post\" name=\"f1\" action=\"".$_SERVER['PHP_SELF']."?publish_survey=$surveyid&id=$_GET[id]&db_name=$db_name&cidReq=$_GET[cidReq]&action=$_GET[action]\" style=\"margin:0px;\">\n";
+		echo "<form method=\"post\" name=\"f1\" action=\"".$_SERVER['PHP_SELF']."?publish_survey=$surveyid&id=".$_GET['id']."&db_name=$db_name&cidReq=".$_GET['cidReq']."&action=".$_GET['action']."\" style=\"margin:0px;\">\n";
 
 		//this variable defines if the course administrator can send a message to a specific user / group
 		// or not

@@ -1336,7 +1336,7 @@ function api_not_allowed()
 		$form->addElement('submit','submitAuth',get_lang('Ok'));
 		$test = $form->return_form();
 		echo '<div align="center">';
-		Display :: display_error_message("<p>Either you are not allowed here or your session has expired.<br/><br/>Please try to login again using the following form: <br/>".$test);
+		Display :: display_error_message("<p>Either you are not allowed here or your session has expired.<br/><br/>Please try to login again using the following form: <br/>".$test,false);
 		echo '</div>';
 		$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
 		Display::display_footer();
@@ -1344,7 +1344,7 @@ function api_not_allowed()
 	}else{
 		//if no course ID was included in the requested URL, redirect to homepage
 		echo '<div align="center">';
-		Display :: display_error_message('<p>Either you are not allowed here or your session has expired.<br/><br/><a href="'.$home_url.'">Please try to login again from the homepage</a><br/>');
+		Display :: display_error_message('<p>Either you are not allowed here or your session has expired.<br/><br/><a href="'.$home_url.'">Please try to login again from the homepage</a><br/>',false);
 		echo '</div>';
 		Display::display_footer();
 		die();

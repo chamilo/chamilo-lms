@@ -109,8 +109,8 @@ FCKConfig.ToolbarSets["Default"] = [
 
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;
-FCKConfig.Plugins.Add("Video", "en,it", sOtherPluginPath ) ;
-FCKConfig.Plugins.Add("MP3", "en,it", sOtherPluginPath ) ;
+FCKConfig.Plugins.Add("Video", "en", sOtherPluginPath ) ;
+FCKConfig.Plugins.Add("MP3", "en", sOtherPluginPath ) ;
 FCKConfig.Plugins.Add('ImageManager');
 
 FCKConfig.ToolbarSets["Basic"] = [

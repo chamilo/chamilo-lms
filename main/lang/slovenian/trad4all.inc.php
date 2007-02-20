@@ -405,4 +405,5 @@ $Vertical = "Navpièno";
 $DisplaySearchResults = "Prikaži rezultate iskanja";
 $DisplayAll = "Prikaži vse";
 $File_upload = "Prepis datoteke";
+$Percentage = "Odstotek";
 ?>

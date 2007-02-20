@@ -117,4 +117,6 @@ $AdvancedSettings = "Napredne nastavitve";
 $AdvancedSettings = "Napredne nastavitve";
 $File = "Datoteka";
 $DocDeleteError = "Napaka med brisanjem dokumenta";
+$ViModProb = "Med ažuriranjem vidnosti se je pojavil problem";
+$DirDeleted = "Mapa je bila odstranjena";
 ?>

@@ -33,4 +33,6 @@ $langChat_reset_by = "reset chat";
 $OrFile = "Or file";
 $langCallSent = "Chat call has been sent. Waiting for approval of your partner.";
 $langChatDenied = "Your call has been denied by your partner.";
+$Send = "Send";
+$Connected = "Connected";
 ?>

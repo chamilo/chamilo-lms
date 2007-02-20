@@ -101,7 +101,7 @@ $Wikipedia = "Encyclopédie en ligne gratuite";
 $DefaultGroupCategory = "Groupes par défaut";
 $DefaultCourseImages = "Gallerie";
 $ExampleForumCategory = "Example de catégorie";
-$ExampleForum = "Example de forum";
+$ExampleForum = "Exemple de forum";
 $ExampleThread = "Example de sujet";
 $ExampleThreadContent = "Example de contenu";
 ?>

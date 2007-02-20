@@ -154,4 +154,15 @@ $ConnectionsToThisCourse = "Povezav na ta teèaj";
 $StudentTutors = "Teèajnikovi uèitelji (coaches)";
 $StudentSessions = "Teèajnikove seje";
 $StudentCourses = "Teèajnikovi teèaji";
+$NoLearnpath = "Ni uènih poti";
+$Attempts = "Poskusov";
+$Correction = "Popravek";
+$NoExercise = "Ni vaj/testov";
+$LimitDate = "Rok";
+$SentDate = "Datum pošiljanja";
+$Annotate = "Pripiši";
+$Comments = "Komentarji";
+$DayOfDelay = "Dan zakasnitve";
+$NoProduction = "Ni produkcije";
+$NoComment = "Ni komentarja";
 ?>

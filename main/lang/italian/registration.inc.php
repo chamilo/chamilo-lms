@@ -160,4 +160,7 @@ $NeverExpires = "Senza data di scadenza";
 $On = "Il";
 $ExpirationDate = "Data di scadenza";
 $ActiveAccount = "Attiva l\'account";
+$YourAccountHasToBeApproved = "L\'iscrizione è in attesa di approvazione";
+$ApprovalForNewAccount = "Approvazione della nuova iscrizione";
+$ManageUser = "Gestione utenti";
 ?>

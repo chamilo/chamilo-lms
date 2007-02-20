@@ -63,4 +63,11 @@ $CourseSortingDone = "Razvršèanje teèajev konèano";
 $ExistingCourseCategories = "Obstojeèe kategorije teèajev";
 $YouAreNowUnsubscribed = "Sedaj si izpisan iz teèaja";
 $ViewOpenCourses = "Poglej odprte teèaje";
+$ErrorContactPlatformAdmin = "Pojavila se je neznana napaka. Prosimo, da kontaktirate upravitelja platforme.";
+$CourseRegistrationCodeIncorrect = "Koda teèaja ni pravilna";
+$CourseRequiresPassword = "Teèaj zahteva geslo";
+$SubmitRegistrationCode = "Izroèi registracijsk kodo";
+$CourseCategoryDeleted = "Kategorija taèaja je bila odstranjena";
+$CategorySortingDone = "Razvršèanje kategorije je konèano";
+$CourseCategoryEditStored = "Kategorija je bila ažurirana";
 ?>

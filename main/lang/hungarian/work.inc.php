@@ -30,4 +30,7 @@ $langDirCr = "Mappa létrehozása";
 $langCurrentDir = "Jelenlegi mappa";
 $UploadADocument = "Dokumentum feltöltése";
 $EditToolOptions = "Eszköz beállításai";
+$DocumentDeleted = "A dokumentum törölve";
+$SendMailBody = "A kurzusod egyik résztvev&#337;je beküldött egy hallgatói publikációt.";
+$DirDelete = "Könyvtár törlése";
 ?>

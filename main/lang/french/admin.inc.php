@@ -585,4 +585,15 @@ $AllSessions = "Toutes les sessions";
 $CodeDoesNotExists = "Ce code n\'existe pas";
 $UnknownUser = "Utilisateur inconnu";
 $UnknownStatus = "Statut inconnu";
+$SessionDeleted = "La session a bien été supprimée";
+$CourseDoesNotExist = "Ce cours n\'existe pas";
+$UserDoesNotExist = "Cet utilisateur n\'existe pas";
+$ButProblemsOccured = "mais des problèmes sont survenus";
+$UsernameTooLongWasCut = "Ce nom d\'utilisateur a été coupé";
+$NoInputFile = "Aucun fichier envoyé";
+$NoInputFile = "Aucun fichier envoyé";
+$StudentStatusWasGivenTo = "Le statut étudiant a été attribué à ";
+$WrongDate = "La date n\'a pas le bon format (yyyy-mm-dd)";
+$WrongDate = "La date n\'a pas le bon format (yyyy-mm-dd)";
+$DateStartMoreThanDateEnd = "La date de début est ultérieure à la date de fin";
 ?>

@@ -30,4 +30,6 @@ $langDirCr = "Directório criado";
 $langCurrentDir = "Directório actual";
 $UploadADocument = "Transferir documento";
 $EditToolOptions = "Editar opções desta ferramenta";
+$DocumentDeleted = "Documento apagado";
+$DirDelete = "Apagar directoria";
 ?>

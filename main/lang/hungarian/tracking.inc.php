@@ -153,4 +153,5 @@ $ConnectionsToThisCourse = "Kapcsolatok a kurzushoz";
 $StudentTutors = "A tanulók konzulensei";
 $StudentSessions = "A tanulók kurzusai";
 $StudentCourses = "Tanulók kurzusai";
+$Attempts = "Próbálkozások";
 ?>

@@ -33,4 +33,6 @@ $langChat_reset_by = "La discussion à été rafraichie par ";
 $OrFile = "Ou le fichier";
 $langCallSent = "Une demande de \"chat\" a été envoyée. En attente d\'approbation de la personne contactée.";
 $langChatDenied = "Votre appel a été refusé par la personne contactée.";
+$Send = "Envoyer";
+$Connected = "Connectés";
 ?>

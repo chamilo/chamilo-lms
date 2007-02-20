@@ -77,4 +77,5 @@ $Unlock = "Entsperren";
 $MoveThread = "Thema verschieben";
 $PostVisibilityChanged = "Sichtbarkeit der Nachricht wurde geändert";
 $PostDeleted = "Nachricht wurde gelöscht";
+$MakeInvisible = "Unsichtbar machen";
 ?>

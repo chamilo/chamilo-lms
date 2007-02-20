@@ -160,4 +160,7 @@ $NeverExpires = "Nikoli ne poteèe";
 $On = "Dne";
 $ExpirationDate = "Datum poteka";
 $ActiveAccount = "Aktiven raèun";
+$YourAccountHasToBeApproved = "Vaš raèun zahteva odobritev";
+$ApprovalForNewAccount = "Odobritev za nov raèun";
+$ManageUser = "Upravljaj uporabnika";
 ?>

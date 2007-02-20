@@ -402,4 +402,5 @@ $Horizontal = "Horizontaal";
 $Vertical = "Vertikaal";
 $DisplaySearchResults = "Zoekresultaten weergeven";
 $DisplayAll = "Alles weergeven";
+$Percentage = "Percentage";
 ?>

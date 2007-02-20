@@ -158,4 +158,7 @@ $NeverExpires = "Läuft nie ab";
 $On = "An";
 $ExpirationDate = "Ablaufdatum";
 $ActiveAccount = "Aktiver Account";
+$YourAccountHasToBeApproved = "Der Account muss genehmigt werden";
+$ApprovalForNewAccount = "Genehmigung für neuen Account";
+$ManageUser = "Benutzer verwalten";
 ?>

@@ -117,4 +117,6 @@ $AdvancedSettings = "Configurações avançadas";
 $AdvancedSettings = "Configurações avançadas";
 $File = "Ficheiro";
 $DocDeleteError = "Ocorreu um erro durante a supressão do documento";
+$ViModProb = "Ocorreu um problema durante a actualização da visibilidade";
+$DirDeleted = "Directoria apagada";
 ?>

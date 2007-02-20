@@ -30,4 +30,7 @@ $langDirCr = "Verzeichnis erstellen";
 $langCurrentDir = "aktuelles Verzeichnis";
 $UploadADocument = "Upload eines Dokuments ";
 $EditToolOptions = "Optionen zum Editieren von Werkzeugen";
+$DocumentDeleted = "Dokument wurde gelöscht";
+$SendMailBody = "Ein Benutzer hat ein Dokument im Aufgaben Tool Deines Kurses veröffentlicht";
+$DirDelete = "Verzeichnis wurde gelöscht";
 ?>

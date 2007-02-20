@@ -165,4 +165,7 @@ $NeverExpires = "Nunca expira";
 $On = "a";
 $ExpirationDate = "Data de expiração";
 $ActiveAccount = "Activação de conta";
+$YourAccountHasToBeApproved = "O seu registo tem de ser aprovado";
+$ApprovalForNewAccount = "Aprovação para um novo registo";
+$ManageUser = "Gerir utilizador";
 ?>

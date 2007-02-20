@@ -8,7 +8,7 @@ $Description = "Beschreibung";
 $Links = "Links";
 $Forums = "Foren";
 $langExercices = "Übungen";
-$name = "Name";
+$Name = "Name";
 $langComment = "Kommentar";
 $langVisible = "sichtbar/unsichtbar";
 $Download = "Hochladen";
@@ -404,4 +404,6 @@ $Horizontal = "horizontal";
 $Vertical = "vertikal";
 $DisplaySearchResults = "Suchergebnisse anzeigen";
 $DisplayAll = "Alle anzeigen";
+$File_upload = "Datei hochladen";
+$Percentage = "Prozentsatz";
 ?>

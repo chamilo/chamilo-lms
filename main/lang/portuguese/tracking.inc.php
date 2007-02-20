@@ -154,4 +154,15 @@ $ConnectionsToThisCourse = "Conexões a este curso";
 $StudentTutors = "Professores do estudante";
 $StudentSessions = "Sessões do estudante";
 $StudentCourses = "Cursos do estudante";
+$NoLearnpath = "Não existem Sequências de Aprendizagem";
+$Attempts = "Tentativas";
+$Correction = "Correcção";
+$NoExercise = "Não existem exercícios";
+$LimitDate = "Data limite";
+$SentDate = "Data de envio";
+$Annotate = "Anotação";
+$Comments = "Comentários";
+$DayOfDelay = "Dia(s) de atraso";
+$NoProduction = "Sem produção";
+$NoComment = "Sem comentários";
 ?>

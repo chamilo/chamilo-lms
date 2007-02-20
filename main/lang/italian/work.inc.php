@@ -30,4 +30,7 @@ $langDirCr = "Crea una cartella";
 $langCurrentDir = "Cartella in uso";
 $UploadADocument = "Carica un documento";
 $EditToolOptions = "Modifica le opzioni";
+$DocumentDeleted = "Documento eliminato";
+$SendMailBody = "Un utente ha inviato un documento nella sezione Elaborati del tuo corso";
+$DirDelete = "Elimina la cartella";
 ?>

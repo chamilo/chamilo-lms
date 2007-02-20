@@ -117,4 +117,6 @@ $AdvancedSettings = "Configurazione avanzata";
 $AdvancedSettings = "Configurazione avanzata";
 $File = "File";
 $DocDeleteError = "Errore nel corso dell\'eliminazione del documento";
+$ViModProb = "Ci sono stati problemi nel cambiare la visibilità";
+$DirDeleted = "Cartella eliminata";
 ?>

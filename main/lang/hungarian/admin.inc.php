@@ -209,6 +209,7 @@ $langStudent = "Diák";
 $Guest = "Vendég";
 $langLoginAsThisUserColumnName = "Belépés, mint";
 $langLoginAsThisUser = "Belépés";
+$SelectPicture = "Kép kiválasztása...";
 $DontResetPassword = "Ne módosítsa a jelszót";
 $ParticipateInCommunityDevelopment = "Résztvesz a fejlesztésben";
 $langCourseAdmin = "Kurzus adminisztrátor";

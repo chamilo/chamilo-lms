@@ -584,4 +584,15 @@ $AllSessions = "All the sessions";
 $CodeDoesNotExists = "This code does not exist";
 $UnknownUser = "Unknown user";
 $UnknownStatus = "Unknown status";
+$SessionDeleted = "The session has been deleted";
+$CourseDoesNotExist = "This course doesn\'t exist";
+$UserDoesNotExist = "This user doesn\'t exist";
+$ButProblemsOccured = "but problems occured";
+$UsernameTooLongWasCut = "This username was cut";
+$NoInputFile = "No file was sent";
+$NoInputFile = "No file was sent";
+$StudentStatusWasGivenTo = "Student status has been given to";
+$WrongDate = "Wrong date format (yyyy-mm-dd)";
+$WrongDate = "Wrong date format (yyyy-mm-dd)";
+$DateStartMoreThanDateEnd = "Start date is more than end date";
 ?>

@@ -186,7 +186,7 @@ $Today = "today";
 $langCourseHomepageLink = "Course Home";
 $Description = "Description";
 $Attachment = "attachment";
-$User = "User";
+$User = "Users";
 $MondayInit = "M";
 $TuesdayInit = "T";
 $WednesdayInit = "W";
@@ -405,4 +405,5 @@ $Vertical = "Vertical";
 $DisplaySearchResults = "Display search results";
 $DisplayAll = "Display all";
 $File_upload = "File upload";
+$Percentage = "Percentage";
 ?>

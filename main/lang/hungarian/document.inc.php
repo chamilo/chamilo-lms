@@ -117,4 +117,5 @@ $AdvancedSettings = "Haladó beállítások";
 $AdvancedSettings = "Haladó beállítások";
 $File = "Állomány";
 $DocDeleteError = "Hiba történt a dokumentum törlése során";
+$DirDeleted = "Könyvtár törölve";
 ?>

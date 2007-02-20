@@ -134,4 +134,11 @@ $SurveyDeleted = "Vprašalnik je bil odstranjen.";
 $NoSurveysSelected = "Noben vprašalnik ni bil izbran.";
 $NumberOfQuestions = "Število vprašanj";
 $Invite = "Povabi";
+$NumberOfQuestions = "Število vprašanj";
+$SubmitQuestionFilter = "Uveljavi filter";
+$ResetQuestionFilter = "Razveljavi filter";
+$SelectUser = "Izberi uporabnika";
+$NextQuestion = "Naslednje vprašanje";
+$PreviousQuestion = "Predhodno vprašanje";
+$AdditonalUsers = "Dodatni uporabniki";
 ?>

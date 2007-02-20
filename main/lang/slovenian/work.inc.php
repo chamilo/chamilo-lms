@@ -30,4 +30,7 @@ $langDirCr = "Ustvari mapo";
 $langCurrentDir = "trenutna mapa";
 $UploadADocument = "Prenesi dokument";
 $EditToolOptions = "Opcije orodja Uredi";
+$DocumentDeleted = "Dokument je bil odstranjen";
+$SendMailBody = "Uporabnik je prepisal dokument v objave teajnikov tvojega teèaja.";
+$DirDelete = "Odstrani mapo";
 ?>

@@ -149,6 +149,7 @@ $langPlatform = "Platform";
 $localLangName = "magyar";
 $Statistics = "Statisztikák";
 $langPrevious = "el&#337;z&#337;";
+$DestDirectoryDoesntExist = "A célkönyvtár nem létezik";
 $Courses = "kurzusok";
 $In = "itt:";
 $langShowAll = "Mutasd mindet";
@@ -403,4 +404,6 @@ $Horizontal = "Vízszintes";
 $Vertical = "Függ&#337;leges";
 $DisplaySearchResults = "Keresési eredmények megtekintése";
 $DisplayAll = "Mind megtekintése";
+$File_upload = "Állomány feltöltése";
+$Percentage = "Százalék";
 ?>

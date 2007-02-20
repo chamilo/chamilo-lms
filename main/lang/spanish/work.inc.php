@@ -30,4 +30,7 @@ $langDirCr = "Crear directorio";
 $langCurrentDir = "carpeta actual";
 $UploadADocument = "Enviar un documento";
 $EditToolOptions = "Editar las opciones de las herramientas";
+$DocumentDeleted = "Documento borrado";
+$SendMailBody = "Un usuario ha publicado un documento en la herramienta trabajos de su curso.";
+$DirDelete = "Borrar el directorio";
 ?>

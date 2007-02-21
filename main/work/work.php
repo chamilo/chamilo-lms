@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 11152 2007-02-19 23:25:44Z yannoo $
+*  	@version $Id: work.php 11180 2007-02-21 14:24:39Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -473,7 +473,7 @@ if (api_is_allowed_to_edit())
 	if(!empty($_REQUEST['move']))
 	{
 		$folders = get_subdirs_list($base_work_dir,1);
-		Display::display_normal_message(build_move_to_selector($folders,$cur_dir_path,$_REQUEST['move']));
+		Display::display_normal_message(build_move_to_selector($folders,$cur_dir_path,$_REQUEST['move']),false);
 	}
 	/* ------------------
 	 * Move file command
@@ -781,7 +781,7 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 	if(!$Id) { $Id = $insertId; }
     event_upload($Id);
 	$submit_success_message	= $message . "<br />\n";
-	Display::display_normal_message($submit_success_message);
+	Display::display_normal_message($submit_success_message,false);
 }
 
 //{

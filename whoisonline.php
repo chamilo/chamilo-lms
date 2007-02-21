@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 11167 2007-02-20 02:03:42Z yannoo $
+<?php // $Id: whoisonline.php 11180 2007-02-21 14:24:39Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -109,7 +109,7 @@ function display_user_list($user_list, $_plugins)
 		}
 		$table_header[] = array(get_lang('UserPicture'),true,'width="50"');
 		$table_header[] = array(get_lang('FirstName'),true);
-		$table_header[] = array(get_lang('Lastname'),true);
+		$table_header[] = array(get_lang('LastName'),true);
 		if (api_get_setting("show_email_addresses") == "true")
 		{
 			$table_header[] = array(get_lang('Email'),true);

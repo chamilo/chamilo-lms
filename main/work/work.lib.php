@@ -72,17 +72,14 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 	if (! $is_allowed_to_edit) return;
-
-	echo	"<table cellpadding=\"5\" cellspacing=\"2\" border=\"0\">\n";
-
-	echo	"<tr>\n",
-			"<td colspan=\"2\">\n",
-
-			"<table cellspacing=\"0\" cellpadding=\"5\" border=\"1\" bordercolor\"gray\">\n",
-			"<tr>\n",
+	
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&display_tool_options=true"; ">';
+	
+	echo	"<br><table class=\"data_table\">\n",
+			"<tr><th>&nbsp;</th><th>".get_lang("Modify")."</th></tr><tr class=\"row_even\">\n",
 			"<td>",
-			get_lang('AllFiles')." : ",
-			"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&origin=$origin&delete=all\" ",
+			get_lang('AllFiles')." : </td>",
+			"<td><a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&origin=$origin&delete=all&display_tool_options=true\" ",
 			"onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">",
 			"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" align=\"absmiddle\">",
 			"</a>",
@@ -97,13 +94,13 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 
 		if ($columnStatus['Default'] == 1)
 		{
-			echo	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&origin=$origin&make_invisible=all\">",
+			echo	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&origin=$origin&make_invisible=all&display_tool_options=true\">",
 					"<img src=\"../img/visible.gif\" border=\"0\" alt=\"".get_lang('Invisible')."\" align=\"absmiddle\">",
 					"</a>\n";
 		}
 		else
 		{
-			echo	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&origin=$origin&make_visible=all\">",
+			echo	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&origin=$origin&make_visible=all&display_tool_options=true\">",
 					"<img src=\"../img/invisible.gif\" border=\"0\" alt=\"".get_lang('Visible')."\" align=\"absmiddle\">",
 					"</a>\n";
 		}
@@ -111,10 +108,15 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 
 	echo "</td></tr>";
 
-	display_default_visibility_form($uploadvisibledisabled, $origin);
+	display_default_visibility_form($uploadvisibledisabled);
 
 	echo '</table>';
-	echo '</td></tr><tr><td>';
+	
+	echo '<div>'.get_lang("ValidateChanges").' : <input type="submit" name="changeProperties" value="'.get_lang("Ok").'"></div></form>';
+	
+	echo	"<br><table cellpadding=\"5\" cellspacing=\"2\" border=\"0\">\n";
+
+	
 	/*
 	==============================================================================
 			Display directories list
@@ -147,21 +149,18 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 * @param $uploadvisibledisabled
 * @param $origin
 */
-function display_default_visibility_form($uploadvisibledisabled, $origin)
+function display_default_visibility_form($uploadvisibledisabled)
 {
 	?>
-	<form method="post" action="<?php echo $_SERVER['PHP_SELF']."?origin=$origin"; ?>">
-	<tr><td align="left">
-		<strong><?php echo get_lang("_default_upload"); ?><br /></strong>
-		<input class="checkbox" type="radio" name="uploadvisibledisabled" value="0"
+	<tr class="row_odd"><td align="left">
+		<strong><?php echo get_lang("_default_upload"); ?></strong></td>
+		<td><input class="checkbox" type="radio" name="uploadvisibledisabled" value="0"
 			<?php if($uploadvisibledisabled==0) echo "checked";  ?>>
 		<?php echo get_lang("_new_visible");?><br />
 		<input class="checkbox" type="radio" name="uploadvisibledisabled" value="1"
 			<?php if($uploadvisibledisabled==1) echo "checked";  ?>>
 		<?php echo get_lang("_new_unvisible"); ?><br />
-		<input type="submit" name="changeProperties" value="<?php echo get_lang("Ok"); ?>">
 	</td></tr>
-	</form>
 	<?php
 }
 
@@ -253,7 +252,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$class = '';
 			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));
 			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.api_get_course_id().
-				'&curdirpath='.$mydir.'"'.$class.'><img src="../img/dossier.gif" alt="dir" height="20" width="20" valign="bottom"/>'.$dir.'</a>';
+				'&curdirpath='.$mydir.'"'.$class.'><img src="../img/folder_document.gif" alt="dir" height="20" width="20" align="absbottom"/>&nbsp;'.$dir.'</a>';
 			$row[] = '';
 			$row[] = '';
 			$row[] = '';

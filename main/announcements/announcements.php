@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 11162 2007-02-20 01:14:49Z yannoo $
+<?php //$Id: announcements.php 11181 2007-02-21 15:24:19Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -711,7 +711,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 									api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
 	                            }
 	                            else{
-									$mail_body = $myrow["lastname"]." ".$myrow["firstname"]." <".$myrow["email"]."><br /> \n\n".stripslashes($emailTitle)."<br />".trim(stripslashes($newContentsix))." <br /><br />-- <br />";
+									$mail_body = $myrow["lastname"]." ".$myrow["firstname"]." <".$myrow["email"]."><br /> \n\n".stripslashes($emailTitle)."<br />".trim(stripslashes($newContent))." <br /><br />-- <br />";
 									$mail_body .= $_user['firstName'].' '.$_user['lastName']." ";
 									$mail_body .= "<".$_user['mail'].">\n";
 									$mail_body .= $_course['official_code'].' '.$_course['name'];

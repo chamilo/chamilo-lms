@@ -153,6 +153,12 @@ if(isset($_POST['activeExtension'])){
 					WHERE variable="service_ppt2lp"
 					AND subkey="path_to_lzx"';
 			api_sql_query($sql, __FILE__, __LINE__);
+			
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['size']).'"
+					WHERE variable="service_ppt2lp"
+					AND subkey="size"';
+			api_sql_query($sql, __FILE__, __LINE__);
 				
 			break;		
 	}
@@ -325,6 +331,14 @@ Display::display_header($nameTool);
 						$form -> addElement('text', 'ftp_password', get_lang('FtpPassword'));
 						$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'path_to_lzx', get_lang('PathToLzx'));
+						$form -> addElement('html','<br /><br />');
+						$options = array(
+									'540x405'=>'540x405',
+									'640x480'=>'640x480',
+									'800x600'=>'800x600',
+									'1000x750'=>'1000x750'
+									);
+						$form -> addElement('select', 'size', get_lang('SlideSize'), $options);
 						$form -> addElement('hidden', 'extension_code', 'ppt2lp');
 						
 						$defaults = array();

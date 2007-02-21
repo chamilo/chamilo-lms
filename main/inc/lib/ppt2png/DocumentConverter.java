@@ -49,20 +49,25 @@ public class DocumentConverter {
 	public static void main(String args[]) {
 		
 		String cnx, ftpuser, host, port, url, ftpPasswd, destinationFolder, remoteFolderFullPath, remoteFolder;
+		int width, height;
 		
-		try {
+		try {			
 			host = args[0];
 			port = args[1];
 			url = args[2];
 			destinationFolder = args[3];
-			if(args.length == 6){
-				ftpuser = args[4];
-				ftpPasswd = args[5];
+			width = Integer.parseInt(args[4]);
+			height = Integer.parseInt(args[5]);
+			if(args.length == 8){
+				ftpuser = args[6];
+				ftpPasswd = args[7];
 			}
 			else{
 				ftpuser = "";
 				ftpPasswd = "";
 			}
+			
+			
 			if(host.equals("localhost")){
 				String prefix = "file://";
 				if(url.charAt(0)!='/')
@@ -185,9 +190,9 @@ public class DocumentConverter {
 					}
 					
 					filterDatas[0].Name = "PixelWidth";
-					filterDatas[0].Value = new Integer(540);
+					filterDatas[0].Value = new Integer(width);
 					filterDatas[1].Name = "PixelHeight";
-					filterDatas[1].Value = new Integer(405);
+					filterDatas[1].Value = new Integer(height);
 					filterDatas[2].Name = "LogicalWidth";
 					filterDatas[2].Value = new Integer(2000);
 					filterDatas[3].Name = "LogicalHeight";

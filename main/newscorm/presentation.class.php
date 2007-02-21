@@ -78,15 +78,15 @@ class presentation extends learnpath {
 		{
 			$classpath = str_replace(':',';',$classpath);
 		}
-		
+		list($slide_width, $slide_height) = explode('x',api_get_setting('service_ppt2lp','size'));
 		
 		if(strpos($_ENV['OS'],'Windows') !== false)
-		{			
-			$cmd = 'cd '.str_replace('/','\\',api_get_path(SYS_PATH)).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
+		{
+			$cmd = 'cd '.str_replace('/','\\',api_get_path(SYS_PATH)).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.$slide_width.' '.$slide_height.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
 		}
 		else
 		{
-			$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
+			$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.$slide_width.' '.$slide_height.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
 		}
 		chmod ($base_work_dir.$created_dir,0777);
 		
@@ -108,16 +108,27 @@ class presentation extends learnpath {
 			$first_item = 0;
 			foreach($files as $file){
 				$i++;
-				$document_id = add_document($_course,$created_dir.'/'.$file,'file',filesize($base_work_dir.$created_dir.'/'.$file),$file);
-				if ($document_id){
+				
+				// create an html file
+				$html_file = $file.'.html';
+				$fp = fopen($base_work_dir.$created_dir.'/'.$html_file, 'w+');
+				
+				fwrite($fp,
+						'<html>
+						<head></head>
+						<body>
+							<img src="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$created_dir.'/'.$file.'" />
+						</body>
+						</html>');
+				fclose($fp);
+				$document_id = add_document($_course,$created_dir.'/'.$html_file,'file',filesize($base_work_dir.$created_dir.'/'.$html_file),$html_file);
+				if ($document_id){	
+								
 					//put the document in item_property update
 					api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],$to_group_id,$to_user_id);
 					
 					$infos = pathinfo($file);
-					//$slide_name = substr($infos['basename'],0,strpos($infos['basename'],'.'));
-					
 					$slide_name = 'slide'.str_repeat('0',2-strlen($i)).$i;
-					
 					$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
 					if($first_item == 0){
 						$first_item = $previous;

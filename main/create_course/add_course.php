@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 11050 2007-02-02 10:48:43Z elixir_julian $
+// $Id: add_course.php 11193 2007-02-22 13:51:17Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -128,7 +128,7 @@ if($form->validate())
 	$message .= " <strong>".$course_values['wanted_code']."</strong>";
 	$message .= "<br/><br/>";
 	$message .= '<a href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
-	Display :: display_normal_message($message);
+	Display :: display_normal_message($message,false);
 }
 else
 {

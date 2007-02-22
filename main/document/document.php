@@ -1,4 +1,4 @@
-<?php // $Id: document.php 11102 2007-02-12 15:36:36Z elixir_julian $
+<?php // $Id: document.php 11193 2007-02-22 13:51:17Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -413,7 +413,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'" />';
 		$new_folder_text .= '</form>';
 		//show the form
-		Display::display_normal_message($new_folder_text);
+		Display::display_normal_message($new_folder_text,false);
 	}
 
 

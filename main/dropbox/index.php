@@ -497,8 +497,6 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 			$dropbox_file_data[]=$dropbox_file->last_upload_date;
 			foreach ($dropbox_file->recipients as $recipient)
 			{
-				//print_r($recipient);
-				//echo '<br />';
 				$receivers_celldata=display_user_link($recipient['user_id'], $recipient['name']).', '.$receivers_celldata;
 			}
 			$dropbox_file_data[]=$receivers_celldata;

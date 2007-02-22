@@ -521,7 +521,7 @@ function display_add_form()
 				<?php echo dropbox_lang("authors")?>:
 			</td>
 			<td>
-				<input type="text" name="authors" value="<?php echo getUserNameFromId($_user['user_id'])?>" size="32" />
+				<input type="text" name="authors" value="<?php echo getUserNameFromId($_user['user_id'])?>" size="32" style="width: 350px;" />
 			</td>
 		</tr>
 		<tr>
@@ -529,7 +529,7 @@ function display_add_form()
 				<?php echo dropbox_lang("description")?>:
 			</td>
 			<td>
-				<textarea name="description" cols="24" rows="2"></textarea>
+				<textarea name="description" cols="24" rows="2" style="width: 350px;"></textarea>
 			</td>
 		</tr>
 		<tr>
@@ -541,13 +541,13 @@ function display_add_form()
 	<?php
 		if ( $dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
 		{
-			echo 5;
+			echo 10;
 		}
 		else
 		{
-			echo 3;
+			echo 6;
 		}
-	?>" multiple style="width: 220px;">
+	?>" multiple style="width: 350px;">
 	<?php
 
 	//list of all users in this course and all virtual courses combined with it
@@ -1021,7 +1021,7 @@ function format_feedback($feedback)
 
 	$output.='<strong>'.get_lang('Date').'</strong>: '.$feedback['feedback_date'].'<br />';
 	$output.='<strong>'.get_lang('Author').'</strong>: '.display_user_link($feedback['author_user_id']).'<br />';
-	$output.='<strong>'.get_lang('Text').'</strong>: '.$feedback['feedback'].'<hr size="1" noshade/>';
+	$output.='<strong>'.get_lang('Text').'</strong>: '.nl2br($feedback['feedback']).'<hr size="1" noshade/>';
 	return $output;
 }
 
@@ -1045,7 +1045,7 @@ function feedback_form()
 	$number_users_who_see_file=mysql_num_rows($result);
 	if ($number_users_who_see_file>1)
 	{
-		$return .= '<textarea name="feedback"></textarea><br /><input type="submit" name="store_feedback" value="Submit">';
+		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><input type="submit" name="store_feedback" value="Submit">';
 	}
 	else
 	{

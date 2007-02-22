@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 11113 2007-02-14 17:43:58Z elixir_inter $
+* 	@version $Id: exercice.php 11197 2007-02-22 16:03:42Z elixir_julian $
 */
 
 
@@ -671,13 +671,11 @@ if($show == 'test'){
 if($_configuration['tracking_enabled'])
 {
 	?>
-<br>
-<br>
  <h3><?php
  //add link to breadcrumb
  //$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('StudentScore'));
 
- echo $is_allowedToEdit?get_lang('StudentResults'):get_lang('YourResults'); ?></h3>
+ //echo $is_allowedToEdit?get_lang('StudentResults'):get_lang('YourResults'); ?></h3>
 
 	<?php
 	if($show == 'result'){
@@ -925,7 +923,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 		<?php
 	}else{
 
-		echo '<p><img src="'.api_get_path(WEB_IMG_PATH).'show_test_results.gif" align="absbottom">&nbsp;<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.get_lang("Show").' &gt;&gt;</a></p>';
+		echo '<p><img src="'.api_get_path(WEB_IMG_PATH).'show_test_results.gif" align="absbottom">&nbsp;<a href="'.api_add_url_param($_SERVER['REQUEST_URI'],'show=result').'">'.get_lang("Results").' &gt;&gt;</a></p>';
 
 	}// end if($show == 'result')
 

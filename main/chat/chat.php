@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 11141 2007-02-19 09:00:55Z elixir_julian $
+<?php // $Id: chat.php 11196 2007-02-22 15:44:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -51,11 +51,11 @@ event_access_tool(TOOL_CHAT);
 
 ?>
 
-<frameset rows="115,*,125" border="0" frameborder="0" framespacing="1">
+<frameset rows="115,*,130" border="0" frameborder="0" framespacing="1">
 	<frame src="chat_banner.php" name="chat_banner" scrolling="no">
 	<frameset cols="200,*,0" border="1" frameborder="1" framespacing="1">
 		<frame src="chat_whoisonline.php" name="chat_whoisonline" scrolling="auto">
-		<frameset rows="75,7" border="1" frameborder="1" framespacing="1">
+		<frameset rows="75,15" border="1" frameborder="1" framespacing="1">
 			<frame src="chat_chat.php?origin=<?php echo $_GET["origin"]; ?>&target=<?php echo $_GET["target"]; ?>" name="chat_chat" scrolling="auto">
 			<frame src="chat_message.php" name="chat_message" scrolling="no">
 		</frameset>

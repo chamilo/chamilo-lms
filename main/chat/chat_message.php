@@ -61,7 +61,7 @@ $question = $_REQUEST['question'];
 		MAIN CODE
 ==============================================================================
 */
-$query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
+$query="SELECT lastname, firstname, username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=api_sql_query($query,__FILE__,__LINE__);
 
 list($pseudoUser)=mysql_fetch_row($result);
@@ -69,10 +69,8 @@ list($pseudoUser)=mysql_fetch_row($result);
 $isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 $isMaster=$is_courseAdmin?true:false;
 
-/*if(!$isAllowed)
-{
-	exit();
-}*/
+$firstname=mysql_result($result,0,'firstname');
+$lastname=mysql_result($result,0,'lastname');
 
 $dateNow=date('Y-m-d');
 
@@ -101,7 +99,7 @@ $chat_size=0;
 if($sent)
 {
 	$message=trim(htmlspecialchars(stripslashes($_POST['message'])));
-
+	
 	if(!empty($message))
 	{
 		$message=make_clickable($message);
@@ -127,11 +125,11 @@ if($sent)
 
 		if($isMaster)
 		{
-			fputs($fp,"<span class=\"master\"><b>$pseudoUser</b></span> : $message\n");
+			fputs($fp,"<span style='color: #00F;'><b>$firstname $lastname</b></span> : $message\n");
 		}
 		else
 		{
-			fputs($fp,"<b>$pseudoUser</b> : $message\n");
+			fputs($fp,"<b>$firstname $lastname</b> : $message\n");
 		}
 
 		fclose($fp);
@@ -150,7 +148,12 @@ include('header_frame.inc.php');
 <input type="hidden" name="sent" value="1">
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td width="95%"><input type="text" name="message" value="" style="width: 500px">&nbsp;<input type="submit" value="OK"></td>
+  <td width="520" valign="middle">
+  	<textarea name="message" style="width: 520px; height: 35px" onkeydown="send_message(event);"></textarea>
+  </td>
+  <td>
+  	<input type="submit" value="<?php echo get_lang("Send"); ?>" class="background_submit">
+  </td>
 </tr>
 </table>
 </form>

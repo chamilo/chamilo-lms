@@ -38,9 +38,6 @@ include('../inc/global.inc.php');
 
 $showPic=intval($_GET['showPic']);
 
-//$tbl_user=$mainDbName."`.`user";
-//$tbl_cours_user=$mainDbName."`.`cours_user";
-//updated for 1.6 - YW
 $tbl_course_user	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_chat_connected	= Database::get_course_chat_connected_table();
@@ -53,11 +50,6 @@ list($pseudoUser)=mysql_fetch_row($result);
 $isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 $isMaster=$is_courseAdmin?true:false;
 
-/*if(!$isAllowed)
-{
-	exit();
-}*/
-
 $pictureURL=api_get_path(WEB_CODE_PATH).'upload/users/';
 
 $query="SELECT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.course_code = '".$_course[sysCode]."' AND t2.last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' ORDER BY username";
@@ -69,7 +61,9 @@ $Users=api_store_result($result);
 include('header_frame.inc.php');
 ?>
 
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="data_table">
+
+<tr><th colspan="2"><?php echo get_lang("Connected"); ?></th></tr>
 
 <?php
 foreach($Users as $enreg)
@@ -77,20 +71,15 @@ foreach($Users as $enreg)
 ?>
 
 <tr>
-  <td width="1%" rowspan="2" valign="top"><?php if($enreg['status'] == 1) echo '<img src="../img/teachers.gif" align="absbottom" border="0" alt="" style="margin: 1px;">'; else echo '<img src="../img/students.gif" align="absbottom" border="0" alt="" style="margin: 1px;">';?></td>
-  <td width="99%"><a <?php if($enreg['status'] == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo $_SERVER['PHP_SELF']; ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><b><?php echo ucfirst($enreg['lastname']).' '.ucfirst($enreg['firstname']); ?></b></a></td>
+  <td width="1%" valign="top"><?php if($enreg['status'] == 1) echo '<img src="../img/teachers.gif" align="absbottom" border="0" alt="" style="margin: 1px;">'; else echo '<img src="../img/students.gif" align="absbottom" border="0" alt="" style="margin: 1px;">';?></td>
+  <td width="99%"><a <?php if($enreg['status'] == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo $_SERVER['PHP_SELF']; ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo ucfirst($enreg['firstname']).' '.ucfirst($enreg['lastname']); ?></a></td>
 </tr>
-
 
 <?php if($showPic == $enreg['user_id']): ?>
 <tr>
   <td colspan="2" align="center"><img src="<?php if(empty($enreg['picture_uri'])) echo '../img/unknown.jpg'; else echo $pictureURL.$enreg['picture_uri']; ?>" border="0" width="100" alt="" style="margin-top: 5px;"></td>
 </tr>
 <?php endif; ?>
-
-<tr>
-  <td height="5"></td>
-</tr>
 
 <?php
 }

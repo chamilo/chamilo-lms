@@ -55,7 +55,21 @@ elseif(FRAME == 'message')
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Chat</title>
 
-<link rel="stylesheet" type="text/css" href="../css/default/chat.css">
+<link rel="stylesheet" type="text/css" href="../css/<?php if(api_get_setting('stylesheets')=="") echo 'default'; else echo api_get_setting('stylesheets'); ?>/default.css">
+
+<style>
+	a{
+		font-size: 12px;
+	}
+	
+	.background_submit{
+		background: url(../img/chat_little.gif) 2px 2px no-repeat;
+		padding: 2px 1px 1px 20px;
+	}
+	TH{
+		font-size: 12px;
+	}
+</style>
 
 <script type="text/javascript" language="javascript">
 <!--
@@ -90,6 +104,19 @@ function eventMessage()
 	document.formMessage.message.focus();
 }
 
+function send_message(evenement){
+
+    for (prop in evenement)
+    {
+    	if(prop == 'which') touche = evenement.which; else touche = evenement.keyCode;
+    }
+    
+    if (touche == 13)
+    {
+    	document.formMessage.submit();
+    }
+
+}
 
 //-->
 </script>

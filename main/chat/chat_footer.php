@@ -1,12 +1,20 @@
 <?php
-
 require ('../inc/global.inc.php');
+
+define('FRAME','footer');
 
 echo '<html><head><style>';
 
-echo '@import "'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'.'";';
+if(api_get_setting('stylesheets')!=""){
+	$css=api_get_setting('stylesheets');
+}
+else{
+	$css='default';
+}
 
-echo '</style></head><body>';
+echo '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$css.'/default.css'.'";';
+
+echo '</style></head><body><br>';
 
 /*
 ==============================================================================

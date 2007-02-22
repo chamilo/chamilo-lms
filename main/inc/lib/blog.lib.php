@@ -733,6 +733,8 @@ class Blog
 				{
 					$readMoreLink = '';
 				}
+				
+				$introduction_text=stripslashes($introduction_text);
 
 				echo '<div class="blogpost">'."\n";
 					echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>'."\n";
@@ -845,7 +847,8 @@ class Blog
 		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_rate'))
 			$rating_select = Blog::display_rating_form('post',$blog_id,$post_id);
 
-
+		$blog_post_text=stripslashes($blog_post_text);
+		
 		// Display post
 		echo '<div class="blogpost">';
 			echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
@@ -1030,7 +1033,8 @@ class Blog
 			{
 				$border_color = ' border-left: 3px solid #' . $comment['color'];
 			}
-
+			
+			$comment_text=stripslashes($comment_text);
 
 			// Output...
 			$margin = $current_level * 30;

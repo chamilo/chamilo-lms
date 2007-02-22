@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 11143 2007-02-19 11:01:17Z elixir_julian $
+<?php //$Id: agenda.inc.php 11194 2007-02-22 14:22:55Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1567,7 +1567,7 @@ function display_agenda_items()
 				"<a href=\"".$_SERVER['PHP_SELF']."?origin=".$_GET['origin']."&action=delete&id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\">",
 				"<img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang("Delete")."\"/></a>";
 		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?origin=".$_GET['origin']."&action=announce&id=".$myrow['id']."\">".
-				"<img src=\"../img/valves_add.gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang("AddAnnouncement")."\"/></a>";
+				"<img src=\"../img/announce_add.gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang("AddAnnouncement")."\"/></a>";
 		if ($myrow['visibility']==1)
 		{
 			$image_visibility="visible";
@@ -1896,7 +1896,7 @@ function show_add_form($id = '')
 	<!-- the title -->
 	<tr class="title">
 		<td colspan="3">
-		<h4><?php echo (isset($id) AND $id<>'')?get_lang('ModifyCalendarItem'):get_lang("AddCalendarItem"); ?></h4>
+		<span style="font-weight: bold;"><?php echo (isset($id) AND $id<>'')?get_lang('ModifyCalendarItem'):get_lang("AddCalendarItem"); ?></span>
 		</td>
 	</tr>
 
@@ -1941,8 +1941,16 @@ function show_add_form($id = '')
 	<!-- START date and time -->
 	<tr class="subtitle">
 		<td>
-			<!-- date: 1 -> 31 -->
-			<?php echo get_lang('StartDate').": \n"; ?>
+		
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			
+			<tr><td width="110">
+				<!-- date: 1 -> 31 -->
+				<?php echo get_lang('StartDate').": \n"; ?>
+			</td>
+			
+			<td>
+		
 			<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
 				<?php
 					// small loop for filling all the dates
@@ -2002,10 +2010,20 @@ function show_add_form($id = '')
 						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 					} ?>
 			</select>
-			<a href="javascript:openCalendar('new_calendar_item', 'f')"><img src="../img/calendar_select.gif" border="0" /></a>
+			<a href="javascript:openCalendar('new_calendar_item', 'f')"><img src="../img/calendar_select.gif" border="0" align="absmiddle" /></a>
+			</td></tr></table>
 		</td>
 		<td>
-			<?php echo get_lang('StartTime').': '; ?>
+		
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			
+			<tr><td width="110">
+				<!-- date: 1 -> 31 -->
+				<?php echo get_lang('StartTime').": \n"; ?>
+			</td>
+			
+			<td>
+			
 			<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
 				<option value="--">--</option>
 				<?php
@@ -2037,14 +2055,23 @@ function show_add_form($id = '')
 						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 					} ?>
 			</select>
+			</td></tr></table>
 		</td>
 	</tr>
 	<!-- END date and time -->
 
 	<tr class="subtitle">
 		<td>
-			<!-- date: 1 -> 31 -->
-			<?php echo get_lang('EndDate').": \n"; ?>
+		
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			
+			<tr><td width="110">
+				<!-- date: 1 -> 31 -->
+				<?php echo get_lang('EndDate').": \n"; ?>
+			</td>
+			
+			<td>
+			
 			<select name="end_fday">
 				<?php
 					// small loop for filling all the dates
@@ -2088,11 +2115,21 @@ function show_add_form($id = '')
 						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 					} ?>
 			</select>
-			<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><img src="../img/calendar_select.gif" border="0" /></a>
+			<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><img src="../img/calendar_select.gif" border="0" align="absmiddle" /></a>
+			</td></tr></table>
 		</td>
 
 		<td>
-			<?php echo get_lang('EndTime').': ';?>
+			
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			
+			<tr><td width="110">
+				<!-- date: 1 -> 31 -->
+				<?php echo get_lang('EndTime').": \n"; ?>
+			</td>
+			
+			<td>
+			
 			<select name="end_fhour">
 				<option value="--">--</option>
 				<?php
@@ -2120,6 +2157,7 @@ function show_add_form($id = '')
 						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 					} ?>
 			</select>
+			</td></tr></table>
 		</td>
 	</tr>
 

@@ -30,7 +30,7 @@ class presentation extends learnpath {
     
     function convert_presentation($file){
     	
-    	global $_course, $_user;
+    	global $_course, $_user, $_configuration;
     
     	$file_name = (strrpos($file['name'],'.')>0 ? substr($file['name'], 0, strrpos($file['name'],'.')) : $file['name']);
     	$file_extension = (strrpos($file['name'],'.')>0 ? substr($file['name'], strrpos($file['name'],'.'),10) : '');
@@ -97,7 +97,6 @@ class presentation extends learnpath {
 			DocumentManager::delete_document($_course, $dir_name, $base_work_dir);	 
 			return false;   	
 	    }
-	    
 	    else {
 			// create lp
 			$learnpath_name .= $file_name;
@@ -117,7 +116,7 @@ class presentation extends learnpath {
 						'<html>
 						<head></head>
 						<body>
-							<img src="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$created_dir.'/'.$file.'" />
+							<img src="'.$_configuration['url_append'].'/courses/'.$_course['path'].'/document'.$created_dir.'/'.$file.'" />
 						</body>
 						</html>');
 				fclose($fp);

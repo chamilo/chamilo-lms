@@ -92,7 +92,7 @@ function choose_image($file_name)
 		$type['acrobat'   ] = array('pdf');
 		$type['powerpoint'] = array('ppt');
 		$type['flash'     ] = array('fla', 'swf');
-		$type['text'      ] = array('txt');
+		$type['text'      ] = array('txt','log');
 		$type['oo_writer' ] = array('odt','sxw');
 		$type['oo_calc'   ] = array('ods','sxc');
 		$type['oo_impress'] = array('odp','sxi');

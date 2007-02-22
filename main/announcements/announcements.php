@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 11181 2007-02-21 15:24:19Z elixir_inter $
+<?php //$Id: announcements.php 11195 2007-02-22 15:42:28Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -927,7 +927,7 @@ if(!$surveyid)
 		if ((api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announcement')) and ($_GET['origin'] !== 'learnpath'))
 		{
 
-			echo "<a href='".$_SERVER['PHP_SELF']."?action=add&origin=".$_GET['origin']."'><img src=\"../img/valves_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
+			echo "<a href='".$_SERVER['PHP_SELF']."?action=add&origin=".$_GET['origin']."'><img src=\"../img/announce_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
 			if ($announcement_number > 1)
 			{
 				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\"><img src=\"../img/valves_delete.gif\"/> ".get_lang("AnnouncementDeleteAll")."</a>\n";

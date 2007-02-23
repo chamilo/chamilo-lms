@@ -81,7 +81,7 @@ if (isset ($_POST['action']))
 				{
 					$group['category'] = $_POST['group_0_category'];
 				}
-				GroupManager :: create_group(strip_tags($group['name']), $group['category'], $group['places']);
+				GroupManager :: create_group(strip_tags($group['name']), $group['category'],$group['tutor'] , $group['places']);
 			}
 			$msg = urlencode(count($groups).' '.get_lang('GroupsAdded'));
 			header('Location: group.php?action=show_msg&msg='.$msg);

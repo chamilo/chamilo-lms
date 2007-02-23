@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 11172 2007-02-20 11:09:30Z elixir_inter $
+// $Id: create_document.php 11205 2007-02-23 14:01:05Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -45,6 +45,94 @@ $language_file = 'document';
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
 
+$htmlHeadXtra[]='<script>
+	
+	var temp=false;
+
+	function FCKeditor_OnComplete( editorInstance )
+	{
+	  editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
+	}
+
+	function check_for_title()
+	{
+		if(temp==true){
+			// This functions shows that you can interact directly with the editor area
+			// DOM. In this way you have the freedom to do anything you want with it.
+	
+			// Get the editor instance that we want to interact with.
+			var oEditor = FCKeditorAPI.GetInstance(\'content\') ;
+	
+			// Get the Editor Area DOM (Document object).
+			var oDOM = oEditor.EditorDocument ;
+	
+			var iLength ;
+			var contentText ;
+			var contentTextArray;
+			var bestandsnaamNieuw = "";
+			var bestandsnaamOud = "";
+	
+			// The are two diffent ways to get the text (without HTML markups).
+			// It is browser specific.
+	
+			if( document.all )		// If Internet Explorer.
+			{
+				contentText = oDOM.body.innerText ;
+			}
+			else					// If Gecko.
+			{
+				var r = oDOM.createRange() ;
+				r.selectNodeContents( oDOM.body ) ;
+				contentText = r.toString() ;
+			}
+
+			var index=contentText.indexOf("/*<![CDATA");
+			contentText=contentText.substr(0,index);			
+
+			// Compose title if there is none
+			contentTextArray = contentText.split(\' \') ;
+			var x=0;
+			for(x=0; (x<5 && x<contentTextArray.length); x++)
+			{
+				if(x < 4)
+				{
+					bestandsnaamNieuw += contentTextArray[x] + \' \';
+				}
+				else
+				{
+					bestandsnaamNieuw += contentTextArray[x] + \'...\';
+				}
+			}
+	
+			if(document.getElementById(\'title_edited\').value == "false")
+			{
+				document.getElementById(\'title\').value = bestandsnaamNieuw;
+			}
+			
+		}
+		temp=true;
+	}
+
+	function trim(s) {
+	 while(s.substring(0,1) == \' \') {
+	  s = s.substring(1,s.length);
+	 }
+	 while(s.substring(s.length-1,s.length) == \' \') {
+	  s = s.substring(0,s.length-1);
+	 }
+	 return s;
+	}
+
+	function check_if_still_empty()
+	{
+		if(trim(document.getElementById(\'title\').value) != "")
+		{
+			document.getElementById(\'title_edited\').value = "true";
+		}
+	}
+
+</script>';
+
 include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include (api_get_path(LIBRARY_PATH).'document.lib.php');
 include (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
@@ -55,7 +143,6 @@ $nameTools = get_lang('CreateDocument');
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '350';
 $fck_attribute['ToolbarSet'] = 'Full';
-$fck_attribute['Config']['FullPage'] = true;
 
 /*
 -----------------------------------------------------------
@@ -139,12 +226,16 @@ if (isset ($group))
 	unset ($display_dir[1]);
 	$display_dir = implode('/', $display_dir);
 }
+
 // Create a new form
 $form = new FormValidator('create_document');
 // Hidden element with current directory
 $form->addElement('hidden', 'dir');
 $default['dir'] = $dir;
 // Filename
+
+$form->addElement('hidden','title_edited','false','id="title_edited"');
+
 $form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles"');
 $form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
 /**
@@ -158,12 +249,13 @@ function document_exists($filename)
 }
 // Change the default renderer for the filename-field to display the dir and extension
 $renderer = & $form->defaultRenderer();
-$filename_template = str_replace('{element}', "<tt>$display_dir</tt> {element} <tt>.html</tt>", $renderer->_elementTemplate);
+//$filename_template = str_replace('{element}', "<tt>$display_dir</tt> {element} <tt>.html</tt>", $renderer->_elementTemplate);
+$filename_template = str_replace('{element}', "{element}", $renderer->_elementTemplate);
 $renderer->setElementTemplate($filename_template, 'filename');
 // If allowed, add element for document title
 if (get_setting('use_document_title') == 'true')
 {
-	$form->add_textfield('title', get_lang('Title'),true,'class="input_titles"');
+	$form->add_textfield('title', get_lang('Title'),true,'class="input_titles" id="title" onblur="check_if_still_empty()"');
 }
 // HTML-editor
 $form->add_html_editor('content', get_lang('Content'), false, true);
@@ -171,6 +263,7 @@ $form->add_html_editor('content', get_lang('Content'), false, true);
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
 $form->addElement('submit', 'submit', get_lang('Ok'));
 $form->setDefaults($default);
+
 // If form validates -> save the new document
 if ($form->validate())
 {
@@ -252,7 +345,7 @@ if ($form->validate())
 	else
 	{
 		Display :: display_header($nameTools, "Doc");
-		api_display_tool_title($nameTools);
+		//api_display_tool_title($nameTools);
 		Display :: display_error_message(get_lang('Impossible'));
 		Display :: display_footer();
 	}
@@ -260,7 +353,7 @@ if ($form->validate())
 else
 {
 	Display :: display_header($nameTools, "Doc");
-	api_display_tool_title($nameTools);
+	//api_display_tool_title($nameTools);
 	$form->display();
 	Display :: display_footer();
 }

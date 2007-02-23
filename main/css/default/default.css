@@ -1988,22 +1988,41 @@ input.forms	{
 	border: 1px #7F9DB9 solid;
 }
 
-#WCAG-editor #course_description textarea {
-	height: 360px;
+/* don't work on IE < 7 */
+#WCAG-editor input[type="checkbox"], #WCAG-editor input[type="radio"], #WCAG-editor input[type="submit"] {
+	width: auto;
 }
 
+/* don't apply on IE < 7 */
 #WCAG-editor input {
 	width: 100%;
 }
 
-#WCAG-home img {
+/* only for IE < 7 */
+#WCAG-editor #submit, #WCAG-editor #visible_teacher, #WCAG-editor #visible_student, #WCAG-editor #visible_guest {
+ 	width: auto;
+}
+
+
+
+#WCAG-content img {
 	float: left;
 	margin-right: 5px;
 	margin-bottom: 5px;
 }
 
-#WCAG-home p {
+#WCAG-content p {
 	text-align: justify;
+}
+
+/* hack for IE < 7 */
+
+#course_description input {
+	width: auto;
+}
+
+#course_description #imagefile, #course_description #imageLabel, #course_description #link, #course_description #linkLabel {
+	width: 100%;
 }
 
 .WCAG-form textarea {

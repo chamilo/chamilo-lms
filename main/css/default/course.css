@@ -39,7 +39,7 @@
 	width: 690px;
 	background: transparent url("images/writerheader.png") no-repeat top
 		left;
-	height: 185px;
+	height: 150px;
 }
 
 /*
@@ -50,14 +50,13 @@
 
 #text_presentation { 
 	/* Min-height hack for IE 6*/
-	min-height: 250px;
+	min-height: 200px;
 	height: auto !important;
-	height: 250px;
+	height: 200px;
 	width: 690px;
 	float:left;
 	text-align: justify;
 	background: transparent url("images/repeat_template.png") repeat-y top center;
-	padding-bottom: 2em;
 }
 
 #text_presentation em {
@@ -74,7 +73,7 @@
 #text_presentation p {
 	text-align: justify;
 	width: 620px;
-	margin: 0 auto 2em auto;
+	margin: 1em auto 1em auto;
 }
 
 /*
@@ -84,11 +83,10 @@
 */
 #body_explanation {
 	background: transparent url("images/repeat_template.png") repeat-y top center;
-	padding-bottom:2em;
 	/* Min-height hack for IE 6*/
-	min-height: 250px;
+	min-height: 200px;
 	height: auto !important;
-	height: 250px;
+	height: 200px;
 	width: 690px;
 	float:left;
 }
@@ -110,9 +108,9 @@
 	background: transparent url("images/vertdivider_template.jpg") no-repeat top right;
 	padding-right:15px;
 	/* Min-height hack for IE 6*/
-	min-height: 250px;
+	min-height: 200px;
 	height: auto !important;
-	height: 250px;
+	height: 200px;
 }
 
 
@@ -149,7 +147,7 @@
 	margin:0 0 0 10px;
 	text-align:justify;
 	float:left;
-	height:250px;
+	height:205px;
 	overflow: auto;
 }
 
@@ -178,7 +176,7 @@
 }
 
 #objectives_template {
-	margin:1em auto;
+	margin:.3em auto 0 auto;
 	padding:0;
 	width:550px;
 	text-align:justify;
@@ -188,17 +186,16 @@
 }
 
 #objectives_template li {
-	margin:0 0 1em 1em;
+	margin:0 0 .5em 1em;
 	padding:0;
 }
 
 #text_course_objectives {
 	background: transparent url("images/repeat_template.png") repeat-y top center;
-	padding-bottom:2em;
 	/* Min-height hack for IE 6*/
-	min-height: 250px;
+	min-height: 200px;
 	height: auto !important;
-	height: 250px;
+	height: 200px;
 	width: 690px;
 	float:left;
 }
@@ -214,11 +211,10 @@
 
 #body_proposal {
 	background: transparent url("images/repeat_template.png") repeat-y top center;
-	padding-bottom:2em;
 	/* Min-height hack for IE 6*/
-	min-height: 250px;
+	min-height: 200px;
 	height: auto !important;
-	height: 250px;
+	height: 200px;
 	width: 690px;
 	float:left;
 }
@@ -235,9 +231,9 @@
 	background: transparent url("images/vertdivider_template.jpg") no-repeat top right;
 	padding-right:15px;
 	/* Min-height hack for IE 6*/
-	min-height: 250px;
+	min-height: 200px;
 	height: auto !important;
-	height: 250px;
+	height: 200px;
 }
 
 
@@ -279,11 +275,10 @@
 
 #text_course_think {
 	background: transparent url("images/repeat_template.png") repeat-y top center;
-	padding-bottom:2em;
 	/* Min-height hack for IE 6*/
-	min-height: 250px;
+	min-height: 200px;
 	height: auto !important;
-	height: 250px;
+	height: 200px;
 	width: 690px;
 	float:left;
 }
@@ -294,7 +289,7 @@
 }
 
 #think_about_list {
-	margin:1em auto;
+	margin:.5em auto 0 auto;
 	padding:0;
 	width:600px;
 	text-align:justify;
@@ -310,7 +305,7 @@
 
 #think_forum {
 	width:500px;
-	margin:0 auto;
+	margin:-1em auto 0 auto;
 	color:#aaa;
 	font: bold 1.2em Arial, sans-serif, sans;
 	background: transparent url("images/forum_template.png") no-repeat top right;
@@ -352,11 +347,10 @@
 
 #text_colaborative_activity {
 	background: transparent url("images/repeat_template.png") repeat-y top center;
-	padding-bottom:2em;
 	/* Min-height hack for IE 6*/
-	min-height: 250px;
+	min-height: 200px;
 	height: auto !important;
-	height: 250px;
+	height: 200px;
 	width: 690px;
 	float:left;
 }
@@ -389,11 +383,10 @@
 
 #text_unit_overview {
 	background: transparent url("images/repeat_template.png") repeat-y top center;
-	padding-bottom:2em;
 	/* Min-height hack for IE 6*/
-	min-height: 250px;
+	min-height: 200px;
 	height: auto !important;
-	height: 250px;
+	height: 200px;
 	width: 690px;
 	float:left;
 }
@@ -406,4 +399,102 @@
 #unit_overview #header_template {
 	background: transparent url("images/readerheader.png") no-repeat top
 		left;
+}
+/*
+------------------------------------------------------------------------------
+	Blank template
+------------------------------------------------------------------------------
+*/
+
+#blank_template #text_presentation { 
+	/* Min-height hack for IE 6*/
+	min-height: 200px;
+	height: auto !important;
+	height: 200px;
+	width: 690px;
+	float:left;
+	text-align: justify;
+	background: transparent url("images/repeat_template.png") repeat-y top center;
+}
+
+#blank_template #box_title {
+	text-align: right;
+	width: 640px;
+	margin:3em 0 0 0;
+	float:left;
+}
+
+#blank_template #box_title h1 {
+	font: bold 2em Arial, sans-serif, sans;
+	color: #bbb;
+}
+
+#blank_template #header_template {
+	width: 690px;
+	background: transparent url("images/blankheader.png") no-repeat top
+		left;
+	height: 150px;
+}
+/*
+------------------------------------------------------------------------------
+	More templates
+------------------------------------------------------------------------------
+*/
+
+#contact_template {
+	color:#aaa;
+	font: bold 1.2em Arial, sans-serif, sans;
+}
+
+#contact_template a{
+	color:#4271b5;
+	text-decoration:none;
+}
+
+#contact_template a:hover, #contact_template a:focus{
+	text-decoration:underline;
+}
+
+
+#more_templates #box_title {
+	text-align: right;
+	width: 640px;
+	margin:3em 0 0 0;
+	float:left;
+}
+
+#more_templates #box_title h1 {
+	font: bold 2em Arial, sans-serif, sans;
+	color: #bbb;
+}
+
+#more_templates #header_template {
+	width: 690px;
+	background: transparent url("images/blankheader.png") no-repeat top
+		left;
+	height: 150px;
+}
+
+#more_templates p {
+	margin-top:4em;
+	padding-top:.8em;
+	width:450px;
+	padding-right:60px;
+	text-align:justify;
+	background: transparent url("images/forum_template.png") no-repeat top right;
+}
+
+#more_templates #text_presentation { 
+	height: 150px;
+	width: 690px;
+	float:left;
+	text-align: justify;
+	background: transparent url("images/repeat_template.png") repeat-y top center;
+}
+
+#more_templates #footer_template {
+	background: transparent url("images/footer_dokeos.png") no-repeat top center;
+	width: 690px;
+	height: 48px;
+	clear:both;
 }

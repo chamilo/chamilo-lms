@@ -46,7 +46,7 @@ api_plugin('footer');
   <?php
   if (get_setting('show_administrator_data')=="true")
   	{
-  	echo get_lang("Manager") ?> : <?php echo Display::encrypted_mailto_link(get_setting('emailAdministrator'),get_setting('administratorSurname')." ".get_setting('administratorName'));
+  	echo get_lang("Manager") ?> : <?php echo Display::encrypted_mailto_link(get_setting('emailAdministrator'),get_setting('administratorName')." ".get_setting('administratorSurname'));
 	}
   ?>&nbsp;
 </div> <!-- end of #footer -->

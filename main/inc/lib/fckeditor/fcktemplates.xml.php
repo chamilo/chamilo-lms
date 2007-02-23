@@ -13,7 +13,7 @@ $css = loadCSS('default');
 
 ?>
 <Templates imagesBasePath="fck_template/images/">
-	<Template title="Content" image="1.jpg">
+	<Template title="Content" image="thumb1.png">
 		<Description>Introductory title</Description>
 		<Html>
 			<![CDATA[
@@ -35,7 +35,7 @@ $css = loadCSS('default');
 			]]>
 		</Html>
 	</Template>
-	<Template title="Content" image="3.jpg">
+	<Template title="Content" image="thumb2.png">
 		<Description>Explanation</Description>
 		<Html>
 			<![CDATA[
@@ -69,7 +69,7 @@ $css = loadCSS('default');
 			]]>
 		</Html>
 	</Template>
-	<Template title="Content" image="2.jpg">
+	<Template title="Content" image="thumb3.png">
 		<Description>Course objectives</Description>
 		<Html>
 			<![CDATA[
@@ -100,7 +100,7 @@ $css = loadCSS('default');
 			]]>
 		</Html>
 	</Template>
-	<Template title="Content" image="3.jpg">
+	<Template title="Content" image="thumb4.png">
 		<Description>Activity proposal</Description>
 		<Html>
 			<![CDATA[
@@ -132,11 +132,7 @@ $css = loadCSS('default');
 				Nulla faciddsi. Praesent consequat, lectus ac solddcitudin condimentum,
 				nunc fedds pharetra ddgula, at tincidunt mauris neque vel nulla.
 				Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis
-				scelerisque sapien. Class aptent taciti sociosqu ad ddtora torquent per
-				conubia nostra, per inceptos hymenaeos. Praesent convaldds. Cum sociis
-				natoque penatibus et magnis dis parturient montes, nascetur ridiculus
-				mus. In tristique laoreet fedds. Ut vitae est. Integer posuere lacus
-				sed ddbero.</p>
+				scelerisque sapien.</p>
 						</div>
 					</div>		
 					<div id="footer_template">
@@ -145,7 +141,7 @@ $css = loadCSS('default');
 			]]>
 		</Html>
 	</Template>
-	<Template title="Content" image="3.png">
+	<Template title="Content" image="thumb5.png">
 		<Description>Think about this...</Description>
 		<Html>
 			<![CDATA[
@@ -172,7 +168,7 @@ $css = loadCSS('default');
 			]]>
 		</Html>
 	</Template>
-	<Template title="Content" image="1.jpg">
+	<Template title="Content" image="thumb6.png">
 		<Description>Colaborative activity</Description>
 		<Html>
 			<![CDATA[
@@ -206,7 +202,7 @@ $css = loadCSS('default');
 			]]>
 		</Html>
 	</Template>
-	<Template title="Content" image="1.jpg">
+	<Template title="Content" image="thumb7.png">
 		<Description>Unit overview</Description>
 		<Html>
 			<![CDATA[
@@ -226,6 +222,47 @@ $css = loadCSS('default');
 								</li><li>Unit 3: Topic number 3<ul class="subunit_overview"><li>3.1. Subtopic 1
 																							</li><li>3.2. Subtopic 2</li></ul>
 								</li></ul>
+					    </div>
+						<div id="footer_template">
+						</div>
+					</div>
+			]]>
+		</Html>
+	</Template>
+	<Template title="Content" image="thumb8.png">
+		<Description>Blank Template</Description>
+		<Html>
+			<![CDATA[
+					<?php echo $css ?>
+				   <div class="dokeos_course" id="blank_template">
+						<div id="header_template">
+							<div id="box_title">
+								<h1>Title</h1>
+							</div>
+						</div>
+						<div id="text_presentation">
+							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing eddt. Curabitur commodo urna in justo. Nulla faciddsi. Vestibulum dapibus mattis sapien. <em>Keyword 1, keyword 2</em>. Nunc suscipit. Nulla odio urna, faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper hendrerit magna. Maecenas nec ddgula. Quisque tellus tortor, semper in, blandit quis, addquet ut, tellus. Quisque vulputate. Sed ddgula ipsum, interdum vel, congue tincidunt, faciddsis eget, arcu.</p>
+							<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.<em>Keyword 3, keyword 4</em>. Nulla faciddsi. Praesent consequat, lectus ac solddcitudin condimentum, nunc fedds pharetra ddgula, at tincidunt mauris neque vel nulla. Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis scelerisque sapien. Class aptent taciti sociosqu ad ddtora torquent per conubia nostra, per inceptos hymenaeos. Praesent convaldds. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tristique laoreet fedds. Ut vitae est. Integer posuere lacus sed ddbero.</p>
+					    </div>
+						<div id="footer_template">
+						</div>
+					</div>
+			]]>
+		</Html>
+	</Template>
+	<Template title="Content" image="thumb9.png">
+		<Description>Need templates?</Description>
+		<Html>
+			<![CDATA[
+					<?php echo $css ?>
+				  	<div class="dokeos_course" id="more_templates">
+						<div id="header_template">
+							<div id="box_title">
+								<h1>Need more templates?</h1>
+							</div>
+						</div>
+						<div id="text_presentation">
+							<p>Do you need more? We can customize you templates and produce tailored ones. Just ask us at <span id="contact_template"><a href="mailto:info@dokeos.com">info@dokeos.com</a></span> and we will see what can we do for you.</p>
 					    </div>
 						<div id="footer_template">
 						</div>

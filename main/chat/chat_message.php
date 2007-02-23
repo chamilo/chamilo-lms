@@ -54,7 +54,6 @@ include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 */
 $tbl_user	= Database::get_main_table(TABLE_MAIN_USER);
 $sent = $_REQUEST['sent'];
-$question = $_REQUEST['question'];
 
 /*
 ==============================================================================
@@ -104,37 +103,32 @@ if($sent)
 	{
 		$message=make_clickable($message);
 
-		if($question)
+		if(!file_exists($chatPath.'messages-'.$dateNow.'.log.html'))
 		{
-			$message='<span class="question"><b>'.get_lang('Question').' :</b> '.$message.'</span>';
-		}
-
-		if(!file_exists($chatPath.'messages-'.$dateNow.'.log'))
-		{
-			$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log','file',0,'messages-'.$dateNow.'.log');
+			$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log.html','file',0,'messages-'.$dateNow.'.log.html');
 
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
 			item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 		}
 		else
 		{
-			$doc_id = DocumentManager::get_document_id($_course,'/chat_files/messages-'.$dateNow.'.log');
+			$doc_id = DocumentManager::get_document_id($_course,'/chat_files/messages-'.$dateNow.'.log.html');
 		}
 
-		$fp=fopen($chatPath.'messages-'.$dateNow.'.log','a');
+		$fp=fopen($chatPath.'messages-'.$dateNow.'.log.html','a');
 
 		if($isMaster)
 		{
-			fputs($fp,"<span style='color: #00F;'><b>$firstname $lastname</b></span> : $message\n");
+			fputs($fp,"<span style='color: #00F;'><b>$firstname $lastname</b></span> : $message<br>\n");
 		}
 		else
 		{
-			fputs($fp,"<b>$firstname $lastname</b> : $message\n");
+			fputs($fp,"<b>$firstname $lastname</b> : $message<br>\n");
 		}
 
 		fclose($fp);
 
-		$chat_size=filesize($chatPath.'messages-'.$dateNow.'.log');
+		$chat_size=filesize($chatPath.'messages-'.$dateNow.'.log.html');
 
 		update_existing_document($_course, $doc_id,$chat_size);
 		item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);

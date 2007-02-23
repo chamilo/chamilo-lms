@@ -40,7 +40,6 @@ include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 
 $reset=$_GET['reset']?true:false;
 
-//$tbl_user=$mainDbName."`.`user";
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
@@ -51,10 +50,6 @@ list($pseudoUser)=mysql_fetch_row($result);
 $isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 $isMaster=$is_courseAdmin?true:false;
 
-/*if(!$isAllowed)
-{
-	exit();
-}*/
 
 $dateNow=date('Y-m-d');
 
@@ -78,11 +73,11 @@ if(!is_dir($chatPath))
 	
 }
 
-if(!file_exists($chatPath.'messages-'.$dateNow.'.log'))
+if(!file_exists($chatPath.'messages-'.$dateNow.'.log.html'))
 {
-	fclose(fopen($chatPath.'messages-'.$dateNow.'.log','w'));
+	fclose(fopen($chatPath.'messages-'.$dateNow.'.log.html','w'));
 
-	$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log','file',0,'messages-'.$dateNow.'.log');
+	$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log.html','file',0,'messages-'.$dateNow.'.log.html');
 
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
 	item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
@@ -92,26 +87,26 @@ if($reset && $isMaster)
 {
 	$i=1;
 
-	while(file_exists($chatPath.'messages-'.$dateNow.'-'.$i.'.log'))
+	while(file_exists($chatPath.'messages-'.$dateNow.'-'.$i.'.log.html'))
 	{
 		$i++;
 	}
 
-	rename($chatPath.'messages-'.$dateNow.'.log',$chatPath.'messages-'.$dateNow.'-'.$i.'.log');
+	rename($chatPath.'messages-'.$dateNow.'.log.html',$chatPath.'messages-'.$dateNow.'-'.$i.'.log.html');
 
-	fclose(fopen($chatPath.'messages-'.$dateNow.'.log','w'));
+	fclose(fopen($chatPath.'messages-'.$dateNow.'.log.html','w'));
 
-	$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'-'.$i.'.log','file',filesize($chatPath.'messages-'.$dateNow.'-'.$i.'.log'),'messages-'.$dateNow.'-'.$i.'.log');
+	$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'-'.$i.'.log.html','file',filesize($chatPath.'messages-'.$dateNow.'-'.$i.'.log.html'),'messages-'.$dateNow.'-'.$i.'.log.html');
 
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
 	item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 
-	$doc_id = DocumentManager::get_document_id($_course,'/chat_files/messages-'.$dateNow.'.log');
+	$doc_id = DocumentManager::get_document_id($_course,'/chat_files/messages-'.$dateNow.'.log.html');
 
 	update_existing_document($_course, $doc_id,0);
 }
 
-$content=file($chatPath.'messages-'.$dateNow.'.log');
+$content=file($chatPath.'messages-'.$dateNow.'.log.html');
 $nbr_lines=sizeof($content);
 $remove=$nbr_lines-100;
 
@@ -136,7 +131,7 @@ if ($_GET["origin"]=='whoisonlinejoin') {   //the joiner (we have to delete the 
 echo '<div style="margin-left: 5px;">';
 foreach($content as $thisLine)
 {
-	echo "$thisLine<br>";
+	echo "$thisLine";
 }
 echo '</div>';
 

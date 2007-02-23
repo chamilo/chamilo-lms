@@ -118,6 +118,11 @@ div.row div.label {
 div.row div.formw {
 	width: 100%;
 }
+.convert_button{
+	background: url("../img/scorm.gif") 0px 0px no-repeat;
+	padding: 2px 1px 3px 22px;
+}
+
 </style>';
 $form = new FormValidator('update_course');
 
@@ -133,7 +138,7 @@ $form -> addGroup($group);
 $form -> addElement ('html','<br /><br />');
 $form -> addElement ('hidden', 'ppt2lp', 'true');
 
-$form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), null);
+$form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
 
 $form -> addElement ('html','<br />');
 $form -> add_real_progress_bar('ppt2lp', 'qf_group_1', 1, true);
@@ -141,7 +146,6 @@ $form -> add_real_progress_bar('ppt2lp', 'qf_group_1', 1, true);
 
 // display the form
 $form -> display();
-
 
 /*
 ==============================================================================

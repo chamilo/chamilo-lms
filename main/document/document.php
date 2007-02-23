@@ -1,4 +1,4 @@
-<?php // $Id: document.php 11193 2007-02-22 13:51:17Z elixir_julian $
+<?php // $Id: document.php 11204 2007-02-23 13:58:47Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -310,7 +310,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		if(DocumentManager::get_document_id($_course,$_GET['move']))
 		{
 			$folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit || $group_member_with_upload_rights);
-			Display::display_normal_message(build_move_to_selector($folders,$_GET['curdirpath'],$_GET['move'],$group_properties['directory']));
+			Display::display_normal_message(build_move_to_selector($folders,$_GET['curdirpath'],$_GET['move'],$group_properties['directory']),false);
 		}
 	}
 
@@ -392,7 +392,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		if($created_dir)
 		{
 			//Display::display_normal_message("<strong>".$created_dir."</strong> was created!");
-			Display::display_normal_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>');
+			Display::display_normal_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>',false);
 			//uncomment if you want to enter the created dir
 			//$curdirpath = $created_dir;
 			//$curdirpathurl = urlencode($curdirpath);

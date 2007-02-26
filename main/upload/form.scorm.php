@@ -64,7 +64,7 @@ $select_content_proximity = &$form->addElement('select','content_proximity',get_
 $form->addElement('submit', 'submit', get_lang('Download'));
 
 $form->addElement('html', '<br><br><br>');
-$list = get_zip_files_in_garbage();
+/*$list = get_zip_files_in_garbage();
 if(count($list)>0){
 	$select_file_name = &$form->addElement('select','file_name',get_lang('Or').' '.strtolower(get_lang('UploadLocalFileFromGarbageDir')));
 	foreach($list as $file){
@@ -76,7 +76,7 @@ else{
 	$text_empty = &$form->addElement('text', 'empty', get_lang('Or').' '.strtolower(get_lang('UploadLocalFileFromGarbageDir')));
 	$defaults["empty"] = get_lang('Empty');
 	$text_empty->freeze();
-}
+}*/
 
 $form->add_real_progress_bar('uploadScorm','user_file');
 

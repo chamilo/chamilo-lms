@@ -8,6 +8,9 @@
 /**
  * Script
  */
+$language_file[] = "scormdocument";
+$language_file[] = "scorm";
+$language_file[] = "learnpath";
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
 require_once('scorm.class.php');

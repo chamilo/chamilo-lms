@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 11090 2007-02-09 15:59:01Z pvandermaesen $
+<?php // $Id: configure_homepage.php 11227 2007-02-26 13:45:20Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -779,7 +779,7 @@ else
 	  </td>
 	  <td width="50%">
 		<br />
-		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit_news"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>
+		<!--<a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit_news"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>-->
 	  </td>
 	</tr>
 	<tr>
@@ -810,7 +810,7 @@ else
 
 		</table>
 	  </td>
-	  <td width="50%" valign="top">
+	  <!--<td width="50%" valign="top">
 
 	<?php
 
@@ -831,7 +831,7 @@ else
 		}
 	?>
 
-	  </td>
+	  </td>-->
 	</tr>
 	</table>
   </td>

@@ -221,7 +221,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         $sql = "SELECT visual_code FROM $TABLECOURSE WHERE code = '".$_cid."'";
         $_course['visual_code'] = getOneResult($sql);
 
-        echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000001'>".get_lang('ExportAsCSV')."</a>";
+        echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000001'><img src=\"../img/excel.gif\" align=\"absmiddle\">&nbsp;".get_lang('ExportAsCSV')."</a>";
         if (is_array($results))
         {
         	

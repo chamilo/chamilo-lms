@@ -134,4 +134,5 @@ $SurveyDeleted = "A kérd&#337;ív törölve.";
 $NoSurveysSelected = "Nincsenek kiválasztva kérd&#337;ívek.";
 $NumberOfQuestions = "Kérdések száma";
 $Invite = "Meghívás";
+$PreviousQuestion = "El&#337;z&#337; kérdés";
 ?>

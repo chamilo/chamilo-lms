@@ -539,4 +539,5 @@ $MyTextHere = "a szövegem helye";
 $Ajax_course_tracking_refresh = "összegezi a kurzusban eltöltött id&#337;t";
 $Ajax_course_tracking_refresh_comment = "Ezzel a beállítással lehet kiszámolni azt az id&#337;t amit a felhasználó valóban a kurzusban töltött el. A mez&#337; értéke a frissítés gyakorisága másodpercben megadva. A lehet&#337;ség kikapcsolásához írjon 0-t a mez&#337;be.";
 $EditLink = "Hivatkozás szerkesztése";
+$ExternalAuthentication = "Küls&#337; hitelesítés";
 ?>

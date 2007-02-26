@@ -33,4 +33,6 @@ $langChat_reset_by = "Reeniciar Chat";
 $OrFile = "Ou ficheiro";
 $langCallSent = "Convite para Chat foi enviado. Esperando aprovação do destinatário...";
 $langChatDenied = "O convite foi negado.";
+$Send = "Enviar";
+$Connected = "Conectado";
 ?>

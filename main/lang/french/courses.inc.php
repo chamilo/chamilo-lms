@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $lang_already_enrolled                      = "Déjà inscrit";
 $lang_my_personnal_course_list              = "Ma liste de cours personnelle";
-$lang_course_enrollment                     = "Cours du membre";
+$lang_course_enrollment                     = "Cours de l\'utilisateur";
 $lang_course_not_available                  = "Cours non disponible ou n\'existe pas.";
 $lang_enroll                                = "Inscription";
 $lang_enroll_to_a_new_course                = "Inscription à un nouveau cours";

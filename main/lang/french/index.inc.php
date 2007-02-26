@@ -4,9 +4,7 @@ for more information: see languages.txt in the lang folder.
 $langInvalidId = "Cet identifiant n\'est pas valide.";
 $langWelcome = "cours sont en libre accès ci-dessous. Les autres cours existants
 nécessitent un identifiant et un mot de passe que l\'on peut
-obtenir en cliquant sur la mention \'inscription\'. Il est possible aux
-responsables de créer un nouveau cours en cliquant sur la
-mention \'inscription\'.";
+obtenir en cliquant sur la mention \'inscription\'. Les responsables de cours peuvent  créer de nouveaux cours.";
 $langPass = "Mot de passe";
 $langEnter = "Entrer";
 $langReg = "Inscription";
@@ -30,7 +28,7 @@ $langHelptwo = "Aide";
 $langRegAll = "S\'inscrire";
 $EussMenu = "menu";
 $Opinio = "Opinion";
-$email = "courriel";
+$email = "email";
 $Intranet = "Intranet";
 $Englin = "Anglais";
 $langInvalidForSelfRegistration = "Échec du login - si vous n\'êtes pas enregistré, vous pouvez le faire en utilisant le <a href=claroline/auth/inscription.php>formulaire d\'enregistrement</a>";
@@ -60,7 +58,7 @@ $ViewOpenCourses = "Visualiser les cours en accès libre";
 $langCompetences = "Compétences";
 $langDiplomas = "Diplômes";
 $langTeach = "Ce qu\'il/elle peut enseigner";
-$langOpenarea = "Zone publique personnelle";
+$langOpenarea = "Espace perso";
 $langProductions = "Productions";
 $langSendChatRequest = "Envoyer une demande de \"chat\" à cette personne";
 $langRequestDenied = "Cet appel a été refusé.";

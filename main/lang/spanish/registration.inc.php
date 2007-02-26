@@ -163,4 +163,7 @@ $NeverExpires = "Nunca expira";
 $On = "En";
 $ExpirationDate = "Fecha de expiración";
 $ActiveAccount = "Activar cuenta";
+$YourAccountHasToBeApproved = "Su cuenta ha sido validada";
+$ApprovalForNewAccount = "Validación de una nueva cuenta";
+$ManageUser = "Gestión de usuario";
 ?>

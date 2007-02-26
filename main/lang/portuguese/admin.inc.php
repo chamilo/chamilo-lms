@@ -586,4 +586,15 @@ $CodeDoesNotExists = "Este código não existe";
 $UnknownUser = "Utilizador desconhecido";
 $UnknownStatus = "Estatuto desconhecido";
 $SessionDeleted = "A sessão foi apagada";
+$CourseDoesNotExist = "Este curso não existe";
+$UserDoesNotExist = "Este utilizador não existe";
+$ButProblemsOccured = "mas problemas ocorreram";
+$UsernameTooLongWasCut = "Este nome de utilizador foi cortado";
+$NoInputFile = "Nenhum ficheiro enviado";
+$NoInputFile = "Nenhum ficheiro enviado";
+$StudentStatusWasGivenTo = "O estatuto do estudante foi dado a ";
+$WrongDate = "Formato de data errado (yyyy-mm-dd)";
+$WrongDate = "Formato de data errado (yyyy-mm-dd)";
+$DateStartMoreThanDateEnd = "Data de início é ulterior à data de fim";
+$SlideSize = "Tamanho dos diapositivos";
 ?>

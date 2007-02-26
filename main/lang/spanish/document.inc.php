@@ -117,4 +117,6 @@ $AdvancedSettings = "Configuraciónes avanzadas";
 $AdvancedSettings = "Configuraciones avanzadas";
 $File = "Archivo";
 $DocDeleteError = "Error durante el borrado del documento";
+$ViModProb = "Se ha producido un problema mientras actualizaba la visibilidad";
+$DirDeleted = "Directorio borrado";
 ?>

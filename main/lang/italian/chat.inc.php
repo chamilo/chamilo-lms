@@ -33,4 +33,6 @@ $langChat_reset_by = "Fai ripartire la chat";
 $OrFile = "O importa";
 $langCallSent = "La chiamata in chat è stata inviata: sono in attesa di consenso da parte della persona che hai chiamato";
 $langChatDenied = "Il consenso alla chat è stato negato da parte della persona che hai chiamato";
+$Send = "Invia";
+$Connected = "Connessa/o";
 ?>

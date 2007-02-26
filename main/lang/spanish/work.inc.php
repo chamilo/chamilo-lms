@@ -33,4 +33,5 @@ $EditToolOptions = "Editar las opciones de las herramientas";
 $DocumentDeleted = "Documento borrado";
 $SendMailBody = "Un usuario ha publicado un documento en la herramienta trabajos de su curso.";
 $DirDelete = "Borrar el directorio";
+$ValidateChanges = "Confirmar los cambios";
 ?>

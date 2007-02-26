@@ -30,4 +30,5 @@ $langDirCr = "Criar Diretório";
 $langCurrentDir = "Diretório atual";
 $UploadADocument = "Enviar um documento";
 $EditToolOptions = "Editar opções da Ferramenta";
+$ValidateChanges = "Validar alterações";
 ?>

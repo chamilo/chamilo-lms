@@ -5,9 +5,7 @@ $langHFor = "Aide Forums";
 $langForContent = "<p>Le forum est un outil de discussion asynchrone par écrit.
  A la différence de l\'email, le forum situe la discussion dans un espace
  public ou semi-public (à plusieurs).</p><p>Pour utiliser l\'outil de forum
- de Dokeos, les membres n\'ont besoin que d\'un simple navigateur web
- (Netscape, Explorer...), pas besoin d\'outil de courriel (Eudora,
- Outlook...).</P>
+ de Dokeos, les membres n\'ont besoin que d\'un simple navigateur web, pas besoin d\'outil d\'email.</P>
  <p>Pour organiser les forums, cliquez sur \'administrer\'.
  Les échanges sont organisés de façon hiérarchique selon l\'arborescence
  suivante:</p><p><b>Catégorie > Forum > Sujet > Réponse</b></p>Pour
@@ -22,36 +20,33 @@ $langForContent = "<p>Le forum est un outil de discussion asynchrone par écrit.
  <b>Forums de groupes</b>
  <p>Pour créer des forums de groupes, utilisez l\'outil Groupes et non l\'outil Forums. Cela vous permettra de créer des forums privatifs (non accessibles aux membres des autres groupes) et de fournir simultanément un espace de documents aux groupes.</p>
  <p><b>Astuces pédagogiques</b></p>
- Un forum d\'apprentissage n\'est pas identique aux forums que l\'on trouve habituellement sur internet. D\'une part il n\'est pas possible pour les étudiants/stagiaires de modifier leurs messages une fois publiés car le cours suit une logique d\'archivage et peut être utilisé pour vérifier ce qui a été dit dans le passé. Par ailleurs, les forums Dokeos permettent certains usages particulièrement pertinents dans un contexte d\'apprentissage. Ainsi certains enseignants/formateurs publient directement dans les forums leurs corrections:
- <ul><li>Un étudiant/stagiaire est invité à publier un rapport directement dans le forum,</li>
+ Un forum d\'apprentissage n\'est pas identique aux forums que l\'on trouve habituellement sur internet. D\'une part il n\'est pas possible pour les apprenants de modifier leurs messages une fois publiés car le cours suit une logique d\'archivage et peut être utilisé pour vérifier ce qui a été dit dans le passé. Par ailleurs, les forums Dokeos permettent certains usages particulièrement pertinents dans un contexte d\'apprentissage. Ainsi certains enseignants/formateurs publient directement dans les forums leurs corrections:
+ <ul><li>Un apprenant est invité à publier un rapport directement dans le forum,</li>
  <li>L\'enseignant le corrige en cliquant sur Editer (crayon jaune) puis introduit ses corrections à l\'aide de l\'éditeur graphique : couleur, soulignage etc.,</li>
- <li>Finalement, les autres étudiants/stagiaires profitent de la correction qui a été faite sur la production de l\'un d\'entre eux,</li>
- <li>Notez que le même principe peut être utilisé d\'un étudiant à l\'autre, mais il faudra alors copier/coller le message de son consdisciple car les étudiants/stagiaires ne peuvent éditer les messages des autres étudiants/stagiaires.<.li></ul>";
+ <li>Finalement, les autres apprenants profitent de la correction qui a été faite sur la production de l\'un d\'entre eux,</li>
+ <li>Notez que le même principe peut être utilisé d\'un apprenant à l\'autre, mais il faudra alors copier/coller le message de son consdisciple car les étudiants/stagiaires ne peuvent éditer les messages des autres apprenants.<.li></ul>";
 $langHDropbox = "Aide Partage de fichiers";
-$langDropboxContent = "L\'outil de partage affiche les fichiers qui vous ont été envoyés
-(dossier Recu) et les fichiers que vous avez communiqués à d\'autres membres
-(dossier Envoyé). Si vous envoyez deux fois un fichier du même nom, vous pouvez choisir d\'écraser
-le premier envoi par le second.
+$langDropboxContent = "L\'outil de partage affiche les fichiers qui vous ont été envoyés (dossier Reçu) et les fichiers que vous avez communiqués à d\'autres utilisateurs (dossier Envoyé). Si vous envoyez deux fois un fichier du même nom, vous pouvez choisir d\'écraser le premier envoi par le second.
 <br>
 <br>
-Comme membre, vous pouvez seulement envoyer un fichier au responsable du cours,
-à moins que le gestionnaire système ait activé le partage entre les membres.
+Comme utilisateur, vous pouvez seulement envoyer un fichier au responsable du cours,
+à moins que le gestionnaire système ait activé le partage entre les utilisateurs.
 <br>
 <br>
-Un responsable peut choisir d\'envoyer un fichier à tous les membres du cours.
+Un responsable peut choisir d\'envoyer un fichier à tous les utilisateurs du cours.
 <br><br>
 L\'administrateur système peut activer l\'envoi de fichiers sans destinataire.
 <br><br>
 Si la liste des fichiers devient trop longue, vous pouvez supprimer certains fichiers ou
-tous les fichiers. Le fichier lui-même n\'est toutefois pas supprimé pour les autres membres
+tous les fichiers. Le fichier lui-même n\'est toutefois pas supprimé pour les autres utilisateurs
 qui y ont accès à moins que tous le suppriment.
 <br>";
 $langHHome = "Aide Page d\'accueil";
-$langHomeContent = "<p>La page d\'accueil de votre cours présente une série d\'outils : un texte d\'introduction, une Description du cours, un outil de publication de Documents, etc. Cette page est modulaire. Vous pouvez masquer ou afficher chacun des outils.</p>
+$langHomeContent = "<p>La page d\'accueil de votre cours présente une série d\'outils : un texte d\'introduction, une Description du cours, un outil de publication de Documents, etc. Cette page est modulaire. Vous pouvez masquer ou afficher chacun des outils en cliquant sur + ou - (parfois icone Oeil fermé Oeil ouvert).</p>
 <b>Navigation</b>
-<p>La navigation se fait soit au moyen du menu en arborescence situé sous la bannière de couleur, dans le coin supérieur gauche, soit au moyen des icônes permettant un accès direct aux outils et situées dans le coin supérieur droit. Que vous cliquiez à droite sur la maison ou à gauche sur le code du cours (toujours en majuscules), vous retournerez à la page d\'accueil.</p>
+<p>La navigation se fait soit au moyen du menu en arborescence situé sous la bannière de couleur, dans le coin supérieur gauche, soit au moyen des icônes permettant un accès direct aux outils.</p>
 <b>Méthodologie</b>
-<p>Il importe de rendre votre espace dynamique afin de montrer aux participants qu\'il y a quelqu\'un derrière l\'écran. Ainsi vous pouvez modifier régulièrement le texte d\'introduction (en cliquant sur le crayon jaune) pour y signaler des événements ou rappeler des étapes du cours.</p>
+<p>Il importe de rendre votre espace dynamique afin de montrer aux apprenants qu\'il y a quelqu\'un derrière l\'écran. Ainsi vous pouvez modifier régulièrement le texte d\'introduction (en cliquant sur le crayon jaune) pour y signaler des événements ou rappeler des étapes du cours.</p>
 <p>Pour construire votre cours, une manière classique de travailler est de procéder comme suit:
 <ol><li>Dans Propriétés du cours, cochez Accès : privé et Inscription : refusé afin d\'interdire toute visite pendant la phase de fabrication du cours,</li>
 <li>Affichez tous les outils en cliquant sur le lien gris \'Afficher\' sous le nom des outils masqués dans le bas de l\'écran,</li>
@@ -59,127 +54,23 @@ $langHomeContent = "<p>La page d\'accueil de votre cours présente une série d\'o
 <li>Désactivez tous les outils,</li>
 <li>Utilisez l\'outil Parcours pour construire un itinéraire à travers les autres outils</li>
 <li>Rendez le parcours ainsi créé visible : il s\'affichera sur la page d\'accueil</li>
-<li> Votre cours est terminé. Il présente un texte d\'introduction suivi d\'un lien portant le titre du parcours que vous avez créé. Cliquez sur \'Vue membre\' pour voir le cours du point de vue de celui qui le suit.<I></I></li></ol>";
+<li> Votre cours est terminé. Il présente un texte d\'introduction suivi d\'un lien portant le titre du parcours que vous avez créé. Cliquez sur \'Vue apprenant\' pour voir le cours du point de vue de celui qui le suit.<I></I></li></ol>";
 $langHOnline = "Aide Système de conférence en direct";
-$langOnlineContent = "<br><span style=\"font-weight: bold;\">Introduction </span><br>
-      <br>
-      <div style=\"margin-left: 40px;\">L\'outil de conférence en direct vous permet de former, d\'informer ou de consulter jusqu\'à 500 personnes distantes simultanément de façon simple et rapide à l\'aide de:<br>
-      </div>
-      <ul>
-        <ul>
-          <li><b>audio en direct :</b> la voix do formateur/conférencier est diffusée en direct aux participants sous forme de fichier mp3,<br>
-          </li>
-          <li><b>transparents :</b> les participants suivent la présentation sur des transparents PowerPoint, un fichier PDF ou tout autre type de support,<br>
-          </li>
-          <li><b>interaction :</b> les participants posent des questions par chat.</li>
-        </ul>
-      </ul>
-      <span style=\"font-weight: bold;\"></span><span
- style=\"font-weight: bold;\"><br>
-Etudiant/participant</span><br>
-      <br>
-      <div style=\"margin-left: 40px;\">Pour assiter à une conférence, vous devez diposer de:<br>
-      </div>
-      <br>
-      <div style=\"margin-left: 40px;\">1. Des haut-parleurs (ou un casque) connectés à votre PC<br>
-      <br>
-      <a href=\"http://www.logitech.com\"><img
- style=\"border: 0px solid ; width: 87px; height: 58px;\" alt=\"speakers\"
- src=\"../img/speaker.gif\"></a><br>
-      <br>
-2. Winamp Media player (ou tout autre logiciel permettant de lire du mp3 en streaming)<br>
-      <br>
-      <a href=\"http://www.winamp.com\"><img
- style=\"border: 0px solid ; width: 87px; height: 27px;\" alt=\"Winamp\"
- src=\"../img/winamp.gif\"></a><br>
-      <br>
-Mac : utilisez <a href=\"http://www.quicktime.com\">Quicktime</a><br>
-Linux : utilisez <a href=\"http://www.xmms.org/\">XMMS</a> <br>
-      <br>
-  3. Acrobat PDF reader ou Word oo PowerPoint, en fonction du choix opéré par le formateur/conférencier pour la diffusion de ses transparents.>br>
-      <br>
-      <a href=\"http://www.acrobat.com\"><img
- style=\"border: 0px solid ; width: 87px; height: 31px;\"
- alt=\"acrobat reader\" src=\"../img/acroread.gif\"></a><br>
-      </div>
-      <br>
-      <span style=\"font-weight: bold;\"><br>
-Formateur/conférencier</span><br>
-      <br>
-      <div style=\"margin-left: 40px;\">Pour donner une conférence, vous devez disposer de:<br>
-      </div>
-      <br>
-      <div style=\"margin-left: 40px;\">1. Un casque avec microphone<br>
-      <br>
-      <a href=\"http://www.logitech.com\"><img
- style=\"border: 0px solid ; width: 87px; height: 87px;\" alt=\"Headset\"
- src=\"../img/headset.gif\"></a><br>
-Nous vous recommandons d\'utiliser un casque <a href=\"http://www.logitech.com/\">Logitech</a>
-avec prise USB pour une qualité de diffusion audio optimale et garantie.<br>
-      <br>
-2. Winamp<br>
-      <br>
-      <a href=\"http://www.winamp.com\"><img
- style=\"border: 0px solid ; width: 87px; height: 27px;\" alt=\"Winamp\"
- src=\"../img/winamp.gif\"></a><br>
-      <br>
-3. Le plugin SHOUTcast DSP pour Winamp 2.x <br>
-      <br>
-      <a href=\"http://www.shoutcast.com\"><img
- style=\"border: 0px solid ; width: 87px; height: 24px;\" alt=\"Shoutcast\"
- src=\"../img/shoutcast.gif\"></a><br>
-      <br>
-Suivez les instructions sur <a href=\"http://www.shoutcast.com\">www.shoutcast.com</a>
-pour installer et paramétrer le plugin Shoutcast Winamp.<br>
-      </div>
-      <br>
-      <span style=\"font-weight: bold;\"><br>
-Comment donner une conférence?<br>
-      <br>
-      </span>
-      <div style=\"margin-left: 40px;\">Créez un cours Dokeos > Entrez dedans > Affichez puis entrez dans l\'outil Conférence > Editez (icône du crayon jaune en haut à gauche) les paramètres > envoyez vos transparents (PDF, PowerPoint ou quelque document que ce soit) et votre photo (de préférence pas trop grande)> tapez un texte d\'introduction qui pourra si vous voulez renvoyer par des liens à d\'autres sites ou d\'autres documents
-> tapez l\'URL de votre streaming audio en fonction des informations qui vous ont été communiquées par votre responsable informatique (Dokeos fournit, à titre payant, un tel service : info@dokeos.com) et lancez la diffusion par Winamp tout en mettant votre casque.<br><span style=\"font-weight: bold;\"></span><br>
-      <span style=\"font-weight: bold;\"></span></div>
-      <div style=\"margin-left: 40px;\"><img
- style=\"width: 256px; height: 182px;\" alt=\"conference config\"
- src=\"../img/conf_screen_conf.gif\"><br>
-N\'oubliez pas de fournir à vos futurs participants une date et une heure de rendez-vous précise et de vous assurer que cvhacun possède identifiant et mot de passe pour accéder à votre cours. Une fois la conférence commencée, il sera trop tard pour régler les problèmes techniques ou d\'accès).<br>
-      <br>
-      <span style=\"font-weight: bold;\">Astuce</span> : 10 minutes avant la conférence, tapez un court message dans le chat pour informer les participants de votre présence et aider ceux qui auraient éventuellement des problèmes audio. Il est important aussi que vous soyez le premier connecté et que vous diffusiez l\'audio quelques minutes à l\'avance, sinon vous devrez demander à vos participants de relancer leur lecteur audio. <br>
-      </div>
-      <br>
-      <br>
-      <span style=\"font-weight: bold;\">Serveur de streaming</span><br>
-      <br>
-      <div style=\"margin-left: 40px;\">Il ne faut pas confondre la conférence en direct (de 1 à plusieurs) avec la téléphonie par internet (de 1 à 1). Pour donner une conférence en direct, vous avez nécessairement besoin d\'un serveur de streaming et probablement d\'un responsable technique pour vous aider à configurer le flux audio (la vidéo fonctionne aussi, mais nous ne la recommandons pas). Cette personne vous communiquera l\'URL de votre flux audio et vous devrez taper cette URL dans la configuration de votre conférence. 
-	 <br>
-      <br>
-      <small><a href=\"http://www.dokeos.com/hosting.php#streaming\"><img
- style=\"border: 0px solid ; width: 258px; height: 103px;\"
- alt=\"dokeos streaming\" src=\"../img/streaming.jpg\"><br>
-dokeos streaming</a></small><br>
-      <br>
-faites-le vous-même ou faites-le faire par un de vos proches : installez, configurez et administrez <a
- href=\"http://www.shoutcast.com\">Shoutcast</a> ou <a
- href=\"http://developer.apple.com/darwin/projects/streaming/\">Apple
-Darwin</a>. <br>
-      <br>
-Ou contactez Dokeos. Nous pouvons vous aider à organiser votre conférence et vous assister dans sa mise en oeuvre vous louant un espace de streaming sur nos serveurs et en vous guidant dans son utilisation: <a
- href=\"http://www.dokeos.com/hosting.php#streaming\">http://www.dokeos.com/hosting.php</a><br>
-      <br>
-      <br>";
+$langOnlineContent = "<b>Dokeos Live Conferencing</b>
+<p>Dokeos Live Conferencing (DLC) est un outil de vidéoconférence basé sur le web et qui utilise la technologie Flash. Il vous permet d\'organiser facilement des réunions virtuelles entre 2, 3 ou 4 lieux distants ainsi que des classes virtuelles (interaction entre un formateur et jusqu\'à 500 apprenants).</p>
+<p>Pour organiser une réunion virtuelle, commencez par importer une présentation PowerPoint sous l\'onglet Présentation (en bas à gauche) puis fixez un rendez-vous pour la réunion en utilisant l\'outil Agenda de Dokeos. Au moment de la réunion, vous devrez disposer d\'une webcam et d\'un casque avec microphone. Le son, en particulier celui du microphone, devra être correctement réglé. Ce réglage s\'obtient dans l\'outil Paramètres audio de votre ordinateur ainsi que par un clic droit sur la zone des vidéos dand DLC puis Paramètres de Flash > Micro > Volume. Vous pouvez aussi en profiter pour activer l\'effet anti-écho dans Flash. </p>
+<p>DLS requiert Flash 9 minimum et une connection internet équivalant au minimum à l\'ADSL. Des problèmes de blocage liés au mur pare-feu (firewall) de votre organisation peuvent se produire. Contactez votre administrateur système.</p>
+<p>En mode Réunion virtuelle (four2four), chacun peut devenir modérateur, diffuser sa présentation PowerPoint, écrire ou dessiner par-dessus et se faire entendre des autres. En mode Classe virtuelle (one2many), il y a un maître de cérémonie qui dirige les opérations, diffuse l\'information et est vue et entendu de tous. Les autres suivent passivement, posent des questions par chat ou demandent la parole. En mode Classe virtuelle, seule le formateur a donc besoin d\'une webcam.</p>";
 $langHClar = "Aide Dokeos";
-$langClarContent = "<p><b>Enseignant, formateur</b></p>
-<p>Dokeos est un système de gestion de la formation et de la connaissance. Il permet à des enseignants, des formateurs, des responsables de formation d\'organiser des parcours d\'apprentissage, de gérer des interactions avec des apprenants et de construire des contenus sans quitter le navigateur web.</p>
+$langClarContent = "<p><b>Responsable du cours (formateur, enseignant...)</b></p>
+<p>Dokeos est un système de gestion de la formation et de la connaissance. Il permet à des enseignants, des formateurs, des responsables de formation d\'organiser des cours en ligne sous forme de parcours d\'apprentissage, de gérer des interactions avec des apprenants et de construire des contenus sans quitter le navigateur web. Depuis Dokeos 1.8, il est également possible de convertir des présentations PowerPoint en parcours d\'apprentissage et d\'organiser de la vidéoconférence (réunion virtuelle et classe virtuelle)</p>
 <p>Pour utiliser Dokeos en tant que formateur/enseignant, vous devez disposer d\'un identifiant et d\'un mot de passe. Ceux-ci pourront être obtenus soit par auto-inscription (si votre portail le permet, un lien \'Inscription\' apparaît sur sa page d\'accueil) soit par votre administration si l\'inscription est gérée de façon centralisée. Une fois en possession de votre identifiant et de votre mot de passe, introduisez-les dans le système, créez un cours (ou utilisez celui qui a été créé pour vous par votre administration) et familiarisez-vous avec les outils en déposant des documents, en composant des textes de description etc.</p>
-<p>Dans votre cours, commencez par ouvrir Paramètres du cours et fermez-en l\'accès le temps de concevoir le dispositif. Vous pouvez, si vous le souhaitez, inscrire un collègue comme co-responsable de votre cours pendant cette période, pour cela, si votre collègue n\'est pas encore inscrit dans le portail, rendez-vous dans la rubrique Membres et inscrivez-le en cochant : \'Responsable\'. S\'il est déjà inscrit dans le système, ouvrez l\'accès à l\'inscription (dans Paramètres du cours) et demandez-lui de s\'inscrire lui-même puis modifiez ses droits dans \'Membres\' pour le rendre responsable au même titre que vous puis refermez l\'accès à l\'inscription. Si votre organisation le permet, vous pouvez aussi lui demander d\'associer votre collègue à votre cours.</p><p>Chaque outil est muni d\'une aide contextuelle (signalée par la bouée) qui vous en explique le fonctionnement. Si vous ne trouvez pas l\'information voulue, consultez la page de documentation: <a href=\"http://www.dokeos.com/documentation.php\">http://www.dokeos.com/documentation.php</a> et téléchargez éventuellement le Manuel du professeur.</p>
-<p><b>Etudiant, apprenant, stagiaire</b></p>
+<p>Dans votre cours, commencez par ouvrir Paramètres du cours et fermez-en l\'accès le temps de concevoir le dispositif. Vous pouvez, si vous le souhaitez, inscrire un collègue comme co-responsable de votre cours pendant cette période, pour cela, si votre collègue n\'est pas encore inscrit dans le portail, rendez-vous dans la rubrique Membres et inscrivez-le en cochant : \'Responsable\'. S\'il est déjà inscrit dans le système, ouvrez l\'accès à l\'inscription (dans Paramètres du cours) et demandez-lui de s\'inscrire lui-même puis modifiez ses droits dans \'Utilisateurs\' pour le rendre responsable au même titre que vous puis refermez l\'accès à l\'inscription. Si votre organisation le permet, vous pouvez aussi lui demander d\'associer votre collègue à votre cours.</p><p>Chaque outil est muni d\'une aide contextuelle (signalée par la bouée) qui vous en explique le fonctionnement. Si vous ne trouvez pas l\'information voulue, consultez la page de documentation: <a href=\"http://www.dokeos.com/documentation.php\">http://www.dokeos.com/documentation.php</a> et téléchargez éventuellement le Manuel du professeur.</p>
+<p><b>Apprenant (étudiant, stagiaire...)</b></p>
 <p>Ce portail vous permet de suivre des formations et d\'y participer. Le logiciel Dokeos a été spécialement conçu pour favoriser les scénarios d\'apprentissage actifs : par la collaboration, par le projet, le problème, etc. Vos formateurs/enseignants ont conçu pour vous des espaces d\'apprentissage qui peuvent prendre la forme de simples répertoires de documents ou bien de parcours sophistiqués impliquant une chronologie et des épreuves à surmonter, seul ou en groupe.</p>
 <p>Selon les décisions qui ont été prises par votre organisation, votre école, votre université, les modes d\'inscription et de participation aux cours peuvent varier sensiblement. Dans certains campus, vous pouvez vous auto-inscrire dans le système, vous auto-inscrire dans les cours. Dans d\'autres, un système d\'administration centralisée gère l\'inscription et vous recevrez par courriel ou par la poste votre identifiant et votre mot de passe.</p>";
 $langHDoc = "Aide Documents";
-$langDocContent = "<p>Le module de gestion de document fonctionne de
- manière semblable à la gestion de vos documents sur un
- ordinateur. </p><p>Vous pouvez y créer des pages web simples et y déposer des documents de tous type
+$langDocContent = "<p>L\'outil Documents gère vos fichiers comme le fait le Gestionnaire de fichiers de votre ordinateur, à la diffférence qu\'il les partage avec vos apprenants. </p><p>Vous pouvez y créer des pages web grâce à l\'outil Templates (première icône dans l\'éditeur en ligne) et y déposer des documents de tous type
  (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.).</p>
  <p>Vous pouvez également envoyer des sites web complexes, sous forme de fichiers ZIP qui se décompresseront à \'arrivée (cochez \'dézipper\').</p>Soyez
  attentifs à ce que les membres disposent des
@@ -199,20 +90,9 @@ $langDocContent = "<p>Le module de gestion de document fonctionne de
  </p>
 <p>Vous pouvez :</p>
 <H4>Créer un document</H4>
-<p>Cliquez sur \'Créer un document\' > donnez-lui un titre (ni espaces ni accents) > tapez votre texte > utilisez les boutons de l\'éditeur WYSIWYG (What You See Is What You Get) pour structurer l\'information, créer des tables, des styles, des listes à puces etc. </p>
-<p>Pour produire des pages web acceptables, vous devrez apprendre à maîtriser 3 concepts : les Liens, l\'insertion d\'images par URL et la disposition dans l\'espace à l\'aide des Tables.</p>
-<p>Ne perdez pas de vue qu\'une page web n\'est pas un document Word et qu\'elle est soumise à des contraintes et des limitations plus importantes (taille du fichier, limites de mise en page, garantie d\'affichage d\'un navigateur et d\'un ordinateur à l\'autre).</p>
-<p>Une façon rapide de produire du contenu à l\'aide de l\'éditeur est de copier/coller le contenu de vos pages Word ou de pages web. Vous perdrez certains éléments de mise en page et parfois les liens vers les images, mais vous obtiendrez rapidement un résultat.
+<p>Cliquez sur \'Créer un document\' > donnez-lui un titre > tapez votre texte > utilisez les boutons de l\'éditeur WYSIWYG (What You See Is What You Get) pour recourir à un Template ou Modèle de page, structurer l\'information, créer des tables, des styles, des listes à puces etc. </p>
+Pour ajouter une image</b>, cliquez sur l\'icone d\'images de l\'éditeur en ligne. Vous y trouverez une galerie d\'images par défaut. Sinon, commencez par y importer une image que vous possédez ou que vous auvez trouvée sur internet.
 </p>
-<ul><li><b>Pour ajouter un lien</b>, vous devez préalablement copier la cible de votre lien. Nous vous conseillons d\'ouvrir simultanément deux fenêtres de votre navigateur, l\'une avec votre cours Dokeos et l\'autre pour partir à la recherche de la page vers laquelle vous voulez pointer (cette page peut d\'ailleurs se trouver à l\'intérieur de votre espace Dokeos).<br><br>Une fois la page cible obtenue, copiez son URL (sélectionnez son URL dans la barre d\'URL et tapez CTRL+C ou POMME+C), retournez dans la fenêtre où vous tapez votre texte, sélectionnez le mot qui servira de lien et cliquez dans l\'éditeur Wysiwyg sur l\'icône représentant un maillon de chaine. Collez alors (CTRL+V ou POMME+V) l\'URL dans le champ d\'URL et validez.<br><br>Le mot sélectionné est devenu bleu et constitue un lien. Il ne sera utilisable qu\'une fois la page enregistrée. Testez-le > enregistrez la page, ouvrez-la en mode navigation (et non édition) et cliquez sur le lien pour observer le résultat. Notez que vous pouvez décider si le lien s\'ouvrira dans la même fenêtre (écrasant possiblement votre cours ou le faisant disparaître) ou dans une nouvelle fenêtre.</li>
-
-
-<li><b>Pour ajouter une image</b>, le principe est similaire: parcourez le web à l\'aide d\'une deuxième fenêtre de navigateur, trouvez l\'image (si cette image se trouve dans votr répertoire de documents, cliquez sur \'Sans cadres\' pour afficher l\'image seule), copiez son URL (CTRL+C ou POMME+C) depuis la barre d\'URL et retournez dans la fenêtre où vous tapez votre texte.<br><br>Positionnez votre curseur dans le champ de saisie à l\'endroit où vous voulez voir apparaître l\'image et cliquez sur l\'icône représentant un arbre. Copiez l\'URL (CTRL+V ou POMME+V) dans le chapp URL, affichez \'Preview\' puis validez.
-<br><br>Notez que dans une page web, vous ne pouvez ni redimensionner ni déplacer une image à votre guise comme dans une page Word. De manière générale dans le web, il n\'y a pas moyen de glisser/déposer quoi que ce soit.</li>
-
-<li><b>Pour ajouter une table</b> (ce qui est une des seules façons de disposer les parties de texte et les images dans l\'espace), positionnez votre curseur dans le champ de saisie à l\'endroit où vous voulez voir apparaître le tableau, sélectionnez l\'icône représentant un tableau dans l\'éditeur Wysiwyg, décidez d\'un nombre de lignes et de colonnes et validez. Nous vous recommandons aussi de choisir les valeurs width=600 border=1, cellspacing=0 et cellpadding=4 pour obtenir de beaux tableaux. Notez que vous ne pourrez ni redimensionner ni modifier la structure de vos tableaux une fois créés.</li>
-</ul>
-
 <h4>Transférer un document</h4>
 <ul>
   <li>Sélectionnez le document sur votre ordinateur à l\'aide
@@ -306,16 +186,15 @@ $langDocContent = "<p>Le module de gestion de document fonctionne de
 		votre module document).</li>
 	  <li>Validez en cliquant \"Valider\"
 		<input type=\"button\" value=\"Valider\">.</li>
-	</ul>
-<h4>Créer un Parcours d\'apprentissage</h4>L\'outil de Parcours vous permet de construire des itinéraires dans le contenu et les activités. Le résultat ressemblera à une Table des matières mais offrira bien plus de possiblités qu\'une Table des matières ordinaires. Voir l\'aide de l\'outil Parcours.</p>";
+	</ul>";
 $langHUser = "Aide Membres";
-$langUserContent = "L\'outil Membres fournit la liste des personnes inscrites au cours. Elle offre en outre les fonctionnalités suivantes:
+$langUserContent = "L\'outil Utilisateurs fournit la liste des personnes inscrites au cours. Il offre en outre les fonctionnalités suivantes:
 <ul><li><b>Nom et prénom</b> : pour accéder à la fiche de l\'utilisateur contenant sa photo, son adresse email et d\'autres informations, cliquez sur son nom</li>
-<li><b>Description</b> : remplissez ce champ pour donner informer les autres membres du rôle joué par l\'un d\'entre eux dans votre dispositif</li>
+<li><b>Description</b> : remplissez ce champ pour donner informer les autres utilisateurs du rôle joué par l\'un d\'entre eux dans votre dispositif</li>
 <li><b>Editer (crayon jaune)</b> : permet d\'attribuer des droits supplémentaires, comme celui de partager avec vous la responsabilité d\'administrer ce cours ou bien celui, plus modeste, de modérer les échanges dans les groupes</li>
-<li><b>Suivi</b> : vous renseigne sur l\'utilisation du cours par l\'étudiant/le membre. Combien de fois il/elle est venu(e), combien de points il/elle a obtenu aux tests, combien de temps il (elle) a passé dans les modules de cours Scorm, quels documents il/elle a déposés dans l\'outil Travaux, etc.</li>
+<li><b>Suivi</b> : vous renseigne sur l\'utilisation du cours par l\'apprenant. Combien de fois il/elle est venu(e), combien de points il/elle a obtenu aux tests, combien de temps il (elle) a passé dans les modules de cours Scorm, quels documents il/elle a déposés dans l\'outil Travaux, etc.</li>
 </ul>
-Vous pouvez aussi, dans la page Membres, inscrire des membres à votre cours (ne le faites que si ils/elles ne sont pas encore inscrits dans le campus), gérer les espaces des groupes ou définir des intitulés qui permettront aux étudiants de se décrire ou de se présenter aux autres : numéro de téléphone, curriculum vitae etc.
+Vous pouvez aussi, dans la page Utilisateurs, inscrire des utilisateurs du portail à votre cours (pour inscrire des utilisateurs au portail, contactez votre administration), gérer les espaces des groupes ou définir des intitulés qui permettront aux étudiants de se décrire ou de se présenter aux autres : numéro de téléphone, curriculum vitae etc.
 
 
 <p><b>Co-responsabilité d\'un cours</b>
@@ -323,8 +202,7 @@ Vous pouvez aussi, dans la page Membres, inscrire des membres à votre cours (ne 
  lui demander de s\'inscrire à votre cours ou vous assurer qu\'il est inscrit puis modifier
  ses droits en cliquant sur l\'icône d\'édition puis sur \'Responsable\'.</P>
 <p>Pour faire figurer le nom de ce co-responsable dans l\'en-tête de votre
- cours, utilisez la page \'Propriétés de ce cours\' (dans les outils orange
- sur la page d\'accueil de votre cours). Cette modification de l\'en-tête
+ cours, utilisez la page \'Propriétés de ce cours\'. Cette modification de l\'en-tête
  du cours n\'inscrit pas automatiquement ce co-responsable comme membre du cours. Ce sont deux actions distinctes.</p>";
 $langGroupContent = "<p><b>Introduction</b></p>
 	<p>Cet outil permet de créer et de gérer des groupes de travail.
@@ -332,7 +210,7 @@ $langGroupContent = "<p><b>Introduction</b></p>
 	plusieurs façons de les remplir:
 	<ul><li>automatique (\'Remplir les groupes\'),</li>
 	<li>à la pièce (\'Editer\'),</li>
-	<li>par les membres (Propriétés: \'Membres autorisés ...\').</li></ul>
+	<li>par les utilisateurs (Propriétés: \'Utilisateurs autorisés ...\').</li></ul>
 	Ces modes de remplissage sont combinables entre eux. Ainsi, on peut demander aux membres
 	de s\'inscrire eux-mêmes puis constater que certains d\'entre eux ont oublié de s\'inscrire
 	et choisir alors de remplir les groupes, ce qui aura pour effet de les compléter. On peut
@@ -340,14 +218,14 @@ $langGroupContent = "<p><b>Introduction</b></p>
 	après remplissage automatique ou après auto-inscription par les membres.</p>
 	<p>Le remplissage des groupes, qu\'il soit automatique ou manuel, ne fonctionne que
 	si les membres sont déjà inscrits au cours, ce qui peut être vérifié via l\'outil
-	\'Membres\'.</p><hr noshade size=1>
+	\'Utilisateurs\'.</p><hr noshade size=1>
 	<p><b>Créer des groupes</b></p>
 	<p>Pour créer de nouveaux groupes, cliquez sur \'Créer nouveau(x) groupe(s)\' et déterminez
 	le nombre de groupes à créer. Le nombre maximum de participants est facultatif. Si
 	vous laissez ce champ inchangé, la taille des groupes sera illimitée.</p><hr noshade size=1>
 	<p><b>Propriétés des groupes</b></p>
 	<p>Vous pouvez déterminer de façon globale les propriétés des groupes.
-	<ul><li><b>Membres autorisés à s\'inscrire eux-mêmes dans les groupes</b>:
+	<ul><li><b>Utilisateurs autorisés à s\'inscrire eux-mêmes dans les groupes</b>:
 	vous créez des groupes vides et laissez les membres s\'y ajouter eux-mêmes.
 	Si vous avez défini un nombre de places maximum
 	par groupe, les groupes complets n\'acceptent plus de nouveaux membres.
@@ -356,8 +234,7 @@ $langGroupContent = "<p><b>Introduction</b></p>
 	<li><b>Accès aux groupes réservé uniquement à leurs membres</b>: les groupes n\'accèdent
 	pas aux forums et documents partagés des autres groupes. Cette propriété n\'exclut pas
 	la publication de documents par les groupes hors de leur espace privé.</li>
-	<li><b>Outils</b>: chaque groupe dispose soit d\'un forum, soit d\'un répertoire partagé associé
-	à un gestionnaire de documents, soit (cas le plus fréquent) les deux.</li></ul>
+	<li><b>Outils</b>: chaque groupe dispose d\'au moins un des outils suivants : Documents, Agenda, Tarvaux, Annonces.</li></ul>
 	<hr noshade size=1>
 	<p><b>Edition manuelle</b></p>
 	<p>Une fois des groupes crées, vous voyez apparaître leur liste assortie d\'une série d\'informations
@@ -366,32 +243,36 @@ $langGroupContent = "<p><b>Introduction</b></p>
 	<hr noshade size=1>";
 $langHExercise = "Aide Tests";
 $langExerciseContent = "<p>Le module de tests vous permet de créer des tests d\'auto-évaluation pouvant contenir un nombre quelconque de questions.<br><br>
-Il existe différents types de réponses disponibles pour la création de vos questions :<br><br>
+Il existe différents types de réponses disponibles pour la création de vos questions :
 <ul>
-  <li>Choix multiple (Réponse unique)</li>
-  <li>Choix multiple (Réponses multiples)</li>
-  <li>Correspondance</li>
-  <li>Remplissage de blancs</li>
+  <li>Choix multiple</li>
+  <li>Réponses multiples</li>
+<li>Remplir les blancs</li>
+  <li>Apparier (correspondances)</li>
+  <li>Question ouverte</li>
+  <li>Zones sur image (hotspots)</li>
 </ul>
+Combinés au puissant éditeur multimédia de Dokeos, ces différents types permettent en outre de créer des tests sur images, des compréhensions à l\'audition et des questions d\'interprétation à partir de vidéos ou d\'animations Flash.
 Un test rassemble un certain nombre de questions sous un thème commun.</p>
+<p>Depuis Dokeos 1.8, vous pouvez visualiser une copie des réponses de l\'apprenant et introduire des remarques dans sa \'copie\' afin de fournir un feedback le plus précis possible. C\'est aussi dans cette interface de visualisation des réponses de l\'apprenant que vous pourrez corriger les questions ouvertes qui sont une autre innovation de Dokeos 1.8.</p>
 <hr>
 <b>Création d\'un test</b>
 <p>Pour créer un test, cliquez sur le lien \"Nouveau test\".<br><br>
-Introduisez l\'intitulé de votre test, ainsi qu\'une éventuelle description de celui-ci.<br><br>
-Vous pouvez également choisir entre 2 types de tests :<br><br>
+Introduisez l\'intitulé de votre test, ainsi qu\'une éventuelle description de celui-ci. Utilisez le champ Description si vous souhaitez ajouter un fichier audio afin de créer une compréhension à l\'audition.<br><br>
+Vous pouvez également choisir entre 2 types de tests:
 <ul>
   <li>Questions sur une seule page</li>
   <li>Une question par page (séquentiel)</li>
 </ul>
-et préciser si vous souhaitez ou non que les questions soient triées aléatoirement lors de l\'exécution du test par le membre.<br><br>
+et préciser si vous souhaitez ou non que les questions soient triées aléatoirement lors de l\'exécution du test par l\'apprenant.<br><br>
 Enregistrez ensuite votre test. Vous arriverez à la gestion des questions de ce test.</p>
 <hr>
 <b>Ajout d\'une question</b>
-<p>Vous pouvez à présent ajouter une question au test précédemment créé. La description est facultative, de même que l\'image que vous avez la possibilité d\'associer à votre question.</p>
+<p>Vous pouvez à présent ajouter une question au test précédemment créé. La description est facultative, de même que les images que vous avez la possibilité d\'associer à votre question dans le champ Description. Ici encore, utilisez le champ description si vous souhaitez que la question porte sur une image (interprétation visuelle) ou sur un fichier audio (compréhension à l\'audition).</p>
 <hr>
 <b>Choix multiple</b>
 <p>Il s\'agit du classique QRM (question à réponse multiple) / QCM (question à choix multiple).<br><br>
-Pour créer un QRM / QCM :<br><br>
+Pour créer un QRM / QCM :
 <ul>
   <li>Définissez les réponses à votre question. Vous pouvez ajouter ou supprimer une réponse en cliquant sur le bouton adéquat</li>
   <li>Cochez grâce aux cases de gauche la ou les réponses exactes</li>
@@ -400,18 +281,24 @@ Pour créer un QRM / QCM :<br><br>
   <li>Enregistrez vos réponses</li>
 </ul></p>
 <hr>
-<b>Remplissage de blancs</b>
-<p>Il s\'agit du texte à trous. Le but est de faire trouver par le membre des mots que vous avez préalablement retirés du texte.<br><br>
+<b>Remplir les blancs</b>
+<p>Il s\'agit du texte à trous. Le but est de faire trouver par l\'apprenant des mots que vous avez préalablement retirés du texte.<br><br>
 Pour retirer un mot du texte, et donc créer un blanc, placez ce mot entre crochets [comme ceci].<br><br>
 Une fois le texte introduit et les blancs définis, vous pouvez éventuellement ajouter un commentaire qui sera vu par le membre lorsqu\'il aura répondu à la question.<br><br>
 Enregistrez votre texte, et vous arriverez à l\'étape suivante qui vous permettra d\'attribuer une pondération à chacun des blancs. Par exemple si la question est sur 10 points et que vous avez 5 blancs, vous pouvez donner une pondération de 2 points à chaque blanc.</p>
 <hr>
-<b>Correspondance</b>
-<p>Ce type de réponse peut être choisi pour créer une question où le membre devra relier des éléments d\'un ensemble E1 avec les éléments d\'un ensemble E2.<br><br>
+<b>Apparier</b>
+<p>Ce type de réponse peut être choisi pour créer une question où l\'apprenant doit relier des éléments d\'un ensemble E01 avec les éléments d\'un ensemble E02.<br><br>
 Il peut également être utilisé pour demander au membre de trier des éléments dans un certain ordre.<br><br>
 Commencez par définir les options parmi lesquelles le membre pourra choisir la bonne réponse. Ensuite, définissez les questions qui devront être reliées à une des options définies précédemment. Enfin, établissez les correspondances via les menus déroulants.<br><br>
 Remarque : Plusieurs éléments du premier ensemble peuvent pointer vers le même élément du deuxième ensemble.<br><br>
 Donnez une pondération à chaque correspondance correctement établie, et enregistrez votre réponse.</p>
+<hr>
+<b>Question ouverte</b>
+<p>Il est des questions dont la correction ne peut être automatisée. Par exemple : \'Résumez l\'article suivant en une dizaine de lignes\'. Le champ Question inclura \'Résumez l\'article, etc\', le champ Description accueillera un copier/coller de l\'article en question et le champ libre laissé à l\'apprenant accueillera sa réponse. Le responsable du cours (formateur, coach...) ira dans Résultats de mes apprenants dans l\'outil Tests pour corriger manuellement les réponses. En attendant, la réponse aura un score de zéro.</p>
+<hr>
+<b>Zones sur image (hotspots)</b>
+<p>Dans bien des métiers, la compétence se vérifie par une manipulation ou une prise en compte d\'éléments visuels. Le conducteur d\'une grue doit savoir à quoi correspondent différents leviers, un chirgurgien doit pouvoir distinguer d\'un coup d\'oeil les éléments qui composent l\'anatomie humaine, etc. Un utilisateur d\'outils de bureautique doit pouvoir reconnaître les différents éléments d\'une interface donnée. Pour l\'évalutaion de ces sompétences, on pourra introduire une image (obligatoirement au format .jpg ou .jpeg) et dessiner des zones via Dokeos en y associant questions, score et commentaires.</p>
 <hr>
 <b>Modification d\'un test</b>
 <p>Pour modifier un test, le principe est le même que pour la création. Cliquez simplement sur l\'image <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> à côté du test à modifier, et suivez les instructions ci-dessus.</p>
@@ -436,40 +323,23 @@ La banque de questions permet également de réutiliser une même question dans plu
 Par défaut, toutes les questions de votre formation sont affichées. Vous pouvez afficher les questions relatives à un test en particulier, en choisissant celui-ci dans le menu déroulant \"Filtre\".<br><br>
 Des questions orphelines sont des questions n\'appartenant à aucun test.</p>";
 $langHPath = "Aide Parcours pédagogique";
-$langPathContent = "<br>L\'outil Parcours a deux fonctions :
-<ul><li>Créer un parcours</li>
-<li>Importer un parcours au format Scorm ou IMS</li></ul>
-<img src=\"../img/path_help.gif\">
+$langPathContent = "<br>L\'outil Parcours a trois fonctions :
+<ul><li>Créer des parcours</li>
+<li>Importer des parcours au format SCORM, AICC ou IMS</li>
+<li>Convertir des présentations PowerPoint ou Impress en parcours</li></ul>
 
 <p><b>
 Qu\'est-ce qu\'un parcours?</b>
-</p><p>Un parcours est une séquence d\'apprentissage découpée en modules eux-mêmes découpés en étapes. Il peut être organisé en fonction d\'un contenu, il constituera alors une sorte de Table des matières, ou bien en fonction d\'activités, il s\'apparentera alors à un Agenda de \'choses à faire\' pour acquérir la maîtrise d\'un savoir, d\'une compétence. Il vous appartient de baptiser les modules successifs de votre parcours \'chapitres\', \'semaines\', \'modules\', \'séquences\' ou toute autre appellation répondant à la nature de votre scénario pédagogique.</p><p>En plus d\'être structuré, un parcours peut être séquencé. Cela signifie que certaines étapes peuvent constituer des prérequis pour d\'autres (\'Vous ne pouvez aller à l\'étape 2 avant d\'avoir parcouru l\'étape 1\'). Votre séquence peut être suggestive (vous montrez les étapes l\'une après l\'autre) ou contraignante (l\'étudiant est obligé de suivre les étapes dans un ordre imposé).
+</p><p>Un parcours est une séquence d\'apprentissage pouvant inclure : du texte, des images, du son, des animations, des tests, des activités de production et des activités de collaboration. Depuis Dokeos 1.8, vous disposez de Templates ou Modèles pour créer du contenu plus facilement (première icone dans l\'éditeur en ligne de documents) et d\'un outil dee séquençage pour vous permettre de produire rapidements des parcours, y compris à partir de PowerPoint.
 </p>
 <p><b>Comment créer un parcours?</b></p>
 <p>
-Cliquez sur Créer un parcours > Créer un nouveau parcours > Créer un module > Ajouter une étape (=un document, une activité, un outil etc.). Pour ajouter des étapes, il vous suffit ensuite de parcourir les outils dans le menu de gauche puis d\'ajouter les documents, les activités, forums, travaux etc. Cliquez sur Retour à \'nom du parcours\' pour revenir au parcours désormais rempli d\'étapes et cliquez sur \'Vue étudiant\' pour un aperçu du parcours (pour revenir à la vue de l\'enseignant, cliquez sur la maison dans le coin supérieur droit puis sur Vue responsable).</p><p>Ensuite paramétrez plus finement votre parcours pour:
-<ul><li>renommer le titre des documents, des outils, des liens etc. afin de constituer une véritable \'table des matière pour l\'étudiant</li>
-<li>réordonner les étapes en fonction de votre scénario de cours : icônes en triangle blanc vers le haut et vers le bas</li>
-<li>établir une séquence en ajoutant des prérequis: à l\'aide de l\'icône grise représentant deux documents, définissez quelle étape est prérequise pour l\'étape courante</li>
-<li>définir si le parcours est visible ou invisible : si vous sélectionnez visible, le parcours appraîtra sur la page d\'accueil du cours</li>
-</ul>
-Il est important de comprendre qu\'un parcours est plus que le découpage d\'une matière : il est un itinéraire à travers le savoir qui inclut potentiellement des épreuves, des temps de discussion, d\'évaluation, d\'expérimentation, de publication, de regard-croisé... C\'est pourquoi l\'outil de parcours de Dokeos constitue une sorte de méta-outil permettant de puiser dans l\'ensemble des autres outils pour séquencer:
-<ul>
-<li>événements de l\'agenda</li>
-<li>documents de toute nature : pages web, images, fichiers Word, PowerPoint etc.</li>
-<li>Annonces</li>
-<li>Forums</li>
-<li>Sujets dans les forums</li>
-<li>Messages dans les forums</li>
-<li>Liens (ils s\'ouvriront dans une fenêtre séparée)</li>
-<li>Tests (n\'oubliez pas de les rendre visibles dans l\'outil de tests)</li>
-<li>Page de travaux (où les étudiants peuvent envoyer leur copie)</li>
-<li>Partage de fichiers (pour échanger des brouillons, travailler à plusieurs voix...)</li>
-</ul>
+Cliquez sur Créer un parcours et suivez les instructions. Pour créer un document directement dans le parcours, cliquez sur Nouvelle étape > Nouveau document et choisissez si vous le voulez, un de nos Templates dans l\'éditeur en ligne (première icone de l\'éditeur).<br><br>Cliquez sur Organiser pour déplacer les étapes les unes par rapport aux autres. Cliquez sur Montrer pour voir le parcours du point de vue de l\'apprenant. Cliquez sur Construire pour retourner en mode \'édition\'. Vous pouvez ajouter Documents, Tests, Liens, Travaux et Forums afin de constituer un parcours réellement interactif. Pour ajouter des éléments multimédia, commencez par créer un document puis utilisez l\'éditeur en ligne pour ajouter ddes images, du son en MP3, des animations FLASH et des vidéos. Depuis Dokeos 1.8, Dokeos vous propose une galerie d\'images par défaut afin d\'accélrer encore votre processus de création. 
+
 </p><p><b>
 Qu\'est-ce qu\'un parcours Scorm ou IMS et comment l\'importer?</b>
 </p>
-<p>Outre la possibilité qu\'il vous offre de CONSTRUIRE des parcours, l\'outil Parcours ACCUEILLE vos contenus e-Learning conformes à la norme Scorm. Ceux-ci peuvent être importés sous forme de fichiers compressés au format ZIP (seul ce format est accepté). Vous avez peut-être acquis des licences sur de tels cours ou bien vous préférez construire vos parcours localement sur votre disque dur plutôt que directement en ligne sur Dokeos. Dans ce cas, lisez ce qui suit.</p>
+<p>Outre la possibilité qu\'il vous offre de CONSTRUIRE des parcours, l\'outil Parcours ACCUEILLE vos contenus e-Learning conformes aux normes SCORM, IMS et AICC. Ceux-ci peuvent être importés sous forme de fichiers compressés au format ZIP (seul ce format est accepté). Vous avez peut-être acquis des licences sur de tels cours ou bien vous préférez construire vos parcours localement sur votre disque dur plutôt que directement en ligne sur Dokeos. Dans ce cas, lisez ce qui suit.</p>
 <p>SCORM (<i>Sharable Content Object Reference Model</i>) est un standard public respecté par les acteurs majeurs du e-Learning: NETg, Macromedia, Microsoft, Skillsoft, etc. Ce standard agit à trois niveaux:
 </p>
 <ul>
@@ -480,21 +350,11 @@ Qu\'est-ce qu\'un parcours Scorm ou IMS et comment l\'importer?</b>
 <b>Comment générer localement (sur votre disque dur) un cours compatible Scorm?</b><br>
 <br>
 Utilisez des outils auteurs comme Dreamweaver, Lectora et/ou Reload puis sauvegardez votre parcours comme un fichier ZIP et téléchargez-le dans l\'outil \"Parcours\".<br>
-<br>
-<b>Liens utiles</b><br>
-<ul>
-<li>Adlnet : autorité responsable de la norme Scorm, <a
-href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li>
-<li>Reload : Editeur et player Scorm Open Source et gratuits, <a
-href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li>
-<li>Lectora : Logiciel auteur permettant d\'exporter au format Scorm, <a
-href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br>
-</li>
-</ul><b>
+<b>
 </p>";
 $langHDescription = "Aide Description du cours";
-$langDescriptionContent = "<p>L\'outil Description du cours vous invite à décrire votre cours de manière synthétique et globale dans une logique de cahier des charges. Cette description pourra servir à donner aux étudiants ou aux participants un avant-goût de ce qui les attend. Pour décrire le cours chronologiquement étape par étape, préférez l\'Agenda ou le Parcours.</p>Les rubriques sont proposées à titre de suggestion. Si vous souhaitez rédiger une description du cours qui ne tienne aucun compte de nos propositions, il vous suffit de ne créer que des rubriques \'Autre\'.</p>
-<p>Pour remplir la Description du cours, cliquez sur Créer et éditer une description... > Déroulez le menu déroulant et sélectionnez la rubrique de votre choix puis validez. Remplissez ensuite les champs. Il vous sera à tout moment possible de détruire ou de modifier une rubrique en cliquant sur le crayon ou sur la croix rouge.</p>";
+$langDescriptionContent = "<p>L\'outil Description du cours vous invite à décrire votre cours de manière synthétique et globale dans une logique de cahier des charges. Cette description pourra servir à donner aux apprenants un avant-goût de ce qui les attend. Pour décrire le cours chronologiquement étape par étape, préférez l\'Agenda ou le Parcours.</p>Les rubriques sont proposées à titre de suggestion. Si vous souhaitez rédiger une description du cours qui ne tienne aucun compte de nos propositions, il vous suffit de ne créer que des rubriques \'Autre\'.</p>
+<p>Pour remplir la Description du cours, cliquez sur chacune des images, remplissez et validez.</p>";
 $langHLinks = "Aide Liens";
 $langLinksContent = "<p>L\'outil Liens vous permet de constituer une bibliothèque de ressources pour vos étudiants et en particulier de ressources que vous n\'avez pas produites vous-même.</p>
 <p>Lorsque la liste s\'allonge, il peut être utile d\'organiser les liens en catégories afin de faciliter la recherche d\'information par vos étudiants. Veillez é vérifier de temps en temps si les liens sont toujours valides.</p>
@@ -510,27 +370,27 @@ $langMycoursesContent = "<p>Une fois identifié dans le système, vous êtes ici su
 Pour entrer dans un cours (partie gauche de l\'écran), cliquez sur son intitulé. Votre profil peut varier d\'un cours à l\'autre. Il se pourrait que vous soyez responsable dans tel cours et apprenant dans un autre. Dans les cours où vous êtes responsable, vous disposez d\'outils d\'édition, dans les cours où vous êtes apprenant, vous accédez aux outils sur un mode plus passif.</p>
 <p>La disposition de <i>votre</i> page peut varier d\'une organisation à l\'autre selon les options qui ont été activées par l\'administrateur système. Ainsi il est possible que vous n\'ayez pas accès à la fonction de création de cours, même en tant que formateur, parce que cette fonction est gérée par une administration centrale.";
 $langHAgenda = "Aide Agenda";
-$langAgendaContent = "<p>L\'agenda est un outil qui prend place à la fois dans chaque cours et comme outil de synthèse pour l\'étudiant (\'Mon agenda\') reprenant l\'ensemble des événements relatifs aux cours dans lesquels il est inscrit.</p>Depuis Dokeos 1.5.4 il est possible d\'ajouter des annexes aux événements : documents, liens divers. Ceci permet de traiter l\'agenda comme un outil de programmation de l\'apprentissage jour après jour ou semaine après semaine qui renvoie aux contenus et aux activités.</p>Toutefois, si l\'on souhaite organiser les activités dans le temps de façon structurée, il peut être préférable d\'utiliser l\'outil Parcours qui permettra de construire de véritables séquences à travers le temps, les activités ou le contenu en présentant le cours selon une logique formelle de table des matières.</p>";
+$langAgendaContent = "<p>L\'agenda est un outil qui prend place à la fois dans chaque cours et comme outil de synthèse pour l\'étudiant (\'Mon agenda\') reprenant l\'ensemble des événements relatifs aux cours dans lesquels il est inscrit.</p>Depuis Dokeos 1.8, les groupes disposent également d\'un agenda. Ceci permet de traiter l\'agenda comme un outil de programmation de l\'apprentissage jour après jour ou semaine après semaine qui renvoie aux contenus et aux activités.</p>Toutefois, si l\'on souhaite organiser les activités dans le temps de façon structurée, il préférable d\'utiliser l\'outil Parcours qui permettra de construire de véritables séquences à travers le temps, les activités ou le contenu en présentant le cours selon une logique formelle de table des matières.</p>";
 $langHAnnouncements = "Aide Annonces";
 $langAnnouncementsContent = "<p>L\'outil d\'Annonces vous permet d\'envoyer un message par courriel aux étudiants/apprenants. Que ce soit pour leur signaler que vous avez déposé un nouveau documents, que la date de remise des rapports approche ou qu\'untel a réalisé un travail de qualité, l\'envoi de courriels, s\'il est utilisé avec modération, permet d\'aller chercher les participants et peut-être de les ramener au site web s\'il est déserté.</p>
 <b>Message pour certains membres</b>
 <p>Outre l\'envoi d\'un courriel à l\'ensemble des membres du cours, vous pouvez envoyer un courriel à une ou plusieurs personnes et/ou un ou plusieurs groupes. Dans ce nouvel outil, utilisez CTRL+clic pour sélectionner plusieurs éléments dna le menu de gauche puis cliquez sur la flèche droite pour les amener dans le menu de droite. Tapez ensuite votre message dans le champ de saisie situé en bas de la page.";
 $langHChat = "Aide Discussion";
-$langChatContent = "<p>L\'outil de discussion est un \'chat\' ou \'clavardage\' qui vous permet de discuter en direct avec vos étudiants/participants.</p>
-<p>A la différence des outils de chat que l\'on trouve sur le marché, ce \'chat\' fonctionne dans une page web et non à l\'aide d\'un client additionnel à télécharger : Microsoft Messenger®, Yahoo! Messenger® etc. L\'avantage de cette solution est l\'universalité garantie de son utilisation sur tous ordinateurs et sans délai. L\'inconvénient est que la liste des messages ne se rafraichit pas instantamément mais peut prendre de 5 à 10 secondes.</p>
-<p>Si les étudiants/participants ont envoyé leur photo dans l\'outil \'Mon profil\', celle-ci apparaîtra en réduction à côté de leurs messages. Sinon, ce sera une photo par défaut en noir sur fond blanc.</p>
-<p>Il appartient au responsable d\'effacer les discussions quand il/elle le juge pertinent. Par ailleurs, ces discussions sont archivées automatiquement dans l\'outil \'Documents\'.</p>
+$langChatContent = "<p>L\'outil de discussion est un \'chat\' ou \'clavardage\' qui vous permet de discuter en direct avec vos apprenants.</p>
+<p>A la différence des outils de chat que l\'on trouve sur le marché, ce \'chat\' fonctionne dans une page web et non à l\'aide d\'un client additionnel à télécharger : Microsoft Messenger®, Yahoo! Messenger® etc. L\'avantage de cette solution est l\'universalité garantie de son utilisation sur tous ordinateurs et sans délai. L\'inconvénient est que la liste des messages ne se rafraichit pas instantamément mais peut prendre de 1 à 5 secondes.</p>
+<p>Si les apprenants ont envoyé leur photo dans l\'outil \'Mon profil\', celle-ci apparaîtra en réduction dans la colonne de gauche. Sinon, ce sera une photo par défaut.</p>
+<p>Il appartient au responsable du cours d\'effacer les discussions quand il/elle le juge pertinent. Par ailleurs, ces discussions sont archivées automatiquement dans l\'outil \'Documents\'.</p>
 <b>Usages pédagogiques</b>
-<p>Si l\'ajout d\'un \'chat\' dans le cours n\'apporte pas nécessairement une valeur ajoutée dans les processus d\'apprentissage, une utilisation méthodique de celui-ci peut apporter une réelle contribution. Ainsi, vous pouvez fixer des rendez-vous de questions-réponses à vos membres et désactiver l\'outil le reste du temps, ou bien exploiter l\'archivage des discussions pour revenir en classe sur un sujet abordé dans le passé.";
+<p>Si l\'ajout d\'un \'chat\' dans le cours n\'apporte pas comme tel une valeur ajoutée dans les processus d\'apprentissage, une utilisation méthodique de celui-ci peut apporter une réelle contribution. Ainsi, vous pouvez fixer des rendez-vous de questions-réponses à vos membres et désactiver l\'outil le reste du temps, ou bien exploiter l\'archivage des discussions pour revenir en classe sur un sujet abordé dans le passé.";
 $langHWork = "Aide Travaux";
-$langWorkContent = "<p>L\'outil Travaux est un outil très simple permettant à vos étudiants/participants d\'envoyer des documents vers le cours. Il peut servir à réceptionner des rapports individuels ou collectifs, des réponses à des questions ouvertes ou toute autre forme de document.</p>
+$langWorkContent = "<p>L\'outil Travaux est un outil très simple permettant à vos apprenants d\'envoyer des documents vers le cours. Il peut servir à réceptionner des rapports individuels ou collectifs, des réponses à des questions ouvertes ou toute autre forme de document.</p>
 <p>Beaucoup de formateurs/d\'enseignants masquent l\'outil Travaux jusqu\'à la date de remise des rapports. Vous pouvez aussi pointer vers cet outil par un lien depuis le texte d\'introduction de votre cours ou l\'agenda. L\'outil Travaux dispose lui aussi d\'un texte d\'introduction qui pourra vous servir à formuler une question ouverte, à préciser les consignes pour la remise de rapports ou toute autre information.</p>
 <p>Les travaux sont soit publics soit à destination du seul responsable. Publics, ils serviront un dispositif de regard croisé dans lequel vous invitez les participants à commenter mutuellement leurs productions selon un scénario et des critères éventuellement formulés dans le Texte d\'intruduction. Privés, ils seront comme une boîte aux lettres du formateur/ de l\'enseignant.";
 $langHTracking = "Aide Suivi statistique";
 $langTrackingContent = "<p>L\'outil de suivi statistique vous permet de suivre l\'évolution du cours à deux niveaux:
 <ul><li><b>Globalement</b>: quelles sont les pages les plus visitées, quel est le taux de connection par semaine...?</li>
-<li><b>Nominativement</b>: quelles pages Jean Dupont a vues et quand, quels résultats a-t-il obtenu aux exercices, combien de temps est-il resté dans chaque chapitre d\'un cours Scorm, quels traavaux a-t-il déposé et à quelle date?</li></ul>
-Pour obtenir les statistiques nominatives, cliquez sur \'Membres\'. Pour les statistiques globales, cliquez sur \'Montrer tout\'.</p>
+<li><b>Nominativement</b>: quelles pages Jean Dupont a vues et quand, quels scores a-t-il obtenu aux exercices, combien de temps est-il resté dans chaque chapitre d\'un cours Scorm, quels travaux a-t-il déposé et à quelle date?</li></ul>
+Pour obtenir les statistiques nominatives, cliquez sur \'Utilisateurs\'. Pour les statistiques globales, cliquez sur \'Montrer tout\'.</p>
 <p>";
 $langHSettings = "Aide Propriétés du cours";
 $langSettingsContent = "<p>L\'outil \'Propriétés du cours\' vous permet de modifier le comportement global de votre cours.</p>

@@ -33,4 +33,5 @@ $EditToolOptions = "Opcije orodja Uredi";
 $DocumentDeleted = "Dokument je bil odstranjen";
 $SendMailBody = "Uporabnik je prepisal dokument v objave teajnikov tvojega teèaja.";
 $DirDelete = "Odstrani mapo";
+$ValidateChanges = "Uveljavi spremembe";
 ?>

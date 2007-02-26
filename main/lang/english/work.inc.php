@@ -33,4 +33,5 @@ $EditToolOptions = "Edit Tool Options";
 $DocumentDeleted = "Document deleted";
 $SendMailBody = "A user posted a document in the work tool of your course.";
 $DirDelete = "Delete directory";
+$ValidateChanges = "Validate changes";
 ?>

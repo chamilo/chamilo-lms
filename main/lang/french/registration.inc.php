@@ -13,7 +13,7 @@ $langImageWrong = "La taille du fichier doit être inférieure à";
 $langAddImage = "Ajoutez une photo";
 $langCourseManager = "Responsable";
 $password_request = "Vous avez demandé que votre mot de passe soit réinitialisé. Si vous ne l\'avez pas demandé, veuillez ignorer cet e-mail. Pour réinitialiser votre mot de passe, cliquez sur le lien \"réinitialiser\".";
-$YourPasswordHasBeenEmailed = "Votre mot de passe vous a été envoyé par courrier électronique.";
+$YourPasswordHasBeenEmailed = "Votre mot de passe vous a été envoyé par email.";
 $lang_enter_email_and_well_send_you_password = "Entrez l\'adresse de courrier électronique que vous avez utilisée pour vous enregistrer et nous vous enverrons votre mot de passe.";
 $langLogin = "Log In";
 $langAction = "Action";
@@ -25,7 +25,7 @@ $langCourseName = "Nom du cours";
 $langSubscribe = "M\'inscrire<br>coché = oui";
 $langSee = "Voir";
 $langLastVisits = "Mes dernières visites";
-$langIfYouWantToAddManyUsers = "Si vous voulez ajouter une liste des membres de votre cours, contactez votre web administrateur.";
+$langIfYouWantToAddManyUsers = "Si vous voulez ajouter une liste des utilisateurs de votre cours, contactez votre web administrateur.";
 $langPassTooEasy = "Ce mot de passe est trop simple. Veuillez choisir un autre mot de passe comme par exemple";
 $langGroupUserManagement = "Gestion des groupes";
 $langAddedToCourse = "a été inscrit à votre cours";
@@ -40,11 +40,9 @@ $langDownloadUserList = "Envoyer la liste";
 $langSend = "Envoyer";
 $langUserAddExplanation = "Chaque ligne du fichier à envoyer
 		contiendra nécessairement et uniquement les
-		5 champs <b>Nom   Prénom   
-		Identifiant   Mot de passe 
-		  Courriel</b> séparés par des tabulations
+		5 champs <b>First name   Last name    Login   Password    Email</b> séparés par des tabulations
 		et présentés dans cet ordre. Les membres recevront
-		par courriel identifiant et mot de passe.";
+		par email identifiant et mot de passe.";
 $langUserMany = "Importer une liste de membres via un fichier CSV / XML";
 $langOneByOne = "Ajouter manuellement un utilisateur";
 $langNow = "actuellement";
@@ -54,7 +52,7 @@ $langAddHereSomeCourses = "<font size=2 face=\'arial, helvetica\'><big>Mes cours
 			Cochez les cours auxquels vous souhaitez participer et décochez ceux auxquels vous
 			ne voulez plus participer (les cours dont vous êtes responsable
 			ne peuvent être décochés). Cliquez ensuite sur Ok en bas de la liste.";
-$langStudent = "membre";
+$langStudent = "apprenant";
 $langImportUserList = "Importer une liste d\'utilisateurs";
 $langAddAU = "Ajouter des membres";
 $langAddedU = "a été ajouté. Si vous avez introduit son adresse, un message lui a été envoyé pour lui communiquer son identifiant";
@@ -125,7 +123,7 @@ $langAdministrationTools = "Outils d\'administration";
 $langUserProfileReg = "La modification du profil a été effectuée";
 $lang_no_user_account_with_this_email_address = "Il n\'y a pas de compte utilisateur avec cette adresse de courrier électronique.";
 $langCourses4User = "Cours pour ce membre";
-$langCoursesByUser = "Vue d\'ensemble des cours par membre";
+$langCoursesByUser = "Vue d\'ensemble des cours par utilisateurs";
 $langSubscribeUserToCourse = "Inscrire des utilisateurs";
 $langPreced100 = "100 précédents";
 $langAddmore = "Ajoutez des utilisateurs enregistrés";
@@ -163,6 +161,9 @@ $AccountsExternalAuthSource = "Dokeos ne peut prendre cette requête en charge au
 $RequestSentToPlatformAdmin = "Dokeos ne peut prendre la requête en charge automatiquement pour ce type de compte. Votre requête a été envoyée à un administrateur de la plateforme qui prendra les mesures appropriées et vous avertira du résultat.";
 $langphone = "Téléphone";
 $Unreg = "Désinscrire";
+$MyProgress = "Mes progrès";
+$ProgressIntroduction = "Commencez par choisir une session ci-dessous. </br>Vous pouvez ensuite voir votre progression dans tous les cours où vous êtes inscrit(e)";
+$Select = "Sélectionnez";
 $NeverExpires = "N\'expire jamais";
 $On = "Le";
 $ExpirationDate = "Date d\'expiration";

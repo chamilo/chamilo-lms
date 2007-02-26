@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langStatDB              = "Base pour le tracking.  Utile uniquement si vous séparez les bases centrale et tracking";
 $langEnableTracking      = "Activer le Tracking";
-$langInstituteShortName  = "Nom abrégé de l\'institution";
+$langInstituteShortName  = "Nom abrégé de l\'organisation";
 $langWarningResponsible  = "Utilisez ce script après avoir fait un backup. Nous ne pourrons être tenu responsable pour tout problème qui vous ferai perdre des données.";
 $langAllowSelfRegProf  = "Autoriser l\'auto-inscription en tant que créateur de cours";
 $langEG = "par ex.";

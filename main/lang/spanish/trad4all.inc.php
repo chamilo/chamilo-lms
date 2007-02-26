@@ -405,4 +405,5 @@ $Vertical = "Vertical";
 $DisplaySearchResults = "Mostrar los resultados de la búsqueda";
 $DisplayAll = "Mostrar todos";
 $File_upload = "Enviar archivo";
+$Percentage = "Porcentaje";
 ?>

@@ -10,7 +10,7 @@ $langMoveDown = "Descendre";
 $langAddNewHeading = "Ajouter un intitulé";
 $langCourseAdministratorOnly = "Réservé au responsable";
 $langDefineHeadings = "Définir les intitulés";
-$langBackToUsersList = "Retourner à liste des membres";
+$langBackToUsersList = "Retourner à liste des utilisateurs";
 $langTracking = "Suivi";
 $langCourseManager = "Responsable";
 $langModRight = "changer les droits de";
@@ -26,7 +26,7 @@ $langTaken = "est déjà utilisé.";
 $langTutor = "Tuteur";
 $langUnreg = "Désinscrire";
 $langGroupUserManagement = "Gestion des groupes";
-$langUserInfo = "Fiche membre";
+$langUserInfo = "Fiche utilisateur";
 $langUnregister = "Non enregistré";
 $langAddAUser = "Ajouter des utilisateurs";
 ?>

@@ -2,15 +2,15 @@
 for more information: see languages.txt in the lang folder. 
 */
 $MoveTo = "Déplacer vers";
-$langDownloadFile = "Transférer le fichier sur le serveur";
+$langDownloadFile = "Charger le fichier";
 $langCreateDir = "Créer un répertoire";
 $langNameDir = "Nom du nouveau répertoire";
 $langSize = "Taille";
 $langRename = "Renommer";
 $langCopy = "Copier";
 $langTo = "vers";
-$langNoSpace = "Le téléchargement a échoué. Il n\'y a plus assez de place dans votre répertoire";
-$langDownloadEnd = "Le téléchargement est terminé";
+$langNoSpace = "Le chargement a échoué. Il n\'y a plus assez de place dans votre répertoire";
+$langDownloadEnd = "Le chargement est terminé";
 $langFileExists = "Impossible d\'effectuer cette opération.
 <br>Un fichier portant ce nom existe déjà.";
 $langNewDir = "Nom du nouveau répertoire";
@@ -28,7 +28,7 @@ $langGroupSpaceLink = "Espace du groupe";
 $langGroupForumLink = "Forum du groupe";
 $langZipNoPhp = "Le fichier ZIP ne peut pas contenir de fichiers en .php";
 $langUncompress = "Décompresser un fichier ZIP";
-$langDownloadAndZipEnd = " Le fichier .zip a été envoyé et décompressé";
+$langDownloadAndZipEnd = " Le fichier ZIP a été envoyé et décompressé";
 $langRoot = "racine";
 $langCreateDoc = "Créer un document";
 $langDown = "Descendre";
@@ -89,7 +89,7 @@ $UplUnableToSaveFile = "Le fichier envoyé n\'a pu être sauvé (problème de permis
 $UplNotEnoughSpace = "Plus assez d\'espace pour envoyer ce fichier!";
 $UplNoSCORMContent = "Aucun contenu SCORM n\'a été trouvé!";
 $UplZipExtractSuccess = "Fichier zip extrait!";
-$UplZipCorrupt = "Impossible d\'extraire le fichier zip (fichier corrompu?).";
+$UplZipCorrupt = "Impossible d\'extraire le fichier ZIP (fichier corrompu?).";
 $UplAlreadyExists = "existe déjà!";
 $UplFileSavedAs = "Fichier sauvé sous";
 $UplFileOverwritten = "a été écrasé.";
@@ -103,14 +103,14 @@ $UplOverwriteLong = "Écraser le fichier existant";
 $UplRename = "Renommer";
 $UplRenameLong = "Renommer le fichier envoyé s\'il existe déjà";
 $Metadata = "Méta-données";
-$DocumentQuota = "Quota de document";
+$DocumentQuota = "Quota de documents autorisé";
 $NoDocsInFolder = "Pas de document dans ce répertoire!";
 $UploadTo = "Télécharger vers";
 $fileModified = "Le fichier est modifié";
 $DocumentsOverview = "l\'outil Documents";
-$ViewSlideshow = "Gallerie d\'images";
+$ViewSlideshow = "Galerie d\'images";
 $Options = "Options";
-$WelcomeOogieConverter = "Bienvenue dans le convertisseur de Power Point Oogie<ul type=\\\"1\\\"><li>Choisissez un fichier .ppt ou .odp<li>Envoyez ce fichier à Oogie. Il sera converti en parcours Scorm<li>Vous allez maintenant pouvoir ajouter des commentaires audios sur chaque slide et insérer des tests entres les diapos pour une évaluation</ul>";
+$WelcomeOogieConverter = "Bienvenue dans le convertisseur de Power Point Oogie<ul type=\\\"1\\\"><li>Choisissez un fichier .ppt ou .odp<li>Envoyez ce fichier à Oogie. Il sera converti en parcours SCORM<li>Vous pourrez ensuite ajouter des commentaires audio sur chaque dia et insérer tests et activités entres les dias</ul>";
 $ConvertToLP = "Convertir en parcours";
 $Content = "Contenu";
 $Validate = "Valider";

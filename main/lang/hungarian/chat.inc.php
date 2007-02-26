@@ -33,4 +33,6 @@ $langChat_reset_by = "cseveg&#337; kiürítése";
 $OrFile = "vagy fájl";
 $langCallSent = "Chat-felhívás elküldve";
 $langChatDenied = "Visszautasítva.";
+$Send = "Küld";
+$Connected = "Létrejött a kapcsolat";
 ?>

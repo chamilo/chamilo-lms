@@ -212,4 +212,5 @@ $LessAnswer = "- respuesta";
 $YourScore = "Su puntuación";
 $Attempted = "Intentado";
 $AssignMarks = "Dar una nota";
+$Results = "Resultados";
 ?>

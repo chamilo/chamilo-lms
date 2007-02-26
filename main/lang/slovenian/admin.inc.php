@@ -586,8 +586,15 @@ $CodeDoesNotExists = "Ta koda ne obstaja";
 $UnknownUser = "Neznan uporabnik";
 $UnknownStatus = "Neznan status";
 $SessionDeleted = "Ta seja je bila odstranjena";
+$CourseDoesNotExist = "Ta teèaj ne obstaja";
 $UserDoesNotExist = "Ta uporabnik ne obstaja";
+$ButProblemsOccured = "vendar so se pojavili problemi";
 $UsernameTooLongWasCut = "To uporabniško ime je bilo skrajšano";
 $NoInputFile = "Nobena datoteka ni bila poslana";
 $NoInputFile = "Nobena datoteka ni bila poslana";
+$StudentStatusWasGivenTo = "Status teèajnika je bil dodeljen za";
+$WrongDate = "Napaèna oblika datuma (llll-mm-dd)";
+$WrongDate = "Napaèna oblika datuma (llll-mm-dd)";
+$DateStartMoreThanDateEnd = "Konèni datum je pred zaèetnim";
+$SlideSize = "Velikost diapozitiva";
 ?>

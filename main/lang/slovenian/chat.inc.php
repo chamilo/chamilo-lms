@@ -33,4 +33,6 @@ $langChat_reset_by = "resetiraj klepetalnico";
 $OrFile = "Ali datoteka";
 $langCallSent = "Poziv na razgovor je bil odposlan. Poèakaj na potrditev ali zavrnitev svojega klica.";
 $langChatDenied = "Tvoj klic je klicoèi zavrnil.";
+$Send = "Pošlji";
+$Connected = "Povezan";
 ?>

@@ -596,4 +596,5 @@ $StudentStatusWasGivenTo = "Lo stato dell\'utente è ora";
 $WrongDate = "Errore nel formato della data (yyyy-mm-dd)";
 $WrongDate = "Errore nel formato della data (yyyy-mm-dd)";
 $DateStartMoreThanDateEnd = "La data iniziale è successiva a quella iniziale!";
+$SlideSize = "Dimensione delle diapositive";
 ?>

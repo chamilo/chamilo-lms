@@ -156,6 +156,8 @@ $PeopleWhoAnswered = "Pessoas que escolheram esta resposta";
 $CourseUsers = "Utilizadores inscritos no curso";
 $SurveyPublication = "Publicação do questionário";
 $AdditonalUsers = "Utilizadores adicionais";
+$AdditonalUsersComment = "Pode convidar um utilizador adicional não pertencente ao curso para preencher este questionário bastando para isso acrescentar o endereço de email aqui separado por uma , ou ;";
 $MailTitle = "Título do email";
 $MailText = "Texto do email";
+$UseLinkSyntax = "Os utilizadores seleccionados receberão um email com o texto acima e uma única ligação que terão de clicar para preencher o questionário. Se desejar colocar a ligação noutro lugar do texto tem de de escrever o seguinte texto onde desejar no meio do texto: **ligação** (asterisco asterisco ligação asterisco asterisco). Isto será automaticamente substituído por uma única ligação. Se não acrescentar **ligação** no seu texto uma ligação será, então, acrescentada na parte final do texto.";
 ?>

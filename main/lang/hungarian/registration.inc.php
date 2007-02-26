@@ -160,4 +160,7 @@ $NeverExpires = "Soha nem jár le";
 $On = "Hol";
 $ExpirationDate = "Lejárat dátuma";
 $ActiveAccount = "Aktív felhasználó";
+$YourAccountHasToBeApproved = "Felhasználói fiókját jóvá kell hagyni";
+$ApprovalForNewAccount = "Új felhasználó jóváhagyása";
+$ManageUser = "Felhasználók kezelése";
 ?>

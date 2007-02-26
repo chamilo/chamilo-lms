@@ -211,4 +211,5 @@ $LessAnswer = "- válasz";
 $YourScore = "Az eredménye:";
 $Attempted = "Elkezdve";
 $AssignMarks = "Osztályzat hozzáadása";
+$Results = "Eredmények";
 ?>

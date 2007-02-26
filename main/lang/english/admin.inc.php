@@ -595,4 +595,5 @@ $StudentStatusWasGivenTo = "Student status has been given to";
 $WrongDate = "Wrong date format (yyyy-mm-dd)";
 $WrongDate = "Wrong date format (yyyy-mm-dd)";
 $DateStartMoreThanDateEnd = "Start date is more than end date";
+$SlideSize = "Size of the slides";
 ?>

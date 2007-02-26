@@ -211,4 +211,5 @@ $LessAnswer = "- risposte";
 $YourScore = "Il tuo punteggio";
 $Attempted = "Affrontato";
 $AssignMarks = "Dai un voto";
+$Results = "Risultati";
 ?>

@@ -1,10 +1,10 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$AgendaAdd = "Ajouter un nouvel événement";
+$AgendaAdd = "Ajouter un événement";
 $ShowAll = "Afficher tous les événements";
 $ShowCurrent = "Afficher les événements du mois";
-$AddCalendarItem = "Ajouter un nouvel événement";
+$AddCalendarItem = "Ajouter un événement";
 $Day = "Jour";
 $Month = "Mois";
 $Year = "Année";
@@ -31,21 +31,21 @@ $langLasting = "durée";
 $langOldToNew = "d\'ancien à nouveau";
 $langNewToOld = "de nouveau à ancien";
 $langNow = "maintenant";
-$langAddEvent = "Ajouter un évènement";
+$langAddEvent = "Ajouter un événement";
 $langDetail = "détail";
 $MonthView = "Vue par mois";
 $WeekView = "Vue par semaine";
 $DayView = "Vue par jour";
-$AddPersonalItem = "Ajouter un élément d\'agenda personnel";
+$AddPersonalItem = "Ajouter un événement perso";
 $Week = "Semaine";
 $Date = "Date";
 $Time = "Heure";
-$AddPersonalCalendarItem = "Ajouter un élément d\'agenda personnel";
-$ModifyPersonalCalendarItem = "Modifier un élément d\'agenda personnel";
-$PeronalAgendaItemAdded = "Votre élément d\'agenda personnel a été ajouté";
-$PeronalAgendaItemEdited = "Votre élément d\'agenda personnel a été modifié";
-$PeronalAgendaItemDeleted = "Votre élément d\'agenda personnel a été supprimé";
-$ViewPersonalItem = "Visualiser l\'agenda personnel";
+$AddPersonalCalendarItem = "Ajouter un événement perso";
+$ModifyPersonalCalendarItem = "Modifier un événement perso";
+$PeronalAgendaItemAdded = "Votre événement perso a été ajouté";
+$PeronalAgendaItemEdited = "Votre événement perso a été modifié";
+$PeronalAgendaItemDeleted = "Votre événement perso a été supprimé";
+$ViewPersonalItem = "Visualiser l\'agenda perso";
 $UserGroupFilter = "Filtrer par groupes/utilisateurs";
 $VisibilityChanged = "Visibilité modifiée";
 $ShowAll = "Tous les utilisateurs";

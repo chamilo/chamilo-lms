@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 11050 2007-02-02 10:48:43Z elixir_julian $
+// $Id: course_add.php 11239 2007-02-26 15:44:23Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -71,7 +71,7 @@ $res = api_sql_query($sql,__FILE__,__LINE__);
 $teachers = array();
 while($obj = mysql_fetch_object($res))
 {
-		$teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
+		$teachers[$obj->user_id] = $obj->firstname.' '.$obj->lastname;
 }
 // Build the form
 $form = new FormValidator('update_course');

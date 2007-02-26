@@ -104,10 +104,10 @@ $resultFormateurs = api_sql_query($sqlFormateurs);
 echo '<table class="data_table">
 	 	<tr>
 			<th>
-				'.get_lang('LastName').'
+				'.get_lang('FirstName').'
 			</th>
 			<th>
-				'.get_lang('FirstName').'
+				'.get_lang('LastName').'
 			</th>
 			<th>
 				'.get_lang('Email').'
@@ -121,8 +121,8 @@ echo '<table class="data_table">
 		</tr>
   	 ';
 
-$a_header[]=get_lang('LastName');
 $a_header[]=get_lang('FirstName');
+$a_header[]=get_lang('LastName');
 $a_header[]=get_lang('Email');
 
 $a_data=array();
@@ -144,10 +144,10 @@ if(mysql_num_rows($resultFormateurs)>0){
 			if($i%20==0 && $i!=0){
 				echo '<tr>
 				<th>
-					'.get_lang('LastName').'
+					'.get_lang('FirstName').'
 				</th>
 				<th>
-					'.get_lang('FirstName').'
+					'.get_lang('LastName').'
 				</th>
 				<th>
 					'.get_lang('Email').'
@@ -168,11 +168,11 @@ if(mysql_num_rows($resultFormateurs)>0){
 		
 		$i++;
 		
-		$a_data[$i_user_id]["lastname"]=$s_lastname;
 		$a_data[$i_user_id]["firstname"]=$s_firstname;
+		$a_data[$i_user_id]["lastname"]=$s_lastname;
 		$a_data[$i_user_id]["email"]=$s_email;
 		
-		echo '<tr class="'.$s_css_class.'"><td>'.$s_lastname.'</td><td>'.$s_firstname.'</td><td><a href="mailto:'.$s_email.'">'.$s_email.'</a></td><td><a href="cours.php?user_id='.$i_user_id.'">-></a></td><td><a href="student.php?user_id='.$i_user_id.'">-></a></td></tr>';
+		echo '<tr class="'.$s_css_class.'"><td>'.$s_firstname.'</td><td>'.$s_lastname.'</td><td><a href="mailto:'.$s_email.'">'.$s_email.'</a></td><td><a href="cours.php?user_id='.$i_user_id.'">-></a></td><td><a href="student.php?user_id='.$i_user_id.'">-></a></td></tr>';
 		
 	}
 	

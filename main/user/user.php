@@ -389,8 +389,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 		$columns[] = 'u.user_id';
 		$columns[] = 'u.official_code';
-		$columns[] = 'u.lastname';
 		$columns[] = 'u.firstname';
+		$columns[] = 'u.lastname';
 		$columns[] = 'cu.role';
 		$columns[] = "''"; //placeholder for group-data
 		$columns[] = "IF(cu.tutor_id = 1,'".get_lang('Tutor')."','')";
@@ -446,8 +446,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 	    $columns[] = 'u.user_id';
 		$columns[] = 'u.official_code';
-		$columns[] = 'u.lastname';
 		$columns[] = 'u.firstname';
+		$columns[] = 'u.lastname';
 		$columns[] = "''";
 		$columns[] = "''"; //placeholder for group-data
 		$columns[] = "''";
@@ -487,8 +487,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$columns[] = 'u.user_id';
 			}
 			$columns[] = 'u.official_code';
-			$columns[] = 'u.lastname';
 			$columns[] = 'u.firstname';
+			$columns[] = 'u.lastname';
 			$columns[] = '""';
 			$columns[] = "''"; //placeholder for group-data
 			if(api_is_allowed_to_edit())
@@ -525,8 +525,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$columns[] = 'u.user_id';
 			}
 			$columns[] = 'u.official_code';
-			$columns[] = 'u.lastname';
 			$columns[] = 'u.firstname';
+			$columns[] = 'u.lastname';
 			$columns[] = '""';
 			$columns[] = "''"; //placeholder for group-data
 			if(api_is_allowed_to_edit())
@@ -628,8 +628,8 @@ $header_nr = 0;
 	$table->set_header($header_nr++, '', false);
 }
 $table->set_header($header_nr++, get_lang('OfficialCode'));
-$table->set_header($header_nr++, get_lang('LastName'));
 $table->set_header($header_nr++, get_lang('FirstName'));
+$table->set_header($header_nr++, get_lang('LastName'));
 $table->set_header($header_nr++, get_lang('Role'));
 $table->set_header($header_nr++, get_lang('Group'),false);
  if( api_is_allowed_to_edit())

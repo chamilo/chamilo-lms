@@ -162,10 +162,10 @@ $resultCoachs = api_sql_query($sqlCoachs);
 echo '<table class="data_table">
 	 	<tr>
 			<th>
-				'.get_lang('LastName').'
+				'.get_lang('FirstName').'
 			</th>
 			<th>
-				'.get_lang('FirstName').'
+				'.get_lang('LastName').'
 			</th>
 			<th>
 				'.get_lang('ConnectionTime').'
@@ -179,8 +179,8 @@ echo '<table class="data_table">
 		</tr>
   	 ';
 
-$a_header[]=get_lang('LastName');
 $a_header[]=get_lang('FirstName');
+$a_header[]=get_lang('LastName');
 $a_header[]=get_lang('ConnectionTime');
 
 if(mysql_num_rows($resultCoachs)>0){
@@ -254,11 +254,11 @@ if(mysql_num_rows($resultCoachs)>0){
 		
 		$i++;
 		
-		$a_data[$i_id_coach]["lastname"]=$s_lastname;
 		$a_data[$i_id_coach]["firstname"]=$s_firstname;
+		$a_data[$i_id_coach]["lastname"]=$s_lastname;
 		$a_data[$i_id_coach]["connection_time"]=$s_connection_time;
 			
-		echo '<tr class="'.$s_css_class.'"><td>'.$s_lastname.'</td><td>'.$s_firstname.'</td><td>'.$s_connection_time.'</td><td><a href="cours.php?type=coach&user_id='.$i_id_coach.'">-></a></td><td><a href="student.php?type=coach&user_id='.$i_id_coach.'">-></a></td></tr>';
+		echo '<tr class="'.$s_css_class.'"><td>'.$s_firstname.'</td><td>'.$s_lastname.'</td><td>'.$s_connection_time.'</td><td><a href="cours.php?type=coach&user_id='.$i_id_coach.'">-></a></td><td><a href="student.php?type=coach&user_id='.$i_id_coach.'">-></a></td></tr>';
 		
 	}
 	

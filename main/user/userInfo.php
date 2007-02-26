@@ -97,8 +97,8 @@ $userIdViewer = $_user['user_id']; // id fo the user currently online
 //$userIdViewed = $_GET['userIdViewed']; // Id of the user we want to view
 
 $allowedToEditContent = ($userIdViewer == $userIdViewed) || $is_platformAdmin;
-$allowedToEditDef = $is_courseAdmin;
-$is_allowedToTrack = $is_courseAdmin && $_configuration['tracking_enabled'];
+$allowedToEditDef = api_is_allowed_to_edit();
+$is_allowedToTrack = api_is_allowed_to_edit() && $_configuration['tracking_enabled'];
 
 // Library connection
 include ("userInfoLib.php");
@@ -301,6 +301,7 @@ elseif ($displayMode == "viewContentEdit")
 }
 elseif ($displayMode == "viewMainInfoEdit")
 {
+	
 	/*>>>>>>>>>>>> CATEGORIES MAIN INFO : EDIT <<<<<<<<<<<<*/
 
 	$mainUserInfo = get_main_user_info($userIdViewed, $courseCode);

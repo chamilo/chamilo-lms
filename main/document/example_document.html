@@ -13,7 +13,6 @@
 	GLOBAL STYLES
 ==============================================================================
 */
-
 #box_title {
 	text-align: right;
 	margin-left: 30%;
@@ -40,7 +39,7 @@
 }
 
 #footer_template {
-	background: transparent url("http://192.168.1.3/dokeos_SVN/main/css/default/images/footer_template.png") no-repeat top center;
+	background: transparent url("../../../main/css/default/images/footer_template.png") no-repeat top center;
 	width: 690px;
 	height: 48px;
 	clear:both;
@@ -48,97 +47,81 @@
 
 #header_template {
 	width: 690px;
-	background: transparent url("http://192.168.1.3/dokeos_SVN/main/css/default/images/writerheader.png") no-repeat top
+	background: transparent url("../../../main/css/default/images/writerheader.png") no-repeat top
 		left;
-	height: 185px;
+	height: 150px;
+}
+
+/*
+------------------------------------------------------------------------------
+	Presentation
+------------------------------------------------------------------------------
+*/
+
+#text_presentation { 
+	/* Min-height hack for IE 6*/
+	min-height: 200px;
+	height: auto !important;
+	height: 200px;
+	width: 690px;
+	float:left;
+	text-align: justify;
+	background: transparent url("images/repeat_template.png") repeat-y top center;
+}
+
+#text_presentation em {
+	font: normal normal bold 1em verdana, 'Lucida Grande', sans-serif, sans;
+}
+
+#text_presentation img.left {
+	float: left;
+	margin: 0 2em 2em 1em;
+	clear: left;
+	display: block;
+}
+
+#text_presentation p {
+	text-align: justify;
+	width: 620px;
+	margin: 1em auto 1em auto;
 }
 
 
 /*
 ------------------------------------------------------------------------------
-	Explanation
+	Blank template
 ------------------------------------------------------------------------------
 */
-#body_explanation {
-	background: transparent url("http://192.168.1.3/dokeos_SVN/main/css/default/images/repeat_template.png") repeat-y top center;
-	padding-bottom:2em;
+
+#blank_template #text_presentation { 
 	/* Min-height hack for IE 6*/
-	min-height: 250px;
+	min-height: 200px;
 	height: auto !important;
-	height: 250px;
+	height: 200px;
 	width: 690px;
 	float:left;
+	text-align: justify;
+	background: transparent url("../../../main/css/default/images/repeat_template.png") repeat-y top center;
 }
 
-#explanation #header_template {
-	background: transparent url("http://192.168.1.3/dokeos_SVN/main/css/default/images/teacherheader.png") no-repeat top
-		left;
-}
-
-#menu_explanation {
-	margin:1em 0 0 0;
-	padding:0;
-	width:130px;
-	margin-left:20px;
+#blank_template #box_title {
+	text-align: right;
+	width: 640px;
+	margin:3em 0 0 0;
 	float:left;
-	clear:left;
-	list-style:none;
-	height:100%;
-	background: transparent url("http://192.168.1.3/dokeos_SVN/main/css/default/images/vertdivider_template.jpg") no-repeat top right;
-	padding-right:15px;
-	/* Min-height hack for IE 6*/
-	min-height: 250px;
-	height: auto !important;
-	height: 250px;
 }
 
-
-#menu_explanation dd{
-	margin:1em 0 0 0;
-	padding:0;
-	list-style:none;
-	text-indent:25px;
-	font: bold 1.1em Arial, sans-serif, sans;
-	color: #aaa;
-}
-
-#menu_explanation dd a{
-	color: #aaa;
-	text-decoration:none;	
-}
-
-#menu_explanation dd a:visited {
+#blank_template #box_title h1 {
+	font: bold 2em Arial, sans-serif, sans;
 	color: #bbb;
 }
 
-#menu_explanation dd a:hover, #menu_explanation dd a:focus {
-	color:#000;
+#blank_template #header_template {
+	width: 690px;
+	background: transparent url("../../../main/css/default/images/blankheader.png") no-repeat top
+		left;
+	height: 150px;
 }
-
-#menu_explanation dt {
-	margin:0 0 1em 10px;
-	font: bold 1.2em Arial, sans-serif, sans;
-	color: #aaa;
-}
-
-#text_explanation {
-	width:450px;
-	margin:0 0 0 10px;
-	text-align:justify;
-	float:left;
-	height:250px;
-	overflow: auto;
-}
-
-#text_explanation em {
-	font: normal normal bold 1em verdana, 'Lucida Grande', sans-serif, sans;
-}
-
-#text_explanation p{
-	width:390px;
-	margin:1em auto;
-}
-
 
 </style>
 
@@ -146,43 +129,31 @@
 
 <body>
 
-<div id="explanation" class="dokeos_course">
+<div id="blank_template" class="dokeos_course">
 
 	<div id="header_template">
 		<div id="box_title">
-			<h1>Explanation</h1>
-			<h2>Write here a subtitle</h2>
+			<h1>Title</h1>
 		</div>
 	</div>
 	
-	<div id="body_explanation">
-	
-		<div id="menu_explanation">
-			<dl>
-				<dt>Chek out:</dt>
-				<dd>
-					<a title="Web 1" href="#nogo">Web 1</a>
-				</dd>
-				<dd>
-					<a title="Web 2" href="#nogo">Web 2</a>
-				</dd>
-				<dd>
-					<a title="Resource" href="#nogo">Resource</a>
-				</dd>
-				<dd>
-					<a title="Etc..." href="#nogo">Etc...</a>
-				</dd>
-			</dl>
-		</div>
-		
-		<div id="text_explanation">
-		
-			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing eddt. Curabitur commodo urna in justo. Nulla faciddsi. Vestibulum dapibus mattis sapien. <em>Keyword 1, keyword 2</em>. Nunc suscipit. Nulla odio urna, faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper hendrerit magna. Maecenas nec ddgula. Quisque tellus tortor, semper in, blandit quis, addquet ut, tellus. Quisque vulputate. Sed ddgula ipsum, interdum vel, congue tincidunt, faciddsis eget, arcu.</p>
-			<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. <em>Keyword 3, keyword 4</em>. Nulla faciddsi. Praesent consequat, lectus ac solddcitudin condimentum, nunc fedds pharetra ddgula, at tincidunt mauris neque vel nulla. Vivamus nec magna vitae leo egestas hendrerit. Fusce sagittis scelerisque sapien. Class aptent taciti sociosqu ad ddtora torquent per conubia nostra, per inceptos hymenaeos. Praesent convaldds. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tristique laoreet fedds. Ut vitae est. Integer posuere lacus sed ddbero.</p>
-			<p>Donec pretium sagittis nisi. Nullam sed ipsum hendrerit arcu ornare mollis. Praesent hendrerit consectetuer magna. Aliquam dignissim. Sed aliquam. Maecenas dui. Quisque eleifend egestas diam. Curabitur sollicitudin dui ac risus. In nunc risus, rutrum eget, malesuada at, lobortis a, erat. Integer vitae nisl ac arcu nonummy ultrices. Nullam sollicitudin arcu quis nisi. Nam nec neque a urna fringilla consequat.</p>
-			
-		</div>
-		
+	<div id="text_presentation">
+		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing eddt.
+		Curabitur commodo urna in justo. Nulla faciddsi. Vestibulum dapibus
+		mattis sapien. <em>Keyword 1, keyword 2</em>. Nunc suscipit. Nulla odio
+		urna, faucibus et, porttitor sed, tincidunt in, mauris. Phasellus semper
+		hendrerit magna. Maecenas nec ddgula. Quisque tellus tortor, semper in,
+		blandit quis, addquet ut, tellus. Quisque vulputate. Sed ddgula ipsum,
+		interdum vel, congue tincidunt, faciddsis eget, arcu.</p>
+		<p>Pellentesque habitant morbi tristique senectus et netus et
+		malesuada fames ac turpis egestas.<em>Keyword 3, keyword 4</em>. Nulla
+		faciddsi. Praesent consequat, lectus ac solddcitudin condimentum, nunc
+		fedds pharetra ddgula, at tincidunt mauris neque vel nulla. Vivamus nec
+		magna vitae leo egestas hendrerit. Fusce sagittis scelerisque sapien.
+		Class aptent taciti sociosqu ad ddtora torquent per conubia nostra, per
+		inceptos hymenaeos. Praesent convaldds. Cum sociis natoque penatibus et
+		magnis dis parturient montes, nascetur ridiculus mus. In tristique
+		laoreet fedds. Ut vitae est. Integer posuere lacus sed ddbero.</p>
 	</div>
 	
 	<div id="footer_template"></div>

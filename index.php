@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 11164 2007-02-20 01:41:09Z yannoo $
+* 	@version $Id: index.php 11226 2007-02-26 13:44:34Z elixir_julian $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -215,7 +215,7 @@ if (!$page_included)
 	if (api_get_setting('display_courses_to_anonymous_users') == 'true')
 	{
 		echo '<div class="home_cats">';
-		display_anonymous_course_list();
+		//display_anonymous_course_list();
 		echo '</div>';
 	}
 }

@@ -172,7 +172,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 		echo '</td>';
 		echo '<td class="workspace">';
 
-			Display::display_normal_message(get_lang('AddLpIntro'));
+			Display::display_normal_message(get_lang('AddLpIntro'),false);
 			
 			echo '<div style="background:#F8F8F8; border:1px solid #999999; margin:15px auto; padding:10px; width:400px;">';
 				 

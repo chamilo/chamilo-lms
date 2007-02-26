@@ -1593,7 +1593,7 @@ function store_thread($values)
 	session_unregister('addedresource');
 	session_unregister('addedresourceid');
 	
-	Display :: display_normal_message($message);
+	Display :: display_normal_message($message,false);
 }
 /**
 * This function displays the form that is used to add a post. This can be a new thread or a reply. 
@@ -1765,7 +1765,7 @@ function store_reply($values)
 	session_unregister('addedresource');
 	session_unregister('addedresourceid');	
 	
-	Display :: display_normal_message($message);
+	Display :: display_normal_message($message,false);
 }
 
 
@@ -1897,7 +1897,7 @@ function store_edit_post($values)
 	session_unregister('addedresource');
 	session_unregister('addedresourceid');
 	
-	Display :: display_normal_message($message);	
+	Display :: display_normal_message($message,false);	
 }
 
 

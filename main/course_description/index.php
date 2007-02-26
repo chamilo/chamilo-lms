@@ -1,4 +1,4 @@
-<?php // $Id: index.php 10986 2007-01-29 23:57:37Z pvandermaesen $
+<?php // $Id: index.php 11241 2007-02-26 16:09:15Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -264,7 +264,7 @@ if ($show_description_list)
 	if (api_is_allowed_to_edit())
 	{
 		echo '<div style="position: relative;width: 500px;">';
-		Display::display_normal_message(get_lang('CourseDescriptionIntro'));
+		Display::display_normal_message(get_lang('CourseDescriptionIntro'),false);
 		echo "</div>";
 		$categories = array ();
 		

@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 11193 2007-02-22 13:51:17Z elixir_julian $
+// $Id: add_course.php 11228 2007-02-26 13:46:00Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -99,7 +99,7 @@ else{
 	$values['course_language'] = get_setting('platformLanguage');
 }
 
-$values['tutor_name'] = $_user['lastName']." ".$_user['firstName'];
+$values['tutor_name'] = $_user['firstName']." ".$_user['lastName'];
 $form->setDefaults($values);
 // Validate the form
 if($form->validate())

@@ -119,7 +119,7 @@ if($sent)
 
 		if($isMaster)
 		{
-			fputs($fp,"<span style='color: #00F;'><b>$firstname $lastname</b></span> : $message<br>\n");
+			fputs($fp,"<span style='color: #2754AF;'><b>$firstname $lastname</b></span> : $message<br>\n");
 		}
 		else
 		{

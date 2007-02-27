@@ -6034,7 +6034,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			unset($this->arrMenu);
 			
 			if($action == 'add')
-				$return .= '<p class="lp_title">'.get_lang("student_publication").' :</p>' . "\n";
+				$return .= '<p class="lp_title">'.get_lang("Student_publication").' :</p>' . "\n";
 			elseif($action == 'move')
 				$return .= '<p class="lp_title">'.get_lang("MoveCurrentStudentPublication").' :</p>' . "\n";
 			else

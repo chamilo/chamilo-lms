@@ -283,17 +283,38 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 					
 					
 					case TOOL_DOCUMENT:
+						
+						$msg = '<div class="lp_message" style="margin-bottom:10px;">';
+						
+							$msg .= get_lang("NewDocumentCreated");
+						
+						$msg .= '</div>';
+						
+						echo $_SESSION['oLP']->display_item($new_item_id, true, $msg);
+						
+						break;
+						
+						
+					case TOOL_FORUM:
+						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+						
+						echo '<div class="lp_message" style="margin:3px 10px;">';
+						
+							echo get_lang("NewForumCreated");
+						
+						echo '</div>';
+						
+						break;
 					
-						//if(isset($_GET['file']) && (is_numeric($_GET['file'])) || $_GET['file'] == 'new')
-						//{
-							$msg = '<div class="lp_message" style="margin-bottom:10px;">';
-							
-								$msg .= get_lang("NewDocumentCreated");
-							
-							$msg .= '</div>';
-							
-							echo $_SESSION['oLP']->display_item($new_item_id, true, $msg);
-						//}
+					
+					case 'thread':
+						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+						
+						echo '<div class="lp_message" style="margin:3px 10px;">';
+						
+							echo get_lang("NewThreadCreated");
+						
+						echo '</div>';
 						
 						break;
 					

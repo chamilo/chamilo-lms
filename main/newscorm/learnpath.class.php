@@ -6606,7 +6606,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			ORDER BY path ASC";
 		$res_doc = api_sql_query($sql_doc, __FILE__, __LINE__);
 		
-		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_DOCUMENT . '.png" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
+		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_DOCUMENT . '.gif" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 		
 			while($row_doc = Database::fetch_array($res_doc))
@@ -6649,7 +6649,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			ORDER BY title ASC";
 		$res_quiz = api_sql_query($sql_quiz, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header_end"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />'.get_lang("Exercise").'</div>';
+		$return .= '<div class="lp_resource_header_end"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.gif" style="margin-right:5px;" title="" />'.get_lang("Exercise").'</div>';
 		$return .= '<div class="lp_resource_elements_end" id="resExercise">';
 		
 			while($row_quiz = Database::fetch_array($res_quiz))
@@ -6686,7 +6686,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			ORDER BY title ASC";
 		$res_link = api_sql_query($sql_link, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_LINK . '.png" style="margin-right:5px;" title="" />Links</div>';
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />Links</div>';
 		$return .= '<div class="lp_resource_elements" id="resLink">';
 		
 			while($row_link = Database::fetch_array($res_link))
@@ -6722,7 +6722,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			ORDER BY title ASC";
 		$res_student = api_sql_query($sql_student, __FILE__, __LINE__);
 		
-		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />'.get_lang('Assignments').'</div>';
+		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />'.get_lang('Assignments').'</div>';
 		$return .= '<div class="lp_resource_elements" id="resStudent" style="border-bottom:1px solid #999999; border-top:0;">';
 		$return .= '<div class="lp_resource_element">';
 		$return .= '<img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />';

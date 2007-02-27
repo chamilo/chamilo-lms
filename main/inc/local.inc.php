@@ -602,110 +602,103 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
     	else
     	{
 
-	    	// is it the session coach ?
-	    	
-	    	$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-	    	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-	    	$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	    	
-	        $sql = "SELECT 1
-					FROM ".$tbl_session."
-					INNER JOIN ".$tbl_session_course."
-						ON session_rel_course.id_session = session.id
-						AND session_rel_course.course_code='$_cid'
-					WHERE session.id_coach = '".$_user['user_id']."'";
+			$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+						
+ 			$sql = "SELECT * FROM ".$tbl_course_user."
+               WHERE `user_id`  = '".$_user['user_id']."'
+               AND `course_code` = '$cidReq'";
 
 	        $result = api_sql_query($sql,__FILE__,__LINE__);
-	        if($row = mysql_fetch_array($result)){
-	        	$_courseUser['role'] = 'Professor';
+
+	        if (mysql_num_rows($result) > 0) // this  user have a recorded state for this course
+	        {
+	            $cuData = mysql_fetch_array($result);
+
+	            $_courseUser['role'] = $cuData['role'  ];
 	            $is_courseMember     = true;
-	            $is_courseTutor      = true;
-	            $is_courseAdmin      = true;
+	            $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
+	            $is_courseAdmin      = (bool) ($cuData['status'] == 1 );
 
 	            api_session_register('_courseUser');
 	        }
-        	else
-        	{
-	        	// vérifier que c pas le coach du cours
-	        	$sql = "SELECT 1
-						FROM ".$tbl_session_course."
-						WHERE session_rel_course.course_code='$_cid'
-						AND session_rel_course.id_coach = '".$_user['user_id']."'";
-
-		        $result = api_sql_query($sql,__FILE__,__LINE__);
-		        if($row = mysql_fetch_array($result))
+	        else // this user has no status related to this course
 		        {
+		        	
+		    	// is it the session coach ?
+		    	
+		    	$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+		    	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+		    	$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		    	
+		        $sql = "SELECT 1
+						FROM ".$tbl_session."
+						INNER JOIN ".$tbl_session_course."
+							ON session_rel_course.id_session = session.id
+							AND session_rel_course.course_code='$_cid'
+						WHERE session.id_coach = '".$_user['user_id']."'";
+	
+		        $result = api_sql_query($sql,__FILE__,__LINE__);
+		        if($row = mysql_fetch_array($result)){
 		        	$_courseUser['role'] = 'Professor';
 		            $is_courseMember     = true;
 		            $is_courseTutor      = true;
-		            
-		            $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-		            
-		            $sql="SELECT status FROM ".$tbl_user." WHERE user_id = ".$_user['user_id']."";
-
-		  			$result=api_sql_query($sql);
-		  			if(mysql_result($result,0,0)==1){
-		  				$is_courseAdmin = true;
-		  			}
-		  			else{
-		  				$is_courseAdmin = false;
-		  			}	           
-
+		            $is_courseAdmin      = true;
+	
 		            api_session_register('_courseUser');
 		        }
-		        else
-		        {
-	        		// vérifier que c pas un élève de la session
-			        $sql = "SELECT * FROM ".$tbl_session_course_user." 
-			        		WHERE `id_user`  = '".$_user['user_id']."'
-							AND `course_code` = '$cidReq'";
-
+	        	else
+	        	{
+		        	// vérifier que c pas le coach du cours
+		        	$sql = "SELECT 1
+							FROM ".$tbl_session_course."
+							WHERE session_rel_course.course_code='$_cid'
+							AND session_rel_course.id_coach = '".$_user['user_id']."'";
+	
 			        $result = api_sql_query($sql,__FILE__,__LINE__);
-
-			        if (mysql_num_rows($result) > 0) // this  user have a recorded state for this course
+			        if($row = mysql_fetch_array($result))
 			        {
-			        	while($row = mysql_fetch_array($result)){
-				            $is_courseMember     = true;
-				            $is_courseTutor      = false;
-				            $is_courseAdmin      = false;
-
-				            api_session_register('_courseUser');
-			        	}
-
-					}
-					else
-					{
-						
-						$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-						
-			 			$sql = "SELECT * FROM ".$tbl_course_user."
-			               WHERE `user_id`  = '".$_user['user_id']."'
-			               AND `course_code` = '$cidReq'";
-
+			        	$_courseUser['role'] = 'Professor';
+			            $is_courseMember     = true;
+			            $is_courseTutor      = true;
+			            
+			            $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+			            
+			            $sql="SELECT status FROM ".$tbl_user." WHERE user_id = ".$_user['user_id']."";
+	
+			  			$result=api_sql_query($sql);
+			  			if(mysql_result($result,0,0)==1){
+			  				$is_courseAdmin = true;
+			  			}
+			  			else{
+			  				$is_courseAdmin = false;
+			  			}	           
+	
+			            api_session_register('_courseUser');
+			        }
+			        else
+			        {
+		        		// vérifier que c pas un élève de la session
+				        $sql = "SELECT * FROM ".$tbl_session_course_user." 
+				        		WHERE `id_user`  = '".$_user['user_id']."'
+								AND `course_code` = '$cidReq'";
+	
 				        $result = api_sql_query($sql,__FILE__,__LINE__);
-
+	
 				        if (mysql_num_rows($result) > 0) // this  user have a recorded state for this course
 				        {
-				            $cuData = mysql_fetch_array($result);
-
-				            $_courseUser['role'] = $cuData['role'  ];
-				            $is_courseMember     = true;
-				            $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
-				            $is_courseAdmin      = (bool) ($cuData['status'] == 1 );
-
-				            api_session_register('_courseUser');
-				        }
-				        else // this user has no status related to this course
-				        {
-				            $is_courseMember = false;
-				            $is_courseAdmin  = false;
-				            $is_courseTutor  = false;
-				        }
-
-					}
-		        }
-        	}
-        }
+				        	while($row = mysql_fetch_array($result)){
+					            $is_courseMember     = true;
+					            $is_courseTutor      = false;
+					            $is_courseAdmin      = false;
+	
+					            api_session_register('_courseUser');
+				        	}
+	
+						}
+			        }
+	        	}
+	        }
+    	}
     }
     else // keys missing => not anymore in the course - user relation
     {

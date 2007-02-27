@@ -350,7 +350,9 @@ $result =api_sql_query($query, __FILE__, __LINE__);
   <td width="200" height="90" valign="top">
   <?php
 		if($answerType == MULTIPLE_ANSWER)
-		{?>
+		{
+			$choice=array();
+			?>
 			<table width="355" border="0" cellspacing="3" cellpadding="3">
 			<tr>
 			<td>&nbsp;</td>

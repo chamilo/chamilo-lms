@@ -364,7 +364,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						item_property_update_on_folder($_course,$upload_path,$user_id);
 						//display success message with extra info to user
 						if($output){
-							Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path .' '. get_lang('UplFileOverwritten'));
+							Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path .' '. get_lang('UplFileOverwritten'),false);
 						}
 						return $file_path;
 					}
@@ -380,7 +380,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						//if the file is in a folder, we need to update all parent folders
 						item_property_update_on_folder($_course,$upload_path,$user_id);
 						//display success message to user
-						Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path);
+						Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path,false);
 						return $file_path;
 					}
 				}
@@ -410,7 +410,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 					item_property_update_on_folder($_course,$upload_path,$user_id);
 					//display success message to user
 					if($output){
-						Display::display_confirmation_message(get_lang('UplUploadSucceeded'). "<br>" .get_lang('UplFileSavedAs') . $new_file_path);
+						Display::display_confirmation_message(get_lang('UplUploadSucceeded'). "<br>" .get_lang('UplFileSavedAs') . $new_file_path,false);
 					}
 					return $new_file_path;
 				}
@@ -425,7 +425,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 			default:
 				if (file_exists($store_path))
 				{
-					Display::display_error_message($clean_name.get_lang('UplAlreadyExists'));
+					Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
 				}
 				else
 				{
@@ -443,7 +443,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						item_property_update_on_folder($_course,$upload_path,$user_id);
 						//display success message to user
 						if($output){
-							Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path);
+							Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>".$file_path,false);
 						}
 						return $file_path;
 					}

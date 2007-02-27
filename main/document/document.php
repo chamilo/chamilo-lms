@@ -1,4 +1,4 @@
-<?php // $Id: document.php 11204 2007-02-23 13:58:47Z elixir_julian $
+<?php // $Id: document.php 11250 2007-02-27 10:55:02Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -261,7 +261,7 @@ $image_files_only="";
 -----------------------------------------------------------
 */
 
-$tool_name = get_lang("Doc"); // title of the page (should come from the language file)
+$tool_name = get_lang("Document"); // title of the page (should come from the language file)
 Display::display_header($tool_name,"Doc");
 $is_allowed_to_edit  = api_is_allowed_to_edit();
 

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 11241 2007-02-26 16:09:15Z elixir_julian $
+<?php // $Id: index.php 11249 2007-02-27 10:53:09Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -154,7 +154,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		}
 		
 		$fck_attribute['Width'] = '100%';
-		$fck_attribute['Height'] = '350';
+		$fck_attribute['Height'] = '225';
 		$fck_attribute['ToolbarSet'] = 'Middle';
 		
 		echo '
@@ -176,7 +176,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		$form->addElement('hidden', 'description_id');
 		if (($description_id == ADD_BLOCK) || $default_description_title_editable[$description_id])
 		{
-			$form->add_textfield('title', get_lang('Title'));
+			$form->add_textfield('title', get_lang('Title'), true, array('style'=>'width: 350px;'));
 		}
 		
 		if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
@@ -234,8 +234,8 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 				}
 				if (isset ($information[$description_id]))
 				{
-					echo '<dt><b>'.get_lang('Info2Say').'</b></dt>';
-					echo '<dd>'.$information[$description_id].'</dd>';
+					//echo '<dt><b>'.get_lang('Info2Say').'</b></dt>';
+					//echo '<dd>'.$information[$description_id].'</dd>';
 				}
 				echo '</dl>';
 			}

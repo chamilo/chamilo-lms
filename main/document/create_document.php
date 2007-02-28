@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 11212 2007-02-26 08:47:37Z elixir_julian $
+// $Id: create_document.php 11269 2007-02-28 09:58:32Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,6 +48,8 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[]='<script>
 	
 	var temp=false;
+	var temp2=false;
+	var use_document_title='.api_get_setting('use_document_title').';
 
 	function FCKeditor_OnComplete( editorInstance )
 	{
@@ -100,15 +102,17 @@ $htmlHeadXtra[]='<script>
 				}
 				else
 				{
-					bestandsnaamNieuw += contentTextArray[x] + \'...\';
+					bestandsnaamNieuw += contentTextArray[x];
 				}
 			}
 	
 			if(document.getElementById(\'title_edited\').value == "false")
 			{
-				document.getElementById(\'title\').value = bestandsnaamNieuw;
+				document.getElementById(\'filename\').value = bestandsnaamNieuw;
+				if(use_document_title){
+					document.getElementById(\'title\').value = bestandsnaamNieuw;
+				}
 			}
-			
 		}
 		temp=true;
 	}
@@ -125,7 +129,7 @@ $htmlHeadXtra[]='<script>
 
 	function check_if_still_empty()
 	{
-		if(trim(document.getElementById(\'title\').value) != "")
+		if(trim(document.getElementById(\'filename\').value) != "")
 		{
 			document.getElementById(\'title_edited\').value = "true";
 		}
@@ -237,7 +241,7 @@ $default['dir'] = $dir;
 
 $form->addElement('hidden','title_edited','false','id="title_edited"');
 
-$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles"');
+$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
 $form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
 /**
  * Check if a document width the choosen filename allready exists
@@ -254,9 +258,9 @@ $renderer = & $form->defaultRenderer();
 $filename_template = str_replace('{element}', "{element}", $renderer->_elementTemplate);
 $renderer->setElementTemplate($filename_template, 'filename');
 // If allowed, add element for document title
-if (get_setting('use_document_title') == 'true')
+if (api_get_setting('use_document_title') == 'true')
 {
-	$form->add_textfield('title', get_lang('Title'),true,'class="input_titles" id="title" onblur="check_if_still_empty()"');
+	$form->add_textfield('title', get_lang('Title'),true,'class="input_titles" id="title"');
 }
 // HTML-editor
 $form->add_html_editor('content', get_lang('Content'), false, true);
@@ -269,7 +273,7 @@ $form->setDefaults($default);
 if ($form->validate())
 {
 	$values = $form->exportValues();
-	if (get_setting('use_document_title') != 'true')
+	if (api_get_setting('use_document_title') != 'true')
 	{
 		$values['title'] = $values['filename'];
 	}

@@ -1710,4 +1710,31 @@ function api_parse_tex($textext)
 	return $textext;
 }
 
+
+/**
+ * Transform a number of seconds in hh:mm:ss format
+ * @author Julian Prud'homme
+ * @param integer the number of seconds
+ * @return string the formated time
+ */
+function api_time_to_hms($seconds)
+{
+	
+  //How many hours ?
+  $hours = floor($seconds / 3600);
+
+  //How many minutes ?
+  $min = floor(($seconds - ($hours * 3600)) / 60);
+  if ($min < 10)
+    $min = "0".$min;
+
+  //How many seconds
+  $sec = $seconds - ($hours * 3600) - ($min * 60);
+  if ($sec < 10)
+    $sec = "0".$sec;
+
+  return $hours.":".$min.":".$sec ;
+
+}
+
 ?>

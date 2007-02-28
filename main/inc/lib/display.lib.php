@@ -590,7 +590,7 @@ class Display {
 			}
 		}
 
-		return '<img src="'.api_get_path(WEB_IMG_PATH).$image.'" alt="'.$alt_text.'" '.$attribute_list.'  />';
+		return '<img src="'.api_get_path(WEB_IMG_PATH).$image.'" alt="'.$alt_text.'"  title="'.$alt_text.'" '.$attribute_list.'  />';
 	}
 
 

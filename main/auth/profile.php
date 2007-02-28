@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 11170 2007-02-20 02:24:18Z yannoo $
+// $Id: profile.php 11280 2007-02-28 14:12:14Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -138,7 +138,7 @@ if (CONFVAL_ASK_FOR_OFFICIAL_CODE)
 		$form->freeze('official_code');
 	$form->applyFilter('official_code', 'stripslashes');
 	$form->applyFilter('official_code', 'trim');
-	if (api_get_setting('registration', 'officialcode') == 'true')
+	if (api_get_setting('registration', 'officialcode') == 'true' && api_get_setting('profile', 'officialcode') == 'true')
 		$form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
 }
 

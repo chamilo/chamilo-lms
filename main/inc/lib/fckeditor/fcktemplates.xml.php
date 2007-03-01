@@ -262,7 +262,7 @@ $css = loadCSS('default');
 							</div>
 						</div>
 						<div id="text_presentation">
-							<p>Do you need more? We can customize you templates and produce tailored ones. Just ask us at <span id="contact_template"><a href="mailto:info@dokeos.com">info@dokeos.com</a></span> and we will see what can we do for you.</p>
+							<p>Do you need more? We can customize your templates and produce tailored ones. Just ask us at <span id="contact_template"><a href="mailto:info@dokeos.com">info@dokeos.com</a></span> and we will see what can we do for you.</p>
 					    </div>
 						<div id="footer_template">
 						</div>

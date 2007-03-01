@@ -1189,6 +1189,11 @@ class CourseManager
 	 * deleted.
 	 * When the given course is a real course, also all virtual courses refering
 	 * to the given course will be deleted.
+	 * Considering the fact that we remove all traces of the course in the main
+	 * database, it makes sense to remove all tracking as well (if stats databases exist)
+	 * so that a new course created with this code would not use the remains of an older
+	 * course.
+	 * 
 	 * @param string $code The code of the course to delete
 	 * @todo When deleting a virtual course: unsubscribe users from that virtual
 	 * course from the groups in the real course if they are not subscribed in
@@ -1205,16 +1210,39 @@ class CourseManager
 		$user_role_table = Database :: get_main_table(MAIN_USER_ROLE_TABLE);
 		$location_table = Database::get_main_table(MAIN_LOCATION_TABLE);
 		$role_right_location_table = Database::get_main_table(MAIN_ROLE_RIGHT_LOCATION_TABLE);
+		$table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$table_course_survey = Database::get_main_table(TABLE_MAIN_COURSE_SURVEY);
+		$table_course_survey_user = Database::get_main_table(TABLE_MAIN_SURVEY_USER);
+		$table_course_survey_reminder = Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+		$stats = false;
+		if(Database::get_statistics_database() != ''){
+			$stats = true;
+			$table_stats_hotpots = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+			$table_stats_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+			$table_stats_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+			$table_stats_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+			$table_stats_lastaccess = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+			$table_stats_course_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+			$table_stats_online = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+			$table_stats_default = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+			$table_stats_downloads = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+			$table_stats_links = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
+			$table_stats_uploads = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
+		}
 
 		$sql = "SELECT * FROM $table_course WHERE code='".$code."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
-		if (mysql_num_rows($res) == 0)
+		if (Database::num_rows($res) == 0)
 		{
 			return;
 		}
+		$this_course = Database::fetch_array($res);
+		$db_name = $this_course['db_name'];
 		CourseManager :: create_database_dump($code);
 		if (!CourseManager :: is_virtual_course_from_system_code($code))
 		{
+			// If this is not a virtual course, look for virtual courses that depend on this one, if any
 			$virtual_courses = CourseManager :: get_virtual_courses_linked_to_real_course($code);
 			foreach ($virtual_courses as $index => $virtual_course)
 			{
@@ -1224,30 +1252,72 @@ class CourseManager
 				// Unsubscribe all users from the virtual course
 				$sql = "DELETE FROM $table_course_user WHERE course_code='".$virtual_course['code']."'";
 				api_sql_query($sql, __FILE__, __LINE__);
-				// Delete the course from the database
+				// Delete the course from the sessions tables
+				$sql = "DELETE FROM $table_session_course WHERE course_code='".$virtual_course['code']."'";
+				api_sql_query($sql,__FILE__,__LINE__);
+				$sql = "DELETE FROM $table_session_course_user WHERE course_code='".$virtual_course['code']."'";
+				api_sql_query($sql,__FILE__,__LINE__);
+				// Delete the course from the survey tables
+				$sql = "DELETE FROM $table_course_survey WHERE course_code='".$virtual_course['code']."'";
+				api_sql_query($sql,__FILE__,__LINE__);
+				$sql = "DELETE FROM $table_course_survey_user WHERE db_name='".$virtual_course['db_name']."'";
+				api_sql_query($sql,__FILE__,__LINE__);
+				$sql = "DELETE FROM $table_course_survey_reminder WHERE db_name='".$virtual_course['db_name']."'";
+				api_sql_query($sql,__FILE__,__LINE__);
+				
+				// Delete the course from the stats tables
+				if($stats)
+				{
+					$sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM $table_stats_online WHERE course = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$virtual_course['code']."'";
+					api_sql_query($sql,__FILE__,__LINE__);
+				}				
+				
+				// Delete the course from the course table
 				$sql = "DELETE FROM $table_course WHERE code='".$virtual_course['code']."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 			$sql = "SELECT * FROM $table_course WHERE code='".$code."'";
 			$res = api_sql_query($sql, __FILE__, __LINE__);
-			$course = mysql_fetch_object($res);
+			$course = Database::fetch_array($res);
 			if (!$_configuration['single_database'])
 			{
-				$sql = "DROP DATABASE IF EXISTS ".$course->db_name;
+				$sql = "DROP DATABASE IF EXISTS ".$course['db_name'];
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 			else
 			{
-				$db_pattern = $_configuration['table_prefix'].$course->db_name.$_configuration['db_glue'];
+				//TODO Clean the following code as currently it would probably delete another course
+				//similarly named, by mistake...
+				$db_pattern = $_configuration['table_prefix'].$course['db_name'].$_configuration['db_glue'];
 				$sql = "SHOW TABLES LIKE '$db_pattern%'";
 				$result = api_sql_query($sql, __FILE__, __LINE__);
-				while (list ($courseTable) = mysql_fetch_row($result))
+				while (list ($courseTable) = Database::fetch_array($result))
 				{
 					api_sql_query("DROP TABLE `$courseTable`", __FILE__, __LINE__);
 				}
 			}
-			$course_dir = api_get_path(SYS_COURSE_PATH).$course->directory;
-			$garbage_dir = api_get_path(GARBAGE_PATH).$course->directory.'_'.time();
+			$course_dir = api_get_path(SYS_COURSE_PATH).$course['directory'];
+			$garbage_dir = api_get_path(GARBAGE_PATH).$course['directory'].'_'.time();
 			rename($course_dir, $garbage_dir);
 		}
 
@@ -1257,6 +1327,45 @@ class CourseManager
 		// Unsubscribe all users from the course
 		$sql = "DELETE FROM $table_course_user WHERE course_code='".$code."'";
 		api_sql_query($sql, __FILE__, __LINE__);
+		// Delete the course from the sessions tables
+		$sql = "DELETE FROM $table_session_course WHERE course_code='".$code."'";
+		api_sql_query($sql,__FILE__,__LINE__);
+		$sql = "DELETE FROM $table_session_course_user WHERE course_code='".$code."'";
+		api_sql_query($sql,__FILE__,__LINE__);
+		// Delete the course from the survey tables
+		$sql = "DELETE FROM $table_course_survey WHERE course_code='".$code."'";
+		api_sql_query($sql,__FILE__,__LINE__);
+		$sql = "DELETE FROM $table_course_survey_user WHERE db_name='".$db_name."'";
+		api_sql_query($sql,__FILE__,__LINE__);
+		$sql = "DELETE FROM $table_course_survey_reminder WHERE db_name='".$db_name."'";
+		api_sql_query($sql,__FILE__,__LINE__);
+
+		// Delete the course from the stats tables
+		if($stats)
+		{
+			$sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM $table_stats_online WHERE course = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$code."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+		}				
 		// Delete the course from the database
 		$sql = "DELETE FROM $table_course WHERE code='".$code."'";
 		api_sql_query($sql, __FILE__, __LINE__);
@@ -1279,14 +1388,14 @@ class CourseManager
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT * FROM $table_course WHERE code = '$course_code'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
-		$course = mysql_fetch_object($res);
-		$sql = "SHOW TABLES FROM $course->db_name";
+		$course = Database::fetch_array($res);
+		$sql = "SHOW TABLES FROM ".$course['db_name'];
 		$res = api_sql_query($sql, __FILE__, __LINE__);
-		while ($table = mysql_fetch_row($res))
+		while ($table = Database::fetch_array($res))
 		{
-			$sql = "SELECT * FROM `$course->db_name`.`$table[0]`";
+			$sql = "SELECT * FROM `".$course['db_name']."`.`".$table[0]."`";
 			$res3 = api_sql_query($sql, __FILE__, __LINE__);
-			while ($row = mysql_fetch_assoc($res3))
+			while ($row = Database::fetch_array($res3))
 			{
 				foreach ($row as $key => $value)
 				{
@@ -1295,10 +1404,14 @@ class CourseManager
 				$sql_dump .= "\nINSERT INTO $table[0] SET ".implode(', ', $row).';';
 			}
 		}
-		$file_name = api_get_path(SYS_COURSE_PATH).$course->directory.'/mysql_dump.sql';
+		$file_name = api_get_path(SYS_COURSE_PATH).$course['directory'].'/mysql_dump.sql';
 		$handle = fopen($file_name, 'a+');
-		fwrite($handle, $sql_dump);
-		fclose($handle);
+		if($handle!==false){
+			fwrite($handle, $sql_dump);
+			fclose($handle);
+		}else{
+			//TODO trigger exception in a try-catch
+		}
 	}
 } //end class CourseManager
 ?>

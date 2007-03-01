@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 11107 2007-02-14 09:46:32Z elixir_julian $
+* 	@version $Id: exercice_submit.php 11297 2007-03-01 13:30:14Z elixir_julian $
 */
 
 
@@ -411,7 +411,7 @@ else
 </head>
 
 <body>
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/frames.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default/frames.css" />
 
 <?php
 }

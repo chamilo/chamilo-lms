@@ -109,7 +109,7 @@ if(!empty($errorMessage)){
 echo '
 <style>
 .row{
-	width:300px;
+	width:90%;
 }
 div.row div.label {
 	width: 0%;
@@ -120,27 +120,24 @@ div.row div.formw {
 }
 .convert_button{
 	background: url("../img/scorm.gif") 0px 0px no-repeat;
-	padding: 2px 1px 3px 22px;
+	padding: 2px 0px 2px 22px;
 }
 
 </style>';
-$form = new FormValidator('update_course');
+$form = new FormValidator('update_course', 'POST', '', '', 'style="margin: 0;"');
 
 // build the form
 
-$form -> addElement ('html','<br />');
+$form -> addElement ('html','<br>');
 
 $group = array();
 $group[] = FormValidator::createElement ('image','ppt_img','../img/powerpoint_big.gif','align="absbottom"');
 $group[] = FormValidator::createElement ('file', 'user_file',null);
+$group[] = FormValidator::createElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
 $form -> addGroup($group);
 
-$form -> addElement ('html','<br /><br />');
 $form -> addElement ('hidden', 'ppt2lp', 'true');
 
-$form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
-
-$form -> addElement ('html','<br />');
 $form -> add_real_progress_bar('ppt2lp', 'qf_group_1', 1, true);
 
 

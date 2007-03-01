@@ -178,7 +178,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 		 //Links
 		 echo "<div class='admin_section'>
 			<h4>
-				<img src='../img/links.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0001000' class='specialLink'>".get_lang('LinksAccess')."</a>
+				<img src='../img/file_html.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0001000' class='specialLink'>".get_lang('LinksAccess')."</a>
 			</h4>
 		 </div>";
 		 

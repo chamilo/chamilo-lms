@@ -337,7 +337,7 @@ function change_visibility($id, $scope)
 		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_user['user_id']);
 	}
 	
-	Display::display_confirmation_message('VisibilityChanged');
+	Display::display_confirmation_message(get_lang('VisibilityChanged'));
 }
 
 /**
@@ -357,20 +357,20 @@ function showlinksofcategory($catid)
 	$sqlLinks = "SELECT * FROM ".$tbl_link." link, ".$TABLE_ITEM_PROPERTY." itemproperties WHERE itemproperties.tool='".TOOL_LINK."' AND link.id=itemproperties.ref AND  link.category_id='".$catid."' AND (itemproperties.visibility='0' OR itemproperties.visibility='1')ORDER BY link.display_order DESC";
 	$result = api_sql_query($sqlLinks);
 	$numberoflinks = mysql_num_rows($result);
-	echo "<table border=\"0\">";
+	echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 	$i = 1;
 	while ($myrow = mysql_fetch_array($result))
 	{
 		$myrow[3] = text_filter($myrow[3]);
 		if ($myrow['visibility'] == '1')
 		{
-			echo "<tr>", "<td align=\"right\" valign=\"top\" width=\"40\">", "<img src=\"../../main/img/pixel.gif\" border=\"0\" width=\"10\"/>", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", "<img src=\"../../main/img/links.gif\" border=\"0\" alt=\"".get_lang('Links')."\"/>", "</a></td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", htmlentities($myrow[2]), "</a>\n", "<br/>", $myrow[3], "";
+			echo "<tr>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", "<img src=\"../../main/img/file_html.gif\" border=\"0\" alt=\"".get_lang('Links')."\"/>", "</a></td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", htmlentities($myrow[2]), "</a>\n", "<br/>", $myrow[3], "";
 		}
 		else
 		{
 			if (api_is_allowed_to_edit())
 			{
-				echo "<tr>", "<td align=\"right\" valign=\"top\" width=\"40\">", "<img src=\"../../main/img/pixel.gif\" border=\"0\" width=\"10\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", "<img src=\"../../main/img/links_na.gif\" border=\"0\" alt=\"".get_lang('Links')."\">", "</td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", htmlentities($myrow[2]), "</a>\n", "<br>", $myrow[3], "";
+				echo "<tr>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", "<img src=\"../../main/img/file_html_na.gif\" border=\"0\" alt=\"".get_lang('Links')."\">", "</td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", htmlentities($myrow[2]), "</a>\n", "<br>", $myrow[3], "";
 			}
 		}
 		if (api_is_allowed_to_edit())
@@ -508,7 +508,7 @@ function movecatlink($catlinkid)
 		}
 	}
 	
-	Display::display_confirmation_message('Moved');
+	Display::display_confirmation_message(get_lang('LinkMoved'));
 }
 
 /**

@@ -273,7 +273,7 @@ if (isset($up))
 */
 if(is_allowed_to_edit())
 {
-	echo Display::return_icon('linksnew.gif')." <a href=\"".$_SERVER['PHP_SELF']."?action=addlink&amp;category=".$category."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
+	echo Display::return_icon('file_html_new.gif')." <a href=\"".$_SERVER['PHP_SELF']."?action=addlink&amp;category=".$category."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
 	echo Display::return_icon('folder_new.gif')." <a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
 	   /* "<a href=\"".$_SERVER['PHP_SELF']."?action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
 }
@@ -301,14 +301,14 @@ $sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 $resultcategories=api_sql_query($sqlcategories);
 
 //Starting the table which contains the categories
-echo "<table width=\"100%\">";
+echo "<br /><br /><table class=\"data_table\">";
 // displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
 	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 or category_id IS NULL";
 	$result = api_sql_query($sqlLinks);
 	$numberofzerocategory=mysql_num_rows($result);
 	if ($numberofzerocategory!==0)
 		{
-		echo "<tr><td bgcolor=\"#e6e6e6\"><i>".get_lang('NoCategory')."</i></td></tr>";
+		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\"><i>".get_lang('NoCategory')."</i></th></tr>";
 		echo "<tr><td>";
 		showlinksofcategory(0);
 		echo "</td></tr>";
@@ -336,12 +336,12 @@ while ($myrow=@mysql_fetch_array($resultcategories))
 		$newurlview=$urlview;
 		$newurlview[$i]="0";
 		echo "<tr>",
-			"<td bgcolor=\"#e6e6e6\"><b>- <a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".htmlentities($myrow["category_title"])."</a></b><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
+			"<th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">- <a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".htmlentities($myrow["category_title"])."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
 		if (is_allowed_to_edit())
 		{
 		showcategoryadmintools($myrow["id"]);
 		}
-	echo "</td>",
+	echo "</th>",
 		"</tr>",
 		"<tr>",
 		"<td>",showlinksofcategory($myrow["id"])."</td>",
@@ -351,9 +351,9 @@ while ($myrow=@mysql_fetch_array($resultcategories))
 	else
 		{
 
-		echo "<tr><td bgcolor=\"#E6E6E6\"><b>+ <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">+ <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 		echo is_array($view)?implode('',$view):$view;
-		echo "\">".htmlentities($myrow["category_title"])."</a></b><br>&nbsp;&nbsp;&nbsp;";
+		echo "\">".htmlentities($myrow["category_title"])."</a><br>&nbsp;&nbsp;&nbsp;";
 		echo $myrow["description"];
 
 		if (is_allowed_to_edit())

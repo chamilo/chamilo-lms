@@ -143,7 +143,7 @@ foreach($list as $my_item_id){
 		$qry_order = 'ASC';
 	}
 	if(!empty($view)){
-		$sql="SELECT iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid, i.title as mytitle, i.max_score as mymaxscore, iv.view_count as iv_view_count, iv.id as iv_id " .
+		$sql="SELECT iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid, i.title as mytitle, i.max_score as mymaxscore, i.item_type as item_type, iv.view_count as iv_view_count, iv.id as iv_id " .
 			" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v " .
 			" WHERE i.id = iv.lp_item_id " .
 			" AND i.id = $my_item_id " .
@@ -153,7 +153,7 @@ foreach($list as $my_item_id){
 			" AND v.view_count = $view ".
 			" ORDER BY iv.view_count $qry_order ";
 	}else{
-		$sql="SELECT iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid, i.title as mytitle, i.max_score as mymaxscore, iv.view_count as iv_view_count, iv.id as iv_id " .
+		$sql="SELECT iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid, i.title as mytitle, i.max_score as mymaxscore, i.item_type as item_type, iv.view_count as iv_view_count, iv.id as iv_id " .
 			" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v " .
 			" WHERE i.id = iv.lp_item_id " .
 			" AND i.id = $my_item_id " .
@@ -178,13 +178,17 @@ foreach($list as $my_item_id){
 		if(empty($title)){
 			$title = rl_get_resource_name(api_get_course_id(),$lp_id,$row['myid']);
 		}
-		$output .= "<tr class='$oddclass'>\n"
-					."<td>$extend_link</td>\n"
-					.'<td colspan="4" class="content"><div class="mystatus">'.$title."</div></td>\n"
-					.'<td colspan="2" class="content"></td>'."\n"
-					.'<td colspan="2" class="content"></td>'."\n"
-					.'<td colspan="2" class="content"></td>'."\n"
-				."</tr>\n";
+		
+		if($row['item_type']!='dokeos_chapter'){
+			$output .= "<tr class='$oddclass'>\n"
+						."<td>$extend_link</td>\n"
+						.'<td colspan="4" class="content"><div class="mystatus">'.$title."</div></td>\n"
+						.'<td colspan="2" class="content"></td>'."\n"
+						.'<td colspan="2" class="content"></td>'."\n"
+						.'<td colspan="2" class="content"></td>'."\n"
+					."</tr>\n";
+		}
+		
 		$counter ++;
 		do{
 			//check if there are interactions below
@@ -206,6 +210,7 @@ foreach($list as $my_item_id){
 			$score=$row['myscore'];
 			$time_for_total = $row['mytime'];
 			$time=learnpathItem::get_scorm_time('php',$row['mytime']);
+			$type;
 			$scoIdentifier=$row['myid'];
 			if($score==0){
 				$maxscore = 0;
@@ -225,15 +230,18 @@ foreach($list as $my_item_id){
 			);
 			$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]),ENT_QUOTES,$dokeos_charset);
 			//$my_lesson_status = get_lang($mylanglist[$lesson_status]);
-			$output .= "<tr class='$oddclass'>\n"
-						."<td></td>\n"
-						."<td>$extend_attempt_link</td>\n"
-						.'<td colspan="3">Attempt '.$row['iv_view_count']."</td>\n"
-						//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
-						.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n"
-						.'<td colspan="2"><div class="mystatus" align="center">'.($score==0?'-':$score.'/'.$maxscore)."</div></td>\n"
-						.'<td colspan="2"><div class="mystatus">'.$time."</div></td>\n"
-					."</tr>\n";
+			if($row['item_type']!='dokeos_chapter'){
+				$output .= "<tr class='$oddclass'>\n"
+							."<td></td>\n"
+							."<td>$extend_attempt_link</td>\n"
+							.'<td colspan="3">Attempt '.$row['iv_view_count']."</td>\n"
+							//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
+							.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n"
+							.'<td colspan="2"><div class="mystatus" align="center">'.($score==0?'-':$score.'/'.$maxscore)."</div></td>\n"
+							.'<td colspan="2"><div class="mystatus">'.$time."</div></td>\n"
+						."</tr>\n";
+			}
+			
 			$counter ++;
 			if($extend_this_attempt OR $extend_all){
 				$list = get_iv_interactions_array($row['iv_id']);
@@ -316,14 +324,18 @@ foreach($list as $my_item_id){
 			'not attempted' => 'ScormNotAttempted',
 		);
 		$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]),ENT_QUOTES,$dokeos_charset);
-		$output .= "<tr class='$oddclass'>\n"
-					."<td>$extend_link</td>\n"
-					.'<td colspan="4"><div class="mystatus">'.$title.'</div></td>'."\n"
-					//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
-					.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n"
-					.'<td colspan="2"><div class="mystatus" align="center">'.($score==0?'-':$score.'/'.$maxscore)."</div></td>\n"
-					.'<td colspan="2"><div class="mystatus">'.$time."</div></td>\n"
-				."</tr>\n";
+		
+		if($row['item_type']!='dokeos_chapter'){
+			$output .= "<tr class='$oddclass'>\n"
+						."<td>$extend_link</td>\n"
+						.'<td colspan="4"><div class="mystatus">'.$title.'</div></td>'."\n"
+						//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
+						.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n"
+						.'<td colspan="2"><div class="mystatus" align="center">'.($score==0?'-':$score.'/'.$maxscore)."</div></td>\n"
+						.'<td colspan="2"><div class="mystatus">'.$time."</div></td>\n"
+					."</tr>\n";
+		}
+		
 		$counter ++;
 
 		if($extend_this_attempt OR $extend_all){

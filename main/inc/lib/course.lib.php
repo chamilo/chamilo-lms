@@ -1216,7 +1216,7 @@ class CourseManager
 		$table_course_survey_user = Database::get_main_table(TABLE_MAIN_SURVEY_USER);
 		$table_course_survey_reminder = Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 		$stats = false;
-		if(Database::get_statistics_database() != ''){
+		if(Database::get_statistic_database() != ''){
 			$stats = true;
 			$table_stats_hotpots = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 			$table_stats_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);

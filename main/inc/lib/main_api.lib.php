@@ -1724,16 +1724,18 @@ function api_time_to_hms($seconds)
   $hours = floor($seconds / 3600);
 
   //How many minutes ?
-  $min = floor(($seconds - ($hours * 3600)) / 60);
-  if ($min < 10)
-    $min = "0".$min;
+  $min = floor(($seconds - ($hours * 3600)) / 60);  
 
   //How many seconds
   $sec = floor($seconds - ($hours * 3600) - ($min * 60));
+  
   if ($sec < 10)
     $sec = "0".$sec;
-
-  return $hours.":".$min.":".$sec ;
+  
+  if ($min < 10)
+    $min = "0".$min;
+    
+  return $hours.":".$min.":".$sec;
 
 }
 

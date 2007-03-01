@@ -1,5 +1,5 @@
 <?php
-// $Id: delete_course.php 11311 2007-03-01 22:27:00Z yannoo $
+// $Id: delete_course.php 11317 2007-03-01 23:51:07Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -34,7 +34,7 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = 'course_info';
+$language_file = array ('admin','course_info');
 
 include ('../inc/global.inc.php');
 include (api_get_path(LIBRARY_PATH).'course.lib.php');
@@ -62,8 +62,8 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'yes')
 } // end if $delete
 else
 {
-	$message = "&quot;".$currentCourseName."&quot; "."(".$currentCourseCode.") "."<p>".get_lang("ByDel")."</p>"."<p>"."<a href=\"infocours.php\">".get_lang("N")."</a>"."&nbsp;&nbsp;|&nbsp;&nbsp;"."<a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">".get_lang("Y")."</a>"."</p>";
-	$interbreadcrumb[] = array ("url" => "infocours.php", "name" => get_lang('ModifInfo'));
+	$message = "&quot;".$currentCourseName."&quot; "."(".$currentCourseCode.") "."<p>".get_lang("ByDel")."</p>"."<p>"."<a href=\"maintenance.php\">".get_lang("N")."</a>"."&nbsp;&nbsp;|&nbsp;&nbsp;"."<a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">".get_lang("Y")."</a>"."</p>";
+	$interbreadcrumb[] = array ("url" => "maintenance.php", "name" => get_lang('Maintenance'));
 } 
 Display :: display_header($tool_name, "Settings");
 api_display_tool_title($tool_name);

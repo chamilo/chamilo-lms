@@ -130,7 +130,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 
 	echo '</li>';
 }
-if ($_user['user_id'])
+/*if ($_user['user_id'])
 {
 	if (api_is_course_admin() && is_student_view_enabled())
 	{
@@ -138,8 +138,8 @@ if ($_user['user_id'])
 		api_display_tool_view_option($_GET['isStudentView']);
 		echo '</li>';
 	}
-}
-if ( api_is_allowed_to_edit() )
+}*/
+/*if ( api_is_allowed_to_edit() )
 {
 	if( $help != null)
 	{
@@ -151,7 +151,7 @@ if ( api_is_allowed_to_edit() )
 
 	<?php
 	}
-}
+}*/
 ?>
 		</ul>
 	</div>

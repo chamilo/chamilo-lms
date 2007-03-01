@@ -117,24 +117,24 @@ api_display_tool_title($tool_name);
 <!-- General properties -->
 <table class="data_table" width="100%">
 <tr>
-  <th colspan="2">Propriétés générales
+  <th colspan="2"><?php echo get_lang('GeneralProperties'); ?>
   	<a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="Editer"></a></th>
   </th>
 </tr>
 <tr>
-	<td>Nom de la session :</td>
+	<td><?php echo get_lang('SessionName');?> :</td>
 	<td><?php echo $session['name'] ?></td>
 </tr>
 <tr>
-	<td>Coach général :</td>
+	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
 	<td><?php echo $session['lastname'].' '.$session['firstname'].' ('.$session['username'].')' ?></td>
 </tr>
 <tr>
-	<td>Dates :</td>	
+	<td><?php echo ('Dates'); ?> :</td>	
 	<td>
 	<?php 
 		if($session['date_start']=='00-00-0000')
-			echo 'Pas de limites de temps';
+			echo get_lang('NoTimeLimits');
 		else
 			echo 'Du '.$session['date_start'].' au '.$session['date_end'];
 		 ?>
@@ -147,16 +147,16 @@ api_display_tool_title($tool_name);
 <!--List of courses -->
 <table class="data_table" width="100%">
 <tr>
-  <th colspan="4">Liste des cours
+  <th colspan="4"><?php echo get_lang('CourseList'); ?>
   	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="Editer"></a></th>
   </th>
 </tr>
 <tr>
   <tr>
-  <th width="35%">Titre du cours</th>
-  <th width="30%">Coach du cours</th>
-  <th width="20%">Nombre d'utilisateurs</th>
-  <th width="15%">Actions</th>
+  <th width="35%"><?php echo get_lang('CourseTitle'); ?></th>
+  <th width="30%"><?php echo get_lang('CourseCoach'); ?></th>
+  <th width="20%"><?php echo get_lang('UsersNumber'); ?></th>
+  <th width="15%"><?php echo get_lang('Actions'); ?></th>
 </tr>
 </tr>
 <?php
@@ -202,7 +202,7 @@ else {
 <!--List of courses -->
 <table class="data_table" width="100%">
 <tr>
-  <th colspan="4">Liste des utilisateurs
+  <th colspan="4"><?php echo get_lang('UserList'); ?>
   	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="Editer"></a></th>
   </th>
 </tr>
@@ -215,40 +215,8 @@ if($session['nbr_users']==0){
 		</tr>';
 }
 else {
-	/*
-	$sql = "SELECT $tbl_user.user_id, lastname, firstname, username, name as class_name, $tbl_class.id as class_id
-			FROM $tbl_user
-			INNER JOIN $tbl_class_rel_user
-				ON $tbl_class_rel_user.user_id = $tbl_user.user_id
-			INNER JOIN $tbl_class
-				ON $tbl_class_rel_user.class_id = $tbl_class.id
-			INNER JOIN $tbl_session_rel_class
-				ON $tbl_session_rel_class.class_id = $tbl_class_rel_user.class_id
-				AND session_id='$id_session'
-			ORDER BY lastname";
-	
-	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$classesusers=api_store_result($result);
-	
-	$classes = array();
-	foreach($classesusers as $user){
-		if(!in_array($user['class_id'],$classes)){
-			echo '<tr>
-					<td width="90%">
-						<b>Classe : '.$user['class_name'].'</b>
-					</td>
-					<td>
-						<a href="'.$_SERVER['PHP_SELF'].'?id_session='.$id_session.'&action=delete&class='.$user['class_id'].'" onclick="javascript:if(!confirm(\'Veuillez confirmer votre choix.\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
-					</td>
-				  </tr>';
-			$classes[]=$user['class_id'];
-		}
-		echo '
-		<tr>
-			<td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</td>
-		</tr>';
-	}
-	*/ // classe development, obsolete for the moment
+
+	// classe development, obsolete for the moment
 	
 	$sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username
 			FROM '.$tbl_user.'

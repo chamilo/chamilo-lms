@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 11239 2007-02-26 15:44:23Z elixir_julian $
+// $Id: user_list.php 11301 2007-03-01 13:57:15Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -136,7 +136,7 @@ function login_user($user_id)
 			$target_url = api_get_path(WEB_PATH)."user_portal.php";
 			$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";
 			Display :: display_header(get_lang('UserList'));
-			Display :: display_normal_message($message);
+			Display :: display_normal_message($message,false);
 			Display :: display_footer();
 			exit;
 		}

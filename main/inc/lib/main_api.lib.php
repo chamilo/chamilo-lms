@@ -1729,7 +1729,7 @@ function api_time_to_hms($seconds)
     $min = "0".$min;
 
   //How many seconds
-  $sec = $seconds - ($hours * 3600) - ($min * 60);
+  $sec = floor($seconds - ($hours * 3600) - ($min * 60));
   if ($sec < 10)
     $sec = "0".$sec;
 

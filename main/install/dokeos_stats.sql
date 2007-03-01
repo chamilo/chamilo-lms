@@ -82,7 +82,7 @@ CREATE TABLE track_e_downloads (
   down_id int NOT NULL auto_increment,
   down_user_id int unsigned default NULL,
   down_date datetime NOT NULL default '0000-00-00 00:00:00',
-  down_cours_id varchar(20) NOT NULL default '',
+  down_cours_id varchar(40) NOT NULL default '',
   down_doc_path varchar(255) NOT NULL default '',
   PRIMARY KEY  (down_id)
 );
@@ -160,7 +160,7 @@ CREATE TABLE track_e_uploads (
   upload_id int NOT NULL auto_increment,
   upload_user_id int unsigned default NULL,
   upload_date datetime NOT NULL default '0000-00-00 00:00:00',
-  upload_cours_id varchar(20) NOT NULL default '',
+  upload_cours_id varchar(40) NOT NULL default '',
   upload_work_id int NOT NULL default 0,
   PRIMARY KEY  (upload_id)
 );

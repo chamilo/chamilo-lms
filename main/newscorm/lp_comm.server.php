@@ -130,7 +130,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 	
 	$mylp->save_item($item_id,false);
 	
-	$mytotal = $mylp->get_total_items_count();
+	$mytotal = $mylp->get_total_items_count_without_chapters();
 	$mycomplete = $mylp->get_complete_items_count();
 	$myprogress_mode = $mylp->get_progress_bar_mode();
 	$myprogress_mode = ($myprogress_mode==''?'%':$myprogress_mode);
@@ -291,7 +291,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 	 * -lms_view_id
 	 * -lms_user_id
 	 */
-	$mytotal = $mylp->get_total_items_count();
+	$mytotal = $mylp->get_total_items_count_without_chapters();
 	$mycomplete = $mylp->get_complete_items_count();
 	$myprogress_mode = $mylp->get_progress_bar_mode();
 	$myprogress_mode = ($myprogress_mode==''?'%':$myprogress_mode);

@@ -1620,7 +1620,7 @@ class learnpath {
 
     		//if($this->items[$id]->status_is(array('completed','passed','succeeded'))){
     		//Trying failed and browsed considered "progressed" as well
-    		if($this->items[$id]->status_is(array('completed','passed','succeeded','browsed','failed'))){
+    		if($this->items[$id]->status_is(array('completed','passed','succeeded','browsed','failed'))&&$this->items[$id]->get_type()!='dokeos_chapter'&&$this->items[$id]->get_type()!='dir'){
 
     			$i++;
 
@@ -1655,6 +1655,19 @@ class learnpath {
     {
 		if($this->debug>0){error_log('New LP - In learnpath::get_total_items_count()',0);}
     	return count($this->items);
+    }
+    /**
+     * Gets the total number of items available for viewing in this SCORM but without chapters
+     * @return	integer	The total no-chapters number of items
+     */
+    function get_total_items_count_without_chapters()
+    {
+		if($this->debug>0){error_log('New LP - In learnpath::get_total_items_count_without_chapters()',0);}
+		$total=0;
+		foreach($this->items as $temp=>$temp2){
+			if($temp2->get_type() != 'dokeos_chapter') $total++;
+		}
+		return $total;
     }
 	/**
      * Gets the first element URL.
@@ -1962,7 +1975,7 @@ class learnpath {
 
     	if($this->debug>2){error_log('New LP - Now looking at ordered_items['.($index).'] - type is '.$this->items[$this->ordered_items[$index]]['type'],0);}
 
-    	while(!empty($this->ordered_items[$index]) AND $this->items[$this->ordered_items[$index]]->get_type() == 'dir' AND $index < $this->max_ordered_items)
+    	while(!empty($this->ordered_items[$index]) AND ($this->items[$this->ordered_items[$index]]->get_type() == 'dir' || $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter') AND $index < $this->max_ordered_items)
 
     	{
 
@@ -2084,7 +2097,7 @@ class learnpath {
 
 	    	$index --;
 
-	    	while(isset($this->ordered_items[$index]) AND $this->items[$this->ordered_items[$index]]->get_type() == 'dir')
+	    	while(isset($this->ordered_items[$index]) AND ($this->items[$this->ordered_items[$index]]->get_type() == 'dir' || $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter'))
 
 	    	{
 
@@ -2229,7 +2242,7 @@ class learnpath {
     {
 		if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar_text()',0);}
     	if(empty($mode)){$mode = $this->progress_bar_mode;}
-    	$total_items = $this->get_total_items_count();
+    	$total_items = $this->get_total_items_count_without_chapters();
     	if($this->debug>2){error_log('New LP - Total items available in this learnpath: '.$total_items,0);}
     	$i = $this->get_complete_items_count();
 		if($this->debug>2){error_log('New LP - Items completed so far: '.$i,0);}
@@ -5533,12 +5546,18 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			$explode = explode('.', $row['title']);
 			
-			for($i = 0; $i < count($explode) - 1; $i++)
-				$item_title .= $explode[$i];
+			if(count($explode)>1){
+				for($i = 0; $i < count($explode) - 1; $i++)
+					$item_title .= $explode[$i];
+			}
+			else{
+				$item_title=$row['title'];
+			}
 			
 			$item_title = str_replace('_', ' ', $item_title);
+			
 			if(empty($item_title))
-			{				
+			{
 				$path_parts = pathinfo($row['path']);
 				$item_title = stripslashes($path_parts['filename']);
 			}

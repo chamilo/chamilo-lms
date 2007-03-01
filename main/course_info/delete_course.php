@@ -1,5 +1,5 @@
 <?php
-// $Id: delete_course.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: delete_course.php 11310 2007-03-01 22:20:10Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -67,7 +67,7 @@ else
 } 
 Display :: display_header($tool_name, "Settings");
 api_display_tool_title($tool_name);
-Display::display_normal_message($message);
+Display::display_normal_message($message,false);
 /*
 ==============================================================================
 		FOOTER

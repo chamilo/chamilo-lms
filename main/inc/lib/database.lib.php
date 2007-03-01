@@ -114,6 +114,12 @@ define('TABLE_LEARNPATH_MAIN', 'learnpath_main');
 define('TABLE_LEARNPATH_CHAPTER', 'learnpath_chapter');
 define('TABLE_LEARNPATH_ITEM', 'learnpath_item');
 define('TABLE_LEARNPATH_USER', 'learnpath_user');
+//new scorm tables
+define('TABLE_LP_MAIN', 'lp');
+define('TABLE_LP_ITEM', 'lp_item');
+define('TABLE_LP_VIEW', 'lp_view');
+define('TABLE_LP_VIEW_ITEM', 'lp_view_item');
+define('TABLE_LP_IV_INTERACTION', 'lp_iv_interaction'); // IV = Item View
 // Smartblogs (Kevin Van Den Haute::kevin@develop-it.be)
 // permission tables
 define('TABLE_PERMISSION_USER', 'permission_user');

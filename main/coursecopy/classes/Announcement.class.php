@@ -1,4 +1,4 @@
-<?php // $Id: Announcement.class.php 5246 2005-05-31 08:49:27Z bmol $
+<?php // $Id: Announcement.class.php 11326 2007-03-02 10:34:18Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -47,6 +47,10 @@ class Announcement extends Resource
 	 */
 	var $display_order;
 	/**
+	 * Has the e-mail been sent?
+	 */
+	var $email_sent;
+	/**
 	 * Create a new announcement
 	 * @param int $id
 	 * @param string $title
@@ -54,13 +58,14 @@ class Announcement extends Resource
 	 * @param string $date
 	 * @param int display_order
 	 */
-	function Announcement($id,$title,$content,$date,$display_order)
+	function Announcement($id,$title,$content,$date,$display_order,$email_sent)
 	{
 		parent::Resource($id,RESOURCE_ANNOUNCEMENT);
 		$this->content = $content;
 		$this->title = $title;
 		$this->date = $date;
 		$this->display_order = $display_order;
+		$this->email_sent = $email_sent;
 	}
 	/**
 	 * Show this announcement

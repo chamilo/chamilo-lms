@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 10197 2006-11-26 18:45:33Z pcool $
+// $Id: CourseRestorer.class.php 11326 2007-03-02 10:34:18Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -531,7 +531,12 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement)
 			{
-				$sql = "INSERT INTO ".$table." SET title = '".mysql_real_escape_string($announcement->title)."',content = '".mysql_real_escape_string($announcement->content)."', end_date = '".$announcement->date."', display_order = '".$announcement->display_order."'";
+				$sql = "INSERT INTO ".$table." " .
+						"SET title = '".mysql_real_escape_string($announcement->title)."'," .
+							"content = '".mysql_real_escape_string($announcement->content)."', " .
+							"end_date = '".$announcement->date."', " .
+							"display_order = '".$announcement->display_order."', " .
+							"email_sent = '".$announcement->email_sent."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = mysql_insert_id();
 			}

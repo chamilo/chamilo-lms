@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 10197 2006-11-26 18:45:33Z pcool $
+<?php // $Id: CourseBuilder.class.php 11326 2007-03-02 10:34:18Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -294,7 +294,7 @@ class CourseBuilder
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
 		{
-			$announcement = new Announcement($obj->id, $obj->title, $obj->content, $obj->end_date,$obj->display_order);
+			$announcement = new Announcement($obj->id, $obj->title, $obj->content, $obj->end_date,$obj->display_order,$obj->email_sent);
 			$this->course->add_resource($announcement);
 		}
 	}
@@ -331,9 +331,8 @@ class CourseBuilder
 	 */
 	function build_learnpaths()
 	{
-		$table_main 	= Database :: get_course_table(TABLE_LEARNPATH_MAIN);
-		$table_chapter 	= Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-		$table_item 	= Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+		$table_main 	= Database :: get_course_table(TABLE_LP_MAIN);
+		$table_item 	= Database :: get_course_table(TABLE_LP_ITEM);
 		$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST);
 
 		$sql = 'SELECT * FROM '.$table_main;
@@ -341,38 +340,36 @@ class CourseBuilder
 
 		while ($obj = mysql_fetch_object($db_result))
 		{
-			$sql_chapters = "SELECT * FROM ".$table_chapter." WHERE learnpath_id = ".$obj->learnpath_id."";
+			$sql_chapters = "SELECT * FROM ".$table_item." WHERE lp_id = ".$obj->id." AND item_type in ('dokeos_chapter','dir')";
 			$db_chapters = api_sql_query($sql_chapters);
 
 			$chapters = array ();
 
 			while ($obj_chapter = mysql_fetch_object($db_chapters))
 			{
-				$chapter['name'] = $obj_chapter->chapter_name;
-				$chapter['description'] = $obj_chapter->chapter_description;
+				$chapter['name'] = $obj_chapter->title;
+				$chapter['description'] = $obj_chapter->description;
 				$chapter['display_order'] = $obj_chapter->display_order;
 
 				$chapter['items'] = array();
 
-				$sql_items = "SELECT * FROM ".$table_item." WHERE chapter_id = ".$obj_chapter->id."";
+				$sql_items = "SELECT * FROM ".$table_item." WHERE parent_item_id = ".$obj_chapter->id."";
 				$db_items = api_sql_query($sql_items);
 				while ($obj_item = mysql_fetch_object($db_items))
 				{
 					$item['type'] = $obj_item->item_type;
-					$item['id'] = $obj_item->item_id;
+					$item['id'] = $obj_item->id;
 					$item['title'] = $obj_item->title;
 					$item['display_order'] = $obj_item->display_order;
 					$item['description'] = $obj_item->description;
-					$item['prereq'] = $obj_item->prereq_id;
-					$item['prereq_type'] = $obj_item->prereq_type;
-					$item['prereq_completion_limit'] = $obj_item->prereq_completion_limit;
-					$item['ref_id'] = $obj_item->id;
+					$item['prereq'] = $obj_item->prerequisite;
+					$item['ref_id'] = $obj_item->ref;
 					$chapter['items'][] = $item;
 				}
 				$chapters[] = $chapter;
 			}
 
-			$sql_tool = "SELECT 1 FROM ".$table_tool." WHERE (name='".addslashes($obj->learnpath_name)."' and image='scormbuilder.gif') AND visibility='1'";
+			$sql_tool = "SELECT 1 FROM ".$table_tool." WHERE (name='".addslashes($obj->name)."' and image='scormbuilder.gif') AND visibility='1'";
 			$db_tool = api_sql_query($sql_tool);
 
 			if(mysql_num_rows($db_tool))
@@ -384,7 +381,7 @@ class CourseBuilder
 				$visibility='0';
 			}
 
-			$lp = new Learnpath($obj->learnpath_id, $obj->learnpath_name, $obj->learnpath_description, $visibility, $chapters);
+			$lp = new Learnpath($obj->id, $obj->name, $obj->description, $visibility, $chapters);
 
 			$this->course->add_resource($lp);
 		}

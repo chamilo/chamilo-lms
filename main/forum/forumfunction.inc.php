@@ -109,26 +109,26 @@ function handle_forum_and_forumcategories()
 	if ($_GET['action']=='delete' AND isset($_GET['content']) AND isset($_GET['id']))
 	{
 		$return_message=delete_forum_forumcategory_thread($_GET['content'],$_GET['id']);// note: this has to be cleaned first
-		Display :: display_normal_message($return_message);
+		Display :: display_normal_message($return_message,false);
 		
 	}
 	// Change visibility of a forum or a forum category
 	if (($_GET['action']=='invisible' OR $_GET['action']=='visible') AND isset($_GET['content']) AND isset($_GET['id']))
 	{
 		$return_message=change_visibility($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
-		Display :: display_normal_message($return_message);
+		Display :: display_normal_message($return_message,false);
 	}
 	// Change lock status of a forum or a forum category
 	if (($_GET['action']=='lock' OR $_GET['action']=='unlock') AND isset($_GET['content']) AND isset($_GET['id']))
 	{
 		$return_message=change_lock_status($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
-		Display :: display_normal_message($return_message);
+		Display :: display_normal_message($return_message,false);
 	}	
 	// Move a forum or a forum category
 	if ($_GET['action']=='move' AND isset($_GET['content']) AND isset($_GET['id']) AND isset($_GET['direction']))
 	{
 		$return_message=move_up_down($_GET['content'], $_GET['direction'], $_GET['id']);// note: this has to be cleaned first
-		Display :: display_normal_message($return_message);
+		Display :: display_normal_message($return_message,false);
 	}	
 	
 }

@@ -602,6 +602,26 @@ class Database
 		}
 	}
 	/**
+	 * Gets the next row of the result of the SQL query (as returned by api_sql_query) in an object form
+	 * @param	resource	The result from a call to sql_query (e.g. api_sql_query)
+	 * @param	string		Optional class name to instanciate
+	 * @param	array		Optional array of parameters
+	 * @return	object		Object of class StdClass or the required class, containing the query result row
+	 * @author	Yannick Warnier <yannick.warnier@dokeos.com>
+	 */
+	function fetch_object($res,$class=null,$params=null)
+	{
+		if(!empty($class))
+		{
+			if(is_array($params))
+			{
+				return mysql_fetch_object($res,$class,$params);
+			}
+			return mysql_fetch_object($res,$class);
+		}
+		return mysql_fetch_object($res);	
+	}
+	/**
 	 * Gets the number of rows from the last query result - help achieving database independence
 	 * @param   resource    The result
 	 * @return  integer     The number of rows contained in this result

@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseRecycler.class.php 11356 2007-03-02 23:42:15Z yannoo $
+// $Id: CourseRecycler.class.php 11357 2007-03-02 23:52:24Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -112,24 +112,13 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_FORUM))
 		{
-			$table_forum = Database :: get_course_table(FORUM_TABLE);
-			$table_topic = Database :: get_course_table(FORUM_TOPIC_TABLE);
+			$table_forum = Database :: get_course_table(TABLE_FORUM);
+			$table_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
 			$table_post = Database :: get_course_table(TABLE_FORUM_POST);
-			$table_posttext = Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
 			$forum_ids = implode(',', (array_keys($this->course->resources[RESOURCE_FORUM])));
-			$sql = "SELECT post_id FROM ".$table_post." WHERE forum_id IN (".$forum_ids.")";
-			$res = api_sql_query($sql,__FILE__,__LINE__);
-			$post_ids = array ();
-			while ($obj = mysql_fetch_object($res))
-			{
-				$post_ids[] = $obj->post_id;
-			}
-			$post_ids = implode(',', $post_ids);
-			$sql = "DELETE FROM ".$table_posttext." WHERE post_id IN(".$post_ids.")";
-			api_sql_query($sql,__FILE__,__LINE__);
 			$sql = "DELETE FROM ".$table_post." WHERE forum_id IN(".$forum_ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
-			$sql = "DELETE FROM ".$table_topic." WHERE forum_id IN(".$forum_ids.")";
+			$sql = "DELETE FROM ".$table_thread." WHERE forum_id IN(".$forum_ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
 			$sql = "DELETE FROM ".$table_forum." WHERE forum_id IN(".$forum_ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
@@ -143,7 +132,7 @@ class CourseRecycler
 	{
 		$table_forum = Database :: get_course_table(TABLE_FORUM);
 		$table_forumcat = Database :: get_course_table(TABLE_FORUM_CATEGORY);
-		$sql = "SELECT fc.cat_id FROM ".$table_forumcat." fc LEFT JOIN ".$table_forum." f ON fc.cat_id=f.cat_id WHERE f.forum_id IS NULL";
+		$sql = "SELECT fc.cat_id FROM ".$table_forumcat." fc LEFT JOIN ".$table_forum." f ON fc.cat_id=f.forum_category WHERE f.forum_id IS NULL";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		while ($obj = mysql_fetch_object($res))
 		{
@@ -153,7 +142,7 @@ class CourseRecycler
 	}
 	/**
 	 * Delete link-categories
-	 * Deletes all link-categories from current course without links
+	 * Deletes all empty link-categories (=without links) from current course
 	 */
 	function recycle_link_categories()
 	{
@@ -194,12 +183,14 @@ class CourseRecycler
 		}
 	}
 	/**
-	 * Recycle quizzes
+	 * Recycle quizzes - doesn't remove the questions and their answers, as they might still be used later
 	 */
 	function recycle_quizzes()
 	{
 		if ($this->course->has_resources(RESOURCE_QUIZ))
 		{
+			//$table_qui_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+			//$table_qui_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_QUIZ])));

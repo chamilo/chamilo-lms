@@ -1,5 +1,5 @@
 <?php
-// $Id: course_information.php 10920 2007-01-26 10:55:37Z elixir_julian $
+// $Id: course_information.php 11354 2007-03-02 23:06:28Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -52,29 +52,29 @@ function get_course_usage($course_code)
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$course = mysql_fetch_object($res);
 	// Learnpaths
-	$table = Database :: get_course_table(TABLE_LEARNPATH_MAIN, $course->db_name);
-	$usage[] = array (get_lang(TOOL_LEARNPATH), Database::count_rows($table));
+	$table = Database :: get_course_table(TABLE_LP_MAIN, $course->db_name);
+	$usage[] = array (get_lang(ucfirst(TOOL_LEARNPATH)), Database::count_rows($table));
 	// Forums
 	$table = Database :: get_course_table(TABLE_FORUM, $course->db_name);
-	$usage[] = array (get_lang(TOOL_BB_FORUM), Database::count_rows($table));
+	$usage[] = array (get_lang('Forums'), Database::count_rows($table));
 	// Quizzes
 	$table = Database :: get_course_table(TABLE_QUIZ_TEST, $course->db_name);
-	$usage[] = array (get_lang(TOOL_QUIZ), Database::count_rows($table));
+	$usage[] = array (get_lang(ucfirst(TOOL_QUIZ)), Database::count_rows($table));
 	// Documents
 	$table = Database :: get_course_table(TABLE_DOCUMENT, $course->db_name);
-	$usage[] = array (get_lang(TOOL_DOCUMENT), Database::count_rows($table));
+	$usage[] = array (get_lang(ucfirst(TOOL_DOCUMENT)), Database::count_rows($table));
 	// Groups
 	$table = Database :: get_course_table(TABLE_GROUP, $course->db_name);
 	$usage[] = array (get_lang(TOOL_GROUP), Database::count_rows($table));
 	// Calendar
 	$table = Database :: get_course_table(TABLE_AGENDA, $course->db_name);
-	$usage[] = array (get_lang(TOOL_CALENDAR_EVENT), Database::count_rows($table));
+	$usage[] = array (get_lang(ucfirst(TOOL_CALENDAR_EVENT)), Database::count_rows($table));
 	// Link
 	$table = Database::get_course_table(TABLE_LINK, $course->db_name);
-	$usage[] = array(get_lang(TOOL_LINK), Database::count_rows($table));
+	$usage[] = array(get_lang(ucfirst(TOOL_LINK)), Database::count_rows($table));
 	// Announcements
 	$table = Database::get_course_table(TABLE_ANNOUNCEMENT, $course->db_name);
-	$usage[] = array(get_lang(TOOL_ANNOUNCEMENT), Database::count_rows($table));
+	$usage[] = array(get_lang(ucfirst(TOOL_ANNOUNCEMENT)), Database::count_rows($table));
 	return $usage;
 }
 /*****************************************************************/

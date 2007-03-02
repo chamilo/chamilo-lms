@@ -31,7 +31,7 @@ $langCurrentDir = "répertoire courant";
 $UploadADocument = "Envoyer un document";
 $EditToolOptions = "Éditer les options des outils";
 $DocumentDeleted = "Document supprimé";
-$SendMailBody = "Un utilisateur a publié un document dans l\\\'outil travaux de votre cours";
+$SendMailBody = "Un utilisateur a publié un document dans l\'outil travaux de votre cours";
 $DirDelete = "Supprimer le répertoire";
 $ValidateChanges = "Valider les changements";
 ?>

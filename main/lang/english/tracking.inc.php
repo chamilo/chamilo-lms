@@ -4,6 +4,18 @@ for more information: see languages.txt in the lang folder.
 $langShowAll = "Show all";
 $langToolName = "Tracking";
 $TrackingDisabled = "Tracking has been disabled by system administrator.";
+$InactivesStudents = "Inactive probationners";
+$AverageTimeSpentOnThePlatform = "Average time spent on the platform";
+$AverageCoursePerStudent = "Average courses number per probationner";
+$AverageProgressInLearnpath = "Average progress in learnpathes";
+$AverageResultsToTheExercices = "Average result to the exercises";
+$SeeStudentList = "See the probationners list";
+$NbActiveSessions = "Active sessions";
+$NbPastSessions = "Past sessions";
+$NbFutureSessions = "Future sessions";
+$NbStudentPerSession = "Number of probationners per session";
+$NbCoursesPerSession = "Number of courses per session";
+$SeeSessionList = "See the sessions list";
 $langShowNone = "Show none";
 $langCourseStats = "Course Stats";
 $langToolsAccess = "Access to tools";
@@ -165,4 +177,7 @@ $Comments = "Comments";
 $DayOfDelay = "Day of delay";
 $NoProduction = "No production";
 $NoComment = "No comment";
+$LatestLogin = "Last connection";
+$TimeSpentOnThePlatform = "Time spent on the platform";
+$Messages = "Posts";
 ?>

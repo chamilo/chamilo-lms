@@ -30,4 +30,7 @@ $langDirCr = "Vytvo&#345;it složku";
 $langCurrentDir = "aktuální složka";
 $UploadADocument = "Uložit dokument na server ";
 $EditToolOptions = "Možnosti nástroje pro úpravu ";
+$DocumentDeleted = "Dokument smazán";
+$DirDelete = "Smazat adresá&#345;";
+$ValidateChanges = "Potvrdit zm&#283;ny";
 ?>

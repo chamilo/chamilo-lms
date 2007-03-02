@@ -34,4 +34,6 @@ $langChat_reset_by = "reiniciar el chat";
 $OrFile = "O archivo";
 $langCallSent = "Petición de conferencia enviada, espere por la aprobación de su compañero";
 $langChatDenied = "Su peteción ha sido denegada por su compañero";
+$Send = "Enviar";
+$Connected = "Conectado";
 ?>

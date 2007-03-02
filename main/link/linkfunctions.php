@@ -660,4 +660,3 @@ function import_csvfile()
 		$catlinkstatus = get_lang('CsvFileNotFound');
 }
 ?>
-

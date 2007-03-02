@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 11180 2007-02-21 14:24:39Z elixir_julian $
+*  	@version $Id: work.php 11339 2007-03-02 13:35:38Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -761,11 +761,11 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 		// The body can be as long as you wish, and any combination of text and variables
 
 		//$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." ($title)\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-		$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." ($title)\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
+		$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." (".stripslashes($title).")\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
 
 		// Here we are forming one large header line
 		// Every header must be followed by a \n except the last
-		$emailheaders = "From: ".get_setting('administratorSurname')." ".get_setting('administratorName')." <".get_setting('emailAdministrator').">\n";
+		$emailheaders = "From: ".get_setting('administratorName')." ".get_setting('administratorSurname')." <".get_setting('emailAdministrator').">\n";
 		$emailheaders .= "Reply-To: ".get_setting('emailAdministrator');
 
 		// Because I predefined all of my variables, this api_send_mail() function looks nice and clean hmm?

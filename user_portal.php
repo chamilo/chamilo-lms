@@ -382,7 +382,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 									 FROM $tbl_session_course as session_course
 									 INNER JOIN $tbl_course AS course
 									 	ON course.code = session_course.course_code
-									 INNER JOIN $tbl_user as user
+									 LEFT JOIN $tbl_user as user
 										ON user.user_id = session_course.id_coach
 									 INNER JOIN $tbl_session_course_user
 										ON $tbl_session_course_user.id_session = $id_session
@@ -391,7 +391,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 										ON session_course.id_session = session.id
 									 WHERE session_course.id_session = $id_session
 									 ORDER BY i";
-	
+
 		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 				
 		while ($result_row = mysql_fetch_array($course_list_sql_result))
@@ -405,7 +405,6 @@ function get_personal_session_course_list($user_id, $list_sessions)
 			}
 		}
 	}
-	
 	//print_r($personal_course_list);
 
 	return $personal_course_list;

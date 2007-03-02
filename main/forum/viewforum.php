@@ -242,7 +242,8 @@ foreach ($threads as $row)
 		{
 			 $class="row_odd";
 		}
-		else{
+		else
+		{
 			$class="row_even";
 		}
 		echo "\t<tr class=\"$class\">\n";

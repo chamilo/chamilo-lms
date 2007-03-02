@@ -240,7 +240,10 @@ foreach ($threads as $row)
 	{
 		if($counter%2==0)
 		{
-			 $class="row_odd"; else $class="row_even";
+			 $class="row_odd";
+		}
+		else{
+			$class="row_even";
 		}
 		echo "\t<tr class=\"$class\">\n";
 		echo "\t\t<td>";

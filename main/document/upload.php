@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 10840 2007-01-23 09:40:38Z elixir_julian $
+<?php // $Id: upload.php 11321 2007-03-02 09:05:54Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -266,7 +266,7 @@ if(isset($_POST['create_dir']) && $_POST['dirname']!='')
 	if($created_dir)
 	{
 		//Display::display_normal_message("<strong>".$created_dir."</strong> was created!");
-		Display::display_normal_message(get_lang('DirCr'));
+		Display::display_normal_message(get_lang('DirCr'),false);
 		$path = $created_dir;
 	}
 	else 

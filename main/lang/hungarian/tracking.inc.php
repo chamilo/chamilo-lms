@@ -154,4 +154,9 @@ $StudentTutors = "A tanulók konzulensei";
 $StudentSessions = "A tanulók kurzusai";
 $StudentCourses = "Tanulók kurzusai";
 $Attempts = "Próbálkozások";
+$Correction = "Javítás";
+$NoExercise = "Nincsenek gyakorlatok";
+$Annotate = "Megjegyzéssel ellát";
+$Comments = "Megjegyzések";
+$NoComment = "Nincs megjegyzés";
 ?>

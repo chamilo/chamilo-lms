@@ -62,4 +62,9 @@ $CourseSortingDone = "Kurzusok sorbarendezve";
 $ExistingCourseCategories = "A jelenlegi kurzus kategóriák";
 $YouAreNowUnsubscribed = "Ön sikeresen leiratkozott a kurzusról";
 $ViewOpenCourses = "Nyitott kurzusok megtekintése";
+$CourseRegistrationCodeIncorrect = "A kurzus kódja helytelen";
+$CourseRequiresPassword = "A kurzus jelszóhoz kötött";
+$SubmitRegistrationCode = "Regisztrációs kód elküldése";
+$CourseCategoryDeleted = "Törölt kurzus kategória ";
+$CourseCategoryEditStored = "Frissített kategória";
 ?>

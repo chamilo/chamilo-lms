@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$LinkMoved = "The link has been moved";
+$VisibilityChanged = "The link\'s visibility has been moved";
 $langLinkName = "Link name";
 $langLinkAdd = "Add a link";
 $langLinkAdded = "The link has been added.";

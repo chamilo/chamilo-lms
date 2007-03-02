@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewForumCreated = "O novo fórum acaba de ser criado";
+$NewThreadCreated = "O novo assunto do fórum acaba de ser criado.";
 $lang_learning_path = "Sequência de Aprendizagem";
 $lang_learning_path_builder = "Editor de Sequências de Aprendizagem";
 $lang_description = "Descrição";

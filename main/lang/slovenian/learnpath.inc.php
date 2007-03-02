@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewForumCreated = "Nov forum je bil ustvarjen";
+$NewThreadCreated = "Nova nit foruma je bila ustvarjena.";
 $lang_learning_path = "Uèna pot";
 $lang_learning_path_builder = "Kreator uène poti";
 $lang_description = "opis";

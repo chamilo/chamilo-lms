@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewForumCreated = "The new forum has been created";
+$NewThreadCreated = "The new forum thread has been created.";
 $lang_learning_path = "Learning Path";
 $lang_learning_path_builder = "Learning Path builder";
 $lang_description = "description";
@@ -147,7 +149,7 @@ $langMaximum = "Maximum";
 $langNoDocuments = "No documents";
 $langNoExercisesAvailable = "No exercises available";
 $langNoLinksAvailable = "No links available";
-$langNoItemsInLp = "There are no items in the learning path for this moment. Click on \"Advanced\" for creating your learning path items.";
+$langNoItemsInLp = "There are no items in the learning path for this moment. Click on \"Build\" for creating your learning path items.";
 $FirstPosition = "First position";
 $NewQuiz = "New quiz";
 $CreateTheForum = "Add the forum";

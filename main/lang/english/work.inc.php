@@ -31,7 +31,7 @@ $langCurrentDir = "current folder";
 $UploadADocument = "Upload a document";
 $EditToolOptions = "Edit Tool Options";
 $DocumentDeleted = "Document deleted";
-$SendMailBody = "A user posted a document in the work tool of your course.";
+$SendMailBody = "A user posted a document in the Publications tool of your course.";
 $DirDelete = "Delete directory";
 $ValidateChanges = "Validate changes";
 ?>

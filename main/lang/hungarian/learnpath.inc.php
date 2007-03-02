@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewForumCreated = "Elkészült az új fórum";
 $lang_learning_path = "Tanösvény";
 $lang_learning_path_builder = "Tanösvény szerkeszt&#337;";
 $lang_description = "Leírás";

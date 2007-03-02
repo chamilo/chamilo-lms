@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$LinkMoved = "Povezava je bila prestavljena";
+$VisibilityChanged = "Vidnost povezave je bila spremenjena";
 $langLinkName = "Ime povezave";
 $langLinkAdd = "Dodaj povezavo";
 $langLinkAdded = "Povezava je bila dodana";

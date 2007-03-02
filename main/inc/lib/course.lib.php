@@ -869,8 +869,11 @@ class CourseManager
 	*
 	* @return true if the user is registered in the course, false otherwise
 	*/
-	function is_user_subscribed_in_course($user_id, $course_code)
+	function is_user_subscribed_in_course($user_id, $course_code, $in_a_session=false)
 	{
+		$user_id = intval($user_id);
+		$course_code = addslashes($course_code);
+		
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 		$sql_query = "SELECT * FROM $table WHERE `user_id` = '$user_id' AND `course_code` = '$course_code'";
@@ -879,7 +882,19 @@ class CourseManager
 
 		if (!isset ($result) || empty ($result))
 		{
-			return false; //user is not registered in course
+			if($in_a_session)
+			{
+				$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
+						WHERE id_user = '.$user_id.' AND course_code="'.$course_code.'"';
+				
+				$rs = api_sql_query($sql, __FILE__, __LINE__);
+				if(mysql_num_rows($rs)>0)
+				{
+					return true;
+				}
+			}
+			else
+				return false; //user is not registered in course
 		}
 		else
 		{

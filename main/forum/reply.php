@@ -147,7 +147,8 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resour
 if($origin=='learnpath')
 {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
-} else 
+} 
+else 
 {
 	Display :: display_header();
 	api_display_tool_title($nameTools);
@@ -224,7 +225,9 @@ if (!empty($values) AND $_POST['SubmitPost'])
 ==============================================================================
 */
 if($origin!='learnpath')
+{
 	Display :: display_footer();
+}
 ?>
 
 

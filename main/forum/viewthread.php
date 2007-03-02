@@ -22,23 +22,23 @@
 */
 
 /**
-*	These files are a complete rework of the forum. The database structure is 
+*	These files are a complete rework of the forum. The database structure is
 *	based on phpBB but all the code is rewritten. A lot of new functionalities
 *	are added:
 * 	- forum categories and forums can be sorted up or down, locked or made invisible
 *	- consistent and integrated forum administration
-* 	- forum options: 	are students allowed to edit their post? 
+* 	- forum options: 	are students allowed to edit their post?
 * 						moderation of posts (approval)
 * 						reply only forums (students cannot create new threads)
 * 						multiple forums per group
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*	
+*
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
-* 
+*
 * 	@package dokeos.forum
 */
 
@@ -50,7 +50,7 @@
  * merge files and test it all over again. So for the moment, please do not
  * touch the code
  * 							-- Patrick Cool <patrick.cool@UGent.be>
- ************************************************************************** 
+ **************************************************************************
  */
 
 /*
@@ -63,7 +63,7 @@
 	Language Initialisation
 -----------------------------------------------------------
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'forum';
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
@@ -98,11 +98,11 @@ if(isset($_GET['origin']))
 	Retrieving forum and forum categorie information
 -----------------------------------------------------------
 */
-// we are getting all the information about the current forum and forum category. 
+// we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
 $current_thread=get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
-$current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum. 
+$current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 
 $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
@@ -115,9 +115,9 @@ $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 if($origin=='learnpath')
 {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
-} else 
+} else
 {
-	
+
 	$interbreadcrumb[]=array("url" => "index.php","name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
 	$interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" => prepare4display($current_forum['forum_title']));
@@ -127,17 +127,17 @@ if($origin=='learnpath')
 	}
 	Display :: display_header();
 	api_display_tool_title($nameTools);
-	
+
 }
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 
 /*
 -----------------------------------------------------------
-	Is the user allowed here? 
+	Is the user allowed here?
 -----------------------------------------------------------
 */
 // if the user is not a course administrator and the forum is hidden
-// then the user is not allowed here. 
+// then the user is not allowed here.
 if (!api_is_allowed_to_edit() AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0))
 {
 	forum_not_allowed_here();
@@ -168,18 +168,18 @@ if ($_GET['action']=='move' and isset($_GET['post']))
 */
 if (isset($message))
 {
-	Display :: display_normal_message(get_lang($message));
+	Display :: display_confirmation_message(get_lang($message));
 }
 
 
 if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 {
-	
+
 	// this increases the number of times the thread has been viewed
 	increase_thread_view($_GET['thread']);
-	
-	
-	
+
+
+
 	/*
 	-----------------------------------------------------------
 		Action Links
@@ -194,7 +194,7 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 	// if one of the three levels is locked then the link should not be displayed
 	if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit())
 	{
-		// The link should only appear when the user is logged in or when anonymous posts are allowed. 
+		// The link should only appear when the user is logged in or when anonymous posts are allowed.
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 		{
 			echo '<a href="reply.php?forum='.$_GET['forum'].'&amp;thread='.$_GET['thread'].'&amp;action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
@@ -202,41 +202,41 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 	}
 	// note: this is to prevent that some browsers display the links over the table (FF does it but Opera doesn't)
 	echo '&nbsp;';
-	
-	
+
+
 	/*
 	-----------------------------------------------------------
 		Display Forum Category and the Forum information
 	-----------------------------------------------------------
 	*/
-	
+
 	if (!$_SESSION['view'])
 	{
-		$viewmode=$current_forum['default_view']; 
+		$viewmode=$current_forum['default_view'];
 	}
-	else 
+	else
 	{
-		$viewmode=$_SESSION['view']; 
+		$viewmode=$_SESSION['view'];
 	}
-	
+
 	$viewmode_whitelist=array('flat', 'threaded', 'nested');
 	if (isset($_GET['view']) and in_array($_GET['view'],$viewmode_whitelist))
 	{
 		$viewmode=$_GET['view'];
-		$_SESSION['view']=$viewmode; 
+		$_SESSION['view']=$viewmode;
 	}
-	
-	
+
+
 	/*
 	-----------------------------------------------------------
 		Display Forum Category and the Forum information
 	-----------------------------------------------------------
 	*/
-	// we are getting all the information about the current forum and forum category. 
+	// we are getting all the information about the current forum and forum category.
 	// note pcool: I tried to use only one sql statement (and function) for this
 	// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
 	echo "<table class=\"data_table\" width='100%'>\n";
-	
+
 	// the forum category
 	if($origin!='learnpath')
 	{
@@ -246,23 +246,23 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 		echo "</th>\n";
 		echo "\t</tr>\n";
 	}
-	
-	// the forum 
+
+	// the forum
 	echo "\t<tr class=\"forum_header\">\n";
 	echo "\t\t<td><a href=\"viewforum.php?forum=".$current_forum['forum_id']."\" ".class_visible_invisible($current_forum['visibility']).">".prepare4display($current_forum['forum_title'])."</a><br />";
 	echo '<span>'.prepare4display($current_forum['forum_comment']).'</span>';
 	echo "</td>\n";
 	echo "\t</tr>\n";
-	
-	// the thread 
+
+	// the thread
 	echo "\t<tr class=\"forum_thread\">\n";
 	echo "\t\t<td><span ".class_visible_invisible($current_thread['visibility']).">".prepare4display($current_thread['thread_title'])."</span><br />";
 	echo "</td>\n";
 	echo "\t</tr>\n";
 	echo "</table>";
-	
+
 	echo '<br />';
-	
+
 	switch ($viewmode)
 	{
 		case 'flat':
@@ -270,10 +270,10 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 			break;
 		case 'threaded':
 			include_once('viewthread_threaded.inc.php');
-			break;		
+			break;
 		case 'nested':
 			include_once('viewthread_nested.inc.php');
-			break;			
+			break;
 	}
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 

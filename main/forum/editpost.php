@@ -76,7 +76,10 @@ require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 
-if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
+if(!api_is_allowed_to_edit())
+{
+	$fck_attribute['Config']['UserStatus'] = 'student';
+}
 
 $nameTools=get_lang('Forum');
 

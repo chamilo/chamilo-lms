@@ -22,23 +22,23 @@
 */
 
 /**
-*	These files are a complete rework of the forum. The database structure is 
+*	These files are a complete rework of the forum. The database structure is
 *	based on phpBB but all the code is rewritten. A lot of new functionalities
 *	are added:
 * 	- forum categories and forums can be sorted up or down, locked or made invisible
 *	- consistent and integrated forum administration
-* 	- forum options: 	are students allowed to edit their post? 
+* 	- forum options: 	are students allowed to edit their post?
 * 						moderation of posts (approval)
 * 						reply only forums (students cannot create new threads)
 * 						multiple forums per group
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*	
+*
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
-* 
+*
 * 	@package dokeos.forum
 */
 
@@ -50,7 +50,7 @@
  * merge files and test it all over again. So for the moment, please do not
  * touch the code
  * 							-- Patrick Cool <patrick.cool@UGent.be>
- ************************************************************************** 
+ **************************************************************************
  */
 
 /*
@@ -63,7 +63,7 @@
 	Language Initialisation
 -----------------------------------------------------------
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'forum';
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
@@ -100,10 +100,10 @@ include('forumfunction.inc.php');
 	Retrieving forum and forum categorie information
 -----------------------------------------------------------
 */
-// we are getting all the information about the current forum and forum category. 
+// we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-$current_forum=get_forum_information($_GET['forum']); // note: this has to be validated that it is an existing forum. 
+$current_forum=get_forum_information($_GET['forum']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 
 
@@ -119,7 +119,7 @@ $interbreadcrumb[]=array("url" => "viewforum.php?forum=".$_GET['forum'],"name" =
 if($origin=='learnpath')
 {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
-} else 
+} else
 {
 	Display :: display_header();
 	api_display_tool_title($nameTools);
@@ -153,11 +153,11 @@ if ($_GET['action']=='move' and isset($_GET['thread']))
 
 /*
 -----------------------------------------------------------
-	Is the user allowed here? 
+	Is the user allowed here?
 -----------------------------------------------------------
 */
 // if the user is not a course administrator and the forum is hidden
-// then the user is not allowed here. 
+// then the user is not allowed here.
 if (!api_is_allowed_to_edit() AND ($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))
 {
 	forum_not_allowed_here();
@@ -171,7 +171,7 @@ if (!api_is_allowed_to_edit() AND ($current_forum_category['visibility']==0 OR $
 */
 if (isset($message))
 {
-	Display :: display_normal_message($message);
+	Display :: display_confirmation_message($message);
 }
 
 
@@ -191,7 +191,7 @@ if (api_is_allowed_to_edit() OR ($current_forum['allow_new_threads']==1 AND isse
 
 /*
 -----------------------------------------------------------
-					Display 
+					Display
 -----------------------------------------------------------
 */
 echo "<table class=\"data_table\" width='100%'>\n";
@@ -206,7 +206,7 @@ if($origin != 'learnpath')
 	echo "\t</tr>\n";
 }
 
-// the forum 
+// the forum
 echo "\t<tr class=\"forum_header\">\n";
 echo "\t\t<td colspan=\"7\">".prepare4display($current_forum['forum_title'])."<br />";
 echo '<span>'.prepare4display($current_forum['forum_comment']).'</span>';
@@ -235,21 +235,24 @@ $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 $counter=0;
 foreach ($threads as $row)
 {
-	// thread who have no replies yet and the only post is invisible should not be displayed to students. 
+	// thread who have no replies yet and the only post is invisible should not be displayed to students.
 	if (api_is_allowed_to_edit() OR  !($row['thread_replies']=='0' AND $row['visible']=='0'))
-	{ 
-		if($counter%2==0) $class="row_odd"; else $class="row_even";
+	{
+		if($counter%2==0)
+		{
+			 $class="row_odd"; else $class="row_even";
+		}
 		echo "\t<tr class=\"$class\">\n";
 		echo "\t\t<td>";
 		if (is_array($whatsnew_post_info[$_GET['forum']][$row['thread_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']]))
 		{
-			echo icon('../img/forumthreadnew.gif');	
+			echo icon('../img/forumthreadnew.gif');
 		}
-		else 
+		else
 		{
-			echo icon('../img/forumthread.gif');	
+			echo icon('../img/forumthread.gif');
 		}
-	
+
 		if ($row['thread_sticky']==1)
 		{
 			echo icon('../img/exclamation.gif');
@@ -261,7 +264,7 @@ foreach ($threads as $row)
 		{
 			$name=prepare4display($row['thread_poster_name']);
 		}
-		else 
+		else
 		{
 			$name=$row['firstname'].' '.$row['lastname'];
 		}
@@ -269,7 +272,7 @@ foreach ($threads as $row)
 		{
 			echo "\t\t<td>".display_user_link($row['user_id'], $name)."</td>\n";
 		}
-		else 
+		else
 		{
 			echo "\t\t<td>".$name."</td>\n";
 		}
@@ -278,7 +281,7 @@ foreach ($threads as $row)
 		{
 			$name=$row['poster_name'];
 		}
-		else 
+		else
 		{
 			$name=$row['last_poster_firstname'].' '.$row['last_poster_lastname'];
 		}
@@ -295,7 +298,7 @@ foreach ($threads as $row)
 			$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
 			$last_post=$last_post_row['post_date']." ".get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
 		}
-		else 
+		else
 		{
 			$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
 			$last_post_result=api_sql_query($last_post_sql, __LINE__, __FILE__);
@@ -326,7 +329,9 @@ echo "</table>";
 ==============================================================================
 */
 if($origin != 'learnpath')
+{
 	Display :: display_footer();
+}
 ?>
 
 

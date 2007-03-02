@@ -34,6 +34,10 @@ $language_file = 'survey';
 // including the global dokeos file
 require ('../inc/global.inc.php');
 
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '200';
+$fck_attribute['ToolbarSet'] = 'Survey';
+
 // including additional libraries
 //require_once (api_get_path(LIBRARY_PATH)."/survey.lib.php");
 require_once('survey.lib.php');
@@ -80,10 +84,10 @@ foreach ($complete_user_list as $index => $user)
 {
 	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
 }
-$users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users);
+$users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 220px;"');
 $users->setElementTemplate('
 {javascript}
-<table{class}>
+<table{class} width="500">
 <!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
 <!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
 <tr>
@@ -94,11 +98,11 @@ $users->setElementTemplate('
 </table>
 ');
 // additional users
-$form->addElement('textarea', 'additional_users', get_lang('AdditonalUsers'), array ('cols' => 50, 'rows' => 2));
+$form->addElement('textarea', 'additional_users', get_lang('AdditonalUsers'), array ('cols' => 100, 'rows' => 2));
 // additional users comment
 $form->addElement('static', null, null, get_lang('AdditonalUsersComment'));
 // the title of the mail
-$form->addElement('text', 'mail_title', get_lang('MailTitle'));
+$form->addElement('text', 'mail_title', get_lang('MailTitle'), 'style="width: 350px"');
 // the text of the mail
 $form->addElement('html_editor', 'mail_text', get_lang('MailText'));
 // some explanation of the mail

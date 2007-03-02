@@ -654,7 +654,7 @@ class question
 		if ($_POST['save_question'])
 		{
 			$message = survey_manager::save_question($form_content);
-			Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.$_GET['survey_id'].'">'.get_lang('Survey').'</a>');
+			Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.$_GET['survey_id'].'">'.get_lang('Survey').'</a>',false);
 		}
 
 		/**

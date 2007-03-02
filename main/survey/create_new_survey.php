@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 11134 2007-02-16 14:39:59Z pcool $
+* 	@version $Id: create_new_survey.php 11349 2007-03-02 15:57:21Z elixir_julian $
 *
 * 	@todo rename this file to survey.php
 * 	@todo try to understand the template stuff and implement it (if needed)
@@ -34,6 +34,10 @@ $language_file = 'survey';
 
 // including the global dokeos file
 require_once ('../inc/global.inc.php');
+
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '200';
+$fck_attribute['ToolbarSet'] = 'Survey';
 
 // including additional libraries
 /** @todo check if these are all needed */
@@ -89,9 +93,9 @@ if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET
 {
 	$form->addElement('hidden', 'survey_id');
 }
-$form->addElement('text', 'survey_code', get_lang('SurveyCode'));
-$form->addElement('text', 'survey_title', get_lang('SurveyTitle'));
-$form->addElement('text', 'survey_subtitle', get_lang('SurveySubTitle'));
+$form->addElement('text', 'survey_code', get_lang('SurveyCode'), 'style="width: 200px;"');
+$form->addElement('text', 'survey_title', get_lang('SurveyTitle'), 'style="width: 350px;"');
+$form->addElement('text', 'survey_subtitle', get_lang('SurveySubTitle'), 'style="width: 350px;"');
 $lang_array = api_get_languages();
 foreach ($lang_array['name'] as $key=>$value)
 {
@@ -144,7 +148,7 @@ if( $form->validate() )
 {
    $values = $form->exportValues();
    $return = survey_manager::store_survey($values);
-   Display::display_confirmation_message($return['message']);
+   Display::display_confirmation_message($return['message'],false);
 }
 else
 {

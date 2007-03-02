@@ -283,6 +283,21 @@ class UserManager
 		$user = mysql_fetch_array($res,MYSQL_ASSOC);
 		return $user;
 	}
+	
+	/**
+	 * Get user information
+	 * @param string $id The id
+	 * @return array All user information as an associative array
+	 */
+	function get_user_info_by_id($user_id)
+	{
+		$user_id = intval($user_id);
+		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		$sql = "SELECT * FROM $user_table WHERE user_id=".$user_id;
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$user = mysql_fetch_array($res,MYSQL_ASSOC);
+		return $user;
+	}
 
 	//for survey
 	function get_teacher_list($course_id, $sel_teacher='')

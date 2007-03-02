@@ -7,6 +7,8 @@ $language_file = array ('registration', 'index','tracking');
 $cidReset=true;
 
 require ('../inc/global.inc.php');
+require (api_get_path(LIBRARY_PATH).'tracking.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 $nameTools= get_lang("MySpace");
 
 $this_section = "session_my_space";
@@ -24,34 +26,223 @@ $tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_user 			= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_admin					= Database :: get_main_table(TABLE_MAIN_ADMIN);
-  
-  
-    
-function is_coach()
+
+$isCoach = api_is_coach(); 
+
+
+if($isCoach)
 {
-  	global $tbl_session_course;
-  	
-	$sql="SELECT course_code FROM $tbl_session_course WHERE id_coach='".$_SESSION["_uid"]."'";
-	$result=api_sql_query($sql);
-	  
-	if(mysql_num_rows($result)>0)
+	
+	/****************************************
+	 * Infos about students of the coach
+	 ****************************************/
+	$a_students = Tracking :: get_student_followed_by_coach($_user['user_id']);
+	$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
+	$nbStudents = count($a_students);
+	
+	$totalTimeSpent = 0;
+	$totalCourses = 0;
+	$avgTotalProgress = 0;
+	$avgResultsToExercises = 0;
+	$nb_inactive_students = 0;
+	foreach($a_students as $student_id)
 	{
-	    return true;	    
+		if($last_connection_date = Tracking :: get_last_connection_date($student_id))
+		{
+			list($last_connection_date, $last_connection_hour) = explode(' ',$last_connection_date);
+			$last_connection_date = explode('-',$last_connection_date);
+			$last_connection_hour = explode(':',$last_connection_hour);
+			$last_connection_time = mktime($last_connection_hour[0],$last_connection_hour[1],$last_connection_hour[2],$last_connection_date[1],$last_connection_date[2],$last_connection_date[0]);			
+			if(time()-(3600*24*7) > $last_connection_time)
+			{
+				$nb_inactive_students++;
+			}
+		}
+		else
+		{
+			$nb_inactive_students++;
+		}
+		
+		$totalTimeSpent += Tracking :: get_time_spent_on_the_platform($student_id);
+		$totalCourses += Tracking :: count_course_per_student($student_id);
+		$avgStudentProgress = $avgStudentScore = 0;
+		$nb_courses_student = 0;
+		foreach($a_courses as $course_code)
+		{
+			if(CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true))
+			{
+				$nb_courses_student++;
+				$avgStudentProgress += Tracking :: get_avg_student_progress($student_id,$course_code);
+				$avgStudentScore += Tracking :: get_avg_student_score($student_id,$course_code);
+			}
+		}
+		// average progress of the student
+		$avgStudentProgress = $avgStudentProgress / $nb_courses_student;
+		$avgTotalProgress += $avgStudentProgress;
+		
+		// average test results of the student
+		$avgStudentScore = $avgStudentScore / $nb_courses_student;
+		$avgResultsToExercises += $avgStudentScore;
+		
 	}
-	else
+	// average progress
+	$avgTotalProgress = $avgTotalProgress/$nbStudents;
+	
+	// average results to the tests
+	$avgResultsToExercises = $avgResultsToExercises/$nbStudents;
+	
+	// average courses by student
+	$avgCoursesPerStudent = round($totalCourses / $nbStudents,1);
+	
+	// average time spent on the platform
+	$avgTimeSpent = $totalTimeSpent / $nbStudents;
+	
+	
+	 echo '
+	 <div class="admin_section">
+		<h4>
+			<a href="student.php"><img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Probationers').' ('.$nbStudents.')'.'</a> 
+		</h4>
+		<table class="data_table">
+			<tr>
+				<td>
+					'.get_lang('InactivesStudents').'
+				</td>
+				<td>
+					'.$nb_inactive_students.'
+				</td>
+			</tr>
+			<tr>
+				<td>
+					'.get_lang('AverageTimeSpentOnThePlatform').'
+				</td>
+				<td>
+					'.api_time_to_hms($avgTimeSpent).'
+				</td>
+			</tr>
+			<tr>
+				<td>
+					'.get_lang('AverageCoursePerStudent').'
+				</td>
+				<td>
+					'.$avgCoursesPerStudent.'
+				</td>
+			</tr>
+			<tr>
+				<td>
+					'.get_lang('AverageProgressInLearnpath').'
+				</td>
+				<td>
+					'.round($avgTotalProgress,1).' %
+				</td>
+			</tr>
+			<tr>
+				<td>
+					'.get_lang('AverageResultsToTheExercices').'
+				</td>
+				<td>
+					'.round($avgResultsToExercises,1).'
+				</td>
+			</tr>
+		</table>
+		<a href="student.php">'.get_lang('SeeStudentList').'</a>
+	 </div>';
+	 
+	 
+	 
+	 /****************************************
+	 * Infos about sessions of the coach
+	 ****************************************/
+	$a_sessions = Tracking :: get_sessions_coached_by_user($_user['user_id']);
+	$nbSessions = count($a_sessions);
+	$nb_sessions_past = $nb_sessions_future = $nb_sessions_current = 0;
+	$a_courses = array();
+	foreach($a_sessions as $a_session)
 	{
-		return false;
+		if($a_session['date_start'] == '0000-00-00')
+		{
+			$nb_sessions_current ++;
+		}
+		else
+		{
+			$date_start = explode('-',$session['date_start']);
+			$time_start = mktime(0,0,0,$date_start[1],$date_start[2],$date_start[0]);
+			
+			$date_end = explode('-',$session['date_end']);				
+			$time_end = mktime(0,0,0,$date_end[1],$date_end[2],$date_end[0]);			
+			if($time_start < time() && time() < $time_end)
+			{
+				$nb_sessions_current++;
+			}
+			else if(time() < $time_start)
+			{
+				$nb_sessions_future++;
+			}
+			else if(time() > $time_end)
+			{
+				$nb_sessions_past++;
+			}
+		}
+		$a_courses = array_merge($a_courses, Tracking::get_courses_list_from_session($a_session['id']));		
 	}
+	$nb_courses_per_session = round(count($a_courses)/$nbSessions,1);
+	echo '
+	 <div class="admin_section">
+		<h4>
+			<a href="session.php"><img src="'.api_get_path(WEB_IMG_PATH).'sessions.gif">&nbsp;'.get_lang('Sessions').' ('.$nbSessions.')'.'</a>
+		</h4>
+		<table class="data_table">
+			<tr>
+				<td>
+					'.get_lang('NbActiveSessions').'
+				</td>
+				<td>
+					'.$nb_sessions_current.'
+				</td>
+			</tr>
+			<tr>
+				<td>
+					'.get_lang('NbPastSessions').'
+				</td>
+				<td>
+					'.$nb_sessions_past.'
+				</td>
+			</tr>
+			<tr>
+				<td>
+					'.get_lang('NbFutureSessions').'
+				</td>
+				<td>
+					'.$nb_sessions_future.'
+				</td>
+			</tr>
+			<tr>
+				<td>
+					'.get_lang('NbStudentPerSession').'
+				</td>
+				<td>
+					'.round($nbStudents/$nbSessions,1).'
+				</td>
+			</tr>
+			<tr>
+				<td>
+					'.get_lang('NbCoursesPerSession').'
+				</td>
+				<td>
+					'.$nb_courses_per_session.'
+				</td>
+			</tr>
+		</table>
+		<a href="student.php">'.get_lang('SeeSessionList').'</a>
+	 </div>';
+	 
+	 Display::display_footer();
+	 exit;
 }
-  
-  
-  
- /*
- ===============================================================================
- 	MAIN CODE
- ===============================================================================  
- */
- 	
+
+
+
+
 //Trainers
 if(api_is_platform_admin())
 {
@@ -153,7 +344,7 @@ elseif($is_allowedCreateCourse)
 			}
 	}
 		
-		if(is_coach())
+		if($isCoach)
 		{
 			$a_stagiaire_coach=array();
 			
@@ -228,20 +419,7 @@ elseif($is_allowedCreateCourse)
 			
 		}
 		
-		//La personne est coach
-		if(is_coach()){
-			
-			$sqlNbCours = "	SELECT DISTINCT course_code 
-							FROM $tbl_session_course 
-						  	WHERE id_coach='".$_user['user_id']."' 
-						  ";
-			$resultCours = api_sql_query($sqlNbCours);
-			
-			while($a_cours_coach = mysql_fetch_array($resultCours)){
-				$a_cours[]=$a_cours_coach["course_code"];
-			}
-			
-		}
+		
 		$a_cours=array_unique($a_cours);
 		$nbCours=count($a_cours);
 		
@@ -280,7 +458,7 @@ elseif($is_allowedCreateCourse)
 			
 		}
 		
-		if(is_coach())
+		if($isCoach)
 		{
 			$sqlNbSessions = "	SELECT DISTINCT id_session 
 								FROM $tbl_session_course 
@@ -300,9 +478,6 @@ elseif($is_allowedCreateCourse)
 		
 	}
 
-	$sql_nb_admin="SELECT count(user_id) FROM $tbl_admin";
-	$resultNbAdmin = api_sql_query($sql_nb_admin);
-	$i_nb_admin=mysql_result($resultNbAdmin,0,0);
 
 if(api_is_platform_admin())
 {
@@ -313,60 +488,47 @@ if(api_is_platform_admin())
 	 </div>';
 }
  
-if((api_is_platform_admin() || $is_allowedCreateCourse) && api_get_setting('use_session_mode')=='true')
-{
+if((api_is_platform_admin() || ($is_allowedCreateCourse && $nbCoachs>0)) && api_get_setting('use_session_mode')=='true')
+{ // if the user is platform admin, or if he's a teacher which manage coaches
 	 echo '<div class="admin_section">
 		<h4>
 			<a href="coaches.php"><img src="'.api_get_path(WEB_IMG_PATH).'coachs.gif">&nbsp;'.get_lang("Tutors").' ('.$nbCoachs.')</a>
 		</h4>
 	 </div>';
 }
-?>
- <div class="admin_section">
-	<h4>
-		<?php 
-			echo "<a href='student.php'><img src='".api_get_path(WEB_IMG_PATH)."students.gif'>&nbsp;".get_lang('Probationers').' ('.$nbStagiaire.')'."</a>"; 
-		?>
-	</h4>
- </div>
- <div class="admin_section">
-	<h4>
-		<?php echo "<a href='admin.php'><img src='".api_get_path(WEB_IMG_PATH)."admins.gif'>&nbsp;".get_lang('Administrators')." (".$i_nb_admin.")</a>"; ?>
-	</h4>
- </div>
- <div class="admin_section">
-	<h4>
-		<?php echo "<a href='cours.php'><img src='".api_get_path(WEB_IMG_PATH)."courses.gif'>&nbsp;".get_lang('Courses').' ('.$nbCours.')'."</a>"; ?>
-	</h4>
- </div>
- 
- <?php
- if(api_get_setting('use_session_mode')=='true'){
- ?>
- <div class="admin_section">
-	<h4>
-		<?php echo "<a href='session.php'><img src='".api_get_path(WEB_IMG_PATH)."sessions.gif'>&nbsp;".get_lang('Sessions').' ('.$nbSessions.')'."</a>"; ?>
-	</h4>
- </div>
- <?php
- }
- ?>
 
- <div class="admin_section">
-	<h4>
-		<?php echo "<img src='".api_get_path(WEB_IMG_PATH)."statistics.gif'>&nbsp;".get_lang('Tracks'); ?>
-	</h4>
-	<ul>
-		<li>
-			<a href="progression.php"><?php echo get_lang('Progression'); ?></a>
-		</li>
-		<li>
-			<a href="reussite.php"><?php echo get_lang('Success'); ?></a>
-		</li>
-	</ul>
- </div>
 
- <?php
+if(api_is_platform_admin())
+{
+	
+	$sql_nb_admin="SELECT count(user_id) FROM $tbl_admin";
+	$resultNbAdmin = api_sql_query($sql_nb_admin);
+	$i_nb_admin=mysql_result($resultNbAdmin,0,0);
+	echo '
+	 <div class="admin_section">
+		<h4>
+			<a href="admin.php"><img src="'.api_get_path(WEB_IMG_PATH).'admins.gif>&nbsp;'.get_lang('Administrators').' ('.$i_nb_admin.')</a>
+		</h4>
+	 </div>';
+}
+if($nbCours)
+{
+	echo '
+	 <div class="admin_section">
+		<h4>
+			<a href="cours.php"><img src="'.api_get_path(WEB_IMG_PATH).'courses.gif">&nbsp;'.get_lang('Courses').' ('.$nbCours.')'.'</a>
+		</h4>
+	 </div>';
+}
+if(api_get_setting('use_session_mode')=='true'){
+	echo '
+	 <div class="admin_section">
+		<h4>
+			<a href="session.php"><img src="'.api_get_path(WEB_IMG_PATH).'sessions.gif">&nbsp;'.get_lang('Sessions').' ('.$nbSessions.')'.'</a>
+		</h4>
+	 </div>';
+}
+
  
  
  /*

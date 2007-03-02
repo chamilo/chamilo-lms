@@ -7,6 +7,9 @@
 $language_file = array ('registration', 'index', 'tracking', 'exercice');
  $cidReset=true;
  include ('../inc/global.inc.php');
+ include_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
+ include_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+ include_once(api_get_path(LIBRARY_PATH).'course.lib.php');
  
  $this_section = "session_my_space";
  
@@ -191,7 +194,7 @@ else
 
 if(!empty($_GET['student']))
 {
-	
+	// is the user online ?
 	$statistics_database = Database :: get_statistic_database();
 	$a_usersOnline = WhoIsOnline($_GET['student'], $statistics_database, 30);
 	foreach($a_usersOnline as $a_online)
@@ -205,82 +208,63 @@ if(!empty($_GET['student']))
 			$online = get_lang('No');
 		}
 	}
-	$sqlInfosUser = "	SELECT  user_id,
-								CONCAT(firstname,' ',lastname) AS name,
-								email,
-								phone,
-								picture_uri
-						FROM $tbl_user
-						WHERE user_id = ".$_GET['student']
-					;
-	$resultInfosUser = api_sql_query($sqlInfosUser);
-	$a_infosUser = mysql_fetch_array($resultInfosUser);
 	
-	if(api_get_setting('use_session_mode')=='true'){
-	$sqlCours = " 	SELECT DISTINCT course.title,
-									course.code,
-									course.db_name,
-									CONCAT(user.firstname,' ',user.lastname) as tutor_name,
-									sessionCourse.id_coach
-					FROM $tbl_user as user,$tbl_course AS course
-					INNER JOIN $tbl_session_course_user AS course_user
-						ON course_user.course_code = course.code
-					INNER JOIN $tbl_session_course as sessionCourse
-							ON sessionCourse.course_code = course.code
-					WHERE course_user.id_user = ".$_GET['student']."
-					AND sessionCourse.id_coach = user.user_id
-					ORDER BY course.title ASC
-				";
+	// infos about user
+	$a_infosUser = UserManager::get_user_info_by_id($_GET['student']);
+	$a_infosUser['name'] = $a_infosUser['firstname'].' '.$a_infosUser['lastname'];
+	
+	// courses followed by user where we are coach
+	$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
+	$avg_student_progress = $avg_student_score = $nb_courses = 0;
+	foreach ($a_courses as $key=>$course_code)
+	{
+		if(!CourseManager::is_user_subscribed_in_course($a_infosUser['user_id'], $course_code, true))
+		{
+			array_splice($a_courses, $key);
+		}
+		else
+		{
+			$nb_courses++;
+			$avg_student_progress += Tracking :: get_avg_student_progress($a_infosUser['user_id'],$course_code);
+			$avg_student_score += Tracking :: get_avg_student_score($a_infosUser['user_id'],$course_code);
+		}
 	}
-	else{
-					
-		$sqlCours = "SELECT course.title,course.code,course.db_name FROM $tbl_course as course, $tbl_course_user as cru WHERE cru.course_code=course.code AND cru.user_id='".$_GET['student']."'";			
-
-	}
-		$resultCours = api_sql_query($sqlCours);
+	$avg_student_progress = round($avg_student_progress / $nb_courses,1);
+	$avg_student_score = round($avg_student_score / $nb_courses,1);
 		
 ?>
 
 	<a name="infosStudent"></a>
 	<table class="data_table">
 		<tr>
-			<td 
-				<?php
-					if(empty($details))
-						echo 'colspan="6"';
-					else
-						echo 'colspan="7"';	
-				?>
-				class="border">
+			<td class="border">
 				<table width="100%" border="0" >
 					<tr>
 						
 							<?php
 								if(!empty($a_infosUser['picture_uri']))
 								{
-									echo '	<td class="borderRight">
+									echo '	<td class="borderRight" width="10%">
 												<img src="'.$a_infosUser['picture_uri'].'" />
 											</td>
 										 ';
 								}
 								else{
-									echo '	<td class="borderRight">
+									echo '	<td class="borderRight" width="10%">
 												<img src="../img/unknown.jpg" />
 											</td>
 										 '; 
 								}
 								
-								if(!empty($_GET['details'])){
-									$widthCellInfos="60%";
-								}
-								else{
-									$widthCellInfos="85%";
-								}
-								
 							?>
 						
-						<td class="none" width="<?php echo $widthCellInfos;?>">
-							<table>
+						<td class="none" width="40%">
+							<table width="100%">
+								<tr>
+									<th>
+										<?php echo get_lang('Informations'); ?>
+									</th>
+								</tr>
 								<tr>
 									<td class="none">
 										<?php 
@@ -330,14 +314,58 @@ if(!empty($_GET['student']))
 								</tr>
 							</table>
 						</td>
+						<td class="borderLeft" width="35%">
+							<table width="100%">
+								<tr>
+									<th>
+										<?php echo get_lang('Tracking'); ?>
+									</th>
+								</tr>
+								<tr>
+									<td>
+										<table>
+											<tr>
+												<td class="none">
+													<?php echo get_lang('LatestLogin') ?>
+												</td>
+												<td class="none">
+													<?php echo Tracking::get_last_connection_date($a_infosUser['user_id']) ?>
+												</td>
+											</tr>
+											<tr>
+												<td class="none">
+													<?php echo get_lang('TimeSpentOnThePlatform') ?>
+												</td>
+												<td class="none">
+													<?php echo api_time_to_hms(Tracking::get_time_spent_on_the_platform($a_infosUser['user_id'])) ?>
+												</td>
+											</tr>
+											<tr>
+												<td class="none">
+													<?php echo get_lang('Progress') ?>
+												</td>
+												<td class="none">
+													<?php echo $avg_student_progress.' %' ?>
+												</td>
+											</tr>
+											<tr>
+												<td class="none">
+													<?php echo get_lang('Score') ?>
+												</td>
+												<td class="none">
+													<?php echo $avg_student_score.' %' ?>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
 					<?php
-				
-						if(!empty($_GET['details']))
-						{
 							$sendMail = Display::encrypted_mailto_link($a_infosUser['email'], ' '.get_lang('SendMail'));
 						
 					?>
-						<td class="borderLeft" width="25%">
+						<td class="borderLeft" width="15%">
 							<table width="100%">
 								<tr>
 									<th>
@@ -362,36 +390,14 @@ if(!empty($_GET['student']))
 										?>
 								
 								</tr>
-								<tr>
-									<td class="none">
-										<?php echo "<img align='absbottom' src='../img/meeting_agenda.gif'><a href=''>".'&nbsp; '.get_lang('RdvAgenda')."</a>"; ?>
-									</td>
-								</tr>
-								<tr>
-									<td class="none">
-										<?php echo "<img align='absbottom' src='../img/visio.gif'><a href=''>".'&nbsp; '.get_lang('VideoConf')."</a>"; ?>
-									</td>
-								</tr>
-								<tr>
-									<td class="none">
-										<?php echo "<img align='absbottom' src='../img/chat.gif'><a href=''>".'&nbsp; '.get_lang('Chat')."</a>"; ?>
-									</td>
-								</tr>
-								<tr>
-									<td class="none">
-								
-										<?php echo "<img align='absbottom' src='../img/spreadsheet.gif'><a href='".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."&csv=true#infosStudent'>".'&nbsp; '.get_lang('ExcelFormat')."</a>"; ?>
-									</td>
-								</tr>
 							</table>
 						</td>
-					<?php
-						}
-					?>
 					</tr>
 				</table>
 			</td>
 		</tr>
+	</table>
+	<table class="data_table">
 		<tr><td colspan="5" style="border-width: 0px;">&nbsp;</td></tr>
 		</a>
 <?php
@@ -773,144 +779,32 @@ if(!empty($_GET['student']))
 			</th>
 		</tr>
 <?php
-			if(mysql_num_rows($resultCours)>0)
+		if(count($a_courses)>0)
+		{
+			foreach($a_courses as $course_code)
 			{
-				while($a_cours = mysql_fetch_array($resultCours))
-				{
+				$course_infos = CourseManager :: get_course_information($course_code);
+				echo '
+<tr>				
+	<td>
+		'.$course_infos['title'].'
+	</td>
+	<td>
+		'.api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_code)).'
+	</td>
+	<td>
+		'.Tracking :: get_avg_student_progress($a_infosUser['user_id'], $course_code).' %
+	</td>
+	<td>
+		'.Tracking :: get_avg_student_score($a_infosUser['user_id'], $course_code).' %
+	</td>
+	<td>
+		<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'#infosStudent"> -> </a>
+	</td>
 
-				if((api_get_setting("use_session_mode")=="true" && $i_user_id == $a_cours['id_coach']) || (api_get_setting("use_session_mode")=="false") && is_teacher($a_cours['code'])){
-						if($i%2==0){
-							$s_css_class="row_odd";
-					}
-					else{
-						$s_css_class="row_even";
-					}
-					
-					$i++;
-					
-					/**
-					 * Calcul du score total de l'étudiant sur le cours courant
-					 */
-					
-					$sqlScore = "	SELECT  exe_result,
-											exe_weighting
-					 				FROM $tbl_stats_exercices
-									WHERE exe_user_id = ".$_GET['student']."
-					 				AND exe_cours_id = '".$a_cours['code']."'
-								";
-					$resultScore = api_sql_query($sqlScore);
-					$i = 0;
-					$score = 0;
-					while($a_score = mysql_fetch_array($resultScore))
-					{
-						$score = $score + $a_score['exe_result'];
-						$weighting = $weighting + $a_score['exe_weighting'];
-						$i++;
-					}
-					
-					$totalScore = $totalScore + $score;
-					$totalWeighting = $totalWeighting + $weighting;
-					
-					$pourcentageScore = round(($score*100)/$weighting);
-					
-					$weighting = 0;
-					
-					/**
-					 * Calcul de la progression de l'étudiant sur les learning path du cours courant
-					 */
-					
-					$sqlProgress = "SELECT COUNT( DISTINCT item_view.lp_item_id ) AS nbItem 
-									FROM ".$a_cours['db_name'].".".$tbl_course_lp_view_item." AS item_view 
-									INNER JOIN ".$a_cours['db_name'].".".$tbl_course_lp_view." AS lpview 
-										ON lpview.user_id = ".$_GET['student']." 
-									WHERE item_view.status = 'completed' 
-								   ";
-	
-					$resultProgress = api_sql_query($sqlProgress);
-					$a_nbItem = mysql_fetch_array($resultProgress);
-					
-					$table = $a_cours['db_name'].'.'.$tbl_course_lp_item;
-					if(mysql_select_db($a_cours['db_name']))
-						$nbTotalItem = Database::count_rows($table);
-			
-					$totalItem = $totalItem + $nbTotalItem;
-					
-					$totalProgress = $totalProgress + $a_nbItem['nbItem'];
-					
-					$progress = round(($a_nbItem['nbItem'] * 100)/$nbTotalItem);
-					
-					
-					/**
-					 * Calcul du temps passé sur le cours courant
-					 */
-					
-					$tbl_track_lcourse_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-					
-					$s_sql_connection_time="SELECT login_course_date, logout_course_date FROM $tbl_track_lcourse_access WHERE user_id ='".$_GET['student']."' AND logout_course_date <> 'null' AND course_code='".$a_cours['code']."'";
 
-					$q_result_connection_time=api_sql_query($s_sql_connection_time);
-					
-					$i_nb_seconds=0;
-					
-					while($a_connections=mysql_fetch_array($q_result_connection_time)){
-						
-						$s_login_date=$a_connections["login_course_date"];
-						$s_logout_date=$a_connections["logout_course_date"];
-						
-						$i_timestamp_login_date=strtotime($s_login_date);
-						$i_timestamp_logout_date=strtotime($s_logout_date);
-						
-						$i_nb_seconds+=($i_timestamp_logout_date-$i_timestamp_login_date);
-						
-					}
-					
-					$s_connection_time=calculHours($i_nb_seconds);
-					if($s_connection_time=="0h00m00s"){
-						$s_connection_time="";
-					}
-					
-					echo '<tr class="'.$s_css_class.'">';
-						
-					if(api_get_setting("use_session_mode")=="true"){
-						echo '<td>'.$a_cours['title'].'&nbsp;-&nbsp;'.get_lang('Tutor').' : '.$a_cours['tutor_name'].'</td>';
-					}
-					else{
-						echo '<td>'.$a_cours['title'].'</td>';
-					}
-					
-					echo '<td align="center">'.$s_connection_time.'</td>';
-					
-					echo '<td align="center">'.$progress.'%</td>';
-					
-					echo '<td align="center">'.$pourcentageScore.'%</td>';
-					
-					echo '<td align="center"><a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$a_cours['code'].'#infosStudent"> -> </a></td>';
-					
-					echo '</tr>';
-					
-				}
-					
+';
 			}
-			
-			$totalPourcentageScore = round(($totalScore*100)/$totalWeighting);
-			$progress = round(($totalProgress*100)/$totalItem);
-?>
-		<tr class='total'>
-			<td>
-				<strong>Total</strong>
-			</td>
-			<td>
-			</td>
-			<td align="center">
-				<?php echo $progress.'%'; ?>
-			</td>
-			<td align="center">
-				<?php echo $totalPourcentageScore.'%'; ?>
-			</td>
-			<td>
-			</td>
-		</tr>
-	<?php
 		}
 		else
 		{

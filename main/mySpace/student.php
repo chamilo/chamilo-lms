@@ -9,6 +9,9 @@ ob_start();
 $language_file = array ('registration', 'index', 'tracking');
  $cidReset=true;
  require ('../inc/global.inc.php');
+ require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
+ require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+ require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
  
   $nameTools= get_lang("Students");
  
@@ -256,13 +259,87 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 	}
 	
 }
- 
+
+function count_student_coached()
+{
+	global $a_students;
+	return count($a_students);
+}
 
 /*
  ===============================================================================
  	MAIN CODE
  ===============================================================================  
  */
+ 
+ 
+ 
+$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
+$a_students = Tracking :: get_student_followed_by_coach($_user['user_id']);
+
+if(count($a_students)>0)
+{
+	$table = new SortableTable('tracking', 'count_student_coached');
+	$table -> set_header(0, get_lang('Name'),false);
+	$table -> set_header(1, get_lang('Time'),false);
+	$table -> set_header(2, get_lang('Progress'),false);
+	$table -> set_header(3, get_lang('Score'),false);	
+	$table -> set_header(4, get_lang('Student_publication'),false);
+	$table -> set_header(5, get_lang('Messages'),false);
+	$table -> set_header(6, get_lang('LatestLogin'),false);
+	$table -> set_header(7, get_lang('Details'),false);
+     
+      	 
+	foreach($a_students as $student_id)
+	{
+		$student_datas = UserManager :: get_user_info_by_id($student_id);
+		
+		$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0 ;
+		$nb_courses_student = 0;
+		foreach($a_courses as $course_code)
+		{
+			if(CourseManager :: is_user_subscribed_in_course($student_id,$course_code, true))
+			{
+				$avg_time_spent += Tracking :: get_time_spent_on_the_platform($student_id, $course_code);
+				$avg_student_score += Tracking :: get_avg_student_score($student_id, $course_code);
+				$avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
+				$total_assignments += Tracking :: count_student_assignments($student_id, $course_code);
+				$total_messages += Tracking :: count_student_messages($student_id, $course_code);
+				$nb_courses_student++;
+			}
+		}
+		$avg_time_spent = $avg_time_spent / $nb_courses_student;
+		$avg_student_score = $avg_student_score / $nb_courses_student;
+		$avg_student_progress = $avg_student_progress / $nb_courses_student;
+		
+		$row = array();
+		$row[] = $student_datas['firstname'].' '.$student_datas['lastname'];
+		$row[] = api_time_to_hms($avg_time_spent);
+		$row[] = $avg_student_progress.' %';
+		$row[] = $avg_student_score.' %';		
+		$row[] = $total_assignments;
+		$row[] = $total_messages;
+		$row[] = Tracking :: get_last_connection_date($student_id);
+		$row[] = '<a href="myStudents.php?student='.$student_id.'">-></a>';
+		
+		$table -> addRow($row);
+
+	}
+	$table -> display();
+	echo '</table>';
+}
+else
+{
+	echo get_lang('NoStudent');
+}
+exit;
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 	$a_students=array();
 	
 	//La personne est admin
@@ -347,127 +424,7 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 	
 	usort($a_students,"mysort");
 	
-	$a_header[]=get_lang('LastName');
-	$a_header[]=get_lang('FirstName');
-	$a_header[]=get_lang('Email');
 	
-	$a_data=array();
-
-	if(count($a_students)>0)
-	{
-		echo '<table class="data_table">
-			 	<tr>
-					<th>
-						'.get_lang('LastName').'
-					</th>
-					<th>
-						'.get_lang('FirstName').'
-					</th>
-					<th>
-						'.get_lang('Email').'
-					</th>
-					<th>
-						'.get_lang('Tracking').'
-					</th>
-				</tr>
-          	 ';
-          	 
-		foreach($a_students as $a_current_student)
-		{
-			
-			if($i%2==0){
-				$s_css_class="row_odd";
-				
-				if($i%20==0 && $i!=0){
-					/*echo '<tr>
-							<th>
-								'.get_lang('Lastname').'
-							</th>
-							<th>
-								'.get_lang('Firstname').'
-							</th>
-							<th>
-								'.get_lang('Email').'
-							</th>
-							<th>
-								'.get_lang('Tutor').'
-							</th>
-							<th>
-								'.get_lang('Courses').'
-							</th>
-							<th>
-								'.get_lang('TakenSessions').'
-							</th>
-						</tr>
-		          	 ';*/
-		          	 echo '<tr>
-							<th>
-								'.get_lang('LastName').'
-							</th>
-							<th>
-								'.get_lang('FirstName').'
-							</th>
-							<th>
-								'.get_lang('Email').'
-							</th>
-							<th>
-								'.get_lang('Tracking').'
-							</th>
-						</tr>
-		          	 ';
-				}
-			}
-			else{
-				$s_css_class="row_even";
-			}
-			
-			$i++;
-			
-			echo '<tr class="'.$s_css_class.'">
-					<td>
-				 ';
-			echo		"<a href='myStudents.php?student=".$a_current_student[0]."#infosStudent'>".$a_current_student[1]."</a>";
-			echo '	</td>
-					<td>
-						<a href="myStudents.php?student='.$a_current_student[0].'#infosStudent">'.$a_current_student[2].'</a>
-					</td>
-					<td>
-				 ';
-			if(!empty($a_current_student[3]))
-			{	
-				echo	'<a href="mailto:'.$a_current_student[3].'">'.$a_current_student[3].'</a>';
-			}
-			else
-			{
-				//echo get_lang('NoEmail');
-			}
-			echo '	</td>';
-			
-			
-			if($a_current_student["teacher"]==true){
-				echo '<td align="center">';
-				if(api_get_setting('use_session_mode')=='true'){
-					echo '<a href="coaches.php?id_student='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'coachs.gif" alt="'.get_lang("StudentTutors").'" title="'.get_lang("StudentTutors").'"></a>&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_current_student[0].'#sessionSuivie"><img src="'.api_get_path(WEB_IMG_PATH).'agenda.gif" alt="'.get_lang("StudentSessions").'" title="'.get_lang("StudentSessions").'"></a>&nbsp;';
-				}		
-				echo '<a href="cours.php?type=student&user_id='.$a_current_student[0].'"><img src="'.api_get_path(WEB_IMG_PATH).'course.gif" alt="'.get_lang("StudentCourses").'" title="'.get_lang("StudentCourses").'"></a>';				
-			}
-			else{
-				echo '<td></td>';
-			}
-			  echo '</tr>';
-
-				 
-			$a_data[$a_student['user_id']]["lastname"]=$a_student['lastname'];
-			$a_data[$a_student['user_id']]["firstname"]=$a_student['firstname'];
-			$a_data[$a_student['user_id']]["email"]=$a_student['email'];
-
-		}
-		echo '</table>';
-	}
-	else
-	{
-		echo get_lang('NoStudent');
-	}
 	
 
 	if(isset($_POST['export'])){

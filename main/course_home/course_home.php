@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 11122 2007-02-15 14:51:33Z elixir_julian $
+<?php // $Id: course_home.php 11322 2007-03-02 09:14:15Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -89,7 +89,7 @@ $section = "course";
 $language_file = "course_home";
 
 // inlcuding the global file
-include('../../main/inc/global.inc.php');
+include('../inc/global.inc.php');
 
 if(isset($_SESSION['_gid'])){
 	unset($_SESSION['_gid']);

@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseRecycler.class.php 10197 2006-11-26 18:45:33Z pcool $
+// $Id: CourseRecycler.class.php 11356 2007-03-02 23:42:15Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -216,33 +216,45 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_LEARNPATH))
 		{
-			$table_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
-			$table_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-			$table_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+			$table_main = Database :: get_course_table(TABLE_LP_MAIN);
+			$table_item = Database :: get_course_table(TABLE_LP_ITEM);
+			$table_view = Database :: get_course_table(TABLE_LP_VIEW);
+			$table_iv   = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+			$table_iv_int = Database :: get_course_table(TABLE_LP_IV_INTERACTION);
 			$table_tool = Database::get_course_table(TABLE_TOOL_LIST);
 			foreach($this->course->resources[RESOURCE_LEARNPATH] as $id => $learnpath)
 			{
-				$sql = "DELETE FROM $table_tool WHERE link='".mysql_real_escape_string('learnpath/learnpath_handler.php?learnpath_id='.$id)."'";
+				//remove links from course homepage
+				$sql = "DELETE FROM $table_tool WHERE link LIKE '%lp_controller.php%lp_id=$id%' AND image='scormbuilder.gif'";
 				api_sql_query($sql,__FILE__,__LINE__);	
+				//remove elements from lp_* tables (from bottom-up) by removing interactions, then item_view, then views and items, then paths
+				$sql_items = "SELECT id FROM $table_item WHERE lp_id=$id";
+				$res_items = api_sql_query($sql_items,__FILE__,__LINE__);
+				while ($row_item = Database::fetch_array($res_items))
+				{
+					//get item views
+					$sql_iv = "SELECT id FROM $table_iv WHERE lp_item_id=".$row_item['id'];
+					$res_iv = api_sql_query($sql_iv,__FILE__,__LINE__);
+					while ($row_iv = Database::fetch_array($res_iv))
+					{
+						//delete interactions
+						$sql_iv_int_del = "DELETE FROM $table_iv_int WHERE lp_iv_id = ".$row_iv['id'];
+						$res_iv_int_del = api_sql_query($sql_iv_int_del,__FILE__,__LINE__);
+					}
+					//delete item views
+					$sql_iv_del = "DELETE FROM $table_iv WHERE lp_item_id=".$row_item['id'];
+					$res_iv_del = api_sql_query($sql_iv_del,__FILE__,__LINE__);
+				}
+				//delete items
+				$sql_items_del = "DELETE FROM $table_item WHERE lp_id=$id";
+				$res_items_del = api_sql_query($sql_items_del,__FILE__,__LINE__);
+				//delete views
+				$sql_views_del = "DELETE FROM $table_view WHERE lp_id=$id";
+				$res_views_del = api_sql_query($sql_views_del,__FILE__,__LINE__);
+				//delete lps					
+				$sql_del = "DELETE FROM $table_main WHERE id = $id";
+				$res_del = api_sql_query($sql_del,__FILE__,__LINE__);
 			}
-			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_LEARNPATH])));
-			$sql = "SELECT id FROM ".$table_chapter." WHERE learnpath_id IN (".$ids.")";
-			$db_result = api_sql_query($sql,__FILE__,__LINE__);
-			$chapter_ids = array ();
-			while ($chap = mysql_fetch_object($db_result))
-			{
-				$chapter_ids[] = $chap->id;
-			}
-			if( count($chapter_ids) > 0 )
-			{
-				$chap_ids = implode(',', $chapter_ids);
-				$sql = "DELETE FROM ".$table_item." WHERE chapter_id IN (".$chap_ids.")";
-				api_sql_query($sql,__FILE__,__LINE__);
-				$sql = "DELETE FROM ".$table_chapter." WHERE id IN (".$chap_ids.")";
-				api_sql_query($sql,__FILE__,__LINE__);
-			}
-			$sql = "DELETE FROM ".$table_main." WHERE learnpath_id IN(".$ids.")";
-			api_sql_query($sql,__FILE__,__LINE__);
 		}
 	}
 	/**

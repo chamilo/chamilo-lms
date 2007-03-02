@@ -185,7 +185,7 @@ function display_move_form($part, $id, $target=array())
 	$message.= '</select>';
 	$message.='<input type="submit" name="do_move" value="Submit">';
 	$message.='</form>';
-	Display :: display_normal_message($message);
+	Display :: display_normal_message($message,false);
 }
 
 /**

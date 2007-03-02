@@ -901,6 +901,23 @@ class CourseManager
 			return true; //user is registered in course
 		}
 	}
+	
+	/**
+	*	Is the user a teacher in the given course?
+	*
+	*	@param $user_id, the id (int) of the user
+	*	@param $course_code, the course code
+	*
+	*	@return true if the user is a teacher in the course, false otherwise
+	*/
+	function is_course_teacher($user_id,$course_code)
+	{
+		$tbl_course_user	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		$sql_query='SELECT status FROM '.$tbl_course_user.' WHERE course_code="'.$course_code.'" and user_id="'.$user_id.'"';
+		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$status=mysql_result($sql_result,0,'status');
+		if($status==1) return true; else return false;
+	}
 
 	/**
 	*	Is the user subscribed in the real course or linked courses?

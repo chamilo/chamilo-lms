@@ -35,10 +35,12 @@ define('FRAME','online');
 $language_file = array ('chat');
 
 include('../inc/global.inc.php');
+include('../inc/lib/course.lib.php');
 
 $showPic=intval($_GET['showPic']);
 
 $tbl_course_user	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_session_course_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_chat_connected	= Database::get_course_chat_connected_table();
 
@@ -52,7 +54,12 @@ $isMaster=$is_courseAdmin?true:false;
 
 $pictureURL=api_get_path(WEB_CODE_PATH).'upload/users/';
 
-$query="SELECT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.course_code = '".$_course[sysCode]."' AND t2.last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' ORDER BY username";
+if(!isset($_SESSION['id_session'])){
+	$query="SELECT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.course_code = '".$_course[sysCode]."' AND t2.last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' ORDER BY username";
+}
+else{
+	$query="SELECT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3 WHERE t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND t3.course_code = '".$_course[sysCode]."' AND t2.last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' ORDER BY username";
+}
 
 $result=api_sql_query($query,__FILE__,__LINE__);
 
@@ -68,11 +75,19 @@ include('header_frame.inc.php');
 <?php
 foreach($Users as $enreg)
 {
+
+if(!isset($_SESSION['id_session'])){
+	$status=$enreg['status'];
+}
+else{
+	if(CourseManager::is_course_teacher($enreg['user_id'],$_SESSION['_course']['id'])) $status=1; else $status=5;
+}
+
 ?>
 
 <tr>
-  <td width="1%" valign="top"><?php if($enreg['status'] == 1) echo '<img src="../img/teachers.gif" align="absbottom" border="0" alt="" style="margin: 1px;">'; else echo '<img src="../img/students.gif" align="absbottom" border="0" alt="" style="margin: 1px;">';?></td>
-  <td width="99%"><a <?php if($enreg['status'] == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo $_SERVER['PHP_SELF']; ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo ucfirst($enreg['firstname']).' '.ucfirst($enreg['lastname']); ?></a></td>
+  <td width="1%" valign="top"><?php if($status == 1) echo '<img src="../img/teachers.gif" align="absbottom" border="0" alt="" style="margin: 1px;">'; else echo '<img src="../img/students.gif" align="absbottom" border="0" alt="" style="margin: 1px;">';?></td>
+  <td width="99%"><a <?php if($status == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo $_SERVER['PHP_SELF']; ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo ucfirst($enreg['firstname']).' '.ucfirst($enreg['lastname']); ?></a></td>
 </tr>
 
 <?php if($showPic == $enreg['user_id']): ?>

@@ -1,4 +1,4 @@
-<?php // $Id: ForumTopic.class.php 3305 2005-02-03 12:44:01Z bmol $
+<?php // $Id: ForumTopic.class.php 11365 2007-03-03 10:49:33Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -24,7 +24,7 @@
 */
 require_once('Resource.class.php');
 /**
- * A forum-topic
+ * A forum-topic/thread
  * @author Bart Mollet <bart.mollet@hogent.be>
  */
 class ForumTopic extends Resource

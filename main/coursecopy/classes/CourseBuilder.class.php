@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 11326 2007-03-02 10:34:18Z yannoo $
+<?php // $Id: CourseBuilder.class.php 11358 2007-03-03 09:54:18Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -81,7 +81,6 @@ class CourseBuilder
 		$this->build_course_descriptions();
 		$this->build_quizzes();
 		$this->build_learnpaths();
-		$this->build_scorm_documents();
 		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 		foreach ($this->course->resources as $type => $resources)
 		{
@@ -338,41 +337,37 @@ class CourseBuilder
 		$sql = 'SELECT * FROM '.$table_main;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
-			$sql_chapters = "SELECT * FROM ".$table_item." WHERE lp_id = ".$obj->id." AND item_type in ('dokeos_chapter','dir')";
-			$db_chapters = api_sql_query($sql_chapters);
-
-			$chapters = array ();
-
-			while ($obj_chapter = mysql_fetch_object($db_chapters))
+			
+			$items = array();
+			$sql_items = "SELECT * FROM ".$table_item." WHERE lp_id = ".$obj->id."";
+			$db_items = api_sql_query($sql_items);
+			while ($obj_item = Database::fetch_object($db_items))
 			{
-				$chapter['name'] = $obj_chapter->title;
-				$chapter['description'] = $obj_chapter->description;
-				$chapter['display_order'] = $obj_chapter->display_order;
-
-				$chapter['items'] = array();
-
-				$sql_items = "SELECT * FROM ".$table_item." WHERE parent_item_id = ".$obj_chapter->id."";
-				$db_items = api_sql_query($sql_items);
-				while ($obj_item = mysql_fetch_object($db_items))
-				{
-					$item['type'] = $obj_item->item_type;
-					$item['id'] = $obj_item->id;
-					$item['title'] = $obj_item->title;
-					$item['display_order'] = $obj_item->display_order;
-					$item['description'] = $obj_item->description;
-					$item['prereq'] = $obj_item->prerequisite;
-					$item['ref_id'] = $obj_item->ref;
-					$chapter['items'][] = $item;
-				}
-				$chapters[] = $chapter;
+				$item['id'] = $obj_item->id;
+				$item['item_type'] = $obj_item->item_type;
+				$item['ref'] = $obj_item->ref;
+				$item['title'] = $obj_item->title;
+				$item['description'] = $obj_item->description;
+				$item['path'] = $obj_item->path;
+				$item['min_score'] = $obj_item->min_score;
+				$item['max_score'] = $obj_item->max_score;
+				$item['mastery_score'] = $obj_item->mastery_score;
+				$item['parent_item_id'] = $obj_item->parent_item_id;
+				$item['previous_item_id'] = $obj_item->previous_item_id;
+				$item['next_item_id'] = $obj_item->next_item_id;
+				$item['display_order'] = $obj_item->display_order;
+				$item['prerequisite'] = $obj_item->prerequisite;
+				$item['parameters'] = $obj_item->parameters;
+				$item['launch_data'] = $obj_item->launch_data;
+				$items[] = $item;
 			}
 
-			$sql_tool = "SELECT 1 FROM ".$table_tool." WHERE (name='".addslashes($obj->name)."' and image='scormbuilder.gif') AND visibility='1'";
+			$sql_tool = "SELECT id FROM ".$table_tool." WHERE (link LIKE '%lp_controller.php%lp_id=".$obj->id."%' and image='scormbuilder.gif') AND visibility='1'";
 			$db_tool = api_sql_query($sql_tool);
 
-			if(mysql_num_rows($db_tool))
+			if(Database::num_rows($db_tool))
 			{
 				$visibility='1';
 			}
@@ -381,31 +376,9 @@ class CourseBuilder
 				$visibility='0';
 			}
 
-			$lp = new Learnpath($obj->id, $obj->name, $obj->description, $visibility, $chapters);
+			$lp = new Learnpath($obj->id, $obj->lp_type, $obj->name, $obj->path, $obj->ref, $obj->description, $obj->content_local, $obj->default_encoding, $obj->default_view_mod, $obj->prevent_reinit, $obj->force_commit, $obj->content_maker, $obj->display_order, $obj->js_lib, $obj->content_license, $obj->debug, $visibility, $items);
 
 			$this->course->add_resource($lp);
-		}
-	}
-
-	/**
-	 * Build scorm document
-	 */
-	function build_scorm_documents()
-	{
-		$i=1;
-
-		if($dir=@opendir($this->course->backup_path.'/scorm'))
-		{
-			while($file=readdir($dir))
-			{
-				if(is_dir($this->course->backup_path.'/scorm/'.$file) && !in_array($file,array('.','..')))
-				{
-					$doc = new ScormDocument($i++, '/'.$file, $file);
-					$this->course->add_resource($doc);
-				}
-			}
-
-			closedir($dir);
 		}
 	}
 }

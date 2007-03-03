@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 11372 2007-03-03 22:02:52Z yannoo $
+// $Id: CourseRestorer.class.php 11375 2007-03-03 22:47:49Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -673,7 +673,7 @@ class CourseRestorer
 						$ref = $this->get_new_id($item['item_type'],$item['ref']);
 					}
 					$sql = "INSERT INTO ".$table_item." SET " .
-							"lp_id = '".$new_lp_id."'" .
+							"lp_id = '".$new_lp_id."', " .
 							"item_type='".$item['item_type']."', " .
 							"ref = '".$ref."', " .
 							"title = '".Database::escape_string($item['title'])."', " .
@@ -685,10 +685,10 @@ class CourseRestorer
 							"parent_item_id = '".$item['parent_item_id']."', " .
 							"previous_item_id = '".$item['previous_item_id']."', " .
 							"next_item_id = '".$item['next_item_id']."', " .
-							"next_item_id = '".$item['display_order']."', " .
+							"display_order = '".$item['display_order']."', " .
 							"prerequisite = '".Database::escape_string($item['prerequisite'])."', " .
 							"parameters='".Database::escape_string($item['parameters'])."', " .
-							"launch_data = '".Database::escape_string($item['launch_dataprereq_type'])."' ";
+							"launch_data = '".Database::escape_string($item['launch_dataprereq_type'])."';";
 					api_sql_query($sql, __FILE__, __LINE__);
 					$new_item_id = Database::get_last_insert_id();
 					//save a link between old and new item IDs

@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: copy_course.php 11374 2007-03-03 22:32:33Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -37,13 +37,14 @@
 ==============================================================================
 */ 
 // name of the language file that needs to be included 
-$language_file = 'coursebackup';
+$language_file = array('coursebackup','admin');
 include ('../inc/global.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 require_once ('classes/CourseBuilder.class.php');
 require_once ('classes/CourseRestorer.class.php');
 require_once ('classes/CourseSelectForm.class.php');
 $nameTools = get_lang('CopyCourse');
+$interbreadcrumb[] = array ("url" => "../course_info/maintenance.php", "name" => get_lang('Maintenance'));
 Display::display_header($nameTools);
 //api_display_tool_title($nameTools);
 if (!api_is_allowed_to_edit())

@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 11374 2007-03-03 22:32:33Z yannoo $
+// $Id: copy_course.php 11376 2007-03-03 22:48:24Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -71,7 +71,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 	$cr = new CourseRestorer($course);
 	$cr->set_file_option($_POST['same_file_name_option']);
 	$cr->restore($_POST['destination_course']);
-	echo get_lang('CopyFinished');
+	Display::display_normal_message(get_lang('CopyFinished'));
 }
 // Else, if a CourseSelectForm is requested, show it
 elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items')

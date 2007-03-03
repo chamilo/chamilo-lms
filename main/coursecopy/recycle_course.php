@@ -1,4 +1,4 @@
-<?php // $Id: recycle_course.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: recycle_course.php 11373 2007-03-03 22:11:05Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -36,9 +36,10 @@
 ==============================================================================
 */ 
 // name of the language file that needs to be included 
-$language_file = 'coursebackup';
+$language_file = array ('admin','course_info','coursebackup');
 include ('../inc/global.inc.php');
 $nameTools = get_lang('RecycleCourse');
+$interbreadcrumb[] = array ("url" => "../course_info/maintenance.php", "name" => get_lang('Maintenance'));
 Display::display_header($nameTools);
 require_once('classes/CourseBuilder.class.php');
 require_once('classes/CourseArchiver.class.php');
@@ -67,7 +68,7 @@ if(  (isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (
 	}
 	$cr = new CourseRecycler($course);
 	$cr->recycle();
-	echo get_lang('RecycleFinished');
+	Display::display_normal_message(get_lang('RecycleFinished'));
 }
 elseif( isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'select_items')
 {
@@ -85,7 +86,7 @@ else
 	}	
 	else
 	{
-	Display::display_error_message(get_lang('RecycleWarning'));
+	Display::display_warning_message(get_lang('RecycleWarning'),false);
 	?>
 	<form method="post" action="recycle_course.php">
 	<input type="radio" class="checkbox" id="recycle_option_1" name="recycle_option" value="full_backup" checked="checked"/>

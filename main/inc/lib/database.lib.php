@@ -27,6 +27,10 @@
 ==============================================================================
 *	This is the main database library for Dokeos.
 *	Include/require it in your code to use its functionality.
+*   Because this library contains all the basic database calls, it could be
+*   replaced by another library for say, PostgreSQL, to actually use Dokeos
+*   with another database (this is not ready yet because a lot of code still
+*   uses the MySQL database functions extensively).
 *
 *	@package dokeos.library
 * 	@todo the table constants have all to start with TABLE_
@@ -575,6 +579,16 @@ class Database
 	function get_last_insert_id()
 	{
 		return mysql_insert_id();
+	}
+	/**
+	 * Escapes a string to insert into the database as text
+	 * @param	string	The string to escape
+	 * @return	string	The escaped string
+	 * @author	Yannick Warnier <yannick.warnier@dokeos.com>
+	 */
+	function escape_string($string)
+	{
+		return mysql_escape_string($string);
 	}
 	/**
 	 * Gets the array from a SQL result (as returned by api_sql_query) - help achieving database independence

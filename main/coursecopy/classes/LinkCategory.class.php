@@ -1,4 +1,4 @@
-<?php // $Id: LinkCategory.class.php 3305 2005-02-03 12:44:01Z bmol $
+<?php // $Id: LinkCategory.class.php 11363 2007-03-03 10:47:32Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -38,16 +38,21 @@ class LinkCategory extends Resource
 	 */
 	var $description;
 	/**
+	 * The display order
+	 */
+	var $display_order;
+	/**
 	 * Create a new LinkCategory
 	 * @param int $id
 	 * @param string $title
 	 * @param string $description
 	 */
-	function LinkCategory($id,$title,$description)
+	function LinkCategory($id,$title,$description,$display_order)
 	{
 		parent::Resource($id,RESOURCE_LINKCATEGORY);
 		$this->title = $title;
-		$this->description = $description;	
+		$this->description = $description;
+		$this->display_order = $display_order;
 	}	
 	/**
 	 * Show this LinkCategory

@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 11366 2007-03-03 10:50:25Z yannoo $
+<?php // $Id: CourseBuilder.class.php 11367 2007-03-03 13:01:39Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -374,6 +374,22 @@ class CourseBuilder
 			else
 			{
 				$visibility='0';
+			}
+			
+			//save scorm directory (previously build_scorm_documents())
+			$i = 1;
+			if($dir=@opendir($this->course->backup_path.'/scorm'))
+			{
+				while($file=readdir($dir))
+				{
+					if(is_dir($this->course->backup_path.'/scorm/'.$file) && !in_array($file,array('.','..')))
+					{
+						$doc = new ScormDocument($i++, '/'.$file, $file);
+						$this->course->add_resource($doc);
+					}
+				}
+	
+				closedir($dir);
 			}
 
 			$lp = new Learnpath($obj->id, $obj->lp_type, $obj->name, $obj->path, $obj->ref, $obj->description, $obj->content_local, $obj->default_encoding, $obj->default_view_mod, $obj->prevent_reinit, $obj->force_commit, $obj->content_maker, $obj->display_order, $obj->js_lib, $obj->content_license, $obj->debug, $visibility, $items);

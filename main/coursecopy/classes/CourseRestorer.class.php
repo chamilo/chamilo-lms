@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 11371 2007-03-03 19:42:06Z yannoo $
+// $Id: CourseRestorer.class.php 11372 2007-03-03 22:02:52Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -667,7 +667,7 @@ class CourseRestorer
 						 $type_parts = explode(' ',$item['type']);
 						 $item['id'] = $this->course->resources[$type_parts[0]][$item['id']]->destination_id;
 					}
-					//TODO @TODO get the new ref ID for all items that are not sco (dokeos quizzes, documents, etc)
+					//Get the new ref ID for all items that are not sco (dokeos quizzes, documents, etc)
 					$ref = '';
 					if(!empty($item['ref'])){
 						$ref = $this->get_new_id($item['item_type'],$item['ref']);

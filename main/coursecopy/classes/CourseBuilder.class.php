@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 11358 2007-03-03 09:54:18Z yannoo $
+<?php // $Id: CourseBuilder.class.php 11359 2007-03-03 09:56:48Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -88,7 +88,7 @@ class CourseBuilder
 			{
 				$sql = "SELECT * FROM ".$table." WHERE source_type = '".$resource->get_type()."' AND source_id = '".$resource->get_id()."'";
 				$res = api_sql_query($sql, __FILE__, __LINE__);
-				while ($link = mysql_fetch_object($res))
+				while ($link = Database::fetch_object($res))
 				{
 					$this->course->resources[$type][$id]->add_linked_resource($link->resource_type, $link->resource_id);
 				}
@@ -105,7 +105,7 @@ class CourseBuilder
 					$sql = "SELECT * FROM $table WHERE TOOL = '".$tool."' AND ref='".$resource->get_id()."'";
 					$res = api_sql_query($sql,__FILE__,__LINE__);
 					$all_properties = array ();
-					while ($item_property = mysql_fetch_array($res, MYSQL_ASSOC))
+					while ($item_property = Database::fetch_array($res, MYSQL_ASSOC))
 					{
 						$all_properties[] = $item_property;
 					}
@@ -124,7 +124,7 @@ class CourseBuilder
 		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 		$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 ORDER BY path';
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
 			$this->course->add_resource($doc);
@@ -138,7 +138,7 @@ class CourseBuilder
 		$table = Database :: get_course_table(TABLE_FORUM);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$forum = new Forum($obj->forum_id, $obj->forum_name, $obj->forum_description, $obj->cat_id, $obj->forum_last_post_id);
 			$this->course->add_resource($forum);
@@ -155,7 +155,7 @@ class CourseBuilder
 		$table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$sql = 'SELECT * FROM '.$table.' WHERE cat_id = '.$id;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$forum_category = new ForumCategory($obj->cat_id, $obj->cat_title);
 			$this->course->add_resource($forum_category);
@@ -169,7 +169,7 @@ class CourseBuilder
 		$table = Database :: get_course_table(TABLE_FORUM_POST);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$forum_topic = new ForumTopic($obj->topic_id, $obj->topic_title, $obj->topic_time, $obj->prenom, $obj->nom, $obj->topic_notify, $obj->forum_id, $obj->topic_last_post_id);
 			$this->course->add_resource($forum_topic);
@@ -184,7 +184,7 @@ class CourseBuilder
 		$table_posttext = Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
 		$sql = 'SELECT * FROM '.$table_post.' p,'.$table_posttext.' pt WHERE p.post_id = pt.post_id';
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$forum_post = new ForumPost($obj->post_id, $obj->post_title, $obj->post_text, $obj->post_time, $obj->poster_ip, $obj->prenom, $obj->nom, $obj->topic_notify, $obj->parent_id, $obj->topic_id);
 			$this->course->add_resource($forum_post);
@@ -199,7 +199,7 @@ class CourseBuilder
 		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 		$sql = "SELECT * FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2  ORDER BY l.display_order";
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$link = new Link($obj->id, $obj->title, $obj->url, $obj->description, $obj->category_id, $obj->on_homepage);
 			$this->course->add_resource($link);
@@ -214,7 +214,7 @@ class CourseBuilder
 		$table = Database :: get_course_table(TABLE_TOOL_INTRO);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$tool_intro = new ToolIntro($obj->id, $obj->intro_text);
 			$this->course->add_resource($tool_intro);
@@ -228,7 +228,7 @@ class CourseBuilder
 		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
 		$sql = 'SELECT * FROM '.$link_cat_table.' WHERE id = '.$id;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$link_category = new LinkCategory($obj->id, $obj->category_title, $obj->description);
 			$this->course->add_resource($link_category);
@@ -244,17 +244,17 @@ class CourseBuilder
 		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
 		$sql = 'SELECT * FROM '.$table_qui;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			if (strlen($obj->sound) > 0)
 			{
-				$doc = mysql_fetch_object(api_sql_query("SELECT id FROM ".$table_doc." WHERE path = '/audio/".$obj->sound."'"));
+				$doc = Database::fetch_object(api_sql_query("SELECT id FROM ".$table_doc." WHERE path = '/audio/".$obj->sound."'"));
 				$obj->sound = $doc->id;
 			}
 			$quiz = new Quiz($obj->id, $obj->title, $obj->description, $obj->random, $obj->type, $obj->active, $obj->sound);
 			$sql = 'SELECT * FROM '.$table_rel.' WHERE exercice_id = '.$obj->id;
 			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
-			while ($obj2 = mysql_fetch_object($db_result2))
+			while ($obj2 = Database::fetch_object($db_result2))
 			{
 				$quiz->add_question($obj2->question_id);
 			}
@@ -271,12 +271,12 @@ class CourseBuilder
 		$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 		$sql = 'SELECT * FROM '.$table_que;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position);
 			$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
 			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
-			while ($obj2 = mysql_fetch_object($db_result2))
+			while ($obj2 = Database::fetch_object($db_result2))
 			{
 				$question->add_answer($obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position);
 			}
@@ -291,7 +291,7 @@ class CourseBuilder
 		$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$announcement = new Announcement($obj->id, $obj->title, $obj->content, $obj->end_date,$obj->display_order,$obj->email_sent);
 			$this->course->add_resource($announcement);
@@ -305,7 +305,7 @@ class CourseBuilder
 		$table = Database :: get_course_table(TABLE_AGENDA);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$event = new Event($obj->id, $obj->title, $obj->content, $obj->start_date, $obj->end_date);
 			$this->course->add_resource($event);
@@ -319,7 +319,7 @@ class CourseBuilder
 		$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$cd = new CourseDescription($obj->id, $obj->title, $obj->content);
 			$this->course->add_resource($cd);

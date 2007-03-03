@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 11375 2007-03-03 22:47:49Z yannoo $
+// $Id: CourseRestorer.class.php 11377 2007-03-03 23:01:08Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -651,7 +651,7 @@ class CourseRestorer
 
 				if($lp->visibility)
 				{
-					$sql = "INSERT INTO $table_tool SET name='".Database::escape_string($lp->name)."', link='learnpath/learnpath_handler.php?learnpath_id=$new_lp_id', image='scormbuilder.gif', visibility='1', admin='0', address='squaregrey.gif'";
+					$sql = "INSERT INTO $table_tool SET name='".Database::escape_string($lp->name)."', link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id', image='scormbuilder.gif', visibility='1', admin='0', address='squaregrey.gif'";
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
 

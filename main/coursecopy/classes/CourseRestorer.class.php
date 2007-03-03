@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 11326 2007-03-02 10:34:18Z yannoo $
+// $Id: CourseRestorer.class.php 11360 2007-03-03 10:05:59Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -114,7 +114,7 @@ class CourseRestorer
 					// First check if there isn't allready a record for this resource
 					$sql = "SELECT * FROM $table WHERE tool = '".$property['tool']."' AND ref = '".$resource->destination_id."'";
 					$res = api_sql_query($sql,__FILE__,__LINE__);
-					if( mysql_num_rows($res) == 0)
+					if( Database::num_rows($res) == 0)
 					{
 						// The to_group_id and to_user_id are set to default values as users/groups possibly not exist in the target course
 						$sql = "INSERT INTO $table SET
@@ -128,6 +128,7 @@ class CourseRestorer
 												visibility = '".$property['visibility']."',
 												start_visible = '".$property['start_visible']."',
 												end_visible = '".$property['end_visible']."',
+												to_user_id  = '".$property['to_user_id']."',
 												to_group_id = '0'";
 												;
 						api_sql_query($sql, __FILE__, __LINE__);
@@ -177,7 +178,7 @@ class CourseRestorer
 								copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
 								$sql = "SELECT id FROM ".$table." WHERE path='/".substr($document->path, 9)."'";
 								$res = api_sql_query($sql, __FILE__, __LINE__);
-								$obj = mysql_fetch_object($res);
+								$obj = Database::fetch_object($res);
 								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
 								$sql = "UPDATE ".$table." SET comment = '".mysql_real_escape_string($document->comment)."', title='".mysql_real_escape_string($document->title)."', size='".$document->size."' WHERE id = '".$obj->id."'";
 								api_sql_query($sql, __FILE__, __LINE__);
@@ -185,7 +186,7 @@ class CourseRestorer
 							case FILE_SKIP :
 								$sql = "SELECT id FROM ".$table." WHERE path='/".mysql_real_escape_string(substr($document->path, 9))."'";
 								$res = api_sql_query($sql, __FILE__, __LINE__);
-								$obj = mysql_fetch_object($res);
+								$obj = Database::fetch_object($res);
 								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
 								break;
 							case FILE_RENAME :
@@ -213,7 +214,7 @@ class CourseRestorer
 								copy($this->course->backup_path.'/'.$document->path, $path.$new_file_name);
 								$sql = "INSERT INTO ".$table." SET path = '/".mysql_real_escape_string(substr($new_file_name, 9))."', comment = '".mysql_real_escape_string($document->comment)."', title = '".mysql_real_escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
 								api_sql_query($sql, __FILE__, __LINE__);
-								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = mysql_insert_id();
+								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
 								break;
 						} // end switch
 					} // end if file exists
@@ -222,23 +223,23 @@ class CourseRestorer
 						copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
 						$sql = "INSERT INTO ".$table." SET path = '/".substr($document->path, 9)."', comment = '".mysql_real_escape_string($document->comment)."', title = '".mysql_real_escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
 						api_sql_query($sql, __FILE__, __LINE__);
-						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = mysql_insert_id();
+						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
 					} // end file doesn't exist
 				}
 				else
 				{
 					$sql = "SELECT id FROM ".$table." WHERE path = '/".mysql_real_escape_string(substr($document->path, 9))."'";
 					$res = api_sql_query($sql,__FILE__,__LINE__);
-					if( mysql_num_rows($res)> 0)
+					if( Database::num_rows($res)> 0)
 					{
-						$obj = mysql_fetch_object($res);
+						$obj = Database::fetch_object($res);
 						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;	
 					}
 					else
 					{
 						$sql = "INSERT INTO ".$table." SET path = '/".mysql_real_escape_string(substr($document->path, 9))."', comment = '".mysql_real_escape_string($document->comment)."', title = '".mysql_real_escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
 						api_sql_query($sql, __FILE__, __LINE__);
-						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = mysql_insert_id();
+						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
 					}
 				} // end folder
 			} // end for each
@@ -332,7 +333,7 @@ class CourseRestorer
 				$cat_id = $this->restore_forum_category($forum->category_id);
 				$sql = "INSERT INTO ".$table_forum." SET forum_name = '".mysql_real_escape_string($forum->title)."', forum_desc = '".mysql_real_escape_string($forum->description)."', cat_id = '".$cat_id."', forum_access='2'";
 				api_sql_query($sql, __FILE__, __LINE__);
-				$new_id = mysql_insert_id();
+				$new_id = Database::get_last_insert_id();
 				$this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
 				$forum_topics = 0;
 				if (is_array($this->course->resources[RESOURCE_FORUMTOPIC]))
@@ -367,7 +368,7 @@ class CourseRestorer
 		{
 			$sql = "INSERT INTO ".$forum_cat_table." SET cat_title = '".mysql_real_escape_string($forum_cat->title.' ('.$this->course->code.')')."'";
 			api_sql_query($sql, __FILE__, __LINE__);
-			$new_id = mysql_insert_id();
+			$new_id = Database::get_last_insert_id();
 			$this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;
 			return $new_id;
 		}
@@ -383,7 +384,7 @@ class CourseRestorer
 		$topic = $resources[RESOURCE_FORUMTOPIC][$id];
 		$sql = "INSERT INTO ".$table." SET topic_title = '".mysql_real_escape_string($topic->title)."', topic_time = '".$topic->time."', nom = '".mysql_real_escape_string($topic->lastname)."', prenom = '".mysql_real_escape_string($topic->firstname)."', topic_notify = '".$topic->topic_notify."', forum_id = '".$forum_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
-		$new_id = mysql_insert_id();
+		$new_id = Database::get_last_insert_id();
 		$this->course->resources[RESOURCE_FORUMTOPIC][$id]->destination_id = $new_id;
 		$topic_replies = -1;
 		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post)
@@ -414,7 +415,7 @@ class CourseRestorer
 		$post = $resources[RESOURCE_FORUMPOST][$id];
 		$sql = "INSERT INTO ".$table_post." SET topic_id = '".$topic_id."', post_time = '".$post->post_time."', forum_id = '".$forum_id."', nom = '".mysql_real_escape_string($post->lastname)."', prenom = '".mysql_real_escape_string($post->firstname)."', topic_notify = '".$post->topic_notify."', poster_ip = '".$post->poster_ip."'";
 		api_sql_query($sql, __FILE__, __LINE__);
-		$new_id = mysql_insert_id();
+		$new_id = Database::get_last_insert_id();
 		$this->course->resources[RESOURCE_FORUMPOST][$id]->destination_id = $new_id;
 		$sql = "INSERT INTO ".$table_posttext." SET post_text = '".mysql_real_escape_string($post->text)."', post_title = '".mysql_real_escape_string($post->title)."', post_id = '".$new_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
@@ -434,10 +435,10 @@ class CourseRestorer
 				$cat_id = $this->restore_link_category($link->category_id);
 				$sql = "SELECT MAX(display_order) FROM  $link_table WHERE category_id='" . mysql_real_escape_string($cat_id). "'";
 				$result = api_sql_query($sql, __FILE__, __LINE__);
-    			list($max_order) = mysql_fetch_row($result);
+    			list($max_order) = Database::fetch_array($result);
 				$sql = "INSERT INTO ".$link_table." SET url = '".mysql_real_escape_string($link->url)."', title = '".mysql_real_escape_string($link->title)."', description = '".mysql_real_escape_string($link->description)."', category_id='".$cat_id."', on_homepage = '".$link->on_homepage."', display_order='".($max_order+1)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
-				$this->course->resources[RESOURCE_LINK][$id]->destination_id = mysql_insert_id();
+				$this->course->resources[RESOURCE_LINK][$id]->destination_id = Database::get_last_insert_id();
 			}
 		}
 	}
@@ -458,7 +459,7 @@ class CourseRestorer
 				$sql = "INSERT INTO ".$tool_intro_table." SET id='".mysql_real_escape_string($tool_intro->id)."', intro_text = '".mysql_real_escape_string($tool_intro->intro_text)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 
-				$this->course->resources[RESOURCE_TOOL_INTRO][$id]->destination_id = mysql_insert_id();
+				$this->course->resources[RESOURCE_TOOL_INTRO][$id]->destination_id = Database::get_last_insert_id();
 			}
 		}
 	}
@@ -476,11 +477,11 @@ class CourseRestorer
 		{
 			$sql = "SELECT MAX(display_order) FROM  $link_cat_table";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
-			list($orderMax)=mysql_fetch_row($result);
+			list($orderMax)=Database::fetch_array($result,'NUM');
 			$display_order=$orderMax+1;
 			$sql = "INSERT INTO ".$link_cat_table." SET category_title = '".mysql_real_escape_string($link_cat->title)."', description='".mysql_real_escape_string($link_cat->description)."', display_order='".$display_order."' ";
 			api_sql_query($sql, __FILE__, __LINE__);
-			$new_id = mysql_insert_id();
+			$new_id = Database::get_last_insert_id();
 			$this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id = $new_id;
 			return $new_id;
 		}
@@ -499,7 +500,7 @@ class CourseRestorer
 			{
 				$sql = "INSERT INTO ".$table." SET title = '".mysql_real_escape_string($event->title)."', content = '".mysql_real_escape_string($event->content)."', start_date = '".$event->start_date."', end_date = '".$event->end_date."'";
 				api_sql_query($sql, __FILE__, __LINE__);
-				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = mysql_insert_id();
+				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = Database::get_last_insert_id();
 			}
 		}
 	}
@@ -516,7 +517,7 @@ class CourseRestorer
 			{
 				$sql = "INSERT INTO ".$table." SET title = '".mysql_real_escape_string($cd->title)."', content = '".mysql_real_escape_string($cd->content)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
-				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = mysql_insert_id();
+				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = Database::get_last_insert_id();
 			}
 		}
 	}
@@ -538,7 +539,7 @@ class CourseRestorer
 							"display_order = '".$announcement->display_order."', " .
 							"email_sent = '".$announcement->email_sent."'";
 				api_sql_query($sql, __FILE__, __LINE__);
-				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = mysql_insert_id();
+				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = Database::get_last_insert_id();
 			}
 		}
 	}
@@ -562,13 +563,13 @@ class CourseRestorer
 					{
 						$sql = "SELECT path FROM ".$table_doc." WHERE id = ".$resources[RESOURCE_DOCUMENT][$quiz->media]->destination_id;
 						$doc = api_sql_query($sql, __FILE__, __LINE__);
-						$doc = mysql_fetch_object($doc);
+						$doc = Database::fetch_object($doc);
 						$doc = str_replace('/audio/', '', $doc->path);
 					}
 				}
 				$sql = "INSERT INTO ".$table_qui." SET title = '".mysql_real_escape_string($quiz->title)."', description = '".mysql_real_escape_string($quiz->description)."', type = '".$quiz->quiz_type."', random = '".$quiz->random."', active = '".$quiz->active."', sound = '".mysql_real_escape_string($doc)."' ";
 				api_sql_query($sql, __FILE__, __LINE__);
-				$new_id = mysql_insert_id();
+				$new_id = Database::get_last_insert_id();
 				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
 				foreach ($quiz->question_ids as $index => $question_id)
 				{
@@ -599,7 +600,7 @@ class CourseRestorer
 			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER, $this->course->destination_db);
 			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."'";
 			api_sql_query($sql, __FILE__, __LINE__);
-			$new_id = mysql_insert_id();
+			$new_id = Database::get_last_insert_id();
 			foreach ($question->answers as $index => $answer)
 			{
 				$sql = "INSERT INTO ".$table_ans." SET id= '". ($index +1)."',question_id = '".$new_id."', answer = '".mysql_real_escape_string($answer['answer'])."', correct = '".$answer['correct']."', comment = '".mysql_real_escape_string($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."'";
@@ -631,7 +632,7 @@ class CourseRestorer
 				$sql = "INSERT INTO ".$table_main." SET learnpath_name = '".mysql_real_escape_string($lp->name)."', learnpath_description = '".mysql_real_escape_string($lp->description)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 
-				$new_lp_id = mysql_insert_id();
+				$new_lp_id = Database::get_last_insert_id();
 
 				if($lp->visibility)
 				{
@@ -643,7 +644,7 @@ class CourseRestorer
 				{
 					$sql = "INSERT INTO  ".$table_chapter." SET learnpath_id ='".$new_lp_id."' ,chapter_name='".mysql_real_escape_string($chapter['name'])."', chapter_description='".mysql_real_escape_string($chapter['description'])."',display_order='".$chapter['display_order']."' ";
 					api_sql_query($sql, __FILE__, __LINE__);
-					$new_chap_id = mysql_insert_id();
+					$new_chap_id = Database::get_last_insert_id();
 					foreach ($chapter['items'] as $index => $item)
 					{
 						if ($item['id'] != 0)
@@ -654,7 +655,7 @@ class CourseRestorer
 						}
 						$sql = "INSERT INTO ".$table_item." SET chapter_id='".$new_chap_id."', item_type='".$item['type']."', item_id='".$item['id']."', display_order = '".$item['display_order']."', title = '".mysql_real_escape_string($item['title'])."', description ='".mysql_real_escape_string($item['description'])."', prereq_id='".$item['prereq']."', prereq_type = '".$item['prereq_type']."', prereq_completion_limit = '".$item['prereq_completion_limit']."' ";
 						api_sql_query($sql, __FILE__, __LINE__);
-						$new_item_id = mysql_insert_id();
+						$new_item_id = Database::get_last_insert_id();
 						if ($item['prereq'] != '')
 						{
 							$prereq_old[$new_item_id] = $item['prereq'];

@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 11359 2007-03-03 09:56:48Z yannoo $
+<?php // $Id: CourseBuilder.class.php 11366 2007-03-03 10:50:25Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -230,7 +230,7 @@ class CourseBuilder
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
-			$link_category = new LinkCategory($obj->id, $obj->category_title, $obj->description);
+			$link_category = new LinkCategory($obj->id, $obj->category_title, $obj->description, $obj->display_order);
 			$this->course->add_resource($link_category);
 		}
 	}

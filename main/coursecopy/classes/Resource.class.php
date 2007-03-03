@@ -1,5 +1,5 @@
 <?php
-// $Id: Resource.class.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: Resource.class.php 11370 2007-03-03 19:39:17Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,20 +26,20 @@
 /**
  * All possible resource-types
  */
-define('RESOURCE_LINK', 'Link');
-define('RESOURCE_TOOL_INTRO', 'Tool introduction');
-define('RESOURCE_EVENT', 'Agenda');
-define('RESOURCE_ANNOUNCEMENT', 'Ad_Valvas');
-define('RESOURCE_LINKCATEGORY', 'Link_Category');
-define('RESOURCE_DOCUMENT', 'Document');
-define('RESOURCE_COURSEDESCRIPTION', 'Course_Description');
-define('RESOURCE_FORUMCATEGORY', 'Forum_Category');
-define('RESOURCE_FORUM', 'Forum');
-define('RESOURCE_FORUMTOPIC', 'Thread');
-define('RESOURCE_FORUMPOST', 'Post');
+define('RESOURCE_DOCUMENT', 'document');
+define('RESOURCE_EVENT', 'calendar_event');
+define('RESOURCE_LINK', 'link');
+define('RESOURCE_COURSEDESCRIPTION', 'course_description');
+define('RESOURCE_LEARNPATH', 'learnpath');
+define('RESOURCE_ANNOUNCEMENT', 'announcement');
+define('RESOURCE_FORUM', 'forum');
+define('RESOURCE_FORUMTOPIC', 'thread');
+define('RESOURCE_FORUMPOST', 'post');
+define('RESOURCE_QUIZ', 'quiz');
 define('RESOURCE_QUIZQUESTION', 'Exercise_Question');
-define('RESOURCE_QUIZ', 'Exercise');
-define('RESOURCE_LEARNPATH', 'Learnpath');
+define('RESOURCE_TOOL_INTRO', 'Tool introduction');
+define('RESOURCE_LINKCATEGORY', 'Link_Category');
+define('RESOURCE_FORUMCATEGORY', 'Forum_Category');
 define('RESOURCE_SCORM', 'Scorm');
 
 /**

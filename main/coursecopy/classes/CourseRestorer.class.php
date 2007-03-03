@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 11369 2007-03-03 18:41:11Z yannoo $
+// $Id: CourseRestorer.class.php 11371 2007-03-03 19:42:06Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -619,9 +619,8 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_LEARNPATH))
 		{
-			$table_main 	= Database :: get_course_table(TABLE_LEARNPATH_MAIN, $this->course->destination_db);
-			$table_chapter 	= Database :: get_course_table(TABLE_LEARNPATH_CHAPTER, $this->course->destination_db);
-			$table_item 	= Database :: get_course_table(TABLE_LEARNPATH_ITEM, $this->course->destination_db);
+			$table_main 	= Database :: get_course_table(TABLE_LP_MAIN, $this->course->destination_db);
+			$table_item 	= Database :: get_course_table(TABLE_LP_ITEM, $this->course->destination_db);
 			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST, $this->course->destination_db);
 
 			$resources = $this->course->resources;
@@ -630,7 +629,22 @@ class CourseRestorer
 
 			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp)
 			{
-				$sql = "INSERT INTO ".$table_main." SET learnpath_name = '".Database::escape_string($lp->name)."', learnpath_description = '".Database::escape_string($lp->description)."'";
+				$sql = "INSERT INTO ".$table_main." " .
+						"SET lp_type = '".$lp->lp_type."', " .
+								"name = '".Database::escape_string($lp->name)."', " .
+								"path = '".Database::escape_string($lp->path)."', " .
+								"ref = '".$lp->ref."', " .
+								"description = '".Database::escape_string($lp->description)."', " .
+								"content_local = '".Database::escape_string($lp->content_local)."', " .
+								"default_encoding = '".Database::escape_string($lp->default_encoding)."', " .
+								"default_view_mod = '".Database::escape_string($lp->default_view_mod)."', " .
+								"prevent_reinit = '".Database::escape_string($lp->prevent_reinit)."', " .
+								"force_commit = '".Database::escape_string($lp->force_commit)."', " .
+								"content_maker = '".Database::escape_string($lp->content_maker)."', " .
+								"display_order = '".Database::escape_string($lp->display_order)."', " .
+								"js_lib= '".Database::escape_string($lp->js_lib)."', " .
+								"content_license= '".Database::escape_string($lp->content_license)."', " .
+								"debug= '".Database::escape_string($lp->debug)."' ";
 				api_sql_query($sql, __FILE__, __LINE__);
 
 				$new_lp_id = Database::get_last_insert_id();
@@ -641,40 +655,87 @@ class CourseRestorer
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
 
-				foreach ($lp->get_chapters() as $index => $chapter)
+				$new_item_ids = array();
+				$parent_item_ids = array();
+				$previous_item_ids = array();
+				$next_item_ids = array();
+				foreach ($lp->get_items() as $index => $item)
 				{
-					$sql = "INSERT INTO  ".$table_chapter." SET learnpath_id ='".$new_lp_id."' ,chapter_name='".Database::escape_string($chapter['name'])."', chapter_description='".Database::escape_string($chapter['description'])."',display_order='".$chapter['display_order']."' ";
-					api_sql_query($sql, __FILE__, __LINE__);
-					$new_chap_id = Database::get_last_insert_id();
-					foreach ($chapter['items'] as $index => $item)
+					if ($item['id'] != 0)
 					{
-						if ($item['id'] != 0)
-						{
-						 // Link in learnpath have types 'Link _self' or 'Link _blank'. We only need 'Link' here.
+						 // Links in learnpath have types 'Link _self' or 'Link _blank'. We only need 'Link' here.
 						 $type_parts = explode(' ',$item['type']);
 						 $item['id'] = $this->course->resources[$type_parts[0]][$item['id']]->destination_id;
-						}
-						$sql = "INSERT INTO ".$table_item." SET chapter_id='".$new_chap_id."', item_type='".$item['type']."', item_id='".$item['id']."', display_order = '".$item['display_order']."', title = '".Database::escape_string($item['title'])."', description ='".Database::escape_string($item['description'])."', prereq_id='".$item['prereq']."', prereq_type = '".$item['prereq_type']."', prereq_completion_limit = '".$item['prereq_completion_limit']."' ";
-						api_sql_query($sql, __FILE__, __LINE__);
-						$new_item_id = Database::get_last_insert_id();
-						if ($item['prereq'] != '')
-						{
-							$prereq_old[$new_item_id] = $item['prereq'];
-						}
-						$item_id_old[$item['ref_id']] = $new_item_id;
 					}
+					//TODO @TODO get the new ref ID for all items that are not sco (dokeos quizzes, documents, etc)
+					$ref = '';
+					if(!empty($item['ref'])){
+						$ref = $this->get_new_id($item['item_type'],$item['ref']);
+					}
+					$sql = "INSERT INTO ".$table_item." SET " .
+							"lp_id = '".$new_lp_id."'" .
+							"item_type='".$item['item_type']."', " .
+							"ref = '".$ref."', " .
+							"title = '".Database::escape_string($item['title'])."', " .
+							"description ='".Database::escape_string($item['description'])."', " .
+							"path = '".Database::escape_string($item['path'])."', " .
+							"min_score = '".$item['min_score']."', " .
+							"max_score = '".$item['max_score']."', " .
+							"mastery_score = '".$item['mastery_score']."', " .
+							"parent_item_id = '".$item['parent_item_id']."', " .
+							"previous_item_id = '".$item['previous_item_id']."', " .
+							"next_item_id = '".$item['next_item_id']."', " .
+							"next_item_id = '".$item['display_order']."', " .
+							"prerequisite = '".Database::escape_string($item['prerequisite'])."', " .
+							"parameters='".Database::escape_string($item['parameters'])."', " .
+							"launch_data = '".Database::escape_string($item['launch_dataprereq_type'])."' ";
+					api_sql_query($sql, __FILE__, __LINE__);
+					$new_item_id = Database::get_last_insert_id();
+					//save a link between old and new item IDs
+					$new_item_ids[$item['id']] = $new_item_id;
+					//save a reference of items that need a parent_item_id refresh
+					$parent_item_ids[$new_item_id] = $item['parent_item_id'];
+					//save a reference of items that need a previous_item_id refresh
+					$previous_item_ids[$new_item_id] = $item['previous_item_id'];
+					//save a reference of items that need a next_item_id refresh
+					$next_item_ids[$new_item_id] = $item['next_item_id'];
 				}
-
-				foreach ($prereq_old as $new_item_id => $prereq_old_id)
+	
+				foreach ($parent_item_ids as $new_item_id => $parent_item_old_id)
 				{
-					$prereq_new_id = $item_id_old[$prereq_old_id];
-					$sql = "UPDATE ".$table_item." SET prereq_id = '".$prereq_new_id."' WHERE id = '".$new_item_id."'";
+					$parent_new_id = $new_item_ids[$parent_item_old_id];
+					$sql = "UPDATE ".$table_item." SET parent_item_id = '".$parent_new_id."' WHERE id = '".$new_item_id."'";
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
-
+				foreach ($previous_item_ids as $new_item_id => $previous_item_old_id)
+				{
+					$previous_new_id = $new_item_ids[$previous_item_old_id];
+					$sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."' WHERE id = '".$new_item_id."'";
+					api_sql_query($sql, __FILE__, __LINE__);
+				}
+				foreach ($next_item_ids as $new_item_id => $next_item_old_id)
+				{
+					$next_new_id = $new_item_ids[$next_item_old_id];
+					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."' WHERE id = '".$new_item_id."'";
+					api_sql_query($sql, __FILE__, __LINE__);
+				}
 				$this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
 			}
 		}
+	}
+	/**
+	 * Gets the new ID of one specific tool item from the tool name and the old ID
+	 * @param	string	Tool name
+	 * @param	integer	Old ID
+	 * @return	integer	New ID
+	 */
+	function get_new_id($tool,$ref)
+	{
+		//transform $tool into one backup/restore constant
+		if(!empty($this->course->resources[$tool][$ref]->destination_id)){
+			return $this->course->resources[$tool][$ref]->destination_id;
+		}
+		return '';
 	}
 }
 ?>

@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 11369 2007-03-03 18:41:11Z yannoo $
+<?php // $Id: CourseBuilder.class.php 11371 2007-03-03 19:42:06Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -376,7 +376,24 @@ class CourseBuilder
 				$visibility='0';
 			}
 			
-			$lp = new Learnpath($obj->id, $obj->lp_type, $obj->name, $obj->path, $obj->ref, $obj->description, $obj->content_local, $obj->default_encoding, $obj->default_view_mod, $obj->prevent_reinit, $obj->force_commit, $obj->content_maker, $obj->display_order, $obj->js_lib, $obj->content_license, $obj->debug, $visibility, $items);
+			$lp = new Learnpath($obj->id,
+								$obj->lp_type,
+								$obj->name,
+								$obj->path,
+								$obj->ref,
+								$obj->description,
+								$obj->content_local,
+								$obj->default_encoding,
+								$obj->default_view_mod,
+								$obj->prevent_reinit,
+								$obj->force_commit,
+								$obj->content_maker,
+								$obj->display_order,
+								$obj->js_lib,
+								$obj->content_license,
+								$obj->debug,
+								$visibility,
+								$items);
 
 			$this->course->add_resource($lp);
 		}

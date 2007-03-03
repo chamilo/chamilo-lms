@@ -1,4 +1,4 @@
-<?php // $Id: Learnpath.class.php 5703 2005-07-05 09:22:24Z olivierb78 $
+<?php // $Id: Learnpath.class.php 11364 2007-03-03 10:48:36Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -22,7 +22,6 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-require_once('Learnpath.class.php');
 /**
  * A learnpath
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -31,53 +30,133 @@ require_once('Learnpath.class.php');
 class Learnpath extends Resource
 {
 	/**
+	 * Type of learnpath (can be dokeos (1), scorm (2), aicc (3))
+	 */
+	var $lp_type;
+	/**
 	 * The name
 	 */
 	var $name;
+	/**
+	 * The reference
+	 */
+	var $ref;
 	/**
 	 * The description
 	 */
 	var $description;
 	/**
-	 * The chapters
+	 * Path to the learning path files
 	 */
-	var $chapters;
-
+	var $path;
+	/**
+	 * Whether additional commits should be forced or not
+	 */
+	var $force_commit;
+	/**
+	 * View mode by default ('embedded' or 'fullscreen')
+	 */
+	var $default_view_mod;
+	/**
+	 * Default character encoding
+	 */
+	var $default_encoding;
+	/**
+	 * Display order
+	 */
+	var $display_order;
+	/**
+	 * Content editor/publisher
+	 */
+	var $content_maker;
+	/**
+	 * Location of the content (local or remote)
+	 */
+	var $content_local;
+	/**
+	 * License of the content
+	 */
+	var $content_license;
+	/**
+	 * Whether to prevent reinitialisation or not
+	 */
+	var $prevent_reinit;
+	/**
+	 * JavaScript library used
+	 */
+	var $js_lib;
+	/**
+	 * Debug level for this lp
+	 */
+	var $debug;
+	/**
+	 * The items
+	 */
+	var $items;
+	/**
+	 * The learnpath visibility on the homepage
+	 */
 	var $visibility;
 
 	/**
 	 * Create a new learnpath
+	 * @param integer ID
+	 * @param integer Type (1,2,3,...)
 	 * @param string $name
+	 * @param string $path
+	 * @param string $ref
 	 * @param string $description
+	 * @param string $content_local
+	 * @param string $default_encoding
+	 * @param string $default_view_mode
+	 * @param bool   $prevent_reinit
+	 * @param bool   $force_commit
+	 * @param string $content_maker
+	 * @param integer $display_order
+	 * @param string $js_lib
+	 * @param string $content_license
+	 * @param integer $debug
+	 * @param string $visibility
+	 * @param array  $items
 	 */
-	function Learnpath($id,$name,$description,$visibility,$chapters)
+	function Learnpath($id,$type,$name,$path,$ref,$description,$content_local,$default_encoding,$default_view_mode,$prevent_reinit,$force_commit,$content_maker,$display_order,$js_lib,$content_license,$debug,$visibility,$items)
 	{
 		parent::Resource($id,RESOURCE_LEARNPATH);
+		$this->lp_type = $type; 
 		$this->name = $name;
+		$this->path = $path;
+		$this->ref = $ref;
 		$this->description = $description;
+		$this->content_local = $content_local;
+		$this->default_encoding = $default_encoding;
+		$this->default_view_mod = $default_view_mode;
+		$this->prevent_reinit = $prevent_reinit;
+		$this->force_commit = $force_commit;
+		$this->content_maker = $content_maker;
+		$this->display_order = $display_order;
+		$this->js_lib = $js_lib;
+		$this->content_license = $content_license;
+		$this->debug = $debug;
 		$this->visibility=$visibility;
-		$this->chapters = $chapters;
+		$this->items = $items;
 	}
 	/**
-	 * Get the chapters
+	 * Get the items
 	 */
-	function get_chapters()
+	function get_items()
 	{
-		return $this->chapters;
+		return $this->items;
 	}
 	/**
 	 * Check if a given resource is used as an item in this chapter
 	 */
 	function has_item($resource)
 	{
-		foreach($this->chapters as $index => $chapter)
+		foreach($this->items as $index => $item)
 		{
-			foreach($chapter['items'] as $index => $item)
+			if( $item['id'] == $resource->get_id() && $item['type'] == $resource->get_type())
 			{
-				if( $item['id'] == $resource->get_id() && $item['type'] == $resource->get_type())
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 		return false;

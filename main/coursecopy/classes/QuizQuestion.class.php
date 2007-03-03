@@ -1,4 +1,4 @@
-<?php // $Id: QuizQuestion.class.php 3935 2005-03-28 16:45:23Z yannoo $
+<?php // $Id: QuizQuestion.class.php 11369 2007-03-03 18:41:11Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -75,7 +75,7 @@ class QuizQuestion extends Resource
 	/**
 	 * Add an answer to this QuizQuestion
 	 */
-	function add_answer($answer_text,$correct,$comment,$ponderation,$position)
+	function add_answer($answer_text,$correct,$comment,$ponderation,$position,$hotspot_coordinates,$hotspot_type)
 	{
 		$answer = array();
 		$answer['answer'] = $answer_text;
@@ -83,6 +83,8 @@ class QuizQuestion extends Resource
 		$answer['comment'] = $comment;
 		$answer['ponderation'] = $ponderation;
 		$answer['position'] = $position;
+		$answer['hotspot_coordinates'] = $hotspot_coordinates;
+		$answer['hotspot_type'] = $hotspot_type;
 		$this->answers[] = $answer;
 	}
 	/**

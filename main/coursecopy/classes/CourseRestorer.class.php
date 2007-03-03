@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 11362 2007-03-03 10:14:21Z yannoo $
+// $Id: CourseRestorer.class.php 11369 2007-03-03 18:41:11Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -248,6 +248,7 @@ class CourseRestorer
 
 	/**
 	 * Restore scorm documents
+	 * TODO @TODO check that the restore function with renaming doesn't break the scorm structure!
 	 */
 	function restore_scorm_documents()
 	{
@@ -603,7 +604,7 @@ class CourseRestorer
 			$new_id = Database::get_last_insert_id();
 			foreach ($question->answers as $index => $answer)
 			{
-				$sql = "INSERT INTO ".$table_ans." SET id= '". ($index +1)."',question_id = '".$new_id."', answer = '".Database::escape_string($answer['answer'])."', correct = '".$answer['correct']."', comment = '".Database::escape_string($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."'";
+				$sql = "INSERT INTO ".$table_ans." SET id= '". ($index +1)."',question_id = '".$new_id."', answer = '".Database::escape_string($answer['answer'])."', correct = '".$answer['correct']."', comment = '".Database::escape_string($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;

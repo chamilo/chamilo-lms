@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 11368 2007-03-03 13:02:29Z yannoo $
+<?php // $Id: CourseBuilder.class.php 11369 2007-03-03 18:41:11Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -278,7 +278,7 @@ class CourseBuilder
 			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
 			while ($obj2 = Database::fetch_object($db_result2))
 			{
-				$question->add_answer($obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position);
+				$question->add_answer($obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
 			}
 			$this->course->add_resource($question);
 		}

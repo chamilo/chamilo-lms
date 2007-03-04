@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 11371 2007-03-03 19:42:06Z yannoo $
+<?php // $Id: CourseBuilder.class.php 11379 2007-03-04 14:38:54Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -105,7 +105,7 @@ class CourseBuilder
 					$sql = "SELECT * FROM $table WHERE TOOL = '".$tool."' AND ref='".$resource->get_id()."'";
 					$res = api_sql_query($sql,__FILE__,__LINE__);
 					$all_properties = array ();
-					while ($item_property = Database::fetch_array($res, MYSQL_ASSOC))
+					while ($item_property = Database::fetch_array($res))
 					{
 						$all_properties[] = $item_property;
 					}

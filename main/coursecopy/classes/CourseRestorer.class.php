@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 11380 2007-03-04 15:36:33Z yannoo $
+// $Id: CourseRestorer.class.php 11381 2007-03-04 18:43:55Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -670,12 +670,14 @@ class CourseRestorer
 				$next_item_ids = array();
 				foreach ($lp->get_items() as $index => $item)
 				{
+					/*
 					if ($item['id'] != 0)
 					{
 						 // Links in learnpath have types 'Link _self' or 'Link _blank'. We only need 'Link' here.
 						 $type_parts = explode(' ',$item['type']);
 						 $item['id'] = $this->course->resources[$type_parts[0]][$item['id']]->destination_id;
 					}
+					*/
 					//Get the new ref ID for all items that are not sco (dokeos quizzes, documents, etc)
 					$ref = '';
 					if(!empty($item['ref'])){
@@ -704,7 +706,7 @@ class CourseRestorer
 							"display_order = '".$item['display_order']."', " .
 							"prerequisite = '".Database::escape_string($item['prerequisite'])."', " .
 							"parameters='".Database::escape_string($item['parameters'])."', " .
-							"launch_data = '".Database::escape_string($item['launch_dataprereq_type'])."';";
+							"launch_data = '".Database::escape_string($item['launch_dataprereq_type'])."'";
 					api_sql_query($sql, __FILE__, __LINE__);
 					$new_item_id = Database::get_last_insert_id();
 					//save a link between old and new item IDs
@@ -716,22 +718,30 @@ class CourseRestorer
 					//save a reference of items that need a next_item_id refresh
 					$next_item_ids[$new_item_id] = $item['next_item_id'];
 				}
-	
 				foreach ($parent_item_ids as $new_item_id => $parent_item_old_id)
 				{
-					$parent_new_id = $new_item_ids[$parent_item_old_id];
+					$parent_new_id = 0;
+					if($parent_item_old_id != 0){
+						$parent_new_id = $new_item_ids[$parent_item_old_id];
+					}
 					$sql = "UPDATE ".$table_item." SET parent_item_id = '".$parent_new_id."' WHERE id = '".$new_item_id."'";
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
 				foreach ($previous_item_ids as $new_item_id => $previous_item_old_id)
 				{
-					$previous_new_id = $new_item_ids[$previous_item_old_id];
+					$previous_new_id = 0;
+					if($previous_item_old_id != 0){
+						$previous_new_id = $new_item_ids[$previous_item_old_id];
+					}
 					$sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."' WHERE id = '".$new_item_id."'";
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
 				foreach ($next_item_ids as $new_item_id => $next_item_old_id)
 				{
-					$next_new_id = $new_item_ids[$next_item_old_id];
+					$next_new_id = 0;
+					if($next_item_old_id != 0){
+						$next_new_id = $new_item_ids[$next_item_old_id];
+					}
 					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."' WHERE id = '".$new_item_id."'";
 					api_sql_query($sql, __FILE__, __LINE__);
 				}

@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 11377 2007-03-03 23:01:08Z yannoo $
+// $Id: CourseRestorer.class.php 11380 2007-03-04 15:36:33Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -215,6 +215,15 @@ class CourseRestorer
 								$sql = "INSERT INTO ".$table." SET path = '/".Database::escape_string(substr($new_file_name, 9))."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
 								api_sql_query($sql, __FILE__, __LINE__);
 								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
+								//also insert into item_property
+								/*
+								api_item_property_update(
+										array('dbName'=>$this->course->destination_db,
+										TOOL_DOCUMENT,
+										$this->course->resource[RESOURCE_DOCUMENT][$id]->destination_id,
+										'DocumentAdded',
+										);
+								*/
 								break;
 						} // end switch
 					} // end if file exists
@@ -672,13 +681,20 @@ class CourseRestorer
 					if(!empty($item['ref'])){
 						$ref = $this->get_new_id($item['item_type'],$item['ref']);
 					}
+					//Dealing with path the same way as ref as some data has been put into path when it's a
+					//local resource
+					$path = Database::escape_string($item['path']);
+					if(strval(intval($path)) === $path)
+					{
+						$path = $this->get_new_id($item['item_type'],$path);
+					}
 					$sql = "INSERT INTO ".$table_item." SET " .
 							"lp_id = '".$new_lp_id."', " .
 							"item_type='".$item['item_type']."', " .
 							"ref = '".$ref."', " .
 							"title = '".Database::escape_string($item['title'])."', " .
 							"description ='".Database::escape_string($item['description'])."', " .
-							"path = '".Database::escape_string($item['path'])."', " .
+							"path = '".$path."', " .
 							"min_score = '".$item['min_score']."', " .
 							"max_score = '".$item['max_score']."', " .
 							"mastery_score = '".$item['mastery_score']."', " .

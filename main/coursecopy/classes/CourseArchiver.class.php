@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseArchiver.class.php 9246 2006-09-25 13:24:53Z bmol $
+// $Id: CourseArchiver.class.php 11378 2007-03-04 01:34:09Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -185,7 +185,7 @@ class CourseArchiver
 		$contents = fread($fp, filesize('course_info.dat'));
 		fclose($fp);
 		$course = unserialize(base64_decode($contents));
-		if( get_class($course) != 'course')
+		if( get_class($course) != 'Course')
 		{
 			return new Course();
 		}

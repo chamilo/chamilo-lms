@@ -1579,6 +1579,22 @@ function api_disp_html_area($name, $content = '', $height = '', $width = '100%',
 	}
 	echo $editor->toHtml();
 }
+function api_return_html_area($name, $content = '', $height = '', $width = '100%', $optAttrib = '')
+{
+	global $_configuration, $_course, $fck_attribute;
+	require_once(dirname(__FILE__).'/formvalidator/Element/html_editor.php');
+	$editor = new HTML_QuickForm_html_editor($name);
+	$editor->setValue($content);
+	if( $height != '')
+	{
+		$fck_attribute['Height'] = $height;
+	}
+	if( $width != '')
+	{
+		$fck_attribute['Width'] = $width;
+	}
+	return $editor->toHtml();
+}
 
 /**
  * Send an email.

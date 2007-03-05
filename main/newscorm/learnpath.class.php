@@ -6814,15 +6814,62 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 */
 	 function scorm_export()
 	 {
+	 	if (!class_exists('DomDocument'))
+	 	{
+	 		error_log('DOM functions not supported for PHP version below 5.0',0);
+			$this->error = 'PHP DOM functions not supported for PHP versions below 5.0';
+			return null;
+		}
 	 	//Create the zip handler (this will remain available throughout the method)
 	 	
 	 	//Build a dummy imsmanifest structure. Do not add to the zip yet (we still need it)
+	 	//This structure is developed following regulations for SCORM 1.2 packaging in the SCORM 1.2 Content
+	 	//Aggregation Model official document, secion "2.3 Content Packaging"
+	 	$xmldoc = domxml_new_doc("1.0");
+	 	$root = $xmldoc->add_root('manifest');
+	 	$root->set_attribute('identifier','SingleCourseManifest');
+	 	$root->set_attribute('version','1.1');
+	 	$root->set_attribute('xmlns','http://www.imsproject.org/xsd/imscp_rootv1p1p2');
+	 	$root->set_attribute('xmlns:adlcp','http://www.adlnet.org/xsd/adlcp_rootv1p2');
+	 	$root->set_attribute('xmlns:xsi','http://www.w3.org/2001/XMLSchema-instance');
+	 	$root->set_attribute('xsi:schemaLocation','http://www.omsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
+	 			http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd
+                http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd');
+	 	//Build mandatory sub-root container elements
+	 	$metadata = $root->new_child('metadata');
+	 	$md_schema = $metadata->new_child('schema','ADL SCORM');
+	 	$md_schemaversion = $metadata->new_child('schemaversion','1.2');
+	 	
+	 	$organizations = $root->new_child('organizations');
+	 	$resources = $root->new_child('resources');
+	 	//Build the only organization we will use in building our learnpaths
+	 	$organizations->set_attribute('default','dokeos_export');
+	 	$organization = $organization->new_child('organization');
+	 	$organization->set_attribute('identifier','dokeos_export');
+	 	$org_title = $organization->new_child('title',$this->get_name()); //filter data for XML?
 	 	
 	 	//For each element, add it to the imsmanifest structure, then add it to the zip.
 	 	//Always call the learnpathItem->scorm_export() method to change it to the SCORM
 	 	//format
-	 	 
+	 	$my_items = array();
+	 	$my_resources = array();
+	 	$my_files = array();
+	 	foreach($this->items as $index => $item){
+	 		$my_item[$index] = $organization->new_child('item');
+	 		$my_item[$index]->set_attribute('identifier','dokeos_'.$item->get_id()); 
+	 		$my_item[$index]->set_attribute('identifierref','dokeos_ref_'.$item->get_id()); 
+	 		$my_item[$index]->set_attribute('isvisible','true');
+	 		$my_item[$index]->new_child('title',$item->get_title());
+	 		$my_resources[$index] = $resources->new_child('resource');
+	 		$my_resources[$index]->set_attribute('identifier','');
+	 		$my_resources[$index]->set_attribute('type','');
+	 		$my_resources[$index]->set_attribute('href','');
+	 		$my_files[$index] = $my_resource[$index]->new_child('file');
+	 		$my_files[$index]->set_attribute('href','');
+	 	}
+	 	
 	 	//Finalize the imsmanifest structure, add to the zip, then return the zip
+	 	//$xmldoc->writexml();
 	 }
 }
 

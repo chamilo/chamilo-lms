@@ -1,5 +1,5 @@
 <?php
-// $Id: create_backup.php 11374 2007-03-03 22:32:33Z yannoo $
+// $Id: create_backup.php 11389 2007-03-05 10:46:21Z elixir_julian $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -99,21 +99,24 @@ else
 	}
 	else
 	{
-		echo get_lang('SelectOptionForBackup')
-?>
-	<form method="post">
-	<input type="radio" class="checkbox" id="backup_option_1" name="backup_option" value="full_backup" checked="checked"/>
-	<label for="backup_option_1"><?php echo get_lang('CreateFullBackup') ?></label>
-	<br/>
-	<input type="radio" class="checkbox" id="backup_option_2" name="backup_option" value="select_items"/>
-	<label for="backup_option_2"><?php echo get_lang('LetMeSelectItems') ?></label>
-	<br/>
-	<br/>
-	<input type="submit" value="<?php echo get_lang('CreateBackup') ?>"/>
-	</form>
-	<?php
-
-}
+		echo get_lang('SelectOptionForBackup');
+		
+		include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+		$form = new FormValidator('create_backup_form','POST');
+		$renderer = $form->defaultRenderer();
+		$renderer->setElementTemplate('<div>{element}</div> ');
+		$form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');
+		$form->addElement('radio', 'backup_option', '',  get_lang('LetMeSelectItems'), 'select_items');
+		$form->addElement('html','<br/>');
+		$form->addElement('submit', null, get_lang('CreateBackup'));
+		
+		$form->add_progress_bar();
+		
+		$values['backup_option'] = 'full_backup';
+		$form->setDefaults($values);
+		
+		$form->display();
+	}
 }
 /*
 ==============================================================================

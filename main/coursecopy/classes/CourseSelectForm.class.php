@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 9773 2006-10-25 14:39:14Z yannoo $
+// $Id: CourseSelectForm.class.php 11389 2007-03-05 10:46:21Z elixir_julian $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -77,7 +77,12 @@ class CourseSelectForm
 		echo '<p>';
 		echo get_lang('SelectResources');
 		echo '</p>';
-		echo '<form method="post" name="course_select_form">';
+		
+		echo '<script language="javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
+		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
+		
+		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
+		
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 		echo '<input type="hidden" name="course" value="'.base64_encode(serialize($course)).'"/>';
 		foreach ($course->resources as $type => $resources)
@@ -124,6 +129,7 @@ class CourseSelectForm
 		}
 		echo '<br/><input type="submit" value="'.get_lang('Ok').'"/>';
 		echo '</form>';
+		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
 	}
 	/**
 	 * Get the posted course

@@ -165,4 +165,5 @@ $Comments = "Comentarios";
 $DayOfDelay = "Dias de retraso";
 $NoProduction = "Sin productos";
 $NoComment = "Sin comentarios";
+$Print = "Imprimir";
 ?>

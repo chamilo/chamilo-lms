@@ -23,9 +23,6 @@ $BackToQuestions = "Volver a las preguntas";
 $SelectWhichLanguage = "Seleccione el idioma en que desea crear la encuesta";
 $CreateInAnotherLanguage = "Crear esta encuesta en otro idioma";
 $ExportInExcel = "Exportar en formato Excel";
-$PreciseWhatYouWantToCompare = "Detalle los datos que desea comparar
-";
-$HelpComparative = "Seleccionar los datos en el menú inferior. Para seleccionar más de un artículo, utilizar el crtl + clic. Luego, pulsar Ok. ";
 $ComparativeResults = "Resultados comparativos";
 $SelectDataYouWantToCompare = "Seleccionar los datos que desea comparar";
 $OrCopyPasteUrl = "O copiar y pegar el enlace en la barra de direcciones de su navegador:";

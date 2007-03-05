@@ -155,6 +155,7 @@ $langLimitUsersListDefaultMax = "Najveèje število prikazanih uporabnikov";
 $NoTimeLimits = "Brez èasovnih omejitev";
 $GeneralProperties = "Splošne lastnosti";
 $CourseCoach = "Uèitelj (coach) teèaja";
+$UsersNumber = "Število uporabnikov";
 $PageAfterLoginTitle = "Stran po prijavi";
 $PageAfterLoginComment = "Stran, ki je vidna uporabniku po prijavi";
 $DokeosAdminWebLinks = "Dokeos spletne povezave";

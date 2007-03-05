@@ -177,4 +177,7 @@ $Comments = "Commenti";
 $DayOfDelay = "Giorni di ritardo";
 $NoProduction = "Nessun prodotto";
 $NoComment = "Nessun commento";
+$LatestLogin = "Ultimo accesso";
+$TimeSpentOnThePlatform = "Tempo di collegamento";
+$Messages = "Messaggi";
 ?>

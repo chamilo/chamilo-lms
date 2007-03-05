@@ -180,4 +180,11 @@ $NoComment = "Pas de commentaires";
 $LatestLogin = "Dernière connexion";
 $TimeSpentOnThePlatform = "Temps passé sur la plateforme";
 $Messages = "Messages";
+$AveragePostsInForum = "Nombre moyen de messages sur le forum";
+$AverageAssignments = "Nombre moyen de travaux envoyés";
+$Print = "Imprimer";
+$StudentDetails = "Détails de l\'apprenant";
+$StudentDetailsInCourse = "Détails de l\'apprenant dans le cours";
+$Learnpaths = "Parcours pédagogiques";
+$OtherTools = "Autres outils";
 ?>

@@ -77,7 +77,7 @@ Display::display_header(get_lang('SendEmail'));
 			<label for="email_title"><?php echo get_lang('EmailTitle');?></label>
 		</td>
 		<td>
-			<input name="email_title" id="email_title" value="<?php echo $_POST['email_title'];?>"></input>
+			<input name="email_title" id="email_title" value="<?php echo $_POST['email_title'];?>" size="60"></input>
 		</td>
 	</tr>
 	<tr>

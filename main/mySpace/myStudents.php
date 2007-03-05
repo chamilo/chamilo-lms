@@ -8,21 +8,29 @@ $language_file = array ('registration', 'index', 'tracking', 'exercice');
  $cidReset=true;
  include ('../inc/global.inc.php');
  include_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
+ include_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
  include_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
  include_once(api_get_path(LIBRARY_PATH).'course.lib.php');
  
+ 
+$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+if($export_csv)
+{
+	ob_start();
+}
+$csv_content = array();
+ 
  $this_section = "session_my_space";
  
- $nameTools=get_lang("MyStudents");
+ $nameTools=get_lang("StudentDetails");
  
  $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+ $interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
  
- if(isset($_GET["user_id"]) && $_GET["user_id"]!="" && !isset($_GET["type"])){
- 	$interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
- }
- 
- if(isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"]=="coach"){
- 	$interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
+ if(isset($_GET['details']))
+ {
+ 	$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'], "name" => get_lang("StudentDetails"));
+ 	$nameTools=get_lang("DetailsStudentInCourse");
  }
  
  api_block_anonymous_users();
@@ -33,91 +41,7 @@ $language_file = array ('registration', 'index', 'tracking', 'exercice');
   * 	FUNCTIONS
   * ======================================================================================
   */
-  
-function exportCsv($a_infosUser,$tableTitle,$a_header,$a_dataLearnpath,$a_dataExercices,$a_dataProduction)
-{
-	global $archiveDirName;
-	
-	$fileName = 'test.csv';
-	$archivePath = api_get_path(SYS_PATH).$archiveDirName.'/';
-	$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
-	
-	if(!$open = fopen($archivePath.$fileName,'w+'))
-	{
-		$message = get_lang('noOpen');
-	}
-	else
-	{
-		$info = '';
-		
-		$info .= $a_infosUser['name'];
-		$info .= "\r\n";
-		$info .= $a_infosUser['email'];
-		$info .= "\r\n";
-		$info .= $a_infosUser['phone'];
-		/*$info .= "\r\n";
-		$info .= $a_infosUser['adresse'];*/
-		
-		$info .= "\r\n";
-		$info .= "\r\n";
-		$info .= $tableTitle;
-		$info .= "\r\n";
-		
-		for($i=0;$i<4;$i++)
-		{
-			$info .= $a_header[$i].';';
-		}
-		$info .= "\r\n";
-		
-		foreach($a_dataLearnpath as $a_learnpath)
-		{
-			foreach($a_learnpath as $learnpath)
-			{
-				$info .= $learnpath.';';
-			}
-			$info .= "\r\n";
-		}
-		
-		for($i=4;$i<8;$i++)
-		{
-			$info .= $a_header[$i].';';
-		}
-		$info .= "\r\n";
-		
-		foreach($a_dataExercices as $a_exercice)
-		{
-			foreach($a_exercice as $exercice)
-			{
-				$info .= $exercice.';';
-			}
-			$info .= "\r\n";	
-		}
-		
-		for($i=8;$i<12;$i++)
-		{
-			$info .= $a_header[$i].';';
-		}
-		
-		$info .= "\r\n";
-		
-		foreach($a_dataProduction as $a_production)
-		{
-			foreach($a_production as $production)
-			{
-				$info .= $production.';';
-			}
-			$info .= "\r\n";
-		}
-		fwrite($open,$info);
-		fclose($open);
-		chmod($fileName,0777);
-		$message = get_lang('UsageDatacreated');
-		
-		header("Location:".$archiveURL.$fileName);
-	}
-	
-	return $message;
-}
+
 
 
 function calculHours($seconds)
@@ -194,6 +118,13 @@ else
 
 if(!empty($_GET['student']))
 {
+	
+	echo '<div align="right">
+		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
+		<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+	  </div>';
+	  
+	  
 	// is the user online ?
 	$statistics_database = Database :: get_statistic_database();
 	$a_usersOnline = WhoIsOnline($_GET['student'], $statistics_database, 30);
@@ -231,7 +162,21 @@ if(!empty($_GET['student']))
 	}
 	$avg_student_progress = round($avg_student_progress / $nb_courses,1);
 	$avg_student_score = round($avg_student_score / $nb_courses,1);
-		
+	$last_connection_date = Tracking::get_last_connection_date($a_infosUser['user_id']);
+	$time_spent_on_the_platform = api_time_to_hms(Tracking::get_time_spent_on_the_platform($a_infosUser['user_id']));
+	
+	// cvs informations
+	$csv_content[] = array(get_lang('Informations'));
+	$csv_content[] = array(get_lang('Name'), get_lang('Email'), get_lang('Tel'));
+	$csv_content[] = array($a_infosUser['name'], $a_infosUser['email'],$a_infosUser['phone']);
+	
+	$csv_content[] = array();
+	
+	// csv tracking
+	$csv_content[] = array(get_lang('Tracking'));
+	$csv_content[] = array(get_lang('LatestLogin'), get_lang('TimeSpentOnThePlatform'), get_lang('Progress'), get_lang('Score'));
+	$csv_content[] = array($last_connection_date, $time_spent_on_the_platform , $avg_student_progress.' %',$avg_student_score.' %');
+	
 ?>
 
 	<a name="infosStudent"></a>
@@ -247,13 +192,13 @@ if(!empty($_GET['student']))
 									echo '	<td class="borderRight" width="10%">
 												<img src="'.$a_infosUser['picture_uri'].'" />
 											</td>
-										 ';
+										 	';
 								}
 								else{
 									echo '	<td class="borderRight" width="10%">
 												<img src="../img/unknown.jpg" />
 											</td>
-										 '; 
+										 	'; 
 								}
 								
 							?>
@@ -329,7 +274,7 @@ if(!empty($_GET['student']))
 													<?php echo get_lang('LatestLogin') ?>
 												</td>
 												<td class="none">
-													<?php echo Tracking::get_last_connection_date($a_infosUser['user_id']) ?>
+													<?php echo $last_connection_date ?>
 												</td>
 											</tr>
 											<tr>
@@ -337,7 +282,7 @@ if(!empty($_GET['student']))
 													<?php echo get_lang('TimeSpentOnThePlatform') ?>
 												</td>
 												<td class="none">
-													<?php echo api_time_to_hms(Tracking::get_time_spent_on_the_platform($a_infosUser['user_id'])) ?>
+													<?php echo $time_spent_on_the_platform ?>
 												</td>
 											</tr>
 											<tr>
@@ -398,18 +343,12 @@ if(!empty($_GET['student']))
 		</tr>
 	</table>
 	<table class="data_table">
-		<tr><td colspan="5" style="border-width: 0px;">&nbsp;</td></tr>
-		</a>
+		<tr>
+			<td colspan="5" style="border-width: 0px;">&nbsp;</td>
+		</tr>
 <?php
 			if(!empty($_GET['details']))
 			{
-?>			
-			<br /><br />
-			<div align="left">
-				<a href="<?php echo $_SERVER['PHP_SELF']; ?>?student=<?php echo $a_infosUser['user_id']; ?>#infosStudent"><?php echo get_lang('Back'); ?></a>
-			</div>
-			<br />
-<?php
 		
 				$sqlInfosCourse = "	SELECT 	course.code,
 										course.title,
@@ -436,7 +375,9 @@ if(!empty($_GET['student']))
 			$date_end = $a_date_end[2].'/'.$a_date_end[1].'/'.$a_date_end[0];
 			$dateSession = get_lang('From').' '.$date_start.' '.get_lang('To').' '.$date_end;
 			$tableTitle = $a_infosCours['title'].'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.$a_infosCours['tutor_name'];
-				
+			
+			$csv_content[] = array();
+			$csv_content[] = array($tableTitle);	
 				
 ?>
 		<tr class="tableName">
@@ -444,20 +385,23 @@ if(!empty($_GET['student']))
 					<strong><?php echo $tableTitle; ?></strong>
 			</td>
 		</tr>
-		<tr>
-			<th class="head">
-				<?php echo get_lang('Learnpath'); ?>
-			</th>
-			<th class="head" colspan="2">
-				<?php echo get_lang('Time'); ?>
-			</th>
-			<th class="head">
-				<?php echo get_lang('Progress'); ?>
-			</th>
-			<th class="head" colspan="2">
-				<?php echo get_lang('LastConnexion'); ?>
-			</th>
-		</tr>
+		<tr> <!-- line about learnpaths -->
+			<td>
+				<table class="data_table">
+					<tr>
+						<th>
+							<?php echo get_lang('Learnpaths'); ?>
+						</th>
+						<th>
+							<?php echo get_lang('Time'); ?>
+						</th>
+						<th>
+							<?php echo get_lang('Progress'); ?>
+						</th>
+						<th>
+							<?php echo get_lang('LastConnexion'); ?>
+						</th>
+					</tr>
 <?php
 				$a_headerLearnpath = array(get_lang('Learnpath'),get_lang('Time'),get_lang('Progress'),get_lang('LastConnexion'));
 			
@@ -466,6 +410,9 @@ if(!empty($_GET['student']))
 							";
 
 			$resultLearnpath = api_sql_query($sqlLearnpath);
+			
+			$csv_content[] = array();
+			$csv_content[] = array(get_lang('Learnpath'),get_lang('Time'),get_lang('Progress'),get_lang('LastConnexion'));
 			
 			if(mysql_num_rows($resultLearnpath)>0)
 			{
@@ -492,6 +439,29 @@ if(!empty($_GET['student']))
 					
 					$progress = round(($a_nbItem['nbItem'] * 100)/$a_totalItem['totalItem']);
 					
+					
+					
+					// calculates time
+					$sql = 'SELECT SUM(total_time) 
+								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
+								INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
+									ON item_view.lp_view_id = view.id
+									AND view.lp_id = '.$a_learnpath['id'].'
+									AND view.user_id = '.$_GET['student'];
+					$rs = api_sql_query($sql, __FILE__, __LINE__);
+					$total_time = mysql_result($rs, 0, 0);
+					
+					// calculates last connection time
+					$sql = 'SELECT MAX(start_time) 
+								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
+								INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
+									ON item_view.lp_view_id = view.id
+									AND view.lp_id = '.$a_learnpath['id'].'
+									AND view.user_id = '.$_GET['student'];
+					$rs = api_sql_query($sql, __FILE__, __LINE__);
+					$start_time = mysql_result($rs, 0, 0);
+					
+					
 					if($i%2==0){
 						$s_css_class="row_odd";
 					}
@@ -501,19 +471,21 @@ if(!empty($_GET['student']))
 					
 					$i++;
 					
+					$csv_content[] = array(stripslashes($a_learnpath['name']),api_time_to_hms($total_time),$progress.' %',date('Y-m-d',$start_time));
+					
 				?>
 					<tr class="<?php echo $s_css_class;?>">
 						<td>
 							<?php echo stripslashes($a_learnpath['name']); ?>
 						</td>
-						<td colspan="2">
-						
+						<td align="center">
+						<?php echo api_time_to_hms($total_time) ?>
 						</td>
 						<td align="center">
-							<?php echo $progress.'%'; ?>
+							<?php echo $progress.' %'; ?>
 						</td>
-						<td colspan="2">
-						
+						<td align="center">
+							<?php echo date('Y-m-d',$start_time) ?>
 						</td>
 					</tr>
 				
@@ -535,28 +507,29 @@ if(!empty($_GET['student']))
 					 ";
 				}
 ?>
-		<tr>
-			<th class="head">
-				<?php echo get_lang('Exercices'); ?>
-			</th>
-			<th class="head">
-				<?php echo get_lang('Score') ?>
-			</th>
-			<th class="head">
-				<?php echo get_lang('Details'); ?>
-			</th>
-			<th class="head">
-				<?php echo get_lang('Attempts'); ?>
-			</th>
-			<th class="head">
-				<?php echo get_lang('Correction'); ?>
-			</th>
-			<th class="head">
-				<?php echo get_lang('CorrectTest'); ?>
-			</th>
+				</table>
+			</td>
 		</tr>
-<?php
-				$a_headerExercices = array(get_lang('Exercices'),get_lang('Score'),get_lang('Attempts'),get_lang('Correction'));
+		<tr> <!-- line about exercises -->
+			<td>
+			<table class="data_table">
+				<tr>
+					<th>
+						<?php echo get_lang('Exercices'); ?>
+					</th>
+					<th>
+						<?php echo get_lang('Score') ?>
+					</th>
+					<th>
+						<?php echo get_lang('Attempts'); ?>
+					</th>
+					<th>
+						<?php echo get_lang('CorrectTest'); ?>
+					</th>
+				</tr>
+			<?php
+			$csv_content[] = array();
+			$csv_content[] = array(get_lang('Exercices'),get_lang('Score'),get_lang('Attempts'));
 			$sqlExercices = "	SELECT quiz.title,id
 								FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
 							";
@@ -575,11 +548,12 @@ if(!empty($_GET['student']))
 					$resultEssais = api_sql_query($sqlEssais);
 					$a_essais = mysql_fetch_array($resultEssais);
 					
-					$sqlScore = "SELECT exe_result,exe_weighting
+					$sqlScore = "SELECT exe_id, exe_result,exe_weighting
 								 FROM $tbl_stats_exercices
 								 WHERE exe_user_id = ".$_GET['student']."
 								 AND exe_cours_id = '".$a_infosCours['code']."'
-								 AND exe_exo_id = ".$a_exercices['id']
+								 AND exe_exo_id = ".$a_exercices['id']."
+								 ORDER BY exe_date DESC LIMIT 1"
 									;
 							
 					$resultScore = api_sql_query($sqlScore);
@@ -588,10 +562,13 @@ if(!empty($_GET['student']))
 					{
 						$score = $score + $a_score['exe_result'];
 						$weighting = $weighting + $a_score['exe_weighting'];
+						$exe_id = $a_score['exe_id'];
 					}
 					$pourcentageScore = round(($score*100)/$weighting);
 	
 					$weighting = 0;
+					
+					$csv_content[] = array($a_exercices['title'], $pourcentageScore.' %', $a_essais['essais']);
 					
 					if($i%2==0){
 						$s_css_class="row_odd";
@@ -610,22 +587,15 @@ if(!empty($_GET['student']))
 						 ";
 					echo "	<td align='center'>
 						  ";
-					echo 		$pourcentageScore.'%';
-					echo "	</td>
-							<td align='center'>
-						 ";
-					echo		"<a href='".$_SERVER['PHP_SELF']."?student=".$_GET['student']."&details=true&course=".$_GET['course']."&exe_id=".$a_exercices['id']."#infosExe'> -> </a>";
+					echo 		$pourcentageScore.' %';
 					echo "	</td>
 							<td align='center'>
 						 ";
 					echo 		$a_essais['essais'];
 					echo "	</td>
-							<td>
-						 ";
-					echo "	</td>
 							<td align='center'>
 						 ";
-					echo		"<a href=''> -> </a>";
+					echo		'<a href="../exercice/exercise_show.php?id='.$exe_id.'&cidReq='.$a_infosCours['code'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
 					echo "	</td>
 						  </tr>
 						 ";
@@ -647,119 +617,72 @@ if(!empty($_GET['student']))
 						</tr>
 					 ";
 				}
-
-?>
-		<tr>
-			<th class="head">
-				<?php echo get_lang('Productions'); ?>
-			</th>
-			<th class="head" colspan="2">
-				<?php echo get_lang('LimitDate'); ?>
-			</th>
-			<th class="head">
-				<?php echo get_lang('SentDate'); ?>
-			</th>
-			<th class="head">
-				<?php echo get_lang('Comments'); ?>
-			</th>
-			<th class="head">
-				<?php echo get_lang('Annotate'); ?>
-			</th>
-		</tr>
-<?php
-
-				$a_headerProductions = array(get_lang('Productions'),get_lang('LimitDate'),get_lang('SentDate'),get_lang('Comments'));
-			$sqlProduction = "	SELECT title,sent_date
-								FROM ".$a_infosCours['db_name'].".".$course_student_publication."
-							 ";
-	
-			$resultProduction = api_sql_query($sqlProduction);
-			if(mysql_num_rows($resultProduction)>0)
-			{
-				$i = 0;
-				while($a_production = mysql_fetch_array($resultProduction))
-				{
 					
-					//$tmp_limitDate = $newDate = mktime(0 , 0 , 0 , date("m") , date("d") , date("Y"));
-					$tmp_limitDate = $newDate = mktime(0 , 0 , 0 ,8 , 20 , 2006);
-					
-					$a_sentDate = explode(' ',$a_production['sent_date']);
-					$a_sentDate = explode('-',$a_sentDate[0]);
-					$tmp_sentDate = mktime(0,0,0,$a_sentDate[1],$a_sentDate[2],$a_sentDate[0]);
-					
-					$sentDate = $a_sentDate[2].'/'.$a_sentDate[1].'/'.$a_sentDate[0];
-					
-					if($i%2==0){
-						$s_css_class="row_odd";
-					}
-					else{
-						$s_css_class="row_even";
-					}
-					
-					$i++;
-					
-					echo "<tr class='$s_css_class'>
-							<td>
-						 ";
-					echo 		$a_production['title'];
-					echo "	</td>
-						 ";
-					echo "	<td align='center' colspan='2'>
-						  ";
-					
-					echo "	</td>
-						 ";
-					if($tmp_sentDate > $tmp_limitDate)
-					{
-						echo "<td align='center' class='redText'>";
-						$tmp_retard = $tmp_sentDate - $tmp_limitDate;
-						$retard = round($tmp_retard/86400);
-						echo $retard.' '.get_lang('DayOfDelay');
-						echo "</td>";
-					}
-					else
-					{
-						echo "<td align='center'>";
-						echo	$sentDate;
-						echo "</td>";
-					}
-					echo "	<td align='center'>
-						 ";
-					$remarque = '';
-					if($remarque == '')
-					{
-						echo "--";
-					}
-					
-					echo "	</td>
-							<td align='center'>
-						 ";
-					echo		"<a href=''> -> </a>";
-					echo "	</td>
-						  </tr>
-						 ";
-						 
-					$dataProduction[$i][] =  $a_production['title'];
-					//$dataProduction[$i][] = $a_production['sent_date'];
-					$dataProduction[$i][] =  $a_production['sent_date'];
-					//$dataProduction[$i][] =  remarques;
-					$i++;
-					
-				}
-			}
-			else
-			{
-				echo "	<tr>	
-							<td colspan='6'>
-								".get_lang('NoProduction')."
-							</td>
-						</tr>
-					 ";
-				}
+?>					
+					</table>
+				</td>
+			</tr>
+		<tr><!-- line about other tools -->
+			<td>
+			<table class="data_table">
+			<?php
+			$csv_content[] = array();
 			
-			}
-			else
-			{
+			$nb_assignments = Tracking :: count_student_assignments($a_infosUser['user_id'], $a_infosCours['code']);
+			$messages = Tracking :: count_student_messages($a_infosUser['user_id'], $a_infosCours['code']);
+			$links = Tracking :: count_student_visited_links($a_infosUser['user_id'], $a_infosCours['code']);
+			$documents = Tracking :: count_student_downloaded_documents($a_infosUser['user_id'], $a_infosCours['code']);
+			
+			$csv_content[] = array(get_lang('Student_publication'), $nb_assignments);
+			$csv_content[] = array(get_lang('Messages'), $messages);
+			$csv_content[] = array(get_lang('LinksDetails'), $links);
+			$csv_content[] = array(get_lang('DocumentsDetails'), $documents);
+			?>
+				<tr>
+					<th colspan="2">
+						<?php echo get_lang('OtherTools'); ?>
+					</th>
+				</tr>
+				<tr><!-- assignments -->
+					<td width="40%">
+						<?php echo get_lang('Student_publication') ?>
+					</td>
+					<td>
+						<?php echo $nb_assignments ?>
+					</td>
+				</tr>
+				<tr><!-- messages -->
+					<td>
+						<?php echo get_lang('Messages') ?>
+					</td>
+					<td>
+						<?php echo $messages ?>
+					</td>
+				</tr>
+				<tr><!-- links -->
+					<td>
+						<?php echo get_lang('LinksDetails') ?>
+					</td>
+					<td>
+						<?php echo $links ?>
+					</td>
+				</tr>
+				<tr><!-- documents -->
+					<td>
+						<?php echo get_lang('DocumentsDetails') ?>
+					</td>
+					<td>
+						<?php echo $documents ?>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		</table>
+<?php			
+		}
+		else
+		{
 ?>
 		<tr>
 			<th>
@@ -781,29 +704,35 @@ if(!empty($_GET['student']))
 <?php
 		if(count($a_courses)>0)
 		{
+			$csv_content[] = array();
+			$csv_content[] = array(get_lang('Course'),get_lang('Time'),get_lang('Progress'),get_lang('Score'));
 			foreach($a_courses as $course_code)
 			{
+				
 				$course_infos = CourseManager :: get_course_information($course_code);
+				$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_code));
+				$progress = Tracking :: get_avg_student_progress($a_infosUser['user_id'], $course_code).' %';
+				$score = Tracking :: get_avg_student_score($a_infosUser['user_id'], $course_code).' %';
+				$csv_content[] = array($course_infos['title'], $time_spent_on_course, $progress, $score);
 				echo '
-<tr>				
-	<td>
-		'.$course_infos['title'].'
-	</td>
-	<td>
-		'.api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_code)).'
-	</td>
-	<td>
-		'.Tracking :: get_avg_student_progress($a_infosUser['user_id'], $course_code).' %
-	</td>
-	<td>
-		'.Tracking :: get_avg_student_score($a_infosUser['user_id'], $course_code).' %
-	</td>
-	<td>
-		<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'#infosStudent"> -> </a>
-	</td>
-
-
-';
+				<tr>				
+					<td align="right">
+						'.$course_infos['title'].'
+					</td>
+					<td align="right">
+						'.$time_spent_on_course.'
+					</td>
+					<td align="right">
+						'.$progress.'
+					</td>
+					<td align="right">
+						'.$score.'
+					</td>
+					<td align="center" width="10">
+						<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+					</td>
+				</tr>
+				';
 			}
 		}
 		else
@@ -903,12 +832,13 @@ if(!empty($_GET['student']))
 	}
 	 $a_header = array_merge($a_headerLearnpath,$a_headerExercices,$a_headerProductions);
 
-	if($_GET['csv'] == "true")
-	 {
-		$exportResult = exportCsv($a_infosUser,$tableTitle,$a_header,$dataLearnpath,$dataExercices,$dataProduction);
-	 	Display :: display_error_message($exportResult);
-	 }
 	
+}
+
+if($export_csv)
+{
+	ob_end_clean();
+	Export :: export_table_csv($csv_content, 'reporting_student');
 }
 	
 /*

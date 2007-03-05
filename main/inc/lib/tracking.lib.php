@@ -414,6 +414,43 @@ class Tracking {
 		$rs = api_sql_query($sql, __LINE__, __FILE__);
 		return mysql_num_rows($rs);
 	}
+	
+	function count_student_visited_links ($student_id, $course_code)
+	{
+		// protect datas
+		$student_id = intval($student_id);
+		$course_code = addslashes($course_code);
+		
+		// table definition
+		$tbl_stats_links = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
+		
+		$sql = 'SELECT 1
+				FROM '.$tbl_stats_links.' 
+				WHERE links_user_id='.$student_id.'
+				AND links_cours_id="'.$course_code.'"';
+		
+		$rs = api_sql_query($sql, __LINE__, __FILE__);
+		return mysql_num_rows($rs);
+	}
+	
+	function count_student_downloaded_documents ($student_id, $course_code)
+	{
+		// protect datas
+		$student_id = intval($student_id);
+		$course_code = addslashes($course_code);
+		
+		// table definition
+		$tbl_stats_documents = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+		
+		$sql = 'SELECT 1
+				FROM '.$tbl_stats_documents.' 
+				WHERE down_user_id='.$student_id.'
+				AND down_cours_id="'.$course_code.'"';
+		
+		$rs = api_sql_query($sql, __LINE__, __FILE__);
+		return mysql_num_rows($rs);
+	}
+	
 }
 
 

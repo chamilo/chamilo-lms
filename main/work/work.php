@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 11339 2007-03-02 13:35:38Z elixir_julian $
+*  	@version $Id: work.php 11391 2007-03-05 14:31:29Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -448,7 +448,7 @@ if (api_is_allowed_to_edit())
 		if($created_dir)
 		{
 			//Display::display_normal_message("<strong>".$created_dir."</strong> was created!");
-			Display::display_normal_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>');
+			Display::display_normal_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>', false);
 			//uncomment if you want to enter the created dir
 			//$curdirpath = $created_dir;
 			//$curdirpathurl = urlencode($curdirpath);

@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 11195 2007-02-22 15:42:28Z elixir_julian $
+<?php //$Id: announcements.php 11385 2007-03-05 09:11:12Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -154,7 +154,7 @@ if ($_POST['To'])
 {
 	$display_form = true;
 
-	$form_elements= array ('emailTitle'=>stripslashes($emailTitle), 'newContent'=>stripslashes($newContent), 'id'=>$id, 'emailoption'=>$email_ann);
+	$form_elements= array ('emailTitle'=>$_POST['emailTitle'], 'newContent'=>$_POST['newContent'], 'id'=>$_POST['id'], 'emailoption'=>$_POST['email_ann']);
     $_SESSION['formelements']=$form_elements;
 
     $form_elements            	= $_SESSION['formelements'];
@@ -988,7 +988,10 @@ if ($message == true)
 
 	if ($display_form == true)
 	{
-
+		
+		$content_to_modify=stripslashes($content_to_modify);
+		$title_to_modify=stripslashes($title_to_modify);
+		
 		// DISPLAY ADD ANNOUNCEMENT COMMAND
 
 		echo "<form method=\"post\" name=\"f1\" action=\"".$_SERVER['PHP_SELF']."?publish_survey=$surveyid&id=".$_GET['id']."&db_name=$db_name&cidReq=".$_GET['cidReq']."&action=".$_GET['action']."\" style=\"margin:0px;\">\n";
@@ -1051,7 +1054,7 @@ if ($message == true)
 		if (!isset($announcement_to_modify) ) $announcement_to_modify ="";
 		if (!isset($content_to_modify) ) 		$content_to_modify ="";
 		if (!isset($title_to_modify)) 		$title_to_modify = "";
-
+		
 	    echo	"<br />\n<input type=\"hidden\" name=\"id\" value=\"".$announcement_to_modify."\">";
 		if($surveyid){
 			$content_to_modify='<br /><a href="'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name">'.get_lang('ClickHereToOpenSurvey').'</a><br />

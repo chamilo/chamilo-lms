@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 11194 2007-02-22 14:22:55Z elixir_julian $
+<?php //$Id: agenda.inc.php 11385 2007-03-05 09:11:12Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1877,7 +1877,8 @@ function show_add_form($id = '')
 		$to=$item_2_edit['to'];
 		//echo "<br />after get_agenda_item".$_SESSION['allow_individual_calendar'];
 	}
-
+	$content=stripslashes($content);
+	$title=stripslashes($title);
 	// we start a completely new item, we do not come from the resource linker
 	if ($_GET['originalresource']!=="no" and $_GET['action']=="add")
 	{

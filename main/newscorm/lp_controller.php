@@ -421,9 +421,10 @@ switch($_REQUEST['action'])
 		if(!$lp_found){ error_log('New LP - No learnpath given for delete',0); require('lp_list.php'); }
 		else{
 			$_SESSION['refresh'] = 1;
+			//remove lp from homepage if it is there
+			$_SESSION['oLP']->toggle_visibility($_SESSION['oLP']->get_id(),'i');
 			$_SESSION['oLP']->delete(null,null,'remove');
 			api_session_unregister('oLP');
-			//require('lp_delete.php');
 			require('lp_list.php');
 		}
 		break;

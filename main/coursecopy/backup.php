@@ -1,5 +1,5 @@
 <?php
-// $Id: backup.php 10204 2006-11-26 20:46:53Z pcool $
+// $Id: backup.php 11392 2007-03-05 14:52:46Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -37,9 +37,10 @@
 ==============================================================================
 */ 
 // name of the language file that needs to be included 
-$language_file = 'coursebackup';
+$language_file = array('coursebackup','admin');
 include ('../inc/global.inc.php');
 $nameTools = get_lang('Backup');
+$interbreadcrumb[] = array ("url" => "../course_info/maintenance.php", "name" => get_lang('Maintenance'));
 Display::display_header($nameTools);
 api_display_tool_title($nameTools);
 if (!api_is_allowed_to_edit())

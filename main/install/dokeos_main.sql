@@ -672,54 +672,55 @@ INSERT INTO `user` VALUES (1,'{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}'
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
---
--- Table structure for table `course_rel_survey`
---
+-- 
+-- Table structure for `shared_survey`
+-- 
 
-CREATE TABLE `course_rel_survey` (
-  `id` int(100) NOT NULL auto_increment,
-  `course_code` varchar(200) default NULL,
-  `db_name` varchar(200) default NULL,
-  `survey_id` varchar(200) default NULL,
-  PRIMARY KEY  (`id`)
+CREATE TABLE `shared_survey` (
+  `survey_id` int(10) unsigned NOT NULL auto_increment,
+  `code` varchar(20) default NULL,
+  `title` varchar(80) default NULL,
+  `subtitle` varchar(80) default NULL,
+  `author` varchar(20) default NULL,
+  `lang` varchar(20) default NULL,
+  `template` varchar(20) default NULL,
+  `intro` text,
+  `surveythanks` text,
+  `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `course_code` varchar(40) NOT NULL default '',
+  PRIMARY KEY  (`survey_id`),
+  UNIQUE KEY `id` (`survey_id`)
 );
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `survey_reminder`
---
+-- 
+-- Table structure for `shared_survey_question`
+-- 
 
-CREATE TABLE `survey_reminder` (
-  `sid` int(11) NOT NULL default '0',
-  `db_name` varchar(100) NOT NULL default '',
-  `email` varchar(100) NOT NULL default '',
-  `access` int(11) NOT NULL default '0',
-  `subject` text NOT NULL,
-  `content` text NOT NULL,
-  `reminder_choice` int(11) NOT NULL default '0',
-  `reminder_time` text NOT NULL,
-  `avail_till` date NOT NULL default '0000-00-00'
-) ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `survey_user_info`
---
-
-CREATE TABLE `survey_user_info` (
-  `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) NOT NULL default '0',
+CREATE TABLE `shared_survey_question` (
+  `question_id` int(11) NOT NULL auto_increment,
   `survey_id` int(11) NOT NULL default '0',
-  `db_name` varchar(200) default NULL,
-  `firstname` varchar(200) default NULL,
-  `lastname` varchar(200) default NULL,
-  `email` varchar(200) default NULL,
-  `organization` text,
-  `age` int(11) default NULL,
-  `registered` char(1) default NULL,
-  `attempted` varchar(10) NOT NULL default '',
-  PRIMARY KEY  (`id`)
+  `survey_question` text NOT NULL,
+  `survey_question_comment` text NOT NULL,
+  `type` varchar(250) NOT NULL default '',
+  `display` varchar(10) NOT NULL default '',
+  `sort` int(11) NOT NULL default '0',
+  `code` varchar(40) NOT NULL default '',
+  PRIMARY KEY  (`question_id`)
 );
 
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for `shared_survey_question_option`
+-- 
+
+CREATE TABLE `shared_survey_question_option` (
+  `question_option_id` int(11) NOT NULL auto_increment,
+  `question_id` int(11) NOT NULL default '0',
+  `survey_id` int(11) NOT NULL default '0',
+  `option_text` text NOT NULL,
+  `sort` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`question_option_id`)
+);

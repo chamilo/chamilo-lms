@@ -269,7 +269,7 @@ foreach ($group_cats as $index => $category)
 			// group name
 			if (api_is_allowed_to_edit() || in_array($_user['user_id'],$tutorsids_of_group) || $this_group['is_member'] || GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_FORUM) || GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_DOCUMENTS))
 			{
-				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gidReq='.$this_group['id'].'">'.$this_group['name'].'</a>';
+				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';
 				if ($_SESSION['_uid'] && $_SESSION['_uid'] == $this_group['id_tutor'])
 				{
 					$group_name .= ' ('.get_lang('OneMyGroups').')';
@@ -278,11 +278,11 @@ foreach ($group_cats as $index => $category)
 				{
 					$group_name .= ' ('.get_lang("MyGroup").')';
 				}
-				$row[] = $group_name.'<br/>'.trim($this_group['description']);
+				$row[] = $group_name.'<br/>'.stripslashes(trim($this_group['description']));
 			}
 			else
 			{
-				$row[] = $this_group['name'].'<br/>'.trim($this_group['description']);
+				$row[] = $this_group['name'].'<br/>'.stripslashes(trim($this_group['description']));
 			}
 			// self-registration / unregistration
 			if (!api_is_allowed_to_edit())

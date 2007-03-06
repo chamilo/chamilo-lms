@@ -1,4 +1,5 @@
 <?php
+$config['survey']['debug'] = false;
 /*
     DOKEOS - elearning and course management software
 
@@ -37,22 +38,28 @@ class survey_manager
 	 * This function retrieves all the survey information
 	 *
 	 * @param integer $survey_id the id of the survey
+	 * @param boolean $shared this parameter determines if we have to get the information of a survey from the central (shared) database or from the
+	 * 		  course database
+	 *
 	 * @return array
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version January 2007
+	 * @version February 2007
 	 *
-	 * @todo move this function to surveymanager.inc.lib.php
 	 * @todo this is the same function as in create_new_survey.php
 	 */
-	function get_survey($survey_id)
+	function get_survey($survey_id,$shared=0)
 	{
 		global $_course;
 
 		// table definition
-		$tbl_survey = Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
+		$table_survey = Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
+		if ($shared<>0)
+		{
+			$table_survey	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+		}
 
-		$sql = "SELECT * FROM $tbl_survey WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
+		$sql = "SELECT * FROM $table_survey WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$return = mysql_fetch_assoc($result);
 
@@ -71,22 +78,25 @@ class survey_manager
 	}
 
 	/**
-	 * This function stores a survey in the database
+	 * This function stores a survey in the database.
 	 *
 	 * @param array $values
 	 * @return array $return the type of return message that has to be displayed and the message in it
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version January 2007
-	 *
-	 * @todo move this function to surveymanager.inc.lib.php
+	 * @version February 2007
 	 */
 	function store_survey($values)
 	{
 		global $_user;
 
 		// table defnitions
-		$table_survey 		= Database :: get_course_table(TABLE_SURVEY);
+		$table_survey 	= Database :: get_course_table(TABLE_SURVEY);
+
+		if ($values['survey_share']['survey_share'] !== '0')
+		{
+			$shared_survey_id = survey_manager::store_shared_survey($values);
+		}
 
 		if (!$values['survey_id'] OR !is_numeric($values['survey_id']))
 		{
@@ -98,7 +108,7 @@ class survey_manager
 						'".mysql_real_escape_string($values['survey_language'])."',
 						'".mysql_real_escape_string($values['start_date'])."',
 						'".mysql_real_escape_string($values['end_date'])."',
-						'".mysql_real_escape_string($values['survey_share']['survey_share'])."',
+						'".mysql_real_escape_string($shared_survey_id)."',
 						'".mysql_real_escape_string('template')."',
 						'".mysql_real_escape_string($values['survey_introduction'])."',
 						'".mysql_real_escape_string($values['survey_thanks'])."',
@@ -106,9 +116,11 @@ class survey_manager
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$survey_id = mysql_insert_id();
 
-			$return['message'] = get_lang('SurveyCreatedSuccesfully').'<br />'.get_lang('YouCanNowAddQuestionToYourSurvey').': ';
-			$return['message'] .= '<a href="survey.php?survey_id='.$survey_id.'">'.get_lang('ClickHere').'</a>';
+			//$return['message'] = get_lang('SurveyCreatedSuccesfully').'<br />'.get_lang('YouCanNowAddQuestionToYourSurvey').': ';
+			//$return['message'] .= '<a href="survey.php?survey_id='.$survey_id.'">'.get_lang('ClickHere').'</a>';
+			$return['message'] = 'SurveyCreatedSuccesfully';
 			$return['type'] = 'confirmation';
+			$return['id']	= $survey_id;
 		}
 		else
 		{
@@ -120,19 +132,72 @@ class survey_manager
 							lang 			= '".mysql_real_escape_string($values['survey_language'])."',
 							avail_from 		= '".mysql_real_escape_string($values['start_date'])."',
 							avail_till		= '".mysql_real_escape_string($values['end_date'])."',
-							is_shared		= '".mysql_real_escape_string($values['survey_share']['survey_share'])."',
+							is_shared		= '".mysql_real_escape_string($shared_survey_id)."',
 							template 		= '".mysql_real_escape_string('template')."',
 							intro			= '".mysql_real_escape_string($values['survey_introduction'])."',
 							surveythanks	= '".mysql_real_escape_string($values['survey_thanks'])."'
 					WHERE survey_id = '".mysql_real_escape_string($values['survey_id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
-			$return['message'] = get_lang('SurveyUpdatedSuccesfully').'<br />'.get_lang('YouCanNowAddQuestionToYourSurvey').': ';
-			$return['message'] .= '<a href="survey.php?survey_id='.$values['survey_id'].'">'.get_lang('Here').'</a>';
-			$return['message'] .= get_lang('OrReturnToSurveyOverview').'<a href="survey_list.php">'.get_lang('Here').'</a>';
+			//$return['message'] = get_lang('SurveyUpdatedSuccesfully').'<br />'.get_lang('YouCanNowAddQuestionToYourSurvey').': ';
+			//$return['message'] .= '<a href="survey.php?survey_id='.$values['survey_id'].'">'.get_lang('Here').'</a>';
+			//$return['message'] .= get_lang('OrReturnToSurveyOverview').'<a href="survey_list.php">'.get_lang('Here').'</a>';
+			$return['message'] = 'SurveyUpdatedSuccesfully';
 			$return['type'] = 'confirmation';
+			$return['id']	= $values['survey_id'];
 		}
 
+	return $return;
+	}
+
+	/**
+	 * This function stores a shared survey in the central database.
+	 *
+	 * @param array $values
+	 * @return array $return the type of return message that has to be displayed and the message in it
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version February 2007
+	 */
+	function store_shared_survey($values)
+	{
+		global $_user;
+		global $_course;
+
+		// table defnitions
+		$table_survey	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY);
+
+		if (!$values['survey_id'] OR !is_numeric($values['survey_id']) OR $values['survey_share']['survey_share'] == 'true')
+		{
+			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, template, intro, surveythanks, creation_date, course_code) VALUES (
+						'".mysql_real_escape_string($values['survey_code'])."',
+						'".mysql_real_escape_string($values['survey_title'])."',
+						'".mysql_real_escape_string($values['survey_subtitle'])."',
+						'".mysql_real_escape_string($_user['user_id'])."',
+						'".mysql_real_escape_string($values['survey_language'])."',
+						'".mysql_real_escape_string('template')."',
+						'".mysql_real_escape_string($values['survey_introduction'])."',
+						'".mysql_real_escape_string($values['survey_thanks'])."',
+						'".date()."',
+						'".$_course['id']."')";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$return	= mysql_insert_id();
+		}
+		else
+		{
+			$sql = "UPDATE $table_survey SET
+							code 			= '".mysql_real_escape_string($values['survey_code'])."',
+							title 			= '".mysql_real_escape_string($values['survey_title'])."',
+							subtitle 		= '".mysql_real_escape_string($values['survey_subtitle'])."',
+							author 			= '".mysql_real_escape_string($_user['user_id'])."',
+							lang 			= '".mysql_real_escape_string($values['survey_language'])."',
+							template 		= '".mysql_real_escape_string('template')."',
+							intro			= '".mysql_real_escape_string($values['survey_introduction'])."',
+							surveythanks	= '".mysql_real_escape_string($values['survey_thanks'])."'
+					WHERE survey_id = '".mysql_real_escape_string($values['survey_share']['survey_share'])."'";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$return	= $values['survey_share']['survey_share'];
+		}
 		return $return;
 	}
 
@@ -145,17 +210,21 @@ class survey_manager
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function delete_survey($survey_id)
+	function delete_survey($survey_id, $shared=false)
 	{
 		// Database table definitions
-		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+		$table_survey 		= Database :: get_course_table(TABLE_SURVEY);
+		if ($shared)
+		{
+			$table_survey 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY);
+		}
 
 		// deleting the survey
 		$sql = "DELETE from $table_survey WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// deleting the questions of the survey
-		survey_manager::delete_all_survey_questions($survey_id);
+		survey_manager::delete_all_survey_questions($survey_id, $shared);
 
 		return true;
 	}
@@ -169,26 +238,91 @@ class survey_manager
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function update_survey_answered($survey_id)
+	function update_survey_answered($survey_id, $user)
 	{
 		global $_course;
 
 		// Database table definitions
-		$table_survey 			= Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
+		$table_survey 				= Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
+		$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION, $_course['db_name']);
 
 		// getting a list with all the people who have filled the survey
 		$people_filled = survey_manager::get_people_who_filled_survey($survey_id);
 		$number = count($people_filled);
 
-		// storing this value
+		// storing this value in the survey table
 		$sql = "UPDATE $table_survey SET answered = '".mysql_real_escape_string($number)."' WHERE survey_id = '".mysql_real_escape_string($survey_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
+
+		// storing that the user has finished the survey.
+		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE user='".mysql_real_escape_string($user)."'";
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+	}
+
+	/**
+	 * This function gets a complete structure of a survey (all survey information, all question information
+	 * of all the questions and all the options of all the questions.
+	 *
+	 * @param integer $survey_id the id of the survey
+	 * @param boolean $shared this parameter determines if we have to get the information of a survey from the central (shared) database or from the
+	 * 		  course database
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version February 2007
+	 */
+	function get_complete_survey_structure($survey_id, $shared=0)
+	{
+		// Database table definitions
+		$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
+		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+
+		if ($shared<>0)
+		{
+			$table_survey 					= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+			$table_survey_question 			= Database :: get_course_table(TABLE_SHARED_SURVEY_QUESTION);
+			$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
+		}
+
+		$structure = survey_manager::get_survey($survey_id, $shared);
+
+		$structure['questions'] = survey_manager::get_questions($survey_id);
 	}
 
 	/******************************************************************************************************
 										SURVEY QUESTION FUNCTIONS
 	 *****************************************************************************************************/
 
+	/**
+	 * This function return the "icon" of the question type
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version February 2007
+	 */
+	function icon_question($type)
+	{
+		// the possible question types
+		$possible_types = array('yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak');
+
+		// the images array
+		$icon_question = array(
+				'yesno' 			=> 'fill_in_blanks.gif',
+				'multiplechoice' 	=> 'mcua.gif',
+				'multipleresponse' 	=> 'mcma.gif',
+				'open' 				=> 'open_answer.gif',
+				'dropdown' 			=> 'fill_in_blanks.gif',
+				'comment' 			=> 'fill_in_blanks.gif',
+				'pagebreak' 		=> 'fill_in_blanks.gif');
+
+		if (in_array($type, $possible_types))
+		{
+			return $icon_question[$type];
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	/**
 	 * This function retrieves all the information of a question
@@ -201,21 +335,27 @@ class survey_manager
 	 *
 	 * @todo one sql call should do the trick
 	 */
-	function get_question($question_id)
+	function get_question($question_id, $shared=false)
 	{
 		// table definitions
 		$tbl_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+		if ($shared)
+		{
+			$tbl_survey_question 			= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+			$table_survey_question_option	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
+		}
 
 		// getting the information of the question
 		$sql = "SELECT * FROM $tbl_survey_question WHERE question_id='".mysql_real_escape_string($question_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$row = mysql_fetch_assoc($result);
-		$return['survey_id'] 	= $row['survey_id'];
-	    $return['question_id'] 	= $row['question_id'];
-	    $return['type'] 		= $row['type'];
-	    $return['question'] 	= $row['survey_question'];
+		$return['survey_id'] 			= $row['survey_id'];
+	    $return['question_id'] 			= $row['question_id'];
+	    $return['type'] 				= $row['type'];
+	    $return['question'] 			= $row['survey_question'];
 	    $return['horizontalvertical'] 	= $row['display'];
+	    $return['shared_question_id']	= $row['shared_question_id'];
 
 	    // getting the information of the question options
 		$sql = "SELECT * FROM $table_survey_question_option WHERE question_id='".mysql_real_escape_string($question_id)."'";
@@ -261,7 +401,7 @@ class survey_manager
 		}
 
 	    // getting the information of the question options
-		$sql = "SELECT * FROM $table_survey_question_option WHERE question_id='".mysql_real_escape_string($question_id)."'";
+		$sql = "SELECT * FROM $table_survey_question_option WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{
@@ -274,17 +414,10 @@ class survey_manager
 	 * This function saves a question in the database.
 	 * This can be either an update of an existing survey or storing a new survey
 	 *
-	 * @param integer $question_id the id of the question (used to determine weither it is a update or an insert)
-	 * @param integer $survey_id the id of the survey
-	 * @param string $question_title the question itself
-	 * @param string $question_comment the comment of the question (not yet in use)
-	 * @param string $question_display how the options of the questions should be displayed
+	 * @param array $form_content all the information of the form
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
-	 *
-	 * @todo move to surveymanager.lib.php
-	 * @todo return message, type and id (and display the information)
 	 */
 	function save_question($form_content)
 	{
@@ -293,6 +426,16 @@ class survey_manager
 		// table definitions
 		$table_survey 			= Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
 		$tbl_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION, $_course['db_name']);
+
+		// getting all the information of the survey
+		$survey_data = survey_manager::get_survey($form_content['survey_id']);
+
+		// storing the question in the shared database
+		if (is_numeric($survey_data['survey_share']) AND $survey_data['survey_share'] <> 0)
+		{
+			$shared_question_id = survey_manager::save_shared_question($form_content, $survey_data);
+			$form_content['shared_question_id'] = $shared_question_id;
+		}
 
 		// storing a new question
 		if ($form_content['question_id'] == '' OR !is_numeric($form_content['question_id']))
@@ -304,17 +447,18 @@ class survey_manager
 			$max_sort = $row['max_sort'];
 
 			// adding the question to the survey_question table
-			$sql = "INSERT INTO $tbl_survey_question (survey_id,survey_question,survey_question_comment,type,display, sort) VALUES (
+			$sql = "INSERT INTO $tbl_survey_question (survey_id,survey_question,survey_question_comment,type,display, sort, shared_question_id) VALUES (
 						'".mysql_real_escape_string($form_content['survey_id'])."',
 						'".mysql_real_escape_string($form_content['question'])."',
 						'".mysql_real_escape_string($form_content['question_comment'])."',
 						'".mysql_real_escape_string($form_content['type'])."',
 						'".mysql_real_escape_string($form_content['horizontalvertical'])."',
-						'".mysql_real_escape_string($max_sort+1)."')";
+						'".mysql_real_escape_string($max_sort+1)."',
+						'".mysql_real_escape_string($form_content['shared_question_id'])."')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$question_id = mysql_insert_id();
 			$form_content['question_id'] = $question_id;
-			$return_message = get_lang('QuestionAdded');
+			$return_message = 'QuestionAdded';
 		}
 		// updating an existing question
 		else
@@ -326,12 +470,69 @@ class survey_manager
 						display = '".mysql_real_escape_string($form_content['horizontalvertical'])."'
 						WHERE question_id = '".mysql_real_escape_string($form_content['question_id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$return_message = get_lang('QuestionUpdated');
+			$return_message = 'QuestionUpdated';
+		}
+		// storing the options of the question
+		survey_manager::save_question_options($form_content, $survey_data);
+		return $return_message;
+	}
+
+	/**
+	 * This function saves the question in the shared database
+	 *
+	 * @param array $form_content all the information of the form
+	 * @param array $survey_data all the information of the survey
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version February 2007
+	 *
+	 * @todo editing of a shared question
+	 */
+	function save_shared_question($form_content, $survey_data)
+	{
+		global $_course;
+
+		// table definitions
+		$tbl_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+
+		// storing a new question
+		if ($form_content['shared_question_id'] == '' OR !is_numeric($form_content['shared_question_id']))
+		{
+			// finding the max sort order of the questions in the given survey
+			$sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question
+					WHERE survey_id='".mysql_real_escape_string($survey_data['survey_share'])."'
+					AND code='".mysql_real_escape_string($_course['id'])."'";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$row = mysql_fetch_assoc($result);
+			$max_sort = $row['max_sort'];
+
+			// adding the question to the survey_question table
+			$sql = "INSERT INTO $tbl_survey_question (survey_id, survey_question, survey_question_comment, type, display, sort, code) VALUES (
+						'".mysql_real_escape_string($survey_data['survey_share'])."',
+						'".mysql_real_escape_string($form_content['question'])."',
+						'".mysql_real_escape_string($form_content['question_comment'])."',
+						'".mysql_real_escape_string($form_content['type'])."',
+						'".mysql_real_escape_string($form_content['horizontalvertical'])."',
+						'".mysql_real_escape_string($max_sort+1)."',
+						'".mysql_real_escape_string($_course['id'])."')";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$shared_question_id = mysql_insert_id();
+		}
+		// updating an existing question
+		else
+		{
+			// adding the question to the survey_question table
+			$sql = "UPDATE $tbl_survey_question SET
+						survey_question = '".mysql_real_escape_string($form_content['question'])."',
+						survey_question_comment = '".mysql_real_escape_string($form_content['question_comment'])."',
+						display = '".mysql_real_escape_string($form_content['horizontalvertical'])."'
+						WHERE question_id = '".mysql_real_escape_string($form_content['shared_question_id'])."'
+						AND code='".mysql_real_escape_string($_course['id'])."'";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$shared_question_id = $form_content['shared_question_id'];
 		}
 
-		// storing the options of the question
-		survey_manager::save_question_options($form_content);
-		return $return_message;
+		return $shared_question_id;
 	}
 
 	/**
@@ -394,22 +595,82 @@ class survey_manager
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function delete_all_survey_questions($survey_id)
+	function delete_all_survey_questions($survey_id, $shared=false)
 	{
 		// table definitions
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		if ($shared)
+		{
+			$table_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+		}
 
 		// deleting the survey questions
 		$sql = "DELETE from $table_survey_question WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// deleting all the options of the questions of the survey
-		survey_manager::delete_all_survey_questions_options($survey_id);
+		survey_manager::delete_all_survey_questions_options($survey_id, $shared);
 
 		// deleting all the answers on this survey
 		survey_manager::delete_all_survey_answers($survey_id);
 	}
 
+
+	/**
+	 * This function deletes a survey question and all its options
+	 *
+	 * @param integer $survey_id the id of the survey
+	 * @param integer $question_id the id of the question
+	 * @param integer $shared
+	 *
+	 * @todo also delete the answers to this question
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version March 2007
+	 */
+	function delete_survey_question($survey_id, $question_id, $shared=false)
+	{
+		// table definitions
+		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		if ($shared)
+		{
+			survey_manager::delete_shared_survey_question($survey_id, $question_id);
+		}
+
+		// deleting the survey questions
+		$sql = "DELETE from $table_survey_question WHERE survey_id='".mysql_real_escape_string($survey_id)."' AND question_id='".mysql_real_escape_string($question_id)."'";
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+
+		// deleting the options of the question of the survey
+		survey_manager::delete_survey_question_option($survey_id, $question_id, $shared);
+	}
+
+	/**
+	 * This function deletes a shared survey question from the main database and all its options
+	 *
+	 * @param integer $question_id the id of the question
+	 * @param integer $shared
+	 *
+	 * @todo delete all the options of this question
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version March 2007
+	 */
+	function delete_shared_survey_question($survey_id, $question_id)
+	{
+		// table definitions
+		$table_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+
+		// first we have to get the shared_question_id
+		$question_data = survey_manager::get_question($question_id);
+
+		// deleting the survey questions
+		$sql = "DELETE FROM $table_survey_question WHERE question_id='".mysql_real_escape_string($question_data['shared_question_id'])."'";
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+
+		// deleting the options of the question of the survey
+		// survey_manager::delete_shared_survey_question_option($survey_id, $question_id, $shared);
+	}
 
 	/******************************************************************************************************
 									SURVEY QUESTION OPTIONS FUNCTIONS
@@ -426,8 +687,13 @@ class survey_manager
 	 *
 	 * @todo writing the update statement when editing a question
 	 */
-	function save_question_options($form_content)
+	function save_question_options($form_content, $survey_data)
 	{
+		if (is_numeric($survey_data['survey_share']) AND $survey_data['survey_share'] <> 0)
+		{
+			survey_manager::save_shared_question_options($form_content, $survey_data);
+		}
+
 		// table defintion
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
@@ -451,6 +717,46 @@ class survey_manager
 		}
 	}
 
+	/**
+	 * This function stores the options of the questions in the shared table
+	 *
+	 * @param array $form_content
+	 * @return
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version February 2007
+	 *
+	 * @todo writing the update statement when editing a question
+	 */
+	function save_shared_question_options($form_content, $survey_data)
+	{
+		// table defintion
+		$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
+
+		// we are editing a question so we first have to remove all the existing options from the database
+		$sql = "DELETE FROM $table_survey_question_option WHERE question_id = '".mysql_real_escape_string($form_content['shared_question_id'])."'";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+
+		$counter = 1;
+		foreach ($form_content['answers'] as $key=>$answer)
+		{
+			$sql = "INSERT INTO $table_survey_question_option (question_id, survey_id, option_text, sort) VALUES (
+							'".mysql_real_escape_string($form_content['shared_question_id'])."',
+							'".mysql_real_escape_string($survey_data['is_shared'])."',
+							'".mysql_real_escape_string($answer)."',
+							'".mysql_real_escape_string($counter)."')";
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$counter++;
+		}
+	}
+
+	/*
+		if (is_numeric($survey_data['survey_share']) AND $survey_data['survey_share'] <> 0)
+		{
+			$form_content = survey_manager::save_shared_question($form_content, $survey_data);
+		}
+	*/
+
 
 	/**
 	 * This function deletes all the options of the questions of a given survey
@@ -462,13 +768,44 @@ class survey_manager
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function delete_all_survey_questions_options($survey_id)
+	function delete_all_survey_questions_options($survey_id, $shared=false)
 	{
 		// table definitions
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+		if ($shared)
+		{
+			$table_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
+		}
 
 		// deleting the options of the survey questions
 		$sql = "DELETE from $table_survey_question_option WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		return true;
+	}
+
+
+	/**
+	 * This function deletes the options of a given question
+	 *
+	 * @param unknown_type $survey_id
+	 * @param unknown_type $question_id
+	 * @param unknown_type $shared
+	 * @return unknown
+	 *
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @version March 2007
+	 */
+	function delete_survey_question_option($survey_id, $question_id, $shared=false)
+	{
+		// table definitions
+		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+		if ($shared)
+		{
+			$table_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
+		}
+
+		// deleting the options of the survey questions
+		$sql = "DELETE from $table_survey_question_option WHERE survey_id='".mysql_real_escape_string($survey_id)."' AND question_id='".mysql_real_escape_string($question_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		return true;
 	}
@@ -485,6 +822,8 @@ class survey_manager
 	 *
 	 * @param $survey_id the id of the survey that has to be deleted
 	 * @return true
+	 *
+	 * @todo write the function
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
@@ -556,18 +895,23 @@ class question
 	 */
 	function create_form($form_content)
 	{
+		global $fck_attribute;
 		$this->html = '<form id="question_form" name="question_form" method="post" action="'.$_SERVER['PHP_SELF'].'?action='.$_GET['action'].'&type='.$_GET['type'].'&survey_id='.$_GET['survey_id'].'&question_id='.$_GET['question_id'].'">';
 		$this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.$_GET['survey_id'].'"/>';
 		$this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.$_GET['question_id'].'"/>';
+		$this->html .= '		<input type="hidden" name="shared_question_id" id="shared_question_id" value="'.$form_content['shared_question_id'].'"/>';
 		$this->html .= '		<input type="hidden" name="type" id="type" value="'.$_GET['type'].'"/>';
 		$this->html .= '<table>';
 		$this->html .= '	<tr>';
 		$this->html .= '		<td colspan="3"><strong>'.get_lang('Question').'</strong></td>';
 		$this->html .= '	</tr>';
 		$this->html .= '	<tr>';
-		$this->html .= '		<td><label for="question">'.get_lang('Question').'</label></td>';
-		$this->html .= '		<td><input type="text" name="question" id="question" value="'.$form_content['question'].'"/></td>';
-		$this->html .= '		<td>&nbsp;</td>';
+		//$this->html .= '		<td><label for="question">'.get_lang('Question').'</label></td>';
+		$fck_attribute['Width'] = '100%';
+		$fck_attribute['Height'] = '100';
+		$fck_attribute['ToolbarSet'] = 'Survey';
+		//$this->html .= '		<td><input type="text" name="question" id="question" value="'.$form_content['question'].'"/></td>';
+		$this->html .= '		<td colspan="3" width="500">'.api_return_html_area('question', $form_content['question']).'</td>';
 		$this->html .= '	</tr>';
 		/*
 		$this->html .= '	<tr>';
@@ -576,6 +920,10 @@ class question
 		$this->html .= '		<td>&nbsp;</td>';
 		$this->html .= '	</tr>';
 		*/
+
+		$this->html .='		<tr>
+								<td colspan="">&nbsp</td>
+							</tr>';
 		return $this->html;
 	}
 
@@ -609,6 +957,8 @@ class question
 	 */
 	function handle_action($form_content)
 	{
+		global $config;
+
 		// moving an answer up
 		if ($_POST['move_up'])
 		{
@@ -654,7 +1004,15 @@ class question
 		if ($_POST['save_question'])
 		{
 			$message = survey_manager::save_question($form_content);
-			Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.$_GET['survey_id'].'">'.get_lang('Survey').'</a>',false);
+			if ($config['survey']['debug'])
+			{
+				Display :: display_header();
+				Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.$_GET['survey_id'].'">'.get_lang('Survey').'</a>', false);
+			}
+			else
+			{
+				header('location:survey.php?survey_id='.$_GET['survey_id'].'&message='.$message);
+			}
 		}
 
 		/**
@@ -754,18 +1112,24 @@ class yesno extends question
 		$this->html .= '		</td>';
 		$this->html .= '		<td>&nbsp;</td>';
 		$this->html .= '	</tr>';
-		// The answers
+		$this->html .='		<tr>
+								<td colspan="">&nbsp</td>
+							</tr>';
+
+		// The options
 		$this->html .= '	<tr>';
 		$this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
 		$this->html .= '	</tr>';
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right"><label for="answers[0]">1</label></td>';
-		$this->html .= '		<td><input type="text" name="answers[0]" id="answers[0]" value="'.$form_content['answers'][0].'" /></td>';
+		//$this->html .= '		<td><input type="text" name="answers[0]" id="answers[0]" value="'.$form_content['answers'][0].'" /></td>';
+		$this->html .= '		<td>'.api_return_html_area('answers[0]', $form_content['answers'][0]).'</td>';
 		$this->html .= '		<td><input type="image" src="../img/down.gif"  value="move_down[0]" name="move_down[0]"/></td>';
 		$this->html .= '	</tr>';
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right"><label for="answers[1]">2</label></td>';
-		$this->html .= '		<td><input type="text" name="answers[1]" id="answers[1]" value="'.$form_content['answers'][1].'" /></td>';
+		//$this->html .= '		<td><input type="text" name="answers[1]" id="answers[1]" value="'.$form_content['answers'][1].'" /></td>';
+		$this->html .= '		<td>'.api_return_html_area('answers[1]', $form_content['answers'][1]).'</td>';
 		$this->html .= '		<td><input type="image" src="../img/up.gif" value="move_up[1]" name="move_up[1]" /></td>';
 		$this->html .= '	</tr>';
 	}
@@ -797,6 +1161,7 @@ class yesno extends question
 		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
 		echo '<div class="survey_question_options">';
 		echo $this->html;
+		echo '</div>';
 		echo '</div>';
 	}
 
@@ -834,7 +1199,11 @@ class multiplechoice extends question
     	$this->html .= ' />'.get_lang('Vertical').'</label>';		$this->html .= '		</td>';
 		$this->html .= '		<td>&nbsp;</td>';
 		$this->html .= '	</tr>';
-		// The answers
+		$this->html .='		<tr>
+								<td colspan="">&nbsp</td>
+							</tr>';
+
+		// The Options
 		$this->html .= '	<tr>';
 		$this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
 		$this->html .= '	</tr>';
@@ -843,15 +1212,24 @@ class multiplechoice extends question
 		{
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
-			$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
+			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
+			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', $form_content['answers'][$key]).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{
 				$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
 			}
+			else
+			{
+				$this->html .= '			<img src="../img/spacer.gif" alt="'.get_lang('Empty').'" title="'.get_lang('Empty').'" />';
+			}
 			if ($key>0)
 			{
 				$this->html .= '			<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+			}
+			else
+			{
+				$this->html .= '			<img src="../img/spacer.gif" alt="'.get_lang('Empty').'" title="'.get_lang('Empty').'" />';
 			}
 			if ($total_number_of_answers> 2)
 			{
@@ -915,7 +1293,12 @@ class multipleresponse extends question
     	$this->html .= ' />'.get_lang('Vertical').'</label>';		$this->html .= '		</td>';
 		$this->html .= '		<td>&nbsp;</td>';
 		$this->html .= '	</tr>';
-		// The answers
+		$this->html .='		<tr>
+								<td colspan="">&nbsp</td>
+							</tr>';
+
+
+		// The options
 		$this->html .= '	<tr>';
 		$this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
 		$this->html .= '	</tr>';
@@ -924,15 +1307,24 @@ class multipleresponse extends question
 		{
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
-			$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
+			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
+			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', $form_content['answers'][$key]).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{
 				$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
 			}
+			else
+			{
+				$this->html .= '			<img src="../img/spacer.gif" alt="'.get_lang('Empty').'" title="'.get_lang('Empty').'" />';
+			}
 			if ($key>0)
 			{
 				$this->html .= '			<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+			}
+			else
+			{
+				$this->html .= '			<img src="../img/spacer.gif" alt="'.get_lang('Empty').'" title="'.get_lang('Empty').'" />';
 			}
 			if ($total_number_of_answers> 2)
 			{
@@ -955,7 +1347,6 @@ class multipleresponse extends question
 	 */
 	function render_question($form_content, $answers=array())
 	{
-		//print_r($form_content);
 		foreach ($form_content['options'] as $key=>$value)
 		{
 			$this->html .= '<label><input name="question'.$form_content['question_id'].'[]" type="checkbox" value="'.$key.'"';
@@ -1118,6 +1509,8 @@ class comment extends question
 	{
 		echo '<div class="survey_question_wrapper">';
 		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
+		echo '</div>';
+		echo "\n";
 	}
 }
 

@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 11134 2007-02-16 14:39:59Z pcool $
+* 	@version $Id: reporting.php 11451 2007-03-06 21:54:30Z pcool $
 *
 * 	@todo use quickforms for the forms
 */
@@ -78,7 +78,7 @@ check_parameters();
 if (!api_is_allowed_to_edit())
 {
 	Display :: display_header();
-	Display :: display_error_message(get_lang('NotAllowedHere'));
+	Display :: display_error_message(get_lang('NotAllowedHere'), false);
 	Display :: display_footer();
 	exit;
 }
@@ -91,8 +91,17 @@ $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
 
+// getting the survey information
+$survey_data = survey_manager::get_survey($_GET['survey_id']);
+$urlname = substr(strip_tags($survey_data['title']), 0, 40);
+if (strlen(strip_tags($survey_data['title'])) > 40)
+{
+	$urlname .= '...';
+}
+
 // breadcrumbs
 $interbreadcrumb[] = array ("url" => "survey_list.php", "name" => get_lang('SurveyList'));
+$interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);
 if (!$_GET['action'] OR $_GET['action'] == 'overview')
 {
 	$tool_name = get_lang('Reporting');
@@ -112,10 +121,10 @@ handle_reporting_actions();
 
 if (!$_GET['action'] OR $_GET['action'] == 'overview')
 {
-	echo '<b><a href="reporting.php?action=questionreport&amp;survey_id='.$_GET['survey_id'].'">see detailed report question by question</a></b> <br />In this report you see the results question by question. A basic statistical analysis is provided <br />';
-	echo '<b><a href="reporting.php?action=userreport&amp;survey_id='.$_GET['survey_id'].'">see the answers from a user</a></b><br />In this report you can see all the answers a specific user has given.<br />';
-	echo '<b><a href="reporting.php?action=comparativereport&amp;survey_id='.$_GET['survey_id'].'">Comparative report</a></b><br />In this report you can compare two questions.<br />';
-	echo '<b><a href="reporting.php?action=completereport&amp;survey_id='.$_GET['survey_id'].'">Complete report</a></b><br />In this report you get an overview of all the answers of all users on all questions. You also have the option to see only a selection of questions. You can export the results in CSV format and use this for processing in a statistical application<br />';
+	echo '<b><a href="reporting.php?action=questionreport&amp;survey_id='.$_GET['survey_id'].'">'.get_lang('DetailedReportByQuestion').'</a></b> <br />'.get_lang('DetailedReportByQuestionDetail').' <br /><br />';
+	echo '<b><a href="reporting.php?action=userreport&amp;survey_id='.$_GET['survey_id'].'">'.get_lang('DetailedReportByUser').'</a></b><br />'.get_lang('DetailedReportByUserDetail').'.<br /><br />';
+	echo '<b><a href="reporting.php?action=comparativereport&amp;survey_id='.$_GET['survey_id'].'">'.get_lang('ComparativeReport').'</a></b><br />'.get_lang('ComparativeReportDetail').'.<br /><br />';
+	echo '<b><a href="reporting.php?action=completereport&amp;survey_id='.$_GET['survey_id'].'">'.get_lang('CompleteReport').'</a></b><br />'.get_lang('CompleteReportDetail').'<br /><br />';
 }
 
 // Footer
@@ -173,7 +182,7 @@ function check_parameters()
 	if ($error)
 	{
 		Display::display_header();
-		Display::display_error_message(get_lang('Error').': '.$error);
+		Display::display_error_message(get_lang('Error').': '.$error, false);
 		Display::display_footer();
 		exit;
 	}
@@ -191,11 +200,6 @@ function check_parameters()
  */
 function handle_reporting_actions()
 {
-	// Displaying the survey information
-	$survey_data = survey_manager::get_survey($_GET['survey_id']);
-	echo '<strong>'.$survey_data['title'].'</strong><br />';
-	echo $survey_data['subtitle'].'<br />';
-
 	// getting the number of question
 	$questions_data = survey_manager::get_questions($_GET['survey_id']);
 	$survey_data['number_of_questions'] = count($questions_data);
@@ -264,7 +268,7 @@ function display_user_report()
 	// step 2: displaying the survey and the answer of the selected users
 	if (isset($_GET['user']))
 	{
-		Display::display_normal_message(get_lang('AllQuestionsOnOnePage'));
+		Display::display_normal_message(get_lang('AllQuestionsOnOnePage'), false);
 
 		// getting all the questions and options
 		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
@@ -347,7 +351,7 @@ function display_question_report($survey_data)
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$question = mysql_fetch_assoc($result);
 
-	if (!isset($_GET['question']) OR $_GET['question'] <> 0)
+	if ($_GET['question'] <> 0)
 	{
 		echo '<a href="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.($offset-1).'">'.get_lang('PreviousQuestion').'</a>';
 	}
@@ -734,7 +738,7 @@ function display_comparative_report()
 	$questions = survey_manager::get_questions($_GET['survey_id']);
 
 	// displaying an information message that only the questions with predefined answers can be used in a comparative report
-	Display::display_normal_message(get_lang('OnlyQuestionsWithPredefinedAnswers'));
+	Display::display_normal_message(get_lang('OnlyQuestionsWithPredefinedAnswers'), false);
 
 	// The form for selecting the axis of the table
 	echo '<form id="form1" name="form1" method="get" action="'.$_SERVER['PHP_SELF'].'?action='.$_GET['action'].'&survey_id='.$_GET['survey_id'].'&xaxis='.$_GET['xaxis'].'&y='.$_GET['yaxis'].'">';

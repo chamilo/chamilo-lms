@@ -26,6 +26,7 @@
 * 	@todo use quickforms for the forms
 * 	@todo check if the user already filled the survey and if this is the case then the answers have to be updated and not stored again.
 * 			alterantively we could not allow people from filling the survey twice.
+* 	@todo performance could be improved if not the survey_id was stored with the invitation but the survey_code
 */
 
 // name of the language file that needs to be included
@@ -56,18 +57,10 @@ $table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATIO
 // Header
 Display :: display_header(get_lang('Survey'));
 
-// debug
-/*
-echo '<pre>';
-print_r($_POST);
-echo '</pre>';
-*/
-
-
 // first we check if the needed parameters are present
 if (!isset($_GET['course']) OR !isset($_GET['invitationcode']))
 {
-	Display :: display_error_message(get_lang('SurveyParametersMissingUseCopyPaste'));
+	Display :: display_error_message(get_lang('SurveyParametersMissingUseCopyPaste'), false);
 	Display :: display_footer();
 	exit;
 }
@@ -77,12 +70,50 @@ $sql = "SELECT * FROM $table_survey_invitation WHERE invitation_code = '".mysql_
 $result = api_sql_query($sql, __FILE__, __LINE__);
 if (mysql_num_rows($result) < 1)
 {
-	Display :: display_error_message(get_lang('WrongInvitationCode'));
+	Display :: display_error_message(get_lang('WrongInvitationCode'), false);
 	Display :: display_footer();
 	exit;
 }
 $survey_invitation = mysql_fetch_assoc($result);
 
+// now we check if the user already filled the survey
+if ($survey_invitation['answered'] == 1)
+{
+	Display :: display_error_message(get_lang('YouAlreadyFilledThisSurvey'), false);
+	Display :: display_footer();
+	exit;
+}
+
+// checking if there is another survey with this code.
+// If this is the case there will be a language choice
+$sql = "SELECT * FROM $table_survey WHERE code='".mysql_real_escape_string($survey_invitation['survey_code'])."'";
+$result = api_sql_query($sql, __FILE__, __LINE__);
+if (mysql_num_rows($result) > 1)
+{
+	if ($_POST['language'])
+	{
+		$survey_invitation['survey_id'] = $_POST['language'];
+	}
+	else
+	{
+		echo '<form id="language" name="language" method="POST" action="'.$_SERVER['PHP_SELF'].'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'">';
+		echo '  <select name="language">';
+		while ($row=mysql_fetch_assoc($result))
+		{
+			echo '<option value="'.$row['survey_id'].'">'.$row['lang'].'</option>';
+		}
+		echo '</select>';
+		echo '  <input type="submit" name="Submit" value="'.get_lang('Ok').'" />';
+		echo '</form>';
+		display::display_footer();
+		exit;
+	}
+}
+else
+{
+	$row=mysql_fetch_assoc($result);
+	$survey_invitation['survey_id'] = $row['survey_id'];
+}
 
 // storing the answers
 if ($_POST)
@@ -94,6 +125,7 @@ if ($_POST)
 			$survey_question_id = str_replace('question', '',$key);
 			if (is_array($value))
 			{
+				remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
 				foreach ($value as $answer_key => $answer_value)
 				{
 					store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $answer_value);
@@ -102,29 +134,33 @@ if ($_POST)
 			else // multipleresponse
 			{
 				$survey_question_answer = $value;
+				remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
 				store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value);
 			}
 		}
 	}
 }
 
-// survey information
+// getting the survey information
 $survey_data = survey_manager::get_survey($survey_invitation['survey_id']);
+$survey_data['survey_id'] = $survey_invitation['survey_id'];
+
+// displaying the survey title and subtitle (appears on every page)
 echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
 echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
 
 // displaying the survey introduction
 if (!isset($_GET['show']))
 {
-	echo '<div id="survey_content">'.$survey_data['survey_introduction'].'</div>';
+	echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
 	$limit = 0;
 }
 
 // displaying the survey thanks message
 if ($_POST['finish_survey'])
 {
-	echo '<div id="survey_content"><strong>'.get_lang('SurveyFinished').'</strong>'.$survey_data['survey_thanks'].'</div>';
-	survey_manager::update_survey_answered($survey_invitation['survey_id']);
+	echo '<div id="survey_content" class="survey_content"><strong>'.get_lang('SurveyFinished').'</strong> <br />'.$survey_data['survey_thanks'].'</div>';
+	survey_manager::update_survey_answered($survey_data['survey_id'], $survey_invitation['user']);
 	Display :: display_footer();
 	exit;
 }
@@ -170,35 +206,30 @@ if (isset($_GET['show']))
 
 // Displaying the form with the questions
 echo '<form id="question" name="question" method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'&show='.$limit.'">';
+echo '<input type="hidden" name="language" value="'.$_POST['language'].'" />';
 foreach ($questions as $key=>$question)
 {
 	$display = new $question['type'];
 	$display->render_question($question);
 }
 
-if (($limit AND $limit <> $question_counter_max) OR !$_GET['show'])
+if (($limit AND $limit <> $question_counter_max) OR !isset($_GET['show']))
 {
 	//echo '<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.$survey_invitation['survey_id'].'&amp;show='.$limit.'">NEXT</a>';
 	echo '<input type="submit" name="next_survey_page" value="'.get_lang('Next').' >> " />';
 }
-if (!$limit AND $_GET['show'])
+if (!$limit AND isset($_GET['show']))
 {
 	echo '<input type="submit" name="finish_survey" value="'.get_lang('FinishSurvey').' >> " />';
 }
 echo '</form>';
-
-/*
-echo '<pre>';
-print_r($questions);
-echo '</pre>';
-*/
 
 // Footer
 Display :: display_footer();
 
 
 /**
- * This function stores an answer on a survey
+ * This function stores an answer of a user on a question of a survey
  *
  * @param mixed $user the user id or email of the person who fills the survey
  * @param integer $survey_id the survey id
@@ -221,6 +252,31 @@ function store_answer($user, $survey_id, $question_id, $option_id)
 			'".mysql_real_escape_string($question_id)."',
 			'".mysql_real_escape_string($option_id)."'
 			)";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+}
+
+/**
+ * This function removes an (or multiple) answer(s) of a user on a question of a survey
+ *
+ * @param mixed $user the user id or email of the person who fills the survey
+ * @param integer $survey_id the survey id
+ * @param integer $question_id the question id
+ * @param integer $option_id the option id
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version January 2007
+ */
+function remove_answer($user, $survey_id, $question_id)
+{
+	global $_course;
+
+	// table definition
+	$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
+
+	$sql = "DELETE FROM $table_survey_answer
+			WHERE user = '".mysql_real_escape_string($user)."'
+			AND survey_id = '".mysql_real_escape_string($survey_id)."'
+			AND question_id = '".mysql_real_escape_string($question_id)."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 }
 ?>

@@ -1,20 +1,20 @@
 <?php
 /*
-    DOKEOS - elearning and course management software
+DOKEOS - elearning and course management software
 
-    For a full list of contributors, see documentation/credits.html
+For a full list of contributors, see documentation/credits.html
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+See "documentation/licence.html" more details.
 
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
+Contact:
+Dokeos
+Rue des Palais 44 Paleizenstraat
+B-1030 Brussels - Belgium
+Tel. +32 (2) 211 34 56
 */
 
 /**
@@ -43,48 +43,49 @@ $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUEST
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
+// getting the survey information
+$survey_data = survey_manager::get_survey($_GET['survey_id']);
+$urlname = substr(strip_tags($survey_data['title']), 0, 40);
+if (strlen(strip_tags($survey_data['title'])) > 40)
+{
+	$urlname .= '...';
+}
+
 // breadcrumbs
 $interbreadcrumb[] = array ("url" => 'survey_list.php', 'name' => get_lang('SurveyList'));
+$interbreadcrumb[] = array ("url" => "survey.php?survey_id=".$_GET['survey_id'], "name" => $urlname);
 
 // Header
 Display :: display_header(get_lang('SurveyPreview'));
 
-// debug
-/*
-echo '<pre>';
-print_r($_POST);
-echo '</pre>';
-*/
-
 // only a course admin is allowed to preview a survey: you are NOT a course admin => error message
 if (!api_is_allowed_to_edit())
 {
-	Display :: display_error_message(get_lang('NotAllowedHere'));
+	Display :: display_error_message(get_lang('NotAllowedHere'), false);
 }
 // only a course admin is allowed to preview a survey: you are a course admin
 else
 {
 	if (!isset($_GET['survey_id']) OR !is_numeric($_GET['survey_id']))
 	{
-		Display :: display_error_message(get_lang('InvallidSurvey'));
+		Display :: display_error_message(get_lang('InvallidSurvey'), false);
 	}
 
 	// survey information
-	$survey_data = survey_manager::get_survey($_GET['survey_id']);
 	echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
 	echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
 
 	// displaying the survey introduction
 	if (!isset($_GET['show']))
 	{
-		echo '<div id="survey_content">'.$survey_data['survey_introduction'].'</div>';
+		echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
 		$limit = 0;
 	}
 
 	// displaying the survey thanks message
 	if ($_POST['finish_survey'])
 	{
-		echo '<div id="survey_content"><strong>'.get_lang('SurveyFinished').'</strong>'.$survey_data['survey_thanks'].'</div>';
+		echo '<div id="survey_content" class="survey_content"><strong>'.get_lang('SurveyFinished').'</strong>'.$survey_data['survey_thanks'].'</div>';
 		Display :: display_footer();
 		exit;
 	}
@@ -101,11 +102,12 @@ else
 				ORDER BY survey_question.sort ASC";
 		if ($_GET['show'])
 		{
-				$sql .= ' LIMIT '.($_GET['show']+1).',1000';
+			$sql .= ' LIMIT '.($_GET['show']+1).',1000';
 		}
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$question_counter_max = mysql_num_rows($result);
 		$counter = 0;
+		$limit=0;
 		while ($row = mysql_fetch_assoc($result))
 		{
 			// if the type is not a pagebreak we store it in the $questions array
@@ -135,23 +137,16 @@ else
 		$display = new $question['type'];
 		$display->render_question($question);
 	}
-
 	if (($limit AND $limit <> $question_counter_max) OR !$_GET['show'])
 	{
 		//echo '<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.$_GET['survey_id'].'&amp;show='.$limit.'">NEXT</a>';
-		echo '<input type="submit" name="next_survey_page" value="'.get_lang('Next').' >> " />';
+		echo '<br /><input type="submit" name="next_survey_page" value="'.get_lang('Next').' >> " />';
 	}
-	if (!$limit AND $_GET['show'])
+	if ($limit==0 AND $_GET['show'])
 	{
 		echo '<input type="submit" name="finish_survey" value="'.get_lang('FinishSurvey').' >> " />';
 	}
 	echo '</form>';
-
-	/*
-	echo '<pre>';
-	print_r($questions);
-	echo '</pre>';
-	*/
 }
 
 // Footer

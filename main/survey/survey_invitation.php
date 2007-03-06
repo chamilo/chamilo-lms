@@ -42,7 +42,7 @@ require_once (api_get_path(LIBRARY_PATH)."mail.lib.inc.php");
 if (!api_is_allowed_to_edit())
 {
 	Display :: display_header();
-	Display :: display_error_message(get_lang('NotAllowedHere'));
+	Display :: display_error_message(get_lang('NotAllowedHere'), false);
 	Display :: display_footer();
 	exit;
 }
@@ -55,9 +55,18 @@ $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
 
+// getting the survey information
+$survey_data = survey_manager::get_survey($_GET['survey_id']);
+$urlname = substr(strip_tags($survey_data['title']), 0, 40);
+if (strlen(strip_tags($survey_data['title'])) > 40)
+{
+	$urlname .= '...';
+}
+
+
 // breadcrumbs
 $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$_GET['survey_id'], 'name' => get_lang('Survey'));
+$interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);
 $tool_name = get_lang('SurveyInvitations');
 
 // Displaying the header
@@ -66,22 +75,20 @@ Display::display_header($tool_name);
 // Checking the parameters
 if (!is_numeric($_GET['survey_id']))
 {
-	Display::display_error_message(get_lang('Error'));
+	Display::display_error_message(get_lang('Error'), false);
 	Display::display_footer();
 	exit;
 }
-
-// Displaying the survey information
-$survey_data = survey_manager::get_survey($_GET['survey_id']);
-echo '<a href="survey.php?survey_id='.$survey_data['survey_id'].'">'.$survey_data['title'].'</a><br />';
-echo $survey_data['subtitle'];
 
 // Getting all the people who have filled this survey
 $answered_data = survey_manager::get_people_who_filled_survey($_GET['survey_id']);
 
 
 //
-echo 'view invited | view answered | view unanswered';
+echo '	<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=invited">'.get_lang('ViewInvited').'</a> |
+		<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=answered">'.get_lang('ViewAnswered').'</a> |
+		<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=unanswered">'.get_lang('ViewUnanswered').'</a> |
+	';
 
 // table header
 echo '<table class="data_table">';
@@ -94,35 +101,37 @@ echo '	</tr>';
 
 $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email FROM $table_survey_invitation survey_invitation
 			LEFT JOIN $table_user user ON  survey_invitation.user = user.user_id
-			WHERE survey_invitation.survey_id = '".mysql_real_escape_string($_GET['survey_id'])."'";
+			WHERE survey_invitation.survey_code = '".mysql_real_escape_string($survey_data['code'])."'";
 $res = api_sql_query($sql, __FILE__, __LINE__);
 while ($row = mysql_fetch_assoc($res))
 {
-	echo '<tr>';
-	if (is_numeric($row['user']))
+	if (!$_GET['view'] OR $_GET['view'] == 'invited' OR ($_GET['view'] == 'answered' AND in_array($row['user'], $answered_data)) OR ($_GET['view'] == 'unanswered' AND !in_array($row['user'], $answered_data)))
 	{
-		echo '			<td><a href="../user/userInfo.php?editMainUserInfo='.$row['user'].'">'.$row['firstname'].' '.$row['lastname'].'</a></td>';
+		echo '<tr>';
+		if (is_numeric($row['user']))
+		{
+			echo '			<td><a href="../user/userInfo.php?editMainUserInfo='.$row['user'].'">'.$row['firstname'].' '.$row['lastname'].'</a></td>';
+		}
+		else
+		{
+				echo '	<td>'.$row['user'].'</td>';
+		}
+		/** @todo this is temporary to allow the developer to quickly fill a survey as a different user */
+		// echo '	<td>'.$row['invitation_code'].'</td>';
+		echo '	<td><a href="fillsurvey.php?course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'">'.$row['invitation_code'].'</td>';
+		echo '	<td>'.$row['invitation_date'].'</td>';
+		echo '	<td>';
+		if (in_array($row['user'], $answered_data))
+		{
+			echo '<a href="reporting.php?action=userreport&amp;survey_id='.$_GET['survey_id'].'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
+		}
+		else
+		{
+			echo '-';
+		}
+		echo '	</td>';
+		echo '</tr>';
 	}
-	else
-	{
-			echo '	<td>'.$row['user'].'</td>';
-	}
-	/** @todo this is temporary to allow the developer to quickly fill a survey as a different user */
-	// echo '	<td>'.$row['invitation_code'].'</td>';
-	echo '	<td><a href="fillsurvey.php?course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'">'.$row['invitation_code'].'</td>';
-	echo '	<td>'.$row['invitation_date'].'</td>';
-	echo '	<td>';
-	if (in_array($row['user'], $answered_data))
-	{
-		echo '<a href="reporting.php?action=userreport&amp;survey_id='.$_GET['survey_id'].'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
-	}
-	else
-	{
-		echo '-';
-	}
-	echo '	</td>';
-	echo '</tr>';
-
 }
 // closing the table
 echo '</table>';

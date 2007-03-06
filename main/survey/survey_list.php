@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 11351 2007-03-02 16:03:00Z elixir_julian $
+* 	@version $Id: survey_list.php 11451 2007-03-06 21:54:30Z pcool $
 *
 * 	@todo The invite column is not done
 * 	@todo try to understand the white, blue, ... template stuff.
@@ -43,7 +43,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 if (!api_is_allowed_to_edit())
 {
 	Display :: display_header();
-	Display :: display_error_message(get_lang('NotAllowedHere'));
+	Display :: display_error_message(get_lang('NotAllowedHere'), false);
 	Display :: display_footer();
 	exit;
 }
@@ -57,6 +57,7 @@ $table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
 // language variables
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 {
+	$interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
 	$tool_name = get_lang('SearchASurvey');
 }
 else
@@ -76,14 +77,21 @@ if (isset ($_GET['search']) AND $_GET['search'] == 'advanced')
 // Action handling: deleting a survey
 if (isset($_GET['action']) AND $_GET['action'] == 'delete' AND isset($_GET['survey_id']) AND is_numeric($_GET['survey_id']))
 {
+	// getting the information of the survey (used for when the survey is shared)
+	$survey_data = survey_manager::get_survey($_GET['survey_id']);
+	// if the survey is shared => also delete the shared content
+	if (is_numeric($survey_data['survey_share']))
+	{
+		survey_manager::delete_survey($survey_data['survey_share'], true);
+	}
 	$return = survey_manager :: delete_survey($_GET['survey_id']);
 	if ($return)
 	{
-		Display :: display_confirmation_message(get_lang('SurveyDeleted'));
+		Display :: display_confirmation_message(get_lang('SurveyDeleted'), false);
 	}
 	else
 	{
-		Display :: display_error_message(get_lang('ErrorOccurred'));
+		Display :: display_error_message(get_lang('ErrorOccurred'), false);
 	}
 }
 
@@ -94,13 +102,21 @@ if ($_POST['action'])
 	{
 		foreach ($_POST['id'] as $key=>$value)
 		{
-			delete_survey($value);
+			// getting the information of the survey (used for when the survey is shared)
+			$survey_data = survey_manager::get_survey($value);
+			// if the survey is shared => also delete the shared content
+			if (is_numeric($survey_data['survey_share']))
+			{
+				survey_manager::delete_survey($survey_data['survey_share'], true);
+			}
+			// delete the actual survey
+			survey_manager::delete_survey($value);
 		}
-		Display :: display_confirmation_message(get_lang('SurveyDeleted'));
+		Display :: display_confirmation_message(get_lang('SurveysDeleted'), false);
 	}
 	else
 	{
-		Display :: display_error_message(get_lang('NoSurveysSelected'));
+		Display :: display_error_message(get_lang('NoSurveysSelected'), false);
 	}
 }
 
@@ -175,7 +191,7 @@ function display_survey_list()
 	{
 		$message = get_lang('DisplaySearchResults').'<br />';
 		$message .= '<a href="'.$_SERVER['PHP_SELF'].'">'.get_lang('DisplayAll').'</a>';
-		Display::display_normal_message($message);
+		Display::display_normal_message($message, false);
 	}
 
 	// Create a sortable table with survey-data
@@ -187,11 +203,12 @@ function display_survey_list()
 	$table->set_header(3, get_lang('NumberOfQuestions'));
 	$table->set_header(4, get_lang('Author'));
 	$table->set_header(5, get_lang('Language'));
-	$table->set_header(6, get_lang('AvailableFrom'));
-	$table->set_header(7, get_lang('AvailableUntill'));
-	$table->set_header(8, get_lang('Invite'));
-	$table->set_header(9, get_lang('Modify'), false);
-	$table->set_column_filter(9, 'modify_filter');
+	$table->set_header(6, get_lang('Shared'));
+	$table->set_header(7, get_lang('AvailableFrom'));
+	$table->set_header(8, get_lang('AvailableUntill'));
+	$table->set_header(9, get_lang('Invite'));
+	$table->set_header(10, get_lang('Modify'), false);
+	$table->set_column_filter(10, 'modify_filter');
 	$table->set_form_actions(array ('delete' => get_lang('DeleteSurvey')));
 	$table->display();
 
@@ -253,10 +270,11 @@ function get_survey_data($from, $number_of_items, $column, $direction)
 				count(survey_question.question_id)			AS col3,
                 CONCAT(user.firstname, ' ', user.lastname)	AS col4,
                 survey.lang									AS col5,
-				survey.avail_from							AS col6,
-                survey.avail_till							AS col7,
-                CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col8,
-                survey.survey_id							AS col9
+                IF(is_shared<>0,'V','-')	 					AS col6,
+				survey.avail_from							AS col7,
+                survey.avail_till							AS col8,
+                CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col9,
+                survey.survey_id							AS col10
              FROM $table_survey survey
 			 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
              , $table_user user
@@ -287,13 +305,13 @@ function get_survey_data($from, $number_of_items, $column, $direction)
  */
 function modify_filter($survey_id)
 {
-	$return = '<a href="create_new_survey.php?action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif').'</a>';
-	$return .= '<a href="survey_list.php?action=delete&amp;survey_id='.$survey_id.'">'.Display::return_icon('delete.gif').'</a>';
-	//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif').'</a>';
-	//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif').'</a>';
-	$return .= '<a href="preview.php?survey_id='.$survey_id.'">'.Display::return_icon('preview.gif').'</a>';
-	$return .= '<a href="survey_invite.php?survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif').'</a>';
-	$return .= '<a href="reporting.php?survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif').'</a>';
+	$return = '<a href="create_new_survey.php?action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+	$return .= '<a href="survey_list.php?action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?')).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+	//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
+	//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
+	$return .= '<a href="preview.php?survey_id='.$survey_id.'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
+	$return .= '<a href="survey_invite.php?survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
+	$return .= '<a href="reporting.php?survey_id='.$survey_id.'">'.Display::return_icon('surveyreporting.gif', get_lang('Reporting')).'</a>';
 	return $return;
 }
 
@@ -331,102 +349,4 @@ function survey_search_restriction()
 		return false;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-/*	if(isset($published))
-	{
-		$sname = surveymanager::pick_surveyname($surveyid);
-		$error_message = get_lang('YourSurveyHasBeenPublished');
-		Display::display_error_message("Survey "."'".$sname."'"." ".$error_message);
-	}
-	$res = api_sql_query($sql,__FILE__,__LINE__);
-	if (mysql_num_rows($res) > 0)
-	{
-
-		$courses = array ();
-		while ($obj = mysql_fetch_object($res))
-		{
-			$template=$obj->template;
-			$surveyid = $obj->survey_id;
-			if($template=='template1'){$view='white';}
-			elseif($template=='template2'){$view='blue';}
-			elseif($template=='template3'){$view='brown';}
-			elseif($template=='template4'){$view='gray';}
-			else{$view=='blank';}
-			$sql_sent="	SELECT DISTINCT user_info.*
-							FROM $user_info as user_info
-							INNER JOIN $table_survey as survey
-							ON user_info.sid = survey.survey_id
-							AND survey.code = '".$obj->code."'";
-
-			$res_sent=api_sql_query($sql_sent);
-			$sent=mysql_num_rows($res_sent);
-
-			$attempted=0;
-
-			$sqlAttempt = '	SELECT DISTINCT *
-							FROM '.Database::get_main_table(TABLE_MAIN_SURVEY_USER).'
-							WHERE survey_id='.$obj->survey_id.' AND db_name="'.$db_name.'"';
-			$res_attempt=api_sql_query($sqlAttempt);
-			$attempted=mysql_num_rows($res_attempt);
-
-			if($sent=='0')
-			{$ratio=$attempted."/".$sent." "."(Not Published)";}
-			else
-				$ratio=$attempted."/".$sent;
-			$survey = array ();
-			$survey[] = '<input type="checkbox" name="survey_delete[]" value="'.$obj->survey_id.'">';
-			$survey[] = $obj->title;
-			$survey[] = $obj->code;
-			$idd=surveymanager::get_author($db_name,$surveyid);
-			$author=surveymanager::get_survey_author($idd);
-			$survey[] = $author;
-			$survey[] = $obj->lang;
-			$survey[] = $obj->avail_from ;
-			$survey[] = $obj->avail_till ;
-			$survey[] = $ratio;
-			//$NoOfQuestion=surveymanager::no_of_question($gid);
-			//$language=surveymanager::no_of_question($sid);
-			$survey[] = '<a href="survey_edit.php?surveyid='.$obj->survey_id.'"><img src="../img/edit.gif" border="0" align="absmiddle" alt="'.get_lang('Edit').'"/></a>'.'<a href="survey_list.php?&action=delete_surveys&survey_delete[]='.$obj->survey_id.'&delete_survey='.$obj->survey_id.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="'.get_lang('Delete').'"/></a>'.'<a href="create_survey_in_another_language.php?id_survey='.$obj->survey_id.'"><img width="28" src="../img/copy.gif" border="0" align="absmiddle" alt="'.get_lang('CreateInAnotherLanguage').'" title="'.get_lang('CreateInAnotherLanguage').'" /></a>'.'<a href="survey_white.php?surveyid='.$surveyid.'&temp='.$template.'">&nbsp;<img src="../img/visible.gif" border="0" align="absmiddle" alt="'.get_lang('ViewSurvey').'"></a>'.'<a href="../announcements/announcements.php?action=add&publish_survey='.$obj->survey_id.'">&nbsp;<img src="../img/survey_publish.gif" border="0" align="absmiddle" alt="'.get_lang('Publish').'"></a>'.'<a href="reporting.php?surveyid='.$obj->survey_id.'">&nbsp;<img src="../img/surveyreporting.gif" border="0" align="absmiddle" alt="'.get_lang('Reporting').'"></a>';
-			$surveys[] = $survey;
-		}
-		$table_header[] = array (' ', false);
-		$table_header[] = array (get_lang('SurveyName'), true);
-		$table_header[] = array (get_lang('SurveyCode'), true);
-		$table_header[] = array (get_lang('Author'), true);
-		$table_header[] = array (get_lang('Language'), true);
-		$table_header[] = array (get_lang('AvailableFrom'), true);
-		$table_header[] = array (get_lang('AvailableTill'), true);
-		$table_header[] = array (get_lang('AnsTarget'), true);
-		$table_header[] = array (' ', false);
-		echo '<form method="get" action="survey_list.php" name="frm">';
-		Display :: display_sortable_table($table_header, $surveys, array (), array (), $parameters);
-		echo '<select name="action">';
-		echo '<option value="delete_surveys">'.get_lang('DeleteSurvey').'</option>';
-		echo '</select>';
-
-		echo '&nbsp;&nbsp;<input type="submit" value="'.get_lang('Ok').'" onclick="return validate(\'frm\');"/>';
-		echo '</form>';
-	}
-	else
-	{
-		if((isset ($_GET['keyword'])) || (isset ($_GET['keyword_title']))){
-		echo get_lang('NoSearchResults') ;
-		}
-		else{
-			$nosurvey=get_lang('NoSurveyAvailable');
-			api_display_tool_title($nosurvey);
-		}
-	}
-}
-*/
 ?>

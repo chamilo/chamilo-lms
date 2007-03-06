@@ -207,19 +207,19 @@ if (is_array($flat_list))
 			if($details['lp_type']==1){
 				$dsp_export = '<td align="center">' .
 					"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
-					"<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
+					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					"</a>" .
 					"";
 			}elseif($details['lp_type']==2){
 				$dsp_export = '<td align="center">' .
-					//"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name,'strict').".zip'>" .
+					"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name,'strict').".zip'>" .
 					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
-					//"</a>" .
+					"</a>" .
 					"";
 			}else{
 				$dsp_export = '<td align="center">' .
 					//"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
-					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
+					"<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					//"</a>" .
 					"";
 			}			

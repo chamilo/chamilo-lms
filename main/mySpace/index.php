@@ -55,21 +55,13 @@ function count_teacher_courses()
 
 $isCoach = api_is_coach();
 
-if($isCoach)
-{
-	
-	/****************************************
-	 * Print and export
-	 ****************************************/
-	if(!$export_csv)
-	{
-		echo '<div align="right">
+echo '<div align="right">
 				<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 				<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 			  </div>';
-	}
-	
-	
+
+if($isCoach)
+{
 	
 	/****************************************
 	 * Infos about students of the coach
@@ -350,10 +342,7 @@ $nb_teacher_courses = count($a_courses);
 
 if($nb_teacher_courses)
 {
-	echo '<div align="right">
-				<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-				<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-			  </div>';
+	
 			  
 	$table = new SortableTable('tracking_list_course', 'count_teacher_courses');
 	$table -> set_header(0, get_lang('CourseTitle'), false);

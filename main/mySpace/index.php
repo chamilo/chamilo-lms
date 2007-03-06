@@ -330,6 +330,8 @@ if($isCoach)
 	 
 }
 
+echo '<br />';
+
 $sqlNbCours = "	SELECT course_rel_user.course_code, course.title
 				FROM $tbl_course_user as course_rel_user
 				INNER JOIN $tbl_course as course

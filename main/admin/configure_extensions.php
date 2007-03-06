@@ -371,6 +371,46 @@ Display::display_header($nameTool);
 		</div>
 	</div>
 	
+	<!-- EPHORUS -->
+	<div id="main_ephorus">
+		<div id="extension_header_ephorus" class="accordion_header">
+			<a href="#"><?php echo get_lang('EphorusPlagiarismPrevention') ?></a>
+		</div>
+		<div id="extension_content_ephorus" style="display:none;padding:0;width:780px;" class="accordion_content">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td align="center">
+						<?php
+						$language=$_SESSION['_user']['language'];
+						$language='';
+						switch($language){
+							case '':
+								$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+								$platform_language=api_get_setting("platformLanguage");
+								$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='$platform_language'";
+								$result_sql=api_sql_query($sql);
+								$isocode_language=mysql_result($result_sql,0,0);
+								break;
+							case 'english': $isocode_language='en';break;
+							case 'french': $isocode_language='fr';break;
+							case 'dutch': $isocode_language='nl';break;
+							case 'german': $isocode_language='de';break;
+							case 'danish': $isocode_language='dk';break;
+							case 'finnish': $isocode_language='fi';break;
+							case 'italian': $isocode_language='it';break;
+							case 'norwegian': $isocode_language='no';break;
+							case 'portugese': $isocode_language='pt';break;
+							case 'spanish': $isocode_language='es';break;
+							case 'swedish': $isocode_language='se';break;
+						}
+						?>
+						<iframe frameborder="0" width="780" height="480" src="http://www.ephorus.com/dokeos_<?php echo $isocode_language; ?>.html"></iframe>
+                    </td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
 	<!-- SEARCH -->
 	<div id="main_search">
 		<div id="extension_header_search" class="accordion_header">

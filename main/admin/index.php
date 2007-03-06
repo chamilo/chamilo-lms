@@ -1,4 +1,4 @@
-<?php // $Id: index.php 11095 2007-02-09 17:56:52Z yannoo $
+<?php // $Id: index.php 11407 2007-03-06 09:49:29Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -130,6 +130,7 @@ if ($_POST['Register'])
   <ul>
   <li><a href="configure_extensions.php?display=visio"><?php echo get_lang('Visioconf'); ?></a></li>
   <li><a href="configure_extensions.php?display=ppt2lp"><?php echo get_lang('Ppt2lp'); ?></a></li>
+  <li><a href="configure_extensions.php?display=ephorus"><?php echo get_lang('EphorusPlagiarismPrevention'); ?></a></li>
   <li><a href="configure_extensions.php?display=search"><?php echo get_lang('SearchEngine'); ?></a></li>
   <li><a href="configure_extensions.php?display=serverstats"><?php echo get_lang('ServerStatistics'); ?></a></li>
   <li><a href="configure_extensions.php?display=bandwidthstats"><?php echo get_lang('BandWidthStatistics'); ?></a></li>

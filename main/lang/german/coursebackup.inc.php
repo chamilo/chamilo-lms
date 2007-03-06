@@ -42,4 +42,5 @@ $langBackup = "Backup";
 $langImportBackupInfo = "Backup Information importieren";
 $langCreateBackupInfo = "Backup Information erstellen";
 $ToolIntro = "Tool Einleitung";
+$UploadError = "Upload ist fehlgeschlagen, bitte maximale Dateigröße und Schreibrechte für Verzeichnisse prüfen";
 ?>

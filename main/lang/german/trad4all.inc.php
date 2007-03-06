@@ -406,4 +406,10 @@ $DisplaySearchResults = "Suchergebnisse anzeigen";
 $DisplayAll = "Alle anzeigen";
 $File_upload = "Datei hochladen";
 $Percentage = "Prozentsatz";
+$Informations = "Informationen";
+$EmailDestination = "E-Mail Empfänger";
+$SendEmail = "E-Mail senden";
+$EmailTitle = "E-Mail Titel";
+$EmailText = "E-Mail Nachricht";
+$Send = "Abschicken";
 ?>

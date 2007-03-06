@@ -601,4 +601,5 @@ $WrongDate = "Falsches Datumsformat (jjjj-mm-tt)";
 $WrongDate = "Falsches Datumsformat (jjjj-mm-tt)";
 $DateStartMoreThanDateEnd = "Anfangsdatum ist später als das Enddatum";
 $SlideSize = "Größe der Slides";
+$EphorusPlagiarismPrevention = "EUphrous Plagiat Verhinderung";
 ?>

@@ -602,4 +602,5 @@ $WrongDate = "Errore nel formato della data (yyyy-mm-dd)";
 $WrongDate = "Errore nel formato della data (yyyy-mm-dd)";
 $DateStartMoreThanDateEnd = "La data iniziale è successiva a quella iniziale!";
 $SlideSize = "Dimensione delle diapositive";
+$EphorusPlagiarismPrevention = "Prevenzione da plagio EPhorus ";
 ?>

@@ -281,6 +281,7 @@ class Tracking {
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
+		$tbl_course					= Database :: get_main_table(TABLE_MAIN_COURSE);
 		
 		//////////////////////////////////////////////////////////////
 		// At first, courses where $coach_id is coach of the course //
@@ -300,7 +301,9 @@ class Tracking {
 				FROM '.$tbl_session_course.' as session_course
 				INNER JOIN '.$tbl_session.' as session
 					ON session.id = session_course.id_session
-					AND session.id_coach = '.$coach_id;
+					AND session.id_coach = '.$coach_id.'
+				INNER JOIN '.$tbl_course.' as course
+					ON course.code = session_course.course_code';
 		$result=api_sql_query($sql);
 		
 		while($row=mysql_fetch_array($result))

@@ -165,4 +165,8 @@ $Comments = "Comentários";
 $DayOfDelay = "Dia(s) de atraso";
 $NoProduction = "Sem produção";
 $NoComment = "Sem comentários";
+$Print = "Imprimir";
+$Learnpaths = "Sequências de Aprendizagem";
+$OtherTools = "Outras ferramentas";
+$CourseTitle = "Título do curso";
 ?>

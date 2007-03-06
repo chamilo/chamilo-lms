@@ -152,6 +152,7 @@ $langTechnicalTools  = "Ferramentas Técnicas";
 $langConfig  = "Configuração do sistema";
 $langLogIdentLogoutComplete  = "Lista de acessos (detalhada)";
 $langLimitUsersListDefaultMax = "Número máximo de utilizadores a ser mostrado na listagem";
+$UsersNumber = "Número de utilizadores";
 $PageAfterLoginTitle = "Página após identificação";
 $PageAfterLoginComment = "Página visualizada pelo utilizador depois de se conectar";
 $DokeosAdminWebLinks = "Ligações Web Dokeos";

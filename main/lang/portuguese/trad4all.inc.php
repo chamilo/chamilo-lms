@@ -406,4 +406,10 @@ $DisplaySearchResults = "Mostrar resultados da pesquisa";
 $DisplayAll = "Mostrar todas";
 $File_upload = "Carregamento de ficheiro";
 $Percentage = "Percentagem";
+$Informations = "Informações";
+$EmailDestination = "Destinatário";
+$SendEmail = "Enviar email";
+$EmailTitle = "Assunto do email";
+$EmailText = "Conteúdo do email";
+$Send = "Enviar";
 ?>

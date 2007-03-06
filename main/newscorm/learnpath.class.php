@@ -6934,7 +6934,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		}
 	 	
 	 	//Finalize the imsmanifest structure, add to the zip, then return the zip
-	 	//$xmldoc->writexml(api_get_path(GARBAGE_PATH));
+	 	$xmldoc->save(api_get_path(GARBAGE_PATH).'/'.$this->path.'/imsmanifest.xml');
 		$zip_folder->add(api_get_path('GARBAGE_PATH').'/'.$this->path.'/imsmanifest.xml',PCLZIP_OPT_REMOVE_PATH, api_get_path('GARBAGE_PATH').'/');
 
 		//Send file to client

@@ -138,8 +138,8 @@ $is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course
 /*
  * Group title and comment
  */
-api_display_tool_title($nameTools.' '.$current_group['name']);
-echo '<blockquote>'.$current_group['description'].'</blockquote>';
+api_display_tool_title($nameTools.' '.stripslashes($current_group['name']));
+echo '<blockquote>'.stripslashes($current_group['description']).'</blockquote>';
 
 
 

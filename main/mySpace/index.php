@@ -11,6 +11,7 @@ require (api_get_path(LIBRARY_PATH).'tracking.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
 
+ob_start();
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $csv_content = array();
@@ -35,8 +36,24 @@ $tbl_session_user 			= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_admin					= Database :: get_main_table(TABLE_MAIN_ADMIN);
 
-$isCoach = api_is_coach(); 
 
+/********************
+ * FUNCTIONS
+ ********************/
+ 
+function count_teacher_courses()
+{
+	global $nb_teacher_courses;
+	return $nb_teacher_courses;
+}
+
+
+
+/**************************
+ * MAIN CODE
+ ***************************/
+
+$isCoach = api_is_coach();
 
 if($isCoach)
 {
@@ -314,307 +331,136 @@ if($isCoach)
 					</td>
 				</tr>
 			</table>
-			<a href="student.php">'.get_lang('SeeSessionList').'</a>
+			<a href="session.php">'.get_lang('SeeSessionList').'</a>
 		 </div>';
 	 }
 	 
 	 
 }
 
-else
+$sqlNbCours = "	SELECT course_rel_user.course_code, course.title
+				FROM $tbl_course_user as course_rel_user
+				INNER JOIN $tbl_course as course
+					ON course.code = course_rel_user.course_code
+			  	WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
+			  ";
+$resultNbCours = api_sql_query($sqlNbCours, __FILE__, __LINE__);
+$a_courses = api_store_result($resultNbCours);
+$nb_teacher_courses = count($a_courses);
+
+if($nb_teacher_courses)
 {
-
-
-	//Trainers
-	if(api_is_platform_admin())
-	{
-		$sqlNbFormateurs = "SELECT COUNT(user_id) FROM $tbl_user WHERE status = 1";
-		$resultNbFormateurs = api_sql_query($sqlNbFormateurs);
-		$a_nbFormateurs = mysql_fetch_array($resultNbFormateurs);
-		$nbFormateurs = $a_nbFormateurs[0];
-	}
-	 	
-	//Coachs
-	$nbCoachs=0;
-	if(api_is_platform_admin())
-	{
-		$sqlNbCoachs = "SELECT COUNT(DISTINCT id_coach)	FROM $tbl_session_course WHERE id_coach<>'0'";
-		$resultNbCoachs = api_sql_query($sqlNbCoachs);
-		$a_nbCoachs = mysql_fetch_array($resultNbCoachs);
-		$nbCoachs = $a_nbCoachs[0];
-	}
-	elseif($is_allowedCreateCourse)
-	{
-		$a_coach=array();
-	  		
-	  	$sqlNbCours = "	SELECT course_code
-						FROM $tbl_course_user
-					  	WHERE user_id='".$_user['user_id']."' AND status='1'
-					  ";
-		$resultNbCours = api_sql_query($sqlNbCours);
-		
-		while($a_courses=mysql_fetch_array($resultNbCours))
-		{
-			$sql="SELECT DISTINCT id_coach FROM $tbl_session_course WHERE course_code='".$a_courses["course_code"]."'";
-				
-			$resultCoach = api_sql_query($sql);
-				
-			if(mysql_num_rows($resultCoach)>0)
-			{
-				while($a_temp=mysql_fetch_array($resultCoach))
-				{
-					$a_coach[]=$a_temp["id_coach"];
-				}
-			}
-		}
+	echo '<div align="right">
+				<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
+				<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+			  </div>';
+			  
+	$table = new SortableTable('tracking_list_course', 'count_teacher_courses');
+	$table -> set_header(0, get_lang('CourseTitle'), false);
+	$table -> set_header(1, get_lang('NbStudents'), false);
+	$table -> set_header(2, get_lang('TimeSpentInTheCourse'), false);
+	$table -> set_header(3, get_lang('AvgStudentsProgress'), false);
+	$table -> set_header(4, get_lang('AvgStudentsScore'), false);
+	$table -> set_header(5, get_lang('AvgMessages'), false);
+	$table -> set_header(6, get_lang('AvgAssignments'), false);
+	$table -> set_header(7, get_lang('Details'), false);
+	
+	$csv_content[] = array(
+					get_lang('CourseTitle'),
+					get_lang('NbStudents'),
+					get_lang('TimeSpentInTheCourse'),
+					get_lang('AvgStudentsProgress'),
+					get_lang('AvgStudentsScore'),
+					get_lang('AvgMessages'),
+					get_lang('AvgAssignments')
+					);
 			
-		$a_coach=array_unique($a_coach);
-		$nbCoachs=count($a_coach);
-	}
+	$a_students = array();
 	
-	
+	foreach($a_courses as $course)
+	{
 		
-	//Nombre de stagiaires (cours dans lesquels il est coach ou formateurs)
+		$course_code = $course['course_code'];
 		
-		$nbStagiaire=0;
-		$a_stagiaire_teacher=array();
+		$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = 0;
 		
-		//La personne est admin
-		if(api_is_platform_admin())
+		// students directly subscribed to the course
+		$sql = "SELECT user.user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
+		$rs = api_sql_query($sql);		
+		while($row = mysql_fetch_array($rs))
 		{
-	
-			$sqlNbStagiaire = "	SELECT COUNT(user_id)
-						  		FROM $tbl_user
-						  		WHERE status = 5 
-						 	  ";
-			$resultNbStagiaire = api_sql_query($sqlNbStagiaire);
-			$a_nbStagiaire = mysql_fetch_array($resultNbStagiaire);
-			$nbStagiaire = $a_nbStagiaire[0];
-		}
-		else
-		{
-			//La personne a le statut de professeur
-			if($is_allowedCreateCourse){
-				
-				//Cours ou la personne est formateur mais dont les cours ne sont pas dans une session
-				$sql_select_courses="SELECT course_rel_user.course_code FROM $tbl_course_user as course_rel_user LEFT OUTER JOIN $tbl_session_course as src ON course_rel_user.course_code=src.course_code WHERE user_id='$_uid' AND status='1' AND src.course_code IS NULL";
-				
-				$result_courses=api_sql_query($sql_select_courses);
-				
-				while($a_courses=mysql_fetch_array($result_courses))
-				{
-					$s_course_code=$a_courses["course_code"];
-			 		$sqlStudents = "SELECT user.user_id,lastname,firstname,email FROM $tbl_course_user as course_rel_user, $tbl_user as user WHERE course_rel_user.user_id=user.user_id AND course_rel_user.status='5' AND course_rel_user.course_code='$s_course_code'";
-			 		$result_students=api_sql_query($sqlStudents);
-			 		if(mysql_num_rows($result_students)>0)
-			 		{
-		 				while($a_students_temp=mysql_fetch_array($result_students))
-		 				{
-		 					$a_stagiaire_teacher[]=$a_students_temp["user_id"];
-		 				}
-			 		}
-				}
-	
-				$sqlNbStagiaire="SELECT DISTINCT srcru.id_user FROM $tbl_course_user as course_rel_user, $tbl_session_course_user as srcru " .
-								"WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1' AND course_rel_user.course_code=srcru.course_code";
-				
-				$resultNbStagiaire = api_sql_query($sqlNbStagiaire);
-				
-				while($a_temp = mysql_fetch_array($resultNbStagiaire))
-				{
-					$a_stagiaire_teacher[]=$a_temp[0];
-				}
-		}
+			$nb_students_in_course++;
 			
-			if($isCoach)
+			// tracking datas
+			$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
+			$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
+			$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
+			$a_students[] = $row['user_id'];
+		}
+		
+		// students subscribed to the course throw a session
+		if(api_get_setting('use_session_mode') == 'true')
+		{
+			$sql = 'SELECT id_user as user_id
+					FROM '.$tbl_session_course_user.'
+					WHERE course_code="'.addslashes($course_code).'"';
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			while($row = mysql_fetch_array($rs))
 			{
-				$a_stagiaire_coach=array();
-				
-				$sql="SELECT id_session, course_code FROM $tbl_session_course WHERE id_coach='".$_user['user_id']."'";
-	
-				$result=api_sql_query($sql);
-				
-				while($a_courses=mysql_fetch_array($result))
+				if(!in_array($row['user_id'], $a_students))
 				{
-			    	$course_code=$a_courses["course_code"];
-			    	$id_session=$a_courses["id_session"];
-			    	
-			    	$sqlStudents = "SELECT distinct	srcru.id_user  
-									FROM $tbl_session_course_user AS srcru 
-									INNER JOIN $tbl_user as user 
-										ON srcru.id_user = user.user_id 
-										AND user.status = 5 
-									WHERE course_code='$course_code' AND id_session='$id_session'";
-	
-					$q_students=api_sql_query($sqlStudents);
+					$nb_students_in_course++;
 					
-					while($a_temp=mysql_fetch_array($q_students))
-					{
-						$a_stagiaire_coach[]=$a_temp[0];
-					}
-					
-			    }
-			    $a_stagiaires=array_merge($a_stagiaire_teacher,$a_stagiaire_coach);
-					
-				$a_stagiaires=array_unique($a_stagiaires);
-				
-				$nbStagiaire=count($a_stagiaires);
-			    
-			}
-			else
-			{
-				$nbStagiaire=count($a_stagiaire_teacher);
-			}
-		}
-		
-		//Nombre de cours
-		//La personne est admin donc on compte le nombre total de cours
-		if(api_is_platform_admin())
-		{
-		
-			$sqlNbCours = "	SELECT COUNT(code)
-							FROM $tbl_course
-						  ";
-			$resultNbCours = api_sql_query($sqlNbCours);
-			$a_nbCours = mysql_fetch_array($resultNbCours);
-			$nbCours = $a_nbCours[0];
-			
-		}
-		
-		else{
-			
-			$a_cours=array();
-			
-			//La personne a le statut de professeur	
-			if($is_allowedCreateCourse)
-			{
-				
-				$sqlNbCours = "	SELECT DISTINCT course_code
-								FROM $tbl_course_user
-							  	WHERE user_id='".$_user['user_id']."' AND status='1'
-							  ";
-				$resultCours = api_sql_query($sqlNbCours);
-				
-				while($a_cours_teacher = mysql_fetch_array($resultCours)){
-					$a_cours[]=$a_cours_teacher["course_code"];
-				}
-				
-			}
-			
-			
-			$a_cours=array_unique($a_cours);
-			$nbCours=count($a_cours);
-			
-		}
-		
-		
-		//Nombre de sessions
-		
-		//La personne est admin donc on compte le nombre total de sessions
-		if(api_is_platform_admin())
-		{
-			$sqlNbSessions = "	SELECT COUNT(id)
-								FROM $tbl_sessions
-							 ";
-			$resultNbSessions = api_sql_query($sqlNbSessions);
-			$a_nbSessions= mysql_fetch_array($resultNbSessions);
-			$nbSessions = $a_nbSessions[0];
-		}
-		else
-		{
-			$a_sessions=array();
-			
-			if($is_allowedCreateCourse)
-			{
-				
-				$sqlNbSessions = "	SELECT DISTINCT id_session 
-									FROM $tbl_session_course as session_course, $tbl_course_user as course_rel_user  
-								  	WHERE session_course.course_code=course_rel_user.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".$_user['user_id']."' 
-								  ";
-				$resultNbSessions = api_sql_query($sqlNbSessions);
-				
-				while($a_temp = mysql_fetch_array($resultNbSessions))
-				{
-					$a_sessions[]=$a_temp["id_session"];
-				}
-				
-			}
-			
-			if($isCoach)
-			{
-				$sqlNbSessions = "	SELECT DISTINCT id_session 
-									FROM $tbl_session_course 
-								  	WHERE id_coach='".$_user['user_id']."' 
-								  ";
-	
-				$resultNbSessions = api_sql_query($sqlNbSessions);
-				
-				while($a_temp = mysql_fetch_array($resultNbSessions))
-				{
-					$a_sessions[]=$a_temp["id_session"];
+					// tracking datas
+					$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
+					$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
+					$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
+					$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
+					$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
+					$a_students[] = $row['user_id'];
 				}
 			}
-			
-			$a_sessions=array_unique($a_sessions);
-			$nbSessions = count($a_sessions);
-			
 		}
-	
-	
-	if(api_is_platform_admin())
-	{
-		echo '<div class="admin_section">
-			<h4>
-			<a href="teachers.php"><img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif">&nbsp;'.get_lang('Trainers').' ('.$nbFormateurs.')</a>
-			</h4>
-		 </div>';
-	}
-	 
-	if((api_is_platform_admin() || ($is_allowedCreateCourse && $nbCoachs>0)) && api_get_setting('use_session_mode')=='true')
-	{ // if the user is platform admin, or if he's a teacher which manage coaches
-		 echo '<div class="admin_section">
-			<h4>
-				<a href="coaches.php"><img src="'.api_get_path(WEB_IMG_PATH).'coachs.gif">&nbsp;'.get_lang("Tutors").' ('.$nbCoachs.')</a>
-			</h4>
-		 </div>';
-	}
-	
-	
-	if(api_is_platform_admin())
-	{
 		
-		$sql_nb_admin="SELECT count(user_id) FROM $tbl_admin";
-		$resultNbAdmin = api_sql_query($sql_nb_admin);
-		$i_nb_admin=mysql_result($resultNbAdmin,0,0);
-		echo '
-		 <div class="admin_section">
-			<h4>
-				<a href="admin.php"><img src="'.api_get_path(WEB_IMG_PATH).'admins.gif>&nbsp;'.get_lang('Administrators').' ('.$i_nb_admin.')</a>
-			</h4>
-		 </div>';
+		$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
+		$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course,1).' %';
+		$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course,1).' %';
+		$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course,1);
+		$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course,1);
+		
+		$table_row = array();
+		$table_row[] = $course['title'];
+		$table_row[] = $nb_students_in_course;
+		$table_row[] = $avg_time_spent_in_course;
+		$table_row[] = $avg_progress_in_course;
+		$table_row[] = $avg_score_in_course;
+		$table_row[] = $avg_messages_in_course;
+		$table_row[] = $avg_assignments_in_course;
+		$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+		
+		$csv_content[] = array(
+							$course['title'],
+							$nb_students_in_course,
+							$avg_time_spent_in_course,
+							$avg_progress_in_course,
+							$avg_score_in_course,
+							$avg_messages_in_course,
+							$avg_assignments_in_course,
+							);
+		
+		$table -> addRow($table_row, 'align="right"');
+		
 	}
-	if($nbCours)
-	{
-		echo '
-		 <div class="admin_section">
-			<h4>
-				<a href="cours.php"><img src="'.api_get_path(WEB_IMG_PATH).'courses.gif">&nbsp;'.get_lang('Courses').' ('.$nbCours.')'.'</a>
-			</h4>
-		 </div>';
-	}
-	if(api_get_setting('use_session_mode')=='true'){
-		echo '
-		 <div class="admin_section">
-			<h4>
-				<a href="session.php"><img src="'.api_get_path(WEB_IMG_PATH).'sessions.gif">&nbsp;'.get_lang('Sessions').' ('.$nbSessions.')'.'</a>
-			</h4>
-		 </div>';
-	}
+	
+	$table -> display();
+		
 }
+
 
 // send the csv file if asked
 if($export_csv)
 {
+	ob_end_clean();
 	Export :: export_table_csv($csv_content, 'reporting_index');
 }
  

@@ -591,7 +591,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function modify_filter($user_id)
 {
-	global $origin,$_user,$is_allowed_to_track;
+	global $origin,$_user, $_course, $is_allowed_to_track;
 
 	$result="<div style='text-align: center'>";
 
@@ -600,7 +600,7 @@ function modify_filter($user_id)
 
 	if($is_allowed_to_track)
 	{
-		$result .= '<a href="../tracking/userLog.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
+		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'&details=true&course='.$_course['id'].'&origin=tracking_course"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
 	}
 
 	if(api_is_allowed_to_edit())

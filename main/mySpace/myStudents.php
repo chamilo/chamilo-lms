@@ -24,13 +24,28 @@ $csv_content = array();
  
  $nameTools=get_lang("StudentDetails");
  
- $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
- $interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
+ 
  
  if(isset($_GET['details']))
  {
- 	$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'], "name" => get_lang("StudentDetails"));
- 	$nameTools=get_lang("DetailsStudentInCourse");
+ 	if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course')
+ 	{
+ 		$course_infos = CourseManager :: get_course_information($_GET['course']);
+ 		$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
+ 		$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$_GET['course'], "name" => get_lang("Users"));
+ 	}
+ 	else
+ 	{
+ 		$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+ 		$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
+	 	$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'], "name" => get_lang("StudentDetails"));
+	 	$nameTools=get_lang("DetailsStudentInCourse");
+ 	}
+ }
+ else
+ {
+ 	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+ 	$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
  }
  
  api_block_anonymous_users();

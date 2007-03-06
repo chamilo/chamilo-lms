@@ -1270,6 +1270,7 @@ function update_Db_course($courseDbName)
 			  type varchar(250) NOT NULL,
 			  display varchar(10) NOT NULL,
 			  sort int NOT NULL,
+			  shared_question_id int(11),
 			  PRIMARY KEY  (question_id)
 			)";
 	$result = mysql_query($sql) or die(mysql_error($sql));

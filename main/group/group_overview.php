@@ -123,7 +123,7 @@ foreach($categories as $index => $category)
 	foreach($groups as $index => $group)
 	{
 		echo '<li>';
-		echo $group['name'];
+		echo stripslashes($group['name']);
 		echo '<ul>';
 		$users = GroupManager::get_users($group['id']);
 		foreach($users as $index => $user)

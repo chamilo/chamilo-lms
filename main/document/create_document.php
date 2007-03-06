@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 11269 2007-02-28 09:58:32Z elixir_julian $
+// $Id: create_document.php 11439 2007-03-06 16:14:54Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -289,9 +289,7 @@ if ($form->validate())
 	{
 		$texte = text_filter($texte);
 		
-		$path_to_remove = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir;
-
-		$texte = str_replace($path_to_remove, './', $texte);
+		$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $texte);
 
 		$texte = str_replace('mp3player.swf?son='.urlencode($path_to_remove), 'mp3player.swf?son=.%2F', $texte);
 

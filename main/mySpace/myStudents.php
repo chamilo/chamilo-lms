@@ -365,24 +365,7 @@ if(!empty($_GET['student']))
 			if(!empty($_GET['details']))
 			{
 		
-				$sqlInfosCourse = "	SELECT 	course.code,
-										course.title,
-										course.db_name,
-										CONCAT(user.firstname,' ',user.lastname) as tutor_name,
-										session.date_start,
-										session.date_end
-								FROM $tbl_user as user, $tbl_course as course
-								INNER JOIN $tbl_session_course as sessionCourse
-									ON sessionCourse.course_code = course.code
-								INNER JOIN $tbl_session AS session
-									ON session.id = sessionCourse.id_session
-								WHERE sessionCourse.id_coach = user.user_id
-								AND course.code= '".$_GET['course']."'
-							 ";
-	
-			$resultInfosCourse = api_sql_query($sqlInfosCourse);
-			
-			$a_infosCours = mysql_fetch_array($resultInfosCourse);
+				$a_infosCours = CourseManager :: get_course_information($_GET['course']);
 			
 			$a_date_start = explode('-',$a_infosCours['date_start']);
 			$date_start = $a_date_start[2].'/'.$a_date_start[1].'/'.$a_date_start[0];

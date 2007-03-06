@@ -1791,11 +1791,11 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		$titular=addslashes($titular);
 		// here we must add 2 fields
 		$sql = "INSERT INTO ".$TABLECOURSE . " SET
-					code = '".$courseSysCode . "',
-					db_name = '".$courseDbName . "',
-					directory = '".$courseRepository . "',
+					code = '".addslashes($courseSysCode) . "',
+					db_name = '".addslashes($courseDbName) . "',
+					directory = '".addslashes($courseRepository) . "',
 					course_language = '".$course_language . "',
-					title = '".$title . "',
+					title = '".addslashes($title) . "',
 					description = '".lang2db($langCourseDescription) . "',
 					category_code = '".$category . "',
 					visibility = '".$defaultVisibilityForANewCourse . "',
@@ -1805,15 +1805,15 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					expiration_date = ".$expiration_date . ",
 					last_edit = now(),
 					last_visit = NULL,
-					tutor_name = '".$titular . "',
-					visual_code = '".$courseScreenCode . "'";
+					tutor_name = '".addslashes($titular) . "',
+					visual_code = '".addslashes($courseScreenCode) . "'";
 
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		$sort = api_max_sort_value('0');
 
 		$sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-					course_code = '".$courseSysCode . "',
+					course_code = '".addslashes($courseSysCode) . "',
 					user_id = '".$uidCreator . "',
 					status = '1',
 					role = '".lang2db('Professor') . "',

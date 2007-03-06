@@ -470,6 +470,10 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 				<td class="requirements-value">'.check_writable('upload/').'</td>
 			</tr>
 			<tr>
+				<td class="requirements-item">dokeos/main/img/default_courses_img/</td>
+				<td class="requirements-value">'.check_writable('img/default_courses_img/').'</td>
+			</tr>
+			<tr>
 				<td class="requirements-item">dokeos/archive/</td>
 				<td class="requirements-value">'.check_writable('../archive/').'</td>
 			</tr>

@@ -92,7 +92,7 @@ api_display_tool_title($nameTools);
 	}
 
 	echo "<a href='".$_SERVER['PHP_SELF']."?action=add'>",
-	"<img src='../img/blog.gif' border=\"0\" align=\"absmiddle\" alt='scormbuilder'>&nbsp;&nbsp;".get_lang('AddBlog')."</a>";
+	"<img src='../img/blog_new.gif' border=\"0\" align=\"absmiddle\" alt='".get_lang('NewBlog')."'>&nbsp;&nbsp;".get_lang('AddBlog')."</a>";
 	echo "<table width=\"100%\" border=\"0\" cellspacing=\"2\" class='data_table'>";
 	echo	"<tr>",
 				 "<th>",get_lang('Title'),"</th>\n",

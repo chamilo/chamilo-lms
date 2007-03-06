@@ -4380,6 +4380,9 @@ class learnpath {
 	 */
 	function edit_document($_course)
 	{
+		global $_configuration;
+		
+		
 		$dir = isset($_GET['dir']) ? $_GET['dir'] : $_POST['dir']; // please do not modify this dirname formatting
 		
 		if(strstr($dir, '..'))
@@ -4418,8 +4421,7 @@ class learnpath {
 		if($fp = @fopen($file, 'w'))
 		{
 			$content = text_filter($content);
-			$path_to_remove = api_get_path('WEB_COURSE_PATH') . $_course['path'] . '/document' . $dir;
-			$content = str_replace($path_to_remove, './', $content);
+			$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $content);
 			
 			fputs($fp, $content);
 			fclose($fp);

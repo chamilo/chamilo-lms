@@ -187,4 +187,12 @@ $StudentDetails = "Probationner details";
 $StudentDetailsInCourse = "Probationner details in course";
 $Learnpaths = "Learnpaths";
 $OtherTools = "Other tools";
+$DetailsStudentInCourse = "Student details in course";
+$CourseTitle = "Course title";
+$NbStudents = "Number of probationners";
+$TimeSpentInTheCourse = "Time spent in the course";
+$AvgStudentsProgress = "Average probationners progress";
+$AvgStudentsScore = "Average probationners score";
+$AvgMessages = "Messages per probationner";
+$AvgAssignments = "Assignments per probationner";
 ?>

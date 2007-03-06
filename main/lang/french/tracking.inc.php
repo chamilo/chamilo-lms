@@ -187,4 +187,12 @@ $StudentDetails = "Détails de l\'apprenant";
 $StudentDetailsInCourse = "Détails de l\'apprenant dans le cours";
 $Learnpaths = "Parcours pédagogiques";
 $OtherTools = "Autres outils";
+$DetailsStudentInCourse = "Détails de l\'apprenant dans le cours";
+$CourseTitle = "Titre du cours";
+$NbStudents = "Nombre d\'apprenants";
+$TimeSpentInTheCourse = "Temps passé sur le cours";
+$AvgStudentsProgress = "Progression moyenne des apprenants";
+$AvgStudentsScore = "Score moyen des apprenants";
+$AvgMessages = "Messages par apprenant";
+$AvgAssignments = "Travaux par apprenant";
 ?>

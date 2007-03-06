@@ -427,4 +427,6 @@ $YourVersionIs = "Sizin sürümünüz";
 $ShowEmailAddresses = "Eposta adreslerini göster";
 $ShowEmailAddressesComment = "Eposta adreslerini kullan&#305;c&#305;lara göster";
 $AddSession = "Oturum ekle";
+$Footer = "ba&#351;l&#305;k";
+$CourseListInSession = "kurs listesi";
 ?>

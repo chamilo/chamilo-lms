@@ -407,4 +407,9 @@ $DisplayAll = "Prikaži vse";
 $File_upload = "Prepis datoteke";
 $Percentage = "Odstotek";
 $Informations = "Informacije";
+$EmailDestination = "Prejemnik";
+$SendEmail = "Pošlji sporoèilo";
+$EmailTitle = "Naslov sporoèila";
+$EmailText = "Vsebina sporoèila";
+$Send = "Pošlji";
 ?>

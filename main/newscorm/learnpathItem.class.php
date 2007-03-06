@@ -266,6 +266,51 @@ class learnpathItem{
     	return $this->description;
     }
     /**
+     * Gets the file path from the course's root directory, no matter what tool it is from.
+     * @return	string	The file path, or an empty string if there is no file attached, or '-1' if the file must be replaced by an error page
+     */
+    function get_file_path(){
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_file_path()',0);}
+    	$path = $this->get_path();
+   		$type = $this->get_type();
+    	if(empty($path))
+    	{
+    		if($type == 'dokeos_chapter' OR $type=='chapter' OR $type == 'dir')
+    		{
+    			return '';
+    		}
+    		else
+    		{
+    			return '-1';
+    		}
+    	}elseif($path == strval(intval($path))){
+    		//the path is numeric, so it is a reference to a Dokeos object
+    		switch($type)
+    		{
+    			case 'dokeos_chapter':
+    			case 'dir':
+    			case 'chapter':
+    				return '';
+    			case TOOL_DOCUMENT:
+    				$table_doc = Database::get_course_table(TABLE_DOCUMENT);
+    				$sql = 'SELECT path FROM '.$table_doc.' WHERE id = '.$path;
+    				$res = api_sql_query($sql,__FILE__,__LINE__);
+    				$row = Database::fetch_array($res);
+    				$real_path = 'document/'.$row['path'];
+    				return $real_path;
+    			case TOOL_STUDENTPUBLICATION:
+    			case TOOL_QUIZ:
+    			case TOOL_FORUM:
+    			case TOOL_THREAD:
+    			case TOOL_LINK:
+    			default:
+    				return '-1';
+    		}
+    	}else{
+    		return $path;
+    	}
+    }
+    /**
      * Gets the DB ID
      * @return	integer	Database ID for the current item
      */

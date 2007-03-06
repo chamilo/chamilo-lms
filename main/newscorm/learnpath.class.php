@@ -6850,82 +6850,95 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 		    closedir($handle);
 		}
-	 	
+		
+
 	 	//Build a dummy imsmanifest structure. Do not add to the zip yet (we still need it)
 	 	//This structure is developed following regulations for SCORM 1.2 packaging in the SCORM 1.2 Content
 	 	//Aggregation Model official document, secion "2.3 Content Packaging"
-	 	$xmldoc = domxml_new_doc("1.0");
-	 	$root = $xmldoc->add_root('manifest');
-	 	$root->set_attribute('identifier','SingleCourseManifest');
-	 	$root->set_attribute('version','1.1');
-	 	$root->set_attribute('xmlns','http://www.imsproject.org/xsd/imscp_rootv1p1p2');
-	 	$root->set_attribute('xmlns:adlcp','http://www.adlnet.org/xsd/adlcp_rootv1p2');
-	 	$root->set_attribute('xmlns:xsi','http://www.w3.org/2001/XMLSchema-instance');
-	 	$root->set_attribute('xsi:schemaLocation','http://www.omsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
+	 	$xmldoc = new DOMDocument('1.0',$this->encoding);
+	 	$root = $xmldoc->createElement('manifest');
+	 	$root->setAttribute('identifier','SingleCourseManifest');
+	 	$root->setAttribute('version','1.1');
+	 	$root->setAttribute('xmlns','http://www.imsproject.org/xsd/imscp_rootv1p1p2');
+	 	$root->setAttribute('xmlns:adlcp','http://www.adlnet.org/xsd/adlcp_rootv1p2');
+	 	$root->setAttribute('xmlns:xsi','http://www.w3.org/2001/XMLSchema-instance');
+	 	$root->setAttribute('xsi:schemaLocation','http://www.omsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
 	 			http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd
                 http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd');
 	 	//Build mandatory sub-root container elements
-	 	$metadata = $root->new_child('metadata');
-	 	$md_schema = $metadata->new_child('schema','ADL SCORM');
-	 	$md_schemaversion = $metadata->new_child('schemaversion','1.2');
+	 	$metadata = $xmldoc->createElement('metadata');
+	 	$md_schema = $xmldoc->createElement('schema','ADL SCORM');
+	 	$metadata->appendChild($md_schema);
+	 	$md_schemaversion = $xmldoc->createElement('schemaversion','1.2');
+	 	$metadata->appendChild($md_schemaversion);
+	 	$root->appendChild($metadata);
 	 	
-	 	$organizations = $root->new_child('organizations');
-	 	$resources = $root->new_child('resources');
+	 	$organizations = $xmldoc->createElement('organizations');
+	 	
+	 	$resources = $xmldoc->createElement('resources');
+	 	
 	 	//Build the only organization we will use in building our learnpaths
-	 	$organizations->set_attribute('default','dokeos_export');
-	 	$organization = $organization->new_child('organization');
-	 	$organization->set_attribute('identifier','dokeos_export');
-	 	$org_title = $organization->new_child('title',$this->get_name()); //filter data for XML?
+	 	$organizations->setAttribute('default','dokeos_scorm_export');
+	 	$organization = $xmldoc->createElement('organization');
+	 	$organization->setAttribute('identifier','dokeos_scorm_export');
+	 	$org_title = $xmldoc->createElement('title',$this->get_name()); //filter data for XML?
+	 	$organization->appendChild($org_title);
 	 	
 	 	//For each element, add it to the imsmanifest structure, then add it to the zip.
 	 	//Always call the learnpathItem->scorm_export() method to change it to the SCORM
 	 	//format
-	 	//set a bunch of temporary arrays that will hold elements that need attributes
-	 	$my_items = array();
-	 	$my_resources = array();
-	 	$my_files = array();
-	 	$my_prereqs = array();
 	 	$zip_files = array();
 	 	foreach($this->items as $index => $item){
 	 		//give a child element <item> to the <organization> element
-	 		$my_item[$index] = $organization->new_child('item');
-	 		$my_item[$index]->set_attribute('identifier','ITEM_'.$item->get_id()); 
-	 		$my_item[$index]->set_attribute('identifierref','RESOURCE_'.$item->get_id()); 
-	 		$my_item[$index]->set_attribute('isvisible','true');
+	 		$my_item = $xmldoc->createElement('item');
+	 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
+	 		$my_item->setAttribute('identifierref','RESOURCE_'.$item->get_id()); 
+	 		$my_item->setAttribute('isvisible','true');
 	 		//give a child element <title> to the <item> element
-	 		$my_item[$index]->new_child('title',$item->get_title());
+	 		$my_title = $xmldoc->createElement('title',$item->get_title());
+	 		$my_item->appendChild($my_title);
 	 		//give a child element <adlcp:prerequisite> to the <item> element
-	 		$my_prereqs[$index] = $my_items[$index]->new_child('adlcp:prerequisite',$item->get_prereq_string());
-	 		$my_prereqs[$index]->set_attribute('type','aicc_script');
+	 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisite',$item->get_prereq_string());
+	 		$my_prereqs->setAttribute('type','aicc_script');
+	 		$my_item->appendChild($my_prereqs);
 	 		//give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported
-	 		//$my_items[$index]->new_child('adlcp:maxtimeallowed','');
+	 		//$xmldoc->createElement('adlcp:maxtimeallowed','');
 			//give a child element <adlcp:timelimitaction> to the <item> element - not yet supported
-	 		//$my_items[$index]->new_child('adlcp:timelimitaction','');
+	 		//$xmldoc->createElement('adlcp:timelimitaction','');
 	 		//give a child element <adlcp:datafromlms> to the <item> element - not yet supported
-	 		//$my_items[$index]->new_child('adlcp:datafromlms','');
+	 		//$xmldoc->createElement('adlcp:datafromlms','');
 	 		//give a child element <adlcp:masteryscore> to the <item> element
-	 		$my_items[$index]->new_child('adlcp:masteryscore',$item->masteryscore);
-	 		
-
-	 		//give a <resource> child to the <resources> element
-	 		$my_resources[$index] = $resources->new_child('resource');
-	 		$my_resources[$index]->set_attribute('identifier','RESOURCE_'.$item->get_id());
-	 		$my_resources[$index]->set_attribute('type','webcontent');
-	 		$my_resources[$index]->set_attribute('href','');
-	 		//adlcp:scormtype can be either 'sco' or 'asset'
-	 		$my_resources[$index]->set_attribute('adlcp:scormtype','asset');
-	 		//xml:base is the base directory to find the files declared in this resource
-	 		$my_resources[$index]->set_attribute('xml:base','');
-	 		//give a <file> child to the <resource> element
-	 		$my_files[$index] = $my_resource[$index]->new_child('file');
-	 		$my_files[$index]->set_attribute('href','');
-	 		//dependency to other files - not yet supported
-	 		//$my_dependency[$index] = $my_resource[$index]->new_child('dependency');
-	 		//$my_dependency[$index]->set_attribute('identifierref','');
+	 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->masteryscore);
+	 		$my_item->appendChild($my_masteryscore);
+	 		//attache this item to the organization element
+	 		$organization->appendChild($my_item);
 	 		
 	 		//get the path of the file(s) from the course directory root
-	 		$zip_files[] = $item->get_file_path();
+			$my_file_path = $item->get_file_path(); 
+	 		//give a <resource> child to the <resources> element
+	 		$my_resource = $xmldoc->createElement('resource');
+	 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
+	 		$my_resource->setAttribute('type','webcontent');
+	 		$my_resource->setAttribute('href',$my_file_path);
+	 		//adlcp:scormtype can be either 'sco' or 'asset'
+	 		$my_resource->setAttribute('adlcp:scormtype','asset');
+	 		//xml:base is the base directory to find the files declared in this resource
+	 		$my_resource->setAttribute('xml:base','');
+	 		//give a <file> child to the <resource> element
+	 		$my_file = $xmldoc->createElement('file');
+	 		$my_file->setAttribute('href',$my_file_path);
+	 		//dependency to other files - not yet supported
+	 		//$my_dependency = $xmldoc->createElement('dependency');
+	 		//$my_dependency->setAttribute('identifierref','');
+	 		$my_resource->appendChild($my_file);
+	 		$resources->appendChild($my_resource);
+	 		
+	 		$zip_files[] = $my_file_path;
 	 	}
+	 	$organizations->appendChild($organization);
+	 	$root->appendChild($organizations);
+	 	$root->appendChild($resources);
+		$xmldoc->appendChild($root);
 
 		for($i=0;$i<count($zip_files);$i++)
 		{

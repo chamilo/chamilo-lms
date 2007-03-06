@@ -44,7 +44,6 @@
 ==============================================================================
 */
 session_start();
-
 // Including necessary files
 require('../inc/installedVersion.inc.php');
 require('../inc/lib/main_api.lib.php');
@@ -65,6 +64,15 @@ elseif ( isset($_SESSION['install_language']) && $_SESSION['install_language'] )
 	$install_language = $_SESSION['install_language'];
 	include_once("../lang/$install_language/trad4all.inc.php");
 	include_once("../lang/$install_language/install.inc.php");
+}
+
+$charset = '';
+//force ISO-8859-15 for European languages. Leave Apache determine the encoding for others (HTML declaring UTF-8)
+$euro_langs = array('english','french','french_KM','french_corporate','french_org','dutch','spanish','german','italian','greek','danish','swedish','norwegian','polish','galician','catalan','czech','finnish');
+if(in_array($install_language,$euro_langs))
+{
+	$charset = 'ISO-8859-15';
+	header('Content-Type: text/html; charset='. $charset);
 }
 
 require_once('install_upgrade.lib.php');
@@ -276,6 +284,9 @@ elseif (!empty($_POST['step5']))
 		@import "../css/default/default.css";
 		/*]]>*/
 	</style>
+<?php if(!empty($charset)){ ?>
+	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>" />
+<?php } ?>
 </head>
 <body dir="<?php echo $text_dir ?>">
 

@@ -340,7 +340,12 @@ class learnpath {
     	if($this->debug>0){error_log('New LP - In learnpath::add_item('.$parent.','.$previous.','.$type.','.$id.','.$title.')',0);}
     	
     	$tbl_lp_item = Database::get_course_table('lp_item');
-    	$parent = (int) $parent;
+    	$parent = intval($parent);
+    	$previous = intval($previous);
+    	$type = $this->escape_string($type);
+    	$id = intval($id);
+    	$title = $this->escape_string(htmlentities($title));
+    	$description = $this->escape_string(htmlentities($description));
     	
     	$sql_count = "
     		SELECT COUNT(id) AS num
@@ -427,8 +432,8 @@ class learnpath {
     			" . $this->get_id() . ",
     			'" . $type . "',
     			'',
-    			'" . $this->escape_string(htmlentities($title)) . "',
-    			'" . $this->escape_string(htmlentities($description)) . "',
+    			'" . $title . "',
+    			'" . $description . "',
     			'" . $id . "',
     			" . $parent . ",
     			" . $previous . ",
@@ -1483,7 +1488,7 @@ class learnpath {
     	switch($type){
 
     		case 'scorm':
-
+				
     			break;
 
     		case 'zip':
@@ -6808,6 +6813,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 * @TODO The method might be redefined later on in the scorm class itself to avoid
 	 * creating a SCORM structure if there is one already. However, if the initial SCORM
 	 * path has been modified, it should use the generic method here below.
+	 * @TODO link this function with the export_lp() function in the same class
 	 * @param	string	Optional name of zip file. If none, title of learnpath is
 	 * 					domesticated and trailed with ".zip"
 	 * @return	string	Returns the zip package string, or null if error 
@@ -6821,6 +6827,29 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			return null;
 		}
 	 	//Create the zip handler (this will remain available throughout the method)
+		$temp_dir_short = uniqid();
+		$temp_zip_dir = api_get_path(GARBAGE_PATH)."/".$this->path;
+		$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
+		$zip_folder=new PclZip($temp_zip_file);
+		//place to temporarily stash the zipfiles
+		//create the temp dir if it doesn't exist
+		//or do a cleanup befor creating the zipfile
+		if(!is_dir($temp_zip_dir))
+		{
+			mkdir($temp_zip_dir);
+		}
+		else 
+		{//cleanup: check the temp dir for old files and delete them
+			$handle=opendir($temp_zip_dir);
+			while (false!==($file = readdir($handle)))
+			{
+				if ($file != "." && $file != "..")
+				{
+					unlink("$temp_zip_dir/$file");
+				}
+			}
+		    closedir($handle);
+		}
 	 	
 	 	//Build a dummy imsmanifest structure. Do not add to the zip yet (we still need it)
 	 	//This structure is developed following regulations for SCORM 1.2 packaging in the SCORM 1.2 Content
@@ -6851,26 +6880,66 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	//For each element, add it to the imsmanifest structure, then add it to the zip.
 	 	//Always call the learnpathItem->scorm_export() method to change it to the SCORM
 	 	//format
+	 	//set a bunch of temporary arrays that will hold elements that need attributes
 	 	$my_items = array();
 	 	$my_resources = array();
 	 	$my_files = array();
+	 	$my_prereqs = array();
+	 	$zip_files = array();
 	 	foreach($this->items as $index => $item){
+	 		//give a child element <item> to the <organization> element
 	 		$my_item[$index] = $organization->new_child('item');
-	 		$my_item[$index]->set_attribute('identifier','dokeos_'.$item->get_id()); 
-	 		$my_item[$index]->set_attribute('identifierref','dokeos_ref_'.$item->get_id()); 
+	 		$my_item[$index]->set_attribute('identifier','ITEM_'.$item->get_id()); 
+	 		$my_item[$index]->set_attribute('identifierref','RESOURCE_'.$item->get_id()); 
 	 		$my_item[$index]->set_attribute('isvisible','true');
+	 		//give a child element <title> to the <item> element
 	 		$my_item[$index]->new_child('title',$item->get_title());
+	 		//give a child element <adlcp:prerequisite> to the <item> element
+	 		$my_prereqs[$index] = $my_items[$index]->new_child('adlcp:prerequisite',$item->get_prereq_string());
+	 		$my_prereqs[$index]->set_attribute('type','aicc_script');
+	 		//give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported
+	 		//$my_items[$index]->new_child('adlcp:maxtimeallowed','');
+			//give a child element <adlcp:timelimitaction> to the <item> element - not yet supported
+	 		//$my_items[$index]->new_child('adlcp:timelimitaction','');
+	 		//give a child element <adlcp:datafromlms> to the <item> element - not yet supported
+	 		//$my_items[$index]->new_child('adlcp:datafromlms','');
+	 		//give a child element <adlcp:masteryscore> to the <item> element
+	 		$my_items[$index]->new_child('adlcp:masteryscore',$item->masteryscore);
+	 		
+
+	 		//give a <resource> child to the <resources> element
 	 		$my_resources[$index] = $resources->new_child('resource');
-	 		$my_resources[$index]->set_attribute('identifier','');
-	 		$my_resources[$index]->set_attribute('type','');
+	 		$my_resources[$index]->set_attribute('identifier','RESOURCE_'.$item->get_id());
+	 		$my_resources[$index]->set_attribute('type','webcontent');
 	 		$my_resources[$index]->set_attribute('href','');
+	 		//adlcp:scormtype can be either 'sco' or 'asset'
+	 		$my_resources[$index]->set_attribute('adlcp:scormtype','asset');
+	 		//xml:base is the base directory to find the files declared in this resource
+	 		$my_resources[$index]->set_attribute('xml:base','');
+	 		//give a <file> child to the <resource> element
 	 		$my_files[$index] = $my_resource[$index]->new_child('file');
 	 		$my_files[$index]->set_attribute('href','');
+	 		//dependency to other files - not yet supported
+	 		//$my_dependency[$index] = $my_resource[$index]->new_child('dependency');
+	 		//$my_dependency[$index]->set_attribute('identifierref','');
+	 		
+	 		//get the path of the file(s) from the course directory root
+	 		$zip_files[] = $item->get_file_path();
 	 	}
+
+		for($i=0;$i<count($zip_files);$i++)
+		{
+			$zip_folder->add(api_get_path('SYS_COURSE_PATH').'/'.$zip_files[$i],PCLZIP_OPT_REMOVE_PATH, api_get_path('SYS_COURSE_PATH').'/');
+			//echo $sys_course_path.$_course['path']."/document".$files_for_zipfile[$i]."<br>";
+		}
 	 	
 	 	//Finalize the imsmanifest structure, add to the zip, then return the zip
-	 	//$xmldoc->writexml();
-	 }
+	 	//$xmldoc->writexml(api_get_path(GARBAGE_PATH));
+		$zip_folder->add(api_get_path('GARBAGE_PATH').'/'.$this->path.'/imsmanifest.xml',PCLZIP_OPT_REMOVE_PATH, api_get_path('GARBAGE_PATH').'/');
+
+		//Send file to client
+		$name = 'scorm_export_'.$this->lp_id.'.zip';
+		DocumentManager::file_send_for_download($temp_zip_file,true,$name);	 }
 }
 
 ?>

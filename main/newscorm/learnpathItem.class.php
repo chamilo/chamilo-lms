@@ -296,7 +296,7 @@ class learnpathItem{
     				$sql = 'SELECT path FROM '.$table_doc.' WHERE id = '.$path;
     				$res = api_sql_query($sql,__FILE__,__LINE__);
     				$row = Database::fetch_array($res);
-    				$real_path = 'document/'.$row['path'];
+    				$real_path = 'document'.$row['path'];
     				return $real_path;
     			case TOOL_STUDENTPUBLICATION:
     			case TOOL_QUIZ:

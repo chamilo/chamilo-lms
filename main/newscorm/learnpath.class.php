@@ -2660,10 +2660,11 @@ class learnpath {
     		//if(substr($lp_item_params,0,1)!='?'){
     		//	$lp_item_params = '?'.$lp_item_params;
     		//}
+    		$sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
     		if($type == 'http'){
     			$course_path = api_get_path(WEB_COURSE_PATH).api_get_course_path(); //web path
     		}else{
-    			$course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path(); //system path
+    			$course_path = $sys_course_path; //system path
     		}
     		//now go through the specific cases to get the end of the path
     		switch($lp_type){
@@ -2700,13 +2701,21 @@ class learnpath {
 			    				//TODO fix this for urls with protocol header
 			    				$file = str_replace('//','/',$file);
 			    				$file = str_replace(':/','://',$file);
+
+			    				if(!is_file($sys_course_path.'/scorm/'.$lp_path.'/'.$lp_item_path))
+			    				{//if file not found
+			    					$file = 'blank.php';
+			    				}
 		    				}
     					//}else{
     						//prerequisites did not match
     						//$file = 'blank.php';
     					//}
     					//We want to use parameters if they were defined in the imsmanifest
-    					$file.= $lp_item_params;
+    					if($file!='blank.php')
+    					{
+    						$file.= $lp_item_params;
+    					}
     				}else{
     					$file = 'lp_content.php?type=dir';
     				}

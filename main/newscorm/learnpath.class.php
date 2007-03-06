@@ -6820,6 +6820,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 */
 	 function scorm_export()
 	 {
+	 	global $_course;
 	 	if (!class_exists('DomDocument'))
 	 	{
 	 		error_log('DOM functions not supported for PHP version below 5.0',0);
@@ -6828,7 +6829,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		}
 	 	//Create the zip handler (this will remain available throughout the method)
 		$temp_dir_short = uniqid();
-		$temp_zip_dir = api_get_path(GARBAGE_PATH)."/".$this->path;
+		$temp_zip_dir = api_get_path(GARBAGE_PATH)."/".$temp_dir_short;
 		$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 		$zip_folder=new PclZip($temp_zip_file);
 		//place to temporarily stash the zipfiles
@@ -6934,25 +6935,52 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 		$resources->appendChild($my_resource);
 	 		
 	 		$zip_files[] = $my_file_path;
+			//error_log('File '.$my_file_path. ' added to $zip_files',0);
 	 	}
 	 	$organizations->appendChild($organization);
 	 	$root->appendChild($organizations);
 	 	$root->appendChild($resources);
 		$xmldoc->appendChild($root);
 
-		for($i=0;$i<count($zip_files);$i++)
+		//error_log(print_r($zip_files,true),0);
+		foreach($zip_files as $file_path)
 		{
-			$zip_folder->add(api_get_path('SYS_COURSE_PATH').'/'.$zip_files[$i],PCLZIP_OPT_REMOVE_PATH, api_get_path('SYS_COURSE_PATH').'/');
-			//echo $sys_course_path.$_course['path']."/document".$files_for_zipfile[$i]."<br>";
+			//error_log('getting document from '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' removing '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/',0);
+			$this->create_path(api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path);
+			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
+			copy(api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path,api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path);
+			$zip_folder->add(api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,PCLZIP_OPT_REMOVE_PATH, api_get_path('GARBAGE_PATH'));
 		}
 	 	
 	 	//Finalize the imsmanifest structure, add to the zip, then return the zip
-	 	$xmldoc->save(api_get_path(GARBAGE_PATH).'/'.$this->path.'/imsmanifest.xml');
-		$zip_folder->add(api_get_path('GARBAGE_PATH').'/'.$this->path.'/imsmanifest.xml',PCLZIP_OPT_REMOVE_PATH, api_get_path('GARBAGE_PATH').'/');
+	 	$xmldoc->save(api_get_path(GARBAGE_PATH).'/'.$temp_dir_short.'/imsmanifest.xml');
+		$zip_folder->add(api_get_path('GARBAGE_PATH').'/'.$temp_dir_short.'/imsmanifest.xml',PCLZIP_OPT_REMOVE_PATH, api_get_path('GARBAGE_PATH').'/');
 
 		//Send file to client
 		$name = 'scorm_export_'.$this->lp_id.'.zip';
-		DocumentManager::file_send_for_download($temp_zip_file,true,$name);	 }
+		DocumentManager::file_send_for_download($temp_zip_file,true,$name);
+	}
+	/**
+	 * Temp function to be moved in main_api or the best place around for this. Creates a file path
+	 * if it doesn't exist
+	 */
+	function create_path($path){
+		$path_bits = split('/',dirname($path));
+		$path_built = '/';
+		foreach($path_bits as $bit){
+			if(!empty($bit)){
+				$new_path = $path_built.$bit;
+				if(is_dir($new_path)){
+					$path_built = $new_path.'/';
+				}
+				else
+				{
+					mkdir($new_path);
+					$path_built = $new_path.'/';
+				}
+			}
+		}
+	}
 }
 
 ?>

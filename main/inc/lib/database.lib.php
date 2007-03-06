@@ -61,9 +61,9 @@ define('TABLE_MAIN_SESSION_COURSE', 'session_rel_course');
 define('TABLE_MAIN_SESSION_USER', 'session_rel_user');
 define('TABLE_MAIN_SESSION_CLASS', 'session_rel_class');
 define('TABLE_MAIN_SESSION_COURSE_USER', 'session_rel_course_rel_user');
-define('TABLE_MAIN_COURSE_SURVEY', 'course_rel_survey');
-define('TABLE_MAIN_SURVEY_USER', 'survey_user_info');
-define('TABLE_MAIN_SURVEY_REMINDER','survey_reminder');
+define('TABLE_MAIN_SHARED_SURVEY', 'shared_survey');
+define('TABLE_MAIN_SHARED_SURVEY_QUESTION', 'shared_survey_question');
+define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_option');
 
 //statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');
@@ -633,7 +633,7 @@ class Database
 			}
 			return mysql_fetch_object($res,$class);
 		}
-		return mysql_fetch_object($res);	
+		return mysql_fetch_object($res);
 	}
 	/**
 	 * Gets the number of rows from the last query result - help achieving database independence

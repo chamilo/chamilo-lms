@@ -593,7 +593,8 @@ if(!empty($_GET['student']))
 					echo "	</td>
 							<td align='center'>
 						 ";
-					echo		'<a href="../exercice/exercise_show.php?id='.$exe_id.'&cidReq='.$a_infosCours['code'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+					if($a_essais['essais']>0)
+						echo		'<a href="../exercice/exercise_show.php?id='.$exe_id.'&cidReq='.$a_infosCours['code'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
 					echo "	</td>
 						  </tr>
 						 ";

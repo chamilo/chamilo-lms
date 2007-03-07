@@ -5,7 +5,7 @@
  * To change the template for this generated file go to
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
-include("../main/inc/global.inc.php");
+include("../../main/inc/global.inc.php");
 api_block_anonymous_users();
 
 printf ('<?xml version="1.0" encoding="UTF-8" ?>');

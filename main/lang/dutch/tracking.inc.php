@@ -150,4 +150,6 @@ $Time = "Tijd";
 $Score = "Score";
 $LastConnexion = "Laatste connectie";
 $ConnectionTime = "connectietijd";
+$Attempts = "Pogingen";
+$CourseTitle = "Titel van de cursus";
 ?>

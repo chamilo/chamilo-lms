@@ -34,4 +34,6 @@ $langChat_reset_by = "herstart chat";
 $OrFile = "Of bestand";
 $langCallSent = "Chatverzoek verzonden.  Wachten op de goedkeuring van uw partner.";
 $langChatDenied = "Uw verzoek is genegeerd door uw partner.";
+$Send = "Verstuur";
+$Connected = "verbonden";
 ?>

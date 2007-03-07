@@ -53,4 +53,7 @@ $langUserHasPermission = "The user has rights";
 $langLegend = "Legend";
 $langUserHasPermissionByRoleGroup = "The user has rights of its group";
 $AddBlog = "Create a new blog";
+$Comments = "Comments";
+$NoTasks = "No tasks";
+$Shared = "Shared";
 ?>

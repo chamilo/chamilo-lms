@@ -62,4 +62,5 @@ $CourseSortingDone = "De cursus werd herschikt";
 $ExistingCourseCategories = "Reeds bestaande cursuscategorieën";
 $YouAreNowUnsubscribed = "U bent nu uitgeschreven voor de cursus";
 $ViewOpenCourses = "Bekijk open cursussen";
+$CategorySortingDone = "De categorieën zijn gesorteerd";
 ?>

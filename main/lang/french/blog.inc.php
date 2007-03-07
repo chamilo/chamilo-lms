@@ -88,4 +88,7 @@ $EditBlog = "Editer le titre et le sous-titre";
 $DeleteBlog = "Supprimer ce blog";
 $Comments = "Commentaires";
 $Comment = "Commentaire";
+$Comments = "Commentaires";
+$NoTasks = "pas de tâches";
+$Shared = "Partagé";
 ?>

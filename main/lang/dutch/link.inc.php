@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$LinkMoved = "De link is verplaatst";
 $langLinkName = "Naam link";
 $langLinkAdd = "Link toevoegen";
 $langLinkAdded = "Link is toegevoegd.";

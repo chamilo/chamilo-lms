@@ -188,4 +188,5 @@ $StudentDetailsInCourse = "Podrobnosti o kandidatu znotraj teèaja";
 $Learnpaths = "Uène poti";
 $OtherTools = "Ostala orodja";
 $DetailsStudentInCourse = "Taèajnikove podrobnosti v teèaju";
+$NbStudents = "Število kandidatov";
 ?>

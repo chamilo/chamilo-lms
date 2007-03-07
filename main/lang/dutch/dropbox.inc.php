@@ -121,4 +121,5 @@ $FileUploadSucces = "Het bestand is met succes geüpload.";
 $mailingNonMailingError = "Mailing kan niet overschreven worden door een niet-mailing en vice versa";
 $MailingSelectNoOther = "Een mailing kan niet gecombineerd worden met andere bestemmelingen.";
 $mailingJustUploadSelectNoOther = "Enkel upload kan niet gecombineerd worden met andere bestemmelingen.";
+$NoFilesHere = "Er zijn hier geen bestanden";
 ?>

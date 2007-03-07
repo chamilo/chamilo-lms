@@ -48,4 +48,5 @@ $AnnouncementDeletedAll = "Alle aankondigingen zijn verwijderd.";
 $AnnouncementMoved = "De aankondiging is verplaatst.";
 $NoAnnouncements = "Er zijn geen aankondigingen.";
 $SelectEverybody = "Selecteer iedereen";
+$SelectedUsersGroups = "Gebruikers van de geselecteerde groepen";
 ?>

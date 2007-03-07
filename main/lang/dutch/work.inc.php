@@ -30,4 +30,5 @@ $langDirCr = "Map aanmaken";
 $langCurrentDir = "huidige map";
 $UploadADocument = "Een document uploaden";
 $EditToolOptions = "Moduleopties wijzigen";
+$DocumentDeleted = "Het document is verwijderd";
 ?>

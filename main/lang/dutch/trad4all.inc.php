@@ -403,4 +403,9 @@ $Vertical = "Vertikaal";
 $DisplaySearchResults = "Zoekresultaten weergeven";
 $DisplayAll = "Alles weergeven";
 $Percentage = "Percentage";
+$Informations = "Informatie";
+$EmailDestination = "Bestemmeling";
+$EmailTitle = "Titel van de email";
+$EmailText = "Inhoud van de email";
+$Send = "Versturen";
 ?>

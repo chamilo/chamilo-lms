@@ -152,6 +152,7 @@ $langTechnicalTools  = "Technisch";
 $langConfig  = "Systeemconfiguratie";
 $langLogIdentLogoutComplete  = "Log-in- en log-outlijst (uitgebreid)";
 $langLimitUsersListDefaultMax = "Maximumaantal gebruikers, getoond in de scroll-lijst";
+$CourseCoach = "Coach van de cursus";
 $PageAfterLoginTitle = "Pagina na aanmelden";
 $PageAfterLoginComment = "De pagina die de gebruiker te zien krijgt na aanmelden op het platform";
 $DokeosAdminWebLinks = "Dokeos Web Links";

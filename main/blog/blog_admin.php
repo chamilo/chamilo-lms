@@ -57,11 +57,11 @@ else
 */
 if ($_POST['new_blog_submit'])
 {
-	Blog::create_blog(mysql_real_escape_string($_POST['blog_name']),mysql_real_escape_string($_POST['blog_subtitle']));
+	Blog::create_blog($_POST['blog_name'],$_POST['blog_subtitle']);
 }
 if ($_POST['edit_blog_submit'])
 {
-	Blog::edit_blog(mysql_real_escape_string((int)$_POST['blog_id']),mysql_real_escape_string($_POST['blog_name']),mysql_real_escape_string($_POST['blog_subtitle']));
+	Blog::edit_blog($_POST['blog_id'],$_POST['blog_name'],$_POST['blog_subtitle']);
 }
 if ($_GET['action'] == 'visibility')
 {

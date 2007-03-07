@@ -2704,7 +2704,15 @@ class learnpath {
 
 			    				if(!is_file($sys_course_path.'/scorm/'.$lp_path.'/'.$lp_item_path))
 			    				{//if file not found
-			    					$file = 'blank.php';
+			    					$decoded = html_entity_decode($lp_item_path);
+			    					if(!is_file($sys_course_path.'/scorm/'.$lp_path.'/'.$decoded))
+			    					{
+			    						$file = 'blank.php';
+			    					}
+			    					else
+			    					{
+			    						$file = $course_path.'/scorm/'.$lp_path.'/'.$decoded;
+			    					}
 			    				}
 		    				}
     					//}else{
@@ -6926,19 +6934,20 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 		$organization->appendChild($my_item);
 	 		
 	 		//get the path of the file(s) from the course directory root
-			$my_file_path = $item->get_file_path(); 
+			$my_file_path = $item->get_file_path();
+			$my_xml_file_path = htmlentities($my_file_path); 
 	 		//give a <resource> child to the <resources> element
 	 		$my_resource = $xmldoc->createElement('resource');
 	 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
 	 		$my_resource->setAttribute('type','webcontent');
-	 		$my_resource->setAttribute('href',$my_file_path);
+	 		$my_resource->setAttribute('href',$my_xml_file_path);
 	 		//adlcp:scormtype can be either 'sco' or 'asset'
 	 		$my_resource->setAttribute('adlcp:scormtype','asset');
 	 		//xml:base is the base directory to find the files declared in this resource
 	 		$my_resource->setAttribute('xml:base','');
 	 		//give a <file> child to the <resource> element
 	 		$my_file = $xmldoc->createElement('file');
-	 		$my_file->setAttribute('href',$my_file_path);
+	 		$my_file->setAttribute('href',$my_xml_file_path);
 	 		//dependency to other files - not yet supported
 	 		//$my_dependency = $xmldoc->createElement('dependency');
 	 		//$my_dependency->setAttribute('identifierref','');

@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 11460 2007-03-07 07:41:56Z pcool $
+* 	@version $Id: reporting.php 11462 2007-03-07 07:49:38Z pcool $
 *
 * 	@todo use quickforms for the forms
 */
@@ -357,15 +357,16 @@ function display_question_report($survey_data)
 	}
 	else
 	{
-		echo get_lang('PreviousQuestion');
+		echo '&lt;&lt;'.get_lang('PreviousQuestion').' ';
 	}
+	echo ' | ';
 	if ($_GET['question'] < ($survey_data['number_of_questions']-1))
 	{
 		echo '<a href="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.($offset+1).'">'.get_lang('NextQuestion').'&gt;&gt; </a>';
 	}
 	else
 	{
-		echo get_lang('NextQuestion');
+		echo get_lang('NextQuestion'). '&gt;&gt;';
 	}
 	echo '<br />';
 

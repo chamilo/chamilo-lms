@@ -442,7 +442,7 @@ if($nb_teacher_courses)
 		$table -> addRow($table_row, 'align="right"');
 		
 	}
-	
+	$table -> setColAttributes(7,array('align'=>'center'));
 	$table -> display();
 		
 }

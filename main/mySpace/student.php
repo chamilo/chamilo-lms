@@ -174,7 +174,7 @@ if($isCoach)
 		{
 			$table -> addRow($row,'align="right"');	
 		}
-		
+		$table -> setColAttributes(8,array('align'=>'center'));
 		$table -> display();
 		
 	}

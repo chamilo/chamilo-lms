@@ -3,7 +3,7 @@
 $language_file = 'agenda'; 
 
 // including the global 
-include('../inc/claro_init_global.inc.php');
+include('../inc/global.inc.php');
 
 // the variables for the days and the months
 // Defining the shorts for the days

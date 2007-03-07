@@ -6893,7 +6893,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	$organizations->setAttribute('default','dokeos_scorm_export');
 	 	$organization = $xmldoc->createElement('organization');
 	 	$organization->setAttribute('identifier','dokeos_scorm_export');
-	 	$org_title = $xmldoc->createElement('title',$this->get_name()); //filter data for XML?
+	 	$org_title = $xmldoc->createElement('title',htmlspecialchars($this->get_name(),ENT_QUOTES)); //filter data for XML?
 	 	$organization->appendChild($org_title);
 	 	
 	 	//For each element, add it to the imsmanifest structure, then add it to the zip.
@@ -6907,7 +6907,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 		$my_item->setAttribute('identifierref','RESOURCE_'.$item->get_id()); 
 	 		$my_item->setAttribute('isvisible','true');
 	 		//give a child element <title> to the <item> element
-	 		$my_title = $xmldoc->createElement('title',$item->get_title());
+	 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
 	 		$my_item->appendChild($my_title);
 	 		//give a child element <adlcp:prerequisite> to the <item> element
 	 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisite',$item->get_prereq_string());

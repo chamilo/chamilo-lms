@@ -64,11 +64,8 @@ $language_file = "learnpath";
 	Header and action code
 -----------------------------------------------------------
 */ 
-$my_style = api_get_setting('stylesheets');
-$my_code_path = api_get_path(WEB_CODE_PATH);
-if(empty($my_style)){$my_style = 'default';}
-$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='".$my_code_path."css/".$my_style."/learnpath.css' />";
-$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='learnpath.css' />"; //will be a merged with original learnpath.css
+$currentstyle = api_get_setting('stylesheets');
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$currentstyle.'/default.css"/>';
 $htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='dtree.css' />"; //will be moved
 $htmlHeadXtra[] = "<script src='dtree.js' type='text/javascript'></script>"; //will be moved
 

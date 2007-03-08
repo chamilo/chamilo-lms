@@ -1244,9 +1244,9 @@ class CourseManager
 		$role_right_location_table = Database::get_main_table(MAIN_ROLE_RIGHT_LOCATION_TABLE);
 		$table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		$table_course_survey = Database::get_main_table(TABLE_MAIN_COURSE_SURVEY);
-		$table_course_survey_user = Database::get_main_table(TABLE_MAIN_SURVEY_USER);
-		$table_course_survey_reminder = Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+		$table_course_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
+		$table_course_survey_question = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+		$table_course_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 		$stats = false;
 		if(Database::get_statistic_database() != ''){
 			$stats = true;
@@ -1364,13 +1364,18 @@ class CourseManager
 		api_sql_query($sql,__FILE__,__LINE__);
 		$sql = "DELETE FROM $table_session_course_user WHERE course_code='".$code."'";
 		api_sql_query($sql,__FILE__,__LINE__);
-		// Delete the course from the survey tables
-		$sql = "DELETE FROM $table_course_survey WHERE course_code='".$code."'";
-		api_sql_query($sql,__FILE__,__LINE__);
-		$sql = "DELETE FROM $table_course_survey_user WHERE db_name='".$db_name."'";
-		api_sql_query($sql,__FILE__,__LINE__);
-		$sql = "DELETE FROM $table_course_survey_reminder WHERE db_name='".$db_name."'";
-		api_sql_query($sql,__FILE__,__LINE__);
+		
+		$sql='SELECT survey_id FROM '.$table_course_survey.' WHERE course_code="'.$code.'"';
+		$result_surveys=api_sql_query($sql);
+		while($surveys=mysql_fetch_array($result_surveys)){
+			$survey_id=$surveys[0];
+			$sql='DELETE FROM '.$table_course_survey_question.' WHERE survey_id="'.$survey_id.'"';
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql='DELETE FROM '.$table_course_survey_question_option.' WHERE survey_id="'.$survey_id.'"';
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql='DELETE FROM '.$table_course_survey.' WHERE survey_id="'.$survey_id.'"';
+			api_sql_query($sql,__FILE__,__LINE__);
+		}
 
 		// Delete the course from the stats tables
 		if($stats)

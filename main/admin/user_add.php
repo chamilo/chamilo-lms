@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 10811 2007-01-22 08:26:40Z elixir_julian $
+<?php // $Id: user_add.php 11497 2007-03-08 10:17:46Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -176,7 +176,7 @@ if( $form->validate())
 	$username = $user['username'];
 	$status = intval($user['status']);
 	$picture = $_FILES['picture'];
-	$platform_admin = intval($user['platform_admin']);
+	$platform_admin = intval($user['admin']['platform_admin']);
 	$send_mail = intval($user['mail']['send_mail']);
 	if(count($extAuthSource) > 0 && $user['password']['password_auto'] == '2')
 	{

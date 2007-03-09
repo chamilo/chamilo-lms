@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 11484 2007-03-07 12:40:13Z yannoo $
+// $Id: settings.php 11512 2007-03-09 16:55:00Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -470,17 +470,32 @@ function store_stylesheets()
 	// Database Table Definitions
 	$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
-	// Delete the current stylesheet (if there is one). We are not sure there is one
-	$sql = "DELETE FROM $table_settings_current WHERE category='stylesheets'";
-	api_sql_query($sql, __LINE__, __FILE__);
-
 	// Insert the stylesheet
-	if ($_POST['style'] <> 'default')
+	$style = Database::escape_string($_POST['style']);
+	if (is_style($style))
 	{
-		$sql = "INSERT into $table_settings_current (variable,category,selected_value) VALUES ('stylesheets','stylesheets','".$_POST['style']."')";
+		$sql = "UPDATE $table_settings_current (variable,category,selected_value) VALUES ('stylesheets','stylesheets','".$style."')";
 		api_sql_query($sql, __LINE__, __FILE__);
 	}
 
 	return true;
+}
+
+/**
+ * This function checks if the given style is a recognize style that exists in the css directory as
+ * a standalone directory.
+ * @param	string	Style
+ * @return	bool	True if this style is recognized, false otherwise
+ */
+function is_style($style)
+{
+	$dir = api_get_path(SYS_PATH).'main/css/';
+	$dirs = scandir($dir);
+	$style = str_replace(array('/','\\'),array('',''),$style); //avoid slashes or backslashes
+	if (in_array($style,$dirs) && is_dir($dir.$style))
+	{
+		return true;
+	}
+	return false;
 }
 ?>

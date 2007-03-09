@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 10957 2007-01-29 10:16:23Z elixir_julian $
+* 	@version $Id: admin.php 11506 2007-03-09 09:51:57Z elixir_julian $
 */
 
 
@@ -146,7 +146,7 @@ $objAnswer   = $_SESSION['objAnswer'];
 // allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);
 
-$is_allowedToEdit=$is_courseAdmin;
+$is_allowedToEdit=api_is_allowed_to_edit();
 
 // document path
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';

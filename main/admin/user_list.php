@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 11301 2007-03-01 13:57:15Z elixir_julian $
+// $Id: user_list.php 11508 2007-03-09 13:40:24Z guim_led $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -47,7 +47,7 @@ api_protect_admin_script();
 *	@author Roan Embrechts
 */
 function login_user($user_id)
-{
+{	
 	//init ---------------------------------------------------------------------
 	global $uidReset, $loginFailed, $_configuration;
 
@@ -107,6 +107,10 @@ function login_user($user_id)
 
 			$user_data = mysql_fetch_array($sql_result);
 
+            //Delog the current user
+			 
+			LoginDelete($_SESSION["_user"]["user_id"], $_configuration['statistics_database']);
+
 			// Cleaning session variables
 			unset($_SESSION['_user']);
 			unset($_SESSION['is_platformAdmin']);
@@ -124,8 +128,6 @@ function login_user($user_id)
 
 			$is_platformAdmin = (bool) (!is_null($user_data['is_admin']));
 			$is_allowedCreateCourse = (bool) ($user_data['status'] == 1);
-
-			LoginDelete($_SESSION["_user"]["user_id"], $_configuration['statistics_database']);
 
 			// Filling session variables with new data
 			$_SESSION['_uid'] = $user_id;

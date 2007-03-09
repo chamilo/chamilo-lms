@@ -282,7 +282,8 @@ function api_get_path($path_type)
 	switch ($path_type)
 	{
 		case WEB_PATH :
-			// example: http://www.mydokeos.com
+			// example: http://www.mydokeos.com or http://www.mydokeos.com/portal/ if you're using
+			// a subdirectory of your document root for Dokeos
 			return $_configuration['root_web'];
 			break;
 

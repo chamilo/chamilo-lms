@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 11512 2007-03-09 16:55:00Z yannoo $
+// $Id: settings.php 11514 2007-03-10 10:00:11Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -57,7 +57,7 @@ api_protect_admin_script();
 if ($_POST['submit_stylesheets'])
 {
 	$message = store_stylesheets();
-	header("Location: ".api_get_path(WEB_PATH)."{$_SERVER['PHP_SELF']}?category=stylesheets");
+	header("Location: {$_SERVER['PHP_SELF']}?category=stylesheets");
 	exit;
 }
 

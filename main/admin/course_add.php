@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 11239 2007-02-26 15:44:23Z elixir_julian $
+// $Id: course_add.php 11520 2007-03-12 10:35:32Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,6 +79,7 @@ $form->add_textfield( 'visual_code', get_lang('CourseCode'),true,array('size'=>'
 $form->applyFilter('visual_code','strtoupper');
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',20);
 $form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers);
+$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple');
 $form->add_textfield('title', get_lang('Title'),true, array ('size' => '60'));
 $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
 $form->add_textfield('department_name', get_lang('CourseDepartment'),false, array ('size' => '60'));
@@ -102,6 +103,8 @@ $values['disk_quota'] = get_setting('default_document_quotum');
 $values['visibility'] = COURSE_VISIBILITY_OPEN_PLATFORM;
 $values['subscribe'] = 1;
 $values['unsubscribe'] = 0;
+reset($teachers);
+$values['course_teachers'] = key($teachers);
 $form->setDefaults($values);
 // Validate form
 if( $form->validate())
@@ -110,6 +113,17 @@ if( $form->validate())
 	$code = $course['visual_code'];
 	$tutor_name = $teachers[$course['tutor_id']];
 	$teacher_id = $course['tutor_id'];
+	$course_teachers = $course['course_teachers'];
+	$test=false;
+	
+	//The course tutor has been selected in the teachers list so we must remove him to avoid double records in the database
+	foreach($course_teachers as $key=>$value){
+		if($value==$teacher_id){
+			unset($course_teachers[$key]);
+			break;
+		}
+	}
+
 	$title = $course['title'];
 	$category = $course['category_code'];
 	$department_name = $course['department_name'];
@@ -132,7 +146,7 @@ if( $form->validate())
 		update_Db_course($currentCourseDbName);
 		$pictures_array=fill_course_repository($currentCourseRepository);
 		fill_Db_course($currentCourseDbName, $currentCourseRepository, $course_language,$pictures_array);
-		register_course($currentCourseId, $currentCourseCode, $currentCourseRepository, $currentCourseDbName, $tutor_name, $category, $title, $course_language, $teacher_id, $expiration_date);
+		register_course($currentCourseId, $currentCourseCode, $currentCourseRepository, $currentCourseDbName, $tutor_name, $category, $title, $course_language, $teacher_id, $expiration_date,$course_teachers);
 		$sql = "UPDATE $table_course SET disk_quota = '".$disk_quota."', visibility = '".mysql_real_escape_string($course['visibility'])."', subscribe = '".mysql_real_escape_string($course['subscribe'])."', unsubscribe='".mysql_real_escape_string($course['unsubscribe'])."' WHERE code = '".$currentCourseId."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		header('Location: course_list.php');
@@ -140,7 +154,7 @@ if( $form->validate())
 	}
 }
 Display::display_header($tool_name);
-//api_display_tool_title($tool_name);
+
 // Display the form
 $form->display();
 /*

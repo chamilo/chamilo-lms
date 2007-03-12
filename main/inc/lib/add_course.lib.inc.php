@@ -1725,7 +1725,7 @@ function string2binary($variable)
  * @param string	$course_language		lang for this course
  * @param string	$uid				uid of owner
  */
-function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "")
+function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "", $teachers)
 {
 	GLOBAL $defaultVisibilityForANewCourse, $langCourseDescription, $langProfessor, $langAnnouncementEx, $error_msg, $_configuration;
 	$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1822,6 +1822,20 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					sort='". ($sort +1) . "',
 					user_course_cat='0'";
 		api_sql_query($sql, __FILE__, __LINE__);
+		
+		if(count($teachers)>0){		
+			foreach($teachers as $key){
+				$sql = "INSERT INTO ".$TABLECOURSUSER . " SET
+					course_code = '".addslashes($courseSysCode) . "',
+					user_id = '".$key . "',
+					status = '1',
+					role = '',
+					tutor_id='1',
+					sort='". ($sort +1) . "',
+					user_course_cat='0'";
+				api_sql_query($sql, __FILE__, __LINE__);
+			}
+		}
 
 	}
 

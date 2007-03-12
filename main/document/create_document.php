@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 11439 2007-03-06 16:14:54Z elixir_inter $
+// $Id: create_document.php 11538 2007-03-12 14:36:05Z guim_led $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -309,8 +309,10 @@ if ($form->validate())
 
 		if (!is_file($filepath.'css/frames.css'))
 		{
-			copy(api_get_path(SYS_CODE_PATH).'css/frames.css', $filepath.'css/frames.css');
-
+			//make a copy of the current css for the new document			
+			
+			copy(api_get_path(SYS_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css', $filepath.'css/frames.css');
+			
 			$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
 
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);

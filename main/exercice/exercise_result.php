@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 11297 2007-03-01 13:30:14Z elixir_julian $
+* 	@version $Id: exercise_result.php 11534 2007-03-12 13:29:29Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -644,7 +644,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					$lastName =   $_SESSION['_user']['lastName'];
 					$mail =  $_SESSION['_user']['mail'];
 					$coursecode =  $_SESSION['_course']['official_code'];
-					$query1 = "SELECT user_id from $main_course_user_table where course_code= '$coursecode' and role = 'professor'";
+					$query1 = "SELECT user_id from $main_course_user_table where course_code= '$coursecode' and status = '1' LIMIT 0,1";
 					$result1 = api_sql_query($query1, __FILE__, __LINE__);
 					$temp = mysql_result($result1,0,"user_id");
 					$query = "select email from $main_user_table where user_id =".$temp ;

@@ -1830,7 +1830,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					user_id = '".$key . "',
 					status = '1',
 					role = '',
-					tutor_id='1',
+					tutor_id='0',
 					sort='". ($sort +1) . "',
 					user_course_cat='0'";
 				api_sql_query($sql, __FILE__, __LINE__);

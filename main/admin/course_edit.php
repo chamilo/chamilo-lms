@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_edit.php 11521 2007-03-12 10:37:05Z elixir_julian $
+// $Id: course_edit.php 11522 2007-03-12 10:48:58Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -228,7 +228,7 @@ if( $form->validate())
 				user_id = '".$key . "',
 				status = '1',
 				role = '',
-				tutor_id='1',
+				tutor_id='0',
 				sort='0',
 				user_course_cat='0'";
 			api_sql_query($sql, __FILE__, __LINE__);

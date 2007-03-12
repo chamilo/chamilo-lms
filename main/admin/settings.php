@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 11542 2007-03-12 15:30:11Z elixir_inter $
+// $Id: settings.php 11544 2007-03-12 15:47:34Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -478,7 +478,7 @@ function store_stylesheets()
 				selected_value = "'.$style.'"
 				WHERE variable = "stylesheets"
 				AND category = "stylesheets"';
-		echo $sql;
+		
 		api_sql_query($sql, __LINE__, __FILE__);
 	}
 

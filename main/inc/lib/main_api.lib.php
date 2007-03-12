@@ -914,6 +914,15 @@ function api_get_setting($variable, $key = NULL)
 	return is_null($key) ? $_setting[$variable] : $_setting[$variable][$key];
 }
 
+/**
+ * Returns an escaped version of $_SERVER['PHP_SELF'] to avoid XSS injection
+ * @return	string	Escaped version of $_SERVER['PHP_SELF']
+ */
+function api_get_self()
+{
+	return htmlentities($_SERVER['PHP_SELF']);
+}
+
 /*
 ==============================================================================
 		LANGUAGE SUPPORT

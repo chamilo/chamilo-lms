@@ -65,6 +65,7 @@ $language_file = "learnpath";
 */ 
 $currentstyle = api_get_setting('stylesheets');
 $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$currentstyle.'/default.css"/>';
+$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='learnpath.css' />"; //will be a merged with original learnpath.css
 $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; //will be moved
 $htmlHeadXtra[] = '<script src="dtree.js" type="text/javascript"></script>'; //will be moved
 /*

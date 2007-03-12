@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 11546 2007-03-12 15:52:51Z guim_led $
+* 	@version $Id: exercise_result.php 11548 2007-03-12 16:03:43Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -298,9 +298,11 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$exeId =mysql_result($res,0,"id");
 	$exeId=$exeId+1;
-
+	
+	$counter=0;
 	foreach($questionList as $questionId)
 	{
+		$counter++;
 		// gets the student choice for this question
 		$choice=$exerciseResult[$questionId];
 		// creates a temporary Question object
@@ -336,7 +338,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			<table width="100%" border="0" cellpadding="3" cellspacing="2">
 			<tr bgcolor="#E6E6E6">
 			<td colspan="<?php echo $colspan; ?>">
-				<?php echo get_lang("Question").' '.($i+1); ?>
+				<?php echo get_lang("Question").' '.($counter); ?>
 			</td>
 			</tr>
 			<tr>

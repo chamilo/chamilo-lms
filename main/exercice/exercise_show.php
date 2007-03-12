@@ -306,6 +306,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 	$questionList = array();
 	$exerciseResult = array();
 	$k=0;
+	$counter=0;
 	while ($row = mysql_fetch_array($result))
 			{
 			$questionList[] = $row['question_id'];
@@ -313,6 +314,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			}
 		foreach($questionList as $questionId)
 			{
+				$counter++;
 				$k++;
 				$choice=$exerciseResult[$questionId];
 				// creates a temporary Question object
@@ -341,7 +343,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				}?>
 
   <tr bgcolor="#E6E6E6">
-    <td colspan="2" > <?php echo get_lang("Question").' '.($i+1); ?> </td>
+    <td colspan="2" > <?php echo get_lang("Question").' '.($counter); ?> </td>
   </tr>
   <tr>
     <td colspan="2"><?php echo $questionName; ?> </td>

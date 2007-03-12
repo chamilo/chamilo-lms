@@ -77,7 +77,12 @@ api_display_tool_title($tool_name);
 
 if (isset ($_GET['register']))
 {
-	CourseManager :: subscribe_user($_GET['user_id'], $_course['sysCode']);
+	if(isset($_GET['type']) && $_GET['type']=='teacher'){
+		CourseManager :: subscribe_user($_GET['user_id'], $_course['sysCode'],COURSEMANAGER);
+	}
+	else{
+		CourseManager :: subscribe_user($_GET['user_id'], $_course['sysCode']);
+	}
 }
 if (isset ($_POST['action']))
 {
@@ -129,17 +134,34 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$sql = "SELECT 
-							u.user_id AS col0,
-							u.official_code   AS col1, 
-							u.lastname  AS col2, 
-							u.firstname AS col3, 
-							u.email 	AS col4,
-							u.user_id   AS col5 
-						FROM $user_table u
-						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-						WHERE cu.user_id IS NULL
-						";
+	
+	if(isset($_GET['type']) && $_GET['type']=='teacher'){
+		$sql = "SELECT 
+					u.user_id AS col0,
+					u.official_code   AS col1, 
+					u.lastname  AS col2, 
+					u.firstname AS col3, 
+					u.email 	AS col4,
+					u.user_id   AS col5 
+				FROM $user_table u
+				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+				WHERE u.status='1' and cu.user_id IS NULL
+				";
+	}
+	else{
+		$sql = "SELECT 
+					u.user_id AS col0,
+					u.official_code   AS col1, 
+					u.lastname  AS col2, 
+					u.firstname AS col3, 
+					u.email 	AS col4,
+					u.user_id   AS col5 
+				FROM $user_table u
+				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+				WHERE u.status='5' and cu.user_id IS NULL
+				";
+	}
+
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = mysql_real_escape_string($_GET['keyword']);
@@ -171,7 +193,8 @@ function email_filter($email)
  */
 function reg_filter($user_id)
 {
-	$result = "<a href=\"".$_SERVER['PHP_SELF']."?register=yes&amp;user_id=".$user_id."\">".get_lang("reg")."</a>";
+	if(isset($_GET['type']) && $_GET['type']=='teacher') $type='teacher'; else $type='student';
+	$result = "<a href=\"".$_SERVER['PHP_SELF']."?register=yes&amp;type=".$type."&amp;user_id=".$user_id."\">".get_lang("reg")."</a>";
 	return $result;
 }
 // Build search-form

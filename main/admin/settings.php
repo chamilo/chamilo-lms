@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 11514 2007-03-10 10:00:11Z yannoo $
+// $Id: settings.php 11542 2007-03-12 15:30:11Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -474,7 +474,11 @@ function store_stylesheets()
 	$style = Database::escape_string($_POST['style']);
 	if (is_style($style))
 	{
-		$sql = "UPDATE $table_settings_current (variable,category,selected_value) VALUES ('stylesheets','stylesheets','".$style."')";
+		$sql = 'UPDATE '.$table_settings_current.' SET
+				selected_value = "'.$style.'"
+				WHERE variable = "stylesheets"
+				AND category = "stylesheets"';
+		echo $sql;
 		api_sql_query($sql, __LINE__, __FILE__);
 	}
 

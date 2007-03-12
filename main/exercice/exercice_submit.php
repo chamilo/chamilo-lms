@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 11297 2007-03-01 13:30:14Z elixir_julian $
+* 	@version $Id: exercice_submit.php 11546 2007-03-12 15:52:51Z guim_led $
 */
 
 
@@ -411,7 +411,7 @@ else
 </head>
 
 <body>
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default/frames.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css'; ?>" />
 
 <?php
 }
@@ -576,7 +576,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display::display_footer();
 } else {
 	?>
-	<link rel="stylesheet" type="text/css" href="<?php echo $clarolineRepositoryWeb ?>css/frames.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css'; ?>" />
 	</body></html>
 <?php
 }

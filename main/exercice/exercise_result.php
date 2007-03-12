@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 11534 2007-03-12 13:29:29Z elixir_julian $
+* 	@version $Id: exercise_result.php 11546 2007-03-12 15:52:51Z guim_led $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -174,7 +174,7 @@ else
 </head>
 
 <body>
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default/frames.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css'; ?>" />
 
 <?php
 }

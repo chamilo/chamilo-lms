@@ -18,7 +18,7 @@ function upload(latency){
 		__progress_bar_domid = domid;
 		__progress_bar_img   = img;
 		__progress_bar_text  = text;
-		__progress_bar_interval = setTimeout(__display_progress_bar,latency);
+		__progress_bar_interval = setTimeout(__display_progress_bar,latency,__progress_bar_text);
 		__upload_form_domid  = formid;
 	}
 	
@@ -50,7 +50,7 @@ function upload(latency){
 	 * Displays the progress bar in the given DOM element
 	 */
 	function __display_progress_bar(){
-		var my_html ='<span style="font-style:italic;">'+ __progress_bar_text+'</span><br/><img src="'+__progress_bar_img+'" alt="Progress bar"/>';
+		var my_html ='<span style="font-style:italic;">'+ __progress_bar_text+'</span><br/><img src="'+__progress_bar_img+'" alt="'+__progress_bar_text+'"  title="'+__progress_bar_text+'"/>';
 		document.getElementById(__progress_bar_domid).innerHTML = my_html;
 		if(__upload_form_domid != ''){
 			document.getElementById(__upload_form_domid).style.display = 'none';

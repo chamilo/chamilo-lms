@@ -225,7 +225,10 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 		$viewmode=$_GET['view'];
 		$_SESSION['view']=$viewmode;
 	}
-
+	if(empty($viewmode))
+	{
+		$viewmode = 'flat';
+	}
 
 	/*
 	-----------------------------------------------------------
@@ -273,6 +276,8 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 			break;
 		case 'nested':
 			include_once('viewthread_nested.inc.php');
+		default:
+			include_once('viewthread_flat.inc.php');
 			break;
 	}
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed

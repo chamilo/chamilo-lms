@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 10485 2006-12-13 15:52:15Z elixir_inter $
+<?php // $Id: edit_document.php 11559 2007-03-13 12:05:35Z guim_led $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -59,7 +59,6 @@
 // name of the language file that needs to be included 
 $language_file = 'document';
 
-
 /*
 ------------------------------------------------------------------------------
 	Included libraries
@@ -77,6 +76,8 @@ require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php')
 $fck_attribute['Width'] = '800';
 $fck_attribute['Height'] = '450';
 $fck_attribute['ToolbarSet'] = 'Full';
+
+
 
 /*
 ------------------------------------------------------------------------------
@@ -195,12 +196,15 @@ event_access_tool(TOOL_DOCUMENT);
 */
 function change_name($baseWorkDir, $sourceFile, $renameTo, $dir, $doc)
 {
+	
+	
 	$file_name_for_change = $baseWorkDir.$dir.$sourceFile;
 
 	//api_display_debug_info("call my_rename: params $file_name_for_change, $renameTo");
-
+    
+    $renameTo = disable_dangerous_file($renameTo); //avoid renaming to .htaccess file
 	$renameTo = my_rename($file_name_for_change, stripslashes($renameTo)); //fileManage API
-
+    
 	if ($renameTo)
 	{
 		if (isset($dir) && $dir != "")
@@ -285,8 +289,9 @@ if (isset($_POST['newComment']))
 */
 
 if (isset($_POST['renameTo']))
-{
+{	
 	$info_message = change_name($baseWorkDir, $_GET['sourceFile'], $_POST['renameTo'], $dir, $doc);
+	
 	//assume name change was successful
 }
 
@@ -325,8 +330,8 @@ if($is_allowedToEdit)
 	if($_POST['formSent']==1)
 	{
 		if(isset($_POST['renameTo']))
-		{
-			$_POST['filename']=$_POST['renameTo'];
+		{	
+			$_POST['filename']=disable_dangerous_file($_POST['renameTo']);
 
 			$extension=explode('.',$_POST['filename']);
 			$extension=$extension[sizeof($extension)-1];

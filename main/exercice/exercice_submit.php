@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 11546 2007-03-12 15:52:51Z guim_led $
+* 	@version $Id: exercice_submit.php 11550 2007-03-13 07:00:11Z guim_led $
 */
 
 
@@ -574,10 +574,5 @@ echo $s;
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display::display_footer();
-} else {
-	?>
-	<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css'; ?>" />
-	</body></html>
-<?php
-}
+} 
 ?>

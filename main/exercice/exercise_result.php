@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 11548 2007-03-12 16:03:43Z elixir_julian $
+* 	@version $Id: exercise_result.php 11562 2007-03-13 15:41:19Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -719,10 +719,9 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			}
 			elseif ($answerType==4)
 			{
-				$j=3;
+				$j=sizeof($choice)+1;
 				for ($i=0;$i<sizeof($choice);$i++,$j++)
 				{
-
 					$val = $choice[$j];
 					if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
 						$val = $arr1[1][0];

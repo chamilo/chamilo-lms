@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 11550 2007-03-13 07:00:11Z guim_led $
+* 	@version $Id: exercice_submit.php 11555 2007-03-13 10:42:00Z elixir_julian $
 */
 
 
@@ -228,6 +228,7 @@ if(!is_object($objExercise))
 
 $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
+$exerciseDescription=stripslashes($exerciseDescription);
 $exerciseSound=$objExercise->selectSound();
 $randomQuestions=$objExercise->isRandom();
 $exerciseType=$objExercise->selectType();

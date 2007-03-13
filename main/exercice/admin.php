@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 11506 2007-03-09 09:51:57Z elixir_julian $
+* 	@version $Id: admin.php 11555 2007-03-13 10:42:00Z elixir_julian $
 */
 
 
@@ -423,7 +423,7 @@ $description = $objExercise->selectDescription();
 echo '<h3 style="display:inline">'.$objExercise->selectTitle().'</h3>&nbsp;';
 if(!empty($description))
 {
-	echo '<div id="description_box">'.$description.'</div>';
+	echo '<div id="description_box">'.stripslashes($description).'</div>';
 }
 echo '<br /><br />';
 

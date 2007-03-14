@@ -124,11 +124,21 @@ ul {
 	clear: right;
 }
 
+
 #outerframe {
 	background-color: #fff;
 	width: 100%;
 	margin: 0;
 	padding: 0;
+}
+
+.user_course_category {
+	font: bold 100% sans, sans-serif, arial;
+	text-transform: capitalize;
+	padding: .3em;
+	background: #8cafe1 url('images/crystal3.png') repeat-x;
+	color: #fff;
+	margin:.8em 0;
 }
 
 /*
@@ -347,13 +357,13 @@ ul {
 */
 
 #footer {
-	background: #4171b5 url('images/bg.jpg') no-repeat 25% 100%;
+	background: #4171b5 url('images/bg.jpg') no-repeat 50% 100%;
 	font: bold 1em Arial, sans-serif, sans;
-	width: 95%;
+	width: 98%;
 	float: left;
 	clear: both;
 	color: #B7DCE9;
-	padding: 82px 0 .8em 5%;
+	padding: 82px 0 .8em 2%;
 	border-bottom: 1px solid #4171b5;
 }
 
@@ -369,7 +379,7 @@ ul {
 #footer .copyright {
 	float: right;
 	clear: right;
-	margin: 0 6em 0 0;
+	margin: 0 2em 0 0;
 }
 
 /*
@@ -494,22 +504,8 @@ td .menu {
 	text-decoration: none;
 }
 
-.data_table .row_even a,.data_table .row_odd a {
-	color: #001B41;
-}
-
-.data_table .row_odd a:hover,.data_table .row_odd:focus,.data_table .row_even a:hover,.data_table .row_odd a:focus
-	{
-	color: #fff;
-}
-
-/* Hack to improve readability in Ie6 or older*/
-* html .data_table .row_odd a:hover,* html .data_table .row_odd:focus,* html .data_table .row_even a:hover,* html .data_table .row_odd a:focus
-	{
-	color: #000;
-}
-
 .data_table .row_even td {
+	border-right: 1px solid #fff;
 	background: #d6e3f5;
 	padding: .2em;
 	color: #00122B;
@@ -517,7 +513,8 @@ td .menu {
 }
 
 .data_table .row_odd td {
-	background: #b0c8eb;
+	border-right: 1px solid #fff;
+	background: #dfecff;
 	padding: .2em;
 	color: #00122B;
 	margin: 0;
@@ -525,6 +522,14 @@ td .menu {
 
 .data_table .row_even:hover td,.data_table .row_odd:hover td {
 	background: #8cafe1 none;
+	color: #fff;
+}
+
+.data_table .row_even:hover td a,.data_table .row_odd:hover td a{
+	color: #00357f;
+}
+
+.data_table .row_even:hover td a:hover,.data_table .row_odd:hover td a:hover,.data_table .row_even:hover td a:focus,.data_table .row_odd:hover td a:focus{
 	color: #fff;
 }
 
@@ -594,7 +599,7 @@ div.row {
 }
 
 div.row div.formw {
-	width: 78%;
+	width: 73%;
 	margin: 0;
 }
 
@@ -602,7 +607,7 @@ div.row div.label {
 	float: left;
 	text-align: left;
 	font: bold 115% Arial, sans-serif, sans;
-	width: 20%;
+	width: 25%;
 	margin: 0;
 }
 
@@ -1325,6 +1330,17 @@ div.system_announcement {
 .system_announcement_title {
 	color: #fff;
 }
+/*
+==============================================================================
+	FCKEDITOR
+==============================================================================
+*/
+
+#skip {
+	position:absolute;
+	top:0;
+	left:-9000px;
+}
 
 /*
 ==============================================================================
@@ -1380,91 +1396,4 @@ div.system_announcement {
 	background-color: #f7f7f7;
 	padding-left: 2px;
 	width: 50%;
-}
-.skip {
-	display: none;
-}
-
-#WCAG-editor {
-	border: 1px #DCDCDC solid;
-	background-color: #F0F0F0;
-	width: 100%;	
-}
-
-#WCAG-editor .title {
-	padding: 2px;
-	
-	background-color: #DCDCDC;
-	
-	text-align: center;
-	color: #000000;
-	font-weight: bold;
-}
-
-#WCAG-editor .body {
-	padding-top: 5px;
-	padding-left: 5px;
-	padding-right: 13px;
-	padding-bottom: 5px;
-}
-
-#WCAG-editor textarea {
-	margin-left: 0px;
-	margin-right: 0px;
-	width: 100%;
-	height: 180px;
-	
-	border: 1px #DCDCDC solid;
-}
-
-#WCAG-editor input {
-	width: 98%;
-}
-
-/* don't work on IE 6 */
-#WCAG-editor input[type="checkbox"], #WCAG-editor input[type="radio"], #WCAG-editor input[type="submit"] {
-	width: auto;
-}
-
-/* only for IE6 */
-#WCAG-editor #submit, #WCAG-editor #visible_teacher, #WCAG-editor #visible_student, #WCAG-editor #visible_guest {
- 	width: auto;
-}
-
-#WCAG-content img {
-	float: left;
-	margin-right: 5px;
-	margin-bottom: 5px;
-}
-
-#WCAG-content p {
-	text-align: justify;
-}
-
-/* hack for IE < 7 */
-
-#course_description input {
-	width: auto;
-}
-
-#course_description #imagefile, #course_description #imageLabel, #course_description #link, #course_description #linkLabel {
-	width: 98%;
-}
-
-.WCAG-form textarea {
-	width: 100%;
-	height: 180px;
-}
-
-.skip {
-	display: none;
-}
-
-/*
-------------------------------------------------------------------------------
-    OTHERS
-------------------------------------------------------------------------------
-*/
-.input_titles{
-	width: 300px;
 }

@@ -18,6 +18,7 @@ $profileIsEditable = true;
 ///// PICTURE OF USERS /////
 define ('PREFIX_IMAGE_FILENAME_WITH_UID', true); // if true, filename of images on server begin with uid of the user.
 define ('RESIZE_IMAGE_TO_THIS_HEIGTH',180);
+define('IMAGE_THUMBNAIL_WIDTH', 100);
 
 //  ABOUT IMAGE REPLACE
 define ('KEEP_THE_NAME_WHEN_CHANGE_IMAGE',TRUE);

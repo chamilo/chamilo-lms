@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 11559 2007-03-13 12:05:35Z guim_led $
+<?php // $Id: edit_document.php 11577 2007-03-14 17:33:31Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -481,7 +481,7 @@ if( isset($info_message))
 {
 	Display::display_normal_message($info_message); //main API
 }
-$action =  $_SERVER['PHP_SELF'].'?sourceFile='.urlencode($file_name).'&amp;curdirpath='.urlencode($_GET['curdirpath']).'&amp;file='.urlencode($_GET['file']).'&amp;doc='.urlencode($doc);
+$action =  $_SERVER['PHP_SELF'].'?sourceFile='.urlencode($file_name).'&curdirpath='.urlencode($_GET['curdirpath']).'&file='.urlencode($_GET['file']).'&doc='.urlencode($doc);
 $form = new FormValidator('formEdit','post',$action);
 $form->addElement('hidden','filename');
 $form->addElement('hidden','extension');

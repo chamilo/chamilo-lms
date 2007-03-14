@@ -205,7 +205,7 @@ if(!empty($_GET['student']))
 								if(!empty($a_infosUser['picture_uri']))
 								{
 									echo '	<td class="borderRight" width="10%">
-												<img src="'.$a_infosUser['picture_uri'].'" />
+												<img src="../upload/users/'.$a_infosUser['picture_uri'].'" width="100" />
 											</td>
 										 	';
 								}
@@ -796,7 +796,7 @@ if(!empty($_GET['student']))
 			$resultAnswer = api_sql_query($sqlAnswer);
 			
 			echo "<a name='infosExe'></a>";
-			//print_r($a_exerciceDetails);
+
 			echo"	
 			<tr>
 				<td colspan='2'>

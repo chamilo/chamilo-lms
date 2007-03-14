@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 11280 2007-02-28 14:12:14Z elixir_inter $
+// $Id: profile.php 11570 2007-03-14 13:03:17Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,6 +79,7 @@ require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
 */
 include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 
 if (is_profile_editable())
 	$tool_name = get_lang('ModifProfile');
@@ -339,11 +340,24 @@ function upload_user_image($user_id)
 	{
 		$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? $user_id.'_' : '').uniqid('').'.'.$file_extension;
 	}
+	
+	$temp = new image($_FILES['picture']['tmp_name']);
+	$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
+	$new_height = round((IMAGE_THUMBNAIL_WIDTH/$picture_infos[0])*$picture_infos[1]);
+	$temp->resize(IMAGE_THUMBNAIL_WIDTH,$new_height,0);
+	$type=$picture_infos[2];
+   
+    switch ($type) {
+            case 2 : $temp->send_image('JPG',$image_repository.$picture_filename);
+            break;
+            case 3 : $temp->send_image('PNG',$image_repository.$picture_filename);
+            break;
+            case 1 : $temp->send_image('GIF',$image_repository.$picture_filename);
+            break;
+    }
+    
+    return $picture_filename;
 
-	if (move_uploaded_file($_FILES['picture']['tmp_name'], $image_repository.$picture_filename))
-		return $picture_filename;
-
-	return false; // this should be returned if anything went wrong with the upload
 }
 
 /**
@@ -508,6 +522,7 @@ elseif ($form->validate())
 	{
 		if ($new_picture = upload_user_image($_user['user_id']))
 			$user_data['picture_uri'] = $new_picture;
+		
 	}
 	// remove existing picture if asked
 	elseif ($user_data['remove_picture'])

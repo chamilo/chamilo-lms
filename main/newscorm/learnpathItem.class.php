@@ -47,7 +47,7 @@ class learnpathItem{
 	var $save_on_close = true;
 	var $status;
 	var $title;
-	var $type;
+	var $type; // this attribute can contain chapter|link|student_publication|module|quiz|document|forum|thread
 	var $view_id;
 	
 	var $debug = 0; //logging param

@@ -91,4 +91,114 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
    return 1;
  }
 
+/**
+ * Sends an HTML email using the phpmailer class (and multipart/alternative to downgrade gracefully)
+ * Sender name and email can be specified, if not specified
+ * name and email of the platform admin are used
+ *
+ * @author Bert Vanderkimpen ICT&O UGent
+ * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ *
+ * @param string		   	name of recipient
+ * @param string		  	email of recipient
+ * @param string            email subject
+ * @param string			email body
+ * @param string			sender name
+ * @param string			sender e-mail
+ * @param array				extra headers in form $headers = array($name => $value) to allow parsing
+ * @return                  returns true if mail was sent
+ * @see                     class.phpmailer.php
+ */
+function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name="", $sender_email="", $extra_headers=null) {
+
+   global $regexp;
+   global $platform_email;
+
+   $mail = new PHPMailer();
+   $mail->Mailer  = $platform_email['SMTP_MAILER'];
+   $mail->Host    = $platform_email['SMTP_HOST'];
+   $mail->Port    = $platform_email['SMTP_PORT'];
+
+   if($platform_email['SMTP_AUTH'])
+   {
+      $mail->SMTPAuth = 1;
+      $mail->Username = $platform_email['SMTP_USER'];
+      $mail->Password = $platform_email['SMTP_PASS'];
+   }
+
+   $mail->Priority = 3; // 5=low, 1=high
+   $mail->AddCustomHeader("Errors-To: ".$platform_email['SMTP_FROM_EMAIL']."");
+   $mail->IsHTML(0);
+   $mail->SMTPKeepAlive = true;
+
+
+   // attachments
+   // $mail->AddAttachment($path);
+   // $mail->AddAttachment($path,$filename);
+
+
+   if ($sender_email!="")
+   {
+      $mail->From 		  = $sender_email;
+      $mail->Sender       = $sender_email;
+      //$mail->ConfirmReadingTo = $sender_email; //Disposition-Notification
+   }
+   else
+    {
+      $mail->From 		= $platform_email['SMTP_FROM_EMAIL'];
+      $mail->Sender 	= $platform_email['SMTP_FROM_EMAIL'];
+      //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
+    }
+
+
+   if ($sender_name!="")
+   {
+      $mail->FromName = $sender_name;
+   }
+   else
+   {
+      $mail->FromName = $platform_email['SMTP_FROM_NAME'];
+   }
+      $mail->Subject = $subject;
+      $mail->AltBody    = strip_tags(str_replace('<br />',"\n",$message));
+      $mail->Body    = '<html><head></head><body>'.$message.'</body></html>';
+      //only valid address
+      if(eregi( $regexp, $recipient_email ))
+      {
+     	 $mail->AddAddress($recipient_email, $recipient_name);
+      }
+
+	if (is_array($extra_headers) && count($extra_headers)>0){
+		foreach($extra_headers as $key=>$value)
+		{
+			switch(strtolower($key)){
+				case 'encoding':
+				case 'content-transfer-encoding':
+					$mail->Encoding = $value;
+					break;
+				case 'charset':
+					$mail->Charset = $value;
+					break;
+				case 'contenttype':
+				case 'content-type':
+					$mail->ContentType = $value;
+					break;
+				default:
+					$mail->AddCustomHeader($key.':'.$value);
+					break;
+			}
+		}
+	}
+   //send mail
+   if (!$mail->Send())
+   {
+        //echo "ERROR: mail not sent to ".$recipient_name." (".$recipient_email.") because of ".$mail->ErrorInfo."<br>";
+        return 0;
+   }
+
+   // Clear all addresses
+   $mail->ClearAddresses();
+   return 1;
+ }
+
 ?>

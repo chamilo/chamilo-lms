@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 11385 2007-03-05 09:11:12Z elixir_julian $
+<?php //$Id: announcements.php 11581 2007-03-15 08:17:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -721,12 +721,13 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 
 									//$to_email_address =$_POST['emailsAdd'];
 									//$mail_body;
-
+									$headers = array();
 		                          	if(empty($charset)){$charset='ISO-8859-1';}
-									$encoding = 'Content-Type: text/html; charset='. $charset;
+									$headers['Content-Type'] = 'text/html';
+									$headers['charset'] = $charset;
 			                        $mailid=$myrow["email"];
 
-									$newmail = api_mail($myrow["lastname"].' '.$myrow["firstname"], $myrow["email"],    $emailSubject, $mail_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail'],$encoding);
+									$newmail = api_mail_html($myrow["lastname"].' '.$myrow["firstname"], $myrow["email"],    $emailSubject, $mail_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail'],$headers);
 	                            }
 								$sql_date="SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
 								$res_date=api_sql_query($sql_date);

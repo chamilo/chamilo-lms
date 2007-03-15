@@ -384,6 +384,8 @@ a.invisible:visited {
 	color: #009;
 	margin-bottom: 2px;
 	padding: 4px;
+	float: left;
+	clear:right;
 }
 
 #header4 a {
@@ -398,6 +400,7 @@ a.invisible:visited {
 /* The tool shortcuts */
 #toolshortcuts {
 	text-align: right;
+	clear: right;
 }
 
 /*

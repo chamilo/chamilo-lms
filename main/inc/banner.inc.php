@@ -324,7 +324,7 @@ foreach($navigation as $index => $navigation_info)
 }
 echo implode(' &gt; ',$navigation);
 ?>
-<div class="clear">&nbsp;</div>
+
 </div><!-- end of header4 -->
 <?php
 if(api_get_setting('show_toolshortcuts')=='true')
@@ -348,6 +348,7 @@ if (isset ($dokeos_database_connection))
 ?>
 
 </div> <!-- end of the whole #header section -->
+<div class="clear">&nbsp;</div>
 <?php
 //to mask the main div, set $header_hide_main_div to true in any script just before calling Display::display_header();
 global $header_hide_main_div;

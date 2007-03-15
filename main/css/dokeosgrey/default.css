@@ -311,6 +311,8 @@ input[text] {font-size: 12px; }
 	color: #009;
 	padding: 4px;
 	margin-bottom: 2px;
+	float: left;
+	clear:right;
 }
 #header4 a {
 	color: #666;
@@ -322,6 +324,7 @@ input[text] {font-size: 12px; }
 /* The tool shortcuts */
 #toolshortcuts {
 	text-align: right;
+	clear: right;
 }
 
 /***************************************************** 

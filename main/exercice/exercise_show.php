@@ -569,7 +569,12 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$resq=api_sql_query($query);
 			$choice = mysql_result($resq,0,"answer");
 			$questionScore = mysql_result($resq,0,"marks");
-			$totalScore+=$questionScore;
+			if($questionScore==-1){
+				$totalScore+=0;
+			}
+			else{
+				$totalScore+=$questionScore;
+			}
 			?>
 			<tr>
 			<td valign="top"><?php display_free_answer($choice, $id, $questionId);?> </td>
@@ -802,6 +807,10 @@ $result =api_sql_query($query, __FILE__, __LINE__);
     									<?php } ?>
 								  </select>
 								  </form></div><?php
+								  if($questionScore==-1){
+								  	$questionScore=0;
+								  	echo '<br>'.get_lang('notCorrectedYet');
+								  }
 								 }
 								 else{
 								 	$arrmarks[] = $questionId;

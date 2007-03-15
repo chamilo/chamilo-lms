@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 11562 2007-03-13 15:41:19Z elixir_julian $
+* 	@version $Id: exercise_result.php 11595 2007-03-15 13:07:10Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -569,7 +569,8 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 										if($studentChoice)
 										{
-										  	$questionScore=0;
+											//Score is at -1 because the question has'nt been corected
+										  	$questionScore=-1;
 											$totalScore+=0;
 										}
 
@@ -691,7 +692,15 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		?>
 			<tr>
 			<td colspan="<?php echo $colspan; ?>" align="right">
-				<b><?php echo get_lang('Score')." : $questionScore/$questionWeighting"; ?></b>
+				<b>
+				<?php
+				if($questionScore==-1){ 
+					echo get_lang('Score')." : 0/$questionWeighting";
+				}
+				else{
+					echo get_lang('Score')." : $questionScore/$questionWeighting";
+				}
+				?></b>
 			</td>
 			</tr>
 			</table>

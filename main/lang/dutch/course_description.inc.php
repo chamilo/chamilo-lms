@@ -15,4 +15,7 @@ $langBackAndForget  = "Annuleren";
 $langOkSent = "Uw pagina werd opgestuurd.<br /><br />
 Die is toegankelijk vanaf uw <a href=\"../../index.php\">cursusstartpagina</a>.";
 $Content = "Inhoud";
+$CourseDescriptionUpdated = "De cursusbeschrijving is bijgewerkt";
+$CourseDescriptionDeleted = "De cursusbeschrijving is verwijderd";
+$CourseDescriptionIntro = "Om een cursusbeschrijving aan te maken, klik op de hoofding en vul het juiste veld in.<br><br>Klik op OK of vul een andere hoofding in.";
 ?>

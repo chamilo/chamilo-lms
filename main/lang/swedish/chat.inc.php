@@ -33,4 +33,5 @@ $langChat_reset_by = "har nollställt chatten";
 $OrFile = "Eller fil";
 $langCallSent = "Chattanrop har skickats. Väntar på godkännande från din partner.";
 $langChatDenied = "Ditt anrop har blivit avvisat av din partner.";
+$Send = "Skicka";
 ?>

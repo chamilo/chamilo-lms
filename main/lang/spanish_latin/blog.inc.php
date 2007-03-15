@@ -68,6 +68,7 @@ $ViewPostsOfThisDay = "Ver los artículos de este día";
 $PostsOf = "Artículos de";
 $SearchResults = "Resultados";
 $NoArticleMatches = "No se encuentran artículos que se ajusten a sus criterios de búsqueda. Probablemente haya escrito incorrectamente algo o su búsqueda es poco concreta. Realice las modificaciones que estime oportunas y ejecute una nueva búsqueda.";
+$langTask1 = "Tarea 1";
 $blog_management = "Administrar blogs";
 $langWelcome = "Bienvenido !";
 $langModule = "Módulo";

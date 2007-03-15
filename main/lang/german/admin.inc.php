@@ -545,6 +545,7 @@ $Host = "Host";
 $UserOnHost = "Benutzername";
 $FtpPassword = "FTP Passwort";
 $PathToLzx = "Pfad zu LZX Dateien";
+$WCAGContent = "WCAG Inhalt";
 $SubscribeCoursesToSession = "Kurse in dieser Session belegen ";
 $DateStartSession = "Anfangsdatum der Session";
 $DateEndSession = "Enddatum der Session";
@@ -602,4 +603,5 @@ $WrongDate = "Falsches Datumsformat (jjjj-mm-tt)";
 $DateStartMoreThanDateEnd = "Anfangsdatum ist später als das Enddatum";
 $SlideSize = "Größe der Slides";
 $EphorusPlagiarismPrevention = "EUphrous Plagiat Verhinderung";
+$CourseTeachers = "Kurslehrer";
 ?>

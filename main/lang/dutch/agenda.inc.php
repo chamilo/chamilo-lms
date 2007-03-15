@@ -42,12 +42,12 @@ $Date = "Datum";
 $Time = "Tijd";
 $AddPersonalCalendarItem = "Persoonlijk agenda-item toevoegen";
 $ModifyPersonalCalendarItem = "Persoonlijk agenda-item wijzigen";
-$PeronalAgendaItemAdded = "Uw persoonlijk agenda-item is toegevoegd.";
-$PeronalAgendaItemEdited = "Uw persoonlijk agenda-item is gewijzigd.";
-$PeronalAgendaItemDeleted = "Uw persoonlijk agenda-item is verwijderd.";
+$PeronalAgendaItemAdded = "Uw persoonlijk agenda-item is toegevoegd";
+$PeronalAgendaItemEdited = "Uw persoonlijk agenda-item is gewijzigd";
+$PeronalAgendaItemDeleted = "Uw persoonlijk agenda-item is verwijderd";
 $ViewPersonalItem = "Bekijk persoonlijke agenda";
 $UserGroupFilter = "Filter op groepen/gebruikers";
-$VisibilityChanged = "De zichtbaarheid is aangepast.";
+$VisibilityChanged = "De zichtbaarheid is aangepast";
 $ShowAll = "Alles tonen";
 $Print = "Afdrukken";
 ?>

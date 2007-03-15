@@ -62,7 +62,7 @@ $langTocDown  = "Omlaag";
 $langTocUp  = "Omhoog";
 $lang_cut_paste_link = "Geen frames";
 $langCreatePath = "Nieuw leerpad";
-$langOogieConversionPowerPoint = "Oogie : powerpoint conversie";
+$langOogieConversionPowerPoint = "Oogie: powerpoint conversie";
 $langWelcomeOogieSubtitle = "Een conversie applicatie die een Powerpoint presentatie omzet in een leerpad.";
 $langAddMetadata = "Metadata bekijken/veranderen";
 $langGoMetadata = "Go";
@@ -118,4 +118,8 @@ $Content = "Inhoud";
 $Validate = "Valideer";
 $AdvancedSettings = "Geavanceerde instellingen";
 $AdvancedSettings = "Geavanceerde instellingen";
+$File = "Bestand";
+$DocDeleteError = "Fout bij het verwijderen van het document";
+$ViModProb = "Er deed zich een probleem voor bij het bijwerken van de zichtbaarheid";
+$DirDeleted = "Folder verwijderd";
 ?>

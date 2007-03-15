@@ -406,4 +406,10 @@ $DisplaySearchResults = "Keresési eredmények megtekintése";
 $DisplayAll = "Mind megtekintése";
 $File_upload = "Állomány feltöltése";
 $Percentage = "Százalék";
+$Informations = "Információk";
+$EmailDestination = "Fogadó";
+$SendEmail = "Email küldése";
+$EmailTitle = "Email cím";
+$EmailText = "Email tartalma";
+$Send = "Küldés";
 ?>

@@ -62,5 +62,11 @@ $CourseSortingDone = "De cursus werd herschikt";
 $ExistingCourseCategories = "Reeds bestaande cursuscategorieën";
 $YouAreNowUnsubscribed = "U bent nu uitgeschreven voor de cursus";
 $ViewOpenCourses = "Bekijk open cursussen";
+$ErrorContactPlatformAdmin = "Er deed zich een onbekende fout voor. Contacteer uw platformbeheerder.";
+$CourseRegistrationCodeIncorrect = "De cursuscode is niet correct";
+$CourseRequiresPassword = "Deze cursus vereist een paswoord";
+$SubmitRegistrationCode = "Verstuur registratiecode";
+$CourseCategoryDeleted = "Cursuscategorie verwijderd";
 $CategorySortingDone = "De categorieën zijn gesorteerd";
+$CourseCategoryEditStored = "Categorie bijgewerkt";
 ?>

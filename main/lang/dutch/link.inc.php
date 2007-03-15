@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $LinkMoved = "De link is verplaatst";
+$VisibilityChanged = "De zichtbaarheid van de link werd verwijderd";
 $langLinkName = "Naam link";
 $langLinkAdd = "Link toevoegen";
 $langLinkAdded = "Link is toegevoegd.";

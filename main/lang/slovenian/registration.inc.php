@@ -163,4 +163,5 @@ $ActiveAccount = "Aktiven raèun";
 $YourAccountHasToBeApproved = "Vaš raèun zahteva odobritev";
 $ApprovalForNewAccount = "Odobritev za nov raèun";
 $ManageUser = "Upravljaj uporabnika";
+$SubscribeUserToCourseAsTeacher = "Vpiši uporabnike v ta teèaj kot uèitelje";
 ?>

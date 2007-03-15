@@ -171,4 +171,5 @@ $ActiveAccount = "Activation du compte";
 $YourAccountHasToBeApproved = "Votre inscription doit être validée";
 $ApprovalForNewAccount = "Approbation pour un nouveau compte";
 $ManageUser = "Gestion de l\'utilisateur";
+$SubscribeUserToCourseAsTeacher = "Inscrire des utilisateurs comme responsable";
 ?>

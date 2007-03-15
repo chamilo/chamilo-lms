@@ -161,4 +161,5 @@ $ActiveAccount = "Aktiver Account";
 $YourAccountHasToBeApproved = "Der Account muss genehmigt werden";
 $ApprovalForNewAccount = "Genehmigung für neuen Account";
 $ManageUser = "Benutzer verwalten";
+$SubscribeUserToCourseAsTeacher = "ALs Lehrer Benutzer in diesem Kurs einschreiben";
 ?>

@@ -289,4 +289,8 @@ $NoSearchResults = "Inga sök resultat";
 $h = "t";
 $CreateNewGlobalRole = "Skapa ny global rättighet";
 $CreateNewLocalRole = "Skapa ny lokal rättighet";
+$Content = "Innehåll";
+$EmailDestination = "Mottagare";
+$SendEmail = "Skicka e-post";
+$Send = "Skicka";
 ?>

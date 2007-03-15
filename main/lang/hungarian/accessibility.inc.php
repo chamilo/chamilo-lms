@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$WCAGContent = "Szöveg";
 $test = "teszt";
 $WCAGImage = "Kép";
 $WCAGLabel = "Kép cimke";

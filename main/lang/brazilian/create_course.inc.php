@@ -96,4 +96,8 @@ $AnnouncementExampleTitle = "Este é um exemplo de Comunicado";
 $Wikipedia = "Enciclopédia online gratuita";
 $DefaultGroupCategory = "Grupos padrões";
 $DefaultCourseImages = "Imagens padrão";
+$ExampleForumCategory = "Exemplo de categoria de fórum";
+$ExampleForum = "Exemplo de Fórum";
+$ExampleThread = "Exemplo de mensagem";
+$ExampleThreadContent = "Exemplo de conteúdo";
 ?>

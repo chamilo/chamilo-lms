@@ -30,5 +30,8 @@ $langDirCr = "Criar Diretório";
 $langCurrentDir = "Diretório atual";
 $UploadADocument = "Enviar um documento";
 $EditToolOptions = "Editar opções da Ferramenta";
+$DocumentDeleted = "Documento apagado";
+$SendMailBody = "Um usuário postou um documento na ferramenta Publicações";
+$DirDelete = "Deleta diretório";
 $ValidateChanges = "Validar alterações";
 ?>

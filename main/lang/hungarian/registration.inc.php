@@ -163,4 +163,5 @@ $ActiveAccount = "Aktív felhasználó";
 $YourAccountHasToBeApproved = "Felhasználói fiókját jóvá kell hagyni";
 $ApprovalForNewAccount = "Új felhasználó jóváhagyása";
 $ManageUser = "Felhasználók kezelése";
+$SubscribeUserToCourseAsTeacher = "Felhasználók tanárként beíratása a kurzusba";
 ?>

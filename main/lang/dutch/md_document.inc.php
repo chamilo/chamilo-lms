@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langMdCallingTool = "Documenten";
-$langMdTitle = "Titel v.h. leerobject";
+$langMdTitle = "Titel van het leerobject";
 $langMdDescription = "Om de gegevens te bewaren, druk op \"Bewaren\"";
 $langMdCoverage = "bv. Bachelor in &hellip;";
 $langMdCopyright = "bv. met bronvermelding";

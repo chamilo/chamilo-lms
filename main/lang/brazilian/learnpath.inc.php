@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewForumCreated = "O novo fórum acaba de ser criado";
+$NewThreadCreated = "O novo assunto do fórum acaba de ser criado.";
 $lang_learning_path = "Rota de Aprendizado";
 $lang_learning_path_builder = "Construtor de Rotas de Aprendizado";
 $lang_description = "descrição";
@@ -162,4 +164,8 @@ $EditCurrentLink = "Editar o link ";
 $Url = "Url";
 $MoveCurrentStudentPublication = "Mover trabalho do aluno";
 $EditCurrentStudentPublication = "Editar trabalho do estudante";
+$AllowMultipleAttempts = "Permitir várias tentativas";
+$PreventMultipleAttempts = "Impedir várias tentativas";
+$MakeScormRecordingExtra = "Fazer gravações SCORM extra";
+$MakeScormRecordingNormal = "Fazer gravações SCORM normais";
 ?>

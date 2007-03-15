@@ -3,8 +3,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "versione";
 $langScormRestarted = "Ora tutti gli elementi sono da completare";
-$langScormNoNext = "Non ci sono elementi successivi.";
-$langScormNoPrev = "Non ci sono elementi precedenti.";
+$langScormNoNext = "Ultimo elemento.";
+$langScormNoPrev = "Primo elemento.";
 $langScormTime = "Tempo";
 $langScormNoOrder = "Non c\'è un ordine obbligatorio, potete cliccare su qualsiasi elemento.";
 $langScormScore = "Punti";
@@ -25,7 +25,7 @@ $langScormTitle = "Lettore Scorm di Dokeos";
 $langScormMystatus = "Situazione";
 $langScormNoItems = "Questa parte non contiene elementi";
 $langScormNoStatus = "Stato non definito per il contenuto";
-$langScormLoggedout = "Sei stato sconnesso da Dokeos. Ora la finestra verrà chiusa.";
+$langScormLoggedout = "Sei stato sconnesso dall\'area Percorsi";
 $langScormCloseWindow = "Vuoi veramente concludere?";
 $ScormBrowsed = "Visto";
 $langScormExitFullScreen = "Schermo normale";

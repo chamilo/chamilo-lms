@@ -88,4 +88,7 @@ $EditBlog = "Modifica il blog";
 $DeleteBlog = "Elimina il blog";
 $Comments = "Commenti";
 $Comment = "Commento";
+$Comments = "Commenti";
+$NoTasks = "Nessuna attività";
+$Shared = "Condivisione";
 ?>

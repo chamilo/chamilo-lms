@@ -84,6 +84,7 @@ $langScore = "Pontuação";
 $langCorrespondsTo = "Corresponde a";
 $langExpectedChoice = "Escolha esperada";
 $langYourTotalScore = "Sua pontuação total é";
+$Build = "Construir";
 $langEvalSet = "parâmetros de avaliação";
 $langActive = "ativo";
 $langInactive = "inativo";
@@ -209,4 +210,6 @@ $PlusAnswer = "+ resposta";
 $LessAnswer = "- resposta";
 $YourScore = "Sua pontuação";
 $Attempted = "Tentado";
+$AssignMarks = "Atribuir uma classificação";
+$Results = "Resultados";
 ?>

@@ -168,4 +168,5 @@ $ActiveAccount = "Activação de conta";
 $YourAccountHasToBeApproved = "O seu registo tem de ser aprovado";
 $ApprovalForNewAccount = "Aprovação para um novo registo";
 $ManageUser = "Gerir utilizador";
+$SubscribeUserToCourseAsTeacher = "Inscrever utilizador(es) para este curso como professor(es)";
 ?>

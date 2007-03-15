@@ -188,5 +188,11 @@ $StudentDetailsInCourse = "Podrobnosti o kandidatu znotraj teèaja";
 $Learnpaths = "Uène poti";
 $OtherTools = "Ostala orodja";
 $DetailsStudentInCourse = "Taèajnikove podrobnosti v teèaju";
+$CourseTitle = "Naslov teèaja";
 $NbStudents = "Število kandidatov";
+$TimeSpentInTheCourse = "Porabljen èas v okviru teèaja";
+$AvgStudentsProgress = "Povpreèen napredek kandidatov";
+$AvgStudentsScore = "Povpreèen rezultat kandidatov";
+$AvgMessages = "Sporoèil na kandidata";
+$AvgAssignments = "Objav teèajnikov na kandidata";
 ?>

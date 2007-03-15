@@ -99,5 +99,8 @@ $AnnouncementExampleTitle = "Dit is een voorbeeldbericht.";
 $Wikipedia = "Gratis online-encyclopedie";
 $DefaultGroupCategory = "Standaardgroepen";
 $DefaultCourseImages = "Standaard afbeeldingen";
+$ExampleForumCategory = "Voorbeeld forumcategorie";
 $ExampleForum = "Voorbeeldforum";
+$ExampleThread = "Voorbeelddiscussie";
+$ExampleThreadContent = "Voorbeeldinhoud";
 ?>

@@ -42,4 +42,5 @@ $langBackup = "Visszaállítás";
 $langImportBackupInfo = "Biztonsági mentés importálása. Lehet&#337;sége van feltölteni egy mentés fájlt a gépér&#337;l, vagy egy a szerveren lev&#337; mentést használni.";
 $langCreateBackupInfo = "Biztonsági mentés készítése kurzusáról. Megadhatja, hogy milyen kurzuselemek kerüljenek bele a mentés állományba.";
 $ToolIntro = "Eszközismertet&#337;";
+$UploadError = "Sikertelen feltöltés. Kérjük, ellen&#337;rizze a fájlnagyság limitjét és a mappa jogosultságait!";
 ?>

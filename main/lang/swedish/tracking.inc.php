@@ -132,4 +132,6 @@ $SynthesisView = "Visa syntes";
 $Visited = "Besökt";
 $FirstAccess = "Första access";
 $LastAccess = "Senaste access";
+$Administrators = "Administratörer";
+$ExcelFormat = "Excel-format";
 ?>

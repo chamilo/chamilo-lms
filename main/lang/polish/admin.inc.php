@@ -407,4 +407,5 @@ $RoleId = "Identyfikator Funkcji";
 $RoleName = "Nazwa funkcji";
 $RoleType = "Typ";
 $RightValueModified = "Warto&#347;&#263; zosta&#322;a zmodyfikowana.";
+$WCAGContent = "Tekst";
 ?>

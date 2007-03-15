@@ -164,4 +164,5 @@ $ActiveAccount = "Active account";
 $YourAccountHasToBeApproved = "Your account has to be approved";
 $ApprovalForNewAccount = "Approval for new account";
 $ManageUser = "Manage user";
+$SubscribeUserToCourseAsTeacher = "Subscribe users to this course as teacher";
 ?>

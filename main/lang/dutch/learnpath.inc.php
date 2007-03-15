@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewForumCreated = "Het nieuwe forum is aangemaakt";
+$NewThreadCreated = "Een nieuw forum thread werd aangemaakt.";
 $lang_learning_path = "Leerpad";
 $lang_learning_path_builder = "Leerpadbouwer";
 $lang_description = "beschrijving";
@@ -109,7 +111,7 @@ $langAfter = "Na ";
 $lang_prerequisites_limit = "limiet";
 $lang_loading = "Pagina aan het laden, geduld a.u.b.&hellip;";
 $lang_empty = "Dit leerpad bevat geen stappen.";
-$langHotPotatoesFinished = "Deze Hot Potatoestest is gesloten.";
+$langHotPotatoesFinished = "Deze HotPotatoestest is gesloten.";
 $langCompletionLimit = "Limit van voltooiing (minimumaantal punten)";
 $langPrereqToEnter = "binnengaan";
 $langPrereqFirstNeedTo = "u moet eerst vervolledigen";
@@ -148,4 +150,19 @@ $langNoDocuments = "Géén bestanden";
 $langNoExercisesAvailable = "Er is geen enkele oefening beschikbaar";
 $langNoLinksAvailable = "Er is géén link beschikbaar";
 $langNoItemsInLp = "Er zijn géén stappen in dit leerpad. Klik op \"geavanceerd\" om een stap aan te maken.";
+$FirstPosition = "Eerste plaats";
+$NewQuiz = "Nieuwe kwis";
+$CreateTheForum = "Toevoegen van een forum";
+$Forums = "Forums";
+$AddLpIntro = "<strong>Welkom</strong> bij het Dokeos Leerpad auteursgedeelte";
+$AddLpIntro = "<strong>Welkom</strong> bij het Dokeos Leerpad auteursgedeelte.<br> Je leert stap voor stap een leerpad aanmaken. De structuur van jouw leerpad zal verschijnen in een menu langs de linkerzijde van het venster.";
+$AddLpToStart = "Om te starten, geef een titl voor uw leerpad";
+$CreateTheLink = "Importeer een link";
+$MoveCurrentLink = "Verplaats de huidig link";
+$EditCurrentLink = "Wijzig huidige link";
+$Url = "Url";
+$MoveCurrentStudentPublication = "Wijzig de publicatie van de huidige student";
+$EditCurrentStudentPublication = "Wijzig de publicatie van de huidige student";
+$AllowMultipleAttempts = "Sta meerdere pogingen toe";
+$PreventMultipleAttempts = "Sta geen meerdere pogingen toe";
 ?>

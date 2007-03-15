@@ -161,4 +161,8 @@ $NeverExpires = "Nunca expira";
 $On = "a";
 $ExpirationDate = "Data de expiração";
 $ActiveAccount = "Ativação de conta";
+$YourAccountHasToBeApproved = "O seu registo necessita aprovação";
+$ApprovalForNewAccount = "Aprovação para um novo registro";
+$ManageUser = "Administrar usuário";
+$SubscribeUserToCourseAsTeacher = "Registra usuários neste curso como professor";
 ?>

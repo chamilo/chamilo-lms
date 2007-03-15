@@ -88,4 +88,5 @@ $EditBlog = "Editar título e subtítulo";
 $DeleteBlog = "Apagar este blog";
 $Comments = "Comentários";
 $Comment = "Comentário";
+$Comments = "Comentários";
 ?>

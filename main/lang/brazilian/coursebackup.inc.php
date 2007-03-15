@@ -42,4 +42,5 @@ $langBackup = "Backup";
 $langImportBackupInfo = "Importar informações do backup";
 $langCreateBackupInfo = "Criar informações de backup";
 $ToolIntro = "Introdução da ferramenta";
+$UploadError = "Erro no upload, verifique os limites de tamanho e permissões de escrita";
 ?>

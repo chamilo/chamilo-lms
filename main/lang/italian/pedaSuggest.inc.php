@@ -13,7 +13,7 @@ $TopicsQuestions = "Quale sarà la sequenza degli argomenti?  Quale sarà la progr
 
 ";
 $Methodology = "Metodologia";
-$MethodologyQuestions = "Quali metodi e attività favoriranno il raggiungimento degli obiettivi prefissati?  Qual\'è il calendario delle attività?";
+$MethodologyQuestions = "Quali metodi e attività favoriranno il raggiungimento degli obiettivi prefissati?  Qual è il calendario delle attività?";
 $MethodologyInformation = "Presentazione delle attività previste (seminari, presentazioni tenute dagli studenti, esercitazioni pratiche, laboratori, visite, raccolta di informazioni ...).";
 $CourseMaterial = "Materiali di supporto";
 $CourseMaterialQuestions = "Esistono dei supporti al corso (testi, dispense, articoli, bibliografia, elenco di collegamenti su Internet...)?  ";

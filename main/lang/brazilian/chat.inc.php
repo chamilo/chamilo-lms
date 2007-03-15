@@ -33,4 +33,6 @@ $langChat_reset_by = "limpar chat";
 $OrFile = "Ou arquivo";
 $langCallSent = "A chamada para o bate-papo foi enviada. Aguarde aprovação do usuário solicitado";
 $langChatDenied = "Seu convite para bate-papo não foi aceito pelo usuário";
+$Send = "Enviar";
+$Connected = "Conectado";
 ?>

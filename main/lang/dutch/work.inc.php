@@ -31,4 +31,7 @@ $langCurrentDir = "huidige map";
 $UploadADocument = "Een document uploaden";
 $EditToolOptions = "Moduleopties wijzigen";
 $DocumentDeleted = "Het document is verwijderd";
+$SendMailBody = "Een gebruiker postte een document in de publicaties-tool van uw cursus.";
+$DirDelete = "Verwijder folder";
+$ValidateChanges = "Valideer wijzigingen";
 ?>

@@ -57,4 +57,5 @@ $ForumAddNewTopic = "Forum: nieuw bericht toevoegen";
 $ForumEditTopic = "Forum: bericht wijzigen";
 $ExerciseAnswers = "Oefeningen: antwoorden";
 $ForumReply = "Forum: antwoorden";
+$AgendaSortChronologicallyDown = "Sorteer agenda chronologisch";
 ?>

@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$LinkMoved = "A link eltávolításra került.";
 $langLinkName = "Hivatkozás neve";
 $langLinkAdd = "Hivatkozás hozzáadása";
 $langLinkAdded = "A hivatkozás hozzá lett adva";

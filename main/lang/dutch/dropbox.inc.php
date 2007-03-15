@@ -122,4 +122,5 @@ $mailingNonMailingError = "Mailing kan niet overschreven worden door een niet-ma
 $MailingSelectNoOther = "Een mailing kan niet gecombineerd worden met andere bestemmelingen.";
 $mailingJustUploadSelectNoOther = "Enkel upload kan niet gecombineerd worden met andere bestemmelingen.";
 $NoFilesHere = "Er zijn hier geen bestanden";
+$NoFilesHere = "Hier zijn geen bestanden";
 ?>

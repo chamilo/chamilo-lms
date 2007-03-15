@@ -163,4 +163,5 @@ $ActiveAccount = "Attiva l\'account";
 $YourAccountHasToBeApproved = "L\'iscrizione è in attesa di approvazione";
 $ApprovalForNewAccount = "Approvazione della nuova iscrizione";
 $ManageUser = "Gestione utenti";
+$SubscribeUserToCourseAsTeacher = "Iscrivi degli utenti al corso come docente";
 ?>

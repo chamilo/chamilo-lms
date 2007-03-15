@@ -353,6 +353,7 @@ $AccountValidDurationTitle = "Platnost ú&#269;tu";
 $Comment = "Komentá&#345;";
 $Version = "Verze";
 $Header = "Záhlaví";
+$WCAGContent = "Text";
 $RegistrationDate = "Datum registrace";
 $NoUsersInCourse = "Žádný uživatelé v kurzu";
 $FileImported = "Soubor byl naimportován";

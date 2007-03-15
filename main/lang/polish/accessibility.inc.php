@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$WCAGContent = "Tekst";
 $test = "test";
 $WCAGImage = "Obrazek";
 $WCAGLabel = "Etykieta obrazka";

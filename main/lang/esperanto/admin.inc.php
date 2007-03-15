@@ -497,4 +497,5 @@ $AccountValidDurationComment = "Uzanta konto validas dum tiom da tagoj post sia 
 $UseSessionModeTitle = "Utiligi sesian modon";
 $UseSessionModeComment = "Sesio ebligas alian manieron de kursmastrumado, per kiu kursoj havas kurspreparanton, kursgvidanton kaj studentojn. &#264;iu kursgvidanto gvidas kurson dum difinita tempo, nomata sesio, al difinita grupo da studentoj.";
 $IconsOnly = "Kelkaj ikonoj";
+$WCAGContent = "teksto";
 ?>

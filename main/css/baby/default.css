@@ -1375,7 +1375,7 @@ div.system_announcement {
 ==============================================================================
 */
 
-#skip {
+.skip {
 	position:absolute;
 	top:0;
 	left:-9000px;

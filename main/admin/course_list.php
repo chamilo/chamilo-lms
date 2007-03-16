@@ -1,5 +1,5 @@
 <?php
-// $Id: course_list.php 10920 2007-01-26 10:55:37Z elixir_julian $
+// $Id: course_list.php 11609 2007-03-16 14:55:30Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -77,6 +77,9 @@ function get_number_of_courses()
 function get_course_data($from, $number_of_items, $column, $direction)
 {
 	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+	$users_table = Database :: get_main_table(TABLE_MAIN_USER);
+	$course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	
 	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, code AS col8 FROM $course_table";
 	if (isset ($_GET['keyword']))
 	{
@@ -103,6 +106,11 @@ function get_course_data($from, $number_of_items, $column, $direction)
 		$course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[7] = CourseManager :: is_virtual_course_from_system_code($course[7]) ? get_lang('Yes') : get_lang('No');
+		$sql2='SELECT firstname, lastname FROM '.$users_table.' as u, '.$course_users_table.' as cu  WHERE cu.course_code="'.$course[0].'" AND cu.status="1" and cu.role="Professor" AND cu.user_id=u.user_id';
+		$result2 = api_sql_query($sql2, __FILE__, __LINE__);
+		$firstname=mysql_result($result2,0,'firstname');
+		$lastname=mysql_result($result2,0,'lastname');
+		$course[8] = $firstname.' '.$lastname;
 		$courses[] = $course;
 	}
 	return $courses;
@@ -206,8 +214,9 @@ else
 	$table->set_header(5, get_lang('SubscriptionAllowed'));
 	$table->set_header(6, get_lang('UnsubscriptionAllowed'));
 	$table->set_header(7, get_lang('IsVirtualCourse'));
-	$table->set_header(8, '', false);
-	$table->set_column_filter(8,'modify_filter');
+	$table->set_header(8, get_lang('Teacher'));
+	$table->set_header(9, '', false);
+	$table->set_column_filter(9,'modify_filter');
 	$table->set_form_actions(array ('delete_courses' => get_lang('DeleteCourse')),'course');
 	$table->display();
 }

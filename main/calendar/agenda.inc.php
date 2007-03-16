@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 11385 2007-03-05 09:11:12Z elixir_julian $
+<?php //$Id: agenda.inc.php 11607 2007-03-16 13:18:47Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -429,29 +429,33 @@ global $_cid;
 if (!isset($courseadmin_filter))
 	{$courseadmin_filter='';}
 
-if(api_get_setting("use_session_mode") != "true")
-{
-	$sql =	"SELECT u.lastname lastName, u.firstname firstName, u.user_id uid
-			         FROM ".$tbl_user." u, ".$tbl_courseUser." cu
-			         WHERE cu.course_code = '".$_cid."'
-			         AND cu.user_id = u.user_id $courseadmin_filter
-			         ORDER BY u.lastname, u.firstname";
+$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName 
+		FROM $tbl_user as u, $tbl_courseUser as cu 
+		WHERE cu.course_code = '".$_cid."' 
+			AND cu.user_id = u.user_id $courseadmin_filter 
+		ORDER BY u.lastname, u.firstname";
+$result = api_sql_query($sql,__FILE__,__LINE__);
+while($user=mysql_fetch_array($result)){
+	$users[$user[0]] = $user;
 }
-else 
-{
-	$sql = "SELECT u.lastname lastName, u.firstName firstName, u.user_id uid 
+
+if(!empty($_SESSION['id_session'])){
+	$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstName firstName  
 			FROM $tbl_session_course_user AS session_course_user
 			INNER JOIN $tbl_user u
 				ON u.user_id = session_course_user.id_user
 			WHERE id_session='".$_SESSION['id_session']."' 
 			AND course_code='$_cid'";
+	
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	while($user=mysql_fetch_array($result)){
+		$users[$user[0]] = $user;
+	}	
+
 }
-$result = api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
-while ($user_data = mysql_fetch_array($result))
-	{
-	$user_list [$user_data['uid']] = $user_data;
-	}
-return $user_list;
+
+return $users;
+
 }
 
 
@@ -489,7 +493,7 @@ function show_to_form($to_already_selected)
 $user_list=get_course_users();
 $group_list=get_course_groups();
 
-echo "\n<table>\n";
+echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
 	echo "\t<tr>\n";
 	// the form containing all the groups and all the users of the course
 	echo "\t\t<td>\n";
@@ -498,13 +502,13 @@ echo "\n<table>\n";
 	// the buttons for adding or removing groups/users
 	echo "\n\t\t<td valign=\"middle\">\n";
 	echo "\t\t<input type=\"button\" ",
-				"onclick=\"move(this.form.elements[3],this.form.elements[6])\" ",
+				"onclick=\"move(this.form.elements[2],this.form.elements[5])\" ",
 				"value=\"   &gt;&gt;   \" />",
 
 				"\n\t\t<p>&nbsp;</p>",
 
 				"\n\t\t<input type=\"button\" ",
-				"onclick=\"move(this.form.elements[6],this.form.elements[3])\" ",
+				"onclick=\"move(this.form.elements[5],this.form.elements[2])\" ",
 				"value=\"   &lt;&lt;   \" />";
 	echo "\t\t</td>\n";
 	echo "\n\t\t<td>\n";
@@ -624,7 +628,8 @@ $last_id=mysql_insert_id();
 
 // store in last_tooledit (first the groups, then the users
 $to=$_POST['selectedform'];
-if (($_SESSION['allow_individual_calendar']=="show" and !is_null($to))or (!empty($_SESSION['toolgroup']))) // !is_null($to): when no user is selected we send it to everyone
+
+if ((!is_null($to))or (!empty($_SESSION['toolgroup']))) // !is_null($to): when no user is selected we send it to everyone
 	{
 	$send_to=separate_users_groups($to);
 	// storing the selected groups
@@ -1132,7 +1137,7 @@ function store_edited_agenda_item()
 
 		$result = api_sql_query($sql_delete,__FILE__,__LINE__) or die (mysql_error());
 		// 2.b. storing the new users/groups
-		if ($_SESSION['allow_individual_calendar']=="show" and !is_null($to)) // !is_null($to): when no user is selected we send it to everyone
+		if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
 		{
 			$send_to=separate_users_groups($to);
 			// storing the selected groups
@@ -1789,11 +1794,12 @@ function display_one_agenda_item($agenda_id)
 * agenda item. When the id parameter is empty (default behaviour), then we show an empty form, else we are editing and
 * we have to retrieve the information that is in the database and use this information in the forms.
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @param integer id, the id of the agenda itme we are editing. By default this is empty which means that we are adding an
+* @param integer id, the id of the agenda item we are editing. By default this is empty which means that we are adding an
 *		 agenda item.
 */
 function show_add_form($id = '')
 {
+
 	global $MonthsLong;
 
 	// the default values for the forms
@@ -1902,7 +1908,7 @@ function show_add_form($id = '')
 	</tr>
 
 	<!--  the select specific users / send to all form -->
-	<?php
+	<?php 
 	if (isset ($_SESSION['toolgroup']))
 	{
 		echo '<tr id="subtitle">';
@@ -1912,23 +1918,25 @@ function show_add_form($id = '')
 		echo '</td>';
 		echo '</tr>'; 
 	
-	}else{ 
+	}else{
+		 
 		?>
 		<tr class="subtitle">
 			<td valign="top" colspan="3">
 				<?php
 				// this variable defines if the course administrator can send a message to a specific user / group
 				// or not 
-				echo "<input type=\"submit\" name=\"To\" value=\"".get_lang("SelectGroupsUsers")."\" style=\"float:left\">" ;
+				//echo "<input type=\"submit\" name=\"To\" value=\"".get_lang("SelectGroupsUsers")."\" style=\"float:left\">" ;
 	
 				//echo "sessiewaarde: ".$_SESSION['allow_individual_calendar'];
-				if ($_SESSION['allow_individual_calendar']=="hide")
-				{
-					echo '<select name="selectedform[]" size="1" multiple="multiple" style="width:200px" width="200px"><option>'.get_lang("Everybody").'</option></select>';
+				echo get_lang("SentTo").": ";
+				if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id'])){
+					echo get_lang("Everybody").'&nbsp;';
 				}
-				if ($_SESSION['allow_individual_calendar']=="show")
-				{
-					show_to_form($to);
+				echo '<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
+				show_to_form($to);
+				if (isset($_GET['id']) && $to!='everyone'){
+					echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
 				}
 			?>
 			<hr noshade="noshade" color="#cccccc" />
@@ -2221,7 +2229,7 @@ function show_add_form($id = '')
 
 	<tr>
 		<td colspan="7">
-			<input type="submit" name="submit_event" value="<?php echo get_lang('Ok'); ?>" onclick="selectAll(this.form.elements[6],true)" />
+			<input type="submit" name="submit_event" value="<?php echo get_lang('Ok'); ?>" onclick="selectAll(this.form.elements[5],true)" />
 		</td>
 	</tr>
 </table>

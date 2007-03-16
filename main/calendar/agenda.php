@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 11195 2007-02-22 15:42:28Z elixir_julian $
+<?php //$Id: agenda.php 11607 2007-03-16 13:18:47Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -156,13 +156,8 @@ if ($_GET['isStudentView']=="false")
 	api_session_unregister("group");
 }
 
-// setting the javascripts
-if ($_SESSION['allow_individual_calendar']=="show")
-{
-	// this javascript should only be loaded when we show the forms to send messages to individual users/groups
-	// because otherwise it produces a bug (=> year is set to 2009 on submit due to the javascript selectAll
-	$htmlHeadXtra[] = to_javascript();
-}
+$htmlHeadXtra[] = to_javascript();
+
 $htmlHeadXtra[] = user_group_filter_javascript();
 // this loads the javascript that is needed for the date popup selection
 $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";

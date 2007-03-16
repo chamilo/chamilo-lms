@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 11104 2007-02-13 09:21:38Z elixir_julian $
+<?php //$Id: announcements.inc.php 11607 2007-03-16 13:18:47Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -94,7 +94,7 @@ function show_to_form($to_already_selected)
 	$user_list=get_course_users();
 	$group_list=get_course_groups();
 
-	echo "\n<table>\n";
+	echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
 	echo "\t<tr>\n";
 	
 	// the form containing all the groups and all the users of the course
@@ -105,13 +105,13 @@ function show_to_form($to_already_selected)
 	// the buttons for adding or removing groups/users
 	echo "\n\t\t<td valign=\"middle\">\n";
 	echo "\t\t<input	type=\"button\"	",
-				"onClick=\"move(this.form.elements[1],this.form.elements[4])\" ",               // 7 & 4 : fonts
+				"onClick=\"move(this.form.elements[0],this.form.elements[3])\" ",// 7 & 4 : fonts
 				"value=\"   >>   \">",
 
 				"\n\t\t<p>&nbsp;</p>",
 
 				"\n\t\t<input	type=\"button\"",
-				"onClick=\"move(this.form.elements[4],this.form.elements[1])\" ",
+				"onClick=\"move(this.form.elements[3],this.form.elements[0])\" ",
 				"value=\"   <<   \">";
 	echo "\t\t</td>\n";
 	echo "\n\t\t<td>\n";
@@ -196,7 +196,15 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 		}
 		else
 		{
-			echo "\t\t<option value=\"".$groupuser."\">".$ref_array_users[$id]['lastName']." ".$ref_array_users[$id]['firstName']."</option>";
+			
+			foreach($ref_array_users as $key=>$value){
+
+				if($value['user_id']==$id){
+					echo "\t\t<option value=\"".$groupuser."\">".$value['lastName']." ".$value['firstName']."</option>";
+					break;
+				}
+				
+			}
 		}
 	}
 	echo "</select>\n";
@@ -649,7 +657,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to)
 
 	global $tbl_announcement;
 	global $tbl_item_property;
-
+	
 	// store the modifications in the table announcement
 	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";
 

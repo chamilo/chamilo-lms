@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 11581 2007-03-15 08:17:58Z yannoo $
+<?php //$Id: announcements.php 11607 2007-03-16 13:18:47Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -211,14 +211,8 @@ if ($originalresource!=="no" and $action=="add")
 	Javascript
 -----------------------------------------------------------
 */
-// this is a quick and dirty hack that fixes a bug http://www.dokeos.com/forum/viewtopic.php?t=5263
-// when you edit an announcement that was sent to specific users/groups
-if ($_SESSION['select_groupusers'] =="show" or $_GET['action']=='modify')
-{
-	// this javascript should only be loaded when we show the forms to send messages to individual users/groups
-	// because otherwise it produces a bug (=> year is set to 2009 on submit due to the javascript selectAll
-	$htmlHeadXtra[] = to_javascript();
-}
+
+$htmlHeadXtra[] = to_javascript();
 
 /*
 -----------------------------------------------------------
@@ -518,7 +512,7 @@ if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announce
 			
 			if(isset($id)&&$id) // there is an Id => the announcement already exists => update mode
 			{
-				$edit_id = edit_advalvas_item($id,$emailTitle,$newContent,$selectedform);
+				$edit_id = edit_advalvas_item($id,$emailTitle,$newContent,$_POST['selectedform']);
 				if(!$delete)
 				{
 				    update_added_resources("Ad_Valvas", $id);
@@ -532,7 +526,6 @@ if (api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announce
 	
 					list($orderMax) = mysql_fetch_row($result);
 					$order = $orderMax + 1;
-	
 					if(!empty($_SESSION['toolgroup'])){
 						$insert_id=store_advalvas_item($_POST['emailTitle'],$_POST['newContent'],$order,array('GROUP:'.$_SESSION['toolgroup']));
 					}else{
@@ -1001,28 +994,20 @@ if ($message == true)
 		// or not
 		//echo "sessiewaarde: ".$_SESSION['select_groupusers'];
 	if(empty($_SESSION['toolgroup'])){
-		if ($_SESSION['select_groupusers']=="hide")
-		{
-			echo "<table><tr><td>";
-			echo get_lang("SentTo").": ";
-			echo "</td><td>";
+		
+		echo "<table><tr><td>";
+		echo get_lang("SentTo").": ";
+		echo "</td><td>";
+		if(isset($_GET['id']) && is_array($to)){
+			echo '&nbsp;';
+		}
+		else{
 			echo get_lang("Everybody");
-			echo "</td><td>";
-			echo "<input type=\"submit\" name=\"To\" value=\"".get_lang("SelectGroupsUsers")."\" style=\"float:left\">" ;
-			echo "</td></tr></table>";
 		}
-
-		if ($_SESSION['select_groupusers']=="show")
-		{
-			echo "<table><tr><td>";
-			echo get_lang("SentTo").": ";
-			echo "</td><td>";
-			echo get_lang('SelectedUsersGroups');
-			echo '</td><td>';
-			echo "<input type=\"submit\" name=\"To\" value=\"".get_lang("SelectEverybody")."\" style=\"float:left\">" ;
-			echo "</td></tr></table>";
-			show_to_form($to);
-		}
+		echo "</td><td>";
+		echo '<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</span>';
+		echo "</td></tr></table>";
+		show_to_form($to);
 
 		echo "<br /><br />";
 
@@ -1111,11 +1096,14 @@ if ($message == true)
 					  echo "</table>";*/
 
 		?>
-                <br /><input type="Submit" name="submitAnnouncement" value="<?php echo get_lang('Ok') ?>" onclick="selectAll(this.form.elements[4],true)" /><br /><br />
+                <br /><input type="Submit" name="submitAnnouncement" value="<?php echo get_lang('Ok') ?>" onclick="selectAll(this.form.elements[3],true)" /><br /><br />
 
         <?php
 
 				"</form><br />\n";
+		if(isset($_GET['action']) && isset($_GET['id']) && is_array($to)){
+			echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
+		}
     } // displayform
 
 

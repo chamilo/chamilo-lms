@@ -2674,6 +2674,11 @@ class learnpath {
     				}else{
 	    				require_once('resourcelinker.inc.php');
     					$file = rl_get_resource_link_for_learnpath(api_get_course_id(),$this->get_id(),$item_id);
+    					$tmp_array=explode("/",$file);
+    					$document_name=$tmp_array[count($tmp_array)-1];
+    					if(strpos($document_name,'_DELETED_')){
+    						$file = 'blank.php?error=document_deleted';
+    					}
     				}
     				break;
     			case 2:

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 11508 2007-03-09 13:40:24Z guim_led $
+// $Id: user_list.php 11610 2007-03-19 08:46:35Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -301,7 +301,7 @@ function active_filter($active, $url_params, $row)
 
 	if ($row['0']<>$_user['user_id']) // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 	{
-		$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'"><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang($action).'" title="'.get_lang($action).'"/></a>';
+		$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'"><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></a>';
 	}
 	return $result;
 }

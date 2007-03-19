@@ -1,5 +1,5 @@
 <?php
-// $Id: course_list.php 11609 2007-03-16 14:55:30Z elixir_julian $
+// $Id: course_list.php 11618 2007-03-19 16:05:45Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -80,7 +80,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	$users_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	
-	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, code AS col8 FROM $course_table";
+	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, 0 as col8, code AS col9 FROM $course_table";
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = mysql_real_escape_string($_GET['keyword']);

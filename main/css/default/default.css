@@ -282,6 +282,7 @@ a.invisible:visited {
 	font-size: 1.0em;
 	height:auto;
 	margin: 0px;
+	margin-bottom: 1px;
 	padding: 0em 0em 0.4em 0em;
 }
 

@@ -330,7 +330,7 @@ if($isCoach)
 	 
 }
 
-echo '<br />';
+echo '<div class="clear">&nbsp;</div>';
 
 $sqlNbCours = "	SELECT course_rel_user.course_code, course.title
 				FROM $tbl_course_user as course_rel_user

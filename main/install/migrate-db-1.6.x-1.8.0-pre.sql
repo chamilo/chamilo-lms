@@ -207,6 +207,9 @@ ALTER TABLE tool ADD COLUMN added_tool tinyint NOT NULL DEFAULT 1;
 UPDATE tool SET added_tool = 0 WHERE added_tool_temp = '0';
 UPDATE tool SET added_tool = 1 WHERE added_tool_temp = '1';
 ALTER TABLE tool ADD COLUMN category enum('authoring','interaction','admin') NOT NULL default 'authoring';
+UPDATE tool SET category = 'authoring' WHERE name IN ('course_description','document','learnpath','link','quiz');
+UPDATE tool SET category = 'interaction' WHERE name IN ('student_publication','chat','group','user','dropbox','forum','announcement','calendar_event');
+UPDATE tool SET category = 'admin' WHERE name IN ('blog_management','tracking','course_setting','survey','course_maintenance');
 -- calendar_event table
 -- document table
 -- scorm_document table (deprecated)

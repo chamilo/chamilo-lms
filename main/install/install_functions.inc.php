@@ -968,13 +968,20 @@ function display_after_install_message($installType, $nbr_courses)
 	<?php echo get_lang('FirstUseTip'); ?>
 
 	<?php if($installType == 'update' && $nbr_courses > MAX_COURSE_TRANSFER): ?>
-	<br><br>
+	<br /><br />
 	<font color="red"><b><?php echo get_lang('Warning');?> :</b> <?php printf(get_lang('YouHaveMoreThanXCourses'),MAX_COURSE_TRANSFER,MAX_COURSE_TRANSFER,'<a href="update_courses.php"><font color="red">','</font></a>');?></font>
 	<?php endif; ?>
 
-	<br><br>
-	<b><?php echo get_lang('SecurityAdvice');?> :</b> <?php printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'),'main/inc/conf/configuration.php','main/install/index.php');?>
-	<br><br><br><br>
+	<br /><br />
+	<?php
+	echo '<div class="warning-message">';
+	echo '<img src="../img/message_warning.png" style="float:left; margin-right:10px;" />';
+	echo '<b>'.get_lang('SecurityAdvice').'</b>';
+	echo ': ';
+	printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'),'main/inc/conf/configuration.php','main/install/index.php');
+	echo '</div>';
+	?>
+
 
 	</form>
 	<a href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>

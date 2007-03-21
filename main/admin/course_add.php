@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 11520 2007-03-12 10:35:32Z elixir_julian $
+// $Id: course_add.php 11641 2007-03-21 16:42:52Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,7 +79,7 @@ $form->add_textfield( 'visual_code', get_lang('CourseCode'),true,array('size'=>'
 $form->applyFilter('visual_code','strtoupper');
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',20);
 $form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers);
-$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple');
+$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size=5');
 $form->add_textfield('title', get_lang('Title'),true, array ('size' => '60'));
 $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
 $form->add_textfield('department_name', get_lang('CourseDepartment'),false, array ('size' => '60'));

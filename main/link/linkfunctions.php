@@ -66,7 +66,14 @@ function addlinkcategory($type)
 		$urllink = $_POST['urllink'];
 		$description = $_POST['description'];
 		$selectcategory = $_POST['selectcategory'];
-		$onhomepage = $_POST['onhomepage'];
+		if ($_POST['onhomepage'] = '')
+		{
+			$onhomepage = 0;
+		}
+		else
+		{
+			$onhomepage = $_POST['onhomepage'];
+		}
 
 		$urllink = trim($urllink);
 		$title = trim($title);
@@ -106,7 +113,7 @@ function addlinkcategory($type)
 			$catlinkstatus = get_lang('LinkAdded');
 			api_sql_query($sql, __FILE__, __LINE__);
 			unset ($urllink, $title, $description, $selectcategory);
-			
+
 			Display::display_confirmation_message(get_lang('LinkAdded'));
 		}
 	}
@@ -140,7 +147,7 @@ function addlinkcategory($type)
 			$catlinkstatus = get_lang('CategoryAdded');
 
 			unset ($category_title, $description);
-			
+
 			Display::display_confirmation_message(get_lang('CategoryAdded'));
 		}
 	}
@@ -181,7 +188,7 @@ function deletelinkcategory($type)
 		api_item_property_update($_course, TOOL_LINK, $id, "delete", $_user['user_id']);
 		$catlinkstatus = get_lang("LinkDeleted");
 		unset ($id);
-		
+
 		Display::display_confirmation_message(get_lang('LinkDeleted'));
 	}
 	if ($type == "category")
@@ -195,7 +202,7 @@ function deletelinkcategory($type)
 		$catlinkstatus = get_lang('CategoryDeleted');
 		unset ($id);
 		api_sql_query($sql, __FILE__, __LINE__);
-		
+
 		Display::display_confirmation_message(get_lang('CategoryDeleted'));
 	}
 }
@@ -216,7 +223,7 @@ function editlinkcategory($type)
 	global $submitCategory;
 	global $_user;
 	global $_course;
-	global $nameTools;	
+	global $nameTools;
 		global $urllink;
 		global $title;
 		global $description;
@@ -225,7 +232,7 @@ function editlinkcategory($type)
 	global $selectcategory;
 	global $description;
 	global $category_title;
-	
+
 	$tbl_link 		= Database :: get_course_table(TABLE_LINK);
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
@@ -271,7 +278,7 @@ function editlinkcategory($type)
 
 			// "WHAT'S NEW" notification: update table last_toolEdit
 			api_item_property_update($_course, TOOL_LINK, $_POST['id'], "LinkUpdated", $_user['user_id']);
-			
+
 			Display::display_confirmation_message(get_lang('LinkModded'));
 		}
 	}
@@ -295,8 +302,8 @@ function editlinkcategory($type)
 			api_sql_query($sql, __FILE__, __LINE__);
 			Display::display_confirmation_message(get_lang('CategoryModded'));
 		}
-		
-		
+
+
 	}
 }
 // END of function editlinkcat
@@ -336,7 +343,7 @@ function change_visibility($id, $scope)
 		$row = mysql_fetch_array($result);
 		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_user['user_id']);
 	}
-	
+
 	Display::display_confirmation_message(get_lang('VisibilityChanged'));
 }
 
@@ -507,7 +514,7 @@ function movecatlink($catlinkid)
 			}
 		}
 	}
-	
+
 	Display::display_confirmation_message(get_lang('LinkMoved'));
 }
 

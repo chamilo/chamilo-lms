@@ -857,19 +857,24 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 		echo '<td>';
 		echo "<select name=\"languageForm\">\n";
 		$dirname='../lang/';
-		if($dir=@opendir($dirname))
-		{
-			while($file=readdir($dir))
-			{
-				if($file != '.' && $file != '..' && $file != 'CVS' && $file != '.svn' && is_dir($dirname.$file))
-				{
-					echo '<option value="'.$file.'"';
-					if($file == $languageForm) echo ' selected="selected"';
-					echo ">$file</option>\n";
+		
+		if ($dir=@opendir($dirname)) {
+			$lang_files = array();
+				while (($file = readdir($dir)) !== false) {
+					if($file != '.' && $file != '..' && $file != 'CVS' && $file != '.svn' && is_dir($dirname.$file)){
+						array_push($lang_files, $file);
+					}
 				}
-			}
 			closedir($dir);
 		}
+		sort($lang_files);
+		
+		foreach ($lang_files as $file) {
+			echo '<option value="'.$file.'"';
+				if($file == $languageForm) echo ' selected="selected"';
+				echo ">$file</option>\n";
+		}
+
 
 		echo '</select>';
 		echo "</td>\n";

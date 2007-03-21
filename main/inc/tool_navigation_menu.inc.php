@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 11044 2007-02-01 08:50:39Z bmol $
+// $Id: tool_navigation_menu.inc.php 11651 2007-03-21 22:34:55Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,7 +74,7 @@ function get_navigation_items($include_admin_tools = false)
 			if (!stristr($row['link'], 'http://'))
 			{
 				$navigation_items[$row['id']]['link'] = api_get_path(REL_CLARO_PATH).$row['link'];
-				$navigation_items[$row['id']]['name'] = $row['image'] == 'scormbuilder.gif' ? $navigation_items[$row['id']]['name'] : get_lang($navigation_items[$row['id']]['name']);
+				$navigation_items[$row['id']]['name'] = $row['image'] == 'scormbuilder.gif' ? $navigation_items[$row['id']]['name'] : get_lang(ucfirst($navigation_items[$row['id']]['name']));
 			}
 		}
 		/*
@@ -92,7 +92,7 @@ function get_navigation_items($include_admin_tools = false)
 															WHERE link='course_info/infocours.php'";
 			$sql_result = api_sql_query($course_settings_sql);
 			$course_setting_info = mysql_fetch_array($sql_result);
-			$course_setting_visual_name = get_lang($course_setting_info['name']);
+			$course_setting_visual_name = get_lang(ucfirst($course_setting_info['name']));
 
 			// course settings item
 			$navigation_items['course_settings']['image'] = $course_setting_info['image'];

@@ -210,6 +210,7 @@ ALTER TABLE tool ADD COLUMN category enum('authoring','interaction','admin') NOT
 UPDATE tool SET category = 'authoring' WHERE name IN ('course_description','document','learnpath','link','quiz');
 UPDATE tool SET category = 'interaction' WHERE name IN ('student_publication','chat','group','user','dropbox','forum','announcement','calendar_event');
 UPDATE tool SET category = 'admin' WHERE name IN ('blog_management','tracking','course_setting','survey','course_maintenance');
+UPDATE tool SET name='forum' WHERE name='bb_forum';
 -- calendar_event table
 -- document table
 -- scorm_document table (deprecated)

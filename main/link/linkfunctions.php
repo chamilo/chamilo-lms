@@ -224,11 +224,10 @@ function editlinkcategory($type)
 	global $_user;
 	global $_course;
 	global $nameTools;
-		global $urllink;
-		global $title;
-		global $description;
-		global $category;
-		global $onhomepage;
+	global $urllink;
+	global $title;
+	global $description;
+	global $category;
 	global $selectcategory;
 	global $description;
 	global $category_title;
@@ -255,6 +254,15 @@ function editlinkcategory($type)
 		// this is used to put the modified info of the link-form into the database
 		if ($_POST['submitLink'])
 		{
+			if ($_POST['onhomepage'] = '')
+			{
+				$onhomepage = 0;
+			}
+			else
+			{
+				$onhomepage = $_POST['onhomepage'];
+			}
+
 			// finding the old category_id
 			$sql = "SELECT * FROM ".$tbl_link." WHERE id='".$_POST['id']."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);

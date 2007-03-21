@@ -167,7 +167,7 @@ ALTER TABLE track_e_uploads CHANGE upload_cours_id upload_cours_id varchar(40) N
 
 
 -- xxUSERxx
-ALTER TABLE user_course_category ADD sort int;
+ALTER TABLE user_course_category ADD `sort` int;
 
 -- xxCOURSExx
 -- trying to keep the same order in tables declaration as in add_course.lib.inc.php

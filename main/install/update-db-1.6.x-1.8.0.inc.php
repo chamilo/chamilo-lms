@@ -233,7 +233,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				$list[] = $row;
 				$i++;
 			}
-			foreach($list as $row)
+			foreach($list as $row_course)
 			{
 				//now use the $c_q_list
 				/**
@@ -242,7 +242,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				 */
 				if (!$singleDbForm) //otherwise just use the main one
 				{
-					mysql_select_db($row['db_name']);
+					mysql_select_db($row_course['db_name']);
 				}
 				foreach($c_q_list as $query)
 				{
@@ -253,12 +253,26 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					
 					if($only_test)
 					{
-						error_log("mysql_query(".$row['db_name'].",$query)",0);
+						error_log("mysql_query(".$row_course['db_name'].",$query)",0);
 					}else{
 						$res = mysql_query($query);
-						error_log("In ".$row['db_name'].", executed: $query",0);
+						error_log("In ".$row_course['db_name'].", executed: $query",0);
 					}
 				}
+
+				//prepare reusable users list to avoid repetition of the SQL query, but only select
+				//users from the current course to avoid blowing the memory limit
+				$users_list = array();
+				$sql_uc = "SELECT u.user_id as ui, u.firstname as fn, u.lastname as ln " .
+						" FROM $dbNameForm.user u, $dbNameForm.course_rel_user cu " .
+						" WHERE cu.course_code = '".$row_course['code']."' " .
+							" AND u.user_id = cu.user_id";
+				$res_uc = mysql_query($sql_uc);
+				while($user_row = mysql_fetch_array($res_uc))
+				{
+					$users_list[$user_row['fn'].' '.$user_row['ln']] = $user_row['ui'];
+				}
+
 				//update course manually
 				//update group_category.forum_state ?
 				//update group_info.tutor_id (put it in group_tutor table?) ?
@@ -313,10 +327,22 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				$sql_orig = "SELECT * FROM ".$prefix."bb_topics";
 				$res_orig = mysql_query($sql_orig);
 				while($row = mysql_fetch_array($res_orig)){
+					$name = $row['prenom'].' '.$row['nom'];
+					//check if user id is reusable
+					if($row['topic_poster'] <= 1 )
+					{
+						if(isset($users_list[$name]))
+						{
+							$poster_id = $users_list[$name];
+						}
+						else
+						{
+							$poster_id = $row['topic_poster'];
+						}
+					}
 					//convert time from varchar to datetime
 					$time = $row['topic_time'];
-					$poster_id = ($row['topic_poster']==-1?1:$row['topic_poster']);
-					$name = mysql_real_escape_string($row['prenom']." ".$row['nom']);
+					$name = mysql_real_escape_string($name);
 					$sql = "INSERT INTO ".$prefix."forum_thread " .
 							"(thread_id,forum_id,thread_poster_id," .
 							"locked,thread_replies,thread_sticky,thread_title," .
@@ -339,10 +365,22 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				$sql_orig = "SELECT * FROM ".$prefix."bb_posts bp, ".$prefix."bb_posts_text bpt WHERE bp.post_id = bpt.post_id";
 				$res_orig = mysql_query($sql_orig);
 				while($row = mysql_fetch_array($res_orig)){
+					$name = $row['prenom'].' '.$row['nom'];
+					//check if user id is reusable
+					if($row['poster_id'] <= 0 )
+					{
+						if(isset($users_list[$name]))
+						{
+							$poster_id = $users_list[$name];
+						}
+						else
+						{
+							$poster_id = $row['poster_id'];
+						}
+					}
 					//convert time from varchar to datetime
 					$time = $row['post_time'];
-					$poster_id = ($row['topic_poster']==-1?1:$row['topic_poster']);
-					$name = mysql_real_escape_string($row['prenom']." ".$row['nom']);
+					$name = mysql_real_escape_string($name);
 					$sql = "INSERT INTO ".$prefix."forum_post " .
 							"(post_id,forum_id,thread_id," .
 							"poster_id,post_parent_id,visible, " .
@@ -362,6 +400,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					$res = mysql_query($sql);
 					error_log($sql,0);
 				}
+				unset($users_list);
 			}
 		}
 	}

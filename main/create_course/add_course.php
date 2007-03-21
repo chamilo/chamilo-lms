@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 11228 2007-02-26 13:46:00Z elixir_julian $
+// $Id: add_course.php 11640 2007-03-21 16:21:55Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -86,7 +86,7 @@ $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
 $form->addElement('static',null,null, get_lang('TargetFac'));
 $form->add_textfield('wanted_code', get_lang('Code'),true,array('size'=>'20','maxlength'=>20));
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',20);
-$titular= &$form->add_textfield('tutor_name', get_lang('Professors'),true,array('size'=>'60', 'readonly'=>'true'));
+$titular= &$form->add_textfield('tutor_name', get_lang('Professors'),true,array('size'=>'60'));
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->addElement('submit', null, get_lang('Ok'));
 $form->add_progress_bar();

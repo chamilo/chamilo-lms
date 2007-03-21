@@ -375,8 +375,8 @@ if($nb_teacher_courses)
 		$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = 0;
 		
 		// students directly subscribed to the course
-		$sql = "SELECT user.user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
-		$rs = api_sql_query($sql);		
+		$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
+		$rs = api_sql_query($sql, __FILE__, __LINE__);	
 		while($row = mysql_fetch_array($rs))
 		{
 			$nb_students_in_course++;

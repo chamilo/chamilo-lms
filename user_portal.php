@@ -568,12 +568,12 @@ function get_logged_user_course_html($my_course)
 	
 	// Table definitions
 	//$statistic_database = Database::get_statistic_database();
+	$course_database = $my_course['db'];
 	$course_tool_table 			= Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
 	$tool_edit_table 			= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_database);
 	$course_group_user_table 	= Database :: get_course_table(TOOL_USER, $course_database);	
 	
 	$user_id = api_get_user_id();
-	$course_database = $my_course['db'];
 	$course_system_code = $my_course['k'];
 	$course_visual_code = $my_course['c'];
 	$course_title = $my_course['i'];
@@ -670,50 +670,7 @@ function get_logged_user_course_html($my_course)
 	}
 	// display the what's new icons
 	$result .= show_notification($my_course);
-	/*
-	// get the user's last access dates to all tools of this course
-	$sqlLastTrackInCourse = "SELECT * FROM $statistic_database.track_e_lastaccess"
-							." WHERE access_user_id = ".$user_id
-							." AND access_cours_code = '".$my_course['k']."'";
-	$resLastTrackInCourse = api_sql_query($sqlLastTrackInCourse,__FILE__,__LINE__);
-	while($lastTrackInCourse = mysql_fetch_array($resLastTrackInCourse))
-	{
-		$lastTrackInCourseDate[$lastTrackInCourse["access_tool"]] = $lastTrackInCourse["access_date"];
-	}
 
-	// get the last edits of all tools of this course
-	$sql = "SELECT tooledit.lastedit_date last_date, tooledit.tool tool, tooledit.ref ref,
-				tooledit.lastedit_type type, tooledit.to_group_id group_id,
-				accueil.image image, accueil.link link
-			FROM $tool_edit_table tooledit, $course_tool_table accueil
-			WHERE accueil.name = tooledit.tool
-			AND accueil.visibility = '1'
-			AND tooledit.insert_user_id != $user_id
-			AND (tooledit.to_user_id = '$user_id' OR tooledit.to_user_id = 0)";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
-
-	$sql = "SELECT group_id FROM $course_group_user_table WHERE user_id = '$user_id'";
-	$groupres = api_sql_query($sql,__FILE__,__LINE__);
-	$groups = mysql_fetch_array($groupres);
-	$groups[] = 0;
-
-	//show icons of tools where there is something new
-
-	while($lastToolEdit = mysql_fetch_array($res))
-	{
-		if ($lastTrackInCourseDate[$lastToolEdit["tool"]]<$lastToolEdit["last_date"] && in_array($lastToolEdit["group_id"], $groups))
-		{
-			$lastDate = date("d/m/Y H:i", convert_mysql_date($lastToolEdit["last_date"]));
-			$type = ($lastToolEdit["type"]=="" || $lastToolEdit["type"]==NULL) ? get_lang('_new_item') : $lastToolEdit["type"];
-
-			$result.= '<a href="'.api_get_path(WEB_CODE_PATH).$lastToolEdit['link'].'?cidReq='.$my_course['k'].'">'.
-				'<img title="&mdash; '.$lastToolEdit['tool'].' &mdash; '.get_lang('_title_notification').": $type ($lastDate).\""
-						.' src="'.api_get_path(WEB_IMG_PATH).$lastToolEdit['image'].'" border="0" align="middle" alt="'.$lastToolEdit['image'].'" /></a>';
-
-		}
-	}
-	unset($lastTrackInCourseDate);
-	unset($groups);*/
 	if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0)
 	{
 		reset($digest);
@@ -1079,11 +1036,11 @@ if (is_array($list))
 	//print_r($list);
 	
 	//Courses whithout sessions
+	$old_user_category = 0;
 	foreach($list as $key=>$value){
 		
 		if($value[2]==0){
 			
-			$old_user_category = 0;
 			$userdefined_categories = get_user_course_categories();
 			echo "<ul>\n";
 			

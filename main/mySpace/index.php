@@ -238,10 +238,9 @@ if($isCoach)
 		}
 		else
 		{
-			$date_start = explode('-',$session['date_start']);
-			$time_start = mktime(0,0,0,$date_start[1],$date_start[2],$date_start[0]);
-			
-			$date_end = explode('-',$session['date_end']);				
+			$date_start = explode('-',$a_session['date_start']);
+			$time_start = mktime(0,0,0,$date_start[1],$date_start[2],$date_start[0]);			
+			$date_end = explode('-',$a_session['date_end']);				
 			$time_end = mktime(0,0,0,$date_end[1],$date_end[2],$date_end[0]);			
 			if($time_start < time() && time() < $time_end)
 			{

@@ -44,6 +44,8 @@ if(function_exists('ini_set'))
 {
 	ini_set('memory_limit',-1);
 	ini_set('max_execution_time',0);
+}else{
+	error_log('Update-db script: could not change memory and time limits',0);
 }
 
 /*

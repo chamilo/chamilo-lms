@@ -385,6 +385,9 @@ if($nb_teacher_courses)
 			$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
 			$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
 			$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
+			$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
+			$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
+					
 			$a_students[] = $row['user_id'];
 		}
 		

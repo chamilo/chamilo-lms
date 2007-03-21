@@ -335,10 +335,13 @@ Display::display_header($nameTool);
 						$options = array(
 									'540x405'=>'540x405',
 									'640x480'=>'640x480',
+									'720x540'=>'720x540',
 									'800x600'=>'800x600',
 									'1000x750'=>'1000x750'
 									);
 						$form -> addElement('select', 'size', get_lang('SlideSize'), $options);
+						
+						
 						$form -> addElement('hidden', 'extension_code', 'ppt2lp');
 						
 						$defaults = array();
@@ -358,8 +361,10 @@ Display::display_header($nameTool);
 							$form -> addElement('submit', 'activeExtension', get_lang('ReconfigureExtension'));
 						}
 						else {
+							$defaults['size'] = '720x540';
 							$form -> addElement('submit', 'activeExtension', get_lang('ActiveExtension'));
 						}
+						
 						$form -> setDefaults($defaults);
 						$form -> display();
 						

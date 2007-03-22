@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 11538 2007-03-12 14:36:05Z guim_led $
+// $Id: create_document.php 11663 2007-03-22 14:48:23Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -211,7 +211,7 @@ $interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GE
 if (!$is_allowed_in_course)
 	api_not_allowed();
 
-$is_allowedToEdit = $is_courseAdmin;
+$is_allowedToEdit = api_is_allowed_to_edit();
 if (!($is_allowedToEdit || $_SESSION['group_member_with_upload_rights']))
 {
 	api_not_allowed();

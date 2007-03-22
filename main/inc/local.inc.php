@@ -490,17 +490,6 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 					"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
 
 			api_sql_query($sql,__FILE__,__LINE__);
-			
-			if(api_get_setting("Ajax_course_tracking_refresh")!=0 && !isset($noajax)){
-				
-				include("common_course_tracking.ajax.php");
-				
-				$i_milliseconds_for_refresh=intval(api_get_setting("Ajax_course_tracking_refresh"))*1000;
-				
-				$htmlHeadXtra[] = $xajax_course_tracking->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
-				$htmlHeadXtra[] = "<script type=\"text/javascript\">var user_id=".$_user ['user_id'].";</script><script type=\"text/javascript\" src=\"".api_get_path(WEB_CODE_PATH)."inc/course_tracking.js\"></script><script type=\"text/javascript\">window.setInterval('update_course_tracking()',".$i_milliseconds_for_refresh.");</script>";
-				
-			}
 
         }
         else
@@ -540,20 +529,8 @@ else // continue with the previous values
    					"counter = counter+1 " .
 				"WHERE course_access_id='$i_course_access_id'";
 		
-		if(!isset($noajax)){
-			api_sql_query($sql,__FILE__,__LINE__);
-		}
+		api_sql_query($sql,__FILE__,__LINE__);
 		
-		if(api_get_setting("Ajax_course_tracking_refresh")!=0 && !isset($noajax)){			
-			
-			include("common_course_tracking.ajax.php");
-			
-			$i_milliseconds_for_refresh=intval(api_get_setting("Ajax_course_tracking_refresh"))*1000;
-			
-			$htmlHeadXtra[] = $xajax_course_tracking->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
-			$htmlHeadXtra[] = "<script type=\"text/javascript\">var user_id=".$_user ['user_id'].";</script><script type=\"text/javascript\" src=\"".api_get_path(WEB_CODE_PATH)."inc/course_tracking.js\"></script><script type=\"text/javascript\">setInterval('update_course_tracking()',".$i_milliseconds_for_refresh.");</script>";
-			
-		}
 
 
 	}

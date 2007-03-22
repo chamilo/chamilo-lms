@@ -482,7 +482,6 @@ INSERT INTO `settings_current` VALUES
 (71, 'donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL),
 (72, 'show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL),
 (73,'profile','phone','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'phone'),
-(74, 'Ajax_course_tracking_refresh', NULL, 'textfield','Course','0', 'Ajax_course_tracking_refresh','Ajax_course_tracking_refresh_comment', NULL, NULL),
 (75, 'service_visio', 'active', 'radio',NULL,'false', 'visio_actived','', NULL, NULL),
 (76, 'service_visio', 'visioconference_url', 'textfield',NULL,'', 'visio_url','', NULL, NULL),
 (77, 'service_visio', 'visioclassroom_url', 'textfield',NULL,'', 'visio_url','', NULL, NULL),

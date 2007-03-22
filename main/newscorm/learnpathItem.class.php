@@ -1406,7 +1406,7 @@ class learnpathItem{
 		     			"".$this->db_id."," .
 		     			"".$this->view_id."," .
 		     			"".$this->get_attempt_id()."," .
-		     			"'".$this->current_data."'," .
+		     			"'".Database::escape_string($this->current_data)."'," .
 		     			"'".$this->lesson_location."')";
 		     	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view: '.$sql,0);}
 		     	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -1417,7 +1417,7 @@ class learnpathItem{
 		     			" start_time = ".$this->get_current_start_time().", " .
 		     			" score = ".$this->get_score().", " .
 		     			" status = '".$this->get_status(false)."'," .
-		     			" suspend_data = '".$this->current_data."'," .
+		     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
 		     			" lesson_location = '".$this->lesson_location."' " .
 		     			"WHERE lp_item_id = ".$this->db_id." " .
 		     			"AND lp_view_id = ".$this->view_id." " .

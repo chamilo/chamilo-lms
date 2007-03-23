@@ -22,7 +22,6 @@ $langVid = "Wideo";
 $langWork = "Prace studentów";
 $langProgramMenu = "Program kursu";
 $langAnnouncement = "Og&#322;oszenia";
-$langForum = "Forum";
 $langExercise = "Testy";
 $langStats = "Statystyki";
 $langUplPage = "Za³aduj stronê i przy³±cz do strony g³ównej";

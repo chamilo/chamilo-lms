@@ -51,7 +51,6 @@ $langExportUsers = "Exportova&#357; zoznam užívate&#318;ov";
 $langKeyword = "Klú&#269;ové slová";
 $langGroupName = "Meno skupiny";
 $langGroupTutor = "Tútor skupiny";
-$langGroupForum = "Fórum skupiny";
 $langGroupDescription = "Popis skupiny";
 $langNumberOfParticipants = "Po&#269;et zú&#269;astnených";
 $langNumberOfUsers = "Po&#269;et užívate&#318;ov";

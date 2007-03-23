@@ -21,7 +21,6 @@ $Dropbox = "Demetujo ";
 $Assignments = "Studentaj publika&#309;oj ";
 $Exercise = "Ekzerco ";
 $Link = "Ligilo";
-$Forum = "Forumo ";
 $AdValvas = "Publikigejo ";
 $Document = "Dokumento ";
 $ShowDelete = "Montri / Forigi ";

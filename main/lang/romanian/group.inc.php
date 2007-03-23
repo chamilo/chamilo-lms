@@ -14,7 +14,6 @@ $langExistingGroups = "Grupuri";
 $langRegistered = "Inregistrati";
 $langGroupAllowStudentRegistration = "Utilizatorilor le este permisa auto-inregistrarea in grupuri";
 $langGroupTools = "Unelte";
-$langGroupForum = "Forumul grupului";
 $langGroupDocument = "Documente";
 $langGroupPropertiesModified = "Setarile grupului au fost modificate";
 $langGroupSpace = "Zona grupului";

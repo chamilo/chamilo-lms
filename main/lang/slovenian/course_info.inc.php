@@ -22,7 +22,6 @@ $langVid = "Video";
 $langWork = "Prispevki";
 $langProgramMenu = "Program teèaja";
 $langAnnouncement = "Obvestila";
-$langForum = "Forumi";
 $langExercise = "Vaje";
 $langStats = "Statistike";
 $langUplPage = "Prenesi stran in povezavo na domaèo stran";

@@ -166,4 +166,5 @@ $ActiveAccount = "Activar cuenta";
 $YourAccountHasToBeApproved = "Su cuenta ha sido validada";
 $ApprovalForNewAccount = "Validación de una nueva cuenta";
 $ManageUser = "Gestión de usuario";
+$SubscribeUserToCourseAsTeacher = "Inscribir usuarios como profesores en este curso";
 ?>

@@ -21,7 +21,6 @@ $Dropbox = "投递箱";
 $Assignments = "学生作业";
 $Exercise = "测验";
 $Link = "链接";
-$Forum = "论坛";
 $AdValvas = "通知";
 $Document = "文档";
 $ShowDelete = "显示/删除";

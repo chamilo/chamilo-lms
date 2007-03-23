@@ -10,6 +10,7 @@ $Name = "名称";
 $langComment = "コメント";
 $langVisible = "見えるようにする/見えないようにする";
 $Language = "&#35328;&#35486;";
+$Forum = "Forum";
 $langUp = "Up";
 $langCourseCreate = "コースのウエブサイトを作る";
 $langTodo = "「要望」";

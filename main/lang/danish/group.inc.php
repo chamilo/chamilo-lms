@@ -14,7 +14,6 @@ $langExistingGroups = "Grupper";
 $langRegistered = "Tilmeldt";
 $langGroupAllowStudentRegistration = "De studerende skal selv tilmelde sig grupperne";
 $langGroupTools = "Værktøjer";
-$langGroupForum = "Diskussionsforum";
 $langGroupDocument = "Dokumenter";
 $langGroupPropertiesModified = "Opsætning af gruppe er ændret";
 $langGroupSpace = "Gruppeområde";

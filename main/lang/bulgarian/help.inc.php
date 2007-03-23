@@ -13,28 +13,6 @@ $langHomeContent = "За по-голямо удобство, claroline инструменти съдържат готови
 <p>Може да добавяте ваши собствени страници към главната ви страница. Те трябва да са HTML страници (които да са създадени от какъвто и да е Текстови Редактор или Web Композитор). Използвайте \'Качи страницата и връзка към Главната страница\' за да изпратите страницата ви към сървъра. Стандартният header на сайта ви ще се слее автоматично с новия ви документ, така че просто ще трябва да се концентрирате върху съдържанието. Ако искате да се прехвърляте от Главната ви страница към други сайтове или страници, където и да е в Интернет (дори вътре във вашия сайт), използвайте \'Добавете връзка към Заглавната страница\' Страниците, които сте добавили към Главната страница могат да бъдат деактивирани след като са изтрити, като стандартните инструменти могат да бъдат дезактивирани, но не и изтрити.</p><p>След като сайта ви е готов отидете към \'Редактирайте информацията за курса\' и решете каква степен на поверителност желаете
  По подразбиране курса ви е скрит (тъй като работите върху него).</p>";
 $langHClar = "Start Help";
-$langClarContent = "Here, professors and assistants create and administer
- courses websites. Students read (documents, agendas, informations) and, 
- sometimes, make exercices, publish papers, participate to
- forum discussions...</p><b>Registration</b><p>The following instructions
- only apply if your version of claroline allows self-registration (some sites 
- register you automatically). <br>If you are a Student, you
- just need to register selecting \'Follow courses (student)\', then choose
- the courses you would like to follow.</p><p>If you are a Professor or an
- Assistant, register too, but select \'Create courses (professor)\'. You will
- then have to fill a form with Course Code, Faculty and Course Title. Once
- this validated, you will be driven to the site you have just created and
- allowed to modify its content and organisation according to your
- requirements. </p><p>The \'To do\' option is to allow feedback to your claroline website administrators.  
- Things that you might post here include faults or suggestions for improvements. The \'To do\' 
- list is linked to on the Home Page of the campus (once
- logged in).</p>
-<p>The support forum is different. It connects all Claroline users worldwide. 
-If you don\'t find the answer to a question inside your claroline campus and environment, 
-post a message there.</p>
-<p>The link to Registration (if present) is on the Home Page of the campus
- (top right).</p><b>Login</b><p>On your next visits, type login/password
- and Ok to access your courses. The URL of the site is";
 $langHDoc = "Help Documents";
 $langDocContent = "<p>The Documents tool is similar to the FileManager of
  your desktop computer.</p><p>You can upload files of any type (HTML, Word,

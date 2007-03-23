@@ -23,7 +23,6 @@ $langVid = "Video";
 $langWork = "Trabajos";
 $langProgramMenu = "Programa del curso";
 $langAnnouncement = "Tablón de anuncios";
-$langForum = "Foros";
 $langExercise = "Ejercicios";
 $langStats = "Estadísticas";
 $langUplPage = "Transferir una página y enlazarla a la principal";

@@ -14,7 +14,6 @@ $langExistingGroups = "Ъфиттэ";
 $langRegistered = "Явткхвпэ";
 $langGroupAllowStudentRegistration = "Хжидепжво фвяфещепр хворхжруженыпр явткхэювжыху ю ъфиттэ";
 $langGroupTools = "Хфедхжюв итфвюнепку";
-$langGroupForum = "Црфио";
 $langGroupDocument = "Иаечпэе овжефквнэ";
 $langGroupPropertiesModified = "Хюрлхжюв ъфитт чэнк кяоепепэ";
 $langGroupSpace = "Тфрхжфвпхжюр ъфиттэ";

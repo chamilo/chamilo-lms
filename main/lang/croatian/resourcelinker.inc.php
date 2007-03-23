@@ -21,7 +21,6 @@ $Dropbox = "Pretinac";
 $Assignments = "Studentski radovi";
 $Exercise = "Vježbe";
 $Link = "Poveznica";
-$Forum = "Forum";
 $AdValvas = "Obavijesti";
 $Document = "Dokument";
 $ShowDelete = "Prikaži/Izbriši";

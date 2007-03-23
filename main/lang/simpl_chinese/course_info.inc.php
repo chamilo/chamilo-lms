@@ -22,7 +22,6 @@ $langVid = "视频";
 $langWork = "作业论文";
 $langProgramMenu = "课程大纲";
 $langAnnouncement = "公告通知";
-$langForum = "学习论坛";
 $langExercise = "测验";
 $langStats = "统计信息";
 $langUplPage = "上传网页和链接";

@@ -21,7 +21,6 @@ $Dropbox = "Fájl Posta";
 $Assignments = "Hallgatói publikációk";
 $Exercise = "Teszt";
 $Link = "Link";
-$Forum = "Fórum";
 $AdValvas = "Hirdetmény";
 $Document = "Dokumentum";
 $ShowDelete = "Mutat / Töröl";

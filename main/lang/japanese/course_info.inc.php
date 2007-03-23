@@ -22,7 +22,6 @@ $langVid = "ヴィデオ";
 $langWork = "学生の文書たち";
 $langProgramMenu = "コースプログラム";
 $langAnnouncement = "お知らせ";
-$langForum = "会議室";
 $langExercise = "演習問題";
 $langStats = "統計";
 $langUplPage = "ページとリンクをホームページにアップロード";

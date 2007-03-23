@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Търсене";
+$Search = "&#1058;&#1098;&#1088;&#1089;&#1077;&#1085;&#1077;";
 $MyTasks = "Моите задачи";
 $FavoriteBlogs = "Предпочитани блогове";
 $Navigation = "Навигация";

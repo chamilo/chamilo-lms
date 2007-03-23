@@ -14,7 +14,6 @@ $langExistingGroups = "Nama Kumpulan";
 $langRegistered = "Bilangan Ahli Semasa";
 $langGroupAllowStudentRegistration = "Pelajar dibenarkan untuk mendaftar sendiri ke kumpulan";
 $langGroupTools = "Alat Bantu";
-$langGroupForum = "Forum";
 $langGroupDocument = "Dokumen";
 $langGroupPropertiesModified = "<i>Setting</i> kumpulan telah diubahsuai";
 $langGroupSpace = "Maklumat kumpulan";

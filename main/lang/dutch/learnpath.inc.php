@@ -153,7 +153,6 @@ $langNoItemsInLp = "Er zijn géén stappen in dit leerpad. Klik op \"geavanceerd\"
 $FirstPosition = "Eerste plaats";
 $NewQuiz = "Nieuwe kwis";
 $CreateTheForum = "Toevoegen van een forum";
-$Forums = "Forums";
 $AddLpIntro = "<strong>Welkom</strong> bij het Dokeos Leerpad auteursgedeelte";
 $AddLpIntro = "<strong>Welkom</strong> bij het Dokeos Leerpad auteursgedeelte.<br> Je leert stap voor stap een leerpad aanmaken. De structuur van jouw leerpad zal verschijnen in een menu langs de linkerzijde van het venster.";
 $AddLpToStart = "Om te starten, geef een titl voor uw leerpad";
@@ -165,4 +164,7 @@ $MoveCurrentStudentPublication = "Wijzig de publicatie van de huidige student";
 $EditCurrentStudentPublication = "Wijzig de publicatie van de huidige student";
 $AllowMultipleAttempts = "Sta meerdere pogingen toe";
 $PreventMultipleAttempts = "Sta geen meerdere pogingen toe";
+$MakeScormRecordingExtra = "Voeg extra SCROM evenementen toe";
+$MakeScormRecordingNormal = "Gebruik normale SCORM functies";
+$DocumentHasBeenDeleted = "Het document kan niet getoond worden omdat het verwijderd is.";
 ?>

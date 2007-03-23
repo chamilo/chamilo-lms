@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $Exercise = "Tester";
 $Link = "Lenke";
-$Forum = "Forum";
 $Document = "Dokument";
 $ShowDelete = "Vis / Slett";
 $IntroductionText = "Introduksjonstekst";

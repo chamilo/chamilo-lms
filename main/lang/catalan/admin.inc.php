@@ -55,7 +55,6 @@ $langExportUsers = "Exportar el llistat d\'usuaris";
 $langKeyword = "Paraules clau";
 $langGroupName = "Noms del grup";
 $langGroupTutor = "Tutor del grup";
-$langGroupForum = "Forum del grup";
 $langGroupDescription = "Descripció del grup";
 $langNumberOfParticipants = "Nombre de participants";
 $langNumberOfUsers = "Nombre d\'usuaris";

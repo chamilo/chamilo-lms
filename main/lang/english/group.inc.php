@@ -14,7 +14,6 @@ $langExistingGroups = "Groups";
 $langRegistered = "Registered";
 $langGroupAllowStudentRegistration = "Users are allowed to self-register in groups";
 $langGroupTools = "Tools";
-$langGroupForum = "Group\'s Forum";
 $langGroupDocument = "Documents";
 $langGroupPropertiesModified = "Group settings have been modified";
 $langGroupSpace = "Group area";

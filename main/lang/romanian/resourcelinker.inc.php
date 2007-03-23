@@ -21,7 +21,6 @@ $Dropbox = "Mapa de documente";
 $Assignments = "Publicatiile studentilor";
 $Exercise = "Teste";
 $Link = "Link";
-$Forum = "Forum";
 $AdValvas = "Anunturi";
 $Document = "Document";
 $ShowDelete = "Arata / Sterge";

@@ -14,7 +14,6 @@ $langExistingGroups = "Ryhmät";
 $langRegistered = "Rekisteröityneet";
 $langGroupAllowStudentRegistration = "Käyttäjät voivat itse muodostaa ryhmät";
 $langGroupTools = "Työkalut";
-$langGroupForum = "Ryhmien foorumit";
 $langGroupDocument = "Dokumentit";
 $langGroupPropertiesModified = "Ryhmien asetuksia on muutettu";
 $langGroupSpace = "Ryhmän alue";

@@ -20,7 +20,6 @@ $langVid = "Video";
 $langWork = "Bài viết của học sinh";
 $langProgramMenu = "Chương trình khoá học";
 $langAnnouncement = "Thông báo";
-$langForum = "Diễn đàn";
 $langExercise = "Bài tập";
 $langStats = "Thống kê";
 $langUplPage = "Upload trang và tạo liên kết tới trang chủ";

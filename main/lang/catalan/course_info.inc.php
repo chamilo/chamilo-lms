@@ -20,7 +20,6 @@ $langVid = "Video";
 $langWork = "Treballs dels estudiants";
 $langProgramMenu = "Programa del curs";
 $langAnnouncement = "Anuncis";
-$langForum = "Fòrums";
 $langExercise = "Exercicis";
 $langStats = "Estadístiques";
 $langUplPage = "Puja plana i enllas a Plana Principal";

@@ -77,7 +77,7 @@ $ExtensionLDAPNotAvailable = "LDAP extensie niet beschikbaar";
 $ExtensionGDNotAvailable = "GD extensie niet beschikbaar";
 $DokeosLicenseInfo = "Dokeos is vrije software die verdeeld wordt onder de GNU Algemene Publieke Licentie (GPL).";
 $IAccept = "Ik ga akkoord";
-$ConfigSettingsInfo = "De volgende waarden worden in uw configuratiebestand (<b>main/inc/conf/claro_main.conf.php</b>) bewaard:";
+$ConfigSettingsInfo = "De volgende waarden worden in uw configuratiebestand (<b>main/inc/conf/configuration.php</b>) bewaard:";
 $DokeosInstallation = "Dokeos installatie";
 $InstallDokeos = "Installeer Dokeos";
 $GoToYourNewlyCreatedPortal = "Ga naar uw geïnstalleerde portaal.";
@@ -106,4 +106,5 @@ $NoWritePermissionPleaseReadInstallGuide = "Sommige bestanden en mappen hebben g
 $DBServerDoesntWorkOrLoginPassIsWrong = "De databaseserver werkt niet of de combinatie login / paswoord is niet correct";
 $PleaseCheckTheseValues = "Gelieve deze waarden te controleren";
 $PleaseGoBackToStep = "Gelieve terug te gaan naar stap";
+$DBSettingUpgradeIntro = "Het upgradescript zal de Dokeos database(s) recupereren en updaten. Het script zal hiervoor onderstaande instellingen gebruiken. Aangezien deze software op een grote reeks verschillende systemen draait en niet alle systemen getest zijn, is het aangewezen een backup te maken van de database alvorens een upgrade uit te voeren.";
 ?>

@@ -14,7 +14,6 @@ $langExistingGroups = "Grupas";
 $langRegistered = "Re&#291;istr&#275;ts";
 $langGroupAllowStudentRegistration = "Lietot&#257;jiem ir at&#316;auts pašiem sevi pieteikt grup&#257;m";
 $langGroupTools = "R&#299;ki";
-$langGroupForum = "Grupas diskusija";
 $langGroupDocument = "Dokumenti";
 $langGroupPropertiesModified = "Grupas iestat&#299;jumi tika izmain&#299;ti";
 $langGroupSpace = "Grupas apraksts";

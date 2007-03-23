@@ -24,7 +24,6 @@ $langVid = "Video";
 $langWork = "Elevarbeten";
 $langProgramMenu = "Kursprogram";
 $langAnnouncement = "Tillkännagivanden";
-$langForum = "Forum";
 $langExercise = "Övningar";
 $langStats = "Statistik";
 $langUplPage = "Ladda upp sida och länka till hemsida";

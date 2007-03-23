@@ -25,7 +25,6 @@ $langVid = "Multimedia";
 $langWork = "Studerendes Opgaver";
 $langProgramMenu = "Kursusprogram";
 $langAnnouncement = "Meddelelser";
-$langForum = "Diskussionsforum";
 $langExercise = "Øvelser";
 $langStats = "Statistikker";
 $langUplPage = "Læg et html dokument ud på kursushjemmesiden";

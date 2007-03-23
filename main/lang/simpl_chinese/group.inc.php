@@ -14,7 +14,6 @@ $langExistingGroups = "小组";
 $langRegistered = "注册";
 $langGroupAllowStudentRegistration = "允许用户自己注册到小组中";
 $langGroupTools = "工具";
-$langGroupForum = "小组论坛";
 $langGroupDocument = "文档";
 $langGroupPropertiesModified = "小组设置已修改";
 $langGroupSpace = "小组区域";

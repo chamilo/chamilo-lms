@@ -63,5 +63,5 @@ $langSendChatRequest = "Richiedi una chat con questa persona";
 $langRequestDenied = "Consenso negato";
 $UsageDatacreated = "Dati d\'impiego creati";
 $SessionView = "Mostra i corsi ordinandoli per sessione";
-$CourseView = "Vedi l\'elenco completo dei corsi";
+$CourseView = "Mostra l\'elenco completo dei corsi";
 ?>

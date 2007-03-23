@@ -14,7 +14,6 @@ $langExistingGroups = "Group-group";
 $langRegistered = "Terdaftar";
 $langGroupAllowStudentRegistration = "Siswa diijinkan untuk mendaftar sendiri dalam group";
 $langGroupTools = "Tool";
-$langGroupForum = "Forum";
 $langGroupDocument = "Dokumen";
 $langGroupPropertiesModified = "Seting Group telah diubah";
 $langGroupSpace = "Areal Group";

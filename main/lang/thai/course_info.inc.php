@@ -22,7 +22,6 @@ $langVid = "วิดีทัศน์";
 $langWork = "การสนับสนุน";
 $langProgramMenu = "ปฏิทินการศึกษา";
 $langAnnouncement = "ประกาศ";
-$langForum = "กลุ่มอภิปราย";
 $langExercise = "แบบทดสอบ";
 $langStats = "สถิติ";
 $langUplPage = "หน้าโอนย้ายไฟล์และเชื่อมต่อไปหน้าโฮมเพจ";

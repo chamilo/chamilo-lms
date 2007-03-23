@@ -21,7 +21,6 @@ $Dropbox = "Apmai&#326;as kaste";
 $Assignments = "Studentu publik&#257;cijas";
 $Exercise = "Kontroldarbi";
 $Link = "Hipersaite";
-$Forum = "Diskusija";
 $AdValvas = "Pazi&#326;ojumi";
 $Document = "Dokuments";
 $ShowDelete = "R&#257;d&#299;t / Dz&#275;st";

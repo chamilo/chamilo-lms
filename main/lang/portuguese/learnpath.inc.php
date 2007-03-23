@@ -153,7 +153,6 @@ $langNoItemsInLp = "De momento não existem itens na Sequência de Aprendizagem. C
 $FirstPosition = "Primeira posição";
 $NewQuiz = "Novo Quiz";
 $CreateTheForum = "Acrescentar o fórum";
-$Forums = "Fóruns";
 $AddLpIntro = "<strong>Bem-Vindo(a)</strong> à ferramenta de autoria da Sequência de Aprendizagem Dokeos";
 $AddLpIntro = "<strong>Bem-Vindo(a)</strong> à ferramenta de autoria Sequência de Aprendizagem Dokeos.<br />Poderá criar a sua Sequência de Aprendizagem passo a passo. A estrutura da Sequência de Aprendizagem aparecerá no menu do lado esquerdo.";
 $AddLpToStart = "Para começar, dê um título à Sequência de Aprendizagem";
@@ -167,4 +166,7 @@ $AllowMultipleAttempts = "Permitir várias tentativas";
 $PreventMultipleAttempts = "Impedir várias tentativas";
 $MakeScormRecordingExtra = "Fazer gravações SCORM extra";
 $MakeScormRecordingNormal = "Fazer gravações SCORM normais";
+$DocumentHasBeenDeleted = "O documento não pode ser mostrado porque foi apagado.";
+$EditCurrentForum = "Editar este fórum";
+$NoPrerequisites = "Sem pré-requisitos";
 ?>

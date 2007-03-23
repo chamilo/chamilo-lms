@@ -21,7 +21,6 @@ $langVid = "Video";
 $langWork = "Opiskelijoiden tehtävät";
 $langProgramMenu = "Kurssin ohjelma";
 $langAnnouncement = "Ilmoitukset";
-$langForum = "Foorumit";
 $langExercise = "Harjoitukset";
 $langStats = "Tilastot";
 $langUplPage = "Lataa sivu ja linkki omalle sivulle";

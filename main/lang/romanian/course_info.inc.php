@@ -22,7 +22,6 @@ $langVid = "Video";
 $langWork = "Contributii";
 $langProgramMenu = "Programul cursului";
 $langAnnouncement = "Anunturi";
-$langForum = "Forumuri";
 $langExercise = "Teste";
 $langStats = "Statistici";
 $langUplPage = "Incarcati pagina si atasati linkul la Pagina principala";

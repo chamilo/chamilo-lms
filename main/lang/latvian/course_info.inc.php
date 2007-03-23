@@ -22,7 +22,6 @@ $langVid = "Video";
 $langWork = "Raksti";
 $langProgramMenu = "Kursa programma";
 $langAnnouncement = "Pazi&#326;ojumi";
-$langForum = "Diskusijas";
 $langExercise = "Kontroldarbi";
 $langStats = "Statistika";
 $langUplPage = "Augšupiel&#257;d&#275;t lapu un saist&#299;t to ar kursa s&#257;kumlapu";

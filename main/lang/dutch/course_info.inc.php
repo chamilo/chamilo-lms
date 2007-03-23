@@ -22,7 +22,6 @@ $langVid = "Video";
 $langWork = "Studentenpublicaties";
 $langProgramMenu = "Takenprogramma";
 $langAnnouncement = "Aankondigingen";
-$langForum = "Forums";
 $langExercise = "Oefeningen";
 $langStats = "Statistieken";
 $langUplPage = "Pagina uploaden en verbinden met startpagina";

@@ -14,7 +14,6 @@ $langExistingGroups = "Groepen";
 $langRegistered = "Ingeschreven";
 $langGroupAllowStudentRegistration = "De gebruikers mogen zichzelf in de groepen inschrijven";
 $langGroupTools = "Functies";
-$langGroupForum = "Forum";
 $langGroupDocument = "Documenten";
 $langGroupPropertiesModified = "De groepseigenschappen zijn gewijzigd.";
 $langGroupSpace = "Groepsruimte";

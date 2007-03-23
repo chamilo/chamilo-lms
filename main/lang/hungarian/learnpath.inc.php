@@ -152,7 +152,6 @@ $langNoItemsInLp = "A tanulási útvonalban jelenleg nincsenek elemek. Kattintson 
 $FirstPosition = "Els&#337; pozíció";
 $NewQuiz = "Új kvíz";
 $CreateTheForum = "Fórum hozzáadása";
-$Forums = "Fórumok";
 $AddLpIntro = "Üdvözli Önt a Dokeos Tanulási Útvonal szerkeszt&#337;!";
 $AddLpIntro = "<strong>Üdvözli Önt</strong> a Dokeos Tanulási Útvonal szerkeszt&#337;. <br />lépésr&#337;l lépésre létrehozhatja tanulási útvonalát, amelynek struktúrája a bal oldali menüben látható.";
 $AddLpToStart = "Kezdésként nevezze el a tanulási útvonalát.";

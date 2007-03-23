@@ -17,11 +17,6 @@ $langHomeContent = "<p>Die Kurshomepage zeigt eine Anzahl Werkzeuge: Einleitungs
 $langHOnline = "Hilfe - Live Konferenz System";
 $langOnlineContent = "<p>Online Inhalte";
 $langHClar = "Hilfe starten";
-$langClarContent = "Hier können Trainer/innen Kurswebsiten einstellen, ändern und löschen. Teilnehmer/innen können lesen (Dokumente, Themen, Agenden, diverse Informationen) und teilweise, Übungen durchführen, Unterlagen veröffentlichen, an Diskussionsforen teilnehmen...</p><b>Registrierung</b><p>Sollten Sie ein/e Teilnehmer/in sein, können Sie dem Kurs beitreten, indem Sie das Register \'zu den Seminaren (Teilnehmer/in)\' auswählen, anschließend wählen Sie die Kurse aus, die Sie belegen möchten.</p>
-<p>Sind Sie ein/e Trainer/in, können Sie sich auch registrieren lassen. Sie wählen jedoch \'Kurse anlegen (Trainer/in)\'. Daraufhin müssen Sie ein Formular ausfüllen, in dem Sie den Kurse Code, den Bereich und den  Kurstitel definieren. Wenn diese Eingaben bestätigt sind, werden Sie zu der Seminarseite weitergeleitet und es wird Ihnen ermöglicht, den Inhalt entsprechend Ihren Wünsche zu verändern. </p>
-<p>Wenn dieses Portal nicht Ihren Ansprüchen gerecht wird, lassen Sie es uns bitte über die \'To do\' Liste wissen. Sie ist auf der Homepage der Plattform (sobald sie eingelogged sind).</p>
-<p>Der Link zur Registrierung ist auf der Homepage der Plattform (oben rechts).</p><b>Login</b>
-<p>Bei Ihren nächsten Besuchen loggen Sie sich ein, mit Login/Passwort und bestätigen Sie den Zugriff auf Ihr/e Seminar/e. Die URL der Seite ist";
 $langHDoc = "Hilfe Dokumente";
 $langDocContent = "<p>Das Werkzeug Dokumente ist vergleichbar mit dem Dateimanager Ihres Computers.</p><p>Sie können beliebige Dateien hochladen (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, usw.). Denken Sie daran, dass Ihre Teilnehmer/innne die entprechende Software zum Öffnen benötigen. Manche Dateitypen können Viren enthalten. Sie sind dafür verantwortlich, keine infizierten Dateien hochzuladen. Sie sollten die Dateien mit einem Antivirenprogramm kontrollieren, bevor Sie die Dateien hochladen.</p>
 <p>Die Dokumente sind alphabetisch sortiert.<br><b>Hinweis : </b>Wenn Sie sie in einer anderen Reihenfolge bereitstellen möchten, nummerieren Sie sie: 01, 02, 03...</p>

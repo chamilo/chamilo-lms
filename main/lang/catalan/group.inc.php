@@ -14,7 +14,6 @@ $langExistingGroups = "Grups";
 $langRegistered = "Enregistrats";
 $langGroupAllowStudentRegistration = "Els estudiants es poden auto-enregistrar en els grups";
 $langGroupTools = "Eines";
-$langGroupForum = "Fòrum";
 $langGroupDocument = "Documents";
 $langGroupPropertiesModified = "Les especificacions del grup han estat modificades";
 $langGroupSpace = "Espai de grup";

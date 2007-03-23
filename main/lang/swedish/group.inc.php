@@ -14,7 +14,6 @@ $langExistingGroups = "Grupper";
 $langRegistered = "Registrerade";
 $langGroupAllowStudentRegistration = "Elever tillåts självregistrera sig i grupper.";
 $langGroupTools = "Verktyg";
-$langGroupForum = "Forum";
 $langGroupDocument = "Dokument";
 $langGroupPropertiesModified = "Gruppinställningar har modifierats";
 $langGroupSpace = "Grupparea";

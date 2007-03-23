@@ -153,7 +153,6 @@ $langNoItemsInLp = "Im Augenblick gibt es keine Schritte im Lernpfad. Auf \"Fort
 $FirstPosition = "Erste Stelle";
 $NewQuiz = "Neues Quiz";
 $CreateTheForum = "Forum hinzufügen";
-$Forums = "Forums";
 $AddLpIntro = "<strong>Willkommen</strong> zum Dokeos Lernpfad Erstellungstool
 ";
 $AddLpIntro = "<strong>Willkommen</strong> zum Dokeos Lernpfad Erstellungstool.<br />Sie können Ihren Lernpfad Schritt für Schritt erstellen.  Die Struktur Ihres Lernpfads erscheint links in dem Menu.";
@@ -168,4 +167,7 @@ $AllowMultipleAttempts = "Mehrere Versuche gestatten";
 $PreventMultipleAttempts = "Mehrere Versuche ausschliessen";
 $MakeScormRecordingExtra = "SCORM Aufzeichnungen extra behandeln";
 $MakeScormRecordingNormal = "SCORM Aufzeichnungen normal behandeln";
+$DocumentHasBeenDeleted = "Das Dokument kann nicht angezeigt werden, weil es gelöscht wurde.";
+$EditCurrentForum = "Das aktuelle Forum bearbeiten";
+$NoPrerequisites = "Keine Vorbedingungen";
 ?>

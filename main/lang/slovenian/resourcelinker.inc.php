@@ -21,7 +21,6 @@ $Dropbox = "Nabiralnik";
 $Assignments = "Zadolžitve";
 $Exercise = "Testi";
 $Link = "Povezava";
-$Forum = "Forum";
 $AdValvas = "Obvestila";
 $Document = "Dokument";
 $ShowDelete = "Prikaži / Briši";

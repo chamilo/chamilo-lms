@@ -187,7 +187,6 @@ $Document = "Dokumenty";
 $Learnpath = "U&#269;ebná osnova";
 $Link = "Odkazy";
 $Announcement = "Oznámenia";
-$langbb_forum = "Fórum";
 $Dropbox = "Schránka na dokumenty";
 $Quiz = "Testy";
 $langgroup = "Skupiny";

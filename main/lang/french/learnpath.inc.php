@@ -153,7 +153,6 @@ $langNoItemsInLp = "Il n\'y a pas d\'étapes dans ce parcours pour le moment.  Cl
 $FirstPosition = "Première position";
 $NewQuiz = "Nouveau test";
 $CreateTheForum = "Ajouter le forum";
-$Forums = "Forums";
 $AddLpIntro = "<strong>Binevenue</strong> dans ";
 $AddLpIntro = "<strong>Bienvenue</strong> dans l\'outil de création de parcours de Dokeos.<br />Vous pourrez créer votre parcouts étape par étape. La structure de votre parcours apparaîtra dans le menu sur la gauche";
 $AddLpToStart = "Pour commencer, choisissez un titre pour votre parcours";
@@ -167,4 +166,7 @@ $AllowMultipleAttempts = "Autoriser plusieurs essais";
 $PreventMultipleAttempts = "Interdire plusieurs essais";
 $MakeScormRecordingExtra = "ajouter des événements SCORM";
 $MakeScormRecordingNormal = "pas d\'événements SCORM additionnels";
+$DocumentHasBeenDeleted = "Le document ne peut pas être affiché parce qu\'il a été supprimé";
+$EditCurrentForum = "Editer ce forum";
+$NoPrerequisites = "Aucun pré-requis";
 ?>

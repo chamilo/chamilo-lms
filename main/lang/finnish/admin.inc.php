@@ -37,7 +37,6 @@ $langAddUsers = "Lis‰‰ k‰ytt‰j‰";
 $langAddGroups = "Lis‰‰ ryhmi‰";
 $langAddClasses = "Lis‰‰ luokkia";
 $langExportUsers = "Tuo k‰ytt‰j‰ lista";
-$langGroupForum = "Ryhm‰n foorumi";
 $langAddACategory = "Lis‰‰ kategoria";
 $ServerStatusTitle = "Palvelin tyyppi";
 $Languages = "Kielet";

@@ -14,7 +14,6 @@ $langExistingGroups = "Gruppi";
 $langRegistered = "Iscritto";
 $langGroupAllowStudentRegistration = "I corsisti sono autorizzati ad iscriversi autonomamente ai gruppi";
 $langGroupTools = "Strumenti";
-$langGroupForum = "Forum";
 $langGroupDocument = "Documenti";
 $langGroupPropertiesModified = "Le proprietà del gruppo sono state modificate";
 $langGroupSpace = "Area di lavoro del gruppo";
@@ -89,7 +88,7 @@ $GroupTutors = "Tutor";
 $GroupWork = "Elaborati";
 $GroupCalendar = "Agenda";
 $GroupAnnouncements = "Avvisi";
-$NoCategoriesDefined = "Non sono presenti categorie deinite";
+$NoCategoriesDefined = "Non sono presenti categorie definite";
 $GroupsFromClasses = "Gruppi basati sulle classi";
 $GroupsFromClassesInfo = "Scegliendo tale opzione, verranno creati dei gruppi sulla base delle classi iscritte al corso.";
 ?>

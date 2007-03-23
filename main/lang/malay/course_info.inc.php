@@ -20,7 +20,6 @@ $langVid = "Video";
 $langWork = "Tugasan";
 $langProgramMenu = "Program Subjek";
 $langAnnouncement = "Pengumuman";
-$langForum = "Forum";
 $langExercise = "Latihan";
 $langStats = "Statistik";
 $langUplPage = "Muatnaik Page dan pautkan dengan Home Page";

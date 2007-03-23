@@ -153,7 +153,6 @@ $langNoItemsInLp = "There are no items in the learning path for this moment. Cli
 $FirstPosition = "First position";
 $NewQuiz = "New quiz";
 $CreateTheForum = "Add the forum";
-$Forums = "Forums";
 $AddLpIntro = "<strong>Welcome</strong> to Dokeos Learning path authoring tool";
 $AddLpIntro = "<strong>Welcome</strong> to Dokeos Learning path authoring tool.<br />You will be able to create your learning path step by step. The structure of your learning path will appear in a menu on the left.";
 $AddLpToStart = "To start, give a title to your learning path";
@@ -167,4 +166,7 @@ $AllowMultipleAttempts = "Allow multiple attempts";
 $PreventMultipleAttempts = "Prevent multiple attempts";
 $MakeScormRecordingExtra = "Make SCORM recordings extra";
 $MakeScormRecordingNormal = "Make SCORM recordings normal";
+$DocumentHasBeenDeleted = "The document cannot be displayed because it has been deleted";
+$EditCurrentForum = "Edit the current forum";
+$NoPrerequisites = "No prerequisites";
 ?>

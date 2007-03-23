@@ -22,7 +22,6 @@ $langVid = "Видео";
 $langWork = "Студентски материали";
 $langProgramMenu = "Програма на курса";
 $langAnnouncement = "Обяви";
-$langForum = "Форуми";
 $langExercise = "Упражнения";
 $langStats = "Статистики";
 $langUplPage = "Добавяне на HTML страница или хипервръзка към Началната страница";

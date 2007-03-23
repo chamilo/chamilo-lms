@@ -14,7 +14,6 @@ $langExistingGroups = "Grupy";
 $langRegistered = "Zarejestrowani";
 $langGroupAllowStudentRegistration = "Studenci mog&#261; samodzielne zapisywa&#263; si&#281; do grup";
 $langGroupTools = "Narz&#281;dzia";
-$langGroupForum = "Forum dyskusyjne";
 $langGroupDocument = "Dokumenty";
 $langGroupPropertiesModified = "Ustawienia grup zosta&#322;y zmodyfikowane";
 $langGroupSpace = "Obszar grupy";

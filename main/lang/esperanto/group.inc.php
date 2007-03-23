@@ -14,7 +14,6 @@ $langExistingGroups = "Grupoj";
 $langRegistered = "Registritaj";
 $langGroupAllowStudentRegistration = "Uzuloj rajtas memregistri en grupoj";
 $langGroupTools = "Iloj";
-$langGroupForum = "Forumo de Grupo";
 $langGroupDocument = "Dokumentoj";
 $langGroupPropertiesModified = "Grupagordaro estas &#349;an&#285;ita";
 $langGroupSpace = "Grupejo";

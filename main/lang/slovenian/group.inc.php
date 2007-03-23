@@ -14,7 +14,6 @@ $langExistingGroups = "Skupine";
 $langRegistered = "Vpisano";
 $langGroupAllowStudentRegistration = "Teèajniki se lahko sami vpišejo v skupine";
 $langGroupTools = "Orodja";
-$langGroupForum = "Forum skupine";
 $langGroupDocument = "Dokumenti";
 $langGroupPropertiesModified = "Lastnosti skupine so spremenjene";
 $langGroupSpace = "Podroèje skupine";

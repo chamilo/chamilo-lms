@@ -14,7 +14,6 @@ $langExistingGroups = "Ομάδες Χρηστών";
 $langRegistered = "Εγγεγραμμένοι";
 $langGroupAllowStudentRegistration = "Οι φοιτητές επιτρέπονται να εγγραφούν στις ομάδες χρηστών";
 $langGroupTools = "Εργαλεία";
-$langGroupForum = "Περιοχή συζητήσεων";
 $langGroupDocument = "Έγγραφα";
 $langGroupPropertiesModified = "Αλλάχτηκαν οι ρυθμίσεις της ομάδας χρηστών";
 $langGroupSpace = "Περιοχή ομάδας χρηστών";

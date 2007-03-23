@@ -21,7 +21,6 @@ $Dropbox = "Dropbox";
 $Assignments = "Ö&#287;renci Çal&#305;&#351;malar&#305;";
 $Exercise = "Test";
 $Link = "Ba&#287;lant&#305;";
-$Forum = "Forum";
 $AdValvas = "Ad Valvas";
 $Document = "Belge";
 $ShowDelete = "Göster / Sil";

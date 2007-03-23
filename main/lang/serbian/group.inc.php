@@ -14,7 +14,6 @@ $langExistingGroups = "Grupe";
 $langRegistered = "Registrovan";
 $langGroupAllowStudentRegistration = "Korisnicima je dozvoljeno da se sami registruju u grupe";
 $langGroupTools = "Alati";
-$langGroupForum = "Forum grupe";
 $langGroupDocument = "Dokumenta";
 $langGroupPropertiesModified = "Podešavanja grupe su modifikovana";
 $langGroupSpace = "Okruženje grupe";

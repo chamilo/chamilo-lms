@@ -22,7 +22,6 @@ $langVid = "Βίντεο";
 $langWork = "Εργασίες Φοιτητών";
 $langProgramMenu = "Πρόγραμμα Μαθήματος";
 $langAnnouncement = "Ανακοινώσεις";
-$langForum = "Περιοχή Συζητήσεων";
 $langExercise = "Ασκήσεις";
 $langStats = "Στατιστικά";
 $langUplPage = "Ανέβασμα σελίδας και δημιουργία συνδέσμου στην Αρχική Σελίδα";

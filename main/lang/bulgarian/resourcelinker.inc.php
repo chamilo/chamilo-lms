@@ -21,7 +21,6 @@ $Dropbox = "Куриер";
 $Assignments = "Студентски работи";
 $Exercise = "Тестове";
 $Link = "Връзки";
-$Forum = "Форум";
 $AdValvas = "Обяви";
 $Document = "Документ";
 $ShowDelete = "Показване / Изтриване";

@@ -21,7 +21,6 @@ $Dropbox = "Baúl de tarefas";
 $Assignments = "Tarefas dos estudantes";
 $Exercise = "Exercicio";
 $Link = "Ligazón";
-$Forum = "Foro";
 $AdValvas = "Engadir anuncio";
 $Document = "Documento";
 $ShowDelete = "Mostrar / Borrar";

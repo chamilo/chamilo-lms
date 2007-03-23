@@ -21,7 +21,6 @@ $Dropbox = "Dropbox";
 $Assignments = "Assignments";
 $Exercise = "Test";
 $Link = "Link";
-$Forum = "Forum";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
 $ShowDelete = "Mostrar / Borrar";

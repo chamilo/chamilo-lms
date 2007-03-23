@@ -14,7 +14,6 @@ $langExistingGroups = "Gruplar";
 $langRegistered = "Kayýtlý";
 $langGroupAllowStudentRegistration = "Öðrenciler gruplara kendi kendilerine kaydolabilir";
 $langGroupTools = "Araçlar";
-$langGroupForum = "Forum";
 $langGroupDocument = "Belgeler";
 $langGroupPropertiesModified = "Grup ayarlarý deðiþtirildi";
 $langGroupSpace = "Grup alanlarý";

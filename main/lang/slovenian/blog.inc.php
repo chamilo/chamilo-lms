@@ -44,6 +44,7 @@ $SelectUser = "Izberi uporabnika";
 $SelectTask = "Izberi opravilo";
 $Color = "Barva";
 $TaskList = "Seznam opravil";
+$AssignedTasks = "Dodeljena opravila";
 $ReadMore = "Veè...";
 $EditThisPost = "Uredi to objavo";
 $NoTasks = "Ni opravil";

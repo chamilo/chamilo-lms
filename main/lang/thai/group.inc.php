@@ -14,7 +14,6 @@ $langExistingGroups = "กลุ่ม";
 $langRegistered = "ลงทะเบียน";
 $langGroupAllowStudentRegistration = "อนุญาตให้ผู้ใช้ลงทะเบียนเข้ากลุ่มด้วยตัวเอง";
 $langGroupTools = "เครื่องมือ";
-$langGroupForum = "กลุ่มอภิปราย";
 $langGroupDocument = "เอกสาร";
 $langGroupPropertiesModified = "แก้ไขการตั้งค่ากลุ่ม";
 $langGroupSpace = "ขอบข่ายของกลุ่ม Group area";

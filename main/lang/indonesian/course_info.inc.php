@@ -22,7 +22,6 @@ $langVid = "Video";
 $langWork = "Tugad";
 $langProgramMenu = "Program mata kuliah";
 $langAnnouncement = "Pengumuman";
-$langForum = "Forum";
 $langExercise = "Latihan";
 $langStats = "Statistik";
 $langUplPage = "Upload halaman dan link-kan ke Home Page";

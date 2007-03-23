@@ -21,7 +21,6 @@ $Dropbox = "Partage de fichiers";
 $Assignments = "Travaux";
 $Exercise = "Tests";
 $Link = "Liens";
-$Forum = "Forums";
 $AdValvas = "Annonces";
 $Document = "Documents";
 $ShowDelete = "Afficher / Modifier les ressources";

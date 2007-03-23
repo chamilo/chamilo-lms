@@ -22,7 +22,6 @@ $langVid = "Video";
 $langWork = "Doprinosi";
 $langProgramMenu = "Program kursa";
 $langAnnouncement = "Obaveštenja";
-$langForum = "Forumi";
 $langExercise = "Testovi";
 $langStats = "Statistike";
 $langUplPage = "U&#269;itaj stranicu na server i stavi link ka po&#269;etnoj stranici";

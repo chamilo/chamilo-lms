@@ -22,7 +22,6 @@ $langVid = "Video";
 $langWork = "Hozzájárulások";
 $langProgramMenu = "Kurzus program";
 $langAnnouncement = "Hirdetmények";
-$langForum = "Fórumok";
 $langExercise = "Tesztek";
 $langStats = "Statisztikák";
 $langUplPage = "Oldal feltöltése és a fõoldalhoz csatlakoztatása";

@@ -14,7 +14,6 @@ $langExistingGroups = "Csoportok";
 $langRegistered = "Résztvev&#337;k";
 $langGroupAllowStudentRegistration = "A felhasználók regisztálhatják magukat a csoportokba";
 $langGroupTools = "Eszközök";
-$langGroupForum = "Csoport fóruma";
 $langGroupDocument = "Dokumentumok";
 $langGroupPropertiesModified = "A csoport beállításai módosultak";
 $langGroupSpace = "Csoport terület";

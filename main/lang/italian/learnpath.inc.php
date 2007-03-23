@@ -153,7 +153,6 @@ $langNoItemsInLp = "Non ci sono elementi nel percorso, per ora. Clicca su \"Comp
 $FirstPosition = "Prima posizione";
 $NewQuiz = "Nuova domanda";
 $CreateTheForum = "Crea il Forum";
-$Forums = "Forum";
 $AddLpIntro = "<strong>Benvenuti</strong> al sistema autore di percorsi didattici di Dokeos";
 $AddLpIntro = "<strong>Benvenuti</strong> al sistema autore di percorsi didattici di Dokeos. Puoi creare il percorso elemento per elemento. A sinistra vedrai la struttura del percorso.";
 $AddLpToStart = "Per iniziare, indica il Titolo del percorso";
@@ -167,4 +166,5 @@ $AllowMultipleAttempts = "Permetti più tentativi di risposta";
 $PreventMultipleAttempts = "Permetti un solo tentativo";
 $MakeScormRecordingExtra = "Usa funzioni  SCORM avanzate";
 $MakeScormRecordingNormal = "Usa funzioni  SCORM normali";
+$DocumentHasBeenDeleted = "Il docimento non è visibile perché è stato eliminato";
 ?>

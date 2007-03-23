@@ -1316,17 +1316,28 @@ function update_Db_course($courseDbName)
 	return 0;
 }
 
-function browse_folders($path, $files){
-	$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
+function browse_folders($path, $files, $media){
+	if($media=='images'){
+		$code_path = api_get_path(SYS_CODE_PATH)."default_course_document/images/";
+	}
+	if($media=='audio'){
+		$code_path = api_get_path(SYS_CODE_PATH)."default_course_document/audio/";
+	}
+	if($media=='flash'){
+		$code_path = api_get_path(SYS_CODE_PATH)."default_course_document/flash/";
+	}
+	if($media=='video'){
+		$code_path = api_get_path(SYS_CODE_PATH)."default_course_document/video/";
+	}
 	if(is_dir($path)){
 		$handle = opendir($path);
 		while (false !== ($file = readdir($handle))) {
 			if(is_dir($path.$file) && strpos($file,'.')!==0){
-				$files[]["dir"] = str_replace($img_code_path,"",$path.$file."/");
-				$files = browse_folders($path.$file."/",$files);
+				$files[]["dir"] = str_replace($code_path,"",$path.$file."/");
+				$files = browse_folders($path.$file."/",$files,$media);
 			}
 			elseif(is_file($path.$file) && strpos($file,'.')!==0){
-		        $files[]["file"] = str_replace($img_code_path,"",$path.$file);
+		        $files[]["file"] = str_replace($code_path,"",$path.$file);
 			}
 		}
 	}
@@ -1364,37 +1375,131 @@ function fill_course_repository($courseRepository)
 		fputs($fp, $enreg);
 	}
 	fclose($fp);
-
+	
+	$default_document_array=array();
+	
 	if(api_get_setting('example_material_course_creation')<>'false')
 	{
-		$img_code_path = api_get_path(SYS_CODE_PATH)."img/default_courses_img/";
-		$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/examples/';
-
+		$img_code_path = api_get_path(SYS_CODE_PATH)."default_course_document/images/";
+		$audio_code_path = api_get_path(SYS_CODE_PATH)."default_course_document/audio/";
+		$flash_code_path = api_get_path(SYS_CODE_PATH)."default_course_document/flash/";
+		$video_code_path = api_get_path(SYS_CODE_PATH)."default_course_document/video/";
+		$course_documents_folder_images=$sys_course_path.$courseRepository.'/document/images/examples/';
+		$course_documents_folder_audio=$sys_course_path.$courseRepository.'/document/audio/';
+		$course_documents_folder_flash=$sys_course_path.$courseRepository.'/document/flash/';
+		$course_documents_folder_video=$sys_course_path.$courseRepository.'/document/video/';
+		
+		/*
+		 * Images
+		 */
 	   	$files=array();
 
-		$files=browse_folders($img_code_path,$files);
-
+		$files=browse_folders($img_code_path,$files,'images');
+		
 		$pictures_array = sort_pictures($files,"dir");
 		$pictures_array = array_merge($pictures_array,sort_pictures($files,"file"));
 
-		mkdir($course_documents_folder,0777);
+		mkdir($course_documents_folder_images,0777);
 
 		$handle = opendir($img_code_path);
 
 		foreach($pictures_array as $key => $value){
 
 			if($value["dir"]!=""){
-				mkdir($course_documents_folder.$value["dir"],0777);
+				mkdir($course_documents_folder_images.$value["dir"],0777);
 			}
 			if($value["file"]!=""){
-				copy($img_code_path.$value["file"],$course_documents_folder.$value["file"]);
-				chmod($course_documents_folder.$value["file"],0777);
+				copy($img_code_path.$value["file"],$course_documents_folder_images.$value["file"]);
+				chmod($course_documents_folder_images.$value["file"],0777);
 			}
 
 		}
+		
+		$default_document_array['images']=$pictures_array;
+		
+		/*
+		 * Audio
+		 */
+		$files=array();
+
+		$files=browse_folders($audio_code_path,$files,'audio');
+		
+		$audio_array = sort_pictures($files,"dir");
+		$audio_array = array_merge($audio_array,sort_pictures($files,"file"));
+
+		mkdir($course_documents_folder_audio,0777);
+
+		$handle = opendir($audio_code_path);
+
+		foreach($audio_array as $key => $value){
+
+			if($value["dir"]!=""){
+				mkdir($course_documents_folder_audio.$value["dir"],0777);
+			}
+			if($value["file"]!=""){
+				copy($audio_code_path.$value["file"],$course_documents_folder_audio.$value["file"]);
+				chmod($course_documents_folder_audio.$value["file"],0777);
+			}
+
+		}
+		$default_document_array['audio']=$audio_array;
+		
+		/*
+		 * Flash
+		 */
+		$files=array();
+
+		$files=browse_folders($flash_code_path,$files,'flash');
+		
+		$flash_array = sort_pictures($files,"dir");
+		$flash_array = array_merge($flash_array,sort_pictures($files,"file"));
+
+		mkdir($course_documents_folder_flash,0777);
+
+		$handle = opendir($flash_code_path);
+
+		foreach($flash_array as $key => $value){
+
+			if($value["dir"]!=""){
+				mkdir($course_documents_folder_flash.$value["dir"],0777);
+			}
+			if($value["file"]!=""){
+				copy($flash_code_path.$value["file"],$course_documents_folder_flash.$value["file"]);
+				chmod($course_documents_folder_flash.$value["file"],0777);
+			}
+
+		}
+		$default_document_array['flash']=$flash_array;
+		
+		/*
+		 * Video
+		 */
+		$files=array();
+
+		$files=browse_folders($video_code_path,$files,'video');
+		
+		$video_array = sort_pictures($files,"dir");
+		$video_array = array_merge($video_array,sort_pictures($files,"file"));
+
+		mkdir($course_documents_folder_video,0777);
+
+		$handle = opendir($video_code_path);
+
+		foreach($video_array as $key => $value){
+
+			if($value["dir"]!=""){
+				mkdir($course_documents_folder_video.$value["dir"],0777);
+			}
+			if($value["file"]!=""){
+				copy($video_code_path.$value["file"],$course_documents_folder_video.$value["file"]);
+				chmod($course_documents_folder_video.$value["file"],0777);
+			}
+
+		}
+		$default_document_array['video']=$video_array;		
 
 	}
-	return $pictures_array;
+	return $default_document_array;
 }
 
 /**
@@ -1414,7 +1519,7 @@ function lang2db($string)
 *	Fills the course database with some required content and example content.
 *	@version 1.2
 */
-function fill_Db_course($courseDbName, $courseRepository, $language,$pictures_array)
+function fill_Db_course($courseDbName, $courseRepository, $language,$default_document_array)
 {
 	global $_configuration, $clarolineRepositoryWeb, $_user;
 
@@ -1572,26 +1677,39 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$pictures_ar
 		//FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
 
-		$img_documents='/images/examples/';
-
-		$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/examples/';
-
-		foreach($pictures_array as $key => $value){
-			if($value["dir"]!=""){
-				$folder_path=substr($value["dir"],0,strlen($value["dir"])-1);
-				$temp=explode("/",$folder_path);
-				api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents".$folder_path."','".$temp[count($temp)-1]."','folder','0')");
-				$image_id = Database :: get_last_insert_id();
-				api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
+		foreach($default_document_array as $media_type=>$array_media){
+			if($media_type=='images'){
+				$path_documents='/images/examples/';
+				$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/examples/';
 			}
-			if($value["file"]!=""){
-				$temp=explode("/",$value["file"]);
-				$file_size=filesize($course_documents_folder.$value["file"]);
-		        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$img_documents".$value["file"]."','".$temp[count($temp)-1]."','file','$file_size')");
-				$image_id = Database :: get_last_insert_id();
-				api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
+			if($media_type=='audio'){
+				$path_documents='/audio/';
+				$course_documents_folder=$sys_course_path.$courseRepository.'/document/audio/';
 			}
-
+			if($media_type=='flash'){
+				$path_documents='/flash/';
+				$course_documents_folder=$sys_course_path.$courseRepository.'/document/flash/';
+			}
+			if($media_type=='video'){
+				$path_documents='/video/';
+				$course_documents_folder=$sys_course_path.$courseRepository.'/document/video/';
+			}
+			foreach($array_media as $key => $value){
+				if($value["dir"]!=""){
+					$folder_path=substr($value["dir"],0,strlen($value["dir"])-1);
+					$temp=explode("/",$folder_path);
+					api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$path_documents".$folder_path."','".$temp[count($temp)-1]."','folder','0')");
+					$image_id = Database :: get_last_insert_id();
+					api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
+				}
+				if($value["file"]!=""){
+					$temp=explode("/",$value["file"]);
+					$file_size=filesize($course_documents_folder.$value["file"]);
+			        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$path_documents".$value["file"]."','".$temp[count($temp)-1]."','file','$file_size')");
+					$image_id = Database :: get_last_insert_id();
+					api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
+				}
+			}
 		}
 
 		/*
@@ -1656,7 +1774,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$pictures_ar
 		api_sql_query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '2', '1', '".lang2db(get_lang('AdmitError')) . "', '0', '".lang2db(get_lang('NoSeduction')) . "', '-5', '2','','')");
 		api_sql_query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '3', '1', '".lang2db(get_lang('Force')) . "', '1', '".lang2db(get_lang('Indeed')) . "', '5', '3','','')");
 		api_sql_query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4','','')");
-		$html=addslashes('<table width="100%" border="0" callpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_IMG_PATH).'/default_courses_img/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.lang2db(get_lang('Antique')).'</td></tr></table>');
+		$html=addslashes('<table width="100%" border="0" callpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'/default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.lang2db(get_lang('Antique')).'</td></tr></table>');
 		api_sql_query('INSERT INTO `'.$TABLEQUIZ . '` VALUES ( "1", "'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "", "1", "0", "1")');
 		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTIONLIST . "` VALUES ( '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','')");
 		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTION . "` VALUES ( '1', '1')");

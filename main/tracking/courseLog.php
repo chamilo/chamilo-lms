@@ -449,7 +449,7 @@ else {
 	}
 	else
 	{
-		echo get_lang('NoStudent');
+		echo get_lang('NoUsersInCourse');
 	}
 	
 	// send the csv file if asked

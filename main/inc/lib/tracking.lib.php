@@ -122,6 +122,25 @@ class Tracking {
 		}
 	}
 	
+	function get_last_connection_date_on_the_course($student_id, $course_code)
+	{
+		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+		$sql = 'SELECT login_course_date FROM '.$tbl_track_login.' 
+				WHERE user_id = '.intval($student_id).' 
+				AND course_code = "'.mysql_real_escape_string($course_code).'"
+				ORDER BY login_course_date DESC LIMIT 0,1';
+		
+		$rs = api_sql_query($sql);
+		if($last_login_date = mysql_result($rs,0,0))
+		{
+			return $last_login_date;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	function count_course_per_student ($user_id)
 	{
 		

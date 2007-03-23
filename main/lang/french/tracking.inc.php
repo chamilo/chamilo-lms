@@ -195,4 +195,9 @@ $AvgStudentsProgress = "Progression moyenne des apprenants";
 $AvgStudentsScore = "Score moyen des apprenants";
 $AvgMessages = "Messages par apprenant";
 $AvgAssignments = "Travaux par apprenant";
+$ToolsMostUsed = "Outils les plus utilisés";
+$StudentsTracking = "Suivi des apprenants";
+$CourseTracking = "Suivi du cours";
+$LinksMostClicked = "Liens les plus visités";
+$DocumentsMostDownloaded = "Documents les plus téléchargés";
 ?>

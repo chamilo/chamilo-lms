@@ -195,4 +195,9 @@ $AvgStudentsProgress = "Average probationners progress";
 $AvgStudentsScore = "Average probationners score";
 $AvgMessages = "Messages per probationner";
 $AvgAssignments = "Assignments per probationner";
+$ToolsMostUsed = "Tools most used";
+$StudentsTracking = "Probationners tracking";
+$CourseTracking = "Course tracking";
+$LinksMostClicked = "Links most visited";
+$DocumentsMostDownloaded = "Documents most downloaded";
 ?>

@@ -412,4 +412,7 @@ $EmailTitle = "Email title";
 $EmailText = "Email content";
 $Send = "Send";
 $ModifyRecipientList = "Modify recipient list";
+$NoLinkVisited = "No link visited";
+$NoDocumentDownloaded = "No document downloaded";
+$Clicks = "clicks";
 ?>

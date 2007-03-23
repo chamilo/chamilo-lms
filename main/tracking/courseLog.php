@@ -50,6 +50,9 @@ require_once('../newscorm/learnpath.class.php');
 require_once('../newscorm/learnpathItem.class.php');
 require_once('../newscorm/scorm.class.php');
 require_once('../newscorm/scormItem.class.php');
+require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
 // charset determination
 if ($_GET['scormcontopen'])
@@ -103,15 +106,7 @@ $tbl_learnpath_item_view = Database::get_course_table('lp_item_view');
 
 $view = $_REQUEST['view'];
 
-if($view=="0000001") $nameTools=get_lang('SynthesisView');
-if($view=="1000000") $nameTools=get_lang('CourseStats');
-if($view=="0100000") $nameTools=get_lang('CourseAccess');
-if($view=="0010000") $nameTools=get_lang('ToolsAccess');
-if($view=="0001000") $nameTools=get_lang('LinksAccess');
-if($view=="0000100") $nameTools=get_lang('DocumentsAccess');
-if($view=="00000010") $nameTools=get_lang('ScormAccess');
-
-$interbreadcrumb[] = array ("url" => $_SERVER['PHP_SELF']."?view=0000000", "name" => get_lang('ToolName'));
+$nameTools = get_lang('Tracking');
 
 Display::display_header($nameTools, "Tracking");
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
@@ -119,620 +114,351 @@ include("../resourcelinker/resourcelinker.inc.php");
 
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin;
 
+
+ 
+$a_students_temp = CourseManager :: get_user_list_from_course_code($_course['id']);
+foreach($a_students_temp as $student)
+{
+	if($student['status'] == 5)
+		$a_students[] = $student['user_id'];
+}
+$nbStudents = count($a_students);
+
+/**
+ * count the number of students in this course (used for SortableTable)
+ */
+function count_student_in_course()
+{
+	global $nbStudents;
+	return $nbStudents;
+}
+
 /*
 ==============================================================================
 		MAIN CODE
 ==============================================================================
 */
-?>
-<br>
-<h3><?php echo get_lang('StatsOfCourse')." : ".$_course['official_code']; ?></h3>
-<p><?php echo get_lang('SeeIndividualTracking'); ?></p>
 
-<?php
-// check if uid is prof of this group
 
-if($is_allowedToTrack && $_configuration['tracking_enabled'])
+if($_GET['studentlist'] == 'false')
 {
-    // show all : view must be equal to the sum of all view values (1024+512+...+64)
-    // show none : less than the tiniest value
-    /*echo "<div>
-            [<a href='".$_SERVER['PHP_SELF']."?view=1111111'>".get_lang('ShowAll')."</a>]
-            [<a href='".$_SERVER['PHP_SELF']."?view=0000000'>".get_lang('ShowNone')."</a>]
-        </div><br>
-    ";*/
-
-    if(!isset($view)) $view ="0000000";
-	
-	
-	if($view =="0000000"){
-		
-		//Synthesis view
-		echo "<div class='admin_section'>
-			<h4>
-				<img src='../img/synthese_view.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000001' class='specialLink'>".get_lang('SynthesisView')."</a>
-			</h4>
-		 </div>";
-		 
-		 //Course Stats
-		 echo "<div class='admin_section'>
-			<h4>
-				<img src='../img/stats_access.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=1000000' class='specialLink'>".get_lang('CourseStats')."</a>
-			</h4>
-		 </div>";
-		 
-		 //Access to this course
-		 echo "<div class='admin_section'>
-			<h4>
-				<img src='../img/course.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0100000' class='specialLink'>".get_lang('CourseAccess')."</a>
-			</h4>
-		 </div>";
-		 
-		 //Access to tools
-		 echo "<div class='admin_section'>
-			<h4>
-				<img src='../img/acces_tool.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0010000' class='specialLink'>".get_lang('ToolsAccess')."</a>
-			</h4>
-		 </div>";
-		 
-		 //Links
-		 echo "<div class='admin_section'>
-			<h4>
-				<img src='../img/file_html.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0001000' class='specialLink'>".get_lang('LinksAccess')."</a>
-			</h4>
-		 </div>";
-		 
-		 //Documents
-		 echo "<div class='admin_section'>
-			<h4>
-				<img src='../img/documents.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000100' class='specialLink'>".get_lang('DocumentsAccess')."</a>
-			</h4>
-		 </div>";
-		 
-		 //Learning path - Scorm format courses
-		 echo "<div class='admin_section'>
-			<h4>
-				<img src='../img/scormbuilder.gif' align='absbottom'>&nbsp;<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=0000010' class='specialLink'>".get_lang('ScormAccess')."</a>
-			</h4>
-		 </div>";
-		 
-		
-	}
-	
-/***************************************************************************
- *
- *		Reporting
- *
- ***************************************************************************/
-	
-	$tempView = $view;
-    if($view[6] == '1'){
-    	
-    	$tempView[6] = '0';
-    	
-        //--------------------------------BEGIN users in this course
-        $sql = "SELECT $TABLECOURSUSER.`user_id`, $table_user.`lastname`, $table_user.`firstname`
-                    FROM $TABLECOURSUSER, $table_user
-                    WHERE $TABLECOURSUSER.course_code = '".$_cid."' AND $TABLECOURSUSER.`user_id` = $table_user.`user_id`
-                    ORDER BY $table_user.`lastname`";
-        $results = getManyResults3Col($sql);
-
-        //BUGFIX: get visual code instead of real course code. Scormpaths use the visual code... (should be fixed in future versions)
-        $sql = "SELECT visual_code FROM $TABLECOURSE WHERE code = '".$_cid."'";
-        $_course['visual_code'] = getOneResult($sql);
-
-        echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000001'><img src=\"../img/excel.gif\" align=\"absmiddle\">&nbsp;".get_lang('ExportAsCSV')."</a>";
-        if (is_array($results))
-        {
-        	
-        	echo '<table class="data_table">';
-			echo "<tr>
-					<td class='secLine'>".get_lang('Name')."</td>
-					<td class='secLine'>".get_lang('FirstAccess')."</td>
-					<td class='secLine'>".get_lang('LastAccess')."</td>
-					<td class='secLine'>%&nbsp;".get_lang('Visited')."</td>
-	        	  </tr>";
-        	
-            for($j = 0 ; $j < count($results) ; $j++)
-            {
-
-
-            	//--------------------------------BEGIN % visited
-            	// sum of all items (= multiple learningpaths + SCORM imported paths)
-            	$sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) " .
-            			"FROM $tbl_learnpath_item_view iv " .
-            			"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id = v.id " .
-            			"WHERE v.user_id = ".$results[$j][0];
-            	$total_lpath_items = getOneResult($sql);
-
-            	// sum of all completed items (= multiple learningpaths + SCORM imported paths)
-            	$sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) " .
-            			"FROM $tbl_learnpath_item_view iv " .
-            			"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id = v.id " .
-            			"WHERE v.user_id = ".$results[$j][0]." " .
-            				"AND (status = 'completed' OR status='passed')";
-            	$total_lpath_items_completed = getOneResult($sql);
-
-            	// calculation & bgcolor setting
-            	$lpath_pct_completed = empty($total_lpath_items) ? "-" : round(($total_lpath_items_completed / $total_lpath_items) * 100);
-               	//--------------------------------END % visited
-
-
-
-            	//--------------------------------BEGIN first/last access
-            	// first access
-            	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2 WHERE `access_user_id` = '".$results[$j][0]."' AND `access_cours_code` = '".$_course['official_code']."' AND `access_tool` = 'learnpath' ORDER BY access_id ASC LIMIT 1";
-            	$first_access = getOneResult($sql);
-            	$first_access = empty($first_access) ? "-" : date('d.m.y',strtotime($first_access));
-
-            	// last access
-            	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE `access_user_id` = '".$results[$j][0]."' AND `access_cours_code` = '".$_course['official_code']."' AND `access_tool` = 'learnpath'";
-            	$last_access = getOneResult($sql);
-            	$last_access = empty($last_access) ? "-" : date('d.m.y',strtotime($last_access));
-            	//--------------------------------END first/last access
-
-
-
-            	//--------------------------------BEGIN presentation of data
-				echo "		<tr>";
-				echo "			<td>".$results[$j][1]." ".$results[$j][2]."</td>";
-				echo "			<td>".$first_access."</td>";
-				echo "			<td>".$last_access."</td>";
-				echo "			<td align='center'>".$lpath_pct_completed."</td>";
-				echo "		</tr>";
-				//--------------------------------END presentation of data
-								
-            }
-            echo "</table>";
-
-        }
-        else
-        {
-            echo "<div class='secLine' align='center'>".get_lang('NoResult')."</div>";
-        }
-		 
-    }
-    
-    
-    
-/***************************************************************************
- *
- *		Main
- *
- ***************************************************************************/
-
-    $tempView = $view;
-    if($view[0] == '1')
-    {
-        $tempView[0] = '0';
-        
-        $sql = "SELECT count(*)
-                    FROM $TABLECOURSUSER
-                    WHERE course_code = '".$_cid."'";
-        $count = getOneResult($sql);
-        
-        echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=1000000'>".get_lang('ExportAsCSV')."</a>";        
-        echo '<table class="data_table">';
-        
-        echo "<tr><td class='secLine'>".get_lang('CountUsers')." : ".$count."</td></tr>";
-        
-        echo '</table>';
-        
-        
-    }   
-    
-
-/***************************************************************************
-*
-*		Access to this course
-*
-***************************************************************************/
-    $tempView = $view;
-    if($view[1] == '1'){
-    	
-        $tempView[1] = '0';
-                
-        echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0100000'>".get_lang('ExportAsCSV')."</a>";                
-        echo '<table class="data_table">';
-        
-        echo "<tr><td class='secLine'>".get_lang('ConnectionsToThisCourse')."</td></tr>";
-        
-        //Total
-        $sql = "SELECT count(*)
-                    FROM $TABLETRACK_ACCESS
-                    WHERE access_cours_code = '".$_cid."'
-                        AND access_tool IS NULL";
-        $count = getOneResult($sql);
-        
-        echo "
-            <tr>
-                <td valign='top'>"
-                .get_lang('CountToolAccess')." : ".$count."
-                </td>
-            </tr>
-        ";
-        
-        // last 31 days
-        $sql = "SELECT count(*)
-                    FROM $TABLETRACK_ACCESS
-                    WHERE `access_cours_code` = '$_cid'
-                        AND (access_date > DATE_ADD(CURDATE(), INTERVAL -31 DAY))
-                        AND access_tool IS NULL";
-        $count = getOneResult($sql);
-        
-        echo "
-            <tr>
-                <td valign='top'>
-                ".get_lang('Last31days')." : ".$count."
-                </td>
-            </tr>
-        ";
-        
-        // last 7 days
-        $sql = "SELECT count(*)
-                    FROM $TABLETRACK_ACCESS
-                    WHERE `access_cours_code` = '$_cid'
-                        AND (access_date > DATE_ADD(CURDATE(), INTERVAL -7 DAY))
-                        AND access_tool IS NULL";
-        $count = getOneResult($sql);
-        
-        echo "
-            <tr>
-                <td valign='top'>
-                ".get_lang('Last7days')." : ".$count."
-                </td>
-            </tr>
-        ";
-        // today
-        $sql = "SELECT count(*)
-                    FROM $TABLETRACK_ACCESS
-                    WHERE `access_cours_code` = '$_cid'
-                        AND ( access_date > CURDATE() )
-                        AND access_tool IS NULL";
-        $count = getOneResult($sql);
-        echo "
-            <tr>
-                <td valign='top'>
-                ".get_lang('Thisday')." : ".$count."
-                </td>
-            </tr>
-        ";
-        
-        //-- view details of traffic
-        echo "
-            <tr>
-                <td valign='top'>
-                <a href='course_access_details.php'>".get_lang('TrafficDetails')."</a>
-                </td>
-            </tr>
-        ";
-        
-		echo '</table>';		
-		
-    }
-    
-    
-    
-/***************************************************************************
- *
- *		Tools
- *
- ***************************************************************************/
-	$tempView = $view;
-	if($view[2] == '1'){
-		
-	    $tempView[2] = '0';
-	    echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0010000'>".get_lang('ExportAsCSV')."</a>";
-	    echo '<table class="data_table">';
-	    
-	    echo "<tr>
-                <td class='secLine'>".get_lang('ToolTitleToolnameColumn')."</td>
-                <td class='secLine'>".get_lang('ToolTitleUsersColumn')."                </td>
-                <td class='secLine'>".get_lang('ToolTitleCountColumn')."                </td>
-              </tr>";
-              
-		$sql = "SELECT `access_tool`, COUNT(DISTINCT `access_user_id`),count( `access_tool` )
-                FROM $TABLETRACK_ACCESS
-                WHERE `access_tool` IS NOT NULL
-                    AND `access_cours_code` = '$_cid'
-                GROUP BY `access_tool`";
-                
-        $results = getManyResults3Col($sql);
-        
-        if (is_array($results))
-        {
-            for($j = 0 ; $j < count($results) ; $j++)
-            {
-                echo "<tr>";
-                echo "<td class='content'><a href='toolaccess_details.php?tool=".$results[$j][0]."'>".get_lang(ucfirst($results[$j][0]))."</a></td>";
-                echo "<td align='left' class='content'>".$results[$j][1]."</td>";
-                echo "<td align='left' class='content'>".$results[$j][2]."</td>";
-                echo"</tr>";
-            }
-
-        }
-        else
-        {
-            echo "<tr>";
-            echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
-            echo"</tr>";
-        }
-	    
-	    echo '</table>';
-	    
-	}
-    
-    
-/***************************************************************************
-*
-*		Links
-*
-***************************************************************************/
-
-    $tempView = $view;
-    if($view[3] == '1'){
-    	
-        $tempView[3] = '0';
-        
-        $sql = "SELECT `cl`.`title`, `cl`.`url`,count(DISTINCT `sl`.`links_user_id`), count(`cl`.`title`)
-                    FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
-                    WHERE `sl`.`links_link_id` = `cl`.`id`
-                        AND `sl`.`links_cours_id` = '$_cid'
-                    GROUP BY `cl`.`title`, `cl`.`url`";
-                    
-		$results = getManyResultsXCol($sql,4);
-		
-	    echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0001000'>".get_lang('ExportAsCSV')."</a>";		
-		echo '<table class="data_table">';
-		
-		echo "<tr>
-                <td class='secLine'>".get_lang('LinksTitleLinkColumn')."</td>
-                <td class='secLine'>".get_lang('LinksTitleUsersColumn')."</td>
-                <td class='secLine'>".get_lang('LinksTitleCountColumn')."</td>
-            </tr>";
-        
-        if (is_array($results))
-        {
-            for($j = 0 ; $j < count($results) ; $j++)
-            {
-                    echo "<tr>";
-                    echo "<td class='content'><a href='".$results[$j][1]."'>".$results[$j][0]."</a></td>";
-                    echo "<td align='left' class='content'>".$results[$j][2]."</td>";
-                    echo "<td align='left' class='content'>".$results[$j][3]."</td>";
-                    echo"</tr>";
-            }
-
-        }
-        else
-        {
-            echo "<tr>";
-            echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
-            echo"</tr>";
-        }
-        
-        echo '</table>';
-        
-    }
-
-
-/***************************************************************************
-*
-*		Documents
-*
-***************************************************************************/
-
-    $tempView = $view;
-    if($view[4] == '1'){
-    	
-        $tempView[4] = '0';
-        
-        $sql = "SELECT `down_doc_path`, COUNT(DISTINCT `down_user_id`), COUNT(`down_doc_path`)
-                    FROM $TABLETRACK_DOWNLOADS
-                    WHERE `down_cours_id` = '$_cid'
-                    GROUP BY `down_doc_path`";
-        
-        $results = getManyResults3Col($sql);
-        
-	    echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000100'>".get_lang('ExportAsCSV')."</a>";
-        echo '<table class="data_table">';
-        
-        echo "<tr>
-                <td class='secLine'>".get_lang('DocumentsTitleDocumentColumn')."</td>
-                <td class='secLine'>".get_lang('DocumentsTitleUsersColumn')."</td>
-                <td class='secLine'>".get_lang('DocumentsTitleCountColumn')."</td>
-            </tr>";
-        if (is_array($results))
-        {
-            for($j = 0 ; $j < count($results) ; $j++)
-            {
-                    echo "<tr>";
-                    echo "<td class='content'>".$results[$j][0]."</td>";
-                    echo "<td align='left' class='content'>".$results[$j][1]."</td>";
-                    echo "<td align='left' class='content'>".$results[$j][2]."</td>";
-                    echo"</tr>";
-            }
-
-        }
-        else
-        {
-            echo "<tr>";
-            echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
-            echo"</tr>";
-        }
-        
-        echo '</table>';
-        
-        
-    }
-
-
-/***************************************************************************
-*
-*		Scorm contents and Learning Path
-*
-***************************************************************************/
-    $tempView = $view;
-    if($view[5] == '1'){
-    	
-        $tempView[5] = '0';
-        
-        $sql = "SELECT id, name 
-					FROM $tbl_learnpath_main";
-                    //WHERE dokeosCourse='$_cid'"; we are using a table inside the course now, so no need for course id
-		$result=api_sql_query($sql,__FILE__,__LINE__);
-		
-	    $ar=Database::fetch_array($result);
-	    
-	    echo "<a href='courseLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=0000010'>".get_lang('ExportAsCSV')."</a>";
-	    echo '<table class="data_table">';
-	    
-	    echo "<tr>
-	            <td class='secLine'>".get_lang('ScormContentColumn')."</td>
-			</tr>";
-			
-		$scormcontopen=$_REQUEST["scormcontopen"];
-		$scormstudentopen=$_REQUEST["scormstudentopen"];
-	    
-	    if (is_array($ar)){
-	    	
-	    	while ($ar['id'] != '') {
-				$lp_title = stripslashes($ar['name']);
-				echo "<tr><td>";
-				echo "<a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."' class='specialLink'>$lp_title</a>";
-				echo "</td></tr>";
-				if ($ar['id']==$scormcontopen) { //have to list the students here
-					$contentId=$ar['id'];
-					$sql2 = "SELECT u.user_id, u.lastname, u.firstname " .
-							"FROM  $tbl_learnpath_view sd " .
-							"INNER JOIN $table_user u " .
-							"ON u.user_id = sd.user_id " .
-		                    "WHERE sd.lp_id=$contentId group by u.user_id";
-		            //error_log($sql2,0);
-					$result2=api_sql_query($sql2,__FILE__,__LINE__);
-					
-					if(mysql_num_rows($result2)>0){
-						
-						echo "<tr><td align='center'><table cellspacing='0' cellpadding='0' style='margin-left: 15px;margin-right: 15px; margin-top: 5px; margin-bottom: 5px; width: 97%;'>";
-						
-						$isFirstLine=true;
-						
-					    $ar2=Database::fetch_array($result2);
-						while ($ar2 != '') {
-							
-							if (isset($_REQUEST["scormstudentopen"]) && $ar2['user_id']==$scormstudentopen) {
-							
-							echo "<tr><td align='left' class='secLine' style=''><a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."&scormstudentopen=".$ar2['user_id']."' class='specialLink'>{$ar2['lastname']} {$ar2['firstname']}</a>";
-							echo "</td></tr>";
-							
-							}
-							
-							else{
-								
-								if($isFirstLine){
-									echo "<tr><td align='left' style='border-top: 1px solid #b0b0b0;'><a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."&scormstudentopen=".$ar2['user_id']."' class='specialLink'>{$ar2['lastname']} {$ar2['firstname']}</a>";
-									echo "</td></tr>";
-									$isFirstLine=false;
-								}
-								
-								else{
-								
-									echo "<tr><td align='left'><a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."&scormstudentopen=".$ar2['user_id']."' class='specialLink'>{$ar2['lastname']} {$ar2['firstname']}</a>";
-									echo "</td></tr>";
-								
-								}
-			
-							}
-							
-							$isFirstLine=false;
-							
-							
-							if ($ar2['user_id']==$scormstudentopen) { //have to list the student's results
-							
-								echo "<tr><td align='center'><table style='margin-left: 15px;margin-right: 15px; margin-top: 5px; margin-bottom: 5px; width: 97%;'>";
-								
-								$studentId=$ar2['user_id'];
-								$sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
-										"FROM $tbl_learnpath_item i " .
-										"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
-										"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
-										"WHERE (v.user_id=$studentId and v.lp_id=$contentId) ORDER BY v.id, i.id";
-								$result3=api_sql_query($sql3,__FILE__,__LINE__);
-							    $ar3=Database::fetch_array($result3);
-						        echo "<tr><td class='secLine'>
-					                &nbsp;".get_lang('ScormTitleColumn')."&nbsp;
-					                </td>
-					                <td class='secLine'>
-					                &nbsp;".get_lang('ScormStatusColumn')."&nbsp;
-					                </td>
-					                <td class='secLine'>
-					                &nbsp;".get_lang('ScormScoreColumn')."&nbsp;
-					                </td>
-					                <td class='secLine'>
-					                &nbsp;".get_lang('ScormTimeColumn')."&nbsp;
-					                </td>
-						            </tr>";
-								while ($ar3['status'] != '') {
-									require_once('../newscorm/learnpathItem.class.php');
-									$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
-									$title = htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
-									
-									$mylanglist = array(
-										'completed' => 'ScormCompstatus',
-										'incomplete'=> 'ScormIncomplete',
-										'failed'	=> 'ScormFailed',
-										'passed'	=> 'ScormPassed',
-										'browsed'	=> 'ScormBrowsed',
-										'not attempted' => 'ScormNotAttempted',
-									);
-									
-									echo "<tr><td>";
-									echo "$title</td><td align=right>".get_lang($mylanglist[$ar3['status']])."</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
-									echo "</tr>";
-									$ar3=Database::fetch_array($result3);
-								}
-								
-								echo "</td></tr></table>";
-								
-							}
-						
-							$ar2=Database::fetch_array($result2);
-						}
-						
-						echo "</td></tr></table>";
-						
-					}
-
-				}
-				
-				$ar=Database::fetch_array($result);
-				
-			}
-	    	
-    	}
-    	
-    	else{
-    		 echo "<tr>";
-             echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
-             echo"</tr>";
-    	}
-	    
-	    echo '</table>';
-        
-    }
-
-    
+	echo '<div style="float:left; clear:left">
+			<a href="courseLog.php?studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|
+			'.get_lang('CourseTracking').'
+		  </div>';
 }
-// not allowed
 else
 {
-    if(!$_configuration['tracking_enabled'])
+	echo '<div style="float:left; clear:left">
+			'.get_lang('StudentsTracking').' |
+			<a href="courseLog.php?studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;
+		  </div>';
+}
+echo '<div style="float:right; clear:right">
+		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
+		<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+	  </div>';
+
+if($_GET['studentlist'] == 'false')
+{
+	echo'<br /><br />';
+		
+	
+	/**********************
+	 * TOOLS
+	 **********************/
+	
+	echo "<div class='admin_section'>
+				<h4>
+					<img src='../img/acces_tool.gif' align='absbottom'>&nbsp;".get_lang('ToolsMostUsed')."
+				</h4>
+			<table class='data_table'>";
+			 
+	$sql = "SELECT `access_tool`, COUNT(DISTINCT `access_user_id`),count( `access_tool` ) as count_access_tool
+            FROM $TABLETRACK_ACCESS
+            WHERE `access_tool` IS NOT NULL
+                AND `access_cours_code` = '$_cid'
+            GROUP BY `access_tool`
+			ORDER BY count_access_tool DESC
+			LIMIT 0, 3";
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	
+	while ($row = mysql_fetch_array($rs))
+	{
+		echo '	<tr>
+					<td>'.get_lang(ucfirst($row['access_tool'])).'</td>
+					<td align="right">'.$row['count_access_tool'].' '.get_lang('Clicks').'</td>
+				</tr>';
+	}
+	
+	echo '</table></div>';
+	
+	echo '<div class="clear"></div>';
+	
+	/***************************
+	 * LINKS
+	 ***************************/
+	 
+	 echo "<div class='admin_section'>
+				<h4>
+					<img src='../img/link.gif' align='absbottom'>&nbsp;".get_lang('LinksMostClicked')."
+				</h4>
+			<table class='data_table'>";
+			
+	$sql = "SELECT `cl`.`title`, `cl`.`url`,count(DISTINCT `sl`.`links_user_id`), count(`cl`.`title`) as count_visits
+            FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
+            WHERE `sl`.`links_link_id` = `cl`.`id`
+                AND `sl`.`links_cours_id` = '$_cid'
+            GROUP BY `cl`.`title`, `cl`.`url`
+			ORDER BY count_visits DESC
+			LIMIT 0, 3";
+    $rs = api_sql_query($sql, __FILE__, __LINE__);
+    if(mysql_num_rows($rs)>0)
     {
-        echo get_lang('TrackingDisabled');
+	    while($row = mysql_fetch_array($rs))
+	    {
+	    	echo '	<tr>
+						<td>'.$row['title'].'</td>
+						<td align="right">'.$row['count_visits'].' '.get_lang('Clicks').'</td>
+					</tr>';
+	    }
     }
     else
     {
-        api_not_allowed();
+    	echo '<tr><td>'.get_lang('NoLinkVisited').'</td></tr>';
     }
+	echo '</table></div>';
+	
+	
+	echo '<div class="clear"></div>';
+	
+	
+	/***************************
+	 * DOCUMENTS
+	 ***************************/
+	 
+	 echo "<div class='admin_section'>
+				<h4>
+					<img src='../img/documents.gif' align='absbottom'>&nbsp;".get_lang('DocumentsMostDownloaded')."
+				</h4>
+			<table class='data_table'>";
+			
+	$sql = "SELECT `down_doc_path`, COUNT(DISTINCT `down_user_id`), COUNT(`down_doc_path`) as count_down
+            FROM $TABLETRACK_DOWNLOADS
+            WHERE `down_cours_id` = '$_cid'
+            GROUP BY `down_doc_path`
+			ORDER BY count_down DESC
+			LIMIT 0, 3";
+    $rs = api_sql_query($sql, __FILE__, __LINE__);
+    if(mysql_num_rows($rs)>0)
+    {
+	    while($row = mysql_fetch_array($rs))
+	    {
+	    	echo '	<tr>
+						<td>'.$row['down_doc_path'].'</td>
+						<td align="right">'.$row['count_down'].' '.get_lang('Clicks').'</td>
+					</tr>';
+	    }
+    }
+    else
+    {
+    	echo '<tr><td>'.get_lang('NoDocumentDownloaded').'</td></tr>';
+    }
+	echo '</table></div>';
+	
+	echo '<div class="clear"></div>';
+	
+	
+	/***************************
+	 * LEARNING PATHS
+	 ***************************/
+	 
+	 echo "<div class='admin_section'>
+				<h4>
+					<img src='../img/scormbuilder.gif' align='absbottom'>&nbsp;".get_lang('AverageProgressInLearnpath')."
+				</h4>
+			<table class='data_table'>";
+			
+	$sql = "SELECT lp.name,lp.id
+			FROM ".$tbl_learnpath_main." AS lp";
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	
+	if(mysql_num_rows($rs)>0)
+	{
+		while($lp = mysql_fetch_array($rs))
+		{
+			$lp_avg_progress = 0;
+			foreach($a_students as $student)
+			{
+				
+				// get the progress in learning pathes	
+				$lp_avg_progress += learnpath::get_db_progress($lp['id'],$student);
+				
+				
+			}
+			if($nbStudents > 0)
+			{
+				$lp_avg_progress = $lp_avg_progress / $nbStudents;
+			}
+			echo '<tr><td>'.$lp['name'].'</td><td align="right">'.$lp_avg_progress.' %</td></tr>';
+		}
+	}
+	else
+	{
+		echo '<tr><td>'.get_lang('NoLearningPath').'</td></tr>';
+	}
+	
+	echo '</table></div>';
+	
+	
+	echo '<div class="clear"></div>';
+	
+	
+	/***************************
+	 * EXERCICES
+	 ***************************/
+	 
+	 echo "<div class='admin_section'>
+				<h4>
+					<img src='../img/quiz.gif' align='absbottom'>&nbsp;".get_lang('AverageResultsToTheExercices')."
+				</h4>
+			<table class='data_table'>";
+			
+	$sql = "SELECT id, title
+			FROM ".Database :: get_course_table(TABLE_QUIZ_TEST);
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	
+	if(mysql_num_rows($rs)>0)
+	{
+		while($quiz = mysql_fetch_array($rs))
+		{
+			$quiz_avg_score = 0;
+			
+			// get the progress in learning pathes	
+			$sql = 'SELECT exe_result , exe_weighting
+					FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
+					WHERE exe_exo_id = '.$quiz['id'].'
+					ORDER BY exe_date DESC
+					LIMIT 0, 1';
+			$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
+			$nb_attempts = 0;
+			while($attempt = mysql_fetch_array($rsAttempt))
+			{
+				$nb_attempts++;
+				$quiz_avg_score += $attempt['exe_result']/$attempt['exe_weighting']*100;
+			}
+			if($nb_attempts>0)
+				$quiz_avg_score = $quiz_avg_score / $nb_attempts;
+			
+			echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.$quiz_avg_score.' %</td></tr>';
+		}
+	}
+	else
+	{
+		echo '<tr><td>'.get_lang('NoExercises').'</td></tr>';
+	}
+	
+	echo '</table></div>';
+	
+	
+}
+// else display student list with all the informations
+else {
+	
+	$tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
+	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : DESC;
+	
+	if(count($a_students)>0)
+	{
+		$table = new SortableTable('tracking', 'count_student_in_course');
+		$table -> set_header(0, get_lang('LastName'));
+		$table -> set_header(1, get_lang('FirstName'));
+		$table -> set_header(2, get_lang('Time'),false);
+		$table -> set_header(3, get_lang('Progress'),false);
+		$table -> set_header(4, get_lang('Score'),false);	
+		$table -> set_header(5, get_lang('Student_publication'),false);
+		$table -> set_header(6, get_lang('Messages'),false);
+		$table -> set_header(7, get_lang('LatestLogin'),false);
+		$table -> set_header(8, get_lang('Details'),false);
+	     
+	    if($export_csv)
+		{
+			$csv_content[] = array ( 
+									get_lang('LastName'),
+									get_lang('FirstName'),
+									get_lang('Time'),
+									get_lang('Progress'),
+									get_lang('Score'),
+									get_lang('Student_publication'),
+									get_lang('Messages'),
+									get_lang('LatestLogin')
+								   );
+		}
+	    
+	    $all_datas = array();
+	    $course_code = $_course['id'];
+		foreach($a_students as $student_id)
+		{
+			$student_datas = UserManager :: get_user_info_by_id($student_id);
+			
+			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0 ;
+			$nb_courses_student = 0;
+			$avg_time_spent = Tracking :: get_time_spent_on_the_course($student_id, $course_code);
+			$avg_student_score = Tracking :: get_avg_student_score($student_id, $course_code);
+			$avg_student_progress = Tracking :: get_avg_student_progress($student_id, $course_code);
+			$total_assignments = Tracking :: count_student_assignments($student_id, $course_code);
+			$total_messages = Tracking :: count_student_messages($student_id, $course_code);
+			
+			$row = array();
+			$row[] = $student_datas['lastname'];
+			$row[] = 	$student_datas['firstname'];
+			$row[] = api_time_to_hms($avg_time_spent);
+			$row[] = $avg_student_progress.' %';
+			$row[] = $avg_student_score.' %';		
+			$row[] = $total_assignments;
+			$row[] = $total_messages;
+			$row[] = Tracking :: get_last_connection_date_on_the_course($student_id, $course_code);
+			
+			if($export_csv)
+			{
+				$csv_content[] = $row;
+			}
+			
+			$row[] = '<a href="../mySpace/myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+			
+			$all_datas[] = $row;		
+	
+		}
+		
+		usort($all_datas, 'sort_users');
+		if($tracking_direction == 'ASC')
+			rsort($all_datas);
+		
+		if($export_csv)
+		{
+			usort($csv_content, 'sort_users');
+		}
+		
+		foreach($all_datas as $row)
+		{
+			$table -> addRow($row,'align="right"');	
+		}
+		$table -> setColAttributes(8,array('align'=>'center'));
+		$table -> display();
+		
+	}
+	else
+	{
+		echo get_lang('NoStudent');
+	}
+	
+	// send the csv file if asked
+	if($export_csv)
+	{
+		ob_end_clean();
+		Export :: export_table_csv($csv_content, 'reporting_student_list');
+	}
+	
 }
 ?>
 </table>

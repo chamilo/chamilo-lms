@@ -28,11 +28,17 @@ $csv_content = array();
  
  if(isset($_GET['details']))
  {
- 	if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course')
+ 	if(!empty($_GET['origin']) && $_GET['origin'] == 'user_course')
  	{
  		$course_infos = CourseManager :: get_course_information($_GET['course']);
  		$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
  		$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$_GET['course'], "name" => get_lang("Users"));
+ 	}
+ 	else if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course')
+ 	{
+ 		$course_infos = CourseManager :: get_course_information($_GET['course']);
+ 		$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
+ 		$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$_GET['course'].'&studentlist=true', "name" => get_lang("Tracking"));
  	}
  	else
  	{
@@ -748,7 +754,7 @@ if(!empty($_GET['student']))
 	</table>
 	<br />
 <?php 
-	if(!empty($_GET['details']))
+	if(!empty($_GET['details']) && $_GET['origin'] != 'tracking_course' && $_GET['origin'] != 'user_course')
 	{
 ?>
 		<div align="left">

@@ -601,7 +601,7 @@ function modify_filter($user_id)
 
 	if($is_allowed_to_track)
 	{
-		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'&details=true&course='.$_course['id'].'&origin=tracking_course"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
+		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'&details=true&course='.$_course['id'].'&origin=user_course"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
 	}
 
 	if(api_is_allowed_to_edit())

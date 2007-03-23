@@ -429,7 +429,7 @@ if($nb_teacher_courses)
 		$table_row[] = $avg_score_in_course;
 		$table_row[] = $avg_messages_in_course;
 		$table_row[] = $avg_assignments_in_course;
-		$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+		$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 		
 		$csv_content[] = array(
 							$course['title'],

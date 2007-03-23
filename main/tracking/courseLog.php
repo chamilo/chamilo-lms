@@ -158,7 +158,7 @@ echo '<div style="float:right; clear:right">
 		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 		<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 	  </div>';
-
+echo '<div class="clear"></div>';
 if($_GET['studentlist'] == 'false')
 {
 	echo'<br /><br />';

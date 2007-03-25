@@ -85,10 +85,30 @@ $answered_data = survey_manager::get_people_who_filled_survey($_GET['survey_id']
 
 
 //
-echo '	<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=invited">'.get_lang('ViewInvited').'</a> |
-		<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=answered">'.get_lang('ViewAnswered').'</a> |
-		<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=unanswered">'.get_lang('ViewUnanswered').'</a> |
-	';
+if (!isset($_GET['view']) OR $_GET['view'] == 'invited')
+{
+	echo get_lang('ViewInvited'). ' | ';
+}
+else
+{
+	echo '	<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=invited">'.get_lang('ViewInvited').'</a> |';
+}
+if ($_GET['view'] == 'answered')
+{
+	echo get_lang('ViewAnswered').' | ';
+}
+else
+{
+	echo '	<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=answered">'.get_lang('ViewAnswered').'</a> |';
+}
+if ($_GET['view'] == 'unanswered')
+{
+	echo get_lang('ViewUnanswered');
+}
+else
+{
+	echo '	<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=unanswered">'.get_lang('ViewUnanswered').'</a>';
+}
 
 // table header
 echo '<table class="data_table">';
@@ -101,7 +121,7 @@ echo '	</tr>';
 
 $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email FROM $table_survey_invitation survey_invitation
 			LEFT JOIN $table_user user ON  survey_invitation.user = user.user_id
-			WHERE survey_invitation.survey_code = '".mysql_real_escape_string($survey_data['code'])."'";
+			WHERE survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."'";
 $res = api_sql_query($sql, __FILE__, __LINE__);
 while ($row = mysql_fetch_assoc($res))
 {
@@ -181,7 +201,7 @@ function get_survey_invitations_data()
 				'' as col4
 				FROM $table_survey_invitation survey_invitation
 		LEFT JOIN $table_user user ON  survey_invitation.user = user.user_id
-		WHERE survey_invitation.survey_id = '".mysql_real_escape_string($_GET['survey_id'])."'";
+		WHERE survey_invitation.survey_id = '".Database::escape_string($_GET['survey_id'])."'";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_array($res))
 	{
@@ -205,7 +225,7 @@ function get_number_of_survey_invitations()
 	// Database table definition
 	$table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
 
-	$sql = "SELECT count(user) AS total FROM $table_survey_invitation WHERE survey_id='".mysql_real_escape_string($_GET['survey_id'])."'";
+	$sql = "SELECT count(user) AS total FROM $table_survey_invitation WHERE survey_id='".Database::escape_string($_GET['survey_id'])."'";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$row = mysql_fetch_assoc($res);
 	return $row['total'];

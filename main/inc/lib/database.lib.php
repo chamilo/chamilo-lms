@@ -585,10 +585,15 @@ class Database
 	 * @param	string	The string to escape
 	 * @return	string	The escaped string
 	 * @author	Yannick Warnier <yannick.warnier@dokeos.com>
+	 * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 */
 	function escape_string($string)
 	{
-		return mysql_escape_string($string);
+		if (get_magic_quotes_gpc())
+		{
+			$string = stripslashes($string);
+		}
+		return mysql_real_escape_string($string);
 	}
 	/**
 	 * Gets the array from a SQL result (as returned by api_sql_query) - help achieving database independence

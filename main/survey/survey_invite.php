@@ -76,7 +76,7 @@ Display::display_header($tool_name);
 
 // checking if there is another survey with this code.
 // If this is the case there will be a language choice
-$sql = "SELECT * FROM $table_survey WHERE code='".mysql_real_escape_string($survey_data['code'])."'";
+$sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_data['code'])."'";
 $result = api_sql_query($sql, __FILE__, __LINE__);
 if (mysql_num_rows($result) > 1)
 {
@@ -186,7 +186,7 @@ function save_invite_mail($mailtext, $reminder=0)
 		$mail_field = 'reminder_mail';
 	}
 
-	$sql = "UPDATE $table_survey SET $mail_field = '".mysql_real_escape_string($mailtext)."' WHERE survey_id = '".$_GET['survey_id']."'";
+	$sql = "UPDATE $table_survey SET $mail_field = '".Database::escape_string($mailtext)."' WHERE survey_id = '".$_GET['survey_id']."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 }
 
@@ -238,7 +238,7 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 			if ((is_numeric($value) AND !in_array($value,$already_invited['course_users'])) OR (!is_numeric($value) AND !strstr($already_invited['additional_users'], $value)) AND !empty($value))
 			{
 				$sql = "INSERT INTO $table_survey_invitation (user, survey_code, invitation_code, invitation_date) VALUES
-							('".mysql_real_escape_string($value)."','".mysql_real_escape_string($survey_data['code'])."','".mysql_real_escape_string($invitation_code)."','".mysql_real_escape_string(date('Y-m-d H:i:s'))."')";
+							('".Database::escape_string($value)."','".Database::escape_string($survey_data['code'])."','".Database::escape_string($invitation_code)."','".Database::escape_string(date('Y-m-d H:i:s'))."')";
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 
 				// replacing the **link** part with a valid link for the user
@@ -252,7 +252,7 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 				// optionally: finding the e-mail of the course user
 				if (is_numeric($value))
 				{
-					$sql = "SELECT firstname, lastname, email FROM $table_user WHERE user_id='".mysql_real_escape_string($value)."'";
+					$sql = "SELECT firstname, lastname, email FROM $table_user WHERE user_id='".Database::escape_string($value)."'";
 					$result = api_sql_query($sql, __FILE__, __LINE__);
 					$row = mysql_fetch_assoc($result);
 					$recipient_email = $row['email'];
@@ -293,13 +293,13 @@ function update_count_invited($survey_code)
 	$table_survey 				= Database :: get_course_table(TABLE_SURVEY);
 
 	// counting the number of people that are invited
-	$sql = "SELECT count(user) as total FROM $table_survey_invitation WHERE survey_code = '".mysql_real_escape_string($survey_code)."'";
+	$sql = "SELECT count(user) as total FROM $table_survey_invitation WHERE survey_code = '".Database::escape_string($survey_code)."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$row = mysql_fetch_assoc($result);
 	$total_invited = $row['total'];
 
 	// updating the field in the survey table
-	$sql = "UPDATE $table_survey SET invited = '".mysql_real_escape_string($total_invited)."' WHERE code = '".mysql_real_escape_string($survey_code)."'";
+	$sql = "UPDATE $table_survey SET invited = '".Database::escape_string($total_invited)."' WHERE code = '".Database::escape_string($survey_code)."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 }
 
@@ -320,7 +320,7 @@ function get_invitations($survey_code)
 	$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
 
 	// Selecting all the invitations of this survey
-	$sql = "SELECT user FROM $table_survey_invitation WHERE survey_code='".mysql_real_escape_string($survey_code)."'";
+	$sql = "SELECT user FROM $table_survey_invitation WHERE survey_code='".Database::escape_string($survey_code)."'";
 
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))

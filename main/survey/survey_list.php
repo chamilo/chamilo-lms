@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 11451 2007-03-06 21:54:30Z pcool $
+* 	@version $Id: survey_list.php 11685 2007-03-25 21:14:55Z pcool $
 *
 * 	@todo The invite column is not done
 * 	@todo try to understand the white, blue, ... template stuff.
@@ -330,15 +330,15 @@ function survey_search_restriction()
 	{
 		if ($_GET['keyword_title']<>'')
 		{
-			$search_term[] = 'title =\''.mysql_real_escape_string($_GET['keyword_title']).'\'';
+			$search_term[] = 'title =\''.Database::escape_string($_GET['keyword_title']).'\'';
 		}
 		if ($_GET['keyword_code']<>'')
 		{
-			$search_term[] = 'code =\''.mysql_real_escape_string($_GET['keyword_code']).'\'';
+			$search_term[] = 'code =\''.Database::escape_string($_GET['keyword_code']).'\'';
 		}
 		if ($_GET['keyword_language']<>'%')
 		{
-			$search_term[] = 'lang =\''.mysql_real_escape_string($_GET['keyword_language']).'\'';
+			$search_term[] = 'lang =\''.Database::escape_string($_GET['keyword_language']).'\'';
 		}
 
 		$search_restriction = implode(' AND ', $search_term);

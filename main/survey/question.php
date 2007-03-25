@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 11451 2007-03-06 21:54:30Z pcool $
+* 	@version $Id: question.php 11685 2007-03-25 21:14:55Z pcool $
 */
 
 // name of the language file that needs to be included
@@ -76,7 +76,7 @@ if ($_GET['action'] == 'edit')
 
 
 // the possible question types
-$possible_types = array('yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak');
+$possible_types = array('yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak', 'percentage', 'score');
 
 // checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types))

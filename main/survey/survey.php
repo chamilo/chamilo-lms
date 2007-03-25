@@ -21,7 +21,7 @@ Tel. +32 (2) 211 34 56
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 11451 2007-03-06 21:54:30Z pcool $
+* 	@version $Id: survey.php 11685 2007-03-25 21:14:55Z pcool $
 *
 * 	@todo use quickforms for the forms
 */
@@ -112,8 +112,8 @@ echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.
 echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=multipleresponse&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/mcma.gif" /><br />'.get_lang('MultipleResponse').'</a></div>';
 echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=open&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/open_answer.gif" /><br />'.get_lang('Open').'</a></div>';
 echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=dropdown&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/dropdown.gif" /><br />'.get_lang('Dropdown').'</a></div>';
-//echo '<div style="float:left"><a href="question.php?action=add&type=percentage&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/fill_in_blanks.gif" /><br />'.get_lang('Dropdown').'</a></div>';
-//echo '<div style="float:left"><a href="question.php?action=add&type=rating&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/fill_in_blanks.gif" /><br />'.get_lang('Dropdown').'</a></div>';
+echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=percentage&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/percentagequestion.gif" /><br />'.get_lang('Percentage').'</a></div>';
+echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=score&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/fill_in_blanks.gif" /><br />'.get_lang('Score').'</a></div>';
 echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=comment&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/commentquestion.gif" /><br />'.get_lang('Comment').'</a></div>';
 echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=pagebreak&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/page_end.gif" /><br />'.get_lang('Pagebreak').'</a></div>';
 echo '</div>';
@@ -134,7 +134,7 @@ $sql = "SELECT survey_question.*, count(survey_question_option.question_option_i
 			FROM $table_survey_question survey_question
 			LEFT JOIN $table_survey_question_option survey_question_option
 			ON survey_question.question_id = survey_question_option.question_id
-			WHERE survey_question.survey_id = '".mysql_real_escape_string($_GET['survey_id'])."'
+			WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 			GROUP BY survey_question.question_id
 			ORDER BY survey_question.sort ASC";
 $result = api_sql_query($sql, __FILE__, __LINE__);
@@ -143,7 +143,16 @@ while ($row = mysql_fetch_assoc($result))
 {
 	echo '<tr>';
 	echo '	<td>'.$question_counter.'</td>';
-	echo '	<td>'.$row['survey_question'].'</td>';
+	echo '	<td>';
+	if (strlen($row['survey_question']) > 100)
+	{
+		echo substr($row['survey_question'],0, 100).' ... ';
+	}
+	else
+	{
+		echo $row['survey_question'];
+	}
+	echo '</td>';
 	echo '	<td>'.get_lang(ucfirst($row['type'])).'</td>';
 	echo '	<td>'.$row['number_of_options'].'</td>';
 	echo '	<td>';

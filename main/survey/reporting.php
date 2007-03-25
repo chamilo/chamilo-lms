@@ -21,9 +21,9 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 11462 2007-03-07 07:49:38Z pcool $
+* 	@version $Id: reporting.php 11685 2007-03-25 21:14:55Z pcool $
 *
-* 	@todo use quickforms for the forms
+* 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
 
 // name of the language file that needs to be included
@@ -109,8 +109,21 @@ if (!$_GET['action'] OR $_GET['action'] == 'overview')
 else
 {
 	$interbreadcrumb[] = array ("url" => "reporting.php?survey_id=".$_GET['survey_id'], "name" => get_lang('Reporting'));
-	/** @todo fix this language problem **/
-	$tool_name = get_lang($_GET['action']);
+	switch ($_GET['action'])
+	{
+		case 'questionreport':
+			$tool_name = get_lang('DetailedReportByQuestion');
+			break;
+		case 'userreport':
+			$tool_name = get_lang('DetailedReportByUser');
+			break;
+		case 'comparativereport':
+			$tool_name = get_lang('ComparativeReport');
+			break;
+		case 'completereport':
+			$tool_name = get_lang('CompleteReport');
+			break;
+	}
 }
 
 // Displaying the header
@@ -201,7 +214,18 @@ function check_parameters()
 function handle_reporting_actions()
 {
 	// getting the number of question
-	$questions_data = survey_manager::get_questions($_GET['survey_id']);
+	$temp_questions_data = survey_manager::get_questions($_GET['survey_id']);
+
+	// sorting like they should be displayed and removing the non-answer question types (comment and pagebreak)
+	foreach ($temp_questions_data as $key=>$value)
+	{
+		if ($value['type'] <> 'comment' AND $value['type']<>'pagebreak')
+		{
+			$questions_data[$value['sort']]=$value;
+		}
+	}
+
+	// counting the number of questions that are relevant for the reporting
 	$survey_data['number_of_questions'] = count($questions_data);
 
 	if ($_GET['action'] == 'questionreport')
@@ -271,40 +295,58 @@ function display_user_report()
 		Display::display_normal_message(get_lang('AllQuestionsOnOnePage'), false);
 
 		// getting all the questions and options
-		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
+		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.max_value, survey_question.sort, survey_question.type,
 						survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
 				FROM $table_survey_question survey_question
 				LEFT JOIN $table_survey_question_option survey_question_option
 				ON survey_question.question_id = survey_question_option.question_id
-				WHERE survey_question.survey_id = '".mysql_real_escape_string($_GET['survey_id'])."'
+				WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 				ORDER BY survey_question.sort ASC";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{
 			if($row['type'] <> 'pagebreak')
 			{
-				$questions[$row['sort']]['question_id'] = $row['question_id'];
-				$questions[$row['sort']]['survey_id'] = $row['survey_id'];
-				$questions[$row['sort']]['survey_question'] = $row['survey_question'];
-				$questions[$row['sort']]['display'] = $row['display'];
-				$questions[$row['sort']]['type'] = $row['type'];
+				$questions[$row['sort']]['question_id'] 						= $row['question_id'];
+				$questions[$row['sort']]['survey_id'] 							= $row['survey_id'];
+				$questions[$row['sort']]['survey_question'] 					= $row['survey_question'];
+				$questions[$row['sort']]['display'] 							= $row['display'];
+				$questions[$row['sort']]['type'] 								= $row['type'];
+				$questions[$row['sort']]['maximum_score'] 						= $row['max_value'];
 				$questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
 			}
 		}
 
 		// getting all the answers of the user
-		$sql = "SELECT * FROM $table_survey_answer WHERE survey_id = '".mysql_real_escape_string($_GET['survey_id'])."' AND user = '".mysql_real_escape_string($_GET['user'])."'";
+		$sql = "SELECT * FROM $table_survey_answer WHERE survey_id = '".Database::escape_string($_GET['survey_id'])."' AND user = '".Database::escape_string($_GET['user'])."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{
 			$answers[$row['question_id']][] = $row['option_id'];
+			$all_answers[$row['question_id']][] = $row;
 		}
 
 		// displaying all the questions
 		foreach ($questions as $key=>$question)
 		{
+			// if the question type is a scoring then we have to format the answers differently
+			if ($question['type'] == 'score')
+			{
+				foreach($all_answers[$question['question_id']] as $key=>$answer_array)
+				{
+					$second_parameter[$answer_array['option_id']] = $answer_array['value'];
+				}
+			}
+			else
+			{
+				$second_parameter = $answers[$question['question_id']];
+			}
+
 			$display = new $question['type'];
-			$display->render_question($question, $answers[$question['question_id']]);
+			$display->render_question($question, $second_parameter);
+//			echo '<pre>';
+	//		print_r($answers[$question['question_id']]);
+		//	echo '</pre>';
 		}
 	}
 }
@@ -325,6 +367,7 @@ function display_user_report()
  * @todo allow switching between horizontal and vertical.
  * @todo multiple response: percentage are probably not OK
  * @todo the question and option text have to be shortened and should expand when the user clicks on it.
+ * @todo the pagebreak and comment question types should not be shown => removed from $survey_data before
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version February 2007
@@ -346,11 +389,30 @@ function display_question_report($survey_data)
 		$offset = $_GET['question'];
 	}
 
+	echo '<div id="question_report_questionnumbers">';
+	for($i=1; $i<=($survey_data['number_of_questions']); $i++ )
+	{
+		if ($offset <> $i-1)
+		{
+			echo '<a href="reporting.php?action=questionreport&amp;survey_id='.(int)$_GET['survey_id'].'&amp;question='.($i-1).'">'.$i.'</a>';
+		}
+		else
+		{
+			echo $i;
+		}
+		if ($i < $survey_data['number_of_questions'])
+		{
+			echo ' | ';
+		}
+	}
+	echo '</div>';
+
 	// getting the question information
-	$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".mysql_real_escape_string($_GET['survey_id'])."' LIMIT ".$offset.",1";
+	$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' AND type<>'pagebreak' AND type<>'comment' ORDER BY sort ASC LIMIT ".$offset.",1";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$question = mysql_fetch_assoc($result);
 
+	// navigate through the questions (next and previous)
 	if ($_GET['question'] <> 0)
 	{
 		echo '<a href="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.($offset-1).'"> &lt;&lt; '.get_lang('PreviousQuestion').'</a>  ';
@@ -372,10 +434,113 @@ function display_question_report($survey_data)
 
 	echo $question['survey_question'];
 
+	echo '<br />';
+
+	if ($question['type'] == 'score')
+	{
+		/** @todo this function should return the options as this is needed further in the code */
+		$options = display_question_report_score($survey_data, $question, $offset);
+	}
+	elseif ($question['type'] == 'open')
+	{
+		/** @todo also get the user who has answered this */
+		$sql = "SELECT * FROM $table_survey_answer WHERE survey_id='".Database::escape_string($_GET['survey_id'])."'
+					AND question_id = '".Database::escape_string($question['question_id'])."'";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($row = mysql_fetch_assoc($result))
+		{
+			echo $row['option_id'].'<hr noshade="noshade" size="1" />';
+		}
+
+	}
+	else
+	{
+		// getting the options
+		$sql = "SELECT * FROM $table_survey_question_option
+					WHERE survey_id='".Database::escape_string($_GET['survey_id'])."'
+					AND question_id = '".Database::escape_string($question['question_id'])."'
+					ORDER BY sort ASC";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($row = mysql_fetch_assoc($result))
+		{
+			$options[$row['question_option_id']] = $row;
+		}
+
+		// getting the answers
+		$sql = "SELECT *, count(answer_id) as total FROM $table_survey_answer
+					WHERE survey_id='".Database::escape_string($_GET['survey_id'])."'
+					AND question_id = '".Database::escape_string($question['question_id'])."'
+					GROUP BY option_id, value";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($row = mysql_fetch_assoc($result))
+		{
+			$number_of_answers += $row['total'];
+			$data[$row['option_id']] = $row;
+		}
+
+		// displaying the table: headers
+		echo '<table>';
+		echo '	<tr>';
+		echo '		<th>&nbsp;</th>';
+		echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
+		echo '		<th>'.get_lang('Percentage').'</th>';
+		echo '		<th>'.get_lang('VisualRepresentation').'</th>';
+		echo '	<tr>';
+
+
+		// displaying the table: the content
+		foreach ($options as $key=>$value)
+		{
+			$absolute_number = $data[$value['question_option_id']]['total'];
+
+			echo '	<tr>';
+			echo '		<td>'.$value['option_text'].'</td>';
+			echo '		<td><a href="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.$offset.'&amp;viewoption='.$value['question_option_id'].'">'.$absolute_number.'</a></td>';
+			echo '		<td>'.round($absolute_number/$number_of_answers*100, 2).' %</td>';
+			echo '		<td><div style="background-color:#0066CC; height:10px; width:'.($absolute_number/$number_of_answers*100*2).'px">&nbsp;</div></td>';
+			echo '	</tr>';
+		}
+
+		// displaying the table: footer (totals)
+		echo '	<tr>';
+		echo '		<td style="border-top:1px solid black"><b>'.get_lang('Total').'</b></td>';
+		echo '		<td style="border-top:1px solid black"><b>'.$number_of_answers.'</b></td>';
+		echo '		<td style="border-top:1px solid black">&nbsp;</td>';
+		echo '		<td style="border-top:1px solid black">&nbsp;</td>';
+		echo '	</tr>';
+
+		echo '</table>';
+	}
+
+	if (isset($_GET['viewoption']))
+	{
+		echo get_lang('PeopleWhoAnswered').': '.$options[$_GET['viewoption']]['option_text'].'<br />';
+
+		if (is_numeric($_GET['value']))
+		{
+			$sql_restriction = "AND value='".Database::escape_string($_GET['value'])."'";
+		}
+
+		$sql = "SELECT user FROM $table_survey_answer WHERE option_id = '".Database::escape_string($_GET['viewoption'])."' $sql_restriction";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($row = mysql_fetch_assoc($result))
+		{
+			echo '<a href="reporting.php?action=userreport&survey_id='.$_GET['survey_id'].'&user='.$row['user'].'">'.$row['user'].'</a><br />';
+		}
+	}
+}
+
+function display_question_report_score($survey_data, $question, $offset)
+{
+	// Database table definitions
+	$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+	$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+	$table_survey_answer 			= Database :: get_course_table(TABLE_SURVEY_ANSWER);
+
 	// getting the options
 	$sql = "SELECT * FROM $table_survey_question_option
-				WHERE survey_id='".mysql_real_escape_string($_GET['survey_id'])."'
-				AND question_id = '".mysql_real_escape_string($question['question_id'])."'
+				WHERE survey_id='".Database::escape_string($_GET['survey_id'])."'
+				AND question_id = '".Database::escape_string($question['question_id'])."'
 				ORDER BY sort ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
@@ -385,20 +550,27 @@ function display_question_report($survey_data)
 
 	// getting the answers
 	$sql = "SELECT *, count(answer_id) as total FROM $table_survey_answer
-				WHERE survey_id='".mysql_real_escape_string($_GET['survey_id'])."'
-				AND question_id = '".mysql_real_escape_string($question['question_id'])."'
-				GROUP BY option_id";
+				WHERE survey_id='".Database::escape_string($_GET['survey_id'])."'
+				AND question_id = '".Database::escape_string($question['question_id'])."'
+				GROUP BY option_id, value";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
 	{
 		$number_of_answers += $row['total'];
-		$data[$row['option_id']] = $row;
+		$data[$row['option_id']][$row['value']] = $row;
 	}
+
+	/*
+	echo '<pre>';
+	print_r($data);
+	echo '</pre>';
+	*/
 
 	// displaying the table: headers
 	echo '<table>';
 	echo '	<tr>';
 	echo '		<th>&nbsp;</th>';
+	echo '		<th>'.get_lang('Score').'</th>';
 	echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
 	echo '		<th>'.get_lang('Percentage').'</th>';
 	echo '		<th>'.get_lang('VisualRepresentation').'</th>';
@@ -408,37 +580,29 @@ function display_question_report($survey_data)
 	// displaying the table: the content
 	foreach ($options as $key=>$value)
 	{
-		$absolute_number = $data[$value['question_option_id']]['total'];
-
-		echo '	<tr>';
-		echo '		<td>'.$value['option_text'].'</td>';
-		echo '		<td><a href="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.$offset.'&amp;viewoption='.$value['question_option_id'].'">'.$absolute_number.'</a></td>';
-		echo '		<td>'.round($absolute_number/$number_of_answers*100, 2).' %</td>';
-		echo '		<td><div style="background-color:#0066CC; height:10px; width:'.($absolute_number/$number_of_answers*100*2).'px">&nbsp;</div></td>';
-		echo '	</tr>';
-	}
-
-	// displaying the table: footer (totals)
-	echo '	<tr>';
-	echo '		<td style="border-top:1px solid black"><b>'.get_lang('Total').'</b></td>';
-	echo '		<td style="border-top:1px solid black"><b>'.$number_of_answers.'</b></td>';
-	echo '		<td style="border-top:1px solid black">&nbsp;</td>';
-	echo '		<td style="border-top:1px solid black">&nbsp;</td>';
-	echo '	</tr>';
-
-	echo '</table>';
-
-	if (isset($_GET['viewoption']))
-	{
-		echo get_lang('PeopleWhoAnswered').': '.$options[$_GET['viewoption']]['option_text'].'<br />';
-
-		$sql = "SELECT user FROM $table_survey_answer WHERE option_id = '".mysql_real_escape_string($_GET['viewoption'])."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($row = mysql_fetch_assoc($result))
+		for ($i=1; $i<=$question['max_value']; $i++)
 		{
-			echo '<a href="reporting.php?action=userreport&survey_id='.$_GET['survey_id'].'&user='.$row['user'].'">'.$row['user'].'</a><br />';
+			$absolute_number = $data[$value['question_option_id']][$i]['total'];
+
+			echo '	<tr>';
+			echo '		<td>'.$value['option_text'].'</td>';
+			echo '		<td>'.$i.'</td>';
+			echo '		<td><a href="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.$offset.'&amp;viewoption='.$value['question_option_id'].'&amp;value='.$i.'">'.$absolute_number.'</a></td>';
+			echo '		<td>'.round($absolute_number/$number_of_answers*100, 2).' %</td>';
+			echo '		<td><div style="background-color:#0066CC; height:10px; width:'.($absolute_number/$number_of_answers*100*2).'px">&nbsp;</div></td>';
+			echo '	</tr>';
 		}
 	}
+		// displaying the table: footer (totals)
+		echo '	<tr>';
+		echo '		<td style="border-top:1px solid black"><b>'.get_lang('Total').'</b></td>';
+		echo '		<td style="border-top:1px solid black">&nbsp;</td>';
+		echo '		<td style="border-top:1px solid black"><b>'.$number_of_answers.'</b></td>';
+		echo '		<td style="border-top:1px solid black">&nbsp;</td>';
+		echo '		<td style="border-top:1px solid black">&nbsp;</td>';
+		echo '	</tr>';
+
+		echo '</table>';
 }
 
 /**
@@ -480,7 +644,7 @@ function display_complete_report()
 			FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
 			ON questions.question_id = options.question_id
 			/*WHERE questions.question_id = options.question_id*/
-			AND questions.survey_id = '".mysql_real_escape_string($_GET['survey_id'])."'
+			AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 			GROUP BY questions.question_id";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
@@ -517,7 +681,7 @@ function display_complete_report()
 			FROM $table_survey_question survey_question
 			LEFT JOIN $table_survey_question_option survey_question_option
 			ON survey_question.question_id = survey_question_option.question_id
-			WHERE survey_question.survey_id = '".mysql_real_escape_string($_GET['survey_id'])."'
+			WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 			ORDER BY survey_question.sort ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
@@ -542,7 +706,7 @@ function display_complete_report()
 	// getting all the answers of the users
 	$old_user='';
 	$answers_of_user = array();
-	$sql = "SELECT * FROM $table_survey_answer WHERE survey_id='".mysql_real_escape_string($_GET['survey_id'])."' ORDER BY user ASC";
+	$sql = "SELECT * FROM $table_survey_answer WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' ORDER BY user ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
 	{
@@ -587,7 +751,14 @@ function display_complete_report_row($possible_answers, $answers_of_user, $user)
 			echo '<td align="center">';
 			if (!empty($answers_of_user[$question_id][$option_id]))
 			{
-				echo 'v';
+				if ($answers_of_user[$question_id][$option_id]['value']<>0)
+				{
+					echo $answers_of_user[$question_id][$option_id]['value'];
+				}
+				else
+				{
+					echo 'v';
+				}
 			}
 			echo '</td>';
 		}
@@ -620,7 +791,7 @@ function export_complete_report()
 			FROM $table_survey_question questions LEFT JOIN $table_survey_question_option options
 			ON questions.question_id = options.question_id
 			/*WHERE questions.question_id = options.question_id*/
-			AND questions.survey_id = '".mysql_real_escape_string($_GET['survey_id'])."'
+			AND questions.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 			GROUP BY questions.question_id";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
@@ -649,7 +820,7 @@ function export_complete_report()
 			FROM $table_survey_question survey_question
 			LEFT JOIN $table_survey_question_option survey_question_option
 			ON survey_question.question_id = survey_question_option.question_id
-			WHERE survey_question.survey_id = '".mysql_real_escape_string($_GET['survey_id'])."'
+			WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 			ORDER BY survey_question.sort ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
@@ -672,7 +843,7 @@ function export_complete_report()
 	// getting all the answers of the users
 	$old_user='';
 	$answers_of_user = array();
-	$sql = "SELECT * FROM $table_survey_answer WHERE survey_id='".mysql_real_escape_string($_GET['survey_id'])."' ORDER BY user ASC";
+	$sql = "SELECT * FROM $table_survey_answer WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' ORDER BY user ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
 	{
@@ -735,6 +906,9 @@ function export_complete_report_row($possible_answers, $answers_of_user, $user)
  */
 function display_comparative_report()
 {
+	// allowed question types for comparative report
+	$allowed_question_types = array('yesno', 'multiplechoice', 'multipleresponse', 'dropdown', 'percentage', 'score');
+
 	// getting all the questions
 	$questions = survey_manager::get_questions($_GET['survey_id']);
 
@@ -752,7 +926,7 @@ function display_comparative_report()
 	echo '<option value="">---</option>';
 	foreach ($questions as $key=>$question)
 	{
-		if (in_array($question['type'], array('yesno', 'multiplechoice', 'multipleresponse', 'dropdown')))
+		if (in_array($question['type'], $allowed_question_types))
 		{
 			echo '<option value="'.$question['question_id'].'"';
 			if ($_GET['xaxis'] == $question['question_id'])
@@ -769,7 +943,7 @@ function display_comparative_report()
 	echo '<option value="">---</option>';
 	foreach ($questions as $key=>$question)
 	{
-		if (in_array($question['type'], array('yesno', 'multiplechoice', 'multipleresponse', 'dropdown')))
+		if (in_array($question['type'], $allowed_question_types))
 		{
 			echo '<option value="'.$question['question_id'].'"';
 			if ($_GET['yaxis'] == $question['question_id'])
@@ -803,6 +977,7 @@ function display_comparative_report()
 
 		// displaying the table
 		echo '<table border="1" class="data_table">';
+
 		// the header
 		echo '	<tr>';
 		for ($ii=0; $ii<=count($question_x['answers']); $ii++)
@@ -813,7 +988,18 @@ function display_comparative_report()
 			}
 			else
 			{
-				echo '		<th>'.$question_x['answers'][($ii-1)].'</th>';
+				if ($question_x['type']=='score')
+				{
+					for($x=1; $x<=$question_x['maximum_score']; $x++)
+					{
+						echo '		<th>'.$question_x['answers'][($ii-1)].'<br />'.$x.'</th>';
+					}
+					$x='';
+				}
+				else
+				{
+					echo '		<th>'.$question_x['answers'][($ii-1)].'</th>';
+				}
 			}
 		}
 		echo '	</tr>';
@@ -821,21 +1007,87 @@ function display_comparative_report()
 		// the main part
 		for ($ij=0; $ij<count($question_y['answers']); $ij++)
 		{
-			echo '	<tr>';
-			for ($ii=0; $ii<=count($question_x['answers']); $ii++)
+			// The Y axis is a scoring question type so we have more rows than the options (actually options * maximum score)
+			if ($question_y['type'] == 'score')
 			{
-				if ($ii == 0)
+				for($y=1; $y<=$question_y['maximum_score']; $y++)
 				{
-					echo '		<th>'.$question_y['answers'][($ij)].'</th>';
-				}
-				else
-				{
-					echo '		<td align="center">';
-					echo comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)]);
-					echo '</td>';
+					echo '	<tr>';
+					for ($ii=0; $ii<=count($question_x['answers']); $ii++)
+					{
+						if ($question_x['type']=='score')
+						{
+							for($x=1; $x<=$question_x['maximum_score']; $x++)
+							{
+								if ($ii == 0)
+								{
+									echo '		<th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
+									break;
+								}
+								else
+								{
+									echo '		<td align="center">';
+									echo comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], $x, $y);
+									echo '</td>';
+								}
+							}
+						}
+						else
+						{
+							if ($ii == 0)
+							{
+								echo '		<th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
+							}
+							else
+							{
+								echo '		<td align="center">';
+								echo comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], 0, $y);
+								echo '</td>';
+							}
+						}
+					}
+					echo '	</tr>';
 				}
 			}
-			echo '	</tr>';
+			// The Y axis is NOT a score question type so the number of rows = the number of options
+			else
+			{
+				echo '	<tr>';
+				for ($ii=0; $ii<=count($question_x['answers']); $ii++)
+				{
+						if ($question_x['type']=='score')
+						{
+							for($x=1; $x<=$question_x['maximum_score']; $x++)
+							{
+								if ($ii == 0)
+								{
+									echo '		<th>'.$question_y['answers'][($ij)].'</th>';
+									break;
+								}
+								else
+								{
+									echo '		<td align="center">';
+									echo comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], $x, 0);
+									echo '</td>';
+								}
+							}
+						}
+						else
+						{
+							if ($ii == 0)
+							{
+								echo '		<th>'.$question_y['answers'][($ij)].'</th>';
+							}
+							else
+							{
+								echo '		<td align="center">';
+								echo comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)]);
+								echo '</td>';
+							}
+						}
+				}
+				echo '	</tr>';
+			}
 		}
 		echo '</table>';
 	}
@@ -859,13 +1111,21 @@ function get_answers_of_question_by_user($survey_id, $question_id)
 	$table_survey_answer 			= Database :: get_course_table(TABLE_SURVEY_ANSWER);
 
 	$sql = "SELECT * FROM $table_survey_answer
-				WHERE survey_id='".mysql_real_escape_string($survey_id)."'
-				AND question_id='".mysql_real_escape_string($question_id)."'
+				WHERE survey_id='".Database::escape_string($survey_id)."'
+				AND question_id='".Database::escape_string($question_id)."'
 				ORDER BY USER ASC";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_assoc($result))
 	{
-		$return[$row['user']][] = $row['option_id'];
+		if ($row['value'] == 0)
+		{
+			$return[$row['user']][] = $row['option_id'];
+		}
+		else
+		{
+			$return[$row['user']][] = $row['option_id'].'*'.$row['value'];
+		}
+
 	}
 	return $return;
 }
@@ -883,16 +1143,33 @@ function get_answers_of_question_by_user($survey_id, $question_id)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version February 2007
  */
-function comparative_check($answers_x, $answers_y, $option_x, $option_y)
+function comparative_check($answers_x, $answers_y, $option_x, $option_y, $value_x=0, $value_y=0)
 {
+	if ($value_x==0)
+	{
+		$check_x = $option_x;
+	}
+	else
+	{
+		$check_x = $option_x.'*'.$value_x;
+	}
+	if ($value_y==0)
+	{
+		$check_y = $option_y;
+	}
+	else
+	{
+		$check_y = $option_y.'*'.$value_y;
+	}
+
 	$counter = 0;
 	foreach ($answers_x as $user => $answers)
 	{
 		// check if the user has given $option_x as answer
-		if (in_array($option_x, $answers))
+		if (in_array($check_x, $answers))
 		{
 			// check if the user has given $option_y as an answer
-			if (in_array($option_y, $answers_y[$user]))
+			if (in_array($check_y, $answers_y[$user]))
 			{
 				$counter++;
 			}

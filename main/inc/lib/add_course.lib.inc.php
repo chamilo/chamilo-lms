@@ -1271,6 +1271,7 @@ function update_Db_course($courseDbName)
 			  display varchar(10) NOT NULL,
 			  sort int NOT NULL,
 			  shared_question_id int(11),
+			  max_value int(11),
 			  PRIMARY KEY  (question_id)
 			)";
 	$result = mysql_query($sql) or die(mysql_error($sql));
@@ -1302,6 +1303,7 @@ function update_Db_course($courseDbName)
 			  survey_id int unsigned NOT NULL,
 			  question_id int unsigned NOT NULL,
 			  option_id int unsigned NOT NULL,
+			  value int unsigned NOT NULL,
 			  user varchar(250) NOT NULL,
 			  PRIMARY KEY  (answer_id)
 			)";
@@ -1375,9 +1377,9 @@ function fill_course_repository($courseRepository)
 		fputs($fp, $enreg);
 	}
 	fclose($fp);
-	
+
 	$default_document_array=array();
-	
+
 	if(api_get_setting('example_material_course_creation')<>'false')
 	{
 		$img_code_path = api_get_path(SYS_CODE_PATH)."default_course_document/images/";
@@ -1388,14 +1390,14 @@ function fill_course_repository($courseRepository)
 		$course_documents_folder_audio=$sys_course_path.$courseRepository.'/document/audio/';
 		$course_documents_folder_flash=$sys_course_path.$courseRepository.'/document/flash/';
 		$course_documents_folder_video=$sys_course_path.$courseRepository.'/document/video/';
-		
+
 		/*
 		 * Images
 		 */
 	   	$files=array();
 
 		$files=browse_folders($img_code_path,$files,'images');
-		
+
 		$pictures_array = sort_pictures($files,"dir");
 		$pictures_array = array_merge($pictures_array,sort_pictures($files,"file"));
 
@@ -1414,16 +1416,16 @@ function fill_course_repository($courseRepository)
 			}
 
 		}
-		
+
 		$default_document_array['images']=$pictures_array;
-		
+
 		/*
 		 * Audio
 		 */
 		$files=array();
 
 		$files=browse_folders($audio_code_path,$files,'audio');
-		
+
 		$audio_array = sort_pictures($files,"dir");
 		$audio_array = array_merge($audio_array,sort_pictures($files,"file"));
 
@@ -1443,14 +1445,14 @@ function fill_course_repository($courseRepository)
 
 		}
 		$default_document_array['audio']=$audio_array;
-		
+
 		/*
 		 * Flash
 		 */
 		$files=array();
 
 		$files=browse_folders($flash_code_path,$files,'flash');
-		
+
 		$flash_array = sort_pictures($files,"dir");
 		$flash_array = array_merge($flash_array,sort_pictures($files,"file"));
 
@@ -1470,14 +1472,14 @@ function fill_course_repository($courseRepository)
 
 		}
 		$default_document_array['flash']=$flash_array;
-		
+
 		/*
 		 * Video
 		 */
 		$files=array();
 
 		$files=browse_folders($video_code_path,$files,'video');
-		
+
 		$video_array = sort_pictures($files,"dir");
 		$video_array = array_merge($video_array,sort_pictures($files,"file"));
 
@@ -1496,7 +1498,7 @@ function fill_course_repository($courseRepository)
 			}
 
 		}
-		$default_document_array['video']=$video_array;		
+		$default_document_array['video']=$video_array;
 
 	}
 	return $default_document_array;
@@ -1940,8 +1942,8 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					sort='". ($sort +1) . "',
 					user_course_cat='0'";
 		api_sql_query($sql, __FILE__, __LINE__);
-		
-		if(count($teachers)>0){		
+
+		if(count($teachers)>0){
 			foreach($teachers as $key){
 				$sql = "INSERT INTO ".$TABLECOURSUSER . " SET
 					course_code = '".addslashes($courseSysCode) . "',

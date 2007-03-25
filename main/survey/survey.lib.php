@@ -1,5 +1,5 @@
 <?php
-$config['survey']['debug'] = false;
+$config['survey']['debug'] = true;
 /*
     DOKEOS - elearning and course management software
 
@@ -59,7 +59,7 @@ class survey_manager
 			$table_survey	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
 		}
 
-		$sql = "SELECT * FROM $table_survey WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
+		$sql = "SELECT * FROM $table_survey WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$return = mysql_fetch_assoc($result);
 
@@ -101,17 +101,17 @@ class survey_manager
 		if (!$values['survey_id'] OR !is_numeric($values['survey_id']))
 		{
 			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date) VALUES (
-						'".mysql_real_escape_string($values['survey_code'])."',
-						'".mysql_real_escape_string($values['survey_title'])."',
-						'".mysql_real_escape_string($values['survey_subtitle'])."',
-						'".mysql_real_escape_string($_user['user_id'])."',
-						'".mysql_real_escape_string($values['survey_language'])."',
-						'".mysql_real_escape_string($values['start_date'])."',
-						'".mysql_real_escape_string($values['end_date'])."',
-						'".mysql_real_escape_string($shared_survey_id)."',
-						'".mysql_real_escape_string('template')."',
-						'".mysql_real_escape_string($values['survey_introduction'])."',
-						'".mysql_real_escape_string($values['survey_thanks'])."',
+						'".Database::escape_string($values['survey_code'])."',
+						'".Database::escape_string($values['survey_title'])."',
+						'".Database::escape_string($values['survey_subtitle'])."',
+						'".Database::escape_string($_user['user_id'])."',
+						'".Database::escape_string($values['survey_language'])."',
+						'".Database::escape_string($values['start_date'])."',
+						'".Database::escape_string($values['end_date'])."',
+						'".Database::escape_string($shared_survey_id)."',
+						'".Database::escape_string('template')."',
+						'".Database::escape_string($values['survey_introduction'])."',
+						'".Database::escape_string($values['survey_thanks'])."',
 						'".date()."')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$survey_id = mysql_insert_id();
@@ -125,18 +125,18 @@ class survey_manager
 		else
 		{
 			$sql = "UPDATE $table_survey SET
-							code 			= '".mysql_real_escape_string($values['survey_code'])."',
-							title 			= '".mysql_real_escape_string($values['survey_title'])."',
-							subtitle 		= '".mysql_real_escape_string($values['survey_subtitle'])."',
-							author 			= '".mysql_real_escape_string($_user['user_id'])."',
-							lang 			= '".mysql_real_escape_string($values['survey_language'])."',
-							avail_from 		= '".mysql_real_escape_string($values['start_date'])."',
-							avail_till		= '".mysql_real_escape_string($values['end_date'])."',
-							is_shared		= '".mysql_real_escape_string($shared_survey_id)."',
-							template 		= '".mysql_real_escape_string('template')."',
-							intro			= '".mysql_real_escape_string($values['survey_introduction'])."',
-							surveythanks	= '".mysql_real_escape_string($values['survey_thanks'])."'
-					WHERE survey_id = '".mysql_real_escape_string($values['survey_id'])."'";
+							code 			= '".Database::escape_string($values['survey_code'])."',
+							title 			= '".Database::escape_string($values['survey_title'])."',
+							subtitle 		= '".Database::escape_string($values['survey_subtitle'])."',
+							author 			= '".Database::escape_string($_user['user_id'])."',
+							lang 			= '".Database::escape_string($values['survey_language'])."',
+							avail_from 		= '".Database::escape_string($values['start_date'])."',
+							avail_till		= '".Database::escape_string($values['end_date'])."',
+							is_shared		= '".Database::escape_string($shared_survey_id)."',
+							template 		= '".Database::escape_string('template')."',
+							intro			= '".Database::escape_string($values['survey_introduction'])."',
+							surveythanks	= '".Database::escape_string($values['survey_thanks'])."'
+					WHERE survey_id = '".Database::escape_string($values['survey_id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 
 			//$return['message'] = get_lang('SurveyUpdatedSuccesfully').'<br />'.get_lang('YouCanNowAddQuestionToYourSurvey').': ';
@@ -170,14 +170,14 @@ class survey_manager
 		if (!$values['survey_id'] OR !is_numeric($values['survey_id']) OR $values['survey_share']['survey_share'] == 'true')
 		{
 			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, template, intro, surveythanks, creation_date, course_code) VALUES (
-						'".mysql_real_escape_string($values['survey_code'])."',
-						'".mysql_real_escape_string($values['survey_title'])."',
-						'".mysql_real_escape_string($values['survey_subtitle'])."',
-						'".mysql_real_escape_string($_user['user_id'])."',
-						'".mysql_real_escape_string($values['survey_language'])."',
-						'".mysql_real_escape_string('template')."',
-						'".mysql_real_escape_string($values['survey_introduction'])."',
-						'".mysql_real_escape_string($values['survey_thanks'])."',
+						'".Database::escape_string($values['survey_code'])."',
+						'".Database::escape_string($values['survey_title'])."',
+						'".Database::escape_string($values['survey_subtitle'])."',
+						'".Database::escape_string($_user['user_id'])."',
+						'".Database::escape_string($values['survey_language'])."',
+						'".Database::escape_string('template')."',
+						'".Database::escape_string($values['survey_introduction'])."',
+						'".Database::escape_string($values['survey_thanks'])."',
 						'".date()."',
 						'".$_course['id']."')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -186,15 +186,15 @@ class survey_manager
 		else
 		{
 			$sql = "UPDATE $table_survey SET
-							code 			= '".mysql_real_escape_string($values['survey_code'])."',
-							title 			= '".mysql_real_escape_string($values['survey_title'])."',
-							subtitle 		= '".mysql_real_escape_string($values['survey_subtitle'])."',
-							author 			= '".mysql_real_escape_string($_user['user_id'])."',
-							lang 			= '".mysql_real_escape_string($values['survey_language'])."',
-							template 		= '".mysql_real_escape_string('template')."',
-							intro			= '".mysql_real_escape_string($values['survey_introduction'])."',
-							surveythanks	= '".mysql_real_escape_string($values['survey_thanks'])."'
-					WHERE survey_id = '".mysql_real_escape_string($values['survey_share']['survey_share'])."'";
+							code 			= '".Database::escape_string($values['survey_code'])."',
+							title 			= '".Database::escape_string($values['survey_title'])."',
+							subtitle 		= '".Database::escape_string($values['survey_subtitle'])."',
+							author 			= '".Database::escape_string($_user['user_id'])."',
+							lang 			= '".Database::escape_string($values['survey_language'])."',
+							template 		= '".Database::escape_string('template')."',
+							intro			= '".Database::escape_string($values['survey_introduction'])."',
+							surveythanks	= '".Database::escape_string($values['survey_thanks'])."'
+					WHERE survey_id = '".Database::escape_string($values['survey_share']['survey_share'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$return	= $values['survey_share']['survey_share'];
 		}
@@ -220,7 +220,7 @@ class survey_manager
 		}
 
 		// deleting the survey
-		$sql = "DELETE from $table_survey WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
+		$sql = "DELETE from $table_survey WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// deleting the questions of the survey
@@ -251,11 +251,11 @@ class survey_manager
 		$number = count($people_filled);
 
 		// storing this value in the survey table
-		$sql = "UPDATE $table_survey SET answered = '".mysql_real_escape_string($number)."' WHERE survey_id = '".mysql_real_escape_string($survey_id)."'";
+		$sql = "UPDATE $table_survey SET answered = '".Database::escape_string($number)."' WHERE survey_id = '".Database::escape_string(s$survey_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// storing that the user has finished the survey.
-		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE user='".mysql_real_escape_string($user)."'";
+		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE user='".Database::escape_string($user)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 	}
 
@@ -302,17 +302,20 @@ class survey_manager
 	function icon_question($type)
 	{
 		// the possible question types
-		$possible_types = array('yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak');
+		$possible_types = array('yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak', 'percentage', 'score');
 
 		// the images array
 		$icon_question = array(
-				'yesno' 			=> 'fill_in_blanks.gif',
+				'yesno' 			=> 'yesno.gif',
 				'multiplechoice' 	=> 'mcua.gif',
 				'multipleresponse' 	=> 'mcma.gif',
 				'open' 				=> 'open_answer.gif',
-				'dropdown' 			=> 'fill_in_blanks.gif',
-				'comment' 			=> 'fill_in_blanks.gif',
-				'pagebreak' 		=> 'fill_in_blanks.gif');
+				'dropdown' 			=> 'dropdown.gif',
+				'percentage' 		=> 'percentagequestion.gif',
+				'score' 			=> 'scorequestion.gif',
+				'comment' 			=> 'commentquestion.gif',
+				'pagebreak' 		=> 'page_end.gif',
+				);
 
 		if (in_array($type, $possible_types))
 		{
@@ -347,7 +350,7 @@ class survey_manager
 		}
 
 		// getting the information of the question
-		$sql = "SELECT * FROM $tbl_survey_question WHERE question_id='".mysql_real_escape_string($question_id)."'";
+		$sql = "SELECT * FROM $tbl_survey_question WHERE question_id='".Database::escape_string($question_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$row = mysql_fetch_assoc($result);
 		$return['survey_id'] 			= $row['survey_id'];
@@ -356,9 +359,10 @@ class survey_manager
 	    $return['question'] 			= $row['survey_question'];
 	    $return['horizontalvertical'] 	= $row['display'];
 	    $return['shared_question_id']	= $row['shared_question_id'];
+	    $return['maximum_score']		= $row['max_value'];
 
 	    // getting the information of the question options
-		$sql = "SELECT * FROM $table_survey_question_option WHERE question_id='".mysql_real_escape_string($question_id)."'";
+		$sql = "SELECT * FROM $table_survey_question_option WHERE question_id='".Database::escape_string($question_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{
@@ -389,7 +393,7 @@ class survey_manager
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
 		// getting the information of the question
-		$sql = "SELECT * FROM $tbl_survey_question WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
+		$sql = "SELECT * FROM $tbl_survey_question WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{
@@ -398,10 +402,13 @@ class survey_manager
 		    $return[$row['question_id']]['type'] 				= $row['type'];
 	    	$return[$row['question_id']]['question'] 			= $row['survey_question'];
 		    $return[$row['question_id']]['horizontalvertical'] 	= $row['display'];
+		    $return[$row['question_id']]['maximum_score'] 		= $row['max_value'];
+		    $return[$row['question_id']]['sort'] 				= $row['sort'];
+
 		}
 
 	    // getting the information of the question options
-		$sql = "SELECT * FROM $table_survey_question_option WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
+		$sql = "SELECT * FROM $table_survey_question_option WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{
@@ -441,20 +448,22 @@ class survey_manager
 		if ($form_content['question_id'] == '' OR !is_numeric($form_content['question_id']))
 		{
 			// finding the max sort order of the questions in the given survey
-			$sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question WHERE survey_id='".mysql_real_escape_string($form_content['survey_id'])."'";
+			$sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question WHERE survey_id='".Database::escape_string($form_content['survey_id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$row = mysql_fetch_assoc($result);
 			$max_sort = $row['max_sort'];
 
 			// adding the question to the survey_question table
-			$sql = "INSERT INTO $tbl_survey_question (survey_id,survey_question,survey_question_comment,type,display, sort, shared_question_id) VALUES (
-						'".mysql_real_escape_string($form_content['survey_id'])."',
-						'".mysql_real_escape_string($form_content['question'])."',
-						'".mysql_real_escape_string($form_content['question_comment'])."',
-						'".mysql_real_escape_string($form_content['type'])."',
-						'".mysql_real_escape_string($form_content['horizontalvertical'])."',
-						'".mysql_real_escape_string($max_sort+1)."',
-						'".mysql_real_escape_string($form_content['shared_question_id'])."')";
+			$sql = "INSERT INTO $tbl_survey_question (survey_id,survey_question,survey_question_comment,type,display, sort, shared_question_id, max_value) VALUES (
+						'".Database::escape_string($form_content['survey_id'])."',
+						'".Database::escape_string($form_content['question'])."',
+						'".Database::escape_string($form_content['question_comment'])."',
+						'".Database::escape_string($form_content['type'])."',
+						'".Database::escape_string($form_content['horizontalvertical'])."',
+						'".Database::escape_string($max_sort+1)."',
+						'".Database::escape_string($form_content['shared_question_id'])."',
+						'".Database::escape_string($form_content['maximum_score'])."'
+						)";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$question_id = mysql_insert_id();
 			$form_content['question_id'] = $question_id;
@@ -465,10 +474,11 @@ class survey_manager
 		{
 			// adding the question to the survey_question table
 			$sql = "UPDATE $tbl_survey_question SET
-						survey_question = '".mysql_real_escape_string($form_content['question'])."',
-						survey_question_comment = '".mysql_real_escape_string($form_content['question_comment'])."',
-						display = '".mysql_real_escape_string($form_content['horizontalvertical'])."'
-						WHERE question_id = '".mysql_real_escape_string($form_content['question_id'])."'";
+						survey_question 		= '".Database::escape_string($form_content['question'])."',
+						survey_question_comment = '".Database::escape_string($form_content['question_comment'])."',
+						display 				= '".Database::escape_string($form_content['horizontalvertical'])."',
+						max_value 				= '".Database::escape_string($form_content['maximum_score'])."'
+						WHERE question_id 		= '".Database::escape_string($form_content['question_id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$return_message = 'QuestionUpdated';
 		}
@@ -500,21 +510,21 @@ class survey_manager
 		{
 			// finding the max sort order of the questions in the given survey
 			$sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question
-					WHERE survey_id='".mysql_real_escape_string($survey_data['survey_share'])."'
-					AND code='".mysql_real_escape_string($_course['id'])."'";
+					WHERE survey_id='".Database::escape_string($survey_data['survey_share'])."'
+					AND code='".Database::escape_string($_course['id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$row = mysql_fetch_assoc($result);
 			$max_sort = $row['max_sort'];
 
 			// adding the question to the survey_question table
 			$sql = "INSERT INTO $tbl_survey_question (survey_id, survey_question, survey_question_comment, type, display, sort, code) VALUES (
-						'".mysql_real_escape_string($survey_data['survey_share'])."',
-						'".mysql_real_escape_string($form_content['question'])."',
-						'".mysql_real_escape_string($form_content['question_comment'])."',
-						'".mysql_real_escape_string($form_content['type'])."',
-						'".mysql_real_escape_string($form_content['horizontalvertical'])."',
-						'".mysql_real_escape_string($max_sort+1)."',
-						'".mysql_real_escape_string($_course['id'])."')";
+						'".Database::escape_string($survey_data['survey_share'])."',
+						'".Database::escape_string($form_content['question'])."',
+						'".Database::escape_string($form_content['question_comment'])."',
+						'".Database::escape_string($form_content['type'])."',
+						'".Database::escape_string($form_content['horizontalvertical'])."',
+						'".Database::escape_string($max_sort+1)."',
+						'".Database::escape_string($_course['id'])."')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$shared_question_id = mysql_insert_id();
 		}
@@ -523,11 +533,11 @@ class survey_manager
 		{
 			// adding the question to the survey_question table
 			$sql = "UPDATE $tbl_survey_question SET
-						survey_question = '".mysql_real_escape_string($form_content['question'])."',
-						survey_question_comment = '".mysql_real_escape_string($form_content['question_comment'])."',
-						display = '".mysql_real_escape_string($form_content['horizontalvertical'])."'
-						WHERE question_id = '".mysql_real_escape_string($form_content['shared_question_id'])."'
-						AND code='".mysql_real_escape_string($_course['id'])."'";
+						survey_question = '".Database::escape_string($form_content['question'])."',
+						survey_question_comment = '".Database::escape_string($form_content['question_comment'])."',
+						display = '".Database::escape_string($form_content['horizontalvertical'])."'
+						WHERE question_id = '".Database::escape_string($form_content['shared_question_id'])."'
+						AND code='".Database::escape_string($_course['id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$shared_question_id = $form_content['shared_question_id'];
 		}
@@ -560,7 +570,7 @@ class survey_manager
 		}
 
 		// finding the two questions that needs to be swapped
-		$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".mysql_real_escape_string($survey_id)."' ORDER BY sort $sort";
+		$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' ORDER BY sort $sort";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{
@@ -578,9 +588,9 @@ class survey_manager
 			}
 		}
 
-		$sql1 = "UPDATE $table_survey_question SET sort = '".mysql_real_escape_string($question_sort_two)."' WHERE question_id='".mysql_real_escape_string($question_id_one)."'";
+		$sql1 = "UPDATE $table_survey_question SET sort = '".Database::escape_string($question_sort_two)."' WHERE question_id='".Database::escape_string($question_id_one)."'";
 		$result = api_sql_query($sql1, __FILE__, __LINE__);
-		$sql2 = "UPDATE $table_survey_question SET sort = '".mysql_real_escape_string($question_sort_one)."' WHERE question_id='".mysql_real_escape_string($question_id_two)."'";
+		$sql2 = "UPDATE $table_survey_question SET sort = '".Database::escape_string($question_sort_one)."' WHERE question_id='".Database::escape_string($question_id_two)."'";
 		$result = api_sql_query($sql2, __FILE__, __LINE__);
 	}
 
@@ -605,7 +615,7 @@ class survey_manager
 		}
 
 		// deleting the survey questions
-		$sql = "DELETE from $table_survey_question WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
+		$sql = "DELETE from $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// deleting all the options of the questions of the survey
@@ -638,7 +648,7 @@ class survey_manager
 		}
 
 		// deleting the survey questions
-		$sql = "DELETE from $table_survey_question WHERE survey_id='".mysql_real_escape_string($survey_id)."' AND question_id='".mysql_real_escape_string($question_id)."'";
+		$sql = "DELETE from $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' AND question_id='".Database::escape_string($question_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// deleting the options of the question of the survey
@@ -665,7 +675,7 @@ class survey_manager
 		$question_data = survey_manager::get_question($question_id);
 
 		// deleting the survey questions
-		$sql = "DELETE FROM $table_survey_question WHERE question_id='".mysql_real_escape_string($question_data['shared_question_id'])."'";
+		$sql = "DELETE FROM $table_survey_question WHERE question_id='".Database::escape_string($question_data['shared_question_id'])."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// deleting the options of the question of the survey
@@ -689,6 +699,15 @@ class survey_manager
 	 */
 	function save_question_options($form_content, $survey_data)
 	{
+		// a percentage question type has options 1 -> 100
+		if ($form_content['type'] == 'percentage')
+		{
+			for($i=1;$i<101;$i++)
+			{
+				$form_content['answers'][] = $i;
+			}
+		}
+
 		if (is_numeric($survey_data['survey_share']) AND $survey_data['survey_share'] <> 0)
 		{
 			survey_manager::save_shared_question_options($form_content, $survey_data);
@@ -700,7 +719,7 @@ class survey_manager
 		// we are editing a question so we first have to remove all the existing options from the database
 		if (is_numeric($form_content['question_id']))
 		{
-			$sql = "DELETE FROM $table_survey_question_option WHERE question_id = '".mysql_real_escape_string($form_content['question_id'])."'";
+			$sql = "DELETE FROM $table_survey_question_option WHERE question_id = '".Database::escape_string($form_content['question_id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 		}
 
@@ -708,10 +727,10 @@ class survey_manager
 		foreach ($form_content['answers'] as $key=>$answer)
 		{
 			$sql = "INSERT INTO $table_survey_question_option (question_id, survey_id, option_text, sort) VALUES (
-							'".mysql_real_escape_string($form_content['question_id'])."',
-							'".mysql_real_escape_string($form_content['survey_id'])."',
-							'".mysql_real_escape_string($answer)."',
-							'".mysql_real_escape_string($counter)."')";
+							'".Database::escape_string($form_content['question_id'])."',
+							'".Database::escape_string($form_content['survey_id'])."',
+							'".Database::escape_string($answer)."',
+							'".Database::escape_string($counter)."')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$counter++;
 		}
@@ -734,17 +753,17 @@ class survey_manager
 		$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 
 		// we are editing a question so we first have to remove all the existing options from the database
-		$sql = "DELETE FROM $table_survey_question_option WHERE question_id = '".mysql_real_escape_string($form_content['shared_question_id'])."'";
+		$sql = "DELETE FROM $table_survey_question_option WHERE question_id = '".Database::escape_string($form_content['shared_question_id'])."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		$counter = 1;
 		foreach ($form_content['answers'] as $key=>$answer)
 		{
 			$sql = "INSERT INTO $table_survey_question_option (question_id, survey_id, option_text, sort) VALUES (
-							'".mysql_real_escape_string($form_content['shared_question_id'])."',
-							'".mysql_real_escape_string($survey_data['is_shared'])."',
-							'".mysql_real_escape_string($answer)."',
-							'".mysql_real_escape_string($counter)."')";
+							'".Database::escape_string($form_content['shared_question_id'])."',
+							'".Database::escape_string($survey_data['is_shared'])."',
+							'".Database::escape_string($answer)."',
+							'".Database::escape_string($counter)."')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$counter++;
 		}
@@ -778,7 +797,7 @@ class survey_manager
 		}
 
 		// deleting the options of the survey questions
-		$sql = "DELETE from $table_survey_question_option WHERE survey_id='".mysql_real_escape_string($survey_id)."'";
+		$sql = "DELETE from $table_survey_question_option WHERE survey_id='".Database::escape_string($survey_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		return true;
 	}
@@ -805,7 +824,7 @@ class survey_manager
 		}
 
 		// deleting the options of the survey questions
-		$sql = "DELETE from $table_survey_question_option WHERE survey_id='".mysql_real_escape_string($survey_id)."' AND question_id='".mysql_real_escape_string($question_id)."'";
+		$sql = "DELETE from $table_survey_question_option WHERE survey_id='".Database::escape_string($survey_id)."' AND question_id='".Database::escape_string($question_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		return true;
 	}
@@ -852,7 +871,7 @@ class survey_manager
 		// variable initialisation
 		$return = array();
 
-		$sql = "SELECT DISTINCT user FROM $table_survey_answer WHERE survey_id = '".mysql_real_escape_string($survey_id)."'";
+		$sql = "SELECT DISTINCT user FROM $table_survey_answer WHERE survey_id = '".Database::escape_string($survey_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($res))
 		{
@@ -1533,5 +1552,119 @@ class pagebreak extends question
 
 class percentage extends question
 {
+	function create_form($form_content)
+	{
+		$this->html = parent::create_form($form_content);
+	}
+
+	function render_question($form_content, $answers=array())
+	{
+		$this->html .= '<option value="--">--</option>';
+		foreach ($form_content['options'] as $key=>$value)
+		{
+			$this->html .= '<option value="'.$key.'" ';
+			if (in_array($key,$answers))
+			{
+				$this->html .= 'selected="selected"';
+			}
+			$this->html .= '>'.$value.'</option>';
+		}
+		echo '<div class="survey_question_wrapper">';
+		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
+		echo '<div class="survey_question_options">';
+		echo '<select name="question'.$form_content['question_id'].'" id="select">';
+		echo $this->html;
+		echo '</select>';
+		echo '</div>';
+	}
+}
+
+
+class score extends question
+{
+	function create_form($form_content)
+	{
+		$this->html = parent::create_form($form_content);
+		// the maximum score that can be given
+		$this->html .= '	<tr>';
+		$this->html .= '		<td colspan="3"><strong>'.get_lang('MaximumScore').'</strong></td>';
+		$this->html .= '	</tr>';
+		$this->html .= '	<tr>
+								<td colspan="3"><input type="text" name="maximum_score" value="'.$form_content['maximum_score'].'"></td>
+							</tr>';
+		// The answers
+		$this->html .= '	<tr>';
+		$this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
+		$this->html .= '	</tr>';
+		$total_number_of_answers = count($form_content['answers']);
+		foreach ($form_content['answers'] as $key=>$value)
+		{
+			$this->html .= '	<tr>';
+			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
+			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
+			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', $form_content['answers'][$key]).'</td>';
+			$this->html .= '		<td>';
+			if ($key<$total_number_of_answers-1)
+			{
+				$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+			}
+			if ($key>0)
+			{
+				$this->html .= '			<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+			}
+			if ($total_number_of_answers> 2)
+			{
+				$this->html .= '			<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+			}
+			$this->html .= ' 		</td>';
+			$this->html .= '	</tr>';
+		}
+		// The buttons for adding or removing
+		$this->html .= parent :: add_remove_buttons($form_content);
+	}
+
+	function render_question($form_content, $answers=array())
+	{
+		/*
+		echo '<div style="border: 1px solid red;">';
+		echo '<pre>';
+		print_r($answers);
+		echo '</pre></div>';
+		*/
+		$this->html = '<table>';
+		foreach ($form_content['options'] as $key=>$value)
+		{
+			$this->html .= '<tr>
+								<td>'.$value.'</td>';
+			$this->html .= '	<td>';
+			$this->html .= '<select name="question'.$form_content['question_id'].'['.$key.']">';
+			$this->html .= '<option value="--">--</option>';
+			for($i=1; $i<=$form_content['maximum_score']; $i++)
+			{
+				$this->html .= '<option value="'.$i.'"';
+				if ($answers[$key] == $i)
+				{
+					$this->html .= 'selected="selected" ';
+				}
+				$this->html .= '>'.$i.'</option>';
+			}
+			$this->html .= '</select>';
+			$this->html .= '	</td>';
+			$this->html .= '</tr>';
+		}
+		$this->html .= '</table>';
+		echo '<div class="survey_question_wrapper">';
+		echo '<div class="survey_question">'.$form_content['survey_question'].' score</div>';
+		echo '<div class="survey_question_options">';
+		//echo '<select name="question'.$form_content['question_id'].'" id="select">';
+		echo $this->html;
+		//echo '</select>';
+		echo '</div>';
+	}
+}
+
+function db_escape_string($value)
+{
+
 }
 ?>

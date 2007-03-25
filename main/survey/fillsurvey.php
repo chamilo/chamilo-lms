@@ -66,7 +66,7 @@ if (!isset($_GET['course']) OR !isset($_GET['invitationcode']))
 }
 
 // now we check if the invitationcode is valid
-$sql = "SELECT * FROM $table_survey_invitation WHERE invitation_code = '".mysql_real_escape_string($_GET['invitationcode'])."'";
+$sql = "SELECT * FROM $table_survey_invitation WHERE invitation_code = '".Database::escape_string($_GET['invitationcode'])."'";
 $result = api_sql_query($sql, __FILE__, __LINE__);
 if (mysql_num_rows($result) < 1)
 {
@@ -86,7 +86,7 @@ if ($survey_invitation['answered'] == 1)
 
 // checking if there is another survey with this code.
 // If this is the case there will be a language choice
-$sql = "SELECT * FROM $table_survey WHERE code='".mysql_real_escape_string($survey_invitation['survey_code'])."'";
+$sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_invitation['survey_code'])."'";
 $result = api_sql_query($sql, __FILE__, __LINE__);
 if (mysql_num_rows($result) > 1)
 {
@@ -118,24 +118,70 @@ else
 // storing the answers
 if ($_POST)
 {
+	/*
+	echo '<pre>';
+	print_r($_POST);
+	echo '</pre>';
+	*/
+
+	// getting all the types of the question (because of the special treatment of the score question type
+	$sql = "SELECT * FROM $table_survey_question WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	while ($row = mysql_fetch_assoc($result))
+	{
+		$types[$row['question_id']] = $row['type'];
+	}
+
+
+	// looping through all the post values
 	foreach ($_POST as $key=>$value)
 	{
+		// if the post value key contains the string 'question' then it is an answer on a question
 		if (strstr($key,'question'))
 		{
+			// finding the question id by removing 'question'
 			$survey_question_id = str_replace('question', '',$key);
+
+			// if the post value is an array then we have a multiple response question or a scoring question type
+			// remark: when it is a multiple response then the value of the array is the option_id
+			// 		   when it is a scoring question then the key of the array is the option_id and the value is the value
 			if (is_array($value))
 			{
 				remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
 				foreach ($value as $answer_key => $answer_value)
 				{
-					store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $answer_value);
+					if ($types[$survey_question_id] == 'score')
+					{
+						$option_id = $answer_key;
+						$option_value = $answer_value;
+					}
+					else
+					{
+						$option_id = $answer_value;
+						$option_value = '';
+					}
+					store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $option_id, $option_value);
 				}
 			}
-			else // multipleresponse
+			// all the other question types (open question, multiple choice, percentage, ...)
+			else
 			{
+				if ($types[$survey_question_id] == 'percentage')
+				{
+					$sql = "SELECT * FROM $table_survey_question_option WHERE question_option_id='".Database::escape_string($value)."'";
+					$result = api_sql_query($sql, __FILE__, __LINE__);
+					$row = mysql_fetch_assoc($result);
+					$option_value = $row['option_text'];
+				}
+				else
+				{
+					$option_value = 0;
+				}
+
+
 				$survey_question_answer = $value;
 				remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
-				store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value);
+				store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value, $option_value);
 			}
 		}
 	}
@@ -168,12 +214,12 @@ if ($_POST['finish_survey'])
 if (isset($_GET['show']))
 {
 	// Getting all the questions for this page
-	$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
+	$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, max_value,
 					survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
 			FROM $table_survey_question survey_question
 			LEFT JOIN $table_survey_question_option survey_question_option
 			ON survey_question.question_id = survey_question_option.question_id
-			WHERE survey_question.survey_id = '".mysql_real_escape_string($survey_invitation['survey_id'])."'
+			WHERE survey_question.survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
 			ORDER BY survey_question.sort ASC";
 	if ($_GET['show'])
 	{
@@ -185,6 +231,7 @@ if (isset($_GET['show']))
 	while ($row = mysql_fetch_assoc($result))
 	{
 		// if the type is not a pagebreak we store it in the $questions array
+		// which is used for displaying the page
 		if($row['type'] <> 'pagebreak')
 		{
 			$questions[$row['sort']]['question_id'] = $row['question_id'];
@@ -193,6 +240,10 @@ if (isset($_GET['show']))
 			$questions[$row['sort']]['display'] = $row['display'];
 			$questions[$row['sort']]['type'] = $row['type'];
 			$questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
+			$questions[$row['sort']]['maximum_score'] = $row['max_value'];
+
+			// we also store the type of the questions in an array
+			$types[$row['question_id']] = $row['type'];
 		}
 		// if the type is a pagebreak we are finished loading the questions for this page
 		else
@@ -239,18 +290,22 @@ Display :: display_footer();
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version January 2007
  */
-function store_answer($user, $survey_id, $question_id, $option_id)
+function store_answer($user, $survey_id, $question_id, $option_id, $option_value)
 {
 	global $_course;
+	global $types;
+
+
 
 	// table definition
 	$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
 
-	$sql = "INSERT INTO $table_survey_answer (user, survey_id, question_id, option_id) VALUES (
-			'".mysql_real_escape_string($user)."',
-			'".mysql_real_escape_string($survey_id)."',
-			'".mysql_real_escape_string($question_id)."',
-			'".mysql_real_escape_string($option_id)."'
+	$sql = "INSERT INTO $table_survey_answer (user, survey_id, question_id, option_id, value) VALUES (
+			'".Database::escape_string($user)."',
+			'".Database::escape_string($survey_id)."',
+			'".Database::escape_string($question_id)."',
+			'".Database::escape_string($option_id)."',
+			'".Database::escape_string($option_value)."'
 			)";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 }
@@ -274,9 +329,9 @@ function remove_answer($user, $survey_id, $question_id)
 	$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
 
 	$sql = "DELETE FROM $table_survey_answer
-			WHERE user = '".mysql_real_escape_string($user)."'
-			AND survey_id = '".mysql_real_escape_string($survey_id)."'
-			AND question_id = '".mysql_real_escape_string($question_id)."'";
+			WHERE user = '".Database::escape_string($user)."'
+			AND survey_id = '".Database::escape_string($survey_id)."'
+			AND question_id = '".Database::escape_string($question_id)."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 }
 ?>

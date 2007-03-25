@@ -93,12 +93,12 @@ else
 	if (isset($_GET['show']))
 	{
 		// Getting all the questions for this page
-		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
+		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
 						survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
 				FROM $table_survey_question survey_question
 				LEFT JOIN $table_survey_question_option survey_question_option
 				ON survey_question.question_id = survey_question_option.question_id
-				WHERE survey_question.survey_id = '".mysql_real_escape_string($_GET['survey_id'])."'
+				WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 				ORDER BY survey_question.sort ASC";
 		if ($_GET['show'])
 		{
@@ -119,6 +119,7 @@ else
 				$questions[$row['sort']]['display'] = $row['display'];
 				$questions[$row['sort']]['type'] = $row['type'];
 				$questions[$row['sort']]['options'][$row['option_sort']] = $row['option_text'];
+				$questions[$row['sort']]['maximum_score'] = $row['max_value'];
 			}
 			// if the type is a pagebreak we are finished loading the questions for this page
 			else

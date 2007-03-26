@@ -247,7 +247,8 @@ foreach ($group_cats as $index => $category)
 		$in_category = true;
 	}
 	echo '<div style="margin: 0px;margin-left: 50px;">';
-	if (count($group_list) > 0 && $in_category)
+	//if (count($group_list) > 0 && $in_category)
+	if ($in_category)
 	{
 		$totalRegistered = 0;
 		// Determine wether current user is tutor for this course
@@ -361,10 +362,12 @@ foreach ($group_cats as $index => $category)
 		}
 		$table->display();
 	}
+	/*
 	elseif ($in_category)
 	{
 		echo get_lang('NoGroupsAvailable');
 	}
+	*/
 	echo '</div>';
 }
 /*

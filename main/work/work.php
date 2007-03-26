@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 11391 2007-03-05 14:31:29Z elixir_julian $
+*  	@version $Id: work.php 11699 2007-03-26 13:47:44Z pcool $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -263,11 +263,13 @@ if (!api_is_course_admin()){
 */
 if ($origin != 'learnpath')
 {
-	if($display_upload_form){
+	if($display_upload_form)
+	{
 		$tool_name = get_lang("UploadADocument");
 		$interbreadcrumb[] = array ("url" => "work.php", "name" => get_lang('StudentPublications'));
 	}
-	if($display_tool_options){
+	if($display_tool_options)
+	{
 		$tool_name = get_lang("EditToolOptions");
 		$interbreadcrumb[] = array ("url" => "work.php", "name" => get_lang('StudentPublications'));
 	}
@@ -912,7 +914,14 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 		Display list of student publications
 ==============================================================================
 */
-	if($cur_dir_path =='/'){$my_cur_dir_path = '';}else{$my_cur_dir_path = $cur_dir_path;}
+	if($cur_dir_path =='/')
+	{
+		$my_cur_dir_path = '';
+	}
+	else
+	{
+		$my_cur_dir_path = $cur_dir_path;
+	}
 	display_student_publications_list($base_work_dir.'/'.$my_cur_dir_path,'work/'.$my_cur_dir_path,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin);
 //}
 

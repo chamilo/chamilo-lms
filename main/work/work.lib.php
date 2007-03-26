@@ -174,7 +174,7 @@ function display_default_visibility_form($uploadvisibledisabled)
 */
 function display_student_publications_list($work_dir,$sub_course_dir,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin)
 {
-	//init
+	// Database table names
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$is_allowed_to_edit = api_is_allowed_to_edit();
@@ -199,8 +199,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	}
 	$sort_params = implode('&amp;',$sort_params);
 
-	if(substr($sub_course_dir,-1,1)!='/' && !empty($sub_course_dir)){$sub_course_dir = $sub_course_dir.'/';}
-	if($sub_course_dir == '/'){$sub_course_dir='';}
+	if(substr($sub_course_dir,-1,1)!='/' && !empty($sub_course_dir))
+	{
+		$sub_course_dir = $sub_course_dir.'/';
+	}
+	if($sub_course_dir == '/')
+	{
+		$sub_course_dir='';
+	}
 
 	//Get list from database
 	if($is_allowed_to_edit)
@@ -217,13 +223,11 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		{
 			$group_query = " WHERE post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
 		}
-		else {
+		else
+		{
 			$group_query = '';
 		}
-		$sql_get_publications_list =	"SELECT * " .
-									"FROM  ".$work_table." " .
-									$group_query.
-									"ORDER BY id";
+		$sql_get_publications_list =	"SELECT * FROM  $work_table $group_query ORDER BY id";
 	}
 	//echo $sql_get_publications_list;
 	$sql_result = api_sql_query($sql_get_publications_list,__FILE__,__LINE__);
@@ -324,10 +328,10 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$table_data[] = $row;
 		}
 	}
-	if( count($table_data) > 0)
-	{
+	//if( count($table_data) > 0)
+	//{
 		Display::display_sortable_table($table_header,$table_data);
-	}
+	//}
 }
 /**
  * Returns a list of subdirectories found in the given directory.

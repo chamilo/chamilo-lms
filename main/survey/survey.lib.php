@@ -251,7 +251,7 @@ class survey_manager
 		$number = count($people_filled);
 
 		// storing this value in the survey table
-		$sql = "UPDATE $table_survey SET answered = '".Database::escape_string($number)."' WHERE survey_id = '".Database::escape_string(s$survey_id)."'";
+		$sql = "UPDATE $table_survey SET answered = '".Database::escape_string($number)."' WHERE survey_id = '".Database::escape_string($survey_id)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// storing that the user has finished the survey.

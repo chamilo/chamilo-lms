@@ -42,7 +42,6 @@ function check_extension($extention_name,$return_success=false, $return_failure=
 	else
 		{
 		return '<strong><font color="red">'.$return_failure.'</font></strong>';
-		//echo "\t<li><b>$extentionName</b> <font color=\"red\">is missing (Dokeos can work without it)</font> (<a href=\"http://www.php.net/$extentionName\" target=\"_blank\">$extentionName</a>)</li>\n";
 		}
 	}
 
@@ -375,12 +374,12 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 				<td class="requirements-value">'.check_extension('xml',get_lang('OK'), get_lang('ExtensionZlibNotAvailable')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">LDAP '.get_lang('support').'('.get_lang('Optional').')</td>
-				<td class="requirements-value">'.check_extension('ldap',get_lang('OK'), get_lang('ExtensionLDAPNotAvailable')).'</td>
+				<td class="requirements-item">GD '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('gd',get_lang('OK'), get_lang('ExtensionGDNotAvailable')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">GD '.get_lang('support').'('.get_lang('Optional').')</td>
-				<td class="requirements-value">'.check_extension('gd',get_lang('OK'), get_lang('ExtensionGDNotAvailable')).'</td>
+				<td class="requirements-item">LDAP '.get_lang('support').'('.get_lang('Optional').')</td>
+				<td class="requirements-value">'.check_extension('ldap',get_lang('OK'), get_lang('ExtensionLDAPNotAvailable')).'</td>
 			</tr>
 		  </table>';
 	echo '	</div>';

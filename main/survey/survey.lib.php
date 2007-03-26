@@ -1,5 +1,5 @@
 <?php
-$config['survey']['debug'] = true;
+$config['survey']['debug'] = false;
 /*
     DOKEOS - elearning and course management software
 

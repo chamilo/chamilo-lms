@@ -2522,7 +2522,7 @@ class learnpath {
      * @return	mixed	Ordered list of item IDs or false on error
      */
     function get_flat_ordered_items_list($lp,$parent=0){
-		if($this->debug>0){error_log('New LP - In learnpath::get_flat_ordered_items_list('.$lp.','.$parent.')',0);}
+		//if($this->debug>0){error_log('New LP - In learnpath::get_flat_ordered_items_list('.$lp.','.$parent.')',0);}
     	$list = array();
     	if(empty($lp)){return false;}
     	$tbl_lp_item = Database::get_course_table('lp_item');

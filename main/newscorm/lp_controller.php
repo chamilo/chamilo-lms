@@ -192,11 +192,11 @@ switch($_REQUEST['action'])
 							$document_id = $_SESSION['oLP']->create_document($_course);
 						}
 								
-						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, $_POST['title'], $_POST['description']);
+						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, $_POST['title'], $_POST['description'], $_POST['prerequisites']);
 					}
 					else
 					{
-						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description']);
+						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
 					}
 					
 					require('kevin_lp_add_item.php');
@@ -314,7 +314,7 @@ switch($_REQUEST['action'])
 			
 			if(isset($_POST['submit_button']) && !empty($_POST['title']))
 			{
-				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description']);
+				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
 				
 				if(isset($_POST['content_lp']))
 				{

@@ -84,7 +84,7 @@ switch($lp_type){
 			$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
 			$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
 		}else{
-			$src = 'blank.php';
+			$src = 'blank.php?error=prerequisites';
 		}		
 		break;
 	case 2:

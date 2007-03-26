@@ -175,7 +175,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 
 			Display::display_normal_message(get_lang('AddLpIntro'),false);
 			
-			echo '<div style="background:#F8F8F8; border:1px solid #999999; margin:15px auto; padding:10px; width:400px;">';
+			echo '<div style="background:#F8F8F8; border:1px solid #999999; margin:10px; padding:10px; width:490px;">';
 				 
 				echo '<p style="font-weight:bold">'.get_lang('AddLpToStart').' :</p>';
 				

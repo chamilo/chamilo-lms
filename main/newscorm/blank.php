@@ -8,29 +8,28 @@
  * Script
  */
  
-if(isset($_GET['error']) && $_GET['error']=='document_deleted'){
-	$language_file[] = "learnpath";
-	require('../inc/global.inc.php');
-}
+
+$language_file[] = "learnpath";
+require('../inc/global.inc.php');
+include_once('../inc/reduced_header.inc.php');
 
 ?>
 
-<html>
-<head>
-	<style type="text/css">
-		<?php
-		$my_style = api_get_setting('stylesheets');
-		if(empty($my_style)){$my_style = 'default';}
-		echo '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/default.css";'."\n";
-		?>
-	</style>
-</head>
 <body>
 
 <?php
-if(isset($_GET['error']) && $_GET['error']=='document_deleted'){
-	Display::display_error_message(get_lang('DocumentHasBeenDeleted'));
+
+switch($_GET['error']){
+	case 'document_deleted':
+		Display::display_error_message(get_lang('DocumentHasBeenDeleted'));
+		break;
+	case 'prerequisites':
+		Display::display_normal_message(get_lang('_prereq_not_complete'));
+		break;
+	default:
+		break;
 }
+
 ?>
 
 </body>

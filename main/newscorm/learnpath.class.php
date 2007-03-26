@@ -335,7 +335,7 @@ class learnpath {
      * @param string $description
      * @return int
      */
-    function add_item($parent, $previous, $type = 'dokeos_chapter', $id, $title, $description)
+    function add_item($parent, $previous, $type = 'dokeos_chapter', $id, $title, $description, $prerequisites=0)
     {
     	if($this->debug>0){error_log('New LP - In learnpath::add_item('.$parent.','.$previous.','.$type.','.$id.','.$title.')',0);}
     	
@@ -415,31 +415,62 @@ class learnpath {
     	$new_item_id = -1;
     	$id = $this->escape_string($id);
 		
-    	//insert new item
-    	$sql_ins = "
-    		INSERT INTO " . $tbl_lp_item . " (
-    			lp_id,
-    			item_type,
-    			ref,
-    			title,
-    			description,
-    			path,
-    			parent_item_id,
-    			previous_item_id,
-    			next_item_id,
-    			display_order
-    		) VALUES (
-    			" . $this->get_id() . ",
-    			'" . $type . "',
-    			'',
-    			'" . $title . "',
-    			'" . $description . "',
-    			'" . $id . "',
-    			" . $parent . ",
-    			" . $previous . ",
-    			" . $next . ",
-    			" . ($display_order + 1) . "
-    		)";
+		if($prerequisites!=0){
+			$sql_ins = "
+	    		INSERT INTO " . $tbl_lp_item . " (
+	    			lp_id,
+	    			item_type,
+	    			ref,
+	    			title,
+	    			description,
+	    			path,
+	    			parent_item_id,
+	    			previous_item_id,
+	    			next_item_id,
+	    			display_order, 
+					prerequisite
+	    		) VALUES (
+	    			" . $this->get_id() . ",
+	    			'" . $type . "',
+	    			'',
+	    			'" . $title . "',
+	    			'" . $description . "',
+	    			'" . $id . "',
+	    			" . $parent . ",
+	    			" . $previous . ",
+	    			" . $next . ",
+	    			" . ($display_order + 1) . ",
+	    			" . $prerequisites . "
+	    		)";
+		}
+		
+		else{
+	    	//insert new item
+	    	$sql_ins = "
+	    		INSERT INTO " . $tbl_lp_item . " (
+	    			lp_id,
+	    			item_type,
+	    			ref,
+	    			title,
+	    			description,
+	    			path,
+	    			parent_item_id,
+	    			previous_item_id,
+	    			next_item_id,
+	    			display_order
+	    		) VALUES (
+	    			" . $this->get_id() . ",
+	    			'" . $type . "',
+	    			'',
+	    			'" . $title . "',
+	    			'" . $description . "',
+	    			'" . $id . "',
+	    			" . $parent . ",
+	    			" . $previous . ",
+	    			" . $next . ",
+	    			" . ($display_order + 1) . "
+	    		)";
+		}
     	
     	if($this->debug>2){error_log('New LP - Inserting dokeos_chapter: '.$sql_ins,0);}
 
@@ -476,6 +507,15 @@ class learnpath {
 	    			display_order > " . $display_order;
 	    	
 	    	$res_update_previous = api_sql_query($sql_update_order, __FILE__, __LINE__);
+	    	
+	    	//update the item that should come after the new item
+	    	$sql_update_ref = "
+	    		UPDATE " . $tbl_lp_item . "
+	    		SET ref = " . $new_item_id . "
+	    		WHERE id = " . $new_item_id;
+	    	
+	    	api_sql_query($sql_update_ref, __FILE__, __LINE__);
+	    	
     	}
     	
     	return $new_item_id;
@@ -1195,7 +1235,7 @@ class learnpath {
 
     }
     
-    function edit_item($id, $parent, $previous, $title, $description)
+    function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0)
     {
     	if($this->debug > 0){error_log('New LP - In learnpath::edit_item()', 0);}
 
@@ -1220,16 +1260,18 @@ class learnpath {
     			UPDATE " . $tbl_lp_item . "
     			SET
     				title = '" . $this->escape_string(htmlentities($title)) . "',
+					prerequisite = '".$prerequisites."',
     				description = '" . $this->escape_string(htmlentities($description)) . "'
     			WHERE id = " . $id;
     		$res_update = api_sql_query($sql_update, __FILE__, __LINE__);
     	}
     	else
     	{
-    		$old_parent		= $row_select['parent_item_id'];
-    		$old_previous	= $row_select['previous_item_id'];
-    		$old_next		= $row_select['next_item_id'];
-    		$old_order		= $row_select['display_order'];
+    		$old_parent		 = $row_select['parent_item_id'];
+    		$old_previous	 = $row_select['previous_item_id'];
+    		$old_next		 = $row_select['next_item_id'];
+    		$old_order		 = $row_select['display_order'];
+    		$old_prerequisite= $row_select['prerequisite'];
     		
     		/* BEGIN -- virtually remove the current item id */
     		/* for the next and previous item it is like the current item doesn't exist anymore */
@@ -1362,6 +1404,14 @@ class learnpath {
 			    	WHERE id = " . $new_next;
 			  	$res_update_next = api_sql_query($sql_update_next, __FILE__, __LINE__);
 			  	//echo '<p>' . $sql_update_next . '</p>';
+    		}
+    		
+    		if($old_prerequisite!=$prerequisites){
+    			$sql_update_next = "
+		    		UPDATE " . $tbl_lp_item . "
+		    		SET prerequisite = " . $prerequisites . "
+		    		WHERE id = " . $id;
+		    	$res_update_next = api_sql_query($sql_update_next, __FILE__, __LINE__);
     		}
     		
     		//update all the items with the same or a bigger display_order then the current item
@@ -3733,9 +3783,13 @@ class learnpath {
 			)
 			{
 	    		$this->items[$this->current]->open();
-	    		$this->items[$this->current]->save(false);    		
+	    		    		
 	    		$this->autocomplete_parents($this->current);
-	    		$this->prerequisites_match(); //launch the prerequisites check and set error if needed
+	    		$prereq_check = $this->prerequisites_match($this->current);
+	    		if($prereq_check === true) //launch the prerequisites check and set error if needed
+	    		{
+	    			$this->items[$this->current]->save(false);
+	    		}
 	    		//$this->update_queue[$this->last] = $this->items[$this->last]->get_status();
 			}else{
 				//if sco, then it is supposed to have been updated by some other call
@@ -3756,7 +3810,7 @@ class learnpath {
 
 		if($this->debug>0){error_log('New LP - In learnpath::stop_previous_item()',0);}
 
-    	if($this->last != 0 AND is_object($this->items[$this->last]))
+    	if($this->last != 0 AND $this->last!=$this->current AND is_object($this->items[$this->last]))
     	{
     		if($this->debug>2){error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' is object',0);}
     		switch($this->get_type()){
@@ -4055,6 +4109,7 @@ class learnpath {
 						'previous_item_id' => $array[$i]['previous_item_id'],
 						'next_item_id' => $array[$i]['next_item_id'],
 						'display_order' => $array[$i]['display_order'],
+						'prerequisite' => $array[$i]['prerequisite'],
 						'depth' => $depth
 						);
 					
@@ -4779,7 +4834,8 @@ class learnpath {
 					'parent_item_id' => $row['parent_item_id'],
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
-					'display_order' => $row['display_order']);
+					'display_order' => $row['display_order'],
+					'prerequisite' => $row['prerequisite']);
 			}
 			
 			$this->tree_array($arrLP);
@@ -4884,6 +4940,50 @@ class learnpath {
 							
 							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+						
+						
+						$id_prerequisite=0;
+						foreach($arrLP as $key=>$value){
+							if($value['id']==$id){
+								$id_prerequisite=$value['prerequisite'];
+								break;
+							}
+						}
+						
+						$arrHide=array();
+						for($i = 0; $i < count($arrLP); $i++)
+						{
+							if($arrLP[$i]['id'] != $id)
+							{
+								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+									$s_selected_position=$arrLP[$i]['id'];
+								elseif($action == 'add')
+									$s_selected_position=$arrLP[$i]['id'];
+								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								
+							}
+						}
+						
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							
+							foreach($arrHide as $key => $value){
+								if($key==$s_selected_position && $action == 'add'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								elseif($key==$id_prerequisite && $action == 'edit'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								else{
+									$return .= '<option value="'.$key.'">'.$value['value'].'</option>';
+								}
+							}
+							
+							$return .= "</select></td>";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
 						
@@ -4992,7 +5092,8 @@ class learnpath {
 					'parent_item_id' => $row['parent_item_id'],
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
-					'display_order' => $row['display_order']);
+					'display_order' => $row['display_order'],
+					'prerequisite' => $row['prerequisite']);
 			}
 			
 			$this->tree_array($arrLP);
@@ -5097,6 +5198,50 @@ class learnpath {
 							//$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
+						
+						$id_prerequisite=0;
+						foreach($arrLP as $key=>$value){
+							if($value['id']==$id){
+								$id_prerequisite=$value['prerequisite'];
+								break;
+							}
+						}
+						
+						$arrHide=array();
+						for($i = 0; $i < count($arrLP); $i++)
+						{
+							if($arrLP[$i]['id'] != $id)
+							{
+								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+									$s_selected_position=$arrLP[$i]['id'];
+								elseif($action == 'add')
+									$s_selected_position=$arrLP[$i]['id'];
+								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								
+							}
+						}
+						
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							
+							foreach($arrHide as $key => $value){
+								if($key==$s_selected_position && $action == 'add'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								elseif($key==$id_prerequisite && $action == 'edit'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								else{
+									$return .= '<option value="'.$key.'">'.$value['value'].'</option>';
+								}
+							}
+							
+							$return .= "</select></td>";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+						
 					}
 					
 					$return .= "\t\t" . '<tr>' . "\n";
@@ -5187,7 +5332,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					'parent_item_id' => $row['parent_item_id'],
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
-					'display_order' => $row['display_order']);
+					'display_order' => $row['display_order'],
+					'prerequisite' => $row['prerequisite']);
 			}
 			
 			$this->tree_array($arrLP);
@@ -5292,6 +5438,50 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							//$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
+						
+						$id_prerequisite=0;
+						foreach($arrLP as $key=>$value){
+							if($value['id']==$id){
+								$id_prerequisite=$value['prerequisite'];
+								break;
+							}
+						}
+						
+						$arrHide=array();
+						for($i = 0; $i < count($arrLP); $i++)
+						{
+							if($arrLP[$i]['id'] != $id)
+							{
+								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+									$s_selected_position=$arrLP[$i]['id'];
+								elseif($action == 'add')
+									$s_selected_position=$arrLP[$i]['id'];
+								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								
+							}
+						}
+						
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							
+							foreach($arrHide as $key => $value){
+								if($key==$s_selected_position && $action == 'add'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								elseif($key==$id_prerequisite && $action == 'edit'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								else{
+									$return .= '<option value="'.$key.'">'.$value['value'].'</option>';
+								}
+							}
+							
+							$return .= "</select></td>";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+						
 					}
 					
 					$return .= "\t\t" . '<tr>' . "\n";
@@ -5627,7 +5817,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					'parent_item_id' => $row['parent_item_id'],
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
-					'display_order' => $row['display_order']);
+					'display_order' => $row['display_order'],
+					'prerequisite' => $row['prerequisite']);
 			}
 			
 			$this->tree_array($arrLP);
@@ -5700,7 +5891,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			foreach($arrHide as $key => $value){
 				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
-			$parent_select -> setSelected($s_selected_parent);
+			$parent_select -> setSelected($parent);
 			reset($arrLP);
 			
 			$arrHide=array();
@@ -5732,6 +5923,44 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			if($action != 'move'){
 				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 				//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
+				
+				$id_prerequisite=0;
+				foreach($arrLP as $key=>$value){
+					if($value['id']==$id){
+						$id_prerequisite=$value['prerequisite'];
+						break;
+					}
+				}
+
+				$select_prerequisites=$form->addElement('select', 'prerequisites', get_lang('Prerequisites'), '', 'id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
+				$select_prerequisites->addOption(get_lang("NoPrerequisites"),0,'style="padding-left:3px;"');
+				
+				$arrHide=array();
+
+				for($i = 0; $i < count($arrLP); $i++)
+				{
+					if($arrLP[$i]['id'] != $id)
+					{
+						if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+							$s_selected_position=$arrLP[$i]['id'];
+						elseif($action == 'add')
+							$s_selected_position=$arrLP[$i]['id'];
+						
+						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+						
+					}
+				}
+				
+				foreach($arrHide as $key => $value){
+					$select_prerequisites->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
+					if($key==$s_selected_position && $action == 'add'){
+						$select_prerequisites -> setSelected($s_selected_position);
+					}
+					elseif($key==$id_prerequisite && $action == 'edit'){
+						$select_prerequisites -> setSelected($id_prerequisite);
+					}
+				}
+				
 				if(!$no_display_add)
 				{
 					if(($extra_info == 'new' || $extra_info['item_type'] == TOOL_DOCUMENT || $_GET['edit'] == 'true'))
@@ -5861,7 +6090,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					'parent_item_id' => $row['parent_item_id'],
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
-					'display_order' => $row['display_order']);
+					'display_order' => $row['display_order'],
+					'prerequisite' => $row['prerequisite']);
 			}
 			
 			$this->tree_array($arrLP);
@@ -5972,6 +6202,50 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							$return .= "\t\t\t" . '<td class="input"><input' . (is_numeric($extra_info) ? ' disabled="disabled"' : '') . ' id="idURL" name="url" type="text" value="' . $item_url . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
+						
+						$id_prerequisite=0;
+						foreach($arrLP as $key=>$value){
+							if($value['id']==$id){
+								$id_prerequisite=$value['prerequisite'];
+								break;
+							}
+						}
+						
+						$arrHide=array();
+						for($i = 0; $i < count($arrLP); $i++)
+						{
+							if($arrLP[$i]['id'] != $id)
+							{
+								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+									$s_selected_position=$arrLP[$i]['id'];
+								elseif($action == 'add')
+									$s_selected_position=$arrLP[$i]['id'];
+								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								
+							}
+						}
+						
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							
+							foreach($arrHide as $key => $value){
+								if($key==$s_selected_position && $action == 'add'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								elseif($key==$id_prerequisite && $action == 'edit'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								else{
+									$return .= '<option value="'.$key.'">'.$value['value'].'</option>';
+								}
+							}
+							
+							$return .= "</select></td>";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+								
 					}
 					
 					$return .= "\t\t" . '<tr>' . "\n";
@@ -6072,7 +6346,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					'parent_item_id' => $row['parent_item_id'],
 					'previous_item_id' => $row['previous_item_id'],
 					'next_item_id' => $row['next_item_id'],
-					'display_order' => $row['display_order']);
+					'display_order' => $row['display_order'],
+					'prerequisite' => $row['prerequisite']);
 			}
 			
 			$this->tree_array($arrLP);
@@ -6169,6 +6444,50 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
 						
 						$return .= "\t\t" . '</tr>' . "\n";
+						
+						$id_prerequisite=0;
+						foreach($arrLP as $key=>$value){
+							if($value['id']==$id){
+								$id_prerequisite=$value['prerequisite'];
+								break;
+							}
+						}
+						
+						$arrHide=array();
+						for($i = 0; $i < count($arrLP); $i++)
+						{
+							if($arrLP[$i]['id'] != $id)
+							{
+								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+									$s_selected_position=$arrLP[$i]['id'];
+								elseif($action == 'add')
+									$s_selected_position=$arrLP[$i]['id'];
+								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+								
+							}
+						}
+						
+						$return .= "\t\t" . '<tr>' . "\n";
+							
+							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+							
+							foreach($arrHide as $key => $value){
+								if($key==$s_selected_position && $action == 'add'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								elseif($key==$id_prerequisite && $action == 'edit'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								else{
+									$return .= '<option value="'.$key.'">'.$value['value'].'</option>';
+								}
+							}
+							
+							$return .= "</select></td>";
+						
+						$return .= "\t\t" . '</tr>' . "\n";
+						
 					}
 					
 					$return .= "\t\t" . '<tr>' . "\n";
@@ -6657,25 +6976,25 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_DOCUMENT . '.gif" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 		
-			while($row_doc = Database::fetch_array($res_doc))
-			{
-				$explode = explode('/', $row_doc['path']);
-				$num = count($explode) - 2;
+		while($row_doc = Database::fetch_array($res_doc))
+		{
+			$explode = explode('/', $row_doc['path']);
+			$num = count($explode) - 2;
+			
+			$return .= '<div class="lp_resource_element">';
+			
+				$return .= '<img align="left" alt="" src="../img/lp_' . (($row_doc['filetype'] == 'file') ? TOOL_DOCUMENT : 'folder') . '.png" style="margin-left:' . ($num * 20) . 'px;margin-right:5px;" title="" />';
 				
-				$return .= '<div class="lp_resource_element">';
+				if($row_doc['filetype'] == 'file')
+					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $row_doc['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_doc['title'] . '</a>';
+				else
+					$return .= $row_doc['title'];
 				
-					$return .= '<img align="left" alt="" src="../img/lp_' . (($row_doc['filetype'] == 'file') ? TOOL_DOCUMENT : 'folder') . '.png" style="margin-left:' . ($num * 20) . 'px;margin-right:5px;" title="" />';
-					
-					if($row_doc['filetype'] == 'file')
-						$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $row_doc['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_doc['title'] . '</a>';
-					else
-						$return .= $row_doc['title'];
-					
-				$return .= '</div>';
-			}
+			$return .= '</div>';
+		}
 
-			if(Database::num_rows($res_doc) == 0)
-				$return .= '<div class="lp_resource_element">'.get_lang("NoDocuments").'</div>';
+		if(Database::num_rows($res_doc) == 0)
+			$return .= '<div class="lp_resource_element">'.get_lang("NoDocuments").'</div>';
 		
 		$return .= '</div>';
 		

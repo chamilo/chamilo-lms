@@ -84,51 +84,56 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 	}
 	//$objResponse->addAlert(api_get_path(REL_CLARO_PATH).'newscorm/learnpathItem.class.php');
 	
-	$mylpi =& $mylp->items[$item_id];
-	//$mylpi->set_lp_view($view_id);
-	if($score!=-1){
-		$mylpi->set_score($score);
-	}
-	if($max!=-1){
-		$mylpi->max_score=$max;
-	}
-	if($min!=-1){
-		$mylpi->min_score=$min;
-	}
-	if($status!='')
-	{
-		if($debug>1){error_log('Calling set_status('.$status.') from xajax',0);}
-		$mylpi->set_status($status);
-		if($debug>1){error_log('Done calling set_status from xajax',0);}
-	}
-	if($time!='')
-	{
-		//if big integer, then it's a timestamp, otherwise it's normal scorm time
-		if($time == intval(strval($time)) && $time>1000000){
-			$real_time = time() - $time;
-			//$real_time += $mylpi->get_total_time();
-			$mylpi->set_time($real_time,'int');
-		}else{
-			$mylpi->set_time($time);
-		}
-	}
-	if($suspend!='')
-	{
-		$mylpi->current_data = $suspend;//escapetxt($suspend);
-	}
-	if($location!='')
-	{
-		$mylpi->set_lesson_location($location);
-	}
-	//deal with interactions provided in arrays in the following format
-	//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
-	if(is_array($interactions) && count($interactions)>0){
-		foreach($interactions as $index=>$interaction){
-			$mylpi->add_interaction($index,$interactions[$index]);
-		}
-	}
 	
-	$mylp->save_item($item_id,false);
+	$prereq_check = $mylp->prerequisites_match($item_id);
+	if($prereq_check === true) //launch the prerequisites check and set error if needed
+	{
+	
+		$mylpi =& $mylp->items[$item_id];
+		//$mylpi->set_lp_view($view_id);
+		if($score!=-1){
+			$mylpi->set_score($score);
+		}
+		if($max!=-1){
+			$mylpi->max_score=$max;
+		}
+		if($min!=-1){
+			$mylpi->min_score=$min;
+		}
+		if($status!='')
+		{
+			if($debug>1){error_log('Calling set_status('.$status.') from xajax',0);}
+			$mylpi->set_status($status);
+			if($debug>1){error_log('Done calling set_status from xajax',0);}
+		}
+		if($time!='')
+		{
+			//if big integer, then it's a timestamp, otherwise it's normal scorm time
+			if($time == intval(strval($time)) && $time>1000000){
+				$real_time = time() - $time;
+				//$real_time += $mylpi->get_total_time();
+				$mylpi->set_time($real_time,'int');
+			}else{
+				$mylpi->set_time($time);
+			}
+		}
+		if($suspend!='')
+		{
+			$mylpi->current_data = $suspend;//escapetxt($suspend);
+		}
+		if($location!='')
+		{
+			$mylpi->set_lesson_location($location);
+		}
+		//deal with interactions provided in arrays in the following format
+		//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
+		if(is_array($interactions) && count($interactions)>0){
+			foreach($interactions as $index=>$interaction){
+				$mylpi->add_interaction($index,$interactions[$index]);
+			}
+		}
+		$mylp->save_item($item_id,false);
+	}
 	
 	$mytotal = $mylp->get_total_items_count_without_chapters();
 	$mycomplete = $mylp->get_complete_items_count();

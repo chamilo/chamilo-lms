@@ -21,7 +21,7 @@ Tel. +32 (2) 211 34 56
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 11685 2007-03-25 21:14:55Z pcool $
+* 	@version $Id: survey.php 11688 2007-03-26 07:55:38Z pcool $
 *
 * 	@todo use quickforms for the forms
 */
@@ -113,7 +113,7 @@ echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.
 echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=open&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/open_answer.gif" /><br />'.get_lang('Open').'</a></div>';
 echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=dropdown&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/dropdown.gif" /><br />'.get_lang('Dropdown').'</a></div>';
 echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=percentage&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/percentagequestion.gif" /><br />'.get_lang('Percentage').'</a></div>';
-echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=score&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/fill_in_blanks.gif" /><br />'.get_lang('Score').'</a></div>';
+echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=score&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/scorequestion.gif" /><br />'.get_lang('Score').'</a></div>';
 echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=comment&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/commentquestion.gif" /><br />'.get_lang('Comment').'</a></div>';
 echo '<div style="float:left; text-align:center; margin:5px;"><a href="question.php?action=add&type=pagebreak&amp;survey_id='.$_GET['survey_id'].'"><img src="../img/page_end.gif" /><br />'.get_lang('Pagebreak').'</a></div>';
 echo '</div>';

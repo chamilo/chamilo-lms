@@ -1037,6 +1037,44 @@ class CourseManager
 
 		return $result_array;
 	}
+	
+	
+	/**
+	*	Return user info array of all users registered in the specified real or virtual course
+	*	This only returns the users that are registered in this actual course, not linked courses.
+	*
+	*	@param string $course_code
+	*	@param boolean $full list to true if we want sessions students too
+	*	@return array with user id
+	*/
+	function get_student_list_from_course_code($course_code, $full_list=false)
+	{
+		$a_students = array();
+		
+		// students directly subscribed to the course
+		$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$sql_query = "SELECT user_id FROM $table WHERE `course_code` = '$course_code' AND `status` = 5";
+		$rs = api_sql_query($sql_query, __FILE__, __LINE__);
+		while($student = mysql_fetch_array($rs))
+		{
+			$a_students[$student['user_id']] = $student['user_id']; 
+		}
+		
+		// students subscribed to the course through a session
+		
+		if(api_get_setting('use_session_mode')=='true' && $full_list)
+		{
+			$table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+			$sql_query = "SELECT DISTINCT id_user as user_id FROM $table WHERE `course_code` = '$course_code'";
+			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
+			while($student = mysql_fetch_array($rs))
+			{
+				$a_students[$student['user_id']] = $student['user_id']; 
+			}
+		}
+		
+		return $a_students;
+	}
 
 	/**
 	*	Return user info array of all users registered in the specified course

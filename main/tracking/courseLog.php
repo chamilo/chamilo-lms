@@ -116,12 +116,7 @@ $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin;
 
 
  
-$a_students_temp = CourseManager :: get_user_list_from_course_code($_course['id']);
-foreach($a_students_temp as $student)
-{
-	if($student['status'] == 5)
-		$a_students[] = $student['user_id'];
-}
+$a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true);
 $nbStudents = count($a_students);
 
 /**

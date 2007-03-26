@@ -2412,6 +2412,60 @@ class learnpath {
     	}
     	return $list;
     }
+	/**
+	 * Return the number of interactions for the given learnpath Item View ID.
+	 * This method can be used as static. 
+	 * @param	integer	Item View ID
+	 * @return	integer	Number of interactions
+	 */
+	function get_interactions_count_from_db($lp_iv_id=0){
+		$table = Database::get_course_table('lp_iv_interaction');
+		$sql = "SELECT count(*) FROM $table WHERE lp_iv_id = $lp_iv_id";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$row = Database::fetch_array($res);
+		$num = $row[0];
+		return $num;
+	}
+	/**
+	 * Return the interactions as an array for the given lp_iv_id.
+	 * This method can be used as static.
+	 * @param	integer	Learnpath Item View ID
+	 * @return	array
+	 * @todo 	Translate labels 
+	 */
+	function get_iv_interactions_array($lp_iv_id=0){
+		$list = array();
+		$table = Database::get_course_table('lp_iv_interaction');
+		$sql = "SELECT * FROM $table WHERE lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$num = Database::num_rows($res);
+		if($num>0){
+			$list[] = array(
+				"order_id"=>'Order',
+				"id"=>'Interaction ID',
+				"type"=>'Type',
+				"time"=>'Time (finished at ...)',
+				"correct_responses"=>'Correct responses',
+				"student_response"=>'Student response',
+				"result"=>'Result',
+				"latency"=>'Latency (time spent)');
+			while ($row = Database::fetch_array($res)){
+				$list[] = array(
+					"order_id"=>($row['order_id']+1),
+					"id"=>urldecode($row['interaction_id']),//urldecode because they often have %2F or stuff like that
+					"type"=>$row['interaction_type'],
+					"time"=>$row['completion_time'],
+					//"correct_responses"=>$row['correct_responses'],
+					//hide correct responses from students
+					"correct_responses"=>'',
+					"student_response"=>$row['student_response'],
+					"result"=>$row['result'],
+					"latency"=>$row['latency']);
+			}
+		}
+		return $list;	
+	}
+
     /**
      * Generate and return the table of contents for this learnpath. The (flat) table returned can be
      * used by get_html_toc() to be ready to display

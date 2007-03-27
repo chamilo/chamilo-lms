@@ -284,7 +284,10 @@ function display_language_selection_box()
 	$dirname = '../lang/';
 	$language_list = get_language_folder_list($dirname);
 	sort($language_list);
-	$language_to_display = $language_list;
+	//Reduce the number of languages shown to only show those with higher than 90% translation in DLTT
+	//This option can be easily removed later on. The aim is to test people response to less choice
+	//$language_to_display = $language_list;
+	$language_to_display = array('brazilian','dutch','english','french','german','hungarian','italian','portuguese','slovenian','spanish');
 
 	//display
 	echo "\t\t<select name=\"language_list\">\n";
@@ -296,7 +299,7 @@ function display_language_selection_box()
 		else $option_end = '>';
 		echo "\t\t\t<option value=\"$value\"$option_end";
 
-		echo $value;
+		echo ucfirst($value);
 		echo "</option>\n";
 	}
 

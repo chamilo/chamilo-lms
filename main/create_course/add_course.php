@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 11640 2007-03-21 16:21:55Z yannoo $
+// $Id: add_course.php 11722 2007-03-27 11:47:46Z fvauthier $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -72,6 +72,8 @@ if (!api_is_allowed_to_create_course())
 }
 // Get all course categories
 $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
+$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+
 $sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE' ORDER BY tree_pos";
 $res = api_sql_query($sql, __FILE__, __LINE__);
 while ($cat = mysql_fetch_array($res))
@@ -111,24 +113,36 @@ if($form->validate())
 	$title = $course_values['title'];
 	$course_language = $course_values['course_language'];
 	$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
-	if (sizeof($keys))
-	{
-		$visual_code = $keys["currentCourseCode"];
-		$code = $keys["currentCourseId"];
-		$db_name = $keys["currentCourseDbName"];
-		$directory = $keys["currentCourseRepository"];
-		$expiration_date = time() + $firstExpirationDelay;
-		prepare_course_repository($directory, $code);
-		update_Db_course($db_name);
-		$pictures_array=fill_course_repository($directory);
-		fill_Db_course($db_name, $directory, $course_language,$pictures_array);
-		register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $_user['user_id'], $expiration_date);
+	
+	$sql_check = "SELECT * FROM ".$table_course."WHERE visual_code = '$wanted_code'";
+	//$result_check = mysql_query($sql_check);
+	$result_check = api_sql_query($sql_check,__FILE__,__LINE__); //I don't know why this api function doesn't work...
+	if(Database::num_rows($result_check)<1){
+		if (sizeof($keys))
+		{
+			$visual_code = $keys["currentCourseCode"];
+			$code = $keys["currentCourseId"];
+			$db_name = $keys["currentCourseDbName"];
+			$directory = $keys["currentCourseRepository"];
+			$expiration_date = time() + $firstExpirationDelay;
+			prepare_course_repository($directory, $code);
+			update_Db_course($db_name);
+			$pictures_array=fill_course_repository($directory);
+			fill_Db_course($db_name, $directory, $course_language,$pictures_array);
+			register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $_user['user_id'], $expiration_date);
+		}
+		$message = get_lang('JustCreated');
+		$message .= " <strong>".$course_values['wanted_code']."</strong>";
+		$message .= "<br/><br/>";
+		$message .= '<a href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
+		Display :: display_normal_message($message,false);
 	}
-	$message = get_lang('JustCreated');
-	$message .= " <strong>".$course_values['wanted_code']."</strong>";
-	$message .= "<br/><br/>";
-	$message .= '<a href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
-	Display :: display_normal_message($message,false);
+	else{
+				Display :: display_error_message(get_lang('CourseCodeAlreadyExist'),false);
+		$form->display();
+		echo '<p>'.get_lang('Explanation').'</p>';
+	}
+		
 }
 else
 {

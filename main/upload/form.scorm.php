@@ -61,7 +61,7 @@ $select_content_proximity = &$form->addElement('select','content_proximity',get_
 	$select_content_proximity->addOption(get_lang('Remote'),"remote");
 	$select_content_proximity -> setSelected("local");
 
-$form->addElement('submit', 'submit', get_lang('Download'));
+$form->addElement('submit', 'submit', get_lang('Send'));
 
 $form->addElement('html', '<br><br><br>');
 /*$list = get_zip_files_in_garbage();

@@ -192,13 +192,17 @@ class Tracking {
 		$resultProgress = api_sql_query($sqlProgress);
 		$a_nbItem = mysql_fetch_array($resultProgress);
 		
-		$nbTotalItem = Database::count_rows($tbl_course_lp_item);
-
-		$totalItem = $totalItem + $nbTotalItem;
 		
-		$totalProgress = $totalProgress + $a_nbItem['nbItem'];
+		$sqlTotalItem = "	SELECT	1
+							FROM ".$tbl_course_lp_item."
+							WHERE item_type != 'chapter'
+							AND item_type != 'dokeos_chapter'
+							AND item_type != 'dir'"
+										;
+		$resultItem = api_sql_query($sqlTotalItem, __FILE__, __LINE__);
 		
-		$progress = round(($a_nbItem['nbItem'] * 100) / $nbTotalItem);
+		$totalItem = Database::num_rows($resultItem);
+		$progress = round(($a_nbItem['nbItem'] * 100) / $totalItem);
 		
 		return $progress;
 	}

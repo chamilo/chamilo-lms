@@ -405,6 +405,9 @@ if(!empty($_GET['student']))
 						<th>
 							<?php echo get_lang('LastConnexion'); ?>
 						</th>
+						<th>
+							<?php echo get_lang('Details'); ?>
+						</th>
 					</tr>
 <?php
 				$a_headerLearnpath = array(get_lang('Learnpath'),get_lang('Time'),get_lang('Progress'),get_lang('LastConnexion'));
@@ -430,13 +433,16 @@ if(!empty($_GET['student']))
 										AND view.lp_id = ".$a_learnpath['id']."
 										AND view.user_id = ".$_GET['student']."
 									WHERE item_view.status = 'completed'
+									OR item_view.status = 'passed'
 									";
 					$resultProgress = api_sql_query($sqlProgress);
 					$a_nbItem = mysql_fetch_array($resultProgress);
 	
 					$sqlTotalItem = "	SELECT	COUNT(item_type) AS totalItem
 										FROM ".$a_infosCours['db_name'].".".$tbl_course_lp_item." 
-										WHERE lp_id = ".$a_learnpath['id']
+										WHERE lp_id = ".$a_learnpath['id']."
+										AND item_type != 'chapter'
+										AND item_type != 'dokeos_chapter'"
 									;
 					$resultItem = api_sql_query($sqlTotalItem);
 					$a_totalItem = mysql_fetch_array($resultItem);
@@ -491,10 +497,14 @@ if(!empty($_GET['student']))
 						<td align="center">
 							<?php echo date('Y-m-d',$start_time) ?>
 						</td>
+						<td align="center">
+							<a href="lp_tracking.php?course=<?php echo $_GET['course'] ?>&origin=<?php echo $_GET['origin'] ?>&lp_id=<?php echo $a_learnpath['id']?>&student_id=<?php echo $a_infosUser['user_id'] ?>">
+								<img src="../img/2rightarrow.gif" border="0" />
+							</a>
+						</td>
 					</tr>
 				
 				<?php
-				
 				$dataLearnpath[$i][] = $a_learnpath['name'];
 				$dataLearnpath[$i][] = $progress.'%';
 				$i++;

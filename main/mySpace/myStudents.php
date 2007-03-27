@@ -442,7 +442,8 @@ if(!empty($_GET['student']))
 										FROM ".$a_infosCours['db_name'].".".$tbl_course_lp_item." 
 										WHERE lp_id = ".$a_learnpath['id']."
 										AND item_type != 'chapter'
-										AND item_type != 'dokeos_chapter'"
+										AND item_type != 'dokeos_chapter'
+										AND item_type != 'dir'"
 									;
 					$resultItem = api_sql_query($sqlTotalItem);
 					$a_totalItem = mysql_fetch_array($resultItem);

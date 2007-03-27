@@ -113,7 +113,7 @@ foreach($Sessions as $enreg)
 
 ?>
 
-<option value="<?php echo $enreg['id']; ?>" <?php if($enreg['id'] == $id_session) echo 'selected="selected"'; ?> ><?php echo htmlentities($enreg['name']); if($date_start!='0000-00-00') { ?> (<?php echo get_lang('From'); ?> <?php echo $enreg['date_start']; ?> <?php echo get_lang('Until'); ?> <?php echo $enreg['date_end']; ?>)<?php } ?></option>
+<option value="<?php echo $enreg['id']; ?>" <?php if($enreg['id'] == $id_session) echo 'selected="selected"'; ?> ><?php echo htmlentities($enreg['name']); if($date_start!='0000-00-00') { ?> (<?php echo get_lang('From'); ?> <?php echo $enreg['date_start']; ?> <?php echo get_lang('To'); ?> <?php echo $enreg['date_end']; ?>)<?php } ?></option>
 
 <?php
 }

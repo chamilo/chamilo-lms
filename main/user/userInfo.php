@@ -99,7 +99,7 @@ $userIdViewer = $_user['user_id']; // id fo the user currently online
 $allowedToEditContent = ($userIdViewer == $userIdViewed) || $is_platformAdmin;
 $allowedToEditDef = api_is_allowed_to_edit();
 $is_allowedToTrack = api_is_allowed_to_edit() && $_configuration['tracking_enabled'];
-echo $is_allowedToTrack;
+
 // Library connection
 include ("userInfoLib.php");
 
@@ -217,8 +217,7 @@ if ($allowedToEditContent)
 */
 
 // Back button for each display mode (Top)
-echo "<p align=\"right\"><a href=\"user.php?".api_get_cidreq()."&origin=".$origin."\">".get_lang('BackUser')."</a></p>\n";
-
+echo "<div align=\"right\"><a href=\"user.php?".api_get_cidreq()."&origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
 if ($displayMode == "viewDefEdit")
 {
 	/*>>>>>>>>>>>> CATEGORIES DEFINITIONS : EDIT <<<<<<<<<<<<*/
@@ -482,7 +481,7 @@ elseif ($displayMode == "viewContentList") // default display
 }
 
 // Back button for each display mode (bottom)
-echo "<p align=\"right\"><a href=\"user.php?".api_get_cidreq()."&origin=".$origin."\">".get_lang('BackUser')."</a></p>\n";
+echo "<div align=\"right\"><a href=\"user.php?".api_get_cidreq()."&origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
 /*
 ==============================================================================
 		FOOTER

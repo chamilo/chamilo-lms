@@ -775,7 +775,8 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	</tr>
 	<tr>
 		<td><input type="submit" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" /> </td>
-		<?php if (mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false): ?>
+		<?php $dbConnect = test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm);
+		if($dbConnect==1): ?>
 		<td colspan="2">
 			<div class="confirmation-message">
 				<div  style="float:left; margin-right:10px;">
@@ -994,4 +995,53 @@ function display_after_install_message($installType, $nbr_courses)
 	<a href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
 	<?php
 }
+
+/**
+* In step 3. Test the connection to the DB in case of single or multy DB.
+* Return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
+*/
+function test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm)
+{
+	$dbConnect = -1;
+	if($singleDbForm == 1)
+	{
+		if(mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false)
+		{
+			$dbConnect = 1;
+		}
+		else
+		{
+			$dbConnect = -1;
+		}
+	}
+	elseif($singleDbForm == 0)
+	{
+		if(mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false)
+		{
+			$multipleDbCheck = @mysql_query("CREATE DATABASE ".$dbPrefixForm."test");
+			if($multipleDbCheck !== false)
+			{
+				$multipleDbCheck = @mysql_query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test");
+				if($multipleDbCheck !== false)
+				{
+					$dbConnect = 1;
+				}
+				else
+				{
+					$dbConnect = 0;
+				}
+			}
+			else
+			{
+				$dbConnect = 0;
+			}
+		}
+		else
+		{
+			$dbConnect = -1;
+		}
+	}
+	return($dbConnect); //return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
+}
+
 ?>

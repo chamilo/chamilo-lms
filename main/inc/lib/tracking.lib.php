@@ -186,6 +186,7 @@ class Tracking {
 						INNER JOIN ".$tbl_course_lp_view." AS lpview 
 							ON lpview.user_id = ".$student_id." 
 						WHERE item_view.status = 'completed' 
+						OR item_view.status = 'passed'
 					   ";
 		
 		$resultProgress = api_sql_query($sqlProgress);
@@ -291,6 +292,55 @@ class Tracking {
 		}
 		
 		return $a_students;
+	}
+	
+	
+	
+	
+	function is_allowed_to_coach_student($coach_id, $student_id)
+	{
+		$coach_id = intval($coach_id);
+		$student_id = intval($student_id);
+		
+		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$tbl_session 		= Database :: get_main_table(TABLE_MAIN_SESSION);
+		
+		//////////////////////////////////////////////////////////////
+		// At first, courses where $coach_id is coach of the course //
+		//////////////////////////////////////////////////////////////
+		$sql = 'SELECT 1 
+				FROM '.$tbl_session_course_user.' AS session_course_user
+				INNER JOIN '.$tbl_session_course.' AS session_course
+					ON session_course.course_code = session_course_user.course_code
+					AND id_coach='.$coach_id.' 
+				WHERE id_user='.$student_id;
+		$result=api_sql_query($sql, __FILE__, __LINE__);
+		if(mysql_num_rows($result) > 0)
+		{
+			return true;
+		}
+		
+		//////////////////////////////////////////////////////////////
+		// Then, courses where $coach_id is coach of the session    //
+		//////////////////////////////////////////////////////////////
+		
+		$sql = 'SELECT session_course_user.id_user 
+				FROM '.$tbl_session_course_user.' as session_course_user
+				INNER JOIN '.$tbl_session_course.' as session_course
+					ON session_course.course_code = session_course_user.course_code
+				INNER JOIN '.$tbl_session.' as session
+					ON session.id = session_course.id_session
+					AND session.id_coach = '.$coach_id.'
+				WHERE id_user = '.$student_id;
+		$result=api_sql_query($sql, __FILE__, __LINE__);
+		if(mysql_num_rows($result) > 0)
+		{
+			return true;
+		}
+		
+		return false;
+		
 	}
 	
 	function get_courses_followed_by_coach ($coach_id) {

@@ -499,9 +499,16 @@ if(!empty($_GET['student']))
 							<?php echo date('Y-m-d',$start_time) ?>
 						</td>
 						<td align="center">
+							<?php
+							if($progress > 0)
+							{
+							?>
 							<a href="lp_tracking.php?course=<?php echo $_GET['course'] ?>&origin=<?php echo $_GET['origin'] ?>&lp_id=<?php echo $a_learnpath['id']?>&student_id=<?php echo $a_infosUser['user_id'] ?>">
 								<img src="../img/2rightarrow.gif" border="0" />
 							</a>
+							<?php
+							}
+							?>
 						</td>
 					</tr>
 				

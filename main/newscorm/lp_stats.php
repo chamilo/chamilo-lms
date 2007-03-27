@@ -19,22 +19,26 @@ require_once ('resourcelinker.inc.php');
 //$list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
 //$user_id = $_user['user_id'];
 //$stats_charset = $_SESSION['oLP']->encoding
-
-if (!empty ($stats_charset)) {
-	$charset_lang = $stats_charset;
-} else {
-	$charset_lang = 'ISO-8859-1';
+if(!isset($origin))
+	$origin = '';
+if($origin != 'tracking')
+{
+	if (!empty ($stats_charset)) {
+		$charset_lang = $stats_charset;
+	} else {
+		$charset_lang = 'ISO-8859-1';
+	}
+	$dokeos_charset = 'ISO-8859-1';
+	$charset = $charset_lang;
+	$w = $tablewidth -20;
+	$htmlHeadXtra[] = ''.'<style type="text/css" media="screen, projection">
+		/*<![CDATA[*/
+		@import "../css/default/scorm.css";
+		/*]]>*/
+	</style>';
+	include_once ('../inc/reduced_header.inc.php');
+	echo '<body>';
 }
-$dokeos_charset = 'ISO-8859-1';
-$charset = $charset_lang;
-$w = $tablewidth -20;
-$htmlHeadXtra[] = ''.'<style type="text/css" media="screen, projection">
-	/*<![CDATA[*/
-	@import "../css/default/scorm.css";
-	/*]]>*/
-</style>';
-include_once ('../inc/reduced_header.inc.php');
-echo '<body>';
 
 //if display in fullscreen required
 if (strcmp($_GET["fs"], "true") == 0) {
@@ -46,11 +50,21 @@ if (strcmp($_GET["fs"], "true") == 0) {
 //check if the user asked for the "extend all" option
 $extend_all_link = '';
 $extend_all = 0;
+
+if($origin == 'tracking')
+{
+	$url_suffix = '&course='.$_GET['course'].'&student_id='.$_GET['student_id'].'&lp_id='.$_GET['lp_id'];
+}
+else
+{
+	$url_suffix = '';
+}
+	
 if (!empty ($_GET['extend_all'])) {
-	$extend_all_link = '<a href="lp_controller.php?action=stats"><img src="../img/view_less_stats.gif" alt="fold_view" border="0"></a>';
+	$extend_all_link = '<a href="'.api_get_self().'?action=stats'.$url_suffix.'"><img src="../img/view_less_stats.gif" alt="fold_view" border="0"></a>';
 	$extend_all = 1;
 } else {
-	$extend_all_link = '<a href="lp_controller.php?action=stats&extend_all=1"><img src="../img/view_more_stats.gif" alt="extend_view" border="0"></a>';
+	$extend_all_link = '<a href="'.api_get_self().'?action=stats&extend_all=1'.$url_suffix.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0"></a>';
 }
 
 $output .= "<tr><td><div class='title'>".htmlentities(get_lang('ScormMystatus'), ENT_QUOTES, $dokeos_charset)."</div></td></tr>"."<tr><td>&nbsp;</td></tr>"."<tr><td>"."<table border='0' class='data_table'><tr>\n".'<td width="16">'.$extend_all_link.'</td>'.'<td colspan="4" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormLessonTitle'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormStatus'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormScore'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormTime'), ENT_QUOTES, $dokeos_charset)."</div></td></tr>\n";
@@ -291,7 +305,10 @@ $output .= "<tr class='$oddclass'>\n"."<td></td>\n".'<td colspan="4"><div class=
 .'<td colspan="2"></td>'."\n".'<td colspan="2"><div class="mystatus" align="center">'. ($total_score == 0 ? '-' : $total_percent.'%')."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$total_time.'</div></td>'."\n"."</tr>\n";
 
 $output .= "</table></td></tr></table>";
-$output .= "</body></html>";
+if($origin != 'tracking')
+{
+	$output .= "</body></html>";
+}
 echo $output;
 ?>
 

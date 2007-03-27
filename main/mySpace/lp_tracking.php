@@ -49,6 +49,66 @@ $interbreadcrumb[] = array("url" => "myStudents.php?student=".$_GET['student_id'
 
 $nameTools = get_lang('LearningPathDetails');
 
+$htmlHeadXtra[] = '
+<style>
+div.title {
+	font-weight : bold;
+	text-align : left;
+}
+div.mystatusfirstrow {
+	font-weight : bold;
+	text-align : left;
+}
+div.description {
+	font-family : Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: Silver;
+}
+ .data_table
+  {
+  	border-collapse: collapse;
+  }
+ .data_table th{
+	padding-right: 0px;
+  	border: 1px  solid gray;
+  	background-color: #eef;
+  }
+  .data_table tr.row_odd
+  {
+  	background-color: #fafafa;
+  }
+  .data_table tr.row_odd:hover, .data_table tr.row_even:hover
+  {
+  	background-color: #f0f0f0;
+  }
+  .data_table tr.row_even
+  {
+  	background-color: #fff;
+  }
+ .data_table td
+  {
+  	padding: 5px;
+	vertical-align: top;
+  	border-bottom: 1px solid #b1b1b1;
+  	border-right: 1px dotted #e1e1e1; 
+  	border-left: 1px dotted #e1e1e1;
+ }
+
+ .margin_table
+ {
+	margin-left : 3px;
+        width: 80%;
+ }
+ .margin_table td.title
+ {
+    background-color: #ffff99;
+ }
+ .margin_table td.content
+ {
+    background-color: #ddddff;
+ }
+</style>';
+
 Display :: display_header($nameTools);
 
 $user_id = intval($_GET['student_id']);
@@ -56,8 +116,8 @@ $lp_id = intval($_GET['lp_id']);
 
 $list = learnpath :: get_flat_ordered_items_list($lp_id);
 
-
+$origin = 'tracking';
 
 include_once('../newscorm/lp_stats.php');
-
 ?>
+

@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 11610 2007-03-19 08:46:35Z elixir_julian $
+// $Id: user_list.php 11702 2007-03-27 07:35:23Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -266,7 +266,7 @@ function modify_filter($user_id,$url_params)
 		$result .= '<a href="../mySpace/teachers.php?teacher_id='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
 	}
 	if(mysql_result($result_sql,0,"status")=="5"){
-		$result .= '<a href="../mySpace/student.php?user_id='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
+		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;';
 	}
 
 	$result .= '<a href="user_edit.php?user_id='.$user_id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;';

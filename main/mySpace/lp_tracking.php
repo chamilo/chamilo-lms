@@ -13,6 +13,7 @@ include_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once('../newscorm/learnpath.class.php');
+include_once('../newscorm/learnpathItem.class.php');
 
 
 if(!CourseManager :: is_course_teacher($_user['user_id'], $_GET['course']) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']))

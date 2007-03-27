@@ -357,6 +357,16 @@ foreach($Courses as $enreg)
 										AND view.user_id = '.$_user['user_id'];
 						$rs = api_sql_query($sql, __FILE__, __LINE__);
 						$start_time = mysql_result($rs, 0, 0);
+						
+						// calculates time
+						$sql = 'SELECT SUM(total_time) 
+									FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
+									INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
+										ON item_view.lp_view_id = view.id
+										AND view.lp_id = '.$a_learnpath['id'].'
+										AND view.user_id = '.$_user['user_id'];
+						$rs = api_sql_query($sql, __FILE__, __LINE__);
+						$total_time = mysql_result($rs, 0, 0);
 
 
 						echo "<tr>
@@ -366,6 +376,7 @@ foreach($Courses as $enreg)
 						echo "	</td>
 								<td>
 							 ";
+						echo api_time_to_hms($total_time);
 						echo "	</td>
 								<td align='center'>
 							 ";

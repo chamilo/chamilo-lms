@@ -7030,28 +7030,52 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_DOCUMENT . '.gif" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 		
-		while($row_doc = Database::fetch_array($res_doc))
-		{
-			$explode = explode('/', $row_doc['path']);
-			$num = count($explode) - 2;
-			
-			$return .= '<div class="lp_resource_element">';
-			
-				$return .= '<img align="left" alt="" src="../img/lp_' . (($row_doc['filetype'] == 'file') ? TOOL_DOCUMENT : 'folder') . '.png" style="margin-left:' . ($num * 20) . 'px;margin-right:5px;" title="" />';
-				
-				if($row_doc['filetype'] == 'file')
-					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $row_doc['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_doc['title'] . '</a>';
-				else
-					$return .= $row_doc['title'];
-				
-			$return .= '</div>';
-		}
+		$resources=api_store_result($res_doc);
+
+		$return .=$this->write_resources_tree('', $resources);
+		
+		$return .='</div>';
 
 		if(Database::num_rows($res_doc) == 0)
 			$return .= '<div class="lp_resource_element">'.get_lang("NoDocuments").'</div>';
 		
-		$return .= '</div>';
+
+		return $return;
+	}
+	
+	function write_resources_tree($parent, $resources_array_first = false){
 		
+		static $resources_array;
+		if($resources_array_first !== false)
+			$resources_array = $resources_array_first;
+		
+	
+		while($value = current($resources_array))
+		{
+			
+			if(strpos($value['path'], $parent)!==false || $parent=='')
+			{
+
+				$explode = explode('/', $value['path']);
+				$num = count($explode) - 2;
+								
+				//It's a file
+				if ($value['filetype'] == 'file') {
+					if($num==0) $num=1;
+					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $value['id'] . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/lp_' . (($value['filetype'] == 'file') ? TOOL_DOCUMENT : 'folder') . '.png" title="" />'.$value['title']."</a></div></div>\r\n";
+					array_shift($resources_array);
+				}
+				//It's a folder
+				else {
+					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/add.gif" id="img_'.$value["id"].'" onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')"><img alt="" src="../img/lp_' . (($value['filetype'] == 'file') ? TOOL_DOCUMENT : 'folder') . '.png" title="" /><span onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')" style="cursor: pointer;" >'.$value['title'].'</span></div><div style="display: none;" id="'.$value['id'].'">';
+					array_shift($resources_array);
+					$return .= $this->write_resources_tree($value['path']);
+					$return .= "</div></div>\r\n";
+				}
+			}
+			else
+				return $return;
+		}
 		return $return;
 	}
 	

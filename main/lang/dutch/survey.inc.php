@@ -154,4 +154,5 @@ $Yesno = "Ja / Neen";
 $Multiplechoice = "Meerdere keuzes";
 $Multiplechoice = "Meerdere keuzes";
 $Multipleresponse = "Meerdere antwoorden";
+$Score = "Score";
 ?>

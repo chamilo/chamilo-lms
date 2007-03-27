@@ -200,4 +200,5 @@ $StudentsTracking = "Suivi des apprenants";
 $CourseTracking = "Suivi du cours";
 $LinksMostClicked = "Liens les plus visités";
 $DocumentsMostDownloaded = "Documents les plus téléchargés";
+$LearningPathDetails = "Détails du parcours";
 ?>

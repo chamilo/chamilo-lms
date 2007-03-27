@@ -404,6 +404,7 @@ $Vertical = "Függ&#337;leges";
 $DisplaySearchResults = "Keresési eredmények megtekintése";
 $DisplayAll = "Mind megtekintése";
 $File_upload = "Állomány feltöltése";
+$NoUsersInCourse = "Nincsenek felhasználók a kurzusban";
 $Percentage = "Százalék";
 $Informations = "Információk";
 $EmailDestination = "Fogadó";

@@ -155,4 +155,5 @@ $Yesno = "Ja / Nein";
 $Multiplechoice = "Auswahl";
 $Multiplechoice = "Auswahl";
 $Multipleresponse = "Mehrfach Antworten";
+$Score = "Ergebnis";
 ?>

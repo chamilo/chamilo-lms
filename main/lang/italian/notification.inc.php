@@ -13,6 +13,6 @@ $lang_update_link = "Aggiornato un collegamento esistente";
 $lang_new_link = "Aggiunto un nuovo collegamento";
 $lang_new_forum_topic = "Nuovo argomento aggiunto";
 $lang_new_groupforum_topic = "Nuovo argomento aggiunto al forum del gruppo";
-$lang_new_dropbox_file = "ricevuto un nuovo file";
+$lang_new_dropbox_file = "Ricevuto un nuovo file";
 $lang_update_dropbox_file = "il file nella tua casella è stato aggiornato";
 ?>

@@ -573,7 +573,6 @@ $UserUpdated = "Benutzer wurde aktualisiert";
 $HomePageFilesNotReadable = "Homepage Dateien können nicht gelesen werden";
 $DateStartMoreThanDateEnd = "Anfangsdatum liegt vor dem Enddatum";
 $Choose = "Wählen";
-$NoUsersInCourse = "Keine Benutzer im Kurs";
 $ModifySessionCourse = "Session Kurs bearbeiten";
 $CourseSessionList = "Session Kursliste";
 $SelectACoach = "Einen Tutor auswählen";

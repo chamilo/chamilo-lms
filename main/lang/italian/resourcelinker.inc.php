@@ -19,7 +19,7 @@ $DropboxAdd = "Aggiungi casella personale.";
 $AddAssignmentPage = "Aggiungi pagina per il caricamento degli elaborati dei corsisti.";
 $Dropbox = "Caselle";
 $Assignments = "Contributi";
-$Exercise = "Esercizi";
+$Exercise = "Verifiche";
 $Link = "Collegamento";
 $AdValvas = "Avvisi";
 $Document = "Documenti";
@@ -54,7 +54,7 @@ $AddCalendarItem = "Aggiungi una voce all\'Agenda";
 $AddAnn = "Aggiungi un avviso";
 $ForumAddNewTopic = "Forum: nuovo argomento";
 $ForumEditTopic = "Forum: modifica argomento";
-$ExerciseAnswers = "Esercizi: Risposte";
+$ExerciseAnswers = "Test: Risposte";
 $ForumReply = "Forum: rispondi";
 $AgendaSortChronologicallyDown = "Ordina cronologicamente l\'Agenda (giù)";
 ?>

@@ -195,4 +195,10 @@ $AvgStudentsProgress = "Gemiddelde vooruitgang van de cursisten";
 $AvgStudentsScore = "Gemiddelde score van de studenten";
 $AvgMessages = "Berichten per student";
 $AvgAssignments = "Opdrachten per student";
+$ToolsMostUsed = "Meest gebruikte diensten";
+$StudentsTracking = "Studentenopvolging";
+$CourseTracking = "Cursusopvolging";
+$LinksMostClicked = "Meest bezochte links";
+$DocumentsMostDownloaded = "Meest gedownloade documenten";
+$LearningPathDetails = "Details van het leerpad";
 ?>

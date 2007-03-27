@@ -8,8 +8,8 @@ $Objectives = "Obiettivi e Competenze";
 $ObjectivesInformation = "Presentazione degli obiettivi generali e specifici del corso e delle competenze ottenibili.";
 $ObjectivesQuestions = "Cosa saranno in grado di fare i corsisti alla fine del corso? Cosa dovranno produrre durante il corso?";
 $Topics = "Contenuti";
-$TopicsInformation = "Presentazione dei contenuti del corso, della struttura dei contenuti, del loro livello di difficoltà, della progressione.";
-$TopicsQuestions = "Quale sarà la sequenza degli argomenti?  Quale sarà la progressione dei contenuti? A quali punti si dovrà prestare una particolare attenzione?  Ci sono difficoltà di comprensione bene identificate? Quanto tempo bisognerà dedicare alle diverse parti del corso?
+$TopicsInformation = "Presentazione degli argomenti del corso, dell\'elenco dei contenuti, del loro livello di importanza e di difficoltà, della sequenza didattica e del collegamento tra le diverse parti";
+$TopicsQuestions = "Quale sarà la sequenza degli argomenti? A quali punti si dovrà prestare una particolare attenzione?  Ci sono difficoltà di comprensione bene identificate? Quanto tempo bisognerà dedicare alle diverse parti del corso?
 
 ";
 $Methodology = "Metodologia";

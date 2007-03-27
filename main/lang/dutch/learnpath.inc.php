@@ -155,7 +155,7 @@ $NewQuiz = "Nieuwe kwis";
 $CreateTheForum = "Toevoegen van een forum";
 $AddLpIntro = "<strong>Welkom</strong> bij het Dokeos Leerpad auteursgedeelte";
 $AddLpIntro = "<strong>Welkom</strong> bij het Dokeos Leerpad auteursgedeelte.<br> Je leert stap voor stap een leerpad aanmaken. De structuur van jouw leerpad zal verschijnen in een menu langs de linkerzijde van het venster.";
-$AddLpToStart = "Om te starten, geef een titl voor uw leerpad";
+$AddLpToStart = "Om te starten, geef een titel voor uw leerpad";
 $CreateTheLink = "Importeer een link";
 $MoveCurrentLink = "Verplaats de huidig link";
 $EditCurrentLink = "Wijzig huidige link";
@@ -167,4 +167,6 @@ $PreventMultipleAttempts = "Sta geen meerdere pogingen toe";
 $MakeScormRecordingExtra = "Voeg extra SCROM evenementen toe";
 $MakeScormRecordingNormal = "Gebruik normale SCORM functies";
 $DocumentHasBeenDeleted = "Het document kan niet getoond worden omdat het verwijderd is.";
+$EditCurrentForum = "Wijzig het huidige forum";
+$NoPrerequisites = "Geen vereisten";
 ?>

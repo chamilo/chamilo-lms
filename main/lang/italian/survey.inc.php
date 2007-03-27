@@ -154,4 +154,5 @@ $Yesno = "Sì / No";
 $Multiplechoice = "Scelta multipla";
 $Multiplechoice = "Scelta multipla";
 $Multipleresponse = "Risposta multipla";
+$Score = "Punteggio";
 ?>

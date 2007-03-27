@@ -574,7 +574,6 @@ $UserUpdated = "Informazioni utente aggiornate";
 $HomePageFilesNotReadable = "I documenti della pagina iniziale non hanno permessi di lettura";
 $DateStartMoreThanDateEnd = "Data d\'inizio successiva a quella di conclusione";
 $Choose = "Scegli";
-$NoUsersInCourse = "Il corso non ha utenti";
 $ModifySessionCourse = "Modifica la sessione del corso";
 $CourseSessionList = "Elenco dei corsi della sessione";
 $SelectACoach = "Seleziona un tutor";

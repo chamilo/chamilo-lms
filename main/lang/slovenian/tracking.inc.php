@@ -195,4 +195,9 @@ $AvgStudentsProgress = "Povpreèen napredek kandidatov";
 $AvgStudentsScore = "Povpreèen rezultat kandidatov";
 $AvgMessages = "Sporoèil na kandidata";
 $AvgAssignments = "Objav teèajnikov na kandidata";
+$ToolsMostUsed = "Najveèkrat uporabljena orodja";
+$StudentsTracking = "Sledenje kandidatov";
+$CourseTracking = "Sledenje teèaja";
+$LinksMostClicked = "Najveèkrat uporabljene povezave";
+$DocumentsMostDownloaded = "Najveèkrat preneseni dokumenti";
 ?>

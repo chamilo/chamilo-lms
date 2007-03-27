@@ -574,7 +574,6 @@ $UserUpdated = "Uporabnik je bil ažuriran";
 $HomePageFilesNotReadable = "Datoteke domaèe strani niso bralne";
 $DateStartMoreThanDateEnd = "Zaèetni datum je kasnejši od konènega";
 $Choose = "Izberi";
-$NoUsersInCourse = "V teèaju ni uporabnikov";
 $ModifySessionCourse = "Spremeni teèaj seje";
 $CourseSessionList = "Seznam teèajev seje";
 $SelectACoach = "Izberi uèitelja (coach-a)";

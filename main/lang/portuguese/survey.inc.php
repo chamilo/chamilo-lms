@@ -154,4 +154,5 @@ $Yesno = "Sim / Não";
 $Multiplechoice = "Escolha múltipla";
 $Multiplechoice = "Escolha múltipla";
 $Multipleresponse = "Respostas múltiplas";
+$Score = "Pontuação";
 ?>

@@ -556,7 +556,6 @@ $UserUpdated = "Felhasználó frissítve";
 $HomePageFilesNotReadable = "A honlap fájlai nem olvashatóak!";
 $DateStartMoreThanDateEnd = "A kezd&#337;dátum a végdátum után áll";
 $Choose = "Válassz!";
-$NoUsersInCourse = "Nincsenek felhasználók a kurzusban";
 $SelectACoach = "Tréner választása";
 $UserNameUsedTwice = "A felhasználónév kétszer használt";
 $UserNameNotAvailable = "Ez a felhasználónév nem hozzáférhet&#337;";

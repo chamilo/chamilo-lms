@@ -353,7 +353,6 @@ $Version = "Verze";
 $Header = "Záhlaví";
 $WCAGContent = "Text";
 $RegistrationDate = "Datum registrace";
-$NoUsersInCourse = "Žádný uživatelé v kurzu";
 $FileImported = "Soubor byl naimportován";
 $CourseDoesNotExist = "Tento kurz neexistuje";
 $UserDoesNotExist = "Tenhle uživatel neexistuje";

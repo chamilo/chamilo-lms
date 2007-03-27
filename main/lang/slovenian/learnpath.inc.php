@@ -167,4 +167,6 @@ $PreventMultipleAttempts = "Prepreèi veè poskusov";
 $MakeScormRecordingExtra = "Razširjeno beleženje SCORM(a)";
 $MakeScormRecordingNormal = "Obièajno beleženje SCORM(a)";
 $DocumentHasBeenDeleted = "Ta dokument je bil odstranjen in ga ne morem prikazati";
+$EditCurrentForum = "Uredi trenuten forum";
+$NoPrerequisites = "Brez predzahtev";
 ?>

@@ -200,4 +200,5 @@ $StudentsTracking = "Probationners tracking";
 $CourseTracking = "Course tracking";
 $LinksMostClicked = "Links most visited";
 $DocumentsMostDownloaded = "Documents most downloaded";
+$LearningPathDetails = "Learning path details";
 ?>

@@ -404,6 +404,7 @@ $Vertical = "Vertical";
 $DisplaySearchResults = "Display search results";
 $DisplayAll = "Display all";
 $File_upload = "File upload";
+$NoUsersInCourse = "No users in course";
 $Percentage = "Percentage";
 $Informations = "Informations";
 $EmailDestination = "Receiver";

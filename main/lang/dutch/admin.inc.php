@@ -572,7 +572,6 @@ $UserUpdated = "Gebruiker bijgewerkt";
 $HomePageFilesNotReadable = "Homepage-bestanden zijn niet leesbaar";
 $DateStartMoreThanDateEnd = "Startdatum is later dan de einddatum";
 $Choose = "Kies";
-$NoUsersInCourse = "Geen gebruikers in deze cursus";
 $ModifySessionCourse = "Wijzig de sessie van de cursus";
 $CourseSessionList = "Lijst van de cursussen in deze sessie";
 $SelectACoach = "Slecteer een begeleider";

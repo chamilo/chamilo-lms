@@ -351,4 +351,5 @@ $InCourse = "v kurzu";
 $UserOnlineListSession = "Seznam student&#367; aktualn&#283; p&#345;ihlá&#353;ených - Výuka";
 $From = "od";
 $To = "komu";
+$NoUsersInCourse = "Žádný uživatelé v kurzu";
 ?>

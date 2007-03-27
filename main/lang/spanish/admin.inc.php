@@ -577,7 +577,6 @@ $UserUpdated = "Usuario actualizado";
 $HomePageFilesNotReadable = "Los ficheros de la página principal no son legibles";
 $DateStartMoreThanDateEnd = "La fecha de inicio es posterior a la fecha de finalización";
 $Choose = "Seleccione";
-$NoUsersInCourse = "Este curso no tiene usuarios";
 $ModifySessionCourse = "Modificar la sesión del curso";
 $CourseSessionList = "Lista de los cursos de la sesión";
 $SelectACoach = "Seleccionar un tutor";

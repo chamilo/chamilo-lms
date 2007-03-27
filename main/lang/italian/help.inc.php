@@ -241,8 +241,8 @@ di informazioni e funzioni:
 <ul><li><b>Modifica</b> per modificare manualmente il Nome del Gruppo, la Descrizione, l\'indicazione del Tutor, l\'elenco dei Partecipanti.</li>
 <li><b>Eliminare</b> per eliminare un gruppo.</li></ul>
 <hr noshade size=1>";
-$langHExercise = "\'Esercizi\'";
-$langExerciseContent = "<p>Lo strumento \'Esercizi\' consente di creare esercizi composti dal numero prescelto di domande.<br><br>
+$langHExercise = "Verifiche";
+$langExerciseContent = "<p>Lo strumento \'Verifiche\' consente di creare test composti dal numero prescelto di quesiti.<br><br>
 
 Sono disponibili varie tipologie di risposte per la creazione dei vostri quesiti:<br><br>
 <ul>
@@ -251,12 +251,12 @@ Sono disponibili varie tipologie di risposte per la creazione dei vostri quesiti
   <li>Accoppiamento</li>
   <li>Riempire gli spazi</li>
 </ul>
-Un esercizio riunisce un certo numero di quesiti sotto un comune denominatore.</p>
+Un test riunisce un certo numero di quesiti sotto un comune denominatore.</p>
 <hr>
-<b>Creazione di un esercizio</b>
-<p>Per creare un esercizio, utilizzate il pulsante \"Nuovo esercizio\".<br><br>
-Digitate il nome dell\'esercizio, ed inseritene eventualmente la descrizione.<br><br>
-Si può scegliere tra due tipologie di esercizi :<br><br>
+<b>Creazione di un test</b>
+<p>Per creare un test, utilizzate il pulsante \"Nuovo test\".<br><br>
+Digitate il nome del test, ed inseritene eventualmente la descrizione.<br><br>
+Si può scegliere tra due tipologie di test :<br><br>
 <ul>
   <li>Domande \'su pagina unica\'</li>
   <li>Una domanda per pagina (sequenziale)</li>

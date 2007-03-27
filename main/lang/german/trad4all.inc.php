@@ -404,6 +404,7 @@ $Vertical = "vertikal";
 $DisplaySearchResults = "Suchergebnisse anzeigen";
 $DisplayAll = "Alle anzeigen";
 $File_upload = "Datei hochladen";
+$NoUsersInCourse = "Keine Benutzer im Kurs";
 $Percentage = "Prozentsatz";
 $Informations = "Informationen";
 $EmailDestination = "E-Mail Empfänger";
@@ -412,4 +413,7 @@ $EmailTitle = "E-Mail Titel";
 $EmailText = "E-Mail Nachricht";
 $Send = "Abschicken";
 $ModifyRecipientList = "Empfängerliste ändern";
+$NoLinkVisited = "Kein besuchter Link";
+$NoDocumentDownloaded = "Kein Dokument herunter geladen";
+$Clicks = "Klicks";
 ?>

@@ -573,7 +573,6 @@ $UserUpdated = "User updated";
 $HomePageFilesNotReadable = "Homepage files are not readable";
 $DateStartMoreThanDateEnd = "Start date is after end date";
 $Choose = "Choose";
-$NoUsersInCourse = "No users in course";
 $ModifySessionCourse = "Modify session course";
 $CourseSessionList = "Session courses list";
 $SelectACoach = "Select a coach";

@@ -404,6 +404,7 @@ $Vertical = "Vertikaal";
 $DisplaySearchResults = "Zoekresultaten weergeven";
 $DisplayAll = "Alles weergeven";
 $File_upload = "Bestand upload";
+$NoUsersInCourse = "Geen gebruikers in deze cursus";
 $Percentage = "Percentage";
 $Informations = "Informatie";
 $EmailDestination = "Bestemmeling";
@@ -412,4 +413,7 @@ $EmailTitle = "Titel van de email";
 $EmailText = "Inhoud van de email";
 $Send = "Versturen";
 $ModifyRecipientList = "Wijzig de lijst van ontvangers";
+$NoLinkVisited = "Geen link bezocht";
+$NoDocumentDownloaded = "Geen document gedownloaded";
+$Clicks = "klikken";
 ?>

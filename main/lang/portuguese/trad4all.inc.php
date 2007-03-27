@@ -404,6 +404,7 @@ $Vertical = "Vertical";
 $DisplaySearchResults = "Mostrar resultados da pesquisa";
 $DisplayAll = "Mostrar todas";
 $File_upload = "Carregamento de ficheiro";
+$NoUsersInCourse = "Curso sem utilizadores";
 $Percentage = "Percentagem";
 $Informations = "Informações";
 $EmailDestination = "Destinatário";
@@ -412,4 +413,7 @@ $EmailTitle = "Assunto do email";
 $EmailText = "Conteúdo do email";
 $Send = "Enviar";
 $ModifyRecipientList = "Modificar lista de destinatários";
+$NoLinkVisited = "Nenhuma ligação visitada";
+$NoDocumentDownloaded = "Nenhum documento descarregado";
+$Clicks = "Cliques";
 ?>

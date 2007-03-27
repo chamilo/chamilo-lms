@@ -404,6 +404,7 @@ $Vertical = "Vertical";
 $DisplaySearchResults = "Exibe resultados da busca";
 $DisplayAll = "Mostra todos";
 $File_upload = "Envio de arquivo";
+$NoUsersInCourse = "Curso sem usuários";
 $Percentage = "Porcentagem";
 $Informations = "Informações";
 $EmailDestination = "Destinatário";

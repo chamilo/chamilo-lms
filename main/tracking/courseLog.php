@@ -45,6 +45,19 @@ $language_file[] = 'tracking';
 $language_file[] = 'scorm';
 
 include('../inc/global.inc.php');
+
+
+$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin;
+
+if(!$is_allowedToTrack)
+{
+	Display :: display_header();
+	api_not_allowed();
+	Display :: display_footer();
+}
+
+
+
 //includes for SCORM and LP
 require_once('../newscorm/learnpath.class.php');
 require_once('../newscorm/learnpathItem.class.php');
@@ -54,6 +67,8 @@ require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
+
+
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 if($export_csv)
@@ -119,8 +134,6 @@ $nameTools = get_lang('Tracking');
 Display::display_header($nameTools, "Tracking");
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 include("../resourcelinker/resourcelinker.inc.php");
-
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin;
 
 
  

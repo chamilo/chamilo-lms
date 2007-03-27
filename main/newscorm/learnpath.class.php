@@ -5597,138 +5597,138 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	
 		$return = '<div style="margin:3px 10px;">';
 			
-			if($id != 0 && is_array($extra_info))
-				$parent = $extra_info['parent_item_id'];
-			else
-				$parent = 0;
-			
-			$sql = "
-				SELECT *
-				FROM " . $tbl_lp_item . "
-				WHERE
-					lp_id = " . $this->lp_id;
-			
-			if($item_type == 'module')
-				$sql .= " AND parent_item_id = 0";
-			
-			$result = api_sql_query($sql, __FILE__, __LINE__);
-			
-			$arrLP = array();
-			
-			while($row = Database::fetch_array($result))
-			{
-				$arrLP[] = array(
-					'id' => $row['id'],
-					'item_type' => $row['item_type'],
-					'title' => $row['title'],
-					'path' => $row['path'],
-					'description' => $row['description'],
-					'parent_item_id' => $row['parent_item_id'],
-					'previous_item_id' => $row['previous_item_id'],
-					'next_item_id' => $row['next_item_id'],
-					'display_order' => $row['display_order']);
-			}
-			
-			$this->tree_array($arrLP);
-			
-			$arrLP = $this->arrMenu;
-			
-			unset($this->arrMenu);
-			
-			$return .= '<p class="lp_title">' . $title . '</p>' . "\n";
+		if($id != 0 && is_array($extra_info))
+			$parent = $extra_info['parent_item_id'];
+		else
+			$parent = 0;
+		
+		$sql = "
+			SELECT *
+			FROM " . $tbl_lp_item . "
+			WHERE
+				lp_id = " . $this->lp_id;
+		
+		if($item_type == 'module')
+			$sql .= " AND parent_item_id = 0";
+		
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		
+		$arrLP = array();
+		
+		while($row = Database::fetch_array($result))
+		{
+			$arrLP[] = array(
+				'id' => $row['id'],
+				'item_type' => $row['item_type'],
+				'title' => $row['title'],
+				'path' => $row['path'],
+				'description' => $row['description'],
+				'parent_item_id' => $row['parent_item_id'],
+				'previous_item_id' => $row['previous_item_id'],
+				'next_item_id' => $row['next_item_id'],
+				'display_order' => $row['display_order']);
+		}
+		
+		$this->tree_array($arrLP);
+		
+		$arrLP = $this->arrMenu;
+		
+		unset($this->arrMenu);
+		
+		$return .= '<p class="lp_title">' . $title . '</p>' . "\n";
 
-			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-			
-			$form = new FormValidator('form','POST',$_SERVER["PHP_SELF"]."?".$_SERVER["QUERY_STRING"]);
-			
-			$defaults["title"]=$item_title;
-			$defaults["description"]=$item_description;
-			
-			$form->addElement('html',$return);
-						
-			//$arrHide = array($id);
-			
-			$arrHide[0]['value']=$this->name;
-			$arrHide[0]['padding']=3;
-			
-			if($item_type != 'module' && $item_type != 'dokeos_module')
-			{
-				for($i = 0; $i < count($arrLP); $i++)
-				{
-					if($action != 'add'){
-						if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
-							$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
-							$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
-							if($parent == $arrLP[$i]['id']){
-								$s_selected_parent=$arrHide[$arrLP[$i]['id']];
-							}
-						}
-					}
-					else{
-						if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter'){
-							$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
-							$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
-							if($parent == $arrLP[$i]['id']){
-								$s_selected_parent=$arrHide[$arrLP[$i]['id']];
-							}
-						}
-					}
-				}
-				
-				$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
-
-				foreach($arrHide as $key => $value){
-					$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
-				}
-				$parent_select -> setSelected($s_selected_parent);
-				
-			}
-			
-			reset($arrLP);
-			
-			$arrHide=array();
-
-			//POSITION
+		require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+		
+		$form = new FormValidator('form','POST',$_SERVER["PHP_SELF"]."?".$_SERVER["QUERY_STRING"]);
+		
+		$defaults["title"]=$item_title;
+		$defaults["description"]=$item_description;
+		
+		$form->addElement('html',$return);
+					
+		//$arrHide = array($id);
+		
+		$arrHide[0]['value']=$this->name;
+		$arrHide[0]['padding']=3;
+		
+		if($item_type != 'module' && $item_type != 'dokeos_module')
+		{
 			for($i = 0; $i < count($arrLP); $i++)
 			{
-				if($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id)
-				{
-					if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
-						$s_selected_position=$arrLP[$i]['id'];
-					elseif($action == 'add')
-						$s_selected_position=$arrLP[$i]['id'];
-					
-					$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title']));
-					
+				if($action != 'add'){
+					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
+						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
+						if($parent == $arrLP[$i]['id']){
+							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
+						}
+					}
+				}
+				else{
+					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter'){
+						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
+						if($parent == $arrLP[$i]['id']){
+							$s_selected_parent=$arrHide[$arrLP[$i]['id']];
+						}
+					}
 				}
 			}
 			
-			$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
-			
-			$position->addOption(get_lang('FirstPosition'),$key,'style="padding-left:'.$value['padding'].'px;"');
+			$parent_select = &$form->addElement('select', 'parent', get_lang("Parent")." :", '', 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;" onchange="load_cbo(this.value);"');
+
 			foreach($arrHide as $key => $value){
-				$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
+				$parent_select->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 			}
-			if(empty($s_selected_position))
-			$position -> setSelected($s_selected_position);
-			reset($arrLP);
+			$parent_select -> setSelected($s_selected_parent);
 			
-			if($action != 'move'){
-				$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
-				$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
+		}
+		
+		reset($arrLP);
+		
+		$arrHide=array();
+
+		//POSITION
+		for($i = 0; $i < count($arrLP); $i++)
+		{
+			if($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id)
+			{
+				if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+					$s_selected_position=$arrLP[$i]['id'];
+				elseif($action == 'add')
+					$s_selected_position=$arrLP[$i]['id'];
+				
+				$arrHide[$arrLP[$i]['id']]['value']=get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title']));
 				
 			}
+		}
+		
+		$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
+		
+		$position->addOption(get_lang('FirstPosition'),$key,'style="padding-left:'.$value['padding'].'px;"');
+		foreach($arrHide as $key => $value){
+			$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
+		}
+		if(empty($s_selected_position))
+		$position -> setSelected($s_selected_position);
+		reset($arrLP);
+		
+		if($action != 'move'){
+			$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
+			//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 			
-			$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
-			
-			if($item_type == 'module' || $item_type == 'dokeos_module')
-			{
-				$form->addElement('hidden', 'parent', '0');
-			}
-			
-			
-			$form->addElement('hidden', 'type', 'dokeos_'.$item_type);
-			$form->addElement('hidden', 'post_time', time());
+		}
+		
+		$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
+		
+		if($item_type == 'module' || $item_type == 'dokeos_module')
+		{
+			$form->addElement('hidden', 'parent', '0');
+		}
+		
+		
+		$form->addElement('hidden', 'type', 'dokeos_'.$item_type);
+		$form->addElement('hidden', 'post_time', time());
 			
 		$form->addElement('html','</div>');
 		

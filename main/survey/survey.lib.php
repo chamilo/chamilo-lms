@@ -670,6 +670,7 @@ class survey_manager
 	{
 		// table definitions
 		$table_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
+		$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 
 		// first we have to get the shared_question_id
 		$question_data = survey_manager::get_question($question_id);
@@ -678,8 +679,9 @@ class survey_manager
 		$sql = "DELETE FROM $table_survey_question WHERE question_id='".Database::escape_string($question_data['shared_question_id'])."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
-		// deleting the options of the question of the survey
-		// survey_manager::delete_shared_survey_question_option($survey_id, $question_id, $shared);
+		// deleting the options of the question of the survey question
+		$sql = "DELETE FROM $table_survey_question_option WHERE question_id='".Database::escape_string($question_data['shared_question_id'])."'";
+		$res = api_sql_query($sql, __FILE__, __LINE__);
 	}
 
 	/******************************************************************************************************

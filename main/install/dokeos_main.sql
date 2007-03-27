@@ -679,9 +679,9 @@ UNLOCK TABLES;
 CREATE TABLE `shared_survey` (
   `survey_id` int(10) unsigned NOT NULL auto_increment,
   `code` varchar(20) default NULL,
-  `title` varchar(80) default NULL,
-  `subtitle` varchar(80) default NULL,
-  `author` varchar(20) default NULL,
+  `title` text default NULL,
+  `subtitle` text default NULL,
+  `author` varchar(250) default NULL,
   `lang` varchar(20) default NULL,
   `template` varchar(20) default NULL,
   `intro` text,
@@ -707,6 +707,7 @@ CREATE TABLE `shared_survey_question` (
   `display` varchar(10) NOT NULL default '',
   `sort` int(11) NOT NULL default '0',
   `code` varchar(40) NOT NULL default '',
+  `max_value` int(11) NOT NULL default '',
   PRIMARY KEY  (`question_id`)
 );
 

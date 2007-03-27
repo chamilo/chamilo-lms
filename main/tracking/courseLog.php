@@ -53,6 +53,14 @@ require_once('../newscorm/scormItem.class.php');
 require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
+
+$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+if($export_csv)
+{
+	ob_start();
+}
+$csv_content = array();
 
 // charset determination
 if ($_GET['scormcontopen'])
@@ -150,9 +158,13 @@ else
 		  </div>';
 }
 echo '<div style="float:right; clear:right">
-		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-		<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-	  </div>';
+		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
+if($_GET['studentlist'] == 'false'){	
+	echo '<a href="'.$_SERVER['PHP_SELF'].'?export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a></div>';
+}
+else{
+	echo '<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a></div>';
+}
 echo '<div class="clear"></div>';
 if($_GET['studentlist'] == 'false')
 {
@@ -178,12 +190,21 @@ if($_GET['studentlist'] == 'false')
 			LIMIT 0, 3";
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
 	
+	 if($export_csv){
+    	$temp=array(get_lang('ToolsMostUsed'),'');
+    	$csv_content[] = $temp;
+    }
+	
 	while ($row = mysql_fetch_array($rs))
 	{
 		echo '	<tr>
 					<td>'.get_lang(ucfirst($row['access_tool'])).'</td>
 					<td align="right">'.$row['count_access_tool'].' '.get_lang('Clicks').'</td>
 				</tr>';
+		if($export_csv){
+			$temp=array(get_lang(ucfirst($row['access_tool'])),$row['count_access_tool'].' '.get_lang('Clicks'));
+			$csv_content[] = $temp;
+		}
 	}
 	
 	echo '</table></div>';
@@ -208,6 +229,13 @@ if($_GET['studentlist'] == 'false')
 			ORDER BY count_visits DESC
 			LIMIT 0, 3";
     $rs = api_sql_query($sql, __FILE__, __LINE__);
+    
+    if($export_csv){
+    	$temp=array(get_lang('LinksMostClicked'),'');
+    	$csv_content[] = array('','');
+    	$csv_content[] = $temp;
+    }
+    
     if(mysql_num_rows($rs)>0)
     {
 	    while($row = mysql_fetch_array($rs))
@@ -216,11 +244,19 @@ if($_GET['studentlist'] == 'false')
 						<td>'.$row['title'].'</td>
 						<td align="right">'.$row['count_visits'].' '.get_lang('Clicks').'</td>
 					</tr>';
+			if($export_csv){
+				$temp=array($row['title'],$row['count_visits'].' '.get_lang('Clicks'));
+				$csv_content[] = $temp;
+			}
 	    }
     }
     else
     {
     	echo '<tr><td>'.get_lang('NoLinkVisited').'</td></tr>';
+    	if($export_csv){
+    		$temp=array(get_lang('NoLinkVisited'),'');
+			$csv_content[] = $temp;
+    	}
     }
 	echo '</table></div>';
 	
@@ -245,6 +281,13 @@ if($_GET['studentlist'] == 'false')
 			ORDER BY count_down DESC
 			LIMIT 0, 3";
     $rs = api_sql_query($sql, __FILE__, __LINE__);
+    
+    if($export_csv){
+    	$temp=array(get_lang('DocumentsMostDownloaded'),'');
+    	$csv_content[] = array('','');
+    	$csv_content[] = $temp;
+    }
+    
     if(mysql_num_rows($rs)>0)
     {
 	    while($row = mysql_fetch_array($rs))
@@ -253,11 +296,20 @@ if($_GET['studentlist'] == 'false')
 						<td>'.$row['down_doc_path'].'</td>
 						<td align="right">'.$row['count_down'].' '.get_lang('Clicks').'</td>
 					</tr>';
+					
+			if($export_csv){
+				$temp=array($row['down_doc_path'],$row['count_down'].' '.get_lang('Clicks'));
+				$csv_content[] = $temp;
+			}
 	    }
     }
     else
     {
     	echo '<tr><td>'.get_lang('NoDocumentDownloaded').'</td></tr>';
+    	if($export_csv){
+    		$temp=array(get_lang('NoDocumentDownloaded'),'');
+			$csv_content[] = $temp;
+    	}
     }
 	echo '</table></div>';
 	
@@ -278,6 +330,12 @@ if($_GET['studentlist'] == 'false')
 			FROM ".$tbl_learnpath_main." AS lp";
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
 	
+	if($export_csv){
+    	$temp=array(get_lang('AverageProgressInLearnpath'),'');
+    	$csv_content[] = array('','');
+    	$csv_content[] = $temp;
+    }
+	
 	if(mysql_num_rows($rs)>0)
 	{
 		while($lp = mysql_fetch_array($rs))
@@ -296,11 +354,19 @@ if($_GET['studentlist'] == 'false')
 				$lp_avg_progress = $lp_avg_progress / $nbStudents;
 			}
 			echo '<tr><td>'.$lp['name'].'</td><td align="right">'.$lp_avg_progress.' %</td></tr>';
+			if($export_csv){
+				$temp=array($lp['name'],$lp_avg_progress);
+				$csv_content[] = $temp;
+			}
 		}
 	}
 	else
 	{
 		echo '<tr><td>'.get_lang('NoLearningPath').'</td></tr>';
+		if($export_csv){
+    		$temp=array(get_lang('NoLearningPath'),'');
+			$csv_content[] = $temp;
+    	}
 	}
 	
 	echo '</table></div>';
@@ -322,6 +388,12 @@ if($_GET['studentlist'] == 'false')
 	$sql = "SELECT id, title
 			FROM ".Database :: get_course_table(TABLE_QUIZ_TEST);
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	
+	if($export_csv){
+    	$temp=array(get_lang('AverageProgressInLearnpath'),'');
+    	$csv_content[] = array('','');
+    	$csv_content[] = $temp;
+    }
 	
 	if(mysql_num_rows($rs)>0)
 	{
@@ -346,15 +418,29 @@ if($_GET['studentlist'] == 'false')
 				$quiz_avg_score = $quiz_avg_score / $nb_attempts;
 			
 			echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.$quiz_avg_score.' %</td></tr>';
+			if($export_csv){
+				$temp=array($quiz['title'],$quiz_avg_score);
+				$csv_content[] = $temp;
+			}
 		}
 	}
 	else
 	{
 		echo '<tr><td>'.get_lang('NoExercises').'</td></tr>';
+		if($export_csv){
+    		$temp=array(get_lang('NoExercises'),'');
+			$csv_content[] = $temp;
+    	}
 	}
 	
 	echo '</table></div>';
 	
+	// send the csv file if asked
+	if($export_csv)
+	{
+		ob_end_clean();
+		Export :: export_table_csv($csv_content, 'reporting_course_tracking');
+	}
 	
 }
 // else display student list with all the informations

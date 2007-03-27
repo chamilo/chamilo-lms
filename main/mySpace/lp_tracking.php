@@ -119,5 +119,7 @@ $list = learnpath :: get_flat_ordered_items_list($lp_id);
 $origin = 'tracking';
 
 include_once('../newscorm/lp_stats.php');
+
+Display :: display_footer();
 ?>
 

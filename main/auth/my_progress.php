@@ -5,6 +5,7 @@ $language_file = array('registration','tracking');
 $cidReset = true;
 
 require ('../inc/global.inc.php');
+require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
 
 $nameTools=get_lang('MyProgress');
 
@@ -36,7 +37,7 @@ $tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_stats_lastaccess 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-$tbl_stats_exercices 		= Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICES_TABLE);
+$tbl_stats_exercices 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $tbl_course_lp_view 		= Database :: get_course_table('lp_view');
 $tbl_course_lp_view_item 	= Database :: get_course_table('lp_item_view');
 $tbl_course_lp 				= Database :: get_course_table('lp');
@@ -207,22 +208,8 @@ foreach($Courses as $enreg)
 	{
 		$lastConnexion = get_lang('NoConnexion');
 	}
-	$sqlProgress = "SELECT COUNT(DISTINCT item_view.lp_item_id) AS nbItem
-					FROM ".$enreg['db_name'].".".$tbl_course_lp_view_item." AS item_view
-					INNER JOIN ".$enreg['db_name'].".".$tbl_course_lp_view." AS view
-						ON view.user_id = ".$_user['user_id']."
-					WHERE item_view.status = 'completed'
-					";
-	$resultProgress = api_sql_query($sqlProgress);
-	$a_nbItem = mysql_fetch_array($resultProgress);
 
-	$table = $enreg['db_name'].'.'.$tbl_course_lp_item;
-	$nbTotalItem = Database :: count_rows($table);
-
-	$totalItem = $totalItem + $nbTotalItem;
-	$totalProgress = $totalProgress + $a_nbItem['nbItem'];
-
-	$progress = round(($a_nbItem['nbItem'] * 100)/$nbTotalItem);
+	$progress = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
 
 	/*$time = $lastAccessTms - $firstAccessTms;
 
@@ -273,7 +260,7 @@ foreach($Courses as $enreg)
   	</td>
 
   	<td align='center'>
-		<a href="<?php echo $SERVER['PHP_SELF']; ?>?course=<?php echo $enreg['code']; ?>"> -> </a>
+		<a href="<?php echo $SERVER['PHP_SELF']; ?>?id_session=<?php echo $id_session ?>&course=<?php echo $enreg['code']; ?>"> -> </a>
   	</td>
 </tr>
 
@@ -283,62 +270,7 @@ foreach($Courses as $enreg)
 
 	$i=$i ? 0 : 1;
 }
-
-unset($Courses);
-
-/*if($totalTime >= 60)
-{
-	 $minute = round($totalTime / 60);
-
-	if($minute >= 60)
-	{
-		$heure = round($minute / 60);
-		$minute = $minute - round((60*(($time/60)/60)));
-		if($minute == 0)
-		{
-			$minute = '00';
-		}
-
-	}
-	else
-	{
-		$heure = 0;
-	}
-
-	$totalTemps = $heure.'h'.$minute;
-}
-else
-{
-	$totalTemps = '0h00';
-}*/
-
-$totalPourcentageScore = round(($totalScore*100)/$totalWeighting);
-$progress = round(($totalProgress*100)/$totalItem);
-
 ?>
-<tr class='total'>
-  	<td>
-		<strong><?php echo get_lang('Total'); ?></strong>
-  	</td>
-
-  	<td align='center'>
-		<?php echo $totalTemps; ?>
-  	</td>
-
-  	<td align='center'>
-		<?php echo $progress.'%'; ?>
-  	</td>
-
-  	<td align='center'>
-		<?php echo $totalPourcentageScore.'%'; ?>
-  	</td>
-
-  	<td>
-  	</td>
-
-  	<td>
-  	</td>
-</tr>
 </table>
 
 <br/><br/>
@@ -398,19 +330,33 @@ $progress = round(($totalProgress*100)/$totalItem);
 											ON item_view.lp_view_id = view.id
 											AND view.lp_id = ".$a_learnpath['id']."
 											AND view.user_id = ".$_user['user_id']."
-										WHERE item_view.status = 'completed'
+										WHERE item_view.status = 'completed' OR item_view.status = 'passed'
 										";
 						$resultProgress = api_sql_query($sqlProgress);
 						$a_nbItem = mysql_fetch_array($resultProgress);
 
 						$sqlTotalItem = "	SELECT	COUNT(item_type) AS totalItem
 											FROM ".$a_infosCours['db_name'].".".$tbl_course_lp_item."
-											WHERE lp_id = ".$a_learnpath['id']
+											WHERE lp_id = ".$a_learnpath['id']."
+											AND item_type != 'chapter'
+											AND item_type != 'dokeos_chapter'
+											AND item_type != 'dir'"
 										;
 						$resultItem = api_sql_query($sqlTotalItem);
 						$a_totalItem = mysql_fetch_array($resultItem);
 
 						$progress = round(($a_nbItem['nbItem'] * 100)/$a_totalItem['totalItem']);
+						
+						
+						// calculates last connection time
+						$sql = 'SELECT MAX(start_time) 
+									FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
+									INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
+										ON item_view.lp_view_id = view.id
+										AND view.lp_id = '.$a_learnpath['id'].'
+										AND view.user_id = '.$_user['user_id'];
+						$rs = api_sql_query($sql, __FILE__, __LINE__);
+						$start_time = mysql_result($rs, 0, 0);
 
 
 						echo "<tr>
@@ -427,7 +373,7 @@ $progress = round(($totalProgress*100)/$totalItem);
 						echo "	</td>
 								<td align='center'>
 							 ";
-						echo		"unknown";
+						echo		date('Y-m-d',$start_time);
 						echo "	</td>
 							  </tr>
 							 ";
@@ -451,7 +397,7 @@ $progress = round(($totalProgress*100)/$totalItem);
 			  <th class="head"><?php echo get_lang('Exercices'); ?></th>
 			  <th class="head"><?php echo get_lang('Score'); ?></th>
 			  <th class="head"><?php echo get_lang('Attempts'); ?></th>
-			  <th class="head"><?php echo get_lang('Correction'); ?></th>
+			  <th class="head"><?php echo get_lang('Details'); ?></th>
 			</tr>
 
 			<?php
@@ -472,11 +418,12 @@ $progress = round(($totalProgress*100)/$totalItem);
 					$resultEssais = api_sql_query($sqlEssais);
 					$a_essais = mysql_fetch_array($resultEssais);
 
-					$sqlScore = "SELECT exe_result,exe_weighting
+					$sqlScore = "SELECT exe_id , exe_result,exe_weighting
 								 FROM $tbl_stats_exercices
 								 WHERE exe_user_id = ".$_user['user_id']."
 								 AND exe_cours_id = '".$a_infosCours['code']."'
-								 AND exe_exo_id = ".$a_exercices['id']
+								 AND exe_exo_id = ".$a_exercices['id']."
+								ORDER BY exe_date DESC LIMIT 1"
 									;
 
 					$resultScore = api_sql_query($sqlScore);
@@ -485,6 +432,7 @@ $progress = round(($totalProgress*100)/$totalItem);
 					{
 						$score = $score + $a_score['exe_result'];
 						$weighting = $weighting + $a_score['exe_weighting'];
+						$exe_id = $a_score['exe_id'];
 					}
 					$pourcentageScore = round(($score*100)/$weighting);
 
@@ -504,9 +452,11 @@ $progress = round(($totalProgress*100)/$totalItem);
 							<td align='center'>
 						 ";
 					echo 		$a_essais['essais'];
-					echo "	</td>
-							<td>
-						 ";
+					echo '	</td>
+							<td align="center" width="25">
+						 ';
+					if($a_essais['essais']>0)
+						echo '<a href="../exercice/exercise_show.php?id='.$exe_id.'&cidReq='.$a_infosCours['code'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
 					echo "	</td>
 						  </tr>
 						 ";

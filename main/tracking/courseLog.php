@@ -353,7 +353,7 @@ if($_GET['studentlist'] == 'false')
 			{
 				$lp_avg_progress = $lp_avg_progress / $nbStudents;
 			}
-			echo '<tr><td>'.$lp['name'].'</td><td align="right">'.$lp_avg_progress.' %</td></tr>';
+			echo '<tr><td>'.$lp['name'].'</td><td align="right">'.round($lp_avg_progress,1).' %</td></tr>';
 			if($export_csv){
 				$temp=array($lp['name'],$lp_avg_progress);
 				$csv_content[] = $temp;
@@ -417,7 +417,7 @@ if($_GET['studentlist'] == 'false')
 			if($nb_attempts>0)
 				$quiz_avg_score = $quiz_avg_score / $nb_attempts;
 			
-			echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.$quiz_avg_score.' %</td></tr>';
+			echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.round($quiz_avg_score,1).' %</td></tr>';
 			if($export_csv){
 				$temp=array($quiz['title'],$quiz_avg_score);
 				$csv_content[] = $temp;

@@ -486,6 +486,7 @@ class learnpathItem{
 						case 'html':
 						case 'htm':
 						case 'shtml':
+					 		$wanted_attributes = array('src','url','@import');
 			    			//parse it for included resources
 			    			/*
 			    			$fh = fopen($abs_path,'r');
@@ -506,7 +507,6 @@ class learnpathItem{
 			    			}*/
 							$file_content = file_get_contents($abs_path);
 							//get an array of attributes from the HTML source
-							$wanted_attributes = array('src');
 							$attributes = $this->parse_HTML_attributes($file_content,$wanted_attributes);
 							//look at 'src' attributes in this file
 							if(isset($attributes['src']))
@@ -1076,32 +1076,42 @@ class learnpathItem{
 	    	$reduced = true;
 	    }
 	    if (preg_match_all(
-	            "/(([A-Za-z_:]|[^\\x00-\\x7F])([A-Za-z0-9_:\\.-]|[^\\x00-\\x7F])*)" .
+	            "/(((([A-Za-z_:])([A-Za-z0-9_:\\.-]|[^\\x00-\\x7F])*)" .
 	            "([ \\n\\t\\r]+)?(" .
-	            "(=([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*))" .
+	              "(=([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*))" .
+	              "|" .
+	              "(\\(([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*)\\))" .
+	            "))" .
 	            "|" .
-	            "(\\(([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*)\\))" .
-	            ")?/", 
+	            "(@import([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*)))?/", 
 	            $attrString, 
 	            $regs
 	       )) {
 	        for ($i = 0; $i < count($regs[1]); $i++) {
-	            $name  = trim($regs[1][$i]);
+	            $name  = trim($regs[3][$i]);
 	            $check = trim($regs[0][$i]);
-	            $value = trim($regs[8][$i]);
-	            if(empty($value) and !empty($regs[11][$i]))
+	            $value = trim($regs[10][$i]);
+	            if(empty($value) and !empty($regs[13][$i]))
 	            {
-	            	$value = $regs[11][$i];
+	            	$value = $regs[13][$i];
 	            }
-				if(!$reduced OR in_array(strtolower($name),$wanted))
+	            if(empty($name) && !empty($regs[16][$i]))
 	            {
-		            if ($name == $check) {
-	            		$attributes[strtolower($name)][] = strtolower($name);
-		            } else {
-		                if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {
-		                    $value = substr($value, 1, -1);
-		                }
-		                $attributes[strtolower($name)][] = $value;
+	            	$name = '@import';
+	            	$value = trim($regs[16][$i]);
+	            }
+	            if(!empty($name))
+	            {     
+					if(!$reduced OR in_array(strtolower($name),$wanted))
+		            {
+			            if ($name == $check) {
+		            		$attributes[strtolower($name)][] = strtolower($name);
+			            } else {
+			                if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {
+			                    $value = substr($value, 1, -1);
+			                }
+			                $attributes[strtolower($name)][] = $value;
+			            }
 		            }
 	            }
 	        }

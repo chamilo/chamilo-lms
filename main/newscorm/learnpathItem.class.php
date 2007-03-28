@@ -459,6 +459,110 @@ class learnpathItem{
     	return $this->prevent_reinit;
     }
     /**
+     * Gets the list of included resources as a list of absolute or relative paths of
+     * resources included in the current item. This allows for a better SCORM export.
+     * The list will generally include pictures, flash objects, java applets, or any other
+     * stuff included in the source of the current item. The current item is expected
+     * to be an HTML file. If it is not, then the function will return and empty list.
+     * @return	array	List of file paths. An additional field containing 'local' or 'remote' helps determine if the file should be copied into the zip or just linked
+     */
+    function get_resources_from_source()
+    {
+    	$files_list = array();
+    	$type = $this->get_type();
+    	switch($type)
+    	{
+    		case TOOL_DOCUMENT:
+    			//get the document and, if HTML, open it
+    			$path = $this->get_file_path();
+    			$abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
+    			if(is_file($abs_path))
+    			{
+	    			//for now, read the whole file in one go (that's gonna be a problem when the file is too big)
+					$info = pathinfo($abs_path);
+					$ext = $info['extension'];
+					switch(strtolower($ext))
+					{
+						case 'html':
+						case 'htm':
+						case 'shtml':
+			    			//parse it for included resources
+			    			/*
+			    			$fh = fopen($abs_path,'r');
+			    			if($fh !== false)
+			    			{
+			    				while($line = fread($fh,1024))
+			    				{
+			    					if(preg_match('expression',$line))
+			    					{
+			    						//do something
+			    					}
+			    				}
+			    				$close = fclose($fh);
+			    				if($close === false)
+			    				{
+			    					//do nothing yet
+			    				}	
+			    			}*/
+							$file_content = file_get_contents($abs_path);
+							//get an array of attributes from the HTML source
+							$wanted_attributes = array('src');
+							$attributes = $this->parse_HTML_attributes($file_content,$wanted_attributes);
+							//look at 'src' attributes in this file
+							if(isset($attributes['src']))
+							{
+								//find which kind of path these are (local or remote)
+								$sources = $attributes['src'];
+								foreach($sources as $source)
+								{
+									if(strstr($source,'://') > 0)
+									{
+										//found some protocol there
+										if(strstr($source,api_get_path(WEB_PATH))!==false)
+										{
+											//we found the current portal url
+											$files_list[] = array($source,'local','url');
+										}
+										else
+										{
+											//we didn't find any trace of current portal
+											$files_list[] = array($source,'remote','url');
+										}
+									}
+									else
+									{
+										//no protocol found, make link local
+										if(strstr($source,'/') === 0)
+										{	//link starts with a /, making it absolute (relative to DocumentRoot)
+											$files_list[] = array($source,'local','abs');
+										}
+										else
+										{	//no starting '/', making it relative to current document's path
+											$files_list[] = array($source,'local','rel');
+										}
+									}
+								}
+							}
+							break;
+						default:
+							break;
+					}
+					
+    			}
+    			else
+    			{
+    				//the file could not be found
+    				return false;
+    			}
+    			break;
+    		case TOOL_QUIZ:
+    			break;
+    		default: //ignore
+    			break;
+    	}
+    	return $files_list;
+    }
+    /**
      * Gets the score
      * @return	float	The current score or 0 if no score set yet
      */
@@ -950,6 +1054,48 @@ class learnpathItem{
     	if($this->debug>1){error_log('New LP - End of parse_prereq. Error code is now '.$this->prereq_alert,0);}
     	return false;
     }
+    /**
+	 * Parses the HTML attributes given as string.
+	 * 
+	 * @param    string  HTML attribute string
+	 * @param	 array	 List of attributes that we want to get back
+	 * @return   array   An associative array of attributes
+	 * @author Based on a function from the HTML_Common2 PEAR module
+	 */
+	function parse_HTML_attributes($attrString,$wanted=array())
+	{
+	    $attributes = array();
+	    $regs = array();
+	    $reduced = false;
+	    if(count($wanted)>0)
+	    {
+	    	$reduced = true;
+	    }
+	    if (preg_match_all(
+	            "/(([A-Za-z_:]|[^\\x00-\\x7F])([A-Za-z0-9_:.-]|[^\\x00-\\x7F])*)" .
+	            "([ \\n\\t\\r]+)?(=([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*))?/", 
+	            $attrString, 
+	            $regs
+	       )) {
+	        for ($i = 0; $i < count($regs[1]); $i++) {
+	            $name  = trim($regs[1][$i]);
+	            $check = trim($regs[0][$i]);
+	            $value = trim($regs[7][$i]);
+				if(!$reduced OR in_array(strtolower($name),$wanted))
+	            {
+		            if ($name == $check) {
+	            		$attributes[strtolower($name)][] = strtolower($name);
+		            } else {
+		                if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {
+		                    $value = substr($value, 1, -1);
+		                }
+		                $attributes[strtolower($name)][] = $value;
+		            }
+	            }
+	        }
+	    }
+	    return $attributes;
+	}
     /**
      * Reinits all local values as the learnpath is restarted
      * @return	boolean	True on success, false otherwise	

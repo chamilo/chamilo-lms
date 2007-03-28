@@ -7311,7 +7311,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	//Always call the learnpathItem->scorm_export() method to change it to the SCORM
 	 	//format
 	 	$zip_files = array();
+	 	$zip_files_abs = array();
 	 	foreach($this->items as $index => $item){
+	 		//get included documents from this item
+	 		$inc_docs = $item->get_resources_from_source();
 	 		//give a child element <item> to the <organization> element
 	 		$my_item = $xmldoc->createElement('item');
 	 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
@@ -7339,6 +7342,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 		//get the path of the file(s) from the course directory root
 			$my_file_path = $item->get_file_path();
 			$my_xml_file_path = htmlentities($my_file_path); 
+			$my_sub_dir = dirname($my_file_path); 
+			$my_xml_sub_dir = htmlentities($my_sub_dir);
 	 		//give a <resource> child to the <resources> element
 	 		$my_resource = $xmldoc->createElement('resource');
 	 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
@@ -7351,10 +7356,55 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 		//give a <file> child to the <resource> element
 	 		$my_file = $xmldoc->createElement('file');
 	 		$my_file->setAttribute('href',$my_xml_file_path);
+	 		$my_resource->appendChild($my_file);
+
 	 		//dependency to other files - not yet supported
+	 		$i = 1;
+	 		foreach($inc_docs as $doc_info)
+	 		{
+	 			$my_dep = $xmldoc->createElement('resource');
+	 			$res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
+	 			$my_dep->setAttribute('identifier',$res_id);
+	 			$my_dep->setAttribute('type','webcontent');
+	 			$my_dep->setAttribute('adlc:scormtype','asset');
+	 			$my_dep_file = $xmldoc->createElement('file');
+	 			//check type of URL
+	 			if($doc_info[1] == 'remote')
+	 			{ //remote file. Save url as is
+	 				$my_dep_file->setAttribute('href',$doc_info[0]);
+		 			$my_dep->setAttribute('xml:base','');
+	 			}elseif($doc_info[1] == 'local'){
+	 				switch($doc_info[2])
+	 				{
+	 					case 'url': //local URL - save path as url for now, don't zip file
+			 				$my_dep_file->setAttribute('href',$doc_info[0]);
+				 			$my_dep->setAttribute('xml:base','');
+	 						break;
+	 					case 'abs': //absolute path from DocumentRoot. Save file and leave path as is in the zip
+			 				$my_dep_file->setAttribute('href',$doc_info[0]);
+	 			 			$my_dep->setAttribute('xml:base','');
+	 			 			$zip_files_abs[] = $doc_info[0];
+	 						break;
+	 					case 'rel': //path relative to the current document. Save xml:base as current document's directory and save file in zip as subdir.file_path
+			 				$my_dep_file->setAttribute('href',$doc_info[0]);
+	 			 			$my_dep->setAttribute('xml:base',$my_xml_sub_dir);
+	 			 			$zip_files[] = $my_sub_dir.'/'.$doc_info[0];
+	 						break;
+	 					default:
+			 				$my_dep_file->setAttribute('href',$doc_info[0]);
+	 			 			$my_dep->setAttribute('xml:base','');
+	 						break;
+	 				}
+	 			}
+	 			$my_dep->appendChild($my_dep_file);
+	 			$resources->appendChild($my_dep);
+	 			$dependency = $xmldoc->createElement('dependency');
+	 			$dependency->setAttribute('identifierref',$res_id);
+	 			$my_resource->appendChild($dependency);
+	 			$i++;
+	 		}
 	 		//$my_dependency = $xmldoc->createElement('dependency');
 	 		//$my_dependency->setAttribute('identifierref','');
-	 		$my_resource->appendChild($my_file);
 	 		$resources->appendChild($my_resource);
 	 		
 	 		$zip_files[] = $my_file_path;
@@ -7372,6 +7422,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$this->create_path(api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path);
 			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
 			copy(api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path,api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path);
+			$zip_folder->add(api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,PCLZIP_OPT_REMOVE_PATH, api_get_path('GARBAGE_PATH'));
+		}
+		foreach($zip_files_abs as $file_path)
+		{
+			//error_log('getting document from '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' removing '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/',0);
+			$this->create_path(api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path);
+			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
+			copy(api_get_path('SYS_COURSE_PATH').$file_path,api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path);
 			$zip_folder->add(api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,PCLZIP_OPT_REMOVE_PATH, api_get_path('GARBAGE_PATH'));
 		}
 	 	

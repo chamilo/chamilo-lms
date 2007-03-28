@@ -11,6 +11,7 @@ $language_file = array ('registration', 'index', 'tracking', 'exercice');
  include_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
  include_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
  include_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+ include_once('../newscorm/learnpath.class.php');
  
  
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
@@ -139,6 +140,8 @@ else
 
 if(!empty($_GET['student']))
 {
+	
+	$student_id = intval($_GET['student']);
 	
 	echo '<div align="right">
 		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
@@ -426,29 +429,8 @@ if(!empty($_GET['student']))
 				$i = 0;
 				while($a_learnpath = mysql_fetch_array($resultLearnpath))
 				{
-					$sqlProgress = "SELECT COUNT(DISTINCT lp_item_id) AS nbItem
-									FROM ".$a_infosCours['db_name'].".".$tbl_course_lp_view_item." AS item_view
-									INNER JOIN ".$a_infosCours['db_name'].".".$tbl_course_lp_view." AS view
-										ON item_view.lp_view_id = view.id
-										AND view.lp_id = ".$a_learnpath['id']."
-										AND view.user_id = ".$_GET['student']."
-									WHERE item_view.status = 'completed'
-									OR item_view.status = 'passed'
-									";
-					$resultProgress = api_sql_query($sqlProgress);
-					$a_nbItem = mysql_fetch_array($resultProgress);
-	
-					$sqlTotalItem = "	SELECT	COUNT(item_type) AS totalItem
-										FROM ".$a_infosCours['db_name'].".".$tbl_course_lp_item." 
-										WHERE lp_id = ".$a_learnpath['id']."
-										AND item_type != 'chapter'
-										AND item_type != 'dokeos_chapter'
-										AND item_type != 'dir'"
-									;
-					$resultItem = api_sql_query($sqlTotalItem);
-					$a_totalItem = mysql_fetch_array($resultItem);
 					
-					$progress = round(($a_nbItem['nbItem'] * 100)/$a_totalItem['totalItem']);
+					$progress = learnpath :: get_db_progress($a_learnpath['id'],$student_id, '%',$a_infosCours['db_name']);
 					
 					
 					
@@ -493,7 +475,7 @@ if(!empty($_GET['student']))
 						<?php echo api_time_to_hms($total_time) ?>
 						</td>
 						<td align="center">
-							<?php echo $progress.' %'; ?>
+							<?php echo $progress ?>
 						</td>
 						<td align="center">
 							<?php echo date('Y-m-d',$start_time) ?>

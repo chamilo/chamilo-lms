@@ -2214,9 +2214,9 @@ class learnpath {
      * @param	string	Mode of display ('%','abs' or 'both')
      * @return	integer	Current progress value as found in the database
      */
-    function get_db_progress($lp_id,$user_id,$mode='%'){
+   function get_db_progress($lp_id,$user_id,$mode='%', $course_db=''){
 		//if($this->debug>0){error_log('New LP - In learnpath::get_db_progress()',0);}
-    	$table = Database::get_course_table('lp_view');
+    	$table = Database::get_course_table('lp_view', $course_db);
     	$sql = "SELECT * FROM $table WHERE lp_id = $lp_id AND user_id = $user_id";
     	$res = api_sql_query($sql,__FILE__,__LINE__);
 		$view_id = 0;
@@ -2232,13 +2232,13 @@ class learnpath {
     			return $progress.'%';
     	}else{
     		//get the number of items completed and the number of items total
-    		$tbl = Database::get_course_table('lp_item');
+    		$tbl = Database::get_course_table('lp_item', $course_db);
     		$sql = "SELECT count(*) FROM $tbl WHERE lp_id = ".$lp_id." 
 					AND item_type NOT IN('dokeos_chapter','chapter','dir')";
     		$res = api_sql_query($sql);
     		$row = Database::fetch_array($res);
     		$total = $row[0];
-    		$tbl = Database::get_course_table('lp_item_view');
+    		$tbl = Database::get_course_table('lp_item_view', $course_db);
     		//$sql = "SELECT count(distinct(lp_item_id)) FROM $tbl WHERE lp_view_id = ".$view_id." AND status IN ('passed','completed','succeeded')";
     		//trying as also counting browsed and failed items
     		$sql = "SELECT count(distinct(lp_item_id)) FROM $tbl WHERE lp_view_id = ".$view_id." AND status IN ('passed','completed','succeeded','browsed','failed')";

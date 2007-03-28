@@ -178,33 +178,31 @@ class Tracking {
 		$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW , $a_course['db_name']);
 		$tbl_course_lp_view_item = Database :: get_course_table(TABLE_LP_ITEM_VIEW , $a_course['db_name']);
 		$tbl_course_lp_item = Database :: get_course_table(TABLE_LP_ITEM , $a_course['db_name']);
-		$tbl_course_lp = Database :: get_course_table(TABLE_LP , $a_course['db_name']);
+		$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN , $a_course['db_name']);
 		
-		// get the progress in learning pathes	
-		$sqlProgress = "SELECT COUNT( DISTINCT item_view.lp_item_id ) AS nbItem 
-						FROM ".$tbl_course_lp_view_item." AS item_view 
-						INNER JOIN ".$tbl_course_lp_view." AS lpview 
-							ON lpview.user_id = ".$student_id." 
-						WHERE item_view.status = 'completed' 
-						OR item_view.status = 'passed'
-					   ";
+		//get the list of learning paths
+		$sql = 'SELECT id FROM '.$tbl_course_lp;
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$nb_lp = mysql_num_rows($rs);
+		$avg_progress = 0;
 		
-		$resultProgress = api_sql_query($sqlProgress);
-		$a_nbItem = mysql_fetch_array($resultProgress);
+		if($nb_lp>0)
+		{
+			while($lp = Database :: fetch_array($rs))
+			{
+				// get the progress in learning pathes	
+				$sqlProgress = "SELECT progress
+								FROM ".$tbl_course_lp_view." AS lp_view
+								WHERE lp_view.user_id = ".$student_id." 
+								AND lp_view.lp_id = ".$lp['id']."
+							   ";
+				$resultItem = api_sql_query($sqlProgress, __FILE__, __LINE__);
+				$avg_progress += mysql_result($resultItem, 0, 0);
+			}
+			$avg_progress = round($avg_progress / $nb_lp,1);
+		}
 		
-		
-		$sqlTotalItem = "	SELECT	1
-							FROM ".$tbl_course_lp_item."
-							WHERE item_type != 'chapter'
-							AND item_type != 'dokeos_chapter'
-							AND item_type != 'dir'"
-										;
-		$resultItem = api_sql_query($sqlTotalItem, __FILE__, __LINE__);
-		
-		$totalItem = Database::num_rows($resultItem);
-		$progress = round(($a_nbItem['nbItem'] * 100) / $totalItem);
-		
-		return $progress;
+		return $avg_progress;
 	}
 	
 	function get_avg_student_score($student_id, $course_code)

@@ -14,7 +14,14 @@ include_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once('../newscorm/learnpath.class.php');
 include_once('../newscorm/learnpathItem.class.php');
+require_once (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
 
+$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+if($export_csv)
+{
+	ob_start();
+}
+$csv_content = array();
 
 if(!CourseManager :: is_course_teacher($_user['user_id'], $_GET['course']) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']))
 {
@@ -113,6 +120,11 @@ Display :: display_header($nameTools);
 
 $user_id = intval($_GET['student_id']);
 $lp_id = intval($_GET['lp_id']);
+
+echo '<div align="right">
+			<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
+			<a href="'.$_SERVER['PHP_SELF'].'?export=csv&'.$_SERVER['QUERY_STRING'].'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+		  </div>';
 
 $list = learnpath :: get_flat_ordered_items_list($lp_id);
 

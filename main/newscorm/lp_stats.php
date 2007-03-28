@@ -89,6 +89,17 @@ $total_score = 0;
 $total_max_score = 0;
 $total_time = 0;
 $h = get_lang('h');
+
+if($export_csv)
+{
+	$csv_content[] = array ( 
+							get_lang('ScormLessonTitle'),
+							get_lang('ScormStatus'),
+							get_lang('ScormScore'),
+							get_lang('ScormTime')
+						   );
+}
+
 foreach ($list as $my_item_id) {
 	$extend_this = 0;
 	$qry_order = 'DESC';
@@ -150,7 +161,7 @@ foreach ($list as $my_item_id) {
 			$lesson_status = $row['mystatus'];
 			$score = $row['myscore'];
 			$time_for_total = $row['mytime'];
-			$time = learnpathItem :: get_scorm_time('php', $row['mytime']);
+			$time = learnpathItem :: get_scorm_time('js', $row['mytime']);
 			$type;
 			$scoIdentifier = $row['myid'];
 			if ($score == 0) {
@@ -234,7 +245,7 @@ foreach ($list as $my_item_id) {
 		}
 		//}
 		$time_for_total = $subtotal_time;
-		$time = learnpathItem :: get_scorm_time('php', $subtotal_time);
+		$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 		$scoIdentifier = $row['myid'];
 		$title = $row['mytitle'];
 		$title = stripslashes($title);
@@ -247,7 +258,8 @@ foreach ($list as $my_item_id) {
 			$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
 		}
 		//Remove "NaN" if any (@todo: locate the source of these NaN)
-		$time = str_replace('NaN', '00'.$h.'00\'00"', $time);
+		//$time = str_replace('NaN', '00'.$h.'00\'00"', $time);
+				
 		if (($lesson_status == 'completed') or ($lesson_status == 'passed')) {
 			$color = 'green';
 		} else {
@@ -260,6 +272,16 @@ foreach ($list as $my_item_id) {
 			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4"><div class="mystatus">'.$title.'</div></td>'."\n"
 			//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
 			.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : $score.'/'.$maxscore)."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td>\n"."</tr>\n";
+						
+			if($export_csv)
+			{
+				$temp = array();
+				$temp[] = $title;
+				$temp[] = html_entity_decode($my_lesson_status);
+				$temp[] = ($score == 0 ? '-' : $score.'/'.$maxscore);
+				$temp[] = $time;
+				$csv_content[] = $temp;
+			}
 		}
 
 		$counter ++;
@@ -280,14 +302,16 @@ foreach ($list as $my_item_id) {
 				$counter ++;
 			}
 		}
-
+		
 	}
 	//only sum up the latest attempt each time
 	$total_max_score += $maxscore;
 	$total_score += $score;
 	$total_time += $time_for_total;
 }
-$total_time = learnpathItem :: get_scorm_time('php', $total_time);
+
+		
+$total_time = learnpathItem :: get_scorm_time('js', $total_time);
 //$total_time = str_replace('NaN','00:00:00',$total_time);
 $total_time = str_replace('NaN', '00'.$h.'00\'00"', $total_time);
 if ($total_max_score == 0) {
@@ -305,6 +329,17 @@ $output .= "<tr class='$oddclass'>\n"."<td></td>\n".'<td colspan="4"><div class=
 .'<td colspan="2"></td>'."\n".'<td colspan="2"><div class="mystatus" align="center">'. ($total_score == 0 ? '-' : $total_percent.'%')."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$total_time.'</div></td>'."\n"."</tr>\n";
 
 $output .= "</table></td></tr></table>";
+
+if($export_csv)
+{
+	$temp = array('','','','');
+	$csv_content[] = $temp;
+	$temp = array(get_lang('AccomplishedStepsTotal'),'',($total_score == 0 ? '-' : $total_percent.'%'),$total_time);
+	$csv_content[] = $temp;
+	ob_end_clean();
+	Export :: export_table_csv($csv_content, 'reporting_learning_path_details');
+}
+
 if($origin != 'tracking')
 {
 	$output .= "</body></html>";

@@ -37,7 +37,7 @@ include('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-include(api_get_library_path().'/fileManage.lib.php');
+include(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 
 $session_id=$_GET['session_id'];
 $formSent=0;
@@ -250,7 +250,7 @@ $Sessions=api_store_result($result);
 <?php
 if(!empty($errorMsg))
 {
-	Display::display_normal_message($errorMsg); //main API
+	Display::display_normal_message($errorMsg, false); //main API
 }
 ?>
 

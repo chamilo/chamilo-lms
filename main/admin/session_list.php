@@ -14,6 +14,8 @@ $tbl_session_rel_course_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_COU
 $page=intval($_GET['page']);
 $action=$_REQUEST['action'];
 $sort=in_array($_GET['sort'],array('name','nbr_courses','date_start','date_end'))?$_GET['sort']:'name';
+$idChecked = $_GET['idChecked'];
+
 
 if($action == 'delete')
 {
@@ -59,7 +61,7 @@ api_display_tool_title($tool_name);
 <?php
 
 if(isset($_GET['action'])){
-	Display::display_normal_message(stripslashes($_GET['message']));
+	Display::display_normal_message(stripslashes($_GET['message']), false);
 }
 
 ?>

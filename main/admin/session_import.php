@@ -76,310 +76,318 @@ if($_POST['formSent'])
 		{
 			
 			$racine = simplexml_load_file($_FILES['import_file']['tmp_name']);
-			foreach($racine->Users->User as $userNode)
+			if(is_object($racine))
 			{
-				$username = $userNode->Username;
-				$isCut = 0; // if the username given is too long
-				if(strlen($username)>20)
+				foreach($racine->Users->User as $userNode)
 				{
-					$user_name_dist = $username;
-					$username = substr($username,0,19);
-					$isCut = 1;
-				}
-				
-				$sql = "SELECT 1 FROM $tbl_user WHERE username='".addslashes($username)."'";				
-				$rs = api_sql_query($sql, __FILE__, __LINE__);
-				
-				if(mysql_affected_rows()==0)
-				{
-					if($isCut)
+					$username = $userNode->Username;
+					$isCut = 0; // if the username given is too long
+					if(strlen($username)>20)
 					{
-						$errorMsg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
+						$user_name_dist = $username;
+						$username = substr($username,0,20);
+						$isCut = 1;
 					}
 					
-					$lastname = $userNode->Lastname;
-					$firstname = $userNode->Firstname;
-					$password = $userNode->Password;
-					if(empty($password))
-						$password = base64_encode(rand(1000,10000));
-					$email = $userNode->Email;
-					$official_code = $userNode->OfficialCode;
-					$phone = $userNode->Phone;
-					$status = $userNode->Status;
-					switch($status)
+					$sql = "SELECT 1 FROM $tbl_user WHERE username='".addslashes($username)."'";				
+					$rs = api_sql_query($sql, __FILE__, __LINE__);
+					
+					if(mysql_affected_rows()==0)
 					{
-						case 'student' : $status = 5; break;
-						case 'teacher' : $status = 1; break;
-						default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />'; 
-					}
-					
-					
-					
-					$sql = "INSERT INTO $tbl_user SET
-							username = '".addslashes($username)."',
-							lastname = '".addslashes($lastname)."',
-							firstname = '".addslashes($firstname)."',
-							password = '".($userPasswordCrypted==true ? md5($password) : $password)."',
-							email = '".addslashes($email)."',
-							official_code = '".addslashes($official_code)."',
-							phone = '".addslashes($phone)."',
-							status = '".addslashes($status)."'";
-					
-					api_sql_query($sql, __FILE__, __LINE__);
-					
-					if(mysql_affected_rows()>0 && $sendMail)
-					{
-						$emailto='"'.$firstname.' '.$lastname.'" <'.$email.'>';
-						$emailsubject='['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
-						$emailbody="[NOTE:] Ceci est un e-mail automatique, veuillez ne pas y répondre.\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\nVous recevrez prochainement un e-mail de votre coach responsable. Nous vous invitons à bien lire ses recommandations.\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');
-						//#287 modifiée par Stéphane DEBIEVE - FOREM
-						$emailheaders='From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
-						$emailheaders.='Reply-To: '.get_setting('emailAdministrator');
-	
-						@api_send_mail($emailto,$emailsubject,$emailbody,$emailheaders);
-					}
-				}
-				
-			}
-			foreach($racine->Courses->Course as $courseNode)
-			{
-				$course_code = $courseNode->CourseCode;				
-				$title = $courseNode->CourseTitle;				
-				$description = $courseNode->CourseDescription;				
-				$language = $courseNode->CourseLanguage;				
-				$username = $courseNode->CourseTeacher;
-				
-				$sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";				
-				$rs = api_sql_query($sql, __FILE__, __LINE__);
-				
-				list($user_id, $lastname, $firstname) = mysql_fetch_array($rs);
-				$keys = define_course_keys($course_code, "", $dbNamePrefix);				
-				
-				if (sizeof($keys))
-				{
-					
-					$currentCourseCode = $keys['visual_code'];	
-					$currentCourseId = $keys["currentCourseId"];	
-					if(empty($currentCourseCode))			
-						$currentCourseCode = $currentCourseId;
-					$currentCourseDbName = $keys["currentCourseDbName"];
-					$currentCourseRepository = $keys["currentCourseRepository"];
-					
-					if($currentCourseId == strtoupper($course_code))
-					{
-						if (empty ($title))
+						if($isCut)
 						{
-							$title = $keys["currentCourseCode"];
+							$errorMsg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
 						}
-						prepare_course_repository($currentCourseRepository, $currentCourseId);
-						update_Db_course($currentCourseDbName);
-						fill_course_repository($currentCourseRepository);
-						fill_Db_course($currentCourseDbName, $currentCourseRepository, 'french');
-						//register_course($currentCourseId, $currentCourseCode, $currentCourseRepository, $currentCourseDbName, "$lastname $firstname", $course['unit_code'], addslashes($course['FR']['title']), $language, $user_id);
-						$sql = "INSERT INTO ".$tbl_course." SET
-									code = '".$currentCourseId."',
-									db_name = '".$currentCourseDbName."',
-									directory = '".$currentCourseRepository."',
-									course_language = '".$language."',
-									title = '".$title."',
-									description = '".lang2db($description)."',
-									category_code = '',
-									visibility = '".$defaultVisibilityForANewCourse."',
-									show_score = '',
-									disk_quota = NULL,
-									creation_date = now(),
-									expiration_date = NULL,
-									last_edit = now(),
-									last_visit = NULL,
-									tutor_name = '".$lastname." ".$firstname."',
-									visual_code = '".$currentCourseCode."'";
+						
+						$lastname = $userNode->Lastname;
+						$firstname = $userNode->Firstname;
+						$password = $userNode->Password;
+						if(empty($password))
+							$password = base64_encode(rand(1000,10000));
+						$email = $userNode->Email;
+						$official_code = $userNode->OfficialCode;
+						$phone = $userNode->Phone;
+						$status = $userNode->Status;
+						switch($status)
+						{
+							case 'student' : $status = 5; break;
+							case 'teacher' : $status = 1; break;
+							default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />'; 
+						}
+						
+						
+						
+						$sql = "INSERT INTO $tbl_user SET
+								username = '".addslashes($username)."',
+								lastname = '".addslashes($lastname)."',
+								firstname = '".addslashes($firstname)."',
+								password = '".($userPasswordCrypted==true ? md5($password) : $password)."',
+								email = '".addslashes($email)."',
+								official_code = '".addslashes($official_code)."',
+								phone = '".addslashes($phone)."',
+								status = '".addslashes($status)."'";
 						
 						api_sql_query($sql, __FILE__, __LINE__);
-				
-						$sql = "INSERT INTO ".$tbl_course_user." SET
-									course_code = '".$currentCourseId."',
-									user_id = '".$user_id."',
-									status = '1',
-									role = '".lang2db('Professor')."',
-									tutor_id='1',
-									sort='". ($sort +1)."',
-									user_course_cat='0'";
 						
-						api_sql_query($sql, __FILE__, __LINE__);
+						if(mysql_affected_rows()>0 && $sendMail)
+						{
+							$emailto='"'.$firstname.' '.$lastname.'" <'.$email.'>';
+							$emailsubject='['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
+							$emailbody="[NOTE:] Ceci est un e-mail automatique, veuillez ne pas y répondre.\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\nVous recevrez prochainement un e-mail de votre coach responsable. Nous vous invitons à bien lire ses recommandations.\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');
+							//#287 modifiée par Stéphane DEBIEVE - FOREM
+							$emailheaders='From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
+							$emailheaders.='Reply-To: '.get_setting('emailAdministrator');
+		
+							@api_send_mail($emailto,$emailsubject,$emailbody,$emailheaders);
+						}
 					}
 					
 				}
-			}
-			foreach ($racine->Session as $sessionNode){ // foreach session
-			
-				$countCourses = 0;
-				$countUsers = 0;
-				
-				$SessionName = $sessionNode->SessionName; 
-				$Coach = $sessionNode->Coach;
-				
-				if(!empty($Coach)){
-					$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
-					$rsCoach = api_sql_query($sqlCoach);
-					list($CoachId) = (mysql_fetch_array($rsCoach));
-					if(empty($CoachId))
-					{
-						$errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
-					}
-				}
-				
-				$DateStart = $sessionNode->DateStart; 
-				if(!empty($DateStart))
+				foreach($racine->Courses->Course as $courseNode)
 				{
-					list($YearStart,$MonthStart, $DayStart) = explode('-',$DateStart);
-					if(empty($YearStart) || empty($MonthStart) || empty($DayStart))
+					$course_code = $courseNode->CourseCode;				
+					$title = $courseNode->CourseTitle;				
+					$description = $courseNode->CourseDescription;				
+					$language = $courseNode->CourseLanguage;				
+					$username = $courseNode->CourseTeacher;
+					
+					$sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";				
+					$rs = api_sql_query($sql, __FILE__, __LINE__);
+					
+					list($user_id, $lastname, $firstname) = mysql_fetch_array($rs);
+					$keys = define_course_keys($course_code, "", $dbNamePrefix);				
+					
+					if (sizeof($keys))
 					{
-						$errorMsg .= get_lang('WrongDate').' : '.$DateStart.'<br />';
-						break;
+						
+						$currentCourseCode = $keys['visual_code'];	
+						$currentCourseId = $keys["currentCourseId"];	
+						if(empty($currentCourseCode))			
+							$currentCourseCode = $currentCourseId;
+						$currentCourseDbName = $keys["currentCourseDbName"];
+						$currentCourseRepository = $keys["currentCourseRepository"];
+						
+						if($currentCourseId == strtoupper($course_code))
+						{
+							if (empty ($title))
+							{
+								$title = $keys["currentCourseCode"];
+							}
+							prepare_course_repository($currentCourseRepository, $currentCourseId);
+							update_Db_course($currentCourseDbName);
+							fill_course_repository($currentCourseRepository);
+							fill_Db_course($currentCourseDbName, $currentCourseRepository, 'french');
+							//register_course($currentCourseId, $currentCourseCode, $currentCourseRepository, $currentCourseDbName, "$lastname $firstname", $course['unit_code'], addslashes($course['FR']['title']), $language, $user_id);
+							$sql = "INSERT INTO ".$tbl_course." SET
+										code = '".$currentCourseId."',
+										db_name = '".$currentCourseDbName."',
+										directory = '".$currentCourseRepository."',
+										course_language = '".$language."',
+										title = '".$title."',
+										description = '".lang2db($description)."',
+										category_code = '',
+										visibility = '".$defaultVisibilityForANewCourse."',
+										show_score = '',
+										disk_quota = NULL,
+										creation_date = now(),
+										expiration_date = NULL,
+										last_edit = now(),
+										last_visit = NULL,
+										tutor_name = '".$lastname." ".$firstname."',
+										visual_code = '".$currentCourseCode."'";
+							
+							api_sql_query($sql, __FILE__, __LINE__);
+					
+							$sql = "INSERT INTO ".$tbl_course_user." SET
+										course_code = '".$currentCourseId."',
+										user_id = '".$user_id."',
+										status = '1',
+										role = '".lang2db('Professor')."',
+										tutor_id='1',
+										sort='". ($sort +1)."',
+										user_course_cat='0'";
+							
+							api_sql_query($sql, __FILE__, __LINE__);
+						}
+						
 					}
-					else 
-					{
-						$timeStart = mktime(0,0,0,$MonthStart,$DayStart,$YearStart);
+				}
+				foreach ($racine->Session as $sessionNode){ // foreach session
+				
+					$countCourses = 0;
+					$countUsers = 0;
+					
+					$SessionName = $sessionNode->SessionName; 
+					$Coach = $sessionNode->Coach;
+					
+					if(!empty($Coach)){
+						$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
+						$rsCoach = api_sql_query($sqlCoach);
+						list($CoachId) = (mysql_fetch_array($rsCoach));
+						if(empty($CoachId))
+						{
+							$errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
+						}
 					}
 					
-					$DateEnd = $sessionNode->DateEnd; 
+					$DateStart = $sessionNode->DateStart; 
 					if(!empty($DateStart))
 					{
-						list($YearEnd,$MonthEnd, $DayEnd) = explode('-',$DateEnd);
-						if(empty($YearEnd) || empty($MonthEnd) || empty($DayEnd))
+						list($YearStart,$MonthStart, $DayStart) = explode('-',$DateStart);
+						if(empty($YearStart) || empty($MonthStart) || empty($DayStart))
 						{
-							$errorMsg .= get_lang('WrongDate').' : '.$DateEnd.'<br />';
+							$errorMsg .= get_lang('WrongDate').' : '.$DateStart.'<br />';
 							break;
 						}
 						else 
 						{
-							$timeEnd = mktime(0,0,0,$MonthEnd,$DayEnd,$YearEnd);
+							$timeStart = mktime(0,0,0,$MonthStart,$DayStart,$YearStart);
 						}
-					}
-					if($timeEnd - $timeStart < 0)
-					{
-						$errorMsg .= get_lang('DateStartMoreThanDateEnd').' : '.$DateEnd.'<br />';
-					}
-				}
-				
-				
-				
-				$sqlSession = "INSERT IGNORE INTO $tbl_session SET
-								name = '$SessionName',
-								id_coach = '$CoachId',
-								date_start = '$DateStart',
-								date_end = '$DateEnd'";
-				$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
-				$update = false;
-				if(mysql_affected_rows() == 0){
-					$update = true;
-					$sqlSession = "UPDATE $tbl_session SET								
-									id_coach = '$CoachId',
-									date_start = '$DateStart',
-									date_end = '$DateEnd'
-									WHERE name = '$SessionName'";
-					$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
-					
-					$session_id = api_sql_query("SELECT id FROM $tbl_session WHERE name='$SessionName'",__FILE__,__LINE__);
-					list($session_id) = mysql_fetch_array($session_id);				
-					
-					api_sql_query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'",__FILE__,__LINE__);
-					api_sql_query("DELETE FROM $tbl_session_course WHERE id_session='$session_id'",__FILE__,__LINE__);
-					api_sql_query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id'",__FILE__,__LINE__);
-				}
-				else {
-					$session_id = mysql_insert_id();
-				}
-				foreach ($sessionNode->User as $userNode){	
-					$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".addslashes($userNode)."'";
-					$rsUser = api_sql_query($sqlUser);
-					list($user_id) = (mysql_fetch_array($rsUser));
-					if(!empty($user_id)){
-						$sql = "INSERT INTO $tbl_session_user SET 
-								id_user='$user_id',
-								id_session = '$session_id'";
-						$rsUser = api_sql_query($sql,__FILE__,__LINE__);
-						if(mysql_affected_rows()){
-							$countUsers++;
-						}
-					}					
-				}
-				
-				foreach($sessionNode->Course as $courseNode){
 						
-					$CourseCode = $courseNode->CourseCode;
-					
-					// verify that the course pointed by the course code node exists
-					$sql = 'SELECT 1 FROM '.$tbl_course.' WHERE code="'.mysql_escape_string($CourseCode).'"';
-					$rs = api_sql_query($sql, __FILE__, __LINE__);
-					if(mysql_num_rows($rs)>0)
-					{ // if the course exists we continue
-					
-						$Coach = $courseNode->Coach; 
-						if(!empty($Coach)){
-							$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
-							$rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
-							list($CoachId) = (mysql_fetch_array($rsCoach));
-							if(empty($CoachId))
+						$DateEnd = $sessionNode->DateEnd; 
+						if(!empty($DateStart))
+						{
+							list($YearEnd,$MonthEnd, $DayEnd) = explode('-',$DateEnd);
+							if(empty($YearEnd) || empty($MonthEnd) || empty($DayEnd))
 							{
-								$errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
+								$errorMsg .= get_lang('WrongDate').' : '.$DateEnd.'<br />';
+								break;
+							}
+							else 
+							{
+								$timeEnd = mktime(0,0,0,$MonthEnd,$DayEnd,$YearEnd);
 							}
 						}
-						else {
-							$Coach = '';
+						if($timeEnd - $timeStart < 0)
+						{
+							$errorMsg .= get_lang('DateStartMoreThanDateEnd').' : '.$DateEnd.'<br />';
 						}
-						
-						$sqlCourse = "INSERT INTO $tbl_session_course SET
-									  course_code = '$CourseCode',
-									  id_coach='$Coach',
-									  id_session='$session_id'";
-						$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
-						if(mysql_affected_rows()){
-							$countCourses++;
+					}
+					
+					
+					// verify that session doesn't exist
+					while(!$uniqueName)
+					{
+						if($i>1)
+							$suffix = ' - '.$i;
+						$sql = 'SELECT 1 FROM '.$tbl_session.' WHERE name="'.addslashes($SessionName.$suffix).'"';
+						$rs = api_sql_query($sql, __FILE__, __LINE__);
+					
+						if(mysql_result($rs,0,0))
+						{
+							$i++;
+						}
+						else
+						{
+							$uniqueName = true;
+							$SessionName .= $suffix;
+						}
+					}				
+					
+					$sqlSession = "INSERT IGNORE INTO $tbl_session SET
+									name = '$SessionName',
+									id_coach = '$CoachId',
+									date_start = '$DateStart',
+									date_end = '$DateEnd'";
+					$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
+					$session_id = mysql_insert_id();
+					
+					foreach ($sessionNode->User as $userNode){
+						$username = substr($userNode->nodeValue(),0,20);	
+						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".addslashes($username)."'";
+						$rsUser = api_sql_query($sqlUser);
+						list($user_id) = (mysql_fetch_array($rsUser));
+						if(!empty($user_id)){
+							$sql = "INSERT INTO $tbl_session_user SET 
+									id_user='$user_id',
+									id_session = '$session_id'";
+							$rsUser = api_sql_query($sql,__FILE__,__LINE__);
+							if(mysql_affected_rows()){
+								$countUsers++;
+							}
+						}					
+					}
+					
+					foreach($sessionNode->Course as $courseNode){
 							
-							$countUsersCourses = 0;
-							foreach ($courseNode->User as $userNode){
-								$username = substr($userNode,0,19);
-								$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$username."'";
-								$rsUser = api_sql_query($sqlUser);
-								list($user_id) = (mysql_fetch_array($rsUser));
-								if(!empty($user_id))
+						$CourseCode = $courseNode->CourseCode;
+						
+						// verify that the course pointed by the course code node exists
+						$sql = 'SELECT 1 FROM '.$tbl_course.' WHERE code="'.mysql_escape_string($CourseCode).'"';
+						$rs = api_sql_query($sql, __FILE__, __LINE__);
+						if(mysql_num_rows($rs)>0)
+						{ // if the course exists we continue
+						
+							$Coach = substr($courseNode->Coach,0,20); 
+							if(!empty($Coach)){
+								$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
+								$rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
+								list($CoachId) = (mysql_fetch_array($rsCoach));
+								if(empty($CoachId))
 								{
-									$sql = "INSERT IGNORE INTO $tbl_session_user SET 
-										id_user='$user_id',
-										id_session = '$session_id'";
-									
-									if(mysql_affected_rows())
-										$countUsers++;
-									$rsUser = api_sql_query($sql,__FILE__,__LINE__);
-									
-									$sql = "INSERT IGNORE INTO $tbl_session_course_user SET 
+									$errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
+								}
+							}
+							else {
+								$Coach = '';
+							}
+							
+							$sqlCourse = "INSERT INTO $tbl_session_course SET
+										  course_code = '$CourseCode',
+										  id_coach='$CoachId',
+										  id_session='$session_id'";
+							$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
+							if(mysql_affected_rows()){
+								$countCourses++;
+								
+								$countUsersCourses = 0;
+								foreach ($courseNode->User as $userNode){
+									$username = substr($userNode,0,20);
+									$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$username."'";
+									$rsUser = api_sql_query($sqlUser);
+									list($user_id) = (mysql_fetch_array($rsUser));
+									if(!empty($user_id))
+									{
+										$sql = "INSERT IGNORE INTO $tbl_session_user SET 
 											id_user='$user_id',
-											course_code='$CourseCode',
 											id_session = '$session_id'";
-									$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
-									if(mysql_affected_rows())
-										$countUsersCourses++;
-								}
-								else
-								{
-									$errorMsg .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
-								}
-							}	
-							api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);	
+										
+										if(mysql_affected_rows())
+											$countUsers++;
+										$rsUser = api_sql_query($sql,__FILE__,__LINE__);
+										
+										$sql = "INSERT IGNORE INTO $tbl_session_course_user SET 
+												id_user='$user_id',
+												course_code='$CourseCode',
+												id_session = '$session_id'";
+										$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
+										if(mysql_affected_rows())
+											$countUsersCourses++;
+									}
+									else
+									{
+										$errorMsg .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
+									}
+								}	
+								api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);	
+							}
+						}
+						else 
+						{ // if the course does not exists
+							$errorMsg .= get_lang('CourseDoesNotExist').' : '.$CourseCode.'<br />';
 						}
 					}
-					else 
-					{ // if the course does not exists
-						$errorMsg .= get_lang('CourseDoesNotExist').' : '.$CourseCode.'<br />';
-					}
+					api_sql_query("UPDATE $tbl_session SET nbr_users='$countUsers', nbr_courses='$countCourses' WHERE id='$session_id'",__FILE__,__LINE__);
+					
 				}
-				api_sql_query("UPDATE $tbl_session SET nbr_users='$countUsers', nbr_courses='$countCourses' WHERE id='$session_id'",__FILE__,__LINE__);
-				
+			
 			}
-			
-			
+			else
+			{
+				$errorMsg .= get_lang('XMLNotValid');
+			}
 		}
+		
 		
 		
 		
@@ -564,7 +572,7 @@ if(!empty($errorMsg))
   <td colspan="2">
 
 <?php
-	Display::display_normal_message($errorMsg); //main API
+	Display::display_normal_message($errorMsg,false); //main API
 ?>
 
   </td>

@@ -466,15 +466,21 @@ class learnpathItem{
      * to be an HTML file. If it is not, then the function will return and empty list.
      * @param	string	type (one of the Dokeos tools) - optional (otherwise takes the current item's type)
      * @param	string	path (absolute file path) - optional (otherwise takes the current item's path)
+     * @param	int		level of recursivity we're in
      * @return	array	List of file paths. An additional field containing 'local' or 'remote' helps determine if the file should be copied into the zip or just linked
      */
-    function get_resources_from_source($type=null,$abs_path=null)
+    function get_resources_from_source($type=null,$abs_path=null, $recursivity=1)
     {
+    	$max = 5;
+    	if($recursivity > $max)
+    	{
+    		return array();
+    	}
     	if(!isset($type))
     	{
     		$type = $this->get_type();
     	}
-    	if(!isser($abs_path))
+    	if(!isset($abs_path))
     	{
     		$path = $this->get_file_path();
    			$abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
@@ -495,6 +501,7 @@ class learnpathItem{
 						case 'html':
 						case 'htm':
 						case 'shtml':
+						case 'css':
 					 		$wanted_attributes = array('src','url','@import');
 			    			//parse it for included resources
 			    			/*
@@ -531,7 +538,7 @@ class learnpathItem{
 										{
 											//we found the current portal url
 											$files_list[] = array($source,'local','url');
-											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source);
+											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1);
 											$files_list = array_merge($files_list,$in_files_list); 
 										}
 										else
@@ -546,7 +553,7 @@ class learnpathItem{
 										if(strstr($source,'/') === 0)
 										{	//link starts with a /, making it absolute (relative to DocumentRoot)
 											$files_list[] = array($source,'local','abs');
-											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source); 
+											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1); 
 											$files_list = array_merge($files_list,$in_files_list); 
 										}
 										elseif(strstr($source,'..') === 0)
@@ -554,7 +561,7 @@ class learnpathItem{
 											$files_list[] = array($source,'local','rel');
 											$dir = dirname($abs_path);
 											$new_abs_path = realpath($dir.'/'.$source);
-											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path); 
+											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
 											$files_list = array_merge($files_list,$in_files_list); 
 										}
 										else
@@ -562,7 +569,7 @@ class learnpathItem{
 											$files_list[] = array($source,'local','rel');
 											$dir = dirname($abs_path);
 											$new_abs_path = realpath($dir.'/'.$source);
-											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path); 
+											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
 											$files_list = array_merge($files_list,$in_files_list); 
 										}
 									}

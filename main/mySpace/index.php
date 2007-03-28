@@ -414,12 +414,14 @@ if($nb_teacher_courses)
 				}
 			}
 		}
-		
-		$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
-		$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course,1).' %';
-		$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course,1).' %';
-		$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course,1);
-		$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course,1);
+		if($nb_students_in_course>0)
+		{
+			$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
+			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course,1).' %';
+			$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course,1).' %';
+			$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course,1);
+			$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course,1);
+		}
 		
 		$table_row = array();
 		$table_row[] = $course['title'];

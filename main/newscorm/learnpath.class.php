@@ -7256,7 +7256,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$zip_folder=new PclZip($temp_zip_file);
 		$current_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
 		$root_path = api_get_path(SYS_PATH);
-		$main_path = $root_path.api_get_path(REL_PATH);
+		$rel_path = api_get_path(REL_PATH);
+		if($rel_path === '/')
+		{
+			$rel_path = '';
+		}
+		$main_path = $root_path.$rel_path;
 		
 		//place to temporarily stash the zipfiles
 		//create the temp dir if it doesn't exist
@@ -7316,9 +7321,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	//format
 	 	$zip_files = array();
 	 	$zip_files_abs = array();
+	 	$link_updates = array();
 	 	foreach($this->items as $index => $item){
 	 		//get included documents from this item
 	 		$inc_docs = $item->get_resources_from_source();
+	 		//error_log('Dealing with document '.$item->get_file_path().', found included documents: '.print_r($inc_docs,true),0);
 	 		//give a child element <item> to the <organization> element
 	 		$my_item = $xmldoc->createElement('item');
 	 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
@@ -7366,6 +7373,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 		$i = 1;
 	 		foreach($inc_docs as $doc_info)
 	 		{
+	 			if(count($doc_info)<1 or empty($doc_info[0])){continue;}
 	 			$my_dep = $xmldoc->createElement('resource');
 	 			$res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
 	 			$my_dep->setAttribute('identifier',$res_id);
@@ -7373,6 +7381,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 			$my_dep->setAttribute('adlc:scormtype','asset');
 	 			$my_dep_file = $xmldoc->createElement('file');
 	 			//check type of URL
+	 			//error_log('Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2],0);
 	 			if($doc_info[1] == 'remote')
 	 			{ //remote file. Save url as is
 	 				$my_dep_file->setAttribute('href',$doc_info[0]);
@@ -7388,22 +7397,38 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			 				$my_dep_file->setAttribute('href',$doc_info[0]);
 	 			 			$my_dep->setAttribute('xml:base','');
 	 			 			$zip_files_abs[] = $doc_info[0];
+
+		 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+							$file_path = realpath($doc_info[0]);
+		 					if(strstr($file_path,$main_path) !== false)
+		 					{//the calculated real path is really inside the dokeos root path
+		 						//reduce file path to what's under the DocumentRoot
+		 						$file_path = substr($file_path,strlen($root_path));
+		 						//error_log('Reduced path: '.$file_path,0);
+		 						$zip_files_abs[] = $file_path;
+		 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+				 				$my_dep_file->setAttribute('href','document/'.$file_path);
+		 			 			$my_dep->setAttribute('xml:base','');
+		 					}
 	 						break;
 	 					case 'rel': //path relative to the current document. Save xml:base as current document's directory and save file in zip as subdir.file_path
-			 				if(substr($doc_info[0],0,2)=='..')
+		 					if(substr($doc_info[0],0,2)=='..')
 			 				{ //relative path going up
-			 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path());
-			 					$file_path = realpath($current_dir.'/'.$doc_info);
-			 					if(strstr($file_path,$main_path) === 0)
+			 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+			 					$file_path = realpath($current_dir.$doc_info[0]);
+			 					//error_log($file_path.' <-> '.$main_path,0);
+			 					if(strstr($file_path,$main_path) !== false)
 			 					{//the calculated real path is really inside the dokeos root path
 			 						//reduce file path to what's under the DocumentRoot
 			 						$file_path = substr($file_path,strlen($root_path));
-			 						$zip_file_abs[] = $file_path;
-					 				$my_dep_file->setAttribute('href',$doc_info[0]);
+			 						//error_log('Reduced path: '.$file_path,0);
+			 						$zip_files_abs[] = $file_path;
+			 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+					 				$my_dep_file->setAttribute('href','document/'.$file_path);
 			 			 			$my_dep->setAttribute('xml:base','');
 			 					}
 			 				}else{
-		 			 			$zip_files[] = $my_sub_dir.'/'.$doc_info[0];
+			 					$zip_files[] = $my_sub_dir.'/'.$doc_info[0];
 				 				$my_dep_file->setAttribute('href',$doc_info[0]);
 		 			 			$my_dep->setAttribute('xml:base',$my_xml_sub_dir);
 			 				}
@@ -7434,26 +7459,55 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$xmldoc->appendChild($root);
 
 		//error_log(print_r($zip_files,true),0);
+		$garbage_path = api_get_path(GARBAGE_PATH);
+		$sys_course_path = api_get_path(SYS_COURSE_PATH);
 		foreach($zip_files as $file_path)
 		{
+			if(empty($file_path)){continue;}
 			//error_log('getting document from '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' removing '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/',0);
-			$this->create_path(api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path);
+			$dest_file = $garbage_path.$temp_dir_short.'/'.$file_path;
+			$this->create_path($dest_file);
 			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
-			copy(api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path,api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path);
-			$zip_folder->add(api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,PCLZIP_OPT_REMOVE_PATH, api_get_path('GARBAGE_PATH'));
+			copy($sys_course_path.$_course['path'].'/'.$file_path,$dest_file);
+			//check if the file needs a link update
+			if(in_array($file_path,array_keys($link_updates))){
+				$string = file_get_contents($dest_file);
+				unlink($dest_file);
+				foreach($link_updates[$file_path] as $old_new)
+				{
+					//error_log('Replacing '.$old_new['orig'].' by '.$old_new['dest'].' in '.$file_path,0);
+					$string = str_replace($old_new['orig'],$old_new['dest'],$string);
+				}
+				file_put_contents($dest_file,$string);
+			}
+			$zip_folder->add($dest_file,PCLZIP_OPT_REMOVE_PATH, $garbage_path);
 		}
 		foreach($zip_files_abs as $file_path)
 		{
+			if(empty($file_path)){continue;}
 			//error_log('getting document from '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' removing '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/',0);
-			$this->create_path(api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path);
+			$dest_file = $garbage_path.$temp_dir_short.'/document/'.$file_path;
+			$this->create_path($dest_file);
+			//error_log('Created path '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/document/'.$file_path,0);
 			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
-			copy(api_get_path('SYS_COURSE_PATH').$file_path,api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path);
-			$zip_folder->add(api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,PCLZIP_OPT_REMOVE_PATH, api_get_path('GARBAGE_PATH'));
+			copy($main_path.$file_path,$dest_file);
+			//check if the file needs a link update
+			if(in_array($file_path,array_keys($link_updates))){
+				$string = file_get_contents($dest_file);
+				unlink($dest_file);
+				foreach($link_updates[$file_path] as $old_new)
+				{
+					//error_log('Replacing '.$old_new['orig'].' by '.$old_new['dest'].' in '.$file_path,0);
+					$string = str_replace($old_new['orig'],$old_new['dest'],$string);
+				}
+				file_put_contents($dest_file,$string);
+			}
+			$zip_folder->add($dest_file,PCLZIP_OPT_REMOVE_PATH, $garbage_path);
 		}
 	 	
 	 	//Finalize the imsmanifest structure, add to the zip, then return the zip
-	 	$xmldoc->save(api_get_path(GARBAGE_PATH).'/'.$temp_dir_short.'/imsmanifest.xml');
-		$zip_folder->add(api_get_path('GARBAGE_PATH').'/'.$temp_dir_short.'/imsmanifest.xml',PCLZIP_OPT_REMOVE_PATH, api_get_path('GARBAGE_PATH').'/');
+	 	$xmldoc->save($garbage_path.'/'.$temp_dir_short.'/imsmanifest.xml');
+		$zip_folder->add($garbage_path.'/'.$temp_dir_short.'/imsmanifest.xml',PCLZIP_OPT_REMOVE_PATH, $garbage_path.'/');
 
 		//Send file to client
 		$name = 'scorm_export_'.$this->lp_id.'.zip';

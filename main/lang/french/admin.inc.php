@@ -602,4 +602,5 @@ $DateStartMoreThanDateEnd = "La date de début est ultérieure à la date de fin";
 $SlideSize = "Taille des diapositives";
 $EphorusPlagiarismPrevention = "Prévention du plagiat Ephorus";
 $CourseTeachers = "Responsables du cours";
+$XMLNotValid = "Le document XML n\'est pas valide";
 ?>

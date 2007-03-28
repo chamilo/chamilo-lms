@@ -601,4 +601,5 @@ $DateStartMoreThanDateEnd = "Start date is more than end date";
 $SlideSize = "Size of the slides";
 $EphorusPlagiarismPrevention = "Ephorus plagiarism prevention";
 $CourseTeachers = "Course teachers";
+$XMLNotValid = "XML document is not valid";
 ?>

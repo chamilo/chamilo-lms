@@ -156,4 +156,7 @@ $Multiplechoice = "Auswahl";
 $Multiplechoice = "Auswahl";
 $Multipleresponse = "Mehrfach Antworten";
 $Score = "Ergebnis";
+$Shared = "Geteilt";
+$Invite = "Einladen";
+$MaximumScore = "Höchstzahl ";
 ?>

@@ -412,4 +412,7 @@ $SendEmail = "Email küldése";
 $EmailTitle = "Email cím";
 $EmailText = "Email tartalma";
 $Send = "Küldés";
+$NoLinkVisited = "Nincs meglátogatott link";
+$NoDocumentDownloaded = "Nincs letöltött dokumentum";
+$Clicks = "Kattintások";
 ?>

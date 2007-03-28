@@ -150,4 +150,5 @@ $Yesno = "Igen / Nem";
 $Multiplechoice = "Többszörös választás";
 $Multiplechoice = "Többszörös választás";
 $Multipleresponse = "Többszörös válaszok";
+$Score = "Pontszám";
 ?>

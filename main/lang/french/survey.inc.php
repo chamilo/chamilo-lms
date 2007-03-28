@@ -154,4 +154,7 @@ $Yesno = "Oui / Non";
 $Multiplechoice = "Choix multiple";
 $Multiplechoice = "Choix multiple";
 $Multipleresponse = "Réponses multiples";
+$Shared = "Partagée";
+$Invite = "Invités";
+$MaximumScore = "Score maximum";
 ?>

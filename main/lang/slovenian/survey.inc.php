@@ -154,4 +154,5 @@ $Yesno = "Da / Ne";
 $Multiplechoice = "Veèkratna izbira";
 $Multiplechoice = "Veèkratna izbira";
 $Multipleresponse = "Veèkratni odgovori";
+$Score = "Rezultat";
 ?>

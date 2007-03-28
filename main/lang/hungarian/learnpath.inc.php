@@ -165,4 +165,5 @@ $AllowMultipleAttempts = "Többszöri próbálkozás engedélyezése";
 $PreventMultipleAttempts = "Többszöri próbálkozás megakadályozása";
 $MakeScormRecordingExtra = "SCORM extra felvételek létrehozása";
 $MakeScormRecordingNormal = "SCORM normál felvételek létrehozása";
+$EditCurrentForum = "Fórum szerkesztése";
 ?>

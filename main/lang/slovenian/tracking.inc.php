@@ -200,4 +200,5 @@ $StudentsTracking = "Sledenje kandidatov";
 $CourseTracking = "Sledenje teèaja";
 $LinksMostClicked = "Najveèkrat uporabljene povezave";
 $DocumentsMostDownloaded = "Najveèkrat preneseni dokumenti";
+$LearningPathDetails = "Podrobnosti uène poti";
 ?>

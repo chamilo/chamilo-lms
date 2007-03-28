@@ -174,4 +174,8 @@ $OtherTools = "Egyéb eszközök";
 $DetailsStudentInCourse = "Tanuló adatai";
 $CourseTitle = "Kurzus címe";
 $TimeSpentInTheCourse = "A kurzusban eltöltött id&#337;";
+$ToolsMostUsed = "A legtöbbet használt eszközök";
+$LinksMostClicked = "A leggyakrabban látogatott linkek";
+$DocumentsMostDownloaded = "A legtöbbet letöltött dokumentumok";
+$LearningPathDetails = "Tanösvény részletek";
 ?>

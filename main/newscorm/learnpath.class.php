@@ -1720,7 +1720,7 @@ class learnpath {
 		if($this->debug>0){error_log('New LP - In learnpath::get_total_items_count_without_chapters()',0);}
 		$total=0;
 		foreach($this->items as $temp=>$temp2){
-			if($temp2->get_type() != 'dokeos_chapter') $total++;
+			if(!in_array($temp2->get_type(), array('dokeos_chapter','chapter','dir'))) $total++;
 		}
 		return $total;
     }
@@ -2233,7 +2233,8 @@ class learnpath {
     	}else{
     		//get the number of items completed and the number of items total
     		$tbl = Database::get_course_table('lp_item');
-    		$sql = "SELECT count(*) FROM $tbl WHERE lp_id = ".$lp_id;
+    		$sql = "SELECT count(*) FROM $tbl WHERE lp_id = ".$lp_id." 
+					AND item_type NOT IN('dokeos_chapter','chapter','dir')";
     		$res = api_sql_query($sql);
     		$row = Database::fetch_array($res);
     		$total = $row[0];

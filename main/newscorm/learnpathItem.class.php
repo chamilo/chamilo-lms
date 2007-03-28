@@ -485,6 +485,7 @@ class learnpathItem{
     		$path = $this->get_file_path();
    			$abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
     	}
+    	//error_log(str_repeat(' ',$recursivity).'Analyse file '.$abs_path,0);
     	$files_list = array();
     	$type = $this->get_type();
     	switch($type)
@@ -502,7 +503,7 @@ class learnpathItem{
 						case 'htm':
 						case 'shtml':
 						case 'css':
-					 		$wanted_attributes = array('src','url','@import');
+					 		$wanted_attributes = array('src','url','@import','href');
 			    			//parse it for included resources
 			    			/*
 			    			$fh = fopen($abs_path,'r');
@@ -525,52 +526,71 @@ class learnpathItem{
 							//get an array of attributes from the HTML source
 							$attributes = learnpathItem::parse_HTML_attributes($file_content,$wanted_attributes);
 							//look at 'src' attributes in this file
-							if(isset($attributes['src']))
+							foreach($wanted_attributes as $attr)
 							{
-								//find which kind of path these are (local or remote)
-								$sources = $attributes['src'];
-								foreach($sources as $source)
+								if(isset($attributes[$attr]))
 								{
-									if(strstr($source,'://') > 0)
+									//find which kind of path these are (local or remote)
+									$sources = $attributes[$attr];
+									foreach($sources as $source)
 									{
-										//found some protocol there
-										if(strstr($source,api_get_path(WEB_PATH))!==false)
+										if(strstr($source,'://') > 0)
 										{
-											//we found the current portal url
-											$files_list[] = array($source,'local','url');
-											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1);
-											$files_list = array_merge($files_list,$in_files_list); 
+											//found some protocol there
+											if(strstr($source,api_get_path(WEB_PATH))!==false)
+											{
+												//we found the current portal url
+												$files_list[] = array($source,'local','url');
+												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1);
+												if(count($in_files_list)>0)
+												{
+													$files_list = array_merge($files_list,$in_files_list);
+												} 
+											}
+											else
+											{
+												//we didn't find any trace of current portal
+												$files_list[] = array($source,'remote','url');
+											}
 										}
 										else
 										{
-											//we didn't find any trace of current portal
-											$files_list[] = array($source,'remote','url');
-										}
-									}
-									else
-									{
-										//no protocol found, make link local
-										if(strstr($source,'/') === 0)
-										{	//link starts with a /, making it absolute (relative to DocumentRoot)
-											$files_list[] = array($source,'local','abs');
-											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1); 
-											$files_list = array_merge($files_list,$in_files_list); 
-										}
-										elseif(strstr($source,'..') === 0)
-										{	//link is relative but going back in the hierarchy
-											$files_list[] = array($source,'local','rel');
-											$dir = dirname($abs_path);
-											$new_abs_path = realpath($dir.'/'.$source);
-											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
-											$files_list = array_merge($files_list,$in_files_list); 
-										}
-										else
-										{	//no starting '/', making it relative to current document's path
-											$files_list[] = array($source,'local','rel');
-											$dir = dirname($abs_path);
-											$new_abs_path = realpath($dir.'/'.$source);
-											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
-											$files_list = array_merge($files_list,$in_files_list); 
+											//no protocol found, make link local
+											if(substr($source,0,1) === '/')
+											{	//link starts with a /, making it absolute (relative to DocumentRoot)
+												$files_list[] = array($source,'local','abs');
+												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1); 
+												if(count($in_files_list)>0)
+												{
+													$files_list = array_merge($files_list,$in_files_list);
+												} 
+											}
+											elseif(strstr($source,'..') === 0)
+											{	//link is relative but going back in the hierarchy
+												$files_list[] = array($source,'local','rel');
+												$dir = dirname($abs_path);
+												$new_abs_path = realpath($dir.'/'.$source);
+												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+												if(count($in_files_list)>0)
+												{
+													$files_list = array_merge($files_list,$in_files_list);
+												} 
+											}
+											else
+											{	//no starting '/', making it relative to current document's path
+												if(substr($source,0,2) == './')
+												{
+													$source = substr($source,2);
+												}
+												$files_list[] = array($source,'local','rel');
+												$dir = dirname($abs_path);
+												$new_abs_path = realpath($dir.'/'.$source);
+												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+												if(count($in_files_list)>0)
+												{
+													$files_list = array_merge($files_list,$in_files_list);
+												} 
+											}
 										}
 									}
 								}
@@ -592,6 +612,7 @@ class learnpathItem{
     		default: //ignore
     			break;
     	}
+    	//error_log(str_repeat(' ',$recursivity),'found files '.print_r($files_list,true),0);
     	return $files_list;
     }
     /**
@@ -1096,6 +1117,7 @@ class learnpathItem{
 	 */
 	function parse_HTML_attributes($attrString,$wanted=array())
 	{
+		//error_log('Entering parse_HTML_attributes',0);
 	    $attributes = array();
 	    $regs = array();
 	    $reduced = false;
@@ -1103,7 +1125,9 @@ class learnpathItem{
 	    {
 	    	$reduced = true;
 	    }
-	    if (preg_match_all(
+	    //error_log('launching preg_match',0);
+	    try {
+	    	$res = preg_match_all(
 	            "/(((([A-Za-z_:])([A-Za-z0-9_:\\.-]|[^\\x00-\\x7F])*)" .
 	            "([ \\n\\t\\r]+)?(" .
 	              "(=([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*))" .
@@ -1114,7 +1138,14 @@ class learnpathItem{
 	            "(@import([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*)))?/", 
 	            $attrString, 
 	            $regs
-	       )) {
+	       );
+
+		} catch (Exception $e) {
+    		error_log('Caught exception: '. $e->getMessage(),0) ;
+		}
+
+	    if ($res) {
+	       	//error_log('preg_match ok',0);
 	        for ($i = 0; $i < count($regs[1]); $i++) {
 	            $name  = trim($regs[3][$i]);
 	            $check = trim($regs[0][$i]);
@@ -1143,7 +1174,10 @@ class learnpathItem{
 		            }
 	            }
 	        }
+	    }else{
+	    	error_log('preg_match did not find anything',0);
 	    }
+	    //error_log('Exiting parse_HTML_attributes() - found '.print_r($attributes,true),0);
 	    return $attributes;
 	}
     /**

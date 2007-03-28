@@ -536,6 +536,10 @@ class learnpathItem{
 										{	//link starts with a /, making it absolute (relative to DocumentRoot)
 											$files_list[] = array($source,'local','abs');
 										}
+										elseif(strstr($source,'..') === 0)
+										{	//link is relative but going back in the hierarchy
+											$files_list[] = array($source,'local','rel');
+										}
 										else
 										{	//no starting '/', making it relative to current document's path
 											$files_list[] = array($source,'local','rel');
@@ -1072,15 +1076,23 @@ class learnpathItem{
 	    	$reduced = true;
 	    }
 	    if (preg_match_all(
-	            "/(([A-Za-z_:]|[^\\x00-\\x7F])([A-Za-z0-9_:.-]|[^\\x00-\\x7F])*)" .
-	            "([ \\n\\t\\r]+)?(=([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*))?/", 
+	            "/(([A-Za-z_:]|[^\\x00-\\x7F])([A-Za-z0-9_:\\.-]|[^\\x00-\\x7F])*)" .
+	            "([ \\n\\t\\r]+)?(" .
+	            "(=([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*))" .
+	            "|" .
+	            "(\\(([ \\n\\t\\r]+)?(\"[^\"]*\"|'[^']*'|[^ \\n\\t\\r]*)\\))" .
+	            ")?/", 
 	            $attrString, 
 	            $regs
 	       )) {
 	        for ($i = 0; $i < count($regs[1]); $i++) {
 	            $name  = trim($regs[1][$i]);
 	            $check = trim($regs[0][$i]);
-	            $value = trim($regs[7][$i]);
+	            $value = trim($regs[8][$i]);
+	            if(empty($value) and !empty($regs[11][$i]))
+	            {
+	            	$value = $regs[11][$i];
+	            }
 				if(!$reduced OR in_array(strtolower($name),$wanted))
 	            {
 		            if ($name == $check) {

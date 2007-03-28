@@ -464,18 +464,27 @@ class learnpathItem{
      * The list will generally include pictures, flash objects, java applets, or any other
      * stuff included in the source of the current item. The current item is expected
      * to be an HTML file. If it is not, then the function will return and empty list.
+     * @param	string	type (one of the Dokeos tools) - optional (otherwise takes the current item's type)
+     * @param	string	path (absolute file path) - optional (otherwise takes the current item's path)
      * @return	array	List of file paths. An additional field containing 'local' or 'remote' helps determine if the file should be copied into the zip or just linked
      */
-    function get_resources_from_source()
+    function get_resources_from_source($type=null,$abs_path=null)
     {
+    	if(!isset($type))
+    	{
+    		$type = $this->get_type();
+    	}
+    	if(!isser($abs_path))
+    	{
+    		$path = $this->get_file_path();
+   			$abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
+    	}
     	$files_list = array();
     	$type = $this->get_type();
     	switch($type)
     	{
     		case TOOL_DOCUMENT:
     			//get the document and, if HTML, open it
-    			$path = $this->get_file_path();
-    			$abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
     			if(is_file($abs_path))
     			{
 	    			//for now, read the whole file in one go (that's gonna be a problem when the file is too big)
@@ -507,7 +516,7 @@ class learnpathItem{
 			    			}*/
 							$file_content = file_get_contents($abs_path);
 							//get an array of attributes from the HTML source
-							$attributes = $this->parse_HTML_attributes($file_content,$wanted_attributes);
+							$attributes = learnpathItem::parse_HTML_attributes($file_content,$wanted_attributes);
 							//look at 'src' attributes in this file
 							if(isset($attributes['src']))
 							{
@@ -522,6 +531,8 @@ class learnpathItem{
 										{
 											//we found the current portal url
 											$files_list[] = array($source,'local','url');
+											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source);
+											$files_list = array_merge($files_list,$in_files_list); 
 										}
 										else
 										{
@@ -535,14 +546,24 @@ class learnpathItem{
 										if(strstr($source,'/') === 0)
 										{	//link starts with a /, making it absolute (relative to DocumentRoot)
 											$files_list[] = array($source,'local','abs');
+											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source); 
+											$files_list = array_merge($files_list,$in_files_list); 
 										}
 										elseif(strstr($source,'..') === 0)
 										{	//link is relative but going back in the hierarchy
 											$files_list[] = array($source,'local','rel');
+											$dir = dirname($abs_path);
+											$new_abs_path = realpath($dir.'/'.$source);
+											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path); 
+											$files_list = array_merge($files_list,$in_files_list); 
 										}
 										else
 										{	//no starting '/', making it relative to current document's path
 											$files_list[] = array($source,'local','rel');
+											$dir = dirname($abs_path);
+											$new_abs_path = realpath($dir.'/'.$source);
+											$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path); 
+											$files_list = array_merge($files_list,$in_files_list); 
 										}
 									}
 								}

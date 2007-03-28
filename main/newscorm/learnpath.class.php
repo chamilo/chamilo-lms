@@ -7254,6 +7254,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$temp_zip_dir = api_get_path(GARBAGE_PATH)."/".$temp_dir_short;
 		$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 		$zip_folder=new PclZip($temp_zip_file);
+		$current_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
+		$root_path = api_get_path(SYS_PATH);
+		$main_path = $root_path.api_get_path(REL_PATH);
+		
 		//place to temporarily stash the zipfiles
 		//create the temp dir if it doesn't exist
 		//or do a cleanup befor creating the zipfile
@@ -7386,9 +7390,23 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 			 			$zip_files_abs[] = $doc_info[0];
 	 						break;
 	 					case 'rel': //path relative to the current document. Save xml:base as current document's directory and save file in zip as subdir.file_path
-			 				$my_dep_file->setAttribute('href',$doc_info[0]);
-	 			 			$my_dep->setAttribute('xml:base',$my_xml_sub_dir);
-	 			 			$zip_files[] = $my_sub_dir.'/'.$doc_info[0];
+			 				if(substr($doc_info[0],0,2)=='..')
+			 				{ //relative path going up
+			 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path());
+			 					$file_path = realpath($current_dir.'/'.$doc_info);
+			 					if(strstr($file_path,$main_path) === 0)
+			 					{//the calculated real path is really inside the dokeos root path
+			 						//reduce file path to what's under the DocumentRoot
+			 						$file_path = substr($file_path,strlen($root_path));
+			 						$zip_file_abs[] = $file_path;
+					 				$my_dep_file->setAttribute('href',$doc_info[0]);
+			 			 			$my_dep->setAttribute('xml:base','');
+			 					}
+			 				}else{
+		 			 			$zip_files[] = $my_sub_dir.'/'.$doc_info[0];
+				 				$my_dep_file->setAttribute('href',$doc_info[0]);
+		 			 			$my_dep->setAttribute('xml:base',$my_xml_sub_dir);
+			 				}
 	 						break;
 	 					default:
 			 				$my_dep_file->setAttribute('href',$doc_info[0]);

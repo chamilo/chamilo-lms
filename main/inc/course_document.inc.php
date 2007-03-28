@@ -39,6 +39,8 @@ $sType = isset($sType)?$sType:"Image";
 
 if($sType=="MP3") $sType="audio";
 
+$sType = strtolower($sType);
+
 $course_dir   = $_course['path']."/document/".$sType;
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$course_dir;

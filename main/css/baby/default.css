@@ -12,11 +12,11 @@
 a {
 	text-decoration: none;
 	font: bold 100% Arial, sans-serif, sans;
-	color: #0265aa;
+	color: #317100;
 }
 
 a:hover,a:focus {
-	color: #697ccf;
+	color: #683000;
 }
 
 blockquote {
@@ -107,17 +107,18 @@ ul {
 	padding: 0 1% 15px 3%;
 	/* min-height hack for ie6 or older*/
 	min-height: 320px;
-	margin-bottom:1em;
 	height: auto !important;
 	height: 320px;
 	clear: both;
 	float: left;
+	margin-bottom:1em;
 }
 
 /* For ie6 browsers or older*/
 * html #main {
 	padding: 0 1% 15px 2.96%;
 }
+
 
 .maincontent {
 	margin: 0 0 1em 1em;
@@ -136,8 +137,8 @@ ul {
 .user_course_category {
 	font: bold 110% sans, sans-serif, arial;
 	text-transform: capitalize;
-	text-align: center;
-	background: transparent url("images/thindivider.jpg") no-repeat bottom center;
+	text-align: left;
+	background: transparent url("images/thindivider.jpg") no-repeat 20% 100%;
 	height: 2.8em;
 	border-top:2px solid #5F5700;
 	padding-top:0.5em;
@@ -160,15 +161,14 @@ ul {
 	float: left;
 	clear: both;
 	margin-bottom: .5em;
+	position:relative;
 }
 
 #header a {
-	color: #f7d77e;
 	text-decoration: none;
 }
 
 #header li#current a,#header a:hover,header a:focus {
-	color: #eee403;
 	text-decoration: none;
 }
 
@@ -212,14 +212,6 @@ ul {
 	margin: .5em 0 0 0;
 	padding: 0;;
 	text-align: right;
-}
-
-#header2 a {
-	color: #e4031e;
-}
-
-#header2 a:hover,#header2 a:focus {
-	color: #fff;
 }
 
 #header2 ul {
@@ -339,13 +331,11 @@ ul {
 }
 
 #header4 a {
-	color: #ee8003;
 	font-size: 120%;
 	letter-spacing: -.05em;
 }
 
 #header4 a:hover,a:focus {
-	color: #eeb103;
 	text-decoration: none;
 }
 
@@ -358,6 +348,26 @@ ul {
 	right: 0;
 	margin: 0;
 	padding: 0;
+}
+
+/*
+------------------------------------------------------------------------------
+    SHORTCUTS
+------------------------------------------------------------------------------
+*/
+
+#toolshortcuts {
+	width:550px;
+	position: absolute;
+	bottom:-.75em;
+	right:.5em;
+	padding: 0;
+	margin:0;
+	text-align: right;
+}
+
+#toolshortcuts a {
+	margin:0 3px 0 3px;
 }
 
 /*
@@ -375,15 +385,6 @@ ul {
 	margin-top: -1.7em;
 	padding: 82px 0 .8em 2%;
 	background: transparent url('images/bg.jpg') no-repeat 100% 100%;
-}
-
-#footer a {
-	color: #eee403;
-}
-
-#footer a:hover,footer a:focus {
-	text-decoration: none;
-	color: #c7e272;
 }
 
 #footer .copyright {
@@ -415,17 +416,9 @@ ul {
 	padding: 0 0 .3em 0;
 	font-family: Arial, sans-serif, sans;
 	/* min-height hack for ie6 or older*/
-	min-height: 210px;
+	min-height: 320px;
 	height: auto !important;
-	height: 210px;
-}
-
-.menu a {
-	color: #794102;
-}
-
-.menu a:hover,.menu a:focus {
-	color: #df6000;
+	height: 320px;
 }
 
 .menu #formLogin {
@@ -524,17 +517,6 @@ td .menu {
 	text-decoration: none;
 }
 
-.data_table .row_even a,.data_table .row_odd a {
-	color: #ac5d02;
-}
-
-
-/* Hack to improve readability in Ie6 or older*/
-* html .data_table .row_odd a:hover,* html .data_table .row_odd a:focus,* html .data_table .row_even a:hover,* html .data_table .row_odd a:focus
-	{
-	color: #e36300;
-}
-
 .data_table .row_even td {
 	border-right: 1px solid #fff;
 	background: #ffdc9f;
@@ -554,14 +536,6 @@ td .menu {
 	color: #fff;
 }
 
-.data_table .row_even:hover td a,.data_table .row_odd:hover td a{
-	color: #000;
-}
-
-.data_table .row_even:hover td a:hover,.data_table .row_odd:hover td a:hover,.data_table .row_even:hover td a:focus,.data_table .row_odd:hover td a:focus{
-	color: #fff0df;
-}
-
 .data_table th,.data_table .row_odd th,.row_odd th {
 	font: bold 100% sans, sans-serif, arial;
 	text-transform: capitalize;
@@ -571,23 +545,11 @@ td .menu {
 }
 
 .data_table .row_odd th a {
-	color: #EE4C03;
 	text-decoration: none;
 	font-size: 110%;
 }
 
-.data_table .row_odd th a:hover,.data_table .row_odd th a:focus {
-	color: #eee403;
-}
-
-/*For forum*/
-.data_table tr th,.data_table tr th a {
-	color: #fff;
-}
-
-.data_table tr th a:hover,.data_table tr th a:focus {
-	color: #000;
-}
+/*Forum*/
 
 .row_odd img,.row_even img {
 	margin: 0 1em 0 1em;
@@ -601,10 +563,6 @@ td .menu {
 #doc_links a,#folderselector {
 	font: bold 100% Arial, sans-serif, sans;
 	text-decoration: none;
-}
-
-#doc_links a:hover,#doc_links a:focus {
-	color: #697ccf;
 }
 
 #folderselector {
@@ -740,6 +698,10 @@ div.row div.formw {
 	width: 550px;
 }
 
+#profile {
+	border:none;
+}
+
 #profile .clear {
 	position: absolute;
 	background: transparent url("images/divider.jpg") no-repeat top center;
@@ -803,6 +765,16 @@ div.row div.formw {
 
 .admin_section input {
 	margin: .5em;
+}
+
+.admin_section a {
+	text-decoration: none;
+	font: bold 100% Arial, sans-serif, sans;
+	color: #317100;
+}
+
+.admin_section  a:hover,.admin_section  a:focus {
+	color: #683000;
 }
 
 /*
@@ -919,11 +891,6 @@ div.row div.formw {
 #agenda_select li a {
 	font: bold 1em Arial, sans-serif, sans;
 	text-decoration: none;
-	color: #0265AA;
-}
-
-#agenda_select li a:hover,#agenda_select li a:hover {
-	color: #000;
 }
 
 .alternativeBgLight {
@@ -966,7 +933,7 @@ span.agendaitem i {
 }
 
 .days_week {
-	background-color: #EEB103;
+	background: #ffea9f;
 }
 
 .days_week,.days_weekend,.days_today {
@@ -974,40 +941,35 @@ span.agendaitem i {
 }
 
 .days_weekend {
-	background-color: #EE4C03;
+	background: #ffdc9f;
 }
 
 .days_week a,.days_weekend a {
 	font: bold 1em Arial, sans-serif, sans;
-	color: #697ccf;
 }
 
 .days_week a:hover,.days_weekend a:hover,.days_week a:focus,.days_weekend a:focus
 	{
 	text-decoration: none;
-	color: #0265aa;
 }
 
 .days_week .agendaitem i,.days_weekend .agendaitem i {
 	color: #3F3A00;
 }
 
+#newedit_form tr.title {
+	background:none;
+	text-align:left;
+}
+
 .title {
 	background: #ffb963 url('images/headertables.jpg') repeat-x;
-}
-
-.title a {
-	color: #FFF79F;
-}
-
-.title a:hover,.title a:focus {
-	color: #1F1C00;
 }
 
 .weekdays {
 	font: bold 1.1em Arial, sans-serif, sans;
 	color: #fff;
-	background-color: #EE8003;
+	background: #eebb03;
 	text-align: center;
 }
 
@@ -1128,29 +1090,30 @@ span.agendaitem i {
 	color: #000;
 }
 
-.blogpost_title a {
-	color: #EE8003;
-}
-
-.blogpost_title a:hover,.blogpost_title a:focus {
-	color: #000;
-}
-
 .blog_subtitle {
 	position: relative;
 	top: .8em;
-	padding: .2em;
+	padding: .2em .9em;
 	witdh: 100%;
 	border: 1px solid #EEB103;
 	background:  #ffb963 url('images/headertables.jpg') repeat-x top center;
+	display:block;
+	width:250px;
+	margin:0 0 -1em 0;
+}
+
+/*Hack for KHTML and safari browser to fit left*/
+body:last-child:not(:root:root) .blog_subtitle {
+	width:220px;
 }
 
 .blog_title {
 	padding: .1em 1em;
 	font: bold 140% Arial, sans-serif, sans;
 	color: #EE4C03;
-	margin-bottom: .2em;
 	text-transform:uppercase;
+	margin:0 0 -1.3em 0;
+	display:block;
 }
 
 .comments,.new_comment {
@@ -1162,14 +1125,6 @@ span.agendaitem i {
 		center;
 	padding-bottom: 25px;
 	margin-bottom: 2em;
-}
-
-.blogpost_comment a{
-	color:#fff;
-}
-
-.blogpost_comment a:hover,.blogpost_comment a:focus{
-	color:#000;
 }
 
 .blogpost_comment_title {
@@ -1202,12 +1157,12 @@ span.agendaitem i {
 */
 
 a.specialLink {
-	font: bold 100% Arial, sans-serif, sans;
-	color: #0265aa;
+	font: bold 80% Arial, sans-serif, sans;
+	color: #317100;
 }
 
 a.specialLink:hover,a.specialLink:focus {
-	color: #697ccf;
+	color: #683000;
 }
 
 /*
@@ -1223,6 +1178,10 @@ a.specialLink:hover,a.specialLink:focus {
 
 .forum_header td {
 	background: transparent url('images/line.jpg') repeat-x bottom center;
+}
+
+th span {
+	color:#000;
 }
 
 /*
@@ -1248,14 +1207,6 @@ a.specialLink:hover,a.specialLink:focus {
 	vertical-align: top;
 	width: 15em;
 	border-collapse: collapse;
-}
-
-.forum_message_left a {
-	color: #794102;
-}
-
-.forum_message_left a:hover,.forum_message_left a:focus {
-	color: #000;
 }
 
 .forum_message_post_text {
@@ -1342,12 +1293,8 @@ div.system_announcement {
 	border: 1px solid #EE8003;
 }
 
-.system_announcement a,.system_announcement_title {
+.system_announcement_title {
 	color: #794102;
-}
-
-.system_announcement a:hover,.system_announcement a:focus {
-	color: #000;
 }
 
 .system_announcements {

@@ -11,11 +11,11 @@
 a {
 	text-decoration: none;
 	font: bold 100% Arial, sans-serif, sans;
-	color: #4170b4;
+	color: #900;
 }
 
 a:hover,a:focus {
-	color: #111;
+	color: #990;
 }
 
 blockquote {
@@ -155,21 +155,9 @@ ul {
 	float: left;
 	clear: both;
 	margin-bottom: .5em;
+	position:relative;
 }
 
-#header a {
-	color: #000;
-	text-decoration: none;
-}
-
-#header a:hover,header a:focus {
-	text-decoration: none;
-}
-
-#header li#current a,#header a:hover,header a:focus {
-	color: #888;
-	text-decoration: underline;
-}
 
 /*
 ------------------------------------------------------------------------------
@@ -207,10 +195,6 @@ ul {
 	margin: .5em 0 0 0;
 	padding: 0;;
 	text-align: right;
-}
-
-#header2 a:hover,#header2 a:focus {
-	color: #fff;
 }
 
 #header2 ul {
@@ -331,14 +315,11 @@ ul {
 }
 
 #header4 a {
-	color: #4170b4;
 	font-size: 120%;
 	letter-spacing: -.05em;
+	width:30%;
 }
 
-#header4 a:hover,a:focus {
-	color: #111;
-}
 
 #header4 .clear {
 	width: 100%;
@@ -349,6 +330,26 @@ ul {
 	right: 0;
 	margin: 0;
 	padding: 0;
+}
+
+/*
+------------------------------------------------------------------------------
+    SHORTCUTS
+------------------------------------------------------------------------------
+*/
+
+#toolshortcuts {
+	width:550px;
+	position: absolute;
+	bottom:-.75em;
+	right:.5em;
+	padding: 0;
+	margin:0;
+	text-align: right;
+}
+
+#toolshortcuts a {
+	margin:0 3px 0 3px;
 }
 
 /*
@@ -368,24 +369,12 @@ ul {
 	border-bottom: 1px solid #999;
 }
 
-#footer a {
-	color: #4170b4;
-}
-
-#footer a:hover,footer a:focus {
-	text-decoration: none;
-	color: #888;
-}
-
 #footer .copyright {
 	float: right;
 	clear: right;
 	margin: 0 2em 0 0;
 }
 
-#footer .copyright a:hover,#footer .copyright a:focus {
-	color: #fff;
-}
 
 /*
 ==============================================================================
@@ -405,6 +394,10 @@ ul {
 	float: left;
 	clear: left;
 	width: 215px;
+	/* min-height hack for ie6 or older*/
+	min-height: 380px;
+	height: auto !important;
+	height: 380px;
 	border: 1px solid #999;
 	margin: 0 0 1em 0;
 	padding: 0 0 .3em 0;
@@ -522,11 +515,6 @@ td .menu {
 	color: #333;
 }
 
-.data_table .row_odd a:hover,.data_table .row_odd:focus,.data_table .row_even a:hover,.data_table .row_odd a:focus
-	{
-	color: #111;
-}
-
 .data_table th,.data_table .row_odd th,.row_odd th {
 	font: bold 100% sans, sans-serif, arial;
 	text-transform: capitalize;
@@ -536,7 +524,6 @@ td .menu {
 }
 
 .data_table .row_odd th a {
-	color: #157;
 	text-decoration: none;
 	font-size: 110%;
 }
@@ -552,7 +539,6 @@ td .menu {
 
 #doc_links a,#folderselector {
 	font: bold 100% Arial, sans-serif, sans;
-	color: #4170b4;
 	text-decoration: none;
 }
 
@@ -684,6 +670,10 @@ div.row div.label {
 	width: 550px;
 }
 
+#profile {
+	border:none;
+}
+
 #profile .clear {
 	position: absolute;
 	background: transparent url("images/divider3.jpg") no-repeat top center;
@@ -767,11 +757,6 @@ div.row div.label {
 	margin: 0 auto;
 	text-align: center;
 	font: bold 100% Arial, sans-serif, sans;
-	color: #4170b4;
-}
-
-.courseadminview a:hover,.courseadminview a:focus {
-	color: #000;
 }
 
 .courseadminview table td {
@@ -865,14 +850,8 @@ div.row div.label {
 }
 
 #agenda_select li a {
-	color: #4170b4;
 	font: bold 1em Arial, sans-serif, sans;
 	text-decoration: none;
-	color: #667;
-}
-
-#agenda_select li a:hover,#agenda_select li a:hover {
-	color: #111;
 }
 
 .alternativeBgLight {
@@ -923,14 +902,7 @@ span.agendaitem i {
 }
 
 .days_week a,.days_weekend a {
-	color: #4170b4;
 	font: bold 1em Arial, sans-serif, sans;
-}
-
-.days_week a:hover,.days_weekend a:hover,.days_week a:focus,.days_weekend a:focus
-	{
-	text-decoration: none;
-	color: #444;
 }
 
 .days_weekend {
@@ -939,6 +911,11 @@ span.agendaitem i {
 
 .days_weekend .agendaitem i {
 	color: #444;
+}
+
+#newedit_form tr.title {
+	background:none;
+	text-align:left;
 }
 
 .title {
@@ -1073,18 +1050,33 @@ span.agendaitem i {
 .blog_subtitle {
 	position: relative;
 	top: .8em;
-	padding: .2em;
+	padding: .2em 1em;
 	witdh: 100%;
 	border: 1px solid #ddd;
 	background: #ddd url('images/headertables.jpg') repeat-x top center;
+	display:block;
+	width:250px;
+	margin:0 0 -1em 0;
+}
+
+/*Hack for KHTML and safari browser to fit left*/
+body:last-child:not(:root:root) .blog_subtitle {
+	width:220px;
 }
 
 .blog_title {
-	padding: .1em 1em;
+	padding: .1em .9em;
 	font: bold 130% Arial, sans-serif, sans;
 	color: #fff;
 	background-color: #999;
-	margin-bottom: .2em;
+	margin:0 0 -1.3em 0;
+	display:block;
+	width:250px;
+}
+
+/*Hack for KHTML and safari browser to fit left*/
+body:last-child:not(:root:root) .blog_title {
+	width:222px;
 }
 
 .comments,.new_comment {
@@ -1128,8 +1120,12 @@ span.agendaitem i {
 */
 
 a.specialLink {
-	font: bold 100% Arial, sans-serif, sans;
-	color: #4170b4;
+	font: bold 80% Arial, sans-serif, sans;
+	color: #900;
+}
+
+a.specialLink:hover,a.specialLink:focus {
+	color: #990;
 }
 
 /*

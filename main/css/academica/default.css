@@ -156,6 +156,7 @@ ul {
 	clear: both;
 	margin-bottom: .5em;
 	color: #b0c8eb;
+	position:relative;
 }
 
 #header a {
@@ -351,6 +352,26 @@ ul {
 }
 
 /*
+------------------------------------------------------------------------------
+    SHORTCUTS
+------------------------------------------------------------------------------
+*/
+
+#toolshortcuts {
+	width:550px;
+	position: absolute;
+	bottom:-1.1em;
+	right:.5em;
+	padding: 0;
+	margin:0;
+	text-align: right;
+}
+
+#toolshortcuts a {
+	margin:0 3px 0 3px;
+}
+
+/*
 ==============================================================================
     FOOTER STYLES
 ==============================================================================
@@ -358,11 +379,11 @@ ul {
 
 #footer {
 	background: #4171b5 url('images/bg.jpg') no-repeat 50% 100%;
-	font: bold 1em Arial, sans-serif, sans;
+	font: bold .9em Arial, sans-serif, sans;
 	width: 98%;
 	float: left;
 	clear: both;
-	color: #B7DCE9;
+	color: #b0c8eb;
 	padding: 82px 0 .8em 2%;
 	border-bottom: 1px solid #4171b5;
 }
@@ -404,6 +425,10 @@ ul {
 	margin: 0 0 1em 0;
 	padding: 0 0 .3em 0;
 	font-family: Arial, sans-serif, sans;
+	/* min-height hack for ie6 or older*/
+	min-height: 320px;
+	height: auto !important;
+	height: 320px;
 }
 
 .menu #formLogin {
@@ -702,6 +727,10 @@ div.row div.label {
 	width: 550px;
 }
 
+#profile {
+	border:none;
+}
+
 #profile .clear {
 	position: absolute;
 	background: transparent url("images/divider.jpg") no-repeat top center;
@@ -936,7 +965,7 @@ span.agendaitem i {
 }
 
 .days_week {
-	background-color: #b0c8eb;
+	background: #dfecff;
 }
 
 .days_week,.days_weekend,.days_today {
@@ -959,7 +988,13 @@ span.agendaitem i {
 }
 
 .days_weekend {
-	background-color: #8cafe1;
+	background: #d6e3f5;
+}
+
+#newedit_form tr.title {
+	background:none;
+	color:#000;
+	text-align:left;
 }
 
 .title {
@@ -978,7 +1013,7 @@ span.agendaitem i {
 .weekdays {
 	font: bold 1.1em Arial, sans-serif, sans;
 	color: #fff;
-	background-color: #0049AF;
+	background-color: #8cafe1;
 	text-align: center;
 }
 
@@ -1100,20 +1135,34 @@ span.agendaitem i {
 .blog_subtitle {
 	position: relative;
 	top: .8em;
-	padding: .2em;
-	witdh: 100%;
+	padding: .2em 1em;
 	color: #fff;
 	background: #8cafe1 url('images/crystal3.png') repeat-x;
 	border: 1px solid #002D6D;
+	display:block;
+	width:250px;
+	margin:0 0 -1em 0;
+}
+
+/*Hack for KHTML and safari browser to fit left*/
+body:last-child:not(:root:root) .blog_subtitle {
+	width:220px;
 }
 
 .blog_title {
-	padding: .1em 1em;
+	padding: .1em .85em;
 	font: bold 130% Arial, sans-serif, sans;
 	color: #fff;
 	background: #8cafe1 url('images/crystal3.png') repeat-x;
 	border: 1px solid #002D6D;
-	margin-bottom: .2em;
+	margin:0 0 -1.3em 0;
+	display:block;
+	width:250px;
+}
+
+/*Hack for KHTML and safari browser to fit left*/
+body:last-child:not(:root:root) .blog_title {
+	width:222px;
 }
 
 .comments,.new_comment {
@@ -1156,8 +1205,12 @@ span.agendaitem i {
 */
 
 a.specialLink {
-	font: bold 100% Arial, sans-serif, sans;
+	font: bold 80% Arial, sans-serif, sans;
 	color: #4171b5;
+}
+
+a.specialLink:hover,a.specialLink:focus {
+	color: #000915;
 }
 
 /*
@@ -1396,4 +1449,12 @@ div.system_announcement {
 	background-color: #f7f7f7;
 	padding-left: 2px;
 	width: 50%;
+}
+
+#openarea___Config {
+	width:200px;
+}
+
+#openarea___Frame {
+	width:200px;
 }

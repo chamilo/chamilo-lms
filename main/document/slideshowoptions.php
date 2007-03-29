@@ -1,4 +1,4 @@
-<?php // $Id: slideshowoptions.php 10204 2006-11-26 20:46:53Z pcool $ 
+<?php // $Id: slideshowoptions.php 11766 2007-03-29 08:39:27Z elixir_julian $ 
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,7 +73,7 @@ $originaltoolname=get_lang('Documents');
 $interbreadcrumb[]= array ("url"=>$url, "name"=>$originaltoolname );
 
 $url="slideshow.php?curdirpath=".$pathurl;
-$originaltoolname=get_lang('Slideshow');
+$originaltoolname=get_lang('SlideShow');
 $interbreadcrumb[]= array ("url"=>$url, "name"=>$originaltoolname );
 
 // because $nametools uses $_SERVER['PHP_SELF'] for the breadcrumbs instead of $_SERVER['REQUEST_URI'], I had to 

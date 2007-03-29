@@ -1,5 +1,5 @@
 <?php
-// $Id: slideshow.php 10839 2007-01-23 09:35:28Z elixir_julian $
+// $Id: slideshow.php 11766 2007-03-29 08:39:27Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -89,7 +89,7 @@ $interbreadcrumb[] = array ("url" => $url, "name" => $originaltoolname);
 // because $nametools uses $_SERVER['PHP_SELF'] for the breadcrumbs instead of $_SERVER['REQUEST_URI'], I had to 
 // bypass the $nametools thing and use <b></b> tags in the $interbreadcrump array
 $url = "slideshow.php?curdirpath=".$pathurl;
-$originaltoolname = get_lang('_slideshow');
+$originaltoolname = get_lang('SlideShow');
 //$interbreadcrumb[]= array ("url"=>$url, "name"=>$originaltoolname );
 
 Display :: display_header($originaltoolname, "Doc");
@@ -123,7 +123,7 @@ function MM_openBrWindow(theURL,winName,features) { //v2.0
 
 
 <p></p>
-<h3 style="margin-top: 0; margin-bottom: 0"><?php echo get_lang('_slideshow'); ?></h3>
+<h3 style="margin-top: 0; margin-bottom: 0"><?php echo get_lang('SlideShow'); ?></h3>
 <table width="100%" border="0" cellspacing="0" cellpadding="2">
   <tr>
     <td>

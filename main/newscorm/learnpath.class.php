@@ -7068,7 +7068,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				}
 				//It's a folder
 				else {
-					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/add.gif" id="img_'.$value["id"].'" onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')"><img alt="" src="../img/lp_' . (($value['filetype'] == 'file') ? TOOL_DOCUMENT.'_file' : 'folder') . '.gif" title="" /><span onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')" style="cursor: pointer;" >'.$value['title'].'</span></div><div style="display: none;" id="'.$value['id'].'">';
+					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_'.$value["id"].'" onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')"><img alt="" src="../img/lp_' . (($value['filetype'] == 'file') ? TOOL_DOCUMENT.'_file' : 'folder') . '.gif" title="" align="absmiddle" /><span onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')" style="cursor: pointer;" >'.$value['title'].'</span></div><div style="display: none;" id="'.$value['id'].'">';
 					array_shift($resources_array);
 					$return .= $this->write_resources_tree($value['path']);
 					$return .= "</div></div>\r\n";

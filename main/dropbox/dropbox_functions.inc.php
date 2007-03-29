@@ -141,11 +141,11 @@ function delete_category($action, $id)
 	}
 
 	// step 1: delete the category
-	$sql="DELETE FROM `".$dropbox_cnf['tbl_category']."` WHERE cat_id='".mysql_real_escape_string($id)."' AND $sentreceived='1'";
+	$sql="DELETE FROM `".$dropbox_cnf['tbl_category']."` WHERE cat_id='".Database::escape_string($id)."' AND $sentreceived='1'";
 	$result=api_sql_query($sql);
 
 	// step 2: delete all the documents in this category
-	$sql="SELECT * FROM `".$entries_table."` WHERE cat_id='".mysql_real_escape_string($id)."'";
+	$sql="SELECT * FROM `".$entries_table."` WHERE cat_id='".Database::escape_string($id)."'";
 	$result=api_sql_query($sql);
 
 	while ($row=mysql_fetch_array($result))
@@ -209,18 +209,18 @@ function store_move($id, $target, $part)
 	{
 		if ($part=='received')
 		{
-			$sql="UPDATE `".$dropbox_cnf["postTbl"]."` SET cat_id='".mysql_real_escape_string($target)."'
-						WHERE dest_user_id='".mysql_real_escape_string($_user['user_id'])."'
-						AND file_id='".mysql_real_escape_string($id)."'
+			$sql="UPDATE `".$dropbox_cnf["postTbl"]."` SET cat_id='".Database::escape_string($target)."'
+						WHERE dest_user_id='".Database::escape_string($_user['user_id'])."'
+						AND file_id='".Database::escape_string($id)."'
 						";
 			api_sql_query($sql,__FILE__,__LINE__);
 			$return_message=get_lang('ReceivedFileMoved');
 		}
 		if ($part=='sent')
 		{
-			$sql="UPDATE `".$dropbox_cnf["fileTbl"]."` SET cat_id='".mysql_real_escape_string($target)."'
-						WHERE uploader_id='".mysql_real_escape_string($_user['user_id'])."'
-						AND id='".mysql_real_escape_string($id)."'
+			$sql="UPDATE `".$dropbox_cnf["fileTbl"]."` SET cat_id='".Database::escape_string($target)."'
+						WHERE uploader_id='".Database::escape_string($_user['user_id'])."'
+						AND id='".Database::escape_string($id)."'
 						";
 			api_sql_query($sql,__FILE__,__LINE__);
 			$return_message=get_lang('SentFileMoved');
@@ -367,7 +367,7 @@ function store_addcategory()
 	if (!$_POST['edit_id'])
 	{
 		// step 3a, we check if the category doesn't already exist
-		$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE user_id='".$_user['user_id']."' AND cat_name='".mysql_real_escape_string($_POST['category_name'])."' AND received='".$received."' AND sent='".$sent."'";
+		$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE user_id='".$_user['user_id']."' AND cat_name='".Database::escape_string($_POST['category_name'])."' AND received='".$received."' AND sent='".$sent."'";
 		$result=api_sql_query($sql);
 
 
@@ -375,7 +375,7 @@ function store_addcategory()
 		if (mysql_num_rows($result)==0)
 		{
 			$sql="INSERT INTO `".$dropbox_cnf['tbl_category']."` (cat_name, received, sent, user_id)
-					VALUES ('".mysql_real_escape_string($_POST['category_name'])."', '".mysql_real_escape_string($received)."', '".mysql_real_escape_string($sent)."', '".mysql_real_escape_string($_user['user_id'])."')";
+					VALUES ('".Database::escape_string($_POST['category_name'])."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', '".Database::escape_string($_user['user_id'])."')";
 			api_sql_query($sql);
 			return get_lang('CategoryStored');
 		}
@@ -386,9 +386,9 @@ function store_addcategory()
 	}
 	else
 	{
-		$sql="UPDATE `".$dropbox_cnf['tbl_category']."` SET cat_name='".mysql_real_escape_string($_POST['category_name'])."', received='".mysql_real_escape_string($received)."' , sent='".mysql_real_escape_string($sent)."'
-				WHERE user_id='".mysql_real_escape_string($_user['user_id'])."'
-				AND cat_id='".mysql_real_escape_string($_POST['edit_id'])."'";
+		$sql="UPDATE `".$dropbox_cnf['tbl_category']."` SET cat_name='".Database::escape_string($_POST['category_name'])."', received='".Database::escape_string($received)."' , sent='".Database::escape_string($sent)."'
+				WHERE user_id='".Database::escape_string($_user['user_id'])."'
+				AND cat_id='".Database::escape_string($_POST['edit_id'])."'";
 		api_sql_query($sql);
 		return get_lang('CategoryModified');
 	}
@@ -412,7 +412,7 @@ function display_addcategory_form($category_name='', $id='')
 	if (isset($id) AND $id<>'')
 	{
 		// retrieve the category we are editing
-		$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE cat_id='".mysql_real_escape_string($id)."'";
+		$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE cat_id='".Database::escape_string($id)."'";
 		$result=api_sql_query($sql);
 		$row=mysql_fetch_array($result);
 
@@ -972,7 +972,7 @@ function display_user_link($user_id, $name='')
 		if ($name=='')
 		{
 			$table_user = Database::get_main_table(TABLE_MAIN_USER);
-			$sql="SELECT * FROM $table_user WHERE user_id='".mysql_real_escape_string($user_id)."'";
+			$sql="SELECT * FROM $table_user WHERE user_id='".Database::escape_string($user_id)."'";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 			$row=mysql_fetch_array($result);
 			return "<a href=\"../user/userInfo.php?uInfo=".$row['user_id']."\">".$row['firstname']." ".$row['lastname']."</a>";
@@ -1040,7 +1040,7 @@ function feedback_form()
 
 	// we now check if the other users have not delete this document yet. If this is the case then it is useless to see the
 	// add feedback since the other users will never get to see the feedback.
-	$sql="SELECT * FROM `".$dropbox_cnf["personTbl"]."` WHERE file_id='".mysql_real_escape_string($_GET['id'])."'";
+	$sql="SELECT * FROM `".$dropbox_cnf["personTbl"]."` WHERE file_id='".Database::escape_string($_GET['id'])."'";
 	$result=api_sql_query($sql,__LINE__, __FILE__);
 	$number_users_who_see_file=mysql_num_rows($result);
 	if ($number_users_who_see_file>1)
@@ -1077,7 +1077,7 @@ function store_feedback()
 	else
 	{
 		$sql="INSERT INTO `".$dropbox_cnf['tbl_feedback']."` (file_id, author_user_id, feedback, feedback_date) VALUES
-				('".mysql_real_escape_string($_GET['id'])."','".mysql_real_escape_string($_user['user_id'])."','".mysql_real_escape_string($_POST['feedback'])."',NOW())";
+				('".Database::escape_string($_GET['id'])."','".Database::escape_string($_user['user_id'])."','".Database::escape_string($_POST['feedback'])."',NOW())";
 		api_sql_query($sql);
 		return get_lang('DropboxFeedbackStored');
 	}
@@ -1428,9 +1428,9 @@ function get_last_tool_access($tool, $course_code='', $user_id='')
 	// the table where the last tool access is stored (=track_e_lastaccess)
 	$table_last_access=Database::get_statistic_table('track_e_lastaccess');
 
-	$sql="SELECT access_date FROM $table_last_access WHERE access_user_id='".mysql_real_escape_string($user_id)."'
-				AND access_cours_code='".mysql_real_escape_string($course_code)."'
-				AND access_tool='".mysql_real_escape_string($tool)."'";
+	$sql="SELECT access_date FROM $table_last_access WHERE access_user_id='".Database::escape_string($user_id)."'
+				AND access_cours_code='".Database::escape_string($course_code)."'
+				AND access_tool='".Database::escape_string($tool)."'";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$row=mysql_fetch_array($result);
 	return $row['access_date'];

@@ -387,7 +387,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 				$dropbox_category_data[]=''; // this is where the checkbox icon for the files appear
 				// the icon of the category
 				$dropbox_category_data[]=build_document_icon_tag('folder',$category['cat_name']);
-				$dropbox_category_data[]='<a href="dropbox_download.php?cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=received"><img width="16" height="16" src="../img/folder_zip.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="'.api_get_self().'?view_received_category='.$category['cat_id'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.stripslashes($category['cat_name']).'</a>';
+				$dropbox_category_data[]='<a href="dropbox_download.php?cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=received"><img width="16" height="16" src="../img/folder_zip.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="'.api_get_self().'?view_received_category='.$category['cat_id'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.$category['cat_name'].'</a>';
 				$dropbox_category_data[]='';
 				$dropbox_category_data[]='';
 				$dropbox_category_data[]='';
@@ -531,7 +531,7 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 			{
 				$dropbox_category_data[]=''; // this is where the checkbox icon for the files appear
 				$dropbox_category_data[]=build_document_icon_tag('folder',$category['cat_name']);
-				$dropbox_category_data[]='<a href="dropbox_download.php?cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=sent"><img width="16" height="16" src="../img/folder_zip.gif" style="float:right;" alt="'.get_lang('Save').'" /></a><a href="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.$_GET['view'].'">'.stripslashes($category['cat_name']).'</a>';
+				$dropbox_category_data[]='<a href="dropbox_download.php?cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=sent"><img width="16" height="16" src="../img/folder_zip.gif" style="float:right;" alt="'.get_lang('Save').'" /></a><a href="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.$_GET['view'].'">'.$category['cat_name'].'</a>';
 				$dropbox_category_data[]='';
 				$dropbox_category_data[]='';
 				$dropbox_category_data[]='';

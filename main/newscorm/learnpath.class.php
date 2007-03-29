@@ -5015,7 +5015,7 @@ class learnpath {
 								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
-									$s_selected_position=$arrLP[$i]['id'];
+									$s_selected_position=0;
 								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
 								
 							}
@@ -5270,7 +5270,7 @@ class learnpath {
 								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
-									$s_selected_position=$arrLP[$i]['id'];
+									$s_selected_position=0;
 								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
 								
 							}
@@ -5510,7 +5510,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
-									$s_selected_position=$arrLP[$i]['id'];
+									$s_selected_position=0;
 								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
 								
 							}
@@ -6009,7 +6009,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				foreach($arrHide as $key => $value){
 					$select_prerequisites->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 					if($key==$s_selected_position && $action == 'add'){
-						$select_prerequisites -> setSelected($s_selected_position);
+						$select_prerequisites -> setSelected(0);
 					}
 					elseif($key==$id_prerequisite && $action == 'edit'){
 						$select_prerequisites -> setSelected($id_prerequisite);
@@ -6516,7 +6516,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
-									$s_selected_position=$arrLP[$i]['id'];
+									$s_selected_position=0;
 								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
 								
 							}

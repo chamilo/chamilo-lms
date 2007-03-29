@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 11555 2007-03-13 10:42:00Z elixir_julian $
+* 	@version $Id: exercice_submit.php 11764 2007-03-29 08:28:07Z elixir_inter $
 */
 
 
@@ -197,7 +197,7 @@ if($formSent)
 }
 
 // if the object is not in the session
-if(!isset($_SESSION['objExercise']))
+if(!isset($_SESSION['objExercise']) || $origin == 'learnpath')
 {
     if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[objExercise] was unset'."<br />\n";}
     // construction of Exercise
@@ -233,7 +233,7 @@ $exerciseSound=$objExercise->selectSound();
 $randomQuestions=$objExercise->isRandom();
 $exerciseType=$objExercise->selectType();
 
-if(!isset($_SESSION['questionList']))
+if(!isset($_SESSION['questionList']) || $origin == 'learnpath')
 {
     if($debug>0){echo str_repeat('&nbsp;',0).'$_SESSION[questionList] was unset'."<br />\n";}
     // selects the list of question ID

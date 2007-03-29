@@ -1,5 +1,5 @@
 <?php
-// $Id: Resource.class.php 11776 2007-03-29 11:47:41Z yannoo $
+// $Id: Resource.class.php 11784 2007-03-29 14:45:54Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -178,6 +178,7 @@ class Resource
 			//	return TOOL_SURVEY_INVITATION;
 			default:
 				return null;
+		}
 	}
 	/**
 	 * Set the destination id

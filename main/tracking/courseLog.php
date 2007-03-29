@@ -61,6 +61,7 @@ if(!$is_allowedToTrack)
 //includes for SCORM and LP
 require_once('../newscorm/learnpath.class.php');
 require_once('../newscorm/learnpathItem.class.php');
+require_once('../newscorm/learnpathList.class.php');
 require_once('../newscorm/scorm.class.php');
 require_once('../newscorm/scormItem.class.php');
 require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
@@ -339,9 +340,8 @@ if($_GET['studentlist'] == 'false')
 				</h4>
 			<table class='data_table'>";
 			
-	$sql = "SELECT lp.name,lp.id
-			FROM ".$tbl_learnpath_main." AS lp";
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$list = new LearnpathList($student);
+	$flat_list = $list->get_flat_list();
 	
 	if($export_csv){
     	$temp=array(get_lang('AverageProgressInLearnpath'),'');
@@ -349,16 +349,16 @@ if($_GET['studentlist'] == 'false')
     	$csv_content[] = $temp;
     }
 	
-	if(mysql_num_rows($rs)>0)
+	if(count($flat_list)>0)
 	{
-		while($lp = mysql_fetch_array($rs))
+		foreach($flat_list as $lp_id => $lp)
 		{
 			$lp_avg_progress = 0;
 			foreach($a_students as $student)
 			{
 				
 				// get the progress in learning pathes	
-				$lp_avg_progress += learnpath::get_db_progress($lp['id'],$student);
+				$lp_avg_progress += learnpath::get_db_progress($lp_id,$student);
 				
 				
 			}
@@ -366,9 +366,9 @@ if($_GET['studentlist'] == 'false')
 			{
 				$lp_avg_progress = $lp_avg_progress / $nbStudents;
 			}
-			echo '<tr><td>'.$lp['name'].'</td><td align="right">'.round($lp_avg_progress,1).' %</td></tr>';
+			echo '<tr><td>'.$lp['lp_name'].'</td><td align="right">'.round($lp_avg_progress,1).' %</td></tr>';
 			if($export_csv){
-				$temp=array($lp['name'],$lp_avg_progress);
+				$temp=array($lp['lp_name'],$lp_avg_progress);
 				$csv_content[] = $temp;
 			}
 		}

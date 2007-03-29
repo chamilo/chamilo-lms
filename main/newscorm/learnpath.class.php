@@ -5010,7 +5010,7 @@ class learnpath {
 						$arrHide=array();
 						for($i = 0; $i < count($arrLP); $i++)
 						{
-							if($arrLP[$i]['id'] != $id)
+							if($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter')
 							{
 								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 									$s_selected_position=$arrLP[$i]['id'];
@@ -5265,7 +5265,7 @@ class learnpath {
 						$arrHide=array();
 						for($i = 0; $i < count($arrLP); $i++)
 						{
-							if($arrLP[$i]['id'] != $id)
+							if($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter')
 							{
 								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 									$s_selected_position=$arrLP[$i]['id'];
@@ -5505,7 +5505,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						$arrHide=array();
 						for($i = 0; $i < count($arrLP); $i++)
 						{
-							if($arrLP[$i]['id'] != $id)
+							if($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter')
 							{
 								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 									$s_selected_position=$arrLP[$i]['id'];
@@ -5994,7 +5994,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 
 				for($i = 0; $i < count($arrLP); $i++)
 				{
-					if($arrLP[$i]['id'] != $id)
+					if($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter')
 					{
 						if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 							$s_selected_position=$arrLP[$i]['id'];
@@ -6269,7 +6269,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						$arrHide=array();
 						for($i = 0; $i < count($arrLP); $i++)
 						{
-							if($arrLP[$i]['id'] != $id)
+							if($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter')
 							{
 								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 									$s_selected_position=$arrLP[$i]['id'];
@@ -6511,7 +6511,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						$arrHide=array();
 						for($i = 0; $i < count($arrLP); $i++)
 						{
-							if($arrLP[$i]['id'] != $id)
+							if($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter')
 							{
 								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 									$s_selected_position=$arrLP[$i]['id'];

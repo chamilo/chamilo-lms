@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 11166 2007-02-20 01:53:14Z yannoo $
+<?php // $Id: courses.php 11789 2007-03-29 20:54:00Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -39,41 +39,45 @@ $language_file = 'courses';
 
 // including the global file
 include('../inc/global.inc.php');
+
+// section for the tabs
 $this_section=SECTION_COURSES;
 
+// acces rights: anonymous users can't do anything usefull here
 api_block_anonymous_users();
 
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
+// include additional libraries
 include_once(api_get_path(LIBRARY_PATH) . 'debug.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
 
-/*
------------------------------------------------------------
-	Variables
------------------------------------------------------------
-*/
+// Database table definitions
 $tbl_course             = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_courses_nodes      = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tbl_courseUser         = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
-
 // title of the page
-$nameTools= get_lang('CourseManagement');
+if ($_GET['action'] == 'sortmycourses' OR !isset($_GET['action']))
+{
+	$nameTools = get_lang("SortMyCourses");
+}
+if ($_GET['action'] == 'createcoursecategory')
+{
+	$nameTools = get_lang('CreateCourseCategory');
+}
+if ($_GET['action'] == 'subscribe')
+{
+	$nameTools = get_lang("SubscribeToCourse");
+}
 
+// breadcrumbs
+$interbreadcrumb[] = array('name'=> get_lang('CourseManagement'), 'url'=>'courses.php');
 
-
+// Displaying the header
 Display::display_header($nameTools);
-api_display_tool_title($nameTools);
+
+// Diplaying the tool title
+// api_display_tool_title($nameTools);
 
 /*
 ==============================================================================
@@ -139,34 +143,55 @@ if (isset($message))
 ==============================================================================
 */
 // The menu with the different options in the course management
-echo "<div>\n";
-echo "\t<ul>\n";
-echo "\t\t<li><a href=\"".$_SERVER['PHP_SELF']."?action=sortmycourses\">".get_lang("SortMyCourses")."</a></li>\n";
-echo "\t\t<li><a href=\"".$_SERVER['PHP_SELF']."?action=createcoursecategory\">".get_lang("CreateCourseCategory")."</a></li>\n";
-echo "\t\t<li><a href=\"".$_SERVER['PHP_SELF']."?action=subscribe\">".get_lang("SubscribeToCourse")."</a></li>\n";
-echo "\t</ul>\n";
+echo "<div id=\"actions\">\n";
+if ($_GET['action'] <> 'sortmycourses' AND isset($_GET['action']))
+{
+	echo "<a href=\"".$_SERVER['PHP_SELF']."?action=sortmycourses\">".Display::return_icon('deplacer_fichier.gif').' '.get_lang("SortMyCourses")."</a>";
+}
+else
+{
+	echo '<b>'.Display::return_icon('deplacer_fichier.gif').' '.get_lang('SortMyCourses').'</b>';
+}
+echo '&nbsp;&nbsp;';
+if ($_GET['action']<>'createcoursecategory')
+{
+	echo "<a href=\"".$_SERVER['PHP_SELF']."?action=createcoursecategory\">".Display::return_icon('folder_new.gif').' '.get_lang("CreateCourseCategory")."</a>\n";
+}
+else
+{
+	echo '<b>'.Display::return_icon('folder_new.gif').' '.get_lang('CreateCourseCategory').'</b>';
+}
+echo '&nbsp;&nbsp;';
+if ($_GET['action']<>'subscribe')
+{
+	echo "\t\t<a href=\"".$_SERVER['PHP_SELF']."?action=subscribe\">".Display::return_icon('view_more_stats.gif').' '.get_lang("SubscribeToCourse")."</a>\n";
+}
+else
+{
+	echo '<b>'.Display::return_icon('view_more_stats.gif').' '.get_lang("SubscribeToCourse").'</b>';
+}
 echo "</div>";
 
 echo "<div>";
 switch ($_GET['action'])
 {
 	case 'subscribe':
-		api_display_tool_title(get_lang('SubscribeToCourse'));
+		//api_display_tool_title(get_lang('SubscribeToCourse'));
 		courses_subscribing();
 		break;
 	case 'unsubscribe':
-		api_display_tool_title(get_lang('UnsubscribeFromCourse'));
+		//api_display_tool_title(get_lang('UnsubscribeFromCourse'));
 		$user_courses=get_courses_of_user($_user['user_id']);
 		display_courses($_user['user_id'], true, $user_courses);
 		break;
 	case 'createcoursecategory':
-		api_display_tool_title(get_lang('CreateCourseCategory'));
+		//api_display_tool_title(get_lang('CreateCourseCategory'));
 		display_create_course_category_form();
 		break;
 	case 'deletecoursecategory':
 	case 'sortmycourses':
 	default:
-		api_display_tool_title(get_lang('SortMyCourses'));
+		//api_display_tool_title(get_lang('SortMyCourses'));
 		$user_courses=get_courses_of_user($_user['user_id']);
 		display_courses($_user['user_id'], true, $user_courses);
 		break;
@@ -575,7 +600,7 @@ function display_create_course_category_form()
 function store_changecoursecategory($course_code, $newcategory)
 {
 	global $_user;
-	
+
 	$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$max_sort_value=api_max_sort_value($newcategory,$_user['user_id']); //max_sort_value($newcategory);

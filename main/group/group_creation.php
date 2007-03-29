@@ -125,7 +125,7 @@ elseif (isset ($_POST['number_of_groups']))
 {
 	if (!is_numeric($_POST['number_of_groups']) || intval($_POST['number_of_groups']) < 1)
 	{
-		Display :: display_error_message(get_lang('PleaseEnterValidNumber').'<br/><br/><a href="group_creation.php">&laquo; '.get_lang('Back').'</a>');
+		Display :: display_error_message(get_lang('PleaseEnterValidNumber').'<br/><br/><a href="group_creation.php">&laquo; '.get_lang('Back').'</a>',false);
 	}
 	else
 	{

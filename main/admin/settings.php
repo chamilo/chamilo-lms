@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 11544 2007-03-12 15:47:34Z elixir_inter $
+// $Id: settings.php 11788 2007-03-29 20:38:06Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -310,6 +310,7 @@ function handle_plugins()
 		$plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$testplugin."/plugin.php";
 		if (file_exists($plugin_info_file))
 		{
+			$plugin_info = array();
 			include ($plugin_info_file);
 
 			echo "\t<tr>\n";
@@ -388,7 +389,7 @@ function handle_stylesheets()
 			if(substr($style_dir,0,1)=='.') //skip dirs starting with a '.'
 			{
 				continue;
-			} 
+			}
 			$dirpath = api_get_path(SYS_PATH).'main/css/'.$style_dir;
 			if (is_dir($dirpath))
 			{
@@ -446,7 +447,7 @@ function store_plugins()
 /**
  * Check if the post information is really a valid plugin location.
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/			
+*/
 function is_valid_plugin_location($location)
 {
 	$valid_locations=array('loginpage_main', 'loginpage_menu', 'campushomepage_main', 'campushomepage_menu', 'mycourses_main', 'mycourses_menu','header', 'footer');
@@ -454,12 +455,12 @@ function is_valid_plugin_location($location)
 	{
 		return true;
 	}
-	else 
+	else
 	{
-		return false; 
+		return false;
 	}
-}			
-			
+}
+
 
 /**
  * This function allows the platform admin to choose which should be the default stylesheet
@@ -478,7 +479,7 @@ function store_stylesheets()
 				selected_value = "'.$style.'"
 				WHERE variable = "stylesheets"
 				AND category = "stylesheets"';
-		
+
 		api_sql_query($sql, __LINE__, __FILE__);
 	}
 

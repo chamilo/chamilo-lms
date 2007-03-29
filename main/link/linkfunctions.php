@@ -66,7 +66,7 @@ function addlinkcategory($type)
 		$urllink = $_POST['urllink'];
 		$description = $_POST['description'];
 		$selectcategory = $_POST['selectcategory'];
-		if ($_POST['onhomepage'] = '')
+		if ($_POST['onhomepage'] == '')
 		{
 			$onhomepage = 0;
 		}
@@ -231,6 +231,7 @@ function editlinkcategory($type)
 	global $selectcategory;
 	global $description;
 	global $category_title;
+	global $onhomepage;
 
 	$tbl_link 		= Database :: get_course_table(TABLE_LINK);
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
@@ -254,7 +255,7 @@ function editlinkcategory($type)
 		// this is used to put the modified info of the link-form into the database
 		if ($_POST['submitLink'])
 		{
-			if ($_POST['onhomepage'] = '')
+			if ($_POST['onhomepage'] == '')
 			{
 				$onhomepage = 0;
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Id: Resource.class.php 11773 2007-03-29 10:31:32Z yannoo $
+// $Id: Resource.class.php 11775 2007-03-29 11:34:04Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -42,6 +42,8 @@ define('RESOURCE_LINKCATEGORY', 'Link_Category');
 define('RESOURCE_FORUMCATEGORY', 'Forum_Category');
 define('RESOURCE_SCORM', 'Scorm');
 define('RESOURCE_SURVEY','survey');
+define('RESOURCE_SURVEYQUESTION','survey_question');
+define('RESOURCE_SURVEYINVITATION','survey_invitation');
 
 /**
  * Representation of a resource in a Dokeos-course.

@@ -11,6 +11,11 @@ $language_file = array ('index', 'chat', 'tracking');
 
 include_once("./main/inc/global.inc.php");
 api_block_anonymous_users();
+
+
+$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+
 /*
 -----------------------------------------------------------
 	Header
@@ -42,26 +47,34 @@ Display::display_header(get_lang('UserOnlineListSession'));
 		</th>
 	</tr>
 <?php
+	$sessionIsCoach = array();
 	$result = api_sql_query("SELECT DISTINCT id, 
 									name, 
 									date_start, 
 									date_end 
-								FROM session 
-								INNER JOIN session_rel_course
+								FROM $tbl_session as session 
+								INNER JOIN $tbl_session_course as session_rel_course
 									ON session_rel_course.id_coach = ".$_user['user_id']."
+									AND session.id = session_rel_course.id_session
 								ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 	
-	$sessionIsCoach = api_store_result($result);
+	while ($session = Database:: fetch_array($result))
+	{
+		$sessionIsCoach[$session['id']] = $session;
+	}
 	
 	$result = api_sql_query("SELECT DISTINCT id, 
 									name, 
 									date_start, 
 									date_end 
-							FROM session 
+							FROM $tbl_session as session 
 							WHERE session.id_coach = ".$_user['user_id']."
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
-	$sessionIsCoach = array_merge($sessionIsCoach , api_store_result($result));
-	
+	while ($session = Database:: fetch_array($result))
+	{
+		$sessionIsCoach[$session['id']] = $session;
+	}
+		
 	foreach($sessionIsCoach as $session)
 	{
 		$sql = "SELECT 	DISTINCT last_access.access_user_id, 

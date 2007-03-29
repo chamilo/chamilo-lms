@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 11379 2007-03-04 14:38:54Z yannoo $
+<?php // $Id: CourseBuilder.class.php 11785 2007-03-29 15:09:23Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,6 +37,8 @@ require_once ('ForumCategory.class.php');
 require_once ('Quiz.class.php');
 require_once ('QuizQuestion.class.php');
 require_once ('Learnpath.class.php');
+require_once ('Survey.class.php');
+require_once ('SurveyQuestion.class.php');
 /**
  * Class which can build a course-object from a Dokeos-course.
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -81,6 +83,7 @@ class CourseBuilder
 		$this->build_course_descriptions();
 		$this->build_quizzes();
 		$this->build_learnpaths();
+		$this->build_surveys();
 		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 		foreach ($this->course->resources as $type => $resources)
 		{
@@ -279,6 +282,57 @@ class CourseBuilder
 			while ($obj2 = Database::fetch_object($db_result2))
 			{
 				$question->add_answer($obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
+			}
+			$this->course->add_resource($question);
+		}
+	}
+	/**
+	 * Build the Surveys
+	 */
+	function build_surveys()
+	{
+		$table_survey = Database :: get_course_table(TABLE_SURVEY);
+		$table_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		$sql = 'SELECT * FROM '.$table_survey;
+		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($obj = Database::fetch_object($db_result))
+		{
+			$survey = new Survey($obj->survey_id, $obj->code,$obj->title,
+								$obj->subtitle, $obj->author, $obj->lang, 
+								$obj->avail_from, $obj->avail_till, $obj->is_shared,
+								$obj->template, $obj->intro, $obj->surveythanks, 
+								$obj->creation_date, $obj->invited, $obj->answered,
+								$obj->invite_mail, $obj->reminder_mail);
+			$sql = 'SELECT * FROM '.$table_question.' WHERE survey_id = '.$obj->survey_id;
+			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
+			while ($obj2 = Database::fetch_object($db_result2))
+			{
+				$survey->add_question($obj2->question_id);
+			}
+			$this->course->add_resource($survey);
+		}
+		$this->build_survey_questions();
+	}
+	/**
+	 * Build the Survey Questions
+	 */
+	function build_survey_questions()
+	{
+		$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		$table_opt = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+		$sql = 'SELECT * FROM '.$table_que;
+		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($obj = Database::fetch_object($db_result))
+		{
+			$question = new SurveyQuestion($obj->question_id, $obj->survey_id, 
+											$obj->survey_question, $obj->survey_question_comment, 
+											$obj->type, $obj->display, $obj->sort,
+											$obj->shared_question_id, $obj->max_value);
+			$sql = 'SELECT * FROM '.$table_opt.' WHERE question_id = '.$obj->id;
+			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
+			while ($obj2 = Database::fetch_object($db_result2))
+			{
+				$question->add_answer($obj2->option_text, $obj2->sort);
 			}
 			$this->course->add_resource($question);
 		}

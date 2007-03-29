@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseRecycler.class.php 11357 2007-03-02 23:52:24Z yannoo $
+// $Id: CourseRecycler.class.php 11785 2007-03-29 15:09:23Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -197,6 +197,31 @@ class CourseRecycler
 			$sql = "DELETE FROM ".$table_qui." WHERE id IN(".$ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
 			$sql = "DELETE FROM ".$table_rel." WHERE exercice_id IN(".$ids.")";
+			api_sql_query($sql,__FILE__,__LINE__);
+		}
+	}
+	/**
+	 * Recycle surveys - removes everything
+	 */
+	function recycle_quizzes()
+	{
+		if ($this->course->has_resources(RESOURCE_SURVEY))
+		{
+			$table_survey = Database :: get_course_table(TABLE_SURVEY);
+			$table_survey_q = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+			$table_survey_q_o = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+			$table_survey_a = Database :: get_course_Table(TABLE_SURVEY_ANSWER);
+			$table_survey_i = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_SURVEY])));
+			$sql = "DELETE FROM ".$table_survey_i." ";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM ".$table_survey_a." WHERE survey_id IN(".$ids.")";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM ".$table_survey_q_o." WHERE survey_id IN(".$ids.")";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM ".$table_survey_q." WHERE survey_id IN(".$ids.")";
+			api_sql_query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM ".$table_survey." WHERE survey_id IN(".$ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 	}

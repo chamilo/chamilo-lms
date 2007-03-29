@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 11381 2007-03-04 18:43:55Z yannoo $
+// $Id: CourseRestorer.class.php 11785 2007-03-29 15:09:23Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,6 +36,8 @@ require_once ('ForumTopic.class.php');
 require_once ('ForumPost.class.php');
 require_once ('CourseDescription.class.php');
 require_once ('Learnpath.class.php');
+require_once ('Survey.class.php');
+require_once ('SurveyQuestion.class.php');
 require_once ('mkdirr.php');
 require_once ('rmdirr.php');
 define('FILE_SKIP', 1);
@@ -103,6 +105,7 @@ class CourseRestorer
 		//$this->restore_forums();
 		$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
 		$this->restore_learnpaths();
+		$this->restore_surveys();
 		// Restore the item properties
 		$table = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
 		foreach ($this->course->resources as $type => $resources)
@@ -617,6 +620,100 @@ class CourseRestorer
 				api_sql_query($sql, __FILE__, __LINE__);
 			}
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
+		}
+
+		return $new_id;
+	}
+	/**
+	 * Restore Quiz
+	 */
+	function restore_surveys()
+	{
+		if ($this->course->has_resources(RESOURCE_QUIZ))
+		{
+			$table_sur = Database :: get_course_table(TABLE_SURVEY, $this->course->destination_db);
+			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION, $this->course->destination_db);
+			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
+			$resources = $this->course->resources;
+			foreach ($resources[RESOURCE_SURVEY] as $id => $survey)
+			{
+				$doc = '';
+				$sql = "INSERT INTO ".$table_sur." " .
+						"SET code = '".Database::escape_string($quiz->code)."', " .
+						"title = '".Database::escape_string($quiz->title)."', " .
+						"subtitle = '".Database::escape_string($quiz->subtitle)."', " .
+						"author = '".Database::escape_string($quiz->author)."', " .
+						"lang = '".Database::escape_string($quiz->lang)."', " .
+						"avail_from = '".Database::escape_string($quiz->avail_from)."', " .
+						"avail_till = '".Database::escape_string($quiz->avail_till)."', " .
+						"is_shared = '".Database::escape_string($quiz->is_shared)."', " .
+						"template = '".Database::escape_string($quiz->template)."', " .
+						"intro = '".Database::escape_string($quiz->intro)."', " .
+						"surveythanks = '".Database::escape_string($quiz->surveythanks)."', " .
+						"creation_date = '".Database::escape_string($quiz->creation_date)."', " .
+						"invited = '".Database::escape_string($quiz->invited)."', " .
+						"answered = '".Database::escape_string($quiz->answered)."', " .
+						"invite_mail = '".Database::escape_string($quiz->invite_mail)."', " .
+						"reminder_mail = '".Database::escape_string($quiz->reminder_mail)."'";
+				api_sql_query($sql, __FILE__, __LINE__);
+				$new_id = Database::get_last_insert_id();
+				$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
+				foreach ($survey->question_ids as $index => $question_id)
+				{
+					$qid = $this->restore_survey_question($question_id);
+					$sql = "UPDATE ".$table_que." " .
+							"SET survey_id = ".$new_id." WHERE " .
+							"question_id = ".$qid."";
+					api_sql_query($sql, __FILE__, __LINE__);
+					$sql = "UPDATE ".$table_ans." ".
+							"SET survey_id = ".$new_id." WHERE " .
+							"question_id = ".$qid."";
+					api_sql_query($sql, __FILE__, __LINE__);
+				}
+			}
+		}
+	}
+	/**
+	 * Restore survey-questions
+	 */
+	function restore_survey_question($id)
+	{
+		$resources = $this->course->resources;
+		$question = $resources[RESOURCE_SURVEYQUESTION][$id];
+
+		$new_id=0;
+
+		if(is_object($question))
+		{
+			if ($question->is_restored())
+			{
+				return $question->destination_id;
+			}
+			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION, $this->course->destination_db);
+			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
+			$sql = "INSERT INTO ".$table_que." " .
+					"SET survey_id = '".addslashes($question->survey_id)."', " .
+					"survey_question = '".addslashes($question->survey_question)."', " .
+					"survey_question_comment = '".addslashes($question->survey_question_comment)."', " .
+					"type = '".addslashes($question->type)."', " .
+					"display = '".addslashes($question->display)."', " .
+					"sort = '".addslashes($question->sort)."', " .
+					"shared_question_id = '".addslashes($question->shared_question_id)."', " .
+					"max_value = '".addslashes($question->max_value)."' ";
+			api_sql_query($sql, __FILE__, __LINE__);
+			$new_id = Database::get_last_insert_id();
+			foreach ($question->answers as $index => $answer)
+			{
+				$sql = "INSERT INTO ".$table_ans." " .
+						"SET " .
+						"question_id = '".addslashes($new_id)."', " .
+						"option_text = '".addslashes($answer->option_text)."', " .
+						"sort = '".addslashes($answer->sort)."', " .
+						"survey_id = '".addslashes($question->survey_id)."'";
+
+				api_sql_query($sql, __FILE__, __LINE__);
+			}
+			$this->course->resources[RESOURCE_SURVEYQUESTION][$id]->destination_id = $new_id;
 		}
 
 		return $new_id;

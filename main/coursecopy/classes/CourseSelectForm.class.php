@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 11389 2007-03-05 10:46:21Z elixir_julian $
+// $Id: CourseSelectForm.class.php 11785 2007-03-29 15:09:23Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -47,6 +47,7 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_LEARNPATH] = get_lang('Learnpaths');
 		$resource_titles[RESOURCE_SCORM] = 'SCORM';
 		$resource_titles[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
+		$resource_titles[RESOURCE_SURVEY] = get_lang('Survey');
 ?>
 		<script language="JavaScript" type="text/javascript">
 			function exp(item) {
@@ -96,6 +97,7 @@ class CourseSelectForm
 					case RESOURCE_FORUMPOST :
 					case RESOURCE_FORUMTOPIC :
 					case RESOURCE_QUIZQUESTION:
+					case RESOURCE_SURVEYQUESTION:
 						break;
 					default :
 						echo ' <img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" >';
@@ -148,6 +150,7 @@ class CourseSelectForm
 				case RESOURCE_FORUMPOST :
 				case RESOURCE_FORUMTOPIC :
 				case RESOURCE_QUIZQUESTION :
+				case RESOURCE_SURVEYQUESTION
 					break;
 				case RESOURCE_DOCUMENT:
 					// Mark folders to import which are not selected by the user to import,

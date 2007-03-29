@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 11785 2007-03-29 15:09:23Z yannoo $
+// $Id: CourseSelectForm.class.php 11786 2007-03-29 16:09:54Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -150,8 +150,7 @@ class CourseSelectForm
 				case RESOURCE_FORUMPOST :
 				case RESOURCE_FORUMTOPIC :
 				case RESOURCE_QUIZQUESTION :
-				case RESOURCE_SURVEYQUESTION
-					break;
+				case RESOURCE_SURVEYQUESTION:
 				case RESOURCE_DOCUMENT:
 					// Mark folders to import which are not selected by the user to import,
 					// but in which a document was selected.

@@ -1,5 +1,5 @@
 <?php
-// $Id: Resource.class.php 11775 2007-03-29 11:34:04Z yannoo $
+// $Id: Resource.class.php 11776 2007-03-29 11:47:41Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -146,19 +146,38 @@ class Resource
 				return TOOL_LINK;
 			case RESOURCE_EVENT:
 				return TOOL_CALENDAR_EVENT;
-			case RESOURCE_FORUM:
-				return TOOL_BB_FORUM;
-			case RESOURCE_FORUMTOPIC:
-				return TOOL_BB_THREAD;
-			case RESOURCE_FORUMPOST:
-				return TOOL_BB_POST;
+			case RESOURCE_COURSEDESCRIPTION:
+				return TOOL_COURSE_DESCRIPTION;
+			case RESOURCE_LEARNPATH:
+				return TOOL_LEARNPATH;
 			case RESOURCE_ANNOUNCEMENT:
 				return TOOL_ANNOUNCEMENT;
+			case RESOURCE_FORUM:
+				return TOOL_FORUM;
+			case RESOURCE_FORUMTOPIC:
+				return TOOL_THREAD;
+			case RESOURCE_FORUMPOST:
+				return TOOL_POST;
 			case RESOURCE_QUIZ:
 				return TOOL_QUIZ;
+			//case RESOURCE_QUIZQUESTION: //no corresponding global constant
+			//	return TOOL_QUIZ_QUESTION;
+			//case RESOURCE_TOOL_INTRO:
+			//	return TOOL_INTRO;
+			//case RESOURCE_LINKCATEGORY:
+			//	return TOOL_LINK_CATEGORY;
+			//case RESOURCE_TOOL_FORUMCATEGORY:
+			//	return TOOL_FORUM_CATEGORY;
+			//case RESOURCE_SCORM:
+			//	return TOOL_SCORM_DOCUMENT;
+			case RESOURCE_SURVEY:
+				return TOOL_SURVEY;
+			//case RESOURCE_SURVEYQUESTION:
+			//	return TOOL_SURVEY_QUESTION;
+			//case RESOURCE_SURVEYINVITATION:
+			//	return TOOL_SURVEY_INVITATION;
 			default:
 				return null;
-		}
 	}
 	/**
 	 * Set the destination id

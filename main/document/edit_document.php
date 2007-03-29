@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 11577 2007-03-14 17:33:31Z yannoo $
+<?php // $Id: edit_document.php 11790 2007-03-29 20:58:06Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,12 +50,6 @@
 ==============================================================================
 */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-
 // name of the language file that needs to be included 
 $language_file = 'document';
 
@@ -98,8 +92,6 @@ $baseServUrl = $_configuration['url_append']."/";
 $courseDir   = $_course['path']."/document";
 $baseWorkDir = $baseServDir.$courseDir;
 $group_document = false;
-// name of the language file that needs to be included 
-$language_file = 'document';
 
 $use_document_title = (get_setting('use_document_title')=='true')?true:false;
 $noPHP_SELF=true;
@@ -196,8 +188,6 @@ event_access_tool(TOOL_DOCUMENT);
 */
 function change_name($baseWorkDir, $sourceFile, $renameTo, $dir, $doc)
 {
-	
-	
 	$file_name_for_change = $baseWorkDir.$dir.$sourceFile;
 
 	//api_display_debug_info("call my_rename: params $file_name_for_change, $renameTo");
@@ -289,9 +279,9 @@ if (isset($_POST['newComment']))
 */
 
 if (isset($_POST['renameTo']))
-{	
+{
 	$info_message = change_name($baseWorkDir, $_GET['sourceFile'], $_POST['renameTo'], $dir, $doc);
-	
+
 	//assume name change was successful
 }
 
@@ -330,7 +320,7 @@ if($is_allowedToEdit)
 	if($_POST['formSent']==1)
 	{
 		if(isset($_POST['renameTo']))
-		{	
+		{
 			$_POST['filename']=disable_dangerous_file($_POST['renameTo']);
 
 			$extension=explode('.',$_POST['filename']);
@@ -373,8 +363,8 @@ if($is_allowedToEdit)
 		{
 			if($fp=@fopen($filepath.$filename.'.'.$extension,'w'))
 			{
-				$texte = text_filter($texte);				
-				
+				$texte = text_filter($texte);
+
 				//echo('file path: '.$filepath.$filename.'.'.$extension);
 				$path_to_remove=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir;
 
@@ -475,7 +465,7 @@ api_display_tool_title(get_lang("EditDocument") . ": $file_name");
 
 if(isset($msgError))
 {
-	Display::display_normal_message($msgError); //main API
+	Display::display_error_message($msgError); //main API
 }
 if( isset($info_message))
 {

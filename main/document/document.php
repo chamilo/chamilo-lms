@@ -1,4 +1,4 @@
-<?php // $Id: document.php 11250 2007-02-27 10:55:02Z elixir_julian $
+<?php // $Id: document.php 11790 2007-03-29 20:58:06Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,7 +62,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'document';
 
 include("../inc/global.inc.php");
@@ -322,17 +322,15 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$dbTable = Database::get_course_table(TABLE_DOCUMENT);
 
 		//security fix: make sure they can't move files that are not in the document table
-		if(DocumentManager::get_document_id($_course,$_POST['move_file'])) {
-
-			//Display::display_normal_message('We want to move '.$_POST['move_file'].' to '.$_POST['move_to']);
+		if(DocumentManager::get_document_id($_course,$_POST['move_file']))
+		{
 			if ( move($base_work_dir.$_POST['move_file'],$base_work_dir.$_POST['move_to']) )
 			{
-
 				update_db_info("update", $_POST['move_file'], $_POST['move_to']."/".basename($_POST['move_file']));
 				//set the current path
 				$curdirpath = $_POST['move_to'];
 				$curdirpathurl = urlencode($_POST['move_to']);
-				Display::display_normal_message(get_lang('DirMv'));
+				Display::display_confirmation_message(get_lang('DirMv'));
 			}
 			else
 			{
@@ -355,11 +353,11 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 		if(DocumentManager::delete_document($_course,$_GET['delete'],$base_work_dir))
 		{
-			Display::display_normal_message(get_lang('DocDeleted'));
+			Display::display_confirmation_message(get_lang('DocDeleted'));
 		}
 		else
 		{
-			Display::display_normal_message(get_lang('DocDeleteError'));
+			Display::display_error_message(get_lang('DocDeleteError'));
 		}
 	}
 
@@ -372,7 +370,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 				{
 					DocumentManager::delete_document($_course,$path,$base_work_dir);
 				}
-				Display::display_normal_message(get_lang('DocDeleted'));
+				Display::display_confirmation_message(get_lang('DocDeleted'));
 				break;
 		}
 	}
@@ -391,8 +389,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
 		if($created_dir)
 		{
-			//Display::display_normal_message("<strong>".$created_dir."</strong> was created!");
-			Display::display_normal_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>',false);
+			Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>',false);
 			//uncomment if you want to enter the created dir
 			//$curdirpath = $created_dir;
 			//$curdirpathurl = urlencode($curdirpath);
@@ -437,7 +434,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		//update item_property to change visibility
 		if(api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, $_user['user_id']))
 		{
-			Display::display_normal_message(get_lang("ViMod"));
+			Display::display_confirmation_message(get_lang("ViMod"));
 		}
 		else
 		{
@@ -467,8 +464,8 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 
 	<?php
 	echo "<div id=\"doc_links\">";
-	
-	
+
+
 	/* GO TO PARENT DIRECTORY */
 
 	if ($curdirpath!= '/'&& $curdirpath!=$group_properties['directory'])
@@ -563,7 +560,7 @@ if($docs_and_folders)
 		if ($is_allowed_to_edit || $group_member_with_upload_rights)
 		{
 			$edit_icons = build_edit_icons($curdirpath,$id['filetype'],$id['path'],$id['visibility'],$key);
-			
+
 			$row[] = $edit_icons;
 		}
 		$sortable_data[] = $row;

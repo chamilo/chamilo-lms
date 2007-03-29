@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 11321 2007-03-02 09:05:54Z yannoo $
+<?php // $Id: upload.php 11790 2007-03-29 20:58:06Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -109,7 +109,7 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') //if the group id is set, 
 	//get group info
 	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
 	$noPHP_SELF=true;
-		
+
 	if($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'],$_SESSION['_gid'])) //only courseadmin or group members allowed
 	{
 		$to_group_id = $_SESSION['_gid'];
@@ -140,7 +140,7 @@ elseif (isset($_POST['curdirpath']))
 {
 	$path = $_POST['curdirpath'];
 }
-else 
+else
 {
 	$path = '/';
 }
@@ -210,7 +210,7 @@ if(isset($_FILES['user_upload']))
 	//echo("<pre>");
 	//print_r($_FILES['user_upload']);
 	//echo("</pre>");
-	
+
 	$upload_ok = process_uploaded_file($_FILES['user_upload']);
 	if($upload_ok)
 	{
@@ -218,7 +218,7 @@ if(isset($_FILES['user_upload']))
 		$new_path = handle_uploaded_document($_course, $_FILES['user_upload'],$base_work_dir,$_POST['curdirpath'],$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space,$_POST['unzip'],$_POST['if_exists']);
     	$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
     	$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
-		
+
     	if ($new_path && ($new_comment || $new_title))
     	if (($docid = DocumentManager::get_document_id($_course, $new_path)))
     	{
@@ -226,7 +226,7 @@ if(isset($_FILES['user_upload']))
         	$ct = '';
         	if ($new_comment) $ct .= ", comment='$new_comment'";
         	if ($new_title)   $ct .= ", title='$new_title'";
-        	api_sql_query("UPDATE $table_document SET" . substr($ct, 1) . 
+        	api_sql_query("UPDATE $table_document SET" . substr($ct, 1) .
         	    " WHERE id = '$docid'", __FILE__, __LINE__);
     	}
 		//check for missing images in html files
@@ -254,7 +254,7 @@ if(isset($_POST['submit_image']))
 		//open the html file and replace the paths
 		replace_img_path_in_html_file($_POST['img_file_path'],$paths_to_replace_in_file,$base_work_dir.$_POST['related_file']);
 		//update parent folders
-		item_property_update_on_folder($_course,$_POST['curdirpath'],$_user['user_id']);	
+		item_property_update_on_folder($_course,$_POST['curdirpath'],$_user['user_id']);
 	}
 }
 //they want to create a directory
@@ -265,11 +265,10 @@ if(isset($_POST['create_dir']) && $_POST['dirname']!='')
 	$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
 	if($created_dir)
 	{
-		//Display::display_normal_message("<strong>".$created_dir."</strong> was created!");
-		Display::display_normal_message(get_lang('DirCr'),false);
+		Display::display_confirmation_message(get_lang('DirCr'),false);
 		$path = $created_dir;
 	}
-	else 
+	else
 	{
 		display_error(get_lang('CannotCreateDir'));
 	}
@@ -296,7 +295,7 @@ if(isset($_GET['createdir']))
 	$new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'"/>';
 	$new_folder_text .= '</form>';
 	//show the form
-	Display::display_normal_message($new_folder_text);
+	Display::display_normal_message($new_folder_text, false);
 }
 else {	//give them a link to create a directory
 	?>
@@ -347,7 +346,7 @@ $form->display();
 
 <!-- end upload form -->
 
- <!-- so they can get back to the documents   --> 	 
+ <!-- so they can get back to the documents   -->
  <p><?php echo (get_lang('Back'));?> <?php echo (get_lang('To'));?> <a href="document.php?curdirpath=<?php echo $path; ?>"><?php echo (get_lang('DocumentsOverview'));?></a></p>
 
 <?php

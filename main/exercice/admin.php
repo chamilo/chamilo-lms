@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 11555 2007-03-13 10:42:00Z elixir_julian $
+* 	@version $Id: admin.php 11760 2007-03-29 07:46:40Z pcool $
 */
 
 
@@ -418,6 +418,14 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 // -->
 </script>";
 Display::display_header($nameTools,"Exercise");
+
+if(isset($_GET['message']))
+{
+	if (in_array($_GET['message'], array('ExerciseStored')))
+	{
+		Display::display_confirmation_message(get_lang($_GET['message']));
+	}
+}
 
 $description = $objExercise->selectDescription();
 echo '<h3 style="display:inline">'.$objExercise->selectTitle().'</h3>&nbsp;';

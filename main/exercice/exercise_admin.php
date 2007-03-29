@@ -79,11 +79,11 @@ if($form -> validate())
 	$objExercise -> processCreation($form);
 	if($form -> getSubmitValue('edit') == 'true')
 	{
-		header('Location:exercice.php');
+		header('Location:exercice.php?message=ExerciseEdited');
 	}
 	else
 	{
-		header('Location:admin.php?exerciseId='.$objExercise->id);
+		header('Location:admin.php?message=ExerciseStored&exerciseId='.$objExercise->id);
 	}
 }
 else

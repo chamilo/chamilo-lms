@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 11197 2007-02-22 16:03:42Z elixir_julian $
+* 	@version $Id: exercice.php 11760 2007-03-29 07:46:40Z pcool $
 */
 
 
@@ -161,6 +161,13 @@ if ($origin != 'learnpath')
 {
 	//so we are not in learnpath tool
 	Display::display_header($nameTools,"Exercise");
+	if(isset($_GET['message']))
+	{
+		if (in_array($_GET['message'], array('ExerciseEdited')))
+		{
+			Display::display_confirmation_message(get_lang($_GET['message']));
+		}
+	}
 
 }
 else
@@ -214,7 +221,7 @@ if($is_allowedToEdit)
 			{
 				case 'delete':	// deletes an exercise
 								$objExerciseTmp->delete();
-
+								Display::display_confirmation_message(get_lang('ExerciseDeleted'));
 								break;
 				case 'enable':  // enables an exercise
 								$objExerciseTmp->enable();
@@ -223,11 +230,13 @@ if($is_allowedToEdit)
 								// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
 								api_item_property_update($_course, TOOL_QUIZ, $exerciseId, "QuizAdded", $_user['user_id']);
 
+								Display::display_confirmation_message(get_lang('VisibilityChanged'));
+
 								break;
 				case 'disable': // disables an exercise
 								$objExerciseTmp->disable();
 								$objExerciseTmp->save();
-
+								Display::display_confirmation_message(get_lang('VisibilityChanged'));
 								break;
 			}
 		}

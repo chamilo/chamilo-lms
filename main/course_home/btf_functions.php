@@ -1,5 +1,5 @@
 <?php
-// $Id: btf_functions.php 10195 2006-11-25 15:26:00Z pcool $
+// $Id: btf_functions.php 11759 2007-03-29 07:43:19Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -84,7 +84,7 @@ function showtools2($cat)
 	{
 		if ($tempRow['img'] != "scormbuilder.gif")
 		{
-			$tempRow['name_translated'] = get_lang($tempRow['name']);
+			$tempRow['name_translated'] = get_lang(ucfirst($tempRow['name']));
 		}
 		$toolsRow_all[] = $tempRow;
 	}

@@ -288,7 +288,11 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 <table width="100%" border="0" cellspacing=0 cellpadding=0>
   <tr>
     <td colspan="2">
-	<?php $exerciseTitle=api_parse_tex($test);
+	<?php
+		$sql_test_name='SELECT title FROM '.$TBL_EXERCICES.' WHERE id="'.$id.'"';
+		$result=api_sql_query($sql_test_name);
+		$test=mysql_result($result,0,0);
+		$exerciseTitle=api_parse_tex($test);
 					
 $query = "select * from `".$TABLETRACK_ATTEMPT."` as attempts  
 						INNER JOIN `".$TABLETRACK_EXERCICES."` as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 

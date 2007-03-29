@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 11760 2007-03-29 07:46:40Z pcool $
+* 	@version $Id: exercice.php 11765 2007-03-29 08:34:31Z elixir_julian $
 */
 
 
@@ -871,7 +871,7 @@ $message = "<p>You attempt for the test #test# has been viewed/commented/correct
 		  <td><?php $test = $results[$i][1]; echo $results[$i][1]; ?></td>
 		  <td><?php $dt = strftime($dateTimeFormatLong,$results[$i][4]); echo strftime($dateTimeFormatLong,$results[$i][4]); ?></td>
 		  <td><?php $res = $results[$i][2]; echo $results[$i][2]; ?> / <?php echo $results[$i][3]; ?></td>
-		 <td><?php echo $is_allowedToEdit?"<a href='exercise_show.php?user=$user&test=$test&dt=$dt&res=$res&id=$id&email=$mailid'>Edit</a>":"<a href='exercise_show.php?test=$test&dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>"?></td>
+		 <td><?php echo $is_allowedToEdit?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>Edit</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>"?></td>
 
 		 </tr>
 

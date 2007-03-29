@@ -377,6 +377,10 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 				<td class="requirements-value">'.check_extension('xml',get_lang('OK'), get_lang('ExtensionZlibNotAvailable')).'</td>
 			</tr>
 			<tr>
+				<td class="requirements-item">MultiByteString '.get_lang('support').'</td>
+				<td class="requirements-value">'.check_extension('mbstring',get_lang('OK'), get_lang('ExtensionMBStringNotAvailable')).'</td>
+			</tr>
+			<tr>
 				<td class="requirements-item">GD '.get_lang('support').'</td>
 				<td class="requirements-value">'.check_extension('gd',get_lang('OK'), get_lang('ExtensionGDNotAvailable')).'</td>
 			</tr>
@@ -384,6 +388,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 				<td class="requirements-item">LDAP '.get_lang('support').'('.get_lang('Optional').')</td>
 				<td class="requirements-value">'.check_extension('ldap',get_lang('OK'), get_lang('ExtensionLDAPNotAvailable')).'</td>
 			</tr>
+				
 		  </table>';
 	echo '	</div>';
 	echo '</div>';

@@ -1122,7 +1122,7 @@ function api_display_tool_title($titleElement)
 *	student view works correctly in the new links tool
 *
 *	Example code for using this in your tools:
-*	//if ( $is_courseAdmin && is_student_view_enabled() )
+*	//if ( $is_courseAdmin && api_get_setting('show_student_view') == 'true' )
 *	//{
 *	//	display_tool_view_option($isStudentView);
 *	//}
@@ -1236,7 +1236,7 @@ function api_is_allowed_to_edit()
 {
 	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
 
-	if(is_student_view_enabled())
+	if(api_get_setting('show_student_view') == 'true')
 	{
 		$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != "studentenview";
 
@@ -1359,16 +1359,6 @@ function api_not_allowed()
 		Display::display_footer();
 		die();
 	}
-}
-/**
-* Returns true if student view option is enabled, false otherwise. If it is
-* true, tools can provide a student / course manager switch option. (see
-* display_tool_view_option() )
-* @return boolean True if student view option is enabled.
-*/
-function is_student_view_enabled()
-{
-	return api_get_setting('show_student_view') == 'true';
 }
 
 /*

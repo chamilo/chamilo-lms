@@ -418,7 +418,7 @@ INSERT INTO `settings_current` VALUES
 (7,'show_administrator_data',NULL,'radio','Platform','true','ShowAdministratorDataTitle','ShowAdministratorDataComment',NULL,NULL),
 (8,'homepage_view',NULL,'radio','Course','activity','HomepageViewTitle','HomepageViewComment',NULL,NULL),
 (9,'show_toolshortcuts',NULL,'radio','Course','false','ShowToolShortcutsTitle','ShowToolShortcutsComment',NULL,NULL),
-(10,'show_student_view',NULL,'radio','Course','true','ShowStudentViewTitle','ShowStudentViewComment',NULL,NULL),
+(10,'show_student_view',NULL,'radio','Course','false','ShowStudentViewTitle','ShowStudentViewComment',NULL,NULL),
 (11,'allow_group_categories',NULL,'radio','Course','false','AllowGroupCategories','AllowGroupCategoriesComment',NULL,NULL),
 (12,'server_type',NULL,'radio','Platform','production','ServerStatusTitle','ServerStatusComment',NULL,NULL),
 (13,'platformLanguage',NULL,'link','Languages','{PLATFORMLANGUAGE}','PlatformLanguageTitle','PlatformLanguageComment',NULL,NULL),

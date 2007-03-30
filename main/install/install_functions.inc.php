@@ -1023,10 +1023,10 @@ function test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFo
 	{
 		if(mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false)
 		{
-			$multipleDbCheck = @mysql_query("CREATE DATABASE ".$dbPrefixForm."test");
+			$multipleDbCheck = @mysql_query("CREATE DATABASE ".$dbPrefixForm."test_dokeos_connection");
 			if($multipleDbCheck !== false)
 			{
-				$multipleDbCheck = @mysql_query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test");
+				$multipleDbCheck = @mysql_query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_dokeos_connection");
 				if($multipleDbCheck !== false)
 				{
 					$dbConnect = 1;

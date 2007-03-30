@@ -150,7 +150,7 @@ function LMSGetValue(param) {
 		result='<?php echo $_user['user_id']; ?>';
 	}else if(param == 'cmi.core.student_name'){
 		  <?php
-			$who=$_user['lastName'].", ".$_user['firstName'];
+			$who=addslashes($_user['lastName'].", ".$_user['firstName']);
 		    echo "result='$who';"; 
 		  ?>
 	}else if(param == 'cmi.core.lesson_location'){
@@ -206,7 +206,7 @@ function LMSGetValue(param) {
 			break;
 		case 'cmi.core.student_name'	: 
 		  <?php
-			$who=$_user['firstName'].",".$_user['lastName'];
+			$who=addslashes($_user['firstName'].",".$_user['lastName']);
 		    echo "result='$who';"; 
 		  ?>	break;
 		case 'cmi.core.lesson_location'	:

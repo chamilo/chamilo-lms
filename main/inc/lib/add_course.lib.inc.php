@@ -1912,11 +1912,11 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		$titular=addslashes($titular);
 		// here we must add 2 fields
 		$sql = "INSERT INTO ".$TABLECOURSE . " SET
-					code = '".addslashes($courseSysCode) . "',
-					db_name = '".addslashes($courseDbName) . "',
-					directory = '".addslashes($courseRepository) . "',
+					code = '".Database :: escape_string($courseSysCode) . "',
+					db_name = '".Database :: escape_string($courseDbName) . "',
+					directory = '".Database :: escape_string($courseRepository) . "',
 					course_language = '".$course_language . "',
-					title = '".addslashes($title) . "',
+					title = '".Database :: escape_string($title) . "',
 					description = '".lang2db($langCourseDescription) . "',
 					category_code = '".$category . "',
 					visibility = '".$defaultVisibilityForANewCourse . "',
@@ -1926,8 +1926,8 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					expiration_date = ".$expiration_date . ",
 					last_edit = now(),
 					last_visit = NULL,
-					tutor_name = '".addslashes($titular) . "',
-					visual_code = '".addslashes($courseScreenCode) . "'";
+					tutor_name = '".Database :: escape_string($titular) . "',
+					visual_code = '".Database :: escape_string($courseScreenCode) . "'";
 
 		api_sql_query($sql, __FILE__, __LINE__);
 

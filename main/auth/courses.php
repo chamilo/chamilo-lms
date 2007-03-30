@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 11789 2007-03-29 20:54:00Z pcool $
+<?php // $Id: courses.php 11811 2007-03-30 13:28:21Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -134,7 +134,7 @@ if ($_GET['action']=='deletecoursecategory' AND isset($_GET['id']))
 // we are displaying any result messages;
 if (isset($message))
 {
-	Display::display_normal_message($message);
+	Display::display_confirmation_message($message);
 }
 
 /*
@@ -549,10 +549,19 @@ function store_course_category()
 	$maxsort=mysql_fetch_array($result);
 	$nextsort=$maxsort['sort']+1;
 
-
+	// step 2: we check if there is already a category with this name, if not we store it, else we give an error.
+	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' AND title='".Database::escape_string($_POST['title_course_category'])."'ORDER BY sort DESC";
+	$result=api_sql_query($sql);
+	if (mysql_numrows($result) == 0)
+	{
 	$sql_insert="INSERT INTO `$TABLE_USER_COURSE_CATEGORY` (user_id, title,sort) VALUES ('".$_user['user_id']."', '".htmlentities($_POST['title_course_category'])."', '".$nextsort."')";
 	api_sql_query($sql_insert);
-	return get_lang("CourseCategoryStored");
+		Display::display_confirmation_message(get_lang("CourseCategoryStored"));
+	}
+	else
+	{
+		Display::display_error_message(get_lang('ACourseCategoryWithThisNameAlreadyExists'));
+	}
 }
 
 

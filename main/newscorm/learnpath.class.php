@@ -2238,11 +2238,19 @@ class learnpath {
     		$res = api_sql_query($sql);
     		$row = Database::fetch_array($res);
     		$total = $row[0];
-    		$tbl = Database::get_course_table('lp_item_view', $course_db);
+    		$tbl_item_view = Database::get_course_table('lp_item_view', $course_db);
+    		$tbl_item = Database::get_course_table('lp_item', $course_db);
+    		
     		//$sql = "SELECT count(distinct(lp_item_id)) FROM $tbl WHERE lp_view_id = ".$view_id." AND status IN ('passed','completed','succeeded')";
     		//trying as also counting browsed and failed items
-    		$sql = "SELECT count(distinct(lp_item_id)) FROM $tbl WHERE lp_view_id = ".$view_id." AND status IN ('passed','completed','succeeded','browsed','failed')";
-    		$res = api_sql_query($sql);
+    		$sql = "SELECT count(distinct(lp_item_id)) 
+					FROM $tbl_item_view as item_view
+					INNER JOIN $tbl_item as item
+						ON item.id = item_view.lp_item_id
+						AND item_type NOT IN('dokeos_chapter','chapter','dir')
+					WHERE lp_view_id = ".$view_id." 
+					AND status IN ('passed','completed','succeeded','browsed','failed')";
+    		$res = api_sql_query($sql, __FILE__, __LINE__);
     		$row = Database::fetch_array($res);
     		$completed = $row[0];
     		if($mode == 'abs'){

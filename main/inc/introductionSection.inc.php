@@ -87,7 +87,7 @@ if ($intro_editAllowed)
 			{
 				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".mysql_real_escape_string($intro_content)."'";
 				api_sql_query($sql,__FILE__,__LINE__);
-				Display::display_confirmation_message('IntroductionTextUpdated');
+				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'));
 			}
 			else
 			{

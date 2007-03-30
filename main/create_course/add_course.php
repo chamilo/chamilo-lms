@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 11797 2007-03-30 09:25:10Z elixir_inter $
+// $Id: add_course.php 11809 2007-03-30 13:17:40Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,47 +26,41 @@
 /**
 ==============================================================================
 * This script allows professors and administrative staff to create course sites.
-* @author X X main author
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @author Roan Embrechts, refactoring
 * @package dokeos.create_course
 ==============================================================================
 */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+
 // name of the language file that needs to be included 
 $language_file = "create_course";
+
+// including the global file
 include ('../inc/global.inc.php');
 
+// section for the tabs
 $this_section=SECTION_COURSES;
 
+// include configuration file
 include (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
 
+// include additional libraries
 include_once (api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(CONFIGURATION_PATH).'course_info.conf.php');
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+// Displaying the header
 $tool_name = get_lang('CreateSite');
 Display :: display_header($tool_name);
+
+// Displaying the tool title
 api_display_tool_title($tool_name);
 // Check access rights
 if (!api_is_allowed_to_create_course())
 {
-	Display :: display_normal_message(get_lang("NotAllowed"));
+	Display :: display_error_message(get_lang("NotAllowed"));
 	Display::display_footer();
 	exit;
 }
@@ -94,10 +88,12 @@ $form->addElement('submit', null, get_lang('Ok'));
 $form->add_progress_bar();
 
 // Set default values
-if(isset($_user["language"]) && $_user["language"]!=""){
+if(isset($_user["language"]) && $_user["language"]!="")
+{
 	$values['course_language'] = $_user["language"];
 }
-else{
+else
+{
 	$values['course_language'] = get_setting('platformLanguage');
 }
 
@@ -135,7 +131,7 @@ if($form->validate())
 		$message .= " <strong>".$course_values['wanted_code']."</strong>";
 		$message .= "<br/><br/>";
 		$message .= '<a href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
-		Display :: display_normal_message($message,false);
+		Display :: display_confirmation_message($message,false);
 	}
 	else{
 				Display :: display_error_message(get_lang('CourseCodeAlreadyExist'),false);

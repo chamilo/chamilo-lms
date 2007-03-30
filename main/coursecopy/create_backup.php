@@ -1,5 +1,5 @@
 <?php
-// $Id: create_backup.php 11389 2007-03-05 10:46:21Z elixir_julian $
+// $Id: create_backup.php 11791 2007-03-30 07:14:33Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -31,24 +31,34 @@
  * @package dokeos.backup
  * ==============================================================================
  */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/ 
+
 // name of the language file that needs to be included 
-//$language_file = 'coursebackup';
 $language_file = array ('admin','coursebackup');
+
+// including the global file
 include ('../inc/global.inc.php');
-include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
-$nameTools = get_lang('CreateBackup');
+
+// section for the tabs
+$this_section=SECTION_COURSES;
+
+// breadcrumbs
 $interbreadcrumb[] = array ("url" => "../course_info/maintenance.php", "name" => get_lang('Maintenance'));
+
+// Displaying the header
+$nameTools = get_lang('CreateBackup');
 Display::display_header($nameTools);
+
+// include additional libraries
+include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 require_once ('classes/CourseBuilder.class.php');
 require_once ('classes/CourseArchiver.class.php');
 require_once ('classes/CourseRestorer.class.php');
 require_once ('classes/CourseSelectForm.class.php');
+
+// Display the tool title
 api_display_tool_title($nameTools);
+
+// Check access rights (only teachers are allowed here)
 if (!api_is_allowed_to_edit())
 {
 	api_not_allowed();

@@ -1,5 +1,5 @@
 <?php
-// $Id: backup.php 11392 2007-03-05 14:52:46Z yannoo $
+// $Id: backup.php 11791 2007-03-30 07:14:33Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -31,18 +31,27 @@
  * @package dokeos.backup
  * ==============================================================================
  */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/ 
+
 // name of the language file that needs to be included 
 $language_file = array('coursebackup','admin');
+
+// including the global file
 include ('../inc/global.inc.php');
-$nameTools = get_lang('Backup');
+
+// section for the tabs
+$this_section=SECTION_COURSES;
+
+// breadcrumbs
 $interbreadcrumb[] = array ("url" => "../course_info/maintenance.php", "name" => get_lang('Maintenance'));
+
+// Displaying the header
+$nameTools = get_lang('Backup');
 Display::display_header($nameTools);
+
+// Display the tool title
 api_display_tool_title($nameTools);
+
+// Check access rights (only teachers allowed)
 if (!api_is_allowed_to_edit())
 {
 	api_not_allowed();
@@ -63,10 +72,6 @@ if (!api_is_allowed_to_edit())
     </li>
   </ul>
 <?php
-/*
-==============================================================================
-		FOOTER 
-==============================================================================
-*/
+// Display the footer
 Display::display_footer();
 ?>

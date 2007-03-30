@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 11792 2007-03-30 07:17:11Z pcool $
+// $Id: add_course.php 11797 2007-03-30 09:25:10Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -26,47 +26,53 @@
 /**
 ==============================================================================
 * This script allows professors and administrative staff to create course sites.
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author X X main author
 * @author Roan Embrechts, refactoring
 * @package dokeos.create_course
 ==============================================================================
 */
-
+/*
+==============================================================================
+		INIT SECTION
+==============================================================================
+*/
 // name of the language file that needs to be included 
 $language_file = "create_course";
-
-// including the global file
 include ('../inc/global.inc.php');
 
-// section for the tabs
 $this_section=SECTION_COURSES;
 
-// include configuration file
 include (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
+/*
+-----------------------------------------------------------
+	Libraries
+-----------------------------------------------------------
+*/
 
-// include additional libraries
 include_once (api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(CONFIGURATION_PATH).'course_info.conf.php');
 
-// Displaying the header
+/*
+==============================================================================
+		MAIN CODE
+==============================================================================
+*/
 $tool_name = get_lang('CreateSite');
 Display :: display_header($tool_name);
-
-// Displaying the tool title
 api_display_tool_title($tool_name);
 // Check access rights
 if (!api_is_allowed_to_create_course())
 {
-	Display :: display_error_message(get_lang("NotAllowed"));
+	Display :: display_normal_message(get_lang("NotAllowed"));
 	Display::display_footer();
 	exit;
 }
 // Get all course categories
-$table_course_category 	= Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$table_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
+$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
+$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 $sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE' ORDER BY tree_pos";
 $res = api_sql_query($sql, __FILE__, __LINE__);
@@ -88,12 +94,10 @@ $form->addElement('submit', null, get_lang('Ok'));
 $form->add_progress_bar();
 
 // Set default values
-if(isset($_user["language"]) && $_user["language"]!="")
-{
+if(isset($_user["language"]) && $_user["language"]!=""){
 	$values['course_language'] = $_user["language"];
 }
-else
-{
+else{
 	$values['course_language'] = get_setting('platformLanguage');
 }
 
@@ -110,7 +114,7 @@ if($form->validate())
 	$course_language = $course_values['course_language'];
 	$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
 	
-	$sql_check = "SELECT * FROM ".$table_course."WHERE visual_code = '$wanted_code'";
+	$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
 	//$result_check = mysql_query($sql_check);
 	$result_check = api_sql_query($sql_check,__FILE__,__LINE__); //I don't know why this api function doesn't work...
 	if(Database::num_rows($result_check)<1){
@@ -130,8 +134,15 @@ if($form->validate())
 		$message = get_lang('JustCreated');
 		$message .= " <strong>".$course_values['wanted_code']."</strong>";
 		$message .= "<br/><br/>";
-	$message .= '<a href="'.api_get_path(WEB_PATH).api_get_setting('page_after_login').'">'.get_lang('Enter').'</a>';
-	Display :: display_confirmation_message($message,false);
+		$message .= '<a href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
+		Display :: display_normal_message($message,false);
+	}
+	else{
+				Display :: display_error_message(get_lang('CourseCodeAlreadyExist'),false);
+		$form->display();
+		echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';
+	}
+		
 }
 else
 {

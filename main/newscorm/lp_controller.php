@@ -568,6 +568,7 @@ switch($_REQUEST['action'])
 		if($debug>0) error_log('New LP - Item id is '.$_GET['item_id'],0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for content',0); require('lp_list.php'); }
 		else{
+			$_SESSION['oLP']->save_last();
 			$_SESSION['oLP']->set_current_item($_GET['item_id']); 
 			$_SESSION['oLP']->start_current_item();
 			require('lp_content.php'); 

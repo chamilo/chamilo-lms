@@ -131,7 +131,7 @@ if ($_GET["origin"]=='whoisonlinejoin') {   //the joiner (we have to delete the 
 echo '<div style="margin-left: 5px;">';
 foreach($content as $thisLine)
 {
-	echo "$thisLine";
+	echo strip_tags(html_entity_decode($thisLine),'<br> <span> <b>');
 }
 echo '</div>';
 

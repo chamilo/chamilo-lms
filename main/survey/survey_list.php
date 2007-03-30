@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 11685 2007-03-25 21:14:55Z pcool $
+* 	@version $Id: survey_list.php 11799 2007-03-30 09:31:17Z elixir_julian $
 *
 * 	@todo The invite column is not done
 * 	@todo try to understand the white, blue, ... template stuff.
@@ -124,7 +124,7 @@ if ($_POST['action'])
 // Action links
 echo '<a href="create_new_survey.php?action=add">'.get_lang('CreateNewSurvey').'</a> | ';
 //echo '<a href="survey_all_courses.php">'.get_lang('CreateExistingSurvey').'</a> | ';
-echo '<a href="'.$_SERVER['PHP_SELF'].'?search=advanced">'.get_lang('Search').'</a>';
+echo '<a href="'.api_get_self().'?search=advanced">'.get_lang('Search').'</a>';
 
 // Main content
 display_survey_list();
@@ -190,7 +190,7 @@ function display_survey_list()
 	if ($_GET['do_search'])
 	{
 		$message = get_lang('DisplaySearchResults').'<br />';
-		$message .= '<a href="'.$_SERVER['PHP_SELF'].'">'.get_lang('DisplayAll').'</a>';
+		$message .= '<a href="'.api_get_self().'">'.get_lang('DisplayAll').'</a>';
 		Display::display_normal_message($message, false);
 	}
 

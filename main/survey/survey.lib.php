@@ -917,7 +917,7 @@ class question
 	function create_form($form_content)
 	{
 		global $fck_attribute;
-		$this->html = '<form id="question_form" name="question_form" method="post" action="'.$_SERVER['PHP_SELF'].'?action='.$_GET['action'].'&type='.$_GET['type'].'&survey_id='.$_GET['survey_id'].'&question_id='.$_GET['question_id'].'">';
+		$this->html = '<form id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.$_GET['action'].'&type='.$_GET['type'].'&survey_id='.$_GET['survey_id'].'&question_id='.$_GET['question_id'].'">';
 		$this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.$_GET['survey_id'].'"/>';
 		$this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.$_GET['question_id'].'"/>';
 		$this->html .= '		<input type="hidden" name="shared_question_id" id="shared_question_id" value="'.$form_content['shared_question_id'].'"/>';
@@ -932,7 +932,7 @@ class question
 		$fck_attribute['Height'] = '100';
 		$fck_attribute['ToolbarSet'] = 'Survey';
 		//$this->html .= '		<td><input type="text" name="question" id="question" value="'.$form_content['question'].'"/></td>';
-		$this->html .= '		<td colspan="3" width="500">'.api_return_html_area('question', $form_content['question']).'</td>';
+		$this->html .= '		<td colspan="3" width="500">'.api_return_html_area('question', stripslashes($form_content['question'])).'</td>';
 		$this->html .= '	</tr>';
 		/*
 		$this->html .= '	<tr>';
@@ -1329,7 +1329,7 @@ class multipleresponse extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', $form_content['answers'][$key]).'</td>';
+			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', stripslashes($form_content['answers'][$key])).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{

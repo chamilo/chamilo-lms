@@ -416,4 +416,5 @@ $ModifyRecipientList = "Modifier la liste des destinataires";
 $NoLinkVisited = "Pas de lien visité";
 $NoDocumentDownloaded = "Pas de document téléchargé";
 $Clicks = "clics";
+$SearchResults = "Résultats de la recherche";
 ?>

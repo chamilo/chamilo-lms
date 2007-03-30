@@ -155,4 +155,7 @@ $Multiplechoice = "Veèkratna izbira";
 $Multiplechoice = "Veèkratna izbira";
 $Multipleresponse = "Veèkratni odgovori";
 $Score = "Rezultat";
+$Shared = "V skupni rabi";
+$Invite = "Povabi";
+$MaximumScore = "Najveèji rezultat";
 ?>

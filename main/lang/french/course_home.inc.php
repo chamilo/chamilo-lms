@@ -23,4 +23,5 @@ $GreyIcons = "Boîte à outils";
 $Interaction = "Interaction";
 $Authoring = "Production";
 $Administration = "Administration";
+$IntroductionTextUpdated = "Le texte d\'introduction a été mis à jour";
 ?>

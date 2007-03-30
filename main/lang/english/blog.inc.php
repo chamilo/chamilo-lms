@@ -70,7 +70,6 @@ $SearchResults = "Search results";
 $NoArticleMatches = "No article have been found. Check the word spelling or try another search.";
 $langTask1 = "Task 1";
 $langTask2 = "Task 2";
-$langTask1 = "Task 1";
 $langTask3 = "Task 3";
 $langTask1Desc = "Task 1 description";
 $langTask2Desc = "Task 2 description";

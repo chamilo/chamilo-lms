@@ -212,4 +212,5 @@ $YourScore = "Votre score";
 $Attempted = "Tenté";
 $AssignMarks = "Assigner un score";
 $Results = "Résultats";
+$ExerciseStored = "L\'exercice a bien été ajouté";
 ?>

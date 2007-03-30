@@ -605,4 +605,8 @@ $DateStartMoreThanDateEnd = "La fecha de inicio es posterior a la de finalizació
 $SlideSize = "Tamaño de las diapositivas";
 $EphorusPlagiarismPrevention = "Prevención de plagio Ephorus";
 $CourseTeachers = "Profesores del curso";
+$XMLNotValid = "El documento XML no es válido";
+$AllowEmailEditorTitle = "Activar el editor de correo electrónico en línea";
+$AllowEmailEditorTitle = "Activar el editor en línea de correos electrónicos";
+$AllowEmailEditorComment = "Si se activa esta opción, al hacer clic en un correo electrónico, se abrirá un editor en línea. ";
 ?>

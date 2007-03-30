@@ -416,4 +416,5 @@ $ModifyRecipientList = "Uredi seznam prejemnikov";
 $NoLinkVisited = "Brez obiskanih povezav";
 $NoDocumentDownloaded = "Brez prenesenih dokumentov";
 $Clicks = "klikov";
+$SearchResults = "Rezultati iskanja";
 ?>

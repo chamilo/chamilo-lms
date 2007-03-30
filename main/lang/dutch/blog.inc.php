@@ -70,7 +70,6 @@ $SearchResults = "Zoekresultaten";
 $NoArticleMatches = "We hebben géén artikels gevonden die voldoen aan uw zoekcriteria. Gelieve een ruimere zoekopdracht uit te voeren.";
 $langTask1 = "Taak 1";
 $langTask2 = "Taak 2";
-$langTask1 = "Taak 1";
 $langTask3 = "Taak 3";
 $langTask1Desc = "Beschrijving van taak 1";
 $langTask2Desc = "Beschrijving van taak 2";

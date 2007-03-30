@@ -107,4 +107,5 @@ $DBServerDoesntWorkOrLoginPassIsWrong = "De databaseserver werkt niet of de comb
 $PleaseCheckTheseValues = "Gelieve deze waarden te controleren";
 $PleaseGoBackToStep = "Gelieve terug te gaan naar stap";
 $DBSettingUpgradeIntro = "Het upgradescript zal de Dokeos database(s) recupereren en updaten. Het script zal hiervoor onderstaande instellingen gebruiken. Aangezien deze software op een grote reeks verschillende systemen draait en niet alle systemen getest zijn, is het aangewezen een backup te maken van de database alvorens een upgrade uit te voeren.";
+$ExtensionMBStringNotAvailable = "MBString extensie is niet beschikbaar";
 ?>

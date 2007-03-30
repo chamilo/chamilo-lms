@@ -134,7 +134,7 @@ $langTreeRebuildedIn  = "Boomstructuur opnieuw opgebouwd in";
 $langTreeRecountedIn  = "Boomstructuur opnieuw geteld in";
 $langRebuildTree = "Bouw boomstructuur opnieuw op";
 $langRefreshNbChildren = "Vernieuw aantal kinderen";
-$langShowTree  = "Toon boomstructuur";
+$langShowTree  = "Boomstructuur weergeven";
 $langBack  = "Terug naar vorige pagina";
 $langLogDeleteCat   = "Categorie verwijderd";
 $langRecountChildren  = "Tel kinderen opnieuw";
@@ -600,4 +600,8 @@ $DateStartMoreThanDateEnd = "De startdatum komt na de einddatum";
 $SlideSize = "Grootte van de slides";
 $EphorusPlagiarismPrevention = "Ephorus plagiaat preventie";
 $CourseTeachers = "Leerkrachten van de cursus";
+$XMLNotValid = "Het XML document is niet geldig";
+$AllowEmailEditorTitle = "Activeer online e-mail editor";
+$AllowEmailEditorTitle = "Activeer online e-mail editor";
+$AllowEmailEditorComment = "Als deze optie is geactiveerd, wordt een online e-mail editor geopend na het klikken op een e-mailadres";
 ?>

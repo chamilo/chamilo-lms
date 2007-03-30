@@ -12,7 +12,6 @@ $NewPost = "Nový &#269;lánek";
 $TaskManager = "Správa úkol&#367;";
 $langTask1 = "Úloha 1";
 $langTask2 = "Úloha 2";
-$langTask1 = "Úloha 1";
 $langTask3 = "Úloha 3";
 $langTask1Desc = "Úloha 1 - popis";
 $langTask2Desc = "Úloha 2 - popis";

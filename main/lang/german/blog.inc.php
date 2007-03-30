@@ -70,7 +70,6 @@ $SearchResults = "Suchergebnisse";
 $NoArticleMatches = "Kein passender Artikel gefunden ";
 $langTask1 = "Aufgabe 1";
 $langTask2 = "Aufgabe 2";
-$langTask1 = "Aufgabe 1";
 $langTask3 = "Aufgabe 3";
 $langTask1Desc = "Beschreibung von Aufgabe 1";
 $langTask2Desc = "Beschreibung von Aufgabe 2";

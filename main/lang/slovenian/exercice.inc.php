@@ -214,4 +214,5 @@ $YourScore = "Tvoj rezultat";
 $Attempted = "Poskusov";
 $AssignMarks = "Oceni / dodeli oceno";
 $Results = "Rezultati";
+$ExerciseStored = "Vaja je bila shranjena";
 ?>

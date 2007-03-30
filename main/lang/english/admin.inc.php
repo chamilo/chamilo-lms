@@ -602,4 +602,7 @@ $SlideSize = "Size of the slides";
 $EphorusPlagiarismPrevention = "Ephorus plagiarism prevention";
 $CourseTeachers = "Course teachers";
 $XMLNotValid = "XML document is not valid";
+$AllowEmailEditorTitle = "Active online email editor";
+$AllowEmailEditorTitle = "Active online email editor";
+$AllowEmailEditorComment = "If this option is activated, clicking on an email will open an online mail editor.";
 ?>

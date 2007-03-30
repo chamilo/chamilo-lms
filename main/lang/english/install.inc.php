@@ -107,4 +107,5 @@ $DBServerDoesntWorkOrLoginPassIsWrong = "The database server doesn\'t work or lo
 $PleaseCheckTheseValues = "Please check these values";
 $PleaseGoBackToStep = "Please go back to Step";
 $DBSettingUpgradeIntro = "The upgrade script will recover and update the Dokeos database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!";
+$ExtensionMBStringNotAvailable = "MBString extension not available";
 ?>

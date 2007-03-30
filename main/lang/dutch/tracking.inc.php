@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Toon alles";
+$langShowAll = "Alles weergeven";
 $langToolName = "Statistieken";
 $TrackingDisabled = "Statistieken zijn uitgeschakeld door de platformbeheerder.";
 $InactivesStudents = "Inactive studenten";

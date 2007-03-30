@@ -72,7 +72,6 @@ $SearchResults = "Ser&#265;rezultoj";
 $NoArticleMatches = "Ni ne trovis artikolojn respondajn al viaj ser&#265;kriterioj. Bonvolu fari pli vastan ser&#265;peton.";
 $langTask1 = "Tasko 1";
 $langTask2 = "Tasko 2";
-$langTask1 = "Tasko 1";
 $langTask3 = "Tasko 3";
 $langTask1Desc = "Priskribo de tasko 1";
 $langTask2Desc = "Priskribo de tasko 2";

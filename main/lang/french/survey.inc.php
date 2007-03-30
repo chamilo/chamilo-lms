@@ -129,7 +129,7 @@ $SelectYAxis = "Sélectionnez les questions sur l\'axe des Y";
 $ComparativeReport = "Reporting comparatif";
 $AllQuestionsOnOnePage = "Toutes les questions sont affichées sur une page";
 $SelectUser = "Sélectionnez un utilisateur";
-$SelectUserWhoFilledSurvey = "Sélectionnez un utilisateur qui a rémondu à l\'enquête";
+$SelectUserWhoFilledSurvey = "Sélectionnez un utilisateur qui a répondu à l\'enquête";
 $userreport = "Rapport sur un utilisateur";
 $VisualRepresentation = "Graphique";
 $AbsoluteTotal = "Total absolu";
@@ -157,4 +157,7 @@ $Multipleresponse = "Réponses multiples";
 $Shared = "Partagée";
 $Invite = "Invités";
 $MaximumScore = "Score maximum";
+$ViewInvited = "Voir les invités";
+$ViewAnswered = "Voir les personnes ayant répondu";
+$ViewUnanswered = "Voir les personnes n\'ayant pas répondu";
 ?>

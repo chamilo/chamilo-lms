@@ -213,4 +213,5 @@ $YourScore = "Ihre Quelle";
 $Attempted = "Versucht ";
 $AssignMarks = "Eine Markierung zuweisen";
 $Results = "Ergebnisse";
+$ExerciseStored = "Diese Übung wurde gespeichert";
 ?>

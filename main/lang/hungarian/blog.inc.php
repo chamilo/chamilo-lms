@@ -70,7 +70,6 @@ $SearchResults = "Keresési eredmények";
 $NoArticleMatches = "A keresés nem járt eredménnyel";
 $langTask1 = "1. Feladat";
 $langTask2 = "2. Feladat";
-$langTask1 = "1. Feladat";
 $langTask3 = "3. Feladat";
 $langTask1Desc = "1. Feladat leírása";
 $langTask2Desc = "2. Feladat leírása";

@@ -158,4 +158,7 @@ $Score = "Score";
 $Shared = "Shared";
 $Invite = "Invite";
 $MaximumScore = "Maximum score";
+$ViewInvited = "View invited";
+$ViewAnswered = "View answered people";
+$ViewUnanswered = "View answered people";
 ?>

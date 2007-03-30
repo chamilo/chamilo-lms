@@ -213,4 +213,5 @@ $YourScore = "Su puntuación";
 $Attempted = "Intentado";
 $AssignMarks = "Dar una puntuación";
 $Results = "Resultados";
+$ExerciseStored = "El ejercicio ha sido almacenado";
 ?>

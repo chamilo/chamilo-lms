@@ -109,7 +109,7 @@ $langSeveral = "Verschillende";
 $langNotice = "Merk op";
 $langDate = "Datum";
 $langAmong = "tussen";
-$langShow = "Toon";
+$langShow = "Weergeven";
 $langMyCourses = "Mijn cursussen";
 $langModifyProfile = "Mijn profiel";
 $langMyStats = "Toon mijn statistieken";
@@ -416,4 +416,5 @@ $ModifyRecipientList = "Wijzig de lijst van ontvangers";
 $NoLinkVisited = "Geen link bezocht";
 $NoDocumentDownloaded = "Geen document gedownloaded";
 $Clicks = "klikken";
+$SearchResults = "Zoekresultaten";
 ?>

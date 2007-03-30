@@ -602,4 +602,6 @@ $DateStartMoreThanDateEnd = "Konèni datum je pred zaèetnim";
 $SlideSize = "Velikost diapozitiva";
 $EphorusPlagiarismPrevention = "Ephorus zašita pred plagiatorstvom";
 $CourseTeachers = "Uèitelji teèaja";
+$XMLNotValid = "XML dokument ni veljaven";
+$AllowEmailEditorComment = "V primeru, da je ta možnost aktivirana, klik na e-pošto odpre vrajen urejevalnik e-pošte.";
 ?>

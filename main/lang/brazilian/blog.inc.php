@@ -70,7 +70,6 @@ $SearchResults = "Resultados";
 $NoArticleMatches = "Não encontrámos artigos que se ajustem aos seus critérios de pesquisa. Pode ser que tenha escrito mal as palavras ou a sua pesquisa é pouco concreta. Altere o que desejar e inicie uma nova pesquisa.";
 $langTask1 = "Tarefa 1";
 $langTask2 = "Tarefa 2";
-$langTask1 = "Tarefa 1";
 $langTask3 = "Tarefa 3";
 $langTask1Desc = "Descrição da tarefa 1";
 $langTask2Desc = "Descrição da tarefa 2";

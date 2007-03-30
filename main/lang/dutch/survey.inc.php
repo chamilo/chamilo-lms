@@ -155,4 +155,7 @@ $Multiplechoice = "Meerdere keuzes";
 $Multiplechoice = "Meerdere keuzes";
 $Multipleresponse = "Meerdere antwoorden";
 $Score = "Score";
+$Shared = "Gedeeld";
+$Invite = "Nodig uit";
+$MaximumScore = "Maximum score";
 ?>

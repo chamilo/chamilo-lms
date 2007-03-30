@@ -23,4 +23,5 @@ $GreyIcons = "Modules";
 $Interaction = "Interactie";
 $Authoring = "Opstellen";
 $Administration = "Administratie";
+$IntroductionTextUpdated = "De introductietekst is gewijzigd";
 ?>

@@ -2,7 +2,7 @@
 ==============================================================================
 							CORPORATIVE STYLESHEET
 ==============================================================================
-*/ 
+*/
 /*
 ==============================================================================
 	GLOBAL STYLES - REDEFINED HTML TAGS
@@ -82,16 +82,16 @@ ul {
 ==============================================================================
 	PAGE STRUCTURE
 ==============================================================================
-*/ 
+*/
 /* user_portal course status icon */
-#coursestatusicons {
+.coursestatusicons {
 	float: left;
 	clear: left;
 	margin-right: .5em;
 }
 
 /* user_portal course list */
-#courses {
+.courses {
 	font-weight: bold;
 	list-style: none;
 	margin-bottom: .2em;
@@ -303,7 +303,7 @@ ul {
 	padding: 0;
 }
 
-/* Solves the IE inherited margin bug */ 
+/* Solves the IE inherited margin bug */
 /* IE-7*/
 *:first-child+html #header4 {
 	margin-top: 0;
@@ -487,7 +487,7 @@ td .menu {
 ==============================================================================
     DOCUMENT MODULE AND DATA TABLES
 ==============================================================================
-*/ 
+*/
 
 /* Data tables */
 .data_table {
@@ -592,7 +592,7 @@ div.row div.label {
 	margin: 0;
 }
 
-/* Solves the IE inherited margin bug */ 
+/* Solves the IE inherited margin bug */
 /* IE-7*/
 *:first-child+html .row .formw input {
 	margin-left: -1em;
@@ -931,7 +931,7 @@ span.agendaitem i {
 
 /*
 ==============================================================================
-    DOKEOS CONFIG SETTINGS 
+    DOKEOS CONFIG SETTINGS
 ==============================================================================
 */
 
@@ -1181,7 +1181,7 @@ a.specialLink:hover,a.specialLink:focus {
 ==============================================================================
     DISPLAY MESSAGES
 ==============================================================================
-*/ 
+*/
 
 /* Common message styles */
 .confirmation-message,.error-message,.normal-message,.warning-message {

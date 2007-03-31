@@ -96,7 +96,7 @@ input.link_alike:hover {
 }
 
 input.link_alike{
-	color: #4171b5;	
+	color: #4171b5;
 }
 
 input.link_alike:hover {
@@ -158,7 +158,7 @@ a.invisible:visited {
 }
 
 /* user_portal course status icon */
-#coursestatusicons{
+.coursestatusicons{
 	border: 0px solid #000;
 	float: left;
 	padding-right: 5px;
@@ -166,7 +166,7 @@ a.invisible:visited {
 }
 
 /* user_portal course list */
-#courses {
+.courses {
 	list-style-type: none;
 	margin-bottom: 5px;
 }
@@ -306,7 +306,7 @@ a.invisible:visited {
 }
 
 #header3 li {
-	border-right: solid 1px #73A2B6; 
+	border-right: solid 1px #73A2B6;
 	color: #73A2B6;
 	display: block;
 	float: left;
@@ -341,7 +341,7 @@ a.invisible:visited {
 #header3 input {
 	display: block;
 	padding-left: 2px;
-	padding-right: 2px;	
+	padding-right: 2px;
 }
 
 #header3 input:hover {
@@ -422,8 +422,8 @@ a.invisible:visited {
 }
 
 #myprofilefooter {
-	clear:both; 
-	border-top:thin solid; 
+	clear:both;
+	border-top:thin solid;
 	padding-top:2px;
 }
 
@@ -437,9 +437,9 @@ a.invisible:visited {
 .menu {
 	background-color: #E5EDF9;
 	border: 1px solid #4171B5;
-	float: right;	
+	float: right;
 	padding: 0 0 6px 0;
-	width: 20%;	
+	width: 20%;
 }
 
 .menucaption {
@@ -452,7 +452,7 @@ a.invisible:visited {
 	border: 1px solid #4171B5;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	width: auto;	
+	width: auto;
 }
 
 .menusectioncaption {
@@ -481,18 +481,18 @@ a.invisible:visited {
 	*/
 }
 
-#center { 
-	margin: 0 190px 0 0; 
-	min-height: 300px; 
+#center {
+	margin: 0 190px 0 0;
+	min-height: 300px;
 	padding: 10px 0 40px 0;
 }
 
-#toolnav { 
+#toolnav {
 	float: right;
 	margin: 0;
  	margin-left: -5%;  /* the difference to make the left colum appear flush left */
  	padding: 0;
- 	width: 180px;	
+ 	width: 180px;
 }
 
 #toolnav img {
@@ -509,15 +509,15 @@ a.invisible:visited {
 
 /*
 this lets the navigation menu appear to the left:
-#center { 
+#center {
 	margin: 0 0 0 180px;
-	min-height: 300px; 
+	min-height: 300px;
  	padding: 10px 0 40px 0;
 }
 
-#toolnav { 
-	float: left; 
-	width: 180px; 
+#toolnav {
+	float: left;
+	width: 180px;
 	padding: 20px 0 0 0;
  	margin-left: -5%;
 }
@@ -534,7 +534,7 @@ this lets the navigation menu appear to the left:
 	border: 1px solid #4271b5;
 	float: left;
 	margin: 0 0 0 10px;
-	padding: 0;	
+	padding: 0;
 }
 
 #toolnavbox dl {
@@ -563,7 +563,7 @@ this lets the navigation menu appear to the left:
 	text-align: left;
 }
 
-#toolnavlist a, 
+#toolnavlist a,
 #toolnavlist a:link {
 	background: #E5EDF9;
 	color: #4171b5;
@@ -596,7 +596,7 @@ this lets the navigation menu appear to the left:
 	text-align: left;
 }
 
-#lang_form input, 
+#lang_form input,
 #lang_form select{
 	font-size: 12px;
 }
@@ -638,7 +638,7 @@ input.liteoption {
 
 /* various sections in course-home.php file  */
 #toolremove {
-	border: 2px solid #f00;	
+	border: 2px solid #f00;
 	color: #f00;
 	font-weight: bold;
 	margin: 10px auto;
@@ -646,48 +646,48 @@ input.liteoption {
 	width: 40%;
 }
 
-#courseintro { 
+#courseintro {
 	border-bottom: 1px solid #4171B5;
  	clear: both;
  	margin: 10px auto;
- 	padding: 10px; 
+ 	padding: 10px;
  	width: 80%;
 }
 
-#courseintro_icons { 
-	clear: both; 
+#courseintro_icons {
+	clear: both;
 	margin: 10px auto;
-	width: 80%; 
+	width: 80%;
 }
 
-.everybodyview { 
-	margin: 10px auto; 
+.everybodyview {
+	margin: 10px auto;
  	padding: 10px;
  	position: relative; /* to avoid the IE peekabo bug ?*/
- 	width: 80%; 	
+ 	width: 80%;
 }
 
 .Authoringview,
-.courseadminview, 
+.courseadminview,
 .platformadminview {
 	border: 1px solid #4171B5;
-	margin: 25px auto 10px; 
- 	padding: 10px; 
-	position: relative; 
+	margin: 25px auto 10px;
+ 	padding: 10px;
+	position: relative;
 	width: 80%;
  }
 
 .viewcaption {
-	background-color: #fff; 
- 	color: #4171B5; 
+	background-color: #fff;
+ 	color: #4171B5;
  	font-size: 12px;
- 	font-weight: bold; 
+ 	font-weight: bold;
 	padding: 0 4px;
-	position: relative; 
-	top: -20px; 
+	position: relative;
+	top: -20px;
 }
- 	
- 	
+
+
 /*
 ==============================================================================
     AGENDA
@@ -701,7 +701,7 @@ input.liteoption {
 	border-collapse: collapse;
 }
 
-#agenda .title a { 
+#agenda .title a {
 	color: #fff;
 }
 
@@ -710,9 +710,9 @@ input.liteoption {
 }
 
 .agenda_month_divider {
-	background-color: #4171B5; 
-	color: #fff; 
-	font-size: 12px; 
+	background-color: #4171B5;
+	color: #fff;
+	font-size: 12px;
 	font-weight: bold;
  	text-align: center;
 }
@@ -722,8 +722,8 @@ input.liteoption {
 
 #agenda_select {
 	border: 0px solid green;
-	list-style: none; 
- 	margin: 30px 0 0 0; 
+	list-style: none;
+ 	margin: 30px 0 0 0;
  	padding: 0 0 0 10px;
  }
 
@@ -737,24 +737,24 @@ input.liteoption {
 #agenda_list {
 	border: 1px solid #fff;
  	border-collapse: collapse;
-	margin: 0 auto; 
-	width: 100%; 
+	margin: 0 auto;
+	width: 100%;
 }
 
 /*The caption of the calendar (displays the month and the << and >> links*/
 #agenda_list .title{
-	background-color: #4171B5; 
- 	border: 1px solid #264269;	
- 	color: #fff; 
- 	font-size: 12px; 
+	background-color: #4171B5;
+ 	border: 1px solid #264269;
+ 	color: #fff;
+ 	font-size: 12px;
 	font-weight: bold;
- 	padding: 2px 10px; 
- 	text-align: center; 
+ 	padding: 2px 10px;
+ 	text-align: center;
 
 }
 
 #agenda_list .title a{
-	color: #fff; 
+	color: #fff;
 }
 
 
@@ -762,21 +762,21 @@ input.liteoption {
 /* The cells with the name of the days of the weeks (mon->sun)*/
 #agenda_list .weekdays {
 	background-color: #D3DFF1;
-	border: 1px solid #264269; 
- 	border-collapse: collapse; 
-	font-weight: bold; 
-	text-align: center;	
+	border: 1px solid #264269;
+ 	border-collapse: collapse;
+	font-weight: bold;
+	text-align: center;
 }
 
 #agenda_list .days_week,
 #agenda_list .days_weekend,
 #agenda_list .days_today {
-	border: 1px solid #264269; 
- 	border-collapse: collapse; 
- 	height: 40px; 
-	text-align: left; 
+	border: 1px solid #264269;
+ 	border-collapse: collapse;
+ 	height: 40px;
+	text-align: left;
 	vertical-align: top;
-	width: 12%; 	
+	width: 12%;
 }
 
 /* The cells for the days (1->31) */
@@ -785,13 +785,13 @@ input.liteoption {
 }
 
 #agenda_list .days_weekend {
-	background-color: #e6e6e6;	
+	background-color: #e6e6e6;
 }
- 
+
 #agenda_list .days_today {
 	background-color: #FFCA8D;
  	color: #CC3300;
- 	font-weight: bold; 
+ 	font-weight: bold;
 }
 
 #agenda_list .data,
@@ -803,61 +803,61 @@ input.liteoption {
 #agenda_list .datanow,
 #agenda_list .datanotboldnow,
 #agenda_list .textnow {
-	border: 0px solid #4171B5; 
+	border: 0px solid #4171B5;
  	border-collapse: collapse;
  	padding: 2px 10px;
-	text-align: left; 
+	text-align: left;
 }
 
 /* text in the cells: display of agenda items (visible)*/
 #agenda_list .data {
-	background-color: #eee; 
-	font-weight: bold; 
+	background-color: #eee;
+	font-weight: bold;
 }
 
 #agenda_list .datanotbold {
-	background-color: #eee; 
-	font-weight: normal; 
+	background-color: #eee;
+	font-weight: normal;
 }
 
 #agenda_list .text {
-	background-color: #fff; 
-	font-weight: normal; 
+	background-color: #fff;
+	font-weight: normal;
 }
 
 /*text in the cells: display of agenda items (invisible)*/
 #agenda_list .data_hidden {
-	background-color: #eee; 
+	background-color: #eee;
 	color: #999999;
-	font-weight: bold; 
+	font-weight: bold;
 }
 
 #agenda_list .datanotbold_hidden {
-	background-color: #eee; 
+	background-color: #eee;
 	color: #999999;
-	font-weight: normal; 
+	font-weight: normal;
 }
 
 #agenda_list .text_hidden {
-	background-color: #fff; 
+	background-color: #fff;
 	color: #999999;
-	font-weight: normal; 
+	font-weight: normal;
 }
 
 /*text in the cells: display of agenda items (highlighted)*/
 #agenda_list .datanow {
-	background-color: #FFCC00; 
-	font-weight: bold; 
+	background-color: #FFCC00;
+	font-weight: bold;
 }
 
 #agenda_list .datanotboldnow {
-	background-color: #FFCC00; 
-	font-weight: normal; 
+	background-color: #FFCC00;
+	font-weight: normal;
 }
 
 #agenda_list .textnow {
-	background-color: #fff; 
-	font-weight: normal; 
+	background-color: #fff;
+	font-weight: normal;
 }
 
 /*
@@ -868,54 +868,54 @@ input.liteoption {
 #smallcalendar {
 	border: 1px solid #fff;
  	border-collapse: collapse;
-	margin: 0 auto; 
-	width: 100%; 
+	margin: 0 auto;
+	width: 100%;
 }
 
 #smallcalendar .title {
-	background-color: #4171B5; 
-	color: #fff; 
+	background-color: #4171B5;
+	color: #fff;
 	font-size: 11px;
- 	font-weight: bold; 
+ 	font-weight: bold;
 	padding: 2px;
- 	text-align: center; 	
+ 	text-align: center;
 }
 
-#smallcalendar .title a { 
+#smallcalendar .title a {
 	color: #fff;
 }
 
 #smallcalendar .weekdays {
 	background-color: #D3DFF1;
-	border: 1px solid #fff; 
+	border: 1px solid #fff;
  	border-collapse: collapse;
-	font-size: 11px; 
- 	font-weight: bold; 
+	font-size: 11px;
+ 	font-weight: bold;
  	text-align: center;
 }
 
 #smallcalendar .days_week {
-	background-color: #f5f5f5; 
+	background-color: #f5f5f5;
 	border-collapse: collapse;
-	font-size: 11px; 
+	font-size: 11px;
 	text-align: center;
 }
 
 #smallcalendar .days_weekend {
 	background-color: #e6e6e6;
-	border: 1px solid #fff; 
- 	border-collapse: collapse; 
-	font-size: 11px; 
+	border: 1px solid #fff;
+ 	border-collapse: collapse;
+	font-size: 11px;
 	text-align: center;
 }
 
 #smallcalendar .days_today {
 	background-color: #FFCA8D;
- 	border: 1px solid #FA8500; 
- 	border-collapse: collapse; 
- 	font-size: 11px; 
+ 	border: 1px solid #FA8500;
+ 	border-collapse: collapse;
+ 	font-size: 11px;
 	text-align: center;
-	width: 12%; 	
+	width: 12%;
 }
 
 /*
@@ -923,17 +923,17 @@ input.liteoption {
     styles for the personal agenda
 ------------------------------------------------------------------------------
 */
-.personal_agenda, 
+.personal_agenda,
 .personal_agenda a:link,
 .personal_agenda a:visited,
 a.personal_agenda:link,
 a.personal_agenda:visited{
-	color: #008000; 
+	color: #008000;
 }
 
 .personal_agenda a:hover,
 a.personal_agenda:hover  {
-	color: #666666; 
+	color: #666666;
 }
 
 
@@ -987,12 +987,12 @@ a.personal_agenda:hover  {
 }
 
 #message {
-	margin: 0 auto; 
+	margin: 0 auto;
 	text-align: center;
 }
 
 #message select {
-	margin: 10px 0; 
+	margin: 10px 0;
 	width: 220px;
 }
 
@@ -1006,23 +1006,23 @@ a.personal_agenda:hover  {
 
 /*
 ==============================================================================
-    DOCUMENT MODULE 
+    DOCUMENT MODULE
 ==============================================================================
 */
 
 /* styles from the document.php file */
-.comment { 
-	margin-left: 30px; 
+.comment {
+	margin-left: 30px;
 }
 
 /* styles from the upload.php file */
 dl.upload_option {
-	margin: 1em 0; 
+	margin: 1em 0;
 	padding: 0;
 }
 
 .upload_option dt {
-	font-weight:bold; 
+	font-weight:bold;
 	margin:0;
 }
 
@@ -1049,20 +1049,20 @@ dl.upload_option {
 	font-weight: bold
 }
 
-.dropbox_listTitle { 
+.dropbox_listTitle {
 	color: #000000;
 }
 
 .dropbox_feedback {
-	font-size: x-small; 
-	height: 50px; 
+	font-size: x-small;
+	height: 50px;
 	overflow: auto
-	width: 200px; 
+	width: 200px;
 }
 
 .dropbox_feedbacks {
-	height: 250px; 
-	width: 100%; 
+	height: 250px;
+	width: 100%;
 	overflow: auto
 }
 
@@ -1074,49 +1074,49 @@ dl.upload_option {
 
 /* styles for chat / conference tools */
 #chat_entermessage {
-	background-color: #D6E5FA; 
+	background-color: #D6E5FA;
 	border-top: 1px solid #4171B5;
  	padding: 5px; margin: 0;
 }
 
 /* the following for the greyed out elements */
-a.nobold:link, 
-a.nobold:visited, 
-a.nobold:active { 
-	font-weight: normal; 
-	color: #999; 
+a.nobold:link,
+a.nobold:visited,
+a.nobold:active {
+	font-weight: normal;
+	color: #999;
 	margin: 0 0 0 25px;
 }
 
-a.nobold:hover { 
-	font-weight: normal; 
-	color: #999; 
-	text-decoration: underline; 
+a.nobold:hover {
+	font-weight: normal;
+	color: #999;
+	text-decoration: underline;
 	margin: 0 0 0 25px;
 }
 
-.note {	
+.note {
 	background-color: #FFF089;
-	border: 1px solid #4171B5;	
-	color: #4171B5; 
-	font-size: 12px; 
+	border: 1px solid #4171B5;
+	color: #4171B5;
+	font-size: 12px;
 	font-family: verdana, arial, helvetica, sans-serif;
-	line-height: 14px; 
-	margin: 6px; 
+	line-height: 14px;
+	margin: 6px;
 	padding: 4px;}
 
-.alternativeBgLight { 
+.alternativeBgLight {
 	background-color: #f5f5f5;
- 	border: 1px solid #4171B5; 
+ 	border: 1px solid #4171B5;
  	border-collapse: collapse;
  }
- 
-.alternativeBgDark { 
+
+.alternativeBgDark {
 	background-color: #ccf;
- 	border: 1px solid #4171B5; 
+ 	border: 1px solid #4171B5;
  	border-collapse: collapse;
 }
- 
+
 .myagendatoday {
 	background-color: #FFCA8D;
 	border-collapse: collapse;
@@ -1124,8 +1124,8 @@ a.nobold:hover {
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-weight: bold;
  }
- 
- 
+
+
 /*
 ==============================================================================
     FORM STYLES
@@ -1213,7 +1213,7 @@ span.form_error {
 	font-weight:bold;
 	padding-left:5px;
     text-align:left;
-}	
+}
 
 .data_table {
   	border-collapse: collapse;
@@ -1232,7 +1232,7 @@ span.form_error {
 .data_table tr.row_odd {
   	background-color: #fafafa;
 }
-  
+
 .data_table tr.row_odd:hover,
 .data_table tr.row_even:hover{
   	background-color: #f0f0f0;
@@ -1310,12 +1310,12 @@ span.form_error {
 ==============================================================================
 */
 
-.tool_list dt { 
-	font-weight: bold; 
+.tool_list dt {
+	font-weight: bold;
 }
 
-.tool_list dd { 
-	margin: 0; 
+.tool_list dd {
+	margin: 0;
 	padding: 4px 0 0 10px;
 }
 
@@ -1327,32 +1327,32 @@ span.form_error {
 
 .home_cats {
 	background: #fff;
-	float: left; 
-	margin: 0; 
-	padding: 0px; 
-	padding-top: 8px; 
+	float: left;
+	margin: 0;
+	padding: 0px;
+	padding-top: 8px;
 	position: relative;
 	width: 45%;
 }
 
 .home_news {
 	background: #fff;
-	float: right; 
-	margin: 0; 
-	padding: 0px; 
-	padding-top: 8px; 
+	float: right;
+	margin: 0;
+	padding: 0px;
+	padding-top: 8px;
 	position: relative;
-	width: 45%; 
+	width: 45%;
 }
 
-label.left { 
-	float: left; 
-	width: 15em; 
-	margin: 0 0 0.5em 0; 
+label.left {
+	float: left;
+	width: 15em;
+	margin: 0 0 0.5em 0;
 }
 
-form br { 
-	clear: both; 
+form br {
+	clear: both;
 }
 
 /* Fix for alignment problem in IE-Win browsers  */
@@ -1362,15 +1362,15 @@ form br {
 /* End hide from IE5/mac */
 
 .radio,
-.checkbox { 
+.checkbox {
 	background-color: transparent;
-	border: none; 
-	margin: 0; 
-	padding: 0; 
+	border: none;
+	margin: 0;
+	padding: 0;
 }
 
-.required { 
-	color: #f00; 
+.required {
+	color: #f00;
 	font-weight: bold;
 }
 
@@ -1507,7 +1507,7 @@ tr.forum_category_header a {
 
 /*
 ------------------------------------------------------------------------------
-    FORUM 
+    FORUM
 ------------------------------------------------------------------------------
 */
 .forum_header {
@@ -1542,7 +1542,7 @@ tr.forum_threadheader td{
 	/*border-bottom: 1px solid #666666;*/
 	border-right: 1px solid #aaa;
 	vertical-align: top;
-	width: 150px;	
+	width: 150px;
 }
 
 .forum_message_left_2_be_approved {
@@ -1600,7 +1600,7 @@ a.forum_group_link {
 
 /*
 ------------------------------------------------------------------------------
-    BLOG 
+    BLOG
 ------------------------------------------------------------------------------
 */
 span.blog_title {
@@ -1740,17 +1740,17 @@ div.comments {
 }
 
 .link {
-	color : #1657A9; 
+	color : #1657A9;
 	cursor: pointer
-	font-weight : bold; 
-	text-decoration: none; 
+	font-weight : bold;
+	text-decoration: none;
 }
 
 .link:hover {
-	color: #abd9f1; 
+	color: #abd9f1;
 	cursor: pointer
-	font-weight: bold; 
-	text-decoration: none; 
+	font-weight: bold;
+	text-decoration: none;
 }
 
 
@@ -1879,13 +1879,13 @@ div.comments {
 
 /*
 input.forms	{
-	letter-spacing: normal; 
-	padding-top: 0px;	
-	padding-right: 0px;	
-	padding-bottom: 0px;	
+	letter-spacing: normal;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
 	padding-left: 0px;
-	text-align: justify; 
-	text-indent: 3pt;	
+	text-align: justify;
+	text-indent: 3pt;
 	word-spacing: normal;
 }
 */
@@ -1965,14 +1965,14 @@ input.forms	{
 #WCAG-editor {
 	border: 1px #4171B5 solid;
 	background-color: #E5EDF9;
-	width: 100%;	
+	width: 100%;
 }
 
 #WCAG-editor .title {
 	padding: 2px;
-	
+
 	background-color: #4171B5;
-	
+
 	text-align: center;
 	color: #ffffff;
 	font-weight: bold;
@@ -1988,7 +1988,7 @@ input.forms	{
 #WCAG-editor textarea {
 	width: 100%;
 	height: 180px;
-	
+
 	border: 1px #7F9DB9 solid;
 }
 

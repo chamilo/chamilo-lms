@@ -43,12 +43,12 @@
 */
 
 /**
- * @todo shouldn't the SCRIPTVAL_ and CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for? 
+ * @todo shouldn't the SCRIPTVAL_ and CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for?
  * 		 if these are really configuration settings then we can add those to the dokeos config settings
  * @todo move get_personal_course_list and some other functions to a more appripriate place course.lib.php or user.lib.php
  * @todo use api_get_path instead of $rootAdminWeb
  * @todo check for duplication of functions with index.php (user_portal.php is orginally a copy of index.php)
- * @todo display_digest, shouldn't this be removed and be made into an extension? 
+ * @todo display_digest, shouldn't this be removed and be made into an extension?
  */
 
 /*
@@ -67,7 +67,7 @@ define('SCRIPTVAL_NoTimeLimit', 6);
 // End 'don't change' section
 
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('courses', 'index');
 
 $cidReset = true; /* Flag forcing the 'current course' reset,
@@ -221,7 +221,7 @@ function get_personal_course_list($user_id)
 {
 	// initialisation
 	$personal_course_list = array();
-	
+
 	// table definitions
 	$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 	$main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -229,10 +229,10 @@ function get_personal_course_list($user_id)
 	$tbl_session_course 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_session_course_user= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$tbl_session 			= Database :: get_main_table(TABLE_MAIN_SESSION);
-	
+
 	$personal_course_list = array ();
-	
-	
+
+
 	//Courses in which we suscribed out of any session
 	$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
 										course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
@@ -242,35 +242,35 @@ function get_personal_course_list($user_id)
 										AND   course_rel_user.user_id = '".$user_id."'
 										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,course.title,course.code";
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-	
+
 	while ($result_row = mysql_fetch_array($course_list_sql_result))
 	{
 		$personal_course_list[] = $result_row;
 	}
-	
+
 	//$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
-	
-	$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, 5 as s 
-								FROM $main_course_table as course, $tbl_session_course_user as srcru 
+
+	$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, 5 as s
+								FROM $main_course_table as course, $tbl_session_course_user as srcru
 							  	WHERE srcru.course_code=course.code AND srcru.id_user='$user_id'";
-	
+
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-	
+
 	while ($result_row = mysql_fetch_array($course_list_sql_result))
 	{
 		$personal_course_list[] = $result_row;
 	}
-	
+
 	//$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
-	
-	$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, 2 as s 
-								FROM $main_course_table as course, $tbl_session_course as src, $tbl_session as session 
+
+	$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, 2 as s
+								FROM $main_course_table as course, $tbl_session_course as src, $tbl_session as session
 							  	WHERE session.id_coach='$user_id' AND session.id=src.id_session AND src.course_code=course.code";
-	
+
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-	
+
 	//$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
-	
+
 	while ($result_row = mysql_fetch_array($course_list_sql_result))
 	{
 		$personal_course_list[] = $result_row;
@@ -284,7 +284,7 @@ function get_personal_course_list($user_id)
  * @param unknown_type $user_id
  * @param unknown_type $list_sessions
  * @return unknown
- * 
+ *
  */
 function get_personal_session_course_list($user_id, $list_sessions)
 {
@@ -300,7 +300,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 	// variable initialisation
 	$personal_course_list_sql = '';
 	$personal_course_list = array();
-	
+
 	//Courses in which we suscribed out of any session
 	$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
 										course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
@@ -310,7 +310,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 										AND   course_rel_user.user_id = '".$user_id."'
 										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,course.title,course.code";
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-	
+
 	while ($result_row = mysql_fetch_array($course_list_sql_result))
 	{
 		$personal_course_list[] = $result_row;
@@ -320,11 +320,11 @@ function get_personal_session_course_list($user_id, $list_sessions)
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 							FROM session_rel_user, session
 							WHERE id_session=id AND id_user=$user_id ORDER BY date_start, date_end, name",__FILE__,__LINE__);
-	
+
 	$Sessions=api_store_result($result);
 
 	$Sessions = array_merge($Sessions , api_store_result($result));
-	
+
 	// get the list of sessions where the user is subscribed as coach in a course
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 							FROM $tbl_session as session
@@ -336,7 +336,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 	$sessionIsCoach = api_store_result($result);
 
 	$Sessions = array_merge($Sessions , $sessionIsCoach);
-	
+
 	// get the list of sessions where the user is subscribed as coach
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 							FROM $tbl_session as session
@@ -362,7 +362,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 										 WHERE session_course.id_session = $id_session
 										 AND (session_course.id_coach=$user_id OR session.id_coach=$user_id)
 										ORDER BY i";
-			
+
 			$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
 			while ($result_row = mysql_fetch_array($course_list_sql_result))
@@ -393,13 +393,13 @@ function get_personal_session_course_list($user_id, $list_sessions)
 									 ORDER BY i";
 
 		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-				
+
 		while ($result_row = mysql_fetch_array($course_list_sql_result))
 		{
 			$key = $result_row['id_session'].' - '.$result_row['k'];
 			$result_row['s'] = $result_row['14'];
-			
-			if(!isset($personal_course_list[$key]))	
+
+			if(!isset($personal_course_list[$key]))
 			{
 				$personal_course_list[$key] = $result_row;
 			}
@@ -552,27 +552,27 @@ function display_digest($toolsList, $digest, $orderKey, $courses)
  * @todo refactor into different functions for database calls | logic | display
  * @todo replace single-character $my_course['d'] indices
  * @todo move code for what's new icons to a separate function to clear things up
- * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this. 
+ * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
  */
 function get_logged_user_course_html($my_course)
 {
 	global $nosession;
-	
+
 	if(api_get_setting('use_session_mode')=='true' && !$nosession)
 	{
 		global $now, $date_start, $date_end;
 	}
-	
+
 	//initialise
 	$result = '';
-	
+
 	// Table definitions
 	//$statistic_database = Database::get_statistic_database();
 	$course_database = $my_course['db'];
 	$course_tool_table 			= Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
 	$tool_edit_table 			= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_database);
-	$course_group_user_table 	= Database :: get_course_table(TOOL_USER, $course_database);	
-	
+	$course_group_user_table 	= Database :: get_course_table(TOOL_USER, $course_database);
+
 	$user_id = api_get_user_id();
 	$course_system_code = $my_course['k'];
 	$course_visual_code = $my_course['c'];
@@ -615,19 +615,22 @@ function get_logged_user_course_html($my_course)
 
 	$s_htlm_status_icon="";
 
-	if($s_course_status==1){
-		$s_htlm_status_icon="<img src='main/img/teachers.gif'>";
+	if($s_course_status==1)
+	{
+		$s_htlm_status_icon=Display::return_icon('teachers.gif');
 	}
-	if($s_course_status==2){
-		$s_htlm_status_icon="<img src='main/img/coachs.gif'>";
+	if($s_course_status==2)
+	{
+		$s_htlm_status_icon=Display::return_icon('coachs.gif');
 	}
-	if($s_course_status==5){
-		$s_htlm_status_icon="<img src='main/img/students.gif'>";
+	if($s_course_status==5)
+	{
+		$s_htlm_status_icon=Display::return_icon('students.gif');
 	}
 
 	//display course entry
 	$result.="\n\t";
-	$result .= '<li id="courses"><div id="coursestatusicons">'.$s_htlm_status_icon.'</div>';
+	$result .= '<li class="courses"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
 	//show a hyperlink to the course, unless the course is closed and user is not course admin
 	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)
 	{
@@ -642,7 +645,7 @@ function get_logged_user_course_html($my_course)
 				$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
 			}
 		}
-		else 
+		else
 		{
 			$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
 		}
@@ -731,7 +734,7 @@ function get_logged_user_course_html($my_course)
 				$session .= ' - '.get_lang('WithoutTimeLimits');
 				$active = true;
 			}
-			else 
+			else
 			{
 				$session .= ' - '.get_lang('From').' '.$my_course['date_start'].' '.get_lang('To').' '.$my_course['date_end'];
 				$active = ($date_start <= $now && $date_end >= $now)?true:false;
@@ -739,7 +742,7 @@ function get_logged_user_course_html($my_course)
 		}
 		$output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active'=>$active);
 	}
-	else 
+	else
 	{
 		$output = array ($my_course['user_course_cat'], $result);
 	}
@@ -817,7 +820,7 @@ function show_notification($my_course)
 function get_user_course_categories()
 {
 	global $_user;
-	
+
 	$table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_user['user_id']."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
@@ -902,9 +905,9 @@ else
 	   --------------------------------------*/
 
 	$list = '';
-	
+
 	$personal_course_list = get_personal_session_course_list($_user['user_id']);
-	
+
 	/*if(api_get_setting('use_session_mode')=='true' && !$nosession)
 	{
 		echo "bouh";
@@ -914,7 +917,7 @@ else
 	{
 		$personal_course_list = get_personal_course_list($_user['user_id']);
 	}*/
-	
+
 	foreach ($personal_course_list as $my_course)
 	{
 		$thisCourseDbName = $my_course['db'];
@@ -1034,16 +1037,16 @@ else
 if (is_array($list))
 {
 	//print_r($list);
-	
+
 	//Courses whithout sessions
 	$old_user_category = 0;
-	foreach($list as $key=>$value){
-		
+	foreach($list as $key=>$value)
+	{
 		if($value[2]==0){
-			
+
 			$userdefined_categories = get_user_course_categories();
 			echo "<ul>\n";
-			
+
 			if ($old_user_category<>$value[0])
 			{
 				if ($key<>0 OR $value[0]<>0) // there are courses in the previous category
@@ -1059,14 +1062,14 @@ if (is_array($list))
 
 			}
 			echo $value[1];
-			
+
 			echo "</ul>\n";
-				
+
 		}
-		
+
 	}
-	
-	
+
+
 	$listActives = $listInactives = $listCourses = array();
 	foreach($list as $key=>$value){
 		if($value['active'])
@@ -1076,7 +1079,7 @@ if (is_array($list))
 	}
 	$old_user_category = 0;
 	$userdefined_categories = get_user_course_categories();
-	
+
 	if(count($listActives)>0 && $display_actives){
 		echo "<ul style=\"line-height: 20px; margin-top: 20px;\">\n";
 
@@ -1124,8 +1127,8 @@ if (is_array($list))
 
 		echo "\n</ul><br /><br />\n";
 	}
-		
-	
+
+
 	/*if(api_get_setting('use_session_mode')=='true' && !$nosession)
 	{
 		$listActives = $listInactives = $listCourses = array();
@@ -1137,11 +1140,11 @@ if (is_array($list))
 		}
 		$old_user_category = 0;
 		$userdefined_categories = get_user_course_categories();
-		
+
 		//Courses which belong to no sessions
 		//echo "<ul style=\"line-height: 20px;\">\n\n\n\t<ul class=\"user_course_category\"><li>".get_lang("Courses_no_sessions")."</li></ul>\n</ul>";
-		
-		
+
+
 		if(count($listActives)>0 && $display_actives){
 			echo "<ul style=\"line-height: 20px;\">\n";
 
@@ -1272,9 +1275,9 @@ if (is_array($_plugins['mycourses_menu'])){
 	echo '<div class="note" style="background: none">';
 	api_plugin('mycourses_menu');
 	echo "</div>";
-	
+
 }
-	
+
 echo "</div>"; // end of menu
 
 /*

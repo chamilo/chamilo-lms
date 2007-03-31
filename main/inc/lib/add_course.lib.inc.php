@@ -1763,7 +1763,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 			Introduction text
 		-----------------------------------------------------------
 		*/
-		$intro_text='<table width="100%" border="0" callpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_IMG_PATH).'mr_dokeos.png"></td><td valign="top" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr></table>';
+		$intro_text='<table width="100%" border="0" callpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_IMG_PATH).'mr_dokeos.png" alt="mr. Dokeos" title="mr. Dokeos" /></td><td valign="top" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr></table>';
 		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_COURSE_HOMEPAGE . "','".$intro_text. "')");
 		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_STUDENTPUBLICATION . "','".lang2db(get_lang('IntroductionTwo')) . "')");
 

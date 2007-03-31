@@ -160,15 +160,9 @@ if ($intro_dispDefault)
 {
 	//$intro_content = make_clickable($intro_content); // make url in text clickable
 	$intro_content = text_filter($intro_content); // parse [tex] codes
-//<img src='../../img/mr_dokeos.png'>
 	if (!empty($intro_content))
 	{
-		//$intro_content="<img src='../../main/img/mr_dokeos.png'>".$intro_content;
-		/*echo	"<div id=\"courseintro\"><p>\n",
-				$intro_content,"\n",
-				"</p>\n</div>";*/
 		echo "<table align='center' style='width: 80%;'><tr><td>$intro_content</td></tr></table>";
-
 	}
 }
 

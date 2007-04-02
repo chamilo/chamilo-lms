@@ -293,7 +293,7 @@ foreach ($forum_list as $key=>$forum)
 			{
 				if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']]))
 				{
-					echo icon('../img/forumnew.gif');	
+					echo icon('../img/forum.gif');	
 				}
 				else 
 				{

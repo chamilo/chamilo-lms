@@ -250,7 +250,7 @@ foreach ($threads as $row)
 		echo "\t\t<td>";
 		if (is_array($whatsnew_post_info[$_GET['forum']][$row['thread_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']]))
 		{
-			echo icon('../img/forumthreadnew.gif');
+			echo icon('../img/forumthread.gif');
 		}
 		else
 		{

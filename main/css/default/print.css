@@ -655,3 +655,7 @@ div.system_announcement_content{
 .print_invisible{
 	display:none;
 }
+
+.skip {
+	display: none;
+}

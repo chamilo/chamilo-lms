@@ -277,6 +277,11 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
 					break;
 			}
 		}
+		$my_parent_id = 0;
+		if(isset($lp_chap_items[$row['chapter_id']]))
+		{
+			$my_parent_id = $lp_chap_items[$row['chapter_id']];
+		}
 		$ins_lp_sql = "INSERT INTO $my_new_lp_item (" .
 				"lp_id," .
 				"item_type," .

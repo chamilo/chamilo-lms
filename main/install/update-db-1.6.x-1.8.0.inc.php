@@ -118,6 +118,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	//if this script has been included by index.php, not update_courses.php, so
 	// that we want to change the main databases as well...
 	$only_test = false;
+	$log = 0;
 	if (defined('DOKEOS_INSTALL')) 
 	{
 		if ($singleDbForm)
@@ -152,7 +153,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log("mysql_query($dbNameForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
-					error_log("In $dbNameForm, executed: $query",0);
+					if($log)
+					{
+						error_log("In $dbNameForm, executed: $query",0);
+					}
 				}
 			}
 		}
@@ -172,7 +176,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log("mysql_query($dbStatsForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
-					error_log("In $dbStatsForm, executed: $query",0);
+					if($log)
+					{
+						error_log("In $dbStatsForm, executed: $query",0);
+					}
 				}
 			}
 		}
@@ -256,7 +263,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						error_log("mysql_query(".$row_course['db_name'].",$query)",0);
 					}else{
 						$res = mysql_query($query);
-						error_log("In ".$row_course['db_name'].", executed: $query",0);
+						if($log)
+						{
+							error_log("In ".$row_course['db_name'].", executed: $query",0);
+						}
 					}
 				}
 
@@ -290,13 +300,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							"('".$row['cat_id']."','".mysql_real_escape_string($row['cat_title'])."','','".$myorder."',0)";
 					$res = mysql_query($sql);
 					$lastcatid = mysql_insert_id();
-					error_log($sql,0);
+					//error_log($sql,0);
 					$order ++;
 					//add item_property - forum categories were not put into item_properties before
 					$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 							"VALUES ('forum_category','1','$lastcatid','ForumCategoryAdded','1','1')";
 					$res = mysql_query($sql);
-					error_log($sql,0);
+					//error_log($sql,0);
 				}
 				$sql_orig = "SELECT * FROM ".$prefix."bb_forums ORDER BY forum_last_post_id desc";
 				$res_orig = mysql_query($sql_orig);
@@ -313,7 +323,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							"'".$row['forum_last_post_id']."','".$row['forum_topics']."'," .
 							"0,'".$row['forum_posts']."'," .
 							"1,$order)";
-					error_log($sql,0);
+					//error_log($sql,0);
 					$res = mysql_query($sql);
 					$lastforumid = mysql_insert_id();
 					$order++;
@@ -322,7 +332,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 							"VALUES ('forum','1','$lastforumid','ForumAdded','1','1')";
 					$res = mysql_query($sql);
-					error_log($sql,0);
+					//error_log($sql,0);
 				}
 				$sql_orig = "SELECT * FROM ".$prefix."bb_topics";
 				$res_orig = mysql_query($sql_orig);
@@ -352,7 +362,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							"0,'".$row['topic_replies']."',0,'".mysql_real_escape_string($row['topic_title'])."'," .
 							"'$name','$time','".$row['topic_last_post_id']."'," .
 							"'".$row['topic_views']."')";
-					error_log($sql,0);
+					//error_log($sql,0);
 					$res = mysql_query($sql);
 					$lastthreadid = mysql_insert_id();
 					
@@ -360,7 +370,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 							"VALUES ('forum_thread','1','$lastthreadid','ForumThreadAdded','1','1')";
 					$res = mysql_query($sql);
-					error_log($sql,0);
+					//error_log($sql,0);
 				}
 				$sql_orig = "SELECT * FROM ".$prefix."bb_posts bp, ".$prefix."bb_posts_text bpt WHERE bp.post_id = bpt.post_id";
 				$res_orig = mysql_query($sql_orig);
@@ -390,7 +400,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							"'".$poster_id."','".$row['parent_id']."',1," .
 							"'".mysql_real_escape_string($row['post_title'])."','$name', '".mysql_real_escape_string($row['post_text'])."'," .
 							"'$time',0)";
-					error_log($sql,0);
+					//error_log($sql,0);
 					$res = mysql_query($sql);
 					$lastpostid = mysql_insert_id();
 					
@@ -398,7 +408,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					$sql = "INSERT INTO ".$prefix."item_property(tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 							"VALUES ('forum_post','1','$lastpostid','ForumPostAdded','1','1')";
 					$res = mysql_query($sql);
-					error_log($sql,0);
+					//error_log($sql,0);
 				}
 				unset($users_list);
 			}
@@ -433,7 +443,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log("mysql_query($dbNameForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
-					error_log("In $dbNameForm, executed: $query",0);
+					if($log)
+					{
+						error_log("In $dbNameForm, executed: $query",0);
+					}
 				}
 			}
 		}
@@ -453,7 +466,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log("mysql_query($dbStatsForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
-					error_log("In $dbStatsForm, executed: $query",0);
+					if($log)
+					{
+						error_log("In $dbStatsForm, executed: $query",0);
+					}
 				}
 			}
 		}
@@ -472,7 +488,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					error_log("mysql_query($dbUserForm,$query)",0);
 				}else{
 					$res = mysql_query($query);
-					error_log("In $dbUserForm, executed: $query",0);
+					if($log)
+					{
+						error_log("In $dbUserForm, executed: $query",0);
+					}
 				}
 			}
 		}
@@ -514,7 +533,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						error_log("mysql_query(".$row['db_name'].",$query)",0);
 					}else{
 						$res = mysql_query($query);
-						error_log("In ".$row['db_name'].", executed: $query",0);
+						if($log)
+						{
+							error_log("In ".$row['db_name'].", executed: $query",0);
+						}
 					}
 				}
 			}

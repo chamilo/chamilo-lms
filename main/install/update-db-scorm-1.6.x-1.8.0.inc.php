@@ -185,10 +185,14 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
 		if($old_parent_chap != 0){
 			$new_chap = $lp_chap_items[$old_chap];
 			$new_parent = $lp_chap_items[$old_parent_chap];
-			$sql_par_chap = "UPDATE $my_new_lp_item " .
+			if(isset($new_chap) && $new_chap != '' 
+				&& isset($new_parent) && $new_parent != '')
+			{
+				$sql_par_chap = "UPDATE $my_new_lp_item " .
 					"SET parent_item_id = $new_parent " .
 					"WHERE id = $new_chap";
-			$res_par_chap = api_sql_query($sql_par_chap,__FILE__,__LINE__);
+				$res_par_chap = api_sql_query($sql_par_chap,__FILE__,__LINE__);
+			}
 		}
 	}
 	unset($parent_chaps);

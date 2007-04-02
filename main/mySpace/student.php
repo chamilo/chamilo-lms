@@ -100,7 +100,7 @@ if($isCoach)
 		$table -> set_header(4, get_lang('Score'),false);	
 		$table -> set_header(5, get_lang('Student_publication'),false);
 		$table -> set_header(6, get_lang('Messages'),false);
-		$table -> set_header(7, get_lang('LatestLogin'),false);
+		$table -> set_header(7, get_lang('LatestLogin'));
 		$table -> set_header(8, get_lang('Details'),false);
 	     
 	    if($export_csv)
@@ -148,7 +148,18 @@ if($isCoach)
 			$row[] = $avg_student_score.' %';		
 			$row[] = $total_assignments;
 			$row[] = $total_messages;
-			$row[] = Tracking :: get_last_connection_date($student_id);
+			
+			$string_date=Tracking :: get_last_connection_date($student_id);
+			$timestamp=strtotime($string_date);
+			$currentTimestamp=mktime();
+			
+			//If the last connection is > than 7 days, the text is red
+			if($currentTimestamp-$timestamp>345600){
+				$row[] = '<span style="color: #F00;">'.$string_date.'</span>';
+			}
+			else{
+				$row[] = $string_date;
+			}
 			
 			if($export_csv)
 			{

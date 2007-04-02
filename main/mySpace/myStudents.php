@@ -184,9 +184,12 @@ if(!empty($_GET['student']))
 			$avg_student_score += Tracking :: get_avg_student_score($a_infosUser['user_id'],$course_code);
 		}
 	}
-	$avg_student_progress = round($avg_student_progress / $nb_courses,1);
-	$avg_student_score = round($avg_student_score / $nb_courses,1);
+	$avg_student_progress = round($avg_student_progress / $nb_courses,2);
+	$avg_student_score = round($avg_student_score / $nb_courses,2);
 	$last_connection_date = Tracking::get_last_connection_date($a_infosUser['user_id']);
+	if($last_connection_date==''){
+		$last_connection_date=get_lang('NoConnexion');
+	}
 	$time_spent_on_the_platform = api_time_to_hms(Tracking::get_time_spent_on_the_platform($a_infosUser['user_id']));
 	
 	// cvs informations
@@ -294,34 +297,34 @@ if(!empty($_GET['student']))
 									<td>
 										<table>
 											<tr>
-												<td class="none">
+												<td class="none" align="right">
 													<?php echo get_lang('LatestLogin') ?>
 												</td>
-												<td class="none">
+												<td class="none" align="left">
 													<?php echo $last_connection_date ?>
 												</td>
 											</tr>
 											<tr>
-												<td class="none">
+												<td class="none" align="right">
 													<?php echo get_lang('TimeSpentOnThePlatform') ?>
 												</td>
-												<td class="none">
+												<td class="none" align="left">
 													<?php echo $time_spent_on_the_platform ?>
 												</td>
 											</tr>
 											<tr>
-												<td class="none">
+												<td class="none" align="right">
 													<?php echo get_lang('Progress') ?>
 												</td>
-												<td class="none">
+												<td class="none" align="left">
 													<?php echo $avg_student_progress.' %' ?>
 												</td>
 											</tr>
 											<tr>
-												<td class="none">
+												<td class="none" align="right">
 													<?php echo get_lang('Score') ?>
 												</td>
-												<td class="none">
+												<td class="none" align="left">
 													<?php echo $avg_student_score.' %' ?>
 												</td>
 											</tr>
@@ -381,7 +384,7 @@ if(!empty($_GET['student']))
 			$a_date_end = explode('-',$a_infosCours['date_end']);
 			$date_end = $a_date_end[2].'/'.$a_date_end[1].'/'.$a_date_end[0];
 			$dateSession = get_lang('From').' '.$date_start.' '.get_lang('To').' '.$date_end;
-			$tableTitle = $a_infosCours['title'].'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.$a_infosCours['tutor_name'];
+			$tableTitle = $a_infosCours['title'].'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.stripslashes($a_infosCours['tutor_name']);
 			
 			$csv_content[] = array();
 			$csv_content[] = array($tableTitle);	
@@ -478,7 +481,7 @@ if(!empty($_GET['student']))
 							<?php echo $progress ?>
 						</td>
 						<td align="center">
-							<?php echo date('Y-m-d',$start_time) ?>
+							<?php if($start_time!='') echo date('Y-m-d',$start_time); else echo '-'; ?>
 						</td>
 						<td align="center">
 							<?php
@@ -547,7 +550,8 @@ if(!empty($_GET['student']))
 					$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
 									FROM $tbl_stats_exercices AS ex
 									WHERE  ex.exe_cours_id = '".$a_infosCours['code']."'
-									AND ex.exe_exo_id = ".$a_exercices['id']
+									AND ex.exe_exo_id = ".$a_exercices['id']."
+									AND exe_user_id='".$_GET["student"]."'"
 								 ;
 					$resultEssais = api_sql_query($sqlEssais);
 					$a_essais = mysql_fetch_array($resultEssais);

@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 11570 2007-03-14 13:03:17Z elixir_julian $
+// $Id: profile.php 11833 2007-04-02 15:05:02Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -606,10 +606,6 @@ if ($image_size[0] > 300) //limit display width to 300px
 echo '<img '.$img_attributes.'/>';
 
 $form->display();
-
-echo '<div id="myprofilefooter">
-	<a href="'.api_get_path(WEB_CODE_PATH).'tracking/personnalLog.php">'.get_lang('MyStats').'</a>
-	| <a href="'.api_get_path(WEB_CODE_PATH).'auth/courses.php">'.get_lang('MyCourses').'</a></div>';
 
 Display :: display_footer();
 ?>

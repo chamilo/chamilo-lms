@@ -126,7 +126,7 @@ if($isCoach)
 	$avgResultsToExercises = $avgResultsToExercises/$nbStudents;
 	
 	// average courses by student
-	$avgCoursesPerStudent = round($totalCourses / $nbStudents,1);
+	$avgCoursesPerStudent = round($totalCourses / $nbStudents,2);
 	
 	// average time spent on the platform
 	$avgTimeSpent = $totalTimeSpent / $nbStudents;
@@ -190,7 +190,7 @@ if($isCoach)
 						'.get_lang('AverageProgressInLearnpath').'
 					</td>
 					<td align="right">
-						'.round($avgTotalProgress,1).' %
+						'.round($avgTotalProgress,2).' %
 					</td>
 				</tr>
 				<tr>
@@ -198,7 +198,7 @@ if($isCoach)
 						'.get_lang('AverageResultsToTheExercices').'
 					</td>
 					<td align="right">
-						'.round($avgResultsToExercises,1).' %
+						'.round($avgResultsToExercises,2).' %
 					</td>
 				</tr>
 				<tr>
@@ -206,7 +206,7 @@ if($isCoach)
 						'.get_lang('AveragePostsInForum').'
 					</td>
 					<td align="right">
-						'.round($nb_posts,1).'
+						'.round($nb_posts,2).'
 					</td>
 				</tr>
 				<tr>
@@ -214,7 +214,7 @@ if($isCoach)
 						'.get_lang('AverageAssignments').'
 					</td>
 					<td align="right">
-						'.round($nb_assignments,1).'
+						'.round($nb_assignments,2).'
 					</td>
 				</tr>
 			</table>
@@ -257,7 +257,7 @@ if($isCoach)
 		}
 		$a_courses = array_merge($a_courses, Tracking::get_courses_list_from_session($a_session['id']));		
 	}
-	$nb_courses_per_session = round(count($a_courses)/$nbSessions,1);
+	$nb_courses_per_session = round(count($a_courses)/$nbSessions,2);
 	
 	
 	 //csv part
@@ -267,7 +267,7 @@ if($isCoach)
 		$csv_content[] = array( get_lang('NbActiveSessions').';'.$nb_sessions_current);
 		$csv_content[] = array( get_lang('NbPastSessions').';'.$nb_sessions_past);
 		$csv_content[] = array( get_lang('NbFutureSessions').';'.$nb_sessions_future);
-		$csv_content[] = array( get_lang('NbStudentPerSession').';'.round($nbStudents/$nbSessions,1));
+		$csv_content[] = array( get_lang('NbStudentPerSession').';'.round($nbStudents/$nbSessions,2));
 		$csv_content[] = array( get_lang('NbCoursesPerSession').';'.$nb_courses_per_session);
 		$csv_content[] = array();
 	 }
@@ -310,7 +310,7 @@ if($isCoach)
 						'.get_lang('NbStudentPerSession').'
 					</td>
 					<td align="right">
-						'.round($nbStudents/$nbSessions,1).'
+						'.round($nbStudents/$nbSessions,2).'
 					</td>
 				</tr>
 				<tr>
@@ -417,10 +417,10 @@ if($nb_teacher_courses)
 		if($nb_students_in_course>0)
 		{
 			$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
-			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course,1).' %';
-			$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course,1).' %';
-			$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course,1);
-			$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course,1);
+			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course,2).' %';
+			$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course,2).' %';
+			$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course,2);
+			$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course,2);
 		}
 		
 		$table_row = array();
@@ -443,7 +443,7 @@ if($nb_teacher_courses)
 							$avg_assignments_in_course,
 							);
 		
-		$table -> addRow($table_row, 'align="right"');
+		$table -> addRow($table_row, 'align="left"');
 		
 	}
 	$table -> setColAttributes(7,array('align'=>'center'));

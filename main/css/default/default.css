@@ -1226,7 +1226,7 @@ span.form_error {
 .data_table th {
 	background-color: #E5EDF9;
 	border: 1px  solid gray;
-  	padding-right: 20px;
+  	padding: 3px;
 }
 
 .data_table tr.row_odd {

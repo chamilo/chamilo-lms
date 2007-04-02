@@ -282,34 +282,36 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
 		{
 			$my_parent_id = $lp_chap_items[$row['chapter_id']];
 		}
-		$ins_lp_sql = "INSERT INTO $my_new_lp_item (" .
-				"lp_id," .
-				"item_type," .
-				"ref, " .
-				"title," .
-				"description," .
-				"path, " .
-				"parent_item_id," .
-				"prerequisite," .
-				"display_order" .
-				") VALUES (" .
-				"'".$lp_ids[$parent_lps[$row['chapter_id']]]."'," . //insert new learnpath ID
-				"'$type'," .
-				"'$ref', " .
-				"'".mysql_real_escape_string($row['title'])."'," .
-				"'".mysql_real_escape_string($row['description'])."'," .
-				"'$ref'," .
-				"".$lp_chap_items[$row['chapter_id']]."," .
-				"'$prereq_id'," .
-				$row['display_order']." " .
-				")";
-		$ins_res = api_sql_query($ins_lp_sql,__FILE__,__LINE__);
-		$in_id = Database::get_last_insert_id();
-		//echo "&nbsp;&nbsp;Inserted item $in_id (".$row['title'].")<br />\n";
-		if(empty($in_id) OR $in_id == false) die('Could not insert lp_item: '.$ins_sql);
-		$lp_items[$parent_lps[$row['chapter_id']]][$row['id']] = $in_id;
-		$lp_ordered_items[$parent_lps[$row['chapter_id']]][$row['chapter_id']][] = $in_id;
-		
+		if(isset($lp_ids[$parent_lps[$row['chapter_id']]]))
+		{ //if there is a parent learnpath
+			$ins_lp_sql = "INSERT INTO $my_new_lp_item (" .
+					"lp_id," .
+					"item_type," .
+					"ref, " .
+					"title," .
+					"description," .
+					"path, " .
+					"parent_item_id," .
+					"prerequisite," .
+					"display_order" .
+					") VALUES (" .
+					"'".$lp_ids[$parent_lps[$row['chapter_id']]]."'," . //insert new learnpath ID
+					"'$type'," .
+					"'$ref', " .
+					"'".mysql_real_escape_string($row['title'])."'," .
+					"'".mysql_real_escape_string($row['description'])."'," .
+					"'$ref'," .
+					"".$my_parent_id."," .
+					"'$prereq_id'," .
+					$row['display_order']." " .
+					")";
+			$ins_res = api_sql_query($ins_lp_sql,__FILE__,__LINE__);
+			$in_id = Database::get_last_insert_id();
+			//echo "&nbsp;&nbsp;Inserted item $in_id (".$row['title'].")<br />\n";
+			if(empty($in_id) OR $in_id == false) die('Could not insert lp_item: '.$ins_sql);
+			$lp_items[$parent_lps[$row['chapter_id']]][$row['id']] = $in_id;
+			$lp_ordered_items[$parent_lps[$row['chapter_id']]][$row['chapter_id']][] = $in_id;
+		}		
 	}
 	//echo "<pre>lp_items:".print_r($lp_items,true)."</pre>\n";
 	// complete next_item_id field by going through the new table and looking at parent_id and display_order

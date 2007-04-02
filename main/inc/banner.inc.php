@@ -46,7 +46,7 @@ if (isset ($_cid))
 	}
 	if (api_get_setting("display_teacher_in_courselist") == "true")
 	{
-		echo $_course['titular'];
+		echo stripslashes($_course['titular']);
 	}
 	echo "</a></div>";
 }

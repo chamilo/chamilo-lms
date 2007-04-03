@@ -442,7 +442,6 @@ else // continue with the previous values
 
 if (isset($cidReset) && $cidReset) // course session data refresh requested or empty data
 {
-	api_session_unregister('id_session');
 	api_session_unregister('session_name');
     if ($cidReq)
     {
@@ -490,6 +489,25 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 					"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
 
 			api_sql_query($sql,__FILE__,__LINE__);
+			
+			
+			// if a session id has been given in url, we store the session
+			if(api_get_setting('use_session_mode')=='true') 
+			{
+				// Database Table Definitions
+				$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
+				$tbl_user 					= Database::get_main_table(TABLE_MAIN_USER);
+				$tbl_session_course 		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+				$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+				
+				if(!empty($_GET['id_session']))
+				{
+					$_SESSION['id_session'] = $_GET['id_session'];
+					$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.$_SESSION['id_session'] . '"';
+					$rs = api_sql_query($sql,__FILE__,__LINE__);
+					list($_SESSION['session_name']) = mysql_fetch_array($rs);
+				}
+			}
 
         }
         else

@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 11342 2007-03-02 13:48:38Z elixir_julian $
+<?php // $Id: course_home.php 11849 2007-04-03 12:52:25Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -159,30 +159,6 @@ if($is_allowed_in_course == false)
 {
 	api_not_allowed();
 }
-
-
-/*
------------------------------------------------------------
-	Session Management
------------------------------------------------------------
-*/
-if(api_get_setting('use_session_mode')=='true' && $is_allowed_in_course) 
-{
-	// Database Table Definitions
-	$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
-	$tbl_user 					= Database::get_main_table(TABLE_MAIN_USER);
-	$tbl_session_course 		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-	$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	
-	if(!empty($_GET['id_session']))
-	{
-		$_SESSION['id_session'] = $_GET['id_session'];
-		$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.$_SESSION['id_session'] . '"';
-		$rs = api_sql_query($sql,__FILE__,__LINE__);
-		list($_SESSION['session_name']) = mysql_fetch_array($rs);
-	}
-}
-
 
 
 /*

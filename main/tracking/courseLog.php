@@ -138,7 +138,7 @@ include("../resourcelinker/resourcelinker.inc.php");
 
 
  
-$a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true);
+$a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
 $nbStudents = count($a_students);
 
 /**
@@ -354,11 +354,11 @@ if($_GET['studentlist'] == 'false')
 		foreach($flat_list as $lp_id => $lp)
 		{
 			$lp_avg_progress = 0;
-			foreach($a_students as $student)
+			foreach($a_students as $student_id => $student)
 			{
 				
 				// get the progress in learning pathes	
-				$lp_avg_progress += learnpath::get_db_progress($lp_id,$student);
+				$lp_avg_progress += learnpath::get_db_progress($lp_id,$student_id);
 				
 				
 			}
@@ -491,7 +491,7 @@ else {
 	    
 	    $all_datas = array();
 	    $course_code = $_course['id'];
-		foreach($a_students as $student_id)
+		foreach($a_students as $student_id => $student)
 		{
 			$student_datas = UserManager :: get_user_info_by_id($student_id);
 			

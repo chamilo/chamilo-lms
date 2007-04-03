@@ -8,7 +8,14 @@ ob_start();
 $language_file = array ('registration', 'index','trad4all','tracking');
  $cidReset=true;
  require ('../inc/global.inc.php');
- 
+ require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
+ require_once (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
+
+
+
+api_block_anonymous_users();
+
+
  $this_section = "session_my_space";
  
  api_block_anonymous_users();
@@ -22,156 +29,110 @@ $tbl_session_course 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
  
  
+$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+if($export_csv)
+{
+	ob_start();
+	$csv_content = array();
+}
+
+
+
  /*
  ===============================================================================
  	FUNCTION
  ===============================================================================  
  */
  
- function exportCsv($a_header,$a_data)
- {
- 	global $archiveDirName;
+function count_sessions_coached()
+{
+	global $nb_sessions;
+	return $nb_sessions;
+}
 
-	$fileName = 'sessions.csv';
-	$archivePath = api_get_path(SYS_PATH).$archiveDirName.'/';
-	$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
-	
-	if(!$open = fopen($archivePath.$fileName,'w+'))
-	{
-		$message = get_lang('noOpen');
-	}
-	else
-	{
-		$info = '';
-		
-		foreach($a_header as $header)
-		{
-			$info .= $header.';';
-		}
-		$info .= "\r\n";
-		
-		
-		foreach($a_data as $data)
-		{
-			foreach($data as $infos)
-			{
-				$info .= $infos.';';
-			}
-			$info .= "\r\n";
-		}
-		
-		fwrite($open,$info);
-		fclose($open);
-		chmod($fileName,0777);
-		
-		header("Location:".$archiveURL.$fileName);
-	}
-	
-	return $message;
- }
- 
- 
- 
+function sort_sessions($a, $b)
+{
+	global $tracking_column;
+	if($a[$tracking_column] > $b[$tracking_column])
+		return 1;
+	else 
+		return -1;
+}
+
+
  /*
  ===============================================================================
  	MAIN CODE
  ===============================================================================  
  */
-	
-	
-	//Nombre de sessions
-	
-	//La personne est admin donc on récupère toutes les sessions
-	if(api_is_platform_admin()){
-	
-		$sqlSessions = "	SELECT id, name
-							FROM $tbl_sessions
-						 ";
-		
-	}
-	
-	else{
-		
-		$a_sessions=array();
-		
-		if($is_allowedCreateCourse){
-			
-			$sqlSessions = "	SELECT DISTINCT $tbl_sessions.id, name 
-								FROM $tbl_session_course as session_course, $tbl_course_user as course_rel_user, $tbl_sessions as session  
-							  	WHERE session.id=session_course.id_session AND session_course.course_code=course_rel_user.course_code AND course_rel_user.status='1' AND (course_rel_user.user_id='".$_user['user_id']."' OR session_course.id_coach='".$_user['user_id']."') 
-							  ";
+ 
+$a_sessions = Tracking :: get_sessions_coached_by_user ($_user['user_id']);
+$nb_sessions = count($a_sessions);
 
-			$resultSessions = api_sql_query($sqlSessions);
-			
-			while($a_temp = mysql_fetch_array($resultSessions)){
-				$a_sessions[]=$a_temp["id_session"];
-			}
-			
-		}
-		
-		$a_sessions=array_unique($a_sessions);
-		$nbSessions = count($a_sessions);
-		
-	}
+if($nb_sessions > 0)
+{
+	echo '<div align="right">
+			<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
+			<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+		  </div>';
+		  
+		  
+	$table = new SortableTable('tracking', 'count_sessions_coached');
+	$table -> set_header(0, get_lang('Title'));
+	$table -> set_header(1, get_lang('Status'));
+	$table -> set_header(2, get_lang('Date'));
+	$table -> set_header(3, get_lang('Details'),false);
 	
-	$a_header[]=get_lang('Title');
+	$all_datas = array();
 	
-	$resultSessions = api_sql_query($sqlSessions);
-	
-	if(mysql_num_rows($resultSessions)>0)
-	{
-		echo '<table class="data_table">
-			 	<tr>
-					<th>
-						'.get_lang('Title').'
-					</th>
-					<th>
-						'.get_lang('Courses').'
-					</th>
-				</tr>
-          	 ';
-		while($a_sessions = mysql_fetch_array($resultSessions))
+	foreach ($a_sessions as $session)
+	{		
+		$row = array();
+		$row[] = $session['name'];
+		$row[] = $session['status'];
+		$row[] = get_lang('From').' '.format_locale_date("%B %Y %d",strtotime($session['date_start'])).' '.get_lang('To').' '.$session['date_end'];
+		if($export_csv)
 		{
-			
-			$i_id_session=$a_sessions['id'];
-			/*
-			//On récupère tous les cours de la session courante
-			$sql="SELECT course.title FROM $tbl_course as course, $tbl_session_course as session_rel_course " .
-					"WHERE session_rel_course.id_session='$i_id_session' AND session_rel_course.course_code=course.code";
-			
-			$resultCourses = api_sql_query($sql);*/
-			
-			echo '<tr>
-					<td>
-				 ';
-			echo		$a_sessions['name'];
-			echo '	</td>
-					<td>
-						<a href="cours.php?id_session='.$i_id_session.'">-></a>
-					</td>
-				  </tr>
-				 ';
-				 
-			$a_data[$i_id_session]["name"]=$a_sessions['name'];		
-			
+			$csv_content[] = $row;
 		}
-		echo '</table>';
+		$row[] = '<a href="cours.php?id_session='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+	
+		$all_datas[] = $row;
 	}
-	else
+	
+	if(!isset($tracking_column))
+		$tracking_column = 0;
+		
+	usort($all_datas, 'sort_sessions');
+	if($_GET['tracking_direction'] == 'DESC')
 	{
-		echo get_lang('NoSession');
+		rsort($all_datas);
 	}
-
-if(isset($_POST['export'])){
 	
-	exportCsv($a_header,$a_data);
+	if($export_csv)
+	{
+		usort($csv_content, 'sort_sessions');
+	}
 	
+	foreach($all_datas as $row)
+	{
+		$table -> addRow($row);	
+	}
+	
+	$table -> setColAttributes(3,array('align'=>'center'));
+	$table -> display();
+	
+	
+	if($export_csv)
+	{
+		ob_end_clean();
+		Export :: export_table_csv($csv_content, 'reporting_student_list');
+	}
 }
-
-echo "<br /><br />";
-echo "<form method='post' action='session.php'>
-		<input type='submit' name='export' value='".get_lang('exportExcel')."'/>
-	  <form>";
+else
+{
+	get_lang('NoSession');
+}
 
 /*
 ==============================================================================

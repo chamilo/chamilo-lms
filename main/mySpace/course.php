@@ -58,7 +58,7 @@ $a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id'], $id_se
 $nb_courses = count($a_courses);
 
 $table = new SortableTable('tracking_list_course', 'count_courses');
-$table -> set_header(0, get_lang('CourseTitle'), false);
+$table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
 $table -> set_header(1, get_lang('NbStudents'), false);
 $table -> set_header(2, get_lang('TimeSpentInTheCourse'), false);
 $table -> set_header(3, get_lang('AvgStudentsProgress'), false);
@@ -77,11 +77,12 @@ $csv_content[] = array(
 				get_lang('AvgAssignments')
 				);
 
-$a_students = array();
+
 	
 foreach($a_courses as $course_code)
 {
-	
+	$nb_students_in_course = 0;
+	$a_students = array();
 	$course = CourseManager :: get_course_information($course_code);
 	$avg_assignments_in_course = $avg_messages_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = 0;
 	
@@ -93,12 +94,12 @@ foreach($a_courses as $course_code)
 				WHERE course_code="'.Database :: escape_string($course_code).'"
 				AND id_session='.$id_session;
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		
 		while($row = mysql_fetch_array($rs))
 		{
 			if(!in_array($row['user_id'], $a_students))
 			{
 				$nb_students_in_course++;
-				
 				
 				// tracking datas
 				$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
@@ -139,9 +140,10 @@ foreach($a_courses as $course_code)
 						$avg_assignments_in_course,
 						);
 	
-	$table -> addRow($table_row, 'align="left"');
+	$table -> addRow($table_row, 'align="right"');
 	
 }
+$table -> setColAttributes(0,array('align'=>'left'));
 $table -> setColAttributes(7,array('align'=>'center'));
 $table -> display();
 	

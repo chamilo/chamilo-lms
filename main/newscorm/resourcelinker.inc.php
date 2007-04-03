@@ -666,8 +666,8 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 		case TOOL_FORUM:
 		case "Forum":
-			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
-			$result= api_sql_query("SELECT * FROM `$TBL_FORUMS` WHERE forum_id=$id",__FILE__,__LINE__);
+			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['database']);
+			$result= api_sql_query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
@@ -717,10 +717,8 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 		case TOOL_THREAD:
 		case "Thread":  //forum post
-			$tbl_topics      = $_course['dbNameGlu'].'bb_topics';
-			$tbl_posts		 = $_course['dbNameGlu'].'bb_posts';
-			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
-			$sql="SELECT * FROM `$tbl_topics` where topic_id=$id";
+			$tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD,$_course['database']);
+			$sql="SELECT * FROM $tbl_topics where topic_id=$id";
 			$result= api_sql_query($sql,__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 

@@ -2006,27 +2006,12 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 			$output = $myrow['forum_name'];
 			break;
 		case TOOL_THREAD:  //=topics
-			if(!empty($_SESSION['dokeos_version']) AND $_SESSION['dokeos_version']>=1.8){
-				//$tbl_forum 		= Database::get_course_table(TABLE_FORUM,$_course['database']);
-				//$tbl_thread 	= Database::get_course_table(TABLE_FORUM_THREAD,$_course['database']);
-				$tbl_post 		= Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
-				// grabbing the title of the post
-				$sql_title = "SELECT * FROM $tbl_post WHERE post_id=".$id;
-				$result_title = api_sql_query($sql_title,__FILE__,__LINE__);
-				$myrow_title = Database::fetch_array($result_title);
-				$output = $myrow_title['post_title'];
-			}else{//older dokeos versions
-				$tbl_posts		= $_course['dbNameGlu'].'bb_posts';
-				$tbl_posts_text	= $_course['dbNameGlu'].'bb_posts_text';
-				$TBL_FORUMS		= $_course['dbNameGlu'].'bb_forums';
-				$result = api_sql_query("SELECT * FROM `$tbl_posts` posts, `$TBL_FORUMS` forum WHERE forum.forum_id=posts.forum_id and post_id=$id",__FILE__,__LINE__);
-				$myrow = Database::fetch_array($result);
-				// grabbing the title of the post
-				$sql_title = "SELECT * FROM `$tbl_posts_text` WHERE post_id=".$myrow["post_id"];
-				$result_title = api_sql_query($sql_title,__FILE__,__LINE__);
-				$myrow_title = Database::fetch_array($result_title);
-				$output = $myrow_title['post_title'];
-			}
+			$tbl_post 		= Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
+			// grabbing the title of the post
+			$sql_title = "SELECT * FROM $tbl_post WHERE post_id=".$id;
+			$result_title = api_sql_query($sql_title,__FILE__,__LINE__);
+			$myrow_title = Database::fetch_array($result_title);
+			$output = $myrow_title['post_title'];
 			break;
 		case TOOL_POST:
 			$tbl_post = Database::get_course_table(TABLE_FORUM_POST,$_course['database']);

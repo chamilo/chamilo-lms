@@ -8,6 +8,9 @@
 $language_file = array ('registration', 'index','trad4all', 'tracking');
  $cidReset=true;
  require ('../inc/global.inc.php');
+ require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
+ require_once (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
+ require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
  
  $this_section = "session_my_space";
  
@@ -31,7 +34,16 @@ $language_file = array ('registration', 'index','trad4all', 'tracking');
  }
  
  Display :: display_header($nameTools);
- 
+
+
+
+function count_courses()
+{
+	global $nb_courses;
+	return $nb_courses;
+}
+
+
 // Database Table Definitions 
 $tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user_course 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -40,316 +52,98 @@ $tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
  
-/*
- ===============================================================================
- 	FUNCTION
- ===============================================================================  
- */
- 
- function exportCsv($a_header,$a_data)
- {
- 	global $archiveDirName;
+$id_session = intval($_GET['id_session']);
 
-	$fileName = 'courses.csv';
-	$archivePath = api_get_path(SYS_PATH).$archiveDirName.'/';
-	$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
+$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id'], $id_session);
+$nb_courses = count($a_courses);
+
+$table = new SortableTable('tracking_list_course', 'count_courses');
+$table -> set_header(0, get_lang('CourseTitle'), false);
+$table -> set_header(1, get_lang('NbStudents'), false);
+$table -> set_header(2, get_lang('TimeSpentInTheCourse'), false);
+$table -> set_header(3, get_lang('AvgStudentsProgress'), false);
+$table -> set_header(4, get_lang('AvgStudentsScore'), false);
+$table -> set_header(5, get_lang('AvgMessages'), false);
+$table -> set_header(6, get_lang('AvgAssignments'), false);
+$table -> set_header(7, get_lang('Details'), false);
+
+$csv_content[] = array(
+				get_lang('CourseTitle'),
+				get_lang('NbStudents'),
+				get_lang('TimeSpentInTheCourse'),
+				get_lang('AvgStudentsProgress'),
+				get_lang('AvgStudentsScore'),
+				get_lang('AvgMessages'),
+				get_lang('AvgAssignments')
+				);
+
+$a_students = array();
 	
-	if(!$open = fopen($archivePath.$fileName,'w+'))
+foreach($a_courses as $course_code)
+{
+	
+	$course = CourseManager :: get_course_information($course_code);
+	$avg_assignments_in_course = $avg_messages_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = 0;
+	
+	// students subscribed to the course throw a session
+	if(api_get_setting('use_session_mode') == 'true')
 	{
-		$message = get_lang('noOpen');
-	}
-	else
-	{
-		$info = '';
-		
-		foreach($a_header as $header)
+		$sql = 'SELECT id_user as user_id
+				FROM '.$tbl_session_course_user.'
+				WHERE course_code="'.Database :: escape_string($course_code).'"
+				AND id_session='.$id_session;
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		while($row = mysql_fetch_array($rs))
 		{
-			$info .= $header.';';
-		}
-		$info .= "\r\n";
-		
-		
-		foreach($a_data as $data)
-		{
-			foreach($data as $infos)
+			if(!in_array($row['user_id'], $a_students))
 			{
-				$info .= $infos.';';
+				$nb_students_in_course++;
+				
+				
+				// tracking datas
+				$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
+				$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
+				$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
+				$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
+				$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
+				$a_students[] = $row['user_id'];
 			}
-			$info .= "\r\n";
 		}
-		
-		fwrite($open,$info);
-		fclose($open);
-		chmod($fileName,0777);
-		
-		header("Location:".$archiveURL.$fileName);
 	}
-	
-	return $message;
- }
- 
- function is_coach(){
-  	
-  	global $tbl_session_course;
-  	
-	$sql="SELECT course_code FROM $tbl_session_course WHERE id_coach='".$_SESSION["_uid"]."'";
-
-	$result=api_sql_query($sql);
-	  
-	if(mysql_num_rows($result)>0){
-	    return true;	    
-	}
-	else{
-		return false;
-	}
-  }
-  
-  function isDisplayed($s_code, $a_courses){
-  	
-  	if(array_key_exists($s_code,$a_courses)){
-  		return true;
-  	}
-  	else{
-  		return false;
-  	}
-  	
-  }
-  
-
-/*
- ===============================================================================
- 	MAIN CODE
- ===============================================================================  
- */
-	
-	$a_courses=array();
-	$a_coursesRelUser=array();
-	
-	if(isset($_GET["id_session"]) && $_GET["id_session"]!=""){
-		
-		$i_id_session=intval($_GET["id_session"]);
-		
-		$sqlCourse="SELECT DISTINCT code, title " .
- 					"FROM $tbl_course as course, $tbl_session_course as src " .
- 					"WHERE course.code=src.course_code AND src.id_session='$i_id_session'";
-
-		$resultCourses = api_sql_query($sqlCourse);
-		
-		$a_courses = api_store_result($resultCourses);
-		
-	}
-	
-	if(isset($_GET["user_id"]) && $_GET["user_id"]!=""){
- 		
- 		$i_user_id=$_GET["user_id"];
- 		
- 		//We want to display the course where this user is a coach
- 		if(isset($_GET["type"]) && $_GET["type"]=="coach"){
- 			
- 			$sqlCourse="SELECT title,code " .
- 					"FROM $tbl_course as course, $tbl_session_course as src " .
- 					"WHERE course.code=src.course_code AND id_coach='$i_user_id'";
- 			
- 		}
- 		
- 		elseif(isset($_GET["type"]) && $_GET["type"]=="student"){
- 			
- 			$sqlCourse="SELECT title,code " .
-	 					"FROM $tbl_course as course, $tbl_session_course_user as srcu " .
-	 					"WHERE course.code=srcu.course_code AND srcu.id_user='$i_user_id'";
-	 					
-	 		$sqlCourseRelUser="SELECT title,code " .
-	 					"FROM $tbl_course as course, $tbl_user_course as src " .
-	 					"WHERE course.code=src.course_code AND src.user_id='$i_user_id' AND src.status='5'";
-
-			$resultCourseRelUser = api_sql_query($sqlCourseRelUser);
-		
-			$a_coursesRelUser = api_store_result($resultCourseRelUser);
-			
-			
-			
- 		}
- 		
- 		//It's a teacher
- 		else{
-	 		$sqlCourse = "	SELECT 	title,code
-							FROM $tbl_course as course, $tbl_user_course as cru
-							WHERE course.code=cru.course_code AND cru.user_id='$i_user_id' AND cru.status='1'
-							ORDER BY title ASC
-						  ";
-
- 		}
- 		
- 		$resultCourses = api_sql_query($sqlCourse);
-		
-		$a_courses = api_store_result($resultCourses);
-		
-		$a_courses=array_merge($a_courses,$a_coursesRelUser);
-
- 	}
- 	if(!isset($_GET["user_id"]) && !isset($_GET["id_session"])){
- 		
- 		//La personne est admin
-		if(api_is_platform_admin()){
- 		
-	 		$sqlCourse = "	SELECT 	title,code
-							FROM $tbl_course as course
-							ORDER BY title ASC
-						  ";
-			$resultCourses = api_sql_query($sqlCourse);
-		
-			$a_courses = api_store_result($resultCourses);
-
-		}
-		else{
-			
-			if($is_allowedCreateCourse){
-				
-				$sqlCourse = "	SELECT title,code
-								FROM $tbl_course as course, $tbl_user_course as course_rel_user 
-								WHERE course_rel_user.course_code=course.code AND course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-								ORDER BY title ASC
-							  ";
-
-			}
-			
-			$resultCoursesTeacher = api_sql_query($sqlCourse);
-		
-			$a_courses_teacher = api_store_result($resultCoursesTeacher);
-			
-			if(is_coach()){
-				
-				$sqlCourse = "	SELECT DISTINCT code, title 
-								FROM $tbl_course as course, $tbl_session_course as session_rel_course 
-							  	WHERE session_rel_course.course_code=course.code AND id_coach='".$_user['user_id']."' 
-							  ";
-
-				$resultCoursesCoach = api_sql_query($sqlCourse);
-				$a_courses = array_merge($a_courses_teacher,api_store_result($resultCoursesCoach));
-				
-				
-			}
-			
-			else{
-				$a_courses=$a_courses_teacher;
-			}
-			
-		}
- 	}
-	
-	$a_header[]=get_lang('Title');
-	$a_header[]=get_lang('Tutor');
-	$a_header[]=get_lang('Teachers');
-	
-	if(count($a_courses)>0)
+	if($nb_students_in_course>0)
 	{
-		echo '<table class="data_table">
-			 	<tr>
-					<th>
-						'.get_lang('Title').'
-					</th>
-					<th>
-						'.get_lang('Tutor').'
-					</th>
-					<th>
-						'.get_lang('Teachers').'
-					</th>
-				</tr>
-          	 ';
-		
-		$a_alreadydisplay=array();
-		
-		foreach($a_courses as $a_course){
-			
-			if(!isDisplayed($a_course["code"],$a_alreadydisplay)){
-				
-				$a_alreadydisplay[$a_course["code"]]=1;
-				
-				$sqlCoach = "SELECT CONCAT(user.firstname,' ',user.lastname) as tutor_name
-							 FROM $tbl_user
-							 INNER JOIN $tbl_session_course as sessionCourse
-								ON sessionCourse.course_code = '".$a_course['code']."'
-								AND sessionCourse.id_coach = user.user_id
-							";
-				$resultCoach = api_sql_query($sqlCoach);
-				$a_coach = mysql_fetch_array($resultCoach);
-				
-				/*$sqlFormateur = "	SELECT CONCAT(user.firstname,' ',user.lastname) as formateur_name
-							 		FROM $tbl_user
-									INNER JOIN $tbl_session_course as sessionCourse
-										ON sessionCourse.course_code = '".$a_course['code']."'
-									INNER JOIN $tbl_session AS session
-										ON session.id = sessionCourse.id_session
-										AND session.id_coach = user.user_id
-								";*/
-				$sqlFormateur = "	SELECT CONCAT(user.firstname,' ',user.lastname) as formateur_name
-							 		FROM $tbl_user as user, $tbl_user_course as cru
-									WHERE user.user_id=cru.user_id AND cru.status='1' AND cru.course_code='".$a_course['code']."'
-								";
-	
-				$resultFormateur = api_sql_query($sqlFormateur);
-				$a_formateur = mysql_fetch_array($resultFormateur);
-				
-				if($i%2==0){
-					$s_css_class="row_odd";
-					
-					if($i%20==0 && $i!=0){
-							echo '<tr>
-							<th>
-								'.get_lang('Title').'
-							</th>
-							<th>
-								'.get_lang('Tutor').'
-							</th>
-							<th>
-								'.get_lang('Teachers').'
-							</th>
-						</tr>';
-						}
-					
-				}
-				else{
-					$s_css_class="row_even";
-				}
-				
-				$i++;
-	
-				echo '<tr class="'.$s_css_class.'">
-						<td>
-					 		<a href="'.api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?cidReq='.$a_course['code'].'">'.$a_course['title'].'</a></td>
-						<td>
-							'.$a_coach['tutor_name'].'
-						</td>
-					 	<td>
-							'.$a_formateur['formateur_name'].'
-						</td>
-					  </tr>
-					 ';
-	
-				$a_data[$index]["title"]=$a_course['title'];
-				$a_data[$index]["tutor_name"]=$a_coach['tutor_name'];
-				$a_data[$index]["formateur_name"]=$a_formateur['formateur_name'];
-				
-				$index++;			
-			}
-		}
-		echo '</table>';
-	}
-	else
-	{
-		echo get_lang('NoCourse');
-	}
-
-	if(isset($_POST['export'])){
-	
-		exportCsv($a_header,$a_data);
-		
+		$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
+		$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course,2).' %';
+		$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course,2).' %';
+		$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course,2);
+		$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course,2);
 	}
 	
-	echo "<br /><br />";
-	echo "<form method='post' action='cours.php'>
-			<input type='submit' name='export' value='".get_lang('exportExcel')."'/>
-		  <form>";
+	$table_row = array();
+	$table_row[] = $course['title'];
+	$table_row[] = $nb_students_in_course;
+	$table_row[] = $avg_time_spent_in_course;
+	$table_row[] = $avg_progress_in_course;
+	$table_row[] = $avg_score_in_course;
+	$table_row[] = $avg_messages_in_course;
+	$table_row[] = $avg_assignments_in_course;
+	$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true&id_session='.$id_session.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+	
+	$csv_content[] = array(
+						$course['title'],
+						$nb_students_in_course,
+						$avg_time_spent_in_course,
+						$avg_progress_in_course,
+						$avg_score_in_course,
+						$avg_messages_in_course,
+						$avg_assignments_in_course,
+						);
+	
+	$table -> addRow($table_row, 'align="left"');
+	
+}
+$table -> setColAttributes(7,array('align'=>'center'));
+$table -> display();
 	
  
 /*

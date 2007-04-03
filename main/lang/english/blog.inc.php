@@ -86,7 +86,6 @@ $AddBlog = "Create a new blog";
 $EditBlog = "Edit the title and the subtitle";
 $DeleteBlog = "Delete this blog";
 $Comments = "Comments";
-$Comment = "Comment";
 $Comments = "Comments";
 $NoTasks = "No tasks";
 $Shared = "Shared";

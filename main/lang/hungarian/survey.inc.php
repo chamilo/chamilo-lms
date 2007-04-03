@@ -151,4 +151,7 @@ $Multiplechoice = "Többszörös választás";
 $Multiplechoice = "Többszörös választás";
 $Multipleresponse = "Többszörös válaszok";
 $Score = "Pontszám";
+$Shared = "Megosztott";
+$Invite = "Meghív";
+$MaximumScore = "Maximális pontszám";
 ?>

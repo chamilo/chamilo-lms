@@ -88,5 +88,4 @@ $AddBlog = "Fari novan blogon";
 $EditBlog = "Redakti titolon kaj subtitolon";
 $DeleteBlog = "Vi&#349;i &#265;i tiun blogon";
 $Comments = "Komentarioj";
-$Comment = "Komentario";
 ?>

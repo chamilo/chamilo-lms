@@ -23,4 +23,5 @@ $GreyIcons = "Orodjarna";
 $Interaction = "Interakcija";
 $Authoring = "Avtorska orodja";
 $Administration = "Upravljanje";
+$IntroductionTextUpdated = "Uvodno besedilo je bilo ažurirano";
 ?>

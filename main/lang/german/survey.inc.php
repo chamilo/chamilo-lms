@@ -159,4 +159,7 @@ $Score = "Ergebnis";
 $Shared = "Geteilt";
 $Invite = "Einladen";
 $MaximumScore = "Höchstzahl ";
+$ViewInvited = "Ansicht erbeten";
+$ViewAnswered = "Ansicht der Leute, denen geantwortet wurde";
+$ViewUnanswered = "Ansicht der Leute, denen geantwortet wurde";
 ?>

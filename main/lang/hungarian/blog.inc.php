@@ -86,7 +86,6 @@ $AddBlog = "Blog hozzáadása";
 $EditBlog = "Blog szerkesztése";
 $DeleteBlog = "Blog törlése";
 $Comments = "Hozzászólások";
-$Comment = "Hozzászólás";
 $Comments = "Észrevételek";
 $NoTasks = "Nincsenek feladatok";
 $Shared = "Megosztott";

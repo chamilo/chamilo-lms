@@ -30,4 +30,8 @@ $langDirCr = "Stwórz katalog";
 $langCurrentDir = "obecny folder";
 $UploadADocument = "Za&#322;aduj dokument";
 $EditToolOptions = "Opcje narz&#281;dzi edycji";
+$DocumentDeleted = "Dokument zosta&#322; skasowany";
+$SendMailBody = "U&#380;ytkownik opublikowa&#322; dokument w Publikacjach dla twojego kursu.";
+$DirDelete = "Usu&#324; katalog";
+$ValidateChanges = "Sprawd&#378; zmiany";
 ?>

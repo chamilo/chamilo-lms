@@ -158,4 +158,5 @@ $Score = "Rezultat";
 $Shared = "V skupni rabi";
 $Invite = "Povabi";
 $MaximumScore = "Najveèji rezultat";
+$ViewInvited = "Poglej povabljene";
 ?>

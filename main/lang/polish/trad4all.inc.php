@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$Title = "Tytu&#322;";
 $UsersOnline = "U&#380;ytkownicy online";
 $Remove = "usu&#324;";
 $Description = "Opis";
@@ -23,6 +24,38 @@ $TheListIsEmpty = "Ta lista jest pusta";
 $langCourseCreate = "Tworzenie kursu";
 $langTodo = "Wolne wnioski";
 $UserName = "Nazwa u&#380;ytkownika";
+$Hide = "Ukryj";
+$langCourseCode = "Kod kursu";
+$langNoDescription = "Brak opisu";
+$langCategory = "Kategoria";
+$langOfficialCode = "Oficjalny Kod";
+$FirstName = "Imi&#281;";
+$LastName = "Nazwisko";
+$Status = "Status";
+$langEmail = "E-mail";
+$UploadFile = "Za&#322;aduj plik";
+$AvailableFrom = "Dost&#281;pny(a) od";
+$AvailableTill = "Dost&#281;pny(a) do";
+$Preview = "Podgl&#261;d";
+$Type = "Typ";
+$EmailAddress = "Adres e-mail";
+$Organisation = "Organizacja";
+$Code = "Kod";
+$Update = "Aktualizuj";
+$CurrentCourse = "Aktualny kurs";
+$Back = "Wstecz";
+$Info = "Informacja";
+$Search = "Wyszukiwanie";
+$AdvancedSearch = "Zaawansowane wyszukiwanie";
+$Open = "Otwórz";
+$Import = "Import";
+$AddAnother = "Dodaj kolejny";
+$Author = "Autor";
+$TrueFalse = "Prawda / Fa&#322;sz";
+$NoSearchResults = "Brak wyników wyszukiwania";
+$SelectQuestion = "Wybierz pytanie";
+$AddNewQuestionType = "Dodaj nowy typ pytania";
+$Numbered = "Ponumerowany";
 $iso639_2_code = "pol";
 $iso639_1_code = "pl";
 $charset = "iso-8859-2";
@@ -250,5 +283,6 @@ $SelectGroupsUsers = "Wybierz grupy/u&#380;ytkowników";
 $Student = "Student";
 $Teacher = "Nauczyciel";
 $Send2All = "Nie wybra&#322;e&#347; u&#380;ytkownika / grupy. Element jest widoczny dla ka&#380;dego u&#380;ytkownika";
+$wiki = "Wiki";
 $AccessNotAllowed = "Dost&#281;p do tej strony nie jest zezwolony";
 ?>

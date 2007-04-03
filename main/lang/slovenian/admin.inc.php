@@ -603,5 +603,7 @@ $SlideSize = "Velikost diapozitiva";
 $EphorusPlagiarismPrevention = "Ephorus zašita pred plagiatorstvom";
 $CourseTeachers = "Uèitelji teèaja";
 $XMLNotValid = "XML dokument ni veljaven";
+$AllowEmailEditorTitle = "Aktiviraj vgrajen urejevlanik e-sporoèil";
+$AllowEmailEditorTitle = "Aktiviraj vgrajen urejevlanik e-sporoèil";
 $AllowEmailEditorComment = "V primeru, da je ta možnost aktivirana, klik na e-pošto odpre vrajen urejevalnik e-pošte.";
 ?>

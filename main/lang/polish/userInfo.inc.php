@@ -13,7 +13,9 @@ $langDefineHeadings = "Tworzenie rubryki";
 $langBackToUsersList = "Powrót do listy u&#380;ytkowników";
 $langTracking = "Raportowanie";
 $langCourseManager = "Administrator";
+$langModRight = "zmie&#324; uprawnienia dla";
 $langRole = "rola/status";
+$langIsNow = "jest odt&#261;d";
 $langInC = "w tym kursie";
 $langFilled = "Nie wszystkie pola zosta&#322;y wype&#322;nione";
 $langUserNo = "Numer u&#380;ytkownika";
@@ -22,5 +24,6 @@ $langTutor = "Wychowawca (opiekun)";
 $langUnreg = "Zrezygnuj";
 $langGroupUserManagement = "Zarz&#261;dzanie grupowe";
 $langUserInfo = "dane u&#380;ytkownika";
+$langUnregister = "Wyrejestruj";
 $langAddAUser = "Dodaj u&#380;ytkowników";
 ?>

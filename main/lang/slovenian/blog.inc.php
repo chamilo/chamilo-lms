@@ -86,7 +86,6 @@ $AddBlog = "Dodaj blog";
 $EditBlog = "Uredi blog";
 $DeleteBlog = "Odstrani blog";
 $Comments = "Komentarji";
-$Comment = "Komentar";
 $Comments = "Komentarji";
 $NoTasks = "Ni opravil";
 $Shared = "Skupna raba";

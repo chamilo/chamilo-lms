@@ -201,4 +201,5 @@ $CourseTracking = "Estatística do curso";
 $LinksMostClicked = "Ligações mais visitadas";
 $DocumentsMostDownloaded = "Documentos mais descarregados";
 $LearningPathDetails = "Detalhes da Sequência de Aprendizagem";
+$NoConnexion = "Nenhuma ligação";
 ?>

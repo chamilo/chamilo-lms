@@ -417,4 +417,8 @@ $NoLinkVisited = "Nenhuma ligação visitada";
 $NoDocumentDownloaded = "Nenhum documento descarregado";
 $Clicks = "Cliques";
 $SearchResults = "Resultados da procura";
+$SessionPast = "Passada";
+$SessionActive = "Activa";
+$SessionFuture = "Ainda não iniciada";
+$SessionFuture = "Ainda não iniciada";
 ?>

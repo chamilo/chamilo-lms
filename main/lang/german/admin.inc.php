@@ -602,4 +602,7 @@ $SlideSize = "Größe der Slides";
 $EphorusPlagiarismPrevention = "EUphrous Plagiat Verhinderung";
 $CourseTeachers = "Kurslehrer";
 $XMLNotValid = "XML Dokument ist ungültig";
+$AllowEmailEditorTitle = "Online E-Mail Editor aktivieren";
+$AllowEmailEditorTitle = "Online E-Mail Editor";
+$AllowEmailEditorComment = "Wenn diese Option aktiviert ist, öffnet ein Klick auf eine E-Mail den online E-Mail Editor";
 ?>

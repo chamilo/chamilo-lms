@@ -86,7 +86,6 @@ $AddBlog = "Maak een nieuwe blog";
 $EditBlog = "Titel en ondertitel aanpassen";
 $DeleteBlog = "Deze blog verwijderen";
 $Comments = "Reacties";
-$Comment = "Reactie";
 $Comments = "Opmerkingen";
 $NoTasks = "Geen taken";
 $Shared = "Gedeeld";

@@ -158,4 +158,7 @@ $Score = "Puntuación";
 $Shared = "Compartido";
 $Invite = "Invitados";
 $MaximumScore = "Resultado máximo";
+$ViewInvited = "Ver invitados";
+$ViewAnswered = "Ver las personas que han respondido";
+$ViewUnanswered = "Ver las personas que no han respondido";
 ?>

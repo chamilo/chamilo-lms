@@ -108,4 +108,5 @@ $DBServerDoesntWorkOrLoginPassIsWrong = "O servidor do banco de dados não funcio
 $PleaseCheckTheseValues = "Verifique, por favor, estes valores";
 $PleaseGoBackToStep = "Volte, por favor, para a Etapa";
 $DBSettingUpgradeIntro = "O script de atualização vai recuperar e atualizar os bancos de dados do Dokeos. Para isso, este script usará as bases de dados e configurações definidas abaixo. Em virtude da diversidade de sistemas em que Dokeos está instalado e porque nem sempre esses sistemas foram testados previamente, recomendamos que faça um cópia total das bases de dados antes de prosseguir com a atualização !";
+$ExtensionMBStringNotAvailable = "Extensão MBString não disponível";
 ?>

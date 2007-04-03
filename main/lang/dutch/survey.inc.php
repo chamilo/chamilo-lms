@@ -158,4 +158,7 @@ $Score = "Score";
 $Shared = "Gedeeld";
 $Invite = "Nodig uit";
 $MaximumScore = "Maximum score";
+$ViewInvited = "Toon geïnviteerden";
+$ViewAnswered = "Toon beantwoorde personen";
+$ViewUnanswered = "Toon beantwoorde personen";
 ?>

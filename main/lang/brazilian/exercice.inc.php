@@ -212,4 +212,5 @@ $YourScore = "Sua pontuação";
 $Attempted = "Tentado";
 $AssignMarks = "Atribuir uma classificação";
 $Results = "Resultados";
+$ExerciseStored = "Este exercício foi acrescentado";
 ?>

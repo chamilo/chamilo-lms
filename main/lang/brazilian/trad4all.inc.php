@@ -412,4 +412,9 @@ $SendEmail = "Enviar email";
 $EmailTitle = "Assunto do email";
 $EmailText = "Conteúdo do email";
 $Send = "Enviar";
+$ModifyRecipientList = "Modificar lista de destinatários";
+$NoLinkVisited = "Nenhum link visitado";
+$NoDocumentDownloaded = "Nenhum documento baixado";
+$Clicks = "Cliques";
+$SearchResults = "Resultados da busca";
 ?>

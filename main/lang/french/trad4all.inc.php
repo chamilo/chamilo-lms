@@ -417,4 +417,8 @@ $NoLinkVisited = "Pas de lien visité";
 $NoDocumentDownloaded = "Pas de document téléchargé";
 $Clicks = "clics";
 $SearchResults = "Résultats de la recherche";
+$SessionPast = "Passée";
+$SessionActive = "Active";
+$SessionFuture = "A venir";
+$SessionFuture = "A venir";
 ?>

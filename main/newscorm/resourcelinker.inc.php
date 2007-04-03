@@ -320,8 +320,7 @@ function display_addedresource_link($type, $id, $style='')
 			break;
 		case 'Post':
 			$tbl_post = Database::get_course_table(TABLE_FORUM_POST);
-			$tbl_post_text = Database::get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
-			$sql = "SELECT * FROM $tbl_post p, $tbl_post_text t WHERE p.post_id = t.post_id AND p.post_id = $id";
+			$sql = "SELECT * FROM $tbl_post p WHERE post_id = $id";
 			$result = api_sql_query($sql,__FILE__,__LINE__);
 			$post = mysql_fetch_object($result);
 			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$post->topic_id.'&amp;forum='.$post->forum_id.'"'.$styling.'>'.$post->post_title."</a><br />\n";
@@ -1735,7 +1734,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 			$output = '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercice_submit.php?exerciseId='.$myrow['id'].'"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case TOOL_FORUM:
-			$TBL_FORUMS = Database::get_course_table(TOOL_FORUM,$_course['database']);
+			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&md5='.$myrow['md5'].'"'.$styling.' '.$target.'>'.$myrow['forum_name']."</a><br />\n";
@@ -2003,7 +2002,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 			$output = $myrow['title'];
 			break;
 		case TOOL_FORUM:
-			$TBL_FORUMS = Database::get_course_table(TOOL_FORUM,$_course['database']);
+			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['database']);
 			$result = api_sql_query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = $myrow['forum_name'];

@@ -1057,11 +1057,11 @@ class CourseManager
 		{
 			// students directly subscribed to the course
 			$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-			$sql_query = "SELECT user_id FROM $table WHERE `course_code` = '$course_code' AND `status` = 5";
+			$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code' AND `status` = 5";
 			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
 			while($student = mysql_fetch_array($rs))
 			{
-				$a_students[$student['user_id']] = $student['user_id']; 
+				$a_students[$student['user_id']] = $student; 
 			}
 		}
 		
@@ -1070,13 +1070,13 @@ class CourseManager
 		if(api_get_setting('use_session_mode')=='true' && $with_session)
 		{
 			$table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-			$sql_query = "SELECT DISTINCT id_user as user_id FROM $table WHERE `course_code` = '$course_code'";
+			$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code'";
 			if($session_id!=0)
 				$sql_query .= ' AND id_session = '.$session_id;
 			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
 			while($student = mysql_fetch_array($rs))
 			{
-				$a_students[$student['user_id']] = $student['user_id']; 
+				$a_students[$student['id_user']] = $student; 
 			}
 		}
 		

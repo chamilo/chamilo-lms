@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 11607 2007-03-16 13:18:47Z elixir_julian $
+<?php //$Id: agenda.inc.php 11855 2007-04-03 15:00:22Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1032,7 +1032,7 @@ function change_visibility($tool,$id)
 */
 function display_courseadmin_links()
 {	
-	echo "<li><a href='".$_SERVER['PHP_SELF']."?action=add&amp;origin=".$_GET['origin']."'><img src=\"../img/view_more_stats.gif\" align=\"absmiddle\" border=\"0\" /> ".get_lang("AgendaAdd")."</a><br /></li>";
+	echo "<li><a href='".$_SERVER['PHP_SELF']."?action=add&amp;origin=".$_GET['origin']."'><img src=\"../img/view_more_stats.gif\" alt=\"".get_lang('MoreStats')."\" border=\"0\" /> ".get_lang("AgendaAdd")."</a><br /></li>";
 	if (empty ($_SESSION['toolgroup']))
 	{
 		echo "<li>".get_lang(UserGroupFilter)."<br/>";
@@ -1054,11 +1054,11 @@ function display_student_links()
 	global $show;
 	if ($_SESSION['sort'] == 'DESC')
 	{
-		echo "<li><a href='".$_SERVER['PHP_SELF']."?sort=asc&amp;origin=".$_GET['origin']."'><img src=\"../img/calendar_up.gif\" border=\"0\" /> ".get_lang("AgendaSortChronologicallyUp")."</a></li>";
+		echo "<li><a href='".$_SERVER['PHP_SELF']."?sort=asc&amp;origin=".$_GET['origin']."'><img src=\"../img/calendar_up.gif\" border=\"0\" alt=\"".get_lang('AgendaSortChronologicallyUp')."\" /> ".get_lang("AgendaSortChronologicallyUp")."</a></li>";
 	}
 	else
 	{
-		echo "<li><a href='".$_SERVER['PHP_SELF']."?sort=desc&amp;origin=".$_GET['origin']."'><img src=\"../img/calendar_down.gif\" border=\"0\" /> ".get_lang("AgendaSortChronologicallyDown")."</a></li>";
+		echo "<li><a href='".$_SERVER['PHP_SELF']."?sort=desc&amp;origin=".$_GET['origin']."'><img src=\"../img/calendar_down.gif\" border=\"0\" alt=\"".get_lang('AgendaSortChronologicallyDown')."\" /> ".get_lang("AgendaSortChronologicallyDown")."</a></li>";
 	}
 
 	// showing the link to show all items or only those of the current month
@@ -1495,20 +1495,20 @@ function display_agenda_items()
 	// the icons. If the message is sent to one or more specific users/groups
 	// we add the groups icon
 	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
-	echo "<img src=\"../img/agenda.gif\" align=\"absbottom\" border=\"0\" />";
+	echo "<img src=\"../img/agenda.gif\" border=\"0\" />";
 	if ($myrow['to_group_id']!=='0')
 		{
 		echo "<img src=\"../img/group.gif\" border=\"0\" />";
 		}
 	echo " ".$myrow['title']."\n";
-	echo "\t\t</td>\n";
+	echo "\t\t</th>\n";
 
 	// the message has been sent to
 	echo "\t\t<th>".get_lang("SentTo").": ";
 	$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
 	$sent_to_form=sent_to_form($sent_to);
 	echo $sent_to_form;
-	echo "</td>\n\t</tr>\n";
+	echo "</th>\n\t</tr>\n";
 
 /*--------------------------------------------------
  			display: the title

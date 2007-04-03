@@ -92,11 +92,13 @@ if (is_allowed_to_edit())
 		$toolsRow = mysql_fetch_array($result);
 		$tool_name = htmlspecialchars($toolsRow['name'] != "" ? $toolsRow['name'] : $toolsRow['link']);
 		if($toolsRow['img'] != "external.gif")
+		{
 			$toolsRow['link']=$clarolineRepositoryWeb.$toolsRow['link'];
+		}
 		$toolsRow['image']=$clarolineRepositoryWeb."img/".$toolsRow['image'];
 		
 		echo 	"<br><br><br>\n";
-		echo	"<table class=message width=\"70%\" align=\"center\">\n",
+		echo	"<table class=\"message\" width=\"70%\" align=\"center\">\n",
 				"<tr><td width=\"7%\" align=\"center\">\n",
 			   	"<a href=\"".$toolsRow['link']."\"><img src=\"",$toolsRow['image'],"\" alt=\"\" align=\"absmiddle\" border=\"0\">","</a></td>\n",
 				"<td width=\"28%\" height=\"45\"><small>\n",
@@ -108,7 +110,7 @@ if (is_allowed_to_edit())
 				"<br>&nbsp;&nbsp;&nbsp;\n",
 				"<a href=\"".$_SERVER['PHP_SELF']."\">",get_lang('No'),"</a>\n",
 				"&nbsp;|&nbsp;\n",
-				"<a href=\"".$_SERVER['PHP_SELF']."?destroy=yes&id=$id\">",get_lang('Yes'),"</a>\n",
+				"<a href=\"".$_SERVER['PHP_SELF']."?destroy=yes&amp;id=$id\">",get_lang('Yes'),"</a>\n",
 				"</font></td></tr>\n",
 				"</table>\n";
 		echo 	"<br><br><br>\n";
@@ -239,7 +241,7 @@ if ($is_platformAdmin and is_allowed_to_edit())
 				"<br>&nbsp;&nbsp;&nbsp;\n",
 				"<a href=\"".$_SERVER['PHP_SELF']."\">",get_lang('No'),"</a>\n",
 				"&nbsp;|&nbsp;\n",
-				"<a href=\"".$_SERVER['PHP_SELF']."?delete=yes&id=$id\">",get_lang('Yes'),"</a>\n",
+				"<a href=\"".$_SERVER['PHP_SELF']."?delete=yes&amp;id=$id\">",get_lang('Yes'),"</a>\n",
 				"</font>\n",
 				"<br><br><br>\n",
 				"</td>\n",
@@ -260,15 +262,17 @@ if ($is_platformAdmin and is_allowed_to_edit())
 }
 
 
-echo "<table class=item valign=\"middle\" align=\"center\" border=\"0\" width=\"95%\">\n";
+echo "<table class=\"item\" align=\"center\" border=\"0\" width=\"95%\">\n";
 
 /*==========================
      TOOLS  FOR  EVERYBODY
   ==========================*/
 
 echo	"<tr>\n<td colspan=\"6\">&nbsp;</td>\n</tr>\n";
+echo	"<tr>\n<td colspan=\"6\">";
 showtools2('Basic');
 showtools2('External');
+echo 	"</td>\n</tr>\n";
 
 
 /*==========================
@@ -277,12 +281,13 @@ showtools2('External');
 
 if (is_allowed_to_edit())
 {
-	echo	"<tr><td colspan=\"6\"><hr noshade size=\"1\"></td></tr>\n",
+	echo	"<tr><td colspan=\"6\"><hr noshade size=\"1\" /></td></tr>\n",
 			"<tr>\n","<td colspan=\"6\">\n",
 			"<font color=\"#F66105\">\n",get_lang('CourseAdminOnly'),"</font>\n",
 			"</td>\n","</tr>\n";
-
+	echo	"<tr>\n<td colspan=\"6\">";
 	showtools2('courseAdmin');
+	echo 	"</td>\n</tr>\n";
 }
 
 
@@ -293,13 +298,14 @@ if (is_allowed_to_edit())
 if ($is_platformAdmin and is_allowed_to_edit())
 {
 	echo	"<tr>","<td colspan=\"6\">",
-			"<hr noshade size=\"1\">",
+			"<hr noshade size=\"1\" />",
 			"</td>","</tr>\n",
 			"<tr>\n","<td colspan=\"6\">\n",
 			"<font color=\"#F66105\" >",get_lang('PlatformAdminOnly'),"</font>\n",
 			"</td>\n","</tr>\n";
-
+	echo	"<tr>\n<td colspan=\"6\">";
 	showtools2('claroAdmin');
+	echo 	"</td>\n</tr>\n";
 }
 
 echo	"</table>\n";

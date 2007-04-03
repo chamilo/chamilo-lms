@@ -440,7 +440,7 @@ class Display {
 		}
 
 		//return encrypted mailto hyperlink
-		return '<a href="'.$hmail.'"'.$style_class.' name="clickable_email_link">'.$hclickable_text.'</a>';
+		return '<a href="'.$hmail.'"'.$style_class.'>'.$hclickable_text.'</a>';
 	}
 
 	/**

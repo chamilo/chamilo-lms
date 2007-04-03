@@ -22,7 +22,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 11674 2007-03-23 14:26:21Z elixir_julian $
+* 	@version $Id: exercise.class.php 11855 2007-04-03 15:00:22Z pcool $
 */
 
 
@@ -630,7 +630,7 @@ class Exercise
 			$defaults['exerciseDescription'] = $this -> selectDescription();
 		}
 		else{
-			$defaults['exerciseDescription'] = '<table width="100%" border="0" callpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'/default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left"></td></tr></table>';
+			$defaults['exerciseDescription'] = '<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'/default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left"></td></tr></table>';
 		}
 		$defaults['exerciseType'] = '1';
 

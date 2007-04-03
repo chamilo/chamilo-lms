@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 11849 2007-04-03 12:52:25Z elixir_inter $
+<?php // $Id: course_home.php 11855 2007-04-03 15:00:22Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -58,7 +58,7 @@
 */
 
 $htmlHeadXtra[] = "
-		<style>
+		<style type=\"text/css\" media=\"screen, projection\">
 .row{
 width:100%;
 }
@@ -209,11 +209,17 @@ Display::display_introduction_section(TOOL_COURSE_HOMEPAGE);
 -----------------------------------------------------------
 */
 if(get_setting('homepage_view') == "activity")
+{
 	include('activity.php');
+}
 elseif(get_setting('homepage_view') == "2column")
+{
 	include('2column.php');
+}
 elseif(get_setting('homepage_view') == "3column")
+{
 	include('3column.php');
+}
 
 /*
 ==============================================================================

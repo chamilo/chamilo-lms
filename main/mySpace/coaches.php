@@ -258,7 +258,7 @@ if(mysql_num_rows($resultCoachs)>0){
 		$a_data[$i_id_coach]["lastname"]=$s_lastname;
 		$a_data[$i_id_coach]["connection_time"]=$s_connection_time;
 			
-		echo '<tr class="'.$s_css_class.'"><td>'.$s_firstname.'</td><td>'.$s_lastname.'</td><td>'.$s_connection_time.'</td><td><a href="cours.php?type=coach&user_id='.$i_id_coach.'">-></a></td><td><a href="student.php?type=coach&user_id='.$i_id_coach.'">-></a></td></tr>';
+		echo '<tr class="'.$s_css_class.'"><td>'.$s_firstname.'</td><td>'.$s_lastname.'</td><td>'.$s_connection_time.'</td><td><a href="course.php?type=coach&user_id='.$i_id_coach.'">-></a></td><td><a href="student.php?type=coach&user_id='.$i_id_coach.'">-></a></td></tr>';
 		
 	}
 	

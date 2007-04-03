@@ -95,7 +95,7 @@ if($nb_sessions > 0)
 		{
 			$csv_content[] = $row;
 		}
-		$row[] = '<a href="cours.php?id_session='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+		$row[] = '<a href="course.php?id_session='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 	
 		$all_datas[] = $row;
 	}

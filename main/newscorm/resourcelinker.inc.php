@@ -1889,12 +1889,12 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			break;
 
 		case TOOL_POST:
-			$tbl_post = Database::get_course_table(TABLE_FORUM_THREAD,$_course['database']);
+			$tbl_post = Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
 			$result= api_sql_query("SELECT * FROM $tbl_post where post_id=$id",__FILE__,__LINE__);
 			$myrow=Database::fetch_array($result);
 			$title=$myrow['post_title'];
 
-			$desc=$row_item['description'];
+			//$desc=$row_item['description'];
     		
 			$posternom=$myrow['poster_name'];
 			$posttime=$myrow['post_date'];			
@@ -1902,8 +1902,8 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			$posttitle=$title;
 			$posttext = str_replace('"',"'",$posttext);
 
-			$link .= $main_dir_path.'phpbb/viewpost.php?post='.$id.'' .
-					'&topic='.$myrow['topic_id'].'&forum='.$myrow['forum_id'].'' .
+			$link .= $main_dir_path.'forum/viewthread.php?post='.$id.'' .
+					'&thread='.$myrow['thread_id'].'&forum='.$myrow['forum_id'].'' .
 					'&lp=true';
 			break;
 

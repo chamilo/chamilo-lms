@@ -415,7 +415,34 @@ class Tracking {
 		
 		while($row = mysql_fetch_array($rs))
 		{
-			$a_sessions[$row["id"]]=$row;
+			$a_sessions[$row["id"]]=$row;			
+		}
+		
+		foreach($a_sessions as &$session)
+		{
+			if($row['date_start'] == '0000-00-00')
+			{
+				$session['status'] = get_lang('Active');
+			}
+			else
+			{
+				$date_start = explode('-',$session['date_start']);
+				$time_start = mktime(0,0,0,$date_start[1],$date_start[2],$date_start[0]);			
+				$date_end = explode('-',$session['date_end']);				
+				$time_end = mktime(0,0,0,$date_end[1],$date_end[2],$date_end[0]);			
+				if($time_start < time() && time() < $time_end)
+				{
+					$session['status'] = get_lang('SessionActive');
+				}
+				else if(time() < $time_start)
+				{
+					$session['status'] = get_lang('SessionFuture');
+				}
+				else if(time() > $time_end)
+				{
+					$session['status'] = get_lang('SessionPast');
+				}
+			}
 		}
 		
 		

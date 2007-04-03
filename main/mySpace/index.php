@@ -346,7 +346,7 @@ if($nb_teacher_courses)
 	
 			  
 	$table = new SortableTable('tracking_list_course', 'count_teacher_courses');
-	$table -> set_header(0, get_lang('CourseTitle'), false);
+	$table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
 	$table -> set_header(1, get_lang('NbStudents'), false);
 	$table -> set_header(2, get_lang('TimeSpentInTheCourse'), false);
 	$table -> set_header(3, get_lang('AvgStudentsProgress'), false);
@@ -443,10 +443,11 @@ if($nb_teacher_courses)
 							$avg_assignments_in_course,
 							);
 		
-		$table -> addRow($table_row, 'align="left"');
+		$table -> addRow($table_row, 'align="right"');
 		
 	}
-	$table -> setColAttributes(7,array('align'=>'center'));
+	$table -> updateColAttributes(0,array('align'=>'left'));
+	$table -> updateColAttributes(7,array('align'=>'center'));
 	$table -> display();
 		
 }

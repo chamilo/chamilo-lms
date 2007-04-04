@@ -1,4 +1,4 @@
-<?php //$Id: announcements.inc.php 11607 2007-03-16 13:18:47Z elixir_julian $
+<?php //$Id: announcements.inc.php 11860 2007-04-04 09:09:13Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -226,7 +226,7 @@ function get_course_users()
 	//this would return only the users from real courses:
 	//$user_list = CourseManager::get_user_list_from_course_code(api_get_course_id());
 	
-	$user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id());
+	$user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), true, $_SESSION['id_session']);
 	return $user_list;
 }
 

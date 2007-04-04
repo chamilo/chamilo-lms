@@ -442,7 +442,7 @@ else // continue with the previous values
 
 if (isset($cidReset) && $cidReset) // course session data refresh requested or empty data
 {
-	api_session_unregister('session_name');
+	
     if ($cidReq)
     {
     	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -507,6 +507,12 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 					$rs = api_sql_query($sql,__FILE__,__LINE__);
 					list($_SESSION['session_name']) = mysql_fetch_array($rs);
 				}
+				else
+				{
+					api_session_unregister('session_name');
+					api_session_unregister('id_session');
+				}
+					
 			}
 
         }

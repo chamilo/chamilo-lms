@@ -1003,39 +1003,48 @@ class CourseManager
 	*	@param string $course_code
 	*	@return array with user info
 	*/
-	function get_user_list_from_course_code($course_code)
+	function get_user_list_from_course_code($course_code, $with_session=true, $session_id=0)
 	{
-		if(api_get_setting('use_session_mode')!='true')
+		
+		$session_id = intval($session_id);
+		$a_users = array();
+		
+		// users subscribed to the course through a session		
+		if(api_get_setting('use_session_mode')=='true' && $with_session)
 		{
+			$table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+			$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code'";
+			if($session_id!=0)
+				$sql_query .= ' AND id_session = '.$session_id;
+			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
+			while($user = mysql_fetch_array($rs))
+			{
+				$user_infos = Database :: get_user_info_from_id($user['id_user']);
+				$user_infos["status"] = $user["status"];
+				$user_infos["role"] = $user["role"];
+				$user_infos["tutor_id"] = $user["tutor_id"];
+				$a_users[$user['id_user']] = $user_infos; 
+			}
+		}
+		
+		
+		if($session_id == 0)
+		{
+			// users directly subscribed to the course
 			$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-			$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code' ORDER BY `status`";
-		}
-		else
-		{
-			if(!empty($_SESSION['id_session'])){
-				$table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-				$sql_query = "SELECT id_user as user_id FROM $table WHERE `course_code` = '$course_code' AND id_session = '".$_SESSION['id_session']."'";
+			$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code'";
+			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
+			while($user = mysql_fetch_array($rs))
+			{
+				$user_infos = Database :: get_user_info_from_id($user['user_id']);
+				$user_infos["status"] = $user["status"];
+				$user_infos["role"] = $user["role"];
+				$user_infos["tutor_id"] = $user["tutor_id"];
+				$a_users[$user['user_id']] = $user_infos; 
 			}
-			else{
-				$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-				$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code' ORDER BY `status`";
-			}
-			
 		}
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-		while ($course_user_info = mysql_fetch_array($sql_result))
-		{
-			$user_id = $course_user_info["user_id"];
-			$user_info = Database :: get_user_info_from_id($user_id);
-
-			//add extra fields from course_user table
-			$user_info["status"] = $course_user_info["status"];
-			$user_info["role"] = $course_user_info["role"];
-			$user_info["tutor_id"] = $course_user_info["tutor_id"];
-			$result_array[] = $user_info;
-		}
-
-		return $result_array;
+		
+		return $a_users;
 	}
 	
 	
@@ -1090,13 +1099,13 @@ class CourseManager
 	*	@param array $course_info
 	*	@return array with user info
 	*/
-	function get_real_and_linked_user_list($course_code)
+	function get_real_and_linked_user_list($course_code, $with_sessions = true, $session_id=0)
 	{
 		//get list of virtual courses
 		$virtual_course_list = CourseManager :: get_virtual_courses_linked_to_real_course($course_code);
 
 		//get users from real course
-		$user_list = CourseManager :: get_user_list_from_course_code($course_code);
+		$user_list = CourseManager :: get_user_list_from_course_code($course_code, $with_sessions, $session_id);
 		foreach ($user_list as $this_user)
 		{
 			$complete_user_list[] = $this_user;
@@ -1106,7 +1115,7 @@ class CourseManager
 		foreach ($virtual_course_list as $this_course)
 		{
 			$course_code = $this_course["code"];
-			$user_list = CourseManager :: get_user_list_from_course_code($course_code);
+			$user_list = CourseManager :: get_user_list_from_course_code($course_code, $with_sessions, $session_id);
 			foreach ($user_list as $this_user)
 			{
 				$complete_user_list[] = $this_user;

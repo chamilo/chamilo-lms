@@ -86,7 +86,7 @@ if (mysql_num_rows($result) > 1)
 // building the form for publishing the survey
 $form = new FormValidator('publish_form','post', $_SERVER['PHP_SELF'].'?survey_id='.$_GET['survey_id']);
 // Course users
-$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
+$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
 $possible_users = array ();
 foreach ($complete_user_list as $index => $user)
 {

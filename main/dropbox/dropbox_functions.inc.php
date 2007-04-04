@@ -551,7 +551,7 @@ function display_add_form()
 	<?php
 
 	//list of all users in this course and all virtual courses combined with it
-	$complete_user_list_for_dropbox = CourseManager::get_real_and_linked_user_list($course_info['code']);
+	$complete_user_list_for_dropbox = CourseManager::get_real_and_linked_user_list($course_info['code'], true, $_SESSION['id_session']);
 
 	foreach ($complete_user_list_for_dropbox as $k => $e)
 	    $complete_user_list_for_dropbox[$k] = $e +

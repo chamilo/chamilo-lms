@@ -61,6 +61,8 @@ require_once (api_get_path(LIBRARY_PATH)."export.lib.inc.php");
 require_once (api_get_path(LIBRARY_PATH)."course.lib.php");
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 
 //CHECK KEYS
  if( !isset ($_cid))
@@ -375,216 +377,84 @@ function get_number_of_users()
 	$result = mysql_fetch_object($res);
 	return $result->number_of_users;
 }
+
+function search_keyword($firstname,$lastname,$username,$official_code,$keyword){
+	
+	if(strripos($firstname,$keyword)!==false || strripos($lastname,$keyword)!==false || strripos($username,$keyword)!==false || strripos($official_code,$keyword)!==false){
+		return true;
+	}
+	else{
+		return false;
+	}
+	
+}
+
+function sort_users($a,$b){
+	$a = trim(strtolower($a[$_GET['users_column']]));
+	$b = trim(strtolower($b[$_GET['users_column']]));
+	if($_GET['users_direction'] == 'DESC')
+		return strcmp($b, $a);
+	else
+		return strcmp($a, $b);
+}
+
 /**
  * Get the users to display on the current page.
  */
 function get_user_data($from, $number_of_items, $column, $direction)
 {
-	global $is_allowed_to_track;
-
-	//It's a teacher in the current course; We display all the students of the course (as if the course belong to no sessions)
-	if($_SESSION["is_courseAdmin"] || $_SESSION["is_platformAdmin"]){
-
-		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-		$columns[] = 'u.user_id';
-		$columns[] = 'u.official_code';
-		$columns[] = 'u.firstname';
-		$columns[] = 'u.lastname';
-		$columns[] = 'cu.role';
-		$columns[] = "''"; //placeholder for group-data
-		$columns[] = "IF(cu.tutor_id = 1,'".get_lang('Tutor')."','')";
-		$columns[] = "IF(cu.status = 1,'".get_lang('CourseManager')."','')";
-
-		$columns[] = 'u.user_id';
-		$sql = "SELECT ";
-
-		foreach( $columns as $index => $sqlcolumn)
-		{
-			$columns[$index] = ' '.$sqlcolumn.' AS col'.$index.' ';
-		}
-		$sql .= implode(" , ", $columns);
-		$sql .= "FROM $user_table u,$course_user_table cu WHERE u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
-
-		if( isset ($_GET['keyword']))
-		{
-			$keyword = mysql_real_escape_string($_GET['keyword']);
-			$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
-		}
-
-		$sql .= " ORDER BY col$column $direction ";
-		$sql .= " LIMIT $from, $number_of_items";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
-
-		$users = array();
-		$user_ids = array();
-
-		while($user = mysql_fetch_row($res))
-		{
-			$users[''.$user[0]] = $user;
-			$user_ids[] = $user[0];
-		}
-
-		$sql = "
-			SELECT
-				ug.user_id,
-				ug.group_id group_id,
-				sg.name
-			FROM " . Database::get_course_table(TABLE_GROUP_USER) . " ug
-			LEFT JOIN " . Database::get_course_table(TABLE_GROUP) . " sg ON ug.group_id = sg.id
-			WHERE ug.user_id IN ('".implode("','", $user_ids)."')";
-
-		$res = api_sql_query($sql,__FILE__,__LINE__);
-
-	    while($group = mysql_fetch_object($res))
-	    {
-	    	$users[''.$group->user_id][5] .= $group->name.'<br />';
-	    }
-
-	    //Sessions
-	    $columns=array();
-
-	    $columns[] = 'u.user_id';
-		$columns[] = 'u.official_code';
-		$columns[] = 'u.firstname';
-		$columns[] = 'u.lastname';
-		$columns[] = "''";
-		$columns[] = "''"; //placeholder for group-data
-		$columns[] = "''";
-		$columns[] = "''";
-		$columns[] = 'u.user_id';
-
-	    $sql = "SELECT  ".implode(',',$columns)."
-				FROM ".Database::get_main_table(TABLE_MAIN_USER)." `u`, ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." c
-               WHERE `u`.`user_id`= c.`id_user`
-               AND c.`course_code`='".$_SESSION['_course']['id']."'
-				";
-
-		if( isset ($_GET['keyword']))
-		{
-			$keyword = mysql_real_escape_string($_GET['keyword']);
-			$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
-		}
-
-		$res = api_sql_query($sql, __FILE__, __LINE__);
-
-		while ($user = mysql_fetch_row($res))
-		{
-			$users[''.$user[0]] = $user;
-			$user_ids[] = $user[0];
+	$a_users=array();
+	
+	if(!empty($_SESSION["id_session"])){
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+	}
+	else{
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
+	}
+	
+	foreach($a_course_users as $user_id=>$o_course_user){
+		
+		if( (isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'],$o_course_user['lastname'],$o_course_user['username'],$o_course_user['official_code'],$_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])){
+			
+			$groups_name=GroupManager :: get_user_group_name($user_id);
+			
+			if(api_is_allowed_to_edit()){
+				$temp=array();
+				$temp[] = $user_id;
+				$temp[] = $o_course_user['official_code'];
+				$temp[] = $o_course_user['firstname'];
+				$temp[] = $o_course_user['lastname'];
+				$temp[] = $o_course_user['role'];
+				$temp[] = implode(', ',$groups_name); //Group
+				
+				if(isset($o_course_user['tutor_id']) && $o_course_user['tutor_id']==1)
+					$temp[] = get_lang('Tutor');
+				else
+					$temp[] = '-';
+				if(isset($o_course_user['status']) && $o_course_user['status']==1)
+					$temp[] = get_lang('CourseManager');
+				else
+					$temp[] = '-';
+					
+				$temp[] = $user_id;
+			}
+			else{
+				$temp=array();
+				$temp[] = $o_course_user['official_code'];
+				$temp[] = $o_course_user['firstname'];
+				$temp[] = $o_course_user['lastname'];
+				$temp[] = $o_course_user['role'];
+				$temp[] = implode(', ',$groups_name);//Group
+				$temp[] = $user_id;
+			}
+			$a_users[$user_id] = $temp;
 		}
 	}
-
-	//Sudent or coach
-	else
-	{
-		//We are coach
-		if($_SESSION["is_courseTutor"]){
-
-			$columns = array();
-			if(api_is_allowed_to_edit())
-			{
-				$columns[] = 'u.user_id';
-			}
-			$columns[] = 'u.official_code';
-			$columns[] = 'u.firstname';
-			$columns[] = 'u.lastname';
-			$columns[] = '""';
-			$columns[] = "''"; //placeholder for group-data
-			if(api_is_allowed_to_edit())
-			{
-				$columns[] = "''";
-				$columns[] = "''";
-			}
-			$columns[] = 'u.user_id';
-
-			$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		 	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		 	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-		 	$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-
-	 		$sql="SELECT ".implode(',',$columns)."
-							FROM $tbl_session_course_user as srcru, $tbl_user as u
-							WHERE srcru.course_code='".$_SESSION['_course']['id']."' AND srcru.id_user=u.user_id
-							";
-
-	 		$res = api_sql_query($sql, __FILE__, __LINE__);
-
-			while ($user = mysql_fetch_array($res))
-			{
-				$users[''.$user["user_id"]] = $user;
-				$user_ids[] = $user["user_id"];
-			}
-
-		}
-		else
-		{
-			$columns = array();
-			if(api_is_allowed_to_edit())
-			{
-				$columns[] = 'u.user_id';
-			}
-			$columns[] = 'u.official_code';
-			$columns[] = 'u.firstname';
-			$columns[] = 'u.lastname';
-			$columns[] = '""';
-			$columns[] = "''"; //placeholder for group-data
-			if(api_is_allowed_to_edit())
-			{
-				$columns[] = "''";
-				$columns[] = "''";
-			}
-			$columns[] = 'u.user_id';
-
-			$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		 	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		 	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-		 	$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-
-			if(empty($_SESSION["id_session"]))
-			{
-				$sql="SELECT ";
-				foreach( $columns as $index => $sqlcolumn)
-				{
-					$columns[$index] = ' '.$sqlcolumn.' AS col'.$index.' ';
-				}
-				$sql .= implode(" , ", $columns);
-				$sql .= "FROM $tbl_course_user as cu, $tbl_user as u
-					WHERE cu.course_code='".$_SESSION['_course']['id']."' AND cu.user_id=u.user_id
-					";
-			}
-			else
-			{
-				$sql="SELECT ";
-				foreach( $columns as $index => $sqlcolumn)
-				{
-					$columns[$index] = ' '.$sqlcolumn.' AS col'.$index.' ';
-				}
-				$sql .= implode(" , ", $columns);
-				$sql .= "FROM $tbl_session_course_user as srcru, $tbl_user as u
-					WHERE srcru.course_code='".$_SESSION['_course']['id']."' AND srcru.id_user=u.user_id";
-			}
-
-			if( isset ($_GET['keyword']))
-			{
-				$keyword = mysql_real_escape_string($_GET['keyword']);
-				$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
-			}
-			$sql .= " ORDER BY col$column $direction ";
-			$sql .= " LIMIT $from, $number_of_items";
-	 		$res = api_sql_query($sql, __FILE__, __LINE__);
-
-			while ($user = mysql_fetch_array($res))
-			{
-				$users[''.$user[0]] = $user;
-				$user_ids[] = $user["user_id"];
-			}
-		}
-	}
-
-	return $users;
+	usort($a_users, 'sort_users');	
+	return $a_users;
 }
+
+
 /**
  * Build the modify-column of the table
  * @param int $user_id The user id
@@ -619,7 +489,7 @@ function modify_filter($user_id)
 	$result.="</div>";
 	return $result;
 }
-$default_column = api_is_allowed_to_edit() ? 2 : 1;
+$default_column = api_is_allowed_to_edit() ? 1 : 0;
 $table = new SortableTable('users', 'get_number_of_users', 'get_user_data',$default_column);
 $parameters['keyword'] = $_GET['keyword'];
 $table->set_additional_parameters($parameters);

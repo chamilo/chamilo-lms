@@ -63,6 +63,7 @@ class FormValidator extends HTML_QuickForm
 		$this->registerRule('username_available',null,'HTML_QuickForm_Rule_UsernameAvailable',$dir.'Rule/UsernameAvailable.php');
 		$this->registerRule('username',null,'HTML_QuickForm_Rule_Username',$dir.'Rule/Username.php');
 		$this->registerRule('filetype',null,'HTML_QuickForm_Rule_Filetype',$dir.'Rule/Filetype.php');
+		$this->registerRule('multiple_required','required','HTML_QuickForm_Rule_MultipleRequired',$dir.'Rule/MultipleRequired.php');
 
 		// Modify the default templates
 		$renderer = & $this->defaultRenderer();
@@ -284,6 +285,18 @@ EOT;
 		$this->updateAttributes("onsubmit=\"myUpload.startRealUpload('dynamic_div','".$upload_id."','".$this->getAttribute('id')."',".$waitAfterUpload.")\"");
 		
 		
+	}
+	
+	/**
+	 * This function avoid to change directly QuickForm class.
+	 * When we use it, the element is threated as 'required' to be dealt during validation
+	 * @param array $element the array of elements
+	 * @param string $message the message displayed
+	 */
+	function add_multiple_required_rule($elements, $message)
+	{
+		$this->_required[] = $elements[0];
+		$this -> addRule ($elements , get_lang('YouMustCheckACheckbox') , 'multiple_required');		
 	}
 	
 	/**

@@ -109,6 +109,8 @@ class MultipleAnswer extends Question {
 		}
 
 		$form -> addElement('hidden', 'nb_answers');
+		
+		$boxes_names = array();
 
 		for($i = 1 ; $i <= $nb_answers ; ++$i)
 		{
@@ -128,6 +130,8 @@ class MultipleAnswer extends Question {
 			$answer_number->freeze();
 			
 			$form->addElement('checkbox', 'correct['.$i.']', null, null, $i);
+			$boxes_names[] = 'correct['.$i.']';
+			
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"');
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 			$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"');
@@ -135,6 +139,8 @@ class MultipleAnswer extends Question {
 			$form -> addElement ('html', '</tr>');
 		}
 		$form -> addElement ('html', '</table>');
+		
+		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
 
 		$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'));
 		$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'));

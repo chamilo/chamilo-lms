@@ -1296,5 +1296,23 @@ class GroupManager
 			return GroupManager :: is_subscribed($user_id, $group_id);
 		}
 	}
+	/**
+	 * Get all groups where a specific user is subscribed
+	 */
+	function get_user_group_name($user_id){
+		
+		$table_group_user=Database::get_course_table(TABLE_GROUP_USER);
+		$table_group=Database::get_course_table(TABLE_GROUP);
+		
+		$sql_groups = 'SELECT name FROM '.$table_group.' g,'.$table_group_user.' gu WHERE gu.user_id="'.$user_id.'" AND gu.group_id=g.id';
+		$res = api_sql_query($sql_groups,__FILE__,__LINE__);
+		
+		$groups=array();
+	    while($group = mysql_fetch_array($res))
+	    {
+	    	$groups[] .= $group['name'];
+	    }
+	    return $groups;
+	}
 }
 ?>

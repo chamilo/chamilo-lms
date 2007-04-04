@@ -34,12 +34,12 @@ $language_file = array ('chat');
 
 include('../inc/global.inc.php');
 
-$nameTools=get_lang('Chat');
 
+$interbreadcrumb[] = array ("url" => "chat.php", "name" => get_lang("Chat"));
 $noPHP_SELF=true;
 $shortBanner=false;
 
-Display::display_header($nameTools,"Chat");
+Display::display_header(null,"Chat");
 ?>
 
 </body>

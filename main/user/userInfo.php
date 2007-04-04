@@ -43,7 +43,7 @@
 */
 $editMainUserInfo = $_REQUEST['editMainUserInfo'];
 $uInfo = intval($_REQUEST['uInfo']);
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('registration', 'userInfo');
 
 include ("../inc/global.inc.php");
@@ -217,7 +217,7 @@ if ($allowedToEditContent)
 */
 
 // Back button for each display mode (Top)
-echo "<div align=\"right\"><a href=\"user.php?".api_get_cidreq()."&origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
+echo "<div align=\"right\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
 if ($displayMode == "viewDefEdit")
 {
 	/*>>>>>>>>>>>> CATEGORIES DEFINITIONS : EDIT <<<<<<<<<<<<*/
@@ -265,12 +265,16 @@ elseif ($displayMode == "viewDefList")
 
 			// displays commands
 
-			echo "<a href=\"".$_SERVER['PHP_SELF']."?removeDef=", $thisCat['catId'], "\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Remove')."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?editDef=", $thisCat['catId'], "\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\">", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?moveUpDef=", $thisCat['catId'], "\">", "<img src=\"../img/up.gif\" border=\"0\" alt=\"".get_lang('MoveUp')."\">", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?moveDownDef=", $thisCat['catId'], "\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('MoveDown')."\">", "</a>\n";
+			echo "<a href=\"".$_SERVER['PHP_SELF']."?removeDef=", $thisCat['catId'], "\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Remove')."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?editDef=", $thisCat['catId'], "\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" />", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?moveUpDef=", $thisCat['catId'], "\">", "<img src=\"../img/up.gif\" border=\"0\" alt=\"".get_lang('MoveUp')."\">", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?moveDownDef=", $thisCat['catId'], "\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('MoveDown')."\">", "</a>\n";
 		} // end for each
 
 	} // end if ($catList)
 
-	echo "<center>\n", "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">", "<input type=\"submit\" name=\"addDef\" value=\"".get_lang('AddNewHeading')."\">", "</form>\n", "<center>\n";
+	echo "<center>\n",
+			"<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">",
+			"<input type=\"submit\" name=\"addDef\" value=\"".get_lang('AddNewHeading')."\" />",
+			"</form>\n",
+			"<center>\n";
 }
 elseif ($displayMode == "viewContentEdit")
 {
@@ -300,7 +304,7 @@ elseif ($displayMode == "viewContentEdit")
 }
 elseif ($displayMode == "viewMainInfoEdit")
 {
-	
+
 	/*>>>>>>>>>>>> CATEGORIES MAIN INFO : EDIT <<<<<<<<<<<<*/
 
 	$mainUserInfo = get_main_user_info($userIdViewed, $courseCode);
@@ -318,14 +322,26 @@ elseif ($displayMode == "viewMainInfoEdit")
 		}
 		else
 		{
-			echo "<img src=\"../img/unknown.jpg\" border=\"1\">";
+			Display::display_icon('unknown.jpg', get_lang('Unknown'));
 		}
 
-		echo "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n", "<input type=\"hidden\" name=\"submitMainUserInfo\" value=\"$userIdViewed\">\n", "<table width=\"80%\" border=\"0\">", "<tr align=\"center\" bgcolor=\"#E6E6E6\">\n", "<td align=\"left\">", get_lang('Name'), "</td>\n", "<td align=\"left\">", get_lang('Role'), "</td>\n", "<td>", get_lang('Tutor'), "</td>\n", "<td>", get_lang('CourseManager'), "</td>\n", "</tr>\n", "<tr align=\"center\">", "<td align=\"left\"><b>", htmlize($mainUserInfo['firstName']), " ", htmlize($mainUserInfo['lastName']), "</b></td>\n", "<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\"></td>", "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, "></td>";
+		echo "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n",
+				"<input type=\"hidden\" name=\"submitMainUserInfo\" value=\"$userIdViewed\" />\n",
+				"<table width=\"80%\" border=\"0\">",
+					"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
+						"<td align=\"left\">", get_lang('Name'), "</td>\n",
+						"<td align=\"left\">", get_lang('Role'), "</td>\n",
+						"<td>", get_lang('Tutor'), "</td>\n",
+						"<td>", get_lang('CourseManager'), "</td>\n",
+					"</tr>\n",
+					"<tr align=\"center\">",
+						"<td align=\"left\"><b>", htmlize($mainUserInfo['firstName']), " ", htmlize($mainUserInfo['lastName']), "</b></td>\n",
+						"<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\" /></td>",
+						"<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
 
 		if (!($is_courseAdmin && $_user['user_id'] == $userIdViewed))
 		{
-			echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteCourseAdmin\" value=\"1\"", $courseAdminChecked, "></td>\n";
+			echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteCourseAdmin\" value=\"1\"", $courseAdminChecked, " /></td>\n";
 		}
 		else
 		{
@@ -333,7 +349,7 @@ elseif ($displayMode == "viewMainInfoEdit")
 
 		}
 
-		echo "<td><input type=\"submit\" name=\"submit\" value=\"Ok\"></td>\n", "</tr>", "</table>", "</form>\n";
+		echo "<td><input type=\"submit\" name=\"submit\" value=\"Ok\" /></td>\n", "</tr>", "</table>", "</form>\n";
 
 		echo "<p>".Display :: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
 
@@ -363,11 +379,11 @@ elseif ($displayMode == "viewContentList") // default display
 		}
 		else
 		{
-			echo "<img src=\"../img/unknown.jpg\" border=\"1\">";
+			Display::display_icon('unknown.jpg', get_lang('Unknown'));
 		}
 		if($is_allowedToTrack)
 		{
-			echo get_lang('Tracking');	
+			echo get_lang('Tracking');
 		}
 
 		//DISPLAY TABLE HEADING
@@ -411,14 +427,14 @@ elseif ($displayMode == "viewContentList") // default display
 				{
 					echo	"<td>",
 							"<a href=\"".$_SERVER['PHP_SELF']."?editMainUserInfo=$userIdViewed\">",
-							"<img border=\"0\" alt=\"\" src=\"../img/edit.gif\">",
+							"<img border=\"0\" alt=\"\" src=\"../img/edit.gif\" />",
 							"</a>",
 							"</td>";
 				}
                                 if ($is_allowedToTrack)
                                 {
                                         echo	"<td>",
-							"<a href=\"../tracking/userLog.php?".api_get_cidreq()."&uInfo=$userIdViewed\">",
+							"<a href=\"../tracking/userLog.php?".api_get_cidreq()."&amp;uInfo=$userIdViewed\">",
 							"<img border=\"0\" alt=\"".get_lang('Tracking')." : $userIdViewed\" src=\"../img/statistics.png\" />",
 							"</a>",
 							"</td>";
@@ -427,8 +443,6 @@ elseif ($displayMode == "viewContentList") // default display
 				"</table>";
 				//"<p><a href=\"mailto:",$mainUserInfo['email'],"\">",$mainUserInfo['email'],"</a>",
 				echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
-
-				echo "<p>\n";
 	}
 
 	if (get_setting('allow_user_headings') == 'true' && $allowedToEditDef) // only course administrators see this line
@@ -436,7 +450,7 @@ elseif ($displayMode == "viewContentList") // default display
 		echo	"<div align=right>",
 				"<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">",
 				get_lang('CourseAdministratorOnly')," : ",
-				"<input type=\"submit\" name=\"viewDefList\" value=\"".get_lang('DefineHeadings')."\">",
+				"<input type=\"submit\" name=\"viewDefList\" value=\"".get_lang('DefineHeadings')."\" />",
 				"</form>",
 				"<hr noshade size=\"1\" style=\"color:#99CCFF\">",
 				"</div>\n";
@@ -481,7 +495,7 @@ elseif ($displayMode == "viewContentList") // default display
 }
 
 // Back button for each display mode (bottom)
-echo "<div align=\"right\"><a href=\"user.php?".api_get_cidreq()."&origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
+echo "<div align=\"right\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
 /*
 ==============================================================================
 		FOOTER

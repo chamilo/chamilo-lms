@@ -1144,6 +1144,7 @@ function api_display_tool_view_option()
 	else
 	{
 		$sourceurl = $_SERVER['REQUEST_URI'];
+		$sourceurl = str_replace('&', '&amp;', $sourceurl);
 	}
 	if ($isStudentView == "true" and $_SESSION["studentview"])
 	{
@@ -1735,22 +1736,22 @@ function api_parse_tex($textext)
  */
 function api_time_to_hms($seconds)
 {
-	
+
   //How many hours ?
   $hours = floor($seconds / 3600);
 
   //How many minutes ?
-  $min = floor(($seconds - ($hours * 3600)) / 60);  
+  $min = floor(($seconds - ($hours * 3600)) / 60);
 
   //How many seconds
   $sec = floor($seconds - ($hours * 3600) - ($min * 60));
-  
+
   if ($sec < 10)
     $sec = "0".$sec;
-  
+
   if ($min < 10)
     $min = "0".$min;
-    
+
   return $hours.":".$min.":".$sec;
 
 }

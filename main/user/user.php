@@ -311,10 +311,10 @@ Display::display_introduction_section(TOOL_USER, $is_allowed);
  if( api_is_allowed_to_edit())
 {
 	echo "<div align=\"right\">";
-	echo '<a href="user.php?action=export&type=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a> | ';
-	echo "<a href=\"subscribe_user.php\"><img align='absbottom' src='../img/add_user_big.gif'>&nbsp;".get_lang("SubscribeUserToCourse")."</a> | ";
-	echo "<a href=\"subscribe_user.php?type=teacher\"><img align='absbottom' src='../img/add_user_big.gif'>&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> | ";
-	echo "<a href=\"../group/group.php?".api_get_cidreq()."\"><img align='absbottom' src='../img/edit_group.gif'>&nbsp;".get_lang("GroupUserManagement")."</a>";
+	echo '<a href="user.php?action=export&amp;type=csv">'.Display::return_icon('excel.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> | ';
+	echo '<a href="subscribe_user.php">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a> | ';
+	echo "<a href=\"subscribe_user.php?type=teacher\">".Display::return_icon('add_user_big.gif', get_lang("SubscribeUserToCourseAsTeacher"))."&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> | ";
+	echo "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('edit_group.gif', get_lang("GroupUserManagement"))."&nbsp;".get_lang("GroupUserManagement")."</a>";
 	if(api_get_setting('use_session_mode')=='false')
 	{
 		echo ' | <a href="class.php">'.get_lang('Classes').'</a>';
@@ -356,7 +356,7 @@ function get_number_of_users()
 		$sql = "SELECT COUNT(u.user_id) AS number_of_users FROM $user_table u,$course_user_table cu WHERE u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 	}
 	else{
-		
+
 		if(!empty($_SESSION['id_session'])){
 			$session_course_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 			$sql = "SELECT COUNT(DISTINCT id_user) AS number_of_users
@@ -379,14 +379,14 @@ function get_number_of_users()
 }
 
 function search_keyword($firstname,$lastname,$username,$official_code,$keyword){
-	
+
 	if(strripos($firstname,$keyword)!==false || strripos($lastname,$keyword)!==false || strripos($username,$keyword)!==false || strripos($official_code,$keyword)!==false){
 		return true;
 	}
 	else{
 		return false;
 	}
-	
+
 }
 
 function sort_users($a,$b){
@@ -404,20 +404,20 @@ function sort_users($a,$b){
 function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$a_users=array();
-	
+
 	if(!empty($_SESSION["id_session"])){
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
 	}
 	else{
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
 	}
-	
+
 	foreach($a_course_users as $user_id=>$o_course_user){
-		
+
 		if( (isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'],$o_course_user['lastname'],$o_course_user['username'],$o_course_user['official_code'],$_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])){
-			
+
 			$groups_name=GroupManager :: get_user_group_name($user_id);
-			
+
 			if(api_is_allowed_to_edit()){
 				$temp=array();
 				$temp[] = $user_id;
@@ -426,7 +426,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$temp[] = $o_course_user['lastname'];
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ',$groups_name); //Group
-				
+
 				if(isset($o_course_user['tutor_id']) && $o_course_user['tutor_id']==1)
 					$temp[] = get_lang('Tutor');
 				else
@@ -435,7 +435,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					$temp[] = get_lang('CourseManager');
 				else
 					$temp[] = '-';
-					
+
 				$temp[] = $user_id;
 			}
 			else{
@@ -450,7 +450,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			$a_users[$user_id] = $temp;
 		}
 	}
-	usort($a_users, 'sort_users');	
+	usort($a_users, 'sort_users');
 	return $a_users;
 }
 
@@ -471,7 +471,7 @@ function modify_filter($user_id)
 
 	if($is_allowed_to_track)
 	{
-		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'&details=true&course='.$_course['id'].'&origin=user_course"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
+		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
 	}
 
 	if(api_is_allowed_to_edit())

@@ -41,7 +41,7 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "group";
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
@@ -53,9 +53,9 @@ $nameTools = get_lang("GroupManagement");
 	Libraries
 -----------------------------------------------------------
 */
-include_once (api_get_path(LIBRARY_PATH).'course.lib.php'); 
+include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php'); 
+include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
 //Create default category if it doesn't exist when group categories aren't allowed
 if( api_get_setting('allow_group_categories') == 'false')
@@ -185,18 +185,18 @@ if (api_is_allowed_to_edit())
 		}
 	}
 	// Show admin-panel
-	echo '<a href="group_creation.php"><img src="../img/group_add_big.gif" align="absbottom">&nbsp;'.get_lang("NewGroupCreate").'</a>&nbsp;';
+	echo '<a href="group_creation.php">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang("NewGroupCreate").'</a>&nbsp;';
 	if (get_setting('allow_group_categories') == 'true')
 	{
 		echo '<a href="group_category.php?action=add_category">'.get_lang("AddCategory").'</a>&nbsp;';
 	}
 	else
 	{
-		echo '<a href="group_category.php?id=2"><img src="../img/edit_group.gif" align="absbottom">&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
+		echo '<a href="group_category.php?id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
 	}
 	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0)
 	{
-		echo '<a href="group_overview.php"><img src="../img/group_view.gif" align="absbottom">&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
+		echo '<a href="group_overview.php">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
 	}
 }
 $group_cats = GroupManager :: get_categories();

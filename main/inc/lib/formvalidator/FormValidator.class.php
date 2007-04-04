@@ -296,7 +296,7 @@ EOT;
 	function add_multiple_required_rule($elements, $message)
 	{
 		$this->_required[] = $elements[0];
-		$this -> addRule ($elements , get_lang('YouMustCheckACheckbox') , 'multiple_required');		
+		$this -> addRule ($elements , $message , 'multiple_required');		
 	}
 	
 	/**

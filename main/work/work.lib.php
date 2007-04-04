@@ -41,11 +41,11 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	}
 	if (! $always_show_upload_form )
 	{
-		$display_output .= "<a href=\"".$_SERVER['PHP_SELF']."?curdirpath=".$cur_dir_path."&display_upload_form=true&origin=".$_GET['origin']."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";
+		$display_output .= "<a href=\"".$_SERVER['PHP_SELF']."?curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".$_GET['origin']."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";
 	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit() )
 	{
-		$display_output .=	"<a href=\"".$_SERVER['PHP_SELF']."?curdirpath=".$cur_dir_path."&display_tool_options=true&origin=".$_GET['origin']."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";
+		$display_output .=	"<a href=\"".$_SERVER['PHP_SELF']."?curdirpath=".$cur_dir_path."&amp;display_tool_options=true&amp;origin=".$_GET['origin']."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";
 	}
 
 	if ($display_output != "")
@@ -72,16 +72,16 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 	if (! $is_allowed_to_edit) return;
-	
-	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&display_tool_options=true"; ">';
-	
-	echo	"<br><table class=\"data_table\">\n",
+
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&display_tool_options=true">';
+
+	echo	"<br/><table class=\"data_table\">\n",
 			"<tr><th>&nbsp;</th><th>".get_lang("Modify")."</th></tr><tr class=\"row_even\">\n",
 			"<td>",
 			get_lang('AllFiles')." : </td>",
-			"<td><a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&origin=$origin&delete=all&display_tool_options=true\" ",
+			"<td><a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;delete=all&amp;display_tool_options=true\" ",
 			"onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">",
-			"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" align=\"absmiddle\">",
+			"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" />",
 			"</a>",
 			"&nbsp;";
 
@@ -94,14 +94,14 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 
 		if ($columnStatus['Default'] == 1)
 		{
-			echo	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&origin=$origin&make_invisible=all&display_tool_options=true\">",
-					"<img src=\"../img/visible.gif\" border=\"0\" alt=\"".get_lang('Invisible')."\" align=\"absmiddle\">",
+			echo	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=$origin&make_invisible=all&display_tool_options=true\">",
+					"<img src=\"../img/visible.gif\" border=\"0\" alt=\"".get_lang('Invisible')."\" />",
 					"</a>\n";
 		}
 		else
 		{
-			echo	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&origin=$origin&make_visible=all&display_tool_options=true\">",
-					"<img src=\"../img/invisible.gif\" border=\"0\" alt=\"".get_lang('Visible')."\" align=\"absmiddle\">",
+			echo	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;make_visible=all&amp;display_tool_options=true\">",
+					"<img src=\"../img/invisible.gif\" border=\"0\" alt=\"".get_lang('Visible')."\">",
 					"</a>\n";
 		}
 	}
@@ -111,12 +111,12 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 	display_default_visibility_form($uploadvisibledisabled);
 
 	echo '</table>';
-	
-	echo '<div>'.get_lang("ValidateChanges").' : <input type="submit" name="changeProperties" value="'.get_lang("Ok").'"></div></form>';
-	
-	echo	"<br><table cellpadding=\"5\" cellspacing=\"2\" border=\"0\">\n";
 
-	
+	echo '<div>'.get_lang("ValidateChanges").' : <input type="submit" name="changeProperties" value="'.get_lang("Ok").'" /></div></form>';
+
+	echo	"<br/><table cellpadding=\"5\" cellspacing=\"2\" border=\"0\">\n";
+
+
 	/*
 	==============================================================================
 			Display directories list
@@ -136,8 +136,8 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 				get_lang("Up").'</a>&nbsp;'."\n";
 }
 	echo '<!-- create directory -->' .
-			'<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$cur_dir_path.'&amp;createdir=1"><img src="../img/folder_new.gif" border="0" align="absmiddle" alt ="" /></a>'.
-			'<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$cur_dir_path.'&amp;createdir=1">'.get_lang("CreateDir").'</a>&nbsp;'."\n";
+			'<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1"><img src="../img/folder_new.gif" border="0"alt ="" /></a>'.
+			'<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1">'.get_lang("CreateDir").'</a>&nbsp;'."\n";
 
 	echo "</td></tr></table>";
 }
@@ -155,10 +155,10 @@ function display_default_visibility_form($uploadvisibledisabled)
 	<tr class="row_odd"><td align="left">
 		<strong><?php echo get_lang("_default_upload"); ?></strong></td>
 		<td><input class="checkbox" type="radio" name="uploadvisibledisabled" value="0"
-			<?php if($uploadvisibledisabled==0) echo "checked";  ?>>
+			<?php if($uploadvisibledisabled==0) echo "checked";  ?> />
 		<?php echo get_lang("_new_visible");?><br />
 		<input class="checkbox" type="radio" name="uploadvisibledisabled" value="1"
-			<?php if($uploadvisibledisabled==1) echo "checked";  ?>>
+			<?php if($uploadvisibledisabled==1) echo "checked";  ?> />
 		<?php echo get_lang("_new_unvisible"); ?><br />
 	</td></tr>
 	<?php
@@ -303,23 +303,23 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			if( $is_allowed_to_edit)
 			{
 				$action = '';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&move='.$work->id.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
+				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
+				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
+				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;move='.$work->id.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
 				if($work->accepted == '1')
 				{
-					$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&make_invisible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/visible.gif" alt="'.get_lang('Invisible').'"></a>';
+					$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/visible.gif" alt="'.get_lang('Invisible').'"></a>';
 				}
 				else
 				{
-					$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&make_visible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/invisible.gif" alt="'.get_lang('Visible').'"></a>';
+					$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/invisible.gif" alt="'.get_lang('Visible').'"></a>';
 				}
 
 				$row[] = $action;
 			}elseif($is_author){
 				$action = '';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&origin='.$origin.'&delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
+				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
+				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
 
 				$row[] = $action;
 			}else{
@@ -401,7 +401,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='')
 	}
 
 	$form .= '</select>'."\n";
-	$form .= '<noscript><input type="submit" name="change_path" value="'.get_lang('Ok').'"></noscript>'."\n";
+	$form .= '<noscript><input type="submit" name="change_path" value="'.get_lang('Ok').'" /></noscript>'."\n";
 	$form .= '</form>';
 
 	return $form;
@@ -419,7 +419,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='')
 function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 {
 	$form = '<form name="move_to" action="'.$_SERVER['PHP_SELF'].'" method="POST">'."\n";
-	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'">'."\n";
+	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />'."\n";
 	$form .= get_lang('MoveTo').' <select name="move_to">'."\n";
 
 	//group documents cannot be uploaded in the root
@@ -462,7 +462,7 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 	}
 
 	$form .= '</select>'."\n";
-	$form .= '<input type="submit" name="move_file_submit" value="'.get_lang('Ok').'">'."\n";
+	$form .= '<input type="submit" name="move_file_submit" value="'.get_lang('Ok').'" />'."\n";
 	$form .= '</form>';
 
 	return $form;

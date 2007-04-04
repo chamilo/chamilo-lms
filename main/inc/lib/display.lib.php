@@ -93,10 +93,12 @@ class Display {
 	* @param string $tool These are the constants that are used for indicating the tools
 	* @return html code for adding an introduction
 	*/
-	function display_introduction_section($tool) {
+	function display_introduction_section($tool)
+	{
 		$is_allowed_to_edit = api_is_allowed_to_edit();
 		$moduleId = $tool;
-		if (api_get_setting('enable_tool_introduction') == 'true' || $tool==TOOL_COURSE_HOMEPAGE) {
+		if (api_get_setting('enable_tool_introduction') == 'true' || $tool==TOOL_COURSE_HOMEPAGE)
+		{
 			include (api_get_path(INCLUDE_PATH)."introductionSection.inc.php");
 		}
 	}
@@ -111,7 +113,8 @@ class Display {
 	*
 	*	@param $full_file_name, the (path) name of the file, without .html
 	*/
-	function display_localised_html_file($full_file_name) {
+	function display_localised_html_file($full_file_name)
+	{
 		global $language_interface;
 		$localised_file_name = $full_file_name."_".$language_interface.".html";
 		$default_file_name = $full_file_name.".html";
@@ -195,10 +198,16 @@ class Display {
 		if ($is_alternating)
 		{
 			if ($bgcolor == "bgcolor='".HTML_WHITE."'")
+			{
 				$bgcolor = "bgcolor='".DOKEOSLIGHTGREY."'";
+			}
 			else
+			{
 				if ($bgcolor == "bgcolor='".DOKEOSLIGHTGREY."'")
+				{
 					$bgcolor = "bgcolor='".HTML_WHITE."'";
+				}
+			}
 		}
 		return $bgcolor;
 	}
@@ -294,7 +303,8 @@ class Display {
 	*/
 	function display_normal_message($message,$filter=true)
 	{
-		if($filter){
+		if($filter)
+		{
 			//filter message
 			$message = htmlentities($message);
 		}
@@ -386,6 +396,7 @@ class Display {
 			//filter message
 			$message = htmlentities($message);
 		}
+
 		if (!headers_sent())
 		{
 			echo '

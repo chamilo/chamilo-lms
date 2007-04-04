@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 11811 2007-03-30 13:28:21Z pcool $
+<?php // $Id: courses.php 11873 2007-04-04 19:46:04Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -900,7 +900,8 @@ function display_course_icons($key, $number_of_courses, $course, $user_courses)
 	if ($key>0 AND $user_courses[$key-1]['user_course_category']==$course['user_course_category'])
 	{
 		echo "<a href=\"courses.php?action=".$_GET['action']."&amp;move=up&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."\">";
-		echo "<img src=\"../img/up.gif\" alt=\"".htmlentities(get_lang("Up"))."\"></a>";
+		Display::display_icon('up.gif', get_lang('Up'));
+		echo '</a>';
 	}
 	echo "</td>";
 	// the edit icon OR the edit dropdown list
@@ -935,7 +936,8 @@ function display_course_icons($key, $number_of_courses, $course, $user_courses)
 	if ($key<$number_of_courses-1 AND $user_courses[$key+1]['user_course_category']==$course['user_course_category'])
 	{
 		echo "<a href=\"courses.php?action=".$_GET['action']."&amp;move=down&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."\">";
-		echo "<img src=\"../img/down.gif\" alt=\"".htmlentities(get_lang("Down"))."\"></a>";
+		Display::display_icon('down.gif', get_lang('Down'));
+		echo '</a>';
 	}
 	echo "</td></tr></table>";
 }

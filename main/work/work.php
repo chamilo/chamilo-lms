@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 11699 2007-03-26 13:47:44Z pcool $
+*  	@version $Id: work.php 11873 2007-04-04 19:46:04Z pcool $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -827,56 +827,56 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 				$defaults["document"] = '<a href="'.format_url($submitGroupWorkUrl).'">'.$realUrl.'</a>';
 				$text_document->freeze();
 			}
-			
+
 			elseif ($edit && ($is_allowed_to_edit or $is_author))
 			{
 				$workUrl = $currentCourseRepositoryWeb.$workUrl;
 				$form->addElement('hidden', 'id', $edit);
-				
+
 				$html='<div class="row">
 					<div class="label">'.get_lang("Document").'
 					</div>
-					<div class="formw">	
+					<div class="formw">
 						<a href="'.$workUrl.'">'.$workUrl.'</a>
 					</div>
 				</div>';
 				$form->addElement('html', $html);
 			}
-			
+
 			else // else standard upload option
 			{
 				$form->addElement('file','file',get_lang('DownloadFile'));
 			}
-			
+
 			$titleWork=$form->addElement('text', 'title', get_lang("TitleWork"));
 			$defaults["title"] = ($edit?stripslashes($workTitle):stripslashes($title));
-			
+
 			$titleAuthors=$form->addElement('text', 'authors', get_lang("Authors"));
 			$defaults["authors"] = ($edit?stripslashes($workAuthor):stripslashes($authors));
-			
+
 			$titleAuthors=$form->addElement('textarea', 'description', get_lang("Description"));
 			$defaults["description"] = ($edit?stripslashes($workDescription):stripslashes($description));
-			
+
 			$form->addElement('hidden', 'active', 1);
 			$form->addElement('hidden', 'accepted', 1);
-			
+
 			$form->addElement('submit', 'submitWork', get_lang('Ok'));
-			
+
 			if(empty($authors))
 			{
 				$authors=$_user['lastName']." ".$_user['firstName'];
 			}
-			
+
 			if($_POST['submitWork'] || $edit)
 			{
 				$form->addElement('submit', 'cancelForm', get_lang('Cancel'));
 			}
-			
+
 			$form->add_real_progress_bar('uploadWork','DownloadFile');
-			
+
 			$form->setDefaults($defaults);
 			$form->display();
-			
+
 		}
 		//show them the form for the directory name
 		if(isset($_REQUEST['createdir']) && $is_allowed_to_edit)

@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 11855 2007-04-03 15:00:22Z pcool $
+<?php //$Id: agenda.inc.php 11873 2007-04-04 19:46:04Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,7 +36,7 @@
 
 /*
 -----------------------------------------------------------
-	Constants and variables 
+	Constants and variables
 -----------------------------------------------------------
 */
 // the variables for the days and the months
@@ -48,9 +48,9 @@ $DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("Tue
 $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
 
 /*
-============================================================================== 
+==============================================================================
 		FUNCTIONS
-============================================================================== 
+==============================================================================
 */
 
 /**
@@ -429,10 +429,10 @@ global $_cid;
 if (!isset($courseadmin_filter))
 	{$courseadmin_filter='';}
 
-$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName 
-		FROM $tbl_user as u, $tbl_courseUser as cu 
-		WHERE cu.course_code = '".$_cid."' 
-			AND cu.user_id = u.user_id $courseadmin_filter 
+$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName
+		FROM $tbl_user as u, $tbl_courseUser as cu
+		WHERE cu.course_code = '".$_cid."'
+			AND cu.user_id = u.user_id $courseadmin_filter
 		ORDER BY u.lastname, u.firstname";
 $result = api_sql_query($sql,__FILE__,__LINE__);
 while($user=mysql_fetch_array($result)){
@@ -440,17 +440,17 @@ while($user=mysql_fetch_array($result)){
 }
 
 if(!empty($_SESSION['id_session'])){
-	$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstName firstName  
+	$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstName firstName
 			FROM $tbl_session_course_user AS session_course_user
 			INNER JOIN $tbl_user u
 				ON u.user_id = session_course_user.id_user
-			WHERE id_session='".$_SESSION['id_session']."' 
+			WHERE id_session='".$_SESSION['id_session']."'
 			AND course_code='$_cid'";
-	
+
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while($user=mysql_fetch_array($result)){
 		$users[$user[0]] = $user;
-	}	
+	}
 
 }
 
@@ -667,8 +667,8 @@ return $last_id;
  */
 function store_agenda_item_as_announcement($item_id){
 	$table_agenda = Database::get_course_table(TABLE_AGENDA);
-	$table_ann = Database::get_course_table(TABLE_ANNOUNCEMENT); 
-	//check params 
+	$table_ann = Database::get_course_table(TABLE_ANNOUNCEMENT);
+	//check params
 	if(empty($item_id) or $item_id != strval(intval($item_id))){return -1;}
 	//get the agenda item
 	$sql = "SELECT * FROM $table_agenda WHERE id = '".$item_id."'";
@@ -684,7 +684,7 @@ function store_agenda_item_as_announcement($item_id){
 		//build the announcement text
 		$content = $row['start_date']." - ".$row['end_date']."\n\n".$row['content'];
 		//insert announcement
-		
+
 		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order) " .
 				"VALUES ('".$row['title']."','$content','".$row['end_date']."','$max')";
 		$res_ins = api_sql_query($sql_ins,__FILE__,__LINE__);
@@ -959,7 +959,7 @@ function show_user_group_filter_form()
 		echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
 		echo ">".$this_user['lastName']." ".$this_user['firstName']."</option>";
 		}
-	echo "\n\t</optgroup>";	
+	echo "\n\t</optgroup>";
 	echo "</select>";
 }
 
@@ -1031,7 +1031,7 @@ function change_visibility($tool,$id)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function display_courseadmin_links()
-{	
+{
 	echo "<li><a href='".$_SERVER['PHP_SELF']."?action=add&amp;origin=".$_GET['origin']."'><img src=\"../img/view_more_stats.gif\" alt=\"".get_lang('MoreStats')."\" border=\"0\" /> ".get_lang("AgendaAdd")."</a><br /></li>";
 	if (empty ($_SESSION['toolgroup']))
 	{
@@ -1054,21 +1054,21 @@ function display_student_links()
 	global $show;
 	if ($_SESSION['sort'] == 'DESC')
 	{
-		echo "<li><a href='".$_SERVER['PHP_SELF']."?sort=asc&amp;origin=".$_GET['origin']."'><img src=\"../img/calendar_up.gif\" border=\"0\" alt=\"".get_lang('AgendaSortChronologicallyUp')."\" /> ".get_lang("AgendaSortChronologicallyUp")."</a></li>";
+		echo "<li><a href='".$_SERVER['PHP_SELF']."?sort=asc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a></li>";
 	}
 	else
 	{
-		echo "<li><a href='".$_SERVER['PHP_SELF']."?sort=desc&amp;origin=".$_GET['origin']."'><img src=\"../img/calendar_down.gif\" border=\"0\" alt=\"".get_lang('AgendaSortChronologicallyDown')."\" /> ".get_lang("AgendaSortChronologicallyDown")."</a></li>";
+		echo "<li><a href='".$_SERVER['PHP_SELF']."?sort=desc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a></li>";
 	}
 
 	// showing the link to show all items or only those of the current month
 	if ($_SESSION['show']=="showcurrent")
 	{
-		echo "<li><a href='".$_SERVER['PHP_SELF']."?action=showall&amp;origin=".$_GET['origin']."'><img src=\"../img/calendar_select.gif\" border=\"0\" /> ".get_lang("ShowAll")."</a></li>";
+		echo "<li><a href='".$_SERVER['PHP_SELF']."?action=showall&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_select.gif').' '.get_lang("ShowAll")."</a></li>";
 	}
 	else
 	{
-		echo "<li><a href='".$_SERVER['PHP_SELF']."?action=showcurrent&amp;origin=".$_GET['origin']."'><img src=\"../img/calendar_month.gif\" border=\"0\" /> ".get_lang("ShowCurrent")."</a></li>";
+		echo "<li><a href='".$_SERVER['PHP_SELF']."?action=showcurrent&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_month.gif').' '.get_lang("ShowCurrent")."</a></li>";
 	}
 }
 
@@ -1238,7 +1238,7 @@ function showhide_agenda_item($id)
 	  ==================================================*/
 	//  and $_GET['isStudentView']<>"false" is added to prevent that the visibility is changed after you do the following:
 	// change visibility -> studentview -> course manager view
-	if ((is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda')) and $_GET['isStudentView']<>"false") 
+	if ((is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda')) and $_GET['isStudentView']<>"false")
 	{
 		if (isset($_GET['id'])&&$_GET['id']&&isset($_GET['action'])&&$_GET['action']=="showhide")
 		{
@@ -1261,7 +1261,7 @@ function display_agenda_items()
 	global $is_courseAdmin;
 	global $dateFormatLong, $timeNoSecFormat;
 	global $_user;
-	
+
 	// getting the group memberships
 	$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
 
@@ -1495,11 +1495,11 @@ function display_agenda_items()
 	// the icons. If the message is sent to one or more specific users/groups
 	// we add the groups icon
 	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
-	echo "<img src=\"../img/agenda.gif\" border=\"0\" />";
+	Display::display_icon('agenda.gif', get_lang('Agenda'));
 	if ($myrow['to_group_id']!=='0')
-		{
-		echo "<img src=\"../img/group.gif\" border=\"0\" />";
-		}
+	{
+		echo "<img src=\"../img/group.gif\" border=\"0\" alt=\"".get_lang('Group')."\"/>";
+	}
 	echo " ".$myrow['title']."\n";
 	echo "\t\t</th>\n";
 
@@ -1537,7 +1537,7 @@ function display_agenda_items()
 	echo "<tr class='row_even'>";
 	echo "<td colspan='2'>";
 
-	echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;"><img src="../img/print.gif" border="0" title="'.htmlentities(get_lang('Print')).'" /></a>&nbsp;';
+	echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
 
 	echo $content;
 	echo "</td></tr>";
@@ -1560,19 +1560,19 @@ function display_agenda_items()
 /*--------------------------------------------------
 	display: edit delete button (course admin only)
   --------------------------------------------------*/
-  
+
 	$event_list.=$myrow['id'].',';
-  
+
 	echo "<tr class='row_odd'><td>";
 			if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
 	{
 		// edit
-		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?origin=".$_GET['origin']."&action=edit&id=".$myrow['id']."\">",
-				"<img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>",
-				"<a href=\"".$_SERVER['PHP_SELF']."?origin=".$_GET['origin']."&action=delete&id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\">",
-				"<img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang("Delete")."\"/></a>";
-		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?origin=".$_GET['origin']."&action=announce&id=".$myrow['id']."\">".
-				"<img src=\"../img/announce_add.gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang("AddAnnouncement")."\"/></a>";
+		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",
+				"<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>",
+				"<a href=\"".$_SERVER['PHP_SELF']."?origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\">",
+				"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\"/></a>";
+		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?origin=".$_GET['origin']."&amp;action=announce&amp;id=".$myrow['id']."\">".
+				"<img src=\"../img/announce_add.gif\" border=\"0\" alt=\"".get_lang("AddAnnouncement")."\"/></a>";
 		if ($myrow['visibility']==1)
 		{
 			$image_visibility="visible";
@@ -1582,17 +1582,17 @@ function display_agenda_items()
 			$image_visibility="invisible";
 		}
 		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?origin=".$_GET['origin']."&amp;action=showhide&amp;id=".$myrow['id']."\">",
-				"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" align=\"absmiddle\" alt=\"".get_lang("Visible")."\" /></a>";
+				"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang("Visible")."\" /></a>";
 	}
 	echo "</td>";
-	
+
 	$counter++;
 
 /*--------------------------------------------------
 	display: jump-to-top icon
   --------------------------------------------------*/
 	echo "<td><a href=\"#top\"><img src=\"../img/top.gif\" border=\"0\" alt=\"to top\" align=\"right\" /></a></td></tr>";
-	echo "</table><br><br>";
+	echo "</table><br /><br />";
 } // end while ($myrow=mysql_fetch_array($result))
 
 
@@ -1701,10 +1701,10 @@ function display_one_agenda_item($agenda_id)
 	// the icons. If the message is sent to one or more specific users/groups
 	// we add the groups icon
 	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
-	echo "<img src=\"../img/agenda.gif\" border=\"0\" />";
+	echo Display::return_icon('agenda.gif');
 	if ($myrow['to_group_id']!=='0')
 		{
-		echo "<img src=\"../img/group.gif\" border=\"0\" />";
+		echo Display::return_icon('group.gif'); //"<img src=\"../img/group.gif\" border=\"0\" />";
 		}
 	echo " ".$myrow['title']."\n";
 	echo "\t\t</td>\n";
@@ -1908,26 +1908,28 @@ function show_add_form($id = '')
 	</tr>
 
 	<!--  the select specific users / send to all form -->
-	<?php 
+	<?php
 	if (isset ($_SESSION['toolgroup']))
 	{
 		echo '<tr id="subtitle">';
 		echo '<td colspan="3">';
-		echo '<input type="hidden" name="selectedform[0]" value="GROUP:'.$_SESSION['toolgroup'].'"/>' ; 
-		echo '<input type="hidden" name="To" value="true"/>' ; 
+		echo '<input type="hidden" name="selectedform[0]" value="GROUP:'.$_SESSION['toolgroup'].'"/>' ;
+		echo '<input type="hidden" name="To" value="true"/>' ;
 		echo '</td>';
-		echo '</tr>'; 
-	
-	}else{
-		 
+		echo '</tr>';
+
+	}
+	else
+	{
+
 		?>
 		<tr class="subtitle">
 			<td valign="top" colspan="3">
 				<?php
 				// this variable defines if the course administrator can send a message to a specific user / group
-				// or not 
+				// or not
 				//echo "<input type=\"submit\" name=\"To\" value=\"".get_lang("SelectGroupsUsers")."\" style=\"float:left\">" ;
-	
+
 				//echo "sessiewaarde: ".$_SESSION['allow_individual_calendar'];
 				echo get_lang("SentTo").": ";
 				if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id'])){
@@ -1943,23 +1945,23 @@ function show_add_form($id = '')
 		</td>
 	</tr>
 
-	<?php 
-	} 
+	<?php
+	}
 	?>
 
 	<!-- START date and time -->
 	<tr class="subtitle">
 		<td>
-		
+
 			<table cellpadding="0" cellspacing="0" border="0" width="100%">
-			
+
 			<tr><td width="110">
 				<!-- date: 1 -> 31 -->
 				<?php echo get_lang('StartDate').": \n"; ?>
 			</td>
-			
+
 			<td>
-		
+
 			<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
 				<?php
 					// small loop for filling all the dates
@@ -1971,7 +1973,7 @@ function show_add_form($id = '')
 						$value = ($i <= 9 ? '0'.$i : $i );
 						// the current day is indicated with [] around the date
 						if ($value==$day)
-						{ 
+						{
 							echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";
 						}
 						else
@@ -1998,12 +2000,12 @@ function show_add_form($id = '')
 							$value=$i;
 						}
 						if ($value==$month)
-						{ 
-							echo "\t\t\t\t <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n"; 
+						{
+							echo "\t\t\t\t <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n";
 						}
 						else
-						{ 
-							echo "\t\t\t\t <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n"; 
+						{
+							echo "\t\t\t\t <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n";
 						}
 					} ?>
 			</select>
@@ -2019,20 +2021,20 @@ function show_add_form($id = '')
 						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 					} ?>
 			</select>
-			<a href="javascript:openCalendar('new_calendar_item', 'f')"><img src="../img/calendar_select.gif" border="0" align="absmiddle" /></a>
+			<a href="javascript:openCalendar('new_calendar_item', 'f')"><img src="../img/calendar_select.gif" border="0" alt="Select"/></a>
 			</td></tr></table>
 		</td>
 		<td>
-		
+
 			<table cellpadding="0" cellspacing="0" border="0" width="100%">
-			
+
 			<tr><td width="110">
 				<!-- date: 1 -> 31 -->
 				<?php echo get_lang('StartTime').": \n"; ?>
 			</td>
-			
+
 			<td>
-			
+
 			<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
 				<option value="--">--</option>
 				<?php
@@ -2043,8 +2045,8 @@ function show_add_form($id = '')
 						$value = ($i <= 9 ? '0'.$i : $i );
 						// the current hour is indicated with [] around the hour
 						if ($hours==$value)
-						{ 
-							echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n"; 
+						{
+							echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n";
 						}
 						else
 						{
@@ -2071,16 +2073,16 @@ function show_add_form($id = '')
 
 	<tr class="subtitle">
 		<td>
-		
+
 			<table cellpadding="0" cellspacing="0" border="0" width="100%">
-			
+
 			<tr><td width="110">
 				<!-- date: 1 -> 31 -->
 				<?php echo get_lang('EndDate').": \n"; ?>
 			</td>
-			
+
 			<td>
-			
+
 			<select name="end_fday">
 				<?php
 					// small loop for filling all the dates
@@ -2124,21 +2126,21 @@ function show_add_form($id = '')
 						echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
 					} ?>
 			</select>
-			<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><img src="../img/calendar_select.gif" border="0" align="absmiddle" /></a>
+			<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><img src="../img/calendar_select.gif" border="0" /></a>
 			</td></tr></table>
 		</td>
 
 		<td>
-			
+
 			<table cellpadding="0" cellspacing="0" border="0" width="100%">
-			
+
 			<tr><td width="110">
 				<!-- date: 1 -> 31 -->
 				<?php echo get_lang('EndTime').": \n"; ?>
 			</td>
-			
+
 			<td>
-			
+
 			<select name="end_fhour">
 				<option value="--">--</option>
 				<?php
@@ -2179,10 +2181,10 @@ function show_add_form($id = '')
 
 	<tr>
 		<td colspan="7">
-		
-			<?php 
+
+			<?php
 			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
-			
+
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 			$oFCKeditor->Height		= '175';
@@ -2190,17 +2192,17 @@ function show_add_form($id = '')
 			$oFCKeditor->Value		= $content;
 			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 			$oFCKeditor->ToolbarSet = "Middle";
-			
+
 			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
 			$result_sql=api_sql_query($sql);
 			$isocode_language=mysql_result($result_sql,0,0);
 			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-			
+
 			$return =	$oFCKeditor->CreateHtml();
-			
+
 			echo $return;
-			
+
  ?>
 		</td>
 	</tr>

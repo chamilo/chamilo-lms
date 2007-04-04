@@ -45,7 +45,7 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "link";
 
 // including libraries
@@ -151,10 +151,10 @@ switch($_GET['action'])
 							break;
 	case "visible":
 		change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
-							break;	
+							break;
 	case "invisible":
 		change_visibility($_GET['id'],$_GET['scope']); // here we edit a category
-							break;								
+							break;
 }
 
 
@@ -180,7 +180,7 @@ if (is_allowed_to_edit())
 		{
 			echo "<input type=\"hidden\" name=\"id\" value=\"".$_GET['id']."\" />";
 		}
-				
+
 		echo "<table><tr>"
 			. "<td align=\"right\">URL<span class=\"required\">*</span>  :</td>"
 			. "<td><input type=\"text\" name=\"urllink\" size=\"50\" value=\"" . (empty($urllink)?'http://':htmlentities($urllink)) . "\" /></td>"			. "</tr>";
@@ -188,9 +188,9 @@ if (is_allowed_to_edit())
 				. "<td align=\"right\">" . get_lang("LinkName") . " :</td>"
 				. "<td><input type=\"text\" name=\"title\" size=\"50\" value=\"" . htmlentities($title) . "\" /></td>"
 				. "</tr>"
-				. "<tr>" . 
-				"<td align=\"right\" valign=\"top\">" . get_lang("Description") . " :</td>" . 
-				"<td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\">" .
+				. "<tr>" .
+				"<td align=\"right\" valign=\"top\">" . get_lang("Description") . " :</td>" .
+				"<td><textarea rows=\"3\" cols=\"50\" name=\"description\">" .
 				htmlentities($description) . "</textarea></td></tr>";
 
 		$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
@@ -213,7 +213,7 @@ if (is_allowed_to_edit())
 		}
 
 		echo "<tr><td align=\"right\">".get_lang("OnHomepage")." ? </td><td><input class=\"checkbox\" type=\"checkbox\" name=\"onhomepage\" id=\"onhomepage\" value=\"1\" $onhomepage><label for=\"onhomepage\"> ".get_lang("Yes")."</label></td></tr>";
-		
+
 		echo "<tr><td></td><td><input type=\"Submit\" name=\"submitLink\" value=\"".get_lang("Ok")."\" /></td></tr>",
 			"</table>",
 			"</form>";
@@ -236,8 +236,8 @@ if (is_allowed_to_edit())
 			"<td><input type=\"text\" name=\"category_title\" size=\"50\" value=\"",htmlentities($category_title)."\" /></td>",
 			"</tr>",
 			"<tr><td align=\"right\" valign=\"top\">".get_lang("Description")." :</td>",
-			"<td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\">",htmlentities($description)."</textarea></td></tr>",
-			"<tr><td></td><td><input type=\"Submit\" name=\"submitCategory\" value=\"".get_lang("Ok")."\"></td></tr>",
+			"<td><textarea rows=\"3\" cols=\"50\" name=\"description\">",htmlentities($description)."</textarea></td></tr>",
+			"<tr><td></td><td><input type=\"Submit\" name=\"submitCategory\" value=\"".get_lang("Ok")."\" /></td></tr>",
 			"</table>",
 			"</form>";
 	}
@@ -353,14 +353,14 @@ while ($myrow=@mysql_fetch_array($resultcategories))
 
 		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">+ <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 		echo is_array($view)?implode('',$view):$view;
-		echo "\">".htmlentities($myrow["category_title"])."</a><br>&nbsp;&nbsp;&nbsp;";
+		echo "\">".htmlentities($myrow["category_title"])."</a><br />&nbsp;&nbsp;&nbsp;";
 		echo $myrow["description"];
 
 		if (is_allowed_to_edit())
 		{
 			showcategoryadmintools($myrow["id"]);
 		}
-		echo "</td>",
+		echo "</th>",
 			"</tr>";
 		}
 	// displaying the link of the category

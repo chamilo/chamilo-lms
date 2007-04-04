@@ -66,7 +66,7 @@ function addlinkcategory($type)
 		$urllink = $_POST['urllink'];
 		$description = $_POST['description'];
 		$selectcategory = $_POST['selectcategory'];
-		if ($_POST['onhomepage'] == '')
+		if ($_POST['onhomepage'] = '')
 		{
 			$onhomepage = 0;
 		}
@@ -231,7 +231,6 @@ function editlinkcategory($type)
 	global $selectcategory;
 	global $description;
 	global $category_title;
-	global $onhomepage;
 
 	$tbl_link 		= Database :: get_course_table(TABLE_LINK);
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
@@ -255,7 +254,7 @@ function editlinkcategory($type)
 		// this is used to put the modified info of the link-form into the database
 		if ($_POST['submitLink'])
 		{
-			if ($_POST['onhomepage'] == '')
+			if ($_POST['onhomepage'] = '')
 			{
 				$onhomepage = 0;
 			}
@@ -386,12 +385,12 @@ function showlinksofcategory($catid)
 		{
 			if (api_is_allowed_to_edit())
 			{
-				echo "<tr>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", "<img src=\"../../main/img/file_html_na.gif\" border=\"0\" alt=\"".get_lang('Links')."\">", "</td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", htmlentities($myrow[2]), "</a>\n", "<br>", $myrow[3], "";
+				echo "<tr>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", Display::return_icon('file_html_na.gif', get_lang('Links')),"</a></td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", htmlentities($myrow[2]), "</a>\n", "<br />", $myrow[3], "";
 			}
 		}
 		if (api_is_allowed_to_edit())
 		{
-			echo "<br>", "<a href=\"".$_SERVER['PHP_SELF']."?action=editlink&category=$category&id=$myrow[0]&urlview=$urlview\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\">", "</a>", " <a href=\"".$_SERVER['PHP_SELF']."?action=deletelink&amp;id=", $myrow[0], "&urlview=", $urlview, "\" onclick=\"javascript:if(!confirm('".get_lang('LinkDelconfirm')."')) return false;\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\">", "</a>";
+			echo "<br />", "<a href=\"".$_SERVER['PHP_SELF']."?action=editlink&amp;category=$category&amp;id=$myrow[0]&amp;urlview=$urlview\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\" />", "</a>", " <a href=\"".$_SERVER['PHP_SELF']."?action=deletelink&amp;id=", $myrow[0], "&amp;urlview=", $urlview, "\" onclick=\"javascript:if(!confirm('".get_lang('LinkDelconfirm')."')) return false;\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\" />", "</a>";
 			// DISPLAY MOVE UP COMMAND only if it is not the top link
 			if ($i != 1)
 			{
@@ -404,11 +403,11 @@ function showlinksofcategory($catid)
 			}
 			if ($myrow['visibility'] == "1")
 			{
-				echo "<a href=\"link.php?action=invisible&amp;id=".$myrow['id']."&amp;scope=link\"><img src=\"../img/visible.gif\"/></a>";
+				echo "<a href=\"link.php?action=invisible&amp;id=".$myrow['id']."&amp;scope=link\">".Display::return_icon('visible.gif')."</a>";
 			}
 			if ($myrow['visibility'] == "0")
 			{
-				echo "<a href=\"link.php?action=visible&amp;id=".$myrow['id']."&amp;scope=link\"><img src=\"../img/invisible.gif\"/></a>";
+				echo "<a href=\"link.php?action=visible&amp;id=".$myrow['id']."&amp;scope=link\">".Display::return_icon('invisible.gif')."</a>";
 			}
 
 		}

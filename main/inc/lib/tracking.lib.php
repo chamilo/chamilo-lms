@@ -345,9 +345,11 @@ class Tracking {
 		
 	}
 	
-	function get_courses_followed_by_coach ($coach_id) {
+	function get_courses_followed_by_coach ($coach_id, $id_session='') {
 		
 		$coach_id = intval($coach_id);
+		if(!empty($id_session))
+			$id_session = intval($id_session);
 		
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -358,7 +360,9 @@ class Tracking {
 		// At first, courses where $coach_id is coach of the course //
 		//////////////////////////////////////////////////////////////
 		$sql = 'SELECT DISTINCT course_code FROM '.$tbl_session_course.' WHERE id_coach='.$coach_id;
-		$result=api_sql_query($sql);
+		if(!empty($id_session))
+			$sql .= ' AND id_session='.$id_session;
+		$result=api_sql_query($sql, __FILE__, __LINE__);
 		while($row = mysql_fetch_array($result))
 		{
 			$a_courses[$row['course_code']] = $row['course_code'];
@@ -375,7 +379,9 @@ class Tracking {
 					AND session.id_coach = '.$coach_id.'
 				INNER JOIN '.$tbl_course.' as course
 					ON course.code = session_course.course_code';
-		$result=api_sql_query($sql);
+		if(!empty($id_session))
+			$sql .= ' WHERE session_course.id_session='.$id_session;
+		$result=api_sql_query($sql, __FILE__, __LINE__);
 		
 		while($row=mysql_fetch_array($result))
 		{
@@ -394,10 +400,13 @@ class Tracking {
 		// protect datas
 		$coach_id = intval($coach_id);
 		
+		
 		// session where we are general coach
 		$sql = 'SELECT DISTINCT id, name, date_start, date_end
 				FROM '.$tbl_session.' 
 				WHERE id_coach='.$coach_id;
+		
+		
 		$rs = api_sql_query($sql);
 		while($row = mysql_fetch_array($rs))
 		{
@@ -410,7 +419,6 @@ class Tracking {
 				INNER JOIN '.$tbl_session_course.' as session_course
 					ON session.id = session_course.id_session
 					AND session_course.id_coach='.$coach_id;
-
 		$rs = api_sql_query($sql);
 		
 		while($row = mysql_fetch_array($rs))

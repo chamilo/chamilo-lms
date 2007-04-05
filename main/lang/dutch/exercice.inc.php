@@ -215,4 +215,5 @@ $Attempted = "Geprobeerd";
 $AssignMarks = "Punten toekennen";
 $Results = "Resultaten";
 $ExerciseStored = "De oefening is opgeslagen";
+$ChooseAtLeastOneCheckbox = "Kies minimum één correct antwoord";
 ?>

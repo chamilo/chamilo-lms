@@ -268,7 +268,7 @@ $Dropbox = "Dropbox";
 $Quiz = "Tests";
 $langgroup = "Groups";
 $langChat = "Chat";
-$langconference = "Conference";
+$Conference = "Conference";
 $Student_publication = "Student Publications";
 $Tracking = "Tracking";
 $langhomepage_link = "Add link to this page";
@@ -421,4 +421,5 @@ $SessionPast = "Past";
 $SessionActive = "Active";
 $SessionFuture = "Not yet begun";
 $SessionFuture = "Not yet begun";
+$FateFormatLongWithoutDay = "%B %d, %Y";
 ?>

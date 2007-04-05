@@ -268,7 +268,7 @@ $Dropbox = "Dropbox";
 $Quiz = "Oefeningen";
 $langgroup = "Groepen";
 $langChat = "Chat";
-$langconference = "Conferentie";
+$Conference = "Conferentie";
 $Student_publication = "Studentenpublicaties";
 $Tracking = "Statistieken";
 $langhomepage_link = "Een link toevoegen aan deze pagina";
@@ -417,4 +417,8 @@ $NoLinkVisited = "Geen link bezocht";
 $NoDocumentDownloaded = "Geen document gedownloaded";
 $Clicks = "klikken";
 $SearchResults = "Zoekresultaten";
+$SessionPast = "Verleden";
+$SessionActive = "Actief";
+$SessionFuture = "Nog niet gestart";
+$SessionFuture = "Nog niet gestart";
 ?>

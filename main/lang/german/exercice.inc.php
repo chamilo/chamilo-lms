@@ -214,4 +214,5 @@ $Attempted = "Versucht ";
 $AssignMarks = "Eine Markierung zuweisen";
 $Results = "Ergebnisse";
 $ExerciseStored = "Diese Übung wurde gespeichert";
+$ChooseAtLeastOneCheckbox = "Bitte zumindest eine gute Antwort auswählen";
 ?>

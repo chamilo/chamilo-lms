@@ -213,4 +213,5 @@ $Attempted = "Tenté";
 $AssignMarks = "Assigner un score";
 $Results = "Résultats";
 $ExerciseStored = "L\'exercice a bien été ajouté";
+$ChooseAtLeastOneCheckbox = "Choisissez une bonne réponse";
 ?>

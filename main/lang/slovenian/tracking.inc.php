@@ -201,4 +201,5 @@ $CourseTracking = "Sledenje teèaja";
 $LinksMostClicked = "Najveèkrat uporabljene povezave";
 $DocumentsMostDownloaded = "Najveèkrat preneseni dokumenti";
 $LearningPathDetails = "Podrobnosti uène poti";
+$NoConnexion = "Ni povezave";
 ?>

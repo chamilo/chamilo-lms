@@ -202,4 +202,7 @@ $LinksMostClicked = "Meist besuchte Links";
 $DocumentsMostDownloaded = "Meist herunter geladene Dokumente";
 $LearningPathDetails = "Lernpfad Details ";
 $NoConnexion = "Keine Verbindung";
+$TeacherInterface = "Lehrer Oberfläche";
+$CoachInterface = "Coach Oberfläche";
+$AdminInterface = "Administrator Oberfläche";
 ?>

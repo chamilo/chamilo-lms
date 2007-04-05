@@ -213,4 +213,5 @@ $Attempted = "Tentado";
 $AssignMarks = "Atribuir uma classificação";
 $Results = "Resultados";
 $ExerciseStored = "Este exercício foi acrescentado";
+$ChooseAtLeastOneCheckbox = "Escolher uma resposta pelo menos";
 ?>

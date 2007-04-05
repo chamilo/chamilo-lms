@@ -598,6 +598,7 @@ $WrongDate = "Formato de data errado (yyyy-mm-dd)";
 $WrongDate = "Formato de data errado (yyyy-mm-dd)";
 $DateStartMoreThanDateEnd = "Data de início é posterior a data de fim";
 $SlideSize = "Tamanho dos dispositivos";
+$EphorusPlagiarismPrevention = "Prevenção do pelagianismo Ephorus";
 $CourseTeachers = "Professores do curso";
 $XMLNotValid = "O documento XML não é válido";
 $AllowEmailEditorTitle = "Ativar o editor de email online";

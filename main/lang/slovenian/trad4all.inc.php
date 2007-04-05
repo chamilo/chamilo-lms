@@ -268,7 +268,7 @@ $Dropbox = "Nabiralnik";
 $Quiz = "Testi in vaje";
 $langgroup = "Skupine";
 $langChat = "Klepetalnica";
-$langconference = "Konference";
+$Conference = "Konference";
 $Student_publication = "Izdelki teèajnikov";
 $Tracking = "Sledenje";
 $langhomepage_link = "Dodaj povezavo na to stran";
@@ -417,4 +417,8 @@ $NoLinkVisited = "Brez obiskanih povezav";
 $NoDocumentDownloaded = "Brez prenesenih dokumentov";
 $Clicks = "klikov";
 $SearchResults = "Rezultati iskanja";
+$SessionPast = "Pretekla";
+$SessionActive = "Aktivna";
+$SessionFuture = "Neprièeta";
+$SessionFuture = "Neprièeta";
 ?>

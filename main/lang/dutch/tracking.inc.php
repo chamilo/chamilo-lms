@@ -201,4 +201,8 @@ $CourseTracking = "Cursusopvolging";
 $LinksMostClicked = "Meest bezochte links";
 $DocumentsMostDownloaded = "Meest gedownloade documenten";
 $LearningPathDetails = "Details van het leerpad";
+$NoConnexion = "Geen verbinding";
+$TeacherInterface = "Lerareninterface";
+$CoachInterface = "Coachinterface";
+$AdminInterface = "Beheerderinterface";
 ?>

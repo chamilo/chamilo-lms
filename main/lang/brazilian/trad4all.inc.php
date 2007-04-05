@@ -268,7 +268,7 @@ $Dropbox = "Caixa de entrega";
 $Quiz = "Testes";
 $langgroup = "Grupos";
 $langChat = "Chat";
-$langconference = "Conferência";
+$Conference = "Conferência";
 $Student_publication = "Publicações de Estudantes";
 $Tracking = "Acompanhamento";
 $langhomepage_link = "Adicionar link para essa página";
@@ -417,4 +417,8 @@ $NoLinkVisited = "Nenhum link visitado";
 $NoDocumentDownloaded = "Nenhum documento baixado";
 $Clicks = "Cliques";
 $SearchResults = "Resultados da busca";
+$SessionPast = "Passada";
+$SessionActive = "Ativa";
+$SessionFuture = "Ainda não iniciada";
+$SessionFuture = "Ainda não iniciada";
 ?>

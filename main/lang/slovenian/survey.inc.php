@@ -159,4 +159,6 @@ $Shared = "V skupni rabi";
 $Invite = "Povabi";
 $MaximumScore = "Najveèji rezultat";
 $ViewInvited = "Poglej povabljene";
+$ViewAnswered = "Poglej odzvane osebe";
+$ViewUnanswered = "Poglej neodzvane osebe";
 ?>

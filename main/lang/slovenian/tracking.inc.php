@@ -202,4 +202,7 @@ $LinksMostClicked = "Najveèkrat uporabljene povezave";
 $DocumentsMostDownloaded = "Najveèkrat preneseni dokumenti";
 $LearningPathDetails = "Podrobnosti uène poti";
 $NoConnexion = "Ni povezave";
+$TeacherInterface = "Vmesnik uèitelja";
+$CoachInterface = "Vmesnik coacha";
+$AdminInterface = "Upraviteljev vmesnik";
 ?>

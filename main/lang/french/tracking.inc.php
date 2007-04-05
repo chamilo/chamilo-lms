@@ -205,4 +205,8 @@ $NoConnexion = "Aucune connexion";
 $TeacherInterface = "Interface formateur";
 $CoachInterface = "Interface coach";
 $AdminInterface = "Interface administrateur";
+$NumberOfSessions = "Nombre de sessions";
+$YourCourseList = "Votre liste de cours";
+$YourStatistics = "Vos statistiques";
+$CoachList = "Liste des coachs";
 ?>

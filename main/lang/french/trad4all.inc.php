@@ -421,5 +421,5 @@ $SessionPast = "Passée";
 $SessionActive = "Active";
 $SessionFuture = "A venir";
 $SessionFuture = "A venir";
-$FateFormatLongWithoutDay = "%d %B %Y";
+$DateFormatLongWithoutDay = "%d %B %Y";
 ?>

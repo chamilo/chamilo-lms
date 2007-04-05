@@ -421,4 +421,5 @@ $SessionPast = "Pretekla";
 $SessionActive = "Aktivna";
 $SessionFuture = "Neprièeta";
 $SessionFuture = "Neprièeta";
+$DateFormatLongWithoutDay = "%d. %B %Y";
 ?>

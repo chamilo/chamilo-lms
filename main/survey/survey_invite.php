@@ -269,7 +269,7 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 				$sender_email = $_user['email'];
 				//echo $recipient_name.'-'.$recipient_email.'-'.$invitation_title.'-'.$invitation_text.'-'.$sender_name.'-'.$sender_email.'-';
 				//api_mail($recipient_name, $recipient_email, $invitation_title, $invitation_text, $sender_name, $sender_email, '');
-				mail($recipient_email, strip_tags($invitation_title, strip_tags($invitation_text)));
+				mail($recipient_email, strip_tags($invitation_title), strip_tags($invitation_text));
 				$counter++;
 			}
 		}

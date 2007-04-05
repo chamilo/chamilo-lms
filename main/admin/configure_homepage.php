@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 11227 2007-02-26 13:45:20Z elixir_julian $
+<?php // $Id: configure_homepage.php 11881 2007-04-05 12:42:47Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -718,6 +718,7 @@ if($action == 'edit_news'){
 		echo WCAG_Rendering::create_xhtml($open);
 		
 	} else {
+		$open=str_replace('{rel_path}',api_get_path(REL_PATH),$open);
 		$oFCKeditor = new FCKeditor($name) ;
 		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 		$oFCKeditor->Height		= '400';
@@ -767,7 +768,10 @@ else
 	  <td colspan="2">
 
 <?php
-	include('../../home/home_top.html');
+	$home_top_temp=file('../../home/home_top.html');
+	$home_top_temp=implode('',$home_top_temp);
+	$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
+	echo $open;
 ?>
 
 	  </td>

@@ -434,7 +434,7 @@ elseif ($displayMode == "viewContentList") // default display
                                 if ($is_allowedToTrack)
                                 {
                                         echo	"<td>",
-							"<a href=\"../tracking/userLog.php?".api_get_cidreq()."&amp;uInfo=$userIdViewed\">",
+							"<a href=\"../mySpace/myStudents.php?origin=user_course&student=$userIdViewed&details=true&course=".$_course['id']."\">",
 							"<img border=\"0\" alt=\"".get_lang('Tracking')." : $userIdViewed\" src=\"../img/statistics.png\" />",
 							"</a>",
 							"</td>";

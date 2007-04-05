@@ -70,7 +70,7 @@ if($_POST['formSent'])
 						   date_end='$date_end',
 						   id_coach='$id_coach'
 					   WHERE id='$id'",__FILE__,__LINE__);
-			header('Location: resume_session?id_session='.$id);
+			header('Location: resume_session.php?id_session='.$id);
 			exit();
 		}
 	}

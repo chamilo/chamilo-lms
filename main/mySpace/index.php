@@ -75,6 +75,7 @@ if(api_is_allowed_to_create_course())
 	if($view=='teacher')
 	{
 		$menu_items[] = get_lang('TeacherInterface');
+		$title = get_lang('YourCourseList');
 	}
 	else
 	{
@@ -90,6 +91,7 @@ if($isCoach)
 	if($view=='coach')
 	{
 		$menu_items[] = get_lang('CoachInterface');
+		$title = get_lang('YourStatistics');
 	}
 	else
 	{
@@ -101,6 +103,7 @@ if(api_is_platform_admin)
 	if($view=='admin')
 	{
 		$menu_items[] = get_lang('AdminInterface');
+		$title = get_lang('CoachList');
 	}
 	else
 	{
@@ -117,11 +120,13 @@ foreach($menu_items as $key=> $item)
 		echo ' | ';
 	}
 }
-
-echo '<div align="right">
-				<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-				<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-			  </div>';
+echo '<br />';
+echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
+	  <div align="right">
+		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
+		<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+	  </div>
+	  <div class="clear"></div>';
 
 if($isCoach && $view=='coach')
 {
@@ -523,14 +528,24 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 if(api_is_platform_admin() && $view=='admin'){
 	
 	$table = new SortableTable('tracking_list_coaches', 'count_coaches');
-	$table -> set_header(0, get_lang('FirstName'), false);
-	$table -> set_header(1, get_lang('LastName'), false);
+	$table -> set_header(0, get_lang('FirstName'), true);
+	$table -> set_header(1, get_lang('LastName'), true);
 	$table -> set_header(2, get_lang('AverageTimeSpentOnThePlatform'), false);
 	$table -> set_header(3, get_lang('LastConnexion'), false);
 	$table -> set_header(4, get_lang('NbStudents'), false);
 	$table -> set_header(5, get_lang('CountCours'), false);
 	$table -> set_header(6, get_lang('NumberOfSessions'), false);
 	$table -> set_header(7, get_lang('Details'), false,'align="center"');
+	
+	$csv_content[] = array(
+						get_lang('FirstName'),
+						get_lang('LastName'),
+						get_lang('AverageTimeSpentOnThePlatform'),
+						get_lang('LastConnexion'),
+						get_lang('NbStudents'),
+						get_lang('CountCours'),
+						get_lang('NumberOfSessions')
+						);
 	
 	$sqlCoachs = "	SELECT DISTINCT id_coach, user_id, lastname, firstname
 					FROM $tbl_user, $tbl_session_course
@@ -542,19 +557,35 @@ if(api_is_platform_admin() && $view=='admin'){
 	$total_no_coachs = mysql_num_rows($result_coaches);
 	
 	while($a_coachs=mysql_fetch_array($result_coaches)){
+		
+		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($a_coachs['user_id']));
+		$last_connection = Tracking :: get_last_connection_date($a_coachs['user_id']);
+		$nb_students = count(Tracking :: get_student_followed_by_coach($a_coachs['user_id']));
+		$nb_courses = count(Tracking :: get_courses_followed_by_coach($a_coachs['user_id']));
+		$nb_sessions = count(Tracking :: get_sessions_coached_by_user($a_coachs['user_id']));
+		
 		$table_row = array();
 		$table_row[] = $a_coachs['firstname'];
 		$table_row[] = $a_coachs['lastname'];
-		$table_row[] = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($a_coachs['user_id']));
-		$table_row[] = Tracking :: get_last_connection_date($a_coachs['user_id']);
-		$table_row[] = count(Tracking :: get_student_followed_by_coach($a_coachs['user_id']));
-		$table_row[] = count(Tracking :: get_courses_followed_by_coach($a_coachs['user_id']));
-		$table_row[] = count(Tracking :: get_sessions_coached_by_user($a_coachs['user_id']));
+		$table_row[] = $time_on_platform;
+		$table_row[] = $last_connection;
+		$table_row[] = $nb_students;
+		$table_row[] = $nb_courses;
+		$table_row[] = $nb_sessions;
 		$table_row[] = '<a href="student.php?id_coach='.$a_coachs['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 		$table -> addRow($table_row, 'align="right"');
+		
+		$csv_content[] = array(
+								$a_coachs['firstname'],
+								$a_coachs['lastname'],
+								$time_on_platform,
+								$last_connection,
+								$nb_courses,
+								$nb_sessions
+								);
 	
 	}
-	
+	$table -> updateColAttributes(7,array('align'=>'center'));
 	$table -> display();
 	
 }

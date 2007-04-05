@@ -76,16 +76,23 @@ function sort_users($a, $b)
  ===============================================================================  
  */ 
 
-if($isCoach)
+if($isCoach || api_is_platform_admin())
 {
 
 	echo '<div align="right">
 			<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 			<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 		  </div>';
-	 
-	$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
-	$a_students = Tracking :: get_student_followed_by_coach($_user['user_id']);
+	
+	if(isset($_GET['id_coach'])){
+		$coach_id=intval($_GET['id_coach']);
+	}
+	else{
+		$coach_id=$_user['user_id'];
+	}
+	
+	$a_courses = Tracking :: get_courses_followed_by_coach($coach_id);
+	$a_students = Tracking :: get_student_followed_by_coach($coach_id);
 	
 	$tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
 	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : DESC;
@@ -194,7 +201,6 @@ if($isCoach)
 		Export :: export_table_csv($csv_content, 'reporting_student_list');
 	}
 }
-
 
 /*
  ==============================================================================

@@ -47,6 +47,12 @@ function count_teacher_courses()
 	return $nb_teacher_courses;
 }
 
+function count_coaches()
+{
+	global $total_no_coachs;
+	return $total_no_coachs;
+}
+
 
 
 /**************************
@@ -514,6 +520,44 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 	}
 }
 
+if(api_is_platform_admin() && $view=='admin'){
+	
+	$table = new SortableTable('tracking_list_coaches', 'count_coaches');
+	$table -> set_header(0, get_lang('FirstName'), false);
+	$table -> set_header(1, get_lang('LastName'), false);
+	$table -> set_header(2, get_lang('AverageTimeSpentOnThePlatform'), false);
+	$table -> set_header(3, get_lang('LastConnexion'), false);
+	$table -> set_header(4, get_lang('NbStudents'), false);
+	$table -> set_header(5, get_lang('CountCours'), false);
+	$table -> set_header(6, get_lang('NumberOfSessions'), false);
+	$table -> set_header(7, get_lang('Details'), false,'align="center"');
+	
+	$sqlCoachs = "	SELECT DISTINCT id_coach, user_id, lastname, firstname
+					FROM $tbl_user, $tbl_session_course
+					WHERE id_coach=user_id
+					ORDER BY lastname ASC
+				 ";
+	
+	$result_coaches=api_sql_query($sqlCoachs, __FILE__, __LINE__);
+	$total_no_coachs = mysql_num_rows($result_coaches);
+	
+	while($a_coachs=mysql_fetch_array($result_coaches)){
+		$table_row = array();
+		$table_row[] = $a_coachs['firstname'];
+		$table_row[] = $a_coachs['lastname'];
+		$table_row[] = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($a_coachs['user_id']));
+		$table_row[] = Tracking :: get_last_connection_date($a_coachs['user_id']);
+		$table_row[] = count(Tracking :: get_student_followed_by_coach($a_coachs['user_id']));
+		$table_row[] = count(Tracking :: get_courses_followed_by_coach($a_coachs['user_id']));
+		$table_row[] = count(Tracking :: get_sessions_coached_by_user($a_coachs['user_id']));
+		$table_row[] = '<a href="student.php?id_coach='.$a_coachs['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+		$table -> addRow($table_row, 'align="right"');
+	
+	}
+	
+	$table -> display();
+	
+}
 
 // send the csv file if asked
 if($export_csv)

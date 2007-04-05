@@ -144,7 +144,11 @@ class UniqueAnswer extends Question {
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}','moreAnswers');
 		$form -> addElement ('html', '</div></div>');
-
+		
+		//We check the first radio button to be sure a radio button will be check 
+		if($correct==0){
+			$correct=1;
+		}
 		$defaults['correct'] = $correct;
 		$form -> setDefaults($defaults);
 

@@ -144,22 +144,15 @@ if($isCoach)
 			$row[] = $student_datas['lastname'];
 			$row[] = 	$student_datas['firstname'];
 			$row[] = api_time_to_hms($avg_time_spent);
-			$row[] = $avg_student_progress.' %';
-			$row[] = $avg_student_score.' %';		
+			$row[] = round($avg_student_progress,2).' %';
+			$row[] = round($avg_student_score,2).' %';		
 			$row[] = $total_assignments;
 			$row[] = $total_messages;
 			
-			$string_date=Tracking :: get_last_connection_date($student_id);
-			$timestamp=strtotime($string_date);
-			$currentTimestamp=mktime();
+			$string_date=Tracking :: get_last_connection_date($student_id,true);
 			
-			//If the last connection is > than 7 days, the text is red
-			if($currentTimestamp-$timestamp>345600){
-				$row[] = '<span style="color: #F00;">'.$string_date.'</span>';
-			}
-			else{
-				$row[] = $string_date;
-			}
+			$row[] = $string_date;
+			
 			
 			if($export_csv)
 			{

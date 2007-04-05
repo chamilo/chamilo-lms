@@ -30,7 +30,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file='exercice';
+$language_file=array('exercice','tracking');
 
 // including the global dokeos file
 include('../inc/global.inc.php');
@@ -49,12 +49,7 @@ define('MATCHING',		4);
 define('FREE_ANSWER', 5);
 define('HOTSPOT', 6);
 
-
-
-
-$this_section=SECTION_COURSES;
 api_protect_course_script();
-
 
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -108,9 +103,19 @@ if ( empty ( $objExercise ) ) {
     $objExercise = $_SESSION['objExercise'];
 }
 $is_allowedToEdit=$is_courseAdmin;
-$nameTools=get_lang('Exercice');
+$nameTools=get_lang('CorrectTest');
 
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+if($origin=='' || $origin!='tests'){
+	$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+	$this_section=SECTION_COURSES;
+}
+else{
+	unset($_cid);
+	$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
+	$interbreadcrumb[] = array ("url" => "../mySpace/student.php", "name" => get_lang("MyStudents"));
+ 	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".$_GET['student'].'&details=true&course='.$_GET['cidReq'].'', "name" => get_lang("StudentDetails"));
+ 	$this_section = "session_my_space";
+}
 
 Display::display_header($nameTools,"Exercise");
 //echo "<pre>";
@@ -851,8 +856,16 @@ $totalWeighting+=$questionWeighting;
 			if($is_allowedToEdit)
 			{
 		?>
-
-			 <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid=<?php echo $id; ?>&test=<?php echo $test; ?>&emailid=<?php echo $emailId;?>" method="post">
+		
+		<?php
+			if($origin=='tests'){
+				echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'&origin=tests&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
+			}
+			else{
+				echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'" method="post">';
+			}
+		?>
+			
 			 <input type="submit" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');"/>
 			 </form>
 		<?php } ?>

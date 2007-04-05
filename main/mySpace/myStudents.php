@@ -481,7 +481,7 @@ if(!empty($_GET['student']))
 							<?php echo $progress ?>
 						</td>
 						<td align="center">
-							<?php if($start_time!='') echo date('Y-m-d',$start_time); else echo '-'; ?>
+							<?php if($start_time!='') echo format_locale_date(get_lang('DateFormatLongWithoutDay'),$start_time); else echo '-'; ?>
 						</td>
 						<td align="center">
 							<?php
@@ -561,9 +561,8 @@ if(!empty($_GET['student']))
 								 WHERE exe_user_id = ".$_GET['student']."
 								 AND exe_cours_id = '".$a_infosCours['code']."'
 								 AND exe_exo_id = ".$a_exercices['id']."
-								 ORDER BY exe_date DESC LIMIT 1"
-									;
-							
+								 ORDER BY exe_date DESC LIMIT 1";
+
 					$resultScore = api_sql_query($sqlScore);
 					$score = 0; 
 					while($a_score = mysql_fetch_array($resultScore))
@@ -604,7 +603,7 @@ if(!empty($_GET['student']))
 							<td align='center'>
 						 ";
 					if($a_essais['essais']>0)
-						echo		'<a href="../exercice/exercise_show.php?id='.$exe_id.'&cidReq='.$a_infosCours['code'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+						echo		'<a href="../exercice/exercise_show.php?id='.$a_exercices['id'].'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin=tests"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
 					echo "	</td>
 						  </tr>
 						 ";
@@ -717,7 +716,6 @@ if(!empty($_GET['student']))
 			$csv_content[] = array(get_lang('Course'),get_lang('Time'),get_lang('Progress'),get_lang('Score'));
 			foreach($a_courses as $course_code)
 			{
-				
 				$course_infos = CourseManager :: get_course_information($course_code);
 				$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_code));
 				$progress = Tracking :: get_avg_student_progress($a_infosUser['user_id'], $course_code).' %';
@@ -761,9 +759,7 @@ if(!empty($_GET['student']))
 	if(!empty($_GET['details']) && $_GET['origin'] != 'tracking_course' && $_GET['origin'] != 'user_course')
 	{
 ?>
-		<div align="left">
-			<a href="<?php echo $_SERVER['PHP_SELF']; ?>?student=<?php echo $a_infosUser['user_id']; ?>#infosStudent"><?php echo get_lang('Back'); ?></a>
-		</div>
+		
 		<br /><br />
 <?php
 		}

@@ -90,7 +90,7 @@ if($nb_sessions > 0)
 		$row = array();
 		$row[] = $session['name'];
 		$row[] = $session['status'];
-		$row[] = get_lang('From').' '.format_locale_date("%B %Y %d",strtotime($session['date_start'])).' '.get_lang('To').' '.format_locale_date("%B %Y %d",strtotime($session['date_end']));
+		$row[] = get_lang('From').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($session['date_start'])).' '.get_lang('To').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($session['date_end']));
 		if($export_csv)
 		{
 			$csv_content[] = $row;

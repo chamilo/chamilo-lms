@@ -104,7 +104,7 @@ class Tracking {
 		return $nb_seconds;
 	}
 	
-	function get_last_connection_date($student_id)
+	function get_last_connection_date($student_id, $warning_message=false)
 	{
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 		$sql = 'SELECT login_date FROM '.$tbl_track_login.' 
@@ -114,7 +114,22 @@ class Tracking {
 		$rs = api_sql_query($sql);
 		if($last_login_date = mysql_result($rs,0,0))
 		{
-			return $last_login_date;
+			if(!$warning_message){
+				return format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($last_login_date));
+			}
+			else{
+				$timestamp=strtotime($last_login_date);
+				$currentTimestamp=mktime();
+			
+				//If the last connection is > than 7 days, the text is red
+				//345600 = 7 days in seconds 
+				if($currentTimestamp-$timestamp>345600){
+					return '<span style="color: #F00;">'.format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($last_login_date)).'</span>';
+				}
+				else{
+					return format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($last_login_date));
+				}
+			}
 		}
 		else
 		{
@@ -133,7 +148,7 @@ class Tracking {
 		$rs = api_sql_query($sql);
 		if($last_login_date = mysql_result($rs,0,0))
 		{
-			return $last_login_date;
+			return format_locale_date(get_lang('dateTimeFormatLong'),strtotime($last_login_date));
 		}
 		else
 		{

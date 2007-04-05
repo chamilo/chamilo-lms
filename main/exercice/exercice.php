@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 11767 2007-03-29 09:22:59Z elixir_julian $
+* 	@version $Id: exercice.php 11884 2007-04-05 12:46:00Z elixir_julian $
 */
 
 
@@ -137,6 +137,123 @@ a.invisible:hover
 }
 -->
 </style>';
+
+if ($show=='result' && $_REQUEST['comments']=='update' && $is_allowedToEdit)
+{
+	$id  = $_GET['exeid'];
+	$emailid = $_GET['emailid'];
+	$test  = $_GET['test'];
+	$from = $_SESSION[_user]['mail'];
+	$from_name = $_SESSION[_user]['firstName']." ".$_SESSION[_user]['lastName'];
+	$url = $_SESSION['checkDokeosURL'].'claroline/exercice/exercice.php?'.api_get_cidreq().'&show=result';
+
+	foreach ($_POST as $key=>$v)
+	{
+		$keyexp = explode('_',$key);
+		if ($keyexp[0] == "marks")
+		{
+			$sql = "select question from $TBL_QUESTIONS where id = '$keyexp[1]'";
+			$result =api_sql_query($sql, __FILE__, __LINE__);
+			$ques_name = mysql_result($result,0,"question");
+
+			$query = "update `$TABLETRACK_ATTEMPT` set marks = '$v' where question_id = $keyexp[1] and exe_id=$id";
+			api_sql_query($query, __FILE__, __LINE__);
+
+			$qry = 'SELECT sum(marks) as tot
+					FROM `'.$TABLETRACK_ATTEMPT.'` where exe_id = '.intval($id).'
+					GROUP BY question_id';
+
+			$res = api_sql_query($qry,__FILE__,__LINE__);
+			$tot = mysql_result($res,0,'tot');
+
+			$totquery = "update `$TBL_TRACK_EXERCICES` set exe_result = $tot where exe_Id=$id";
+			api_sql_query($totquery, __FILE__, __LINE__);
+
+		}
+		else
+		{
+		  $query = "update `$TABLETRACK_ATTEMPT` set teacher_comment = '$v' where question_id = $keyexp[1] and exe_id = $id ";
+		   api_sql_query($query, __FILE__, __LINE__);
+		}
+
+	}
+
+	$qry = 'SELECT DISTINCT question_id, marks
+			FROM `'.$TABLETRACK_ATTEMPT.'` where exe_id = '.intval($id).'
+			GROUP BY question_id';
+
+	$res = api_sql_query($qry,__FILE__,__LINE__);
+	$tot = 0;
+	while($row = mysql_fetch_assoc($res))
+	{
+		$tot += $row ['marks'];
+	}
+
+	$totquery = "update `$TBL_TRACK_EXERCICES` set exe_result = $tot where exe_Id=$id";
+
+	api_sql_query($totquery, __FILE__, __LINE__);
+$subject = "Examsheet viewed/corrected/commented by teacher";
+$message = "<html>
+<head>
+<style type='text/css'>
+<!--
+.body{
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-weight: Normal;
+color: #000000;
+}
+.style8 {font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: #006699; }
+.style10 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+.style16 {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; }
+-->
+</style>
+</head>
+<body>
+<DIV>
+  <p>Dear Student, </p>
+  <p class='style10'> Your following attempt has been viewed/commented/corrected by teacher </p>
+  <table width='417'>
+    <tr>
+      <td width='229' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Question</span></td>
+      <td width='469' valign='top' bgcolor='#F3F3F3'><span class='style16'>#ques_name#</span></td>
+
+    </tr>
+    <tr>
+      <td width='229' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Test</span></td>
+       <td width='469' valign='top' bgcolor='#F3F3F3'><span class='style16'>#test#</span></td>
+
+    </tr>
+  </table>
+  <p>Click the link below to access   your account and view your commented Examsheet. <A href='#url#'>#url#</A><BR>
+    <BR>
+  Regards </p>
+  </DIV>
+  </body>
+  </html>
+";
+$message = "<p>You attempt for the test #test# has been viewed/commented/corrected by the teacher. Click the link below to access  your account and view your Examsheet. <A href='#url#'>#url#</A></p>
+<BR>";
+$mess= str_replace("#test#",$test,$message);
+//$message= str_replace("#ques_name#",$ques_name,$mess);
+$message = str_replace("#url#",$url,$mess);
+$mess = stripslashes($message);
+$headers  = " MIME-Version: 1.0 \r\n";
+$headers .= "User-Agent: Dokeos/1.6";
+$headers .= "Content-Transfer-Encoding: 7bit";
+$headers .= 'From: '.$from_name.' <'.$from.'>' . "\r\n";
+$headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=iso-8859-15";
+//mail($emailid, $subject, $mess,$headers);
+
+if($_GET['origin']=='tests'){
+	//Redirect to the reporting		
+	header('location: ../mySpace/myStudents.php?student='.$_GET['student'].'&details=true&course='.$_GET['course']);
+}
+
+}
 
 if($show!='result')
 {
@@ -679,133 +796,9 @@ if($show == 'test'){
 // if tracking is enabled
 if($_configuration['tracking_enabled'])
 {
-	?>
- <h3><?php
- //add link to breadcrumb
- //$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('StudentScore'));
 
- //echo $is_allowedToEdit?get_lang('StudentResults'):get_lang('YourResults'); ?></h3>
-
-	<?php
 	if($show == 'result'){
-			if($is_allowedToEdit)
-		{
-		if ($_REQUEST['comments']=='update')
-				{
-
-					$id  = $_GET['exeid'];
-					$emailid = $_GET['emailid'];
-					$test  = $_GET['test'];
-					$from = $_SESSION[_user]['mail'];
-					$from_name = $_SESSION[_user]['firstName']." ".$_SESSION[_user]['lastName'];
-					$url = $_SESSION['checkDokeosURL'].'claroline/exercice/exercice.php?'.api_get_cidreq().'&show=result';
-
-					foreach ($_POST as $key=>$v)
-						{
-						$keyexp = explode('_',$key);
-						if ($keyexp[0] == "marks")
-							{
-							$sql = "select question from $TBL_QUESTIONS where id = '$keyexp[1]'";
-							$result =api_sql_query($sql, __FILE__, __LINE__);
-							$ques_name = mysql_result($result,0,"question");
-
-							$query = "update `$TABLETRACK_ATTEMPT` set marks = '$v' where question_id = $keyexp[1] and exe_id=$id";
-							api_sql_query($query, __FILE__, __LINE__);
-
-							$qry = 'SELECT sum(marks) as tot
-									FROM `'.$TABLETRACK_ATTEMPT.'` where exe_id = '.intval($id).'
-									GROUP BY question_id';
-
-							$res = api_sql_query($qry,__FILE__,__LINE__);
-							$tot = mysql_result($res,0,'tot');
-
-							$totquery = "update `$TBL_TRACK_EXERCICES` set exe_result = $tot where exe_Id=$id";
-							api_sql_query($totquery, __FILE__, __LINE__);
-
-							}
-						else
-						  {
-						  $query = "update `$TABLETRACK_ATTEMPT` set teacher_comment = '$v' where question_id = $keyexp[1] and exe_id = $id ";
-						   api_sql_query($query, __FILE__, __LINE__);
-							}
-
-
-						}
-
-						$qry = 'SELECT DISTINCT question_id, marks
-								FROM `'.$TABLETRACK_ATTEMPT.'` where exe_id = '.intval($id).'
-								GROUP BY question_id';
-
-						$res = api_sql_query($qry,__FILE__,__LINE__);
-						$tot = 0;
-						while($row = mysql_fetch_assoc($res))
-						{
-							$tot += $row ['marks'];
-						}
-
-						$totquery = "update `$TBL_TRACK_EXERCICES` set exe_result = $tot where exe_Id=$id";
-
-						api_sql_query($totquery, __FILE__, __LINE__);
-				$subject = "Examsheet viewed/corrected/commented by teacher";
-				$message = "<html>
-<head>
-<style type='text/css'>
-<!--
-.body{
-font-family: Verdana, Arial, Helvetica, sans-serif;
-font-weight: Normal;
-color: #000000;
-}
-.style8 {font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: #006699; }
-.style10 {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	font-weight: bold;
-}
-.style16 {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; }
--->
-</style>
-</head>
-<body>
-<DIV>
-  <p>Dear Student, </p>
-  <p class='style10'> Your following attempt has been viewed/commented/corrected by teacher </p>
-  <table width='417'>
-    <tr>
-      <td width='229' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Question</span></td>
-      <td width='469' valign='top' bgcolor='#F3F3F3'><span class='style16'>#ques_name#</span></td>
-
-    </tr>
-    <tr>
-      <td width='229' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Test</span></td>
-       <td width='469' valign='top' bgcolor='#F3F3F3'><span class='style16'>#test#</span></td>
-
-    </tr>
-  </table>
-  <p>Click the link below to access   your account and view your commented Examsheet. <A href='#url#'>#url#</A><BR>
-    <BR>
-  Regards </p>
-  </DIV>
-  </body>
-  </html>
-";
-$message = "<p>You attempt for the test #test# has been viewed/commented/corrected by the teacher. Click the link below to access  your account and view your Examsheet. <A href='#url#'>#url#</A></p>
-    <BR>";
-				$mess= str_replace("#test#",$test,$message);
-				//$message= str_replace("#ques_name#",$ques_name,$mess);
-				$message = str_replace("#url#",$url,$mess);
-				$mess = stripslashes($message);
-				$headers  = " MIME-Version: 1.0 \r\n";
-				$headers .= "User-Agent: Dokeos/1.6";
-				$headers .= "Content-Transfer-Encoding: 7bit";
-				$headers .= 'From: '.$from_name.' <'.$from.'>' . "\r\n";
-				$headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=iso-8859-15";
-			//mail($emailid, $subject, $mess,$headers);
-
-
-
-				}
-				}
+		
 		?>
 
 		<table class="data_table">

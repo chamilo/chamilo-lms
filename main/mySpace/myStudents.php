@@ -409,6 +409,9 @@ if(!empty($_GET['student']))
 							<?php echo get_lang('Progress'); ?>
 						</th>
 						<th>
+							<?php echo get_lang('Progress'); ?>
+						</th>
+						<th>
 							<?php echo get_lang('LastConnexion'); ?>
 						</th>
 						<th>
@@ -458,6 +461,36 @@ if(!empty($_GET['student']))
 					$start_time = mysql_result($rs, 0, 0);
 					
 					
+					// get the average score in this lp (if there are exercices)
+					$score = 0;
+					$sql = 'SELECT DISTINCT path 
+							FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_item.'
+							WHERE item_type = "quiz"
+							AND lp_id='.$a_learnpath['id'];
+					$rs = api_sql_query($sql, __FILE__,__LINE__);
+					$nb_quiz = mysql_num_rows($rs);
+					while ($quiz = Database :: fetch_array($rs))
+					{
+						$sqlScore = "SELECT  exe_result,
+									 exe_weighting
+					 				 FROM ".Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
+									 WHERE exe_user_id = ".$student_id."
+					 				 AND exe_cours_id = '".Database::escape_string($_GET['course'])."'
+									 AND exe_exo_id = ".$quiz['path']."
+									 ORDER BY exe_id DESC LIMIT 0,1";
+						$rs_score = api_sql_query($sqlScore, __FILE__, __LINE__);
+						$score += mysql_result($rs_score, 0, 0) / mysql_result($rs_score, 0, 1) * 100; 
+					}
+					if($nb_quiz == 0)
+					{
+						$score = '-';
+					}
+					else
+					{
+						$score = $score / $nb_quiz.' %';
+					}
+					
+					
 					if($i%2==0){
 						$s_css_class="row_odd";
 					}
@@ -476,6 +509,9 @@ if(!empty($_GET['student']))
 						</td>
 						<td align="center">
 						<?php echo api_time_to_hms($total_time) ?>
+						</td>
+						<td align="center">
+							<?php echo $score ?>
 						</td>
 						<td align="center">
 							<?php echo $progress ?>

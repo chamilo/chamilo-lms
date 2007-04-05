@@ -54,13 +54,70 @@ function count_teacher_courses()
  ***************************/
 
 $isCoach = api_is_coach();
+$isPlatformAdmin = api_is_platform_admin();
+
+$view = isset($_GET['view']) ? $_GET['view'] : 'teacher';
+
+$menu_items = array();
+
+if(api_is_allowed_to_create_course())
+{
+	if(!$isCoach && !api_is_platform_admin())
+	{
+		$view = 'teacher';
+	}
+	if($view=='teacher')
+	{
+		$menu_items[] = get_lang('TeacherInterface');
+	}
+	else
+	{
+		$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';
+	}
+}
+if($isCoach)
+{
+	if(!api_is_allowed_to_create_course() && !api_is_platform_admin())
+	{
+		$view = 'teacher';
+	}
+	if($view=='coach')
+	{
+		$menu_items[] = get_lang('CoachInterface');
+	}
+	else
+	{
+		$menu_items[] = '<a href="'.api_get_self().'?view=coach">'.get_lang('CoachInterface').'</a>';
+	}
+}
+if(api_is_platform_admin)
+{
+	if($view=='admin')
+	{
+		$menu_items[] = get_lang('AdminInterface');
+	}
+	else
+	{
+		$menu_items[] = '<a href="'.api_get_self().'?view=admin">'.get_lang('AdminInterface').'</a>';
+	}
+}
+
+$nb_menu_items = count($menu_items);
+foreach($menu_items as $key=> $item)
+{
+	echo $item;
+	if($key!=$nb_menu_items-1)
+	{
+		echo ' | ';
+	}
+}
 
 echo '<div align="right">
 				<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 				<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 			  </div>';
 
-if($isCoach)
+if($isCoach && $view=='coach')
 {
 	
 	/****************************************
@@ -331,125 +388,130 @@ if($isCoach)
 
 echo '<div class="clear">&nbsp;</div>';
 
-$sqlNbCours = "	SELECT course_rel_user.course_code, course.title
-				FROM $tbl_course_user as course_rel_user
-				INNER JOIN $tbl_course as course
-					ON course.code = course_rel_user.course_code
-			  	WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-			  ";
-$resultNbCours = api_sql_query($sqlNbCours, __FILE__, __LINE__);
-$a_courses = api_store_result($resultNbCours);
-$nb_teacher_courses = count($a_courses);
 
-if($nb_teacher_courses)
+if(api_is_allowed_to_create_course() && $view=='teacher')
 {
 	
-			  
-	$table = new SortableTable('tracking_list_course', 'count_teacher_courses');
-	$table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
-	$table -> set_header(1, get_lang('NbStudents'), false);
-	$table -> set_header(2, get_lang('TimeSpentInTheCourse'), false);
-	$table -> set_header(3, get_lang('AvgStudentsProgress'), false);
-	$table -> set_header(4, get_lang('AvgStudentsScore'), false);
-	$table -> set_header(5, get_lang('AvgMessages'), false);
-	$table -> set_header(6, get_lang('AvgAssignments'), false);
-	$table -> set_header(7, get_lang('Details'), false);
+	$sqlNbCours = "	SELECT course_rel_user.course_code, course.title
+					FROM $tbl_course_user as course_rel_user
+					INNER JOIN $tbl_course as course
+						ON course.code = course_rel_user.course_code
+				  	WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
+				  ";
+	$resultNbCours = api_sql_query($sqlNbCours, __FILE__, __LINE__);
+	$a_courses = api_store_result($resultNbCours);
+	$nb_teacher_courses = count($a_courses);
 	
-	$csv_content[] = array(
-					get_lang('CourseTitle'),
-					get_lang('NbStudents'),
-					get_lang('TimeSpentInTheCourse'),
-					get_lang('AvgStudentsProgress'),
-					get_lang('AvgStudentsScore'),
-					get_lang('AvgMessages'),
-					get_lang('AvgAssignments')
-					);
-			
-	$a_students = array();
-	
-	foreach($a_courses as $course)
+	if($nb_teacher_courses)
 	{
 		
-		$course_code = $course['course_code'];
-		
-		$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = 0;
-		
-		// students directly subscribed to the course
-		$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
-		$rs = api_sql_query($sql, __FILE__, __LINE__);	
-		while($row = mysql_fetch_array($rs))
-		{
-			$nb_students_in_course++;
-			
-			// tracking datas
-			$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
-			$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
-			$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
-			$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
-			$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
-					
-			$a_students[] = $row['user_id'];
-		}
-		
-		// students subscribed to the course throw a session
-		if(api_get_setting('use_session_mode') == 'true')
-		{
-			$sql = 'SELECT id_user as user_id
-					FROM '.$tbl_session_course_user.'
-					WHERE course_code="'.addslashes($course_code).'"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
-			while($row = mysql_fetch_array($rs))
-			{
-				if(!in_array($row['user_id'], $a_students))
-				{
-					$nb_students_in_course++;
-					
-					// tracking datas
-					$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
-					$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
-					$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
-					$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
-					$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
-					$a_students[] = $row['user_id'];
-				}
-			}
-		}
-		if($nb_students_in_course>0)
-		{
-			$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
-			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course,2).' %';
-			$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course,2).' %';
-			$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course,2);
-			$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course,2);
-		}
-		
-		$table_row = array();
-		$table_row[] = $course['title'];
-		$table_row[] = $nb_students_in_course;
-		$table_row[] = $avg_time_spent_in_course;
-		$table_row[] = $avg_progress_in_course;
-		$table_row[] = $avg_score_in_course;
-		$table_row[] = $avg_messages_in_course;
-		$table_row[] = $avg_assignments_in_course;
-		$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+				  
+		$table = new SortableTable('tracking_list_course', 'count_teacher_courses');
+		$table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
+		$table -> set_header(1, get_lang('NbStudents'), false);
+		$table -> set_header(2, get_lang('TimeSpentInTheCourse'), false);
+		$table -> set_header(3, get_lang('AvgStudentsProgress'), false);
+		$table -> set_header(4, get_lang('AvgStudentsScore'), false);
+		$table -> set_header(5, get_lang('AvgMessages'), false);
+		$table -> set_header(6, get_lang('AvgAssignments'), false);
+		$table -> set_header(7, get_lang('Details'), false);
 		
 		$csv_content[] = array(
-							$course['title'],
-							$nb_students_in_course,
-							$avg_time_spent_in_course,
-							$avg_progress_in_course,
-							$avg_score_in_course,
-							$avg_messages_in_course,
-							$avg_assignments_in_course,
-							);
+						get_lang('CourseTitle'),
+						get_lang('NbStudents'),
+						get_lang('TimeSpentInTheCourse'),
+						get_lang('AvgStudentsProgress'),
+						get_lang('AvgStudentsScore'),
+						get_lang('AvgMessages'),
+						get_lang('AvgAssignments')
+						);
+				
+		$a_students = array();
 		
-		$table -> addRow($table_row, 'align="right"');
-		
+		foreach($a_courses as $course)
+		{
+			
+			$course_code = $course['course_code'];
+			
+			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = 0;
+			
+			// students directly subscribed to the course
+			$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
+			$rs = api_sql_query($sql, __FILE__, __LINE__);	
+			while($row = mysql_fetch_array($rs))
+			{
+				$nb_students_in_course++;
+				
+				// tracking datas
+				$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
+				$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
+				$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
+				$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
+				$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
+						
+				$a_students[] = $row['user_id'];
+			}
+			
+			// students subscribed to the course throw a session
+			if(api_get_setting('use_session_mode') == 'true')
+			{
+				$sql = 'SELECT id_user as user_id
+						FROM '.$tbl_session_course_user.'
+						WHERE course_code="'.addslashes($course_code).'"';
+				$rs = api_sql_query($sql, __FILE__, __LINE__);
+				while($row = mysql_fetch_array($rs))
+				{
+					if(!in_array($row['user_id'], $a_students))
+					{
+						$nb_students_in_course++;
+						
+						// tracking datas
+						$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
+						$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
+						$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
+						$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
+						$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
+						$a_students[] = $row['user_id'];
+					}
+				}
+			}
+			if($nb_students_in_course>0)
+			{
+				$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
+				$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course,2).' %';
+				$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course,2).' %';
+				$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course,2);
+				$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course,2);
+			}
+			
+			$table_row = array();
+			$table_row[] = $course['title'];
+			$table_row[] = $nb_students_in_course;
+			$table_row[] = $avg_time_spent_in_course;
+			$table_row[] = $avg_progress_in_course;
+			$table_row[] = $avg_score_in_course;
+			$table_row[] = $avg_messages_in_course;
+			$table_row[] = $avg_assignments_in_course;
+			$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+			
+			$csv_content[] = array(
+								$course['title'],
+								$nb_students_in_course,
+								$avg_time_spent_in_course,
+								$avg_progress_in_course,
+								$avg_score_in_course,
+								$avg_messages_in_course,
+								$avg_assignments_in_course,
+								);
+			
+			$table -> addRow($table_row, 'align="right"');
+			
+		}
+		$table -> updateColAttributes(0,array('align'=>'left'));
+		$table -> updateColAttributes(7,array('align'=>'center'));
+		$table -> display();
+			
 	}
-	$table -> updateColAttributes(0,array('align'=>'left'));
-	$table -> updateColAttributes(7,array('align'=>'center'));
-	$table -> display();
-		
 }
 
 

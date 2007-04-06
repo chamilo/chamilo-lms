@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 11595 2007-03-15 13:07:10Z elixir_julian $
+* 	@version $Id: exercise_result.php 11921 2007-04-06 15:08:29Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -41,6 +41,11 @@
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
+if($_GET['origin']=='learnpath')
+{
+	require_once ('../newscorm/learnpath.class.php');
+	require_once ('../newscorm/learnpathItem.class.php');
+}
 
 // answer types
 define('UNIQUE_ANSWER',	1);
@@ -814,13 +819,11 @@ if ($origin != 'learnpath')
 				$user_id = (!empty($_SESSION['_user']['id'])?$_SESSION['_user']['id']:0);
                 $lp_item = Database::get_course_table('lp_item');
                 $lp_item_view = Database::get_course_table('lp_item_view');
-                $sql2 = "UPDATE $lp_item SET max_score = '$totalWeighting'
-                        WHERE id = '$learnpath_item_id'";
-                api_sql_query($sql2,__FILE__,__LINE__);
                 $sql2 = "UPDATE $lp_item_view SET score = '$totalScore'
                         WHERE lp_item_id = '$learnpath_item_id'
                         AND lp_view_id = '".$_SESSION['scorm_view_id']."'";
                 api_sql_query($sql2,__FILE__,__LINE__);
+                $_SESSION['oLP']->save_last();
 
 }
 $csspath = "http://portal.dokeos.com/demo/main/css/default.css";

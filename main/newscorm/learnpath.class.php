@@ -414,6 +414,21 @@ class learnpath {
     	
     	$new_item_id = -1;
     	$id = $this->escape_string($id);
+    	
+    	if($type == 'quiz')
+    	{
+    		$sql = 'SELECT SUM(ponderation)
+					FROM '.Database :: get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
+					INNER JOIN  '.Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
+						ON quiz_question.id = quiz_rel_question.question_id
+						AND quiz_rel_question.exercice_id = '.$id;
+			$rsQuiz = api_sql_query($sql, __FILE__, __LINE__);
+			$max_score = mysql_result($rsQuiz, 0, 0);
+    	}
+    	else
+    	{
+    		$max_score = 100;
+    	}
 		
 		if($prerequisites!=0){
 			$sql_ins = "
@@ -424,6 +439,7 @@ class learnpath {
 	    			title,
 	    			description,
 	    			path,
+					max_score,
 	    			parent_item_id,
 	    			previous_item_id,
 	    			next_item_id,
@@ -436,6 +452,7 @@ class learnpath {
 	    			'" . $title . "',
 	    			'" . $description . "',
 	    			'" . $id . "',
+					'" . $max_score. "',
 	    			" . $parent . ",
 	    			" . $previous . ",
 	    			" . $next . ",
@@ -454,6 +471,7 @@ class learnpath {
 	    			title,
 	    			description,
 	    			path,
+					max_score,
 	    			parent_item_id,
 	    			previous_item_id,
 	    			next_item_id,
@@ -465,6 +483,7 @@ class learnpath {
 	    			'" . $title . "',
 	    			'" . $description . "',
 	    			'" . $id . "',
+					'" . $max_score. "',
 	    			" . $parent . ",
 	    			" . $previous . ",
 	    			" . $next . ",

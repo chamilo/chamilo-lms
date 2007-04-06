@@ -460,7 +460,7 @@ if(!empty($_GET['student']))
 								INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
 									ON item_view.lp_view_id = view.id
 									AND view.lp_id = '.$a_learnpath['id'].'
-									AND view.user_id = '.$_GET['student'];
+									AND view.user_id = '.intval($_GET['student']);
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
 					$total_time = mysql_result($rs, 0, 0);
 					
@@ -470,40 +470,32 @@ if(!empty($_GET['student']))
 								INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
 									ON item_view.lp_view_id = view.id
 									AND view.lp_id = '.$a_learnpath['id'].'
-									AND view.user_id = '.$_GET['student'];
+									AND view.user_id = '.intval($_GET['student']);
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
 					$start_time = mysql_result($rs, 0, 0);
 					
 					
-					// get the average score in this lp (if there are exercices)
-					$score = 0;
-					$sql = 'SELECT DISTINCT path 
-							FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_item.'
-							WHERE item_type = "quiz"
-							AND lp_id='.$a_learnpath['id'];
-					$rs = api_sql_query($sql, __FILE__,__LINE__);
-					$nb_quiz = mysql_num_rows($rs);
-					while ($quiz = Database :: fetch_array($rs))
-					{
-						$sqlScore = "SELECT  exe_result,
-									 exe_weighting
-					 				 FROM ".Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
-									 WHERE exe_user_id = ".$student_id."
-					 				 AND exe_cours_id = '".Database::escape_string($_GET['course'])."'
-									 AND exe_exo_id = ".$quiz['path']."
-									 ORDER BY exe_id DESC LIMIT 0,1";
-						$rs_score = api_sql_query($sqlScore, __FILE__, __LINE__);
-						$score += mysql_result($rs_score, 0, 0) / mysql_result($rs_score, 0, 1) * 100; 
-					}
-					if($nb_quiz == 0)
-					{
-						$score = '-';
-					}
-					else
-					{
-						$score = round($score / $nb_quiz,2).' %';
-					}
 					
+					$sql = 'SELECT id as item_id, max_score 
+							FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_item.' AS lp_item
+							WHERE lp_id='.$a_learnpath['id'].'
+							AND item_type="quiz"';
+					$rsItems = api_sql_query($sql, __FILE__, __LINE__);
+					$total_score = $total_weighting = 0;
+					while($item = Database :: fetch_array($rsItems, 'ASSOC'))
+					{
+						$sql = 'SELECT score as student_score 
+								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' as lp_view
+								LEFT JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' as lp_view_item
+									ON lp_view.id = lp_view_item.lp_view_id
+									AND lp_view_item.lp_item_id = '.$item['item_id'].'
+								WHERE lp_view.user_id = '.intval($_GET['student']).'
+								AND '.$a_learnpath['id'];
+						$rsScores = api_sql_query($sql, __FILE__, __LINE__);
+						$total_score += mysql_result($rsScores, 0, 0);
+						$total_weighting += $item['max_score'];
+					}
+					$score = round($total_score / $total_weighting * 100,2);
 					
 					if($i%2==0){
 						$s_css_class="row_odd";
@@ -535,7 +527,7 @@ if(!empty($_GET['student']))
 						</td>
 						<td align="center">
 							<?php
-							if($progress > 0)
+							if($progress > 0 || $score > 0)
 							{
 							?>
 							<a href="lp_tracking.php?course=<?php echo $_GET['course'] ?>&origin=<?php echo $_GET['origin'] ?>&lp_id=<?php echo $a_learnpath['id']?>&student_id=<?php echo $a_infosUser['user_id'] ?>">

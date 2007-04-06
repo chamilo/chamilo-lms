@@ -152,90 +152,16 @@ $totalProgress = 0;
 
 foreach($Courses as $enreg)
 {
-	$sqlTime = "SELECT total_time
-				FROM ".$enreg['db_name'].'.'.$tbl_course_lp_view_item." AS lpi
-				INNER JOIN ".$enreg['db_name'].'.'.$tbl_course_lp_view." AS lpv
-					ON lpv.lp_id = lpi.lp_view_id
-					AND lpv.user_id = ".$_user['user_id']
-				;
-	$result = api_sql_query($sqlTime);
-	while($totalTime = mysql_fetch_array($result))
-	{
-		//print_r($totalTime);
-	}
-
-	$sqlScore = "SELECT exe_result,exe_weighting
-				 FROM $tbl_stats_exercices
-				 WHERE exe_user_id = ".$_user['user_id']."
-				 AND exe_cours_id = '".$enreg['code']."'
-				";
-
-	$resultScore = api_sql_query($sqlScore);
-	$i = 0;
-	$score = 0;
-	while($a_score = mysql_fetch_array($resultScore))
-	{
-		$score = $score + $a_score['exe_result'];
-		$weighting = $weighting + $a_score['exe_weighting'];
-		$i++;
-	}
-
-	$totalScore = $totalScore + $score;
-	$totalWeighting = $totalWeighting + $weighting;
-
-	$pourcentageScore = round(($score*100)/$weighting);
-
 	$weighting = 0;
-
-	$sqlLastAccess = "	SELECT access_date
-						FROM $tbl_stats_lastaccess
-						WHERE access_user_id = ".$_user['user_id']."
-						AND access_cours_code = '".$enreg['code']."'
-						ORDER BY access_date DESC LIMIT 0,1"
-					;
-	$result = api_sql_query($sqlLastAccess);
-	$lastAccess = mysql_fetch_array($result);
-
-	if(!empty($lastAccess['access_date']))
-	{
-		$a_lastConnexion = explode(' ',$lastAccess['access_date']);
-		$a_date = explode('-',$a_lastConnexion[0]);
-		$a_heure = explode(':',$a_lastConnexion[1]);
-		$lastConnexion = $a_date[2]."/".$a_date[1]."/".$a_date[0];
-		$lastAccessTms  = mktime ( $a_heure[0], $a_heure[1] ,$a_heure[2] ,$a_date[1], $a_date[2],$a_date[0]);
-	}
-	else
-	{
-		$lastConnexion = get_lang('NoConnexion');
-	}
+	
+	$lastConnexion = Tracking :: get_last_connection_date_on_the_course($_user['user_id'],$enreg['code']);
 
 	$progress = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
+	
+	$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']));
 
-	/*$time = $lastAccessTms - $firstAccessTms;
+	$pourcentageScore = Tracking :: get_avg_student_score($_user['user_id'], $enreg['code']);
 
-	if($time >= 60)
-	{
-		$minute = round($time/60);
-		if($minute >= 60)
-		{
-			$heure = round($minute/60);
-			$minute = $minute - round((60*(($time/60)/60)));
-			if($minute == 0)
-			{
-				$minute = '00';
-			}
-		}
-		else
-		{
-			$heure = 0;
-		}
-		$temps = $heure.'h'.$minute;
-	}
-	else
-	{
-		$temps = '0h00';
-	}
-	$totalTime .= $time; */
 ?>
 
 <tr class='<?php echo $i?'row_odd':'row_even'; ?>'>
@@ -244,7 +170,7 @@ foreach($Courses as $enreg)
   	</td>
 
   	<td align='center'>
-		<?php echo $temps; ?>
+		<?php echo $time; ?>
   	</td>
 
   	<td align='center'>
@@ -260,7 +186,7 @@ foreach($Courses as $enreg)
   	</td>
 
   	<td align='center'>
-		<a href="<?php echo $SERVER['PHP_SELF']; ?>?id_session=<?php echo $id_session ?>&course=<?php echo $enreg['code']; ?>"> -> </a>
+		<a href="<?php echo $SERVER['PHP_SELF']; ?>?id_session=<?php echo $id_session ?>&course=<?php echo $enreg['code']; ?>"> <?php echo '<img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />';?> </a>
   	</td>
 </tr>
 
@@ -372,7 +298,7 @@ foreach($Courses as $enreg)
 						echo "<tr>
 								<td>
 							 ";
-						echo 		$a_learnpath['name'];
+						echo 		stripslashes($a_learnpath['name']);
 						echo "	</td>
 								<td>
 							 ";
@@ -384,7 +310,12 @@ foreach($Courses as $enreg)
 						echo "	</td>
 								<td align='center'>
 							 ";
-						echo		date('Y-m-d',$start_time);
+						if($start_time!=''){
+							echo format_locale_date(get_lang('dateFormatLong'),$start_time);
+						}
+						else{
+							echo '-';
+						}
 						echo "	</td>
 							  </tr>
 							 ";
@@ -423,7 +354,7 @@ foreach($Courses as $enreg)
 				{
 					$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
 									FROM $tbl_stats_exercices AS ex
-									WHERE  ex.exe_cours_id = '".$a_infosCours['code']."'
+									WHERE ex.exe_user_id='".$_user['user_id']."' AND ex.exe_cours_id = '".$a_infosCours['code']."'
 									AND ex.exe_exo_id = ".$a_exercices['id']
 								 ;
 					$resultEssais = api_sql_query($sqlEssais);
@@ -467,7 +398,7 @@ foreach($Courses as $enreg)
 							<td align="center" width="25">
 						 ';
 					if($a_essais['essais']>0)
-						echo '<a href="../exercice/exercise_show.php?id='.$exe_id.'&cidReq='.$a_infosCours['code'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+						echo '<a href="../exercice/exercise_show.php?id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
 					echo "	</td>
 						  </tr>
 						 ";

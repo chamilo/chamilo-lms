@@ -421,4 +421,5 @@ $SessionPast = "Passada";
 $SessionActive = "Activa";
 $SessionFuture = "Ainda não iniciada";
 $SessionFuture = "Ainda não iniciada";
+$DateFormatLongWithoutDay = "%d %B, %Y";
 ?>

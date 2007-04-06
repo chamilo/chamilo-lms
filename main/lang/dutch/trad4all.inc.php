@@ -421,4 +421,5 @@ $SessionPast = "Verleden";
 $SessionActive = "Actief";
 $SessionFuture = "Nog niet gestart";
 $SessionFuture = "Nog niet gestart";
+$DateFormatLongWithoutDay = "%d %B %Y";
 ?>

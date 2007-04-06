@@ -415,4 +415,7 @@ $Send = "Küldés";
 $NoLinkVisited = "Nincs meglátogatott link";
 $NoDocumentDownloaded = "Nincs letöltött dokumentum";
 $Clicks = "Kattintások";
+$SearchResults = "Keresési eredmények";
+$SessionActive = "Aktív";
+$SessionFuture = "Nem kezd&#337;dött még el";
 ?>

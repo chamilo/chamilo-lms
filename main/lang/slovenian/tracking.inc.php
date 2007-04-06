@@ -205,4 +205,8 @@ $NoConnexion = "Ni povezave";
 $TeacherInterface = "Vmesnik uèitelja";
 $CoachInterface = "Vmesnik coacha";
 $AdminInterface = "Upraviteljev vmesnik";
+$NumberOfSessions = "Število sej";
+$YourCourseList = "Seznam tvojih teèajev";
+$YourStatistics = "Tvoja statistika";
+$CoachList = "Seznam coach-ov";
 ?>

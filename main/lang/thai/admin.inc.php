@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$AdminBy  = "บริหารจัดการระบบโดย";
+$AdminBy  = "&#3610;&#3619;&#3636;&#3627;&#3634;&#3619;&#3619;&#3632;&#3610;&#3610;&#3650;&#3604;&#3618;";
 $AdministrationTools  = "การบริหารจัดการ";
 $State  = "สถานะของระบบ";
 $Statistiques  = "ค่าสถิติ";

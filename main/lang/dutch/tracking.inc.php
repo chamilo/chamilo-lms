@@ -205,4 +205,8 @@ $NoConnexion = "Geen verbinding";
 $TeacherInterface = "Lerareninterface";
 $CoachInterface = "Coachinterface";
 $AdminInterface = "Beheerderinterface";
+$NumberOfSessions = "Aantal sessies";
+$YourCourseList = "Uw cursuslijst";
+$YourStatistics = "Uw statistieken";
+$CoachList = "Coachlijst";
 ?>

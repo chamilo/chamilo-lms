@@ -105,16 +105,19 @@ if ( empty ( $objExercise ) ) {
 $is_allowedToEdit=$is_courseAdmin;
 $nameTools=get_lang('CorrectTest');
 
-if($origin=='' || $origin!='tests'){
+if($origin=='user_course')
+{
+	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$_GET['course'], "name" => get_lang("Users"));
+	$interbreadcrumb[] = array("url" => "../mySpace/myStudents.php?student=".$_GET['student']."&course=".$_course['id']."&details=true&origin=".$_GET['origin'] , "name" => get_lang("DetailsStudentInCourse"));
+}
+else if($origin=='tracking_course')
+{
+	$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
+ 	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".$_GET['student'].'&details=true&origin='.$origin.'&course='.$_GET['cidReq'], "name" => get_lang("DetailsStudentInCourse"));
+}
+else {
 	$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 	$this_section=SECTION_COURSES;
-}
-else{
-	unset($_cid);
-	$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
-	$interbreadcrumb[] = array ("url" => "../mySpace/student.php", "name" => get_lang("MyStudents"));
- 	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".$_GET['student'].'&details=true&course='.$_GET['cidReq'].'', "name" => get_lang("StudentDetails"));
- 	$this_section = "session_my_space";
 }
 
 Display::display_header($nameTools,"Exercise");
@@ -858,8 +861,8 @@ $totalWeighting+=$questionWeighting;
 		?>
 		
 		<?php
-			if($origin=='tests'){
-				echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'&origin=tests&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
+			if(in_array($origin, array('tracking_course','user_course'))){
+				echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
 			}
 			else{
 				echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'" method="post">';

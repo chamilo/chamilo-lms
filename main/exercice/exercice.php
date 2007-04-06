@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 11884 2007-04-05 12:46:00Z elixir_julian $
+* 	@version $Id: exercice.php 11898 2007-04-06 09:06:17Z elixir_inter $
 */
 
 
@@ -248,9 +248,9 @@ $headers .= 'From: '.$from_name.' <'.$from.'>' . "\r\n";
 $headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=iso-8859-15";
 //mail($emailid, $subject, $mess,$headers);
 
-if($_GET['origin']=='tests'){
+if(in_array($origin, array('tracking_course','user_course'))){
 	//Redirect to the reporting		
-	header('location: ../mySpace/myStudents.php?student='.$_GET['student'].'&details=true&course='.$_GET['course']);
+	header('location: ../mySpace/myStudents.php?origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['course']);
 }
 
 }

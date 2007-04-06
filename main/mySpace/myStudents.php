@@ -32,13 +32,15 @@ $csv_content = array();
  	if(!empty($_GET['origin']) && $_GET['origin'] == 'user_course')
  	{
  		$course_infos = CourseManager :: get_course_information($_GET['course']);
- 		$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
+ 		if(empty($cidReq))
+ 			$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
  		$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$_GET['course'], "name" => get_lang("Users"));
  	}
  	else if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course')
  	{
  		$course_infos = CourseManager :: get_course_information($_GET['course']);
- 		$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
+ 		if(empty($cidReq))
+ 			$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
  		$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$_GET['course'].'&studentlist=true', "name" => get_lang("Tracking"));
  	}
  	else
@@ -650,7 +652,7 @@ if(!empty($_GET['student']))
 							<td align='center'>
 						 ";
 					if($a_essais['essais']>0)
-						echo		'<a href="../exercice/exercise_show.php?id='.$a_exercices['id'].'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin=tests"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+						echo		'<a href="../exercice/exercise_show.php?id='.$a_exercices['id'].'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin='.(empty($_GET['origin']) ? 'tracking' : $_GET['origin']).'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
 					echo "	</td>
 						  </tr>
 						 ";

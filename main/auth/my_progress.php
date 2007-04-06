@@ -367,7 +367,7 @@ foreach($Courses as $enreg)
 								 AND exe_exo_id = ".$a_exercices['id']."
 								ORDER BY exe_date DESC LIMIT 1"
 									;
-
+					
 					$resultScore = api_sql_query($sqlScore);
 					$score = 0;
 					while($a_score = mysql_fetch_array($resultScore))
@@ -398,7 +398,7 @@ foreach($Courses as $enreg)
 							<td align="center" width="25">
 						 ';
 					if($a_essais['essais']>0)
-						echo '<a href="../exercice/exercise_show.php?id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+						echo '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
 					echo "	</td>
 						  </tr>
 						 ";

@@ -297,7 +297,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
   <tr>
     <td colspan="2">
 	<?php
-		$sql_test_name='SELECT title FROM '.$TBL_EXERCICES.' WHERE id="'.$id.'"';
+		$sql_test_name='SELECT title FROM '.$TBL_EXERCICES.' as exercises, `'.$TABLETRACK_EXERCICES.'` as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.$id.'"';
 		$result=api_sql_query($sql_test_name);
 		$test=mysql_result($result,0,0);
 		$exerciseTitle=api_parse_tex($test);

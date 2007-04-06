@@ -406,7 +406,7 @@ if(!empty($_GET['student']))
 							<?php echo get_lang('Time'); ?>
 						</th>
 						<th>
-							<?php echo get_lang('Progress'); ?>
+							<?php echo get_lang('Score'); ?>
 						</th>
 						<th>
 							<?php echo get_lang('Progress'); ?>
@@ -487,7 +487,7 @@ if(!empty($_GET['student']))
 					}
 					else
 					{
-						$score = $score / $nb_quiz.' %';
+						$score = round($score / $nb_quiz,2).' %';
 					}
 					
 					
@@ -507,13 +507,13 @@ if(!empty($_GET['student']))
 						<td>
 							<?php echo stripslashes($a_learnpath['name']); ?>
 						</td>
-						<td align="center">
+						<td align="right">
 						<?php echo api_time_to_hms($total_time) ?>
 						</td>
-						<td align="center">
+						<td align="right">
 							<?php echo $score ?>
 						</td>
-						<td align="center">
+						<td align="right">
 							<?php echo $progress ?>
 						</td>
 						<td align="center">
@@ -628,11 +628,11 @@ if(!empty($_GET['student']))
 					echo 		$a_exercices['title'];
 					echo "	</td>
 						 ";
-					echo "	<td align='center'>
+					echo "	<td align='right'>
 						  ";
 					echo 		$pourcentageScore.' %';
 					echo "	</td>
-							<td align='center'>
+							<td align='right'>
 						 ";
 					echo 		$a_essais['essais'];
 					echo "	</td>

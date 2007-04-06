@@ -465,14 +465,14 @@ else {
 	if(count($a_students)>0)
 	{
 		$table = new SortableTable('tracking', 'count_student_in_course');
-		$table -> set_header(0, get_lang('LastName'));
-		$table -> set_header(1, get_lang('FirstName'));
+		$table -> set_header(0, get_lang('LastName'), true, 'align="center"');
+		$table -> set_header(1, get_lang('FirstName'), true, 'align="center"');
 		$table -> set_header(2, get_lang('Time'),false);
 		$table -> set_header(3, get_lang('Progress'),false);
 		$table -> set_header(4, get_lang('Score'),false);	
 		$table -> set_header(5, get_lang('Student_publication'),false);
 		$table -> set_header(6, get_lang('Messages'),false);
-		$table -> set_header(7, get_lang('LatestLogin'));
+		$table -> set_header(7, get_lang('LatestLogin'), true, 'align="center"');
 		$table -> set_header(8, get_lang('Details'),false);
 	     
 	    if($export_csv)
@@ -537,6 +537,9 @@ else {
 		{
 			$table -> addRow($row,'align="right"');	
 		}
+		$table -> setColAttributes(0,array('align'=>'left'));
+		$table -> setColAttributes(1,array('align'=>'left'));
+		$table -> setColAttributes(7,array('align'=>'left'));
 		$table -> setColAttributes(8,array('align'=>'center'));
 		$table -> display();
 		

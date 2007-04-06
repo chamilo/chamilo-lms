@@ -68,25 +68,38 @@ $menu_items = array();
 
 if(api_is_allowed_to_create_course())
 {
-	if(!$isCoach && !api_is_platform_admin())
+	
+	$sqlNbCours = "	SELECT course_rel_user.course_code, course.title
+					FROM $tbl_course_user as course_rel_user
+					INNER JOIN $tbl_course as course
+						ON course.code = course_rel_user.course_code
+				  	WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
+				  ";
+	$resultNbCours = api_sql_query($sqlNbCours, __FILE__, __LINE__);
+	$a_courses = api_store_result($resultNbCours);
+	$nb_teacher_courses = count($a_courses);
+	if($nb_teacher_courses)
 	{
-		$view = 'teacher';
-	}
-	if($view=='teacher')
-	{
-		$menu_items[] = get_lang('TeacherInterface');
-		$title = get_lang('YourCourseList');
-	}
-	else
-	{
-		$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';
+		if(!$isCoach && !api_is_platform_admin())
+		{
+			$view = 'teacher';
+		}
+		if($view=='teacher')
+		{
+			$menu_items[] = get_lang('TeacherInterface');
+			$title = get_lang('YourCourseList');
+		}
+		else
+		{
+			$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';
+		}
 	}
 }
 if($isCoach)
 {
-	if(!api_is_allowed_to_create_course() && !api_is_platform_admin())
+	if($nb_teacher_courses==0 && !api_is_platform_admin())
 	{
-		$view = 'teacher';
+		$view = 'coach';
 	}
 	if($view=='coach')
 	{
@@ -98,7 +111,7 @@ if($isCoach)
 		$menu_items[] = '<a href="'.api_get_self().'?view=coach">'.get_lang('CoachInterface').'</a>';
 	}
 }
-if(api_is_platform_admin)
+if(api_is_platform_admin())
 {
 	if($view=='admin')
 	{
@@ -112,15 +125,18 @@ if(api_is_platform_admin)
 }
 
 $nb_menu_items = count($menu_items);
-foreach($menu_items as $key=> $item)
+if($nb_menu_items>1)
 {
-	echo $item;
-	if($key!=$nb_menu_items-1)
+	foreach($menu_items as $key=> $item)
 	{
-		echo ' | ';
+		echo $item;
+		if($key!=$nb_menu_items-1)
+		{
+			echo ' | ';
+		}
 	}
+	echo '<br />';
 }
-echo '<br />';
 echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
 	  <div align="right">
 		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
@@ -403,16 +419,6 @@ echo '<div class="clear">&nbsp;</div>';
 if(api_is_allowed_to_create_course() && $view=='teacher')
 {
 	
-	$sqlNbCours = "	SELECT course_rel_user.course_code, course.title
-					FROM $tbl_course_user as course_rel_user
-					INNER JOIN $tbl_course as course
-						ON course.code = course_rel_user.course_code
-				  	WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-				  ";
-	$resultNbCours = api_sql_query($sqlNbCours, __FILE__, __LINE__);
-	$a_courses = api_store_result($resultNbCours);
-	$nb_teacher_courses = count($a_courses);
-	
 	if($nb_teacher_courses)
 	{
 		
@@ -528,19 +534,19 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 if(api_is_platform_admin() && $view=='admin'){
 	
 	$table = new SortableTable('tracking_list_coaches', 'count_coaches');
-	$table -> set_header(0, get_lang('FirstName'), true);
-	$table -> set_header(1, get_lang('LastName'), true);
-	$table -> set_header(2, get_lang('AverageTimeSpentOnThePlatform'), false);
-	$table -> set_header(3, get_lang('LastConnexion'), false);
+	$table -> set_header(0, get_lang('FirstName'), true, 'align="center"');
+	$table -> set_header(1, get_lang('LastName'), true, 'align="center"');
+	$table -> set_header(2, get_lang('TimeSpentOnThePlatform'), false);
+	$table -> set_header(3, get_lang('LastConnexion'), false, 'align="center"');
 	$table -> set_header(4, get_lang('NbStudents'), false);
 	$table -> set_header(5, get_lang('CountCours'), false);
 	$table -> set_header(6, get_lang('NumberOfSessions'), false);
-	$table -> set_header(7, get_lang('Details'), false,'align="center"');
+	$table -> set_header(7, get_lang('Probationers'), false,'align="center"');
 	
 	$csv_content[] = array(
 						get_lang('FirstName'),
 						get_lang('LastName'),
-						get_lang('AverageTimeSpentOnThePlatform'),
+						get_lang('TimeSpentOnThePlatform'),
 						get_lang('LastConnexion'),
 						get_lang('NbStudents'),
 						get_lang('CountCours'),
@@ -585,6 +591,9 @@ if(api_is_platform_admin() && $view=='admin'){
 								);
 	
 	}
+	$table -> updateColAttributes(0,array('align'=>'left'));
+	$table -> updateColAttributes(1,array('align'=>'left'));
+	$table -> updateColAttributes(3,array('align'=>'left'));
 	$table -> updateColAttributes(7,array('align'=>'center'));
 	$table -> display();
 	

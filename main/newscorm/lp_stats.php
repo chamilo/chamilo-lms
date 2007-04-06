@@ -53,7 +53,7 @@ $extend_all = 0;
 
 if($origin == 'tracking')
 {
-	$url_suffix = '&course='.$_GET['course'].'&student_id='.$_GET['student_id'].'&lp_id='.$_GET['lp_id'];
+	$url_suffix = '&course='.$_GET['course'].'&student_id='.$_GET['student_id'].'&lp_id='.$_GET['lp_id'].'&origin='.$_GET['origin'];
 }
 else
 {

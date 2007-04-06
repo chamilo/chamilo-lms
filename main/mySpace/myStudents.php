@@ -51,9 +51,9 @@ $csv_content = array();
  		else{
  			$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
  			$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'], "name" => get_lang("StudentDetails"));
- 		}
-	 	$nameTools=get_lang("DetailsStudentInCourse");
+ 		}	 	
  	}
+ 	$nameTools=get_lang("DetailsStudentInCourse");
  }
  else
  {

@@ -52,7 +52,7 @@ else
  	$nameTools=get_lang("DetailsStudentInCourse");
 }
 
-$interbreadcrumb[] = array("url" => "myStudents.php?student=".$_GET['student_id']."&course=".$_GET['course']."&details=true" , "name" => get_lang("StudentDetails"));
+$interbreadcrumb[] = array("url" => "myStudents.php?student=".$_GET['student_id']."&course=".$_GET['course']."&details=true&origin=".$_GET['origin'] , "name" => get_lang("DetailsStudentInCourse"));
 
 $nameTools = get_lang('LearningPathDetails');
 

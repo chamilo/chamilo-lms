@@ -22,9 +22,14 @@ $csv_content = array();
 
 if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
 	$nameTools= get_lang("CoachStudents");
+	$sql = 'SELECT lastname, firstname FROM '.Database::get_main_table(TABLE_MAIN_USER).' WHERE user_id='.intval($_GET['id_coach']);
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$coach_name = mysql_result($rs, 0, 0).' '.mysql_result($rs, 0, 1);
+	$title = get_lang('Probationers').' - '.$coach_name;
 }
 else{
-	$nameTools= get_lang("Students");	
+	$nameTools= get_lang("Students");
+	$title = get_lang('Probationers');
 }
  
 $this_section = "session_my_space";
@@ -84,10 +89,11 @@ function sort_users($a, $b)
 if($isCoach || api_is_platform_admin())
 {
 
-	echo '<div align="right">
+	echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
+		  <div align="right">
 			<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 			<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-		  </div>';
+		  </div><div class="clear"></div>';
 	
 	if(isset($_GET['id_coach'])){
 		$coach_id=intval($_GET['id_coach']);

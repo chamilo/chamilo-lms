@@ -67,8 +67,11 @@ if (!empty ($_GET['extend_all'])) {
 	$extend_all_link = '<a href="'.api_get_self().'?action=stats&extend_all=1'.$url_suffix.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0"></a>';
 }
 
-$output .= "<tr><td><div class='title'>".htmlentities(get_lang('ScormMystatus'), ENT_QUOTES, $dokeos_charset)."</div></td></tr>"."<tr><td>&nbsp;</td></tr>"."<tr><td>"."<table border='0' class='data_table'><tr>\n".'<td width="16">'.$extend_all_link.'</td>'.'<td colspan="4" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormLessonTitle'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormStatus'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormScore'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormTime'), ENT_QUOTES, $dokeos_charset)."</div></td></tr>\n";
-
+if($origin != 'tracking')
+{
+	$output .= "<tr><td><div class='title'>".htmlentities(get_lang('ScormMystatus'), ENT_QUOTES, $dokeos_charset)."</div></td></tr>";
+}
+$output .= "<tr><td>&nbsp;</td></tr>"."<tr><td>"."<table border='0' class='data_table'><tr>\n".'<td width="16">'.$extend_all_link.'</td>'.'<td colspan="4" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormLessonTitle'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormStatus'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormScore'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormTime'), ENT_QUOTES, $dokeos_charset)."</div></td></tr>\n";
 //going through the items using the $items[] array instead of the database order ensures
 // we get them in the same order as in the imsmanifest file, which is rather random when using
 // the database table

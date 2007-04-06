@@ -127,6 +127,7 @@ $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE
 $tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$tbl_stats_exercices_attempts 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 //$tbl_course_lp_view 		= Database :: get_course_table('lp_view');
 //$tbl_course_lp_view_item = Database :: get_course_table('lp_item_view');
 //$tbl_course_lp_item 		= Database :: get_course_table('lp_item');
@@ -651,8 +652,13 @@ if(!empty($_GET['student']))
 					echo "	</td>
 							<td align='center'>
 						 ";
+					
+					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$a_exercices['id'].'" AND exe_user_id="'.$_GET['student'].'" AND exe_cours_id="'.$a_infosCours['code'].'" ORDER BY exe_date DESC LIMIT 1';
+					$resultLastAttempt = api_sql_query($sql_last_attempt);
+					$id_last_attempt=mysql_result($resultLastAttempt,0,0);
+					
 					if($a_essais['essais']>0)
-						echo		'<a href="../exercice/exercise_show.php?id='.$a_exercices['id'].'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin='.(empty($_GET['origin']) ? 'tracking' : $_GET['origin']).'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+						echo		'<a href="../exercice/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin='.(empty($_GET['origin']) ? 'tracking' : $_GET['origin']).'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
 					echo "	</td>
 						  </tr>
 						 ";

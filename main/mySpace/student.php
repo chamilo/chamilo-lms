@@ -19,8 +19,13 @@ if($export_csv)
 	ob_start();
 }
 $csv_content = array();
- 
-$nameTools= get_lang("Students");
+
+if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
+	$nameTools= get_lang("CoachStudents");
+}
+else{
+	$nameTools= get_lang("Students");	
+}
  
 $this_section = "session_my_space";
  
@@ -166,7 +171,12 @@ if($isCoach || api_is_platform_admin())
 				$csv_content[] = $row;
 			}
 			
-			$row[] = '<a href="myStudents.php?student='.$student_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+			if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
+				$row[] = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+			}
+			else{
+				$row[] = '<a href="myStudents.php?student='.$student_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+			}
 			
 			$all_datas[] = $row;		
 	

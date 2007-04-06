@@ -44,15 +44,26 @@ $csv_content = array();
  	else
  	{
  		$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
- 		$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
-	 	$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'], "name" => get_lang("StudentDetails"));
+ 		if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
+ 			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach'], "name" => get_lang("CoachStudents"));
+ 			$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'].'&id_coach='.$_GET['id_coach'], "name" => get_lang("StudentDetails"));
+ 		}
+ 		else{
+ 			$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
+ 			$interbreadcrumb[] = array ("url" => "myStudents.php?student=".$_GET['student'], "name" => get_lang("StudentDetails"));
+ 		}
 	 	$nameTools=get_lang("DetailsStudentInCourse");
  	}
  }
  else
  {
  	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
- 	$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
+ 	if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
+ 		$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach'], "name" => get_lang("CoachStudents"));
+ 	}
+ 	else{
+ 		$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
+ 	}
  }
  
  api_block_anonymous_users();
@@ -770,12 +781,19 @@ if(!empty($_GET['student']))
 					</td>
 					<td align="right">
 						'.$score.'
-					</td>
-					<td align="center" width="10">
-						<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
-					</td>
-				</tr>
-				';
+					</td>';
+					if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
+						echo '<td align="center" width="10">
+							<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'&id_coach='.$_GET['id_coach'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+						</td>';
+					}
+					else{
+						echo '<td align="center" width="10">
+							<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+						</td>';
+					}
+				echo '</tr>';
+				
 			}
 		}
 		else

@@ -115,6 +115,11 @@ else if($origin=='tracking_course')
 	$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
  	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".$_GET['student'].'&details=true&origin='.$origin.'&course='.$_GET['cidReq'], "name" => get_lang("DetailsStudentInCourse"));
 }
+else if($origin=='student_progress')
+{
+	$interbreadcrumb[] = array ("url" => "../auth/my_progress.php?id_session".$_GET['id_session']."&course=".$_cid, "name" => get_lang('MyProgress'));
+	unset($_cid);
+}
 else {
 	$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 	$this_section=SECTION_COURSES;

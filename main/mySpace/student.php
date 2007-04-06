@@ -112,7 +112,7 @@ if($isCoach || api_is_platform_admin())
 		$table -> set_header(4, get_lang('Score'),false);	
 		$table -> set_header(5, get_lang('Student_publication'),false);
 		$table -> set_header(6, get_lang('Messages'),false);
-		$table -> set_header(7, get_lang('LatestLogin'), 'align="center');
+		$table -> set_header(7, get_lang('LatestLogin'), false);
 		$table -> set_header(8, get_lang('Details'),false);
 	     
 	    if($export_csv)

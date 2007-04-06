@@ -53,7 +53,14 @@ function count_coaches()
 	return $total_no_coachs;
 }
 
-
+function sort_users($a, $b)
+{
+	global $tracking_column;
+	if($a[$tracking_column] > $b[$tracking_column])
+		return 1;
+	else 
+		return -1;
+}
 
 /**************************
  * MAIN CODE
@@ -424,6 +431,8 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 		
 				  
 		$table = new SortableTable('tracking_list_course', 'count_teacher_courses');
+		$parameters['view'] = 'teacher';
+		$table->set_additional_parameters($parameters);
 		$table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
 		$table -> set_header(1, get_lang('NbStudents'), false);
 		$table -> set_header(2, get_lang('TimeSpentInTheCourse'), false);
@@ -533,7 +542,12 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 
 if(api_is_platform_admin() && $view=='admin'){
 	
+	$tracking_column = isset($_GET['tracking_list_coaches_column']) ? $_GET['tracking_list_coaches_column'] : 0;
+	$tracking_direction = isset($_GET['tracking_list_coaches_direction']) ? $_GET['tracking_list_coaches_direction'] : DESC;
+	
 	$table = new SortableTable('tracking_list_coaches', 'count_coaches');
+	$parameters['view'] = 'admin';
+	$table->set_additional_parameters($parameters);
 	$table -> set_header(0, get_lang('FirstName'), true, 'align="center"');
 	$table -> set_header(1, get_lang('LastName'), true, 'align="center"');
 	$table -> set_header(2, get_lang('TimeSpentOnThePlatform'), false);
@@ -562,6 +576,8 @@ if(api_is_platform_admin() && $view=='admin'){
 	$result_coaches=api_sql_query($sqlCoachs, __FILE__, __LINE__);
 	$total_no_coachs = mysql_num_rows($result_coaches);
 	
+	$all_datas=array();
+	
 	while($a_coachs=mysql_fetch_array($result_coaches)){
 		
 		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($a_coachs['user_id']));
@@ -579,7 +595,7 @@ if(api_is_platform_admin() && $view=='admin'){
 		$table_row[] = $nb_courses;
 		$table_row[] = $nb_sessions;
 		$table_row[] = '<a href="student.php?id_coach='.$a_coachs['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
-		$table -> addRow($table_row, 'align="right"');
+		$all_datas[] = $table_row;
 		
 		$csv_content[] = array(
 								$a_coachs['firstname'],
@@ -591,6 +607,21 @@ if(api_is_platform_admin() && $view=='admin'){
 								);
 	
 	}
+	
+	usort($all_datas, 'sort_users');
+	if($tracking_direction == 'ASC')
+		rsort($all_datas);
+		
+	if($export_csv)
+	{
+		usort($csv_content, 'sort_users');
+	}
+	
+	foreach($all_datas as $row)
+	{
+		$table -> addRow($row,'align="right"');	
+	}
+	
 	$table -> updateColAttributes(0,array('align'=>'left'));
 	$table -> updateColAttributes(1,array('align'=>'left'));
 	$table -> updateColAttributes(3,array('align'=>'left'));

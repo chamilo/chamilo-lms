@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 11883 2007-04-05 12:44:26Z elixir_inter $
+* 	@version $Id: index.php 11924 2007-04-08 16:30:56Z pcool $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -428,9 +428,7 @@ function display_login_form()
 	$form->addElement('password','password',get_lang('Pass'),array('size'=>15));
 	$form->addElement('submit','submitAuth',get_lang('Ok'));
 	$renderer =& $form->defaultRenderer();
-	$element_template = '<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}<br />
-			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}<br />';
-	$renderer->setElementTemplate($element_template);
+	$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
 	$form->display();
 }
 /**

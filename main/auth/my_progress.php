@@ -91,7 +91,7 @@ echo get_lang('ProgressIntroduction');
 
 <form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>" style="margin: 0px;">
 <center>
-Session de cours :
+<?php echo get_lang('SessionCourses'); ?> :
 <select name="id_session">
 <option value="0">---------- <?php echo get_lang('Select'); ?> ----------</option>
 
@@ -122,11 +122,11 @@ unset($Sessions);
 ?>
 
 </select>
-<input type="submit" value="Valider">
+<input type="submit" value="<?php echo get_lang('Ok'); ?>" />
 </center>
 </form>
 
-<br><br>
+<br /><br />
 
 <table class="data_table" width="100%">
 <tr class="tableName">
@@ -153,11 +153,11 @@ $totalProgress = 0;
 foreach($Courses as $enreg)
 {
 	$weighting = 0;
-	
+
 	$lastConnexion = Tracking :: get_last_connection_date_on_the_course($_user['user_id'],$enreg['code']);
 
 	$progress = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
-	
+
 	$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']));
 
 	$pourcentageScore = Tracking :: get_avg_student_score($_user['user_id'], $enreg['code']);
@@ -272,10 +272,10 @@ foreach($Courses as $enreg)
 						$a_totalItem = mysql_fetch_array($resultItem);
 
 						$progress = round(($a_nbItem['nbItem'] * 100)/$a_totalItem['totalItem']);
-						
-						
+
+
 						// calculates last connection time
-						$sql = 'SELECT MAX(start_time) 
+						$sql = 'SELECT MAX(start_time)
 									FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
 									INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
 										ON item_view.lp_view_id = view.id
@@ -283,9 +283,9 @@ foreach($Courses as $enreg)
 										AND view.user_id = '.$_user['user_id'];
 						$rs = api_sql_query($sql, __FILE__, __LINE__);
 						$start_time = mysql_result($rs, 0, 0);
-						
+
 						// calculates time
-						$sql = 'SELECT SUM(total_time) 
+						$sql = 'SELECT SUM(total_time)
 									FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
 									INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
 										ON item_view.lp_view_id = view.id
@@ -367,7 +367,7 @@ foreach($Courses as $enreg)
 								 AND exe_exo_id = ".$a_exercices['id']."
 								ORDER BY exe_date DESC LIMIT 1"
 									;
-					
+
 					$resultScore = api_sql_query($sqlScore);
 					$score = 0;
 					while($a_score = mysql_fetch_array($resultScore))

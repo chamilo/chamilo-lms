@@ -127,8 +127,8 @@ $phpMyAdminPath              							= '';
 //============================================================================
 // For new login module
 // Uncomment these lines to activate ldap
-// $extAuthSource["ldap"]["login"]=api_get_path(SYS_CODE_PATH)."auth/ldap/login.php";
-// $extAuthSource["ldap"]["newUser"]=api_get_path(SYS_CODE_PATH)."auth/ldap/newUser.php";
+// $extAuthSource["ldap"]["login"]						= $_configuration['root_sys'].$_configuration['code_append']."auth/ldap/login.php";
+// $extAuthSource["ldap"]["newUser"]					= $_configuration['root_sys'].$_configuration['code_append']."auth/ldap/newUser.php";
 
 //============================================================================
 //   Misc. settings

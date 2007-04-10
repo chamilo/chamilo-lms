@@ -551,7 +551,7 @@ if(api_is_platform_admin() && $view=='admin'){
 	$table -> set_header(0, get_lang('FirstName'), true, 'align="center"');
 	$table -> set_header(1, get_lang('LastName'), true, 'align="center"');
 	$table -> set_header(2, get_lang('TimeSpentOnThePlatform'), false);
-	$table -> set_header(3, get_lang('LastConnexion'), false, 'align="center"');
+	$table -> set_header(3, get_lang('LastConnexion'), true, 'align="center"');
 	$table -> set_header(4, get_lang('NbStudents'), false);
 	$table -> set_header(5, get_lang('CountCours'), false);
 	$table -> set_header(6, get_lang('NumberOfSessions'), false);
@@ -567,12 +567,14 @@ if(api_is_platform_admin() && $view=='admin'){
 						get_lang('NumberOfSessions')
 						);
 	
-	$sqlCoachs = "	SELECT DISTINCT id_coach, user_id, lastname, firstname
-					FROM $tbl_user, $tbl_session_course
-					WHERE id_coach=user_id
-					ORDER BY lastname ASC
-				 ";
+	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 	
+	$sqlCoachs = "	SELECT DISTINCT id_coach, user_id, lastname, firstname, MAX(login_date) as login_date 
+					FROM $tbl_user, $tbl_session_course, $tbl_track_login 
+					WHERE id_coach=user_id AND login_user_id=user_id
+					GROUP BY user_id
+					ORDER BY login_date ".$tracking_direction;
+
 	$result_coaches=api_sql_query($sqlCoachs, __FILE__, __LINE__);
 	$total_no_coachs = mysql_num_rows($result_coaches);
 	
@@ -608,11 +610,13 @@ if(api_is_platform_admin() && $view=='admin'){
 	
 	}
 	
-	usort($all_datas, 'sort_users');
-	if($tracking_direction == 'ASC')
-		rsort($all_datas);
+	if($tracking_column != 3){
+		usort($all_datas, 'sort_users');
+		if($tracking_direction == 'ASC')
+			rsort($all_datas);
+	}
 		
-	if($export_csv)
+	if($export_csv && $tracking_column != 3)
 	{
 		usort($csv_content, 'sort_users');
 	}

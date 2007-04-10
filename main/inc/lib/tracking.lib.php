@@ -298,6 +298,7 @@ class Tracking {
 				FROM '.$tbl_session_course_user.' as session_course_user
 				INNER JOIN '.$tbl_session_course.' as session_course
 					ON session_course.course_code = session_course_user.course_code
+					AND session_course_user.id_session = session_course.id_session
 				INNER JOIN '.$tbl_session.' as session
 					ON session.id = session_course.id_session
 					AND session.id_coach = '.$coach_id;
@@ -307,7 +308,6 @@ class Tracking {
 		{
 			$a_students[$row['id_user']]=$row['id_user'];
 		}
-		
 		return $a_students;
 	}
 	

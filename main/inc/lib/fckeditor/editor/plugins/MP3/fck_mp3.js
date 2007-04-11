@@ -260,7 +260,7 @@ Media.prototype.getOuterHTML = function (objectId){
  * Devuelve el codigo HTML interno del elemento
  */
 Media.prototype.getInnerHTML = function (objectId){
-	var s='<object id="mp3player" type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" width="220" height="30" style="vertical-align: bottom;"><!-- MP3 Flash player. Credits, license, contact & examples: http://pyg.keonox.com/flashmp3player/ --><param name="type" value="application/x-shockwave-flash" /><param name="codebase" value="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" /><param name="movie" value="'+getObjData(this.url)+'" /><param name="FlashVars" value="file='+getSoundUrl()+'&amp;autolaunch=false" /></object>';
+	var s = '<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" WIDTH="90" HEIGHT="25" id="test" ALIGN=""><PARAM NAME=movie VALUE="'+getObjData(this.url)+'?mp3file='+getSoundUrl()+'"> <PARAM NAME=quality VALUE=high> <PARAM NAME=bgcolor VALUE=#FFFFFF> <EMBED src="'+getObjData(this.url)+'?mp3file='+getSoundUrl()+'" quality=high bgcolor=#FFFFFF  WIDTH="90" HEIGHT="25" NAME="Streaming" ALIGN=""TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED></OBJECT>';
 	return s;
 };
 

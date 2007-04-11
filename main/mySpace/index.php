@@ -555,7 +555,7 @@ if(api_is_platform_admin() && $view=='admin'){
 	$table -> set_header(4, get_lang('NbStudents'), false);
 	$table -> set_header(5, get_lang('CountCours'), false);
 	$table -> set_header(6, get_lang('NumberOfSessions'), false);
-	$table -> set_header(7, get_lang('Probationers'), false,'align="center"');
+	$table -> set_header(7, get_lang('Sessions'), false,'align="center"');
 	
 	$csv_content[] = array(
 						get_lang('FirstName'),
@@ -577,10 +577,26 @@ if(api_is_platform_admin() && $view=='admin'){
 
 	$result_coaches=api_sql_query($sqlCoachs, __FILE__, __LINE__);
 	$total_no_coachs = mysql_num_rows($result_coaches);
+
+	$global_coachs=array();
+	while($a_coach=mysql_fetch_array($result_coaches)){
+		$global_coachs[$a_coach['user_id']] = $a_coach;
+	}
+	
+	$sql_session_coach = 'SELECT session.id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
+							FROM '.$tbl_user.','.$tbl_sessions.' as session,'.$tbl_track_login.'
+							WHERE id_coach=user_id AND login_user_id=user_id
+							GROUP BY user_id
+							ORDER BY login_date '.$tracking_direction;
+	$result_sessions_coach=api_sql_query($sql_session_coach, __FILE__, __LINE__);
+	$total_no_coachs += mysql_num_rows($result_sessions_coach);
+	while($a_coach=mysql_fetch_array($result_sessions_coach)){
+		$global_coachs[$a_coach['user_id']] = $a_coach;
+	}	
 	
 	$all_datas=array();
 	
-	while($a_coachs=mysql_fetch_array($result_coaches)){
+	foreach($global_coachs as $id_coach => $a_coachs){
 		
 		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($a_coachs['user_id']));
 		$last_connection = Tracking :: get_last_connection_date($a_coachs['user_id']);
@@ -596,7 +612,7 @@ if(api_is_platform_admin() && $view=='admin'){
 		$table_row[] = $nb_students;
 		$table_row[] = $nb_courses;
 		$table_row[] = $nb_sessions;
-		$table_row[] = '<a href="student.php?id_coach='.$a_coachs['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+		$table_row[] = '<a href="session.php?id_coach='.$a_coachs['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 		$all_datas[] = $table_row;
 		
 		$csv_content[] = array(

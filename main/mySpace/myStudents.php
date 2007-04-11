@@ -60,8 +60,14 @@ $csv_content = array();
  else
  {
  	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+ 	
  	if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
- 		$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach'], "name" => get_lang("CoachStudents"));
+ 		if(isset($_GET['id_session']) && intval($_GET['id_session'])!=0){
+ 		$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach']."&id_session=".$_GET['id_session'], "name" => get_lang("CoachStudents"));
+ 		}
+ 		else{
+ 			$interbreadcrumb[] = array ("url" => "student.php?id_coach=".$_GET['id_coach'], "name" => get_lang("CoachStudents"));
+ 		}
  	}
  	else{
  		$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));
@@ -183,7 +189,12 @@ if(!empty($_GET['student']))
 	$a_infosUser['name'] = $a_infosUser['firstname'].' '.$a_infosUser['lastname'];
 	
 	// courses followed by user where we are coach
-	$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
+	if(!isset($_GET['id_coach'])){
+		$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
+	}
+	else{
+		$a_courses = Tracking :: get_courses_followed_by_coach($_GET['id_coach']);
+	}
 	$avg_student_progress = $avg_student_score = $nb_courses = 0;
 	foreach ($a_courses as $key=>$course_code)
 	{

@@ -311,7 +311,61 @@ class Tracking {
 		return $a_students;
 	}
 	
-	
+	function get_student_followed_by_coach_in_a_session($id_session,$coach_id){
+		
+		$coach_id = intval($coach_id);
+		
+		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$tbl_session 		= Database :: get_main_table(TABLE_MAIN_SESSION);
+			
+		$a_students = array();
+		
+		//////////////////////////////////////////////////////////////
+		// At first, courses where $coach_id is coach of the course //
+		//////////////////////////////////////////////////////////////
+		$sql = 'SELECT course_code FROM '.$tbl_session_course.' WHERE id_session="'.$id_session.'" AND id_coach='.$coach_id;
+		
+		$result=api_sql_query($sql);
+		
+		while($a_courses=mysql_fetch_array($result))
+		{
+	    	$course_code=$a_courses["course_code"];
+	    	
+	    	$sql = "SELECT distinct	srcru.id_user  
+					FROM $tbl_session_course_user AS srcru 
+					WHERE course_code='$course_code'";
+
+			$rs=api_sql_query($sql);
+			
+			while($row=mysql_fetch_array($rs))
+			{
+				$a_students[$row['id_user']]=$row['id_user'];
+			}			
+	    }
+	    
+	    //////////////////////////////////////////////////////////////
+		// Then, courses where $coach_id is coach of the session    //
+		//////////////////////////////////////////////////////////////
+		
+		$sql = 'SELECT DISTINCT session_course_user.id_user 
+				FROM '.$tbl_session_course_user.' as session_course_user
+				INNER JOIN '.$tbl_session_course.' as session_course
+					ON session_course.course_code = session_course_user.course_code
+					AND session_course_user.id_session = session_course.id_session
+				INNER JOIN '.$tbl_session.' as session
+					ON session.id = session_course.id_session
+					AND session.id_coach = '.$coach_id.' AND session.id='.$id_session;
+
+		$result=api_sql_query($sql);
+		
+		while($row=mysql_fetch_array($result))
+		{
+			$a_students[$row['id_user']]=$row['id_user'];
+		}
+		return $a_students;
+		
+	}
 	
 	
 	function is_allowed_to_coach_student($coach_id, $student_id)
@@ -573,6 +627,20 @@ class Tracking {
 		
 		$rs = api_sql_query($sql, __LINE__, __FILE__);
 		return mysql_num_rows($rs);
+	}
+	
+	function get_course_list_in_session_from_student($user_id, $id_session){
+		$user_id = intval($user_id);
+		$id_session = intval($id_session);
+		$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$sql='SELECT course_code FROM '.$tbl_session_course_user.' WHERE id_user="'.$user_id.'" AND id_session="'.$id_session.'"';
+		$result = api_sql_query($sql, __LINE__, __FILE__);
+		$a_courses=array();
+		while($row=mysql_fetch_array($result))
+		{
+			$a_courses[$row['course_code']]=$row['course_code'];
+		}
+		return $a_courses;
 	}
 	
 }

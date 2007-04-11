@@ -102,8 +102,13 @@ if($isCoach || api_is_platform_admin())
 		$coach_id=$_user['user_id'];
 	}
 	
-	$a_courses = Tracking :: get_courses_followed_by_coach($coach_id);
-	$a_students = Tracking :: get_student_followed_by_coach($coach_id);
+	if(!isset($_GET['id_session'])){
+		$a_courses = Tracking :: get_courses_followed_by_coach($coach_id);
+		$a_students = Tracking :: get_student_followed_by_coach($coach_id);
+	}
+	else{
+		$a_students = Tracking :: get_student_followed_by_coach_in_a_session($_GET['id_session'], $coach_id);
+	}
 	
 	$tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
 	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : DESC;
@@ -139,6 +144,9 @@ if($isCoach || api_is_platform_admin())
 		foreach($a_students as $student_id)
 		{
 			$student_datas = UserManager :: get_user_info_by_id($student_id);
+			if(isset($_GET['id_session'])){
+				$a_courses = Tracking :: get_course_list_in_session_from_student($student_id,$_GET['id_session']);
+			}
 			
 			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0 ;
 			$nb_courses_student = 0;
@@ -178,7 +186,7 @@ if($isCoach || api_is_platform_admin())
 			}
 			
 			if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
-				$row[] = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+				$row[] = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$_GET['id_session'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 			}
 			else{
 				$row[] = '<a href="myStudents.php?student='.$student_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';

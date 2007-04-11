@@ -65,8 +65,16 @@ function sort_sessions($a, $b)
  	MAIN CODE
  ===============================================================================  
  */
- 
-$a_sessions = Tracking :: get_sessions_coached_by_user ($_user['user_id']);
+
+if(isset($_GET['id_coach']) && $_GET['id_coach']!=''){
+	$id_coach=$_GET['id_coach'];
+}
+else{
+	$id_coach=$_user['user_id'];
+}
+
+$a_sessions = Tracking :: get_sessions_coached_by_user ($id_coach);
+
 $nb_sessions = count($a_sessions);
 
 if($nb_sessions > 0)
@@ -100,7 +108,12 @@ if($nb_sessions > 0)
 		{
 			$csv_content[] = $row;
 		}
-		$row[] = '<a href="course.php?id_session='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+		if(isset($_GET['id_coach']) && $_GET['id_coach']!=''){
+			$row[] = '<a href="student.php?id_session='.$session['id'].'&id_coach='.$_GET['id_coach'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+		}
+		else{
+			$row[] = '<a href="course.php?id_session='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+		}
 	
 		$all_datas[] = $row;
 	}

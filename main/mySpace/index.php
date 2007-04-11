@@ -120,6 +120,10 @@ if($isCoach)
 }
 if(api_is_platform_admin())
 {
+	if(!$isCoach && $nb_teacher_courses==0)
+	{
+		$view = 'admin';
+	}
 	if($view=='admin')
 	{
 		$menu_items[] = get_lang('AdminInterface');

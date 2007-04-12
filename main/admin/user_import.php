@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 11999 2007-04-12 21:31:57Z pcool $
+// $Id: user_import.php 12001 2007-04-12 22:38:53Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -300,7 +300,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 
 set_time_limit(0);
 
-if ($_POST['formSent'])
+if ($_POST['formSent'] AND !empty($_POST['import_file']))
 {
 	$file_type = $_POST['file_type'];
 	if ($file_type == 'csv')
@@ -322,6 +322,12 @@ if ($_POST['formSent'])
 }
 Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
+
+if(empty($_POST['import_file']))
+{
+	Display::display_error_message(get_lang('ThisFieldIsRequired'));
+}
+
 if (count($errors) != 0)
 {
 	$error_message = '<ul>';
@@ -337,6 +343,7 @@ if (count($errors) != 0)
 $form = new FormValidator('user_import');
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
+$form->addRule('import_file', get_lang('ThisFieldIsRequired'), 'required');
 $allowed_file_types = array ('xml', 'csv');
 $form->addRule('file', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
 $form->addElement('radio', 'file_type', get_lang('FileType'), 'XML (<a href="exemple.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');

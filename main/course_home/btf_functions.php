@@ -1,5 +1,5 @@
 <?php
-// $Id: btf_functions.php 11759 2007-03-29 07:43:19Z pcool $
+// $Id: btf_functions.php 11995 2007-04-12 18:30:04Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -58,15 +58,19 @@ function showtools2($cat)
 
 		case 'External' :
 			if (api_is_allowed_to_edit())
+			{
 				$sql = "SELECT a.*, t.image img FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
 										WHERE (a.link=t.link AND t.position='external')
-										OR (a.visibility <= 1 AND (a.image = 'external.gif' OR a.image = 'scormbuilder.gif') AND a.image=t.image)
+										OR (a.visibility <= 1 AND (a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND a.image=t.image)
 										ORDER BY a.id";
+			}
 			else
+			{
 				$sql = "SELECT a.*, t.image img FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
 										WHERE a.visibility = 1 AND ((a.link=t.link AND t.position='external')
-										OR ((a.image = 'external.gif' OR a.image = 'scormbuilder.gif') AND a.image=t.image))
+										OR ((a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND a.image=t.image))
 										 ORDER BY a.id";
+			}
 			break;
 
 		case 'courseAdmin' :
@@ -82,7 +86,7 @@ function showtools2($cat)
 	// grabbing all the tools from $course_tool_table
 	while ($tempRow = mysql_fetch_array($result))
 	{
-		if ($tempRow['img'] != "scormbuilder.gif")
+		if ($tempRow['img'] !== "scormbuilder.gif" AND $tempRow['img'] !== "blog.gif")
 		{
 			$tempRow['name_translated'] = get_lang(ucfirst($tempRow['name']));
 		}

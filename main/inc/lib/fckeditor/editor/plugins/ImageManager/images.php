@@ -113,7 +113,12 @@ function drawErrorBase(&$manager)
 ?>
 <table width="100%">
   <tr>
-    <td class="error">Invalid base directory: <?php echo $manager->config['base_dir']; ?></td>
+    <td class="error"><?php echo get_lang('InvalidDirectoryPleaseCreateAnImagesFolder'); ?>
+    <?php
+    if (api_is_platform_admin())
+    {
+    	echo $manager->config['base_dir'];
+    }?></td>
   </tr>
 </table>
 <?php	

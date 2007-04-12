@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 10811 2007-01-22 08:26:40Z elixir_julian $
+// $Id: user_import.php 11999 2007-04-12 21:31:57Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -332,7 +332,7 @@ if (count($errors) != 0)
 		$error_message .= '</li>';
 	}
 	$error_message .= '</ul>';
-	Display :: display_error_message($error_message);
+	Display :: display_error_message($error_message, false);
 }
 $form = new FormValidator('user_import');
 $form->addElement('hidden', 'formSent');
@@ -386,7 +386,7 @@ $form->display();
 
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

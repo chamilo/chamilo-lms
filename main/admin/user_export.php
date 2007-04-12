@@ -1,5 +1,5 @@
 <?php
-// $Id: user_export.php 10811 2007-01-22 08:26:40Z elixir_julian $
+// $Id: user_export.php 11999 2007-04-12 21:31:57Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -63,6 +63,7 @@ while ($course = mysql_fetch_object($result))
 $form = new FormValidator('export_users');
 $form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'XML','xml');
 $form->addElement('radio', 'file_type', null, 'CSV','csv');
+$form->addElement('checkbox', 'addcsvheader', get_lang('AddCSVHeader'), get_lang('YesAddCSVHeader'),'1');
 $form->addElement('select', 'course_code', get_lang('OnlyUsersFromCourse'), $courses);
 $form->addElement('submit', 'submit', get_lang('Ok'));
 $form->setDefaults(array('file_type'=>'csv'));
@@ -91,8 +92,13 @@ if ($form->validate())
 		$sql .= " FROM $user_table u ORDER BY lastname,firstname";
 		$filename = 'export_users_'.date('Y-m-d_H-i-s');
 	}
-	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$data = array();
+	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv')
+	{
+		$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName', 'Password', 'AuthSource', 'Statut', 'OfficialCode', 'Phone');
+	}
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+
 	while($user = mysql_fetch_array($res,MYSQL_ASSOC))
 	{
 		$data[] = $user	;
@@ -112,7 +118,7 @@ Display :: display_header($tool_name);
 $form->display();
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

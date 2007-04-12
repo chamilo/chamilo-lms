@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 11118 2007-02-15 10:47:44Z elixir_julian $
+// $Id: infocours.php 11985 2007-04-12 08:16:24Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -126,7 +126,7 @@ while($a_titulars=mysql_fetch_array($q_result_titulars)){
 		$s_lastname=$a_titulars["lastname"];
 		$s_firstname=$a_titulars["firstname"];
 
-		if($s_username==$s_tutor){
+		if($s_firstname.' '.$s_lastname==$s_tutor){
 			$s_selected_tutor=$s_username;
 		}
 		$s_disabled_select_titular="";

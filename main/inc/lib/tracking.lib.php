@@ -336,7 +336,7 @@ class Tracking {
 					FROM $tbl_session_course_user AS srcru 
 					WHERE course_code='$course_code'";
 
-			$rs=api_sql_query($sql);
+			$rs=api_sql_query($sql, __FILE__, __LINE__);
 			
 			while($row=mysql_fetch_array($rs))
 			{
@@ -348,23 +348,18 @@ class Tracking {
 		// Then, courses where $coach_id is coach of the session    //
 		//////////////////////////////////////////////////////////////
 		
-		$sql = 'SELECT DISTINCT session_course_user.id_user 
-				FROM '.$tbl_session_course_user.' as session_course_user
-				INNER JOIN '.$tbl_session_course.' as session_course
-					ON session_course.course_code = session_course_user.course_code
-					AND session_course_user.id_session = session_course.id_session
-				INNER JOIN '.$tbl_session.' as session
-					ON session.id = session_course.id_session
-					AND session.id_coach = '.$coach_id.' AND session.id='.$id_session;
-
-		$result=api_sql_query($sql);
-		
-		while($row=mysql_fetch_array($result))
-		{
-			$a_students[$row['id_user']]=$row['id_user'];
+		$dsl_session_coach = 'SELECT id_coach FROM '.$tbl_session.' WHERE id="'.$id_session.'" AND id_coach="'.$coach_id.'"';
+		$result=api_sql_query($dsl_session_coach, __FILE__, __LINE__);
+		//He is the session_coach so we select all the users in the session
+		if(mysql_num_rows($result)>0){
+			$sql = 'SELECT DISTINCT srcru.id_user FROM '.$tbl_session_course_user.' AS srcru WHERE id_session="'.$id_session.'"';
+			$result=api_sql_query($sql);
+			while($row=mysql_fetch_array($result))
+			{
+				$a_students[$row['id_user']]=$row['id_user'];
+			}
 		}
-		return $a_students;
-		
+		return $a_students;		
 	}
 	
 	

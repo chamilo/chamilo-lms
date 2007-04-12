@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 11515 2007-03-11 23:01:29Z pcool $
+* 	@version $Id: create_new_survey.php 11997 2007-04-12 19:18:32Z pcool $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -100,16 +100,9 @@ if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET
 else
 {
 	$defaults['survey_language'] = $_course['language'];
-	$defaults['start_date']['d'] = date('d');
-	$defaults['start_date']['F'] = date('F');
-	$defaults['start_date']['Y'] = date('Y');
-	$defaults['start_date']['H'] = date('H');
-	$defaults['start_date']['i'] = date('i');
-	$defaults['end_date']['d'] = date('d');
-	$defaults['end_date']['F'] = date('F');
-	$defaults['end_date']['Y'] = date('Y');
-	$defaults['end_date']['H'] = date('H');
-	$defaults['end_date']['i'] = date('i');
+	$defaults['start_date'] = date('d-F-Y H:i');
+	$startdateandxdays = time() + 864000; // today + 10 days
+	$defaults['end_date'] = date('d-F-Y H:i', $startdateandxdays);
 	$defaults['survey_share']['survey_share'] = 0;
 	$form_share_value = 1;
 }

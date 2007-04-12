@@ -334,7 +334,7 @@ class Tracking {
 	    	
 	    	$sql = "SELECT distinct	srcru.id_user  
 					FROM $tbl_session_course_user AS srcru 
-					WHERE course_code='$course_code'";
+					WHERE course_code='$course_code' and id_session = '".$id_session."'";
 
 			$rs=api_sql_query($sql, __FILE__, __LINE__);
 			

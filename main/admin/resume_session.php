@@ -64,7 +64,7 @@ $id_session = $_GET['id_session'];
 
 if($_GET['action'] == 'delete')
 {
-	$isChecked = $_GET['isChecked'];
+	$idChecked = $_GET['idChecked'];
 	if(is_array($idChecked))
 	{
 		$idChecked="'".implode("','",$idChecked)."'";

@@ -43,7 +43,7 @@ class SystemAnnouncementManager
 	{
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table." WHERE (lang='$user_selected_language' OR lang IS NULL) AND (NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00' ";
+		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table." WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
 		switch ($visible)
 		{
 			case VISIBLE_GUEST :
@@ -104,7 +104,7 @@ class SystemAnnouncementManager
 
 			}
 
-			echo '<tr><td height="15px"></td></tr>';
+			/*echo '<tr><td height="15px"></td></tr>';*/
 			echo '<tr><td colspan="2">';
 			echo '<a href="newsList.php">'.get_lang("More").'</a>';
 			echo '</td></tr>';

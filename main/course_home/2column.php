@@ -156,7 +156,7 @@ function show_tools($course_tool_category)
 						'" target="' , $toolsRow['target'], '" '.$class.'>',
 					'<img src="', $web_code_path, 'img/',
 						$toolsRow['image'], '" align="absmiddle" border="0" alt="', $toolsRow['image'],'" />',
-					'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif") ? htmlspecialchars( $toolsRow['name']) : get_lang($toolsRow['name']),
+					'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif" || $toolsRow['image']=="blog.gif") ? htmlspecialchars( $toolsRow['name']) : get_lang(ucfirst($toolsRow['name'])),
 					"</a>\n ";
 
 			// This part displays the links to hide or remove a tool.

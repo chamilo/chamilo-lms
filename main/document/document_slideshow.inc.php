@@ -1,4 +1,4 @@
-<?php // $Id: document_slideshow.inc.php 12008 2007-04-13 09:16:22Z elixir_julian $
+<?php // $Id: document_slideshow.inc.php 12013 2007-04-13 09:52:50Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -114,7 +114,7 @@ else{
 }
 $tablename_direction = $_GET['tablename_direction'];
 
-$image_files_only = sort_files1($array_to_search);
+$image_files_only = sort_files($array_to_search);
 $_SESSION["image_files_only"] = $image_files_only;
 
 function sort_files($table){

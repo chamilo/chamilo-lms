@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 12001 2007-04-12 22:38:53Z pcool $
+// $Id: user_import.php 12014 2007-04-13 09:57:59Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -300,7 +300,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 
 set_time_limit(0);
 
-if ($_POST['formSent'] AND !empty($_POST['import_file']))
+if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0)
 {
 	$file_type = $_POST['file_type'];
 	if ($file_type == 'csv')
@@ -323,7 +323,7 @@ if ($_POST['formSent'] AND !empty($_POST['import_file']))
 Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 
-if(empty($_POST['import_file']))
+if($_FILES['import_file']['size'] == 0 AND $_POST)
 {
 	Display::display_error_message(get_lang('ThisFieldIsRequired'));
 }

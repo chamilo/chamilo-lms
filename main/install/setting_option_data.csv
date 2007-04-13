@@ -46,8 +46,6 @@
 58,'dropbox_allow_mailing','false','No',
 59,'extended_profile','true','Yes',
 60,'extended_profile','false','No',
-61,'student_view_enabled','true','Yes',
-62,'student_view_enabled','false','No',
 63,'show_navigation_menu','false','No',
 64,'show_navigation_menu','icons','IconsOnly',
 65,'show_navigation_menu','text','TextOnly',

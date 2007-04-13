@@ -83,7 +83,6 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 -- UPDATE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='online_conference';
 -- UPDATE settings_current SET selected_value = 'true' WHERE variable='course_create_active_tools' AND subkey='student_publications';
 -- UPDATE settings_current SET selected_value = 'true' WHERE variable='use_document_title';
-INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('student_view_enabled',NULL,'radio','Platform','true','StudentViewEnabledTitle','StudentViewEnabledComment',NULL,NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_navigation_menu',NULL,'radio','Course','false','ShowNavigationMenuTitle','ShowNavigationMenuComment',NULL,NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('enable_tool_introduction',NULL,'radio','course','false','EnableToolIntroductionTitle','EnableToolIntroductionComment',NULL,NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('page_after_login', NULL, 'radio','Platform','user_portal.php', 'PageAfterLoginTitle','PageAfterLoginComment', NULL, NULL);
@@ -112,8 +111,6 @@ UPDATE settings_options SET value = 'activity', display_text='HomepageViewActivi
 UPDATE settings_options SET value = '2column', display_text='HomepageView2column' WHERE variable = 'homepage_view' AND value = 'basic_tools_fixed';
 INSERT INTO settings_options(variable,value,display_text) VALUES ('homepage_view','3column','HomepageView3column');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('allow_registration','approval','AfterApproval');
-INSERT INTO settings_options(variable,value,display_text) VALUES ('student_view_enabled','true','Yes');
-INSERT INTO settings_options(variable,value,display_text) VALUES ('student_view_enabled','false','No');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('show_navigation_menu','false','No');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('show_navigation_menu','icons','IconsOnly');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('show_navigation_menu','text','TextOnly');

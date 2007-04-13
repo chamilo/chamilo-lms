@@ -6301,7 +6301,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 									$s_selected_position=$arrLP[$i]['id'];
 								elseif($action == 'add')
-									$s_selected_position=$arrLP[$i]['id'];
+									$s_selected_position=0;
 								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
 								
 							}

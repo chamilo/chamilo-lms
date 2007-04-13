@@ -1,4 +1,4 @@
-<?php // $Id: document_slideshow.inc.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: document_slideshow.inc.php 12008 2007-04-13 09:16:22Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -104,6 +104,55 @@ if ( count($all_files) > 0 )
 		}
 	}
 }
+
+$tablename_column = $_GET['tablename_column'];
+if($tablename_column==0){
+	$tablename_column=1;
+}
+else{
+	$tablename_column= intval($tablename_column)-1;
+}
+$tablename_direction = $_GET['tablename_direction'];
+
+$image_files_only = sort_files1($array_to_search);
+$_SESSION["image_files_only"] = $image_files_only;
+
+function sort_files($table){
 	
-$_SESSION["image_files_only"]=$image_files_only; 
+	global $tablename_direction;
+	$temp=array();
+	
+	foreach($table as $file_array){
+		if($file_array['filetype']=='file'){
+			$temp[] = array('file', $file_array['title'], $file_array['size'], $file_array['insert_date']);
+		}
+	}
+	
+	usort($temp, 'sort_table');
+	if($tablename_direction == 'DESC'){
+		rsort($temp);
+	}
+	
+	$final_array=array();
+	foreach($temp as $file_array){
+		$final_array[] = $file_array[1];
+	}
+	
+	return $final_array;
+	
+}
+
+function sort_table($a, $b)
+{
+	global $tablename_column;
+	if($a[$tablename_column] > $b[$tablename_column]){
+		return 1;
+	}
+	else{
+		return -1;
+	}
+}
+
+
+ 
 ?>

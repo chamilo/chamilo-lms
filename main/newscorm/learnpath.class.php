@@ -7059,7 +7059,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 		
 		$resources=api_store_result($res_doc);
-
+		
 		$return .=$this->write_resources_tree('', $resources);
 		
 		$return .='</div>';
@@ -7073,6 +7073,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	
 	function write_resources_tree($parent, $resources_array_first = false){
 		
+		include_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 		static $resources_array;
 		if($resources_array_first !== false)
 			$resources_array = $resources_array_first;
@@ -7090,7 +7091,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				//It's a file
 				if ($value['filetype'] == 'file') {
 					if($num==0) $num=1;
-					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $value['id'] . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/lp_' . (($value['filetype'] == 'file') ? TOOL_DOCUMENT.'_file' : 'folder') . '.gif" title="" />'.$value['title']."</a></div></div>\r\n";
+					//$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $value['id'] . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/lp_' . (($value['filetype'] == 'file') ? TOOL_DOCUMENT.'_file' : 'folder') . '.gif" title="" />'.$value['title']."</a></div></div>\r\n";
+					$icon = choose_image(trim($value['title']));
+					$position = strrpos($icon,'.');
+					$icon=substr($icon,0,$position).'_small.gif';
+					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $value['id'] . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/'.$icon.'" title="" />'.$value['title']."</a></div></div>\r\n";
 					array_shift($resources_array);
 				}
 				//It's a folder
@@ -7129,7 +7134,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			{
 				$return .= '<div class="lp_resource_element">';
 				
-					$return .= '<img alt="" src="../img/lp_' . TOOL_QUIZ . '.png" style="margin-right:5px;" title="" />';
+					$return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
 					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_quiz['title'] . '</a>';
 					//$return .= $row_quiz['title'];
 				
@@ -7166,7 +7171,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			{
 				$return .= '<div class="lp_resource_element">';
 				
-					$return .= '<img align="left" alt="" src="../img/lp_' . TOOL_LINK . '.png" style="margin-right:5px;" title="" />';
+					$return .= '<img align="left" alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
 					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
 				
 				$return .= '</div>';
@@ -7198,7 +7203,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />'.get_lang('Assignments').'</div>';
 		$return .= '<div class="lp_resource_elements" id="resStudent" style="border-bottom:1px solid #999999; border-top:0;">';
 		$return .= '<div class="lp_resource_element">';
-		$return .= '<img align="left" alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.png" style="margin-right:5px;" title="" />';
+		$return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
 		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
 		$return .= '</div>';
 		$return .= '</div>';

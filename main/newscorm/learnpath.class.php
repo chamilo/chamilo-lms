@@ -106,10 +106,7 @@ class learnpath {
     	else
     	{    		
     		//TODO make it flexible to use any course_code (still using env course code here)
-    		//$lp_table = Database::get_course_table(LEARNPATH_TABLE);
-	    	$lp_db = Database::get_current_course_database();
-	    	$lp_pref = Database::get_course_table_prefix();
-	    	$lp_table = $lp_db.'.'.$lp_pref.'lp';
+	    	$lp_table = Database::get_course_table('lp');
 
     		//$id = Database::escape_integer($id);
     		$lp_id = $this->escape_string($lp_id);

@@ -381,10 +381,6 @@ elseif ($displayMode == "viewContentList") // default display
 		{
 			Display::display_icon('unknown.jpg', get_lang('Unknown'));
 		}
-		if($is_allowedToTrack)
-		{
-			echo get_lang('Tracking');
-		}
 
 		//DISPLAY TABLE HEADING
 		if ($origin == 'learnpath') { $allowedToEditDef=false; $is_allowedToTrack=false; }

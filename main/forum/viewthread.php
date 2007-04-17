@@ -276,6 +276,7 @@ if ($message<>'PostDeletedSpecial') // in this case the first and only post of t
 			break;
 		case 'nested':
 			include_once('viewthread_nested.inc.php');
+			break;
 		default:
 			include_once('viewthread_flat.inc.php');
 			break;

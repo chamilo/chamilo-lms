@@ -122,6 +122,21 @@ input[type=radio],
 input[type=button],
 input[type=submit] {cursor:	pointer; font-size: 12px;}
 input[text] {font-size: 12px; }
+
+/* user_portal course status icon */
+.coursestatusicons{
+	border: 0px solid #000;
+	float: left;
+	padding-right: 5px;
+	width: auto;
+}
+
+/* user_portal course list */
+.courses {
+	list-style-type: none;
+	margin-bottom: 5px;
+}
+
 /*****************************************************
  *  HEADER STYLES                                    *
  *****************************************************/

@@ -209,6 +209,7 @@ input[text] {font-size: 12px; }
 	color: #006;
 	border-bottom: 1px solid #4171b5;
 	height:auto;
+	margin-bottom: 1px;
 }
 #header3 A {
 	PADDING-RIGHT: 15px;

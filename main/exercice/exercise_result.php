@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 11921 2007-04-06 15:08:29Z elixir_inter $
+* 	@version $Id: exercise_result.php 12050 2007-04-18 13:05:09Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -740,6 +740,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
 						$val = $arr1[1][0];
 					$val=addslashes($val);
+					$val=strip_tags($val);
 					$sql = "select position from $table_ans where question_id=$questionId and answer='$val'";
 					$res = api_sql_query($sql, __FILE__, __LINE__);
 					$answer = mysql_result($res,0,"position");

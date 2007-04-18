@@ -598,99 +598,68 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			</tr>
 			</table>
 	<?php  }
-		elseif($answerType == MATCHING)
-			{?>
-		<table width="355" height="71" border="0">
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<tr>
-			<td><i><?php echo get_lang("ElementList"); ?></i> </td>
-			<td><i><?php echo get_lang("CorrespondsTo"); ?></i></td>
+	
+	elseif($answerType == MATCHING)
+	{
 
-			</tr>
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<?php
-			$objAnswerTmp=new Answer($questionId);
-			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-			$questionScore=0;
-			for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-				{
-				$answer=$objAnswerTmp->selectAnswer($answerId);
-				$answerComment=$objAnswerTmp->selectComment($answerId);
-				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-				$querymatch = "select * from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
-				$resmatch = api_sql_query($querymatch, __FILE__, __LINE__);
-				while ($row = mysql_fetch_array($resmatch))
-					{
-					$ind = $row['position'];
-					$answ = $row['answer'];
-					$choice[$ind] = $answ;
-					}
+		$objAnswerTmp=new Answer($questionId);
+		
+		$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+		$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt";
+		
+		$sql_select_answer = 'SELECT id, answer, correct, position FROM '.$table_ans.' WHERE question_id="'.$questionId.'" AND correct<>0';
+		$res_answers = api_sql_query($sql_select_answer, __FILE__, __LINE__);
+		
+		echo '<table width="355" height="71" border="0">';
+		echo '<tr><td colspan="2">&nbsp;</td></tr>';
+		echo '<tr>
+				<td><span style="font-style: italic;">'.get_lang("ElementList").'</span> </td>
+				<td><span style="font-style: italic;">'.get_lang("CorrespondsTo").'</span></td>
+			  </tr>';
+		echo '<tr><td colspan="2">&nbsp;</td></tr>';
+		
+		$questionScore=0;
+		
+		while($a_answers = mysql_fetch_array($res_answers)){
+			
+			$i_answer_id = $a_answers['id'];
+			$s_answer_label = $a_answers['answer'];
+			$i_answer_correct_answer = $a_answers['correct'];
+			$i_answer_position = $a_answers['position'];
+			
+			$sql_user_answer = 'SELECT answers.answer 
+								FROM `'.$TABLETRACK_ATTEMPT.'` as track_e_attempt, '.$table_ans.' as answers 
+								WHERE track_e_attempt.answer=answers.position 
+								AND track_e_attempt.position="'.$i_answer_position.'" 
+								AND answers.question_id ="'.$questionId.'" 
+								AND exe_id = "'.$id.'"';
 
-				 if($answerCorrect)
-				{
-					if($answerCorrect == $choice[$answerId])
-					{
-						$questionScore+=$answerWeighting;
-						$totalScore+=$answerWeighting;
-						$choice[$answerId]=$matching[$choice[$answerId]];
-					}
-					elseif(!$choice[$answerId])
-					{
-						$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
-					}
-					else
-					{
-						$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
-					}
-				}
-				else
-				{
-					$matching[$answerId]=$answer;
-				}
-				 ?>
-			<tr>
-
-
-							  <?php
-								$answer=api_parse_tex($answer);
-								//echo $answer; ?>
-
-							  <?php
-						$query = "select position from `".$TABLETRACK_ATTEMPT."` where question_id = $questionId and exe_id=$id";
-						$resapp = api_sql_query($query, __FILE__, __LINE__);
-						while($row = mysql_fetch_array($resapp))
-							{
-							 $tp = $row['position'];
-						     }
-						foreach($choice as $key => $v)
-							{
-							if($key==$answerId)
-								{
-                                 echo "<td>".$answer."</td>";
-								 echo "<td>";
-								 echo $v.'/';
-
-								}
-							}
-
-							?>  <font color="green"><b>
-							<?php
-							 $matching[$answerCorrect]=api_parse_tex($matching[$answerCorrect]);
-							 echo $matching[$answerCorrect]; ?></b></font>
-			</td>
-
-			</tr><?php
-		$i++;
-
-
-		}?>
-			</table>
-	<?php }
+			$res_user_answer = api_sql_query($sql_user_answer, __FILE__, __LINE__);
+			$s_user_answer = mysql_result($res_user_answer,0,0);
+			
+			$sql_correct_answer = 'SELECT answer FROM '.$table_ans.' WHERE position = "'.$i_answer_correct_answer.'" AND question_id="'.$questionId.'"';
+			$res_correct_answer = api_sql_query($sql_correct_answer, __FILE__, __LINE__);
+			$s_correct_answer = mysql_result($res_correct_answer,0,0);
+			
+			$i_answerWeighting=$objAnswerTmp->selectWeighting($i_answer_id);
+			
+			if($s_user_answer == $s_correct_answer){
+				$questionScore+=$i_answerWeighting;
+				$totalScore+=$i_answerWeighting;
+			}
+			else{
+				$s_user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$s_user_answer.'</span>';
+			}
+			
+			echo '<tr>';
+			echo '<td>'.$s_answer_label.'</td><td>'.$s_user_answer.' / <span style="color: #008000;">'.$s_correct_answer.'</span></td>';
+			echo '</tr>';
+			
+		}
+		
+		echo '</table>';
+	
+	}
 	else if($answerType == HOTSPOT){
 
 

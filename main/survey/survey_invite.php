@@ -265,11 +265,12 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 				}
 
 				// sending the mail
-				$sender_name  = $_user['firstname'].' '.$_user['lastname'];
-				$sender_email = $_user['email'];
+				$sender_name  = $_user['firstName'].' '.$_user['lastName'];
+				$sender_email = $_user['mail'];
 				//echo $recipient_name.'-'.$recipient_email.'-'.$invitation_title.'-'.$invitation_text.'-'.$sender_name.'-'.$sender_email.'-';
-				//api_mail($recipient_name, $recipient_email, $invitation_title, $invitation_text, $sender_name, $sender_email, '');
-				mail($recipient_email, strip_tags($invitation_title), strip_tags($invitation_text));
+				
+				api_mail($recipient_name, $recipient_email, $invitation_title, $invitation_text, $sender_name, $sender_email, '');
+				//mail($recipient_email, strip_tags($invitation_title), strip_tags($invitation_text));
 				$counter++;
 			}
 		}

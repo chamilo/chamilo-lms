@@ -1,5 +1,6 @@
 <?php
 require(api_get_path(INCLUDE_PATH).'lib/phpmailer/class.phpmailer.php');
+require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
 
  //regular expression to test for valid email address
  $regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
@@ -58,7 +59,6 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
       $mail->Sender 	= $platform_email['SMTP_FROM_EMAIL'];
       //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
     }
-
 
    if ($sender_name!="")
    {

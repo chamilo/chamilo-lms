@@ -3797,7 +3797,17 @@ class learnpath {
 
 		//$res = Database::query($sql);
 
-		$res = api_sql_query($sql);
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		
+		// if the lp is visible on the homepage, change his name there
+		if(mysql_affected_rows())
+		{ 
+			$table = Database :: get_course_table(TABLE_TOOL_LIST);
+			$sql = 'UPDATE '.$table.' SET
+						name = "'.$this->name.'"
+					WHERE link = "newscorm/lp_controller.php?action=view&lp_id='.$lp_id.'"';
+			api_sql_query($sql, __FILE__, __LINE__);
+		}
 
     	return true;
 

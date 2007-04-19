@@ -48,4 +48,5 @@ $AnnouncementDeletedAll = "Alla tillkännagivanden har raderats";
 $AnnouncementMoved = "Tillkännagivanden har flyttats";
 $NoAnnouncements = "Det finns inga tillkännagivanden";
 $SelectEverybody = "Välj alla";
+$SelectedUsersGroups = "valda användargrupper";
 ?>

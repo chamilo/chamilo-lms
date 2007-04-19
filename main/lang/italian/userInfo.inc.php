@@ -29,4 +29,5 @@ $langGroupUserManagement = "Gestione gruppi";
 $langUserInfo = "informazioni sull\'utente";
 $langUnregister = "Cancella l\'iscrizione";
 $langAddAUser = "Aggiungi utenti";
+$UsersUnsubscribed = "Glii utenti selezionati sono stati cancellati dal corso";
 ?>

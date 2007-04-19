@@ -216,4 +216,6 @@ $AssignMarks = "Oceni / dodeli oceno";
 $Results = "Rezultati";
 $ExerciseStored = "Vaja je bila shranjena";
 $ChooseAtLeastOneCheckbox = "Izberite vsaj en pravilen odgovor";
+$ExerciseEdited = "Vaja je bila spremenjena";
+$ExerciseDeleted = "Vaja je bila odstranjena";
 ?>

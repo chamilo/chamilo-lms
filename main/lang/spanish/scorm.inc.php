@@ -2,17 +2,17 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langScormVersion = "versión";
-$langScormRestarted = "Todas las unidades están sin completar.";
-$langScormNoNext = "Esta es la última unidad.";
-$langScormNoPrev = "Esta es la primera unidad.";
+$langScormRestarted = "Todas las lecciones están sin completar.";
+$langScormNoNext = "Esta es la última lección.";
+$langScormNoPrev = "Esta es la primera lección.";
 $langScormTime = "Hora";
-$langScormNoOrder = "No hay un orden preestablecido, puedes hacer clic en cualquier unidad.";
+$langScormNoOrder = "No hay un orden preestablecido, puedes hacer clic en cualquier lección.";
 $langScormScore = "Puntuación";
-$langScormLessonTitle = "Título de la unidad";
+$langScormLessonTitle = "Título de la lección";
 $langScormStatus = "Estado";
 $langScormToEnter = "Para entrar en";
 $langScormFirstNeedTo = "primero debe terminar";
-$langScormThisStatus = "Esta unidad ahora está";
+$langScormThisStatus = "Esta lección ahora está";
 $langScormClose = "Cerrar aplicación";
 $langScormRestart = "Reiniciar";
 $langScormCompstatus = "Completado";
@@ -43,6 +43,6 @@ $Local = "Local";
 $Remote = "Remoto";
 $FileToUpload = "Archivo a enviar";
 $ContentMaker = "Creador de contenidos";
-$ContentProximity = "Proximidad del contenido";
+$ContentProximity = "Localización del contenido";
 $UploadLocalFileFromGarbageDir = "Enviar archivo local desde el directorio main/garbage";
 ?>

@@ -86,4 +86,5 @@ $AddBlog = "Crear un novo blog";
 $EditBlog = "Modificar título e subtítulo";
 $DeleteBlog = "Eliminar este blog";
 $Comments = "Comentarios";
+$Comments = "Comentarios";
 ?>

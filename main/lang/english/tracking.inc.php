@@ -211,4 +211,5 @@ $YourStatistics = "Your statistics";
 $CoachList = "Coachs list";
 $CoachStudents = "Coach students";
 $NoLearningPath = "No learning paths";
+$SessionCourses = "Session of courses";
 ?>

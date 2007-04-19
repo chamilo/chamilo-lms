@@ -213,5 +213,8 @@ $YourScore = "Su puntuación";
 $Attempted = "Intentado";
 $AssignMarks = "Dar una puntuación";
 $Results = "Resultados";
-$ExerciseStored = "El ejercicio ha sido almacenado";
+$ExerciseStored = "El ejercicio ha sido guardado";
+$ChooseAtLeastOneCheckbox = "Escoger al menos una respuesta correcta";
+$ExerciseEdited = "El ejercicio ha sido modificado";
+$ExerciseDeleted = "El ejercicio ha sido borrado";
 ?>

@@ -604,4 +604,6 @@ $XMLNotValid = "Het XML document is niet geldig";
 $AllowEmailEditorTitle = "Activeer online e-mail editor";
 $AllowEmailEditorTitle = "Activeer online e-mail editor";
 $AllowEmailEditorComment = "Als deze optie is geactiveerd, wordt een online e-mail editor geopend na het klikken op een e-mailadres";
+$AddCSVHeader = "Voeg de CSV hoofding toe?";
+$YesAddCSVHeader = "Ja, voeg de CSV hoofding toe<br />Deze lijn bepaalt de velden en is noodzakelijk als u het bestand wilt importeren in een andere Dokeos campus";
 ?>

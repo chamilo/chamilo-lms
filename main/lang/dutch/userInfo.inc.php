@@ -29,4 +29,5 @@ $langGroupUserManagement = "Groepenbeheer";
 $langUserInfo = "gebruikersinformatie";
 $langUnregister = "Uitschrijven";
 $langAddAUser = "gebruikers toevoegen";
+$UsersUnsubscribed = "De geselecteerde gebruikers zijn uitgeschreven uit de cursus";
 ?>

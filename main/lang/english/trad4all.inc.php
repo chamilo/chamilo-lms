@@ -422,4 +422,5 @@ $SessionActive = "Active";
 $SessionFuture = "Not yet begun";
 $SessionFuture = "Not yet begun";
 $DateFormatLongWithoutDay = "%B %d, %Y";
+$InvalidDirectoryPleaseCreateAnImagesFolder = "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder";
 ?>

@@ -29,4 +29,5 @@ $langGroupUserManagement = "Group management";
 $langUserInfo = "user information";
 $langUnregister = "Unregister";
 $langAddAUser = "Add users";
+$UsersUnsubscribed = "The selected users have been unsubscribed from the course";
 ?>

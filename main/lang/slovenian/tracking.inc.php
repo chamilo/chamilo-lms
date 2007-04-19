@@ -209,4 +209,7 @@ $NumberOfSessions = "Število sej";
 $YourCourseList = "Seznam tvojih teèajev";
 $YourStatistics = "Tvoja statistika";
 $CoachList = "Seznam coach-ov";
+$CoachStudents = "Teèajniki (coach-eji)";
+$NoLearningPath = "Ni uènih poti";
+$SessionCourses = "Seja teèajev";
 ?>

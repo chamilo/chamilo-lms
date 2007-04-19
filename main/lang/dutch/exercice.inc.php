@@ -216,4 +216,6 @@ $AssignMarks = "Punten toekennen";
 $Results = "Resultaten";
 $ExerciseStored = "De oefening is opgeslagen";
 $ChooseAtLeastOneCheckbox = "Kies minimum één correct antwoord";
+$ExerciseEdited = "De oefening is gewijzigd";
+$ExerciseDeleted = "De oefening is verwijderd";
 ?>

@@ -151,6 +151,8 @@ $langTechnicalTools  = "Técnico";
 $langConfig  = "Configuración do sistema";
 $langLogIdentLogoutComplete  = "Lista de Login (detallada)";
 $langLimitUsersListDefaultMax = "Número máximo de usuarios a ser mostrado na listaxe";
+$CourseCoach = "Titor do curso";
+$UsersNumber = "Número de usuarios";
 $PageAfterLoginTitle = "Páxina despois de rexistrarse";
 $PageAfterLoginComment = "A páxina á que se envía o usuario que se conecte";
 $DokeosAdminWebLinks = "Ligazóns Web de Dokeos";
@@ -483,5 +485,8 @@ $ServiceActivated = "Activouse o servizo";
 $ActiveExtension = "Activar servizos";
 $InvalidExtension = "Extensión non válida";
 $VersionCheckExplanation = "Para permitir a comprobación automática de versión ten que rexistrar o seu campus en dokeos.com. A información que se obteña ao obter este botón só será empregada internamente e só se farán públicos resultados agregados (número total de campus, número total de cursos de dokeos, número total de estudantes en dokeos, ... ) (consulte <a href=\"see http://www.dokeos.com/stats/\">consulte http://www.dokeos.com/stats/</a>. Ao rexistrarse tamén aparecerá na lista mundial (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>. De non querer aparecer nesta lista só ten que clicar na opción correspondente. O rexistre non pode ser máis doado: só ten que clicar neste botón: <br />";
+$Version = "Versión";
+$Active = "Activo";
 $WCAGContent = "Texto";
+$UnknownUser = "Usuario descoñecido";
 ?>

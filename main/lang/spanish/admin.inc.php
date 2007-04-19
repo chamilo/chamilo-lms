@@ -216,7 +216,7 @@ $langLoginAsThisUser = "Entrar";
 $SelectPicture = "Seleccionar imagen...";
 $DontResetPassword = "No reiniciar contraseña";
 $ParticipateInCommunityDevelopment = "Participar en el desarrollo";
-$langCourseAdmin = "administrador del curso";
+$langCourseAdmin = "administrador de curso";
 $langOtherCourses = "otros cursos";
 $PlatformLanguageTitle = "Idioma de la plataforma";
 $ServerStatusComment = "¿ Qué tipo de servidor utiliza ? Esto activa o desactiva algunas opciones específicas. En un servidor de desarrollo hay una funcionalidad que indica las cadenas de caracteres no traducidas.";
@@ -609,4 +609,6 @@ $XMLNotValid = "El documento XML no es válido";
 $AllowEmailEditorTitle = "Activar el editor de correo electrónico en línea";
 $AllowEmailEditorTitle = "Activar el editor en línea de correos electrónicos";
 $AllowEmailEditorComment = "Si se activa esta opción, al hacer clic en un correo electrónico, se abrirá un editor en línea. ";
+$AddCSVHeader = "¿ Añadir la linea de cabecera del CSV ?";
+$YesAddCSVHeader = "Sí, añadir las cabeceras CSV <br /> Esta línea define los campos y es necesaria cuando quiera importar el archivo en un campus distinto de Dokeos";
 ?>

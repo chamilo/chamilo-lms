@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$LinkMoved = "Ten link zosta&#322; przeuni&#281;ty";
 $langLinkName = "Nazwa odno&#347;nika";
 $langLinkAdd = "Dodaj odno&#347;nik";
 $langLinkAdded = "Odno&#347;nik zosta&#322; dodany";
@@ -24,6 +25,10 @@ $langGiveCategoryName = "Podaj nazw&#281; kategorii";
 $langNoCategory = "Nie okre&#347;lono kategorii";
 $showall = "Poka&#380; wszystkie";
 $shownone = "Ukryj wszystkie";
+$langListDeleted = "Lista zosta&#322;a skasowana";
+$langAddLink = "Dodaj link";
+$langDelList = "Usu&#324; link";
+$langModifyLink = "Modyfikuj link";
 $langCsvImport = "Importuj plik CSV";
 $langCsvFileNotFound = "Importowany plik CSV nie mo&#380;e zosta&#263; otworzony (mo&#380;e by&#263; np. pusty lub za du&#380;y)";
 $langCsvFileNoSeps = "Importowany plik CSV musi wykorzystywa&#263; \',\' lub \';\' jako separatora listy";

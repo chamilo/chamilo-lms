@@ -606,4 +606,6 @@ $XMLNotValid = "XML dokument ni veljaven";
 $AllowEmailEditorTitle = "Aktiviraj vgrajen urejevlanik e-sporoèil";
 $AllowEmailEditorTitle = "Aktiviraj vgrajen urejevlanik e-sporoèil";
 $AllowEmailEditorComment = "V primeru, da je ta možnost aktivirana, klik na e-pošto odpre vrajen urejevalnik e-pošte.";
+$AddCSVHeader = "Dodam CSV datoteki naslovno vrstico ?";
+$YesAddCSVHeader = "Da, dodaj CSV naslovno vrstico<br />Ta vrstica doloèi polja datoteke in je potrebna v primeru, da želite importirati datoteko v (lahko drugo) Dokeos platformo.";
 ?>

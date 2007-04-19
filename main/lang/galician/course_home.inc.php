@@ -18,4 +18,5 @@ $EditLink = "Editar ligazón";
 $Blog_management = "Xestión do blog";
 $Course_maintenance = "Mantemento do curso";
 $Authoring = "Creación de contidos";
+$Administration = "Administración";
 ?>

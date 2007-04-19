@@ -201,4 +201,15 @@ $CourseTracking = "Tracciamento del corso";
 $LinksMostClicked = "Collegamenti più visitati";
 $DocumentsMostDownloaded = "Documenti più scaricati";
 $LearningPathDetails = "Dettagli sui percorsi";
+$NoConnexion = "Connessione assente";
+$TeacherInterface = "Interfaccia docente";
+$CoachInterface = "Interfaccia Tutor";
+$AdminInterface = "Interfaccia amministratore";
+$NumberOfSessions = "Numero sessioni";
+$YourCourseList = "Elenco dei corsi";
+$YourStatistics = "Statistiche";
+$CoachList = "Elenco tutor";
+$CoachStudents = "Corsisti assegnati al tutor";
+$NoLearningPath = "Non ci sono percorsi";
+$SessionCourses = "Sessione dei corsi";
 ?>

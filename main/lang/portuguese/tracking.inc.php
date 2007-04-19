@@ -209,4 +209,7 @@ $NumberOfSessions = "Número de sessões";
 $YourCourseList = "Lista de cursos";
 $YourStatistics = "Estatísticas";
 $CoachList = "Lista de tutores";
+$CoachStudents = "Estudantes do Tutor";
+$NoLearningPath = "Nenhuma Sequência de Aprendizagem";
+$SessionCourses = "Sessões dos cursos";
 ?>

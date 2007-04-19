@@ -606,4 +606,6 @@ $XMLNotValid = "O documento XML não é válido";
 $AllowEmailEditorTitle = "Activar o editor de email online";
 $AllowEmailEditorTitle = "Activar o editor de email online";
 $AllowEmailEditorComment = "Se esta opção estiver activa, clicando num endereço de email abrirá o editor de email online.";
+$AddCSVHeader = "Acrescentar a linha do cabeçalho do CVS?";
+$YesAddCSVHeader = "Sim, acrescentar o cabeçalho CVS.<br /> Esta linha define os campos e é necessária sempre que desejar importar o ficheiro para outras instalações de Dokeos.";
 ?>

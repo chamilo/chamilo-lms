@@ -29,4 +29,5 @@ $langGroupUserManagement = "Gestão do Grupo";
 $langUserInfo = "Informação do Utilizador";
 $langUnregister = "Anular inscrição";
 $langAddAUser = "Acrescentar um utilizador";
+$UsersUnsubscribed = "Utilizadores não inscritos";
 ?>

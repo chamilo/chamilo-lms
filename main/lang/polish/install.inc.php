@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langStatDB              = "Raportowanie Bazy.";
+$langStatDB              = "Baza raportów.";
 $langEnableTracking      = "W&#322;&#261;czenie raportowania";
 $langInstituteShortName  = "Skrót nazwy instytucji";
 $langWarningResponsible  = "U&#380;yj tego sktyptu tylko po uaktualnieniu. Autorzy systemu nie ponosz&#261; odpowiedzialno&#347;ci za utrat&#281; lub uszkodzenie danych";
@@ -47,4 +47,13 @@ $langAdminPhone = "Telefon administratora";
 $langInstituteURL = "Adres URL tej organizacji";
 $langDokeosURL = "URL Dokeos";
 $langUserDB = "U&#380;ytkownik bazy";
+$langInstallationLanguage = "J&#281;zyk instalacji";
+$ReadThoroughly = "Przeczytaj uwa&#380;nie";
+$DokeosNeedFollowingOnServer = "Do uruchomienia Dokeosa potrzebujesz nast&#281;puj&#261;cych rzeczy na swoim serwerze";
+$WarningExistingDokeosInstallationDetected = "Uwaga!<br/>Instalator wykry&#322; instalacj&#281; Dokeosa w twoim systemie.";
+$NewInstallation = "Nowa instalacja";
+$CheckDatabaseConnection = "Sprawd&#378; po&#322;&#261;czenie z baz&#261; danych";
+$PrintOverview = "Poka&#380; podsumowanie";
+$Installing = "Zainstaluj";
+$PHPVersion = "wersja PHP";
 ?>

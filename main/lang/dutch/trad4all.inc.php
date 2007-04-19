@@ -422,4 +422,5 @@ $SessionActive = "Actief";
 $SessionFuture = "Nog niet gestart";
 $SessionFuture = "Nog niet gestart";
 $DateFormatLongWithoutDay = "%d %B %Y";
+$InvalidDirectoryPleaseCreateAnImagesFolder = "Ongeldige folder: gelieve een folder images aan te maken in de documentenmodule waar de afbeelding kunnen in geplaatst worden.";
 ?>

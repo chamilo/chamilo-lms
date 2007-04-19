@@ -6,6 +6,7 @@ $FavoriteBlogs = "Mina favorit bloggar";
 $Navigation = "Navigation";
 $ThisBlog = "Denna blog";
 $NewPost = "Ny artikel";
+$PostFullText = "Text";
 $blog_management = "Blog hantering";
 $langWelcome = "Välkommen!";
 $langModule = "Modul";

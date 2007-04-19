@@ -7,6 +7,7 @@ $WCAGImage = "Bild";
 $WCAGLabel = "Bildetikett";
 $WCAGLink = "Länk";
 $WCAGLinkLabel = "Länketikett";
+$WCAGEditor = "WCAG Editor";
 $WCAGGoMenu = "Gå till meny";
 $WCAGGoContent = "Gå till innehåll";
 ?>

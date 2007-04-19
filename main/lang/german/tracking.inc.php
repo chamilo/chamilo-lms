@@ -205,4 +205,11 @@ $NoConnexion = "Keine Verbindung";
 $TeacherInterface = "Lehrer Oberfläche";
 $CoachInterface = "Coach Oberfläche";
 $AdminInterface = "Administrator Oberfläche";
+$NumberOfSessions = "Anzahl Sessions";
+$YourCourseList = "Deine Liste von Kursen";
+$YourStatistics = "Deine Statistiken";
+$CoachList = "Liste der Coaches";
+$CoachStudents = "Coach Studenten";
+$NoLearningPath = "Keine Lernpfade";
+$SessionCourses = "Session der Kurse";
 ?>

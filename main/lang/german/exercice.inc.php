@@ -215,4 +215,6 @@ $AssignMarks = "Eine Markierung zuweisen";
 $Results = "Ergebnisse";
 $ExerciseStored = "Diese Übung wurde gespeichert";
 $ChooseAtLeastOneCheckbox = "Bitte zumindest eine gute Antwort auswählen";
+$ExerciseEdited = "Diese Übung wurde bearbeitet";
+$ExerciseDeleted = "Diese Übung wurde gelöscht";
 ?>

@@ -3,13 +3,13 @@ for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Documentos";
 $langMdTitle = "Título del objeto de aprendizaje";
-$langMdDescription = "Para almacenar esta información, presione Almacenar";
+$langMdDescription = "Para guardar esta información, presione Guardar";
 $langMdCoverage = "por ej., Licenciado en...";
 $langMdCopyright = "por ej., el proveedor de la fuente es conocido";
 $langTool = "Metadatos del documento";
 $langSorry = "Seleccione primero un curso";
 $langNoScript = "Su navegador no permite scripts, por favor ignore la parte inferior de la pantalla. No funcionará...";
-$langPressAgain = "Pulse de nuevo \'Almacenar\' ...";
+$langPressAgain = "Pulse de nuevo \'Guardar\' ...";
 $langLanguageTip = "idioma en el que el objeto de aprendizaje fue hecho";
 $langIdentifier = "Identificador";
 $langIdentifierTip = "identificador único para este objeto de aprendizaje, compuesto de letras, números, _-.()\\\'!*";
@@ -37,7 +37,7 @@ $langFormat = "Formato";
 $langFormatTip = "seleccionar de la lista";
 $langLocation = "URL/URI";
 $langLocationTip = "haga clic para abrir el objeto";
-$langStore = "Almacenar";
+$langStore = "Guardar";
 $langDeleteAll = "Borrar todos los metadatos";
 $langConfirmDelete = "¿ Está *seguro* de querer borrar todos los metadatos ?";
 $langCourseKwds = "Este documento contiene las palabras clave del curso";

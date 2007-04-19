@@ -209,4 +209,7 @@ $NumberOfSessions = "Aantal sessies";
 $YourCourseList = "Uw cursuslijst";
 $YourStatistics = "Uw statistieken";
 $CoachList = "Coachlijst";
+$CoachStudents = "Begeleid studenten";
+$NoLearningPath = "Geen leerpaden";
+$SessionCourses = "Sessie van cursussen";
 ?>

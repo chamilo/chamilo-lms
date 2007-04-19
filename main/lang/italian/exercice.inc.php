@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langExercice = "Verifica";
+$langExercice = "Test";
 $langActivate = "Attiva";
 $langDeactivate = "Disattiva";
 $langNoEx = "Nessun test disponibile";
@@ -28,9 +28,9 @@ $langNoAnswer = "Per ora non c\'è alcuna risposta";
 $langGoBackToQuestionPool = "Ritorna al gruppo di quesiti";
 $langGoBackToQuestionList = "Ritorna all\'elenco dei quesiti";
 $langQuestionAnswers = "Risposte al quesito";
-$langUsedInSeveralExercises = "Attenzione! Questo quesito e le rispettive risposte vengono utilizzati in numerose verifiche. Desideri modificarle?";
-$langModifyInAllExercises = "in tutte le verifiche";
-$langModifyInThisExercise = "solo in questa verifica";
+$langUsedInSeveralExercises = "Attenzione! Questo quesito e le rispettive risposte vengono utilizzati in diversi Test. Desideri modificarle?";
+$langModifyInAllExercises = "in tutti i Test";
+$langModifyInThisExercise = "solo in questo Test";
 $langAnswerType = "Tipologia di risposta";
 $langUniqueSelect = "Scelta multipla (Risposta unica)";
 $langMultipleSelect = "Scelta multipla (Risposta multipla)";
@@ -62,7 +62,7 @@ $langDefineBlanks = "Definisci almeno uno spazio con le parentesi [...]";
 $langGiveAnswers = "Fornisci le risposte al quesito";
 $langChooseGoodAnswer = "Scegli la risposta corretta";
 $langChooseGoodAnswers = "Scegli una o più risposte corrette";
-$langQuestionList = "Elenco dei quesiti della verifica";
+$langQuestionList = "Elenco dei quesiti del test";
 $langMoveUp = "Sposta in su";
 $langMoveDown = "Sposta in giù";
 $langGetExistingQuestion = "Gruppo di quesiti";
@@ -74,7 +74,7 @@ $langAllExercises = "Tutti i test";
 $langFilter = "Filtro";
 $langGoBackToEx = "Ritorna al test";
 $langReuse = "Riutilizza";
-$langExerciseManagement = "Gestione delle verifiche";
+$langExerciseManagement = "Gestione Test";
 $langQuestionManagement = "Gestione di Quesiti e Risposte";
 $langQuestionNotFound = "Quesito non trovato";
 $langExerciseNotFound = "Test non trovato";
@@ -213,4 +213,7 @@ $Attempted = "Affrontato";
 $AssignMarks = "Dai un voto";
 $Results = "Risultati";
 $ExerciseStored = "L\'esercizio è stato memorizzato";
+$ChooseAtLeastOneCheckbox = "Scegli almeno una risposta corretta";
+$ExerciseEdited = "Esercizio modificato";
+$ExerciseDeleted = "Esercizio eliminato";
 ?>

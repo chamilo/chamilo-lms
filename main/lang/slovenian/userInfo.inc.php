@@ -29,4 +29,5 @@ $langGroupUserManagement = "Upravljanje skupine";
 $langUserInfo = "informacije o uporabniku";
 $langUnregister = "Izpiši";
 $langAddAUser = "Dodaj uporabnike";
+$UsersUnsubscribed = "Izbrani uporabniki so bili izpisani iz teèaja";
 ?>

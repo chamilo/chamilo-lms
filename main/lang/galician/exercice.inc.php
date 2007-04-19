@@ -158,4 +158,6 @@ $langUseExistantQuestion = "Empregar unha pregunta xa existente";
 $freeAnswer = "Resposta libre";
 $notCorrectedYet = "Esta resposta aínda non foi correxida. Mentres tanto, a súa puntuación para esta pregunta será 0, afectando a puntuación total.";
 $adminHP = "Administración de HotPotatoes";
+$NewQu = "Nova pregunta";
+$Results = "Resultados";
 ?>

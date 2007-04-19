@@ -2,12 +2,12 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langProfessors = "Titolare/i";
-$langExplanation = "Una volta cliccato su \'Conferma\' verrà creato un sito contenente Forum, Collegamenti, Verifiche, Agenda, Documenti... . 	Potrai modificarne il contenuto accedendo con il tuo identificativo di creatore del corso.";
+$langExplanation = "Una volta cliccato su \'Conferma\' verrà creato un sito contenente Forum, Collegamenti, Test, Agenda, Documenti... . 	Potrai modificarne il contenuto accedendo con il tuo identificativo di creatore del corso.";
 $langEmpty = "Alcuni campi non sono stati compilati.<br>Utilizza il pulsante <b>Indietro</b> del browser e riprova.<br>Se non conosci il codice del Corso, consulta il Piano dei Corsi";
 $langCodeTaken = "Il codice del corso è già in uso.<br>Utilizza il pulsante <b>Indietro</b> del browser e riprova.";
 $langFormula = "Cordialmente, il Vostro docente";
 $langMessage = "Quando si elimina l\'esempio di Forum, verrà eliminato anche l\'argomento corrente che contiene solo il presente messaggio.";
-$langExerciceEx = "Esempio di Verifica";
+$langExerciceEx = "Esempio di Test";
 $langAntique = "Storia della Filosofia antica";
 $langSocraticIrony = "L\'ironia socratica consiste nel...";
 $langManyAnswers = "(sono possibili più risposte esatte)";

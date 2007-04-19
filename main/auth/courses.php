@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 11873 2007-04-04 19:46:04Z pcool $
+<?php // $Id: courses.php 12057 2007-04-19 07:31:36Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -134,7 +134,7 @@ if ($_GET['action']=='deletecoursecategory' AND isset($_GET['id']))
 // we are displaying any result messages;
 if (isset($message))
 {
-	Display::display_confirmation_message($message);
+	Display::display_confirmation_message($message, false);
 }
 
 /*

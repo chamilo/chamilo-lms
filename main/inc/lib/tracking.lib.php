@@ -148,7 +148,16 @@ class Tracking {
 		$rs = api_sql_query($sql);
 		if($last_login_date = mysql_result($rs,0,0))
 		{
-			return format_locale_date(get_lang('dateTimeFormatLong'),strtotime($last_login_date));
+			$timestamp=strtotime($last_login_date);
+			$currentTimestamp=mktime();
+			//If the last connection is > than 7 days, the text is red
+			//345600 = 7 days in seconds 
+			if($currentTimestamp-$timestamp>345600){
+				return '<span style="color: #F00;">'.format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($last_login_date)).'</span>';
+			}
+			else{
+				return format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($last_login_date));
+			}
 		}
 		else
 		{

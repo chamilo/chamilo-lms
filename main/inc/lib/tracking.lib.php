@@ -120,10 +120,12 @@ class Tracking {
 			else{
 				$timestamp=strtotime($last_login_date);
 				$currentTimestamp=mktime();
-			
+				
+				echo $currentTimestamp-$timestamp.'<br>';
+				
 				//If the last connection is > than 7 days, the text is red
 				//345600 = 7 days in seconds 
-				if($currentTimestamp-$timestamp>345600){
+				if($currentTimestamp-$timestamp>604800){
 					return '<span style="color: #F00;">'.format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($last_login_date)).'</span>';
 				}
 				else{
@@ -152,7 +154,7 @@ class Tracking {
 			$currentTimestamp=mktime();
 			//If the last connection is > than 7 days, the text is red
 			//345600 = 7 days in seconds 
-			if($currentTimestamp-$timestamp>345600){
+			if($currentTimestamp-$timestamp>604800){
 				return '<span style="color: #F00;">'.format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($last_login_date)).'</span>';
 			}
 			else{

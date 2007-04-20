@@ -332,6 +332,7 @@ input[text] {font-size: 12px; }
 	background-color: #fff;
 	color: #009;
 	padding: 4px;
+	padding-left: 21px;
 	margin-bottom: 2px;
 	float: left;
 	clear:right;

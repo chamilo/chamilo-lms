@@ -121,8 +121,6 @@ class Tracking {
 				$timestamp=strtotime($last_login_date);
 				$currentTimestamp=mktime();
 				
-				echo $currentTimestamp-$timestamp.'<br>';
-				
 				//If the last connection is > than 7 days, the text is red
 				//345600 = 7 days in seconds 
 				if($currentTimestamp-$timestamp>604800){

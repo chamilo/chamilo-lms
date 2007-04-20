@@ -287,24 +287,24 @@ INSERT INTO `language` VALUES
 (14,'Magyar','hungarian','hu','hungarian',1),
 (15,'Indonesia (Bahasa I.)','indonesian','id','indonesian',1),
 (16,'Italiano','italian','it','italian',1),
-(17,'Nihongo','japanese','ja','japanese',1),
-(18,'Melayu (Bahasa M.)','malay','ms','malay',1),
+(17,'Nihongo','japanese','ja','japanese',0),
+(18,'Melayu (Bahasa M.)','malay','ms','malay',0),
 (19,'Polski','polish','pl','polish',0),
 (20,'Portugu&ecirc;s (Portugal)','portuguese','pt','portuguese',1),
 (21,'Russkij','russian','ru','russian',0),
-(22,'Chinese (simplified)','simpl_chinese','zh','simpl_chinese',1),
+(22,'Chinese (simplified)','simpl_chinese','zh','simpl_chinese',0),
 (23,'Slovenscina','slovenian','sl','slovenian',1),
 (24,'Espa&ntilde;ol','spanish','es','spanish',1),
-(25,'Svenska','swedish','sv','swedish',1),
+(25,'Svenska','swedish','sv','swedish',0),
 (26,'Thai','thai','th','thai',0),
-(27,'T&uuml;rk&ccedil;e','turkce','tr','turkce',1),
-(28,'Vi&ecirc;t (Ti&ecirc;ng V.)','vietnamese','vi','vietnamese',1),
+(27,'T&uuml;rk&ccedil;e','turkce','tr','turkce',0),
+(28,'Vi&ecirc;t (Ti&ecirc;ng V.)','vietnamese','vi','vietnamese',0),
 (29,'Norsk','norwegian','no','norwegian',0),
 (30,'Farsi','persian','fa','persian',0),
 (31,'Srpski','serbian','sr','serbian',0),
 (32,'Bosanski','bosnian',NULL,'bosnian',1),
 (33,'Swahili (kiSw.)','swahili','sw','swahili',0),
-(34,'Esperanto','esperanto','eo','esperanto',1);
+(34,'Esperanto','esperanto','eo','esperanto',0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
 

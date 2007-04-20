@@ -7131,6 +7131,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$sql_quiz = "
 			SELECT *
 			FROM " . $tbl_quiz . "
+			WHERE active<>'-1'
 			ORDER BY title ASC";
 		$res_quiz = api_sql_query($sql_quiz, __FILE__, __LINE__);
 		

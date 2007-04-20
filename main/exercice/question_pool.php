@@ -24,7 +24,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 11110 2007-02-14 13:48:08Z elixir_julian $
+* 	@version $Id: question_pool.php 12070 2007-04-20 09:43:41Z elixir_julian $
 */
 
 // name of the language file that needs to be included
@@ -55,6 +55,9 @@ if ( empty ( $recup ) ) {
 }
 if ( empty ( $fromExercise ) ) {
     $fromExercise = $_GET['fromExercise'];
+}
+if(isset($_GET['exerciseId'])){
+	$exerciseId = $_GET['exerciseId'];
 }
 
 // maximum number of questions on a same page
@@ -100,7 +103,7 @@ if($is_allowedToEdit)
 
 		api_session_register('objExercise');
 
-		header("Location: admin.php");
+		header("Location: admin.php?exerciseId=$fromExercise");
 		exit();
 	}
 }
@@ -129,7 +132,7 @@ if($is_allowedToEdit)
 	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>>-- <?php echo get_lang('OrphanQuestions'); ?> --</option>
 
 <?php 
-	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'$fromExercise' ORDER BY id";
+	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'$fromExercise' AND active<>'-1' ORDER BY id";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 	// shows a list-box allowing to filter questions
@@ -153,24 +156,22 @@ if($is_allowedToEdit)
 	// if we have selected an exercise in the list-box 'Filter'
 	if($exerciseId > 0)
 	{
-		$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='$exerciseId' ORDER BY position LIMIT $from,".($limitQuestPage+1);
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='$exerciseId' ORDER BY position";
 	}
 	// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 	elseif($exerciseId == -1)
 	{
-		$sql="SELECT id,question,type FROM $TBL_QUESTIONS LEFT JOIN $TBL_EXERCICE_QUESTION ON question_id=id WHERE exercice_id IS NULL ORDER BY question LIMIT $from,".($limitQuestPage+1);
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$sql='SELECT id, question, type, exercice_id FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id AND exercice_id IS NULL';
 	}
 	// if we have not selected any option in the list-box 'Filter'
 	else
 	{
-		$sql="SELECT id,question,type FROM $TBL_QUESTIONS LEFT JOIN $TBL_EXERCICE_QUESTION ON question_id=id WHERE exercice_id IS NULL OR exercice_id<>'$fromExercise' GROUP BY id ORDER BY question LIMIT $from,".($limitQuestPage+1);
-		$result=api_sql_query($sql,__FILE__,__LINE__);
-
+		$sql="SELECT id,question,type FROM $TBL_QUESTIONS";
 		// forces the value to 0
 		$exerciseId=0;
 	}
+	
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 	$nbrQuestions=mysql_num_rows($result);
 ?>
@@ -186,7 +187,7 @@ if($is_allowedToEdit)
 	{
 ?>
 
-		<a href="admin.php">&lt;&lt; <?php echo get_lang('GoBackToEx'); ?></a>
+		<a href="admin.php?exerciseId=<?php echo $fromExercise; ?>">&lt;&lt; <?php echo get_lang('GoBackToEx'); ?></a>
 
 <?php
 	}

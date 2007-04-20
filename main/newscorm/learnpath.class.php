@@ -369,7 +369,7 @@ class learnpath {
 	   				WHERE
 	   					lp_id = " . $this->get_id() . " AND
 	   					parent_item_id = " . $parent . " AND
-	   					previous_item_id = 0";
+	   					previous_item_id = 0 OR previous_item_id=".$parent;
 	    		
 	    		$result = api_sql_query($sql, __FILE__, __LINE__);
 	   			$row = Database::fetch_array($result);
@@ -2841,7 +2841,14 @@ class learnpath {
 			    					$decoded = html_entity_decode($lp_item_path);
 			    					if(!is_file($sys_course_path.'/scorm/'.$lp_path.'/'.$decoded))
 			    					{
-			    						$file = 'blank.php';
+			    						require_once('resourcelinker.inc.php');
+    					$file = rl_get_resource_link_for_learnpath(api_get_course_id(),$this->get_id(),$item_id);
+    					$tmp_array=explode("/",$file);
+    					$document_name=$tmp_array[count($tmp_array)-1];
+    					if(strpos($document_name,'_DELETED_')){
+    						$file = 'blank.php?error=document_deleted';
+    					}
+
 			    					}
 			    					else
 			    					{
@@ -4969,7 +4976,7 @@ class learnpath {
 								{
 									if($action != 'add')
 									{
-										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 										}
@@ -4980,7 +4987,7 @@ class learnpath {
 									}
 									else
 									{
-										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter')
+										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 									}
 								}
@@ -5217,7 +5224,7 @@ class learnpath {
 								{
 									if($action != 'add')
 									{
-										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 										}
@@ -5228,7 +5235,7 @@ class learnpath {
 									}
 									else
 									{
-										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter')
+										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 									}
 								}
@@ -5457,7 +5464,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 								{
 									if($action != 'add')
 									{
-										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 										}
@@ -5468,7 +5475,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									}
 									else
 									{
-										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter')
+										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 									}
 								}
@@ -5957,7 +5964,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			for($i = 0; $i < count($arrLP); $i++)
 			{
 				if($action != 'add'){
-					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
+					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
 						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
 						if($parent == $arrLP[$i]['id']){
@@ -5966,7 +5973,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					}
 				}
 				else{
-					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter'){
+					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir'){
 						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
 						if($parent == $arrLP[$i]['id']){
@@ -6215,7 +6222,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 								{
 									if($action != 'add')
 									{
-										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 										}
@@ -6226,7 +6233,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									}
 									else
 									{
-										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter')
+										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 									}
 								}
@@ -6471,7 +6478,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 								{
 									if($action != 'add')
 									{
-										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
 										{
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 										}
@@ -6482,7 +6489,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 									}
 									else
 									{
-										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter')
+										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
 											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
 									}
 								}

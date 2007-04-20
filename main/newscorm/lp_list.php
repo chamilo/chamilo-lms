@@ -278,7 +278,7 @@ if (is_array($flat_list))
 						'<img src="../img/kaboodleloop_gray.gif" border="0" alt="Prevent reinit" title="'.get_lang("PreventMultipleAttempts").'"/>' .
 						'</a>&nbsp;';
 			}
-			if($details['lp_type']==1){
+			if($details['lp_type']==1 || $details['lp_type']==2){
 				$dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/wizard.gif" border="0" title="'.get_lang("Build").'"></a>&nbsp;';
 			}else{
 				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="'.get_lang("build").'">&nbsp;';

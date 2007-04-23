@@ -55,9 +55,7 @@ foreach($file as $value)
 		$explode[1] = substr($explode[1], 0, strlen($explode[1]) - 1);
 		$explode[1] = ereg_replace('"', '', $explode[1]);
 		
-		$string_temp = substr($explode[1],1);
-		
-		$temp[] = $explode[0] . '=' . substr($string_temp, 0, strlen($string_temp)-1);
+		$temp[] = $explode[0] . '=' . $explode[1];
 	}
 }
 

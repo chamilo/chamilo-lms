@@ -61,6 +61,6 @@ foreach($file as $value)
 
 foreach($temp as $value)
 {
-	echo utf8_decode($value . ' ');
+	echo $value . ' ';
 }
 ?>

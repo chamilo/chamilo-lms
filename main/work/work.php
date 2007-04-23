@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 11873 2007-04-04 19:46:04Z pcool $
+*  	@version $Id: work.php 12084 2007-04-23 12:47:19Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -845,16 +845,16 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 
 			else // else standard upload option
 			{
-				$form->addElement('file','file',get_lang('DownloadFile'));
+				$form->addElement('file','file',get_lang('DownloadFile'), 'size="30"');
 			}
 
-			$titleWork=$form->addElement('text', 'title', get_lang("TitleWork"));
+			$titleWork=$form->addElement('text', 'title', get_lang("TitleWork"), 'style="width: 350px;"');
 			$defaults["title"] = ($edit?stripslashes($workTitle):stripslashes($title));
 
-			$titleAuthors=$form->addElement('text', 'authors', get_lang("Authors"));
+			$titleAuthors=$form->addElement('text', 'authors', get_lang("Authors"), 'style="width: 350px;"');
 			$defaults["authors"] = ($edit?stripslashes($workAuthor):stripslashes($authors));
 
-			$titleAuthors=$form->addElement('textarea', 'description', get_lang("Description"));
+			$titleAuthors=$form->addElement('textarea', 'description', get_lang("Description"), 'style="width: 350px; height: 60px;"');
 			$defaults["description"] = ($edit?stripslashes($workDescription):stripslashes($description));
 
 			$form->addElement('hidden', 'active', 1);

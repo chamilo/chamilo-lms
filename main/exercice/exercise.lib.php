@@ -23,7 +23,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 11110 2007-02-14 13:48:08Z elixir_julian $
+* 	@version $Id: exercise.lib.php 12078 2007-04-23 09:05:34Z elixir_julian $
 */
 
 
@@ -95,7 +95,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
 	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
 	$oFCKeditor->Config['IMUploadPath'] = 'upload/test/';
-	$oFCKeditor->ToolbarSet = "Small";
+	$oFCKeditor->ToolbarSet = "Test";
 	$oFCKeditor->Width  = '80%';
 	$oFCKeditor->Height = '300';
 	$oFCKeditor->Value	= '' ;

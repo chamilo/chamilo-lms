@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 11108 2007-02-14 10:48:51Z elixir_julian $
+* 	@version $Id: question.class.php 12078 2007-04-23 09:05:34Z elixir_julian $
 */
 
 
@@ -732,6 +732,11 @@ abstract class Question
 	 */
 	function createForm (&$form) {
 
+		echo '	<style>
+					div.row div.label{ width: 10%; }
+					div.row div.formw{ width: 89%; }
+				</style>';
+		
 		// question name
 		$test=$form->addElement('text','questionName',get_lang('Question'),'size="60"');
 		$renderer = $form->defaultRenderer();
@@ -748,7 +753,7 @@ abstract class Question
 		$fck_attribute = array();
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '150';
-		$fck_attribute['ToolbarSet'] = 'Test';
+		$fck_attribute['ToolbarSet'] = 'TestComment';
 		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
 		$fck_attribute['Config']['FlashUploadPath'] = 'upload/test/';
 		if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';

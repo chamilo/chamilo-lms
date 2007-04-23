@@ -60,7 +60,7 @@ class MultipleAnswer extends Question {
 		global $fck_attribute;
 
 		$fck_attribute = array();
-		$fck_attribute['Width'] = '320px';
+		$fck_attribute['Width'] = '348px';
 		$fck_attribute['Height'] = '100px';
 		$fck_attribute['ToolbarSet'] = 'Test';
 		$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';

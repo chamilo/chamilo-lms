@@ -67,6 +67,24 @@ FCKFlashProcessor.ProcessDocument=function(A){
 		C.parentNode.insertBefore(E,C);
 		C.parentNode.removeChild(C);
 		};
+		
+		if (C.src.endsWith('.mp3',true)){
+			var D=C.cloneNode(true);
+			if (FCKBrowserInfo.IsIE){
+				D.setAttribute('scale',C.getAttribute('scale'));
+				D.setAttribute('play',C.getAttribute('play'));
+				D.setAttribute('loop',C.getAttribute('loop'));
+				D.setAttribute('menu',C.getAttribute('menu'));
+			};
+
+			var E=FCKDocumentProcessors_CreateFakeImage('FCK__MP3',D);
+
+			E.setAttribute('_fckmp3','true',0);
+			FCKFlashProcessor.RefreshView(E,C);
+			C.parentNode.insertBefore(E,C);
+			C.parentNode.removeChild(C);
+		};
+		
 	};
 
 };

@@ -77,7 +77,7 @@ FCKAnchorsProcessor.ProcessDocument=function(A)
 				C.parentNode.removeChild(C);
 			};
 
-			if (C.src.endsWith('.avi',true) || C.src.endsWith('.mp3',true) || C.src.endsWith('.mpg',true) || C.src.endsWith('.mpeg',true) || C.src.endsWith('.mov',true) || C.src.endsWith('.wmv',true) || C.src.endsWith('.rm',true)){
+			if (C.src.endsWith('.avi',true) || C.src.endsWith('.mpg',true) || C.src.endsWith('.mpeg',true) || C.src.endsWith('.mov',true) || C.src.endsWith('.wmv',true) || C.src.endsWith('.rm',true)){
 				var D=C.cloneNode(true);
 				if (FCKBrowserInfo.IsIE){
 					D.setAttribute('scale',C.getAttribute('scale'));
@@ -89,6 +89,23 @@ FCKAnchorsProcessor.ProcessDocument=function(A)
 				var E=FCKDocumentProcessors_CreateFakeImage('FCK__Video',D);
 
 				E.setAttribute('_fckVideo','true',0);
+				FCKFlashProcessor.RefreshView(E,C);
+				C.parentNode.insertBefore(E,C);
+				C.parentNode.removeChild(C);
+			};
+			
+			if (C.src.endsWith('.mp3',true)){
+				var D=C.cloneNode(true);
+				if (FCKBrowserInfo.IsIE){
+					D.setAttribute('scale',C.getAttribute('scale'));
+					D.setAttribute('play',C.getAttribute('play'));
+					D.setAttribute('loop',C.getAttribute('loop'));
+					D.setAttribute('menu',C.getAttribute('menu'));
+				};
+
+				var E=FCKDocumentProcessors_CreateFakeImage('FCK__MP3',D);
+
+				E.setAttribute('_fckmp3','true',0);
 				FCKFlashProcessor.RefreshView(E,C);
 				C.parentNode.insertBefore(E,C);
 				C.parentNode.removeChild(C);

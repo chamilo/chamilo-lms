@@ -109,6 +109,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		exit ();
 	}
 
+
+	$dblistres = mysql_list_dbs();
+	$dblist = array();
+	while ($row = mysql_fetch_object($dblistres)) {
+    	$dblist[] = $row->Database;
+	}
 	/*
 	-----------------------------------------------------------
 		Normal upgrade procedure:
@@ -147,15 +153,21 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			mysql_select_db($dbNameForm);
-			foreach($m_q_list as $query){
-				if($only_test){
-					error_log("mysql_query($dbNameForm,$query)",0);
-				}else{
-					$res = mysql_query($query);
-					if($log)
-					{
-						error_log("In $dbNameForm, executed: $query",0);
+			if(strlen($dbNameForm)>40){
+				error_log('Database name '.$dbNameForm.' is too long, skipping',0);
+			}elseif(!in_array($dbNameForm,$dblist)){
+				error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+			}else{
+				mysql_select_db($dbNameForm);
+				foreach($m_q_list as $query){
+					if($only_test){
+						error_log("mysql_query($dbNameForm,$query)",0);
+					}else{
+						$res = mysql_query($query);
+						if($log)
+						{
+							error_log("In $dbNameForm, executed: $query",0);
+						}
 					}
 				}
 			}
@@ -170,15 +182,21 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			mysql_select_db($dbStatsForm);
-			foreach($s_q_list as $query){
-				if($only_test){
-					error_log("mysql_query($dbStatsForm,$query)",0);
-				}else{
-					$res = mysql_query($query);
-					if($log)
-					{
-						error_log("In $dbStatsForm, executed: $query",0);
+			if(strlen($dbStatsForm)>40){
+				error_log('Database name '.$dbStatsForm.' is too long, skipping',0);
+			}elseif(!in_array($dbStatsForm,$dblist)){
+				error_log('Database '.$dbStatsForm.' was not found, skipping',0);				
+			}else{
+				mysql_select_db($dbStatsForm);
+				foreach($s_q_list as $query){
+					if($only_test){
+						error_log("mysql_query($dbStatsForm,$query)",0);
+					}else{
+						$res = mysql_query($query);
+						if($log)
+						{
+							error_log("In $dbStatsForm, executed: $query",0);
+						}
 					}
 				}
 			}
@@ -192,13 +210,19 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			mysql_select_db($dbUserForm);
-			foreach($u_q_list as $query){
-				if($only_test){
-					error_log("mysql_query($dbUserForm,$query)",0);
-					error_log("In $dbUserForm, executed: $query",0);
-				}else{
-					$res = mysql_query($query);
+			if(strlen($dbUserForm)>40){
+				error_log('Database name '.$dbUserForm.' is too long, skipping',0);
+			}elseif(!in_array($dbUserForm,$dblist)){
+				error_log('Database '.$dbUserForm.' was not found, skipping',0);				
+			}else{
+				mysql_select_db($dbUserForm);
+				foreach($u_q_list as $query){
+					if($only_test){
+						error_log("mysql_query($dbUserForm,$query)",0);
+						error_log("In $dbUserForm, executed: $query",0);
+					}else{
+						$res = mysql_query($query);
+					}
 				}
 			}
 		}
@@ -228,189 +252,195 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	if(count($c_q_list)>0)
 	{
 		//get the courses list
-		mysql_select_db($dbNameForm);
-		$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
-		if($res===false){die('Error while querying the courses list in update_db.inc.php');}
-		if(mysql_num_rows($res)>0)
-		{
-			$i=0;
-			//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
-			while($row = mysql_fetch_array($res))
+		if(strlen($dbNameForm)>40){
+			error_log('Database name '.$dbNameForm.' is too long, skipping',0);
+		}elseif(!in_array($dbNameForm,$dblist)){
+				error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+		}else{
+			mysql_select_db($dbNameForm);
+			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+			if($res===false){die('Error while querying the courses list in update_db.inc.php');}
+			if(mysql_num_rows($res)>0)
 			{
-				$list[] = $row;
-				$i++;
-			}
-			foreach($list as $row_course)
-			{
-				//now use the $c_q_list
-				/**
-				 * We connect to the right DB first to make sure we can use the queries
-				 * without a database name
-				 */
-				if (!$singleDbForm) //otherwise just use the main one
+				$i=0;
+				//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
+				while($row = mysql_fetch_array($res))
 				{
-					mysql_select_db($row_course['db_name']);
+					$list[] = $row;
+					$i++;
 				}
-				foreach($c_q_list as $query)
+				foreach($list as $row_course)
 				{
-					if ($singleDbForm) //otherwise just use the main one
+					//now use the $c_q_list
+					/**
+					 * We connect to the right DB first to make sure we can use the queries
+					 * without a database name
+					 */
+					if (!$singleDbForm) //otherwise just use the main one
 					{
-						$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix$2$3",$query);
+						mysql_select_db($row_course['db_name']);
 					}
+					foreach($c_q_list as $query)
+					{
+						if ($singleDbForm) //otherwise just use the main one
+						{
+							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix$2$3",$query);
+						}
+						
+						if($only_test)
+						{
+							error_log("mysql_query(".$row_course['db_name'].",$query)",0);
+						}else{
+							$res = mysql_query($query);
+							if($log)
+							{
+								error_log("In ".$row_course['db_name'].", executed: $query",0);
+							}
+						}
+					}
+	
+					//prepare reusable users list to avoid repetition of the SQL query, but only select
+					//users from the current course to avoid blowing the memory limit
+					$users_list = array();
+					$sql_uc = "SELECT u.user_id as ui, u.firstname as fn, u.lastname as ln " .
+							" FROM $dbNameForm.user u, $dbNameForm.course_rel_user cu " .
+							" WHERE cu.course_code = '".$row_course['code']."' " .
+								" AND u.user_id = cu.user_id";
+					$res_uc = mysql_query($sql_uc);
+					while($user_row = mysql_fetch_array($res_uc))
+					{
+						$users_list[$user_row['fn'].' '.$user_row['ln']] = $user_row['ui'];
+					}
+	
+					//update course manually
+					//update group_category.forum_state ?
+					//update group_info.tutor_id (put it in group_tutor table?) ?
+					//update group_info.forum_state, forum_id ?
 					
-					if($only_test)
-					{
-						error_log("mysql_query(".$row_course['db_name'].",$query)",0);
-					}else{
-						$res = mysql_query($query);
-						if($log)
-						{
-							error_log("In ".$row_course['db_name'].", executed: $query",0);
-						}
+					//update forum tables (migrate from bb_ tables to forum_ tables)
+					//migrate categories
+					$sql_orig = "SELECT * FROM ".$prefix."bb_categories";
+					$res_orig = mysql_query($sql_orig);
+					$order = 1;
+					while($row = mysql_fetch_array($res_orig)){
+						$myorder = (empty($row['cat_order'])?$order:$row['cat_order']);
+						$sql = "INSERT INTO ".$prefix."forum_category " .
+								"(cat_id,cat_title,cat_comment,cat_order,locked) VALUES " .
+								"('".$row['cat_id']."','".mysql_real_escape_string($row['cat_title'])."','','".$myorder."',0)";
+						$res = mysql_query($sql);
+						$lastcatid = mysql_insert_id();
+						//error_log($sql,0);
+						$order ++;
+						//add item_property - forum categories were not put into item_properties before
+						$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+								"VALUES ('forum_category','1','$lastcatid','ForumCategoryAdded','1','1')";
+						$res = mysql_query($sql);
+						//error_log($sql,0);
 					}
-				}
-
-				//prepare reusable users list to avoid repetition of the SQL query, but only select
-				//users from the current course to avoid blowing the memory limit
-				$users_list = array();
-				$sql_uc = "SELECT u.user_id as ui, u.firstname as fn, u.lastname as ln " .
-						" FROM $dbNameForm.user u, $dbNameForm.course_rel_user cu " .
-						" WHERE cu.course_code = '".$row_course['code']."' " .
-							" AND u.user_id = cu.user_id";
-				$res_uc = mysql_query($sql_uc);
-				while($user_row = mysql_fetch_array($res_uc))
-				{
-					$users_list[$user_row['fn'].' '.$user_row['ln']] = $user_row['ui'];
-				}
-
-				//update course manually
-				//update group_category.forum_state ?
-				//update group_info.tutor_id (put it in group_tutor table?) ?
-				//update group_info.forum_state, forum_id ?
-				
-				//update forum tables (migrate from bb_ tables to forum_ tables)
-				//migrate categories
-				$sql_orig = "SELECT * FROM ".$prefix."bb_categories";
-				$res_orig = mysql_query($sql_orig);
-				$order = 1;
-				while($row = mysql_fetch_array($res_orig)){
-					$myorder = (empty($row['cat_order'])?$order:$row['cat_order']);
-					$sql = "INSERT INTO ".$prefix."forum_category " .
-							"(cat_id,cat_title,cat_comment,cat_order,locked) VALUES " .
-							"('".$row['cat_id']."','".mysql_real_escape_string($row['cat_title'])."','','".$myorder."',0)";
-					$res = mysql_query($sql);
-					$lastcatid = mysql_insert_id();
-					//error_log($sql,0);
-					$order ++;
-					//add item_property - forum categories were not put into item_properties before
-					$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
-							"VALUES ('forum_category','1','$lastcatid','ForumCategoryAdded','1','1')";
-					$res = mysql_query($sql);
-					//error_log($sql,0);
-				}
-				$sql_orig = "SELECT * FROM ".$prefix."bb_forums ORDER BY forum_last_post_id desc";
-				$res_orig = mysql_query($sql_orig);
-				$order = 1;
-				while($row = mysql_fetch_array($res_orig)){
-					$sql = "INSERT INTO ".$prefix."forum_forum " .
-							"(forum_id,forum_category,allow_edit,forum_comment," .
-							"forum_title," .
-							"forum_last_post, forum_threads," .
-							"locked, forum_posts, " .
-							"allow_new_threads, forum_order) VALUES " .
-							"('".$row['forum_id']."','".$row['cat_id']."',1,'".mysql_real_escape_string($row['forum_desc'])."'," .
-							"'".mysql_real_escape_string($row['forum_name'])."'," .
-							"'".$row['forum_last_post_id']."','".$row['forum_topics']."'," .
-							"0,'".$row['forum_posts']."'," .
-							"1,$order)";
-					//error_log($sql,0);
-					$res = mysql_query($sql);
-					$lastforumid = mysql_insert_id();
-					$order++;
-
-					//add item_property - forums were not put into item_properties before
-					$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
-							"VALUES ('forum','1','$lastforumid','ForumAdded','1','1')";
-					$res = mysql_query($sql);
-					//error_log($sql,0);
-				}
-				$sql_orig = "SELECT * FROM ".$prefix."bb_topics";
-				$res_orig = mysql_query($sql_orig);
-				while($row = mysql_fetch_array($res_orig)){
-					$name = $row['prenom'].' '.$row['nom'];
-					//check if user id is reusable
-					if($row['topic_poster'] <= 1 )
-					{
-						if(isset($users_list[$name]))
-						{
-							$poster_id = $users_list[$name];
-						}
-						else
-						{
-							$poster_id = $row['topic_poster'];
-						}
+					$sql_orig = "SELECT * FROM ".$prefix."bb_forums ORDER BY forum_last_post_id desc";
+					$res_orig = mysql_query($sql_orig);
+					$order = 1;
+					while($row = mysql_fetch_array($res_orig)){
+						$sql = "INSERT INTO ".$prefix."forum_forum " .
+								"(forum_id,forum_category,allow_edit,forum_comment," .
+								"forum_title," .
+								"forum_last_post, forum_threads," .
+								"locked, forum_posts, " .
+								"allow_new_threads, forum_order) VALUES " .
+								"('".$row['forum_id']."','".$row['cat_id']."',1,'".mysql_real_escape_string($row['forum_desc'])."'," .
+								"'".mysql_real_escape_string($row['forum_name'])."'," .
+								"'".$row['forum_last_post_id']."','".$row['forum_topics']."'," .
+								"0,'".$row['forum_posts']."'," .
+								"1,$order)";
+						//error_log($sql,0);
+						$res = mysql_query($sql);
+						$lastforumid = mysql_insert_id();
+						$order++;
+	
+						//add item_property - forums were not put into item_properties before
+						$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+								"VALUES ('forum','1','$lastforumid','ForumAdded','1','1')";
+						$res = mysql_query($sql);
+						//error_log($sql,0);
 					}
-					//convert time from varchar to datetime
-					$time = $row['topic_time'];
-					$name = mysql_real_escape_string($name);
-					$sql = "INSERT INTO ".$prefix."forum_thread " .
-							"(thread_id,forum_id,thread_poster_id," .
-							"locked,thread_replies,thread_sticky,thread_title," .
-							"thread_poster_name, thread_date, thread_last_post," .
-							"thread_views) VALUES " .
-							"('".$row['topic_id']."','".$row['forum_id']."','".$poster_id."'," .
-							"0,'".$row['topic_replies']."',0,'".mysql_real_escape_string($row['topic_title'])."'," .
-							"'$name','$time','".$row['topic_last_post_id']."'," .
-							"'".$row['topic_views']."')";
-					//error_log($sql,0);
-					$res = mysql_query($sql);
-					$lastthreadid = mysql_insert_id();
-					
-					//add item_property - forum threads were not put into item_properties before
-					$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
-							"VALUES ('forum_thread','1','$lastthreadid','ForumThreadAdded','1','1')";
-					$res = mysql_query($sql);
-					//error_log($sql,0);
-				}
-				$sql_orig = "SELECT * FROM ".$prefix."bb_posts bp, ".$prefix."bb_posts_text bpt WHERE bp.post_id = bpt.post_id";
-				$res_orig = mysql_query($sql_orig);
-				while($row = mysql_fetch_array($res_orig)){
-					$name = $row['prenom'].' '.$row['nom'];
-					//check if user id is reusable
-					if($row['poster_id'] <= 0 )
-					{
-						if(isset($users_list[$name]))
+					$sql_orig = "SELECT * FROM ".$prefix."bb_topics";
+					$res_orig = mysql_query($sql_orig);
+					while($row = mysql_fetch_array($res_orig)){
+						$name = $row['prenom'].' '.$row['nom'];
+						//check if user id is reusable
+						if($row['topic_poster'] <= 1 )
 						{
-							$poster_id = $users_list[$name];
+							if(isset($users_list[$name]))
+							{
+								$poster_id = $users_list[$name];
+							}
+							else
+							{
+								$poster_id = $row['topic_poster'];
+							}
 						}
-						else
-						{
-							$poster_id = $row['poster_id'];
-						}
+						//convert time from varchar to datetime
+						$time = $row['topic_time'];
+						$name = mysql_real_escape_string($name);
+						$sql = "INSERT INTO ".$prefix."forum_thread " .
+								"(thread_id,forum_id,thread_poster_id," .
+								"locked,thread_replies,thread_sticky,thread_title," .
+								"thread_poster_name, thread_date, thread_last_post," .
+								"thread_views) VALUES " .
+								"('".$row['topic_id']."','".$row['forum_id']."','".$poster_id."'," .
+								"0,'".$row['topic_replies']."',0,'".mysql_real_escape_string($row['topic_title'])."'," .
+								"'$name','$time','".$row['topic_last_post_id']."'," .
+								"'".$row['topic_views']."')";
+						//error_log($sql,0);
+						$res = mysql_query($sql);
+						$lastthreadid = mysql_insert_id();
+						
+						//add item_property - forum threads were not put into item_properties before
+						$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+								"VALUES ('forum_thread','1','$lastthreadid','ForumThreadAdded','1','1')";
+						$res = mysql_query($sql);
+						//error_log($sql,0);
 					}
-					//convert time from varchar to datetime
-					$time = $row['post_time'];
-					$name = mysql_real_escape_string($name);
-					$sql = "INSERT INTO ".$prefix."forum_post " .
-							"(post_id,forum_id,thread_id," .
-							"poster_id,post_parent_id,visible, " .
-							"post_title,poster_name, post_text, " .
-							"post_date, post_notification) VALUES " .
-							"('".$row['post_id']."','".$row['forum_id']."','".$row['topic_id']."'," .
-							"'".$poster_id."','".$row['parent_id']."',1," .
-							"'".mysql_real_escape_string($row['post_title'])."','$name', '".mysql_real_escape_string($row['post_text'])."'," .
-							"'$time',0)";
-					//error_log($sql,0);
-					$res = mysql_query($sql);
-					$lastpostid = mysql_insert_id();
-					
-					//add item_property - forum threads were not put into item_properties before
-					$sql = "INSERT INTO ".$prefix."item_property(tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
-							"VALUES ('forum_post','1','$lastpostid','ForumPostAdded','1','1')";
-					$res = mysql_query($sql);
-					//error_log($sql,0);
+					$sql_orig = "SELECT * FROM ".$prefix."bb_posts bp, ".$prefix."bb_posts_text bpt WHERE bp.post_id = bpt.post_id";
+					$res_orig = mysql_query($sql_orig);
+					while($row = mysql_fetch_array($res_orig)){
+						$name = $row['prenom'].' '.$row['nom'];
+						//check if user id is reusable
+						if($row['poster_id'] <= 0 )
+						{
+							if(isset($users_list[$name]))
+							{
+								$poster_id = $users_list[$name];
+							}
+							else
+							{
+								$poster_id = $row['poster_id'];
+							}
+						}
+						//convert time from varchar to datetime
+						$time = $row['post_time'];
+						$name = mysql_real_escape_string($name);
+						$sql = "INSERT INTO ".$prefix."forum_post " .
+								"(post_id,forum_id,thread_id," .
+								"poster_id,post_parent_id,visible, " .
+								"post_title,poster_name, post_text, " .
+								"post_date, post_notification) VALUES " .
+								"('".$row['post_id']."','".$row['forum_id']."','".$row['topic_id']."'," .
+								"'".$poster_id."','".$row['parent_id']."',1," .
+								"'".mysql_real_escape_string($row['post_title'])."','$name', '".mysql_real_escape_string($row['post_text'])."'," .
+								"'$time',0)";
+						//error_log($sql,0);
+						$res = mysql_query($sql);
+						$lastpostid = mysql_insert_id();
+						
+						//add item_property - forum threads were not put into item_properties before
+						$sql = "INSERT INTO ".$prefix."item_property(tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+								"VALUES ('forum_post','1','$lastpostid','ForumPostAdded','1','1')";
+						$res = mysql_query($sql);
+						//error_log($sql,0);
+					}
+					unset($users_list);
 				}
-				unset($users_list);
 			}
 		}
 	}
@@ -437,15 +467,21 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			mysql_select_db($dbNameForm);
-			foreach($m_q_list as $query){
-				if($only_test){
-					error_log("mysql_query($dbNameForm,$query)",0);
-				}else{
-					$res = mysql_query($query);
-					if($log)
-					{
-						error_log("In $dbNameForm, executed: $query",0);
+			if(strlen($dbNameForm)>40){
+				error_log('Database name '.$dbNameForm.' is too long, skipping',0);
+			}elseif(!in_array($dbNameForm,$dblist)){
+				error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+			}else{
+				mysql_select_db($dbNameForm);
+				foreach($m_q_list as $query){
+					if($only_test){
+						error_log("mysql_query($dbNameForm,$query)",0);
+					}else{
+						$res = mysql_query($query);
+						if($log)
+						{
+							error_log("In $dbNameForm, executed: $query",0);
+						}
 					}
 				}
 			}
@@ -460,15 +496,21 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			mysql_select_db($dbStatsForm);
-			foreach($s_q_list as $query){
-				if($only_test){
-					error_log("mysql_query($dbStatsForm,$query)",0);
-				}else{
-					$res = mysql_query($query);
-					if($log)
-					{
-						error_log("In $dbStatsForm, executed: $query",0);
+			if(strlen($dbStatsForm)>40){
+				error_log('Database name '.$dbStatsForm.' is too long, skipping',0);
+			}elseif(!in_array($dbNameForm,$dblist)){
+				error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+			}else{
+				mysql_select_db($dbStatsForm);
+				foreach($s_q_list as $query){
+					if($only_test){
+						error_log("mysql_query($dbStatsForm,$query)",0);
+					}else{
+						$res = mysql_query($query);
+						if($log)
+						{
+							error_log("In $dbStatsForm, executed: $query",0);
+						}
 					}
 				}
 			}
@@ -482,15 +524,21 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			mysql_select_db($dbUserForm);
-			foreach($u_q_list as $query){
-				if($only_test){
-					error_log("mysql_query($dbUserForm,$query)",0);
-				}else{
-					$res = mysql_query($query);
-					if($log)
-					{
-						error_log("In $dbUserForm, executed: $query",0);
+			if(strlen($dbUserForm)>40){
+				error_log('Database name '.$dbUserForm.' is too long, skipping',0);
+			}elseif(!in_array($dbUserForm,$dblist)){
+				error_log('Database '.$dbUserForm.' was not found, skipping',0);				
+			}else{
+				mysql_select_db($dbUserForm);
+				foreach($u_q_list as $query){
+					if($only_test){
+						error_log("mysql_query($dbUserForm,$query)",0);
+					}else{
+						$res = mysql_query($query);
+						if($log)
+						{
+							error_log("In $dbUserForm, executed: $query",0);
+						}
 					}
 				}
 			}
@@ -502,40 +550,46 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	if(count($c_q_list)>0)
 	{
 		//get the courses list
-		mysql_select_db($dbNameForm);
-		$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
-		if($res===false){die('Error while querying the courses list in update_db.inc.php');}
-		if(mysql_num_rows($res)>0)
-		{
-			$i=0;
-			//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
-			while($row = mysql_fetch_array($res))
+		if(strlen($dbNameForm)>40){
+			error_log('Database name '.$dbNameForm.' is too long, skipping',0);
+		}elseif(!in_array($dbNameForm,$dblist)){
+				error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+		}else{
+			mysql_select_db($dbNameForm);
+			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+			if($res===false){die('Error while querying the courses list in update_db.inc.php');}
+			if(mysql_num_rows($res)>0)
 			{
-				$list[] = $row;
-				$i++;
-			}
-			foreach($list as $row)
-			{
-				//now use the $c_q_list
-				/**
-				 * We connect to the right DB first to make sure we can use the queries
-				 * without a database name
-				 */
-				mysql_select_db($row['db_name']);
-				foreach($c_q_list as $query)
+				$i=0;
+				//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
+				while($row = mysql_fetch_array($res))
 				{
-					if ($singleDbForm) //otherwise just use the main one
+					$list[] = $row;
+					$i++;
+				}
+				foreach($list as $row)
+				{
+					//now use the $c_q_list
+					/**
+					 * We connect to the right DB first to make sure we can use the queries
+					 * without a database name
+					 */
+					mysql_select_db($row['db_name']);
+					foreach($c_q_list as $query)
 					{
-						$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix$2$3",$query);
-					}
-					if($only_test)
-					{
-						error_log("mysql_query(".$row['db_name'].",$query)",0);
-					}else{
-						$res = mysql_query($query);
-						if($log)
+						if ($singleDbForm) //otherwise just use the main one
 						{
-							error_log("In ".$row['db_name'].", executed: $query",0);
+							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix$2$3",$query);
+						}
+						if($only_test)
+						{
+							error_log("mysql_query(".$row['db_name'].",$query)",0);
+						}else{
+							$res = mysql_query($query);
+							if($log)
+							{
+								error_log("In ".$row['db_name'].", executed: $query",0);
+							}
 						}
 					}
 				}

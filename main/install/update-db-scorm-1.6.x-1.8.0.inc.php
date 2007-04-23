@@ -85,6 +85,11 @@ if($loglevel>0){error_log("Tables created/deleted for all courses",0);}
 //$courses_list = array('fadtest_BLA');
 foreach($courses_id_full_table_prefix_list as $course_code => $db)
 {
+	if(strlen($courses_id_list[$course_code])>40)
+	{
+		error_log('Database '.$courses_id_list[$course_code].' is too long, skipping',0);
+		continue;
+	}
 	$incoherences = 0;
 	if($loglevel>0){error_log("Now starting migration of learnpath tables from $db database...",0);}
 	$lp_main = $db.TABLE_LEARNPATH_MAIN;
@@ -581,6 +586,11 @@ while($course_row = Database::fetch_array($res_crs)){
 	//reinit the scormdocuments list
 	//$scormdocuments_lps = array();
 	$db_name = $courses_id_full_table_prefix_list[$my_course_code];
+	if(strlen($courses_id_list[$course_code])>40)
+	{
+		error_log('Database '.$courses_id_list[$course_code].' is too long, skipping',0);
+		continue;
+	}
 	$tblscodoc = $db_name.TABLE_SCORMDOC;		
 	$sql_scodoc = "SELECT path FROM $tblscodoc WHERE path IS NOT NULL AND path != ''";
 	if($loglevel>1){error_log("$sql_scodoc",0);}

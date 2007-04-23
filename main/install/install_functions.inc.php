@@ -138,6 +138,7 @@ function get_config_param($param)
 		//give up recovering
 		else
 		{
+			error_log('Could not find config file in '.$updatePath.' in get_config_param()',0);
 			return null;
 		}
 	}
@@ -214,6 +215,11 @@ function get_config_param($param)
 		}
 
 		return $val;
+	} 
+	else 
+	{
+		error_log('Config array could not be found in get_config_param()',0);
+		return null;
 	}
 }
 

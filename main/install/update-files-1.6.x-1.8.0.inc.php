@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 11139 2007-02-17 15:43:14Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 12086 2007-04-23 13:02:44Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,7 +79,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		
 		$currentCourseRepositorySys = $sys_course_path.$courses_directories["directory"]."/";
 		$db_name = $courses_directories["db_name"];
-		
+		if(!is_dir($currentCourseRepositorySys)){
+			error_log('Directory '.$currentCourseRepositorySys.' does not exist. Skipping.',0);
+			continue;	
+		}
 		//move everything to the new hierarchy (from old path to new path)
 		error_log('Renaming '.$updatePath.'courses/'.$courses_directories["directory"].' to '.$sys_course_path.$courses_directories["directory"],0);
 		rename($updatePath.'courses/'.$courses_directories["directory"],$sys_course_path.$courses_directories["directory"]);
@@ -160,7 +163,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	copy($updatePath.'claroline/inc/conf/course_info.conf.php',$pathForm.'main/inc/conf/course_info.conf.php');
 	copy($updatePath.'claroline/inc/conf/mail.conf.php',$pathForm.'main/inc/conf/mail.conf.php');
 	copy($updatePath.'claroline/inc/conf/profile.conf.inc.php',$pathForm.'main/inc/conf/profile.conf.php');
-	
+
+	error_log('Renaming '.$updatePath.'claroline/upload/users to '.$pathForm.'main/upload/users',0);
+	rename($updatePath.'claroline/upload/users',$pathForm.'main/upload/users');
+		
 	/*
 	if (defined('DOKEOS_INSTALL'))
 	{

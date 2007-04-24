@@ -21,7 +21,7 @@ Tel. +32 (2) 211 34 56
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 12106 2007-04-24 13:17:19Z elixir_julian $
+* 	@version $Id: survey.php 12113 2007-04-24 22:01:45Z pcool $
 *
 * 	@todo use quickforms for the forms
 */
@@ -103,7 +103,7 @@ $survey_actions .= '<a href="survey_list.php?action=delete&amp;survey_id='.$_GET
 //$survey_actions .= '<a href="create_survey_in_another_language.php?id_survey='.$_GET['survey_id'].'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 $survey_actions .= '<a href="preview.php?survey_id='.$_GET['survey_id'].'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
 $survey_actions .= '<a href="survey_invite.php?survey_id='.$_GET['survey_id'].'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
-$survey_actions .= '<a href="reporting.php?survey_id='.$_GET['survey_id'].'">'.Display::return_icon('surveyreporting.gif', get_lang('Reporting')).'</a>';
+$survey_actions .= '<a href="reporting.php?survey_id='.$_GET['survey_id'].'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 echo '<div style="float:right;">'.$survey_actions.'</div>';
 
 echo '<div>';

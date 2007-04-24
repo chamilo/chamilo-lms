@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 11924 2007-04-08 16:30:56Z pcool $
+* 	@version $Id: index.php 12104 2007-04-24 12:40:13Z elixir_julian $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -300,6 +300,16 @@ function category_has_open_courses($category)
 	return false;
 }
 
+function display_create_course_link()
+{
+	echo "<li><a href=\"main/create_course/add_course.php\">".get_lang("CourseCreate")."</a></li>";
+}
+
+function display_edit_course_list_links()
+{
+	echo "<li><a href=\"main/auth/courses.php\">".get_lang("CourseManagement")."</a></li>";
+}
+
 /**
  * Displays the right-hand menu for anonymous users:
  * login form, useful links, help section
@@ -367,6 +377,40 @@ function display_anonymous_right_menu()
 		echo '<div class="note" style="background: none">';
 		api_plugin('campushomepage_menu');
 		echo '</div>';
+	}
+	
+	/**
+	 * User section
+	 */
+	if(isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id']!=0){
+		echo "<div class=\"menusection\">";
+		echo "<span class=\"menusectioncaption\">".get_lang("MenuUser")."</span>";
+		echo "<ul class=\"menulist\">";
+		
+		$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION["studentview"] != "studentenview");
+		if ($display_add_course_link)
+			display_create_course_link();
+		display_edit_course_list_links();
+		
+		$navigation=array();
+		// Link to my profile
+		$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+		$navigation['myprofile']['title'] = get_lang('ModifyProfile');
+		// Link to my agenda
+		$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/myagenda.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+		$navigation['myagenda']['title'] = get_lang('MyAgenda');
+		
+		foreach($navigation as $section => $navigation_info)
+		{
+			$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
+			echo '<li'.$current.'>';
+			echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+			echo '</li>';
+			echo "\n";
+		}
+		
+		echo "</ul>";
+		echo "</div>";
 	}
 
 /**** use this comment to hide notice file section from right menu ****

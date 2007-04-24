@@ -7105,11 +7105,16 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				//It's a file
 				if ($value['filetype'] == 'file') {
 					if($num==0) $num=1;
-					//$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $value['id'] . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/lp_' . (($value['filetype'] == 'file') ? TOOL_DOCUMENT.'_file' : 'folder') . '.gif" title="" />'.$value['title']."</a></div></div>\r\n";
-					$icon = choose_image(trim($value['title']));
+					
+					$icon = choose_image(trim($value['path']));
 					$position = strrpos($icon,'.');
 					$icon=substr($icon,0,$position).'_small.gif';
-					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $value['id'] . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/'.$icon.'" title="" />'.$value['title']."</a></div></div>\r\n";
+					
+					//value['path'] don't always have an extension so we must take the path to have the complete name with extension
+					$array_temp = explode('/',trim($value['path']));
+					$document_name = $array_temp[count($array_temp)-1];
+					
+					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $value['id'] . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/'.$icon.'" title="" />'.$document_name."</a></div></div>\r\n";
 					array_shift($resources_array);
 				}
 				//It's a folder

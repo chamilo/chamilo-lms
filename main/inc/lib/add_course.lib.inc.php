@@ -1252,6 +1252,7 @@ function update_Db_course($courseDbName)
 			  invitation_code varchar(250) NOT NULL,
 			  invitation_date datetime NOT NULL,
 			  reminder_date datetime NOT NULL,
+			  answered int(2) NOT NULL default '0',
 			  PRIMARY KEY  (survey_invitation_id)
 			)";
 	$result = mysql_query($sql) or die(mysql_error($sql));

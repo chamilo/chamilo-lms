@@ -5685,8 +5685,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		$form = new FormValidator('form','POST',$_SERVER["PHP_SELF"]."?".$_SERVER["QUERY_STRING"]);
 		
-		$defaults["title"]=$item_title;
-		$defaults["description"]=$item_description;
+		$defaults["title"]=html_entity_decode($item_title);
+		$defaults["description"]=html_entity_decode($item_description);
 		
 		$form->addElement('html',$return);
 					
@@ -5885,7 +5885,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_title			= '';
 			$item_description	= '';
 		}
-		
 				
 		$return = '<div style="margin:3px 10px;">';
 			
@@ -5953,9 +5952,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			$form = new FormValidator('form','POST',$_SERVER["PHP_SELF"]."?".$_SERVER["QUERY_STRING"]);
 			
-			$defaults["title"]=$item_title;
-			$defaults["description"]=$item_description;
-			
+			$defaults["title"]=html_entity_decode($item_title);
+			$defaults["description"]=html_entity_decode($item_description);			
+		
 			$form->addElement('html',$return);
 						
 			//$arrHide = array($id);

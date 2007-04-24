@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 11997 2007-04-12 19:18:32Z pcool $
+* 	@version $Id: create_new_survey.php 12106 2007-04-24 13:17:19Z elixir_julian $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -55,7 +55,7 @@ $table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY)
 if (!api_is_allowed_to_edit())
 {
 	Display :: display_header();
-	Display :: display_error_message(get_lang('NotAllowedHere'), false);
+	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
 }

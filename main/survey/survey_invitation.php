@@ -42,7 +42,7 @@ require_once (api_get_path(LIBRARY_PATH)."mail.lib.inc.php");
 if (!api_is_allowed_to_edit())
 {
 	Display :: display_header();
-	Display :: display_error_message(get_lang('NotAllowedHere'), false);
+	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
 }

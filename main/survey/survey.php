@@ -21,7 +21,7 @@ Tel. +32 (2) 211 34 56
 *	@package dokeos.survey
 * 	@author unknown
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey.php 11688 2007-03-26 07:55:38Z pcool $
+* 	@version $Id: survey.php 12106 2007-04-24 13:17:19Z elixir_julian $
 *
 * 	@todo use quickforms for the forms
 */
@@ -41,7 +41,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 if (!api_is_allowed_to_edit())
 {
 	Display :: display_header();
-	Display :: display_error_message(get_lang('NotAllowedHere'), false);
+	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
 }

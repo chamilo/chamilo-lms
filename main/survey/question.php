@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 12089 2007-04-23 14:53:48Z elixir_julian $
+* 	@version $Id: question.php 12106 2007-04-24 13:17:19Z elixir_julian $
 */
 
 // name of the language file that needs to be included
@@ -38,7 +38,7 @@ require_once('survey.lib.php');
 if (!api_is_allowed_to_edit())
 {
 	Display :: display_header();
-	Display :: display_error_message(get_lang('NotAllowedHere'), false);
+	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
 }

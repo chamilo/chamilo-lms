@@ -61,7 +61,7 @@ Display :: display_header(get_lang('SurveyPreview'));
 // only a course admin is allowed to preview a survey: you are NOT a course admin => error message
 if (!api_is_allowed_to_edit())
 {
-	Display :: display_error_message(get_lang('NotAllowedHere'), false);
+	Display :: display_error_message(get_lang('NotAllowed'), false);
 }
 // only a course admin is allowed to preview a survey: you are a course admin
 else

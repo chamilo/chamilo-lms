@@ -214,7 +214,7 @@ function prepare_course_repository($courseRepository, $courseId)
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images", 0777);
-		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/examples/", 0777);
+		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/gallery/", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/audio", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/flash", 0777);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/video", 0777);
@@ -1386,7 +1386,7 @@ function fill_course_repository($courseRepository)
 		$audio_code_path = api_get_path(SYS_CODE_PATH)."default_course_document/audio/";
 		$flash_code_path = api_get_path(SYS_CODE_PATH)."default_course_document/flash/";
 		$video_code_path = api_get_path(SYS_CODE_PATH)."default_course_document/video/";
-		$course_documents_folder_images=$sys_course_path.$courseRepository.'/document/images/examples/';
+		$course_documents_folder_images=$sys_course_path.$courseRepository.'/document/images/gallery/';
 		$course_documents_folder_audio=$sys_course_path.$courseRepository.'/document/audio/';
 		$course_documents_folder_flash=$sys_course_path.$courseRepository.'/document/flash/';
 		$course_documents_folder_video=$sys_course_path.$courseRepository.'/document/video/';
@@ -1660,7 +1660,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
-		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images/examples','".get_lang('DefaultCourseImages')."','folder','0')");
+		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images/gallery','".get_lang('DefaultCourseImages')."','folder','0')");
 		$example_doc_id = Database :: get_last_insert_id();
 		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
@@ -1681,8 +1681,8 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 
 		foreach($default_document_array as $media_type=>$array_media){
 			if($media_type=='images'){
-				$path_documents='/images/examples/';
-				$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/examples/';
+				$path_documents='/images/gallery/';
+				$course_documents_folder=$sys_course_path.$courseRepository.'/document/images/gallery/';
 			}
 			if($media_type=='audio'){
 				$path_documents='/audio/';

@@ -492,7 +492,7 @@ INSERT INTO `settings_current` VALUES
 (82, 'service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL),
 (84, 'service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL),
 (85, 'wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL),
-(86, 'stylesheets', NULL, 'textfield','stylesheets','default','',NULL, NULL, NULL);
+(86, 'stylesheets', NULL, 'textfield','stylesheets','default_with_tabs','',NULL, NULL, NULL);
 
 
 UNLOCK TABLES;

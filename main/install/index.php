@@ -299,7 +299,7 @@ elseif (!empty($_POST['step5']))
 </div>
 
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>" autocomplete="off">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 
 <div id="installation_steps">
 	<img src="../img/bluelogo.gif" hspace="10" vspace="10" alt="Dokeos logo" />
@@ -391,7 +391,7 @@ elseif($_POST['step4'])
 		$encryptPassForm = get_config_param('userPasswordCrypted');
 		$allowSelfReg = get_config_param('allowSelfReg');
 		$allowSelfRegProf = get_config_param('allowSelfRegProf');
-	}	
+	}
 	display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm);
 }
 elseif($_POST['step5'])

@@ -76,8 +76,8 @@ class learnpathItem{
     	}
     	$row = mysql_fetch_array($res);
     	$this->lp_id	 = $row['lp_id'];
-    	$this->max_score = $row['max'];
-    	$this->min_score = $row['min'];
+    	$this->max_score = $row['max_score'];
+    	$this->min_score = $row['min_score'];
     	$this->name 	 = $row['title'];
     	$this->type 	 = $row['item_type'];
     	$this->ref		 = $row['ref'];
@@ -1051,18 +1051,48 @@ class learnpathItem{
 					    		//Nothing found there either. Now return the value of the corresponding resource completion status
 					    		
 				    			if($this->debug>1){error_log('New LP - Didnt find any group, returning value for '.$prereqs_string,0);}
-				    			if(isset($oLP->items[$oLP->refs_list[$prereqs_string]])){
-				    				$status = $oLP->items[$oLP->refs_list[$prereqs_string]]->get_status(true);
-					    			$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
-							    	if(!$returnstatus && empty($this->prereq_alert)){
-							    		$this->prereq_alert = get_lang('_prereq_not_complete');
-							    	}
-							    	if(!$returnstatus){
-							    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
-							    	}else{
-							    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
-							    	}
-					    			return $returnstatus;
+				    			if(isset($oLP->items[$oLP->refs_list[$prereqs_string]])){				    				
+				    				if($oLP->items[$oLP->refs_list[$prereqs_string]]->type == 'quiz')
+				    				{
+				    					$sql = 'SELECT exe_result, exe_weighting
+												FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
+												WHERE exe_exo_id = '.$oLP->items[$oLP->refs_list[$prereqs_string]]->path.'
+												ORDER BY exe_date DESC
+												LIMIT 0, 1';
+										$rs_quiz = api_sql_query($sql, __FILE__, __LINE__);
+										if($quiz = Database :: fetch_array($rs_quiz))
+										{
+											if($quiz['exe_result'] > $this -> min_score)
+											{
+												$returnstatus = true;
+											}
+											else
+											{
+												$this->prereq_alert = get_lang('_prereq_not_complete');
+												$returnstatus = false;
+											}
+										}
+										else
+										{
+											$this->prereq_alert = get_lang('_prereq_not_complete');
+											$returnstatus = false;
+										}
+										return $returnstatus;
+				    				}
+				    				else
+				    				{
+					    				$status = $oLP->items[$oLP->refs_list[$prereqs_string]]->get_status(true);
+						    			$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
+								    	if(!$returnstatus && empty($this->prereq_alert)){
+								    		$this->prereq_alert = get_lang('_prereq_not_complete');
+								    	}
+								    	if(!$returnstatus){
+								    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
+								    	}else{
+								    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
+								    	}
+						    			return $returnstatus;
+				    				}
 				    			}else{
 				    				if($this->debug>1){error_log('New LP - Could not find '.$prereqs_string.' in '.print_r($oLP->refs_list,true),0);}
 				    			}

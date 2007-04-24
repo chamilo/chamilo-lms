@@ -3399,7 +3399,7 @@ class learnpath {
 	    	if($this->debug>0){error_log('Found prereq_string: '.$prereq_string,0);}
 
 	    	//now send to the parse_prereq() function that will check this component's prerequisites
-
+			
 	    	$result = $this->items[$item]->parse_prereq($prereq_string,$this);
 
 	    	if($result === false){
@@ -4204,6 +4204,8 @@ class learnpath {
 						'parent_item_id' => $array[$i]['parent_item_id'],
 						'previous_item_id' => $array[$i]['previous_item_id'],
 						'next_item_id' => $array[$i]['next_item_id'],
+						'min_score' => $array[$i]['min_score'],
+						'max_score' => $array[$i]['max_score'],
 						'display_order' => $array[$i]['display_order'],
 						'prerequisite' => $array[$i]['prerequisite'],
 						'depth' => $depth
@@ -6686,7 +6688,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
 		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
-		
+		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Prerequisites').'"><img align="absbottom" alt="'.get_lang('Prerequisites').'" src="../img/right.gif" title="'.get_lang('Prerequisites').'" /> '.get_lang('Prerequisites').'</a>';
 		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
 		
 		//$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
@@ -6989,6 +6991,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							'parent_item_id' => $row['parent_item_id'],
 							'previous_item_id' => $row['previous_item_id'],
 							'next_item_id' => $row['next_item_id'],
+							'max_score' => $row['max_score'],
+							'min_score' => $row['min_score'],
+							'next_item_id' => $row['next_item_id'],
 							'display_order' => $row['display_order']);
 					}
 					
@@ -7015,6 +7020,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							
 							if($arrLP[$i]['item_type'] == TOOL_QUIZ)
 							{
+								print_r($arrLP[$i]);
 								$return .= '<td class="exercise">';
 								
 									$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_min : 0) . '" />';
@@ -7023,7 +7029,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 								
 								$return .= '<td class="exercise">';
 								
-									$return .= '<input maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_max : 100) . '" />';
+									$return .= '<input maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" />';
 								
 								$return .= '</td>';
 							}

@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 12106 2007-04-24 13:17:19Z elixir_julian $
+* 	@version $Id: question.php 12111 2007-04-24 13:54:58Z elixir_julian $
 */
 
 // name of the language file that needs to be included
@@ -113,20 +113,6 @@ if (!$_POST['save_question'])
 	// an action has been performed (for instance adding a possible answer, moving an answer, ...)
 	if ($_POST)
 	{
-		while(list($key,$val) = each($_POST))
-		{
-			if(is_string($val))
-				$_POST[$key] = htmlentities(stripslashes($val));
-			else if (is_array($val))
-			{
-				while(list($key2,$val2) = each($val))
-				{
-					if(is_string($val2))
-						$val[$key2] = htmlentities(stripslashes($val2));
-				}
-				$_POST[$key] = $val;
-			}	
-		}
 		$form_content = $_POST;
 		$form_content = $form->handle_action($form_content);
 	}

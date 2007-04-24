@@ -932,7 +932,7 @@ class question
 		$fck_attribute['Height'] = '100';
 		$fck_attribute['ToolbarSet'] = 'Survey';
 		//$this->html .= '		<td><input type="text" name="question" id="question" value="'.$form_content['question'].'"/></td>';
-		$this->html .= '		<td colspan="3" width="500">'.api_return_html_area('question', stripslashes($form_content['question'])).'</td>';
+		$this->html .= '		<td colspan="3" width="500">'.api_return_html_area('question', html_entity_decode(stripslashes($form_content['question']))).'</td>';
 		$this->html .= '	</tr>';
 		/*
 		$this->html .= '	<tr>';
@@ -1144,13 +1144,13 @@ class yesno extends question
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right"><label for="answers[0]">1</label></td>';
 		//$this->html .= '		<td><input type="text" name="answers[0]" id="answers[0]" value="'.$form_content['answers'][0].'" /></td>';
-		$this->html .= '		<td>'.api_return_html_area('answers[0]', $form_content['answers'][0]).'</td>';
+		$this->html .= '		<td>'.api_return_html_area('answers[0]', stripslashes($form_content['answers'][0])).'</td>';
 		$this->html .= '		<td><input type="image" src="../img/down.gif"  value="move_down[0]" name="move_down[0]"/></td>';
 		$this->html .= '	</tr>';
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right"><label for="answers[1]">2</label></td>';
 		//$this->html .= '		<td><input type="text" name="answers[1]" id="answers[1]" value="'.$form_content['answers'][1].'" /></td>';
-		$this->html .= '		<td>'.api_return_html_area('answers[1]', $form_content['answers'][1]).'</td>';
+		$this->html .= '		<td>'.api_return_html_area('answers[1]', stripslashes($form_content['answers'][1])).'</td>';
 		$this->html .= '		<td><input type="image" src="../img/up.gif" value="move_up[1]" name="move_up[1]" /></td>';
 		$this->html .= '	</tr>';
 	}
@@ -1234,7 +1234,7 @@ class multiplechoice extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', $form_content['answers'][$key]).'</td>';
+			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', html_entity_decode(stripslashes($form_content['answers'][$key]))).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{
@@ -1329,7 +1329,7 @@ class multipleresponse extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', stripslashes($form_content['answers'][$key])).'</td>';
+			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', html_entity_decode(stripslashes($form_content['answers'][$key]))).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{
@@ -1409,7 +1409,7 @@ class dropdown extends question
 		{
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
-			$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
+			$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.stripslashes(htmlentities($form_content['answers'][$key])).'" /></td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{
@@ -1604,7 +1604,7 @@ class score extends question
 			$this->html .= '	<tr>';
 			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
 			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', $form_content['answers'][$key]).'</td>';
+			$this->html .= '		<td width="500">'.api_return_html_area('answers['.$key.']', stripslashes($form_content['answers'][$key])).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers-1)
 			{

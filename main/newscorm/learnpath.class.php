@@ -3167,11 +3167,11 @@ class learnpath {
 			    	$previous_previous = $row2['previous_item_id'];
 
 			 		//update previous_previous item (switch "next" with current)
-
+			
 			 		if($previous_previous != 0){
 
-				    	$sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $id WHERE id = $previous_$previous";
-
+				    	$sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $id WHERE id = $previous_previous";
+						
 				    	if($this->debug>2){error_log($sql_upd2,0);}
 
 				    	$res_upd2 = api_sql_query($sql_upd2);

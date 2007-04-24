@@ -7020,7 +7020,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							
 							if($arrLP[$i]['item_type'] == TOOL_QUIZ)
 							{
-								print_r($arrLP[$i]);
 								$return .= '<td class="exercise">';
 								
 									$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_min : 0) . '" />';

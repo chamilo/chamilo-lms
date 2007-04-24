@@ -92,7 +92,7 @@ foreach ($complete_user_list as $index => $user)
 {
 	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
 }
-$users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users);
+$users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 250px; height: 200px;"');
 $users->setElementTemplate('
 {javascript}
 <table{class}>

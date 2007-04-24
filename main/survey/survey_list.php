@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 11799 2007-03-30 09:31:17Z elixir_julian $
+* 	@version $Id: survey_list.php 12092 2007-04-24 07:31:13Z elixir_julian $
 *
 * 	@todo The invite column is not done
 * 	@todo try to understand the white, blue, ... template stuff.
@@ -311,7 +311,7 @@ function modify_filter($survey_id)
 	//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
 	$return .= '<a href="preview.php?survey_id='.$survey_id.'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
 	$return .= '<a href="survey_invite.php?survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
-	$return .= '<a href="reporting.php?survey_id='.$survey_id.'">'.Display::return_icon('surveyreporting.gif', get_lang('Reporting')).'</a>';
+	$return .= '<a href="reporting.php?survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 	return $return;
 }
 

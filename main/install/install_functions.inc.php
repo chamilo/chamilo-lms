@@ -634,7 +634,7 @@ function display_license_agreement()
 	echo '<p><a href="../../documentation/license.html">'.get_lang('PrintVers').'</a></p>';
 	?>
 	<table><tr><td>
-		<p><textarea cols="75" rows="15" wrap="virtual"><?php include('../../documentation/license.txt'); ?></textarea></p>
+		<p><textarea cols="75" rows="15" ><?php htmlentities(include('../../documentation/license.txt')); ?></textarea></p>
 		</td>
 		</tr>
 		<tr>
@@ -798,7 +798,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 				MySQL server version: <?php echo mysql_get_server_info(); ?><br />
 				MySQL protocol version: <?php echo mysql_get_proto_info(); ?>
 			</div>
-				<div style="clear:both;"
+				<div style="clear:both;"></div>
 			</div>
 		</td>
 		<?php else: ?>
@@ -994,7 +994,7 @@ function display_after_install_message($installType, $nbr_courses)
 	<br /><br />
 	<?php
 	echo '<div class="warning-message">';
-	echo '<img src="../img/message_warning.png" style="float:left; margin-right:10px;" />';
+	echo '<img src="../img/message_warning.png" style="float:left; margin-right:10px;" alt="'.get_lang('Warning').'"/>';
 	echo '<b>'.get_lang('SecurityAdvice').'</b>';
 	echo ': ';
 	printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'),'main/inc/conf/configuration.php','main/install/index.php');

@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseRecycler.class.php 11785 2007-03-29 15:09:23Z yannoo $
+// $Id: CourseRecycler.class.php 12117 2007-04-24 22:06:36Z pcool $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -72,6 +72,7 @@ class CourseRecycler
 		//$this->recycle_forums();
 		//$this->recycle_forum_categories();
 		$this->recycle_quizzes();
+		$this->recycle_surveys();
 		$this->recycle_learnpaths();
 		$this->recycle_cours_description();
 	}
@@ -203,7 +204,7 @@ class CourseRecycler
 	/**
 	 * Recycle surveys - removes everything
 	 */
-	function recycle_quizzes()
+	function recycle_surveys()
 	{
 		if ($this->course->has_resources(RESOURCE_SURVEY))
 		{
@@ -242,7 +243,7 @@ class CourseRecycler
 			{
 				//remove links from course homepage
 				$sql = "DELETE FROM $table_tool WHERE link LIKE '%lp_controller.php%lp_id=$id%' AND image='scormbuilder.gif'";
-				api_sql_query($sql,__FILE__,__LINE__);	
+				api_sql_query($sql,__FILE__,__LINE__);
 				//remove elements from lp_* tables (from bottom-up) by removing interactions, then item_view, then views and items, then paths
 				$sql_items = "SELECT id FROM $table_item WHERE lp_id=$id";
 				$res_items = api_sql_query($sql_items,__FILE__,__LINE__);
@@ -267,7 +268,7 @@ class CourseRecycler
 				//delete views
 				$sql_views_del = "DELETE FROM $table_view WHERE lp_id=$id";
 				$res_views_del = api_sql_query($sql_views_del,__FILE__,__LINE__);
-				//delete lps					
+				//delete lps
 				$sql_del = "DELETE FROM $table_main WHERE id = $id";
 				$res_del = api_sql_query($sql_del,__FILE__,__LINE__);
 			}

@@ -1458,3 +1458,44 @@ div.system_announcement {
 #openarea___Frame {
 	width:200px;
 }
+
+/*
+------------------------------------------------------------------------------
+    Survey
+------------------------------------------------------------------------------
+*/
+#survey_title{
+	background-color:#264269;
+	color:#FFF;
+	padding:2px;
+	border: 1px solid #264269;
+}
+#survey_subtitle{
+	background-color:#264269;
+	color:#FFF;
+	padding:2px;
+	border: 1px solid #264269;
+}
+.survey_content{
+	background-color:#EFEFEF;
+	color:#264269;
+	padding:5px;
+	border: 1px solid #264269;
+}
+.survey_question_wrapper{
+ 	border: 1px solid #4271b5;
+}
+.survey_question{
+	/* 264269 4271b5 E5EDF9 */
+	background-color:#4271b5;
+	color:#FFFFFF;
+	padding:5px;
+	/*border: 1px solid #264269;*/
+}
+.survey_question_options{
+	/* 264269 4271b5 E5EDF9 */
+	background-color:#FFF;
+	color:#000;
+	padding:5px;
+	/*border: 1px solid #264269;*/
+}

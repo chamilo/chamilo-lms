@@ -240,7 +240,7 @@ function get_personal_course_list($user_id)
 										FROM    ".$main_course_table."       course,".$main_course_user_table."   course_rel_user
 										WHERE course.code = course_rel_user.course_code"."
 										AND   course_rel_user.user_id = '".$user_id."'
-										ORDER BY course.title, course_rel_user.user_course_cat, course_rel_user.sort ASC,course.code";
+										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,course.code";
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
 	while ($result_row = mysql_fetch_array($course_list_sql_result))
@@ -308,7 +308,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 										FROM    ".$tbl_course."       course,".$main_course_user_table."   course_rel_user
 										WHERE course.code = course_rel_user.course_code"."
 										AND   course_rel_user.user_id = '".$user_id."'
-										ORDER BY course.title, course_rel_user.user_course_cat, course_rel_user.sort ASC,course.code";
+										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,course.code";
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
 	while ($result_row = mysql_fetch_array($course_list_sql_result))
@@ -319,7 +319,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 	// get the list of sessions where the user is subscribed as student
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 							FROM session_rel_user, session
-							WHERE id_session=id AND id_user=$user_id 
+							WHERE id_session=id AND id_user=$user_id
 							AND (date_start < NOW() AND date_end > NOW() OR date_start='0000-00-00')
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 

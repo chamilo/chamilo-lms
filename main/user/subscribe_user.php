@@ -75,13 +75,13 @@ api_display_tool_title($tool_name);
 ============================================================================== 
 */
 
-if (isset ($_GET['register']))
+if (isset ($_REQUEST['register']))
 {
-	if(isset($_GET['type']) && $_GET['type']=='teacher'){
-		CourseManager :: subscribe_user($_GET['user_id'], $_course['sysCode'],COURSEMANAGER);
+	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher'){
+		CourseManager :: subscribe_user($_REQUEST['user_id'], $_course['sysCode'],COURSEMANAGER);
 	}
 	else{
-		CourseManager :: subscribe_user($_GET['user_id'], $_course['sysCode']);
+		CourseManager :: subscribe_user($_REQUEST['user_id'], $_course['sysCode']);
 	}
 }
 if (isset ($_POST['action']))
@@ -113,14 +113,23 @@ function get_number_of_users()
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$sql = "SELECT 	u.user_id  
-						FROM $user_table u
-						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-						WHERE cu.user_id IS NULL
-						";
-	if (isset ($_GET['keyword']))
+	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher'){
+		$sql = "SELECT 	u.user_id  
+							FROM $user_table u
+							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+							WHERE cu.user_id IS NULL AND u.status='1'
+							";
+	}
+	else{
+		$sql = "SELECT 	u.user_id  
+							FROM $user_table u
+							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+							WHERE cu.user_id IS NULL AND u.status='5'
+							";
+	}
+	if (isset ($_REQUEST['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = mysql_real_escape_string($_REQUEST['keyword']);
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 	}
 	$res = api_sql_query($sql, __FILE__, __LINE__);
@@ -135,7 +144,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	
-	if(isset($_GET['type']) && $_GET['type']=='teacher'){
+	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher'){
 		$sql = "SELECT 
 					u.user_id AS col0,
 					u.official_code   AS col1, 
@@ -161,10 +170,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				WHERE u.status='5' and cu.user_id IS NULL
 				";
 	}
-
-	if (isset ($_GET['keyword']))
+	if (isset ($_REQUEST['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = mysql_real_escape_string($_REQUEST['keyword']);
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 	}
 	$sql .= " ORDER BY col$column $direction ";
@@ -193,12 +201,12 @@ function email_filter($email)
  */
 function reg_filter($user_id)
 {
-	if(isset($_GET['type']) && $_GET['type']=='teacher') $type='teacher'; else $type='student';
+	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') $type='teacher'; else $type='student';
 	$result = "<a href=\"".$_SERVER['PHP_SELF']."?register=yes&amp;type=".$type."&amp;user_id=".$user_id."\">".get_lang("reg")."</a>";
 	return $result;
 }
 // Build search-form
-$form = new FormValidator('search_user', 'get','','',null,false);
+$form = new FormValidator('search_user', 'POST',api_get_self().'?type='.$_REQUEST['type'],'',null,false);
 $renderer = & $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->add_textfield('keyword', '', false);
@@ -206,7 +214,7 @@ $form->addElement('submit', 'submit', get_lang('SearchButton'));
 
 // Build table
 $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', 2);
-$parameters['keyword'] = $_GET['keyword'];
+$parameters['keyword'] = $_REQUEST['keyword'];
 $table->set_additional_parameters($parameters);
 $col = 0;
 $table->set_header($col ++, '', false);

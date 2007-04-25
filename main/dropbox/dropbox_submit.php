@@ -73,9 +73,12 @@ api_session_register("dropbox_uniqueid");
  */
 if ( isset( $_POST["submitWork"]))
 {
-    if (file_exists(api_get_path(INCLUDE_PATH) . "/fileUploadLib.inc.php")) {
+    if (file_exists(api_get_path(INCLUDE_PATH) . "/fileUploadLib.inc.php")) 
+    {
         require_once(api_get_path(INCLUDE_PATH) . "/fileUploadLib.inc.php");
-    } else {
+    } 
+    else 
+    {
         require_once(api_get_path(LIBRARY_PATH) . "/fileUpload.lib.php");
 	}
 
@@ -399,9 +402,12 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
             }
         }
 
-	    if (file_exists(api_get_path(INCLUDE_PATH) . "/pclzip/pclzip.lib.php")) {
+	    if (file_exists(api_get_path(INCLUDE_PATH) . "/pclzip/pclzip.lib.php")) 
+	    {
 	        require(api_get_path(INCLUDE_PATH) . "/pclzip/pclzip.lib.php");
-	    } else {
+	    } 
+	    else 
+	    {
 	        require(api_get_path(LIBRARY_PATH) . "/pclzip/pclzip.lib.php");
 		}
 

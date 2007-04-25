@@ -856,6 +856,7 @@ function update_Db_course($courseDbName)
 		dest_user_id int unsigned NOT NULL default 0,
 		feedback_date datetime NOT NULL default '0000-00-00 00:00:00',
 		feedback text default '',
+		cat_id int(11) NOT NULLL default 0,
 		PRIMARY KEY (file_id,dest_user_id)
 		)");
 

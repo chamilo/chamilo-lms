@@ -105,9 +105,12 @@ class Dropbox_Work {
 		* Constructor calls private functions to create a new work or retreive an existing work from DB
 		* depending on the number of parameters
 		*/
-		if (func_num_args()>1) {
+		if (func_num_args()>1) 
+		{
 		    $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
-		} else {
+		} 
+		else 
+		{
 			$this->_createExistingWork($arg1);
 		}
 	}
@@ -162,7 +165,9 @@ class Dropbox_Work {
 					, last_upload_date = '".addslashes($this->last_upload_date)."'
 					WHERE id='".addslashes($this->id)."'";
 			$result = api_sql_query($sql,__FILE__,__LINE__);
-		} else {
+		} 
+		else 
+		{
 			$this->upload_date = $this->last_upload_date;
 			$sql="INSERT INTO `".dropbox_cnf("fileTbl")."` 
 				(uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date)
@@ -427,7 +432,8 @@ class Dropbox_Person {
 					AND r.dest_user_id = p.user_id
 					AND r.file_id = p.file_id";
         $result = api_sql_query($sql,__FILE__,__LINE__);
-		while ($res = mysql_fetch_array($result)) {
+		while ($res = mysql_fetch_array($result)) 
+		{
 			$this->receivedWork[] = new Dropbox_Work($res["file_id"]);
 		}	
 		/*
@@ -439,7 +445,8 @@ class Dropbox_Person {
 				AND f.uploader_id = p.user_id
 				AND f.id = p.file_id";
         $result =api_sql_query($sql,__FILE__,__LINE__);
-		while ($res = mysql_fetch_array($result)) {
+		while ($res = mysql_fetch_array($result)) 
+		{
 			$this->sentWork[] = new Dropbox_SentWork($res["id"]);
 		}
 	}

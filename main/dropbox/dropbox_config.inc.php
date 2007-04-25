@@ -33,29 +33,29 @@ $DEBUG = TRUE;
  *       DATABASE TABLE VARIABLES
  * --------------------------------------
  */
-$dropbox_cnf["postTbl"] = $_course["dbNameGlu"] . "dropbox_post";
-$dropbox_cnf["fileTbl"] = $_course["dbNameGlu"] . "dropbox_file";
-$dropbox_cnf["personTbl"] = $_course["dbNameGlu"] . "dropbox_person";
-$dropbox_cnf["introTbl"] = $_course["dbNameGlu"] . "tool_intro";
-$dropbox_cnf["userTbl"] = $_configuration['main_database'] . "`.`user";
-$dropbox_cnf["courseUserTbl"] = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$dropbox_cnf['tbl_category'] = $_course["dbNameGlu"] . "dropbox_category";
-$dropbox_cnf['tbl_feedback'] = $_course["dbNameGlu"] . "dropbox_feedback";
+$dropbox_cnf["postTbl"] 		= $_course["dbNameGlu"] . "dropbox_post";
+$dropbox_cnf["fileTbl"] 		= $_course["dbNameGlu"] . "dropbox_file";
+$dropbox_cnf["personTbl"] 		= $_course["dbNameGlu"] . "dropbox_person";
+$dropbox_cnf["introTbl"] 		= $_course["dbNameGlu"] . "tool_intro";
+$dropbox_cnf["userTbl"] 		= $_configuration['main_database'] . "`.`user";
+$dropbox_cnf["courseUserTbl"] 	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$dropbox_cnf['tbl_category'] 	= $_course["dbNameGlu"] . "dropbox_category";
+$dropbox_cnf['tbl_feedback'] 	= $_course["dbNameGlu"] . "dropbox_feedback";
 
 /**
  * --------------------------------------
  *       INITIALISE OTHER VARIABLES & CONSTANTS
  * --------------------------------------
  */
-$dropbox_cnf["courseId"] = $_cid;
-$dropbox_cnf["sysPath"] = api_get_path('SYS_COURSE_PATH') . $_course["path"] . "/dropbox"; //path to dropbox subdir in course containing the uploaded files
-$dropbox_cnf["webPath"] = api_get_path('WEB_COURSE_PATH') . $_course["path"] . "/dropbox";
-$dropbox_cnf["maxFilesize"] = get_setting("dropbox_max_filesize"); //file size limit as imposed by the platform admin (see Dokeos Config Settings on the platform administration section)
-//$dropbox_cnf["version"] = "1.4";
-$dropbox_cnf["allowOverwrite"] = string_2_boolean(get_setting("dropbox_allow_overwrite"));
-$dropbox_cnf["allowJustUpload"] = string_2_boolean(get_setting("dropbox_allow_just_upload"));
-$dropbox_cnf["allowStudentToStudent"] = string_2_boolean(get_setting("dropbox_allow_student_to_student"));
-$dropbox_cnf["allowGroup"] = string_2_boolean(get_setting("dropbox_allow_group"));
+$dropbox_cnf["courseId"] 				= $_cid;
+$dropbox_cnf["sysPath"] 				= api_get_path('SYS_COURSE_PATH') . $_course["path"] . "/dropbox"; //path to dropbox subdir in course containing the uploaded files
+$dropbox_cnf["webPath"] 				= api_get_path('WEB_COURSE_PATH') . $_course["path"] . "/dropbox";
+$dropbox_cnf["maxFilesize"] 			= get_setting("dropbox_max_filesize"); //file size limit as imposed by the platform admin (see Dokeos Config Settings on the platform administration section)
+//$dropbox_cnf["version"] 				= "1.4";
+$dropbox_cnf["allowOverwrite"] 			= string_2_boolean(get_setting("dropbox_allow_overwrite"));
+$dropbox_cnf["allowJustUpload"] 		= string_2_boolean(get_setting("dropbox_allow_just_upload"));
+$dropbox_cnf["allowStudentToStudent"] 	= string_2_boolean(get_setting("dropbox_allow_student_to_student"));
+$dropbox_cnf["allowGroup"] 				= string_2_boolean(get_setting("dropbox_allow_group"));
 
 /**
  * --------------------------------------

@@ -25,7 +25,7 @@
 ==============================================================================
  * First initialisation file with initialisation of variables and
  * without outputting anything to browser.
- * 1. Calls claro_init_global.inc.php and lang file
+ * 1. Calls global.inc.php and lang file
  * 2. Initialises $dropbox_cnf array with all relevant vars
  * 3. Often used functions
  *
@@ -51,24 +51,23 @@
 		INIT SECTION
 ==============================================================================
 */ 
-//name of langfile
 // name of the language file that needs to be included 
 $language_file = "dropbox";	
 
-//this var disables the link in the breadcrumps on top of the page
+//this var disables the link in the breadcrumbs on top of the page
 //$noPHP_SELF = TRUE;	
 
 // including the basic Dokeos initialisation file
 require("../inc/global.inc.php");
 
 // the dropbox configuration parameters
-include_once('dropbox_config.inc.php');
+require_once('dropbox_config.inc.php');
 
 // the dropbox sanity files (adds a new table and some new fields)
-include_once('dropbox_sanity.inc.php');
+//require_once('dropbox_sanity.inc.php');
 
 // the dropbox file that contains additional functions
-include_once('dropbox_functions.inc.php');
+require_once('dropbox_functions.inc.php');
 
 // protecting the script 
 api_protect_course_script();
@@ -315,7 +314,6 @@ api_display_tool_title();
  */
 if(! $is_allowed_in_course || ! $is_courseMember)
 {
-	debug ($_SESSION);
 	api_not_allowed();
 	if ($origin != 'learnpath')
 	{

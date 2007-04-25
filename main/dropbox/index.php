@@ -332,11 +332,6 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	// the content of the sortable table = the received files
 	foreach ( $dropbox_person -> receivedWork as $dropbox_file)
 	{
-		//echo '<pre>';
-		//print_r($dropbox_file);
-		//echo '</pre>';
-
-
 		$dropbox_file_data=array();
 		if ($view_dropbox_category_received==$dropbox_file->category) // we only display the files that are in the category that we are in.
 		{

@@ -74,6 +74,8 @@ window.onload = function()
 
 	window.parent.SetAutoSize( true ) ;
 
+	window.parent.resizeTo(450,550);
+	
 	// Activate the "OK" button.
 	//window.parent.SetOkButton( true ) ;
 

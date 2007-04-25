@@ -53,12 +53,12 @@ include('../../../../../inc/global.inc.php');
 							<TR>
 								<TD nowrap>
 									<span fckLang="DlgImgWidth">Width</span><br>
-									<input id="txtWidth" class="FCK__FieldNumeric" type="text" size="3">
+									<input id="txtWidth" class="FCK__FieldNumeric" type="text" size="3" value="450">
 								</TD>
 								<TD>&nbsp;</TD>
 								<TD>
 									<span fckLang="DlgImgHeight">Height</span><br>
-									<input id="txtHeight" class="FCK__FieldNumeric" type="text" size="3">
+									<input id="txtHeight" class="FCK__FieldNumeric" type="text" size="3" value="450">
 								</TD>
 							</TR>
 						</table>

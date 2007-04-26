@@ -34,7 +34,6 @@ define('FRAME','chat');
 
 $language_file = array ('chat');
 require('../inc/global.inc.php');
-
 include(api_get_path(LIBRARY_PATH).'document.lib.php');
 include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 
@@ -140,12 +139,13 @@ echo '</div>';
 <a name="bottom" style="text-decoration:none;">&nbsp;</a>
 
 <?php
-if($isMaster)
+if($isMaster || $is_courseCoach)
 {
 	$rand=mt_rand(1,1000);
-?>
-
-<?php
+	
+	echo '<div style="margin-left: 5px;">';
+	echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1#bottom" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmReset'))).'\')) return false;"><img src="../img/delete.gif" border="0" alt="" align="absbottom">'.get_lang('ClearList').'</a>';
+	echo '</div>';	
 }
 
 include('footer_frame.inc.php');

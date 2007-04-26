@@ -200,7 +200,7 @@ if(!empty($_GET['student']))
 	{
 		if(!CourseManager::is_user_subscribed_in_course($a_infosUser['user_id'], $course_code, true))
 		{
-			array_splice($a_courses, $key,1);
+			unset($a_courses[$key]);
 		}
 		else
 		{

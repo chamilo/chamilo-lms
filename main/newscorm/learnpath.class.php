@@ -7311,14 +7311,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 		$zip_folder=new PclZip($temp_zip_file);
 		$current_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
-		$root_path = api_get_path(SYS_PATH);
-		$rel_path = api_get_path(REL_PATH);
-		if($rel_path === '/')
-		{
-			$rel_path = '';
-		}
-		$main_path = $root_path.$rel_path;
-		
+		$root_path = $main_path = api_get_path(SYS_PATH);
 		//place to temporarily stash the zipfiles
 		//create the temp dir if it doesn't exist
 		//or do a cleanup befor creating the zipfile

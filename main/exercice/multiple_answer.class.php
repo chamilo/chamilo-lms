@@ -176,15 +176,11 @@ class MultipleAnswer extends Question {
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
 
-        	if($goodAnswer)
-        	{
-        		$nbrGoodAnswers++;
-        		$weighting = abs($weighting);
-        		if($weighting > 0)
-                {
-                    $questionWeighting += $weighting;
-                }
-        	}
+    		$weighting = abs($weighting);
+    		if($weighting > 0)
+            {
+                $questionWeighting += $weighting;
+            }
 
         	$objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i);
 

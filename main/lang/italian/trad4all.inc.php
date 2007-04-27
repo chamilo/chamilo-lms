@@ -420,7 +420,6 @@ $SearchResults = "Risultati della ricerca";
 $SessionPast = "Conclusa";
 $SessionActive = "Attiva";
 $SessionFuture = "Non iniziata";
-$SessionFuture = "Futura";
 $DateFormatLongWithoutDay = "%d %B %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Cartella non valida: crea una cartella di nome <i>images<i /> nella sezione documenti, in modo da permettere alle immagini di essere caricate al suo interno";
 ?>

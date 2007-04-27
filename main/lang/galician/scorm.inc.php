@@ -37,4 +37,12 @@ $langRemote = "Remoto";
 $langAutodetect = "Auto-detectar";
 $langAccomplishedStepsTotal = "Total de etapas realizadas";
 $langUnknown = "Descoñecido";
+$AreYouSureToDeleteSteps = "Ten certeza de querer eliminar estes pasos?";
+$Origin = "Orixe";
+$Local = "Local";
+$Remote = "Remoto";
+$FileToUpload = "Ficheiro para enviar";
+$ContentMaker = "Creador de Contidos";
+$ContentProximity = "Proximidade de Contido";
+$UploadLocalFileFromGarbageDir = "Enviar ficheiro local desde o directorio principal/lixo";
 ?>

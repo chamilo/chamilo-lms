@@ -420,7 +420,6 @@ $SearchResults = "Rezultati iskanja";
 $SessionPast = "Pretekla";
 $SessionActive = "Aktivna";
 $SessionFuture = "Neprièeta";
-$SessionFuture = "Neprièeta";
 $DateFormatLongWithoutDay = "%d. %B %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Napaèna mapa: ustvarite mapo z imenom <b>images</b> v orodju dokumenti, da bo možno vanj nalagati slike.";
 ?>

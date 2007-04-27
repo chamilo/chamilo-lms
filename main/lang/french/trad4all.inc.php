@@ -12,7 +12,7 @@ $Name = "Nom";
 $langComment = "Commentaire";
 $langVisible = "Visible/invisible";
 $Download = "Transférer";
-$langGroup = "Groupe";
+$langGroup = "Groupes";
 $langEdit = "Editer";
 $langGroupForum = "Forum du groupe";
 $Language = "Langue";
@@ -420,6 +420,6 @@ $SearchResults = "Résultats de la recherche";
 $SessionPast = "Passée";
 $SessionActive = "Active";
 $SessionFuture = "A venir";
-$SessionFuture = "A venir";
 $DateFormatLongWithoutDay = "%d %B %Y";
+$UsersConnectedToMySessions = "Voir les utilisateurs connectés à mes sessions";
 ?>

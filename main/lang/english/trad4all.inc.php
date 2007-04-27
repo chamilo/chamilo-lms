@@ -12,7 +12,7 @@ $Name = "Name";
 $langComment = "Comment";
 $langVisible = "Visible/invisible";
 $Download = "Upload";
-$langGroup = "Group";
+$langGroup = "Groups";
 $langEdit = "Edit";
 $langGroupForum = "Group\'s Forum";
 $Language = "Language";
@@ -420,7 +420,7 @@ $SearchResults = "Search results";
 $SessionPast = "Past";
 $SessionActive = "Active";
 $SessionFuture = "Not yet begun";
-$SessionFuture = "Not yet begun";
 $DateFormatLongWithoutDay = "%B %d, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder";
+$UsersConnectedToMySessions = "See all users connected to my sessions";
 ?>

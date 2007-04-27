@@ -169,4 +169,5 @@ $MakeScormRecordingNormal = "Make SCORM recordings normal";
 $DocumentHasBeenDeleted = "The document cannot be displayed because it has been deleted";
 $EditCurrentForum = "Edit the current forum";
 $NoPrerequisites = "No prerequisites";
+$NewExercise = "New test";
 ?>

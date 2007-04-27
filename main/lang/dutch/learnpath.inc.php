@@ -71,7 +71,7 @@ $lang_short_help = "Om een item toe te voegen, klik op het +-icoon; om een titel
 $lang_prereq_not_complete = "Voorkennisvereisten zijn niet afgewerkt.";
 $lang_author = "Auteur";
 $lang_date = "Datum";
-$langBasicOverview = "Basis weergave";
+$langBasicOverview = "Organiseren";
 $langAdvanced = "Geavanceerde weergave";
 $langDisplay = "Weergeven";
 $langNewChapter = "Nieuw hoofdstuk";
@@ -169,4 +169,5 @@ $MakeScormRecordingNormal = "Gebruik normale SCORM functies";
 $DocumentHasBeenDeleted = "Het document kan niet getoond worden omdat het verwijderd is.";
 $EditCurrentForum = "Wijzig het huidige forum";
 $NoPrerequisites = "Geen vereisten";
+$NewExercise = "nieuwe oefening";
 ?>

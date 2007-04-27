@@ -420,7 +420,6 @@ $SearchResults = "Resultados da procura";
 $SessionPast = "Passada";
 $SessionActive = "Activa";
 $SessionFuture = "Ainda não iniciada";
-$SessionFuture = "Ainda não iniciada";
 $DateFormatLongWithoutDay = "%d %B, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Pasta inválida: por favor, crie uma pasta com o nome images na secção documentos de modo que as imagens carregadas possam ser alojadas nessa pasta.";
 ?>

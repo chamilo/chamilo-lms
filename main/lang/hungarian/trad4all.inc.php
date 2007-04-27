@@ -420,7 +420,6 @@ $SearchResults = "Keresési eredmények";
 $SessionPast = "Korábban";
 $SessionActive = "Aktív";
 $SessionFuture = "Nem kezd&#337;dött el";
-$SessionFuture = "Nem kezd&#337;dött még el";
 $DateFormatLongWithoutDay = "%B %d, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Érvénytelen mappa: kérem, hozzon létre egy \"images\" nev&#369; mappát a dokumentumok eszközben, csak ezután tud feltölteni képeket ";
 ?>

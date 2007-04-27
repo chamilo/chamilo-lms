@@ -420,5 +420,4 @@ $SearchResults = "Resultados da busca";
 $SessionPast = "Passada";
 $SessionActive = "Ativa";
 $SessionFuture = "Ainda não iniciada";
-$SessionFuture = "Ainda não iniciada";
 ?>

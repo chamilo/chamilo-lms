@@ -240,7 +240,8 @@ function get_personal_course_list($user_id)
 										FROM    ".$main_course_table."       course,".$main_course_user_table."   course_rel_user
 										WHERE course.code = course_rel_user.course_code"."
 										AND   course_rel_user.user_id = '".$user_id."'
-										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,course.code";
+										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,i";
+	
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
 	while ($result_row = mysql_fetch_array($course_list_sql_result))
@@ -308,9 +309,9 @@ function get_personal_session_course_list($user_id, $list_sessions)
 										FROM    ".$tbl_course."       course,".$main_course_user_table."   course_rel_user
 										WHERE course.code = course_rel_user.course_code"."
 										AND   course_rel_user.user_id = '".$user_id."'
-										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,course.code";
+										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,i";
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-
+	
 	while ($result_row = mysql_fetch_array($course_list_sql_result))
 	{
 		$personal_course_list[] = $result_row;

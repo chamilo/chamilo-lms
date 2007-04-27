@@ -4691,7 +4691,7 @@ class learnpath {
 			
 			switch($row['item_type'])
 			{
-				case 'dokeos_chapter':
+				case 'dokeos_chapter': case 'dir' : case 'asset' : 
 					
 					if(isset($_GET['view']) && $_GET['view'] == 'build')
 					{
@@ -5700,7 +5700,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			for($i = 0; $i < count($arrLP); $i++)
 			{
 				if($action != 'add'){
-					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
+					if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)){
 						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
 						if($parent == $arrLP[$i]['id']){
@@ -5709,7 +5709,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					}
 				}
 				else{
-					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter'){
+					if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir'){
 						$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
 						$arrHide[$arrLP[$i]['id']]['padding']=3+ $arrLP[$i]['depth'] * 10;
 						if($parent == $arrLP[$i]['id']){
@@ -6822,7 +6822,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			switch($row['item_type'])
 			{
-				case 'dokeos_chapter':
+				case 'dokeos_chapter': case 'dir' : case 'asset' :
 					
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_item_form($row['item_type'], 'Move the current chapter:', 'move', $item_id, $row);

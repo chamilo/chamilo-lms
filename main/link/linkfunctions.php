@@ -373,20 +373,23 @@ function showlinksofcategory($catid)
 	$sqlLinks = "SELECT * FROM ".$tbl_link." link, ".$TABLE_ITEM_PROPERTY." itemproperties WHERE itemproperties.tool='".TOOL_LINK."' AND link.id=itemproperties.ref AND  link.category_id='".$catid."' AND (itemproperties.visibility='0' OR itemproperties.visibility='1')ORDER BY link.display_order DESC";
 	$result = api_sql_query($sqlLinks);
 	$numberoflinks = mysql_num_rows($result);
-	echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
+	echo "<table class='data_table'>";
 	$i = 1;
 	while ($myrow = mysql_fetch_array($result))
 	{
+		if($i%2==0) $css_class = 'row_odd';
+		else $css_class = 'row_even';
+		
 		$myrow[3] = text_filter($myrow[3]);
 		if ($myrow['visibility'] == '1')
 		{
-			echo "<tr>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", "<img src=\"../../main/img/file_html.gif\" border=\"0\" alt=\"".get_lang('Links')."\"/>", "</a></td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", htmlentities($myrow[2]), "</a>\n", "<br/>", $myrow[3], "";
+			echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", "<img src=\"../../main/img/file_html.gif\" border=\"0\" alt=\"".get_lang('Links')."\"/>", "</a></td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", htmlentities($myrow[2]), "</a>\n", "<br/>", $myrow[3], "";
 		}
 		else
 		{
 			if (api_is_allowed_to_edit())
 			{
-				echo "<tr>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", Display::return_icon('file_html_na.gif', get_lang('Links')),"</a></td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", htmlentities($myrow[2]), "</a>\n", "<br />", $myrow[3], "";
+				echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", Display::return_icon('file_html_na.gif', get_lang('Links')),"</a></td>", "<td width=\"580\" valign=\"top\">", "<a href=\"link_goto.php?link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", htmlentities($myrow[2]), "</a>\n", "<br />", $myrow[3], "";
 			}
 		}
 		if (api_is_allowed_to_edit())

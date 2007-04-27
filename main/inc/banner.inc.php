@@ -106,7 +106,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 {
 	if(api_get_setting("use_session_mode") == "true" && isset($_user['user_id']) && api_is_coach())
 	{
-		echo "<li><a href='".api_get_path(WEB_PATH)."whoisonlinesession.php?id_coach=".$_user['user_id']."&referer=".urlencode($_SERVER['REQUEST_URI'])."' target='_top'>Voir les utilisateurs connectés à mes sessions</a></li>";
+		echo "<li><a href='".api_get_path(WEB_PATH)."whoisonlinesession.php?id_coach=".$_user['user_id']."&referer=".urlencode($_SERVER['REQUEST_URI'])."' target='_top'>".get_lang('UsersConnectedToMySessions')."</a></li>";
 	}
 
 	$statistics_database = Database :: get_statistic_database();

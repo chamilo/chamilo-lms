@@ -150,10 +150,7 @@ class GroupManager
 		$table_group = Database :: get_course_table(TABLE_GROUP);
 		$table_forum = Database :: get_course_table(TABLE_FORUM);
 		$category = GroupManager :: get_category($category_id);
-		if( strlen($places) == 0)
-		{
-			$places = $category['max_student'];
-		}
+
 		$sql = "INSERT INTO ".$table_group." SET category_id='".$category_id."', max_student = '".$places."', doc_state = '".$category['doc_state']."', calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 		$lastId = mysql_insert_id();

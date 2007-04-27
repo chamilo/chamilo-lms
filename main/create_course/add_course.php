@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 11809 2007-03-30 13:17:40Z pcool $
+// $Id: add_course.php 12159 2007-04-27 13:42:24Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -113,7 +113,8 @@ if($form->validate())
 	$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
 	//$result_check = mysql_query($sql_check);
 	$result_check = api_sql_query($sql_check,__FILE__,__LINE__); //I don't know why this api function doesn't work...
-	if(Database::num_rows($result_check)<1){
+	if(Database::num_rows($result_check)<1)
+	{
 		if (sizeof($keys))
 		{
 			$visual_code = $keys["currentCourseCode"];
@@ -133,7 +134,8 @@ if($form->validate())
 		$message .= '<a href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
 		Display :: display_confirmation_message($message,false);
 	}
-	else{
+	else
+	{
 				Display :: display_error_message(get_lang('CourseCodeAlreadyExist'),false);
 		$form->display();
 		echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';

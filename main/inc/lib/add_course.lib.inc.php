@@ -1849,7 +1849,7 @@ function string2binary($variable)
  */
 function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "", $teachers)
 {
-	GLOBAL $defaultVisibilityForANewCourse, $langCourseDescription, $langProfessor, $langAnnouncementEx, $error_msg, $_configuration;
+	GLOBAL $defaultVisibilityForANewCourse, $langCourseDescription, $langProfessor, $langAnnouncementEx, $error_msg, $_configuration, $_user;
 	$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -1933,7 +1933,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 
 		api_sql_query($sql, __FILE__, __LINE__);
 
-		$sort = api_max_sort_value('0');
+		$sort = api_max_sort_value('0', $_user['user_id']);
 
 		$sql = "INSERT INTO ".$TABLECOURSUSER . " SET
 					course_code = '".addslashes($courseSysCode) . "',

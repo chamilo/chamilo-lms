@@ -707,7 +707,7 @@ CREATE TABLE `shared_survey_question` (
   `display` varchar(10) NOT NULL default '',
   `sort` int(11) NOT NULL default '0',
   `code` varchar(40) NOT NULL default '',
-  `max_value` int(11) NOT NULL default '',
+  `max_value` int(11) NOT NULL,
   PRIMARY KEY  (`question_id`)
 );
 

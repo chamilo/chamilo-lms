@@ -7169,7 +7169,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				$return .= '<div class="lp_resource_element">'.get_lang("NoExercisesAvailable").'</div>';
 		
 		$return .= '<div class="lp_resource_element">';	
-			$return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
+			$return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a href="'.api_get_path(REL_CLARO_PATH).'exercice/exercise_admin.php">' . get_lang('NewExercise') . '</a>';
 		$return .= '</div>';
 		

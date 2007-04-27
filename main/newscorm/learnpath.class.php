@@ -7118,12 +7118,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					$array_temp = explode('/',trim($value['path']));
 					$document_name = $array_temp[count($array_temp)-1];
 					
-					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $value['id'] . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/'.$icon.'" title="" />'.$document_name."</a></div></div>\r\n";
+					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $value['id'] . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/'.$icon.'" title="" />&nbsp;'.$document_name."</a></div></div>\r\n";
 					array_shift($resources_array);
 				}
 				//It's a folder
 				else {
-					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_'.$value["id"].'" onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')"><img alt="" src="../img/lp_' . (($value['filetype'] == 'file') ? TOOL_DOCUMENT.'_file' : 'folder') . '.gif" title="" align="absmiddle" /><span onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')" style="cursor: pointer;" >'.$value['title'].'</span></div><div style="display: none;" id="'.$value['id'].'">';
+					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_'.$value["id"].'" onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')"><img alt="" src="../img/lp_' . (($value['filetype'] == 'file') ? TOOL_DOCUMENT.'_file' : 'folder') . '.gif" title="" align="absmiddle" />&nbsp;<span onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')" style="cursor: pointer;" >'.$value['title'].'</span></div><div style="display: none;" id="'.$value['id'].'">';
 					array_shift($resources_array);
 					$return .= $this->write_resources_tree($value['path']);
 					$return .= "</div></div>\r\n";
@@ -7167,6 +7167,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			
 			if(Database::num_rows($res_quiz) == 0)
 				$return .= '<div class="lp_resource_element">'.get_lang("NoExercisesAvailable").'</div>';
+		
+		$return .= '<div class="lp_resource_element">';	
+			$return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
+			$return .= '<a href="'.api_get_path(REL_CLARO_PATH).'exercice/exercise_admin.php">' . get_lang('NewExercise') . '</a>';
+		$return .= '</div>';
 		
 		$return .= '</div>';
 		

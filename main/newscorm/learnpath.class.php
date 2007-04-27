@@ -7372,100 +7372,107 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	$zip_files_abs = array();
 	 	$link_updates = array();
 	 	foreach($this->items as $index => $item){
-	 		//get included documents from this item
-	 		$inc_docs = $item->get_resources_from_source();
-	 		//error_log('Dealing with document '.$item->get_file_path().', found included documents: '.print_r($inc_docs,true),0);
-	 		//give a child element <item> to the <organization> element
-	 		$my_item = $xmldoc->createElement('item');
-	 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
-	 		$my_item->setAttribute('identifierref','RESOURCE_'.$item->get_id()); 
-	 		$my_item->setAttribute('isvisible','true');
-	 		//give a child element <title> to the <item> element
-	 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
-	 		$my_item->appendChild($my_title);
-	 		//give a child element <adlcp:prerequisite> to the <item> element
-	 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisite',$item->get_prereq_string());
-	 		$my_prereqs->setAttribute('type','aicc_script');
-	 		$my_item->appendChild($my_prereqs);
-	 		//give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported
-	 		//$xmldoc->createElement('adlcp:maxtimeallowed','');
-			//give a child element <adlcp:timelimitaction> to the <item> element - not yet supported
-	 		//$xmldoc->createElement('adlcp:timelimitaction','');
-	 		//give a child element <adlcp:datafromlms> to the <item> element - not yet supported
-	 		//$xmldoc->createElement('adlcp:datafromlms','');
-	 		//give a child element <adlcp:masteryscore> to the <item> element
-	 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->masteryscore);
-	 		$my_item->appendChild($my_masteryscore);
-	 		//attache this item to the organization element
-	 		$organization->appendChild($my_item);
 	 		
-	 		//get the path of the file(s) from the course directory root
-			$my_file_path = $item->get_file_path();
-			$my_xml_file_path = htmlentities($my_file_path); 
-			$my_sub_dir = dirname($my_file_path); 
-			$my_xml_sub_dir = htmlentities($my_sub_dir);
-	 		//give a <resource> child to the <resources> element
-	 		$my_resource = $xmldoc->createElement('resource');
-	 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
-	 		$my_resource->setAttribute('type','webcontent');
-	 		$my_resource->setAttribute('href',$my_xml_file_path);
-	 		//adlcp:scormtype can be either 'sco' or 'asset'
-	 		$my_resource->setAttribute('adlcp:scormtype','asset');
-	 		//xml:base is the base directory to find the files declared in this resource
-	 		$my_resource->setAttribute('xml:base','');
-	 		//give a <file> child to the <resource> element
-	 		$my_file = $xmldoc->createElement('file');
-	 		$my_file->setAttribute('href',$my_xml_file_path);
-	 		$my_resource->appendChild($my_file);
-
-	 		//dependency to other files - not yet supported
-	 		$i = 1;
-	 		foreach($inc_docs as $doc_info)
+	 		if(!in_array($item->type , array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK)))
 	 		{
-	 			if(count($doc_info)<1 or empty($doc_info[0])){continue;}
-	 			$my_dep = $xmldoc->createElement('resource');
-	 			$res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
-	 			$my_dep->setAttribute('identifier',$res_id);
-	 			$my_dep->setAttribute('type','webcontent');
-	 			$my_dep->setAttribute('adlc:scormtype','asset');
-	 			$my_dep_file = $xmldoc->createElement('file');
-	 			//check type of URL
-	 			//error_log('Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2],0);
-	 			if($doc_info[1] == 'remote')
-	 			{ //remote file. Save url as is
-	 				$my_dep_file->setAttribute('href',$doc_info[0]);
-		 			$my_dep->setAttribute('xml:base','');
-	 			}elseif($doc_info[1] == 'local'){
-	 				switch($doc_info[2])
-	 				{
-	 					case 'url': //local URL - save path as url for now, don't zip file
-			 				$my_dep_file->setAttribute('href',$doc_info[0]);
-				 			$my_dep->setAttribute('xml:base','');
-	 						break;
-	 					case 'abs': //absolute path from DocumentRoot. Save file and leave path as is in the zip
-			 				$my_dep_file->setAttribute('href',$doc_info[0]);
-	 			 			$my_dep->setAttribute('xml:base','');
-	 			 			$zip_files_abs[] = $doc_info[0];
-
-		 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
-							$file_path = realpath($doc_info[0]);
-		 					if(strstr($file_path,$main_path) !== false)
-		 					{//the calculated real path is really inside the dokeos root path
-		 						//reduce file path to what's under the DocumentRoot
-		 						$file_path = substr($file_path,strlen($root_path));
-		 						//error_log('Reduced path: '.$file_path,0);
-		 						$zip_files_abs[] = $file_path;
-		 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
-				 				$my_dep_file->setAttribute('href','document/'.$file_path);
+		 		//get included documents from this item
+		 		$inc_docs = $item->get_resources_from_source();
+		 		//error_log('Dealing with document '.$item->get_file_path().', found included documents: '.print_r($inc_docs,true),0);
+		 		//give a child element <item> to the <organization> element
+		 		$my_item = $xmldoc->createElement('item');
+		 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
+		 		$my_item->setAttribute('identifierref','RESOURCE_'.$item->get_id()); 
+		 		$my_item->setAttribute('isvisible','true');
+		 		//give a child element <title> to the <item> element
+		 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
+		 		$my_item->appendChild($my_title);
+		 		//give a child element <adlcp:prerequisite> to the <item> element
+		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisite',$item->get_prereq_string());
+		 		$my_prereqs->setAttribute('type','aicc_script');
+		 		$my_item->appendChild($my_prereqs);
+		 		//give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported
+		 		//$xmldoc->createElement('adlcp:maxtimeallowed','');
+				//give a child element <adlcp:timelimitaction> to the <item> element - not yet supported
+		 		//$xmldoc->createElement('adlcp:timelimitaction','');
+		 		//give a child element <adlcp:datafromlms> to the <item> element - not yet supported
+		 		//$xmldoc->createElement('adlcp:datafromlms','');
+		 		//give a child element <adlcp:masteryscore> to the <item> element
+		 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->masteryscore);
+		 		$my_item->appendChild($my_masteryscore);
+		 		
+		 		
+		 		//attach this item to the organization element or hits parent if there is one
+		 		if(!empty($item->parent) && $item->parent!=0)
+		 		{
+		 			$children = $organization->childNodes;
+			        for($i=0;$i<$children->length;$i++){
+				        $item_temp = $children->item($i);
+				        if ($item_temp -> nodeName == 'item')
+				        {
+				        	if($item_temp->getAttribute('identifier') == 'ITEM_'.$item->parent)
+				        	{
+				        		$item_temp -> appendChild($my_item);
+				        	}
+				        	
+				        }
+			        }
+		 		}
+		 		else
+		 		{
+		 			$organization->appendChild($my_item);
+		 		}
+		 		
+		 		
+		 		//get the path of the file(s) from the course directory root
+				$my_file_path = $item->get_file_path();
+				$my_xml_file_path = htmlentities($my_file_path); 
+				$my_sub_dir = dirname($my_file_path); 
+				$my_xml_sub_dir = htmlentities($my_sub_dir);
+		 		//give a <resource> child to the <resources> element
+		 		$my_resource = $xmldoc->createElement('resource');
+		 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
+		 		$my_resource->setAttribute('type','webcontent');
+		 		$my_resource->setAttribute('href',$my_xml_file_path);
+		 		//adlcp:scormtype can be either 'sco' or 'asset'
+		 		$my_resource->setAttribute('adlcp:scormtype','asset');
+		 		//xml:base is the base directory to find the files declared in this resource
+		 		$my_resource->setAttribute('xml:base','');
+		 		//give a <file> child to the <resource> element
+		 		$my_file = $xmldoc->createElement('file');
+		 		$my_file->setAttribute('href',$my_xml_file_path);
+		 		$my_resource->appendChild($my_file);
+	
+		 		//dependency to other files - not yet supported
+		 		$i = 1;
+		 		foreach($inc_docs as $doc_info)
+		 		{
+		 			if(count($doc_info)<1 or empty($doc_info[0])){continue;}
+		 			$my_dep = $xmldoc->createElement('resource');
+		 			$res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
+		 			$my_dep->setAttribute('identifier',$res_id);
+		 			$my_dep->setAttribute('type','webcontent');
+		 			$my_dep->setAttribute('adlcp:scormtype','asset');
+		 			$my_dep_file = $xmldoc->createElement('file');
+		 			//check type of URL
+		 			//error_log('Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2],0);
+		 			if($doc_info[1] == 'remote')
+		 			{ //remote file. Save url as is
+		 				$my_dep_file->setAttribute('href',$doc_info[0]);
+			 			$my_dep->setAttribute('xml:base','');
+		 			}elseif($doc_info[1] == 'local'){
+		 				switch($doc_info[2])
+		 				{
+		 					case 'url': //local URL - save path as url for now, don't zip file
+				 				$my_dep_file->setAttribute('href',$doc_info[0]);
+					 			$my_dep->setAttribute('xml:base','');
+		 						break;
+		 					case 'abs': //absolute path from DocumentRoot. Save file and leave path as is in the zip
+				 				$my_dep_file->setAttribute('href',$doc_info[0]);
 		 			 			$my_dep->setAttribute('xml:base','');
-		 					}
-	 						break;
-	 					case 'rel': //path relative to the current document. Save xml:base as current document's directory and save file in zip as subdir.file_path
-		 					if(substr($doc_info[0],0,2)=='..')
-			 				{ //relative path going up
+		 			 			$zip_files_abs[] = $doc_info[0];
+	
 			 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
-			 					$file_path = realpath($current_dir.$doc_info[0]);
-			 					//error_log($file_path.' <-> '.$main_path,0);
+								$file_path = realpath($doc_info[0]);
 			 					if(strstr($file_path,$main_path) !== false)
 			 					{//the calculated real path is really inside the dokeos root path
 			 						//reduce file path to what's under the DocumentRoot
@@ -7476,31 +7483,115 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					 				$my_dep_file->setAttribute('href','document/'.$file_path);
 			 			 			$my_dep->setAttribute('xml:base','');
 			 					}
-			 				}else{
-			 					$zip_files[] = $my_sub_dir.'/'.$doc_info[0];
+		 						break;
+		 					case 'rel': //path relative to the current document. Save xml:base as current document's directory and save file in zip as subdir.file_path
+			 					if(substr($doc_info[0],0,2)=='..')
+				 				{ //relative path going up
+				 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+				 					$file_path = realpath($current_dir.$doc_info[0]);
+				 					//error_log($file_path.' <-> '.$main_path,0);
+				 					if(strstr($file_path,$main_path) !== false)
+				 					{//the calculated real path is really inside the dokeos root path
+				 						//reduce file path to what's under the DocumentRoot
+				 						$file_path = substr($file_path,strlen($root_path));
+				 						//error_log('Reduced path: '.$file_path,0);
+				 						$zip_files_abs[] = $file_path;
+				 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+						 				$my_dep_file->setAttribute('href','document/'.$file_path);
+				 			 			$my_dep->setAttribute('xml:base','');
+				 					}
+				 				}else{
+				 					$zip_files[] = $my_sub_dir.'/'.$doc_info[0];
+					 				$my_dep_file->setAttribute('href',$doc_info[0]);
+			 			 			$my_dep->setAttribute('xml:base',$my_xml_sub_dir);
+				 				}
+		 						break;
+		 					default:
 				 				$my_dep_file->setAttribute('href',$doc_info[0]);
-		 			 			$my_dep->setAttribute('xml:base',$my_xml_sub_dir);
-			 				}
-	 						break;
-	 					default:
-			 				$my_dep_file->setAttribute('href',$doc_info[0]);
-	 			 			$my_dep->setAttribute('xml:base','');
-	 						break;
-	 				}
-	 			}
-	 			$my_dep->appendChild($my_dep_file);
-	 			$resources->appendChild($my_dep);
-	 			$dependency = $xmldoc->createElement('dependency');
-	 			$dependency->setAttribute('identifierref',$res_id);
-	 			$my_resource->appendChild($dependency);
-	 			$i++;
+		 			 			$my_dep->setAttribute('xml:base','');
+		 						break;
+		 				}
+		 			}
+		 			$my_dep->appendChild($my_dep_file);
+		 			$resources->appendChild($my_dep);
+		 			$dependency = $xmldoc->createElement('dependency');
+		 			$dependency->setAttribute('identifierref',$res_id);
+		 			$my_resource->appendChild($dependency);
+		 			$i++;
+		 		}
+		 		//$my_dependency = $xmldoc->createElement('dependency');
+		 		//$my_dependency->setAttribute('identifierref','');
+		 		$resources->appendChild($my_resource);
+		 		
+		 		$zip_files[] = $my_file_path;
+				//error_log('File '.$my_file_path. ' added to $zip_files',0);
 	 		}
-	 		//$my_dependency = $xmldoc->createElement('dependency');
-	 		//$my_dependency->setAttribute('identifierref','');
-	 		$resources->appendChild($my_resource);
+	 		else
+	 		{ // if the item is a quiz or a link or whatever non-exportable, we include a step indicating it
 	 		
-	 		$zip_files[] = $my_file_path;
-			//error_log('File '.$my_file_path. ' added to $zip_files',0);
+	 			$my_item = $xmldoc->createElement('item');
+		 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
+		 		$my_item->setAttribute('identifierref','RESOURCE_'.$item->get_id()); 
+		 		$my_item->setAttribute('isvisible','true');
+		 		//give a child element <title> to the <item> element
+		 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
+		 		$my_item->appendChild($my_title);
+		 		//give a child element <adlcp:prerequisite> to the <item> element
+		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisite',$item->get_prereq_string());
+		 		$my_prereqs->setAttribute('type','aicc_script');
+		 		$my_item->appendChild($my_prereqs);
+		 		//give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported
+		 		//$xmldoc->createElement('adlcp:maxtimeallowed','');
+				//give a child element <adlcp:timelimitaction> to the <item> element - not yet supported
+		 		//$xmldoc->createElement('adlcp:timelimitaction','');
+		 		//give a child element <adlcp:datafromlms> to the <item> element - not yet supported
+		 		//$xmldoc->createElement('adlcp:datafromlms','');
+		 		//give a child element <adlcp:masteryscore> to the <item> element
+		 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->masteryscore);
+		 		$my_item->appendChild($my_masteryscore);
+		 		
+		 		
+		 		//attach this item to the organization element or hits parent if there is one
+		 		if(!empty($item->parent) && $item->parent!=0)
+		 		{
+		 			$children = $organization->childNodes;
+			        for($i=0;$i<$children->length;$i++){
+				        $item_temp = $children->item($i);
+				        if ($item_temp -> nodeName == 'item')
+				        {
+				        	if($item_temp->getAttribute('identifier') == 'ITEM_'.$item->parent)
+				        	{
+				        		$item_temp -> appendChild($my_item);
+				        	}
+				        	
+				        }
+			        }
+		 		}
+		 		else
+		 		{
+		 			$organization->appendChild($my_item);
+		 		}
+		 		
+		 		//get the path of the file(s) from the course directory root
+				$my_file_path = 'non_exportable.html';
+				$my_xml_file_path = htmlentities($my_file_path); 
+				$my_sub_dir = dirname($my_file_path); 
+				$my_xml_sub_dir = htmlentities($my_sub_dir);
+		 		//give a <resource> child to the <resources> element
+		 		$my_resource = $xmldoc->createElement('resource');
+		 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
+		 		$my_resource->setAttribute('type','webcontent');
+		 		$my_resource->setAttribute('href','document/'.$my_xml_file_path);
+		 		//adlcp:scormtype can be either 'sco' or 'asset'
+		 		$my_resource->setAttribute('adlcp:scormtype','asset');
+		 		//xml:base is the base directory to find the files declared in this resource
+		 		$my_resource->setAttribute('xml:base','');
+		 		//give a <file> child to the <resource> element
+		 		$my_file = $xmldoc->createElement('file');
+		 		$my_file->setAttribute('href','document/'.$my_xml_file_path);
+		 		$my_resource->appendChild($my_file);
+		 		$resources->appendChild($my_resource);
+	 		}
 	 	}
 	 	$organizations->appendChild($organization);
 	 	$root->appendChild($organizations);
@@ -7510,6 +7601,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		//error_log(print_r($zip_files,true),0);
 		$garbage_path = api_get_path(GARBAGE_PATH);
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
+		
 		foreach($zip_files as $file_path)
 		{
 			if(empty($file_path)){continue;}
@@ -7517,6 +7609,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$dest_file = $garbage_path.$temp_dir_short.'/'.$file_path;
 			$this->create_path($dest_file);
 			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
+			//echo $main_path.$file_path.'<br>';
 			copy($sys_course_path.$_course['path'].'/'.$file_path,$dest_file);
 			//check if the file needs a link update
 			if(in_array($file_path,array_keys($link_updates))){
@@ -7553,7 +7646,37 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 			$zip_folder->add($dest_file,PCLZIP_OPT_REMOVE_PATH, $garbage_path);
 		}
-	 	
+		$lang_not_exportable = get_lang('ThisItemIsNotExportable');
+		$file_content = 
+<<<EOD
+<html>
+	<head>
+		<style>
+			.error-message {
+				font-family: arial, verdana, helvetica, sans-serif;
+				border-width: 1px;
+				border-style: solid;
+				left: 50%;
+				margin: 10px auto;
+				min-height: 30px;
+				padding: 5px;
+				right: 50%;
+				width: 500px;
+				background-color: #FFD1D1;
+				border-color: #FF0000;
+				color: #000;
+			}
+		</style>
+	<body>
+		<div class="error-message">
+			$lang_not_exportable
+		</div>
+	</body>
+</html>
+EOD;
+		file_put_contents($garbage_path.$temp_dir_short.'/document/non_exportable.html', $file_content);
+		$zip_folder->add($garbage_path.$temp_dir_short.'/document/non_exportable.html',PCLZIP_OPT_REMOVE_PATH, $garbage_path);
+		
 	 	//Finalize the imsmanifest structure, add to the zip, then return the zip
 	 	$xmldoc->save($garbage_path.'/'.$temp_dir_short.'/imsmanifest.xml');
 		$zip_folder->add($garbage_path.'/'.$temp_dir_short.'/imsmanifest.xml',PCLZIP_OPT_REMOVE_PATH, $garbage_path.'/');

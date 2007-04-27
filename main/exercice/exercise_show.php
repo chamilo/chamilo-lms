@@ -344,6 +344,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				// creates a temporary Question object
 				$objQuestionTmp = Question::read($questionId);
 				$questionName=$objQuestionTmp->selectTitle();
+				$questionDescription=$objQuestionTmp->selectDescription();
 				$questionWeighting=$objQuestionTmp->selectWeighting();
 				$answerType=$objQuestionTmp->selectType();
 				$quesId =$objQuestionTmp->selectId(); //added by priya saini
@@ -371,6 +372,9 @@ $result =api_sql_query($query, __FILE__, __LINE__);
   </tr>
   <tr>
     <td colspan="2"><?php echo $questionName; ?> </td>
+  </tr>
+   <tr>
+    <td colspan="2"><?php echo $questionDescription; ?> </td>
   </tr>
   <tr>
   <td width="200" height="90" valign="top">

@@ -518,14 +518,6 @@ function display_add_form()
 	?>
 		<tr>
 			<td valign="top"  align="left">
-				<?php echo dropbox_lang("authors")?>:
-			</td>
-			<td>
-				<input type="text" name="authors" value="<?php echo getUserNameFromId($_user['user_id'])?>" size="32" style="width: 350px;" />
-			</td>
-		</tr>
-		<tr>
-			<td valign="top"  align="left">
 				<?php echo dropbox_lang("description")?>:
 			</td>
 			<td>
@@ -794,11 +786,13 @@ function store_add_dropbox()
 	// Validating the form data
 	// ----------------------------------------------------------
 
-	// the author is empty
+	// the author is
+	/*
     if (!isset( $_POST['authors']))
     {
         return get_lang('AuthorFieldCannotBeEmpty');
     }
+    */
 
     // there are no recipients selected
 	if ( !isset( $_POST['recipients']) || count( $_POST['recipients']) <= 0)
@@ -1406,9 +1400,10 @@ function check_number_feedback($key, $array)
  * @param $course_code the course_id
  * @param $user_id the id of the user
  * @return string last tool access date
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version march 2006
+ *
  * @todo consider moving this function to a more appropriate place.
  */
 function get_last_tool_access($tool, $course_code='', $user_id='')

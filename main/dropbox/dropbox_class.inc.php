@@ -100,11 +100,20 @@ class Dropbox_Work {
 	var $isOldWork;
 	var $feedback_date, $feedback;  // RH: Feedback
 	
-	function Dropbox_Work ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null) {
-		/*
+	/**
 		* Constructor calls private functions to create a new work or retreive an existing work from DB
 		* depending on the number of parameters
+	 *
+	 * @param unknown_type $arg1
+	 * @param unknown_type $arg2
+	 * @param unknown_type $arg3
+	 * @param unknown_type $arg4
+	 * @param unknown_type $arg5
+	 * @param unknown_type $arg6
+	 * @return Dropbox_Work
 		*/
+	function Dropbox_Work ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null)
+	{
 		if (func_num_args()>1) 
 		{
 		    $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
@@ -115,34 +124,40 @@ class Dropbox_Work {
 		}
 	}
 	
-	function _createNewWork ($uploader_id, $title, $description, $author, $filename, $filesize) {
-		/*
+	/**
 		* private function creating a new work object
+	 *
+	 * @param unknown_type $uploader_id
+	 * @param unknown_type $title
+	 * @param unknown_type $description
+	 * @param unknown_type $author
+	 * @param unknown_type $filename
+	 * @param unknown_type $filesize
+	 *
+	 * @todo 	$author was originally a field but this has now been replaced by the first and lastname of the uploader (to prevent anonymous uploads)
+	 * 			As a consequence this parameter can be removed
 		*/
+	function _createNewWork ($uploader_id, $title, $description, $author, $filename, $filesize)
+	{
+		global $_user;
 		
-		/*
-		* Do some sanity checks
-		*/
+		// Do some sanity checks
 		settype($uploader_id, 'integer') or die(dropbox_lang("generalError")." (code 201)"); //set $uploader_id to correct type
 		//if (! isCourseMember($uploader_id)) die(); //uploader must be coursemember to be able to upload
 			//-->this check is done when submitting data so it isn't checked here
 			
-		/*
-		* Fill in the properties
-		*/
+		// Fill in the properties
 		$this->uploader_id = $uploader_id; 
 		$this->uploaderName = getUserNameFromId($this->uploader_id);
 		$this->filename = $filename;
 		$this->filesize = $filesize;
 		$this->title = $title;
 		$this->description = $description;
-		$this->author = $author;
+		$this->author 			= $_user['firstName'].' '.$_user['lastName'];
 		$this->last_upload_date = date("Y-m-d H:i:s",time());
 
-		/*
-		* Check if object exists already. If it does, the old object is used 
-		* with updated information (authors, descriptio, upload_date)
-		*/
+		// Check if object exists already. If it does, the old object is used
+		// with updated information (authors, descriptio, upload_date)
 		$this->isOldWork = FALSE;
 		$sql="SELECT id, upload_date 
 				FROM `".dropbox_cnf("fileTbl")."` 
@@ -151,10 +166,9 @@ class Dropbox_Work {
 		$res = mysql_fetch_array($result);
 		if ($res != FALSE) $this->isOldWork = TRUE;
 		
-		/*
-		* insert or update the dropbox_file table and set the id property
-		*/
-		if ($this->isOldWork) {
+		// insert or update the dropbox_file table and set the id property
+		if ($this->isOldWork)
+		{
 			$this->id = $res["id"];
 			$this->upload_date = $res["upload_date"];
 		    $sql = "UPDATE `".dropbox_cnf("fileTbl")."`
@@ -185,10 +199,7 @@ class Dropbox_Work {
 			$this->id = mysql_insert_id(); //get automatically inserted id
 		}
 		
-		
-		/*
-		* insert entries into person table
-		*/
+		// insert entries into person table
 		$sql="INSERT INTO `".dropbox_cnf("personTbl")."` 
 				(file_id, user_id)
 				VALUES ('".addslashes($this->id)."'
@@ -197,43 +208,41 @@ class Dropbox_Work {
         $result = api_sql_query($sql);	//if work already exists no error is generated
 	}
 	
-	function _createExistingWork ($id) {
-		/*
+	/**
 		* private function creating existing object by retreiving info from db
+	 *
+	 * @param unknown_type $id
 		*/
+	function _createExistingWork ($id)
+	{
 		global $_user;  // RH: Feedback
 		
-		/*
-		* Do some sanity checks
-		*/
+		// Do some sanity checks
 		settype($id, 'integer') or die(dropbox_lang("generalError")." (code 205)"); //set $id to correct type
 
-		/*
-		* get the data from DB
-		*/
+		// get the data from DB
 		$sql="SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
 				FROM `".dropbox_cnf("fileTbl")."`
 				WHERE id='".addslashes($id)."'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
 		$res = mysql_fetch_array($result,MYSQL_ASSOC);
 		
-		/*
-		* Check if uploader is still in Dokeos system
-		*/
+		// Check if uploader is still in Dokeos system
 		$uploader_id = stripslashes($res["uploader_id"]);    
 		$uploaderName = getUserNameFromId($uploader_id);
-		if ($uploaderName == FALSE) {
+		if ($uploaderName == FALSE)
+		{
 			//deleted user
 			$this->uploader_id = -1;
 			$this->uploaderName = dropbox_lang("anonymous", "noDLTT");			
-		} else {
+		}
+		else
+		{
 			$this->uploader_id = $uploader_id; 
 			$this->uploaderName = $uploaderName;			
 		}
 		
-		/*
-		* Fill in properties
-		*/
+		// Fill in properties
 		$this->id = $id;
 		$this->filename = stripslashes($res["filename"]);
 		$this->filesize = stripslashes($res["filesize"]);
@@ -245,9 +254,7 @@ class Dropbox_Work {
 		$this->category = $res['cat_id'];
 		
 		
-		/*
-		*	Getting the feedback on the work.
-		*/
+		// Getting the feedback on the work.
 		if ($_GET['action']=='viewfeedback' AND $this->id==$_GET['id'])
 		{
 			$feedback2=array();
@@ -275,37 +282,53 @@ class Dropbox_Work {
 	}
 }
 
-class Dropbox_SentWork extends Dropbox_Work {
+class Dropbox_SentWork extends Dropbox_Work
+{
 	var $recipients;	//array of ["id"]["name"] arrays
 	
-	function Dropbox_SentWork ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null, $arg7=null) {
-		/*
+	/**
 		* Constructor calls private functions to create a new work or retreive an existing work from DB
 		* depending on the number of parameters
+	 *
+	 * @param unknown_type $arg1
+	 * @param unknown_type $arg2
+	 * @param unknown_type $arg3
+	 * @param unknown_type $arg4
+	 * @param unknown_type $arg5
+	 * @param unknown_type $arg6
+	 * @param unknown_type $arg7
+	 * @return Dropbox_SentWork
 		*/
-		if (func_num_args()>1) {
+	function Dropbox_SentWork ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null, $arg7=null)
+	{
+		if (func_num_args()>1)
+		{
 		    $this->_createNewSentWork ($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
-		} else {
+		}
+		else
+		{
 			$this->_createExistingSentWork ($arg1);
 		}
 	}
 
-	function _createNewSentWork ($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids) {
-		/*
+	/**
 		* private function creating a new SentWork object
 		*
-		* RH: Mailing: $recipient_ids is integer instead of array (mailing zip)
+	 * @param unknown_type $uploader_id
+	 * @param unknown_type $title
+	 * @param unknown_type $description
+	 * @param unknown_type $author
+	 * @param unknown_type $filename
+	 * @param unknown_type $filesize
+	 * @param unknown_type $recipient_ids
 		*/
-
-		/*
-		* Call constructor of Dropbox_Work object
-		*/
+	function _createNewSentWork ($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids)
+	{
+		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($uploader_id, $title, $description, $author, $filename, $filesize);
 
-		/*
-		* Do sanity checks on recipient_ids array & property fillin
-		* The sanity check for ex-coursemembers is already done in base constructor
-		*/
+		// Do sanity checks on recipient_ids array & property fillin
+		// The sanity check for ex-coursemembers is already done in base constructor
 		settype($uploader_id, 'integer') or die(dropbox_lang("generalError")." (code 208)"); //set $uploader_id to correct type
 		
 		$justSubmit = FALSE;  // RH: mailing zip-file or just upload
@@ -317,18 +340,21 @@ class Dropbox_SentWork extends Dropbox_Work {
 		{
 			$justSubmit = TRUE; $recipient_ids = array($uploader_id);
 		}
-		if (! is_array($recipient_ids) || count($recipient_ids) == 0) die(dropbox_lang("generalError")." (code 209)");
-		foreach ($recipient_ids as $rec) {
+		if (! is_array($recipient_ids) || count($recipient_ids) == 0)
+		{
+			die(dropbox_lang("generalError")." (code 209)");
+		}
+		foreach ($recipient_ids as $rec)
+		{
 			if (empty($rec)) die(dropbox_lang("generalError")." (code 210)");
 			//if (!isCourseMember($rec)) die(); //cannot sent document to someone outside of course
 				//this check is done when validating submitted data
 			$this->recipients[] = array("id"=>$rec, "name"=>getUserNameFromId($rec));
 		}
 		
-		/*
-		* insert data in dropbox_post and dropbox_person table for each recipient
-		*/
-		foreach ($this->recipients as $rec) {	
+		// insert data in dropbox_post and dropbox_person table for each recipient
+		foreach ($this->recipients as $rec)
+		{
 			$sql="INSERT INTO `".dropbox_cnf("postTbl")."` 
 				(file_id, dest_user_id)
 				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."')";
@@ -348,47 +374,48 @@ class Dropbox_SentWork extends Dropbox_Work {
 			global $_course, $dropbox_cnf;
 			
 			if (($ownerid = $this->uploader_id) > $dropbox_cnf["mailingIdBase"])
+			{
 			    $ownerid = getUserOwningThisMailing($ownerid);
+			}
 			if (($recipid = $rec["id"]) > $dropbox_cnf["mailingIdBase"])
+			{
 			    $recipid = $ownerid;  // mailing file recipient = mailing id, not a person
+			}
 			api_item_property_update($_course, TOOL_DROPBOX, $this->id, "DropboxFileAdded", $ownerid, NULL, $recipid) ;
 		}
 	}
 	
-	function _createExistingSentWork  ($id) {
-		/*
+	/**
 		* private function creating existing object by retreiving info from db
+	 *
+	 * @param unknown_type $id
 		*/
-
-		/*
-		* Call constructor of Dropbox_Work object
-		*/
+	function _createExistingSentWork  ($id)
+	{
+		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($id);
 		
-		/*
-		* Do sanity check
-		* The sanity check for ex-coursemembers is already done in base constructor
-		*/
+		// Do sanity check. The sanity check for ex-coursemembers is already done in base constructor
 		settype($id, 'integer') or die(dropbox_lang("generalError")." (code 211)"); //set $id to correct type
 
-		/*
-		* Fill in recipients array
-		*/
+		//Fill in recipients array/
 		$this->recipients = array();  // RH: Feedback: added to SELECT
 		$sql="SELECT dest_user_id, feedback_date, feedback 
 				FROM `".dropbox_cnf("postTbl")."`
 				WHERE file_id='".addslashes($id)."'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
-		while ($res = mysql_fetch_array($result)) {
-			/*
-			* check for deleted users
-			*/
+		while ($res = mysql_fetch_array($result))
+		{
+			// check for deleted users
 			$dest_user_id = $res["dest_user_id"];
 			$recipientName = getUserNameFromId($dest_user_id);
 			//$this->category=$res['cat_id'];
-			if ($recipientName == FALSE) {
+			if ($recipientName == FALSE)
+			{
 				$this->recipients[] = array("id"=>-1, "name"=> dropbox_lang("anonymous", "noDLTT"));
-			} else {
+			}
+			else
+			{
 				$this->recipients[] = array("id"=>$dest_user_id, "name"=>$recipientName, "user_id"=>$dest_user_id, 
 				    "feedback_date"=>$res["feedback_date"], "feedback"=>$res["feedback"]);  // RH: Feedback
 			}
@@ -396,7 +423,8 @@ class Dropbox_SentWork extends Dropbox_Work {
 	}
 }
 
-class Dropbox_Person {
+class Dropbox_Person
+{
 	var $receivedWork;	//array of Dropbox_Work objects
 	var $sentWork;		//array of Dropbox_SentWork objects
 	var $userId = 0;
@@ -405,14 +433,17 @@ class Dropbox_Person {
 	var $_orderBy = '';	//private property that determines by which field 
 						//the receivedWork and the sentWork arrays are sorted
 
-	function Dropbox_Person ($userId, $isCourseAdmin, $isCourseTutor) {
-		/*
+	/**
 		* Constructor for recreating the Dropbox_Person object
+	 *
+	 * @param unknown_type $userId
+	 * @param unknown_type $isCourseAdmin
+	 * @param unknown_type $isCourseTutor
+	 * @return Dropbox_Person
 		*/
-		
-		/*
-		* Fill in properties
-		*/
+	function Dropbox_Person ($userId, $isCourseAdmin, $isCourseTutor)
+	{
+		// Fill in properties
 		$this->userId = $userId;
 		$this->isCourseAdmin = $isCourseAdmin;
 		$this->isCourseTutor = $isCourseTutor;	
@@ -421,9 +452,7 @@ class Dropbox_Person {
 
 		//Note: perhaps include an ex coursemember check to delete old files
 		
-		/*
-		* find all entries where this person is the recipient 
-		*/
+		// find all entries where this person is the recipient
 		$sql = "SELECT r.file_id
 				FROM 
 					`".dropbox_cnf("postTbl")."` r
@@ -432,56 +461,65 @@ class Dropbox_Person {
 					AND r.dest_user_id = p.user_id
 					AND r.file_id = p.file_id";
         $result = api_sql_query($sql,__FILE__,__LINE__);
-		while ($res = mysql_fetch_array($result)) 
-		{
+		while ($res = mysql_fetch_array($result)) {
 			$this->receivedWork[] = new Dropbox_Work($res["file_id"]);
 		}	
-		/*
-		* find all entries where this person is the sender/uploader
-		*/
+
+		// find all entries where this person is the sender/uploader
 		$sql = "SELECT f.id 
 				FROM `".dropbox_cnf("fileTbl")."` f, `".dropbox_cnf("personTbl")."` p 
 				WHERE f.uploader_id = '".addslashes($this->userId)."'
 				AND f.uploader_id = p.user_id
 				AND f.id = p.file_id";
         $result =api_sql_query($sql,__FILE__,__LINE__);
-		while ($res = mysql_fetch_array($result)) 
-		{
+		while ($res = mysql_fetch_array($result)) {
 			$this->sentWork[] = new Dropbox_SentWork($res["id"]);
 		}
 	}
 	
-	
-	function _cmpWork ($a, $b) {
-		/*
+	/**
 		* This private method is used by the usort function in  the 
 		* orderSentWork and orderReceivedWork methods. 
 		* It compares 2 work-objects by 1 of the properties of that object, dictated by the 
-		* private property _orderBy.
-		* It returns -1, 0 or 1 dependent of the result of the comparison.
+	 * private property _orderBy
+	 *
+	 * @param unknown_type $a
+	 * @param unknown_type $b
+	 * @return -1, 0 or 1 dependent of the result of the comparison.
 		*/
+	function _cmpWork ($a, $b)
+	{
 		$sort = $this->_orderBy;
 		$aval = $a->$sort;
 		$bval = $b->$sort;
-		if ($sort == 'recipients') {	//the recipients property is an array so we do the comparison based 
-										//on the first item of the recipients array
+		if ($sort == 'recipients')
+		{	//the recipients property is an array so we do the comparison based on the first item of the recipients array
 		    $aval = $aval[0]['name'];
 			$bval = $bval[0]['name'];
 		}
-		if ($sort == 'filesize') {	//filesize is not a string, so we use other comparison technique
+		if ($sort == 'filesize')
+		{	//filesize is not a string, so we use other comparison technique
 			return $aval<$bval ? -1 : 1;
-		} else {
+		}
+		else
+		{
 		    return strcasecmp($aval, $bval);
 		}
 	}
 	
-	
-	function orderSentWork($sort) {
-		/*
+	/**
 		* method that sorts the objects in the sentWork array, dependent on the $sort parameter.
 		* $sort can be lastDate, firstDate, title, size, ...
+	 *
+	 * @param unknown_type $sort
 		*/
-		switch($sort){
+	function orderSentWork($sort)
+	{
+		/*
+
+		*/
+		switch($sort)
+		{
 			case 'lastDate': 
 				$this->_orderBy = 'last_upload_date';
 				break;
@@ -507,12 +545,15 @@ class Dropbox_Person {
 		usort($this->sentWork, array($this,"_cmpWork"));	//this calls the _cmpWork method	
 	}
 	
-	function orderReceivedWork($sort) {
-		/*
+	/**
 		* method that sorts the objects in the receivedWork array, dependent on the $sort parameter.
 		* $sort can be lastDate, firstDate, title, size, ...
+	 * @param unknown_type $sort
 		*/
-		switch($sort){
+	function orderReceivedWork($sort)
+	{
+		switch($sort)
+		{
 			case 'lastDate': 
 				$this->_orderBy = 'last_upload_date';
 				break;
@@ -538,32 +579,42 @@ class Dropbox_Person {
 		usort($this->receivedWork, array($this,"_cmpWork"));	//this calls the _cmpWork method		
 	}
 	
-	function deleteAllReceivedWork () {
-		/*
+	/**
 		* Deletes all the received work of this person
+	 *
 		*/
-	
+	function deleteAllReceivedWork ()
+	{
 		//delete entries in person table concerning received works
-		foreach ($this->receivedWork as $w) {
+		foreach ($this->receivedWork as $w)
+		{
 			api_sql_query("DELETE FROM `".dropbox_cnf("personTbl")."` WHERE user_id='".$this->userId."' AND file_id='".$w->id."'",__FILE__,__LINE__);		
 		}
 		removeUnusedFiles();	//check for unused files
 
 	}
 	
-	function deleteReceivedWork ($id) {
-		/*
-		* Deletes a received work of this person with id=$id
+	/**
+	 * Deletes a received dropbox file of this person with id=$id
+	 *
+	 * @param integer $id
 		*/
-
+	function deleteReceivedWork ($id)
+	{
 		//id check
 		$found = false;
-		foreach($this->receivedWork as $w) {
-			if ($w->id == $id) {
-			   $found = true; break;
+		foreach($this->receivedWork as $w)
+		{
+			if ($w->id == $id)
+			{
+			   $found = true;
+			   break;
 			}
 		}
-		if (! $found) die(dropbox_lang("generalError")." (code 216)");
+		if (! $found)
+		{
+			die(dropbox_lang("generalError")." (code 216)");
+		}
 		
 		//delete entries in person table concerning received works
 		api_sql_query("DELETE FROM `".dropbox_cnf("personTbl")."` WHERE user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);		
@@ -571,13 +622,14 @@ class Dropbox_Person {
 		removeUnusedFiles();	//check for unused files
 	}
 	
-	function deleteAllSentWork () {
-		/*
-		* Deletes all the sent work of this person
+	/**
+	 * Deletes all the sent dropbox files of this person
 		*/
-	
+	function deleteAllSentWork ()
+	{
 		//delete entries in person table concerning sent works
-		foreach ($this->sentWork as $w) {
+		foreach ($this->sentWork as $w)
+		{
 			api_sql_query("DELETE FROM `".dropbox_cnf("personTbl")."` WHERE user_id='".$this->userId."' AND file_id='".$w->id."'",__FILE__,__LINE__);		
 			removeMoreIfMailing($w->id);  // RH: Mailing: see init1
 		}		
@@ -585,16 +637,21 @@ class Dropbox_Person {
 
 	}
 	
-	function deleteSentWork ($id) {
-		/*
-		* Deletes a sent work of this person with id=$id
+	/**
+	 * Deletes a sent dropbox file of this person with id=$id
+	 *
+	 * @param unknown_type $id
 		*/
-
+	function deleteSentWork ($id)
+	{
 		//index check
 		$found = false;
-		foreach($this->sentWork as $w) {
-			if ($w->id == $id) {
-			   $found = true; break;
+		foreach($this->sentWork as $w)
+		{
+			if ($w->id == $id)
+			{
+			   $found = true;
+			   break;
 			}
 		}
 		if (!$found) die(dropbox_lang("generalError")." (code 219)");
@@ -607,16 +664,24 @@ class Dropbox_Person {
 		removeUnusedFiles();	//check for unused files
 	}
 	
-	function updateFeedback($id, $text) {  // RH: Feedback
-		/*
-		* Updates feedback for received work of this person with id=$id
-		*/
+	/**
+	 * Updates feedback for received work of this person with id=$id
+	 *
+	 * @param unknown_type $id
+	 * @param unknown_type $text
+	 */
+	function updateFeedback($id, $text)
+	{
+		global $_course, $dropbox_cnf;
 
 		//id check
 		$found = false; $wi = -1;
-		foreach($this->receivedWork as $w) {
-			$wi++; if ($w->id == $id) {
-			   $found = true; break;
+		foreach($this->receivedWork as $w)
+		{
+			$wi++; if ($w->id == $id)
+			{
+			   $found = true;
+			   break;
 			}  // foreach (... as $wi -> $w) gives error 221! (no idea why...)
 		}
 		if (! $found) die(dropbox_lang("generalError")." (code 221)");
@@ -631,10 +696,11 @@ class Dropbox_Person {
 
 		//update item_property (previously last_tooledit) table
 		
-		global $_course, $dropbox_cnf;
 		
 		if (($ownerid = $this->receivedWork[$wi]->uploader_id) > $dropbox_cnf["mailingIdBase"])
+		{
 		    $ownerid = getUserOwningThisMailing($ownerid);
+		}
 		api_item_property_update($_course, TOOL_DROPBOX, $this->receivedWork[$wi]->id, "DropboxFileUpdated", $this->userId, NULL, $ownerid) ;
 
 	}

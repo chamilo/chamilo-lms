@@ -161,4 +161,5 @@ $MaximumScore = "Maximum score";
 $ViewInvited = "Toon geïnviteerden";
 $ViewAnswered = "Toon beantwoorde personen";
 $ViewUnanswered = "Toon beantwoorde personen";
+$DeleteSurveyQuestion = "Wilt u deze vraag zeker verwijderen?";
 ?>

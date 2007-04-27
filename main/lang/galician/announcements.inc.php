@@ -49,4 +49,5 @@ $AnnouncementDeletedAll = "Elimináronse todos os anuncios";
 $AnnouncementMoved = "Moveuse o anuncio";
 $NoAnnouncements = "Non hai anuncios";
 $SelectEverybody = "Seleccionar Todos";
+$SelectedUsersGroups = "usuarios dos grupos seleccionados";
 ?>

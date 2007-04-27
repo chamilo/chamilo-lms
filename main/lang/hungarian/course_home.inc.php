@@ -23,4 +23,5 @@ $GreyIcons = "Eszközök";
 $Interaction = "Tevékenység";
 $Authoring = "Létrehozás";
 $Administration = "Adminisztráció";
+$IntroductionTextUpdated = "A bevezet&#337; szöveg frissítve lett.";
 ?>

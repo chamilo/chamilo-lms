@@ -298,4 +298,6 @@ $ComposeMessage = "Redactar unha mensaxe";
 $Other = "Outro";
 $AddRight = "Engadir";
 $Students = "Estudantes";
+$Send = "Enviar";
+$SessionPast = "Pasada";
 ?>

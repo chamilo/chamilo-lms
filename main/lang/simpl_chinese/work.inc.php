@@ -30,4 +30,6 @@ $langDirCr = "新建目录";
 $langCurrentDir = "当前目录";
 $UploadADocument = "上传文档";
 $EditToolOptions = "编辑工具选项";
+$DocumentDeleted = "已删除文件";
+$DirDelete = "删除目录";
 ?>

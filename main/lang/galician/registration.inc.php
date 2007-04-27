@@ -97,7 +97,7 @@ Use o botón de Volver do navegador e volva intentalo.";
 $langRegAdmin = "Crear sitios de cursos (Profesor)";
 $langRegStudent = "Matricularme en cursos (estudante)";
 $langConfirmation = "confirmación";
-$langPass = "Clave de acceso";
+$langPass = "Contrasinal";
 $langSurname = "Apelidos";
 $langRegistration = "Inscrición";
 $langYourAccountParam = "Este é o teu nome de usuario e contrasinal";

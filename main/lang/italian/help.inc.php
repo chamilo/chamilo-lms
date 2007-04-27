@@ -1,20 +1,16 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langHFor = "\'Forum\'";
+$langHFor = "Forum";
 $langForContent = "Il forum è uno strumento di discussione in forma scritta svolto in modalità asincrona.
  Mentre l\'e-mail consente il dialogo tra due persone (uno-a-uno), il forum colloca la discussione in uno spazio pubblico o semi-pubblico (molti-a-molti).</p>
  <p>Per usare il forum del campus, i corsisti necessitano unicamente di un browser web (Netscape, Explorer...).</P>
  <p>Per organizzare dei forum, cliccate su \'Amministra\'. Le discussioni sono organizzate in modo gerarchico secondo la struttura \'ad albero\' seguente:</p><p><b>Categoria > Forum > Argomento > Risposta</b></p>
-Per permettere ai corsisti di discutere in modo strutturato, è opportuno per prima cosa organizzare le discussioni in Categorie e Forum 
-(saranno i corsisti stessi a proporre in seguito gli argomenti e le risposte). 
-Per default il Forum contiene unicamente la Categoria Pubblico, un argomento esemplificativo e un messaggio d\'esempio. 
-La prima cosa  da fare è eliminare l\'argomento esemplificativo.
-Potete aggiungere dei forum nella categoria Pubblico, oppure modificare l\'intestazione o ancora creare nuove Categorie al cui interno potrete creare nuovi Forum. 
+Per rendere efficaci le discussioni dei corsisti è opportuno organizzare a priori le categorie ed i forum, lasciando ai corsisti la possibilità di creare gli argomenti di discussione e le risposte. Di default il forum di Dokeos contiene una categoria \"Pubblica\" un forum di esempio ed un argomento di esempio. La prima cosa da fare è cancellare l\'argomento esemplificativo. Quindi è possibile creare, all\'interno della categoria \"Pubblico\" altri forum suddivisi per tema, in base alle specifiche esigenze.
 Non mescolate categorie e forum, e non dimenticate che una Categoria che non contenga Forum non sarà utilizzabile dal corsista. 
 Se ad esempio create una Categoria \'discussione per piccoli gruppi\', dovrete creare una serie di forum nella Categoria, ad esempio \'gruppo 1\', \'gruppo 2\', \'gruppo 3\', ecc.</p>
 <p>La Descrizione di un forum di gruppo potrebbe essere costituita dall\'elenco delle persone che sono invitate ad usarlo, ma anche da una spiegazione sulle sue finalità o sugli argomenti contenuti. 
-Se create, per qualsiasi ragione, un Forum \"Richieste d\'aiuto\", potete aggiungere come descrizione: \'Segnalare le difficoltà relative al contenuto o all\'organizzazione\'.</p><p><b>Uso pedagogico</b> <p>Alcuni formatori usano il forum per inviare correzzioni. Un corsista pubblica il suo elaborato come messagio e il docente, usando il pulsante di editing (la matita) sottoline gli errori e (utilizzando i colori) indica le correzioni in modo che sia utili anche agli altri corsisti.</p>";
+Se create, per qualsiasi ragione, un Forum \"Richieste d\'aiuto\", potete aggiungere come descrizione: \'Segnalare le difficoltà relative al contenuto o all\'organizzazione\'.</p><p><b>Uso pedagogico</b> <p>Alcuni formatori usano il forum per inviare correzioni. Un corsista pubblica il suo elaborato come messaggio e il docente, usando il pulsante di editing (la matita) sottoline gli errori e (utilizzando i colori) indica le correzioni in modo che sia utili anche agli altri corsisti.</p>";
 $langHDropbox = "Caselle";
 $langDropboxContent = "Le Caselle sono uno strumento dedicato allo scambio di dati peer-to-peer. Sono accettati files con quasiasi estensione. Lo strumento permette di tenere più versioni di un file e non cancella files con stesso nome.<br /> Nella casella sono contenuti i file che vi sono stati inviati (nella cartella file ricevuti) e i file che voi avete inviato ad altri membri di questo Corso (nella cartella file inviati).<br />
 In qualità di corsista, potete inviare un file solamente ad un docente del corso, a meno che il Gestore di Sistema non abbia abilitato la comunicazione \'corsista-a-corsista\'.

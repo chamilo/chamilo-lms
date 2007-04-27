@@ -33,4 +33,6 @@ $langChat_reset_by = "reiniciar o chat";
 $OrFile = "Ou ficheiro";
 $langCallSent = "Enviouse a chamada para chat. Esperando a aprovación da outra persoa.";
 $langChatDenied = "A túa chamada non foi admitida pola outra persoa.";
+$Send = "Enviar";
+$Connected = "Conectado";
 ?>

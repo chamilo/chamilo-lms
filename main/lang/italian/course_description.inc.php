@@ -15,6 +15,6 @@ $langBackAndForget  = "Annulla";
 $langOkSent = "La pagina è stata inviata.<p>Sarà accessibile dalla <a href=../../DOKEOSDEV/index.php>Pagina principale</a> del corso";
 $Content = "Contenuto";
 $CourseDescriptionUpdated = "Descrizione del corso aggiornata";
-$CourseDescriptionDeleted = "Voce della descrizione eliminata";
+$CourseDescriptionDeleted = "Descrizione del corso eliminata";
 $CourseDescriptionIntro = "Clicca sulla voce e compila il modulo per creare una descrizione.<br><br>Clicca Conferma per salvare.";
 ?>

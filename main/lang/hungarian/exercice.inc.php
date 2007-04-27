@@ -212,4 +212,8 @@ $YourScore = "Az eredménye:";
 $Attempted = "Elkezdve";
 $AssignMarks = "Osztályzat hozzáadása";
 $Results = "Eredmények";
+$ExerciseStored = "A gyakorlat tárolásra került.";
+$ChooseAtLeastOneCheckbox = "Válasszon legalább egy jó választ";
+$ExerciseEdited = "A gyakorlat szerkesztésre került.";
+$ExerciseDeleted = "A gyakorlat törlésre került.";
 ?>

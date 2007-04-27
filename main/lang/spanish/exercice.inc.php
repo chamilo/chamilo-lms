@@ -162,7 +162,7 @@ $notCorrectedYet = "Esta respuesta todavía no ha sido corregida. Mientras tanto,
 $adminHP = "Administración Hot Potatoes";
 $NewQu = "Nueva pregunta";
 $NoImage = "Seleccione una imagen en el inferior de la página.";
-$langAnswerHotspot = "La descripción y el valor son requeridos para cada hotspot - el comentario es opcional";
+$langAnswerHotspot = "En cada hotspot la descripción y el valor son obligatorios - el comentario es opcional.";
 $langMinHotspot = "Tiene que crear, al menos, un (1) hotspot.";
 $langMaxHotspot = "El máximo de hotspots que puede crear es doce (12)";
 $langHotspotError = "Por favor, proporcione una descripción y un valor a cada hotspot.";
@@ -182,7 +182,7 @@ $langHotspotWeightingError = "Debe dar un valor (>0) positivo a todos los hotspo
 $langHotspotValidateError1 = "Debe contestar completamente a la pregunta (";
 $langHotspotValidateError2 = "clics requeridos en la imagen) antes de ver los resultados";
 $langHotspotRequired = "La descripción y el valor son requeridos en cada hotspot. El comentario es opcional.";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Para crear un hotspot: seleccionar una forma junto al color, y después dibujar el hotspot.</div><div style=\\\"padding:2px 3px;\\\">&bull; Para mover un hotspot, seleccionar el color, hacer clic en otro punto de la imagen, y después dibujar el hotspot.<div><div style=\\\"padding:2px 3px;\\\">&bull; Para añadir un hotspot: hacer clic en el botón [+hotspot].</div><div style=\\\"padding:2px 3px;\\\">&bull; Para cerrar una forma poligonal: clic derecho y seleccionar \\\"Cerrar polígono\\\".</div>";
+$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Para crear un hotspot: seleccione la forma asociada al color y después dibuje el hotspot.</div><div style=\\\"padding:2px 3px;\\\">&bull; Para mover un hotspot, seleccione el color, haga clic en otro punto de la imagen y finalmente dibuje el hotspot.<div><div style=\\\"padding:2px 3px;\\\">&bull; Para añadir un hotspot: haga clic en el botón [+hotspot].</div><div style=\\\"padding:2px 3px;\\\">&bull; Para cerrar una forma poligonal: botón derecho del ratón y seleccionar \\\"Cerrar polígono\\\".</div>";
 $Fault = "Incorrecto";
 $Hotspot = "hotspot";
 $ClickNumber = "Número de clics";

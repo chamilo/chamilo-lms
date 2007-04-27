@@ -162,4 +162,5 @@ $MaximumScore = "Höchstzahl ";
 $ViewInvited = "Ansicht erbeten";
 $ViewAnswered = "Ansicht der Leute, denen geantwortet wurde";
 $ViewUnanswered = "Ansicht der Leute, denen geantwortet wurde";
+$DeleteSurveyQuestion = "Soll diese Frage wirklich gelöscht werden? ";
 ?>

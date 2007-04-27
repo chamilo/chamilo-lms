@@ -63,4 +63,11 @@ $CourseSortingDone = "Cursos ordenados";
 $ExistingCourseCategories = "Categorías de cursos existentes";
 $YouAreNowUnsubscribed = "Desubscrición do curso feita";
 $ViewOpenCourses = "Ver os cursos abertos";
+$ErrorContactPlatformAdmin = "Produciuse un erro descoñecido. Contacte co administrador da plataforma.";
+$CourseRegistrationCodeIncorrect = "O código do curso é incorrecto";
+$CourseRequiresPassword = "O curso esixe un contrasinal";
+$SubmitRegistrationCode = "Enviar o código de rexistro";
+$CourseCategoryDeleted = "Eliminouse a categoría do curso";
+$CategorySortingDone = "Concluíu o ordenamento das categorías";
+$CourseCategoryEditStored = "Categoría actualizada";
 ?>

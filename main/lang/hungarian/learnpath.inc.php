@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $NewForumCreated = "Elkészült az új fórum";
+$NewThreadCreated = "Az új fórum téma létrejött.";
 $lang_learning_path = "Tanösvény";
 $lang_learning_path_builder = "Tanösvény szerkeszt&#337;";
 $lang_description = "Leírás";
@@ -165,5 +166,7 @@ $AllowMultipleAttempts = "Többszöri próbálkozás engedélyezése";
 $PreventMultipleAttempts = "Többszöri próbálkozás megakadályozása";
 $MakeScormRecordingExtra = "SCORM extra felvételek létrehozása";
 $MakeScormRecordingNormal = "SCORM normál felvételek létrehozása";
+$DocumentHasBeenDeleted = "A dokumentumot nem lehet megjeleníteni, mert törölve lett";
 $EditCurrentForum = "Fórum szerkesztése";
+$NoPrerequisites = "Nincsenek el&#337;feltételek";
 ?>

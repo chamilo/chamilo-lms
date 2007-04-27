@@ -2,15 +2,15 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Announcement = "Avvisi";
-$langAnnEmpty = "L\'elenco è stato cancellato";
+$langAnnEmpty = "L\'elenco degli avvisi è stato cancellato";
 $AnnouncementModified = "L\'avviso è stato modificato";
 $AnnouncementAdded = "L\'avviso è stato aggiunto";
 $AnnouncementDeleted = "L\'avviso è stato eliminato";
 $AnnouncementPublishedOn = "Pubblicato in data";
 $AddAnnouncement = "<em>Aggiungi un avviso:</em>";
 $langContent = "Contenuto";
-$AnnouncementDeleteAll = "Cancella l\'elenco";
-$professorMessage = "Messaggio dal docente";
+$AnnouncementDeleteAll = "Cancella l\'elenco degli avvisi";
+$professorMessage = "Messaggio del docente";
 $langEmailSent = " e inviato via e-mail ai corsisti registrati";
 $EmailOption = "Invia l\'avviso via e-mail ai corsisti registrati";
 $langOn = "Su";
@@ -31,7 +31,7 @@ $langSelectedUsers  = "Utenti selezionati";
 $langSubmit  = "Invia";
 $langPleaseEnterMessage  = "Inserisci un testo!";
 $langPleaseSelectUsers  = "Seleziona almeno un utente!";
-$Teachersubject = "Messaggio inviato agli utenti del corso dal Campus ";
+$Teachersubject = "Messaggio inviato ai corsisti";
 $langMessages  = "Messaggi";
 $langMessageToSelectedUsers  = "Messaggi ad utenti specifici";
 $langIntroText  = "Per inviare un messaggio, seleziona un gruppo di utenti (indicato con la lettera G all\'inizio) o a singoli utenti dall\'elenco a sinistra.";

@@ -71,22 +71,22 @@ $langRestoreNotice = "Questa procedura non consente ancora di ripristinare autom
 l\'iscrizione degli utenti, ma i dati salvati in \"users.csv\" 
 sono sufficienti per consentire all\'Amministratore di effettuarne manualmente il ripristino.";
 $langAvailableArchives = "Elenco degli archivi disponibili";
-$langNoArchive = "Non è stato selezionato nessun archivio";
+$langNoArchive = "Non è stato selezionato alcun archivio";
 $langArchiveNotFound = "L\'archivio non è stato trovato";
 $langArchiveUncompressed = "L\'archivio è stato scompattato e installato.";
 $langCsvPutIntoDocTool = "Il file \"users.csv\" è stato inserito nella sezione Documenti.";
 $langBackH = "Ritorna alla pagina principale";
-$langOtherCategory = "Altre categorie";
+$langOtherCategory = "Altra categoria";
 $langAllowedToUnsubscribe = "Gli utenti possono cancellarsi dal corso";
 $langNotAllowedToUnsubscribe = "Gli utenti non possono cancellarsi dal corso";
 $langCourseVisibilityClosed = "Chiuso definitivamente; il corso è accessibile solo dall\'amministratore del corso";
 $CourseVisibilityClosed = "Chiuso - temporaneamente non è possibile accedere al corso";
 $CourseVisibilityModified = "Modificato (per maggiori dettagli vedi il sotto-sistema ruoli e permessi)";
-$WorkEmailAlert = "Avvisa via e-mail della pubblicazione di un nuovo elaborato.";
+$WorkEmailAlert = "Avvisa via e-mail della pubblicazione di un elaborato.";
 $WorkEmailAlertActivate = "Avvisa via e-mail della pubblicazione di un nuovo elaborato.";
 $WorkEmailAlertDeactivate = "Disabilita l\'avviso via e-mail della pubblicazione di un nuovo elaborato.";
 $DropboxEmailAlert = "Avviso via e-mail dell\'invio di un file nella casella.";
-$DropboxEmailAlertActivate = "Avviso via e-mail dell\'invio di un file nella casella.";
+$DropboxEmailAlertActivate = "Avviso via e-mail dell\'invio di un nuovo file nella casella.";
 $DropboxEmailAlertDeactivate = "Disabilita l\'avviso via e-mail dell\'invio di un file nella casella.";
 $AllowUserEditAgenda = "Permetti ai corsisti di modificare l\'agenda del corso";
 $AllowUserEditAgendaActivate = "Attivare la possibilità per i corsisti di modificare l\'agenda del corso";

@@ -161,4 +161,5 @@ $MaximumScore = "Resultado máximo";
 $ViewInvited = "Ver invitados";
 $ViewAnswered = "Ver las personas que han respondido";
 $ViewUnanswered = "Ver las personas que no han respondido";
+$DeleteSurveyQuestion = "¿ Está seguro de que quiere borrar esta pregunta ?";
 ?>

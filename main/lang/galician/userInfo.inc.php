@@ -29,4 +29,5 @@ $langGroupUserManagement = "Xestión de grupos";
 $langUserInfo = "Información do usuario";
 $langUnregister = "Sen rexistrar";
 $langAddAUser = "Engadir usuarios";
+$UsersUnsubscribed = "Os usuarios seleccionados foron dados de baixa do curso";
 ?>

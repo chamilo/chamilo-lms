@@ -16,7 +16,12 @@ $ToolIsNowVisible = "A ferramenta é agora visible";
 $ToolIsNowHidden = "A ferramenta é agora invisible";
 $EditLink = "Editar ligazón";
 $Blog_management = "Xestión do blog";
+$Forum = "Foros";
 $Course_maintenance = "Mantemento do curso";
+$TOOL_SURVEY = "Enquisas";
+$GreyIcons = "Ferramentas";
+$Interaction = "Interacción";
 $Authoring = "Creación de contidos";
 $Administration = "Administración";
+$IntroductionTextUpdated = "Actualizouse a mensaxe introdutoria";
 ?>

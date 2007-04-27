@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $LinkMoved = "A link eltávolításra került.";
+$VisibilityChanged = "A hivatkozás láthatósága törölve";
 $langLinkName = "Hivatkozás neve";
 $langLinkAdd = "Hivatkozás hozzáadása";
 $langLinkAdded = "A hivatkozás hozzá lett adva";

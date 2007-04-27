@@ -490,7 +490,7 @@ $ServiceActivated = "Dienst ist aktiviert";
 $ActiveExtension = "Aktive Erweiterungen";
 $InvalidExtension = "Ungültige Erweiterung";
 $VersionCheckExplanation = "Um automatische Versionskontrolle zu nutzen, muss man das Campus bei dokeos.com registrieren. Die weitergegebene Information nach Klicken dieses Buttons dient lediglich internen Zwecken und lediglich Gesamtinformationen werden öffentlich verfügbar sein (Anzahl Campus Installationen insgesamt, Anzahl Kurse insgesamt, Anzahl Studenten insgesamt, usw) (vgl. <a href=\"http://www.dokeos.com/stats/\"> http://www.dokeos.com/stats/</a>. Nach der Registrierung erscheint das Campus auch auf der Worldwide List (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>. 
-Wenn Ihr Campus dort nicht erscheienen soll, markieren Sie bitte die nachfolgende Checkbox .  Die Resgistrierung ist ganz einfach: Sie klicken lediglich auf diesen Button:<br />";
+Wenn Ihr Campus dort nicht erscheinen soll, markieren Sie bitte die nachfolgende Checkbox .  Die Registrierung ist ganz einfach: Sie klicken lediglich auf diesen Button:<br />";
 $AfterApproval = "Nach Genehmigung";
 $StudentViewEnabledTitle = "Studenten Ansicht  aktivieren";
 $StudentViewEnabledComment = "Studenten Ansicht aktivieren ermöglicht einem Lehrer oder Admin, den Kurs aus Sicht eines Studenten zu betrachten";

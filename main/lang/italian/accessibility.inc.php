@@ -1,25 +1,20 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langClarContent = "In questa sezione docenti e tutor creano e amministrano i siti dei corsi. 
-Gli studenti leggono (documenti, calendari, informazioni) e, talvolta, eseguono le esercitazioni, producono contributi, partecipano alle discussioni nei forum...</p>
- <b>Iscrizione</b>
- <p>Le seguenti informazioni sono pertinenti unicamente se la vostra versione di Claroline consente l\'iscrizione autonoma da parte del corsista (alcuni siti registrano l\'utente automaticamente).
- <br>Se siete un corsista, dovete solamente iscrivervi selezionando \'Iscrizione a un nuovo corso\', poi scegliendo il corso/i che desiderate seguire.</p>
- <p>Se siete un docente o un tutor, effettuate l\'iscrizione, ma selezionate \'Crea un nuovo corso (docente)\'.
- Sarete tenuti poi a compilare un modulo inserendo il codice del corso, la Facoltà e il titolo del corso. 
- Non appena ottenuta l\'autorizzazione, verrete guidati verso il sito appena creato e vi sarà consentito di modificarne contenuti ed organizzazione in base alle vostre esigenze. </p>
- <p>Il pulsante \'Miglioramenti\' consente agli amministratori della piattaforma Dokeos di ricevere un feedback complessivo da parte degli utenti. 
- Le informazioni che si possono inviare comprendono riferimenti a malfunzionamenti o indicazioni di migliorie da apportare alla piattaforma.
- Il pulsante \'Miglioramenti\' è utilizzabile - non appena connessi - dalla Pagina Principale del campus.</p>
-<p>Il forum del Progetto Dokeos ha una funzione diversa. Consente a tutti gli utenti Dokeos nel mondo di mettersi in contatto tra loro.
-Se non trovate una risposta ad un vostro quesito nell\'ambito del vostro campus, inviate un messaggio a questo forum.</p>
+$langClarContent = "<p><b>Docente</b></p>Dokeos è un sistema di e-learning e di Knowledge Management, che permette al docente di organizzare materiali e percorsi didattici, gestendo le interazioni con i corsisti. Tutto ciò avviene usando il browser web.
 
+Per usare Dokeos come docente devi possedere un nome utente e una password. A seconda del livello di sicurezza configurato potrai ottenerli direttamente oppure contattando l\'amministrazione del sistema dell\'ente cui appartieni. Nome utente e password non possono contenere spazi o accenti e distinguono maiuscole da minuscole. Accedi con la tua combinazione Nume utente / Password e crea un corso o usa un corso che è stato creato per te dall\'amministratore.
 
-<p>Il collegamento a \'Iscrizione\' (se presente) si trova nella Pagina Principale del Campus nella sezione a destra.</p>
- <b>Accesso</b>
- <p>Al vostro prossimo accesso, inserite \'Nome Utente\' e \'Password\' e confermate l\'inserimento per accedere ai vostri corsi.
- L\'URL del sito è";
+Per aggiungere docenti, tutor e co-gestori del corso 
+1. Se non sono ancora registrati presso la piattaforma, registrali e seleziona per loro il profilo \"Docente\" dallla sezione Utenti.
+2. Se sono già registrati presso la piattaforma apri temporaneamente il corso alle iscrizioni e chiedi loro di iscriversi al corso; in seguito, dalla sezione Utenti, darai loro i privilegi di docente.
+
+Ogno sezione del corso posside un \"Help\" rappresentato dall\'icona di un salvagente: potrà esserti utile nella gestione del corso. In alternativa leggi i documenti alla pagina <a href=\"http://www.dokeos.com/documentation.php\">http://www.dokeos.com/documentation.php</a>, in inglese o nella tua lingua.
+
+<p><b>Corsista</b></p> il portale ti consente di partecipare a corsi, attività formative, workshop e gruppi di lavoro. E` stato creato per promuovere attività di apprendimento, basate su progetti, problemi, studio di casi, collaborazione ecc. I docenti hanno creato sezioni che si presentano come semplici cartelle o come complessi sistemi per l\'auto apprendimento o il lavoro di gruppo.
+
+<p>Il processo di registrazione può variare, in alcuni casi è ammessa la registrazione individuale alla piattaforma, seguita dall\'iscrizione ai corsi. In altri casi nome utente e password ti saranno forniti dall\'ente gestore.</p>
+";
 $test = "Test";
 $WCAGImage = "Immagine";
 $WCAGLabel = "Descrizione dell\'immagine";

@@ -1,11 +1,11 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langProfessors = "Titolare/i";
+$langProfessors = "Docenti";
 $langExplanation = "Una volta cliccato su \'Conferma\' verrà creato un sito contenente Forum, Collegamenti, Test, Agenda, Documenti... . 	Potrai modificarne il contenuto accedendo con il tuo identificativo di creatore del corso.";
 $langEmpty = "Alcuni campi non sono stati compilati.<br>Utilizza il pulsante <b>Indietro</b> del browser e riprova.<br>Se non conosci il codice del Corso, consulta il Piano dei Corsi";
 $langCodeTaken = "Il codice del corso è già in uso.<br>Utilizza il pulsante <b>Indietro</b> del browser e riprova.";
-$langFormula = "Cordialmente, il Vostro docente";
+$langFormula = "Cordialmente";
 $langMessage = "Quando si elimina l\'esempio di Forum, verrà eliminato anche l\'argomento corrente che contiene solo il presente messaggio.";
 $langExerciceEx = "Esempio di Test";
 $langAntique = "Storia della Filosofia antica";
@@ -22,7 +22,7 @@ $langNotFalse = "La risposta non è falsa: è vero che mettere in evidenza l\'igno
 $langAgenda = "Agenda";
 $langVideo = "Video";
 $langWorks = "Elaborati";
-$langCourseProgram = "Descrizione";
+$langCourseProgram = "Programma del corso";
 $langAnnouncements = "Avvisi";
 $langAddPageHome = "Carica e collega una pagina";
 $langLinkSite = "Aggiungi al menù";
@@ -52,16 +52,16 @@ $langTargetFac = "Questa è la Facoltà, Dipartimento o Scuola presso cui il corso
 $langCode = "Codice del Corso";
 $langMax = "max. 12 caratteri, es. <i>RISUM21</i>";
 $langDoubt = "In caso di dubbio sulla denominazione esatta o sul codice del corso, consulta il, ";
-$langProgram = "Piano dei corsi</a>. Se non esiste un codice appropriato, puoi inventarne uno. 
+$langProgram = "Programma del corso</a>. Se non esiste un codice appropriato, puoi inventarne uno. 
 Ad esempio <i>INNOVAZ01</i> se si tratta di un corso di formazione sulla gestione dell\'innovazione";
 $langScormtool = "Percorsi";
 $langScormbuildertool = "Creatore di percorsi SCORM";
 $langPathbuildertool = "Creatore di percorsi didattici";
 $langOnlineConference = "Teleconferenza";
 $langAgendaCreationTitle = "Creazione del corso";
-$langAgendaCreationContenu = "Momento di creazione del corso";
+$langAgendaCreationContenu = "Creazione del corso";
 $langOnlineDescription = "Questo è un esempio di descrizione per lo strumento Teleconferenza";
-$langDropbox  = "Caselle";
+$langDropbox  = "Casella";
 $langOnly  = "Solo";
 $langRandomLanguage  = "Riarrangia la selezione nei linguaggi disponibili";
 $langImages = "Immagini";
@@ -96,7 +96,7 @@ $langRecycle = "Riazzera il corso";
 $AnnouncementExampleTitle = "Esempio di avviso";
 $Wikipedia = "Libera Enciclopedia online";
 $DefaultGroupCategory = "Gruppi di default";
-$DefaultCourseImages = "Immagini di default";
+$DefaultCourseImages = "Immagini";
 $ExampleForumCategory = "Esempio di Categoria di Forum";
 $ExampleForum = "Esempio di Forum";
 $ExampleThread = "Esempio di Argomento";

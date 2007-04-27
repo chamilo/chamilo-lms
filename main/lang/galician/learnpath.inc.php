@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewForumCreated = "Creouse o novo foro";
+$NewThreadCreated = "Creouse o novo tema no foro";
 $lang_learning_path = "Itinerario formativo";
 $lang_learning_path_builder = "Construtor de itinerarios formativos";
 $lang_description = "descrición";
@@ -69,7 +71,33 @@ $lang_short_help = "Para engadir un paso, fai clic na cruz; para engadir un novo
 $lang_prereq_not_complete = "Prerequisitos non completados.";
 $lang_author = "Autor";
 $lang_date = "Data";
+$langBasicOverview = "Vista básica";
+$langAdvanced = "Avanzado";
+$langDisplay = "Mostrar";
+$langNewChapter = "Novo módulo";
+$langNewStep = "Paso novo";
+$langPrerequisites = "Requisitos";
+$langEditPrerequisites = " 	
+Editar os requisitos do item actual";
+$langTitleManipulateChapter = "Manipular o módulo actual";
+$langTitleManipulateModule = "Manipular o módulo actual";
+$langTitleManipulateDocument = "Manipular o documento actual";
+$langTitleManipulateLink = "Manipular a ligazón actual";
+$langTitleManipulateQuiz = "Manipular o exercicio actual";
+$langTitleManipulateStudentPublication = "Manipular a actual publicación de estudante";
+$langEnterDataNewChapter = "Introduza os datos do novo capítulo";
+$langEnterDataNewModule = "Introduza os datos do novo módulo";
+$langCreateNewStep = " 	
+Crear un novo paso :";
 $langNewDocument = "Novo documento";
+$langUseAnExistingResource = " 	
+Ou use un recurso xa existente :";
+$langParent = "Principal";
+$langPosition = "Posición";
+$langBuild = " 	
+Construír";
+$langViewModeEmbedded = "Vista: embebida";
+$langShowDebug = "Mostrar debub";
 $lang_prerequisites_limit = "Prerrequisitos (límite)";
 $lang_loading = "Cargando páxina, por favor, espere...";
 $lang_empty = "Este itinerario non contén ningún paso.";
@@ -88,4 +116,10 @@ $langItemMissing1 = "Había unha";
 $langItemMissing2 = "páxina (paso) aquí no itinerario de aprendizaxe orixinal de Dokeos.";
 $langDone = "Feito";
 $langNoItemSelected = "Para amosar algo aquí, por favor seleccione un elemento do menú lateral";
+$langCreateTheDocument = "Crear o documento";
+$langDirectory = "Directorio";
+$langPowerPointConvert = "Conversión PowerPoint";
+$langMinimum = " 	Mínimo";
+$langMaximum = "Máximo";
+$Url = "Url";
 ?>

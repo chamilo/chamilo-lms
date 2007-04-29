@@ -26,10 +26,8 @@ echo '<h4>'.get_lang('_edit_learnpath').'</h4>';
 $defaults=array();
 $form = new FormValidator('form1', 'post', 'lp_controller.php');
 
-
 //Title
-$form -> addElement('text', 'lp_name', get_lang('_title'));
-
+$form -> addElement('text', 'lp_name', ucfirst(get_lang('_title')));
 
 //Ecoding
 $encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));

@@ -354,18 +354,8 @@ class scorm extends learnpath {
      function import_manifest($course_code){
      	if($this->debug>0){error_log('New LP - Entered import_manifest('.$course_code.')',0);}
      	//get table names
-     	$new_lp = 'lp';
-     	$new_lp_item = 'lp_item';
-     	
-     	//The previous method wasn't safe to get the database name, so do it manually with the course_code
-     	$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
-        $res = api_sql_query($sql,__FILE__,__LINE__);
-        if(Database::num_rows($res)<1){ error_log('Database for '.$course_code.' not found '.__FILE__.' '.__LINE__,0);return -1;}
-        $row = Database::fetch_array($res);
-        $dbname = Database::get_course_table_prefix().$row['db_name'];
-		
-		$new_lp = $dbname.'.lp';
-		$new_lp_item = $dbname.'.lp_item';
+		$new_lp = Database::get_course_table('lp',$course_code);
+		$new_lp_item = Database::get_course_table('lp_item',$course_code);
 		
 		foreach($this->organizations as $id => $dummy)
 		{
@@ -847,9 +837,7 @@ class scorm extends learnpath {
    		
    		//TODO make it flexible to use any course_code (still using env course code here)
 		//$lp_table = Database::get_course_table(LEARNPATH_TABLE);
-    	$lp_db = Database::get_current_course_database();
-    	$lp_pref = Database::get_course_table_prefix();
-    	$lp_table = $lp_db.'.'.$lp_pref.'lp';
+    	$lp_table = Database::get_course_table('lp');
 
 		//$id = Database::escape_integer($id);
 		$lp_id = $this->escape_string($lp_id);

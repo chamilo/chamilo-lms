@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 12057 2007-04-19 07:31:36Z pcool $
+<?php // $Id: courses.php 12175 2007-04-29 23:03:17Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -56,16 +56,25 @@ $tbl_courses_nodes      = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tbl_courseUser         = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
 
+//filter
+$safe = array();
+$safe['action'] = '';
+$actions = array('sortmycourses','createcoursecategory','subscribe','deletecoursecategory','unsubscribe');
+if(in_array(htmlentities($_GET['action']),$actions))
+{
+	$safe['action'] = htmlentities($_GET['action']);
+}
+
 // title of the page
-if ($_GET['action'] == 'sortmycourses' OR !isset($_GET['action']))
+if ($safe['action'] == 'sortmycourses' OR !isset($safe['action']))
 {
 	$nameTools = get_lang("SortMyCourses");
 }
-if ($_GET['action'] == 'createcoursecategory')
+if ($safe['action'] == 'createcoursecategory')
 {
 	$nameTools = get_lang('CreateCourseCategory');
 }
-if ($_GET['action'] == 'subscribe')
+if ($safe['action'] == 'subscribe')
 {
 	$nameTools = get_lang("SubscribeToCourse");
 }
@@ -126,7 +135,7 @@ if (isset($_POST['unsubscribe']))
 	$message=remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
 }
 // we are deleting a course category
-if ($_GET['action']=='deletecoursecategory' AND isset($_GET['id']))
+if ($safe['action']=='deletecoursecategory' AND isset($_GET['id']))
 {
 	$message=delete_course_category($_GET['id']);
 }
@@ -144,27 +153,27 @@ if (isset($message))
 */
 // The menu with the different options in the course management
 echo "<div id=\"actions\">\n";
-if ($_GET['action'] <> 'sortmycourses' AND isset($_GET['action']))
+if ($safe['action'] <> 'sortmycourses' AND isset($safe['action']))
 {
-	echo "<a href=\"".$_SERVER['PHP_SELF']."?action=sortmycourses\">".Display::return_icon('deplacer_fichier.gif').' '.get_lang("SortMyCourses")."</a>";
+	echo "<a href=\"".api_get_self()."?action=sortmycourses\">".Display::return_icon('deplacer_fichier.gif').' '.get_lang("SortMyCourses")."</a>";
 }
 else
 {
 	echo '<b>'.Display::return_icon('deplacer_fichier.gif').' '.get_lang('SortMyCourses').'</b>';
 }
 echo '&nbsp;&nbsp;';
-if ($_GET['action']<>'createcoursecategory')
+if ($safe['action']<>'createcoursecategory')
 {
-	echo "<a href=\"".$_SERVER['PHP_SELF']."?action=createcoursecategory\">".Display::return_icon('folder_new.gif').' '.get_lang("CreateCourseCategory")."</a>\n";
+	echo "<a href=\"".api_get_self()."?action=createcoursecategory\">".Display::return_icon('folder_new.gif').' '.get_lang("CreateCourseCategory")."</a>\n";
 }
 else
 {
 	echo '<b>'.Display::return_icon('folder_new.gif').' '.get_lang('CreateCourseCategory').'</b>';
 }
 echo '&nbsp;&nbsp;';
-if ($_GET['action']<>'subscribe')
+if ($safe['action']<>'subscribe')
 {
-	echo "\t\t<a href=\"".$_SERVER['PHP_SELF']."?action=subscribe\">".Display::return_icon('view_more_stats.gif').' '.get_lang("SubscribeToCourse")."</a>\n";
+	echo "\t\t<a href=\"".api_get_self()."?action=subscribe\">".Display::return_icon('view_more_stats.gif').' '.get_lang("SubscribeToCourse")."</a>\n";
 }
 else
 {
@@ -173,7 +182,7 @@ else
 echo "</div>";
 
 echo "<div>";
-switch ($_GET['action'])
+switch ($safe['action'])
 {
 	case 'subscribe':
 		//api_display_tool_title(get_lang('SubscribeToCourse'));
@@ -333,12 +342,12 @@ function browse_course_categories()
 	{
 		if ($row['children_count'] > 0 OR count_courses_in_category($row['code'])>0)
 		{
-			echo	"<li><a href=\"".$_SERVER['PHP_SELF']."?action=subscribe&amp;category=".$row['code']."&amp;up=".$_GET['category']."\">".$row['name']."</a>".
+			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$_GET['category']."\">".$row['name']."</a>".
 				" (".count_courses_in_category($row['code']).")</li>";
 		}
 		elseif ($row['nbChilds'] > 0)
 		{
-			echo	"<li><a href=\"".$_SERVER['PHP_SELF']."?action=subscribe&amp;category=".$row['code']."&amp;up=".$_GET['category']."\">".$row['name']."</a></li>";
+			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$_GET['category']."\">".$row['name']."</a></li>";
 		}
 		else
 		{
@@ -349,7 +358,7 @@ function browse_course_categories()
 	echo "</ul>";
 	if ($_GET['category'])
 	{
-		echo "<a href=\"".$_SERVER['PHP_SELF']."?action=subscribe&amp;category=".$_GET['up']."\">&lt; ".get_lang('UpOneCategory')."</a>";
+		echo "<a href=\"".api_get_self()."?action=subscribe&amp;category=".$_GET['up']."\">&lt; ".get_lang('UpOneCategory')."</a>";
 	}
 }
 
@@ -393,7 +402,7 @@ function display_search_courses()
 {
 	global $_user;
 	echo "<p><b>".get_lang("SearchCourse")."</b><br />";
-	echo "<form class=\"course_list\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=subscribe\">",
+	echo "<form class=\"course_list\" method=\"post\" action=\"".api_get_self()."?action=subscribe\">",
 					"<input type=\"hidden\" name=\"search_course\" value=\"1\" />",
 					"<input type=\"text\" name=\"search_term\" />",
 					"&nbsp;<input type=\"submit\" value=\"",get_lang("_search"),"\" />",
@@ -574,7 +583,7 @@ function display_create_course_category_form()
 {
 	global $_user, $_configuration;
 
-	echo "<form name=\"create_course_category\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=sortmycourses\">\n";
+	echo "<form name=\"create_course_category\" method=\"post\" action=\"".api_get_self()."?action=sortmycourses\">\n";
 	echo "<input type=\"text\" name=\"title_course_category\" />\n";
 	echo "<input type=\"submit\" name=\"create_course_category\" value=\"".get_lang("Ok")."\" />\n";
 	echo "</form>\n";
@@ -613,7 +622,7 @@ function store_changecoursecategory($course_code, $newcategory)
 	$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$max_sort_value=api_max_sort_value($newcategory,$_user['user_id']); //max_sort_value($newcategory);
-
+	$new_category = htmlentities($newcategory);
 	$sql="UPDATE $TABLECOURSUSER SET user_course_cat='".$newcategory."', sort='".($max_sort_value+1)."' WHERE course_code='".$course_code."' AND user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql);
 	return get_lang("EditCourseCategorySucces");
@@ -894,12 +903,12 @@ function display_subscribe_icon($current_course, $user_coursecodes)
 function display_course_icons($key, $number_of_courses, $course, $user_courses)
 {
 	//print_r($course);
-
+	global $safe;
 	echo "<table><tr><td>";
 	// the up icon
 	if ($key>0 AND $user_courses[$key-1]['user_course_category']==$course['user_course_category'])
 	{
-		echo "<a href=\"courses.php?action=".$_GET['action']."&amp;move=up&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."\">";
+		echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=up&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."\">";
 		Display::display_icon('up.gif', get_lang('Up'));
 		echo '</a>';
 	}
@@ -911,7 +920,7 @@ function display_course_icons($key, $number_of_courses, $course, $user_courses)
 	}
 	else
 	{
-		echo "<td rowspan=\"2\" valign=\"middle\"><a href=\"courses.php?action=".$_GET['action']."&amp;edit=".$course['code']."\">";
+		echo "<td rowspan=\"2\" valign=\"middle\"><a href=\"courses.php?action=".$safe['action']."&amp;edit=".$course['code']."\">";
 		Display::display_icon('edit.gif',get_lang('Edit'));
 		echo "</a></td>";
 	}
@@ -920,7 +929,7 @@ function display_course_icons($key, $number_of_courses, $course, $user_courses)
 	{
 		if ($course['unsubscr'] == 1)
 			{	// changed link to submit to avoid action by the search tool indexer
-				echo	"<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmUnsubscribeFromCourse")))."')) return false;\">";
+				echo	"<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmUnsubscribeFromCourse")))."')) return false;\">";
 				echo 	"<input type=\"hidden\" name=\"unsubscribe\" value=\"".$course['code']."\" />";
 				echo 	"<input type=\"image\" name=\"unsub\" src=\"../img/delete.gif\" alt=\"".get_lang("_unsubscribe")."\" /></form>";
 			}
@@ -935,7 +944,7 @@ function display_course_icons($key, $number_of_courses, $course, $user_courses)
 	echo "</tr><tr><td>";
 	if ($key<$number_of_courses-1 AND $user_courses[$key+1]['user_course_category']==$course['user_course_category'])
 	{
-		echo "<a href=\"courses.php?action=".$_GET['action']."&amp;move=down&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."\">";
+		echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=down&amp;course=".$course['code']."&amp;category=".$course['user_course_cat']."\">";
 		Display::display_icon('down.gif', get_lang('Down'));
 		echo '</a>';
 	}
@@ -952,16 +961,17 @@ function display_course_icons($key, $number_of_courses, $course, $user_courses)
 */
 function display_category_icons($current_category, $all_user_categories)
 {
+	global $safe;
 	$max_category_key=count($all_user_categories);
 
-	if ($_GET['action']<>'unsubscribe') // we are in the unsubscribe section then we do not show the icons.
+	if ($safe['action']<>'unsubscribe') // we are in the unsubscribe section then we do not show the icons.
 	{
 		echo "<table>";
 		echo "<tr>";
 		echo "<td>";
 		if ($current_category<>$all_user_categories[0])
 		{
-			echo "<a href=\"courses.php?action=".$_GET['action']."&amp;move=up&amp;category=".$current_category."\">";
+			echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=up&amp;category=".$current_category."\">";
 			echo "<img src=\"../img/up.gif\" alt=\"".htmlentities(get_lang("Up"))."\"></a>";
 		}
 		echo "</td>";
@@ -980,7 +990,7 @@ function display_category_icons($current_category, $all_user_categories)
 		echo " <td>";
 		if ($current_category<>$all_user_categories[$max_category_key-1])
 		{
-			echo "<a href=\"courses.php?action=".$_GET['action']."&amp;move=down&amp;category=".$current_category."\">";
+			echo "<a href=\"courses.php?action=".$safe['action']."&amp;move=down&amp;category=".$current_category."\">";
 			echo "<img src=\"../img/down.gif\" alt=\"".htmlentities(get_lang("Down"))."\"></a>";
 		}
 		echo "</td>";
@@ -1000,7 +1010,7 @@ function display_category_icons($current_category, $all_user_categories)
 */
 function display_change_course_category_form($edit_course)
 {
-	global $_user, $_configuration;
+	global $_user, $_configuration, $safe;
 
 	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
@@ -1008,7 +1018,7 @@ function display_change_course_category_form($edit_course)
 	$result=api_sql_query($sql);
 
 
-	$output="<form name=\"edit_course_category\" method=\"post\" action=\"courses.php?action=".$_GET['action']."\">\n";
+	$output="<form name=\"edit_course_category\" method=\"post\" action=\"courses.php?action=".$safe['action']."\">\n";
 	$output.="<input type=\"hidden\" name=\"course_2_edit_category\" value=\"".$edit_course."\" />";
 	$output.="\t<select name=\"course_categories\">\n";
 	$output.="\t\t<option value=\"0\">".get_lang("NoCourseCategory")."</option>";
@@ -1036,7 +1046,7 @@ function display_unsubscribe_icons($course)
 	{
 		if ($course['unsubscribe'] == 1)
 			{	// changed link to submit to avoid action by the search tool indexer
-				echo	"<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmUnsubscribeFromCourse")))."')) return false;\">";
+				echo	"<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmUnsubscribeFromCourse")))."')) return false;\">";
 				echo 	"<input type=\"hidden\" name=\"unsubscribe\" value=\"".$course['code']."\" />";
 				echo 	"<input type=\"image\" name=\"unsub\" src=\"../img/delete.gif\" alt=\"".get_lang("_unsubscribe")."\" /></form>";
 			}
@@ -1121,7 +1131,8 @@ function display_info_text($text)
 */
 function display_edit_course_category_form($edit_course_category)
 {
-	echo "<form name=\"edit_course_category\" method=\"post\" action=\"courses.php?action=".$_GET['action']."\">\n";
+	global $safe;
+	echo "<form name=\"edit_course_category\" method=\"post\" action=\"courses.php?action=".$safe['action']."\">\n";
 	echo "\t<input type=\"hidden\" name=\"edit_course_category\" value=\"".$edit_course_category."\" />\n";
 	$info_this_user_course_category=get_user_course_category($edit_course_category);
 	echo "\t<input type=\"text\" name=\"title_course_category\" value=\"".$info_this_user_course_category['title']."\" />";

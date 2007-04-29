@@ -169,10 +169,7 @@ class learnpath {
     	//end of variables checking
     	
     	//now get the latest attempt from this user on this LP, if available, otherwise create a new one
-		//$lp_table = Database::get_course_table(LEARNPATH_VIEW_TABLE);
-    	$lp_db = Database::get_current_course_database();
-    	$lp_pref = Database::get_course_table_prefix();
-    	$lp_table = $lp_db.'.'.$lp_pref.'lp_view';
+		$lp_table = Database::get_course_table(TABLE_LP_VIEW);
 		//selecting by view_count descending allows to get the highest view_count first
 		$sql = "SELECT * FROM $lp_table WHERE lp_id = '$lp_id' AND user_id = '$user_id' ORDER BY view_count DESC";
 		if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - querying lp_view: '.$sql,0);}
@@ -199,8 +196,8 @@ class learnpath {
 		}
 
     	//initialise items
-    	$lp_item_table = $lp_db.'.'.$lp_pref.'lp_item';
-		$sql = "SELECT * FROM $lp_item_table WHERE lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";
+		$lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
+    	$sql = "SELECT * FROM $lp_item_table WHERE lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";
     	$res = api_sql_query($sql);
     	
     	while($row = Database::fetch_array($res))
@@ -267,8 +264,7 @@ class learnpath {
    			}
 
 	    	//get last viewing vars
-	    	//$learnpath_items_view_table = Database::get_course_table(LEARNPATH_ITEM_VIEW_TABLE);
-	    	$lp_item_view_table = $lp_db.'.'.$lp_pref.'lp_item_view';
+	    	$lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 	    	//this query should only return one or zero result
 	    	$sql = "SELECT * " .
 	    			"FROM $lp_item_view_table " .

@@ -1775,6 +1775,8 @@ class learnpath {
     		if($this->debug>2){error_log('New LP - In learnpath::first() - No last item seen',0);}
 	    	$index = 0;
 	    	while (!empty($this->ordered_items[$index]) 
+	    			AND
+	    			is_a($this->items[$this->ordered_items[$index]],'learnpathItem')
 	    		AND 
 	    		(
 	    			$this->items[$this->ordered_items[$index]]->get_type() == 'dir'

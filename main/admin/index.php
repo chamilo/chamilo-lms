@@ -1,4 +1,4 @@
-<?php // $Id: index.php 11407 2007-03-06 09:49:29Z elixir_julian $
+<?php // $Id: index.php 12172 2007-04-29 19:34:21Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -43,15 +43,16 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_admin_script();
+$nameTools = get_lang('PlatformAdmin');
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => $nameTools);
 
 // setting the name of the tool
 $tool_name=get_lang("PlatformAdmin");
 
 // Displaying the header
-Display::display_header();
+Display::display_header($nameTools);
 
 /*
 ==============================================================================

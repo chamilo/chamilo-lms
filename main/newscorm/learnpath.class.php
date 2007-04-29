@@ -532,488 +532,203 @@ class learnpath {
     	
     	return $new_item_id;
     }
-    
-    
+   
     /**
-     * Adds an item to the current learnpath
-     * @param	integer	Parent ID
-     * @param	integer	Previous elem ID (0 if first)
-     * @param	string	Resource type to add ('file','dokeos_item')
-     * @param	string	Resource ID or path if 'file' or name if 'dokeos_chapter'
-     * @return	integer	New element ID
-     */
-	function old_add_item($parent, $previous, $type = 'dokeos_chapter', $id, $title)
-    {
-    	//TODO
-    	if($this->debug>0){error_log('New LP - In learnpath::add_item('.$parent.','.$previous.','.$type.','.$id.','.$title.')',0);}
-    	
-    	$tbl_lp_item = Database::get_course_table('lp_item');
-    	$parent = (int) $parent;
-    	$display_order = 1;
-    	
-    	if($previous == -1){
-    		//insert in latest position available
-    		$sql_check = "SELECT MAX(previous_item_id) as prev, id FROM $tbl_lp_item WHERE lp_id = " . $this->get_id() . " AND parent_item_id = " . $parent;
-    		
-    		if($this->debug>1){error_log('New LP - checking for latest item at this level: '.$sql_check,0);}
-    		
-    		$res = mysql_query($sql_check) or die(mysql_error());
-    		
-    		$res_check = api_sql_query($sql_check, __FILE__, __LINE__);
-    		$num = Database::num_rows($res_check);
-    		
-    		if($num>0){
-    			$row = Database::fetch_array($res_check);
-    			$previous = $row['id'];
-    		}else{
-    			$previous = 0;
-    		}
-    	}else{
-   			$previous = (int) $previous;
-    	}
-    	
-    	$new_item_id = -1;
-    	//check type
-    	switch ($type){
-			case 'dokeos_step':
-    			$id = $this->escape_string($id);
-				//check the next item
-    			$sql_check = "SELECT * FROM $tbl_lp_item " .
-    					"WHERE lp_id = ".$this->get_id()." " .
-    							"AND previous_item_id = $previous " .
-    							"AND parent_item_id = $parent";
-    			if($this->debug>2){error_log('New LP - Getting info from the next element: '.$sql_check,0);}
-				$res_check = api_sql_query($sql_check);
-				if(Database::num_rows($res_check)){
-					$row = Database::fetch_array($res_check);
-					$next = $row['id'];
-					//TODO check display_order
-					$display_order = $row['display_order']+1;
-				}else{
-					$next = 0;
-					$display_order = 1;
-				}
-				
-				//insert new item
-    			$sql_ins = "INSERT INTO $tbl_lp_item " .
-    					"(lp_id,item_type,ref,title," .
-    					"path,parent_item_id," .
-    					"previous_item_id,next_item_id,display_order)" .
-    					"VALUES" .
-    					"(".$this->get_id().",'$type','','$title','$id'," .
-    					"$parent," .
-    					"$previous,$next,$display_order)";
-    			if($this->debug>2){error_log('New LP - Inserting dokeos_chapter: '.$sql_ins,0);}
-    			$res_ins = api_sql_query($sql_ins);
-    			if($res_ins>0){
-	    			$new_item_id = Database::get_last_insert_id($res_ins);
-	    			//now update previous item
-	    			$sql_upd = "UPDATE $tbl_lp_item " .
-	    					"SET next_item_id = $new_item_id " .
-	    					"WHERE lp_id = ".$this->get_id()." " .
-	    							"AND id = $previous AND parent_item_id = $parent";
-
-	    			if($this->debug>2){error_log('New LP - Updating previous item: '.$sql_upd,0);}
-
-	    			$res_upd = api_sql_query($sql_upd);
-
-	    			//now update next item
-
-	    			$sql_upd = "UPDATE $tbl_lp_item " .
-
-	    					"SET previous_item_id = $new_item_id " .
-
-	    					"WHERE lp_id = ".$this->get_id()." " .
-
-	    							"AND id = $next AND parent_item_id = $parent";
-
-	    			if($this->debug>2){error_log('New LP - Updating next item: '.$sql_upd,0);}
-
-	    			$res_upd = api_sql_query($sql_upd);
-	    			
-    			}
-
-	    		break;
-
-    		default:
-
-    			break;
-
-    	}
-
-    	return $new_item_id;
-
-    }
-
-    /**
-
      * Static admin function allowing addition of a learnpath to a course.
-
      * @param	string	Course code
-
      * @param	string	Learnpath name
-
      * @param	string	Learnpath description string, if provided
-
      * @param	string	Type of learnpath (default = 'guess', others = 'dokeos', 'aicc',...)
-
      * @param	string	Type of files origin (default = 'zip', others = 'dir','web_dir',...)
-
      * @param	string	Zip file containing the learnpath or directory containing the learnpath
-
      * @return	integer	The new learnpath ID on success, 0 on failure
-
      */
-
     function add_lp($course,$name,$description='',$learnpath='guess',$origin='zip',$zipname='')
-
     {
-
 		//if($this->debug>0){error_log('New LP - In learnpath::add_lp()',0);}
-
     	//TODO
-
     	$tbl_lp = Database::get_course_table('lp');
-
     	//check course code exists
-
     	//check lp_name doesn't exist, otherwise append something
-
     	$i = 0;
-
     	$name = learnpath::escape_string(htmlentities($name)); //Kevin Van Den Haute: added htmlentities()
-
     	$check_name = "SELECT * FROM $tbl_lp WHERE name = '$name'";
-
     	//if($this->debug>2){error_log('New LP - Checking the name for new LP: '.$check_name,0);}
-
     	$res_name = api_sql_query($check_name);
-
 		while(Database::num_rows($res_name)){
-
     		//there is already one such name, update the current one a bit
-
     		$i++;
-
     		$name = $name.' - '.$i;
-
 	    	$check_name = "SELECT * FROM $tbl_lp WHERE name = '$name'";
-
 	    	//if($this->debug>2){error_log('New LP - Checking the name for new LP: '.$check_name,0);}
-
 	    	$res_name = api_sql_query($check_name);
-
     	}
-
     	//new name does not exist yet; keep it
-
     	//escape description
-
     	$description = learnpath::escape_string(htmlentities($description)); //Kevin: added htmlentities()
-
     	$type = 1;
-
     	switch($learnpath){
-
     		case 'guess':
-
     			break;
-
     		case 'dokeos':
-
     			$type = 1;
-
     			break;
-
     		case 'aicc':
-
     			break;
-
     	}
-
     	switch($origin){
-
     		case 'zip':
-
 	    		//check zipname string. If empty, we are currently creating a new Dokeos learnpath
-
     			break;
-
     		case 'manual':
-
 		    	$get_max = "SELECT MAX(display_order) FROM $tbl_lp";
-
 		    	$res_max = api_sql_query($get_max);
-
 		    	if(Database::num_rows($res_max)<1){
-
 		    		$dsp = 1;
-
 		    	}else{
-
 		    		$row = Database::fetch_array($res_max);
-
 		    		$dsp = $row[0]+1;
-
 		    	}
-
     			$sql_insert = "INSERT INTO $tbl_lp " .
-
     					"(lp_type,name,description,path,default_view_mod," .
-
     					"default_encoding,display_order,content_maker," .
-
     					"content_local,js_lib) " .
-
     					"VALUES ($type,'$name','$description','','embedded'," .
-
     					"'ISO-8859-1','$dsp','Dokeos'," .
-
     					"'local','')";
-
     			//if($this->debug>2){error_log('New LP - Inserting new lp '.$sql_insert,0);}
-				
     			$res_insert = api_sql_query($sql_insert);
-
 				$id = Database::get_last_insert_id();
-				
 				if($id>0){
-
 					return $id;
-
 				}
-
     			break;
-
     	}
-
     }
 
     /**
-
      * Appends a message to the message attribute
-
      * @param	string	Message to append.
-
      */
-
     function append_message($string)
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::append_message()',0);}
-
     	$this->message .= $string;
-
     }
 
     /**
-
      * Autocompletes the parents of an item in case it's been completed or passed
-
      * @param	integer	Optional ID of the item from which to look for parents
-
      */
-
     function autocomplete_parents($item)
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::autocomplete_parents()',0);}
-
     	if(empty($item)){
-
     		$item = $this->current;
-
     	}
-
     	$parent_id = $this->items[$item]->get_parent();
-
     	if($this->debug>2){error_log('New LP - autocompleting parent of item '.$item.' (item '.$parent_id.')',0);}
-
     	if(is_object($this->items[$item]) and !empty($parent_id))
-
     	{//if $item points to an object and there is a parent
-
     		if($this->debug>2){error_log('New LP - '.$item.' is an item, proceed',0);}
-
     		$current_item =& $this->items[$item];
-
     		$parent =& $this->items[$parent_id]; //get the parent
-
 			//new experiment including failed and browsed in completed status
 			$current_status = $current_item->get_status();
-    		if($current_item->is_done() || $current_status=='browsed' || $current_status=='failed'){
-
+    		if($current_item->is_done() || $current_status=='browsed' || $current_status=='failed')
+    		{
     			//if the current item is completed or passes or succeeded
-
     			$completed = true;
-
     			if($this->debug>2){error_log('New LP - Status of current item is alright',0);}
-
-    			foreach($parent->get_children() as $child){
-
+    			foreach($parent->get_children() as $child)
+    			{
     				//check all his brothers (his parent's children) for completion status
-
-    				if($child!= $item){
-
+    				if($child!= $item)
+    				{
     					if($this->debug>2){error_log('New LP - Looking at brother with ID '.$child.', status is '.$this->items[$child]->get_status(),0);}
-
     					//if($this->items[$child]->status_is(array('completed','passed','succeeded')))
     					//Trying completing parents of failed and browsed items as well
     					if($this->items[$child]->status_is(array('completed','passed','succeeded','browsed','failed')))
     					{
-
     						//keep completion status to true
-
     					}else{
-
     						if($this->debug>2){error_log('New LP - Found one incomplete child of '.$parent_id.': '.$child.' is '.$this->items[$child]->get_status(),0);}
-
     						$completed = false;
-
     					}
-
     				}
-
     			}
-
-    			if($completed == true){ //if all the children were completed
-
+    			if($completed == true)
+    			{ //if all the children were completed
 	    			$parent->set_status('completed');
-
 	    			$parent->save(false);
-
     				$this->update_queue[$parent->get_id()] = $parent->get_status();
-
     				if($this->debug>2){error_log('New LP - Added parent to update queue '.print_r($this->update_queue,true),0);}
-
 	    			$this->autocomplete_parents($parent->get_id()); //recursive call
-
     			}
-
     		}else{
-
     			//error_log('New LP - status of current item is not enough to get bothered',0);
-
     		}
-
     	}
-
     }
 
     /**
-
      * Autosaves the current results into the database for the whole learnpath
-
      */
-
     function autosave()
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::autosave()',0);}
-
     	//TODO add aditionnal save operations for the learnpath itself
-
     }
 
     /**
-
      * Clears the message attribute
-
      */
-
     function clear_message()
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::clear_message()',0);}
-
     	$this->message = '';
-
     }
-
     /**
-
      * Closes the current resource
-
      *
-
      * Stops the timer
-
      * Saves into the database if required
-
      * Clears the current resource data from this object
-
      * @return	boolean	True on success, false on failure
-
      */
 
     function close()
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::close()',0);}
-
     	if(empty($this->lp_id))
-
     	{
-
     		$this->error = 'Trying to close this learnpath but no ID is set';
-
     		return false;
-
     	}
-
     	$this->current_time_stop = time();
-
     	if($this->save)
-
     	{
-
-	    	$learnpath_view_table = Database::get_course_table(LEARNPATH_VIEW_TABLE);
-
+	    	$learnpath_view_table = Database::get_course_table(TABLE_LP_VIEW);
 	    	/*
-
 	    	$sql = "UPDATE $learnpath_view_table " .
-
 	    			"SET " .
-
 	    			"stop_time = ".$this->current_time_stop.", " .
-
 	    			"score = ".$this->current_score.", ".
-
 	    			"WHERE learnpath_id = '".$this->lp_id."'";
-
 	    	//$res = Database::query($sql);
-
 	    	$res = api_sql_query($res);
-
 	    	if(mysql_affected_rows($res)<1)
-
 	    	{
-
 	    		$this->error = 'Could not update learnpath_view table while closing learnpath';
-
 	    		return false;
-
 	    	}
-
 	    	*/    		
-
     	}
-
     	$this->ordered_items = array();
-
     	$this->index=0;
-
     	unset($this->lp_id);
-
     	//unset other stuff
-
     	return true;
-
     }
 
     /**

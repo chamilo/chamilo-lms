@@ -732,55 +732,30 @@ class learnpath {
     }
 
     /**
-
      * Static admin function allowing removal of a learnpath
-
      * @param	string	Course code
-
      * @param	integer	Learnpath ID
-
      * @param	string	Whether to delete data or keep it (default: 'keep', others: 'remove')
-
      * @return	boolean	True on success, false on failure (might change that to return number of elements deleted)
-
      */
-
     function delete($course=null,$id=null,$delete='keep')
-
     {
-
     	//TODO implement a way of getting this to work when the current object is not set
-
     	//In clear: implement this in the item class as well (abstract class) and use the given ID in queries
-
     	//if(empty($course)){$course = api_get_course_id();}
-
     	//if(empty($id)){$id = $this->get_id();}
-
     	
-
 		//if($this->debug>0){error_log('New LP - In learnpath::delete()',0);}
-
     	foreach($this->items as $id => $dummy)
-
     	{
-
     		$this->items[$id]->delete();
-
     	}
-
     	$lp = Database::get_course_table('lp');
-
     	$lp_view = Database::get_course_table('lp_view');
-
     	$sql_del_view = "DELETE FROM $lp_view WHERE lp_id = ".$this->lp_id;
-
     	//if($this->debug>2){error_log('New LP - Deleting views bound to lp '.$this->lp_id.': '.$sql_del_view,0);}
-
     	$res_del_view = api_sql_query($sql_del_view);
-
     	//if($this->debug>2){error_log('New LP - Deleting lp '.$this->lp_id.' of type '.$this->type,0);}
-
     	if($this->type == 2 OR $this->type==3){
     		//this is a scorm learning path, delete the files as well
     		$sql = "SELECT path FROM $lp WHERE id = ".$this->lp_id;
@@ -811,157 +786,72 @@ class learnpath {
     }
 
     /**
-
      * Removes all the children of one item - dangerous!
-
      * @param	integer	Element ID of which children have to be removed
-
      * @return	integer	Total number of children removed
-
      */
-
     function delete_children_items($id){
-
 		if($this->debug>0){error_log('New LP - In learnpath::delete_children_items('.$id.')',0);}
-
     	$num = 0;
-
     	if(empty($id) || $id != strval(intval($id))){return false;}
-
 		$lp_item = Database::get_course_table('lp_item');
-
 		$sql = "SELECT * FROM $lp_item WHERE parent_item_id = $id";
-
 		$res = api_sql_query($sql);
-
 		while($row = Database::fetch_array($res)){
-
 			$num += $this->delete_children_items($row['id']);
-
 			$sql_del = "DELETE FROM $lp_item WHERE id = ".$row['id'];
-
 			$res_del = api_sql_query($sql_del);
-
 			$num++;
-
 		}
-
 		return $num;
-
     }
 
     /**
-
      * Removes an item from the current learnpath
-
      * @param	integer	Elem ID (0 if first)
-
      * @param	integer	Whether to remove the resource/data from the system or leave it (default: 'keep', others 'remove')
-
      * @return	integer	Number of elements moved
-
      * @todo implement resource removal
-
      */
-
     function delete_item($id, $remove='keep')
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::delete_item()',0);}
-
     	//TODO - implement the resource removal
-
     	if(empty($id) || $id != strval(intval($id))){return false;}
-
     	//first select item to get previous, next, and display order
-
 		$lp_item = Database::get_course_table('lp_item');
-
     	$sql_sel = "SELECT * FROM $lp_item WHERE id = $id";
-
     	$res_sel = api_sql_query($sql_sel,__FILE__,__LINE__);
-
     	if(Database::num_rows($res_sel)<1){return false;}
-
     	$row = Database::fetch_array($res_sel);
-
     	$previous = $row['previous_item_id'];
-
     	$next = $row['next_item_id'];
-
     	$display = $row['display_order'];
-
     	$parent = $row['parent_item_id'];
-
     	$lp = $row['lp_id'];
-
     	//delete children items
-
     	$num = $this->delete_children_items($id);
-
     	if($this->debug>2){error_log('New LP - learnpath::delete_item() - deleted '.$num.' children of element '.$id,0);}
-
     	//now delete the item
-
     	$sql_del = "DELETE FROM $lp_item WHERE id = $id";
-
     	if($this->debug>2){error_log('New LP - Deleting item: '.$sql_del,0);}
-
     	$res_del = api_sql_query($sql_del,__FILE__,__LINE__);
-
     	//now update surrounding items
-
     	$sql_upd = "UPDATE $lp_item SET next_item_id = $next WHERE id = $previous";
-
     	$res_upd = api_sql_query($sql_upd,__FILE__,__LINE__);
-
     	$sql_upd = "UPDATE $lp_item SET previous_item_id = $previous WHERE id = $next";
-
     	$res_upd = api_sql_query($sql_upd,__FILE__,__LINE__);
-
     	//now update all following items with new display order
-
     	$sql_all = "UPDATE $lp_item SET display_order = display_order-1 WHERE lp_id = $lp AND parent_item_id = $parent AND display_order > $display";
-
     	$res_all = api_sql_query($sql_all,__FILE__,__LINE__);
-
     }
 
     /**
-
      * Updates an item's content in place
-
      * @param	integer	Element ID
-
 	 * @param	string	New content
-
      * @return	boolean	True on success, false on error
-
      */
-
-    function old_edit_item($id,$content)
-
-    {
-
-		if($this->debug>0){error_log('New LP - In learnpath::edit_item()',0);}
-
-    	if(empty($id) or ($id != strval(intval($id))) or empty($content)){ return false; }
-
-    	$content = $this->escape_string($content);
-
-		$lp_item = Database::get_course_table('lp_item');
-
-    	$sql_upd = "UPDATE $lp_item SET title = '$content' WHERE id = $id";
-
-    	$res_upd = api_sql_query($sql_upd,__FILE__,__LINE__);
-
-    	//TODO update the item object (can be ignored for now because refreshed)
-
-    	return true;
-
-    }
-    
     function edit_item($id, $parent, $previous, $title, $description, $prerequisites=0)
     {
     	if($this->debug > 0){error_log('New LP - In learnpath::edit_item()', 0);}

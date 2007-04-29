@@ -2371,10 +2371,8 @@ class learnpath {
     	}
 
     	$file = '';
-		$lp_db = Database::get_current_course_database();
-		$lp_pref = Database::get_course_table_prefix();
-		$lp_table = $lp_db.'.'.$lp_pref.'lp';
-		$lp_item_table = $lp_db.'.'.$lp_pref.'lp_item';
+		$lp_table = Database::get_course_table(TABLE_LP_MAIN);
+		$lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
     	$sel = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams " .
     			"FROM $lp_table l, $lp_item_table li WHERE li.id = $item_id AND li.lp_id = l.id";
     	if($this->debug>2){error_log('New LP - In learnpath::get_link() - selecting item '.$sel,0);}
@@ -2509,656 +2507,366 @@ class learnpath {
     				}else{
     					$file = 'lp_content.php?type=dir';
     				}
-
     				break;
-
     			case 4:
-
     				break;
-
     			default:
-
     				break;	
-
     		}
-
     	}
-
     	if($this->debug>2){error_log('New LP - In learnpath::get_link() - returning "'.$file.'" from get_link',0);}
-
     	return $file;
-
     }
 
     /**
-
      * Gets the latest usable view or generate a new one
-
      * @param	integer	Optional attempt number. If none given, takes the highest from the lp_view table
-
      * @return	integer	DB lp_view id
-
      */
-
     function get_view($attempt_num=0)
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_view()',0);}
-
     	$search = '';
-
     	//use $attempt_num to enable multi-views management (disabled so far)
-
     	if($attempt_num != 0 AND intval(strval($attempt_num)) == $attempt_num)
-
     	{
-
     		$search = 'AND view_count = '.$attempt_num;
-
     	}
-
     	//when missing $attempt_num, search for a unique lp_view record for this lp and user
-
     	$lp_view_table = Database::get_course_table('lp_view');
-
     	$sql = "SELECT id, view_count FROM $lp_view_table " .
-
     			"WHERE lp_id = ".$this->get_id()." " .
-
     			"AND user_id = ".$this->get_user_id()." " .
-
     			$search .
-
     			" ORDER BY view_count DESC";
-
     	$res = api_sql_query($sql);
-
     	if(Database::num_rows($res)>0)
-
     	{
-
     		$row = Database::fetch_array($res);
-
     		$this->lp_view_id = $row['id'];
-
     	}else{
-
     		//no database record, create one
-
     		$sql = "INSERT INTO $lp_view_table(lp_id,user_id,view_count)" .
-
     				"VALUES (".$this->get_id().",".$this->get_user_id().",1)";
-
     		$res = api_sql_query($sql);
-
     		$id = Database::get_last_insert_id();
-
     		$this->lp_view_id = $id;
-
     	}
-
     }
 
     /**
-
      * Gets the current view id
-
      * @return	integer	View ID (from lp_view)
-
      */
-
     function get_view_id()
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_view_id()',0);}
-
        	if(!empty($this->lp_view_id))
-
     	{
-
     		return $this->lp_view_id;
-
     	}else{
-
     		return 0;
-
     	}
-
     }
 
     /**
-
      * Gets the update queue
-
      * @return	array	Array containing IDs of items to be updated by JavaScript
-
      */
-
     function get_update_queue()
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_update_queue()',0);}
-
     	return $this->update_queue;
-
     }
-
     /**
-
      * Gets the user ID
-
      * @return	integer	User ID
-
      */
-
     function get_user_id()
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_user_id()',0);}
-
     	if(!empty($this->user_id))
-
     	{
-
     		return $this->user_id;
-
     	}else{
-
     		return false;
-
     	}
-
     }
-
     /**
-
      * Logs a message into a file
-
      * @param	string 	Message to log
-
      * @return	boolean	True on success, false on error or if msg empty
-
      */
-
     function log($msg)
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::log()',0);}
-
     	//TODO
-
     	$this->error .= $msg."\n";
-
     	return true;
-
     }
-
     /**
-
      * Moves an item up and down at its level
-
      * @param	integer	Item to move up and down
-
      * @param	string	Direction 'up' or 'down'
-
      * @return	integer	New display order, or false on error
-
      */
-
     function move_item($id, $direction){
-
 		if($this->debug>0){error_log('New LP - In learnpath::move_item('.$id.','.$direction.')',0);}
-
     	if(empty($id) or empty($direction)){return false;}
-
     	$tbl_lp_item = Database::get_course_table('lp_item');
-
 		$sql_sel = "
 			SELECT *
 			FROM " . $tbl_lp_item . "
 			WHERE id = " . $id;
     	$res_sel = api_sql_query($sql_sel,__FILE__,__LINE__);
-
     	//check if elem exists
-
     	if(Database::num_rows($res_sel)<1){return false;}
-
     	//gather data
-
     	$row = Database::fetch_array($res_sel);
-
     	$previous = $row['previous_item_id'];
-
     	$next = $row['next_item_id'];
-
     	$display = $row['display_order'];
-
     	$parent = $row['parent_item_id'];
-
     	$lp = $row['lp_id'];
-
     	//update the item (switch with previous/next one)
-
     	switch($direction)
 		{
     		case 'up':
     			if($this->debug>2){error_log('Movement up detected',0);}
-
     			if($display <= 1){/*do nothing*/}
-
     			else{
-
 			     	$sql_sel2 = "SELECT * 
 						FROM $tbl_lp_item 
 						WHERE id = $previous";
 
 					if($this->debug>2){error_log('Selecting previous: '.$sql_sel2,0);}
-
 			    	$res_sel2 = api_sql_query($sql_sel2,__FILE__,__LINE__);
-
 			    	if(Database::num_rows($res_sel2)<1){$previous_previous = 0;}
-
 			    	//gather data
-
 			    	$row2 = Database::fetch_array($res_sel2);
-
 			    	$previous_previous = $row2['previous_item_id'];
-
 			 		//update previous_previous item (switch "next" with current)
-			
-			 		if($previous_previous != 0){
-
+			 		if($previous_previous != 0)
+			 		{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $id WHERE id = $previous_previous";
-						
 				    	if($this->debug>2){error_log($sql_upd2,0);}
-
 				    	$res_upd2 = api_sql_query($sql_upd2);
-
 			 		}
-
 				 	//update previous item (switch with current)
-
-			    	if($previous != 0){
-
+			    	if($previous != 0)
+			    	{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $next, previous_item_id = $id, display_order = display_order +1 WHERE id = $previous";
-
 				    	if($this->debug>2){error_log($sql_upd2,0);}
-
 				    	$res_upd2 = api_sql_query($sql_upd2);
-
 			    	}
 
 			    	//update current item (switch with previous)
-
 			    	if($id != 0){
-
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $previous, previous_item_id = $previous_previous, display_order = display_order-1 WHERE id = $id";
-
 				    	if($this->debug>2){error_log($sql_upd2,0);}
-
 				    	$res_upd2 = api_sql_query($sql_upd2);
-
 			    	}
-
 			    	//update next item (new previous item)
-
 			    	if($next != 0){
-
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $previous WHERE id = $next";
-
 				    	if($this->debug>2){error_log($sql_upd2,0);}
-
 				    	$res_upd2 = api_sql_query($sql_upd2);
-
 			    	}
-
 			    	$display = $display-1;    				
-
     			}
-
     			break;
 
     		case 'down':
-
     			if($this->debug>2){error_log('Movement down detected',0);}
-
     			if($next == 0){/*do nothing*/}
-
     			else{
-
 			     	$sql_sel2 = "SELECT * FROM $tbl_lp_item WHERE id = $next";
-
 					if($this->debug>2){error_log('Selecting next: '.$sql_sel2,0);}
-
 			    	$res_sel2 = api_sql_query($sql_sel2,__FILE__,__LINE__);
-
 			    	if(Database::num_rows($res_sel2)<1){$next_next = 0;}
-
 			    	//gather data
-
 			    	$row2 = Database::fetch_array($res_sel2);
-
 			    	$next_next = $row2['next_item_id'];
-
     				//update previous item (switch with current)
-
-					if($previous != 0){
-
+					if($previous != 0)
+					{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET next_item_id = $next WHERE id = $previous";
-
 				    	$res_upd2 = api_sql_query($sql_upd2);
-
 					}
-
 				    //update current item (switch with previous)
-
-			    	if($id != 0){
-
+			    	if($id != 0)
+			    	{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $next, next_item_id = $next_next, display_order = display_order+1 WHERE id = $id";
-
 				    	$res_upd2 = api_sql_query($sql_upd2);
-
 			    	}
 
 			    	//update next item (new previous item)
-
-			    	if($next != 0){
-
+			    	if($next != 0)
+			    	{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $previous, next_item_id = $id, display_order = display_order-1 WHERE id = $next";
-
 				    	$res_upd2 = api_sql_query($sql_upd2);    				
-
 			    	}
 
 			    	//update next_next item (switch "previous" with current)
-
-			    	if($next_next != 0){
-
+			    	if($next_next != 0)
+			    	{
 				    	$sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $id WHERE id = $next_next";
-
 				    	$res_upd2 = api_sql_query($sql_upd2);    				
-
 			    	}
-
 			    	$display = $display+1;    				
-
     			}
 
     			break;
-
     		default:
-
     			return false;
-
     	}
-
 		return $display;
-
     }
 
     /**
-
      * Updates learnpath attributes to point to the next element
-
      * The last part is similar to set_current_item but processing the other way around
-
      */
-
-    function next(){
-
+    function next()
+    {
 		if($this->debug>0){error_log('New LP - In learnpath::next()',0);}
-
     	$this->last = $this->get_current_item_id();
-
     	$this->items[$this->last]->save(false);
-
     	$this->autocomplete_parents($this->last);
-
     	$new_index = $this->get_next_index();
-
     	if($this->debug>2){error_log('New LP - New index: '.$new_index,0);}
-
     	$this->index = $new_index;
-
     	if($this->debug>2){error_log('New LP - Now having orderedlist['.$new_index.'] = '. $this->ordered_items[$new_index],0);}
-
     	$this->current = $this->ordered_items[$new_index];
-
     	if($this->debug>2){error_log('New LP - new item id is '.$this->current.'-'.$this->get_current_item_id(),0);}
-
     }
 
     /**
-
      * Open a resource = initialise all local variables relative to this resource. Depending on the child
-
      * class, this might be redefined to allow several behaviours depending on the document type.
-
      * @param integer Resource ID
-
      * @return boolean True on success, false otherwise
-
      */
 
     function open($id)
-
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::open()',0);}
-
     	//TODO
-
     	//set the current resource attribute to this resource
-
     	//switch on element type (redefine in child class?)
-
     	//set status for this item to "opened"
-
     	//start timer
-
     	//initialise score
-
     	$this->index = 0; //or = the last item seen (see $this->last)
-
     }
 
     /**
-
      * Check that all prerequisites are fulfilled. Returns true and an empty string on succes, returns false
-
      * and the prerequisite string on error.
-
      * This function is based on the rules for aicc_script language as described in the SCORM 1.2 CAM documentation page 108.
-
      * @param	integer	Optional item ID. If none given, uses the current open item.
-
      * @return	boolean	True if prerequisites are matched, false otherwise
-
      * @return	string	Empty string if true returned, prerequisites string otherwise.
-
      */
-
-    function prerequisites_match($item = null){
-
+    function prerequisites_match($item = null)
+    {
 		if($this->debug>0){error_log('New LP - In learnpath::prerequisites_match()',0);}
-
     	if(empty($item)){$item = $this->current;}
-
-    	if(is_object($this->items[$item])){
-
+    	if(is_object($this->items[$item]))
+    	{
 	    	$prereq_string = $this->items[$item]->get_prereq_string();
-
 	    	if(empty($prereq_string)){return true;}
-
 	    	//clean spaces
-
 	    	$prereq_string = str_replace(' ','',$prereq_string);
-
 	    	if($this->debug>0){error_log('Found prereq_string: '.$prereq_string,0);}
-
 	    	//now send to the parse_prereq() function that will check this component's prerequisites
-			
 	    	$result = $this->items[$item]->parse_prereq($prereq_string,$this);
-
-	    	if($result === false){
-
+	    	if($result === false)
+	    	{
 	    		$this->set_error_msg($this->items[$item]->prereq_alert);
-
 	    	}
-
     	}else{
-
     		$result = true;
-
     		if($this->debug>1){error_log('New LP - $this->items['.$item.'] was not an object',0);}
-
     	}
 
     	if($this->debug>1){error_log('New LP - End of prerequisites_match(). Error message is now '.$this->error,0);}
-
     	return $result;
-
     }
 
     /**
-
      * Updates learnpath attributes to point to the previous element
-
      * The last part is similar to set_current_item but processing the other way around
-
      */
 
-    function previous(){
-
+    function previous()
+    {
 		if($this->debug>0){error_log('New LP - In learnpath::previous()',0);}
-
     	$this->last = $this->get_current_item_id();
-
     	$this->items[$this->last]->save(false);
-
     	$this->autocomplete_parents($this->last);
-
     	$new_index = $this->get_previous_index();
-
     	$this->index = $new_index;
-
     	$this->current = $this->ordered_items[$new_index];
-
     }    
 
     /**
-
      * Publishes a learnpath. This basically means show or hide the learnpath 
-
      * to normal users.
-
      * Can be used as abstract
-
 	 * @param	integer	Learnpath ID
-
      * @param	string	New visibility
-
      */
 
     function toggle_visibility($lp_id,$set_visibility='v')
-
     {
-
 		//if($this->debug>0){error_log('New LP - In learnpath::toggle_visibility()',0);}
-
     	$tbl_lp = Database::get_course_table('lp');
-
 		$sql="SELECT * FROM $tbl_lp where id=$lp_id";
-
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-
 		$row=Database::fetch_array($result);
-
 		$name=domesticate($row['name']);
-
 		if($set_visibility == 'i') { 
-
 			$s=$name." ".get_lang('_no_published'); 
-
 			$dialogBox=$s; 
-
 			$v=0; 
-
 		}
-
-		if($set_visibility == 'v') { 
-
+		if($set_visibility == 'v')
+		{ 
 			$s=$name." ".get_lang('_published');    
-
 			$dialogBox=$s; 
-
 			$v=1; 
-
 		}
 
 		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-
 		$link = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id;
-
 		$sql="SELECT * FROM $tbl_tool where name='$name' and image='scormbuilder.gif' and link LIKE '$link%'";
-
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-
 		$num=Database::num_rows($result);
-
 		$row2=Database::fetch_array($result);
-		
 		//if($this->debug>2){error_log('New LP - '.$sql.' - '.$num,0);}
-
 		if(($set_visibility == 'i') && ($num>0))
-
 		{
-
 			//it is visible or hidden but once was published
-
 			if(($row2['visibility'])==1)
-
 			{
-
 				$sql ="DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%')";
-
 			}
-
 			else
-
 			{
-
 				$sql ="UPDATE $tbl_tool set visibility=1 WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%')";
-
 			}
-
 		}
-
 		elseif(($set_visibility == 'v') && ($num==0))
-
 		{
-
 			$sql ="INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('$name','newscorm/lp_controller.php?action=view&lp_id=$lp_id','scormbuilder.gif','$v','0','pastillegris.gif',0)";
-
 		}
-
 		else
-
 		{
-
 			//parameter and database incompatible, do nothing
-
 		}
-
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-
 		//if($this->debug>2){error_log('New LP - Leaving learnpath::toggle_visibility: '.$sql,0);}
-
 	}
     /**
      * Restart the whole learnpath. Return the URL of the first element.

@@ -116,28 +116,30 @@ class scormResource {
 	    			default:
 				     	//if($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function
 				     	$children = $element->childNodes;
-				    	foreach($children as $child)
-				     	{
-				     		switch($child->nodeType)
-				     		{
-				     			case XML_ELEMENT_NODE:
-									switch($child->tagName){
-				     					case 'file':
-				     						//echo "Child is a file tag<br />\n";
-				     						$this->files[] = $child->getAttribute('href');
-											break;
-				     					case 'metadata':
-				     						//echo "Child is a metadata tag<br />\n";
-				     						$this->metadata = new scormMetadata('manifest',$child);
-				     						break;
-				     					case 'dependency':
-				     						//need to get identifierref attribute inside dependency node
-				     						//dependencies[] array represents all <dependency identifierref='x'> tags united
-				     						$this->dependencies[] = $child->getAttribute('identifierref');
-				     						break;
-				     				}
-				     				break;
-				     		}
+				    	if(is_array($children)){
+					    	foreach($children as $child)
+					     	{
+					     		switch($child->nodeType)
+					     		{
+					     			case XML_ELEMENT_NODE:
+										switch($child->tagName){
+					     					case 'file':
+					     						//echo "Child is a file tag<br />\n";
+					     						$this->files[] = $child->getAttribute('href');
+												break;
+					     					case 'metadata':
+					     						//echo "Child is a metadata tag<br />\n";
+					     						$this->metadata = new scormMetadata('manifest',$child);
+					     						break;
+					     					case 'dependency':
+					     						//need to get identifierref attribute inside dependency node
+					     						//dependencies[] array represents all <dependency identifierref='x'> tags united
+					     						$this->dependencies[] = $child->getAttribute('identifierref');
+					     						break;
+					     				}
+					     				break;
+					     		}
+					     	}
 				     	}
 				     	//$keep_href = '';
 				     	if($element->hasAttributes()){ //in some cases we get here with an empty attributes array

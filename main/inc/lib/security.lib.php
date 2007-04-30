@@ -54,6 +54,25 @@
 class Security{
 	var	$clean = array();
 	/**
+	 * Checks if the absolute path given is really under the checker path
+	 * @param	string	Absolute path to be checked (with trailing slash)
+	 * @param	string	Checker path under which the path should be (with trailing slash)
+	 * @return	bool	True if the path is under the checker, false otherwise
+	 */
+	function check_abs_path($abs_path,$checker_path)
+	{
+		if(empty($checker_path)){return false;} //checker path must be set
+		
+		$true_path=str_replace("\\", "/", realpath($abs_path));
+		
+		$found = strpos($true_path.'/',$checker_path);
+		if($found===0)
+		{
+			return true;
+		}
+		return false;
+	}
+	/**
 	 * Checks if the relative path given is really under the checker path
 	 * @param	string	Relative path to be checked (relative to the current directory) (with trailing slash)
 	 * @param	string	Checker path under which the path should be (with trailing slash)
@@ -68,25 +87,6 @@ class Security{
 		}
 		$abs_path = $current_path.$rel_path;
 		$true_path=str_replace("\\", "/", realpath($abs_path));
-		$found = strpos($true_path.'/',$checker_path);
-		if($found===0)
-		{
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * Checks if the absolute path given is really under the checker path
-	 * @param	string	Absolute path to be checked (with trailing slash)
-	 * @param	string	Checker path under which the path should be (with trailing slash)
-	 * @return	bool	True if the path is under the checker, false otherwise
-	 */
-	function check_abs_path($abs_path,$checker_path)
-	{
-		if(empty($checker_path)){return false;} //checker path must be set
-		
-		$true_path=str_replace("\\", "/", realpath($abs_path));
-		
 		$found = strpos($true_path.'/',$checker_path);
 		if($found===0)
 		{
@@ -136,6 +136,15 @@ class Security{
 			return true;
 		}
 		return false;
+	}
+	/**
+	 * Clear the security token from the session
+	 * @return void
+	 */
+	function clear_token()
+	{
+		$_SESSION['sec_token'] = null;
+		unset($_SESSION['sec_token']);
 	}
 	/**
 	 * This function sets a random token to be included in a form as a hidden field

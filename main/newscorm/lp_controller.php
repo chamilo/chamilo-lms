@@ -42,7 +42,6 @@ if ($is_allowed_in_course == false){
 	Display::display_footer();
 }
 
-//require_once(api_get_path(LIBRARY_PATH) . "/fckeditor.lib.php");
 require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 $lpfound = false;
 
@@ -175,11 +174,6 @@ switch($_REQUEST['action'])
 				else
 				{
 					$_SESSION['post_time'] = $_POST['post_time'];
-					
-					/*if($_REQUEST['type'] != 'dokeos_chapter' && $_REQUEST['type'] != 'dokeos_module' && $_REQUEST['type'] != 'dokeos_step')
-					{
-						$_REQUEST['type'] = 'dokeos_module';
-					}*/
 					
 					if($_POST['type'] == TOOL_DOCUMENT)
 					{
@@ -410,9 +404,6 @@ switch($_REQUEST['action'])
 		if($debug>0) error_log('New LP - export action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for export',0); require('lp_list.php'); }
 		else{
-			/*if($_SESSION['oLP']->get_type()==2){
-				$_SESSION['oLP']->export_zip();
-			}*/
 			$_SESSION['oLP']->scorm_export();
 			require('lp_list.php'); 
 		}
@@ -485,19 +476,6 @@ switch($_REQUEST['action'])
 			require('lp_admin_view.php');
 		}
 		break;
-	/*case 'edititem':
-	case 'edit_item':
-		if($debug>0) error_log('New LP - edit item action triggered',0);
-		if(!$lp_found){ error_log('New LP - No learnpath given for edit item',0); require('lp_list.php'); }
-		else{
-			if(!empty($_REQUEST['id']) && !empty($_REQUEST['submit_item'])){
-				$_SESSION['refresh'] = 1;
-				$_SESSION['oLP']->edit_item($_REQUEST['id'], $_REQUEST['title']);
-			}
-			require('lp_admin_view.php');
-		}
-		break;
-	*/
 	case 'edititemprereq':
 	case 'edit_item_prereq':
 		if($debug>0) error_log('New LP - edit item prereq action triggered',0);
@@ -649,29 +627,6 @@ switch($_REQUEST['action'])
 		if($debug>0) error_log('New LP - intro_cmdAdd action triggered',0);
 		//add introduction section page
 		break;
-	/*
-	case 'moveitem':
-	case 'move_item':
-		if($debug > 0)
-			error_log('New LP - move_item action triggered', 0);
-		
-		if(!$lp_found)
-		{
-			error_log('New LP - No learnpath given for move_item', 0);
-			
-			require('lp_list.php');
-		}
-		
-		if(!empty($_REQUEST['direction']) && !empty($_REQUEST['id']))
-		{
-			$_SESSION['refresh'] = 1;
-			$_SESSION['oLP']->move_item($_REQUEST['id'], $_REQUEST['direction']);
-		}
-		
-		require('lp_admin_view.php');
-		
-		break;	
-	*/
 	case 'js_api_refresh':
 		if($debug>0) error_log('New LP - js_api_refresh action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for js_api_refresh',0); require('lp_message.php'); }

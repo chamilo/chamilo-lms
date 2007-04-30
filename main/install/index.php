@@ -55,6 +55,7 @@ if (!empty($_POST['language_list']))
 {
 	$search = array('../','\\0');
 	$install_language = str_replace($search,'',urldecode($_POST['language_list']));
+	if(!is_dir('../lang/'.$install_language)){$install_language = 'english';}
 	include_once("../lang/$install_language/trad4all.inc.php");
 	include_once("../lang/$install_language/install.inc.php");
 	api_session_register('install_language');

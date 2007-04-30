@@ -6790,10 +6790,23 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	
 			 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
 								$file_path = realpath($doc_info[0]);
+								
 			 					if(strstr($file_path,$main_path) !== false)
 			 					{//the calculated real path is really inside the dokeos root path
 			 						//reduce file path to what's under the DocumentRoot
 			 						$file_path = substr($file_path,strlen($root_path));
+			 						//echo $file_path;echo '<br><br>';
+			 						//error_log('Reduced path: '.$file_path,0);
+			 						$zip_files_abs[] = $file_path;
+			 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+					 				$my_dep_file->setAttribute('href','document/'.$file_path);
+			 			 			$my_dep->setAttribute('xml:base','');
+			 					}
+			 					else if (empty($file_path))
+			 					{
+			 						$file_path = $_SERVER['DOCUMENT_ROOT'].$doc_info[0];
+			 						$file_path = substr($file_path,strlen($root_path)+1);
+			 						//echo $file_path;echo '<br><br>';
 			 						//error_log('Reduced path: '.$file_path,0);
 			 						$zip_files_abs[] = $file_path;
 			 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
@@ -6889,25 +6902,59 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 			$organization->appendChild($my_item);
 		 		}
 		 		
-		 		//get the path of the file(s) from the course directory root
-				$my_file_path = 'non_exportable.html';
-				$my_xml_file_path = htmlentities($my_file_path); 
-				$my_sub_dir = dirname($my_file_path); 
-				$my_xml_sub_dir = htmlentities($my_sub_dir);
-		 		//give a <resource> child to the <resources> element
-		 		$my_resource = $xmldoc->createElement('resource');
-		 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
-		 		$my_resource->setAttribute('type','webcontent');
-		 		$my_resource->setAttribute('href','document/'.$my_xml_file_path);
-		 		//adlcp:scormtype can be either 'sco' or 'asset'
-		 		$my_resource->setAttribute('adlcp:scormtype','asset');
-		 		//xml:base is the base directory to find the files declared in this resource
-		 		$my_resource->setAttribute('xml:base','');
-		 		//give a <file> child to the <resource> element
-		 		$my_file = $xmldoc->createElement('file');
-		 		$my_file->setAttribute('href','document/'.$my_xml_file_path);
-		 		$my_resource->appendChild($my_file);
-		 		$resources->appendChild($my_resource);
+	 			if($item->type == TOOL_LINK)
+	 			{
+	 				$my_file_path = 'link_'.$item->get_id().'.html';
+	 				$sql = 'SELECT url, title FROM '.Database :: get_course_table(TABLE_LINK).' WHERE id='.$item->path;
+	 				$rs = api_sql_query($sql, __FILE__, __LINE__);
+	 				if($link = Database :: fetch_array($rs))
+	 				{
+	 					$url = $link['url'];
+	 					$title = stripslashes($link['title']);
+	 					$links_to_create[$my_file_path] = array('title'=>$title,'url'=>$url);
+						$my_xml_file_path = htmlentities($my_file_path); 
+						$my_sub_dir = dirname($my_file_path); 
+						$my_xml_sub_dir = htmlentities($my_sub_dir);
+				 		//give a <resource> child to the <resources> element
+				 		$my_resource = $xmldoc->createElement('resource');
+				 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
+				 		$my_resource->setAttribute('type','webcontent');
+				 		$my_resource->setAttribute('href',$my_xml_file_path);
+				 		//adlcp:scormtype can be either 'sco' or 'asset'
+				 		$my_resource->setAttribute('adlcp:scormtype','asset');
+				 		//xml:base is the base directory to find the files declared in this resource
+				 		$my_resource->setAttribute('xml:base','');
+				 		//give a <file> child to the <resource> element
+				 		$my_file = $xmldoc->createElement('file');
+				 		$my_file->setAttribute('href',$my_xml_file_path);
+				 		$my_resource->appendChild($my_file);
+				 		$resources->appendChild($my_resource);
+	 				}
+	 			}
+	 			else
+	 			{
+		 		
+			 		//get the path of the file(s) from the course directory root
+					$my_file_path = 'non_exportable.html';
+					$my_xml_file_path = htmlentities($my_file_path); 
+					$my_sub_dir = dirname($my_file_path); 
+					$my_xml_sub_dir = htmlentities($my_sub_dir);
+			 		//give a <resource> child to the <resources> element
+			 		$my_resource = $xmldoc->createElement('resource');
+			 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
+			 		$my_resource->setAttribute('type','webcontent');
+			 		$my_resource->setAttribute('href','document/'.$my_xml_file_path);
+			 		//adlcp:scormtype can be either 'sco' or 'asset'
+			 		$my_resource->setAttribute('adlcp:scormtype','asset');
+			 		//xml:base is the base directory to find the files declared in this resource
+			 		$my_resource->setAttribute('xml:base','');
+			 		//give a <file> child to the <resource> element
+			 		$my_file = $xmldoc->createElement('file');
+			 		$my_file->setAttribute('href','document/'.$my_xml_file_path);
+			 		$my_resource->appendChild($my_file);
+			 		$resources->appendChild($my_resource);
+			 		
+	 			}
 	 		}
 	 	}
 	 	$organizations->appendChild($organization);
@@ -6949,6 +6996,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$this->create_path($dest_file);
 			//error_log('Created path '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/document/'.$file_path,0);
 			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
+			//echo $main_path.$file_path.' - '.$dest_file.'<br>';
 			copy($main_path.$file_path,$dest_file);
 			//check if the file needs a link update
 			if(in_array($file_path,array_keys($link_updates))){
@@ -6963,6 +7011,18 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 			$zip_folder->add($dest_file,PCLZIP_OPT_REMOVE_PATH, $garbage_path);
 		}
+		
+		if(is_array($links_to_create))
+		{
+			foreach($links_to_create as $file=>$link)
+			{
+				$file_content = '<html><body><div style="text-align:center"><a href="'.$link['url'].'">'.$link['title'].'</a></div></body></html>';
+				file_put_contents($garbage_path.$temp_dir_short.'/'.$file, $file_content);
+				$zip_folder->add($garbage_path.$temp_dir_short.'/'.$file,PCLZIP_OPT_REMOVE_PATH, $garbage_path);
+			}
+		}
+		
+		// add non exportable message explanation
 		$lang_not_exportable = get_lang('ThisItemIsNotExportable');
 		$file_content = 
 <<<EOD

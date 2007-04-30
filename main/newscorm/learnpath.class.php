@@ -6387,9 +6387,40 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_DOCUMENT . '.gif" style="margin-right:5px;" title="" />'.get_lang("Document").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 		
+		
 		$resources=api_store_result($res_doc);
 		
-		$return .=$this->write_resources_tree('', $resources);
+		$resources_sorted = array();
+		
+		// if you want to debug it, I advise you to do "echo" on the eval statements
+		
+		foreach($resources as $resource)
+		{
+			$resource_paths = explode('/',$resource['path']);
+			array_shift($resource_paths);
+			$path_to_eval = $last_path = '';
+			$is_file = false;
+			foreach($resource_paths as $key => $resource_path)
+			{
+				if(strpos($resource_path,'.')===false && $key != count($resource_paths)-1)
+				{ // it's a folder
+					$path_to_eval .= '["'.$resource_path.'"]["files"]';
+				}
+				else if(strpos($resource_path,'.')!==false)
+					$is_file = true;
+				$last_path = $resource_path;
+			}
+			if($is_file)
+			{
+				eval('$resources_sorted'.$path_to_eval.'['.$resource['id'].'] = "'.$last_path.'";');
+			}
+			else
+			{
+				eval('$resources_sorted'.$path_to_eval.'["'.$last_path.'"]["id"]='.$resource['id'].';');
+			}
+			
+		}
+		$return .=$this->write_resources_tree('', $resources_sorted);
 		
 		$return .='</div>';
 
@@ -6400,49 +6431,30 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		return $return;
 	}
 	
-	function write_resources_tree($parent, $resources_array_first = false){
+	function write_resources_tree($return, $resources_sorted, $num=0){
 		
 		include_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
-		static $resources_array;
-		if($resources_array_first !== false)
-			$resources_array = $resources_array_first;
 		
-	
-		while($value = current($resources_array))
+		foreach($resources_sorted as $key=>$resource)
 		{
 			
-			if(strpos($value['path'], $parent)!==false || $parent=='')
-			{
-
-				$explode = explode('/', $value['path']);
-				$num = count($explode) - 2;
-								
-				//It's a file
-				if ($value['filetype'] == 'file') {
-					if($num==0) $num=1;
-					
-					$icon = choose_image(trim($value['path']));
-					$position = strrpos($icon,'.');
-					$icon=substr($icon,0,$position).'_small.gif';
-					
-					//value['path'] don't always have an extension so we must take the path to have the complete name with extension
-					$array_temp = explode('/',trim($value['path']));
-					$document_name = $array_temp[count($array_temp)-1];
-					
-					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $value['id'] . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/'.$icon.'" title="" />&nbsp;'.$document_name."</a></div></div>\r\n";
-					array_shift($resources_array);
-				}
-				//It's a folder
-				else {
-					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_'.$value["id"].'" onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')"><img alt="" src="../img/lp_' . (($value['filetype'] == 'file') ? TOOL_DOCUMENT.'_file' : 'folder') . '.gif" title="" align="absmiddle" />&nbsp;<span onclick="testResources(\''.$value["id"].'\',\'img_'.$value["id"].'\')" style="cursor: pointer;" >'.$value['title'].'</span></div><div style="display: none;" id="'.$value['id'].'">';
-					array_shift($resources_array);
-					$return .= $this->write_resources_tree($value['path']);
-					$return .= "</div></div>\r\n";
-				}
+			if(is_array($resource['files']))
+			{ // it's a folder
+				$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_'.$resource["id"].'" onclick="testResources(\''.$resource["id"].'\',\'img_'.$resource["id"].'\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onclick="testResources(\''.$resource["id"].'\',\'img_'.$resource["id"].'\')" style="cursor: pointer;" >'.$key.'</span></div><div style="display: none;" id="'.$resource['id'].'">';
+				$return = $this->write_resources_tree($return, $resource['files'], $num+1);
+				$return .= "</div></div>\r\n";
 			}
 			else
-				return $return;
+			{
+				// it's a file
+				$icon = choose_image($resource);
+				$position = strrpos($icon,'.');
+				$icon=substr($icon,0,$position).'_small.gif';
+				$return .= '<div><div style="margin-left:' . (($num+1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img align="left" alt="" src="../img/'.$icon.'" title="" />&nbsp;'.$resource."</a></div></div>\r\n";
+			}
+			
 		}
+		
 		return $return;
 	}
 	

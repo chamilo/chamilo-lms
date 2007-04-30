@@ -1096,6 +1096,7 @@ if (is_array($list))
 					}
 					echo "\n\n\t<ul class=\"user_course_category\" style=\"margin-bottom: 10px;\"><li>".$value[3]."</li></ul>\n";
 
+					echo "<ul style=\"padding: 0px; margin: 0px;\">";
 				}
 			}
 			echo $value[1];

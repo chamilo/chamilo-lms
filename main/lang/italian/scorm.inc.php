@@ -2,17 +2,17 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langScormVersion = "versione";
-$langScormRestarted = "Ora tutti gli elementi sono da completare";
+$langScormRestarted = "Tutti gli elementi devono essere completati";
 $langScormNoNext = "Ultimo elemento.";
 $langScormNoPrev = "Primo elemento.";
 $langScormTime = "Tempo";
-$langScormNoOrder = "Non c\'è un ordine obbligatorio, potete cliccare su qualsiasi elemento.";
+$langScormNoOrder = "Non c\'è un ordine obbligatorio, puoi cliccare su qualsiasi elemento.";
 $langScormScore = "Punti";
 $langScormLessonTitle = "Lezione";
-$langScormStatus = "Situazione";
+$langScormStatus = "Status";
 $langScormToEnter = "Per entrare in ";
 $langScormFirstNeedTo = "devi prima concludere";
-$langScormThisStatus = "Il percorso è";
+$langScormThisStatus = "L\'elemento è";
 $langScormClose = "Concludi";
 $langScormRestart = "Ricomincia";
 $langScormCompstatus = "Concluso";

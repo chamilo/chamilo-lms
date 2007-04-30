@@ -316,21 +316,21 @@ L\'opzione consente anche di riutilizzare la stessa domanda in esercizi diversi.
 Per default, tutte le domande del corso sono visibili. Potete rendere visibili le domande relative ad un esercizio, scegliendo questa opzione nel menù a tendina \"Filter\".<br><br>
 Le domande orfane sono domande che non appartengono a nessun esercizio.</p>";
 $langHPath = "I Percorsi di Apprendimento";
-$langPathContent = "I Percorsi di Apprendimento si possono creare in due modi:
-<ul><li>Usando l\'opzione <b>Crea un percorso di apprendimento</b></li>
-<li>Usando l\'opzione <b>Carica un file Scorm verso il server</b></li></ul>
+$langPathContent = "I Percorsi didattici si possono creare in due modi:
+<ul><li>Usando l\'opzione <b>Crea un percorso didattico</b></li>
+<li>Usando l\'opzione <b>Carica un file Scorm</b></li></ul>
 <img src=\"../img/path_help.gif\">
 <p><b>
-Cos\'è un percoso di apprendimento ?</b>
-</p><p>Un percorso di apprendimento è una sequenza di \'passi\' con cui strutturare uno o piu  moduli didattici. Può essere basato su contenuti, su attività o su una combinazione di entrambe per promuovere, consolidare o accertare la conoscenza e le competenze in relazione ai contenuti di un determinato corso.</p>
-<p>La strutturazione di un percorso di apprendimento può anche essere organizzato in sequenze condizionate alla verifica del soddisfacimento di determinati prerequisiti (si può, ad esempio, fare in modo che non si possa accedere all\'argomento 2 senza aver concluso l\'argomento 1 o aver completato un questionario di verifica).
+Cos\'è un percoso didattico ?</b>
+</p><p>Un percorso didattico è una sequenza di \'passi\' con cui strutturare uno o piu  moduli didattici. Può essere basato su contenuti, su attività o su una combinazione di entrambe per promuovere, consolidare o accertare la conoscenza e le competenze in relazione ai contenuti di un determinato corso.</p>
+<p>Un percorso di apprendimento può anche essere organizzato in sequenze condizionate alla verifica del soddisfacimento di determinati prerequisiti (si può, ad esempio, fare in modo che non si possa accedere all\'argomento 2 senza aver concluso l\'argomento 1 o aver completato un questionario di verifica).
 </p>
-<p><b>Come si crea un percorso di apprendimento ?</b></p>
+<p><b>Come si crea un percorso didattico ?</b></p>
 <ol> 
-<li>Il primo passo è cliccare su  <b>Crea un nuovo Percorso di Apprendimento</b>. Nella schermata successiva bisognerà fornire un titolo ed una descrizione per il percorso.
-<li>Il percorso è inizialmente vuoto ed è necessario aggiungere almeno un modulo. Dovrete quindi cliccare sul nome del percorso e nella schermata successiva dargli un titolo ed una descrizione. 
-<li>Si possono a questo punto aggiungere \'Elementi\' cliccando sulla relativa casella (Aggiungi elemento).
-<li>Tutti i documenti e gli strumenti del corso possono essere aggiunti al modulo. Si può iniziare con pochi elementi, ma non c\'è virtualmente limite. Quando si è finito di aggiungere elementi si può passare alla loro struturazione cliccando sul link <b>Vai a [nome del modulo]</b>.
+<li>Il primo passo è cliccare su  <b>Crea un nuovo Percorso</b>. Nella schermata successiva bisognerà fornire un titolo ed una descrizione per il percorso.
+<li>Il percorso è inizialmente vuoto ed è necessario aggiungere almeno un paragrafo. Dovrete quindi cliccare sul nome del percorso e nella schermata successiva dargli un titolo ed una descrizione. 
+<li>Si possono a questo punto aggiungere paragrafi cliccando sulla relativa casella.
+<li>Tutti i documenti e gli strumenti del corso possono  far parte del paragrafo. Si può iniziare con pochi elementi, ma non c\'è virtualmente limite. Quando si è finito di aggiungere elementi si può passare alla loro struturazione cliccando sul link <b>Ordinamento</b>.
 <li>E\' adesso visibile l\'elenco degli elementi aggiunti e si può stabilire in che ordine vanno eseguiti spostando in alto o in basso gli elementi cliccando sulle corrispondenti frecce di direzione (alla voce \'Cambia ordine\').<br>E\' anche possibile stabilire dei prerequisiti per ogni elemento (alla voce \'Aggiungi prerequisito\').
 <li>Una volta completato non dimenticate di rendere visibile il percorso agli studenti cliccando sul relativo collegamento <b> Visibilità </b>.
 </ol>

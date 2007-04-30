@@ -106,7 +106,7 @@ $langViewModeFullScreen = "Vista: pieno schermo";
 $langShowDebug = "Mostra il debug";
 $langHideDebug = "Nascondi il debug";
 $langCantEditDocument = "Il documento non può essere modificato";
-$langAreYouSureToDelete = "Sei sicura/o dell\'eliminazione?";
+$langAreYouSureToDelete = "Sei sicura/o dell\'eliminazione";
 $langAfter = "Dopo";
 $lang_prerequisites_limit = "Prerequisiti";
 $lang_loading = "Caricamento pagina, attendere prego ..";
@@ -169,4 +169,5 @@ $MakeScormRecordingNormal = "Usa funzioni  SCORM normali";
 $DocumentHasBeenDeleted = "Il docimento non è visibile perché è stato eliminato";
 $EditCurrentForum = "Modifica il forum";
 $NoPrerequisites = "Nessun prerequisito";
+$NewExercise = "Nuovo Test";
 ?>

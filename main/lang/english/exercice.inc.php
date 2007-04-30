@@ -216,4 +216,11 @@ $ExerciseStored = "The exercice has been stored";
 $ChooseAtLeastOneCheckbox = "Choose at least one good answer";
 $ExerciseEdited = "The exercise has been edited";
 $ExerciseDeleted = "The exercise has been deleted";
+$ClickToCommentAndGiveFeedback = "Click the following link to check the answer and give feedbacks";
+$OpenQuestionsAttempted = "An open question has been attempted";
+$AttemptDetails = "Attempt details";
+$TestAttempted = "Test attempted";
+$StudentName = "Student\'s name";
+$StudentEmail = "Student email";
+$OpenQuestionsAttemptedAre = "Open question attempted is";
 ?>

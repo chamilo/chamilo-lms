@@ -45,4 +45,5 @@ $FileToUpload = "Fichier à envoyer";
 $ContentMaker = "Créateur du contenu";
 $ContentProximity = "Situation du parcours";
 $UploadLocalFileFromGarbageDir = "Intégrer un fichier déposé par FTP sur le serveur";
+$ThisItemIsNotExportable = "Cet item n\'est pas compatible SCORM pour le moment. Il n\'est donc pas exportable.";
 ?>

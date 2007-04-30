@@ -169,4 +169,5 @@ $MakeScormRecordingNormal = "Obièajno beleženje SCORM(a)";
 $DocumentHasBeenDeleted = "Ta dokument je bil odstranjen in ga ne morem prikazati";
 $EditCurrentForum = "Uredi trenuten forum";
 $NoPrerequisites = "Brez predzahtev";
+$NewExercise = "Nov test";
 ?>

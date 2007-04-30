@@ -169,4 +169,5 @@ $MakeScormRecordingNormal = "SCORM normál felvételek létrehozása";
 $DocumentHasBeenDeleted = "A dokumentumot nem lehet megjeleníteni, mert törölve lett";
 $EditCurrentForum = "Fórum szerkesztése";
 $NoPrerequisites = "Nincsenek el&#337;feltételek";
+$NewExercise = "Új teszt";
 ?>

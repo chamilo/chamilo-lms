@@ -30,4 +30,6 @@ $langDirCr = "Izveidot mapi";
 $langCurrentDir = "patreiz&#275;j&#257; mape";
 $UploadADocument = "Augšupiel&#257;d&#275;t dokumentu";
 $EditToolOptions = "Main&#299;t darbar&#299;ku iestat&#299;jumus";
+$DocumentDeleted = "Dokuments izdz&#275;sts";
+$DirDelete = "Izdz&#275;st direktoriju";
 ?>

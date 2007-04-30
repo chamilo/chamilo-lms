@@ -216,4 +216,11 @@ $ExerciseStored = "L\'exercice a bien été ajouté";
 $ChooseAtLeastOneCheckbox = "Choisissez une bonne réponse";
 $ExerciseEdited = "L\'exercice a bien été édité";
 $ExerciseDeleted = "L\'exercice a bien été supprimé";
+$ClickToCommentAndGiveFeedback = "Cliquez sur le lien suivant pour corriger la réponse et la commenter";
+$OpenQuestionsAttempted = "Une question ouverte a été tentée";
+$AttemptDetails = "Détails de l\'essai";
+$TestAttempted = "Nom de l\'exercice";
+$StudentName = "Nom de l\'étudiant";
+$StudentEmail = "Email de l\'étudiant";
+$OpenQuestionsAttemptedAre = "La question ouverte tentée est";
 ?>

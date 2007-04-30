@@ -45,4 +45,5 @@ $FileToUpload = "File to upload";
 $ContentMaker = "Content Maker";
 $ContentProximity = "Content Proximity";
 $UploadLocalFileFromGarbageDir = "Upload local file from main/garbage directory";
+$ThisItemIsNotExportable = "This item is not scorm compatible for the moment. That\'s why it is not exportable.";
 ?>

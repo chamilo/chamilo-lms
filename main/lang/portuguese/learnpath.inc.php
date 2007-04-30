@@ -169,4 +169,5 @@ $MakeScormRecordingNormal = "Fazer gravações SCORM normais";
 $DocumentHasBeenDeleted = "O documento não pode ser mostrado porque foi apagado.";
 $EditCurrentForum = "Editar este fórum";
 $NoPrerequisites = "Sem pré-requisitos";
+$NewExercise = "Novo exercício";
 ?>

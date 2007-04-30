@@ -109,4 +109,5 @@ $PleaseCheckTheseValues = "Verifique, por favor, estes valores";
 $PleaseGoBackToStep = "Volte, por favor, para a Etapa";
 $DBSettingUpgradeIntro = "O script de actualização vai recuperar e actualizar as bases de dados de Dokeos. Para isso, este script usará as bases de dados e configurações definidas abaixo. Em virtude da diversidade de sistemas em que Dokeos está instalado e porque nem sempre esses sistemas foram testados previamente, recomendamos vivamente que faça um cópia total das bases de dados antes de prosseguir com a actualização !";
 $ExtensionMBStringNotAvailable = "Extensão MBString não disponível";
+$ExtensionMySQLNotAvailable = "Extensão MySQL não disponível";
 ?>

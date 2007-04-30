@@ -111,4 +111,5 @@ $PleaseGoBackToStep = "Prodim, pojdite nazaj na korak";
 $DBSettingUpgradeIntro = "Postopek bo obnovil in nadgradil Dokeos podatkovne baze. V postopku nadgraditve bodo uporabljene podatkovne baze in nastavitve, kot so podane spodaj. 
 Strogo priporo&#269;amo, da izvedete popolno arhivsko kopijo vaših podatkovnih baz, predenj nadaljujete spostopkom nadgrajevanja. ";
 $ExtensionMBStringNotAvailable = "MBString razširitev ni na voljo";
+$ExtensionMySQLNotAvailable = "MySQL razširitev ni na voljo";
 ?>

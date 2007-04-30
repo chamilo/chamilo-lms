@@ -434,7 +434,6 @@ switch($_REQUEST['action'])
 		else{
 			$_SESSION['refresh'] = 1;
 			require('lp_edit.php');
-			//require('lp_admin_view.php');
 		}
 		break;
 	case 'update_lp':
@@ -460,7 +459,7 @@ switch($_REQUEST['action'])
 				require('resourcelinker.php');
 				//$_SESSION['oLP']->add_sub_item($_REQUEST['parent_item_id'],$_REQUEST['previous'],$_REQUEST['type'],$_REQUEST['path'],$_REQUEST['title']);
 			}else{
-				require('lp_admin_view.php');
+				require('kevin_lp_admin_view.php');
 			}
 		}
 		break;
@@ -473,7 +472,7 @@ switch($_REQUEST['action'])
 			if(!empty($_REQUEST['id'])){
 				$_SESSION['oLP']->delete_item($_REQUEST['id']);
 			}
-			require('lp_admin_view.php');
+			require('kevin_lp_admin_view.php');
 		}
 		break;
 	case 'edititemprereq':
@@ -485,7 +484,7 @@ switch($_REQUEST['action'])
 				$_SESSION['refresh'] = 1;
 				$_SESSION['oLP']->edit_item_prereq($_REQUEST['id'],$_REQUEST['prereq']);
 			}
-			require('lp_admin_view.php');
+			require('kevin_lp_admin_view.php');
 		}
 		break;
 	case 'restart':

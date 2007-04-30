@@ -6740,7 +6740,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 		
 		 		
 		 		//get the path of the file(s) from the course directory root
-				$my_file_path = $item->get_file_path();
+				$my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
+				
 				$my_xml_file_path = htmlentities($my_file_path); 
 				$my_sub_dir = dirname($my_file_path); 
 				$my_xml_sub_dir = htmlentities($my_sub_dir);
@@ -6838,8 +6839,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 		//$my_dependency = $xmldoc->createElement('dependency');
 		 		//$my_dependency->setAttribute('identifierref','');
 		 		$resources->appendChild($my_resource);
-		 		
 		 		$zip_files[] = $my_file_path;
+		 		
 				//error_log('File '.$my_file_path. ' added to $zip_files',0);
 	 		}
 	 		else

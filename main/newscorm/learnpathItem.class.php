@@ -269,7 +269,7 @@ class learnpathItem{
      * Gets the file path from the course's root directory, no matter what tool it is from.
      * @return	string	The file path, or an empty string if there is no file attached, or '-1' if the file must be replaced by an error page
      */
-    function get_file_path(){
+    function get_file_path($path_to_scorm_dir=''){
     	if($this->debug>0){error_log('New LP - In learnpathItem::get_file_path()',0);}
     	$path = $this->get_path();
    		$type = $this->get_type();
@@ -307,6 +307,10 @@ class learnpathItem{
     				return '-1';
     		}
     	}else{
+    		if(!empty($path_to_scorm_dir))
+    		{
+    			$path = $path_to_scorm_dir.$path;
+    		}
     		return $path;
     	}
     }
@@ -503,7 +507,7 @@ class learnpathItem{
 						case 'htm':
 						case 'shtml':
 						case 'css':
-					 		$wanted_attributes = array('src','url','@import','href');
+					 		$wanted_attributes = array('src','url','@import','href','value');
 			    			//parse it for included resources
 			    			/*
 			    			$fh = fopen($abs_path,'r');
@@ -532,8 +536,17 @@ class learnpathItem{
 								{
 									//find which kind of path these are (local or remote)
 									$sources = $attributes[$attr];
+									
 									foreach($sources as $source)
 									{
+										
+										if($attr == 'value')
+										{
+											if(strpos($source , 'mp3file'))
+											{
+												$files_list[] = array(substr($source , strpos($source , 'mp3file=')+8),'local','rel');
+											}
+										}
 										if(strstr($source,'://') > 0)
 										{
 											//found some protocol there

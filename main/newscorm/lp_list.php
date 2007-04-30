@@ -102,10 +102,6 @@ if(api_is_allowed_to_edit())
     Display::display_normal_message(api_failure::get_last_failure());
   }
   
-  if($_REQUEST['action']=='add_lp' && !($new_lp_id>0)){
-  	require('lp_add.php');
-  }
-
   include('content_makers.inc.php');
   echo	'<a href="'.$_SERVER['PHP_SELF'].'?action=add_lp">'.
 		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="scormbuilder">&nbsp;'.get_lang('_add_learnpath').

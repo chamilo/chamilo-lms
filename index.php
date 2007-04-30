@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12104 2007-04-24 12:40:13Z elixir_julian $
+* 	@version $Id: index.php 12186 2007-04-30 04:23:02Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -545,7 +545,7 @@ function display_anonymous_course_list()
 				elseif ($catLine['children_count'] > 0)
 				{
 					//the category has children, subcategories
-					$htmlListCat .= "<a href=\"".$_SERVER['PHP_SELF']."?category=".$catLine['code']."\">".$catLine['name']."</a>";
+					$htmlListCat .= "<a href=\"".api_get_self()."?category=".$catLine['code']."\">".$catLine['name']."</a>";
 				}
 				/************************************************************************
 				 end changed code to eliminate the (0 courses) after empty categories
@@ -566,7 +566,7 @@ function display_anonymous_course_list()
 				}
 				if (!is_null($catLine['parent_id']) || ($_setting['show_back_link_on_top_of_tree'] <> 'true' && !is_null($catLine['code'])))
 				{
-					$htmlTitre .= "<a href=\"".$_SERVER['PHP_SELF']."?category=".$catLine['parent_id']."\">"."&lt;&lt; ".get_lang("Up")."</a>";
+					$htmlTitre .= "<a href=\"".api_get_self()."?category=".$catLine['parent_id']."\">"."&lt;&lt; ".get_lang("Up")."</a>";
 				}
 				$htmlTitre .= "</p>\n";
 				if ($category != "" && !is_null($catLine['code']))
@@ -617,7 +617,7 @@ function display_anonymous_course_list()
 	}
 	if ($category != "")
 	{
-		echo "<p>", "<a href=\"".$_SERVER['PHP_SELF']."\"><b>&lt;&lt;</b> ", get_lang("BackToHomePage"), "</a>", "</p>\n";
+		echo "<p>", "<a href=\"".api_get_self()."\"><b>&lt;&lt;</b> ", get_lang("BackToHomePage"), "</a>", "</p>\n";
 	}
 }
 ?>

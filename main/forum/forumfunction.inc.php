@@ -2327,20 +2327,19 @@ function send_mail($user_info=array(), $thread_information=array())
 		$thread_link= api_get_path('WEB_CODE_PATH').'forum/viewthread.php?forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
 		//http://157.193.57.110/dokeos_cvs/claroline/forum/viewthread.php?forum=12&thread=49
 	}
-	$email_body=get_lang('Dear')." ".$user_info['firstname']." ".$user_info['lastname']."\n\r";
-	$email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]\n";
+	$email_body= $user_info['firstname']." ".$user_info['lastname']."\n\r";
+	$email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br>\n";
 	$email_body .= get_lang('NewForumPost')."\n";
-	$email_body .= get_lang('YouWantedToStayInformed')."\n";
-	$email_body .= get_lang('ThreadCanBeFoundHere').":".$thread_link."\n";
+	$email_body .= get_lang('YouWantedToStayInformed')."<br><br>\n";
+	$email_body .= get_lang('ThreadCanBeFoundHere')." : <a href=\"".$thread_link."\">".$thread_link."</a>\n";
 
 	//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
 	//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
 	if(empty($charset)){$charset='ISO-8859-1';}
 
-	$encoding = 'Content-Type: text/html; charset='. $charset;
 	if ($user_info['user_id']<>$_user['user_id'])
 	{
-		$newmail = api_mail($user_info["lastname"].' '.$user_info["firstname"], $user_info["email"], $email_subject, $email_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail'],$encoding);
+		$newmail = api_mail_html($user_info["lastname"].' '.$user_info["firstname"], $user_info["email"], $email_subject, $email_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail']);
 	}
 }
 

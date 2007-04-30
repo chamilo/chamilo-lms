@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 12050 2007-04-18 13:05:09Z elixir_julian $
+* 	@version $Id: exercise_result.php 12195 2007-04-30 12:30:38Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -651,7 +651,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					$firstName =   $_SESSION['_user']['firstName'];
 					$lastName =   $_SESSION['_user']['lastName'];
 					$mail =  $_SESSION['_user']['mail'];
-					$coursecode =  $_SESSION['_course']['official_code'];
+					$coursecode =  $_SESSION['_course']['id'];
 					$query1 = "SELECT user_id from $main_course_user_table where course_code= '$coursecode' and status = '1' LIMIT 0,1";
 					$result1 = api_sql_query($query1, __FILE__, __LINE__);
 					$temp = mysql_result($result1,0,"user_id");
@@ -907,25 +907,25 @@ color: #000000;
 	//
 	$msg .= "</head>
 <body><br>
-<p>".get_lang('OpenQuestionsAttempted')."
+<p>".get_lang('OpenQuestionsAttempted')." : 
 </p>
-<p>Attempt Details : ><br>
+<p>".get_lang('AttemptDetails')." : ><br>
 </p>
 <table width='730' height='136' border='0' cellpadding='3' cellspacing='3'>
 					<tr>
-    <td width='229' valign='top'  class='mybody'>&nbsp;&nbsp;Course Name</td>
+    <td width='229' valign='top'  class='mybody'>&nbsp;&nbsp;".get_lang('CourseName')."</td>
     <td width='469' valign='top'  class='mybody'>#course#</td>
   </tr>
   <tr>
-    <td width='229' valign='top' class='outerframe'>&nbsp;&nbsp;".get_lang('TestAttempted')."Test Attempted</span></td>
+    <td width='229' valign='top' class='outerframe'>&nbsp;&nbsp;".get_lang('TestAttempted')."</span></td>
     <td width='469' valign='top' class='outerframe'>#exercise#</td>
   </tr>
   <tr>
-    <td valign='top'>&nbsp;&nbsp;<span class='style10'>Student's Name </span></td>
+    <td valign='top'>&nbsp;&nbsp;<span class='style10'>".get_lang('StudentName')." </span></td>
     <td valign='top' >#firstName# #lastName#</td>
   </tr>
   <tr>
-    <td valign='top' >&nbsp;&nbsp;Student's Email ID </td>
+    <td valign='top' >&nbsp;&nbsp;".get_lang('StudentEmail')." </td>
     <td valign='top'> #mail#</td>
 </tr></table>
 <p><br>
@@ -936,11 +936,11 @@ color: #000000;
   {
   $msg.="
 	<tr>
-    <td width='220' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Question</span></td>
+    <td width='220' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>".get_lang('Question')."</span></td>
     <td width='473' valign='top' bgcolor='F3F3F3'><span class='style16'> #questionName#</span></td>
   	</tr>
   	<tr>
-    <td width='220' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Answer </span></td>
+    <td width='220' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>".get_lang('Answer')." </span></td>
     <td valign='top' bgcolor='F3F3F3'><span class='style16'> #answer#</span></td>
   	</tr>";
 
@@ -955,7 +955,7 @@ color: #000000;
 
 	}
 	$msg.="</table><br>
- 	<span class='style16'>Click the following links tp check the answer and give feedbacks,<br>
+ 	<span class='style16'>".get_lang('ClickToCommentAndGiveFeedback').",<br>
 <a href='#url#'>#url#</a></span></body></html>";
 
 
@@ -963,7 +963,6 @@ color: #000000;
 	$mail_content = stripslashes($msg1);
 	$student_name = $_SESSION[_user][firstName].' '.$_SESSION[_user][lastName];
 	$subject = get_lang('OpenQuestionsAttempted');
-	$headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=iso-8859-15";
-	api_mail($student_name, $to, $subject, $mail_content, $from_name, $from, $headers);
+	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from);
 }
 ?>

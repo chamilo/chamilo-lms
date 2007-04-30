@@ -233,7 +233,9 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 		{
 			// generating the unique code
 			$invitation_code = md5($value.microtime());
-
+			$survey_link = '';
+			$full_invitation_text= '';
+						
 			// storing the invitation (only if the user_id is not in $already_invited['course_users'] OR email is not in $already_invited['additional_users']
 			if ((is_numeric($value) AND !in_array($value,$already_invited['course_users'])) OR (!is_numeric($value) AND !strstr($already_invited['additional_users'], $value)) AND !empty($value))
 			{
@@ -243,11 +245,7 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 
 				// replacing the **link** part with a valid link for the user
 				$survey_link = $_configuration['root_web'].$_configuration['code_append'].'survey/'.'fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$invitation_code;
-				$invitation_text = str_ireplace('**link**', $survey_link ,$invitation_text, $replace_count);
-				if ($replace_count < 1)
-				{
-					$invitation_text = $invitation_text . $survey_link;
-				}
+				$full_invitation_text = $invitation_text . $survey_link;
 
 				// optionally: finding the e-mail of the course user
 				if (is_numeric($value))
@@ -267,9 +265,8 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 				// sending the mail
 				$sender_name  = $_user['firstName'].' '.$_user['lastName'];
 				$sender_email = $_user['mail'];
-				//echo $recipient_name.'-'.$recipient_email.'-'.$invitation_title.'-'.$invitation_text.'-'.$sender_name.'-'.$sender_email.'-';
 				
-				api_mail_html($recipient_name, $recipient_email, $invitation_title, $invitation_text, $sender_name, $sender_email, '');
+				api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, '');
 				//mail($recipient_email, strip_tags($invitation_title), strip_tags($invitation_text));
 				$counter++;
 			}

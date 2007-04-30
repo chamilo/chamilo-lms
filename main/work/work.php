@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 12084 2007-04-23 12:47:19Z elixir_julian $
+*  	@version $Id: work.php 12203 2007-04-30 14:06:24Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -465,7 +465,6 @@ if (api_is_allowed_to_edit())
 	 --------------------*/
 	if(!empty($_REQUEST['delete_dir']))
 	{
-		//TODO implement
 		del_dir($base_work_dir.'/',$_REQUEST['delete_dir']);
 		Display::display_normal_message($_REQUEST['delete_dir'].' '.get_lang('DirDeleted'));
 	}
@@ -599,7 +598,8 @@ else
 
 $error_message="";
 
-if($_POST['submitWork'] && $is_course_member)
+$check = Security::check_token('post'); //check the token inserted into the form
+if($_POST['submitWork'] && $is_course_member && $check)
 {
 	if($_FILES['file']['size'])
 	{
@@ -739,10 +739,11 @@ if($_POST['submitWork'] && $is_course_member)
 			$error_message = get_lang('TooBig');
 		}
 	}
+	Security::clear_token();//clear the token to prevent re-executing the request with back button
 }
 if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is not "just" an edit
 {
-		//YW Tis part serve to send a e-mail to the tutors when a new file is send
+		//YW Tis part serve to send a e-mail to the tutors when a new file is sent
 	// Lets predefine some variables. Be sure to change the from address!
 	$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -801,6 +802,7 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 	{
 		if ($display_upload_form || $edit)
 		{
+			$token = Security::get_token(); //generate token to be used to check validity of request
 			if($edit){
 				//Get the author ID for that document from the item_property table
 				$is_author = false;
@@ -859,7 +861,8 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 
 			$form->addElement('hidden', 'active', 1);
 			$form->addElement('hidden', 'accepted', 1);
-
+			$form->addElement('hidden', 'sec_token', $token);
+			
 			$form->addElement('submit', 'submitWork', get_lang('Ok'));
 
 			if(empty($authors))

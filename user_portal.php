@@ -1041,8 +1041,6 @@ else
 
 if (is_array($list))
 {
-	//print_r($list);
-
 	//Courses whithout sessions
 	$old_user_category = 0;
 	foreach($list as $key=>$value)
@@ -1096,16 +1094,15 @@ if (is_array($list))
 					if($key != 0){
 						echo "\n</ul>";
 					}
-					echo "\n\n\t<ul class=\"user_course_category\"><li>".$value[3]."</li></ul>\n";
+					echo "\n\n\t<ul class=\"user_course_category\" style=\"margin-bottom: 10px;\"><li>".$value[3]."</li></ul>\n";
 
-					echo "<ul>";
 				}
 			}
 			echo $value[1];
 
 		}
 
-		echo "\n</ul></ul><br /><br />\n";
+		echo "\n</ul><br /><br />\n";
 
 	}
 

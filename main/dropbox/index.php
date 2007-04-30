@@ -107,6 +107,10 @@ Version 1.3 (Patrick Cool)
 - same action on multiple documents ([zip]download, move, delete)
 - consistency with the docuements tool (open/download file, icons of documents, ...)
 - zip download of complete folder
+
+Version 1.4 (Yannick Warnier)
+-----------------------------
+- removed all self-built database tables names
 ==============================================================================
  */
 

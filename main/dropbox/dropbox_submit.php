@@ -527,7 +527,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 
 			    $sendDT = addslashes(date("Y-m-d H:i:s",time()));
 			    // set filesize to zero on send, to avoid 2nd send (see index.php)
-				$sql = "UPDATE `".dropbox_cnf("fileTbl")."`
+				$sql = "UPDATE ".dropbox_cnf("tbl_file")."
 						SET filesize = '0'
 						, upload_date = '".$sendDT."', last_upload_date = '".$sendDT."'
 						WHERE id='".addslashes($mailing_item->id)."'";

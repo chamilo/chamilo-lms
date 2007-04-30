@@ -160,7 +160,7 @@ class Dropbox_Work {
 		// with updated information (authors, descriptio, upload_date)
 		$this->isOldWork = FALSE;
 		$sql="SELECT id, upload_date 
-				FROM `".dropbox_cnf("fileTbl")."` 
+				FROM ".dropbox_cnf("tbl_file")." 
 				WHERE filename = '".addslashes($this->filename)."'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
 		$res = mysql_fetch_array($result);
@@ -171,7 +171,7 @@ class Dropbox_Work {
 		{
 			$this->id = $res["id"];
 			$this->upload_date = $res["upload_date"];
-		    $sql = "UPDATE `".dropbox_cnf("fileTbl")."`
+		    $sql = "UPDATE ".dropbox_cnf("tbl_file")."
 					SET filesize = '".addslashes($this->filesize)."'
 					, title = '".addslashes($this->title)."'
 					, description = '".addslashes($this->description)."'
@@ -183,7 +183,7 @@ class Dropbox_Work {
 		else 
 		{
 			$this->upload_date = $this->last_upload_date;
-			$sql="INSERT INTO `".dropbox_cnf("fileTbl")."` 
+			$sql="INSERT INTO ".dropbox_cnf("tbl_file")." 
 				(uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date)
 				VALUES ('".addslashes($this->uploader_id)."'
 						, '".addslashes($this->filename)."'
@@ -200,7 +200,7 @@ class Dropbox_Work {
 		}
 		
 		// insert entries into person table
-		$sql="INSERT INTO `".dropbox_cnf("personTbl")."` 
+		$sql="INSERT INTO ".dropbox_cnf("tbl_person")." 
 				(file_id, user_id)
 				VALUES ('".addslashes($this->id)."'
 						, '".addslashes($this->uploader_id)."'
@@ -222,7 +222,7 @@ class Dropbox_Work {
 
 		// get the data from DB
 		$sql="SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
-				FROM `".dropbox_cnf("fileTbl")."`
+				FROM ".dropbox_cnf("tbl_file")."
 				WHERE id='".addslashes($id)."'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
 		$res = mysql_fetch_array($result,MYSQL_ASSOC);
@@ -258,7 +258,7 @@ class Dropbox_Work {
 		if ($_GET['action']=='viewfeedback' AND $this->id==$_GET['id'])
 		{
 			$feedback2=array();
-			$sql_feedback = "SELECT * FROM `".dropbox_cnf("tbl_feedback")."` WHERE file_id='".$id."' ORDER BY feedback_id ASC";
+			$sql_feedback = "SELECT * FROM ".dropbox_cnf("tbl_feedback")." WHERE file_id='".$id."' ORDER BY feedback_id ASC";
 			$result = api_sql_query($sql_feedback, __FILE__, __LINE__);
 			while ($row_feedback=mysql_fetch_array($result))
 			{
@@ -270,8 +270,8 @@ class Dropbox_Work {
 		
 		/*
 		// RH: Feedback
-		$result = api_sql_query("SELECT feedback_date, feedback, cat_id FROM `".
-		    dropbox_cnf("postTbl")."` WHERE dest_user_id='".$_user['user_id'].
+		$result = api_sql_query("SELECT feedback_date, feedback, cat_id FROM ".
+		    dropbox_cnf("tbl_post")." WHERE dest_user_id='".$_user['user_id'].
 		    "' AND file_id='".$id."'",__FILE__,__LINE__);		
 		if ($res = mysql_fetch_array($result))
 		{
@@ -355,13 +355,13 @@ class Dropbox_SentWork extends Dropbox_Work
 		// insert data in dropbox_post and dropbox_person table for each recipient
 		foreach ($this->recipients as $rec)
 		{
-			$sql="INSERT INTO `".dropbox_cnf("postTbl")."` 
+			$sql="INSERT INTO ".dropbox_cnf("tbl_post")." 
 				(file_id, dest_user_id)
 				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."')";
 	        $result = api_sql_query($sql);	//if work already exists no error is generated
 						
 			//insert entries into person table
-			$sql="INSERT INTO `".dropbox_cnf("personTbl")."` 
+			$sql="INSERT INTO ".dropbox_cnf("tbl_person")." 
 				(file_id, user_id)
 				VALUES ('".addslashes($this->id)."'
 						, '".addslashes($rec["id"])."'
@@ -401,7 +401,7 @@ class Dropbox_SentWork extends Dropbox_Work
 		//Fill in recipients array/
 		$this->recipients = array();  // RH: Feedback: added to SELECT
 		$sql="SELECT dest_user_id, feedback_date, feedback 
-				FROM `".dropbox_cnf("postTbl")."`
+				FROM ".dropbox_cnf("tbl_post")."
 				WHERE file_id='".addslashes($id)."'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
 		while ($res = mysql_fetch_array($result))
@@ -434,13 +434,13 @@ class Dropbox_Person
 						//the receivedWork and the sentWork arrays are sorted
 
 	/**
-		* Constructor for recreating the Dropbox_Person object
+	 * Constructor for recreating the Dropbox_Person object
 	 *
 	 * @param unknown_type $userId
 	 * @param unknown_type $isCourseAdmin
 	 * @param unknown_type $isCourseTutor
 	 * @return Dropbox_Person
-		*/
+	 */
 	function Dropbox_Person ($userId, $isCourseAdmin, $isCourseTutor)
 	{
 		// Fill in properties
@@ -452,11 +452,14 @@ class Dropbox_Person
 
 		//Note: perhaps include an ex coursemember check to delete old files
 		
+		$post_tbl = Database::get_course_table();
+		$person_tbl = Database::get_course_table();
+		$file_tbl = Database::get_course_table();
 		// find all entries where this person is the recipient
 		$sql = "SELECT r.file_id
 				FROM 
-					`".dropbox_cnf("postTbl")."` r
-					, `".dropbox_cnf("personTbl")."` p
+					".dropbox_cnf("tbl_post")." r
+					, ".dropbox_cnf("tbl_person")." p
 				WHERE r.dest_user_id = '".addslashes($this->userId)."' 
 					AND r.dest_user_id = p.user_id
 					AND r.file_id = p.file_id";
@@ -467,7 +470,7 @@ class Dropbox_Person
 
 		// find all entries where this person is the sender/uploader
 		$sql = "SELECT f.id 
-				FROM `".dropbox_cnf("fileTbl")."` f, `".dropbox_cnf("personTbl")."` p 
+				FROM ".dropbox_cnf("tbl_file")." f, ".dropbox_cnf("tbl_person")." p 
 				WHERE f.uploader_id = '".addslashes($this->userId)."'
 				AND f.uploader_id = p.user_id
 				AND f.id = p.file_id";
@@ -588,7 +591,7 @@ class Dropbox_Person
 		//delete entries in person table concerning received works
 		foreach ($this->receivedWork as $w)
 		{
-			api_sql_query("DELETE FROM `".dropbox_cnf("personTbl")."` WHERE user_id='".$this->userId."' AND file_id='".$w->id."'",__FILE__,__LINE__);		
+			api_sql_query("DELETE FROM ".dropbox_cnf("tbl_person")." WHERE user_id='".$this->userId."' AND file_id='".$w->id."'",__FILE__,__LINE__);		
 		}
 		removeUnusedFiles();	//check for unused files
 
@@ -617,7 +620,7 @@ class Dropbox_Person
 		}
 		
 		//delete entries in person table concerning received works
-		api_sql_query("DELETE FROM `".dropbox_cnf("personTbl")."` WHERE user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);		
+		api_sql_query("DELETE FROM ".dropbox_cnf("tbl_person")." WHERE user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);		
 		
 		removeUnusedFiles();	//check for unused files
 	}
@@ -630,7 +633,7 @@ class Dropbox_Person
 		//delete entries in person table concerning sent works
 		foreach ($this->sentWork as $w)
 		{
-			api_sql_query("DELETE FROM `".dropbox_cnf("personTbl")."` WHERE user_id='".$this->userId."' AND file_id='".$w->id."'",__FILE__,__LINE__);		
+			api_sql_query("DELETE FROM ".dropbox_cnf("tbl_person")." WHERE user_id='".$this->userId."' AND file_id='".$w->id."'",__FILE__,__LINE__);		
 			removeMoreIfMailing($w->id);  // RH: Mailing: see init1
 		}		
 		removeUnusedFiles();	//check for unused files
@@ -658,7 +661,7 @@ class Dropbox_Person
 		//$file_id = $this->sentWork[$index]->id;  // RH: Mailing
 		
 		//delete entries in person table concerning sent works
-		api_sql_query("DELETE FROM `".dropbox_cnf("personTbl")."` WHERE user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);		
+		api_sql_query("DELETE FROM ".dropbox_cnf("tbl_person")." WHERE user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);		
 		
 		removeMoreIfMailing($id);  // RH: Mailing: see init1
 		removeUnusedFiles();	//check for unused files
@@ -690,7 +693,7 @@ class Dropbox_Person
 		$this->receivedWork[$wi]->feedback_date = $feedback_date;
 		$this->receivedWork[$wi]->feedback = $text;
 		
-		api_sql_query("UPDATE `".dropbox_cnf("postTbl")."` SET feedback_date='".
+		api_sql_query("UPDATE ".dropbox_cnf("tbl_post")." SET feedback_date='".
 		    addslashes($feedback_date)."', feedback='".addslashes($text).
 		    "' WHERE dest_user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);		
 

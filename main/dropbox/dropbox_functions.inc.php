@@ -126,13 +126,13 @@ function delete_category($action, $id)
 	if ($action=='deletereceivedcategory')
 	{
 		$sentreceived='received';
-		$entries_table=$dropbox_cnf['postTbl'];
+		$entries_table=$dropbox_cnf['tbl_post'];
 		$id_field='file_id';
 	}
 	elseif ($action=='deletesentcategory')
 	{
 		$sentreceived='sent';
-		$entries_table=$dropbox_cnf['fileTbl'];
+		$entries_table=$dropbox_cnf['tbl_file'];
 		$id_field='id';
 	}
 	else
@@ -145,7 +145,7 @@ function delete_category($action, $id)
 	$result=api_sql_query($sql);
 
 	// step 2: delete all the documents in this category
-	$sql="SELECT * FROM `".$entries_table."` WHERE cat_id='".Database::escape_string($id)."'";
+	$sql="SELECT * FROM ".$entries_table." WHERE cat_id='".Database::escape_string($id)."'";
 	$result=api_sql_query($sql);
 
 	while ($row=mysql_fetch_array($result))
@@ -209,7 +209,7 @@ function store_move($id, $target, $part)
 	{
 		if ($part=='received')
 		{
-			$sql="UPDATE `".$dropbox_cnf["postTbl"]."` SET cat_id='".Database::escape_string($target)."'
+			$sql="UPDATE ".$dropbox_cnf["tbl_post"]." SET cat_id='".Database::escape_string($target)."'
 						WHERE dest_user_id='".Database::escape_string($_user['user_id'])."'
 						AND file_id='".Database::escape_string($id)."'
 						";
@@ -218,7 +218,7 @@ function store_move($id, $target, $part)
 		}
 		if ($part=='sent')
 		{
-			$sql="UPDATE `".$dropbox_cnf["fileTbl"]."` SET cat_id='".Database::escape_string($target)."'
+			$sql="UPDATE ".$dropbox_cnf["tbl_file"]." SET cat_id='".Database::escape_string($target)."'
 						WHERE uploader_id='".Database::escape_string($_user['user_id'])."'
 						AND id='".Database::escape_string($id)."'
 						";
@@ -309,7 +309,7 @@ function get_dropbox_categories($filter='')
 
 	$return_array=array();
 
-	$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE user_id='".$_user['user_id']."'";
+	$sql="SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE user_id='".$_user['user_id']."'";
 
 	$result=api_sql_query($sql);
 	while ($row=mysql_fetch_array($result))
@@ -367,14 +367,14 @@ function store_addcategory()
 	if (!$_POST['edit_id'])
 	{
 		// step 3a, we check if the category doesn't already exist
-		$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE user_id='".$_user['user_id']."' AND cat_name='".Database::escape_string($_POST['category_name'])."' AND received='".$received."' AND sent='".$sent."'";
+		$sql="SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE user_id='".$_user['user_id']."' AND cat_name='".Database::escape_string($_POST['category_name'])."' AND received='".$received."' AND sent='".$sent."'";
 		$result=api_sql_query($sql);
 
 
 		// step 3b, we add the category if it does not exist yet.
 		if (mysql_num_rows($result)==0)
 		{
-			$sql="INSERT INTO `".$dropbox_cnf['tbl_category']."` (cat_name, received, sent, user_id)
+			$sql="INSERT INTO ".$dropbox_cnf['tbl_category']." (cat_name, received, sent, user_id)
 					VALUES ('".Database::escape_string($_POST['category_name'])."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', '".Database::escape_string($_user['user_id'])."')";
 			api_sql_query($sql);
 			return get_lang('CategoryStored');
@@ -386,7 +386,7 @@ function store_addcategory()
 	}
 	else
 	{
-		$sql="UPDATE `".$dropbox_cnf['tbl_category']."` SET cat_name='".Database::escape_string($_POST['category_name'])."', received='".Database::escape_string($received)."' , sent='".Database::escape_string($sent)."'
+		$sql="UPDATE ".$dropbox_cnf['tbl_category']." SET cat_name='".Database::escape_string($_POST['category_name'])."', received='".Database::escape_string($received)."' , sent='".Database::escape_string($sent)."'
 				WHERE user_id='".Database::escape_string($_user['user_id'])."'
 				AND cat_id='".Database::escape_string($_POST['edit_id'])."'";
 		api_sql_query($sql);
@@ -412,7 +412,7 @@ function display_addcategory_form($category_name='', $id='')
 	if (isset($id) AND $id<>'')
 	{
 		// retrieve the category we are editing
-		$sql="SELECT * FROM `".$dropbox_cnf['tbl_category']."` WHERE cat_id='".Database::escape_string($id)."'";
+		$sql="SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".Database::escape_string($id)."'";
 		$result=api_sql_query($sql);
 		$row=mysql_fetch_array($result);
 
@@ -622,7 +622,7 @@ function getUserNameFromId ( $id)  // RH: Mailing: return 'Mailing ' + id
     }
 
     $sql = "SELECT CONCAT(lastname,' ', firstname) AS name
-			FROM `" . dropbox_cnf("userTbl") . "`
+			FROM " . dropbox_cnf("tbl_user") . "
 			WHERE user_id='" . addslashes( $id) . "'";
     $result = api_sql_query($sql,__FILE__,__LINE__);
     $res = mysql_fetch_array( $result);
@@ -638,7 +638,7 @@ function getUserNameFromId ( $id)  // RH: Mailing: return 'Mailing ' + id
 function getLoginFromId ( $id)
 {
     $sql = "SELECT username
-			FROM `" . dropbox_cnf("userTbl") . "`
+			FROM " . dropbox_cnf("tbl_user") . "
 			WHERE user_id='" . addslashes( $id) . "'";
     $result =api_sql_query($sql,__FILE__,__LINE__);
     $res = mysql_fetch_array( $result);
@@ -667,16 +667,16 @@ function removeUnusedFiles( )
 {
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
-			FROM `" . dropbox_cnf("fileTbl") . "` f
-			LEFT JOIN `" . dropbox_cnf("personTbl") . "` p ON f.id = p.file_id
+			FROM " . dropbox_cnf("tbl_file") . " f
+			LEFT JOIN " . dropbox_cnf("tbl_person") . " p ON f.id = p.file_id
 			WHERE p.user_id IS NULL";
     $result = api_sql_query($sql,__FILE__,__LINE__);
     while ( $res = mysql_fetch_array( $result))
     {
 		//delete the selected files from the post and file tables
-        $sql = "DELETE FROM `" . dropbox_cnf("postTbl") . "` WHERE file_id='" . $res['id'] . "'";
+        $sql = "DELETE FROM " . dropbox_cnf("tbl_post") . " WHERE file_id='" . $res['id'] . "'";
         $result1 = api_sql_query($sql,__FILE__,__LINE__);
-        $sql = "DELETE FROM `" . dropbox_cnf("fileTbl") . "` WHERE id='" . $res['id'] . "'";
+        $sql = "DELETE FROM " . dropbox_cnf("tbl_file") . " WHERE id='" . $res['id'] . "'";
         $result1 = api_sql_query($sql,__FILE__,__LINE__);
 
 		//delete file from server
@@ -700,8 +700,8 @@ function removeUnusedFiles( )
 function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
 {
     $sql = "SELECT f.uploader_id
-			FROM `" . dropbox_cnf("fileTbl") . "` f
-			LEFT JOIN `" . dropbox_cnf("postTbl") . "` p ON f.id = p.file_id
+			FROM " . dropbox_cnf("tbl_file") . " f
+			LEFT JOIN " . dropbox_cnf("tbl_post") . " p ON f.id = p.file_id
 			WHERE p.dest_user_id = '" . $mailingPseudoId . "'";
     $result = api_sql_query($sql,__FILE__,__LINE__);
 
@@ -727,7 +727,7 @@ function removeMoreIfMailing($file_id)
     //    for all content files, replace mailingPseudoId by owner as uploader
 
     $sql = "SELECT p.dest_user_id
-			FROM `" . dropbox_cnf("postTbl") . "` p
+			FROM " . dropbox_cnf("tbl_post") . " p
 			WHERE p.file_id = '" . $file_id . "'";
     $result = api_sql_query($sql,__FILE__,__LINE__);
 
@@ -736,11 +736,11 @@ function removeMoreIfMailing($file_id)
 	    $mailingPseudoId = $res['dest_user_id'];
 	    if ( $mailingPseudoId > dropbox_cnf("mailingIdBase"))
 	    {
-	        $sql = "DELETE FROM `" . dropbox_cnf("personTbl") . "` WHERE user_id='" . $mailingPseudoId . "'";
+	        $sql = "DELETE FROM " . dropbox_cnf("tbl_person") . " WHERE user_id='" . $mailingPseudoId . "'";
 	        $result1 = api_sql_query($sql,__FILE__,__LINE__);
 
-	        $sql = "UPDATE `" . dropbox_cnf("fileTbl") .
-	            "` SET uploader_id='" . api_get_user_id() . "' WHERE uploader_id='" . $mailingPseudoId . "'";
+	        $sql = "UPDATE " . dropbox_cnf("tbl_file") .
+	            " SET uploader_id='" . api_get_user_id() . "' WHERE uploader_id='" . $mailingPseudoId . "'";
 	        $result1 = api_sql_query($sql,__FILE__,__LINE__);
         }
     }
@@ -1034,7 +1034,7 @@ function feedback_form()
 
 	// we now check if the other users have not delete this document yet. If this is the case then it is useless to see the
 	// add feedback since the other users will never get to see the feedback.
-	$sql="SELECT * FROM `".$dropbox_cnf["personTbl"]."` WHERE file_id='".Database::escape_string($_GET['id'])."'";
+	$sql="SELECT * FROM ".$dropbox_cnf["tbl_person"]." WHERE file_id='".Database::escape_string($_GET['id'])."'";
 	$result=api_sql_query($sql,__LINE__, __FILE__);
 	$number_users_who_see_file=mysql_num_rows($result);
 	if ($number_users_who_see_file>1)
@@ -1070,7 +1070,7 @@ function store_feedback()
 	}
 	else
 	{
-		$sql="INSERT INTO `".$dropbox_cnf['tbl_feedback']."` (file_id, author_user_id, feedback, feedback_date) VALUES
+		$sql="INSERT INTO ".$dropbox_cnf['tbl_feedback']." (file_id, author_user_id, feedback, feedback_date) VALUES
 				('".Database::escape_string($_GET['id'])."','".Database::escape_string($_user['user_id'])."','".Database::escape_string($_POST['feedback'])."',NOW())";
 		api_sql_query($sql);
 		return get_lang('DropboxFeedbackStored');
@@ -1112,7 +1112,7 @@ function zip_download ($array)
 
 	// note: we also have to add the check if the user has received or sent this file. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	$sql="SELECT distinct file.filename, file.title, file.author, file.description
-			FROM `".$dropbox_cnf["fileTbl"]."` file, `".$dropbox_cnf["personTbl"]."` person
+			FROM ".$dropbox_cnf["tbl_file"]." file, ".$dropbox_cnf["tbl_person"]." person
 			WHERE file.id IN (".implode(', ',$array).")
 			AND file.id=person.file_id
 			AND person.user_id='".$_user['user_id']."'";
@@ -1362,7 +1362,7 @@ function get_total_number_feedback($file_id='')
 {
 	global $dropbox_cnf;
 
-	$sql="SELECT COUNT(feedback_id) AS total, file_id FROM `".$dropbox_cnf['tbl_feedback']."` GROUP BY file_id";
+	$sql="SELECT COUNT(feedback_id) AS total, file_id FROM ".$dropbox_cnf['tbl_feedback']." GROUP BY file_id";
 	$result=api_sql_query($sql, __FILE__, __LINE__);
 	while ($row=mysql_fetch_array($result))
 	{

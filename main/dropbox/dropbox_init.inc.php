@@ -321,35 +321,4 @@ if(! $is_allowed_in_course || ! $is_courseMember)
 	}
 	exit();
 }
-
-
-/**
- * ========================================
- *       SANITY CHECK
- * ========================================
- * @todo This has to be moved to the install / update script
- */
-if (mysql_query("SELECT * FROM `".$dropbox_cnf['tbl_category']."`")==false)
-{
-	$sql="CREATE TABLE `".$dropbox_cnf['tbl_category']."` (
-			  `cat_id` int(11) NOT NULL auto_increment,
-			  `cat_name` text NOT NULL,
-			  `received` enum('0','1') NOT NULL default '0',
-			  `sent` enum('0','1') NOT NULL default '0',
-			  `user_id` int(11) NOT NULL default '0',
-			  PRIMARY KEY  (`cat_id`)
-			  );";
-	api_sql_query($sql);
-}
-
-if (mysql_query("SELECT cat_id FROM `".$dropbox_cnf["fileTbl"]."`")==false)
-{
-	$sql="ALTER TABLE `".$dropbox_cnf["fileTbl"]."`
-			ADD `cat_id` int(11) NOT NULL default '0'";
-	api_sql_query($sql);
-}
-
-
-
-
 ?>

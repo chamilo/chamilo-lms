@@ -33,14 +33,14 @@ $DEBUG = TRUE;
  *       DATABASE TABLE VARIABLES
  * --------------------------------------
  */
-$dropbox_cnf["postTbl"] 		= $_course["dbNameGlu"] . "dropbox_post";
-$dropbox_cnf["fileTbl"] 		= $_course["dbNameGlu"] . "dropbox_file";
-$dropbox_cnf["personTbl"] 		= $_course["dbNameGlu"] . "dropbox_person";
-$dropbox_cnf["introTbl"] 		= $_course["dbNameGlu"] . "tool_intro";
-$dropbox_cnf["userTbl"] 		= $_configuration['main_database'] . "`.`user";
-$dropbox_cnf["courseUserTbl"] 	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$dropbox_cnf['tbl_category'] 	= $_course["dbNameGlu"] . "dropbox_category";
-$dropbox_cnf['tbl_feedback'] 	= $_course["dbNameGlu"] . "dropbox_feedback";
+$dropbox_cnf['tbl_post'] 		= Database::get_course_table(TABLE_DROPBOX_POST);
+$dropbox_cnf['tbl_file'] 		= Database::get_course_table(TABLE_DROPBOX_FILE);
+$dropbox_cnf['tbl_person'] 		= Database::get_course_table(TABLE_DROPBOX_PERSON);
+$dropbox_cnf['tbl_intro'] 		= Database::get_course_table(TABLE_TOOL_INTRO);
+$dropbox_cnf['tbl_user'] 		= Database::get_main_table(TABLE_MAIN_USER);
+$dropbox_cnf['tbl_course_user']	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$dropbox_cnf['tbl_category'] 	= Database::get_course_table(TABLE_DROPBOX_CATEGORY);
+$dropbox_cnf['tbl_feedback'] 	= Database::get_course_table(TABLE_DROPBOX_FEEDBACK);
 
 /**
  * --------------------------------------

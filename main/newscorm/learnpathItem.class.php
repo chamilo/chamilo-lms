@@ -494,8 +494,9 @@ class learnpathItem{
     	$type = $this->get_type();
     	switch($type)
     	{
-    		case TOOL_DOCUMENT:
+    		case TOOL_DOCUMENT : case 'sco':
     			//get the document and, if HTML, open it
+    			
     			if(is_file($abs_path))
     			{
 	    			//for now, read the whole file in one go (that's gonna be a problem when the file is too big)

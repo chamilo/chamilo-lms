@@ -6704,7 +6704,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 		if(!in_array($item->type , array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK)))
 	 		{
 		 		//get included documents from this item
-		 		$inc_docs = $item->get_resources_from_source();
+		 		if($item->type=='sco')
+		 			$inc_docs = $item->get_resources_from_source(null,api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.'scorm/'.$this->path.'/'.$item->get_path());
+		 		else
+		 			$inc_docs = $item->get_resources_from_source();
 		 		//error_log('Dealing with document '.$item->get_file_path().', found included documents: '.print_r($inc_docs,true),0);
 		 		//give a child element <item> to the <organization> element
 		 		$my_item = $xmldoc->createElement('item');

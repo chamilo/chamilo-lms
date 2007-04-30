@@ -6804,9 +6804,13 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			 					}
 			 					else if (empty($file_path))
 			 					{
-			 						$file_path = $_SERVER['DOCUMENT_ROOT'].$doc_info[0];
-			 						$file_path = substr($file_path,strlen($root_path)+1);
-			 						//echo $file_path;echo '<br><br>';
+			 						/*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH),api_get_path(REL_PATH)));
+			 						if(strpos($document_root,-1)=='/')
+			 						{
+			 							$document_root = substr(0, -1, $document_root);
+			 						}*/
+			 						$file_path = substr($doc_info[0],strlen(api_get_path(REL_PATH)));
+			 						//echo $file_path.'<br><br>';
 			 						//error_log('Reduced path: '.$file_path,0);
 			 						$zip_files_abs[] = $file_path;
 			 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);

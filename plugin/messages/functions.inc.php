@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.survey
 * 	@author
-* 	@version $Id: functions.inc.php 10675 2007-01-11 13:03:10Z bmol $
+* 	@version $Id: functions.inc.php 12191 2007-04-30 11:06:34Z pcool $
 * 	@todo use database library
 */
 
@@ -58,7 +58,7 @@ function display_success_message($uid)
 			"inbox.php\">".
 			get_lang('BackToInbox').
 			"</a>";
-	Display::display_normal_message($success);
+	Display::display_confirmation_message($success, false);
 }
 
 /**

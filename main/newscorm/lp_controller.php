@@ -169,7 +169,7 @@ switch($_REQUEST['action'])
 			{				
 				if(isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time'])
 				{
-					require('kevin_lp_add_item.php');
+					require('lp_add_item.php');
 				}
 				else
 				{
@@ -193,12 +193,12 @@ switch($_REQUEST['action'])
 						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
 					}
 					
-					require('kevin_lp_add_item.php');
+					require('lp_add_item.php');
 				}
 			}
 			else
 			{
-				require('kevin_lp_add_item.php');
+				require('lp_add_item.php');
 			}
 		}
 		
@@ -216,7 +216,7 @@ switch($_REQUEST['action'])
 			
 			if(isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_REQUEST['post_time'])
 			{
-				require('kevin_lp_add.php');
+				require('lp_add.php');
 			}
 			else
 			{
@@ -239,7 +239,7 @@ switch($_REQUEST['action'])
 			}
 		}
 		else
-			require('kevin_lp_add.php');
+			require('lp_add.php');
 		
 		break;
 		

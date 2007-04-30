@@ -544,6 +544,7 @@ class learnpathItem{
 										{
 											if(strpos($source , 'mp3file'))
 											{
+												$files_list[] = array(substr($source, 0, strpos($source , '.swf')+4),'local','abs');
 												$files_list[] = array(substr($source , strpos($source , 'mp3file=')+8),'local','rel');
 											}
 										}

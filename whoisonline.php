@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 11180 2007-02-21 14:24:39Z elixir_julian $
+<?php // $Id: whoisonline.php 12187 2007-04-30 04:28:25Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -247,7 +247,7 @@ if ((get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR (get
 		{
 			if(0) // if ($_user['user_id'] && $_GET["id"] != $_user['user_id'])
 			{
-				echo '<a href="'.$_SERVER['PHP_SELF'].'?chatid='.$_GET['id'].'">'.get_lang('SendChatRequest').'</a>';
+				echo '<a href="'.api_get_self().'?chatid='.$_GET['id'].'">'.get_lang('SendChatRequest').'</a>';
 			}
 		}
 	}

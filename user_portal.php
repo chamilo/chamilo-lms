@@ -882,10 +882,10 @@ echo "<div class=\"maincontent\">"; // start of content for logged in users
 // link to see the session view or course view
 /*if(api_get_setting('use_session_mode')=='true' && api_is_allowed_to_create_course()) {
 	if(isset($_GET['sessionview'])){
-		echo '<a href="'.$_SERVER['PHP_SELF'].'">'.get_lang('CourseView').'</a>';
+		echo '<a href="'.api_get_self().'">'.get_lang('CourseView').'</a>';
 	}
 	else {
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?sessionview=true">'.get_lang('SessionView').'</a>';
+		echo '<a href="'.api_get_self().'?sessionview=true">'.get_lang('SessionView').'</a>';
 	}
 }*/
 

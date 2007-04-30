@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12186 2007-04-30 04:23:02Z yannoo $
+* 	@version $Id: index.php 12187 2007-04-30 04:28:25Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -536,7 +536,7 @@ function display_anonymous_course_list()
 				if ($category_has_open_courses)
 				{
 					//the category contains courses accessible to anonymous visitors
-					$htmlListCat .= "<a href=\"".$_SERVER['PHP_SELF']."?category=".$catLine['code']."\">".$catLine['name']."</a>";
+					$htmlListCat .= "<a href=\"".api_get_self()."?category=".$catLine['code']."\">".$catLine['name']."</a>";
 					if (get_setting('show_number_of_courses') == 'true')
 					{
 						$htmlListCat .= " (".$catLine['nbCourse']." ".get_lang("Courses").")";
@@ -562,7 +562,7 @@ function display_anonymous_course_list()
 				$htmlTitre = "<p>";
 				if ($_setting['show_back_link_on_top_of_tree'] == 'true')
 				{
-					$htmlTitre .= "<a href=\"".$_SERVER['PHP_SELF']."\">"."&lt;&lt; ".get_lang("BackToHomePage")."</a>";
+					$htmlTitre .= "<a href=\"".api_get_self()."\">"."&lt;&lt; ".get_lang("BackToHomePage")."</a>";
 				}
 				if (!is_null($catLine['parent_id']) || ($_setting['show_back_link_on_top_of_tree'] <> 'true' && !is_null($catLine['code'])))
 				{

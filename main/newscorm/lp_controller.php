@@ -458,19 +458,6 @@ switch($_REQUEST['action'])
 			require('lp_list.php');
 		}	
 		break;
-	/*case 'add_lp':
-		if($debug>0) error_log('New LP - add_lp action triggered',0);
-	
-		//call learnpath creation abstract method with course_id, learnpath_name, learnpath_description, type_of_lp, origin_of_creation, file_name
-		if(!empty($_REQUEST['learnpath_name'])){
-			$_SESSION['refresh'] = 1;
-			$new_lp_id = learnpath::add_lp(api_get_course_id(),$_REQUEST['learnpath_name'],$_REQUEST['learnpath_description'],'dokeos','manual','');
-			//TODO maybe create a first module directly to avoid bugging the user with useless queries
-			$_SESSION['oLP'] = new learnpath(api_get_course_id(),$new_lp_id,api_get_user_id());
-			$_SESSION['oLP']->add_item(0,-1,'dokeos_chapter',$_REQUEST['path'],'Default');			
-		}
-		require('lp_list.php');
-		break;*/
 	case 'add_sub_item': //add an item inside a chapter
 		if($debug>0) error_log('New LP - add sub item action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for add sub item',0); require('lp_list.php'); }

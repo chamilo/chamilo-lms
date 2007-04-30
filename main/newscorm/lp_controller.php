@@ -234,7 +234,7 @@ switch($_REQUEST['action'])
 							
 					//$_SESSION['oLP']->add_item(0,-1,'dokeos_chapter',$_REQUEST['path'],'Default');
 				
-					require('kevin_lp_build.php');
+					require('lp_build.php');
 				}
 			}
 		}
@@ -251,7 +251,7 @@ switch($_REQUEST['action'])
 		{
 			$_SESSION['refresh'] = 1;
 			
-			require('kevin_lp_admin_view.php');
+			require('lp_admin_view.php');
 		}
 		
 		break;
@@ -264,7 +264,7 @@ switch($_REQUEST['action'])
 		{
 			$_SESSION['refresh'] = 1;
 			
-			require('kevin_lp_build.php');
+			require('lp_build.php');
 		}
 		
 		break;
@@ -287,11 +287,11 @@ switch($_REQUEST['action'])
 			
 			if(isset($_GET['view']) && $_GET['view'] == 'build')
 			{
-				require('kevin_lp_build.php');
+				require('lp_build.php');
 			}
 			else
 			{
-				require('kevin_lp_admin_view.php');
+				require('lp_admin_view.php');
 			}
 		}
 		
@@ -320,11 +320,11 @@ switch($_REQUEST['action'])
 			
 			if(isset($_GET['view']) && $_GET['view'] == 'build')
 			{
-				require('kevin_lp_edit_item.php');
+				require('lp_edit_item.php');
 			}
 			else
 			{
-				require('kevin_lp_admin_view.php');
+				require('lp_admin_view.php');
 			}
 		}
 		
@@ -344,7 +344,7 @@ switch($_REQUEST['action'])
 				$_SESSION['oLP']->edit_item_prereq($_GET['id'], $_POST['prerequisites'], $_POST['min_' . $_POST['prerequisites']], $_POST['max_' . $_POST['prerequisites']]);
 			}
 			
-			require('kevin_lp_edit_item_prereq.php');
+			require('lp_edit_item_prereq.php');
 		}
 		
 		break;
@@ -367,13 +367,13 @@ switch($_REQUEST['action'])
 			
 			if(isset($_GET['view']) && $_GET['view'] == 'build')
 			{
-				require('kevin_lp_move_item.php');
+				require('lp_move_item.php');
 			}
 			else
 			{
 				$_SESSION['oLP']->move_item($_GET['id'], $_GET['direction']);
 				
-				require('kevin_lp_admin_view.php');
+				require('lp_admin_view.php');
 			}
 		}
 		
@@ -387,7 +387,7 @@ switch($_REQUEST['action'])
 		{
 			$_SESSION['refresh'] = 1;
 			
-			require('kevin_lp_view_item.php');
+			require('lp_view_item.php');
 		}
 		
 		break;	
@@ -459,7 +459,7 @@ switch($_REQUEST['action'])
 				require('resourcelinker.php');
 				//$_SESSION['oLP']->add_sub_item($_REQUEST['parent_item_id'],$_REQUEST['previous'],$_REQUEST['type'],$_REQUEST['path'],$_REQUEST['title']);
 			}else{
-				require('kevin_lp_admin_view.php');
+				require('lp_admin_view.php');
 			}
 		}
 		break;
@@ -472,7 +472,7 @@ switch($_REQUEST['action'])
 			if(!empty($_REQUEST['id'])){
 				$_SESSION['oLP']->delete_item($_REQUEST['id']);
 			}
-			require('kevin_lp_admin_view.php');
+			require('lp_admin_view.php');
 		}
 		break;
 	case 'edititemprereq':
@@ -484,7 +484,7 @@ switch($_REQUEST['action'])
 				$_SESSION['refresh'] = 1;
 				$_SESSION['oLP']->edit_item_prereq($_REQUEST['id'],$_REQUEST['prereq']);
 			}
-			require('kevin_lp_admin_view.php');
+			require('lp_admin_view.php');
 		}
 		break;
 	case 'restart':

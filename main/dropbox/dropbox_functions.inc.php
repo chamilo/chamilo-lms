@@ -482,6 +482,7 @@ function display_add_form()
 	global $is_courseTutor;
 	global $course_info; // this
 
+	$token = Security::get_token();
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	?>
 	<form method="post" action="index.php?view_received_category=<?php echo $_GET['view_received_category']; ?>&view_sent_category=<?php echo $_GET['view_sent_category']; ?>&view=<?php echo $_GET['view']; ?>&<?php echo "&origin=$origin"; ?>" enctype="multipart/form-data" onsubmit="return checkForm(this)">
@@ -494,6 +495,7 @@ function display_add_form()
 				<input type="hidden" name="MAX_FILE_SIZE" value='<?php echo dropbox_cnf("maxFilesize")?>' />
 				<input type="file" name="file" size="20" <?php if (dropbox_cnf("allowOverwrite")) echo 'onChange="checkfile(this.value)"'; ?> />
 				<input type="hidden" name="dropbox_unid" value="<?php echo $dropbox_unid?>" />
+				<input type="hidden" name="sec_token" value="<?php echo $token?>" />
 				<?php
 				if ($origin=='learnpath')
 				{
@@ -942,6 +944,7 @@ function store_add_dropbox()
 
 	new Dropbox_SentWork( $_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $new_work_recipients);
 
+	Security::clear_token();
     return get_lang('FileUploadSucces');
 }
 

@@ -59,6 +59,7 @@ $language_file = "dropbox";
 
 // including the basic Dokeos initialisation file
 require("../inc/global.inc.php");
+require_once(api_get_path(LIBRARY_PATH) . "security.lib.php");
 
 // the dropbox configuration parameters
 require_once('dropbox_config.inc.php');

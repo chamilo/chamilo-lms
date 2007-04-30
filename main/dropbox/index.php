@@ -162,8 +162,12 @@ if ($_GET['action']=="add")
 }
 if ($_POST['submitWork'])
 {
-	Display :: display_normal_message(store_add_dropbox());
-	//include_once('dropbox_submit.php');
+	$check = Security::check_token();
+	if($check)
+	{
+		Display :: display_normal_message(store_add_dropbox());
+		//include_once('dropbox_submit.php');
+	}
 }
 
 

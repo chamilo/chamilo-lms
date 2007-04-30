@@ -78,4 +78,5 @@ $MoveThread = "Déplacer le fil de discussion";
 $PostVisibilityChanged = "La visibilité du message a bien été changée";
 $PostDeleted = "Le message a bien été supprimé";
 $MakeInvisible = "Rendre invisible";
+$ThreadCanBeFoundHere = "Le sujet est accessible à cette adresse";
 ?>

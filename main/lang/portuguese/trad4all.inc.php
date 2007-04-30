@@ -42,6 +42,7 @@ $Preview = "Previsão";
 $Type = "Tipo";
 $EmailAddress = "Endereço de email";
 $Organisation = "Organização";
+$Reporting = "Relatório";
 $Code = "Código";
 $Update = "Actualizar";
 $CurrentCourse = "Curso actual";

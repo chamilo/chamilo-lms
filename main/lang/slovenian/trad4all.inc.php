@@ -42,6 +42,7 @@ $Preview = "Predogled";
 $Type = "Vrsta";
 $EmailAddress = "E-poštni naslov";
 $Organisation = "Organizacija";
+$Reporting = "Poroèila";
 $Code = "Koda";
 $Update = "Ažuriraj";
 $CurrentCourse = "Trenuten teèaj";

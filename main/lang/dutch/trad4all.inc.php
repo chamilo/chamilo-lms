@@ -42,6 +42,7 @@ $Preview = "voorbeeld";
 $Type = "Type";
 $EmailAddress = "Email adres";
 $Organisation = "Instelling";
+$Reporting = "Rapportering ";
 $Code = "Code";
 $Update = "Updaten";
 $CurrentCourse = "Huidige cursus";

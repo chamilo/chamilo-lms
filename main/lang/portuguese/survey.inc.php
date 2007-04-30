@@ -27,7 +27,6 @@ $ViewSurvey = "Ver questionário";
 $SelectDisplayType = "Seleccionar o tipo de visualização :";
 $Thanks = "Mensagem de feedback";
 $SurveyReporting = "Relatório do questionário";
-$Reporting = "Relatório";
 $NoSurveyAvailable = "Não há nenhum questionário disponível";
 $YourSurveyHasBeenPublished = "foi publicado";
 $CreateFromExistingSurvey = "Criar a partir de um questionário existente";

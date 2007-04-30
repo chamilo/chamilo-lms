@@ -20,4 +20,5 @@ $Date = "Datum";
 $InvalidMessageId = "Het identificatienummer van het te beantwoorden bericht is niet correct.";
 $ErrorSendingMessage = "Er was een fout tijdens het verzenden van het bericht.";
 $SureYouWantToDeleteSelectedMessages = "Bent u zeker dat u de geselecteerde berichten wil verwijderen?";
+$SelectedMessagesDeleted = "De geselecteerde berichten werden verwijderd";
 ?>

@@ -27,7 +27,6 @@ $ViewSurvey = "Enquete bekijken";
 $SelectDisplayType = "Selecteer weergave";
 $Thanks = "Feedback ";
 $SurveyReporting = "Rapportering van de enquete";
-$Reporting = "Rapportering ";
 $NoSurveyAvailable = "Geen enquete beschikbaar";
 $YourSurveyHasBeenPublished = "is gepubliceerd";
 $CreateFromExistingSurvey = "Aanmaken vanaf bestaande enquete";

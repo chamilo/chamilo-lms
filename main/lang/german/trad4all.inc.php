@@ -42,6 +42,7 @@ $Preview = "Vorschau";
 $Type = "Typ";
 $EmailAddress = "E-Mail Adresse";
 $Organisation = "Organisation";
+$Reporting = "Report";
 $Code = "Code";
 $Update = "Update";
 $CurrentCourse = "dieser Kurs";

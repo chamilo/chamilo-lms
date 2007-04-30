@@ -216,4 +216,12 @@ $ExerciseStored = "Este exercício foi acrescentado";
 $ChooseAtLeastOneCheckbox = "Escolher uma resposta pelo menos";
 $ExerciseEdited = "O exercício foi eliminado";
 $ExerciseDeleted = "O exercício foi eliminado";
+$ClickToCommentAndGiveFeedback = "Clique no seguinte link para verificar a resposta e comentar";
+$OpenQuestionsAttempted = "Um utilizador respondeu a uma pergunta aberta";
+$AttemptDetails = "Detalhes das tentativas";
+$TestAttempted = "Nome do exercício";
+$StudentName = "Nome do utilizador";
+$StudentEmail = "Email do utilizador";
+$OpenQuestionsAttemptedAre = "Questão aberta trabalhada é";
+$CourseName = "Nome do curso";
 ?>

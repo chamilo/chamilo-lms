@@ -27,7 +27,6 @@ $ViewSurvey = "View survey";
 $SelectDisplayType = "Select Display Type :";
 $Thanks = "Feedback message";
 $SurveyReporting = "Survey reporting";
-$Reporting = "Reporting";
 $NoSurveyAvailable = "No survey available";
 $YourSurveyHasBeenPublished = "has been published";
 $CreateFromExistingSurvey = "Create from existing survey";

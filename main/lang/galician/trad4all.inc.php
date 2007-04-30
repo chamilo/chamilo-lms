@@ -25,6 +25,7 @@ $langCourseCreate = "Crear o sitio dun curso";
 $langTodo = "Suxestións";
 $UserName = "Nome de usuario";
 $Hide = "Agochar";
+$Reporting = "Informe";
 $TrueFalse = "Verdadeiro / Falso";
 $iso639_2_code = "gl";
 $iso639_1_code = "spa";

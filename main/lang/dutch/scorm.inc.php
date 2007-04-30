@@ -45,4 +45,6 @@ $FileToUpload = "Op te laden bestand";
 $ContentMaker = "Auteur van de inhoud";
 $ContentProximity = "Situatie van het leerpad";
 $UploadLocalFileFromGarbageDir = "Lokaal bestand uit de main/garbage folder opladen";
+$ThisItemIsNotExportable = "Dit item is momenteel niet SCORM compatibel. Het kan dus 
+niet geëxporteerd worden.";
 ?>

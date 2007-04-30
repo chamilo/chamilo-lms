@@ -27,7 +27,6 @@ $ViewSurvey = "Ver encuesta";
 $SelectDisplayType = "Seleccionar el tipo de visualización:";
 $Thanks = "Mensaje de feedback";
 $SurveyReporting = "Informe de la encuesta";
-$Reporting = "Informe";
 $NoSurveyAvailable = "No hay encuestas disponibles";
 $YourSurveyHasBeenPublished = "ha sido publicada";
 $CreateFromExistingSurvey = "Crear a partir de  una encuesta ya existente";

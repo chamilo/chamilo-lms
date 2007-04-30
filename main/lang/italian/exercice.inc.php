@@ -216,4 +216,12 @@ $ExerciseStored = "L\'esercizio è stato memorizzato";
 $ChooseAtLeastOneCheckbox = "Scegli almeno una risposta corretta";
 $ExerciseEdited = "Esercizio modificato";
 $ExerciseDeleted = "Esercizio eliminato";
+$ClickToCommentAndGiveFeedback = "Clicca sul collegamento seguente per controllare la risposta e commentarla";
+$OpenQuestionsAttempted = "Un corsista ha risposto ad una domanda a risposta aperta";
+$AttemptDetails = "Dettagli sulla risposta";
+$TestAttempted = "Test affrontato";
+$StudentName = "Nome del corsista";
+$StudentEmail = "Email del corsista";
+$OpenQuestionsAttemptedAre = "La risposta aperta affrontata è";
+$CourseName = "Nome del corso";
 ?>

@@ -27,7 +27,6 @@ $ViewSurvey = "Kérd&#337;ív megtekintése";
 $SelectDisplayType = "Megtekintés típusa:";
 $Thanks = "Visszacsatoló üzenet";
 $SurveyReporting = "Kérd&#337;ív  jelentések";
-$Reporting = "Jelentés";
 $NoSurveyAvailable = "Nincs elérhet&#337; kérd&#337;ív";
 $YourSurveyHasBeenPublished = "közzétéve";
 $CreateFromExistingSurvey = "Létrehozás létez&#337; kérd&#337;ívb&#337;l";

@@ -27,7 +27,6 @@ $ViewSurvey = "Poglej vprašalnik";
 $SelectDisplayType = "Izberi obliko prikaza :";
 $Thanks = "Povratno sporoèilo";
 $SurveyReporting = "Poroèila evalvacijskih vprašalnikov";
-$Reporting = "Poroèila";
 $NoSurveyAvailable = "Noben evalvacijski vprašalnik ni dostopen";
 $YourSurveyHasBeenPublished = "je bil objavljen";
 $CreateFromExistingSurvey = "Ustvari iz obstojeèega vprašalnika";

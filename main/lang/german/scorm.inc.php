@@ -45,4 +45,5 @@ $FileToUpload = "Datei für Upload";
 $ContentMaker = "Ersteller des Inhalts";
 $ContentProximity = "Ähnlichkeit des Inhalts";
 $UploadLocalFileFromGarbageDir = "Lokale Datei von Haupt/Garbage Verzeichnis hochladen";
+$ThisItemIsNotExportable = "Dieses Object ist zur Zeit nicht Scorm kompatibel. Aus diesem Grund kann es nicht exportiert werden.";
 ?>

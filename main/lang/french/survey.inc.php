@@ -27,7 +27,6 @@ $ViewSurvey = "Voir l\'enquête";
 $SelectDisplayType = "Sélectionner le type d\'affichage :";
 $Thanks = "Message de feedback";
 $SurveyReporting = "Suivi d\'enquête";
-$Reporting = "Suivi";
 $NoSurveyAvailable = "Pas d\'enquête disponible";
 $YourSurveyHasBeenPublished = "a été publié";
 $CreateFromExistingSurvey = "Créer à partir d\'enquête existante";

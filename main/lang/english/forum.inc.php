@@ -78,4 +78,5 @@ $MoveThread = "Move Thread";
 $PostVisibilityChanged = "Post visibility changed";
 $PostDeleted = "Post has been deleted";
 $MakeInvisible = "Make invisible";
+$ThreadCanBeFoundHere = "The thread can be found here";
 ?>

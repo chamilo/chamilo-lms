@@ -42,6 +42,7 @@ $Preview = "El&#337;zetes";
 $Type = "Típus";
 $EmailAddress = "Email cím";
 $Organisation = "Szervezet";
+$Reporting = "Jelentés";
 $Code = "Kód";
 $Update = "Frissít";
 $CurrentCourse = "Jelenlegi kurzus";

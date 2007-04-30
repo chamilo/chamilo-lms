@@ -27,7 +27,6 @@ $ViewSurvey = "Ver enquete";
 $SelectDisplayType = "Selecionar o tipo de visualização:";
 $Thanks = "Mensagem de feedback";
 $SurveyReporting = "Relatório da enquete";
-$Reporting = "Relatório";
 $NoSurveyAvailable = "Não há nenhuma enquete disponível";
 $YourSurveyHasBeenPublished = "foi publicado";
 $CreateFromExistingSurvey = "Criar a partir de uma enquete existente";

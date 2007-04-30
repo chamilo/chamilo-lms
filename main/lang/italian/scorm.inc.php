@@ -45,4 +45,5 @@ $FileToUpload = "File da caricare";
 $ContentMaker = "Creazione di contenuti";
 $ContentProximity = "Stato del contenuto";
 $UploadLocalFileFromGarbageDir = "Carica un file locale dalla directory principale o garbage";
+$ThisItemIsNotExportable = "L\'elemento non è per ora compatibile con lo standard SCORM, quindi non è esportabile.";
 ?>

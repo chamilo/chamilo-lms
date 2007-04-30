@@ -20,4 +20,5 @@ $Date = "Datum";
 $InvalidMessageId = "Die ID der zu beantwortenden Nachricht ist ungültig";
 $ErrorSendingMessage = "Beim Versenden der Nachricht gab es einen Fehler";
 $SureYouWantToDeleteSelectedMessages = "Sind Sie sicher, dass Sie die ausgewählten Nachrichten löschen möchten?";
+$SelectedMessagesDeleted = "Die ausgewählten Nachrichten wurden gelöscht";
 ?>

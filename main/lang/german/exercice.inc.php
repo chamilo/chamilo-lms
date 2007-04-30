@@ -217,4 +217,12 @@ $ExerciseStored = "Diese Übung wurde gespeichert";
 $ChooseAtLeastOneCheckbox = "Bitte zumindest eine gute Antwort auswählen";
 $ExerciseEdited = "Diese Übung wurde bearbeitet";
 $ExerciseDeleted = "Diese Übung wurde gelöscht";
+$ClickToCommentAndGiveFeedback = "Den folgenden Link klicken, um Antwort zu markieren und Feedback zu geben";
+$OpenQuestionsAttempted = "Ein Student hat eine offene Frage beantwortet";
+$AttemptDetails = "Details Versuch";
+$TestAttempted = "Test versucht";
+$StudentName = "Name des Studenten";
+$StudentEmail = "E-Mail des Studenten";
+$OpenQuestionsAttemptedAre = "Die versuchte offene Frage ist ";
+$CourseName = "Kursname";
 ?>

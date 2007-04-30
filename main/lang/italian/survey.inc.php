@@ -27,7 +27,6 @@ $ViewSurvey = "Vedi il questionario";
 $SelectDisplayType = "Seleziona la modalità di visualizzazione:";
 $Thanks = "Messaggio di conferma";
 $SurveyReporting = "Risultati del questionario";
-$Reporting = "Report";
 $NoSurveyAvailable = "Non ci sono  questionari disponibili";
 $YourSurveyHasBeenPublished = "è stato pubblicato";
 $CreateFromExistingSurvey = "Crea da un questionario precedente";

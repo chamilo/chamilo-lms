@@ -108,6 +108,12 @@ define('TABLE_GROUP', 'group_info');
 define('TABLE_GROUP_USER', 'group_rel_user');
 define('TABLE_GROUP_TUTOR', 'group_rel_tutor');
 define('TABLE_GROUP_CATEGORY', 'group_category');
+//course dropbox tables
+define('TABLE_DROPBOX_CATEGORY','dropbox_category');
+define('TABLE_DROPBOX_FEEDBACK','dropbox_feedback');
+define('TABLE_DROPBOX_POST','dropbox_post');
+define('TABLE_DROPBOX_FILE','dropbox_file');
+define('TABLE_DROPBOX_PERSON','dropbox_person');
 //course quiz tables
 define('TABLE_QUIZ_QUESTION', 'quiz_question');
 define('TABLE_QUIZ_TEST', 'quiz');

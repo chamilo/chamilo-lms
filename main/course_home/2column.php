@@ -149,6 +149,7 @@ function show_tools($course_tool_category)
 			    $class="class=\"invisible\"";
 			}
 			$qm_or_amp = ((strpos($toolsRow['link'],'?')===FALSE)?'?':'&amp;');
+			$toolsRow['link'] = $toolsRow['link'].$qm_or_amp.api_get_cidreq();
 			echo	'<td width="50%" height="30">', "\n",
 
 					'<a href="', htmlspecialchars($toolsRow['link'])

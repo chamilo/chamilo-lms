@@ -33,7 +33,7 @@ include_once("../inc/global.inc.php");
 
 if(empty($_user['user_id']))
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 //api_protect_course_script(); //not a course script, so no protection

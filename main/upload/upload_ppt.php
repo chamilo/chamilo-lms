@@ -49,17 +49,17 @@ if(isset($_POST['convert'])){
 event_access_tool(TOOL_UPLOAD);
 
 
-$interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Doc"));
-$nameTools = get_lang("OogieConversionPowerPoint");
-Display :: display_header($nameTools);
-
-
 // check access permissions (edit permission is needed to add a document or a LP)
 $is_allowed_to_edit = api_is_allowed_to_edit();
 
 if(!$is_allowed_to_edit){
-	api_not_allowed();
+	api_not_allowed(true);
 }
+
+$interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Doc"));
+$nameTools = get_lang("OogieConversionPowerPoint");
+Display :: display_header($nameTools);
+
 
 ?>
 

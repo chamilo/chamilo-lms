@@ -24,7 +24,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 12070 2007-04-20 09:43:41Z elixir_julian $
+* 	@version $Id: question_pool.php 12219 2007-05-01 18:46:59Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -112,10 +112,10 @@ $nameTools=get_lang('QuestionPool');
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 
-Display::display_header($nameTools,"Exercise");
 // if admin of course
 if($is_allowedToEdit)
 {
+	Display::display_header($nameTools,"Exercise");
 ?>
 
 <h3>
@@ -348,12 +348,11 @@ if($is_allowedToEdit)
 </form>
 
 <?php
+	Display::display_footer();
 }
 // if not admin of course
 else
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
-
-Display::display_footer();
 ?>

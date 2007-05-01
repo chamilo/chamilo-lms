@@ -1,5 +1,5 @@
 <?php
-// $Id: delete_course.php 11317 2007-03-01 23:51:07Z yannoo $
+// $Id: delete_course.php 12219 2007-05-01 18:46:59Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -46,7 +46,7 @@ $currentCourseName = $_course['name'];
 
 if (!api_is_allowed_to_edit())
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 $tool_name = get_lang('DelCourse');
 if (isset($_GET['delete']) && $_GET['delete'] == 'yes')

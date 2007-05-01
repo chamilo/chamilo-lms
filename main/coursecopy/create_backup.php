@@ -1,5 +1,5 @@
 <?php
-// $Id: create_backup.php 11998 2007-04-12 19:23:11Z pcool $
+// $Id: create_backup.php 12219 2007-05-01 18:46:59Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -38,6 +38,11 @@ $language_file = array ('admin','coursebackup');
 // including the global file
 include ('../inc/global.inc.php');
 
+// Check access rights (only teachers are allowed here)
+if (!api_is_allowed_to_edit())
+{
+	api_not_allowed(true);
+}
 // section for the tabs
 $this_section=SECTION_COURSES;
 
@@ -58,11 +63,6 @@ require_once ('classes/CourseSelectForm.class.php');
 // Display the tool title
 api_display_tool_title($nameTools);
 
-// Check access rights (only teachers are allowed here)
-if (!api_is_allowed_to_edit())
-{
-	api_not_allowed();
-}
 /*
 ==============================================================================
 		MAIN CODE

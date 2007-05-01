@@ -1,5 +1,5 @@
 <?php
-// $Id: infocours.php 12051 2007-04-18 13:26:45Z elixir_julian $
+// $Id: infocours.php 12219 2007-05-01 18:46:59Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -96,7 +96,7 @@ $course_access_settings = CourseManager :: get_access_settings($course_code);
 
 if (!$is_allowedToEdit)
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);

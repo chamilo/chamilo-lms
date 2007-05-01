@@ -22,7 +22,7 @@
 *	HotPotatoes administration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: adminhp.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: adminhp.php 12219 2007-05-01 18:46:59Z yannoo $
 */
 
 
@@ -84,7 +84,7 @@ $dbTable					= $TBL_DOCUMENT;
 
 if(!$is_allowedToEdit)
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));

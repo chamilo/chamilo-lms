@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 11376 2007-03-03 22:48:24Z yannoo $
+// $Id: copy_course.php 12219 2007-05-01 18:46:59Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -43,14 +43,17 @@ include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 require_once ('classes/CourseBuilder.class.php');
 require_once ('classes/CourseRestorer.class.php');
 require_once ('classes/CourseSelectForm.class.php');
-$nameTools = get_lang('CopyCourse');
-$interbreadcrumb[] = array ("url" => "../course_info/maintenance.php", "name" => get_lang('Maintenance'));
-Display::display_header($nameTools);
-//api_display_tool_title($nameTools);
+
 if (!api_is_allowed_to_edit())
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
+
+$nameTools = get_lang('CopyCourse');
+$interbreadcrumb[] = array ("url" => "../course_info/maintenance.php", "name" => get_lang('Maintenance'));
+
+Display::display_header($nameTools);
+//api_display_tool_title($nameTools);
 /*
 ==============================================================================
 		MAIN CODE

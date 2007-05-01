@@ -98,12 +98,7 @@ if( isset($_GET['action']))
 $interbreadcrumb[]=array("url" => "group.php","name" => get_lang('GroupManagement'));
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
 { //so we are not in learnpath tool
-Display::display_header($nameTools,"Group");
-	//event_access_tool($nameTools);
-
-	api_display_tool_title($nameTools);
-	
-	if (! $is_allowed_in_course) api_not_allowed();
+	if (! $is_allowed_in_course) api_not_allowed(true);	
 }
 else
 {

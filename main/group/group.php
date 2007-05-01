@@ -78,11 +78,8 @@ if( api_get_setting('allow_group_categories') == 'false')
 */
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
 { //so we are not in learnpath tool
-	Display::display_header($nameTools,"Group");
 	event_access_tool(TOOL_GROUP);
-	//api_display_tool_title($nameTools);
-
-	if (! $is_allowed_in_course) api_not_allowed();
+	if (! $is_allowed_in_course) api_not_allowed(true);
 }
 else
 {

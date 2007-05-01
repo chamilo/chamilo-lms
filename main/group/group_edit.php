@@ -67,7 +67,7 @@ $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('GroupManag
 
 if (!api_is_allowed_to_edit())
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 /*
 ============================================================================== 

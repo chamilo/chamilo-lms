@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 11760 2007-03-29 07:46:40Z pcool $
+* 	@version $Id: admin.php 12219 2007-05-01 18:46:59Z yannoo $
 */
 
 
@@ -169,7 +169,7 @@ $TBL_DOCUMENT          = Database::get_course_table(TABLE_DOCUMENT);
 
 if(!$is_allowedToEdit)
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 // intializes the Exercise object

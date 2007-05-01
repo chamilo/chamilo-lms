@@ -22,7 +22,7 @@ if(empty($_SESSION['my_tool'])){header('location:index.php');}
 $is_allowed_to_edit = api_is_allowed_to_edit();
 
 if(!$is_allowed_to_edit){
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 

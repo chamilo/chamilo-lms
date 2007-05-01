@@ -38,7 +38,7 @@ api_protect_course_script();
 
 if ($is_allowed_in_course == false){
 	//Display::display_header('');
-	api_not_allowed();
+	api_not_allowed(true);
 	//Display::display_footer();
 }
 

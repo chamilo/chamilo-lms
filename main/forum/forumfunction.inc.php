@@ -619,7 +619,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 {
 	if ($current_visibility_status=='1')
 	{
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&';
 		if (is_array($additional_url_parameters))
 		{
 			foreach ($additional_url_parameters as $key=>$value)
@@ -631,7 +631,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 	}
 	if ($current_visibility_status=='0')
 	{
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&';
 		if (is_array($additional_url_parameters))
 		{
 			foreach ($additional_url_parameters as $key=>$value)
@@ -658,7 +658,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
 {
 	if ($current_lock_status=='1')
 	{
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&';
 		if (is_array($additional_url_parameters))
 		{
 			foreach ($additional_url_parameters as $key=>$value)
@@ -670,7 +670,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
 	}
 	if ($current_lock_status=='0')
 	{
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&';
 		if (is_array($additional_url_parameters))
 		{
 			foreach ($additional_url_parameters as $key=>$value)
@@ -711,11 +711,11 @@ function display_up_down_icon($content, $id, $list)
 	}
 	if ($position>1)
 	{
-		$return_value='<a href="'.$_SERVER['PHP_SELF'].'?action=move&amp;direction=up&amp;content='.$content.'&amp;id='.$id.'"><img src="../img/up.gif" /></a>';
+		$return_value='<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;id='.$id.'"><img src="../img/up.gif" /></a>';
 	}
 	if ($position<$total_items)
 	{
-		$return_value.='<a href="'.$_SERVER['PHP_SELF'].'?action=move&amp;direction=down&amp;content='.$content.'&amp;id='.$id.'"><img src="../img/down.gif" /></a>';
+		$return_value.='<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;id='.$id.'"><img src="../img/down.gif" /></a>';
 	}
 
 	echo $return_value;
@@ -1579,12 +1579,12 @@ function store_thread($values)
 	if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit())
 	{
 		$message.=get_lang('MessageHasToBeApproved').'<br />';
-		$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
+		$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
 	}
 	else
 	{
-		$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-		$message.=get_lang('ReturnTo').' <a href="viewthread.php?forum='.$values['forum_id'].'&origin='.$origin.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
+		$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+		$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
 	}
 
 	session_unregister('formelements');
@@ -1754,8 +1754,8 @@ function store_reply($values)
 	{
 		$message.=get_lang('MessageHasToBeApproved').'<br />';
 	}
-	$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-	$message.=get_lang('ReturnTo').' <a href="viewthread.php?forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&origin='.$origin.'">'.get_lang('Message').'</a>';
+	$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+	$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&origin='.$origin.'">'.get_lang('Message').'</a>';
 
 	send_notification_mails($values['thread_id'], $values);
 
@@ -1888,8 +1888,8 @@ function store_edit_post($values)
 	//update_added_resources('forum_post',$values['post_id']);
 
 	$message=get_lang('EditPostStored').'<br />';
-	$message.=get_lang('ReturnTo').' <a href="viewforum.php?forum='.$_GET['forum'].'">'.get_lang('Forum').'</a><br />';
-	$message.=get_lang('ReturnTo').' <a href="viewthread.php?forum='.$_GET['forum'].'&amp;thread='.$values['thread_id'].'&amp;post='.$_GET['post'].'">'.get_lang('Message').'</a>';
+	$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$_GET['forum'].'">'.get_lang('Forum').'</a><br />';
+	$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$_GET['forum'].'&amp;thread='.$values['thread_id'].'&amp;post='.$_GET['post'].'">'.get_lang('Message').'</a>';
 
 	session_unregister('formelements');
 	session_unregister('origin');
@@ -2324,7 +2324,7 @@ function send_mail($user_info=array(), $thread_information=array())
 
 	if (isset($thread_information) and is_array($thread_information))
 	{
-		$thread_link= api_get_path('WEB_CODE_PATH').'forum/viewthread.php?forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
+		$thread_link= api_get_path('WEB_CODE_PATH').'forum/viewthread.php?'.api_get_cidreq().'&forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
 		//http://157.193.57.110/dokeos_cvs/claroline/forum/viewthread.php?forum=12&thread=49
 	}
 	$email_body= $user_info['firstname']." ".$user_info['lastname']."\n\r";

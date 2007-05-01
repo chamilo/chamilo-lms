@@ -265,7 +265,7 @@ elseif ($displayMode == "viewDefList")
 
 			// displays commands
 
-			echo "<a href=\"".$_SERVER['PHP_SELF']."?removeDef=", $thisCat['catId'], "\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Remove')."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?editDef=", $thisCat['catId'], "\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" />", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?moveUpDef=", $thisCat['catId'], "\">", "<img src=\"../img/up.gif\" border=\"0\" alt=\"".get_lang('MoveUp')."\">", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?moveDownDef=", $thisCat['catId'], "\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('MoveDown')."\">", "</a>\n";
+			echo "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&removeDef=", $thisCat['catId'], "\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Remove')."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&editDef=", $thisCat['catId'], "\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" />", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&moveUpDef=", $thisCat['catId'], "\">", "<img src=\"../img/up.gif\" border=\"0\" alt=\"".get_lang('MoveUp')."\">", "</a>", "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&moveDownDef=", $thisCat['catId'], "\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('MoveDown')."\">", "</a>\n";
 		} // end for each
 
 	} // end if ($catList)
@@ -422,7 +422,7 @@ elseif ($displayMode == "viewContentList") // default display
 				if ($allowedToEditDef)
 				{
 					echo	"<td>",
-							"<a href=\"".$_SERVER['PHP_SELF']."?editMainUserInfo=$userIdViewed\">",
+							"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&editMainUserInfo=$userIdViewed\">",
 							"<img border=\"0\" alt=\"\" src=\"../img/edit.gif\" />",
 							"</a>",
 							"</td>";
@@ -430,7 +430,7 @@ elseif ($displayMode == "viewContentList") // default display
                                 if ($is_allowedToTrack)
                                 {
                                         echo	"<td>",
-							"<a href=\"../mySpace/myStudents.php?origin=user_course&student=$userIdViewed&details=true&course=".$_course['id']."\">",
+							"<a href=\"../mySpace/myStudents.php?".api_get_cidreq()."&origin=user_course&student=$userIdViewed&details=true&course=".$_course['id']."\">",
 							"<img border=\"0\" alt=\"".get_lang('Tracking')." : $userIdViewed\" src=\"../img/statistics.png\" />",
 							"</a>",
 							"</td>";
@@ -480,7 +480,7 @@ elseif ($displayMode == "viewContentList") // default display
 			if ($allowedToEditContent)
 			{
 				echo	"<br><br>\n",
-						"<a href=\"".$_SERVER['PHP_SELF']."?editContent=",$thisCat['catId'],"&uInfo=",$userIdViewed,"\">",
+						"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&editContent=",$thisCat['catId'],"&uInfo=",$userIdViewed,"\">",
 						"<img src=\"../img/edit.gif\" border=\"0\" alt=\"edit\">",
 						"</a>\n";
 			}

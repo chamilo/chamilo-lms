@@ -53,9 +53,9 @@ $nameTools = get_lang("GroupManagement");
 	Libraries
 -----------------------------------------------------------
 */
-include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
+require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
 //Create default category if it doesn't exist when group categories aren't allowed
 if( api_get_setting('allow_group_categories') == 'false')
@@ -81,10 +81,7 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
 	event_access_tool(TOOL_GROUP);
 	if (! $is_allowed_in_course) api_not_allowed(true);
 }
-else
-{
-	?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css" /> <?php
-}
+Display::display_header(TOOL_GROUP);
 
 /*
 -----------------------------------------------------------
@@ -182,24 +179,24 @@ if (api_is_allowed_to_edit())
 		}
 	}
 	// Show admin-panel
-	echo '<a href="group_creation.php">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang("NewGroupCreate").'</a>&nbsp;';
+	echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang("NewGroupCreate").'</a>&nbsp;';
 	if (get_setting('allow_group_categories') == 'true')
 	{
-		echo '<a href="group_category.php?action=add_category">'.get_lang("AddCategory").'</a>&nbsp;';
+		echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang("AddCategory").'</a>&nbsp;';
 	}
 	else
 	{
-		echo '<a href="group_category.php?id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
+		echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
 	}
 	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0)
 	{
-		echo '<a href="group_overview.php">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
+		echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
 	}
 }
 $group_cats = GroupManager :: get_categories();
 if (get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)
 {
-	echo '<p><a href="?show_all=1">'.get_lang('ShowAll').'</a></p>';
+	echo '<p><a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a></p>';
 }
 /*
  * List all categories
@@ -213,27 +210,27 @@ foreach ($group_cats as $index => $category)
 		if (isset ($_GET['show_all']) || (isset ($_GET['category']) && $_GET['category'] == $category['id']))
 		{
 			echo '<img src="../img/opendir.gif" alt=""/>';
-			echo ' <a href="group.php?origin='.$_GET['origin'].'">'.$category['title'].'</a>';
+			echo ' <a href="group.php?'.api_get_cidreq().'&origin='.$_GET['origin'].'">'.$category['title'].'</a>';
 			$in_category = true;
 		}
 		else
 		{
 			echo '<img src="../img/file.gif" alt=""/>';
-			echo ' <a href="group.php?origin='.$_GET['origin'].'&amp;category='.$category['id'].'">'.$category['title'].'</a>';
+			echo ' <a href="group.php?'.api_get_cidreq().'&origin='.$_GET['origin'].'&amp;category='.$category['id'].'">'.$category['title'].'</a>';
 		}
 		$group_list = GroupManager :: get_group_list($category['id']);
 		echo ' ('.count($group_list).' '.get_lang("ExistingGroups").')';
 		if (api_is_allowed_to_edit())
 		{
-			echo '<a href="group_category.php?id='.$category['id'].'"  title="'.get_lang('Edit').'"><img src="../img/edit.gif" alt="'.get_lang('Edit').'"/></a> ';
-			echo '<a href="group.php?action=delete_category&amp;id='.$category['id'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('Delete').'"><img src="../img/delete.gif"  alt="'.get_lang('Delete').'"/></a> ';
+			echo '<a href="group_category.php?'.api_get_cidreq().'&id='.$category['id'].'"  title="'.get_lang('Edit').'"><img src="../img/edit.gif" alt="'.get_lang('Edit').'"/></a> ';
+			echo '<a href="group.php?'.api_get_cidreq().'&action=delete_category&amp;id='.$category['id'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('Delete').'"><img src="../img/delete.gif"  alt="'.get_lang('Delete').'"/></a> ';
 			if ($index != 0)
 			{
-				echo ' <a href="group.php?action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index -1]['id'].'"><img src="../img/up.gif" alt=""/></a>';
+				echo ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index -1]['id'].'"><img src="../img/up.gif" alt=""/></a>';
 			}
 			if ($index != count($group_cats) - 1)
 			{
-				echo ' <a href="group.php?action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index +1]['id'].'"><img src="../img/down.gif" alt=""/></a>';
+				echo ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index +1]['id'].'"><img src="../img/down.gif" alt=""/></a>';
 			}
 		}
 		echo '<p style="margin: 0px;margin-left: 50px;">'.$category['description'].'</p>';
@@ -287,11 +284,11 @@ foreach ($group_cats as $index => $category)
 			{
 				if (GroupManager :: is_self_registration_allowed($_user['user_id'], $this_group['id']))
 				{
-					$row[] = '<a href="group.php?category='.$category['id'].'&amp;action=self_reg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.get_lang("GroupSelfRegInf").'</a>';
+					$row[] = '<a href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_reg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.get_lang("GroupSelfRegInf").'</a>';
 				}
 				elseif (GroupManager :: is_self_unregistration_allowed($_user['user_id'], $this_group['id']))
 				{
-					$row[] = '<a href="group.php?category='.$category['id'].'&amp;action=self_unreg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.get_lang("GroupSelfUnRegInf").'</a>';
+					$row[] = '<a href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_unreg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.get_lang("GroupSelfUnRegInf").'</a>';
 				}
 				else
 				{
@@ -313,10 +310,10 @@ foreach ($group_cats as $index => $category)
 			// edit-links
 			if (api_is_allowed_to_edit())
 			{
-				$edit_actions = '<a href="group_edit.php?gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'"><img src="../img/edit.gif" alt="'.get_lang("Edit").'"/></a>&nbsp;';
-				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?category='.$category['id'].'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('Delete').'"><img src="../img/delete.gif" alt="'.get_lang("Delete").'"/></a>&nbsp;';
-				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?category='.$category['id'].'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('EmptyGroup').'"><img src="../img/group_delete.gif" alt="'.get_lang("EmptyGroup").'"/></a>&nbsp;';
-				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('FillGroup').'"><img src="../img/add_user.gif" alt="'.get_lang("FillGroup").'"/></a>';
+				$edit_actions = '<a href="group_edit.php?'.api_get_cidreq().'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'"><img src="../img/edit.gif" alt="'.get_lang("Edit").'"/></a>&nbsp;';
+				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('Delete').'"><img src="../img/delete.gif" alt="'.get_lang("Delete").'"/></a>&nbsp;';
+				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('EmptyGroup').'"><img src="../img/group_delete.gif" alt="'.get_lang("EmptyGroup").'"/></a>&nbsp;';
+				$edit_actions .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;" title="'.get_lang('FillGroup').'"><img src="../img/add_user.gif" alt="'.get_lang("FillGroup").'"/></a>';
 				$row[] = $edit_actions;
 			}
 			$totalRegistered = $totalRegistered + $this_group[nbMember];

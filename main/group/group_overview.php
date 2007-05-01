@@ -104,8 +104,8 @@ else
 {
 ?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css" /> <?php
 }
-echo '<a href="group_overview.php?action=export&type=csv">'.get_lang('ExportAsCSV').'</a>';
-echo ' | <a href="group_overview.php?action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';
+echo '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a>';
+echo ' | <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';
 $categories = GroupManager::get_categories();
 foreach($categories as $index => $category)
 {

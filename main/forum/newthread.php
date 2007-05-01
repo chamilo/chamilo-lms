@@ -196,7 +196,7 @@ echo "<table class=\"data_table\" width='100%'>\n";
 if($origin != 'learnpath')
 {
 	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\"  colspan=\"2\">";
-	echo '<a href="index.php?origin='.$origin.'" '.class_visible_invisible($current_forum_category['visibility']).'>'.$current_forum_category['cat_title'].'</a><br />';
+	echo '<a href="index.php?'.api_get_cidreq().'&origin='.$origin.'" '.class_visible_invisible($current_forum_category['visibility']).'>'.$current_forum_category['cat_title'].'</a><br />';
 	echo '<span>'.$current_forum_category['cat_comment'].'</span>';
 	echo "</th>\n";
 	echo "\t</tr>\n";

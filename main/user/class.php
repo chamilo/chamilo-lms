@@ -69,7 +69,7 @@ Display :: display_header($tool_name, "User");
 api_display_tool_title($tool_name);
 if (api_is_allowed_to_edit())
 {
-	echo '<a href="subscribe_class.php">'.get_lang("AddClassesToACourse").'</a><br /><br />';
+	echo '<a href="subscribe_class.php?'.api_get_cidreq().'">'.get_lang("AddClassesToACourse").'</a><br /><br />';
 }
 /*
 ==============================================================================
@@ -167,7 +167,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
  */
 function reg_filter($class_id)
 {
-	$result = '<a href="'.$_SERVER['PHP_SELF'].'?unsubscribe=yes&amp;class_id='.$class_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img src="../img/delete.gif"/></a>';
+	$result = '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&unsubscribe=yes&amp;class_id='.$class_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img src="../img/delete.gif"/></a>';
 	return $result;
 }
 // Build search-form

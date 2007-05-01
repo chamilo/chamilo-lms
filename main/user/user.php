@@ -312,13 +312,13 @@ Display::display_introduction_section(TOOL_USER, $is_allowed);
  if( api_is_allowed_to_edit())
 {
 	echo "<div align=\"right\">";
-	echo '<a href="user.php?action=export&amp;type=csv">'.Display::return_icon('excel.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> | ';
-	echo '<a href="subscribe_user.php">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a> | ';
-	echo "<a href=\"subscribe_user.php?type=teacher\">".Display::return_icon('add_user_big.gif', get_lang("SubscribeUserToCourseAsTeacher"))."&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> | ";
+	echo '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('excel.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> | ';
+	echo '<a href="subscribe_user.php'.api_get_cidreq().'">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a> | ';
+	echo "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('add_user_big.gif', get_lang("SubscribeUserToCourseAsTeacher"))."&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> | ";
 	echo "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('edit_group.gif', get_lang("GroupUserManagement"))."&nbsp;".get_lang("GroupUserManagement")."</a>";
 	if(api_get_setting('use_session_mode')=='false')
 	{
-		echo ' | <a href="class.php">'.get_lang('Classes').'</a>';
+		echo ' | <a href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
 	}
 	echo "</div>";
 }
@@ -468,22 +468,22 @@ function modify_filter($user_id)
 	$result="<div style='text-align: center'>";
 
 	// info
-	$result .= '<a href="userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/user_info.gif" /></a>&nbsp;';
+	$result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'"><img border="0" alt="'.get_lang('Info').'" src="../img/user_info.gif" /></a>&nbsp;';
 
 	if($is_allowed_to_track)
 	{
-		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
+		$result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course"><img border="0" alt="'.get_lang('Tracking').'" src="../img/statistics.gif" /></a>&nbsp;';
 	}
 
 	if(api_is_allowed_to_edit())
 	{
 
 		// edit
-		$result .= '<a href="userInfo.php?origin='.$origin.'&amp;editMainUserInfo='.$user_id.'"><img border="0" alt="'.get_lang('Edit').'" src="../img/edit.gif" /></a>&nbsp;';
+		$result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'"><img border="0" alt="'.get_lang('Edit').'" src="../img/edit.gif" /></a>&nbsp;';
 		// unregister
 		 if( $user_id != $_user['user_id'])
 		{
-			$result .= '<a href="'.$_SERVER['PHP_SELF'].'?unregister=yes&amp;user_id='.$user_id.'&amp;'.$sort_params.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
+			$result .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'&amp;'.$sort_params.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
 		}
 
 	}

@@ -37,15 +37,15 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	if(strlen($cur_dir_path) > 0 && $cur_dir_path != '/')
 	{
 		$parent_dir = dirname($cur_dir_path);
-		$display_output .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif').' '.get_lang('Up').'</a> ';
+		$display_output .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif').' '.get_lang('Up').'</a> ';
 	}
 	if (! $always_show_upload_form )
 	{
-		$display_output .= "<a href=\"".$_SERVER['PHP_SELF']."?curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".$_GET['origin']."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";
+		$display_output .= "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".$_GET['origin']."\">".Display::return_icon('submit_file.gif')." ". get_lang("UploadADocument") . "</a> ";
 	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit() )
 	{
-		$display_output .=	"<a href=\"".$_SERVER['PHP_SELF']."?curdirpath=".$cur_dir_path."&amp;display_tool_options=true&amp;origin=".$_GET['origin']."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";
+		$display_output .=	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_tool_options=true&amp;origin=".$_GET['origin']."\">".Display::return_icon('acces_tool.gif').' ' . get_lang("EditToolOptions") . "</a> ";
 	}
 
 	if ($display_output != "")
@@ -255,7 +255,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$row = array();
 			$class = '';
 			$url = implode("/", array_map("rawurlencode", explode("/", $work->url)));
-			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.api_get_course_id().
+			$row[] = '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().
 				'&curdirpath='.$mydir.'"'.$class.'><img src="../img/folder_document.gif" alt="dir" height="20" width="20" align="absbottom"/>&nbsp;'.$dir.'</a>';
 			$row[] = '';
 			$row[] = '';
@@ -265,7 +265,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				//$action .= '<a href="'.$_SERVER['PHP_SELF'].'?cidReq='.api_get_course_id().
 				//	'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?'.
-					'delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('DirDelete').'"></a>';
+					api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('DirDelete').'"></a>';
 				$row[] = $action;
 			}else{
 				$row[] = "";
@@ -303,23 +303,23 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			if( $is_allowed_to_edit)
 			{
 				$action = '';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;move='.$work->id.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
+				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
+				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
+				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;move='.$work->id.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
 				if($work->accepted == '1')
 				{
-					$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/visible.gif" alt="'.get_lang('Invisible').'"></a>';
+					$action .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/visible.gif" alt="'.get_lang('Invisible').'"></a>';
 				}
 				else
 				{
-					$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/invisible.gif" alt="'.get_lang('Visible').'"></a>';
+					$action .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'"><img src="../img/invisible.gif" alt="'.get_lang('Visible').'"></a>';
 				}
 
 				$row[] = $action;
 			}elseif($is_author){
 				$action = '';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
+				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
+				$action .= '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
 
 				$row[] = $action;
 			}else{

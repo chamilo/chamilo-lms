@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 12106 2007-04-24 13:17:19Z elixir_julian $
+* 	@version $Id: survey_list.php 12221 2007-05-01 23:23:49Z yannoo $
 *
 * 	@todo The invite column is not done
 * 	@todo try to understand the white, blue, ... template stuff.
@@ -122,9 +122,9 @@ if ($_POST['action'])
 
 
 // Action links
-echo '<a href="create_new_survey.php?action=add">'.get_lang('CreateNewSurvey').'</a> | ';
+echo '<a href="create_new_survey.php?'.api_get_cidreq().'&action=add">'.get_lang('CreateNewSurvey').'</a> | ';
 //echo '<a href="survey_all_courses.php">'.get_lang('CreateExistingSurvey').'</a> | ';
-echo '<a href="'.api_get_self().'?search=advanced">'.get_lang('Search').'</a>';
+echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&search=advanced">'.get_lang('Search').'</a>';
 
 // Main content
 display_survey_list();
@@ -305,13 +305,13 @@ function get_survey_data($from, $number_of_items, $column, $direction)
  */
 function modify_filter($survey_id)
 {
-	$return = '<a href="create_new_survey.php?action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-	$return .= '<a href="survey_list.php?action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?')).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+	$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+	$return .= '<a href="survey_list.php?'.api_get_cidreq().'&action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?')).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 	//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
-	$return .= '<a href="preview.php?survey_id='.$survey_id.'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
-	$return .= '<a href="survey_invite.php?survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
-	$return .= '<a href="reporting.php?survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
+	$return .= '<a href="preview.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
+	$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
+	$return .= '<a href="reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 	return $return;
 }
 

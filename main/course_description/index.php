@@ -1,4 +1,4 @@
-<?php // $Id: index.php 11249 2007-02-27 10:53:09Z elixir_julian $
+<?php // $Id: index.php 12218 2007-05-01 18:27:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -66,10 +66,11 @@ if(isset($_GET['description_id']) && $_GET['description_id']==6) $interbreadcrum
 if(isset($_GET['description_id']) && $_GET['description_id']==7) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('Assessment'));
 if(isset($_GET['description_id']) && $_GET['description_id']==8) $interbreadcrumb[] = array ("url" => "#", "name" => get_lang('NewBloc'));
 
+api_protect_course_script();
+
 Display :: display_header($nameTools, "Description");
 api_display_tool_title($nameTools);
 
-api_protect_course_script();
 
 
 /*

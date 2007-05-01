@@ -287,6 +287,23 @@ if ($_POST['actions']=='download' and !$_POST['store_feedback'])
 }
 
 /*
+ * ========================================
+ *         AUTHORISATION SECTION
+ * ========================================
+ * Prevents access of all users that are not course members
+ */
+if(! $is_allowed_in_course || ! $is_courseMember)
+{
+	if ($origin != 'learnpath')
+	{
+		api_not_allowed(true);//print headers/footers
+	}else{
+		api_not_allowed();
+	}
+	exit();
+}
+
+/*
 ==============================================================================
 		HEADER & TITLE
 ==============================================================================
@@ -305,21 +322,4 @@ else // if we come from the learning path we have to include the stylesheet and 
 }
 
 api_display_tool_title();
-
-
-/*
- * ========================================
- *         AUTHORISATION SECTION
- * ========================================
- * Prevents access of all users that are not course members
- */
-if(! $is_allowed_in_course || ! $is_courseMember)
-{
-	api_not_allowed();
-	if ($origin != 'learnpath')
-	{
-		Display::display_footer();
-	}
-	exit();
-}
 ?>

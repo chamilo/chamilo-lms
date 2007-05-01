@@ -248,6 +248,10 @@ function show_users_in_virtual_courses()
 	}
 }
 
+if(!$is_allowed_in_course){
+	api_not_allowed(true);
+}
+
 /*
 -----------------------------------------------------------
 	Header
@@ -285,9 +289,6 @@ if( isset($message))
 		MAIN CODE
 ==============================================================================
 */
-if(!$is_allowed_in_course){
-	api_not_allowed();
-}
 
 //statistics
 event_access_tool(TOOL_USER);

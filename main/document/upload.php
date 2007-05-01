@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 11790 2007-03-29 20:58:06Z pcool $
+<?php // $Id: upload.php 12218 2007-05-01 18:27:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -118,7 +118,7 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') //if the group id is set, 
 	}
 	else
 	{
-		api_not_allowed();
+		api_not_allowed(true);
 	}
 }
 elseif($is_allowed_to_edit) //admin for "regular" upload, no group documents
@@ -128,7 +128,7 @@ elseif($is_allowed_to_edit) //admin for "regular" upload, no group documents
 }
 else  //no course admin and no group member...
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 //what's the current path?

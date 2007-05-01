@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 11855 2007-04-03 15:00:22Z pcool $
+<?php // $Id: course_home.php 12218 2007-05-01 18:27:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -145,20 +145,21 @@ api_session_unregister('toolgroup');
 
 /*
 -----------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
-Display::display_header($course_title, "Home");
-
-/*
------------------------------------------------------------
 	Is the user allowed here?
 -----------------------------------------------------------
 */
 if($is_allowed_in_course == false) 
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
+/*
+-----------------------------------------------------------
+	Header
+-----------------------------------------------------------
+*/
+Display::display_header($course_title, "Home");
+
+
 
 
 /*

@@ -1,4 +1,4 @@
-<?php // $Id: download.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: download.php 12218 2007-05-01 18:27:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,7 +74,7 @@ include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
 if (! isset($_course))
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 

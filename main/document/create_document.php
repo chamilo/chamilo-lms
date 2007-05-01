@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 11663 2007-03-22 14:48:23Z elixir_inter $
+// $Id: create_document.php 12218 2007-05-01 18:27:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -203,18 +203,18 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '')
 	$path = explode('/', $dir);
 	if ('/'.$path[1] != $group['directory'])
 	{
-		api_not_allowed();
+		api_not_allowed(true);
 	}
 }
 $interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
 
 if (!$is_allowed_in_course)
-	api_not_allowed();
+	api_not_allowed(true);
 
 $is_allowedToEdit = api_is_allowed_to_edit();
 if (!($is_allowedToEdit || $_SESSION['group_member_with_upload_rights']))
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 /*
 -----------------------------------------------------------

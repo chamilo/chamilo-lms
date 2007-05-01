@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 11790 2007-03-29 20:58:06Z pcool $
+<?php // $Id: edit_document.php 12218 2007-05-01 18:27:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -153,7 +153,7 @@ $is_allowedToEdit = is_allowed_to_edit() || $_SESSION['group_member_with_upload_
 
 if(!$is_allowedToEdit)
 {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 event_access_tool(TOOL_DOCUMENT);

@@ -1343,7 +1343,14 @@ function api_not_allowed($print_headers = false)
 	 // but the cidReq is not found, assume we are missing course data and send the user
 	 // to the user_portal
 	 //TODO deal with the no-headers case (headers already sent, so no redirection possible)
-		header('location: '.$home_url.'user_portal.php');
+		if(!headers_sent())
+		{
+			header('location: '.$home_url.'user_portal.php');
+		}else{
+			echo '<div align="center">';
+			Display :: display_error_message('<p>Either you are not allowed here or your session has expired.<br/><br/><a href="'.$home_url.'">Please try to login again from the homepage</a><br/>',false);
+			echo '</div>';
+		}
 		die();
 	}
 	elseif(!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq'])){

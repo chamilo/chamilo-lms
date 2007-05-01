@@ -161,6 +161,8 @@ if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php'))
 
 
 
+// preventing XSS injections on all scripts at once
+$_SERVER['PHP_SELF'] = api_get_self();
 
 if(get_setting('server_type') == 'test')
 {
@@ -406,7 +408,4 @@ if(mysql_num_rows($q_last_connection) > 0)
 	$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 	api_sql_query($s_sql_update_logout_date);
 }
-
-// preventing XSS injections on all scripts at once
-$_SERVER['PHP_SELF'] = api_get_self();
 ?>

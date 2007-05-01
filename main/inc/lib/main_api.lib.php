@@ -153,7 +153,6 @@ function api_protect_course_script()
 	global $is_allowed_in_course;
 	if (!isset ($_SESSION["_course"]) || !$is_allowed_in_course)
 	{
-		include (api_get_path(INCLUDE_PATH)."header.inc.php");
 		api_not_allowed();
 	}
 }
@@ -1265,8 +1264,8 @@ function api_is_allowed($tool, $action, $task_id = 0)
 	//if(!$_SESSION['total_permissions'][$_course['code']] and $_course)
 	if($_course)
 	{
-		include_once(api_get_path(SYS_CODE_PATH) . 'permissions/permissions_functions.inc.php');
-		include_once(api_get_path(LIBRARY_PATH) . "/groupmanager.lib.php");
+		require_once(api_get_path(SYS_CODE_PATH) . 'permissions/permissions_functions.inc.php');
+		require_once(api_get_path(LIBRARY_PATH) . "/groupmanager.lib.php");
 
 		// getting the permissions of this user
 		if($task_id == 0)
@@ -1336,7 +1335,16 @@ function api_is_allowed($tool, $action, $task_id = 0)
 function api_not_allowed()
 {
 	$home_url = api_get_path(WEB_PATH);
-	if(!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq'])){
+	$user = api_get_user_id();
+	$course = api_get_course_id();
+	if(isset($user) && !isset($course) && empty($_GET['cidReq']))
+	{//if the access is not authorized and there is some login information 
+	 // but the cidReq is not found, assume we are missing course data and send the user
+	 // to the user_portal
+		header('location: '.$home_url.'user_portal.php');
+	die();
+	}
+	elseif(!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq'])){
 		//only display form and return to the previous URL if there was a course ID included
 		include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 		$form = new FormValidator('formLogin');
@@ -1346,6 +1354,7 @@ function api_not_allowed()
 		$form->addElement('password','password','',array('size'=>15));
 		$form->addElement('submit','submitAuth',get_lang('Ok'));
 		$test = $form->return_form();
+		Display::display_header();
 		echo '<div align="center">';
 		Display :: display_error_message("<p>Either you are not allowed here or your session has expired.<br/><br/>Please try to login again using the following form: <br/>".$test,false);
 		echo '</div>';
@@ -1354,6 +1363,7 @@ function api_not_allowed()
 		die();
 	}else{
 		//if no course ID was included in the requested URL, redirect to homepage
+		Display::display_header();
 		echo '<div align="center">';
 		Display :: display_error_message('<p>Either you are not allowed here or your session has expired.<br/><br/><a href="'.$home_url.'">Please try to login again from the homepage</a><br/>',false);
 		echo '</div>';

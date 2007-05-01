@@ -1324,6 +1324,7 @@ function api_is_allowed($tool, $action, $task_id = 0)
 
 /**
  * Displays message "You are not allowed here..." and exits the entire script.
+ * @param	bool	Whether or not to print headers (default = false -> does not print them)
  *
  * @author Roan Embrechts
  * @author Yannick Warnier
@@ -1332,7 +1333,7 @@ function api_is_allowed($tool, $action, $task_id = 0)
  * @version 1.0, February 2004
  * @version dokeos 1.8, August 2006
 */
-function api_not_allowed()
+function api_not_allowed($print_headers = false)
 {
 	$home_url = api_get_path(WEB_PATH);
 	$user = api_get_user_id();
@@ -1341,8 +1342,9 @@ function api_not_allowed()
 	{//if the access is not authorized and there is some login information 
 	 // but the cidReq is not found, assume we are missing course data and send the user
 	 // to the user_portal
+	 //TODO deal with the no-headers case (headers already sent, so no redirection possible)
 		header('location: '.$home_url.'user_portal.php');
-	die();
+		die();
 	}
 	elseif(!empty($_SERVER['REQUEST_URI']) && !empty($_GET['cidReq'])){
 		//only display form and return to the previous URL if there was a course ID included
@@ -1354,20 +1356,20 @@ function api_not_allowed()
 		$form->addElement('password','password','',array('size'=>15));
 		$form->addElement('submit','submitAuth',get_lang('Ok'));
 		$test = $form->return_form();
-		Display::display_header();
+		if($print_headers){Display::display_header();}
 		echo '<div align="center">';
 		Display :: display_error_message("<p>Either you are not allowed here or your session has expired.<br/><br/>Please try to login again using the following form: <br/>".$test,false);
 		echo '</div>';
 		$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-		Display::display_footer();
+		if($print_headers){Display::display_footer();}
 		die();
 	}else{
 		//if no course ID was included in the requested URL, redirect to homepage
-		Display::display_header();
+		if($print_headers){Display::display_header();}
 		echo '<div align="center">';
 		Display :: display_error_message('<p>Either you are not allowed here or your session has expired.<br/><br/><a href="'.$home_url.'">Please try to login again from the homepage</a><br/>',false);
 		echo '</div>';
-		Display::display_footer();
+		if($print_headers){Display::display_footer();}
 		die();
 	}
 }

@@ -37,9 +37,9 @@ api_protect_course_script();
 //$is_allowed_to_edit = api_is_allowed_to_edit();
 
 if ($is_allowed_in_course == false){
-	Display::display_header('');
+	//Display::display_header('');
 	api_not_allowed();
-	Display::display_footer();
+	//Display::display_footer();
 }
 
 require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");

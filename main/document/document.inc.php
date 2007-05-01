@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 10839 2007-01-23 09:35:28Z elixir_julian $
+<?php // $Id: document.inc.php 12220 2007-05-01 22:19:23Z yannoo $
 
 /*
 ==============================================================================
@@ -98,7 +98,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 
 function display_document_options()
 {
-	$message = "<a href=\"quota.php\">".get_lang("ShowCourseQuotaUse")."</a>";
+	$message = "<a href=\"quota.php?".api_get_cidreq()."\">".get_lang("ShowCourseQuotaUse")."</a>";
 	echo 	/*"<div id=\"smallmessagebox\">"
 			.*/ "<p>" . $message . "</p>"
 			/*. "</div>"*/;
@@ -129,7 +129,7 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 	//add class="invisible" on invisible files
 	$visibility_class= ($visibility==0)?' class="invisible"':'';
 	//build download link (icon)
-	$forcedownload_link=($filetype=='folder')?$_SERVER['PHP_SELF'].'?action=downloadfolder&amp;path='.$url_path.$req_gid:$_SERVER['PHP_SELF'].'?action=download&amp;id='.$url_path.$req_gid;
+	$forcedownload_link=($filetype=='folder')?$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid:$_SERVER['PHP_SELF'].'?action=download&amp;id='.$url_path.$req_gid;
 	//folder download or file download?
 	$forcedownload_icon=($filetype=='folder')?'folder_zip.gif':'filesave.gif';
 	//prevent multiple clicks on zipped folder download
@@ -226,10 +226,10 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id)
 	$visibility_command = ($visibility==0)?'set_visible':'set_invisible';
 	$curdirpath = urlencode($curdirpath);
 	
-	$modify_icons = '<a href="edit_document.php?curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$gid_req.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$gid_req.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$gid_req.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$gid_req.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
+	$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$gid_req.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
+	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$gid_req.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
+	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$gid_req.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
+	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$gid_req.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
 	return $modify_icons;
 }
 

@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 12048 2007-04-18 08:08:26Z elixir_julian $
+* 	@version $Id: exercice.php 12220 2007-05-01 22:19:23Z yannoo $
 */
 
 
@@ -436,7 +436,7 @@ if($show == 'test'){
 	{
 		//error_log('is_allowedToEdit and origin<> learnpath',0);
 		echo "<td width=\"50%\" nowrap=\"nowrap\">",
-			"<img src=\"../img/new_test.gif\" alt=\"new test\" align=\"absbottom\">&nbsp;<a href=\"exercise_admin.php\">".get_lang("NewEx")."</a>",
+			"<img src=\"../img/new_test.gif\" alt=\"new test\" align=\"absbottom\">&nbsp;<a href=\"exercise_admin.php?".api_get_cidreq()."\">".get_lang("NewEx")."</a>",
 
 			//"<img src=\"../img/quiz_na.gif\" alt=\"new test\" valign=\"ABSMIDDLE\"><a href=\"question_pool.php\">".get_lang("QuestionPool")."</a> | ",
 			//" | <img src=\"../img/jqz.jpg\" alt=\"HotPotatoes\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"hotpotatoes.php\">".get_lang("ImportHotPotatoesQuiz")."</a>",

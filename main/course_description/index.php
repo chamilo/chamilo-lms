@@ -1,4 +1,4 @@
-<?php // $Id: index.php 12218 2007-05-01 18:27:14Z yannoo $
+<?php // $Id: index.php 12220 2007-05-01 22:19:23Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -281,7 +281,7 @@ if ($show_description_list)
 				echo '<div style="padding-bottom: 5px;margin-bottom: 0px;">';
 			}
 			echo '<div style="float: left;width:150px; text-align:center; margin-right: 5px;">
-	            	<a href="'.$_SERVER["PHP_SELF"].'?description_id='.$id.'"><img src="'.$default_description_icon[$id].'" /><br>'.$title.'</a>
+	            	<a href="'.$_SERVER["PHP_SELF"].'?'.api_get_cidreq().'&description_id='.$id.'"><img src="'.$default_description_icon[$id].'" /><br>'.$title.'</a>
 	        	</div>';
         	if($i==4 || $i==8){
 				echo '<div style="clear: both"></div></div>';

@@ -273,22 +273,22 @@ if (isset($up))
 */
 if(is_allowed_to_edit())
 {
-	echo Display::return_icon('file_html_new.gif')." <a href=\"".$_SERVER['PHP_SELF']."?action=addlink&amp;category=".$category."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
-	echo Display::return_icon('folder_new.gif')." <a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
-	   /* "<a href=\"".$_SERVER['PHP_SELF']."?action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
+	echo Display::return_icon('file_html_new.gif')." <a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=addlink&amp;category=".$category."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
+	echo Display::return_icon('folder_new.gif')." <a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
+	   /* "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
 }
 //making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
 //number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
 $sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 $resultcategories=api_sql_query($sqlcategories);
 $aantalcategories = @mysql_num_rows($resultcategories);
-echo Display::return_icon('remove.gif')." <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+echo Display::return_icon('remove.gif')." <a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&urlview=";
 for($j = 1; $j <= $aantalcategories; $j++)
 {
 	echo "0";
 }
 echo "\">$shownone</a>";
-echo Display::return_icon('add.gif')." <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+echo Display::return_icon('add.gif')." <a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&urlview=";
 for($j = 1; $j <= $aantalcategories; $j++)
 {
 echo "1";
@@ -336,7 +336,7 @@ while ($myrow=@mysql_fetch_array($resultcategories))
 		$newurlview=$urlview;
 		$newurlview[$i]="0";
 		echo "<tr>",
-			"<th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">- <a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".htmlentities($myrow["category_title"])."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
+			"<th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">- <a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&urlview=".$newurlview."\">".htmlentities($myrow["category_title"])."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
 		if (is_allowed_to_edit())
 		{
 		showcategoryadmintools($myrow["id"]);
@@ -351,7 +351,7 @@ while ($myrow=@mysql_fetch_array($resultcategories))
 	else
 		{
 
-		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">+ <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">+ <a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&urlview=";
 		echo is_array($view)?implode('',$view):$view;
 		echo "\">".htmlentities($myrow["category_title"])."</a><br />&nbsp;&nbsp;&nbsp;";
 		echo $myrow["description"];

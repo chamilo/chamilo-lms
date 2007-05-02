@@ -338,13 +338,15 @@ if (!in_array($user_language,$valid_languages['folder']))
 	$user_language=get_setting('platformLanguage');
 }
 
-
 if (in_array($user_language,$valid_languages['folder']) and (isset($_GET['language']) OR isset($_POST['language_list'])))
 {
 	$user_selected_language = $user_language; // $_GET["language"];
 	$_SESSION["user_language_choice"] = $user_selected_language;
 	$platformLanguage = $user_selected_language;
+}else{
+	$platformLanguage = get_setting('platformLanguage');
 }
+
 
 if (isset($_SESSION["user_language_choice"]))
 {

@@ -75,18 +75,18 @@ Display::display_header($nameTools,"Group");
 /*
  * User wants to register in this group
  */
-if ($_GET['selfReg'] && GroupManager :: is_self_registration_allowed($_SESSION['_uid'], $current_group['id']))
+if ($_GET['selfReg'] && GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
 {
-	GroupManager :: subscribe_users($_SESSION['_uid'], $current_group['id']);
+	GroupManager :: subscribe_users($_SESSION['_user']['user_id'], $current_group['id']);
 	Display :: display_normal_message(get_lang('GroupNowMember'));
 }
 
 /*
  * User wants to unregister from this group
  */
-if ($_GET['selfUnReg'] && GroupManager :: is_self_unregistration_allowed($_SESSION['_uid'], $current_group['id']))
+if ($_GET['selfUnReg'] && GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
 {
-	GroupManager :: unsubscribe_users($_SESSION['_uid'], $current_group['id']);
+	GroupManager :: unsubscribe_users($_SESSION['_user']['user_id'], $current_group['id']);
 	Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
 /*
@@ -100,7 +100,7 @@ if (api_is_allowed_to_edit() or GroupManager :: is_tutor($_user['user_id']))
 /*
  * Register to group
  */
-if (GroupManager :: is_self_registration_allowed($_SESSION['_uid'], $current_group['id']))
+if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
 {
 	echo '<p align="right"><a href="'.$_SERVER['PHP_SELF'].'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.get_lang("RegIntoGroup").'</a></p>';
 }
@@ -108,7 +108,7 @@ if (GroupManager :: is_self_registration_allowed($_SESSION['_uid'], $current_gro
 /*
  * Unregister from group
  */
-if (GroupManager :: is_self_unregistration_allowed($_SESSION['_uid'], $current_group['id']))
+if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
 {
 	echo '<p align="right"><a href="'.$_SERVER['PHP_SELF'].'?selfUnReg=1" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a></p>';
 }
@@ -133,7 +133,7 @@ if( isset($_GET['action']))
 -----------------------------------------------------------
 */
 $course_code = $_course['sysCode'];
-$is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course($_SESSION['_uid'], $course_code);
+$is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course($_SESSION['_user']['user_id'], $course_code);
 
 /*
  * Group title and comment
@@ -150,7 +150,7 @@ if (!empty($current_group['description']))
  * Group Tools
  */
 // If the user is subscribed to the group or the user is a tutor of the group then
-if (api_is_allowed_to_edit() OR GroupManager :: is_user_in_group($_SESSION['_uid'], $current_group['id']))
+if (api_is_allowed_to_edit() OR GroupManager :: is_user_in_group($_SESSION['_user']['user_id'], $current_group['id']))
 {
 	$tools = '';
 	// Edited by Patrick Cool, 12 feb 2004: hide the forum link if there is no forum for this group (deleted through forum_admin.php)

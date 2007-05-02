@@ -188,14 +188,16 @@ if(!empty($_GET['student']))
 	$a_infosUser = UserManager::get_user_info_by_id($_GET['student']);
 	$a_infosUser['name'] = $a_infosUser['firstname'].' '.$a_infosUser['lastname'];
 	
-	// courses followed by user where we are coach
-	if(!isset($_GET['id_coach'])){
-		$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
-	}
-	else{
-		$a_courses = Tracking :: get_courses_followed_by_coach($_GET['id_coach']);
-	}
+	
 	$avg_student_progress = $avg_student_score = $nb_courses = 0;
+	$sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.$a_infosUser['user_id'];
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$a_courses = array();
+	while($row = Database :: fetch_array($rs))
+	{
+		$a_courses[] = $row['course_code'];
+	}
+	
 	foreach ($a_courses as $key=>$course_code)
 	{
 		if(!CourseManager::is_user_subscribed_in_course($a_infosUser['user_id'], $course_code, true))
@@ -768,6 +770,13 @@ if(!empty($_GET['student']))
 			</th>
 		</tr>
 <?php
+		// courses followed by user where we are coach
+		if(!isset($_GET['id_coach'])){
+			$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
+		}
+		else{
+			$a_courses = Tracking :: get_courses_followed_by_coach($_GET['id_coach']);
+		}
 		if(count($a_courses)>0)
 		{
 			$csv_content[] = array();

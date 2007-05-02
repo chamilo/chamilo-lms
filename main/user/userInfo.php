@@ -354,6 +354,9 @@ elseif ($displayMode == "viewMainInfoEdit")
 		echo "<p>".Display :: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
 
 	}
+	else{
+		Display :: display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));
+	}
 }
 elseif ($displayMode == "viewContentList") // default display
 {
@@ -431,7 +434,7 @@ elseif ($displayMode == "viewContentList") // default display
                                 {
                                         echo	"<td>",
 							"<a href=\"../mySpace/myStudents.php?".api_get_cidreq()."&origin=user_course&student=$userIdViewed&details=true&course=".$_course['id']."\">",
-							"<img border=\"0\" alt=\"".get_lang('Tracking')." : $userIdViewed\" src=\"../img/statistics.png\" />",
+							"<img border=\"0\" alt=\"".get_lang('Tracking')." : $userIdViewed\" src=\"../img/statistics.gif\" />",
 							"</a>",
 							"</td>";
                                 }
@@ -439,6 +442,9 @@ elseif ($displayMode == "viewContentList") // default display
 				"</table>";
 				//"<p><a href=\"mailto:",$mainUserInfo['email'],"\">",$mainUserInfo['email'],"</a>",
 				echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
+	}
+	else{
+		Display :: display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));
 	}
 
 	if (get_setting('allow_user_headings') == 'true' && $allowedToEditDef) // only course administrators see this line

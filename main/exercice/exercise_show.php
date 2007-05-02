@@ -806,6 +806,11 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								 	$arrmarks[] = $questionId;
 								 	echo '<div id="'.$marksname.'" style="visibility:hidden"><form name="marksform_'.$questionId.'" method="post" action=""><select name="marks" id="marks" style="display:none;"><option>'.$questionScore.'</option></select></form></div>';
 								 }
+						}
+						else{
+							if($questionScore==-1){
+								  	$questionScore=0;
+						}
 						}?>
 
   </td><tr><td></td><td align="right"><b><?php echo get_lang('Score')." : $questionScore/$questionWeighting"; ?></b></td>

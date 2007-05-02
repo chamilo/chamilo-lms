@@ -280,14 +280,11 @@ function get_personal_course_list($user_id)
 }
 
 /**
- * Enter description here...
- *
- * @param unknown_type $user_id
- * @param unknown_type $list_sessions
- * @return unknown
- *
+ * Gives a list of [session_id-course_code] => [status] for the current user.
+ * @param integer $user_id
+ * @return array  list of statuses (session_id-course_code => status)
  */
-function get_personal_session_course_list($user_id, $list_sessions)
+function get_personal_session_course_list($user_id)
 {
 	// Database Table Definitions
 	$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -324,9 +321,9 @@ function get_personal_session_course_list($user_id, $list_sessions)
 							AND (date_start < NOW() AND date_end > NOW() OR date_start='0000-00-00')
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
-	$Sessions=api_store_result($result);
+	$sessions=api_store_result($result);
 
-	$Sessions = array_merge($Sessions , api_store_result($result));
+	$sessions = array_merge($sessions , api_store_result($result));
 
 	// get the list of sessions where the user is subscribed as coach in a course
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
@@ -336,10 +333,9 @@ function get_personal_session_course_list($user_id, $list_sessions)
 							AND (date_start < NOW() AND date_end > NOW() OR date_start='0000-00-00')
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
-	//global $sessionIsCoach;
-	$sessionIsCoach = api_store_result($result);
+	$session_is_coach = api_store_result($result);
 
-	$Sessions = array_merge($Sessions , $sessionIsCoach);
+	$sessions = array_merge($sessions , $session_is_coach);
 
 	// get the list of sessions where the user is subscribed as coach
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
@@ -348,12 +344,12 @@ function get_personal_session_course_list($user_id, $list_sessions)
 							AND (date_start < NOW() AND date_end > NOW() OR date_start='0000-00-00')
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
-	$Sessions = array_merge($Sessions , api_store_result($result));
+	$sessions = array_merge($sessions , api_store_result($result));
 
 
 	if(api_is_allowed_to_create_course())
 	{
-		foreach($Sessions as $enreg)
+		foreach($sessions as $enreg)
 		{
 			$id_session = $enreg['id'];
 			$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name
@@ -380,7 +376,7 @@ function get_personal_session_course_list($user_id, $list_sessions)
 
 	}
 
-	foreach($Sessions as $enreg)
+	foreach($sessions as $enreg)
 	{
 		$id_session = $enreg['id'];
 		$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')

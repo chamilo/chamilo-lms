@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: select.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id: select.php 12243 2007-05-02 21:00:52Z yannoo $
 
 require_once('HTML/QuickForm/element.php');
 
@@ -446,9 +446,9 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
             case (is_a($options, 'db_result')):
                 return $this->loadDbResult($options, $param1, $param2, $param3);
                 break;
-            case (is_string($options) && !empty($options) || is_subclass_of($options, "db_common")):
-                return $this->loadQuery($options, $param1, $param2, $param3, $param4);
-                break;
+            //case (is_string($options) && !empty($options) || is_subclass_of($options, "db_common")):
+            //    return $this->loadQuery($options, $param1, $param2, $param3, $param4);
+            //    break;
         }
     } // end func load
     

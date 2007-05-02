@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 12195 2007-04-30 12:30:38Z elixir_julian $
+* 	@version $Id: exercise_result.php 12238 2007-05-02 15:46:44Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -733,7 +733,8 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			}
 			elseif ($answerType==4)
 			{
-				$j=sizeof($choice)+1;
+				$j=sizeof($matching)+1;
+
 				for ($i=0;$i<sizeof($choice);$i++,$j++)
 				{
 					$val = $choice[$j];
@@ -743,8 +744,8 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 					$val=strip_tags($val);
 					$sql = "select position from $table_ans where question_id=$questionId and answer='$val'";
 					$res = api_sql_query($sql, __FILE__, __LINE__);
-					$answer = mysql_result($res,0,"position");
-
+					$answer = mysql_result($res,0,"position");				
+					
 					exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
 
 				}

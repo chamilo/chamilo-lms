@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 11881 2007-04-05 12:42:47Z elixir_julian $
+<?php // $Id: configure_homepage.php 12222 2007-05-02 05:45:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -71,7 +71,7 @@ $menu_language=$_SESSION['user_language_choice'];
 
 if(!isset($menu_language))
 {
-	$menu_language=$platformLanguage;
+	$menu_language=get_setting('platformLanguage');
 }
 
 if(!file_exists('../../home/home_menu_'.$menu_language.'.html'))
@@ -479,11 +479,8 @@ Display::display_header($tool_name);
 
 //api_display_tool_title($tool_name);
 
-if($action == 'open_link')
+if($action == 'open_link' && !empty($link))
 {
-?>
-
-<?php
 	include('../../home/'.$link);
 }
 elseif($action == 'edit_notice')

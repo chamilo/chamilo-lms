@@ -85,6 +85,7 @@ class TableSort
 	 */
 	function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGULAR)
 	{
+		if(!is_array($data) or count($data)==0){return array();}
 		switch ($type)
 		{
 			case SORT_REGULAR :

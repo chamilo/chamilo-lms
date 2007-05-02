@@ -126,9 +126,7 @@ else {
 }
 
 Display::display_header($nameTools,"Exercise");
-//echo "<pre>";
-//print_r($_SESSION);
-//echo "</pre>";
+
 $emailId = $_REQUEST['email'];
 $user_name = $_REQUEST['user'];
 $test 	   = $_REQUEST['test'];
@@ -302,10 +300,11 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
   <tr>
     <td colspan="2">
 	<?php
-		$sql_test_name='SELECT title FROM '.$TBL_EXERCICES.' as exercises, `'.$TABLETRACK_EXERCICES.'` as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.$id.'"';
+		$sql_test_name='SELECT title, description FROM '.$TBL_EXERCICES.' as exercises, `'.$TABLETRACK_EXERCICES.'` as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.$id.'"';
 		$result=api_sql_query($sql_test_name);
 		$test=mysql_result($result,0,0);
 		$exerciseTitle=api_parse_tex($test);
+		$exerciseDexcription=mysql_result($result,0,1);
 					
 $query = "select * from `".$TABLETRACK_ATTEMPT."` as attempts  
 						INNER JOIN `".$TABLETRACK_EXERCICES."` as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
@@ -316,8 +315,8 @@ $query = "select * from `".$TABLETRACK_ATTEMPT."` as attempts
 
 $result =api_sql_query($query, __FILE__, __LINE__);
 ?>
-	<h3><?php echo stripslashes($test)?>: <?php echo get_lang("Result"); ?></h3>
-
+	<h3><?php echo stripslashes($test)?> : <?php echo get_lang("Result"); ?></h3>
+	<?php echo $exerciseDexcription.'<br>'; ?>
 	 </td>
   </tr>
   <?php

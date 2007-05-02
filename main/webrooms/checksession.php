@@ -13,11 +13,11 @@ printf ('<?xml version="1.0" encoding="UTF-8" ?>');
 printf('<dokeosobject>');
 
 printf('<courseobject>');
-foreach ($_SESSION['_course'] as $key => $val)	printf('<%s>%s</%s>',$key,$val,$key);
+foreach ($_SESSION['_course'] as $key => $val)	printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
 printf('</courseobject>');
 
 printf('<userobject>');
-foreach ($_SESSION['_user'] as $key => $val)	printf('<%s>%s</%s>',$key,$val,$key);
+foreach ($_SESSION['_user'] as $key => $val)	printf('<%s>%s</%s>',$key,utf8_encode($val),$key);
 printf('</userobject>');
 
 printf('</dokeosobject>');

@@ -57,7 +57,7 @@ class HotSpot extends Question {
 		parent::createForm ($form);
 		if(!isset($_GET['editQuestion']))
 		{
-			$form->addElement('file','imageUpload',get_lang('UploadFile'));
+			$form->addElement('file','imageUpload',get_lang('UploadJpgPicture'));
 			$form->addRule('imageUpload', get_lang('OnlyJPG'), 'mimetype',array('image/jpeg','image/pjpeg'));
 			$form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
 		}

@@ -265,7 +265,7 @@ foreach ($group_cats as $index => $category)
 			if (api_is_allowed_to_edit() || in_array($_user['user_id'],$tutorsids_of_group) || $this_group['is_member'])
 			{
 				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';
-				if ($_SESSION['_user']['_uid'] && $_SESSION['_user']['user_id'] == $this_group['id_tutor'])
+				if ($_SESSION['_user']['user_id'] && $_SESSION['_user']['user_id'] == $this_group['id_tutor'])
 				{
 					$group_name .= ' ('.get_lang('OneMyGroups').')';
 				}

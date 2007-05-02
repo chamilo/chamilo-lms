@@ -136,6 +136,9 @@ if ($form->validate())
 	$values['additional_users'] = $values['additional_users'].';'; 	// this is for the case when you enter only one email
 	$temp = str_replace(',',';',$values['additional_users']);		// this is to allow , and ; as email separators
 	$additional_users = explode(';',$temp);
+	for($i=0; $i<count($additional_users); $i++){
+		$additional_users[$i] = trim($additional_users[$i]);
+	}
 	$counter_additional_users = save_invitations($additional_users, $values['mail_title'], $values['mail_text'], $values['resend_to_all']);
 	// updating the invited field in the survey table
 	update_count_invited($survey_data['code']);

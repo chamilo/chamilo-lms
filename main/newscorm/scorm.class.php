@@ -358,7 +358,7 @@ class scorm extends learnpath {
         $res = api_sql_query($sql,__FILE__,__LINE__);
         if(Database::num_rows($res)<1){ error_log('Database for '.$course_code.' not found '.__FILE__.' '.__LINE__,0);return -1;}
         $row = Database::fetch_array($res);
-        $dbname = Database::get_course_table_prefix().$row['db_name'];
+        $dbname = $row['db_name'];
 
 		//get table names
 		$new_lp = Database::get_course_table('lp',$dbname);

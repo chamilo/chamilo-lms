@@ -1,4 +1,4 @@
-<?php // $Id: document.php 12220 2007-05-01 22:19:23Z yannoo $
+<?php // $Id: document.php 12242 2007-05-02 20:31:24Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -63,12 +63,13 @@
 */
 
 // name of the language file that needs to be included
-$language_file = 'document';
+$language_file[] = 'document';
+$language_file[] = 'slideshow';
 
-include("../inc/global.inc.php");
+require("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 
-include('document.inc.php');
+require('document.inc.php');
 
 
 api_protect_course_script();
@@ -499,8 +500,6 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 	<?php
 	// Slideshow by Patrick Cool, May 2004
 	include("document_slideshow.inc.php");
-	// including the language file for the slideshow
-	include(api_get_path(SYS_LANG_PATH).$languageInterface."/"."slideshow.inc.php");
 	if ($image_present)
 	{
 		echo "<a href=\"slideshow.php?".api_get_cidreq()."&curdirpath=".$curdirpathurl."\"><img src=\"../img/images_gallery.gif\" border=\"0\" title=\"".get_lang('ViewSlideshow')."\"/>&nbsp;". get_lang('ViewSlideshow') . "</a>";

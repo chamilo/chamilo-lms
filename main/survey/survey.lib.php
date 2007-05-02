@@ -1496,7 +1496,7 @@ class open extends question
 		echo '<div class="survey_question_wrapper">';
 		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
 		echo '<div class="survey_question_options">';
-		echo '<label for="question'.$form_content['question_id'].'"></label><textarea name="question'.$form_content['question_id'].'" id="textarea">'.implode($answers).'</textarea>';
+		echo '<label for="question'.$form_content['question_id'].'"></label><textarea name="question'.$form_content['question_id'].'" id="textarea" style="width: 400px; height: 130px;">'.implode($answers).'</textarea>';
 		echo '</div>';
 	}
 }

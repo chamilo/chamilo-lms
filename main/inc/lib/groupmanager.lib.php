@@ -806,9 +806,11 @@ class GroupManager
 	 */
 	function is_subscribed($user_id, $group_id)
 	{
+		if(empty($user_id) or empty($group_id)){return false;}
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
-		$db_result = api_sql_query('SELECT 1 FROM '.$table_group_user.' WHERE group_id = '.$group_id.' AND user_id = '.$user_id);
-		return mysql_num_rows($db_result) > 0;
+		$sql = 'SELECT 1 FROM '.$table_group_user.' WHERE group_id = '.$group_id.' AND user_id = '.$user_id;
+		$db_result = api_sql_query($sql);
+		return Database::num_rows($db_result) > 0;
 	}
 	/**
 	 * Can a user subscribe to a specified group in a course

@@ -1081,7 +1081,7 @@ class learnpathItem{
 										$rs_quiz = api_sql_query($sql, __FILE__, __LINE__);
 										if($quiz = Database :: fetch_array($rs_quiz))
 										{
-											if($quiz['exe_result'] > $this -> min_score)
+											if($quiz['exe_result'] >= $this -> min_score)
 											{
 												$returnstatus = true;
 											}

@@ -639,6 +639,10 @@ function display_license_agreement()
 		</tr>
 		<tr>
 		<td>
+		<p><?php echo get_lang('DokeosArtLicense');?></p>
+		</td>
+		</tr>
+		<td>
 		<table width="100%">
 			<tr>
 				<td></td>

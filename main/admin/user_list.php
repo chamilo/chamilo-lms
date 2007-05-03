@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 11702 2007-03-27 07:35:23Z elixir_inter $
+// $Id: user_list.php 12277 2007-05-03 15:35:44Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,6 +36,7 @@ $cidReset = true;
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once (api_get_path(LIBRARY_PATH).'security.lib.php');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -256,7 +257,7 @@ function email_filter($email)
 function modify_filter($user_id,$url_params)
 {
 	$result .= '<a href="user_information.php?user_id='.$user_id.'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Info').'" alt="'.get_lang('Info').'"/></a>&nbsp;';
-	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'"><img src="../img/login_as.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
+	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'"><img src="../img/login_as.gif" border="0" style="vertical-align: middle;" alt="'.get_lang('LoginAs').'" title="'.get_lang('LoginAs').'"/></a>&nbsp;';
 
 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql="SELECT status FROM ".$tbl_user." WHERE user_id='".$user_id."'";
@@ -270,7 +271,7 @@ function modify_filter($user_id,$url_params)
 	}
 
 	$result .= '<a href="user_edit.php?user_id='.$user_id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;';
-	$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';
+	$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>';
 	return $result;
 }
 
@@ -301,7 +302,7 @@ function active_filter($active, $url_params, $row)
 
 	if ($row['0']<>$_user['user_id']) // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 	{
-		$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'"><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></a>';
+		$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></a>';
 	}
 	return $result;
 }
@@ -316,7 +317,6 @@ function active_filter($active, $url_params, $row)
 function lock_unlock_user($status,$user_id)
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-
 	if ($status=='lock')
 	{
 		$status_db='0';
@@ -392,58 +392,68 @@ else
 	//api_display_tool_title($tool_name);
 	if (isset ($_GET['action']))
 	{
-		switch ($_GET['action'])
+		$check = Security::check_token('get');
+		if($check)
 		{
-			case 'show_message' :
-				Display :: display_normal_message(stripslashes($_GET['message']));
-				break;
-			case 'delete_user' :
-				if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id']))
-				{
-					Display :: display_normal_message(get_lang('UserDeleted'));
-				}
-				else
-				{
-					Display :: display_error_message(get_lang('CannotDeleteUser'));
-				}
-				break;
-			case 'lock' :
-				$message=lock_unlock_user('lock',$_GET['user_id']);
-				Display :: display_normal_message($message);
-				break;
-			case 'unlock';
-				$message=lock_unlock_user('unlock',$_GET['user_id']);
-				Display :: display_normal_message($message);
-				break;
-
+			switch ($_GET['action'])
+			{
+				case 'show_message' :
+					Display :: display_normal_message(stripslashes($_GET['message']));
+					break;
+				case 'delete_user' :
+					if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id']))
+					{
+						Display :: display_normal_message(get_lang('UserDeleted'));
+					}
+					else
+					{
+						Display :: display_error_message(get_lang('CannotDeleteUser'));
+					}
+					break;
+				case 'lock' :
+					$message=lock_unlock_user('lock',$_GET['user_id']);
+					Display :: display_normal_message($message);
+					break;
+				case 'unlock';
+					$message=lock_unlock_user('unlock',$_GET['user_id']);
+					Display :: display_normal_message($message);
+					break;
+	
+			}
+			Security::clear_token();
 		}
 	}
 	if (isset ($_POST['action']))
 	{
-		switch ($_POST['action'])
+		$check = Security::check_token('post');
+		if($check)
 		{
-			case 'delete' :
-				$number_of_selected_users = count($_POST['id']);
-				$number_of_deleted_users = 0;
-				foreach ($_POST['id'] as $index => $user_id)
-				{
-					if($user_id != $_user['user_id'])
+			switch ($_POST['action'])
+			{
+				case 'delete' :
+					$number_of_selected_users = count($_POST['id']);
+					$number_of_deleted_users = 0;
+					foreach ($_POST['id'] as $index => $user_id)
 					{
-						if(UserManager :: delete_user($user_id))
+						if($user_id != $_user['user_id'])
 						{
-							$number_of_deleted_users++;
+							if(UserManager :: delete_user($user_id))
+							{
+								$number_of_deleted_users++;
+							}
 						}
 					}
-				}
-				if($number_of_selected_users == $number_of_deleted_users)
-				{
-					Display :: display_normal_message(get_lang('SelectedUsersDeleted'));
-				}
-				else
-				{
-					Display :: display_error_message(get_lang('SomeUsersNotDeleted'));
-				}
-				break;
+					if($number_of_selected_users == $number_of_deleted_users)
+					{
+						Display :: display_normal_message(get_lang('SelectedUsersDeleted'));
+					}
+					else
+					{
+						Display :: display_error_message(get_lang('SomeUsersNotDeleted'));
+					}
+					break;
+			}
+			Security::clear_token();
 		}
 	}
 	// Create a search-box
@@ -469,6 +479,7 @@ else
 		$parameters['keyword_inactive'] = $_GET['keyword_inactive'];
 	}
 	// Create a sortable table with user-data
+	Security::get_token();
 	$table = new SortableTable('users', 'get_number_of_users', 'get_user_data',2);
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);

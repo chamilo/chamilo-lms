@@ -69,7 +69,7 @@ if (!$already_installed)
 
 			<div style="text-align: center;"><br /><br />
 					<form action="main/install/index.php" method="get"><input type="submit" value="&nbsp;&nbsp; Click to INSTALL DOKEOS &nbsp;&nbsp;" /></form><br />
-					or <a href="documentation/installation_guide.html" target="_blank">read the installation guide</a><br /><br />
+					or <a href="documentation/Dokeos18InstallManual.pdf" target="_blank">read the installation guide</a><br /><br />
 			</div>
 
 			<div id="footer">

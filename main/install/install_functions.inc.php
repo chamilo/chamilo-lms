@@ -342,7 +342,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 	echo '<h2>'.display_step_sequence().get_lang('Requirements')."</h2>\n";
 
 	echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
-	echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
+	echo get_lang('MoreDetails').' <a href="../../documentation/Dokeos18InstallManual.pdf" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
 
 	//	SERVER REQUIREMENTS
 	echo '<div class="RequirementHeading"><h1>'.get_lang('ServerRequirements').'</h1>';

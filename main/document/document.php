@@ -1,4 +1,4 @@
-<?php // $Id: document.php 12263 2007-05-03 13:34:40Z elixir_julian $
+<?php // $Id: document.php 12268 2007-05-03 14:16:09Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -459,6 +459,7 @@ $docs_and_folders = DocumentManager::get_all_document_data($_course,$curdirpath,
 <div id="folderselector" style="float:left;margin-right:10px;margin-top:5px;">
 <?php
 $folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit || $group_member_with_upload_rights);
+if($folders===false){$folders = array();}
 echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'],true));
 ?>
 </div>

@@ -110,7 +110,7 @@ if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_u
 }
 if (api_is_allowed_to_edit())
 {
-	echo "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=delete&amp;content=post&amp;id=".$rows[$display_post_id]['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
+	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=delete&amp;content=post&amp;id=".$rows[$display_post_id]['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
 	display_visible_invisible_icon('post', $rows[$display_post_id]['post_id'], $rows[$display_post_id]['visible'],array('forum'=>$_GET['forum'],'thread'=>$_GET['thread'], 'post'=>$_GET['post'] ));
 	echo "\n";
 	echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=move&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('Edit'))."</a>\n";

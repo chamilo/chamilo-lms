@@ -92,7 +92,7 @@ if($isCoach || api_is_platform_admin())
 	echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
 		  <div align="right">
 			<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-			<a href="'.$_SERVER['PHP_SELF'].'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+			<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 		  </div><div class="clear"></div>';
 	
 	if(isset($_GET['id_coach'])){

@@ -1,4 +1,4 @@
-<?php // $Id: document.php 12242 2007-05-02 20:31:24Z yannoo $
+<?php // $Id: document.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -404,7 +404,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	if(isset($_GET['createdir']))
 	{
 		//create the form that asks for the directory name
-		$new_folder_text = '<form action="'.$_SERVER['PHP_SELF'].'" method="post">';
+		$new_folder_text = '<form action="'.api_get_self().'" method="post">';
 		$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
 		$new_folder_text .= get_lang('NewDir') .' ';
 		$new_folder_text .= '<input type="text" name="dirname" />';

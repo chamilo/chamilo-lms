@@ -233,7 +233,7 @@ class SortableTable extends HTML_Table
 															</script>';
 				$params = $this->get_sortable_table_param_string.'&amp;'.$this->get_additional_url_paramstring();
 
-				$html .= '<form method="post" action="'.$_SERVER['PHP_SELF'].'?'.$params.'" name="form_'.$this->table_name.'">';
+				$html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
 		}
 		$html .= $this->get_table_html();
@@ -321,7 +321,7 @@ class SortableTable extends HTML_Table
 		{
 			return '';
 		}
-		$result[] = '<form method="get" action="'.$_SERVER['PHP_SELF'].'" style="display:inline;">';
+		$result[] = '<form method="get" action="'.api_get_self().'" style="display:inline;">';
 		$param[$this->param_prefix.'direction'] = $this->direction;
 		$param[$this->param_prefix.'page_nr'] = $this->page_nr;
 		$param[$this->param_prefix.'column'] = $this->column;
@@ -379,7 +379,7 @@ class SortableTable extends HTML_Table
 		$param['column'] = $column;
 		if ($sortable)
 		{
-			$link = '<a href="'.$_SERVER['PHP_SELF'].'?';
+			$link = '<a href="'.api_get_self().'?';
 			foreach ($param as $key => $value)
 			{
 				$link .= $this->param_prefix.$key.'='.urlencode($value).'&amp;';

@@ -22,7 +22,7 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: hotpotatoes.php 12263 2007-05-03 13:34:40Z elixir_julian $
 */
 
 
@@ -246,7 +246,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 	 --------------------------------------*/
 	echo	"<!-- upload  -->\n",
 			"<td align=\"right\">\n",
-			"<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" enctype=\"multipart/form-data\">\n",
+			"<form action=\"".api_get_self()."\" method=\"post\" enctype=\"multipart/form-data\">\n",
 			"<input type=\"hidden\" name=\"uploadPath\" value=\"\">\n",
 			"<input type=\"hidden\" name=\"fld\" value=\"$fld\">\n",
 			"<input type=\"hidden\" name=\"imgcount\" value=\"$imgcount\">\n",

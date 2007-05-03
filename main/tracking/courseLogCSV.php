@@ -120,8 +120,8 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     // show all : view must be equal to the sum of all view values (1024+512+...+64)
     // show none : less than the tiniest value
     /*echo "<div>
-            [<a href='".$_SERVER['PHP_SELF']."?view=1111111'>".get_lang('ShowAll')."</a>]
-            [<a href='".$_SERVER['PHP_SELF']."?view=0000000'>".get_lang('ShowNone')."</a>]
+            [<a href='".api_get_self()."?view=1111111'>".get_lang('ShowAll')."</a>]
+            [<a href='".api_get_self()."?view=0000000'>".get_lang('ShowNone')."</a>]
         </div><br>
     ";*/
 
@@ -440,7 +440,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 	    	
 	    	while ($ar['id'] != '') {
 				$lp_title = stripslashes($ar['name']);
-				//echo "<a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."' class='specialLink'>$lp_title</a>";			
+				//echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."' class='specialLink'>$lp_title</a>";			
 				if ($ar['id']==$scormcontopen) { //have to list the students here
 					$contentId=$ar['id'];
 					$sql2 = "SELECT u.user_id, u.lastname, u.firstname " .

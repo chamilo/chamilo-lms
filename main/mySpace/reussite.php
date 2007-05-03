@@ -37,7 +37,7 @@ $tbl_track_exercice = Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICE
 				  ";
 	$resultSession = api_sql_query($sqlSession);
 	
-	echo "<a href='".$_SERVER['PHP_SELF']."'>".get_lang('MoyCourse')."</a>";
+	echo "<a href='".api_get_self()."'>".get_lang('MoyCourse')."</a>";
 	echo "<br /><br />";
 	
 	if(mysql_num_rows($resultSession)>0)
@@ -121,7 +121,7 @@ $tbl_track_exercice = Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICE
 	
 	$resultCourse = api_sql_query($sqlCourse);
 	
-	echo "<a href='".$_SERVER['PHP_SELF']."?session=true'>".get_lang('MoySession')."</a>";
+	echo "<a href='".api_get_self()."?session=true'>".get_lang('MoySession')."</a>";
 	echo "<br /><br />";
 	if(mysql_num_rows($resultCourse)>0)
 	{

@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 11160 2007-02-20 01:07:55Z yannoo $
+<?php // $Id: userLog.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -211,7 +211,7 @@ function display_login_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('LoginsAndAccessTools'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=10000'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('LoginsAndAccessTools'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=10000'>".get_lang('ExportAsCSV')."</a>]
 					</td>
 			</tr>
 			";
@@ -269,7 +269,7 @@ function display_login_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('LoginsAndAccessTools'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('LoginsAndAccessTools'))."</a>
 					</td>
 			</tr>
 		";
@@ -289,7 +289,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 				<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('ExercicesResults'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=01000'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('ExercicesResults'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=01000'>".get_lang('ExportAsCSV')."</a>]
 				</td>
 			</tr>
 		";
@@ -384,7 +384,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 				<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('ExercicesResults'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('ExercicesResults'))."</a>
 				</td>
 			</tr>
 		";
@@ -404,7 +404,7 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('WorkUploads'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=00100'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('WorkUploads'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=00100'>".get_lang('ExportAsCSV')."</a>]
 					</td>
 			</tr>
 		";
@@ -461,7 +461,7 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('WorkUploads'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('WorkUploads'))."</a>
 					</td>
 			</tr>
 		";
@@ -481,7 +481,7 @@ function display_links_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('LinksAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=00010'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('LinksAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=00010'>".get_lang('ExportAsCSV')."</a>]
 					</td>
 			</tr>
 		";
@@ -525,7 +525,7 @@ function display_links_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('LinksAccess'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('LinksAccess'))."</a>
 					</td>
 			</tr>
 		";
@@ -544,7 +544,7 @@ function display_document_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('DocumentsAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=00001'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('DocumentsAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=00001'>".get_lang('ExportAsCSV')."</a>]
 					</td>
 			</tr>
 		";
@@ -589,7 +589,7 @@ function display_document_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('DocumentsAccess'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('DocumentsAccess'))."</a>
 					</td>
 			</tr>
 		";
@@ -661,7 +661,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 
 			if ($previous >= 0)
 			{
-					$navLink .= "<a href='".$_SERVER['PHP_SELF']."?offset=$previous'>&lt;&lt; ".myEnc(get_lang('PreviousPage'))."</a>";
+					$navLink .= "<a href='".api_get_self()."?offset=$previous'>&lt;&lt; ".myEnc(get_lang('PreviousPage'))."</a>";
 			}
 
 			$navLink .= "</td>\n"
@@ -669,7 +669,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 
 			if ($next < $userGroupNb)
 			{
-					$navLink .= "<a href='".$_SERVER['PHP_SELF']."?offset=$next'>".myEnc(get_lang('NextPage'))." &gt;&gt;</a>";
+					$navLink .= "<a href='".api_get_self()."?offset=$next'>".myEnc(get_lang('NextPage'))." &gt;&gt;</a>";
 			}
 
 			$navLink .= "</td>\n"
@@ -711,7 +711,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		{
 			echo    "<tr valign='top' align='center'>\n"
 					."<td align='left'>"
-					."<a href='".$_SERVER['PHP_SELF']."?uInfo=",$list_users[$i][0],"'>"
+					."<a href='".api_get_self()."?uInfo=",$list_users[$i][0],"'>"
 					.$list_users[$i][1]," ",$list_users[$i][2]
 					."</a>".
 					"</td>\n";
@@ -765,9 +765,9 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			// show none : number of 0 is equal to or bigger than number of categories
 			echo "<tr>
 					<td>
-					[<a href='".$_SERVER['PHP_SELF']."?uInfo=$uInfo&view=1111111'>".myEnc(get_lang('ShowAll'))."</a>]
-					[<a href='".$_SERVER['PHP_SELF']."?uInfo=$uInfo&view=0000000'>".myEnc(get_lang('ShowNone'))."</a>]".
-					//"||[<a href='".$_SERVER['PHP_SELF']."'>".myEnc(get_lang('BackToList'))."</a>]".
+					[<a href='".api_get_self()."?uInfo=$uInfo&view=1111111'>".myEnc(get_lang('ShowAll'))."</a>]
+					[<a href='".api_get_self()."?uInfo=$uInfo&view=0000000'>".myEnc(get_lang('ShowNone'))."</a>]".
+					//"||[<a href='".api_get_self()."'>".myEnc(get_lang('BackToList'))."</a>]".
 					"</td>
 				</tr>
 			";
@@ -807,7 +807,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
             echo "
                 <tr>
                         <td valign='top'>
-                        <font     color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('ScormAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?view=$new_view&uInfo=$uInfo'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=000001'>".get_lang('ExportAsCSV')."</a>]
+                        <font     color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('ScormAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?view=$new_view&uInfo=$uInfo'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".$_GET['uInfo']."&view=000001'>".get_lang('ExportAsCSV')."</a>]
                         </td>
                 </tr>
             ";
@@ -827,7 +827,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
     			while ($ar['id'] != '') {
     				$lp_title = stripslashes($ar['name']);
     				echo "<tr><td>";
-    				echo "<a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."&uInfo=$uInfo' class='specialLink'>$lp_title</a>";
+    				echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."&uInfo=$uInfo' class='specialLink'>$lp_title</a>";
     				echo "</td></tr>";
     				if ($ar['id']==$scormcontopen) { //have to list the students here
         					$contentId=$ar['id'];
@@ -891,7 +891,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
             echo "
                 <tr>
                         <td valign='top'>
-                        +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=$new_view&uInfo=$uInfo' class='specialLink'>".myEnc(get_lang('ScormAccess'))."</a>
+                        +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?view=$new_view&uInfo=$uInfo' class='specialLink'>".myEnc(get_lang('ScormAccess'))."</a>
                         </td>
                 </tr>
             ";

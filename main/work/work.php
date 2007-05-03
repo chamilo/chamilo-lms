@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 12203 2007-04-30 14:06:24Z yannoo $
+*  	@version $Id: work.php 12263 2007-05-03 13:34:40Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -220,7 +220,7 @@ api_protect_course_script();
 
 if(isset($_POST['cancelForm']) && !empty($_POST['cancelForm']))
 {
-	header('Location: '.$_SERVER['PHP_SELF']."?origin=$origin");
+	header('Location: '.api_get_self()."?origin=$origin");
 	exit();
 }
 
@@ -885,7 +885,7 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 		if(isset($_REQUEST['createdir']) && $is_allowed_to_edit)
 		{
 			//create the form that asks for the directory name
-			$new_folder_text = '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
+			$new_folder_text = '<form action="'.api_get_self().'" method="POST">';
 			$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$cur_dir_path.'"/>';
 			$new_folder_text .= get_lang('NewDir') .' ';
 			$new_folder_text .= '<input type="text" name="new_dir"/>';

@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 12221 2007-05-01 23:23:49Z yannoo $
+<?php //$Id: announcements.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -921,10 +921,10 @@ if(!$surveyid)
 		if ((api_is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_announcement')) and ($_GET['origin'] !== 'learnpath'))
 		{
 
-			echo "<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=add&origin=".$_GET['origin']."'><img src=\"../img/announce_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
+			echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$_GET['origin']."'><img src=\"../img/announce_add.gif\"> ".get_lang("AddAnnouncement")."</a><br/>";
 			if ($announcement_number > 1)
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\"><img src=\"../img/valves_delete.gif\"/> ".get_lang("AnnouncementDeleteAll")."</a>\n";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\"><img src=\"../img/valves_delete.gif\"/> ".get_lang("AnnouncementDeleteAll")."</a>\n";
 			}	// if announcementNumber > 1
 			echo "<hr noshade size=\"1\">";
 		}
@@ -988,7 +988,7 @@ if ($message == true)
 		
 		// DISPLAY ADD ANNOUNCEMENT COMMAND
 
-		echo "<form method=\"post\" name=\"f1\" action=\"".$_SERVER['PHP_SELF']."?publish_survey=$surveyid&id=".$_GET['id']."&db_name=$db_name&cidReq=".$_GET['cidReq']."&action=".$_GET['action']."\" style=\"margin:0px;\">\n";
+		echo "<form method=\"post\" name=\"f1\" action=\"".api_get_self()."?publish_survey=$surveyid&id=".$_GET['id']."&db_name=$db_name&cidReq=".$_GET['cidReq']."&action=".$_GET['action']."\" style=\"margin:0px;\">\n";
 
 		//this variable defines if the course administrator can send a message to a specific user / group
 		// or not
@@ -1406,12 +1406,12 @@ if ($message == true)
 												SHOW MOD/DEL/VIS FUNCTIONS
 					=====================================================================*/
 					echo "<table><tr>";
-					echo	"<td valign=\"top\"><a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">",
+					echo	"<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">",
 							"<img src=\"../img/edit.gif\" title=\"",get_lang('Modify'),"\" border=\"0\" align=\"absmiddle\">",
 							"</a></td>";
 
 
-					if (api_is_allowed_to_edit()) echo "<td valign=\"top\"><a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">",
+					if (api_is_allowed_to_edit()) echo "<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">",
 							"<img src=\"../img/delete.gif\" title=\"",get_lang('Delete'),"\" border=\"0\" align=\"absmiddle\">",
 							"</a></td>";
 
@@ -1424,7 +1424,7 @@ if ($message == true)
 									$image_visibility="invisible";
 							}
 
-							echo 	"<td valign=\"top\"><a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=".$_GET['origin']."&action=showhide&id=".$myrow['id']."\">",
+							echo 	"<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&action=showhide&id=".$myrow['id']."\">",
 									"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang('Visible')."\"/></a></td>";
 
 
@@ -1434,7 +1434,7 @@ if ($message == true)
 							if($iterator != 1)
 							{
 
-							echo	"<td valign=\"top\"><a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&up=",$myrow["id"],"\">",
+							echo	"<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&up=",$myrow["id"],"\">",
 									"<img src=../img/up.gif border=0 title=\"".get_lang('Up')."\" align=\"absmiddle\">",
 									"</a></td>";
 							}
@@ -1443,7 +1443,7 @@ if ($message == true)
 							if($iterator < $bottomAnnouncement)
 							{
 
-							echo	"<td valign=\"top\"><a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&down=".$myrow["id"]."\">",
+							echo	"<td valign=\"top\"><a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."\">",
 									"<img src=\"../img/down.gif\" border=\"0\" title=\"".get_lang('Down')."\" align=\"absmiddle\">",
 									"</a></td>";
 							}

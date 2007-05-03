@@ -242,13 +242,13 @@ if (isset ($_user['user_id']))
 	}
 	display_minimonthcalendar($agendaitems, $month, $year, $monthName);
 	echo "\n<ul id=\"agenda_select\">\n";
-	echo "\t<li><a href=\"".$_SERVER['PHP_SELF']."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a></li>\n";
-	echo "\t<li><a href=\"".$_SERVER['PHP_SELF']."?action=view&amp;view=week\"><img src=\"../img/calendar_week.gif\" border=\"0\" alt=\"".get_lang('WeekView')."\" /> ".get_lang('WeekView')."</a></li>\n";
-	echo "\t<li><a href=\"".$_SERVER['PHP_SELF']."?action=view&amp;view=day\"><img src=\"../img/calendar_day.gif\" border=\"0\" alt=\"".get_lang('DayView')."\" /> ".get_lang('DayView')."</a></li>\n";
+	echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a></li>\n";
+	echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=week\"><img src=\"../img/calendar_week.gif\" border=\"0\" alt=\"".get_lang('WeekView')."\" /> ".get_lang('WeekView')."</a></li>\n";
+	echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=day\"><img src=\"../img/calendar_day.gif\" border=\"0\" alt=\"".get_lang('DayView')."\" /> ".get_lang('DayView')."</a></li>\n";
 	if (get_setting('allow_personal_agenda') == 'true')
 	{
-		echo "\t<li><a href=\"".$_SERVER['PHP_SELF']."?action=add_personal_agenda_item\"><img src=\"../img/calendar_personal_add.gif\" border=\"0\" /> ".get_lang("AddPersonalItem")."</a></li>\n";
-		echo "\t<li><a href=\"".$_SERVER['PHP_SELF']."?action=view&amp;view=personal\"><img src=\"../img/calendar_personal.gif\" border=\"0\" />  ".get_lang("ViewPersonalItem")."</a></li>\n";
+		echo "\t<li><a href=\"".api_get_self()."?action=add_personal_agenda_item\"><img src=\"../img/calendar_personal_add.gif\" border=\"0\" /> ".get_lang("AddPersonalItem")."</a></li>\n";
+		echo "\t<li><a href=\"".api_get_self()."?action=view&amp;view=personal\"><img src=\"../img/calendar_personal.gif\" border=\"0\" />  ".get_lang("ViewPersonalItem")."</a></li>\n";
 	}
 	echo "</ul>\n\n";
 	echo "</td>";
@@ -515,7 +515,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 				echo "\t<td ".$class.">";
 				if ($agendaitems[$curday] <> "")
 				{
-					echo "<a href=\"".$_SERVER['PHP_SELF']."?action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
+					echo "<a href=\"".api_get_self()."?action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
 				}
 				else
 				{
@@ -1321,7 +1321,7 @@ function show_personal_agenda()
 			  --------------------------------------------------*/
 			echo "\t<tr>\n\t\t<td class=\"".$text_style."\" colspan='2'>";
 			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\"><img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" /></a>";
-			echo "<a href=\"".$_SERVER['PHP_SELF']."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\"><img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" /></a>";
+			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\"><img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" /></a>";
 			echo "</td></tr>";
 		}
 	}

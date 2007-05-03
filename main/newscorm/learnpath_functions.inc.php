@@ -488,8 +488,8 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 					$oddclass = "row_even";
 				}
 
-				//echo '<tr class="'.$oddclass.'">'."\n".'  <td>'.str_repeat("&nbsp;&gt;", $level)."<img src='../img/documents.gif' alt='folder'/><a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&item_id={$row['id']}&action=add&type=learnpathitem&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9'><b>&nbsp;".$row['title']."</b></a>"."<br /><i><div align='justify'>&nbsp;".str_repeat("&nbsp;&nbsp;&nbsp;", $level)."</i></td>\n".'  <td  align="center"><a href="'.$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&item_id={$row['id']}&action=add&type=learnpathitem&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9"><img src='../img/0.gif' width='13' height='13' border='0' title='$lang_add_learnpath_item'></a></td>\n"."  <td";
-				echo '<tr class="'.$oddclass.'">'."\n".'  <td>'.str_repeat("&nbsp;&gt;", $level)."<img src='../img/documents.gif' alt='folder'/><a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&parent_item_id=".$row['id']."&action=add_sub_item'><b>&nbsp;".$row['title']."</b></a>"."<br /><i><div align='justify'>&nbsp;".str_repeat("&nbsp;&nbsp;&nbsp;", $level)."</i></td>\n".'  <td  align="center"><a href="'.$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&parent_item_id=".$row['id']."&action=add_sub_item\"><img src='../img/0.gif' width='13' height='13' border='0' title='$lang_add_learnpath_item'></a></td>\n"."  <td";
+				//echo '<tr class="'.$oddclass.'">'."\n".'  <td>'.str_repeat("&nbsp;&gt;", $level)."<img src='../img/documents.gif' alt='folder'/><a href='".api_get_self()."?lp_id=$learnpath_id&item_id={$row['id']}&action=add&type=learnpathitem&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9'><b>&nbsp;".$row['title']."</b></a>"."<br /><i><div align='justify'>&nbsp;".str_repeat("&nbsp;&nbsp;&nbsp;", $level)."</i></td>\n".'  <td  align="center"><a href="'.api_get_self()."?lp_id=$learnpath_id&item_id={$row['id']}&action=add&type=learnpathitem&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9"><img src='../img/0.gif' width='13' height='13' border='0' title='$lang_add_learnpath_item'></a></td>\n"."  <td";
+				echo '<tr class="'.$oddclass.'">'."\n".'  <td>'.str_repeat("&nbsp;&gt;", $level)."<img src='../img/documents.gif' alt='folder'/><a href='".api_get_self()."?lp_id=$learnpath_id&parent_item_id=".$row['id']."&action=add_sub_item'><b>&nbsp;".$row['title']."</b></a>"."<br /><i><div align='justify'>&nbsp;".str_repeat("&nbsp;&nbsp;&nbsp;", $level)."</i></td>\n".'  <td  align="center"><a href="'.api_get_self()."?lp_id=$learnpath_id&parent_item_id=".$row['id']."&action=add_sub_item\"><img src='../img/0.gif' width='13' height='13' border='0' title='$lang_add_learnpath_item'></a></td>\n"."  <td";
 				if (is_prereq($learnpath_id))
 				{
 					echo " bgcolor='#ddddee'";
@@ -504,8 +504,8 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 					{
 
 						// if we are still under the number of chapters in this section, show "move down"
-						//echo "  <td align=center>"."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&amp;action=".$myaction."&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lang_move_down\">"."</a></td>\n";
-						echo "  <td align=center>"."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&action=".$myaction."&direction=down&moduleid=".$parent_item_id."&id=".$row["id"]."'>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lang_move_down\">"."</a></td>\n";
+						//echo "  <td align=center>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=".$myaction."&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lang_move_down\">"."</a></td>\n";
+						echo "  <td align=center>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=".$myaction."&direction=down&moduleid=".$parent_item_id."&id=".$row["id"]."'>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lang_move_down\">"."</a></td>\n";
 					}
 					else
 					{
@@ -514,8 +514,8 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 
 					if ($i > 1)
 					{
-						//echo '  <td align="center">'."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&amp;action=".$myaction."&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lang_move_up\">"."</a>"."</td>\n";
-						echo '  <td align="center">'."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&action=".$myaction."&direction=up&moduleid=".$parent_item_id."&id=".$row["id"]."'>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lang_move_up\">"."</a>"."</td>\n";
+						//echo '  <td align="center">'."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=".$myaction."&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lang_move_up\">"."</a>"."</td>\n";
+						echo '  <td align="center">'."<a href='".api_get_self()."?lp_id=$learnpath_id&action=".$myaction."&direction=up&moduleid=".$parent_item_id."&id=".$row["id"]."'>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lang_move_up\">"."</a>"."</td>\n";
 					}
 					else
 					{
@@ -523,11 +523,11 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 					}
 
 					echo "  <td align='center'>&nbsp;</td>\n";
-					//echo "  <td align='center'>"."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&amp;action=editmodule&amp;id=".$row["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath_module\">"."</a>"."</td>\n";
-					echo "  <td align='center'>"."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&action=edititem&id=".$row["id"]."'>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath_module\">"."</a>"."</td>\n";
+					//echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=editmodule&amp;id=".$row["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath_module\">"."</a>"."</td>\n";
+					echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=edititem&id=".$row["id"]."'>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath_module\">"."</a>"."</td>\n";
 					
-					//echo "  <td align='center'>"."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&amp;action=deletemodule&amp;id=".$row["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9 onclick=\"return confirmation('".$row['chapter_name']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath_module\">"."</a>"."</td>\n";
-					echo "  <td align='center'>"."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&action=delete_item&id=".$row["id"]."' onclick=\"return confirmation('".$row['title']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath_module\">"."</a>"."</td>\n";
+					//echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=deletemodule&amp;id=".$row["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9 onclick=\"return confirmation('".$row['chapter_name']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath_module\">"."</a>"."</td>\n";
+					echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=delete_item&id=".$row["id"]."' onclick=\"return confirmation('".$row['title']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath_module\">"."</a>"."</td>\n";
 				}
 
 				echo "</tr>\n";
@@ -611,7 +611,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 					// move
 					if ($i < $num_modules)
 					{
-						echo "<td align='center'>"."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lang_move_down\">"."</a>"."</td>";
+						echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lang_move_down\">"."</a>"."</td>";
 					}
 					else
 					{
@@ -620,7 +620,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 
 					if ($i > 1)
 					{
-						echo "<td align='center'>"."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lang_move_up\">"."</a>";
+						echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lang_move_up\">"."</a>";
 					}
 					else
 					{
@@ -629,13 +629,13 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 					echo "</td>"."<td align='center'>";
 
 					// edit prereq
-					echo "<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&amp;action=edititemprereq&amp;id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lang_add_prereq\">"."</a>"."</td>";
+					echo "<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=edititemprereq&amp;id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lang_add_prereq\">"."</a>"."</td>";
 
 					// edit
-					echo "<td align='center'>"."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&amp;action=edititem&amp;id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath_item\">"."</a>"."</td>";
+					echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=edititem&amp;id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath_item\">"."</a>"."</td>";
 
 					// delete
-					echo "<td align='center'>"."<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath_item\" onclick=\"return confirmation('".$row_items["item_type"]."');\">"."</a>";
+					echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath_item\" onclick=\"return confirmation('".$row_items["item_type"]."');\">"."</a>";
 				}
 				$i ++;
 				echo "</td></tr>";
@@ -672,8 +672,8 @@ function display_all_learnpath()
 		if (is_allowed_to_edit())
 		{
 			echo "<td bgcolor=\"$color2\" align=center><a href='learnpath_handler.php?lp_id={$row['lp_id']}&action=add&type=learnpathcategory'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src='../img/0.gif' width='13' height='13' border='0' title='$lang_add_learnpath_chapter_to_path'></a></td>";
-			echo "<td bgcolor=\"$color2\" align=center><a href='".$_SERVER['PHP_SELF']."?action=editpath&id=".$row["lp_id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath\"></a></td>";
-			echo "<td bgcolor=\"$color2\" align=center><a href='".$_SERVER['PHP_SELF']."?action=deletepath&id=".$row["lp_id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath\" onclick=\"return confirmation('".$row2['learnpath_name']."');\"></a></td>";
+			echo "<td bgcolor=\"$color2\" align=center><a href='".api_get_self()."?action=editpath&id=".$row["lp_id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath\"></a></td>";
+			echo "<td bgcolor=\"$color2\" align=center><a href='".api_get_self()."?action=deletepath&id=".$row["lp_id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath\" onclick=\"return confirmation('".$row2['learnpath_name']."');\"></a></td>";
 			$id = $row["lp_id"];
 			$sql2 = "SELECT * FROM $tbl_learnpath_main where lp_id=$id";
 			$result2 = api_sql_query($sql2, __FILE__, __LINE__);
@@ -684,11 +684,11 @@ function display_all_learnpath()
 			$row3 = mysql_fetch_array($result3);
 			if (($row3["visibility"]) == '1')
 			{
-				echo "<td bgcolor=\"$color2\" align=center><a href='".$_SERVER['PHP_SELF']."?action=publishpath&set=i&id=".$row["lp_id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/visible.gif\" border=\"0\" title=\"$lang_no_publish\"></a></td>";
+				echo "<td bgcolor=\"$color2\" align=center><a href='".api_get_self()."?action=publishpath&set=i&id=".$row["lp_id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/visible.gif\" border=\"0\" title=\"$lang_no_publish\"></a></td>";
 			}
 			else
 			{
-				echo "<td bgcolor=\"$color2\" align=center><a href='".$_SERVER['PHP_SELF']."?action=publishpath&set=v&id=".$row["lp_id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/invisible.gif\" border=\"0\" title=\"$lang_publish\"></a></td>";
+				echo "<td bgcolor=\"$color2\" align=center><a href='".api_get_self()."?action=publishpath&set=v&id=".$row["lp_id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/invisible.gif\" border=\"0\" title=\"$lang_publish\"></a></td>";
 			}
 		}
 		$i ++;
@@ -779,7 +779,7 @@ function display_learnpath_items($categoryid)
 			// move
 			if ($i < $number_items)
 			{
-				echo "<td align='center'><a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&action=moveitem&direction=down&moduleid=".$categoryid."&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/down.gif\" border=\"0\" title=\"$lang_move_down\"></a></td>";
+				echo "<td align='center'><a href='".api_get_self()."?lp_id=$learnpath_id&action=moveitem&direction=down&moduleid=".$categoryid."&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/down.gif\" border=\"0\" title=\"$lang_move_down\"></a></td>";
 			}
 			else
 			{
@@ -788,7 +788,7 @@ function display_learnpath_items($categoryid)
 
 			if ($i > 1)
 			{
-				echo "<td align='center'><a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&action=moveitem&direction=up&moduleid=".$categoryid."&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/up.gif\" border=\"0\" title=\"$lang_move_up\"></a>";
+				echo "<td align='center'><a href='".api_get_self()."?lp_id=$learnpath_id&action=moveitem&direction=up&moduleid=".$categoryid."&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/up.gif\" border=\"0\" title=\"$lang_move_up\"></a>";
 			}
 			else
 			{
@@ -797,14 +797,14 @@ function display_learnpath_items($categoryid)
 			echo "</td><td align='center'>";
 
 			// edit prereq
-			echo "<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&action=edititemprereq&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lang_add_prereq\"></a></td>";
+			echo "<a href='".api_get_self()."?lp_id=$learnpath_id&action=edititemprereq&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lang_add_prereq\"></a></td>";
 
 			// edit
-			echo "<td align='center'><a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&action=edititem&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath_item\"></a></td>";
+			echo "<td align='center'><a href='".api_get_self()."?lp_id=$learnpath_id&action=edititem&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath_item\"></a></td>";
 
 			// delete
 			echo "<td align='center'>";
-			echo "<a href='".$_SERVER['PHP_SELF']."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath_item\" onclick=\"return confirmation('".$langThisItem."');\"></a>";
+			echo "<a href='".api_get_self()."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items["id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath_item\" onclick=\"return confirmation('".$langThisItem."');\"></a>";
 		}
 		$i ++;
 		echo "</td></tr>";

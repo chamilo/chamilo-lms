@@ -1533,14 +1533,14 @@ function api_display_language_form()
 	<?php
 
 
-	echo "<form id=\"lang_form\" name=\"lang_form\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">", "<select name=\"language_list\"  onchange=\"jumpMenu('parent',this,0)\">";
+	echo "<form id=\"lang_form\" name=\"lang_form\" method=\"post\" action=\"".api_get_self()."\">", "<select name=\"language_list\"  onchange=\"jumpMenu('parent',this,0)\">";
 	foreach ($original_languages as $key => $value)
 	{
 		if ($folder[$key] == $user_selected_language)
 			$option_end = " selected=\"selected\" >";
 		else
 			$option_end = ">";
-		echo "<option value=\"".$_SERVER['PHP_SELF']."?language=".$folder[$key]."\"$option_end";
+		echo "<option value=\"".api_get_self()."?language=".$folder[$key]."\"$option_end";
 		#echo substr($value,0,16); #cut string to keep 800x600 aspect
 		echo $value;
 		echo "</option>\n";

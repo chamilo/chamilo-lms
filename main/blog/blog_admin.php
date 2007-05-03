@@ -91,7 +91,7 @@ api_display_tool_title($nameTools);
 		Blog::display_edit_blog_form(mysql_real_escape_string((int)$_GET['blog_id']));
 	}
 
-	echo "<a href='".$_SERVER['PHP_SELF']."?action=add'>",
+	echo "<a href='".api_get_self()."?action=add'>",
 	"<img src='../img/blog_new.gif' border=\"0\" align=\"absmiddle\" alt='".get_lang('NewBlog')."'>&nbsp;&nbsp;".get_lang('AddBlog')."</a>";
 	echo "<table width=\"100%\" border=\"0\" cellspacing=\"2\" class='data_table'>";
 	echo	"<tr>",

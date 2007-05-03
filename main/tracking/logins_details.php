@@ -134,8 +134,8 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                 [<a href='userLog.php?uInfo=$uInfo&view=$view'>".get_lang('Back')."</a>]
         ";
         echo "  &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
-                [<a href='".$_SERVER['PHP_SELF']."?uInfo=$uInfo&view=$view&period=week&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodWeek')."</a>]
-                [<a href='".$_SERVER['PHP_SELF']."?uInfo=$uInfo&view=$view&period=month&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodMonth')."</a>]
+                [<a href='".api_get_self()."?uInfo=$uInfo&view=$view&period=week&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodWeek')."</a>]
+                [<a href='".api_get_self()."?uInfo=$uInfo&view=$view&period=month&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodMonth')."</a>]
                 &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
         ";
         switch($period)
@@ -145,8 +145,8 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                 $previousReqDate = $reqdate - 7*86400;
                 $nextReqDate = $reqdate + 7*86400;
                 echo   "
-                    [<a href='".$_SERVER['PHP_SELF']."?uInfo=$uInfo&view=$view&period=week&reqdate=$previousReqDate' class='specialLink'>".get_lang('PreviousWeek')."</a>]
-                    [<a href='".$_SERVER['PHP_SELF']."?uInfo=$uInfo&view=$view&period=week&reqdate=$nextReqDate' class='specialLink'>".get_lang('NextWeek')."</a>]
+                    [<a href='".api_get_self()."?uInfo=$uInfo&view=$view&period=week&reqdate=$previousReqDate' class='specialLink'>".get_lang('PreviousWeek')."</a>]
+                    [<a href='".api_get_self()."?uInfo=$uInfo&view=$view&period=week&reqdate=$nextReqDate' class='specialLink'>".get_lang('NextWeek')."</a>]
                 ";
                 break;
             default :
@@ -157,8 +157,8 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                 $previousReqDate = mktime(1,1,1,date("m",$reqdate)-1,1,date("Y",$reqdate));
                 $nextReqDate = mktime(1,1,1,date("m",$reqdate)+1,1,date("Y",$reqdate));
                 echo   "
-                    [<a href='".$_SERVER['PHP_SELF']."?uInfo=$uInfo&view=$view&period=month&reqdate=$previousReqDate' class='specialLink'>".get_lang('PreviousMonth')."</a>]
-                    [<a href='".$_SERVER['PHP_SELF']."?uInfo=$uInfo&view=$view&period=month&reqdate=$nextReqDate' class='specialLink'>".get_lang('NextMonth')."</a>]
+                    [<a href='".api_get_self()."?uInfo=$uInfo&view=$view&period=month&reqdate=$previousReqDate' class='specialLink'>".get_lang('PreviousMonth')."</a>]
+                    [<a href='".api_get_self()."?uInfo=$uInfo&view=$view&period=month&reqdate=$nextReqDate' class='specialLink'>".get_lang('NextMonth')."</a>]
                 ";
                 break;
 

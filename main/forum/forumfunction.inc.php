@@ -619,7 +619,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 {
 	if ($current_visibility_status=='1')
 	{
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
 		if (is_array($additional_url_parameters))
 		{
 			foreach ($additional_url_parameters as $key=>$value)
@@ -631,7 +631,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 	}
 	if ($current_visibility_status=='0')
 	{
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
 		if (is_array($additional_url_parameters))
 		{
 			foreach ($additional_url_parameters as $key=>$value)
@@ -658,7 +658,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
 {
 	if ($current_lock_status=='1')
 	{
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
 		if (is_array($additional_url_parameters))
 		{
 			foreach ($additional_url_parameters as $key=>$value)
@@ -670,7 +670,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
 	}
 	if ($current_lock_status=='0')
 	{
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
 		if (is_array($additional_url_parameters))
 		{
 			foreach ($additional_url_parameters as $key=>$value)
@@ -711,11 +711,11 @@ function display_up_down_icon($content, $id, $list)
 	}
 	if ($position>1)
 	{
-		$return_value='<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;id='.$id.'"><img src="../img/up.gif" /></a>';
+		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;id='.$id.'"><img src="../img/up.gif" /></a>';
 	}
 	if ($position<$total_items)
 	{
-		$return_value.='<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;id='.$id.'"><img src="../img/down.gif" /></a>';
+		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;id='.$id.'"><img src="../img/down.gif" /></a>';
 	}
 
 	echo $return_value;

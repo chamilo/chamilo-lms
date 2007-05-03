@@ -132,7 +132,7 @@ else
 	}
 
 	// Displaying the form with the questions
-	echo '<form id="question" name="question" method="post" action="'.$_SERVER['PHP_SELF'].'?survey_id='.$_GET['survey_id'].'&show='.$limit.'">';
+	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.$_GET['survey_id'].'&show='.$limit.'">';
 	foreach ($questions as $key=>$question)
 	{
 		$display = new $question['type'];
@@ -140,7 +140,7 @@ else
 	}
 	if (($limit AND $limit <> $question_counter_max) OR !$_GET['show'])
 	{
-		//echo '<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.$_GET['survey_id'].'&amp;show='.$limit.'">NEXT</a>';
+		//echo '<a href="'.api_get_self().'?survey_id='.$_GET['survey_id'].'&amp;show='.$limit.'">NEXT</a>';
 		echo '<br /><input type="submit" name="next_survey_page" value="'.get_lang('Next').' >> " />';
 	}
 	if ($limit==0 AND $_GET['show'])

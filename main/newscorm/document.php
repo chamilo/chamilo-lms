@@ -205,7 +205,7 @@ if(api_is_allowed_to_edit())
 
   echo	"<!-- upload  -->",
 	"<p align=\"right\">",
-	"<form action=\"".$_SERVER['PHP_SELF']."?openDir=", rawurlencode($openDir), 
+	"<form action=\"".api_get_self()."?openDir=", rawurlencode($openDir), 
 		"&subdirs=$subdirs\" method=\"post\" enctype=\"multipart/form-data\">",
 		"<input type=\"hidden\" name=\"uploadPath\" value=\"$curDirPath\" />",
 		get_lang('DownloadFile'),"&nbsp;:&nbsp;",
@@ -225,10 +225,10 @@ if(api_is_allowed_to_edit())
   echo	"<table border='0' cellspacing='2' cellpadding='4'>
     <tr>
       <td valign='bottom'>
-        <a href='".$_SERVER['PHP_SELF']."?action=add'>",
+        <a href='".api_get_self()."?action=add'>",
 	"<img src='../img/scormbuilder.gif' border=\"0\" align=\"absmiddle\" alt='scormbuilder'>".get_lang('_add_learnpath')."</a>
       </td>",
-      "<td valign='bottom'>&nbsp;&nbsp;&nbsp;<a href='".$_SERVER['PHP_SELF']."?createDir=$cmdCurDirPath'>",
+      "<td valign='bottom'>&nbsp;&nbsp;&nbsp;<a href='".api_get_self()."?createDir=$cmdCurDirPath'>",
       "<img src=\"../img/dossier.gif\" border=\"0\" align=\"absmiddle\">",
 	"",get_lang("CreateDir"),"</a>
       </td>
@@ -372,16 +372,16 @@ if ($fileList)
 	
      /* export */
 	
-     echo "<td align='center'><a href='".$_SERVER['PHP_SELF']."?action=exportscorm&".api_get_cidreq()."&path=".$cmdFileName."'><img src=\"../img/save_zip.gif\" border=\"0\" title=\"".get_lang('Export')."\"></a>";
+     echo "<td align='center'><a href='".api_get_self()."?action=exportscorm&".api_get_cidreq()."&path=".$cmdFileName."'><img src=\"../img/save_zip.gif\" border=\"0\" title=\"".get_lang('Export')."\"></a>";
 	
      /* edit title and description */
 	
       echo "<td align='center'>",
-	"<a href='".$_SERVER['PHP_SELF']."?action=editscorm&path=".$cmdFileName."'><img src=\"../img/edit.gif\" border=\"0\" title=\"".get_lang('_edit_learnpath')."\"></a>";
+	"<a href='".api_get_self()."?action=editscorm&path=".$cmdFileName."'><img src=\"../img/edit.gif\" border=\"0\" title=\"".get_lang('_edit_learnpath')."\"></a>";
 	
       /* DELETE COMMAND */
       echo
-	"<a href=\"".$_SERVER['PHP_SELF']."?delete=",$cmdFileName,"\" ",
+	"<a href=\"".api_get_self()."?delete=",$cmdFileName,"\" ",
 	"onClick=\"return confirmation('",addslashes($dspFileName),"');\">",
 	"<img src=\"../img/delete.gif\" border=\"0\" title=\"".get_lang('_delete_learnpath')."\" />",
 	"</a>";
@@ -390,13 +390,13 @@ if ($fileList)
 	
       if ($fileList['visibility'][$fileKey] == "i")
       {
-        echo	"<a href=\"".$_SERVER['PHP_SELF']."?make_directory_visible=",$cmdFileName,"\">",
+        echo	"<a href=\"".api_get_self()."?make_directory_visible=",$cmdFileName,"\">",
 	  "<img src=\"../img/invisible.gif\" border=\"0\" title=\"".get_lang('_publish')."\" />",
 	  "</a>";
       }
       else
       {
-        echo	"<a href=\"".$_SERVER['PHP_SELF']."?make_directory_invisible=",$cmdFileName,"\">",
+        echo	"<a href=\"".api_get_self()."?make_directory_invisible=",$cmdFileName,"\">",
 	  "<img src=\"../img/visible.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />",
 	  "</a>";
       }
@@ -439,16 +439,16 @@ if (!$curDirPath) {
     }
     if(api_is_allowed_to_edit()) {
       //no init of $circle1 here
-      echo "<td align='center'><a href='".$_SERVER['PHP_SELF']."?action=exportpath&id=".$row["learnpath_id"]."'><img src=\"../img/save_zip.gif\" border=\"0\" title=\"".get_lang('Export')."\"></a>";
+      echo "<td align='center'><a href='".api_get_self()."?action=exportpath&id=".$row["learnpath_id"]."'><img src=\"../img/save_zip.gif\" border=\"0\" title=\"".get_lang('Export')."\"></a>";
 	
-      echo "<td align='center'><a href='".$_SERVER['PHP_SELF']."?action=editpath&id=".$row["learnpath_id"]."'><img src=\"../img/edit.gif\" border=\"0\" title=\"".get_lang('_edit_learnpath')."\"></a>";
+      echo "<td align='center'><a href='".api_get_self()."?action=editpath&id=".$row["learnpath_id"]."'><img src=\"../img/edit.gif\" border=\"0\" title=\"".get_lang('_edit_learnpath')."\"></a>";
 	
-      echo "<a href='".$_SERVER['PHP_SELF']."?action=deletepath&id=".$row["learnpath_id"]."'><img src=\"../img/delete.gif\" border=\"0\" title=\"".get_lang('_delete_learnpath')."\" onClick=\"return confirmation('".$row2['learnpath_name']."');\"></a>";
+      echo "<a href='".api_get_self()."?action=deletepath&id=".$row["learnpath_id"]."'><img src=\"../img/delete.gif\" border=\"0\" title=\"".get_lang('_delete_learnpath')."\" onClick=\"return confirmation('".$row2['learnpath_name']."');\"></a>";
 	
       if (($row3["visibility"])=='1') {
-        echo "<a href='".$_SERVER['PHP_SELF']."?action=publishpath&set_visibility=i&id=".$row["learnpath_id"]."'><img src=\"../img/visible.gif\" border=\"0\" alt=\"".get_lang('_no_publish')."\" title=\"".get_lang('_no_publish')."\"></a>";
+        echo "<a href='".api_get_self()."?action=publishpath&set_visibility=i&id=".$row["learnpath_id"]."'><img src=\"../img/visible.gif\" border=\"0\" alt=\"".get_lang('_no_publish')."\" title=\"".get_lang('_no_publish')."\"></a>";
       } else {
-        echo "<a href='".$_SERVER['PHP_SELF']."?action=publishpath&set_visibility=v&id=".$row["learnpath_id"]."'><img 	src=\"../img/invisible.gif\" border=\"0\" alt=\"".get_lang('_publish')."\" title=\"".get_lang('_publish')."\"></a>";
+        echo "<a href='".api_get_self()."?action=publishpath&set_visibility=v&id=".$row["learnpath_id"]."'><img 	src=\"../img/invisible.gif\" border=\"0\" alt=\"".get_lang('_publish')."\" title=\"".get_lang('_publish')."\"></a>";
       }
       echo "</td>";
     }

@@ -75,7 +75,7 @@ echo '<img src="../img/add.png" /> <a href="roles.php?action=add">'.get_lang('Ad
 
 if ($_GET['action']=='add')
 {
-	echo "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">";
+	echo "<form method=\"post\" action=\"".api_get_self()."\">";
 	echo "\n<table>";
 	echo "\n\t<tr>";
 	echo "\n\t\t<td>";

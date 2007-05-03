@@ -1,5 +1,5 @@
 <?php
-// $Id: languages.php 11120 2007-02-15 13:44:23Z elixir_julian $
+// $Id: languages.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -169,11 +169,11 @@ while ($row = mysql_fetch_array($result_select))
 	// the fourth column with the visibility icon and the edit icon
 	if ($row['available'] == 1)
 	{
-		$row_td[] = "<a href='".$_SERVER['PHP_SELF']."?action=makeunavailable&id=".$row['id']."'><img src='../img/visible.gif' border='0'></a> <a href='".$_SERVER['PHP_SELF']."?action=edit&id=".$row['id']."'><img src='../img/edit.gif' border='0'></a>";
+		$row_td[] = "<a href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'><img src='../img/visible.gif' border='0'></a> <a href='".api_get_self()."?action=edit&id=".$row['id']."'><img src='../img/edit.gif' border='0'></a>";
 	}
 	else
 	{
-		$row_td[] = "<a href='".$_SERVER['PHP_SELF']."?action=makeavailable&id=".$row['id']."'><img src='../img/invisible.gif' border='0'></a> <a href='".$_SERVER['PHP_SELF']."?action=edit&id=".$row['id']."'><img src='../img/edit.gif' border='0'></a>";
+		$row_td[] = "<a href='".api_get_self()."?action=makeavailable&id=".$row['id']."'><img src='../img/invisible.gif' border='0'></a> <a href='".api_get_self()."?action=edit&id=".$row['id']."'><img src='../img/edit.gif' border='0'></a>";
 	}
 
 	$language_data[] = $row_td;

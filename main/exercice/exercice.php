@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 12235 2007-05-02 13:17:31Z elixir_julian $
+* 	@version $Id: exercice.php 12263 2007-05-03 13:34:40Z elixir_julian $
 */
 
 
@@ -478,7 +478,7 @@ if($show == 'test'){
 	//show pages navigation link for previous page
 	if($page)
 	{
-		echo "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&page=".($page-1)."\">&lt;&lt; ",get_lang("PreviousPage")."</a> | ";
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&page=".($page-1)."\">&lt;&lt; ",get_lang("PreviousPage")."</a> | ";
 	}
 	elseif($nbrExercises+$nbrNextTests > $limitExPage)
 	{
@@ -488,7 +488,7 @@ if($show == 'test'){
 	//show pages navigation link for previous page
 	if($nbrExercises+$nbrNextTests > $limitExPage)
 	{
-		echo "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&page=".($page+1)."\">&gt;&gt; ",get_lang("NextPage")."</a>";
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&page=".($page+1)."\">&gt;&gt; ",get_lang("NextPage")."</a>";
 
 	}
 	elseif($page)

@@ -173,7 +173,7 @@ function delete_category($action, $id)
 function display_move_form($part, $id, $target=array())
 {
 	$message=get_lang('MoveFileTo');
-	$message.='<form name="form1" method="post" action="'.$_SERVER['PHP_SELF'].'?view_received_category='.$_GET['view_received_category'].'&view_sent_category='.$_GET['view_sent_category'].'&view='.$_GET['view'].'">';
+	$message.='<form name="form1" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&view_sent_category='.$_GET['view_sent_category'].'&view='.$_GET['view'].'">';
 	$message.='<input type="hidden" name="id" value="'.$id.'">';
 	$message.='<input type="hidden" name="part" value="'.$part.'">';
 	$message.='<select name="move_target">';
@@ -442,7 +442,7 @@ function display_addcategory_form($category_name='', $id='')
 	}
 
 
-	echo "<form name=\"add_new_category\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."?view=".$_GET['view']."\">\n";
+	echo "<form name=\"add_new_category\" method=\"post\" action=\"".api_get_self()."?view=".$_GET['view']."\">\n";
 	echo '<strong>'.$title.'</strong>';
 	if (isset($id) AND $id<>'')
 	{

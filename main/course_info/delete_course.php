@@ -1,5 +1,5 @@
 <?php
-// $Id: delete_course.php 12219 2007-05-01 18:46:59Z yannoo $
+// $Id: delete_course.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -62,7 +62,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'yes')
 } // end if $delete
 else
 {
-	$message = "&quot;".$currentCourseName."&quot; "."(".$currentCourseCode.") "."<p>".get_lang("ByDel")."</p>"."<p>"."<a href=\"maintenance.php\">".get_lang("N")."</a>"."&nbsp;&nbsp;|&nbsp;&nbsp;"."<a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">".get_lang("Y")."</a>"."</p>";
+	$message = "&quot;".$currentCourseName."&quot; "."(".$currentCourseCode.") "."<p>".get_lang("ByDel")."</p>"."<p>"."<a href=\"maintenance.php\">".get_lang("N")."</a>"."&nbsp;&nbsp;|&nbsp;&nbsp;"."<a href=\"".api_get_self()."?delete=yes\">".get_lang("Y")."</a>"."</p>";
 	$interbreadcrumb[] = array ("url" => "maintenance.php", "name" => get_lang('Maintenance'));
 } 
 Display :: display_header($tool_name, "Settings");

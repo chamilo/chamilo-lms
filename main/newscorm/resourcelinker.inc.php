@@ -74,7 +74,7 @@ function show_folder_up()
 
 	if ($level == 1)
 	{
-		echo "<a href='".$_SERVER['PHP_SELF']."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang('LevelUp')."</a>";
+		echo "<a href='".api_get_self()."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang('LevelUp')."</a>";
 	}
 	if ($level and $level != 0 and $level != 1)
 	{
@@ -83,7 +83,7 @@ function show_folder_up()
 		$last=count($folder_temp)-1;
 		unset($folder_temp[$last]);
 		$folder_up=implode('/',$folder_temp);
-		echo "<a href='".$_SERVER['PHP_SELF']."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;folder=$folder_up&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang('LevelUp')."</a>";
+		echo "<a href='".api_get_self()."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;folder=$folder_up&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang('LevelUp')."</a>";
 	}
 }
 
@@ -131,7 +131,7 @@ function show_documents($folder)
 				// folders should be clickable
 				if (file_or_folder($row['path']))
 				{
-					echo "<a href='".$_SERVER['PHP_SELF']."?content=Document";
+					echo "<a href='".api_get_self()."?content=Document";
 					echo "&folder=".substr($row['path'],1)."&source_id=$source_id&source_forum=".$_GET['source_forum']."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".substr($row['path'],1).'</a><br />';
 				}
 				else
@@ -409,7 +409,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if ($icon == 'icon') { echo "<img src='../img/agenda.gif' align=\"absmiddle\" alt='agenda'>"; }
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Agenda&origin=$origin&agenda_id=$agenda_id#$id_in_path\" class='$completed'>".shorten($myrow["title"],($length-3*$level))."</a>";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Agenda&origin=$origin&agenda_id=$agenda_id#$id_in_path\" class='$completed'>".shorten($myrow["title"],($length-3*$level))."</a>";
         		$items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Agenda&origin=$origin&agenda_id=$agenda_id#$id_in_path";
 				if ($desc != '')
 				{
@@ -469,7 +469,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if ($icon == 'icon') { echo "<img src='../img/valves.gif' align=\"absmiddle\" alt='ad valvas'>"; }
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Ad_Valvas&origin=$origin&ann_id=$ann_id#$id_in_path\" class='$completed'>".shorten($title,($length-3*$level))."</a>";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Ad_Valvas&origin=$origin&ann_id=$ann_id#$id_in_path\" class='$completed'>".shorten($title,($length-3*$level))."</a>";
 				$items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Ad_Valvas&origin=$origin&ann_id=$ann_id#$id_in_path";
 				if ($desc != '')
 				{
@@ -528,7 +528,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			$thelink=$myrow["url"];
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=$linktype&origin=$origin&thelink=$thelink#$id_in_path\" class='$completed'>".shorten($myrow["title"],($length-3*$level))."</a>";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=$linktype&origin=$origin&thelink=$thelink#$id_in_path\" class='$completed'>".shorten($myrow["title"],($length-3*$level))."</a>";
 				$items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=$linktype&origin=$origin&thelink=$thelink#$id_in_path";
 				if ($desc != '')
 				{
@@ -585,7 +585,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if ($icon == 'icon') { echo "<img src='../img/quiz.gif' align=\"absmiddle\" alt='quizz'>"; }
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path\" class='$completed'>".shorten($myrow["title"],($length-3*$level))."</a>";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path\" class='$completed'>".shorten($myrow["title"],($length-3*$level))."</a>";
 				$items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path";
 				if ($desc != '')
 				{
@@ -644,7 +644,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>";
 				$items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path";
 				if ($desc != '')
 				{
@@ -695,7 +695,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			$forumparameters="forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Forum&origin=$origin&forumparameters=$forumparameters#$id_in_path\" class='$completed'>".shorten($myrow["forum_name"],($length-3*$level))."</a>";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Forum&origin=$origin&forumparameters=$forumparameters#$id_in_path\" class='$completed'>".shorten($myrow["forum_name"],($length-3*$level))."</a>";
 				$items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Forum&origin=$origin&forumparameters=$forumparameters#$id_in_path";
 				if ($desc != '')
 				{
@@ -746,7 +746,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if ($icon == 'icon') { echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>"; }
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Thread&origin=$origin&topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."#$id_in_path\" class='$completed'>".shorten($myrow["topic_title"],($length-3*$level))."</a>";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Thread&origin=$origin&topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."#$id_in_path\" class='$completed'>".shorten($myrow["topic_title"],($length-3*$level))."</a>";
 				$items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Thread&origin=$origin&topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."#$id_in_path";
 				if ($desc != '')
 				{
@@ -811,7 +811,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if ($icon == 'icon') { echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>"; }
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path\" class='$completed'>".shorten($myrow_titel["post_title"],($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path\" class='$completed'>".shorten($myrow_titel["post_title"],($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path";
 				if ($desc != '')
 				{
 					if ($icon != 'wrap')
@@ -871,7 +871,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if ($icon == 'icon') { echo "<img src='../img/$image' align=\"absmiddle\" alt='$image'>"; }
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Document&origin=$origin&docurl=".$myrow["path"]."#$id_in_path\" class='$completed'>".shorten($filename,($length-3*$level))."</a>";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Document&origin=$origin&docurl=".$myrow["path"]."#$id_in_path\" class='$completed'>".shorten($filename,($length-3*$level))."</a>";
 				if ($desc != '')
 				{
 					if ($icon != 'wrap')
@@ -929,7 +929,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if ($icon == 'icon') { echo "<img src='../img/works.gif' align=\"absmiddle\">"; }
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Assignments&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Assignments&origin=$origin#$id_in_path";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Assignments&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Assignments&origin=$origin#$id_in_path";
 				if ($desc != '')
 				{
 					if ($icon != 'wrap')
@@ -975,7 +975,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Dropbox&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Dropbox&origin=$origin#$id_in_path";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Dropbox&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Dropbox&origin=$origin#$id_in_path";
 				if ($desc != '') {
 					if ($icon != 'wrap') {
 						echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div></td></tr>"; }
@@ -1014,7 +1014,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Introduction_text&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Introduction_text&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>";
 				$items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Introduction_text&origin=$origin#$id_in_path";
 				if ($desc != '') {
 					if ($icon != 'wrap') {
@@ -1055,7 +1055,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path";
 				if ($desc != '') {
 					if ($icon != 'wrap') {
 						echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div></td></tr>"; }
@@ -1095,7 +1095,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Groups&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Groups&origin=$origin#$id_in_path";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Groups&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Groups&origin=$origin#$id_in_path";
 				if ($desc != '') {
 					if ($icon != 'wrap') {
 						echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div></td></tr>"; }
@@ -1134,7 +1134,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if ($builder != 'builder')
 			{
-				echo "<a href=\"".$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Users&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Users&origin=$origin#$id_in_path";
+				echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Users&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=$_SERVER['PHP_SELF']."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Users&origin=$origin#$id_in_path";
 				if ($desc != '') {
 					if ($icon != 'wrap') {
 						echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div></td></tr>"; }
@@ -1622,7 +1622,7 @@ function display_resources($showdeleteimg)
 
 			if ($showdeleteimg==1)
 			{
-				echo "<a href=".$_SERVER['PHP_SELF']."?showresources=true&amp;source_forum=".$_GET['source_forum']."&amp;resourceaction=removeresource&amp;locationkey=".key($addedresource)."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no><img src='../img/delete.gif' border='0' alt='resource ".get_lang('Delete')."' /></a><br />";
+				echo "<a href=".api_get_self()."?showresources=true&amp;source_forum=".$_GET['source_forum']."&amp;resourceaction=removeresource&amp;locationkey=".key($addedresource)."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no><img src='../img/delete.gif' border='0' alt='resource ".get_lang('Delete')."' /></a><br />";
 			}
 			echo '</td></tr>';
 			next($addedresource);
@@ -1663,11 +1663,11 @@ function showorhide_addresourcelink($type, $id)
 		{
 			if ($type=="Document")
 			{
-				echo "<a href=".$_SERVER['PHP_SELF']."?content=".$type."&folder=".$folder."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no>".$lang_add_it_or_resource."</a>";
+				echo "<a href=".api_get_self()."?content=".$type."&folder=".$folder."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no>".$lang_add_it_or_resource."</a>";
 			}
 			else
 			{
-				echo "<a href='".$_SERVER['PHP_SELF']."?content=".$type."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no&target=$target'>".$lang_add_it_or_resource."</a>";
+				echo "<a href='".api_get_self()."?content=".$type."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no&target=$target'>".$lang_add_it_or_resource."</a>";
 			}
 		}
 	}
@@ -1676,7 +1676,7 @@ function showorhide_addresourcelink($type, $id)
 		if ($_SESSION['addedresource']!==$type or $_SESSION['addedresourceid']!==$id)
 		{
 			if ($from_learnpath) { $lang_add_it_or_resource=get_lang('AddIt'); } else { $lang_add_it_or_resource=get_lang('AddResource'); }
-			echo "<a href='".$_SERVER['PHP_SELF']."?content=".$type."&folder=".$folder."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no&target=$target'>".$lang_add_it_or_resource."</a>";
+			echo "<a href='".api_get_self()."?content=".$type."&folder=".$folder."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no&target=$target'>".$lang_add_it_or_resource."</a>";
 		}
 	}
 }

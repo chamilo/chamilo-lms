@@ -103,7 +103,7 @@ if(api_is_allowed_to_edit())
   }
   
   include('content_makers.inc.php');
-  echo	'<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&action=add_lp">'.
+  echo	'<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.
 		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="scormbuilder">&nbsp;'.get_lang('_add_learnpath').
 		'</a>' .
 		str_repeat('&nbsp;',3).
@@ -202,19 +202,19 @@ if (is_array($flat_list))
 			//export not available for normal lps yet
 			if($details['lp_type']==1){
 				$dsp_export = '<td align="center">' .
-					"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
+					"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
 					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					"</a>" .
 					"";
 			}elseif($details['lp_type']==2){
 				$dsp_export = '<td align="center">' .
-					"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name,'strict').".zip'>" .
+					"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name,'strict').".zip'>" .
 					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					"</a>" .
 					"";
 			}else{
 				$dsp_export = '<td align="center">' .
-					//"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
+					//"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
 					"<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					//"</a>" .
 					"";
@@ -233,14 +233,14 @@ if (is_array($flat_list))
 			
 			if ($details['lp_visibility'] == "i")
 			{
-		        $dsp_visible =	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=v\">" .
+		        $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=v\">" .
 				"<img src=\"../img/invisible_LP_list.gif\" border=\"0\" title=\"".get_lang('_publish')."\" />" .
 				"</a>" .
 				"";
 			}
 			else
 			{
-				$dsp_visible =	"<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=i'>" .
+				$dsp_visible =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=i'>" .
 				"<img src=\"../img/visible_LP_list.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />" .
 				"</a>".
 				"";

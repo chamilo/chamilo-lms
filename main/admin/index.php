@@ -1,4 +1,4 @@
-<?php // $Id: index.php 12172 2007-04-29 19:34:21Z yannoo $
+<?php // $Id: index.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -228,7 +228,7 @@ function version_check()
 	if (get_setting('registered')=='false' OR get_setting('registered') == false )
 	{
 		$return = '';
-		$return .= '<form action="'.$_SERVER['PHP_SELF'].'" id="VersionCheck" name="VersionCheck" method="post">';
+		$return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
 		$return .= get_lang('VersionCheckExplanation');
 		$return .= '<input type="checkbox" name="donotlistcampus" value="1" id="checkbox" /> Do not display my campus in the list of Dokeos platforms';
 		$return .= '<input type="submit" name="Register" value="Enable Version Check" id="register" />';
@@ -240,7 +240,7 @@ function version_check()
 		if ((get_setting('registered') + 15552000) > mktime())
 		{
 			$return = 'It has been a long time since about your campus has been updated on Dokeos.com';
-			$return .= '<form action="'.$_SERVER['PHP_SELF'].'" id="VersionCheck" name="VersionCheck" method="post">';
+			$return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
 			$return .= '<input type="submit" name="Register" value="Enable Version Check" id="register" />';
 			$return .= '</form>';
 		}

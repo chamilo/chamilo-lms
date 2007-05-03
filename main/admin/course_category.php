@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 10926 2007-01-26 14:34:47Z elixir_julian $
+<?php // $Id: course_category.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,7 +50,7 @@ if(!empty($action))
 	{
 		deleteNode($_GET['id']);
 
-		header('Location: '.$_SERVER['PHP_SELF'].'?category='.$category);
+		header('Location: '.api_get_self().'?category='.$category);
 		exit();
 	}
 	elseif(($action == 'add' || $action == 'edit') && $_POST['formSent'])
@@ -97,7 +97,7 @@ if(!empty($action))
 	{
 		moveNodeUp($_GET['id'],$_GET['tree_pos'],$category);
 
-		header('Location: '.$_SERVER['PHP_SELF'].'?category='.$category);
+		header('Location: '.api_get_self().'?category='.$category);
 		exit();
 	}
 }

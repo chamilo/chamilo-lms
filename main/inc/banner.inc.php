@@ -59,7 +59,7 @@ elseif (isset ($nameTools) && $language_file != 'course_home')
 	}
 	elseif(!$noPHP_SELF)
 	{
-		echo "<div id=\"my_courses\"><a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq(), "\" target=\"_top\">", $nameTools, "</a></div>", "\n";
+		echo "<div id=\"my_courses\"><a href=\"".api_get_self()."?".api_get_cidreq(), "\" target=\"_top\">", $nameTools, "</a></div>", "\n";
 	}
 	else
 	{

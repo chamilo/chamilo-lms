@@ -614,7 +614,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
     			while ($ar['id'] != '') {
     				$lp_title = stripslashes($ar['name']);
     				echo "<tr><td>";
-    				echo "<a href='".$_SERVER['PHP_SELF']."?view=".$view."&scormcontopen=".$ar['id']."&uInfo=$uInfo' class='specialLink'>$lp_title</a>";
+    				echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."&uInfo=$uInfo' class='specialLink'>$lp_title</a>";
     				echo "</td></tr>";
     				if ($ar['id']==$scormcontopen) { //have to list the students here
         					$contentId=$ar['id'];

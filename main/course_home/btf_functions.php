@@ -1,5 +1,5 @@
 <?php
-// $Id: btf_functions.php 11995 2007-04-12 18:30:04Z pcool $
+// $Id: btf_functions.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -218,7 +218,7 @@ function showtools2($cat)
 					}
 					else
 					{
-						$cell_content .= "<a href=\"".$_SERVER['PHP_SELF']."?id=".$toolsRow["id"]."&amp;".$thisLnk['cmd']."\">".$thisLnk['name']."</a>";
+						$cell_content .= "<a href=\"".api_get_self()."?id=".$toolsRow["id"]."&amp;".$thisLnk['cmd']."\">".$thisLnk['name']."</a>";
 					}
 				}
 			}

@@ -189,7 +189,7 @@ else {
 			<td>
 				<a href="../tracking/courseLog.php?cidReq='.$course['code'].'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Tracking').'" alt="'.get_lang('Tracking').'"/></a>&nbsp;
 				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].'"><img src="../img/edit.gif" border="0" align="absmiddle" title="Editer"></a>
-				<a href="'.$_SERVER['PHP_SELF'].'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\'Veuillez confirmer votre choix.\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
+				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\'Veuillez confirmer votre choix.\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
 			</td>
 		</tr>';
 	}
@@ -233,7 +233,7 @@ else {
 						<b>'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</b>
 					</td>
 					<td>
-						<a href="../mySpace/student.php?user_id='.$user['user_id'].'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\'Veuillez confirmer votre choix.\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
+						<a href="../mySpace/student.php?user_id='.$user['user_id'].'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\'Veuillez confirmer votre choix.\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
 					</td>
 				  </tr>';
 	}

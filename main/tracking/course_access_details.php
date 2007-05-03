@@ -107,9 +107,9 @@ $is_allowedToTrack = $is_courseAdmin;
         echo "<tr>
                 <td>
         ";
-        echo "  ".get_lang('PeriodToDisplay')." : [<a href='".$_SERVER['PHP_SELF']."?period=year&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodYear')."</a>]
-                [<a href='".$_SERVER['PHP_SELF']."?period=month&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodMonth')."</a>]
-                [<a href='".$_SERVER['PHP_SELF']."?period=day&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodDay')."</a>]
+        echo "  ".get_lang('PeriodToDisplay')." : [<a href='".api_get_self()."?period=year&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodYear')."</a>]
+                [<a href='".api_get_self()."?period=month&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodMonth')."</a>]
+                [<a href='".api_get_self()."?period=day&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodDay')."</a>]
                 &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
                 ".get_lang('DetailView')." :
         ";
@@ -117,13 +117,13 @@ $is_allowedToTrack = $is_courseAdmin;
         {
             case "year" :
                     //-- if period is "year" display can be by month, day or hour
-                    echo "  [<a href='".$_SERVER['PHP_SELF']."?period=$period&reqdate=$reqdate&displayType=month' class='specialLink'>".get_lang('PeriodMonth')."</a>]";
+                    echo "  [<a href='".api_get_self()."?period=$period&reqdate=$reqdate&displayType=month' class='specialLink'>".get_lang('PeriodMonth')."</a>]";
             case "month" :
                     //-- if period is "month" display can be by day or hour
-                    echo "  [<a href='".$_SERVER['PHP_SELF']."?period=$period&reqdate=$reqdate&displayType=day' class='specialLink'>".get_lang('PeriodDay')."</a>]";
+                    echo "  [<a href='".api_get_self()."?period=$period&reqdate=$reqdate&displayType=day' class='specialLink'>".get_lang('PeriodDay')."</a>]";
             case "day" :
                     //-- if period is "day" display can only be by hour
-                    echo "  [<a href='".$_SERVER['PHP_SELF']."?period=$period&reqdate=$reqdate&displayType=hour' class='specialLink'>".get_lang('PeriodHour')."</a>]";
+                    echo "  [<a href='".api_get_self()."?period=$period&reqdate=$reqdate&displayType=hour' class='specialLink'>".get_lang('PeriodHour')."</a>]";
                     break;
         }
 
@@ -137,8 +137,8 @@ $is_allowedToTrack = $is_courseAdmin;
                 $previousReqDate = mktime(1,1,1,1,1,date("Y",$reqdate)-1);
                 $nextReqDate = mktime(1,1,1,1,1,date("Y",$reqdate)+1);
                 echo   "
-                    [<a href='".$_SERVER['PHP_SELF']."?period=$period&reqdate=$previousReqDate&displayType=$displayType' class='specialLink'>".get_lang('PreviousYear')."</a>]
-                    [<a href='".$_SERVER['PHP_SELF']."?period=$period&reqdate=$nextReqDate&displayType=$displayType' class='specialLink'>".get_lang('NextYear')."</a>]
+                    [<a href='".api_get_self()."?period=$period&reqdate=$previousReqDate&displayType=$displayType' class='specialLink'>".get_lang('PreviousYear')."</a>]
+                    [<a href='".api_get_self()."?period=$period&reqdate=$nextReqDate&displayType=$displayType' class='specialLink'>".get_lang('NextYear')."</a>]
                 ";
                 break;
             case "month" :
@@ -147,8 +147,8 @@ $is_allowedToTrack = $is_courseAdmin;
                 $previousReqDate = mktime(1,1,1,date("m",$reqdate)-1,1,date("Y",$reqdate));
                 $nextReqDate = mktime(1,1,1,date("m",$reqdate)+1,1,date("Y",$reqdate));
                 echo   "
-                    [<a href='".$_SERVER['PHP_SELF']."?period=$period&reqdate=$previousReqDate&displayType=$displayType' class='specialLink'>".get_lang('PreviousMonth')."</a>]
-                    [<a href='".$_SERVER['PHP_SELF']."?period=$period&reqdate=$nextReqDate&displayType=$displayType' class='specialLink'>".get_lang('NextMonth')."</a>]
+                    [<a href='".api_get_self()."?period=$period&reqdate=$previousReqDate&displayType=$displayType' class='specialLink'>".get_lang('PreviousMonth')."</a>]
+                    [<a href='".api_get_self()."?period=$period&reqdate=$nextReqDate&displayType=$displayType' class='specialLink'>".get_lang('NextMonth')."</a>]
                 ";
                 break;
             case "day" :
@@ -156,8 +156,8 @@ $is_allowedToTrack = $is_courseAdmin;
                 $previousReqDate = $reqdate - 86400;
                 $nextReqDate = $reqdate + 86400;
                 echo   "
-                    [<a href='".$_SERVER['PHP_SELF']."?period=$period&reqdate=$previousReqDate&displayType=$displayType' class='specialLink'>".get_lang('PreviousDay')."</a>]
-                    [<a href='".$_SERVER['PHP_SELF']."?period=$period&reqdate=$nextReqDate&displayType=$displayType' class='specialLink'>".get_lang('NextDay')."</a>]
+                    [<a href='".api_get_self()."?period=$period&reqdate=$previousReqDate&displayType=$displayType' class='specialLink'>".get_lang('PreviousDay')."</a>]
+                    [<a href='".api_get_self()."?period=$period&reqdate=$nextReqDate&displayType=$displayType' class='specialLink'>".get_lang('NextDay')."</a>]
                 ";
                 break;
         }

@@ -1,4 +1,4 @@
-<?php # $Id: fileManage.lib.php 10083 2006-11-21 19:43:29Z pcool $
+<?php # $Id: fileManage.lib.php 12263 2007-05-03 13:34:40Z elixir_julian $
 
 /* vim: set expandtab tabstop=4 shiftwidth=4:
 ===============================================================================
@@ -472,7 +472,7 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 
 	$dirList = index_and_sort_dir($baseWorkDir);
 
-	$dialogBox .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n" ;
+	$dialogBox .= "<form action=\"".api_get_self()."\" method=\"post\">\n" ;
 	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
 	$dialogBox .= get_lang('Move').' '.$sourceComponent.' '.get_lang('To');
 	$dialogBox .= "<select name=\"".$command."\">\n" ;

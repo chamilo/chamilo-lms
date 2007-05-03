@@ -1095,7 +1095,7 @@ class question
 	 */
 	function render_question($form_content)
 	{
-		$this->html = '<form id="question" name="question" method="post" action="'.$_SERVER['PHP_SELF'].'?survey_id='.$_GET['survey_id'].'">';
+		$this->html = '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.$_GET['survey_id'].'">';
 		echo $this->html;
 	}
 }

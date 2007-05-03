@@ -1,4 +1,4 @@
-<?php // $Id: toolaccess_details.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: toolaccess_details.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -199,9 +199,9 @@ $reqdate=$_REQUEST['reqdate'];
             echo "<tr>
                     <td>
                     <small>
-                    [<a href='".$_SERVER['PHP_SELF']."?tool=$encodedTool&period=day&reqdate=$reqdate' class='specialLink'>$langPeriodDay</a>] 
-                    [<a href='".$_SERVER['PHP_SELF']."?tool=$encodedTool&period=week&reqdate=$reqdate' class='specialLink'>$langPeriodWeek</a>]
-                    [<a href='".$_SERVER['PHP_SELF']."?tool=$encodedTool&period=month&reqdate=$reqdate' class='specialLink'>$langPeriodMonth</a>]
+                    [<a href='".api_get_self()."?tool=$encodedTool&period=day&reqdate=$reqdate' class='specialLink'>$langPeriodDay</a>] 
+                    [<a href='".api_get_self()."?tool=$encodedTool&period=week&reqdate=$reqdate' class='specialLink'>$langPeriodWeek</a>]
+                    [<a href='".api_get_self()."?tool=$encodedTool&period=month&reqdate=$reqdate' class='specialLink'>$langPeriodMonth</a>]
                     &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
                     
                     ";
@@ -213,8 +213,8 @@ $reqdate=$_REQUEST['reqdate'];
                     $previousReqDate = mktime(1,1,1,date("m",$reqdate)-1,1,date("Y",$reqdate));
                     $nextReqDate = mktime(1,1,1,date("m",$reqdate)+1,1,date("Y",$reqdate));
                     echo   "
-                        [<a href='".$_SERVER['PHP_SELF']."?tool=$encodedTool&period=month&reqdate=$previousReqDate' class='specialLink'>$langPreviousMonth</a>] 
-                        [<a href='".$_SERVER['PHP_SELF']."?tool=$encodedTool&period=month&reqdate=$nextReqDate' class='specialLink'>$langNextMonth</a>]
+                        [<a href='".api_get_self()."?tool=$encodedTool&period=month&reqdate=$previousReqDate' class='specialLink'>$langPreviousMonth</a>] 
+                        [<a href='".api_get_self()."?tool=$encodedTool&period=month&reqdate=$nextReqDate' class='specialLink'>$langNextMonth</a>]
                     ";
                     break;
                 case "week" :
@@ -222,8 +222,8 @@ $reqdate=$_REQUEST['reqdate'];
                     $previousReqDate = $reqdate - 7*86400;
                     $nextReqDate = $reqdate + 7*86400;
                     echo   "
-                        [<a href='".$_SERVER['PHP_SELF']."?tool=$encodedTool&period=week&reqdate=$previousReqDate' class='specialLink'>$langPreviousWeek</a>] 
-                        [<a href='".$_SERVER['PHP_SELF']."?tool=$encodedTool&period=week&reqdate=$nextReqDate' class='specialLink'>$langNextWeek</a>]
+                        [<a href='".api_get_self()."?tool=$encodedTool&period=week&reqdate=$previousReqDate' class='specialLink'>$langPreviousWeek</a>] 
+                        [<a href='".api_get_self()."?tool=$encodedTool&period=week&reqdate=$nextReqDate' class='specialLink'>$langNextWeek</a>]
                     ";
                     break;
                 case "day" :
@@ -231,14 +231,14 @@ $reqdate=$_REQUEST['reqdate'];
                     $previousReqDate = $reqdate - 86400;
                     $nextReqDate = $reqdate + 86400;
                     echo   "
-                        [<a href='".$_SERVER['PHP_SELF']."?tool=$encodedTool&period=day&reqdate=$previousReqDate' class='specialLink'>$langPreviousDay</a>] 
-                        [<a href='".$_SERVER['PHP_SELF']."?tool=$encodedTool&period=day&reqdate=$nextReqDate' class='specialLink'>$langNextDay</a>]
+                        [<a href='".api_get_self()."?tool=$encodedTool&period=day&reqdate=$previousReqDate' class='specialLink'>$langPreviousDay</a>] 
+                        [<a href='".api_get_self()."?tool=$encodedTool&period=day&reqdate=$nextReqDate' class='specialLink'>$langNextDay</a>]
                     ";
                     break;
             }
             
             echo"   &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
-                    [<a href='".$_SERVER['PHP_SELF']."' class='specialLink'>$langViewToolList</a>]
+                    [<a href='".api_get_self()."' class='specialLink'>$langViewToolList</a>]
                     </small>
                     </td>
                 </tr>

@@ -96,7 +96,7 @@ if (mysql_num_rows($result) > 1)
 	}
 	else
 	{
-		echo '<form id="language" name="language" method="POST" action="'.$_SERVER['PHP_SELF'].'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'">';
+		echo '<form id="language" name="language" method="POST" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'">';
 		echo '  <select name="language">';
 		while ($row=mysql_fetch_assoc($result))
 		{
@@ -256,7 +256,7 @@ if (isset($_GET['show']))
 }
 
 // Displaying the form with the questions
-echo '<form id="question" name="question" method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'&show='.$limit.'">';
+echo '<form id="question" name="question" method="post" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'&show='.$limit.'">';
 echo '<input type="hidden" name="language" value="'.$_POST['language'].'" />';
 foreach ($questions as $key=>$question)
 {
@@ -266,7 +266,7 @@ foreach ($questions as $key=>$question)
 
 if (($limit AND $limit <> $question_counter_max) OR !isset($_GET['show']))
 {
-	//echo '<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.$survey_invitation['survey_id'].'&amp;show='.$limit.'">NEXT</a>';
+	//echo '<a href="'.api_get_self().'?survey_id='.$survey_invitation['survey_id'].'&amp;show='.$limit.'">NEXT</a>';
 	echo '<input type="submit" name="next_survey_page" value="'.get_lang('Next').' >> " />';
 }
 if (!$limit AND isset($_GET['show']))

@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 12220 2007-05-01 22:19:23Z yannoo $
+<?php // $Id: document.inc.php 12263 2007-05-03 13:34:40Z elixir_julian $
 
 /*
 ==============================================================================
@@ -227,16 +227,16 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id)
 	$curdirpath = urlencode($curdirpath);
 	
 	$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$gid_req.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$gid_req.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$gid_req.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
-	$modify_icons .= '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$gid_req.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
+	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$gid_req.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
+	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$gid_req.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
+	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$gid_req.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
 	return $modify_icons;
 }
 
 
 function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 {
-	$form = '<form name="move_to" action="'.$_SERVER['PHP_SELF'].'" method="post">'."\n";
+	$form = '<form name="move_to" action="'.api_get_self().'" method="post">'."\n";
 	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />'."\n";
 	$form .= get_lang('MoveTo').' <select name="move_to">'."\n";
 	

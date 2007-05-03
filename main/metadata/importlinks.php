@@ -343,7 +343,7 @@ if (count($dups))
 
 echo '<h3>', get_lang('OrElse'), $warning, '</h3>', "\n",  // select new target
     '<table><tr><td align="right" class="alternativeBgDark">', "\n", 
-    '<form action="'.$_SERVER['PHP_SELF'].'" method="post">', "\n", 
+    '<form action="'.api_get_self().'" method="post">', "\n", 
     get_lang('SLC'), ' :', "\n", '<select name="lcn">', "\n",
     '<option value=""></option>', "\n";
     

@@ -335,8 +335,8 @@ if(api_is_allowed_to_edit())
 	/*if($_GET["remove"])
 	{
 		$msgDestroy=get_lang('DelLk').'<br />';
-		$msgDestroy.='<a href="'.$_SERVER['PHP_SELF'].'">'.get_lang('No').'</a>&nbsp;|&nbsp;';
-		$msgDestroy.='<a href="'.$_SERVER['PHP_SELF'].'?destroy=yes&amp;id='.$_GET["id"].'">'.get_lang('Yes').'</a>';
+		$msgDestroy.='<a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;';
+		$msgDestroy.='<a href="'.api_get_self().'?destroy=yes&amp;id='.$_GET["id"].'">'.get_lang('Yes').'</a>';
 
 		Display :: display_normal_message($msgDestroy);
 	}*/

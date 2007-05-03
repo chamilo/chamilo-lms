@@ -171,14 +171,14 @@ if ($intro_dispCommand)
 	if( empty($intro_content) ) // displays "Add intro" Commands
 	{
 		echo	"<div id=\"courseintro\"><p>\n",
-				"<a href=\"".$_SERVER['PHP_SELF']."?intro_cmdAdd=1\">\n",get_lang('AddIntro'),"</a>\n",
+				"<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n",get_lang('AddIntro'),"</a>\n",
 				"</p>\n</div>";
 	}
 	else // displays "edit intro && delete intro" Commands
 	{
 		echo	"<div id=\"courseintro_icons\"><p>\n",
-				"<a href=\"".$_SERVER['PHP_SELF']."?intro_cmdEdit=1\"><img src=\"" . api_get_path(WEB_CODE_PATH) . "img/edit.gif\" alt=\"",get_lang('Modify'),"\" border=\"0\" /></a>\n",
-				"<a href=\"".$_SERVER['PHP_SELF']."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\"><img src=\"" . api_get_path(WEB_CODE_PATH) . "img/delete.gif\" alt=\"",get_lang('Delete'),"\" border=\"0\" /></a>\n",
+				"<a href=\"".api_get_self()."?intro_cmdEdit=1\"><img src=\"" . api_get_path(WEB_CODE_PATH) . "img/edit.gif\" alt=\"",get_lang('Modify'),"\" border=\"0\" /></a>\n",
+				"<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\"><img src=\"" . api_get_path(WEB_CODE_PATH) . "img/delete.gif\" alt=\"",get_lang('Delete'),"\" border=\"0\" /></a>\n",
 				"</p>\n</div>";
 	}
 }

@@ -108,9 +108,9 @@ if (is_allowed_to_edit())
 				"&nbsp;&nbsp;&nbsp;",
 				"<strong>",get_lang('DelLk'),"</strong>",
 				"<br>&nbsp;&nbsp;&nbsp;\n",
-				"<a href=\"".$_SERVER['PHP_SELF']."\">",get_lang('No'),"</a>\n",
+				"<a href=\"".api_get_self()."\">",get_lang('No'),"</a>\n",
 				"&nbsp;|&nbsp;\n",
-				"<a href=\"".$_SERVER['PHP_SELF']."?destroy=yes&amp;id=$id\">",get_lang('Yes'),"</a>\n",
+				"<a href=\"".api_get_self()."?destroy=yes&amp;id=$id\">",get_lang('Yes'),"</a>\n",
 				"</font></td></tr>\n",
 				"</table>\n";
 		echo 	"<br><br><br>\n";
@@ -169,7 +169,7 @@ if (is_allowed_to_edit())
 				"<tr>\n",
 				"<td>\n",
 
-				"<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n",
+				"<form method=\"post\" action=\"".api_get_self()."\">\n",
 				"<input type=\"hidden\" name=\"id\" value=\"$id\">\n",
 				"Image : <img alt=\"\" src=\"".$image."\" border=\"0\" align=\"absmiddle\">\n",
 				"</td>\n",
@@ -239,9 +239,9 @@ if ($is_platformAdmin and is_allowed_to_edit())
 				"&nbsp;&nbsp;&nbsp;",
 				"<strong>",get_lang('DelLk'),"</strong>",
 				"<br>&nbsp;&nbsp;&nbsp;\n",
-				"<a href=\"".$_SERVER['PHP_SELF']."\">",get_lang('No'),"</a>\n",
+				"<a href=\"".api_get_self()."\">",get_lang('No'),"</a>\n",
 				"&nbsp;|&nbsp;\n",
-				"<a href=\"".$_SERVER['PHP_SELF']."?delete=yes&amp;id=$id\">",get_lang('Yes'),"</a>\n",
+				"<a href=\"".api_get_self()."?delete=yes&amp;id=$id\">",get_lang('Yes'),"</a>\n",
 				"</font>\n",
 				"<br><br><br>\n",
 				"</td>\n",

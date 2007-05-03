@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 11764 2007-03-29 08:28:07Z elixir_inter $
+* 	@version $Id: exercice_submit.php 12263 2007-05-03 13:34:40Z elixir_julian $
 */
 
 
@@ -475,7 +475,7 @@ if($number_of_hotspot_questions > 0)
 }
 $s="
 <p>$exerciseDescription</p>
- <form method='post' action='".$_SERVER['PHP_SELF']."?autocomplete=off' name='frm_exercise' $onsubmit>
+ <form method='post' action='".api_get_self()."?autocomplete=off' name='frm_exercise' $onsubmit>
  <input type='hidden' name='formSent' value='1' />
  <input type='hidden' name='exerciseType' value='".$exerciseType."' />
  <input type='hidden' name='questionNum' value='".$questionNum."' />

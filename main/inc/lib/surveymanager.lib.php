@@ -1664,13 +1664,13 @@ function display_sortable_table($groupid,$surveyid,$curr_dbname,$header, $conten
 			$page_nav = get_lang('Page').' : ';
 			if ($paging_options['page_nr'] > 1)
 			{
-				$page_nav .= '<a href="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='. ($paging_options['page_nr'] - 1).'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">&laquo;</a> ';
+				$page_nav .= '<a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='. ($paging_options['page_nr'] - 1).'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">&laquo;</a> ';
 			}
 			for ($i = $paging_options['page_nr'] - 3; $i < $paging_options['page_nr']; $i ++)
 			{
 				if ($i > 0)
 				{
-					$page_nav .= '<a href="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='.$i.'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">'.$i.'</a> ';
+					$page_nav .= '<a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='.$i.'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">'.$i.'</a> ';
 				}
 			}
 			if ($i == $paging_options['page_nr'])
@@ -1681,22 +1681,22 @@ function display_sortable_table($groupid,$surveyid,$curr_dbname,$header, $conten
 			{
 				if ($i <= count($pages))
 				{
-					$page_nav .= '<a href="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='.$i.'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">'.$i.'</a> ';
+					$page_nav .= '<a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='.$i.'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">'.$i.'</a> ';
 				}
 			}
 			if ($paging_options['page_nr'] < count($pages))
 			{
-				$page_nav .= '<a href="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='. ($paging_options['page_nr'] + 1).'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">&raquo;</a> ';
+				$page_nav .= '<a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr='. ($paging_options['page_nr'] + 1).'&amp;per_page='.$paging_options['per_page'].''.$query_string.'">&raquo;</a> ';
 			}
 		}
 		$view_switch = '';
 		if (count($pages) == 1 && count($page_content) > $paging_options['per_page_default'])
 		{
-			$view_switch = ' <a href="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr=1&amp;per_page='.$paging_options['per_page_default'].''.$query_string.'">'.get_lang('Show').' '.$paging_options['per_page_default'].'</a>';
+			$view_switch = ' <a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr=1&amp;per_page='.$paging_options['per_page_default'].''.$query_string.'">'.get_lang('Show').' '.$paging_options['per_page_default'].'</a>';
 		}
 		elseif (count($pages) > 1)
 		{
-			$view_switch = ' <a href="'.$_SERVER['PHP_SELF'].'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr=1&amp;per_page='.count($content).''.$query_string.'">'.get_lang('ShowAll').'</a>';
+			$view_switch = ' <a href="'.api_get_self().'?origin='.$origin.'&amp;column='.$sorting_options['column'].'&amp;direction='.$sorting_options['direction'].'&amp;page_nr=1&amp;per_page='.count($content).''.$query_string.'">'.get_lang('ShowAll').'</a>';
 		}
 		$page_nav = '<table width="100%"><tr><td>'.$view_switch.'</td><td align="right">'.$page_nav.'</td></tr></table>';
 		// Determine new direction

@@ -543,7 +543,7 @@ while ($row=mysql_fetch_array($result_select_active))
         {
         ?>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Document')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Document')."</a>"; ?></td>
         </tr>
         <?php 
         } 
@@ -551,7 +551,7 @@ while ($row=mysql_fetch_array($result_select_active))
         {
         ?>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Agenda&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Agenda')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Agenda&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Agenda')."</a>"; ?></td>
         </tr>
         <?php 
         }  
@@ -559,7 +559,7 @@ while ($row=mysql_fetch_array($result_select_active))
         {
         ?>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Ad_Valvas&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('AdValvas')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Ad_Valvas&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('AdValvas')."</a>"; ?></td>
         </tr>
         <?php 
         }  
@@ -567,7 +567,7 @@ while ($row=mysql_fetch_array($result_select_active))
         {
         ?>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Forum&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Forum')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Forum&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Forum')."</a>"; ?></td>
         </tr>
         <?php 
         }
@@ -575,7 +575,7 @@ while ($row=mysql_fetch_array($result_select_active))
         {
         ?>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Link')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Link')."</a>"; ?></td>
         </tr>
         <?php 
         }
@@ -583,7 +583,7 @@ while ($row=mysql_fetch_array($result_select_active))
         {
         ?>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Exercise&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Exercise')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Exercise&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Exercise')."</a>"; ?></td>
         </tr>
 
 		<?php
@@ -601,32 +601,32 @@ else
         </tr-->
 <?php if ($multi_level_learnpath === true ) { ?>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=chapter&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Chapter')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=chapter&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Chapter')."</a>"; ?></td>
         </tr>
 <?php } ?>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Document')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Document')."</a>"; ?></td>
         </tr>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Exercise&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Exercise')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Exercise&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Exercise')."</a>"; ?></td>
         </tr>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Link')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Link')."</a>"; ?></td>
         </tr>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Forum&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Forum')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Forum&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Forum')."</a>"; ?></td>
         </tr>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Agenda&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Agenda')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Agenda&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Agenda')."</a>"; ?></td>
         </tr>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Ad_Valvas&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('AdValvas')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Ad_Valvas&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('AdValvas')."</a>"; ?></td>
         </tr>
         <!--tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Course_description&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('CourseDescription')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Course_description&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('CourseDescription')."</a>"; ?></td>
         </tr-->
         <!--tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Introduction_text&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('IntroductionText')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Introduction_text&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('IntroductionText')."</a>"; ?></td>
         </tr-->
 		<!--tr>
           <td>&nbsp;</td>
@@ -635,16 +635,16 @@ else
           <td width="26%"><b><?php echo get_lang('DokeosRelatedCourseMaterial'); ?></b></td>
         </tr-->
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Dropbox&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Dropbox')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Dropbox&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Dropbox')."</a>"; ?></td>
         </tr>
 		<tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Assignment&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Assignments')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Assignment&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Assignments')."</a>"; ?></td>
         </tr>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Groups&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Groups')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Groups&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Groups')."</a>"; ?></td>
         </tr>
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Users&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Users')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Users&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Users')."</a>"; ?></td>
         </tr>
 
 		<?php
@@ -661,7 +661,7 @@ else
           <td><b><?php echo get_lang("ExternalResources"); ?></b></td>
         </tr-->
         <tr>
-          <td><?php echo "<a href=\"".$_SERVER['PHP_SELF']."?content=Externallink&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('ExternalLink')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Externallink&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('ExternalLink')."</a>"; ?></td>
         </tr>
 		<?php
 
@@ -671,7 +671,7 @@ if ($from_learnpath != 'yes')
 	echo "<tr><td><b>".get_lang('ResourcesAdded')." (";
 	echo count($addedresource);
 	echo ")</b></td></tr>";
-	echo "<tr><td nowrap><a href=\"".$_SERVER['PHP_SELF']."?showresources=true&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('ShowDelete')."</a>";
+	echo "<tr><td nowrap><a href=\"".api_get_self()."?showresources=true&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('ShowDelete')."</a>";
 	echo "</td></tr>";
 }
 ?>
@@ -847,7 +847,7 @@ if ($content == "Forum")
 				echo "<tr><td bgcolor='#4171B5' colspan='2'><font color='white'><b>".$myrow["cat_title"]."</b></font></td></tr>";
 			}
 			$old_cat_title = $myrow["cat_title"];
-			echo "<tr><td><img src='../img/forum.gif'><a href='".$_SERVER['PHP_SELF']."?content=Forum&category=".$myrow["cat_id"]."&forum=".$myrow["forum_id"]."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".$myrow["forum_name"]."</td><td>";
+			echo "<tr><td><img src='../img/forum.gif'><a href='".api_get_self()."?content=Forum&category=".$myrow["cat_id"]."&forum=".$myrow["forum_id"]."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".$myrow["forum_name"]."</td><td>";
 			showorhide_addresourcelink("Forum", $myrow["forum_id"]);
 			echo "</td></tr>";
 		}
@@ -874,7 +874,7 @@ if ($content == "Forum")
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			while ($myrow = mysql_fetch_array($result))
 			{
-				echo "<tr><td><a href='".$_SERVER['PHP_SELF']."?content=Forum&category=$category&forum=1&thread=".$myrow["topic_id"]."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".$myrow["topic_title"]."</a>  (".$myrow["prenom"]." ".$myrow["nom"].")</td><td>";
+				echo "<tr><td><a href='".api_get_self()."?content=Forum&category=$category&forum=1&thread=".$myrow["topic_id"]."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".$myrow["topic_title"]."</a>  (".$myrow["prenom"]." ".$myrow["nom"].")</td><td>";
 				showorhide_addresourcelink("Thread", $myrow["topic_id"]);
 				echo "</td></tr>";
 			}
@@ -1061,7 +1061,7 @@ if ($content == "Externallink")
 */
 if ($content == "Assignment")
 {
-	echo "<a href=".$_SERVER['PHP_SELF']."?content=Ass&add=Ass&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no>".get_lang('AddAssignmentPage')."</a>";
+	echo "<a href=".api_get_self()."?content=Ass&add=Ass&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no>".get_lang('AddAssignmentPage')."</a>";
 }
 
 /*
@@ -1071,7 +1071,7 @@ if ($content == "Assignment")
 */
 if ($content == "Dropbox")
 {
-	echo "<a href='".$_SERVER['PHP_SELF']."?content=Drop&add=Drop&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('DropboxAdd')."</a>";
+	echo "<a href='".api_get_self()."?content=Drop&add=Drop&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('DropboxAdd')."</a>";
 }
 
 /*
@@ -1081,7 +1081,7 @@ if ($content == "Dropbox")
 */
 if ($content == "Introduction_text")
 {
-	echo "<a href='".$_SERVER['PHP_SELF']."?content=Intro&add=Intro&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('IntroductionTextAdd')."</a>";
+	echo "<a href='".api_get_self()."?content=Intro&add=Intro&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('IntroductionTextAdd')."</a>";
 }
 
 /*
@@ -1091,7 +1091,7 @@ if ($content == "Introduction_text")
 */
 if ($content == "Course_description")
 {
-	echo "<a href='".$_SERVER['PHP_SELF']."?content=Course_desc&add=Course_desc&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('CourseDescriptionAdd')."</a>";
+	echo "<a href='".api_get_self()."?content=Course_desc&add=Course_desc&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('CourseDescriptionAdd')."</a>";
 }
 
 /*
@@ -1101,7 +1101,7 @@ if ($content == "Course_description")
 */
 if ($content == "Groups")
 {
-	echo "<a href='".$_SERVER['PHP_SELF']."?content=Group&add=Group&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('GroupsAdd')."</a>";
+	echo "<a href='".api_get_self()."?content=Group&add=Group&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('GroupsAdd')."</a>";
 }
 
 /*
@@ -1111,7 +1111,7 @@ if ($content == "Groups")
 */
 if ($content == "Users")
 {
-	echo "<a href='".$_SERVER['PHP_SELF']."?content=User&add=User&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('UsersAdd')."</a>";
+	echo "<a href='".api_get_self()."?content=User&add=User&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('UsersAdd')."</a>";
 }
 
 if ($showresources)

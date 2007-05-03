@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 11788 2007-03-29 20:38:06Z pcool $
+// $Id: settings.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -170,10 +170,10 @@ $resultcategories = api_sql_query($selectcategories, __FILE__, __LINE__);
 echo "\n<div><ul>";
 while ($row = mysql_fetch_array($resultcategories))
 {
-	echo "\n\t<li><a href=\"".$_SERVER['PHP_SELF']."?category=".$row['category']."\">".ucfirst(get_lang($row['category']))."</a></li>";
+	echo "\n\t<li><a href=\"".api_get_self()."?category=".$row['category']."\">".ucfirst(get_lang($row['category']))."</a></li>";
 }
-echo "\n\t<li><a href=\"".$_SERVER['PHP_SELF']."?category=Plugins\">".ucfirst(get_lang('Plugins'))."</a></li>";
-echo "\n\t<li><a href=\"".$_SERVER['PHP_SELF']."?category=stylesheets\">".ucfirst(get_lang('Stylesheets'))."</a></li>";
+echo "\n\t<li><a href=\"".api_get_self()."?category=Plugins\">".ucfirst(get_lang('Plugins'))."</a></li>";
+echo "\n\t<li><a href=\"".api_get_self()."?category=stylesheets\">".ucfirst(get_lang('Stylesheets'))."</a></li>";
 echo "\n</ul></div>";
 
 if (isset ($_GET['category']))
@@ -264,7 +264,7 @@ function handle_plugins()
 		$plugin_info['version']='0.1 alpha'; // The version number of the plugin
 		$plugin_info['author']='Patrick Cool'; // The author of the plugin
 	*/
-	echo '<form name="plugins" method="post" action="'.$_SERVER['PHP_SELF'].'?category='.$_GET['category'].'">';
+	echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.$_GET['category'].'">';
 	echo "<table class=\"data_table\">\n";
 	echo "\t<tr>\n";
 	echo "\t\t<th>\n";
@@ -380,7 +380,7 @@ function handle_stylesheets()
 	// Preview of the stylesheet
 	echo '<div><iframe src="style_preview.php" width="100%" height="300" name="preview"></iframe></div>';
 
-	echo '<form name="stylesheets" method="post" action="'.$_SERVER['PHP_SELF'].'?category='.$_GET['category'].'">';
+	echo '<form name="stylesheets" method="post" action="'.api_get_self().'?category='.$_GET['category'].'">';
 	if ($handle = opendir(api_get_path(SYS_PATH).'main/css/'))
 	{
 		$counter=1;

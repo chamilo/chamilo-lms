@@ -187,7 +187,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
  */
 function reg_filter($class_id)
 {
-	$result = "<a href=\"".$_SERVER['PHP_SELF']."?register=yes&amp;class_id=".$class_id."\">".get_lang("reg")."</a>";
+	$result = "<a href=\"".api_get_self()."?register=yes&amp;class_id=".$class_id."\">".get_lang("reg")."</a>";
 	return $result;
 }
 // Build search-form

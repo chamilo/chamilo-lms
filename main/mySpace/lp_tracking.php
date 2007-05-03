@@ -136,7 +136,7 @@ $name = mysql_result($rs, 0, 0).' '.mysql_result($rs, 0, 1);
 echo '<div align="left" style="float:left"><h4>'.$_course['title'].' - '.$lp_title.' - '.$name.'</h4></div>
 	  <div align="right">
 			<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-			<a href="'.$_SERVER['PHP_SELF'].'?export=csv&'.$_SERVER['QUERY_STRING'].'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+			<a href="'.api_get_self().'?export=csv&'.$_SERVER['QUERY_STRING'].'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 		 </div>
 	<div class="clear"></div>';
 

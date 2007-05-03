@@ -95,8 +95,8 @@ if ( $_configuration['tracking_enabled'] )
 <table width=\"100%\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\">
     <tr>
         <td class='minilink'>
-                [<a href='".$_SERVER['PHP_SELF']."?view=1111111'>".get_lang('ShowAll')."</a>]
-                [<a href='".$_SERVER['PHP_SELF']."?view=0000000'>".get_lang('ShowNone')."</a>]
+                [<a href='".api_get_self()."?view=1111111'>".get_lang('ShowAll')."</a>]
+                [<a href='".api_get_self()."?view=0000000'>".get_lang('ShowNone')."</a>]
             </td>
         </tr>
         ";
@@ -117,7 +117,7 @@ if ( $_configuration['tracking_enabled'] )
             <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font>
             <b>".get_lang('Logins')."</b>
             &nbsp;&nbsp;&nbsp;
-                [<a href='".$_SERVER['PHP_SELF']."?view=".$tempView."'>".get_lang('Close')."</a>]
+                [<a href='".api_get_self()."?view=".$tempView."'>".get_lang('Close')."</a>]
         </td>
     </tr>";
         $sql = "SELECT `login_date`
@@ -216,7 +216,7 @@ if ( $_configuration['tracking_enabled'] )
         echo "
             <tr>
                     <td valign='top'>
-                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=".$tempView."' class='specialLink'>".get_lang('Logins')."</a>
+                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?view=".$tempView."' class='specialLink'>".get_lang('Logins')."</a>
                     </td>
             </tr>
         ";
@@ -236,7 +236,7 @@ if ( $_configuration['tracking_enabled'] )
         echo "
             <tr>
                     <td valign='top'>
-                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('ExercicesResults')."</b>&nbsp;&nbsp;&nbsp;[<a href='".$_SERVER['PHP_SELF']."?view=".$tempView."'>".get_lang('Close')."</a>]
+                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('ExercicesResults')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?view=".$tempView."'>".get_lang('Close')."</a>]
                     </td>
             </tr>
         ";
@@ -295,7 +295,7 @@ if ( $_configuration['tracking_enabled'] )
         echo "
             <tr>
                     <td valign='top'>
-                    <font color='#0000FF'>+&nbsp;&nbsp;</font><a href='".$_SERVER['PHP_SELF']."?view=".$tempView."' class='specialLink'>".get_lang('ExercicesResults')."</a>
+                    <font color='#0000FF'>+&nbsp;&nbsp;</font><a href='".api_get_self()."?view=".$tempView."' class='specialLink'>".get_lang('ExercicesResults')."</a>
                     </td>
             </tr>
         ";

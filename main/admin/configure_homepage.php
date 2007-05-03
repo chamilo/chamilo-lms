@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 12222 2007-05-02 05:45:20Z yannoo $
+<?php // $Id: configure_homepage.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -868,8 +868,8 @@ else
 
 		if(!empty($enreg))
 		{
-			$edit_link='<a href="'.$_SERVER['PHP_SELF'].'?action=edit_link&amp;link_index='.$key.'"><img src="../img/edit.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Modify')).'"/></a>';
-			$delete_link='<a href="'.$_SERVER['PHP_SELF'].'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img src="../img/delete.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Delete')).'"/></a>';
+			$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'"><img src="../img/edit.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Modify')).'"/></a>';
+			$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img src="../img/delete.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Delete')).'"/></a>';
 
 			echo str_replace(array('href="'.$_configuration['root_web'].'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($_SERVER['PHP_SELF']).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
 		}

@@ -1735,7 +1735,7 @@ function build_missing_files_form($missing_files,$upload_path,$file_name)
 		$added_slash = ($upload_path=='/')?'':'/';
 		//build the form
 		$form .= "<p><strong>".get_lang('MissingImagesDetected')."</strong></p>\n"
-				."<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\" enctype=\"multipart/form-data\">\n"
+				."<form method=\"post\" action=\"".api_get_self()."\" enctype=\"multipart/form-data\">\n"
 				//related_file is the path to the file that has missing images
 				."<input type=\"hidden\" name=\"related_file\" value=\"".$upload_path.$added_slash.$file_name."\" />\n"
 				."<input type=\"hidden\" name=\"upload_path\" value=\"".$upload_path."\" />\n"

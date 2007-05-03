@@ -165,7 +165,7 @@ if(!empty($_GET['student']))
 	
 	echo '<div align="right">
 		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-		<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+		<a href="'.api_get_self().'?'.$_SERVER['QUERY_STRING'].'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 	  </div>';
 	  
 	  
@@ -804,12 +804,12 @@ if(!empty($_GET['student']))
 					</td>';
 					if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
 						echo '<td align="center" width="10">
-							<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'&id_coach='.$_GET['id_coach'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+							<a href="'.api_get_self().'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'&id_coach='.$_GET['id_coach'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
 						</td>';
 					}
 					else{
 						echo '<td align="center" width="10">
-							<a href="'.$_SERVER['PHP_SELF'].'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+							<a href="'.api_get_self().'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
 						</td>';
 					}
 				echo '</tr>';

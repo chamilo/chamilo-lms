@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 12220 2007-05-01 22:19:23Z yannoo $
+<?php //$Id: agenda.inc.php 12263 2007-05-03 13:34:40Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -185,7 +185,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 				echo "\t<td ".$class.">";
 				if ($agendaitems[$curday] <> "")
 				{
-					echo "<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
+					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
 				}
 				else
 				{
@@ -270,7 +270,7 @@ function display_monthcalendar($month, $year)
 
 				$dayheader = "$curday";
 				if (in_array($curday,$data))
-					{ $dayheader="<a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>"; }
+					{ $dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>"; }
 
 				if (($curday==$today['mday'])&&($year ==$today['year'])&&($month == $today[mon]))
 				{
@@ -1032,7 +1032,7 @@ function change_visibility($tool,$id)
 */
 function display_courseadmin_links()
 {
-	echo "<li><a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=add&amp;origin=".$_GET['origin']."'><img src=\"../img/view_more_stats.gif\" alt=\"".get_lang('MoreStats')."\" border=\"0\" /> ".get_lang("AgendaAdd")."</a><br /></li>";
+	echo "<li><a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".$_GET['origin']."'><img src=\"../img/view_more_stats.gif\" alt=\"".get_lang('MoreStats')."\" border=\"0\" /> ".get_lang("AgendaAdd")."</a><br /></li>";
 	if (empty ($_SESSION['toolgroup']))
 	{
 		echo "<li>".get_lang(UserGroupFilter)."<br/>";
@@ -1054,21 +1054,21 @@ function display_student_links()
 	global $show;
 	if ($_SESSION['sort'] == 'DESC')
 	{
-		echo "<li><a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&sort=asc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a></li>";
+		echo "<li><a href='".api_get_self()."?".api_get_cidreq()."&sort=asc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a></li>";
 	}
 	else
 	{
-		echo "<li><a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&sort=desc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a></li>";
+		echo "<li><a href='".api_get_self()."?".api_get_cidreq()."&sort=desc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a></li>";
 	}
 
 	// showing the link to show all items or only those of the current month
 	if ($_SESSION['show']=="showcurrent")
 	{
-		echo "<li><a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=showall&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_select.gif').' '.get_lang("ShowAll")."</a></li>";
+		echo "<li><a href='".api_get_self()."?".api_get_cidreq()."&action=showall&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_select.gif').' '.get_lang("ShowAll")."</a></li>";
 	}
 	else
 	{
-		echo "<li><a href='".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&action=showcurrent&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_month.gif').' '.get_lang("ShowCurrent")."</a></li>";
+		echo "<li><a href='".api_get_self()."?".api_get_cidreq()."&action=showcurrent&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_month.gif').' '.get_lang("ShowCurrent")."</a></li>";
 	}
 }
 
@@ -1567,11 +1567,11 @@ function display_agenda_items()
 			if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
 	{
 		// edit
-		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",
+		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",
 				"<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>",
-				"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\">",
+				"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\">",
 				"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\"/></a>";
-		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=announce&amp;id=".$myrow['id']."\">".
+		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=announce&amp;id=".$myrow['id']."\">".
 				"<img src=\"../img/announce_add.gif\" border=\"0\" alt=\"".get_lang("AddAnnouncement")."\"/></a>";
 		if ($myrow['visibility']==1)
 		{
@@ -1581,7 +1581,7 @@ function display_agenda_items()
 		{
 			$image_visibility="invisible";
 		}
-		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=showhide&amp;id=".$myrow['id']."\">",
+		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=showhide&amp;id=".$myrow['id']."\">",
 				"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang("Visible")."\" /></a>";
 	}
 	echo "</td>";
@@ -1762,9 +1762,9 @@ function display_one_agenda_item($agenda_id)
 	if (is_allowed_to_edit())
 		{
 		// edit
-		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",
+		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",
 				"<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>",
-				"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\">",
+				"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\">",
 				"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\" /></a>";
 		if ($myrow['visibility']==1)
 			{
@@ -1774,7 +1774,7 @@ function display_one_agenda_item($agenda_id)
 			{
 			$image_visibility="invisible";
 			}
-		echo 	"<a href=\"".$_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=showhide&amp;id=".$myrow['id']."\">",
+		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=showhide&amp;id=".$myrow['id']."\">",
 				"<img src=\"../img/".$image_visibility.".gif\" border=\"0\" alt=\"".get_lang("Visible")."\" /></a><br /><br />";
 		}
 	echo "</td>";

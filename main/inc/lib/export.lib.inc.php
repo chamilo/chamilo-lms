@@ -432,7 +432,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 		      +----------------------------------------------------------------------+
 		      Dokeos version ".$dokeos_version."
 		      +----------------------------------------------------------------------+
-		      This file was generate by script ".$_SERVER['PHP_SELF']."
+		      This file was generate by script ".api_get_self()."
 		      ".date("r")."                  |
 		      +----------------------------------------------------------------------+
 		      |   This program is free software; you can redistribute it and/or      |

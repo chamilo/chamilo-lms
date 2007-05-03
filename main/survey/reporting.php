@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 12106 2007-04-24 13:17:19Z elixir_julian $
+* 	@version $Id: reporting.php 12263 2007-05-03 13:34:40Z elixir_julian $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -623,7 +623,7 @@ function display_complete_report()
 	$table_survey_answer 			= Database :: get_course_table(TABLE_SURVEY_ANSWER);
 
 	// the form
-	echo '<form id="form1" name="form1" method="post" action="'.$_SERVER['PHP_SELF'].'?action='.$_GET['action'].'&survey_id='.$_GET['survey_id'].'">';
+	echo '<form id="form1" name="form1" method="post" action="'.api_get_self().'?action='.$_GET['action'].'&survey_id='.$_GET['survey_id'].'">';
 
 	// the export button
 	echo '<input type="submit" name="export_report" value="'.get_lang('ExportCurrentReport').'" />';
@@ -741,7 +741,7 @@ function display_complete_report()
 function display_complete_report_row($possible_answers, $answers_of_user, $user)
 {
 	echo '<tr>';
-	echo '		<th><a href="'.$_SERVER['PHP_SELF'].'?action=userreport&survey_id='.$_GET['survey_id'].'&user='.$user.'">'.$user.'</a></th>'; // the user column
+	echo '		<th><a href="'.api_get_self().'?action=userreport&survey_id='.$_GET['survey_id'].'&user='.$user.'">'.$user.'</a></th>'; // the user column
 
 
 	foreach ($possible_answers as $question_id=>$possible_option)
@@ -916,7 +916,7 @@ function display_comparative_report()
 	Display::display_normal_message(get_lang('OnlyQuestionsWithPredefinedAnswers'), false);
 
 	// The form for selecting the axis of the table
-	echo '<form id="form1" name="form1" method="get" action="'.$_SERVER['PHP_SELF'].'?action='.$_GET['action'].'&survey_id='.$_GET['survey_id'].'&xaxis='.$_GET['xaxis'].'&y='.$_GET['yaxis'].'">';
+	echo '<form id="form1" name="form1" method="get" action="'.api_get_self().'?action='.$_GET['action'].'&survey_id='.$_GET['survey_id'].'&xaxis='.$_GET['xaxis'].'&y='.$_GET['yaxis'].'">';
 	// survey_id
 	echo '<input type="hidden" name="action" value="'.$_GET['action'].'"/>';
 	echo '<input type="hidden" name="survey_id" value="'.(int)$_GET['survey_id'].'"/>';

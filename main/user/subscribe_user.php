@@ -202,7 +202,7 @@ function email_filter($email)
 function reg_filter($user_id)
 {
 	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') $type='teacher'; else $type='student';
-	$result = "<a href=\"".$_SERVER['PHP_SELF']."?register=yes&amp;type=".$type."&amp;user_id=".$user_id."\">".get_lang("reg")."</a>";
+	$result = "<a href=\"".api_get_self()."?register=yes&amp;type=".$type."&amp;user_id=".$user_id."\">".get_lang("reg")."</a>";
 	return $result;
 }
 // Build search-form

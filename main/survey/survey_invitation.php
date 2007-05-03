@@ -91,7 +91,7 @@ if (!isset($_GET['view']) OR $_GET['view'] == 'invited')
 }
 else
 {
-	echo '	<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=invited">'.get_lang('ViewInvited').'</a> |';
+	echo '	<a href="'.api_get_self().'?survey_id='.(int)$_GET['survey_id'].'&amp;view=invited">'.get_lang('ViewInvited').'</a> |';
 }
 if ($_GET['view'] == 'answered')
 {
@@ -99,7 +99,7 @@ if ($_GET['view'] == 'answered')
 }
 else
 {
-	echo '	<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=answered">'.get_lang('ViewAnswered').'</a> |';
+	echo '	<a href="'.api_get_self().'?survey_id='.(int)$_GET['survey_id'].'&amp;view=answered">'.get_lang('ViewAnswered').'</a> |';
 }
 if ($_GET['view'] == 'unanswered')
 {
@@ -107,7 +107,7 @@ if ($_GET['view'] == 'unanswered')
 }
 else
 {
-	echo '	<a href="'.$_SERVER['PHP_SELF'].'?survey_id='.(int)$_GET['survey_id'].'&amp;view=unanswered">'.get_lang('ViewUnanswered').'</a>';
+	echo '	<a href="'.api_get_self().'?survey_id='.(int)$_GET['survey_id'].'&amp;view=unanswered">'.get_lang('ViewUnanswered').'</a>';
 }
 
 // table header

@@ -105,10 +105,9 @@ class scormOrganization {
 				     						break;
 				     					case 'title':
 						     				$tmp_children = $child->childNodes;
-						     				//if(count($tmp_children)==1 and $tmp_children[0]->textContent != '' )
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue != '' )
 						     				{
-						     					$this->title = $tmp_children->firstChild->nodeValue;
+						     					$this->title = $child->firstChild->nodeValue;
 						     				}
 						     				break;
 				     				}

@@ -412,9 +412,12 @@ class SortableTable extends HTML_Table
 	function get_additional_url_paramstring()
 	{
 		$param_string_parts = array ();
-		foreach ($this->additional_parameters as $key => $value)
+		if(is_array($this->additional_parameters) && count($this->additional_parameters)>0)
 		{
-			$param_string_parts[] = urlencode($key).'='.urlencode($value);
+			foreach ($this->additional_parameters as $key => $value)
+			{
+				$param_string_parts[] = urlencode($key).'='.urlencode($value);
+			}
 		}
 		$result = implode('&amp;', $param_string_parts);
 		foreach($this->other_tables as $index => $tablename)

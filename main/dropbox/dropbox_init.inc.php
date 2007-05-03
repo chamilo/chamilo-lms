@@ -292,7 +292,7 @@ if ($_POST['actions']=='download' and !$_POST['store_feedback'])
  * ========================================
  * Prevents access of all users that are not course members
  */
-if(! $is_allowed_in_course || ! $is_courseMember)
+if((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit())
 {
 	if ($origin != 'learnpath')
 	{

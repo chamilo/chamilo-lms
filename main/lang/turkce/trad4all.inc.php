@@ -116,6 +116,7 @@ $langNameOfLang['spanish'] = "spanish";
 $Close = "Kapat";
 $langPlatform = "Geli&#351;tiren";
 $localLangName = "lisan";
+$langCourseCodeAlreadyExists = "Üzgünüm, Bu ders kodu zaten var. Lütfen ba&#351;ka bir kod belirleyiniz.";
 $Statistics = "&#304;statistik";
 $langPrevious = "önceki";
 $Courses = "dersler";

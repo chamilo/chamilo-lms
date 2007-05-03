@@ -187,7 +187,6 @@ $langAdminManageVirtualCourses = "Upravljanje virtualnim kolegijima";
 $langAdminCreateVirtualCourse = "Izradi virtualni kolegij";
 $langAdminCreateVirtualCourseExplanation = "Virtualni kolegij dijelit &#263;e skladišni prostor (direktorij i bazu podataka) s postoje&#263;im \'stvarnim\' kolegijem.";
 $langRealCourseCode = "Šifra stvarnoga kolegija";
-$langCourseCodeAlreadyExists = "Žao nam je, ali ta je šifra kolegija ve&#263; u uporabi. Molimo odaberite drugu.";
 $langCourseCreationSucceeded = "Kolegij je uspješno izra&#273;en.";
 $langYourDokeosUses = "Vaša instalacija Dokeos trenutno rabi";
 $langOnTheHardDisk = "na tvrdom disku";

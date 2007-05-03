@@ -114,6 +114,8 @@ $langNameOfLang['spanish'] = "Espanyol";
 $Close = "Tanca";
 $langPlatform = "Plataforma basada en";
 $localLangName = "idioma";
+$langCourseCodeAlreadyExists = "Trist, però aquell codi de curs ja existeix. Si us plau esculli\'n un altre.
+";
 $Statistics = "Estadístiques";
 $langPrevious = "previ";
 $Courses = "Cursos";

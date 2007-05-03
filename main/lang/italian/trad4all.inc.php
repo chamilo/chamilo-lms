@@ -150,6 +150,7 @@ $langNameOfLang['spanish'] = "spagnolo";
 $Close = "chiudi";
 $langPlatform = "Piattaforma";
 $localLangName = "italiano";
+$langCourseCodeAlreadyExists = "Spiacente, ma questo codice è già in uso, scegline uno diverso.";
 $Statistics = "Statistiche";
 $langPrevious = "precedente";
 $DestDirectoryDoesntExist = "La cartella di destinazione non esiste";

@@ -150,6 +150,7 @@ $langNameOfLang['spanish'] = "espanhol";
 $Close = "fechar";
 $langPlatform = "Plataforma baseada em";
 $localLangName = "Idioma";
+$langCourseCodeAlreadyExists = "Perdão, mas o código do curso já existe. Por favor escolha outro.";
 $Statistics = "Estatísticas";
 $langPrevious = "prever";
 $DestDirectoryDoesntExist = "Diretório de destino inexistente";

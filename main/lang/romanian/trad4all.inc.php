@@ -125,6 +125,7 @@ $langNameOfLang['spanish'] = "spanish";
 $Close = "inchide";
 $langPlatform = "Platforma";
 $localLangName = "limba";
+$langCourseCodeAlreadyExists = "Acest cod de curs exista deja, alege altul.";
 $Statistics = "Statistici";
 $langPrevious = "anterior";
 $Courses = "cursuri";

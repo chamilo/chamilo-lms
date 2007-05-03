@@ -115,6 +115,7 @@ $langNameOfLang['spanish'] = "สเปน";
 $Close = "ปิด";
 $langPlatform = "ระบบ";
 $localLangName = "ภาษา";
+$langCourseCodeAlreadyExists = "ขออภัย! รหัสวิชานี้มีอยู่แล้ว โปรดเลือกรหัสอื่นหรือกำหนดให้แตกต่างออกไป";
 $Statistics = "สถิติ";
 $langPrevious = "ที่ผ่านมา";
 $Courses = "รายวิชา";

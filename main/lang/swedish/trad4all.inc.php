@@ -115,6 +115,7 @@ $langNameOfLang['spanish'] = "spanska";
 $Close = "stäng";
 $langPlatform = "Med kraft från";
 $localLangName = "språk";
+$langCourseCodeAlreadyExists = "Tyvärr, denna kurs existerar redan. Var vänlig välj en annan.";
 $Statistics = "Statistik";
 $langPrevious = "föregående";
 $Courses = "Kurser";

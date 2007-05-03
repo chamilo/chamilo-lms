@@ -189,7 +189,6 @@ $langAddCourse = "Opprett et kurs";
 $langAdminManageVirtualCourses = "Administrer virtuelle kurs";
 $langAdminCreateVirtualCourse = "Opprett ett virtuelt kurs";
 $langRealCourseCode = "Ekte kurskode";
-$langCourseCodeAlreadyExists = "Denne kurskoden finnes allerede.  Benytt en annen";
 $langCourseCreationSucceeded = "Kurset ble opprettet";
 $langYourDokeosUses = "Din Dokeosinstallasjon bruker for nåværende";
 $langOnTheHardDisk = "på harddisken";

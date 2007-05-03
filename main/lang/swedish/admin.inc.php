@@ -192,7 +192,6 @@ $langAdminManageVirtualCourses = "Hantera virtuella kurser";
 $langAdminCreateVirtualCourse = "Skapa en virtuell kurs";
 $langAdminCreateVirtualCourseExplanation = "Den virtuella kursen kommer att dela plats (bibliotek och databas) med existerande \"riktig\" kurs.";
 $langRealCourseCode = "Riktig kurs kod";
-$langCourseCodeAlreadyExists = "Tyvärr, denna kurs existerar redan. Var vänlig välj en annan.";
 $langCourseCreationSucceeded = "Kursen skapades";
 $langYourDokeosUses = "Din Dokeos installation använder ";
 $langOnTheHardDisk = "På hårddisken";

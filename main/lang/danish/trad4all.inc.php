@@ -114,6 +114,7 @@ $langNameOfLang['spanish'] = "spansk";
 $Close = "luk";
 $langPlatform = "Platform";
 $localLangName = "sprog";
+$langCourseCodeAlreadyExists = "Beklager, men den kursus kode eksisterer allerede. Vælg venligst en anden.";
 $Statistics = "Statistikker";
 $langPrevious = "forrige";
 $Courses = "kurser";

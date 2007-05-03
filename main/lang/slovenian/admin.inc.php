@@ -196,7 +196,6 @@ $langAdminManageVirtualCourses = "Upravljanje navideznih teèajev";
 $langAdminCreateVirtualCourse = "Kreiraj navidezni teèaj";
 $langAdminCreateVirtualCourseExplanation = "Navidezni teèaj bo delil pomnilniški prostor (mape in podatkovno bazo) z obstojeèim \'pravim\' teèajem.";
 $langRealCourseCode = "Prava koda teèaja";
-$langCourseCodeAlreadyExists = "Oprostite, koda teèaja že obstaja. Izberite drugo kodo.";
 $langCourseCreationSucceeded = "Teèaj je bil uspešno kreiran.";
 $langYourDokeosUses = "Vaša Dokeos instalacija trenutno uporablja";
 $langOnTheHardDisk = "na trdem disku";

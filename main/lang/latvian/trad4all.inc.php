@@ -149,6 +149,7 @@ $langNameOfLang['spanish'] = "sp&#257;&#326;u";
 $Close = "aizv&#275;rt";
 $langPlatform = "Platforma";
 $localLangName = "valoda";
+$langCourseCodeAlreadyExists = "Hmm, bet šis kursa kods jau eksist&#275;. L&#363;dzu izv&#275;lies citu codu.";
 $Statistics = "Statistika";
 $langPrevious = "iepriekš&#275;jo";
 $DestDirectoryDoesntExist = "Sa&#326;&#275;m&#275;j direktorija neeksist&#275;";

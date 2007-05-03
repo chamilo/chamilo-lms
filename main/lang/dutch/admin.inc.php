@@ -196,7 +196,6 @@ $langAdminManageVirtualCourses = "Beheer virtuele cursussen";
 $langAdminCreateVirtualCourse = "Maak een virtuele cursus";
 $langAdminCreateVirtualCourseExplanation = "De virtuele cursus zal zijn opslagruimte (bestanden en databank) delen met een bestaande \'echte\' cursus.";
 $langRealCourseCode = "Code van de echte cursus";
-$langCourseCodeAlreadyExists = "Deze cursuscode is al in gebruik. Gelieve een andere te kiezen.";
 $langCourseCreationSucceeded = "De cursus is met succes aangemaakt.";
 $langYourDokeosUses = "Uw Dokeosinstallatie gebruikt momenteel";
 $langOnTheHardDisk = "op de harde schijf";

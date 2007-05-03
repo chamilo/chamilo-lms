@@ -196,7 +196,6 @@ $langAdminManageVirtualCourses = "Kelola mata kuliah virtual";
 $langAdminCreateVirtualCourse = "Buat mata kuliah virtual";
 $langAdminCreateVirtualCourseExplanation = "Mata kuliah virtual tsb akan berbagi simpanan (direktori dan database) dengan mata kuliah sungguhan yang ada.";
 $langRealCourseCode = "Kode mata kuliah nyata";
-$langCourseCodeAlreadyExists = "Maaf, kode mata kuliah tsb sudah terpakai.  Silahkan pilih yang lain.";
 $langCourseCreationSucceeded = "Mata kuliah tsb sukses dibuat.";
 $langYourDokeosUses = "Instalasi Dokeos anda saat ini menggunakan";
 $langOnTheHardDisk = "dalam hard disk";

@@ -196,7 +196,6 @@ $langAdminManageVirtualCourses = "管理虚拟课程";
 $langAdminCreateVirtualCourse = "新建虚拟课程";
 $langAdminCreateVirtualCourseExplanation = "这门虚拟课程将要和现有的\"真实\"课程共享存储空间（目录和数据库空间）";
 $langRealCourseCode = "真实课程代码";
-$langCourseCodeAlreadyExists = "对不起，课程代码已经存在，请选择另外一个";
 $langCourseCreationSucceeded = "创建课程成功";
 $langYourDokeosUses = "Dokeos安装程序现在在使用";
 $langOnTheHardDisk = "在硬盘上";

@@ -150,6 +150,7 @@ $langNameOfLang['spanish'] = "spanyol";
 $Close = "bezár";
 $langPlatform = "Platform";
 $localLangName = "magyar";
+$langCourseCodeAlreadyExists = "Sajnos ez a kurzus kód már létezik. Kérjük válassz egy másikat!";
 $Statistics = "Statisztikák";
 $langPrevious = "el&#337;z&#337;";
 $DestDirectoryDoesntExist = "A célkönyvtár nem létezik";

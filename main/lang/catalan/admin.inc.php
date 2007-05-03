@@ -190,8 +190,6 @@ $langAdminCreateVirtualCourseExplanation = "El curs virtual compartirà enmagatza
 
 ";
 $langRealCourseCode = "Codi del curs real";
-$langCourseCodeAlreadyExists = "Trist, però aquell codi de curs ja existeix. Si us plau esculli\'n un altre.
-";
 $langCourseCreationSucceeded = "El curs ha estat creat satisfactoriament";
 $langYourDokeosUses = "La seva instal·lació Dokeos utilitza actualment";
 $langOnTheHardDisk = "En el disk dur";

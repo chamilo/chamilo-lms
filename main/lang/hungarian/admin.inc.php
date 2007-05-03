@@ -196,7 +196,6 @@ $langAdminManageVirtualCourses = "Virtuális kurzusok kezelése";
 $langAdminCreateVirtualCourse = "Virtuális kurzus létrehozása";
 $langAdminCreateVirtualCourseExplanation = "A virtuális kurzus megosztva fogja használni a tárolóhelyet (könyvtárak és adatbázis) a meglev&#337;, \'valódi\' kurzussal";
 $langRealCourseCode = "Valódi kurzus kód";
-$langCourseCodeAlreadyExists = "Sajnos ez a kurzus kód már létezik. Kérjük válassz egy másikat!";
 $langCourseCreationSucceeded = "A kurzus sikeresen létrejött.";
 $langYourDokeosUses = "A Dokeos telepítése jelenleg ";
 $langOnTheHardDisk = "helyet foglal a merevlemezen";

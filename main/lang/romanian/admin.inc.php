@@ -191,7 +191,6 @@ $langAdminManageVirtualCourses = "Administrati cursurile virtuale";
 $langAdminCreateVirtualCourse = "Creati un curs virtual";
 $langAdminCreateVirtualCourseExplanation = "Cursul virtual va imparti spatiul (directoarele si baza de date) cu un curs \"real\" existent.";
 $langRealCourseCode = "Codul cursului";
-$langCourseCodeAlreadyExists = "Acest cod de curs exista deja, alege altul.";
 $langCourseCreationSucceeded = "Cursul a fost creat cu succes.";
 $langYourDokeosUses = "Platforma ta Dokeos foloseste in prezent";
 $langOnTheHardDisk = "pe hard disk";

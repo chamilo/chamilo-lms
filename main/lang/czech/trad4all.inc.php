@@ -121,6 +121,7 @@ $langNameOfLang['simpl_chinese'] = "&#269;ínsky";
 $langNameOfLang['spanish'] = "špan&#283;lsky";
 $langPlatform = "Platforma";
 $localLangName = "jazyk";
+$langCourseCodeAlreadyExists = "Lituji, ale takový kód kurzu již existuje. Prosím zvolte jiný.";
 $Statistics = "Statistika";
 $langPrevious = "p&#345;edchozí";
 $langShowAll = "Uka&#382; v&#353;e";

@@ -125,6 +125,7 @@ $langNameOfLang['spanish'] = "español";
 $Close = "cerrar";
 $langPlatform = "Plataforma";
 $localLangName = "español";
+$langCourseCodeAlreadyExists = "El código del curso ya existe, Por favor seleccione otro.";
 $Statistics = "Estadística";
 $langPrevious = "anterior";
 $Courses = "Cursos";

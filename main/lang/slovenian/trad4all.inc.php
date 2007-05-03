@@ -150,6 +150,7 @@ $langNameOfLang['spanish'] = " spanish";
 $Close = "zapri";
 $langPlatform = "Platforma ";
 $localLangName = "jezik";
+$langCourseCodeAlreadyExists = "Oprostite, koda teèaja že obstaja. Izberite drugo kodo.";
 $Statistics = "Statistika";
 $langPrevious = "prejšnji";
 $DestDirectoryDoesntExist = "Ciljna mapa ne obstaja";

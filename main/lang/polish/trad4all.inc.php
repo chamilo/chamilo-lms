@@ -140,6 +140,7 @@ $langNameOfLang['spanish'] = "hiszpa&#324;ski";
 $Close = "zamknij";
 $langPlatform = "Platforma";
 $localLangName = "j&#281;zyk";
+$langCourseCodeAlreadyExists = "Przykro mi ale kurs tego kodu ju&#380; istnieje. Prosz&#281; wybierz inny.";
 $Statistics = "Statystyki";
 $langPrevious = "poprzedni";
 $Courses = "kursów";

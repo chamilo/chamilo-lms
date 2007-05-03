@@ -187,7 +187,6 @@ $langAdminManageVirtualCourses = "Administr&#275;t virtu&#257;los kursus";
 $langAdminCreateVirtualCourse = "Izveidot virtu&#257;lo kursu";
 $langAdminCreateVirtualCourseExplanation = "Virtu&#257;lais kurss lietos to pašu vietu uz servera diska (map&#275;m un datub&#257;z&#275;m) ko eksist&#275;jošais \'re&#257;lais\' kurss ";
 $langRealCourseCode = "Re&#257;l&#257; kursa kods";
-$langCourseCodeAlreadyExists = "Hmm, bet šis kursa kods jau eksist&#275;. L&#363;dzu izv&#275;lies citu codu.";
 $langCourseCreationSucceeded = "Kurss tika veiksm&#299;gi izveidots.";
 $langYourDokeosUses = "J&#363;su Dokeos instal&#257;cija izmanto ";
 $langOnTheHardDisk = "uz ciet&#326;a";

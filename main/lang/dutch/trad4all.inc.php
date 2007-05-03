@@ -150,6 +150,7 @@ $langNameOfLang['spanish'] = "Spaans";
 $Close = "Sluiten";
 $langPlatform = "Platform";
 $localLangName = "Nederlands";
+$langCourseCodeAlreadyExists = "Deze cursuscode is al in gebruik. Gelieve een andere te kiezen.";
 $Statistics = "Statistieken";
 $langPrevious = "Vorige";
 $DestDirectoryDoesntExist = "De bestemmingsmap bestaat niet";

@@ -194,7 +194,6 @@ $langAdminManageVirtualCourses = "Administrar cursos virtuales";
 $langAdminCreateVirtualCourse = "Crear un curso virtual";
 $langAdminCreateVirtualCourseExplanation = "El curso virtual compartira almacenamiento (directorio  y base de datos) con un curso \'real\' existente";
 $langRealCourseCode = "Código de curso real";
-$langCourseCodeAlreadyExists = "El código del curso ya existe, Por favor seleccione otro.";
 $langCourseCreationSucceeded = "El curso fue creado exitosamente";
 $langYourDokeosUses = "Su instalación de Dokeos usa \'presently\'";
 $langOnTheHardDisk = "en el disco duro";

@@ -114,6 +114,7 @@ $langNameOfLang['spanish'] = "španjolski";
 $Close = "Zatvorite";
 $langPlatform = "Platforma";
 $localLangName = "jezik";
+$langCourseCodeAlreadyExists = "Žao nam je, ali ta je šifra kolegija ve&#263; u uporabi. Molimo odaberite drugu.";
 $Statistics = "Statistika";
 $langPrevious = "prethodni";
 $Courses = "kolegiji";

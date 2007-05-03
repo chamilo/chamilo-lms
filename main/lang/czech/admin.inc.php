@@ -193,7 +193,6 @@ $langAdminManageVirtualCourses = "Spravovat virtuální kurz";
 $langAdminCreateVirtualCourse = "Vytvo&#345;it virtuální kurz";
 $langAdminCreateVirtualCourseExplanation = "Virtuální kurz bude sdílet pam&#283;&#357;ový prostor (adresá&#345; a databázi) s existujícím pravým\' kurzem.";
 $langRealCourseCode = "Kód pravého kurzu";
-$langCourseCodeAlreadyExists = "Lituji, ale takový kód kurzu již existuje. Prosím zvolte jiný.";
 $langCourseCreationSucceeded = "Kurz byl úsp&#283;šn&#283; vytvo&#345;en.";
 $langYourDokeosUses = "Vaše Dokeos instalace užívá v sou&#269;astnosti";
 $langOnTheHardDisk = "na hard disk";

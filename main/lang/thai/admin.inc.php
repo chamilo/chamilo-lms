@@ -191,7 +191,6 @@ $langAdminManageVirtualCourses = "บริหารรายวิชาเสมือน";
 $langAdminCreateVirtualCourse = "สร้างรายวิชาเสมือน";
 $langAdminCreateVirtualCourseExplanation = "รายวิชาเสมือนจะร่วมใช้ไฟล์และพื้นที่เก็บไฟล์กับรายวิชาจริง";
 $langRealCourseCode = "รหัสวิชาจริง";
-$langCourseCodeAlreadyExists = "ขออภัย! รหัสวิชานี้มีอยู่แล้ว โปรดเลือกรหัสอื่นหรือกำหนดให้แตกต่างออกไป";
 $langCourseCreationSucceeded = "ได้สร้างรายวิชาเรียบร้อยแล้ว";
 $langYourDokeosUses = "ติดตั้ง Dokeos ตามที่แสดงค่านี้ ";
 $langOnTheHardDisk = "อยู่ในฮาร์ดดิสก์";

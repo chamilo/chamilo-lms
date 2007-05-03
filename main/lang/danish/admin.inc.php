@@ -185,7 +185,6 @@ $langAdminManageVirtualCourses = "Håndtering af virtuelle kurser";
 $langAdminCreateVirtualCourse = "Opret et virtuelt kursus";
 $langAdminCreateVirtualCourseExplanation = "Det virtuelle kursus vil dele plads (mappe og database) med et eksisterende \'ægte\' kursus.";
 $langRealCourseCode = "Ægte kursus kode";
-$langCourseCodeAlreadyExists = "Beklager, men den kursus kode eksisterer allerede. Vælg venligst en anden.";
 $langCourseCreationSucceeded = "Kurset blev korrekt oprettet.";
 $langYourDokeosUses = "Din Dokeos installation bruger lige nu";
 $langOnTheHardDisk = "på disken";

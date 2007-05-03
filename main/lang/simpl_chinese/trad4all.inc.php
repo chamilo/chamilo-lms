@@ -127,6 +127,7 @@ $langNameOfLang['spanish'] = "西班牙语";
 $Close = "关闭";
 $langPlatform = "平台";
 $localLangName = "语言";
+$langCourseCodeAlreadyExists = "对不起，课程代码已经存在，请选择另外一个";
 $Statistics = "统计";
 $langPrevious = "先前";
 $Courses = "课程";

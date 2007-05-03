@@ -46,4 +46,5 @@ $ContentMaker = "Criação de conteúdos";
 $ContentProximity = "Situação";
 $UploadLocalFileFromGarbageDir = "Enviar ficheiro a partir da directoria principal/reciclagem";
 $ThisItemIsNotExportable = "Este item, de momento, não é compatível com Scorm. É por isso que não é exportável.";
+$MoveCurrentChapter = "Mover capítulo actual";
 ?>

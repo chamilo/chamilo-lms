@@ -116,6 +116,7 @@ $langNameOfLang['spanish'] = "spanyol";
 $Close = "tutup";
 $langPlatform = "Platform";
 $localLangName = "bahasa";
+$langCourseCodeAlreadyExists = "Maaf, kode mata kuliah tsb sudah terpakai.  Silahkan pilih yang lain.";
 $Statistics = "Statistik";
 $langPrevious = "sebelumnya";
 $Courses = "mata kuliah";

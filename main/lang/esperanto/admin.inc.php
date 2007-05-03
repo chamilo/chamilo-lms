@@ -191,7 +191,6 @@ $langAdminManageVirtualCourses = "Mastrumi virtualajn kursojn ";
 $langAdminCreateVirtualCourse = "Krei virtualan kurson ";
 $langAdminCreateVirtualCourseExplanation = "La virtuala kurso kunekzistos kun \'reala\' en sama tenejo (dosieroj kaj datumaro). ";
 $langRealCourseCode = "Kodo de la reala kurso ";
-$langCourseCodeAlreadyExists = "Tiu kurskodo jam ekzistas. Bonvolu elekti alian. ";
 $langCourseCreationSucceeded = "La kurso sukcese krei&#285;is. ";
 $langYourDokeosUses = "Via Dokeos-instala&#309;o momente uzas ";
 $langOnTheHardDisk = "sur la dura disko ";

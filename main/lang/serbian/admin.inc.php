@@ -185,7 +185,6 @@ $langAdminManageVirtualCourses = "Upravljanje virtuelnim kursevima";
 $langAdminCreateVirtualCourse = "Kreiraj virtuelni kurs";
 $langAdminCreateVirtualCourseExplanation = "Virtuelni kurs &#263;e deliti prostor diska (direktorijume i baze) sa postoje&#263;im \'stvarnim\' kursevima.";
 $langRealCourseCode = "Šifra stvarnog kursa";
-$langCourseCodeAlreadyExists = "Takva šifra kursa ve&#263; postoji. Molim Vas, izaberite drugu. ";
 $langCourseCreationSucceeded = "Kurs je uspešno kreiran";
 $langYourDokeosUses = "Vaša Dokeos instalacija sad koristi";
 $langOnTheHardDisk = "na hard disku";

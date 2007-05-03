@@ -186,7 +186,6 @@ $langAdminManageVirtualCourses = "Sanal ders yönetimi";
 $langAdminCreateVirtualCourse = "Sanal ders olu&#351;tur";
 $langAdminCreateVirtualCourseExplanation = "Sanal ders, mevcut gerçek ders ile ayn&#305; klasör ve veritaban&#305; depolama alan&#305;n&#305; payla&#351;acakt&#305;r.";
 $langRealCourseCode = "Ders kodu";
-$langCourseCodeAlreadyExists = "Üzgünüm, Bu ders kodu zaten var. Lütfen ba&#351;ka bir kod belirleyiniz.";
 $langCourseCreationSucceeded = "Ders, ba&#351;ar&#305;yla olu&#351;turuldu.";
 $langYourDokeosUses = "Dokeos kurulumunuzda &#351;u an için kullan&#305;lanlar.";
 $langOnTheHardDisk = "sabit disk üzerinde";

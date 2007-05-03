@@ -108,6 +108,7 @@ $langNameOfLang['simpl_chinese'] = "Vanlig kinesisk";
 $langNameOfLang['spanish'] = "Spansk";
 $langPlatform = "Platform";
 $localLangName = "språk";
+$langCourseCodeAlreadyExists = "Denne kurskoden finnes allerede.  Benytt en annen";
 $Statistics = "Statistikk";
 $langPrevious = "forrige";
 $Courses = "kurs";

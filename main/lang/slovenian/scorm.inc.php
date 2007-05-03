@@ -46,4 +46,5 @@ $ContentMaker = "Izvor vsebine (orodje)";
 $ContentProximity = "Lokacija vsebine";
 $UploadLocalFileFromGarbageDir = "Prenesi lokalno datoteko z mape main/garbage";
 $ThisItemIsNotExportable = "Ta element trenutno ni SCORM združljiv, zato ga trenutno ni možno izvoziti.";
+$MoveCurrentChapter = "Premakni trenutno poglavje";
 ?>

@@ -116,6 +116,7 @@ $langNameOfLang['spanish'] = "hispana";
 $Close = "Fermi ";
 $langPlatform = "Platformo ";
 $localLangName = "Esperanto";
+$langCourseCodeAlreadyExists = "Tiu kurskodo jam ekzistas. Bonvolu elekti alian. ";
 $Statistics = "Statistikoj ";
 $langPrevious = "Anta&#365;a ";
 $Courses = "kursoj";

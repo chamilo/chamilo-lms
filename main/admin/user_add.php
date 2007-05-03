@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 11497 2007-03-08 10:17:46Z elixir_julian $
+<?php // $Id: user_add.php 12274 2007-05-03 14:58:36Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -32,11 +32,13 @@ $language_file = array('admin','registration');
 $cidReset = true;
 
 // including necessary libraries
-include ('../inc/global.inc.php');
-include (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require ('../inc/global.inc.php');
+$libpath = api_get_path(LIBRARY_PATH);
+include_once ($libpath.'fileManage.lib.php');
+include_once ($libpath.'fileUpload.lib.php');
+include_once ($libpath.'usermanager.lib.php');
+require_once ($libpath.'formvalidator/FormValidator.class.php');
+require_once ($libpath.'security.lib.php');
 
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -158,72 +160,80 @@ $form->addElement('submit', 'submit_plus', get_lang('Add').'+');
 // Validate form
 if( $form->validate())
 {
-	$user = $form->exportValues();
-	$picture_element = & $form->getElement('picture');
-	$picture = $picture_element->getValue();
-	$picture_uri = '';
-	if (strlen($picture['name']) > 0)
+	$check = Security::check_token('post');
+	if($check)
 	{
-		$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
-		$picture_location = api_get_path(SYS_CODE_PATH).'upload/users/'.$picture_uri;
-		move_uploaded_file($picture['tmp_name'], $picture_location);
+		$user = $form->exportValues();
+		$picture_element = & $form->getElement('picture');
+		$picture = $picture_element->getValue();
+		$picture_uri = '';
+		if (strlen($picture['name']) > 0)
+		{
+			$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
+			$picture_location = api_get_path(SYS_CODE_PATH).'upload/users/'.$picture_uri;
+			move_uploaded_file($picture['tmp_name'], $picture_location);
+		}
+		$lastname = $user['lastname'];
+		$firstname = $user['firstname'];
+		$official_code = $user['official_code'];
+		$email = $user['email'];
+		$phone = $user['phone'];
+		$username = $user['username'];
+		$status = intval($user['status']);
+		$picture = $_FILES['picture'];
+		$platform_admin = intval($user['admin']['platform_admin']);
+		$send_mail = intval($user['mail']['send_mail']);
+		if(count($extAuthSource) > 0 && $user['password']['password_auto'] == '2')
+		{
+			$auth_source = $user['password']['auth_source'];
+			$password = 'PLACEHOLDER';
+		}
+		else
+		{
+			$auth_source = PLATFORM_AUTH_SOURCE;
+			$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
+		}
+		if ($user['radio_expiration_date']=='1' )
+		{
+			$expiration_date=$user['expiration_date'];
+		}
+		else
+		{
+			$expiration_date='0000-00-00 00:00:00';
+		}
+		$active = intval($user['active']);
+	
+		$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
+		if ($platform_admin)
+		{
+			$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+		}
+		if (!empty ($email) && $send_mail)
+		{
+			$emailto = '"'.$firstname.' '.$lastname.'" <'.$email.'>';
+			$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
+			$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
+			$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
+			$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
+			@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+		}
+		Security::clear_token();
+		if(isset($user['submit_plus']))
+		{
+			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
+			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')));
+			exit ();
+		}
+		else
+		{
+			header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserAdded')));
+			exit ();
+		}
 	}
-	$lastname = $user['lastname'];
-	$firstname = $user['firstname'];
-	$official_code = $user['official_code'];
-	$email = $user['email'];
-	$phone = $user['phone'];
-	$username = $user['username'];
-	$status = intval($user['status']);
-	$picture = $_FILES['picture'];
-	$platform_admin = intval($user['admin']['platform_admin']);
-	$send_mail = intval($user['mail']['send_mail']);
-	if(count($extAuthSource) > 0 && $user['password']['password_auto'] == '2')
-	{
-		$auth_source = $user['password']['auth_source'];
-		$password = 'PLACEHOLDER';
-	}
-	else
-	{
-		$auth_source = PLATFORM_AUTH_SOURCE;
-		$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
-	}
-	if ($user['radio_expiration_date']=='1' )
-	{
-		$expiration_date=$user['expiration_date'];
-	}
-	else
-	{
-		$expiration_date='0000-00-00 00:00:00';
-	}
-	$active = intval($user['active']);
-
-	$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
-	if ($platform_admin)
-	{
-		$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
-		api_sql_query($sql,__FILE__,__LINE__);
-	}
-	if (!empty ($email) && $send_mail)
-	{
-		$emailto = '"'.$firstname.' '.$lastname.'" <'.$email.'>';
-		$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
-		$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
-		$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
-		$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-		@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
-	}
-	if(isset($user['submit_plus']))
-	{
-		//we want to add more. Prepare report message and redirect to the same page (to clean the form)
-		header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')));
-		exit ();
-	}
-	else
-	{
-		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserAdded')));
-		exit ();
-	}
+}else{
+	$token = Security::get_token();
+	$form->addElement('hidden','sec_token',$token);
 }
 // Display form
 Display::display_header($tool_name);

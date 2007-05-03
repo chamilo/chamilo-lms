@@ -20,10 +20,10 @@
 /**
 *	@package dokeos.survey
 * 	@author
-* 	@version $Id: functions.inc.php 12191 2007-04-30 11:06:34Z pcool $
+* 	@version $Id: functions.inc.php 12281 2007-05-03 16:25:12Z yannoo $
 * 	@todo use database library
 */
-
+if(!function_exists('api_get_path')){header('location: view_message.php');die;}
 include_once(api_get_path(LIBRARY_PATH).'/online.inc.php');
 
 define ("MESSAGES_DATABASE", "messages");

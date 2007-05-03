@@ -9,6 +9,6 @@
 */
 
 $stable = false;
-$dokeos_version 	= "1.8 RC2";
+$dokeos_version 	= "1.8";
 
 ?>

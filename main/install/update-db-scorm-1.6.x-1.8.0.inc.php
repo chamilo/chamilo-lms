@@ -68,7 +68,14 @@ $res = api_sql_query($sql,__FILE__,__LINE__);
 while ($row = Database::fetch_array($res))
 {
 	$course_pref = $table_prefix;
-	$dbname = $row['db_name'].'.'.$course_pref;
+	if($singleDbForm)
+	{
+		$dbname = $_configuration['main_database'].'.'.$course_pref.$row['db_name'].'_';
+	}
+	else
+	{
+		$dbname = $row['db_name'].'.'.$course_pref;
+	}
 	$courses_list[] = $row['db_name'];
 	$courses_id_list[$row['code']] = $row['db_name'];
 	$courses_id_full_table_prefix_list[$row['code']] = $dbname;
@@ -591,7 +598,7 @@ while($course_row = Database::fetch_array($res_crs)){
 		error_log('Database '.$courses_id_list[$course_code].' is too long, skipping',0);
 		continue;
 	}
-	$tblscodoc = $db_name.TABLE_SCORMDOC;		
+	$tblscodoc = $db_name.TABLE_SCORMDOC;
 	$sql_scodoc = "SELECT path FROM $tblscodoc WHERE path IS NOT NULL AND path != ''";
 	if($loglevel>1){error_log("$sql_scodoc",0);}
 	$res_scodoc = api_sql_query($sql_scodoc,__FILE__,__LINE__);

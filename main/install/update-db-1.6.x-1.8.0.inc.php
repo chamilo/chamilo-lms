@@ -75,6 +75,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	if ($singleDbForm)
 	{
 		$_configuration['table_prefix'] = get_config_param('courseTablePrefix');
+		$_configuration['main_database'] = get_config_param('mainDbName');
+		$_configuration['db_prefix'] = get_config_param('dbNamePrefix');
 	}
 
 	$dbScormForm = eregi_replace('[^a-z0-9_-]', '', $dbScormForm);
@@ -280,11 +282,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					{
 						mysql_select_db($row_course['db_name']);
 					}
+					
 					foreach($c_q_list as $query)
 					{
 						if ($singleDbForm) //otherwise just use the main one
 						{
-							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix$2$3",$query);
+							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix{$row_course['db_name']}_$2$3",$query);
 						}
 						
 						if($only_test)

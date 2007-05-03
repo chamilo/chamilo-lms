@@ -322,7 +322,7 @@ if($modifyAnswers)
 			</script>
 		</td>
 		<td valign="top">
-			<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" name="frm_exercise">
+			<form method="post" action="<?php echo api_get_self(); ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" name="frm_exercise">
 				<input type="hidden" name="formSent" value="1" />
 				<input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
 				<table class="data_table">

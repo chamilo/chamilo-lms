@@ -179,7 +179,7 @@ function mdo_add_breadcrump_nav()
     
     $regs = array(); // for use with ereg()
     
-    $docurl = $_SERVER['PHP_SELF'];  // should be .../main/xxx/yyy.php
+    $docurl = api_get_self();  // should be .../main/xxx/yyy.php
     if (ereg('^(.+[^/\.]+)/[^/\.]+/[^/\.]+.[^/\.]+$', $docurl, $regs))
         $docurl = $regs[1] . '/link/link.php';
     

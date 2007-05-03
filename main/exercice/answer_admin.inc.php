@@ -22,7 +22,7 @@
 *	This script allows to manage answers. It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: answer_admin.inc.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: answer_admin.inc.php 12269 2007-05-03 14:17:37Z elixir_julian $
 */
 
 
@@ -902,18 +902,18 @@ if($modifyAnswers)
 <?php
 		/*if ($exerciseId==0){
 	?>
-		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?modifyAnswers=<?php  echo $modifyAnswers; ?>">
+		<form method="post" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php  echo $modifyAnswers; ?>">
 		<?php }
 		else
 		{
 		?>
-		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?exerciseId=<?php  echo $exerciseId; ?>">
+		<form method="post" action="<?php echo api_get_self(); ?>?exerciseId=<?php  echo $exerciseId; ?>">
 		<?php
 		}*/
 
 
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?modifyAnswers=<?php  echo $modifyAnswers; ?>">
+<form method="post" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php  echo $modifyAnswers; ?>">
 
 
 <input type="hidden" name="formSent" value="1">
@@ -1023,7 +1023,7 @@ if($modifyAnswers)
   <?php echo $questionName; ?>
 </h3>
 
-<form name="formulaire" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?modifyAnswers=<?php echo $modifyAnswers; ?>">
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php echo $modifyAnswers; ?>">
 <input type="hidden" name="formSent" value="1">
 <input type="hidden" name="setWeighting" value="<?php echo $setWeighting; ?>">
 <input type="hidden" name="myid" value="<?php echo $_REQUEST['myid']; ?>">
@@ -1163,7 +1163,7 @@ if($modifyAnswers)
 			echo $desc = mysql_result($res,0,'description');
 			 ?>
 
-			<form name="formulaire" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?modifyAnswers=<?php echo $modifyAnswers; ?>">
+			<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php echo $modifyAnswers; ?>">
 			<input type="hidden" name="formSent" value="1">
 			<input type="hidden" name="setWeighting" value="1">
 			<input type="hidden" name="myid" value="<?php  echo $_REQUEST['myid'];?>">
@@ -1216,7 +1216,7 @@ if($modifyAnswers)
   <?php echo $questionName; ?>
 </h3>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?modifyAnswers=<?php echo $modifyAnswers; ?>">
+<form method="post" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php echo $modifyAnswers; ?>">
 <input type="hidden" name="formSent" value="1">
 <input type="hidden" name="nbrOptions" value="<?php echo $nbrOptions; ?>">
 <input type="hidden" name="nbrMatches" value="<?php echo $nbrMatches; ?>">
@@ -1397,7 +1397,7 @@ if($modifyAnswers)
 			</script>
 		</td>
 		<td valign="top">
-			<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?modifyAnswers=<?php echo $modifyAnswers; ?>" name="frm_exercise">
+			<form method="post" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php echo $modifyAnswers; ?>" name="frm_exercise">
 				<input type="hidden" name="formSent" value="1" />
 				<input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
 				<table border="0" cellpadding="3" cellspacing="0" style="border: 1px solid #4271b5; border-left:none; width: 100%; ">

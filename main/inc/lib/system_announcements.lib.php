@@ -62,7 +62,7 @@ class SystemAnnouncementManager
 		{
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
 			$query_string = ereg_replace('&$', '', $query_string);
-			$url = $_SERVER['PHP_SELF'];
+			$url = api_get_self();
 			echo '<div class="system_announcements">';
 			echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
 			echo '<table border="0">';
@@ -150,7 +150,7 @@ class SystemAnnouncementManager
 		{
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
 			$query_string = ereg_replace('&$', '', $query_string);
-			$url = $_SERVER['PHP_SELF'];
+			$url = api_get_self();
 			echo '<div class="system_announcements">';
 			echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
 			echo '<table align="center">';

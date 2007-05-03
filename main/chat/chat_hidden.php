@@ -84,7 +84,7 @@ list($connected_new)=mysql_fetch_row($result);
 include("header_frame.inc.php");
 ?>
 
-<form name="formHidden" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<form name="formHidden" method="post" action="<?php echo api_get_self(); ?>">
 <input type="hidden" name="chat_size_old" value="<?php echo $chat_size_new; ?>">
 <input type="hidden" name="connected_old" value="<?php echo $connected_new; ?>">
 </form>

@@ -260,7 +260,7 @@ Display::display_header($nameTools,"User");
 
 <?php echo get_lang('OneByOne'); ?>. <?php echo get_lang('UserOneByOneExplanation'); ?>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?register=yes">
+<form method="post" action="<?php echo api_get_self(); ?>?register=yes">
 <table cellpadding="3" cellspacing="0" border="0">
 
 <?php

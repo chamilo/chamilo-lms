@@ -79,7 +79,7 @@ Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 ?>
 
-<form method="post" name="form" action="<?php echo $_SERVER['PHP_SELF']; ?>" style="margin:0px;">
+<form method="post" name="form" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 
 <table border="0" cellpadding="5" cellspacing="0" width="550">

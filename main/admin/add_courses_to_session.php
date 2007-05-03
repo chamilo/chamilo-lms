@@ -176,7 +176,7 @@ foreach($Courses as $course)
 unset($Courses);
 ?>
 
-<form name="formulaire" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=<?php echo $_GET['page'] ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1" />
 
 <?php

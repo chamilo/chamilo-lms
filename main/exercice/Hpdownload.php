@@ -22,7 +22,7 @@
 *	This script shows the list of exercises for administrators and students.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: Hpdownload.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: Hpdownload.php 12269 2007-05-03 14:17:37Z elixir_julian $
 */
 
 
@@ -126,7 +126,7 @@ if($content_type == 'text/html')
 	*/
 
 
-		$exercicePath = $_SERVER['PHP_SELF'];
+		$exercicePath = api_get_self();
   	$exfile = explode('/',$exercicePath);
   	$exfile = $exfile[sizeof($exfile)-1];
   	$exercicePath = substr($exercicePath,0,strpos($exercicePath,$exfile));

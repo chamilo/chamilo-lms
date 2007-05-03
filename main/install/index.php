@@ -300,7 +300,7 @@ elseif (!empty($_POST['step5']))
 </div>
 
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+<form method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 
 <div id="installation_steps">
 	<img src="../img/bluelogo.gif" hspace="10" vspace="10" alt="Dokeos logo" />

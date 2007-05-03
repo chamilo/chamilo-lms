@@ -24,7 +24,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 12219 2007-05-01 18:46:59Z yannoo $
+* 	@version $Id: question_pool.php 12269 2007-05-03 14:17:37Z elixir_julian $
 */
 
 // name of the language file that needs to be included
@@ -122,7 +122,7 @@ if($is_allowedToEdit)
   <?php echo $nameTools; ?>
 </h3>
 
-<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<form method="get" action="<?php echo api_get_self(); ?>">
 <input type="hidden" name="fromExercise" value="<?php echo $fromExercise; ?>">
 <table class="data_table">
 <tr>
@@ -209,7 +209,7 @@ if($is_allowedToEdit)
 	{
 ?>
 
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?exerciseId=<?php echo $exerciseId; ?>&fromExercise=<?php echo $fromExercise; ?>&page=<?php echo ($page-1); ?>">&lt;&lt; <?php echo get_lang('PreviousPage'); ?></a> |
+	<a href="<?php echo api_get_self(); ?>?exerciseId=<?php echo $exerciseId; ?>&fromExercise=<?php echo $fromExercise; ?>&page=<?php echo ($page-1); ?>">&lt;&lt; <?php echo get_lang('PreviousPage'); ?></a> |
 
 <?php
 	}
@@ -226,7 +226,7 @@ if($is_allowedToEdit)
 	{
 ?>
 
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?exerciseId=<?php echo $exerciseId; ?>&fromExercise=<?php echo $fromExercise; ?>&page=<?php echo ($page+1); ?>"><?php echo get_lang('NextPage'); ?> &gt;&gt;</a>
+	<a href="<?php echo api_get_self(); ?>?exerciseId=<?php echo $exerciseId; ?>&fromExercise=<?php echo $fromExercise; ?>&page=<?php echo ($page+1); ?>"><?php echo get_lang('NextPage'); ?> &gt;&gt;</a>
 
 <?php
 	}
@@ -312,7 +312,7 @@ if($is_allowedToEdit)
 ?>
 
   <td align="center">
-    <a href="<?php echo $_SERVER['PHP_SELF']; ?>?exerciseId=<?php echo $exerciseId; ?>&delete=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo get_lang('Delete'); ?>"></a>
+    <a href="<?php echo api_get_self(); ?>?exerciseId=<?php echo $exerciseId; ?>&delete=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo get_lang('Delete'); ?>"></a>
   </td>
 
 <?php

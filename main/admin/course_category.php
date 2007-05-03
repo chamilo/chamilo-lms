@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 12263 2007-05-03 13:34:40Z elixir_julian $
+<?php // $Id: course_category.php 12269 2007-05-03 14:17:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -125,7 +125,7 @@ if(!empty($category) && empty($action))
 	list($parent_id)=mysql_fetch_row($result);
 ?>
 
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($parent_id); ?>">&lt;&lt; <?php echo get_lang("Back"); if(!empty($parent_id)) echo ' ('.$parent_id.')'; ?></a>
+<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($parent_id); ?>">&lt;&lt; <?php echo get_lang("Back"); if(!empty($parent_id)) echo ' ('.$parent_id.')'; ?></a>
 
 <?php
 }
@@ -134,11 +134,11 @@ if($action == 'add' || $action == 'edit')
 {
 ?>
 
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($category); ?>">&lt;&lt; <?php echo get_lang("Back"); if(!empty($category)) echo ' ('.$category.')'; ?></a>
+<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>">&lt;&lt; <?php echo get_lang("Back"); if(!empty($category)) echo ' ('.$category.')'; ?></a>
 
 <h3><?php echo ($action == 'add')?get_lang('AddACategory'):get_lang('EditNode'); if(!empty($category)) echo ' '.get_lang('Into').' '.$category; ?></h3>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?action=<?php echo $action; ?>&category=<?php echo urlencode($category); ?>&amp;id=<?php echo urlencode(stripslashes($_GET['id'])); ?>">
+<form method="post" action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>&category=<?php echo urlencode($category); ?>&amp;id=<?php echo urlencode(stripslashes($_GET['id'])); ?>">
 <input type="hidden" name="formSent" value="1" />
 <table border="0" cellpadding="5" cellspacing="0">
 
@@ -199,10 +199,10 @@ else
 ?>
 
   <li>
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($enreg['code']); ?>"><img src="../img/folder_document.gif" border="0" title="<?php echo get_lang("OpenNode"); ?>" alt="" align="absbottom" /></a>
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($category); ?>&amp;action=edit&amp;id=<?php echo urlencode($enreg['code']); ?>"><img src="../img/edit.gif" border="0" title="<?php echo get_lang("EditNode"); ?>" alt ="" /></a>
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($category); ?>&amp;action=delete&amp;id=<?php echo urlencode($enreg['code']); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" title="<?php echo get_lang("DeleteNode"); ?>" alt="" /></a>
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo urlencode($category); ?>&amp;action=moveUp&amp;id=<?php echo urlencode($enreg['code']); ?>&amp;tree_pos=<?php echo $enreg['tree_pos']; ?>"><img src="../img/up.gif" border="0" title="<?php echo get_lang("UpInSameLevel"); ?>" alt="" /></a>
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($enreg['code']); ?>"><img src="../img/folder_document.gif" border="0" title="<?php echo get_lang("OpenNode"); ?>" alt="" align="absbottom" /></a>
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>&amp;action=edit&amp;id=<?php echo urlencode($enreg['code']); ?>"><img src="../img/edit.gif" border="0" title="<?php echo get_lang("EditNode"); ?>" alt ="" /></a>
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>&amp;action=delete&amp;id=<?php echo urlencode($enreg['code']); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" title="<?php echo get_lang("DeleteNode"); ?>" alt="" /></a>
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>&amp;action=moveUp&amp;id=<?php echo urlencode($enreg['code']); ?>&amp;tree_pos=<?php echo $enreg['tree_pos']; ?>"><img src="../img/up.gif" border="0" title="<?php echo get_lang("UpInSameLevel"); ?>" alt="" /></a>
 	<?php echo $enreg['name']; ?>
 	(<?php echo $enreg['children_count']; ?> <?php echo get_lang("Categories"); ?> - <?php echo $enreg['nbr_courses']; ?> <?php echo get_lang("Courses"); ?>)
   </li>
@@ -220,7 +220,7 @@ else
 
 </ul>
 
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>?category=<?php echo $category; ?>&amp;action=add"><?php echo get_lang("AddACategory"); if(!empty($category)) echo ' '.get_lang('Into').' '.$category; ?></a>
+<a href="<?php echo api_get_self(); ?>?category=<?php echo $category; ?>&amp;action=add"><?php echo get_lang("AddACategory"); if(!empty($category)) echo ' '.get_lang('Into').' '.$category; ?></a>
 
 <?php
 }

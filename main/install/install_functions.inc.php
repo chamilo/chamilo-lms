@@ -321,7 +321,7 @@ function display_language_selection()
 	<h1><?php get_lang('WelcomeToTheDokeosInstaller');?></h1>
 	<h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage');?></h2>
 	<p><?php echo get_lang('PleaseSelectInstallationProcessLanguage');?>:</p>
-	<form id="lang_form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+	<form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
 <?php display_language_selection_box(); ?>
 		<input type="submit" name="step1" value="<?php get_lang('Next');?> &gt;" />
 	</form>

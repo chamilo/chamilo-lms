@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 12263 2007-05-03 13:34:40Z elixir_julian $
+<?php // $Id: configure_homepage.php 12269 2007-05-03 14:17:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -487,7 +487,7 @@ elseif($action == 'edit_notice')
 {
 ?>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
+<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
 <input type="hidden" name="formSent" value="1"/>
 
 <table border="0" cellpadding="5" cellspacing="0">
@@ -534,7 +534,7 @@ elseif($action == 'insert_link' || $action == 'edit_link')
 ?>
 
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
+<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
 <input type="hidden" name="formSent" value="1"/>
 <input type="hidden" name="link_index" value="<?php if($action == 'edit_link') echo $link_index; else echo '0'; ?>"/>
 <input type="hidden" name="filename" value="<?php if($action == 'edit_link') echo $filename; else echo ''; ?>"/>
@@ -674,7 +674,7 @@ elseif($action == 'edit_top' || $action == 'edit_news')
 ?>
 
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
+<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
 <input type="hidden" name="formSent" value="1"/>
 
 <?php
@@ -752,10 +752,10 @@ else
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
   <td width="80%" colspan="2">
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit_top"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
+	<a href="<?php echo api_get_self(); ?>?action=edit_top"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
   </td>
   <td width="20%">
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=insert_link"><img src="../img/insert_row.png" border="0"/></a> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
+	<a href="<?php echo api_get_self(); ?>?action=insert_link"><img src="../img/insert_row.png" border="0"/></a> <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
   </td>
 </tr>
 <tr>
@@ -780,7 +780,7 @@ else
 	  </td>
 	  <td width="50%">
 		<br />
-		<!--<a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit_news"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>-->
+		<!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>-->
 	  </td>
 	</tr>
 	<tr>
@@ -880,7 +880,7 @@ else
 	</div>
 
 	<br />
-	&nbsp;&nbsp;<a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit_notice"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
+	&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=edit_notice"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
 
 	<div class="note">
 

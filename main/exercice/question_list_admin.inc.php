@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 11057 2007-02-05 08:56:17Z elixir_julian $
+* 	@version $Id: question_list_admin.inc.php 12269 2007-05-03 14:17:37Z elixir_julian $
 */
 
 
@@ -105,14 +105,14 @@ if($nbrQuestions)
 
 <tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
   <td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td> <td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
-  <td> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo $_SERVER['PHP_SELF']; ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
+  <td> <a href="<?php echo api_get_self(); ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
 
 	<?php
 		if($i != 1)
 		{
 ?>
 
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveUp'); ?>"></a>
+	<a href="<?php echo api_get_self(); ?>?moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveUp'); ?>"></a>
 
 <?php
 		}
@@ -121,7 +121,7 @@ if($nbrQuestions)
 		{
 ?>
 
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveDown'); ?>"></a>
+	<a href="<?php echo api_get_self(); ?>?moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveDown'); ?>"></a>
 
 <?php
 		}

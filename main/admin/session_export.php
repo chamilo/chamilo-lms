@@ -254,7 +254,7 @@ if(!empty($errorMsg))
 }
 ?>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" style="margin:0px;">
+<form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 <table border="0" cellpadding="5" cellspacing="0">
 <tr>

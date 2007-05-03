@@ -1,4 +1,4 @@
-<?php // $Id: online_links.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: online_links.php 12269 2007-05-03 14:17:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -178,7 +178,7 @@ include('header_frame.inc.php');
 
 <br>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?action=<?php echo $action; ?>&link=<?php echo $link; ?>" enctype="multipart/form-data">
+<form method="post" action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>&link=<?php echo $link; ?>" enctype="multipart/form-data">
 <input type="hidden" name="sent" value="1">
 <table border="0" cellpadding="3" cellspacing="0">
 <tr>
@@ -221,8 +221,8 @@ else
 
 <tr>
   <td width="98%"><a href="online_goto.php?url=<?php echo urlencode($enreg['url']); ?>" target="online_working_area"><?php echo $enreg['name']; ?></a></td>
-  <td width="1%" valign="middle"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit&link=<?php echo $enreg['id']; ?>"><img src="../img/edit.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Modify')); ?>"></a></td>
-  <td width="1%" valign="middle"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=delete&link=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Delete')); ?>"></a></td>
+  <td width="1%" valign="middle"><a href="<?php echo api_get_self(); ?>?action=edit&link=<?php echo $enreg['id']; ?>"><img src="../img/edit.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Modify')); ?>"></a></td>
+  <td width="1%" valign="middle"><a href="<?php echo api_get_self(); ?>?action=delete&link=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Delete')); ?>"></a></td>
 </tr>
 
 <?php

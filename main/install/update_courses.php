@@ -126,7 +126,7 @@ elseif($_POST['step1'])
 </head>
 <body bgcolor="white" dir="<?php echo $text_dir ?>">
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<form method="post" action="<?php echo api_get_self(); ?>">
 <table cellpadding="6" cellspacing="0" border="0" width="650" bgcolor="#E6E6E6" align="center">
 <tr bgcolor="#4171B5"">
   <td valign="top">

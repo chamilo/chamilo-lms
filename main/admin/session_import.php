@@ -559,7 +559,7 @@ api_display_tool_title($tool_name);
 
 ?>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" style="margin:0px;">
+<form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 <table border="0" cellpadding="5" cellspacing="0">
 

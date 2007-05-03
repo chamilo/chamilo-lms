@@ -133,7 +133,7 @@ require("../loader.class.php");
 $loader = new Loader('formUpload');
 $loader->init();
 ?>
-		<form name="formUpload" enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST"><!--onSubmit="progress_bar();"-->
+		<form name="formUpload" enctype="multipart/form-data" action="<?php echo api_get_self(); ?>" method="POST"><!--onSubmit="progress_bar();"-->
 <input type="hidden" name="sent" value="1">
 		<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
 		<div class="title"><span>File Attachment</span></div>

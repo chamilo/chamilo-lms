@@ -1,4 +1,4 @@
-<?php // $Id: document.php 12268 2007-05-03 14:16:09Z yannoo $
+<?php // $Id: document.php 12269 2007-05-03 14:17:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -473,7 +473,7 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 	if ($curdirpath!= '/'&& $curdirpath!=$group_properties['directory'])
 	{
 	?>
-		 <a href="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)) ?>">
+		 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)) ?>">
 				<img src="../img/folder_up.gif" border="0" align="absbottom" hspace="5" alt="" />
 				<?php echo get_lang("Up"); ?></a>&nbsp;
 	<?php
@@ -490,14 +490,14 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
 			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;
 			<!-- create directory -->
-			<a href="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" alt ="" /></a>
-			<a href="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
+			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" alt ="" /></a>
+			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
 		<?php
 	}
 	?>
 	<!-- download zipped folder -->
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl; ?>"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
-	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl; ?>"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
+	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl; ?>"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
+	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl; ?>"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
 	<?php
 	// Slideshow by Patrick Cool, May 2004
 	include("document_slideshow.inc.php");

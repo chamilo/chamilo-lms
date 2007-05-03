@@ -1,5 +1,5 @@
 <?php
-// $Id: subscribe_user2course.php 10811 2007-01-22 08:26:40Z elixir_julian $
+// $Id: subscribe_user2course.php 12269 2007-05-03 14:17:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -133,7 +133,7 @@ $result = api_sql_query($sql, __FILE__, __LINE__);
 $db_courses = api_store_result($result);
 ?>
 
-<form name="formulaire" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" style="margin:0px;">
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
  <input type="hidden" name="formSent" value="1"/>
   <table border="0" cellpadding="5" cellspacing="0" width="100%">
    <tr>

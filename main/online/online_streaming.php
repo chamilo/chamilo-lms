@@ -1,4 +1,4 @@
-<?php // $Id: online_streaming.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: online_streaming.php 12269 2007-05-03 14:17:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -102,7 +102,7 @@ include('header_frame.inc.php');
 
 <br>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<form method="post" action="<?php echo api_get_self(); ?>">
 <input type="hidden" name="sent" value="1">
 <table border="0" cellpadding="3" cellspacing="0">
 <tr>

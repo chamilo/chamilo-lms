@@ -1,4 +1,4 @@
-<?php // $Id: online_message.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: online_message.php 12269 2007-05-03 14:17:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -114,7 +114,7 @@ if($sent)
 include('header_frame.inc.php');
 ?>
 
-<form name="formMessage" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(htmlentities(get_lang('TypeMessage'))); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">
+<form name="formMessage" method="post" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(htmlentities(get_lang('TypeMessage'))); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">
 <input type="hidden" name="sent" value="1">
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>

@@ -136,7 +136,7 @@ else
 <p><?php echo $toolid ? get_lang('ChangePress') : get_lang('SubTitle'); ?></p>
 
 <table border="0">
-<form method="post" action="<?php echo $toolid ? $_SERVER['PHP_SELF'] . '?id=' . $id : $_SERVER['PHP_SELF']; ?>">
+<form method="post" action="<?php echo $toolid ? $_SERVER['PHP_SELF'] . '?id=' . $id : api_get_self(); ?>">
 <input type="hidden" name="formSent" value="1">
 
 <?php

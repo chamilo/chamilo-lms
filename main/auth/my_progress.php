@@ -89,7 +89,7 @@ echo get_lang('ProgressIntroduction');
 ?>
 <br /><br />
 
-<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>" style="margin: 0px;">
+<form method="get" action="<?php echo api_get_self(); ?>" style="margin: 0px;">
 <center>
 <?php echo get_lang('SessionCourses'); ?> :
 <select name="id_session">

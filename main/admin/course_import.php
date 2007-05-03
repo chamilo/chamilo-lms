@@ -191,7 +191,7 @@ if (count($errors) != 0)
 	Display :: display_error_message($error_message);
 }
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" style="margin:0px;">
+<form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin:0px;">
 <input type="file" name="import_file"/>
 <input type="hidden" name="formSent" value="1"/>
 <input type="submit" value="<?php echo get_lang('Ok'); ?>"/>

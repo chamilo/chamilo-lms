@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 12263 2007-05-03 13:34:40Z elixir_julian $
+* 	@version $Id: exercice.php 12269 2007-05-03 14:17:37Z elixir_julian $
 */
 
 
@@ -75,7 +75,7 @@ $audioPath=$documentPath.'/audio';
 
 // hotpotatoes
 $uploadPath = "/HotPotatoes_files";
-$exercicePath = $_SERVER['PHP_SELF'];
+$exercicePath = api_get_self();
 $exfile = explode('/',$exercicePath);
 $exfile = strtolower($exfile[sizeof($exfile)-1]);
 $exercicePath = substr($exercicePath,0,strpos($exercicePath,$exfile));

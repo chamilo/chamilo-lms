@@ -19,7 +19,7 @@ include("index_html_top.php");
 
   <div><h3><?php echo _pfc("Available Languages"); ?></h3>
     <ul>
-      <li><form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+      <li><form action="<?php echo api_get_self(); ?>" method="post">
           <select name="lang">
         <?php 
         $available_admin_lang = pfcI18N::GetAcceptedLanguage("admin");

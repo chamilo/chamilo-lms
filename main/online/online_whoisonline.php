@@ -1,4 +1,4 @@
-<?php // $Id: online_whoisonline.php 10204 2006-11-26 20:46:53Z pcool $
+<?php // $Id: online_whoisonline.php 12269 2007-05-03 14:17:37Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,7 +76,7 @@ foreach($Users as $enreg)
 
 <tr>
   <td width="1%" rowspan="2" valign="middle"><img src="../img/whoisonline.png" border="0" alt="" style="margin-right: 3px;"></td>
-  <td width="99%"><a <?php if($enreg['status'] == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo $_SERVER['PHP_SELF']; ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><b><?php echo $enreg['username']; ?></b></a></td>
+  <td width="99%"><a <?php if($enreg['status'] == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><b><?php echo $enreg['username']; ?></b></a></td>
 </tr>
 <tr>
   <td width="99%"><small><?php echo ucfirst($enreg['lastname']).' '.ucfirst($enreg['firstname']); ?></small></td>

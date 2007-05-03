@@ -161,7 +161,7 @@ if(isset($_GET['createdir']))
 }
 else {	//give them a link to create a directory
 	?>
-	<p><a href="<?php echo $_SERVER['PHP_SELF']; ?>?path=<?php echo $path; ?>&amp;createdir=1"><img src="../img/new_folder.gif" border="0" align="absmiddle" alt ="" /> <?php echo(get_lang('CreateDir'));?></a></p>
+	<p><a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1"><img src="../img/new_folder.gif" border="0" align="absmiddle" alt ="" /> <?php echo(get_lang('CreateDir'));?></a></p>
 	<?php
 }
 ?>
@@ -175,7 +175,7 @@ else {	//give them a link to create a directory
 </div>
 
 <!-- start upload form -->
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" name="upload" enctype="multipart/form-data">
+<form action="<?php echo api_get_self(); ?>" method="POST" name="upload" enctype="multipart/form-data">
 <!-- <input type="hidden" name="MAX_FILE_SIZE" value="5400"> -->
 <input type="hidden" name="curdirpath" value="<?php echo $path; ?>">
 <table>

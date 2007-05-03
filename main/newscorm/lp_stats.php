@@ -201,7 +201,7 @@ foreach ($list as $my_item_id) {
 					//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
 					.'<td colspan="2">'.$interaction['type']."</td>\n"
 					//.'<td>'.$interaction['correct_responses']."</td>\n"
-					.'<td>'.$interaction['student_response']."</td>\n".'<td>'.$interaction['result']."</td>\n".'<td>'.$interaction['latency']."</td>\n".'<td>'.$interaction['time']."</td>\n"."</tr>\n";
+					.'<td>'.urldecode($interaction['student_response'])."</td>\n".'<td>'.$interaction['result']."</td>\n".'<td>'.$interaction['latency']."</td>\n".'<td>'.$interaction['time']."</td>\n"."</tr>\n";
 					$counter ++;
 				}
 			}
@@ -301,7 +301,7 @@ foreach ($list as $my_item_id) {
 				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
 				.'<td colspan="2">'.$interaction['type']."</td>\n"
 				//.'<td>'.$interaction['correct_responses']."</td>\n"
-				.'<td>'.$interaction['student_response']."</td>\n".'<td>'.$interaction['result']."</td>\n".'<td>'.$interaction['latency']."</td>\n".'<td>'.$interaction['time']."</td>\n"."</tr>\n";
+				.'<td>'.urldecode($interaction['student_response'])."</td>\n".'<td>'.$interaction['result']."</td>\n".'<td>'.$interaction['latency']."</td>\n".'<td>'.$interaction['time']."</td>\n"."</tr>\n";
 				$counter ++;
 			}
 		}

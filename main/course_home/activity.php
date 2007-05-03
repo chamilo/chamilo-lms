@@ -255,7 +255,7 @@ function show_tools_category($course_tool_category)
 				{
 					if(!$toolsRow['adminlink'])
 						{
-							echo "<a href=\"" . $_SERVER['PHP_SELF'] . "?".api_get_cidreq()."&amp;id=" . $toolsRow["id"] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
+							echo "<a href=\"" .api_get_self(). "?".api_get_cidreq()."&amp;id=" . $toolsRow["id"] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
 						}
 				}
 			}

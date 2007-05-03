@@ -180,19 +180,19 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 			
 		echo '<td class="tree">';
 		
-			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;">'.get_lang("Build").'&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("BasicOverview").'</a>&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.get_lang("Display").'</a></p>';
+			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;">'.get_lang("Build").'&nbsp;<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("BasicOverview").'</a>&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.get_lang("Display").'</a></p>';
 			
 			//links for adding a module, chapter or step
 			echo '<div class="lp_actions">';
 				
 				echo '<p class="lp_action">';
 				
-					echo '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img align="left" alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
+					echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewChapter").'"><img align="left" alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.png" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
 						
 				echo '</p>';
 				echo '<p class="lp_action">';
 				
-					echo '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img align="left" alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
+					echo '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("NewStep").'"><img align="left" alt="'.get_lang("NewStep").'" src="../img/lp_dokeos_step_add.png" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
 				
 				echo '</p>';
 				

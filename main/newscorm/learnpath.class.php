@@ -3605,7 +3605,7 @@ class learnpath {
 		unset($this->arrMenu);
 		
 		if(api_is_allowed_to_edit())
-			$return .= '<p><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.get_lang("Advanced").'</a>&nbsp;'.get_lang("BasicOverview").'&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.get_lang("Display").'</a></p>';
+			$return .= '<p><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=build&amp;lp_id=' . $this->lp_id . '">'.get_lang("Advanced").'</a>&nbsp;'.get_lang("BasicOverview").'&nbsp;<a href="lp_controller.php?cidReq='.$_GET['cidReq'].'&action=view&lp_id='.$this->lp_id.'">'.get_lang("Display").'</a></p>';
 		
 		$return .= '<table class="data_table">' . "\n";
 		
@@ -3636,7 +3636,7 @@ class learnpath {
 							
 							if($arrLP[$i]['previous_item_id'] != 0)
 							{
-								$return .= "\t\t\t" . '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
+								$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
 									$return .= '<img alt="" src="../img/arrow_up_' . ($arrLP[$i]['depth'] % 3) . '.gif" />';
 								$return .= '</a>' . "\n";
 							}
@@ -3645,7 +3645,7 @@ class learnpath {
 							
 							if($arrLP[$i]['next_item_id'] != 0)
 							{
-								$return .= "\t\t\t" . '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=down&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
+								$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=down&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
 									$return .= '<img src="../img/arrow_down_' . ($arrLP[$i]['depth'] % 3) . '.gif" />';
 								$return .= '</a>' . "\n";
 							}
@@ -3658,18 +3658,18 @@ class learnpath {
 						
 						if($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module')
 						{
-							$return .= "\t\t\t" . '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
+							$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
 								$return .= '<img alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
 							$return .= '</a>' . "\n";
 						}
 						else
 						{
-							$return .= "\t\t\t" . '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
+							$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
 								$return .= '<img alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
 							$return .= '</a>' . "\n";
 						}
 						
-						$return .= "\t\t\t" . '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $arrLP[$i]['title'] . '\');">';
+						$return .= "\t\t\t" . '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $arrLP[$i]['title'] . '\');">';
 							$return .= '<img alt="" src="../img/delete.gif" title="' . get_lang('_delete_learnpath_module') . '" />';
 						$return .= '</a>' . "\n";
 						
@@ -4110,7 +4110,7 @@ class learnpath {
 		
 			$return .= '<p class="lp_title" style="margin-top:0;">'.get_lang("CreateNewStep").'</p>';
 		
-			$return .= '<div><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("NewDocument").'</a></div>';
+			$return .= '<div><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">'.get_lang("NewDocument").'</a></div>';
 			
 			$return .= '<p class="lp_title" style="margin-top:10px;">'.get_lang("UseAnExistingResource").'</p>';
 			
@@ -4169,7 +4169,7 @@ class learnpath {
 		$row_doc = Database::fetch_array($res_doc);
 		
 		//if($show_title)
-			//$return .= '<p class="lp_title">' . $row_doc['title'] . ($edit_link ? ' [ <a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $_GET['file'] . '&amp;edit=true&amp;lp_id=' . $_GET['lp_id'] . '">Edit this document</a> ]' : '') . '</p>';
+			//$return .= '<p class="lp_title">' . $row_doc['title'] . ($edit_link ? ' [ <a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $_GET['file'] . '&amp;edit=true&amp;lp_id=' . $_GET['lp_id'] . '">Edit this document</a> ]' : '') . '</p>';
 		
 		//TODO: add a path filter
 		if($iframe){
@@ -6006,10 +6006,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		$return .= '<p class="lp_title">' . $lang . '</p>';
 		
-		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
-		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
-		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Prerequisites').'"><img align="absbottom" alt="'.get_lang('Prerequisites').'" src="../img/right.gif" title="'.get_lang('Prerequisites').'" /> '.get_lang('Prerequisites').'</a>';
-		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Prerequisites').'"><img align="absbottom" alt="'.get_lang('Prerequisites').'" src="../img/right.gif" title="'.get_lang('Prerequisites').'" /> '.get_lang('Prerequisites').'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
 		
 		//$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
 		
@@ -6492,7 +6492,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				$return .= '<div class="lp_resource_element">';
 				
 					$return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
-					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_quiz['title'] . '</a>';
+					$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_quiz['title'] . '</a>';
 					//$return .= $row_quiz['title'];
 				
 				$return .= '</div>';
@@ -6534,7 +6534,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				$return .= '<div class="lp_resource_element">';
 				
 					$return .= '<img align="left" alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
-					$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
+					$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
 				
 				$return .= '</div>';
 			}
@@ -6566,7 +6566,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return .= '<div class="lp_resource_elements" id="resStudent" style="border-bottom:1px solid #999999; border-top:0;">';
 		$return .= '<div class="lp_resource_element">';
 		$return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
-		$return .= '<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
 		$return .= '</div>';
 		$return .= '</div>';
 		
@@ -6606,11 +6606,11 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						';
 			$return .= '<img align="left" alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a style="cursor:hand" onclick="toggle_forum('.$forum['forum_id'].')" style="vertical-align:middle"><img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" /></a>
-						<a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_'.$forum['forum_id'].'_content">';
+						<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_'.$forum['forum_id'].'_content">';
 			$a_threads = get_threads($forum['forum_id']);
 			foreach($a_threads as $thread)
 			{
-				$return .=  '<li><a href="' . $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . $thread['thread_title'] . '</a></li>';
+				$return .=  '<li><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . $thread['thread_title'] . '</a></li>';
 			}
 			$return .= '</ul></div>';
 		}

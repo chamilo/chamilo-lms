@@ -102,7 +102,7 @@ else
 
 if (false && file_exists($phpDigIncCn))  // future: buttons for operations
 {
-    echo '<form action="' . $_SERVER['PHP_SELF'] . '" method="post">', "\n", 
+    echo '<form action="' .api_get_self(). '" method="post">', "\n", 
         '<input type="submit" name="dmo" value="', get_lang('Import', 'noDLTT'), '">', "\n", 
         '<input type="submit" name="dmo" value="', get_lang('Remove', 'noDLTT'), '">', "\n", 
         '</form>', "\n";

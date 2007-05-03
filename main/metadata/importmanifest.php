@@ -564,7 +564,7 @@ if (file_exists($fhtf = $baseWorkDir . $workWith . '/' . HTF))
 if ($mfContents || $xht_doc->error)
 {
     echo '<h3>', get_lang('UploadMff'), "</h3>\n\n",
-        '<form action="' . $_SERVER['PHP_SELF'] . '?sdi=' . urlencode($sdi) .
+        '<form action="' .api_get_self(). '?sdi=' . urlencode($sdi) .
                 ($sdisub ? '&sdisub=' . urlencode($sdisub) : ($sdiall ? '&sdisub='.UZYX : '')) .
                 '" enctype="multipart/form-data" method="post">', "\n",
             '<input type="hidden" name="MAX_FILE_SIZE" value="32768">', "\n",
@@ -576,7 +576,7 @@ if ($mfContents || $xht_doc->error)
 echo '<h3>', get_lang('UploadHtt'), file_exists($fhtf) ?
     (' + ' . get_lang('RemoveHtt')) : '', "</h3>\n\n",
 
-    '<form action="' . $_SERVER['PHP_SELF'] . '?sdi=' . urlencode($sdi) .
+    '<form action="' .api_get_self(). '?sdi=' . urlencode($sdi) .
             ($sdisub ? '&sdisub=' . urlencode($sdisub) : ($sdiall ? '&sdisub='.UZYX : '')) .
             '" enctype="multipart/form-data" method="post">', "\n",
         '<input type="hidden" name="MAX_FILE_SIZE" value="32768">', "\n",
@@ -590,7 +590,7 @@ echo '<h3>', $nameTools, $hdrInfo, '</h3>', "\n";
 
 if ($mfContents || $perId[$sdi])  // buttons for manifest operations
 {
-    echo '<form action="' . $_SERVER['PHP_SELF'] . '?sdi=' . urlencode($sdi) .
+    echo '<form action="' .api_get_self(). '?sdi=' . urlencode($sdi) .
         ($sdisub ? '&sdisub=' . urlencode($sdisub) : ($sdiall ? '&sdisub='.UZYX : '')) .
         '" method="post">', "\n";
     if ($mfContents) echo

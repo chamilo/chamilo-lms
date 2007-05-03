@@ -1265,8 +1265,8 @@ class Blog
 			$counter = 0;
 			global $color2;
 
-			echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=add"><img src="../img/blog.gif" border="0" align="middle" alt="scormbuilder" />' . get_lang('AddTasks') . '</a> ';
-			echo '<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=assign"><img src="../img/blog.gif" border="0" align="middle" alt="scormbuilder" />' . get_lang('AssignTasks') . '</a>';
+			echo '<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=add"><img src="../img/blog.gif" border="0" align="middle" alt="scormbuilder" />' . get_lang('AddTasks') . '</a> ';
+			echo '<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=assign"><img src="../img/blog.gif" border="0" align="middle" alt="scormbuilder" />' . get_lang('AssignTasks') . '</a>';
 			echo '<span class="blogpost_title">' . get_lang('TaskList') . '</span><br />';
 			echo "<table class=\"data_table\">";
 			echo	"<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
@@ -1308,7 +1308,7 @@ class Blog
 							 '<td>' . stripslashes($task['description']) . '</td>',
 							 '<td><span style="background-color: #' . $task['color'] . '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>',
 							 '<td width="50">',
-							 	'<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=edit&amp;task_id=' . $task['task_id'] . '">',
+							 	'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=edit&amp;task_id=' . $task['task_id'] . '">',
 								'<img src="../img/edit.gif" border="0" title="' . get_lang('EditTask') . '" />',
 								"</a>\n",
 								'<a href="' . $delete_link . '"',
@@ -1368,10 +1368,10 @@ class Blog
 						 '<td>'.stripslashes($assignment['title']) . '</td>',
 						 '<td>' . $assignment['target_date'] . '</td>',
 						 '<td width="50">',
-						 	'<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=edit_assignment&amp;assignment_id=' . $assignment['task_id'] . '|' . $assignment['user_id'] . '">',
+						 	'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=edit_assignment&amp;assignment_id=' . $assignment['task_id'] . '|' . $assignment['user_id'] . '">',
 							'<img src="../img/edit.gif" border="0" title="' . get_lang('EditTask') . '" />',
 							"</a>\n",
-							'<a href="' . $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=delete_assignment&amp;assignment_id=' . $assignment['task_id'] . '|' . $assignment['user_id'] . '" ',
+							'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=delete_assignment&amp;assignment_id=' . $assignment['task_id'] . '|' . $assignment['user_id'] . '" ',
 							'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"',
 							'<img src="../img/' . $delete_icon . '" border="0" title="' . $delete_title . '" />',
 							"</a>\n",
@@ -2534,14 +2534,14 @@ class Blog
 						 '<td width="290"' . $visibility_class . '>'.stripslashes($blog['blog_name']) . '</td>',
 						 '<td' . $visibility_class . '>'.stripslashes($blog['blog_subtitle']) . '</td>',
 						 '<td width="200">',
-						 	'<a href="' . $_SERVER['PHP_SELF'] . '?action=edit&amp;blog_id=' . $blog['blog_id'] . '">',
+						 	'<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $blog['blog_id'] . '">',
 							'<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />',
 							"</a>\n",
-							'<a href="' . $_SERVER['PHP_SELF'] . '?action=delete&amp;blog_id=' . $blog['blog_id'] . '" ',
+							'<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $blog['blog_id'] . '" ',
 							'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"',
 							'<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />',
 							"</a>\n",
-							'<a href="' . $_SERVER['PHP_SELF'] . '?action=visibility&amp;blog_id=' . $blog['blog_id'] . '">',
+							'<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $blog['blog_id'] . '">',
 							'<img src="../img/' . $visibility_icon . '" border="0" title="' . get_lang('Visible') . '" />',
 							"</a>\n",
 						 '</td>',

@@ -309,7 +309,7 @@ if (isset($lci))
 
 echo '<h3>', $nameTools, $hdrInfo, '</h3>', "\n";
 
-echo '<form action="' . $_SERVER['PHP_SELF'] . '?lcn=' . urlencode($lcn) . 
+echo '<form action="' .api_get_self(). '?lcn=' . urlencode($lcn) . 
     '" method="post">', "\n"; 
 
 if (count($lceids)) echo 

@@ -261,11 +261,12 @@ CREATE TABLE group_rel_tutor(id int NOT NULL auto_increment, user_id int NOT NUL
 -- tool_intro table
 
 -- dropbox_file table
+ALTER TABLE dropbox_file ADD cat_id INT(11) NOT NULL ;
 -- dropbox_post table
+ALTER TABLE dropbox_post ADD cat_id INT(11) NOT NULL ;
 -- dropbox_person table
 CREATE TABLE dropbox_category(cat_id int NOT NULL auto_increment, cat_name text NOT NULL, received tinyint unsigned NOT NULL default 0, sent tinyint unsigned NOT NULL default 0, user_id int NOT NULL default 0, PRIMARY KEY  (cat_id));
 CREATE TABLE dropbox_feedback(feedback_id int NOT NULL auto_increment, file_id int NOT NULL default 0, author_user_id int NOT NULL default 0, feedback text NOT NULL, feedback_date datetime NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY  (feedback_id), KEY file_id (file_id), KEY author_user_id (author_user_id));
-
 
 CREATE TABLE lp(id int	unsigned primary key auto_increment, lp_type	smallint unsigned not null, name tinytext not null, ref tinytext null, description text null, path text	not null, force_commit  tinyint	unsigned not null default 0, default_view_mod char(32) not null default 'embedded', default_encoding char(32)	not null default 'ISO-8859-1', display_order int		unsigned	not null default 0, content_maker tinytext  not null default '', content_local 	varchar(32)  not null default 'local', content_license	text not null default '', prevent_reinit tinyint unsigned not null default 1, js_lib tinytext    not null default '', debug tinyint unsigned not null default 0);
 CREATE TABLE lp_view(id	int	unsigned primary key auto_increment, lp_id int	unsigned not null, user_id int unsigned not null, view_count smallint unsigned not null default 0, last_item int	unsigned not null default 0, progress int	unsigned default 0);

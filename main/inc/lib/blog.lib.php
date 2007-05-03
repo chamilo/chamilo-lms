@@ -2062,7 +2062,7 @@ class Blog
 				//Link to register users
 				if($user["user_id"] != $HTTP_SESSION_VARS["uid"])
 				{
-					$row[] = "<a href=\"" . $_SERVER['PHP_SELF']."?action=manage_members&amp;blog_id=$blog_id&amp;register=yes&amp;user_id=" . $user[user_id]."\">" . get_lang('Register')."</a>";
+					$row[] = "<a href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;register=yes&amp;user_id=" . $user[user_id]."\">" . get_lang('Register')."</a>";
 				}
 				else
 				{
@@ -2169,7 +2169,7 @@ class Blog
 
 			if($myrow["user_id"] != $_user['user_id'])
 			{
-				$row[] = "<a href=\"" . $_SERVER['PHP_SELF']."?action=manage_members&amp;blog_id=$blog_id&amp;unregister=yes&amp;user_id=" . $myrow[user_id]."\">" . get_lang('UnRegister')."</a>";
+				$row[] = "<a href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;unregister=yes&amp;user_id=" . $myrow[user_id]."\">" . get_lang('UnRegister')."</a>";
 			}
 			else
 			{

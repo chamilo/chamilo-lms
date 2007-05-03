@@ -171,7 +171,7 @@ CREATE TABLE survey ( survey_id int unsigned NOT NULL auto_increment, code varch
 CREATE TABLE survey_invitation (survey_invitation_id int unsigned NOT NULL auto_increment, survey_code varchar(20) NOT NULL, user varchar(250) NOT NULL, invitation_code varchar(250) NOT NULL, invitation_date datetime NOT NULL, reminder_date datetime NOT NULL, answered int(2) NOT NULL default '0', PRIMARY KEY  (survey_invitation_id));
 CREATE TABLE survey_question ( question_id int unsigned NOT NULL auto_increment, survey_id int unsigned NOT NULL, survey_question text NOT NULL, survey_question_comment text NOT NULL, type varchar(250) NOT NULL, display varchar(10) NOT NULL, sort int NOT NULL, shared_question_id int, max_value int, PRIMARY KEY  (question_id) );
 CREATE TABLE survey_question_option ( question_option_id int unsigned NOT NULL auto_increment, question_id int unsigned NOT NULL, survey_id int unsigned NOT NULL, option_text text NOT NULL, sort int NOT NULL, PRIMARY KEY  (question_option_id) );
-CREATE TABLE survey_anwser (answer_id unsigned int NOT NULL auto_increment, survey_id int unsigned NOT NULL, question_id int NOT NULL, option_id int NOT NULL, value int unsigned not null, user varchar(250) NOT NULL, PRIMARY KEY  (answer_id) );
+CREATE TABLE survey_anwser (answer_id unsigned int NOT NULL auto_increment, survey_id int unsigned NOT NULL, question_id int NOT NULL, option_id TEXT NOT NULL, value int unsigned not null, user varchar(250) NOT NULL, PRIMARY KEY  (answer_id) );
 
 ALTER TABLE announcement CHANGE content content mediumtext;
 ALTER TABLE announcement ADD email_sent tinyint default 0;

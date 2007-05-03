@@ -1304,7 +1304,7 @@ function update_Db_course($courseDbName)
 			  answer_id int unsigned NOT NULL auto_increment,
 			  survey_id int unsigned NOT NULL,
 			  question_id int unsigned NOT NULL,
-			  option_id int unsigned NOT NULL,
+			  option_id TEXT NOT NULL,
 			  value int unsigned NOT NULL,
 			  user varchar(250) NOT NULL,
 			  PRIMARY KEY  (answer_id)

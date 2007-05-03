@@ -167,7 +167,7 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 		$audio_recorder_studentview = false;
 	}
 	?>
-	<frameset rows="100,*">
+	<frameset rows="130,*">
 		<frame id="header" src="lp_header.php" border="0" frameborder="0" scrolling="no" />
 		<frameset cols="195,*">
 			<frameset rows="<?php echo($displayAudioRecorder?'60,':'');?>475,95,80,*">

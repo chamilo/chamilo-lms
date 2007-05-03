@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 12272 2007-05-03 14:40:45Z elixir_julian $
+*  	@version $Id: work.php 12298 2007-05-03 20:09:48Z yannoo $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -743,36 +743,40 @@ if($_POST['submitWork'] && $is_course_member && $check)
 }
 if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is not "just" an edit
 {
-		//YW Tis part serve to send a e-mail to the tutors when a new file is sent
-	// Lets predefine some variables. Be sure to change the from address!
-	$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	$table_user = Database::get_main_table(TABLE_MAIN_USER);
-	$sql_resp = 'SELECT u.email as myemail FROM '.$table_course_user.' cu, '.$table_user.' u WHERE cu.course_code = '."'".api_get_course_id()."'".' AND cu.status = 1 AND u.user_id = cu.user_id';
-	//echo $sql_resp;
-	$res_resp = api_sql_query($sql_resp,__FILE__,__LINE__);
-	if(Database::num_rows($res_resp)>0){
-		$emailto = '';
-		while($row_email = Database::fetch_array($res_resp)){
-			if(!empty($row_email['myemail'])){
-				$emailto .= $row_email['myemail'].',';
+	//YW Tis part serve to send a e-mail to the tutors when a new file is sent
+	$send = api_get_course_setting('email_alert_manager_on_new_doc');
+	if($send>0)
+	{
+		// Lets predefine some variables. Be sure to change the from address!
+		$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		$table_user = Database::get_main_table(TABLE_MAIN_USER);
+		$sql_resp = 'SELECT u.email as myemail FROM '.$table_course_user.' cu, '.$table_user.' u WHERE cu.course_code = '."'".api_get_course_id()."'".' AND cu.status = 1 AND u.user_id = cu.user_id';
+		//echo $sql_resp;
+		$res_resp = api_sql_query($sql_resp,__FILE__,__LINE__);
+		if(Database::num_rows($res_resp)>0){
+			$emailto = '';
+			while($row_email = Database::fetch_array($res_resp)){
+				if(!empty($row_email['myemail'])){
+					$emailto .= $row_email['myemail'].',';
+				}
 			}
+			$emailfromaddr = get_setting('emailAdministrator');
+			$emailfromname = get_setting('siteName');
+			$emailsubject  = "[".get_setting('siteName')."] ";
+	
+			// The body can be as long as you wish, and any combination of text and variables
+	
+			//$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." ($title)\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
+			$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." (".stripslashes($title).")\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
+	
+			// Here we are forming one large header line
+			// Every header must be followed by a \n except the last
+			$emailheaders = "From: ".get_setting('administratorName')." ".get_setting('administratorSurname')." <".get_setting('emailAdministrator').">\n";
+			$emailheaders .= "Reply-To: ".get_setting('emailAdministrator');
+	
+			// Because I predefined all of my variables, this api_send_mail() function looks nice and clean hmm?
+			@api_send_mail( $emailto, $emailsubject, $emailbody, $emailheaders);
 		}
-		$emailfromaddr = get_setting('emailAdministrator');
-		$emailfromname = get_setting('siteName');
-		$emailsubject  = "[".get_setting('siteName')."] ";
-
-		// The body can be as long as you wish, and any combination of text and variables
-
-		//$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." ($title)\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-		$emailbody=get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()." (".stripslashes($title).")\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-
-		// Here we are forming one large header line
-		// Every header must be followed by a \n except the last
-		$emailheaders = "From: ".get_setting('administratorName')." ".get_setting('administratorSurname')." <".get_setting('emailAdministrator').">\n";
-		$emailheaders .= "Reply-To: ".get_setting('emailAdministrator');
-
-		// Because I predefined all of my variables, this api_send_mail() function looks nice and clean hmm?
-		@api_send_mail( $emailto, $emailsubject, $emailbody, $emailheaders);
 	}
 	$message = get_lang('DocAdd');
     if ($uploadvisibledisabled && !$is_allowed_to_edit)

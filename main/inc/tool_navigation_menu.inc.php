@@ -1,5 +1,5 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 11651 2007-03-21 22:34:55Z yannoo $
+// $Id: tool_navigation_menu.inc.php 12273 2007-05-03 14:49:21Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -235,7 +235,7 @@ function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
 	foreach ($navigation_items as $key => $navigation_item)
 	{
 		echo '<a href="'.$navigation_item['link'].'"';
-		if (strpos($_SERVER['PHP_SELF'], $navigation_item['link']) !== false)
+		if (strpos(api_get_self(), $navigation_item['link']) !== false)
 		{
 			echo ' id="here"';
 		}

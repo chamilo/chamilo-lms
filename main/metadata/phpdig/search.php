@@ -242,7 +242,7 @@ if ($ckwcdt{0} != '?')  // there is a file with extra criteria
 
 <input type="text" id="kwds_string" class="kwl" onKeyUp="takeTypeIn(this, 150, -100, '60%'); checkEnter(event); return true;"/>
 
-<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+<form action="<?php echo api_get_self()?>" method="post">
 <table>
 <tr>
     <td><?php echo $tdhtm, '&nbsp;'; ?>

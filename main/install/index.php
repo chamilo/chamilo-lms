@@ -173,7 +173,7 @@ if(!isset($_GET['running']))
 	$dbUserForm='dokeos_user';
 
 	// extract the path to append to the url if Dokeos is not installed on the web root directory
-	$urlAppendPath=str_replace('/main/install/index.php','',$_SERVER['PHP_SELF']);
+	$urlAppendPath=str_replace('/main/install/index.php','',api_get_self());
   	$urlForm='http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
 	$pathForm=str_replace('\\','/',realpath('../..')).'/';
 

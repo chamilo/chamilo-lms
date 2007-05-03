@@ -291,7 +291,7 @@ function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
     param = 'id='+lms_item_id+'&origin='+origin+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
 	
     url="http://<?php
-    $self=$_SERVER['PHP_SELF'];
+    $self=api_get_self();
     $url=$_SERVER['HTTP_HOST'].$self;
     $url=substr($url,0,-14);//14 is the length of this file's name (/scorm_api.php)
     echo $url;

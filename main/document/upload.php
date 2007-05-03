@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 12269 2007-05-03 14:17:37Z elixir_julian $
+<?php // $Id: upload.php 12273 2007-05-03 14:49:21Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -318,7 +318,7 @@ echo(build_directory_selector($folders,$path,$group_properties['directory']));
 
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
-$form = new FormValidator('upload','POST',$_SERVER['PHP_SELF'],'','enctype="multipart/form-data"');
+$form = new FormValidator('upload','POST',api_get_self(),'','enctype="multipart/form-data"');
 
 $form->addElement('hidden','curdirpath',$path);
 

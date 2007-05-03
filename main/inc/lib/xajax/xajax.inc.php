@@ -906,7 +906,7 @@ class xajax
 			if (!empty($_SERVER['PATH_INFO'])) {
 				$sPath = parse_url($_SERVER['PATH_INFO']);
 			} else {
-				$sPath = parse_url($_SERVER['PHP_SELF']);
+				$sPath = parse_url(api_get_self());
 			}
 			$aURL['path'] = $sPath['path'];
 			unset($sPath);

@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 12272 2007-05-03 14:40:45Z elixir_julian $
+<?php // $Id: document.inc.php 12273 2007-05-03 14:49:21Z elixir_julian $
 
 /*
 ==============================================================================
@@ -45,7 +45,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 	}
 	
 	require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-	$form = new FormValidator('selector','POST',$_SERVER['PHP_SELF']);
+	$form = new FormValidator('selector','POST',api_get_self());
 	
 	$parent_select = $form->addElement('select', 'curdirpath', get_lang('CurrentDirectory'),'','onchange="javascript:document.selector.submit()"');
 	

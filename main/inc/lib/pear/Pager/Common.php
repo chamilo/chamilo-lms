@@ -33,7 +33,7 @@
  * @author     Richard Heyes <richard@phpguru.org>
  * @copyright  2003-2006 Lorenzo Alberton, Richard Heyes
  * @license    http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
- * @version    CVS: $Id: Common.php 9608 2006-10-20 11:43:03Z bmol $
+ * @version    CVS: $Id: Common.php 12273 2007-05-03 14:49:21Z elixir_julian $
  * @link       http://pear.php.net/package/Pager
  */
 
@@ -41,12 +41,12 @@
  * Two constants used to guess the path- and file-name of the page
  * when the user doesn't set any other value
  */
-if (substr($_SERVER['PHP_SELF'], -1) == '/') {
+if (substr(api_get_self(), -1) == '/') {
     define('CURRENT_FILENAME', '');
-    define('CURRENT_PATHNAME', 'http://'.$_SERVER['HTTP_HOST'].str_replace('\\', '/', $_SERVER['PHP_SELF']));
+    define('CURRENT_PATHNAME', 'http://'.$_SERVER['HTTP_HOST'].str_replace('\\', '/', api_get_self()));
 } else {
-    define('CURRENT_FILENAME', preg_replace('/(.*)\?.*/', '\\1', basename($_SERVER['PHP_SELF'])));
-    define('CURRENT_PATHNAME', str_replace('\\', '/', dirname($_SERVER['PHP_SELF'])));
+    define('CURRENT_FILENAME', preg_replace('/(.*)\?.*/', '\\1', basename(api_get_self())));
+    define('CURRENT_PATHNAME', str_replace('\\', '/', dirname(api_get_self())));
 }
 /**
  * Error codes

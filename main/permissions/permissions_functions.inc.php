@@ -263,7 +263,7 @@ function display_image_matrix($permission_array, $tool, $permission,$inherited_p
 			{
 				if($editable)
 				{
-					$url=$_SERVER['PHP_SELF'];
+					$url=api_get_self();
 					foreach($_GET as $key=>$value)
 					{
 						$parameter[$key]=$value;
@@ -289,7 +289,7 @@ function display_image_matrix($permission_array, $tool, $permission,$inherited_p
 			{
 				if($editable)
 				{
-					$url=$_SERVER['PHP_SELF'];
+					$url=api_get_self();
 					foreach($_GET as $key=>$value)
 					{
 						$parameter[$key]=$value;
@@ -346,7 +346,7 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
 			{
 				if($editable)
 				{
-					$url=$_SERVER['PHP_SELF'];
+					$url=api_get_self();
 					foreach($_GET as $key=>$value)
 					{
 						$parameter[$key]=$value;
@@ -374,7 +374,7 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
 			{
 				if($editable)
 				{
-					$url=$_SERVER['PHP_SELF'];
+					$url=api_get_self();
 					foreach($_GET as $key=>$value)
 					{
 						$parameter[$key]=$value;

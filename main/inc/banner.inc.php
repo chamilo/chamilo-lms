@@ -367,7 +367,7 @@ else
 	"call for chat" module section
 -----------------------------------------------------------------------------
 */
-$chat = strpos($_SERVER['PHP_SELF'], 'chat_banner.php');
+$chat = strpos(api_get_self(), 'chat_banner.php');
 if (!$chat)
 {
 	include_once (api_get_path(LIBRARY_PATH)."online.inc.php");

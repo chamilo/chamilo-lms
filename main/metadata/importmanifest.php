@@ -611,7 +611,7 @@ else
 function showSelectForm($label, $specifics)
 {
     echo    '<tr><td align="right" class="alternativeBgDark">', "\n",
-        	'<form action="', $_SERVER['PHP_SELF'], '" method="post">', "\n",
+        	'<form action="', api_get_self(), '" method="post">', "\n",
             	get_lang($label), ' :', "\n", $specifics, "\n",
                 '<input type="submit" value="', get_lang('Ok'), '" />', "\n",
             '</form></td></tr>', "\n";

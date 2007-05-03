@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 12272 2007-05-03 14:40:45Z elixir_julian $
+<?php // $Id: configure_homepage.php 12273 2007-05-03 14:49:21Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -871,7 +871,7 @@ else
 			$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'"><img src="../img/edit.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Modify')).'"/></a>';
 			$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img src="../img/delete.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Delete')).'"/></a>';
 
-			echo str_replace(array('href="'.$_configuration['root_web'].'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($_SERVER['PHP_SELF']).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
+			echo str_replace(array('href="'.$_configuration['root_web'].'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
 		}
 	}
 ?>

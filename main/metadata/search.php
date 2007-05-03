@@ -55,7 +55,7 @@ $xhtDoc = define_htt(HTT . '.htt', $urlp, $_course['path']);
 $xhtDoc->xht_param['type'] = TYPE;
 
 $xhtDoc->xht_param['index'] = 
-    str_replace('/search.php', '/index.php', $_SERVER['PHP_SELF']);
+    str_replace('/search.php', '/index.php', api_get_self());
 
 
 // XML and DB STUFF ----------------------------------------------------------->

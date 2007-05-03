@@ -102,7 +102,7 @@ if($_POST['step2'])
 		}
 		else
 		{
-			$urlAppendPath=str_replace('/main/install/update_courses.php','',$_SERVER['PHP_SELF']);
+			$urlAppendPath=str_replace('/main/install/update_courses.php','',api_get_self());
 		  	$urlForm='http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
 
 			$singleDbForm=get_config_param('singleDbEnabled');

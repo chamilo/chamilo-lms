@@ -66,7 +66,7 @@ require($drs . 'main/metadata/md_' . strtolower(EID_TYPE) . '.php');
 $mdObj = new mdobject($_course, EID_ID);
 
 define('DR', $_SERVER['DOCUMENT_ROOT']);
-define('SELF', $_SERVER['PHP_SELF']);
+define('SELF', api_get_self());
 define('DIRECTORY', DR . $self = substr(SELF, 0, strrpos(SELF, '/')));
 if (!file_exists(DIRECTORY)) give_up('No such directory: ' . DIRECTORY);
 

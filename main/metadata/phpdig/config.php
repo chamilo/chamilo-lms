@@ -72,7 +72,7 @@ if ((isset($_SERVER['SCRIPT_NAME'])) && (eregi("config.php",$_SERVER['SCRIPT_NAM
 if ((isset($_SERVER['PATH_TRANSLATED'])) && (eregi("config.php",$_SERVER['PATH_TRANSLATED']))) {
   exit();
 }
-if ((isset($_SERVER['PHP_SELF'])) && (eregi("config.php",$_SERVER['PHP_SELF']))) {
+if ((isset(api_get_self())) && (eregi("config.php",api_get_self()))) {
   exit();
 }
 

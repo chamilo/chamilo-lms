@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 12159 2007-04-27 13:42:24Z pcool $
+// $Id: add_course.php 12291 2007-05-03 17:54:20Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -136,7 +136,7 @@ if($form->validate())
 	}
 	else
 	{
-				Display :: display_error_message(get_lang('CourseCodeAlreadyExist'),false);
+				Display :: display_error_message(get_lang('CourseCodeAlreadyExists'),false);
 		$form->display();
 		echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';
 	}

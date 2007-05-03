@@ -5078,7 +5078,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		if($action != 'move'){
 			$form->addElement('text','title', get_lang('Title').' :','id="idTitle" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
 			//$form->addElement('textarea','description',get_lang("Description").' :', 'id="idDescription"  style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:300px;"');
-			
+		}
+		else
+		{
+			$form->addElement('hidden','title');
 		}
 		
 		$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
@@ -6143,7 +6146,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				case 'dokeos_chapter': case 'dir' : case 'asset' :
 					
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
-					$return .= $this->display_item_form($row['item_type'], 'Move the current chapter:', 'move', $item_id, $row);
+					$return .= $this->display_item_form($row['item_type'], get_lang('MoveCurrentChapter'), 'move', $item_id, $row);
 					
 					break;
 				

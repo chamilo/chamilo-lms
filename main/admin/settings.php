@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 12263 2007-05-03 13:34:40Z elixir_julian $
+// $Id: settings.php 12267 2007-05-03 14:07:32Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -57,7 +57,7 @@ api_protect_admin_script();
 if ($_POST['submit_stylesheets'])
 {
 	$message = store_stylesheets();
-	header("Location: {$_SERVER['PHP_SELF']}?category=stylesheets");
+	header("Location: ".api_get_self()."?category=stylesheets");
 	exit;
 }
 

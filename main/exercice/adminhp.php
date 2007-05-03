@@ -22,7 +22,7 @@
 *	HotPotatoes administration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: adminhp.php 12219 2007-05-01 18:46:59Z yannoo $
+* 	@version $Id: adminhp.php 12267 2007-05-03 14:07:32Z elixir_julian $
 */
 
 
@@ -113,7 +113,7 @@ if(isset($newName))
 		}
 }
 
-echo "<form action=\"{$_SERVER['PHP_SELF']}\" method='post' name='form1'>";
+echo "<form action=\"".api_get_self()."\" method='post' name='form1'>";
 echo "<input type=\"hidden\" name=\"hotpotatoesName\" value=\"$hotpotatoesName\">";
 echo "<input type=\"text\" name=\"newName\" value=\"";
 

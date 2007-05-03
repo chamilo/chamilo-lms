@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 11833 2007-04-02 15:05:02Z elixir_julian $
+// $Id: profile.php 12267 2007-05-03 14:07:32Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -113,7 +113,7 @@ $fck_attribute['ToolbarSet'] = "Profil";
 /*
  * Initialize the form.
  */
-$form = new FormValidator('profile', 'post', "{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}", null, array('style' => 'width: 60%; float: '.($text_dir=='rtl'?'right;':'left;')));
+$form = new FormValidator('profile', 'post', api_get_self()."?{$_SERVER['QUERY_STRING']}", null, array('style' => 'width: 60%; float: '.($text_dir=='rtl'?'right;':'left;')));
 
 /* Make sure this is the first submit on the form, even though it is hidden!
  * Otherwise, if a user has productions and presses ENTER to submit, he will
@@ -572,7 +572,7 @@ elseif ($form->validate())
 	$uidReset = true;
 	include (api_get_path(INCLUDE_PATH).'local.inc.php');
 	$_SESSION['profile_update'] = 'success';
-	header("Location: http://{$_SERVER['HTTP_HOST']}{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}");
+	header("Location: http://{$_SERVER['HTTP_HOST']}".api_get_self()."?{$_SERVER['QUERY_STRING']}");
 	exit;
 }
 

@@ -20,4 +20,5 @@ $Date = "Datum";
 $InvalidMessageId = "Identiteta sporoèila, na katerega želite odgovoriti, ni veljavna.";
 $ErrorSendingMessage = "Napaka pri poskusu pošiljanja sporoèila.";
 $SureYouWantToDeleteSelectedMessages = "Ste preprièani, da želite odstranite izbrana sporoèila ?";
+$SelectedMessagesDeleted = "Izbrana sporoèila so bila odstranjena";
 ?>

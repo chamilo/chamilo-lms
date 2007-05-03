@@ -20,4 +20,5 @@ $Date = "Fecha";
 $InvalidMessageId = "El id del mensaje a contestar no es válido.";
 $ErrorSendingMessage = "Se ha producido un error mientras se intentaba enviar el mensaje.";
 $SureYouWantToDeleteSelectedMessages = "¿ Está seguro de querer borrar los mensajes seleccionados ?";
+$SelectedMessagesDeleted = "Los mensajes seleccionados han sido suprimidos";
 ?>

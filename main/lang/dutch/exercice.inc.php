@@ -218,4 +218,13 @@ $ExerciseStored = "De oefening is opgeslagen";
 $ChooseAtLeastOneCheckbox = "Kies minimum één correct antwoord";
 $ExerciseEdited = "De oefening is gewijzigd";
 $ExerciseDeleted = "De oefening is verwijderd";
+$ClickToCommentAndGiveFeedback = "Klik op de link om het antwoord te controleren en feedback te geven";
+$OpenQuestionsAttempted = "Een student heeft een open vraag beantwoord";
+$AttemptDetails = "Details van de pogingen";
+$TestAttempted = "Geprobeerde test";
+$StudentName = "Naam van de student";
+$StudentEmail = "Email van de student";
+$OpenQuestionsAttemptedAre = "De gepoogde open vraag is";
+$CourseName = "Cursusnaam";
+$UploadJpgPicture = "Een afbeelding van het JPG formaat opladen ";
 ?>

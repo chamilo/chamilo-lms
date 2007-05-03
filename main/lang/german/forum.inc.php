@@ -78,4 +78,5 @@ $MoveThread = "Thema verschieben";
 $PostVisibilityChanged = "Sichtbarkeit der Nachricht wurde geändert";
 $PostDeleted = "Nachricht wurde gelöscht";
 $MakeInvisible = "Unsichtbar machen";
+$ThreadCanBeFoundHere = "Diesen Thread gibt es hier";
 ?>

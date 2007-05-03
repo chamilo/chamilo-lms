@@ -8,7 +8,7 @@ $langClickKw = "Clicca sulla Parola chiave nell\'albero per selezionarla o desel
 $langKwHelp = "br/>Fai Click sul pulsante \'+\' per aprire e su \'-\' per chiudere; \'++\' apre tutto e \'--\' chiude tutto.
 <br/> <br/>
 Cancella le Parole chiave selezionate richiudendo l\'albero e riaprendolo di nuovo con il pulsante \'+\' .
-Alt-click \'+\' riseleziona le Parole chiaveprecedentemente selezionate.
+Alt-click \'+\' riseleziona le Parole chiave precedentemente selezionate.
 <br/> <br/>
 Alt-click Parola chiave nega la parola chiave
 <br/> <br/>

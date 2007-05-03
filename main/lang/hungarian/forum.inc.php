@@ -78,4 +78,5 @@ $MoveThread = "Szál áthelyezése";
 $PostVisibilityChanged = "Üzenet láthatósága megváltoztatva";
 $PostDeleted = "Üzenet törölve";
 $MakeInvisible = "Ne legyen látható";
+$ThreadCanBeFoundHere = "Ez a téma itt található";
 ?>

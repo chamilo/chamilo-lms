@@ -196,11 +196,13 @@ $DocumentsMostDownloaded = "A legtöbbet letöltött dokumentumok";
 $LearningPathDetails = "Tanösvény részletek";
 $NoConnexion = "Nincs kapcsolat";
 $TeacherInterface = "Tanári felszín";
+$CoachInterface = "Tréner interfész";
 $AdminInterface = "Adminisztrátor felület";
 $NumberOfSessions = "Látogatások száma";
 $YourCourseList = "Az Ön kurzusainak listája";
 $YourStatistics = "Az Ön statisztikái";
 $CoachList = "Edz&#337;k listája";
+$CoachStudents = "A trénerhez tartozó tanulók";
 $NoLearningPath = "nincsenek tanösvények";
 $SessionCourses = "Kurzusok látogatásai";
 ?>

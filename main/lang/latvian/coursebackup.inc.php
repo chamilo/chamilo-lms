@@ -42,4 +42,5 @@ $langBackup = "Veidot rezerves kopiju";
 $langImportBackupInfo = "Rezerves kopijas import&#275;šana. Jums b&#363;s iesp&#275;ja augšupl&#257;d&#275;t rezerves kopijas failu no viet&#275;j&#257; datora vai b&#363;s iesp&#275;ja izmantot failu, kas atrodas uz servera.";
 $langCreateBackupInfo = "Izveidot rezerves kopiju šim kursam. J&#363;s varat izv&#275;l&#275;ties kursa sast&#257;vda&#316;as, kam b&#363;tu j&#257;veic kopijas izveide.";
 $ToolIntro = "Apskat&#299;t r&#299;ku izmantošanas iesp&#275;jas";
+$UploadError = "Augšupiel&#257;de aptur&#275;ta, l&#363;dzu p&#257;rbaudiet failu atbilst&#299;bu izm&#275;ru ierobežojumiem un mapju viedošanas noteikumus.";
 ?>

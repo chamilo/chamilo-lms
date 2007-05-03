@@ -15,7 +15,7 @@ $exercise_status_3 = "Status: Question terminated";
 $showUserPoints = "Show/Hide userclicks";
 $showHotspots = "Show / Hide hotspots";
 $labelPolyMenu = "Close polygon";
-$triesleft = "Tries left";
-$exeFinished = "All answers defined. You can now rearrange the hotspots or click to submit";
+$triesleft = "Attempts left";
+$exeFinished = "All answers done. You can now rearrange the hotspots or click button below image to submit";
 $nextAnswer = "Now click on: &done=done";
 ?>

@@ -202,4 +202,14 @@ $LinksMostClicked = "Links mais visitados";
 $DocumentsMostDownloaded = "Documentos mais baixados";
 $LearningPathDetails = "Detalhes da Rota de Aprendizagem";
 $NoConnexion = "Nenhuma ligação";
+$TeacherInterface = "Interface do professor";
+$CoachInterface = "Interface do Tutor";
+$AdminInterface = "Interface do administrador";
+$NumberOfSessions = "Número de sessões";
+$YourCourseList = "Lista de cursos";
+$YourStatistics = "Estatísticas";
+$CoachList = "Lista de tutores";
+$CoachStudents = "Estudantes do Tutor";
+$NoLearningPath = "Nenhuma Sequência de Aprendizagem";
+$SessionCourses = "Sessões dos cursos";
 ?>

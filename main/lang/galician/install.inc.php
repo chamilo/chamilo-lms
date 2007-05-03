@@ -95,6 +95,7 @@ $PleaseWait = "Por favor, espere";
 $Warning = "Atención";
 $ReadWarningBelow = "lea a advertencia inferior";
 $SecurityAdvice = "Aviso de seguridade";
+$YouHaveMoreThanXCourses = "Ten vostede máis de %d cursos na súa plataforma Dokeos! Somente se actualizaron %d cursos. Para actualizar os outros, %s faga clic aquí %s";
 $ToProtectYourSiteMakeXAndYReadOnly = "Para protexer o seu sitio, configure %s e %s como ficheiros de só lectura (CHMOD 444).";
 $Error = "Erro";
 $Back = "Volver";
@@ -102,10 +103,12 @@ $HasNotBeenFound = "non se encontrou";
 $PleaseGoBackToStep1 = "Por favor, volva ao Paso 1";
 $HasNotBeenFoundInThatDir = "non se atopou neste directorio";
 $OldVersionRootPath = "path raíz da antiga versión ";
+$NoWritePermissionPleaseReadInstallGuide = "Algúns arquivos ou carpetas non teñen permiso de escritura. Para poder instalar Dokeos debe modificar primeiro os permisos (empregando CHMOD). Por favor lea a %s Guía de Instalación %s";
 $DBServerDoesntWorkOrLoginPassIsWrong = "O servidor de base de datos non funciona ou a identificación / clave é incorrecta";
 $PleaseCheckTheseValues = "Por favor, comprobe estes valores";
 $PleaseGoBackToStep = " 	
 Por favor, volva ao Paso";
 $DBSettingUpgradeIntro = "O programa de actualización recuperará e actualizará as bases de datos de Dokeos. Para realizar isto, o programa utilizará as bases de datos e a configuración definidas debaixo. ¡ Debido a que o noso software funciona nunha ampla gama de sistemas e non foi posible probalo en todos, recomendámoslle encarecidamente que realice unha copia completa das súas bases de datos antes de proceder á actualización !";
 $ExtensionMBStringNotAvailable = "Extensión MBString non dispoñible";
+$ExtensionMySQLNotAvailable = "Extensión MySQL non dispoñible";
 ?>

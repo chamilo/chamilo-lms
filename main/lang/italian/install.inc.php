@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langStatDB              = "Tracciamento del Db.  Utile solo in caso di Database multiplo";
 $langEnableTracking      = "Abilita il tracciamento";
-$langInstituteShortName  = "Sigla dell\\\'organizzazione";
+$langInstituteShortName  = "Sigla dell\'organizzazione";
 $langWarningResponsible  = "Usa questo script solo dopo aver effettuato un backup. Il team di sviluppo della piattaforma non ha responsabilità se i dati saranno persi o danneggiati";
 $langAllowSelfRegProf  = "Permetti l\'iscrizione autonoma dei docenti";
 $langEG = "es.";
@@ -14,17 +14,16 @@ $langMainDB = "Database principale";
 $langAllFieldsRequired = "tutti i campi sono necessari";
 $langPrintVers = "Versione stampabile";
 $langLocalPath = "percorso locale corrispondente";
-$langAdminEmail = "e-mail dell\\\'Amministratore";
+$langAdminEmail = "e-mail dell\'Amministratore";
 $langAdminName = "Nome dell\'amministratore";
 $langAdminSurname = "Cognome dell\'amminstratore";
 $langAdminLogin = "login dell\'Amministratore";
 $langAdminPass = "password dell\'Amministratore (<font color=\"red\">puoi cambiarla</font>)";
 $langEducationManager = "Responsabile didattico";
 $langCampusName = "Il nome del vostro campus";
-$langDBSettingIntro = "
-				Lo script d\'installazione creerà il database principale. 
+$langDBSettingIntro = "				Lo script d\'installazione creerà il database principale. 
 				In seguito il sistema avrà la necessità di creare un database per ogni corso.
-				In caso non vi sia concesso di creare più di un database selezionate l\'opzione \"One\" sottostante
+				In caso non vi sia concesso di creare più di un database selezionate l\'opzione \"Unico database\" sottostante
 			: la piattaforma verrà installata nella versione con database singolo.";
 $langStep1 = "Passo 1 di 6 ";
 $langStep2 = "Passo 2 di 6 ";
@@ -45,9 +44,9 @@ $langSingleDb = "Usa uno o più DB per la piattaforma";
 $langAllowSelfReg = "Permetti l\'iscrizione autonoma";
 $langRecommended = "(raccomandato)";
 $langScormDB = "Database Scorm";
-$langAdminLastName = "Cognome dell\\\'Amministratore";
+$langAdminLastName = "Cognome dell\'Amministratore";
 $langAdminFirstName = "Nome dell\'Amministratore";
-$langAdminPhone = "Telefono dell\\\'Amministratore";
+$langAdminPhone = "Telefono dell\'Amministratore";
 $langInstituteURL = "URL dell\'istituzione";
 $langDokeosURL = "URL di Dokeos";
 $langUserDB = "DB Utente";
@@ -107,10 +106,11 @@ $PleaseGoBackToStep1 = "Prego, ritorna al Passo 1";
 $HasNotBeenFoundInThatDir = "non è stato trovato in questa directory";
 $OldVersionRootPath = "Percorso iniziale della versione precedente";
 $NoWritePermissionPleaseReadInstallGuide = "Non hai il diritto di sovrascrivere alcuni file o cartelle. Per installare Dokeos cambia i permessi (CHMOD). Leggi le istruzioni sulla %s guida di installazione %s";
-$DBServerDoesntWorkOrLoginPassIsWrong = "La combinazione neme utente / password del database non è corretta";
+$DBServerDoesntWorkOrLoginPassIsWrong = "La combinazione nome utente/password del database non è corretta";
 $PleaseCheckTheseValues = "Prego, controlla i seguenti valori";
 $PleaseGoBackToStep = "Prego, ritorna al passo precedente";
 $DBSettingUpgradeIntro = "Lo script di aggiornamento recupererà e aggiornerà i database di Dokeos. Per farlo verranno usate le informazioni sottostanti. SI RACCOMANDA DI FARE IL BACKUP DEI DATABASE in quanto il vostro sistema potrebbe non essere compatibile con quelli testati";
 $ExtensionMBStringNotAvailable = "Estensione MBString non disponibile";
 $ExtensionMySQLNotAvailable = "Estensione MySQL non disponibile";
+$DokeosArtLicense = "Le immagini e le gallerie multimediali di Dokeos utilizzano icone e materiali provenienti dai repertori di Nuvola, Crystal Clear e Tango. Le altre immagini e media (come diagrammi e animazioni Flash) provengono da Wikimedia e dai corsi di Pakdel e di Denis Hoa e sono rilasciate con il loro permesso con licenza BY-SA Creative Common. Per dettagli sulla licenza vedi <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">il sito di CC</a>, ed il collegamento a piè di pagina,  che punta al testo completo della licenza.";
 ?>

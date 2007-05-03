@@ -20,4 +20,5 @@ $Date = "Dátum";
 $InvalidMessageId = "A megválaszolní kívánt üzenet azonosítója érvénytelen.";
 $ErrorSendingMessage = "Az üzenet elküldése közben hiba lépett fel.";
 $SureYouWantToDeleteSelectedMessages = "Biztos benne, hogy törölni kívánja a kiválasztott üzenetet?";
+$SelectedMessagesDeleted = "A kiválasztott üzenetek törlésre kerültek";
 ?>

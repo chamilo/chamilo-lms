@@ -217,4 +217,13 @@ $ExerciseStored = "El ejercicio ha sido guardado";
 $ChooseAtLeastOneCheckbox = "Escoger al menos una respuesta correcta";
 $ExerciseEdited = "El ejercicio ha sido modificado";
 $ExerciseDeleted = "El ejercicio ha sido borrado";
+$ClickToCommentAndGiveFeedback = "Haga clic en el siguiente enlace para comprobar y comentar la respuesta";
+$OpenQuestionsAttempted = "Un alumno ha contestado a una pregunta abierta";
+$AttemptDetails = "Detalles de los intentos";
+$TestAttempted = "Ejercicio";
+$StudentName = "Nombre del estudiante";
+$StudentEmail = "E-Mail del estudiante";
+$OpenQuestionsAttemptedAre = "La pregunta abierta intentada está";
+$CourseName = "Nombre del curso";
+$UploadJpgPicture = "Enviar una imagen JPG";
 ?>

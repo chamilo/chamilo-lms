@@ -112,4 +112,5 @@ $DBSettingUpgradeIntro = "Postopek bo obnovil in nadgradil Dokeos podatkovne baz
 Strogo priporo&#269;amo, da izvedete popolno arhivsko kopijo vaših podatkovnih baz, predenj nadaljujete spostopkom nadgrajevanja. ";
 $ExtensionMBStringNotAvailable = "MBString razširitev ni na voljo";
 $ExtensionMySQLNotAvailable = "MySQL razširitev ni na voljo";
+$DokeosArtLicense = "Galeriji slik in drugih medijskih datotek Dokeos-a vsebujejo slike iz galerij Nuvola, Crystal Clear in Tango. Druge slike in medijske datoteke, kot so diagrami, Flash animacije so sposojene iz Wikimedia in gradiv Ali Pakdel-a ter Denis Hoa z njihovim privoljenjem in pod licenco BY-SA Creative Commons. Podrobnosti o licencah lahko najdete na <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>. Povezava na celotno besedilo pogojev uporabe se nahaja na dnu podane strani.";
 ?>

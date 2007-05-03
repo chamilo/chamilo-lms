@@ -110,4 +110,5 @@ $PleaseGoBackToStep = "Volte, por favor, para a Etapa";
 $DBSettingUpgradeIntro = "O script de actualização vai recuperar e actualizar as bases de dados de Dokeos. Para isso, este script usará as bases de dados e configurações definidas abaixo. Em virtude da diversidade de sistemas em que Dokeos está instalado e porque nem sempre esses sistemas foram testados previamente, recomendamos vivamente que faça um cópia total das bases de dados antes de prosseguir com a actualização !";
 $ExtensionMBStringNotAvailable = "Extensão MBString não disponível";
 $ExtensionMySQLNotAvailable = "Extensão MySQL não disponível";
+$DokeosArtLicense = "As imagens e a galeria de media de Dokeos são retiradas da galeria de ícones Crystal Clear e Tango. Outras imagens e media, tal como diagramas e animações em flash, foram cedidas por Wikimedia e pelos cursos de Ali Pakdel e Denis Hoa com o seu consentimento e disponibilizadas sob licença de BY-SA Creative Commons. Pode verificar mais detalhes desta licença em <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\"> CC website</a>, onde encontrará uma ligação no rodapé que o orientará para a versão integral da licença.";
 ?>

@@ -29,4 +29,6 @@ $langGroupUserManagement = "Gerenciamento de Grupo";
 $langUserInfo = "informações do usuário";
 $langUnregister = "Descadastrar-se";
 $langAddAUser = "Adicionar Usuários";
+$UsersUnsubscribed = "Usuários não inscritos";
+$ThisStudentIsSubscribeThroughASession = "Este usuário está inscrito neste curso através da sessão. Não pode editar as suas informações.";
 ?>

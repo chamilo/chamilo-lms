@@ -12,7 +12,7 @@ $langCourseAdministratorOnly = "Riservato al gestore del corso";
 $langDefineHeadings = "Definisci le intestazioni";
 $langBackToUsersList = "Ritorna all\'elenco degli utenti";
 $langTracking = "Tracciamento";
-$langCourseManager = "Docente";
+$langCourseManager = "Gestore del corso";
 $langModRight = "cambia i diritti di";
 $langNoAdmin = "da ora <b>non ha alcun diritto</b> su questa pagina";
 $langAllAdmin = "da ora ha <b> tutti</b> i diritti su questa pagina";
@@ -30,4 +30,5 @@ $langUserInfo = "informazioni sull\'utente";
 $langUnregister = "Cancella l\'iscrizione";
 $langAddAUser = "Aggiungi utenti";
 $UsersUnsubscribed = "Glii utenti selezionati sono stati cancellati dal corso";
+$ThisStudentIsSubscribeThroughASession = "Il corsista è iscritto al corso tramite una sessione. Non si possono modificare queste informazioni";
 ?>

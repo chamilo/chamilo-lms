@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langShouldBeCSVFormat = "File should be CSV format. Do not add spaces. Structure should be exactly :";
-$langTracking = "Tracking";
+$langTracking = "Reporting";
 $langEnter2passToChange = "Enter your password twice to change it. Otherwise, leave the fields empty.";
 $langAuthInfo = "Authentication";
 $langDelImage = "Remove picture";
@@ -15,7 +15,7 @@ If you did not ask, then ignore this mail.
 
 To reset your password click on the reset link.";
 $YourPasswordHasBeenEmailed = "Your password has been emailed to you.";
-$lang_enter_email_and_well_send_you_password = "Enter the e-mail address that you used to register and we will send you back your password.";
+$lang_enter_email_and_well_send_you_password = "Enter the e-mail address that you used to register and we will send you your password back.";
 $langLogin = "Log In";
 $langAction = "Action";
 $langPreserved = "Preserved";
@@ -25,11 +25,11 @@ $langConfirmUnsubscribe = "Confirm user unsubscription";
 $langCourseName = "Name of course";
 $langSubscribe = "Subscribe";
 $langSee = "Go to";
-$langLastVisits = "My last visits";
+$langLastVisits = "My latest visits";
 $langIfYouWantToAddManyUsers = "If you want to add a list of users in
 			your course, please contact your web administrator.";
 $langPassTooEasy = "this password  is too simple. Use a pass like this ";
-$langGroupUserManagement = "Group management";
+$langGroupUserManagement = "Groups management";
 $langAddedToCourse = "has been registered to your course";
 $langUserAlreadyRegistered = "A user with same name is already registered	in this course.";
 $langBackUser = "Back to users list";
@@ -38,7 +38,7 @@ $langGiveTutor = "Make coach";
 $langRemoveRight = "Remove this right";
 $langGiveAdmin = "Make admin";
 $langUserNumber = "number";
-$langDownloadUserList = "Upload list";
+$langDownloadUserList = "Upload the list";
 $langSend = "Send";
 $langUserAddExplanation = "every line of file to send will necessarily an only
 		include 5 fields: <b>First name   Last name   
@@ -56,10 +56,10 @@ $langImportUserList = "Import a list of users";
 $langAddAU = "Add a user";
 $langAddedU = "has been added. An email has been sent to give him his username ";
 $langTheU = "The user";
-$langRegYou = "has registered you on this course";
+$langRegYou = "has registered you to this course";
 $langOneResp = "One of the course administrators";
 $langTaken = "is already in use. Choose another one.";
-$langUserNo = "The username you choose ";
+$langUserNo = "The username you chose ";
 $langFilled = "You have left some fields empty.";
 $langInC = "in this course";
 $langRole = "Description";
@@ -79,7 +79,7 @@ $langMailHasBeenSent = "An email has been sent to help you remember your usernam
 $langPersonalSettings = "Your personal settings have been registered";
 $langManager = "Manager";
 $langFormula = "Yours sincerely";
-$langProblem = "In case of problems, contact us.";
+$langProblem = "In case of trouble, contact us.";
 $langIs = "is";
 $langAddress = "The address of ";
 $langSettings = "with the following settings :
@@ -101,7 +101,7 @@ $langYourAccountParam = "This is your information to connect to";
 $langLoginRequest = "Login request";
 $langDefineHeadings = "Define Headings";
 $langCourseAdministratorOnly = "teacher only";
-$langWorks = "Student publications";
+$langWorks = "Assignments";
 $langLostPassword = "Password lost";
 $langAdminOfCourse = "Course Admin";
 $langSimpleUserOfCourse = "User of course";
@@ -144,7 +144,7 @@ $FullUserName = "Full name";
 $SearchForUser = "Search for user";
 $SearchButton = "Search";
 $SearchNoResultsFound = "No search results found";
-$OnlyImagesAllowed = "Only images of type PNG, JPG or GIF allowed";
+$OnlyImagesAllowed = "Only PNG, JPG or GIF images allowed";
 $UsernameWrong = "Your username can only contain letters, numbers and _.-";
 $PasswordRequestFrom = "This is a password request for the e-mail address";
 $CorrespondsToAccount = "This e-mail address corresponds to the following user account.";

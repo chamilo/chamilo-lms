@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langProfessors = "Teachers";
-$langExplanation = "Once you click OK, a website with Forum, Agenda, Document manager etc. will be created. Your login, as creator of the website, allows you to modify it along your own requirements.";
+$langExplanation = "Once you click OK, a website with Forum, Agenda, Documents manager, SCORM courses importa and authoring etc. will be created. Your login, as creator of the website, allows you to modify it along your own requirements.";
 $langEmpty = "You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your course code, see the Course Program";
 $langCodeTaken = "This course code is already in use.  <br>Use the <b>Back</b> button on your browser and try again";
 $langFormula = "Yours sincerely";

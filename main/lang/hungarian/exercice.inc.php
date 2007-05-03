@@ -216,4 +216,13 @@ $ExerciseStored = "A gyakorlat tárolásra került.";
 $ChooseAtLeastOneCheckbox = "Válasszon legalább egy jó választ";
 $ExerciseEdited = "A gyakorlat szerkesztésre került.";
 $ExerciseDeleted = "A gyakorlat törlésre került.";
+$ClickToCommentAndGiveFeedback = "Kattintson ide a válasz megtekintéséhez és megjegyzés hozzáadásához.";
+$OpenQuestionsAttempted = "Egy tanuló választ küldött be egy nyitott kérdésre";
+$AttemptDetails = "Próbálkozás részletei";
+$TestAttempted = "Próbálkozások száma";
+$StudentName = "Tanuló neve";
+$StudentEmail = "Tanuló email";
+$OpenQuestionsAttemptedAre = "Megkísérelt nyitott kérdések";
+$CourseName = "Kurzus neve";
+$UploadJpgPicture = "JPG kép feltöltése";
 ?>

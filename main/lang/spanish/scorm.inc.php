@@ -45,4 +45,6 @@ $FileToUpload = "Archivo a enviar";
 $ContentMaker = "Creador de contenidos";
 $ContentProximity = "Localización del contenido";
 $UploadLocalFileFromGarbageDir = "Enviar archivo local desde el directorio main/garbage";
+$ThisItemIsNotExportable = "Este elemento, por ahora, no es compatible con SCORM. Por ello, no es exportable.";
+$MoveCurrentChapter = "Mover el capítulo actual";
 ?>

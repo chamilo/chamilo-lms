@@ -21,18 +21,18 @@ Per inviare un documento a più persone, selezionatole con CTRL+click";
 $langHHome = " Home page dell\'aiuto";
 $langHomeContent = "<p>La pagina iniziale del corso
 mostra una serie di strumenti: un testo introduttivo, una descrizione
-del corso, un gestore di documenti ecc. . La pagina è
-modulare e potete mostrare o nascondere i dicersi strumenti con un
+del corso, un gestore di documenti ecc. La pagina è
+modulare e potete mostrare o nascondere i diversi strumenti con un
 click.</p>
 <b>Navigazione</b>
 <p>Per esplorare il corso potete
 cliccare e scendere lungo i diversi livelli di menù
 successivi o usare - se attivata - la barra veloce in alto a destra.
-Cliccando sul nome del corso in alto a sinistra o lulla voce \">
+Cliccando sul nome del corso in alto a sinistra o sulla voce \">
 Corso\" ritornerete alla pagina principale. </p>
 <b>Best practice</b>
 <p>Per motivare i corsisti
-è necessario farli sentire che \'c\'è qualcuno
+è necessario assicurarli che che \'c\'è qualcuno
 dietro\', ad esempio potete modificare il testo di introduzione ogni
 settimana per mettere in evidenza notizie, nuovi materiali o scadenze.</p>
 <p>Per costruire il corso
@@ -50,9 +50,9 @@ ecc.,</li>
 strumenti in modo da renderli invisibili in Vista Corsista,</li>
   <li>Usate lo strumento Percorsi
 per strutturare il modo d\'uso e le sequenze di apprendimento:
-così userete gli strumenti ma in un primo momento non
-saranno direttamente accessibili,</li>
-  <li>Fate Click! sul pulsante con
+in questo modo utilizzerete gli altri strumenti ma in un primo momento non
+saranno direttamente accessibili.</li>
+  <li>Fate Click sul pulsante con
 l\'icona a forma di occhio per rendere visibile il percorso: esso
 sarà ora visibile nella pagina iniziale del corso,</li>
   <li>Ora l\'area di lavoro
@@ -62,7 +62,7 @@ gli studenti attraverso il corso. Cliccate sulla Vista corsista a
 destra  per verificare il modo in cui il corso viene visto dai
 corsisti.</li>";
 $langHOnline = "Guida alla Audio Conferenza";
-$langOnlineContent = "Il sistema di Audio Conferenza online di Dokeos vi consente di insegnare, informare o semplicemente raggruppare fino a 100 persone in modo semplice e rapido.<br>
+$langOnlineContent = "Il sistema di Audio Conferenza online di Dokeos vi consente di essere in contatto con fino a 100 persone in modo semplice e rapido.<br>
  <ul>
    <li><b>audio :</b> la voce dell\'istruttore viene inviata in modalità sincrona ai partecipanti in qualità radio FM grazie allo streaming in formato MP3</li>
    <li><b>contenuti :</b> i partecipanti seguono la presentazione in formato Power Point o da strumenti analoghi</li>
@@ -135,7 +135,7 @@ se desiderate elencarli in ordine diverso, numerateli in modo consecutivo: 01, 0
 <h4>Aggiungere o modificare un commento a un documento (o cartella)</h4>
 <ul>
 		<li>Cliccate sul pulsante <img src=../document/../document/img/comment.gif width=20 height=20> 
-			nella colonna\'Commento\'</li>
+			nella colonna \'Commento\'</li>
 		<li>Digitate il nuovo commento nel campo corrispondente (in alto a sinistra).</li>
 		<li>Confermate l\'operazione cliccando sul pulsante \'Conferma\' <input type=submit value=OK name=submit2>.</li>
 </ul>
@@ -170,8 +170,8 @@ Potete modificarli utilizzando il pulsante \'Modifica\' nello strumento \'Utenti
 
 <hr>
 
-<b>Privilegi di Amministrazione</b>
-<p>I privilegi di Amministrazione, al contrario, corrispondono ad una autorizzazione tecnica a modificare contenuti, 
+<b>Privilegi di Gestione</b>
+<p>I privilegi di Gestione, al contrario, corrispondono ad una autorizzazione tecnica a modificare contenuti, 
 struttura e organizzazione del sito del corso.
 Al momento, è possibile concedere tutti i privilegi (ad es. modificare, eliminare, aggiungere un elemento) 
 o nessuno (ad eccezione della possibilità di visitare il sito, pubblicare messaggi nei Forum e inviare 
@@ -179,7 +179,7 @@ documenti e materiali alla sezione \'Contributi\').</P>
 
 <p>Per consentire ad un tutor, ad esempio, di partecipare all\'amministrazione del sito, è necessario innanzitutto iscriverlo al corso 
 o accertarsi che sia già iscritto, poi, utilizzando il pulsante \'Modifica\' nello strumento \'Utenti\', confermare l\'attribuzione 
-di tutti i privilegi come Amministratore spuntando la casella apposita..</P>
+di tutti i privilegi come Gestore spuntando la casella apposita.</P>
 
 <hr>
 
@@ -216,8 +216,7 @@ al corso con l\'iscrizione ai gruppi). L\'elenco dei corsisti è visibile per mez
 
 <p><b>Creare un gruppo</b></p>
 <p>Per creare nuovi gruppi, utilizzate il pulsante \'Crea nuovi gruppi\' indicando il numero di nuovi gruppi da creare. 
-Il numero massimo di partecipanti è facoltativo, ma si consiglia di sceglierne uno; se lasciate il valore del campo invariato, 
-la dimensione massima dei gruppi equivarrà a infinito.</p>
+
 <hr noshade size=1>
 
 <p><b>Impostazioni dei Gruppi</b></p>
@@ -225,7 +224,7 @@ la dimensione massima dei gruppi equivarrà a infinito.</p>
 <b>I corsisti sono autorizzati ad auto-iscriversi nei gruppi</b>:
 <p>Dopo la creazione dei gruppi vuoti, i corsisti si iscrivono autonomamente.
 Se è stato definito un numero massimo, i gruppi già pieni non accetteranno nuove iscrizioni.
-Questo metodo è valido qualora il docente non conosca l\'elenco dei corsisti al momento della creazione dei gruppi.</p>
+Questo metodo è opportuno qualora il docente non conosca l\'elenco dei corsisti al momento della creazione dei gruppi.</p>
 
 <b>Strumenti</b>:</p>
 <p>Ciascun gruppo ha a disposizione sia un \'Forum\' (pubblico o privato) che un\'area \'Documenti\', o, più spesso, entrambi.</p>
@@ -238,7 +237,7 @@ di informazioni e funzioni:
 <li><b>Eliminare</b> per eliminare un gruppo.</li></ul>
 <hr noshade size=1>";
 $langHExercise = "Verifiche";
-$langExerciseContent = "<p>Lo strumento \'Verifiche\' consente di creare test composti dal numero prescelto di quesiti.<br><br>
+$langExerciseContent = "<p>Lo strumento \'Test\' consente di creare test composti dal numero prescelto di quesiti.<br><br>
 
 Sono disponibili varie tipologie di risposte per la creazione dei vostri quesiti:<br><br>
 <ul>
@@ -276,8 +275,8 @@ Per creare una domanda di questo tipo :<br><br>
 <hr>
 
 <b>Riempire gli spazi</b>
-<p>Questa tipologia viconsente di creare un testo con spazi vuoti. L\'obiettivo per il corsista è quello di individuare le parole che sono state da voi omesse.<br><br>
-Per omettere una prola da un testo, creando così uno spazio, inseritela tra parentesi [a questo modo].<br><br>
+<p>Questa tipologia vi consente di creare un testo con spazi vuoti. L\'obiettivo per il corsista è quello di individuare le parole che sono state da voi omesse.<br><br>
+Per omettere una parola da un testo, creando così uno spazio, inseritela tra parentesi [in questo modo].<br><br>
 Non appena il testo è stato digitato e le parole omesse, potete aggiungere un commento che sarà visibile dal corsista non appena ha risposto alla domanda.<br><br>
 Al termine, effettuate il salvataggio dell\'esercizio; passerete così alla fase che vi consentirà di definire un valore da attribuire a ciascuno spazio.
 Ad esempio, se la domanda vale 10 punti e avete a disposizione cinque spazi, ciascun spazio varrà due punti.</p>
@@ -349,7 +348,7 @@ Cos\'è un percoso didattico ?</b>
 </p>
 <p><b>Altre funzioni disponibili</b></p>
 <p>
-E\' possibile fare in modo che gli studenti seguano il perorso in un ordine ben preciso e fissato dal docente attrverso l\'utilizzo dello strumento <u>prerequisitie</u>. Questo significa ad esempio che gli studenti non possano accedere alla lezione due senza prima aver letto la lezione 1 ed aver svolto gli esercizi della lezione 1. Tutte le voci hanno uno \'stato\' : completo o incompleto così lo studente può in ogni momento sapere a che punto si trova rispetto al percorso complessivo.</p>
+E\' possibile fare in modo che gli studenti seguano il perorso in un ordine ben preciso e fissato dal docente attraverso l\'utilizzo dello strumento <u>prerequisiti</u>. Questo significa ad esempio che gli studenti non possano accedere alla lezione due senza prima aver letto la lezione 1 ed aver svolto gli esercizi della lezione 1. Tutte le voci hanno uno \'stato\' : completo o incompleto così lo studente può in ogni momento sapere a che punto si trova rispetto al percorso complessivo.</p>
 <p>
 Si può cambiare il titolo di ogni voce del percorso senza la necessita di cambiare anche il nome del file a cui si riferisce rendendo più facile strutturare i contenuti.</p>
 <br><p><b>
@@ -363,7 +362,7 @@ Permettono di stutturare e sequenzializzare i contenuti e di monitorare le attiv
 <br><p>
 <b>Come si creano gli oggetti scorm ?</b><br>
 <br>
-La piattaforma come visto attraverso lo strumento Percorsi di Apprendimento crea oggetti scorm (anche se ancora non è presente la funzione di esportazione). Se si desidera creare degli oggetti esportabili bisogna utilizzare programmi appositi quali ad esempio: Reload® (gratuito) o Lectora&reg
+La piattaforma (come visto attraverso lo strumento Percorsi di Apprendimento) crea oggetti scorm (anche se ancora non è presente la funzione di esportazione). Se si desidera creare degli oggetti esportabili bisogna utilizzare programmi appositi quali ad esempio: Reload® (gratuito) o Lectora&reg
 <br></p><p>
 <b>Link Utili</b><br>
 <ul>
@@ -384,7 +383,7 @@ $langDescriptionContent = "<p>Questo strumento permette di descrivere brevemente
 $langHLinks = "Links (Collegamenti)";
 $langLinksContent = "<p>I collegamenti permettono di crare una libreria di documenti accessibili via Internet.</p>
 <p>Se i collegamenti sono numerosi possono essere organizzati in categorie: se necessario possono essere spostati di categoria o riorganizzati</p>
-<p>La descrizione permette di orientare i corsisti anticipando i contenuti del collegamento. In alternativa possono essere fornite,, nella descrizione, particolari ottiche o particolari ricerche da svolgere sul documento</p>
+<p>La descrizione permette di orientare i corsisti anticipando i contenuti del collegamento. In alternativa possono essere fornite, nella descrizione, particolari ottiche o particolari ricerche da svolgere sul documento</p>
 <p>Collegamenti essenziali possono essere resi visibili nella pagina iniziale del corso, diventando una personalizzazione del menù.</p>";
 $langHMycourses = "Accesso ai corsi<p>Impostazioni personali";
 $langMycoursesContent = "<p>Una volta effettuato il login vi trovate nella <i>\'Vostra\'</i> home page personale.<p> Potete vedere:

@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langChapter = "Chapter";
-$langDocumentList = "Document list";
+$langDocumentList = "Documents list";
 $langOrganisationList = "Organization list";
 $langEditTOC = "Edit TOC";
 $langDocuments = "Documents";
@@ -10,7 +10,7 @@ $langEditDocument = "Edit document";
 $langCreateDocument = "Create document";
 $langMissingImagesDetected = "Missing images detected";
 $langPublish = "Publish";
-$langScormcontentstudent = "This is a Scorm format course. If you would like to play it, click here : <input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>";
+$langScormcontentstudent = "This is a SCORM course. If you would like to play it, click here : <input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>";
 $langScormcontent = "This is a Scorm content<br><input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>";
 $langDownloadAndZipEnd = " Zip file uploaded and uncompressed";
 $langZipNoPhp = "The zip file can not contain .PHP files";
@@ -32,7 +32,7 @@ $langNoSpace = "The upload has failed. There is not enough disk space in your di
 $langDownloadEnd = "The upload is finished";
 $langFileExists = "Operation impossible.<br>A Path with this name already exists.";
 $langDocCopied = "Document copied";
-$langDocDeleted = "Scorm format Learning Path deleted";
+$langDocDeleted = "Learning path deleted";
 $langElRen = "EI rename ???";
 $langDirCr = "Create directory";
 $langDirMv = "My directory";
@@ -41,7 +41,7 @@ $langRename = "rename";
 $langCopy = "copy";
 $langNameDir = "Name of the new directory";
 $langCreateDir = "Create a directory";
-$langDownloadFile = "Upload IMS or Scorm Learning Path zip course";
+$langDownloadFile = "Upload AICC or SCORM course ZIP file";
 $learning_path_access = "click \'create learning path\' to delete/modify/show/hide/create/add a learning path";
 $langRoot = "root";
 $langBuilder = "Learning Path builder";
@@ -58,7 +58,7 @@ $lang_no_published = "is now hidden from students";
 $lang_published = "is now accessible for students";
 $lang_description = "description";
 $lang_title = "title";
-$langScormBuilder = "Scorm Builder";
+$langScormBuilder = "Learning path builder";
 $langCreateDoc = "Create document";
 $langOrganiseDocuments = "Organise documents";
 $langUncompress = "Uncompress";

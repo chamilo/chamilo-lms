@@ -30,4 +30,5 @@ $langUserInfo = "informacije o uporabniku";
 $langUnregister = "Izpiši";
 $langAddAUser = "Dodaj uporabnike";
 $UsersUnsubscribed = "Izbrani uporabniki so bili izpisani iz teèaja";
+$ThisStudentIsSubscribeThroughASession = "Ta teèajnik je vpisan v ta teèaj preko seje. Njegovih informacij ne morete urejati.";
 ?>

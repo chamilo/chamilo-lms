@@ -45,4 +45,5 @@ $FileToUpload = "Feltöltend&#337; állomány";
 $ContentMaker = "Tartalom készít&#337;";
 $ContentProximity = "Kapcsolódó tartalom";
 $UploadLocalFileFromGarbageDir = "Helyi állomány feltöltése a f&#337;/lomtár könyvtárból ";
+$ThisItemIsNotExportable = "Ez az elem jelenleg (még) nem Scorm kompatibilis, ezért nem exportálható.";
 ?>

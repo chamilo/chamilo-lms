@@ -30,4 +30,5 @@ $langUserInfo = "Benutzer Information";
 $langUnregister = "Abmeldung";
 $langAddAUser = "Nutzer hinzufügen";
 $UsersUnsubscribed = "Die ausgewählten Benutzer wurden aus dem Kurs abgemeldet";
+$ThisStudentIsSubscribeThroughASession = "Dieser Student ist in diesem Kurs durch eine Session eingeschrieben. Seine Informationen können nicht bearbeitet werden";
 ?>

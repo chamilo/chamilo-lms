@@ -48,4 +48,5 @@ $AnnouncementDeletedAll = "Visi pazi&#326;ojumi tika izdz&#275;sti";
 $AnnouncementMoved = "Pazi&#326;ojums tika p&#257;rvietots";
 $NoAnnouncements = "Šeit nav neviena pazi&#326;ojuma";
 $SelectEverybody = "Iez&#299;m&#275;t visus";
+$SelectedUsersGroups = "Iez&#299;m&#275;t lietot&#257;ju grupas";
 ?>

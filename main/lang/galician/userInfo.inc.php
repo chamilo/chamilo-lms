@@ -10,7 +10,7 @@ $langMoveDown = "Baixar";
 $langAddNewHeading = "Engadir novo encabezado";
 $langCourseAdministratorOnly = "Só o administrador do curso";
 $langDefineHeadings = "Definir encabezados";
-$langBackToUsersList = "Volver &aacute lista de usuarios";
+$langBackToUsersList = "Voltar &aacute lista de usuarios";
 $langTracking = "Seguemento";
 $langCourseManager = "Profesor";
 $langModRight = "cambiar os dereitos de";
@@ -30,4 +30,5 @@ $langUserInfo = "Información do usuario";
 $langUnregister = "Sen rexistrar";
 $langAddAUser = "Engadir usuarios";
 $UsersUnsubscribed = "Os usuarios seleccionados foron dados de baixa do curso";
+$ThisStudentIsSubscribeThroughASession = "Este estudante está suscrito a este curso mediante unha sesión. Vostede non pode editar as súas informacións";
 ?>

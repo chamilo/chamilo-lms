@@ -28,6 +28,7 @@ $langCourseList  = "Kursu saraksts";
 $Subscribe = "Pieteikties";
 $AlreadySubscribed = "Jau veikta re&#291;istr&#275;šan&#257;s";
 $CourseCategoryStored = "Kursu noda&#316;a ir izveidota";
+$langWithoutTimeLimits = "Bez laika ierobežojuma";
 $lang_back_to_main_category_list = "Atpaka&#316; uz galveno noda&#316;u sarakstu";
 $langAdded = "Pievienots";
 $langDeleted = "Izdz&#275;sts";
@@ -60,4 +61,7 @@ $SubscribingNotAllowed = "Pieteikšan&#257;s nav at&#316;auta";
 $CourseSortingDone = "Kursu k&#257;rtošana pabeigta";
 $ExistingCourseCategories = "iziet no kursu noda&#316;&#257;m";
 $YouAreNowUnsubscribed = "J&#363;s tagad esat atteikusies/-cies  no kursa";
+$ViewOpenCourses = "Apskat&#299;t atv&#275;rtos kursus";
+$ErrorContactPlatformAdmin = "Nezin&#257;ma k&#316;&#363;da, l&#363;dzu sazinieties ar platformas administr&#257;toru.";
+$CourseRegistrationCodeIncorrect = "Kursa kods ir nepareizs";
 ?>

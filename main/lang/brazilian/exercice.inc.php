@@ -214,4 +214,14 @@ $AssignMarks = "Atribuir uma classificação";
 $Results = "Resultados";
 $ExerciseStored = "Este exercício foi acrescentado";
 $ChooseAtLeastOneCheckbox = "Escolha pelomenos uma resposta";
+$ExerciseEdited = "O exercício foi modificado";
+$ExerciseDeleted = "O exercício foi eliminado";
+$ClickToCommentAndGiveFeedback = "Clique no seguinte link para verificar a resposta e comentar";
+$OpenQuestionsAttempted = "Um usuário respondeu a uma pergunta aberta";
+$AttemptDetails = "Detalhes das tentativas";
+$TestAttempted = "Nome do exercício";
+$StudentName = "Nome do usuário";
+$StudentEmail = "Email do usuário";
+$OpenQuestionsAttemptedAre = "Questão aberta trabalhada é";
+$CourseName = "Nome do curso";
 ?>

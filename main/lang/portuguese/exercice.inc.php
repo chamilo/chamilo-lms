@@ -224,4 +224,5 @@ $StudentName = "Nome do utilizador";
 $StudentEmail = "Email do utilizador";
 $OpenQuestionsAttemptedAre = "Questão aberta trabalhada é";
 $CourseName = "Nome do curso";
+$UploadJpgPicture = "Inserir uma imagem JPG";
 ?>

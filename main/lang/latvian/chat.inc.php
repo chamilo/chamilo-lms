@@ -33,4 +33,6 @@ $langChat_reset_by = "p&#316;&#257;p&#257;šanu ats&#257;ka";
 $OrFile = "Vai fails";
 $langCallSent = "Uzaicin&#257;jums pievienoties p&#316;&#257;p&#257;tuvei tika nos&#363;t&#299;ts. Tagad j&#257;uzgaida l&#299;dz aicin&#257;tais piekrit&#299;s piedal&#299;ties sarun&#257;.";
 $langChatDenied = "Uzaicin&#257;jums tika noraid&#299;ts.";
+$Send = "S&#363;t&#299;t";
+$Connected = "Savienots";
 ?>

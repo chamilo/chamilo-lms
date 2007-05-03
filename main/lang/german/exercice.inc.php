@@ -225,4 +225,5 @@ $StudentName = "Name des Studenten";
 $StudentEmail = "E-Mail des Studenten";
 $OpenQuestionsAttemptedAre = "Die versuchte offene Frage ist ";
 $CourseName = "Kursname";
+$UploadJpgPicture = "Ein JPG Bild hochladen";
 ?>

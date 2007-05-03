@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $GeneralDescription = "General Description";
-$GeneralDescriptionQuestions = "What is the place of the course in the program? Are there pre-requisites? How is the course connected with other courses?";
+$GeneralDescriptionQuestions = "What is the place of the course in the program? Are there pre-requisites? How is the course connected to other courses?";
 $GeneralDescriptionInformation = "Describe the course (number of hours, official code, room where it happens...) and teacher (name, first name, office, Tel., e-mail...).";
 $Objectives = "Objectives";
 $ObjectivesInformation = "Presentation of the global and detailed objectives of the course.";
@@ -19,7 +19,7 @@ $CourseMaterialInformation = "Short description of the course materials.";
 $HumanAndTechnicalResources = "Human and technical Resources";
 $HumanAndTechnicalResourcesQuestions = "Are there teachers, tutors, a technical helpdesk, social assistants, computer rooms?";
 $HumanAndTechnicalResourcesInformation = "Short description of the identitiy of the different contact persons and technical devices available.";
-$Assessment  = "Assessment";
+$Assessment  = "Assessment process";
 $AssessmentQuestions = "How will users be evaluated? Are there strategies to develop in order to master the topic?";
 $AssessmentInformation = "Example exam questions. Criteria of success. Tips and tricks.";
 ?>

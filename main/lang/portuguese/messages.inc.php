@@ -20,4 +20,5 @@ $Date = "Data";
 $InvalidMessageId = "O id da mensagem a responder não é válido.";
 $ErrorSendingMessage = "Houve um erro ao tentar enviar a mensagem.";
 $SureYouWantToDeleteSelectedMessages = "Tem a certeza que deseja apagar todas as mensagens seleccionadas?";
+$SelectedMessagesDeleted = "As mensagens seleccionadas foram apagadas";
 ?>

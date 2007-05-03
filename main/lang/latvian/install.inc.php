@@ -47,9 +47,43 @@ $langAdminPhone = "Administratora t&#257;lrunis";
 $langInstituteURL = "uz&#326;&#275;muma Interneta lapa";
 $langDokeosURL = "DOKEOS Interneta lapa";
 $langUserDB = "Lietot&#257;ju datub&#257;ze";
+$langInstallationLanguage = "Instal&#257;cijas valoda";
 $ReadThoroughly = "Lasiet uzman&#299;gi";
 $DokeosNeedFollowingOnServer = "Lai DOKEOS darbotos, uz J&#363;su servera j&#257;b&#363;t sekojošajam";
 $WarningExistingDokeosInstallationDetected = "Uzman&#299;bu!<br>Instal&#275;t&#257;js atrada eksist&#275;jošu DOKEOS platformu J&#363;su server&#299;.";
 $NewInstallation = "Jauna instal&#257;cija";
 $CheckDatabaseConnection = "P&#257;rbaud&#299;t datub&#257;zes savienojuma esam&#299;bu";
+$PrintOverview = "R&#257;d&#299;t p&#257;rskatu";
+$Installing = "Instal&#275;t";
+$Step = "Solis";
+$ServerRequirements = "Servera vajadz&#299;bas 
+ 
+ 
+";
+$PHPVersion = "PHP versija";
+$support = "atbalsts";
+$PHPVersionOK = "PHP versija ir OK";
+$OK = "OK";
+$RecommendedSettings = "Rekomend&#275;tie iest&#257;d&#299;jumi";
+$Setting = "Iest&#257;d&#299;jums";
+$Actual = "Pašlaik";
+$NotWritable = "Neierakst&#257;ms";
+$Writable = "ierakst&#257;ms";
+$IAccept = "Piekr&#299;tu";
+$DokeosInstallation = "Dokeos instal&#257;cija";
+$InstallDokeos = "Instal&#275;t Dokeos";
+$Version_ = "Versija";
+$UpdateFromDokeosVersion = "Moderniz&#275;t no Dokeos";
+$WelcomToTheDokeosInstaller = "Laipni l&#363;dzam Dokeos Instal&#275;t&#257;j&#257;.";
+$PleaseSelectInstallationProcessLanguage = "L&#363;dzu izv&#275;lieties instal&#257;cijas valodu";
+$ReadTheInstallGuide = "Lasiet instal&#257;cijas pam&#257;c&#299;bu";
+$PrintThisPageToRememberPassAndOthers = "Izdruk&#257;jiet šo lapu, lai atcer&#275;tos J&#363;su paroli un iest&#257;d&#299;jumus";
+$PleaseWait = "L&#363;dzu gaid&#299;t";
+$Warning = "Uzman&#299;bu";
+$ReadWarningBelow = "Lasi br&#299;din&#257;jumu apakš&#257;";
+$Error = "K&#316;&#363;da";
+$Back = "Atpaka&#316;";
+$HasNotBeenFound = "netika atrasts";
+$ExtensionMBStringNotAvailable = "MBString paplašin&#257;jums nav pieejams ";
+$ExtensionMySQLNotAvailable = "MySQL paplašin&#257;jums nav pieejams ";
 ?>

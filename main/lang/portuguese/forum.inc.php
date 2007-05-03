@@ -78,4 +78,5 @@ $MoveThread = "Mover tópico";
 $PostVisibilityChanged = "Visibilidade da mensagem alterada";
 $PostDeleted = "Mensagem foi apagada";
 $MakeInvisible = "Tornar invisível";
+$ThreadCanBeFoundHere = "O tópico pode ser encontrado aqui";
 ?>

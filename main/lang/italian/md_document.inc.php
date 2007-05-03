@@ -22,7 +22,7 @@ $langCoverageTip = "ad esempio diploma di xxx: yyy";
 $langKwNote = "Se cambi la lingua di descrizione, non aggiungere Parole chiave nello stesso momento";
 $langClickKw = "Clicca sulla Parola chiave nell\'albero per selezionarla o deselezionarla.";
 $langKwHelp = "<br/> Fai Click sul pulsante \'+\' per aprire e su  \'-\' per chiudere; \'++\' apre tutto e \'--\' chiude tutto.<br/> <br/> Cancella le Parole chiave selezionate richiudendo l\'albero e riaprendolo di nuovo con il pulsante \'+\' .<br/> Alt-click \'+\' cerca le Parole chiave originali nell\'albero.<br/> <br/> Alt-click Parola chiave seleziona una parola chiave senza
-termini più dettagliati lects la deseleziona.<br/> <br/> Se cambi la lingua della descrizione non introdurre Parole chiave nello stesso tempo.
+termini più dettagliati o la deseleziona.<br/> <br/> Se cambi la lingua della descrizione non introdurre Parole chiave nello stesso tempo.
 .<br/> <br/>";
 $langRights = "Diritti d\'uso";
 $langRightsTip = "descrivi a parole";
@@ -35,7 +35,7 @@ $langAuthorTip = "in formato VCARD";
 $langFormat = "Formato";
 $langFormatTip = "seleziona dall\'elenco";
 $langLocation = "URL/URI";
-$langLocationTip = "Fai click! per aprire l\'oggetto";
+$langLocationTip = "Fai click per aprire l\'oggetto";
 $langStore = "Salva";
 $langDeleteAll = "Elimina tutti i metadati";
 $langConfirmDelete = "Sei *sicuro* di voler eliminare TUTTI i metadati?";

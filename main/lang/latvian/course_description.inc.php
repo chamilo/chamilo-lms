@@ -13,4 +13,7 @@ $langAdd  = "Pievienot";
 $langValid  = "Der&#299;gs";
 $langBackAndForget  = "Atpaka&#316; un dz&#275;st";
 $langOkSent = "J&#363;su lapa tika augšupl&#257;d&#275;ta. <p>Tagad t&#257; ir saist&#299;ta ar <a href=../../$dbname/index.php>Kursa m&#257;jas lapu</a>";
+$Content = "Saturs";
+$CourseDescriptionUpdated = "Kursa apraksts papildin&#257;ts";
+$CourseDescriptionDeleted = "Kursa apraksts izdz&#275;sts";
 ?>

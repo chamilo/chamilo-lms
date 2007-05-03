@@ -78,4 +78,5 @@ $MoveThread = "Prestavi nit";
 $PostVisibilityChanged = "Vidnost objave je bila spremenjena";
 $PostDeleted = "Objava je bila odstranjena";
 $MakeInvisible = "Skrij";
+$ThreadCanBeFoundHere = "Nit foruma lahko najdete tukaj";
 ?>

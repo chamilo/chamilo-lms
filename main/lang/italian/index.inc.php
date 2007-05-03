@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Identificativo non valido";
 $langWelcome = " corsi qui sotto sono di libero accesso. Gli altri corsi richiedono
-un Nome utente e una Password che si può ottenere cliccando sulla opzione \'iscrizione\'. I docenti e i collaboratori non iscritti possono creare un nuovo corso cliccando sull\'opzione \'iscrizione\' e poi \"Crea un corso\' (se la funzione è anilitata.";
+un Nome utente e una Password che si può ottenere cliccando sulla opzione \'iscrizione\'. I docenti e i collaboratori non iscritti possono creare un nuovo corso cliccando sull\'opzione \'iscrizione\' e poi \"Crea un corso\' (se la funzione è abilitata.";
 $langPass = "Password";
 $langEnter = "Entra";
 $langReg = "Iscrizione";
@@ -21,7 +21,7 @@ $lang_edit_my_course_list  = "Elenco dei corsi";
 $langAgenda  = "Prossimi eventi in agenda";
 $langValvas  = "Novità";
 $langUp  = "Livello superiore";
-$langCatList  = "Categoria";
+$langCatList  = "Categorie";
 $langCourseList  = "Corsi";
 $langHelptwo = "Aiuto";
 $langRegAll = "Iscrivi";

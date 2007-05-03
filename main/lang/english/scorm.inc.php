@@ -2,17 +2,17 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langScormVersion = "version";
-$langScormRestarted = "All the lessons are now incomplete.";
-$langScormNoNext = "This is the last lesson.";
-$langScormNoPrev = "This is the first lesson.";
+$langScormRestarted = "All the steps are now incomplete.";
+$langScormNoNext = "This is the latest step.";
+$langScormNoPrev = "This is the first step.";
 $langScormTime = "Time";
-$langScormNoOrder = "There is no given order, you can click onto any lesson.";
+$langScormNoOrder = "There is no given order, you can click on any step.";
 $langScormScore = "Score";
-$langScormLessonTitle = "Lesson title";
+$langScormLessonTitle = "Step title";
 $langScormStatus = "Status";
 $langScormToEnter = "To enter";
-$langScormFirstNeedTo = "you need first accomplish";
-$langScormThisStatus = "This lesson is now";
+$langScormFirstNeedTo = "you need first to accomplish";
+$langScormThisStatus = "This step is now";
 $langScormClose = "Terminate";
 $langScormRestart = "Restart";
 $langScormCompstatus = "Completed";
@@ -41,9 +41,10 @@ $AreYouSureToDeleteSteps = "Are you sure you want to delete these steps?";
 $Origin = "Origin";
 $Local = "Local";
 $Remote = "Remote";
-$FileToUpload = "File to upload";
-$ContentMaker = "Content Maker";
-$ContentProximity = "Content Proximity";
+$FileToUpload = "SCORM or AICC file to upload";
+$ContentMaker = "Course origin";
+$ContentProximity = "Course location";
 $UploadLocalFileFromGarbageDir = "Upload local file from main/garbage directory";
 $ThisItemIsNotExportable = "This item is not scorm compatible for the moment. That\'s why it is not exportable.";
+$MoveCurrentChapter = "Move the current chapter";
 ?>

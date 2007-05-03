@@ -45,4 +45,5 @@ $FileToUpload = "Ficheiro para enviar";
 $ContentMaker = "Creador de Contidos";
 $ContentProximity = "Proximidade de Contido";
 $UploadLocalFileFromGarbageDir = "Enviar ficheiro local desde o directorio principal/lixo";
+$ThisItemIsNotExportable = "Este elemento non é compatible con Scorm polo de agora. Esta é a razón de por que non é exportable.";
 ?>

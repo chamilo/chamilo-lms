@@ -22,7 +22,7 @@ $lang_doc_unvisible = "Your file is only visible for the teacher(s) of this cour
 $langDelLk = "Delete Link";
 $langMustBeRegisteredUser = "Only registered users of this course can publish documents.";
 $langListDel = "Delete list";
-$langWork = "Work";
+$langWork = "Assignments";
 $langCreateDir = "Create directory";
 $langNameDir = "Rename directory";
 $langFileExists = "File already exists";
@@ -31,7 +31,7 @@ $langCurrentDir = "current folder";
 $UploadADocument = "Upload a document";
 $EditToolOptions = "Edit Tool Options";
 $DocumentDeleted = "Document deleted";
-$SendMailBody = "A user posted a document in the Publications tool of your course.";
+$SendMailBody = "A user posted a document in the Assignments tool of your course.";
 $DirDelete = "Delete directory";
 $ValidateChanges = "Validate changes";
 ?>

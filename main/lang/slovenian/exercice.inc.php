@@ -218,4 +218,13 @@ $ExerciseStored = "Vaja je bila shranjena";
 $ChooseAtLeastOneCheckbox = "Izberite vsaj en pravilen odgovor";
 $ExerciseEdited = "Vaja je bila spremenjena";
 $ExerciseDeleted = "Vaja je bila odstranjena";
+$ClickToCommentAndGiveFeedback = "Kliknite naslednjo povezavo za ogled odgovora in podajanje povratne informacije";
+$OpenQuestionsAttempted = "Teèajnik je odgovarjal na vprašanje s prostim odgovorom";
+$AttemptDetails = "Podrobnosti poskusov";
+$TestAttempted = "Poskusi testov";
+$StudentName = "Teèajnikovo ime";
+$StudentEmail = "Teèajnikova e-pošta";
+$OpenQuestionsAttemptedAre = "Poskusi vprašanj s prostim odgovorom";
+$CourseName = "Ime teèaja";
+$UploadJpgPicture = "Naloži JPG sliko";
 ?>

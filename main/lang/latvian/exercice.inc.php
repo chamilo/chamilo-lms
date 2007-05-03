@@ -156,4 +156,6 @@ $langUseExistantQuestion = "Ievietot jau izveidotu jaut&#257;jumu";
 $freeAnswer = "Atbilde br&#299;v&#257; form&#257;";
 $notCorrectedYet = "Š&#299; atbilde v&#275;l nav tikusi izlabota. Tikm&#275;r J&#363;su rezult&#257;ts par šo jaut&#257;jumu ir \"0\", kas tiek pievienots kop&#275;jam rezult&#257;tam.";
 $adminHP = "<i>HotPotatoes</i> administr&#275;šana";
+$langNextQuestion = "N&#257;košais jaut&#257;jums";
+$CourseName = "Kursa nosaukums";
 ?>

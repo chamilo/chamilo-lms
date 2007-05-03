@@ -30,4 +30,5 @@ $langUserInfo = "Informação do Utilizador";
 $langUnregister = "Anular inscrição";
 $langAddAUser = "Acrescentar um utilizador";
 $UsersUnsubscribed = "Utilizadores não inscritos";
+$ThisStudentIsSubscribeThroughASession = "Este utilizador está inscrito neste curso através da sessão. Não pode editar as suas informações.";
 ?>

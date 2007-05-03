@@ -421,4 +421,7 @@ $SearchResults = "Resultados da busca";
 $SessionPast = "Passada";
 $SessionActive = "Ativa";
 $SessionFuture = "Ainda não iniciada";
+$DateFormatLongWithoutDay = "%d %B, %Y";
+$InvalidDirectoryPleaseCreateAnImagesFolder = "Pasta inválida: por favor, crie uma pasta com o nome images na seção documentos de modo que as imagens carregadas possam ser salvas nessa pasta.";
+$UsersConnectedToMySessions = "Ver todos os usuários conectados às minhas sessões";
 ?>

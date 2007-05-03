@@ -108,4 +108,5 @@ $PleaseCheckTheseValues = "Kérjük ellen&#337;rizze ezeket az értékeket";
 $PleaseGoBackToStep = "Kérem térjen vissza a következ&#337; lépéshez:";
 $DBSettingUpgradeIntro = "A frissít&#337;program visszaállítja és frissíti a Dokeos adatbázis(oka)t. Ezek végrehajtásához a megadott adatbázis és egyéb információkat fogja felhasználni. Mivel a szofverünk számos operációs rendszeren és környezetben futtatható, de nem minden környezetben tudtuk tesztelni, ezért nyomtatékosan javasoljuk, hogy végezzen teljes biztonségi mentést, miel&#337;tt továbbmenne a frissítéssel!";
 $ExtensionMBStringNotAvailable = "Az MBString kiterjesztés nem használható";
+$ExtensionMySQLNotAvailable = "A MySQL kiterjesztés nem érhet&#337; el";
 ?>

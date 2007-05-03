@@ -15,4 +15,5 @@ $langCombinedCourse = "Kombin&#275;tais kurss";
 $ToolIsNowVisible = "R&#299;ks ir redzams";
 $ToolIsNowHidden = "R&#299;ks ir sl&#275;pts";
 $EditLink = "Labot vietni (saiti)";
+$Forum = "Forums";
 ?>

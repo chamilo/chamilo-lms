@@ -23,11 +23,12 @@ $langInC = "in this course";
 $langFilled = "Not all fields were filled";
 $langUserNo = "User No";
 $langTaken = "is already in use. Please select a different ";
-$langTutor = "Tutor";
+$langTutor = "Coach";
 $langUnreg = "Unsubscribe";
 $langGroupUserManagement = "Group management";
 $langUserInfo = "user information";
 $langUnregister = "Unregister";
 $langAddAUser = "Add users";
 $UsersUnsubscribed = "The selected users have been unsubscribed from the course";
+$ThisStudentIsSubscribeThroughASession = "This student is subscribed in this course through a session. You cannot edit his informations";
 ?>

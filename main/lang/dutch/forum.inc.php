@@ -78,4 +78,5 @@ $MoveThread = "Verplaats discussie";
 $PostVisibilityChanged = "Zichtbaarheid van he bericht gewijzigd";
 $PostDeleted = "Bericht verwijderd";
 $MakeInvisible = "Maak onzichtbaar";
+$ThreadCanBeFoundHere = "De discussie kan hier gevonden worden";
 ?>

@@ -846,7 +846,7 @@ function update_Db_course($courseDbName)
 		author varchar(250) default '',
 		upload_date datetime NOT NULL default '0000-00-00 00:00:00',
 		last_upload_date datetime NOT NULL default '0000-00-00 00:00:00',
-		cat_id int(11) NOT NULL default 0,
+		cat_id int NOT NULL default 0,
 		PRIMARY KEY (id),
 		UNIQUE KEY UN_filename (filename)
 		)");

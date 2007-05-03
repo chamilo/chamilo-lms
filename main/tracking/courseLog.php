@@ -56,8 +56,6 @@ if(!$is_allowedToTrack)
 	Display :: display_footer();
 }
 
-
-
 //includes for SCORM and LP
 require_once('../newscorm/learnpath.class.php');
 require_once('../newscorm/learnpathItem.class.php');
@@ -148,6 +146,17 @@ function count_student_in_course()
 {
 	global $nbStudents;
 	return $nbStudents;
+}
+
+
+
+function sort_users($a, $b)
+{
+	global $tracking_column;
+	if($a[$tracking_column] > $b[$tracking_column])
+		return 1;
+	else 
+		return -1;
 }
 
 /*

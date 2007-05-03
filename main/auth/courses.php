@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 12175 2007-04-29 23:03:17Z yannoo $
+<?php // $Id: courses.php 12279 2007-05-03 16:04:53Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -409,7 +409,7 @@ function display_search_courses()
 					"</form>";
 	if (isset($_POST['search_course']))
 		{
-		echo "<p><b>".get_lang("SearchResultsFor")." ".$_POST['search_term']."</b><br />";
+		echo "<p><b>".get_lang("SearchResultsFor")." ".htmlentities($_POST['search_term'])."</b><br />";
 		$result_search_courses_array=search_courses($_POST['search_term']);
 		display_subscribe_to_courses($result_search_courses_array);
 		}

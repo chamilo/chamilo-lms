@@ -6711,7 +6711,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	$link_updates = array();
 	 	foreach($this->items as $index => $item){
 	 		
-	 		if(!in_array($item->type , array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK)))
+	 		if(!in_array($item->type , array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION)))
 	 		{
 		 		//get included documents from this item
 		 		if($item->type=='sco')

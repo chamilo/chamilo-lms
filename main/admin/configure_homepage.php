@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 12269 2007-05-03 14:17:37Z elixir_julian $
+<?php // $Id: configure_homepage.php 12272 2007-05-03 14:40:45Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -336,7 +336,7 @@ if(!empty($action))
 
 		if(empty($errorMsg))
 		{
-			header('Location: '.$_SERVER['PHP_SELF']);
+			header('Location: '.api_get_self());
 			exit();
 		}
 	}
@@ -376,7 +376,7 @@ if(!empty($action))
 
 		fclose($fp);
 
-		header('Location: '.$_SERVER['PHP_SELF']);
+		header('Location: '.api_get_self());
 		exit();
 	}
 	elseif($action == 'edit_top')

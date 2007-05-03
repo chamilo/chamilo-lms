@@ -414,7 +414,7 @@ else
 	session_register('from_learnpath');
 	$interbreadcrumb[] = array ("url" => "../scorm/scormdocument.php", "name" => get_lang('LearningPath'));
 	$interbreadcrumb[] = array ("url" => "../learnpath/learnpath_handler.php?learnpath_id=$learnpath_id", "name" => "{$therow['learnpath_name']}");
-	$interbreadcrumb[] = array ("url" => $_SERVER['PHP_SELF']."?action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no", "name" => "{$therow2['chapter_name']}");
+	$interbreadcrumb[] = array ("url" => api_get_self()."?action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no", "name" => "{$therow2['chapter_name']}");
 
 }
 

@@ -1614,7 +1614,7 @@ function show_add_post_form($action='', $id='', $form_values='')
 	global $origin;
 
 	// initiate the object
-	$form = new FormValidator('thread', 'post', $_SERVER['PHP_SELF'].'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post'].'&action='.$_GET['action'].'&origin='.$origin);
+	$form = new FormValidator('thread', 'post', api_get_self().'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post'].'&action='.$_GET['action'].'&origin='.$origin);
 	$form->setConstants(array('forum' => '5'));
 
 	// settting the form elements
@@ -1784,7 +1784,7 @@ function show_edit_post_form($current_post, $current_thread, $form_values='')
 	global $_user;
 
 	// initiate the object
-	$form = new FormValidator('edit_post', 'post', $_SERVER['PHP_SELF'].'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post']);
+	$form = new FormValidator('edit_post', 'post', api_get_self().'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post']);
 
 	// settting the form elements
 	$form->addElement('hidden', 'post_id', $current_post['post_id']);
@@ -2357,7 +2357,7 @@ function move_thread_form()
 	global $origin;
 
 	// initiate the object
-	$form = new FormValidator('movepost', 'post', $_SERVER['PHP_SELF'].'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&action='.$_GET['action'].'&origin='.$origin);
+	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&action='.$_GET['action'].'&origin='.$origin);
 	// the header for the form
 	$form->addElement('header', '', get_lang('MoveThread'));
 	// invisible form: the thread_id
@@ -2414,7 +2414,7 @@ function move_thread_form()
 function move_post_form()
 {
 	// initiate the object
-	$form = new FormValidator('movepost', 'post', $_SERVER['PHP_SELF'].'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post'].'&action='.$_GET['action'].'&post='.$_GET['post']);
+	$form = new FormValidator('movepost', 'post', api_get_self().'?forum='.$_GET['forum'].'&thread='.$_GET['thread'].'&post='.$_GET['post'].'&action='.$_GET['action'].'&post='.$_GET['post']);
 	// the header for the form
 	$form->addElement('header', '', get_lang('MovePost'));
 

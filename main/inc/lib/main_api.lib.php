@@ -1138,7 +1138,7 @@ function api_display_tool_view_option()
 	// check if the $_SERVER['REQUEST_URI'] contains already url parameters (thus a questionmark)
 	if (!strstr($_SERVER['REQUEST_URI'], "?"))
 	{
-		$sourceurl = $_SERVER['PHP_SELF']."?";
+		$sourceurl = api_get_self()."?";
 	}
 	else
 	{

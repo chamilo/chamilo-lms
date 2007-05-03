@@ -137,7 +137,7 @@ $therow=Database::fetch_array($result);
  ==================================================*/		  
 
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
-$interbreadcrumb[]= array ("url"=>$_SERVER['PHP_SELF']."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
+$interbreadcrumb[]= array ("url"=>api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
 
 switch($_GET['type']){
 	case 'chapter':

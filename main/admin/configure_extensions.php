@@ -320,7 +320,7 @@ Display::display_header($nameTool);
 						<img width="90%" src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_ppt2lp.jpg' ?>" />
 					</td>
 					<td align="center" width="50%">
-						<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
+						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<?php 
 						
 						$form = new FormValidator('ppt2lp');						
@@ -429,7 +429,7 @@ Display::display_header($nameTool);
 						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_search.jpg' ?>" />
 					</td>
 					<td align="center" width="50%">
-						<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
+						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<input type="hidden" name="extension_code" value="search" />
 						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActiveExtension') ?>" />
 						</form>
@@ -452,7 +452,7 @@ Display::display_header($nameTool);
 						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_serverstats.jpg' ?>" />
 					</td>
 					<td align="center" width="50%">
-						<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
+						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<input type="hidden" name="extension_code" value="serverstats" />
 						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActiveExtension') ?>" />
 						</form>
@@ -475,7 +475,7 @@ Display::display_header($nameTool);
 						<img src="<?php echo api_get_path(WEB_IMG_PATH).'screenshot_bandwidth.jpg' ?>" />
 					</td>
 					<td align="center" width="50%">
-						<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
+						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<input type="hidden" name="extension_code" value="bandwidthstats" />
 						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActiveExtension') ?>" />
 						</form>

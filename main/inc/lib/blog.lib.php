@@ -1300,7 +1300,7 @@ class Blog
 				$css_class = (($counter % 2) == 0) ? "row_odd" : "row_even";
 				$delete_icon = ($task['system_task'] == '1') ? "delete_na.gif" : "delete.gif";
 				$delete_title = ($task['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
-				$delete_link = ($task['system_task'] == '1') ? '#' : $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=delete&amp;task_id=' . $task['task_id'];
+				$delete_link = ($task['system_task'] == '1') ? '#' : api_get_self() . '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=delete&amp;task_id=' . $task['task_id'];
 				$delete_confirm = ($task['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"';
 
 				echo	'<tr class="' . $css_class . '" valign="top">',
@@ -1360,7 +1360,7 @@ class Blog
 			$css_class = (($counter % 2)==0) ? "row_odd" : "row_even";
 			$delete_icon = ($task['system_task'] == '1') ? "delete_na.gif" : "delete.gif";
 			$delete_title = ($task['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
-			$delete_link = ($task['system_task'] == '1') ? '#' : $_SERVER['PHP_SELF'] . '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=delete&amp;task_id=' . $task['task_id'];
+			$delete_link = ($task['system_task'] == '1') ? '#' : api_get_self() . '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=delete&amp;task_id=' . $task['task_id'];
 			$delete_confirm = ($task['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"';
 
 			echo	'<tr class="' . $css_class . '" valign="top">',
@@ -2322,8 +2322,8 @@ class Blog
 
 		//Start the week on monday
 		$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-		$backwardsURL = $_SERVER['PHP_SELF']."?blog_id=" . (int)$_GET['blog_id']."&amp;filter=" . $_GET['filter']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-		$forewardsURL = $_SERVER['PHP_SELF']."?blog_id=" . (int)$_GET['blog_id']."&amp;filter=" . $_GET['filter']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+		$backwardsURL = api_get_self()."?blog_id=" . (int)$_GET['blog_id']."&amp;filter=" . $_GET['filter']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+		$forewardsURL = api_get_self()."?blog_id=" . (int)$_GET['blog_id']."&amp;filter=" . $_GET['filter']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 		// Get posts for this month
 		$sql = "SELECT post.*, DAYOFMONTH(`date_creation`) as post_day, user.lastname, user.firstname FROM $tbl_blogs_posts post

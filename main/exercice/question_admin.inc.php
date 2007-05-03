@@ -24,7 +24,7 @@
 * 	It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 11066 2007-02-07 09:39:47Z elixir_julian $
+* 	@version $Id: question_admin.inc.php 12272 2007-05-03 14:40:45Z elixir_julian $
 */
 
 /*
@@ -48,12 +48,12 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 if(isset($_GET['editQuestion']))
 {
 	$objQuestion = Question::read ($_GET['editQuestion']);
-	$action = $_SERVER['PHP_SELF']."?modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
+	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 }
 else
 {
 	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
-	$action = $_SERVER['PHP_SELF']."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
+	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }
 
 if(is_object($objQuestion))

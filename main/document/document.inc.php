@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 12263 2007-05-03 13:34:40Z elixir_julian $
+<?php // $Id: document.inc.php 12272 2007-05-03 14:40:45Z elixir_julian $
 
 /*
 ==============================================================================
@@ -129,7 +129,7 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 	//add class="invisible" on invisible files
 	$visibility_class= ($visibility==0)?' class="invisible"':'';
 	//build download link (icon)
-	$forcedownload_link=($filetype=='folder')?$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid:$_SERVER['PHP_SELF'].'?action=download&amp;id='.$url_path.$req_gid;
+	$forcedownload_link=($filetype=='folder')?api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid:api_get_self().'?action=download&amp;id='.$url_path.$req_gid;
 	//folder download or file download?
 	$forcedownload_icon=($filetype=='folder')?'folder_zip.gif':'filesave.gif';
 	//prevent multiple clicks on zipped folder download
@@ -157,7 +157,7 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 		}
 	}
 	else {
-		$url=$_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&amp;curdirpath='.$url_path.$req_gid;
+		$url=api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$url_path.$req_gid;
 	}
 	//the little download icon
 	$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'><img width="16" height="16" src="'.api_get_path(WEB_CODE_PATH).'img/'.$forcedownload_icon.'" alt="" /></a>';

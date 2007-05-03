@@ -65,7 +65,7 @@ Display::display_header($nameTools,"Exercise");
 	$fck_attribute['Height'] = '200';
 	$fck_attribute['ToolbarSet'] = 'Small';
 	$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
-	$form = new FormValidator('feedbackform','post',$_SERVER['PHP_SELF']."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
+	$form = new FormValidator('feedbackform','post',api_get_self()."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
 	$obj_registration_form = new HTML_QuickForm('frmRegistration', 'POST');
 $renderer =& $obj_registration_form->defaultRenderer();
 $renderer->setElementTemplate(

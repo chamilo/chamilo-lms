@@ -98,7 +98,7 @@ if($view=="0001000") $nameTools=get_lang('LinksAccess');
 if($view=="0000100") $nameTools=get_lang('DocumentsAccess');
 if($view=="00000010") $nameTools=get_lang('ScormAccess');
 
-$interbreadcrumb[] = array ("url" => $_SERVER['PHP_SELF']."?view=0000000", "name" => get_lang('ToolName'));
+$interbreadcrumb[] = array ("url" => api_get_self()."?view=0000000", "name" => get_lang('ToolName'));
 
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 include("../resourcelinker/resourcelinker.inc.php");

@@ -246,7 +246,7 @@ if ($curDirName) /* if the $curDirName is empty, we're in the root point
 {
   ?>
   <!-- parent dir -->
-  <a href="<?php echo $_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&openDir='.$cmdParentDir.'&subdirs=yes'; ?>">
+  <a href="<?php echo api_get_self().'?'.api_get_cidreq().'&openDir='.$cmdParentDir.'&subdirs=yes'; ?>">
   <img src="../img/folder_up.gif" border="0" align="absbottom" hspace="5" alt="parent" />
   <?php echo get_lang("Up"); ?></a>&nbsp;
   <?php
@@ -327,19 +327,19 @@ if ($fileList)
     }
 
     if (file_exists($indexRoute1)) {
-      $urlFileName = $_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&openDir='.$cmdFileName.'&indexRoute=index.htm';
+      $urlFileName = api_get_self().'?'.api_get_cidreq().'&openDir='.$cmdFileName.'&indexRoute=index.htm';
       $image="<img src=\"./../img/scorm_logo.gif\" border=\"0\" align=\"absmiddle\" alt='scorm'>";
     } elseif (file_exists($indexRoute2)) {
-      $urlFileName = $_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&openDir='.$cmdFileName.'&indexRoute=index.html';
+      $urlFileName = api_get_self().'?'.api_get_cidreq().'&openDir='.$cmdFileName.'&indexRoute=index.html';
       $image="<img src=\"./../img/scorm_logo.gif\" border=\"0\" align=\"absmiddle\" alt='scorm'>";
     } elseif (file_exists($indexRouteA)) {
-      $urlFileName = $_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&openDir='.$cmdFileName.'&indexRoute=start.htm';
+      $urlFileName = api_get_self().'?'.api_get_cidreq().'&openDir='.$cmdFileName.'&indexRoute=start.htm';
       $image="<img src=\"./../img/scorm_logo.gif\" border=\"0\" align=\"absmiddle\" alt='scorm'>";
     } elseif (file_exists($manifestRoute)) {
-      $urlFileName = $_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&openDir='.$cmdFileName;
+      $urlFileName = api_get_self().'?'.api_get_cidreq().'&openDir='.$cmdFileName;
       $image="<img src=\"./../img/scorm_logo.gif\" border=\"0\" align=\"absmiddle\" alt='scorm'>";
     } else {
-      $urlFileName = $_SERVER['PHP_SELF'].'?'.api_get_cidreq().'&subdirs=yes&openDir='.$cmdFileName;
+      $urlFileName = api_get_self().'?'.api_get_cidreq().'&subdirs=yes&openDir='.$cmdFileName;
       $image="<img src=\"../img/dossier.gif\" border=\"0\"  hspace=\"3\" align=\"absmiddle\" alt='scorm'>";
     }
     

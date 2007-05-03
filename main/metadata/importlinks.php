@@ -141,7 +141,7 @@ if (isset($lcn))  // category_title
     }
 
     $interbreadcrumb[]= array(
-        'url' => $_SERVER['PHP_SELF'] . '?lcn=' . urlencode($lcn), 
+        'url' => api_get_self() . '?lcn=' . urlencode($lcn), 
         'name'=> get_lang('Continue') . ' ' . htmlspecialchars($lcn));
 }
 

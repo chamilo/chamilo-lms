@@ -1,4 +1,4 @@
-<?php // $Id: online_links.php 12269 2007-05-03 14:17:37Z elixir_julian $
+<?php // $Id: online_links.php 12272 2007-05-03 14:40:45Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -128,7 +128,7 @@ if($_POST['sent'])
 	}
 
 	mysql_close();
-	header('Location: '.$_SERVER['PHP_SELF']);
+	header('Location: '.api_get_self());
 	exit();
 }
 
@@ -140,7 +140,7 @@ if($action == 'delete')
 	api_sql_query($query,__FILE__,__LINE__);
 
 	mysql_close();
-	header('Location: '.$_SERVER['PHP_SELF']);
+	header('Location: '.api_get_self());
 	exit();
 }
 

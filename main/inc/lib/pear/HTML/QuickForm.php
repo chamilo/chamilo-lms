@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: QuickForm.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id: QuickForm.php 12272 2007-05-03 14:40:45Z elixir_julian $
 
 require_once('PEAR.php');
 require_once('HTML/Common.php');
@@ -257,7 +257,7 @@ class HTML_QuickForm extends HTML_Common {
     {
         HTML_Common::HTML_Common($attributes);
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
-        $action = ($action == '') ? $_SERVER['PHP_SELF'] : $action;
+        $action = ($action == '') ? api_get_self() : $action;
         $target = empty($target) ? array() : array('target' => $target);
         $attributes = array('action'=>$action, 'method'=>$method, 'name'=>$formName, 'id'=>$formName) + $target;
         $this->updateAttributes($attributes);

@@ -144,7 +144,7 @@ if (isset($workWith))  // now checked to be a valid path in scormdocument
 
 $mdObj->mdo_add_breadcrump_nav();  // see 'md_' . EID_TYPE . '.php'
 if (isset($sdi)) $interbreadcrumb[]= array(
-    'url' => $_SERVER['PHP_SELF'] . '?sdi=' . urlencode($sdi) .
+    'url' => api_get_self() . '?sdi=' . urlencode($sdi) .
         ($sdisub ? '&sdisub=' . urlencode($sdisub) :
         	($sdiall ? '&sdisub='.UZYX : '')),
     'name'=> get_lang('Continue') . ' ' . $sdi .

@@ -3749,7 +3749,7 @@ class learnpath {
 		
 		for($i = 0; $i < count($arrLP); $i++)
 		{
-			$menu_page = $_SERVER['PHP_SELF'] . '?cidReq=' . $_GET['cidReq'] . '&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $_SESSION['oLP']->lp_id;
+			$menu_page = api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $_SESSION['oLP']->lp_id;
 			if(file_exists("../img/lp_" . $arrLP[$i]['item_type'] . ".png"))
 			{
 				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $arrLP[$i]['title'] . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".png', '../img/lp_" . $arrLP[$i]['item_type'] . ".png');\n";
@@ -5001,7 +5001,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 
 		require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 		
-		$form = new FormValidator('form','POST',$_SERVER["PHP_SELF"]."?".$_SERVER["QUERY_STRING"]);
+		$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"]);
 		
 		$defaults["title"]=html_entity_decode($item_title);
 		$defaults["description"]=html_entity_decode($item_description);
@@ -5271,7 +5271,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			*/
 			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			
-			$form = new FormValidator('form','POST',$_SERVER["PHP_SELF"]."?".$_SERVER["QUERY_STRING"]);
+			$form = new FormValidator('form','POST',api_get_self()."?".$_SERVER["QUERY_STRING"]);
 			
 			$defaults["title"]=html_entity_decode($item_title);
 			$defaults["description"]=html_entity_decode($item_description);			

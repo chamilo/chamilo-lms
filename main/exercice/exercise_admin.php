@@ -60,7 +60,7 @@ $objExercise = new Exercise();
  *********************/
 if(isset($_GET['exerciseId']))
 {
-	$form = new FormValidator('exercise_admin', 'post', $_SERVER['PHP_SELF'].'?exerciseId='.$_GET['exerciseId']);
+	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?exerciseId='.$_GET['exerciseId']);
 	$objExercise -> read (intval($_GET['exerciseId']));
 	$form -> addElement ('hidden','edit','true');
 }else

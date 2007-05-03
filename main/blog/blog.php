@@ -247,10 +247,10 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 			<tr>
 				<td class="blog_menu">
 					<ul>
-						<li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('Home') ?>"><?php echo get_lang('Home') ?></a></li>
-						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_add')) { ?><li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo get_lang('NewPost') ?></a></li><?php } ?>
-						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'task_management')) { ?><li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>"><?php echo get_lang('TaskManager') ?></a></li> <?php } ?>
-						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'member_management')) { ?><li><a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>"><?php echo get_lang('MemberManager') ?></a></li><?php } ?>
+						<li><a href="<?php echo api_get_self(); ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('Home') ?>"><?php echo get_lang('Home') ?></a></li>
+						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_add')) { ?><li><a href="<?php echo api_get_self; ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo get_lang('NewPost') ?></a></li><?php } ?>
+						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'task_management')) { ?><li><a href="<?php echo api_get_self(); ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>"><?php echo get_lang('TaskManager') ?></a></li> <?php } ?>
+						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'member_management')) { ?><li><a href="<?php echo api_get_self(); ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>"><?php echo get_lang('MemberManager') ?></a></li><?php } ?>
 					</ul>
 				</td>
 			</tr>
@@ -416,7 +416,7 @@ switch ($current_page)
 			if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'role_management'))
 			{
 			?>
-				<a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo get_lang('RightsManager') ?></a>
+				<a href="<?php echo api_get_self(); ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo get_lang('RightsManager') ?></a>
 			<?php
 			}
 		}

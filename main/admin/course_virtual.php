@@ -1,4 +1,4 @@
-<?php // $Id: course_virtual.php 10811 2007-01-22 08:26:40Z elixir_julian $ 
+<?php // $Id: course_virtual.php 12272 2007-05-03 14:40:45Z elixir_julian $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -194,7 +194,7 @@ function display_create_virtual_course_form()
 	?>
 	<p><?php echo $message;	?></p>
 	<b><?php echo get_lang('MandatoryFields') ?></b>
-	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>">
+	<form method="post" action="<?php echo api_get_self(); ?>">
 	<table>
 	<tr valign="top">
 	<td colspan="2">

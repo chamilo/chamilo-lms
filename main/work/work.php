@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 12263 2007-05-03 13:34:40Z elixir_julian $
+*  	@version $Id: work.php 12272 2007-05-03 14:40:45Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -817,7 +817,7 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 			require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 			require_once (api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 			
-			$form = new FormValidator('form','POST',$_SERVER['PHP_SELF']."?curdirpath=$cur_dir_path&origin=$origin",'','enctype="multipart/form-data"');
+			$form = new FormValidator('form','POST',api_get_self()."?curdirpath=$cur_dir_path&origin=$origin",'','enctype="multipart/form-data"');
 			
 			if(!empty($error_message)) Display::display_error_message($error_message);
 

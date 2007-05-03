@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 12263 2007-05-03 13:34:40Z elixir_julian $
+<?php //$Id: agenda.inc.php 12272 2007-05-03 14:40:45Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -147,8 +147,8 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 	$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
 	//Start the week on monday
 	$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-	$backwardsURL = $_SERVER['PHP_SELF']."?".api_get_cidreq()."&coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-	$forewardsURL = $_SERVER['PHP_SELF']."?".api_get_cidreq()."&coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+	$backwardsURL = api_get_self()."?".api_get_cidreq()."&coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+	$forewardsURL = api_get_self()."?".api_get_cidreq()."&coursePath=".$_GET['coursePath']."&amp;courseCode=".$_GET['courseCode']."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 	echo 	"<table id=\"smallcalendar\">\n",
 			"<tr class=\"title\">\n",
@@ -233,8 +233,8 @@ function display_monthcalendar($month, $year)
   	//Start the week on monday
 	$startdayofweek = $dayone['wday']<>0 ? ($dayone['wday']-1) : 6;
 
-	$backwardsURL = $_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=$origin&amp;month=".($month==1 ? 12 : $month-1)."&amp;year=".($month==1 ? $year-1 : $year);
-	$forewardsURL = $_SERVER['PHP_SELF']."?".api_get_cidreq()."&origin=$origin&amp;month=".($month==12 ? 1 : $month+1)."&amp;year=".($month==12 ? $year+1 : $year);
+	$backwardsURL = api_get_self()."?".api_get_cidreq()."&origin=$origin&amp;month=".($month==1 ? 12 : $month-1)."&amp;year=".($month==1 ? $year-1 : $year);
+	$forewardsURL = api_get_self()."?".api_get_cidreq()."&origin=$origin&amp;month=".($month==12 ? 1 : $month+1)."&amp;year=".($month==12 ? $year+1 : $year);
 
 	   $maand_array_maandnummer=$month-1;
 
@@ -1895,7 +1895,7 @@ function show_add_form($id = '')
 ?>
 
 <!-- START OF THE FORM  -->
-<form action="<?php echo $_SERVER['PHP_SELF'].'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
+<form action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
 <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
 

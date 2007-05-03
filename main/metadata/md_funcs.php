@@ -88,7 +88,7 @@ function define_htt($htt_file, $urlp, $course_path)
     if ($xhtDoc->htt_error) 
         give_up('Templates file "' . $htt_file . '": ' . $xhtDoc->htt_error);
     
-    $xhtDoc->xht_param['self'] = $_SERVER['PHP_SELF'] . $urlp;
+    $xhtDoc->xht_param['self'] = api_get_self() . $urlp;
     
     $xhtDoc->xht_param['dateTime'] = date('Y-m-d');
     

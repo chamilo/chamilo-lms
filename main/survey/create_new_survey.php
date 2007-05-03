@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 12106 2007-04-24 13:17:19Z elixir_julian $
+* 	@version $Id: create_new_survey.php 12272 2007-05-03 14:40:45Z elixir_julian $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -108,7 +108,7 @@ else
 }
 
 // initiate the object
-$form = new FormValidator('survey', 'post', $_SERVER['PHP_SELF'].'?action='.$_GET['action'].'&survey_id='.$_GET['survey_id']);
+$form = new FormValidator('survey', 'post', api_get_self().'?action='.$_GET['action'].'&survey_id='.$_GET['survey_id']);
 
 // settting the form elements
 if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET['survey_id']))

@@ -16,7 +16,7 @@ event_access_tool(TOOL_LEARNPATH);
 if (! $is_allowed_in_course) api_not_allowed();
 
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
-$interbreadcrumb[]= array ("url"=>$_SERVER['PHP_SELF']."?action=admin_view&lp_id=$learnpath_id", "name" => $_SESSION['oLP']->get_name());
+$interbreadcrumb[]= array ("url"=>api_get_self()."?action=admin_view&lp_id=$learnpath_id", "name" => $_SESSION['oLP']->get_name());
 
 Display::display_header(null,'Path');
 

@@ -587,7 +587,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 			$error=true;
 			echo '<div style="color:#cc0033; background-color:white; font-weight:bold; text-align:center;">';
 			echo get_lang('Warning').':<br />';
-			printf(get_lang('NoWritePermissionPleaseReadInstallGuide'),'</font><a href="../../documentation/installation_guide.html" target="blank">','</a> <font color="#cc0033">');
+			printf(get_lang('NoWritePermissionPleaseReadInstallGuide'),'</font><a href="../../documentation/Dokeos18InstallManual.pdf" target="blank">','</a> <font color="#cc0033">');
 			echo '<ul>';
 			foreach ($notwritable as $value)
 			{

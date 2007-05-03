@@ -158,6 +158,10 @@ switch($_REQUEST['action'])
 {
 	case 'add_item':
 		
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
+		
 		if($debug > 0) error_log('New LP - add item action triggered', 0);
 		
 		if(!$lp_found){ error_log('New LP - No learnpath given for add item', 0); require('lp_list.php'); }
@@ -205,6 +209,10 @@ switch($_REQUEST['action'])
 		break;
 	
 	case 'add_lp':
+	
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		
 		if($debug > 0) error_log('New LP - add_lp action triggered', 0);
 		
@@ -244,6 +252,11 @@ switch($_REQUEST['action'])
 		break;
 		
 	case 'admin_view':
+	
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
+		
 		if($debug>0) error_log('New LP - admin_view action triggered',0);
 		
 		if(!$lp_found){ error_log('New LP - No learnpath given for admin_view', 0); require('lp_list.php'); }
@@ -257,6 +270,11 @@ switch($_REQUEST['action'])
 		break;
 	
 	case 'build':
+	
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
+	
 		if($debug > 0) error_log('New LP - build action triggered', 0);
 		
 		if(!$lp_found){ error_log('New LP - No learnpath given for build', 0); require('lp_list.php'); }
@@ -270,6 +288,10 @@ switch($_REQUEST['action'])
 		break;
 		
 	case 'delete_item':
+	
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		
 		if($debug > 0) error_log('New LP - delete item action triggered', 0);
 		
@@ -298,6 +320,10 @@ switch($_REQUEST['action'])
 		break;
 		
 	case 'edit_item':
+	
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		
 		if($debug > 0) error_log('New LP - edit item action triggered', 0);
 		
@@ -331,6 +357,10 @@ switch($_REQUEST['action'])
 		break;
 	
 	case 'edit_item_prereq':
+	
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		
 		if($debug > 0) error_log('New LP - edit item prereq action triggered', 0);
 		
@@ -350,6 +380,10 @@ switch($_REQUEST['action'])
 		break;
 		
 	case 'move_item':
+		
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		
 		if($debug > 0) error_log('New LP - move item action triggered', 0);
 		
@@ -380,6 +414,11 @@ switch($_REQUEST['action'])
 		break;
 		
 	case 'view_item':
+	
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}		
+		
 		if($debug>0) error_log('New LP - view_item action triggered', 0);
 		
 		if(!$lp_found){ error_log('New LP - No learnpath given for view item', 0); require('lp_list.php'); }
@@ -393,6 +432,9 @@ switch($_REQUEST['action'])
 		break;	
 		
 	case 'upload':
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		if($debug>0) error_log('New LP - upload action triggered',0);
 		$cwdir = getcwd();
 		require('lp_upload.php');
@@ -401,6 +443,9 @@ switch($_REQUEST['action'])
 		require('lp_list.php');
 		break;
 	case 'export':
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		if($debug>0) error_log('New LP - export action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for export',0); require('lp_list.php'); }
 		else{
@@ -409,6 +454,9 @@ switch($_REQUEST['action'])
 		}
 		break;
 	case 'delete':
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		if($debug>0) error_log('New LP - delete action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for delete',0); require('lp_list.php'); }
 		else{
@@ -421,6 +469,9 @@ switch($_REQUEST['action'])
 		}
 		break;
 	case 'toggle_visible': //change lp visibility
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		if($debug>0) error_log('New LP - publish action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for publish',0); require('lp_list.php'); }
 		else{
@@ -429,6 +480,9 @@ switch($_REQUEST['action'])
 		}
 		break;
 	case 'edit':
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		if($debug>0) error_log('New LP - edit action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for edit',0); require('lp_list.php'); }
 		else{
@@ -437,6 +491,9 @@ switch($_REQUEST['action'])
 		}
 		break;
 	case 'update_lp':
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		if($debug>0) error_log('New LP - update_lp action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for edit',0); require('lp_list.php'); }
 		else{
@@ -449,6 +506,9 @@ switch($_REQUEST['action'])
 		}	
 		break;
 	case 'add_sub_item': //add an item inside a chapter
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		if($debug>0) error_log('New LP - add sub item action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for add sub item',0); require('lp_list.php'); }
 		else{
@@ -465,6 +525,9 @@ switch($_REQUEST['action'])
 		break;
 	case 'deleteitem':
 	case 'delete_item':
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		if($debug>0) error_log('New LP - delete item action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for delete item',0); require('lp_list.php'); }
 		else{
@@ -477,6 +540,9 @@ switch($_REQUEST['action'])
 		break;
 	case 'edititemprereq':
 	case 'edit_item_prereq':
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
 		if($debug>0) error_log('New LP - edit item prereq action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for edit item prereq',0); require('lp_list.php'); }
 		else{

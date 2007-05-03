@@ -2386,6 +2386,12 @@ class learnpath {
     		$lp_item_type = $row['litype'];
     		$lp_item_path = $row['lipath'];
     		$lp_item_params = $row['liparams'];
+    		if(empty($lp_item_params))
+    		{
+    			list($lp_item_path,$lp_item_params) = explode('?',$lp_item_path);
+    		}
+    		$lp_item_params = '?'.$lp_item_params;
+    		
     		//add ? if none - left commented to give freedom to scorm implementation
     		//if(substr($lp_item_params,0,1)!='?'){
     		//	$lp_item_params = '?'.$lp_item_params;
@@ -2440,15 +2446,16 @@ class learnpath {
 			    				if(!is_file($sys_course_path.'/scorm/'.$lp_path.'/'.$lp_item_path))
 			    				{//if file not found
 			    					$decoded = html_entity_decode($lp_item_path);
+			    					list($decoded) = explode('?',$decoded);
 			    					if(!is_file($sys_course_path.'/scorm/'.$lp_path.'/'.$decoded))
 			    					{
 			    						require_once('resourcelinker.inc.php');
-    					$file = rl_get_resource_link_for_learnpath(api_get_course_id(),$this->get_id(),$item_id);
-    					$tmp_array=explode("/",$file);
-    					$document_name=$tmp_array[count($tmp_array)-1];
-    					if(strpos($document_name,'_DELETED_')){
-    						$file = 'blank.php?error=document_deleted';
-    					}
+				    					$file = rl_get_resource_link_for_learnpath(api_get_course_id(),$this->get_id(),$item_id);
+				    					$tmp_array=explode("/",$file);
+				    					$document_name=$tmp_array[count($tmp_array)-1];
+				    					if(strpos($document_name,'_DELETED_')){
+				    						$file = 'blank.php?error=document_deleted';
+				    					}
 
 			    					}
 			    					else

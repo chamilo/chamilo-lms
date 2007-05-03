@@ -1934,14 +1934,17 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		$sort = api_max_sort_value('0', $_user['user_id']);
-
+		
+		require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+		$i_course_sort = CourseManager :: userCourseSort($uidCreator,$courseSysCode);
+		
 		$sql = "INSERT INTO ".$TABLECOURSUSER . " SET
 					course_code = '".addslashes($courseSysCode) . "',
 					user_id = '".$uidCreator . "',
 					status = '1',
 					role = '".lang2db('Professor') . "',
 					tutor_id='1',
-					sort='". ($sort +1) . "',
+					sort='". ($i_course_sort) . "',
 					user_course_cat='0'";
 		api_sql_query($sql, __FILE__, __LINE__);
 

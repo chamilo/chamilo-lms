@@ -309,12 +309,12 @@ class CourseManager
 				}
 				else
 				{
-					$max_sort = api_max_sort_value('0', $user_id);
+					$course_sort = CourseManager :: userCourseSort($user_id,$course_code);
 					$add_course_user_entry_sql = "INSERT INTO ".$course_user_table."
 										SET `course_code` = '$course_code',
 										`user_id`    = '$user_id',
 											`status`    = '".$status."',
-											`sort`  =   '". ($max_sort +1)."'";
+											`sort`  =   '". ($course_sort)."'";
 					$result = api_sql_query($add_course_user_entry_sql);
 					if ($result)
 					{
@@ -1504,5 +1504,69 @@ class CourseManager
 			//TODO trigger exception in a try-catch
 		}
 	}
+	
+	function userCourseSort($user_id,$course_code){
+	
+		$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
+		$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		
+		$sql = 'SELECT title FROM '.$TABLECOURSE.' WHERE code="'.$course_code.'"';
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$course_title = mysql_result($result,0,0);
+		
+		$sql = 'SELECT course.code as code, course.title as title, cu.sort as sort FROM '.$TABLECOURSUSER.' as cu, '.$TABLECOURSE.' as course 
+				WHERE course.code = cu.course_code 
+				AND user_id = "'.$user_id.'" 
+				AND user_course_cat=0 ORDER BY cu.sort';
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		
+		$s_course_title_precedent = '';
+		$counter = 0;
+		$b_find_course = false;
+		$i_course_sort = 1;
+		
+		while($courses=mysql_fetch_array($result)){
+			
+			if($s_course_title_precedent == ''){
+				$s_course_title_precedent = $courses['title'];
+			}
+	
+			if(strcasecmp($s_course_title_precedent,$course_title)<0){
+				
+				$b_find_course = true;
+				$i_course_sort = $courses['sort'];
+	
+				$s_course_code = $courses['code'];
+				if($counter == 0){
+					$sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'"  AND user_course_cat="0" AND sort > "'.$i_course_sort.'"';
+					$i_course_sort++;
+				}
+				else{
+					$sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'"  AND user_course_cat="0" AND sort >= "'.$i_course_sort.'"';
+				}
+	
+				api_sql_query($sql, __FILE__, __LINE__);
+				break;
+			}
+			
+			else{
+				$s_course_title_precedent = $courses['title'];
+			}
+			
+			$counter++;
+		}
+		
+		//We must register the course in the beginning of the list
+		if(mysql_num_rows($result)>0 && !$b_find_course){
+			$sql_max = 'SELECT min(sort) as min_sort FROM '.$TABLECOURSUSER.' WHERE user_id="'.$user_id.'" AND user_course_cat="0"';
+			$result_min_sort=api_sql_query($sql_max);
+			$i_course_sort = mysql_result($result_min_sort,0,0);
+			
+			$sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'"  AND user_course_cat="0"';
+			api_sql_query($sql);
+		}
+		return $i_course_sort;
+	}
+	
 } //end class CourseManager
 ?>

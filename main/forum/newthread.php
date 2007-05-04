@@ -22,23 +22,23 @@
 */
 
 /**
-*	These files are a complete rework of the forum. The database structure is 
+*	These files are a complete rework of the forum. The database structure is
 *	based on phpBB but all the code is rewritten. A lot of new functionalities
 *	are added:
 * 	- forum categories and forums can be sorted up or down, locked or made invisible
 *	- consistent and integrated forum administration
-* 	- forum options: 	are students allowed to edit their post? 
+* 	- forum options: 	are students allowed to edit their post?
 * 						moderation of posts (approval)
 * 						reply only forums (students cannot create new threads)
 * 						multiple forums per group
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*	
+*
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
-* 
+*
 * 	@package dokeos.forum
 */
 
@@ -50,7 +50,7 @@
  * merge files and test it all over again. So for the moment, please do not
  * touch the code
  * 							-- Patrick Cool <patrick.cool@UGent.be>
- ************************************************************************** 
+ **************************************************************************
  */
 
 /*
@@ -66,19 +66,30 @@
 	Language Initialisation
 -----------------------------------------------------------
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'forum';
+
+// including the global dokeos file
 require ('../inc/global.inc.php');
+
+// the section (tabs)
+$this_section=SECTION_COURSES;
+
+// including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('Forum');
 
+// configuration for FCKeditor
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Middle';
 $fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
-if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
+if(!api_is_allowed_to_edit())
+{
+	$fck_attribute['Config']['UserStatus'] = 'student';
+}
 /*
 -----------------------------------------------------------
 	Including necessary files
@@ -106,7 +117,7 @@ if(isset($_GET['origin']))
 	Retrieving forum and forum categorie information
 -----------------------------------------------------------
 */
-$current_forum=get_forum_information($_GET['forum']); // note: this has to be validated that it is an existing forum. 
+$current_forum=get_forum_information($_GET['forum']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 
 /*
@@ -126,7 +137,7 @@ $interbreadcrumb[]=array("url" => "newthread.php?forum=".$_GET['forum'],"name" =
 */
 if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources'))
 {
-	$_SESSION['formelements']=$_POST; 
+	$_SESSION['formelements']=$_POST;
 	$_SESSION['origin']=$_SERVER['REQUEST_URI'];
 	$_SESSION['breadcrumbs']=$interbreadcrumb;
 	header("Location: ../resourcelinker/resourcelinker.php");
@@ -140,7 +151,7 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resour
 if($origin=='learnpath')
 {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
-} else 
+} else
 {
 	Display :: display_header();
 	api_display_tool_title($nameTools);
@@ -148,15 +159,15 @@ if($origin=='learnpath')
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 /*
 -----------------------------------------------------------
-	Is the user allowed here? 
+	Is the user allowed here?
 -----------------------------------------------------------
 */
-// the user is not allowed here if: 
+// the user is not allowed here if:
 // 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 // 3. new threads are not allowed and the user is not a course manager
 // 4. anonymous posts are not allowed and the user is not logged in
-// I have split this is several pieces for clarity.  
+// I have split this is several pieces for clarity.
 
 if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0)))
 {
@@ -202,7 +213,7 @@ if($origin != 'learnpath')
 	echo "\t</tr>\n";
 }
 
-// the forum 
+// the forum
 echo "\t<tr class=\"forum_header\">\n";
 echo "\t\t<td colspan=\"2\">".$current_forum['forum_title']."<br />";
 echo '<span>'.$current_forum['forum_comment'].'</span>';

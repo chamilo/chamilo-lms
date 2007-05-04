@@ -22,23 +22,23 @@
 */
 
 /**
-*	These files are a complete rework of the forum. The database structure is 
+*	These files are a complete rework of the forum. The database structure is
 *	based on phpBB but all the code is rewritten. A lot of new functionalities
 *	are added:
 * 	- forum categories and forums can be sorted up or down, locked or made invisible
 *	- consistent and integrated forum administration
-* 	- forum options: 	are students allowed to edit their post? 
+* 	- forum options: 	are students allowed to edit their post?
 * 						moderation of posts (approval)
 * 						reply only forums (students cannot create new threads)
 * 						multiple forums per group
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*	
+*
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
-* 
+*
 * 	@package dokeos.forum
 */
 
@@ -50,7 +50,7 @@
  * merge files and test it all over again. So for the moment, please do not
  * touch the code
  * 							-- Patrick Cool <patrick.cool@UGent.be>
- ************************************************************************** 
+ **************************************************************************
  */
 
 
@@ -66,17 +66,27 @@
 	Language Initialisation
 -----------------------------------------------------------
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'forum';
+
+// including the global dokeos file
 require ('../inc/global.inc.php');
 
+// the section (tabs)
+$this_section=SECTION_COURSES;
+
+// configuration for FCKeditor
 $fck_attribute['Width'] = '100%';
 $fck_attribute['Height'] = '300';
 $fck_attribute['ToolbarSet'] = 'Middle';
 $fck_attribute['Config']['IMUploadPath'] = 'upload/forum/';
 $fck_attribute['Config']['FlashUploadPath'] = 'upload/forum/';
-if(!api_is_allowed_to_edit()) $fck_attribute['Config']['UserStatus'] = 'student';
+if(!api_is_allowed_to_edit())
+{
+	$fck_attribute['Config']['UserStatus'] = 'student';
+}
 
+// including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('Forum');
@@ -106,11 +116,11 @@ include('forumfunction.inc.php');
 	Retrieving forum and forum categorie information
 -----------------------------------------------------------
 */
-// we are getting all the information about the current forum and forum category. 
+// we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
 $current_thread=get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
-$current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum. 
+$current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 
 /*
@@ -131,7 +141,7 @@ $interbreadcrumb[]=array("url" => "reply.php?forum=".$_GET['forum']."&amp;thread
 */
 if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources'))
 {
-	$_SESSION['formelements']=$_POST; 
+	$_SESSION['formelements']=$_POST;
 	$_SESSION['origin']=$_SERVER['REQUEST_URI'];
 	$_SESSION['breadcrumbs']=$interbreadcrumb;
 	header("Location: ../resourcelinker/resourcelinker.php");
@@ -147,8 +157,8 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resour
 if($origin=='learnpath')
 {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
-} 
-else 
+}
+else
 {
 	Display :: display_header();
 	api_display_tool_title($nameTools);
@@ -157,7 +167,7 @@ else
 
 /*
 -----------------------------------------------------------
-	Is the user allowed here? 
+	Is the user allowed here?
 -----------------------------------------------------------
 */
 // the user is not allowed here if
@@ -165,7 +175,7 @@ else
 // 2. the forumcategory, forum or thread is locked (locked <>0)
 // 3. if anonymous posts are not allowed
 // The only exception is the course manager
-// I have split this is several pieces for clarity.  
+// I have split this is several pieces for clarity.
 //if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0) OR ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)))
 if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0)))
 {
@@ -202,7 +212,7 @@ echo '<span>'.$current_forum_category['cat_comment'].'</span>';
 echo "</th>\n";
 echo "\t</tr>\n";
 
-// the forum 
+// the forum
 echo "\t<tr class=\"forum_header\">\n";
 echo "\t\t<td colspan=\"2\">";
 echo '<a href="viewforum.php?forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.$current_forum['forum_title'].'</a><br />';

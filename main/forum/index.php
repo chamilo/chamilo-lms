@@ -22,23 +22,23 @@
 */
 
 /**
-*	These files are a complete rework of the forum. The database structure is 
+*	These files are a complete rework of the forum. The database structure is
 *	based on phpBB but all the code is rewritten. A lot of new functionalities
 *	are added:
 * 	- forum categories and forums can be sorted up or down, locked or made invisible
 *	- consistent and integrated forum administration
-* 	- forum options: 	are students allowed to edit their post? 
+* 	- forum options: 	are students allowed to edit their post?
 * 						moderation of posts (approval)
 * 						reply only forums (students cannot create new threads)
 * 						multiple forums per group
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*	
+*
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
-* 
+*
 * 	@package dokeos.forum
 */
 
@@ -50,7 +50,7 @@
  * merge files and test it all over again. So for the moment, please do not
  * touch the code
  * 							-- Patrick Cool <patrick.cool@UGent.be>
- ************************************************************************** 
+ **************************************************************************
  */
 
 /*
@@ -63,9 +63,16 @@
 	Language Initialisation
 -----------------------------------------------------------
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'forum';
+
+// including the global dokeos file
 require ('../inc/global.inc.php');
+
+// the section (tabs)
+$this_section=SECTION_COURSES;
+
+// including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('Forum');
@@ -154,7 +161,7 @@ if(is_array($all_groups))
 {
 	foreach ($all_groups as $group)
 	{
-		$all_groups[$group['id']]=$group; 
+		$all_groups[$group['id']]=$group;
 	}
 }
 
@@ -201,7 +208,7 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 		echo "</th>\n";
 	}
 	echo "\t</tr>\n";
-	
+
 	// step 4: the interim headers (for the forum)
 	echo "\t<tr class=\"forum_header\">\n";
 	echo "\t\t<td colspan='2'>".get_lang('Forum')."</td>\n";
@@ -213,16 +220,16 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 		echo "\t\t<td>".get_lang('Actions')."</td>\n";
 	}
 	echo "\t</tr>\n";
-	
+
 	// the forums in this category
 	$forums_in_category=get_forums_in_category($forum_category['cat_id']);
-	
+
 	// step 5: we display all the forums in this category.
 	$forum_count=0;
 	foreach ($forum_list as $key=>$forum)
 	{
-		// Here we clean the whatnew_post_info array a little bit because to display the icon we 
-		// test if $whatsnew_post_info[$forum['forum_id']] is empty or not. 
+		// Here we clean the whatnew_post_info array a little bit because to display the icon we
+		// test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
 		foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array)
 		{
 			if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id]))
@@ -231,7 +238,7 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 				unset($_SESSION['whatsnew_post_info'][$forum['forum_id']][$key_thread_id]);
 			}
 		}
-		
+
 		// note: this can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
 		if (prepare4display($forum['forum_category'])==prepare4display($forum_category['cat_id']))
 		{
@@ -246,14 +253,14 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 
 			// SHOULD WE SHOW THIS PARTICULAR FORUM
 			// you are teacher => show forum
-			
+
 			if (api_is_allowed_to_edit())
 			{
 				//echo 'teacher';
 				$show_forum=true;
 			}
 			// you are not a teacher
-			else 
+			else
 			{
 				//echo 'student';
 				// it is not a group forum => show forum (invisible forums are already left out see get_forums function)
@@ -263,7 +270,7 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 					$show_forum=true;
 				}
 				// it is a group forum
-				else 
+				else
 				{
 					//echo '-groepsforum';
 					// it is a group forum but it is public => show
@@ -273,7 +280,7 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 						//echo '-publiek';
 					}
 					// it is a group forum and it is private
-					else 
+					else
 					{
 						//echo '-prive';
 						// it is a group forum and it is private but the user is member of the group
@@ -282,17 +289,17 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 							//echo '-is lid';
 							$show_forum=true;
 						}
-						else 
+						else
 						{
 							//echo '-is GEEN lid';
 							$show_forum=false;
 						}
 					}
-					
-				}			
+
+				}
 			}
 			//echo '<hr>';
-			
+
 			if ($show_forum)
 			{
 				$form_count++;
@@ -302,24 +309,24 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 				{
 					if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']]))
 					{
-						echo icon('../img/forumgroupnew.gif');	
+						echo icon('../img/forumgroupnew.gif');
 					}
-					else 
+					else
 					{
-						echo icon('../img/forumgroup.gif');	
+						echo icon('../img/forumgroup.gif');
 					}
 				}
-				else 
+				else
 				{
 					if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']]))
 					{
-						echo icon('../img/forum.gif');	
+						echo icon('../img/forum.gif');
 					}
-					else 
+					else
 					{
-						echo icon('../img/forum.gif');	
+						echo icon('../img/forum.gif');
 					}
-					
+
 				}
 				echo "</td>\n";
 				if ($forum['forum_of_group']<>'0')
@@ -327,11 +334,11 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 					$group_title=substr($all_groups[$forum['forum_of_group']]['name'],0,30);
 					$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$all_groups[$forum['forum_of_group']]['id'].'" class="forum_group_link">'.$group_title.'</a>)';
 				}
-				else 
+				else
 				{
 					$forum_title_group_addition='';
 				}
-				
+
 				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
 				//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 				// the number of topics and posts
@@ -341,21 +348,21 @@ foreach ($forum_categories_list as $forum_category_key => $forum_category)
 				if ($forum['last_poster_name']<>'')
 				{
 					$name=$forum['last_poster_name'];
-					$poster_id=0; 
+					$poster_id=0;
 				}
-				else 
+				else
 				{
 					$name=$forum['last_poster_firstname'].' '.$forum['last_poster_lastname'];
 					$poster_id=$forum['last_poster_id'];
-				}				
+				}
 				echo "\t\t<td NOWRAP>";
 				if (!empty($forum['last_post_id']))
 				{
 					echo $forum['last_post_date']."<br /> ".get_lang('By').' '.display_user_link($poster_id, $name);
 				}
 				echo "</td>\n";
-				
-				
+
+
 				if (api_is_allowed_to_edit())
 				{
 					echo "\t\t<td NOWRAP>";

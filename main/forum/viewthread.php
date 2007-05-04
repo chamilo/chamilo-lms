@@ -65,7 +65,14 @@
 */
 // name of the language file that needs to be included
 $language_file = 'forum';
+
+// including the global dokeos file
 require ('../inc/global.inc.php');
+
+// the section (tabs)
+$this_section=SECTION_COURSES;
+
+// including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 //require_once (api_get_path(LIBRARY_PATH).'resourcelinker.lib.php');

@@ -22,23 +22,23 @@
 */
 
 /**
-*	These files are a complete rework of the forum. The database structure is 
+*	These files are a complete rework of the forum. The database structure is
 *	based on phpBB but all the code is rewritten. A lot of new functionalities
 *	are added:
 * 	- forum categories and forums can be sorted up or down, locked or made invisible
 *	- consistent and integrated forum administration
-* 	- forum options: 	are students allowed to edit their post? 
+* 	- forum options: 	are students allowed to edit their post?
 * 						moderation of posts (approval)
 * 						reply only forums (students cannot create new threads)
 * 						multiple forums per group
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*	
+*
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
-* 
+*
 * 	@package dokeos.forum
 */
 
@@ -50,7 +50,7 @@
  * merge files and test it all over again. So for the moment, please do not
  * touch the code
  * 							-- Patrick Cool <patrick.cool@UGent.be>
- ************************************************************************** 
+ **************************************************************************
  */
 
 /*
@@ -63,9 +63,16 @@
 	Language Initialisation
 -----------------------------------------------------------
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'forum';
+
+// including the global dokeos file
 require ('../inc/global.inc.php');
+
+// the section (tabs)
+$this_section=SECTION_COURSES;
+
+// including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('Forum');
@@ -117,11 +124,11 @@ $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 
 /*
 -----------------------------------------------------------
-	Is the user allowed here? 
+	Is the user allowed here?
 -----------------------------------------------------------
 */
 // if the user is not a course administrator and the forum is hidden
-// then the user is not allowed here. 
+// then the user is not allowed here.
 if (!api_is_allowed_to_edit() AND $current_forum_category['visibility']==0)
 {
 	forum_not_allowed_here();
@@ -146,7 +153,7 @@ latest changes
 */
 // Step 1: We store all the forum categories in an array $forum_categories
 $forum_categories=array();
-$forum_category=get_forum_categories($_GET['forumcategory']); 
+$forum_category=get_forum_categories($_GET['forumcategory']);
 
 // step 2: we find all the forums
 $forum_list=array();
@@ -226,14 +233,14 @@ foreach ($forum_list as $key=>$forum)
 		$show_forum=false;
 		// SHOULD WE SHOW THIS PARTICULAR FORUM
 		// you are teacher => show forum
-		
+
 		if (api_is_allowed_to_edit())
 		{
 			//echo 'teacher';
 			$show_forum=true;
 		}
 		// you are not a teacher
-		else 
+		else
 		{
 			//echo 'student';
 			// it is not a group forum => show forum (invisible forums are already left out see get_forums function)
@@ -243,7 +250,7 @@ foreach ($forum_list as $key=>$forum)
 				$show_forum=true;
 			}
 			// it is a group forum
-			else 
+			else
 			{
 				//echo '-groepsforum';
 				// it is a group forum but it is public => show
@@ -253,7 +260,7 @@ foreach ($forum_list as $key=>$forum)
 					//echo '-publiek';
 				}
 				// it is a group forum and it is private
-				else 
+				else
 				{
 					//echo '-prive';
 					// it is a group forum and it is private but the user is member of the group
@@ -262,17 +269,17 @@ foreach ($forum_list as $key=>$forum)
 						//echo '-is lid';
 						$show_forum=true;
 					}
-					else 
+					else
 					{
 						//echo '-is GEEN lid';
 						$show_forum=false;
 					}
 				}
-				
-			}			
+
+			}
 		}
-		//echo '<hr>';		
-		
+		//echo '<hr>';
+
 		if ($show_forum)
 		{
 			$form_count++;
@@ -282,22 +289,22 @@ foreach ($forum_list as $key=>$forum)
 			{
 				if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']]))
 				{
-					echo icon('../img/forumgroupnew.gif');	
+					echo icon('../img/forumgroupnew.gif');
 				}
-				else 
+				else
 				{
-					echo icon('../img/forumgroup.gif');	
+					echo icon('../img/forumgroup.gif');
 				}
 			}
-			else 
+			else
 			{
 				if (is_array($whatsnew_post_info[$forum['forum_id']]) and !empty($whatsnew_post_info[$forum['forum_id']]))
 				{
-					echo icon('../img/forum.gif');	
+					echo icon('../img/forum.gif');
 				}
-				else 
+				else
 				{
-					echo icon('../img/forum.gif');	
+					echo icon('../img/forum.gif');
 				}
 			}
 			echo "</td>\n";
@@ -310,13 +317,13 @@ foreach ($forum_list as $key=>$forum)
 			if ($forum['last_poster_name']<>'')
 			{
 				$name=$forum['last_poster_name'];
-				$poster_id=0; 
+				$poster_id=0;
 			}
-			else 
+			else
 			{
 				$name=$forum['last_poster_firstname'].' '.$forum['last_poster_lastname'];
 				$poster_id=$forum['last_poster_id'];
-			}				
+			}
 			echo "\t\t<td>";
 			if (!empty($forum['last_post_id']))
 			{

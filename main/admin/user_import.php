@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 12014 2007-04-13 09:57:59Z pcool $
+// $Id: user_import.php 12309 2007-05-04 19:39:12Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -109,43 +109,40 @@ function validate_data($users)
  * Add missing user-information (which isn't required, like password, username
  * etc)
  */
-function complete_missing_data($users)
+function complete_missing_data($user)
 {
-	foreach ($users as $index => $user)
+	//1. Create a username if necessary
+	if (!isset ($user['UserName']) || strlen($user['UserName']) == 0)
 	{
-		//1. Create a username if necessary
-		if (!isset ($user['UserName']) || strlen($user['UserName']) == 0)
+		$username = strtolower(ereg_replace('[^a-zA-Z]', '', substr($user['FirstName'], 0, 3).' '.substr($user['LastName'], 0, 4)));
+		if (!UserManager :: is_username_available($username))
 		{
-			$username = strtolower(ereg_replace('[^a-zA-Z]', '', substr($user['FirstName'], 0, 3).' '.substr($user['LastName'], 0, 4)));
-			if (!UserManager :: is_username_available($username))
+			$i = 0;
+			$temp_username = $username.$i;
+			while (!UserManager :: is_username_available($temp_username))
 			{
-				$i = 0;
-				$temp_username = $username.$i;
-				while (!UserManager :: is_username_available($temp_username))
-				{
-					$temp_username = $username.++$i;
-				}
-				$username = $temp_username;
+				$temp_username = $username.++$i;
 			}
-			$users[$index]['UserName'] = $username;
+			$username = $temp_username;
 		}
-		//2. generate a password if necessary
-		if (!isset ($user['Password']) || strlen($user['Password']) == 0)
-		{
-			$users[$index]['Password'] = api_generate_password();
-		}
-		//3. set status if not allready set
-		if (!isset ($user['Status']) || strlen($user['Status']) == 0)
-		{
-			$users[$index]['Status'] = 'user';
-		}
-		//4. set authsource if not allready set
-		if (!isset ($user['AuthSource']) || strlen($user['AuthSource']) == 0)
-		{
-			$users[$index]['AuthSource'] = PLATFORM_AUTH_SOURCE;
-		}
+		$user['UserName'] = $username;
 	}
-	return $users;
+	//2. generate a password if necessary
+	if (!isset ($user['Password']) || strlen($user['Password']) == 0)
+	{
+		$user['Password'] = api_generate_password();
+	}
+	//3. set status if not allready set
+	if (!isset ($user['Status']) || strlen($user['Status']) == 0)
+	{
+		$user['Status'] = 'user';
+	}
+	//4. set authsource if not allready set
+	if (!isset ($user['AuthSource']) || strlen($user['AuthSource']) == 0)
+	{
+		$user['AuthSource'] = PLATFORM_AUTH_SOURCE;
+	}
+	return $user;
 }
 /**
  * Save the imported data
@@ -156,6 +153,7 @@ function save_data($users)
 	$sendMail = $_POST['sendMail'] ? 1 : 0;
 	foreach ($users as $index => $user)
 	{
+		$user = complete_missing_data($user);
 		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], $user['PhoneNumber'], '', $user['AuthSource']);
 		foreach ($user['Courses'] as $index => $course)
 		{
@@ -314,7 +312,6 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0)
 	$errors = validate_data($users);
 	if (count($errors) == 0)
 	{
-		$users = complete_missing_data($users);
 		save_data($users);
 		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported')));
 		exit ();

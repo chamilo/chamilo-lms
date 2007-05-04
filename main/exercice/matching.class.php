@@ -160,9 +160,9 @@ class Matching extends Question {
 			$puce = FormValidator :: createElement ('text', null,null,'value="'.$i.'"');
 			$puce->freeze();
 			$group[] = $puce;
-			$group[] = FormValidator :: createElement ('text', 'answer['.$i.']',null, 'size="30"');
+			$group[] = FormValidator :: createElement ('text', 'answer['.$i.']',null, 'size="30" style="margin-left: 0em;"');
 			$group[] = FormValidator :: createElement ('select', 'matches['.$i.']',null,$a_matches);
-			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, 'style="vertical-align:middle" size="2" value="1"');
+			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="2" value="1"');
 			$form -> addGroup($group, null, null, '</td><td width="0">');
 
 			$form -> addElement ('html', '</td></tr>');
@@ -207,7 +207,7 @@ class Matching extends Question {
 			$puce = FormValidator :: createElement ('text', null,null,'value="'.chr(64+$i).'"');
 			$puce->freeze();
 			$group[] = $puce;
-			$group[] = FormValidator :: createElement ('text', 'option['.$i.']',null, 'size="30"');
+			$group[] = FormValidator :: createElement ('text', 'option['.$i.']',null, 'size="30" style="margin-left: 0em;"');
 			$form -> addGroup($group, null, null, '</td><td width="0">');
 
 			$form -> addElement ('html', '</td></tr>');

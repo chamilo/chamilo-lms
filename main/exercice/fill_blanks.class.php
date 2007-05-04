@@ -89,7 +89,7 @@ class FillBlanks extends Question {
 						value = document.getElementById("weighting["+i+"]").value;
 					else
 						value = "1";
-					fields += "<tr><td>"+blanks[i]+"</td><td><input size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
+					fields += "<tr><td>"+blanks[i]+"</td><td><input style=\"margin-left: 0em;\" size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
 
 				}
 			}

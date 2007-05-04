@@ -129,13 +129,13 @@ class MultipleAnswer extends Question {
 			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
 			$answer_number->freeze();
 			
-			$form->addElement('checkbox', 'correct['.$i.']', null, null, $i);
+			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'style="margin-left: 0em;"');
 			$boxes_names[] = 'correct['.$i.']';
 			
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"');
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 			$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"');
-			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle" size="5" value="0"');
+			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
 			$form -> addElement ('html', '</tr>');
 		}
 		$form -> addElement ('html', '</table>');

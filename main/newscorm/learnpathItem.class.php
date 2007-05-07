@@ -719,7 +719,7 @@ class learnpathItem{
     	//if($this->debug>0){error_log('New LP - In learnpathItem::get_scorm_time()',0);}
     	$h = get_lang('h');
     	if(!isset($given_time)){
-	    	if(!empty($this->current_start_time)){
+	    	if(!empty($this->current_start_time) && is_object($this)){
 	    		if(!empty($this->current_stop_time)){
 	    			$time = $this->current_stop_time - $this->current_start_time;
 	    		}else{

@@ -206,7 +206,7 @@ foreach ($list as $my_item_id) {
 				}
 			}
 		} while ($row = Database :: fetch_array($result));
-	} else {
+	} elseif($num>0) {
 		$row = Database :: fetch_array($result);
 
 		//check if there are interactions below

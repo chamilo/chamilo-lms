@@ -2047,6 +2047,7 @@ class learnpath {
 	 * @return	integer	Number of interactions
 	 */
 	function get_interactions_count_from_db($lp_iv_id=0){
+		if(empty($lp_iv_id)){return -1;}
 		$table = Database::get_course_table('lp_iv_interaction');
 		$sql = "SELECT count(*) FROM $table WHERE lp_iv_id = $lp_iv_id";
 		$res = api_sql_query($sql,__FILE__,__LINE__);

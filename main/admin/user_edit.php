@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 10215 2006-11-27 13:57:17Z pcool $
+<?php // $Id: user_edit.php 12332 2007-05-08 10:49:18Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -276,7 +276,7 @@ if( $form->validate())
 		$emailbody = get_lang('Dear')." ".stripslashes("$form_firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username;
 		if($reset_password != 0 || !$userPasswordCrypted )
 		{
-			$emaibody .= "\n".get_lang('Pass')." : ".stripslashes($password);
+			$emailbody .= "\n".get_lang('Pass')." : ".stripslashes($password);
 		}
 		$emailbody .= "\n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
 		@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);

@@ -866,14 +866,11 @@ if ($maxCourse > 0)
 	$toolsList['valvas']['path'] = api_get_path(WEB_CODE_PATH)."announcements/announcements.php?cidReq=";
 }
 
-/*
------------------------------------------------------------------------------
-	Plugins for banner section
------------------------------------------------------------------------------
-*/
-
 
 echo "<div class=\"maincontent\">"; // start of content for logged in users
+
+// Plugins for the my courses main area
+api_plugin('mycourses_main');
 
 // link to see the session view or course view
 /*if(api_get_setting('use_session_mode')=='true' && api_is_allowed_to_create_course()) {

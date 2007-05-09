@@ -354,7 +354,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 				$new_icon='';
 			}
 			$dropbox_file_data[]=build_document_icon_tag('file',$dropbox_file->title).$new_icon;
-			$dropbox_file_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download"><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="dropbox_download.php?".api_get_cidreq()."&id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>';
+			$dropbox_file_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download"><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'"/></a><a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>';
 			$dropbox_file_data[]=$dropbox_file->author;
 			$dropbox_file_data[]=$dropbox_file->description;
 			$dropbox_file_data[]=ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');

@@ -46,7 +46,13 @@ class Export
 		$handle = fopen($file, 'a+');
 		foreach ($data as $index => $row)
 		{
-			fwrite($handle, '"'.implode('";"', $row).'"'."\n");
+			$line = '';
+			for($i = 0 ; $i<count($row) ; $i++)
+			{
+				$line .= '"'.str_replace('"','""',$row[$i]).'";';
+			}
+			
+			fwrite($handle, $line."\n");
 		}
 		fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.csv');

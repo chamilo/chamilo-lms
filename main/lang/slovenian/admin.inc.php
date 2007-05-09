@@ -348,7 +348,7 @@ $NotAllowedToUnsubscribe = "Ni dovoljeno";
 $AddDummyContentToCourse = "Dodaj \"dummy\" vsebino v t teèaj";
 $DummyCourseCreator = "Ustvari \"dummy\" vsebino teèaja";
 $DummyCourseDescription = "Funkcija bo dodala \"dummy\" vsebino temu teèaju. To orodje je namenjeno le testiranju, da kreatorju teèaja pri testiranju obnašanja ni potrebno pisati vsebin, obvestil, sporoèil foruma, ...";
-$AvailablePlugins = "Vtièi, ki so bili najdeni na sistemu.";
+$AvailablePlugins = "Vtièi, ki so bili najdeni na sistemu. Dodatne vtièe si lahko prenesete z <a href=\"http://www.dokeos.com/extensions/index.php?section=plugins\">http://www.dokeos.com/extensions/index.php?section=plugins</a>";
 $CreateVirtualCourse = "Ustvari navidezen teèaj";
 $DisplayListVirtualCourses = "Prikaži seznam navideznih teèajev";
 $LinkedToRealCourseCode = "Povezan z resnièno kodo teèaja";
@@ -456,7 +456,7 @@ $langConfigureExtensions = "Nastavitev razširitev";
 $langConfigureExtensions = "Nastavitev storitev";
 $langActiveExtensions = "Aktiviraj to storitev";
 $langVisioconf = "Visio-konferenca";
-$langVisioconfDescription = "Dokeos Live Conferencing® je standardno orodje, namenjeno visiokonferencam, in ponuja: prikaz diapozitivov, belo tablo (whiteboard) za risanje in pisanje, dvosmeren avdio in video prenos, klepet. Zahteva le Flash® predvajalnik in dovoljuje uporabo treh razliènih na&#269;inov interakcije : ena-na-ena, ena-na-ve&#269; in ve&#269;-z-ve&#269;imi.
+$langVisioconfDescription = "Dokeos Live Conferencing® je standardno orodje, namenjeno videokonferencam, in ponuja: prikaz diapozitivov, belo tablo (whiteboard) za risanje in pisanje, dvosmeren avdio in video prenos, klepet. Zahteva le Flash® predvajalnik in dovoljuje uporabo treh razliènih naèinov interakcije : ena-na-ena, ena-na-veè in veè-z-veèimi.
 ";
 $langPpt2lp = "PPT2LP";
 $langPpt2lpDescription = "PPT2LP omogoèa pretvorbo predstavitev, izdelanih v PowerPoint obliki v uèno pot.";

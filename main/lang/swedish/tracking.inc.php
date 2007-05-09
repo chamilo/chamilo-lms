@@ -134,4 +134,10 @@ $FirstAccess = "Första access";
 $LastAccess = "Senaste access";
 $Administrators = "Administratörer";
 $ExcelFormat = "Excel-format";
+$Time = "Tid";
+$Attempts = "Försök";
+$Comments = "Kommentarer";
+$NoComment = "Ingen kommentar";
+$Print = "Skriv ut";
+$NoConnexion = "Ingen anslutning";
 ?>

@@ -30,4 +30,7 @@ $langDirCr = "Skapa arkiv";
 $langCurrentDir = "Aktuell mapp";
 $UploadADocument = "Ladda upp dokument";
 $EditToolOptions = "Ändra verktygs val";
+$DocumentDeleted = "Dokument raderat";
+$DirDelete = "Radera katalog";
+$ValidateChanges = "Godkänn ändringar";
 ?>

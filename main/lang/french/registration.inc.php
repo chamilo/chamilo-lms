@@ -12,7 +12,7 @@ $langUpdateImage = "Changer de photo";
 $langImageWrong = "La taille du fichier doit être inférieure à";
 $langAddImage = "Ajoutez une photo";
 $langCourseManager = "Responsable";
-$password_request = "Vous avez demandé que votre mot de passe soit réinitialisé. Si vous ne l\'avez pas demandé, veuillez ignorer cet e-mail. Pour réinitialiser votre mot de passe, cliquez sur le lien \"réinitialiser\".";
+$password_request = "Vous avez demandé que votre mot de passe soit réinitialisé. Si vous ne l\'avez pas demandé, veuillez ignorer cet e-mail.";
 $YourPasswordHasBeenEmailed = "Votre mot de passe vous a été envoyé par email.";
 $lang_enter_email_and_well_send_you_password = "Entrez l\'adresse de courrier électronique que vous avez utilisée pour vous enregistrer et nous vous enverrons votre mot de passe.";
 $langLogin = "Log In";
@@ -172,4 +172,5 @@ $YourAccountHasToBeApproved = "Votre inscription doit être validée";
 $ApprovalForNewAccount = "Approbation pour un nouveau compte";
 $ManageUser = "Gestion de l\'utilisateur";
 $SubscribeUserToCourseAsTeacher = "Inscrire des utilisateurs comme responsable";
+$PasswordEncryptedForSecurity = "Votre mot de passe est crypté pour des raisons de sécurité. Après avoir cliqué sur le lien, un autre e-mail vous sera envoyé avec votre mot de passe.";
 ?>

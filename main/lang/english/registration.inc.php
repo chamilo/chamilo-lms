@@ -10,10 +10,7 @@ $langUpdateImage = "Change picture";
 $langImageWrong = "The file size should be smaller than";
 $langAddImage = "Picture";
 $langCourseManager = "Teacher";
-$password_request = "You have asked to reset your password.
-If you did not ask, then ignore this mail.
-
-To reset your password click on the reset link.";
+$password_request = "You have asked to reset your password. If you did not ask, then ignore this mail.";
 $YourPasswordHasBeenEmailed = "Your password has been emailed to you.";
 $lang_enter_email_and_well_send_you_password = "Enter the e-mail address that you used to register and we will send you your password back.";
 $langLogin = "Log In";
@@ -165,4 +162,5 @@ $YourAccountHasToBeApproved = "Your account has to be approved";
 $ApprovalForNewAccount = "Approval for new account";
 $ManageUser = "Manage user";
 $SubscribeUserToCourseAsTeacher = "Subscribe users to this course as teacher";
+$PasswordEncryptedForSecurity = "Your password is encrypted for security reasons. Thus, after pressing the link an e-mail will be sent to you again with your password.";
 ?>

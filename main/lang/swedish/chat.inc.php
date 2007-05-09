@@ -34,4 +34,5 @@ $OrFile = "Eller fil";
 $langCallSent = "Chattanrop har skickats. Väntar på godkännande från din partner.";
 $langChatDenied = "Ditt anrop har blivit avvisat av din partner.";
 $Send = "Skicka";
+$Connected = "Ansluten";
 ?>

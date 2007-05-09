@@ -45,7 +45,7 @@ $Chapter = "Capítulo";
 $NoAgendaItems = "No hay eventos en la Agenda";
 $AgendaAdd = "Añadir un evento de la Agenda";
 $UserGroupFilter = "Filtrar por grupos de usuarios";
-$AgendaSortChronologicallyUp = "Ordenar la agenda cronológicamente (arriba)";
+$AgendaSortChronologicallyUp = "Ordenar la agenda del más antiguo al más reciente";
 $ShowCurrent = "Mostrar los eventos actuales de la agenda";
 $ModifyCalendarItem = "Modificar eventos de la agenda";
 $ItemTitle = "Título";
@@ -57,5 +57,5 @@ $ForumAddNewTopic = "Foro: añadir un tema";
 $ForumEditTopic = "Foro: editar un tema";
 $ExerciseAnswers = "Ejercicio: Respuestas";
 $ForumReply = "Foro: responder";
-$AgendaSortChronologicallyDown = "Ordenar la agenda cronológicamente (del más reciente al más antiguo)";
+$AgendaSortChronologicallyDown = "Ordenar la agenda del más reciente al más antiguo";
 ?>

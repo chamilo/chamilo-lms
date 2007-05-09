@@ -181,7 +181,7 @@ $langNbAnnoucement = "Annonces";
 $lang_no_access_here = "Accès non autorisé";
 $langOtherCourses = "autres cours";
 $Doc = "Parcours";
-$LangPlataformAdmin = "Administrateur de la plateforme";
+$PlataformAdmin = "Administrateur de la plateforme";
 $Groups = "Groupes";
 $GroupManagement = "Gestion de groupe";
 $All = "tout";
@@ -424,4 +424,7 @@ $SessionActive = "Active";
 $SessionFuture = "A venir";
 $DateFormatLongWithoutDay = "%d %B %Y";
 $UsersConnectedToMySessions = "Voir les utilisateurs connectés à mes sessions";
+$DearUser = "Cher utilisateur";
+$YourRegistrationData = "Vos accès au portail";
+$ResetLink = "Cliquez ici pour réinitialiser votre mot de passe";
 ?>

@@ -1,28 +1,18 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langClarContent = "Here, professors and assistants create and administer
- courses websites. Students read (documents, agendas, informations) and, 
- sometimes, make exercices, publish papers, participate to
- forum discussions...</p><b>Registration</b><p>The following instructions
- only apply if your version of claroline allows self-registration (some sites 
- register you automatically). <br>If you are a Student, you
- just need to register selecting \'Follow courses (student)\', then choose
- the courses you would like to follow.</p><p>If you are a Professor or an
- Assistant, register too, but select \'Create courses (professor)\'. You will
- then have to fill a form with Course Code, Faculty and Course Title. Once
- this validated, you will be driven to the site you have just created and
- allowed to modify its content and organisation according to your
- requirements. </p><p>The \'To do\' option is to allow feedback to your claroline website administrators.  
- Things that you might post here include faults or suggestions for improvements. The \'To do\' 
- list is linked to on the Home Page of the campus (once
- logged in).</p>
-<p>The support forum is different. It connects all Claroline users worldwide. 
-If you don\'t find the answer to a question inside your claroline campus and environment, 
-post a message there.</p>
-<p>The link to Registration (if present) is on the Home Page of the campus
- (top right).</p><b>Login</b><p>On your next visits, type login/password
- and Ok to access your courses. The URL of the site is";
+$langClarContent = "<p><b>Teacher</b></p>
+<p>Dokeos is a Learning and Knowledge Management System. It allows the teacher to organise learning materials, learning paths  and to manage the interaction with his/her students. All this is made inside the web browser.</p>
+<p>To use Dokeos as a teacher, you need a login and a password. Depending on the security settings of your portal, you an get these by self-registration (right hand menu) or from the central administration of your organisation. Note that a login and a password never contain spaces or acents and that they are case sensitive. Type your login/password, then create a course (top right) or use the course that has been created for you by the central administration of your organisation.</p>
+<p>To add a colleague as co-administrator of your course:
+<ol><li>If he/she is not yet registered in the system, register him/her and select \\\'Teacher\\\' as a profile,</li>
+<li>If he/she is already registered in the system, temporarily open course subscription in Course settings and ask him/her to enroll in your course. Then edit his/her profile and give him/her Teacher rights.</li></ol></p>
+<p>
+Every Dokeos tool contains a contextual help represented by a red buoy. If you don\\\'t find there the good information, consider checking the Dokeos documentation page: <a href=\\\\\\\"http://www.dokeos.com/documentation.php\\\\\\\">http://www.dokeos.com/documentation.php</a> and download the teacher manual. in your own language or in English</p>
+<p><b>Student</b></p>
+<p>This portal allows you to follow and participate to courses, trainings, collaborative workshops etc. It has been created to promote active learning: project-based, problem-based, casesbased learning, collaborative research etc.
+Your teachers have build learning areas that can present as simple documents folders or sophisticated self-learning or group learning sequences of activities.</p>
+<p>Registration process can vary from one organisation to the other. In some cases, self-registration is allowed. In others, you should get from the central administration a login and a password.</p>";
 $test = "&#1058;&#1077;&#1089;&#1090;";
 $WCAGImage = "&#1048;&#1079;&#1086;&#1073;&#1088;&#1072;&#1078;&#1077;&#1085;&#1080;&#1077;";
 $WCAGLabel = "&#1053;&#1072;&#1076;&#1087;&#1080;&#1089; &#1085;&#1072; &#1080;&#1079;&#1086;&#1073;&#1088;&#1072;&#1078;&#1077;&#1085;&#1080;&#1077;&#1090;&#1086;";

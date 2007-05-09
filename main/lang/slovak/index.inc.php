@@ -3,7 +3,9 @@ for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Prihlásenie zlyhalo - nesprávne meno alebo heslo.";
 $langPass = "Heslo";
+$langEnter = "Vstup";
 $langReg = "Registrácia";
+$langMenu  = "Menu";
 $langOtherCourses = "Zoznam kurzov";
 $langCategories  = "Kategórie kurzov";
 $langLostPassword  = "Zabudnuté heslo";

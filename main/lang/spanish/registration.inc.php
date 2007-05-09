@@ -10,7 +10,7 @@ $langUpdateImage = "Cambiar foto";
 $langImageWrong = "El archivo debe tener un tamaño menor de";
 $langAddImage = "Incluir foto";
 $langCourseManager = "Profesor";
-$password_request = "Vd. ha pedido su nombre que su contraseña sea regenerada. Si no lo ha pedido puede ignorar este e-mail. Para regenerar su contraseña haga clic sobre el enlace \\\"regenerar\\\".";
+$password_request = "A través del campus virtual ha solicitado el reenvío de su contraseña. Si no lo ha solicitado o ya ha recuperado su contraseña puede ignorar este correo.";
 $YourPasswordHasBeenEmailed = "Su contraseña le ha sido enviada por correo electrónico.";
 $lang_enter_email_and_well_send_you_password = "Introduzca la dirección de correo electrónico con la que está registrado y le remitiremos su nombre de usuario y contraseña.";
 $langLogin = "Entrar";
@@ -167,4 +167,5 @@ $YourAccountHasToBeApproved = "Su cuenta ha sido validada";
 $ApprovalForNewAccount = "Validación de una nueva cuenta";
 $ManageUser = "Gestión de usuario";
 $SubscribeUserToCourseAsTeacher = "Inscribir usuarios como profesores en este curso";
+$PasswordEncryptedForSecurity = "Su contraseña está encriptada para su seguridad. Por ello, cuando haya pulsado en el enlace para regenerar su clave se le remitirá un nuevo correo que contendrá su contraseña.";
 ?>

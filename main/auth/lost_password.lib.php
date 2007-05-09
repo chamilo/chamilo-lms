@@ -1,5 +1,5 @@
 <?php
-// $Id: lost_password.lib.php 11873 2007-04-04 19:46:04Z pcool $
+// $Id: lost_password.lib.php 12348 2007-05-09 15:26:27Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -56,17 +56,17 @@ function get_user_account_list($user, $reset = false)
 		$secretword = get_secret_word($thisUser["email"]);
 		if ($reset)
 		{
-			$reset_link = "\tReset link : ".$_configuration['root_web']."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser[uid];
+			$reset_link = $_configuration['root_web']."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser[uid];
 		}
 		else
 		{
-			$reset_link = "\t".get_lang('Pass')." : $thisUser[password]";
+			$reset_link = get_lang('Pass')." : $thisUser[password]";
 		}
-		$userAccountList[] = $thisUser["firstName"]." ".$thisUser["lastName"]."\n\n"."\t".get_lang('UserName')." : ".$thisUser["loginName"]."\n"."$reset_link\n\n";
+		$userAccountList[] = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$thisUser["loginName"]."\n".get_lang('ResetLink').' : '.$reset_link.'';
 	}
 	if ($userAccountList)
 	{
-		$userAccountList = implode("------------------------\n", $userAccountList);
+		$userAccountList = implode("\n------------------------\n", $userAccountList);
 	}
 	return $userAccountList;
 }
@@ -114,7 +114,11 @@ function handle_encrypted_password($user)
 	$userAccountList = get_user_account_list($user, true); // BODY
 	$emailTo = $user[0]["email"];
 	$secretword = get_secret_word($emailTo);
-	$emailBody = get_lang("password_request")."\n\n\n".get_lang("YourAccountParam")." ".$_configuration['root_web']."\n\n".$userAccountList;
+	//$emailBody = get_lang("password_request")."\n\n\n".get_lang("YourAccountParam")." ".$_configuration['root_web']."\n\n".$userAccountList;
+	$emailBody = get_lang('DearUser')." :\n".get_lang("password_request")."\n\n";
+	$emailBody .= "-----------------------------------------------\n".$userAccountList."\n-----------------------------------------------\n\n";
+	$emailBody .=get_lang('PasswordEncryptedForSecurity');
+	$emailBody .="\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
 	if (@ api_send_mail($emailTo, $emailSubject, $emailBody, $emailHeaders))
 	{
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));

@@ -1739,8 +1739,8 @@ class learnpath {
 				$package_type = 'scorm';
 				break;//exit the foreach loop
 			}
-			elseif(preg_match('/aicc\//i',$thisContent['filename'])!==FALSE)
-			{//if found an aicc directory...
+			elseif(preg_match('/aicc\//i',$thisContent['filename'])!=false)
+			{//if found an aicc directory... (!= false means it cannot be false (error) or 0 (no match))
 				$package_type='aicc';
 				//break;//don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC
 			}

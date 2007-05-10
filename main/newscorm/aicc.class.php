@@ -468,20 +468,12 @@ class aicc extends learnpath {
 		--------------------------------------
 		*/
 		/*
-			The first version, using OS unzip, is not used anymore
-			because it does not return enough information.
 			We need to process each individual file in the zip archive to
 			- add it to the database
 			- parse & change relative html links
+			- make sure the filenames are secure (filter funny characters or php extensions)
 		*/
-		if (PHP_OS == 'Linux' && ! get_cfg_var('safe_mode') && false)	// *** UGent, changed by OC ***
-		{
-			// Shell Method - if this is possible, it gains some speed
-			//check availability of 'unzip' first!
-			exec("unzip -d \"".$course_sys_dir."".$new_dir." ".$zip_file_path);
-			if($this->debug>=1){error_log('New LP - found Linux system, using unzip',0);}
-		}
-		elseif(is_dir($course_sys_dir.$new_dir) OR @mkdir($course_sys_dir.$new_dir))
+		if(is_dir($course_sys_dir.$new_dir) OR @mkdir($course_sys_dir.$new_dir))
 		{
 			// PHP method - slower...
 			if($this->debug>=1){error_log('New LP - Changing dir to '.$course_sys_dir.$new_dir,0);}
@@ -516,7 +508,9 @@ class aicc extends learnpath {
 						
 						//TODO RENAMING FILES CAN BE VERY DANGEROUS AICC-WISE, avoid that as much as possible!
 						//$safe_file=replace_dangerous_char($file,'strict');
-						$safe_file = str_replace('\\','/',$file);
+						$find_str = array('\\','.php','.phtml');
+						$repl_str = array('/', '.txt','.txt');
+						$safe_file = str_replace($find_str,$repl_str,$file);
 	
 						if($safe_file != $file){
 							//@rename($course_sys_dir.$new_dir,$course_sys_dir.'/'.$safe_file);

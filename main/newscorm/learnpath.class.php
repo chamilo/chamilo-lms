@@ -1731,7 +1731,7 @@ class learnpath {
 		{
 			if ( preg_match('~.(php.*|phtml)$~i', $thisContent['filename']) )
 			{
-				return '';
+				//New behaviour: Don't do anything. These files will be removed in scorm::import_package
 			}
 			elseif(stristr($thisContent['filename'],'imsmanifest.xml')!==FALSE)
 			{

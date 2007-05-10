@@ -64,4 +64,10 @@ $langRequestDenied = "Die Anfrage wurde abgewiesen";
 $UsageDatacreated = "Daten für Usage wurden erstellt";
 $SessionView = "Kurse anzeigen nach Sessions";
 $CourseView = "Die Gesamtliste aller Kurse anzeigen";
+$DropboxFileAdded = "Dropbox Datei wurde hinzugefügt";
+$NewMessageInForum = "Neuer Beitrag wurde im Forum hinzugefügt";
+$FolderCreated = "Neues Verzeichnis wurde erstellt";
+$LinkAdded = "Neuer Link wurde hinzugefügt";
+$AnnouncementAdded = "Ankündigung wurde hinzugefügt";
+$AgendaAdded = "Agenda Eintrag wurde hinzugefügt";
 ?>

@@ -425,4 +425,7 @@ $SessionFuture = "Ainda não iniciada";
 $DateFormatLongWithoutDay = "%d %B, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Pasta inválida: por favor, crie uma pasta com o nome images na secção documentos de modo que as imagens carregadas possam ser alojadas nessa pasta.";
 $UsersConnectedToMySessions = "Ver todos os utilizadores conectados às minhas sessões";
+$DearUser = "Caro(a) utilizador(a)";
+$YourRegistrationData = "Os seus dados do registo";
+$ResetLink = "Clique aqui para recuperar a sua senha";
 ?>

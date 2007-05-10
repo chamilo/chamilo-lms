@@ -162,4 +162,5 @@ $YourAccountHasToBeApproved = "Uw account is geaccepteerd";
 $ApprovalForNewAccount = "Goedkeuring voor een nieuw account";
 $ManageUser = "Beheer gebruiker";
 $SubscribeUserToCourseAsTeacher = "Schrijf de gebruikers in deze cursus in als leerkracht";
+$PasswordEncryptedForSecurity = "Uw paswoord is geëncrypteerd omwile van beveiligingsredenen. Na het klikken op de link wordt opnieuw een e-mail verstuurd met uw paswoord.";
 ?>

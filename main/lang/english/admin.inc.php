@@ -606,4 +606,5 @@ $AllowEmailEditorTitle = "Active online email editor";
 $AllowEmailEditorComment = "If this option is activated, clicking on an email will open an online mail editor.";
 $AddCSVHeader = "Add the CSV header line?";
 $YesAddCSVHeader = "Yes, add the CSV header<br />This line defines the fields and is necessary when you want to import the file in a different Dokeos campus";
+$name = "Name";
 ?>

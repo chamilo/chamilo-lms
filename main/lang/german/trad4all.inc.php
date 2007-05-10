@@ -425,4 +425,7 @@ $SessionFuture = "Noch nicht begonnen";
 $DateFormatLongWithoutDay = "%B %d, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Ungültiges Verzeichnis:  Bitte das Verzeichnis mit Namen \"images\" im Dokument Tool erstellen, damit die Bilder in dieses Verzeichnis hochgeladen werden können.";
 $UsersConnectedToMySessions = "Alle Benutzer anzeigen, die mit meinen Sessions verbunden sind.";
+$DearUser = "Lieber Benutzer";
+$YourRegistrationData = "Ihre Anmeldedaten";
+$ResetLink = "Klicken Sie hier, um Ihr Passwort wieder zu erlangen.";
 ?>

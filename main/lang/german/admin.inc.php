@@ -606,4 +606,5 @@ $AllowEmailEditorTitle = "Online E-Mail Editor";
 $AllowEmailEditorComment = "Wenn diese Option aktiviert ist, öffnet ein Klick auf eine E-Mail den online E-Mail Editor";
 $AddCSVHeader = "Die CVS Header Zeile hinzufügen?";
 $YesAddCSVHeader = "Ja, den CSV Header hinzufügen<br/>Diese Zeile definiert Felder und ist notwendig, wenn man die Datei in ein anderes Dokeos Campus importieren will.";
+$name = "Name";
 ?>

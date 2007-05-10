@@ -65,4 +65,10 @@ $langRequestDenied = "Cet appel a été refusé.";
 $UsageDatacreated = "Données d\'utilisation créées";
 $SessionView = "Voir les cours par sessions";
 $CourseView = "Voir la liste complète des cours";
+$DropboxFileAdded = "Un fichier a été ajouté dans le partage de fichier";
+$NewMessageInForum = "Un nouveau message a été posté dans le forum";
+$FolderCreated = "Un nouveau dossier a été créé";
+$LinkAdded = "Un nouveau lien a été ajouté";
+$AnnouncementAdded = "Une annonce a été ajoutée";
+$AgendaAdded = "Un évènement d\'agenda a été ajouté";
 ?>

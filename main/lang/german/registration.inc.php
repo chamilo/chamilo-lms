@@ -162,4 +162,5 @@ $YourAccountHasToBeApproved = "Der Account muss genehmigt werden";
 $ApprovalForNewAccount = "Genehmigung für neuen Account";
 $ManageUser = "Benutzer verwalten";
 $SubscribeUserToCourseAsTeacher = "ALs Lehrer Benutzer in diesem Kurs einschreiben";
+$PasswordEncryptedForSecurity = "Ihr Passwort wurde zur Sicherheit verschlüsselt. Daher wird nach Klick auf den Link eine E-Mail mit Ihrem Passwort an Ihre E-Mail Adresse verschickt.";
 ?>

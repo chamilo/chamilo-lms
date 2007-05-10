@@ -425,4 +425,7 @@ $SessionFuture = "Nog niet gestart";
 $DateFormatLongWithoutDay = "%d %B %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Ongeldige folder: gelieve een folder images aan te maken in de documentenmodule waar de afbeelding kunnen in geplaatst worden.";
 $UsersConnectedToMySessions = "Bekijk de gebruikers van mijn sessies";
+$DearUser = "Beste gebruiker";
+$YourRegistrationData = "Uw registratiegegevens";
+$ResetLink = "Klik hier om uw paswoord terug te vinden";
 ?>

@@ -605,4 +605,5 @@ $XMLNotValid = "Le document XML n\'est pas valide";
 $AllowEmailEditorTitle = "Activer l\'éditeur d\'emails en ligne";
 $AllowEmailEditorTitle = "Activer l\'éditeur d\'emails en ligne";
 $AllowEmailEditorComment = "Si cette option est activée, cliquer sur une adresse mail ouvrira un éditeur en ligne.";
+$name = "Nom";
 ?>

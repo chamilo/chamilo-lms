@@ -67,4 +67,10 @@ $langRequestDenied = "The invitation has been rejected.";
 $UsageDatacreated = "Usage data created";
 $SessionView = "Display the courses ordered by sessions";
 $CourseView = "Display the full list of the courses";
+$DropboxFileAdded = "Dropbox file added";
+$NewMessageInForum = "New message posted in the forum";
+$FolderCreated = "New folder created";
+$LinkAdded = "New link added";
+$AnnouncementAdded = "Announcement added";
+$AgendaAdded = "Agenda item added";
 ?>

@@ -807,7 +807,7 @@ function show_notification($my_course)
 			$type = $notification['lastedit_type'];
 			//$notification[image]=str_replace(".png","gif",$notification[image]);
 			//$notification[image]=str_replace(".gif","_s.gif",$notification[image]);
-			$retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$my_course['k'].'&amp;ref='.$notification['ref'].'">'.'<img title="-- '.get_lang($notification['tool']).' -- '.get_lang('_title_notification').": $type ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
+			$retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$my_course['k'].'&amp;ref='.$notification['ref'].'">'.'<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
 		}
 	}
 	return $retvalue;

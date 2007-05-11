@@ -27,8 +27,9 @@ $language_file = 'document';
 	}
 
 	$interbreadcrumb[]= array ("url"=>"./document.php?curdirpath=".dirname($_GET['file']).$req_gid, "name"=> $langDocuments);
-
-	Display::display_header($nameTools,"Doc");
+	$interbreadcrumb[]= array ("url"=>"showinframes.php?file=".$_GET['file'], "name"=> $_GET['file']);
+	
+	Display::display_header(null,"Doc");
 
 	echo "<div align=\"center\">";
 	echo "<a href='".api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$_GET['file']."?".api_get_cidreq()."' target='blank'>".$lang_cut_paste_link."</a></div>";

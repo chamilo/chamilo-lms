@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 9246 2006-09-25 13:24:53Z bmol $ 
+<?php // $Id: showinframes.php 12377 2007-05-11 08:56:44Z elixir_julian $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -75,7 +75,7 @@ header('Pragma: no-cache');
 $browser_display_title = "Dokeos Documents - " . $_GET['cidReq'] . " - " . $_GET['file'];
 
 //only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
-$frameheight = 120;
+$frameheight = 130;
 if($is_courseAdmin)
 {
 	$frameheight = 150;

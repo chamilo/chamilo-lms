@@ -492,7 +492,12 @@ INSERT INTO `settings_current` VALUES
 (82, 'service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL),
 (84, 'service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL),
 (85, 'wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL),
-(86, 'stylesheets', NULL, 'textfield','stylesheets','default_with_tabs','',NULL, NULL, NULL);
+(86, 'stylesheets', NULL, 'textfield','stylesheets','default_with_tabs','',NULL, NULL, NULL),
+(87, 'upload_extensions_list_type', NULL, 'radio', 'Security', 'blacklist', 'UploadExtensionsListType', 'UploadExtensionsListTypeComment', NULL, NULL),
+(88, 'upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL),
+(89, 'upload_extensions_whitelist', NULL, 'textfield', 'Security', 'htm;html;jpg;jpeg;gif;png;swf;avi;mpg;mpeg', 'UploadExtensionsWhitelist', 'UploadExtensionsWhitelistComment', NULL, NULL),
+(90, 'upload_extensions_skip', NULL, 'radio', 'Security', 'true', 'UploadExtensionsSkip', 'UploadExtensionsSkipComment', NULL, NULL),
+(91, 'upload_extensions_replace_by', NULL, 'textfield', 'Security', 'dangerous', 'UploadExtensionsReplaceBy', 'UploadExtensionsReplaceByComment', NULL, NULL);
 
 
 UNLOCK TABLES;
@@ -590,7 +595,11 @@ INSERT INTO `settings_options` VALUES
 (80,'show_email_addresses','true','Yes'),
 (81,'show_email_addresses','false','No'),
 (82,'wcag_anysurfer_public_pages', 'true', 'Yes'),
-(83,'wcag_anysurfer_public_pages', 'false', 'No');
+(83,'wcag_anysurfer_public_pages', 'false', 'No'),
+(84, 'upload_extensions_list_type', 'blacklist', 'Blacklist'),
+(85, 'upload_extensions_list_type', 'whitelist', 'Whitelist'),
+(86, 'upload_extensions_skip', 'true', 'Yes'),
+(87, 'upload_extensions_skip', 'false', 'No');
 UNLOCK TABLES;
 
 

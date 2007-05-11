@@ -77,7 +77,7 @@ function api_replace_parameter($upload_path, $buffer, $param_name="src")
  * replaces "forbidden" characters in a filename string
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @author - René Haentjens, UGent (RH)
+ * @author - Renï¿½ Haentjens, UGent (RH)
  * @param  - string $filename
  * @param  - string $strict (optional) remove all non-ASCII
  * @return - the cleaned filename
@@ -1039,8 +1039,8 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
  */
 function clean_up_files_in_zip($p_event, &$p_header)
 {
-	clean_up_path($p_header['filename']);
-	return 1;
+	$res = clean_up_path($p_header['filename']);
+	return $res;
 }
 
 //------------------------------------------------------------------------------
@@ -1059,15 +1059,80 @@ function clean_up_path(&$path)
 	//split the path in folders and files
     $path_array = explode('/',$path);
     //clean up every foler and filename in the path
+    $val = '';
     foreach($path_array as $key => $val)
 	{
 		//we don't want to lose the dots in ././folder/file (cfr. zipfile)
 		if($path_array[$key]!='.')
 			$path_array[$key] = disable_dangerous_file( replace_dangerous_char($val) );
 	}
-	//join the "cleaned" path
+	//join the "cleaned" path (modified in-place as passed by reference)
 	$path = implode('/',$path_array);
-	return $path;
+	$res = filter_extension($path);
+	return $res;
+}
+
+/**
+ * Check if the file is dangerous, based on extension and/or mimetype.
+ * The list of extensions accepted/rejected can be found from 
+ * api_get_setting('upload_extensions_exclude') and api_get_setting('upload_extensions_include')
+ * @param	string 	filename passed by reference. The filename will be modified if filter rules say so! (you can include path but the filename should look like 'abc.html')
+ * @return	int		0 to skip file in zip extraction, 1 to keep file
+ */
+function filter_extension(&$filename)
+{
+	if(substr($filename,-1)=='/'){return 1;} //authorize directories
+	$blacklist = api_get_setting('upload_extensions_list_type');
+	if($blacklist!='whitelist')//if = blacklist
+	{
+		$extensions = split(';',strtolower(api_get_setting('upload_extensions_blacklist')));
+		$skip = api_get_setting('upload_extensions_skip');
+		$ext = strrchr($filename, ".");		
+		$ext = substr($ext,1);
+		if(empty($ext)){return 1;}//we're in blacklist mode, so accept empty extensions
+		if(in_array(strtolower($ext),$extensions))
+		{
+			if($skip=='true')
+			{
+				return 0;
+			}
+			else
+			{
+				$new_ext = api_get_setting('upload_extensions_replace_by');
+				$filename = str_replace(".".$ext,".".$new_ext,$filename);
+				return 1;
+			}
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	else
+	{
+		$extensions = split(';',strtolower(api_get_setting('upload_extensions_whitelist')));
+		$skip = api_get_setting('upload_extensions_skip');
+		$ext = strrchr($filename, ".");
+		$ext = substr($ext,1);
+		if(empty($ext)){return 1;}//accept empty extensions
+		if(!in_array(strtolower($ext),$extensions))
+		{
+			if($skip=='true')
+			{
+				return 0;
+			}
+			else
+			{
+				$new_ext = api_get_setting('upload_extensions_replace_by');
+				$filename = str_replace(".".$ext,".".$new_ext,$filename);
+				return 1;
+			}
+		}
+		else
+		{
+			return 1;
+		}
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -1815,8 +1880,7 @@ $handle=opendir($path);
 
 // could be usefull in some cases...
 function remove_accents($string){
-	$string = strtr ( $string, "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ", "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn");
+	$string = strtr ( $string, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn");
 	return $string;
 }
-
 ?>

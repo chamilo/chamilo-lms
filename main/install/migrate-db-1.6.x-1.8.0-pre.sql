@@ -106,6 +106,12 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('stylesheets', NULL, 'textfield','stylesheets','default','',NULL, NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('upload_extensions_list_type', NULL, 'radio', 'Security', 'blacklist', 'UploadExtensionsListType', 'UploadExtensionsListTypeComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('upload_extensions_whitelist', NULL, 'textfield', 'Security', 'htm;html;jpg;jpeg;gif;png;swf;avi;mpg;mpeg', 'UploadExtensionsWhitelist', 'UploadExtensionsWhitelistComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('upload_extensions_skip', NULL, 'radio', 'Security', 'true', 'UploadExtensionsSkip', 'UploadExtensionsSkipComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('upload_extensions_replace_by', NULL, 'textfield', 'Security', 'txt', 'UploadExtensionsReplaceBy', 'UploadExtensionsReplaceByComment', NULL, NULL);
+
 
 UPDATE settings_options SET value = 'activity', display_text='HomepageViewActivity' WHERE variable = 'homepage_view' AND value = 'default';
 UPDATE settings_options SET value = '2column', display_text='HomepageView2column' WHERE variable = 'homepage_view' AND value = 'basic_tools_fixed';
@@ -132,6 +138,10 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('show_email_ad
 INSERT INTO settings_options(variable,value,display_text) VALUES ('show_email_addresses','false','No');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('wcag_anysurfer_public_pages', 'true', 'Yes');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('wcag_anysurfer_public_pages', 'false', 'No');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'blacklist', 'Blacklist');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'whitelist', 'Whitelist');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'true', 'Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'false', 'No');
 
 UPDATE course_module SET image = 'links.gif' WHERE image='liens.gif';
 UPDATE course_module SET image = 'members.gif' WHERE image = 'membres.gif';

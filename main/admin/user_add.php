@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 12274 2007-05-03 14:58:36Z yannoo $
+<?php // $Id: user_add.php 12379 2007-05-11 09:16:27Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -169,6 +169,9 @@ if( $form->validate())
 		$picture_uri = '';
 		if (strlen($picture['name']) > 0)
 		{
+			if(!is_dir(api_get_path(SYS_CODE_PATH).'upload/users/')){
+				mkdir(api_get_path(SYS_CODE_PATH).'upload/users/', 0777);
+			}
 			$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
 			$picture_location = api_get_path(SYS_CODE_PATH).'upload/users/'.$picture_uri;
 			move_uploaded_file($picture['tmp_name'], $picture_location);

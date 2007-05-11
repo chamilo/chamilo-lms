@@ -598,8 +598,8 @@ INSERT INTO `settings_options` VALUES
 (83,'wcag_anysurfer_public_pages', 'false', 'No'),
 (84, 'upload_extensions_list_type', 'blacklist', 'Blacklist'),
 (85, 'upload_extensions_list_type', 'whitelist', 'Whitelist'),
-(86, 'upload_extensions_skip', 'true', 'Yes'),
-(87, 'upload_extensions_skip', 'false', 'No');
+(86, 'upload_extensions_skip', 'true', 'Remove'),
+(87, 'upload_extensions_skip', 'false', 'Rename');
 UNLOCK TABLES;
 
 

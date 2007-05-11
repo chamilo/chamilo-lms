@@ -20,8 +20,8 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'blacklist', 'Blacklist');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'whitelist', 'Whitelist');
-INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'true', 'Yes');
-INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'false', 'No');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'true', 'Remove');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'false', 'Rename');
 
 -- xxSTATSxx
 

@@ -104,6 +104,21 @@ function trueFalse($var)
 }
 
 /**
+ * This function is similar to the core file() function, except that it
+ * works with line endings in Windows (which is not the case of file())
+ * @param	string	File path
+ * @return	array	The lines of the file returned as an array
+ */
+function file_to_array($filename)
+{
+	$fp = fopen($filename, "rb");
+	$buffer = fread($fp, filesize($filename));
+	fclose($fp);
+	$result = preg_split("/r?n|r/", $buffer);
+	return $result;
+}
+
+/**
  * This function returns the value of a parameter from the configuration file
  *
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
@@ -151,11 +166,11 @@ function get_config_param($param)
 	elseif(file_exists($updatePath.$updateFromConfigFile))
 	{
 		$configFile=array();
-		$temp=file($updatePath.$updateFromConfigFile);
+		$temp=file_to_array($updatePath.$updateFromConfigFile);
 		$val='';
 		if(file_exists($updatePath.$updateFromInstalledVersionFile))
 		{
-			$temp2 = file($updatePath.$updateFromInstalledVersionFile);
+			$temp2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
 			$temp = array_merge($temp,$temp2);
 		}
 

@@ -140,6 +140,9 @@ class FillBlanks extends Question {
 
 		// get the blanks weightings
 		$nb = preg_match_all('/\[[^\]]*\]/', $answer, $blanks);
+		if(isset($_GET['editQuestion'])){
+			$this -> weighting = 0;
+		}
 		if($nb>0)
 		{
 			$answer .= '::';

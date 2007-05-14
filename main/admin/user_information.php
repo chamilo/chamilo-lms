@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 10920 2007-01-26 10:55:37Z elixir_julian $
+// $Id: user_information.php 12388 2007-05-14 09:35:44Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,11 +60,11 @@ if( isset($_GET['action']) )
 			if( CourseManager::get_user_in_course_status($_GET['user_id'],$_GET['course_code']) == STUDENT)
 			{
 				CourseManager::unsubscribe_user($_GET['user_id'],$_GET['course_code']);
-				Display::display_normal_message('UserUnsubscribed');
+				Display::display_normal_message(get_lang('UserUnsubscribed'));
 			}
 			else
 			{
-				Display::display_error_message('CannotUnsubscribeUserFromCourse');	
+				Display::display_error_message(get_lang('CannotUnsubscribeUserFromCourse'));	
 			}
 			break;	
 	}	

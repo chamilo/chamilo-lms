@@ -695,7 +695,7 @@ function removeUnusedFiles( )
 * Mailing content files have uploader_id == mailing pseudo_id, a normal recipient,
 * and are visible initially to recipient and pseudo_id.
 *
-* @author René Haentjens, Ghent University
+* @author Renï¿½ Haentjens, Ghent University
 *
 * @todo check if this function is still necessary.
 */
@@ -717,7 +717,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     die(dropbox_lang("generalError")." (code ".$or_die.")");
 }
 /**
-* @author René Haentjens, Ghent University
+* @author Renï¿½ Haentjens, Ghent University
 * @todo check if this function is still necessary.
 */
 function removeMoreIfMailing($file_id)
@@ -753,7 +753,7 @@ function removeMoreIfMailing($file_id)
 *
 * @todo check if this function is still necessary.
 *
-* @author René Haentjens, Ghent University
+* @author Renï¿½ Haentjens, Ghent University
 */
 function dropbox_lang($variable, $notrans = 'DLTT')
 {
@@ -764,7 +764,7 @@ function dropbox_lang($variable, $notrans = 'DLTT')
 /**
 * Function that finds a given config setting
 *
-* @author René Haentjens, Ghent University
+* @author Renï¿½ Haentjens, Ghent University
 */
 function dropbox_cnf($variable)
 {
@@ -1414,7 +1414,7 @@ function get_last_tool_access($tool, $course_code='', $user_id='')
 	global $_course, $_user;
 
 	// The default values of the parameters
-	if ($course=='')
+	if ($course_code=='')
 	{
 		$course_code=$_course['id'];
 	}

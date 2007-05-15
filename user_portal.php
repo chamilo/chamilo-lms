@@ -672,8 +672,13 @@ function get_logged_user_course_html($my_course)
 	{
 		$result .= $course_teacher;
 	}
-	// display the what's new icons
-	$result .= show_notification($my_course);
+	
+	$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
+	
+	if($current_course_settings['visibility']==1){
+		// display the what's new icons
+		$result .= show_notification($my_course);
+	}
 
 	if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0)
 	{

@@ -15,6 +15,7 @@
   	'Articulate',
   	'ATutor',
   	'Blackboard',
+  	'Calfat',
   	'Captivate',
   	'Claroline',
 	'Commest',

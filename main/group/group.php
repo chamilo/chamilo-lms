@@ -81,7 +81,7 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
 	event_access_tool(TOOL_GROUP);
 	if (! $is_allowed_in_course) api_not_allowed(true);
 }
-Display::display_header(TOOL_GROUP);
+Display::display_header(get_lang("Groups"));
 
 /*
 -----------------------------------------------------------

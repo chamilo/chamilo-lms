@@ -9,22 +9,6 @@ require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
 
 $nameTools=get_lang('MyProgress');
 
-
-if(isset($_GET['id_session']))
-{
-	$id_session = intval($_GET['id_session']);
-
-	$_SESSION['id_session']=$id_session;
-}
-elseif(isset($_SESSION['id_session']))
-{
-	$id_session=$_SESSION['id_session'];
-}
-else
-{
-	$id_session=0;
-}
-
 api_block_anonymous_users();
 
 Display :: display_header($nameTools);
@@ -48,22 +32,12 @@ $result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end FROM sessi
 
 $Sessions=api_store_result($result);
 
-$Courses=array();
+$Courses = array();
 
-if($id_session)
-{
-   /*
-	$result=api_sql_query("SELECT code, title, CONCAT(user.lastname,' ',user.firstname) coach, email
-							FROM $tbl_session_course_user AS session_course_user, $tbl_session_course AS session_course, $tbl_course AS course, $tbl_user AS user
-							WHERE session_course_user.id_session='$id_session'
-							AND session_course_user.id_user='".$_user['user_id']."'
-							AND session_course_user.course_code=course.code
-							AND session_course_user.id_session=session_course.id_session
-							AND session_course_user.course_code=session_course.course_code
-							AND session_course.id_coach=user.user_id
-							ORDER BY title",__FILE__,__LINE__);
-	*/
-
+foreach($Sessions as $enreg){
+	
+	$id_session_temp = $enreg['id'];
+	
 	$sql = "SELECT DISTINCT code,title, CONCAT(lastname, ' ',firstname) coach, username, date_start, date_end, db_name
 			FROM $tbl_course , $tbl_session_course
 			LEFT JOIN $tbl_user
@@ -73,65 +47,42 @@ if($id_session)
 				AND $tbl_session_course_user.id_user = '".$_user['user_id']."'
 			INNER JOIN $tbl_session ON $tbl_session.id = $tbl_session_course.id_session
 			WHERE $tbl_session_course.course_code=code
-			AND $tbl_session_course.id_session='$id_session'
+			AND $tbl_session_course.id_session='$id_session_temp'
 			ORDER BY title";
 
 	$result=api_sql_query($sql);
 
-	$Courses=api_store_result($result);
+	while($a_session_courses = mysql_fetch_array($result)){
+		$a_session_courses['id_session'] = $id_session_temp;
+		$Courses[$a_session_courses['code']] = $a_session_courses;
+	}
+	
 }
+
+	
+$sql = "SELECT DISTINCT code,title, db_name
+		FROM $tbl_course as course, $tbl_course_user as course_rel_user
+		WHERE course_rel_user.user_id = '".$_user['user_id']."'
+		AND course_rel_user.course_code = course.code
+		";
+$result=api_sql_query($sql);
+
+while($a_courses = mysql_fetch_array($result)){
+	$a_courses['id_session'] = 0;
+	$Courses[$a_courses['code']] = $a_courses;
+}
+
 
 api_display_tool_title($nameTools);
 
 $now=date('Y-m-d');
 
-echo get_lang('ProgressIntroduction');
 ?>
-<br /><br />
-
-<form method="get" action="<?php echo api_get_self(); ?>" style="margin: 0px;">
-<center>
-<?php echo get_lang('SessionCourses'); ?> :
-<select name="id_session">
-<option value="0">---------- <?php echo get_lang('Select'); ?> ----------</option>
-
-<?php
-$date_start=$date_end=$now;
-
-foreach($Sessions as $enreg)
-{
-	if($enreg['id'] == $id_session)
-	{
-		$date_start=$enreg['date_start'];
-		$date_end=$enreg['date_end'];
-	}
-	$enreg['date_start']=explode('-',$enreg['date_start']);
-	$enreg['date_start']=$enreg['date_start'][2].'/'.$enreg['date_start'][1].'/'.$enreg['date_start'][0];
-
-	$enreg['date_end']=explode('-',$enreg['date_end']);
-	$enreg['date_end']=$enreg['date_end'][2].'/'.$enreg['date_end'][1].'/'.$enreg['date_end'][0];
-
-?>
-
-<option value="<?php echo $enreg['id']; ?>" <?php if($enreg['id'] == $id_session) echo 'selected="selected"'; ?> ><?php echo htmlentities($enreg['name']); if($date_start!='0000-00-00') { ?> (<?php echo get_lang('From'); ?> <?php echo $enreg['date_start']; ?> <?php echo get_lang('To'); ?> <?php echo $enreg['date_end']; ?>)<?php } ?></option>
-
-<?php
-}
-
-unset($Sessions);
-?>
-
-</select>
-<input type="submit" value="<?php echo get_lang('Ok'); ?>" />
-</center>
-</form>
-
-<br /><br />
 
 <table class="data_table" width="100%">
 <tr class="tableName">
 	<td colspan="6">
-		<strong><?php echo get_lang('MyLearnpath'); ?></strong>
+		<strong><?php echo get_lang('MyCourses'); ?></strong>
 	</td>
 </tr>
 <tr>
@@ -186,7 +137,7 @@ foreach($Courses as $enreg)
   	</td>
 
   	<td align='center'>
-		<a href="<?php echo $SERVER['PHP_SELF']; ?>?id_session=<?php echo $id_session ?>&course=<?php echo $enreg['code']; ?>"> <?php echo '<img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />';?> </a>
+		<a href="<?php echo $SERVER['PHP_SELF']; ?>?id_session=<?php echo $enreg['id_session'] ?>&course=<?php echo $enreg['code']; ?>"> <?php echo '<img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />';?> </a>
   	</td>
 </tr>
 
@@ -211,20 +162,32 @@ foreach($Courses as $enreg)
  */
 	if(isset($_GET['course']))
 	{
-		$sqlInfosCourse = "	SELECT course.code,course.title,course.db_name,CONCAT(user.firstname,' ',user.lastname,' / ',user.email) as tutor_infos
-							FROM $tbl_user as user,$tbl_course as course
-							INNER JOIN $tbl_session_course as sessionCourse
-								ON sessionCourse.course_code = course.code
-							WHERE sessionCourse.id_coach = user.user_id
-							AND course.code= '".$_GET['course']."'
-						 ";
+		if($_GET['id_session']!=0){
+			$sqlInfosCourse = "	SELECT course.code,course.title,course.db_name,CONCAT(user.firstname,' ',user.lastname,' / ',user.email) as tutor_infos
+								FROM $tbl_user as user,$tbl_course as course
+								INNER JOIN $tbl_session_course as sessionCourse
+									ON sessionCourse.course_code = course.code
+								WHERE sessionCourse.id_coach = user.user_id
+								AND course.code= '".$_GET['course']."'
+							 ";
+		}
+		else{
+			$sqlInfosCourse = "	SELECT course.code,course.title,course.db_name
+								FROM $tbl_course as course
+								WHERE course.code= '".$_GET['course']."'
+							 ";
+		}
 
 		$resultInfosCourse = api_sql_query($sqlInfosCourse);
 
 		$a_infosCours = mysql_fetch_array($resultInfosCourse);
-		$tableTitle = $a_infosCours['title'].' - '.get_lang('Tutor').' : '.$a_infosCours['tutor_infos'];
-
-
+		
+		if($_GET['id_session']!=0){
+			$tableTitle = $a_infosCours['title'].' - '.get_lang('Tutor').' : '.$a_infosCours['tutor_infos'];
+		}
+		else{
+			$tableTitle = $a_infosCours['title'];
+		}
 
 		?>
 		<table class="data_table" width="100%">

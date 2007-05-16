@@ -47,9 +47,9 @@ class Export
 		foreach ($data as $index => $row)
 		{
 			$line = '';
-			for($i = 0 ; $i<count($row) ; $i++)
+			foreach($row as $value)
 			{
-				$line .= '"'.str_replace('"','""',$row[$i]).'";';
+				$line .= '"'.str_replace('"','""',$value).'";';
 			}
 			
 			fwrite($handle, $line."\n");

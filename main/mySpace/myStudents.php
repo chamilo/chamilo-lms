@@ -783,36 +783,38 @@ if(!empty($_GET['student']))
 			$csv_content[] = array(get_lang('Course'),get_lang('Time'),get_lang('Progress'),get_lang('Score'));
 			foreach($a_courses as $course_code)
 			{
-				$course_infos = CourseManager :: get_course_information($course_code);
-				$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_code));
-				$progress = Tracking :: get_avg_student_progress($a_infosUser['user_id'], $course_code).' %';
-				$score = Tracking :: get_avg_student_score($a_infosUser['user_id'], $course_code).' %';
-				$csv_content[] = array($course_infos['title'], $time_spent_on_course, $progress, $score);
-				echo '
-				<tr>				
-					<td align="right">
-						'.$course_infos['title'].'
-					</td>
-					<td align="right">
-						'.$time_spent_on_course.'
-					</td>
-					<td align="right">
-						'.$progress.'
-					</td>
-					<td align="right">
-						'.$score.'
-					</td>';
-					if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
-						echo '<td align="center" width="10">
-							<a href="'.api_get_self().'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'&id_coach='.$_GET['id_coach'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+				if(CourseManager :: is_user_subscribed_in_course($student_id,$course_code, true)){
+					$course_infos = CourseManager :: get_course_information($course_code);
+					$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_code));
+					$progress = Tracking :: get_avg_student_progress($a_infosUser['user_id'], $course_code).' %';
+					$score = Tracking :: get_avg_student_score($a_infosUser['user_id'], $course_code).' %';
+					$csv_content[] = array($course_infos['title'], $time_spent_on_course, $progress, $score);
+					echo '
+					<tr>				
+						<td align="right">
+							'.$course_infos['title'].'
+						</td>
+						<td align="right">
+							'.$time_spent_on_course.'
+						</td>
+						<td align="right">
+							'.$progress.'
+						</td>
+						<td align="right">
+							'.$score.'
 						</td>';
-					}
-					else{
-						echo '<td align="center" width="10">
-							<a href="'.api_get_self().'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
-						</td>';
-					}
-				echo '</tr>';
+						if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0){
+							echo '<td align="center" width="10">
+								<a href="'.api_get_self().'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'&id_coach='.$_GET['id_coach'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+							</td>';
+						}
+						else{
+							echo '<td align="center" width="10">
+								<a href="'.api_get_self().'?student='.$a_infosUser['user_id'].'&details=true&course='.$course_infos['code'].'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+							</td>';
+						}
+					echo '</tr>';
+				}
 				
 			}
 		}

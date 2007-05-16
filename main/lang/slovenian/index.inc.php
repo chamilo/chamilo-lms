@@ -66,4 +66,10 @@ $langRequestDenied = "Poziv je bil zavrnjen.";
 $UsageDatacreated = "Uporabniški podatki so bili ustvarjeni";
 $SessionView = "Prikaži teèaje razvršèene po sejah";
 $CourseView = "Prikaži popoln seznam teèajev";
+$DropboxFileAdded = "V nabiralnik je bila dodana nova datoteka";
+$NewMessageInForum = "Novo sporoèilo je bilo objavljeno v forumu";
+$FolderCreated = "Nova mapa je bila ustvarjena";
+$LinkAdded = "Nova povezava je bila dodana";
+$AnnouncementAdded = "Obvestilo je bilo dodano";
+$AgendaAdded = "Zapis agende je bil dodan";
 ?>

@@ -173,4 +173,5 @@ $ApprovalForNewAccount = "Approbation pour un nouveau compte";
 $ManageUser = "Gestion de l\'utilisateur";
 $SubscribeUserToCourseAsTeacher = "Inscrire des utilisateurs comme responsable";
 $PasswordEncryptedForSecurity = "Votre mot de passe est crypté pour des raisons de sécurité. Après avoir cliqué sur le lien, un autre e-mail vous sera envoyé avec votre mot de passe.";
+$UsersUnsubscribed = "Les utilisateurs sélectionnés ont été désinscrits de ce cours";
 ?>

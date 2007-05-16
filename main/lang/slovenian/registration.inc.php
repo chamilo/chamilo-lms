@@ -164,4 +164,6 @@ $YourAccountHasToBeApproved = "Vaš raèun zahteva odobritev";
 $ApprovalForNewAccount = "Odobritev za nov raèun";
 $ManageUser = "Upravljaj uporabnika";
 $SubscribeUserToCourseAsTeacher = "Vpiši uporabnike v ta teèaj kot uèitelje";
+$PasswordEncryptedForSecurity = "Vaše geslo je bilo kriptirano iz varnostnih razlogov. Zato vam bo geslo po kliku na dano povezavo poslano na vaš e-poštni naslov.";
+$UsersUnsubscribed = "Izbrani uporabnik je bil izpisan iz teèaja";
 ?>

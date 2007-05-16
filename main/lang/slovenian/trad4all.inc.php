@@ -425,4 +425,7 @@ $SessionFuture = "Neprièeta";
 $DateFormatLongWithoutDay = "%d. %B %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Napaèna mapa: ustvarite mapo z imenom <b>images</b> v orodju dokumenti, da bo možno vanj nalagati slike.";
 $UsersConnectedToMySessions = "Poglej vse uporabnike aktivne v mojih sejah";
+$DearUser = "Spoštovani uporabnik";
+$YourRegistrationData = "Vaši registracijski podatki";
+$ResetLink = "Kliknite tule za ponastavitev vašega gesla";
 ?>

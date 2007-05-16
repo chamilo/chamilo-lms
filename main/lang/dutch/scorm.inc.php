@@ -48,4 +48,5 @@ $UploadLocalFileFromGarbageDir = "Lokaal bestand uit de main/garbage folder opla
 $ThisItemIsNotExportable = "Dit item is momenteel niet SCORM compatibel. Het kan dus 
 niet geëxporteerd worden.";
 $MoveCurrentChapter = "Verplaats het huidige hoofdstuk";
+$UnknownPackageFormat = "Het pakket kan niet worden herkend. Zorg er voor dat het correct is aangemaakt en geen fouten bevat. Problemen komen mogelijk door een eigen ZIP formaat of het uploaden van grote bestanden. Gebruik minimale zip-opties indien u niet zeker bent van de ZIP.";
 ?>

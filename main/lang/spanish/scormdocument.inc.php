@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langChapter = "Capítulo";
+$langChapter = "Módulo";
 $langDocumentList = "Lista de todos los documentos";
 $langOrganisationList = "Tabla de contenidos";
 $langEditTOC = "Editar tabla de contenidos";
@@ -10,13 +10,13 @@ $langEditDocument = "Editar";
 $langCreateDocument = "Crear un documento";
 $langMissingImagesDetected = "Se detectaron imágenes perdidas";
 $langPublish = "Publicar";
-$langScormcontentstudent = "Este es un curso con formato scorm. Si desea verlo, pulse aquí : <input type=button name=scormbutton value=\'Comenzar!\' onclick=\'openscorm()\'>";
-$langScormcontent = "Esto es un contenido scorm<br><input type=button name=scormbutton value=\'Comenzar!\' onclick=\'openscorm()\'>";
+$langScormcontentstudent = "Este es un curso con formato SCORM. Si desea verlo, pulse aquí : <input type=button name=scormbutton value=\'Comenzar\' onclick=\'openscorm()\'>";
+$langScormcontent = "Esto es un contenido scorm<br><input type=button name=scormbutton value=\'Comenzar\' onclick=\'openscorm()\'>";
 $langDownloadAndZipEnd = "archivo ZIP enviado y descomprimido";
-$langZipNoPhp = "El archivo zip no puede tener archivos .PHP";
+$langZipNoPhp = "El archivo zip no puede contener archivos .PHP";
 $langGroupForumLink = "Foro del Grupo";
-$langGroupSpace = "área del grupo";
-$langNotScormContent = "¡ No es un archivo ZIP SCORM!";
+$langGroupSpace = "Área del grupo";
+$langNotScormContent = "¡ No es un archivo ZIP SCORM !";
 $langNoText = "Escriba el texto / contenido HTML";
 $langNoFileName = "Introduzca el nombre del archivo";
 $langMaxFileSize = "El tamaño máximo  del archivo es";
@@ -46,12 +46,12 @@ $learning_path_access = "Para borrar/modificar/mostrar/ocultar/editar/añadir un 
 $langRoot = "raíz";
 $langBuilder = "Constructor de itinerarios de aprendizaje";
 $lang_edit_learnpath = "Editar nombre/descripción";
-$lang_add_title_and_desc = "Renombrar & añadir desc.";
+$lang_add_title_and_desc = "Renombrar y añadir desc.";
 $lang_add_learnpath = "Crear un Itinerario de aprendizaje";
 $lang_learnpath_added = "El Itinerario de aprendizaje ha sido creado. Ahora puede añadirle módulos. Haga clic sobre su nombre y edítelo.";
-$lang_delete_learnpath = "Borrar";
+$lang_delete_learnpath = "Eliminar";
 $lang_learnpath_edited = "El Itinerario de aprendizaje ha sido editado";
-$lang_learnpath_deleted = "Este Itinerario de aprendizaje y todos sus módulos ha sido borrado";
+$lang_learnpath_deleted = "Este Itinerario de aprendizaje y todos sus módulos han sido eliminados";
 $lang_no_publish = "Ocultar a los estudiantes";
 $lang_publish = "Mostrar a los estudiantes";
 $lang_no_published = "ahora está oculto para los estudiantes";
@@ -62,7 +62,7 @@ $langScormBuilder = "Constructor SCORM";
 $langCreateDoc = "Crear documento";
 $langOrganiseDocuments = "Organizar documentos";
 $langUncompress = "Descomprimir";
-$ExportShort = "Exportación rápida";
+$ExportShort = "Exportación SCORM";
 $Description = "Descripción";
 $progress = "Progreso";
 ?>

@@ -605,4 +605,15 @@ $AllowEmailEditorTitle = "Activeer online e-mail editor";
 $AllowEmailEditorComment = "Als deze optie is geactiveerd, wordt een online e-mail editor geopend na het klikken op een e-mailadres";
 $AddCSVHeader = "Voeg de CSV hoofding toe?";
 $YesAddCSVHeader = "Ja, voeg de CSV hoofding toe<br />Deze lijn bepaalt de velden en is noodzakelijk als u het bestand wilt importeren in een andere Dokeos campus";
+$name = "Naam";
+$Security = "Veiligheid";
+$UploadExtensionsListType = "Filtertype op upload documenten";
+$UploadExtensionsListTypeComment = "Gebruik van blacklist of whitelist filtering. Zie beschrijving blacklist of whitelist voor meer informatie.";
+$Blacklist = "Blacklist";
+$Whitelist = "Whitelist";
+$UploadExtensionsBlacklist = "Blacklist - instellingen";
+$UploadExtensionsWhitelist = "Whistelist - instellingen";
+$UploadExtensionsReplaceBy = "Vervangende extensie";
+$Remove = "Verwijder";
+$Rename = "Hernoem";
 ?>

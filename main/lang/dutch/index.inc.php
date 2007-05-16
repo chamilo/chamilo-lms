@@ -63,4 +63,10 @@ $langRequestDenied = "Het verzoek is geweigerd.";
 $UsageDatacreated = "Gebruiksgegevens gecreëerd";
 $SessionView = "De cursussen weergeven volgens sessies";
 $CourseView = "De volledige lijst met cursussen weergeven";
+$DropboxFileAdded = "Dropbox bestand toegevoegd";
+$NewMessageInForum = "Nieuw bericht geplaatst in het forum";
+$FolderCreated = "Nieuwe folder aangemaakt";
+$LinkAdded = "Nieuwe link toegevoegd";
+$AnnouncementAdded = "Aankondiging toegevoegd";
+$AgendaAdded = "Agenda item toegevoegd";
 ?>

@@ -2048,21 +2048,35 @@ class Blog
 				INNER JOIN $table_course_user cu
 				ON u.user_id = cu.user_id AND course_code='$currentCourse'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
+		
+		include_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
+		include_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
+		
+		if(isset($_SESSION['session_id'])){
+			$session_id = $_SESSION['session_id'];
+		}
+		else{
+			$session_id = 0;
+		}
+		
+		$student_list = CourseManager :: get_student_list_from_course_code($currentCourse, true, $session_id);
+		
 		$user_data = array ();
 
 		// Add users that are not in this blog to the list.
-		while($user = mysql_fetch_array($result))
+		foreach($student_list as $key=>$user)
 		{
 			if(!in_array($user['user_id'],$blog_member_ids)) {
+				$a_infosUser = UserManager :: get_user_info_by_id($user['id_user']);
 				$row = array ();
-				$row[] = '<input type="checkbox" name="user[]" value="' . $user['user_id'] . '" '.(($_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '') . '/>';
-				$row[] = $user["lastname"];
-				$row[] = $user["firstname"];
-				$row[] = Display::encrypted_mailto_link($user["email"]);
+				$row[] = '<input type="checkbox" name="user[]" value="' . $a_infosUser['user_id'] . '" '.(($_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '') . '/>';
+				$row[] = $a_infosUser["lastname"];
+				$row[] = $a_infosUser["firstname"];
+				$row[] = Display::encrypted_mailto_link($a_infosUser["email"]);
 				//Link to register users
-				if($user["user_id"] != $HTTP_SESSION_VARS["uid"])
+				if($a_infosUser["user_id"] != $_SESSION['_user']['user_id'])
 				{
-					$row[] = "<a href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;register=yes&amp;user_id=" . $user[user_id]."\">" . get_lang('Register')."</a>";
+					$row[] = "<a href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;register=yes&amp;user_id=" . $a_infosUser["user_id"]."\">" . get_lang('Register')."</a>";
 				}
 				else
 				{

@@ -87,7 +87,7 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 
 	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 
-	$wantedCode = strtr($wantedCode, "ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
+	$wantedCode = strtr($wantedCode, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
 
 	$wantedCode = ereg_replace("[^A-Z0-9]", "", strtoupper($wantedCode));
 
@@ -929,7 +929,17 @@ function update_Db_course($courseDbName)
 	{
 		error_log($sql,0);
 	}
-
+	$sql = "ALTER TABLE `$TABLELPVIEW` ADD INDEX (lp_id) ";
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	$sql = "ALTER TABLE `$TABLELPVIEW` ADD INDEX (user_id) ";
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	
 	$sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEM` (" .
 		"id				int	unsigned	primary	key auto_increment," .	//unique ID from MySQL
 		"lp_id			int unsigned	not null," .	//lp_id from 'lp'
@@ -952,6 +962,11 @@ function update_Db_course($courseDbName)
 	{
 		error_log($sql,0);
 	}
+	$sql = "ALTER TABLE `$TABLELPITEM` ADD INDEX (lp_id)";
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
 
 	$sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEMVIEW` (" .
 		"id				bigint	unsigned	primary key auto_increment," . //unique ID
@@ -964,6 +979,16 @@ function update_Db_course($courseDbName)
 		"status			char(32) not null default 'Not attempted'," . //status for this item (SCORM)
 		"suspend_data	text null default ''," .
 		"lesson_location text null default '')";
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	$sql = "ALTER TABLE `$TABLELPITEMVIEW` ADD INDEX (lp_item_id) ";
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	$sql = "ALTER TABLE `$TABLELPITEMVIEW` ADD INDEX (lp_view_id) ";
 	if(!api_sql_query($sql))
 	{
 		error_log($sql,0);
@@ -982,6 +1007,11 @@ function update_Db_course($courseDbName)
 		"result			varchar(255) not null default ''," . //textual result
 		"latency		varchar(16)	not null default ''" . //time necessary for completion of the interaction
 		")";
+	if(!api_sql_query($sql))
+	{
+		error_log($sql,0);
+	}
+	$sql = "ALTER TABLE `$TABLELPIVINTERACTION` ADD INDEX (lp_iv_id) ";
 	if(!api_sql_query($sql))
 	{
 		error_log($sql,0);

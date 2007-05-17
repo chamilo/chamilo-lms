@@ -24,6 +24,13 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extens
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'false', 'Rename');
 
 -- xxSTATSxx
+ALTER TABLE track_e_attempt ADD INDEX (exe_id);
+ALTER TABLE track_e_attempt ADD INDEX (user_id); 
+ALTER TABLE track_e_attempt ADD INDEX (question_id);
+ALTER TABLE track_e_exercices ADD INDEX (exe_user_id);
+ALTER TABLE track_e_course_access ADD INDEX (user_id);
+ALTER TABLE track_e_course_access ADD INDEX (login_course_date);
+ALTER TABLE track_e_course_access ADD INDEX (course_code);
 
 -- xxUSERxx
 
@@ -34,3 +41,6 @@ ALTER TABLE lp_item ADD INDEX (lp_id);
 ALTER TABLE lp_item_view ADD INDEX (lp_item_id);
 ALTER TABLE lp_item_view ADD INDEX (lp_view_id);
 ALTER TABLE lp_iv_interaction ADD INDEX (lp_iv_id);
+ALTER TABLE quiz_question ADD INDEX (position); 
+ALTER TABLE forum_thread ADD INDEX (forum_id);
+ALTER TABLE forum_thread DROP INDEX thread_id; 

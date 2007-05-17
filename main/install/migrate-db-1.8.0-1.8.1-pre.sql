@@ -28,3 +28,9 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extens
 -- xxUSERxx
 
 -- xxCOURSExx
+ALTER TABLE lp_view ADD INDEX (lp_id);
+ALTER TABLE lp_view ADD INDEX (user_id);
+ALTER TABLE lp_item ADD INDEX (lp_id);
+ALTER TABLE lp_item_view ADD INDEX (lp_item_id);
+ALTER TABLE lp_item_view ADD INDEX (lp_view_id);
+ALTER TABLE lp_iv_interaction ADD INDEX (lp_iv_id);

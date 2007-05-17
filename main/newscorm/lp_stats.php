@@ -183,7 +183,7 @@ foreach ($list as $my_item_id) {
 			$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
 			//$my_lesson_status = get_lang($mylanglist[$lesson_status]);
 			if ($row['item_type'] != 'dokeos_chapter') {
-				$output .= "<tr class='$oddclass'>\n"."<td></td>\n"."<td>$extend_attempt_link</td>\n".'<td colspan="3">Attempt '.$row['iv_view_count']."</td>\n"
+				$output .= "<tr class='$oddclass'>\n"."<td></td>\n"."<td>$extend_attempt_link</td>\n".'<td colspan="3">'.htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset).' '.$row['iv_view_count']."</td>\n"
 				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
 				.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : $score.'/'.$maxscore)."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td>\n"."</tr>\n";
 			}

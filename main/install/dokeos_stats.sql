@@ -97,6 +97,7 @@ CREATE TABLE track_e_exercices (
   exe_weighting smallint NOT NULL default 0,
   PRIMARY KEY  (exe_id)
 );
+ALTER TABLE track_e_exercices ADD INDEX (exe_user_id);
 
 CREATE TABLE track_e_attempt (
   exe_id int default NULL,
@@ -108,6 +109,9 @@ CREATE TABLE track_e_attempt (
   course_code varchar(40) NOT NULL default '',
   position int default 0
 );
+ALTER TABLE track_e_attempt ADD INDEX (exe_id);
+ALTER TABLE track_e_attempt ADD INDEX (user_id); 
+ALTER TABLE track_e_attempt ADD INDEX (question_id);
 
 CREATE TABLE track_e_hotpotatoes (
   exe_name VARCHAR( 255 ) NOT NULL ,
@@ -174,3 +178,6 @@ CREATE TABLE track_e_course_access (
   counter int NOT NULL,
   PRIMARY KEY  (course_access_id)
 );
+ALTER TABLE track_e_course_access ADD INDEX (user_id);
+ALTER TABLE track_e_course_access ADD INDEX (login_course_date);
+ALTER TABLE track_e_course_access ADD INDEX (course_code);

@@ -492,12 +492,13 @@ function update_Db_course($courseDbName)
 		 thread_date datetime default '0000-00-00 00:00:00',
 		 thread_sticky tinyint unsigned default 0,
 		 locked int NOT NULL default 0,
-		 PRIMARY KEY (thread_id),
-		 KEY thread_id (thread_id)
+		 PRIMARY KEY (thread_id)
 		) TYPE=MyISAM";
 
 	api_sql_query($sql, __FILE__, __LINE__);
-
+	$sql = "ALTER TABLE `".$TABLETOOLFORUMTHREAD . "` ADD INDEX (forum_id)";
+	api_sql_query($sql, __FILE__, __LINE__);
+	
 	// Forum Posts
 	$sql = "
 		CREATE TABLE `".$TABLETOOLFORUMPOST . "` (
@@ -562,7 +563,9 @@ function update_Db_course($courseDbName)
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
-
+	$sql = "ALTER TABLE `".$TABLEQUIZQUESTIONLIST . "` ADD INDEX (position)";
+	api_sql_query($sql, __FILE__, __LINE__);
+	 
 	// Exercise tool - answers
 	$sql = "
 		CREATE TABLE `".$TABLEQUIZANSWERSLIST . "` (

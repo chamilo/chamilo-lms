@@ -657,7 +657,7 @@ function isCourseMember( $user_id)
 {
     global $_course;
 	$course_code = $_course['sysCode'];
-	$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code,$_SESSION['id_session']);
+	$is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code,true);
 	return $is_course_member;
 }
 

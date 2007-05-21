@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 12263 2007-05-03 13:34:40Z elixir_julian $
+* 	@version $Id: exercice_submit.php 12439 2007-05-21 08:14:11Z elixir_julian $
 */
 
 
@@ -530,7 +530,7 @@ foreach($questionList as $questionId)
 	}
 
 	$s="<tr>
-	 <td width='20'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
+	 <td width='3%'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
 	 <td valign='middle' bgcolor='#e6e6e6'>
 		".get_lang('Question')." ";
 	$s.=$i;

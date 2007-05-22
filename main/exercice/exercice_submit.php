@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 12439 2007-05-21 08:14:11Z elixir_julian $
+* 	@version $Id: exercice_submit.php 12443 2007-05-22 11:39:52Z elixir_julian $
 */
 
 
@@ -490,11 +490,6 @@ $s="
 echo $s;
 /* </ERM> */
 
-
-if (isset($_POST['submit']))
-	{
-	echo "Form submited";
-	}
 $i=0;
 
 foreach($questionList as $questionId)

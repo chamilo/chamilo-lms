@@ -154,6 +154,7 @@ var lms_item_credit = '<?php echo $oItem->get_credit();?>';
 var lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode();?>';
 var lms_item_launch_data = '<?php echo $oItem->get_launch_data();?>';
 var lms_item_interactions_count = '<?php echo $oItem->get_interactions_count(); ?>';
+var lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
 var asset_timer = 0;
 
 //Backup for old values
@@ -192,7 +193,8 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 		//msg_f.src = refresh_url;
 	}
 	*/
-	
+	G_LastError = G_NoError ;
+	G_LastErrorMessage = 'No error';	
 	lms_initialized=1;
 	return('true');
 }
@@ -204,13 +206,27 @@ function Initialize() {  //this is the initialize function of all APIobjects
 
 function LMSGetValue(param) {
 	//logit_scorm("LMSGetValue('"+param+"')",1);
+	G_LastError = G_NoError ;
+	G_LastErrorMessage = 'No error';	
 	var result='';
 	if(param=='cmi.core._children' || param=='cmi.core_children'){
 		result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
 	}else if(param == 'cmi.core.entry'){
-		result='';
+		if(lms_item_core_exit=='none')
+		{
+			result='ab-initio';
+		}
+		else if(lms_item_core_exit=='suspend')
+		{
+			result='resume';
+		}
+		else
+		{
+			result='';
+		}
 	}else if(param == 'cmi.core.exit'){
 		result='';
+		G_LastError = G_ElementIsWriteOnly;
 	}else if(param == 'cmi.core.lesson_status'){
 	    if(lesson_status != '') {
 	    	result=lesson_status;
@@ -351,6 +367,9 @@ function GetValue(param) {
 
 function LMSSetValue(param, val) {
 	logit_scorm("LMSSetValue\n\t('"+param+"','"+val+"')",0);
+	G_LastError = G_NoError ;
+	G_LastErrorMessage = 'No error';	
+	return_value = "true";
 	switch(param) {
 	case 'cmi.core.score.raw'		: score= val ;			break;
 	case 'cmi.core.score.max'		: max = val;			break;
@@ -368,6 +387,8 @@ function LMSSetValue(param, val) {
 	case 'cmi.score.scaled'			: score = val ;			break; //1.3
 	case 'cmi.success_status'		: success_status = val; break; //1.3
 	case 'cmi.suspend_data'			: suspend_data = val;   break;
+	case 'cmi.core.exit'			: lms_item_core_exit = val;		break;
+	case 'cmi.core.entry'			: return_value = "false"; G_LastError = G_ElementIsReadOnly; break;
 	default:
 		var myres = new Array();
 		if(myres = param.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency)(.*)/)){
@@ -417,6 +438,7 @@ function LMSSetValue(param, val) {
 					break;
 			}  
 		}else{
+			return_value = "false";
 			G_lastError = G_NotImplementedError;
 			G_lastErrorString = 'Not implemented yet';
 		}
@@ -429,7 +451,7 @@ function LMSSetValue(param, val) {
 		echo "    var mycommit = LMSCommit('force');";
 	}
 	?>
-	return(true);
+	return(return_value);
 }
 
 function SetValue(param, val) {
@@ -452,13 +474,15 @@ function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
     ?>/lp_controller.php?cidReq=<?php echo api_get_course_id();?>&action=save&lp_id=<?php echo $oLP->get_id();?>&" + param + "";
 	*/
 	logit_lms('saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
-	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions);
+	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
 	//xajax_update_pgs();
 	//xajax_update_toc();
 }
 
 function LMSCommit(val) {
 	logit_scorm('LMSCommit()',0);
+	G_LastError = G_NoError ;
+	G_LastErrorMessage = 'No error';	
     commit = true ;
 	savedata('commit');
 	return('true');
@@ -469,6 +493,8 @@ function Commit(val) {
 }
 
 function LMSFinish(val) {
+	G_LastError = G_NoError ;
+	G_LastErrorMessage = 'No error';	
 	if (( commit == false )) { 	
 		logit_scorm('LMSFinish() (no LMSCommit())',1); 
 	}
@@ -512,6 +538,8 @@ function GetDiagnostic(errCode){
 
 function Terminate(){
 	logit_scorm('Terminate()',0);
+	G_LastError = G_NoError ;
+	G_LastErrorMessage = 'No error';	
 	commit = true;
 	savedata('terminate');
 	return (true);

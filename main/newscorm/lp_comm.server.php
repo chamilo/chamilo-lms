@@ -54,11 +54,12 @@ function backup_item_details($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1
  * @param	string	Session time
  * @param	string	Suspend data
  * @param	string	Lesson location
+ * @param	string	Core exit SCORM string
  */
-function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$status='',$time=0,$suspend='',$location='',$interactions=array())
+function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$status='',$time=0,$suspend='',$location='',$interactions=array(),$core_exit='none')
 {
 	$debug=0;
-	if($debug>0){error_log('In xajax_save_item('.$lp_id.','.$user_id.','.$view_id.','.$item_id.','.$score.','.$max.','.$min.','.$status.','.$time.',"'.$suspend.'","'.$location.'","'.(count($interactions)>0?$interactions[0]:'').'")',0);}
+	if($debug>0){error_log('In xajax_save_item('.$lp_id.','.$user_id.','.$view_id.','.$item_id.','.$score.','.$max.','.$min.','.$status.','.$time.',"'.$suspend.'","'.$location.'","'.(count($interactions)>0?$interactions[0]:'').'","'.$core_exit.'")',0);}
 	$objResponse = new xajaxResponse();
 	require_once('learnpath.class.php');
 	require_once('scorm.class.php');
@@ -132,6 +133,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 				$mylpi->add_interaction($index,$interactions[$index]);
 			}
 		}
+		$mylpi->set_core_exit($core_exit);
 		$mylp->save_item($item_id,false);
 	}
 	
@@ -280,7 +282,9 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 			"suspend_data='".$mysuspend_data."';" .
 			"lesson_location='".$mylesson_location."';" .
 			"total_time = '".$mytotal_time."';" .
-			"interactions = new Array();");
+			"interactions = new Array();" .
+			"G_lastError = 0;" .
+			"G_LastErrorMessage = 'No error';");
 	/*
 	 * and re-initialise the rest
 	 * -saved_lesson_status = 'not attempted'
@@ -307,6 +311,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 	$mycredit = $mylpi->get_credit();
 	$mylaunch_data = $mylpi->get_launch_data();
 	$myinteractions_count = $mylpi->get_interactions_count();
+	$mycore_exit = $mylpi->get_core_exit();
 	$objResponse->addScript(
 			"saved_lesson_status='not attempted';" .
 			"lms_lp_id=".$lp_id.";" .
@@ -327,6 +332,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 			"lms_item_lesson_mode = '".$mylesson_mode."';" .
 			"lms_item_launch_data = '".$mylaunch_data."';" .
 			"lms_item_interactions_count = '".$myinteractions_count."';" .
+			"lms_item_core_exit = '".$mycore_exit."'" .
 			"asset_timer = 0;"
 			);
 	$objResponse->addScript("update_toc('unhighlight','".$current_item."');");

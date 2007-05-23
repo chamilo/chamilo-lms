@@ -222,6 +222,13 @@ class learnpathItem{
     	return $list;
     }
     /**
+     * Gets the core_exit value from the database
+     */
+    function get_core_exit()
+    {
+    	return $this->core_exit;
+    }
+    /**
      * Gets the credit information (rather scorm-stuff) based on current status and reinit
      * autorization. Credit tells the sco(content) if Dokeos will record the data it is sent (credit) or not (no-credit)
      * @return	string	'credit' or 'no-credit'. Defaults to 'credit' because if we don't know enough about this item, it's probably because it was never used before.
@@ -1321,7 +1328,11 @@ class learnpathItem{
 		     			case 'lesson_location':
 		     				$this->set_lesson_location($value);
 		     				if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting lesson_location to '.$value,0);}
-		     				break;	
+		     				break;
+		     			case 'core_exit':
+		     				$this->set_core_exit($value);
+		     				if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting core_exit to '.$value,0);}
+		     				break;
 		     			case 'interactions':
 		     				//$interactions = unserialize($value);
 		     				//foreach($interactions as $interaction){
@@ -1399,6 +1410,24 @@ class learnpathItem{
      	return false;
     }
     /**
+     * Sets the core_exit value to the one given
+     */
+    function set_core_exit($value)
+    {
+    	switch($value){
+    		case '':
+    			$this->core_exit = '';
+    			break;
+    		case 'suspend':
+    			$this->core_exit = 'suspend';
+    			break;
+    		default:
+    			$this->core_exit = 'none';
+    			break;
+    	}
+    	return true;
+    }
+    /**
      * Sets the item's description
      * @param	string	Description
      */
@@ -1455,6 +1484,7 @@ class learnpathItem{
 				$this->current_start_time	= $row['start_time'];
 				$this->current_stop_time 	= $this->current_start_time + $row['total_time']; 
 				$this->lesson_location  = $row['lesson_location'];
+				$this->core_exit		= $row['core_exit'];
 		     	if($this->debug>2){error_log('New LP - In learnpathItem::set_lp_view() - Updated item object with database values',0);}
 
 		     	//now get the number of interactions for this little guy

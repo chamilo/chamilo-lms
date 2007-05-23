@@ -43,4 +43,5 @@ ALTER TABLE lp_item_view ADD INDEX (lp_view_id);
 ALTER TABLE lp_iv_interaction ADD INDEX (lp_iv_id);
 ALTER TABLE quiz_question ADD INDEX (position); 
 ALTER TABLE forum_thread ADD INDEX (forum_id);
-ALTER TABLE forum_thread DROP INDEX thread_id; 
+ALTER TABLE forum_thread DROP INDEX thread_id;
+ALTER TABLE lp_item_view ADD core_exit varchar(32) NOT NULL DEFAULT 'none';

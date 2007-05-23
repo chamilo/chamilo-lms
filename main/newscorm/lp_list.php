@@ -62,7 +62,7 @@ function confirmation (name)
 		{return false;}
 }
 </script>";
-$nameTools = get_lang("Doc");
+$nameTools = get_lang(ucfirst(TOOL_LEARNPATH));
 event_access_tool(TOOL_LEARNPATH);
 
 if (! $is_allowed_in_course) api_not_allowed();

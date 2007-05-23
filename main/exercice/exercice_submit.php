@@ -35,7 +35,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 12443 2007-05-22 11:39:52Z elixir_julian $
+* 	@version $Id: exercice_submit.php 12447 2007-05-23 08:03:37Z elixir_julian $
 */
 
 
@@ -474,8 +474,11 @@ if($number_of_hotspot_questions > 0)
 	$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
 }
 $s="
-<p>$exerciseDescription</p>
- <form method='post' action='".api_get_self()."?autocomplete=off' name='frm_exercise' $onsubmit>
+<p>$exerciseDescription</p>";
+if($origin == 'learnpath' && $exerciseType==2){
+	$s2 = "&exerciseId=".$exerciseId;
+}
+$s.=" <form method='post' action='".api_get_self()."?autocomplete=off".$s2."' name='frm_exercise' $onsubmit>
  <input type='hidden' name='formSent' value='1' />
  <input type='hidden' name='exerciseType' value='".$exerciseType."' />
  <input type='hidden' name='questionNum' value='".$questionNum."' />

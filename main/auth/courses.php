@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 12279 2007-05-03 16:04:53Z yannoo $
+<?php // $Id: courses.php 12467 2007-05-25 21:35:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -208,13 +208,6 @@ switch ($safe['action'])
 echo '</div>';
 Display :: display_footer();
 
-
-
-
-
-
-
-
 /*
 ==============================================================================
 		FUNCTIONS
@@ -332,22 +325,23 @@ function count_courses_in_category($category)
 function browse_course_categories()
 {
 	$tbl_courses_nodes      = Database::get_main_table(TABLE_MAIN_CATEGORY);
+	$category = Database::escape_string($_GET['category']);
 
 	echo "<p><b>".get_lang('CourseCategories')."</b>";
 
-	$sql= "SELECT * FROM $tbl_courses_nodes WHERE parent_id ".(empty($_GET['category'])?"IS NULL":"='".$_GET['category']."'")." GROUP BY code, parent_id  ORDER BY tree_pos ASC";
+	$sql= "SELECT * FROM $tbl_courses_nodes WHERE parent_id ".(empty($category)?"IS NULL":"='".$category."'")." GROUP BY code, parent_id  ORDER BY tree_pos ASC";
 	$result=mysql_query($sql);
 	echo "<ul>";
 	while ($row=mysql_fetch_array($result))
 	{
 		if ($row['children_count'] > 0 OR count_courses_in_category($row['code'])>0)
 		{
-			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$_GET['category']."\">".$row['name']."</a>".
+			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".Security::remove_XSS($_GET['category'])."\">".$row['name']."</a>".
 				" (".count_courses_in_category($row['code']).")</li>";
 		}
 		elseif ($row['nbChilds'] > 0)
 		{
-			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$_GET['category']."\">".$row['name']."</a></li>";
+			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".Security::remove_XSS($_GET['category'])."\">".$row['name']."</a></li>";
 		}
 		else
 		{
@@ -358,7 +352,7 @@ function browse_course_categories()
 	echo "</ul>";
 	if ($_GET['category'])
 	{
-		echo "<a href=\"".api_get_self()."?action=subscribe&amp;category=".$_GET['up']."\">&lt; ".get_lang('UpOneCategory')."</a>";
+		echo "<a href=\"".api_get_self()."?action=subscribe&amp;category=".Security::remove_XSS($_GET['up'])."\">&lt; ".get_lang('UpOneCategory')."</a>";
 	}
 }
 
@@ -371,10 +365,10 @@ function browse_course_categories()
 function browse_courses_in_category()
 {
 	$tbl_course         = Database::get_main_table(TABLE_MAIN_COURSE);
-
+	$category = Database::escape_string($_GET['category']);
 
 	echo "<p><b>".get_lang('CoursesInCategory')."</b>";
-	$my_category = (empty($_GET['category'])?" IS NULL":"='".mysql_real_escape_string($_GET['category'])."'");
+	$my_category = (empty($category)?" IS NULL":"='".$category."'");
 	$sql="SELECT * FROM $tbl_course WHERE category_code".$my_category;
 	$result=api_sql_query($sql);
 	while ($row=mysql_fetch_array($result))
@@ -1011,6 +1005,7 @@ function display_category_icons($current_category, $all_user_categories)
 function display_change_course_category_form($edit_course)
 {
 	global $_user, $_configuration, $safe;
+	$edit_course = Security::remove_XSS($edit_course);
 
 	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";

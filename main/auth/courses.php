@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 12469 2007-05-25 21:46:06Z yannoo $
+<?php // $Id: courses.php 12470 2007-05-25 22:13:59Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -326,7 +326,8 @@ function browse_course_categories()
 {
 	$tbl_courses_nodes      = Database::get_main_table(TABLE_MAIN_CATEGORY);
 	$category = Database::escape_string($_GET['category']);
-
+	$safe_url_categ = Security::remove_XSS($_GET['category']);
+	
 	echo "<p><b>".get_lang('CourseCategories')."</b>";
 
 	$sql= "SELECT * FROM $tbl_courses_nodes WHERE parent_id ".(empty($category)?"IS NULL":"='".$category."'")." GROUP BY code, parent_id  ORDER BY tree_pos ASC";
@@ -334,14 +335,15 @@ function browse_course_categories()
 	echo "<ul>";
 	while ($row=Database::fetch_array($result))
 	{
-		if ($row['children_count'] > 0 OR count_courses_in_category($row['code'])>0)
+		$count_courses_in_categ = count_courses_in_category($row['code']);
+		if ($row['children_count'] > 0 OR $count_courses_in_categ>0)
 		{
-			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".Security::remove_XSS($_GET['category'])."\">".$row['name']."</a>".
-				" (".count_courses_in_category($row['code']).")</li>";
+			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$safe_url_categ."\">".$row['name']."</a>".
+				" (".$count_courses_in_categ.")</li>";
 		}
 		elseif ($row['nbChilds'] > 0)
 		{
-			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".Security::remove_XSS($_GET['category'])."\">".$row['name']."</a></li>";
+			echo	"<li><a href=\"".api_get_self()."?action=subscribe&amp;category=".$row['code']."&amp;up=".$safe_url_categ."\">".$row['name']."</a></li>";
 		}
 		else
 		{
@@ -470,22 +472,6 @@ function display_subscribe_to_courses($courses)
 	echo "</table>";
 }
 
-
-/**
- * This function filters dangerous stuff out. It does addslashes when the php.ini setting
- * magic_quotes is set to off.
- * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
- * @param string something that possibly needs addslashing
- * @return string the addslahed version of the input
-*/
-function escape($s)
-{
-    if(!get_magic_quotes_gpc())
-    return addslashes($s);
-    else return $s;
-}
-
-
 /**
  * Search the courses database for a course that matches the search term.
  * The search is done on the code, title and tutor field of the course table.
@@ -498,15 +484,15 @@ function search_courses($search_term)
 {
 	$TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
 
-	$search_term_safe=escape($search_term);
+	$search_term_safe=Database::escape_string($search_term);
 
 	$sql_find="SELECT * FROM $TABLECOURS WHERE code LIKE '%".$search_term_safe."%' OR title LIKE '%".$search_term_safe."%' OR tutor_name LIKE '%".$search_term_safe."%'";
 	$result_find=api_sql_query($sql_find,__FILE__,__LINE__);
 
 	while ($row=Database::fetch_array($result_find))
-		{
+	{
 		$courses[]=array("code" => $row['code'], "directory" => $row['directory'], "db"=> $row['db_name'], "visual_code" => $row['visual_code'], "title" => $row['title'], "tutor" => $row['tutor_name'], "subscribe" => $row['subscribe'], "unsubscribe" => $row['unsubscribe']);
-		}
+	}
 	return $courses;
 }
 
@@ -554,11 +540,11 @@ function store_course_category()
 
 	// step 2: we check if there is already a category with this name, if not we store it, else we give an error.
 	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' AND title='".Database::escape_string($_POST['title_course_category'])."'ORDER BY sort DESC";
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 	if (Database::num_rows($result) == 0)
 	{
-	$sql_insert="INSERT INTO `$TABLE_USER_COURSE_CATEGORY` (user_id, title,sort) VALUES ('".$_user['user_id']."', '".htmlentities($_POST['title_course_category'])."', '".$nextsort."')";
-	api_sql_query($sql_insert);
+		$sql_insert="INSERT INTO `$TABLE_USER_COURSE_CATEGORY` (user_id, title,sort) VALUES ('".$_user['user_id']."', '".htmlentities($_POST['title_course_category'])."', '".$nextsort."')";
+		api_sql_query($sql_insert,__FILE__,__LINE__);
 		Display::display_confirmation_message(get_lang("CourseCategoryStored"));
 	}
 	else
@@ -612,11 +598,12 @@ function display_create_course_category_form()
 function store_changecoursecategory($course_code, $newcategory)
 {
 	global $_user;
+	$course_code = Database::escape_string($course_code);
+	$newcategory = Database::escape_string($newcategory);
 
 	$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$max_sort_value=api_max_sort_value($newcategory,$_user['user_id']); //max_sort_value($newcategory);
-	$new_category = htmlentities($newcategory);
 	$sql="UPDATE $TABLECOURSUSER SET user_course_cat='".$newcategory."', sort='".($max_sort_value+1)."' WHERE course_code='".$course_code."' AND user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql);
 	return get_lang("EditCourseCategorySucces");
@@ -670,12 +657,12 @@ function move_course($direction, $course2move, $category)
 
 
 /**
- * moves the course one place up or down
+ * Moves the course one place up or down
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param string $direction : the direction we are moving the course to (up or down)
  *		  string $course2move : the course we are moving
  * @return string a language variable saying that the course was moved.
-*/
+ */
 function move_category($direction, $category2move)
 {
 	global $_user;
@@ -683,21 +670,27 @@ function move_category($direction, $category2move)
 	$table_user_defined_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
 	$user_coursecategories=get_user_course_categories();
+	$user_course_categories_info = get_user_course_categories_info();
 
 
-	foreach ($user_coursecategories as $key=>$categoryid)
+	foreach ($user_course_categories_info as $key=>$category_details)
+	{
+		if ($category2move==$category_details['id'])
 		{
-		if ($category2move==$categoryid)
-			{
 			// source_course is the course where we clicked the up or down icon
-			$source_category=get_user_course_category($category2move);
+			//$source_category=get_user_course_category($category2move);
+			$source_category = $user_course_categories_info[$category2move];
 			// target_course is the course before/after the source_course (depending on the up/down icon)
 			if ($direction=="up")
-				{$target_category=get_user_course_category($user_coursecategories[$key-1]);}
+			{
+				$target_category=$user_course_categories_info[$user_coursecategories[$key-1]];
+			}
 			else
-				{$target_category=get_user_course_category($user_coursecategories[$key+1]);}
-			 } // if ($course2move==$course['code'])
-		} // foreach ($user_courses as $key=>$course)
+			{
+				$target_category=$user_course_categories_info[$user_coursecategories[$key+1]];
+			}
+		} // if ($course2move==$course['code'])
+	} // foreach ($user_courses as $key=>$course)
 
 	$sql_update1="UPDATE $table_user_defined_category SET sort='".$target_category['sort']."' WHERE id='".$source_category['id']."' AND user_id='".$_user['user_id']."'";
 	$sql_update2="UPDATE $table_user_defined_category SET sort='".$source_category['sort']."' WHERE id='".$target_category['id']."' AND user_id='".$_user['user_id']."'";
@@ -1088,7 +1081,7 @@ function get_courses_of_user($user_id)
 /**
  * retrieves the user defined course categories
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @return array containing all the titles of the user defined courses with the id as key of the array
+ * @return array containing all the IDs of the user defined courses categories, sorted by the "sort" field
 */
 function get_user_course_categories()
 {
@@ -1104,6 +1097,23 @@ function get_user_course_categories()
 }
 
 
+/**
+ * Retrieves the user defined course categories and all the info that goes with it
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @return array containing all the info of the user defined courses categories with the id as key of the array
+*/
+function get_user_course_categories_info()
+{
+	global $_user;
+	$table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	while ($row = Database::fetch_array($result))
+	{
+		$output[$row['id']] = $row;
+	}
+	return $output;
+}
 
 /**
  * @author unknown

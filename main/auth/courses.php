@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 12471 2007-05-25 22:23:24Z yannoo $
+<?php // $Id: courses.php 12472 2007-05-25 22:29:07Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -268,7 +268,7 @@ function remove_user_from_course($user_id, $course_code)
 	// because the course administrator cannot unsubscribe himself
 	// (s)he can only delete the course
 	$sql_check="SELECT * FROM $tbl_course_user WHERE user_id='".$user_id."' AND course_code='".$course_code."' AND status='1'";
-	$result_check=api_sql_query($sql_check);
+	$result_check=api_sql_query($sql_check,__FILE__,__LINE__);
 	$number_of_rows=Database::num_rows($result_check);
 
 	if ($number_of_rows>0)
@@ -312,7 +312,7 @@ function count_courses_in_category($category)
 {
 	$tbl_course         = Database::get_main_table(TABLE_MAIN_COURSE);
 	$sql="SELECT * FROM $tbl_course WHERE category_code".(empty($category)?" IS NULL":"='".$category."'");
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 	return Database::num_rows($result);
 }
 
@@ -331,7 +331,7 @@ function browse_course_categories()
 	echo "<p><b>".get_lang('CourseCategories')."</b>";
 
 	$sql= "SELECT * FROM $tbl_courses_nodes WHERE parent_id ".(empty($category)?"IS NULL":"='".$category."'")." GROUP BY code, parent_id  ORDER BY tree_pos ASC";
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 	echo "<ul>";
 	while ($row=Database::fetch_array($result))
 	{
@@ -372,7 +372,7 @@ function browse_courses_in_category()
 	echo "<p><b>".get_lang('CoursesInCategory')."</b>";
 	$my_category = (empty($category)?" IS NULL":"='".$category."'");
 	$sql="SELECT * FROM $tbl_course WHERE category_code".$my_category;
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result))
 	{
 		if ($row['registration_code']=='')
@@ -534,7 +534,7 @@ function store_course_category()
 
 	// step 1: we determine the max value of the user defined course categories
 	$sql="SELECT sort FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' ORDER BY sort DESC";
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$maxsort=Database::fetch_array($result);
 	$nextsort=$maxsort['sort']+1;
 
@@ -605,7 +605,7 @@ function store_changecoursecategory($course_code, $newcategory)
 
 	$max_sort_value=api_max_sort_value($newcategory,$_user['user_id']); //max_sort_value($newcategory);
 	$sql="UPDATE $TABLECOURSUSER SET user_course_cat='".$newcategory."', sort='".($max_sort_value+1)."' WHERE course_code='".$course_code."' AND user_id='".$_user['user_id']."'";
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 	return get_lang("EditCourseCategorySucces");
 }
 /**
@@ -725,7 +725,7 @@ function display_courses($user_id, $show_course_icons, $user_courses)
 	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result))
 	{
 		if ($show_course_icons=true)
@@ -1001,7 +1001,7 @@ function display_change_course_category_form($edit_course)
 	$DATABASE_USER_TOOLS = $_configuration['user_personal_database'];
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."'";
-	$result=api_sql_query($sql);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 
 
 	$output="<form name=\"edit_course_category\" method=\"post\" action=\"courses.php?action=".$safe['action']."\">\n";

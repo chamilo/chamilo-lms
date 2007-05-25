@@ -40,7 +40,6 @@ if(file_exists($main_configuration_file_path))
 // include the main Dokeos platform library file
 require_once($includePath.'/lib/main_api.lib.php');
 
-
 // Start session
 
 api_session_start($already_installed);
@@ -82,13 +81,17 @@ EOM;
 	die($error_message);
 }
 
+//Assigning a variable to avoid several useless calls to the database setting. 
+// Do not over-user. This is only for this script's local use.
+$lib_path = api_get_path(LIBRARY_PATH); 
 // Add the path to the pear packages to the include path
-ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.api_get_path(LIBRARY_PATH).'pear');
+ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.$lib_path.'pear');
 
 // Include the libraries that are necessary everywhere
-require_once(api_get_path(LIBRARY_PATH).'database.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'display.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
+require_once($lib_path.'database.lib.php');
+require_once($lib_path.'display.lib.php');
+require_once($lib_path.'text.lib.php');
+require_once($lib_path.'security.lib.php');
 
 // @todo: this shouldn't be done here. It should be stored correctly during installation
 if(empty($_configuration['statistics_database']) && $already_installed)
@@ -159,11 +162,6 @@ if (!$x=strpos($_SERVER['PHP_SELF'],'whoisonline.php'))
 
 // ===== end "who is logged in?" module section =====
 
-
-
-// preventing XSS injections on all scripts at once
-$_SERVER['PHP_SELF'] = api_get_self();
-
 if(get_setting('server_type') == 'test')
 {
 	/*
@@ -216,72 +214,6 @@ else
 	if(!isset($HTTP_POST_FILES)) { $HTTP_POST_FILES=$_FILES; }
 	if(!isset($HTTP_SESSION_VARS)) { $HTTP_SESSION_VARS=$_SESSION; }
 	if(!isset($HTTP_SERVER_VARS)) { $HTTP_SERVER_VARS=$_SERVER; }
-
-	/*
-	// Register GET variables into $GLOBALS
-	if(sizeof($HTTP_GET_VARS))
-	{
-		$_GET=array();
-
-		foreach($HTTP_GET_VARS as $key=>$val)
-		{
-			if(!ini_get('magic_quotes_gpc'))
-			{
-				if(is_string($val))
-				{
-					$HTTP_GET_VARS[$key]=addslashes($val);
-				}
-			}
-
-			$_GET[$key]=$HTTP_GET_VARS[$key];
-
-			if(!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key!= 'clarolineRepositorySys' && $key!= 'lang_path' && $key!= 'extAuthSource' && $key!= 'thisAuthSource' && $key!= 'main_configuration_file_path' && $key!= 'phpDigIncCn' && $key!= 'drs')
-			{
-				$GLOBALS[$key]=$HTTP_GET_VARS[$key];
-			}
-		}
-	}
-
-	// Register POST variables into $GLOBALS
-	if(sizeof($HTTP_POST_VARS))
-	{
-		$_POST=array();
-
-		foreach($HTTP_POST_VARS as $key=>$val)
-		{
-			if(!ini_get('magic_quotes_gpc'))
-			{
-				if(is_string($val))
-				{
-					$HTTP_POST_VARS[$key]=addslashes($val);
-				}
-			}
-
-			$_POST[$key]=$HTTP_POST_VARS[$key];
-
-			if(!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key!= 'clarolineRepositorySys' && $key!= 'lang_path' && $key!= 'extAuthSource' && $key!= 'thisAuthSource' && $key!= 'main_configuration_file_path' && $key!= 'phpDigIncCn' && $key!= 'drs')
-			{
-				$GLOBALS[$key]=$HTTP_POST_VARS[$key];
-			}
-		}
-	}
-
-
-	if(sizeof($HTTP_POST_FILES))
-	{
-		$_FILES=array();
-
-		foreach($HTTP_POST_FILES as $key=>$val)
-		{
-			$_FILES[$key]=$HTTP_POST_FILES[$key];
-
-			if(!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key!= 'clarolineRepositorySys' && $key!= 'lang_path' && $key!= 'extAuthSource' && $key!= 'thisAuthSource' && $key!= 'main_configuration_file_path' && $key!= 'phpDigIncCn' && $key!= 'drs')
-			{
-				$GLOBALS[$key]=$HTTP_POST_FILES[$key];
-			}
-		}
-	}
-	*/
 
 	// Register SESSION variables into $GLOBALS
 	if(sizeof($HTTP_SESSION_VARS))

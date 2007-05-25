@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 12470 2007-05-25 22:13:59Z yannoo $
+<?php // $Id: courses.php 12471 2007-05-25 22:23:24Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -672,10 +672,9 @@ function move_category($direction, $category2move)
 	$user_coursecategories=get_user_course_categories();
 	$user_course_categories_info = get_user_course_categories_info();
 
-
-	foreach ($user_course_categories_info as $key=>$category_details)
+	foreach ($user_coursecategories as $key=>$category_id)
 	{
-		if ($category2move==$category_details['id'])
+		if ($category2move==$category_id)
 		{
 			// source_course is the course where we clicked the up or down icon
 			//$source_category=get_user_course_category($category2move);

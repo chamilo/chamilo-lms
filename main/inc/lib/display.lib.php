@@ -473,7 +473,7 @@ class Display {
 	 * page title)
 	 * @param string $help
 	 */
-	function display_header($tool_name, $help = NULL)
+	function display_header($tool_name='', $help = NULL)
 	{
 		$nameTools = $tool_name;
 		global $_plugins;

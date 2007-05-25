@@ -14,6 +14,10 @@ require_once('Classes/ImageEditor.php');
 $manager = new ImageManager($IMConfig);
 $editor = new ImageEditor($manager, $IMConfig);
 
+$img_url = Security::remove_XSS($_GET['img']);
+//@TODO: the following path should be checked using the Security::check_rel_path() method but for this we need to know under which dir this path lives
+$img_dir = dirname($_GET['img']); 
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -79,9 +83,9 @@ $editor = new ImageEditor($manager, $IMConfig);
 		<table>
 		<tr>
 			<td>
-				<form action="editorFrame.php?img=<?php echo $_GET['img']; ?>&action=replace" target='editor' id="uploadForm" method="post" enctype="multipart/form-data">
+				<form action="editorFrame.php?img=<?php echo $img_url; ?>&action=replace" target='editor' id="uploadForm" method="post" enctype="multipart/form-data">
 					&nbsp;<input type="file" name="upload" id="upload"/>
-					<input type="hidden" name="dir" id="dir" value="<?php echo dirname($img); ?>" />
+					<input type="hidden" name="dir" id="dir" value="<?php echo $img_dir; ?>" />
 				</form>
 			</td>
 			<td>
@@ -288,7 +292,7 @@ $editor = new ImageEditor($manager, $IMConfig);
 </div>
 <div id="contents">
 <div id="messages" style="display: none;"><span id="message"></span><img SRC="img/dots.gif" width="22" height="12" alt="..." /></div>
-<iframe src="editorFrame.php?img=<?php if(isset($_GET['img'])) echo rawurlencode($_GET['img']); ?>" name="editor" id="editor" scrolling="auto" title="Image Editor" frameborder="0"></iframe>
+<iframe src="editorFrame.php?img=<?php if(isset($_GET['img'])) echo rawurlencode(htmlentities($_GET['img'])); ?>" name="editor" id="editor" scrolling="auto" title="Image Editor" frameborder="0"></iframe>
 </div>
 <div id="bottom"></div>
 </body>

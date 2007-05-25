@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 12468 2007-05-25 21:38:20Z yannoo $
+<?php // $Id: courses.php 12469 2007-05-25 21:46:06Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -269,7 +269,7 @@ function remove_user_from_course($user_id, $course_code)
 	// (s)he can only delete the course
 	$sql_check="SELECT * FROM $tbl_course_user WHERE user_id='".$user_id."' AND course_code='".$course_code."' AND status='1'";
 	$result_check=api_sql_query($sql_check);
-	$number_of_rows=mysql_num_rows($result_check);
+	$number_of_rows=Database::num_rows($result_check);
 
 	if ($number_of_rows>0)
 	{return false;}
@@ -300,9 +300,9 @@ function browse_courses()
 {
 	browse_course_categories();
 	if (!isset($_POST['search_course']))
-		{
+	{
 		browse_courses_in_category();
-		}
+	}
 }
 
 /**
@@ -313,7 +313,7 @@ function count_courses_in_category($category)
 	$tbl_course         = Database::get_main_table(TABLE_MAIN_COURSE);
 	$sql="SELECT * FROM $tbl_course WHERE category_code".(empty($category)?" IS NULL":"='".$category."'");
 	$result=api_sql_query($sql);
-	return mysql_num_rows($result);
+	return Database::num_rows($result);
 }
 
 
@@ -330,9 +330,9 @@ function browse_course_categories()
 	echo "<p><b>".get_lang('CourseCategories')."</b>";
 
 	$sql= "SELECT * FROM $tbl_courses_nodes WHERE parent_id ".(empty($category)?"IS NULL":"='".$category."'")." GROUP BY code, parent_id  ORDER BY tree_pos ASC";
-	$result=mysql_query($sql);
+	$result=api_sql_query($sql);
 	echo "<ul>";
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		if ($row['children_count'] > 0 OR count_courses_in_category($row['code'])>0)
 		{
@@ -371,7 +371,7 @@ function browse_courses_in_category()
 	$my_category = (empty($category)?" IS NULL":"='".$category."'");
 	$sql="SELECT * FROM $tbl_course WHERE category_code".$my_category;
 	$result=api_sql_query($sql);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		if ($row['registration_code']=='')
 		{
@@ -501,9 +501,9 @@ function search_courses($search_term)
 	$search_term_safe=escape($search_term);
 
 	$sql_find="SELECT * FROM $TABLECOURS WHERE code LIKE '%".$search_term_safe."%' OR title LIKE '%".$search_term_safe."%' OR tutor_name LIKE '%".$search_term_safe."%'";
-	$result_find=mysql_query($sql_find) or die(mysql_error());
+	$result_find=api_sql_query($sql_find,__FILE__,__LINE__);
 
-	while ($row=mysql_fetch_array($result_find))
+	while ($row=Database::fetch_array($result_find))
 		{
 		$courses[]=array("code" => $row['code'], "directory" => $row['directory'], "db"=> $row['db_name'], "visual_code" => $row['visual_code'], "title" => $row['title'], "tutor" => $row['tutor_name'], "subscribe" => $row['subscribe'], "unsubscribe" => $row['unsubscribe']);
 		}
@@ -527,8 +527,8 @@ function delete_course_category($id)
 	$id = intval($id);
 	$sql_delete="DELETE FROM `$TABLE_USER_COURSE_CATEGORY` WHERE id='".$id."' and user_id='".$_user['user_id']."'";
 	$sql_update="UPDATE $TABLECOURSUSER SET user_course_cat='0' WHERE user_course_cat='".$id."' AND user_id='".$_user['user_id']."'";
-	mysql_query($sql_delete) or die(mysql_error());
-	mysql_query($sql_update) or die(mysql_error());
+	api_sql_query($sql_delete,__FILE__,__LINE__);
+	api_sql_query($sql_update,__FILE__,__LINE__);
 
 	return get_lang("CourseCategoryDeleted");
 }
@@ -549,13 +549,13 @@ function store_course_category()
 	// step 1: we determine the max value of the user defined course categories
 	$sql="SELECT sort FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' ORDER BY sort DESC";
 	$result=api_sql_query($sql);
-	$maxsort=mysql_fetch_array($result);
+	$maxsort=Database::fetch_array($result);
 	$nextsort=$maxsort['sort']+1;
 
 	// step 2: we check if there is already a category with this name, if not we store it, else we give an error.
 	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' AND title='".Database::escape_string($_POST['title_course_category'])."'ORDER BY sort DESC";
 	$result=api_sql_query($sql);
-	if (mysql_numrows($result) == 0)
+	if (Database::num_rows($result) == 0)
 	{
 	$sql_insert="INSERT INTO `$TABLE_USER_COURSE_CATEGORY` (user_id, title,sort) VALUES ('".$_user['user_id']."', '".htmlentities($_POST['title_course_category'])."', '".$nextsort."')";
 	api_sql_query($sql_insert);
@@ -587,10 +587,10 @@ function display_create_course_category_form()
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."'";
 	$result=api_sql_query($sql, __LINE__, __FILE__);
-	if (mysql_num_rows($result)>0)
+	if (Database::num_rows($result)>0)
 	{
 		echo "<ul>\n";
-		while ($row=mysql_fetch_array($result))
+		while ($row=Database::fetch_array($result))
 		{
 			echo "\t<li>".$row['title']."</li>\n";
 		}
@@ -663,8 +663,8 @@ function move_course($direction, $course2move, $category)
 
 	$sql_update1="UPDATE $TABLECOURSUSER SET sort='".$target_course['sort']."' WHERE course_code='".$source_course['code']."' AND user_id='".$_user['user_id']."'";
 	$sql_update2="UPDATE $TABLECOURSUSER SET sort='".$source_course['sort']."' WHERE course_code='".$target_course['code']."' AND user_id='".$_user['user_id']."'";
-	mysql_query($sql_update2);
-	mysql_query($sql_update1);
+	api_sql_query($sql_update2,__FILE__,__LINE__);
+	api_sql_query($sql_update1,__FILE__,__LINE__);
 	return get_lang("CourseSortingDone");
 }
 
@@ -701,8 +701,8 @@ function move_category($direction, $category2move)
 
 	$sql_update1="UPDATE $table_user_defined_category SET sort='".$target_category['sort']."' WHERE id='".$source_category['id']."' AND user_id='".$_user['user_id']."'";
 	$sql_update2="UPDATE $table_user_defined_category SET sort='".$source_category['sort']."' WHERE id='".$target_category['id']."' AND user_id='".$_user['user_id']."'";
-	mysql_query($sql_update2);
-	mysql_query($sql_update1);
+	api_sql_query($sql_update2,__FILE__,__LINE__);
+	api_sql_query($sql_update1,__FILE__,__LINE__);
 	return get_lang("CategorySortingDone");
 }
 
@@ -734,7 +734,7 @@ function display_courses($user_id, $show_course_icons, $user_courses)
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$sql="SELECT * FROM `$TABLE_USER_COURSE_CATEGORY` WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
 	$result=api_sql_query($sql);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		if ($show_course_icons=true)
 		{
@@ -788,10 +788,10 @@ function display_courses_in_category($user_category_id, $showicons)
 		                        AND   course_rel_user.user_id = '".$_user['user_id']."'
 		                        AND course_rel_user.user_course_cat='".$user_category_id."'
 		                        ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
-	$result = api_sql_query($sql_select_courses) or die(mysql_error());
-	$number_of_courses=mysql_num_rows($result);
+	$result = api_sql_query($sql_select_courses,__FILE__,__LINE__);
+	$number_of_courses=Database::num_rows($result);
 	$key=0;
-	while ($course=mysql_fetch_array($result))
+	while ($course=Database::fetch_array($result))
 	{
 		echo "\t<tr>\n";
 		echo "\t\t<td>\n";
@@ -846,8 +846,8 @@ function get_user_course_category($id)
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 	$id = intval($id);
 	$sql="SELECT * FROM `".$TABLE_USER_COURSE_CATEGORY."` WHERE user_id='".$_user['user_id']."' AND id='$id'";
-	$result=mysql_query($sql) or die(mysql_error());
-	$row=mysql_fetch_array($result);
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$row=Database::fetch_array($result);
 	return $row;
 }
 
@@ -1016,7 +1016,7 @@ function display_change_course_category_form($edit_course)
 	$output.="<input type=\"hidden\" name=\"course_2_edit_category\" value=\"".$edit_course."\" />";
 	$output.="\t<select name=\"course_categories\">\n";
 	$output.="\t\t<option value=\"0\">".get_lang("NoCourseCategory")."</option>";
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 		{$output.="\t\t<option value=\"".$row['id']."\">".$row['title']."</option>";}
 	$output.="\t</select>\n";
 	$output.="\t<input type=\"submit\" name=\"submit_change_course_category\" value=\"".get_lang("Ok")."\" />\n";
@@ -1075,8 +1075,8 @@ function get_courses_of_user($user_id)
 		                        WHERE course.code = course_rel_user.course_code
 		                        AND   course_rel_user.user_id = '".$user_id."'
 		                        ORDER BY course_rel_user.sort ASC";
-	$result = api_sql_query($sql_select_courses) or die(mysql_error());
-	while ($row=mysql_fetch_array($result))
+	$result = api_sql_query($sql_select_courses,__FILE__,__LINE__);
+	while ($row=Database::fetch_array($result))
 	{
 		// we only need the database name of the course
 		$courses[]=array("db"=> $row['db'], "code" => $row['k'], "visual_code" => $row['vc'], "title" => $row['i'], "directory" => $row['dir'], "status" => $row['status'], "tutor" => $row['t'], "subscribe" => $row['subscr'], "unsubscribe" => $row['unsubscr'], "sort" => $row['sort'], "user_course_category" => $row['user_course_cat']);
@@ -1096,7 +1096,7 @@ function get_user_course_categories()
 	$table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
-	while ($row = mysql_fetch_array($result))
+	while ($row = Database::fetch_array($result))
 	{
 		$output[] = $row['id'];
 	}
@@ -1147,7 +1147,7 @@ function store_edit_course_category()
 	$TABLE_USER_COURSE_CATEGORY = $DATABASE_USER_TOOLS."`.`user_course_category";
 
 	$sql_update="UPDATE `$TABLE_USER_COURSE_CATEGORY` SET title='".htmlentities($_POST['title_course_category'])."' WHERE id='".(int)$_POST['edit_course_category']."'";
-	mysql_query($sql_update) or die(mysql_error());
+	api_sql_query($sql_update,__FILE__,__LINE__);
 	//api_sql_query(sql_update);
 	return get_lang("CourseCategoryEditStored");
 }

@@ -162,19 +162,20 @@ foreach($Courses as $enreg)
  */
 	if(isset($_GET['course']))
 	{
+		$course = Database::escape_string($_GET['course']);
 		if($_GET['id_session']!=0){
 			$sqlInfosCourse = "	SELECT course.code,course.title,course.db_name,CONCAT(user.firstname,' ',user.lastname,' / ',user.email) as tutor_infos
 								FROM $tbl_user as user,$tbl_course as course
 								INNER JOIN $tbl_session_course as sessionCourse
 									ON sessionCourse.course_code = course.code
 								WHERE sessionCourse.id_coach = user.user_id
-								AND course.code= '".$_GET['course']."'
+								AND course.code= '".$course."'
 							 ";
 		}
 		else{
 			$sqlInfosCourse = "	SELECT course.code,course.title,course.db_name
 								FROM $tbl_course as course
-								WHERE course.code= '".$_GET['course']."'
+								WHERE course.code= '".$course."'
 							 ";
 		}
 

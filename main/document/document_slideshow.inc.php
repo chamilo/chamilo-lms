@@ -1,4 +1,4 @@
-<?php // $Id: document_slideshow.inc.php 12013 2007-04-13 09:52:50Z elixir_julian $
+<?php // $Id: document_slideshow.inc.php 12466 2007-05-25 21:05:19Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -63,6 +63,8 @@ the same starting point.
 ============================================================================== 
 */ 
 
+$accepted_extensions = array('.jpg','.jpeg','.gif','.png');
+
 // resetting the images of the slideshow = destroying the slideshow
 if ($_GET['action']=="exit_slideshow")
 {
@@ -97,7 +99,7 @@ if ( count($all_files) > 0 )
 		$slideshow_extension=strrchr($file,"."); 
 		$slideshow_extension=strtolower($slideshow_extension); 
 		$all_extensions[]=$slideshow_extension;
-		if ($slideshow_extension==".jpg" OR $slideshow_extension==".jpeg" OR $slideshow_extension==".gif" or $slideshow_extension==".png")
+		if (in_array($slideshow_extension,$accepted_extensions))
 		{
 			$image_present=1;
 			$image_files_only[]=$file; 
@@ -124,7 +126,7 @@ function sort_files($table){
 	
 	foreach($table as $file_array){
 		if($file_array['filetype']=='file'){
-			$temp[] = array('file', $file_array['title'], $file_array['size'], $file_array['insert_date']);
+			$temp[] = array('file', basename($file_array['path']), $file_array['size'], $file_array['insert_date']);
 		}
 	}
 	

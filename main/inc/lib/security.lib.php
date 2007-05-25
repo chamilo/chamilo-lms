@@ -196,6 +196,7 @@ class Security{
 	 */
 	function filter($var,$type='string',$options=array())
 	{
+		//This function is not finished! Do not use!
 		$result = false;
 		//get variable name and value
 		$args = func_get_args();
@@ -204,15 +205,19 @@ class Security{
 		$value = $args[$name];
 		switch($type){
 			case 'bool':
+				$result = (bool) $var;
 				break;
 			case 'int':
+				$result = (int) $var;
 				break;
 			case 'float':
+				$result = (float) $var;
 				break;
 			case 'string':
+				
 				break;
 			case 'array':
-				//an array variable shouldn't be given to the filtered
+				//an array variable shouldn't be given to the filter
 				return false;
 			default:
 				return false;
@@ -238,10 +243,14 @@ class Security{
 	/**
 	 * This function tackles the XSS injections.
 	 * 
+	 * Filtering for XSS is very easily done by using the htmlentities() function.
+	 * This kind of filtering prevents JavaScript snippets to be understood as such.
+	 * @param	string	The variable to filter for XSS
+	 * @return	string	Filtered string
 	 */
-	function remove_XSS()
+	function remove_XSS($var)
 	{
-		
+		return htmlentities($var);
 	}
 }
 ?>

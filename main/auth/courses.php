@@ -1,4 +1,4 @@
-<?php // $Id: courses.php 12467 2007-05-25 21:35:58Z yannoo $
+<?php // $Id: courses.php 12468 2007-05-25 21:38:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -402,11 +402,11 @@ function display_search_courses()
 					"&nbsp;<input type=\"submit\" value=\"",get_lang("_search"),"\" />",
 					"</form>";
 	if (isset($_POST['search_course']))
-		{
+	{
 		echo "<p><b>".get_lang("SearchResultsFor")." ".htmlentities($_POST['search_term'])."</b><br />";
 		$result_search_courses_array=search_courses($_POST['search_term']);
 		display_subscribe_to_courses($result_search_courses_array);
-		}
+	}
 }
 
 /**
@@ -749,10 +749,9 @@ function display_courses($user_id, $show_course_icons, $user_courses)
 			// we simply display the title of the catgory
 			else
 			{
-				$info_this_user_course_category=get_user_course_category($row['id']);
 				echo "<tr><td colspan=\"2\"  class=\"user_course_category\">";
 				echo '<a name="category'.$row['id'].'"></a>'; // display an internal anchor.
-				echo $info_this_user_course_category['title'];
+				echo $row['title'];
 			}
 			echo "</td><td class=\"user_course_category\">";
 			display_category_icons($row['id'],$all_user_categories);

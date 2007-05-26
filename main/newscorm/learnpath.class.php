@@ -1895,19 +1895,20 @@ class learnpath {
      */
     function get_progress_bar($mode='',$percentage=-1,$text_add='')
     {
-		if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
-    	if($percentage=='-1' OR $text_add==''){
+		//if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
+    	if(is_object($this) && ($percentage=='-1' OR $text_add=='')){
     		list ($percentage, $text_add) = $this->get_progress_bar_text($mode);
     	}
     	$text = $percentage.$text_add;
+    	$size = str_replace('%','',$percentage);
     	$output = '' 
     	//.htmlentities(get_lang('ScormCompstatus'),ENT_QUOTES,'ISO-8859-1')."<br />"
 	    .'<table border="0" cellpadding="0" cellspacing="0"><tr><td>'
 	    .'<img id="progress_img_limit_left" src="../img/bar_1.gif" width="1" height="12">'
-	    .'<img id="progress_img_full" src="../img/bar_1u.gif" width="'.$percentage.'" height="12" id="full_portion">'
+	    .'<img id="progress_img_full" src="../img/bar_1u.gif" width="'.$size.'px" height="12" id="full_portion">'
 	    .'<img id="progress_img_limit_middle" src="../img/bar_1m.gif" width="1" height="12">';
 	    if($percentage <= 98){
-	    	$output .= '<img id="progress_img_empty" src="../img/bar_1r.gif" width="'.(100-$percentage).'" height="12" id="empty_portion">';
+	    	$output .= '<img id="progress_img_empty" src="../img/bar_1r.gif" width="'.(100-$size).'px" height="12" id="empty_portion">';
 	    }else{
 	    	$output .= '<img id="progress_img_empty" src="../img/bar_1r.gif" width="0" height="12" id="empty_portion">';
 	    }

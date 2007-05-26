@@ -10,6 +10,8 @@
 $my_version = '1.8';
 switch($my_version){
 	case '1.6.3':
+	case '1.6.4':
+	case '1.6.5':
 		require('../inc/claro_init_global.inc.php');
 		require_once(api_get_library_path() . '/events.lib.inc.php');
 		require_once(api_get_library_path() . '/database.lib.php');

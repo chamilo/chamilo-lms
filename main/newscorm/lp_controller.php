@@ -33,14 +33,9 @@ if($debug>0) error_log('New LP - Included aiccItem',0);
 
 require_once('back_compat.inc.php');
 if($debug>0) error_log('New LP - Included back_compat',0);
-api_protect_course_script();
-//TODO @TODO define tool, action and task to give as parameters to:
-//$is_allowed_to_edit = api_is_allowed_to_edit();
 
 if ($is_allowed_in_course == false){
-	//Display::display_header('');
 	api_not_allowed(true);
-	//Display::display_footer();
 }
 
 require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");

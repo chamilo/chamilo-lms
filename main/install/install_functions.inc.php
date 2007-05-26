@@ -612,9 +612,9 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 		if(count($notwritable)>0)
 		{
 			$error=true;
-			echo '<div style="color:#cc0033; background-color:white; font-weight:bold; text-align:center;">';
+			echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
 			echo get_lang('Warning').':<br />';
-			printf(get_lang('NoWritePermissionPleaseReadInstallGuide'),'</font><a href="../../documentation/Dokeos18InstallManual.pdf" target="blank">','</a> <font color="#cc0033">');
+			printf(get_lang('NoWritePermissionPleaseReadInstallGuide'),'</font><a href="../../documentation/Dokeos18InstallManual.pdf" target="blank">','</a> <font color="red">');
 			echo '<ul>';
 			foreach ($notwritable as $value)
 			{
@@ -626,7 +626,7 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 		// check wether a Dokeos configuration file already exists.
 		elseif(file_exists('../inc/conf/configuration.php'))
 		{
-				echo '<div style="color:#cc0033; background-color:white; font-weight:bold; text-align:center;">';
+				echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
 				echo get_lang('WarningExistingDokeosInstallationDetected');
 				echo '</div>';
 		}

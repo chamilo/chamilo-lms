@@ -41,6 +41,7 @@ if(empty($lp_controller_touched) || $lp_controller_touched!=1){
 require_once('back_compat.inc.php');
 $courseDir   = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
+$display_progress_bar = true;
 
 require_once('learnpathList.class.php');
 require_once('learnpath.class.php');
@@ -185,9 +186,14 @@ if (is_array($flat_list))
 	    $dsp_edit = '';
 	    $dsp_delete = '';
 	    $dsp_visible = '';
-	    //$dsp_progress = '<td>'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id,api_get_user_id()),'%').'</td>';
-		//temporarily removed progress bar because of display problems
-		$dsp_progress = '<td style="padding-top:1em;">'.learnpath::get_db_progress($id,api_get_user_id(),'both').'</td>';
+	    if($display_progress_bar)
+	    {
+	    	$dsp_progress = '<td>'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id,api_get_user_id()),'').'</td>';
+	    }
+	    else
+	    {
+			$dsp_progress = '<td style="padding-top:1em;">'.learnpath::get_db_progress($id,api_get_user_id(),'both').'</td>';
+	    }
 	    if(api_is_allowed_to_edit())
 	    {
 		    $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a></td>'."\n";

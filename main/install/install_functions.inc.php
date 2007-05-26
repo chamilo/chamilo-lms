@@ -25,25 +25,37 @@ function display_step_sequence()
 	return get_lang('Step'.$current_step).' &ndash; ';
 }
 /**
- * this function checks if a php extension exists or not
+ * This function checks if a php extension exists or not and returns an HTML
+ * status string.
  *
- * @param string  $extentionName  name of the php extension to be checked
- * @param boolean  $echoWhenOk  true => show ok when the extension exists
- * @author Christophe Gesche
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version Dokeos 1.8, august 2006
+ * @param 	string  Name of the PHP extension to be checked
+ * @param 	string  Text to show when extension is available (defaults to 'OK')
+ * @param	string	Text to show when extension is available (defaults to 'KO')
+ * @param	boolean	Whether this extension is optional (in this case show unavailable text in orange rather than red)
+ * @return	string	HTML string reporting the status of this extension. Language-aware.
+ * @author 	Christophe Gesche
+ * @author 	Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @author	Yannick Warnier <yannick.warnier@dokeos.com>
+ * @version Dokeos 1.8.1, May 2007
  */
-function check_extension($extention_name,$return_success=false, $return_failure=false)
+function check_extension($extension_name,$return_success='OK',$return_failure='KO',$optional=false)
 {
-	if(extension_loaded($extention_name))
+	if(extension_loaded($extension_name))
 	{
 		return '<strong><font color="green">'.$return_success.'</font></strong>';
 	}
 	else
+	{
+		if($optional===true)
 		{
-		return '<strong><font color="red">'.$return_failure.'</font></strong>';
+			return '<strong><font color="#ff9900">'.$return_failure.'</font></strong>';
+		}
+		else
+		{
+			return '<strong><font color="red">'.$return_failure.'</font></strong>';
 		}
 	}
+}
 
 
 /**
@@ -406,8 +418,8 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 				<td class="requirements-value">'.check_extension('gd',get_lang('OK'), get_lang('ExtensionGDNotAvailable')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">LDAP '.get_lang('support').'('.get_lang('Optional').')</td>
-				<td class="requirements-value">'.check_extension('ldap',get_lang('OK'), get_lang('ExtensionLDAPNotAvailable')).'</td>
+				<td class="requirements-item">LDAP '.get_lang('support').' ('.get_lang('Optional').')</td>
+				<td class="requirements-value">'.check_extension('ldap',get_lang('OK'), get_lang('ExtensionLDAPNotAvailable'),true).'</td>
 			</tr>
 				
 		  </table>';

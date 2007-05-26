@@ -141,6 +141,8 @@ $_configuration['security_key']      					= '{SECURITY_KEY}';
 $userPasswordCrypted          							= {ENCRYPT_PASSWORD};
 // You may have to restart your web server if you change this
 $storeSessionInDb             							= false;
+// Session lifetime
+$_configuration['session_lifetime']						= {SESSION_LIFETIME};
 
 
 $openoffice_conf 										= array();

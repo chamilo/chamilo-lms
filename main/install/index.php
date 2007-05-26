@@ -204,6 +204,7 @@ if(!isset($_GET['running']))
 	$enableTrackingForm=1;
 	$singleDbForm=0;
 	$encryptPassForm=1;
+	$session_lifetime=360000;
 }
 else
 {
@@ -349,6 +350,7 @@ elseif (!empty($_POST['step5']))
 	<input type="hidden" name="ShowEmailnotcheckedToStudent" value="<?php echo htmlentities($ShowEmailnotcheckedToStudent); ?>" />
 	<input type="hidden" name="userMailCanBeEmpty"   value="<?php echo htmlentities($userMailCanBeEmpty); ?>" />
 	<input type="hidden" name="encryptPassForm"      value="<?php echo htmlentities($encryptPassForm); ?>" />
+	<input type="hidden" name="session_lifetime"  value="<?php echo htmlentities($session_lifetime); ?>" />
 
 
 
@@ -403,52 +405,52 @@ elseif($_POST['step5'])
 	<h2><?php echo display_step_sequence().get_lang('LastCheck'); ?></h2>
 
 	<?php echo get_lang('HereAreTheValuesYouEntered');?>
-	<br>
+	<br/>
 	<b><?php echo get_lang('PrintThisPageToRememberPassAndOthers');?></b>
 
 	<blockquote>
 
-	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br><br>
+	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br/><br/>
 
-	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br>
-	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br>
-	<?php echo get_lang('DBPassword').' : '.$dbPassForm; ?><br>
-	<?php if(!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br>'; ?>
-	<?php echo get_lang('MainDB').' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
+	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br/>
+	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br/>
+	<?php echo get_lang('DBPassword').' : '.$dbPassForm; ?><br/>
+	<?php if(!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br/>'; ?>
+	<?php echo get_lang('MainDB').' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br/>
 	<?php if(!$singleDbForm) { ?>
-		<?php echo get_lang('StatDB').' : <b>'.$dbStatsForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
-		<?php echo get_lang('ScormDB').' : <b>'.$dbScormForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
-		<?php echo get_lang('UserDB').' : <b>'.$dbUserForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br>
+		<?php echo get_lang('StatDB').' : <b>'.$dbStatsForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br/>
+		<?php echo get_lang('ScormDB').' : <b>'.$dbScormForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br/>
+		<?php echo get_lang('UserDB').' : <b>'.$dbUserForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br/>
 	<?php } ?>
-	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm?$langYes:$langNo); ?><br>
-	<?php echo get_lang('SingleDb').' : '.($singleDbForm?$langOne:$langSeveral); ?><br><br>
+	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm?$langYes:$langNo); ?><br/>
+	<?php echo get_lang('SingleDb').' : '.($singleDbForm?$langOne:$langSeveral); ?><br/><br/>
 
-	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg?$langYes:$langNo); ?><br>
-	<?php echo get_lang('EncryptUserPass').' : '.($encryptPassForm?$langYes:$langNo); ?><br><br>
+	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg?$langYes:$langNo); ?><br/>
+	<?php echo get_lang('EncryptUserPass').' : '.($encryptPassForm?$langYes:$langNo); ?><br/><br/>
 
-	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br>
-	<?php echo get_lang('AdminLastName').' : '.$adminLastName; ?><br>
-	<?php echo get_lang('AdminFirstName').' : '.$adminFirstName; ?><br>
-	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br>
+	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br/>
+	<?php echo get_lang('AdminLastName').' : '.$adminLastName; ?><br/>
+	<?php echo get_lang('AdminFirstName').' : '.$adminFirstName; ?><br/>
+	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br/>
 
 	<?php if($installType == 'new'): ?>
-	<?php echo get_lang('AdminLogin').' : <b>'.$loginForm; ?></b><br>
-	<?php echo get_lang('AdminPass').' : <b>'.$passForm; ?></b><br><br>
+	<?php echo get_lang('AdminLogin').' : <b>'.$loginForm; ?></b><br/>
+	<?php echo get_lang('AdminPass').' : <b>'.$passForm; ?></b><br/><br/>
 	<?php else: ?>
-	<br>
+	<br/>
 	<?php endif; ?>
 
-	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br>
-	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br>
-	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br>
-	<?php echo get_lang('DokeosURL').' : '.$urlForm; ?><br>
+	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br/>
+	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br/>
+	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br/>
+	<?php echo get_lang('DokeosURL').' : '.$urlForm; ?><br/>
 
 	</blockquote>
 
 	<?php if($installType == 'new'): ?>
 	<div style="background-color:#FFFFFF">
 	<p align="center"><b><font color="red">
-	<?php echo get_lang('Warning');?> !<br>
+	<?php echo get_lang('Warning');?> !<br/>
 	<?php echo get_lang('TheInstallScriptWillEraseAllTables');?>
 	</font></b></p>
 	</div>

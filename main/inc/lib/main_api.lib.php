@@ -551,7 +551,12 @@ function api_store_result($result)
 ==============================================================================
 */
 /**
- * start the dokeos session
+ * Start the Dokeos session.
+ * 
+ * The default lifetime for session is set here. It is not possible to have it
+ * as a database setting as it is used before the database connection has been made.
+ * It is taken from the configuration file, and if it doesn't exist there, it is set
+ * to 360000 seconds
  *
  * @author Olivier Brouckaert
  * @param  string variable - the variable name to save into the session
@@ -559,8 +564,14 @@ function api_store_result($result)
 function api_session_start($already_installed = true)
 {
 	global $storeSessionInDb;
+	global $_configuration;
 	if($already_installed){
-		session_set_cookie_params(3600,api_get_path(REL_PATH));
+		$session_lifetime = 360000;
+		if(isset($_configuration['session_lifetime']))
+		{
+			$session_lifetime = $_configuration['session_lifetime'];	
+		}
+		session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
 	}
 	if (is_null($storeSessionInDb))
 	{

@@ -175,6 +175,7 @@ function write_dokeos_config_file($path)
 	global $encryptPassForm;
 	global $installType;
 	global $updatePath;
+	global $session_lifetime;
 	$rootSys = realpath($pathForm).'/';
 	$garbageDir = realpath('../garbage/').'/';
 	//change paths if updating
@@ -206,6 +207,7 @@ function write_dokeos_config_file($path)
 	$config['{PLATFORM_LANGUAGE}'] = $languageForm;
 	$config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
 	$config['{ENCRYPT_PASSWORD}'] = trueFalse($encryptPassForm);
+	$config['{SESSION_LIFETIME}'] = $session_lifetime;
 	foreach ($config as $key => $value)
 	{
 		$content = str_replace($key, $value, $content);

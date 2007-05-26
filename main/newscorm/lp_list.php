@@ -79,11 +79,7 @@ Display::display_header($nameTools,"Path");
 	(editable by course admins)
 -----------------------------------------------------------
 */
-if($my_version=='1.8'){
-	Display::display_introduction_section(TOOL_LEARNPATH);
-}else{
-	api_introductionsection(TOOL_LEARNPATH);
-}
+Display::display_introduction_section(TOOL_LEARNPATH);
 
 if(api_is_allowed_to_edit())
 {
@@ -102,7 +98,7 @@ if(api_is_allowed_to_edit())
     Display::display_normal_message(api_failure::get_last_failure());
   }
   
-  include('content_makers.inc.php');
+  //include('content_makers.inc.php');
   echo	'<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.
 		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="scormbuilder">&nbsp;'.get_lang('_add_learnpath').
 		'</a>' .

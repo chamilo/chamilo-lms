@@ -36,6 +36,10 @@ if(file_exists($main_configuration_file_path))
 	require_once($main_configuration_file_path);
 	$already_installed = true;
 }
+else
+{
+	$_configuration = array();
+}
 
 // include the main Dokeos platform library file
 require_once($includePath.'/lib/main_api.lib.php');

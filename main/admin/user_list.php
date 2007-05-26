@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 12277 2007-05-03 15:35:44Z yannoo $
+// $Id: user_list.php 12484 2007-05-26 23:05:46Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -156,29 +156,45 @@ function login_user($user_id)
 function get_number_of_users()
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT COUNT(user_id) AS total_number_of_items FROM $user_table";
+	$sql = "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = mysql_real_escape_string($_GET['keyword']);
-		$sql .= " WHERE firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR email LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%'";
+		$sql .= " WHERE u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%'";
 	}
 	elseif (isset ($_GET['keyword_firstname']))
 	{
+		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 		$keyword_firstname = mysql_real_escape_string($_GET['keyword_firstname']);
 		$keyword_lastname = mysql_real_escape_string($_GET['keyword_lastname']);
 		$keyword_email = mysql_real_escape_string($_GET['keyword_email']);
 		$keyword_username = mysql_real_escape_string($_GET['keyword_username']);
 		$keyword_status = mysql_real_escape_string($_GET['keyword_status']);
+		$query_admin_table = '';
+		$keyword_admin = '';
+		if($keyword_status == 10)
+		{
+			$keyword_status = '%';
+			$query_admin_table = " , $admin_table a ";
+			$keyword_admin = ' AND a.user_id = u.user_id ';
+		}
 		$keyword_active = isset($_GET['keyword_active']);
 		$keyword_inactive = isset($_GET['keyword_inactive']);
-		$sql .= " WHERE firstname LIKE '%".$keyword_firstname."%' AND lastname LIKE '%".$keyword_lastname."%' AND username LIKE '%".$keyword_username."%'  AND email LIKE '%".$keyword_email."%'   AND official_code LIKE '%".$keyword_officialcode."%'    AND status LIKE '".$keyword_status."'";
+		$sql .= $query_admin_table .
+				" WHERE u.firstname LIKE '%".$keyword_firstname."%' " .
+				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
+				"AND u.username LIKE '%".$keyword_username."%'  " .
+				"AND u.email LIKE '%".$keyword_email."%'   " .
+				//"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
+				"AND u.status LIKE '".$keyword_status."'" .
+				$keyword_admin;
 		if($keyword_active && !$keyword_inactive)
 		{
-			$sql .= " AND active='1'";
+			$sql .= " AND u.active='1'";
 		}
 		elseif($keyword_inactive && !$keyword_active)
 		{
-			$sql .= " AND active='0'";
+			$sql .= " AND u.active='0'";
 		}
 	}
 	$res = api_sql_query($sql, __FILE__, __LINE__);
@@ -193,40 +209,55 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT
-                 user_id			AS col0,
-                 official_code		AS col1,
-                 firstname 			AS col2,
-                 lastname 			AS col3,
-                 username			AS col4,
-                 email				AS col5,
-                 IF(status=1,'".get_lang('Teacher')."','".get_lang('Student')."')	 AS col6,
-                 active				AS col7,
-                 user_id			AS col8
+                 u.user_id			AS col0,
+                 u.official_code		AS col1,
+                 u.firstname 			AS col2,
+                 u.lastname 			AS col3,
+                 u.username			AS col4,
+                 u.email				AS col5,
+                 IF(u.status=1,'".get_lang('Teacher')."','".get_lang('Student')."')	 AS col6,
+                 u.active				AS col7,
+                 u.user_id			AS col8
 
              FROM
-                 $user_table ";
+                 $user_table u";
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = mysql_real_escape_string($_GET['keyword']);
-		$sql .= " WHERE firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%'";
+		$sql .= " WHERE u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%'";
 	}
 	elseif (isset ($_GET['keyword_firstname']))
 	{
+		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 		$keyword_firstname = mysql_real_escape_string($_GET['keyword_firstname']);
 		$keyword_lastname = mysql_real_escape_string($_GET['keyword_lastname']);
 		$keyword_email = mysql_real_escape_string($_GET['keyword_email']);
 		$keyword_username = mysql_real_escape_string($_GET['keyword_username']);
 		$keyword_status = mysql_real_escape_string($_GET['keyword_status']);
+		$query_admin_table = '';
+		$keyword_admin = '';
+		if($keyword_status == 10)
+		{
+			$keyword_status = '%';
+			$query_admin_table = " , $admin_table a ";
+			$keyword_admin = ' AND a.user_id = u.user_id ';
+		}
 		$keyword_active = isset($_GET['keyword_active']);
 		$keyword_inactive = isset($_GET['keyword_inactive']);
-		$sql .= " WHERE firstname LIKE '%".$keyword_firstname."%' AND lastname LIKE '%".$keyword_lastname."%' AND username LIKE '%".$keyword_username."%'  AND email LIKE '%".$keyword_email."%'   AND official_code LIKE '%".$keyword_officialcode."%'    AND status LIKE '".$keyword_status."'";
+		$sql .= $query_admin_table." WHERE u.firstname LIKE '%".$keyword_firstname."%' " .
+				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
+				"AND u.username LIKE '%".$keyword_username."%'  " .
+				"AND u.email LIKE '%".$keyword_email."%'   " .
+				//"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
+				"AND u.status LIKE '".$keyword_status."'" .
+				$keyword_admin;
 		if($keyword_active && !$keyword_inactive)
 		{
-			$sql .= " AND active='1'";
+			$sql .= " AND u.active='1'";
 		}
 		elseif($keyword_inactive && !$keyword_active)
 		{
-			$sql .= " AND active='0'";
+			$sql .= " AND u.active='0'";
 		}
 	}
 	$sql .= " ORDER BY col$column $direction ";
@@ -373,6 +404,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$status_options['%'] = get_lang('All');
 	$status_options[STUDENT] = get_lang('Student');
 	$status_options[COURSEMANAGER] = get_lang('Teacher');
+	$status_options[10] = get_lang('Administrator');
 	$form->addElement('select','keyword_status',get_lang('Status'),$status_options);
 	$active_group = array();
 	$active_group[] = $form->createElement('checkbox','keyword_active','',get_lang('Active'));

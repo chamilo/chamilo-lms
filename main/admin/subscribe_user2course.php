@@ -1,5 +1,5 @@
 <?php
-// $Id: subscribe_user2course.php 12269 2007-05-03 14:17:37Z elixir_julian $
+// $Id: subscribe_user2course.php 12486 2007-05-27 05:51:05Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -57,8 +57,8 @@ api_protect_admin_script();
 
 $users = $_GET['users'];
 $form_sent = 0;
-$first_letter_user = '';
-$first_letter_course = '';
+$first_letter_user = 'A';
+$first_letter_course = 'A';
 $courses = array ();
 $users = array();
 

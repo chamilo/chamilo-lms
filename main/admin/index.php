@@ -1,4 +1,4 @@
-<?php // $Id: index.php 12263 2007-05-03 13:34:40Z elixir_julian $
+<?php // $Id: index.php 12485 2007-05-27 04:43:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -35,8 +35,9 @@ $language_file=array('admin','tracking');
 $cidReset=true;
 
 // including some necessary dokeos files
-include('../inc/global.inc.php');
+require('../inc/global.inc.php');
 include_once('../inc/installedVersion.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -70,6 +71,7 @@ if ($_POST['Register'])
 		MAIN SECTION
 ==============================================================================
 */
+$keyword_url = Security::remove_XSS($_GET['keyword']);
 
 ?>
 
@@ -77,7 +79,7 @@ if ($_POST['Register'])
 <h4><img src="../img/members.gif" border="0" style="vertical-align: middle;" alt="" /> <?php echo ucfirst(get_lang('Users')); ?></h4>
 	<ul><li style="list-style-type:none"><form method="get" action="user_list.php">
 
-	<input type="text" name="keyword" value="<?php echo $_GET['keyword']; ?>"/>
+	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form></li>
 	<li>
@@ -95,7 +97,7 @@ if ($_POST['Register'])
 <h4><img src="../img/course.gif" border="0" style="vertical-align: middle;" alt="" /> <?php echo ucfirst(get_lang('Courses')); ?></h4>
 	<ul><li style="list-style-type:none"><form method="get" action="course_list.php">
 
-	<input type="text" name="keyword" value="<?php echo $_GET['keyword']; ?>"/>
+	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form></li>
 	<li>
@@ -154,7 +156,7 @@ if(api_get_setting('use_session_mode')=='true')
  </h4>
  <ul>
  <li style="list-style-type:none"><form method="POST" action="session_list.php">
-	<input type="text" name="keyword" value="<?php echo $_GET['keyword']; ?>"/>
+	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form>
 </li>
@@ -176,7 +178,7 @@ else
 <ul>
 <li style="list-style-type:none"><form method="get" action="class_list.php">
 
-	<input type="text" name="keyword" value="<?php echo $_GET['keyword']; ?>"/>
+	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form>
 </li>
@@ -299,12 +301,12 @@ function check_dokeos_version2()
 		// the number of courses
 		$sql="SELECT code FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
 		$result=api_sql_query($sql);
-		$number_of_courses = mysql_num_rows($result);
+		$number_of_courses = Database::num_rows($result);
 
 		// the number of users
 		$sql="SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_USER);
 		$result=api_sql_query($sql);
-		$number_of_users = mysql_num_rows($result);
+		$number_of_users = Database::num_rows($result);
 
 		$version_url= 'http://www.dokeos.com/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(get_setting('emailAdministrator')).'&version='.urlencode($dokeos_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.get_setting('donotlistcampus');
 		$handle=@fopen($version_url,'r');

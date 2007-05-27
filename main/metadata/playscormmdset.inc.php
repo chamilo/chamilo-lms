@@ -10,7 +10,7 @@
 *	Dokeos Metadata: include file for accessing Scorm metadata
 *
 *   This script is to be included from /coursedir/scorm/dir.../index.php, 
-*   after setting $scormid and $drs (Dokeos document root).
+*   after setting $scormid (Dokeos document root).
 *
 *	@package dokeos.metadata
 ============================================================================== 
@@ -19,10 +19,7 @@
 
 // PRELIMS -------------------------------------------------------------------->
 
-if (!isset($scormid)) exit(); if (!isset($drs)) exit();
-if (strpos($drs, '//') !== FALSE) exit();
-
-require($drs . 'main/metadata/md_funcs.php');
+if (!isset($scormid)) exit(); 
 
 define('EID_TYPE', 'Scorm');
 define('BID', EID_TYPE . '.' . $scormid);
@@ -51,8 +48,10 @@ if (RNG != '*')                             $urlp .= '&rng=' . urlencode(RNG);
 
 // name of the language file that needs to be included 
 $language_file = LFN;
-require($drs . 'main/inc/global.inc.php');
+require('../inc/global.inc.php');
 $nameTools = get_lang('Tool');
+
+require(api_get_path(SYS_CODE_PATH) . 'metadata/md_funcs.php');
 
 ($nameTools && get_lang('Sorry'))
     or give_up('Language file ' . LFN . " doesn't define 'Tool' and 'Sorry'");
@@ -62,7 +61,7 @@ $_course = api_get_course_info(); isset($_course) or give_up(get_lang('Sorry'));
 require(api_get_path(LIBRARY_PATH) . 'xmd.lib.php');
 require(api_get_path(LIBRARY_PATH) . 'xht.lib.php');
 
-require($drs . 'main/metadata/md_' . strtolower(EID_TYPE) . '.php');
+require(api_get_path(SYS_CODE_PATH) . 'metadata/md_' . strtolower(EID_TYPE) . '.php');
 $mdObj = new mdobject($_course, EID_ID);
 
 define('DR', $_SERVER['DOCUMENT_ROOT']);

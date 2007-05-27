@@ -163,17 +163,17 @@ $gidReq = isset($_GET["gidReq"]) ? $_GET["gidReq"] : '';
 //this fixes some problems with generic functionalities like
 //My Agenda & What's New icons linking to courses
 // $cidReq can be set in the index.php file of a course-area
-$cidReq = isset($cidReq) ? $cidReq : '';
+$cidReq = isset($cidReq) ? Database::escape_string($cidReq) : '';
 // $cidReq can be set in URL-parameter
-$cidReq = isset($_GET["cidReq"]) ? $_GET["cidReq"] : $cidReq;
+$cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : $cidReq;
 
-$cidReset = isset($cidReset) ? $cidReset : '';
+$cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
 // $cidReset can be set in URL-parameter
-$cidReset = isset($_GET["cidReq"]) ? $_GET["cidReq"] : $cidReset;
+$cidReset = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
 
 $gidReset = isset($gidReset) ? $gidReset : '';
 // $gidReset can be set in URL-parameter
-$gidReset = isset($_GET["cidReq"]) ? $_GET["cidReq"] : $gidReset;
+$gidReset = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : $gidReset;
 
 // parameters passed via POST
 $login = isset($_POST["login"]) ? $_POST["login"] : '';
@@ -502,7 +502,7 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 				
 				if(!empty($_GET['id_session']))
 				{
-					$_SESSION['id_session'] = $_GET['id_session'];
+					$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
 					$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.$_SESSION['id_session'] . '"';
 					$rs = api_sql_query($sql,__FILE__,__LINE__);
 					list($_SESSION['session_name']) = mysql_fetch_array($rs);

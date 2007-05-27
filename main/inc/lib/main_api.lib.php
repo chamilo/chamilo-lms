@@ -144,16 +144,16 @@ define('PLATFORM_AUTH_SOURCE', 'platform');
 * visibility and user status).
 *
 * This is only the first proposal, test and improve!
-*
+* @param	boolean	Option to print headers when displaying error message. Default: false
 * @todo replace global variable
 * @author Roan Embrechts
 */
-function api_protect_course_script()
+function api_protect_course_script($print_headers=false)
 {
 	global $is_allowed_in_course;
 	if (!isset ($_SESSION["_course"]) || !$is_allowed_in_course)
 	{
-		api_not_allowed();
+		api_not_allowed($print_headers);
 	}
 }
 

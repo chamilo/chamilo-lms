@@ -1,5 +1,5 @@
 <?php
-// $Id: subscribe_user2course.php 12486 2007-05-27 05:51:05Z yannoo $
+// $Id: subscribe_user2course.php 12487 2007-05-27 06:00:33Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -57,8 +57,8 @@ api_protect_admin_script();
 
 $users = $_GET['users'];
 $form_sent = 0;
-$first_letter_user = 'A';
-$first_letter_course = 'A';
+$first_letter_user = '';
+$first_letter_course = '';
 $courses = array ();
 $users = array();
 
@@ -124,13 +124,26 @@ if ($_POST['formSent'])
 	Display GUI
 -----------------------------------------------------------
 */
-
+if(empty($first_letter_user))
+{
+	$sql = "SELECT count(*) as nb_users FROM $tbl_user";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$num_row = Database::fetch_array($result);
+	if($num_row['nb_users']>1000) 
+	{//if there are too much users to gracefully handle with the HTML select list,
+	 // assign a default filter on users names
+		$first_letter_user = 'A';
+	}
+	unset($result);
+}
 $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE lastname LIKE '".$first_letter_user."%' ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." lastname";
 $result = api_sql_query($sql, __FILE__, __LINE__);
 $db_users = api_store_result($result);
+unset($result);
 $sql = "SELECT code,visual_code,title FROM $tbl_course WHERE visual_code LIKE '".$first_letter_course."%' ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 $result = api_sql_query($sql, __FILE__, __LINE__);
 $db_courses = api_store_result($result);
+unset($result);
 ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">

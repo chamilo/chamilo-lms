@@ -1,4 +1,4 @@
-<?php // $Id: document.php 12269 2007-05-03 14:17:37Z elixir_julian $
+<?php // $Id: document.php 12490 2007-05-27 17:54:43Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -72,7 +72,7 @@ $this_section=SECTION_COURSES;
 require('document.inc.php');
 
 
-api_protect_course_script();
+api_protect_course_script(true);
 
 //session
 if(isset($_GET['id_session']))

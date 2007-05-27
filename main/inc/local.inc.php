@@ -158,7 +158,7 @@ The course id is stored in $_cid session variable.
 
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
-$gidReq = isset($_GET["gidReq"]) ? $_GET["gidReq"] : '';
+$gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : '';
 
 //this fixes some problems with generic functionalities like
 //My Agenda & What's New icons linking to courses

@@ -4175,7 +4175,7 @@ class learnpath {
 		
 		//TODO: add a path filter
 		if($iframe){
-			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path'] . '" style="background:#FFFFFF; border:1px solid #CCCCCC; height:490px; width:100%; margin-top: 20px;"></iframe>';
+			$return .= '<iframe frameborder="0" src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document' . str_replace('%2F','/',urlencode($row_doc['path'])) . '" style="background:#FFFFFF; border:1px solid #CCCCCC; height:490px; width:100%; margin-top: 20px;"></iframe>';
 		}
 		else{
 			$return .= file_get_contents(api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $row_doc['path']);

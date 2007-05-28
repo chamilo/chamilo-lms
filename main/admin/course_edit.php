@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_edit.php 11522 2007-03-12 10:48:58Z elixir_julian $
+// $Id: course_edit.php 12498 2007-05-28 08:48:09Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -221,16 +221,27 @@ if( $form->validate())
 	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.mysql_real_escape_string($course_code).'" AND status="1"';
 	api_sql_query($sql, __FILE__, __LINE__);
 	
-	if(count($teachers)>0){		
+	if(count($teachers)>0){
+		
 		foreach($teachers as $key){
-			$sql = "INSERT INTO ".$course_user_table . " SET
-				course_code = '".mysql_real_escape_string($course_code). "',
-				user_id = '".$key . "',
-				status = '1',
-				role = '',
-				tutor_id='0',
-				sort='0',
-				user_course_cat='0'";
+			
+			//We check if the teacher is already subscribed as student in this course 
+			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" AND status="5"';
+			$result = api_sql_query($sql_select_teacher, __FILE__, __LINE__);
+			
+			if(mysql_num_rows($result) == 1){
+				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"';
+			}
+			else{
+				$sql = "INSERT INTO ".$course_user_table . " SET
+					course_code = '".mysql_real_escape_string($course_code). "',
+					user_id = '".$key . "',
+					status = '1',
+					role = '',
+					tutor_id='0',
+					sort='0',
+					user_course_cat='0'";
+			}
 			api_sql_query($sql, __FILE__, __LINE__);
 		}
 	}

@@ -1,9 +1,9 @@
-<?php // $Id: configure_homepage.php 12273 2007-05-03 14:49:21Z elixir_julian $
+<?php // $Id: configure_homepage.php 12493 2007-05-28 01:47:28Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2007 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -32,13 +32,12 @@ include('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-include_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
+require_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
+require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php');
+require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 
-include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-
-require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
-
-$action=$_GET['action'];
+$action=Security::remove_XSS($_GET['action']);
 
 $tbl_category=Database::get_main_table(TABLE_MAIN_CATEGORY);
 

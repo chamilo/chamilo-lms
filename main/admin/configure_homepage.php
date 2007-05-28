@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 12500 2007-05-28 16:33:39Z yannoo $
+<?php // $Id: configure_homepage.php 12501 2007-05-28 19:38:36Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -66,36 +66,64 @@ if(!empty($action)){
 	}
 }
 
-//Get menu language in the following order of priority:
-// - from $_SESSION['user_language_choice'] (selected by user on portal homepage)
-// - from global campus setting 'platformLanguage'
-//Further down this script, we also use $user_selected_language = $_SESSION["_user"]["language"];
-//The global logic should really be: 
-//- take last language selected by user in the edition page
-//- take language selected when connecting ($_SESSION['user_language_choice'])
-//- take default user language ($_SESSION['_user']['language'])
-//- take platform language
-// Then if a language file doesn't exist, it should be created, which is already the case below
-// The default language for the homepage should use the default platform language (if nothing else is selected)
+//The global logic for language priorities should be: 
+//- take language selected when connecting ($_SESSION['user_language_choice']) 
+//  or last language selected (taken from select box into SESSION by global.inc.php) 
+//  or, if unavailable;
+//- take default user language ($_SESSION['_user']['language']) - which is taken from 
+//  the database in local.inc.php or, if unavailable;
+//- take platform language (taken from the database campus setting 'platformLanguage')
+// Then if a language file doesn't exist, it should be created. 
+// The default language for the homepage should use the default platform language 
+// (if nothing else is selected), which means the 'no-language' file should be taken
+// to fill a new 'language-specified' language file, and then only the latter should be
+// modified. The original 'no-language' files should never be modified.
 
+// ----- Language selection -----
+// The final language selected and used everywhere in this script follows the rules
+// described above and is put into "$lang". Because this script includes 
+// global.inc.php, the variables used for language purposes below are considered safe.
 
-$menu_language=$_SESSION['user_language_choice'];
-
-if(!isset($menu_language))
+$lang = ''; //el for "Edit Language"
+if(!empty($_SESSION['user_language_choice']))
 {
-	$menu_language=get_setting('platformLanguage');
+	$lang=$_SESSION['user_language_choice'];
+}
+elseif(!empty($_SESSION['_user']['language']))
+{
+	$lang=$_SESSION['_user']['language'];
+}
+else
+{
+	$lang=get_setting('platformLanguage');
 }
 
-if(!file_exists('../../home/home_menu_'.$menu_language.'.html'))
+// ----- Ensuring availability of main files in the corresponding language -----
+$homep = '../../home/'; //homep for Home Path
+$menuf = 'home_menu'; //menuf for Menu File
+$newsf = 'home_news'; //newsf for News File
+$topf = 'home_top'; //topf for Top File
+$noticef = 'home_notice'; //noticef for Notice File
+$ext = '.html'; //ext for HTML Extension - when used frequently, variables are 
+				// faster than hardcoded strings
+$homef = array($menuf,$newsf,$topf,$noticef);
+
+// If language-specific file does not exist, create it by copying default file
+foreach($homef as $my_file)
 {
-	copy('../../home/home_menu.html','../../home/home_menu_'.$menu_language.'.html');
+	if(!file_exists($homep.$my_file.'_'.$lang.$ext))
+	{
+		copy($homep.$my_file.$ext,$homep.$my_file.'_'.$lang.$ext);
+	}
 }
 
+// Check WCAG settings and prepare edition using WCAG
 $errorMsg='';
 if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 	$errorMsg=WCAG_Rendering::request_validation();
 }
 
+// Filter link param
 $link = '';
 if(!empty($_GET['link']))
 {
@@ -108,37 +136,49 @@ if(!empty($_GET['link']))
 	}
 }
 
+// Start analysing requested actions
 if(!empty($action))
 {
 	if($_POST['formSent'])
 	{
+		//variables used are $homep for home path, $menuf for menu file, $newsf
+		// for news file, $topf for top file, $noticef for noticefile, 
+		// $ext for '.html'
 		switch($action)
 		{
 			case 'edit_top':
+				// Filter
 				$home_top='';
 				if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 					$home_top=WCAG_Rendering::prepareXHTML();
 				} else {
 					$home_top=trim(stripslashes($_POST['home_top']));
 				}
-	
-				if(!is_writable('../../home/home_top.html'))
+				// Write
+				if(file_exists($homep.$topf.'_'.$lang.$ext))
 				{
-					$errorMsg=get_lang('HomePageFilesNotWritable');
+					if(is_writable($homep.$topf.'_'.$lang.$ext))
+					{
+						$fp=fopen($homep.$topf.'_'.$lang.$ext,"w");
+						fputs($fp,$home_top);
+						fclose($fp);
+					}
+					else
+					{
+						$errorMsg=get_lang('HomePageFilesNotWritable');
+					}
 				}
-				elseif(!empty($home_top))
+				else //File does not exist
 				{
-					$fp=fopen('../../home/home_top.html','w');
-	
+					$fp=fopen($homep.$topf.'_'.$lang.$ext,"w");
 					fputs($fp,$home_top);
-	
 					fclose($fp);
 				}
 				break;
 			case 'edit_notice':
+				// Filter
 				$notice_title=trim(strip_tags(stripslashes($_POST['notice_title'])));
-				$notice_text=trim(str_replace(array("\r","\n"),array("","<br />"),strip_tags(stripslashes($_POST['notice_text']),'<a>')));
-	
+				$notice_text=trim(str_replace(array("\r","\n"),array("","<br />"),strip_tags(stripslashes($_POST['notice_text']),'<a>')));	
 				if(empty($notice_title))
 				{
 					$errorMsg=get_lang('PleaseEnterNoticeTitle');
@@ -147,22 +187,30 @@ if(!empty($action))
 				{
 					$errorMsg=get_lang('PleaseEnterNoticeText');
 				}
-				elseif(!is_writable('../../home/home_notice.html'))
+				// Write
+				if(file_exists($homep.$noticef.'_'.$lang.$ext))
 				{
-					$errorMsg=get_lang('HomePageFilesNotWritable');
+					if(is_writable($homep.$noticef.'_'.$lang.$ext))
+					{
+						$fp=fopen($homep.$noticef.'_'.$lang.$ext,"w");
+						fputs($fp,"<b>$notice_title</b><br />\n$notice_text");
+						fclose($fp);
+					}
+					else
+					{
+						$errorMsg.="<br/>\n".get_lang('HomePageFilesNotWritable');
+					}
 				}
-				else
+				else //File does not exist
 				{
-					$fp=fopen('../../home/home_notice.html','w');
-	
+					$fp=fopen($homep.$noticef.'_'.$lang.$ext,"w");
 					fputs($fp,"<b>$notice_title</b><br />\n$notice_text");
-	
 					fclose($fp);
-				}
+				}				
 				break;
 			case 'edit_news':
-				$s_languages_news=$_POST["news_languages"];
-				//echo "langue choisie : ".$s_languages_news;
+				//Filter
+				//$s_languages_news=$_POST["news_languages"];
 				if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 				{
 					$home_news=WCAG_rendering::prepareXHTML();
@@ -170,12 +218,12 @@ if(!empty($action))
 				{ 
 					$home_news=trim(stripslashes($_POST['home_news']));
 				}
-	
+				//Write
 				if($s_languages_news!="all"){
 	
-					if(file_exists("'../../home/home_news_".$s_languages_news.".html")){
-						if(is_writable("../../home/home_news_".$s_languages_news.".html")){
-							$fp=fopen("../../home/home_news_".$s_languages_news.".html","w");
+					if(file_exists($homep.$newsf.'_'.$s_languages_news.$ext)){
+						if(is_writable($homep.$newsf.'_'.$s_languages_news.$ext)){
+							$fp=fopen($homep.$newsf.'_'.$s_languages_news.$ext,"w");
 							fputs($fp,$home_news);
 							fclose($fp);
 						}
@@ -185,23 +233,22 @@ if(!empty($action))
 					}
 					//File not exists
 					else{
-						$fp=fopen("../../home/home_news_".$s_languages_news.".html","w");
+						$fp=fopen($homep.$newsf.'_'.$s_languages_news.$ext,"w");
 						fputs($fp,$home_news);
 						fclose($fp);
 					}
 				}
-	
-				//we update all the news file
-				else{
+				else //we update all the news file
+				{
 					$_languages=api_get_languages();
 	
 					foreach($_languages["name"] as $key => $value){
 	
 						$english_name=$_languages["folder"][$key];
 	
-						if(file_exists("'../../home/home_news_".$english_name.".html")){
-							if(is_writable("../../home/home_news_".$english_name.".html")){
-								$fp=fopen("../../home/home_news_".$english_name.".html","w");
+						if(file_exists($homep.$newsf.'_'.$english_name.$ext)){
+							if(is_writable($homep.$newsf.'_'.$english_name.$ext)){
+								$fp=fopen($homep.$newsf.'_'.$english_name.$ext,"w");
 								fputs($fp,$home_news);
 								fclose($fp);
 							}
@@ -211,7 +258,7 @@ if(!empty($action))
 						}
 						//File not exists
 						else{
-							$fp=fopen("../../home/home_news_".$english_name.".html","w");
+							$fp=fopen($homep.$newsf.'_'.$english_name.$ext,"w");
 							fputs($fp,$home_news);
 							fclose($fp);
 						}
@@ -242,7 +289,7 @@ if(!empty($action))
 					$link_url='http://'.$link_url;
 				}
 	
-				if(!is_writable('../../home/home_menu_'.$menu_language.'.html'))
+				if(!is_writable($homep.$menuf.'_'.$lang.$ext))
 				{
 					$errorMsg=get_lang('HomePageFilesNotWritable');
 				}
@@ -264,13 +311,13 @@ if(!empty($action))
 					}
 					// If the typical language suffix is not found in the file name,
 					// replace the ".html" suffix by "_en.html" or the active menu language
-					if(!strstr($filename,'_'.$menu_language.'.html'))
+					if(!strstr($filename,'_'.$lang.$ext))
 					{
-						$filename=str_replace('.html','_'.$menu_language.'.html',$filename);
+						$filename=str_replace($ext,'_'.$lang.$ext,$filename);
 					}
 					// Get the contents of home_menu_en.html (or active menu language 
 					// version) into $home_menu as an array of one entry per line
-					$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
+					$home_menu=file($homep.$menuf.'_'.$lang.$ext);
 					// Prepare place to insert the new link into (default is end of file) 
 					if($insert_where < -1 || $insert_where > (sizeof($home_menu) - 1))
 					{
@@ -284,12 +331,12 @@ if(!empty($action))
 					// If the given link url is empty, then replace the link url by a link to the link file created 
 					if(empty($link_url))
 					{
-						$link_url=$_configuration['root_web'].'index.php?include='.urlencode($filename);
+						$link_url=api_get_path(WEB_PATH).'index.php?include='.urlencode($filename);
 						// If the file doesn't exist, then create it and
 						// fill it with default text	
-						if(!file_exists($_configuration['root_sys'].'home/'.$filename))
+						if(!file_exists(api_get_path(SYS_PATH).'home/'.$filename))
 						{
-							$fp=@fopen($_configuration['root_sys'].'home/'.$filename,'w');
+							$fp=@fopen(api_get_path(SYS_PATH).'home/'.$filename,'w');
 	
 							if($fp)
 							{
@@ -303,7 +350,7 @@ if(!empty($action))
 					// write to it (if the file doesn't exist, create it)
 					if($action == 'edit_link' && !empty($link_html))
 					{
-						$fp=@fopen($_configuration['root_sys'].'home/'.$filename,'w');
+						$fp=@fopen(api_get_path(SYS_PATH).'home/'.$filename,'w');
 	
 						if($fp)
 						{
@@ -337,12 +384,26 @@ if(!empty($action))
 					}
 					// Re-build the file from the home_menu array
 					$home_menu=implode("\n",$home_menu);
-	
-					$fp=fopen('../../home/home_menu_'.$menu_language.'.html','w');
-	
-					fputs($fp,$home_menu);
-	
-					fclose($fp);
+					// Write
+					if(file_exists($homep.$menuf.'_'.$lang.$ext))
+					{
+						if(is_writable($homep.$menuf.'_'.$lang.$ext))
+						{
+							$fp=fopen($homep.$menuf.'_'.$lang.$ext,"w");
+							fputs($fp,$home_menu);
+							fclose($fp);
+						}
+						else
+						{
+							$errorMsg=get_lang('HomePageFilesNotWritable');
+						}
+					}
+					else //File does not exist
+					{
+						$fp=fopen($homep.$menuf.'_'.$lang.$ext,"w");
+						fputs($fp,$home_menu);
+						fclose($fp);
+					}				
 				}
 				break;
 		} //end of switch($action)
@@ -366,7 +427,7 @@ if(!empty($action))
 				// link and re-writing the array to the file
 				$link_index=intval($_GET['link_index']);
 		
-				$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
+				$home_menu=file($homep.$menuf.'_'.$lang.$ext);
 		
 				foreach($home_menu as $key=>$enreg)
 				{
@@ -382,7 +443,7 @@ if(!empty($action))
 		
 				$home_menu=implode("\n",$home_menu);
 		
-				$fp=fopen('../../home/home_menu_'.$menu_language.'.html','w');
+				$fp=fopen($homep.$menuf.'_'.$lang.$ext,'w');
 		
 				fputs($fp,$home_menu);
 		
@@ -393,44 +454,99 @@ if(!empty($action))
 				break;
 			case 'edit_top':
 				// This request is only the preparation for the update of the home_top
-				$home_top=file('../../home/home_top.html');
-		
-				$home_top=implode('',$home_top);
+				$home_top = '';
+				if(is_file($homep.$topf.'_'.$lang.$ext) 
+					&& is_readable($homep.$topf.'_'.$lang.$ext))
+				{
+					$home_top=file_get_contents($homep.$topf.'_'.$lang.$ext);				
+				}
+				elseif(is_file($homep.$topf.$lang.$ext)
+					&& is_readable($homep.$topf.$lang.$ext))
+				{
+					$home_top=file_get_contents($homep.$topf.$lang.$ext);				
+				}
+				else
+				{
+					$errorMsg=get_lang('HomePageFilesNotReadable');					
+				}
 				break;
 			case 'edit_notice':
 				// This request is only the preparation for the update of the home_notice
-				$home_notice=file('../../home/home_notice.html');
-		
+				$home_notice = '';
+				if(is_file($homep.$noticef.'_'.$lang.$ext) 
+					&& is_readable($homep.$noticef.'_'.$lang.$ext))
+				{
+					$home_notice=file($homep.$noticef.'_'.$lang.$ext);				
+				}
+				elseif(is_file($homep.$noticef.$lang.$ext)
+					&& is_readable($homep.$noticef.$lang.$ext))
+				{
+					$home_notice=file($homep.$noticef.$lang.$ext);				
+				}
+				else
+				{
+					$errorMsg=get_lang('HomePageFilesNotReadable');					
+				}		
 				$notice_title=strip_tags($home_notice[0]);
 				$notice_text=strip_tags(str_replace('<br />',"\n",$home_notice[1]),'<a>');
 				break;
 			case 'edit_news':
 				// This request is the preparation for the update of the home_news page
-				if(file_exists("'../../home/home_news_".$menu_language.".html")){
-					if(is_readable("../../home/home_news_".$menu_language.".html")){
-						$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
-						$home_news=implode('',$home_news);
-					}
-					else{
-						$errorMsg=get_lang('HomePageFilesNotReadable');
-					}
+				$home_news = '';
+				if(is_file($homep.$newsf.'_'.$lang.$ext) 
+					&& is_readable($homep.$newsf.'_'.$lang.$ext))
+				{
+					$home_news=file_get_contents($homep.$newsf.'_'.$lang.$ext);				
+		//			$home_news=file($homep.$newsf.$ext);
+		//			$home_news=implode('',$home_news);
 				}
-				//File not exists
-				else{
-					$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
-					$home_news=implode('',$home_news);
+				elseif(is_file($homep.$newsf.$lang.$ext)
+					&& is_readable($homep.$newsf.$lang.$ext))
+				{
+					$home_news=file_get_contents($homep.$newsf.$lang.$ext);				
 				}
+				else
+				{
+					$errorMsg=get_lang('HomePageFilesNotReadable');					
+				}		
 				break;
 			case 'insert_link':	
 				// This request is the preparation for the addition of an item in home_menu
-				$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
+				$home_menu = '';
+				if(is_file($homep.$menuf.'_'.$lang.$ext) 
+					&& is_readable($homep.$menuf.'_'.$lang.$ext))
+				{
+					$home_menu=file($homep.$menuf.'_'.$lang.$ext);				
+				}
+				elseif(is_file($homep.$menuf.$lang.$ext)
+					&& is_readable($homep.$menuf.$lang.$ext))
+				{
+					$home_menu=file($homep.$menuf.$lang.$ext);				
+				}
+				else
+				{
+					$errorMsg=get_lang('HomePageFilesNotReadable');					
+				}
 				break;
 			case 'edit_link':
 				// This request is the preparation for the edition of the links array
-				$link_index=intval($_GET['link_index']);
-		
-				$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
-		
+				$home_menu = '';
+				if(is_file($homep.$menuf.'_'.$lang.$ext) 
+					&& is_readable($homep.$menuf.'_'.$lang.$ext))
+				{
+					$home_menu=file($homep.$menuf.'_'.$lang.$ext);				
+				}
+				elseif(is_file($homep.$menuf.$lang.$ext)
+					&& is_readable($homep.$menuf.$lang.$ext))
+				{
+					$home_menu=file($homep.$menuf.$lang.$ext);				
+				}
+				else
+				{
+					$errorMsg=get_lang('HomePageFilesNotReadable');					
+				}
+
+				$link_index=intval($_GET['link_index']);		
 				$target_blank=false;
 				$link_name='';
 				$link_url='';
@@ -467,7 +583,7 @@ if(!empty($action))
 							if(!strstr($filename,'/') && strstr($filename,'.html'))
 							{
 								// Get oonly the contents of the link file					
-								$link_html=file($_configuration['root_web'].'home/'.$filename);
+								$link_html=file(api_get_path(SYS_PATH).'home/'.$filename);
 								$link_html=implode('',$link_html);
 								$link_url='';
 							}
@@ -502,7 +618,7 @@ switch($action){
 		if(!empty($link))
 		{
 			// $link is only set in case of action=open_link and is filtered
-			include('../../home/'.$link);
+			include($homep.$link);
 		}
 		break;
 	case 'edit_notice':
@@ -649,29 +765,13 @@ switch($action){
 	case 'edit_news':
 		if($action == 'edit_top')
 		{
-			$name="home_top";
+			$name= $topf;
 			$open = $home_top;
 		}
 		else
 		{
-			$name="home_news";
-			$user_selected_language = $_SESSION["_user"]["language"];
-			if(!file_exists("../../home/home_news_".$user_selected_language.".html")){
-				$platform_language=api_get_setting("platformLanguage");
-				$open='../../home/home_news_'.$platform_language.'.html';
-			}
-			else{
-				$open='../../home/home_news_'.$user_selected_language.'.html';
-			}
-	
-			if(isset($_SESSION["user_language_choice"])){
-				$language=$user_selected_language;
-			}
-			else{
-				$language=api_get_setting("platformLanguage");
-			}
-	
-			$open=file_get_contents($open);
+			$name = $newsf;
+			$open=file_get_contents($homep.$newsf.'_'.$lang.$ext);
 	
 		}
 		// print form header + important formSent attribute
@@ -755,8 +855,14 @@ switch($action){
 			  <td colspan="2">
 				<?php
 					//print home_top contents
-					$home_top_temp=file('../../home/home_top.html');
-					$home_top_temp=implode('',$home_top_temp);
+					if(file_exists($homep.$topf.'_'.$lang.$ext))
+					{
+						$home_top_temp=file_get_contents($homep.$topf.'_'.$lang.$ext);
+					}
+					else
+					{
+						$home_top_temp=file_get_contents($homep.$topf.$ext);					
+					}
 					$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
 					echo $open;
 				?>		
@@ -795,20 +901,13 @@ switch($action){
 			  <!--<td width="50%" valign="top">		
 				<?php
 		
-				$user_selected_language = $_SESSION["_user"]["language"];
-				if(file_exists('../../home/home_news_'.$user_selected_language.'.html'))
+				if(file_exists($homep.$newsf.'_'.$lang.$ext))
 				{
-					include ('../../home/home_news_'.$user_selected_language.'.html');
+					include ($homep.$newsf.'_'.$lang.$ext);
 				}
 				else
 				{
-					$platform_language=api_get_setting("platformLanguage");
-					if(file_exists('../../home/home_news_'.$platform_language.'.html')){
-						include('../../home/home_news_'.$platform_language.'.html');
-					}
-					else{
-						include ('../../home/home_news.html');
-					}
+					include ($homep.$newsf.$ext);
 				}
 			?>
 		
@@ -840,7 +939,15 @@ switch($action){
 				<ul class="menulist">
 		
 				<?php
-					$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
+					$home_menu = '';
+					if(file_exists($homep.$menuf.'_'.$lang.$ext))
+					{
+						$home_menu = file($homep.$menuf.'_'.$lang.$ext);
+					}
+					else
+					{
+						$home_menu = file ($homep.$menuf.$ext);
+					}
 				
 					foreach($home_menu as $key=>$enreg)
 					{
@@ -851,7 +958,7 @@ switch($action){
 							$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'"><img src="../img/edit.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Modify')).'"/></a>';
 							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img src="../img/delete.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Delete')).'"/></a>';
 				
-							echo str_replace(array('href="'.$_configuration['root_web'].'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
+							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
 						}
 					}
 				?>
@@ -865,7 +972,16 @@ switch($action){
 			<div class="note">
 		
 			<?php
-			include('../../home/home_notice.html');
+			$home_notice = '';
+			if(file_exists($homep.$noticef.'_'.$lang.$ext))
+			{
+				$home_notice = file_get_contents($homep.$noticef.'_'.$lang.$ext);
+			}
+			else
+			{
+				$home_notice = file_get_contents($homep.$noticef.$ext);
+			}
+			echo $home_notice
 			?>
 		
 			</div>

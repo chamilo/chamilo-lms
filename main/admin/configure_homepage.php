@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 12494 2007-05-28 02:57:44Z yannoo $
+<?php // $Id: configure_homepage.php 12495 2007-05-28 03:21:12Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,7 +37,7 @@ require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php');
 require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 
-$action=$_GET['action'];
+$action=Security::remove_XSS($_GET['action']);
 
 $tbl_category=Database::get_main_table(TABLE_MAIN_CATEGORY);
 
@@ -45,9 +45,9 @@ $tool_name=get_lang('ConfigureHomePage');
 
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
-if(isset($_GET["action"])){
+if(!empty($action)){
 	$interbreadcrumb[]=array('url' => 'configure_homepage.php',"name" => get_lang('ConfigureHomePage'));
-	switch($_GET["action"]){
+	switch($action){
 		case "edit_top":
 			$tool_name=get_lang("EditHomePage");
 			break;

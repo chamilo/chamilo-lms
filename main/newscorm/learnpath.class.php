@@ -3734,7 +3734,7 @@ class learnpath {
 			$arrLP[] = array(
 				'id' => $row['id'],
 				'item_type' => $row['item_type'],
-				'title' => $row['title'],
+				'title' => addslashes($row['title']),
 				'path' => $row['path'],
 				'description' => $row['description'],
 				'parent_item_id' => $row['parent_item_id'],

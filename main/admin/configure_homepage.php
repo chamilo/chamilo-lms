@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 12499 2007-05-28 16:03:35Z yannoo $
+<?php // $Id: configure_homepage.php 12500 2007-05-28 16:33:39Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -497,423 +497,385 @@ Display::display_header($tool_name);
 
 //api_display_tool_title($tool_name);
 
-if($action == 'open_link' && !empty($link))
-{
-	// $link is only set in case of action=open_link and is filtered
-	include('../../home/'.$link);
-}
-elseif($action == 'edit_notice')
-{
-?>
-
-<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
-<input type="hidden" name="formSent" value="1"/>
-
-<table border="0" cellpadding="5" cellspacing="0">
-
-<?php
-if(!empty($errorMsg))
-{
-?>
-
-<tr>
-  <td colspan="2">
-
-<?php
-	Display::display_normal_message($errorMsg); //main API
-?>
-
-  </td>
-</tr>
-
-<?php
-}
-?>
-
-<tr>
-  <td nowrap="nowrap"><?php echo get_lang('NoticeTitle'); ?> :</td>
-  <td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo htmlentities($notice_title); ?>" style="width: 350px;"/></td>
-</tr>
-<tr>
-  <td nowrap="nowrap" valign="top"><?php echo get_lang('NoticeText'); ?> :</td>
-  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo htmlentities($notice_text); ?></textarea></td>
-</tr>
-<tr>
-  <td>&nbsp;</td>
-  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
-</tr>
-</table>
-
-</form>
-
-<?php
-}
-elseif($action == 'insert_link' || $action == 'edit_link')
-{
-?>
-
-
-<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
-<input type="hidden" name="formSent" value="1"/>
-<input type="hidden" name="link_index" value="<?php if($action == 'edit_link') echo $link_index; else echo '0'; ?>"/>
-<input type="hidden" name="filename" value="<?php if($action == 'edit_link') echo $filename; else echo ''; ?>"/>
-
-<table border="0" cellpadding="5" cellspacing="0">
-
-<?php
-if(!empty($errorMsg))
-{
-?>
-
-<tr>
-  <td colspan="2">
-
-<?php
-	Display::display_normal_message($errorMsg); //main API
-?>
-
-  </td>
-</tr>
-
-<?php
-}
-?>
-
-<tr>
-  <td nowrap="nowrap"><?php echo get_lang('LinkName'); ?> :</td>
-  <td><input type="text" name="link_name" size="30" maxlength="50" value="<?php echo htmlentities($link_name); ?>" style="width: 350px;"/></td>
-</tr>
-<tr>
-  <td nowrap="nowrap"><?php echo get_lang('LinkURL'); ?> (<?php echo get_lang('Optional'); ?>) :</td>
-  <td><input type="text" name="link_url" size="30" maxlength="100" value="<?php if(empty($link_url)) echo 'http://'; else echo htmlentities($link_url); ?>" style="width: 350px;"/></td>
-</tr>
-
-<?php if($action == 'insert_link'): ?>
-<tr>
-  <td nowrap="nowrap"><?php echo get_lang('InsertThisLink'); ?> :</td>
-  <td><select name="insert_where">
-  <option value="-1"><?php echo get_lang('FirstPlace'); ?></option>
-
-<?php
-foreach($home_menu as $key=>$enreg)
-{
-?>
-
-  <option value="<?php echo $key; ?>" <?php if($formSent && $insert_where == $key) echo 'selected="selected"'; ?> ><?php echo get_lang('After'); ?> &quot;<?php echo trim(strip_tags($enreg)); ?>&quot;</option>
-
-<?php
-}
-?>
-
-  </select></td>
-</tr>
-<?php endif; ?>
-
-<tr>
-  <td nowrap="nowrap"><?php echo get_lang('OpenInNewWindow'); ?> ?</td>
-  <td><input class="checkbox" type="checkbox" name="target_blank" value="1" <?php if($target_blank) echo 'checked="checked"'; ?> /> <?php echo get_lang('Yes'); ?></td>
-</tr>
-
-<?php if($action == 'edit_link' && empty($link_url)): ?>
-</table>
-<table border="0" cellpadding="5" cellspacing="0" width="100%">
-<tr>
-  <td>
-
-<?php
-    //api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
-	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-		echo WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html);
-	} else {
-		$oFCKeditor = new FCKeditor('link_html') ;
-		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-		$oFCKeditor->Height		= '400';
-		$oFCKeditor->Width		= '100%';
-		$oFCKeditor->Value		= isset($_POST['link_html'])?$_POST['link_html']:$link_html;
-		$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-		$oFCKeditor->ToolbarSet = "Small";
-	
-		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-		$result_sql=api_sql_query($sql);
-		$isocode_language=mysql_result($result_sql,0,0);
-		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-		echo $oFCKeditor->CreateHtml();
-	}
-	
-?>
-
-  </td>
-</tr>
-<tr>
-  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
-</tr>
-<?php else: ?>
-<tr>
-  <td>&nbsp;</td>
-  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
-</tr>
-<?php endif; ?>
-
-</table>
-
-</form>
-
-<?php
-}
-elseif($action == 'edit_top' || $action == 'edit_news')
-{
-	if($action == 'edit_top')
-	{
-		$name="home_top";
-		$open = $home_top;
-	}
-	else
-	{
-		$name="home_news";
-		$user_selected_language = $_SESSION["_user"]["language"];
-		if(!file_exists("../../home/home_news_".$user_selected_language.".html")){
-			$platform_language=api_get_setting("platformLanguage");
-			$open='../../home/home_news_'.$platform_language.'.html';
+switch($action){
+	case 'open_link':
+		if(!empty($link))
+		{
+			// $link is only set in case of action=open_link and is filtered
+			include('../../home/'.$link);
 		}
-		else{
-			$open='../../home/home_news_'.$user_selected_language.'.html';
-		}
-
-		if(isset($_SESSION["user_language_choice"])){
-			$language=$user_selected_language;
-		}
-		else{
-			$language=api_get_setting("platformLanguage");
-		}
-
-		$open=file_get_contents($open);
-
-	}
-?>
-
-
-<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
-<input type="hidden" name="formSent" value="1"/>
-
-<?php
-if(!empty($errorMsg))
-{
-	Display::display_normal_message($errorMsg); //main API
-}
-
-if($action == 'edit_news'){
-	$_languages=api_get_languages();
-	echo get_lang("ChooseNewsLanguage")." : <select name='news_languages'><option value='all'>".get_lang("AllLanguages")."</option>";
-	foreach($_languages["name"] as $key => $value){
-		$english_name=$_languages["folder"][$key];
-		if($language==$english_name){
-			echo "<option value='$english_name' selected=selected>$value</option>";
-		}
-		else{
-			echo "<option value='$english_name'>$value</option>";
-		}
-	}
-	echo "</select>";
-}
-?>
-
-<table border="0" cellpadding="5" cellspacing="0" width="100%">
-<tr>
-  <td>
-
-<?php
-    //api_disp_html_area($open,isset($_POST[$open])?trim(stripslashes($_POST[$open])):${$open},'400px'); ?>
-<?php
-	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-		
+		break;
+	case 'edit_notice':
+		//------------  Display for edit_notice case --------------
 		?>
-		<script type="text/javascript" src="<?php echo(api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/plugins/ImageManagerStandalone/generic_dialog_common.js')?>" />
+		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
+		<input type="hidden" name="formSent" value="1"/>
+		<table border="0" cellpadding="5" cellspacing="0">
 		<?php
-		
-		echo WCAG_Rendering::create_xhtml($open);
-		
-	} else {
-		$open=str_replace('{rel_path}',api_get_path(REL_PATH),$open);
-		$oFCKeditor = new FCKeditor($name) ;
-		$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-		$oFCKeditor->Height		= '400';
-		$oFCKeditor->Width		= '100%';
-		$oFCKeditor->Value		= $open;
-		$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-		$oFCKeditor->ToolbarSet = "Small";
-	
-		$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
-		$result_sql=api_sql_query($sql);
-		$isocode_language=mysql_result($result_sql,0,0);
-		$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-	
-		echo $oFCKeditor->CreateHtml();
-	}
-?>
-
-  </td>
-</tr>
-<tr>
-  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
-</tr>
-</table>
-
-</form>
-
-<?php
-}
-else
-{
-?>
-
-<table border="0" cellpadding="5" cellspacing="0" width="100%">
-<tr>
-  <td width="80%" colspan="2">
-	<a href="<?php echo api_get_self(); ?>?action=edit_top"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
-  </td>
-  <td width="20%">
-	<a href="<?php echo api_get_self(); ?>?action=insert_link"><img src="../img/insert_row.png" border="0"/></a> <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
-  </td>
-</tr>
-<tr>
-  <td width="80%" colspan="2" valign="top">
-	<table border="0" cellpadding="5" cellspacing="0" width="100%">
-	<tr>
-	  <td colspan="2">
-
-<?php
-	$home_top_temp=file('../../home/home_top.html');
-	$home_top_temp=implode('',$home_top_temp);
-	$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
-	echo $open;
-?>
-
-	  </td>
-	</tr>
-	<tr>
-	  <td width="50%">
-		<br />
-		<a href="course_category.php"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="course_category.php"><?php echo get_lang('EditCategories'); ?></a>
-	  </td>
-	  <td width="50%">
-		<br />
-		<!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>-->
-	  </td>
-	</tr>
-	<tr>
-	  <td width="50%" valign="top">
-		<table border="0" cellpadding="5" cellspacing="0" width="100%">
-
-	<?php
-		if(sizeof($Categories))
+		if(!empty($errorMsg))
 		{
-			foreach($Categories as $enreg)
-			{
-	?>
-
-		  <tr>
-			<td><img src="../img/opendir.gif" border="0" alt=""/>&nbsp;<?php echo $enreg['name']; ?></td>
-		  </tr>
-
-	<?php
-			}
-
-			unset($Categories);
+			echo '<tr><td colspan="2">';
+			Display::display_normal_message($errorMsg); //main API
+			echo '</td></tr>';
 		}
-		else
-		{
-			echo get_lang('NoCategories');
-		}
-	?>
-
+		?>		
+		<tr>
+		  <td nowrap="nowrap"><?php echo get_lang('NoticeTitle'); ?> :</td>
+		  <td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo htmlentities($notice_title); ?>" style="width: 350px;"/></td>
+		</tr>
+		<tr>
+		  <td nowrap="nowrap" valign="top"><?php echo get_lang('NoticeText'); ?> :</td>
+		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo htmlentities($notice_text); ?></textarea></td>
+		</tr>
+		<tr>
+		  <td>&nbsp;</td>
+		  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
+		</tr>
 		</table>
-	  </td>
-	  <!--<td width="50%" valign="top">
-
-	<?php
-
-		$user_selected_language = $_SESSION["_user"]["language"];
-		if(file_exists('../../home/home_news_'.$user_selected_language.'.html'))
+		</form>		
+		<?php
+		break;
+	case 'insert_link':
+	case 'edit_link':
+		?>
+		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
+		<input type="hidden" name="formSent" value="1"/>
+		<input type="hidden" name="link_index" value="<?php if($action == 'edit_link') echo $link_index; else echo '0'; ?>"/>
+		<input type="hidden" name="filename" value="<?php if($action == 'edit_link') echo $filename; else echo ''; ?>"/>
+		
+		<table border="0" cellpadding="5" cellspacing="0">
+		<?php
+		if(!empty($errorMsg))
 		{
-			include ('../../home/home_news_'.$user_selected_language.'.html');
+			echo '<tr><td colspan="2">';
+			Display::display_normal_message($errorMsg); //main API
+			echo '</td></tr>';
+		}
+		?>		
+		<tr>
+		  <td nowrap="nowrap"><?php echo get_lang('LinkName'); ?> :</td>
+		  <td><input type="text" name="link_name" size="30" maxlength="50" value="<?php echo htmlentities($link_name); ?>" style="width: 350px;"/></td>
+		</tr>
+		<tr>
+		  <td nowrap="nowrap"><?php echo get_lang('LinkURL'); ?> (<?php echo get_lang('Optional'); ?>) :</td>
+		  <td><input type="text" name="link_url" size="30" maxlength="100" value="<?php if(empty($link_url)) echo 'http://'; else echo htmlentities($link_url); ?>" style="width: 350px;"/></td>
+		</tr>
+		
+		<?php 
+		if($action == 'insert_link') 
+		{
+		?>
+			<tr>
+			  <td nowrap="nowrap"><?php echo get_lang('InsertThisLink'); ?> :</td>
+			  <td><select name="insert_where">
+			  <option value="-1"><?php echo get_lang('FirstPlace'); ?></option>
+			
+			<?php
+			foreach($home_menu as $key=>$enreg)
+			{
+			?>
+			
+			  <option value="<?php echo $key; ?>" <?php if($formSent && $insert_where == $key) echo 'selected="selected"'; ?> ><?php echo get_lang('After'); ?> &quot;<?php echo trim(strip_tags($enreg)); ?>&quot;</option>
+			
+			<?php
+			}
+			?>
+			
+			  </select></td>
+			</tr>
+		<?php 
+		}
+		?>
+		
+		<tr>
+		  <td nowrap="nowrap"><?php echo get_lang('OpenInNewWindow'); ?> ?</td>
+		  <td><input class="checkbox" type="checkbox" name="target_blank" value="1" <?php if($target_blank) echo 'checked="checked"'; ?> /> <?php echo get_lang('Yes'); ?></td>
+		</tr>
+		
+		<?php 
+		if($action == 'edit_link' && empty($link_url))
+		{
+		?>
+			</table>
+			<table border="0" cellpadding="5" cellspacing="0" width="100%">
+			<tr>
+			  <td>
+			
+			<?php
+			    //api_disp_html_area('link_html',isset($_POST['link_html'])?$_POST['link_html']:$link_html,'400px');
+				if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+					echo WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html);
+				} else {
+					$oFCKeditor = new FCKeditor('link_html') ;
+					$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+					$oFCKeditor->Height		= '400';
+					$oFCKeditor->Width		= '100%';
+					$oFCKeditor->Value		= isset($_POST['link_html'])?$_POST['link_html']:$link_html;
+					$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+					$oFCKeditor->ToolbarSet = "Small";
+				
+					$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+					$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
+					$result_sql=api_sql_query($sql);
+					$isocode_language=mysql_result($result_sql,0,0);
+					$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+					echo $oFCKeditor->CreateHtml();
+				}
+				
+			?>
+			
+			  </td>
+			</tr>
+			<tr>
+			  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
+			</tr>
+		<?php
+		} 
+		else
+		{
+			echo '<tr>' .
+					'<td>&nbsp;</td>' .
+					'<td><input type="submit" value="'.get_lang('Ok').'"/></td>' .
+				'</tr>';
+		}
+		?>
+		
+		</table>
+		</form>
+		
+		<?php
+		break;
+	case 'edit_top':
+	case 'edit_news':
+		if($action == 'edit_top')
+		{
+			$name="home_top";
+			$open = $home_top;
 		}
 		else
 		{
-			$platform_language=api_get_setting("platformLanguage");
-			if(file_exists('../../home/home_news_'.$platform_language.'.html')){
-				include('../../home/home_news_'.$platform_language.'.html');
+			$name="home_news";
+			$user_selected_language = $_SESSION["_user"]["language"];
+			if(!file_exists("../../home/home_news_".$user_selected_language.".html")){
+				$platform_language=api_get_setting("platformLanguage");
+				$open='../../home/home_news_'.$platform_language.'.html';
 			}
 			else{
-				include ('../../home/home_news.html');
+				$open='../../home/home_news_'.$user_selected_language.'.html';
 			}
+	
+			if(isset($_SESSION["user_language_choice"])){
+				$language=$user_selected_language;
+			}
+			else{
+				$language=api_get_setting("platformLanguage");
+			}
+	
+			$open=file_get_contents($open);
+	
 		}
-	?>
+		// print form header + important formSent attribute
+		echo '<form action="'.api_get_self().'?action='.$action.'" method="post" style="margin:0px;">';
+		echo '<input type="hidden" name="formSent" value="1"/>';
 
-	  </td>-->
-	</tr>
-	</table>
-  </td>
-  <td width="20%" rowspan="3" valign="top">
-	<div class="menu" style="width: 100%;">
-	<?php
-	api_display_language_form();
-	?>
-	<form id="loginform">
-	<label><?php echo get_lang('LoginName'); ?></label>
-	<input type="text" id="login" size="15" value="" disabled="disabled" />
-	<label><?php echo get_lang('UserPassword'); ?></label>
-	<input type="password" id="password" size="15" disabled="disabled" />
-	<input type="button" value="<?php echo get_lang('Ok'); ?>" disabled="disabled" />
-	</form>
-	<div class="menusection">
-	<span class="menusectioncaption"><?php echo get_lang('User'); ?></span>
-	<ul class="menulist">
-	<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo ucfirst(get_lang('Registration')); ?></span></li>
-	<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo ucfirst(get_lang('LostPassword')); ?></span></li>
-	</ul>
-	</div>
-	<div class="menusection">
-	<span class="menusectioncaption"><?php echo ucfirst(get_lang('General')); ?></span>
-	<ul class="menulist">
-
-<?php
-	$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
-
-	foreach($home_menu as $key=>$enreg)
-	{
-		$enreg=trim($enreg);
-
-		if(!empty($enreg))
+		if(!empty($errorMsg))
 		{
-			$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'"><img src="../img/edit.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Modify')).'"/></a>';
-			$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img src="../img/delete.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Delete')).'"/></a>';
-
-			echo str_replace(array('href="'.$_configuration['root_web'].'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
+			Display::display_normal_message($errorMsg); //main API
 		}
-	}
-?>
-
-	</ul>
-	</div>
-
-	<br />
-	&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=edit_notice"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
-
-	<div class="note">
-
-<?php
-	include('../../home/home_notice.html');
-?>
-
-	</div>
-	</div>
-  </td>
-</tr>
-</table>
-
-<?php
+		
+		if($action == 'edit_news'){
+			$_languages=api_get_languages();
+			echo get_lang("ChooseNewsLanguage")." : <select name='news_languages'><option value='all'>".get_lang("AllLanguages")."</option>";
+			foreach($_languages["name"] as $key => $value){
+				$english_name=$_languages["folder"][$key];
+				if($language==$english_name){
+					echo "<option value='$english_name' selected=selected>$value</option>";
+				}
+				else{
+					echo "<option value='$english_name'>$value</option>";
+				}
+			}
+			echo "</select>";
+		}
+		?>
+		
+		<table border="0" cellpadding="5" cellspacing="0" width="100%">
+		<tr>
+		  <td>
+		
+		<?php
+		if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+			// Print WCAG-specific HTML editor
+			echo '<script type="text/javascript" src="'.api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/plugins/ImageManagerStandalone/generic_dialog_common.js'.'" />';
+			echo WCAG_Rendering::create_xhtml($open);
+			
+		} else {
+			$open=str_replace('{rel_path}',api_get_path(REL_PATH),$open);
+			$oFCKeditor = new FCKeditor($name) ;
+			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+			$oFCKeditor->Height		= '400';
+			$oFCKeditor->Width		= '100%';
+			$oFCKeditor->Value		= $open;
+			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+			$oFCKeditor->ToolbarSet = "Small";
+		
+			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_user"]["language"]."'";
+			$result_sql=api_sql_query($sql);
+			$isocode_language=mysql_result($result_sql,0,0);
+			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+			echo $oFCKeditor->CreateHtml();
+		}
+		?>
+		  </td>
+		</tr>
+		<tr>
+		  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
+		</tr>
+		</table>
+		</form>
+		
+		<?php
+		break;
+	default: // When no action applies, default page to update campus homepage
+		?>		
+		<table border="0" cellpadding="5" cellspacing="0" width="100%">
+		<tr>
+		  <td width="80%" colspan="2">
+			<a href="<?php echo api_get_self(); ?>?action=edit_top"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
+		  </td>
+		  <td width="20%">
+			<a href="<?php echo api_get_self(); ?>?action=insert_link"><img src="../img/insert_row.png" border="0"/></a> <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
+		  </td>
+		</tr>
+		<tr>
+		  <td width="80%" colspan="2" valign="top">
+			<table border="0" cellpadding="5" cellspacing="0" width="100%">
+			<tr>
+			  <td colspan="2">
+				<?php
+					//print home_top contents
+					$home_top_temp=file('../../home/home_top.html');
+					$home_top_temp=implode('',$home_top_temp);
+					$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
+					echo $open;
+				?>		
+			  </td>
+			</tr>
+			<tr>
+			  <td width="50%">
+				<br />
+				<a href="course_category.php"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="course_category.php"><?php echo get_lang('EditCategories'); ?></a>
+			  </td>
+			  <td width="50%">
+				<br />
+				<!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>-->
+			  </td>
+			</tr>
+			<tr>
+			  <td width="50%" valign="top">
+				<table border="0" cellpadding="5" cellspacing="0" width="100%">
+				<?php
+				if(sizeof($Categories))
+				{
+					foreach($Categories as $enreg)
+					{
+						echo '<tr><td><img src="../img/opendir.gif" border="0" alt="'.get_lang('Directory').'"/>&nbsp;'.$enreg['name'].'</td></tr>';
+					}		
+					unset($Categories);
+				}
+				else
+				{
+					echo get_lang('NoCategories');
+				}
+				?>
+		
+				</table>
+			  </td>
+			  <!--<td width="50%" valign="top">		
+				<?php
+		
+				$user_selected_language = $_SESSION["_user"]["language"];
+				if(file_exists('../../home/home_news_'.$user_selected_language.'.html'))
+				{
+					include ('../../home/home_news_'.$user_selected_language.'.html');
+				}
+				else
+				{
+					$platform_language=api_get_setting("platformLanguage");
+					if(file_exists('../../home/home_news_'.$platform_language.'.html')){
+						include('../../home/home_news_'.$platform_language.'.html');
+					}
+					else{
+						include ('../../home/home_news.html');
+					}
+				}
+			?>
+		
+			  </td>-->
+			</tr>
+			</table>
+		  </td>
+		  <td width="20%" rowspan="3" valign="top">
+			<div class="menu" style="width: 100%;">
+			<?php
+			api_display_language_form();
+			?>
+			<form id="loginform">
+				<label><?php echo get_lang('LoginName'); ?></label>
+				<input type="text" id="login" size="15" value="" disabled="disabled" />
+				<label><?php echo get_lang('UserPassword'); ?></label>
+				<input type="password" id="password" size="15" disabled="disabled" />
+				<input type="button" value="<?php echo get_lang('Ok'); ?>" disabled="disabled" />
+			</form>
+			<div class="menusection">
+				<span class="menusectioncaption"><?php echo get_lang('User'); ?></span>
+				<ul class="menulist">
+				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo ucfirst(get_lang('Registration')); ?></span></li>
+				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo ucfirst(get_lang('LostPassword')); ?></span></li>
+				</ul>
+			</div>
+			<div class="menusection">
+				<span class="menusectioncaption"><?php echo ucfirst(get_lang('General')); ?></span>
+				<ul class="menulist">
+		
+				<?php
+					$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
+				
+					foreach($home_menu as $key=>$enreg)
+					{
+						$enreg=trim($enreg);
+				
+						if(!empty($enreg))
+						{
+							$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'"><img src="../img/edit.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Modify')).'"/></a>';
+							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img src="../img/delete.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Delete')).'"/></a>';
+				
+							echo str_replace(array('href="'.$_configuration['root_web'].'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
+						}
+					}
+				?>
+		
+				</ul>
+			</div>
+		
+			<br />
+			&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=edit_notice"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
+		
+			<div class="note">
+		
+			<?php
+			include('../../home/home_notice.html');
+			?>
+		
+			</div>
+			</div>
+		  </td>
+		</tr>
+		</table>
+		
+		<?php
+		break;
 }
 /*
 ==============================================================================

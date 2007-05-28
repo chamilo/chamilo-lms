@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 12495 2007-05-28 03:21:12Z yannoo $
+<?php // $Id: configure_homepage.php 12499 2007-05-28 16:03:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -66,6 +66,19 @@ if(!empty($action)){
 	}
 }
 
+//Get menu language in the following order of priority:
+// - from $_SESSION['user_language_choice'] (selected by user on portal homepage)
+// - from global campus setting 'platformLanguage'
+//Further down this script, we also use $user_selected_language = $_SESSION["_user"]["language"];
+//The global logic should really be: 
+//- take last language selected by user in the edition page
+//- take language selected when connecting ($_SESSION['user_language_choice'])
+//- take default user language ($_SESSION['_user']['language'])
+//- take platform language
+// Then if a language file doesn't exist, it should be created, which is already the case below
+// The default language for the homepage should use the default platform language (if nothing else is selected)
+
+
 $menu_language=$_SESSION['user_language_choice'];
 
 if(!isset($menu_language))
@@ -81,6 +94,18 @@ if(!file_exists('../../home/home_menu_'.$menu_language.'.html'))
 $errorMsg='';
 if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 	$errorMsg=WCAG_Rendering::request_validation();
+}
+
+$link = '';
+if(!empty($_GET['link']))
+{
+	$link=$_GET['link'];
+	// If the link parameter is suspicious, empty it
+	if(strstr($link,'/') || !strstr($link,'.html') || strstr($link,'\\'))
+	{
+		$link='';
+		$action='';
+	}
 }
 
 if(!empty($action))
@@ -192,19 +217,6 @@ if(!empty($action))
 						}
 					}
 				}
-	
-				/*if(!is_writable('../../home/home_news.html'))
-				{
-					$errorMsg=get_lang('HomePageFilesNotWritable');
-				}
-				elseif(!empty($home_news))
-				{
-					$fp=fopen('../../home/home_news.html','w');
-	
-					fputs($fp,$home_news);
-	
-					fclose($fp);
-				}*/
 				break;
 			case 'insert_link':
 			case 'edit_link':
@@ -240,37 +252,41 @@ if(!empty($action))
 				}
 				else
 				{
+					// New links are added as new files in the home/ directory
 					if($action == 'insert_link' || empty($filename) || strstr($filename,'/') || !strstr($filename,'.html'))
 					{
 						$filename=replace_dangerous_char($link_name,'strict').'.html';
 					}
-	
+					// "home_" prefix for links are renamed to "user_" prefix (to avoid name clash with existing home page files)
 					if(!empty($filename))
 					{
 						$filename=str_replace('home_','user_',$filename);
 					}
-	
+					// If the typical language suffix is not found in the file name,
+					// replace the ".html" suffix by "_en.html" or the active menu language
 					if(!strstr($filename,'_'.$menu_language.'.html'))
 					{
 						$filename=str_replace('.html','_'.$menu_language.'.html',$filename);
 					}
-	
+					// Get the contents of home_menu_en.html (or active menu language 
+					// version) into $home_menu as an array of one entry per line
 					$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
-	
+					// Prepare place to insert the new link into (default is end of file) 
 					if($insert_where < -1 || $insert_where > (sizeof($home_menu) - 1))
 					{
 						$insert_where=sizeof($home_menu) - 1;
 					}
-	
+					// For each line of the file, remove trailing spaces and special chars
 					foreach($home_menu as $key=>$enreg)
 					{
 						$home_menu[$key]=trim($enreg);
 					}
-	
+					// If the given link url is empty, then replace the link url by a link to the link file created 
 					if(empty($link_url))
 					{
 						$link_url=$_configuration['root_web'].'index.php?include='.urlencode($filename);
-	
+						// If the file doesn't exist, then create it and
+						// fill it with default text	
 						if(!file_exists($_configuration['root_sys'].'home/'.$filename))
 						{
 							$fp=@fopen($_configuration['root_sys'].'home/'.$filename,'w');
@@ -283,7 +299,8 @@ if(!empty($action))
 							}
 						}
 					}
-	
+					// If the requested action is to edit a link, open the file and
+					// write to it (if the file doesn't exist, create it)
 					if($action == 'edit_link' && !empty($link_html))
 					{
 						$fp=@fopen($_configuration['root_sys'].'home/'.$filename,'w');
@@ -295,7 +312,9 @@ if(!empty($action))
 							fclose($fp);
 						}
 					}
-	
+					// If the requested action is to create a link, make some room
+					// for the new link in the home_menu array at the requested place
+					// and insert the new link there
 					if($action == 'insert_link')
 					{
 						for($i=sizeof($home_menu);$i;$i--)
@@ -312,11 +331,11 @@ if(!empty($action))
 	
 						$home_menu[$insert_where+1]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$link_name.'</a></li>';
 					}
-					else
+					else // If the request is about a link edition, change the link 
 					{
 						$home_menu[$link_index]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$link_name.'</a></li>';
 					}
-	
+					// Re-build the file from the home_menu array
 					$home_menu=implode("\n",$home_menu);
 	
 					$fp=fopen('../../home/home_menu_'.$menu_language.'.html','w');
@@ -334,20 +353,17 @@ if(!empty($action))
 			exit();
 		}
 	}
-	else
+	else //if POST[formSent] is not set
 	{
 		switch($action)
 		{
 			case 'open_link':
-				$link=$_GET['link'];
-		
-				if(strstr($link,'/') || !strstr($link,'.html'))
-				{
-					$link='';
-					$action='';
-				}
+				// Previously, filtering of GET['link'] was done here but it left
+				// a security threat. Filtering has now been moved outside conditions
 				break;
 			case 'delete_link':
+				// A link is deleted by getting the file into an array, removing the
+				// link and re-writing the array to the file
 				$link_index=intval($_GET['link_index']);
 		
 				$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
@@ -376,21 +392,20 @@ if(!empty($action))
 				exit();
 				break;
 			case 'edit_top':
+				// This request is only the preparation for the update of the home_top
 				$home_top=file('../../home/home_top.html');
 		
 				$home_top=implode('',$home_top);
 				break;
 			case 'edit_notice':
+				// This request is only the preparation for the update of the home_notice
 				$home_notice=file('../../home/home_notice.html');
 		
 				$notice_title=strip_tags($home_notice[0]);
 				$notice_text=strip_tags(str_replace('<br />',"\n",$home_notice[1]),'<a>');
 				break;
 			case 'edit_news':
-				//$home_news=file('../../home/home_news.html');
-		
-				//$home_news=implode('',$home_news);
-		
+				// This request is the preparation for the update of the home_news page
 				if(file_exists("'../../home/home_news_".$menu_language.".html")){
 					if(is_readable("../../home/home_news_".$menu_language.".html")){
 						$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
@@ -407,9 +422,11 @@ if(!empty($action))
 				}
 				break;
 			case 'insert_link':	
+				// This request is the preparation for the addition of an item in home_menu
 				$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
 				break;
 			case 'edit_link':
+				// This request is the preparation for the edition of the links array
 				$link_index=intval($_GET['link_index']);
 		
 				$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
@@ -418,21 +435,29 @@ if(!empty($action))
 				$link_name='';
 				$link_url='';
 		
+				// For each line of the home_menu file
 				foreach($home_menu as $key=>$enreg)
 				{
+					// Check if the current item is the one we want to update
 					if($key == $link_index)
 					{
+						// This is the link we want to update
+						// Check if the target should be "_blank"
 						if(strstr($enreg,'target="_blank"'))
 						{
 							$target_blank=true;
 						}
-		
+						// Remove dangerous HTML tags from the link itself (this is an
+						// additional measure in case a link previously contained
+						// unsecure tags)
 						$link_name=strip_tags($enreg);
-		
+						
+						// Get the contents of "href" attribute in $link_url
 						$enreg=explode('href="',$enreg);
-		
 						list($link_url)=explode('"',$enreg[sizeof($enreg)-1]);
 		
+						// If the link contains the web root of this portal, then strip
+						// it off and keep only the name of the file that needs edition
 						if(strstr($link_url,$_configuration['root_web']) && strstr($link_url,'?include='))
 						{
 							$link_url=explode('?include=',$link_url);
@@ -441,10 +466,9 @@ if(!empty($action))
 		
 							if(!strstr($filename,'/') && strstr($filename,'.html'))
 							{
+								// Get oonly the contents of the link file					
 								$link_html=file($_configuration['root_web'].'home/'.$filename);
-		
 								$link_html=implode('',$link_html);
-		
 								$link_url='';
 							}
 							else
@@ -452,22 +476,22 @@ if(!empty($action))
 								$filename='';
 							}
 						}
-		
 						break;
 					}
 				}
 				break;
-		}
-	}
+		}//end of second switch($action) (when POST['formSent'] was not set, yet)
+	}// end of "else" in if($_POST['formSent']) condition
 }
-else
+else //if $action is empty, then prepare a list of the course categories to display (?)
 {
 	$result=api_sql_query("SELECT name FROM $tbl_category WHERE parent_id IS NULL ORDER BY tree_pos",__FILE__,__LINE__);
-
 	$Categories=api_store_result($result);
 }
 
+// -------------------------
 // ---- Display section ----
+// -------------------------
 
 Display::display_header($tool_name);
 
@@ -475,6 +499,7 @@ Display::display_header($tool_name);
 
 if($action == 'open_link' && !empty($link))
 {
+	// $link is only set in case of action=open_link and is filtered
 	include('../../home/'.$link);
 }
 elseif($action == 'edit_notice')

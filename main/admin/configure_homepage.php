@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 12493 2007-05-28 01:47:28Z yannoo $
+<?php // $Id: configure_homepage.php 12494 2007-05-28 02:57:44Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,7 +37,7 @@ require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php');
 require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 
-$action=Security::remove_XSS($_GET['action']);
+$action=$_GET['action'];
 
 $tbl_category=Database::get_main_table(TABLE_MAIN_CATEGORY);
 
@@ -87,102 +87,70 @@ if(!empty($action))
 {
 	if($_POST['formSent'])
 	{
-		if($action == 'edit_top')
-		
+		switch($action)
 		{
-			
-			$home_top='';
-			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-				$home_top=WCAG_Rendering::prepareXHTML();
-			} else {
-				$home_top=trim(stripslashes($_POST['home_top']));
-			}
-
-			if(!is_writable('../../home/home_top.html'))
-			{
-				$errorMsg=get_lang('HomePageFilesNotWritable');
-			}
-			elseif(!empty($home_top))
-			{
-				$fp=fopen('../../home/home_top.html','w');
-
-				fputs($fp,$home_top);
-
-				fclose($fp);
-			}
-		}
-		elseif($action == 'edit_notice')
-		{
-			$notice_title=trim(strip_tags(stripslashes($_POST['notice_title'])));
-			$notice_text=trim(str_replace(array("\r","\n"),array("","<br />"),strip_tags(stripslashes($_POST['notice_text']),'<a>')));
-
-			if(empty($notice_title))
-			{
-				$errorMsg=get_lang('PleaseEnterNoticeTitle');
-			}
-			elseif(empty($notice_text))
-			{
-				$errorMsg=get_lang('PleaseEnterNoticeText');
-			}
-			elseif(!is_writable('../../home/home_notice.html'))
-			{
-				$errorMsg=get_lang('HomePageFilesNotWritable');
-			}
-			else
-			{
-				$fp=fopen('../../home/home_notice.html','w');
-
-				fputs($fp,"<b>$notice_title</b><br />\n$notice_text");
-
-				fclose($fp);
-			}
-		}
-
-		//NEWS
-		elseif($action == 'edit_news')
-		{
-
-			$s_languages_news=$_POST["news_languages"];
-			//echo "langue choisie : ".$s_languages_news;
-			if (api_get_setting('wcag_anysurfer_public_pages')=='true')
-			{
-				$home_news=WCAG_rendering::prepareXHTML();
-			} else
-			{ 
-				$home_news=trim(stripslashes($_POST['home_news']));
-			}
-
-			if($s_languages_news!="all"){
-
-				if(file_exists("'../../home/home_news_".$s_languages_news.".html")){
-					if(is_writable("../../home/home_news_".$s_languages_news.".html")){
-						$fp=fopen("../../home/home_news_".$s_languages_news.".html","w");
-						fputs($fp,$home_news);
-						fclose($fp);
-					}
-					else{
-						$errorMsg=get_lang('HomePageFilesNotWritable');
-					}
+			case 'edit_top':
+				$home_top='';
+				if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+					$home_top=WCAG_Rendering::prepareXHTML();
+				} else {
+					$home_top=trim(stripslashes($_POST['home_top']));
 				}
-				//File not exists
-				else{
-					$fp=fopen("../../home/home_news_".$s_languages_news.".html","w");
-					fputs($fp,$home_news);
+	
+				if(!is_writable('../../home/home_top.html'))
+				{
+					$errorMsg=get_lang('HomePageFilesNotWritable');
+				}
+				elseif(!empty($home_top))
+				{
+					$fp=fopen('../../home/home_top.html','w');
+	
+					fputs($fp,$home_top);
+	
 					fclose($fp);
 				}
-			}
-
-			//we update all the news file
-			else{
-				$_languages=api_get_languages();
-
-				foreach($_languages["name"] as $key => $value){
-
-					$english_name=$_languages["folder"][$key];
-
-					if(file_exists("'../../home/home_news_".$english_name.".html")){
-						if(is_writable("../../home/home_news_".$english_name.".html")){
-							$fp=fopen("../../home/home_news_".$english_name.".html","w");
+				break;
+			case 'edit_notice':
+				$notice_title=trim(strip_tags(stripslashes($_POST['notice_title'])));
+				$notice_text=trim(str_replace(array("\r","\n"),array("","<br />"),strip_tags(stripslashes($_POST['notice_text']),'<a>')));
+	
+				if(empty($notice_title))
+				{
+					$errorMsg=get_lang('PleaseEnterNoticeTitle');
+				}
+				elseif(empty($notice_text))
+				{
+					$errorMsg=get_lang('PleaseEnterNoticeText');
+				}
+				elseif(!is_writable('../../home/home_notice.html'))
+				{
+					$errorMsg=get_lang('HomePageFilesNotWritable');
+				}
+				else
+				{
+					$fp=fopen('../../home/home_notice.html','w');
+	
+					fputs($fp,"<b>$notice_title</b><br />\n$notice_text");
+	
+					fclose($fp);
+				}
+				break;
+			case 'edit_news':
+				$s_languages_news=$_POST["news_languages"];
+				//echo "langue choisie : ".$s_languages_news;
+				if (api_get_setting('wcag_anysurfer_public_pages')=='true')
+				{
+					$home_news=WCAG_rendering::prepareXHTML();
+				} else
+				{ 
+					$home_news=trim(stripslashes($_POST['home_news']));
+				}
+	
+				if($s_languages_news!="all"){
+	
+					if(file_exists("'../../home/home_news_".$s_languages_news.".html")){
+						if(is_writable("../../home/home_news_".$s_languages_news.".html")){
+							$fp=fopen("../../home/home_news_".$s_languages_news.".html","w");
 							fputs($fp,$home_news);
 							fclose($fp);
 						}
@@ -192,146 +160,173 @@ if(!empty($action))
 					}
 					//File not exists
 					else{
-						$fp=fopen("../../home/home_news_".$english_name.".html","w");
+						$fp=fopen("../../home/home_news_".$s_languages_news.".html","w");
 						fputs($fp,$home_news);
 						fclose($fp);
 					}
 				}
-			}
-
-			/*if(!is_writable('../../home/home_news.html'))
-			{
-				$errorMsg=get_lang('HomePageFilesNotWritable');
-			}
-			elseif(!empty($home_news))
-			{
-				$fp=fopen('../../home/home_news.html','w');
-
-				fputs($fp,$home_news);
-
-				fclose($fp);
-			}*/
-		}
-		elseif($action == 'insert_link' || $action == 'edit_link')
-		{
-			$link_index=intval($_POST['link_index']);
-			$insert_where=intval($_POST['insert_where']);
-			$link_name=trim(stripslashes($_POST['link_name']));
-			$link_url=trim(stripslashes($_POST['link_url']));
-			// WCAG
-			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-				$link_html=WCAG_Rendering::prepareXHTML();
-			} else {
-				$link_html=trim(stripslashes($_POST['link_html']));
-			}
-			$filename=trim(stripslashes($_POST['filename']));
-			$target_blank=$_POST['target_blank']?true:false;
-
-			if($link_url == 'http://')
-			{
-				$link_url='';
-			}
-			elseif(!empty($link_url) && !strstr($link_url,'://'))
-			{
-				$link_url='http://'.$link_url;
-			}
-
-			if(!is_writable('../../home/home_menu_'.$menu_language.'.html'))
-			{
-				$errorMsg=get_lang('HomePageFilesNotWritable');
-			}
-			elseif(empty($link_name))
-			{
-				$errorMsg=get_lang('PleaseEnterLinkName');
-			}
-			else
-			{
-				if($action == 'insert_link' || empty($filename) || strstr($filename,'/') || !strstr($filename,'.html'))
-				{
-					$filename=replace_dangerous_char($link_name,'strict').'.html';
-				}
-
-				if(!empty($filename))
-				{
-					$filename=str_replace('home_','user_',$filename);
-				}
-
-				if(!strstr($filename,'_'.$menu_language.'.html'))
-				{
-					$filename=str_replace('.html','_'.$menu_language.'.html',$filename);
-				}
-
-				$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
-
-				if($insert_where < -1 || $insert_where > (sizeof($home_menu) - 1))
-				{
-					$insert_where=sizeof($home_menu) - 1;
-				}
-
-				foreach($home_menu as $key=>$enreg)
-				{
-					$home_menu[$key]=trim($enreg);
-				}
-
-				if(empty($link_url))
-				{
-					$link_url=$_configuration['root_web'].'index.php?include='.urlencode($filename);
-
-					if(!file_exists($_configuration['root_sys'].'home/'.$filename))
-					{
-						$fp=@fopen($_configuration['root_sys'].'home/'.$filename,'w');
-
-						if($fp)
-						{
-							fputs($fp,get_lang('MyTextHere'));
-
+	
+				//we update all the news file
+				else{
+					$_languages=api_get_languages();
+	
+					foreach($_languages["name"] as $key => $value){
+	
+						$english_name=$_languages["folder"][$key];
+	
+						if(file_exists("'../../home/home_news_".$english_name.".html")){
+							if(is_writable("../../home/home_news_".$english_name.".html")){
+								$fp=fopen("../../home/home_news_".$english_name.".html","w");
+								fputs($fp,$home_news);
+								fclose($fp);
+							}
+							else{
+								$errorMsg=get_lang('HomePageFilesNotWritable');
+							}
+						}
+						//File not exists
+						else{
+							$fp=fopen("../../home/home_news_".$english_name.".html","w");
+							fputs($fp,$home_news);
 							fclose($fp);
 						}
 					}
 				}
-
-				if($action == 'edit_link' && !empty($link_html))
+	
+				/*if(!is_writable('../../home/home_news.html'))
 				{
-					$fp=@fopen($_configuration['root_sys'].'home/'.$filename,'w');
-
-					if($fp)
-					{
-						fputs($fp,$link_html);
-
-						fclose($fp);
-					}
+					$errorMsg=get_lang('HomePageFilesNotWritable');
 				}
-
-				if($action == 'insert_link')
+				elseif(!empty($home_news))
 				{
-					for($i=sizeof($home_menu);$i;$i--)
-					{
-						if($i > $insert_where)
-						{
-							$home_menu[$i]=$home_menu[$i-1];
-						}
-						else
-						{
-							break;
-						}
-					}
-
-					$home_menu[$insert_where+1]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$link_name.'</a></li>';
+					$fp=fopen('../../home/home_news.html','w');
+	
+					fputs($fp,$home_news);
+	
+					fclose($fp);
+				}*/
+				break;
+			case 'insert_link':
+			case 'edit_link':
+				$link_index=intval($_POST['link_index']);
+				$insert_where=intval($_POST['insert_where']);
+				$link_name=trim(stripslashes($_POST['link_name']));
+				$link_url=trim(stripslashes($_POST['link_url']));
+				// WCAG
+				if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+					$link_html=WCAG_Rendering::prepareXHTML();
+				} else {
+					$link_html=trim(stripslashes($_POST['link_html']));
+				}
+				$filename=trim(stripslashes($_POST['filename']));
+				$target_blank=$_POST['target_blank']?true:false;
+	
+				if($link_url == 'http://')
+				{
+					$link_url='';
+				}
+				elseif(!empty($link_url) && !strstr($link_url,'://'))
+				{
+					$link_url='http://'.$link_url;
+				}
+	
+				if(!is_writable('../../home/home_menu_'.$menu_language.'.html'))
+				{
+					$errorMsg=get_lang('HomePageFilesNotWritable');
+				}
+				elseif(empty($link_name))
+				{
+					$errorMsg=get_lang('PleaseEnterLinkName');
 				}
 				else
 				{
-					$home_menu[$link_index]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$link_name.'</a></li>';
+					if($action == 'insert_link' || empty($filename) || strstr($filename,'/') || !strstr($filename,'.html'))
+					{
+						$filename=replace_dangerous_char($link_name,'strict').'.html';
+					}
+	
+					if(!empty($filename))
+					{
+						$filename=str_replace('home_','user_',$filename);
+					}
+	
+					if(!strstr($filename,'_'.$menu_language.'.html'))
+					{
+						$filename=str_replace('.html','_'.$menu_language.'.html',$filename);
+					}
+	
+					$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
+	
+					if($insert_where < -1 || $insert_where > (sizeof($home_menu) - 1))
+					{
+						$insert_where=sizeof($home_menu) - 1;
+					}
+	
+					foreach($home_menu as $key=>$enreg)
+					{
+						$home_menu[$key]=trim($enreg);
+					}
+	
+					if(empty($link_url))
+					{
+						$link_url=$_configuration['root_web'].'index.php?include='.urlencode($filename);
+	
+						if(!file_exists($_configuration['root_sys'].'home/'.$filename))
+						{
+							$fp=@fopen($_configuration['root_sys'].'home/'.$filename,'w');
+	
+							if($fp)
+							{
+								fputs($fp,get_lang('MyTextHere'));
+	
+								fclose($fp);
+							}
+						}
+					}
+	
+					if($action == 'edit_link' && !empty($link_html))
+					{
+						$fp=@fopen($_configuration['root_sys'].'home/'.$filename,'w');
+	
+						if($fp)
+						{
+							fputs($fp,$link_html);
+	
+							fclose($fp);
+						}
+					}
+	
+					if($action == 'insert_link')
+					{
+						for($i=sizeof($home_menu);$i;$i--)
+						{
+							if($i > $insert_where)
+							{
+								$home_menu[$i]=$home_menu[$i-1];
+							}
+							else
+							{
+								break;
+							}
+						}
+	
+						$home_menu[$insert_where+1]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$link_name.'</a></li>';
+					}
+					else
+					{
+						$home_menu[$link_index]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$link_name.'</a></li>';
+					}
+	
+					$home_menu=implode("\n",$home_menu);
+	
+					$fp=fopen('../../home/home_menu_'.$menu_language.'.html','w');
+	
+					fputs($fp,$home_menu);
+	
+					fclose($fp);
 				}
-
-				$home_menu=implode("\n",$home_menu);
-
-				$fp=fopen('../../home/home_menu_'.$menu_language.'.html','w');
-
-				fputs($fp,$home_menu);
-
-				fclose($fp);
-			}
-		}
+				break;
+		} //end of switch($action)
 
 		if(empty($errorMsg))
 		{
@@ -339,131 +334,129 @@ if(!empty($action))
 			exit();
 		}
 	}
-	elseif($action == 'open_link')
+	else
 	{
-		$link=$_GET['link'];
-
-		if(strstr($link,'/') || !strstr($link,'.html'))
+		switch($action)
 		{
-			$link='';
-			$action='';
-		}
-	}
-	elseif($action == 'delete_link')
-	{
-		$link_index=intval($_GET['link_index']);
-
-		$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
-
-		foreach($home_menu as $key=>$enreg)
-		{
-			if($key == $link_index)
-			{
-				unset($home_menu[$key]);
-			}
-			else
-			{
-				$home_menu[$key]=trim($enreg);
-			}
-		}
-
-		$home_menu=implode("\n",$home_menu);
-
-		$fp=fopen('../../home/home_menu_'.$menu_language.'.html','w');
-
-		fputs($fp,$home_menu);
-
-		fclose($fp);
-
-		header('Location: '.api_get_self());
-		exit();
-	}
-	elseif($action == 'edit_top')
-	{
-		$home_top=file('../../home/home_top.html');
-
-		$home_top=implode('',$home_top);
-	}
-	elseif($action == 'edit_notice')
-	{
-		$home_notice=file('../../home/home_notice.html');
-
-		$notice_title=strip_tags($home_notice[0]);
-		$notice_text=strip_tags(str_replace('<br />',"\n",$home_notice[1]),'<a>');
-	}
-	elseif($action == 'edit_news')
-	{
-		//$home_news=file('../../home/home_news.html');
-
-		//$home_news=implode('',$home_news);
-
-		if(file_exists("'../../home/home_news_".$menu_language.".html")){
-			if(is_readable("../../home/home_news_".$menu_language.".html")){
-				$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
-				$home_news=implode('',$home_news);
-			}
-			else{
-				$errorMsg=get_lang('HomePageFilesNotReadable');
-			}
-		}
-		//File not exists
-		else{
-			$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
-			$home_news=implode('',$home_news);
-		}
-
-	}
-	elseif($action == 'insert_link')
-	{
-		$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
-	}
-	elseif($action == 'edit_link')
-	{
-		$link_index=intval($_GET['link_index']);
-
-		$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
-
-		$target_blank=false;
-		$link_name='';
-		$link_url='';
-
-		foreach($home_menu as $key=>$enreg)
-		{
-			if($key == $link_index)
-			{
-				if(strstr($enreg,'target="_blank"'))
+			case 'open_link':
+				$link=$_GET['link'];
+		
+				if(strstr($link,'/') || !strstr($link,'.html'))
 				{
-					$target_blank=true;
+					$link='';
+					$action='';
 				}
-
-				$link_name=strip_tags($enreg);
-
-				$enreg=explode('href="',$enreg);
-
-				list($link_url)=explode('"',$enreg[sizeof($enreg)-1]);
-
-				if(strstr($link_url,$_configuration['root_web']) && strstr($link_url,'?include='))
+				break;
+			case 'delete_link':
+				$link_index=intval($_GET['link_index']);
+		
+				$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
+		
+				foreach($home_menu as $key=>$enreg)
 				{
-					$link_url=explode('?include=',$link_url);
-
-					$filename=$link_url[sizeof($link_url)-1];
-
-					if(!strstr($filename,'/') && strstr($filename,'.html'))
+					if($key == $link_index)
 					{
-						$link_html=file($_configuration['root_web'].'home/'.$filename);
-
-						$link_html=implode('',$link_html);
-
-						$link_url='';
+						unset($home_menu[$key]);
 					}
 					else
 					{
-						$filename='';
+						$home_menu[$key]=trim($enreg);
 					}
 				}
-
+		
+				$home_menu=implode("\n",$home_menu);
+		
+				$fp=fopen('../../home/home_menu_'.$menu_language.'.html','w');
+		
+				fputs($fp,$home_menu);
+		
+				fclose($fp);
+		
+				header('Location: '.api_get_self());
+				exit();
 				break;
-			}
+			case 'edit_top':
+				$home_top=file('../../home/home_top.html');
+		
+				$home_top=implode('',$home_top);
+				break;
+			case 'edit_notice':
+				$home_notice=file('../../home/home_notice.html');
+		
+				$notice_title=strip_tags($home_notice[0]);
+				$notice_text=strip_tags(str_replace('<br />',"\n",$home_notice[1]),'<a>');
+				break;
+			case 'edit_news':
+				//$home_news=file('../../home/home_news.html');
+		
+				//$home_news=implode('',$home_news);
+		
+				if(file_exists("'../../home/home_news_".$menu_language.".html")){
+					if(is_readable("../../home/home_news_".$menu_language.".html")){
+						$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
+						$home_news=implode('',$home_news);
+					}
+					else{
+						$errorMsg=get_lang('HomePageFilesNotReadable');
+					}
+				}
+				//File not exists
+				else{
+					$home_news=file_get_contents("../../home/home_news_".$menu_language.".html","r");
+					$home_news=implode('',$home_news);
+				}
+				break;
+			case 'insert_link':	
+				$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
+				break;
+			case 'edit_link':
+				$link_index=intval($_GET['link_index']);
+		
+				$home_menu=file('../../home/home_menu_'.$menu_language.'.html');
+		
+				$target_blank=false;
+				$link_name='';
+				$link_url='';
+		
+				foreach($home_menu as $key=>$enreg)
+				{
+					if($key == $link_index)
+					{
+						if(strstr($enreg,'target="_blank"'))
+						{
+							$target_blank=true;
+						}
+		
+						$link_name=strip_tags($enreg);
+		
+						$enreg=explode('href="',$enreg);
+		
+						list($link_url)=explode('"',$enreg[sizeof($enreg)-1]);
+		
+						if(strstr($link_url,$_configuration['root_web']) && strstr($link_url,'?include='))
+						{
+							$link_url=explode('?include=',$link_url);
+		
+							$filename=$link_url[sizeof($link_url)-1];
+		
+							if(!strstr($filename,'/') && strstr($filename,'.html'))
+							{
+								$link_html=file($_configuration['root_web'].'home/'.$filename);
+		
+								$link_html=implode('',$link_html);
+		
+								$link_url='';
+							}
+							else
+							{
+								$filename='';
+							}
+						}
+		
+						break;
+					}
+				}
+				break;
 		}
 	}
 }
@@ -473,6 +466,8 @@ else
 
 	$Categories=api_store_result($result);
 }
+
+// ---- Display section ----
 
 Display::display_header($tool_name);
 

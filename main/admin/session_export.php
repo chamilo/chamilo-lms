@@ -4,7 +4,7 @@
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
 
@@ -44,8 +44,8 @@ $formSent=0;
 $errorMsg='';
 
 // Database Table Definitions
-$tbl_user					= Database::get_main_table(TABLE_MAIN_USER); 
-$tbl_course      			= Database::get_main_table(TABLE_MAIN_COURSE); 
+$tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course      			= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user 			= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_session      			= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_user      		= Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -73,14 +73,14 @@ if($_POST['formSent'] )
 	}
 	else
 	{
-		$sql = "SELECT id,name,username,date_start,date_end 
-				FROM $tbl_session 
+		$sql = "SELECT id,name,username,date_start,date_end
+				FROM $tbl_session
 				INNER JOIN $tbl_user
 					ON $tbl_user.user_id = $tbl_session.id_coach
 				WHERE id='$session_id'";
-		
+
 		$result = api_sql_query($sql,__FILE__,__LINE__);
-		
+
 	}
 
 	if(mysql_num_rows($result))
@@ -100,10 +100,10 @@ if($_POST['formSent'] )
 		}
 
 		$archiveFile='export_sessions_'.$session_id.'_'.date('Y-m-d_H-i-s').'.'.$file_type;
-		
+
 		while( file_exists($archivePath.$archiveFile))
 		{
-			$archiveFile='export_users_'.$session_id.'_'.date('Y-m-d_H-i-s').'_'.uniqid('').'.'.$file_type;		
+			$archiveFile='export_users_'.$session_id.'_'.date('Y-m-d_H-i-s').'_'.uniqid('').'.'.$file_type;
 		}
 		$fp=fopen($archivePath.$archiveFile,'w');
 
@@ -120,8 +120,8 @@ if($_POST['formSent'] )
 
 		while($row=mysql_fetch_array($result))
 		{
-			
-			
+
+
 			$add = '';
 			$row['name'] = str_replace(';',',',$row['name']);
 			$row['username'] = str_replace(';',',',$row['username']);
@@ -137,13 +137,13 @@ if($_POST['formSent'] )
 						 ."\t\t<DateStart>$row[date_start]</DateStart>\n"
 						 ."\t\t<DateEnd>$row[date_end]</DateEnd>\n";
 			}
-			
+
 			//users
 			$sql = "SELECT DISTINCT $tbl_user.username FROM $tbl_user
 					INNER JOIN $tbl_session_user
 						ON $tbl_user.user_id = $tbl_session_user.id_user
 						AND $tbl_session_user.id_session = '".$row['id']."'";
-			
+
 			$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
 			$users = '';
 			while($rowUsers = mysql_fetch_array($rsUsers)){
@@ -156,15 +156,15 @@ if($_POST['formSent'] )
 			}
 			if(!empty($users) && $cvs)
 				$users = substr($users , 0, strlen($users)-1);
-			
-			if($cvs) 
+
+			if($cvs)
 				$users .= ';';
-			
+
 			$add .= $users;
-			
-			
-			
-			
+
+
+
+
 			//courses
 			$sql = "SELECT DISTINCT $tbl_course.code, $tbl_user.username FROM $tbl_course
 					INNER JOIN $tbl_session_course
@@ -173,10 +173,10 @@ if($_POST['formSent'] )
 					LEFT JOIN $tbl_user
 						ON $tbl_user.user_id = $tbl_session_course.id_coach";
 			$rsCourses = api_sql_query($sql,__FILE__,__LINE__);
-			
+
 			$courses = '';
 			while($rowCourses = mysql_fetch_array($rsCourses)){
-				
+
 				if($cvs){
 					$courses .= str_replace(';',',',$rowCourses['code']);
 					$courses .= '['.str_replace(';',',',$rowCourses['username']).'][';
@@ -186,15 +186,15 @@ if($_POST['formSent'] )
 					$courses .= "\t\t\t<CourseCode>$rowCourses[code]</CourseCode>\n";
 					$courses .= "\t\t\t<Coach>$rowCourses[username]</Coach>\n";
 				}
-				
+
 				// rel user courses
-				$sql = "SELECT DISTINCT username 
+				$sql = "SELECT DISTINCT username
 						FROM $tbl_user
 						INNER JOIN $tbl_session_course_user
 							ON $tbl_session_course_user.id_user = $tbl_user.user_id
 							AND $tbl_session_course_user.course_code='".$rowCourses['code']."'
 							AND id_session='".$row['id']."'";
-				
+
 				$rsUsersCourse = api_sql_query($sql,__FILE__,__LINE__);
 				while($rowUsersCourse = mysql_fetch_array($rsUsersCourse)){
 					if($cvs){
@@ -207,7 +207,7 @@ if($_POST['formSent'] )
 				if($cvs){
 					if(!empty($userscourse))
 						$userscourse = substr($userscourse , 0, strlen($userscourse)-1);
-					
+
 					$courses .= $userscourse.']|';
 				}
 				else {
@@ -217,7 +217,7 @@ if($_POST['formSent'] )
 			if(!empty($courses) && $cvs)
 				$courses = substr($courses , 0, strlen($courses)-1);
 			$add .= $courses;
-			
+
 			if($cvs)
 				$add .= ';';
 			else
@@ -225,7 +225,7 @@ if($_POST['formSent'] )
 
 			fputs($fp, $add);
 		}
-		
+
 		if(!$cvs)
 			fputs($fp,"</Sessions>\n");
 		fclose($fp);
@@ -294,8 +294,8 @@ unset($Courses);
 <?php
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
 ?>

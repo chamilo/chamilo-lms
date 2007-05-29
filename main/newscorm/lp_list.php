@@ -5,7 +5,7 @@
 
 	Copyright (c) 2004-2006 Dokeos S.A.
 	Copyright (c) 2004 Denes Nagy
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
 	For a full list of contributors, see "credits.txt".
@@ -98,7 +98,7 @@ if(api_is_allowed_to_edit())
   {
     Display::display_normal_message(api_failure::get_last_failure());
   }
-  
+
   //include('content_makers.inc.php');
   echo	'<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.
 		'<img src="../img/wizard.gif" border="0" align="absmiddle" alt="scormbuilder">&nbsp;'.get_lang('_add_learnpath').
@@ -170,7 +170,7 @@ if (is_array($flat_list))
 	{
 	    $counter++;
 	    if (($counter % 2)==0) { $oddclass="row_odd"; } else { $oddclass="row_even"; }
-	
+
 		$url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
 		$name = $details['lp_name'];
 		$image='<img src="../img/kcmdf.gif" border="0" align="absmiddle" alt="scorm">'."\n";
@@ -181,7 +181,7 @@ if (is_array($flat_list))
 			"</td>\n";
 	    //$dsp_desc='<td>'.$details['lp_desc'].'</td>'."\n";
 	    $dsp_desc = '';
-	    
+
 	    $dsp_export = '';
 	    $dsp_edit = '';
 	    $dsp_delete = '';
@@ -199,7 +199,7 @@ if (is_array($flat_list))
 		    $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a></td>'."\n";
 			$fileExtension=explode('.',$dspFileName);
 			$fileExtension=strtolower($fileExtension[sizeof($fileExtension)-1]);
-			
+
 			/* export */
 			//export not available for normal lps yet
 			if($details['lp_type']==1){
@@ -220,19 +220,19 @@ if (is_array($flat_list))
 					"<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					//"</a>" .
 					"";
-			}			
+			}
 			/* edit title and description */
-			
+
 			$dsp_edit = '<td align="center">';
-			
+
 			/* DELETE COMMAND */
 			$dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" " .
 			"onClick=\"return confirmation('".addslashes($dspFileName)."');\">" .
 			"<img src=\"../img/delete.gif\" border=\"0\" title=\"".get_lang('_delete_learnpath')."\" />" .
 			"</a>";
-			
+
 			/* VISIBILITY COMMAND */
-			
+
 			if ($details['lp_visibility'] == "i")
 			{
 		        $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=v\">" .
@@ -290,13 +290,13 @@ if (is_array($flat_list))
 						'<img src="../img/bug_gray.gif" border="0" alt="'.get_lang("ShowDebug").'" title="'.get_lang("ShowDebug").'"/>' .
 						'</a>&nbsp;';
 			}
-		
+
 	    }	// end if($is_allowedToEdit)
 	    //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
 	    //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete;
 	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_force_commit.$dsp_delete;
 	    echo	"</tr>\n";
-      
+
 	}	// end foreach ($flat_list)
 	//TODO print some user-friendly message if counter is still = 0 to tell nothing can be displayd yet
 }// end if ( is_array($flat_list)

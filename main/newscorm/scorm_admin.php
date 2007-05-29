@@ -5,7 +5,7 @@
 
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2004 Denes Nagy
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
 	For a full list of contributors, see "credits.txt".
@@ -35,7 +35,7 @@
  * Script init
  */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "scormdocument";
 $uncompress=1; //this variable shouldn't be found here (find its usage before removal)
 
@@ -44,7 +44,7 @@ include("../learnpath/learnpath_functions.inc.php");
 include_once('scorm.lib.php');
 
 $is_allowedToEdit = api_is_allowed_to_edit();
- 
+
 /**
  * Variables
  */
@@ -118,15 +118,15 @@ switch($action){
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 			$row=mysql_fetch_array($result);
 			$name=domesticate($row['learnpath_name']);
-			if ($set_visibility == 'i') { 
-				$s=$name." ".get_lang('_no_published'); 
-				$dialogBox=$s; 
-				$v=0; 
+			if ($set_visibility == 'i') {
+				$s=$name." ".get_lang('_no_published');
+				$dialogBox=$s;
+				$v=0;
 			}
-			if ($set_visibility == 'v') { 
-				$s=$name." ".get_lang('_published');    
-				$dialogBox=$s; 
-				$v=1; 
+			if ($set_visibility == 'v') {
+				$s=$name." ".get_lang('_published');
+				$dialogBox=$s;
+				$v=1;
 			}
 			$sql="SELECT * FROM $tbl_tool where (name='$name' and image='scormbuilder.gif')";
 			$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -153,7 +153,7 @@ switch($action){
 				//parameter and database incompatible, do nothing
 			}
 			$result=api_sql_query($sql,__FILE__,__LINE__);
-		
+
 		}
 		break;
 	case 'editpath':
@@ -215,10 +215,10 @@ if($is_allowedToEdit) // TEACHER ONLY
    * size set in php.ini, all variables from POST are cleared !
    */
 
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' 
-  	&& count($_FILES)>0 
-  	&& empty($submitImage) 
-  	&& empty($cancelSubmitImage) 
+  if ($_SERVER['REQUEST_METHOD'] == 'POST'
+  	&& count($_FILES)>0
+  	&& empty($submitImage)
+  	&& empty($cancelSubmitImage)
   	&& empty($action))
   {
     // A SCORM upload has been detected, now deal with the file...
@@ -255,7 +255,7 @@ if($is_allowedToEdit) // TEACHER ONLY
 	        //exit();
 	    }
 	    //directory creation end
-	    
+
 	    $uploadPath=$openDir.'/'.$newDirName;
 	    if(!$_FILES['userFile']['size'])
         {
@@ -309,13 +309,13 @@ if($is_allowedToEdit) // TEACHER ONLY
 	    {
 	      rmdir($baseWorkDir.$newDirPath.$openDir."/".$newDirName);
 	    }
-     
+
     }
   }//
   else
   {//the filename doesn't contain any alphanum chars (empty filename?)
   	//get a more detailed message?
-    $dialogBox .= get_lang('FileError').'<br />';  
+    $dialogBox .= get_lang('FileError').'<br />';
   }
 
   /*======================================
@@ -327,7 +327,7 @@ if($is_allowedToEdit) // TEACHER ONLY
     if ( scorm_delete($baseWorkDir.$delete))
     {
       //$tbl_document = substr($tbl_document, 1, strlen($tbl_document) - 2);  // RH...
-      update_db_info("delete", $delete); 
+      update_db_info("delete", $delete);
       $dialogBox = get_lang('DocDeleted');
     }
   }
@@ -379,7 +379,7 @@ if($is_allowedToEdit) // TEACHER ONLY
   ======================================*/
   if (!empty($make_directory_visible) || !empty($make_directory_invisible))
   {
-    $visibilityPath = $make_directory_visible.$make_directory_invisible; 
+    $visibilityPath = $make_directory_visible.$make_directory_invisible;
     // At least one of these variables are empty. So it's okay to proceed this way
     /* Check if there is yet a record for this file in the DB */
     $result = mysql_query ("SELECT * FROM $tbl_document WHERE path LIKE '".$visibilityPath."'");

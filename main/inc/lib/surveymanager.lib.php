@@ -1,34 +1,34 @@
-<?php // $Id: usermanager.lib.php,v 1.9.2.3 2005/10/28 14:31:45 bmol Exp $ 
+<?php // $Id: usermanager.lib.php,v 1.9.2.3 2005/10/28 14:31:45 bmol Exp $
 /*
-=====================================================Gh9Xp5m========================= 
+=====================================================Gh9Xp5m=========================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	This library provides functions for user management.
 *	Include/require it in your code to use its functionality.
 *
 *	@author Bart Mollet, main author
 *	@package dokeos.library
-============================================================================== 
+==============================================================================
 */
 class SurveyManager
 {
@@ -45,16 +45,16 @@ class SurveyManager
 			$str_survey_list = "";
 			$str_survey_list .= "<select name=\"exiztingsurvey\" $extra_script>\n";
 			$str_survey_list .= "<option value=\"\">--Select Survey--</option>";
-		
+
 			while($result=mysql_fetch_array($sql_result))
 			{
 			 $selected = ($seleced_surveyid==$result[survey_id])?"selected":"";
 			 $str_survey_list .= "\n<option value=\"".$result[survey_id]."\" ".$selected.">".$result[title]."</option>";
-			}						  
-			
+			}
+
 			$str_survey_list .= "</select>";
 			return $str_survey_list;
-        
+
 		}
 		else
 		{
@@ -65,7 +65,7 @@ class SurveyManager
 
 	/*function getsurveyid($existing)
 	{
-			 
+
 		$survey_table = Database :: get_course_table(TABLE_MAIN_SURVEY);
 		$sql = "SELECT survey_id FROM $survey_table WHERE title='$existing'" ;
 		$result = api_sql_query($sql,__FILE__,__LINE__);
@@ -88,7 +88,7 @@ class SurveyManager
 		}
 		else
 		 {
-			
+
 			$sql = 'SELECT MAX(sortby) FROM '.$table_group.' WHERE survey_id="'.$survey_id.'"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
 			list($sortby) = mysql_fetch_array($rs);
@@ -97,9 +97,9 @@ class SurveyManager
 			$result=api_sql_query($sql);
 			return mysql_insert_id();
 		 }
-        
+
 	}
-	
+
 
 	function get_survey_author($authorid)
 	{
@@ -148,7 +148,7 @@ class SurveyManager
 		return($code);
 	}
 
-	
+
 	function insert_into_group($survey_id,$group_title,$introduction,$tb)
 	{
 		$sql="INSERT INTO $tb(group_id,survey_id,group_title,introduction) values('','$survey_id','$group_title','$introduction')";
@@ -192,55 +192,55 @@ class SurveyManager
 			$result = api_sql_query($sql2, __FILE__, __LINE__);
 			return $survey_id;
 		}
-		
+
 	function create_survey_in_another_language($id, $lang){
-		
+
 		global $_course;
-		
+
 		$original_survey = SurveyManager::get_all_datas($id);
-		
+
 		// copy the survey itself
-		$sql = 'INSERT INTO '.$_course['dbName'].'.survey SET 
+		$sql = 'INSERT INTO '.$_course['dbName'].'.survey SET
 					code = "'.$original_survey->code.'",
-					title = "'.addslashes($original_survey->title).'", 
-					subtitle = "'.addslashes($original_survey->subtitle).'", 
-					author = "'.$original_survey->author.'", 
-					lang = "'.$lang.'", 
+					title = "'.addslashes($original_survey->title).'",
+					subtitle = "'.addslashes($original_survey->subtitle).'",
+					author = "'.$original_survey->author.'",
+					lang = "'.$lang.'",
 					avail_from = "'.$original_survey->avail_from.'",
-					avail_till = "'.$original_survey->avail_till.'", 
-					is_shared = "'.$original_survey->is_shared.'", 
-					template = "'.$original_survey->template.'", 
-					intro = "'.addslashes($original_survey->intro).'", 
-					surveythanks = "'.addslashes($original_survey->surveythanks).'", 
+					avail_till = "'.$original_survey->avail_till.'",
+					is_shared = "'.$original_survey->is_shared.'",
+					template = "'.$original_survey->template.'",
+					intro = "'.addslashes($original_survey->intro).'",
+					surveythanks = "'.addslashes($original_survey->surveythanks).'",
 					creation_date = "NOW()"';
 
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$new_survey_id = mysql_insert_id();
-		
+
 		// copy the groups
 		$groups = SurveyManager::listGroups($id);
 		foreach($groups as $group)
 		{
 			SurveyManager::import_group($new_survey_id, $group['group_id'], $_course['dbName'], $_course['dbName']);
 		}
-		
+
 	}
 
 	function create_survey_attach($surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $table_survey, $table_group)
 	{
 			//$table_survey = Database :: get_course_table('survey');
 			$sql = "INSERT INTO $table_survey (code,title, subtitle, author,lang,avail_from,avail_till, is_shared,template,intro,surveythanks,creation_date) values('$surveycode','$surveytitle','$surveysubtitle','$author','$survey_language','$availablefrom','$availabletill','$isshare','$surveytemplate','$surveyintroduction','$surveythanks',curdate())";
-			$result = api_sql_query($sql, __FILE__, __LINE__);			
-			$survey_id = mysql_insert_id();			
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$survey_id = mysql_insert_id();
 			return $survey_id;
-	}		
+	}
 
 	function update_survey($surveyid,$surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $cidReq,$table_course)
 	{
           $sql_course = "SELECT * FROM $table_course WHERE code = '$cidReq'";
           $res_course = api_sql_query($sql_course,__FILE__,__LINE__);
           $obj_course=@mysql_fetch_object($res_course);
-          $curr_dbname = $obj_course->db_name ; 
+          $curr_dbname = $obj_course->db_name ;
 		  $sql = "UPDATE $curr_dbname.survey SET code='$surveycode', title='$surveytitle', subtitle='$surveysubtitle', lang='$survey_language',   avail_from='$availablefrom', avail_till='$availabletill', is_shared='$isshare', template='$surveytemplate', intro='$surveyintroduction',surveythanks='$surveythanks' WHERE survey_id='$surveyid'";
 		  api_sql_query($sql, __FILE__, __LINE__);
 		  return $curr_dbname;
@@ -267,16 +267,16 @@ class SurveyManager
 				$y.= "'".$rating[$j]."',";
 			}
 		}
-			
+
 		$anst = implode(", " ,$answerT);
 		$ansd = implode(", " ,$answerD);
-			
+
 		$table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 		$sql = "INSERT INTO  $table_question (gid,type,caption,ans1,ans2,ans3,ans4,ans5,ans6,ans7,ans8,ans9,ans10,open_ans,anst,ansd,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('$gid','$type','$caption',$x'$open_ans','$anst','$ansd',$y)";
 		$result = api_sql_query($sql);
 		return mysql_insert_id();
 	}
-			
+
 	function get_question($questionid)
 	{
 		$table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
@@ -325,14 +325,14 @@ class SurveyManager
 		{*/
 			$anst = $answerT;
 			$ansd = $answerD;
-		//}		
+		//}
 			$sql = "INSERT INTO $curr_dbname.questions (gid,survey_id,qtype,caption,alignment,sortby,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('$gid','$surveyid','$qtype','$caption','$alignment','$sortby',$x'$anst','$ansd',$y)";
 			$result = api_sql_query($sql);
 			return mysql_insert_id();
-			
+
 		}
 
-	
+
 	function update_question($qid,$qtype,$caption,$alignment,$answers,$open_ans,$curr_dbname)
 	{
       	for($i=0;$i<10;$i++)
@@ -344,7 +344,7 @@ class SurveyManager
 		$ansd = $answerD;
 		$sql = "UPDATE $curr_dbname.questions SET qtype='$qtype',caption='$caption',alignment='$alignment',a1='$answers[0]',a2='$answers[1]',a3='$answers[2]',a4='$answers[3]',a5='$answers[4]',a6='$answers[5]',a7='$answers[6]',a8='$answers[7]',a9='$answers[8]',a10='$answers[9]' WHERE qid='$qid'";
 		$result = api_sql_query($sql);
-		return mysql_insert_id();			
+		return mysql_insert_id();
 	}
 
 
@@ -356,7 +356,7 @@ class SurveyManager
 			$code=@mysql_result($res,0,'type');
 			return($code);
 	 }
-	  
+
 
 	 function no_of_question($db_name,$gid)
 	 {
@@ -382,25 +382,25 @@ function get_question_data($qid,$curr_dbname)
 	 }
 
 	function get_data($id, $field) {
-		
+
 		global $_course;
-	
+
 		$sql='SELECT '.$field.' FROM '.$_course['dbName'].'.survey WHERE survey_id='.intval($id);
 		$res=api_sql_query($sql);
 		$code=@mysql_result($res,0);
-		return($code);	
-		
+		return($code);
+
 	}
-	
+
 	function get_all_datas($id) {
-		
+
 		global $_course;
-	
+
 		$sql='SELECT * FROM '.$_course['dbName'].'.survey WHERE survey_id='.intval($id);
-	
+
 		$res=api_sql_query($sql);
 		return mysql_fetch_object($res);
-		
+
 	}
 
 	 function get_surveyname($db_name,$sid)
@@ -409,7 +409,7 @@ function get_question_data($qid,$curr_dbname)
 			$sql="SELECT * FROM $db_name.survey WHERE survey_id=$sid";
 			$res=api_sql_query($sql);
 			$code=@mysql_result($res,0,'title');
-			return($code);	
+			return($code);
 		}
 	function get_surveyname_display($sid)
 		{
@@ -417,7 +417,7 @@ function get_question_data($qid,$curr_dbname)
 			$sql="SELECT * FROM $surveytable WHERE survey_id=$sid";
 			$res=api_sql_query($sql);
 			$code=@mysql_result($res,0,'title');
-			return($code);	
+			return($code);
 		}
 	/*
 	function join_survey($question_type)
@@ -425,7 +425,7 @@ function get_question_data($qid,$curr_dbname)
 		  $table_survey = Database :: get_course_table(TABLE_MAIN_SURVEY);
 		  $table_group =  Database :: get_course_table(TABLE_MAIN_GROUP);
 		  $table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
-		  echo $sql="select t1.title as stitle, t3.type as type, t3.caption as caption, t2.groupname as groupname from $table_survey t1, $table_group t2, $table_question t3  where t1.survey_id=t2.survey_id  and t3.gid=t2.group_id and t3.type='$question_type'"; 
+		  echo $sql="select t1.title as stitle, t3.type as type, t3.caption as caption, t2.groupname as groupname from $table_survey t1, $table_group t2, $table_question t3  where t1.survey_id=t2.survey_id  and t3.gid=t2.group_id and t3.type='$question_type'";
 		  $sql_result = api_sql_query($sql,__FILE__,__LINE__);
 		  $result = mysql_fetch_object($sql_result);
 		  return ($result);
@@ -433,7 +433,7 @@ function get_question_data($qid,$curr_dbname)
 		  */
 
 	function import_questions($import_type, $ids)
-	{		
+	{
 			//$groupname=surveymanager::get_groupname($gid_arr[$index]);
 			switch ($import_type){
 				case "survey":
@@ -470,10 +470,10 @@ function get_question_data($qid,$curr_dbname)
 	 * This function deletes a survey and all the groups and question belonging to it.
 	 *
 	 * @param unknown_type $survey_id
-	 * 
+	 *
 	 * @author unknown
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, cleanup and refactoring
-	 * 
+	 *
 	 */
 	function delete_survey($survey_id)
 	{
@@ -484,7 +484,7 @@ function get_question_data($qid,$curr_dbname)
 		// Deleting the survey
 		$sql = "DELETE FROM $table_survey WHERE survey_id='".$survey_id."'";
 		api_sql_query($sql,__FILE__,__LINE__);
-		
+
 		// Deleting all the questions of the survey
 		$sql = "select * FROM $table_group WHERE survey_id='".$survey_id."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -493,20 +493,20 @@ function get_question_data($qid,$curr_dbname)
 			$sql = "DELETE FROM $table_question WHERE gid='".$obj->group_id."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
-		
+
 		// Deleting the groups of the survey
 		$sql = "DELETE FROM $table_group WHERE survey_id='".$survey_id."'";
 		api_sql_query($sql,__FILE__,__LINE__);
-		
+
 		return true;
 	}
 
 	/**
-	 * This function deletes a 
+	 * This function deletes a
 	 *
 	 * @param unknown_type $group_id
 	 * @param unknown_type $curr_dbname
-	 * 
+	 *
 	 * @author unknown
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, refactoring: using correct database calls and removing useless second parameter
 	 */
@@ -516,9 +516,9 @@ function get_question_data($qid,$curr_dbname)
 		/** @todo use database constants for the survey tables */
 		$table_question 	= Database :: get_course_table('questions');
 		$table_survey_group = Database :: get_course_table('survey_group');
-		
+
 		$sql = "DELETE FROM $table_question WHERE gid='".$group_id."'";
-		api_sql_query($sql,__FILE__,__LINE__);			
+		api_sql_query($sql,__FILE__,__LINE__);
 		$sql = "DELETE FROM $table_survey_group WHERE group_id='".$group_id."'";
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
@@ -531,7 +531,7 @@ function get_question_data($qid,$curr_dbname)
 			$res=api_sql_query($sql);
 			$id=@mysql_result($res,0,'gid');
 			$gname=surveymanager::get_groupname($id);
-			return($gname);	
+			return($gname);
 		}
 
 	function insert_questions($sid,$newgid,$gid,$table_group)
@@ -549,7 +549,7 @@ function get_question_data($qid,$curr_dbname)
 	}
 
 	function select_group_list($survey_id, $seleced_groupid='', $extra_script='')
-	{		 
+	{
 		$group_table = Database :: get_course_table('survey_group');
 		$sql = "SELECT * FROM $group_table WHERE survey_id='$survey_id'";
 		$sql_result = api_sql_query($sql,__FILE__,__LINE__);
@@ -557,16 +557,16 @@ function get_question_data($qid,$curr_dbname)
 		{
 			$str_group_list = "";
 			$str_group_list .= "<select name=\"exiztinggroup\" $extra_script>\n";
-		
+
 			while($result=mysql_fetch_array($sql_result))
 			{
 			 $selected = ($seleced_groupid==$result[group_id])?"selected":"";
 			 $str_group_list .= "\n<option value=\"".$result[group_id]."\" ".$selected.">".$result[groupname]."</option>\n";
-			}						  
-			
+			}
+
 			$str_group_list .= "</select>";
 			return $str_group_list;
-        
+
 		}
 		else
 		{
@@ -575,25 +575,25 @@ function get_question_data($qid,$curr_dbname)
 
 	}
 
-	
+
 
 //For importing the groups to new survey
 	function insert_groups($sid,$newgid,$gids,$table_group,$table_question)
 		{
 			$gid_arr = explode(",",$gids);
-			$num = count($gid_arr);		
-				  
-				
+			$num = count($gid_arr);
+
+
 				$queryone = "SELECT *  FROM $table_question WHERE gid = '$newgid'";
 				$rs = api_sql_query($queryone);
-				$numrs=mysql_num_rows($rs); 
+				$numrs=mysql_num_rows($rs);
 
              for($k=0;$k<$numrs;$k++)
 				{
                   $imp[]=mysql_result($rs,$k,"imported_group");
 				}
-				
-      		
+
+
 			$imp=@array_unique($imp);
 			for($n=0;$n<count($gid_arr);$n++)
 				{
@@ -607,22 +607,22 @@ function get_question_data($qid,$curr_dbname)
 					}
 				}
 			//$unique_arr = @array_unique($alr);
-			//print_r($unique_arr);		
-        
+			//print_r($unique_arr);
+
 		/*if($msg)
-			{	
-		
+			{
+
 		echo "You have already imported the following group(s)";
 		echo "<br>".$msg;
-			
+
 		}*/
-		      
+
 			for($index=0;$index<$num;$index++)
 			{
 				if(@!in_array($gid_arr[$index],$imp))
-				{ 
+				{
 				$temp_gid = $gid_arr[$index];
-				
+
 				$sql = "SELECT * FROM $table_question WHERE gid = '$temp_gid'";
 				$res = api_sql_query($sql);
 				$num_rows = mysql_num_rows($res);
@@ -636,39 +636,39 @@ function get_question_data($qid,$curr_dbname)
 						{
 							$temp = "a".$i;
 							$x.= "'".$obj->$temp."',"; /*this variable contains concatenated values and need to be refreshed each time 								before the loop starts!*/
-						}	
-					
+						}
+
 					for($j=1;$j<=10;$j++)
 						{
-							
+
 							if($j==10)
 								{
 									$temps = "r".$j;
 									$y.= "'".$obj->$temps."'";
-								}	
+								}
 							else
 								{
 									$temps = "r".$j;
 									$y.= "'".$obj->$temps."',";
-								}		
+								}
 						}
-				
+
 					$sql_insert = "INSERT INTO  $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$newgid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$temp_gid')";
 					$res2 = api_sql_query($sql_insert);
 				}
-			  
+
 			}
-			
+
 			}
-		
+
 		}
 
 
 
-		
+
 	function display_imported_group($sid,$table_group,$table_question)
 	{
-		
+
 		 $sql = "SELECT group_id FROM $table_group WHERE survey_id='$sid'";
 		$res = api_sql_query($sql);
 		$num = @mysql_num_rows($res);
@@ -677,7 +677,7 @@ function get_question_data($qid,$curr_dbname)
 		$displays = array();
 		while($obj = @mysql_fetch_object($res))
 		{
-			
+
 			$groupid = $obj->group_id;
 			$query = "SELECT * FROM $table_question WHERE gid = '$groupid'";
 			$result = api_sql_query($query);
@@ -691,9 +691,9 @@ function get_question_data($qid,$curr_dbname)
 				//echo "THIS IS GROUP NAME ID".$id;
 				$gname = surveymanager::get_groupname($id);
 				$display[] = $gname;
-				$displays[] = $display;				
-			}		
-		}			
+				$displays[] = $display;
+			}
+		}
 			$table_header[] = array('', false);
 			$table_header[] = array(get_lang('Question'), true);
 			$table_header[] = array(get_lang('QuestionType'), true);
@@ -708,7 +708,7 @@ function attach_survey($surveyid,$newsurveyid,$db_name,$curr_dbname)
 	 $sql = "SELECT *  FROM $db_name.survey_group WHERE survey_id = '$surveyid'";
      $res = api_sql_query($sql,__FILE__,__LINE__);
 	 while($obj=@mysql_fetch_object($res))
-     {	
+     {
 		 $groupname=addslashes($obj->groupname);
 		 $introduction=addslashes($obj->introduction);
 	   $sql_insert = "INSERT INTO $curr_dbname.survey_group(group_id,survey_id,groupname,introduction) values('','$newsurveyid','$groupname','$introduction')";
@@ -749,7 +749,7 @@ function attach_survey($surveyid,$newsurveyid,$db_name,$curr_dbname)
 	     {$sortby=1;}
 	     else{$sortby=$sortby+1;}
 		 $sql_q_insert = "INSERT INTO $curr_dbname.questions (qid,gid,survey_id,qtype,caption,alignment,sortby,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$groupid','$newsurveyid','$obj_q->qtype','$caption1','$obj_q->alignment','$sortby','$a1','$a2','$a3','$a4','$a5','$a6','$a7','$a8','$a9','$a10','$at','$ad','$r1','$r2','$r3','$r4','$r5','$r6','$r7','$r8','$r9','$r10')";
-	    api_sql_query($sql_q_insert,__FILE__,__LINE__);  
+	    api_sql_query($sql_q_insert,__FILE__,__LINE__);
 	   }
      }
    }
@@ -803,22 +803,22 @@ function insert_old_groups($sid,$gids,$table_group,$table_question)
 					for($i=1;$i<=10;$i++)
 						{
 							$temp = "a".$i;
-							$x.= "'".$obj_ques->$temp."',"; 
-						}	
-				
+							$x.= "'".$obj_ques->$temp."',";
+						}
+
 					for($j=1;$j<=10;$j++)
 						{
-					
+
 							if($j==10)
 								{
 									$temps = "r".$j;
 									$y.= "'".$obj_ques->$temps."'";
-								}	
+								}
 							else
 								{
 									$temps = "r".$j;
 									$y.= "'".$obj_ques->$temps."',";
-								}		
+								}
 						}
 					 $sql_ques_insert = "INSERT INTO  $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
 					 $res_ques_insert = api_sql_query($sql_ques_insert);
@@ -859,22 +859,22 @@ function insert_old_groups($sid,$gids,$table_group,$table_question)
 				for($i=1;$i<=10;$i++)
 					{
 						$temp = "a".$i;
-						$x.= "'".$obj_ques->$temp."',"; 
-					}	
-			
+						$x.= "'".$obj_ques->$temp."',";
+					}
+
 				for($j=1;$j<=10;$j++)
 					{
-						
+
 						if($j==10)
 							{
 								$temps = "r".$j;
 								$y.= "'".$obj_ques->$temps."'";
-							}	
+							}
 						else
 							{
 								$temps = "r".$j;
 								$y.= "'".$obj_ques->$temps."',";
-							}		
+							}
 					}
 				 $sql_ques_insert = "INSERT INTO  $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$new_gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
 				 $res_ques_insert = api_sql_query($sql_ques_insert);
@@ -896,7 +896,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 	$sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$obj_name=@mysql_fetch_object($res);
-	$current_db_name = $obj_name->db_name ;	
+	$current_db_name = $obj_name->db_name ;
 	$gid_arr = explode(",",$gids);
 	$index = count($gid_arr);
 	($gid_arr);
@@ -938,21 +938,21 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 						{
 							$temp = "a".$i;
 							$x.= "'".$obj_ques->$temp."',"; /*this variable contains concatenated values and need to be refreshed each time 									before the loop starts!*/
-						}	
-				
+						}
+
 					for($j=1;$j<=10;$j++)
 						{
-					
+
 							if($j==10)
 								{
 									$temps = "r".$j;
 									$y.= "'".$obj_ques->$temps."'";
-								}	
+								}
 							else
 								{
 									$temps = "r".$j;
 									$y.= "'".$obj_ques->$temps."',";
-								}		
+								}
 						}
 					$sql_ques_insert = "INSERT INTO  $current_db_name.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
 					 $res_ques_insert = api_sql_query($sql_ques_insert);
@@ -994,21 +994,21 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 					{
 						$temp = "a".$i;
 						$x.= "'".$obj_ques->$temp."',"; /*this variable contains concatenated values and need to be refreshed each time 									before the loop starts!*/
-					}	
-			
+					}
+
 				for($j=1;$j<=10;$j++)
 					{
-						
+
 						if($j==10)
 							{
 								$temps = "r".$j;
 								$y.= "'".$obj_ques->$temps."'";
-							}	
+							}
 						else
 							{
 								$temps = "r".$j;
 								$y.= "'".$obj_ques->$temps."',";
-							}		
+							}
 					}
 				 $sql_ques_insert = "INSERT INTO  $current_db_name.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$new_gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
 				 $res_ques_insert = api_sql_query($sql_ques_insert);
@@ -1030,7 +1030,7 @@ function import_question($surveyid,$qids,$table_group,$table_question,$db_name,$
    $sql_course = "SELECT * FROM $table_course WHERE code = '$cidReq'";
    $res_course = api_sql_query($sql_course,__FILE__,__LINE__);
    $obj_name=@mysql_fetch_object($res_course);
-   $current_db_name = $obj_name->db_name ;	
+   $current_db_name = $obj_name->db_name ;
    $qid=explode(",",$qids);
    $count = count($qid);
   for($i=0; $i<$count; $i++)
@@ -1057,9 +1057,9 @@ function import_question($surveyid,$qids,$table_group,$table_question,$db_name,$
      //echo "<div align=\"center\"><strong><font color=\"#FF0000\">Already Imported !</font></strong></div>" ;
   }
  else
-    {	 
+    {
   if($num>0 && $yes=="yes")
-  {  
+  {
      $sql_q_insert = "INSERT INTO $current_db_name.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$obj_gid->group_id','$obj->qtype','$obj->caption','$obj->a1','$obj->a2','$obj->a3','$obj->a4','$obj->a5','$obj->a6','$obj->a7','$obj->a8','$obj->a9','$obj->a10','$obj->at','$obj->ad','$obj->r1','$obj->r2','$obj->r3','$obj->r4','$obj->r5','$obj->r6','$obj->r7','$obj->r8','$obj->r9','$obj->r10')";
 	 api_sql_query($sql_q_insert,__FILE__,__LINE__);
   }
@@ -1067,9 +1067,9 @@ function import_question($surveyid,$qids,$table_group,$table_question,$db_name,$
   {
 	 $sql_ginsert="INSERT INTO $current_db_name.survey_group(group_id,survey_id,groupname,introduction) values('','$surveyid','$gname','$gintro')";
 	 api_sql_query($sql_ginsert,__FILE__,__LINE__);
-     $new_gid = mysql_insert_id();	
+     $new_gid = mysql_insert_id();
 	 $sql_q_insert = "INSERT INTO $current_db_name.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$new_gid','$obj->qtype','$obj->caption','$obj->a1','$obj->a2','$obj->a3','$obj->a4','$obj->a5','$obj->a6','$obj->a7','$obj->a8','$obj->a9','$obj->a10','$obj->at','$obj->ad','$obj->r1','$obj->r2','$obj->r3','$obj->r4','$obj->r5','$obj->r6','$obj->r7','$obj->r8','$obj->r9','$obj->r10')";
-	 api_sql_query($sql_q_insert,__FILE__,__LINE__); 
+	 api_sql_query($sql_q_insert,__FILE__,__LINE__);
     }
    }
   }
@@ -1083,13 +1083,13 @@ function create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course
  $obj=@mysql_fetch_object($res);
  $db_name = $obj->db_name ;
  $sql="INSERT INTO $table_course_survey_rel(id,course_code,db_name,survey_id) values('','$cidReq','$db_name','$survey_id')";
- 
- api_sql_query($sql,__FILE__,__LINE__); 
+
+ api_sql_query($sql,__FILE__,__LINE__);
  return $db_name;
 }
 
 function import_existing_question($surveyid,$qids,$table_group,$table_question,$yes)
- {   
+ {
   $qid=explode(",",$qids);
   $count = count($qid);
   for($i=0; $i<$count; $i++)
@@ -1116,9 +1116,9 @@ function import_existing_question($surveyid,$qids,$table_group,$table_question,$
      //echo "<div align=\"center\"><strong><font color=\"#FF0000\">Already Imported !</font></strong></div>" ;
   }
  else
-    {	 
+    {
   if($num>0 && $yes=="yes")
-  {  
+  {
      $sql_q_insert = "INSERT INTO $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$obj_gid->group_id','$obj->qtype','$obj->caption','$obj->a1','$obj->a2','$obj->a3','$obj->a4','$obj->a5','$obj->a6','$obj->a7','$obj->a8','$obj->a9','$obj->a10','$obj->at','$obj->ad','$obj->r1','$obj->r2','$obj->r3','$obj->r4','$obj->r5','$obj->r6','$obj->r7','$obj->r8','$obj->r9','$obj->r10')";
 	 api_sql_query($sql_q_insert,__FILE__,__LINE__);
   }
@@ -1126,9 +1126,9 @@ function import_existing_question($surveyid,$qids,$table_group,$table_question,$
   {
 	 $sql_ginsert="INSERT INTO $table_group(group_id,survey_id,groupname,introduction) values('','$surveyid','$gname','$gintro')";
 	 api_sql_query($sql_ginsert,__FILE__,__LINE__);
-     $new_gid = mysql_insert_id();	
+     $new_gid = mysql_insert_id();
 	 $sql_q_insert = "INSERT INTO $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$new_gid','$obj->qtype','$obj->caption','$obj->a1','$obj->a2','$obj->a3','$obj->a4','$obj->a5','$obj->a6','$obj->a7','$obj->a8','$obj->a9','$obj->a10','$obj->at','$obj->ad','$obj->r1','$obj->r2','$obj->r3','$obj->r4','$obj->r5','$obj->r6','$obj->r7','$obj->r8','$obj->r9','$obj->r10')";
-	 api_sql_query($sql_q_insert,__FILE__,__LINE__); 
+	 api_sql_query($sql_q_insert,__FILE__,__LINE__);
     }
    }
   }
@@ -1177,21 +1177,21 @@ function insert_existing_groups($sid,$gids,$table_group,$table_question)
 						{
 							$temp = "a".$i;
 							$x.= "'".$obj_ques->$temp."',"; /*this variable contains concatenated values and need to be refreshed each time 									before the loop starts!*/
-						}	
-				
+						}
+
 					for($j=1;$j<=10;$j++)
 						{
-					
+
 							if($j==10)
 								{
 									$temps = "r".$j;
 									$y.= "'".$obj_ques->$temps."'";
-								}	
+								}
 							else
 								{
 									$temps = "r".$j;
 									$y.= "'".$obj_ques->$temps."',";
-								}		
+								}
 						}
 					 $sql_ques_insert = "INSERT INTO  $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
 					 $res_ques_insert = api_sql_query($sql_ques_insert);
@@ -1233,21 +1233,21 @@ function insert_existing_groups($sid,$gids,$table_group,$table_question)
 					{
 						$temp = "a".$i;
 						$x.= "'".$obj_ques->$temp."',"; /*this variable contains concatenated values and need to be refreshed each time 									before the loop starts!*/
-					}	
-			
+					}
+
 				for($j=1;$j<=10;$j++)
 					{
-						
+
 						if($j==10)
 							{
 								$temps = "r".$j;
 								$y.= "'".$obj_ques->$temps."'";
-							}	
+							}
 						else
 							{
 								$temps = "r".$j;
 								$y.= "'".$obj_ques->$temps."',";
-							}		
+							}
 					}
 				 $sql_ques_insert = "INSERT INTO  $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$new_gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
 				 $res_ques_insert = api_sql_query($sql_ques_insert);
@@ -1268,7 +1268,7 @@ function insert_existing_groups($sid,$gids,$table_group,$table_question)
 			$sql="SELECT * FROM $surveytable WHERE survey_id=$sid";
 			$res=api_sql_query($sql);
 			$code=@mysql_result($res,0,'title');
-			return($code);	
+			return($code);
 		}
 
 function pick_author($survey_id)
@@ -1329,7 +1329,7 @@ function question_import($surveyid,$qids,$db_name,$curr_dbname)
      $num_ques=mysql_num_rows($res_quesid);
 	if($num_ques>0)
      {
-	  $message=1;	  
+	  $message=1;
      }
 	else
 	 {
@@ -1351,10 +1351,10 @@ function question_import($surveyid,$qids,$db_name,$curr_dbname)
 		 //$num_group;
       $sql_ginsert="INSERT INTO $curr_dbname.survey_group(group_id,survey_id,groupname,introduction,imported_group, db_name) values('','$surveyid','$groupname','$obj_group->introduction','$oldgid','$db_name')";
 	    api_sql_query($sql_ginsert,__FILE__,__LINE__);
-        $new_gid = mysql_insert_id();     
+        $new_gid = mysql_insert_id();
       $sql_q_insert = "INSERT INTO $curr_dbname.questions (qid,gid,survey_id,qtype,caption,alignment,sortby,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_question,db_name) values('','$new_gid','$surveyid','$obj->qtype','$caption1','$obj->alignment','$sortby','$a1','$a2','$a3','$a4','$a5','$a6','$a7','$a8','$a9','$a10','$at','$ad','$r1','$r2','$r3','$r4','$r5','$r6','$r7','$r8','$r9','$r10','$qid[$i]','$db_name')";
 	    api_sql_query($sql_q_insert,__FILE__,__LINE__);
-       } 
+       }
      }
   }
   return $message;
@@ -1378,14 +1378,14 @@ function import_group($surveyid,$gids,$db_name,$curr_dbname)
 		$obj_check = mysql_fetch_object($res_check);
 		$num = mysql_num_rows($res_check);
 		if($num>0)
-		{			
+		{
 			$sql_question = "SELECT * FROM $curr_dbname.questions WHERE survey_id='$surveyid' AND imported_question = '$obj_ques->qid' AND db_name = '$db_name'";
 			$res_question = api_sql_query($sql_question,__FILE__,__LINE__);
 			$num_ques = mysql_num_rows($res_question);
 			if($num_ques>0)
 			{
 				$message=1;
-			}		
+			}
 	      else
            {
 			$sql_insert_ques =  "INSERT INTO $curr_dbname.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_question,db_name) values('','$obj_check->group_id','$surveyid','$obj_ques->qtype','$obj_ques->caption','$obj_ques->a1','$obj_ques->a2','$obj_ques->a3','$obj_ques->a4','$obj_ques->a5','$obj_ques->a6','$obj_ques->a7','$obj_ques->a8','$obj_ques->a9','$obj_ques->a10','$obj_ques->at','$obj_ques->ad','$obj_ques->r1','$obj_ques->r2','$obj_ques->r3','$obj_ques->r4','$obj_ques->r5','$obj_ques->r6','$obj_ques->r7','$obj_ques->r8','$obj_ques->r9','$obj_ques->r10','$obj_ques->qid','$db_name')";
@@ -1399,7 +1399,7 @@ function import_group($surveyid,$gids,$db_name,$curr_dbname)
             $new_gid = mysql_insert_id();
 			$sql_insert_grp =  "INSERT INTO $curr_dbname.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_question,db_name) values('','$new_gid','$surveyid','$obj_ques->qtype','$obj_ques->caption','$obj_ques->a1','$obj_ques->a2','$obj_ques->a3','$obj_ques->a4','$obj_ques->a5','$obj_ques->a6','$obj_ques->a7','$obj_ques->a8','$obj_ques->a9','$obj_ques->a10','$obj_ques->at','$obj_ques->ad','$obj_ques->r1','$obj_ques->r2','$obj_ques->r3','$obj_ques->r4','$obj_ques->r5','$obj_ques->r6','$obj_ques->r7','$obj_ques->r8','$obj_ques->r9','$obj_ques->r10','$obj_ques->qid','$db_name')";
 			api_sql_query($sql_insert_grp);
-		 }				
+		 }
 	  }
 	return $message;
   }
@@ -1424,7 +1424,7 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 		$obj_curr = mysql_fetch_object($res_curr);
 		$gid = $obj_curr->group_id;
 		$num = mysql_num_rows($res_curr);
-		
+
 		if($num>0) //the group name exists and the questions will be imported in this group.
 		{
 			$sql_ques = "SELECT * FROM $curr_dbname.questions WHERE gid = '$gid'";
@@ -1475,7 +1475,7 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 				if(@in_array($obj_old->qid,$check_qid)&&@in_array($db_name,$check_db))  //the question has already been imported
 				{
 					$flag=1;
-					continue;				
+					continue;
 				}
 				else
 				{
@@ -1486,7 +1486,7 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 		}
 		else  //the groupname does not exist. Create group with this name and insert questions in this new group.
 		{
-		
+
 			$sql_insertg = "INSERT INTO $curr_dbname.survey_group (group_id, survey_id, groupname, introduction, imported_group, db_name, sortby) VALUES ('', '$sid', '$groupname', '$introduction', '$obj->group_id', '$db_name', $g_sortby)";
 			api_sql_query($sql_insertg);
 			$group_id = mysql_insert_id();
@@ -1539,12 +1539,12 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
  * Enter description here...
  *
  * @return unknown
- * @todo remove this function because this is of no use and should not be used. 
+ * @todo remove this function because this is of no use and should not be used.
  */
 function get_status()
 {
-	global $_user; 
-	
+	global $_user;
+
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".mysql_real_escape_string($_user['user_id'])."'";
 	$resm = api_sql_query($sqlm,__FILE__,__LINE__);
@@ -1557,23 +1557,23 @@ function get_status()
 
 function move_question($direction,$qid,$sort,$curr_dbname)
 {
-	
+
 	$questions=SurveyManager::get_questions_move($curr_dbname);
-	
+
 	foreach ($questions as $key=>$value)
 		{
-		
+
 		if ($qid==$value['qid'])
 			{
-			$source_course=$value;			
+			$source_course=$value;
 			if ($direction=="up")
 				{
-				  $target_course=$questions[$key-1];			 
+				  $target_course=$questions[$key-1];
 			    }
 			else
 				{$target_course=$questions[$key+1];}
-			 } 
-		} 
+			 }
+		}
 	$sql_update1="UPDATE $curr_dbname.questions SET sortby='".$target_course['sortby']."' WHERE qid='".$source_course['qid']."'";
 	$sql_update2="UPDATE $curr_dbname.questions SET sortby='".$source_course['sortby']."' WHERE qid='".$target_course['qid']."'";
 	mysql_query($sql_update2);
@@ -1604,13 +1604,13 @@ function get_questions_move($curr_dbname)
  * @param unknown_type $sorting_options
  * @param unknown_type $paging_options
  * @param unknown_type $query_vars
- * 
- * @todo check if this function is needed as it seems that this is a copy of the Display::display_sortable_table function. 
+ *
+ * @todo check if this function is needed as it seems that this is a copy of the Display::display_sortable_table function.
  */
 function display_sortable_table($groupid,$surveyid,$curr_dbname,$header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null)
 {
 		global $origin;
-		
+
 		// Database table definitions
 		/** @todo use database constants for the survey tables */
 		$table_survey 		= Database :: get_course_table('survey');
@@ -1618,7 +1618,7 @@ function display_sortable_table($groupid,$surveyid,$curr_dbname,$header, $conten
 		$table_question 	= Database :: get_course_table('questions');
 		$table_course 		= Database::get_main_table(TABLE_MAIN_COURSE);
 		$table_survey_group = Database :: get_course_table('survey_group');
-		
+
 		require_once ('tablesort.lib.php');
 		if (!isset ($paging_options['per_page_default']))
 		{
@@ -1730,7 +1730,7 @@ function display_sortable_table($groupid,$surveyid,$curr_dbname,$header, $conten
 		{
 			$x=0;
             $y=count($page_content);
-			
+
 			$page_nr=$paging_options['page_nr'];
 			$per_page=$paging_options['per_page'];
 			$sql="SELECT * FROM $table_question WHERE survey_id = '$surveyid'";
@@ -1743,32 +1743,32 @@ function display_sortable_table($groupid,$surveyid,$curr_dbname,$header, $conten
 			$questions=mysql_fetch_array($result_gr);
 			foreach ($page_content as $row => $data)
 			{
-               
+
 				echo '<tr class="'. ($row % 2 == 0 ? 'row_even' : 'row_odd').'">';
-				
+
 				foreach( $data as $column => $value)
-				{ 
-					echo '<td '.(isset($header[$column][3])? $header[$column][3] : '' ).'>';					
-					
-					if($x==0 && $page_nr==1)					
+				{
+					echo '<td '.(isset($header[$column][3])? $header[$column][3] : '' ).'>';
+
+					if($x==0 && $page_nr==1)
 					{
                        echo str_replace('<img src="../img/up.gif" border="0" title="lang_move_up">',"",$value);
-					 
+
 					}
 					elseif(($page_nr==$number_q) && ($x==$y-1))
 					{
-                     			
+
 					   echo str_replace('<img src="../img/down.gif" border="0" title="lang_move_down">',"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$value);
-					 
+
 					}
-					
+
 					else{
-                    echo $value; 
+                    echo $value;
 					}
 					echo '</td>';
 				}
 				echo '</tr>';
-				echo "\n";		
+				echo "\n";
                	$x++;
 			}
 		}
@@ -1814,93 +1814,93 @@ function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGU
 		usort($data, create_function('$a,$b', $function_body));
 		return $data;
 	}
-	
+
 	function listGroups($id_survey, $fields = '*'){
-		
+
 		$groups_table = Database :: get_course_table(TABLE_MAIN_GROUP);
-		
+
 		$sql = 'SELECT '.$fields.' FROM '.$groups_table.'
 				WHERE survey_id='.$id_survey.' ORDER BY sortby';
-		
+
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		
+
 		$groups = array();
 		while($row = mysql_fetch_array($rs)){
 			$groups[] = $row;
 		}
-		
+
 		return $groups;
 	}
-	
+
 	function listQuestions($id_survey, $fields = '*'){
-		
+
 		$questions_table = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 		$groups_table = Database :: get_course_table('survey_group');
-		
-		$sql = 'SELECT '.$fields.' 
+
+		$sql = 'SELECT '.$fields.'
 				FROM '.$questions_table.' questions
 				INNER JOIN '.$groups_table.' groups
 					ON questions.gid = groups.group_id
-				WHERE questions.survey_id='.$id_survey.' 
+				WHERE questions.survey_id='.$id_survey.'
 				ORDER BY groups.sortby, questions.sortby';
-		
+
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		
+
 		$questions = array();
 		while($row = mysql_fetch_array($rs)){
 			$questions[] = $row;
 		}
-		
+
 		return $questions;
-		
+
 	}
-	
+
 	function listAnswers($qid){
-		
+
 		$answers_table = Database :: get_course_table('survey_report');
-		
+
 		$sql = 'SELECT DISTINCT answer FROM '.$answers_table.'
 				WHERE qid='.$qid;
-		
+
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
-		
+
 		$answers = array();
 		while($row = mysql_fetch_array($rs)){
 			$answers[] = $row;
 		}
-		
+
 		return $answers;
 	}
-	
-	
+
+
 	function listUsers($survey_id, $dbname, $fields='id, user_id, firstname, lastname, email, organization') {
-		
+
 		$tbl_survey_users = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
-		$sql = 'SELECT '.$fields.' FROM '.$tbl_survey_users.' 
+		$sql = 'SELECT '.$fields.' FROM '.$tbl_survey_users.'
 				WHERE survey_id='.$survey_id.'
 				AND db_name="'.$dbname.'"
 				ORDER BY lastname, firstname ';
-	
+
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		$users = array();
 		while($row = mysql_fetch_array($rs))
 			$users[] = $row;
-			
+
 		return $users;
-		
+
 	}
-	
+
 	function getUserAnswersDetails($id_userAnswers, $params=''){
-	
+
 		$table_answers = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
 		$sql = 'SELECT * FROM '.$table_answers.' '.$where.' '.$order;
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		$answers = array();
 		while($row = mysql_fetch_array($rs))
 			$answers[] = $row;
-			
+
 		return $answers;
-		
+
 	}
 
 

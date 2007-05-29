@@ -4,7 +4,7 @@
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
 
@@ -60,21 +60,21 @@ if($_POST['formSent'])
 {
 	if(isset($_FILES['import_file']['tmp_name']))
 	{
-	
+
 		$formSent=$_POST['formSent'];
 		$file_type=$_POST['file_type'];
 		$sendMail=$_POST['sendMail']?1:0;
-		
-	
+
+
 		$sessions=array();
-		
+
 		///////////////////////
 		//XML/////////////////
 		/////////////////////
-	
+
 		if($file_type == 'xml')
 		{
-			
+
 			$racine = simplexml_load_file($_FILES['import_file']['tmp_name']);
 			if(is_object($racine))
 			{
@@ -88,17 +88,17 @@ if($_POST['formSent'])
 						$username = substr($username,0,20);
 						$isCut = 1;
 					}
-					
-					$sql = "SELECT 1 FROM $tbl_user WHERE username='".addslashes($username)."'";				
+
+					$sql = "SELECT 1 FROM $tbl_user WHERE username='".addslashes($username)."'";
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
-					
+
 					if(mysql_affected_rows()==0)
 					{
 						if($isCut)
 						{
 							$errorMsg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
 						}
-						
+
 						$lastname = $userNode->Lastname;
 						$firstname = $userNode->Firstname;
 						$password = $userNode->Password;
@@ -112,11 +112,11 @@ if($_POST['formSent'])
 						{
 							case 'student' : $status = 5; break;
 							case 'teacher' : $status = 1; break;
-							default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />'; 
+							default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
 						}
-						
-						
-						
+
+
+
 						$sql = "INSERT INTO $tbl_user SET
 								username = '".addslashes($username)."',
 								lastname = '".addslashes($lastname)."',
@@ -126,9 +126,9 @@ if($_POST['formSent'])
 								official_code = '".addslashes($official_code)."',
 								phone = '".addslashes($phone)."',
 								status = '".addslashes($status)."'";
-						
+
 						api_sql_query($sql, __FILE__, __LINE__);
-						
+
 						if(mysql_affected_rows()>0 && $sendMail)
 						{
 							$emailto='"'.$firstname.' '.$lastname.'" <'.$email.'>';
@@ -137,36 +137,36 @@ if($_POST['formSent'])
 							//#287 modifiée par Stéphane DEBIEVE - FOREM
 							$emailheaders='From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 							$emailheaders.='Reply-To: '.get_setting('emailAdministrator');
-		
+
 							@api_send_mail($emailto,$emailsubject,$emailbody,$emailheaders);
 						}
 					}
-					
+
 				}
 				foreach($racine->Courses->Course as $courseNode)
 				{
-					$course_code = $courseNode->CourseCode;				
-					$title = $courseNode->CourseTitle;				
-					$description = $courseNode->CourseDescription;				
-					$language = $courseNode->CourseLanguage;				
+					$course_code = $courseNode->CourseCode;
+					$title = $courseNode->CourseTitle;
+					$description = $courseNode->CourseDescription;
+					$language = $courseNode->CourseLanguage;
 					$username = $courseNode->CourseTeacher;
-					
-					$sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";				
+
+					$sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
-					
+
 					list($user_id, $lastname, $firstname) = mysql_fetch_array($rs);
-					$keys = define_course_keys($course_code, "", $dbNamePrefix);				
-					
+					$keys = define_course_keys($course_code, "", $dbNamePrefix);
+
 					if (sizeof($keys))
 					{
-						
-						$currentCourseCode = $keys['visual_code'];	
-						$currentCourseId = $keys["currentCourseId"];	
-						if(empty($currentCourseCode))			
+
+						$currentCourseCode = $keys['visual_code'];
+						$currentCourseId = $keys["currentCourseId"];
+						if(empty($currentCourseCode))
 							$currentCourseCode = $currentCourseId;
 						$currentCourseDbName = $keys["currentCourseDbName"];
 						$currentCourseRepository = $keys["currentCourseRepository"];
-						
+
 						if($currentCourseId == strtoupper($course_code))
 						{
 							if (empty ($title))
@@ -195,9 +195,9 @@ if($_POST['formSent'])
 										last_visit = NULL,
 										tutor_name = '".$lastname." ".$firstname."',
 										visual_code = '".$currentCourseCode."'";
-							
+
 							api_sql_query($sql, __FILE__, __LINE__);
-					
+
 							$sql = "INSERT INTO ".$tbl_course_user." SET
 										course_code = '".$currentCourseId."',
 										user_id = '".$user_id."',
@@ -206,20 +206,20 @@ if($_POST['formSent'])
 										tutor_id='1',
 										sort='". ($sort +1)."',
 										user_course_cat='0'";
-							
+
 							api_sql_query($sql, __FILE__, __LINE__);
 						}
-						
+
 					}
 				}
 				foreach ($racine->Session as $sessionNode){ // foreach session
-				
+
 					$countCourses = 0;
 					$countUsers = 0;
-					
-					$SessionName = $sessionNode->SessionName; 
+
+					$SessionName = $sessionNode->SessionName;
 					$Coach = $sessionNode->Coach;
-					
+
 					if(!empty($Coach)){
 						$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
 						$rsCoach = api_sql_query($sqlCoach);
@@ -229,8 +229,8 @@ if($_POST['formSent'])
 							$errorMsg .= get_lang('UserDoesNotExist').' : '.$Coach.'<br />';
 						}
 					}
-					
-					$DateStart = $sessionNode->DateStart; 
+
+					$DateStart = $sessionNode->DateStart;
 					if(!empty($DateStart))
 					{
 						list($YearStart,$MonthStart, $DayStart) = explode('-',$DateStart);
@@ -239,12 +239,12 @@ if($_POST['formSent'])
 							$errorMsg .= get_lang('WrongDate').' : '.$DateStart.'<br />';
 							break;
 						}
-						else 
+						else
 						{
 							$timeStart = mktime(0,0,0,$MonthStart,$DayStart,$YearStart);
 						}
-						
-						$DateEnd = $sessionNode->DateEnd; 
+
+						$DateEnd = $sessionNode->DateEnd;
 						if(!empty($DateStart))
 						{
 							list($YearEnd,$MonthEnd, $DayEnd) = explode('-',$DateEnd);
@@ -253,7 +253,7 @@ if($_POST['formSent'])
 								$errorMsg .= get_lang('WrongDate').' : '.$DateEnd.'<br />';
 								break;
 							}
-							else 
+							else
 							{
 								$timeEnd = mktime(0,0,0,$MonthEnd,$DayEnd,$YearEnd);
 							}
@@ -263,8 +263,8 @@ if($_POST['formSent'])
 							$errorMsg .= get_lang('DateStartMoreThanDateEnd').' : '.$DateEnd.'<br />';
 						}
 					}
-					
-					
+
+
 					// verify that session doesn't exist
 					while(!$uniqueName)
 					{
@@ -272,7 +272,7 @@ if($_POST['formSent'])
 							$suffix = ' - '.$i;
 						$sql = 'SELECT 1 FROM '.$tbl_session.' WHERE name="'.addslashes($SessionName.$suffix).'"';
 						$rs = api_sql_query($sql, __FILE__, __LINE__);
-					
+
 						if(mysql_result($rs,0,0))
 						{
 							$i++;
@@ -282,8 +282,8 @@ if($_POST['formSent'])
 							$uniqueName = true;
 							$SessionName .= $suffix;
 						}
-					}				
-					
+					}
+
 					$sqlSession = "INSERT IGNORE INTO $tbl_session SET
 									name = '$SessionName',
 									id_coach = '$CoachId',
@@ -291,34 +291,34 @@ if($_POST['formSent'])
 									date_end = '$DateEnd'";
 					$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
 					$session_id = mysql_insert_id();
-					
+
 					foreach ($sessionNode->User as $userNode){
-						$username = substr($userNode->nodeValue(),0,20);	
+						$username = substr($userNode->nodeValue(),0,20);
 						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".addslashes($username)."'";
 						$rsUser = api_sql_query($sqlUser);
 						list($user_id) = (mysql_fetch_array($rsUser));
 						if(!empty($user_id)){
-							$sql = "INSERT INTO $tbl_session_user SET 
+							$sql = "INSERT INTO $tbl_session_user SET
 									id_user='$user_id',
 									id_session = '$session_id'";
 							$rsUser = api_sql_query($sql,__FILE__,__LINE__);
 							if(mysql_affected_rows()){
 								$countUsers++;
 							}
-						}					
+						}
 					}
-					
+
 					foreach($sessionNode->Course as $courseNode){
-							
+
 						$CourseCode = $courseNode->CourseCode;
-						
+
 						// verify that the course pointed by the course code node exists
 						$sql = 'SELECT 1 FROM '.$tbl_course.' WHERE code="'.mysql_escape_string($CourseCode).'"';
 						$rs = api_sql_query($sql, __FILE__, __LINE__);
 						if(mysql_num_rows($rs)>0)
 						{ // if the course exists we continue
-						
-							$Coach = substr($courseNode->Coach,0,20); 
+
+							$Coach = substr($courseNode->Coach,0,20);
 							if(!empty($Coach)){
 								$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
 								$rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
@@ -331,7 +331,7 @@ if($_POST['formSent'])
 							else {
 								$Coach = '';
 							}
-							
+
 							$sqlCourse = "INSERT INTO $tbl_session_course SET
 										  course_code = '$CourseCode',
 										  id_coach='$CoachId',
@@ -339,7 +339,7 @@ if($_POST['formSent'])
 							$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
 							if(mysql_affected_rows()){
 								$countCourses++;
-								
+
 								$countUsersCourses = 0;
 								foreach ($courseNode->User as $userNode){
 									$username = substr($userNode,0,20);
@@ -348,15 +348,15 @@ if($_POST['formSent'])
 									list($user_id) = (mysql_fetch_array($rsUser));
 									if(!empty($user_id))
 									{
-										$sql = "INSERT IGNORE INTO $tbl_session_user SET 
+										$sql = "INSERT IGNORE INTO $tbl_session_user SET
 											id_user='$user_id',
 											id_session = '$session_id'";
-										
+
 										if(mysql_affected_rows())
 											$countUsers++;
 										$rsUser = api_sql_query($sql,__FILE__,__LINE__);
-										
-										$sql = "INSERT IGNORE INTO $tbl_session_course_user SET 
+
+										$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
 												id_user='$user_id',
 												course_code='$CourseCode',
 												id_session = '$session_id'";
@@ -368,35 +368,35 @@ if($_POST['formSent'])
 									{
 										$errorMsg .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
 									}
-								}	
-								api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);	
+								}
+								api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);
 							}
 						}
-						else 
+						else
 						{ // if the course does not exists
 							$errorMsg .= get_lang('CourseDoesNotExist').' : '.$CourseCode.'<br />';
 						}
 					}
 					api_sql_query("UPDATE $tbl_session SET nbr_users='$countUsers', nbr_courses='$countCourses' WHERE id='$session_id'",__FILE__,__LINE__);
-					
+
 				}
-			
+
 			}
 			else
 			{
 				$errorMsg .= get_lang('XMLNotValid');
 			}
 		}
-		
-		
-		
-		
-		
+
+
+
+
+
 		/////////////////////
 		// CSV /////////////
 		///////////////////
-		
-		
+
+
 		else
 		{
 			$content=file($_FILES['import_file']['tmp_name']);
@@ -406,13 +406,13 @@ if($_POST['formSent'])
 			}
 			else
 			{
-				
+
 				$tag_names=array();
-	
+
 				foreach($content as $key=>$enreg)
 				{
 					$enreg=explode(';',trim($enreg));
-	
+
 					if($key)
 					{
 						foreach($tag_names as $tag_key=>$tag_name)
@@ -426,16 +426,16 @@ if($_POST['formSent'])
 						{
 							$tag_names[]=eregi_replace('[^a-z0-9_-]','',$tag_name);
 						}
-	
+
 						if(!in_array('SessionName',$tag_names) || !in_array('DateStart',$tag_names) || !in_array('DateEnd',$tag_names))
 						{
 							$errorMsg=get_lang('NoNeededData');
-	
+
 							break;
 						}
 					}
 				}
-				
+
 				foreach($sessions as $enreg) {
 					$SessionName = $enreg['SessionName'];
 					$DateStart = $enreg['DateStart'];
@@ -448,7 +448,7 @@ if($_POST['formSent'])
 					else {
 						$Coach = '';
 					}
-					
+
 					$sqlSession = "INSERT IGNORE INTO $tbl_session SET
 								name = '$SessionName',
 								id_coach = '$Coach',
@@ -458,16 +458,16 @@ if($_POST['formSent'])
 					$update = false;
 					if(!mysql_affected_rows($rsSession)){
 						$update = true;
-						$sqlSession = "UPDATE $tbl_session SET								
+						$sqlSession = "UPDATE $tbl_session SET
 										id_coach = '$Coach',
 										date_start = '$DateStart',
 										date_end = '$DateEnd'
 										WHERE name = '$SessionName'";
 						$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
-						
+
 						$session_id = api_sql_query("SELECT id FROM $tbl_session WHERE name='$SessionName'",__FILE__,__LINE__);
-						list($session_id) = mysql_fetch_array($session_id);				
-						
+						list($session_id) = mysql_fetch_array($session_id);
+
 						api_sql_query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'",__FILE__,__LINE__);
 						api_sql_query("DELETE FROM $tbl_session_course WHERE id_session='$session_id'",__FILE__,__LINE__);
 						api_sql_query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id'",__FILE__,__LINE__);
@@ -475,29 +475,29 @@ if($_POST['formSent'])
 					else {
 						$session_id = mysql_insert_id($rsSession);
 					}
-					
+
 					$users = explode('|',$enreg['Users']);
-					foreach ($users as $user){				
+					foreach ($users as $user){
 						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$user."'";
 						$rsUser = api_sql_query($sqlUser);
 						list($user_id) = (mysql_fetch_array($rsUser));
-						$sql = "INSERT INTO $tbl_session_user SET 
+						$sql = "INSERT INTO $tbl_session_user SET
 								id_user='$user_id',
 								id_session = '$session_id'";
-						
+
 						$rsUser = api_sql_query($sql,__FILE__,__LINE__);
 						if(mysql_affected_rows()){
 							$countUsers++;
 						}
 					}
-					
+
 					$courses = explode('|',$enreg['Courses']);
 					foreach($courses as $course){
 						$CourseCode = substr($course,0,strpos($course,'['));
-						
+
 						$Coach = strstr($course,'[');
 						$Coach = substr($Coach,1,strpos($Coach,']')-1);
-						
+
 						if(!empty($Coach)){
 							$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
 							$rsCoach = api_sql_query($sqlCoach,__FILE__,__LINE__);
@@ -506,16 +506,16 @@ if($_POST['formSent'])
 						else {
 							$Coach = '';
 						}
-						
+
 						$sqlCourse = "INSERT INTO $tbl_session_course SET
 									  course_code = '$CourseCode',
 									  id_coach='$Coach',
 									  id_session='$session_id'";
-						
+
 						$rsCourse = api_sql_query($sqlCourse,__FILE__,__LINE__);
 						if(mysql_affected_rows()){
 							$countCourses++;
-							
+
 							$users = substr($course , strpos($course,'[',1)+1 , strpos($course,']',1));
 							$users = explode('|',$enreg['Users']);
 							$countUsersCourses = 0;
@@ -523,19 +523,19 @@ if($_POST['formSent'])
 								$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$user."'";
 								$rsUser = api_sql_query($sqlUser);
 								list($user_id) = (mysql_fetch_array($rsUser));
-								$sql = "INSERT INTO $tbl_session_course_user SET 
+								$sql = "INSERT INTO $tbl_session_course_user SET
 										id_user='$user_id',
 										course_code='$CourseCode',
 										id_session = '$session_id'";
 								$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
 								if(mysql_affected_rows())
 									$countUsersCourses++;
-							}		
-							api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);	
+							}
+							api_sql_query("UPDATE $tbl_session_course SET nbr_users='$countUsersCourses' WHERE course_code='$CourseCode'",__FILE__,__LINE__);
 						}
 					}
 					api_sql_query("UPDATE $tbl_session SET nbr_users='$countUsers', nbr_courses='$countCourses' WHERE id='$session_id'",__FILE__,__LINE__);
-					
+
 				}
 			}
 		}

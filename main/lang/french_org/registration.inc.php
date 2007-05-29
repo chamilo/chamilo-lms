@@ -1,10 +1,10 @@
-<?php # $Id: registration.inc.php 1996 2004-07-07 14:53:05Z olivierb78 $
+<?php # $Id: registration.inc.php 12502 2007-05-29 08:06:23Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and espacee management software
 
 	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
 	For a full list of contributors, see "credits.txt".

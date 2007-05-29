@@ -4,7 +4,7 @@
 	Dokeos - elearning and espacee management software
 
 	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
 	For a full list of contributors, see "credits.txt".

@@ -5,7 +5,7 @@
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
 
@@ -23,10 +23,10 @@
 ==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 	@author Bart Mollet
 *	@package dokeos.admin
-============================================================================== 
+==============================================================================
 */
 /*
 ==============================================================================
@@ -70,36 +70,36 @@ if($_GET['action'] == 'delete')
 		$idChecked="'".implode("','",$idChecked)."'";
 
 		api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
-		
+
 		$nbr_affected_rows=mysql_affected_rows();
 
 		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
 
 		api_sql_query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
 	}
-	
+
 	if(!empty($_GET['class'])){
 		api_sql_query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".$_GET['class'],__FILE__,__LINE__);
-		
+
 		$nbr_affected_rows=mysql_affected_rows();
 
 		api_sql_query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
-		
+
 	}
-	
+
 	if(!empty($_GET['user'])){
 		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session='$id_session' AND id_user=".$_GET['user'],__FILE__,__LINE__);
 		$nbr_affected_rows=mysql_affected_rows();
 		api_sql_query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
-		
+
 		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".$_GET['user'],__FILE__,__LINE__);
 		$nbr_affected_rows=mysql_affected_rows();
 		api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'",__FILE__,__LINE__);
 	}
-}		
+}
 
 $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username
-		FROM '.$tbl_session.' 
+		FROM '.$tbl_session.'
 		LEFT JOIN '.$tbl_user.'
 			ON id_coach = user_id
 		WHERE '.$tbl_session.'.id='.$id_session;
@@ -130,9 +130,9 @@ api_display_tool_title($tool_name);
 	<td><?php echo $session['lastname'].' '.$session['firstname'].' ('.$session['username'].')' ?></td>
 </tr>
 <tr>
-	<td><?php echo ('Dates'); ?> :</td>	
+	<td><?php echo ('Dates'); ?> :</td>
 	<td>
-	<?php 
+	<?php
 		if($session['date_start']=='00-00-0000')
 			echo get_lang('NoTimeLimits');
 		else
@@ -168,7 +168,7 @@ if($session['nbr_courses']==0){
 }
 else {
 	$sql = "SELECT code,title,nbr_users, lastname, firstname, username
-			FROM $tbl_course,$tbl_session_rel_course 
+			FROM $tbl_course,$tbl_session_rel_course
 			LEFT JOIN $tbl_user
 				ON $tbl_session_rel_course.id_coach = $tbl_user.user_id
 			WHERE course_code=code
@@ -217,14 +217,14 @@ if($session['nbr_users']==0){
 else {
 
 	// classe development, obsolete for the moment
-	
+
 	$sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username
 			FROM '.$tbl_user.'
 			INNER JOIN '.$tbl_session_rel_user.'
 				ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user
 				AND '.$tbl_session_rel_user.'.id_session = '.$id_session.'
 			ORDER BY lastname, firstname';
-	
+
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$users=api_store_result($result);
 	foreach($users as $user){
@@ -244,11 +244,11 @@ else {
 
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();
-?> 
+?>
 
 
 

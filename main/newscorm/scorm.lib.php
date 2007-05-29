@@ -6,7 +6,7 @@
 
         Copyright (c) 2004 Dokeos S.A.
         Copyright (c) 2004 Denes Nagy
-        Copyright (c) 2003 University of Ghent (UGent)
+        Copyright (c) 2003 Ghent University (UGent)
         Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
 	For a full list of contributors, see "credits.txt".
@@ -17,20 +17,20 @@
         of the License, or (at your option) any later version.
 										        See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, 
+	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium,
 							info@dokeos.com
 =============================================================================
 */
 /**
 =============================================================================
- * This file is a container for functions related to SCORM and other 
+ * This file is a container for functions related to SCORM and other
  * standard or common course content types. It might later become a class
  * instead of a functions library, as several components are likely to be
  * re-used for different content types.
  * @package dokeos.learnpath.scorm
  * @author Yannick Warnier <ywarnier@beeznest.org>
  * @author Based on work from Denes NAgy, Isthvan Mandak and Roan Embrechts
-============================================================================= 
+=============================================================================
  */
 /**
  * Delete a scorm directory (check for imsmanifest and if found, deletes the related rows in scorm tables also)
@@ -64,29 +64,29 @@ function removescormDir($dir)
             while ($row=mysql_fetch_array($result))
             {
 	      $c=$row['contentId'];
-	      $sql2="DELETE FROM ".Database::get_scorm_table(TABLE_SCORM_SCO_DATA)." where contentId=$c"; 
+	      $sql2="DELETE FROM ".Database::get_scorm_table(TABLE_SCORM_SCO_DATA)." where contentId=$c";
 	      $result2=api_sql_query($sql2,__FILE__,__LINE__);
 	    }
 	    $sql="DELETE FROM ".Database::get_scorm_table(TABLE_SCORM_MAIN)." where (contentTitle='$scormdir' and dokeosCourse='$courseid')";
 	    $result=api_sql_query($sql,__FILE__,__LINE__);
 	  }
-	} 
+	}
 	if(!@unlink($dir.'/'.$readdir))
-	{ 
-	  return false; 
-	} 
-      } elseif(is_dir($dir.'/'.$readdir)) { 
-        if(!removescormDir($dir.'/'.$readdir)) 
-        { 
+	{
 	  return false;
 	}
-      } 
-    } 
-  } 
-  closedir($opendir); 
-  if(!@rmdir($dir)) { 
-    return false; 
-  } 
+      } elseif(is_dir($dir.'/'.$readdir)) {
+        if(!removescormDir($dir.'/'.$readdir))
+        {
+	  return false;
+	}
+      }
+    }
+  }
+  closedir($opendir);
+  if(!@rmdir($dir)) {
+    return false;
+  }
   return true;
 }
 /**

@@ -4,7 +4,7 @@
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
 
@@ -27,7 +27,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='admin';
 
 // resetting the course id
@@ -89,7 +89,7 @@ if($_POST['formSent'])
 		while($row = mysql_fetch_array($result)){
 			$existingUsers[] = $row['id_user'];
 		}
-		
+
 		$result=api_sql_query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'",__FILE__,__LINE__);
 
 		$CourseList=array();
@@ -98,7 +98,7 @@ if($_POST['formSent'])
 		{
 			$CourseList[]=$row['course_code'];
 		}
-		
+
 		foreach($CourseList as $enreg_course)
 		{
 			$nbr_users=0;
@@ -106,7 +106,7 @@ if($_POST['formSent'])
 			{
 				if(!in_array($enreg_user, $existingUsers)){
 					api_sql_query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
-					
+
 					if(mysql_affected_rows())
 					{
 						$nbr_users++;
@@ -117,7 +117,7 @@ if($_POST['formSent'])
 				if(!in_array($existing_user, $UserList)){
 					$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
 					api_sql_query($sql);
-					
+
 					if(mysql_affected_rows())
 					{
 						$nbr_users--;
@@ -128,24 +128,24 @@ if($_POST['formSent'])
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
 			list($nbr_users) = mysql_fetch_array($rs);
 			api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
-			
+
 		}
-		
+
 		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session");
 		$nbr_users = 0;
 		foreach($UserList as $enreg_user){
 			$nbr_users++;
 			api_sql_query("INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')",__FILE__,__LINE__);
-			
+
 		}
 		$nbr_users = count($UserList);
 		api_sql_query("UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ",__FILE__,__LINE__);
-		
+
 		//if(empty($_GET['add']))
 			//header('Location: '.$_GET['page'].'?id_session='.$id_session);
 		//else
 		header('Location: resume_session.php?id_session='.$id_session);
-			
+
 	}
 }
 
@@ -163,7 +163,7 @@ $Classes=api_store_result($result);
 foreach($Classes as $classe)
 	if($classe['id_session'] == $id_session)
 		$sessionClassesList[$classe['id']] = $classe ;
-				
+
 foreach($Classes as $classe)
 	if(empty($sessionClassesList[$classe['user_id']]) && empty($nosessionClassesList[$classe['user_id']]))
 		$nosessionClassesList[$classe['id']] = $classe ;
@@ -171,7 +171,7 @@ foreach($Classes as $classe)
 
 //users
 $sql="SELECT user_id, lastname, firstname, username, id_session
-		FROM $tbl_user 
+		FROM $tbl_user
 		LEFT JOIN $tbl_session_rel_user
 			ON $tbl_session_rel_user.id_user = $tbl_user.user_id
 		ORDER BY lastname,firstname,username";
@@ -181,15 +181,15 @@ $result=api_sql_query($sql,__FILE__,__LINE__);
 $Users=api_store_result($result);
 
 foreach($Users as $user)
-	if($user['id_session'] == $id_session) 
+	if($user['id_session'] == $id_session)
 		$sessionUsersList[$user['user_id']] = $user ;
-				
+
 foreach($Users as $user)
 	if(empty($sessionUsersList[$user['user_id']]) && empty($nosessionUsersList[$user['user_id']]))
 		$nosessionUsersList[$user['user_id']] = $user ;
-		
 
-	
+
+
 
 
 ?>
@@ -219,20 +219,20 @@ if(!empty($errorMsg))
   <td align="center">
   <div id="content_source">
 	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:300px;">
-	
+
 		<?php
 		foreach($nosessionUsersList as $enreg)
 		{
 		?>
-		
+
 			<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
-		
+
 		<?php
 		}
-		
+
 		unset($nosessionUsersList);
 		?>
-	
+
 	  </select>
   </div>
   </td>
@@ -267,7 +267,7 @@ unset($sessionUsersList);
 		<?php
 		if(isset($_GET['add']))
 			echo '<input type="button" value="'.get_lang("FinishSessionCreation").'" onclick="valide()" />';
-		else	
+		else
 			echo '<input type="button" value="'.get_lang('Ok').'" onclick="valide()" />';
 		?>
 	</td>
@@ -282,30 +282,30 @@ unset($sessionUsersList);
 <script type="text/javascript">
 <!--
 function moveItem(origin , destination){
-	
+
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;	
+			origin.options[i]=null;
 			i = i-1;
 		}
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-	
+
 }
 
-function sortOptions(options) { 
+function sortOptions(options) {
 
 	newOptions = new Array();
 	for (i = 0 ; i<options.length ; i++)
 		newOptions[i] = options[i];
-		
-	newOptions = newOptions.sort(mysort);	
+
+	newOptions = newOptions.sort(mysort);
 	options.length = 0;
 	for(i = 0 ; i < newOptions.length ; i++)
 		options[i] = newOptions[i];
-	
+
 }
 
 function mysort(a, b){
@@ -332,34 +332,34 @@ function valide(){
 
 
 function loadUsersInSelect(select){
-	
-	var xhr_object = null; 
-	
-	if(window.XMLHttpRequest) // Firefox 
-		xhr_object = new XMLHttpRequest(); 
-	else if(window.ActiveXObject) // Internet Explorer 
-		xhr_object = new ActiveXObject("Microsoft.XMLHTTP"); 
-	else  // XMLHttpRequest non supporté par le navigateur 
-	alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest..."); 
-	
-	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false); 
+
+	var xhr_object = null;
+
+	if(window.XMLHttpRequest) // Firefox
+		xhr_object = new XMLHttpRequest();
+	else if(window.ActiveXObject) // Internet Explorer
+		xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
+	else  // XMLHttpRequest non supporté par le navigateur
+	alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
+
+	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
 	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-	 		
+
 	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	
-	
+
+
 	nosessionUsers = makepost(document.getElementById('origin_users'));
 	sessionUsers = makepost(document.getElementById('destination_users'));
 	nosessionClasses = makepost(document.getElementById('origin_classes'));
 	sessionClasses = makepost(document.getElementById('destination_classes'));
 	xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
-	
-	xhr_object.onreadystatechange = function() { 
+
+	xhr_object.onreadystatechange = function() {
 		if(xhr_object.readyState == 4) {
-			document.getElementById('content_source').innerHTML = result = xhr_object.responseText;		
+			document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
 			//alert(xhr_object.responseText);
 		}
-	} 
+	}
 }
 
 function makepost(select){
@@ -368,7 +368,7 @@ function makepost(select){
 	var ret = "";
 	for (i = 0 ; i<options.length ; i++)
 		ret = ret + options[i].value +'::'+options[i].text+";;";
-	
+
 	return ret;
 
 }

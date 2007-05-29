@@ -4,7 +4,7 @@
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
 
@@ -27,7 +27,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='admin';
 
 // resetting the course id
@@ -78,23 +78,23 @@ if($_POST['formSent'])
 	{
 		$CourseList=array();
 	}
-	$nbr_courses=0;	
-	
+	$nbr_courses=0;
+
 	$id_coach = api_sql_query("SELECT id_coach FROM $tbl_session WHERE id=$id_session");
 	$id_coach = mysql_fetch_array($id_coach);
 	$id_coach = $id_coach[0];
-	
+
 	$rs = api_sql_query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
-	$existingCourses = api_store_result($rs);				
-	
+	$existingCourses = api_store_result($rs);
+
 	$sql="SELECT id_user
 		FROM $tbl_session_rel_user
 		WHERE id_session = $id_session";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	
+
 	$UserList=api_store_result($result);
-	
-	
+
+
 	foreach($CourseList as $enreg_course)
 	{
 		$exists = false;
@@ -104,18 +104,18 @@ if($_POST['formSent'])
 			{
 				$exists=true;
 			}
-		}		
+		}
 		if(!$exists)
-		{				
+		{
 			api_sql_query("INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')",__FILE__,__LINE__);
-			
-			
+
+
 			$nbr_users=0;
 			foreach($UserList as $enreg_user)
 			{
 				$enreg_user = $enreg_user['id_user'];
 				api_sql_query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
-				
+
 				if(mysql_affected_rows())
 				{
 					$nbr_users++;
@@ -123,14 +123,14 @@ if($_POST['formSent'])
 			}
 			api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
 		}
-		
+
 	}
-	
+
 	foreach($existingCourses as $existingCourse) {
 		if(!in_array($existingCourse['course_code'], $CourseList)){
 			api_sql_query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
 			api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
-			
+
 		}
 	}
 	$nbr_courses=count($CourseList);
@@ -138,13 +138,13 @@ if($_POST['formSent'])
 
 	if(isset($_GET['add']))
 		header('Location: add_users_to_session.php?id_session='.$id_session.'&add=true');
-	else 
+	else
 		header('Location: resume_session.php?id_session='.$id_session);
 		//header('Location: '.$_GET['page'].'?id_session='.$id_session);
-	
-		
-	
-	
+
+
+
+
 }
 
 Display::display_header($tool_name);
@@ -153,7 +153,7 @@ api_display_tool_title($tool_name);
 
 
 $sql="SELECT code, title, visual_code, id_session
-		FROM $tbl_course 
+		FROM $tbl_course
 		LEFT JOIN $tbl_session_rel_course
 			ON code = course_code
 		ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
@@ -165,14 +165,14 @@ $nosessionCourses = $sessionCourses = array();
 
 
 foreach($Courses as $course)
-	if($course['id_session'] == $id_session) 
+	if($course['id_session'] == $id_session)
 		$sessionCourses[$course['code']] = $course ;
-				
+
 foreach($Courses as $course)
 	if(empty($sessionCourses[$course['code']]) && empty($nosessionCourses[$course['code']]))
 		$nosessionCourses[$course['code']] = $course ;
-		
-		
+
+
 unset($Courses);
 ?>
 
@@ -189,7 +189,7 @@ if(!empty($errorMsg))
 <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('CourseListInPlatform') ?> :</b></td>
-  
+
   <td width="10%">&nbsp;</td>
   <td align="center" width="45%"><b><?php echo get_lang('CourseListInSession') ?> :</b></td>
 </tr>
@@ -249,30 +249,30 @@ unset($sessionCourses);
 <script type="text/javascript">
 <!--
 function moveItem(origin , destination){
-	
+
 	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {	
+		if(origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;	
+			origin.options[i]=null;
 			i = i-1;
 		}
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-	
+
 }
 
-function sortOptions(options) { 
+function sortOptions(options) {
 
 	newOptions = new Array();
 	for (i = 0 ; i<options.length ; i++)
 		newOptions[i] = options[i];
-		
-	newOptions = newOptions.sort(mysort);	
+
+	newOptions = newOptions.sort(mysort);
 	options.length = 0;
 	for(i = 0 ; i < newOptions.length ; i++)
 		options[i] = newOptions[i];
-	
+
 }
 
 function mysort(a, b){
@@ -289,7 +289,7 @@ function valide(){
 	var options = document.getElementById('destination').options;
 	for (i = 0 ; i<options.length ; i++)
 		options[i].selected = true;
-		
+
 	document.forms.formulaire.submit();
 }
 -->

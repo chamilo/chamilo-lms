@@ -6,7 +6,7 @@
 	Copyright (c) 2005 Dokeos S.A.
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2004 Denes Nagy
-	Copyright (c) 2003 University of Ghent (UGent)
+	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 
 	For a full list of contributors, see "credits.txt".
@@ -35,7 +35,7 @@
 /**
  * Script
  */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "scormdocument";
 
 
@@ -75,8 +75,8 @@ function confirmation (name)
 // Define the 'doc.inc.php' as language file
 //$nameTools = get_lang("Doc");
 
-// When GET['learnpath_id'] is defined, it means that 
-// a learnpath has been chosen, so we redirect to 
+// When GET['learnpath_id'] is defined, it means that
+// a learnpath has been chosen, so we redirect to
 // learnpath_handler - we possibly lose the $dialogBox warning here
 if(!empty($_GET['learnpath_id']))
 {
@@ -205,7 +205,7 @@ if(api_is_allowed_to_edit())
 
   echo	"<!-- upload  -->",
 	"<p align=\"right\">",
-	"<form action=\"".api_get_self()."?openDir=", rawurlencode($openDir), 
+	"<form action=\"".api_get_self()."?openDir=", rawurlencode($openDir),
 		"&subdirs=$subdirs\" method=\"post\" enctype=\"multipart/form-data\">",
 		"<input type=\"hidden\" name=\"uploadPath\" value=\"$curDirPath\" />",
 		get_lang('DownloadFile'),"&nbsp;:&nbsp;",
@@ -221,7 +221,7 @@ if(api_is_allowed_to_edit())
   {
     Display::display_normal_message($dialogBox);
   }
-  
+
   echo	"<table border='0' cellspacing='2' cellpadding='4'>
     <tr>
       <td valign='bottom'>
@@ -342,7 +342,7 @@ if ($fileList)
       $urlFileName = api_get_self().'?'.api_get_cidreq().'&subdirs=yes&openDir='.$cmdFileName;
       $image="<img src=\"../img/dossier.gif\" border=\"0\"  hspace=\"3\" align=\"absmiddle\" alt='scorm'>";
     }
-    
+
     if ($curDirPath) {
       $sqlpath=$curDirPath."/".$fileList['name'][$fileKey]."";
     } else {
@@ -369,25 +369,25 @@ if ($fileList)
     {
       $fileExtension=explode('.',$dspFileName);
       $fileExtension=strtolower($fileExtension[sizeof($fileExtension)-1]);
-	
+
      /* export */
-	
+
      echo "<td align='center'><a href='".api_get_self()."?action=exportscorm&".api_get_cidreq()."&path=".$cmdFileName."'><img src=\"../img/save_zip.gif\" border=\"0\" title=\"".get_lang('Export')."\"></a>";
-	
+
      /* edit title and description */
-	
+
       echo "<td align='center'>",
 	"<a href='".api_get_self()."?action=editscorm&path=".$cmdFileName."'><img src=\"../img/edit.gif\" border=\"0\" title=\"".get_lang('_edit_learnpath')."\"></a>";
-	
+
       /* DELETE COMMAND */
       echo
 	"<a href=\"".api_get_self()."?delete=",$cmdFileName,"\" ",
 	"onClick=\"return confirmation('",addslashes($dspFileName),"');\">",
 	"<img src=\"../img/delete.gif\" border=\"0\" title=\"".get_lang('_delete_learnpath')."\" />",
 	"</a>";
-	
+
       /* VISIBILITY COMMAND */
-	
+
       if ($fileList['visibility'][$fileKey] == "i")
       {
         echo	"<a href=\"".api_get_self()."?make_directory_visible=",$cmdFileName,"\">",
@@ -400,17 +400,17 @@ if ($fileList)
 	  "<img src=\"../img/visible.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />",
 	  "</a>";
       }
-	
+
     }	// end if($is_allowedToEdit)
     echo	"</tr>\n";
-      
+
   }	// end each ($fileList)
 }// end if ( $fileList)
-  
+
 //display learning paths
- 
+
 if (!$curDirPath) {
-  
+
   echo "<tr><td colspan='4'>&nbsp;</td></tr>";
   $sql="select * from $tbl_learnpath_main";
   $result=api_sql_query($sql,__FILE__,__LINE__);
@@ -418,7 +418,7 @@ if (!$curDirPath) {
   while ($row=mysql_fetch_array($result)) {
     $counter++;
     if (($counter % 2)==0) { $oddclass="row_odd"; } else { $oddclass="row_even"; }
-    
+
     $id=$row["learnpath_id"];
     $sql2="SELECT * FROM $tbl_learnpath_main where learnpath_id=$id";
     $result2=api_sql_query($sql2,__FILE__,__LINE__);
@@ -440,11 +440,11 @@ if (!$curDirPath) {
     if(api_is_allowed_to_edit()) {
       //no init of $circle1 here
       echo "<td align='center'><a href='".api_get_self()."?action=exportpath&id=".$row["learnpath_id"]."'><img src=\"../img/save_zip.gif\" border=\"0\" title=\"".get_lang('Export')."\"></a>";
-	
+
       echo "<td align='center'><a href='".api_get_self()."?action=editpath&id=".$row["learnpath_id"]."'><img src=\"../img/edit.gif\" border=\"0\" title=\"".get_lang('_edit_learnpath')."\"></a>";
-	
+
       echo "<a href='".api_get_self()."?action=deletepath&id=".$row["learnpath_id"]."'><img src=\"../img/delete.gif\" border=\"0\" title=\"".get_lang('_delete_learnpath')."\" onClick=\"return confirmation('".$row2['learnpath_name']."');\"></a>";
-	
+
       if (($row3["visibility"])=='1') {
         echo "<a href='".api_get_self()."?action=publishpath&set_visibility=i&id=".$row["learnpath_id"]."'><img src=\"../img/visible.gif\" border=\"0\" alt=\"".get_lang('_no_publish')."\" title=\"".get_lang('_no_publish')."\"></a>";
       } else {

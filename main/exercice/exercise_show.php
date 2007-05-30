@@ -102,7 +102,7 @@ if ( empty ( $questionList ) ) {
 if ( empty ( $objExercise ) ) {
     $objExercise = $_SESSION['objExercise'];
 }
-$is_allowedToEdit=$is_courseAdmin;
+$is_allowedToEdit=api_is_allowed_to_edit();
 $nameTools=get_lang('CorrectTest');
 
 if($origin=='user_course')

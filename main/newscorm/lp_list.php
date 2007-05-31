@@ -162,13 +162,19 @@ echo		"</tr>\n";
   --------------------------------------*/
 $list = new LearnpathList(api_get_user_id());
 $flat_list = $list->get_flat_list();
+$is_allowed_to_edit = api_is_allowed_to_edit();
 //var_dump($flat_list);
 if (is_array($flat_list))
 {
 	$counter = 0;
 	foreach ($flat_list as $id => $details)
 	{
-	    $counter++;
+	    if(!$is_allowed_to_edit && $details['lp_visibility'] == "i")
+	    {
+	    	// This is a student and this path is invisible, skip
+	    	continue;		
+	    }
+		$counter++;
 	    if (($counter % 2)==0) { $oddclass="row_odd"; } else { $oddclass="row_even"; }
 
 		$url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
@@ -194,7 +200,7 @@ if (is_array($flat_list))
 	    {
 			$dsp_progress = '<td style="padding-top:1em;">'.learnpath::get_db_progress($id,api_get_user_id(),'both').'</td>';
 	    }
-	    if(api_is_allowed_to_edit())
+	    if($is_allowed_to_edit)
 	    {
 		    $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a></td>'."\n";
 			$fileExtension=explode('.',$dspFileName);

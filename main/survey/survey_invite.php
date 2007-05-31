@@ -248,7 +248,7 @@ function save_invitations($users_array, $invitation_title, $invitation_text, $re
 
 				// replacing the **link** part with a valid link for the user
 				$survey_link = $_configuration['root_web'].$_configuration['code_append'].'survey/'.'fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$invitation_code;
-				$text_link = '<a href="'.$survey_link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl').' <br />\r\n '.$survey_link;
+				$text_link = '<a href="'.$survey_link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$survey_link;
 				
 				
 				$full_invitation_text = str_ireplace('**link**', $text_link ,$invitation_text, $replace_count);

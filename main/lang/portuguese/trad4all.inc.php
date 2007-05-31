@@ -428,4 +428,5 @@ $UsersConnectedToMySessions = "Ver todos os utilizadores conectados às minhas se
 $DearUser = "Caro(a) utilizador(a)";
 $YourRegistrationData = "Os seus dados do registo";
 $ResetLink = "Clique aqui para recuperar a sua senha";
+$VisibilityChanged = "A visibilidade foi alterada.";
 ?>

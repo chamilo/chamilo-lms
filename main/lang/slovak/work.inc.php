@@ -30,4 +30,8 @@ $langDirCr = "Vytvori&#357; prie&#269;inok";
 $langCurrentDir = "aktuálny prie&#269;inok";
 $UploadADocument = "Uloži&#357; dokument na server";
 $EditToolOptions = "Možnosti nástroja na úpravu";
+$DocumentDeleted = "Dokument bol vymazaný";
+$SendMailBody = "Užívate&#318; poslal dokument do Vášho kurzu.";
+$DirDelete = "Zamaza&#357; adresár";
+$ValidateChanges = "Potvrdi&#357; zmeny";
 ?>

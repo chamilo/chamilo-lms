@@ -1,6 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$NewForumCreated = "Nové fórum bolo vytvorené";
+$NewThreadCreated = "Nová diskusná téma bola vytvorená.";
 $lang_learning_path = "U&#269;ebná osnova";
 $lang_learning_path_builder = "Tvorca osnovy";
 $lang_description = "popis";
@@ -69,6 +71,24 @@ $lang_short_help = "Pre pridanie kroku, kliknite na znak +; pre pridanie názvu/p
 $lang_prereq_not_complete = "vstupné podmienky niesú splnené";
 $lang_author = "Autor";
 $lang_date = "Dátum";
+$langBasicOverview = "Usporiada&#357;";
+$langAdvanced = "Vytvori&#357;";
+$langDisplay = "Zobrazi&#357;";
+$langNewChapter = "Nová kapitola";
+$langNewStep = "Nový krok";
+$langPrerequisites = "Vstupné podmienky";
+$langEditPrerequisites = "Upravi&#357; vstupné podmienky";
+$langTitleManipulateChapter = "Spravova&#357; túto kapitolu";
+$langTitleManipulateModule = "Spravova&#357; tento modul";
+$langTitleManipulateDocument = "Spravova&#357; tento dokument";
+$langTitleManipulateLink = "Spravova&#357; tento odkaz";
+$langTitleManipulateQuiz = "Spravova&#357; toto cvi&#269;enie";
+$langTitleManipulateStudentPublication = "Spravova&#357; túto študentskú publikáciu";
+$langEnterDataNewChapter = "Zadajte údaje pre novú kapitolu";
+$langCreateNewStep = "Vytvori&#357; nový krok";
+$langNewDocument = "Nový dokument";
+$langParent = "Nadradený";
+$langPosition = "Pozícia";
 $lang_prerequisites_limit = "Vstupné podmienky (limit)";
 $lang_loading = "Nahrávam stránku, prosím &#269;akaj ...";
 $lang_empty = "Táto osnova neobsahuje žiadne kroky.";
@@ -87,4 +107,5 @@ $langItemMissing1 = "Bolo tu";
 $langItemMissing2 = "krokov v originálnej Dokeos osnove.";
 $langDone = "Hotovo";
 $langNoItemSelected = "Aby sa tu nie&#269;o zobrazilo, vyberte položku v bo&#269;nom menu";
+$NewQuiz = "Nový test";
 ?>

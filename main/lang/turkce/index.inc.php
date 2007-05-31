@@ -64,4 +64,5 @@ $langOpenarea = "Ki&#351;isel alan";
 $langProductions = "Yay&#305;nlar&#305;-Eserleri";
 $langSendChatRequest = "Sohbet iste&#287;i gönder";
 $langRequestDenied = "Ça&#287;r&#305;n&#305;z kabul edilmedi.";
+$LinkAdded = "Yeni ba&#287;lant&#305; eklendi";
 ?>

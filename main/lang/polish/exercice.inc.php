@@ -88,6 +88,8 @@ $langYourTotalScore = "Twój wynik ostateczny";
 $langQuestCreate = "utwórz pytania";
 $langDoEx = "wykonaj &#263;wiczenie";
 $langSub = "napisy";
+$langMorA = "+ odpowied&#378;";
+$langLesA = "- odpowied&#378;";
 $langRecAns = "Zapisz odpowiedzi";
 $langIntroduction = "Wprowadzenie";
 $langTitleAssistant = "Asystent utworzonych &#263;wicze&#324;";
@@ -121,4 +123,7 @@ $langIndices = "Wskazówki";
 $langDateExo = "pl";
 $freeAnswer = "Wolna odpowied&#378;";
 $notCorrectedYet = "Ta odpowied&#378; nie by&#322;a jeszcze sprawdzana. Tymczasem twój wynik za to pytanie wynosi 0 i jest brany pod uwag&#281; podczas liczenia ca&#322;kowitego wyniku.";
+$EditCommentsAndMarks = "Edytuj komentarz i ocen&#281;";
+$AddComments = "Dodaj komentarz";
+$Results = "Wyniki";
 ?>

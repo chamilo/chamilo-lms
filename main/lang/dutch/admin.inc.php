@@ -613,7 +613,14 @@ $Blacklist = "Blacklist";
 $Whitelist = "Whitelist";
 $UploadExtensionsBlacklist = "Blacklist - instellingen";
 $UploadExtensionsWhitelist = "Whistelist - instellingen";
+$UploadExtensionsBlacklistComment = "De blacklist wordt gebruikt om file-extensies om te geven die moeten worden gefilterd door ze te verwijderen (of te hernoemen). De extensies moeten  worden ingegeven zonder het voorafgaande punt (.) en worden gescheiden door middel van punt-komma (;). Bijvoorbeeld: exe;com;bat;scr;php. Bestanden zonder extensie worden aanvaard. Hoofdlettergebruik speelt geen rol.";
+$UploadExtensionsWhitelistComment = "De whitelist wordt gebruikt om extensies te filteren (verwijderen of hernoemen) die niet in de whitelist voorkomen. Deze vorm wordt algemeen als veiliger beschouwd, maar is veel gerestricteerder. De extensies moeten worden ingegeven zonder het punt (.) en gescheiden door een punt-komma (;). Bijvoorbeeld: htm;html;txt;doc;xls;ppt
+Bestanden zonder extensie worden aanvaard. Hoofdlettergebruik speelt geen rol.";
+$UploadExtensionsSkip = "Filtergedrag (sla over/hernoem)";
+$UploadExtensionsSkipComment = "Indien u kiest om over te slaan, worden bestanden, gefilterd door de blacklist of whitelist, niet geüpload naar het systeem.
+Als u kiest om te hernoemen, wordt de extensies vervangen door diegene die is opgegeven in het systeem. Let op dat hernoemen geen echte beveiliging biedt en ook dat het uploaden van bestanden met dezelfde naam, maar met andere extensie kan leiden tot fouten.";
 $UploadExtensionsReplaceBy = "Vervangende extensie";
+$UploadExtensionsReplaceByComment = "Geef de extensie die u wil gebruiken om de gevaarlijke extensie, gedetecteer door de filter te vervangen. Enkel nodig indien u een filter door vervanging selecteerde.";
 $Remove = "Verwijder";
 $Rename = "Hernoem";
 ?>

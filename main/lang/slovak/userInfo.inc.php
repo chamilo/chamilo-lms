@@ -29,4 +29,6 @@ $langGroupUserManagement = "Správa skupín";
 $langUserInfo = "informácie o užívate&#318;ovi";
 $langUnregister = "Zruši&#357; registráciu";
 $langAddAUser = "Prida&#357; užívate&#318;a";
+$UsersUnsubscribed = "Vybraný užívate&#318; bol odhlásený z kurzu.";
+$ThisStudentIsSubscribeThroughASession = "Tento študent sa prihlásil do kurzu cez session. Nemôžete upravova&#357; jeho informácie.";
 ?>

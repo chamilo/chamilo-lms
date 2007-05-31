@@ -428,4 +428,5 @@ $UsersConnectedToMySessions = "Bekijk de gebruikers van mijn sessies";
 $DearUser = "Beste gebruiker";
 $YourRegistrationData = "Uw registratiegegevens";
 $ResetLink = "Klik hier om uw paswoord terug te vinden";
+$VisibilityChanged = "De zichtbaarheid is aangepast.";
 ?>

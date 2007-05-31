@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langProfessors = "Profesor(es)";
-$langExplanation = "Una vez que haya pulsado Aceptar, se creará el sitio web de un curso que incluirá: Foro, Agenda, Documentos, Herramienta de autor SCORM, etc. Su identificación como creador de este sitio, le permitirá modificarlo según sus necesidades.";
+$langExplanation = "Una vez que haya pulsado Aceptar, se creará el sitio web de un curso que incluirá: Foro, Agenda, Documentos, Herramienta de autor SCORM, etc. Su identificación como creador de este sitio le permitirá modificarlo según sus necesidades.";
 $langEmpty = "Usted no ha rellenado todos los campos.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.<br>Si usted no conoce el código de su curso, consulte el programa del curso";
 $langCodeTaken = "Este código de curso se utiliza ya en otro curso.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.";
 $langFormula = "Cordialmente, vuestro profesor";
@@ -48,7 +48,7 @@ $langCreateSite = "Crear el sitio de un curso";
 $langFieldsRequ = "Todos los campos son obligatorios";
 $langEx = "Por ej: <i>Historia de la literatura</i>";
 $langFac = "Categoría";
-$langTargetFac = "Este campo puede contener la facultad, departamento o cualquier otra categoría en la que se incluya el curso";
+$langTargetFac = "Este campo puede contener la facultad, el departamento o cualquier otra categoría en la que se incluya el curso";
 $langCode = "Código del curso";
 $langMax = "max. 12 caracteres, p. ej.<i>ROM2121</i>";
 $langDoubt = "En caso de dudas sobre el título exacto del curso o el código que le corresponde consultar el";

@@ -13,4 +13,5 @@ $langAdd  = "Dodaj";
 $langValid  = "Zatwierd¼";
 $langBackAndForget  = "Zrezygnuj";
 $langOkSent = "Twoja strona zosta&#322;a wys&#322;ana.<p>Jest ona dost&#281;pna ze <a href=../..//index.php>Strony g&#322;ównej</a> kursu";
+$Content = "Tre&#347;&#263;";
 ?>

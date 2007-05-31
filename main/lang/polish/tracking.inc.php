@@ -132,4 +132,8 @@ $SynthesisView = "Widok syntetyczny";
 $Visited = "Obejrzano";
 $FirstAccess = "Pierwszy dost&#281;p";
 $LastAccess = "Ostatni dost&#281;p";
+$CourseTitle = "Nazwa kursu";
+$TeacherInterface = "Widok nauczyciela";
+$AdminInterface = "Widok administratora";
+$YourCourseList = "Lista twoich kursów";
 ?>

@@ -14,7 +14,7 @@ $MemberManager = "Administración de usuarios";
 $PostFullText = "Texto";
 $ReadPost = "Leer artículo";
 $Home = "Principal";
-$FirstPostText = "¡ Este es el primer artículo en el blog ! En adelante, todo el mundo que eté suscrito a este blog puede participar.
+$FirstPostText = "¡ Este es el primer artículo en el blog ! En adelante, todos los usuarios suscritos a este blog pueden participar
 ";
 $NewComment = "Añadir un comentario";
 $ReplyToThisComment = "Contestar a este comentario";
@@ -23,7 +23,7 @@ $ManageMembers = "Administrar usuarios";
 $Lastname = "Apellidos";
 $Firstname = "Nombre";
 $Email = "Correo electrónico";
-$Register = "Inscribirse en este blog";
+$Register = "Inscribir en este blog";
 $UnRegister = "Anular la inscripción en este blog";
 $SubscribeMembers = "Inscribir usuarios";
 $UnsubscribeMembers = "Dar de baja a usuarios";

@@ -48,4 +48,5 @@ $UploadLocalFileFromGarbageDir = "Prenesi lokalno datoteko z mape main/garbage";
 $ThisItemIsNotExportable = "Ta element trenutno ni SCORM združljiv, zato ga trenutno ni možno izvoziti.";
 $MoveCurrentChapter = "Premakni trenutno poglavje";
 $UnknownPackageFormat = "Format paketa ni prepoznan. Preprièajte se, da ima ustrezno formo in da ne vsebuje napak. Problem je lahko nastopil tudi zaredi neustreznega ZIP formata ali pa ste skušali naložiti preveliko datoteko. V primeru, da niste preprièani v pravilno obliko ZIP, skušajte datoteko naredi z minimalno uporabo posebnih nastavitev stiskanja.";
+$Attempt = "Poskus";
 ?>

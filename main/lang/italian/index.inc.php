@@ -64,4 +64,10 @@ $langRequestDenied = "Consenso negato";
 $UsageDatacreated = "Dati d\'impiego creati";
 $SessionView = "Mostra i corsi ordinandoli per sessione";
 $CourseView = "Mostra l\'elenco completo dei corsi";
+$DropboxFileAdded = "Aggiunto un file alla casella";
+$NewMessageInForum = "Nuovo messaggio inviato nel forum";
+$FolderCreated = "Nuova cartella creata";
+$LinkAdded = "Nuovo collegamento aggiunto";
+$AnnouncementAdded = "Avviso aggiunto";
+$AgendaAdded = "Voce nell\'agenda aggiunta";
 ?>

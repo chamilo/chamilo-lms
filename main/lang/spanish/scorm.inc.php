@@ -49,4 +49,5 @@ $ThisItemIsNotExportable = "Este elemento, por ahora, no es compatible con SCORM
 $MoveCurrentChapter = "Mover el capítulo actual";
 $UnknownPackageFormat = "El formato del paquete no puede ser reconocido. Por favor, cerciórese de que esté bien creado y de que no contenga errores. Los problemas pueden deberse al formato ZIP o a la transferencia de ficheros muy largos. Si no está seguro del fichero ZIP use el mínimo de funcionalidades al comprimir.
 ";
+$Attempt = "Intento";
 ?>

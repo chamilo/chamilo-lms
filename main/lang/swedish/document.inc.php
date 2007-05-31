@@ -109,5 +109,12 @@ $fileModified = "Filen är ändrad";
 $DocumentsOverview = "dokument översikt";
 $ViewSlideshow = "Visa bildspel";
 $Options = "Val";
+$WelcomeOogieConverter = "Välkommen till Oogie PowerPoint konverterare<ul type=\\\"1\\\"><li>Bläddra på din disk för att hitta en .ppt eller .odp fil<li>Ladda upp den till Oogie. Den kommer att konverteras till en Scorm Learning Path.<li>Du kommer att kunna lägga till ljud/kommentarer till varje slide, även kunna lägga till slides.";
+$ConvertToLP = "Konvertera till Learning Path";
 $Content = "innehåll";
+$Validate = "Validera";
+$AdvancedSettings = "Avancerade inställningar";
+$AdvancedSettings = "Avancerade inställningar";
+$File = "Fil";
+$DirDeleted = "Mapp raderad";
 ?>

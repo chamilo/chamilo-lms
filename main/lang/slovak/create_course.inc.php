@@ -26,4 +26,5 @@ $langScormtool = "U&#269;ebná osnova";
 $langPathbuildertool = "Tvorca u&#269;ebnej osnovy";
 $langAgendaCreationTitle = "Vytvorenie kurzu";
 $langDropbox  = "Schránka na dokumenty";
+$langDepartment = "Oddelenie";
 ?>

@@ -13,4 +13,8 @@ $langCourseAdminOnly = "Tylko dla prowadz&#261;cych";
 $PlatformAdminOnly = "Tylko dla Administratorów platformy";
 $ToolIsNowVisible = "To narz&#281;dzie jest widoczne";
 $ToolIsNowHidden = "To narz&#281;dzie jest niewodoczne";
+$Course_maintenance = "Zarz&#261;dzanie kursem";
+$Interaction = "Tylko dla prowadz&#261;cych";
+$Authoring = "Dost&#281;pne";
+$Administration = "Administracyjne";
 ?>

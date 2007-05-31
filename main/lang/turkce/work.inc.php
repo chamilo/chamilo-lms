@@ -30,4 +30,5 @@ $langDirCr = "Klasör olu&#351;tur";
 $langCurrentDir = "Aktif Dizin";
 $UploadADocument = "Belge gönder";
 $EditToolOptions = "Kelime i&#351;lemci araç seçenekleri";
+$DocumentDeleted = "Belge Silindi";
 ?>

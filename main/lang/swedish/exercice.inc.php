@@ -158,4 +158,8 @@ $langUseExistantQuestion = "Använd en redan existerande fråga";
 $freeAnswer = "Svara fritt";
 $notCorrectedYet = "Detta svar har ännu inte blivit rättat. Under tiden är ditt resultat för denna fråga 0, detta påverkar det totala resultatet.";
 $adminHP = "Hot Potatoes Administratör";
+$NewQu = "Ny fråga";
+$langCorrectAnswer = "Korrekt svar";
+$langAllQuestions = "Alla frågor";
+$Results = "Resultat";
 ?>

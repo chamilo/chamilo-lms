@@ -48,4 +48,5 @@ $UploadLocalFileFromGarbageDir = "Enviar ficheiro a partir da directoria princip
 $ThisItemIsNotExportable = "Este item, de momento, não é compatível com Scorm. É por isso que não é exportável.";
 $MoveCurrentChapter = "Mover capítulo actual";
 $UnknownPackageFormat = "O formato do pacote não é reconhecido. Por favor, verifique se o pacote contém erros. Alguns problemas são devidos ao formato do programa ZIP ou à transferência de ficheiros longos. Em caso de dúvida, evite usar ficheiros zipados.";
+$Attempt = "Tentativa";
 ?>

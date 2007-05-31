@@ -23,4 +23,7 @@ post a message there.</p>
 <p>The link to Registration (if present) is on the Home Page of the campus
  (top right).</p><b>Login</b><p>On your next visits, type login/password
  and Ok to access your courses. The URL of the site is";
+$test = "deneme";
+$WCAGImage = "Resim";
+$WCAGLink = "Ba&#287;lant&#305;";
 ?>

@@ -79,4 +79,5 @@ $langNotAllowedToUnsubscribe = "Užívatelia nemajú povolené zruši&#357; registrác
 $langCourseVisibilityClosed = "Kompletne zatvorený; kurz je dostupný len pre administrátorov a ich asistentov";
 $CourseVisibilityClosed = "Zatvorený - kurz je dostupný len pre administrátorov a ich asistentov";
 $CourseVisibilityModified = "Upravené (detailnejšie nastavenia urobte cez systém rolí a práv)";
+$CourseRegistrationPassword = "Heslo na registráciu do kurzu";
 ?>

@@ -32,7 +32,10 @@ $language_file = array('admin','registration');
 $cidReset=true;
 
 include('../inc/global.inc.php');
-
+if(empty($charset))
+{
+	$charset = 'ISO-8859-15';
+}
 api_protect_admin_script();
 
 include(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
@@ -80,7 +83,7 @@ if($_POST['formSent'])
 			{
 				foreach($racine->Users->User as $userNode)
 				{
-					$username = $userNode->Username;
+					$username = mb_convert_encoding($userNode->Username,$charset,'utf-8');
 					$isCut = 0; // if the username given is too long
 					if(strlen($username)>20)
 					{
@@ -99,15 +102,15 @@ if($_POST['formSent'])
 							$errorMsg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
 						}
 
-						$lastname = $userNode->Lastname;
-						$firstname = $userNode->Firstname;
-						$password = $userNode->Password;
+						$lastname = mb_convert_encoding($userNode->Lastname,$charset,'utf-8');
+						$firstname = mb_convert_encoding($userNode->Firstname,$charset,'utf-8');
+						$password = mb_convert_encoding($userNode->Password,$charset,'utf-8');
 						if(empty($password))
 							$password = base64_encode(rand(1000,10000));
-						$email = $userNode->Email;
-						$official_code = $userNode->OfficialCode;
-						$phone = $userNode->Phone;
-						$status = $userNode->Status;
+						$email = mb_convert_encoding($userNode->Email,$charset,'utf-8');
+						$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
+						$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
+						$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
 						switch($status)
 						{
 							case 'student' : $status = 5; break;
@@ -145,11 +148,11 @@ if($_POST['formSent'])
 				}
 				foreach($racine->Courses->Course as $courseNode)
 				{
-					$course_code = $courseNode->CourseCode;
-					$title = $courseNode->CourseTitle;
-					$description = $courseNode->CourseDescription;
-					$language = $courseNode->CourseLanguage;
-					$username = $courseNode->CourseTeacher;
+					$course_code = mb_convert_encoding($courseNode->CourseCode,$charset,'utf-8');
+					$title = mb_convert_encoding($courseNode->CourseTitle,$charset,'utf-8');
+					$description = mb_convert_encoding($courseNode->CourseDescription,$charset,'utf-8');
+					$language = mb_convert_encoding($courseNode->CourseLanguage,$charset,'utf-8');
+					$username = mb_convert_encoding($courseNode->CourseTeacher,$charset,'utf-8');
 
 					$sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
@@ -217,8 +220,8 @@ if($_POST['formSent'])
 					$countCourses = 0;
 					$countUsers = 0;
 
-					$SessionName = $sessionNode->SessionName;
-					$Coach = $sessionNode->Coach;
+					$SessionName = mb_convert_encoding($sessionNode->SessionName,$charset,'utf-8');
+					$Coach = mb_convert_encoding($sessionNode->Coach,$charset,'utf-8');
 
 					if(!empty($Coach)){
 						$sqlCoach = "SELECT user_id FROM $tbl_user WHERE username='$Coach'";
@@ -293,7 +296,7 @@ if($_POST['formSent'])
 					$session_id = mysql_insert_id();
 
 					foreach ($sessionNode->User as $userNode){
-						$username = substr($userNode->nodeValue(),0,20);
+						$username = mb_convert_encoding(substr($userNode->nodeValue(),0,20),$charset,'utf-8');
 						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".Database::escape_string($username)."'";
 						$rsUser = api_sql_query($sqlUser);
 						list($user_id) = (mysql_fetch_array($rsUser));

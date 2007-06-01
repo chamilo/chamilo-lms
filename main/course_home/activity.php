@@ -56,6 +56,8 @@ function show_tools_category($course_tool_category)
 {
 	$web_code_path = api_get_path(WEB_CODE_PATH);
 	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
+	$is_allowed_to_edit = api_is_allowed_to_edit();
+	$is_platform_admin = api_is_platform_admin();
 
 	switch ($course_tool_category)
 	{
@@ -90,19 +92,16 @@ function show_tools_category($course_tool_category)
 
 	}
 
-	while ($temp_row = mysql_fetch_array($result))
+	while ($temp_row = Database::fetch_array($result))
 	{
 		$all_tools_list[]=$temp_row;
 
 	}
 
-
-		$i=0;
+	$i=0;
 	// grabbing all the links that have the property on_homepage set to 1
 	$course_link_table = Database::get_course_table(TABLE_LINK);
 	$course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-
 
 	switch ($course_tool_category)
 	{
@@ -148,7 +147,7 @@ function show_tools_category($course_tool_category)
 	{
 		$result_links = api_sql_query($sql_links,__FILE__,__LINE__);
 
-		while($links_row = mysql_fetch_array($result_links))
+		while($links_row = Database::fetch_array($result_links))
 		{
 			unset($properties);
 
@@ -176,7 +175,7 @@ function show_tools_category($course_tool_category)
 				$blog_id = substr($toolsRow['link'], strrpos($toolsRow['link'], '=') + 1, strlen($toolsRow['link']));
 
 				// Get blog members
-				if(api_is_platform_admin())
+				if($is_platform_admin)
 				{
 					$sql_blogs = "
 						SELECT *
@@ -195,7 +194,7 @@ function show_tools_category($course_tool_category)
 
 				$result_blogs = api_sql_query($sql_blogs, __FILE__, __LINE__);
 
-				if(mysql_num_rows($result_blogs) > 0)
+				if(Database::num_rows($result_blogs) > 0)
 					$all_tools_list[] = $toolsRow;
 			}
 			else
@@ -205,6 +204,7 @@ function show_tools_category($course_tool_category)
 
 	if(isset($all_tools_list))
 	{
+		$lnk = '';
 		foreach($all_tools_list as $toolsRow)
 		{
 			if(!($i%2))
@@ -214,7 +214,7 @@ function show_tools_category($course_tool_category)
 			// These links are only visible by the course manager.
 			unset($lnk);
 			echo '<td width="50%">' . "\n";
-			if(api_is_allowed_to_edit())
+			if($is_allowed_to_edit)
 			{
 				if($toolsRow['visibility'] == '1' && $toolsRow['admin'] !='1' && !strpos($toolsRow['link'],'learnpath_handler.php?learnpath_id'))
 				{
@@ -238,8 +238,9 @@ function show_tools_category($course_tool_category)
 				}
 
 			}
-
-			if( api_is_platform_admin() )
+			
+			// Both checks are necessary as is_platform_admin doesn't take student view into account
+			if( $is_platform_admin && $is_allowed_to_edit) 
 			{
  				if($toolsRow['admin'] !='1')
 				{
@@ -254,9 +255,9 @@ function show_tools_category($course_tool_category)
 				foreach($lnk as $this_link)
 				{
 					if(!$toolsRow['adminlink'])
-						{
+					{
 							echo "<a href=\"" .api_get_self(). "?".api_get_cidreq()."&amp;id=" . $toolsRow["id"] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
-						}
+					}
 				}
 			}
 			else{ echo '&nbsp;&nbsp;&nbsp;&nbsp;';}
@@ -325,40 +326,6 @@ function show_tools_category($course_tool_category)
 */
 if(api_is_allowed_to_edit())
 {
-	/* Work request */
-
-	/*
-	-----------------------------------------------------------
-		Modify home page
-	-----------------------------------------------------------
-	*/
-
-	/*
-	 * display message to confirm that a tool must be hidden from the list of available tools
-	 * (visibility 0,1->2)
-	 */
-
-	/*if($_GET["remove"])
-	{
-		$msgDestroy=get_lang('DelLk').'<br />';
-		$msgDestroy.='<a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;';
-		$msgDestroy.='<a href="'.api_get_self().'?destroy=yes&amp;id='.$_GET["id"].'">'.get_lang('Yes').'</a>';
-
-		Display :: display_normal_message($msgDestroy);
-	}*/
-
-	/*
-	 * Process hiding a tools from available tools.
-	 * visibility=2 are only view by Dokeos Administrator (visibility 0,1->2)
-	 */
-
-	/*elseif($_GET["destroy"])
-	{
-		api_sql_query("UPDATE $tool_table SET visibility='2' WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
-	}*/
-
-
-
  	/*
 	-----------------------------------------------------------
 		HIDE
@@ -419,37 +386,7 @@ if(api_is_platform_admin())
 */
 
 // start of tools for CourseAdmins (teachers/tutors)
-if(api_is_allowed_to_edit() && !api_is_platform_admin())
-{
-	?>
-	<div class="courseadminview">
-		<span class="viewcaption"><font size="3" style="color:#FF9900;"><?php echo get_lang("Authoring") ?></font></span>
-		<table width="100%">
-			<?php show_tools_category(TOOL_AUTHORING);?>
-		</table>
-	</div>
-	<div class="courseadminview">
-		<span class="viewcaption"><font size="3" style="color:#FF9900;"><?php echo get_lang("Interaction") ?></font></span>
-		<table width="100%">
-			<?php show_tools_category(TOOL_INTERACTION) ?>
-		</table>
-	</div>
-	<div class="courseadminview">
-		<span class="viewcaption"><font size="3" style="color:#FF9900;"><?php echo get_lang("Administration") ?></font></span>
-		<table width="100%">
-			<?php show_tools_category(TOOL_ADMIN_PLATEFORM) ?>
-		</table>
-	</div>
-	<?php
-}
-
-/*
------------------------------------------------------------
-	Tools for platform admin only
------------------------------------------------------------
-*/
-
-elseif(api_is_platform_admin() || api_is_allowed_to_edit())
+if(api_is_allowed_to_edit())
 {
 	?>
 	<div class="courseadminview">

@@ -14,7 +14,7 @@ $tbl_session_rel_course_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_COU
 $page=intval($_GET['page']);
 $action=$_REQUEST['action'];
 $sort=in_array($_GET['sort'],array('name','nbr_courses','date_start','date_end'))?$_GET['sort']:'name';
-$idChecked = $_GET['idChecked'];
+$idChecked = $_REQUEST['idChecked'];
 
 
 if($action == 'delete')
@@ -69,7 +69,7 @@ if(isset($_GET['action'])){
 		<input type="text" name="keyword" value="<?php echo $_GET['keyword']; ?>"/>
 	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form>
-<form method="post" action="<?php echo $PHP_SELF; ?>?sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('Veuillez confirmer votre choix.')) return false;">
+<form method="post" action="<?php echo $PHP_SELF; ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('Veuillez confirmer votre choix.')) return false;">
 
 <div align="left">
 

@@ -1139,23 +1139,13 @@ class CourseManager
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
-		if(api_get_setting("use_session_mode")!="true"){
-			$sql_query = "	SELECT *
-								FROM $course_table course
-								LEFT JOIN $course_user_table course_user
-								ON course.`code` = course_user.`course_code`
-								WHERE course.`target_course_code` = '$real_course_code' AND course_user.`user_id` = '$user_id'";
-		}
-		else {
-			$sql_query = "SELECT course.*
-			               FROM $course_table
-							INNER JOIN ".Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." course_user
-								ON course.code = course_user.course_code
-								AND course_user.course_code = '$real_course_code'
-								AND course_user.id_user = '$user_id'
-								AND id_session = '".$_SESSION['id_session']."'";
 
-		}
+		$sql_query = "	SELECT *
+							FROM $course_table course
+							LEFT JOIN $course_user_table course_user
+							ON course.`code` = course_user.`course_code`
+							WHERE course.`target_course_code` = '$real_course_code' AND course_user.`user_id` = '$user_id'";
+		
 		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
 
 		while ($result = mysql_fetch_array($sql_result))

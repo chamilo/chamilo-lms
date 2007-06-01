@@ -118,14 +118,14 @@ if($_POST['formSent'])
 
 
 						$sql = "INSERT INTO $tbl_user SET
-								username = '".addslashes($username)."',
-								lastname = '".addslashes($lastname)."',
-								firstname = '".addslashes($firstname)."',
+								username = '".Database::escape_string($username)."',
+								lastname = '".Database::escape_string($lastname)."',
+								firstname = '".Database::escape_string($firstname)."',
 								password = '".($userPasswordCrypted==true ? md5($password) : $password)."',
-								email = '".addslashes($email)."',
-								official_code = '".addslashes($official_code)."',
-								phone = '".addslashes($phone)."',
-								status = '".addslashes($status)."'";
+								email = '".Database::escape_string($email)."',
+								official_code = '".Database::escape_string($official_code)."',
+								phone = '".Database::escape_string($phone)."',
+								status = '".Database::escape_string($status)."'";
 
 						api_sql_query($sql, __FILE__, __LINE__);
 
@@ -270,7 +270,7 @@ if($_POST['formSent'])
 					{
 						if($i>1)
 							$suffix = ' - '.$i;
-						$sql = 'SELECT 1 FROM '.$tbl_session.' WHERE name="'.addslashes($SessionName.$suffix).'"';
+						$sql = 'SELECT 1 FROM '.$tbl_session.' WHERE name="'.Database::escape_string($SessionName.$suffix).'"';
 						$rs = api_sql_query($sql, __FILE__, __LINE__);
 
 						if(mysql_result($rs,0,0))
@@ -285,7 +285,7 @@ if($_POST['formSent'])
 					}
 
 					$sqlSession = "INSERT IGNORE INTO $tbl_session SET
-									name = '$SessionName',
+									name = '".Database::escape_string($SessionName)."',
 									id_coach = '$CoachId',
 									date_start = '$DateStart',
 									date_end = '$DateEnd'";
@@ -294,7 +294,7 @@ if($_POST['formSent'])
 
 					foreach ($sessionNode->User as $userNode){
 						$username = substr($userNode->nodeValue(),0,20);
-						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".addslashes($username)."'";
+						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".Database::escape_string($username)."'";
 						$rsUser = api_sql_query($sqlUser);
 						list($user_id) = (mysql_fetch_array($rsUser));
 						if(!empty($user_id)){

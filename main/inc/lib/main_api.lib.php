@@ -1164,7 +1164,7 @@ function api_display_tool_view_option()
 		// we have to remove the isStudentView=true from the $sourceurl
 		$sourceurl = str_replace("&isStudentView=true", "", $sourceurl);
 		$sourceurl = str_replace("&isStudentView=false", "", $sourceurl);
-		$output_string .= "<a href='".$sourceurl."&isStudentView=false'>".get_lang("CourseManagerview")."</a>";
+		$output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_top">'.get_lang("CourseManagerview").'</a>';
 	}
 	elseif ($isStudentView == "false" and $_SESSION["studentview"])
 	{
@@ -1173,19 +1173,19 @@ function api_display_tool_view_option()
 		$sourceurl = str_replace("&isStudentView=false", "", $sourceurl);
 		// We are in teacherview here
 		$_SESSION["studentview"] = "teacherview";
-		$output_string .= "<a href='".$sourceurl."&isStudentView=true'>".get_lang("StudentView")."</a>";
+		$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
 	}
 	elseif ($_SESSION["studentview"])
 	{
 		// no switching
 		if ($_SESSION["studentview"] == "teacherview")
 		{
-			$output_string .= "<a href='".$sourceurl."&isStudentView=true'>".get_lang("StudentView")."</a>";
+			$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
 		}
 		if ($_SESSION["studentview"] == "studentenview")
 		{
 			$sourceurl = str_replace("&isStudentView=true", "", $sourceurl);
-			$output_string .= " <a href='".$sourceurl."&isStudentView=false'>".get_lang("CourseManagerview")."</a>";
+			$output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_top">'.get_lang("CourseManagerview").'</a>';
 		}
 	}
 	elseif (!$_SESSION["studentview"])
@@ -1193,7 +1193,7 @@ function api_display_tool_view_option()
 		// initialisation
 		// We are in teacherview here
 		$_SESSION["studentview"] = "teacherview";
-		$output_string .= "<a href='".$sourceurl."isStudentView=true'>".get_lang("StudentView")."</a>";
+		$output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_top">'.get_lang("StudentView").'</a>';
 
 	}
 	if (api_get_setting('show_student_view') == "true")

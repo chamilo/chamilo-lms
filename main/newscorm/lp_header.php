@@ -19,7 +19,14 @@ if(isset($_SESSION['lpobject'])){
 }
 $path_name = htmlspecialchars($_SESSION['oLP']->get_name());
 $path_id = $_SESSION['oLP']->get_id();
-
+// use the flag set in lp_view.php to check if this script has been loaded
+// as a frame of lp_view.php. Otherwise, redirect to lp_controller
+if(!isset($_SESSION['loaded_lp_view']) || $_SESSION['loaded_lp_view']==false)
+{
+	header('location: lp_controller.php?'.api_get_cidreq().'&action=view&item_id='.$path_id);
+}
+//unset the flag as it has been used already
+$_SESSION['loaded_lp_view'] = false;
 // Check if the learnpaths list should be accessible to the user
 $show_link = true;
 if(!api_is_allowed_to_edit()) //if the user has no edit permission (simple user)

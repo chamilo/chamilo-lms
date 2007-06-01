@@ -166,6 +166,8 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	else{
 		$audio_recorder_studentview = false;
 	}
+	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
+	$_SESSION['loaded_lp_view'] = true;
 	?>
 	<frameset rows="130,*">
 		<frame id="header" src="lp_header.php" border="0" frameborder="0" scrolling="no" />

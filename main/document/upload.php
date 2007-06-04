@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 12273 2007-05-03 14:49:21Z elixir_julian $
+<?php // $Id: upload.php 12531 2007-06-04 15:01:45Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -332,9 +332,9 @@ if(get_setting('use_document_title')=='true')
 
 $form->addElement('checkbox','unzip',get_lang('Options'),get_lang('Uncompress'),'onclick="check_unzip()" value="1"');
 
-$form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'value="nothing"');
-$form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'value="overwrite"');
-$form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'value="rename"');
+$form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
+$form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
+$form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
 
 $form->addElement('submit', 'submitDocument', get_lang('Ok'));
 

@@ -195,8 +195,17 @@ if(!empty($_GET['student']))
 	$a_courses = array();
 	while($row = Database :: fetch_array($rs))
 	{
-		$a_courses[] = $row['course_code'];
+		$a_courses[$row['course_code']] = $row['course_code'];
 	}
+	
+	// get the list of sessions where the user is subscribed as student
+	$sql = 'SELECT DISTINCT course_code FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' WHERE id_user='.intval($a_infosUser['user_id']);
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	while($row = Database :: fetch_array($rs))
+	{
+		$a_courses[$row['course_code']] = $row['course_code'];
+	}
+	
 	
 	foreach ($a_courses as $key=>$course_code)
 	{

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12187 2007-04-30 04:28:25Z yannoo $
+* 	@version $Id: index.php 12538 2007-06-05 14:39:19Z elixir_julian $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -218,7 +218,7 @@ if (!$page_included)
 	if (api_get_setting('display_courses_to_anonymous_users') == 'true')
 	{
 		echo '<div class="home_cats">';
-		//display_anonymous_course_list();
+		display_anonymous_course_list();
 		echo '</div>';
 	}
 }
@@ -598,7 +598,7 @@ function display_anonymous_course_list()
 			echo "<hr size=\"1\" noshade=\"noshade\">\n";
 		}
 		echo "<h4 style=\"margin-top: 0px;\">", get_lang("CourseList"), "</h4>\n", "<ul>\n";
-		while ($course = mysql_fetch_array($sql_result_courses))
+		foreach ($course_list AS $course)
 		{
 			echo "<li>\n";
 			echo "<a href=\"".$web_course_path.$course['directory'], "/\">", $course['title'], "</a>";

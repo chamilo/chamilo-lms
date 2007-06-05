@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 12117 2007-04-24 22:06:36Z pcool $
+<?php // $Id: CourseBuilder.class.php 12532 2007-06-05 00:03:08Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -328,7 +328,7 @@ class CourseBuilder
 											$obj->survey_question, $obj->survey_question_comment,
 											$obj->type, $obj->display, $obj->sort,
 											$obj->shared_question_id, $obj->max_value);
-			$sql = 'SELECT * FROM '.$table_opt.' WHERE question_id = '.$obj->question_id;
+			$sql = 'SELECT * FROM '.$table_opt.' WHERE question_id = '."'".$obj->question_id."'";
 			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
 			while ($obj2 = Database::fetch_object($db_result2))
 			{

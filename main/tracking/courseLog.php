@@ -555,7 +555,7 @@ else {
 	}
 	else
 	{
-		echo get_lang('NoUsersInCourse');
+		echo get_lang('NoUsersInCourseTracking');
 	}
 	
 	// send the csv file if asked

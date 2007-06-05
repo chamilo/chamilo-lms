@@ -1,4 +1,4 @@
-<?php // $Id: document_slideshow.inc.php 12466 2007-05-25 21:05:19Z yannoo $
+<?php // $Id: document_slideshow.inc.php 12537 2007-06-05 13:56:55Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -121,12 +121,16 @@ $_SESSION["image_files_only"] = $image_files_only;
 
 function sort_files($table){
 	
-	global $tablename_direction;
+	global $tablename_direction,$accepted_extensions;
 	$temp=array();
 	
 	foreach($table as $file_array){
 		if($file_array['filetype']=='file'){
-			$temp[] = array('file', basename($file_array['path']), $file_array['size'], $file_array['insert_date']);
+			$slideshow_extension=strrchr($file_array['title'],"."); 
+			if (in_array($slideshow_extension,$accepted_extensions))
+			{
+				$temp[] = array('file', basename($file_array['path']), $file_array['size'], $file_array['insert_date']);
+			}
 		}
 	}
 	

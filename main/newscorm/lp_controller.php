@@ -53,7 +53,7 @@ if(!empty($_SESSION['refresh']) && $_SESSION['refresh']==1){
 if($debug>0) error_log('New LP - Passed refresh check',0);
 
 if(!empty($_REQUEST['dialog_box'])){
-	$dialog_box = learnpath::escape_string(urldecode($_REQUEST['dialog_box']));
+	$dialog_box = stripslashes(urldecode($_REQUEST['dialog_box']));
 }
 
 $lp_controller_touched = 1;

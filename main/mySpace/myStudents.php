@@ -779,12 +779,15 @@ if(!empty($_GET['student']))
 			</th>
 		</tr>
 <?php
-		// courses followed by user where we are coach
-		if(!isset($_GET['id_coach'])){
-			$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
-		}
-		else{
-			$a_courses = Tracking :: get_courses_followed_by_coach($_GET['id_coach']);
+	
+		if(!api_is_platform_admin()){
+			// courses followed by user where we are coach
+			if(!isset($_GET['id_coach'])){
+				$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
+			}
+			else{
+				$a_courses = Tracking :: get_courses_followed_by_coach($_GET['id_coach']);
+			}
 		}
 		if(count($a_courses)>0)
 		{

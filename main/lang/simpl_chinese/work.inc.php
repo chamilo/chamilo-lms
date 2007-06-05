@@ -31,5 +31,7 @@ $langCurrentDir = "当前目录";
 $UploadADocument = "上传文档";
 $EditToolOptions = "编辑工具选项";
 $DocumentDeleted = "已删除文件";
+$SendMailBody = "&#21457;&#20214;&#20154;";
 $DirDelete = "删除目录";
+$ValidateChanges = "&#39564;&#35777;&#21464;&#21270;";
 ?>

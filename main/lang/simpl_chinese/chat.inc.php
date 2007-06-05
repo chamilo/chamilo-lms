@@ -33,4 +33,6 @@ $langChat_reset_by = "重设聊天室";
 $OrFile = "或文件";
 $langCallSent = "聊天请求已经发送. 等待对方同意.";
 $langChatDenied = "你的聊天请求已经被对方拒绝.";
+$Send = "&#21457;&#36865;";
+$Connected = "&#24050;&#36830;&#25509;";
 ?>

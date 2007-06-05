@@ -162,4 +162,6 @@ $ViewInvited = "Ansicht erbeten";
 $ViewAnswered = "Ansicht der Leute, denen geantwortet wurde";
 $ViewUnanswered = "Ansicht der Leute, denen geantwortet wurde";
 $DeleteSurveyQuestion = "Soll diese Frage wirklich gelöscht werden? ";
+$ClickHereToAnswerTheSurvey = "Hier klicken, um Umfrage zu beantworten";
+$OrCopyPasteTheFollowingUrl = "oder die folgende URL kopieren: ";
 ?>

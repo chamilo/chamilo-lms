@@ -161,4 +161,6 @@ $ViewInvited = "Poglej povabljene";
 $ViewAnswered = "Poglej odzvane osebe";
 $ViewUnanswered = "Poglej neodzvane osebe";
 $DeleteSurveyQuestion = "Ste preprièani, da želite odstraniti vprašanje ?";
+$ClickHereToAnswerTheSurvey = "Kliknite tule za izpolnjevanje vprašalnika";
+$OrCopyPasteTheFollowingUrl = "ali pa uporabite kopijo najslednjega URL naslova :";
 ?>

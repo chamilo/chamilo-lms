@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$AdminBy  = "Adminisztrálja";
+$AdminBy  = "Felügyeli";
 $AdministrationTools  = "Adminisztráció";
 $State  = "Rendszer állapota";
 $Statistiques  = "Statisztikák";
@@ -583,4 +583,14 @@ $AllowEmailEditorTitle = "Aktív online email szerkeszt&#337;";
 $AllowEmailEditorComment = "Ha ez a lehet&#337;ség aktíválva van, az email címekre rákattintva megnyílik egy online email szerkeszt&#337;.";
 $AddCSVHeader = "CSV fejléc sor hozzáadása?";
 $YesAddCSVHeader = "Igen, adja hozzá a CSV fejléceket <br />Ez a sor tartalmazza a szükséges mez&#337;ket, amikor különböz&#337; Dokeos rendszerekbe akarja importálni adatait.";
+$UploadExtensionsListType = "A dokumentumfeltöltésre alkalmazott sz&#369;rés típusa";
+$Blacklist = "Feketelista";
+$Whitelist = "Fehér lista";
+$UploadExtensionsBlacklist = "Feketelista - beállítások";
+$UploadExtensionsWhitelist = "Fehér lista - beállítások";
+$UploadExtensionsBlacklistComment = "A feketelista használatakor a listán szerepl&#337; kiterjesztéssel rendelkez&#337; állományok eltávolításra (vagy átnevezésre) kerülnek. A megadott kiterjesztéseket a fáljnévben a kiterjesztés el&#337;tti pont (.) nélkül és pontosvessz&#337;vel (;) elválasztva kell megadni, például az alábbiak szerint: exe;com;bat;scr;php. A kiterjesztés nélküli fájlok nem kerülnek törlésre (átnevezésre). Kis- és naygbet&#369;k között a sz&#369;r&#337; nem tesz különbséget.";
+$UploadExtensionsWhitelistComment = "A fehér lista használatakor az összes olyan fájl eltávolításra (vagy átnevezésre) kerül, amelynek kiterjesztése _NEM_ szerepel a listán. A fehér lista alkalmzása általában korlátozóbb, mint a feketelistáé, de ez utóbbinál biztonságosabbnak tekintett sz&#369;rési módszer. A kiterjesztéseket a fájlnévben szerepl&#337; pont (.) nélkül és pontosvessz&#337;vel (;) elválasztva kell megadni, például az alábbi formában: htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. A kiterjesztés nélküli állományok nem kerülnek sz&#369;résre. Kis- és nagybet&#369;k között sz&#369;réskor nincs különbség.";
+$UploadExtensionsSkip = "Sz&#369;rés típusa (átugor/átnevez)";
+$Remove = "Eltávolít";
+$Rename = "Átnevez";
 ?>

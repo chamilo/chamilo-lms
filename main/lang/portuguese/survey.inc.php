@@ -161,4 +161,6 @@ $ViewInvited = "Ver convidados";
 $ViewAnswered = "Ver pessoas que responderam";
 $ViewUnanswered = "Ver pessoas que não responderam";
 $DeleteSurveyQuestion = "Tem a certeza que deseja apagar a questão?";
+$ClickHereToAnswerTheSurvey = "Clicar aqui para responder ao questionário";
+$OrCopyPasteTheFollowingUrl = "ou copiar e colar o seguinte endereço : ";
 ?>

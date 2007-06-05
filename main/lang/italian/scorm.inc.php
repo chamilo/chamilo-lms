@@ -47,4 +47,6 @@ $ContentProximity = "Stato del contenuto";
 $UploadLocalFileFromGarbageDir = "Carica un file locale dalla directory principale o garbage";
 $ThisItemIsNotExportable = "L\'elemento non è per ora compatibile con lo standard SCORM, quindi non è esportabile.";
 $MoveCurrentChapter = "Sposta il capitolo";
+$UnknownPackageFormat = "Il formato del file non è stato riconosciuto. Assicurati che sia ben formato (in particolare che il file ZIP non abbia caratteristiche proprietarie o che il file non sia troppo lungo). Se non sei sicuro, comprimi il file ZIP con modalità di base.";
+$Attempt = "Tentativo";
 ?>

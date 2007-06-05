@@ -425,4 +425,8 @@ $SessionFuture = "Non iniziata";
 $DateFormatLongWithoutDay = "%d %B %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Cartella non valida: crea una cartella di nome <i>images</i > nella sezione documenti, in modo da permettere alle immagini di essere caricate al suo interno";
 $UsersConnectedToMySessions = "Mostra tutti gli utenti collegati alle mie sessioni";
+$DearUser = "Gentile utente";
+$YourRegistrationData = "i tuoi dati di registrazione";
+$ResetLink = "Clicca per reinizializzare la password";
+$VisibilityChanged = "La visibilità è stata cambiata";
 ?>

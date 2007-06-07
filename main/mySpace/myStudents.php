@@ -74,8 +74,13 @@ $csv_content = array();
  	}
  }
  
- api_block_anonymous_users();
- Display :: display_header($nameTools);
+api_block_anonymous_users();
+
+if(empty($_SESSION['is_allowedCreateCourse']) && !api_is_coach()){
+	api_not_allowed(true);
+}
+
+Display :: display_header($nameTools);
  
  /*
   * ======================================================================================
@@ -475,7 +480,6 @@ if(!empty($_GET['student']))
 					$progress = learnpath :: get_db_progress($a_learnpath['id'],$student_id, '%',$a_infosCours['db_name']);
 					
 					
-					
 					// calculates time
 					$sql = 'SELECT SUM(total_time) 
 								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
@@ -485,6 +489,7 @@ if(!empty($_GET['student']))
 									AND view.user_id = '.intval($_GET['student']);
 					$rs = api_sql_query($sql, __FILE__, __LINE__);
 					$total_time = mysql_result($rs, 0, 0);
+					
 					
 					// calculates last connection time
 					$sql = 'SELECT MAX(start_time) 
@@ -502,21 +507,51 @@ if(!empty($_GET['student']))
 							FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_item.' AS lp_item
 							WHERE lp_id='.$a_learnpath['id'].'
 							AND item_type="quiz"';
+
 					$rsItems = api_sql_query($sql, __FILE__, __LINE__);
+					
+					//We get the last view id of this LP
+					$sql='SELECT max(id) as id FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
+					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
+					$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
+					
 					$total_score = $total_weighting = 0;
 					while($item = Database :: fetch_array($rsItems, 'ASSOC'))
 					{
 						$sql = 'SELECT score as student_score 
-								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' as lp_view
-								LEFT JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' as lp_view_item
-									ON lp_view.id = lp_view_item.lp_view_id
-									AND lp_view_item.lp_item_id = '.$item['item_id'].'
-								WHERE lp_view.user_id = '.intval($_GET['student']).'
-								AND '.$a_learnpath['id'];
+								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' as lp_view_item
+								WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
+								';
+
 						$rsScores = api_sql_query($sql, __FILE__, __LINE__);
 						$total_score += mysql_result($rsScores, 0, 0);
 						$total_weighting += $item['max_score'];
 					}
+					
+					$sql = 'SELECT id, max_score 
+							FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_item.' AS lp_item
+							WHERE lp_id='.$a_learnpath['id'].'
+							AND item_type="sco" LIMIT 1';
+					
+					$rs_lp_item_id_scorm = api_sql_query($sql, __FILE__, __LINE__);
+					
+					if(mysql_num_rows($rs_lp_item_id_scorm)>0){
+						$lp_item_id = mysql_result($rs_lp_item_id_scorm,0,'id');
+						$lp_item__max_score = mysql_result($rs_lp_item_id_scorm,0,'max_score');	
+						$total_weighting+=$lp_item__max_score;
+						
+						//We get the last view id of this LP
+						$sql='SELECT max(id) as id FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
+						$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
+						$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
+						
+						$sql='SELECT SUM(score) as score FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
+						$rs_score = api_sql_query($sql, __FILE__, __LINE__);
+						$lp_scorm_score = mysql_result($rs_score,0,'score');
+						
+						$total_score+=$lp_scorm_score;
+					}
+
 					$score = round($total_score / $total_weighting * 100,2);
 					
 					if($i%2==0){
@@ -539,7 +574,7 @@ if(!empty($_GET['student']))
 						<?php echo api_time_to_hms($total_time) ?>
 						</td>
 						<td align="right">
-							<?php echo $score ?>
+							<?php echo $score.'%' ?>
 						</td>
 						<td align="right">
 							<?php echo $progress ?>

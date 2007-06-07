@@ -41,6 +41,7 @@ include('../../../../../inc/global.inc.php');
 		  <?php 
 		  
 		  $sType = "Flash";
+		  $is_in_admin = true;
 		  include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
 		  
 		  ?>

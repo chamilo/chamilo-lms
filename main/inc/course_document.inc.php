@@ -9,7 +9,10 @@ include_once('global.inc.php');
 // name of the language file that needs to be included 
 
 include(api_get_path(SYS_CODE_PATH).'document/document.inc.php');
-api_protect_course_script();
+
+if(!$is_in_admin){
+	api_protect_course_script();
+}
 
 //session
 if(isset($_GET['id_session']))

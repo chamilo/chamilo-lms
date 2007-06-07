@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 12263 2007-05-03 13:34:40Z elixir_julian $
+<?php //$Id: announcements.php 12566 2007-06-07 14:20:42Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1400,7 +1400,7 @@ if ($message == true)
 				echo   "<br />";
 
 
-				if(api_is_allowed_to_edit())
+				if(api_is_allowed_to_edit() || api_get_course_setting('allow_user_edit_announcement'))
 				{
 					/*=====================================================================
 												SHOW MOD/DEL/VIS FUNCTIONS

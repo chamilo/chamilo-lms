@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 12542 2007-06-06 08:17:24Z elixir_inter $
+* 	@version $Id: exercise_result.php 12560 2007-06-07 08:22:16Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -209,11 +209,11 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		echo $answer; ?>
 	</td>
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
- 		<?php
- 		$answerComment=api_parse_tex($answerComment);
-		if($studentChoice || $answerType == MULTIPLE_ANSWER) echo nl2br(make_clickable($answerComment)); else echo '&nbsp;'; ?>
- 	</td>
- 	</tr>
+		<?php
+		$answerComment=api_parse_tex($answerComment);
+		if($studentChoice) echo nl2br(make_clickable($answerComment)); else echo '&nbsp;'; ?>
+	</td>
+	</tr>
 	<?php
 }
 
@@ -467,9 +467,11 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				case MULTIPLE_ANSWER :
 
 										$studentChoice=$choice[$answerId];
-										if(intval($studentChoice) == intval($answerCorrect)) {
- 											$questionScore+=$answerWeighting;
- 											$totalScore+=$answerWeighting;
+
+										if($studentChoice)
+										{
+											$questionScore+=$answerWeighting;
+											$totalScore+=$answerWeighting;
 										}
 
 										break;

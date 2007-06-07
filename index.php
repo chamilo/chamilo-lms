@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12538 2007-06-05 14:39:19Z elixir_julian $
+* 	@version $Id: index.php 12565 2007-06-07 13:52:17Z elixir_julian $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -193,6 +193,17 @@ if (!empty ($_GET['include']) && !strstr($_GET['include'], '/') && !strstr($_GET
 }
 else
 {
+	
+	if(!empty($_SESSION['user_language_choice'])){
+		$user_selected_language=$_SESSION['user_language_choice'];
+	}
+	elseif(!empty($_SESSION['_user']['language'])){
+		$user_selected_language=$_SESSION['_user']['language'];
+	}
+	else{
+		$user_selected_language=get_setting('platformLanguage');
+	}
+	
 	if(!file_exists('home/home_news_'.$user_selected_language.'.html'))
 	{
 		$home_top_temp=file('home/home_top.html');
@@ -202,7 +213,12 @@ else
 	}
 	else
 	{
-		include('home/home_top_'.$user_selected_language.'.html');
+		if(file_exists('home/home_top_'.$user_selected_language.'.html')){
+			include('home/home_top_'.$user_selected_language.'.html');
+		}
+		else{
+			include('home/home_top.html');
+		}
 	}
 }
 

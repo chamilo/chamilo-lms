@@ -351,7 +351,7 @@ Display::display_introduction_section(TOOL_USER, $is_allowed);
  */
 function get_number_of_users()
 {
-	$user_table = Database::get_main_table(TABLE_MAIN_USER);
+	/*$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	if(api_get_setting('use_session_mode')!="true"){
 		$sql = "SELECT COUNT(u.user_id) AS number_of_users FROM $user_table u,$course_user_table cu WHERE u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
@@ -376,7 +376,25 @@ function get_number_of_users()
 	}
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$result = mysql_fetch_object($res);
-	return $result->number_of_users;
+	return $result->number_of_users;*/
+	$counter=0;
+
+	if(!empty($_SESSION["id_session"])){
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+	}
+	else{
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
+	}
+
+	foreach($a_course_users as $user_id=>$o_course_user){
+
+		if( (isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'],$o_course_user['lastname'],$o_course_user['username'],$o_course_user['official_code'],$_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])){
+			$counter++;			
+		}
+	}
+
+	return $counter;
+	
 }
 
 function search_keyword($firstname,$lastname,$username,$official_code,$keyword){

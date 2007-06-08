@@ -1798,30 +1798,24 @@ class learnpath {
     }
 
     /**
-
      * Gets item_id for the next element
-
      * @return	integer	Previous item (DB) ID
-
      */
-
-     function get_previous_item_id()
-
-     {
-
+    function get_previous_item_id()
+    {
     	$new_index = $this->get_previous_index();
-
     	return $this->ordered_items[$new_index];
-
-     }
+    }
 
     /**
      * Gets the progress value from the progress_db attribute
      * @return	integer	Current progress value
      */
-    function get_progress(){
+    function get_progress()
+    {
 		if($this->debug>0){error_log('New LP - In learnpath::get_progress()',0);}
-    	if(!empty($this->progress_db)){
+    	if(!empty($this->progress_db))
+    	{
     		return $this->progress_db;
     	}
     	return 0;
@@ -1833,23 +1827,29 @@ class learnpath {
      * @param	string	Mode of display ('%','abs' or 'both')
      * @return	integer	Current progress value as found in the database
      */
-   function get_db_progress($lp_id,$user_id,$mode='%', $course_db=''){
+	function get_db_progress($lp_id,$user_id,$mode='%', $course_db='')
+	{
 		//if($this->debug>0){error_log('New LP - In learnpath::get_db_progress()',0);}
     	$table = Database::get_course_table('lp_view', $course_db);
     	$sql = "SELECT * FROM $table WHERE lp_id = $lp_id AND user_id = $user_id";
     	$res = api_sql_query($sql,__FILE__,__LINE__);
 		$view_id = 0;
-    	if(Database::num_rows($res)>0){
+    	if(Database::num_rows($res)>0)
+    	{
     		$row = Database::fetch_array($res);
     		$progress = $row['progress'];
     		$view_id = $row['id'];
     	}
-    	if(!$progress){
+    	if(!$progress)
+    	{
     		$progress = '0';
     	}
-    	if($mode == '%'){
+    	if($mode == '%')
+    	{
     			return $progress.'%';
-    	}else{
+    	}
+    	else
+    	{
     		//get the number of items completed and the number of items total
     		$tbl = Database::get_course_table('lp_item', $course_db);
     		$sql = "SELECT count(*) FROM $tbl WHERE lp_id = ".$lp_id." 
@@ -1872,12 +1872,14 @@ class learnpath {
     		$res = api_sql_query($sql, __FILE__, __LINE__);
     		$row = Database::fetch_array($res);
     		$completed = $row[0];
-    		if($mode == 'abs'){
+    		if($mode == 'abs')
+    		{
     			return $completed.'/'.$total;
     		}
     		elseif($mode == 'both')
     		{
-    			if($progress<($completed/($total?$total:1))){
+    			if($progress<($completed/($total?$total:1)))
+    			{
     				$progress = number_format(($completed/($total?$total:1))*100,0);
     			}
     			return $progress.'% ('.$completed.'/'.$total.')';
@@ -1896,7 +1898,8 @@ class learnpath {
     function get_progress_bar($mode='',$percentage=-1,$text_add='')
     {
 		//if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
-    	if(is_object($this) && ($percentage=='-1' OR $text_add=='')){
+    	if(is_object($this) && ($percentage=='-1' OR $text_add==''))
+    	{
     		list ($percentage, $text_add) = $this->get_progress_bar_text($mode);
     	}
     	$text = $percentage.$text_add;
@@ -1939,8 +1942,14 @@ class learnpath {
     		$i = $total_items;
     	}
     	if($mode == '%'){
-	    	$percentage = ((float)$i/(float)$total_items)*100;
-	    	$percentage = number_format($percentage,0);
+    		if($total_items>0){
+		    	$percentage = ((float)$i/(float)$total_items)*100;
+    		}
+    		else
+    		{
+    			$percentage = 0;
+    		}
+		    $percentage = number_format($percentage,0);
 	    	$text = '%';
     	}elseif($mode == 'abs'){
 	    	$percentage = $i;

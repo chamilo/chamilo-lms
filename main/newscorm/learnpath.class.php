@@ -2257,7 +2257,7 @@ class learnpath {
     	//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
     	$html .= '<div class="inner_lp_toc">'."\n" ;
     	if(api_is_allowed_to_edit()){
-    		$html.="<a href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding)."</a>&#124;<a style='font-size: 11px' href='lp_controller.php?cidReq=".$_SESSION['_cid']."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding)."</a>&#124;".mb_convert_encoding(get_lang("Display"),$this->encoding)."<br><br>";
+    		$html.="<a href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."' style='font-size: 11px' target='_parent'>".mb_convert_encoding(get_lang("Build"),$this->encoding)."</a>&#124;<a style='font-size: 11px' href='lp_controller.php?".api_get_cidreq()."&action=admin_view&lp_id=".$this->lp_id."' target='_parent'>".mb_convert_encoding(get_lang("BasicOverview"),$this->encoding)."</a>&#124;".mb_convert_encoding(get_lang("Display"),$this->encoding)."<br/><br/>";
     	}
     	//		" onchange=\"javascript:document.getElementById('toc_$parent').focus();\">\n";
 		require_once('resourcelinker.inc.php');
@@ -2306,7 +2306,7 @@ class learnpath {
     		if(empty($title))$title = '-';
     		
     		if($item['type']!='dokeos_chapter' and $item['type']!='dir' AND $item['type']!='dokeos_module'){
-					//$html .= "<a href='lp_controller.php?".api_get_cidReq()."&action=content&lp_id=".$this->get_id()."&item_id=".$item['id']."' target='lp_content_frame_name'>".$title."</a>" ;
+					//$html .= "<a href='lp_controller.php?".api_get_cidreq()."&action=content&lp_id=".$this->get_id()."&item_id=".$item['id']."' target='lp_content_frame_name'>".$title."</a>" ;
 					$url = $this->get_link('http',$item['id']);
 					//$html .= '<a href="'.$url.'" target="content_name" onclick="top.load_item('.$item['id'].',\''.$url.'\');">'.$title.'</a>' ;
 					//$html .= '<a href="" onclick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;

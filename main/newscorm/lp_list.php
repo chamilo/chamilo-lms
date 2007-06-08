@@ -147,7 +147,7 @@ if ($curDirPath)
 
 echo	'<tr>';
 echo	'<th>'.get_lang("Name").'</th>'."\n" .
-		'<th>'.get_lang("progress")."</th>\n";
+		'<th>'.get_lang("Progress")."</th>\n";
 if (api_is_allowed_to_edit())
 {
   echo "<th>",get_lang("Description"),"</th>\n" .

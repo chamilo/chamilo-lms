@@ -484,11 +484,9 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 	// the content of the sortable table = the received files
 	foreach ( $dropbox_person -> sentWork as $dropbox_file)
 	{
-		/*echo '<pre>';
-		print_r($dropbox_file);
-		echo '</pre>';	*/
 
 		$dropbox_file_data=array();
+
 		if ($view_dropbox_category_sent==$dropbox_file->category)
 		{
 			$dropbox_file_data[]=display_file_checkbox($dropbox_file->id, 'sent'); ;
@@ -518,9 +516,7 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 			$dropbox_file_data[]=$action_icons;
 			$action_icons='';
 			$dropbox_data_sent[]=$dropbox_file_data;
-			//echo '<pre>';
-			//print_r($dropbox_data_sent);
-			//echo '</pre>';
+
 		}
 	}
 

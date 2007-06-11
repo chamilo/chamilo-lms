@@ -531,6 +531,27 @@ function display_add_form()
 				<?php echo dropbox_lang("sendTo")?>:
 			</td>
 			<td valign="top"  align="left">
+				
+	<?php
+	
+	//list of all users in this course and all virtual courses combined with it
+	if(isset($_SESSION['id_session'])){
+		$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'],true,$_SESSION['id_session']);
+		$complete_user_list2 = CourseManager :: get_coach_list_from_course_code($course_info['code'],$_SESSION['id_session']);
+		$complete_user_list_for_dropbox = array_merge($complete_user_list_for_dropbox,$complete_user_list2);
+	}
+	else{
+		$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code']);
+	}
+
+	foreach ($complete_user_list_for_dropbox as $k => $e)
+	    $complete_user_list_for_dropbox[$k] = $e +
+	        array('lastcommafirst' => $e['lastname'] . ', ' . $e['firstname']);
+
+	$complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
+
+	?>
+				
 				<select name="recipients[]" size="
 	<?php
 		if ( $dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
@@ -541,17 +562,10 @@ function display_add_form()
 		{
 			echo 6;
 		}
+
+	
 	?>" multiple style="width: 350px;">
 	<?php
-
-	//list of all users in this course and all virtual courses combined with it
-	$complete_user_list_for_dropbox = CourseManager::get_real_and_linked_user_list($course_info['code'], true, $_SESSION['id_session']);
-
-	foreach ($complete_user_list_for_dropbox as $k => $e)
-	    $complete_user_list_for_dropbox[$k] = $e +
-	        array('lastcommafirst' => $e['lastname'] . ', ' . $e['firstname']);
-
-	$complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
 
 	/*
 		Create the options inside the select box:

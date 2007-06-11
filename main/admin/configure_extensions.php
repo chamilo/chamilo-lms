@@ -385,31 +385,57 @@ Display::display_header($nameTool);
 			<table width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td align="center">
-						<?php
-						$language=$_SESSION['_user']['language'];
-						$language='';
-						switch($language){
-							case '':
-								$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-								$platform_language=api_get_setting("platformLanguage");
-								$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='$platform_language'";
-								$result_sql=api_sql_query($sql);
-								$isocode_language=mysql_result($result_sql,0,0);
-								break;
-							case 'english': $isocode_language='en';break;
-							case 'french': $isocode_language='fr';break;
-							case 'dutch': $isocode_language='nl';break;
-							case 'german': $isocode_language='de';break;
-							case 'danish': $isocode_language='dk';break;
-							case 'finnish': $isocode_language='fi';break;
-							case 'italian': $isocode_language='it';break;
-							case 'norwegian': $isocode_language='no';break;
-							case 'portugese': $isocode_language='pt';break;
-							case 'spanish': $isocode_language='es';break;
-							case 'swedish': $isocode_language='se';break;
-						}
-						?>
-						<iframe frameborder="0" width="780" height="480" src="http://www.ephorus.com/dokeos_<?php echo $isocode_language; ?>.html"></iframe>
+						<TABLE style="WIDTH: 750px" cellSpacing="0" cellPadding="0" align="middle" border="0">
+						<TBODY>
+							<TR>
+								<TD>
+									<TABLE style="WIDTH: 475px" cellSpacing="0" cellPadding="0" border="0">
+									<TBODY>
+										<TR>
+											<TD>
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+												<A title="http://www.ephorus.com/dokeos_activate.html" href="http://www.ephorus.com/dokeos_activate.html" target="_blank">
+												<IMG style="WIDTH: 235px; HEIGHT: 78px" height="66" alt="Ephorus" hspace="3" src="<?php echo api_get_path(WEB_IMG_PATH).'ephorus.gif' ?>" width="213" vspace="1" border="0">
+												</A>
+											</TD>
+											<TD>
+												<P align=center>
+													<FONT color="#669966" size="3"><?php echo get_lang('EphorusLeadersInAntiPlagiarism') ?></FONT>
+												</P>
+											</TD>
+										</TR>
+									</TBODY>
+									</TABLE>
+								</TD>
+							</TR>
+							<TR>
+								<TD>
+									<P>
+										<TABLE style="WIDTH: 85%" cellSpacing="0" cellPadding="0" border="0">
+										<TBODY>
+											<TR>
+												<TD width="50">
+													&nbsp; 
+												</TD>
+												<TD>
+													<P>
+														<?php echo get_lang('EphorusDescription') ?>
+													</P>
+													<P>
+														<A title="http://www.ephorus.nl/demo_account_en.html" href="http://www.ephorus.nl/demo_account_en.html" target="_blank"><?php echo get_lang('EphorusClickHereForADemoAccount') ?></A>
+													</P>
+													<P>
+														<A title="http://www.ephorus.nl:80/dokeos_activate.html" href="http://www.ephorus.nl/dokeos_activate.html" target="_blank"><?php echo get_lang('EphorusClickHereForInformationsAndPrices') ?></A>.
+													</P>
+												</TD>
+											</TR>
+										</TBODY>
+										</TABLE>
+									</P>
+								</TD>
+							</TR>
+						</TBODY>
+						</TABLE>						
                     </td>
 				</tr>
 			</table>

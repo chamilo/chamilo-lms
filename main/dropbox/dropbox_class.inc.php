@@ -221,12 +221,9 @@ class Dropbox_Work {
 		settype($id, 'integer') or die(dropbox_lang("generalError")." (code 205)"); //set $id to correct type
 
 		// get the data from DB
-		$sql="SELECT file.uploader_id, file.filename, file.filesize, file.title, file.description, file.author, file.upload_date, file.last_upload_date, post.cat_id
-				FROM ".dropbox_cnf("tbl_file")." AS file
-				INNER JOIN ".dropbox_cnf("tbl_post")." AS post
-					ON post.file_id = file.id
-					AND post.dest_user_id = ".intval($_user['user_id'])."
-				WHERE id=".intval($id);
+		$sql="SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
+				FROM ".dropbox_cnf("tbl_file")."
+				WHERE id='".addslashes($id)."'";
         $result = api_sql_query($sql,__FILE__,__LINE__);
 		$res = mysql_fetch_array($result,MYSQL_ASSOC);
 		
@@ -459,7 +456,7 @@ class Dropbox_Person
 		$person_tbl = Database::get_course_table();
 		$file_tbl = Database::get_course_table();
 		// find all entries where this person is the recipient
-		$sql = "SELECT r.file_id
+		$sql = "SELECT r.file_id, r.cat_id
 				FROM 
 					".dropbox_cnf("tbl_post")." r
 					, ".dropbox_cnf("tbl_person")." p
@@ -468,7 +465,9 @@ class Dropbox_Person
 					AND r.file_id = p.file_id";
         $result = api_sql_query($sql,__FILE__,__LINE__);
 		while ($res = mysql_fetch_array($result)) {
-			$this->receivedWork[] = new Dropbox_Work($res["file_id"]);
+			$temp = new Dropbox_Work($res["file_id"]);
+			$temp -> category = $res['cat_id'];
+			$this->receivedWork[] = $temp;
 		}	
 
 		// find all entries where this person is the sender/uploader

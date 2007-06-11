@@ -164,13 +164,20 @@ $form->addElement('radio', 'announcements_state', null, get_lang('Public'), TOOL
 $form->addElement('radio', 'announcements_state', null, get_lang('Private'), TOOL_PRIVATE);
 
 // getting all the users
-$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
+if(isset($_SESSION['id_session'])){
+	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'],true,$_SESSION['id_session']);
+	$complete_user_list2 = CourseManager :: get_coach_list_from_course_code($_course['id'],$_SESSION['id_session']);
+	$complete_user_list = array_merge($complete_user_list,$complete_user_list2);
+}
+else{
+	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
+}
 $possible_users = array ();
 foreach ($complete_user_list as $index => $user)
 {
 	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
 }
-
+//print_r($complete_user_list2);
 // Group tutors
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
 $selected_users = array ();

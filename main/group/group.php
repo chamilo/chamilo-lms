@@ -301,11 +301,15 @@ foreach ($group_cats as $index => $category)
 			$row[] = ($this_group['maximum_number_of_members'] == MEMBER_PER_GROUP_NO_LIMIT ? '-' : $this_group['maximum_number_of_members']);
 			// tutor name
 			$tutor_info = '';
-			if($this_group['id_tutor'] != 0)
+
+			if(count($tutorsids_of_group)>0)
 			{
-				$tutor = api_get_user_info($this_group['id_tutor']);
-				$tutor_info = Display::encrypted_mailto_link($tutor['mail'],$tutor['firstName'].' '.$tutor['lastName']);
+				foreach($tutorsids_of_group as $tutor_id){
+					$tutor = api_get_user_info($tutor_id);
+					$tutor_info .= Display::encrypted_mailto_link($tutor['mail'],$tutor['firstName'].' '.$tutor['lastName']).', ';
+				}
 			}
+			$tutor_info = substr($tutor_info,0,strlen($tutor_info)-2);
 			$row[] = $tutor_info;
 			// edit-links
 			if (api_is_allowed_to_edit())

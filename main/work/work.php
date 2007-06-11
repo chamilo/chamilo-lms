@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 12425 2007-05-16 12:49:17Z elixir_julian $
+*  	@version $Id: work.php 12582 2007-06-11 14:55:14Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -123,7 +123,7 @@ $iprop_table 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
 $tool_name 			= get_lang('StudentPublications');
 $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
-$is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true);
+$is_course_member = $is_courseMember || api_is_platform_admin();
 $currentCourseRepositorySys =  api_get_path(SYS_COURSE_PATH) . $_course["path"]."/";
 $currentCourseRepositoryWeb =  api_get_path(WEB_COURSE_PATH) . $_course["path"]."/";
 $currentUserFirstName       = $_user['firstName'];

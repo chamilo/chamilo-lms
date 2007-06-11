@@ -221,9 +221,12 @@ class Dropbox_Work {
 		settype($id, 'integer') or die(dropbox_lang("generalError")." (code 205)"); //set $id to correct type
 
 		// get the data from DB
-		$sql="SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
-				FROM ".dropbox_cnf("tbl_file")."
-				WHERE id='".addslashes($id)."'";
+		$sql="SELECT file.uploader_id, file.filename, file.filesize, file.title, file.description, file.author, file.upload_date, file.last_upload_date, post.cat_id
+				FROM ".dropbox_cnf("tbl_file")." AS file
+				INNER JOIN ".dropbox_cnf("tbl_post")." AS post
+					ON post.file_id = file.id
+					AND post.dest_user_id = ".intval($_user['user_id'])."
+				WHERE id=".intval($id);
         $result = api_sql_query($sql,__FILE__,__LINE__);
 		$res = mysql_fetch_array($result,MYSQL_ASSOC);
 		

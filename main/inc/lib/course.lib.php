@@ -1040,11 +1040,46 @@ class CourseManager
 				$user_infos["status"] = $user["status"];
 				$user_infos["role"] = $user["role"];
 				$user_infos["tutor_id"] = $user["tutor_id"];
-				$a_users[$user['user_id']] = $user_infos; 
+				$a_users[$user['user_id']] = $user_infos;
 			}
 		}
 		
 		return $a_users;
+	}
+	
+	
+	function get_coach_list_from_course_code($course_code,$session_id){
+		
+		$table_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$table_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+		
+		$a_users=array();
+		
+		//We get the coach for the given course in a given session
+		$sql = 'SELECT id_coach FROM '.$table_session_course.' WHERE id_session="'.$session_id.'" AND course_code="'.$course_code.'"';
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		while($user = mysql_fetch_array($rs))
+		{
+			$user_infos = Database :: get_user_info_from_id($user['id_coach']);
+			$user_infos["status"] = $user["status"];
+			$user_infos["role"] = $user["role"];
+			$user_infos["tutor_id"] = $user["tutor_id"];
+			$a_users[$user['id_coach']] = $user_infos;
+		}
+		
+		//We get the session coach
+		$sql = 'SELECT id_coach FROM '.$table_session.' WHERE id="'.$session_id.'"';
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$user_infos=array();
+		$session_id_coach = mysql_result($rs,0,'id_coach');
+		$user_infos = Database :: get_user_info_from_id($session_id_coach);
+		$user_infos["status"] = $user["status"];
+		$user_infos["role"] = $user["role"];
+		$user_infos["tutor_id"] = $user["tutor_id"];
+		$a_users[$session_id_coach] = $user_infos;
+		
+		return $a_users;
+		
 	}
 	
 	

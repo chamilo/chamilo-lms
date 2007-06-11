@@ -892,6 +892,15 @@ class CourseManager
 				{
 					return true;
 				}
+				else{
+					$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE).'
+						WHERE id_coach = '.$user_id.' AND course_code="'.$course_code.'"';
+					$rs = api_sql_query($sql, __FILE__, __LINE__);
+					if(mysql_num_rows($rs)>0)
+					{
+						return true;
+					}
+				}
 			}
 			else
 				return false; //user is not registered in course
@@ -1027,7 +1036,7 @@ class CourseManager
 			}
 		}
 		
-		
+
 		if($session_id == 0)
 		{
 			// users directly subscribed to the course

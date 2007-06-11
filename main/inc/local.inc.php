@@ -169,7 +169,7 @@ $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : $c
 
 $cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
 // $cidReset can be set in URL-parameter
-$cidReset = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
+$cidReset = isset($_GET["cidReq"])&&$_GET["cidReq"]!=$_SESSION['_cid'] ? Database::escape_string($_GET["cidReq"]) : $cidReset;
 
 $gidReset = isset($gidReset) ? $gidReset : '';
 // $gidReset can be set in URL-parameter

@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 12263 2007-05-03 13:34:40Z elixir_julian $
+* 	@version $Id: reporting.php 12586 2007-06-12 13:39:57Z elixir_julian $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -740,12 +740,18 @@ function display_complete_report()
  */
 function display_complete_report_row($possible_answers, $answers_of_user, $user)
 {
+	$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 	echo '<tr>';
 	echo '		<th><a href="'.api_get_self().'?action=userreport&survey_id='.$_GET['survey_id'].'&user='.$user.'">'.$user.'</a></th>'; // the user column
 
 
 	foreach ($possible_answers as $question_id=>$possible_option)
 	{
+			
+		$sql='SELECT type FROM '.$table_survey_question.' WHERE question_id="'.$question_id.'"';
+		$result=api_sql_query($sql);
+		$question_type=mysql_result($result,0,0);
+		
 		foreach ($possible_option as $option_id=>$value)
 		{
 			echo '<td align="center">';
@@ -759,6 +765,10 @@ function display_complete_report_row($possible_answers, $answers_of_user, $user)
 				{
 					echo 'v';
 				}
+			}
+			elseif($question_type=='open'){
+				$a_answer = $answers_of_user[$question_id];
+				echo key($a_answer);
 			}
 			echo '</td>';
 		}

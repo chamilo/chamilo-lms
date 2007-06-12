@@ -47,7 +47,7 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array('registration','admin');
+$language_file = array('registration','admin','userInfo');
 require_once ("../inc/global.inc.php");
 $this_section = SECTION_COURSES;
 /*
@@ -520,7 +520,7 @@ $header_nr = 0;
 $table->set_header($header_nr++, get_lang('OfficialCode'));
 $table->set_header($header_nr++, get_lang('FirstName'));
 $table->set_header($header_nr++, get_lang('LastName'));
-$table->set_header($header_nr++, get_lang('Role'));
+$table->set_header($header_nr++, get_lang('Description'));
 $table->set_header($header_nr++, get_lang('Group'),false);
  if( api_is_allowed_to_edit())
 {

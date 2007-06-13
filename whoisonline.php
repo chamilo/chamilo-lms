@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 12187 2007-04-30 04:28:25Z yannoo $
+<?php // $Id: whoisonline.php 12589 2007-06-13 16:22:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -266,6 +266,7 @@ if ((get_setting('showonline','world') == 'true' AND !$_user['user_id']) OR (get
 }
 else
 {
+	Display::display_header(get_lang('UsersOnLineList'));
 	Display::display_error_message(get_lang('AccessNotAllowed'));
 }
 $referer = empty($_GET['referer'])?'index.php':htmlentities(strip_tags($_GET['referer']));

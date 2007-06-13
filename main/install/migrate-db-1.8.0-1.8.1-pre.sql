@@ -35,6 +35,7 @@ ALTER TABLE track_e_course_access ADD INDEX (course_code);
 -- xxUSERxx
 
 -- xxCOURSExx
+CREATE TABLE IF NOT EXISTS survey_answer (answer_id int unsigned NOT NULL auto_increment, survey_id int unsigned NOT NULL, question_id int NOT NULL, option_id TEXT NOT NULL, value int unsigned not null, user varchar(250) NOT NULL, PRIMARY KEY  (answer_id) );
 ALTER TABLE lp_view ADD INDEX (lp_id);
 ALTER TABLE lp_view ADD INDEX (user_id);
 ALTER TABLE lp_item ADD INDEX (lp_id);

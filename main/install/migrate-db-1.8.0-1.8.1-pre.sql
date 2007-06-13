@@ -21,7 +21,7 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'blacklist', 'Blacklist');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'whitelist', 'Whitelist');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'true', 'Remove');
-INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'false', 'Rename');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'false', 'Rename'); 
 
 -- xxSTATSxx
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);
@@ -36,6 +36,7 @@ ALTER TABLE track_e_course_access ADD INDEX (course_code);
 
 -- xxCOURSExx
 CREATE TABLE IF NOT EXISTS survey_answer (answer_id int unsigned NOT NULL auto_increment, survey_id int unsigned NOT NULL, question_id int NOT NULL, option_id TEXT NOT NULL, value int unsigned not null, user varchar(250) NOT NULL, PRIMARY KEY  (answer_id) );
+
 ALTER TABLE lp_view ADD INDEX (lp_id);
 ALTER TABLE lp_view ADD INDEX (user_id);
 ALTER TABLE lp_item ADD INDEX (lp_id);

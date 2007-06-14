@@ -49,7 +49,6 @@ $langFieldsRequ = "Všechny polí&#269;ka jsou požadována";
 $langEx = "nap&#345;. <i>Inova&#269;ní management</i>";
 $langFac = "Kategorie";
 $langTargetFac = "Toto je odd&#283;lení nebo jiná kategorie, kde je kurz za&#345;azený";
-$langCode = "Kód kurzu";
 $langMax = "max. 20 znak&#367;, nap&#345;. <i>INNOV21</i>";
 $langDoubt = "Jestli máte pochybnosti o kódu kurzu, pora&#271;te se s administrátorem";
 $langProgram = "Program kurzu</a>. Jestli Váš kurz nemá kód a to z jakéhokoliv d&#367;vodu, vytvo&#345;te mu ho. Nap&#345;íklad <i>INOVACE</i> když se kurz týká Inova&#269;ního Managementu";

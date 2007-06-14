@@ -17,7 +17,6 @@ $CourseResources = "Risorse per il corso";
 $ExternalLink = "Collegamento esterno";
 $DropboxAdd = "Aggiungi casella personale.";
 $AddAssignmentPage = "Aggiungi pagina per il caricamento degli elaborati dei corsisti.";
-$Dropbox = "Caselle";
 $Assignments = "Contributi";
 $Exercise = "Test";
 $Link = "Collegamento";

@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Alege un curs mai intai";
 $langTool = "Metadata";
-$langDenied = "Aceasta functie este disponibila doar pentru administratorii cursului";
 $langClickKw = "Apasa un cuvant cheie in arbore pantru a-l selecta sau a-l deselecta.";
 $langKwHelp = "<br/> Apasa pe \"+\" pentru a deschide \"-\" pentru a inchide, \"++\" pentru a deschide toate \"--\" pentru inchidere toate.<br/> <br/> Anularea tuturor cuvintelor cheie selectate prin inchidere arborelui si deschiderea sa din nou cu butonul + .<br/> <br/>Apasa Alt pentru reselectarea anterioara a cuvintelor cheie selectate.<br/> <br/> Apasa Alt si cuvant cheie pentru a nega cuvantul cheie<br/>";
 $langAdvanced = "Avansat";

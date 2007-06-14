@@ -48,7 +48,6 @@ $PeronalAgendaItemEdited = "Tvoje soukromá polo&#382;ka agendy byla zm&#283;n&#2
 $PeronalAgendaItemDeleted = "Tvoje soukromá polo&#382;ka agendy byla smazána";
 $ViewPersonalItem = "Zobraz soukromé polo&#382;ky";
 $UserGroupFilter = "Filtr na skupiny/u&#382;ivatele";
-$VisibilityChanged = "Viditelnost zm&#283;n&#283;na";
 $ShowAll = "Zobraz v&#353;e";
 $Print = "Tisk";
 ?>

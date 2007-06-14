@@ -106,7 +106,6 @@ $langViewModeFullScreen = "Pogled : celozaslonski";
 $langShowDebug = "Prikaži razhrošèevanje";
 $langHideDebug = "Skrij razhrošèevanje";
 $langCantEditDocument = "Tega dokumenta ni možno urejati";
-$langAreYouSureToDelete = "Ste preprièani, da želite odstraniti ?";
 $langAfter = "Za";
 $lang_prerequisites_limit = "Predzahteve (omejitve)";
 $lang_loading = "Po&#269;akaj, nalagam stran ...";

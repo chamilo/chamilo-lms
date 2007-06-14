@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Ser&#265;i";
 $MyTasks = "Miaj taskoj";
 $FavoriteBlogs = "Mia &#349;atataj blogoj";
 $Navigation = "Navigado";
@@ -21,9 +20,6 @@ $ReplyToThisComment = "Aldoni komenton al &#265;i tiu komento";
 $ManageTasks = "Tekstomastrumado en &#265;i tiu blogo";
 $ManageMembers = "Enskribi / malenstribi uzanton por &#265;i tiu blogo
 ";
-$Lastname = "Familinomo";
-$Firstname = "Anta&#365;nomo";
-$Email = "Retpo&#349;to";
 $Register = "Enskribi en &#265;i tiun blogon";
 $UnRegister = "Malenskribi sin el &#265;i tiu blogo";
 $SubscribeMembers = "Enskribi uzantojn";
@@ -68,7 +64,6 @@ $WrittenBy = "verkita de";
 $InBlog = "en &#265;i tiu blogo";
 $ViewPostsOfThisDay = "Rigardi al la hodia&#365;aj artikoloj";
 $PostsOf = "Artikoloj de";
-$SearchResults = "Ser&#265;rezultoj";
 $NoArticleMatches = "Ni ne trovis artikolojn respondajn al viaj ser&#265;kriterioj. Bonvolu fari pli vastan ser&#265;peton.";
 $langTask1 = "Tasko 1";
 $langTask2 = "Tasko 2";
@@ -87,5 +82,4 @@ $EditPost = "&#348;an&#285;i artikolon";
 $AddBlog = "Fari novan blogon";
 $EditBlog = "Redakti titolon kaj subtitolon";
 $DeleteBlog = "Vi&#349;i &#265;i tiun blogon";
-$Comments = "Komentarioj";
 ?>

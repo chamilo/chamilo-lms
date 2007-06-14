@@ -23,7 +23,6 @@ $langDelLk = "Slett lenke";
 $langMustBeRegisteredUser = "Bare registrerte brukere av dette kurset kan publisere dokumenter";
 $langListDel = "Slett liste";
 $langWork = "Arbeid";
-$langCreateDir = "Opprett mappe";
 $langNameDir = "Gi mappe nytt navn";
 $langFileExists = "Filen finnes allerede";
 $langDirCr = "Opprett mappe";

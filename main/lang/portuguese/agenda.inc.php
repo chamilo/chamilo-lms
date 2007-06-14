@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "O item da Agenda pessoal foi alterado";
 $PeronalAgendaItemDeleted = "O item da Agenda pessoal foi apagado";
 $ViewPersonalItem = "Ver Agenda pessoal";
 $UserGroupFilter = "Filtrar grupos / utilizadores";
-$VisibilityChanged = "Visibilidade alterada";
 $ShowAll = "Mostrar todos";
 $Print = "Imprimir";
 ?>

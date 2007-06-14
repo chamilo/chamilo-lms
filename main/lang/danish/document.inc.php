@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $MoveTo = "Flyt til";
 $langDownloadFile = "Læg filen ud på serveren";
-$langCreateDir = "Opret en mappe";
 $langNameDir = "Navn på den nye mappe";
 $langSize = "Størrelse";
 $langRename = "Omdøb";

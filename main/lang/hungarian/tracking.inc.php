@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Mindet mutasd";
 $langToolName = "Nyomonkövetés";
 $TrackingDisabled = "A nyomonkövetést a rendszer adminisztrátor kikapcsolta.";
 $InactivesStudents = "Inaktív tanulók";
@@ -169,7 +168,6 @@ $NoExercise = "Nincsenek gyakorlatok";
 $LimitDate = "Dátum limit";
 $SentDate = "Küldés dátuma";
 $Annotate = "Megjegyzéssel ellát";
-$Comments = "Megjegyzések";
 $DayOfDelay = "A késedelem napja";
 $NoComment = "Nincs megjegyzés";
 $LatestLogin = "Utolsó kapcsolódás";

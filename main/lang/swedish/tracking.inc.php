@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Visa alla";
 $langToolName = "Statistik";
 $TrackingDisabled = "Spårning har avaktiverats av systemadministratören.";
 $langShowNone = "Visa ingen";
@@ -136,7 +135,6 @@ $Administrators = "Administratörer";
 $ExcelFormat = "Excel-format";
 $Time = "Tid";
 $Attempts = "Försök";
-$Comments = "Kommentarer";
 $NoComment = "Ingen kommentar";
 $Print = "Skriv ut";
 $NoConnexion = "Ingen anslutning";

@@ -137,7 +137,6 @@ $langZipNoPhp = "Zip filen kan inte innehålla .PHP filer";
 $langNoImg = "Prova utan bilder";
 $langImgNote_st = "<br> Du behöver fortfarande ladda upp";
 $langImgNote_en = "bild(er):";
-$langAreYouSureToDelete = "Säkert att du vill radera?";
 $langDocDeleted = "Dokument raderat";
 $langViMod = "Synlighet modifierat";
 $langNameNotEqual = "är inte den giltiga filen!";

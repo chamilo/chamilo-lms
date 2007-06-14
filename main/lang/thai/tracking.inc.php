@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "แสดงทั้งหมด";
 $langToolName = "การติดตาม";
 $TrackingDisabled = "ผู้บริหารระบบไม่ให้ใช้การติดตาม";
 $langShowNone = "ไม่แสดง";

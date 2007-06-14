@@ -49,7 +49,6 @@ $langFieldsRequ = "Semua field wajib diisi";
 $langEx = "misal <i>Dasar-dasar Ilmu Tanah</i>";
 $langFac = "Kategori";
 $langTargetFac = "Ini merupakan nama fakultas, jurusan, atau program studi dimana mata kuliah ditawarkan";
-$langCode = "Kode Mata Kuliah";
 $langMax = "max. 12 karakter, misal <i>TNH101</i>";
 $langDoubt = "Jika anda ragu tentang kode mata kuliah, hubungi, ";
 $langProgram = "Pengelola System</a>. Jika mata kuliah tidak memilliki kode, masukkan kode sembarang. Misal <i>INOVASI</i> jika mata kuliah tsb tentang Manajemen Inovasi";

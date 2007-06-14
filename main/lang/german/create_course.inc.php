@@ -49,7 +49,6 @@ $langFieldsRequ = "Alle Felder müssen ausgefüllt sein";
 $langEx = "e.g. <i>Literaturgeschichte</i>";
 $langFac = "Bereich";
 $langTargetFac = "Dies ist der Bereich, der das Seminar anbietet";
-$langCode = "Kurscode";
 $langMax = "max. 12 Buchstaben, z.B. <i>ABCDEF123456</i>";
 $langDoubt = "Wenn Sie sich nicht sicher sind, welche Nummer Sie belegen sollen, wenden Sie sich bitte an, ";
 $langProgram = "Kursprogramm</a>. Wenn Ihr Kurs keine Nummer hat, aus welchem Grund auch immer, erfinden Sie eine. z.B. <i>Erfindung</i> wenn der Kurs das Thema Erfindungsmanagement hat";

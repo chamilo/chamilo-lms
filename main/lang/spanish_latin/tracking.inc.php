@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Mostrar todo";
 $langToolName = "Estadísticas";
 $TrackingDisabled = "El seguimiento ha sido desactivado por el administrador.";
 $langShowNone = "No mostrar";

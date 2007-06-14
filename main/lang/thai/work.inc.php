@@ -23,7 +23,6 @@ $langDelLk = "ลบรายการเชื่อมโยง";
 $langMustBeRegisteredUser = "อนุญาตให้ส่งไฟล์เอกสารได้เฉพาะผู้ที่ลงทะเบียนในรายวิชานี้";
 $langListDel = "ลบรายการ";
 $langWork = "งาน";
-$langCreateDir = "สร้างแฟ้มเอกสาร";
 $langNameDir = "เปลี่ยนชื่อแฟ้มเอกสาร";
 $langFileExists = "มีไฟล์เดิมอยู่แล้ว";
 $langDirCr = "สร้างแฟ้มเอกสาร";

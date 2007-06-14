@@ -61,5 +61,4 @@ $langSameForAll = "sama kaikille";
 $langNoLimit = "Ei rajoituksia";
 $langPleaseEnterValidNumber = "Montako ryhmää haluat muodostaa";
 $langCreateGroupsFromVirtualCourses = "Muodosta ryhmät kaikista kurssilla olijoista";
-$Tools = "Työkalut";
 ?>

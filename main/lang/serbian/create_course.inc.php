@@ -49,7 +49,6 @@ $langFieldsRequ = "Sva polja su obavezna";
 $langEx = "npr. <i>Inovacioni menadžment</i>";
 $langFac = "Kategorija";
 $langTargetFac = "Ovo je oblast ili bilo koja druga kategorija gde je kurs postavljan.";
-$langCode = "Šifra kursa";
 $langMax = "Maksimum 20 karaktera. pr. <i>INNOV21</i>";
 $langDoubt = "Ako imate sumnji oko šifre kursa, konsultujte";
 $langProgram = "Program kursa</a>. Ako vaš kurs nema šifru, iz bilo kog razloga, izmislite mu jednu. Na primer <i>INOVACIJE</i> ako je kurs o Inovacionom menadžmentu.";

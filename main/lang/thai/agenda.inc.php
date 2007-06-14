@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "ได้แก้ไขกำหนดการส่วนตัวของคุณแล้ว";
 $PeronalAgendaItemDeleted = "ได้ลบกำหนดการส่วนตัวของคุณแล้ว";
 $ViewPersonalItem = "ดูกำหนดการส่วนตัวของเรา";
 $UserGroupFilter = "กรองจากกลุ่ม/บัญชีผู้ใช้งาน";
-$VisibilityChanged = "เห็นการเปลี่ยนแปลง";
 $ShowAll = "แสดงทั้งหมด";
 $Print = "พิมพ์";
 ?>

@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Your personal agenda item was successfully edited";
 $PeronalAgendaItemDeleted = "Your personal agenda item was successfully deleted";
 $ViewPersonalItem = "View personal items";
 $UserGroupFilter = "Filter on groups/users";
-$VisibilityChanged = "Visibility changed";
 $ShowAll = "Show All";
 $Print = "Print";
 ?>

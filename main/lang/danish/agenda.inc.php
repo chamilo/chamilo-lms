@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Din personligt kalender postering blev korrekt gemt"
 $PeronalAgendaItemDeleted = "Din personlige kalender postering blev slettet";
 $ViewPersonalItem = "Se personlige posteringer";
 $UserGroupFilter = "Filter på grupper/brugere";
-$VisibilityChanged = "Synlighed ændret";
 $ShowAll = "Vis Alle";
 $Print = "Udskriv";
 ?>

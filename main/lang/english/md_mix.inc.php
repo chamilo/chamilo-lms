@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Select a course first";
 $langTool = "Metadata";
-$langDenied = "This function is only available for course admins";
 $langClickKw = "Click a keyword in the tree to select or deselect it.";
 $langKwHelp = "<br/>
 Click \'+\' button to open, \'-\' button to close, \'++\' button to open all, \'--\' button to close all.<br/>

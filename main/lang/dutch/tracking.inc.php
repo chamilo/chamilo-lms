@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Alles weergeven";
 $langToolName = "Statistieken";
 $TrackingDisabled = "Statistieken zijn uitgeschakeld door de platformbeheerder.";
 $InactivesStudents = "Inactive studenten";
@@ -173,7 +172,6 @@ $NoExercise = "Geen oefeningen";
 $LimitDate = "Uiterste datum";
 $SentDate = "Datum van verzending";
 $Annotate = "Aantekening";
-$Comments = "Opmerkingen";
 $DayOfDelay = "Aantal dagen vertraging";
 $NoProduction = "Geen productie";
 $NoComment = "Geen opmerkingen";
@@ -212,4 +210,5 @@ $CoachList = "Coachlijst";
 $CoachStudents = "Begeleid studenten";
 $NoLearningPath = "Geen leerpaden";
 $SessionCourses = "Sessie van cursussen";
+$NoUsersInCourseTracking = "Hier vind je de opvolging voor jouw studenten, ingeschreven in deze cursus.";
 ?>

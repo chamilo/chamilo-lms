@@ -137,7 +137,6 @@ $langZipNoPhp = "ZIP fail&#257; nedr&#299;kst b&#363;t iek&#316;auti .PHP faili"
 $langNoImg = "Kontroldarbs bez att&#275;liem";
 $langImgNote_st = "<br> Jums v&#275;l joproj&#257;m j&#257;veic augšupiel&#257;de";
 $langImgNote_en = "att&#275;ls(i):";
-$langAreYouSureToDelete = "Vai esat p&#257;rliecin&#257;ti par dz&#275;šanas nepieciešam&#299;bu";
 $langDocDeleted = "Dokuments izdz&#275;sts";
 $langViMod = "Redzam&#299;ba p&#257;rlikta";
 $langNameNotEqual = "nav atbilstošs fails!";

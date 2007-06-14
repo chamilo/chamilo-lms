@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $MoveTo = "移到";
 $langDownloadFile = "上传本地文件";
-$langCreateDir = "创建目录";
 $langNameDir = "新建目录名称";
 $langSize = "大小";
 $langRename = "重命名";

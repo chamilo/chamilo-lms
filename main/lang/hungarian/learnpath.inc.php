@@ -106,7 +106,6 @@ $langViewModeFullScreen = "Megtekintés módja: teljes képerny&#337;s";
 $langShowDebug = "Hibakeres&#337; megjelenítése";
 $langHideDebug = "Hibakeres&#337; elrejtése";
 $langCantEditDocument = "Ez a dokumentum nem szerkeszthet&#337;";
-$langAreYouSureToDelete = "Biztosan törölni akarja?";
 $langAfter = "Utána";
 $lang_prerequisites_limit = "El&#337;feltételek (limit)";
 $lang_loading = "Az oldal tölt&#337;dik, kérjük várjon ...";

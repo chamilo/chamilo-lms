@@ -28,7 +28,6 @@ $langCourseAccess = "Accés al curs";
 $langCourseSubscription = "Subscripció al curs";
 $langPublicAccess = "Accés Públic";
 $langPrivateAccess = "Accés restringit";
-$langCode = "Codi";
 $langDBManagementOnlyForServerAdmin = "La direcció|gestió de base de dades està només disponible per a
 l\'administrador de servidor";
 $langShowUsersOfCourse = "Mostrar usuaris subscrits al curs";
@@ -276,9 +275,7 @@ $Platform = "Plataforma";
 $Course = "Curs";
 $LinkName = "Text d\'enllaç";
 $Plugins = "Plugins";
-$Search = "Búsqueda";
 $Info = "Informació";
-$All = "Tot";
 $langCourseVisibilityClosed = " Completament tancat; el curs és només accessible a l\'admin de curs.";
 $langSubscription = "Subscriure";
 $DocumentsAndFolders = "Documents i carpetes";

@@ -20,7 +20,6 @@ $langFieldsRequ = "Všetky polia sú vyžadované";
 $langEx = "napr. <i>Menežment zmeny</i>";
 $langFac = "Kategória";
 $langTargetFac = "Toto je oddelenie alebo iná katgória, kde je kurz za&#269;lenený.";
-$langCode = "Kód kurzu";
 $langMax = "max. 20 znakov, napr. <i>MZ1</i>";
 $langScormtool = "U&#269;ebná osnova";
 $langPathbuildertool = "Tvorca u&#269;ebnej osnovy";

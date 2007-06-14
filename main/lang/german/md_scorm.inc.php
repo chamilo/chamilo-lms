@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "Scorm Manifest-Operationen";
 $langMdCallingTool = "SCORM Lernpfad ";
 $langTool = "$nameTools";
-$langSorry = "Zuerst einen Kurs auswählen";
-$langDenied = "Diese Funktion ist nur Kurs-Administratoren zugänglich";
 $langNotInDB = "kein Dokeos DB Eintrag";
 $langManifestSyntax = "(Syntax Fehler in Manifest Datei ...)";
 $langEmptyManifest = "(leere Manifest Datei ...)";

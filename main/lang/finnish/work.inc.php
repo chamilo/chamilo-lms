@@ -23,7 +23,6 @@ $langDelLk = "Poista linkki";
 $langMustBeRegisteredUser = "Ainoastaan kurssin rekisteröityneet käyttäjät voivat julkaista dokumentteja.";
 $langListDel = "Poista lista";
 $langWork = "Työt";
-$langCreateDir = "Luo hakemisto";
 $langNameDir = "Nimeä hakemisto uudelleen";
 $langFileExists = "Tiedosto on jo olemassa";
 $langDirCr = "Luo hakemisto";

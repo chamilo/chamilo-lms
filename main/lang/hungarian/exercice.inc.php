@@ -138,7 +138,6 @@ $langZipNoPhp = "A ZIP fájl nem tartalmazhat .PHP állományt";
 $langNoImg = "Teszt képek nélkül";
 $langImgNote_st = "Még mindíg fel kell töltenie";
 $langImgNote_en = "kép(ek):";
-$langAreYouSureToDelete = "Biztos benne, hogy törli ezt:";
 $langDocDeleted = "Dokumentum törölve";
 $langViMod = "Láthatóság módosult";
 $langNameNotEqual = "nem érvényes fájl!";

@@ -1,9 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "全部显示";
 $langToolName = "学习跟踪";
 $TrackingDisabled = "系统管理员已禁止学习跟踪功能.";
+$InactivesStudents = "&#27963;&#21160;&#29992;&#25143;";
 $langShowNone = "不显示";
 $langCourseStats = "课程统计";
 $langToolsAccess = "工具权限";

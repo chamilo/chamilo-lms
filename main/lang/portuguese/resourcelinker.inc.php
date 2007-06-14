@@ -17,7 +17,6 @@ $CourseResources = "Recursos do Curso";
 $ExternalLink = "Ligação externa";
 $DropboxAdd = "Acrescentar a página da Dropbox a este capítulo.";
 $AddAssignmentPage = "Acrescentar a página dos Trabalhos dos Estudantes a este capítulo.";
-$Dropbox = "Dropbox";
 $Assignments = "Trabalhos dos Estudantes";
 $Exercise = "Exercício";
 $Link = "Ligação";

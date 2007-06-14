@@ -137,7 +137,6 @@ $langZipNoPhp = "File zip tidak dapat berisi file .PHP";
 $langNoImg = "Latihan tanpa gambar";
 $langImgNote_st = "<br> Anda tetap harus meng-upload";
 $langImgNote_en = "gambar:";
-$langAreYouSureToDelete = "Anda yakin menghapus";
 $langDocDeleted = "Dokumen dihapus";
 $langViMod = "Kenampakan diubah";
 $langNameNotEqual = "bukan file yang sah !";

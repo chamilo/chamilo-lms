@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Lütfen önce bir ders seçin";
 $langTool = "Metadata";
-$langDenied = "Bu i&#351;lev sadece ders yetkilileri içindir";
 $langClickKw = "Seçmek veya iptal etmek için dallardaki bir kelimenin üzerine t&#305;klay&#305;n";
 $langKwHelp = "<br/> Click \'+\' button to open, \'-\' button to close, \'++\' button to open all, \'--\' button to close all.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' re-selects the previously selected keywords.<br/> <br/> Alt-click keyword negates the keyword.<br/>";
 $langAdvanced = "Geli&#351;mi&#351;";

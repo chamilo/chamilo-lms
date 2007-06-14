@@ -49,7 +49,6 @@ $langFieldsRequ = "&#264;iuj kampoj estu plenigitaj ";
 $langEx = "Ekz. <i>Literatura historio</i>";
 $langFac = "Kategorio ";
 $langTargetFac = "Jen la nomo de la fakultato, kie la kurso estas instruata ";
-$langCode = "Kurskodo ";
 $langMax = "maks. 12 litersignoj, ekz. .<i>ROM2121</i> ";
 $langDoubt = "Se vi dubas pri la &#285;usta titolo a&#365; la kodo de via kurso, vi povas &#285;in trovi en la kurslisto ";
 $langProgram = "Kursprogramo </a>. Se la startpa&#285;o, kiun vi volas krei, ne respondas al ekzistanta kurskodo, vi povas elpensi &#285;in. Ekzemple <i>RENOVIGO</i> kiam temas pri kleriga programo pri renoviga mastrumado";

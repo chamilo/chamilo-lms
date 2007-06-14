@@ -7,7 +7,6 @@ $langMdDescription = "Om de gegevens te bewaren, druk op \"Bewaren\"";
 $langMdCoverage = "bv. Bachelor in &hellip;";
 $langMdCopyright = "bv. met bronvermelding";
 $langTool = "Document Metadata";
-$langSorry = "Kies eerst een cursus";
 $langNoScript = "Script is niet beschikbaar in de browser, hou geen rekening met de rest van het scherm, het zal niet werken&hellip;";
 $langPressAgain = "Druk nogmaals op \"Bewaren\"&hellip;";
 $langLanguageTip = "de taal waarin dit leerobject gemaakt is";

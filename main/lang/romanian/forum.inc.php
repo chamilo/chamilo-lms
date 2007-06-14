@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Forum = "Forum";
 $AddForumCategory = "Adaugati o noua categorie de forum";
 $AddForum = "Adaugati un forum nou";
-$ThisFieldIsRequired = "Acest camp este obligatoriu";
 $Topics = "Topicuri";
 $Posts = "Mesaje";
 $LastPosts = "Ultimul mesaj";
@@ -33,7 +32,6 @@ $Views = "Vizualizari";
 $LastPost = "Ultimul mesaj";
 $Quoting = "Citeaza";
 $NotifyByEmail = "Atentioneaza-ma prin e-mail cand cineva raspunde";
-$VisibilityChanged = "Vizibilitatea a fost schimbata";
 $StickyPost = "Acesta este un mesaj fix (apare mereu deasupra si are o iconita speciala)";
 $ReplyShort = "Re:";
 $DeletePost = "Sunteti sigur ca doriti sa stergeti acest mesaj? Stergand acest mesaj veti sterge deasemenea si raspunsurile acestuia. Va rog bifati lista arborescenta cu discutii pentru a vedea ce mesaje vor fi deasemenea sterse";

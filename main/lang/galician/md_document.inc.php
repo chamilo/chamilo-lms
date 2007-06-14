@@ -7,7 +7,6 @@ $langMdDescription = "Para gardar esta información, pulse en Gardar";
 $langMdCoverage = "p.ex. Licenciado en ...";
 $langMdCopyright = "p.ex. se a fonte é coñecida";
 $langTool = "Metadatos do documento";
-$langSorry = "Seleccione primeiro un curso";
 $langNoScript = "Non se permite o script no seu navegador, por favor, ingnore a parte inferior de este texto, posto que non funcionará...";
 $langPressAgain = "Pulse en \'Gardar\' de novo...";
 $langLanguageTip = "a lingua na que se fixo este obxecto de aprendizaxe";

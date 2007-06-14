@@ -81,7 +81,6 @@ $GroupCategory = "Grup kategorisi";
 $NoTitleGiven = "Lütfen bir ba&#351;l&#305;k yaz&#305;n&#305;z.";
 $InvalidMaxNumberOfMembers = "Lütfen en fazla üye say&#305;s&#305; için geçerli bir say&#305; yaz&#305;n&#305;z";
 $CategoryOrderChanged = "Kategori s&#305;ras&#305; de&#287;i&#351;tirildi";
-$Tools = "Araçlar";
 $Wiki = "Grup Wiki";
 $CategoryCreated = "Kategori olu&#351;turuldu";
 $GroupCalendar = "Takvim";

@@ -7,7 +7,6 @@ $langMdDescription = "Per a guardar aquesta informació, apreta guardar";
 $langMdCoverage = "Per exemple, llicenciat en...";
 $langMdCopyright = "Per exemple, el proveidor de les fonts és desconegut";
 $langTool = "Metadades del document";
-$langSorry = "Primer seleccionar un curs";
 $langIdentifier = "Identificador";
 $langRightsTip = "descriu en paraules";
 $langVersion = "Versió";

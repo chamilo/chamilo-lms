@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Zapis vaše osebne agende je bil uspešno spremenjen";
 $PeronalAgendaItemDeleted = "Zapis vaše osebne agende je bil odstranjen";
 $ViewPersonalItem = "Poglej osebno agendo";
 $UserGroupFilter = "Filter na skupini/uporabnikih";
-$VisibilityChanged = "Vidnost spremenjena";
 $ShowAll = "Prikaži vse";
 $Print = "Natisni";
 ?>

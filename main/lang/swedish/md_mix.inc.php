@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Välj en kurs först";
 $langTool = "Metadata";
-$langDenied = "Denna funktion tillgänglig endast för kurs administratörer";
 $langClickKw = "Klicka på ett nyckelord i \"trädet\" för att markera eller avmarkera.";
 $langKwHelp = "<br/> Klicka \'+\' knappen för att öppna, \'-\' knappen för att stänga, \'++\' knappen för att öppna allt, \'--\' knappen för att stänga allt.<br/> <br/> Avmarkera alla valda nyckelord genom att stänga \"trädet\" och öppna igen med \'+\' knappen.<br/> Alt-klick \'+\' återväljer tidigare valda nyckelord.<br/> <br/> Alt-klick nyckelord ignorerar nyckelord.<br/>";
 $langAdvanced = "Avancerad";

@@ -49,7 +49,6 @@ $langFieldsRequ = "Todos os campos son obrigatorios";
 $langEx = "p. ex. <i>Historia da literatura</i>";
 $langFac = "facultade";
 $langTargetFac = "Trátase da facultade (ou outra categoría) na que se realiza o curso";
-$langCode = "Código do curso";
 $langMax = "max. 12 caracteres, p. ex.<i>ROM2121</i>";
 $langDoubt = "No caso de dúbidas sobre o título exacto do curso ou o código que lle corresponde , consultar o";
 $langProgram = "Programa do curso</a>. Se a web que vostede quere crear non se corresponde con un código do curso existente, vostede pode inventarse un. Por exemplo <i>INNOVACION</i> se se trata dun programa de formación  sobre xestión da innovación";

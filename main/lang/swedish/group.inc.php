@@ -81,7 +81,6 @@ $GroupCategory = "Grupp kategori";
 $NoTitleGiven = "Var snäll ange en titel";
 $InvalidMaxNumberOfMembers = "Var vänlig ange ett tillåtet antal maximalt antal medlemmar.";
 $CategoryOrderChanged = "Kategorins ordningsföljd är ändrad";
-$Tools = "Verktyg";
 $Wiki = "Grupp wiki";
 $CategoryCreated = "Kategori skapad";
 ?>

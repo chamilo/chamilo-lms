@@ -5,7 +5,6 @@ $langChapter = "Capítol";
 $langDocumentList = "Llista del document";
 $langOrganisationList = "Liista de l\'organització";
 $langEditTOC = "Editar taula de continguts";
-$langDocuments = "Documents";
 $langEditDocument = "Editar documents";
 $langCreateDocument = "Crear document";
 $langMissingImagesDetected = "Detectades imatges perdudes";
@@ -43,7 +42,6 @@ $langComMod = "Comentari modificat????";
 $langRename = "Renombrar";
 $langCopy = "Copiar";
 $langNameDir = "Nom del nou directori";
-$langCreateDir = "Crear un directori";
 $langDownloadFile = "Carregui IMS o curs de cremalleres Scorm Learning Path
 ";
 $learning_path_access = "clic \'crear camí d\'aprenentatge|saber\' a delete/modify/show/hide/create/add un camí d\'aprenentatge|saber ";
@@ -67,5 +65,4 @@ $langCreateDoc = "Crear document";
 $langOrganiseDocuments = "Organitzar document";
 $langUncompress = "Descomprimir";
 $ExportShort = "Exportació curta";
-$Description = "Descripció";
 ?>

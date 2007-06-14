@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Cari";
 $MyTasks = "Tugas-ku (Task)";
 $FavoriteBlogs = "Blog Favorit-ku";
 $Navigation = "Navigasi";

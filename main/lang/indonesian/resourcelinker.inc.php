@@ -17,7 +17,6 @@ $CourseResources = "Sumberdaya Mata Kuliah";
 $ExternalLink = "Link external";
 $DropboxAdd = "Tambah halaman dropbox ke bab ini.";
 $AddAssignmentPage = "Tambah halaman tugas ke bab ini.";
-$Dropbox = "Dropbox";
 $Assignments = "Tugas-tugas";
 $Exercise = "Quiz";
 $Link = "Link";

@@ -8,7 +8,6 @@ $langMdCoverage = "Universal";
 $langMdCopyright = "Universitat de Gante";
 $nameTools = "variable d\'idioma obsoleta";
 $langTool = "Metainformació dels enllaços";
-$langDenied = "Funcionalitat només disponible per els administradors del curs";
 $langIdentifier = "Identificador";
 $langKeyword = "Paraules clau";
 $langStore = "Emmagametzar";

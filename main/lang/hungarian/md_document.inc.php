@@ -7,7 +7,6 @@ $langMdDescription = "Az információ tárolásához kattintson a Tárolás gombra";
 $langMdCoverage = "pl. Kandidátus";
 $langMdCopyright = "pl. a forrás mellékelése megengedett";
 $langTool = "Dokumentum metaadat";
-$langSorry = "El&#337;ször válasszon ki egy kurzust";
 $langNoScript = "A parancsértelmez&#337; nincs engedélyezve a böngész&#337;jén, kérjük, ne vegye figyelembe az alábbi szöveget, nem fog m&#369;ködni...";
 $langPressAgain = "Kattintson újra a Tárolás\' gombra";
 $langLanguageTip = "a tanulási objektumban használt nyelv";

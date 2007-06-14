@@ -7,7 +7,6 @@ $langMdDescription = "Da biste sa&#269;uvali ovu informaciju, pritisnite Sa&#269
 $langMdCoverage = "npr. Diplomirani...";
 $langMdCopyright = "npr. izvor je potvr&#273;en";
 $langTool = "Dokument – Opisna definicuja ";
-$langSorry = "Selektuj prvo kurs";
 $langNoScript = "Skript nije dozvoljen u vašem pretraživa&#269;u, molim Vas, ne obra&#263;ajte pažnju na tekst ispod pošto ne&#263;e raditi...";
 $langPressAgain = "Pritisnite \'Sa&#269;uvaj\' opet ";
 $langLanguageTip = "jezik u kome je napravljen objekat u&#269;enja";

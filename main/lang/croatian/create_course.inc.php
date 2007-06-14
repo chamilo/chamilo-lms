@@ -49,7 +49,6 @@ $langFieldsRequ = "Potrebno je ispuniti sve podatke";
 $langEx = "primjerice. <i>Matematika I</i>";
 $langFac = "Kategorija";
 $langTargetFac = "Naziv fakulteta, odjela ili katedre  ";
-$langCode = "Šifra kolegija";
 $langMax = "najviše 12 znakova, npr. <i>ROM2121</i>";
 $langDoubt = "Ako ne znate šifru kolegija, pogledajte , ";
 $langProgram = "Nastavni program </a>. Ako ne postoji izmislite ga.  Primjerice <i>MATE1</i> za predmet MATEMATIKA I";

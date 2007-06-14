@@ -23,7 +23,6 @@ $langDelLk = "Sterge linkul";
 $langMustBeRegisteredUser = "Numai utilizatorii inregistrati la acest curs pot publica documente.";
 $langListDel = "Sterge lista";
 $langWork = "Lucrari";
-$langCreateDir = "Creaza directorul";
 $langNameDir = "Redenumeste directorul";
 $langFileExists = "Fisierul exista";
 $langDirCr = "Creaza directorul";

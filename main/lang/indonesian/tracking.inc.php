@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Tampilkan semua";
 $langToolName = "Statistik";
 $TrackingDisabled = "Tracking dinon-aktifkan oleh system administrator.";
 $langShowNone = "Sembunyikan semua";

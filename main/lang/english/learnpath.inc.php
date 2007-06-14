@@ -106,7 +106,6 @@ $langViewModeFullScreen = "View mode: fullscreen";
 $langShowDebug = "Show debug";
 $langHideDebug = "Hide debug";
 $langCantEditDocument = "This document is not editable";
-$langAreYouSureToDelete = "Are you sure to delete ?";
 $langAfter = "After";
 $lang_prerequisites_limit = "Prerequisities (limit)";
 $lang_loading = "Loading page, please wait ...";

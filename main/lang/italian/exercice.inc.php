@@ -138,7 +138,6 @@ $langZipNoPhp = "Il file .zip non può contenere files .php";
 $langNoImg = "Test senza immagini";
 $langImgNote_st = "<br> Devi ancora caricare";
 $langImgNote_en = "immagine/i :";
-$langAreYouSureToDelete = "Sei sicuro di eliminare";
 $langDocDeleted = "Documento eliminato";
 $langViMod = "Visibilità modificata";
 $langNameNotEqual = "non è un file valido!";

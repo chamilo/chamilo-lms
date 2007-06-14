@@ -81,5 +81,4 @@ $GroupCategory = "Categoria del grup";
 $NoTitleGiven = "Si us plau donar un títol";
 $InvalidMaxNumberOfMembers = "Si us plau introduir un número vàlid per a un número màxim de membres";
 $CategoryOrderChanged = "L\'ordre de categoria fou canviada";
-$Tools = "Eines";
 ?>

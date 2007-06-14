@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Search";
 $MyTasks = "My tasks";
 $FavoriteBlogs = "My favorite blogs";
 $Navigation = "Navigation";
@@ -19,9 +18,6 @@ $NewComment = "Add a new comment";
 $ReplyToThisComment = "Reply to this comment";
 $ManageTasks = "Manage tasks";
 $ManageMembers = "Subscribe / Unsubscribe the user in this blog";
-$Lastname = "Lastname";
-$Firstname = "Firstname";
-$Email = "Email";
 $Register = "Register to this blog";
 $UnRegister = "Unregister to this blog";
 $SubscribeMembers = "Subscribe users";
@@ -66,7 +62,6 @@ $WrittenBy = "Written by";
 $InBlog = "In the blog";
 $ViewPostsOfThisDay = "View posts of this day";
 $PostsOf = "Posts of";
-$SearchResults = "Search results";
 $NoArticleMatches = "No article have been found. Check the word spelling or try another search.";
 $langTask1 = "Task 1";
 $langTask2 = "Task 2";
@@ -85,8 +80,6 @@ $EditPost = "Edit an article";
 $AddBlog = "Create a new blog";
 $EditBlog = "Edit the title and the subtitle";
 $DeleteBlog = "Delete this blog";
-$Comments = "Comments";
-$Comments = "Comments";
 $NoTasks = "No tasks";
 $Shared = "Shared";
 ?>

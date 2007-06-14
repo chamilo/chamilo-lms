@@ -23,7 +23,6 @@ $langDelLk = "Delete Link";
 $langMustBeRegisteredUser = "Only registered users of this course can publish documents.";
 $langListDel = "Delete list";
 $langWork = "Assignments";
-$langCreateDir = "Create directory";
 $langNameDir = "Rename directory";
 $langFileExists = "File already exists";
 $langDirCr = "Create directory";

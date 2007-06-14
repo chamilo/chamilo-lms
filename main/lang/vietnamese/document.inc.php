@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langDownloadFile = "Upload file lên máy chủ web";
-$langCreateDir = "Tạo thư mục";
 $langNameDir = "Tên thư mục mới";
 $langSize = "Kích thước";
 $langRename = "Đổi tên";

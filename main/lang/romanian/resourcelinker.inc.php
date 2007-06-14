@@ -17,7 +17,6 @@ $CourseResources = "Resursele cursului";
 $ExternalLink = "Link extern";
 $DropboxAdd = "Adauga pagina Mapei de documente la acest capitol.";
 $AddAssignmentPage = "Adauga publicatiile studentilor la acest capitol.";
-$Dropbox = "Mapa de documente";
 $Assignments = "Publicatiile studentilor";
 $Exercise = "Teste";
 $Link = "Link";

@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Montrer tout";
 $langToolName = "Suivi";
 $TrackingDisabled = "Le système de suivi a été désactivé par l\'administrateur système.";
 $InactivesStudents = "Apprenants inactifs";
@@ -11,7 +10,7 @@ $AverageProgressInLearnpath = "Progression moyenne dans les parcours";
 $AverageResultsToTheExercices = "Score moyen aux tests";
 $SeeStudentList = "Voir la liste des apprenants";
 $NbActiveSessions = "Sessions actives";
-$NbPastSessions = "Session passées";
+$NbPastSessions = "Sessions passées";
 $NbFutureSessions = "Sessions futures";
 $NbStudentPerSession = "Nombre d\'apprenants par session";
 $NbCoursesPerSession = "Nombre de cours par session";
@@ -173,7 +172,6 @@ $NoExercise = "Pas d\'exercices";
 $LimitDate = "Date limite";
 $SentDate = "D\'ate d\'envoi";
 $Annotate = "Annoter";
-$Comments = "Commentaires";
 $DayOfDelay = "Jours de délai";
 $NoProduction = "Pas de production";
 $NoComment = "Pas de commentaires";

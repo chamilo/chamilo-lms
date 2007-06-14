@@ -62,4 +62,11 @@ $CourseSortingDone = "课程排序完成";
 $ExistingCourseCategories = "已有课程分类";
 $YouAreNowUnsubscribed = "正从当前课程注销";
 $ViewOpenCourses = "浏览公开课程";
+$ErrorContactPlatformAdmin = "&#26410;&#30693;&#38169;&#35823;&#65292;&#35831;&#32852;&#31995;&#24179;&#21488;&#31649;&#29702;&#21592;";
+$CourseRegistrationCodeIncorrect = "&#38750;&#27861;&#35838;&#31243;&#20195;&#30721;";
+$CourseRequiresPassword = "&#35838;&#31243;&#23494;&#30721;&#19981;&#33021;&#20026;&#31354;";
+$SubmitRegistrationCode = "&#25552;&#20132;&#27880;&#20876;";
+$CourseCategoryDeleted = "&#35838;&#31243;&#30446;&#24405;&#24050;&#32463;&#21024;&#38500;";
+$CategorySortingDone = "&#20998;&#31867;&#36807;&#28388;&#23436;&#25104;";
+$CourseCategoryEditStored = "&#20998;&#31867;&#26356;&#26032;&#23436;&#25104;";
 ?>

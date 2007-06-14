@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "El evento personal de su agenda ha sido editado";
 $PeronalAgendaItemDeleted = "El evento personal ha sido borrado de su agenda ";
 $ViewPersonalItem = "Ver eventos personales";
 $UserGroupFilter = "Filtrar por grupos/usuarios";
-$VisibilityChanged = "Visibilidad cambiada";
 $ShowAll = "Mostrar todo";
 $Print = "Imprimir";
 ?>

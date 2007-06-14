@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Pilih sebuah mata kuliah terlebih dulu";
 $langTool = "Metadata";
-$langDenied = "Fungsi ini hanya tersedia unutk admin mata kuliah";
 $langClickKw = "Klik kata kunci pada tree untuk memilih atau membatalkan pilihan";
 $langKwHelp = "<br/> Klik tombol \'+\' untuk membuka, tombol \'-\'  untuk menutup, tombol \'++\' untuk membuka semua, tombol \'--\' untuk menutup semua.<br/> <br/> Bersihkan semua kata kunci pilihan dengan menutup tree dan membukanya lagibersama tombol  \'+\' .<br/> Alt-click \'+\' memilih kata kunci yang terpilih sebelumnya.<br/> <br/> Alt-click kata kunci membatalkan kata kunci tsb.<br/>";
 $langAdvanced = "Tingkat lanjut";

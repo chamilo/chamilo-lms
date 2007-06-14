@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Xem tất cả";
 $langToolName = "Thống kê";
 $TrackingDisabled = "Tracking has been disabled by system administrator.";
 $langShowNone = "Thu lại";

@@ -41,7 +41,6 @@ $langFieldsRequ = "Visi lauci&#326;i ir j&#257;aizpilda";
 $langEx = "piem. <i>e-m&#257;c&#299;bu ieviešanas vad&#299;ba</i>";
 $langFac = "Noda&#316;a";
 $langTargetFac = "Departaments, noda&#316;a vai k&#257;da cita strukt&#363;rvien&#299;ba zem kuras b&#363;s šis kurss";
-$langCode = "Kursa kods";
 $langMax = "max. 20 simbolu, piem.: <i>INNOV21</i>";
 $langDoubt = "L&#363;dzu <b>konsul&#275;jaties ar atbild&#299;go personu, par kursa kodu.</b> Tas ir svar&#299;gi!";
 $langProgram = "Kursa programa</a>. Ja nezinat kursa kodu, lai k&#257;ds b&#363;tu iemesls tam, izdom&#257;jit to. Piem&#275;ram <i>INNOVATION</i> ja kurss saucas <i>Innovation Management</i>";

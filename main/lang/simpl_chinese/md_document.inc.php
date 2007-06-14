@@ -7,7 +7,6 @@ $langMdDescription = "保存这条信息, 请点击保存按钮";
 $langMdCoverage = "例如: 学士的... ";
 $langMdCopyright = "例如: 提供公认的原始资料";
 $langTool = "文档元数据";
-$langSorry = "首先选择一门课程";
 $langNoScript = "脚本在浏览器中无法运行, 请忽略这段文本以下的屏幕内容, 无法正常显示...";
 $langPressAgain = "再次点击\'保存\'... ";
 $langLanguageTip = "在这部分学习对象中语言已经被定义";

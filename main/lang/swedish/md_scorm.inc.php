@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "suspekt språk var";
 $langMdCallingTool = "Learning path - Scorm";
 $langTool = "Scorm MD Operationer";
-$langSorry = "Välj en kurs först";
-$langDenied = "Denna funktion endast tillgänglig för kursadministratörer";
 $langNotInDB = "ingen Dokeos DB tillträde";
 $langManifestSyntax = "(syntax fel i manifestfilen...)";
 $langEmptyManifest = "(tom manifestfil...)";

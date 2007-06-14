@@ -114,7 +114,6 @@ $langZipNoPhp = "Archiwa zip nie mog&#261; zaiera&#263; plików PHP.";
 $langNoImg = "Test bez obrazków";
 $langImgNote_st = "Wci&#261;&#380; musisz za&#322;adowa&#263;";
 $langImgNote_en = "obraz(y):";
-$langAreYouSureToDelete = "Jeste&#347; pewien &#380;eby skasowa&#263;";
 $langDocDeleted = "Dokument skasowany";
 $langViMod = "Widoczno&#347;&#263; zmodyfikowana";
 $langNameNotEqual = "nieprawid&#322;owy plik!";

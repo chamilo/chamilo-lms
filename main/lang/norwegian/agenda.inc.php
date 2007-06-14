@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Din personlige oppføring i kalender ble endret";
 $PeronalAgendaItemDeleted = "Din personlige oppføring i kalender ble slettet";
 $ViewPersonalItem = "Vis personlige oppføringer";
 $UserGroupFilter = "Filtrer på grupper / brukere";
-$VisibilityChanged = "Synbarhet endret";
 $ShowAll = "Vis alle";
 $Print = "Utskrift";
 ?>

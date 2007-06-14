@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Najpierw wybierz kurs";
 $langTool = "Metadane";
-$langDenied = "Ta funkcja jest dost&#281;pna jedynie dla administratorów kursu";
 $langClickKw = "Kliknij na s&#322;owo kluczowe w drzewie, aby je zaznaczy&#263; lub odznaczy&#263;.";
 $langKwHelp = "<br/> Kliknij przycisk \'+\' aby otworzy&#263;, przycisk \'-\' aby zamkn&#261;&#263;, przycisk \'++\' aby otworzy&#263; wszystkie, przycisk \'--\' aby zamkn&#261;&#263; wszystkie.<br/> <br/> Wyczy&#347;&#263; wszystkie zaznaczone s&#322;owa kluczowe poprzez zamkni&#281;cie drzewa oraz otworzenie go ponowne za pomoc&#261; przycisku \'+\'.<br/> Klikni&#281;cie \'+\' trzymaj&#261;c Alt ponownie wybiera poprzednio wybrane s&#322;owa kluczowe.<br/> <br/> Klikni&#281;cie s&#322;owa kluczowego trzymaj&#261;c Alt anuluje to s&#322;owo.<br/>";
 $langAdvanced = "Zaawansowane";

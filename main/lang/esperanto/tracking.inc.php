@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Vidigi  &#265;ion";
 $langToolName = "Statistikoj ";
 $TrackingDisabled = "Spurado estas mal&#349;altita far la platformmastrumanto. ";
 $langShowNone = "Ne montri ";

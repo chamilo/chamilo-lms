@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "Scorm Manifest Metadata";
 $langMdCallingTool = "Uèna pot - Scorm";
 $langTool = "Scorm MD operacije";
-$langSorry = "Najprej izberite teèaj";
-$langDenied = "Ta funkcija je dostopna le administratorjem teèaja";
 $langNotInDB = "ni vnosa v Dokeos podatkovno bazo";
 $langManifestSyntax = "(sintaktièna napaka v manifest datoteki)";
 $langEmptyManifest = "(prazna manifest datoteka...)";

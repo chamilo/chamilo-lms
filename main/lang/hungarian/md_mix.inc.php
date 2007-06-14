@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Válasszon ki egy kurzust el&#337;ször";
 $langTool = "Metaadat";
-$langDenied = "Ez a funkció csak a kurzus adminisztrátorai számára elérhet&#337;.";
 $langClickKw = "Kattintson a fastruktúrában egy kulcsszóra a kijelöléshez/megsz&#369;ntetéshez.";
 $langKwHelp = "<br/> KAttintson a \'+\' gombra a megnyitáshoz, a \'-\' gombra a bezáráshoz, a \'++\' gombra az összes megnyitásához, a \'--\' gombra az összes bezárásához.<br/> <br/> Az összes kulcsszó kiválasztásának megsz&#369;ntetéséhez zárja össze az egész fát, és nyissa szét újra a \'+\' gombbal.<br/> Alt-click \'+\' újra kiválasztja az el&#337;z&#337;leg választott kulcsszavakat.<br/> <br/> Alt-click kattintva a kulcsszóra megsz&#369;nteti annak kijelöltségét.<br/>";
 $langAdvanced = "Haladó";

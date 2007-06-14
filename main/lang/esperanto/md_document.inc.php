@@ -7,7 +7,6 @@ $langMdDescription = "Por konservi la datumojn, klaku sur \'Konservi\'";
 $langMdCoverage = "ekz. bakala&#365;ro pri ...";
 $langMdCopyright = "ekz. kun mencio de fonto";
 $langTool = "Dokumentaj metadatumoj ";
-$langSorry = "Unue elektu kurson ";
 $langNoScript = "Skript ne disponebla en foliumilo, ne atentu la reston de la ekrano, &#285;i ne funkcios ...";
 $langPressAgain = "Denove musklaku sur \'Konservi\' ...";
 $langLanguageTip = "La lingvo, en kiu &#265;i-lernobjekto estas farita ";

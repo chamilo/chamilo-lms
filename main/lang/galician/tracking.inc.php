@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Mostrar todos";
 $langToolName = "Estatísticas";
 $TrackingDisabled = "O seguemento foi deshabilitado polo administrador do sistema.";
 $InactivesStudents = "Estudantes inactivos";
@@ -173,7 +172,6 @@ $NoExercise = "Sen exercicios";
 $LimitDate = "Data límite";
 $SentDate = "Data de envío";
 $Annotate = "Anotar";
-$Comments = "Comentarios";
 $DayOfDelay = "Día de retraso";
 $NoProduction = "Sen producción";
 $NoComment = "Sen comentarios";

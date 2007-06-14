@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Forum = "Forum";
 $AddForumCategory = "Nieuwe forumcategorie toevoegen";
 $AddForum = "Nieuw forum toevoegen";
-$ThisFieldIsRequired = "Dit is een vereist veld";
 $Topics = "Discussies";
 $Posts = "Berichten";
 $LastPosts = "Laatste bericht";
@@ -33,7 +32,6 @@ $Views = "aantal keer bekeken";
 $LastPost = "Laatste bericht";
 $Quoting = "Quote";
 $NotifyByEmail = "Hou me via e-mail op de hoogte als iemand antwoordt";
-$VisibilityChanged = "De zichtbaarheid werd gewijzigd";
 $StickyPost = "Dit is een vast bericht (verschijnt altijd bovenaan en wordt aangeduid met een speciaal icoon)";
 $ReplyShort = "Antwoord: ";
 $DeletePost = "Bent u zeker dat u dit bericht wenst te verwijderen?";

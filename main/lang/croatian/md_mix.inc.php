@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Najprije odaberite kolegij";
 $langTool = "Defincijski podatci";
-$langDenied = "Funkcija je dostupna samo nadzornicima kolegija";
 $langClickKw = "Kliknite na klju&#269;nu rije&#269; u strukturi kako biste je odabrali ili poništili odabir.";
 $langKwHelp = "<br/> Otvorite pritiskom na tipku \'+\', zatvorite pritiskom na tipku \'-\', otvorite sve pritiskom na tipku \'++\', zatvorite sve pritiskom na tipku \'--\'.<br/> <br/> Uklonite sve odabrane rije&#269;i zatvaranjem strukture i njezinim ponovnim otvaranjem pritiskom na tipku \'+\'.<br/> Pritiskom na Alt i tipku \'+\' ponovno odabirete prethodno odabrane klju&#269;ne rije&#269;i.<br/> <br/> Pritiskom na Alt i klju&#269;nu rije&#269; istu negirate.<br/>";
 $langAdvanced = "Napredna";

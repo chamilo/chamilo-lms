@@ -81,7 +81,6 @@ $GroupCategory = "Kategorija skupine";
 $NoTitleGiven = "Prosim, podaj naslov";
 $InvalidMaxNumberOfMembers = "Vnesi veljavno število za najveèje število èlanov.";
 $CategoryOrderChanged = "Vrstni red kategorij je bil spremenjen";
-$Tools = "Orodja";
 $Wiki = "Wiki skupine";
 $CategoryCreated = "Kategorija ustvarjena";
 $GroupTutors = "Tutorji";

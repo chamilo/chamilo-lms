@@ -106,7 +106,6 @@ $langViewModeFullScreen = "Ansichtmodus: Vollbildschirm";
 $langShowDebug = "Debug anzeigen";
 $langHideDebug = "Debug nicht anzeigen";
 $langCantEditDocument = "Dieses Dokument kann nicht bearbeitet werden";
-$langAreYouSureToDelete = "Wollen Sie dies wirklich löschen?";
 $langAfter = "Nach";
 $lang_prerequisites_limit = "Voraussetzungen (Limit)";
 $lang_loading = "Seite wird geladen. Bitte warten...";

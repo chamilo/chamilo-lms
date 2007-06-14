@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Seleccione primero un curso";
 $langTool = "Metadatos";
-$langDenied = "Esta función sólo está disponible para los administradores del curso";
 $langClickKw = "Presione sobre la palabra clave en el árbol para seleccionarla o deseleccionarla";
 $langKwHelp = "<br/> Clic en el botón \'+\' para abrir, en el botón \'-\' cerrar, en el botón \'++\' para abrir todo, en el botón \'--\' para cerrar todo.<br/> <br/> Desechar todas las palabras claves seleccionadas cerrando el árbol y abriéndolo de nuevo con el botón \'+\'.<br/> Alt-clic \'+\' vuelve a seleccionar la palabra clave seleccionada con anterioridad.<br/> <br/> Alt-clic palabra clave, niega esa palabra clave.<br/>
 ";

@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Uw persoonlijk agenda-item is gewijzigd";
 $PeronalAgendaItemDeleted = "Uw persoonlijk agenda-item is verwijderd";
 $ViewPersonalItem = "Bekijk persoonlijke agenda";
 $UserGroupFilter = "Filter op groepen/gebruikers";
-$VisibilityChanged = "De zichtbaarheid is aangepast";
 $ShowAll = "Alles tonen";
 $Print = "Afdrukken";
 ?>

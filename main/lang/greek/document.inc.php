@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $MoveTo = "&#924;&#949;&#964;&#945;&#954;&#943;&#957;&#951;&#963;&#951; &#963;&#964;&#959;";
 $langDownloadFile = "Ανέβασμα αρχείου στον εξυπηρέτη";
-$langCreateDir = "Δημιουργία καταλόγου";
 $langNameDir = "Όνομα του καινούριου καταλόγου";
 $langSize = "Μέγεθος";
 $langRename = "Μετονομασία";

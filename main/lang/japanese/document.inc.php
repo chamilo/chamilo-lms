@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langDownloadFile = "文書のアップロード";
-$langCreateDir = "ディレクトリを作る";
 $langNameDir = "新ディレクトリの名前";
 $langSize = "サイズ";
 $langRename = "名前を変える";

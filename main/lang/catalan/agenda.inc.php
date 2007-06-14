@@ -46,6 +46,5 @@ $PeronalAgendaItemAdded = "Anotació personal afegida correctament";
 $PeronalAgendaItemEdited = "Anotació personal editada correctament";
 $ViewPersonalItem = "Veure anotacions personals";
 $UserGroupFilter = "Filtrar per grups / usuaris";
-$VisibilityChanged = "Visibilitat canviada";
 $ShowAll = "Mostrar tots";
 ?>

@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langDownloadFile = "Muatnaik fail ke server";
-$langCreateDir = "Bina Direktori";
 $langNameDir = "Nama direktori baru";
 $langSize = "Saiz";
 $langRename = "Tukar Nama";

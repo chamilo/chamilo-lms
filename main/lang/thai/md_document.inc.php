@@ -7,7 +7,6 @@ $langMdDescription = "กดปุ่มจัดเก็บ(restore) To store this information, press St
 $langMdCoverage = "เช่น ปริญญา e.g. Bachelor of ...";
 $langMdCopyright = "e.g. provided the source is acknowledged";
 $langTool = "เอกสาร Metadata";
-$langSorry = "เลือกวิชาก่อน";
 $langNoScript = "โปรแกรมดูอินเตอร์เน็ตที่ท่านใช้อยู่นี้ ไม่ได้อนุญาตให้อ่านคำสั่งนี้ ให้ข้ามไป Script is not enabled in your browser, please ignore the screen part below this text, it won\'t work...";
 $langPressAgain = "จัดเก็บอีกครั้ง Press \'Store\' again...";
 $langLanguageTip = "the language in which this learning object was made";

@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Kursaj ecoj ";
 $langModifDone = "La ecoj estas &#349;an&#285;itaj ";
-$langCode = "Kurskodo ";
 $langDelCourse = "Forigi &#265;i-kursan retejon ";
 $langProfessors = "Instruistoj";
 $langFaculty = "Fakultato";

@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "variabila limbii invehita";
 $langMdCallingTool = "Calea de invatare - Scrom";
 $langTool = "Operatiile Scorm MD";
-$langSorry = "Selecteaza un curs pentru inceput";
-$langDenied = "Aceasta functie este disponibila doar administratorilor cursului";
 $langNotInDB = "nici o intrare a bazei de date Dokeos";
 $langManifestSyntax = "(eroare de sintaxa in fisierul manifest...)";
 $langEmptyManifest = "(fisier manifest gol...)";

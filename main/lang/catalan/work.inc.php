@@ -23,7 +23,6 @@ $langDelLk = "Esborrar enllaç";
 $langMustBeRegisteredUser = "Només els usuaris inscrits en aquest curs poden publicar documents";
 $langListDel = "Eliminar llista";
 $langWork = "Activitat";
-$langCreateDir = "Crear directori";
 $langNameDir = "Canviar nom al directori";
 $langFileExists = "L\'arxiu ja existeix";
 $langDirCr = "Crear directori";

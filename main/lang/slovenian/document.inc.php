@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $MoveTo = "Premakni v";
 $langDownloadFile = "Naloži datoteko na strežnik";
-$langCreateDir = "Tvori mapo";
 $langNameDir = "Ime nove mape";
 $langSize = "Velikost";
 $langRename = "Preimenuj";

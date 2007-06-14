@@ -7,7 +7,6 @@ $langMdDescription = "Untuk menyimpan informasi ini, tekan Simpan";
 $langMdCoverage = "misal Sarjana ...";
 $langMdCopyright = "misal: dengan syarat sumber dikenal";
 $langTool = "Metadata Dokumen";
-$langSorry = "Pilih Mata Kuliah dulu";
 $langNoScript = "Skrip tidak dihidupkan di browser anda, silahkan abaikan layar di bagian bawah teks ini, ini tidak akan berfungsi ...";
 $langPressAgain = "Tekan \'Simpan\' kembali ...";
 $langLanguageTip = "bahasa yang digunakan untuk membuat obyek pembelajaran";

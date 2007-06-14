@@ -7,7 +7,6 @@ $langMdDescription = "Za pohranu podataka pritisnite Pohrani";
 $langMdCoverage = "npr. Prvostupnik ...";
 $langMdCopyright = "npr. pod uvjetom da je izvor naveden";
 $langTool = "Definicijski podatci dokumenta";
-$langSorry = "Prvo odaberite kolegij";
 $langNoScript = "Skript nije aktiviran u vašem pregledniku, molim zanemarite dio zaslona ispod ovoga teksta jer ne&#263;e djelovati...";
 $langPressAgain = "Ponovno pritisnite \'Pohrani\'";
 $langLanguageTip = "jezik izrade objekta u&#269;enja";

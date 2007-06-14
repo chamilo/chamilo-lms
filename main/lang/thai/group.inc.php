@@ -82,7 +82,6 @@ $GroupCategory = "ประเภทกลุ่ม";
 $NoTitleGiven = "กรุณาตั้งชื่อ";
 $InvalidMaxNumberOfMembers = "กรุณาใส่จำนวนมากสุดของกลุ่ม";
 $CategoryOrderChanged = "เปลี่ยนประเภทให้แล้ว";
-$Tools = "เครื่องมือ";
 $Wiki = "กลุ่ม wiki";
 $CategoryCreated = "สร้างประเภทวิชา";
 $GroupTutors = "ผู้ช่วยสอน";

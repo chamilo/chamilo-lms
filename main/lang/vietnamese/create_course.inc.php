@@ -47,7 +47,6 @@ $langCreateSite = "Tạo một website cho khoá học mới";
 $langFieldsRequ = "Xin điền đầy đủ các mục";
 $langEx = "ví dụ. <i>Lích sử văn học </i>";
 $langFac = "Chủ đề (phân loại theo bộ môn)";
-$langCode = "Mã khoá học";
 $langMax = "tối đa 12 ký tự, v.d. <i>TOAN12</i>";
 $langDoubt = "Nếu chưa rõ cách đặt mã, xin hỏi ";
 $langProgram = "Chương trình Khoá học</a>.Nếu khoá học chưa có mã, hãy tạo mã có tính gợi ý và ngắn gọn";

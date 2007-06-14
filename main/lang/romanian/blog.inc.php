@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Cauta";
 $MyTasks = "Sarcinile mele";
 $FavoriteBlogs = "Blogurile mele favorite";
 $Navigation = "Navigare";

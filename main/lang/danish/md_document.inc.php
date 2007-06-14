@@ -7,7 +7,6 @@ $langMdDescription = "Klik på knappen Gem for at gemme denne information";
 $langMdCoverage = "fx Bachelor i..";
 $langMdCopyright = "forudsat at kilden er godkendt";
 $langTool = "Dokument metadata";
-$langSorry = "Vælg først et kursus";
 $langNoScript = "Script er ikke slået til i din browser,  venligst ignorerer skærmbilledet nedenfor denne tekst, det virker ikke...";
 $langPressAgain = "Klik på Gem igen";
 $langLanguageTip = "det sprog, som læringsobjektet i lavet i";

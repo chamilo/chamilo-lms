@@ -1,16 +1,12 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Sök";
 $FavoriteBlogs = "Mina favorit bloggar";
 $Navigation = "Navigation";
 $ThisBlog = "Denna blog";
 $NewPost = "Ny artikel";
 $PostFullText = "Text";
 $ReadPost = "Läs denna post";
-$Lastname = "Efternamn";
-$Firstname = "Förnamn";
-$Email = "Epost";
 $Register = "Registrera mig till denna blog";
 $UnRegister = "Avregistrera mig till denna blog";
 $Member = "Medlem";
@@ -28,6 +24,5 @@ $langWelcome = "Välkommen!";
 $langModule = "Modul";
 $langUserHasPermissionNot = "Användaren har inga rättigheter";
 $langUserHasPermission = "Användaren har rättigheter";
-$Comments = "Kommentarer";
 $Shared = "Delad";
 ?>

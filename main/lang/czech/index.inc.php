@@ -11,8 +11,6 @@ $langBackToHomePage  = "P&#345;ehled kategorií";
 $langCourseList  = "Kurzy";
 $langHelptwo = "Nápov&#283;da";
 $EussMenu = "menu";
-$email = "e-mail";
 $langMenuUser = "Uživatel";
 $langRefresh = "obnovit stránku";
-$langCourseCreate = "Vytvo&#345;it kurz";
 ?>

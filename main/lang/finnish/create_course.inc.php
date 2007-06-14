@@ -47,7 +47,6 @@ $langFieldsRequ = "Täytä kaikki kentät";
 $langEx = "Esimerkki: <i>Kirjallisuuden historia</i>";
 $langFac = "Koulutusala";
 $langTargetFac = "Kurssista vastaava koulutusala: ";
-$langCode = "Kurssin koodi";
 $langMax = "Korkeintaan 12 merkkiä, esimerkiksi <i>Luokka2121</i>";
 $langDoubt = "Jos et tiedä kurssin koodia, kysy: ";
 $langProgram = "Kurssin ohjelma</a>. Jos kurssilla ei ole koodia, keksi sellainen, esimerkiksi jos kurssisi käsittelee keksintöjä, niin anna kurssin koodiksi <i>Keksinnöt</i>";

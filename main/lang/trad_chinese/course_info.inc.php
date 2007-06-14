@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "&#35506;&#31243;&#35373;&#23450;";
 $langModifDone = "&#27492;&#35338;&#24687;&#24050;&#34987;&#20462;&#25913;";
-$langCode = "&#35506;&#31243;&#20195;&#30908;";
 $langDelCourse = "&#21034;&#38500;&#25972;&#20491;&#35506;&#31243;&#38936;&#22495;(course area)";
 $langProfessors = "&#25945;&#24107;&#20497;";
 $langFaculty = "&#39006;&#21029;";

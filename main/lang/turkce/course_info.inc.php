@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Ders bilgilerini deðiþtir";
 $langModifDone = "Bilgiler deðiþti";
-$langCode = "Ders kodu";
 $langDelCourse = "Ders sitesini sil";
 $langProfessors = "Ö&#287;retmenler";
 $langFaculty = "Kategori";

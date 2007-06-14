@@ -49,7 +49,6 @@ $langFieldsRequ = "Semua Ruang Kosong Perlu Diisi";
 $langEx = "cth. <i>Elektronik Analog II</i>";
 $langFac = "Pusat Pengajian";
 $langTargetFac = "Pusat Pengajian yang Menawarkan Subjek Ini.";
-$langCode = "Kod Subjek";
 $langMax = "cth:. <i>EKT221</i>";
 $langDoubt = "If you doubt on your course\'s code, consult, ";
 $langProgram = "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management";

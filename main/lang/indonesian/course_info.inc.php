@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Seting mata kuliah";
 $langModifDone = "Informasi telah diubah";
-$langCode = "Kode mata kuliah";
 $langDelCourse = "Hapus situs mata kuliah";
 $langProfessors = "Pengajar-Pengajar";
 $langFaculty = "Fakultas/Kategori";

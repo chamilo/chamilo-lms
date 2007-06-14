@@ -7,7 +7,6 @@ $langMdDescription = "Para armazenar esta informação, clique em Armazenar";
 $langMdCoverage = "bacharel em engenharia";
 $langMdCopyright = "Universidade de Ghent";
 $langTool = "Metadados do Documento";
-$langSorry = "Selecione um curso primeiro";
 $langNoScript = "O script não está habilitado no seu browser, por favor ignore a parte da tela abaixo desse texto, ele não irá funcionar...";
 $langPressAgain = "Clique em \'Armazenar\' novamente...";
 $langLanguageTip = "a língua na qual esse objeto de aprendizagem foi feito";

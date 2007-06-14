@@ -80,7 +80,6 @@ $GroupCategory = "Kategorija grupe";
 $NoTitleGiven = "Molim Vas, unesite naslov";
 $InvalidMaxNumberOfMembers = "Molim Vas, unesite ispravan broj za maksimalan broj &#269;lanova.";
 $CategoryOrderChanged = "Redosled kategorija je izmenjen";
-$Tools = "Alati";
 $Wiki = "Wiki grupe";
 $CategoryCreated = "Kategorija je kreirana";
 ?>

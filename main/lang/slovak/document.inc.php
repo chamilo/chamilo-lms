@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $MoveTo = "Presunú&#357;";
 $langDownloadFile = "Uloži&#357; súbor na server";
-$langCreateDir = "Vytvori&#357; prie&#269;inok";
 $langNameDir = "Názov nového prie&#269;inku";
 $langSize = "Ve&#318;kos&#357;";
 $langRename = "Premenova&#357;";

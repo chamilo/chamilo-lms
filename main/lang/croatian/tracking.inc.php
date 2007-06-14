@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Prikaži sve";
 $langToolName = "Pra&#263;enje";
 $TrackingDisabled = "Nadzornik sustava onemogu&#263;io je pra&#263;enje.";
 $langShowNone = "Ne prikazuj";

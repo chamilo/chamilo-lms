@@ -140,7 +140,6 @@ $langZipNoPhp = "De zipfile mag geen .PHP-bestanden bevatten";
 $langNoImg = "Testen zonder afbeeldingen";
 $langImgNote_st = "U moet nog uploaden";
 $langImgNote_en = "afbeelding(en):";
-$langAreYouSureToDelete = "Bent u zeker dat u wilt verwijderen";
 $langDocDeleted = "Het document is verwijderd.";
 $langViMod = "De zichtbaarheid is gewijzigd.";
 $langNameNotEqual = "is geen geldig bestand! ";

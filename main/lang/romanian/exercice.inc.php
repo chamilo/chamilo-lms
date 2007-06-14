@@ -137,7 +137,6 @@ $langZipNoPhp = "Arhiva zip nu poate contine fisiere .PHP";
 $langNoImg = "Test fara imagini";
 $langImgNote_st = "<br> Inca trebuie sa transferi";
 $langImgNote_en = "imagine(i) :";
-$langAreYouSureToDelete = "Esti sigur(a) ca doresti sa stergi";
 $langDocDeleted = "Document sters";
 $langViMod = "Vizibilitatea modificata";
 $langNameNotEqual = "nu este un fisier valabil !";

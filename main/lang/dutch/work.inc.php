@@ -23,7 +23,6 @@ $langDelLk = "Link verwijderen";
 $langMustBeRegisteredUser = "U moet geregistreerd zijn voor deze cursus om werk te kunnen publiceren.";
 $langListDel = "Verwijder lijst";
 $langWork = "Studentenpublicaties";
-$langCreateDir = "Map aanmaken";
 $langNameDir = "Map hernoemen";
 $langFileExists = "Map bestaat reeds";
 $langDirCr = "Map aanmaken";

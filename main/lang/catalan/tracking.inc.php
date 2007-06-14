@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Mostrar tot";
 $langToolName = "Seguiment";
 $TrackingDisabled = "Seguir ha estat impossibilitat per administrador de sistema";
 $langShowNone = "No mostrar";

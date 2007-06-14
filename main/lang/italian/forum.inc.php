@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Forum = "Forum";
 $AddForumCategory = "Aggiungi una categoria di forum";
 $AddForum = "Aggiungi un forum";
-$ThisFieldIsRequired = "Questo campo è obbligatorio";
 $Topics = "Argomenti";
 $Posts = "Messaggi";
 $LastPosts = "Ultimo messaggio";
@@ -33,7 +32,6 @@ $Views = "Viste";
 $LastPost = "Ultimo messaggio";
 $Quoting = "Ha detto";
 $NotifyByEmail = "Notificami via e-mail le eventuali risposte";
-$VisibilityChanged = "La visibilità è stata cambiata";
 $StickyPost = "E\' un messaggio in evidenza (verrà posizionato in alto, accompagnato da un\'icona speciale)";
 $ReplyShort = "Re:";
 $DeletePost = "Sei sicuro di voler eliminare il messaggio? Ricorda che anche le risposte successive verranno eliminate. Puoi verificare quali risposte saranno eliminate scegliendo la vista indentata";

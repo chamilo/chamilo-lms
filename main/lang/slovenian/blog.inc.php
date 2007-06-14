@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Iskanje";
 $MyTasks = "Moja opravila";
 $FavoriteBlogs = "Moji priljubljeni blogi";
 $Navigation = "Navigacija";
@@ -19,9 +18,6 @@ $NewComment = "Nov komentar";
 $ReplyToThisComment = "Odgovori na ta komentar";
 $ManageTasks = "Upravljaj opravila";
 $ManageMembers = "Vpiši / Izpiši uporabnika v tem blogu";
-$Lastname = "Priimek";
-$Firstname = "Priimek";
-$Email = "E-pošta";
 $Register = "Vpiši se v ta blog";
 $UnRegister = "Izpiši se iz tega bloga";
 $SubscribeMembers = "Vpiši uporabnike";
@@ -66,7 +62,6 @@ $WrittenBy = "Napisal";
 $InBlog = "V blogu";
 $ViewPostsOfThisDay = "Poglej objave tega dne";
 $PostsOf = "Objav";
-$SearchResults = "Rezultati iskanja";
 $NoArticleMatches = "Ne najdem nobenega èlanka. Preverite èrkovanje ali pa uporabite drug kriterij v iskanju.";
 $langTask1 = "Opravilo 1";
 $langTask2 = "Opravilo 2";
@@ -85,8 +80,6 @@ $EditPost = "Uredi objavo";
 $AddBlog = "Dodaj blog";
 $EditBlog = "Uredi blog";
 $DeleteBlog = "Odstrani blog";
-$Comments = "Komentarji";
-$Comments = "Komentarji";
 $NoTasks = "Ni opravil";
 $Shared = "Skupna raba";
 ?>

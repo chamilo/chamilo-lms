@@ -137,7 +137,6 @@ $langZipNoPhp = "zip fajl ne sme da sadrži .PHP fajlove";
 $langNoImg = "Test bez slika";
 $langImgNote_st = "<br> Još uvek imate da u&#269;itavate";
 $langImgNote_en = "slika/e:";
-$langAreYouSureToDelete = "Da li ste sigurni da želite da obrišete";
 $langDocDeleted = "Dokument je obrisan";
 $langViMod = "Vidljivost je modifikovana";
 $langNameNotEqual = "to nije validan fajl!";

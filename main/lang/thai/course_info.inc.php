@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "ตั้งค่าวิชา";
 $langModifDone = "ได้แก้ไขข้อมูลแล้ว";
-$langCode = "รหัสวิชา";
 $langDelCourse = "ลบรายวิชานี้";
 $langProfessors = "อาจารย์ผู้สอน";
 $langFaculty = "ประเภท";

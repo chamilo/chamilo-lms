@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "obsolete language var";
 $langMdCallingTool = "Learning path - Scorm";
 $langTool = "Scorm MD Operations";
-$langSorry = "Select a course first";
-$langDenied = "This function is only available for course admins";
 $langNotInDB = "no Dokeos DB entry";
 $langManifestSyntax = "(syntax error in manifest file...)";
 $langEmptyManifest = "(empty manifest file...)";

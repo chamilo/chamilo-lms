@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Forum = "Forumo";
 $AddForumCategory = "Aldoni novan fforuman kategorion";
 $AddForum = "Aldoni novan forumon";
-$ThisFieldIsRequired = "Tiu kampo estas deviga";
 $Topics = "Temoj";
 $Posts = "Mesa&#285;oj";
 $LastPosts = "Lasta mesa&#285;o";
@@ -33,7 +32,6 @@ $Views = "Nombro da vizitoj";
 $LastPost = "Lasta mesa&#285;o";
 $Quoting = "Cito";
 $NotifyByEmail = "Sciigu al mi per retpo&#349;to, kiam iu respondas";
-$VisibilityChanged = "Videbloj &#349;an&#285;itaj";
 $StickyPost = "&#264;i tio estas fiksa mesa&#285;o (&#265;iam aperas supre markata de speciala ikono)";
 $ReplyShort = "Respondo:";
 $DeletePost = "&#264;u certe, ke vi volas forigi tiun mesa&#285;on?";

@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "请先选择一门课程";
 $langTool = "元数据";
-$langDenied = "只有课程管理员才能使用此功能";
 $langClickKw = "点击目录中的关键字进行选择或取消选择.";
 $langKwHelp = "单击 \'+\' 按钮打开, \'-\' 按钮关闭, \'++\' 按钮全部打开, \'--\' 
 按钮全部关闭.<BR><BR>通过关闭目录树清除全部选定的关键词，再\'+\'按钮用打开。 按住Alt键并单击 

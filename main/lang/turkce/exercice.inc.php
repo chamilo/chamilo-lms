@@ -137,7 +137,6 @@ $langZipNoPhp = "Zip dosyas&#305;nda .php dosyas&#305; bulunmamal&#305;.";
 $langNoImg = "Resimsiz test";
 $langImgNote_st = "<br>Göndermek zorunda oldu&#287;unuz";
 $langImgNote_en = "resim(ler)";
-$langAreYouSureToDelete = "Silmek istiyormusunuz?";
 $langDocDeleted = "Belge silindi";
 $langViMod = "Görülebilirlik düzenlendi";
 $langNameNotEqual = "geçerli bir dosya de&#287;il !";

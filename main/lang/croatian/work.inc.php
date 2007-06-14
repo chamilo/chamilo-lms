@@ -23,7 +23,6 @@ $langDelLk = "Izbriši poveznicu";
 $langMustBeRegisteredUser = "Samo registrirani korisnici ovoga kolegija mogu objavljivati dokumente.";
 $langListDel = "Izbriši popis";
 $langWork = "Rad";
-$langCreateDir = "Izradi mapu";
 $langNameDir = "Preimenuj mapu";
 $langFileExists = "Datoteka ve&#263; postoji";
 $langDirCr = "Izradi mapu";

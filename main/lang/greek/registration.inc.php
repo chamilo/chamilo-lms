@@ -88,7 +88,5 @@ $langPass = "Συνθηματικό";
 $langSurname = "Όνομα";
 $langRegistration = "Εγγραφή";
 $langWorks = "Εργασίες Μαθητών";
-$langModify = "Τροποποίηση";
 $langEdit = "Διόρθωση";
-$langDelete = "Διαγραφή";
 ?>

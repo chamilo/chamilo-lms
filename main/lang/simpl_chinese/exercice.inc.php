@@ -137,7 +137,6 @@ $langZipNoPhp = "压缩文件不能包含.PHP 文件";
 $langNoImg = "测验没有图像";
 $langImgNote_st = "<br>是否仍然要上传";
 $langImgNote_en = "图像: ";
-$langAreYouSureToDelete = "确认要删除";
 $langDocDeleted = "文档已删除";
 $langViMod = "可见修改";
 $langNameNotEqual = "是非法文件!";

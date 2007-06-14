@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Show all";
 $langToolName = "Reporting";
 $TrackingDisabled = "Reporting has been disabled by system administrator.";
 $InactivesStudents = "Inactive users";
@@ -173,7 +172,6 @@ $NoExercise = "No exercises";
 $LimitDate = "Limit date";
 $SentDate = "Sent date";
 $Annotate = "Notify";
-$Comments = "Comments";
 $DayOfDelay = "Day of delay";
 $NoProduction = "No production";
 $NoComment = "No comment";

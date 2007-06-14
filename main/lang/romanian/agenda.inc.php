@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Itemul personal a fost editat cu succes";
 $PeronalAgendaItemDeleted = "Itemul personal a fost sters cu succes";
 $ViewPersonalItem = "Vezi itemi personali";
 $UserGroupFilter = "Filtreaza grupuri/utilizatori";
-$VisibilityChanged = "Vizibilitatea a fost modificata";
 $ShowAll = "Prezinta toti";
 $Print = "Tipareste";
 ?>

@@ -49,7 +49,6 @@ $langFieldsRequ = "Tutti i campi sono obbligatori";
 $langEx = "es. <i>Gestione delle risorse umane</i>";
 $langFac = "Categoria";
 $langTargetFac = "Questa è la Facoltà, Dipartimento o Scuola presso cui il corso è tenuto";
-$langCode = "Codice del Corso";
 $langMax = "max. 12 caratteri, es. <i>RISUM21</i>";
 $langDoubt = "In caso di dubbio sulla denominazione esatta o sul codice del corso, consulta il, ";
 $langProgram = "Programma del corso</a>. Se non esiste un codice appropriato, puoi inventarne uno. 

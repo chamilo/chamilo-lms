@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "verouderde taalvariabele";
 $langMdCallingTool = "Leerpad &ndash; SCORM";
 $langTool = "SCORM-MD-bewerkingen";
-$langSorry = "Selecteer eerst een cursus";
-$langDenied = "Deze functie is enkel beschikbaar voor cursusbeheerders.";
 $langNotInDB = "geen ingave in de Dokeosdatabank";
 $langManifestSyntax = "(syntaxfout in manifestbestand&hellip;)";
 $langEmptyManifest = "(leeg manifestbestand&hellip;)";

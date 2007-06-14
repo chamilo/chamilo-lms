@@ -75,9 +75,6 @@ $langQuit = "Lopeta";
 $your_password_has_been_reset = "Salasanasi on nollattu";
 $langSex = "Sukupuoli";
 $langClass = "Luokka";
-$FirstName = "etunimi";
-$langGroup = "ryhmä";
-$langModify = "muokkaa";
 $langEdit = "muokkaa";
 $required = "Pakollinen";
 $langOptionalTextFields = "Valinnaiset kentät";
@@ -86,7 +83,5 @@ $langMyDiplomas = "Suoritukseni";
 $langMyPersonalOpenArea = "Lisätietoja minusta";
 $langMyTeach = "Aineet joita opetan";
 $langMyProductions = "Oma tuotantoni";
-$langAreYouSureToDelete = "Haluatko varmasti poistaa";
 $langFileDeleted = "Tiedosto on poistettu";
-$langDelete = "Poista";
 ?>

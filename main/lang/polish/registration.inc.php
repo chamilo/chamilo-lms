@@ -119,9 +119,6 @@ $langQuit = "Zrezygnuj";
 $your_password_has_been_reset = "Twoje has&#322;o zosta&#322;o skasowane";
 $langSex = "p&#322;e&#263;";
 $langClass = "Klasa";
-$FirstName = "Imi&#281;";
-$langGroup = "Grupa";
-$langModify = "modyfikuj";
 $langEdit = "edytuj";
 $required = "wymagane";
 $langOptionalTextFields = "pole opcjonalne";
@@ -130,7 +127,5 @@ $langMyDiplomas = "Moje dyplomy";
 $langMyPersonalOpenArea = "Moje otwarte pole osobiste";
 $langMyTeach = "Czego jestem w stanie uczy&#263;";
 $langMyProductions = "Moje prace";
-$langAreYouSureToDelete = "Czy na pewno skasowa&#263;";
 $langFileDeleted = "Plik zosta&#322; skasowany.";
-$langDelete = "Skasuj";
 ?>

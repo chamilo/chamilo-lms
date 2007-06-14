@@ -14,4 +14,7 @@ $langValid  = "可用的";
 $langBackAndForget  = "返回和取消记忆";
 $langOkSent = "你的页面已经上传. <p>现在链接<a href=\"../..//index.php\">首页</a>";
 $Content = "&#20869;&#23481;";
+$CourseDescriptionUpdated = "&#35838;&#31243;&#25551;&#36848;&#26356;&#26032;&#23436;&#25104;";
+$CourseDescriptionDeleted = "&#35838;&#31243;&#25551;&#36848;&#21024;&#38500;&#23436;&#25104;";
+$CourseDescriptionIntro = "To create a course description, click on a heading and fill the correct form field.<br><br> Click then OK and fill another heading.";
 ?>

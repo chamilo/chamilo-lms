@@ -49,7 +49,6 @@ $langFieldsRequ = "Tots els camps requerits";
 $langEx = "ex: <i>Historia de la Literatura</i>";
 $langFac = "Categoria";
 $langTargetFac = "Aquesta és la facultat, departament o escola on el curs s\'imparteix";
-$langCode = "Codi del curs";
 $langMax = "max. 12 caracters, ex: <i>ONA2121</i>";
 $langDoubt = "Si dubtes sobre el codi del teu curs, consulta, ";
 $langProgram = "Programa del curs</a>. Si el teu curs no té codi, per la raó que sigui, inventa\'n un. Per exemple<i>INNOVACIÓ</i> si el curs és sobre Gestió de la Innovació";

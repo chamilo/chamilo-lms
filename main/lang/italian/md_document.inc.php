@@ -7,7 +7,6 @@ $langMdDescription = "Per salvare l\'informazione, premi Salva";
 $langMdCoverage = "Es. Diploma di...";
 $langMdCopyright = "Es. si prega di citare la fonte";
 $langTool = "Metadati del documento";
-$langSorry = "Seleziona prima un corso";
 $langNoScript = "Il tuo browser non permette l\'esecuzione di scripts, ignora la parte sottostante, non può funzionare...";
 $langPressAgain = "Premi ancora \'Salva\'";
 $langLanguageTip = "lingua impiegata nel learning object";

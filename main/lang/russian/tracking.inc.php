@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Показать все";
 $langToolName = "Статистика";
 $TrackingDisabled = "Система статистики и отслеживания действий пользователей дезактивирована 
 администратором системы.";

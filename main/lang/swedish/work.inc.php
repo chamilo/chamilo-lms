@@ -23,7 +23,6 @@ $langDelLk = "Radera länk";
 $langMustBeRegisteredUser = "Bara registrerade användare i denna kurs kan publicera dokument.";
 $langListDel = "Radera lista";
 $langWork = "Arbete";
-$langCreateDir = "Skapa arkiv";
 $langNameDir = "Döp om arkiv";
 $langFileExists = "Filen existerar redan";
 $langDirCr = "Skapa arkiv";

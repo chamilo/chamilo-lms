@@ -7,7 +7,6 @@ $langMdDescription = "Um diese Informationen zu sichern, klicken Sie auch \'Sich
 $langMdCoverage = "z.B. Bachelor in ...";
 $langMdCopyright = "z.B. wenn die Quelle erwähnt wird";
 $langTool = "Dokument-Metadaten";
-$langSorry = "Zuerst einen Kurs auswählen";
 $langNoScript = "Script ist in Ihrem Browser nicht aktiviert; bitte ignorieren Sie den Teil des Bildschirms unter diesem Text, es wird nicht funktionieren ...";
 $langPressAgain = "Bitte \'Sichern\' nochmals klicken";
 $langLanguageTip = "die Sprache, in der dieses Lernobjekt erstellt wurde";

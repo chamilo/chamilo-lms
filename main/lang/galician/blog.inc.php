@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Procurar";
 $MyTasks = "As miñas tarefas";
 $FavoriteBlogs = "Os meus blogs favoritos";
 $Navigation = "Navegación";
@@ -19,9 +18,6 @@ $NewComment = "Engadir comentario";
 $ReplyToThisComment = "Contestar a este comentario";
 $ManageTasks = "Administrar tarefas";
 $ManageMembers = "Administrar usuarios";
-$Lastname = "Apelidos";
-$Firstname = "Nome";
-$Email = "E-mail";
 $Register = "Rexistrar";
 $UnRegister = "Anular a inscrición neste blog";
 $SubscribeMembers = "Dar de alta usuarios";
@@ -66,7 +62,6 @@ $WrittenBy = "Escrito por ";
 $InBlog = "no blog";
 $ViewPostsOfThisDay = "Ver os artigos do día de hoxe";
 $PostsOf = "Artigos de";
-$SearchResults = "Resultados";
 $NoArticleMatches = "Non se atoparon artigos que se axusten aos seus criterios de busca. Pode ser que teña escrito mal as palabras ou que a súa pesquisa sexa pouco concreta. Altere o que desexar e inicie unha nova pesquisa.";
 $langTask1 = "Tarefa 1";
 $langTask2 = "Tarefa 2";
@@ -85,8 +80,6 @@ $EditPost = "Modificar o artigo";
 $AddBlog = "Crear un novo blog";
 $EditBlog = "Modificar título e subtítulo";
 $DeleteBlog = "Eliminar este blog";
-$Comments = "Comentarios";
-$Comments = "Comentarios";
 $NoTasks = "Sen tarefas";
 $Shared = "Compartido";
 ?>

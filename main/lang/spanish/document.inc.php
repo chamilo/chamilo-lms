@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $MoveTo = "Mover a";
 $langDownloadFile = "Enviar un archivo al servidor";
-$langCreateDir = "Crear un directorio";
 $langNameDir = "Nombre del nuevo directorio";
 $langSize = "Tamaño";
 $langRename = "Renombrar";

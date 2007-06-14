@@ -80,7 +80,6 @@ $GroupCategory = "小组分类";
 $NoTitleGiven = "请输入标题";
 $InvalidMaxNumberOfMembers = "请输入一个有效的最大成员数.";
 $CategoryOrderChanged = "分类顺序已更改";
-$Tools = "工具";
 $Wiki = "小组 wiki";
 $CategoryCreated = "分类已新建";
 $GroupTutors = "&#23548;&#24072;";

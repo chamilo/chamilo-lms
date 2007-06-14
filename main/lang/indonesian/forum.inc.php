@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Forum = "Forum";
 $AddForumCategory = "Tambah kategori baru foum";
 $AddForum = "Tambah sebuah forum baru";
-$ThisFieldIsRequired = "Field ini diwajibkan";
 $Topics = "Topik";
 $Posts = "Posts";
 $LastPosts = "Post terakhir";
@@ -33,7 +32,6 @@ $Views = "Lihat";
 $LastPost = "Posting terakhir";
 $Quoting = "Mengkutip";
 $NotifyByEmail = "Ingatkan saya melalaui email jika ada tanggapan";
-$VisibilityChanged = "Kenampakaan telah diubah";
 $StickyPost = "Ini pesan khusus (tampil selalu di atas dan memiliki ikon khusus)";
 $ReplyShort = "Re:";
 $DeletePost = "Anda yakin ingin mengapus postingan ini?  Menghapus ini juga akan menghapus tanggapan-nya. Silahkan tandai kenampakan thread untuk melihat postingan mana saja yang juga akan dihapus.";

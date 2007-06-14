@@ -23,7 +23,6 @@ $langDelLk = "Zmaza&#357; odkaz";
 $langMustBeRegisteredUser = "Len registrovaný užívatelia tohto kurzu môžu publikova&#357; dokumenty.";
 $langListDel = "Zmaza&#357; zoznam";
 $langWork = "Práca";
-$langCreateDir = "Vytvori&#357; prie&#269;inok";
 $langNameDir = "Premenova&#357; prie&#269;inok";
 $langFileExists = "Súbor už existuje";
 $langDirCr = "Vytvori&#357; prie&#269;inok";

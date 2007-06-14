@@ -17,7 +17,6 @@ $CourseResources = "Resursi kolegija";
 $ExternalLink = "Vanjska poveznica";
 $DropboxAdd = "Dodaj stranicu Pretinac ovome poglavlju.";
 $AddAssignmentPage = "Dodaj stranicu Studentski radovi ovome poglavlju.";
-$Dropbox = "Pretinac";
 $Assignments = "Studentski radovi";
 $Exercise = "Vježbe";
 $Link = "Poveznica";

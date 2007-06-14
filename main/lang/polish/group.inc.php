@@ -80,5 +80,4 @@ $GroupCategory = "Kategorie grup";
 $NoTitleGiven = "Podaj tytu&#322;";
 $InvalidMaxNumberOfMembers = "Wpisz liczb&#281; uczestników (nie wi&#281;cej ni&#380; maks.)";
 $CategoryOrderChanged = "Kolejno&#347;&#263; kategorii zosta&#322;a zmieniona";
-$Tools = "Narz&#281;dzia";
 ?>

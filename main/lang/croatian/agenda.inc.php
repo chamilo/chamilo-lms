@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Vaš osobni element uspješno je izmijenjen u raspored
 $PeronalAgendaItemDeleted = "Vaš osobni elemnt uspješno je izbrisan iz rasporeda";
 $ViewPersonalItem = "Prikaži osobne elemente";
 $UserGroupFilter = "Filtar prema grupama/korisnicima";
-$VisibilityChanged = "Vidljivost izmijenjena";
 $ShowAll = "Prikaži sve";
 $Print = "Tiskanje";
 ?>

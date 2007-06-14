@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "A személyes naptár eleme módosítva.";
 $PeronalAgendaItemDeleted = "A személyes naptár eleme törölve.";
 $ViewPersonalItem = "Személyes elemek megtekintése";
 $UserGroupFilter = "Sz&#369;r&#337; a csoportokon/felhasználókon";
-$VisibilityChanged = "Láthatóság megváltozott";
 $ShowAll = "Mutat mindet";
 $Print = "Nyomtat";
 ?>

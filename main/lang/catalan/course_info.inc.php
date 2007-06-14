@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Modifica la informació del curs";
 $langModifDone = "La informació ha estat modificada";
-$langCode = "Codi del curs";
 $langDelCourse = "Esborra el lloc web sencer del curs";
 $langProfessors = "Professors";
 $langFaculty = "Facultat";

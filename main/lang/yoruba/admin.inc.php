@@ -26,7 +26,6 @@ $langCourseAccess = "aye ise";
 $langCourseSubscription = "ifi oruko sile fun ise";
 $langPublicAccess = "ayefun gbogbo enia";
 $langPrivateAccess = "aye fun enia kan";
-$langCode = "Ena";
 $langLoginName = "wole";
 $langAddPicture = "Fi aworan si";
 ?>

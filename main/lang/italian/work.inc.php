@@ -23,7 +23,6 @@ $langDelLk = "Elimina il collegamento";
 $langMustBeRegisteredUser = "Solo i corsisti iscritti possono pubblicare documenti.";
 $langListDel = "Elimina i documenti elencati";
 $langWork = "Elaborato";
-$langCreateDir = "Crea una cartella";
 $langNameDir = "Rinomina la cartella";
 $langFileExists = "Il file è già esistente";
 $langDirCr = "Crea una cartella";

@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Forum = "Forum";
 $AddForumCategory = "Dodaj now&#261; kategori&#281; forów";
 $AddForum = "Dodaj nowe forum";
-$ThisFieldIsRequired = "To pole jest wymagane";
 $Topics = "Tematy";
 $Posts = "Posty";
 $LastPosts = "Ostatni post";
@@ -33,7 +32,6 @@ $Views = "Widoki";
 $LastPost = "Ostatni post";
 $Quoting = "Cytowanie";
 $NotifyByEmail = "Powiadom mnie poprzez e-mail kiedy kto&#347; odpowie";
-$VisibilityChanged = "Widoczno&#347;&#263; zosta&#322;a zmieniona";
 $StickyPost = "To jest czepliwy post (pojawia si&#281; zawsze na pocz&#261;tku i ma specjaln&#261; czepliw&#261; ikonk&#281;)";
 $ReplyShort = "Odp:";
 $DeletePost = "Czy jeste&#347; pewnien, &#380;e chcesz usun&#261;&#263; ten post? Usuni&#281;cie posta spowoduje usuni&#281;cie równie&#380; odpowiedzi. Sprawd&#378; prosz&#281; w widoku z w&#261;tkami, które posty zostan&#261; równie&#380; usuni&#281;te.";

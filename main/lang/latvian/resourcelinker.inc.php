@@ -17,7 +17,6 @@ $CourseResources = "Kursa resursi";
 $ExternalLink = "&#256;r&#275;ja hipersaite";
 $DropboxAdd = "Pievienot \"Apmai&#326;as kasti\" šai sada&#316;ai.";
 $AddAssignmentPage = "Pievienot \"Studentu publik&#257;ciju\" lapu šai sada&#316;ai.";
-$Dropbox = "Apmai&#326;as kaste";
 $Assignments = "Studentu publik&#257;cijas";
 $Exercise = "Kontroldarbi";
 $Link = "Hipersaite";

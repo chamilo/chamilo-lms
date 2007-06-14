@@ -7,7 +7,6 @@ $langMdDescription = "Pntru memorarea acestei informatii, apasati Memorare";
 $langMdCoverage = "ex. absolvent ...";
 $langMdCopyright = "ex. daca sursa este acceptata";
 $langTool = "Document Metadata";
-$langSorry = "Selectati un curs ";
 $langNoScript = "Scriptul nu este activat in browserul dvs, va rugam sa ignorati partea de mai jos a ecranului, nu va functiona...";
 $langPressAgain = "Apasa \'Memorare\' din nou...";
 $langLanguageTip = "limba in care a fost a fost creat acest obiect de invatare";

@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Zoeken";
 $MyTasks = "Mijn taken";
 $FavoriteBlogs = "Mijn favoriete blogs";
 $Navigation = "Navigatie";
@@ -19,9 +18,6 @@ $NewComment = "Commentaar toevoegen";
 $ReplyToThisComment = "Commentaar toevoegen aan deze commentaar";
 $ManageTasks = "Taakbeheer in deze blog";
 $ManageMembers = "Een gebruiker inschrijven / uitschrijven voor deze blog";
-$Lastname = "Familienaam";
-$Firstname = "Voornaam";
-$Email = "Email";
 $Register = "Zich inschrijven in deze blog";
 $UnRegister = "Zich uitschrijven uit deze blog";
 $SubscribeMembers = "Gebruikers inschrijven";
@@ -66,7 +62,6 @@ $WrittenBy = "geschreven door";
 $InBlog = "in deze blog";
 $ViewPostsOfThisDay = "Artikels van vandaag bekijken";
 $PostsOf = "Artikels van";
-$SearchResults = "Zoekresultaten";
 $NoArticleMatches = "We hebben géén artikels gevonden die voldoen aan uw zoekcriteria. Gelieve een ruimere zoekopdracht uit te voeren.";
 $langTask1 = "Taak 1";
 $langTask2 = "Taak 2";
@@ -85,8 +80,6 @@ $EditPost = "Een artikel wijzigen";
 $AddBlog = "Maak een nieuwe blog";
 $EditBlog = "Titel en ondertitel aanpassen";
 $DeleteBlog = "Deze blog verwijderen";
-$Comments = "Reacties";
-$Comments = "Opmerkingen";
 $NoTasks = "Geen taken";
 $Shared = "Gedeeld";
 ?>

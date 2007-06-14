@@ -7,7 +7,6 @@ $langMdDescription = "För att lagra denna information, tryck Lagra";
 $langMdCoverage = "ex. Filosofie kandidat ...";
 $langMdCopyright = "ex. under förutsättning att källan är känd";
 $langTool = "Dokument Metadata";
-$langSorry = "Välj en kurs först";
 $langNoScript = "Skripthantering är inte aktivt i den webläsare, var vänlig ignorera skärmdelen nedanför denna text, det kommer inte att fungera...";
 $langPressAgain = "Tryck \"Lagra\" igen...";
 $langLanguageTip = "det språk som detta Learning object var skrivet i.";

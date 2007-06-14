@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Ditt personliga agenda objekt är ändrat";
 $PeronalAgendaItemDeleted = "Ditt personliga agenda objekt är raderat";
 $ViewPersonalItem = "Visa personliga objekt";
 $UserGroupFilter = "Filter på grupper/användare";
-$VisibilityChanged = "Synlighet ändrad";
 $ShowAll = "Visa allt";
 $Print = "Skriv ut";
 ?>

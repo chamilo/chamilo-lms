@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Item Agenda Personal anda telah diedit";
 $PeronalAgendaItemDeleted = "Item Personal Agenda anda telah dihapus";
 $ViewPersonalItem = "Lihat Agenda Personal";
 $UserGroupFilter = "Filter groups/user";
-$VisibilityChanged = "Kenampakan diubah";
 $ShowAll = "Tampilkan Semua";
 $Print = "Cetak";
 ?>

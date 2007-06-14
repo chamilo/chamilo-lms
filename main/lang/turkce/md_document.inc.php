@@ -7,7 +7,6 @@ $langMdDescription = "Bu bilgiyi kaydetmek için Kaydet dü&#287;mesine bas&#305;n
 $langMdCoverage = "e.g. Bachelor of ...";
 $langMdCopyright = "e.g. provided the source is acknowledged";
 $langTool = "Belge Metadata";
-$langSorry = "Önce bir ders seçin lütfen";
 $langNoScript = "Script sizin taray&#305;c&#305;n&#305;zda çal&#305;&#351;t&#305;r&#305;lamad&#305;&#287;&#305; için lütfen bu yaz&#305;n&#305;n alt&#305;ndaki parçay&#305; yoksay&#305;n.";
 $langPressAgain = "Kaydet dü&#287;mesine tekrar bas&#305;n...";
 $langLanguageTip = "bu kursun haz&#305;rland&#305;&#287;&#305; lisan";

@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Keresés";
 $MyTasks = "Feladataim";
 $FavoriteBlogs = "Kedvenc blogjaim";
 $Navigation = "Navigálás";
@@ -19,9 +18,6 @@ $NewComment = "Új hozzászólás";
 $ReplyToThisComment = "Válasz erre a hozzászólásra";
 $ManageTasks = "Feladatok kezelése";
 $ManageMembers = "Tagok kezelése";
-$Lastname = "Utónév";
-$Firstname = "Családnév";
-$Email = "E-mail";
 $Register = "Feliratkozás";
 $UnRegister = "Leiratkozás";
 $SubscribeMembers = "Tagok feliratása";
@@ -66,7 +62,6 @@ $WrittenBy = "írta";
 $InBlog = "Melyik blogban";
 $ViewPostsOfThisDay = "A mai nap üzeneteinek megtekintése";
 $PostsOf = "Üzenetek";
-$SearchResults = "Keresési eredmények";
 $NoArticleMatches = "A keresés nem járt eredménnyel";
 $langTask1 = "1. Feladat";
 $langTask2 = "2. Feladat";
@@ -85,8 +80,6 @@ $EditPost = "Üzenet szerkesztése";
 $AddBlog = "Blog hozzáadása";
 $EditBlog = "Blog szerkesztése";
 $DeleteBlog = "Blog törlése";
-$Comments = "Hozzászólások";
-$Comments = "Észrevételek";
 $NoTasks = "Nincsenek feladatok";
 $Shared = "Megosztott";
 ?>

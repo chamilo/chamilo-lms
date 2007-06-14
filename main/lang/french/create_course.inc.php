@@ -52,7 +52,6 @@ $langFieldsRequ = "Tous les champs sont obligatoires";
 $langEx = "p. ex. <i>Gestion de l\'innovation</i>";
 $langFac = "Catégorie";
 $langTargetFac = "Il s\'agit du département ou de toute autre structure de votre organisation";
-$langCode = "Code cours";
 $langMax = "max. 20 caractères, p. ex. <i>INNOV001</i>";
 $langDoubt = "En cas de doute sur l\'intitulé exact ou le code de votre cours, consultez le";
 $langProgram = "Catalogue des cours</a>. Si le cours que vous voulez créer ne correspond pas à un code cours existant, vous pouvez en inventer un. Par exemple <i>INNOV001</i> s\'il s\'agit d\'un programme de gestion de l\'innovation";

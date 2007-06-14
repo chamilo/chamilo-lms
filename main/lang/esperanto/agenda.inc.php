@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Via persona agendero estas sukcese &#349;an&#285;ita
 $PeronalAgendaItemDeleted = "Via persona agendero estas sukcese forigita ";
 $ViewPersonalItem = "Pririgardi personan agendon ";
 $UserGroupFilter = "Filtri grupojn/ uzulojn ";
-$VisibilityChanged = "Videblo estas &#349;an&#285;ita ";
 $ShowAll = "Vidigi &#265;ion ";
 $Print = "Presi";
 ?>

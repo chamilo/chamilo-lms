@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "&#51204;&#48512; &#48372;&#44592;";
 $langToolName = "tracking";
 $TrackingDisabled = "&#44288;&#47532;&#51088;&#44032; Tracking&#51012; &#48708;&#54876;&#49457;&#54868; &#54616;&#50688;&#49845;&#45768;&#45796;.";
 $langShowNone = "&#50500;&#47924;&#44163;&#46020; &#48372;&#50668;&#51452;&#51648; &#50506;&#44592;";

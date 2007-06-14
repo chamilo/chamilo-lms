@@ -49,7 +49,6 @@ $langFieldsRequ = "Toate campurile sunt necesare";
 $langEx = "ex. <i>Management Inovativ</i>";
 $langFac = "Categorie";
 $langTargetFac = "Acesta este departamentul sau orice alta categorie unde cursul este distribuit";
-$langCode = "Codul cursului";
 $langMax = "max. 20 caractere, e.g. <i>INNOV21</i>";
 $langDoubt = "Daca aveti indoieli asupra codului cursului, consultati";
 $langProgram = "Programul Cursului. In cazul in care cursul nu are cod, oricare ar fi motivul, inventati unul. De exemplu <i>INOVATIE</i> in cazul in care cursul este despre Managamentul Inovativ";

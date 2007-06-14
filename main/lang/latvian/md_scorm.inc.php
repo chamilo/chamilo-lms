@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "novecojis valodas main&#299;gais";
 $langMdCallingTool = "M&#257;c&#299;bu pl&#257;ns - <i>Scorm</i>";
 $langTool = "Darb&#299;bas ar <i>Scorm</i> MD";
-$langSorry = "Vispirms izv&#275;lieties kursu";
-$langDenied = "Š&#299; funkcija ir pieejama tikai kursa administratoriem";
 $langNotInDB = "nav DOKEOS DB ieraksta";
 $langManifestSyntax = "(sintakses k&#316;&#363;da izdodamaj&#257; saraksta fail&#257;...)";
 $langEmptyManifest = "(tukšs saraksta fails...)";

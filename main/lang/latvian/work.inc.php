@@ -23,7 +23,6 @@ $langDelLk = "Dz&#275;st saiti";
 $langMustBeRegisteredUser = "Tikai re&#291;istr&#275;tie lietot&#257;ji var public&#275;t dokumentus šai kurs&#257;.";
 $langListDel = "Dz&#275;st sarakstu";
 $langWork = "Darbs";
-$langCreateDir = "Izveidot mapi";
 $langNameDir = "P&#257;rsaukt mapi";
 $langFileExists = "T&#257;ds fails jau eksist&#275;";
 $langDirCr = "Izveidot mapi";

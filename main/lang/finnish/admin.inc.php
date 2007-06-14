@@ -23,7 +23,6 @@ $langCourseAccess = "Kurssi pääsy";
 $langCourseSubscription = "Kurssin tilaus";
 $langPublicAccess = "Julkinen pääsy";
 $langPrivateAccess = "Yksityinen pääsy";
-$langCode = "Koodi";
 $langDBManagementOnlyForServerAdmin = "Tietokannan ylläpito on sallittu vain palvelimen ylläpitäjälle";
 $langLoginName = "Kirjaudu";
 $langPhone = "Puhelin";
@@ -40,7 +39,6 @@ $langExportUsers = "Tuo käyttäjä lista";
 $langAddACategory = "Lisää kategoria";
 $ServerStatusTitle = "Palvelin tyyppi";
 $Languages = "Kielet";
-$Search = "Etsi";
 $ClassDeleted = "Luokka on poistettu";
 $DokeosForum  = "Dokeos Foorumi";
 ?>

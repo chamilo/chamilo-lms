@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Kurzusbeállítások";
 $langModifDone = "Az információ megváltoztatva";
-$langCode = "Kurzus kód";
 $langDelCourse = "Az teljes kurzus törlése";
 $langProfessors = "Oktatók";
 $langFaculty = "Kategória";

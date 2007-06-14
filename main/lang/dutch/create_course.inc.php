@@ -52,7 +52,6 @@ $langFieldsRequ = "Alle velden moeten ingevuld worden";
 $langEx = "bv. <i>Literatuurgeschiedenis</i>";
 $langFac = "Categorie";
 $langTargetFac = "Vul hier de naam in van de faculteit waar de cursus wordt gedoceerd";
-$langCode = "Cursuscode";
 $langMax = "max. 20 lettertekens, bv. <i>ROM2121</i>";
 $langDoubt = "Indien u twijfelt over de juiste titel of code van uw cursus, kunt u deze in de cursuslijst raadplegen.";
 $langProgram = "Cursusprogramma</a>. Als de startpagina die u wil creëren niet overeenkomt met een bestaande cursuscode, dan mag u deze verzinnen. Bijvoorbeeld <i>INNOVATIE</i> als het over een opleidingsprogramma gaat betreffend innovatiebeheer.";

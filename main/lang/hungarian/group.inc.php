@@ -81,7 +81,6 @@ $GroupCategory = "Csoport kategóriák";
 $NoTitleGiven = "Kérem adja meg egy címet";
 $InvalidMaxNumberOfMembers = "Kérem, adja meg a lehetséges tagok számát.";
 $CategoryOrderChanged = "A kategória sorrendje megváltoztatva";
-$Tools = "Eszközök";
 $Wiki = "Csoport wiki";
 $CategoryCreated = "Kategória létrehozva";
 $GroupTutors = "Konzulensek";

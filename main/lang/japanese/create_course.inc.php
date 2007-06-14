@@ -43,7 +43,6 @@ $langFieldsRequ = "すべての欄の記入が必要";
 $langEx = "例：<i>文学史</i>";
 $langFac = "学科";
 $langTargetFac = "このコースの学科、学部";
-$langCode = "コース番号";
 $langMax = "最大１バイト文字で12文字 e.g. <i>ROM2121</i>";
 $langDoubt = "コース番号が疑わしいなら、当該部署に連絡してください";
 $langProgram = "コースプログラム";

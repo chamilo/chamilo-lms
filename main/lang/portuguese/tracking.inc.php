@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Mostrar todos";
 $langToolName = "Estatísticas";
 $TrackingDisabled = "As estatísticas foram desligadas pelo administrador do sistema.";
 $InactivesStudents = "Estudantes inactivos";
@@ -173,7 +172,6 @@ $NoExercise = "Não existem exercícios";
 $LimitDate = "Data limite";
 $SentDate = "Data de envio";
 $Annotate = "Anotação";
-$Comments = "Comentários";
 $DayOfDelay = "Dia(s) de atraso";
 $NoProduction = "Sem produção";
 $NoComment = "Sem comentários";
@@ -212,4 +210,5 @@ $CoachList = "Lista de tutores";
 $CoachStudents = "Estudantes do Tutor";
 $NoLearningPath = "Nenhuma Sequência de Aprendizagem";
 $SessionCourses = "Sessões dos cursos";
+$NoUsersInCourseTracking = "Aqui encontrará as estatísticas dos alunos inscritos no curso.";
 ?>

@@ -81,7 +81,6 @@ $GroupCategory = "Kategori Group";
 $NoTitleGiven = "Silahkan isi judul";
 $InvalidMaxNumberOfMembers = "Silahkan isi jumlah anggota maksimum yang sah.";
 $CategoryOrderChanged = "Urutan kategori diubah";
-$Tools = "Tools";
 $Wiki = "Group wiki";
 $CategoryCreated = "Kategori dibuat";
 $GroupTutors = "Tutor";

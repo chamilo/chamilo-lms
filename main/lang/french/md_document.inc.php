@@ -7,7 +7,6 @@ $langMdDescription = "Pour enregistrer les données, poussez sur Enregistrer";
 $langMdCoverage = "p.e. Baccalauréat en ...";
 $langMdCopyright = "p.e. moyennant mention de la source";
 $langTool = "Métadonnées document";
-$langSorry = "Choisissez d\'abord un cours";
 $langNoScript = "Script n\'est pas disponible dans le navigateur, la partie ci-dessous de l\'écran ne marchera pas...";
 $langPressAgain = "Poussez de nouveau sur \'Enregistrer\'...";
 $langLanguageTip = "la langue dans laquelle cet objet a été construit";

@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "过时语言变量";
 $langMdCallingTool = "学习路径 - SCORM";
 $langTool = "SCORM MD 行动";
-$langSorry = "先选择一门课程";
-$langDenied = "只有课程管理员才能使用此功能";
 $langNotInDB = "没有Dokeos数据库条目";
 $langManifestSyntax = "(manifest文件语法错误...) ";
 $langEmptyManifest = "(空manifest 文件...)";

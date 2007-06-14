@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Arata tot";
 $langToolName = "Urmariri";
 $TrackingDisabled = "Urmarirea a fost dezactivata de catre administratotrul sistemului";
 $langShowNone = "Nu arata";

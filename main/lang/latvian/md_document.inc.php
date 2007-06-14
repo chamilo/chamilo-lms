@@ -7,7 +7,6 @@ $langMdDescription = "Lai saglab&#257;tu šo inform&#257;ciju, klikš&#311;iniet \
 $langMdCoverage = "t.i., ... bakalaurs";
 $langMdCopyright = "t.i., nor&#257;d&#299;tais avots ir apstiprin&#257;ts";
 $langTool = "Dokumenta META dati";
-$langSorry = "Izv&#275;lieties vispirms vajadz&#299;go kursu";
 $langNoScript = "J&#363;su p&#257;rlukprogrammai ir atsl&#275;gta iesp&#275;ja izmantot Javaskriptus, t&#257;d&#275;&#316; ne&#326;emiet v&#275;r&#257; ekr&#257;na da&#316;u zem š&#299; teksta, jo t&#257; nedarbosies...";
 $langPressAgain = "L&#363;dzu, nospiediet \"Saglab&#257;t\" v&#275;lreiz...";
 $langLanguageTip = "valoda, kur&#257; šis m&#257;c&#299;bu priekšmets tika izveidots";

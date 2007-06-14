@@ -23,7 +23,6 @@ $langDelLk = "Ønsker du virkelig at slette?";
 $langMustBeRegisteredUser = "Kun registrerede brugere af dette kursus kan poste dokumenter.";
 $langListDel = "Slet liste";
 $langWork = "Arbejde";
-$langCreateDir = "Opret mappe";
 $langNameDir = "Omdøb mappe";
 $langFileExists = "Filen eksisterer allerede";
 $langDirCr = "Opret mappe";

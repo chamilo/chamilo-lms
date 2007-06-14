@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "Prikaži vse";
 $langToolName = "Sledenje";
 $TrackingDisabled = "Sledenje je onemogoèil administrator.";
 $InactivesStudents = "Neaktivni kandidati";
@@ -173,7 +172,6 @@ $NoExercise = "Ni vaj/testov";
 $LimitDate = "Rok";
 $SentDate = "Datum pošiljanja";
 $Annotate = "Pripiši";
-$Comments = "Komentarji";
 $DayOfDelay = "Dan zakasnitve";
 $NoProduction = "Ni produkcije";
 $NoComment = "Ni komentarja";
@@ -212,4 +210,5 @@ $CoachList = "Seznam coach-ov";
 $CoachStudents = "Teèajniki (coach-eji)";
 $NoLearningPath = "Ni uènih poti";
 $SessionCourses = "Seja teèajev";
+$NoUsersInCourseTracking = "Tu boste našli sledenje za uporabnike, vpisane v ta teèaj.";
 ?>

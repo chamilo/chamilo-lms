@@ -138,7 +138,6 @@ $langZipNoPhp = "Zip datoteka ne sme vsebovati .PHP datotek.";
 $langNoImg = "Test brez slik";
 $langImgNote_st = "<br> Še vedno morate prenesti";
 $langImgNote_en = "slik :";
-$langAreYouSureToDelete = "Ste preprièani, da želite odstaniti";
 $langDocDeleted = "Dokument je bil odstranjen";
 $langViMod = "Vidnost je bila spremenjena";
 $langNameNotEqual = "ni veljavna datoteka !";

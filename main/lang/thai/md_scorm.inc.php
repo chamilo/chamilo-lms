@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "ภาษาที่ล้าสมัย obsolete language var";
 $langMdCallingTool = "การเข้าเรียน - Scorm";
 $langTool = "Scorm MD Operations";
-$langSorry = "เลือกวิชาก่อน";
-$langDenied = "เป็นหน้าที่ของผู้ดูแลระบบ ";
 $langNotInDB = "ไม่มีรายการฐานข้อมูลของDokeos";
 $langManifestSyntax = "โครงสร้างสำคัญของไฟล์เสียหาย";
 $langEmptyManifest = "ไฟล์ไม่มีข้อมูล";

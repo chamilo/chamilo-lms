@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langShowAll = "R&#257;d&#299;t visu";
 $langToolName = "Sekošana";
 $TrackingDisabled = "Sekošanu izsl&#275;dza sist&#275;mas administrators.";
 $langShowNone = "Neko ner&#257;d&#299;t";

@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $MoveTo = "P&#257;rvietot uz";
 $langDownloadFile = "Augšupl&#257;d&#275;t failu server&#299;";
-$langCreateDir = "Izveidot direktoriju";
 $langNameDir = "Jaun&#257;s direktorijas nosaukums";
 $langSize = "Izm&#275;rs";
 $langRename = "P&#257;rsaukt";

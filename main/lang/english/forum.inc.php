@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Forum = "Forum";
 $AddForumCategory = "Add a new forum category";
 $AddForum = "Add a new forum";
-$ThisFieldIsRequired = "This field is required";
 $Topics = "Topics";
 $Posts = "Posts";
 $LastPosts = "Last Post";
@@ -33,7 +32,6 @@ $Views = "Views";
 $LastPost = "Last post";
 $Quoting = "Quoting";
 $NotifyByEmail = "Notify me by e-mail when somebody replies";
-$VisibilityChanged = "The visibility has been changed";
 $StickyPost = "This is a sticky message (appears always on top and has a special sticky icon)";
 $ReplyShort = "Re: ";
 $DeletePost = "Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted";

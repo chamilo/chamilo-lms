@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "コースの情報を修正";
 $langModifDone = "情報修正されました";
-$langCode = "コース番号";
 $langDelCourse = "このコースサイト全体を削除";
 $langProfessors = "担当教員";
 $langFaculty = "学科";

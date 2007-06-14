@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "已成功修改个人议项";
 $PeronalAgendaItemDeleted = "已成功删除个人议项";
 $ViewPersonalItem = "浏览个人议项";
 $UserGroupFilter = "组/用户过滤";
-$VisibilityChanged = "改变可见";
 $ShowAll = "显示所有";
 $Print = "打印";
 ?>

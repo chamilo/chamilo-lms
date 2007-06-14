@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $MoveTo = "Áthelyez";
 $langDownloadFile = "Fájl feltöltése a szerverre";
-$langCreateDir = "Könyvtár létrehozása";
 $langNameDir = "Az új könyvtár neve";
 $langSize = "Méret";
 $langRename = "Átnevez";

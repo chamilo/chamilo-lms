@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Các xác lập của khoá học";
 $langModifDone = "Thông tin đã được hiệu chỉnh";
-$langCode = "Mã khoá học";
 $langDelCourse = "Xoá toàn bộ website của khoá học";
 $langProfessors = "Giáo viên";
 $langFaculty = "Bộ môn";

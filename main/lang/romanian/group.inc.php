@@ -80,7 +80,6 @@ $GroupCategory = "Categoria grupului";
 $NoTitleGiven = "Te rog introdu un titlu";
 $InvalidMaxNumberOfMembers = "Te rog introdu un numar valabil pentru numarul maxim de membrii.";
 $CategoryOrderChanged = "Ordinul categoriei a fost schimbat";
-$Tools = "Unelte";
 $Wiki = "Grupul wiki";
 $CategoryCreated = "Categorie creata";
 $GroupTutors = "Indrumatori";

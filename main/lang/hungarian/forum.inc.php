@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Forum = "Fórum";
 $AddForumCategory = "Új fórum kategória hozzáadása";
 $AddForum = "Új fórum hozzáadása";
-$ThisFieldIsRequired = "A mez&#337; kitöltése kötelez&#337;";
 $Topics = "Témák";
 $Posts = "Üzenetek";
 $LastPosts = "Utolsó Üzenet";
@@ -33,7 +32,6 @@ $Views = "Nézetek";
 $LastPost = "Utolsó üzenet";
 $Quoting = "Idézve";
 $NotifyByEmail = "Kérek email értesítést, ha valaki reagál";
-$VisibilityChanged = "A láthatóságot megváltoztatták";
 $StickyPost = "Ez egy ragadós üzenet (mindíg a lista eleján szerepel különleges ikonnal)";
 $ReplyShort = "Vá:";
 $DeletePost = "Biztos benne, hogy törölni szeretné ezt az üzenetet? Az üzenet törlésével a rá érkezett válaszokat is törölni fogja. A téma szerinti megjelenítés módban ellen&#337;rizheti, hogy milyen üzeneteket töröl ezzel egyidej&#369;leg.";

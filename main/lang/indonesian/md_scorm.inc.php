@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "variable bahasa usang";
 $langMdCallingTool = "Learning path - Scorm";
 $langTool = "Operasi MD Scorm";
-$langSorry = "Pilih mata kuliah terlebih dahulu";
-$langDenied = "Fungsi ini hanya tersedia bagi admin mata kuliah";
 $langNotInDB = "Tidak ada entry Database Dokeos";
 $langManifestSyntax = "(syntax error dalam manifest file ...)";
 $langEmptyManifest = "(manifest file kosong ...)";

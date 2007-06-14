@@ -23,7 +23,6 @@ $langDelLk = "Apagar ligação";
 $langMustBeRegisteredUser = "Só os utilizadores deste curso podem publicar documentos.";
 $langListDel = "A lista foi apagada completamente";
 $langWork = "Trabalho";
-$langCreateDir = "Criar um directório";
 $langNameDir = "Nome do novo directório";
 $langFileExists = "Não é possível realizar esta operação.<br>Já existe um elemento com o mesmo nome.";
 $langDirCr = "Directório criado";

@@ -22,8 +22,6 @@ $langRegistration = "Registrácia";
 $langLoginRequest = "Prihlásenie požadované";
 $your_password_has_been_reset = "Heslo bolo zmenené";
 $langSex = "Pohlavie";
-$FirstName = "krstné meno";
-$langGroup = "Skupina";
 $FullUserName = "Celé meno";
 $SearchForUser = "Hlada&#357; užívate&#318;a";
 ?>

@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Seleziona prima un corso";
 $langTool = "Metadati";
-$langDenied = "Questa funzione è riservata ai gestori del corso";
 $langClickKw = "Clicca sulla Parola chiave nell\'albero per selezionarla o deselezionarla";
 $langKwHelp = "br/>Fai Click sul pulsante \'+\' per aprire e su \'-\' per chiudere; \'++\' apre tutto e \'--\' chiude tutto.
 <br/> <br/>

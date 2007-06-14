@@ -1,7 +1,6 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Search = "Arama";
 $MyTasks = "Görevlerim";
 $FavoriteBlogs = "Gözde günlüklerim";
 $Subtitle = "Altbaşlık";
@@ -9,7 +8,6 @@ $ThisBlog = "Bu günlük";
 $NewPost = "Yeni makale";
 $TaskManager = "Görev yönetimi";
 $Home = "Ana sayfa";
-$SearchResults = "Arama sonuçları";
 $langTask1Desc = "Görev 1 açıklaması";
 $langTask2Desc = "Görev 2 açıklaması";
 $langTask3Desc = "Görev 3 açıklaması";

@@ -7,7 +7,6 @@ $langMdDescription = "Aby zachowa&#263; t&#281; informacj&#281;, naci&#347;nij Z
 $langMdCoverage = "np. Posiada tytu&#322; magistra dziedziny ...";
 $langMdCopyright = "np. wiedz&#261;c, &#380;e &#378;ród&#322;o jest honorowane";
 $langTool = "Dokument Metadane";
-$langSorry = "Najpierw wybierz kurs";
 $langNoScript = "Skrypt jest teraz uruchomiony w Twojej przegl&#261;darce, prosz&#281; zignorowa&#263; cz&#281;&#347;&#263; ekranu pod tym tekstem, to nie zadzia&#322;a ...";
 $langPressAgain = "Powtórnie naci&#347;nij \'Zachowaj\' ";
 $langLanguageTip = "j&#281;zyk, w którym utworzony zosta&#322; ten obiekt";

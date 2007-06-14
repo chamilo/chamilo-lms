@@ -7,7 +7,6 @@ $langMdDescription = "To store this information, press Store";
 $langMdCoverage = "e.g. Bachelor of ...";
 $langMdCopyright = "e.g. provided the source is acknowledged";
 $langTool = "Document Metadata";
-$langSorry = "Select a course first";
 $langNoScript = "Script is not enabled in your browser, please ignore the screen part below this text, it won\'t work...";
 $langPressAgain = "Press \'Store\' again...";
 $langLanguageTip = "the language in which this learning object was made";

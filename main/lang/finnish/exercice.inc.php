@@ -122,7 +122,6 @@ $langZipNoPhp = "Zip -tiedosto ei voi sis‰lt‰‰ .PHP -tiedostoja";
 $langNoImg = "Testaa ilman kuvia";
 $langImgNote_st = "<br> Sinun pit‰‰ viel‰ tallentaa";
 $langImgNote_en = "kuva(t):";
-$langAreYouSureToDelete = "Haluatko varmasti poistaa";
 $langDocDeleted = "Dokumentti poistettu";
 $langViMod = "N‰kyvyytt‰ muutettu";
 $langNameNotEqual = "ei ole oikea tiedosto !";

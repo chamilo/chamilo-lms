@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Prvo selektujte kurs";
 $langTool = "Opisna definicija";
-$langDenied = "Ova opcija je dostupna samo administratorima kursa";
 $langClickKw = "Kliknite ne klju&#269;nu re&#269; na drvetu da je selektujete ili deselektujete. ";
 $langKwHelp = "Kliknite na \'+\' dugme da biste otvorili, \'-\' dugme da biste zatvorili, \'++\' dugme da otvorite sve, \'--\' dugme da zatvorite sve.<br/><br/>O&#269;istite sve selektovane klju&#269;ne re&#269;i zatvaranjem drveta i otvaranjem ponovo sa \'+\' dugmetom.<br/><br/>Alt-click \'+\' Ponovo selektuj prethodno selektovane klju&#269;ne re&#269;i<br/><br/>Alt-click klju&#269;na re&#269; negira klju&#269;nu re&#269; <br/>";
 $langAdvanced = "Napredni";

@@ -7,7 +7,6 @@ $langMdDescription = "Para guardar esta información, presione Guardar";
 $langMdCoverage = "por ej., Licenciado en...";
 $langMdCopyright = "por ej., el proveedor de la fuente es conocido";
 $langTool = "Metadatos del documento";
-$langSorry = "Seleccione primero un curso";
 $langNoScript = "Su navegador no permite scripts, por favor ignore la parte inferior de la pantalla. No funcionará...";
 $langPressAgain = "Pulse de nuevo \'Guardar\' ...";
 $langLanguageTip = "idioma en el que el objeto de aprendizaje fue hecho";

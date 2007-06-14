@@ -137,7 +137,6 @@ $langZipNoPhp = "ไฟล์ zip ไม่สามารถใส่ในไฟล์ phpได้";
 $langNoImg = "แบบทดสอบไม่มีรูปภาพ";
 $langImgNote_st = "<br>คุณยังต้องโอนย้ายไฟล์ You still have to upload ";
 $langImgNote_en = "รูปภาพ";
-$langAreYouSureToDelete = "คุณแน่ใจที่จะลบ";
 $langDocDeleted = "ลบเอกสารแล้ว";
 $langViMod = "ปรับแก้ให้มองเห็นแล้ว Visibility modified";
 $langNameNotEqual = "ไฟล์งานไม่ถูกต้อง/สมบูรณ์";

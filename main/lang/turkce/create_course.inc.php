@@ -49,7 +49,6 @@ $langFieldsRequ = "Tüm alanlar zorunludur";
 $langEx = "e.g. <i>Edebiyat Tarihi</i>";
 $langFac = "Kategori";
 $langTargetFac = "Dersin verildiði fakülte, bölüm veya okul";
-$langCode = "Ders kodu";
 $langMax = "en çok 12 harf olmalýdýr, ara verilmez ve (þ,Þ,ð,Ð,Ý,ý,Ç,ç,Ö,ö,Ü,ü) Türkçe harfler kullanýlmaz. Örnek: <i>FIZIK601</i>";
 $langDoubt = "Ders kodunu okulunuzun web sitesinde bulabilirsiniz, ";
 $langProgram = "Ders Programý</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management";

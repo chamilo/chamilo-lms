@@ -49,7 +49,6 @@ $langFieldsRequ = "Minden mezõ kötelezõ";
 $langEx = "pl.: <i>Innováció menedzsment</i>";
 $langFac = "Kategória";
 $langTargetFac = "Ez az a részleg vagy bármilyen kategória ahova a kurzus tartozik";
-$langCode = "Kurzus kód";
 $langMax = "max. 12 karakter, pl.: <i>INNOV21</i>";
 $langDoubt = "Ha kételkedik a kurzusa kódjában, egyeztessen : ";
 $langProgram = "Kurzus Program</a>. Ha a kurzusának nincs kódja, bármi is az oka, találjon  ki egyet. Pl .: <i>INNOVATION</i> ha a kurzus az Innovációs Menedzsmentrõl szól";

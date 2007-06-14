@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "arkai&#285;inta lingvovariablo ";
 $langMdCallingTool = "Lernpado - Scorm";
 $langTool = "Scorm-MD-operacioj ";
-$langSorry = "Unue elektu kurson ";
-$langDenied = "&#264;i-funkcio disponeblas nur por kursmastrumantoj.";
 $langNotInDB = "ne Dokeos-datumbaza elemento ";
 $langManifestSyntax = "(sintaksa eraro en Manifest-dosiero ...) ";
 $langEmptyManifest = "(malplena Manifest-dosiero ...) ";

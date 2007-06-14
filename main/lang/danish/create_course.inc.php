@@ -49,7 +49,6 @@ $langFieldsRequ = "Udfyld alle felter";
 $langEx = "f.eks. <i>Litteraturhistorie</i>";
 $langFac = "Fakultet";
 $langTargetFac = "Angiv på hvilket Fakultet kurset udbydes";
-$langCode = "Kursuskode";
 $langMax = "max. 12 tegn, f.eks. <i>ROM2121</i>. Brug ikke <i>æ, ø, å</i>";
 $langDoubt = "Hvis du er i tvivl om koden på dit kursus, kontakt, ";
 $langProgram = "Kursusprogram</a>. Hvis dit kursus ikke har en kode, så skal du bare opfinde en. F.eks. <i>INNOVATION</i> hvis kurset drejer sig om Innovation Management";

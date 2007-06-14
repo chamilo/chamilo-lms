@@ -137,7 +137,6 @@ $langZipNoPhp = "La zip-dosiero ne enhavu .PHP-dosierojn!";
 $langNoImg = "Testoj sen bildoj ";
 $langImgNote_st = "Vi ankora&#365; devas al&#349;uti ";
 $langImgNote_en = "bildo(j) :";
-$langAreYouSureToDelete = "&#264;u certe, ke vi volas forigi? ";
 $langDocDeleted = "La dokumento estas forigita ";
 $langViMod = "Videblo &#349;an&#285;ita ";
 $langNameNotEqual = "estas nevalida dosiero !";

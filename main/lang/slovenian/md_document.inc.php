@@ -7,7 +7,6 @@ $langMdDescription = "Shrani te informacije s klikom na Shrani";
 $langMdCoverage = "npr. Bachelor of ...";
 $langMdCopyright = "npr. dani materiali so avtorizirani";
 $langTool = "Metapodatki dokumenta";
-$langSorry = "Najprej izberite teèaj";
 $langNoScript = "Izvajanje skript v brskalniku ni omogoèeno. Zanemarite vsebino zaslona po tem besedilu, niè ne bo delovalo...";
 $langPressAgain = "Ponovno pritisnite \'Shrani\' ...";
 $langLanguageTip = "jezik, v katerem je napisan uèni objekt";

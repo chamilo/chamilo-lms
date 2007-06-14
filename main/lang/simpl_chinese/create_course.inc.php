@@ -49,7 +49,6 @@ $langFieldsRequ = "所有项目都需填写";
 $langEx = "e.g. <i>改革管理</i>";
 $langFac = "分类";
 $langTargetFac = "这是本门课程所属部门或分类";
-$langCode = "课程代码";
 $langMax = "最多12个字母, 例如<i>INNOV21</i>";
 $langDoubt = "如果您对课程代码有疑问的话, 请询问";
 $langProgram = "课程大纲</a>. 如果您的课程没有编号, 不论何种原因, 创造一个. 例如, 如果您的课程内容是关于改革管理的, 就可以取课程代码为<i>INNOVATION</i>";

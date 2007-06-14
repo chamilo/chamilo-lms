@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langDownloadFile = "Разместить файл на сервере";
-$langCreateDir = "Создать папку";
 $langNameDir = "Название новой папки";
 $langSize = "Размер";
 $langRename = "Переименовать";

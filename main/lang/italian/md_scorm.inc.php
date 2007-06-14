@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "variabili non utilizzate";
 $langMdCallingTool = "Percorsi Scorm";
 $langTool = "Operazioni metadata Scorm";
-$langSorry = "Seleziona prima un corso";
-$langDenied = "Funzione riservata agli amministratori del corso";
 $langNotInDB = "non ci sono informazioni nel Database";
 $langManifestSyntax = "(errore di sintassi nel manifest...)";
 $langEmptyManifest = "(manifest vuoto...)";

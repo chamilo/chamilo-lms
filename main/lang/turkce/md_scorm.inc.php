@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "kullan&#305;lmayan lisan de&#287;i&#351;keni";
 $langMdCallingTool = "KURS - SCORM";
 $langTool = "Scorm MD i&#351;lemleri";
-$langSorry = "Lütfen önce bir ders seçiniz";
-$langDenied = "Bu i&#351;lev sadece ders yetkilileri içindir";
 $langNotInDB = "DB giri&#351;i yok";
 $langManifestSyntax = "(aç&#305;klama dosyas&#305;nda yaz&#305;m hatas&#305;...)";
 $langEmptyManifest = "(bo&#351; aç&#305;klama dosyas&#305;...)";

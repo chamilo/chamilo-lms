@@ -80,7 +80,6 @@ $GroupCategory = "Grupa kategorio";
 $NoTitleGiven = "Bv doni titolon";
 $InvalidMaxNumberOfMembers = "Bv doni validan ciferon kiel maksimuman nombron da membroj.";
 $CategoryOrderChanged = "La kategoriordo estas &#349;an&#285;ita";
-$Tools = "Iloj";
 $Wiki = "Vikipedio";
 $CategoryCreated = "Kategorio kreita";
 $GroupTutors = "Mentoro";

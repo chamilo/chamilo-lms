@@ -104,7 +104,6 @@ $langViewModeEmbedded = "Mode Tamplian : embedded";
 $langViewModeFullScreen = "Mode Tampilan : fullscreen";
 $langShowDebug = "Tampilkan debug";
 $langHideDebug = "Sembunyikan debug";
-$langAreYouSureToDelete = "Anda yakin ingin menghapus?";
 $langAfter = "Setelah";
 $lang_prerequisites_limit = "Prasyarat (batas)";
 $lang_loading = "Memuat halaman, silahkan tunggu ....";

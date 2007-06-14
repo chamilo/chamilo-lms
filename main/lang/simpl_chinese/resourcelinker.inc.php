@@ -17,7 +17,6 @@ $CourseResources = "课程资源";
 $ExternalLink = "外部链接";
 $DropboxAdd = "在此章中添加投递箱.";
 $AddAssignmentPage = "在此章中添加学生发表页.";
-$Dropbox = "投递箱";
 $Assignments = "学生作业";
 $Exercise = "测验";
 $Link = "链接";

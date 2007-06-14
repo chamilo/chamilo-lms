@@ -80,7 +80,6 @@ $GroupCategory = "Grupas kategorija";
 $NoTitleGiven = "L&#363;dzu, nor&#257;diet virsrakstu";
 $InvalidMaxNumberOfMembers = "L&#363;dzu, nor&#257;diet korektu maksim&#257;lo lietot&#257;ju skaitu.";
 $CategoryOrderChanged = "Kategoriju k&#257;rt&#299;ba tika main&#299;ta";
-$Tools = "R&#299;ki";
 $Wiki = "Grupas WIKI";
 $CategoryCreated = "Kategorija izveidota";
 ?>

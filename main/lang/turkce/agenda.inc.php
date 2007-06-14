@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Etkinli&#287;iniz düzenlendi";
 $PeronalAgendaItemDeleted = "Etkinli&#287;iniz silindi";
 $ViewPersonalItem = "Ki&#351;isel etkinlikleri göster";
 $UserGroupFilter = "Grup/Kullan&#305;c&#305;lar filtresi";
-$VisibilityChanged = "Görünürlük de&#287;i&#351;ti";
 $ShowAll = "Hepsini göster";
 $Print = "Yaz&#305;c&#305;ya gönder";
 ?>

@@ -2,7 +2,6 @@
 for more information: see languages.txt in the lang folder. 
 */
 $LinkMoved = "Moveuse a ligazón";
-$VisibilityChanged = "Modificouse a visibilidade da ligazón";
 $langLinkName = "Nome da ligazón";
 $langLinkAdd = "Engadir ligazón";
 $langLinkAdded = "Engadíuse a ligazón";

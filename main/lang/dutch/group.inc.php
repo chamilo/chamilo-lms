@@ -80,7 +80,6 @@ $GroupCategory = "Groepscategorie";
 $NoTitleGiven = "Gelieve een titel in te vullen.";
 $InvalidMaxNumberOfMembers = "Gelieve een geldige waarde op te geven voor het maximaal aantal gebruikers.";
 $CategoryOrderChanged = "De volgorde van de categorieën is gewijzigd.";
-$Tools = "Functies";
 $Wiki = "Groepswiki";
 $CategoryCreated = "De categorie is aangemaakt.";
 $GroupTutors = "Groepsbegeleiders";

@@ -25,6 +25,4 @@ $langRefresh = "obnovi&#357;";
 $langMe = "ja";
 $langSystemAnnouncements = "Oznámenia systému";
 $Login = "Prihlásenie";
-$UsersOnLine = "užívate&#318;ov online";
-$langCourseCreate = "Vytvori&#357; kurz";
 ?>

@@ -137,7 +137,6 @@ $langZipNoPhp = "Zipfilen må ikke indeholde .PHP filer";
 $langNoImg = "Test uden billeder";
 $langImgNote_st = "<br>Du mangler stadig at uploade";
 $langImgNote_en = "billede(r):";
-$langAreYouSureToDelete = "Er du sikker på du ønsker at slette";
 $langDocDeleted = "Dokument slettet";
 $langViMod = "Synlighed ændret";
 $langNameNotEqual = "er ikke den rigtige fil!";

@@ -23,7 +23,6 @@ $langDelLk = "删除链接";
 $langMustBeRegisteredUser = "只有此课程的注册用户可以发布文档.";
 $langListDel = "删除列表";
 $langWork = "工作";
-$langCreateDir = "新建目录";
 $langNameDir = "重命名目录";
 $langFileExists = "文件已存在";
 $langDirCr = "新建目录";

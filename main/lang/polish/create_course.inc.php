@@ -49,7 +49,6 @@ $langFieldsRequ = "Wymagane wype&#322;nienie wszystkich pól";
 $langEx = "np. <i>Historia Literatury</i>";
 $langFac = "Kategoria";
 $langTargetFac = "Wydzia&#322;, Instytut lub Szko&#322;a, w której kurs jest prowadzony";
-$langCode = "Kod kursu";
 $langMax = "max. 12 znaków, np. <i>ROM2121</i>";
 $langDoubt = "Je¶li masz w±tpliwo¶ci co do kodu kursu, skonsultuj siê z administratorem ";
 $langProgram = "Program kursu</a>. Je¶li Twój kurs nie ma kodu, wymy¶l go. Na przyk³ad <i>INNOWACJA</i>, je¶li kurs dotyczy Innowacji w Zarz±dzaniau.";

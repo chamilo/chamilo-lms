@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Setkan Subjek";
 $langModifDone = "Maklumat telah diubahsuai";
-$langCode = "Kod Subjek";
 $langDelCourse = "Gugurkan Subjek dari Pangkalan Data";
 $langProfessors = "Pensyarah";
 $langFaculty = "Pusat Pengajian";

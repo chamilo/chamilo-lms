@@ -1,9 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langSorry = "Sélectionnez d\'abord un cours";
 $langTool = "Métadonnées";
-$langDenied = "Cette fonction est accessible seulement aux administrateurs de cours.";
 $langClickKw = "Cliquez sur un mot-clé dans l\'arborescence pour le sélectionner ou le désélectionner";
 $langKwHelp = "<br/> Cliquez sur le bouton \'+\' pour ouvrir, sur le bouton \'-\' pour fermer, sur le bouton \'++\' pour tout ouvrir, sur le bouton \'--\' pour tout fermer. <br/> <br/> Désélectionnez tous les mots-clés en fermant l\'arborescence et en l\'ouvrant de nouveau par le bouton \'+\'. <br/> Alt-click \'+\' sélectionne de nouveau les mots-clés. <br/> <br/> Alt-click sur un mot-clé l\'annule.<br/>";
 $langAdvanced = "Avancé";

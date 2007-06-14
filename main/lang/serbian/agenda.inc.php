@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Li&#269;na stavka je uspešno izmenjena u Agendi ";
 $PeronalAgendaItemDeleted = "Li&#269;na stavka je uspešno izbrisana iz Agende ";
 $ViewPersonalItem = "Pregledaj li&#269;ne stavke";
 $UserGroupFilter = "Filter za grupe/korisnike";
-$VisibilityChanged = "Vidljivost je promenjena";
 $ShowAll = "Prikaži sve";
 $Print = "Štampanje";
 ?>

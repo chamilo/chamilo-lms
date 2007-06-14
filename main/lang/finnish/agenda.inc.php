@@ -47,6 +47,5 @@ $PeronalAgendaItemEdited = "Merkintää on muokattu";
 $PeronalAgendaItemDeleted = "Merkintä on poistettu";
 $ViewPersonalItem = "Tarkastele henkilökohtaisia merkintöjä";
 $UserGroupFilter = "Suodatin ryhmisä/kättäjissä";
-$VisibilityChanged = "Näkyvyyttä muutettu";
 $ShowAll = "Näytä kaikki";
 ?>

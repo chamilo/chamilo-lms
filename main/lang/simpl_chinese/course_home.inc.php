@@ -17,5 +17,11 @@ $ToolIsNowHidden = "工具当前不可用.";
 $EditLink = "编辑链接";
 $Blog_management = "&#21338;&#23458;&#31649;&#29702;";
 $Forum = "&#35770;&#22363;";
+$Course_maintenance = "&#35838;&#31243;&#32500;&#25252;";
+$TOOL_SURVEY = "&#35843;&#26597;";
+$GreyIcons = "&#24037;&#20855;&#31665;";
+$Interaction = "&#20114;&#21160;";
 $Authoring = "&#20889;&#20316;";
+$Administration = "&#31649;&#29702;";
+$IntroductionTextUpdated = "&#31616;&#20171;&#26356;&#26032;&#23436;&#25104;";
 ?>

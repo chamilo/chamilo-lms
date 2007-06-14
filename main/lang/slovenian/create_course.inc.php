@@ -49,7 +49,6 @@ $langFieldsRequ = "Vsa polja so potrebna";
 $langEx = "npr. <i>Inovacijski menedžment</i>";
 $langFac = "Kategorija";
 $langTargetFac = "To je fakulteta, oddelek, aktiv ali šola ali smer, ki ponuja ta teèaj";
-$langCode = "Koda teèaja";
 $langMax = "najveè 12 znakov, na pr. <i>0506INNOV01</i>";
 $langDoubt = "Èe ne veš kode teèaja, se posvetuj z, ";
 $langProgram = "Program teèaja</a>. Èe teèaj nima kode, si jo izmisli. Na primer <i>PROG_JAVA</i> je lahko koda teèaja o programiranju v Javi";

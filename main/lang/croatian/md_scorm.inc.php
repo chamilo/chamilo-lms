@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "suvišna jezi&#269;na odrednica";
 $langMdCallingTool = "Put u&#269;enja - Scorm";
 $langTool = "Operacije Scorm MD";
-$langSorry = "Najprije odaberite kolegij";
-$langDenied = "Funkcija je dostupna samo nadzornicima kolegija";
 $langNotInDB = "nema unosa u bazi podataka Dokeos";
 $langManifestSyntax = "(sintakti&#269;ka greška u datoteci manifesta...)";
 $langEmptyManifest = "(datoteka manifesta prazna...)";

@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = "Element agendy zosta&#322; wyedytowany";
 $PeronalAgendaItemDeleted = "Element agendy zosta&#322; usuni&#281;ty";
 $ViewPersonalItem = "Poka&#380; osobiste elementy ";
 $UserGroupFilter = "Filtr grup/u&#380;ytkowników";
-$VisibilityChanged = "Widoczno&#347;&#263; zmieniona";
 $ShowAll = "Poka&#380; wszystko";
 $Print = "Drukuj";
 ?>

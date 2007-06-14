@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Nastavení kurzu";
 $langModifDone = "Informace byla upravená";
-$langCode = "Kód kurzu";
 $langDelCourse = "Vymazat celou oblast kurzu";
 $langProfessors = "U&#269;itelé";
 $langFaculty = "Kategorie";

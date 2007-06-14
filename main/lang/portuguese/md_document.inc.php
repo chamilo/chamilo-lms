@@ -7,7 +7,6 @@ $langMdDescription = "Para gravar esta informação, clique em Guardar";
 $langMdCoverage = "ex.: Bacharelato em";
 $langMdCopyright = "ex.: fornecendo a origem, é concedido";
 $langTool = "Metadados do Documento";
-$langSorry = "Primeiro, seleccionar um curso";
 $langNoScript = "O seu browser não permite script; por favor, ignore a parte inferior do écrã. Não funcionará ...";
 $langPressAgain = "Clique novamente em \'Guardar\'";
 $langLanguageTip = "a língua na qual este objecto de aprendizagem foi feito";

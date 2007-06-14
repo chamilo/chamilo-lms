@@ -81,7 +81,6 @@ $GroupCategory = "Categoría del grupo";
 $NoTitleGiven = "Por favor, introduzca un título";
 $InvalidMaxNumberOfMembers = "Por favor introduzca un número válido para el número máximo de miembros";
 $CategoryOrderChanged = "El orden de las categorías ha sido cambiado";
-$Tools = "Herramientas";
 $Wiki = "Wiki del grupo";
 $CategoryCreated = "Categoría creada";
 $GroupTutors = "Tutores";

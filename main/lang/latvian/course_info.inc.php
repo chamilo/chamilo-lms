@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Kursa iestat&#299;jumi";
 $langModifDone = "Inform&#257;cija tika labota";
-$langCode = "Kursa kods";
 $langDelCourse = "Izdz&#275;st visu kursa aprakstu";
 $langProfessors = "Doc&#275;t&#257;ji";
 $langFaculty = "Kategorija";

@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Αλλαγή πληροφορίας για το μάθημα";
 $langModifDone = "Η πληροφορία έχει αλλάξει";
-$langCode = "Κωδικος Μαθήματος";
 $langDelCourse = "Διαγραφή ολόκληρου του μαθήματος";
 $langProfessors = "Καθηγητές";
 $langFaculty = "Τμήμα";

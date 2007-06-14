@@ -49,7 +49,6 @@ $langFieldsRequ = "Alla fält krävs";
 $langEx = "e.g. <i>Svenska A</i>";
 $langFac = "Fakultet";
 $langTargetFac = "Detta är den fakultet eller avdelning där kursen hålls";
-$langCode = "Kurskod";
 $langMax = "max. 12 tecken, e.g. <i>SV1201</i>";
 $langDoubt = "Om du tvivlar tvivlar på kurskoden, kontrollera, ";
 $langProgram = "Kursprogrammet</a>. Om din kurs inte har någon kod, oavsett anledning, hitta på en. Till exempel <i>LKSV01</i> om kursen är en lokal kurs i Svenska";

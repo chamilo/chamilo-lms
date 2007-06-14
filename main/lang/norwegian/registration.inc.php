@@ -20,9 +20,6 @@ $langModifProfile = "Redigere min profil";
 $langManager = "Administrator";
 $langSex = "Kjønn";
 $langClass = "Klasse";
-$FirstName = "fornavn";
-$langGroup = "gruppe";
-$langModify = "endre";
 $langEdit = "rediger";
 $required = "nødvendige";
 ?>

@@ -47,7 +47,6 @@ $PeronalAgendaItemEdited = " Person&#299;gais ieraksts tika labots pl&#257;not&#
 $PeronalAgendaItemDeleted = " Person&#299;gais ieraksts tika izdz&#275;sts pl&#257;not&#257;j&#257;";
 $ViewPersonalItem = "Par&#257;d&#299;t person&#299;gos ierakstus";
 $UserGroupFilter = "Grupu un lietot&#257;ju filtrs";
-$VisibilityChanged = "Redzam&#299;ba main&#299;ta";
 $ShowAll = "R&#257;d&#299;t visus";
 $Print = "Druk&#257;t";
 ?>

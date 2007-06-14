@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Cursuseigenschappen";
 $langModifDone = "De eigenschappen werden gewijzigd.";
-$langCode = "Cursuscode";
 $langDelCourse = "Deze cursussite verwijderen";
 $langProfessors = "Lesgevers";
 $langFaculty = "Faculteit";

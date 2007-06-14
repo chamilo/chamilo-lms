@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Kursinnstillinger";
 $langModifDone = "Informasjonen ble endret";
-$langCode = "Kurskode";
 $langDelCourse = "Slett hele kursområdet";
 $langProfessors = "Lærere";
 $langFaculty = "Kategori";

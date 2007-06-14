@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $Forum = "Forum";
 $AddForumCategory = "Dodaj novo kategorijo foruma";
 $AddForum = "Dodaj nov forum";
-$ThisFieldIsRequired = "To polje je zahtevano";
 $Topics = "Teme";
 $Posts = "Objave";
 $LastPosts = "Zadnja objava";
@@ -33,7 +32,6 @@ $Views = "Pogledi";
 $LastPost = "Zadnja objava";
 $Quoting = "Navajanje";
 $NotifyByEmail = "V primeru odgovora me obvesti preko e-pošte";
-$VisibilityChanged = "Vidnost je bila spremenjena";
 $StickyPost = "To je lepljiva objava (vedno se pojavi na vrhu seznama objav, oznaèuje jo posebna ikona)";
 $ReplyShort = "Odg:";
 $DeletePost = "Resnièno želite odstraniti to objavo ? Brisanje te objave odstrani tudi vse morebitne povezane odgovore. Preverite v pogledu tematske niti, katere objave bodo dejansko odstranjene.";

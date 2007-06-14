@@ -23,7 +23,6 @@ $langDelLk = "Hivatkozás törlése";
 $langMustBeRegisteredUser = "Csak regisztrált felhasználók tudnak feltölteni dokumentumokat.";
 $langListDel = "Lista törlése";
 $langWork = "Beadványok";
-$langCreateDir = "Mappa létrehozása";
 $langNameDir = "Mappa átnevezése";
 $langFileExists = "A fájl már létezik.";
 $langDirCr = "Mappa létrehozása";

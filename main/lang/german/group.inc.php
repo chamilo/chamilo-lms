@@ -80,7 +80,6 @@ $GroupCategory = "Gruppen Kategorie";
 $NoTitleGiven = "Bitte einen Titel angeben";
 $InvalidMaxNumberOfMembers = "Bitte eine gültige Zahl für die Maximum Anzahl Teilnehmer eingeben";
 $CategoryOrderChanged = "Die Reihenfolge der Kategorien wurde verändert";
-$Tools = "Werkzeuge";
 $Wiki = "Gruppen Wiki";
 $CategoryCreated = "Kategorie erstellt";
 $GroupTutors = "Betreuer";

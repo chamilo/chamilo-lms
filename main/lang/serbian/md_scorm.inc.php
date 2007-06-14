@@ -4,8 +4,6 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "zastarele jezi&#269;ke varijable";
 $langMdCallingTool = "Putanja u&#269;enja – Scorm";
 $langTool = "Scorm MD operacije";
-$langSorry = "Selektujte listu kurseva";
-$langDenied = "Ova opcija je dostupna samo administratorima kursa ";
 $langNotInDB = "nema unosa baze Dokeosa";
 $langManifestSyntax = "(greška u sintaksi manifest fajla...)";
 $langEmptyManifest = "(prazan manifest fajl...)";

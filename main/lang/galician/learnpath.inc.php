@@ -110,7 +110,6 @@ $langViewModeFullScreen = "Modo de visión: pantalla chea";
 $langShowDebug = "Mostrar debub";
 $langHideDebug = "Agochar os codigos";
 $langCantEditDocument = "Este documento non é editábel.";
-$langAreYouSureToDelete = "Ten certeza de querer eliminar?";
 $langAfter = "Depois de";
 $lang_prerequisites_limit = "Prerrequisitos (límite)";
 $lang_loading = "Cargando páxina, por favor, espere...";

@@ -49,7 +49,6 @@ $langFieldsRequ = "Todos os campos são requeridos";
 $langEx = "ex. <i>Gerenciamento de inovações</i>";
 $langFac = "Categoria";
 $langTargetFac = "Esse deve ser o departamento ou qualquer outra categoria na qual o curso esteja incluído";
-$langCode = "Código do curso";
 $langMax = "máx. de 12 caracteres, ex. <i>INOV21</i>";
 $langDoubt = "Se você tiver dúvidas quanto ao código do seu curso, consulte ";
 $langProgram = "O Programa do Curso</a>. Se o seu curso, por algum motivo, não possuir um código, invente um. Por exemplo <i>INOVACAO</i> se o curso for sobre Gerenciamento de Inovações";

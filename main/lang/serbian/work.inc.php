@@ -23,7 +23,6 @@ $langDelLk = "Obriši link";
 $langMustBeRegisteredUser = "Samo polaznici prijavljeni na ovaj kurs mogu da objave dokumenta.";
 $langListDel = "Obriši listu";
 $langWork = "Rad";
-$langCreateDir = "Kreiraj direktorijum";
 $langNameDir = "Preimenuj direktorijum";
 $langFileExists = "Fajl ve&#263; postoji";
 $langDirCr = "Kreiraj direktorijum";

@@ -632,7 +632,7 @@ switch($_REQUEST['action'])
 			//declare variables to be used in lp_stats.php
 			$lp_id = $_SESSION['oLP']->get_id();
 			$list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
-			$user_id = $_user['user_id'];
+			$user_id = api_get_user_id();
 			$stats_charset = $_SESSION['oLP']->encoding;
 			require('lp_stats.php');
 		}

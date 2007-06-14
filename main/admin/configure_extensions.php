@@ -91,7 +91,6 @@ if(isset($_POST['activeExtension'])){
 								
 						api_sql_query($sql, __FILE__, __LINE__);
 					}					
-	
 				}
 				$message = get_lang('ServiceActivated');
 				
@@ -106,6 +105,30 @@ if(isset($_POST['activeExtension'])){
 					selected_value="'.addslashes($_POST['visioclassroom_url']).'"
 					WHERE variable="service_visio"
 					AND subkey="visioclassroom_url"';
+			$rs = api_sql_query($sql, __FILE__, __LINE__);	
+
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['visio_rtmp_host_local']).'"
+					WHERE variable="service_visio"
+					AND subkey="visio_rtmp_host_local"';
+			$rs = api_sql_query($sql, __FILE__, __LINE__);	
+
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['visio_is_web_rtmp']).'"
+					WHERE variable="service_visio"
+					AND subkey="visio_is_web_rtmp"';
+			$rs = api_sql_query($sql, __FILE__, __LINE__);	
+
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['visio_rtmp_port']).'"
+					WHERE variable="service_visio"
+					AND subkey="visio_rtmp_port"';
+			$rs = api_sql_query($sql, __FILE__, __LINE__);	
+
+			$sql = 'UPDATE '.$tbl_settings_current.' SET
+					selected_value="'.addslashes($_POST['visio_rtmp_tunnel_port']).'"
+					WHERE variable="service_visio"
+					AND subkey="visio_rtmp_tunnel_port"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);	
 			
 			if(empty($message))
@@ -278,6 +301,14 @@ Display::display_header($nameTool);
 						$form -> addElement('text', 'visioconference_url', get_lang('VideoConferenceUrl'));
 						$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'visioclassroom_url', get_lang('VideoClassroomUrl'));
+						$form -> addElement('html','<br /><br />');
+						$form -> addElement('text', 'visio_rtmp_host_local', get_lang('VisioHostLocal'));
+						$form -> addElement('html','<br /><br />');
+						$form -> addElement('text', 'visio_is_web_rtmp', get_lang('VisioRTMPIsWeb'));
+						$form -> addElement('html','<br /><br />');
+						$form -> addElement('text', 'visio_rtmp_port', get_lang('VisioRTMPPort'));
+						$form -> addElement('html','<br /><br />');
+						$form -> addElement('text', 'visio_rtmp_tunnel_port', get_lang('VisioRTMPTunnelPort'));
 						$form -> addElement('hidden', 'extension_code', 'visio');
 						$defaults = array();
 						$renderer = $form -> defaultRenderer();
@@ -286,8 +317,7 @@ Display::display_header($nameTool);
 						if(in_array('service_visio',$listActiveServices))
 						{
 							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.' 
-									WHERE variable = "service_visio"
-									AND (subkey = "visioconference_url" OR subkey = "visioclassroom_url")';
+									WHERE variable = "service_visio"';
 							$rs = api_sql_query($sql, __FILE__, __LINE__);
 							while($row = mysql_fetch_assoc($rs))
 							{

@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 12566 2007-06-07 14:20:42Z elixir_julian $
+<?php //$Id: announcements.php 12595 2007-06-14 09:55:46Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -218,23 +218,6 @@ $htmlHeadXtra[] = to_javascript();
 -----------------------------------------------------------
 	Filter user/group
 -----------------------------------------------------------
-*/
-
-/*	if ($_GET['user'] or $_GET['group'])
-		{
-			$_SESSION['user']=$_GET['user'];
-			$_SESSION['group']=$_GET['group'];
-		}
-	if ($_GET['user']=="none" or $_GET['group']=="none")
-		{
-			api_session_unregister("user");
-			api_session_unregister("group");
-		}
-	if ($_GET['isStudentView']=="false")
-		{
-			api_session_unregister("user");
-			api_session_unregister("group");
-		}
 */
 
 if(!empty($_GET['toolgroup'])){
@@ -1066,35 +1049,6 @@ if ($message == true)
 				
 				echo $oFCKeditor->CreateHtml();
 
-				  /*echo "<br /><table>",
-			           "<tr>",
-			           "<td colspan=7>";
-			            if ($_SESSION['select_groupusers']=="show")
-					   	{
-							show_addresource_button("onClick=\"selectAll(this.form.elements[4],true)\"");
-					   	}
-						else
-						{
-							show_addresource_button();
-						}
-
-					  // sessies
-					  $form_elements=$_SESSION['formelements'];
-
-					  echo "</td>",
-			               "</tr>";
-
-			          if ($_SESSION['addedresource']){
-			          	if(!$surveyid){
-				            echo "<tr>";
-				            echo "<td colspan='7'>";
-				            echo display_resources(0);
-				            $test=$_SESSION['addedresource'];
-				            echo "</td></tr>";
-			          	}
-			          }
-					  echo "</table>";*/
-
 		?>
                 <br /><input type="Submit" name="submitAnnouncement" value="<?php echo get_lang('Ok') ?>" onclick="selectAll(this.form.elements[3],true)" /><br /><br />
 
@@ -1347,13 +1301,12 @@ if ($message == true)
 
 				echo "\t\t\t\t\t<td class=\"".$stylenotbold."\">" . get_lang("SentTo") . " : &nbsp; ";
 				$sent_to=sent_to("announcement", $myrow['id']);
-				// echo $myrow['id'];
 
 				$sent_to_form=sent_to_form($sent_to);
-				echo $sent_to_form,
-
-				"\t\t\t\t\t</td>\n",
-				"\t\t\t\t</tr>\n";
+				$user_info=api_get_user_info($myrow['insert_user_id']);
+				echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.$user_info['lastName'].'&nbsp;'.$user_info['firstName'];
+				
+				echo "\t\t\t\t\t</td>\n","\t\t\t\t</tr>\n";
 
 
 				/*=========================================================

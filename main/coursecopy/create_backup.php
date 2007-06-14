@@ -1,5 +1,5 @@
 <?php
-// $Id: create_backup.php 12219 2007-05-01 18:46:59Z yannoo $
+// $Id: create_backup.php 12597 2007-06-14 12:43:49Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -111,7 +111,7 @@ else
 	{
 		echo get_lang('SelectOptionForBackup');
 		
-		include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+		include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 		$form = new FormValidator('create_backup_form','POST');
 		$renderer = $form->defaultRenderer();
 		$renderer->setElementTemplate('<div>{element}</div> ');

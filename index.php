@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12565 2007-06-07 13:52:17Z elixir_julian $
+* 	@version $Id: index.php 12598 2007-06-14 14:05:56Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -553,7 +553,7 @@ function display_anonymous_course_list()
 				{
 					//the category contains courses accessible to anonymous visitors
 					$htmlListCat .= "<a href=\"".api_get_self()."?category=".$catLine['code']."\">".$catLine['name']."</a>";
-					if (get_setting('show_number_of_courses') == 'true')
+					if (api_get_setting('show_number_of_courses') == 'true')
 					{
 						$htmlListCat .= " (".$catLine['nbCourse']." ".get_lang("Courses").")";
 					}
@@ -566,7 +566,7 @@ function display_anonymous_course_list()
 				/************************************************************************
 				 end changed code to eliminate the (0 courses) after empty categories
 				 ************************************************************************/
-				elseif (get_setting('show_empty_course_categories') == 'true')
+				elseif (api_get_setting('show_empty_course_categories') == 'true')
 				{
 					$htmlListCat .= $catLine['name'];
 				}
@@ -576,11 +576,11 @@ function display_anonymous_course_list()
 			else
 			{
 				$htmlTitre = "<p>";
-				if ($_setting['show_back_link_on_top_of_tree'] == 'true')
+				if (api_get_setting('show_back_link_on_top_of_tree') == 'true')
 				{
 					$htmlTitre .= "<a href=\"".api_get_self()."\">"."&lt;&lt; ".get_lang("BackToHomePage")."</a>";
 				}
-				if (!is_null($catLine['parent_id']) || ($_setting['show_back_link_on_top_of_tree'] <> 'true' && !is_null($catLine['code'])))
+				if (!is_null($catLine['parent_id']) || (api_get_setting('show_back_link_on_top_of_tree') <> 'true' && !is_null($catLine['code'])))
 				{
 					$htmlTitre .= "<a href=\"".api_get_self()."?category=".$catLine['parent_id']."\">"."&lt;&lt; ".get_lang("Up")."</a>";
 				}
@@ -619,7 +619,7 @@ function display_anonymous_course_list()
 			echo "<li>\n";
 			echo "<a href=\"".$web_course_path.$course['directory'], "/\">", $course['title'], "</a>";
 			echo "<br/>", $course['visual_code'], " - ", $course['tutor_name'];
-			if ($_setting['show_different_course_language'] == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
+			if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
 			{
 				echo ' - '.$course['course_language'];
 			}

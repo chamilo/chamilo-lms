@@ -370,6 +370,10 @@ function api_get_path($path_type)
 */
 function api_get_user_id()
 {
+	if(empty($GLOBALS['_user']['user_id']))
+	{
+		return 0;
+	}
 	return $GLOBALS['_user']['user_id'];
 }
 /**
@@ -445,6 +449,32 @@ function api_get_course_setting($setting_name)
 	}
 	return -1;
 }
+/**
+ * Gets an anonymous user ID
+ * 
+ * For some tools that need tracking, like the learnpath tool, it is necessary
+ * to have a usable user-id to enable some kind of tracking, even if not
+ * perfect. An anonymous ID is taken from the users table by looking for a
+ * status of "6" (anonymous).
+ * @return	int	User ID of the anonymous user, or O if no anonymous user found
+ */
+function api_get_anonymous_id()
+{
+	$table = Database::get_main_table(TABLE_MAIN_USER);
+	$sql = "SELECT user_id FROM $table WHERE status = 6";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	if(Database::num_rows($res)>0)
+	{
+		$row = Database::fetch_array($res);
+		//error_log('api_get_anonymous_id() returns '.$row['user_id'],0);
+		return $row['user_id'];
+	}
+	else //no anonymous user was found
+	{
+		return 0;
+	}
+}
+
 /**
  * Returns the cidreq parameter name + current course id
 */
@@ -755,6 +785,29 @@ function api_check_password($password)
 	return ($cptLettres >= 3 && $cptChiffres >= 2) ? true : false;
 }
 /**
+ * Clear the user ID from the session if it was the anonymous user. Generally
+ * used on out-of-tools pages to remove a user ID that could otherwise be used
+ * in the wrong context.
+ * This function is to be used in conjunction with the api_set_anonymous()
+ * function to simulate the user existence in case of an anonymous visit.
+ * @return	bool	true if succesfully unregistered, false if not anonymous. 
+ */
+function api_clear_anonymous()
+{
+	global $_user;
+	if(api_is_anonymous($_user['user_id']))
+	{
+		unset($_user['user_id']);
+		api_session_unregister('_uid');
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/**
  * truncates a string
  *
  * @author Brouckaert Olivier
@@ -835,6 +888,38 @@ function api_set_failure($failureType)
 	$api_failureList[] = $failureType;
 	return false;
 }
+
+/**
+ * Sets the current user as anonymous if it hasn't been identified yet. This 
+ * function should be used inside a tool only. The function api_clear_anonymous()
+ * acts in the opposite direction by clearing the anonymous user's data every
+ * time we get on a course homepage or on a neutral page (index, admin, my space)
+ * @return	bool	true if set user as anonymous, false if user was already logged in or anonymous id could not be found
+ */
+function api_set_anonymous()
+{
+	global $_user;
+	if(!empty($_user['user_id']))
+	{
+		return false;
+	}
+	else
+	{
+		$user_id = api_get_anonymous_id();
+		if($user_id == 0)
+		{
+			return false;
+		}
+		else
+		{
+			api_session_unregister('_user');
+			$_user['user_id'] = $user_id;
+			api_session_register('_user');
+			return true;
+		}
+	}
+}
+
 /**
  * get the last failure stored in $api_failureList;
  *
@@ -1331,6 +1416,27 @@ function api_is_allowed($tool, $action, $task_id = 0)
 		return true;
 	else
 		return false;
+}
+
+/**
+ * Tells whether this user is an anonymous user
+ * @param	int		User ID (optional, will take session ID if not provided)
+ * @return	bool	true if this user is anonymous, false otherwise
+ */
+function api_is_anonymous($user_id=null)
+{
+	if(!isset($user_id))
+	{
+		$user_id = api_get_user_id();
+	}
+	$info = api_get_user_info($user_id);
+	if($info['status'] == 6)
+	{
+		error_log('Returning true from api_is_anonymous()',0);
+		return true;
+	}
+	error_log('Returning false from api_is_anonymous()',0);
+	return false;
 }
 
 /**

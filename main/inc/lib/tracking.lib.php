@@ -238,38 +238,38 @@ class Tracking {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		$tbl_course_lp_view = 'lp_view';
-		$tbl_course_lp_view_item = 'lp_item_view';
-		$tbl_course_lp_item = 'lp_item';
-
 		$course = CourseManager :: get_course_information($course_code);
+		$lp_table = Database :: get_course_table(TABLE_LP_MAIN,$course['db_name']);
+		$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course['db_name']);
+		$lp_view_table = Database  :: get_course_table(TABLE_LP_VIEW,$course['db_name']);
+		$lp_item_view_table = Database  :: get_course_table(TABLE_LP_ITEM_VIEW,$course['db_name']);
 
-		$sql_course_lp = 'SELECT id FROM ' . $course['db_name'] . '.lp';
+		$sql_course_lp = 'SELECT id FROM '.$lp_table;
 		$sql_result_lp = api_sql_query($sql_course_lp, __FILE__, __LINE__);
 		
 		$lp_scorm_score_total = 0;
 		$lp_scorm_weighting_total = 0;
 		
-		if(mysql_num_rows($sql_result_lp)>0){
+		if(Database::num_rows($sql_result_lp)>0){
 			//Scorm
 			while($a_learnpath = mysql_fetch_array($sql_result_lp)){
 				$sql = 'SELECT id, max_score 
-						FROM '.$course['db_name'].'.'.$tbl_course_lp_item.' AS lp_item
+						FROM '.$lp_item_table.' AS lp_item
 						WHERE lp_id='.$a_learnpath['id'].'
 						AND item_type="sco" LIMIT 1';
 				
 				$rs_lp_item_id_scorm = api_sql_query($sql, __FILE__, __LINE__);
 				
-				if(mysql_num_rows($rs_lp_item_id_scorm)>0){
+				if(Database::num_rows($rs_lp_item_id_scorm)>0){
 					$lp_item_id = mysql_result($rs_lp_item_id_scorm,0,'id');
 					$lp_item__max_score = mysql_result($rs_lp_item_id_scorm,0,'max_score');				
 					
 					//We get the last view id of this LP
-					$sql='SELECT max(id) as id FROM '.$course['db_name'].'.'.$tbl_course_lp_view.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
+					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 					$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
 					
-					$sql='SELECT SUM(score) as score FROM '.$course['db_name'].'.'.$tbl_course_lp_view_item.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
+					$sql='SELECT SUM(score) as score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
 					$rs_score = api_sql_query($sql, __FILE__, __LINE__);
 					$lp_scorm_score = mysql_result($rs_score,0,'score');
 					
@@ -282,17 +282,17 @@ class Tracking {
 			}
 			mysql_data_seek($sql_result_lp,0);
 			//Quizz in LP
-			while($a_learnpath = mysql_fetch_array($sql_result_lp)){
+			while($a_learnpath = Database::fetch_array($sql_result_lp)){
 				
 				$sql = 'SELECT id as item_id, max_score 
-						FROM '.$course['db_name'].'.'.$tbl_course_lp_item.' AS lp_item
+						FROM '.$lp_item_table.' AS lp_item
 						WHERE lp_id='.$a_learnpath['id'].'
 						AND item_type="quiz"';
 
 				$rsItems = api_sql_query($sql, __FILE__, __LINE__);
 				
 				//We get the last view id of this LP
-				$sql='SELECT max(id) as id FROM '.$course['db_name'].'.'.$tbl_course_lp_view.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
+				$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
 				$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 				$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
 				
@@ -300,7 +300,7 @@ class Tracking {
 				while($item = Database :: fetch_array($rsItems, 'ASSOC'))
 				{
 					$sql = 'SELECT score as student_score 
-							FROM '.$course['db_name'].'.'.$tbl_course_lp_view_item.' as lp_view_item
+							FROM '.$lp_item_view_table.' as lp_view_item
 							WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
 							';
 

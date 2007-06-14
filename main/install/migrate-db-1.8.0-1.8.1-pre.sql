@@ -17,11 +17,17 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('upload_extensions_whitelist', NULL, 'textfield', 'Security', 'htm;html;jpg;jpeg;gif;png;swf;avi;mpg;mpeg', 'UploadExtensionsWhitelist', 'UploadExtensionsWhitelistComment', NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('upload_extensions_skip', NULL, 'radio', 'Security', 'true', 'UploadExtensionsSkip', 'UploadExtensionsSkipComment', NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('upload_extensions_replace_by', NULL, 'textfield', 'Security', 'txt', 'UploadExtensionsReplaceBy', 'UploadExtensionsReplaceByComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'visio_rtmp_host_local', 'textfield',NULL,'', 'VisioHostLocal','', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'visio_is_web_rtmp', 'radio',NULL,'false', 'VisioRTMPIsWeb','', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'visio_rtmp_port', 'textfield',NULL,'1935', 'VisioRTMPPort','', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'visio_rtmp_tunnel_port', 'textfield',NULL,'80', 'VisioRTMPTunnelPort','', NULL, NULL);
 
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'blacklist', 'Blacklist');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'whitelist', 'Whitelist');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'true', 'Remove');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'false', 'Rename'); 
+INSERT INTO settings_options(variable,value,display_text) VALUES ('visio_rtmp_host_local', 'true', 'Web');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('visio_rtmp_host_local', 'false', 'Not web'); 
 
 -- xxSTATSxx
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);

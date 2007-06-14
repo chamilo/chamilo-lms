@@ -790,12 +790,13 @@ function api_check_password($password)
  * in the wrong context.
  * This function is to be used in conjunction with the api_set_anonymous()
  * function to simulate the user existence in case of an anonymous visit.
+ * @param	bool	database check switch - passed to api_is_anonymous()
  * @return	bool	true if succesfully unregistered, false if not anonymous. 
  */
-function api_clear_anonymous()
+function api_clear_anonymous($db_check=false)
 {
 	global $_user;
-	if(api_is_anonymous($_user['user_id']))
+	if(api_is_anonymous($_user['user_id'],$db_check))
 	{
 		unset($_user['user_id']);
 		api_session_unregister('_uid');
@@ -914,6 +915,7 @@ function api_set_anonymous()
 		{
 			api_session_unregister('_user');
 			$_user['user_id'] = $user_id;
+			$_user['is_anonymous'] = true;
 			api_session_register('_user');
 			return true;
 		}
@@ -1421,21 +1423,31 @@ function api_is_allowed($tool, $action, $task_id = 0)
 /**
  * Tells whether this user is an anonymous user
  * @param	int		User ID (optional, will take session ID if not provided)
+ * @param	bool	Whether to check in the database (true) or simply in the session (false) to see if the current user is the anonymous user
  * @return	bool	true if this user is anonymous, false otherwise
  */
-function api_is_anonymous($user_id=null)
+function api_is_anonymous($user_id=null,$db_check=false)
 {
 	if(!isset($user_id))
 	{
 		$user_id = api_get_user_id();
 	}
-	$info = api_get_user_info($user_id);
-	if($info['status'] == 6)
+	if($db_check)
 	{
-		error_log('Returning true from api_is_anonymous()',0);
-		return true;
+		$info = api_get_user_info($user_id);
+		if($info['status'] == 6)
+		{
+			return true;
+		}
 	}
-	error_log('Returning false from api_is_anonymous()',0);
+	else
+	{
+		global $_user;
+		if(isset($_user['is_anonymous']) and $_user['is_anonymous'] === true)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 

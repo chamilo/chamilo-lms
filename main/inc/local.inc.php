@@ -344,6 +344,20 @@ else
 //    $gidReset = true;
 }
 
+//Now check for anonymous user mode
+if(isset($use_anonymous) && $use_anonymous == true)
+{
+	//if anonymous mode is set, then try to set the current user as anonymous
+	//if he doesn't have a login yet
+	api_set_anonymous();
+}
+else
+{
+	//if anonymous mode is not set, then check if this user is anonymous. If it
+	//is, clean it from being anonymous (make him a nobody :-))
+	api_clear_anonymous();
+}
+
 // if the requested course is different from the course in session
 
 if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid'])))

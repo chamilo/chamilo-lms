@@ -42,6 +42,9 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('show_back_lin
 INSERT INTO settings_options(variable,value,display_text) VALUES ('show_different_course_language', 'true', 'Yes');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('show_different_course_language', 'false', 'No'); 
 
+-- Insert anonymous user
+INSERT INTO user(lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active) VALUES ('Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1);
+
 -- xxSTATSxx
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);
 ALTER TABLE track_e_attempt ADD INDEX (user_id); 

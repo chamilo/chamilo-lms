@@ -21,6 +21,11 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'visio_is_web_rtmp', 'radio',NULL,'false', 'VisioRTMPIsWeb','', NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'visio_rtmp_port', 'textfield',NULL,'1935', 'VisioRTMPPort','', NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('service_visio', 'visio_rtmp_tunnel_port', 'textfield',NULL,'80', 'VisioRTMPTunnelPort','', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_number_of_courses', NULL, 'radio','Platform','false', 'ShowNumberOfCourses','ShowNumberOfCoursesComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_empty_course_categories', NULL, 'radio','Platform','false', 'ShowEmptyCourseCategories','ShowEmptyCourseCategoriesComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_back_link_on_top_of_tree', NULL, 'radio','Platform','false', 'ShowBackLinkOnTopOfCourseTree','ShowBackLinkOnTopOfCourseTreeComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_different_course_language', NULL, 'radio','Platform','false', 'ShowDifferentCourseLanguage','ShowDifferentCourseLanguageComment', NULL, NULL);
+
 
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'blacklist', 'Blacklist');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'whitelist', 'Whitelist');
@@ -28,6 +33,14 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extens
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_skip', 'false', 'Rename'); 
 INSERT INTO settings_options(variable,value,display_text) VALUES ('visio_rtmp_host_local', 'true', 'Web');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('visio_rtmp_host_local', 'false', 'Not web'); 
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_number_of_courses', 'true', 'Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_number_of_courses', 'false', 'No'); 
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_empty_course_categories', 'true', 'Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_empty_course_categories', 'false', 'No'); 
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_back_link_on_top_of_tree', 'true', 'Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_back_link_on_top_of_tree', 'false', 'No'); 
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_different_course_language', 'true', 'Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('show_different_course_language', 'false', 'No'); 
 
 -- xxSTATSxx
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);

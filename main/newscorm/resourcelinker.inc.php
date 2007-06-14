@@ -41,6 +41,8 @@
 
 #$language_file = "resourcelinker";
 
+//flag to allow for anonymous user - needs to be set before global.inc.php
+$use_anonymous = true;
 require_once('back_compat.inc.php');
 include(api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php');
 if(!empty($_course['language'])){

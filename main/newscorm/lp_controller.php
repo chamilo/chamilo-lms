@@ -16,6 +16,9 @@ $language_file[] = "scormdocument";
 $language_file[] = "scorm";
 $language_file[] = "learnpath";
 
+//flag to allow for anonymous user - needs to be set before global.inc.php
+$use_anonymous = true;
+
 //include class definitions before session_start() to ensure availability when touching
 //session vars containing learning paths
 require_once('learnpath.class.php');

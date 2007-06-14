@@ -34,13 +34,15 @@
 /**
  * Script init
  */
+//flag to allow for anonymous user - needs to be set before global.inc.php
+$use_anonymous = true;
 
 // name of the language file that needs to be included
 $language_file = "scormdocument";
 $uncompress=1; //this variable shouldn't be found here (find its usage before removal)
 
 require_once('back_compat.inc.php');
-include("../learnpath/learnpath_functions.inc.php");
+include('learnpath_functions.inc.php');
 include_once('scorm.lib.php');
 
 $is_allowedToEdit = api_is_allowed_to_edit();

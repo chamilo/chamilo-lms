@@ -27,6 +27,9 @@
 ============================================================================== 
 */ 
 
+//flag to allow for anonymous user - needs to be set before global.inc.php
+$use_anonymous = true;
+
 //Load common libraries using a compatibility script to bridge between 1.6 and 1.8
 require_once('back_compat.inc.php');  
 //Load learning path libraries so we can use the objects to define the initial values

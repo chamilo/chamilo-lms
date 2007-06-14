@@ -7,6 +7,8 @@
 /**
  * Script initialisations
  */
+//flag to allow for anonymous user - needs to be set before global.inc.php
+$use_anonymous = true;
 require_once('back_compat.inc.php');
 $course_dir  = api_get_course_path().'/scorm';
 $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_dir;

@@ -10,6 +10,10 @@
  
 
 $language_file[] = "learnpath";
+
+//flag to allow for anonymous user - needs to be set before global.inc.php
+$use_anonymous = true;
+
 require('../inc/global.inc.php');
 include_once('../inc/reduced_header.inc.php');
 

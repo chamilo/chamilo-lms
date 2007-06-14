@@ -8,6 +8,8 @@
 /**
  * Script
  */
+//flag to allow for anonymous user - needs to be set before global.inc.php
+$use_anonymous = true;
 $language_file[] = "scormdocument";
 $language_file[] = "scorm";
 $language_file[] = "learnpath";

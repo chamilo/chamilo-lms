@@ -7,6 +7,8 @@
 /**
  * Script
  */
+//flag to allow for anonymous user - needs to be set before global.inc.php
+$use_anonymous = true;
 // name of the language file that needs to be included 
 $language_file[] = "scormdocument";
 require_once('back_compat.inc.php');

@@ -36,6 +36,10 @@
 ============================================================================== 
 */ 
 $debug = 0;
+
+//flag to allow for anonymous user - needs to be set before global.inc.php
+$use_anonymous = true;
+
 //Use session ID as provided by the request
 if(!empty($_REQUEST['aicc_sid']))
 {

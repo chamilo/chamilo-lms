@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12598 2007-06-14 14:05:56Z yannoo $
+* 	@version $Id: index.php 12601 2007-06-14 15:13:20Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -90,16 +90,6 @@ $track_login_table 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_L
 /** @todo these configuration settings should move to the dokeos config settings */
 /** defines wether or not anonymous visitors can see a list of the courses on the Dokeos homepage that are open to the world */
 $_setting['display_courses_to_anonymous_users'] = 'true';
-/** defines weither empty course categories should appear in the list with the course categories */
-$_setting['show_empty_course_categories'] = 'true';
-/** defines weither the number of open courses has to appear after the course category (faculty) */
-/** remark: actually count are only for direct children */
-$_setting['show_number_of_courses'] = 'false';
-/** Show the back link on top of the tree */
-$_setting['show_back_link_on_top_of_tree'] = 'false';
-/** Show the course language if it is not the same as the platform lanugage */
-$_setting['show_different_course_language'] = 'true';
-
 
 /** @todo remove this piece of code because this is not used */
 if (isset ($_user['user_id']))

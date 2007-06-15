@@ -6827,9 +6827,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 					case 'abs': //absolute path from DocumentRoot. Save file and leave path as is in the zip
 				 				$my_dep_file->setAttribute('href',$doc_info[0]);
 		 			 			$my_dep->setAttribute('xml:base','');
-		 			 			$zip_files_abs[] = $doc_info[0];
 	
 			 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+								
 								$file_path = realpath($doc_info[0]);
 								
 			 					if(strstr($file_path,$main_path) !== false)
@@ -6850,13 +6850,16 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			 						{
 			 							$document_root = substr(0, -1, $document_root);
 			 						}*/
-			 						$file_path = substr($doc_info[0],strlen(api_get_path(REL_PATH)));
-			 						//echo $file_path.'<br><br>';
-			 						//error_log('Reduced path: '.$file_path,0);
-			 						$zip_files_abs[] = $file_path;
-			 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
-					 				$my_dep_file->setAttribute('href','document/'.$file_path);
-			 			 			$my_dep->setAttribute('xml:base','');
+			 						$file_path = $_SERVER['DOCUMENT_ROOT'].$doc_info[0];
+			 						$file_path = str_replace('//','/',$file_path);
+			 						if(file_exists($file_path))
+			 						{
+				 						$file_path = substr($file_path,strlen($current_dir)); // we get the relative path
+				 						$zip_files[] = $my_sub_dir.'/'.$file_path;
+				 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+						 				$my_dep_file->setAttribute('href','document/'.$file_path);
+				 			 			$my_dep->setAttribute('xml:base','');
+			 						}
 			 					}
 		 						break;
 		 					case 'rel': //path relative to the current document. Save xml:base as current document's directory and save file in zip as subdir.file_path
@@ -7041,6 +7044,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			//error_log('Created path '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/document/'.$file_path,0);
 			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('GARBAGE_PATH').$temp_dir_short.'/'.$file_path,0);
 			//echo $main_path.$file_path.' - '.$dest_file.'<br>';
+			
 			copy($main_path.$file_path,$dest_file);
 			//check if the file needs a link update
 			if(in_array($file_path,array_keys($link_updates))){

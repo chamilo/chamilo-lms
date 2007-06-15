@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 12484 2007-05-26 23:05:46Z yannoo $
+// $Id: user_list.php 12612 2007-06-15 13:37:31Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -211,8 +211,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$sql = "SELECT
                  u.user_id			AS col0,
                  u.official_code		AS col1,
-                 u.firstname 			AS col2,
-                 u.lastname 			AS col3,
+				 u.lastname 			AS col2,
+                 u.firstname 			AS col3,
                  u.username			AS col4,
                  u.email				AS col5,
                  IF(u.status=1,'".get_lang('Teacher')."','".get_lang('Student')."')	 AS col6,
@@ -516,8 +516,8 @@ else
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('OfficialCode'));
-	$table->set_header(2, get_lang('FirstName'));
-	$table->set_header(3, get_lang('LastName'));
+	$table->set_header(2, get_lang('LastName'));
+	$table->set_header(3, get_lang('FirstName'));
 	$table->set_header(4, get_lang('LoginName'));
 	$table->set_header(5, get_lang('Email'));
 	$table->set_header(6, get_lang('Status'));

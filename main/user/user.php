@@ -351,32 +351,6 @@ Display::display_introduction_section(TOOL_USER, $is_allowed);
  */
 function get_number_of_users()
 {
-	/*$user_table = Database::get_main_table(TABLE_MAIN_USER);
-	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	if(api_get_setting('use_session_mode')!="true"){
-		$sql = "SELECT COUNT(u.user_id) AS number_of_users FROM $user_table u,$course_user_table cu WHERE u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
-	}
-	else{
-
-		if(!empty($_SESSION['id_session'])){
-			$session_course_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-			$sql = "SELECT COUNT(DISTINCT id_user) AS number_of_users
-					FROM $user_table u, $session_course_user_table
-					WHERE course_code= '".$_SESSION['_course']['id']."'
-					AND id_session='".$_SESSION['id_session']."'";
-		}
-		else{
-			$sql = "SELECT COUNT(u.user_id) AS number_of_users FROM $user_table u,$course_user_table cu WHERE u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
-		}
-	}
-	 if( isset ($_GET['keyword']))
-	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
-		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
-	}
-	$res = api_sql_query($sql, __FILE__, __LINE__);
-	$result = mysql_fetch_object($res);
-	return $result->number_of_users;*/
 	$counter=0;
 
 	if(!empty($_SESSION["id_session"])){
@@ -441,8 +415,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$temp=array();
 				$temp[] = $user_id;
 				$temp[] = $o_course_user['official_code'];
-				$temp[] = $o_course_user['firstname'];
 				$temp[] = $o_course_user['lastname'];
+				$temp[] = $o_course_user['firstname'];
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ',$groups_name); //Group
 
@@ -460,8 +434,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			else{
 				$temp=array();
 				$temp[] = $o_course_user['official_code'];
-				$temp[] = $o_course_user['firstname'];
 				$temp[] = $o_course_user['lastname'];
+				$temp[] = $o_course_user['firstname'];
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ',$groups_name);//Group
 				$temp[] = $user_id;
@@ -518,8 +492,8 @@ $header_nr = 0;
 	$table->set_header($header_nr++, '', false);
 }
 $table->set_header($header_nr++, get_lang('OfficialCode'));
-$table->set_header($header_nr++, get_lang('FirstName'));
 $table->set_header($header_nr++, get_lang('LastName'));
+$table->set_header($header_nr++, get_lang('FirstName'));
 $table->set_header($header_nr++, get_lang('Description'));
 $table->set_header($header_nr++, get_lang('Group'),false);
  if( api_is_allowed_to_edit())

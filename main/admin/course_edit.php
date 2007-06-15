@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_edit.php 12498 2007-05-28 08:48:09Z elixir_julian $
+// $Id: course_edit.php 12612 2007-06-15 13:37:31Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -96,7 +96,7 @@ $res = api_sql_query($sql,__FILE__,__LINE__);
 $course_teachers = array();
 while($obj = mysql_fetch_object($res))
 {
-		$course_teachers[$obj->user_id] = $obj->firstname.' '.$obj->lastname;
+		$course_teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
 }
 
 // Get all possible teachers without the course teachers
@@ -106,7 +106,7 @@ $teachers = array();
 while($obj = mysql_fetch_object($res))
 {		
 	if(!array_key_exists($obj->user_id,$course_teachers)){
-		$teachers[$obj->user_id] = $obj->firstname.' '.$obj->lastname;
+		$teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
 	}
 	
 
@@ -114,7 +114,7 @@ while($obj = mysql_fetch_object($res))
 		$course['tutor_name']=$obj->user_id;
 	}
 	//We add in the array platform teachers 
-	$platform_teachers[$obj->user_id] = $obj->firstname.' '.$obj->lastname;
+	$platform_teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
 }
 
 //Case where there is no teacher in the course

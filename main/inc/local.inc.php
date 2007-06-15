@@ -173,7 +173,6 @@ $cidReset = isset($_GET["cidReq"])&&$_GET["cidReq"]!=$_SESSION['_cid'] ? Databas
 
 $gidReset = isset($gidReset) ? $gidReset : '';
 // $gidReset can be set in URL-parameter
-$gidReset = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : $gidReset;
 
 // parameters passed via POST
 $login = isset($_POST["login"]) ? $_POST["login"] : '';

@@ -6680,8 +6680,15 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 		    closedir($handle);
 		}
-		
-
+		$zip_files = $zip_files_abs = $zip_files_dist = array();
+		if(is_dir($current_course_path.'/scorm/'.$this->path) && is_file($current_course_path.'/scorm/'.$this->path.'/imsmanifest.xml'))
+		{	
+			// remove the possible . at the end of the path
+			$dest_path_to_lp = substr($this->path, -1) == '.' ? substr($this->path, 0, -1) : $this->path;
+			$dest_path_to_scorm_folder = str_replace('//','/',$temp_zip_dir.'/scorm/'.$dest_path_to_lp);
+			mkdir ($dest_path_to_scorm_folder, 0777, true);
+			$zip_files_dist = copyr($current_course_path.'/scorm/'.$this->path, $dest_path_to_scorm_folder, array('imsmanifest'), $zip_files);
+		}
 	 	//Build a dummy imsmanifest structure. Do not add to the zip yet (we still need it)
 	 	//This structure is developed following regulations for SCORM 1.2 packaging in the SCORM 1.2 Content
 	 	//Aggregation Model official document, secion "2.3 Content Packaging"
@@ -6717,8 +6724,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	//For each element, add it to the imsmanifest structure, then add it to the zip.
 	 	//Always call the learnpathItem->scorm_export() method to change it to the SCORM
 	 	//format
-	 	$zip_files = array();
-	 	$zip_files_abs = array();
 	 	$link_updates = array();
 	 	foreach($this->items as $index => $item){
 	 		
@@ -7026,7 +7031,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				}
 				file_put_contents($dest_file,$string);
 			}
-			$zip_folder->add($dest_file,PCLZIP_OPT_REMOVE_PATH, $garbage_path);
 		}
 		foreach($zip_files_abs as $file_path)
 		{
@@ -7049,19 +7053,15 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				}
 				file_put_contents($dest_file,$string);
 			}
-			$zip_folder->add($dest_file,PCLZIP_OPT_REMOVE_PATH, $garbage_path);
 		}
-		
 		if(is_array($links_to_create))
 		{
 			foreach($links_to_create as $file=>$link)
 			{
 				$file_content = '<html><body><div style="text-align:center"><a href="'.$link['url'].'">'.$link['title'].'</a></div></body></html>';
 				file_put_contents($garbage_path.$temp_dir_short.'/'.$file, $file_content);
-				$zip_folder->add($garbage_path.$temp_dir_short.'/'.$file,PCLZIP_OPT_REMOVE_PATH, $garbage_path);
 			}
 		}
-		
 		// add non exportable message explanation
 		$lang_not_exportable = get_lang('ThisItemIsNotExportable');
 		$file_content = 
@@ -7092,11 +7092,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 </html>
 EOD;
 		file_put_contents($garbage_path.$temp_dir_short.'/document/non_exportable.html', $file_content);
-		$zip_folder->add($garbage_path.$temp_dir_short.'/document/non_exportable.html',PCLZIP_OPT_REMOVE_PATH, $garbage_path);
 		
 	 	//Finalize the imsmanifest structure, add to the zip, then return the zip
+	 	
 	 	$xmldoc->save($garbage_path.'/'.$temp_dir_short.'/imsmanifest.xml');
-		$zip_folder->add($garbage_path.'/'.$temp_dir_short.'/imsmanifest.xml',PCLZIP_OPT_REMOVE_PATH, $garbage_path.'/');
+		
+		
+		$zip_folder->add($garbage_path.'/'.$temp_dir_short, PCLZIP_OPT_REMOVE_PATH, $garbage_path);
+
 
 		//Send file to client
 		$name = 'scorm_export_'.$this->lp_id.'.zip';

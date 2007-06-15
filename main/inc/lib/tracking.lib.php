@@ -211,29 +211,6 @@ class Tracking {
 	}
 
 	function get_avg_student_score($student_id, $course_code) {
-
-		// protect datas
-		$student_id = intval($student_id);
-		$course_code = addslashes($course_code);
-
-		$sqlScore = "	SELECT  exe_result, exe_weighting
-				 				FROM " . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES) . "
-								WHERE exe_user_id = " . $student_id . "
-				 				AND exe_cours_id = '" . $course_code . "'
-							";
-		$resultScore = api_sql_query($sqlScore);
-		$i = 0;
-		$score = 0;
-		while ($a_score = mysql_fetch_array($resultScore)) {
-			$score = $score + $a_score['exe_result'];
-			$weighting = $weighting + $a_score['exe_weighting'];
-			$i++;
-		}
-
-		$totalScore = $totalScore + $score;
-		$totalWeighting += $weighting;
-		
-		$pourcentageTests = ($totalScore / $weighting) *100;
 		
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -269,7 +246,8 @@ class Tracking {
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 					$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
 					
-					$sql='SELECT SUM(score) as score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
+					$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$lp_item_view_table.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
+
 					$rs_score = api_sql_query($sql, __FILE__, __LINE__);
 					$lp_scorm_score = mysql_result($rs_score,0,'score');
 					
@@ -302,6 +280,7 @@ class Tracking {
 					$sql = 'SELECT score as student_score 
 							FROM '.$lp_item_view_table.' as lp_view_item
 							WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
+							AND lp_view_id = "'.$lp_view_id.'"
 							';
 
 					$rsScores = api_sql_query($sql, __FILE__, __LINE__);
@@ -316,7 +295,7 @@ class Tracking {
 			}
 		}
 
-		$totalScore = $lp_scorm_score_total + $pourcentageTests;
+		$totalScore = $lp_scorm_score_total;
 		$totalWeighting = $lp_scorm_weighting_total + 100;
 
 		$pourcentageScore = round(($totalScore * 100) / $totalWeighting);

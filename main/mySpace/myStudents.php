@@ -223,6 +223,7 @@ if(!empty($_GET['student']))
 			$nb_courses++;
 			$avg_student_progress += Tracking :: get_avg_student_progress($a_infosUser['user_id'],$course_code);
 			$avg_student_score += Tracking :: get_avg_student_score($a_infosUser['user_id'],$course_code);
+			echo $course_code.' : '.$avg_student_score.'<br>';
 		}
 	}
 	$avg_student_progress = round($avg_student_progress / $nb_courses,2);
@@ -502,7 +503,7 @@ if(!empty($_GET['student']))
 					$start_time = mysql_result($rs, 0, 0);
 					
 					
-					
+					//QUIZZ IN LP
 					$sql = 'SELECT id as item_id, max_score 
 							FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_item.' AS lp_item
 							WHERE lp_id='.$a_learnpath['id'].'
@@ -521,8 +522,9 @@ if(!empty($_GET['student']))
 						$sql = 'SELECT score as student_score 
 								FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' as lp_view_item
 								WHERE lp_view_item.lp_item_id = '.$item['item_id'].'
+								AND lp_view_id = "'.$lp_view_id.'"
 								';
-
+								
 						$rsScores = api_sql_query($sql, __FILE__, __LINE__);
 						$total_score += mysql_result($rsScores, 0, 0);
 						$total_weighting += $item['max_score'];
@@ -545,7 +547,7 @@ if(!empty($_GET['student']))
 						$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 						$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
 						
-						$sql='SELECT SUM(score) as score FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
+						$sql='SELECT SUM(score)/count(lp_item_id) as score FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' WHERE lp_view_id="'.$lp_view_id.'" GROUP BY lp_view_id';
 						$rs_score = api_sql_query($sql, __FILE__, __LINE__);
 						$lp_scorm_score = mysql_result($rs_score,0,'score');
 						

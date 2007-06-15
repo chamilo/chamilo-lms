@@ -223,7 +223,6 @@ if(!empty($_GET['student']))
 			$nb_courses++;
 			$avg_student_progress += Tracking :: get_avg_student_progress($a_infosUser['user_id'],$course_code);
 			$avg_student_score += Tracking :: get_avg_student_score($a_infosUser['user_id'],$course_code);
-			echo $course_code.' : '.$avg_student_score.'<br>';
 		}
 	}
 	$avg_student_progress = round($avg_student_progress / $nb_courses,2);

@@ -1904,4 +1904,48 @@ function api_time_to_hms($seconds)
 
 }
 
+
+/**
+ * function adapted from a php.net comment
+ * copy recursively a folder
+ * @param the source folder
+ * @param the dest folder
+ * @param an array of excluded file_name (without extension)
+ * @param copied_files the returned array of copied files
+ */
+
+function copyr($source, $dest, $exclude=array(), $copied_files=array())
+{
+    // Simple copy for a file
+    if (is_file($source)) {
+    	$path_infos = pathinfo($source);
+    	if(!in_array($path_infos['filename'], $exclude))
+       		copy($source, $dest);
+       	return;
+    }
+
+ 
+    // Make destination directory
+    if (!is_dir($dest)) {
+        mkdir($dest);
+    }
+ 
+    // Loop through the folder
+    $dir = dir($source);
+    while (false !== $entry = $dir->read()) {
+        // Skip pointers
+        if ($entry == '.' || $entry == '..') {
+            continue;
+        }
+ 
+        // Deep copy directories
+        if ($dest !== "$source/$entry") {
+            $zip_files = copyr("$source/$entry", "$dest/$entry", $exclude, $copied_files);
+        }
+    }
+    // Clean up
+    $dir->close();
+    return $zip_files;
+}
+
 ?>

@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 $langToolName = "学习跟踪";
 $TrackingDisabled = "系统管理员已禁止学习跟踪功能.";
 $InactivesStudents = "&#27963;&#21160;&#29992;&#25143;";
+$AverageTimeSpentOnThePlatform = "&#24179;&#22343;&#21344;&#29992;&#26102;&#38388;";
 $langShowNone = "不显示";
 $langCourseStats = "课程统计";
 $langToolsAccess = "工具权限";
@@ -141,6 +142,8 @@ $TakenSessions = "&#34987;&#29992; session";
 $FollowUp = "&#36319;&#36827;";
 $Trainers = "&#23548;&#24072;";
 $Administrators = "&#31649;&#29702;&#21592;";
+$Tracks = "&#36319;&#36394;";
 $Success = "&#25104;&#21151;";
 $ExcelFormat = "Excel &#26684;&#24335;";
+$MyLearnpath = "&#25105;&#30340;&#23398;&#20064;&#36335;&#24452;";
 ?>

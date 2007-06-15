@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Title = "&#20027;&#39064;";
+$By = "By";
 $UsersOnline = "在线用户";
 $Remove = "移除";
 $Description = "简介";
@@ -423,6 +424,8 @@ $Clicks = "&#21333;&#20987;";
 $SearchResults = "&#26816;&#32034;&#32467;&#26524;";
 $SessionPast = "&#36807;&#21435;";
 $SessionActive = "&#28608;&#27963;";
+$SessionFuture = "&#24320;&#22987;&#21069;";
+$DateFormatLongWithoutDay = "%B %d, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "&#38750;&#27861;&#25991;&#20214;&#22841;&#65306;&#35831;&#24314;&#31435;&#29992;&#26469;&#23384;&#20648;&#22270;&#29255;&#30340;&#25991;&#20214;&#22841;";
 $UsersConnectedToMySessions = "&#26597;&#30475;&#27492;&#20250;&#35805;&#30340;&#25152;&#26377;&#29992;&#25143;";
 $DearUser = "&#20146;&#29233;&#30340;&#29992;&#25143;";

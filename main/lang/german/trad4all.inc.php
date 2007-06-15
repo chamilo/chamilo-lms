@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Title = "Titel";
+$By = "von";
 $UsersOnline = "Nutzer online";
 $Remove = "Entfernen";
 $Description = "Beschreibung";

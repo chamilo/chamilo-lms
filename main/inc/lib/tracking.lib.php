@@ -242,7 +242,7 @@ class Tracking {
 					$lp_item__max_score = mysql_result($rs_lp_item_id_scorm,0,'max_score');				
 					
 					//We get the last view id of this LP
-					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
+					$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
 					$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 					$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
 					
@@ -270,7 +270,7 @@ class Tracking {
 				$rsItems = api_sql_query($sql, __FILE__, __LINE__);
 				
 				//We get the last view id of this LP
-				$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($_GET['student']).'"';	
+				$sql='SELECT max(id) as id FROM '.$lp_view_table.' WHERE lp_id='.$a_learnpath['id'].' AND user_id="'.intval($student_id).'"';	
 				$rs_last_lp_view_id = api_sql_query($sql, __FILE__, __LINE__);
 				$lp_view_id = mysql_result($rs_last_lp_view_id,0,'id');
 				

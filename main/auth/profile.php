@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 12267 2007-05-03 14:07:32Z elixir_julian $
+// $Id: profile.php 12622 2007-06-17 04:18:26Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -80,6 +80,7 @@ require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
 include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
 if (is_profile_editable())
 	$tool_name = get_lang('ModifProfile');
@@ -96,16 +97,14 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 /*
  * Get initial values for all fields.
  */
-$sql = "SELECT * FROM $table_user WHERE user_id = '".$_user['user_id']."'";
-$result = api_sql_query($sql, __FILE__, __LINE__);
-if ($result)
+$user_data = UserManager::get_user_info_by_id(api_get_user_id());
+if ($user_data !== false)
 {
-	$user_data = mysql_fetch_array($result, MYSQL_ASSOC);
-
 	if (is_null($user_data['language']))
 		$user_data['language'] = api_get_setting('platformLanguage');
 }
 
+$user_image = UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
 $fck_attribute['Height'] = "150";
 $fck_attribute['Width'] = "450";
 $fck_attribute['ToolbarSet'] = "Profil";
@@ -168,7 +167,7 @@ $form->addRule('phone', get_lang('EmailWrong'), 'email');*/
 //	PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true')
 {
-	$form->addElement('file', 'picture', (get_user_image($_user['user_id']) != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
+	$form->addElement('file', 'picture', ($user_image != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
 	$form->add_progress_bar();
 	if( strlen($user_data['picture_uri']) > 0)
 	{
@@ -276,6 +275,7 @@ function is_profile_editable()
 */
 
 /**
+ * Deprecated function. Use UserManager::get_user_picture_path_by_id($user_id,'none') instead 
  * Get a user's display picture. If the user doesn't have a picture, this
  * function will return an empty string.
  *
@@ -284,6 +284,9 @@ function is_profile_editable()
  */
 function get_user_image($user_id)
 {
+	$path = UserManager::get_user_picture_path_by_id($user_id,'none');
+	return $path['file'];
+	/*
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT picture_uri FROM $table_user WHERE user_id = '$user_id'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -294,6 +297,7 @@ function get_user_image($user_id)
 		$image = '';
 
 	return $image;
+	*/
 }
 
 /**
@@ -309,15 +313,20 @@ function upload_user_image($user_id)
 	 * Moved inside a function and refactored by Thomas Corthals - 2005-11-04
 	 */
 
-	$image_repository = api_get_path(SYS_CODE_PATH).'upload/users/';
-	$existing_image = get_user_image($user_id);
+	$image_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
+	$image_repository = $image_path['dir'];
+	$existing_image = $image_path['file'];
 
 	$file_extension = explode('.', $_FILES['picture']['name']);
 	$file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
 
 	if (!file_exists($image_repository))
+	{
+		//error_log('Making path '.$image_repository,0);	
 		mkpath($image_repository);
-
+	}else{
+		//error_log('Path '.$image_repository.' exists',0);
+	}
 	if ($existing_image != '')
 	{
 		if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE)
@@ -367,8 +376,9 @@ function upload_user_image($user_id)
  */
 function remove_user_image($user_id)
 {
-	$image_repository = api_get_path(SYS_CODE_PATH).'upload/users/';
-	$image = get_user_image($user_id);
+	$image_path = UserManager::get_user_picture_path_by_id($user_id,'system');
+	$image_repository = $image_path['dir'];
+	$image = $image_path['file'];
 
 	if ($image != '')
 	{
@@ -409,7 +419,8 @@ function build_production_list($user_id, $force = false)
 	if (empty($productions))
 		return false;
 
-	$production_dir = api_get_path(WEB_CODE_PATH)."upload/users/$user_id/";
+	$production_path = UserManager::get_user_picture_path_by_id($user_id,'web',true);
+	$production_dir = $production_path['dir'];
 	$del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
 	$del_text = get_lang('Delete');
 
@@ -434,7 +445,8 @@ function build_production_list($user_id, $force = false)
  */
 function get_user_productions($user_id)
 {
-	$production_repository = api_get_path(SYS_CODE_PATH)."upload/users/$user_id/";
+	$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
+	$production_repository = $production_path['dir'].$user_id.'/';
 	$productions = array();
 
 	if (is_dir($production_repository))
@@ -461,7 +473,8 @@ function get_user_productions($user_id)
  */
 function upload_user_production($user_id)
 {
-	$production_repository = api_get_path(SYS_CODE_PATH)."upload/users/$user_id/";
+	$image_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
+	$production_repository = $image_path['dir'].$user_id.'/';
 
 	if (!file_exists($production_repository))
 		mkpath($production_repository);
@@ -483,7 +496,8 @@ function upload_user_production($user_id)
  */
 function remove_user_production($user_id, $production)
 {
-	unlink(api_get_path(SYS_CODE_PATH)."upload/users/$user_id/$production");
+	$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
+	unlink($production_path['dir'].$user_id.'/'.$production);
 }
 
 /*
@@ -592,8 +606,10 @@ elseif ($update_success)
 	Display :: display_normal_message(get_lang('ProfileReg'));
 }
 //	USER PICTURE
-$image = get_user_image($_user['user_id']);
-$image_file = ($image != '' ? api_get_path(WEB_CODE_PATH)."upload/users/$image" : api_get_path(WEB_CODE_PATH).'img/unknown.jpg');
+$image_path = UserManager::get_user_picture_path_by_id($_user['user_id'],'web');
+$image_dir = $image_path['dir'];
+$image = $image_path['file'];
+$image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown.jpg');
 $image_size = @getimagesize($image_file);
 
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '

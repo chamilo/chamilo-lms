@@ -1698,7 +1698,7 @@ function showorhide_addresourcelink($type, $id)
 function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_window=true)
 {
 	//$_course = Database::get_course_info($course_code);
-	$_course = Database::get_course_info_from_code($course_code);
+	$_course = Database::get_course_info($course_code);
 
 	// styling the link of the added resource
 	if ($style <> '') $styling = ' class="'.$style.'"';
@@ -1740,27 +1740,14 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 			$output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&md5='.$myrow['md5'].'"'.$styling.' '.$target.'>'.$myrow['forum_name']."</a><br />\n";
 			break;
 		case TOOL_THREAD:  //=topics
-			if(!empty($_SESSION['dokeos_version']) AND $_SESSION['dokeos_version']>=1.8){
-				//$tbl_forum 		= Database::get_course_table(TABLE_FORUM,$_course['database']);
-				//$tbl_thread 	= Database::get_course_table(TABLE_FORUM_THREAD,$_course['database']);
-				$tbl_post 		= Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
-				// grabbing the title of the post
-				$sql_title = "SELECT * FROM $tbl_post WHERE post_id=".$id;
-				$result_title = api_sql_query($sql_title,__FILE__,__LINE__);
-				$myrow_title = Database::fetch_array($result_title);
-				$output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$myrow_title['thread_id'].'&forum='.$myrow_title['forum_id'].'" '.$styling.' '.$target.'>'.$myrow_title['post_title']."</a><br />\n";
-			}else{//older dokeos versions
-				$tbl_posts		= $_course['dbNameGlu'].'bb_posts';
-				$tbl_posts_text	= $_course['dbNameGlu'].'bb_posts_text';
-				$TBL_FORUMS		= $_course['dbNameGlu'].'bb_forums';
-				$result = api_sql_query("SELECT * FROM `$tbl_posts` posts, `$TBL_FORUMS` forum WHERE forum.forum_id=posts.forum_id and post_id=$id",__FILE__,__LINE__);
-				$myrow = Database::fetch_array($result);
-				// grabbing the title of the post
-				$sql_title = "SELECT * FROM `$tbl_posts_text` WHERE post_id=".$myrow["post_id"];
-				$result_title = api_sql_query($sql_title,__FILE__,__LINE__);
-				$myrow_title = Database::fetch_array($result_title);
-				$output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$myrow['topic_id'].'&amp;forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.' '.$target.'>'.$myrow_title['post_title']."</a><br />\n";
-			}
+			//$tbl_forum 		= Database::get_course_table(TABLE_FORUM,$_course['database']);
+			//$tbl_thread 	= Database::get_course_table(TABLE_FORUM_THREAD,$_course['database']);
+			$tbl_post 		= Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
+			// grabbing the title of the post
+			$sql_title = "SELECT * FROM $tbl_post WHERE post_id=".$id;
+			$result_title = api_sql_query($sql_title,__FILE__,__LINE__);
+			$myrow_title = Database::fetch_array($result_title);
+			$output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$myrow_title['thread_id'].'&forum='.$myrow_title['forum_id'].'" '.$styling.' '.$target.'>'.$myrow_title['post_title']."</a><br />\n";
 			break;
 		case TOOL_POST:
 			$tbl_post = Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
@@ -1812,12 +1799,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_path)
 {
 	//error_log('In rl_get_resource_link_for_learnpath()',0);
-	global $my_version; //added global variable just for cross compatibility. I hate it.
-	if($my_version=='1.8'){
-		$_course = Database::get_course_info($course_code);
-	}else{
-		$_course = Database::get_course_info_from_code($course_code);
-	}
+	$_course = Database::get_course_info($course_code);
 	
 	$tbl_lp_item = Database::get_course_table('lp_item');
 
@@ -1956,12 +1938,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
  */
 function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 {
-	global $my_version;
-	if($my_version == '1.8'){
-		$_course = Database::get_course_info($course_code);
-	}else{
-		$_course = Database::get_course_info_from_code($course_code);
-	}
+	$_course = Database::get_course_info($course_code);
 
 	$tbl_lp_item = Database::get_course_table('lp_item');
 

@@ -497,7 +497,16 @@ INSERT INTO `settings_current` VALUES
 (88, 'upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL),
 (89, 'upload_extensions_whitelist', NULL, 'textfield', 'Security', 'htm;html;jpg;jpeg;gif;png;swf;avi;mpg;mpeg', 'UploadExtensionsWhitelist', 'UploadExtensionsWhitelistComment', NULL, NULL),
 (90, 'upload_extensions_skip', NULL, 'radio', 'Security', 'true', 'UploadExtensionsSkip', 'UploadExtensionsSkipComment', NULL, NULL),
-(91, 'upload_extensions_replace_by', NULL, 'textfield', 'Security', 'dangerous', 'UploadExtensionsReplaceBy', 'UploadExtensionsReplaceByComment', NULL, NULL);
+(91, 'upload_extensions_replace_by', NULL, 'textfield', 'Security', 'dangerous', 'UploadExtensionsReplaceBy', 'UploadExtensionsReplaceByComment', NULL, NULL),
+(92, 'service_visio', 'visio_rtmp_host_local', 'textfield',NULL,'', 'VisioHostLocal','', NULL, NULL),
+(93, 'service_visio', 'visio_is_web_rtmp', 'radio',NULL,'false', 'VisioRTMPIsWeb','', NULL, NULL),
+(94, 'service_visio', 'visio_rtmp_port', 'textfield',NULL,'1935', 'VisioRTMPPort','', NULL, NULL),
+(95, 'service_visio', 'visio_rtmp_tunnel_port', 'textfield',NULL,'80', 'VisioRTMPTunnelPort','', NULL, NULL),
+(96, 'show_number_of_courses', NULL, 'radio','Platform','false', 'ShowNumberOfCourses','ShowNumberOfCoursesComment', NULL, NULL),
+(97, 'show_empty_course_categories', NULL, 'radio','Platform','true', 'ShowEmptyCourseCategories','ShowEmptyCourseCategoriesComment', NULL, NULL),
+(98, 'show_back_link_on_top_of_tree', NULL, 'radio','Platform','false', 'ShowBackLinkOnTopOfCourseTree','ShowBackLinkOnTopOfCourseTreeComment', NULL, NULL),
+(99, 'show_different_course_language', NULL, 'radio','Platform','true', 'ShowDifferentCourseLanguage','ShowDifferentCourseLanguageComment', NULL, NULL),
+(100, 'split_users_upload_directory', NULL, 'radio','Tuning','false', 'SplitUsersUploadDirectory','SplitUsersUploadDirectoryComment', NULL, NULL);
 
 
 UNLOCK TABLES;
@@ -599,7 +608,20 @@ INSERT INTO `settings_options` VALUES
 (84, 'upload_extensions_list_type', 'blacklist', 'Blacklist'),
 (85, 'upload_extensions_list_type', 'whitelist', 'Whitelist'),
 (86, 'upload_extensions_skip', 'true', 'Remove'),
-(87, 'upload_extensions_skip', 'false', 'Rename');
+(87, 'upload_extensions_skip', 'false', 'Rename'),
+(88, 'visio_rtmp_host_local', 'true', 'Web'),
+(89, 'visio_rtmp_host_local', 'false', 'Not web'), 
+(90, 'show_number_of_courses', 'true', 'Yes'),
+(91, 'show_number_of_courses', 'false', 'No'),
+(92, 'show_empty_course_categories', 'true', 'Yes'),
+(93, 'show_empty_course_categories', 'false', 'No'),
+(94, 'show_back_link_on_top_of_tree', 'true', 'Yes'),
+(95, 'show_back_link_on_top_of_tree', 'false', 'No'),
+(96, 'show_different_course_language', 'true', 'Yes'),
+(97, 'show_different_course_language', 'false', 'No'), 
+(98, 'split_users_upload_directory', 'true', 'Yes'),
+(99, 'split_users_upload_directory', 'false', 'No'); 
+
 UNLOCK TABLES;
 
 

@@ -329,6 +329,16 @@ function LMSGetValue(param) {
 		case 'cmi.core.score'		: 
 			result=score;
 			break;
+		case 'cmi.score.scaled'		: //1.3
+			if(score < -1 || score >1)
+			{
+				result=score/max;
+			}
+			else
+			{
+				result=score;			
+			}
+			break;
 		case 'cmi.core.credit'		: 
 			result='no-credit';
 			break;
@@ -371,26 +381,34 @@ function LMSSetValue(param, val) {
 	logit_scorm("LMSSetValue\n\t('"+param+"','"+val+"')",0);
 	G_LastError = G_NoError ;
 	G_LastErrorMessage = 'No error';	
-	return_value = "true";
+	return_value = 'false';
 	switch(param) {
-	case 'cmi.core.score.raw'		: score= val ;			break;
-	case 'cmi.core.score.max'		: max = val;			break;
-	case 'cmi.core.score.min'		: min = val;			break;
-	case 'cmi.core.lesson_location' : lesson_location = val;break;
+	case 'cmi.core.score.raw'		: score= val; return_value='true';	break;
+	case 'cmi.core.score.max'		: max = val;return_value='true';break;
+	case 'cmi.core.score.min'		: min = val;return_value='true';break;
+	case 'cmi.core.lesson_location' : lesson_location = val;return_value='true';break;
 	case 'cmi.core.lesson_status'	: 
 		saved_lesson_status = lesson_status;
 		lesson_status = val;
-		<?php if($oLP->mode != 'fullscreen'){ ?>
-	    //var update = update_toc(lesson_status,lms_item_id);
-	    <?php } ?>
+	    return_value='true';
 		break;
-	case 'cmi.completion_status'	: lesson_status = val;	break; //1.3
-	case 'cmi.core.session_time'	: session_time = val;	break;
-	case 'cmi.score.scaled'			: score = val ;			break; //1.3
-	case 'cmi.success_status'		: success_status = val; break; //1.3
-	case 'cmi.suspend_data'			: suspend_data = val;   break;
-	case 'cmi.core.exit'			: lms_item_core_exit = val;		break;
-	case 'cmi.core.entry'			: return_value = "false"; G_LastError = G_ElementIsReadOnly; break;
+	case 'cmi.completion_status'	: lesson_status = val;return_value='true';break; //1.3
+	case 'cmi.core.session_time'	: session_time = val;return_value='true';break;
+	case 'cmi.score.scaled'			: //1.3
+		if(val<=1 && val>=-1)
+		{ 
+			score = val ;
+			return_value='true';
+		}
+		else
+		{
+			return_value='false';
+		}
+		break;
+	case 'cmi.success_status'		: success_status = val;return_value='true';break; //1.3
+	case 'cmi.suspend_data'			: suspend_data = val;return_value='true';break;
+	case 'cmi.core.exit'			: lms_item_core_exit = val;return_value='true';break;
+	case 'cmi.core.entry'			: G_LastError = G_ElementIsReadOnly; break;
 	default:
 		var myres = new Array();
 		if(myres = param.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency)(.*)/)){
@@ -408,46 +426,51 @@ function LMSSetValue(param, val) {
 				case 'id':
 					interactions[elem_id][0] = val;
 					logit_scorm("Interaction "+elem_id+"'s id updated",2);
+					return_value='true';
 					break;
 				case 'time':
 					interactions[elem_id][2] = val;
 					logit_scorm("Interaction "+elem_id+"'s time updated",2);
+					return_value='true';
 					break;
 				case 'type':
 					interactions[elem_id][1] = val;
 					logit_scorm("Interaction "+elem_id+"'s type updated",2);
+					return_value='true';
 					break;
 				case 'correct_responses':
 					//do nothing yet
 					interactions[elem_id][4].push(val);
 					logit_scorm("Interaction "+elem_id+"'s correct_responses not updated",2);
+					return_value='true';
 					break;
 				case 'weighting':
 					interactions[elem_id][3] = val;
 					logit_scorm("Interaction "+elem_id+"'s weighting updated",2);
+					return_value='true';
 					break;
 				case 'student_response':
 					interactions[elem_id][5] = val;
 					logit_scorm("Interaction "+elem_id+"'s student_response updated",2);
+					return_value='true';
 					break;
 				case 'result':
 					interactions[elem_id][6] = val;
 					logit_scorm("Interaction "+elem_id+"'s result updated",2);
+					return_value='true';
 					break;
 				case 'latency':
 					interactions[elem_id][7] = val;
 					logit_scorm("Interaction "+elem_id+"'s latency updated",2);
+					return_value='true';
 					break;
 			}  
 		}else{
-			return_value = "false";
 			G_lastError = G_NotImplementedError;
 			G_lastErrorString = 'Not implemented yet';
 		}
 		break;
 	}
-    //var update = update_toc();
-	//var update_progress = update_progress_bar();
 	<?php 
 	if ($oLP->force_commit == 1){
 		echo "    var mycommit = LMSCommit('force');";

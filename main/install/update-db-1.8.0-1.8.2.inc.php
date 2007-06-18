@@ -58,7 +58,7 @@ if(function_exists('ini_set'))
 if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 {
 	//check if the current Dokeos install is elligible for update
-	if (empty ($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile))
+	if (!file_exists('../inc/conf/configuration.php'))
 	{
 		echo '<b>'.get_lang('Error').' !</b> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br><br>
 								'.get_lang('PleasGoBackToStep1').'.

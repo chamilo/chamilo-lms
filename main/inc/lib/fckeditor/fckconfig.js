@@ -153,7 +153,7 @@ FCKConfig.FlashDlgHideAdvanced	= false ;
 // Custom implementations should just ignore it.
 var _FileBrowserLanguage	= 'php' ;	// asp | aspx | cfm | lasso | perl | php | py
 var _QuickUploadLanguage	= 'php' ;	// asp | aspx | cfm | lasso | php
-
+FCKConfig.QuickUploadLanguage	= 'php' ;
 // Don't care about the following line. It just calculates the correct connector 
 // extension to use for the default File Browser (Perl uses "cgi").
 var _FileBrowserExtension = _FileBrowserLanguage == 'perl' ? 'cgi' : _FileBrowserLanguage ;

@@ -94,10 +94,7 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 // overriding the timelimit (for large campusses that have to be migrated)
 @set_time_limit(0);
 
-//we hope in the future to add the ability to upgrade from 1.5.x versions
-//to 1.8 as well.
-$old_update_from_version=array('1.5','1.5.4','1.5.5','1.6');
-$update_from_version=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
+$update_from_version=array('1.8.0');
 
 /*
 ==============================================================================
@@ -472,8 +469,8 @@ elseif($_POST['step6'])
 	{
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
-		include('update-db-1.6.x-1.8.0.inc.php');
-		include('update-files-1.6.x-1.8.0.inc.php');
+		include('update-db-1.8.0-1.8.2.inc.php');
+		//include('update-files-1.8.0-1.8.2.inc.php');
 	}
 	else
 	{

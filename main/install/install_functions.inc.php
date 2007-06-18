@@ -148,17 +148,8 @@ function get_config_param($param)
 
 	if(empty($updateFromConfigFile)) //if update from previous install was requested
 	{
-		//try to recover old config file from dokeos 1.6.x
-		if(file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php'))
-		{
-			$updateFromConfigFile='claroline/inc/conf/claro_main.conf.php';
-			if(file_exists($updatePath.'claroline/inc/installedVersion.inc.php'))
-			{
-				$updateFromInstalledVersionFile = 'claroline/inc/installedVersion.inc.php';
-			}
-		}
 		//try to recover old config file from dokeos 1.8.x
-		elseif(file_exists($updatePath.'main/inc/conf/configuration.php'))
+		if(file_exists($updatePath.'main/inc/conf/configuration.php'))
 		{
 			$updateFromConfigFile='main/inc/conf/configuration.php';
 		}

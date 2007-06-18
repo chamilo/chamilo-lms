@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 11786 2007-03-29 16:09:54Z elixir_inter $
+// $Id: CourseSelectForm.class.php 12645 2007-06-18 20:46:16Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -130,9 +130,35 @@ class CourseSelectForm
 			}
 		}
 		echo '<br/><input type="submit" value="'.get_lang('Ok').'"/>';
+		
+		CourseSelectForm :: display_hidden_quiz_questions($course);
 		echo '</form>';
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
 	}
+	
+	
+	function display_hidden_quiz_questions($course)
+	{
+	
+		foreach ($course->resources as $type => $resources)
+		{
+			if (count($resources) > 0)
+			{
+				switch ($type)
+				{
+					case RESOURCE_QUIZQUESTION:
+						foreach ($resources as $id => $resource)
+						{
+							echo '<input type="hidden" name="resource['.RESOURCE_QUIZQUESTION.']['.$id.'] id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
+						}
+						break;
+
+				}
+			}
+		}
+	}
+	
+	
 	/**
 	 * Get the posted course
 	 * @return course The course-object with all resources selected by the user

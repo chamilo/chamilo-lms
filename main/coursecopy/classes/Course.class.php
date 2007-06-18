@@ -1,4 +1,4 @@
-<?php // $Id: Course.class.php 9246 2006-09-25 13:24:53Z bmol $
+<?php // $Id: Course.class.php 12645 2007-06-18 20:46:16Z elixir_inter $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -61,7 +61,7 @@ class Course
 					return true;	
 				}	
 			}	
-			if( $type == RESOURCE_LEARNPATH )
+			if( $type == RESOURCE_LEARNPATH && get_class($resource)=='Learnpath')
 			{
 				if($resource->has_item($resource_to_check))
 				{

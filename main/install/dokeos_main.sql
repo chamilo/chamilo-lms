@@ -691,6 +691,7 @@ CREATE TABLE `user` (
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `username` (`username`)
 );
+ALTER TABLE user ADD INDEX (status);
 
 --
 -- Dumping data for table `user`

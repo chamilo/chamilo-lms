@@ -2,29 +2,35 @@
 }
 .scormpage .menu{
 	width: 180px;
-	position: fixed;
 	padding: 0px;
 	font-size: small;
-	margin-right: 5%;
-	margin-left: 75%;
-	margin-top: 10px;
+	position: absolute;
+	background-color: white;
+/*
 	filter:alpha(opacity=50);
 	opacity: 0.50;
 	-moz-border-radius: 25px;
-	background-color: white;
+	margin-right: 5%;
+	margin-left: 75%;
+	margin-top: 10px;
+*/
 }
 .scormpage .menu .lp_nav{
 	height: 50px;
 	width: 160px;
 	padding-top: 4px;
 	padding-bottom:0px;
+/*	
 	margin-left: 10px;
 	margin-right: 10px;
-	margin-top: 4px;
+*/
+	margin-top: 0px;
 }
 .lp_navigation_elem{
-	padding-left: 25px;
-	padding-top: 0px;
+	padding-top: 2px;
+	position: absolute;
+	left: 50%;
+	margin-left: -70px;
 }
 .lp_navigation_elem .progresstext{
 	margin-top: -12px;
@@ -36,12 +42,18 @@
 	margin-right: 0em;
 	margin-top: 0.4em;
 }
+#msg_div_id{
+	padding-left: 10px;
+	padding-top: 4px;
+}
 .scormpage .menu .notification{
 	height: 50px;
+	margin-left: 15px;
+	margin-right: 15px;
 }
 .scormpage .menu .notification .message{
 	height: 50px;
-	width: 180px;
+	width: 140px;
 	border: none;
 }
 .scormpage .menu .notification .lp_log{
@@ -60,7 +72,7 @@
 	margin-left: 0%;
 	*/
 	/* trying the absolute mode */
-	position: absolute;
+	position: fixed;
 	bottom:0;
 	left:0;
 	width: 100%;

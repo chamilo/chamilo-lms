@@ -163,6 +163,7 @@ echo		"</tr>\n";
 $list = new LearnpathList(api_get_user_id());
 $flat_list = $list->get_flat_list();
 $is_allowed_to_edit = api_is_allowed_to_edit();
+$test_mode = api_get_setting('server_type');
 //var_dump($flat_list);
 if (is_array($flat_list))
 {
@@ -192,6 +193,8 @@ if (is_array($flat_list))
 	    $dsp_edit = '';
 	    $dsp_delete = '';
 	    $dsp_visible = '';
+	    $dsp_default_view = '';
+	    $dsp_debug = '';
 	    if($display_progress_bar)
 	    {
 	    	$dsp_progress = '<td>'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id,api_get_user_id()),'').'</td>';
@@ -287,20 +290,22 @@ if (is_array($flat_list))
 			}else{
 				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="'.get_lang("build").'">&nbsp;';
 			}
-			if($details['lp_scorm_debug']==1){
-				$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
-						'<img src="../img/bug.gif" border="0" alt="'.get_lang("HideDebug").'" title="'.get_lang("HideDebug").'"/>' .
-						'</a>&nbsp;';
-			}else{
-				$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
-						'<img src="../img/bug_gray.gif" border="0" alt="'.get_lang("ShowDebug").'" title="'.get_lang("ShowDebug").'"/>' .
-						'</a>&nbsp;';
-			}
-
+			if($test_mode == 'test')
+			{
+				if($details['lp_scorm_debug']==1){
+					$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
+							'<img src="../img/bug.gif" border="0" alt="'.get_lang("HideDebug").'" title="'.get_lang("HideDebug").'"/>' .
+							'</a>&nbsp;';
+				}else{
+					$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
+							'<img src="../img/bug_gray.gif" border="0" alt="'.get_lang("ShowDebug").'" title="'.get_lang("ShowDebug").'"/>' .
+							'</a>&nbsp;';
+				}
+	    	}
 	    }	// end if($is_allowedToEdit)
 	    //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
-	    //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete;
-	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_force_commit.$dsp_delete;
+	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete;
+	    //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_force_commit.$dsp_delete;
 	    echo	"</tr>\n";
 
 	}	// end foreach ($flat_list)

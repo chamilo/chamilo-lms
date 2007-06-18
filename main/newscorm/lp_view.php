@@ -130,24 +130,13 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	/*]]>*/
 	</style>';
 	include_once('../inc/reduced_header.inc.php');
-?>
-<body>
-	<div class="scormpage">
-		<div class="content">
-	    	<iframe class="iframe" valign="top" name="content_name" id="content_id" src="<?php echo $src; ?>" frameborder="0"></iframe>
-		</div>
-		<div class="menu">
-		    <iframe class="lp_nav" name="nav_name" id="nav_id" src="lp_nav.php" frameborder="0"></iframe>
-		    <div class="notification" id="notification_id">
-		    	<iframe class="message" name="message_name" id="message_id" src="lp_message.php" frameborder="0"></iframe>
-				<!--iframe class="lp_log" name="lp_log_name" id="lp_log_id" src="lp_log.php" border="0" frameborder="0"></iframe-->
-		    </div>
-		</div>
-		<div class="footer">
-		</div>
-	</div>
-</body>
-</html>
+?><frameset rows="40,*">
+		<frameset cols="50%,*">
+			<frame id="nav_id" name="nav_name" class="lp_nav" align="middle" src="lp_nav.php" frameborder="0"></frame>
+			<frame id="message_id" name="message_name" class="message" src="lp_message.php" frameborder="0"></frame>
+		</frameset>
+	   	<frame id="content_id" name="content_frame" class="iframe" valign="top" src="<?php echo $src; ?>" frameborder="0"></frame>
+	</frameset>
 <?php
 }else{
 	$htmlHeadXtra[] =

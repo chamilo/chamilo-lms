@@ -17,7 +17,7 @@
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
-
+error_log('enter in upload');
 include('../../../../../../global.inc.php');
 include_once(api_get_path(INCLUDE_PATH)."lib/fileUpload.lib.php");
 
@@ -108,6 +108,11 @@ if(isset($_SESSION["_course"]["sysCode"])){
 	}
 	
 }
+else
+{ // not in a course
+	$sServerDir = api_get_path(SYS_PATH).'main/upload/';
+	$sserverWebath = api_get_path(WEB_PATH).'main/upload/';
+}
 
 // Try to add an extension to the file if it has'nt one
 $sFileName = add_ext_on_mime(stripslashes($oFile['name']),$oFile['type']);
@@ -133,7 +138,6 @@ if ( is_file( $sServerDir.$sFileName ) ){
 		$sFileName = $base.'_'.$counter.$ext;
 	}
 }
-
 if(!move_uploaded_file( $oFile['tmp_name'], $sServerDir.$sFileName )) $sErrorNumber = '203' ; //check php.ini setting
 	
 if ( is_file( $sServerDir.$sFileName ) )

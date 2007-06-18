@@ -109,7 +109,7 @@ $dirs = $manager->getDirs();
 		  
 		  if(api_is_allowed_to_edit()){
 		  ?>
-		  	<span style="cursor: pointer" onclick="showAdvancedSettings();"><?php echo get_lang("AdvancedSettings");?></span>
+		  	<span style="cursor: pointer" onclick="showAdvancedSettings();"><?php echo utf8_encode(get_lang("AdvancedSettings"));?></span>
 		  	
 		  <?php
 		  }

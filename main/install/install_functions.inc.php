@@ -126,7 +126,7 @@ function file_to_array($filename)
 	$fp = fopen($filename, "rb");
 	$buffer = fread($fp, filesize($filename));
 	fclose($fp);
-	$result = preg_split("/r?n|r/", $buffer);
+	$result = explode('<br />',nl2br($buffer));
 	return $result;
 }
 
@@ -152,6 +152,10 @@ function get_config_param($param)
 		if(file_exists($updatePath.'main/inc/conf/configuration.php'))
 		{
 			$updateFromConfigFile='main/inc/conf/configuration.php';
+			if(file_exists($updatePath.'main/inc/installedVersion.inc.php'))
+			{
+				$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
+			}
 		}
 		//give up recovering
 		else
@@ -183,7 +187,7 @@ function get_config_param($param)
 			if(strstr($enreg,'='))
 			{
 				$enreg=explode('=',$enreg);
-
+				$enreg[0] = trim($enreg[0]);
 				if($enreg[0][0] == '$')
 				{
 					list($enreg[1])=explode(' //',$enreg[1]);

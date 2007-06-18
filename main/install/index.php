@@ -129,7 +129,7 @@ if($_POST['step2_install'] || $_POST['step2_update'])
 
 			if(file_exists($_POST['updatePath']))
 			{
-				if(in_array(get_config_param('clarolineVersion'),$update_from_version))
+				if(in_array(get_config_param('dokeos_version'),$update_from_version))
 				{
 					$_POST['step2']=1;
 				}

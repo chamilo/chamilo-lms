@@ -23,16 +23,22 @@ $language_file = "learnpath";
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
 require_once('scorm.class.php');
+$error = '';
+$display_mode = '';
 if(isset($_SESSION['lpobject'])){
 	$temp = $_SESSION['lpobject'];
 	$_SESSION['oLP'] = unserialize($temp);
+	$error = $_SESSION['oLP']->error;
+	$display_mode = $_SESSION['oLP']->mode;
 }
+//close the session immediately to avoid concurrent access problems
+session_write_close();
 if($debug>0){error_log('New LP - Loaded lp_message : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'],0);}
 $charset = 'ISO-8859-1';
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
   var dokeos_xajax_handler = window.parent.oxajax;
 </script>';
-if($_SESSION['oLP']->mode == 'fullscreen'){
+if($display_mode == 'fullscreen'){
 	$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
 						/*<![CDATA[*/
 						@import "scormfs.css";
@@ -51,7 +57,7 @@ include_once('../inc/reduced_header.inc.php');
 <body>
 <div id="msg_div_id">
 <?php
-echo $_SESSION['oLP']->error;
+echo $error;
 ?>
 </div>
 </body></html>

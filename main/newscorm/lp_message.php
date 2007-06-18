@@ -32,12 +32,19 @@ $charset = 'ISO-8859-1';
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
   var dokeos_xajax_handler = window.parent.oxajax;
 </script>';
-$htmlHeadXtra[] = '' .
-'<style type="text/css" media="screen, projection">
-	/*<![CDATA[*/
-	@import "scorm.css";
-	/*]]>*/
-</style>';
+if($_SESSION['oLP']->mode == 'fullscreen'){
+	$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
+						/*<![CDATA[*/
+						@import "scormfs.css";
+						/*]]>*/
+						</style>';
+}else{
+	$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
+						/*<![CDATA[*/
+						@import "scorm.css";
+						/*]]>*/
+						</style>';
+}
 include_once('../inc/reduced_header.inc.php');
 ?>
 

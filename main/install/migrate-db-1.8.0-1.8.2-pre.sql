@@ -26,6 +26,7 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_back_link_on_top_of_tree', NULL, 'radio','Platform','false', 'ShowBackLinkOnTopOfCourseTree','ShowBackLinkOnTopOfCourseTreeComment', NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_different_course_language', NULL, 'radio','Platform','true', 'ShowDifferentCourseLanguage','ShowDifferentCourseLanguageComment', NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('split_users_upload_directory', NULL, 'radio','Tuning','false', 'SplitUsersUploadDirectory','SplitUsersUploadDirectoryComment', NULL, NULL);
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('hide_dltt_markup', NULL, 'radio','Platform','false', 'HideDLTTMarkup','HideDLTTMarkupComment', NULL, NULL);
 
 
 INSERT INTO settings_options(variable,value,display_text) VALUES ('upload_extensions_list_type', 'blacklist', 'Blacklist');
@@ -44,6 +45,8 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('show_differen
 INSERT INTO settings_options(variable,value,display_text) VALUES ('show_different_course_language', 'false', 'No'); 
 INSERT INTO settings_options(variable,value,display_text) VALUES ('split_users_upload_directory', 'true', 'Yes');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('split_users_upload_directory', 'false', 'No'); 
+INSERT INTO settings_options(variable,value,display_text) VALUES ('hide_dltt_markup', 'false', 'No'); 
+INSERT INTO settings_options(variable,value,display_text) VALUES ('hide_dltt_markup', 'true', 'Yes'); 
 
 -- Insert anonymous user
 INSERT INTO user(lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active) VALUES ('Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1);

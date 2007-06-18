@@ -58,7 +58,7 @@ if(function_exists('ini_set'))
 if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 {
 	//check if the current Dokeos install is elligible for update
-	if (empty ($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile) || !in_array(get_config_param('clarolineVersion'), $update_from_version))
+	if (empty ($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile))
 	{
 		echo '<b>'.get_lang('Error').' !</b> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br><br>
 								'.get_lang('PleasGoBackToStep1').'.
@@ -177,6 +177,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		
 		//get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-1.8.0-1.8.2-pre.sql','stats');
+	
 		if(count($s_q_list)>0)
 		{
 			//now use the $s_q_list

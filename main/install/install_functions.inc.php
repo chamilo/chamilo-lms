@@ -152,10 +152,6 @@ function get_config_param($param)
 		if(file_exists($updatePath.'main/inc/conf/configuration.php'))
 		{
 			$updateFromConfigFile='main/inc/conf/configuration.php';
-			if(file_exists($updatePath.'main/inc/installedVersion.inc.php'))
-			{
-				$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
-			}
 		}
 		//give up recovering
 		else
@@ -163,6 +159,10 @@ function get_config_param($param)
 			error_log('Could not find config file in '.$updatePath.' in get_config_param()',0);
 			return null;
 		}
+	}	
+	if(file_exists($updatePath.'main/inc/installedVersion.inc.php'))
+	{
+		$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
 	}
 	//look if we already have the queried param
 	if(is_array($configFile) && isset($configFile[$param]))
@@ -194,7 +194,7 @@ function get_config_param($param)
 
 					$enreg[0]=trim(str_replace('$','',$enreg[0]));
 					$enreg[1]=str_replace('\"','"',ereg_replace('(^"|"$)','',substr(trim($enreg[1]),0,-1)));
-
+					$enreg[1]=str_replace('\'','"',ereg_replace('(^\'|\'$)','',$enreg[1]));
 					if(strtolower($enreg[1]) == 'true')
 					{
 						$enreg[1]=1;
@@ -707,15 +707,17 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 {
 	if($installType == 'update')
 	{
-		$dbHostForm=get_config_param('dbHost');
-		$dbUsernameForm=get_config_param('dbLogin');
-		$dbPassForm=get_config_param('dbPass');
-		$dbPrefixForm=get_config_param('dbNamePrefix');
-		$enableTrackingForm=get_config_param('is_trackingEnabled');
-		$singleDbForm=get_config_param('singleDbEnabled');
-		$dbNameForm=get_config_param('mainDbName');
-		$dbStatsForm=get_config_param('statsDbName');
-		$dbScormForm=get_config_param('scormDbName');
+		global $_configuration;
+		$dbHostForm=$_configuration['db_host'];
+		$dbUsernameForm=$_configuration['db_user'];
+		$dbPassForm=$_configuration['db_password'];
+		$dbPrefixForm=$_configuration['db_prefix'];
+		$enableTrackingForm=$_configuration['tracking_enabled'];
+		$singleDbForm=$_configuration['single_database'];
+		$dbNameForm=$_configuration['main_database'];
+		$dbStatsForm=$_configuration['statistics_database'];
+		$dbScormForm=$_configuration['scorm_database'];
+		$dbUserForm=$_configuration['user_personal_database'];
 
 		$dbScormExists=true;
 
@@ -732,14 +734,16 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 				$dbScormExists=false;
 			}
 		}
-
-		if($singleDbForm)
+		if(empty($dbUserForm))
 		{
-			$dbUserForm=$dbNameForm;
-		}
-		else
-		{
-			$dbUserForm=$dbPrefixForm.'dokeos_user';
+			if($singleDbForm)
+			{
+				$dbUserForm=$dbNameForm;
+			}
+			else
+			{
+				$dbUserForm=$dbPrefixForm.'dokeos_user';
+			}
 		}
 		echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
 		echo get_lang("DBSettingUpgradeIntro");
@@ -924,7 +928,10 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	//Second parameter: Dokeos URL
 	echo "<tr>\n";
 	echo '<td>'.get_lang('DokeosURL').' (<font color="#cc0033">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>\n";
-	echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.htmlentities($urlForm).'" />'."</td>\n";
+	
+	if($installType == 'update') echo '<td>'.htmlentities($urlForm)."</td>\n";
+	else echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.htmlentities($urlForm).'" />'."</td>\n";
+	
 	echo "</tr>\n";
 
 	//Parameter 3: administrator's email

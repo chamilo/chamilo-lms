@@ -126,7 +126,9 @@ if($_POST['step2_install'] || $_POST['step2_update'])
 			{
 				$_POST['updatePath'].='/';
 			}
-
+			$_POST['step2']=1;
+			$badUpdatePath=false;
+			/* don't verify it to upgrade from 1.8.0 to 1.8.2
 			if(file_exists($_POST['updatePath']))
 			{
 				if(in_array(get_config_param('dokeos_version'),$update_from_version))
@@ -141,7 +143,7 @@ if($_POST['step2_install'] || $_POST['step2_update'])
 			else
 			{
 				$badUpdatePath=true;
-			}
+			}*/
 		}
 	}
 }
@@ -156,6 +158,11 @@ else
 {
 	$installType=$_GET['installType'];
 	$updateFromConfigFile=$_GET['updateFromConfigFile'];
+}
+
+if($installType=='update')
+{
+	include_once('../inc/conf/configuration.php');
 }
 
 if(!isset($_GET['running']))
@@ -387,7 +394,7 @@ elseif($_POST['step4'])
 		if(!empty($tmp)) $institutionForm = $tmp;
 		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'InstitutionUrl');
 		if(!empty($tmp)) $institutionUrlForm = $tmp;
-		$urlForm = get_config_param('rootWeb');
+		$urlForm = $_configuration['root_web'];
 		$encryptPassForm = get_config_param('userPasswordCrypted');
 		$allowSelfReg = get_config_param('allowSelfReg');
 		$allowSelfRegProf = get_config_param('allowSelfRegProf');

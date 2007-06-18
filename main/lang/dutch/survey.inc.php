@@ -161,6 +161,7 @@ $ViewInvited = "Toon geïnviteerden";
 $ViewAnswered = "Toon beantwoorde personen";
 $ViewUnanswered = "Toon beantwoorde personen";
 $DeleteSurveyQuestion = "Wilt u deze vraag zeker verwijderen?";
+$YouAlreadyFilledThisSurvey = "U heeft deze enquête reeds ingevuld";
 $ClickHereToAnswerTheSurvey = "Klik hier om de enquete in te vullen";
 $OrCopyPasteTheFollowingUrl = "of kopieer en plak de volgende url:";
 ?>

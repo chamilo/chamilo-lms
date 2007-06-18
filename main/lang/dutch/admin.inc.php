@@ -282,6 +282,10 @@ $AllowRegistrationComment = "Is registratie als een nieuwe gebruiker toegelaten?
 $AllowRegistrationAsTeacherTitle = "Registratie als cursusbeheerder";
 $AllowRegistrationAsTeacherComment = "Kan men registreren als cursusbeheerder?";
 $PlatformLanguage = "Platformtaal";
+$Tuning = "Afstemmen";
+$SplitUsersUploadDirectory = "Splits de gebruikers\' uploadfolder";
+$SplitUsersUploadDirectoryComment = "Op intensief gebruikte portalen met veel geregistreerde gebruikers die afbeeldingen uploaden in de uploadfolder (main/upload/users/), kan het voorkomen dat het bestandssysteem het aantal bestanden niet meer aankan (deze fout werd gemeld op een Debian server met meer dan 36000 bestanden in één directory). Deze optie wijzigen, zorgt ervoor dat de gebruikersfolders worden verdeeld over 9 subfolders in de uploadfolder. Deze optie heeft geen invloed op de gebruikersfolders op de schijf, maar heeft effect op de Dokeos code. Als u deze optie wijzigt, moet u de nieuwe folders aanmaken en de huidige folders handmatig verplaatsen. Let op dat u bij het aanmaken en verplaatsen van deze folders,  u de folders van gebruikers moet plaatsen in de folders met dezelfde naam. Indien u niet zeker bent van deze optie, kan u ze beter niet activeren.
+";
 $CourseQuota = "Cursusquotum";
 $EditNotice = "Wijzig melding";
 $General = "algemeen";

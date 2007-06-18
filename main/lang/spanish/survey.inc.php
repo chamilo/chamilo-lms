@@ -161,6 +161,7 @@ $ViewInvited = "Ver invitados";
 $ViewAnswered = "Ver las personas que han respondido";
 $ViewUnanswered = "Ver las personas que no han respondido";
 $DeleteSurveyQuestion = "¿ Está seguro de que quiere eliminar esta pregunta ?";
+$YouAlreadyFilledThisSurvey = "Ya ha rellenado esta encuesta";
 $ClickHereToAnswerTheSurvey = "Haga clic aquí para contestar la encuesta";
 $OrCopyPasteTheFollowingUrl = "o copie y pegue la siguiente url:";
 ?>

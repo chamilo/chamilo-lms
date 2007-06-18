@@ -1057,15 +1057,22 @@ function api_get_self()
 */
 function get_lang($variable, $notrans = 'DLTT')
 {
+	$ot = '[='; //opening tag for missing vars
+	$ct = '=]'; //closing tag for missing vars
+	if(api_get_setting('hide_dltt_markup') == 'true')
+	{
+		$ot = '';
+		$ct = '';
+	}
 	if (api_get_setting('server_type') != 'test')
 	{
-		$lvv = isset ($GLOBALS['lang'.$variable]) ? $GLOBALS['lang'.$variable] : (isset ($GLOBALS[$variable]) ? $GLOBALS[$variable] : '[='.$variable.'=]');
+		$lvv = isset ($GLOBALS['lang'.$variable]) ? $GLOBALS['lang'.$variable] : (isset ($GLOBALS[$variable]) ? $GLOBALS[$variable] : $ot.$variable.$ct);
 		if (!is_string($lvv))
 			return $lvv;
 		return str_replace("\\'", "'", $lvv);
 	}
 	if (!is_string($variable))
-		return '[=get_lang(?)=]';
+		return $ot.'get_lang(?)'.$ct;
 	global $language_interface, $language_file;
 	//language file specified in tool
 	if (isset ($language_file))
@@ -1097,8 +1104,8 @@ function get_lang($variable, $notrans = 'DLTT')
 		return str_replace("\\'", "'", $langvar);
 	}
 	if ($notrans != 'DLTT')
-		return '[='.$variable.'=]';
-	return '[='.$variable."=]<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".$language_file.".inc.php&amp;variable=$".$variable."&amp;language=".$language_interface."\" style=\"color:#FF0000\"><strong>#</strong></a>";
+		return $ot.$variable.$ct;
+	return $ot.$variable.$ct."<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".$language_file.".inc.php&amp;variable=$".$variable."&amp;language=".$language_interface."\" style=\"color:#FF0000\"><strong>#</strong></a>";
 }
 
 /**

@@ -47,6 +47,7 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('split_users_u
 
 -- Insert anonymous user
 INSERT INTO user(lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active) VALUES ('Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1);
+ALTER TABLE user ADD INDEX (status);
 
 -- xxSTATSxx
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);

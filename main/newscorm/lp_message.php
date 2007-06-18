@@ -31,8 +31,6 @@ if(isset($_SESSION['lpobject'])){
 	$error = $_SESSION['oLP']->error;
 	$display_mode = $_SESSION['oLP']->mode;
 }
-//close the session immediately to avoid concurrent access problems
-session_write_close();
 if($debug>0){error_log('New LP - Loaded lp_message : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'],0);}
 $charset = 'ISO-8859-1';
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
@@ -52,6 +50,8 @@ if($display_mode == 'fullscreen'){
 						</style>';
 }
 include_once('../inc/reduced_header.inc.php');
+//close the session immediately to avoid concurrent access problems
+session_write_close();
 ?>
 
 <body>

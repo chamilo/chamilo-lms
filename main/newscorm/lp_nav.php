@@ -39,7 +39,6 @@ if(isset($_SESSION['lpobject']))
 	$progress_bar = $_SESSION['oLP']->get_progress_bar();
 	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 }
-session_write_close();
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
   var dokeos_xajax_handler = window.parent.oxajax;
@@ -58,6 +57,7 @@ if($display_mode == 'fullscreen'){
 						</style>';
 }
 include_once('../inc/reduced_header.inc.php');
+session_write_close();
 ?>
 
 <body>

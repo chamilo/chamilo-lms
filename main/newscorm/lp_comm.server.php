@@ -334,7 +334,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 			"lms_item_lesson_mode = '".$mylesson_mode."';" .
 			"lms_item_launch_data = '".$mylaunch_data."';" .
 			"lms_item_interactions_count = '".$myinteractions_count."';" .
-			"lms_item_core_exit = '".$mycore_exit."'" .
+			"lms_item_core_exit = '".$mycore_exit."';" .
 			"asset_timer = 0;"
 			);
 	$objResponse->addScript("update_toc('unhighlight','".$current_item."');");

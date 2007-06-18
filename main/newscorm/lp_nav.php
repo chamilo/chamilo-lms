@@ -21,6 +21,10 @@ require_once('aicc.class.php');
 
 //error_log('New LP - Loaded lp_nav: '.$_SERVER['REQUEST_URI'],0);
 
+$progress_bar = '';
+$navigation_bar = '';
+$display_mode = '';
+
 if(isset($_SESSION['lpobject']))
 {
 	//if($debug>0) //error_log('New LP - in lp_nav.php - SESSION[lpobject] is defined',0);
@@ -31,12 +35,16 @@ if(isset($_SESSION['lpobject']))
 		//error_log('New LP - in lp_nav.php - SESSION[lpobject] is not object - dying',0);
 		die('Could not instanciate lp object');
 	}
+	$display_mode = $_SESSION['oLP']->mode;
+	$progress_bar = $_SESSION['oLP']->get_progress_bar();
+	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 }
+session_write_close();
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
   var dokeos_xajax_handler = window.parent.oxajax;
 </script>';
-if($_SESSION['oLP']->mode == 'fullscreen'){
+if($display_mode == 'fullscreen'){
 	$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
 						/*<![CDATA[*/
 						@import "scormfs.css";
@@ -54,13 +62,8 @@ include_once('../inc/reduced_header.inc.php');
 
 <body>
 	<div class="lp_navigation_elem">
-	  <?php echo $_SESSION['oLP']->get_progress_bar(); ?>
-	  <?php echo $_SESSION['oLP']->get_navigation_bar(); ?>
+	  <?php echo $progress_bar; ?>
+	  <?php echo $navigation_bar; ?>
 	</div>
 </body>
 </html>
-<?php
-if(!empty($_SESSION['oLP'])){
-	$_SESSION['lpobject'] = serialize($_SESSION['oLP']);
-}
-?>

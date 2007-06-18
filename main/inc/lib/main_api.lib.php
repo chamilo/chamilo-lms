@@ -610,6 +610,9 @@ function api_session_start($already_installed = true)
 {
 	global $storeSessionInDb;
 	global $_configuration;
+	
+	/* causes too many problems and is not configurable dynamically
+	 * 
 	if($already_installed){
 		$session_lifetime = 360000;
 		if(isset($_configuration['session_lifetime']))
@@ -617,7 +620,8 @@ function api_session_start($already_installed = true)
 			$session_lifetime = $_configuration['session_lifetime'];	
 		}
 		session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
-	}
+		
+	}*/
 	if (is_null($storeSessionInDb))
 	{
 		$storeSessionInDb = false;

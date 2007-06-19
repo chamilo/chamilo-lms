@@ -129,7 +129,7 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	@import "scorm.css";
 	/*]]>*/
 	</style>';
-	$htmlHeadXtra[] = "<script>window.open('$src','content_name','toolbar=0,location=0,status=0');</script>";
+	$htmlHeadXtra[] = "<script>window.open('$src','content_name','toolbar=0,location=0,status=0,scrollbars=1');</script>";
 	include_once('../inc/reduced_header.inc.php');
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;

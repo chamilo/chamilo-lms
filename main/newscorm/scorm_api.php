@@ -875,7 +875,7 @@ function switch_item(current_item, next_item){
 	if(!cont_f){
 		logit_lms('In switch - content frame not found',0);
 		<?php if($oLP->mode = 'fullscreen'){ ?>
-		cont_f = window.open(''+mysrc,'content_name','toolbar=0,location=0,status=0');
+		cont_f = window.open(''+mysrc,'content_name','toolbar=0,location=0,status=0,scrollbars=1');
 		<?php } else { ?>
 			return false;
 		<?php } ?>

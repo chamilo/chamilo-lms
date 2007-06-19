@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 12622 2007-06-17 04:18:26Z yannoo $
+// $Id: profile.php 12658 2007-06-19 22:17:19Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -352,8 +352,13 @@ function upload_user_image($user_id)
 	
 	$temp = new image($_FILES['picture']['tmp_name']);
 	$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
-	$new_height = round((IMAGE_THUMBNAIL_WIDTH/$picture_infos[0])*$picture_infos[1]);
-	$temp->resize(IMAGE_THUMBNAIL_WIDTH,$new_height,0);
+	$thumbwidth = IMAGE_THUMBNAIL_WIDTH;
+	if(empty($thumbwidth) or $thumbwidth=0)
+	{
+		$thumbwidth=100;
+	}
+	$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+	$temp->resize($thumbwidth,$new_height,0);
 	$type=$picture_infos[2];
    
     switch ($type) {

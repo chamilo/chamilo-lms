@@ -126,17 +126,31 @@ if($_SESSION['oLP']->mode == 'fullscreen'){
 	$htmlHeadXtra[] =
 	'<style type="text/css" media="screen, projection">
 	/*<![CDATA[*/
-	@import "scormfs.css";
+	@import "scorm.css";
 	/*]]>*/
 	</style>';
+	$htmlHeadXtra[] = "<script>window.open('$src','content_name','toolbar=0,location=0,status=0');</script>";
 	include_once('../inc/reduced_header.inc.php');
-?><frameset rows="40,*">
-		<frameset cols="50%,*">
-			<frame id="nav_id" name="nav_name" class="lp_nav" align="middle" src="lp_nav.php" frameborder="0"></frame>
-			<frame id="message_id" name="message_name" class="message" src="lp_message.php" frameborder="0"></frame>
+	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
+	$_SESSION['loaded_lp_view'] = true;
+	?>
+	<frameset rows="130,*">
+		<frame id="header" src="lp_header.php" border="0" frameborder="0" scrolling="no" />
+		<frameset cols="195,*">
+			<frameset rows="475,95,80,*">
+				<frame id="toc_id" name="toc_name" class="lp_toc" src="lp_toc.php" border="0" frameborder="0" scrolling="no"/>
+				<frame id="nav_id" name="nav_name" class="lp_nav" src="lp_nav.php" border="0" frameborder="0" />
+				<frame id="message_id" name="message_name" class="message" src="lp_message.php" border="0" frameborder="0" />
+				<frame id="lp_log_id" name="lp_log_name" class="lp_log" src="lp_log.php" border="0" frameborder="0" />
+			</frameset>
+			<frame id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0">
+			</frame>
 		</frameset>
-	   	<frame id="content_id" name="content_frame" class="iframe" valign="top" src="<?php echo $src; ?>" frameborder="0"></frame>
+		<noframes>
+		This page relies heavily on frames. If your browser doesn't support frames, please try to find a better one. Some are available for free and run on multiple platforms. We recommend you try <a href="http://www.mozilla.com/firefox/">Firefox</a>. Get it from its official website by clicking the link.
+		</noframes>
 	</frameset>
+</html>
 <?php
 }else{
 	$htmlHeadXtra[] =

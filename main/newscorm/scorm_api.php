@@ -716,7 +716,7 @@ function logit_lms(message,priority){
  */
 function update_toc(update_action,update_id)
 {
-	<?php if($oLP->mode != 'fullscreen'){ ?>
+	<?php //if($oLP->mode != 'fullscreen'){ ?>
 		var myframe = frames["toc_name"];
 		var myelem = myframe.document.getElementById("toc_"+update_id);
 		var myelemimg = myframe.document.getElementById("toc_img_"+update_id);
@@ -771,7 +771,7 @@ function update_toc(update_action,update_id)
 			}
 		}
 		return true;
-    <?php } ?>
+    <?php //} ?>
 	return true;
 }
 /**
@@ -860,8 +860,6 @@ function switch_item(current_item, next_item){
 	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);
 	
 	//(3) open the new item in the content_id frame
-	var cont_f = document.getElementById('content_id');
-	if(!cont_f){logit_lms('In switch - content frame not found',0);return false;}
 	switch(next_item){
 		case 'next':
 			next_item = lms_next_item;
@@ -872,7 +870,20 @@ function switch_item(current_item, next_item){
 		default:
 			break;
 	}
-	cont_f.src = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item;
+	var mysrc = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item;
+	var cont_f = document.getElementById('content_id');
+	if(!cont_f){
+		logit_lms('In switch - content frame not found',0);
+		<?php if($oLP->mode = 'fullscreen'){ ?>
+		cont_f = window.open(''+mysrc,'content_name','toolbar=0,location=0,status=0');
+		<?php } else { ?>
+			return false;
+		<?php } ?>
+	}
+	else
+	{
+		cont_f.src = mysrc;
+	}
 	if(lms_lp_type==1 || lms_item_type=='asset'){
 		xajax_start_timer();
 	}	

@@ -51,7 +51,7 @@ $TABLETRACK_LINKS = $_configuration['statistics_database']."`.`track_e_links";
 $TABLETRACK_EXERCICES = $_configuration['statistics_database']."`.`track_e_exercices";
 $TABLETRACK_SUBSCRIPTIONS = $_configuration['statistics_database']."`.`track_e_subscriptions";
 $TABLETRACK_LASTACCESS = $_configuration['statistics_database']."`.`track_e_lastaccess"; //for "what's new" notification
-
+$TABLETRACK_DEFAULT = $_configuration['statistics_database']."`.`track_e_default";
 
 /*
 ============================================================================== 
@@ -556,5 +556,59 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	//$res = api_sql_query($sql,__FILE__,__LINE__);
 	$res = mysql_query($sql) or die(mysql_error());
 	//return 0;
+}
+
+/**
+ * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @desc Record information for common (or admin) events (in the track_e_default table)
+ * @param	string	Type of event
+ * @param	string	Type of value
+ * @param	string	Value
+ * @param	string	Timestamp (defaults to null)
+ * @param	integer	User ID (defaults to null)
+ * @param	string	Course code (defaults to null)
+ */
+function event_system($event_type, $event_value_type, $event_value, $timestamp = null, $user_id=null, $course_code=null)
+{
+	global $_configuration;	
+	global $_user;
+	global $TABLETRACK_DEFAULT;
+	
+	// if tracking is disabled record nothing
+	if (!$_configuration['tracking_enabled'])
+	{
+		return 0;
+	}
+	if(!isset($timestamp))
+	{
+		$timestamp = time();
+	}
+	if(!isset($user_id))
+	{
+		$user_id = 0;
+	}
+	if(!isset($course_code))
+	{
+		$course_code = '';
+	}
+
+	$sql = "INSERT INTO `".$TABLETRACK_DEFAULT."`
+	
+				(`default_user_id`,
+				 `default_cours_code`,
+				 `default_date`, .
+				 `default_event_type`,
+				 `default_value_type`,
+				 `default_value`
+				 )
+				 VALUES
+					('".$user_id."',
+					'".$course_code."',
+					FROM_UNIXTIME(".$timestamp.")," .
+					"'$event_type'," .
+					"'$event_value_type'," .
+					"'$event_value')";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
+	return true;
 }
 ?>

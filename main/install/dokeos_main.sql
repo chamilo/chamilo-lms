@@ -506,7 +506,8 @@ INSERT INTO `settings_current` VALUES
 (97, 'show_empty_course_categories', NULL, 'radio','Platform','true', 'ShowEmptyCourseCategories','ShowEmptyCourseCategoriesComment', NULL, NULL),
 (98, 'show_back_link_on_top_of_tree', NULL, 'radio','Platform','false', 'ShowBackLinkOnTopOfCourseTree','ShowBackLinkOnTopOfCourseTreeComment', NULL, NULL),
 (99, 'show_different_course_language', NULL, 'radio','Platform','true', 'ShowDifferentCourseLanguage','ShowDifferentCourseLanguageComment', NULL, NULL),
-(100, 'split_users_upload_directory', NULL, 'radio','Tuning','false', 'SplitUsersUploadDirectory','SplitUsersUploadDirectoryComment', NULL, NULL);
+(100, 'split_users_upload_directory', NULL, 'radio','Tuning','false', 'SplitUsersUploadDirectory','SplitUsersUploadDirectoryComment', NULL, NULL),
+(101, 'hide_dltt_markup', NULL, 'radio','Platform','false', 'HideDLTTMarkup','HideDLTTMarkupComment', NULL, NULL);
 
 
 UNLOCK TABLES;
@@ -620,7 +621,9 @@ INSERT INTO `settings_options` VALUES
 (96, 'show_different_course_language', 'true', 'Yes'),
 (97, 'show_different_course_language', 'false', 'No'), 
 (98, 'split_users_upload_directory', 'true', 'Yes'),
-(99, 'split_users_upload_directory', 'false', 'No'); 
+(99, 'split_users_upload_directory', 'false', 'No'),
+(100, 'hide_dltt_markup', 'false', 'No'),
+(101, 'hide_dltt_markup', 'true', 'Yes');
 
 UNLOCK TABLES;
 

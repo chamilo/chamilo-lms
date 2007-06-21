@@ -398,13 +398,13 @@ if(api_is_allowed_to_edit())
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang("Interaction") ?></span>
 		<table width="100%">
-			<?php show_tools_category(TOOL_INTERACTION) ?>
+			<?php show_tools_category(TOOL_INTERACTION); ?>
 		</table>
 	</div>
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang("Administration") ?></span>
 		<table width="100%">
-			<?php show_tools_category(TOOL_ADMIN_PLATEFORM) ?>
+			<?php show_tools_category(TOOL_ADMIN_PLATEFORM); ?>
 		</table>
 	</div>
 	<?php
@@ -420,7 +420,7 @@ else{
 	<div class="Authoringview">
 
 		<table width="100%">
-			<?php show_tools_category(TOOL_STUDENT_VIEW) ?>
+			<?php show_tools_category(TOOL_STUDENT_VIEW); ?>
 		</table>
 	</div>
 <?php

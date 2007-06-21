@@ -390,19 +390,19 @@ if(api_is_allowed_to_edit())
 {
 	?>
 	<div class="courseadminview">
-		<span class="viewcaption"><font size="3" style="color:#FF9900;"><?php echo get_lang("Authoring") ?></font></span>
+		<span class="viewcaption"><?php echo get_lang("Authoring") ?></span>
 		<table width="100%">
 			<?php show_tools_category(TOOL_AUTHORING);?>
 		</table>
 	</div>
 	<div class="courseadminview">
-		<span class="viewcaption"><font size="3" style="color:#FF9900;"><?php echo get_lang("Interaction") ?></font></span>
+		<span class="viewcaption"><?php echo get_lang("Interaction") ?></span>
 		<table width="100%">
 			<?php show_tools_category(TOOL_INTERACTION) ?>
 		</table>
 	</div>
 	<div class="courseadminview">
-		<span class="viewcaption"><font size="3" style="color:#FF9900;"><?php echo get_lang("Administration") ?></font></span>
+		<span class="viewcaption"><?php echo get_lang("Administration") ?></span>
 		<table width="100%">
 			<?php show_tools_category(TOOL_ADMIN_PLATEFORM) ?>
 		</table>

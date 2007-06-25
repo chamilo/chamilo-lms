@@ -183,7 +183,7 @@ function display_move_form($part, $id, $target=array())
 		$message.='<option value="'.$category['cat_id'].'">'.$category['cat_name'].'</option>';
 	}
 	$message.= '</select>';
-	$message.='<input type="submit" name="do_move" value="Submit">';
+	$message.='<input type="submit" name="do_move" value="'.get_lang('Submit').'">';
 	$message.='</form>';
 	Display :: display_normal_message($message,false);
 }
@@ -531,9 +531,9 @@ function display_add_form()
 				<?php echo dropbox_lang("sendTo")?>:
 			</td>
 			<td valign="top"  align="left">
-				
+
 	<?php
-	
+
 	//list of all users in this course and all virtual courses combined with it
 	if(isset($_SESSION['id_session'])){
 		$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'],true,$_SESSION['id_session']);
@@ -551,7 +551,7 @@ function display_add_form()
 	$complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
 
 	?>
-				
+
 				<select name="recipients[]" size="
 	<?php
 		if ( $dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
@@ -563,7 +563,7 @@ function display_add_form()
 			echo 6;
 		}
 
-	
+
 	?>" multiple style="width: 350px;">
 	<?php
 
@@ -1056,7 +1056,7 @@ function feedback_form()
 	$number_users_who_see_file=mysql_num_rows($result);
 	if ($number_users_who_see_file>1)
 	{
-		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><input type="submit" name="store_feedback" value="Submit">';
+		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><input type="submit" name="store_feedback" value="'.get_lang('Submit').'">';
 	}
 	else
 	{

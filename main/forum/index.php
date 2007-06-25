@@ -121,7 +121,8 @@ if (api_is_allowed_to_edit())
 	handle_forum_and_forumcategories();
 }
 get_whats_new();
-$whatsnew_post_info=$_SESSION['whatsnew_post_info'];
+$whatsnew_post_info = array();
+$whatsnew_post_info = $_SESSION['whatsnew_post_info'];
 
 /*
 -----------------------------------------------------------

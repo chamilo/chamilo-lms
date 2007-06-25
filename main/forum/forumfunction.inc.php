@@ -2013,6 +2013,7 @@ function get_whats_new()
 	{
 		if ($_SESSION['last_forum_access']<>'')
 		{
+			$whatsnew_post_info = array();
 			$sql="SELECT * FROM".$table_posts."WHERE post_date>'".mysql_real_escape_string($_SESSION['last_forum_access'])."'"; // note: check the performance of this query.
 			$result=api_sql_query($sql,__FILE__,__LINE__);
 			while ($row=mysql_fetch_array($result))

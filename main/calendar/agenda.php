@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 11607 2007-03-16 13:18:47Z elixir_julian $
+<?php //$Id: agenda.php 12663 2007-06-25 12:25:05Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -319,7 +319,7 @@ if (is_allowed_to_edit())
 			$id=(int)$_GET['id'];
 			$ann_id = store_agenda_item_as_announcement($id);
 			$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');
-			Display::display_normal_message('Copied as announcement: <a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">New announcement</a>', false);
+			Display::display_normal_message(get_lang('CopiedAsAnnouncement').'<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
 			display_agenda_items();
 	}
 }

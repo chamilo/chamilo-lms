@@ -452,19 +452,17 @@ class Dropbox_Person
 
 		//Note: perhaps include an ex coursemember check to delete old files
 		
-		$post_tbl = Database::get_course_table();
-		$person_tbl = Database::get_course_table();
-		$file_tbl = Database::get_course_table();
+		$post_tbl = Database::get_course_table(TABLE_DROPBOX_POST);
+		$person_tbl = Database::get_course_table(TABLE_DROPBOX_PERSON);
+		$file_tbl = Database::get_course_table(TABLE_DROPBOX_FILE);
 		// find all entries where this person is the recipient
 		$sql = "SELECT r.file_id, r.cat_id
-				FROM 
-					".dropbox_cnf("tbl_post")." r
-					, ".dropbox_cnf("tbl_person")." p
+				FROM $post_tbl r, $person_tbl p
 				WHERE r.dest_user_id = '".addslashes($this->userId)."' 
 					AND r.dest_user_id = p.user_id
 					AND r.file_id = p.file_id";
         $result = api_sql_query($sql,__FILE__,__LINE__);
-		while ($res = mysql_fetch_array($result)) {
+		while ($res = Database::fetch_array($result)) {
 			$temp = new Dropbox_Work($res["file_id"]);
 			$temp -> category = $res['cat_id'];
 			$this->receivedWork[] = $temp;
@@ -472,12 +470,12 @@ class Dropbox_Person
 
 		// find all entries where this person is the sender/uploader
 		$sql = "SELECT f.id 
-				FROM ".dropbox_cnf("tbl_file")." f, ".dropbox_cnf("tbl_person")." p 
+				FROM $file_tbl f, $person_tbl p 
 				WHERE f.uploader_id = '".addslashes($this->userId)."'
 				AND f.uploader_id = p.user_id
 				AND f.id = p.file_id";
         $result =api_sql_query($sql,__FILE__,__LINE__);
-		while ($res = mysql_fetch_array($result)) {
+		while ($res = Database::fetch_array($result)) {
 			$this->sentWork[] = new Dropbox_SentWork($res["id"]);
 		}
 	}

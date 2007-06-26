@@ -474,19 +474,21 @@ else {
 	if(count($a_students)>0)
 	{
 		$table = new SortableTable('tracking', 'count_student_in_course');
-		$table -> set_header(0, get_lang('LastName'), true, 'align="center"');
-		$table -> set_header(1, get_lang('FirstName'), true, 'align="center"');
-		$table -> set_header(2, get_lang('Time'),false);
-		$table -> set_header(3, get_lang('Progress'),false);
-		$table -> set_header(4, get_lang('Score'),false);	
-		$table -> set_header(5, get_lang('Student_publication'),false);
-		$table -> set_header(6, get_lang('Messages'),false);
-		$table -> set_header(7, get_lang('LatestLogin'), true, 'align="center"');
-		$table -> set_header(8, get_lang('Details'),false);
+		$table -> set_header(0, get_lang('OfficialCode'), true, 'align="center"');
+		$table -> set_header(1, get_lang('LastName'), true, 'align="center"');
+		$table -> set_header(2, get_lang('FirstName'), true, 'align="center"');
+		$table -> set_header(3, get_lang('Time'),false);
+		$table -> set_header(4, get_lang('Progress'),false);
+		$table -> set_header(5, get_lang('Score'),false);	
+		$table -> set_header(6, get_lang('Student_publication'),false);
+		$table -> set_header(7, get_lang('Messages'),false);
+		$table -> set_header(8, get_lang('LatestLogin'), true, 'align="center"');
+		$table -> set_header(9, get_lang('Details'),false);
 	     
 	    if($export_csv)
 		{
 			$csv_content[] = array ( 
+									get_lang('OfficialCode'),
 									get_lang('LastName'),
 									get_lang('FirstName'),
 									get_lang('Time'),
@@ -513,6 +515,7 @@ else {
 			$total_messages = Tracking :: count_student_messages($student_id, $course_code);
 			
 			$row = array();
+			$row[] = $student_datas['official_code'];
 			$row[] = $student_datas['lastname'];
 			$row[] = 	$student_datas['firstname'];
 			$row[] = api_time_to_hms($avg_time_spent);
@@ -536,6 +539,9 @@ else {
 		usort($all_datas, 'sort_users');
 		if($tracking_direction == 'ASC')
 			rsort($all_datas);
+		
+		$page = $table->get_pager()->getCurrentPageID();
+		$all_datas = array_slice($all_datas, ($page-1)*$table -> per_page, $table -> per_page);
 		
 		if($export_csv)
 		{

@@ -1656,7 +1656,7 @@ class score extends question
 		}
 		$this->html .= '</table>';
 		echo '<div class="survey_question_wrapper">';
-		echo '<div class="survey_question">'.$form_content['survey_question'].' score</div>';
+		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
 		echo '<div class="survey_question_options">';
 		//echo '<select name="question'.$form_content['question_id'].'" id="select">';
 		echo $this->html;

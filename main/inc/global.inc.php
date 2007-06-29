@@ -6,7 +6,8 @@
 * - http get, post, post_files, session, server-vars extraction into global namespace;
 *   (which doesn't occur anymore when servertype config setting is set to test,
 *    and which will disappear completely in Dokeos 1.6.1)
-* - include of /conf/configuration.php and /lib/main_api.lib.php;
+* - include of /conf/configuration.php;
+* - include of several libraries: main_api, database, display, text, security;
 * - selecting the main database;
 * - include of language files.
 *

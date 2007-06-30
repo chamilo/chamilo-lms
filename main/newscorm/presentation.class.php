@@ -92,7 +92,7 @@ class presentation extends learnpath {
 		
 		$shell = exec($cmd, $files, $return);
 		
-		chmod ($base_work_dir.$created_dir,0744);
+		chmod ($base_work_dir.$created_dir,0755);
 		if($return != 0) { //if the java application returns an error code
 			DocumentManager::delete_document($_course, $dir_name, $base_work_dir);	 
 			return false;   	

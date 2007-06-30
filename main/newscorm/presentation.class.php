@@ -57,8 +57,8 @@ class presentation extends learnpath {
 		$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name);
 		
 		
-		move_uploaded_file($file['tmp_name'],$base_work_dir.$file['name']);
-		$file = $base_work_dir.$file['name'];
+		move_uploaded_file($file['tmp_name'],$base_work_dir.'/'.$file['name']);
+		$file = $base_work_dir.'/'.$file['name'];
 		chmod($file,0777);
 		
 		

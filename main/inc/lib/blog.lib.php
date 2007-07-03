@@ -2067,7 +2067,7 @@ class Blog
 		foreach($student_list as $key=>$user)
 		{
 			if(!in_array($user['user_id'],$blog_member_ids)) {
-				$a_infosUser = UserManager :: get_user_info_by_id($user['id_user']);
+				$a_infosUser = UserManager :: get_user_info_by_id($user['user_id']);
 				$row = array ();
 				$row[] = '<input type="checkbox" name="user[]" value="' . $a_infosUser['user_id'] . '" '.(($_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '') . '/>';
 				$row[] = $a_infosUser["lastname"];

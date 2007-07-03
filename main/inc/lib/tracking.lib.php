@@ -43,7 +43,7 @@ class Tracking {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 		$sql = 'SELECT login_date, logout_date FROM ' . $tbl_track_login . ' 
-						WHERE login_user_id = ' . intval($user_id);
+						WHERE login_user_id = ' . intval($user_id).' AND logout_date IS NOT NULL';
 
 		$rs = api_sql_query($sql);
 

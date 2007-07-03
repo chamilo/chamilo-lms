@@ -838,13 +838,13 @@ class Blog
 
 		$task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
-		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_edit', $task_id))
+		if(api_is_allowed('BLOG_' . $blog_id, 'article_edit', $task_id))
 			$blog_post_actions .= '<a href="blog.php?action=edit_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;article_id=' . $blog_post['post_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('EditThisPost') . '"><img src="../img/edit.gif" /></a>';
 
-		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_delete', $task_id))
+		if(api_is_allowed('BLOG_' . $blog_id, 'article_delete', $task_id))
 			$blog_post_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_article&amp;article_id=' . $blog_post['post_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisArticle') . '" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>';
 
-		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_rate'))
+		if(api_is_allowed('BLOG_' . $blog_id, 'article_rate'))
 			$rating_select = Blog::display_rating_form('post',$blog_id,$post_id);
 
 		$blog_post_text=stripslashes($blog_post_text);
@@ -868,7 +868,7 @@ class Blog
 		}
 
 		// Display comment form
-		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_comments_add'))
+		if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_add'))
 		{
 			Blog::display_new_comment_form($blog_id, $post_id, $blog_post['title']);
 		}
@@ -1026,8 +1026,8 @@ class Blog
 			$blog_comment_date = ucfirst(format_locale_date($dateFormatLong,strtotime($comment['date_creation'])));
 			$blog_comment_time = date('H:m',strtotime($comment['date_creation']));
 			$blog_comment_actions = "";
-			if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_comment&amp;comment_id=' . $comment['comment_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
-			if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_comments_rate')) { $rating_select = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']); }
+			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_comment&amp;comment_id=' . $comment['comment_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
+			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_rate')) { $rating_select = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']); }
 
 			if(!is_null($comment['task_id']))
 			{
@@ -1059,7 +1059,7 @@ class Blog
 	 */
 	function display_form_new_post($blog_id)
 	{
-		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_add'))
+		if(api_is_allowed('BLOG_' . $blog_id, 'article_add'))
 		{
 			echo '<script type="text/javascript">
 					function FCKeditor_OnComplete( editorInstance )
@@ -1258,7 +1258,7 @@ class Blog
 	 */
 	function display_task_list($blog_id)
 	{
-		if(api_is_allowed_to_edit('BLOG_' . $blog_id, 'article_add'))
+		if(api_is_allowed('BLOG_' . $blog_id, 'article_add'))
 		{
 			// Init
 			$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);

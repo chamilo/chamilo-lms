@@ -137,7 +137,7 @@ if ($_GET['action'] == 'view_post')
 
 	if ($_GET['do'] == 'delete_comment')
 	{
-		if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_comments_delete', $task_id))
+		if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id))
 		{
 			Blog :: delete_comment($blog_id, (int)$_GET['comment_id']);
 		}
@@ -150,7 +150,7 @@ if ($_GET['action'] == 'view_post')
 
 	if ($_GET['do'] == 'delete_article')
 	{
-		if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_delete', $task_id))
+		if (api_is_allowed('BLOG_'.$blog_id, 'article_delete', $task_id))
 		{
 			Blog :: delete_post($blog_id, (int)$_GET['article_id']);
 			$current_page = ''; // Article is gone, go to blog home
@@ -165,14 +165,14 @@ if ($_GET['action'] == 'view_post')
 	{
 		if ($_GET['type'] == 'post')
 		{
-			if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_rate'))
+			if (api_is_allowed('BLOG_'.$blog_id, 'article_rate'))
 			{
 				Blog :: add_rating('post', $blog_id, (int)$_GET['post_id'], (int)$_GET['rating']);
 			}
 		}
 		if ($_GET['type'] == 'comment')
 		{
-			if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_comments_add'))
+			if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_add'))
 			{
 				Blog :: add_rating('comment', $blog_id, (int)$_GET['comment_id'], (int)$_GET['rating']);
 			}
@@ -248,9 +248,9 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 				<td class="blog_menu">
 					<ul>
 						<li><a href="<?php echo api_get_self(); ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('Home') ?>"><?php echo get_lang('Home') ?></a></li>
-						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_add')) { ?><li><a href="<?php echo api_get_self(); ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo get_lang('NewPost') ?></a></li><?php } ?>
-						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'task_management')) { ?><li><a href="<?php echo api_get_self(); ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>"><?php echo get_lang('TaskManager') ?></a></li> <?php } ?>
-						<?php if(api_is_allowed_to_edit('BLOG_'.$blog_id, 'member_management')) { ?><li><a href="<?php echo api_get_self(); ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>"><?php echo get_lang('MemberManager') ?></a></li><?php } ?>
+						<?php if(api_is_allowed('BLOG_'.$blog_id, 'article_add')) { ?><li><a href="<?php echo api_get_self(); ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo get_lang('NewPost') ?></a></li><?php } ?>
+						<?php if(api_is_allowed('BLOG_'.$blog_id, 'task_management')) { ?><li><a href="<?php echo api_get_self(); ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>"><?php echo get_lang('TaskManager') ?></a></li> <?php } ?>
+						<?php if(api_is_allowed('BLOG_'.$blog_id, 'member_management')) { ?><li><a href="<?php echo api_get_self(); ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>"><?php echo get_lang('MemberManager') ?></a></li><?php } ?>
 					</ul>
 				</td>
 			</tr>
@@ -355,7 +355,7 @@ else
 switch ($current_page)
 {
 	case 'new_post' :
-		if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_add', $user_task ? $task_id : 0))
+		if (api_is_allowed('BLOG_'.$blog_id, 'article_add', $user_task ? $task_id : 0))
 		{
 			Blog :: display_form_new_post($blog_id);
 		}
@@ -370,14 +370,14 @@ switch ($current_page)
 	case 'edit_post' :
 		$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
-		if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'article_edit', $task_id))
+		if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id))
 			Blog :: display_form_edit_post($blog_id, mysql_real_escape_string((int)$_GET['post_id']));
 		else
 			api_not_allowed();
 
 		break;
 	case 'manage_members' :
-		if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'member_management'))
+		if (api_is_allowed('BLOG_'.$blog_id, 'member_management'))
 		{
 			Blog :: display_form_user_subscribe($blog_id);
 			echo '<br /><br />';
@@ -391,7 +391,7 @@ switch ($current_page)
 		Blog :: display_form_user_rights($blog_id);
 		break;
 	case 'manage_tasks' :
-		if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'task_management'))
+		if (api_is_allowed('BLOG_'.$blog_id, 'task_management'))
 		{
 			if ($_GET['do'] == 'add')
 			{
@@ -413,7 +413,7 @@ switch ($current_page)
 			echo '<br /><br />';
 			Blog :: display_assigned_task_list($blog_id);
 			echo '<br /><br />';
-			if (api_is_allowed_to_edit('BLOG_'.$blog_id, 'role_management'))
+			if (api_is_allowed('BLOG_'.$blog_id, 'role_management'))
 			{
 			?>
 				<a href="<?php echo api_get_self(); ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo get_lang('RightsManager') ?></a>

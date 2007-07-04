@@ -37,7 +37,7 @@ $language_file="registration";
 include("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 
-if (! ($is_courseAdmin || $is_platformAdmin)) die ("not allowed");
+if (! ($is_courseAdmin || $is_platformAdmin)) api_not_allowed(true);
 
 $currentCourseID   = $_course['sysCode'];
 $currentCourseName = $_course['official_code'];

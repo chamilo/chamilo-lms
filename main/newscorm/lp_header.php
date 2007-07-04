@@ -54,11 +54,7 @@ if($show_link)
 {
 	$interbreadcrumb[]= array ("url"=>"./lp_controller.php?action=list", "name"=> get_lang(ucfirst(TOOL_LEARNPATH)));
 }
-else //if the tool is hidden and the user has no edit permissions, make the breadcrumb link point to the course homepage
-{
-	$web_course_path = api_get_path(WEB_COURSE_PATH);
-	$interbreadcrumb[]= array ("url"=>$web_course_path.$_course['path'].'/index.php', "name"=> get_lang(ucfirst(TOOL_LEARNPATH)));
-}
+// else we don't display get_lang(ucfirst(TOOL_LEARNPATH)) in the breadcrumb since the learner accessed it directly from the course homepage
 $interbreadcrumb[] = array("url"=>"./lp_controller.php?action=view&lp_id=".$path_id,'name'=>$path_name);
 $noPHP_SELF = true;
 Display::display_header($nameTools,"Path", null);

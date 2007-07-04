@@ -315,6 +315,7 @@ if ($_course['language'])
 $language_files = array();
 $language_files[] = 'trad4all';
 $language_files[] = 'notification';
+$language_files[] = 'accessibility';
 if( isset($language_file) )
 {
 	if( !is_array($language_file))

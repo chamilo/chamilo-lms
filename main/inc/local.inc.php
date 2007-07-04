@@ -553,29 +553,33 @@ else // continue with the previous values
 		$_cid 		= $_SESSION['_cid'   ];
    		$_course    = $_SESSION['_course'];
 
-   		$course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-   		//We select the last record for the current course in the course tracking table
-   		$sql="SELECT course_access_id FROM $course_tracking_table WHERE user_id='".$_user ['user_id']."' ORDER BY login_course_date DESC LIMIT 0,1";
-   		$result=api_sql_query($sql,__FILE__,__LINE__);
-   		if(Database::num_rows($result)>0)
-   		{
-	   		$i_course_access_id = mysql_result($result,0,0);
+		if($_configuration['tracking_enabled'])
+		{
+	   		$course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 	
-	   		//We update the course tracking table
-	   		$sql="UPDATE $course_tracking_table " .
-	   				"SET logout_course_date = NOW(), " .
-	   					"counter = counter+1 " .
-					"WHERE course_access_id='$i_course_access_id'";
-			
-			api_sql_query($sql,__FILE__,__LINE__);
-   		}
-   		else
-   		{
-            $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
-					"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
-			api_sql_query($sql,__FILE__,__LINE__);	
-   		}		
+	   		//We select the last record for the current course in the course tracking table
+	   		$sql="SELECT course_access_id FROM $course_tracking_table WHERE user_id=".intval($_user ['user_id'])." ORDER BY login_course_date DESC LIMIT 0,1";
+	   		$result=api_sql_query($sql,__FILE__,__LINE__);
+	   		if(Database::num_rows($result)>0)
+	   		{
+		   		$i_course_access_id = mysql_result($result,0,0);
+		
+		   		//We update the course tracking table
+		   		$sql="UPDATE $course_tracking_table " .
+		   				"SET logout_course_date = NOW(), " .
+		   					"counter = counter+1 " .
+						"WHERE course_access_id=".intval($i_course_access_id);
+				
+				api_sql_query($sql,__FILE__,__LINE__);
+	   		}
+	   		else
+	   		{
+	            $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
+						"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
+				api_sql_query($sql,__FILE__,__LINE__);	
+	   		}		
+		}
 
 
 	}

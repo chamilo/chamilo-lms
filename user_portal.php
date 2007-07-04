@@ -318,7 +318,7 @@ function get_personal_session_course_list($user_id)
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 							FROM session_rel_user, session
 							WHERE id_session=id AND id_user=$user_id
-							AND (date_start < NOW() AND date_end > NOW() OR date_start='0000-00-00')
+							AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
 	$sessions=api_store_result($result);
@@ -330,7 +330,7 @@ function get_personal_session_course_list($user_id)
 							FROM $tbl_session as session
 							INNER JOIN $tbl_session_course as session_rel_course
 								ON session_rel_course.id_coach = $user_id
-							AND (date_start < NOW() AND date_end > NOW() OR date_start='0000-00-00')
+							AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
 	$session_is_coach = api_store_result($result);
@@ -341,7 +341,7 @@ function get_personal_session_course_list($user_id)
 	$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 							FROM $tbl_session as session
 							WHERE session.id_coach = $user_id
-							AND (date_start < NOW() AND date_end > NOW() OR date_start='0000-00-00')
+							AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
 	$sessions = array_merge($sessions , api_store_result($result));

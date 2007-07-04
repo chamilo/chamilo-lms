@@ -580,6 +580,7 @@ function get_logged_user_course_html($my_course)
 	$course_title = $my_course['i'];
 	$course_directory = $my_course['d'];
 	$course_teacher = $my_course['t'];
+	$course_teacher_email = $my_course['email'];
 	$course_info = Database :: get_course_info($course_system_code);
 	$course_access_settings = CourseManager :: get_access_settings($course_system_code);
 	$course_id = $course_info['course_id'];
@@ -671,6 +672,10 @@ function get_logged_user_course_html($my_course)
 	if (get_setting("display_teacher_in_courselist") == "true")
 	{
 		$result .= $course_teacher;
+		if(!empty($course_teacher_email))
+		{
+			$result .= ' ('.$course_teacher_email.')';
+		}
 	}
 	
 	$current_course_settings = CourseManager :: get_access_settings($my_course['k']);

@@ -42,7 +42,7 @@
 $language_file = 'registration';
 include ("../inc/global.inc.php");
 $this_section = SECTION_COURSES;
-
+if (!api_is_allowed_to_edit()) api_not_allowed(true);
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');

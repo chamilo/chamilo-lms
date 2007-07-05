@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 12612 2007-06-15 13:37:31Z elixir_julian $
+// $Id: user_list.php 12707 2007-07-05 16:39:50Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -457,7 +457,7 @@ else
 	}
 	if (isset ($_POST['action']))
 	{
-		$check = Security::check_token('post');
+		$check = Security::check_token('get');
 		if($check)
 		{
 			switch ($_POST['action'])
@@ -511,7 +511,7 @@ else
 		$parameters['keyword_inactive'] = $_GET['keyword_inactive'];
 	}
 	// Create a sortable table with user-data
-	Security::get_token();
+	$parameters['sec_token'] = Security::get_token();
 	$table = new SortableTable('users', 'get_number_of_users', 'get_user_data',2);
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);

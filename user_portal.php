@@ -680,10 +680,9 @@ function get_logged_user_course_html($my_course)
 	
 	$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
 	
-	if($current_course_settings['visibility']==1){
-		// display the what's new icons
-		$result .= show_notification($my_course);
-	}
+	
+	// display the what's new icons
+	$result .= show_notification($my_course);
 
 	if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0)
 	{
@@ -795,6 +794,7 @@ function show_notification($my_course)
 					AND ctt.visibility = '1'
 					AND tet.lastedit_user_id != $user_id
 					ORDER BY tet.lastedit_date";
+	echo $sql;
 	$res = api_sql_query($sql);
 	//get the group_id's with user membership
 	$group_ids = GroupManager :: get_group_ids($course_database, $user_id);

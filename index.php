@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12601 2007-06-14 15:13:20Z yannoo $
+* 	@version $Id: index.php 12708 2007-07-05 20:46:47Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -528,7 +528,7 @@ function display_anonymous_course_list()
 				WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
 				GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos";
 	$resCats = api_sql_query($sqlGetSubCatList, __FILE__, __LINE__);
-	$thereIsSubCat = FALSE;
+	$thereIsSubCat = false;
 	if (mysql_num_rows($resCats) > 0)
 	{
 		$htmlListCat = "<h4 style=\"margin-top: 0px;\">".get_lang("CatList")."</h4>"."<ul>";
@@ -536,32 +536,38 @@ function display_anonymous_course_list()
 		{
 			if ($catLine['code'] != $category)
 			{
-				$htmlListCat .= "<li>";
 
 				$category_has_open_courses = category_has_open_courses($catLine['code']);
 				if ($category_has_open_courses)
 				{
 					//the category contains courses accessible to anonymous visitors
+					$htmlListCat .= "<li>";
 					$htmlListCat .= "<a href=\"".api_get_self()."?category=".$catLine['code']."\">".$catLine['name']."</a>";
 					if (api_get_setting('show_number_of_courses') == 'true')
 					{
 						$htmlListCat .= " (".$catLine['nbCourse']." ".get_lang("Courses").")";
 					}
+					$htmlListCat .= "</li>\n";
+					$thereIsSubCat = true;
 				}
 				elseif ($catLine['children_count'] > 0)
 				{
 					//the category has children, subcategories
+					$htmlListCat .= "<li>";
 					$htmlListCat .= "<a href=\"".api_get_self()."?category=".$catLine['code']."\">".$catLine['name']."</a>";
+					$htmlListCat .= "</li>\n";
+					$thereIsSubCat = true;
 				}
 				/************************************************************************
 				 end changed code to eliminate the (0 courses) after empty categories
 				 ************************************************************************/
 				elseif (api_get_setting('show_empty_course_categories') == 'true')
 				{
+					$htmlListCat .= "<li>";
 					$htmlListCat .= $catLine['name'];
-				}
-				$htmlListCat .= "</li>\n";
-				$thereIsSubCat = true;
+					$htmlListCat .= "</li>\n";
+					$thereIsSubCat = true;
+				}//else don't set thereIsSubCat to true to avoid printing things if not requested
 			}
 			else
 			{

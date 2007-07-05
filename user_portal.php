@@ -794,7 +794,7 @@ function show_notification($my_course)
 					AND ctt.visibility = '1'
 					AND tet.lastedit_user_id != $user_id
 					ORDER BY tet.lastedit_date";
-	echo $sql;
+	
 	$res = api_sql_query($sql);
 	//get the group_id's with user membership
 	$group_ids = GroupManager :: get_group_ids($course_database, $user_id);

@@ -428,7 +428,7 @@ if(!empty($_GET['student']))
 			$tableTitle = $a_infosCours['title'].'&nbsp; | &nbsp;'.get_lang('Tutor').' : '.stripslashes($a_infosCours['tutor_name']);
 			
 			$csv_content[] = array();
-			$csv_content[] = array($tableTitle);	
+			$csv_content[] = array(str_replace('&nbsp;','',$tableTitle));	
 				
 ?>
 		<tr class="tableName">
@@ -469,7 +469,7 @@ if(!empty($_GET['student']))
 			$resultLearnpath = api_sql_query($sqlLearnpath);
 			
 			$csv_content[] = array();
-			$csv_content[] = array(get_lang('Learnpath'),get_lang('Time'),get_lang('Progress'),get_lang('LastConnexion'));
+			$csv_content[] = array(get_lang('Learnpath'),get_lang('Time'),get_lang('Score'),get_lang('Progress'),get_lang('LastConnexion'));
 			
 			if(mysql_num_rows($resultLearnpath)>0)
 			{
@@ -564,7 +564,7 @@ if(!empty($_GET['student']))
 					
 					$i++;
 					
-					$csv_content[] = array(stripslashes($a_learnpath['name']),api_time_to_hms($total_time),$progress.' %',date('Y-m-d',$start_time));
+					$csv_content[] = array(stripslashes($a_learnpath['name']),api_time_to_hms($total_time),$score.'%',$progress,date('Y-m-d',$start_time));
 					
 				?>
 					<tr class="<?php echo $s_css_class;?>">

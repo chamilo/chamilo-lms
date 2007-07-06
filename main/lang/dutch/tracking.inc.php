@@ -211,4 +211,5 @@ $CoachStudents = "Begeleid studenten";
 $NoLearningPath = "Geen leerpaden";
 $SessionCourses = "Sessie van cursussen";
 $NoUsersInCourseTracking = "Hier vind je de opvolging voor jouw studenten, ingeschreven in deze cursus.";
+$AvgTimeSpentInTheCourse = "Gemiddeld gespendeerde tijd in een cursus";
 ?>

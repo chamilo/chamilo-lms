@@ -49,4 +49,7 @@ $ViewPersonalItem = "Bekijk persoonlijke agenda";
 $UserGroupFilter = "Filter op groepen/gebruikers";
 $ShowAll = "Alles tonen";
 $Print = "Afdrukken";
+$CopiedAsAnnouncement = "Gekopieerd als aankondiging";
+$NewAnnouncement = "Nieuwe aankondiging";
+$AddAnnouncement = "Toevoegen als aankondiging";
 ?>

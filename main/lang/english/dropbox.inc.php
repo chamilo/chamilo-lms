@@ -123,4 +123,6 @@ $MailingSelectNoOther = "Mailing cannot be combined with other recipients";
 $mailingJustUploadSelectNoOther = "Just Upload cannot be combined with other recipients";
 $NoFilesHere = "No files here";
 $NoFilesHere = "No files here";
+$NewDropboxFileUploaded = "A new file has been sent in the dropbox tool";
+$NewDropboxFileUploadedContent = "A new file has been sent in the dropbox tool of your course";
 ?>

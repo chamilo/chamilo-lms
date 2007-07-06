@@ -162,6 +162,7 @@ $YourAccountHasToBeApproved = "Su registro deberá ser aprobado posteriormente";
 $ApprovalForNewAccount = "Validación de una nueva cuenta";
 $ManageUser = "Gestión de usuario";
 $SubscribeUserToCourseAsTeacher = "Inscribir usuarios como profesores en este curso";
+$SendMessage = "Enviar mensaje";
 $PasswordEncryptedForSecurity = "Su contraseña está encriptada para su seguridad. Por ello, cuando haya pulsado en el enlace para regenerar su clave se le remitirá un nuevo correo que contendrá su contraseña.";
 $UsersUnsubscribed = "Los usuarios seleccionados han sido dados de baja en el curso";
 ?>

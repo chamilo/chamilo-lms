@@ -211,4 +211,5 @@ $CoachStudents = "Coach Studenten";
 $NoLearningPath = "Keine Lernpfade";
 $SessionCourses = "Session der Kurse";
 $NoUsersInCourseTracking = "Hier finden sich die Informationen für Ihre Studenten, die in diesem Kurs angemeldet sind.";
+$AvgTimeSpentInTheCourse = "Durchschnittliche Zeit, die in einem Kurs verbracht wurde";
 ?>

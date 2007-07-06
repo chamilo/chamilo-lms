@@ -29,4 +29,8 @@ $langDirCr = "Crear directori";
 $langCurrentDir = "Directori actual";
 $UploadADocument = "Penjar un document";
 $EditToolOptions = "Editar les opcions de les eines";
+$DocumentDeleted = "Document esborrat";
+$SendMailBody = "Un usuari ha publicat un document en l\'eina treballs del vostre curs";
+$DirDelete = "Esborrar el directori";
+$ValidateChanges = "Validar els canvis";
 ?>

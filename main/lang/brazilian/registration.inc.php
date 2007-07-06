@@ -160,4 +160,7 @@ $YourAccountHasToBeApproved = "O seu registo necessita aprovação";
 $ApprovalForNewAccount = "Aprovação para um novo registro";
 $ManageUser = "Administrar usuário";
 $SubscribeUserToCourseAsTeacher = "Registra usuários neste curso como professor";
+$SendMessage = "Enviar Mensagem";
+$PasswordEncryptedForSecurity = "A sua senha está encriptada por razões de segurança. Assim, depois de clicar no link será enviado um email para você com sua senha.";
+$UsersUnsubscribed = "Os usuários selecionados foram desinscritos do curso";
 ?>

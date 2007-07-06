@@ -1,6 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ForumDeleted = "Fórum apagado";
+$ForumCategoryDeleted = "Categoria do fórum apagada";
+$ForumBlocked = "Fórum bloqueado";
 $Forum = "Fórum";
 $AddForumCategory = "Adicionar uma nova categoria ao fórum";
 $AddForum = "Adicionar um novo fórum";

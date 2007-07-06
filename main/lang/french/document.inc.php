@@ -109,7 +109,7 @@ $fileModified = "Le fichier est modifié";
 $DocumentsOverview = "l\'outil Documents";
 $ViewSlideshow = "Galerie d\'images";
 $Options = "Options";
-$WelcomeOogieConverter = "Bienvenue dans le convertisseur de Power Point Oogie<ul type=\\\"1\\\"><li>Choisissez un fichier .ppt ou .odp<li>Envoyez ce fichier à Oogie. Il sera converti en parcours SCORM<li>Vous pourrez ensuite ajouter des commentaires audio sur chaque dia et insérer tests et activités entres les dias</ul>";
+$WelcomeOogieConverter = "Bienvenue dans le convertisseur de Power Point Oogie<ul type=\\\"1\\\"><li>Choisissez un fichier .ppt ou .odp<li>Envoyez ce fichier à Oogie. Il sera converti en parcours SCORM<li>Vous pourrez ensuite ajouter des commentaires audio sur chaque diapo et insérer tests et activités entres les dias</ul>";
 $ConvertToLP = "Convertir en parcours";
 $Content = "Contenu";
 $Validate = "Valider";

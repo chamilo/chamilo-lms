@@ -49,4 +49,7 @@ $ViewPersonalItem = "Ver eventos persoais";
 $UserGroupFilter = "Filtrar por grupos/usuarios";
 $ShowAll = "Amosar todo";
 $Print = "Imprimir";
+$CopiedAsAnnouncement = "Copiado como anuncio";
+$NewAnnouncement = "Novo anuncio";
+$AddAnnouncement = "Engadir como un anuncio";
 ?>

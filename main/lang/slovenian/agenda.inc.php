@@ -49,4 +49,7 @@ $ViewPersonalItem = "Poglej osebno agendo";
 $UserGroupFilter = "Filter na skupini/uporabnikih";
 $ShowAll = "Prikaži vse";
 $Print = "Natisni";
+$CopiedAsAnnouncement = "Kopirano kot obvestilo";
+$NewAnnouncement = "Novo obvestilo";
+$AddAnnouncement = "Dodano kot obvestilo";
 ?>

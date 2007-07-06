@@ -46,4 +46,7 @@ $ContentMaker = "Creador de Contidos";
 $ContentProximity = "Proximidade de Contido";
 $UploadLocalFileFromGarbageDir = "Enviar ficheiro local desde o directorio principal/lixo";
 $ThisItemIsNotExportable = "Este elemento non é compatible con Scorm polo de agora. Esta é a razón de por que non é exportable.";
+$MoveCurrentChapter = "Mover o capítulo actual";
+$UnknownPackageFormat = "O formato do paquete non pode ser recoñecido. Por favor, cerciórese de que estea ben creado e de que non conteña erros. Os problemas poden deberse ao formato ZIP ou á transferencia de ficheiros moi longos. Se non está seguro do ficheiro ZIP use o mínimo de funcionalidades ao comprimir.";
+$Attempt = "Intento";
 ?>

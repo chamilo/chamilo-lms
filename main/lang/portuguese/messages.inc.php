@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Inbox  = "Caixa de entrada";
+$Inbox  = "Mensagens recebidas";
 $Messages = "Mensagens";
 $SendMessage = "Enviar mensagem";
 $NewMessage = "Nova mensagem";

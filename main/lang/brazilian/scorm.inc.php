@@ -46,4 +46,7 @@ $ContentMaker = "Criação de conteúdos";
 $ContentProximity = "Situação do Conteúdo";
 $UploadLocalFileFromGarbageDir = "Enviar arquivo a partir do diretorio principal/reciclagem";
 $ThisItemIsNotExportable = "Este item, neste momento, não é compatível com Scorm. Por isso não é exportável.";
+$MoveCurrentChapter = "Mover capítulo atual";
+$UnknownPackageFormat = "O formato do pacote não foi reconhecido. Por favor, verifique se o pacote contém erros. Alguns problemas são devidos ao formato do programa ZIP ou à transferência de arquivos longos. Em caso de dúvida, evite usar arquivos zipados.";
+$Attempt = "Tentativa";
 ?>

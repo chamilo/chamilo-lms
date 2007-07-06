@@ -47,4 +47,6 @@ $MsgText = "Missatge";
 $AnnouncementDeletedAll = "Tots els anuncis han estat esborrats";
 $AnnouncementMoved = "L\'anunci ha estat traslladat";
 $NoAnnouncements = "No hi ha anuncis";
+$SelectEverybody = "Seleccioneu tots";
+$SelectedUsersGroups = "Grup d\'usuaris seleccionats";
 ?>

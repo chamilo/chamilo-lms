@@ -111,4 +111,6 @@ Por favor, volva ao Paso";
 $DBSettingUpgradeIntro = "O programa de actualización recuperará e actualizará as bases de datos de Dokeos. Para realizar isto, o programa utilizará as bases de datos e a configuración definidas debaixo. ¡ Debido a que o noso software funciona nunha ampla gama de sistemas e non foi posible probalo en todos, recomendámoslle encarecidamente que realice unha copia completa das súas bases de datos antes de proceder á actualización !";
 $ExtensionMBStringNotAvailable = "Extensión MBString non dispoñible";
 $ExtensionMySQLNotAvailable = "Extensión MySQL non dispoñible";
+$DokeosArtLicense = "As imaxes e as galerías de medios de Dokeos utilizan imaxes e iconas de Nuvola, Crystal Clear e Tango. Outras imaxes e medios, como diagramas e animacións flash, tomáronse prestadas de Wikimedia e dos cursos de Ali Pakdel e de Denis Hoa co seu consentimento e publicadas baixo licenza BY-SA Creative Commons. Pode atopar os detalles da licenza en <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">
+a web de CC</a>, onde un enlace ao pé da páxina daralle acceso ao texto completo da licenza.";
 ?>

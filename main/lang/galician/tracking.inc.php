@@ -210,4 +210,6 @@ $CoachList = "Lista de titores";
 $CoachStudents = "Estudantes do titor";
 $NoLearningPath = "Ningún itinerario de aprendizaxe";
 $SessionCourses = "Sesións de cursos";
+$NoUsersInCourseTracking = "Aquí atopará o seguimento dos alumnos inscritos neste curso.";
+$AvgTimeSpentInTheCourse = "Tempo medio de permanencia no curso";
 ?>

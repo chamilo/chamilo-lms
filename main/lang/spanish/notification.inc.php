@@ -7,12 +7,12 @@ $lang_update_agenda = "evento de la agenda actualizado";
 $lang_new_agenda = "nuevo evento añadido en la agenda";
 $lang_update_announcements = "anuncio actualizado";
 $lang_new_announcements = "nuevo anuncio añadido";
-$lang_new_document = "nuevo documento(s) añadido";
+$lang_new_document = "nuevo documento añadido";
 $lang_new_exercise = "nuevo ejercicio disponible";
-$lang_update_link = "información actualizada del enlace";
+$lang_update_link = "enlace actualizado";
 $lang_new_link = "nuevo enlace añadido";
 $lang_new_forum_topic = "nuevo tema añadido";
 $lang_new_groupforum_topic = "nuevo tema añadido al foro del grupo";
 $lang_new_dropbox_file = "nuevo archivo recibido";
-$lang_update_dropbox_file = "El archivo de su baúl de tareas ha sido actualizado";
+$lang_update_dropbox_file = "El archivo de su buzón ha sido actualizado";
 ?>

@@ -11,5 +11,17 @@ $langNameOfTheLink  = "Nom de l\'enllas";
 $lang_main_categories_list                  = "Llista de categories principal";
 $langCourseAdminOnly = "Només professors";
 $PlatformAdminOnly = "Només administradors";
+$langCombinedCourse = "Curs combinat";
+$ToolIsNowVisible = "L\'eina és actualment visible";
+$ToolIsNowHidden = "L\'eina és actualment no visible";
 $EditLink = "Editar enllaç";
+$Blog_management = "Gestió de blogs";
+$Forum = "Fòrums";
+$Course_maintenance = "Manteniment del curs";
+$TOOL_SURVEY = "Enquestes";
+$GreyIcons = "Caixa d\'eines";
+$Interaction = "Interacció";
+$Authoring = "Producció";
+$Administration = "Administració";
+$IntroductionTextUpdated = "El text d\'introducció ha estat actualitzat";
 ?>

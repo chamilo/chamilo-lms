@@ -49,4 +49,7 @@ $ViewPersonalItem = "Ver Agenda pessoal";
 $UserGroupFilter = "Filtrar grupos / utilizadores";
 $ShowAll = "Mostrar todos";
 $Print = "Imprimir";
+$CopiedAsAnnouncement = "Copiado como anúncio";
+$NewAnnouncement = "Novo anúncio";
+$AddAnnouncement = "Acrescentado como anúncio";
 ?>

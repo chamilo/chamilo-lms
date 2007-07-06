@@ -81,4 +81,13 @@ $GroupCategory = "Categoria del grup";
 $NoTitleGiven = "Si us plau donar un títol";
 $InvalidMaxNumberOfMembers = "Si us plau introduir un número vàlid per a un número màxim de membres";
 $CategoryOrderChanged = "L\'ordre de categoria fou canviada";
+$Wiki = "Wiki del grup";
+$CategoryCreated = "Categoria creada";
+$GroupTutors = "Tutors";
+$GroupWork = "Treballs";
+$GroupCalendar = "Agenda";
+$GroupAnnouncements = "Avisos";
+$NoCategoriesDefined = "Cap categoria definida";
+$GroupsFromClasses = "Grups en classes";
+$GroupsFromClassesInfo = "Utilitzant aquest opció, podreu crear grups basats en les classes inscrites en el curs. ";
 ?>

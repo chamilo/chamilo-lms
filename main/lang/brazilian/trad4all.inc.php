@@ -2,6 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Title = "Título";
+$By = "Por";
 $UsersOnline = "Usuários online";
 $Remove = "Remover";
 $Description = "Descrição";
@@ -98,7 +99,7 @@ $langFinish = "Finalizar";
 $langCancel = "Cancelar";
 $langNotAllowed = "Você não possui permissão para acessar esta página ou a sua sessão expirou. Por favor faça login novamente.";
 $langNotLogged = "Você não está autenticado no curso";
-$langManager = "Gerente";
+$langManager = "Administrador";
 $langOptional = "Opcional";
 $NextPage = "Próxima página";
 $PreviousPage = "Página anterior";
@@ -148,7 +149,7 @@ $langNameOfLang['russian'] = "russo";
 $langNameOfLang['simpl_chinese'] = "chinês_simpl";
 $langNameOfLang['spanish'] = "espanhol";
 $Close = "fechar";
-$langPlatform = "Plataforma baseada em";
+$langPlatform = "Plataforma";
 $localLangName = "Idioma";
 $email = "e-mail";
 $langCourseCodeAlreadyExists = "Perdão, mas o código do curso já existe. Por favor escolha outro.";
@@ -427,4 +428,8 @@ $SessionFuture = "Ainda não iniciada";
 $DateFormatLongWithoutDay = "%d %B, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Pasta inválida: por favor, crie uma pasta com o nome images na seção documentos de modo que as imagens carregadas possam ser salvas nessa pasta.";
 $UsersConnectedToMySessions = "Ver todos os usuários conectados às minhas sessões";
+$DearUser = "Caro(a) usuário(a)";
+$YourRegistrationData = "Os seus dados do registro";
+$ResetLink = "Clique aqui para recuperar a sua senha";
+$VisibilityChanged = "A visibilidade foi alterada.";
 ?>

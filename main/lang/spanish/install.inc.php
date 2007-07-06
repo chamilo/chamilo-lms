@@ -21,7 +21,7 @@ $langAdminSurname = "Apellidos del administrador";
 $langAdminLogin = "Nombre de usuario del administrador";
 $langAdminPass = "Contraseña del administrador (<font color=\"red\">puede que desee cambiarla</font>)";
 $langEducationManager = "Responsable educativo";
-$langCampusName = "Nombre del campus";
+$langCampusName = "Nombre de su portal";
 $langDBSettingIntro = "El script de instalación creará las principales bases de datos de Dokeos. Por favor, recuerde que  Dokeos necesitará crear varias bases de datos. Si sólo puede tener una base de datos en su proveedor,  Dokeos no funcionará.";
 $langStep1 = "Paso 1 de 6 ";
 $langStep2 = "Paso 2 de 6 ";
@@ -82,7 +82,7 @@ $ConfigSettingsInfo = "Los siguientes valores serán escritos en su archivo de co
 $DokeosInstallation = "Instalación de Dokeos";
 $InstallDokeos = "Instalar Dokeos";
 $GoToYourNewlyCreatedPortal = "Ir al portal que acaba de crear.";
-$FirstUseTip = "Cuando entra en su Campus por primera vez, la mejor manera de entenderlo es registrarse con la opción \"Crear el sitio de un curso\" y seguir las instrucciones.";
+$FirstUseTip = "Cuando entra en su portal por primera vez, la mejor manera de entenderlo es registrarse con la opción \"Crear el sitio de un curso\" y seguir las instrucciones.";
 $Version_ = "Versión";
 $UpdateFromDokeosVersion = "Actualización de Dokeos";
 $WelcomToTheDokeosInstaller = "Bienvenido al Instalador de Dokeos";
@@ -110,6 +110,6 @@ $PleaseGoBackToStep = "Por favor, vuelva al Paso";
 $DBSettingUpgradeIntro = "El programa de actualización recuperará y actualizará las bases de datos de Dokeos. Para realizar esto, el programa utilizará las bases de datos y la configuración definidas debajo. ¡ Debido a que nuestro software funciona en una amplia gama de sistemas y no ha sido posible probarlo en todos, le recomendamos encarecidamente que realice una copia completa de sus bases de datos antes de proceder a la actualización ! ";
 $ExtensionMBStringNotAvailable = "Extensión MBString no disponible";
 $ExtensionMySQLNotAvailable = "Extensión MySQL no disponible";
-$DokeosArtLicense = "Las imágenes y galerías de medios de Dokeos utilizan imágenes e iconos de Nuvola, Crystal Clear y Tango. Otras imágenes y medios, como diagramas y animaciones flash, se han tomado prestadas de Wikimedia y de los cursos de Ali Pakdel y de Denis Hoa con su consentimiento y publicadas bajo licencia BY-SA Creative Commons. Puede encontrar los detalles de la licencia en 
+$DokeosArtLicense = "Las imágenes y las galerías de medios de Dokeos utilizan imágenes e iconos de Nuvola, Crystal Clear y Tango. Otras imágenes y medios, como diagramas y animaciones flash, se han tomado prestadas de Wikimedia y de los cursos de Ali Pakdel y de Denis Hoa con su consentimiento y publicadas bajo licencia BY-SA Creative Commons. Puede encontrar los detalles de la licencia en 
 <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">la web de CC</a>, donde un enlace al pie de la página le dará acceso al texto completo de la licencia.";
 ?>

@@ -11,4 +11,18 @@ $langOkSentLink         = "El seu enllas ha sigut enviat.<p>Aquest és accessible
 $langTooBig             = "No ha escollit cap arxiu a enviar, o és massa gran";
 $langExplanation        = "La pàgina ha de estar en format HTML (ex: \"my_page.htm\"). Serà enllasada a la pàgina principal. Si vosté vol enviar un document NO HTML (PDF, Word, Power Point, Video, etc.) utilitzi <a href=../document/document.php>les eines de documents</a>";
 $langPgTitle            = "Títol de la pàgina";
+$langNoLinkURL          = "Introdueixi l\'adreça del vincle";
+$langLinkTarget = "Destinació del vincle";
+$langSameWindow = "A la mateixa finestra";
+$langNewWindow = "En una nova finestra";
+$langAdded = "El vincle s\'ha afegit";
+$langAddLink = "Afegir un vincle";
+$langNoLinkName = "Introduïu el nom d\'un vincle";
+$langEditLink = "Editar el vincle \"Pàgina inicial\"";
+$langChangePress = "Feu els canvis i cliqueu OK";
+$langLinkChanged = "Vincle \"Pàgina inicial\" del curs modificat. Utilitzeu el menú de navegació horitzontal superior per tornar a la pàgina inicial";
+$NoLinkName = "El vincle no té nom";
+$NoLinkURL = "El vincle no té URL";
+$LinkChanged = "Vincle modificat";
+$OkSentLink = "Vincle enviat";
 ?>

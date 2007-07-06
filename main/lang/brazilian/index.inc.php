@@ -63,4 +63,10 @@ $langRequestDenied = "A chamada foi negada.";
 $UsageDatacreated = "Dados de utilização criados";
 $SessionView = "Mostrar os cursos ordenados por sessões";
 $CourseView = "Mostrar a lista de todos os cursos disponíveis";
+$DropboxFileAdded = "Arquivo adicionado na Dropbox";
+$NewMessageInForum = "Nova mensagem publicada no fórum";
+$FolderCreated = "Criada nova pasta";
+$LinkAdded = "Adicionado novo link";
+$AnnouncementAdded = "Anúncio adicionado";
+$AgendaAdded = "Acrescentado ítem na agenda";
 ?>

@@ -44,7 +44,12 @@ $AddPersonalCalendarItem = "Afegir anotació personal";
 $ModifyPersonalCalendarItem = "Modificar anotació personal";
 $PeronalAgendaItemAdded = "Anotació personal afegida correctament";
 $PeronalAgendaItemEdited = "Anotació personal editada correctament";
+$PeronalAgendaItemDeleted = "L\'esdeveniment personal ha estat esborrat de l\'agenda";
 $ViewPersonalItem = "Veure anotacions personals";
 $UserGroupFilter = "Filtrar per grups / usuaris";
 $ShowAll = "Mostrar tots";
+$Print = "Imprimir";
+$CopiedAsAnnouncement = "Copiat com anunci";
+$NewAnnouncement = "Nou anunci";
+$AddAnnouncement = "Afegir com anunci";
 ?>

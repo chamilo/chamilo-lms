@@ -56,4 +56,5 @@ $langAll_Link_Deleted = "Link is verwijderd.";
 $langOnHomepage = "Toon link op cursushoofdpagina";
 $langShowLinkOnHomepage = "Toon deze link als een icoon op de cursushoofdpagina";
 $langCsvImport = "CSV-bestand importeren";
+$Category = "Categorie";
 ?>

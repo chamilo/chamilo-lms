@@ -211,4 +211,5 @@ $CoachStudents = "Students for this coach";
 $NoLearningPath = "No SCORM courses";
 $SessionCourses = "Session of courses";
 $NoUsersInCourseTracking = "Here you will find the tracking for your students subscribed in this course.";
+$AvgTimeSpentInTheCourse = "Average time spent in course";
 ?>

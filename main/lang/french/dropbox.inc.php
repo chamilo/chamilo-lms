@@ -123,4 +123,6 @@ $MailingSelectNoOther = "On ne peut envoyer par publipostage et de façon classiq
 $mailingJustUploadSelectNoOther = "On ne peut combiner l\'envoi simple avec d\'autres destinataires";
 $NoFilesHere = "Pas de fichiers ici";
 $NoFilesHere = "Aucun fichier";
+$NewDropboxFileUploaded = "Un nouveau fichier a été envoyé dans le partage de fichiers";
+$NewDropboxFileUploadedContent = "Un nouveau fichier a été envoyé dans le partage de fichiers de votre cours";
 ?>

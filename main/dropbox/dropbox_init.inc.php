@@ -70,6 +70,10 @@ require_once('dropbox_config.inc.php');
 // the dropbox file that contains additional functions
 require_once('dropbox_functions.inc.php');
 
+require(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
+
+include_once(api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php');
+
 // protecting the script 
 api_protect_course_script();
 

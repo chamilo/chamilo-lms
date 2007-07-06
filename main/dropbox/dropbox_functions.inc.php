@@ -33,6 +33,8 @@
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
+
+
 function handle_multiple_actions()
 {
 	global $_user, $is_courseAdmin, $is_courseTutor;
@@ -796,6 +798,7 @@ function store_add_dropbox()
 {
 	global $dropbox_cnf;
 	global $_user;
+	global $_course;
 	require_once(api_get_path(LIBRARY_PATH) . "/fileUpload.lib.php");
 
 	// ----------------------------------------------------------
@@ -955,7 +958,16 @@ function store_add_dropbox()
 
 
 	@move_uploaded_file( $dropbox_filetmpname, dropbox_cnf("sysPath") . '/' . $dropbox_filename);
-
+	
+	$b_send_mail = api_get_course_setting('email_alert_on_new_doc_dropbox');
+	if($b_send_mail){
+		foreach($new_work_recipients as $recipient_id){
+			include_once(api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
+			$recipent_temp=UserManager :: get_user_info_by_id($recipient_id);
+			api_mail($recipent_temp['lastname'].' '.$recipent_temp['firstname'],$recipent_temp['email'],get_lang('NewDropboxFileUploaded'),get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator'),get_setting('administratorName')." ".get_setting('administratorSurname'),get_setting('emailAdministrator'));
+		}
+	}
+	
 	new Dropbox_SentWork( $_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $new_work_recipients);
 
 	Security::clear_token();

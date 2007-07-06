@@ -160,6 +160,7 @@ input[text] {font-size: 12px; }
 	text-decoration: none;
 }
 #header1 a:hover{
+	background-color: #264269;
 	text-decoration: underline;
 }
 #sitename {

@@ -1,4 +1,4 @@
-<?php // $Id: document.php 12490 2007-05-27 17:54:43Z yannoo $
+<?php // $Id: document.php 12718 2007-07-09 12:04:18Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -138,7 +138,7 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
 			$to_group_id = $_SESSION['_gid'];
 			$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
 			$interbreadcrumb[]= array ("url"=>"../group/group.php", "name"=> get_lang('Groups'));
-			$interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['_gid'], "name"=> get_lang('GroupSpace'));
+			$interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['_gid'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 			//they are allowed to upload
 			$group_member_with_upload_rights = true;
 		}
@@ -152,7 +152,8 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
 	{
 		$to_group_id = $_SESSION['_gid'];
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-		$interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['_gid'], "name"=> get_lang('GroupSpace'));
+		
+		$interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['_gid'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 		//allowed to upload?
 		if($is_allowed_to_edit || GroupManager::is_subscribed($_user['user_id'],$_SESSION['_gid'])) //only courseadmin or group members can upload
 		{

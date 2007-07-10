@@ -478,14 +478,69 @@ function display_upgrade_header($text_dir, $dokeos_version, $install_type, $upda
 	</div>
 	<?php
 }
+
+/**
+*	Return a list of language directories.
+*	@todo function does not belong here, move to code library,
+*	also see infocours.php which contains similar function
+*/
+function get_language_folder_list()
+{
+	$dirname = dirname(__FILE__).'/../lang';
+	if ($dirname[strlen($dirname) - 1] != '/')
+		$dirname .= '/';
+	$handle = opendir($dirname);
+	while ($entries = readdir($handle))
+	{
+		if ($entries == '.' || $entries == '..' || $entries == '.svn')
+			continue;
+		if (is_dir($dirname.$entries))
+		{
+			$language_list[$entries] = $entries;
+		}
+	}
+	closedir($handle);
+	return $language_list;
+}
+
+function display_installation_overview()
+{
+	echo '<div id="installation_steps">';
+	echo '<img src="../img/bluelogo.gif" hspace="10" vspace="10" alt="Dokeos logo" />';
+	echo '<ol>';
+	echo '<li ' . step_active('1') . '> ' . get_lang('InstallationLanguage') . '</li>';
+	echo '<li ' . step_active('2') . '> ' . get_lang('Requirements') . '</li>';
+	echo '<li ' . step_active('3') . '> ' . get_lang('Licence') . '</li>';
+	echo '<li ' . step_active('4') . '> ' . get_lang('DBSetting') . '</li>';
+	echo '<li ' . step_active('5') . '> ' . get_lang('CfgSetting') . '</li>';
+	echo '<li ' . step_active('6') . '> ' . get_lang('PrintOverview') . '</li>';
+	echo '<li ' . step_active('7') . '> ' . get_lang('Installing') . '</li>';
+	echo '</ol>';
+	echo '</div>';
+}
+
+/**
+ * This function prints class=active_step $current_step=$param
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ */
+function step_active($this_step)
+{
+	global $current_active_step;
+	if ($current_active_step == $this_step)
+	{
+		return ' class="current_step" ';
+	}
+}
 	
 /*
 ==============================================================================
 		MAIN CODE
 ==============================================================================
 */ 
-
+global $current_active_step;
+$current_active_step = '1';
 display_upgrade_header($text_dir, $dokeos_version, $install_type, $update_from_version);
+display_installation_overview();
 
 // Create a new wizard
 $wizard = & new HTML_QuickForm_Controller('regWizard', true);
@@ -552,5 +607,4 @@ $wizard->run();
 		FOOTER 
 ==============================================================================
 */ 
-Display::display_footer();
 ?>

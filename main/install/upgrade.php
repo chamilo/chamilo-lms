@@ -531,6 +531,28 @@ function step_active($this_step)
 		return ' class="current_step" ';
 	}
 }
+
+// Rule to check update path
+function check_update_path($path)
+{
+	global $updateFromVersion;
+	// Make sure path has a trailing /
+	$path = substr($path,-1) != '/' ? $path.'/' : $path;
+	// Check the path
+	if (file_exists($path))
+	{
+		$version = get_config_param('clarolineVersion',$path);
+		if (in_array($version, $updateFromVersion))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	return false;
+}
 	
 /*
 ==============================================================================

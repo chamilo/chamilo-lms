@@ -40,7 +40,11 @@
 		INIT SECTION
 ==============================================================================
 */ 
-
+$_SESSION['whereami'] = 'lp/build';
+if(isset($_SESSION['oLP']) && isset($_GET['id']))
+{
+	$_SESSION['oLP'] -> current = intval($_GET['id']);
+}
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();

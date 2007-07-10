@@ -29,6 +29,15 @@
 *
 * This script uses PEAR QuickForm and QuickFormController classes.
 *
+* First version
+* - ask for old version path
+* - check version (1.6.x or 1.8.x, no others supported at the moment)
+* - get settings from old version
+* - perform necessary upgrade functions based on version
+
+* Future improvements
+* - ask user if she agrees to detected version (chance to cancel)
+*
 * @package dokeos.install
 ==============================================================================
 */

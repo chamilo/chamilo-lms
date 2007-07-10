@@ -25,7 +25,9 @@
 * upgrade directly from Dokeos 1.6.x to Dokeos 1.8.3 
 *
 * For this upgrade we assume there is an old_dokeos directory and the new
-* software is in a new_dokeos directory.
+* software is in a new_dokeos directory. While we're busy developing we 
+* work in this one  - large - separate file so not to disturb the other
+* existing classes - the existing code remains working.
 *
 * This script uses PEAR QuickForm and QuickFormController classes.
 *

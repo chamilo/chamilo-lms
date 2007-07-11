@@ -498,12 +498,14 @@ function get_language_folder_list()
 			continue;
 		if (is_dir($dirname.$entries))
 		{
-			$language_list[$entries] = $entries;
+			$language_list[$entries] = ucfirst($entries);
 		}
 	}
 	closedir($handle);
+	asort($language_list);
 	return $language_list;
 }
+
 
 function display_installation_overview()
 {
@@ -554,6 +556,106 @@ function check_update_path($path)
 		}
 	}
 	return false;
+}
+
+/**
+ * this function returns a the value of a parameter from the configuration file
+ *
+ * WARNING - this function relies heavily on global variables $updateFromConfigFile
+ * and $configFile, and also changes these globals. This can be rewritten.
+ *
+ * @param string  $param  the parameter which the value is returned for
+ * @return  string  the value of the parameter
+ * @author Olivier Brouckaert
+ */
+function get_config_param($param,$path)
+{
+	global $configFile, $updateFromConfigFile;
+
+	if (empty ($updateFromConfigFile))
+	{
+		if (file_exists($path.'claroline/include/config.inc.php'))
+		{
+			$updateFromConfigFile = 'claroline/include/config.inc.php';
+		}
+		elseif (file_exists($path.'claroline/inc/conf/claro_main.conf.php'))
+		{
+			$updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
+		}
+		else
+		{
+			return;
+		}
+	}
+
+	if (is_array($configFile) && isset ($configFile[$param]))
+	{
+		return $configFile[$param];
+	}
+	elseif (file_exists($path.$updateFromConfigFile))
+	{
+		$configFile = array ();
+
+		$temp = file($path.$updateFromConfigFile);
+
+		$val = '';
+
+		foreach ($temp as $enreg)
+		{
+			if (strstr($enreg, '='))
+			{
+				$enreg = explode('=', $enreg);
+
+				if ($enreg[0][0] == '$')
+				{
+					list ($enreg[1]) = explode(' //', $enreg[1]);
+
+					$enreg[0] = trim(str_replace('$', '', $enreg[0]));
+					$enreg[1] = str_replace('\"', '"', ereg_replace('(^"|"$)', '', substr(trim($enreg[1]), 0, -1)));
+
+					if (strtolower($enreg[1]) == 'true')
+					{
+						$enreg[1] = 1;
+					}
+					if (strtolower($enreg[1]) == 'false')
+					{
+						$enreg[1] = 0;
+					}
+					else
+					{
+						$implode_string = ' ';
+
+						if (!strstr($enreg[1], '." ".') && strstr($enreg[1], '.$'))
+						{
+							$enreg[1] = str_replace('.$', '." ".$', $enreg[1]);
+							$implode_string = '';
+						}
+
+						$tmp = explode('." ".', $enreg[1]);
+
+						foreach ($tmp as $tmp_key => $tmp_val)
+						{
+							if (eregi('^\$[a-z_][a-z0-9_]*$', $tmp_val))
+							{
+								$tmp[$tmp_key] = get_config_param(str_replace('$', '', $tmp_val));
+							}
+						}
+
+						$enreg[1] = implode($implode_string, $tmp);
+					}
+
+					$configFile[$enreg[0]] = $enreg[1];
+
+					if ($enreg[0] == $param)
+					{
+						$val = $enreg[1];
+					}
+				}
+			}
+		}
+
+		return $val;
+	}
 }
 	
 /*

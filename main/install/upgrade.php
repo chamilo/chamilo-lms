@@ -560,7 +560,7 @@ function check_update_path($path)
 		//{
 		
 		//search for a 1.6.x installation
-		$version = get_installed_version($_POST['updatePath'], 'platformVersion');
+		$version = get_installed_version($path, 'platformVersion');
 		
 		//}
 		//$_SESSION['upgrade_from_dokeos_version'] = $upgrade_from_dokeos_version;

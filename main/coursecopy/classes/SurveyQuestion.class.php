@@ -82,7 +82,7 @@ class SurveyQuestion extends Resource
 		$this->survey_id = $survey_id;
 		$this->survey_question = $survey_question;
 		$this->survey_question_comment = $survey_question_comment;
-		$this->type = $type;
+		$this->survey_question_type = $type;
 		$this->display = $display;
 		$this->sort = $sort;
 		$this->shared_question_id = $shared_question_id;

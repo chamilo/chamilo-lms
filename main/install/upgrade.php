@@ -553,21 +553,14 @@ function check_update_path($path)
 	// Check the path
 	if (file_exists($path))
 	{
-		$version = get_config_param('clarolineVersion',$path);
-		
-		//$upgrade_from_dokeos_version = get_config_param('dokeos_version');
-		//if (! isset($upgrade_from_dokeos_version) || $upgrade_from_dokeos_version == '')
-		//{
-		
-		//search for a 1.6.x installation
+		//search for 1.6.x installation
 		$version = get_installed_version($path, 'platformVersion');
 		
+		//search for 1.8.x installation
+		//if (! isset($version) || $version == '')
+		//{
+		//   $version = get_installed_version($path, 'dokeos_version');
 		//}
-		//$_SESSION['upgrade_from_dokeos_version'] = $upgrade_from_dokeos_version;
-		
-		
-		echo "The detected old Dokeos version located in $path is $version.";
-		
 		
 		if (in_array($version, $update_from_version))
 		{
@@ -727,8 +720,6 @@ $wizard->addPage(new Page_LocationOldVersion('page_location_old_version'));
 $values = $wizard->exportValues();
 if( isset($values['old_version_path']) && $values['old_version_path'] != '/var/www/html/old_version/' )
 {
-	echo '<p>You\'ve specified to upgrade the old version located in:' . 'old version path = ' . $values['old_version_path'] . '</p>';
-	
 	$defaults['platform_language'] = get_config_param('platformLanguage');
 	$defaults['platform_url'] = 'http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
 	$defaults['license'] = implode("\n", file('../../documentation/license.txt'));

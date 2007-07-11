@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 12645 2007-06-18 20:46:16Z elixir_inter $
+// $Id: CourseSelectForm.class.php 12733 2007-07-11 00:21:31Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -98,6 +98,7 @@ class CourseSelectForm
 					case RESOURCE_FORUMTOPIC :
 					case RESOURCE_QUIZQUESTION:
 					case RESOURCE_SURVEYQUESTION:
+					case RESOURCE_SURVEYINVITATION:
 						break;
 					default :
 						echo ' <img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" >';

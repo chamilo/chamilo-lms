@@ -448,6 +448,135 @@ class Page_ConfirmSettings extends HTML_QuickForm_Page
 }
 
 
+/**
+ * Class to render a page in the install wizard.
+ */
+class ActionDisplay extends HTML_QuickForm_Action_Display
+{
+	/**
+	 * Displays the HTML-code of a page in the wizard
+	 * @param HTML_Quickform_Page $page The page to display.
+	 */
+	function _renderForm(& $current_page)
+	{
+		global $dokeos_version, $installType, $updateFromVersion;
+		$renderer = & $current_page->defaultRenderer();
+		$current_page->setRequiredNote('<font color="#FF0000">*</font> '.get_lang('ThisFieldIsRequired'));
+		$element_template = "\n\t<tr>\n\t\t<td valign=\"top\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span> <!-- END required -->{label}</td>\n\t\t<td valign=\"top\" align=\"left\"><!-- BEGIN error --><span style=\"color: #ff0000;font-size:x-small;margin:2px;\">{error}</span><br /><!-- END error -->\t{element}</td>\n\t</tr>";
+		$renderer->setElementTemplate($element_template);
+		$header_template = "\n\t<tr>\n\t\t<td valign=\"top\" colspan=\"2\">{header}</td>\n\t</tr>";
+		$renderer->setHeaderTemplate($header_template);
+		HTML_QuickForm :: setRequiredNote('<font color="red">*</font> <small>'.get_lang('ThisFieldIsRequired').'</small>');
+		$current_page->accept($renderer);
+?>
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+		<head>
+		<title>-- Dokeos installation -- version <?php echo $dokeos_version; ?></title>
+		<link rel="stylesheet" href="../css/default.css" type="text/css"/>
+		</head>
+		<body dir="<?php echo get_lang('text_dir'); ?>">
+		<div id="header1">
+			Dokeos installation - version <?php echo $dokeos_version; ?><?php if($installType == 'new') echo ' - New installation'; else if($installType == 'update') echo ' - Update from Dokeos '.implode('|',$updateFromVersion); ?>
+		</div>
+		<div style="float: left; background-color:#EFEFEF;margin-right: 20px;padding: 10px;">
+			<img src="../img/bluelogo.gif" alt="logo"/>
+			<?php
+
+		$all_pages = $current_page->controller->_pages;
+		$total_number_of_pages = count($all_pages);
+		$current_page_number = 0;
+		$page_number = 0;
+		echo '<ol>';
+		foreach($all_pages as $index => $page)
+		{
+			$page_number++;
+			if($page->get_title() == $current_page->get_title())
+			{
+				$current_page_number = $page_number;
+				echo '<li style="font-weight: bold;">'.$page->get_title().'</li>';
+			}
+			else
+			{
+				echo '<li>'.$page->get_title().'</li>';
+			}
+		}
+		echo '</ol>';
+		echo '</div>';
+		echo '<div style="margin: 10px;">';
+		echo '<h2>'.get_lang('Step').' '.$current_page_number.' '.get_lang('of').' '.$total_number_of_pages.' &ndash; '.$current_page->get_title().'</h2>';
+		echo '<div>';
+		echo $current_page->get_info();
+		echo '</div>';
+		echo $renderer->toHtml();
+		?>
+        </div>
+        <div style="clear:both;"></div>
+        <div id="footer">
+        &copy; <?php echo $dokeos_version; ?>
+        </div>
+		</body>
+		</html>
+		<?php
+	}
+}
+
+/**
+* Class for form processing
+* Here happens the actual installation action after collecting
+* all the required data.
+*/
+class ActionProcess extends HTML_QuickForm_Action
+{
+	function perform(& $page, $actionName)
+	{
+		global $dokeos_version, $installType, $updateFromVersion;
+		$values = $page->controller->exportValues();
+		?>
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+		<head>
+		<title>-- Dokeos installation -- version <?php echo $dokeos_version; ?></title>
+		<link rel="stylesheet" href="../css/default.css" type="text/css"/>
+		</head>
+		<body dir="<?php echo get_lang('text_dir'); ?>">
+		<div style="background-color:#4171B5;color:white;font-size:x-large;">
+			Dokeos installation - version <?php echo $dokeos_version; ?><?php if($installType == 'new') echo ' - New installation'; else if($installType == 'update') echo ' - Update from Dokeos '.implode('|',$updateFromVersion); ?>
+		</div>
+		<div style="margin:50px;">
+			<img src="../img/bluelogo.gif" alt="logo" align="right"/>
+		<?php
+		echo '<pre>';
+		
+		global $repository_database;
+		global $weblcms_database;
+		global $personal_calendar_database;
+		global $user_database;
+		global $personal_messenger_database;
+		global $profiler_database;
+		
+		$repository_database = $values['database_repository'];
+		$weblcms_database = $values['database_weblcms'];
+		$personal_calendar_database = $values['database_personal_calendar'];
+		$user_database = $values['database_user'];
+		$personal_messenger_database = $values['database_personal_messenger'];
+		$profiler_database = $values['database_profiler'];
+		
+		full_database_install($values);
+		full_file_install($values);
+		create_admin_in_user_table($values);
+		create_default_categories_in_weblcms();
+		echo '</pre>';
+		$page->controller->container(true);
+		?>
+		<a href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
+        </div>
+		</body>
+		</html>
+		<?php
+	}
+}
+
 
 /*
 ==============================================================================

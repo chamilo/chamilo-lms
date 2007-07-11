@@ -561,8 +561,12 @@ function check_update_path($path)
 /**
  * This function returns a the value of a parameter from the configuration file
  * of a previous installation.
- * Before Dokeos 1.8 the main code folder was called 'claroline'.
- * 
+ *
+ * IMPORTANT
+ * - Before Dokeos 1.8 the main code folder was called 'claroline'. Since Dokeos 1.8
+ * this folder is called 'main' -> we have to make a difference based on previous 
+ * version.
+ * - The version may be in the config file or in the installedVersion file... 
  *
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
  * and $configFile, and also changes these globals. This can be rewritten.

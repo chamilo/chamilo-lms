@@ -559,7 +559,10 @@ function check_update_path($path)
 }
 
 /**
- * this function returns a the value of a parameter from the configuration file
+ * This function returns a the value of a parameter from the configuration file
+ * of a previous installation.
+ * Before Dokeos 1.8 the main code folder was called 'claroline'.
+ * 
  *
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
  * and $configFile, and also changes these globals. This can be rewritten.
@@ -672,15 +675,15 @@ display_installation_overview();
 $wizard = & new HTML_QuickForm_Controller('regWizard', true);
 
 //Add pages to wizard - path to follow for upgrade
-$wizard->addPage(new Page_Language('page_language'));
-$wizard->addPage(new Page_Requirements('page_requirements'));
+//$wizard->addPage(new Page_Language('page_language'));
+//$wizard->addPage(new Page_Requirements('page_requirements'));
 $wizard->addPage(new Page_LocationOldVersion('page_location_old_version'));
 $values = $wizard->exportValues();
-if( isset($values['old_version_path']))
+if( isset($values['old_version_path']) )
 {
 	$defaults['platform_language'] = get_config_param('platformLanguage');
 	$defaults['platform_url'] = 'http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
-	$defaults['license'] = implode("\n", file('../license/gpl.txt'));
+	$defaults['license'] = implode("\n", file('../../documentation/license.txt'));
 	$defaults['database_host'] = get_config_param('dbHost');
 	$defaults['database_main_db'] = get_config_param('mainDbName');
 	$defaults['database_tracking'] = get_config_param('statsDbName');
@@ -715,14 +718,41 @@ $wizard->addPage(new Page_DatabaseSettings('page_databasesettings'));
 $wizard->addPage(new Page_ConfigSettings('page_configsettings'));
 $wizard->addPage(new Page_ConfirmSettings('page_confirmsettings'));
 
-
-$defaults['old_version_path'] = '/var/www/html/old_version/';
+$defaults['install_language'] = 'english';
+//$defaults['old_version_path'] = '/var/www/html/old_version/';
+$defaults['old_version_path'] = '';
 
 // Set the default values
 $wizard->setDefaults($defaults);
 
+// Add the process action to the wizard
+//$wizard->addAction('process', new ActionProcess());
+
+// Add the display action to the wizard
+//$wizard->addAction('display', new ActionDisplay());
+
+// Set the installation language
+$install_language = $wizard->exportValue('page_language', 'install_language');
+require_once ('../lang/english/trad4all.inc.php');
+require_once ('../lang/english/install.inc.php');
+include_once ("../lang/$install_language/trad4all.inc.php");
+include_once ("../lang/$install_language/install.inc.php");
+
+// Set default platform language to the choosen install language
+$defaults['platform_language'] = $install_language;
+$wizard->setDefaults($defaults);
+
 // Start the wizard
 $wizard->run();
+
+
+// Set the installation language
+$install_language = $wizard->exportValue('page_language', 'install_language');
+require_once ('../lang/english/trad4all.inc.php');
+require_once ('../lang/english/install.inc.php');
+include_once ("../lang/$install_language/trad4all.inc.php");
+include_once ("../lang/$install_language/install.inc.php");
+
 
 //$values = $wizard->exportValues();
 //echo 'old version path = ' . $values['old_version_path'];

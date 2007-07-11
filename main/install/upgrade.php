@@ -539,14 +539,29 @@ function step_active($this_step)
 // Rule to check update path
 function check_update_path($path)
 {
-	global $updateFromVersion;
+	global $update_from_version;
 	// Make sure path has a trailing /
 	$path = substr($path,-1) != '/' ? $path.'/' : $path;
 	// Check the path
 	if (file_exists($path))
 	{
 		$version = get_config_param('clarolineVersion',$path);
-		if (in_array($version, $updateFromVersion))
+		
+		//$upgrade_from_dokeos_version = get_config_param('dokeos_version');
+		//if (! isset($upgrade_from_dokeos_version) || $upgrade_from_dokeos_version == '')
+		//{
+		
+		//search for a 1.6.x installation
+		$version = get_installed_version($_POST['updatePath'], 'platformVersion');
+		
+		//}
+		//$_SESSION['upgrade_from_dokeos_version'] = $upgrade_from_dokeos_version;
+		
+		
+		echo "The detected old Dokeos version located in $path is $version.";
+		
+		
+		if (in_array($version, $update_from_version))
 		{
 			return true;
 		}
@@ -556,6 +571,25 @@ function check_update_path($path)
 		}
 	}
 	return false;
+}
+
+/**
+ * This function returns the installed version of
+ * the older installation to upgrade by checking the
+ * claroline/inc/installedVersion.inc.php file.
+ */
+function get_installed_version($old_installation_path, $parameter)
+{
+	if( file_exists($old_installation_path.'claroline/inc/installedVersion.inc.php') )
+	{
+		$version_info_file = 'claroline/inc/installedVersion.inc.php';
+	}
+	// with include_once inside a function, variables aren't remembered for later use
+	include($old_installation_path.$version_info_file);
+	if (isset($$parameter))
+	{
+		return $$parameter;
+	}
 }
 
 /**
@@ -683,8 +717,10 @@ $wizard = & new HTML_QuickForm_Controller('regWizard', true);
 //$wizard->addPage(new Page_Requirements('page_requirements'));
 $wizard->addPage(new Page_LocationOldVersion('page_location_old_version'));
 $values = $wizard->exportValues();
-if( isset($values['old_version_path']) )
+if( isset($values['old_version_path']) && $values['old_version_path'] != '/var/www/html/old_version/' )
 {
+	echo '<p>You\'ve specified to upgrade the old version located in:' . 'old version path = ' . $values['old_version_path'] . '</p>';
+	
 	$defaults['platform_language'] = get_config_param('platformLanguage');
 	$defaults['platform_url'] = 'http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
 	$defaults['license'] = implode("\n", file('../../documentation/license.txt'));

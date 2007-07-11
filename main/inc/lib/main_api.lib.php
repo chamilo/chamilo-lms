@@ -88,6 +88,7 @@ define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
 
 //CONSTANTS defining all tools, using the english version
 define('TOOL_DOCUMENT', 'document');
+define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
 define('TOOL_LINK', 'link');
 define('TOOL_COURSE_DESCRIPTION', 'course_description');

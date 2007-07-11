@@ -625,6 +625,8 @@ function get_config_param($param,$path)
 		}
 	}
 
+	//echo "reading from file $path$updateFromConfigFile, which exists...";
+
 	if (is_array($configFile) && isset ($configFile[$param]))
 	{
 		return $configFile[$param];
@@ -719,12 +721,15 @@ if( isset($values['old_version_path']) && $values['old_version_path'] != '/var/w
 	$path = $values['old_version_path'];
 	$defaults['platform_language'] = get_config_param('platformLanguage',$path);
 	$defaults['platform_url'] = 'http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
-	$defaults['license'] = implode("\n", file('../../documentation/license.txt'));
+	//to keep debug output readable:
+	$defaults['license'] = 'GNU GPL v2';
+	//actual license:
+	//$defaults['license'] = implode("\n", file('../../documentation/license.txt'));
 	$defaults['database_host'] = get_config_param('dbHost',$path);
 	$defaults['database_main_db'] = get_config_param('mainDbName',$path);
 	$defaults['database_tracking'] = get_config_param('statsDbName',$path);
 	$defaults['database_scorm'] = get_config_param('scormDbName',$path);
-	$defaults['database_user'] = 'dokeos_user';
+	$defaults['database_user'] = get_config_param('user_personal_database',$path);
 	$defaults['database_repository'] = 'dokeos_repository';
 	$defaults['database_weblcms'] = 'dokeos_weblcms';
 	$defaults['database_username'] = get_config_param('dbLogin',$path);
@@ -749,6 +754,9 @@ else
 {
 	//fail gracefully - unexpected problem with old version path
 }
+
+print_r($defaults);
+
 $wizard->addPage(new Page_License('page_license'));
 $wizard->addPage(new Page_DatabaseSettings('page_databasesettings'));
 $wizard->addPage(new Page_ConfigSettings('page_configsettings'));

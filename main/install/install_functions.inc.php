@@ -59,7 +59,7 @@ function check_extension($extension_name,$return_success='OK',$return_failure='K
 
 
 /**
- * This function checks if a php settings matches the recommended value
+ * This function checks whether a php setting matches the recommended value
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version Dokeos 1.8, august 2006

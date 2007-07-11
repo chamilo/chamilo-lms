@@ -88,14 +88,9 @@ error_reporting(E_ALL);
 
 @set_time_limit(0);
 
-//deprecated:
-$old_update_from_version=array('1.5','1.5.4','1.5.5','1.6');
-//deprecated:
-$update_from_version=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5','community release 2.0','community release 2.0.1','community release 2.0.2','community release 2.0.3','community release 2.0.4');
+$update_from_version=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5','1.8.0','1.8.1','1.8.2');
 $update_from_16_version = array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
-$update_from_20_version = array('community release 2.0','community release 2.0.1','community release 2.0.2','community release 2.0.3','community release 2.0.4');
-
-
+$update_from_18_version = array('1.8.0','1.8.1','1.8.2');
 
 
 /*
@@ -679,7 +674,7 @@ function get_config_param($param,$path)
 						{
 							if (eregi('^\$[a-z_][a-z0-9_]*$', $tmp_val))
 							{
-								$tmp[$tmp_key] = get_config_param(str_replace('$', '', $tmp_val));
+								$tmp[$tmp_key] = get_config_param(str_replace('$', '', $tmp_val), $path);
 							}
 						}
 
@@ -707,6 +702,7 @@ function get_config_param($param,$path)
 */ 
 global $current_active_step;
 $current_active_step = '1';
+$install_type = 'update';
 display_upgrade_header($text_dir, $dokeos_version, $install_type, $update_from_version);
 display_installation_overview();
 
@@ -720,33 +716,34 @@ $wizard->addPage(new Page_LocationOldVersion('page_location_old_version'));
 $values = $wizard->exportValues();
 if( isset($values['old_version_path']) && $values['old_version_path'] != '/var/www/html/old_version/' )
 {
-	$defaults['platform_language'] = get_config_param('platformLanguage');
+	$path = $values['old_version_path'];
+	$defaults['platform_language'] = get_config_param('platformLanguage',$path);
 	$defaults['platform_url'] = 'http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
 	$defaults['license'] = implode("\n", file('../../documentation/license.txt'));
-	$defaults['database_host'] = get_config_param('dbHost');
-	$defaults['database_main_db'] = get_config_param('mainDbName');
-	$defaults['database_tracking'] = get_config_param('statsDbName');
-	$defaults['database_scorm'] = get_config_param('scormDbName');
+	$defaults['database_host'] = get_config_param('dbHost',$path);
+	$defaults['database_main_db'] = get_config_param('mainDbName',$path);
+	$defaults['database_tracking'] = get_config_param('statsDbName',$path);
+	$defaults['database_scorm'] = get_config_param('scormDbName',$path);
 	$defaults['database_user'] = 'dokeos_user';
 	$defaults['database_repository'] = 'dokeos_repository';
 	$defaults['database_weblcms'] = 'dokeos_weblcms';
-	$defaults['database_username'] = get_config_param('dbLogin');
-	$defaults['database_password'] = get_config_param('dbPass');
-	$defaults['database_prefix'] = get_config_param('dbNamePrefix');
-	$defaults['enable_tracking'] = get_config_param('is_trackingEnabled');
-	$defaults['database_single'] = get_config_param('singleDbEnabled');
+	$defaults['database_username'] = get_config_param('dbLogin',$path);
+	$defaults['database_password'] = get_config_param('dbPass',$path);
+	$defaults['database_prefix'] = get_config_param('dbNamePrefix',$path);
+	$defaults['enable_tracking'] = get_config_param('is_trackingEnabled',$path);
+	$defaults['database_single'] = get_config_param('singleDbEnabled',$path);
 	$defaults['admin_lastname'] = 'Doe';
 	$defaults['admin_firstname'] = mt_rand(0,1)?'John':'Jane';
-	$defaults['admin_email'] = get_config_param('emailAdministrator');
+	$defaults['admin_email'] = get_config_param('emailAdministrator',$path);
 	$defaults['admin_username'] = 'admin';
 	$defaults['admin_password'] = api_generate_password();
-	$defaults['admin_phone'] = get_config_param('administrator["phone"]');
-	$defaults['platform_name'] = get_config_param('siteName');
+	$defaults['admin_phone'] = get_config_param('administrator["phone"]',$path);
+	$defaults['platform_name'] = get_config_param('siteName',$path);
 	$defaults['encrypt_password'] = 1;
-	$defaults['organization_name'] = get_config_param('institution["name"]');
-	$defaults['organization_url'] = get_config_param('institution["url"]');
-	$defaults['encrypt_password'] = get_config_param('userPasswordCrypted');
-	$defaults['self_reg'] = get_config_param('allowSelfReg');
+	$defaults['organization_name'] = get_config_param('institution["name"]',$path);
+	$defaults['organization_url'] = get_config_param('institution["url"]',$path);
+	$defaults['encrypt_password'] = get_config_param('userPasswordCrypted',$path);
+	$defaults['self_reg'] = get_config_param('allowSelfReg',$path);
 }
 else
 {

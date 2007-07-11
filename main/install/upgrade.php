@@ -46,6 +46,14 @@
 * @package dokeos.install
 ==============================================================================
 */
+/*
+* ABOUT DETECTING OLDER VERSIONS
+* Dokeos versions 1.6.x and 1.8.x have an installedVersion.inc.php file.
+* In 1.6.x they have a parameter $platformVersion,
+* in 1.8.x a parameter $dokeos_version.
+* The function get_installed_version($old_installation_path, $parameter)
+* can be used to detect version numbers.
+*/
 	
 /*
 ==============================================================================

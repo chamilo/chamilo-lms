@@ -42,7 +42,7 @@ class SurveyQuestion extends Resource
 	/**
 	 * Question type
 	 */
-	var $type;
+	var $survey_question_type;
 	/**
 	 * Display ?
 	 */

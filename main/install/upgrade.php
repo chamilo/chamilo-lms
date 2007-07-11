@@ -314,16 +314,16 @@ class Page_DatabaseSettings extends HTML_QuickForm_Page
 		$this->addRule('database_scorm', 'ThisFieldIsRequired', 'required');
 		$this->addElement('text', 'database_user', get_lang("UserDB"), array ('size' => '40'));
 		$this->addRule('database_user', 'ThisFieldIsRequired', 'required');
-		$this->addElement('text', 'database_repository', get_lang("RepositoryDatabase"), array ('size' => '40'));
-		$this->addRule('database_repository', 'ThisFieldIsRequired', 'required');
-		$this->addElement('text', 'database_weblcms', get_lang("WeblcmsDatabase"), array ('size' => '40'));
-		$this->addRule('database_weblcms', 'ThisFieldIsRequired', 'required');
-		$this->addElement('text', 'database_personal_calendar', get_lang("PersonalCalendarDatabase"), array ('size' => '40'));
-		$this->addRule('database_personal_calendar', 'ThisFieldIsRequired', 'required');
-		$this->addElement('text', 'database_personal_messenger', get_lang("PersonalMessageDatabase"), array ('size' => '40'));
-		$this->addRule('database_personal_messenger', 'ThisFieldIsRequired', 'required');
-		$this->addElement('text', 'database_profiler', get_lang("ProfilerDatabase"), array ('size' => '40'));
-		$this->addRule('database_profiler', 'ThisFieldIsRequired', 'required');
+		//$this->addElement('text', 'database_repository', get_lang("RepositoryDatabase"), array ('size' => '40'));
+		//$this->addRule('database_repository', 'ThisFieldIsRequired', 'required');
+		//$this->addElement('text', 'database_weblcms', get_lang("WeblcmsDatabase"), array ('size' => '40'));
+		//$this->addRule('database_weblcms', 'ThisFieldIsRequired', 'required');
+		//$this->addElement('text', 'database_personal_calendar', get_lang("PersonalCalendarDatabase"), array ('size' => '40'));
+		//$this->addRule('database_personal_calendar', 'ThisFieldIsRequired', 'required');
+		//$this->addElement('text', 'database_personal_messenger', get_lang("PersonalMessageDatabase"), array ('size' => '40'));
+		//$this->addRule('database_personal_messenger', 'ThisFieldIsRequired', 'required');
+		//$this->addElement('text', 'database_profiler', get_lang("ProfilerDatabase"), array ('size' => '40'));
+		//$this->addRule('database_profiler', 'ThisFieldIsRequired', 'required');
 		
 		$enable_tracking[] = & $this->createElement('radio', 'enable_tracking', null, get_lang("Yes"), 1);
 		$enable_tracking[] = & $this->createElement('radio', 'enable_tracking', null, get_lang("No"), 0);
@@ -705,8 +705,8 @@ function get_config_param($param,$path)
 global $current_active_step;
 $current_active_step = '1';
 $install_type = 'update';
-display_upgrade_header($text_dir, $dokeos_version, $install_type, $update_from_version);
-display_installation_overview();
+//display_upgrade_header($text_dir, $dokeos_version, $install_type, $update_from_version);
+//display_installation_overview();
 
 // Create a new wizard
 $wizard = & new HTML_QuickForm_Controller('regWizard', true);
@@ -722,16 +722,16 @@ if( isset($values['old_version_path']) && $values['old_version_path'] != '/var/w
 	$defaults['platform_language'] = get_config_param('platformLanguage',$path);
 	$defaults['platform_url'] = 'http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
 	//to keep debug output readable:
-	$defaults['license'] = 'GNU GPL v2';
+	//$defaults['license'] = 'GNU GPL v2';
 	//actual license:
-	//$defaults['license'] = implode("\n", file('../../documentation/license.txt'));
+	$defaults['license'] = implode("\n", file('../../documentation/license.txt'));
 	$defaults['database_host'] = get_config_param('dbHost',$path);
 	$defaults['database_main_db'] = get_config_param('mainDbName',$path);
 	$defaults['database_tracking'] = get_config_param('statsDbName',$path);
 	$defaults['database_scorm'] = get_config_param('scormDbName',$path);
 	$defaults['database_user'] = get_config_param('user_personal_database',$path);
-	$defaults['database_repository'] = 'dokeos_repository';
-	$defaults['database_weblcms'] = 'dokeos_weblcms';
+	//$defaults['database_repository'] = 'dokeos_repository';
+	//$defaults['database_weblcms'] = 'dokeos_weblcms';
 	$defaults['database_username'] = get_config_param('dbLogin',$path);
 	$defaults['database_password'] = get_config_param('dbPass',$path);
 	$defaults['database_prefix'] = get_config_param('dbNamePrefix',$path);
@@ -752,10 +752,8 @@ if( isset($values['old_version_path']) && $values['old_version_path'] != '/var/w
 }
 else
 {
-	//fail gracefully - unexpected problem with old version path
+	//old version path not correct yet
 }
-
-print_r($defaults);
 
 $wizard->addPage(new Page_License('page_license'));
 $wizard->addPage(new Page_DatabaseSettings('page_databasesettings'));
@@ -782,13 +780,12 @@ require_once ('../lang/english/install.inc.php');
 include_once ("../lang/$install_language/trad4all.inc.php");
 include_once ("../lang/$install_language/install.inc.php");
 
-// Set default platform language to the choosen install language
+// Set default platform language to the selected install language
 $defaults['platform_language'] = $install_language;
 $wizard->setDefaults($defaults);
 
 // Start the wizard
 $wizard->run();
-
 
 // Set the installation language
 $install_language = $wizard->exportValue('page_language', 'install_language');
@@ -797,10 +794,7 @@ require_once ('../lang/english/install.inc.php');
 include_once ("../lang/$install_language/trad4all.inc.php");
 include_once ("../lang/$install_language/install.inc.php");
 
-
 //$values = $wizard->exportValues();
-//echo 'old version path = ' . $values['old_version_path'];
-
 
 /*
 ==============================================================================

@@ -1,0 +1,101 @@
+package DokeosAppShare;
+
+import java.net.*;
+import java.io.*;
+
+/**
+ * Summary description for ConnectionToRelay.
+ */
+public class ConnectionToRelay
+{
+	Socket relay;
+	ReadWriteThread thrdReadRelay;
+	Socket vnc;
+	ReadWriteThread thrdReadVNC;
+
+	public ConnectionToRelay(String serverID) throws IOException
+	{
+		relay = new Socket(Config.getRelayHostName(), Config.getRelayPort());
+
+		OutputStream out = relay.getOutputStream();
+
+		CommandConnection.writeCommand(out, CommandConnection.RELAY_CONNECTION, serverID);
+
+		InputStream in = relay.getInputStream();
+
+		//Wait for byte from relay
+		System.out.println("Waiting for byte from relay...");
+		int read = in.read();
+		System.out.println("read on relay socket : " + read);
+
+		//Connect to VNC
+		System.out.println("Connecting to VNC...");
+		vnc = new Socket(Config.getVNCHostName(), Config.getVNCPort());
+
+		//Duplex
+		thrdReadRelay = new ReadWriteThread(relay, vnc);
+		thrdReadRelay.setDaemon(true);
+		thrdReadRelay.start();
+		thrdReadVNC = new ReadWriteThread(vnc, relay);
+		thrdReadVNC.setDaemon(true);
+		thrdReadVNC.start();
+		System.out.println("Duplex started");
+	}
+}
+
+class ReadWriteThread extends Thread
+{
+	private final Socket socketIn;
+	private final Socket socketOut;
+
+	public ReadWriteThread(final Socket socketIn, final Socket socketOut)
+	{
+		this.socketIn = socketIn;
+		this.socketOut = socketOut;
+	}
+
+	public void run()
+	{
+		try
+		{
+			readWrite(socketIn.getInputStream(), socketOut.getOutputStream());
+		}
+		catch (Throwable e)
+		{
+			e.printStackTrace();
+			try
+			{
+				socketIn.close();
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+			try
+			{
+				socketOut.close();
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+		System.out.println("end connection relay.");
+	}
+
+	private void readWrite(InputStream in, OutputStream out) throws IOException
+	{
+		int b = 0;
+		int readCount = 0;
+		byte[] buffer = new byte[1024*10];
+
+		b = in.read();
+		while (b >= 0)
+		{
+			out.write(b);
+			readCount = in.read(buffer, 0, buffer.length);
+			out.write(buffer, 0, readCount);
+			b = in.read();
+		}
+	}
+}

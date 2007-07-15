@@ -1,0 +1,63 @@
+package DokeosAppShare;
+
+/**
+ * Summary description for Config.
+ */
+public class Config
+{
+	public static String getVNCExecutableURL()
+	{
+		return "http://dokeos.noctis.be/vnc/winvnc.exe";
+	}
+
+	public static void writeRegOptions()
+	{
+		final String KEY_PATH = "SOFTWARE\\ORL";
+		final String SUB_KEY_PATH = "WinVNC3";
+		Microsoft.Win32.RegistryKey lm = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(KEY_PATH);
+		Microsoft.Win32.RegistryKey cu = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(KEY_PATH);
+		try
+		{
+			lm.DeleteSubKeyTree(SUB_KEY_PATH);
+			cu.DeleteSubKeyTree(SUB_KEY_PATH);
+		}
+		catch (Exception e)
+		{
+		}
+		lm = lm.CreateSubKey(SUB_KEY_PATH);
+		cu = cu.CreateSubKey(SUB_KEY_PATH);
+		lm.SetValue("AllowLoopback", new Integer(1), Microsoft.Win32.RegistryValueKind.DWord);
+		lm.SetValue("LoopbackOnly", new Integer(1), Microsoft.Win32.RegistryValueKind.DWord);
+		//lm.SetValue("DisableTrayIcon", new Integer(1), Microsoft.Win32.RegistryValueKind.DWord);
+		cu.SetValue("Password", (Object)new ubyte[] { (ubyte)0x8C, (ubyte)0xEA, (ubyte)0x0C, (ubyte)0x33, (ubyte)0x74, (ubyte)0xAC, (ubyte)0x87, (ubyte)0x17 }, Microsoft.Win32.RegistryValueKind.Binary);
+		cu.SetValue("InputsEnabled", new Integer(0), Microsoft.Win32.RegistryValueKind.DWord);
+		cu.SetValue("LocalInputsDisabled", new Integer(0), Microsoft.Win32.RegistryValueKind.DWord);
+		cu.SetValue("FileTransferEnabled", new Integer(0), Microsoft.Win32.RegistryValueKind.DWord);
+	}
+
+	public static int getConnexionCount()
+	{
+		return 5;
+	}
+
+	public static String getRelayHostName()
+	{
+		//return "dokeos.noctis.be";
+		return "localhost";
+	}
+
+	public static int getRelayPort()
+	{
+		return 443;
+	}
+
+	public static String getVNCHostName()
+	{
+		return "localhost";
+	}
+
+	public static int getVNCPort()
+	{
+		return 5900;
+	}
+}

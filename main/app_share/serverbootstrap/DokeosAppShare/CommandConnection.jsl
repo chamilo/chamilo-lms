@@ -1,0 +1,92 @@
+package DokeosAppShare;
+
+import java.net.*;
+import java.io.*;
+
+/**
+ * Summary description for ConnectionToRelay.
+ */
+public class CommandConnection extends Thread
+{
+
+	/* COMMANDS */
+	public static final int SERVER_CONNECTION = 10;
+	public static final int CLIENT_CONNECTION = 20;
+	public static final int RELAY_CONNECTION = 30;
+	
+	Socket relay;
+	String serverID;
+
+	public CommandConnection(String inServerID) throws IOException
+	{
+		serverID = inServerID;
+		relay = new Socket(Config.getRelayHostName(), Config.getRelayPort());
+		
+		this.setDaemon(true);
+	}
+
+	public void run()
+	{
+		try
+		{
+			InputStream in = relay.getInputStream();
+			OutputStream out = relay.getOutputStream();
+			writeCommand(out, SERVER_CONNECTION, serverID);
+			for (; ; )
+			{
+				//Wait command from relay
+				System.out.println("Waiting command from relay...");
+				int command = in.read();
+				System.out.println("Command receive : " + command);
+				if (command == RELAY_CONNECTION)
+				{
+					String connServerId = readCommandParam(in);
+					System.out.println("relay try connection to : " + connServerId);
+					if (connServerId.equals(serverID))
+					{
+						try
+						{
+							new ConnectionToRelay(serverID);
+						}
+						catch (Exception ex)
+						{
+							System.out.println("Exception on ConnectionToRelay instanciation");
+							ex.printStackTrace();
+						}
+					}
+					else
+					{
+						System.out.println("bad server name : " + connServerId);
+					}
+				}
+
+			}
+		}
+		catch (IOException ex)
+		{
+			System.out.println("Exception in CommandConnection listener thread");
+			ex.printStackTrace();
+		}
+		finally
+		{
+			try { relay.close(); }
+			catch (Exception ex) { }
+			//TODO Exit application
+		}
+	}
+	public static String readCommandParam(InputStream in) throws IOException
+	{
+		int size = in.read();
+		byte[] data = new byte[size];
+		in.read(data);
+		return new String(data);
+	}
+	public static void writeCommand(OutputStream out, int command, String param) throws IOException
+	{
+		out.write(command);
+		byte[] data = param.getBytes();
+		out.write(data.length);
+		out.write(data);
+	}
+
+}

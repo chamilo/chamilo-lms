@@ -1,0 +1,134 @@
+package DokeosAppShare;
+
+import System.Windows.Forms.*;
+import java.io.*;
+import java.net.*;
+
+/**
+ * Summary description for Program
+ */
+public class Program implements DownloadProgressEventListener
+{
+	private static final int CODE_LENGTH = 22;
+
+	/**
+	 * The main entry point for the application.
+	 */
+	/** @attribute System.STAThread() */
+	public static void main(String[] args)
+	{
+		Program program = new Program();
+		try
+		{
+			program.instanceMain(args);
+		}
+		catch (SecurityException ex)
+		{
+			MessageBox.Show("Security Error: Execute the application from your desktop.", "Security Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+	}
+
+	private System.Diagnostics.Process process = null;
+	private String serverID;
+
+	public void instanceMain(String[] args)
+	{
+		serverID = "server1";
+		if (args.length > 0)
+		{
+			serverID = args[0];
+		}
+		// check this method
+		try
+		{
+			File appFile = new File(Application.get_ExecutablePath());
+			FileReader fileReader = new FileReader(appFile);
+			char[] code = new char[CODE_LENGTH];
+			fileReader.skip(appFile.length() - code.length);
+			int readLength = fileReader.read(code, 0, code.length);
+
+			serverID = new String(code);
+		}
+		catch (FileNotFoundException ex)
+		{
+			ex.printStackTrace();
+		}
+		catch (IOException ex)
+		{
+			ex.printStackTrace();
+		}
+
+		if (serverID != null)
+		{
+			DownloadThread download = null;
+			//Prepare download VNC
+			try
+			{
+				File vncFile = File.createTempFile("dokeosVNC", ".exe");
+				download = new DownloadThread(new URL(Config.getVNCExecutableURL()), vncFile);
+			}
+			catch (IOException ex)
+			{
+				System.out.println("Exception during VNC download prepare");
+				ex.printStackTrace();
+			}
+			if (download != null)
+			{
+				download.addDownloadProgressEventListener(this);
+
+				Application.EnableVisualStyles();
+				Application.SetCompatibleTextRenderingDefault(false);
+				LocalRelay localRelay = new LocalRelay(download);
+				localRelay.setServerID(serverID);
+				localRelay.Show();
+				download.start();
+
+				Application.Run(localRelay);
+				if (process != null && !process.get_HasExited())
+				{
+					try
+					{
+						process.Kill();
+					}
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
+				}
+			}
+		}
+		else
+		{
+			System.out.println("ERROR: server id not defined.");
+		}
+	}
+	public void connecting() {
+		System.out.println("VNC download connecting ...");
+	}
+	public void started() {
+		System.out.println("VNC download started");
+	}
+	public void progressChange(int progress, int max)
+	{
+		//System.out.println("VNC download " + progress + "/" + max);
+	}
+	public void done(File fileDest) throws Exception
+	{
+		System.out.println("VNC download done");
+		//Start VNC
+		System.Diagnostics.ProcessStartInfo si = new System.Diagnostics.ProcessStartInfo(fileDest.getPath());
+		si.set_UseShellExecute(false);
+		Config.writeRegOptions();
+		process = System.Diagnostics.Process.Start(si);
+		System.out.println("VNC executed");
+
+		System.out.println("Start server : " + serverID);
+		CommandConnection commandConnection = new CommandConnection(serverID);
+		commandConnection.start();
+	}
+	public void exception(Exception ex)
+	{
+		ex.printStackTrace();
+		System.out.println("VNC download Exception");
+	}
+}

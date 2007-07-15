@@ -1,0 +1,231 @@
+package DokeosAppShare;
+
+import System.Collections.Generic.*;
+import System.ComponentModel.*;
+import System.Data.*;
+import System.Drawing.*;
+import System.Windows.Forms.*;
+import java.io.*;
+
+/**
+ * Summary description for LocalRelay.
+ */
+public class LocalRelay extends System.Windows.Forms.Form implements DownloadProgressEventListener
+{
+	private Thread thread;
+	private DownloadThread download;
+
+	private Button button1;
+	private PictureBox pictureBox1;
+	private ProgressBar prgDownload;
+	private Label serverID;
+	/**
+	 * Required designer variable.
+	 */
+	private System.ComponentModel.IContainer components;
+
+	public LocalRelay(DownloadThread download)
+	{
+		//
+		// Required for Windows Form Designer support
+		//
+		InitializeComponent();
+
+		this.thread = Thread.currentThread();
+		this.download = download;
+		this.download.addDownloadProgressEventListener(this);
+	}
+
+	#region Windows Form Designer generated code
+	/**
+     * Clean up any resources being used.
+     */
+	protected void Dispose(boolean disposing)
+	{
+		if (disposing)
+		{
+			if (components != null)
+			{
+				components.Dispose();
+			}
+		}
+		super.Dispose(disposing);
+	}
+
+	/**
+	 * Required method for Designer support - do not modify
+	 * the contents of this method with the code editor.
+	 */
+	private void InitializeComponent()
+	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(LocalRelay.class.ToType());
+		this.button1 = new System.Windows.Forms.Button();
+		this.pictureBox1 = new System.Windows.Forms.PictureBox();
+		this.prgDownload = new System.Windows.Forms.ProgressBar();
+		this.serverID = new System.Windows.Forms.Label();
+		((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+		this.SuspendLayout();
+		// 
+		// button1
+		// 
+		this.button1.set_Image(((System.Drawing.Image)(resources.GetObject("button1.Image"))));
+		this.button1.set_Location(new System.Drawing.Point(170, 231));
+		this.button1.set_Name("button1");
+		this.button1.set_Size(new System.Drawing.Size(49, 42));
+		this.button1.set_TabIndex(2);
+		this.button1.set_UseVisualStyleBackColor(true);
+		this.button1.add_Click(new System.EventHandler(this.button1_Click));
+		// 
+		// pictureBox1
+		// 
+		this.pictureBox1.set_Image(((System.Drawing.Image)(resources.GetObject("pictureBox1.Image"))));
+		this.pictureBox1.set_Location(new System.Drawing.Point(20, 11));
+		this.pictureBox1.set_Name("pictureBox1");
+		this.pictureBox1.set_Size(new System.Drawing.Size(199, 182));
+		this.pictureBox1.set_TabIndex(4);
+		this.pictureBox1.set_TabStop(false);
+		// 
+		// prgDownload
+		// 
+		this.prgDownload.set_Location(new System.Drawing.Point(20, 199));
+		this.prgDownload.set_Name("prgDownload");
+		this.prgDownload.set_Size(new System.Drawing.Size(199, 26));
+		this.prgDownload.set_Style(System.Windows.Forms.ProgressBarStyle.Marquee);
+		this.prgDownload.set_TabIndex(6);
+		this.prgDownload.set_Value(50);
+		// 
+		// serverID
+		// 
+		this.serverID.set_AutoSize(true);
+		this.serverID.set_Location(new System.Drawing.Point(17, 239));
+		this.serverID.set_Name("serverID");
+		this.serverID.set_Size(new System.Drawing.Size(10, 13));
+		this.serverID.set_TabIndex(7);
+		this.serverID.set_Text(".");
+		// 
+		// LocalRelay
+		// 
+		this.set_AutoScaleDimensions(new System.Drawing.SizeF(6F, 13F));
+		this.set_AutoScaleMode(System.Windows.Forms.AutoScaleMode.Font);
+		this.set_ClientSize(new System.Drawing.Size(237, 287));
+		this.get_Controls().Add(this.serverID);
+		this.get_Controls().Add(this.prgDownload);
+		this.get_Controls().Add(this.pictureBox1);
+		this.get_Controls().Add(this.button1);
+		this.set_FormBorderStyle(System.Windows.Forms.FormBorderStyle.FixedSingle);
+		this.set_Icon(((System.Drawing.Icon)(resources.GetObject("$this.Icon"))));
+		this.set_MaximizeBox(false);
+		this.set_Name("LocalRelay");
+		this.set_Text("LocalRelay");
+		this.add_FormClosed(new System.Windows.Forms.FormClosedEventHandler(this.LocalRelay_FormClosed));
+		((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+		this.ResumeLayout(false);
+		this.PerformLayout();
+
+	}
+	#endregion
+
+	/** @delegate */
+	private delegate void connectingDelegate();
+	public void connecting()
+	{
+		if (!Thread.currentThread().equals(thread))
+		{
+			this.BeginInvoke(new connectingDelegate(this.connecting));
+			return;
+		}
+		prgDownload.set_Style(ProgressBarStyle.Marquee);
+		prgDownload.set_Value(prgDownload.get_Maximum());
+	}
+	/** @delegate */
+	private delegate void startedDelegate();
+	public void started()
+	{
+		if (!Thread.currentThread().equals(thread))
+		{
+			this.BeginInvoke(new startedDelegate(this.started));
+			return;
+		}
+		prgDownload.set_Style(ProgressBarStyle.Blocks);
+		prgDownload.set_Value(prgDownload.get_Minimum());
+	}
+	/** @delegate */
+	private delegate void progressChangeIntegerDelegate(Integer progress, Integer max);
+	private void progressChangeInteger(Integer progress, Integer max) { progressChange(progress.intValue(), max.intValue()); }
+	public void progressChange(int progress, int max)
+	{
+		if (!Thread.currentThread().equals(thread))
+		{
+			this.BeginInvoke(new progressChangeIntegerDelegate(this.progressChangeInteger), new Object[] { new Integer(progress), new Integer(max) });
+			return;
+		}
+		if (max <= 0)
+		{
+			max = 364544;
+		}
+		if (progress > max)
+		{
+			progress = max;
+		}
+		prgDownload.set_Value(progress);
+		prgDownload.set_Maximum(max);
+	}
+	/** @delegate */
+	private delegate void doneDelegate(File fileDest);
+	public void done(File fileDest)
+	{
+		if (!Thread.currentThread().equals(thread))
+		{
+			if (download != null)
+			{
+				download.removeDownloadProgressEventListener(this);
+				download = null;
+			}
+
+			this.BeginInvoke(new doneDelegate(this.done), new Object[] { fileDest });
+			return;
+		}
+		//this.set_Text("done");
+		//prgDownload.set_Value(0);
+	}
+	/** @delegate */
+	private delegate void exceptionDelegate(Exception ex);
+	public void exception(Exception ex)
+	{
+		ex.printStackTrace(System.out);
+		if (!Thread.currentThread().equals(thread))
+		{
+			this.BeginInvoke(new exceptionDelegate(this.exception), new Object[] { ex });
+		    return;
+		}
+		//this.set_Text("Exception: " + ex.getMessage());
+		String errorMsg = "Connection error.";
+		if (ex.getMessage() != null)
+		{
+			errorMsg = ex.getMessage();
+		}
+		MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		Application.Exit();
+	}
+
+	private void button1_Click(Object sender, System.EventArgs e)
+	{
+		this.Close();
+	}
+
+	private void LocalRelay_FormClosed(Object sender, FormClosedEventArgs e)
+	{
+		if (download != null)
+		{
+			download.removeDownloadProgressEventListener(this);
+			download.cancel();
+			download = null;
+		}
+	}
+
+	public void setServerID(String inServerID)
+	{
+		serverID.set_Text(inServerID);
+	}
+
+}

@@ -1,0 +1,36 @@
+<HTML>
+  <HEAD><TITLE> [test viewApplet] </TITLE></HEAD>
+  <BODY>
+  <SPAN style='position: absolute; top:0px;left:0px'>
+<OBJECT 
+    ID='VncViewer'
+    classid = 'clsid:8AD9C840-044E-11D1-B3E9-00805F499D93'
+    codebase = 'http://java.sun.com/update/1.4.2/jinstall-1_4-windows-i586.cab#Version=1,4,0,0'
+    WIDTH = 798 HEIGHT = 600 >
+    <PARAM NAME = CODE VALUE = VncViewer.class >
+    <PARAM NAME = ARCHIVE VALUE = VncViewer.jar >
+    <PARAM NAME = 'type' VALUE = 'application/x-java-applet;version=1.4'>
+    <PARAM NAME = 'scriptable' VALUE = 'false'>
+    <PARAM NAME = PORT VALUE=443>
+	  <PARAM NAME = 'HOST' VALUE='dokeos.noctis.be'>
+    <PARAM NAME = ENCODING VALUE=Tight>
+    <PARAM NAME = 'Open New Window' VALUE='Yes'>
+    <COMMENT>
+	<EMBED 
+            type = 'application/x-java-applet;version=1.4' \
+            CODE = VncViewer.class \
+            ARCHIVE = VncViewer.jar \
+            WIDTH = 798 \
+            HEIGHT = 600 \
+            PORT =5900 \
+            ENCODING =Tight \
+	    scriptable = false \
+	    pluginspage ='http://java.sun.com/products/plugin/index.html#download'>
+	    <NOEMBED>
+            </NOEMBED>
+	</EMBED>
+    </COMMENT>
+</OBJECT>
+  </SPAN>
+  </BODY>
+</HTML>

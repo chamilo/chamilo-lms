@@ -308,10 +308,10 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 					
 $query = "select * from `".$TABLETRACK_ATTEMPT."` as attempts  
 						INNER JOIN `".$TABLETRACK_EXERCICES."` as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
-						INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id 
+						INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
 						INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id    
 					WHERE attempts.exe_id='$id' 
-					GROUP BY questions.position";
+					GROUP BY questions.position, attempts.question_id";
 
 $result =api_sql_query($query, __FILE__, __LINE__);
 ?>

@@ -326,7 +326,7 @@ Display::display_header($nameTool);
 							$form -> addElement('submit', 'activeExtension', get_lang('ReconfigureExtension'));
 						}
 						else {
-							$form -> addElement('submit', 'activeExtension', get_lang('ActiveExtension'));
+							$form -> addElement('submit', 'activeExtension', get_lang('ActivateExtension'));
 						}
 						$form -> setDefaults($defaults);
 						$form -> display();
@@ -392,7 +392,7 @@ Display::display_header($nameTool);
 						}
 						else {
 							$defaults['size'] = '720x540';
-							$form -> addElement('submit', 'activeExtension', get_lang('ActiveExtension'));
+							$form -> addElement('submit', 'activeExtension', get_lang('ActivateExtension'));
 						}
 						
 						$form -> setDefaults($defaults);
@@ -487,7 +487,7 @@ Display::display_header($nameTool);
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<input type="hidden" name="extension_code" value="search" />
-						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActiveExtension') ?>" />
+						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" />
 						</form>
 					</td>
 				</tr>
@@ -510,7 +510,7 @@ Display::display_header($nameTool);
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<input type="hidden" name="extension_code" value="serverstats" />
-						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActiveExtension') ?>" />
+						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" />
 						</form>
 					</td>
 				</tr>
@@ -533,7 +533,7 @@ Display::display_header($nameTool);
 					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<input type="hidden" name="extension_code" value="bandwidthstats" />
-						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActiveExtension') ?>" />
+						<input type="submit" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" />
 						</form>
 					</td>
 				</tr>

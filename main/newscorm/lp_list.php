@@ -267,6 +267,7 @@ if (is_array($flat_list))
 						'</a>&nbsp;';
 			}
 			/* Increase SCORM recording */
+			/*
 			if($details['lp_force_commit'] == 1){
 				$dsp_force_commit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_force_commit&lp_id='.$id.'">' .
 						'<img src="../img/clock.gif" border="0" alt="Normal SCORM recordings" title="'.get_lang("MakeScormRecordingNormal").'"/>' .
@@ -276,6 +277,7 @@ if (is_array($flat_list))
 						'<img src="../img/clock_gray.gif" border="0" alt="Extra SCORM recordings" title="'.get_lang("MakeScormRecordingExtra").'"/>' .
 						'</a>&nbsp;';
 			}
+			*/
 			if($details['lp_prevent_reinit']==1){
 				$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
 						'<img src="../img/kaboodleloop.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>' .

@@ -6543,18 +6543,23 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />'.get_lang("Links").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resLink">';
 		
-			while($row_link = Database::fetch_array($res_link))
-			{
-				$return .= '<div class="lp_resource_element">';
-				
-					$return .= '<img align="left" alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
-					$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
-				
-				$return .= '</div>';
-			}
+		
+		while($row_link = Database::fetch_array($res_link))
+		{
+			$return .= '<div class="lp_resource_element">';
 			
-			if(Database::num_rows($res_link) == 0)
-				$return .= '<div class="lp_resource_element">'.get_lang("NoLinksAvailable").'</div>';
+				$return .= '<img align="left" alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
+				$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
+			
+			$return .= '</div>';
+		}
+		$return .= '<div class="lp_resource_element">';
+			$return .= '<img align="left" alt="" src="../img/file_html_new_small.gif" style="margin-right:5px;" title="" />';
+			$return .= '<a href="'.api_get_path(REL_CLARO_PATH).'link/link.php?'.api_get_cidreq().'&action=addlink" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
+		$return .= '</div>';
+		
+		if(Database::num_rows($res_link) == 0)
+			$return .= '<div class="lp_resource_element">'.get_lang("NoLinksAvailable").'</div>';
 		
 		$return .= '</div>';
 		
@@ -6602,6 +6607,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />'.get_lang('Forums').'</div>';
 		$return .= '<div class="lp_resource_elements" id="forums" style="border-bottom:1px solid #999999; border-top:0;">';
 		
+		
 		foreach($a_forums as $forum)
 		{
 			$return .= '<div class="lp_resource_element">';
@@ -6627,7 +6633,14 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				$return .=  '<li><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . $thread['thread_title'] . '</a></li>';
 			}
 			$return .= '</ul></div>';
+			
+			
 		}
+		
+		$return .= '<div class="lp_resource_element">';
+		$return .= '<img align="left" alt="" src="../img/forum_new_small.gif" style="margin-right:5px;" title="" />';
+		$return .= '<a href="'.api_get_path(REL_CLARO_PATH).'forum/index.php?'.api_get_cidreq().'&action=add&amp;content=forum" title="'.get_lang('CreateANewForum').'">'.get_lang('CreateANewForum').'</a>';
+		$return .= '</div>';
 		
 		return $return;
 	}

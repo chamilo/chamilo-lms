@@ -8,6 +8,7 @@
  * Script
  */
   $content_origins = array(
+	"--".get_lang('GenericScorm')."--",
 	"--".get_lang('Other')."--",
 	'Accent',
 	'Accenture',

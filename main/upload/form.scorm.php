@@ -51,9 +51,6 @@ $select_content_marker = &$form->addElement('select','content_maker',get_lang('C
 
 foreach($content_origins as $index => $origin){
 	$select_content_marker->addOption($origin,$origin);
-	if($index == 1){
-		$select_content_marker -> setSelected($origin);
-	}
 }
 
 $select_content_proximity = &$form->addElement('select','content_proximity',get_lang('ContentProximity'));

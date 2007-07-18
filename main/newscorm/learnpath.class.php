@@ -5410,6 +5410,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						else
 							$content = '';
 						
+						$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
 						
 						if(!$no_display_edit_textarea){
 							$form->addElement('html_editor','content_lp',get_lang("Content")." :");
@@ -5420,15 +5421,15 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 					
 					elseif(is_numeric($extra_info))
 					{
+			
+						$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
+			
 						$return = $this->display_document($extra_info, true, true, true);
 						$form->addElement('html',$return);
 					}
 				}
 				
 			}
-			
-			$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
-			
 			if($action == 'move')
 			{
 				$form->addElement('hidden', 'title', $item_title);

@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12708 2007-07-05 20:46:47Z yannoo $
+* 	@version $Id: index.php 12758 2007-07-19 05:27:21Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -603,29 +603,39 @@ function display_anonymous_course_list()
 		echo "<h3>", $categoryName['name'], "</h3>\n";
 	}
 	$numrows = mysql_num_rows($sql_result_courses);
+	$courses_list_string = '';
+	$courses_shown = 0;
 	if ($numrows > 0)
 	{
 		if ($thereIsSubCat)
 		{
-			echo "<hr size=\"1\" noshade=\"noshade\">\n";
+			$courses_list_string .= "<hr size=\"1\" noshade=\"noshade\">\n";
 		}
-		echo "<h4 style=\"margin-top: 0px;\">", get_lang("CourseList"), "</h4>\n", "<ul>\n";
+		$courses_list_string .= "<h4 style=\"margin-top: 0px;\">".get_lang("CourseList")."</h4>\n"."<ul>\n";
 		foreach ($course_list AS $course)
 		{
-			echo "<li>\n";
-			echo "<a href=\"".$web_course_path.$course['directory'], "/\">", $course['title'], "</a>";
-			echo "<br/>", $course['visual_code'], " - ", $course['tutor_name'];
-			if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
-			{
-				echo ' - '.$course['course_language'];
+			if($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD){
+				$courses_shown++;
+				$courses_list_string .= "<li>\n";
+				$courses_list_string .= "<a href=\"".$web_course_path.$course['directory']."/\">".$course['title']."</a>";
+				$courses_list_string .= "<br/>".$course['visual_code']." - ".$course['tutor_name'];
+				if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] <> api_get_setting('platformLanguage'))
+				{
+					$courses_list_string .= ' - '.$course['course_language'];
+				}
+				$courses_list_string .= "</li>\n";
 			}
-			echo "</li>\n";
 		}
-		echo "</ul>\n";
+		$courses_list_string .= "</ul>\n";
 	}
 	else
 	{
 		// echo "<blockquote>",get_lang('_No_course_publicly_available'),"</blockquote>\n";
+	}
+	if($courses_shown > 0)
+	{ //only display the list of courses and categories if there was more than
+	  // 0 courses visible to the world (we're in the anonymous list here)
+		echo $courses_list_string;
 	}
 	if ($category != "")
 	{

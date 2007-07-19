@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 12218 2007-05-01 18:27:14Z yannoo $
+// $Id: create_document.php 12759 2007-07-19 07:52:56Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -241,8 +241,6 @@ $default['dir'] = $dir;
 
 $form->addElement('hidden','title_edited','false','id="title_edited"');
 
-$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
-$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
 /**
  * Check if a document width the choosen filename allready exists
  */
@@ -262,6 +260,11 @@ if (api_get_setting('use_document_title') == 'true')
 {
 	$form->add_textfield('title', get_lang('Title'),true,'class="input_titles" id="title"');
 }
+else
+{	
+	$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
+	$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
+}
 // HTML-editor
 $form->add_html_editor('content', get_lang('Content'), false, true);
 // Comment-field
@@ -276,6 +279,10 @@ if ($form->validate())
 	if (api_get_setting('use_document_title') != 'true')
 	{
 		$values['title'] = $values['filename'];
+	}
+	else
+	{
+		$values['filename'] = $values['title'];
 	}
 	$filename = replace_dangerous_char($values['filename']);
 	$texte = $values['content'];

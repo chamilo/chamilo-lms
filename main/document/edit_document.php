@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 12272 2007-05-03 14:40:45Z elixir_julian $
+<?php // $Id: edit_document.php 12759 2007-07-19 07:52:56Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -375,7 +375,7 @@ if($is_allowedToEdit)
 
 				//echo (fputs($fp,$texte))?'FPUTS OK':'FPUTS NIET OK';
 				fputs($fp,$texte);
-
+				
 				fclose($fp);
 
 				if(!is_dir($filepath.'css'))
@@ -477,11 +477,14 @@ $form->addElement('hidden','filename');
 $form->addElement('hidden','extension');
 $form->addElement('hidden','file_path');
 $form->addElement('hidden','commentPath');
-$form->add_textfield('renameTo',get_lang('FileName'));
 if($use_document_title)
 {
 	$form->add_textfield('newTitle',get_lang('Title'));
 	$defaults['newTitle'] = $oldTitle;
+}
+else
+{
+	$form->addElement('hidden','renameTo');
 }
 if($extension == "htm" || $extension == "html")
 {

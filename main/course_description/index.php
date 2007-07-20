@@ -1,4 +1,4 @@
-<?php // $Id: index.php 12706 2007-07-05 15:32:54Z elixir_inter $
+<?php // $Id: index.php 12761 2007-07-20 09:17:11Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -156,7 +156,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id))
 		
 		$fck_attribute['Width'] = '100%';
 		$fck_attribute['Height'] = '225';
-		$fck_attribute['ToolbarSet'] = 'Question';
+		$fck_attribute['ToolbarSet'] = 'Middle';
 		
 		echo '
 		<style>

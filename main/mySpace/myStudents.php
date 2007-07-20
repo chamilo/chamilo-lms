@@ -257,13 +257,13 @@ if(!empty($_GET['student']))
 							<?php
 								if(!empty($a_infosUser['picture_uri']))
 								{
-									echo '	<td class="borderRight" width="10%">
+									echo '	<td class="borderRight" width="10%" valign="top">
 												<img src="../upload/users/'.$a_infosUser['picture_uri'].'" width="100" />
 											</td>
 										 	';
 								}
 								else{
-									echo '	<td class="borderRight" width="10%">
+									echo '	<td class="borderRight" width="10%" valign="top">
 												<img src="../img/unknown.jpg" />
 											</td>
 										 	'; 
@@ -271,7 +271,7 @@ if(!empty($_GET['student']))
 								
 							?>
 						
-						<td class="none" width="40%">
+						<td class="none" width="40%" valign="top">
 							<table width="100%">
 								<tr>
 									<th>
@@ -327,7 +327,7 @@ if(!empty($_GET['student']))
 								</tr>
 							</table>
 						</td>
-						<td class="borderLeft" width="35%">
+						<td class="borderLeft" width="35%" valign="top">
 							<table width="100%">
 								<tr>
 									<th>
@@ -378,7 +378,7 @@ if(!empty($_GET['student']))
 							$sendMail = Display::encrypted_mailto_link($a_infosUser['email'], ' '.get_lang('SendMail'));
 						
 					?>
-						<td class="borderLeft" width="15%">
+						<td class="borderLeft" width="15%" valign="top">
 							<table width="100%">
 								<tr>
 									<th>

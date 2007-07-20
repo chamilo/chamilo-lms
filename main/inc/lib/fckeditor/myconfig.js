@@ -17,7 +17,7 @@ FCKConfig.ToolbarSets["Question"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Middle"] = [
-	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager','Flash']
+	['FontSize','Bold','Italic','Underline','StrikeThrough','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager','Flash']
 ] ;
 
 FCKConfig.ToolbarSets["Small"] = [

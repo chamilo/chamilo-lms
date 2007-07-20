@@ -67,11 +67,6 @@ if(!empty($_course['official_code']))
 echo get_setting('siteName');
 ?>
 </title>
-<style type="text/css" media="screen, projection">
-/*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/default/default.css";
-/*]]>*/
-</style>
 
 <?php
 if(api_get_setting('stylesheets')<>'')

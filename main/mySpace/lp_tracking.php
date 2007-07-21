@@ -144,7 +144,12 @@ $list = learnpath :: get_flat_ordered_items_list($lp_id);
 
 $origin = 'tracking';
 
+ob_start();
 include_once('../newscorm/lp_stats.php');
+$tracking_content = ob_get_contents();
+ob_end_clean();
+echo utf8_decode($tracking_content);
+
 
 Display :: display_footer();
 ?>

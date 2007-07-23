@@ -585,7 +585,7 @@ td .menu {
 }
 
 .row_odd img,.row_even img {
-	margin: 0 1em 0 1em;
+	margin: 0 0em 0 0em;
 }
 
 /* Document links */

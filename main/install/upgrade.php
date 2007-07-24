@@ -897,10 +897,10 @@ $defaults['old_version_path'] = '';
 $wizard->setDefaults($defaults);
 
 // Add the process action to the wizard
-//$wizard->addAction('process', new ActionProcess());
+$wizard->addAction('process', new ActionProcess());
 
 // Add the display action to the wizard
-//$wizard->addAction('display', new ActionDisplay());
+$wizard->addAction('display', new ActionDisplay());
 
 // Set the installation language
 $install_language = $wizard->exportValue('page_language', 'install_language');

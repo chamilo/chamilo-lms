@@ -22,7 +22,7 @@
 //   The use of this software is at the risk of the user.
 //
 // --------------------------------------------------------------------------------
-// $Id: pclzip.lib.php 12767 2007-07-24 08:05:31Z elixir_julian $
+// $Id: pclzip.lib.php 12768 2007-07-24 08:12:03Z elixir_julian $
 // --------------------------------------------------------------------------------
 
   // ----- Constants
@@ -56,7 +56,7 @@
   //       Samples :
   // define( 'PCLZIP_TEMPORARY_DIR', '/temp/' );
   // define( 'PCLZIP_TEMPORARY_DIR', 'C:/Temp/' );
-  define( 'PCLZIP_TEMPORARY_DIR', $sys_course_path.$_course['path']."/temp");
+  define( 'PCLZIP_TEMPORARY_DIR', $sys_course_path.$_course['path']."/temp/");
 
 // --------------------------------------------------------------------------------
 // ***** UNDER THIS LINE NOTHING NEEDS TO BE MODIFIED *****

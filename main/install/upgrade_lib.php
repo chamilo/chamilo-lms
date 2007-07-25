@@ -36,14 +36,60 @@
 ==============================================================================
 */
 
+/**
+* see
+* - update-db-1.6.x-1.8.0.inc.php
+* - update-db-scorm-1.6.x-1.8.0.inc.php
+* - migrate-db-1.6.x-1.8.0-post.sql
+* - migrate-db-1.6.x-1.8.0-pre.sql
+*/
 function upgrade_16x_to_180($values)
 {
-	$main_database = $values['database_main_db'];
-	//select database
-	mysql_select_db($main_database);
-	//actual statements
+	/*
+		PRE SECTION
+		UPGRADES TO GENERAL DATABASES before course upgrades
+	*/
+
+	//MAIN database section	
+	//Get the list of queries to upgrade the main database
+	$main_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','main');
+	if(count($main_query_list)>0)
+	{
+		$main_database = $values['database_main_db'];
+		mysql_select_db($main_database);
+		
+		foreach($main_query_list as $this_query)
+		{
+			mysql_query($this_query);
+		}
+	}
+
+	//STATS database section	
+	//Get the list of queries to upgrade the statistics database
+	$statistics_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
+
+	//USER database section	
+	//Get the list of queries to upgrade the user database
+	$user_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','user');
+
+	/*
+		COURSE SECTION
+		UPGRADES TO COURSE DATABASES
+	*/
+
+	/*
+		POST SECTION
+		UPGRADES TO GENERAL DATABASES after course upgrades
+	*/
 }
 
+/**
+* Note - there is no 1.8.1,
+* 1.8.2 is the version that came after 1.8.0
+* see
+* - update-db-1.8.0-1.8.2.inc.php
+* - migrate-db-1.8.0-1.8.2-pre.sql
+*/
 function upgrade_180_to_182($values)
 {
 

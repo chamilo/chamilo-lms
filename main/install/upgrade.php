@@ -472,12 +472,12 @@ class ActionDisplay extends HTML_QuickForm_Action_Display
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 		<head>
-		<title>-- Dokeos installation -- version <?php echo $dokeos_version; ?></title>
-		<link rel="stylesheet" href="../css/default.css" type="text/css"/>
+		<title>-- Dokeos - upgrade to version <?php echo $dokeos_version; ?></title>
+		<link rel="stylesheet" href="../css/default/default.css" type="text/css"/>
 		</head>
 		<body dir="<?php echo get_lang('text_dir'); ?>">
 		<div id="header1">
-			Dokeos installation - version <?php echo $dokeos_version; ?><?php if($installType == 'new') echo ' - New installation'; else if($installType == 'update') echo ' - Update from Dokeos '.implode('|',$updateFromVersion); ?>
+			Dokeos - upgrade to version <?php echo $dokeos_version; ?><?php if($installType == 'new') echo ' - New installation'; else if($installType == 'update') echo ' - Update from Dokeos '.implode('|',$updateFromVersion); ?>
 		</div>
 		<div style="float: left; background-color:#EFEFEF;margin-right: 20px;padding: 10px;">
 			<img src="../img/bluelogo.gif" alt="logo"/>
@@ -562,10 +562,12 @@ class ActionProcess extends HTML_QuickForm_Action
 		$personal_messenger_database = $values['database_personal_messenger'];
 		$profiler_database = $values['database_profiler'];
 		
-		full_database_install($values);
+		/*full_database_install($values);
 		full_file_install($values);
 		create_admin_in_user_table($values);
-		create_default_categories_in_weblcms();
+		create_default_categories_in_weblcms();*/
+		echo "<p>Performing upgrade to latest version....</p>";
+
 		echo '</pre>';
 		$page->controller->container(true);
 		?>

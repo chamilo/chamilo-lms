@@ -74,6 +74,7 @@ require('../inc/lib/main_api.lib.php');
 require('../lang/english/trad4all.inc.php');
 require('../lang/english/install.inc.php');
 require_once('install_upgrade.lib.php');
+require_once('upgrade_lib.php');
 
 define('DOKEOS_INSTALL',1);
 define('MAX_COURSE_TRANSFER',100);
@@ -87,6 +88,12 @@ define('DEFAULT_LANGUAGE', 'english');
 error_reporting(E_ALL);
 
 @set_time_limit(0);
+
+if(function_exists('ini_set'))
+{
+	ini_set('memory_limit',-1);
+	ini_set('max_execution_time',0);
+}
 
 $update_from_version=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5','1.8.0','1.8.1','1.8.2');
 $update_from_16_version = array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
@@ -567,6 +574,8 @@ class ActionProcess extends HTML_QuickForm_Action
 		create_admin_in_user_table($values);
 		create_default_categories_in_weblcms();*/
 		echo "<p>Performing upgrade to latest version....</p>";
+
+		//upgrade_16x_to_180($values);
 
 		echo '</pre>';
 		$page->controller->container(true);

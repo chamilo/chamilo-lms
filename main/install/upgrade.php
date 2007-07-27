@@ -40,7 +40,7 @@
 * Future improvements
 * - ask user if she agrees to detected version (chance to cancel)
 * - ability to do in-place upgrade
-* - ability to let old databases remain and clone thelm for new install so
+* - ability to let old databases remain and clone them for new install so
 * Dokeos admins can have old and new version running side by side
 *
 * @package dokeos.install

@@ -65,12 +65,32 @@ function upgrade_16x_to_180($values)
 	}
 
 	//STATS database section	
-	//Get the list of queries to upgrade the statistics database
-	$statistics_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
+	//Get the list of queries to upgrade the statistics/tracking database
+	$statistic_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
+	if(count($statistic_query_list)>0)
+	{
+		$statistic_database = $values['database_tracking'];
+		mysql_select_db($statistic_database);
+		
+		foreach($statistic_query_list as $this_query)
+		{
+			mysql_query($this_query);
+		}
+	}
 
 	//USER database section	
 	//Get the list of queries to upgrade the user database
 	$user_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','user');
+	if(count($user_query_list)>0)
+	{
+		$user_database = $values['database_user'];
+		mysql_select_db($user_database);
+		
+		foreach($user_query_list as $this_query)
+		{
+			mysql_query($this_query);
+		}
+	}
 
 	/*
 		COURSE SECTION

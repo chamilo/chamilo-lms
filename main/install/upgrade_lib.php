@@ -112,6 +112,7 @@ function upgrade_16x_to_180($values)
 		SCORM SECTION
 	*/
 	//see include('update-db-scorm-1.6.x-1.8.0.inc.php');
+	//deploy in separate function!
 
 	/*
 		POST SECTION

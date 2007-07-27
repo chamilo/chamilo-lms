@@ -43,7 +43,8 @@ public class Config
 	public static String getRelayHostName()
 	{
 		//return "dokeos.noctis.be";
-		return "localhost";
+		//return "localhost";
+		return "www.dokeos.com";
 	}
 
 	public static int getRelayPort()

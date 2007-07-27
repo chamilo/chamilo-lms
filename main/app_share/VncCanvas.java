@@ -200,16 +200,10 @@ class VncCanvas
 			inputEnabled = true;
 			addMouseListener(this);
 			addMouseMotionListener(this);
-			if (viewer.showControls) {
-				viewer.buttonPanel.enableRemoteAccessControls(true);
-			}
 		} else if (!enable && inputEnabled) {
 			inputEnabled = false;
 			removeMouseListener(this);
 			removeMouseMotionListener(this);
-			if (viewer.showControls) {
-				viewer.buttonPanel.enableRemoteAccessControls(false);
-			}
 		}
 	}
 

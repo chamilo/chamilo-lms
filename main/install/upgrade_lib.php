@@ -53,7 +53,7 @@ function upgrade_16x_to_180($values)
 	//MAIN database section	
 	//Get the list of queries to upgrade the main database
 	$main_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','main');
-	if(count($main_query_list)>0)
+	if(count($main_query_list) > 0)
 	{
 		$main_database = $values['database_main_db'];
 		mysql_select_db($main_database);
@@ -64,15 +64,15 @@ function upgrade_16x_to_180($values)
 		}
 	}
 
-	//STATS database section	
+	//TRACKING database section	
 	//Get the list of queries to upgrade the statistics/tracking database
-	$statistic_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
-	if(count($statistic_query_list)>0)
+	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
+	if(count($tracking_query_list) > 0)
 	{
-		$statistic_database = $values['database_tracking'];
-		mysql_select_db($statistic_database);
+		$tracking_database = $values['database_tracking'];
+		mysql_select_db($tracking_database);
 		
-		foreach($statistic_query_list as $this_query)
+		foreach($tracking_query_list as $this_query)
 		{
 			mysql_query($this_query);
 		}
@@ -81,7 +81,7 @@ function upgrade_16x_to_180($values)
 	//USER database section	
 	//Get the list of queries to upgrade the user database
 	$user_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','user');
-	if(count($user_query_list)>0)
+	if(count($user_query_list) > 0)
 	{
 		$user_database = $values['database_user'];
 		mysql_select_db($user_database);
@@ -96,11 +96,96 @@ function upgrade_16x_to_180($values)
 		COURSE SECTION
 		UPGRADES TO COURSE DATABASES
 	*/
+	$prefix = ''; 
+	if ($singleDbForm)
+	{
+		$prefix = $_configuration['table_prefix'];
+	}
+	//get the course databases queries list (c_q_list)
+	$course_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','course');
+	if(count($course_query_list) > 0)
+	{
+		//upgrade course databases
+	}
+
+	/*
+		SCORM SECTION
+	*/
+	//see include('update-db-scorm-1.6.x-1.8.0.inc.php');
 
 	/*
 		POST SECTION
 		UPGRADES TO GENERAL DATABASES after course upgrades
 	*/
+	$main_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','main');
+	if(count($main_query_list) > 0)
+	{
+		$main_database = $values['database_main_db'];
+		mysql_select_db($main_database);
+		
+		foreach($main_query_list as $this_query)
+		{
+			mysql_query($this_query);
+		}
+	}
+
+	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','stats');
+	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
+	if(count($tracking_query_list) > 0)
+	{
+		$tracking_database = $values['database_tracking'];
+		mysql_select_db($tracking_database);
+		
+		foreach($tracking_query_list as $this_query)
+		{
+			mysql_query($this_query);
+		}
+	}
+
+	$user_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','user');
+	if(count($user_query_list) > 0)
+	{
+		$user_database = $values['database_user'];
+		mysql_select_db($user_database);
+		
+		foreach($user_query_list as $this_query)
+		{
+			mysql_query($this_query);
+		}
+	}
+
+	$prefix = ''; 
+	if ($singleDbForm)
+	{
+		$prefix = $_configuration['table_prefix'];
+	}
+	//get the course databases queries list (c_q_list)
+	$course_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','course');
+	if(count($course_query_list) > 0)
+	{
+		//upgrade course databases
+		$main_database = $values['database_main_db'];
+		mysql_select_db($main_database);
+
+		$sql_result = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+		if(mysql_num_rows($sql_result) > 0)
+		{
+			while($row = mysql_fetch_array($sql_result))
+			{
+				$course_list[] = $row;
+			}
+			//for each course in the course list...
+			foreach($course_list as $this_course)
+			{
+				mysql_select_db($this_course['db_name']);
+				//... execute the list of course update queries
+				foreach($course_query_list as $this_query)
+				{
+					mysql_query($this_query);
+				}
+			}
+		}
+	}
 }
 
 /**

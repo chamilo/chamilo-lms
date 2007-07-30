@@ -136,7 +136,7 @@ if($_POST['formSent'])
 						{
 							$emailto='"'.$firstname.' '.$lastname.'" <'.$email.'>';
 							$emailsubject='['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
-							$emailbody="[NOTE:] Ceci est un e-mail automatique, veuillez ne pas y répondre.\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\nVous recevrez prochainement un e-mail de votre coach responsable. Nous vous invitons à bien lire ses recommandations.\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');
+							$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ". get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');
 							//#287 modifiée par Stéphane DEBIEVE - FOREM
 							$emailheaders='From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 							$emailheaders.='Reply-To: '.get_setting('emailAdministrator');
@@ -263,7 +263,7 @@ if($_POST['formSent'])
 						}
 						if($timeEnd - $timeStart < 0)
 						{
-							$errorMsg .= get_lang('DateStartMoreThanDateEnd').' : '.$DateEnd.'<br />';
+							$errorMsg .= get_lang('StartDateShouldBeBeforeEndDate').' : '.$DateEnd.'<br />';
 						}
 					}
 

@@ -38,7 +38,7 @@ if($_POST['formSent'])
 	$month_end=intval($_POST['month_end']);
 	$day_end=intval($_POST['day_end']);
 	$id_coach=intval($_POST['id_coach']);
-	
+
 	if(empty($_POST['nolimit'])){
 		$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
 		$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
@@ -48,17 +48,17 @@ if($_POST['formSent'])
 		$date_end="000-00-00";
 	}
 	if(empty($name)) $errorMsg=get_lang('SessionNameIsRequired');
-	elseif(empty($_POST['nolimit']) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) $errorMsg="Veuillez introduire une date de début valide !";
-	elseif(empty($_POST['nolimit']) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) $errorMsg="Veuillez introduire une date de fin valide !";
-	elseif(empty($_POST['nolimit']) && $date_start >= $date_end) $errorMsg=get_lang('DateStartMoreThanDateEnd');
+	elseif(empty($_POST['nolimit']) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) $errorMsg=get_lang('InvalidStartDate');
+	elseif(empty($_POST['nolimit']) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) $errorMsg=get_lang('InvalidEndDate');
+	elseif(empty($_POST['nolimit']) && $date_start >= $date_end) $errorMsg=get_lang('StartDateShouldBeBeforeEndDate');
 	else
 	{
-		
+
 		$rs = api_sql_query("SELECT id FROM $tbl_session WHERE name='".addslashes($name)."'");
 		$exists = false;
 		while($row = mysql_fetch_array($rs)){
 			if($row['id']!=$id)
-				$exists = true;			
+				$exists = true;
 		}
 		if($exists){
 			$errorMsg = get_lang('SessionNameSoonExists');
@@ -305,16 +305,16 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 <?php if($year_start=="0000") echo "setDisable(document.form.nolimit);\r\n"; ?>
 
 function setDisable(select){
-	
+
 	document.form.day_start.disabled = (select.checked) ? true : false;
 	document.form.month_start.disabled = (select.checked) ? true : false;
 	document.form.year_start.disabled = (select.checked) ? true : false;
-	
+
 	document.form.day_end.disabled = (select.checked) ? true : false;
 	document.form.month_end.disabled = (select.checked) ? true : false;
 	document.form.year_end.disabled = (select.checked) ? true : false;
-	
-	
+
+
 }
 </script>
 <?php

@@ -45,9 +45,9 @@ if($_POST['formSent'])
 		$date_end="000-00-00";
 	}
 	if(empty($name)) $errorMsg=get_lang('SessionNameIsRequired');
-	elseif(empty($_POST['nolimit']) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) $errorMsg="Veuillez introduire une date de début valide !";
-	elseif(empty($_POST['nolimit']) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) $errorMsg="Veuillez introduire une date de fin valide !";
-	elseif(empty($_POST['nolimit']) && $date_start >= $date_end) $errorMsg="La date de fin doit être postérieure à la date de début !";
+	elseif(empty($_POST['nolimit']) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) $errorMsg=get_lang('InvalidStartDate');
+	elseif(empty($_POST['nolimit']) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) $errorMsg=get_lang('InvalidEndDate');
+	elseif(empty($_POST['nolimit']) && $date_start >= $date_end) $errorMsg=get_lang('StartDateShouldBeBeforeEndDate');
 	else
 	{
 		$rs = api_sql_query("SELECT 1 FROM $tbl_session WHERE name='".addslashes($name)."'");
@@ -57,7 +57,7 @@ if($_POST['formSent'])
 		else {
 			api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach')",__FILE__,__LINE__);
 			$id_session=mysql_insert_id();
-	
+
 			header('Location: add_courses_to_session.php?id_session='.$id_session.'&add=true');
 			exit();
 		}
@@ -110,7 +110,7 @@ if(!empty($errorMsg))
 <tr>
   <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
   <td width="70%"><select name="id_coach" value="true" style="width:250px;">
-	<option value="0">Aucun</option>
+	<option value="0"><?php get_lang('None'); ?></option>
 
 <?php
 foreach($Coaches as $enreg)
@@ -185,7 +185,7 @@ unset($Coaches);
   </select>
   /
   <select name="year_start">
-  
+
 <?php
 for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 {
@@ -279,16 +279,16 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 <script type="text/javascript">
 
 function setDisable(select){
-	
+
 	document.form.day_start.disabled = (select.checked) ? true : false;
 	document.form.month_start.disabled = (select.checked) ? true : false;
 	document.form.year_start.disabled = (select.checked) ? true : false;
-	
+
 	document.form.day_end.disabled = (select.checked) ? true : false;
 	document.form.month_end.disabled = (select.checked) ? true : false;
 	document.form.year_end.disabled = (select.checked) ? true : false;
-	
-	
+
+
 }
 </script>
 <?php

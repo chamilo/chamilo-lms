@@ -1,5 +1,5 @@
 <?php
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='admin';
 
 $cidReset=true;
@@ -71,7 +71,7 @@ api_display_tool_title($tool_name);
 
 <div id="main">
 
-<form method="post" action="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('Veuillez confirmer votre choix.')) return false;">
+<form method="post" action="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
 
 <br>
 

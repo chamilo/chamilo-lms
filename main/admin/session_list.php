@@ -69,7 +69,7 @@ if(isset($_GET['action'])){
 		<input type="text" name="keyword" value="<?php echo $_GET['keyword']; ?>"/>
 	<input type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form>
-<form method="post" action="<?php echo $PHP_SELF; ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('Veuillez confirmer votre choix.')) return false;">
+<form method="post" action="<?php echo $PHP_SELF; ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
 
 <div align="left">
 
@@ -79,64 +79,56 @@ if(count($Sessions)==0 && isset($_POST['keyword']))
 {
 	echo get_lang('NoSearchResults');
 }
-else 
+else
 {
 	if($page)
 	{
 	?>
-	
-	<a href="<?php echo $PHP_SELF; ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>">Précédent</a>
-	
+
+	<a href="<?php echo $PHP_SELF; ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Previous'); ?></a>
+
 	<?php
 	}
 	else
 	{
-	?>
-	
-	Précédent
-	
-	<?php
+		echo get_lang('Previous');
 	}
 	?>
-	
+
 	|
-	
+
 	<?php
 	if($nbr_results > $limit)
 	{
 	?>
-	
-	<a href="<?php echo $PHP_SELF; ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>">Suivant</a>
-	
+
+	<a href="<?php echo $PHP_SELF; ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next'); ?></a>
+
 	<?php
 	}
 	else
 	{
-	?>
-	
-	Suivant
-	
-	<?php
+		echo get_lang('Next');
 	}
 	?>
-	
+
 	</div>
-	
+
 	<br>
-	
+
 	<table class="data_table" width="100%">
 	<tr>
 	  <th>&nbsp;</th>
-	  <th><a href="<?php echo $PHP_SELF; ?>?sort=name">Nom de la session</a></th>
-	  <th><a href="<?php echo $PHP_SELF; ?>?sort=nbr_courses">Nombre de cours</a></th>
-	  <th><a href="<?php echo $PHP_SELF; ?>?sort=date_start">Date de début</a></th>
-	  <th><a href="<?php echo $PHP_SELF; ?>?sort=date_end">Date de fin</a></th>
-	  <th>Actions</th>
+	  <th><a href="<?php echo $PHP_SELF; ?>?sort=name"><?php echo get_lang('NameOfTheSession'); ?></a></th>
+	  <th><a href="<?php echo $PHP_SELF; ?>?sort=nbr_courses"><?php echo get_lang('NumberOfCourses'); ?></a></th>
+	  <th><a href="<?php echo $PHP_SELF; ?>?sort=date_start"><?php echo get_lang('StartDate'); ?></a></th>
+	  <th><a href="<?php echo $PHP_SELF; ?>?sort=date_end"><?php echo get_lang('EndDate'); ?></a></th>
+	  <th><?php echo get_lang('Actions'); ?></th>
 	</tr>
-	
+
 	<?php
 	$i=0;
-	
+
 	foreach($Sessions as $key=>$enreg)
 	{
 		if($key == $limit)
@@ -144,12 +136,12 @@ else
 			break;
 		}
 		$sql = 'SELECT COUNT(course_code) FROM '.$tbl_session_rel_course.' WHERE id_session='.intval($enreg['id']);
-	  	
+
 	  	$rs = api_sql_query($sql, __FILE__, __LINE__);
 	  	list($nb_courses) = mysql_fetch_array($rs);
-		
+
 	?>
-	
+
 	<tr class="<?php echo $i?'row_odd':'row_even'; ?>">
 	  <td><input type="checkbox" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
 	  <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo htmlentities($enreg['name']); ?></a></td>
@@ -160,70 +152,62 @@ else
 		<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/add_user_big.gif" border="0" align="absmiddle" title="Inscrire des utilisateurs à cette session"></a>
 		<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/synthese_view.gif" border="0" align="absmiddle" title="Inscrire des cours à cette session"></a>
 		<a href="session_edit.php?page=session_list.php&id=<?php echo $enreg['id']; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="Editer"></a>
-		<a href="<?php echo $PHP_SELF; ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('Veuillez confirmer votre choix.')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
+		<a href="<?php echo $PHP_SELF; ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
 	  </td>
 	</tr>
-	
+
 	<?php
 		$i=$i ? 0 : 1;
 	}
-	
+
 	unset($Sessions);
 
 	?>
-	
+
 	</table>
-	
+
 	<br>
-	
+
 	<div align="left">
-	
+
 	<?php
 	if($page)
 	{
 	?>
-	
-	<a href="<?php echo $PHP_SELF; ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>">Précédent</a>
-	
+
+	<a href="<?php echo $PHP_SELF; ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Previous'); ?></a>
+
 	<?php
 	}
 	else
 	{
-	?>
-	
-	Précédent
-	
-	<?php
+		echo get_lang('Previous');
 	}
 	?>
-	
+
 	|
-	
+
 	<?php
 	if($nbr_results > $limit)
 	{
 	?>
-	
-	<a href="<?php echo $PHP_SELF; ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>">Suivant</a>
-	
+
+	<a href="<?php echo $PHP_SELF; ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next'); ?></a>
+
 	<?php
 	}
 	else
 	{
-	?>
-	
-	Suivant
-	
-	<?php
+		echo get_lang('Next');
 	}
 	?>
-	
+
 	</div>
-	
+
 	<br>
-	
+
 	<select name="action">
-	<option value="delete">Supprimer les sessions sélectionnées</option>
+	<option value="delete"><?php echo get_lang('DeleteSelectedSessions'); ?></option>
 	</select>
 	<input type="submit" value="<?php echo get_lang('Ok'); ?>">
 	<?php } ?>

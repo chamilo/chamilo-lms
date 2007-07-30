@@ -53,11 +53,11 @@ $Users=api_store_result($result);
 
 $nbr_results=sizeof($Users);
 
-$tool_name = "Liste des utilisateurs inscrits au cours &quot;".htmlentities($course_title)."&quot; pour la session &quot;".htmlentities($session_name)."&quot;";
+$tool_name = get_lang('ListOfUsersSubscribedToCourse').' &quot;'.htmlentities($course_title).'&quot; '.get_lang('ForTheSession').' &quot;'.htmlentities($session_name).'&quot;';
 
 $interbredcrump[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
-$interbredcrump[]=array("url" => "session_list.php","name" => "Liste des sessions");
-$interbredcrump[]=array("url" => "session_course_list.php?id_session=$id_session","name" => "Liste des cours de la session &quot;".htmlentities($session_name)."&quot;");
+$interbredcrump[]=array("url" => "session_list.php","name" => get_lang('SessionList'));
+$interbredcrump[]=array("url" => "session_course_list.php?id_session=$id_session","name" => get_lang('ListOfCoursesOfSession')." &quot;".htmlentities($session_name)."&quot;");
 
 Display::display_header($tool_name);
 
@@ -66,7 +66,7 @@ api_display_tool_title($tool_name);
 
 <div id="main">
 
-<form method="post" action="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('Veuillez confirmer votre choix.')) return false;">
+<form method="post" action="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
 
 <div align="right">
 
@@ -75,17 +75,13 @@ if($page)
 {
 ?>
 
-<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>">Précédent</a>
+<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Previous');?></a>
 
 <?php
 }
 else
 {
-?>
-
-Précédent
-
-<?php
+	echo get_lang('Previous');
 }
 ?>
 
@@ -96,17 +92,13 @@ if($nbr_results > $limit)
 {
 ?>
 
-<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>">Suivant</a>
+<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next');?></a>
 
 <?php
 }
 else
 {
-?>
-
-Suivant
-
-<?php
+	echo get_lang('Next');
 }
 ?>
 
@@ -140,7 +132,7 @@ foreach($Users as $key=>$enreg)
   <td><?php echo htmlentities($enreg['firstname']); ?></td>
   <td><?php echo htmlentities($enreg['username']); ?></td>
   <td>
-	<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=delete&idChecked[]=<?php echo $enreg['user_id']; ?>" onclick="javascript:if(!confirm('Veuillez confirmer votre choix.')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
+	<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=delete&idChecked[]=<?php echo $enreg['user_id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
   </td>
 </tr>
 
@@ -162,17 +154,13 @@ if($page)
 {
 ?>
 
-<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>">Précédent</a>
+<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Previous'); ?></a>
 
 <?php
 }
 else
 {
-?>
-
-Précédent
-
-<?php
+	echo get_lang('Previous');
 }
 ?>
 
@@ -183,17 +171,13 @@ if($nbr_results > $limit)
 {
 ?>
 
-<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>">Suivant</a>
+<a href="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next'); ?></a>
 
 <?php
 }
 else
 {
-?>
-
-Suivant
-
-<?php
+	echo get_lang('Next');
 }
 ?>
 
@@ -202,7 +186,7 @@ Suivant
 <br>
 
 <select name="action">
-<option value="delete">Désinscrire de la session les utilisateurs sélectionnés</option>
+<option value="delete"><?php get_lang('UnsubscribeSelectedUsersFromSession');?></option>
 </select>
 <input type="submit" value="<?php echo get_lang('Ok'); ?>">
 

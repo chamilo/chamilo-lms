@@ -211,23 +211,25 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 function prepare_course_repository($courseRepository, $courseId)
 {
 	umask(0);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images", 0777);
-		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/gallery/", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/audio", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/flash", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/video", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/dropbox", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/group", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/page", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/scorm", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/temp", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload", 0777);
-		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/forum", 0777);
-		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/test", 0777);
-		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/blog", 0777);
-	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/work", 0777);
+	$perm = api_get_setting('permissions_for_new_directories');
+	$perm = octdec(!empty($perm)?$perm:'0770');
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images", $perm);
+		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images/gallery/", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/audio", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/flash", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/video", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/dropbox", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/group", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/page", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/scorm", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/temp", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload", $perm);
+		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/forum", $perm);
+		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/test", $perm);
+		mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/blog", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/work", $perm);
 
 	//create .htaccess in dropbox
 	$fp = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . "/dropbox/.htaccess", "w");
@@ -1439,18 +1441,22 @@ function fill_course_repository($courseRepository)
 		$pictures_array = sort_pictures($files,"dir");
 		$pictures_array = array_merge($pictures_array,sort_pictures($files,"file"));
 
-		mkdir($course_documents_folder_images,0777);
+		$perm = api_get_setting('permissions_for_new_directories');
+		$perm = octdec(!empty($perm)?$perm:'0770');
+		$perm_file = api_get_setting('permissions_for_new_files');
+		$perm_file = octdec(!empty($perm_file)?$perm_file:'0550');
+		mkdir($course_documents_folder_images,$perm);
 
 		$handle = opendir($img_code_path);
 
 		foreach($pictures_array as $key => $value){
 
 			if($value["dir"]!=""){
-				mkdir($course_documents_folder_images.$value["dir"],0777);
+				mkdir($course_documents_folder_images.$value["dir"],$perm);
 			}
 			if($value["file"]!=""){
 				copy($img_code_path.$value["file"],$course_documents_folder_images.$value["file"]);
-				chmod($course_documents_folder_images.$value["file"],0777);
+				chmod($course_documents_folder_images.$value["file"],$perm_file);
 			}
 
 		}
@@ -1467,18 +1473,18 @@ function fill_course_repository($courseRepository)
 		$audio_array = sort_pictures($files,"dir");
 		$audio_array = array_merge($audio_array,sort_pictures($files,"file"));
 
-		mkdir($course_documents_folder_audio,0777);
+		mkdir($course_documents_folder_audio,$perm);
 
 		$handle = opendir($audio_code_path);
 
 		foreach($audio_array as $key => $value){
 
 			if($value["dir"]!=""){
-				mkdir($course_documents_folder_audio.$value["dir"],0777);
+				mkdir($course_documents_folder_audio.$value["dir"],$perm);
 			}
 			if($value["file"]!=""){
 				copy($audio_code_path.$value["file"],$course_documents_folder_audio.$value["file"]);
-				chmod($course_documents_folder_audio.$value["file"],0777);
+				chmod($course_documents_folder_audio.$value["file"],$perm_file);
 			}
 
 		}
@@ -1494,18 +1500,18 @@ function fill_course_repository($courseRepository)
 		$flash_array = sort_pictures($files,"dir");
 		$flash_array = array_merge($flash_array,sort_pictures($files,"file"));
 
-		mkdir($course_documents_folder_flash,0777);
+		mkdir($course_documents_folder_flash,$perm);
 
 		$handle = opendir($flash_code_path);
 
 		foreach($flash_array as $key => $value){
 
 			if($value["dir"]!=""){
-				mkdir($course_documents_folder_flash.$value["dir"],0777);
+				mkdir($course_documents_folder_flash.$value["dir"],$perm);
 			}
 			if($value["file"]!=""){
 				copy($flash_code_path.$value["file"],$course_documents_folder_flash.$value["file"]);
-				chmod($course_documents_folder_flash.$value["file"],0777);
+				chmod($course_documents_folder_flash.$value["file"],$perm_file);
 			}
 
 		}
@@ -1521,18 +1527,18 @@ function fill_course_repository($courseRepository)
 		$video_array = sort_pictures($files,"dir");
 		$video_array = array_merge($video_array,sort_pictures($files,"file"));
 
-		mkdir($course_documents_folder_video,0777);
+		mkdir($course_documents_folder_video,$perm);
 
 		$handle = opendir($video_code_path);
 
 		foreach($video_array as $key => $value){
 
 			if($value["dir"]!=""){
-				mkdir($course_documents_folder_video.$value["dir"],0777);
+				mkdir($course_documents_folder_video.$value["dir"],$perm);
 			}
 			if($value["file"]!=""){
 				copy($video_code_path.$value["file"],$course_documents_folder_video.$value["file"]);
-				chmod($course_documents_folder_video.$value["file"],0777);
+				chmod($course_documents_folder_video.$value["file"],$perm_file);
 			}
 
 		}

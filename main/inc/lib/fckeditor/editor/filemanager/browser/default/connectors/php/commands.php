@@ -167,6 +167,9 @@ function FileUpload( $resourceType, $currentFolder )
 		$arAllowed	= $Config['AllowedExtensions'][$resourceType] ;
 		$arDenied	= $Config['DeniedExtensions'][$resourceType] ;
 
+		$perm = api_get_setting('permissions_for_new_files');
+		$perm = octdec(!empty($perm)?$perm:'0550');
+
 		if ( ( count($arAllowed) == 0 || in_array( $sExtension, $arAllowed ) ) && ( count($arDenied) == 0 || !in_array( $sExtension, $arDenied ) ) )
 		{
 			$iCounter = 0 ;
@@ -188,7 +191,7 @@ function FileUpload( $resourceType, $currentFolder )
 					if ( is_file( $sFilePath ) )
 					{
 						$oldumask = umask(0) ;
-						chmod( $sFilePath, 0777 ) ;
+						chmod( $sFilePath, $perm ) ;
 						umask( $oldumask ) ;
 					}
 

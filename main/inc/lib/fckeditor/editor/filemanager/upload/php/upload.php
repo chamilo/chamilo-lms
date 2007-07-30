@@ -143,7 +143,9 @@ if(!move_uploaded_file( $oFile['tmp_name'], $sServerDir.$sFileName )) $sErrorNum
 if ( is_file( $sServerDir.$sFileName ) )
 {
 	$oldumask = umask(0) ;
-	chmod( $sFilePath, 0777 ) ;
+	$perm = api_get_setting('permissions_for_new_files');
+	$perm = octdec(!empty($perm)?$perm:'0550');
+	chmod( $sFilePath, $perm ) ;
 	umask( $oldumask ) ;
 }
 

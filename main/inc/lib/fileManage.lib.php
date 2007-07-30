@@ -1,4 +1,4 @@
-<?php # $Id: fileManage.lib.php 12263 2007-05-03 13:34:40Z elixir_julian $
+<?php # $Id: fileManage.lib.php 12807 2007-07-30 21:25:52Z yannoo $
 
 /* vim: set expandtab tabstop=4 shiftwidth=4:
 ===============================================================================
@@ -797,11 +797,11 @@ class FileManager
 	* @author Christophe Gesche <gesche@ipm.ucl.ac.be>
 	*
 	* @param  string $path - path to create
-	* @param  string $mode - directory permission (default is '777')
+	* @param  string $mode - directory permission (default is '770')
 	*
 	* @return boolean TRUE if succeeds FALSE otherwise
 	*/
-	function mkdirs($path, $mode = '0777')
+	function mkdirs($path, $mode = '0770')
 	{
 		if (file_exists($path))
 		{

@@ -84,8 +84,10 @@ if(!is_dir($chatPath))
 		@unlink($chatPath);
 	}
 
-	@mkdir($chatPath,0777);
-	@chmod($chatPath,0777);
+	$perm = api_get_setting('permissions_for_new_directories');
+	$perm = octdec(!empty($perm)?$perm:'0770');
+	@mkdir($chatPath,$perm);
+	@chmod($chatPath,$perm);
 
 	$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
 

@@ -3742,6 +3742,10 @@ class learnpath {
 		
 		while($row = Database::fetch_array($result))
 		{
+			if($this->encoding='UTF-8')
+			{
+				$row['title'] = utf8_decode($row['title']);
+			}
 			$arrLP[] = array(
 				'id' => $row['id'],
 				'item_type' => $row['item_type'],
@@ -3969,6 +3973,11 @@ class learnpath {
 				
 				if($msg != '')
 					$return .= $msg;
+				
+				if($this->encoding=='UTF-8')
+				{
+					$row['title'] = utf8_decode($row['title']);
+				}
 				
 				$return .= '<p class="lp_title">' . stripslashes($row['title']) . '</p>';
 				//$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';

@@ -507,7 +507,9 @@ function create_unexisting_work_directory($base_work_dir,$desired_dir_name)
 		$nb += 1;
 	}
 	//echo "creating ".$base_work_dir.$desired_dir_name.$nb."#...";
-	if ( mkdir($base_work_dir.$desired_dir_name.$nb, 0777))
+	$perm = api_get_setting('permissions_for_new_directories');
+	$perm = octdec(!empty($perm)?$perm:'0770');
+	if ( mkdir($base_work_dir.$desired_dir_name.$nb, $perm))
 	{
 		return $desired_dir_name.$nb;
 	}

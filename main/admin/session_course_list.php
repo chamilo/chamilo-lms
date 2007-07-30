@@ -46,7 +46,7 @@ if($action == 'delete')
 		api_sql_query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
 	}
 
-	header('Location: '.$PHP_SELF.'?id_session='.$id_session.'&sort='.$sort);
+	header('Location: '.api_get_self().'?id_session='.$id_session.'&sort='.$sort);
 	exit();
 }
 
@@ -71,7 +71,7 @@ api_display_tool_title($tool_name);
 
 <div id="main">
 
-<form method="post" action="<?php echo $PHP_SELF; ?>?id_session=<?php echo $id_session; ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
+<form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
 
 <br>
 
@@ -92,10 +92,10 @@ foreach($Courses as $key=>$enreg)
 	$course[] = htmlentities($enreg['title']);
 	$course[] = '<a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$enreg['code'].'">'.$enreg['nbr_users'].' '.get_lang('Users').'</a>';
 	$course[] = '<a href="session_course_edit.php?id_session='.$id_session.'&page=session_course_list.php&course_code='.$enreg['code'].'"><img src="../img/edit.gif" border="0" align="absmiddle" title="'.get_lang('Edit').'"></a>
-				<a href="'.$PHP_SELF.'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['code'].'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))).'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>';
+				<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['code'].'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))).'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>';
 	$tableCourses[] = $course;
 }
-echo '<form method="post" action="'.$PHP_SELF.'">';
+echo '<form method="post" action="'.api_get_self().'">';
 Display :: display_sortable_table($tableHeader, $tableCourses, array (), array ());
 echo '
 	<select name="action">

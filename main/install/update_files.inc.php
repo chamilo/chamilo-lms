@@ -152,6 +152,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	$newPath = str_replace('\\', '/', realpath('../..')).'/';
 	$oldPath = $_POST['updatePath'];
 
+	$perm = api_get_setting('permissions_for_new_directories');
+	$perm = octdec(!empty($perm)?$perm:'0770');
+
 	foreach ($coursePath as $key => $course)
 	{
 		$mysql_base_course = $courseDB[$key];
@@ -181,7 +184,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			fclose($fp);
 		}
 
-		@ mkdir($oldPath.$course.'/temp', 0777);
+		@ mkdir($oldPath.$course.'/temp', $perm);
 
 		@ rename($oldPath.$course, $newPath.'courses/'.$course);
 

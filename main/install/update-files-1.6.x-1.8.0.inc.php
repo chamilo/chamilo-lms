@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 12086 2007-04-23 13:02:44Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 12809 2007-07-30 21:44:36Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,6 +74,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	$sql = "SELECT * FROM course";
 	error_log('Getting courses for files updates: '.$sql,0);
 	$result=mysql_query($sql);
+
+	$perm = api_get_setting('permissions_for_new_directories');
+	$perm = octdec(!empty($perm)?$perm:'0770');
 	
 	while($courses_directories=mysql_fetch_array($result)){
 		
@@ -95,22 +98,22 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		
 			//document > audio
 			if(!is_dir($currentCourseRepositorySys."document/audio")){
-				mkdir($currentCourseRepositorySys."document/audio",0777);
+				mkdir($currentCourseRepositorySys."document/audio",$perm);
 				insert_db($db_name,"audio",get_lang('Audio'));
 			}
 			//document > flash
 			if(!is_dir($currentCourseRepositorySys."document/flash")){
-				mkdir($currentCourseRepositorySys."document/flash",0777);
+				mkdir($currentCourseRepositorySys."document/flash",$perm);
 				insert_db($db_name,"flash",get_lang('Flash'));
 			}
 			//document > images
 			if(!is_dir($currentCourseRepositorySys."document/images")){
-				mkdir($currentCourseRepositorySys."document/images",0777);
+				mkdir($currentCourseRepositorySys."document/images",$perm);
 				insert_db($db_name,"images",get_lang('Images'));
 			}
 			
 			if(!is_dir($currentCourseRepositorySys."document/video")){
-				mkdir($currentCourseRepositorySys."document/video",0777);
+				mkdir($currentCourseRepositorySys."document/video",$perm);
 				insert_db($db_name,"video",get_lang('Video'));
 			}
 		
@@ -118,20 +121,20 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			
 			//upload
 			if(!is_dir($currentCourseRepositorySys."upload")){
-				mkdir($currentCourseRepositorySys."upload",0777);
+				mkdir($currentCourseRepositorySys."upload",$perm);
 			}
 		
 			//upload > blog
 			if(!is_dir($currentCourseRepositorySys."upload/blog")){
-				mkdir($currentCourseRepositorySys."upload/blog",0777);
+				mkdir($currentCourseRepositorySys."upload/blog",$perm);
 			}
 			//upload > forum
 			if(!is_dir($currentCourseRepositorySys."upload/forum")){
-				mkdir($currentCourseRepositorySys."upload/forum",0777);
+				mkdir($currentCourseRepositorySys."upload/forum",$perm);
 			}
 			//upload > test
 			if(!is_dir($currentCourseRepositorySys."upload/test")){
-				mkdir($currentCourseRepositorySys."upload/test",0777);
+				mkdir($currentCourseRepositorySys."upload/test",$perm);
 			}
 			
 			//Updating index file in courses directories to change claroline/ into main/

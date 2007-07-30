@@ -160,9 +160,11 @@ class Page_Requirements extends HTML_QuickForm_Page
 	{
 		$writable_folders = array ('../inc/conf', '../garbage', '../upload', '../../archive', '../../courses', '../../home');
 		$not_writable = array ();
+		$perm = api_get_setting('permissions_for_new_directories');
+		$perm = octdec(!empty($perm)?$perm:'0770');
 		foreach ($writable_folders as $index => $folder)
 		{
-			if (!is_writable($folder) && !@ chmod($folder, 0777))
+			if (!is_writable($folder) && !@ chmod($folder, $perm))
 			{
 				$not_writable[] = $folder;
 			}

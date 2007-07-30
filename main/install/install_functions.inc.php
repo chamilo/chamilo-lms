@@ -557,49 +557,54 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 	{
 		$error=false;
 
+		$perm = api_get_setting('permissions_for_new_directories');
+		$perm = octdec(!empty($perm)?$perm:'0770');
+		$perm_file = api_get_setting('permissions_for_new_files');
+		$perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
+
 		//First, attempt to set writing permissions if we don't have them yet
 		//0xxx is an octal number, this is the required format
 		$notwritable = array();
 		if(!is_writable('../inc/conf'))
 		{
 			$notwritable[]='../inc/conf';
-			@chmod('../inc/conf',0777);
+			@chmod('../inc/conf',$perm);
 		}
 
 		if(!is_writable('../garbage'))
 		{
 			$notwritable[]='../garbage';
-			@chmod('../garbage',0777);
+			@chmod('../garbage',$perm);
 		}
 
 		if(!is_writable('../upload'))
 		{
 			$notwritable[]='../upload';
-			@chmod('../upload', 0777);
+			@chmod('../upload', $perm);
 		}
 
 		if(!is_writable('../../archive'))
 		{
 			$notwritable[]='../../archive';
-			@chmod('../../archive',0777);
+			@chmod('../../archive',$perm);
 		}
 
 		if(!is_writable('../../courses'))
 		{
 			$notwritable[]='../../courses';
-			@chmod('../../courses',0777);
+			@chmod('../../courses',$perm);
 		}
 
 		if(!is_writable('../../home'))
 		{
 			$notwritable[]='../../home';
-			@chmod('../../home',0777);
+			@chmod('../../home',$perm);
 		}
 
 		if(file_exists('../inc/conf/configuration.php') && !is_writable('../inc/conf/configuration.php'))
 		{
 			$notwritable[]='../inc/conf/configuration.php';
-			@chmod('../inc/conf/configuration.php',0666);
+			@chmod('../inc/conf/configuration.php',$perm_file);
 		}
 
 		//Second, if this fails, report an error

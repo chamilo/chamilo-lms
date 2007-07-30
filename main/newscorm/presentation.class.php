@@ -59,7 +59,9 @@ class presentation extends learnpath {
 		
 		move_uploaded_file($file['tmp_name'],$base_work_dir.'/'.$file['name']);
 		$file = $base_work_dir.'/'.$file['name'];
-		chmod($file,0777);
+		$perm = api_get_setting('permissions_for_new_files');
+		$perm = octdec(!empty($perm)?$perm:'0550');
+		chmod($file,$perm);
 		
 		
 		/*

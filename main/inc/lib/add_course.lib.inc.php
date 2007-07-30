@@ -1444,7 +1444,7 @@ function fill_course_repository($courseRepository)
 		$perm = api_get_setting('permissions_for_new_directories');
 		$perm = octdec(!empty($perm)?$perm:'0770');
 		$perm_file = api_get_setting('permissions_for_new_files');
-		$perm_file = octdec(!empty($perm_file)?$perm_file:'0550');
+		$perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
 		mkdir($course_documents_folder_images,$perm);
 
 		$handle = opendir($img_code_path);

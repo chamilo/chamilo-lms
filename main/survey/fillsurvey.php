@@ -32,6 +32,9 @@
 // name of the language file that needs to be included
 $language_file = 'survey';
 
+// unsetting the course id (because it is in the URL)
+$cidReset = true;
+
 // including the global dokeos file
 require ('../inc/global.inc.php');
 

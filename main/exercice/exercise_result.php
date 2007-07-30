@@ -27,7 +27,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 12560 2007-06-07 08:22:16Z elixir_julian $
+* 	@version $Id: exercise_result.php 12796 2007-07-30 14:51:11Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -400,7 +400,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				<tr>
 					<td width="40%">
 						<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
-						<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo $questionId ?>" width="380" height="400">
+						<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo $questionId ?>" width="570" height="600">
 							<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo $questionId ?>" />
 						</object>
 					</td>
@@ -821,9 +821,12 @@ if ($origin != 'learnpath')
 				$user_id = (!empty($_SESSION['_user']['id'])?$_SESSION['_user']['id']:0);
                 $lp_item = Database::get_course_table('lp_item');
                 $lp_item_view = Database::get_course_table('lp_item_view');
+                
                 $sql2 = "UPDATE $lp_item_view SET score = '$totalScore'
                         WHERE lp_item_id = '$learnpath_item_id'
-                        AND lp_view_id = '".$_SESSION['scorm_view_id']."'";
+                        AND lp_view_id = '".$_SESSION['scorm_view_id']."'
+						ORDER BY view_count DESC LIMIT 1";
+
                 api_sql_query($sql2,__FILE__,__LINE__);
                 $_SESSION['oLP']->save_last();
 

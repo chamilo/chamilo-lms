@@ -159,7 +159,7 @@ class GroupManager
 		{
 			$secret_directory = uniqid("")."_team_".$lastId;
 		}
-		FileManager :: mkdirs(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/".$secret_directory, 0777);
+		FileManager :: mkdirs(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/".$secret_directory, 0770);
 		*/
 		$desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
 		$dir_name = create_unexisting_directory($_course,$_user['user_id'],$lastId,NULL,api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document',$desired_dir_name);
@@ -292,8 +292,10 @@ class GroupManager
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
 		// define repository for deleted element
 		$group_garbage = api_get_path(GARBAGE_PATH).$course['path']."/group/";
+		$perm = api_get_setting('permissions_for_new_directories');
+		$perm = (!empty($perm)?$perm:'0770');
 		if (!file_exists($group_garbage))
-			FileManager :: mkdirs($group_garbage, '0777');
+			FileManager :: mkdirs($group_garbage, $perm);
 		// Unsubscribe all users
 		GroupManager :: unsubscribe_all_users($group_ids);
 		$sql = 'SELECT id, secret_directory FROM '.$group_table.' WHERE id IN ('.implode(' , ', $group_ids).')';

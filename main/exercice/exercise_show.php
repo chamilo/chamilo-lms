@@ -727,7 +727,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 								$name = "fckdiv".$questionId;
 								$marksname = "marksName".$questionId;
 								?>
-								<a href="#" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');"><?php if ($answerType == FREE_ANSWER) echo "&nbsp;".get_lang('EditCommentsAndMarks'); else echo "&nbsp;".get_lang('AddComments');?></a>
+								<a href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');"><?php if ($answerType == FREE_ANSWER) echo "&nbsp;".get_lang('EditCommentsAndMarks'); else echo "&nbsp;".get_lang('AddComments');?></a>
 								<?php
 								$comnt = get_comments($id,$questionId);
 								echo "<br> <br>".$comnt;

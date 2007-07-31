@@ -586,8 +586,8 @@ class DocumentManager
 	 */
 	function delete_document($_course, $path, $base_work_dir)
 	{
-		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 
 		//first, delete the actual document...
 		$document_id = DocumentManager :: get_document_id($_course, $path);

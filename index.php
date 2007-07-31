@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12758 2007-07-19 05:27:21Z yannoo $
+* 	@version $Id: index.php 12813 2007-07-31 08:16:06Z elixir_julian $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -221,7 +221,7 @@ SystemAnnouncementManager :: display_announcements(VISIBLE_GUEST, $announcement)
 if (!$page_included)
 {
 
-	if (api_get_setting('display_courses_to_anonymous_users') == 'true')
+	if (api_get_setting('display_categories_on_homepage') == 'true')
 	{
 		echo '<div class="home_cats">';
 		display_anonymous_course_list();

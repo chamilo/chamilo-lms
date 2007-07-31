@@ -508,7 +508,9 @@ INSERT INTO `settings_current` VALUES
 (99, 'show_different_course_language', NULL, 'radio','Platform','true', 'ShowDifferentCourseLanguage','ShowDifferentCourseLanguageComment', NULL, NULL),
 (100, 'split_users_upload_directory', NULL, 'radio','Tuning','false', 'SplitUsersUploadDirectory','SplitUsersUploadDirectoryComment', NULL, NULL),
 (101, 'hide_dltt_markup', NULL, 'radio','Platform','false', 'HideDLTTMarkup','HideDLTTMarkupComment', NULL, NULL),
-(102,'display_categories_on_homepage',NULL,'radio','Platform','true','DisplayCategoriesOnHomepageTitle','DisplayCategoriesOnHomepageComment',NULL,NULL);
+(102,'display_categories_on_homepage',NULL,'radio','Platform','true','DisplayCategoriesOnHomepageTitle','DisplayCategoriesOnHomepageComment',NULL,NULL),
+(103,'permissions_for_new_directories', NULL, 'textfield', 'Security', '0770', 'PermissionsForNewDirs', 'PermissionsForNewDirsComment', NULL, NULL),
+(104,'permissions_for_new_files', NULL, 'textfield', 'Security', '0660', 'PermissionsForNewFiles', 'PermissionsForNewFilesComment', NULL, NULL);
 
 
 UNLOCK TABLES;

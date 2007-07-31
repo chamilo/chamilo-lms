@@ -12,9 +12,12 @@
 --
 -- This first part is for the main database
 -- xxMAINxx
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('display_categories_on_homepage',NULL,'radio','Platform','true','DisplayCategoriesOnHomepageTitle','DisplayCategoriesOnHomepageComment',NULL,NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('permissions_for_new_directories', NULL, 'textfield', 'Security', '0770', 'PermissionsForNewDirs', 'PermissionsForNewDirsComment', NULL, NULL);
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('permissions_for_new_files', NULL, 'textfield', 'Security', '0660', 'PermissionsForNewFiles', 'PermissionsForNewFilesComment', NULL, NULL);
 
+INSERT INTO settings_options(variable,value,display_text) VALUES ('display_categories_on_homepage', 'true', 'Yes');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('display_categories_on_homepage', 'false', 'No');
 -- xxSTATSxx
 
 -- xxUSERxx

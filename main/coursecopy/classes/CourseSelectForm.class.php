@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 12733 2007-07-11 00:21:31Z yannoo $
+// $Id: CourseSelectForm.class.php 12815 2007-07-31 14:16:16Z elixir_julian $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -71,7 +71,22 @@ class CourseSelectForm
 						}
    					}
  				}
-			}	
+			}
+			function checkLearnPath(message){
+				d = document.course_select_form;
+ 				for (i = 0; i < d.elements.length; i++) {
+ 					if (d.elements[i].type == "checkbox") {
+						var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
+ 						if( name.indexOf('learnpath') > 0){
+ 							if(d.elements[i].checked == true){
+	 							setCheckbox('document',true);
+	 							alert(message);
+	 							break;
+ 							}
+ 						}
+ 					}	
+ 				}
+			}
 		</script>		
 		<?php
 
@@ -130,7 +145,7 @@ class CourseSelectForm
 				echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 			}
 		}
-		echo '<br/><input type="submit" value="'.get_lang('Ok').'"/>';
+		echo '<br/><input type="submit" value="'.get_lang('Ok').'" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')"/>';
 		
 		CourseSelectForm :: display_hidden_quiz_questions($course);
 		echo '</form>';

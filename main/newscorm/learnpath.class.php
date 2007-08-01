@@ -1,3 +1,6 @@
+
+
+
 <?php //$id:$
 /**
  * This (abstract?) class defines the parent attributes and methods for the dokeos learnpaths and scorm
@@ -1578,7 +1581,7 @@ class learnpath {
     			  '      <div class="buttons">'."\n" .
 
      			  '        <a href="lp_controller.php?action=stats" target="content_name" title="stats"><img border="0" src="../img/lp_stats.gif" title="'.get_lang('ScormMystatus').'"></a>&nbsp;'."\n" .
- 
+
     			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="'.get_lang('ScormPrevious').'"></a>&nbsp;'."\n" .
 
     			  '        <a href="" onclick="dokeos_xajax_handler.switch_item('.$mycurrentitemid.',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="'.get_lang('ScormNext').'"></a>&nbsp;'."\n" .
@@ -4092,6 +4095,14 @@ class learnpath {
 					$return .= $this->display_quiz_form('edit', $item_id, $row);
 					
 					break;
+					
+					case TOOL_HOTPOTATOES:
+
+					$return .= $this->display_manipulate($item_id, $row['item_type']);
+					$return .= $this->display_hotpotatoes_form('edit', $item_id, $row);
+
+					break;
+			
 				
 				case TOOL_STUDENTPUBLICATION:
 					
@@ -4137,7 +4148,7 @@ class learnpath {
 			$return .= '<p class="lp_title" style="margin-top:10px;">'.get_lang("UseAnExistingResource").'</p>';
 			
 			/* get all the docs */
-			$return .= $this->get_documents(); 
+			$return .= $this->get_documents();
 			
 			/* get all the exercises */
 			$return .= $this->get_exercises();
@@ -4215,7 +4226,7 @@ class learnpath {
 	function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
 	{
 		
-		$tbl_lp_item = Database::get_course_table('lp_item');
+		$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 		$tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
 		
 		if($id != 0 && is_array($extra_info))
@@ -4406,7 +4417,7 @@ class learnpath {
 						
 						$return .= "\t\t" . '<tr>' . "\n";
 							
-							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
 							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
 							
 							foreach($arrHide as $key => $value){
@@ -4465,6 +4476,271 @@ class learnpath {
 		$return .= '</div>' . "\n";
 		return $return;
 	}
+
+/**
+ * Addition of Hotpotatoes tests
+ * @param	string	Action
+ * @param	integer	Internal ID of the item
+ * @param	mixed	Extra information - can be an array with title and description indexes
+ * @return  string	HTML structure to display the hotpotatoes addition formular
+ */
+	function display_hotpotatoes_form($action = 'add', $id = 0, $extra_info = '')
+	{
+		$uploadPath = DIR_HOTPOTATOES; //defined in main_api
+		$tbl_lp_item = Database::get_course_table('lp_item');
+
+		if($id != 0 && is_array($extra_info))
+		{
+			$item_title			= stripslashes($extra_info['title']);
+			$item_description	= stripslashes($extra_info['description']);
+		}
+		elseif(is_numeric($extra_info))
+		{
+			$TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+
+			$sql_hot = "SELECT * FROM ".$TBL_DOCUMENT."
+			WHERE path LIKE '".$uploadPath."/%/%htm%'
+			ORDER BY id ASC";
+		
+				
+		  	$res_hot = api_sql_query($sql_hot, __FILE__, __LINE__);
+
+			$row = Database::fetch_array($res_hot);
+
+			$item_title = $row['title'];
+			$item_description = $row['description'];
+		}
+		else
+		{
+			$item_title			= '';
+			$item_description	= '';
+		}
+
+		$return = '<div style="margin:3px 10px;">';
+
+			if($id != 0 && is_array($extra_info))
+				$parent = $extra_info['parent_item_id'];
+			else
+				$parent = 0;
+
+			$sql = "
+				SELECT *
+				FROM " . $tbl_lp_item . "
+				WHERE
+					lp_id = " . $this->lp_id;
+
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+
+			$arrLP = array();
+
+			while($row = Database::fetch_array($result))
+			{
+				$arrLP[] = array(
+					'id' => $row['id'],
+					'item_type' => $row['item_type'],
+					'title' => $row['title'],
+					'path' => $row['path'],
+					'description' => $row['description'],
+					'parent_item_id' => $row['parent_item_id'],
+					'previous_item_id' => $row['previous_item_id'],
+					'next_item_id' => $row['next_item_id'],
+					'display_order' => $row['display_order'],
+					'prerequisite' => $row['prerequisite']);
+			}
+
+			$this->tree_array($arrLP);
+
+			$arrLP = $this->arrMenu;
+
+			unset($this->arrMenu);
+
+			if($action == 'add')
+				$return .= '<p class="lp_title">'.get_lang("CreateTheExercise").' :</p>' . "\n";
+			elseif($action == 'move')
+				$return .= '<p class="lp_title">'.get_lang("MoveTheCurrentExercise").' :</p>' . "\n";
+			else
+				$return .= '<p class="lp_title">'.get_lang("EditCurrentExecice").' :</p>' . "\n";
+
+			if(isset($_GET['edit']) && $_GET['edit'] == 'true')
+			{
+				$return .= '<div class="lp_message" style="margin-bottom:15px;">';
+
+					$return .= '<p class="lp_title">'.get_lang("Warning").' !</p>';
+					$return .= get_lang("WarningEditingDocument");
+
+				$return .= '</div>';
+			}
+
+			$return .= '<form method="POST">' . "\n";
+
+				$return .= "\t" . '<table cellpadding="0" cellspacing="0" class="lp_form">' . "\n";
+
+					$return .= "\t\t" . '<tr>' . "\n";
+
+						$return .= "\t\t\t" . '<td class="label"><label for="idParent">'.get_lang("Parent").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="input">' . "\n";
+
+							$return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="load_cbo(this.value);" size="1">';
+
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
+
+								$arrHide = array($id);
+
+								for($i = 0; $i < count($arrLP); $i++)
+								{
+									if($action != 'add')
+									{
+										if(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide))
+										{
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+										}
+										else
+										{
+											$arrHide[] = $arrLP[$i]['id'];
+										}
+									}
+									else
+									{
+										if($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
+											$return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '</option>';
+									}
+								}
+
+								reset($arrLP);
+
+							$return .= "\t\t\t\t" . '</select>';
+
+						$return .= "\t\t\t" . '</td>' . "\n";
+
+					$return .= "\t\t" . '</tr>' . "\n";
+
+					$return .= "\t\t" . '<tr>' . "\n";
+
+						$return .= "\t\t\t" . '<td class="label"><label for="idPosition">'.get_lang("Position").' :</label></td>' . "\n";
+						$return .= "\t\t\t" . '<td class="input">' . "\n";
+
+							$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
+
+								$return .= "\t\t\t\t\t" . '<option class="top" value="0">First position</option>';
+
+								for($i = 0; $i < count($arrLP); $i++)
+								{
+									if($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id)
+									{
+										if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+											$selected = 'selected="selected" ';
+										elseif($action == 'add')
+											$selected = 'selected="selected" ';
+										else
+											$selected = '';
+
+										$return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">'.get_lang("After").' "' . html_entity_decode(stripslashes($arrLP[$i]['title'])) . '"</option>';
+									}
+								}
+
+							$return .= "\t\t\t\t" . '</select>';
+
+						$return .= "\t\t\t" . '</td>' . "\n";
+
+					$return .= "\t\t" . '</tr>' . "\n";
+
+					if($action != 'move')
+					{
+						$return .= "\t\t" . '<tr>' . "\n";
+
+							$return .= "\t\t\t" . '<td class="label"><label for="idTitle">'.get_lang("Title").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>' . "\n";
+
+						$return .= "\t\t" . '</tr>' . "\n";
+
+
+						$id_prerequisite=0;
+						foreach($arrLP as $key=>$value){
+							if($value['id']==$id){
+								$id_prerequisite=$value['prerequisite'];
+								break;
+							}
+						}
+
+						$arrHide=array();
+						for($i = 0; $i < count($arrLP); $i++)
+						{
+							if($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter')
+							{
+								if($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+									$s_selected_position=$arrLP[$i]['id'];
+								elseif($action == 'add')
+									$s_selected_position=0;
+								$arrHide[$arrLP[$i]['id']]['value']=html_entity_decode(stripslashes($arrLP[$i]['title']));
+
+							}
+						}
+
+						$return .= "\t\t" . '<tr>' . "\n";
+
+							$return .= "\t\t\t" . '<td class="label"><label for="idPrerequisites">'.get_lang("Prerequisites").' :</label></td>' . "\n";
+							$return .= "\t\t\t" . '<td class="input"><select name="prerequisites" id="prerequisites" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"><option value="0">'.get_lang("NoPrerequisites").'</option>';
+
+							foreach($arrHide as $key => $value){
+								if($key==$s_selected_position && $action == 'add'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								elseif($key==$id_prerequisite && $action == 'edit'){
+									$return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
+								}
+								else{
+									$return .= '<option value="'.$key.'">'.$value['value'].'</option>';
+								}
+							}
+
+							$return .= "</select></td>";
+
+						$return .= "\t\t" . '</tr>' . "\n";
+
+						$return .= "\t\t" . '<tr>' . "\n";
+
+							//Remove temporaly the test description
+							//$return .= "\t\t\t" . '<td class="label"><label for="idDescription">'.get_lang("Description").' :</label></td>' . "\n";
+							//$return .= "\t\t\t" . '<td class="input"><textarea id="idDescription" name="description" rows="4">' . $item_description . '</textarea></td>' . "\n";
+
+						$return .= "\t\t" . '</tr>' . "\n";
+					}
+
+					$return .= "\t\t" . '<tr>' . "\n";
+
+						$return .= "\t\t\t" . '<td colspan="2"><input class="button" name="submit_button" type="submit" value="OK" /></td>' . "\n";
+
+					$return .= "\t\t" . '</tr>' . "\n";
+
+				$return .= "\t" . '</table>' . "\n";
+
+				if($action == 'move')
+				{
+					$return .= "\t" . '<input name="title" type="hidden" value="' . $item_title . '" />' . "\n";
+					$return .= "\t" . '<input name="description" type="hidden" value="' . $item_description . '" />' . "\n";
+				}
+
+				if(is_numeric($extra_info))
+				{
+					$return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info . '" />' . "\n";
+				}
+				elseif(is_array($extra_info))
+				{
+					$return .= "\t" . '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />' . "\n";
+				}
+
+				$return .= "\t" . '<input name="type" type="hidden" value="'.TOOL_HOTPOTATOES.'" />' . "\n";
+				$return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
+
+			$return .= '</form>' . "\n";
+
+		$return .= '</div>' . "\n";
+		return $return;
+	}
+
+//fin du hotpot form
+
+
 	
 /**
 	 * Enter description here...
@@ -6032,7 +6308,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Edit the current item"><img align="absbottom" alt="Edit the current item" src="../img/edit.gif" title="Edit the current item" /> '.get_lang("Edit").'</a>';
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="Move the current item"><img align="absbottom" alt="Move the current item" src="../img/deplacer_fichier.gif" title="Move the current item" /> '.get_lang("Move").'</a>';
 		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="'.get_lang('Prerequisites').'"><img align="absbottom" alt="'.get_lang('Prerequisites').'" src="../img/right.gif" title="'.get_lang('Prerequisites').'" /> '.get_lang('Prerequisites').'</a>';
-		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . $row['title'] . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
+		$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . htmlentities($s_description) . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="Delete the current item" /> '.get_lang("Delete").'</a>';
 		
 		//$return .= '<br><br><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang("NoDescription").'' : stripslashes(nl2br($s_description))) . '</p>';
 		
@@ -6192,6 +6468,13 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_link_form('move', $item_id, $row);
 					
+					break;
+					
+					case TOOL_HOTPOTATOES:
+
+			$return .= $this->display_manipulate($item_id, $row['item_type']);
+					$return .= $this->display_link_form('move', $item_id, $row);
+
 					break;
 					
 				case TOOL_QUIZ:
@@ -6354,31 +6637,55 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						$return .= '<tr>';
 							
 							$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ) ? ' colspan="3"' : '') . '>';
-							
-								$return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
-								$return .= '<img alt="" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:5px;" title="" />';
-								$return .= '<label for="id' . $arrLP[$i]['id'] . '">' . stripslashes($arrLP[$i]['title']) . '</label>';
-							
+
+							$return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
+
+
+                $return .= '<img alt="" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:5px;" title="" />';
+
+              	$return .= '<label for="id' . $arrLP[$i]['id'] . '">' . stripslashes($arrLP[$i]['title']) . '</label>';
+
 							$return .= '</td>';
-							
+
+
+	$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
+
+	
 							if($arrLP[$i]['item_type'] == TOOL_QUIZ)
 							{
 								$return .= '<td class="exercise">';
-								
+
 									$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_min : 0) . '" />';
 								
 								$return .= '</td>';
-								
+
 								$return .= '<td class="exercise">';
 								
 									$return .= '<input maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" />';
 								
 								$return .= '</td>';
+
+
 							}
+
+
+if($arrLP[$i]['item_type'] == TOOL_HOTPOTATOES)
+
+							{
+								$return .= '<td class="exercise">';
 							
-						$return .= '</tr>';
-					}
-			
+									$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_min : 0) . '" />';
+
+								$return .= '</td>';
+
+								$return .= '<td class="exercise">';
+
+
+									$return .= '<input maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" />';
+
+							$return .= '</td>';
+							}
+
 					$return .= '<tr>';
 							
 						$return .= '<td colspan="3">';
@@ -6386,8 +6693,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							$return .= '<input class="button" name="submit_button" type="submit" value="'.get_lang("Ok").'" /></td>' . "\n";
 						
 						$return .= '</td>';
-							
+
 					$return .= '</tr>';
+
 				
 				$return .= '</table>';
 			
@@ -6498,47 +6806,69 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 */
 	function get_exercises()
 	{
+		// new for hotpotatoes
+		$uploadPath = DIR_HOTPOTATOES; //defined in main_api
+		$tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 		$tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-			
+		
 		$sql_quiz = "
-			SELECT *
+			SELECT * 
 			FROM " . $tbl_quiz . "
 			WHERE active<>'-1'
 			ORDER BY title ASC";
+			
+		$sql_hot = "SELECT * FROM ".$tbl_doc." " .
+				" WHERE path LIKE '".$uploadPath."/%/%htm%'" .
+				" ORDER BY id ASC";
+
 		$res_quiz = api_sql_query($sql_quiz, __FILE__, __LINE__);
-		
+	  	$res_hot = api_sql_query($sql_hot, __FILE__, __LINE__);
+
 		$return .= '<div class="lp_resource_header_end"' . " onclick=\"if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.gif" style="margin-right:5px;" title="" />'.get_lang("Exercise").'</div>';
 		$return .= '<div class="lp_resource_elements_end" id="resExercise">';
-		
-			while($row_quiz = Database::fetch_array($res_quiz))
-			{
-				$return .= '<div class="lp_resource_element">';
-				
-					$return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
-					$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_quiz['title'] . '</a>';
-					//$return .= $row_quiz['title'];
-				
-				$return .= '</div>';
-			}
+
+		while ($row_hot = mysql_fetch_array($res_hot))
+ 		{
+			$return .= '<div class="lp_resource_element">';
+			//display quizhotpotatoes
+			$return .= '<img alt="" src="../img/jqz.jpg" style="margin-right:5px;" title="" />';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_hot['title'] . '</a>';
+			//$return .= $row_quiz['title'];
+
+			$return .= '</div>';
+		}
+
+
+    	while($row_quiz = Database::fetch_array($res_quiz))
+		{
+			$return .= '<div class="lp_resource_element">';
+			$return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
+			$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_quiz['title'] . '</a>';
+			//$return .= $row_quiz['title'];
+			$return .= '</div>';
+		}
+
 			
-			if(Database::num_rows($res_quiz) == 0)
-				$return .= '<div class="lp_resource_element">'.get_lang("NoExercisesAvailable").'</div>';
+		if(Database::num_rows($res_quiz) == 0)
+			$return .= '<div class="lp_resource_element">'.get_lang("NoExercisesAvailable").'</div>';
 		
 		$return .= '<div class="lp_resource_element">';	
-			$return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
-			$return .= '<a href="'.api_get_path(REL_CLARO_PATH).'exercice/exercise_admin.php">' . get_lang('NewExercise') . '</a>';
+		$return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
+		$return .= '<a href="'.api_get_path(REL_CLARO_PATH).'exercice/exercise_admin.php">' . get_lang('NewExercise') . '</a>';
 		$return .= '</div>';
-		
+
 		$return .= '</div>';
 		
 		return $return;
+
 	}
-	
+
 	/**
 	 * Creates a list with all the links in it
 	 *
 	 * @return string
 	 */
+
 	function get_links()
 	{
 		$tbl_link = Database::get_course_table(TABLE_LINK);
@@ -6552,23 +6882,22 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . ' style="cursor:pointer;"><img align="left" alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />'.get_lang("Links").'</div>';
 		$return .= '<div class="lp_resource_elements" id="resLink">';
 		
-		
-		while($row_link = Database::fetch_array($res_link))
-		{
-			$return .= '<div class="lp_resource_element">';
-			
-				$return .= '<img align="left" alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
-				$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
-			
-			$return .= '</div>';
-		}
+			while($row_link = Database::fetch_array($res_link))
+			{
+				$return .= '<div class="lp_resource_element">';
+				
+					$return .= '<img align="left" alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
+					$return .= '<a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
+				
+				$return .= '</div>';
+			}
 		$return .= '<div class="lp_resource_element">';
 			$return .= '<img align="left" alt="" src="../img/file_html_new_small.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a href="'.api_get_path(REL_CLARO_PATH).'link/link.php?'.api_get_cidreq().'&action=addlink" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
 		$return .= '</div>';
-		
-		if(Database::num_rows($res_link) == 0)
-			$return .= '<div class="lp_resource_element">'.get_lang("NoLinksAvailable").'</div>';
+			
+			if(Database::num_rows($res_link) == 0)
+				$return .= '<div class="lp_resource_element">'.get_lang("NoLinksAvailable").'</div>';
 		
 		$return .= '</div>';
 		
@@ -6616,7 +6945,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . ' style="border-bottom:1px solid #999999; cursor:pointer;"><img align="left" alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />'.get_lang('Forums').'</div>';
 		$return .= '<div class="lp_resource_elements" id="forums" style="border-bottom:1px solid #999999; border-top:0;">';
 		
-		
 		foreach($a_forums as $forum)
 		{
 			$return .= '<div class="lp_resource_element">';
@@ -6642,8 +6970,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				$return .=  '<li><a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . $thread['thread_title'] . '</a></li>';
 			}
 			$return .= '</ul></div>';
-			
-			
 		}
 		
 		$return .= '<div class="lp_resource_element">';
@@ -7160,3 +7486,4 @@ EOD;
 }
 
 ?>
+

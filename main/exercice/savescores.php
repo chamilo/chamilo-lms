@@ -22,7 +22,7 @@
 *	Saving the scores.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: savescores.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: savescores.php 12830 2007-08-01 17:22:06Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -37,9 +37,12 @@ $full_file_path = $documentPath.$test;
 
 my_delete($full_file_path.$_user['user_id'].".t.html");
 
+
+
 $TABLETRACK_HOTPOTATOES = $_configuration['statistics_database']."`.`track_e_hotpotatoes";
 $tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
-$_cid = $cid;
+$TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+$_cid = api_get_course_id();
 $test = mysql_real_escape_string($_REQUEST['test']);
 $score = mysql_real_escape_string($_REQUEST['score']);
 $origin = $_REQUEST['origin'];
@@ -85,7 +88,11 @@ function save_scores($file, $score)
 			   '".$score."',
 			   '".$weighting."'
 			  )";
-	error_log($sql,0);
+	
+	
+
+	
+ 	//error_log($sql,0);
 	if ($origin == 'learnpath')
 	{
 		if ($user_id == "NULL")
@@ -99,10 +106,24 @@ function save_scores($file, $score)
 		$res2 = api_sql_query($sql2,__FILE__,__LINE__);
 	}
 	$res = api_sql_query($sql,__FILE__,__LINE__);
+		
 }
 
+
+
 // Save the Scores
+
 save_scores($test, $score);
+//score dans lp_item_view
+
+				$user_id = (!empty($_SESSION['_user']['id'])?$_SESSION['_user']['id']:0);
+               // $lp_item = Database::get_course_table('lp_item');
+                $lp_item_view = Database::get_course_table('lp_item_view');
+                $sql2 = "UPDATE $lp_item_view SET score = '$score'
+                        WHERE lp_view_id = '".$_SESSION['scorm_view_id']."'";
+                api_sql_query($sql2,__FILE__,__LINE__);
+              
+
 // Back
 if ($origin != 'learnpath')
 {

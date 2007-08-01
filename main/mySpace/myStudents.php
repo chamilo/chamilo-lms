@@ -647,7 +647,7 @@ if(!empty($_GET['student']))
 			
 				$sqlExercices = "	SELECT quiz.title,id
 									FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
-									WHERE active='1'
+									WHERE active='1' ORDER BY quiz.title ASC
 									";
 		
 				$resultExercices = api_sql_query($sqlExercices);

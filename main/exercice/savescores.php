@@ -22,7 +22,7 @@
 *	Saving the scores.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: savescores.php 12833 2007-08-01 17:44:11Z yannoo $
+* 	@version $Id: savescores.php 12836 2007-08-01 21:08:24Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -48,10 +48,19 @@ $test = mysql_real_escape_string($_REQUEST['test']);
 $score = mysql_real_escape_string($_REQUEST['score']);
 $origin = $_REQUEST['origin'];
 
+/**
+ * Save the score for a HP quiz. Can be used by the learnpath tool as well
+ * for HotPotatoes quizzes. When coming from the learning path, we
+ * use the session variables telling us which item of the learning path has to
+ * be updated (score-wise)
+ * @param	string	File is the exercise name (the file name for a HP)
+ * @param	integer	Score to save inside the tracking tables (HP and learnpath)
+ * @return	void
+ */
 function save_scores($file, $score)
 {
-	global $_configuration, $origin, $tbl_learnpath_user,
-		$learnpath_id, $learnpath_item_id, $_user, $_cid,
+	global $_configuration, $origin,
+		$_user, $_cid,
 		$TABLETRACK_HOTPOTATOES;
 	// if tracking is disabled record nothing
 	$weighting = 100; // 100%
@@ -71,59 +80,28 @@ function save_scores($file, $score)
 		{
 		$user_id = "NULL";
 	}
-	$sql = "INSERT INTO ".$TABLETRACK_HOTPOTATOES."
-			  (`exe_name`,
-			   `exe_user_id`,
-			   `exe_date`,
-			   `exe_cours_id`,
-			   `exe_result`,
-			   `exe_weighting`
-			  )
+	$sql = "INSERT INTO $TABLETRACK_HOTPOTATOES ".
+	"(exe_name, exe_user_id, exe_date,exe_cours_id,exe_result,exe_weighting)" .
+	"VALUES" .
+	"('$file',$user_id,'$date','$_cid','$score','$weighting')";
+	$res = api_sql_query($sql,__FILE__,__LINE__);
 
-			  VALUES
-			  (
-			   '".$file."',
-			   ".$user_id.",
-				 '".$date."',
-			   '".$_cid."',
-			   '".$score."',
-			   '".$weighting."'
-			  )";
-	
-	
-
-	
- 	//error_log($sql,0);
 	if ($origin == 'learnpath')
 	{
-		if ($user_id == "NULL")
-		{
-			$user_id = '0';
-		}
-		$sql2 = "update $tbl_learnpath_user
-			set score='$score'
-			where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
-		error_log($sql,0);
+		//if we are in a learning path, save the score in the corresponding
+		//table to get tracking in there as well
+		$user_id = api_get_user_id();
+		$lp_item_view = Database::get_course_table('lp_item_view');
+		$sql2 = "UPDATE $lp_item_view SET score = '$score'" .
+				" WHERE lp_view_id = '".$_SESSION['scorm_view_id']."'" .
+				" AND lp_item_id = '".$_SESSION['scorm_item_id']."'";
 		$res2 = api_sql_query($sql2,__FILE__,__LINE__);
 	}
-	$res = api_sql_query($sql,__FILE__,__LINE__);
 		
 }
 
-
-
 // Save the Scores
-
 save_scores($test, $score);
-//score dans lp_item_view
-
-$user_id = (!empty($_SESSION['_user']['id'])?$_SESSION['_user']['id']:0);
-// $lp_item = Database::get_course_table('lp_item');
-$lp_item_view = Database::get_course_table('lp_item_view');
-$sql2 = "UPDATE $lp_item_view SET score = '$score'" .
-		" WHERE lp_view_id = '".$_SESSION['scorm_view_id']."'";
-api_sql_query($sql2,__FILE__,__LINE__);
-              
 
 // Back
 if ($origin != 'learnpath')
@@ -142,12 +120,12 @@ else
 		<link rel='stylesheet' type='text/css' href='../css/scorm.css' />
 		</head>
 		<body>
-		<br /><div class='message'>
+		<br />
+		<div class='message'>
 		<?php echo get_lang('HotPotatoesFinished'); ?>
 		</div>
 		</body>
 		</html>
-		<?php
-
+<?php
 }
 ?>

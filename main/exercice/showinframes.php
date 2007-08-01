@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: showinframes.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: showinframes.php 12831 2007-08-01 17:22:34Z yannoo $
 */
 
 /*
@@ -37,7 +37,7 @@ require_once(api_get_path(SYS_PATH).'main/exercice/hotpotatoes.lib.php');
 
 // init
 $doc_url=urldecode($_GET['file']);
-$cid = $_course['official_code'];
+$cid = api_get_course_id();
 $documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $documentWebPath= api_get_path(WEB_COURSE_PATH).$_course['path']."/document";
 $origin = $_REQUEST['origin'];

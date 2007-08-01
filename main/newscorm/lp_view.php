@@ -70,6 +70,7 @@ $lp_item_id = $_SESSION['oLP']->get_current_item_id();
 
 //Prepare variables for the test tool (just in case) - honestly, this should disappear later on
 $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();
+$_SESSION['scorm_item_id'] = $lp_item_id;
 //reinit exercises variables to avoid spacename clashes (see exercise tool)
 api_session_unregister($exerciseResult);
 unset($_SESSION['objExercise']);

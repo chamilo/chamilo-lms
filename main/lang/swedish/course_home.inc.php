@@ -10,12 +10,15 @@ $langCourseCreate  = "Skapa en webbkurs";
 $langNameOfTheLink  = "Namn på länken";
 $lang_main_categories_list                  = "Huvudkategorilista";
 $langCourseAdminOnly = "Enbart lärare";
-$PlatformAdminOnly = "Enbart plattforms administratör";
+$PlatformAdminOnly = "Enbart plattformsadministratörer";
 $langCombinedCourse = "Kombinerad kurs";
 $ToolIsNowVisible = "Verktyget är nu synligt";
 $ToolIsNowHidden = "Verktyget är nu osynligt";
 $EditLink = "Ändra länk";
-$Blog_management = "Blog hantering";
+$Blog_management = "Blogghantering";
+$Forum = "Forum";
+$Course_maintenance = "Kursunderhåll";
+$TOOL_SURVEY = "Enkäter";
 $GreyIcons = "Verktygslåda";
 $Administration = "Administrering";
 ?>

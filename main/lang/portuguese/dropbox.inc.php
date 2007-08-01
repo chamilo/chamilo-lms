@@ -123,4 +123,6 @@ $MailingSelectNoOther = "O correio electrónico não pode ser combinado com outros
 $mailingJustUploadSelectNoOther = "O envio de ficheiros para si mesmo não pode ser combinado com outros destinatários.";
 $NoFilesHere = "Nenhum ficheiro";
 $NoFilesHere = "Nenhum ficheiro";
+$NewDropboxFileUploaded = "Um novo ficheiro foi enviado para a dropbox";
+$NewDropboxFileUploadedContent = "Um novo ficheiro foi enviado para a dropbox do seu curso";
 ?>

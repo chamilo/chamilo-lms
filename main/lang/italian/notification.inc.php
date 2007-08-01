@@ -14,5 +14,6 @@ $lang_new_link = "Aggiunto un nuovo collegamento";
 $lang_new_forum_topic = "Nuovo argomento aggiunto";
 $lang_new_groupforum_topic = "Nuovo argomento aggiunto al forum del gruppo";
 $lang_new_dropbox_file = "Ricevuto un nuovo file";
-$lang_update_dropbox_file = "il file nella tua casella è stato aggiornato";
+$lang_update_dropbox_file = "il file nella tua sezione Scambio files è stato aggiornato";
+$ForumCategoryAdded = "Categoria di Forum aggiunta";
 ?>

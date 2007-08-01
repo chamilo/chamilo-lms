@@ -80,4 +80,7 @@ $PostVisibilityChanged = "Vidnost objave je bila spremenjena";
 $PostDeleted = "Objava je bila odstranjena";
 $MakeInvisible = "Skrij";
 $ThreadCanBeFoundHere = "Nit foruma lahko najdete tukaj";
+$MakeVisible = "Naredi vidno";
+$DeleteCompleteThread = "Odstranim celotno nit ?";
+$PostDeletedSpecial = "Posebna objava je bila odstranjena";
 ?>

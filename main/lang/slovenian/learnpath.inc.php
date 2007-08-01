@@ -169,4 +169,6 @@ $DocumentHasBeenDeleted = "Ta dokument je bil odstranjen in ga ne morem prikazat
 $EditCurrentForum = "Uredi trenuten forum";
 $NoPrerequisites = "Brez predzahtev";
 $NewExercise = "Nov test";
+$CreateANewLink = "Ustvari novo povezavo";
+$CreateANewForum = "Ustvari nov forum";
 ?>

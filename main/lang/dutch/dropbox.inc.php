@@ -123,4 +123,6 @@ $MailingSelectNoOther = "Een mailing kan niet gecombineerd worden met andere bes
 $mailingJustUploadSelectNoOther = "Enkel upload kan niet gecombineerd worden met andere bestemmelingen.";
 $NoFilesHere = "Er zijn hier geen bestanden";
 $NoFilesHere = "Hier zijn geen bestanden";
+$NewDropboxFileUploaded = "Er werd een nieuw bestand verzonden naar de dropbox tool";
+$NewDropboxFileUploadedContent = "Er werd een nieuw bestand verzonden naar de dropbox van uw cursus";
 ?>

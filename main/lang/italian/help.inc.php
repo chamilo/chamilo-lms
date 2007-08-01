@@ -11,8 +11,8 @@ Non mescolate categorie e forum, e non dimenticate che una Categoria che non con
 Se ad esempio create una Categoria \'discussione per piccoli gruppi\', dovrete creare una serie di forum nella Categoria, ad esempio \'gruppo 1\', \'gruppo 2\', \'gruppo 3\', ecc.</p>
 <p>La Descrizione di un forum di gruppo potrebbe essere costituita dall\'elenco delle persone che sono invitate ad usarlo, ma anche da una spiegazione sulle sue finalità o sugli argomenti contenuti. 
 Se create, per qualsiasi ragione, un Forum \"Richieste d\'aiuto\", potete aggiungere come descrizione: \'Segnalare le difficoltà relative al contenuto o all\'organizzazione\'.</p><p><b>Uso pedagogico</b> <p>Alcuni formatori usano il forum per inviare correzioni. Un corsista pubblica il suo elaborato come messaggio e il docente, usando il pulsante di editing (la matita) sottoline gli errori e (utilizzando i colori) indica le correzioni in modo che sia utili anche agli altri corsisti.</p>";
-$langHDropbox = "Caselle";
-$langDropboxContent = "Le Caselle sono uno strumento dedicato allo scambio di dati peer-to-peer. Sono accettati files con quasiasi estensione. Lo strumento permette di tenere più versioni di un file e non cancella files con stesso nome.<br /> Nella casella sono contenuti i file che vi sono stati inviati (nella cartella file ricevuti) e i file che voi avete inviato ad altri membri di questo Corso (nella cartella file inviati).<br />
+$langHDropbox = "Scambio files";
+$langDropboxContent = "la sezione Scambio files è uno strumento dedicato allo scambio di dati peer-to-peer. Sono accettati files con quasiasi estensione. Lo strumento permette di tenere più versioni di un file e non cancella files con stesso nome.<br /> Nella sezione sono contenuti i file che vi sono stati inviati (nella cartella file ricevuti) e i file che voi avete inviato ad altri membri di questo Corso (nella cartella file inviati).<br />
 In qualità di corsista, potete inviare un file solamente ad un docente del corso, a meno che il Gestore di Sistema non abbia abilitato la comunicazione \'corsista-a-corsista\'.
 <br>
 Se l\'elenco dei file inviati o ricevuti diventa troppo lungo, potete eliminare alcuni o tutti i file contenuti nell\'elenco. I file non verranno eliminati se gli altri destinatari lo terranno visibile.
@@ -61,7 +61,7 @@ introduttivo seguito da un unico collegamento che guiderà
 gli studenti attraverso il corso. Cliccate sulla Vista corsista a
 destra  per verificare il modo in cui il corso viene visto dai
 corsisti.</li>";
-$langHOnline = "Guida alla Audio Conferenza";
+$langHOnline = "Guida al sistema di videoconferenza";
 $langOnlineContent = "Il sistema di Audio Conferenza online di Dokeos vi consente di essere in contatto con fino a 100 persone in modo semplice e rapido.<br>
  <ul>
    <li><b>audio :</b> la voce dell\'istruttore viene inviata in modalità sincrona ai partecipanti in qualità radio FM grazie allo streaming in formato MP3</li>

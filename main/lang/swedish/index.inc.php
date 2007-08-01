@@ -31,7 +31,7 @@ $EussMenu = "meny";
 $Opinio = "Synpunkt";
 $Intranet = "Intranät";
 $Englin = "Engelska";
-$langInvalidForSelfRegistration = "Inloggningen misslyckades - om du inte är registrerad, kan du göra det genom att använda<a href=claroline/auth/inscription.php>registrering</a>";
+$langInvalidForSelfRegistration = "Inloggningen misslyckades - om du inte är registrerad, kan du göra det genom att använda <a href=claroline/auth/inscription.php>registreringsformuläret</a>";
 $langSubCat = "under kategori";
 $langMenuGeneral = "Allmänt";
 $langMenuUser = "Användare";

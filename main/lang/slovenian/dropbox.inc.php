@@ -123,4 +123,6 @@ $MailingSelectNoOther = "Pošiljanje ne more biti kombinirano z drugimi prejemnik
 $mailingJustUploadSelectNoOther = "Le Prenos (v lasten nabiralnik) se ne more izvršiti v kombinaciji z ostalimi prejemniki";
 $NoFilesHere = "Tu trenutno ni nobenih datotek";
 $NoFilesHere = "Tu ni nobenih datotek";
+$NewDropboxFileUploaded = "V nabiralnik je bila poslana nova datoteka";
+$NewDropboxFileUploadedContent = "V nabiralnik tvojega teèaja je bila poslana nova datoteka";
 ?>

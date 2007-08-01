@@ -12,7 +12,7 @@ $langAddCat  = "Aggiungi una categoria";
 $langAdd  = "Aggiungi";
 $langValid  = "Conferma";
 $langBackAndForget  = "Annulla";
-$langOkSent = "La pagina è stata inviata.<p>Sarà accessibile dalla <a href=../../DOKEOSDEV/index.php>Pagina principale</a> del corso";
+$langOkSent = "La pagina è stata inviata.<p>Sarà accessibile dalla <a href=../../DOKEOSDEV/index.php>Home page</a> del corso";
 $Content = "Contenuto";
 $CourseDescriptionUpdated = "Descrizione del corso aggiornata";
 $CourseDescriptionDeleted = "Descrizione del corso eliminata";

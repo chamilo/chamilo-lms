@@ -65,6 +65,7 @@ $NoOfQuestions = "Številka vprašanja";
 $Question = "Vprašanje";
 $ThisCodeAlradyExists = "Ta koda že obstaja";
 $SaveAndExit = "Shrani in izstopi";
+$ViewAnswers = "Poglej odgovore";
 $CreateExistingSurvey = "Ustvari iz obstojeèega vprašalnika";
 $SurveyName = "Naziv eval. vprašalnika";
 $SurveySubTitle = "Podnaslov vprašalnika";

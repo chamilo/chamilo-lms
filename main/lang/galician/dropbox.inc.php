@@ -124,4 +124,6 @@ $mailingJustUploadSelectNoOther = "O envío ao mín mesmo non se pode combinar con
 $NoFilesHere = "Aquí non hai ficheiros";
 $NoFilesHere = " 	
 Aquí non hai arquivos";
+$NewDropboxFileUploaded = "Enviouse un novo arquivo ó baúl de tarefas";
+$NewDropboxFileUploadedContent = "Enviouse un novo arquivo ó baúl de tarefas do teu curso";
 ?>

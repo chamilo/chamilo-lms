@@ -80,4 +80,7 @@ $PostVisibilityChanged = "Post visibility changed";
 $PostDeleted = "Post has been deleted";
 $MakeInvisible = "Make invisible";
 $ThreadCanBeFoundHere = "The thread can be found here";
+$MakeVisible = "Make Visible";
+$DeleteCompleteThread = "Delete complete thread?";
+$PostDeletedSpecial = "Special Post Deleted";
 ?>

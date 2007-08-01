@@ -65,6 +65,7 @@ $NoOfQuestions = "Numero di domande";
 $Question = "Domanda";
 $ThisCodeAlradyExists = "Il codice è già in uso";
 $SaveAndExit = "Salva ed esci";
+$ViewAnswers = "Guarda le risposte";
 $CreateExistingSurvey = "Crea a partire da un questionario esistente";
 $SurveyName = "Nome del questionario";
 $SurveySubTitle = "Sottotitolo del questionario";
@@ -161,6 +162,7 @@ $ViewInvited = "Vedi gli invitati";
 $ViewAnswered = "Utenti che hanno risposto";
 $ViewUnanswered = "Utenti che non hanno risposto";
 $DeleteSurveyQuestion = "Sei sicuro di voler eliminare il quesito?";
+$YouAlreadyFilledThisSurvey = "Hai già compilato questo questionario";
 $ClickHereToAnswerTheSurvey = "Clicca qui per rispondere al questionario";
 $OrCopyPasteTheFollowingUrl = "o copia / incolla la seguente url:";
 ?>

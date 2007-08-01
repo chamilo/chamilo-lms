@@ -65,6 +65,7 @@ $NoOfQuestions = "Number of question";
 $Question = "Question";
 $ThisCodeAlradyExists = "This code already exist";
 $SaveAndExit = "Save and exit";
+$ViewAnswers = "View answers";
 $CreateExistingSurvey = "Create from an existing survey";
 $SurveyName = "Survey name";
 $SurveySubTitle = "Survey subtitle";

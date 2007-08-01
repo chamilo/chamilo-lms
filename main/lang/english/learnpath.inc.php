@@ -169,4 +169,6 @@ $DocumentHasBeenDeleted = "The document cannot be displayed because it has been 
 $EditCurrentForum = "Edit the current forum";
 $NoPrerequisites = "No prerequisites";
 $NewExercise = "New test";
+$CreateANewLink = "Create a new link";
+$CreateANewForum = "Create a new forum";
 ?>

@@ -65,6 +65,7 @@ $NoOfQuestions = "Aantal vragen";
 $Question = "Vraag";
 $ThisCodeAlradyExists = "Deze code bestaat reeds";
 $SaveAndExit = "Bewaren en beeindigen";
+$ViewAnswers = "Toon antwoorden";
 $CreateExistingSurvey = "Aanmaken van een enquete, vertrekkend van een bestaand enquete";
 $SurveyName = "Enquetenaam";
 $SurveySubTitle = "Ondertitel van de enquete";

@@ -15,4 +15,5 @@ $lang_new_forum_topic = "new topic added";
 $lang_new_groupforum_topic = "new topic added to group forum";
 $lang_new_dropbox_file = "new file received";
 $lang_update_dropbox_file = "file in your dropbox was updated";
+$ForumCategoryAdded = "Forum category added";
 ?>

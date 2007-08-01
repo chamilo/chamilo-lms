@@ -80,4 +80,7 @@ $PostVisibilityChanged = "Sichtbarkeit der Nachricht wurde geändert";
 $PostDeleted = "Nachricht wurde gelöscht";
 $MakeInvisible = "Unsichtbar machen";
 $ThreadCanBeFoundHere = "Diesen Thread gibt es hier";
+$MakeVisible = "sichtbar machen";
+$DeleteCompleteThread = "Das gesamte Thema löschen?";
+$PostDeletedSpecial = "Besondere Nachricht wurde gelöscht";
 ?>

@@ -160,4 +160,5 @@ $SubscribeUserToCourseAsTeacher = "ALs Lehrer Benutzer in diesem Kurs einschreib
 $SendMessage = "Nachricht senden";
 $PasswordEncryptedForSecurity = "Ihr Passwort wurde zur Sicherheit verschlüsselt. Daher wird nach Klick auf den Link eine E-Mail mit Ihrem Passwort an Ihre E-Mail Adresse verschickt.";
 $UsersUnsubscribed = "Die ausgewählten Benutzer wurden aus dem Kurs abgemeldet";
+$SystemUnableToSendEmailContact = "System konnte E-Mail Kontakt nicht versenden";
 ?>

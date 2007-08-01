@@ -80,4 +80,7 @@ $PostVisibilityChanged = "La visibilidad del mensaje ha cambiado";
 $PostDeleted = "El mensaje ha sido borrado";
 $MakeInvisible = "Hacer invisible";
 $ThreadCanBeFoundHere = "El tema se puede encontrar aquí";
+$MakeVisible = "Hacer visible";
+$DeleteCompleteThread = "¿ Eliminar el tema por completo ?";
+$PostDeletedSpecial = "Mensaje de aviso eliminado";
 ?>

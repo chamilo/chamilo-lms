@@ -165,4 +165,5 @@ $SubscribeUserToCourseAsTeacher = "Inscribir usuarios como profesores en este cu
 $SendMessage = "Enviar mensaje";
 $PasswordEncryptedForSecurity = "Su contraseña está encriptada para su seguridad. Por ello, cuando haya pulsado en el enlace para regenerar su clave se le remitirá un nuevo correo que contendrá su contraseña.";
 $UsersUnsubscribed = "Los usuarios seleccionados han sido dados de baja en el curso";
+$SystemUnableToSendEmailContact = "El sistema no ha podido enviarle el correo electrónico";
 ?>

@@ -22,58 +22,8 @@ Por último, cada foro puede tener una descripción que puede consistir en la list
 Los foros de los grupos no deben crearse a través de la herramienta \'Foros\', sino mediante la herramienta \'Grupos\'; en esta última podrá decidir si los foros del grupo serán privados o públicos.</p>
 <p>
 <b>Uso pedagógico avanzado</b><p>Algunos profesores utilizan el foro para realizar correcciones.  Un estudiante publica un documento. El profesor lo corrige usando el botón marcador del editor HTML (marca con un color la corrección o los errores), de manera que otros estudiantes y profesores podrán beneficiarse de ellas.</p>";
-$langHDropbox = "Ayuda: Buzón";
-$langDropboxContent = "<p>Esta herramienta permite compartir una zona de archivo de ficheros con el resto de los miembros 
-
-del curso, no pudiendo ser accesible de forma anónima desde la página principal de la plataforma. 
-
-Dentro del curso, no todos los miembros tendrán acceso a lo que otro haya colocado, sino que sólo 
-
-lo verán aquellos a los que se les ha enviado. En cierta manera recuerda el funcionamiento de las 
-
-utilidades P2P. 
-La estructura se asemeja a dos bandejas: una de entrada y otra de salida. El buzón muestra en la parte superior los archivos que le han enviado (ARCHIVOS RECIBIDOS), mientras que 
-
-en la parte inferior aparecen los archivos que envió a otros miembros de la actividad (ARCHIVOS 
-
-ENVIADOS). Si envía un fichero con un nombre que ya existe no sobrescribirá el anterior, sino que 
-
-lo añadirá con una fecha más reciente; de esta forma podrá tener varias versiones de un mismo 
-
-documento.
-<br><br>
-Como alumno sólo puede enviar archivos al profesor del curso, a no ser que el Administrador 
-
-permita el envío de archivos entre estudiantes. 
-<br><br>
-Se pueden enviar archivos a cualquier miembro de la actividad, así como enviar archivos sin un 
-
-destinatario concreto, de manera que sólo serán visibles para la propia persona que lo envía, la 
-
-cual usará la herramienta de forma semejante a un repositorio personal. Para enviar, un documento 
-
-a más de una persona tendrá que seleccionarlas en la lista de miembros mediante CTRL+clic. 
-<br><br> 
-Se permite el envío de muchos tipos de archivos: Word, Excel, PDF etc. En el caso de enviar 
-
-archivos HTML, tenga en cuenta que no contengan enlaces internos a imágenes o a otro tipo de 
-
-archivos, pues aunque los enviemos al mismo directorio del sitio web de la actividad no se verán. 
-
-En el caso de que sean enlaces externos, no habrá problema.
-<br><br>
-Borrado de archivos. Si borra un archivo recibido se borrará de su bandeja pero no de la 
-
-plataforma, ya que si ha sido recibido también por otros usuarios, debe seguir estando disponible 
-
-para ellos. Por el contrario, sí podrá borrar un archivo que haya enviado Vd., desapareciendo de 
-
-su bandeja como de la bandeja de entrada del resto de los usuarios de la plataforma que lo 
-
-hubieran recibido. 
-Si la lista de archivos es demasiado grande, revise de vez en cuando si hay algunos que pueda 
-
-borrar. Un archivo no estará borrado si los demás usuarios pueden verlo.</p>";
+$langHDropbox = "Ayuda: Buzón de tareas";
+$langDropboxContent = "<p>El buzón de tareas es una herramienta de gestión de contenidos dirigida al intercambio de datos entre iguales (p2p). Cualquier tipo de fichero es aceptado: Word, Excel, PDF, etc. Generará diferentes versiones en los envíos, con lo que evitará la destrucción de un documento cuando se envíe otro con el mismo nombre..</p> <p>El Buzón de tareas muestra los archivo que le han enviado (carpeta de archivos recibidos) y los archivos que Vd. ha enviado a otros miembros de este curso (carpeta de archivos enviados)</p><p>Si la lista de archivos recibidos o enviados se hace demasiado larga, puede suprimir todos o algunos archivos de la misma. El archivo sí mismo no se elimina mientras el otro usuario lo mantenga en la suya.</p> <p>Para enviar un documento a más de una persona, debe utilizar CTRL+clic para seleccionarlos en la caja de selección múltiple. La caja de selección múltiple es el formulario que muestra la lista de miembros.<p>";
 $langHHome = "Ayuda: Página principal del curso";
 $langHomeContent = "<p>La página principal del curso muestra una serie de herramientas : un texto de introducción, una descripción del curso, un gestor de documentos, etc..Esta página tiene un funcionamiento modulas :Vd. puede hacer invisible  / visible cualquier herramienta con un sólo clic. Las herramientas escondidas pueden ser reactivadas en cualquier momento.</p> 
 <b>Navegación</b> <p>Para moverse por el curso, dispone de dos herramientas de navegación. Una en la parte superior izquierda, que muestra el lugar en el que se encuentra en el curso. Otra en la parte superior derecha, que le permite acceder a cualquier herramienta mediante un clic en su icono. Si selecciona \'Curso actual\' a la izquierda o el icono en forma de casa situado a la derecha, irá a la página principal del curso. </p>

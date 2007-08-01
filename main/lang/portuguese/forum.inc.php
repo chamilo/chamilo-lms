@@ -80,4 +80,7 @@ $PostVisibilityChanged = "Visibilidade da mensagem alterada";
 $PostDeleted = "Mensagem foi apagada";
 $MakeInvisible = "Tornar invisível";
 $ThreadCanBeFoundHere = "O tópico pode ser encontrado aqui";
+$MakeVisible = "Tornar visível";
+$DeleteCompleteThread = "Tem a certeza que deseja apagar todo o tópico?";
+$PostDeletedSpecial = "Primeira mensagem apagada.";
 ?>

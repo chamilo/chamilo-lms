@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $ResourceAdded = "Risorsa aggiunta";
-$LearningPath = "Percorso";
+$LearningPath = "Percorsi didattici";
 $LevelUp = "sali di un livello";
 $AddIt = "Aggiungi";
 $MainCategory = "categoria principale";
@@ -15,7 +15,7 @@ $BackTo = "Vai a";
 $ExternalResources = "Risorse esterne";
 $CourseResources = "Risorse per il corso";
 $ExternalLink = "Collegamento esterno";
-$DropboxAdd = "Aggiungi casella personale.";
+$DropboxAdd = "Aggiungi sezione Scambio files";
 $AddAssignmentPage = "Aggiungi pagina per il caricamento degli elaborati dei corsisti.";
 $Assignments = "Contributi";
 $Exercise = "Test";

@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $langInvalidId = "Acceso denegado - nombre de usuario o contraseña no válidos.";
 $langWelcome = "los cursos están libremente disponibles abajo. Otros cursos requieren un \'nombre de usuario\' y una contraseña, que se pueden obtener haciendo clic en \'Inscribirse\'. Los profesores pueden crear cursos en \'Inscribirse\', seleccionando la opción \'Crear curso\'.";
 $langPass = "Contraseña";
-$langEnter = "Ingresar";
+$langEnter = "Entrar";
 $langReg = "Registro";
 $langMenu  = "Menú";
 $langAdvises = "Sugerencias";
@@ -60,7 +60,7 @@ $langRequestDenied = "Esta llamada ha sido rechazada";
 $UsageDatacreated = "Datos de uso creados";
 $SessionView = "Mostrar los cursos ordenados por sesiones";
 $CourseView = "Mostrar toda la lista de cursos";
-$DropboxFileAdded = "Ha sido enviado un fichero al buzón";
+$DropboxFileAdded = "Se ha enviado un fichero al Buzón de tareas";
 $NewMessageInForum = "Ha sido publicado un nuevo mensaje en el foro";
 $FolderCreated = "Ha sido creado un nuevo directorio";
 $LinkAdded = "Ha sido añadido un nuevo enlace";

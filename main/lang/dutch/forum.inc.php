@@ -80,4 +80,7 @@ $PostVisibilityChanged = "Zichtbaarheid van he bericht gewijzigd";
 $PostDeleted = "Bericht verwijderd";
 $MakeInvisible = "Maak onzichtbaar";
 $ThreadCanBeFoundHere = "De discussie kan hier gevonden worden";
+$MakeVisible = "Maak zichtbaar";
+$DeleteCompleteThread = "Volledige discussie verwijderen?";
+$PostDeletedSpecial = "Speciaal bericht verwijderd";
 ?>

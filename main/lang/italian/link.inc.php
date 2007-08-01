@@ -45,4 +45,5 @@ $langAll_Link_Deleted = "Il collegamento è stato eliminato";
 $langOnHomepage = "Mostra il collegamento sulla pagina iniziale";
 $langShowLinkOnHomepage = "Mosta il collegamento come nuova voce sulla pagina iniziale del corso";
 $langCsvImport = "Importa un file .csv";
+$Category = "Categoria";
 ?>

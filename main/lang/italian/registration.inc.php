@@ -159,6 +159,8 @@ $YourAccountHasToBeApproved = "L\'iscrizione è in attesa di approvazione";
 $ApprovalForNewAccount = "Approvazione della nuova iscrizione";
 $ManageUser = "Gestione utenti";
 $SubscribeUserToCourseAsTeacher = "Iscrivi degli utenti al corso come docente";
+$SendMessage = "Invia un messaggio";
 $PasswordEncryptedForSecurity = "La tua password è criptata per motivi di sicurezza e di privacy, per cui cliccando sul collegamento la password ti verrà all\'indirizzo e-mail da te fornito.";
 $UsersUnsubscribed = "Gli utenti selezionati sono stati cancellati dall\'elenco degli iscritti al corso";
+$SystemUnableToSendEmailContact = "Il sistema non è in grado di inviare il messaggio e-mail di contatto";
 ?>

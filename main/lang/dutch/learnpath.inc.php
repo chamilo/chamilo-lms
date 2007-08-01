@@ -169,4 +169,6 @@ $DocumentHasBeenDeleted = "Het document kan niet getoond worden omdat het verwij
 $EditCurrentForum = "Wijzig het huidige forum";
 $NoPrerequisites = "Geen vereisten";
 $NewExercise = "nieuwe oefening";
+$CreateANewLink = "Maak een nieuwe link";
+$CreateANewForum = "Maak een nieuw forum";
 ?>

@@ -53,14 +53,14 @@ $langMax = "max. 12 caratteri, es. <i>RISUM21</i>";
 $langDoubt = "In caso di dubbio sulla denominazione esatta o sul codice del corso, consulta il, ";
 $langProgram = "Programma del corso</a>. Se non esiste un codice appropriato, puoi inventarne uno. 
 Ad esempio <i>INNOVAZ01</i> se si tratta di un corso di formazione sulla gestione dell\'innovazione";
-$langScormtool = "Percorsi";
+$langScormtool = "Percorsi didattici";
 $langScormbuildertool = "Creatore di percorsi SCORM";
 $langPathbuildertool = "Creatore di percorsi didattici";
 $langOnlineConference = "Teleconferenza";
 $langAgendaCreationTitle = "Creazione del corso";
 $langAgendaCreationContenu = "Creazione del corso";
 $langOnlineDescription = "Questo è un esempio di descrizione per lo strumento Teleconferenza";
-$langDropbox  = "Casella";
+$langDropbox  = "Scambio files";
 $langOnly  = "Solo";
 $langRandomLanguage  = "Riarrangia la selezione nei linguaggi disponibili";
 $langImages = "Immagini";

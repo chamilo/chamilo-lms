@@ -3,6 +3,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langToolName = "Statistik";
 $TrackingDisabled = "Spårning har avaktiverats av systemadministratören.";
+$InactivesStudents = "Inaktiva användare";
+$SeeStudentList = "Titta på användarlistan";
 $langShowNone = "Visa ingen";
 $langCourseStats = "Kursstatistik";
 $langToolsAccess = "Tillgång till verktyg";
@@ -131,10 +133,12 @@ $SynthesisView = "Visa syntes";
 $Visited = "Besökt";
 $FirstAccess = "Första access";
 $LastAccess = "Senaste access";
+$Trainers = "Lärare";
 $Administrators = "Administratörer";
 $ExcelFormat = "Excel-format";
 $Time = "Tid";
 $Attempts = "Försök";
+$LimitDate = "Datumbegränsning";
 $NoComment = "Ingen kommentar";
 $Print = "Skriv ut";
 $NoConnexion = "Ingen anslutning";

@@ -24,7 +24,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id: exercice.php 12269 2007-05-03 14:17:37Z elixir_julian $
+* 	@version $Id:exercice.php 12269 2007-05-03 14:17:37Z elixir_julian $
 */
 
 
@@ -62,9 +62,9 @@ $TBL_ITEM_PROPERTY      = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES			= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES   	= $_configuration['statistics_database']."`.`track_e_exercices";
-$TBL_TRACK_HOTPOTATOES  = $_configuration['statistics_database']."`.`track_e_hotpotatoes";
-$TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt";
+$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 // document path
 $documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
@@ -80,6 +80,7 @@ $exfile = explode('/',$exercicePath);
 $exfile = strtolower($exfile[sizeof($exfile)-1]);
 $exercicePath = substr($exercicePath,0,strpos($exercicePath,$exfile));
 $exercicePath = $exercicePath."exercice.php";
+
 
 // maximum number of exercises on a same page
 $limitExPage=50;
@@ -156,30 +157,30 @@ if ($show=='result' && $_REQUEST['comments']=='update' && $is_allowedToEdit)
 			$result =api_sql_query($sql, __FILE__, __LINE__);
 			$ques_name = mysql_result($result,0,"question");
 
-			$query = "update `$TABLETRACK_ATTEMPT` set marks = '$v' where question_id = $keyexp[1] and exe_id=$id";
+			$query = "update $TBL_TRACK_ATTEMPT set marks = '$v' where question_id = $keyexp[1] and exe_id=$id";
 			api_sql_query($query, __FILE__, __LINE__);
 
 			$qry = 'SELECT sum(marks) as tot
-					FROM `'.$TABLETRACK_ATTEMPT.'` where exe_id = '.intval($id).'
+					FROM '.$TBL_TRACK_ATTEMPT.' where exe_id = '.intval($id).'
 					GROUP BY question_id';
 
 			$res = api_sql_query($qry,__FILE__,__LINE__);
 			$tot = mysql_result($res,0,'tot');
 
-			$totquery = "update `$TBL_TRACK_EXERCICES` set exe_result = $tot where exe_Id=$id";
+			$totquery = "update $TBL_TRACK_EXERCICES set exe_result = $tot where exe_Id=$id";
 			api_sql_query($totquery, __FILE__, __LINE__);
 
 		}
 		else
 		{
-		  $query = "update `$TABLETRACK_ATTEMPT` set teacher_comment = '$v' where question_id = $keyexp[1] and exe_id = $id ";
+		  $query = "update $TBL_TRACK_ATTEMPT set teacher_comment = '$v' where question_id = $keyexp[1] and exe_id = $id ";
 		   api_sql_query($query, __FILE__, __LINE__);
 		}
 
 	}
 
 	$qry = 'SELECT DISTINCT question_id, marks
-			FROM `'.$TABLETRACK_ATTEMPT.'` where exe_id = '.intval($id).'
+			FROM '.$TBL_TRACK_ATTEMPT.' where exe_id = '.intval($id).'
 			GROUP BY question_id';
 
 	$res = api_sql_query($qry,__FILE__,__LINE__);
@@ -189,7 +190,7 @@ if ($show=='result' && $_REQUEST['comments']=='update' && $is_allowedToEdit)
 		$tot += $row ['marks'];
 	}
 
-	$totquery = "update `$TBL_TRACK_EXERCICES` set exe_result = $tot where exe_Id=$id";
+	$totquery = "update $TBL_TRACK_EXERCICES set exe_result = $tot where exe_Id=$id";
 
 	api_sql_query($totquery, __FILE__, __LINE__);
 $subject = "Examsheet viewed/corrected/commented by teacher";
@@ -565,7 +566,7 @@ if($show == 'test'){
  <td width="8%" align="center"> <?php
  $exid = $row['id'];
  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE `exercice_id` = '$exid'";
- $sqlresult =mysql_query($sqlquery);
+ $sqlresult =api_sql_query($sqlquery);
  $rowi = mysql_result($sqlresult,0);
  echo $rowi.' '.strtolower(get_lang('Questions')); ?> </td>
        <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row[id]; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build')); ?>" alt="<?php echo htmlentities(get_lang('Build')); ?>" /></a>
@@ -604,17 +605,17 @@ if($show == 'test'){
 	 <td align='center'> <?php
  $exid = $row['id'];
  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE `exercice_id` = '$exid'";
- $sqlresult =mysql_query($sqlquery);
+ $sqlresult =api_sql_query($sqlquery);
  $rowi = mysql_result($sqlresult,0);
  echo $rowi.' Question(s)'; ?> </td>
 
 	<td align='center'><?php
 		$eid = $row['id'];
 	$uid= $_SESSION[_user][user_id];
-	$qry = "select * from `".$TBL_TRACK_EXERCICES."` where exe_exo_id = $eid and exe_user_id = $uid";
+	$qry = "select * from ".$TBL_TRACK_EXERCICES." where exe_exo_id = $eid and exe_user_id = $uid";
 	$qryres = api_sql_query($qry);
-	$num = mysql_num_rows($qryres);
-	$row = mysql_fetch_array($qryres);
+	$num = Database::num_rows($qryres);
+	$row = Database::fetch_array($qryres);
 	$percentage = ($row['exe_result']/$row['exe_weighting'])*100;
 	if ($num>0)
 	{
@@ -820,13 +821,13 @@ if($_configuration['tracking_enabled'])
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
 			$sql="SELECT CONCAT(`lastname`,' ',`firstname`),`ce`.`title`, `te`.`exe_result` ,
 						`te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`),`te`.`exe_Id`,email
-				  FROM $TBL_EXERCICES AS ce , `$TBL_TRACK_EXERCICES` AS te, $TBL_USER AS user
+				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user
 				  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `user_id`=`te`.`exe_user_id` AND `te`.`exe_cours_id`='$_cid'
 				  ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
 
 			$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
 						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date)
-					FROM `$TBL_TRACK_HOTPOTATOES` tth, $TBL_USER tu
+					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".$_cid."'
 					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
 
@@ -834,12 +835,12 @@ if($_configuration['tracking_enabled'])
 		else
 		{ // get only this user's results
 			  $sql="SELECT '',`ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`),`te`.`exe_Id`
-				  FROM $TBL_EXERCICES AS ce , `$TBL_TRACK_EXERCICES` AS te
+				  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te
 				  WHERE `te`.`exe_exo_id` = `ce`.`id` AND `te`.`exe_user_id`='".$_user['user_id']."' AND `te`.`exe_cours_id`='$_cid'
 				  ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
 
 			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
-					FROM `$TBL_TRACK_HOTPOTATOES`
+					FROM $TBL_TRACK_HOTPOTATOES
 					WHERE exe_user_id = '".$_user['user_id']."' AND exe_cours_id = '".$_cid."'
 					ORDER BY exe_cours_id ASC, exe_date ASC";
 

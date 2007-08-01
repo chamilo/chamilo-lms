@@ -1361,6 +1361,10 @@ class learnpathItem{
 		 			$this->set_status($this->possible_status[2]);
 		 			break;
 		 		case 'hotpotatoes':
+					/*
+					//This section has been commented out because the score
+					// limits should be defined when including the test in
+					// the learning path
 					$tbl_hotpot = Database::get_course_table(QUIZ_TABLE);
 					$hotpot_sql = "SELECT * FROM $tbl_hotpot WHERE ...";
 					$hotpot_res = api_sql_query($hotpot_sql,__FILE__,__LINE__);
@@ -1380,6 +1384,8 @@ class learnpathItem{
 						//the user hasn't passed the test
 						$this->set_status($this->possible_status[2]);
 					}
+					*/
+					$this->set_status($this->possible_status[2]);
 		 			break;
 		 		case TOOL_QUIZ:
 						$this->set_status($this->possible_status[2]);		 			
@@ -1573,7 +1579,7 @@ class learnpathItem{
      		$my_time = time() - $this->current_start_time;
      		if($my_time > 0){
      			$this->update_time($my_time);
-     			if($this->debug>-1){error_log('New LP - In learnpathItem::set_time('.$scorm_time.') - found asset - set time to '.$my_time,0);}
+     			if($this->debug>0){error_log('New LP - In learnpathItem::set_time('.$scorm_time.') - found asset - set time to '.$my_time,0);}
      		}
      	}else{
      		if($format == 'scorm'){
@@ -1685,7 +1691,7 @@ class learnpathItem{
    			//this info shouldn't be saved as the credit or lesson mode info prevent it
    			if($this->debug>1){error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!',0);}
    		}else{
-	     	//check the row exists
+      	//check the row exists
 	     	$item_view_table = Database::get_course_table('lp_item_view');
 	     	$check = "SELECT * FROM $item_view_table " .
 	     			"WHERE lp_item_id = ".$this->db_id. " " .

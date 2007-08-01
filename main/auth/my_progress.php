@@ -1,6 +1,6 @@
 <?php
 // name of the language file that needs to be included
-$language_file = array('registration','tracking');
+$language_file = array('registration','tracking','exercice');
 
 $cidReset = true;
 
@@ -8,6 +8,8 @@ require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
 
 $nameTools=get_lang('MyProgress');
+
+$this_section = 'session_my_progress';
 
 api_block_anonymous_users();
 
@@ -307,67 +309,81 @@ foreach($Courses as $enreg)
 			</tr>
 
 			<?php
-
-				$sqlExercices = "	SELECT quiz.title,id
-								FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
-							";
-
-
-				$resuktExercices = api_sql_query($sqlExercices);
-				while($a_exercices = mysql_fetch_array($resuktExercices))
-				{
-					$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
-									FROM $tbl_stats_exercices AS ex
-									WHERE ex.exe_user_id='".$_user['user_id']."' AND ex.exe_cours_id = '".$a_infosCours['code']."'
-									AND ex.exe_exo_id = ".$a_exercices['id']
-								 ;
-					$resultEssais = api_sql_query($sqlEssais);
-					$a_essais = mysql_fetch_array($resultEssais);
-
-					$sqlScore = "SELECT exe_id , exe_result,exe_weighting
-								 FROM $tbl_stats_exercices
-								 WHERE exe_user_id = ".$_user['user_id']."
-								 AND exe_cours_id = '".$a_infosCours['code']."'
-								 AND exe_exo_id = ".$a_exercices['id']."
-								ORDER BY exe_date DESC LIMIT 1"
-									;
-
-					$resultScore = api_sql_query($sqlScore);
-					$score = 0;
-					while($a_score = mysql_fetch_array($resultScore))
-					{
-						$score = $score + $a_score['exe_result'];
-						$weighting = $weighting + $a_score['exe_weighting'];
-						$exe_id = $a_score['exe_id'];
+				
+				$sql='SELECT visibility FROM '.$a_infosCours['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
+				$resultVisibilityTests = api_sql_query($sql);
+				
+				if(mysql_result($resultVisibilityTests,0,'visibility')==1){
+				
+					$sqlExercices = "	SELECT quiz.title,id
+									FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
+									WHERE active='1'
+									";
+	
+	
+					$resuktExercices = api_sql_query($sqlExercices);
+					if(mysql_num_rows($resuktExercices)>0){
+						while($a_exercices = mysql_fetch_array($resuktExercices))
+						{
+							$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
+											FROM $tbl_stats_exercices AS ex
+											WHERE ex.exe_user_id='".$_user['user_id']."' AND ex.exe_cours_id = '".$a_infosCours['code']."'
+											AND ex.exe_exo_id = ".$a_exercices['id']
+										 ;
+							$resultEssais = api_sql_query($sqlEssais);
+							$a_essais = mysql_fetch_array($resultEssais);
+		
+							$sqlScore = "SELECT exe_id , exe_result,exe_weighting
+										 FROM $tbl_stats_exercices
+										 WHERE exe_user_id = ".$_user['user_id']."
+										 AND exe_cours_id = '".$a_infosCours['code']."'
+										 AND exe_exo_id = ".$a_exercices['id']."
+										ORDER BY exe_date DESC LIMIT 1"
+											;
+		
+							$resultScore = api_sql_query($sqlScore);
+							$score = 0;
+							while($a_score = mysql_fetch_array($resultScore))
+							{
+								$score = $score + $a_score['exe_result'];
+								$weighting = $weighting + $a_score['exe_weighting'];
+								$exe_id = $a_score['exe_id'];
+							}
+							$pourcentageScore = round(($score*100)/$weighting);
+		
+							$weighting = 0;
+		
+							echo "<tr>
+									<td>
+								 ";
+							echo 		$a_exercices['title'];
+							echo "	</td>
+								 ";
+							echo "	<td align='center'>
+								  ";
+							echo $pourcentageScore.'%';
+							echo "	</td>
+		
+									<td align='center'>
+								 ";
+							echo 		$a_essais['essais'];
+							echo '	</td>
+									<td align="center" width="25">
+								 ';
+							if($a_essais['essais']>0)
+								echo '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+							echo "	</td>
+								  </tr>
+								 ";
+						}
 					}
-					$pourcentageScore = round(($score*100)/$weighting);
-
-					$weighting = 0;
-
-					echo "<tr>
-							<td>
-						 ";
-					echo 		$a_exercices['title'];
-					echo "	</td>
-						 ";
-					echo "	<td align='center'>
-						  ";
-					echo $pourcentageScore.'%';
-					echo "	</td>
-
-							<td align='center'>
-						 ";
-					echo 		$a_essais['essais'];
-					echo '	</td>
-							<td align="center" width="25">
-						 ';
-					if($a_essais['essais']>0)
-						echo '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.$_GET['id_session'].'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
-					echo "	</td>
-						  </tr>
-						 ";
+					else{
+						echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';
+					}
 				}
-
+				else{
+					echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';
+				}
 
 			?>
 		</table>

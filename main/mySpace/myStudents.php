@@ -637,88 +637,107 @@ if(!empty($_GET['student']))
 			<?php
 			$csv_content[] = array();
 			$csv_content[] = array(get_lang('Exercices'),get_lang('Score'),get_lang('Attempts'));
-			$sqlExercices = "	SELECT quiz.title,id
-								FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
-							";
-	
-			$resultExercices = api_sql_query($sqlExercices);
-			$i = 0;
-			if(mysql_num_rows($resultExercices)>0)
-			{
-				while($a_exercices = mysql_fetch_array($resultExercices))
-				{
-					$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
-									FROM $tbl_stats_exercices AS ex
-									WHERE  ex.exe_cours_id = '".$a_infosCours['code']."'
-									AND ex.exe_exo_id = ".$a_exercices['id']."
-									AND exe_user_id='".$_GET["student"]."'"
-								 ;
-					$resultEssais = api_sql_query($sqlEssais);
-					$a_essais = mysql_fetch_array($resultEssais);
-					
-					$sqlScore = "SELECT exe_id, exe_result,exe_weighting
-								 FROM $tbl_stats_exercices
-								 WHERE exe_user_id = ".$_GET['student']."
-								 AND exe_cours_id = '".$a_infosCours['code']."'
-								 AND exe_exo_id = ".$a_exercices['id']."
-								 ORDER BY exe_date DESC LIMIT 1";
+			
+			$a_infosCours = CourseManager :: get_course_information($_GET['course']);
 
-					$resultScore = api_sql_query($sqlScore);
-					$score = 0; 
-					while($a_score = mysql_fetch_array($resultScore))
+			$sql='SELECT visibility FROM '.$a_infosCours['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
+			$resultVisibilityQuizz = api_sql_query($sql);
+			
+			if(mysql_result($resultVisibilityQuizz,0,'visibility')==1){
+			
+				$sqlExercices = "	SELECT quiz.title,id
+									FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
+									WHERE active='1'
+									";
+		
+				$resultExercices = api_sql_query($sqlExercices);
+				$i = 0;
+				if(mysql_num_rows($resultExercices)>0)
+				{
+					while($a_exercices = mysql_fetch_array($resultExercices))
 					{
-						$score = $score + $a_score['exe_result'];
-						$weighting = $weighting + $a_score['exe_weighting'];
-						$exe_id = $a_score['exe_id'];
-					}
-					$pourcentageScore = round(($score*100)/$weighting);
+						$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
+										FROM $tbl_stats_exercices AS ex
+										WHERE  ex.exe_cours_id = '".$a_infosCours['code']."'
+										AND ex.exe_exo_id = ".$a_exercices['id']."
+										AND exe_user_id='".$_GET["student"]."'"
+									 ;
+						$resultEssais = api_sql_query($sqlEssais);
+						$a_essais = mysql_fetch_array($resultEssais);
+						
+						$sqlScore = "SELECT exe_id, exe_result,exe_weighting
+									 FROM $tbl_stats_exercices
+									 WHERE exe_user_id = ".$_GET['student']."
+									 AND exe_cours_id = '".$a_infosCours['code']."'
+									 AND exe_exo_id = ".$a_exercices['id']."
+									 ORDER BY exe_date DESC LIMIT 1";
 	
-					$weighting = 0;
+						$resultScore = api_sql_query($sqlScore);
+						$score = 0; 
+						while($a_score = mysql_fetch_array($resultScore))
+						{
+							$score = $score + $a_score['exe_result'];
+							$weighting = $weighting + $a_score['exe_weighting'];
+							$exe_id = $a_score['exe_id'];
+						}
+						$pourcentageScore = round(($score*100)/$weighting);
+		
+						$weighting = 0;
+						
+						$csv_content[] = array($a_exercices['title'], $pourcentageScore.' %', $a_essais['essais']);
+						
+						if($i%2==0){
+							$s_css_class="row_odd";
+						}
+						else{
+							$s_css_class="row_even";
+						}
+						
+						$i++;
+						
+						echo "<tr class='$s_css_class'>
+								<td>
+							 ";
+						echo 		$a_exercices['title'];
+						echo "	</td>
+							 ";
+						echo "	<td align='right'>
+							  ";
+						echo 		$pourcentageScore.' %';
+						echo "	</td>
+								<td align='right'>
+							 ";
+						echo 		$a_essais['essais'];
+						echo "	</td>
+								<td align='center'>
+							 ";
+						
+						$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$a_exercices['id'].'" AND exe_user_id="'.$_GET['student'].'" AND exe_cours_id="'.$a_infosCours['code'].'" ORDER BY exe_date DESC LIMIT 1';
+						$resultLastAttempt = api_sql_query($sql_last_attempt);
+						$id_last_attempt=mysql_result($resultLastAttempt,0,0);
+						
+						if($a_essais['essais']>0)
+							echo		'<a href="../exercice/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin='.(empty($_GET['origin']) ? 'tracking' : $_GET['origin']).'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
+						echo "	</td>
+							  </tr>
+							 ";
+							 
+						$dataExercices[$i][] =  $a_exercices['title'];
+						$dataExercices[$i][] = $pourcentageScore.'%';
+						$dataExercices[$i][] =  $a_essais['essais'];
+						//$dataExercices[$i][] =  corrections;
+						$i++;
 					
-					$csv_content[] = array($a_exercices['title'], $pourcentageScore.' %', $a_essais['essais']);
-					
-					if($i%2==0){
-						$s_css_class="row_odd";
 					}
-					else{
-						$s_css_class="row_even";
-					}
-					
-					$i++;
-					
-					echo "<tr class='$s_css_class'>
-							<td>
+				}
+				else
+				{
+					echo "	<tr>	
+								<td colspan='6'>
+									".get_lang('NoExercise')."
+								</td>
+							</tr>
 						 ";
-					echo 		$a_exercices['title'];
-					echo "	</td>
-						 ";
-					echo "	<td align='right'>
-						  ";
-					echo 		$pourcentageScore.' %';
-					echo "	</td>
-							<td align='right'>
-						 ";
-					echo 		$a_essais['essais'];
-					echo "	</td>
-							<td align='center'>
-						 ";
-					
-					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$a_exercices['id'].'" AND exe_user_id="'.$_GET['student'].'" AND exe_cours_id="'.$a_infosCours['code'].'" ORDER BY exe_date DESC LIMIT 1';
-					$resultLastAttempt = api_sql_query($sql_last_attempt);
-					$id_last_attempt=mysql_result($resultLastAttempt,0,0);
-					
-					if($a_essais['essais']>0)
-						echo		'<a href="../exercice/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$a_infosCours['code'].'&student='.$_GET['student'].'&origin='.(empty($_GET['origin']) ? 'tracking' : $_GET['origin']).'"> <img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif" border="0"> </a>';
-					echo "	</td>
-						  </tr>
-						 ";
-						 
-					$dataExercices[$i][] =  $a_exercices['title'];
-					$dataExercices[$i][] = $pourcentageScore.'%';
-					$dataExercices[$i][] =  $a_essais['essais'];
-					//$dataExercices[$i][] =  corrections;
-					$i++;
-				
 				}
 			}
 			else
@@ -729,7 +748,7 @@ if(!empty($_GET['student']))
 							</td>
 						</tr>
 					 ";
-				}
+			}
 					
 ?>					
 					</table>

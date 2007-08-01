@@ -71,7 +71,7 @@ if($origin != 'tracking')
 {
 	$output .= "<tr><td><div class='title'>".htmlentities(get_lang('ScormMystatus'), ENT_QUOTES, $dokeos_charset)."</div></td></tr>";
 }
-$output .= "<tr><td>&nbsp;</td></tr>"."<tr><td>"."<table border='0' class='data_table'><tr>\n".'<td width="16">'.$extend_all_link.'</td>'.'<td colspan="4" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormLessonTitle'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormStatus'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormScore'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormTime'), ENT_QUOTES, $dokeos_charset)."</div></td></tr>\n";
+$output .= "<tr><td>&nbsp;</td></tr>"."<tr><td>"."<table border='0' class='data_table'><tr>\n".'<td width="16">'.$extend_all_link.'</td>'.'<td colspan="4" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormLessonTitle'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormStatus'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormScore'), ENT_QUOTES, $dokeos_charset)."</div></td>\n".'<td colspan="2" class="title"><div class="mystatusfirstrow">'.htmlentities(get_lang('ScormTime'), ENT_QUOTES, $dokeos_charset)."</div></td><td class='title'><div class='mystatusfirstrow'>".get_lang('Actions')."</div></td></tr>\n";
 //going through the items using the $items[] array instead of the database order ensures
 // we get them in the same order as in the imsmanifest file, which is rather random when using
 // the database table
@@ -111,9 +111,9 @@ foreach ($list as $my_item_id) {
 		$qry_order = 'ASC';
 	}
 	if (!empty ($view)) {
-		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid, i.title as mytitle, i.max_score as mymaxscore, i.item_type as item_type, iv.view_count as iv_view_count, iv.id as iv_id "." FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v "." WHERE i.id = iv.lp_item_id "." AND i.id = $my_item_id "." AND iv.lp_view_id = v.id "." AND i.lp_id = $lp_id "." AND v.user_id = ".$user_id.""." AND v.view_count = $view "." ORDER BY iv.view_count $qry_order ";
+		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid, i.title as mytitle, i.max_score as mymaxscore, i.item_type as item_type, iv.view_count as iv_view_count, iv.id as iv_id, path as path "." FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v "." WHERE i.id = iv.lp_item_id "." AND i.id = $my_item_id "." AND iv.lp_view_id = v.id "." AND i.lp_id = $lp_id "." AND v.user_id = ".$user_id.""." AND v.view_count = $view "." ORDER BY iv.view_count $qry_order ";
 	} else {
-		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid, i.title as mytitle, i.max_score as mymaxscore, i.item_type as item_type, iv.view_count as iv_view_count, iv.id as iv_id "." FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v "." WHERE i.id = iv.lp_item_id "." AND i.id = $my_item_id "." AND iv.lp_view_id = v.id "." AND i.lp_id = $lp_id "." AND v.user_id = ".$user_id." "." ORDER BY iv.view_count $qry_order ";
+		$sql = "SELECT iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid, i.title as mytitle, i.max_score as mymaxscore, i.item_type as item_type, iv.view_count as iv_view_count, iv.id as iv_id, path as path "." FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v "." WHERE i.id = iv.lp_item_id "." AND i.id = $my_item_id "." AND iv.lp_view_id = v.id "." AND i.lp_id = $lp_id "." AND v.user_id = ".$user_id." "." ORDER BY iv.view_count $qry_order ";
 	}
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$num = Database :: num_rows($result);
@@ -137,7 +137,18 @@ foreach ($list as $my_item_id) {
 		}
 
 		if ($row['item_type'] != 'dokeos_chapter') {
-			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4" class="content"><div class="mystatus">'.$title."</div></td>\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td>'."\n"."</tr>\n";
+			if($row['item_type'] == 'quiz'){
+				if($_SESSION['status'][$_course["id"]] == 5){
+					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$row['path'].'&cidReq='.$_SESSION['_course']['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+				}
+				else{
+					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id='.$row['path'].'&cidReq='.$_SESSION['_course']['id'].'&student='.$_GET['student_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+				}
+			}
+			else{
+				$correct_test_link='-';
+			}
+			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4" class="content"><div class="mystatus">'.$title."</div></td>\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td>'."\n".'<td colspan="2" class="content"></td><td class="content">'.$correct_test_link.'</td>'."\n"."</tr>\n";
 		}
 
 		$counter ++;
@@ -185,7 +196,7 @@ foreach ($list as $my_item_id) {
 			if ($row['item_type'] != 'dokeos_chapter') {
 				$output .= "<tr class='$oddclass'>\n"."<td></td>\n"."<td>$extend_attempt_link</td>\n".'<td colspan="3">'.htmlentities(get_lang('Attempt'), ENT_QUOTES, $dokeos_charset).' '.$row['iv_view_count']."</td>\n"
 				//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
-				.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : $score.'/'.$maxscore)."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td>\n"."</tr>\n";
+				.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : $score.'/'.$maxscore)."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td><td></td>\n"."</tr>\n";
 			}
 
 			$counter ++;
@@ -272,9 +283,20 @@ foreach ($list as $my_item_id) {
 		$my_lesson_status = htmlentities(get_lang($mylanglist[$lesson_status]), ENT_QUOTES, $dokeos_charset);
 
 		if ($row['item_type'] != 'dokeos_chapter') {
+			if($row['item_type'] == 'quiz'){
+				if($_SESSION['status'][$_course["id"]] == 5){
+					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$row['path'].'&cidReq='.$_SESSION['_course']['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+				}
+				else{
+					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id='.$row['path'].'&cidReq='.$_SESSION['_course']['id'].'&student='.$_GET['student_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+				}
+			}
+			else{
+				$correct_test_link='-';
+			}
 			$output .= "<tr class='$oddclass'>\n"."<td>$extend_link</td>\n".'<td colspan="4"><div class="mystatus">'.$title.'</div></td>'."\n"
 			//."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
-			.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : $score.'/'.$maxscore)."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td>\n"."</tr>\n";
+			.'<td colspan="2"><font color="'.$color.'"><div class="mystatus">'.$my_lesson_status."</div></font></td>\n".'<td colspan="2"><div class="mystatus" align="center">'. ($score == 0 ? '-' : $score.'/'.$maxscore)."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$time."</div></td><td>$correct_test_link</td>\n"."</tr>\n";
 						
 			if($export_csv)
 			{
@@ -329,7 +351,7 @@ if (($counter % 2) == 0) {
 
 $output .= "<tr class='$oddclass'>\n"."<td></td>\n".'<td colspan="4"><div class="mystatus"><i>'.htmlentities(get_lang('AccomplishedStepsTotal'), ENT_QUOTES, $dokeos_charset)."</i></div></td>\n"
 //."<td><font color='$color'><div class='mystatus'>".htmlentities($array_status[$lesson_status],ENT_QUOTES,$charset_lang)."</div></font></td>\n"
-.'<td colspan="2"></td>'."\n".'<td colspan="2"><div class="mystatus" align="center">'. ($total_score == 0 ? '-' : $total_percent.'%')."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$total_time.'</div></td>'."\n"."</tr>\n";
+.'<td colspan="2"></td>'."\n".'<td colspan="2"><div class="mystatus" align="center">'. ($total_score == 0 ? '-' : $total_percent.'%')."</div></td>\n".'<td colspan="2"><div class="mystatus">'.$total_time.'</div></td><td></td>'."\n"."</tr>\n";
 
 $output .= "</table></td></tr></table>";
 

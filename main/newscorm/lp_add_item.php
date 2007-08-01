@@ -2,7 +2,7 @@
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
@@ -25,12 +25,13 @@
 */
 /**
 ============================================================================== 
-* This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
+* This is a learning path creation and player tool in Dokeos - previously 
+* learnpath_handler.php
 *
 * @author Patrick Cool
 * @author Denes Nagy
 * @author Roan Embrechts, refactoring and code cleaning
-* @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
+* @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update
 * @package dokeos.learnpath
 ============================================================================== 
 */
@@ -129,12 +130,6 @@ $therow=Database::fetch_array($result);
 /*==================================================
 			SHOWING THE ADMIN TOOLS
  ==================================================*/
-
-
-
-/*==================================================
-	prerequisites setting end
- ==================================================*/		  
 
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
 $interbreadcrumb[]= array ("url"=>api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
@@ -341,13 +336,19 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						
 						if(isset($_GET['file']) && is_numeric($_GET['file']))
 						{
-							echo $_SESSION['oLP']->display_document_form('add', 0, $_GET['file']);
+						echo $_SESSION['oLP']->display_document_form('add', 0, $_GET['file']);
 						}
 						else
 						{
 							echo $_SESSION['oLP']->display_document_form('add', 0);
 						}
 						
+						break;
+					
+					case 'hotpotatoes':
+					
+						echo $_SESSION['oLP']->display_hotpotatoes_form('add', 0, $_GET['file']);
+
 						break;
 					
 					case 'quiz':

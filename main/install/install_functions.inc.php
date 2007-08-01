@@ -952,10 +952,11 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	display_configuration_parameter($installType, get_lang("AdminPhone"), "adminPhoneForm", $adminPhoneForm);
 
 	//Parameter 7: administrator's login
-	display_configuration_parameter($installType, get_lang("AdminLogin"), "loginForm", $loginForm, false);
+	display_configuration_parameter($installType, get_lang("AdminLogin"), "loginForm", $loginForm, ($installType == 'update' ? true : false));
 
 	//Parameter 8: administrator's password
-	display_configuration_parameter($installType, get_lang("AdminPass"), "passForm", $passForm, false);
+	if($installType != 'update')
+		display_configuration_parameter($installType, get_lang("AdminPass"), "passForm", $passForm, false);
 
 	//Parameter 9: campus name
 	display_configuration_parameter($installType, get_lang("CampusName"), "campusForm", $campusForm);

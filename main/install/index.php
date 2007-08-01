@@ -476,7 +476,7 @@ elseif($_POST['step6'])
 	{
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
-		include('update-db-1.8.0-1.8.2.inc.php');
+		include('update-db-1.8.2-1.8.3.inc.php');
 		//include('update-files-1.8.0-1.8.2.inc.php');
 	}
 	else

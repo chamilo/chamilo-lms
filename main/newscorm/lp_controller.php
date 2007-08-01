@@ -163,15 +163,19 @@ switch($_REQUEST['action'])
 		
 		if($debug > 0) error_log('New LP - add item action triggered', 0);
 		
-		if(!$lp_found){ error_log('New LP - No learnpath given for add item', 0); require('lp_list.php'); }
+		if(!$lp_found)
+		{	//check if the learnpath ID was defined, otherwise send back to list
+			error_log('New LP - No learnpath given for add item', 0); 
+			require('lp_list.php'); 
+		}
 		else
 		{
 			$_SESSION['refresh'] = 1;
-				
+			
 			if(isset($_POST['submit_button']) && !empty($_POST['title']))
-			{				
+			{	//if a title was sumbitted 				
 				if(isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time'])
-				{
+				{	//check post_time to ensure ??? (counter-hacking measure?)
 					require('lp_add_item.php');
 				}
 				else
@@ -192,10 +196,10 @@ switch($_REQUEST['action'])
 						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, $_POST['title'], $_POST['description'], $_POST['prerequisites']);
 					}
 					else
-					{
+					{	//for all other item types than documents, load the item using the item type and path rather than its ID
 						$new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
 					}
-					
+					//display 					
 					require('lp_add_item.php');
 				}
 			}

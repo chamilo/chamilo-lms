@@ -106,7 +106,7 @@ if ( empty ($exerciseId ) ) {
     $exerciseId = mysql_real_escape_string($_REQUEST['exerciseId']);
 }
 if ( empty ( $file ) ) {
-    $hpchoice   = mysql_real_escape_string($_REQUEST['file']);
+    $file   = mysql_real_escape_string($_REQUEST['file']);
 }
 $learnpath_id = mysql_real_escape_string($_REQUEST['learnpath_id']);
 $learnpath_item_id = mysql_real_escape_string($_REQUEST['learnpath_item_id']);
@@ -372,22 +372,22 @@ if($is_allowedToEdit)
 		switch($hpchoice)
 		{
 				case 'delete':	// deletes an exercise
-							$imgparams = array();
-							$imgcount = 0;
-							GetImgParams($file,$documentPath,$imgparams,$imgcount);
-							$fld = GetFolderName($file);
-							for($i=0;$i < $imgcount;$i++)
-							{
-									my_delete($documentPath.$uploadPath."/".$fld."/".$imgparams[$i]);
-									update_db_info("delete", $uploadPath."/".$fld."/".$imgparams[$i]);
-							}
+					$imgparams = array();
+					$imgcount = 0;
+					GetImgParams($file,$documentPath,$imgparams,$imgcount);
+					$fld = GetFolderName($file);
+					for($i=0;$i < $imgcount;$i++)
+					{
+							my_delete($documentPath.$uploadPath."/".$fld."/".$imgparams[$i]);
+							update_db_info("delete", $uploadPath."/".$fld."/".$imgparams[$i]);
+					}
 
-							if ( my_delete($documentPath.$file))
-							{
-								update_db_info("delete", $file);
-							}
-							my_delete($documentPath.$uploadPath."/".$fld."/");
-							break;
+					if ( my_delete($documentPath.$file))
+					{
+						update_db_info("delete", $file);
+					}
+					my_delete($documentPath.$uploadPath."/".$fld."/");
+					break;
 				case 'enable':  // enables an exercise
 					$newVisibilityStatus = "1"; //"visible"
                     $query = "SELECT id FROM $TBL_DOCUMENT WHERE path='$file'";
@@ -406,8 +406,9 @@ if($is_allowedToEdit)
 					#$query = "UPDATE $TBL_DOCUMENT SET visibility='$newVisibilityStatus' WHERE path=\"".$file."\""; //added by Toon
 					#api_sql_query($query,__FILE__,__LINE__);
 					//$dialogBox = get_lang('ViMod');
-
-								break;
+					break;
+				default:
+					break;
 		}
 	}
 
@@ -552,7 +553,8 @@ if($show == 'test'){
 			if($is_allowedToEdit)
 			{
 				?>
-  <td width="27%" colspan="2"><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <td width="27%" colspan="2">
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
       <td width="30" align="left"><img src="../img/quiz.gif"></td>
       <td width="15" valign="left" align="center"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
@@ -709,15 +711,14 @@ if($show == 'test'){
 				{
 					/************/
 					?>
-  <td width="27%"><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <td width="27%" colspan="2">
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
-      <td width="20" align="right"><?php echo ($ind+($page*$limitExPage)).'.'; ?><!--<img src="../img/jqz.jpg" alt="HotPotatoes" />--></td>
-	   <td width="1">&nbsp;</td>
-           <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
+      <td width="30" align="left"><img src="../img/jqz.jpg" alt="HotPotatoes" /></td>
+	   <td width="15" align="center"><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
+       <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
     </tr>
   </table></td>
-  <td>
- </td>
   <td></td>
       <td width="12%" align="center"><a href="adminhp.php?hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" alt="<?php echo htmlentities(get_lang('Modify')); ?>" /></a>
   <a href="<?php echo $exercicePath; ?>?hpchoice=delete&file=<?php echo $path; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSure')).$title."?"); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete')); ?>" /></a>

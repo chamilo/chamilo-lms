@@ -441,7 +441,7 @@ if($show == 'test'){
 			"<img src=\"../img/new_test.gif\" alt=\"new test\" align=\"absbottom\">&nbsp;<a href=\"exercise_admin.php?".api_get_cidreq()."\">".get_lang("NewEx")."</a>",
 
 			//"<img src=\"../img/quiz_na.gif\" alt=\"new test\" valign=\"ABSMIDDLE\"><a href=\"question_pool.php\">".get_lang("QuestionPool")."</a> | ",
-			//" | <img src=\"../img/jqz.jpg\" alt=\"HotPotatoes\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"hotpotatoes.php\">".get_lang("ImportHotPotatoesQuiz")."</a>",
+			" | <img src=\"../img/jqz.jpg\" alt=\"HotPotatoes\" valign=\"ABSMIDDLE\">&nbsp;<a href=\"hotpotatoes.php\">".get_lang("ImportHotPotatoesQuiz")."</a>",
 			"</td>",
 			"<td width=\"50%\" align=\"right\">";
 	}
@@ -776,7 +776,8 @@ if($show == 'test'){
 					{
 						$ind++;
 					}
-				}echo "<tr><td colspan = '5'><hr></td></tr>";
+				}
+				//echo '<tr><td colspan="5"><hr /></td></tr>';
 			}
 		}
 
@@ -852,37 +853,39 @@ if($_configuration['tracking_enabled'])
 
 		$NoTestRes = 0;
 		$NoHPTestRes = 0;
-
+		//Print the results of tests
 		if(is_array($results))
 		{
 			for($i = 0; $i < sizeof($results); $i++)
 			{
 				$id = $results[$i][5];
 				$mailid = $results[$i][6];
-		?>
-		 <tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
-		  <?php if($is_allowedToEdit): ?>
-			<td><?php $user = $results[$i][0]; echo $results[$i][0]; ?></td><?php endif; ?>
-		  <td><?php $test = $results[$i][1]; echo $results[$i][1]; ?></td>
-		  <td><?php $dt = strftime($dateTimeFormatLong,$results[$i][4]); echo format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]) ?></td>
-		  <td><?php $res = $results[$i][2]; echo $results[$i][2]; ?> / <?php echo $results[$i][3]; ?></td>
-		 <td><?php echo $is_allowedToEdit?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang("Edit")."</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>"?></td>
-
-		 </tr>
-
-		<?php
-
+				$user = $results[$i][0];
+				$test = $results[$i][1];
+				$dt = strftime($dateTimeFormatLong,$results[$i][4]);
+				$res = $results[$i][2];
+				echo '<tr';
+				if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"';
+				echo '>';
+				if($is_allowedToEdit)
+				{
+					$user = $results[$i][0];
+					echo '<td>'.$user.'</td>';
+				}
+				echo '<td>'.$test.'</td>';
+				echo '<td>'.format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]).'</td>';
+		  		echo '<td>'.$res.' / '.$results[$i][3].'</td>';
+				echo '<td>'.($is_allowedToEdit?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang("Edit")."</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>").'</td>';
+				echo '</tr>';
 			}
 		}
 		else
 		{
 				$NoTestRes = 1;
 		}
-
-		// The Result of Tests
+		// Print the Result of Hotpotatoes Tests
 		if(is_array($hpresults))
 		{
-
 			for($i = 0; $i < sizeof($hpresults); $i++)
 			{
 				$title = GetQuizName($hpresults[$i][1],$documentPath);
@@ -890,16 +893,16 @@ if($_configuration['tracking_enabled'])
 				{
 					$title = GetFileName($hpresults[$i][1]);
 				}
-		?>
-		<tr>
-		<?php if($is_allowedToEdit): ?>
-			<td class="content"><?php echo $hpresults[$i][0]; ?></td><?php endif; ?>
-		  <td class="content"><?php echo $title; ?></td>
-		  <td class="content" align="center"><?php echo strftime($dateTimeFormatLong,$hpresults[$i][4]); ?></td>
-		  <td class="content" align="center"><?php echo $hpresults[$i][2]; ?> / <?php echo $hpresults[$i][3]; ?></td>
-		</tr>
-
-		<?php
+				echo '<tr>';
+				if($is_allowedToEdit)
+				{
+					echo '<td class="content">'.$hpresults[$i][0].'</td>';
+				}
+				echo '<td class="content">'.$title.'</td>';
+				echo '<td class="content">'.strftime($dateTimeFormatLong,$hpresults[$i][4]).'</td>';
+				echo '<td class="content">'.$hpresults[$i][2].' / '.$hpresults[$i][3].'</td>';
+				echo '<td></td>'; //there is no possibility to edit the results of a Hotpotatoes test
+				echo '</tr>';
 			}
 		}
 		else

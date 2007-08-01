@@ -74,7 +74,7 @@ $picturePath=$documentPath.'/images';
 $audioPath=$documentPath.'/audio';
 
 // hotpotatoes
-$uploadPath = "/HotPotatoes_files";
+$uploadPath = DIR_HOTPOTATOES; //defined in main_api
 $exercicePath = api_get_self();
 $exfile = explode('/',$exercicePath);
 $exfile = strtolower($exfile[sizeof($exfile)-1]);

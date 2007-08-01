@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language>
+	<labelfield>
+		<labelid>1</labelid>
+		<labelvalue>Kamera</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>2</labelid>
+		<labelvalue>Mikrophon</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>3</labelid>
+		<labelvalue>Name</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>4</labelid>
+		<labelvalue>Stream löschen</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>5</labelid>
+		<labelvalue>Fortschritt</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>6</labelid>
+		<labelvalue>Play</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>7</labelid>
+		<labelvalue>Stop</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>8</labelid>
+		<labelvalue>Record</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>9</labelid>
+		<labelvalue>Keine Datei vorhanden</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>10</labelid>
+		<labelvalue>Aufnahme nur für Lehrer verfügbar</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>11</labelid>
+		<labelvalue>verbunden Benutzer:</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>12</labelid>
+		<labelvalue>Konferenz starten</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>13</labelid>
+		<labelvalue>Mein Name</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>14</labelid>
+		<labelvalue>Dokeos VideoConference</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>15</labelid>
+		<labelvalue>Präsentation importieren</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>16</labelid>
+		<labelvalue>Liste neu laden</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>17</labelid>
+		<labelvalue>Zum Hauptverzeichnis</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>18</labelid>
+		<labelvalue>neue Umfrage</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>19</labelid>
+		<labelvalue>Eine neue Umfrage für die Konferenz.</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>20</labelid>
+		<labelvalue>Frage:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>21</labelid>
+		<labelvalue>Umfragenart:</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>22</labelid>
+		<labelvalue>anlegen</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>23</labelid>
+		<labelvalue>Info: Jeder verbundene Benutzer erhält eine Nachricht mit der neuen Umfrage.</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>24</labelid>
+		<labelvalue>Umfrage anlegen</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>25</labelid>
+		<labelvalue>abbrechen</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>26</labelid>
+		<labelvalue>Ja/Nein</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>27</labelid>
+		<labelvalue>Numerisch 1-10</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>28</labelid>
+		<labelvalue>Umfrage</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>29</labelid>
+		<labelvalue>Sie müssen Moderator/Lehrer in diesem Raum sein um eine Umfrage anzulegen.</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>30</labelid>
+		<labelvalue>Ihr Stimme wurde abgegeben.</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>31</labelid>
+		<labelvalue>Sie haben für diese Umfrage bereits ihr Votum abgegeben.</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>32</labelid>
+		<labelvalue>abstimmen!</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>33</labelid>
+		<labelvalue>Ihre Antwort:</labelvalue>		
+	</labelfield>												
+	<labelfield>
+		<labelid>34</labelid>
+		<labelvalue>Ja</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>35</labelid>
+		<labelvalue>Nein</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>36</labelid>
+		<labelvalue>will wissen:</labelvalue>		
+	</labelfield>			
+	<labelfield>
+		<labelid>37</labelid>
+		<labelvalue>Umfrageergebnisse</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>38</labelid>
+		<labelvalue>Frage:</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>39</labelid>
+		<labelvalue>Antworten:</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>40</labelid>
+		<labelvalue>Ergebnis:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>41</labelid>
+		<labelvalue>Es gibt zur Zeit keine Umfage.</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>42</labelid>
+		<labelvalue>abstimmen!</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>43</labelid>
+		<labelvalue>Meeting (max 4 Plätze)</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>44</labelid>
+		<labelvalue>Conference (max 50 Plätze)</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>45</labelid>
+		<labelvalue>Modus</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>46</labelid>
+		<labelvalue>verbleibende Plätze</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>47</labelid>
+		<labelvalue>Bereits vergeben</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>48</labelid>
+		<labelvalue>Eintreten</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>49</labelid>
+		<labelvalue>Der Moderator/Lehrer dieses Raums hat den Raum verlassen.</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>50</labelid>
+		<labelvalue>Systemnachricht</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>51</labelid>
+		<labelvalue>Geräteauswahl</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>52</labelid>
+		<labelvalue>Kamera wählen:</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>53</labelid>
+		<labelvalue>Mikrophon wählen:</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>54</labelid>
+		<labelvalue>ok</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>55</labelid>
+		<labelvalue>abbrechen</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>56</labelid>
+		<labelvalue>Sie müssen sich erneut verbinden damit die Änderungen wirksam werden.</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>57</labelid>
+		<labelvalue>Einstellungen ändern.</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>58</labelid>
+		<labelvalue>Kurs:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>59</labelid>
+		<labelvalue>Kurssprache:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>60</labelid>
+		<labelvalue>ok</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>61</labelid>
+		<labelvalue>abbrechen</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>62</labelid>
+		<labelvalue>Zeichenbrett leeren</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>63</labelid>
+		<labelvalue>Soll dass Zeichenbrett geleert werden bevor ein neues Bild hinzugefügt wird?</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>64</labelid>
+		<labelvalue>Nicht nochmal fragen</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>65</labelid>
+		<labelvalue>nein</labelvalue>		
+	</labelfield>			
+	<labelfield>
+		<labelid>66</labelid>
+		<labelvalue>Einstellungen bearbeiten</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>67</labelid>
+		<labelvalue>Bestätigung anfordern bevor das Zeichenbrett geleert wird.</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>68</labelid>
+		<labelvalue>User Info</labelvalue>		
+	</labelfield>			
+	<labelfield>
+		<labelid>69</labelid>
+		<labelvalue>Clear DrawArea</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>70</labelid>
+		<labelvalue>Undo</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>71</labelid>
+		<labelvalue>Redo</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>72</labelid>
+		<labelvalue>Select an Object</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>73</labelid>
+		<labelvalue>Text</labelvalue>		
+	</labelfield>					
+	<labelfield>
+		<labelid>74</labelid>
+		<labelvalue>Paint</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>75</labelid>
+		<labelvalue>Draw line</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>76</labelid>
+		<labelvalue>Draw underline</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>77</labelid>
+		<labelvalue>Rectangle</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>78</labelid>
+		<labelvalue>Ellipse</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>79</labelid>
+		<labelvalue>Arrow</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>80</labelid>
+		<labelvalue>delete chosen Item</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>81</labelid>
+		<labelvalue>Apply for moderation</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>82</labelid>
+		<labelvalue>apply</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>83</labelid>
+		<labelvalue>cancel</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>84</labelid>
+		<labelvalue>Become moderator</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>85</labelid>
+		<labelvalue>close</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>86</labelid>
+		<labelvalue>italic</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>87</labelid>
+		<labelvalue>bold</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>88</labelid>
+		<labelvalue>WAITING</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>89</labelid>
+		<labelvalue>A User wants to apply for moderation:</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>90</labelid>
+		<labelvalue>accept</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>91</labelid>
+		<labelvalue>reject</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>92</labelid>
+		<labelvalue>cancel</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>93</labelid>
+		<labelvalue>Sending request to following Users</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>94</labelid>
+		<labelvalue>Accepted</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>95</labelid>
+		<labelvalue>Rejected</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>96</labelid>
+		<labelvalue>Change Moderator</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>97</labelid>
+		<labelvalue>You are not moderating this course!</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>98</labelid>
+		<labelvalue>Moderator:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>99</labelid>
+		<labelvalue>This Room is full. Sorry please try again later.</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>100</labelid>
+		<labelvalue></labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>101</labelid>
+		<labelvalue>close</labelvalue>		
+	</labelfield>				
+	<labelfield>
+		<labelid>102</labelid>
+		<labelvalue>loading</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>103</labelid>
+		<labelvalue>Please wait while loading</labelvalue>		
+	</labelfield>														
+	<labelfield>
+		<labelid>104</labelid>
+		<labelvalue>Synchronizing Conference Members</labelvalue>		
+	</labelfield>												
+</language>

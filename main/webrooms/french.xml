@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language>
+	<labelfield>
+		<labelid>1</labelid>
+		<labelvalue>Caméra</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>2</labelid>
+		<labelvalue>Micro</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>3</labelid>
+		<labelvalue>Nom</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>4</labelid>
+		<labelvalue>Effacer le commentaire</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>5</labelid>
+		<labelvalue>Progrès</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>6</labelid>
+		<labelvalue>Jouer</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>7</labelid>
+		<labelvalue>Stop</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>8</labelid>
+		<labelvalue>Record</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>9</labelid>
+		<labelvalue>Pas de fichier</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>10</labelid>
+		<labelvalue>L'enregistrement est réservé aux profs</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>11</labelid>
+		<labelvalue>Utilisateurs actuellement:</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>12</labelid>
+		<labelvalue>Démarrer la conférence</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>13</labelid>
+		<labelvalue>Mon nom</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>14</labelid>
+		<labelvalue>Dokeos VidéoConférence</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>15</labelid>
+		<labelvalue>Importer une présentation</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>16</labelid>
+		<labelvalue>Rafraîchir la liste</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>17</labelid>
+		<labelvalue>Remonter dans l'arborescence</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>18</labelid>
+		<labelvalue>Nouveau sondagel</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>19</labelid>
+		<labelvalue>Créer un sondage.</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>20</labelid>
+		<labelvalue>Question:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>21</labelid>
+		<labelvalue>Type de question:</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>22</labelid>
+		<labelvalue>créer</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>23</labelid>
+		<labelvalue>Info: tout utilisateur connecté dans cette chambre recevra le sondage.</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>24</labelid>
+		<labelvalue>Créer un sondage</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>25</labelid>
+		<labelvalue>Annuler</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>26</labelid>
+		<labelvalue>Oui/Non</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>27</labelid>
+		<labelvalue>Numérique de 1 à 10</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>28</labelid>
+		<labelvalue>Sondage</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>29</labelid>
+		<labelvalue>Vous devez être modérateur pour créer des sondages.</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>30</labelid>
+		<labelvalue>Votre vote a été enregistré.</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>31</labelid>
+		<labelvalue>Vous avez déjà voté!</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>32</labelid>
+		<labelvalue>votez!</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>33</labelid>
+		<labelvalue>Votre réponse:</labelvalue>		
+	</labelfield>												
+	<labelfield>
+		<labelid>34</labelid>
+		<labelvalue>Oui</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>35</labelid>
+		<labelvalue>Non</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>36</labelid>
+		<labelvalue>voudrait savoir:</labelvalue>		
+	</labelfield>			
+	<labelfield>
+		<labelid>37</labelid>
+		<labelvalue>Résultats du sondage</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>38</labelid>
+		<labelvalue>Question:</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>39</labelid>
+		<labelvalue>Votes:</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>40</labelid>
+		<labelvalue>Résultat:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>41</labelid>
+		<labelvalue>Il n'y a pas de sondage.</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>42</labelid>
+		<labelvalue>Votez!</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>43</labelid>
+		<labelvalue>Réunion (max 4 places)</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>44</labelid>
+		<labelvalue>Conférence (max 500 places)</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>45</labelid>
+		<labelvalue>Mode</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>46</labelid>
+		<labelvalue>Places restantes</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>47</labelid>
+		<labelvalue>Déjà connectés</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>48</labelid>
+		<labelvalue>Déjà connectés</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>49</labelid>
+		<labelvalue>Le modérateur a quitté la conférence.</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>50</labelid>
+		<labelvalue>Message système</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>51</labelid>
+		<labelvalue>Sélectionnez les périphériques</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>52</labelid>
+		<labelvalue>Sélection de la caméra:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>53</labelid>
+		<labelvalue>Sélection du micro:</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>54</labelid>
+		<labelvalue>Ok</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>55</labelid>
+		<labelvalue>Annuler</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>56</labelid>
+		<labelvalue>Vous devez vous reconnecter pour activer les modifications.</labelvalue>		
+	</labelfield>			
+	<labelfield>
+		<labelid>57</labelid>
+		<labelvalue>Modifier les valeurs</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>58</labelid>
+		<labelvalue>Cours:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>59</labelid>
+		<labelvalue>Langue:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>60</labelid>
+		<labelvalue>Ok</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>61</labelid>
+		<labelvalue>Annuler</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>62</labelid>
+		<labelvalue>Confirmez l'effacement du tableau</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>63</labelid>
+		<labelvalue>Le tableau doit-il être effacé avant ajout d'une dia?</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>64</labelid>
+		<labelvalue>Ne plus me demander</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>65</labelid>
+		<labelvalue>Non</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>66</labelid>
+		<labelvalue>Editer les valeurs</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>67</labelid>
+		<labelvalue>Demander confirmation avant d'effacer le tableau</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>68</labelid>
+		<labelvalue>Info utilisateur</labelvalue>		
+	</labelfield>			
+	<labelfield>
+		<labelid>69</labelid>
+		<labelvalue>Effacer le tableau</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>70</labelid>
+		<labelvalue>Défaire</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>71</labelid>
+		<labelvalue>Refair</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>72</labelid>
+		<labelvalue>Sélectionner un objet</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>73</labelid>
+		<labelvalue>Texte</labelvalue>		
+	</labelfield>					
+	<labelfield>
+		<labelid>74</labelid>
+		<labelvalue>Peindre</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>75</labelid>
+		<labelvalue>Dessiner une ligne</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>76</labelid>
+		<labelvalue>Draw underline</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>77</labelid>
+		<labelvalue>Rectangle</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>78</labelid>
+		<labelvalue>Ellipse</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>79</labelid>
+		<labelvalue>Flèche</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>80</labelid>
+		<labelvalue>Supprimer l'élément sélectionné</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>81</labelid>
+		<labelvalue>Demander à être modérateur</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>82</labelid>
+		<labelvalue>Appliquer</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>83</labelid>
+		<labelvalue>Annuler</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>84</labelid>
+		<labelvalue>Demander à être modérateur</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>85</labelid>
+		<labelvalue>Fermer</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>86</labelid>
+		<labelvalue>Italiques</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>87</labelid>
+		<labelvalue>Grasses</labelvalue>		
+	</labelfield>
+	<labelfield>
+		<labelid>88</labelid>
+		<labelvalue>EN ATTENTE</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>89</labelid>
+		<labelvalue>Un utilisateur demande à être modérateur:</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>90</labelid>
+		<labelvalue>Accepter</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>91</labelid>
+		<labelvalue>rejeter</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>92</labelid>
+		<labelvalue>Annuler</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>93</labelid>
+		<labelvalue>Requête envoyée aux utilisateurs suivants</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>94</labelid>
+		<labelvalue>Accepté</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>95</labelid>
+		<labelvalue>Rejeté</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>96</labelid>
+		<labelvalue>Changer de modérateur</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>97</labelid>
+		<labelvalue>Vous n'êtes pas modérateur!</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>98</labelid>
+		<labelvalue>Modérateur:</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>99</labelid>
+		<labelvalue>Cette salle de conférence est pleine. Veuillez réessayer plus tard. </labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>100</labelid>
+		<labelvalue/>		
+	</labelfield>
+	<labelfield>
+		<labelid>101</labelid>
+		<labelvalue>Fermer</labelvalue>		
+	</labelfield>		
+	<labelfield>
+		<labelid>102</labelid>
+		<labelvalue>loading</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>103</labelid>
+		<labelvalue>Please wait while loading</labelvalue>		
+	</labelfield>	
+	<labelfield>
+		<labelid>104</labelid>
+		<labelvalue>Synchronizing Conference Members</labelvalue>		
+	</labelfield>															
+</language>

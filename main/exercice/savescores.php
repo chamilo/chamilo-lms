@@ -22,7 +22,7 @@
 *	Saving the scores.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: savescores.php 12830 2007-08-01 17:22:06Z yannoo $
+* 	@version $Id: savescores.php 12833 2007-08-01 17:44:11Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -39,9 +39,10 @@ my_delete($full_file_path.$_user['user_id'].".t.html");
 
 
 
-$TABLETRACK_HOTPOTATOES = $_configuration['statistics_database']."`.`track_e_hotpotatoes";
-$tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
-$TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+$TABLETRACK_HOTPOTATOES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+$tbl_learnpath_user 	= Database::get_course_table(TABLE_LEARNPATH_USER);
+$TABLE_LP_ITEM_VIEW 	= Database::get_course_table(TABLE_LP_ITEM_VIEW);
+
 $_cid = api_get_course_id();
 $test = mysql_real_escape_string($_REQUEST['test']);
 $score = mysql_real_escape_string($_REQUEST['score']);
@@ -70,7 +71,7 @@ function save_scores($file, $score)
 		{
 		$user_id = "NULL";
 	}
-	$sql = "INSERT INTO `".$TABLETRACK_HOTPOTATOES."`
+	$sql = "INSERT INTO ".$TABLETRACK_HOTPOTATOES."
 			  (`exe_name`,
 			   `exe_user_id`,
 			   `exe_date`,
@@ -116,12 +117,12 @@ function save_scores($file, $score)
 save_scores($test, $score);
 //score dans lp_item_view
 
-				$user_id = (!empty($_SESSION['_user']['id'])?$_SESSION['_user']['id']:0);
-               // $lp_item = Database::get_course_table('lp_item');
-                $lp_item_view = Database::get_course_table('lp_item_view');
-                $sql2 = "UPDATE $lp_item_view SET score = '$score'
-                        WHERE lp_view_id = '".$_SESSION['scorm_view_id']."'";
-                api_sql_query($sql2,__FILE__,__LINE__);
+$user_id = (!empty($_SESSION['_user']['id'])?$_SESSION['_user']['id']:0);
+// $lp_item = Database::get_course_table('lp_item');
+$lp_item_view = Database::get_course_table('lp_item_view');
+$sql2 = "UPDATE $lp_item_view SET score = '$score'" .
+		" WHERE lp_view_id = '".$_SESSION['scorm_view_id']."'";
+api_sql_query($sql2,__FILE__,__LINE__);
               
 
 // Back

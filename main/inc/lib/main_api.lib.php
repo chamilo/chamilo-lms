@@ -131,6 +131,9 @@ define('SECTION_PLATFORM_ADMIN', 'platform_admin');
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
 
+//CONSTANT defining the default HotPotatoes files directory
+define('DIR_HOTPOTATOES','/HotPotatoes_files');
+
 /*
 ==============================================================================
 		PROTECTION FUNCTIONS

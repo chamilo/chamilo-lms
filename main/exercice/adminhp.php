@@ -22,7 +22,7 @@
 *	HotPotatoes administration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: adminhp.php 12267 2007-05-03 14:07:32Z elixir_julian $
+* 	@version $Id: adminhp.php 12828 2007-08-01 16:48:13Z yannoo $
 */
 
 
@@ -94,7 +94,7 @@ $nameTools = get_lang('adminHP');
 Display::display_header($nameTools,"Exercise");
 
 /** @todo probably wrong !!!! */
-require_once(api_get_path(SYS_PATH).'claroline/exercice/hotpotatoes.lib.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotpotatoes.lib.php');
 
 ?>
 

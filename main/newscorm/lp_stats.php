@@ -78,6 +78,7 @@ $output .= "<tr><td>&nbsp;</td></tr>"."<tr><td>"."<table border='0' class='data_
 $TBL_LP_ITEM = Database :: get_course_table('lp_item');
 $TBL_LP_ITEM_VIEW = Database :: get_course_table('lp_item_view');
 $TBL_LP_VIEW = Database :: get_course_table('lp_view');
+$tbl_stats_exercices 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $sql = "SELECT max(view_count) FROM $TBL_LP_VIEW WHERE lp_id = $lp_id AND user_id = '".$user_id."'";
 $res = api_sql_query($sql, __FILE__, __LINE__);
 $view = '';
@@ -139,10 +140,10 @@ foreach ($list as $my_item_id) {
 		if ($row['item_type'] != 'dokeos_chapter') {
 			if($row['item_type'] == 'quiz'){
 				if($_SESSION['status'][$_course["id"]] == 5){
-					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$row['path'].'&cidReq='.$_SESSION['_course']['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$row['path'].'&cidReq='.$_SESSION['_course']['id'].'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
 				}
 				else{
-					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id='.$row['path'].'&cidReq='.$_SESSION['_course']['id'].'&student='.$_GET['student_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id='.$row['path'].'&cidReq='.$_SESSION['_course']['id'].'&student='.$_GET['student_id'].'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
 				}
 			}
 			else{
@@ -284,11 +285,21 @@ foreach ($list as $my_item_id) {
 
 		if ($row['item_type'] != 'dokeos_chapter') {
 			if($row['item_type'] == 'quiz'){
+				
 				if($_SESSION['status'][$_course["id"]] == 5){
-					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$row['path'].'&cidReq='.$_SESSION['_course']['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.api_get_user_id().'" AND exe_cours_id="'.$_SESSION['_course']['id'].'" ORDER BY exe_date DESC LIMIT 1';
 				}
 				else{
-					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id='.$row['path'].'&cidReq='.$_SESSION['_course']['id'].'&student='.$_GET['student_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.$_GET['student_id'].'" AND exe_cours_id="'.$_SESSION['_course']['id'].'" ORDER BY exe_date DESC LIMIT 1';
+				}
+				$resultLastAttempt = api_sql_query($sql_last_attempt);
+				$id_last_attempt=mysql_result($resultLastAttempt,0,0);
+				
+				if($_SESSION['status'][$_course["id"]] == 5){
+					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=student_progress&id='.$id_last_attempt.'&cidReq='.$_SESSION['_course']['id'].'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
+				}
+				else{
+					$correct_test_link = '<a href="../exercice/exercise_show.php?origin=tracking_course&id='.$id_last_attempt.'&cidReq='.$_SESSION['_course']['id'].'&student='.$_GET['student_id'].'" target="_parent"><img src="'.api_get_path(WEB_IMG_PATH).'quiz.gif"></a>';
 				}
 			}
 			else{

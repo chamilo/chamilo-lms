@@ -6569,138 +6569,91 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$preq_max = $row['max_score'];
 		
 		$return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
-		
 		$return .= '<div style="margin:3px 10px;">';
+		$return .= '<p class="lp_title">'.get_lang("AddEditPrerequisites").'</p>';
+		$return .= '<form method="POST">';
+		$return .= '<table class="lp_form">';
+		$return .= '<tr>';
+		$return .= '<th></th>';
+		$return .= '<th class="exercise">'.get_lang("Minimum").'</th>';
+		$return .= '<th class="exercise">'.get_lang("Maximum").'</th>';
+		$return .= '</tr>';
+		$return .= '<tr>';
+		$return .= '<td class="radio" colspan="3">';
+		$return .= '<input checked="checked" id="idNone" name="prerequisites" style="margin-left:0; margin-right:10px;" type="radio" />';
+		$return .= '<label for="idNone">'.get_lang("None").'</label>';
+		$return .= '</td>';
+		$return .= '</tr>';
+					
+		$sql = "
+			SELECT *
+			FROM " . $tbl_lp_item . "
+			WHERE
+				lp_id = " . $this->lp_id;
 		
-			$return .= '<p class="lp_title">'.get_lang("AddEditPrerequisites").'</p>';
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$arrLP = array();
+		while($row = Database::fetch_array($result))
+		{
+			$arrLP[] = array(
+				'id' => $row['id'],
+				'item_type' => $row['item_type'],
+				'title' => $row['title'],
+				'description' => $row['description'],
+				'parent_item_id' => $row['parent_item_id'],
+				'previous_item_id' => $row['previous_item_id'],
+				'next_item_id' => $row['next_item_id'],
+				'max_score' => $row['max_score'],
+				'min_score' => $row['min_score'],
+				'next_item_id' => $row['next_item_id'],
+				'display_order' => $row['display_order']);
+		}
+		
+		$this->tree_array($arrLP);
+		
+		$arrLP = $this->arrMenu;
+		
+		unset($this->arrMenu);
+		
+		for($i = 0; $i < count($arrLP); $i++)
+		{
+			if($arrLP[$i]['id'] == $item_id)
+				break;
+			$return .= '<tr>';
+			$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ) ? ' colspan="3"' : '') . '>';
+			$return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
+			$return .= '<img alt="" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:5px;" title="" />';
+			$return .= '<label for="id' . $arrLP[$i]['id'] . '">' . stripslashes($arrLP[$i]['title']) . '</label>';
+			$return .= '</td>';
+			$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
 			
-			$return .= '<form method="POST">';
-			
-				$return .= '<table class="lp_form">';
-				
-					$return .= '<tr>';
-					
-						$return .= '<th></th>';
-						$return .= '<th class="exercise">'.get_lang("Minimum").'</th>';
-						$return .= '<th class="exercise">'.get_lang("Maximum").'</th>';
-						
-					$return .= '</tr>';
-					
-					$return .= '<tr>';
-					
-						$return .= '<td class="radio" colspan="3">';
-						
-							$return .= '<input checked="checked" id="idNone" name="prerequisites" style="margin-left:0; margin-right:10px;" type="radio" />';
-							$return .= '<label for="idNone">'.get_lang("None").'</label>';
-						
-						$return .= '</td>';
-					
-					$return .= '</tr>';
-					
-					$sql = "
-						SELECT *
-						FROM " . $tbl_lp_item . "
-						WHERE
-							lp_id = " . $this->lp_id;
-					
-					$result = api_sql_query($sql, __FILE__, __LINE__);
-					
-					$arrLP = array();
-					
-					while($row = Database::fetch_array($result))
-					{
-						$arrLP[] = array(
-							'id' => $row['id'],
-							'item_type' => $row['item_type'],
-							'title' => $row['title'],
-							'description' => $row['description'],
-							'parent_item_id' => $row['parent_item_id'],
-							'previous_item_id' => $row['previous_item_id'],
-							'next_item_id' => $row['next_item_id'],
-							'max_score' => $row['max_score'],
-							'min_score' => $row['min_score'],
-							'next_item_id' => $row['next_item_id'],
-							'display_order' => $row['display_order']);
-					}
-					
-					$this->tree_array($arrLP);
-					
-					$arrLP = $this->arrMenu;
-					
-					unset($this->arrMenu);
-					
-					for($i = 0; $i < count($arrLP); $i++)
-					{
-						if($arrLP[$i]['id'] == $item_id)
-							break;
-						
-						$return .= '<tr>';
-							
-							$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ) ? ' colspan="3"' : '') . '>';
-
-							$return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
-
-
-                $return .= '<img alt="" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:5px;" title="" />';
-
-              	$return .= '<label for="id' . $arrLP[$i]['id'] . '">' . stripslashes($arrLP[$i]['title']) . '</label>';
-
-							$return .= '</td>';
-
-
-	$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
-
-	
-							if($arrLP[$i]['item_type'] == TOOL_QUIZ)
-							{
-								$return .= '<td class="exercise">';
-
-									$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_min : 0) . '" />';
-								
-								$return .= '</td>';
-
-								$return .= '<td class="exercise">';
-								
-									$return .= '<input maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" />';
-								
-								$return .= '</td>';
-
-
-							}
-
-
-if($arrLP[$i]['item_type'] == TOOL_HOTPOTATOES)
-
-							{
-								$return .= '<td class="exercise">';
-							
-									$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_min : 0) . '" />';
-
-								$return .= '</td>';
-
-								$return .= '<td class="exercise">';
-
-
-									$return .= '<input maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" />';
-
-							$return .= '</td>';
-							}
-
-					$return .= '<tr>';
-							
-						$return .= '<td colspan="3">';
-						
-							$return .= '<input class="button" name="submit_button" type="submit" value="'.get_lang("Ok").'" /></td>' . "\n";
-						
-						$return .= '</td>';
-
-					$return .= '</tr>';
-
-				
-				$return .= '</table>';
-			
-			$return .= '</form>';
-			
+			if($arrLP[$i]['item_type'] == TOOL_QUIZ)
+			{	
+				$return .= '<td class="exercise">';
+				$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_min : 0) . '" />';
+				$return .= '</td>';
+				$return .= '<td class="exercise">';
+				$return .= '<input maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" />';
+				$return .= '</td>';
+			}
+			if($arrLP[$i]['item_type'] == TOOL_HOTPOTATOES)
+			{
+				$return .= '<td class="exercise">';
+				$return .= '<input maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_min : 0) . '" />';
+				$return .= '</td>';
+				$return .= '<td class="exercise">';
+				$return .= '<input maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" />';
+				$return .= '</td>';
+			}
+			$return .='</tr>';
+		}
+		$return .= '<tr>';
+		$return .= '<td colspan="3">';
+		$return .= '<input class="button" name="submit_button" type="submit" value="'.get_lang("Ok").'" /></td>' . "\n";
+		$return .= '</td>';
+		$return .= '</tr>';
+		$return .= '</table>';
+		$return .= '</form>';
 		$return .= '</div>';
 		
 		return $return;

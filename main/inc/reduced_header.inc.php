@@ -69,12 +69,13 @@ echo get_setting('siteName');
 </title>
 
 <?php
-if(api_get_setting('stylesheets')<>'')
+$style = api_get_setting('stylesheets');
+if($style<>'')
 {
 ?>
 <style type="text/css" media="screen, projection">
 /*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo api_get_setting('stylesheets');?>/default.css";
+@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo $style;?>/default.css";
 /*]]>*/
 </style>
 <?php

@@ -5720,10 +5720,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			}
 			if(is_numeric($extra_info))
 			{
+				$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
 				$form->addElement('hidden', 'path', $extra_info);
 			}
 			elseif(is_array($extra_info))
 			{
+				$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
 				$form->addElement('hidden', 'path', $extra_info['path']);
 			}
 			

@@ -305,12 +305,13 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		$test=mysql_result($result,0,0);
 		$exerciseTitle=api_parse_tex($test);
 		$exerciseDexcription=mysql_result($result,0,1);
-					
+
+$user_restriction = api_is_allowed_to_edit() ? '' :  "AND user_id=".intval($_user['user_id'])." ";
 $query = "select * from `".$TABLETRACK_ATTEMPT."` as attempts  
 						INNER JOIN `".$TABLETRACK_EXERCICES."` as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
 						INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
 						INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id    
-					WHERE attempts.exe_id='$id' 
+					WHERE attempts.exe_id='$id' $user_restriction
 					GROUP BY questions.position, attempts.question_id";
 
 $result =api_sql_query($query, __FILE__, __LINE__);

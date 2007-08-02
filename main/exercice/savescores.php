@@ -22,7 +22,7 @@
 *	Saving the scores.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: savescores.php 12836 2007-08-01 21:08:24Z yannoo $
+* 	@version $Id: savescores.php 12849 2007-08-02 04:21:36Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -117,7 +117,7 @@ else
 ?>
 		<html>
 		<head>
-		<link rel='stylesheet' type='text/css' href='../css/scorm.css' />
+		<link rel='stylesheet' type='text/css' href='../css/<?php echo api_get_setting('stylesheets');?>/scorm.css' />
 		</head>
 		<body>
 		<br />

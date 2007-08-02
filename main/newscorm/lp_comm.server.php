@@ -346,6 +346,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 	$mylp->prerequisites_match(); //check the prerequisites are all complete
 	if($debug>1){error_log('Prereq_match() returned '.htmlentities($mylp->error),0);}
 	$objResponse->addScript("update_message_frame('".str_replace("'","\'",htmlentities($mylp->error))."');");
+	$_SESSION['scorm_item_id'] = $new_item_id;//Save the new item ID for the exercise tool to use
 	$_SESSION['lpobject'] = serialize($mylp);
 	return $objResponse;
 }

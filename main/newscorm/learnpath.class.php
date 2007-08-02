@@ -1,6 +1,3 @@
-
-
-
 <?php //$id:$
 /**
  * This (abstract?) class defines the parent attributes and methods for the dokeos learnpaths and scorm
@@ -7437,6 +7434,4 @@ EOD;
 		}
 	}
 }
-
 ?>
-

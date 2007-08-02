@@ -46,7 +46,7 @@
 */
 function upgrade_16x_to_180($values)
 {
-	$is_single_database = ['database_single'];
+	$is_single_database = $values['database_single'];
 	$main_database = $values['database_main_db'];
 	$tracking_database = $values['database_tracking'];
 	$user_database = $values['database_user'];

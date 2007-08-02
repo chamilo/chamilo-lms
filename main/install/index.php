@@ -94,7 +94,7 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 // overriding the timelimit (for large campusses that have to be migrated)
 @set_time_limit(0);
 
-$update_from_version=array('1.8.0');
+$update_from_version=array('1.8.2');
 
 /*
 ==============================================================================

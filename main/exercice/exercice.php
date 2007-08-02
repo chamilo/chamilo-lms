@@ -917,7 +917,7 @@ if($_configuration['tracking_enabled'])
 		?>
 
 		 <tr>
-		  <td colspan="3"><?php echo get_lang("NoResult"); ?></td>
+		  <td colspan="5"><?php echo get_lang("NoResult"); ?></td>
 		 </tr>
 
 		<?php

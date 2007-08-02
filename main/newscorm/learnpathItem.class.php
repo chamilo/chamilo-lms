@@ -1727,16 +1727,33 @@ class learnpathItem{
 		     	$res = api_sql_query($sql,__FILE__,__LINE__);
 		     	$this->db_item_view_id = Database::get_last_insert_id();
 	     	}else{
-		     	$sql = "UPDATE $item_view_table " .
-		     			"SET total_time = ".$this->get_total_time().", " .
-		     			" start_time = ".$this->get_current_start_time().", " .
-		     			" score = ".$this->get_score().", " .
-		     			" status = '".$this->get_status(false)."'," .
-		     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
-		     			" lesson_location = '".$this->lesson_location."' " .
-		     			"WHERE lp_item_id = ".$this->db_id." " .
-		     			"AND lp_view_id = ".$this->view_id." " .
-		     			"AND view_count = ".$this->attempt_id;
+	     		$sql = '';
+	     		if($this->type='hotpotatoes')
+	     		{	//make an exception for HotPotatoes, don't update the score
+		     		//because it has been saved outside of this tool
+			     	$sql = "UPDATE $item_view_table " .
+			     			"SET total_time = ".$this->get_total_time().", " .
+			     			" start_time = ".$this->get_current_start_time().", " .
+			     			" status = '".$this->get_status(false)."'," .
+			     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
+			     			" lesson_location = '".$this->lesson_location."' " .
+			     			"WHERE lp_item_id = ".$this->db_id." " .
+			     			"AND lp_view_id = ".$this->view_id." " .
+			     			"AND view_count = ".$this->attempt_id;
+	     		}
+	     		else
+	     		{	//for all other content types...
+			     	$sql = "UPDATE $item_view_table " .
+			     			"SET total_time = ".$this->get_total_time().", " .
+			     			" start_time = ".$this->get_current_start_time().", " .
+			     			" score = ".$this->get_score().", " .
+			     			" status = '".$this->get_status(false)."'," .
+			     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
+			     			" lesson_location = '".$this->lesson_location."' " .
+			     			"WHERE lp_item_id = ".$this->db_id." " .
+			     			"AND lp_view_id = ".$this->view_id." " .
+			     			"AND view_count = ".$this->attempt_id;
+	     		}
 	    	 	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Updating item_view: '.$sql,0);}
 		     	$res = api_sql_query($sql,__FILE__,__LINE__);
 	     	}

@@ -210,6 +210,7 @@ $langAnnouncementAdded = "O anuncio foi engadido";
 $langAnnouncementUpdated = "O anuncio foi actualizado";
 $langAnnouncementDeleted = "O anuncio foi eliminado";
 $langContent = "Contido";
+$PermissionsForNewFiles = "Permisos para novos ficheiros";
 $langStudent = "Estudante";
 $Guest = "invitado";
 $langLoginAsThisUserColumnName = "Acceder como";

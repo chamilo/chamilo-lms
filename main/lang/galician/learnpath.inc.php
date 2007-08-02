@@ -173,4 +173,6 @@ $DocumentHasBeenDeleted = "Non se pode mostrar o documento porque se eliminou";
 $EditCurrentForum = "Editar este foro";
 $NoPrerequisites = "Sen pré-requisitos";
 $NewExercise = "Novo exame";
+$CreateANewLink = "Crear unha nova ligazón";
+$CreateANewForum = "Crear un novo foro";
 ?>

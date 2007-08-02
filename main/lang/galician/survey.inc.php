@@ -65,6 +65,7 @@ $NoOfQuestions = "Número da pregunta";
 $Question = "Pregunta";
 $ThisCodeAlradyExists = "Este código xa existe";
 $SaveAndExit = "Gardar e sair";
+$ViewAnswers = "Ver respostas";
 $CreateExistingSurvey = "Crear a partir dunha enquisa existente";
 $SurveyName = "Nome da enquisa";
 $SurveySubTitle = "Subtítulo da enquisa";

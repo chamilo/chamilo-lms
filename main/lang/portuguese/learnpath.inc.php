@@ -71,7 +71,7 @@ $lang_short_help = "Para acrescentar uma etapa, clique na cruz; para acrescentar
 $lang_prereq_not_complete = "os pré-requisitos não estão preenchidos";
 $lang_author = "Autor";
 $lang_date = "Data";
-$langBasicOverview = "Visualização básica";
+$langBasicOverview = "Organizar";
 $langAdvanced = "Avançada";
 $langDisplay = "Mostrar";
 $langNewChapter = "Novo capítulo";
@@ -171,4 +171,5 @@ $NoPrerequisites = "Sem pré-requisitos";
 $NewExercise = "Novo exercício";
 $CreateANewLink = "Criar nova ligação";
 $CreateANewForum = "Criar novo fórum";
+$LinkAdd = "Acrescentar ligação";
 ?>

@@ -22,7 +22,7 @@
 *	Saving the scores.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: savescores.php 12849 2007-08-02 04:21:36Z yannoo $
+* 	@version $Id: savescores.php 12852 2007-08-02 04:54:12Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -115,17 +115,17 @@ if ($origin != 'learnpath')
 else
 {
 ?>
-		<html>
-		<head>
-		<link rel='stylesheet' type='text/css' href='../css/<?php echo api_get_setting('stylesheets');?>/scorm.css' />
-		</head>
-		<body>
-		<br />
-		<div class='message'>
-		<?php echo get_lang('HotPotatoesFinished'); ?>
-		</div>
-		</body>
-		</html>
+<html>
+<head>
+<link rel='stylesheet' type='text/css' href='../css/<?php echo api_get_setting('stylesheets');?>/scorm.css' />
+</head>
+<body>
+<br />
+<div class='message'>
+<?php echo get_lang('HotPotatoesFinished'); ?>
+</div>
+</body>
+</html>
 <?php
 }
 ?>

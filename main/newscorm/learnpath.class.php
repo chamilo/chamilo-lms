@@ -6620,12 +6620,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			if($arrLP[$i]['id'] == $item_id)
 				break;
 			$return .= '<tr>';
-			$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ) ? ' colspan="3"' : '') . '>';
+			$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ && $arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
 			$return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
 			$return .= '<img alt="" src="../img/lp_' . $arrLP[$i]['item_type'] . '.png" style="margin-right:5px;" title="" />';
 			$return .= '<label for="id' . $arrLP[$i]['id'] . '">' . stripslashes($arrLP[$i]['title']) . '</label>';
 			$return .= '</td>';
-			$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
+			//$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
 			
 			if($arrLP[$i]['item_type'] == TOOL_QUIZ)
 			{	

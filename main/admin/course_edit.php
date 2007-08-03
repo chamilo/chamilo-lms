@@ -1,6 +1,6 @@
 <?php
 
-// $Id: course_edit.php 12612 2007-06-15 13:37:31Z elixir_julian $
+// $Id: course_edit.php 12870 2007-08-03 11:55:04Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -244,7 +244,18 @@ if( $form->validate())
 			}
 			api_sql_query($sql, __FILE__, __LINE__);
 		}
+		
 	}
+	
+	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
+				course_code = '".mysql_real_escape_string($course_code). "',
+				user_id = '".$tutor_id . "',
+				status = '1',
+				role = '',
+				tutor_id='0',
+				sort='0',
+				user_course_cat='0'";
+	api_sql_query($sql, __FILE__, __LINE__);
 	
 	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE,$course_db_name);
 	$sql = "UPDATE ".$forum_config_table." SET default_lang='".mysql_real_escape_string($course_language)."'";

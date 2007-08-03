@@ -293,7 +293,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	//if the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
 	if ($unzip == 1 && preg_match("/.zip$/", strtolower($uploaded_file['name'])) )
 	{
-		return unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $maxFilledSpace, $output);
+		return unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $maxFilledSpace, $output, $to_group_id);
 		//display_message("Unzipping file");
 	}
 	//we can only unzip ZIP files (no gz, tar,...)
@@ -891,7 +891,7 @@ function unzip_uploaded_file($uploadedFile, $uploadPath, $baseWorkDir, $maxFille
  * @return boolean true if it succeeds false otherwise
  */
 
-function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $max_filled_space, $output = true)
+function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $max_filled_space, $output = true, $to_group_id=0)
 {
 	global $_course;
 	global $_user;
@@ -931,7 +931,8 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	//we extract using a callback function that "cleans" the path
 	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip');
 	// Add all documents in the unzipped folder to the database
-	add_all_documents_in_folder_to_database($_course,$_user['user_id'],$base_work_dir,$upload_path == '/' ? '' : $upload_path);
+	add_all_documents_in_folder_to_database($_course,$_user['user_id'],$base_work_dir,$upload_path == '/' ? '' : $upload_path, $to_group_id);
+	
 	return true;
 	/*
 	if ($upload_path != '/')
@@ -1833,7 +1834,7 @@ function build_missing_files_form($missing_files,$upload_path,$file_name)
  * @param string $base_work_dir
  * @param string $current_path, needed for recursivity
  */
-function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path='')
+function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path='',$to_group_id=0)
 {
 
 $path = $base_work_dir.$current_path;
@@ -1846,6 +1847,7 @@ $handle=opendir($path);
 
 	   $completepath="$path/$file";
 	   //directory?
+	   
 	   if (is_dir($completepath))
 	   {
 	   	$title=get_document_title($file);
@@ -1855,12 +1857,12 @@ $handle=opendir($path);
 		if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))
 		{
 			$document_id=add_document($_course,$current_path.'/'.$safe_file,'folder',0,$title);
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id);
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id, $to_group_id);
 			//echo $current_path.'/'.$safe_file." added!<br/>";
 
 		}
 		//recursive
-		add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path.'/'.$safe_file);
+		add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path.'/'.$safe_file, $to_group_id);
 	    }
 	    //file!
 	    else
@@ -1868,12 +1870,13 @@ $handle=opendir($path);
 			//rename
 			$safe_file=disable_dangerous_file(replace_dangerous_char($file));
 			@rename($base_work_dir.$current_path.'/'.$file,$base_work_dir.$current_path.'/'.$safe_file);
+			
 			if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))
 			{
 			$title=get_document_title($file);
 			$size = filesize($base_work_dir.$current_path.'/'.$safe_file);
 			$document_id = add_document($_course,$current_path.'/'.$safe_file,'file',$size,$title);
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id);
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id);
 			//echo $current_path.'/'.$safe_file." added!<br/>";
 			}
 	    }

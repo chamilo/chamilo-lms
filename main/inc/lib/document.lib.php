@@ -588,7 +588,6 @@ class DocumentManager
 	{
 		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-
 		//first, delete the actual document...
 		$document_id = DocumentManager :: get_document_id($_course, $path);
 		$new_path = $path.'_DELETED_'.$document_id;
@@ -604,7 +603,8 @@ class DocumentManager
 				if ($what_to_delete_result && mysql_num_rows($what_to_delete_result) != 0)
 				{
 					//needed to deleted medadata
-					require_once (api_get_path(INCLUDE_PATH)."../metadata/md_funcs.php");
+					require_once (api_get_path(SYS_CODE_PATH).'metadata/md_funcs.php');
+					require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 					$mdStore = new mdstore(TRUE);
 
 					//delete all item_property entries

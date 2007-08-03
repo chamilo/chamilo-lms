@@ -286,12 +286,13 @@ foreach ($list as $my_item_id) {
 		if ($row['item_type'] != 'dokeos_chapter') {
 			if($row['item_type'] == 'quiz'){
 				
-				if($_SESSION['status'][$_course["id"]] == 5){
+				if($origin != 'tracking'){
 					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.api_get_user_id().'" AND exe_cours_id="'.$_SESSION['_course']['id'].'" ORDER BY exe_date DESC LIMIT 1';
 				}
 				else{
 					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$row['path'].'" AND exe_user_id="'.$_GET['student_id'].'" AND exe_cours_id="'.$_SESSION['_course']['id'].'" ORDER BY exe_date DESC LIMIT 1';
 				}
+				
 				$resultLastAttempt = api_sql_query($sql_last_attempt);
 				$id_last_attempt=mysql_result($resultLastAttempt,0,0);
 				

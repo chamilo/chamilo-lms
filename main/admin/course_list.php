@@ -1,5 +1,5 @@
 <?php
-// $Id: course_list.php 11618 2007-03-19 16:05:45Z elixir_julian $
+// $Id: course_list.php 12869 2007-08-03 10:11:46Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -80,7 +80,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	$users_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	
-	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, 0 as col8, code AS col9 FROM $course_table";
+	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9 FROM $course_table";
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = mysql_real_escape_string($_GET['keyword']);
@@ -106,11 +106,6 @@ function get_course_data($from, $number_of_items, $column, $direction)
 		$course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[7] = CourseManager :: is_virtual_course_from_system_code($course[7]) ? get_lang('Yes') : get_lang('No');
-		$sql2='SELECT firstname, lastname FROM '.$users_table.' as u, '.$course_users_table.' as cu  WHERE cu.course_code="'.$course[0].'" AND cu.status="1" and cu.role="Professor" AND cu.user_id=u.user_id';
-		$result2 = api_sql_query($sql2, __FILE__, __LINE__);
-		$firstname=mysql_result($result2,0,'firstname');
-		$lastname=mysql_result($result2,0,'lastname');
-		$course[8] = $firstname.' '.$lastname;
 		$courses[] = $course;
 	}
 	return $courses;

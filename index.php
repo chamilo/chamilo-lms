@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12813 2007-07-31 08:16:06Z elixir_julian $
+* 	@version $Id: index.php 12875 2007-08-06 12:26:55Z pcool $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -184,13 +184,16 @@ if (!empty ($_GET['include']) && !strstr($_GET['include'], '/') && !strstr($_GET
 else
 {
 	
-	if(!empty($_SESSION['user_language_choice'])){
+	if(!empty($_SESSION['user_language_choice']))
+	{
 		$user_selected_language=$_SESSION['user_language_choice'];
 	}
-	elseif(!empty($_SESSION['_user']['language'])){
+	elseif(!empty($_SESSION['_user']['language']))
+	{
 		$user_selected_language=$_SESSION['_user']['language'];
 	}
-	else{
+	else
+	{
 		$user_selected_language=get_setting('platformLanguage');
 	}
 	
@@ -203,10 +206,12 @@ else
 	}
 	else
 	{
-		if(file_exists('home/home_top_'.$user_selected_language.'.html')){
+		if(file_exists('home/home_top_'.$user_selected_language.'.html'))
+		{
 			include('home/home_top_'.$user_selected_language.'.html');
 		}
-		else{
+		else
+		{
 			include('home/home_top.html');
 		}
 	}
@@ -325,7 +330,7 @@ function display_edit_course_list_links()
  */
 function display_anonymous_right_menu()
 {
-	global $loginFailed, $_plugins, $_user;
+	global $loginFailed, $_plugins, $_user, $menu_navigation;
 
 	$platformLanguage = api_get_setting('platformLanguage');
 
@@ -384,37 +389,39 @@ function display_anonymous_right_menu()
 		api_plugin('campushomepage_menu');
 		echo '</div>';
 	}
-	
+
 	/**
 	 * User section
 	 */
-	if(isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id']!=0){
+	if(isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id']!=0)
+	{
+		// tabs that are deactivated are added here
+		if (!empty($menu_navigation))
+		{
+			echo "<div class=\"menusection\">";
+			echo "<span class=\"menusectioncaption\">".get_lang("MainNavigation")."</span>";
+			echo "<ul class=\"menulist\">";
+			foreach($menu_navigation as $section => $navigation_info)
+			{
+				$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
+				echo '<li'.$current.'>';
+				echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+				echo '</li>';
+				echo "\n";
+			}
+			echo "</ul>";
+			echo '</div>';
+		}
+
 		echo "<div class=\"menusection\">";
 		echo "<span class=\"menusectioncaption\">".get_lang("MenuUser")."</span>";
 		echo "<ul class=\"menulist\">";
-		
+
 		$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION["studentview"] != "studentenview");
 		if ($display_add_course_link)
 			display_create_course_link();
 		display_edit_course_list_links();
-		
-		$navigation=array();
-		// Link to my profile
-		$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
-		$navigation['myprofile']['title'] = get_lang('ModifyProfile');
-		// Link to my agenda
-		$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/myagenda.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
-		$navigation['myagenda']['title'] = get_lang('MyAgenda');
-		
-		foreach($navigation as $section => $navigation_info)
-		{
-			$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
-			echo '<li'.$current.'>';
-			echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
-			echo '</li>';
-			echo "\n";
-		}
-		
+
 		echo "</ul>";
 		echo "</div>";
 	}

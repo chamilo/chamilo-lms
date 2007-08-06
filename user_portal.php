@@ -1238,6 +1238,24 @@ api_session_register('status');
 */
 echo "<div class=\"menu\">";
 
+// tabs that are deactivated are added here
+if (!empty($menu_navigation))
+{
+	echo "<div class=\"menusection\">";
+	echo "<span class=\"menusectioncaption\">".get_lang("MainNavigation")."</span>";
+	echo "<ul class=\"menulist\">";
+	foreach($menu_navigation as $section => $navigation_info)
+	{
+		$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
+		echo '<li'.$current.'>';
+		echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+		echo '</li>';
+		echo "\n";
+	}
+	echo "</ul>";
+	echo '</div>';
+}
+
 // api_display_language_form(); // moved to the profile page.
 echo "<div class=\"menusection\">";
 echo "<span class=\"menusectioncaption\">".get_lang("MenuUser")."</span>";
@@ -1249,33 +1267,10 @@ if ($display_add_course_link)
 display_edit_course_list_links();
 display_digest($toolsList, $digest, $orderKey, $courses);
 
-$navigation=array();
-// Link to my profile
-$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
-$navigation['myprofile']['title'] = get_lang('ModifyProfile');
-// Link to my agenda
-$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/myagenda.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
-$navigation['myagenda']['title'] = get_lang('MyAgenda');
-
-foreach($navigation as $section => $navigation_info)
-{
-	$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
-	echo '<li'.$current.'>';
-	echo '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
-	echo '</li>';
-	echo "\n";
-}
-
 echo "</ul>";
 echo "</div>";
 
-
-/*
------------------------------------------------------------------------------
-	Plugins for banner section
------------------------------------------------------------------------------
-*/
-
+// plugins for the my courses menu
 if (is_array($_plugins['mycourses_menu'])){
 
 	echo '<div class="note" style="background: none">';

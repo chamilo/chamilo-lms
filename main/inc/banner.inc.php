@@ -190,72 +190,72 @@ if ($_user['user_id'])
 }
 echo "<ul>\n";
 $navigation = array();
-// Link to campus homepage
-$navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
-$navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
+
+$possible_tabs = get_tabs();
+
+// Campus Homepage
+if (api_get_setting('show_tabs', 'campus_homepage') == 'true')
+{
+	$navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
+}
+else
+{
+	$menu_navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
+}
+
 if ($_user['user_id'])
 {
-	if(api_get_setting('use_session_mode')=='true')
+	// My Courses
+	if (api_get_setting('show_tabs', 'my_courses') == 'true')
 	{
-		if(api_is_allowed_to_create_course())
-		{
-			// Link to my courses for teachers
-			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
-			$navigation['mycourses']['title'] = get_lang('MyCourses');
-		}
-		else 
-		{
-			// Link to my courses for students
-			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
-			$navigation['mycourses']['title'] = get_lang('MyCourses');
-		}
-		
-		// Link to active sessions
-		//$navigation[SECTION_ACTIVESESSIONS]['url'] = api_get_path(WEB_PATH).'user_portal.php';
-		//$navigation[SECTION_ACTIVESESSIONS]['title'] = get_lang('myActiveSessions');
-		// Link to inactive sessions
-		//$navigation[SECTION_INACTIVESESSIONS]['url'] = api_get_path(WEB_PATH).'user_portal.php?inactives';
-		//$navigation[SECTION_INACTIVESESSIONS]['title'] = get_lang('myInActiveSessions');
-		
+		$navigation['mycourses'] = $possible_tabs['mycourses'];
 	}
 	else
 	{
-		// Link to my courses
-		$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
-		$navigation['mycourses']['title'] = get_lang('MyCourses');
+		$menu_navigation['mycourses'] = $possible_tabs['mycourses'];
 	}
-	
-	//NOW IN THE RIGHT MENU IN "MY COURSES"
-	/*
-	// Link to my profile
-	$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
-	$navigation['myprofile']['title'] = get_lang('ModifyProfile');
-	// Link to my agenda
-	$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/myagenda.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
-	$navigation['myagenda']['title'] = get_lang('MyAgenda');*/
-	
-	//if(api_get_setting('use_session_mode')=='true'){
-		
-		if(api_is_allowed_to_create_course())
-		{
-			// Link to my space
-			$navigation['session_my_space']['url'] = api_get_path(WEB_PATH).'main/mySpace/';
-			$navigation['session_my_space']['title'] = get_lang('MySpace');
-		}
-		if(!api_is_allowed_to_create_course())
-		{
-			// Link to my progress
-			$navigation['session_my_progress']['url'] = api_get_path(WEB_PATH).'main/auth/my_progress.php';
-			$navigation['session_my_progress']['title'] = get_lang('MyProgress');
-		}
-	//}
-	if (api_is_platform_admin())
+
+	// My Profile
+	if (api_get_setting('show_tabs', 'my_profile') == 'true')
 	{
-		// Link to platform admin
-		$navigation['platform_admin']['url'] = $rootAdminWeb;
-		$navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
+		$navigation['myprofile'] = $possible_tabs['myprofile'];
+	}
+	else
+	{
+		$menu_navigation['myprofile'] = $possible_tabs['myprofile'];
+	}
+
+	// My Agenda
+	if (api_get_setting('show_tabs', 'my_agenda') == 'true')
+	{
+		$navigation['myagenda'] = $possible_tabs['myagenda'];
+	}
+	else
+	{
+		$menu_navigation['myagenda'] = $possible_tabs['myagenda'];
+	}
+
+	// Reporting
+	if (api_get_setting('show_tabs', 'reporting') == 'true')
+	{
+		$navigation['session_my_space'] = $possible_tabs['session_my_space'];
+	}
+	else
+	{
+		$menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
+	}
+
+	if (api_get_setting('show_tabs', 'platform_administration') == 'true')
+	{
+		$navigation['platform_admin'] = $possible_tabs['platform_admin'];
+	}
+	else
+	{
+		$menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
 	}
 }
+
+// Displaying the tabs
 foreach($navigation as $section => $navigation_info)
 {
 	$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
@@ -414,5 +414,86 @@ if(api_get_setting('show_navigation_menu') != 'false' && api_get_setting('show_n
  	}
 }
 
+/**
+ * Determines the possible tabs (=sections) that are available.
+ * This function is used when creating the tabs in the third header line and all the sections
+ * that do not appear there (as determined by the platform admin on the Dokeos configuration settings page)
+ * will appear in the right hand menu that appears on several other pages
+ *
+ * @return array containing all the possible tabs
+ *
+ * @version Dokeos 1.8.4
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ */
+function get_tabs()
+{
+	global $_course, $rootAdminWeb;
+
+	// Campus Homepage
+	$navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
+	$navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
+
+	// My Courses
+	if(api_get_setting('use_session_mode')=='true')
+	{
+		if(api_is_allowed_to_create_course())
+		{
+			// Link to my courses for teachers
+			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
+			$navigation['mycourses']['title'] = get_lang('MyCourses');
+		}
+		else
+		{
+			// Link to my courses for students
+			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
+			$navigation['mycourses']['title'] = get_lang('MyCourses');
+		}
+
+		// Link to active sessions
+		//$navigation[SECTION_ACTIVESESSIONS]['url'] = api_get_path(WEB_PATH).'user_portal.php';
+		//$navigation[SECTION_ACTIVESESSIONS]['title'] = get_lang('myActiveSessions');
+		// Link to inactive sessions
+		//$navigation[SECTION_INACTIVESESSIONS]['url'] = api_get_path(WEB_PATH).'user_portal.php?inactives';
+		//$navigation[SECTION_INACTIVESESSIONS]['title'] = get_lang('myInActiveSessions');
+
+	}
+	else
+	{
+		// Link to my courses
+		$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
+		$navigation['mycourses']['title'] = get_lang('MyCourses');
+	}
+
+	// My Profile
+	$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+	$navigation['myprofile']['title'] = get_lang('ModifyProfile');
+
+	// Link to my agenda
+	$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/myagenda.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+	$navigation['myagenda']['title'] = get_lang('MyAgenda');
+
+	// Reporting
+	if(api_is_allowed_to_create_course())
+	{
+		// Link to my space
+		$navigation['session_my_space']['url'] = api_get_path(WEB_PATH).'main/mySpace/';
+		$navigation['session_my_space']['title'] = get_lang('MySpace');
+	}
+	else
+	{
+		// Link to my progress
+		$navigation['session_my_progress']['url'] = api_get_path(WEB_PATH).'main/auth/my_progress.php';
+		$navigation['session_my_progress']['title'] = get_lang('MyProgress');
+	}
+
+	// Platform administration
+	if (api_is_platform_admin())
+	{
+		$navigation['platform_admin']['url'] = $rootAdminWeb;
+		$navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
+	}
+
+	return $navigation;
+}
 ?>
 <!--   Begin Of script Output   -->

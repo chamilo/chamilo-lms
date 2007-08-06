@@ -18,8 +18,11 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_tabs', 'platform_administration', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsPlatformAdministration');
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_tabs', 'my_agenda', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyAgenda');
 INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('show_tabs', 'my_profile', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyProfile');
+INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,comment,scope,subkeytext) VALUES ('default_forum_view', NULL, 'radio', 'Course', 'flat', 'DefaultForumViewTitle','DefaultForumViewComment',NULL,NULL);
 
-
+INSERT INTO settings_options(variable,value,display_text) VALUES ('default_forum_view', 'flat', 'Flat');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('default_forum_view', 'threaded', 'Threaded');
+INSERT INTO settings_options(variable,value,display_text) VALUES ('default_forum_view', 'nested', 'Nested');
 -- xxSTATSxx
 
 -- xxUSERxx

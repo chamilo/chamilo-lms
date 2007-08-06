@@ -298,7 +298,7 @@ function show_add_forum_form($inputvalues=array())
 		$defaults['approval_direct_group']['approval_direct']=0;
 		$defaults['allow_attachments_group']['allow_attachments']=1;
 		$defaults['allow_new_threads_group']['allow_new_threads']=1;
-		$defaults['default_view_type_group']['default_view_type']='flat';
+		$defaults['default_view_type_group']['default_view_type']=api_get_setting('default_forum_view');
 		$defaults['public_private_group_forum_group']['public_private_group_forum']='public';
 		if (isset($_GET['forumcategory']))
 		{

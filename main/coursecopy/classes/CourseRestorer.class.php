@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 11785 2007-03-29 15:09:23Z yannoo $
+// $Id: CourseRestorer.class.php 12880 2007-08-10 04:49:24Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -629,7 +629,7 @@ class CourseRestorer
 	 */
 	function restore_surveys()
 	{
-		if ($this->course->has_resources(RESOURCE_QUIZ))
+		if ($this->course->has_resources(RESOURCE_SURVEY))
 		{
 			$table_sur = Database :: get_course_table(TABLE_SURVEY, $this->course->destination_db);
 			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION, $this->course->destination_db);
@@ -639,22 +639,22 @@ class CourseRestorer
 			{
 				$doc = '';
 				$sql = "INSERT INTO ".$table_sur." " .
-						"SET code = '".Database::escape_string($quiz->code)."', " .
-						"title = '".Database::escape_string($quiz->title)."', " .
-						"subtitle = '".Database::escape_string($quiz->subtitle)."', " .
-						"author = '".Database::escape_string($quiz->author)."', " .
-						"lang = '".Database::escape_string($quiz->lang)."', " .
-						"avail_from = '".Database::escape_string($quiz->avail_from)."', " .
-						"avail_till = '".Database::escape_string($quiz->avail_till)."', " .
-						"is_shared = '".Database::escape_string($quiz->is_shared)."', " .
-						"template = '".Database::escape_string($quiz->template)."', " .
-						"intro = '".Database::escape_string($quiz->intro)."', " .
-						"surveythanks = '".Database::escape_string($quiz->surveythanks)."', " .
-						"creation_date = '".Database::escape_string($quiz->creation_date)."', " .
-						"invited = '".Database::escape_string($quiz->invited)."', " .
-						"answered = '".Database::escape_string($quiz->answered)."', " .
-						"invite_mail = '".Database::escape_string($quiz->invite_mail)."', " .
-						"reminder_mail = '".Database::escape_string($quiz->reminder_mail)."'";
+						"SET code = '".Database::escape_string($survey->code)."', " .
+						"title = '".Database::escape_string($survey->title)."', " .
+						"subtitle = '".Database::escape_string($survey->subtitle)."', " .
+						"author = '".Database::escape_string($survey->author)."', " .
+						"lang = '".Database::escape_string($survey->lang)."', " .
+						"avail_from = '".Database::escape_string($survey->avail_from)."', " .
+						"avail_till = '".Database::escape_string($survey->avail_till)."', " .
+						"is_shared = '".Database::escape_string($survey->is_shared)."', " .
+						"template = '".Database::escape_string($survey->template)."', " .
+						"intro = '".Database::escape_string($survey->intro)."', " .
+						"surveythanks = '".Database::escape_string($survey->surveythanks)."', " .
+						"creation_date = '".Database::escape_string($survey->creation_date)."', " .
+						"invited = '".Database::escape_string($survey->invited)."', " .
+						"answered = '".Database::escape_string($survey->answered)."', " .
+						"invite_mail = '".Database::escape_string($survey->invite_mail)."', " .
+						"reminder_mail = '".Database::escape_string($survey->reminder_mail)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 				$new_id = Database::get_last_insert_id();
 				$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
@@ -695,7 +695,7 @@ class CourseRestorer
 					"SET survey_id = '".addslashes($question->survey_id)."', " .
 					"survey_question = '".addslashes($question->survey_question)."', " .
 					"survey_question_comment = '".addslashes($question->survey_question_comment)."', " .
-					"type = '".addslashes($question->type)."', " .
+					"type = '".addslashes($question->survey_question_type)."', " .
 					"display = '".addslashes($question->display)."', " .
 					"sort = '".addslashes($question->sort)."', " .
 					"shared_question_id = '".addslashes($question->shared_question_id)."', " .

@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 12815 2007-07-31 14:16:16Z elixir_julian $
+// $Id: CourseSelectForm.class.php 12879 2007-08-10 04:48:00Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -187,12 +187,20 @@ class CourseSelectForm
 		{
 			switch ($type)
 			{
+				case RESOURCE_SURVEYQUESTION:
+					foreach($resources as $id => $obj)
+					{
+					    if(!in_array($obj->survey_id,array_keys($_POST['resource'][RESOURCE_SURVEY])))
+						{
+							unset ($course->resources[$type][$id]);
+					    }
+					}
+					break;
 				case RESOURCE_LINKCATEGORY :
 				case RESOURCE_FORUMCATEGORY :
 				case RESOURCE_FORUMPOST :
 				case RESOURCE_FORUMTOPIC :
 				case RESOURCE_QUIZQUESTION :
-				case RESOURCE_SURVEYQUESTION:
 				case RESOURCE_DOCUMENT:
 					// Mark folders to import which are not selected by the user to import,
 					// but in which a document was selected.
@@ -211,7 +219,7 @@ class CourseSelectForm
 									break;
 								}	
 							}	
-						}	
+						}
 					}
 				default :
 					foreach ($resources as $id => $obj)

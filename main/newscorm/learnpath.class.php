@@ -5362,7 +5362,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		
 		$position = &$form->addElement('select', 'previous', get_lang("Position")." :", '', 'id="idPosition" style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; width:300px;"');
 		
-		$position->addOption(get_lang('FirstPosition'),$key,'style="padding-left:'.$value['padding'].'px;"');
+		$position->addOption(get_lang('FirstPosition'),0,'style="padding-left:'.$value['padding'].'px;"');
 		foreach($arrHide as $key => $value){
 			$position->addOption($value['value'],$key,'style="padding-left:'.$value['padding'].'px;"');
 		}

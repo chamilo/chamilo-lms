@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 12532 2007-06-05 00:03:08Z yannoo $
+<?php // $Id: CourseBuilder.class.php 12882 2007-08-10 05:38:05Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -245,7 +245,7 @@ class CourseBuilder
 		$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 		$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
-		$sql = 'SELECT * FROM '.$table_qui;
+		$sql = 'SELECT * FROM '.$table_qui.' WHERE active >=0'; //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{

@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 12880 2007-08-10 04:49:24Z yannoo $
+// $Id: CourseRestorer.class.php 12881 2007-08-10 05:08:36Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -707,8 +707,8 @@ class CourseRestorer
 				$sql = "INSERT INTO ".$table_ans." " .
 						"SET " .
 						"question_id = '".addslashes($new_id)."', " .
-						"option_text = '".addslashes($answer->option_text)."', " .
-						"sort = '".addslashes($answer->sort)."', " .
+						"option_text = '".addslashes($answer['option_text'])."', " .
+						"sort = '".addslashes($answer['sort'])."', " .
 						"survey_id = '".addslashes($question->survey_id)."'";
 
 				api_sql_query($sql, __FILE__, __LINE__);

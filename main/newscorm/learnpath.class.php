@@ -900,7 +900,6 @@ class learnpath {
 		    		SET next_item_id = " . $old_next . "
 		    		WHERE id = " . $old_previous;
 		    	$res_update_next = api_sql_query($sql_update_next, __FILE__, __LINE__);
-	    	
 	    		//echo '<p>' . $sql_update_next . '</p>';
     		}
     		
@@ -947,7 +946,7 @@ class learnpath {
 		    	
 		    	//echo '<p>' . $sql_select_old . '</p>';
 		    	
-		    	//if the new parent doesn't had children before
+		    	//if the new parent didn't have children before
 		    	if(Database::num_rows($res_select_old) == 0)
 		    	{
 		    		$new_next	= 0;
@@ -1003,7 +1002,7 @@ class learnpath {
     		
     		if($previous != 0)
     		{
-    			//update the previous item his next_item_id
+    			//update the previous item's next_item_id
 	    		$sql_update_previous = "
 			    	UPDATE " . $tbl_lp_item . "
 			    	SET next_item_id = " . $id . "
@@ -1014,7 +1013,7 @@ class learnpath {
     		
     		if($new_next != 0)
     		{
-       			//update the next item his previous_item_id
+       			//update the next item's previous_item_id
 	    		$sql_update_next = "
 			    	UPDATE " . $tbl_lp_item . "
 			    	SET previous_item_id = " . $id . "
@@ -1031,7 +1030,8 @@ class learnpath {
 		    	$res_update_next = api_sql_query($sql_update_next, __FILE__, __LINE__);
     		}
     		
-    		//update all the items with the same or a bigger display_order then the current item
+    		//update all the items with the same or a bigger display_order than 
+    		//the current item
 	    	$sql_update_order = "
 			   	UPDATE " . $tbl_lp_item . "
 			   	SET display_order = display_order + 1

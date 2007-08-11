@@ -350,7 +350,7 @@ class survey_manager
 		}
 
 		// getting the information of the question
-		$sql = "SELECT * FROM $tbl_survey_question WHERE question_id='".Database::escape_string($question_id)."'";
+		$sql = "SELECT * FROM $tbl_survey_question WHERE question_id='".Database::escape_string($question_id)."' ORDER BY `sort`";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$row = mysql_fetch_assoc($result);
 		$return['survey_id'] 			= $row['survey_id'];
@@ -362,7 +362,7 @@ class survey_manager
 	    $return['maximum_score']		= $row['max_value'];
 
 	    // getting the information of the question options
-		$sql = "SELECT * FROM $table_survey_question_option WHERE question_id='".Database::escape_string($question_id)."'";
+		$sql = "SELECT * FROM $table_survey_question_option WHERE question_id='".Database::escape_string($question_id)."' ORDER BY `sort` ";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{

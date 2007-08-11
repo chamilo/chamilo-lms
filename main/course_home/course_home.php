@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 12218 2007-05-01 18:27:14Z yannoo $
+<?php // $Id: course_home.php 12885 2007-08-11 19:50:07Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -73,9 +73,9 @@ width: 100%;
 
 if(!isset($cidReq))
 {
-	$cidReq = $dbname; // to provide compatibility. with previous system
+	$cidReq = api_get_course_id(); // to provide compatibility. with previous system
 
-	GLOBAL $error_msg,$error_no;
+	global $error_msg,$error_no;
 	$classError = "init";	
 	$error_no[$classError][] = "2";
 	$error_level[$classError][] = "info";
@@ -86,7 +86,7 @@ if(!isset($cidReq))
 $section = "course";
 
 // name of the language file that needs to be included
-$language_file = "course_home";
+$language_file[] = "course_home";
 
 // inlcuding the global file
 include('../../main/inc/global.inc.php');

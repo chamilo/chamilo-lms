@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: question.php 12111 2007-04-24 13:54:58Z elixir_julian $
+* 	@version $Id: question.php 12887 2007-08-11 22:17:36Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -87,7 +87,7 @@ if (!in_array($_GET['type'], $possible_types))
 }
 
 // displaying the form for adding or editing the question
-if (!$_POST['save_question'])
+if (!$_POST['save_question'] && in_array($_GET['type'],$possible_types))
 {
 	// Displaying the header
 	Display::display_header($tool_name);

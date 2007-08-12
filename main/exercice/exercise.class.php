@@ -22,7 +22,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 12892 2007-08-12 19:27:29Z yannoo $
+* 	@version $Id: exercise.class.php 12893 2007-08-12 20:00:41Z yannoo $
 */
 
 
@@ -224,11 +224,7 @@ class Exercise
 		}
 
 		// takes all questions
-		/* section commented to re-implement random questions in a simple manner
-		 * (random or not) rather than only using a number of questions.
-		 */
-		/*
-		if($this->random == -1 || $this->random > $this->selectNbrQuestions())
+		if($this->random == -1 || $this->random >= $this->selectNbrQuestions())
 		{
 			$draws=$this->selectNbrQuestions();
 		}
@@ -236,8 +232,6 @@ class Exercise
 		{
 			$draws=$this->random;
 		}
-		*/
-		$draws = $this->selectNbrQuestions();
 
 		srand((double)microtime()*1000000);
 
@@ -623,8 +617,8 @@ class Exercise
 
 		// random
 		$random = array();
-		$random[] = FormValidator :: createElement ('checkbox', 'randomQuestions', null, get_lang('RandomQuestions'),'0');
-		$form -> addGroup($random,null,get_lang('Questions').' : ','<br />');
+		$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
+		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');
 
 		// submit
 		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));

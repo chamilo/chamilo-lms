@@ -81,8 +81,8 @@ $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          = Database::get_course_table('quiz_answer');
 $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt";
-$TABLETRACK_EXERCICES = $_configuration['statistics_database']."`.`track_e_exercices";
+$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 $dsp_percent = false;
 $debug=0;

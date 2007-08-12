@@ -501,7 +501,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	global $_configuration;	
 	global $_user;
 	global $_cid;
-	global $TABLETRACK_ATTEMPT;
+	global $TBL_TRACK_ATTEMPT;
 	global $origin, $learnpath_id, $learnpath_item_id;
 	
 	// if tracking is disabled record nothing
@@ -519,7 +519,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		{
 		$user_id = "NULL";
 		}
-	$sql = "INSERT INTO `".$TABLETRACK_ATTEMPT."` 
+	$sql = "INSERT INTO ".$TBL_TRACK_ATTEMPT." 
 			  (`exe_id`,
 			   `user_id`,
 			   `question_id`,

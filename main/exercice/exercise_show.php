@@ -58,8 +58,8 @@ $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          	= Database::get_course_table(TABLE_QUIZ_ANSWER);
 $main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt";
-$TABLETRACK_EXERCICES 	= $_configuration['statistics_database']."`.`track_e_exercices";
+$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 $dsp_percent = false;
 $debug=0;
@@ -184,8 +184,8 @@ function getFCK(vals,marksid){
 //functions
 function get_comments($id,$question_id)
 	{
-	global $TABLETRACK_ATTEMPT;
-	$sql = "select teacher_comment from `".$TABLETRACK_ATTEMPT."` where exe_id=$id and question_id = '$question_id' order by question_id";
+	global $TBL_TRACK_ATTEMPT;
+	$sql = "select teacher_comment from ".$TBL_TRACK_ATTEMPT." where exe_id=$id and question_id = '$question_id' order by question_id";
 	$sqlres = api_sql_query($sql, __FILE__, __LINE__);
 	$comm = mysql_result($sqlres,0,"teacher_comment");
 	return $comm;
@@ -300,15 +300,15 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
   <tr>
     <td colspan="2">
 	<?php
-		$sql_test_name='SELECT title, description FROM '.$TBL_EXERCICES.' as exercises, `'.$TABLETRACK_EXERCICES.'` as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.$id.'"';
+		$sql_test_name='SELECT title, description FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.$id.'"';
 		$result=api_sql_query($sql_test_name);
 		$test=mysql_result($result,0,0);
 		$exerciseTitle=api_parse_tex($test);
 		$exerciseDexcription=mysql_result($result,0,1);
 
 $user_restriction = api_is_allowed_to_edit() ? '' :  "AND user_id=".intval($_user['user_id'])." ";
-$query = "select * from `".$TABLETRACK_ATTEMPT."` as attempts  
-						INNER JOIN `".$TABLETRACK_EXERCICES."` as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
+$query = "select * from ".$TBL_TRACK_ATTEMPT." as attempts  
+						INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
 						INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
 						INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id    
 					WHERE attempts.exe_id='$id' $user_restriction
@@ -406,7 +406,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						$answerComment=$objAnswerTmp->selectComment($answerId);
 						$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 						$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-						$queryans = "select * from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
+						$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
 						$resultans = api_sql_query($queryans, __FILE__, __LINE__);
 						while ($row = mysql_fetch_array($resultans))
 								{
@@ -459,7 +459,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				$answerComment=$objAnswerTmp->selectComment($answerId);
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-				$queryans = "select answer from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
+				$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
 				$resultans = api_sql_query($queryans, __FILE__, __LINE__);
 				$choice = mysql_result($resultans,0,"answer");
 				$studentChoice=($choice == $answerId)?1:0;
@@ -540,7 +540,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						{
 							break;
 						}
-					$queryfill = "select answer from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
+					$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
 					$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
 					$str=mysql_result($resfill,0,"answer");
 					preg_match_all ('#\[([^[/]*)/#', $str, $arr);
@@ -586,7 +586,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
-			$query = "select answer, marks from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
+			$query = "select answer, marks from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
 			$resq=api_sql_query($query);
 			$choice = mysql_result($resq,0,"answer");
 			$questionScore = mysql_result($resq,0,"marks");
@@ -609,7 +609,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		$objAnswerTmp=new Answer($questionId);
 		
 		$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-		$TABLETRACK_ATTEMPT = $_configuration['statistics_database']."`.`track_e_attempt";
+		$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		
 		$sql_select_answer = 'SELECT id, answer, correct, position FROM '.$table_ans.' WHERE question_id="'.$questionId.'" AND correct<>0';
 		$res_answers = api_sql_query($sql_select_answer, __FILE__, __LINE__);
@@ -632,7 +632,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$i_answer_position = $a_answers['position'];
 			
 			$sql_user_answer = 'SELECT answers.answer 
-								FROM `'.$TABLETRACK_ATTEMPT.'` as track_e_attempt, '.$table_ans.' as answers 
+								FROM '.$TBL_TRACK_ATTEMPT.' as track_e_attempt, '.$table_ans.' as answers 
 								WHERE track_e_attempt.answer=answers.position 
 								AND track_e_attempt.position="'.$i_answer_position.'" 
 								AND answers.question_id ="'.$questionId.'" 
@@ -698,7 +698,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 
-				$query = "select answer from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
+				$query = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
 				$resq=api_sql_query($query);
 				$choice = mysql_result($resq,0,"answer");
 
@@ -706,7 +706,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 
 				$i++;
 		 	}
-		 	$queryfree = "select marks from `".$TABLETRACK_ATTEMPT."` where exe_id = $id and question_id= $questionId";
+		 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
 			$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
 			$questionScore= mysql_result($resfree,0,"marks");
 			$totalScore+=$questionScore;
@@ -821,7 +821,7 @@ $totalWeighting+=$questionWeighting;
 		}
 ?>
 <tr><td></td><td align=right><b><?php
-			//$query = "update `".$TABLETRACK_EXERCICES."` set exe_result = $totalScore where exe_id = '$id'";
+			//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
 			//api_sql_query($query,__FILE__,__LINE__);
 			echo '<br/>'.get_lang('YourTotalScore')." ";
 			if($dsp_percent == true)

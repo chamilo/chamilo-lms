@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 12888 2007-08-12 19:04:33Z yannoo $
+* 	@version $Id: exercise_result.php 12889 2007-08-12 19:21:05Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -113,7 +113,7 @@ if ( empty ( $objExercise ) ) {
 }
 $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-$courseName = $_SESSION[_course][name];
+$courseName = $_SESSION['_course']['name'];
 $query = "select user_id from $main_admin_table";
 $admin_id = mysql_result(api_sql_query($query),0,"user_id");
 $query1 = "select email,firstname,lastname from $main_user_table where user_id = $admin_id";

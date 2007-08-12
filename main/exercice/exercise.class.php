@@ -22,7 +22,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 12445 2007-05-22 11:52:14Z elixir_julian $
+* 	@version $Id: exercise.class.php 12892 2007-08-12 19:27:29Z yannoo $
 */
 
 
@@ -77,7 +77,7 @@ class Exercise
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
-		if($object=mysql_fetch_object($result))
+		if($object=Database::fetch_object($result))
 		{
 			$this->id=$id;
 			$this->exercise=$object->title;
@@ -92,7 +92,7 @@ class Exercise
 
 			// fills the array with the question ID for this exercise
 			// the key of the array is the question position
-			while($object=mysql_fetch_object($result))
+			while($object=Database::fetch_object($result))
 			{
 				// makes sure that the question position is unique
 				while(isset($this->questionList[$object->position]))
@@ -224,6 +224,10 @@ class Exercise
 		}
 
 		// takes all questions
+		/* section commented to re-implement random questions in a simple manner
+		 * (random or not) rather than only using a number of questions.
+		 */
+		/*
 		if($this->random == -1 || $this->random > $this->selectNbrQuestions())
 		{
 			$draws=$this->selectNbrQuestions();
@@ -232,6 +236,8 @@ class Exercise
 		{
 			$draws=$this->random;
 		}
+		*/
+		$draws = $this->selectNbrQuestions();
 
 		srand((double)microtime()*1000000);
 
@@ -615,6 +621,11 @@ class Exercise
 		$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
 		$form -> addGroup($radios, null, get_lang('ExerciseType').' : ', '<br />');
 
+		// random
+		$random = array();
+		$random[] = FormValidator :: createElement ('checkbox', 'randomQuestions', null, get_lang('RandomQuestions'),'0');
+		$form -> addGroup($random,null,get_lang('Questions').' : ','<br />');
+
 		// submit
 		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
 
@@ -628,9 +639,11 @@ class Exercise
 			$defaults['exerciseType'] = $this -> selectType();
 			$defaults['exerciseTitle'] = $this -> selectTitle();
 			$defaults['exerciseDescription'] = $this -> selectDescription();
+			$defaults['randomQuestions'] = $this -> isRandom();
 		}
 		else{
 			$defaults['exerciseType'] = 1;
+			$defaults['randomQuestions'] = 0;
 			$defaults['exerciseDescription'] = '<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'/default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left"></td></tr></table>';
 		}
 
@@ -650,6 +663,7 @@ class Exercise
 		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
 		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
 		$this -> updateType($form -> getSubmitValue('exerciseType'));
+		$this -> setRandom($form -> getSubmitValue('randomQuestions'));
 		$this -> save();
 
 	}

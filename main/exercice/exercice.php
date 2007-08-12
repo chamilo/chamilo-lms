@@ -103,14 +103,14 @@ if ( empty ( $hpchoice ) ) {
     $hpchoice   = $_REQUEST['hpchoice'];
 }
 if ( empty ($exerciseId ) ) {
-    $exerciseId = mysql_real_escape_string($_REQUEST['exerciseId']);
+    $exerciseId = Database::escape_string($_REQUEST['exerciseId']);
 }
 if ( empty ( $file ) ) {
-    $file   = mysql_real_escape_string($_REQUEST['file']);
+    $file   = Database::escape_string($_REQUEST['file']);
 }
-$learnpath_id = mysql_real_escape_string($_REQUEST['learnpath_id']);
-$learnpath_item_id = mysql_real_escape_string($_REQUEST['learnpath_item_id']);
-$page = mysql_real_escape_string($_REQUEST['page']);
+$learnpath_id = Database::escape_string($_REQUEST['learnpath_id']);
+$learnpath_item_id = Database::escape_string($_REQUEST['learnpath_item_id']);
+$page = Database::escape_string($_REQUEST['page']);
 
 if($origin == 'learnpath'){
 	$show = 'result';
@@ -429,7 +429,7 @@ elseif($show == 'test')
 if($show == 'test'){
 
 	//error_log('Show == test',0);
-	$nbrExercises=mysql_num_rows($result);
+	$nbrExercises=Database::num_rows($result);
 
 	echo "<table border=\"0\" align=\"center\" cellpadding=\"2\" cellspacing=\"2\" width=\"100%\">",
 		"<tr>";
@@ -540,9 +540,13 @@ if($show == 'test'){
 
 	// while list exercises
 
-	if ($origin != 'learnpath') {
-
-		while($row=mysql_fetch_array($result))
+	if ($origin != 'learnpath') 
+	{
+  		//avoid sending empty parameters
+  		$myorigin = (empty($origin)?'':'&origin='.$origin);
+  		$mylpid = (empty($learnpath_id)?'':'&learnpath_id='.$learnpath_id);
+  		$mylpitemid = (empty($learnpath_item_id)?'':'&learnpath_item_id='.$learnpath_item_id);
+		while($row=Database::fetch_array($result))
 		{
 
 			//error_log($row[0],0);
@@ -560,8 +564,8 @@ if($show == 'test'){
       <td width="15" valign="left" align="center"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
       <?php $row['title']=api_parse_tex($row['title']); ?>
       <td>
-      	<a href="exercice_submit.php?<?php echo api_get_cidreq()."&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id"; ?>&exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a>
-      	<a href="exercise_admin.php?modifyExercise=yes&exerciseId=<?php echo $row[id]; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>" alt="<?php echo htmlentities(get_lang('Modify')); ?>" /></a>
+      	<a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a>
+      	<a href="exercise_admin.php?modifyExercise=yes&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>" alt="<?php echo htmlentities(get_lang('Modify')); ?>" /></a>
       </td>
     </tr>
   </table></td>
@@ -571,7 +575,7 @@ if($show == 'test'){
  $sqlresult =api_sql_query($sqlquery);
  $rowi = mysql_result($sqlresult,0);
  echo $rowi.' '.strtolower(get_lang('Questions')); ?> </td>
-       <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row[id]; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build')); ?>" alt="<?php echo htmlentities(get_lang('Build')); ?>" /></a>
+       <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build')); ?>" alt="<?php echo htmlentities(get_lang('Build')); ?>" /></a>
     <a href="exercice.php?choice=delete&exerciseId=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSureToDelete'))); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete')); ?>" /></a>
     <?php
 				// if active
@@ -600,7 +604,7 @@ if($show == 'test'){
             <td width="20" valign="top" align="right"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
             <td width="1">&nbsp;</td>
             <?php $row['title']=api_parse_tex($row['title']);?>
-            <td><a href="exercice_submit.php?<?php echo api_get_cidreq()."&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id"; ?>&exerciseId=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a></td>
+            <td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$myllpitemid; ?>&exerciseId=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a></td>
 
 			</tr>
     </table></td>
@@ -681,7 +685,6 @@ if($show == 'test'){
 			$result = api_sql_query($sql, __FILE__, __LINE__); // only .htm or .html files listed
 			//error_log($sql,0);
 		}
-		//error_log(mysql_num_rows($result),0);
 		while($row = Database::fetch_array($result, 'ASSOC'))
 		{
 			//error_log('hop',0);

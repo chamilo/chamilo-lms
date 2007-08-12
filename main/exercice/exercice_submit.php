@@ -16,15 +16,13 @@
 		B-1030 Brussels - Belgium
 		Tel. +32 (2) 211 34 56
 */
-
-
 /**
 *	Exercise submission
 * 	This script allows to run an exercise. According to the exercise type, questions
 * 	can be on an unique page, or one per page with a Next button.
 *
 * 	One exercise may contain different types of answers (unique or multiple selection,
-* 	matching and fill in blanks).
+* 	matching, fill in blanks, free answer, hot-spot).
 *
 * 	Questions are selected randomly or not.
 *
@@ -35,7 +33,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 12447 2007-05-23 08:03:37Z elixir_julian $
+* 	@version $Id: exercice_submit.php 12891 2007-08-12 19:25:08Z yannoo $
 */
 
 
@@ -49,11 +47,11 @@ include('exercise.lib.php');
 $debug = 0;
 
 // answer types
-define('UNIQUE_ANSWER',	1);
+define('UNIQUE_ANSWER',		1);
 define('MULTIPLE_ANSWER',	2);
 define('FILL_IN_BLANKS',	3);
-define('MATCHING',		4);
-define('FREE_ANSWER', 5);
+define('MATCHING',			4);
+define('FREE_ANSWER', 		5);
 define('HOT_SPOT', 			6);
 define('HOT_SPOT_ORDER', 	7);
 
@@ -78,10 +76,10 @@ if ( empty ( $origin ) ) {
     $origin = $_REQUEST['origin'];
 }
 if ( empty ( $learnpath_id ) ) {
-    $learnpath_id       = mysql_real_escape_string($_REQUEST['learnpath_id']);
+    $learnpath_id       = Database::escape_string($_REQUEST['learnpath_id']);
 }
 if ( empty ( $learnpath_item_id ) ) {
-    $learnpath_item_id  = mysql_real_escape_string($_REQUEST['learnpath_item_id']);
+    $learnpath_item_id  = Database::escape_string($_REQUEST['learnpath_item_id']);
 }
 if ( empty ( $formSent ) ) {
     $formSent       = $_REQUEST['formSent'];
@@ -104,10 +102,10 @@ if ( empty ( $choice ) ) {
     $choice = $_REQUEST['choice'];
 }
 if ( empty ( $questionNum ) ) {
-    $questionNum    = mysql_real_escape_string($_REQUEST['questionNum']);
+    $questionNum    = Database::escape_string($_REQUEST['questionNum']);
 }
 if ( empty ( $nbrQuestions ) ) {
-    $nbrQuestions   = mysql_real_escape_string($_REQUEST['nbrQuestions']);
+    $nbrQuestions   = Database::escape_string($_REQUEST['nbrQuestions']);
 }
 if ( empty ($buttonCancel) ) {
 	$buttonCancel 	= $_REQUEST['buttonCancel'];
@@ -428,13 +426,10 @@ if(!empty($exerciseSound))
 }
 
 
-/* <ERM> */
 // Get number of hotspot questions for javascript validation
 $number_of_hotspot_questions = 0;
 $onsubmit = '';
 $i=0;
-
-//var_dump($questionList);
 
 foreach($questionList as $questionId)
 {
@@ -467,14 +462,12 @@ foreach($questionList as $questionId)
 	}
 }
 
-//echo ':' . $number_of_hotspot_questions;
-
 if($number_of_hotspot_questions > 0)
 {
 	$onsubmit = "onsubmit=\"return validateFlashVar('".$number_of_hotspot_questions."', '".get_lang('HotspotValidateError1')."', '".get_lang('HotspotValidateError2')."');\"";
 }
-$s="
-<p>$exerciseDescription</p>";
+$s="<p>$exerciseDescription</p>";
+
 if($origin == 'learnpath' && $exerciseType==2){
 	$s2 = "&exerciseId=".$exerciseId;
 }
@@ -491,7 +484,6 @@ $s.=" <form method='post' action='".api_get_self()."?autocomplete=off".$s2."' na
   <td>
   <table width='100%' cellpadding='3' cellspacing='2' border='0'>";
 echo $s;
-/* </ERM> */
 
 $i=0;
 

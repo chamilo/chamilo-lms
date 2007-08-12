@@ -16,8 +16,6 @@
 		B-1030 Brussels - Belgium
 		Tel. +32 (2) 211 34 56
 */
-
-
 /**
 *	Exercise result
 *	This script gets informations from the script "exercise_submit.php",
@@ -27,12 +25,10 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 12796 2007-07-30 14:51:11Z elixir_inter $
+* 	@version $Id: exercise_result.php 12888 2007-08-12 19:04:33Z yannoo $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
-
-
 /*
 ==============================================================================
 		INIT SECTION
@@ -70,8 +66,8 @@ $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          	= Database::get_course_table(TABLE_QUIZ_ANSWER);
-$TABLETRACK_EXERCICES 	= $_configuration['statistics_database']."`.`track_e_exercices";
-$TABLETRACK_ATTEMPT 	= $_configuration['statistics_database']."`.`track_e_attempt";
+$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_ans 				= Database :: get_course_table(TABLE_QUIZ_ANSWER);
@@ -211,7 +207,7 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
 		<?php
 		$answerComment=api_parse_tex($answerComment);
-		if($studentChoice) echo nl2br(make_clickable($answerComment)); else echo '&nbsp;'; ?>
+		if($studentChoice) echo nl2br(make_clickable(stripslashes($answerComment))); else echo '&nbsp;'; ?>
 	</td>
 	</tr>
 	<?php
@@ -299,7 +295,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 
 	// added by Priya Saini
-	$sql = "select max(exe_Id) as id from `".$TABLETRACK_EXERCICES."`";
+	$sql = "select max(exe_Id) as id from ".$TBL_TRACK_EXERCICES;
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$exeId =mysql_result($res,0,"id");
 	$exeId=$exeId+1;
@@ -965,7 +961,7 @@ color: #000000;
 
 	$msg1= str_replace("#url#",$url,$msg);
 	$mail_content = stripslashes($msg1);
-	$student_name = $_SESSION[_user][firstName].' '.$_SESSION[_user][lastName];
+	$student_name = $_SESSION['_user']['firstName'].' '.$_SESSION['_user']['lastName'];
 	$subject = get_lang('OpenQuestionsAttempted');
 	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from);
 }

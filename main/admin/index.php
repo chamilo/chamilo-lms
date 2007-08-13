@@ -1,4 +1,4 @@
-<?php // $Id: index.php 12485 2007-05-27 04:43:35Z yannoo $
+<?php // $Id: index.php 12894 2007-08-13 15:45:25Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -206,6 +206,7 @@ else
   <li>
   <?php
   //try to display a maximum before we check the dokeos version and all that
+  	session_write_close(); //close session to avoid blocking concurrent access
 	flush(); //send data to client as much as allowed by the web server
 	ob_flush();
 	echo get_lang('VersionCheck').': '.version_check();

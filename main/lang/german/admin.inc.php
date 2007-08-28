@@ -649,4 +649,6 @@ $EphorusClickHereForInformationsAndPrices = "Klicken Sie hier für weitere Inform
 $NameOfTheSession = "Name der Sitzung";
 $DisplayCategoriesOnHomepageTitle = "Kategorien auf der Startseite anzeigen";
 $DisplayCategoriesOnHomepageComment = "Mit dieser Option werden Kurskategorien auf der Startseite des Portals angezeigt oder ausgeblendet";
+$ShowTabsTitle = "Tabs im Kopfbereich";
+$ShowTabsComment = "Die Tabs markieren, die im Kopfbereich sichtbar sein sollen. Die nicht markierten Tabs werden im Menu auf der rechten Seite auf der Campus Homepage und Meine Kurse Seite erscheinen, falls sie sichtbar sein müssen";
 ?>

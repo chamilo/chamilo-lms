@@ -430,4 +430,5 @@ $DearUser = "Estimado usuario";
 $YourRegistrationData = "Estes son os seus datos de acceso";
 $ResetLink = "Pulse no seguinte enlace para rexenerar o seu contrasinal";
 $VisibilityChanged = "A visibilidade foi cambiada.";
+$MainNavigation = "Navegación principal";
 ?>

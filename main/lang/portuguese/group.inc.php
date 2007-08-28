@@ -90,4 +90,5 @@ $GroupAnnouncements = "Anúncios";
 $NoCategoriesDefined = "Sem categorias definidas";
 $GroupsFromClasses = "Grupos de turmas";
 $GroupsFromClassesInfo = "Usando esta opção, pode criar grupos baseados nas turmas inscritas no curso.";
+$Group = "Grupo";
 ?>

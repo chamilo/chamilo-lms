@@ -171,4 +171,5 @@ $NoPrerequisites = "Geen vereisten";
 $NewExercise = "nieuwe oefening";
 $CreateANewLink = "Maak een nieuwe link";
 $CreateANewForum = "Maak een nieuw forum";
+$LinkAdd = "Link toevoegen";
 ?>

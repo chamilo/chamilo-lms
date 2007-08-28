@@ -171,4 +171,5 @@ $NoPrerequisites = "Brez predzahtev";
 $NewExercise = "Nov test";
 $CreateANewLink = "Ustvari novo povezavo";
 $CreateANewForum = "Ustvari nov forum";
+$LinkAdd = "Dodaj povezavo";
 ?>

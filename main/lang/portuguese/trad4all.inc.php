@@ -14,7 +14,7 @@ $Name = "Nome";
 $langComment = "Comentário";
 $langVisible = "Visível para (activar):";
 $Download = "Transferir";
-$langGroup = "Grupos";
+$langGroup = "Grupo";
 $langEdit = "Alterar";
 $langGroupForum = "Fórum do Grupo";
 $Language = "Língua";
@@ -430,4 +430,5 @@ $DearUser = "Caro(a) utilizador(a)";
 $YourRegistrationData = "Os seus dados do registo";
 $ResetLink = "Clique aqui para recuperar a sua senha";
 $VisibilityChanged = "A visibilidade foi alterada.";
+$MainNavigation = "Navegação principal";
 ?>

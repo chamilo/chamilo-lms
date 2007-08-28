@@ -175,4 +175,5 @@ $NoPrerequisites = "Sen pré-requisitos";
 $NewExercise = "Novo exame";
 $CreateANewLink = "Crear unha nova ligazón";
 $CreateANewForum = "Crear un novo foro";
+$LinkAdd = "Engadir ligazón";
 ?>

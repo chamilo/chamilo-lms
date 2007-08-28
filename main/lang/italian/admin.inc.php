@@ -638,8 +638,8 @@ $UploadExtensionsWhitelist = "Lista bianca - configurazione";
 $UploadExtensionsBlacklistComment = "La lista nera è usata per filtrare i files con determinate estensioni, rimuovendoli o rinominandoli. Le estensioni devono essere descritte senza il punto (.) e i diversi elementi devono essere separati da un punto e virgola (;), ad esempio: exe;com;bat;scr;php. Sono accettati files senza estensioni e le maiuscole o le minuscole non sono significative.";
 $UploadExtensionsWhitelistComment = "La lista bianca è usata per consentire il caricamento di files che abbiano SOLO determinate estensioni, rimuovendo o rinominando gli altri. Il grado di sicurezza è maggiore ma piuttosto restrittivo.
 Le estensioni devono essere descritte senza il punto (.) e i diversi elementi devono essere separati da un punto e virgola (;), ad esempio: htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. Sono accettati files senza estensioni e le maiuscole o le minuscole non sono significative.";
-$UploadExtensionsSkip = "Comportamento del filtro (salta/rinomina)";
-$UploadExtensionsSkipComment = "Se scegli Salta, i files non saranno caricati. Se decidi di rinominare le estensioni dei files saranno sostituite da quelle assegnate in fase di configurazione. Attenzione: rinominare non garantisce la protezione e può creare conflitti tra files con lo stesso nome ma diversa estensione.";
+$UploadExtensionsSkip = "Comportamento del filtro (rimuovi/rinomina)";
+$UploadExtensionsSkipComment = "Se scegli Rimuovi, i files non saranno caricati. Se decidi di rinominare le estensioni dei files saranno sostituite da quelle assegnate in fase di configurazione. Attenzione: rinominare non garantisce la protezione e può creare conflitti tra files con lo stesso nome ma diversa estensione.";
 $UploadExtensionsReplaceBy = "Sostituzione dell\'estensione";
 $UploadExtensionsReplaceByComment = "Immetti l\'estensione che sostituirà quella potenzialmente pericolosa (vale solo se si è scelto di rinominare i files).";
 $Remove = "Rimuovi";
@@ -651,4 +651,6 @@ $EphorusClickHereForInformationsAndPrices = "Clicca per informazioni e prezzi";
 $NameOfTheSession = "Nome della sessione";
 $DisplayCategoriesOnHomepageTitle = "Mostra le categorie nella home page";
 $DisplayCategoriesOnHomepageComment = "L\'opzione permetterà di mostrare o nascondere le categorie di corso sulla pagina di accesso del portale";
+$ShowTabsTitle = "Etichette nell\'intestazione";
+$ShowTabsComment = "Seleziona le etichette visibili nell\'intestazione. Le etichette selezionate appariranno, se necessario, nella parte destra della home page del campus o del corso.";
 ?>

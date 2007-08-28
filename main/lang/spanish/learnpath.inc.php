@@ -172,4 +172,5 @@ $NoPrerequisites = "Sin prerrequisitos";
 $NewExercise = "Nuevo ejercicio";
 $CreateANewLink = "Crear un nuevo enlace";
 $CreateANewForum = "Crear un nuevo foro";
+$LinkAdd = "Añadir enlace";
 ?>

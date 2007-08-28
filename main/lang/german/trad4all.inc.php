@@ -430,4 +430,5 @@ $DearUser = "Lieber Benutzer";
 $YourRegistrationData = "Ihre Anmeldedaten";
 $ResetLink = "Klicken Sie hier, um Ihr Passwort wieder zu erlangen.";
 $VisibilityChanged = "Die Sichtbarkeit wurde geändert";
+$MainNavigation = "Hauptnavigation";
 ?>

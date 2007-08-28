@@ -110,4 +110,5 @@ $DBSettingUpgradeIntro = "Het upgradescript zal de Dokeos database(s) recuperere
 $ExtensionMBStringNotAvailable = "MBString extensie is niet beschikbaar";
 $ExtensionMySQLNotAvailable = "De MySQL extensie is niet beschikbaar";
 $DokeosArtLicense = "De afbeelding en media gallerijen in Dokeos gebruiken afbeelding die afkomstig zijn van Nuvalo, Crystal Clear en Tango. Andere afbeeldingen en media zoals de diagrammen en Flash animaties zijn afkomstig van Wikimedia en van de cursus van Ali Pakdel en Denis Hoa die hiermee instemden en hun materiaal beschikbaar stellen onder de BY-SA Creative Commons licentie. U kunt meer informatie vinden over deze licentie op <a href=\"http://creativecommons.org/licenses/by-sa/3.0/deed.nl\">le de site van Creative Commons</a> waar u de integrale tekst van deze licentie kunt nalezen via een link onderaan de pagina. ";
+$PleasGoBackToStep1 = "Gelieve terug te gaan naar stap 1";
 ?>

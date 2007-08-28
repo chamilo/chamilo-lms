@@ -211,7 +211,7 @@ $langAnnouncementUpdated = "O anúncio foi actualizado";
 $langAnnouncementDeleted = "O anúncio foi apagado";
 $langContent = "Conteúdo";
 $PermissionsForNewFiles = "Permissões para novos ficheiros";
-$PermissionsForNewFilesComment = "A capacidade para definir permissões e atribuí-las aos ficheiros recém criados aumenta a segurança contra ataques de hackers que podem colocar material perigoso na plataforma. O valor por defeito (0550) deveria ser suficiente para proporcionar ao servidor um nível razoável de segurança. O formato fornecido usa a terminologia UNIX do Proprietário-Grupo-Outro com as permissões Ler-Escrever-Executar.";
+$PermissionsForNewFilesComment = "A capacidade para definir permissões e atribuí-las aos ficheiros recém criados aumenta a segurança contra ataques de hackers que podem colocar material perigoso na plataforma. O valor por defeito (0660) deveria ser suficiente para proporcionar ao servidor um nível razoável de segurança. O formato fornecido usa a terminologia UNIX do Proprietário-Grupo-Outro com as permissões Ler-Escrever-Executar.";
 $langStudent = "Estudante";
 $Guest = "Convidado";
 $langLoginAsThisUserColumnName = "Aceder como";
@@ -650,4 +650,6 @@ $EphorusClickHereForInformationsAndPrices = "Clicar aqui para mais informações e
 $NameOfTheSession = "Nome da sessão";
 $DisplayCategoriesOnHomepageTitle = "Mostrar categorias na página principal";
 $DisplayCategoriesOnHomepageComment = "Esta opção mostra ou oculta as categorias dos cursos na página principal do portal";
+$ShowTabsTitle = "Etiquetas no cabeçalho";
+$ShowTabsComment = "Seleccione as etiquetas que deseja no cabeçalho. As etiquetas não seleccionadas aparecerão no menu do lado direito da página principal do campus e na página dos cursos, caso seja necessário aparecer.";
 ?>

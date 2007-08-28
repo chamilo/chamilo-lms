@@ -430,4 +430,5 @@ $DearUser = "Caro(a) usuário(a)";
 $YourRegistrationData = "Os seus dados do registro";
 $ResetLink = "Clique aqui para recuperar a sua senha";
 $VisibilityChanged = "A visibilidade foi alterada.";
+$MainNavigation = "Navegação principal";
 ?>

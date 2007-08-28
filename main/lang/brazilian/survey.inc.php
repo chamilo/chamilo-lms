@@ -65,6 +65,7 @@ $NoOfQuestions = "Número da questão";
 $Question = "Questão";
 $ThisCodeAlradyExists = "Este código já existe";
 $SaveAndExit = "Gravar e sair";
+$ViewAnswers = "Ver respostas";
 $CreateExistingSurvey = "Criar a partir de um questionário existente";
 $SurveyName = "Nome do Questionário";
 $SurveySubTitle = "Subtítulo do questionário";

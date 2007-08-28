@@ -430,4 +430,5 @@ $DearUser = "Beste gebruiker";
 $YourRegistrationData = "Uw registratiegegevens";
 $ResetLink = "Klik hier om uw paswoord terug te vinden";
 $VisibilityChanged = "De zichtbaarheid is aangepast.";
+$MainNavigation = "Hoofdnavigatie";
 ?>

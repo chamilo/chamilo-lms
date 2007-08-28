@@ -65,6 +65,7 @@ $NoOfQuestions = "Número de preguntas";
 $Question = "Pregunta";
 $ThisCodeAlradyExists = "Este código ya existe";
 $SaveAndExit = "Guardar y salir";
+$ViewAnswers = "Ver respuestas";
 $CreateExistingSurvey = "Crear desde una encuesta ya existente";
 $SurveyName = "Nombre de la encuesta";
 $SurveySubTitle = "Subtítulo de la encuesta";

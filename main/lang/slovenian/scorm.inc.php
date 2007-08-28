@@ -50,4 +50,5 @@ $MoveCurrentChapter = "Premakni trenutno poglavje";
 $GenericScorm = "Generièni SCORM";
 $UnknownPackageFormat = "Format paketa ni prepoznan. Preprièajte se, da ima ustrezno formo in da ne vsebuje napak. Problem je lahko nastopil tudi zaredi neustreznega ZIP formata ali pa ste skušali naložiti preveliko datoteko. V primeru, da niste preprièani v pravilno obliko ZIP, skušajte datoteko naredi z minimalno uporabo posebnih nastavitev stiskanja.";
 $Attempt = "Poskus";
+$MoveTheCurrentForum = "Premakni tekoèi forum";
 ?>

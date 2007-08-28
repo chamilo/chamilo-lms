@@ -650,4 +650,6 @@ $EphorusClickHereForInformationsAndPrices = "Kliknite tule za veè informacij in 
 $NameOfTheSession = "Ime seje";
 $DisplayCategoriesOnHomepageTitle = "Prikaži kategorije na domaèi strani";
 $DisplayCategoriesOnHomepageComment = "Ta možnost prikaže ali skrije kategorije na domaèi strani portala";
+$ShowTabsTitle = "Zavihki v zaglavju strani";
+$ShowTabsComment = "Oznaèite zavhke za katere želite, da se pojavijo v zaglavju. Neizbrani zavihki se bodo pojavili v desni izbiri domaèe strani portala in aktivnega teèaja, èe je potrebno, da se pojavljajo.";
 ?>

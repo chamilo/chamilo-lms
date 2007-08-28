@@ -111,4 +111,5 @@ $DBSettingUpgradeIntro = "O script de atualização vai recuperar e atualizar os b
 $ExtensionMBStringNotAvailable = "Extensão MBString não disponível";
 $ExtensionMySQLNotAvailable = "Extensão MySQL não disponível";
 $DokeosArtLicense = "As imagens e a galeria de mídia do Dokeos são retiradas da galeria de ícones Crystal Clear e Tango. Outras imagens e mídia, tal como diagramas e animações em flash, foram cedidas por Wikimedia e pelos cursos de Ali Pakdel e Denis Hoa com o seu consentimento e disponibilizadas sob licença de BY-SA Creative Commons. Pode-se verificar maiores detalhes desta licença em <a €href=\"http://creativecommons.org/licenses/by-sa/3.0/\"> CC website</a>, onde encontrará um link no rodapé que o orientará para a versão integral da licença.";
+$PleasGoBackToStep1 = "Por favor, volte para a etapa 1";
 ?>

@@ -90,4 +90,5 @@ $GroupAnnouncements = "Anuncios";
 $NoCategoriesDefined = "Sin categorías definidas";
 $GroupsFromClasses = "Grupos de clases";
 $GroupsFromClassesInfo = "Información de grupos de clases";
+$Group = "Grupo";
 ?>

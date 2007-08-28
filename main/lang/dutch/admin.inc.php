@@ -651,4 +651,10 @@ $EphorusClickHereForInformationsAndPrices = "Klik hier voor meer informatie en p
 $NameOfTheSession = "Naam van de sessie";
 $DisplayCategoriesOnHomepageTitle = "Toon categorieën op de startpagina";
 $DisplayCategoriesOnHomepageComment = "Deze optie toont of verbergt de cursuscategorieën op de startpagina van de portal";
+$ShowTabsTitle = "Tabs in de hoofding";
+$ShowTabsComment = "Vink de tabs aan die u wenst te zien in de hoofding. De tabs die niet aangevinkt staan zullen verschijnen aan de rechterkant van de campus startpagina of mijn cursussen pagina als deze nodig zijn.";
+$DefaultForumViewTitle = "Standaard forum weergave";
+$DefaultForumViewComment = "Wat is de standaardweergave van een forum bij het aanmaken van een nieuw forum? Elke cursusbeheerder kan voor elk forum afzonderlijk echter een andere weergave kiezen.";
+$ShowTabsTitle = "Tabs";
+$ShowTabsComment = "Welke van onderstaande tabs moeten weergegeven worden?";
 ?>

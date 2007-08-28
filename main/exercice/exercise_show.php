@@ -102,7 +102,7 @@ if ( empty ( $questionList ) ) {
 if ( empty ( $objExercise ) ) {
     $objExercise = $_SESSION['objExercise'];
 }
-$is_allowedToEdit=api_is_allowed_to_edit();
+$is_allowedToEdit=api_is_allowed_to_edit() || $is_courseTutor;
 $nameTools=get_lang('CorrectTest');
 
 if($origin=='user_course')
@@ -306,7 +306,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 		$exerciseTitle=api_parse_tex($test);
 		$exerciseDexcription=mysql_result($result,0,1);
 
-$user_restriction = api_is_allowed_to_edit() ? '' :  "AND user_id=".intval($_user['user_id'])." ";
+$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";
 $query = "select * from ".$TBL_TRACK_ATTEMPT." as attempts  
 						INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id 
 						INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id

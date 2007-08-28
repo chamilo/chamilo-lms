@@ -139,7 +139,7 @@ a.invisible:hover
 -->
 </style>';
 
-if ($show=='result' && $_REQUEST['comments']=='update' && $is_allowedToEdit)
+if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || $is_courseTutor))
 {
 	$id  = $_GET['exeid'];
 	$emailid = $_GET['emailid'];
@@ -809,18 +809,18 @@ if($_configuration['tracking_enabled'])
 
 		<table class="data_table">
 		 <tr class="row_odd">
-		  <?php if($is_allowedToEdit): ?>
+		  <?php if($is_allowedToEdit || $is_courseTutor): ?>
 			<th><?php echo get_lang("User"); ?></th><?php endif; ?>
 		  <th><?php echo get_lang("Exercice"); ?></th>
 		  <th><?php echo get_lang("Date"); ?></th>
 		  <th><?php echo get_lang("Result"); ?></th>
-		  <th><?php echo $is_allowedToEdit?get_lang("CorrectTest"):get_lang("ViewTest"); ?></th>
+		  <th><?php echo $is_allowedToEdit || $is_courseTutor?get_lang("CorrectTest"):get_lang("ViewTest"); ?></th>
 
 
 		 </tr>
 
 		<?php
-		if($is_allowedToEdit)
+		if($is_allowedToEdit || $is_courseTutor)
 		{
 			//get all results (ourself and the others) as an admin should see them
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
@@ -870,7 +870,7 @@ if($_configuration['tracking_enabled'])
 				echo '<tr';
 				if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"';
 				echo '>';
-				if($is_allowedToEdit)
+				if($is_allowedToEdit || $is_courseTutor)
 				{
 					$user = $results[$i][0];
 					echo '<td>'.$user.'</td>';
@@ -878,7 +878,7 @@ if($_configuration['tracking_enabled'])
 				echo '<td>'.$test.'</td>';
 				echo '<td>'.format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]).'</td>';
 		  		echo '<td>'.$res.' / '.$results[$i][3].'</td>';
-				echo '<td>'.($is_allowedToEdit?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang("Edit")."</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>").'</td>';
+				echo '<td>'.($is_allowedToEdit || $is_courseTutor?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang("Edit")."</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>").'</td>';
 				echo '</tr>';
 			}
 		}

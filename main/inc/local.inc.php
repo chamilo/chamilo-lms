@@ -667,7 +667,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 		        	$_courseUser['role'] = 'Professor';
 		            $is_courseMember     = true;
 		            $is_courseTutor      = true;
-		            $is_courseAdmin      = true;
+		            $is_courseAdmin      = false;
 		            $is_courseCoach      = true;
 	
 		            api_session_register('_courseUser');

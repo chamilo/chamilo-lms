@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: survey_list.php 12221 2007-05-01 23:23:49Z yannoo $
+* 	@version $Id: survey_list.php 12901 2007-08-28 12:32:02Z pcool $
 *
 * 	@todo The invite column is not done
 * 	@todo try to understand the white, blue, ... template stuff.
@@ -122,9 +122,9 @@ if ($_POST['action'])
 
 
 // Action links
-echo '<a href="create_new_survey.php?'.api_get_cidreq().'&action=add">'.get_lang('CreateNewSurvey').'</a> | ';
+echo '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.get_lang('CreateNewSurvey').'</a> | ';
 //echo '<a href="survey_all_courses.php">'.get_lang('CreateExistingSurvey').'</a> | ';
-echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&search=advanced">'.get_lang('Search').'</a>';
+echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.get_lang('Search').'</a>';
 
 // Main content
 display_survey_list();
@@ -207,8 +207,10 @@ function display_survey_list()
 	$table->set_header(7, get_lang('AvailableFrom'));
 	$table->set_header(8, get_lang('AvailableUntill'));
 	$table->set_header(9, get_lang('Invite'));
-	$table->set_header(10, get_lang('Modify'), false);
-	$table->set_column_filter(10, 'modify_filter');
+	$table->set_header(10, get_lang('Anonymous'));
+	$table->set_header(11, get_lang('Modify'), false);
+	$table->set_column_filter(10, 'anonymous_filter');
+	$table->set_column_filter(11, 'modify_filter');
 	$table->set_form_actions(array ('delete' => get_lang('DeleteSurvey')));
 	$table->display();
 
@@ -274,7 +276,8 @@ function get_survey_data($from, $number_of_items, $column, $direction)
 				survey.avail_from							AS col7,
                 survey.avail_till							AS col8,
                 CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col9,
-                survey.survey_id							AS col10
+                survey.anonymous							AS col10,
+                survey.survey_id							AS col11
              FROM $table_survey survey
 			 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
              , $table_user user
@@ -305,14 +308,26 @@ function get_survey_data($from, $number_of_items, $column, $direction)
  */
 function modify_filter($survey_id)
 {
-	$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-	$return .= '<a href="survey_list.php?'.api_get_cidreq().'&action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?')).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+	$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+	$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("DeleteSurvey").'?')).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 	//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
-	$return .= '<a href="preview.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
-	$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
-	$return .= '<a href="reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
+	$return .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview.gif', get_lang('Preview')).'</a>';
+	$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('survey_publish.gif', get_lang('Publish')).'</a>';
+	$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 	return $return;
+}
+
+function anonymous_filter($anonymous)
+{
+	if ($anonymous == 1)
+	{
+		return get_lang('Yes');
+	}
+	else
+	{
+		return get_lang('No');
+	}
 }
 
 

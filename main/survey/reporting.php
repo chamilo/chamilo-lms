@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 12586 2007-06-12 13:39:57Z elixir_julian $
+* 	@version $Id: reporting.php 12901 2007-08-28 12:32:02Z pcool $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -340,6 +340,10 @@ function display_user_report()
 			else
 			{
 				$second_parameter = $answers[$question['question_id']];
+				if ($question['type'] == 'open')
+				{
+					$second_parameter = $all_answers[$question['question_id']][0]['value'];
+				}
 			}
 
 			$display = new $question['type'];
@@ -449,7 +453,7 @@ function display_question_report($survey_data)
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{
-			echo $row['option_id'].'<hr noshade="noshade" size="1" />';
+			echo $row['value'].'<hr noshade="noshade" size="1" />';
 		}
 
 	}
@@ -747,11 +751,6 @@ function display_complete_report_row($possible_answers, $answers_of_user, $user)
 
 	foreach ($possible_answers as $question_id=>$possible_option)
 	{
-			
-		$sql='SELECT type FROM '.$table_survey_question.' WHERE question_id="'.$question_id.'"';
-		$result=api_sql_query($sql);
-		$question_type=mysql_result($result,0,0);
-		
 		foreach ($possible_option as $option_id=>$value)
 		{
 			echo '<td align="center">';
@@ -765,10 +764,6 @@ function display_complete_report_row($possible_answers, $answers_of_user, $user)
 				{
 					echo 'v';
 				}
-			}
-			elseif($question_type=='open'){
-				$a_answer = $answers_of_user[$question_id];
-				echo key($a_answer);
 			}
 			echo '</td>';
 		}

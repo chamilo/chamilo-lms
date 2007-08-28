@@ -1273,6 +1273,7 @@ function update_Db_course($courseDbName)
 			  answered int NOT NULL,
 			  invite_mail text NOT NULL,
 			  reminder_mail text NOT NULL,
+			  anonymous enum('0','1') NOT NULL default '0',
 			  PRIMARY KEY  (survey_id)
 			)";
 

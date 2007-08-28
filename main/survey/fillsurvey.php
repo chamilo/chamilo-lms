@@ -118,6 +118,10 @@ else
 	$survey_invitation['survey_id'] = $row['survey_id'];
 }
 
+// getting the survey information
+$survey_data = survey_manager::get_survey($survey_invitation['survey_id']);
+$survey_data['survey_id'] = $survey_invitation['survey_id'];
+
 // storing the answers
 if ($_POST)
 {
@@ -163,7 +167,7 @@ if ($_POST)
 						$option_id = $answer_value;
 						$option_value = '';
 					}
-					store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $option_id, $option_value);
+					store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $option_id, $option_value, $survey_data);
 				}
 			}
 			// all the other question types (open question, multiple choice, percentage, ...)
@@ -179,20 +183,23 @@ if ($_POST)
 				else
 				{
 					$option_value = 0;
+					if($types[$survey_question_id] == 'open')
+					{
+						$option_value = $value;
+						$value = 0;
+
+					}
 				}
 
 
 				$survey_question_answer = $value;
 				remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
-				store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value, $option_value);
+				store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value, $option_value, $survey_data);
+				//store_answer($user,$survey_id,$question_id, $option_id, $option_value, $survey_data);
 			}
 		}
 	}
 }
-
-// getting the survey information
-$survey_data = survey_manager::get_survey($survey_invitation['survey_id']);
-$survey_data['survey_id'] = $survey_invitation['survey_id'];
 
 // displaying the survey title and subtitle (appears on every page)
 echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
@@ -293,7 +300,7 @@ Display :: display_footer();
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version January 2007
  */
-function store_answer($user, $survey_id, $question_id, $option_id, $option_value)
+function store_answer($user, $survey_id, $question_id, $option_id, $option_value, $survey_data)
 {
 	global $_course;
 	global $types;
@@ -302,6 +309,20 @@ function store_answer($user, $survey_id, $question_id, $option_id, $option_value
 
 	// table definition
 	$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
+
+	// make the survey anonymous
+	if ($survey_data['anonymous'] == 1)
+	{
+		if (!$_SESSION['surveyuser'])
+		{
+			$user = md5($user.time());
+			$_SESSION['surveyuser'] = $user;
+		}
+		else
+		{
+			$user = $_SESSION['surveyuser'];
+		}
+	}
 
 	$sql = "INSERT INTO $table_survey_answer (user, survey_id, question_id, option_id, value) VALUES (
 			'".Database::escape_string($user)."',

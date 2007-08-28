@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
-* 	@version $Id: create_new_survey.php 12272 2007-05-03 14:40:45Z elixir_julian $
+* 	@version $Id: create_new_survey.php 12901 2007-08-28 12:32:02Z pcool $
 *
 * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
 */
@@ -96,6 +96,7 @@ if ($_GET['action'] == 'edit' AND isset($_GET['survey_id']) AND is_numeric($_GET
 	{
 		$form_share_value = $defaults['survey_share']['survey_share'];
 	}
+	$defaults['anonymous'] = $survey_data['anonymous'];
 }
 else
 {
@@ -105,6 +106,7 @@ else
 	$defaults['end_date'] = date('d-F-Y H:i', $startdateandxdays);
 	$defaults['survey_share']['survey_share'] = 0;
 	$form_share_value = 1;
+	$defaults['anonymous'] = 0;
 }
 
 // initiate the object
@@ -135,6 +137,7 @@ $group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang
 $group[] =& HTML_QuickForm::createElement('radio', 'survey_share',null, get_lang('No'),0);
 $fck_attribute['Height'] = '200';
 $form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');
+$form->addElement('checkbox', 'anonymous', get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'));
 $form->addElement('submit', 'submit_survey', get_lang('Ok'));

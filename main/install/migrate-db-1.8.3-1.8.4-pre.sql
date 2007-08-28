@@ -28,3 +28,4 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('default_forum
 -- xxUSERxx
 
 -- xxCOURSExx
+ALTER TABLE survey ADD anonymous ENUM( '0', '1' ) NOT NULL DEFAULT '0';

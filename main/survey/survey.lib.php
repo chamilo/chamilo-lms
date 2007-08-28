@@ -100,7 +100,11 @@ class survey_manager
 
 		if (!$values['survey_id'] OR !is_numeric($values['survey_id']))
 		{
-			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date) VALUES (
+			if ($values['anonymous']=='')
+			{
+				$values['anonymous']=0;
+			}
+			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date, anonymous) VALUES (
 						'".Database::escape_string($values['survey_code'])."',
 						'".Database::escape_string($values['survey_title'])."',
 						'".Database::escape_string($values['survey_subtitle'])."',
@@ -112,7 +116,9 @@ class survey_manager
 						'".Database::escape_string('template')."',
 						'".Database::escape_string($values['survey_introduction'])."',
 						'".Database::escape_string($values['survey_thanks'])."',
-						'".date()."')";
+						'".date()."',
+						'".Database::escape_string($values['anonymous'])."'
+						)";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$survey_id = mysql_insert_id();
 
@@ -124,6 +130,10 @@ class survey_manager
 		}
 		else
 		{
+			if ($values['anonymous']=='')
+			{
+				$values['anonymous']=0;
+			}
 			$sql = "UPDATE $table_survey SET
 							code 			= '".Database::escape_string($values['survey_code'])."',
 							title 			= '".Database::escape_string($values['survey_title'])."',
@@ -135,7 +145,8 @@ class survey_manager
 							is_shared		= '".Database::escape_string($shared_survey_id)."',
 							template 		= '".Database::escape_string('template')."',
 							intro			= '".Database::escape_string($values['survey_introduction'])."',
-							surveythanks	= '".Database::escape_string($values['survey_thanks'])."'
+							surveythanks	= '".Database::escape_string($values['survey_thanks'])."',
+							anonymous	= '".Database::escape_string($values['anonymous'])."'
 					WHERE survey_id = '".Database::escape_string($values['survey_id'])."'";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 

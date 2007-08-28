@@ -508,10 +508,16 @@ INSERT INTO `settings_current` VALUES
 (99, 'show_different_course_language', NULL, 'radio','Platform','true', 'ShowDifferentCourseLanguage','ShowDifferentCourseLanguageComment', NULL, NULL),
 (100, 'split_users_upload_directory', NULL, 'radio','Tuning','false', 'SplitUsersUploadDirectory','SplitUsersUploadDirectoryComment', NULL, NULL),
 (101, 'hide_dltt_markup', NULL, 'radio','Platform','false', 'HideDLTTMarkup','HideDLTTMarkupComment', NULL, NULL),
-(102,'display_categories_on_homepage',NULL,'radio','Platform','true','DisplayCategoriesOnHomepageTitle','DisplayCategoriesOnHomepageComment',NULL,NULL),
-(103,'permissions_for_new_directories', NULL, 'textfield', 'Security', '0770', 'PermissionsForNewDirs', 'PermissionsForNewDirsComment', NULL, NULL),
-(104,'permissions_for_new_files', NULL, 'textfield', 'Security', '0660', 'PermissionsForNewFiles', 'PermissionsForNewFilesComment', NULL, NULL);
-
+(102, 'display_categories_on_homepage',NULL,'radio','Platform','true','DisplayCategoriesOnHomepageTitle','DisplayCategoriesOnHomepageComment',NULL,NULL),
+(103, 'permissions_for_new_directories', NULL, 'textfield', 'Security', '0770', 'PermissionsForNewDirs', 'PermissionsForNewDirsComment', NULL, NULL),
+(104, 'permissions_for_new_files', NULL, 'textfield', 'Security', '0660', 'PermissionsForNewFiles', 'PermissionsForNewFilesComment', NULL, NULL),
+(105, 'show_tabs', 'campus_homepage', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsCampusHomepage'),
+(106, 'show_tabs', 'my_courses', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyCourses'),
+(107, 'show_tabs', 'reporting', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsReporting'),
+(108, 'show_tabs', 'platform_administration', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsPlatformAdministration'),
+(109, 'show_tabs', 'my_agenda', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyAgenda'), 
+(110, 'show_tabs', 'my_profile', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyProfile'),
+(111, 'default_forum_view', NULL, 'radio', 'Course', 'flat', 'DefaultForumViewTitle','DefaultForumViewComment',NULL,NULL);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `settings_current` ENABLE KEYS */;
@@ -627,8 +633,12 @@ INSERT INTO `settings_options` VALUES
 (99, 'split_users_upload_directory', 'false', 'No'),
 (100, 'hide_dltt_markup', 'false', 'No'),
 (101, 'hide_dltt_markup', 'true', 'Yes'),
-(102,'display_categories_on_homepage','true','Yes'),
-(103,'display_categories_on_homepage','false','No');
+(102, 'display_categories_on_homepage','true','Yes'),
+(103, 'display_categories_on_homepage','false','No'),
+(104, 'default_forum_view', 'flat', 'Flat'),
+(105, 'default_forum_view', 'threaded', 'Threaded'),
+(106, 'default_forum_view', 'nested', 'Nested');
+
 
 UNLOCK TABLES;
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: course_information.php 11354 2007-03-02 23:06:28Z yannoo $
+// $Id: course_information.php 12903 2007-08-29 14:04:04Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -65,7 +65,7 @@ function get_course_usage($course_code)
 	$usage[] = array (get_lang(ucfirst(TOOL_DOCUMENT)), Database::count_rows($table));
 	// Groups
 	$table = Database :: get_course_table(TABLE_GROUP, $course->db_name);
-	$usage[] = array (get_lang(TOOL_GROUP), Database::count_rows($table));
+	$usage[] = array (get_lang(ucfirst(TOOL_GROUP)), Database::count_rows($table));
 	// Calendar
 	$table = Database :: get_course_table(TABLE_AGENDA, $course->db_name);
 	$usage[] = array (get_lang(ucfirst(TOOL_CALENDAR_EVENT)), Database::count_rows($table));

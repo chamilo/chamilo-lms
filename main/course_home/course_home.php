@@ -1,4 +1,4 @@
-<?php // $Id: course_home.php 12885 2007-08-11 19:50:07Z yannoo $
+<?php // $Id: course_home.php 12904 2007-08-29 14:13:08Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -71,6 +71,12 @@ width: 100%;
 }
 		</style>";
 
+// name of the language file that needs to be included
+$language_file[] = "course_home";
+
+// inlcuding the global file
+include('../../main/inc/global.inc.php');
+
 if(!isset($cidReq))
 {
 	$cidReq = api_get_course_id(); // to provide compatibility. with previous system
@@ -81,15 +87,6 @@ if(!isset($cidReq))
 	$error_level[$classError][] = "info";
 	$error_msg[$classError][] = "[".__FILE__."][".__LINE__."] cidReq was Missing $cidReq take $dbname;";
 }
-
-// is this needed?????
-$section = "course";
-
-// name of the language file that needs to be included
-$language_file[] = "course_home";
-
-// inlcuding the global file
-include('../../main/inc/global.inc.php');
 
 if(isset($_SESSION['_gid'])){
 	unset($_SESSION['_gid']);

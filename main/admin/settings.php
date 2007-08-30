@@ -1,5 +1,5 @@
 <?php
-// $Id: settings.php 12267 2007-05-03 14:07:32Z elixir_julian $
+// $Id: settings.php 12905 2007-08-30 12:26:09Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -416,7 +416,7 @@ function handle_stylesheets()
 		}
 		closedir($handle);
 	}
-	echo '<input type="submit" name="submit_stylesheets" value="Submit" /></form>';
+	echo '<input type="submit" name="submit_stylesheets" value="'.get_lang('Ok').'" /></form>';
 }
 
 /**

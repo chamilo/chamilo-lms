@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 12901 2007-08-28 12:32:02Z pcool $
+* 	@version $Id: reporting.php 12912 2007-08-31 15:52:45Z pcool $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -325,7 +325,12 @@ function display_user_report()
 			$answers[$row['question_id']][] = $row['option_id'];
 			$all_answers[$row['question_id']][] = $row;
 		}
-
+		/*
+		echo '<pre>';
+		print_r($all_answers);
+		echo '</pre>';
+		*/
+		
 		// displaying all the questions
 		foreach ($questions as $key=>$question)
 		{
@@ -342,10 +347,10 @@ function display_user_report()
 				$second_parameter = $answers[$question['question_id']];
 				if ($question['type'] == 'open')
 				{
-					$second_parameter = $all_answers[$question['question_id']][0]['value'];
+					$second_parameter = array();
+					$second_parameter[] = $all_answers[$question['question_id']][0]['option_id'];
 				}
 			}
-
 			$display = new $question['type'];
 			$display->render_question($question, $second_parameter);
 //			echo '<pre>';
@@ -453,7 +458,7 @@ function display_question_report($survey_data)
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($result))
 		{
-			echo $row['value'].'<hr noshade="noshade" size="1" />';
+			echo $row['option_id'].'<hr noshade="noshade" size="1" />';
 		}
 
 	}
@@ -469,6 +474,9 @@ function display_question_report($survey_data)
 		{
 			$options[$row['question_option_id']] = $row;
 		}
+		//echo '<pre>';
+		//print_r($options);
+		//echo '<pre>';
 
 		// getting the answers
 		$sql = "SELECT *, count(answer_id) as total FROM $table_survey_answer
@@ -481,6 +489,9 @@ function display_question_report($survey_data)
 			$number_of_answers += $row['total'];
 			$data[$row['option_id']] = $row;
 		}
+		//echo '<pre>';
+		//print_r($data);
+		//echo '<pre>';
 
 		// displaying the table: headers
 		echo '<table>';
@@ -501,7 +512,13 @@ function display_question_report($survey_data)
 			echo '		<td>'.$value['option_text'].'</td>';
 			echo '		<td><a href="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.$offset.'&amp;viewoption='.$value['question_option_id'].'">'.$absolute_number.'</a></td>';
 			echo '		<td>'.round($absolute_number/$number_of_answers*100, 2).' %</td>';
-			echo '		<td><div style="background-color:#0066CC; height:10px; width:'.($absolute_number/$number_of_answers*100*2).'px">&nbsp;</div></td>';
+			echo '		<td>';
+			$size = $absolute_number/$number_of_answers*100*2;
+			if ($size > 0)
+			{
+				echo '<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:'.$size.'px">&nbsp;</div>';
+			}
+			echo '		</td>';
 			echo '	</tr>';
 		}
 
@@ -593,7 +610,13 @@ function display_question_report_score($survey_data, $question, $offset)
 			echo '		<td>'.$i.'</td>';
 			echo '		<td><a href="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.$offset.'&amp;viewoption='.$value['question_option_id'].'&amp;value='.$i.'">'.$absolute_number.'</a></td>';
 			echo '		<td>'.round($absolute_number/$number_of_answers*100, 2).' %</td>';
-			echo '		<td><div style="background-color:#0066CC; height:10px; width:'.($absolute_number/$number_of_answers*100*2).'px">&nbsp;</div></td>';
+			echo '		<td>';
+			$size = ($absolute_number/$number_of_answers*100*2);
+			if ($size > 0)
+			{
+				echo '			<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:'.$size.'px">&nbsp;</div>';
+			}
+			echo '		</td>';
 			echo '	</tr>';
 		}
 	}
@@ -674,6 +697,7 @@ function display_complete_report()
 				echo '</th>';
 			}
 		}
+		$questions[$row['question_id']] = $row;
 	}
 	echo '	</tr>';
 
@@ -716,13 +740,20 @@ function display_complete_report()
 	{
 		if ($old_user <> $row['user'] AND $old_user<>'')
 		{
-			display_complete_report_row($possible_answers, $answers_of_user, $old_user);
+			display_complete_report_row($possible_answers, $answers_of_user, $old_user, $questions);
 			$answers_of_user=array();
 		}
-		$answers_of_user[$row['question_id']][$row['option_id']] = $row;
+		if ($questions[$row['question_id']]['type']<> 'open')
+		{
+			$answers_of_user[$row['question_id']][$row['option_id']] = $row;
+		}
+		else 
+		{
+			$answers_of_user[$row['question_id']][0] = $row;
+		}
 		$old_user = $row['user'];
 	}
-	display_complete_report_row($possible_answers, $answers_of_user, $old_user); // this is to display the last user
+	display_complete_report_row($possible_answers, $answers_of_user, $old_user, $questions); // this is to display the last user
 
 	echo '</table>';
 
@@ -742,31 +773,39 @@ function display_complete_report()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version February 2007
  */
-function display_complete_report_row($possible_answers, $answers_of_user, $user)
+function display_complete_report_row($possible_answers, $answers_of_user, $user, $questions)
 {
 	$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 	echo '<tr>';
 	echo '		<th><a href="'.api_get_self().'?action=userreport&survey_id='.$_GET['survey_id'].'&user='.$user.'">'.$user.'</a></th>'; // the user column
 
-
 	foreach ($possible_answers as $question_id=>$possible_option)
 	{
-		foreach ($possible_option as $option_id=>$value)
+		if ($questions[$question_id]['type'] == 'open')
 		{
 			echo '<td align="center">';
-			if (!empty($answers_of_user[$question_id][$option_id]))
-			{
-				if ($answers_of_user[$question_id][$option_id]['value']<>0)
-				{
-					echo $answers_of_user[$question_id][$option_id]['value'];
-				}
-				else
-				{
-					echo 'v';
-				}
-			}
+			echo $answers_of_user[$question_id]['0']['option_id'];
 			echo '</td>';
 		}
+		else 
+		{		
+			foreach ($possible_option as $option_id=>$value)
+			{
+				echo '<td align="center">';
+				if (!empty($answers_of_user[$question_id][$option_id]))
+				{
+					if ($answers_of_user[$question_id][$option_id]['value']<>0)
+					{
+						echo $answers_of_user[$question_id][$option_id]['value'];
+					}
+					else
+					{
+						echo 'v';
+					}
+				}
+			}
+		}
+		
 	}
 	echo '</tr>';
 }

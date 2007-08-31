@@ -43,6 +43,15 @@ $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUEST
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
+// We exit here if ther is no valid $_GET parameter
+if (!isset($_GET['survey_id']) OR !is_numeric($_GET['survey_id']))
+{
+	Display :: display_header();
+	Display :: display_error_message(get_lang('InvallidSurvey'), false);
+	Display :: display_footer();
+	exit;
+}
+
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
 $urlname = substr(strip_tags($survey_data['title']), 0, 40);
@@ -58,6 +67,9 @@ $interbreadcrumb[] = array ("url" => "survey.php?survey_id=".$_GET['survey_id'],
 // Header
 Display :: display_header(get_lang('SurveyPreview'));
 
+// We exit here is the first or last question is a pagebreak (which causes errors)
+check_first_last_question($_GET['survey_id'], false);
+
 // only a course admin is allowed to preview a survey: you are NOT a course admin => error message
 if (!api_is_allowed_to_edit())
 {
@@ -66,11 +78,6 @@ if (!api_is_allowed_to_edit())
 // only a course admin is allowed to preview a survey: you are a course admin
 else
 {
-	if (!isset($_GET['survey_id']) OR !is_numeric($_GET['survey_id']))
-	{
-		Display :: display_error_message(get_lang('InvallidSurvey'), false);
-	}
-
 	// survey information
 	echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
 	echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
@@ -92,58 +99,91 @@ else
 
 	if (isset($_GET['show']))
 	{
-		// Getting all the questions for this page
-		$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
-						survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
-				FROM $table_survey_question survey_question
-				LEFT JOIN $table_survey_question_option survey_question_option
-				ON survey_question.question_id = survey_question_option.question_id
-				WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-				ORDER BY survey_question.sort ASC";
-		if ($_GET['show'])
-		{
-			$sql .= ' LIMIT '.($_GET['show']+1).',1000';
-		}
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$question_counter_max = mysql_num_rows($result);
+		// Getting all the questions for this page and add them to a multidimensional array where the first index is the page.
+		// as long as there is no pagebreak fount we keep adding questions to the page
+		$questions_displayed = array();
 		$counter = 0;
-		$limit=0;
+		$sql = "SELECT * FROM $table_survey_question
+				WHERE survey_id = '".Database::escape_string($_GET['survey_id'])."'
+				ORDER BY sort ASC";
+		$result = api_sql_query($sql, __FILE__, __LINE__);
+
 		while ($row = mysql_fetch_assoc($result))
 		{
-			// if the type is not a pagebreak we store it in the $questions array
-			if($row['type'] <> 'pagebreak')
+			if($row['type'] == 'pagebreak')
 			{
-				$questions[$row['sort']]['question_id'] = $row['question_id'];
-				$questions[$row['sort']]['survey_id'] = $row['survey_id'];
-				$questions[$row['sort']]['survey_question'] = $row['survey_question'];
-				$questions[$row['sort']]['display'] = $row['display'];
-				$questions[$row['sort']]['type'] = $row['type'];
-				$questions[$row['sort']]['options'][$row['option_sort']] = $row['option_text'];
-				$questions[$row['sort']]['maximum_score'] = $row['max_value'];
+				$counter++;
 			}
-			// if the type is a pagebreak we are finished loading the questions for this page
 			else
 			{
-				$limit = $counter;
-				break;
+				$paged_questions[$counter][] = $row['question_id'];
 			}
-			$counter++;
+		}
+
+		if (key_exists($_GET['show'],$paged_questions))
+		{
+			$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
+							survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
+					FROM $table_survey_question survey_question
+					LEFT JOIN $table_survey_question_option survey_question_option
+					ON survey_question.question_id = survey_question_option.question_id
+					WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
+					AND survey_question.question_id IN (".implode(',',$paged_questions[$_GET['show']]).")
+					ORDER BY survey_question.sort ASC";
+
+			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$question_counter_max = mysql_num_rows($result);
+			$counter = 0;
+			$limit=0;
+			$questions = array();
+			while ($row = mysql_fetch_assoc($result))
+			{
+				// if the type is not a pagebreak we store it in the $questions array
+				if($row['type'] <> 'pagebreak')
+				{
+					$questions[$row['sort']]['question_id'] = $row['question_id'];
+					$questions[$row['sort']]['survey_id'] = $row['survey_id'];
+					$questions[$row['sort']]['survey_question'] = $row['survey_question'];
+					$questions[$row['sort']]['display'] = $row['display'];
+					$questions[$row['sort']]['type'] = $row['type'];
+					$questions[$row['sort']]['options'][$row['option_sort']] = $row['option_text'];
+					$questions[$row['sort']]['maximum_score'] = $row['max_value'];
+				}
+				// if the type is a pagebreak we are finished loading the questions for this page
+				else
+				{
+					break;
+				}
+				$counter++;
+			}
 		}
 	}
 
+	// selecting the maximum number of pages
+	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($_GET[survey_id])."'";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$numberofpages = mysql_num_rows($result) + 1;
 	// Displaying the form with the questions
-	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.$_GET['survey_id'].'&show='.$limit.'">';
+	if (isset($_GET['show']))
+	{
+		$show = (int)$_GET['show'] + 1;
+	}
+	else
+	{
+		$show = 0;
+	}
+	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.$_GET['survey_id'].'&show='.$show.'">';
 	foreach ($questions as $key=>$question)
 	{
 		$display = new $question['type'];
 		$display->render_question($question);
 	}
-	if (($limit AND $limit <> $question_counter_max) OR !$_GET['show'])
+	if (($show < $numberofpages) OR !$_GET['show'])
 	{
 		//echo '<a href="'.api_get_self().'?survey_id='.$_GET['survey_id'].'&amp;show='.$limit.'">NEXT</a>';
 		echo '<br /><input type="submit" name="next_survey_page" value="'.get_lang('Next').' >> " />';
 	}
-	if ($limit==0 AND $_GET['show'])
+	if ($show >= $numberofpages AND $_GET['show'])
 	{
 		echo '<input type="submit" name="finish_survey" value="'.get_lang('FinishSurvey').' >> " />';
 	}

@@ -63,7 +63,6 @@ if (strlen(strip_tags($survey_data['title'])) > 40)
 	$urlname .= '...';
 }
 
-
 // breadcrumbs
 $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
 $interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$_GET['survey_id'], 'name' => $urlname);
@@ -82,7 +81,11 @@ if (!is_numeric($_GET['survey_id']))
 
 // Getting all the people who have filled this survey
 $answered_data = survey_manager::get_people_who_filled_survey($_GET['survey_id']);
-
+if ($survey_data['anonymous'] == 1)
+{
+	Display::display_normal_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'));
+	$answered_data = array();
+}
 
 //
 if (!isset($_GET['view']) OR $_GET['view'] == 'invited')

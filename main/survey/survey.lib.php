@@ -249,7 +249,7 @@ class survey_manager
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function update_survey_answered($survey_id, $user)
+	function update_survey_answered($survey_id, $user, $survey_code)
 	{
 		global $_course;
 
@@ -266,7 +266,7 @@ class survey_manager
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 
 		// storing that the user has finished the survey.
-		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE user='".Database::escape_string($user)."'";
+		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE user='".Database::escape_string($user)."' AND survey_code='".Database::escape_string($survey_code)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 	}
 
@@ -879,12 +879,15 @@ class survey_manager
 		global $_course;
 
 		// Database table definition
-		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
+		$table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION, $_course['db_name']);
 
 		// variable initialisation
 		$return = array();
+		
+		// getting the survey information
+		$survey_data = survey_manager::get_survey($survey_id);
 
-		$sql = "SELECT DISTINCT user FROM $table_survey_answer WHERE survey_id = '".Database::escape_string($survey_id)."'";
+		$sql = "SELECT DISTINCT user FROM $table_survey_invitation WHERE survey_code= '".Database::escape_string($survey_data['code'])."' AND answered='1'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($res))
 		{
@@ -1507,7 +1510,15 @@ class open extends question
 		echo '<div class="survey_question_wrapper">';
 		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
 		echo '<div class="survey_question_options">';
-		echo '<label for="question'.$form_content['question_id'].'"></label><textarea name="question'.$form_content['question_id'].'" id="textarea" style="width: 400px; height: 130px;">'.implode($answers).'</textarea>';
+		if (is_array($answers))
+		{
+			$content = implode('',$answers);
+		}
+		else 
+		{
+			$content = $answers;
+		}
+		echo '<label for="question'.$form_content['question_id'].'"></label><textarea name="question'.$form_content['question_id'].'" id="textarea" style="width: 400px; height: 130px;">'.$content.'</textarea>';
 		echo '</div>';
 	}
 }
@@ -1679,5 +1690,39 @@ class score extends question
 function db_escape_string($value)
 {
 
+}
+
+function check_first_last_question($survey_id, $continue=true)
+{
+	// table definitions
+	$tbl_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+	$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+
+	// getting the information of the question
+	$sql = "SELECT * FROM $tbl_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' ORDER BY sort ASC";
+	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$total = mysql_num_rows($result);
+	$counter=1;
+	$error = false;
+	while ($row = mysql_fetch_assoc($result))
+	{
+		if ($counter == 1 AND $row['type'] == 'pagebreak')
+		{
+			Display::display_error_message(get_lang('PagebreakNotFirst'), false);
+			$error = true;
+		}
+		if ($counter == $total AND $row['type'] == 'pagebreak')
+		{
+			Display::display_error_message(get_lang('PagebreakNotLast'), false);
+			$error = true;
+		}		
+		$counter++;
+	}
+	
+	if (!$continue AND $error)
+	{
+		Display::display_footer();
+		exit;
+	}
 }
 ?>

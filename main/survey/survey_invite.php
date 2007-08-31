@@ -83,6 +83,16 @@ if (mysql_num_rows($result) > 1)
 	Display::display_warning_message(get_lang('IdenticalSurveycodeWarning'));
 }
 
+// invited / answered message
+if ($survey_data['invited'] > 0)
+{
+	$message  = '<a href="survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
+	$message .= get_lang('HaveAnswered');
+	$message .= '<a href="survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
+	$message .= get_lang('WereInvited');
+	Display::display_normal_message($message, false);
+}
+
 // building the form for publishing the survey
 $form = new FormValidator('publish_form','post', api_get_self().'?survey_id='.$_GET['survey_id']);
 // Course users

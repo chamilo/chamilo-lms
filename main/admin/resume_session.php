@@ -118,7 +118,7 @@ api_display_tool_title($tool_name);
 <table class="data_table" width="100%">
 <tr>
   <th colspan="2"><?php echo get_lang('GeneralProperties'); ?>
-  	<a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="Editer"></a></th>
+  	<a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="<?php echo get_lang('Edit'); ?>"></a></th>
   </th>
 </tr>
 <tr>
@@ -136,7 +136,7 @@ api_display_tool_title($tool_name);
 		if($session['date_start']=='00-00-0000')
 			echo get_lang('NoTimeLimits');
 		else
-			echo 'Du '.$session['date_start'].' au '.$session['date_end'];
+			echo get_lang('From').' '.$session['date_start'].' '.get_lang('To').' '.$session['date_end'];
 		 ?>
 	</td>
 </tr>
@@ -148,7 +148,7 @@ api_display_tool_title($tool_name);
 <table class="data_table" width="100%">
 <tr>
   <th colspan="4"><?php echo get_lang('CourseList'); ?>
-  	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="Editer"></a></th>
+  	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="<?php echo get_lang('Edit'); ?>"></a></th>
   </th>
 </tr>
 <tr>
@@ -163,7 +163,7 @@ api_display_tool_title($tool_name);
 if($session['nbr_courses']==0){
 	echo '
 		<tr>
-			<td colspan="4">Pas de cours pour cette session</td>
+			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';
 }
 else {
@@ -178,7 +178,7 @@ else {
 	$courses=api_store_result($result);
 	foreach($courses as $course){
 		if(empty($course['username']))
-			$coach = 'Aucun';
+			$coach = get_lang('None');
 		else
 			$coach = $course['lastname'].' '.$course['firstname'].' ('.$course['username'].')';
 		echo '
@@ -188,8 +188,8 @@ else {
 			<td>'.$course['nbr_users'].'</td>
 			<td>
 				<a href="../tracking/courseLog.php?cidReq='.$course['code'].'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Tracking').'" alt="'.get_lang('Tracking').'"/></a>&nbsp;
-				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].'"><img src="../img/edit.gif" border="0" align="absmiddle" title="Editer"></a>
-				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
+				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].'"><img src="../img/edit.gif" border="0" align="absmiddle" title="'.get_lang('Edit').'"></a>
+				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>
 			</td>
 		</tr>';
 	}
@@ -203,7 +203,7 @@ else {
 <table class="data_table" width="100%">
 <tr>
   <th colspan="4"><?php echo get_lang('UserList'); ?>
-  	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="Editer"></a></th>
+  	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="<?php echo get_lang('Edit'); ?>"></a></th>
   </th>
 </tr>
 </tr>
@@ -211,7 +211,7 @@ else {
 if($session['nbr_users']==0){
 	echo '
 		<tr>
-			<td colspan="2">Pas d\'utilisateurs pour cette session</td>
+			<td colspan="2">'.get_lang('NoUsersForThisSession').'</td>
 		</tr>';
 }
 else {
@@ -233,7 +233,7 @@ else {
 						<b>'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</b>
 					</td>
 					<td>
-						<a href="../mySpace/student.php?user_id='.$user['user_id'].'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
+						<a href="../mySpace/student.php?user_id='.$user['user_id'].'"><img src="../img/statistics.gif" border="0" style="vertical-align: middle;" title="'.get_lang('Reporting').'" alt="'.get_lang('Reporting').'"/></a>&nbsp;<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="'.get_lang('Delete').'"></a>
 					</td>
 				  </tr>';
 	}

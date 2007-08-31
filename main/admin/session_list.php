@@ -47,7 +47,7 @@ $Sessions=api_store_result($result);
 
 $nbr_results=sizeof($Sessions);
 
-$tool_name = "Liste des sessions";
+$tool_name = get_lang('SessionList');
 
 $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('AdministrationTools'));
 
@@ -149,10 +149,10 @@ else
 	  <td><?php echo htmlentities($enreg['date_start']); ?></td>
 	  <td><?php echo htmlentities($enreg['date_end']); ?></td>
 	  <td>
-		<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/add_user_big.gif" border="0" align="absmiddle" title="Inscrire des utilisateurs à cette session"></a>
-		<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/synthese_view.gif" border="0" align="absmiddle" title="Inscrire des cours à cette session"></a>
-		<a href="session_edit.php?page=session_list.php&id=<?php echo $enreg['id']; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="Editer"></a>
-		<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="Effacer"></a>
+		<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/add_user_big.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeUsersToSession'); ?>"></a>
+		<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/synthese_view.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeCoursesToSession'); ?>"></a>
+		<a href="session_edit.php?page=session_list.php&id=<?php echo $enreg['id']; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" title="<?php echo get_lang('Edit'); ?>"></a>
+		<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" title="<?php echo get_lang('Delete'); ?>"></a>
 	  </td>
 	</tr>
 

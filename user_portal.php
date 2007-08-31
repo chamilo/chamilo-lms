@@ -300,13 +300,25 @@ function get_personal_session_course_list($user_id)
 	$personal_course_list = array();
 
 	//Courses in which we suscribed out of any session
-	$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
+	/*$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
 										course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
 										course_rel_user.user_course_cat user_course_cat
 										FROM    ".$tbl_course."       course,".$main_course_user_table."   course_rel_user
 										WHERE course.code = course_rel_user.course_code"."
 										AND   course_rel_user.user_id = '".$user_id."'
-										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,i";
+										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,i";*/
+
+	$tbl_user_course_category    = Database :: get_user_personal_database();
+	
+	$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+									FROM    ".$main_course_user_table."course_rel_user
+									LEFT JOIN ".$tbl_course."course
+									ON course.code = course_rel_user.course_code
+									LEFT JOIN `".$tbl_user_course_category."`.`user_course_category`
+									ON course_rel_user.user_course_cat = user_course_category.id
+									WHERE  course_rel_user.user_id = '".$user_id."'
+									ORDER BY user_course_category.sort, course_rel_user.sort ASC,i";
+	
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 	
 	while ($result_row = mysql_fetch_array($course_list_sql_result))

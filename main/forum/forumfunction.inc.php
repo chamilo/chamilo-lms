@@ -666,7 +666,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
 				echo $key.'='.$value.'&amp;';
 			}
 		}
-		echo 'action=unlock&amp;content='.$content.'&amp;id='.$id.'">'.icon('../img/lock.gif',get_lang('UnLock')).'</a>';
+		echo 'action=unlock&amp;content='.$content.'&amp;id='.$id.'">'.icon('../img/lock.gif',get_lang('Unlock')).'</a>';
 	}
 	if ($current_lock_status=='0')
 	{

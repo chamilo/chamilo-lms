@@ -10,7 +10,7 @@ FCKConfig.ToolbarSets["Question"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['Image','Flash','Video','MP3','Table','Rule','Smiley','SpecialChar','UniversalKey'],
+	['ImageManager','Flash','Video','MP3','Table','Rule','Smiley','SpecialChar','UniversalKey'],
 	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
 	'/',
 	['Style','FontFormat','FontName','FontSize'],['Attachment']

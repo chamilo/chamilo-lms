@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 12531 2007-06-04 15:01:45Z elixir_julian $
+<?php // $Id: upload.php 12908 2007-08-31 13:15:52Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -234,7 +234,7 @@ if(isset($_FILES['user_upload']))
 		if($missing_files)
 		{
 			//show a form to upload the missing files
-			Display::display_normal_message(build_missing_files_form($missing_files,$_POST['curdirpath'],$_FILES['user_upload']['name']));
+			Display::display_normal_message(build_missing_files_form($missing_files,$_POST['curdirpath'],$_FILES['user_upload']['name']),false);
 		}
 	}
 }

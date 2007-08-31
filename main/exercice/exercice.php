@@ -304,13 +304,7 @@ event_access_tool(TOOL_QUIZ);
 include_once(api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php');
 
 
-/*
------------------------------------------------------------
-	Introduction section
-	(editable by course admins)
------------------------------------------------------------
-*/
-//Display::display_introduction_section(TOOL_QUIZ);
+Display::display_introduction_section(TOOL_QUIZ);
 
 
 // selects $limitExPage exercises at the same time

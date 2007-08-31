@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 12595 2007-06-14 09:55:46Z elixir_julian $
+<?php //$Id: announcements.php 12914 2007-08-31 16:14:07Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -793,7 +793,7 @@ if($_REQUEST['publish_survey'])
 if ($_GET['origin'] !== 'learnpath')
 {
 	//api_display_tool_title($nameTools);
-	//Display::display_introduction_section(TOOL_ANNOUNCEMENT, $is_allowed);
+	Display::display_introduction_section(TOOL_ANNOUNCEMENT, $is_allowed);
 }
 
 /*

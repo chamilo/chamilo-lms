@@ -43,7 +43,7 @@ if($_POST['formSent'])
 
 	$id_coach=intval($_POST['id_coach']);
 
-	if(!$id_coach) $errorMsg=gget_lang("SelectACoach");
+	if(!$id_coach) $errorMsg=get_lang("SelectACoach");
 	else
 	{
 		api_sql_query("UPDATE $tbl_session_course

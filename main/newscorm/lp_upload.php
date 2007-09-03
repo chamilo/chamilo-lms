@@ -86,6 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			$o_ppt = new presentation();
 			$first_item_id = $o_ppt -> convert_presentation($_FILES['user_file']);				
 			break;
+		case 'woogie':
+			require_once('word_document.class.php');
+			$o_doc = new word_document();
+			$first_item_id = $o_doc -> convert_word_document($_FILES['user_file']);				
+			break;
 		case '':
 		default:
 			return api_failure::set_failure('not_a_learning_path');

@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 12332 2007-05-08 10:49:18Z elixir_inter $
+<?php // $Id: user_edit.php 12927 2007-09-03 14:48:13Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -207,6 +207,7 @@ if( $form->validate())
 	$picture_element = & $form->getElement('picture');
 	$picture = $picture_element->getValue();
 	$picture_uri = '';
+	
 	if (strlen($picture['name']) > 0)
 	{
 		$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
@@ -217,6 +218,11 @@ if( $form->validate())
 	{
 		@unlink('../upload/users/'.$user_data['picture_uri']);
 	}
+	
+	if (strlen($picture['name']) == 0){
+		$picture_uri = $user_data['picture_uri'];
+	}
+	
 	$lastname = $user['lastname'];
 	$firstname = $user['firstname'];
 	$official_code = $user['official_code'];

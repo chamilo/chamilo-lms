@@ -39,7 +39,6 @@ function handle_multiple_actions()
 {
 	global $_user, $is_courseAdmin, $is_courseTutor;
 
-	//print_r($_POST);
 	// STEP 1: are we performing the actions on the received or on the sent files?
 	foreach ($_POST as $key=>$value)
 	{
@@ -52,7 +51,7 @@ function handle_multiple_actions()
 	// STEP 2: at least one file has to be selected. If not we return an error message
 	foreach ($_POST as $key=>$value)
 	{
-		if (strstr($key,$part.'_'))
+		if (strstr($key,$part.'_') AND $key!='view_received_category' AND $key!='view_sent_category')
 		{
 			$checked_files=true;
 			$checked_file_ids[]=$value;
@@ -1122,7 +1121,9 @@ function zip_download ($array)
 	global $dropbox_cnf;
 	global $_user;
 	global $files;
-
+	
+	$sys_course_path = api_get_path(SYS_COURSE_PATH);
+	
 	// zip library for creation of the zipfile
 	include(api_get_path(LIBRARY_PATH)."/pclzip/pclzip.lib.php");
 

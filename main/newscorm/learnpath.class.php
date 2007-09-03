@@ -1717,6 +1717,10 @@ class learnpath {
 		{
 			return 'ppt';
 		}
+		if(!empty($_POST['woogie']) && !in_array($extension,array('dll','exe')))
+		{
+			return 'woogie';
+		}
 		
 		
 		$file_base_name = str_replace('.'.$extension,'',$filename); //filename without its extension

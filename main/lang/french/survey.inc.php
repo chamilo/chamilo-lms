@@ -162,4 +162,6 @@ $ViewUnanswered = "Voir les personnes n\'ayant pas répondu";
 $DeleteSurveyQuestion = "Etes-vous sûr de vouloir supprimer cette question ?";
 $ClickHereToAnswerTheSurvey = "Cliquez ici pour répondre à l\'enquête";
 $OrCopyPasteTheFollowingUrl = "ou copiez collez l\'url suivante :";
+$MoveDown = "Déplacer vers le bas";
+$MoveUp = "Déplacer vers le haut";
 ?>

@@ -652,4 +652,10 @@ $DisplayCategoriesOnHomepageTitle = "Prikaži kategorije na domaèi strani";
 $DisplayCategoriesOnHomepageComment = "Ta možnost prikaže ali skrije kategorije na domaèi strani portala";
 $ShowTabsTitle = "Zavihki v zaglavju strani";
 $ShowTabsComment = "Oznaèite zavhke za katere želite, da se pojavijo v zaglavju. Neizbrani zavihki se bodo pojavili v desni izbiri domaèe strani portala in aktivnega teèaja, èe je potrebno, da se pojavljajo.";
+$DefaultForumViewTitle = "Privzeti pogled forumov";
+$DefaultForumViewComment = "Definira privzete možnosti pri kreiranju novega foruma. Vsak upravljalec teèaja lahko nato naknadno doloèi želen pogled za vsak posamezen forum.";
+$ShowTabsTitle = "Zavihki";
+$ShowTabsComment = "Kateri od naslednjih zavihkov bodo prikazani ?";
+$NoCoursesForThisSession = "V tej seji ni uporabnikov";
+$NoUsersForThisSession = "V tej seji ni uporabnikov";
 ?>

@@ -397,7 +397,7 @@ Pode estar baseado en contido (algo como un índice de contidos) ou en actividade
 que se necesita facer para entender unha serie de conceptos ou habilidades).</p><p>
 
 Ademáis de ter unha estrutura definida, tamén pode indicar unha secuencia
-na aprendizaxe. Isto significa que algúns pasos serán un requisito indispensábel
+na aprendizaxe. Isto significa que algúns pasos serán un requisito indispensable
 para poder acceder a outros (\'non podes ir ó contido 2 sen antes ver o
 contido 1\').
 Esta secuenciación pode ser obrigatoria ou non (por exemplo, mostrando o contido
@@ -410,7 +410,7 @@ O primeiro paso é entrar na ligazón \'Construtor de itinerarios\' desde a
 pantalla inicial do módulo de Itinerario formativo.  <br>
 Ó premer, podes crear un (ou máis) itinerarios, premendo en <i>Engadir
 un novo itinerario de aprendizaxe</i>. Cando o creas está vacío
-até que engadas módulos e pasos para definilo. <br>Se fas visíbel
+até que engadas módulos e pasos para definilo. <br>Se fas visible
 un itinerario, aparece como unha ferramenta nova desde a páxina inicial
 do curso, para facilitar o seu acceso.</p>
 <p>
@@ -484,7 +484,7 @@ A maneira máis natural é utilizando o Construtor de Itinerarios Formativos de Do
 <br></p><p>
 <b>Ligazóns interesantes</b><br>
 <ul>
-<li>Adlnet : autoridade responsábel das normas Scorm, <a
+<li>Adlnet : autoridade responsable das normas Scorm, <a
 href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li>
 <li>Reload : Reprodutor e editor de Scorm libre e de Código Aberto, <a
 href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li>
@@ -494,7 +494,7 @@ href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br>
 </ul>
 <p><b>
 Nota :</b></p><p>
-A sección Itinerario Formativo lista todos os <i>Itinerarios Formativos auto-construídos</i>, así como todos os <i>Itinerarios Formativos en formato Scorm</i> subidos. Parece aconsellábel colocar cada itinerario Scorm que se envíe nun directorio separado.
+A sección Itinerario Formativo lista todos os <i>Itinerarios Formativos auto-construídos</i>, así como todos os <i>Itinerarios Formativos en formato Scorm</i> subidos. Parece aconsellable colocar cada itinerario Scorm que se envíe nun directorio separado.
 </p>";
 $langHDescription = "Axuda sobre a Descrición do Curso";
 $langDescriptionContent = "<p>Esta ferramenta axudarache a describir o teu curso de maneira sintética e desde o exterior. Pódelles axudar a futuros estudantes a ter unha idea máis clara do que poden esperar deste curso. Tamén é unha oportunidade de que replantexes o escenario educativo proposto.</p>Os componentes aparecen aquí como propostas. Se queres crear unha descrición do curso cos teus propios componentes, usa só o elemento \"Outro\" e decide o seu título.</p>

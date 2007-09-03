@@ -165,4 +165,6 @@ $DeleteSurveyQuestion = "Ste preprièani, da želite odstraniti vprašanje ?";
 $YouAlreadyFilledThisSurvey = "Ta vprašalnik ste predhodno že izpolnili";
 $ClickHereToAnswerTheSurvey = "Kliknite tule za izpolnjevanje vprašalnika";
 $OrCopyPasteTheFollowingUrl = "ali pa uporabite kopijo najslednjega URL naslova :";
+$MoveDown = "Premakni dol";
+$MoveUp = "Premakni gor";
 ?>

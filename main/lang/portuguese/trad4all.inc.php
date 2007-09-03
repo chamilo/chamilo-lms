@@ -431,4 +431,5 @@ $YourRegistrationData = "Os seus dados do registo";
 $ResetLink = "Clique aqui para recuperar a sua senha";
 $VisibilityChanged = "A visibilidade foi alterada.";
 $MainNavigation = "Navegação principal";
+$None = "Nenhum";
 ?>

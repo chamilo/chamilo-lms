@@ -43,4 +43,5 @@ $langImportBackupInfo = "Uvozi arhivsko datoteko. Daje možnost uvoza arhivske da
 $langCreateBackupInfo = "Ustvari vsebino arhivske datoteke. Izbrati je možno posamezne elemente, ki bodo vkljuèeni v arhiv.";
 $ToolIntro = "Predstavitev orodja";
 $UploadError = "Nalaganje je bilo neuspešno. Preverite najveèjo dovoljeno dolžino datoteke in pravice za dostop do mape, kamor nalagate.";
+$DocumentsWillBeAddedToo = "Pripadajaèi dokumenti bodo tudi dodani";
 ?>

@@ -27,7 +27,7 @@ $ViewSurvey = "Ver enquisa";
 $SelectDisplayType = "Mostrar o Tipo de Visualización:";
 $Thanks = "Mensaxe de resposta";
 $SurveyReporting = "Informe de enquisa";
-$NoSurveyAvailable = "Non existe nengunha enquisa disponíbel";
+$NoSurveyAvailable = "Non existe ningunha enquisa disponible";
 $YourSurveyHasBeenPublished = "foi publicado";
 $CreateFromExistingSurvey = "Crear a partir dunha enquisa existente";
 $Publish = "Publicar enquisa";
@@ -165,4 +165,6 @@ $DeleteSurveyQuestion = "Está seguro de que quere eliminar a pregunta?";
 $YouAlreadyFilledThisSurvey = "Xa encheu esta enquisa";
 $ClickHereToAnswerTheSurvey = "Faga clic aquí para contestar a enquisa";
 $OrCopyPasteTheFollowingUrl = "ou copie e pegue a seguinte url:";
+$MoveDown = "Baixar";
+$MoveUp = "Subir";
 ?>

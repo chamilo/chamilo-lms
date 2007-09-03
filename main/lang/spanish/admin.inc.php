@@ -658,4 +658,10 @@ $DisplayCategoriesOnHomepageTitle = "Mostrar categorías en la página principal";
 $DisplayCategoriesOnHomepageComment = "Esta opción mostrará u ocultará las categorías de cursos en la página principal de la plataforma";
 $ShowTabsTitle = "Pestañas en la cabecera";
 $ShowTabsComment = "Seleccione que pestañas quiere que aparezcan en la cabecera. Las pestañas no seleccionadas, si fueran necesarias, aparecerán en el menú derecho de la página principal de la plataforma y en la página de mis cursos";
+$DefaultForumViewTitle = "Vista del foro por defecto";
+$DefaultForumViewComment = "Cuál es la opción por defecto cuando se crea un nuevo foro. Sin embargo, cualquier administrador de un curso puede elegir una vista diferente en cada foro";
+$ShowTabsTitle = "Pestañas";
+$ShowTabsComment = "¿ Cuáles de las siguientes pestañas deben mostrarse ?";
+$NoCoursesForThisSession = "No hay cursos para esta sesión";
+$NoUsersForThisSession = "No hay usuarios para esta sesión";
 ?>

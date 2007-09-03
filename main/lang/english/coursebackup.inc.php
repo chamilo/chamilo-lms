@@ -43,4 +43,5 @@ $langImportBackupInfo = "Import a backup. You will be able to upload a backup fi
 $langCreateBackupInfo = "Create a backup of this course. You can select the course contents to put in the backup file.";
 $ToolIntro = "Tool introduction";
 $UploadError = "Upload failed, please check maximum file size limits and folder rights.";
+$DocumentsWillBeAddedToo = "Documents will be added too";
 ?>

@@ -43,4 +43,5 @@ $langImportBackupInfo = "Puede transferir una copia de seguridad desde su ordena
 $langCreateBackupInfo = "Puede seleccionar los contenidos del curso que constituirán la copia de seguridad.";
 $ToolIntro = "Introducción de herramienta";
 $UploadError = "Error de envío, revise tamaño máximo del archivo y los permisos del directorio.";
+$DocumentsWillBeAddedToo = "Los documentos también serán añadidos";
 ?>

@@ -432,4 +432,5 @@ $YourRegistrationData = "Estos son sus datos de acceso";
 $ResetLink = "Pulse en el siguiente enlace para regenerar su contraseña";
 $VisibilityChanged = "La visibilidad ha sido cambiada.";
 $MainNavigation = "Navegación principal";
+$None = "Ninguno";
 ?>

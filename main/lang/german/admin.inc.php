@@ -651,4 +651,10 @@ $DisplayCategoriesOnHomepageTitle = "Kategorien auf der Startseite anzeigen";
 $DisplayCategoriesOnHomepageComment = "Mit dieser Option werden Kurskategorien auf der Startseite des Portals angezeigt oder ausgeblendet";
 $ShowTabsTitle = "Tabs im Kopfbereich";
 $ShowTabsComment = "Die Tabs markieren, die im Kopfbereich sichtbar sein sollen. Die nicht markierten Tabs werden im Menu auf der rechten Seite auf der Campus Homepage und Meine Kurse Seite erscheinen, falls sie sichtbar sein müssen";
+$DefaultForumViewTitle = "Default Forum Ansicht ";
+$DefaultForumViewComment = "Welche Ansicht sollte bei der Erstellung eines Forums die Default Ansicht sein? Jeder Kursadministrator kann jedoch eine andere Ansicht für jedes einzelne Forum wählen";
+$ShowTabsTitle = "Tabs";
+$ShowTabsComment = "Welche der nachfolgenden Tabs sollen angezeigt werden?";
+$NoCoursesForThisSession = "Keine Kurse für diese Session";
+$NoUsersForThisSession = "Keine Benutzer für diese Session";
 ?>

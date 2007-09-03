@@ -211,7 +211,8 @@ $langAnnouncementUpdated = "Announcement has been updated";
 $langAnnouncementDeleted = "Announcement has been deleted";
 $langContent = "Content";
 $PermissionsForNewFiles = "Permissions for new files";
-$PermissionsForNewFilesComment = "The ability to define the permissions settings to assign to every newly created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions.";
+$PermissionsForNewFilesComment = "The ability to define the permissions settings to assign to every newly created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions.
+If you use Oogie, take care that the user who launch OpenOffice can write files in the course folder.";
 $langStudent = "Student";
 $Guest = "Guest";
 $langLoginAsThisUserColumnName = "Login as";
@@ -655,4 +656,6 @@ $DefaultForumViewTitle = "Default forum view";
 $DefaultForumViewComment = "What should be the default option when creating a new forum. Any course administrator can however choose a different view for every individual forum";
 $ShowTabsTitle = "Tabs";
 $ShowTabsComment = "Which of the following tabs have to be displayed?";
+$NoCoursesForThisSession = "No courses for this session";
+$NoUsersForThisSession = "No Users for this session";
 ?>

@@ -211,7 +211,8 @@ $langAnnouncementUpdated = "L\'annonce a été mise à jour";
 $langAnnouncementDeleted = "L\'annonce a été effacée";
 $langContent = "Contenu";
 $PermissionsForNewFiles = "Permissions des nouveaux fichiers";
-$PermissionsForNewFilesComment = "La possibilité de définir les permissions allouées aux nouveaux fichiers vous permet d\'augmenter la sécurité contre les attaques de pirates envoyant des contenus dangereux sur votre serveur. La valeur par défaut (0550) devrait être suffisante pour garantir un bon niveau de protection. Le format donné utilise la terminologie UNIX de Propriétaire-Groupe-Autres et de leurs permissions en Lecture-Écriture-Exécution.";
+$PermissionsForNewFilesComment = "La possibilité de définir les permissions allouées aux nouveaux fichiers vous permet d\'augmenter la sécurité contre les attaques de pirates envoyant des contenus dangereux sur votre serveur. La valeur par défaut (0550) devrait être suffisante pour garantir un bon niveau de protection. Le format donné utilise la terminologie UNIX de Propriétaire-Groupe-Autres et de leurs permissions en Lecture-Écriture-Exécution.
+Attention, si vous utilisez Oogie, veillez à ce que l\'utilisateur qui lance OpenOffice ait les droits en écriture sur les dossiers du cours.";
 $langStudent = "Elève";
 $Guest = "Invité";
 $langLoginAsThisUserColumnName = "S\'authentifier en tant que";
@@ -638,4 +639,6 @@ $EphorusLeadersInAntiPlagiarism = "<STRONG>Leaders in <BR>anti plagiarism </STRO
 $EphorusClickHereForInformationsAndPrices = "Click here for more information and prices";
 $DisplayCategoriesOnHomepageTitle = "Afficher les catégories sur la page d\'accueil";
 $DisplayCategoriesOnHomepageComment = "Cette option affichera ou cachera les catégories de cours sur la page d\'accueil";
+$NoCoursesForThisSession = "Pas de cours pour cette session";
+$NoUsersForThisSession = "Pas d\'utilisateurs pour cette session";
 ?>

@@ -652,4 +652,10 @@ $DisplayCategoriesOnHomepageTitle = "Mostrar categorias na página principal";
 $DisplayCategoriesOnHomepageComment = "Esta opção mostra ou oculta as categorias dos cursos na página principal do portal";
 $ShowTabsTitle = "Etiquetas no cabeçalho";
 $ShowTabsComment = "Seleccione as etiquetas que deseja no cabeçalho. As etiquetas não seleccionadas aparecerão no menu do lado direito da página principal do campus e na página dos cursos, caso seja necessário aparecer.";
+$DefaultForumViewTitle = "Visão do fórum por defeito";
+$DefaultForumViewComment = "Qual deverá ser a opção por defeito quando se cria um fórum. Qualquer administrador do curso poderá escolher uma visão diferente para cada fórum.";
+$ShowTabsTitle = "Separadores";
+$ShowTabsComment = "Quais dos seguintes separadores devem ser mostrados?";
+$NoCoursesForThisSession = "Não há cursos para esta sessão";
+$NoUsersForThisSession = "Não há utilizadores para esta sessão";
 ?>

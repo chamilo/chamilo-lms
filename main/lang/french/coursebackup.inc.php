@@ -43,4 +43,5 @@ $langImportBackupInfo = "Importer un cours existant. Vous pouvez charger un fich
 $langCreateBackupInfo = "Créer un fichier de sauvegarde de ce cours. Vous pouvez sélectionner les sections du cours que vous voulez sauver dans ce fichier.";
 $ToolIntro = "Introduction";
 $UploadError = "l\'upload n\'a pas fonctionné, veuillez vérifier les limites de taille de fichiers autorisée et les permissions de vos répertoires.";
+$DocumentsWillBeAddedToo = "Les documents seront également ajoutés";
 ?>

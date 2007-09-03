@@ -171,4 +171,9 @@ $NoPrerequisites = "Aucun pré-requis";
 $NewExercise = "Nouveau test";
 $CreateANewLink = "Créer un nouveau lien";
 $CreateANewForum = "Créer un nouveau forum";
+$WoogieConversionPowerPoint = "Woogie : conversion Word";
+$WelcomeWoogieSubtitle = "Un convertisseur de Word en parcours pédagogiques";
+$WelcomeWoogieConverter = "Bienvenue dans le convertisseur de Word Woogie<ul type=\\\"1\\\"><li>Choisissez un fichier .doc, .sxw, .odt<li>Envoyez ce fichier à Woogie. Il sera converti en parcours SCORM<li>Vous pourrez ensuite ajouter des commentaires audio sur chaque page et insérer tests et activités entres les page</ul>";
+$WelcomeWoogieSubtitle = "Erreur durant la conversion du document Word. Vérifiez qu\'il n\'y a pas de caractères spéciaux dans le nom de votre document ou contactez votre administrateur système.";
+$WordConvert = "Conversion Word";
 ?>

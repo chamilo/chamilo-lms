@@ -431,4 +431,5 @@ $YourRegistrationData = "Vaši registracijski podatki";
 $ResetLink = "Kliknite tule za ponastavitev vašega gesla";
 $VisibilityChanged = "Vidnost je bila spremenjena.";
 $MainNavigation = "Osnovna izbira";
+$None = "Brez";
 ?>

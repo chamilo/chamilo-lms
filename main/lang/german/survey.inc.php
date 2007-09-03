@@ -166,4 +166,6 @@ $DeleteSurveyQuestion = "Soll diese Frage wirklich gelöscht werden? ";
 $YouAlreadyFilledThisSurvey = "Du hast diese Umfrage bereits ausgefüllt";
 $ClickHereToAnswerTheSurvey = "Hier klicken, um Umfrage zu beantworten";
 $OrCopyPasteTheFollowingUrl = "oder die folgende URL kopieren: ";
+$MoveDown = "Nach unten verschieben";
+$MoveUp = "Nach oben verschieben";
 ?>

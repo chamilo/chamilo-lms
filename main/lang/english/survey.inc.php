@@ -165,4 +165,6 @@ $DeleteSurveyQuestion = "Are you sure to delete the question ?";
 $YouAlreadyFilledThisSurvey = "You already filled this survey";
 $ClickHereToAnswerTheSurvey = "Click here to answer the survey";
 $OrCopyPasteTheFollowingUrl = "or copy paste the following url :";
+$MoveDown = "Move down";
+$MoveUp = "Move up";
 ?>

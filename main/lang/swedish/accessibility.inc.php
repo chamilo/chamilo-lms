@@ -7,6 +7,7 @@ $WCAGImage = "Bild";
 $WCAGLabel = "Bildetikett";
 $WCAGLink = "Länk";
 $WCAGLinkLabel = "Länketikett";
+$errorNoLabel = "bilden har ingen etikett.";
 $WCAGEditor = "WCAG Editor";
 $WCAGGoMenu = "Gå till meny";
 $WCAGGoContent = "Gå till innehåll";

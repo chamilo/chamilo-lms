@@ -641,4 +641,7 @@ $DisplayCategoriesOnHomepageTitle = "Afficher les catégories sur la page d\'accu
 $DisplayCategoriesOnHomepageComment = "Cette option affichera ou cachera les catégories de cours sur la page d\'accueil";
 $NoCoursesForThisSession = "Pas de cours pour cette session";
 $NoUsersForThisSession = "Pas d\'utilisateurs pour cette session";
+$LastNameMandatory = "Le nom de famille doit être obligatoirement renseigné";
+$FirstNameMandatory = "Le prénom doit être obligatoirement renseigné";
+$EmailMandatory = "L\'email doit être obligatoirement renseigné";
 ?>

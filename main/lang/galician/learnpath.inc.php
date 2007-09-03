@@ -176,4 +176,9 @@ $NewExercise = "Novo exame";
 $CreateANewLink = "Crear unha nova ligazón";
 $CreateANewForum = "Crear un novo foro";
 $LinkAdd = "Engadir ligazón";
+$WoogieConversionPowerPoint = "Woogie: Conversión Word";
+$WelcomeWoogieSubtitle = "Un conversor de Word a itinerarios formativos";
+$WelcomeWoogieConverter = "Benvido ó conversor Woogie<ul type=\\\"1\\\"><li>Escolla un documento .doc, .sxw, .odt<li>Súbao a Woogie. Convertirarse nun itinerario formativo SCORM<li>Logo poderá engadir comentarios con voz en cada páxina e inserir Tests ou outras actividades entre as páxinas</ul>";
+$WoogieError = "Ocurriu un erro durante a conversión do documento. Por favor, comprove se hai caracteres especiais no nome do seu documento.";
+$WordConvert = "Conversión Word";
 ?>

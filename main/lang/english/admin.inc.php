@@ -658,4 +658,7 @@ $ShowTabsTitle = "Tabs";
 $ShowTabsComment = "Which of the following tabs have to be displayed?";
 $NoCoursesForThisSession = "No courses for this session";
 $NoUsersForThisSession = "No Users for this session";
+$LastNameMandatory = "The last name cannot be empty";
+$FirstNameMandatory = "The first name cannot be empty";
+$EmailMandatory = "The email cannot be empty";
 ?>

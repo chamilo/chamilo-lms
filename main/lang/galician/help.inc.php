@@ -15,8 +15,8 @@ Para estruturar os debates dos alumnos, é necesario organizalos con anterioridad
 <p>Non mestures categorías e
  foros, e non esquezas que unha categoría baleira (sen foros) non aparece na vista de estudante.</p>
 <p>A descrición dun foro pode ser a listaxe dos membros, a descrición dun obxectivo, a definición dunha meta, unha tarefa, un tema...";
-$langHDropbox = "Baúl de tarefas";
-$langDropboxContent = "O baúl de tarefas mostra os ficheiros que che enviaron (a carpeta de entrada)
+$langHDropbox = "Buzón de ficheiros";
+$langDropboxContent = "O buzón de ficheiros mostra os ficheiros que che enviaron (a carpeta de entrada)
 e os arquivos que ti enviachess a outros membros do curso (a carpeta de saída).
 Se envias un ficheiro co mesmo nome dúas veces, podes sobreescribir a
 versión antiga.
@@ -52,7 +52,7 @@ envio_STUDENTID_20040229.zip.
 Despois de enviar o contido dos ficheiros, podes facer clic na icona da carpeta de saída
 na parte esquerda do nome do ficheiro zip
 para ter a lista do contido dos ficheiros .
-Os ficheiros non se poden borrar desde o baúl de tarefas dos destinatarios.
+Os ficheiros non se poden borrar desde o buzón de ficheiros dos destinatarios.
 <br><br>
 Se esta permitida a sobreescritura, pódese actualizar por segunda vez o ficheiro
 .
@@ -431,7 +431,7 @@ con itinerario que se queira crear:<br><ul>
 <li>Tests online de Dokeos(tés que facelos antes visibles na ferramenta
 tests online, se quere presentalos nos itinerarios de aprendizaxe)</li>
 <li>Ferramenta Traballos</li>
-<li>Baúl de tarefas</li>
+<li>Buzón de ficheiros</li>
 <li>Ligazóns externas a Dokeos</li></ul>
 </p>
 <p><b>

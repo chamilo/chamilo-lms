@@ -172,4 +172,10 @@ $NewExercise = "Nov test";
 $CreateANewLink = "Ustvari novo povezavo";
 $CreateANewForum = "Ustvari nov forum";
 $LinkAdd = "Dodaj povezavo";
+$WoogieConversionPowerPoint = "Woogie : pretvorba datotek oblike MS Word";
+$WelcomeWoogieSubtitle = "Pretvorba Word datotek v uèno pot";
+$WelcomeWoogieConverter = "
+Dobrodošli v pretvorniku Woogie<ul type=\\\"1\\\"><li>Izberite datoteko .doc, .sxw, .odt<li>Naložite jo v Woogie. Datoteka bo pretvorjena v SCORM uèno pot.<li>Nato boste imeli možnost dodati zvoène komentarje na vsako izmed strani, vstaviti vaje in druge aktivnosti med stranmi. </ul>";
+$WoogieError = "Napaka med pretvorbo Word dokumenta. Preverite, da v imena datotek ne vsebujejo posebnih zankov, ...";
+$WordConvert = "Pretvorba Word datotek";
 ?>

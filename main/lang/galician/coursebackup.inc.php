@@ -43,4 +43,5 @@ $langImportBackupInfo = "Importar unha copia de seguridade. Poderá subir unha co
 $langCreateBackupInfo = "Crear unha copia de seguridade do curso. Podes eleccionar os contidos do curso para poñer na copia.";
 $ToolIntro = "Introdución da ferramenta";
 $UploadError = "Fallou o envío. Comprobe os límites de tamaño de ficheiro e os permisos de escrita do directorio.";
+$DocumentsWillBeAddedToo = "Tamén se engadirán os documentos";
 ?>

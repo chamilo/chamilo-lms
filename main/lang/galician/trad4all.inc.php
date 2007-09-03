@@ -270,7 +270,7 @@ $Document = "Documentos";
 $Learnpath = "Itinerario Formativo";
 $Link = "Ligazóns";
 $Announcement = "Taboleiro de anuncios";
-$Dropbox = "Baúl de tarefas";
+$Dropbox = "Buzón de ficheiros";
 $Quiz = "Exercicios";
 $langChat = "Chat";
 $Conference = "Conferencia Online";
@@ -431,4 +431,5 @@ $YourRegistrationData = "Estes son os seus datos de acceso";
 $ResetLink = "Pulse no seguinte enlace para rexenerar o seu contrasinal";
 $VisibilityChanged = "A visibilidade foi cambiada.";
 $MainNavigation = "Navegación principal";
+$None = "Ningún";
 ?>

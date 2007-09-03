@@ -16,5 +16,5 @@ $langOkSent = "A súa páxina enviouse ó servidor.<p>É accesible desde a <a href=.
 $Content = "Contido";
 $CourseDescriptionUpdated = "Actualizouse a descrición do curso";
 $CourseDescriptionDeleted = "Eliminouse a descrición do curso";
-$CourseDescriptionIntro = "Para crear a descrición dun curso, clique nun cabezallo e encha o campo asociado.<br><br>Prema sobre De acordo e encha outro cabezallo.";
+$CourseDescriptionIntro = "Para crear a descrición dun curso, clique nunha cabeceira e encha o campo asociado.<br><br>Prema sobre De acordo e encha outra cabeceira.";
 ?>

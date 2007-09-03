@@ -2,8 +2,8 @@
 for more information: see languages.txt in the lang folder. 
 */
 $dropbox_lang["help"]  = "Axuda";
-$dropbox_lang["aliensNotAllowed"]  = "Só os membros da área poden usar o baúl de tarefas. Vostede non é membro desta área";
-$dropbox_lang["dropbox"]  = "Baúl de tarefas";
+$dropbox_lang["aliensNotAllowed"]  = "Só os membros da área poden usar o buzón de ficheiros. Vostede non é membro desta área";
+$dropbox_lang["dropbox"]  = "Buzón de ficheiros";
 $dropbox_lang["queryError"]  = "Error na consulta á base de datos. Por favor, contacte co seu administrador de sistemas.";
 $dropbox_lang["generalError"]  = "Ocurriu un erro. Por favor, contacte co seu administrador de sistema.";
 $dropbox_lang["badFormData"]  = "Fallou o envío: Erro no formato dos datos. Por favor, contacte co seu administrador de sistemas. ";
@@ -11,8 +11,8 @@ $dropbox_lang["noUserSelected"]  = "Por favor, seleccione un usuario ó que envia
 $dropbox_lang["noFileSpecified"]  = "Non especificou un arquivo para enviar.";
 $dropbox_lang["tooBig"]  = "Non escolleu un ficheiro ou este é moi pesado.";
 $dropbox_lang["uploadError"]  = "Erro no envío do ficheiro. Por favor, contacte o seu administrador de sistema.";
-$dropbox_lang["errorCreatingDir"]  = "Non se pode crear o directorio do baúl. Por favor, contacte co seu administrador de sistema.";
-$dropbox_lang["installError"]  = "Non se poden instalar as taboas necesarias para ó módulo do baúl de tarfas. Por favor contacte co seu administrador de sistema.";
+$dropbox_lang["errorCreatingDir"]  = "Non se pode crear o directorio do buzón. Por favor, contacte co seu administrador de sistema.";
+$dropbox_lang["installError"]  = "Non se poden instalar as taboas necesarias para ó módulo do buzón de ficheiros. Por favor contacte co seu administrador de sistema.";
 $dropbox_lang["uploadFile"]  = "Subir un documento";
 $dropbox_lang["authors"]  = "Autores";
 $dropbox_lang["description"]  = "Descrición do documento";
@@ -39,7 +39,7 @@ $dropbox_lang["author"]  = "autor";
 $dropbox_lang["sender"]  = "autor";
 $dropbox_lang["recipient"]  = "receptor";
 $dropbox_lang["docAdd"]  = "O traballo engadiuse correctamente";
-$dropbox_lang["fileDeleted"]  = "O ficheiro seleccionado foi retirado do seu baúl.";
+$dropbox_lang["fileDeleted"]  = "O ficheiro seleccionado foi retirado do seu buzón.";
 $dropbox_lang["mailingAsUsername"]  = "Envío";
 $dropbox_lang["mailingInSelect"]  = "---envío---";
 $dropbox_lang["mailingSelectNoOther"]  = "O envío non pode ser combinado con outros receptores";
@@ -48,7 +48,7 @@ $dropbox_lang["mailingExamine"]  = "Examinar o arquivo ZIP do envío";
 $dropbox_lang["mailingNotYetSent"]  = "Os contidos do envío aínda non se enviaron...";
 $dropbox_lang["mailingSend"]  = "Enviar o contido dos ficheiros";
 $dropbox_lang["mailingConfirmSend"]  = "¿Enviar o contido dos ficheiros a destinatarios individuais?";
-$dropbox_lang["mailingBackToDropbox"]  = "(volver á ventá principal do baúl de tarefas)";
+$dropbox_lang["mailingBackToDropbox"]  = "(volver á ventá principal do buzón de ficheiros)";
 $dropbox_lang["mailingWrongZipfile"]  = "O envío debe ser un arquivo ZIP coa ID do alumno ou o seu LOGIN";
 $dropbox_lang["mailingZipEmptyOrCorrupt"]  = "O arquivo ZIP está vacío ou non é válido";
 $dropbox_lang["mailingZipPhp"]  = "O arquivo ZIP non pode conter arquivos PHP - por tanto non será envíado.";
@@ -68,7 +68,7 @@ $dropbox_lang["justUploadInList"]  = "Subido por";
 $dropbox_lang["mailingJustUploadNoOther"]  = "O recén subido non pode ser combinado con outros destinatarios";
 $dropbox_lang["giveFeedback"] = "Dar / Modificar os comentarios";
 $dropbox_lang["showFeedback"] = "Amosar os comentarios";
-$dropbox_lang["backList"] = "Volver ó seu baúl de tarefas";
+$dropbox_lang["backList"] = "Volver ó seu buzón de ficheiros";
 $dropbox_lang["filingFolders"] = "Arquivado (carpetas)";
 $dropbox_lang["filingRefile"] = "Reclasificar";
 $dropbox_lang["filingSelected"] = "seleccionado";
@@ -124,6 +124,6 @@ $mailingJustUploadSelectNoOther = "O envío ao mín mesmo non se pode combinar con
 $NoFilesHere = "Aquí non hai ficheiros";
 $NoFilesHere = " 	
 Aquí non hai arquivos";
-$NewDropboxFileUploaded = "Enviouse un novo arquivo ó baúl de tarefas";
-$NewDropboxFileUploadedContent = "Enviouse un novo arquivo ó baúl de tarefas do teu curso";
+$NewDropboxFileUploaded = "Enviouse un novo arquivo ó buzón de ficheiros";
+$NewDropboxFileUploadedContent = "Enviouse un novo arquivo ó buzón de ficheiros do teu curso";
 ?>

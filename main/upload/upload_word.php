@@ -64,7 +64,7 @@ Display :: display_header($nameTools);
 ?>
 
 <img src="../img/woogie.gif"><br>
-<span style="color: #ff6434; font-size: 16px; font-family: Arial; margin-left: 10px;"><?php echo get_lang("WelcomeWoogieSubtitle");?></span><br>
+<span style="color: #5577af; font-size: 16px; font-family: Arial; margin-left: 10px;"><?php echo get_lang("WelcomeWoogieSubtitle");?></span><br>
 
 <?php
 

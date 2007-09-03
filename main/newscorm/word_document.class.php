@@ -131,7 +131,7 @@ class word_document extends learnpath {
 					api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],$to_group_id,$to_user_id);
 					
 					$infos = pathinfo($file);
-					$slide_name = 'page'.str_repeat('0',2-strlen($key).$key);
+					$slide_name = 'page'.str_repeat('0',2-strlen($key)).$key;
 					$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
 					if($first_item == 0){
 						$first_item = $previous;

@@ -63,8 +63,7 @@ class word_document extends learnpath {
 		$perm = api_get_setting('permissions_for_new_files');
 		
 		
-		
-		$classpath = '-cp .:*';
+		$classpath = '-cp .:ridl.jar:js.jar:juh.jar:jurt.jar:jut.jar:java_uno.jar:java_uno_accessbridge.jar:edtftpj-1.5.2.jar:unoil.jar:commons-cli-1.0.jar:commons-io-1.3.1.jar:jodconverter-2.2.0.jar:jodconverter-cli-2.2.0.jar';
 		if(strpos($_ENV['OS'],'Windows') !== false)
 		{
 			$classpath = str_replace(':',';',$classpath);
@@ -109,6 +108,8 @@ class word_document extends learnpath {
 			$first_item = 0;
 			
 			foreach($pages as $key=>$page_content){ // for every pages, we create a new file
+				
+				$key +=1;
 				// Tidy
 				$tidy = new tidy;
 				$config = array(
@@ -130,14 +131,13 @@ class word_document extends learnpath {
 					api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],$to_group_id,$to_user_id);
 					
 					$infos = pathinfo($file);
-					$slide_name = 'page'.str_repeat('0',2-strlen($key+1));
+					$slide_name = 'page'.str_repeat('0',2-strlen($key).$key);
 					$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
 					if($first_item == 0){
 						$first_item = $previous;
 					}
 				}
 			}
-			
 			$perm = octdec(!empty($perm)?$perm:0700);
 			chmod ($base_work_dir.$created_dir,$perm);
 			chmod($file,$perm);

@@ -1342,12 +1342,13 @@ class Blog
 		echo	"<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
 				 "<th width='240'><b>",get_lang('Member'),"</b></th>\n",
 				 "<th><b>",get_lang('Task'),"</b></th>\n",
+				 "<th><b>",get_lang('Description'),"</b></th>\n",
 				 "<th><b>",get_lang('TargetDate'),"</b></th>\n",
 				 "<th width='50'><b>",get_lang('Modify'),"</b></th>\n",
 			"</tr>\n";
 
 
-		$sql = "SELECT task_rel_user.*, task.title, user.firstname, user.lastname FROM $tbl_blogs_tasks_rel_user task_rel_user
+		$sql = "SELECT task_rel_user.*, task.title, user.firstname, user.lastname, task.description FROM $tbl_blogs_tasks_rel_user task_rel_user
 		INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 		INNER JOIN $tbl_users user ON task_rel_user.user_id = user.user_id
 		WHERE task_rel_user.blog_id = '".(int)$blog_id."' ORDER BY `target_date` ASC";
@@ -1366,6 +1367,7 @@ class Blog
 			echo	'<tr class="' . $css_class . '" valign="top">',
 						 '<td width="240">' . $assignment['firstname'] . ' ' . $assignment['lastname'] . '</td>',
 						 '<td>'.stripslashes($assignment['title']) . '</td>',
+						 '<td>'.stripslashes($assignment['description']) . '</td>',
 						 '<td>' . $assignment['target_date'] . '</td>',
 						 '<td width="50">',
 						 	'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=edit_assignment&amp;assignment_id=' . $assignment['task_id'] . '|' . $assignment['user_id'] . '">',
@@ -1926,7 +1928,7 @@ class Blog
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 
 		$sql = "
-			SELECT title
+			SELECT title, description
 			FROM $tbl_blogs_tasks
 			WHERE task_id = '".(int)$task_id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -1945,7 +1947,9 @@ class Blog
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 
 		// Display
-		echo '<span class="blogpost_title">' . get_lang('SelectTaskArticle') . ' "' . $row['title'] . '"</span>';
+		echo '<span class="blogpost_title">' . get_lang('SelectTaskArticle') . ' "' . stripslashes($row['title']) . '"</span>';
+		echo '<span style="font-style: italic;"">'.stripslashes($row['description']) . '</span><br><br>';
+		
 
 		if(mysql_num_rows($result) > 0)
 		{
@@ -2169,7 +2173,7 @@ class Blog
 
 			while($r = mysql_fetch_array($sql_res))
 			{
-				$task .= $r['task'] . ', ';
+				$task .= stripslashes($r['task']) . ', ';
 			}
 
 			echo $task;

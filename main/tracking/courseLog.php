@@ -527,6 +527,7 @@ else {
 			
 			if($export_csv)
 			{
+				$row[8] = strip_tags($row[8]);
 				$csv_content[] = $row;
 			}
 			

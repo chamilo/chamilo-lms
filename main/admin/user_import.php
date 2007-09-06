@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 12712 2007-07-06 11:20:22Z elixir_julian $
+// $Id: user_import.php 12942 2007-09-06 11:55:44Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -154,7 +154,7 @@ function save_data($users)
 	foreach ($users as $index => $user)
 	{
 		$user = complete_missing_data($user);
-		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], $user['PhoneNumber'], '', $user['AuthSource']);
+		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], '', $user['PhoneNumber'], '', $user['AuthSource']);
 		foreach ($user['Courses'] as $index => $course)
 		{
 			CourseManager :: subscribe_user($user_id, $course,$user['Status']);

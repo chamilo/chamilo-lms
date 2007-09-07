@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 12912 2007-08-31 15:52:45Z pcool $
+* 	@version $Id: reporting.php 12952 2007-09-07 07:07:17Z pcool $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -158,6 +158,9 @@ Display :: display_footer();
 function check_parameters()
 {
 	$error = false;
+	
+	// getting the survey data
+	$survey_data = survey_manager::get_survey($_GET['survey_id']);
 
 	// $_GET['survey_id'] has to be numeric
 	if (!is_numeric($_GET['survey_id']))
@@ -176,8 +179,28 @@ function check_parameters()
 	if ($_GET['action'] == 'userreport')
 	{
 		global $people_filled;
-		$people_filled = survey_manager::get_people_who_filled_survey($_GET['survey_id']);
-		if (isset($_GET['user']) AND !in_array($_GET['user'], $people_filled))
+		if ($survey_data['anonymous'] == 0)
+		{
+			$people_filled_full_data = true;
+		}
+		else 
+		{
+			$people_filled_full_data = false;
+		}
+		$people_filled = survey_manager::get_people_who_filled_survey($_GET['survey_id'], $people_filled_full_data);
+		if ($survey_data['anonymous'] == 0)
+		{
+			foreach ($people_filled as $key=>$value)
+			{
+				$people_filled_userids[]=$value['user_id'];
+			}
+		}
+		else 
+		{
+			$people_filled_userids = $people_filled;
+		}		
+		
+		if (isset($_GET['user']) AND !in_array($_GET['user'], $people_filled_userids))
 		{
 			$error = get_lang('UnknowUser');
 		}
@@ -257,8 +280,8 @@ function handle_reporting_actions()
  */
 function display_user_report()
 {
-	global $people_filled;
-
+	global $people_filled, $survey_data;
+	
 	// Database table definitions
 	$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 	$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -278,14 +301,25 @@ function display_user_report()
 	echo get_lang('SelectUserWhoFilledSurvey').'<br />';
 	echo '<select name="user" onchange="jumpMenu(\'parent\',this,0)">';
 	echo '<option value="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'">'.get_lang('SelectUser').'</option>';
+	
 	foreach ($people_filled as $key=>$person)
 	{
-		echo '<option value="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'&amp;user='.$person.'" ';
+		if ($survey_data['anonymous'] == 0)
+		{
+			$name = $person['firstname'].' '.$person['lastname'];
+			$id = $person['user_id'];
+		}
+		else 
+		{
+			$name  = $person;
+			$id = $person;
+		}
+		echo '<option value="reporting.php?action='.$_GET['action'].'&amp;survey_id='.$_GET['survey_id'].'&amp;user='.$id.'" ';
 		if ($_GET['user'] == $person)
 		{
 			echo 'selected="selected"';
 		}
-		echo '>'.$person.'</option>';
+		echo '>'.$name.'</option>';
 	}
 	echo '</select>';
 

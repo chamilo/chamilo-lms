@@ -874,12 +874,13 @@ class survey_manager
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function get_people_who_filled_survey($survey_id)
+	function get_people_who_filled_survey($survey_id, $all_user_info = false)
 	{
 		global $_course;
 
 		// Database table definition
-		$table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION, $_course['db_name']);
+		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
+		$table_user					= Database :: get_main_table('user');
 
 		// variable initialisation
 		$return = array();
@@ -887,11 +888,29 @@ class survey_manager
 		// getting the survey information
 		$survey_data = survey_manager::get_survey($survey_id);
 
-		$sql = "SELECT DISTINCT user FROM $table_survey_invitation WHERE survey_code= '".Database::escape_string($survey_data['code'])."' AND answered='1'";
+		if ($all_user_info)
+		{
+			$sql = "SELECT DISTINCT answered_user.user as invited_user, user.firstname, user.lastname, user.user_id 
+						FROM $table_survey_answer answered_user, $table_user as user
+						WHERE answered_user.user = user.user_id
+						AND survey_id= '".Database::escape_string($survey_data['survey_id'])."'";
+		}
+		else 
+		{
+			$sql = "SELECT DISTINCT user FROM $table_survey_answer WHERE survey_id= '".Database::escape_string($survey_data['survey_id'])."'";
+		}
+		echo $sql;
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($res))
 		{
-			$return[] = $row['user'];
+			if ($all_user_info)
+			{
+				$return[] = $row;
+			}
+			else 
+			{
+				$return[] = $row['user'];
+			}
 		}
 
 		return $return;

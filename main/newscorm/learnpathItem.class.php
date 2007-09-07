@@ -1728,7 +1728,7 @@ class learnpathItem{
 		     	$this->db_item_view_id = Database::get_last_insert_id();
 	     	}else{
 	     		$sql = '';
-	     		if($this->type='hotpotatoes')
+	     		if($this->type=='hotpotatoes')
 	     		{	//make an exception for HotPotatoes, don't update the score
 		     		//because it has been saved outside of this tool
 			     	$sql = "UPDATE $item_view_table " .

@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 12388 2007-05-14 09:35:44Z elixir_inter $
+// $Id: user_information.php 12954 2007-09-07 13:49:29Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,6 +76,111 @@ if ($user['picture_uri'] != '')
 }
 echo '<p>'. ($user['status'] == 1 ? get_lang('Teacher') : get_lang('Student')).'</p>';
 echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>';
+
+
+/**
+ * Show the sessions and the courses in wich this user is subscribed
+ */
+
+echo '<p><b>'.get_lang('SessionList').'</b></p>';
+echo '<blockquote>';
+
+$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
+$main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
+$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_session_course 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session 			= Database :: get_main_table(TABLE_MAIN_SESSION);
+$tbl_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+
+$user_id = $user['user_id'];
+
+$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
+							FROM session_rel_user, session
+							WHERE id_session=id AND id_user=$user_id
+							AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
+							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
+
+$sessions=api_store_result($result);
+
+// get the list of sessions where the user is subscribed as coach in a course
+$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
+						FROM $tbl_session as session
+						INNER JOIN $tbl_session_course as session_rel_course
+							ON session_rel_course.id_coach = $user_id
+						AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
+						ORDER BY date_start, date_end, name",__FILE__,__LINE__);
+
+$session_is_coach = api_store_result($result);
+
+$personal_course_list = array();
+
+$header[] = array (get_lang('Code'), true);
+$header[] = array (get_lang('Title'), true);
+$header[] = array (get_lang('Status'), true);
+$header[] = array ('', false);
+
+foreach($sessions as $enreg){
+	
+	$data = array ();
+	$personal_course_list = array();
+	
+	$id_session = $enreg['id'];
+	$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')
+								 FROM $tbl_session_course as session_course
+								 INNER JOIN $tbl_course AS course
+								 	ON course.code = session_course.course_code
+								 LEFT JOIN $tbl_user as user
+									ON user.user_id = session_course.id_coach
+								 INNER JOIN $tbl_session_course_user
+									ON $tbl_session_course_user.id_session = $id_session
+									AND $tbl_session_course_user.id_user = $user_id
+								INNER JOIN $tbl_session  as session
+									ON session_course.id_session = session.id
+								 WHERE session_course.id_session = $id_session
+								 ORDER BY i";
+
+	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
+
+	while ($result_row = mysql_fetch_array($course_list_sql_result)){
+		$key = $result_row['id_session'].' - '.$result_row['k'];
+		$result_row['s'] = $result_row['14'];
+
+		if(!isset($personal_course_list[$key])){
+			$personal_course_list[$key] = $result_row;
+		}
+	}
+	
+	foreach ($personal_course_list as $my_course){
+	
+		$row = array ();
+		
+		$row[] = $my_course['k'];
+		$row[] = $my_course['i'];
+		$row[] = $my_course['s'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
+		$tools = '<a href="course_information.php?code='.$my_course['k'].'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle" /></a>'.
+				'<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'"><img src="../img/course_home.gif" border="0" style="vertical-align: middle" /></a>' .
+				'<a href="course_edit.php?course_code='.$my_course['k'].'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
+		
+		if( $my_course->status == STUDENT ){
+			$tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$my_course['k'].'&user_id='.$user['user_id'].'"><img src="../img/delete.gif"/></a>';
+					
+		}
+		$row[] = $tools;
+		$data[] = $row;
+				
+	}
+	
+	echo $enreg['name'];
+	Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));
+	echo '<br><br><br>';
+	
+}
+
+
+echo '</blockquote>';
+
 /**
  * Show the courses in which this user is subscribed
  */

@@ -962,7 +962,8 @@ function update_Db_course($courseDbName)
 		"display_order		int unsigned	not null default 0," . //this is needed for ordering items under the same parent (previous_item_id doesn't give correct order after reordering)
 		"prerequisite  char(64)  null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
 		"parameters  text  null," . //prerequisites in AICC scripting language as defined in the SCORM norm (allow logical operators)
-		"launch_data 	text	not null default '')"; //data from imsmanifest <item>
+		"launch_data 	text	not null default ''," . //data from imsmanifest <item>
+		"max_time_allowed char(13) NULL default '')"; //data from imsmanifest <adlcp:maxtimeallowed>
 	if(!api_sql_query($sql))
 	{
 		error_log($sql,0);

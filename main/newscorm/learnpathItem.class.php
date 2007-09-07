@@ -1552,7 +1552,8 @@ class learnpathItem{
     	}
     }
     /**
-     * Sets the score value
+     * Sets the score value. If the mastery_score is set and the score reaches
+     * it, then set the status to 'passed'.
      * @param	float	Score
      * @return	boolean	True on success, false otherwise
      */

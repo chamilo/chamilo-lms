@@ -32,7 +32,9 @@ class learnpathItem{
 	//var $location; //only set this for SCORM?
 	var $lp_id;
 	var $max_score;
+	var $mastery_score;
 	var $min_score;
+	var $max_time_allowed = '';
 	var $name;
 	var $next;
 	var $parent;
@@ -84,12 +86,13 @@ class learnpathItem{
     	$this->title	 = $row['title'];
     	$this->description = $row['description'];
     	$this->path		 = $row['path'];
-    	$this->masteryscore = $row['mastery_score'];
+    	$this->mastery_score = $row['mastery_score'];
     	$this->parent	 = $row['parent_item_id'];
     	$this->next		 = $row['next_item_id'];
     	$this->previous	 = $row['previous_item_id'];
     	$this->display_order = $row['display_order'];
     	$this->prereq_string = $row['prerequisite'];
+    	$this->max_time_allowed = $row['max_time_allowed'];
     	if(isset($row['launch_data'])){
     		$this->launch_data = $row['launch_data'];
     	}
@@ -391,12 +394,29 @@ class learnpathItem{
     	return $this->level;
     }
     /**
+     * Gets the mastery score
+     */
+    function get_mastery_score()
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_mastery_score()',0);}
+    	if(isset($this->mastery_score)){return $this->mastery_score;}else{return -1;}    	    	
+    }
+    /**
      * Gets the maximum (score)
      * @return	int	Maximum score. Defaults to 100
      */
     function get_max(){
     	if($this->debug>0){error_log('New LP - In learnpathItem::get_max()',0);}
     	if(!empty($this->max_score)){return $this->max_score;}else{return 100;}
+    }
+    /**
+     * Gets the maximum time allowed for this user in this attempt on this item
+     * @return	string	Time string in SCORM format (HH:MM:SS or HH:MM:SS.SS or HHHH:MM:SS.SS)
+     */
+    function get_max_time_allowed()
+    {
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_max_time_allowed()',0);}
+    	if(!empty($this->max_time_allowed)){return $this->max_time_allowed;}else{return '';}    	
     }
     /**
      * Gets the minimum (score)
@@ -1338,7 +1358,10 @@ class learnpathItem{
 		     				//foreach($interactions as $interaction){
 		     				//	;
 		     				//}
-		     				break;	     				
+		     				break;
+		     			//case 'maxtimeallowed':
+		     			//	$this->set_max_time_allowed($value);
+		     			//	break;
 		     			/*
 		     			case 'objectives._count':
 		     				$this->attempt_id = $value;
@@ -1539,6 +1562,13 @@ class learnpathItem{
    		if(($score <= $this->max_score) && ($score >= $this->min_score))
    		{
    			$this->current_score = $score;
+   			$master = $this->get_mastery_score();
+   			$current_status = $this->get_status(false);
+   			//if mastery_score is set AND the current score reaches the mastery score AND the current status is different from 'completed', then set it to 'passed'
+   			if($master != -1 && $this->current_score >= $master && $current_status != $this->possible_status[2])
+   			{
+   				$this->set_status($this->possible_status[3]);
+   			}
   			return true;
   		}
      	return false;
@@ -1712,6 +1742,7 @@ class learnpathItem{
 		     			"lp_view_id, " .
 		     			"view_count, " .
 		     			"suspend_data, " .
+		     			//"max_time_allowed," .
 		     			"lesson_location)" .
 		     			"VALUES" .
 		     			"(".$this->get_total_time()."," .
@@ -1722,6 +1753,7 @@ class learnpathItem{
 		     			"".$this->view_id."," .
 		     			"".$this->get_attempt_id()."," .
 		     			"'".Database::escape_string($this->current_data)."'," .
+		     			//"'".$this->get_max_time_allowed()."'," .
 		     			"'".$this->lesson_location."')";
 		     	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view: '.$sql,0);}
 		     	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -1749,6 +1781,7 @@ class learnpathItem{
 			     			" score = ".$this->get_score().", " .
 			     			" status = '".$this->get_status(false)."'," .
 			     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
+			     			//" max_time_allowed = '".$this->get_max_time_allowed()."'," .
 			     			" lesson_location = '".$this->lesson_location."' " .
 			     			"WHERE lp_item_id = ".$this->db_id." " .
 			     			"AND lp_view_id = ".$this->view_id." " .

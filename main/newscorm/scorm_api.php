@@ -132,6 +132,9 @@ var session_time='<?php echo $oItem->get_scorm_time('js');?>';
 var suspend_data = '<?php echo $oItem->get_suspend_data();?>';
 var lesson_location = '<?php echo $oItem->get_lesson_location();?>';
 var total_time = '<?php echo $oItem->get_scorm_time('js');?>';
+var mastery_score = '<?php echo $oItem->get_mastery_score();?>';
+var launch_data = '<?php echo $oItem->get_launch_data();?>';
+var max_time_allowed = '<?php echo $oItem->get_max_time_allowed();?>';
 var interactions = new Array();
 
 //Dokeos internal variables
@@ -272,6 +275,12 @@ function LMSGetValue(param) {
 		result = interactions.length;
 	}else if(param == 'cmi.interactions._children'){
 		result = 'id,time,type,correct_responses,weighting,student_response,result,latency';
+	}else if(param == 'cmi.student_data.mastery_score'){
+		result = mastery_score;
+	}else if(param == 'cmi.student_data.launch_data'){
+		result = launch_data;
+	}else if(param == 'cmi.student_data.max_time_allowed'){
+		result = max_time_allowed;
 	}else{
 		result = '';
 		G_lastError = G_NotImplementedError;
@@ -409,6 +418,9 @@ function LMSSetValue(param, val) {
 	case 'cmi.suspend_data'			: suspend_data = val;return_value='true';break;
 	case 'cmi.core.exit'			: lms_item_core_exit = val;return_value='true';break;
 	case 'cmi.core.entry'			: G_LastError = G_ElementIsReadOnly; break;
+	case 'cmi.student_data.mastery_score' : G_LastError = G_ElementIsReadOnly; break;
+	case 'cmi.student_data.max_time_allowed' : G_LastError = G_ElementIsReadOnly; break;
+	case 'cmi.launch_data'			: G_LastError = G_ElementIsReadOnly; break;
 	default:
 		var myres = new Array();
 		if(myres = param.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency)(.*)/)){

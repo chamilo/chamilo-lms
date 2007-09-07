@@ -422,8 +422,13 @@ class scorm extends learnpath {
 				$field_add = '';
 				$value_add = '';
 				if(!empty($item['masteryscore'])){
-					$field_add = 'mastery_score, ';
-					$value_add = $item['masteryscore'].',';
+					$field_add .= 'mastery_score, ';
+					$value_add .= $item['masteryscore'].',';
+				}
+				if(!empty($item['maxtimeallowed']))
+				{
+					$field_add .= 'max_time_allowed, ';
+					$value_add .= "'".$item['maxtimeallowed']."',";
 				}
 				$title = mysql_real_escape_string($item['title']);
 		     	//if($this->manifest_encoding != 'ISO-8859-1'){

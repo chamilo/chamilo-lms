@@ -17,10 +17,10 @@ class scormItem extends learnpathItem{
 	var $sub_items = array();
 	var $metadata;
 	//var $prerequisites = ''; - defined in learnpathItem.class.php
-	var $maxtimeallowed = '00:00:00';
+	var $max_time_allowed = ''; //should be something like HHHH:MM:SS.SS
 	var $timelimitaction = '';
 	var $datafromlms = '';
-	var $masteryscore = '';
+	var $mastery_score = '';
 	var $scorm_contact;
     
     /**
@@ -63,7 +63,7 @@ class scormItem extends learnpathItem{
 						     				$tmp_children = $child->children();
 						     				if(count($tmp_children)==1 and $tmp_children[0]->content!='' )
 						     				{
-						     					$this->maxtimeallowed = $tmp_children[0]->content;
+						     					$this->max_time_allowed = $tmp_children[0]->content;
 						     				}
 						     				break;
 										case 'prerequisites':
@@ -91,7 +91,7 @@ class scormItem extends learnpathItem{
 						     				$tmp_children = $child->children();
 						     				if(count($tmp_children)==1 and $tmp_children[0]->content!='' )
 						     				{
-						     					$this->masteryscore = $tmp_children[0]->content;
+						     					$this->mastery_score = $tmp_children[0]->content;
 						     				}
 						     				break;
 				     					case 'item':
@@ -165,7 +165,7 @@ class scormItem extends learnpathItem{
 						     				//if(count($tmp_children)==1 and $tmp_children[0]->textContent!='' )
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue!='' )
 						     				{
-						     					$this->maxtimeallowed = $child->firstChild->nodeValue;
+						     					$this->max_time_allowed = $child->firstChild->nodeValue;
 						     				}
 						     				break;
 										case 'prerequisites':
@@ -188,6 +188,7 @@ class scormItem extends learnpathItem{
 						     				break;
 										case 'datafromlms':
 										case 'adlcp:datafromlms':
+										case 'adlcp:launchdata': //in some cases (Wouters)
 						     				$tmp_children = $child->childNodes;
 						     				//if(count($tmp_children)==1 and $tmp_children[0]->textContent!='' )
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue!='' )
@@ -201,7 +202,7 @@ class scormItem extends learnpathItem{
 						     				//if(count($tmp_children)==1 and $tmp_children[0]->textContent!='' )
 						     				if($tmp_children->length==1 and $child->firstChild->nodeValue!='' )
 						     				{
-						     					$this->masteryscore = $child->firstChild->nodeValue;
+						     					$this->mastery_score = $child->firstChild->nodeValue;
 						     				}
 						     				break;
 				     					case 'item':
@@ -267,8 +268,8 @@ class scormItem extends learnpathItem{
 			'identifierref' => $this->identifierref,
 			'isvisible' => $this->isvisible,
 			'level' => $level,
-			'masteryscore' => $this->masteryscore,
-			'maxtimeallowed' => $this->maxtimeallowed,
+			'masteryscore' => $this->mastery_score,
+			'maxtimeallowed' => $this->max_time_allowed,
 			'metadata' => $this->metadata,
 			'parameters' => $this->parameters,
 			'prerequisites' => (!empty($this->prereq_string)?$this->prereq_string:''),

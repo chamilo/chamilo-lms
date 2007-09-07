@@ -263,6 +263,9 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 	$mylesson_status = $mylpi->get_status();
 	$mylesson_location = $mylpi->get_lesson_location();
 	$mytotal_time = $mylpi->get_scorm_time('js');
+	$mymastery_score = $mylpi->get_mastery_score();
+	$mymax_time_allowed = $mylpi->get_max_time_allowed();
+	$mylaunch_data = $mylpi->get_launch_data();
 	/*
 	if($mylpi->get_type() == 'asset'){
 		//temporary measure to save completion of an asset. Later on, Dokeos should trigger something on unload, maybe... (even though that would mean the last item cannot be completed)
@@ -284,6 +287,9 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 			"suspend_data='".$mysuspend_data."';" .
 			"lesson_location='".$mylesson_location."';" .
 			"total_time = '".$mytotal_time."';" .
+			"mastery_score = '".$mymastery_score."';" .
+			"max_time_allowed = '".$mymax_time_allowed."';" .
+			"launch_data = '".$mylaunch_data."';" .
 			"interactions = new Array();" .
 			"G_lastError = 0;" .
 			"G_LastErrorMessage = 'No error';");

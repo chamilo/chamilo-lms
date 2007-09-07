@@ -121,8 +121,7 @@ class SystemAnnouncementManager
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table."
-				WHERE (lang='$user_selected_language' OR lang IS NULL) AND (NOW() BETWEEN date_start AND date_end)
-				OR date_end='0000-00-00'";
+				WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end)	OR date_end='0000-00-00')";
 		switch ($visible)
 		{
 			case VISIBLE_GUEST :

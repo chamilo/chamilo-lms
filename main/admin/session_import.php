@@ -296,7 +296,7 @@ if($_POST['formSent'])
 					$session_id = mysql_insert_id();
 
 					foreach ($sessionNode->User as $userNode){
-						$username = mb_convert_encoding(substr($userNode->nodeValue(),0,20),$charset,'utf-8');
+						$username = mb_convert_encoding(substr($userNode->nodeValue,0,20),$charset,'utf-8');
 						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".Database::escape_string($username)."'";
 						$rsUser = api_sql_query($sqlUser);
 						list($user_id) = (mysql_fetch_array($rsUser));

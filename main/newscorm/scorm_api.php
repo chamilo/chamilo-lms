@@ -548,7 +548,7 @@ function Finish(val) {
 
 function LMSGetLastError() {
 	logit_scorm('LMSGetLastError()',1);
-	return(G_LastError);
+	return(G_LastError.toString());
 }
 
 function GetLastError() {

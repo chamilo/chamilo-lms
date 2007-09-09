@@ -497,9 +497,16 @@ function SetValue(param, val) {
 
 function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
     <?php if ($autocomplete_when_80pct){ ?>
-    if( ( lesson_status == 'incomplete') && (score >= (0.8*max) ) ){
+    if ((lesson_status != 'completed') && (lesson_status != 'passed') 
+    	&& (mastery_score >=0) && (score >= mastery_score))
+    {
+      lesson_status = 'passed';
+    }
+    else if( (mastery_score < 0) && ( lesson_status == 'incomplete') && (score >= (0.8*max) ) )
+    {
       lesson_status = 'completed';
     }
+    	
     <?php }?>
     /*param = 'id='+lms_item_id+'&origin='+origin+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
 	

@@ -209,13 +209,13 @@ class learnpath {
    				case 3: //aicc
    					$oItem = new aiccItem('db',$row['id']);
    					if(is_object($oItem)){
+   						$my_item_id = $oItem->get_id();
    						$oItem->set_lp_view($this->lp_view_id);
 		   				$oItem->set_prevent_reinit($this->prevent_reinit);
-		   				$id = $oItem->get_id();
 		   				// Don't use reference here as the next loop will make the pointed object change
-		   				$this->items[$id] = $oItem;   						
-		   				$this->refs_list[$oItem->ref]=$id;
-		   				if($this->debug>2){error_log('New LP - learnpath::learnpath() - aicc object with id '.$id.' set in items[]',0);}
+		   				$this->items[$my_item_id] = $oItem;   						
+		   				$this->refs_list[$oItem->ref]=$my_item_id;
+		   				if($this->debug>2){error_log('New LP - learnpath::learnpath() - aicc object with id '.$my_item_id.' set in items[]',0);}
    					}
 					break;
    				case 2:
@@ -224,12 +224,13 @@ class learnpath {
    					require_once('scormItem.class.php');
    					$oItem = new scormItem('db',$row['id']);   				
 		   			if(is_object($oItem)){
+		   				$my_item_id = $oItem->get_id();
 		   				$oItem->set_lp_view($this->lp_view_id);
 		   				$oItem->set_prevent_reinit($this->prevent_reinit);
 		   				// Don't use reference here as the next loop will make the pointed object change
-		   				$this->items[$oItem->get_id()] = $oItem;
-		   				$this->refs_list[$oItem->ref]=$oItem->get_id();
-		   				if($this->debug>2){error_log('New LP - object with id '.$oItem->get_id().' set in items[]',0);}
+		   				$this->items[$my_item_id] = $oItem;
+		   				$this->refs_list[$oItem->ref]=$my_item_id;
+		   				if($this->debug>2){error_log('New LP - object with id '.$my_item_id.' set in items[]',0);}
 		   			}
    					break;
 
@@ -239,12 +240,13 @@ class learnpath {
    					require_once('learnpathItem.class.php');
    					$oItem = new learnpathItem($row['id'],$user_id);
 		   			if(is_object($oItem)){
+		   				$my_item_id = $oItem->get_id();
 		   				//$oItem->set_lp_view($this->lp_view_id); moved down to when we are sure the item_view exists
 		   				$oItem->set_prevent_reinit($this->prevent_reinit);
 		   				// Don't use reference here as the next loop will make the pointed object change
-		   				$this->items[$oItem->get_id()] = $oItem;
-		   				$this->refs_list[$oItem->get_id()]=$oItem->get_id();
-		   				if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - object with id '.$oItem->get_id().' set in items[]',0);}
+		   				$this->items[$my_item_id] = $oItem;
+		   				$this->refs_list[$my_item_id]=$my_item_id;
+		   				if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - object with id '.$my_item_id.' set in items[]',0);}
 		   			}
    					break;
    			}
@@ -666,7 +668,7 @@ class learnpath {
 	    			$this->autocomplete_parents($parent->get_id()); //recursive call
     			}
     		}else{
-    			//error_log('New LP - status of current item is not enough to get bothered',0);
+    			//error_log('New LP - status of current item is not enough to get bothered with it',0);
     		}
     	}
     }
@@ -1375,6 +1377,8 @@ class learnpath {
     	}else{
     		if($this->debug>2){error_log('New LP - In learnpath::first() - No last item seen',0);}
 	    	$index = 0;
+	    	//loop through all ordered items and stop at the first item that is
+	    	//not a directory *and* that has not been completed yet
 	    	while (!empty($this->ordered_items[$index]) 
 	    			AND
 	    			is_a($this->items[$this->ordered_items[$index]],'learnpathItem')
@@ -1640,62 +1644,44 @@ class learnpath {
     function get_next_index()
 
     {
-
 		if($this->debug>0){error_log('New LP - In learnpath::get_next_index()',0);}
-
     	//TODO
-
     	$index = $this->index;
-
     	$index ++;
-
-    	if($this->debug>2){error_log('New LP - Now looking at ordered_items['.($index).'] - type is '.$this->items[$this->ordered_items[$index]]['type'],0);}
-
+    	if($this->debug>2){error_log('New LP - Now looking at ordered_items['.($index).'] - type is '.$this->items[$this->ordered_items[$index]]->type,0);}
     	while(!empty($this->ordered_items[$index]) AND ($this->items[$this->ordered_items[$index]]->get_type() == 'dir' || $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter') AND $index < $this->max_ordered_items)
-
     	{
-
     		$index ++;
-
     		if($index == $this->max_ordered_items)
-
     		{
-
     			return $this->index;
-
     		}
-
     	}
-
     	if(empty($this->ordered_items[$index])){
-
     		return $this->index;
-
     	}
-
     	if($this->debug>2){error_log('New LP - index is now '.$index,0);}
-
     	return $index;
-
     }
-
     /**
-
      * Gets item_id for the next element
-
      * @return	integer	Next item (DB) ID
-
      */
-
-     function get_next_item_id()
-
-     {
-
+    function get_next_item_id()
+    {
+		if($this->debug>0){error_log('New LP - In learnpath::get_next_item_id()',0);}
     	$new_index = $this->get_next_index();
-
-    	return $this->ordered_items[$new_index];
-
-     }
+    	if(!empty($new_index))
+    	{
+			if(isset($this->ordered_items[$new_index]))
+			{
+				if($this->debug>2){error_log('New LP - In learnpath::get_next_index() - Returning '.$this->ordered_items[$new_index],0);}
+	    		return $this->ordered_items[$new_index];
+			}
+    	}
+    	if($this->debug>2){error_log('New LP - In learnpath::get_next_index() - Problem - Returning 0',0);}
+		return 0;
+    }
 	/**
 	 * Returns the package type ('scorm','aicc','scorm2004','dokeos','ppt'...)
 	 * 
@@ -2576,6 +2562,7 @@ class learnpath {
     		$id = Database::get_last_insert_id();
     		$this->lp_view_id = $id;
     	}
+    	return $this->lp_view_id;
     }
 
     /**
@@ -3199,7 +3186,7 @@ class learnpath {
      * Launches the current item if not 'sco' (starts timer and make sure there is a record ready in the DB)
      * 
      */
-    function start_current_item(){
+    function start_current_item($allow_new_attempt=false){
 		if($this->debug>0){error_log('New LP - In learnpath::start_current_item()',0);}
     	if($this->current != 0 AND
     		is_object($this->items[$this->current]))
@@ -3213,7 +3200,7 @@ class learnpath {
 				($type==1)
 			)
 			{
-	    		$this->items[$this->current]->open();
+	    		$this->items[$this->current]->open($allow_new_attempt);
 	    		    		
 	    		$this->autocomplete_parents($this->current);
 	    		$prereq_check = $this->prerequisites_match($this->current);
@@ -3226,6 +3213,7 @@ class learnpath {
 				//if sco, then it is supposed to have been updated by some other call
 			}
     	}
+		if($this->debug>0){error_log('New LP - End of learnpath::start_current_item()',0);}
     	return true;
     }
 

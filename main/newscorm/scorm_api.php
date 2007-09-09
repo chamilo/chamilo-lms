@@ -271,16 +271,16 @@ function LMSGetValue(param) {
 	}else if(param == 'cmi.objectives._count'){
 		//result='<?php echo $oItem->get_view_count();?>';
 		result = 0;
+	}else if(param == 'cmi.student_data._children'){
+		result = 'mastery_score,max_time_allowed';
+	}else if(param == 'cmi.student_data.mastery_score'){
+		result = mastery_score;
+	}else if(param == 'cmi.student_data.max_time_allowed'){
+		result = max_time_allowed;
 	}else if(param == 'cmi.interactions._count'){
 		result = interactions.length;
 	}else if(param == 'cmi.interactions._children'){
 		result = 'id,time,type,correct_responses,weighting,student_response,result,latency';
-	}else if(param == 'cmi.student_data.mastery_score'){
-		result = mastery_score;
-	}else if(param == 'cmi.student_data.launch_data'){
-		result = launch_data;
-	}else if(param == 'cmi.student_data.max_time_allowed'){
-		result = max_time_allowed;
 	}else{
 		result = '';
 		G_lastError = G_NotImplementedError;

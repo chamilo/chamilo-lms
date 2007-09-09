@@ -69,14 +69,14 @@ class learnpathItem{
     	$id = (int) $db_id;
     	$sql = "SELECT * FROM $items_table WHERE id = $id";
     	//error_log('New LP - Creating item object from DB: '.$sql,0);
-    	$res = mysql_query($sql);
-    	if(mysql_num_rows($res)<1)
+    	$res = @api_sql_query($sql);
+    	if(Database::num_rows($res)<1)
     	{
     		$this->error = "Could not find given learnpath item in learnpath_item table";
     		//error_log('New LP - '.$this->error,0);
     		return false;
     	}
-    	$row = mysql_fetch_array($res);
+    	$row = Database::fetch_array($res);
     	$this->lp_id	 = $row['lp_id'];
     	$this->max_score = $row['max_score'];
     	$this->min_score = $row['min_score'];
@@ -200,12 +200,14 @@ class learnpathItem{
      */
     function get_attempt_id()
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_attempt_id()',0);}
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_attempt_id() on item '.$this->db_id,0);}
+    	$res = 1;
     	if(!empty($this->attempt_id))
     	{
-    		return $this->attempt_id;
+    		$res = $this->attempt_id;
     	}
-    	return 1;
+    	if($this->debug>0){error_log('New LP - End of learnpathItem::get_attempt_id() on item '.$this->db_id.' - Returning '.$res,0);}
+    	return $res;
     }
     /**
      * Gets a list of the item's children
@@ -237,7 +239,7 @@ class learnpathItem{
      * @return	string	'credit' or 'no-credit'. Defaults to 'credit' because if we don't know enough about this item, it's probably because it was never used before.
      */
     function get_credit(){
-    	if(!empty($this->debug) && $this->debug>1){error_log('In learnpathItem::get_credit()',0);}
+    	if(!empty($this->debug) && $this->debug>1){error_log('New LP - In learnpathItem::get_credit()',0);}
 		$credit = 'credit';
     	//now check the value of prevent_reinit (if it's 0, return credit as the default was)
 		if($this->get_prevent_reinit() != 0){ //if prevent_reinit == 1 (or more)
@@ -245,7 +247,7 @@ class learnpathItem{
     		//check the status in the database rather than in the object, as checking in the object
 			//would always return "no-credit" when we want to set it to completed
 			$status = $this->get_status(true);
-			if(!empty($this->debug) && $this->debug>2){error_log('In learnpathItem::get_credit() - get_prevent_reinit!=0 and status is '.$status,0);}			
+			if(!empty($this->debug) && $this->debug>2){error_log('New LP - In learnpathItem::get_credit() - get_prevent_reinit!=0 and status is '.$status,0);}			
 			if($status != $this->possible_status[0] AND $status != $this->possible_status[1]){
 				$credit = 'no-credit';
 			}
@@ -472,8 +474,8 @@ class learnpathItem{
 	    	if(!empty($this->lp_id)){
 	    		$db = Database::get_course_table('lp');
 			   	$sql = "SELECT * FROM $db WHERE id = ".$this->lp_id;
-		    	$res = mysql_query($sql);
-		    	if(mysql_num_rows($res)<1)
+		    	$res = @api_sql_query($sql);
+		    	if(Database::num_rows($res)<1)
 		    	{
 		    		$this->error = "Could not find parent learnpath in learnpath table";
 					if($this->debug>2){error_log('New LP - End of learnpathItem::get_prevent_reinit() - Returning false',0);}
@@ -703,7 +705,7 @@ class learnpathItem{
      */
     function get_status($check_db=true,$update_local=false)
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_status()',0);}
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_status() on item '.$this->db_id,0);}
     	if($check_db)
     	{
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status(): checking db',0);}
@@ -716,6 +718,7 @@ class learnpathItem{
     			if($update_local==true){
     				$this->set_status($row['status']);
     			}
+	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}
     			return $row['status'];
     		}
     	}
@@ -724,9 +727,11 @@ class learnpathItem{
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - in get_status: using attrib',0);}
 	    	if(!empty($this->status))
 	    	{
+	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning attrib: '.$this->status,0);}
 	    		return $this->status;
 	    	}
     	}
+   		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning default '.$this->possible_status[0],0);}
     	return $this->possible_status[0];
     }
     /**
@@ -766,9 +771,9 @@ class learnpathItem{
 		$mins  = ($time%3600)/60;
 		$secs  = ($time%60);
   		if($origin == 'js'){
-			$scorm_time = sprintf("%4d:%02d:%02d",$hours,$mins,$secs);
+			$scorm_time = trim(sprintf("%4d:%02d:%02d",$hours,$mins,$secs));
   		}else{
-			$scorm_time = sprintf("%4d$h%02d'%02d\"",$hours,$mins,$secs);
+			$scorm_time = trim(sprintf("%4d$h%02d'%02d\"",$hours,$mins,$secs));
   		}
 		return $scorm_time;
     }
@@ -805,13 +810,13 @@ class learnpathItem{
     function get_type()
     {
     	$res = 'asset';
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_type()',0);}
+    	if($this->debug>0){error_log('New LP - In learnpathItem::get_type() on item '.$this->db_id,0);}
     	if(!empty($this->type))
     	{
     		//error_log('In item::get_type() - returning '.$this->type,0);
     		$res = $this->type;
     	}
-    	if($this->debug>2){error_log('New LP - In learnpathItem::get_type() - Returning '.$res.' for item '.$this->get_id(),0);}
+    	if($this->debug>2){error_log('New LP - In learnpathItem::get_type() - Returning '.$res.' for item '.$this->db_id,0);}
     	return $res;    	
     }
     /**
@@ -868,15 +873,32 @@ class learnpathItem{
      * Opens/launches the item. Initialises runtime values.
      * @return	boolean	True on success, false on failure.
      */
-    function open(){
+    function open($allow_new_attempt=false){
     	if($this->debug>0){error_log('New LP - In learnpathItem::open()',0);}
-    	if($this->prevent_reinit == 0){
+    	if($this->prevent_reinit == 0)
+    	{
 	    	$this->current_score = 0;
 	    	$this->current_start_time = time();
+	    	//In this case, as we are opening the item, what is important to us
+	    	//is the database status, in order to know if this item has already
+	    	//been used in the past (rather than just loaded and modified by
+	    	//some javascript but not written in the database).
+	    	//If the database status is different from 'not attempted', we can
+	    	//consider this item has already been used, and as such we can
+	    	//open a new attempt. Otherwise, we'll just reuse the current
+	    	//attempt, which is generally created the first time the item is
+	    	//loaded (for example as part of the table of contents)
+	    	$stat = $this->get_status(true);
+	    	if($allow_new_attempt && isset($stat) && ($stat != $this->possible_status[0]))
+	    	{
+	    		$this->attempt_id = $this->attempt_id + 1; //open a new attempt
+	    	}
 	    	$this->status = $this->possible_status[1];
-	    	$this->attempt_id = $this->attempt_id + 1; //open a new attempt
-    	}else{
-    		if($this->current_start_time == 0){ //small exception for start time, to avoid amazing values
+    	}
+    	else
+    	{
+    		if($this->current_start_time == 0)
+    		{ //small exception for start time, to avoid amazing values
     			$this->current_start_time = time();
     		}
     		//error_log('New LP - reinit blocked by setting',0);
@@ -1317,7 +1339,7 @@ class learnpathItem{
 				  if($this->debug>1){error_log('New LP - In learnpathItem::save() - Getting item data from outside',0);}
 		     	  foreach($_GET as $param => $value)
 		     	  {
-		     		$value = mysql_real_escape_string($value);
+		     		$value = Database::escape_string($value);
 		     		switch($param){
 		     			case 'score':
 		   					$this->set_score($value);
@@ -1473,7 +1495,7 @@ class learnpathItem{
     {
    		if($this->debug>0){error_log('New LP - In learnpathItem::set_lesson_location()',0);}
 		if(isset($location)){
-   			$this->lesson_location = mysql_real_escape_string($location);
+   			$this->lesson_location = Database::escape_string($location);
   			return true;
   		}
      	return false;
@@ -1591,7 +1613,7 @@ class learnpathItem{
      	//if(in_array($status,$this->possible_status))
      	if($found)
      	{
-     		$this->status = mysql_real_escape_string($status);
+     		$this->status = Database::escape_string($status);
      		if($this->debug>1){error_log('New LP - In learnpathItem::set_status() - Updated object status of item '.$this->db_id.' to '.$this->status,0);}
      		return true;
      	}
@@ -1652,7 +1674,7 @@ class learnpathItem{
 	 */
 	function status_is($list=array())
 	{
-   		if($this->debug>1){error_log('New LP - In learnpathItem::status_is('.print_r($list,true).')',0);}
+   		if($this->debug>1){error_log('New LP - In learnpathItem::status_is('.print_r($list,true).') on item '.$this->db_id,0);}
 		$mystatus = $this->get_status(true);
 		if(empty($mystatus)){
 			return false;
@@ -1791,10 +1813,10 @@ class learnpathItem{
 	    	 	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Updating item_view: '.$sql,0);}
 		     	$res = api_sql_query($sql,__FILE__,__LINE__);
 	     	}
-	     	if(!$res)
-	     	{
-	     		$this->error = 'Could not update item_view table...'.mysql_error();
-	     	}
+	     	//if(!$res)
+	     	//{
+	     	//	$this->error = 'Could not update item_view table...'.mysql_error();
+	     	//}
 	     	if(is_array($this->interactions) && count($this->interactions)>0){
 	     		//save interactions
 	     		$tbl = Database::get_course_table('lp_item_view');

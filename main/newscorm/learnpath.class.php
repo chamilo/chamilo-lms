@@ -2445,12 +2445,16 @@ class learnpath {
 			    				//TODO fix this for urls with protocol header
 			    				$file = str_replace('//','/',$file);
 			    				$file = str_replace(':/','://',$file);
+								if(substr($lp_path,-1)=='/')
+								{
+									$lp_path = substr($lp_path,0,-1);
+								}
 
-			    				if(!is_file($sys_course_path.'/scorm/'.$lp_path.'/'.$lp_item_path))
+			    				if(!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$lp_item_path)))
 			    				{//if file not found
 			    					$decoded = html_entity_decode($lp_item_path);
 			    					list($decoded) = explode('?',$decoded);
-			    					if(!is_file($sys_course_path.'/scorm/'.$lp_path.'/'.$decoded))
+			    					if(!is_file(realpath($sys_course_path.'/scorm/'.$lp_path.'/'.$decoded)))
 			    					{
 			    						require_once('resourcelinker.inc.php');
 				    					$file = rl_get_resource_link_for_learnpath(api_get_course_id(),$this->get_id(),$item_id);

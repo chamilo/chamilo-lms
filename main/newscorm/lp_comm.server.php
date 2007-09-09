@@ -236,7 +236,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 			if($debug>1){error_log('In {default} - next item is '.$new_item_id.'(current: '.$current_item.')',0);}
 			break;
 	}
-	$mylp->start_current_item();
+	$mylp->start_current_item(true);
 	if($mylp->force_commit){
 		$mylp->save_current();
 	}

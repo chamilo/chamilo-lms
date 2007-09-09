@@ -7,7 +7,10 @@
 /**
  * Nothing very interesting
  */
+$debug = 0;
+if($debug>0){error_log('New lp - In lp_content.php',0);}
 if(empty($lp_controller_touched)){
+	if($debug>0){error_log('New lp - In lp_content.php - Redirecting to lp_controller',0);}
 	header('location: lp_controller.php?action=content&lp_id='.$_REQUEST['lp_id'].'&item_id='.$_REQUEST['item_id']);
 }
 $_SESSION['oLP']->error = '';
@@ -18,6 +21,7 @@ $lp_item_id = $_SESSION['oLP']->get_current_item_id();
  * Get a link to the corresponding document
  */
 $src = '';
+if($debug>0){error_log('New lp - In lp_content.php - Looking for file url',0);}
 switch($lp_type){
 	case 1:
 		$_SESSION['oLP']->stop_previous_item();
@@ -44,6 +48,7 @@ switch($lp_type){
 	case 4:
 		break;
 }
+if($debug>0){error_log('New lp - In lp_content.php - File url is '.$src,0);}
 $_SESSION['oLP']->set_previous_item($lp_item_id);
 
 // Define the 'doc.inc.php' as language file
@@ -53,6 +58,6 @@ $interbreadcrumb[]= array ("url"=>"./lp_list.php", "name"=> get_lang('Doc'));
 $save_setting = get_setting("show_navigation_menu");
 global $_setting;
 $_setting['show_navigation_menu'] = false;
-if($debug>0){error_log('New LP - Loading '.$src.' into lp_content.php',0);}
+if($debug>0){error_log('New LP - In lp_content.php - Loading '.$src,0);}
 header("Location: $src");
 ?>

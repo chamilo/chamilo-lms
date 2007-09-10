@@ -1283,33 +1283,44 @@ function get_threads($forum_id)
 	//					because we also have thread.* in it. This is because thread has a field locked and post also has the same field
 	// 					since we are merging these we would have the post.locked value but in fact we want the thread.locked value
 	//					This is why it is added to the end of the field selection
-	$sql="SELECT thread.*, item_properties.*, post.*, users.firstname, users.lastname, users.user_id,
+
+	
+	$sql = "SELECT thread.*, item_properties.*, post.*, users.firstname, users.lastname, users.user_id,
 				last_poster_users.firstname as last_poster_firstname , last_poster_users.lastname as last_poster_lastname, last_poster_users.user_id as last_poster_user_id, thread.locked as locked
-				FROM ".$table_threads." thread , ".$table_item_property." item_properties, $table_users users, $table_users last_poster_users, $table_posts post
-				WHERE thread.forum_id='".mysql_real_escape_string($forum_id)."'
-				AND thread.thread_last_post = post.post_id
-				AND post.poster_id= last_poster_users.user_id
-				AND thread.thread_poster_id=users.user_id
-				AND thread.thread_id=item_properties.ref
+			FROM $table_threads thread
+			INNER JOIN $table_item_property item_properties
+				ON thread.thread_id=item_properties.ref
 				AND item_properties.visibility='1'
 				AND item_properties.tool='".TOOL_FORUM_THREAD."'
-				ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
+			INNER JOIN $table_users users
+				ON thread.thread_poster_id=users.user_id
+			INNER JOIN $table_posts post
+				ON thread.thread_last_post = post.post_id
+			LEFT JOIN $table_users last_poster_users
+				ON post.poster_id= last_poster_users.user_id
+			WHERE thread.forum_id='".mysql_real_escape_string($forum_id)."'
+			ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
+		
 	if (is_allowed_to_edit())
 	{
 		// important note: 	it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
 		//					because we also have thread.* in it. This is because thread has a field locked and post also has the same field
 		// 					since we are merging these we would have the post.locked value but in fact we want the thread.locked value
 		//					This is why it is added to the end of the field selection
-		$sql="SELECT thread.*, item_properties.*, post.*, users.firstname, users.lastname, users.user_id,
+		$sql = "SELECT thread.*, item_properties.*, post.*, users.firstname, users.lastname, users.user_id,
 					last_poster_users.firstname as last_poster_firstname , last_poster_users.lastname as last_poster_lastname, last_poster_users.user_id as last_poster_user_id, thread.locked as locked
-				FROM ".$table_threads." thread , ".$table_item_property." item_properties, $table_users users, $table_users last_poster_users, $table_posts post
+				FROM $table_threads thread
+				INNER JOIN $table_item_property item_properties
+					ON thread.thread_id=item_properties.ref
+					AND item_properties.visibility<>2
+					AND item_properties.tool='".TOOL_FORUM_THREAD."'
+				INNER JOIN $table_users users
+					ON thread.thread_poster_id=users.user_id
+				INNER JOIN $table_posts post
+					ON thread.thread_last_post = post.post_id
+				LEFT JOIN $table_users last_poster_users
+					ON post.poster_id= last_poster_users.user_id
 				WHERE thread.forum_id='".mysql_real_escape_string($forum_id)."'
-				AND thread.thread_last_post = post.post_id
-				AND post.poster_id= last_poster_users.user_id
-				AND thread.thread_poster_id=users.user_id
-				AND thread.thread_id=item_properties.ref
-				AND item_properties.visibility<>2
-				AND item_properties.tool='".TOOL_FORUM_THREAD."'
 				ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
 	}
 	$result=api_sql_query($sql);
@@ -1336,18 +1347,20 @@ function get_posts($thread_id)
 	// note: change these SQL so that only the relevant fields of the user table are used
 	if (api_is_allowed_to_edit())
 	{
-		$sql="SELECT * FROM $table_posts posts, $table_users users
+		$sql = "SELECT * FROM $table_posts posts
+				LEFT JOIN  $table_users users
+					ON posts.poster_id=users.user_id
 				WHERE posts.thread_id='".mysql_real_escape_string($thread_id)."'
-				AND posts.poster_id=users.user_id
 				ORDER BY posts.post_id ASC";
 	}
 	else
 	{
 		// students can only se the posts that are approved (posts.visible='1')
-		$sql="SELECT * FROM $table_posts posts, $table_users users
+		$sql = "SELECT * FROM $table_posts posts
+				LEFT JOIN  $table_users users
+					ON posts.poster_id=users.user_id
 				WHERE posts.thread_id='".mysql_real_escape_string($thread_id)."'
 				AND posts.visible='1'
-				AND posts.poster_id=users.user_id
 				ORDER BY posts.post_id ASC";
 	}
 	$result=api_sql_query($sql, __FILE__, __LINE__);

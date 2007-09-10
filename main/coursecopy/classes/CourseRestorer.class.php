@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 12881 2007-08-10 05:08:36Z yannoo $
+// $Id: CourseRestorer.class.php 12974 2007-09-10 04:40:24Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -486,7 +486,7 @@ class CourseRestorer
 		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY, $this->course->destination_db);
 		$resources = $this->course->resources;
 		$link_cat = $resources[RESOURCE_LINKCATEGORY][$id];
-		if (!$link_cat->is_restored())
+		if (is_object($link_cat) && !$link_cat->is_restored())
 		{
 			$sql = "SELECT MAX(display_order) FROM  $link_cat_table";
 			$result=api_sql_query($sql,__FILE__,__LINE__);

@@ -74,7 +74,9 @@ if($_POST['formSent'])
 		///////////////////////
 		//XML/////////////////
 		/////////////////////
-
+		
+		$countSessions = 0;
+		
 		if($file_type == 'xml')
 		{
 
@@ -215,8 +217,9 @@ if($_POST['formSent'])
 
 					}
 				}
+				
 				foreach ($racine->Session as $sessionNode){ // foreach session
-
+					
 					$countCourses = 0;
 					$countUsers = 0;
 
@@ -294,6 +297,8 @@ if($_POST['formSent'])
 									date_end = '$DateEnd'";
 					$rsSession = api_sql_query($sqlSession, __FILE__, __LINE__);
 					$session_id = mysql_insert_id();
+					
+					$countSessions++;
 
 					foreach ($sessionNode->User as $userNode){
 						$username = mb_convert_encoding(substr($userNode->nodeValue,0,20),$charset,'utf-8');
@@ -438,8 +443,9 @@ if($_POST['formSent'])
 						}
 					}
 				}
-
+				
 				foreach($sessions as $enreg) {
+					
 					$SessionName = $enreg['SessionName'];
 					$DateStart = $enreg['DateStart'];
 					$DateEnd = $enreg['DateEnd'];
@@ -478,7 +484,9 @@ if($_POST['formSent'])
 					else {
 						$session_id = mysql_insert_id($rsSession);
 					}
-
+					
+					$countSessions++;
+					
 					$users = explode('|',$enreg['Users']);
 					foreach ($users as $user){
 						$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$user."'";
@@ -546,7 +554,15 @@ if($_POST['formSent'])
 		{
 			$errorMsg = get_lang('ButProblemsOccured').' :<br />'.$errorMsg;
 		}
-		header('Location: session_list.php?action=show_message&message='.urlencode(get_lang('FileImported').' '.$errorMsg));
+
+		if($countSessions == 1){
+			header('Location: resume_session.php?id_session='.$session_id);
+			exit;
+		}
+		else{
+			header('Location: session_list.php?action=show_message&message='.urlencode(get_lang('FileImported').' '.$errorMsg));
+			exit;
+		}
 	}
 	else
 	{

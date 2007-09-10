@@ -296,9 +296,8 @@ class Tracking {
 		}
 
 		$totalScore = $lp_scorm_score_total;
-		$totalWeighting = $lp_scorm_weighting_total + 100;
 
-		$pourcentageScore = round(($totalScore * 100) / $totalWeighting);
+		$pourcentageScore = round(($totalScore * 100) / $lp_scorm_weighting_total);
 
 		return $pourcentageScore;
 	}

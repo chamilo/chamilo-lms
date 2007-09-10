@@ -647,7 +647,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) // sessi
 				
 	            api_session_register('_courseUser');
 	        }
-	        else // this user has no status related to this course
+	        if (!$is_courseAdmin) // this user has no status related to this course
 		        {
 		    	// is it the session coach ?
 		    	

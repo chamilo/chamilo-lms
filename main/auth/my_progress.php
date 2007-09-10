@@ -6,6 +6,7 @@ $cidReset = true;
 
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
+require_once ('../newscorm/learnpath.class.php');
 
 $nameTools=get_lang('MyProgress');
 
@@ -216,28 +217,9 @@ foreach($Courses as $enreg)
 				{
 					while($a_learnpath = mysql_fetch_array($resultLearnpath))
 					{
-						$sqlProgress = "SELECT COUNT(DISTINCT lp_item_id) AS nbItem
-										FROM ".$a_infosCours['db_name'].".".$tbl_course_lp_view_item." AS item_view
-										INNER JOIN ".$a_infosCours['db_name'].".".$tbl_course_lp_view." AS view
-											ON item_view.lp_view_id = view.id
-											AND view.lp_id = ".$a_learnpath['id']."
-											AND view.user_id = ".$_user['user_id']."
-										WHERE item_view.status = 'completed' OR item_view.status = 'passed'
-										";
-						$resultProgress = api_sql_query($sqlProgress);
-						$a_nbItem = mysql_fetch_array($resultProgress);
 
-						$sqlTotalItem = "	SELECT	COUNT(item_type) AS totalItem
-											FROM ".$a_infosCours['db_name'].".".$tbl_course_lp_item."
-											WHERE lp_id = ".$a_learnpath['id']."
-											AND item_type != 'chapter'
-											AND item_type != 'dokeos_chapter'
-											AND item_type != 'dir'"
-										;
-						$resultItem = api_sql_query($sqlTotalItem);
-						$a_totalItem = mysql_fetch_array($resultItem);
 
-						$progress = round(($a_nbItem['nbItem'] * 100)/$a_totalItem['totalItem']);
+						$progress = learnpath :: get_db_progress($a_learnpath['id'],$_user['user_id'], '%',$a_infosCours['db_name']);
 
 
 						// calculates last connection time
@@ -272,7 +254,7 @@ foreach($Courses as $enreg)
 						echo "	</td>
 								<td align='center'>
 							 ";
-						echo		$progress.'%';
+						echo		$progress;
 						echo "	</td>
 								<td align='center'>
 							 ";

@@ -502,8 +502,8 @@ function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
     {
       lesson_status = 'passed';
     }
-    else if( (mastery_score < 0) && ( lesson_status == 'incomplete') && (score >= (0.8*max) ) )
-    {
+    else if( (mastery_score < 0) && (lms_lp_type != '2') && ( lesson_status == 'incomplete') && (score >= (0.8*max) ) )
+    { //the status cannot be modified automatically by the LMS under SCORM 1.2's rules
       lesson_status = 'completed';
     }
     	

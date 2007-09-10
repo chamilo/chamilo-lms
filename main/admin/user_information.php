@@ -1,5 +1,5 @@
 <?php
-// $Id: user_information.php 12954 2007-09-07 13:49:29Z elixir_julian $
+// $Id: user_information.php 12979 2007-09-10 09:02:21Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -116,66 +116,72 @@ $session_is_coach = api_store_result($result);
 
 $personal_course_list = array();
 
-$header[] = array (get_lang('Code'), true);
-$header[] = array (get_lang('Title'), true);
-$header[] = array (get_lang('Status'), true);
-$header[] = array ('', false);
+if(count($sessions)>0){
 
-foreach($sessions as $enreg){
+	$header[] = array (get_lang('Code'), true);
+	$header[] = array (get_lang('Title'), true);
+	$header[] = array (get_lang('Status'), true);
+	$header[] = array ('', false);
 	
-	$data = array ();
-	$personal_course_list = array();
+	foreach($sessions as $enreg){
+		
+		$data = array ();
+		$personal_course_list = array();
+		
+		$id_session = $enreg['id'];
+		$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')
+									 FROM $tbl_session_course as session_course
+									 INNER JOIN $tbl_course AS course
+									 	ON course.code = session_course.course_code
+									 LEFT JOIN $tbl_user as user
+										ON user.user_id = session_course.id_coach
+									 INNER JOIN $tbl_session_course_user
+										ON $tbl_session_course_user.id_session = $id_session
+										AND $tbl_session_course_user.id_user = $user_id
+									INNER JOIN $tbl_session  as session
+										ON session_course.id_session = session.id
+									 WHERE session_course.id_session = $id_session
+									 ORDER BY i";
 	
-	$id_session = $enreg['id'];
-	$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')
-								 FROM $tbl_session_course as session_course
-								 INNER JOIN $tbl_course AS course
-								 	ON course.code = session_course.course_code
-								 LEFT JOIN $tbl_user as user
-									ON user.user_id = session_course.id_coach
-								 INNER JOIN $tbl_session_course_user
-									ON $tbl_session_course_user.id_session = $id_session
-									AND $tbl_session_course_user.id_user = $user_id
-								INNER JOIN $tbl_session  as session
-									ON session_course.id_session = session.id
-								 WHERE session_course.id_session = $id_session
-								 ORDER BY i";
-
-	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-
-	while ($result_row = mysql_fetch_array($course_list_sql_result)){
-		$key = $result_row['id_session'].' - '.$result_row['k'];
-		$result_row['s'] = $result_row['14'];
-
-		if(!isset($personal_course_list[$key])){
-			$personal_course_list[$key] = $result_row;
+		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
+	
+		while ($result_row = mysql_fetch_array($course_list_sql_result)){
+			$key = $result_row['id_session'].' - '.$result_row['k'];
+			$result_row['s'] = $result_row['14'];
+	
+			if(!isset($personal_course_list[$key])){
+				$personal_course_list[$key] = $result_row;
+			}
 		}
-	}
-	
-	foreach ($personal_course_list as $my_course){
-	
-		$row = array ();
 		
-		$row[] = $my_course['k'];
-		$row[] = $my_course['i'];
-		$row[] = $my_course['s'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
-		$tools = '<a href="course_information.php?code='.$my_course['k'].'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle" /></a>'.
-				'<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'"><img src="../img/course_home.gif" border="0" style="vertical-align: middle" /></a>' .
-				'<a href="course_edit.php?course_code='.$my_course['k'].'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
+		foreach ($personal_course_list as $my_course){
 		
-		if( $my_course->status == STUDENT ){
-			$tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$my_course['k'].'&user_id='.$user['user_id'].'"><img src="../img/delete.gif"/></a>';
+			$row = array ();
+			
+			$row[] = $my_course['k'];
+			$row[] = $my_course['i'];
+			$row[] = $my_course['s'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
+			$tools = '<a href="course_information.php?code='.$my_course['k'].'"><img src="../img/synthese_view.gif" border="0" style="vertical-align: middle" /></a>'.
+					'<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'"><img src="../img/course_home.gif" border="0" style="vertical-align: middle" /></a>' .
+					'<a href="course_edit.php?course_code='.$my_course['k'].'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>';
+			
+			if( $my_course->status == STUDENT ){
+				$tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$my_course['k'].'&user_id='.$user['user_id'].'"><img src="../img/delete.gif"/></a>';
+						
+			}
+			$row[] = $tools;
+			$data[] = $row;
 					
 		}
-		$row[] = $tools;
-		$data[] = $row;
-				
+		
+		echo $enreg['name'];
+		Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));
+		echo '<br><br><br>';
+		
 	}
-	
-	echo $enreg['name'];
-	Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));
-	echo '<br><br><br>';
-	
+}
+else{
+	echo '<p>'.get_lang('NoSessionsForThisUser').'</p>';
 }
 
 
@@ -188,6 +194,7 @@ $sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c WHERE cu.us
 $res = api_sql_query($sql,__FILE__,__LINE__);
 if (mysql_num_rows($res) > 0)
 {
+	$header=array();
 	$header[] = array (get_lang('Code'), true);
 	$header[] = array (get_lang('Title'), true);
 	$header[] = array (get_lang('Status'), true);
@@ -210,6 +217,7 @@ if (mysql_num_rows($res) > 0)
 		$row[] = $tools;
 		$data[] = $row;
 	}
+
 	echo '<p><b>'.get_lang('Courses').'</b></p>';
 	echo '<blockquote>';
 	Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));

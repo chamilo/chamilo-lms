@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 12882 2007-08-10 05:38:05Z yannoo $
+<?php // $Id: CourseBuilder.class.php 12975 2007-09-10 04:42:01Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -206,7 +206,11 @@ class CourseBuilder
 		{
 			$link = new Link($obj->id, $obj->title, $obj->url, $obj->description, $obj->category_id, $obj->on_homepage);
 			$this->course->add_resource($link);
-			$this->build_link_category($obj->category_id);
+			$res = $this->build_link_category($obj->category_id);
+			if($res > 0)
+			{
+				$this->course->resources[RESOURCE_LINK][$obj->id]->add_linked_resource(RESOURCE_LINKCATEGORY, $obj->category_id);
+			}
 		}
 	}
 	/**
@@ -235,7 +239,9 @@ class CourseBuilder
 		{
 			$link_category = new LinkCategory($obj->id, $obj->category_title, $obj->description, $obj->display_order);
 			$this->course->add_resource($link_category);
+			return $id;
 		}
+		return 0;
 	}
 	/**
 	 * Build the Quizzes

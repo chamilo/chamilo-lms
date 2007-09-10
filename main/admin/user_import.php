@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 12942 2007-09-06 11:55:44Z elixir_julian $
+// $Id: user_import.php 12982 2007-09-10 12:32:37Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,7 +79,7 @@ function validate_data($users)
 			}
 		}
 		//3. check status
-		if (isset ($user['Status']) && ($user['Status'] != COURSEMANAGER && $user['Status'] != STUDENT))
+		if (isset ($user['Status']) && ($user['Status'] != 'user' && $user['Status'] != 'teacher'))
 		{
 			$user['error'] = get_lang('WrongStatus');
 			$errors[] = $user;

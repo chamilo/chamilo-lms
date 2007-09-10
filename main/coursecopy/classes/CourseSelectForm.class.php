@@ -1,5 +1,5 @@
 <?php
-// $Id: CourseSelectForm.class.php 12879 2007-08-10 04:48:00Z yannoo $
+// $Id: CourseSelectForm.class.php 12973 2007-09-10 04:39:14Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -207,7 +207,7 @@ class CourseSelectForm
 					$documents = $_POST['resource'][RESOURCE_DOCUMENT];
 					foreach($resources as $id => $obj)
 					{
-						if( $obj->file_type == 'folder' && ! isset($_POST['resource'][RESOURCE_DOCUMENT][$id]))
+						if( $obj->file_type == 'folder' && ! isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) && is_array($documents))
 						{
 							foreach($documents as $id_to_check => $post_value)
 							{

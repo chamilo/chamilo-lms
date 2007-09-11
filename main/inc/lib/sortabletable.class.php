@@ -337,11 +337,11 @@ class SortableTable extends HTML_Table
 		}
 		if ($total_number_of_items < 500)
 		{
-			$result[] = '<option value="'.$total_number_of_items.'" '. ($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>ALL</option>';
+			$result[] = '<option value="'.$total_number_of_items.'" '. ($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>'.ucfirst(get_lang('All')).'</option>';
 		}
 		$result[] = '</select>';
 		$result[] = '<noscript>';
-		$result[] = '<input type="submit" value="ok"/>';
+		$result[] = '<input type="submit" value="'.get_lang('Ok').'"/>';
 		$result[] = '</noscript>';
 		$result[] = '</form>';
 		$result = implode("\n", $result);

@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 12902 2007-08-29 14:01:44Z elixir_inter $
+// $Id: profile.php 12991 2007-09-11 09:29:06Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -173,7 +173,7 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true')
 	{
 		$form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 	}
-	$form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
+	$form->addRule('picture', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png','image/pjpeg'));
 }
 
 //	USERNAME

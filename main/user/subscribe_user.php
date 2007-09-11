@@ -215,6 +215,7 @@ $form->addElement('submit', 'submit', get_lang('SearchButton'));
 // Build table
 $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', 2);
 $parameters['keyword'] = $_REQUEST['keyword'];
+$parameters ['type'] = $_REQUEST['type']; 
 $table->set_additional_parameters($parameters);
 $col = 0;
 $table->set_header($col ++, '', false);

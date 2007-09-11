@@ -268,23 +268,16 @@ else
 {
 	header ('location: index.php?view='.$_GET['view'].'&error=Error');
 }
-if ($_POST['actions']=='download' and !$_POST['store_feedback'])
+if (($_POST['action']=='download_received' || $_POST['action']=='download_sent') and !$_POST['store_feedback'])
 {
-	foreach ($_POST as $key=>$value)
 	{
-		if (strstr($key,$part.'_'))
-		{
-			$checked_files=true;
-			$checked_file_ids[]=$value;
-		}
-	}
-	if ($checked_files==false)
+	$checked_file_ids = $_POST['id'];
+	if (!is_array($checked_file_ids) || count($checked_file_ids)==0)
 	{
 		header ('location: index.php?view='.$_GET['view'].'&error=CheckAtLeastOneFile');
 		exit; 
 	}
 	else 
-	{
 		handle_multiple_actions();
 		exit; 
 	}

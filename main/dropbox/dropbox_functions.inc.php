@@ -40,31 +40,34 @@ function handle_multiple_actions()
 	global $_user, $is_courseAdmin, $is_courseTutor;
 
 	// STEP 1: are we performing the actions on the received or on the sent files?
-	foreach ($_POST as $key=>$value)
+	if($_POST['action']=='delete_received' || $_POST['action']=='download_received')
 	{
-		if (strstr($key,'do_actions_') AND !$part)
-		{
-			$part=str_replace('do_actions_','',$key);
-		}
+		$part = 'received';
+	}
+	elseif($_POST['action']=='delete_sent' || $_POST['action']=='download_sent')
+	{
+		$part = 'sent';
 	}
 
 	// STEP 2: at least one file has to be selected. If not we return an error message
 	foreach ($_POST as $key=>$value)
 	{
-		if (strstr($key,$part.'_') AND $key!='view_received_category' AND $key!='view_sent_category')
+		if (strstr($value,$part.'_') AND $key!='view_received_category' AND $key!='view_sent_category')
 		{
 			$checked_files=true;
-			$checked_file_ids[]=$value;
+			$checked_file_ids[]=intval(substr($value,strrpos($value,'_')));
 		}
 	}
-	if (!$checked_files)
+	$checked_file_ids = $_POST['id'];
+
+	if (!is_array($checked_file_ids) || count($checked_file_ids)==0)
 	{
 		return get_lang('CheckAtLeastOneFile');
 	}
 
 
 	// STEP 3A: deleting
-	if ($_POST['actions']=='delete')
+	if ($_POST['action']=='delete_received' || $_POST['action']=='delete_sent')
 	{
 		$dropboxfile=new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 		foreach ($checked_file_ids as $key=>$value)
@@ -103,7 +106,7 @@ function handle_multiple_actions()
 	}
 
 	// STEP 3D: downloading
-	if ($_POST['actions']=='download')
+	if ($_POST['action']=='download_sent' || $_POST['action']=='download_received')
 	{
 		zip_download($checked_file_ids);
 	}
@@ -184,7 +187,7 @@ function display_move_form($part, $id, $target=array())
 		$message.='<option value="'.$category['cat_id'].'">'.$category['cat_name'].'</option>';
 	}
 	$message.= '</select>';
-	$message.='<input type="submit" name="do_move" value="'.get_lang('Submit').'">';
+	$message.='<input type="submit" name="do_move" value="'.get_lang('Ok').'">';
 	$message.='</form>';
 	Display :: display_normal_message($message,false);
 }
@@ -1067,7 +1070,7 @@ function feedback_form()
 	$number_users_who_see_file=mysql_num_rows($result);
 	if ($number_users_who_see_file>1)
 	{
-		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><input type="submit" name="store_feedback" value="'.get_lang('Ok').'">';
+		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><input type="button" name="store_feedback" value="'.get_lang('Ok').'" onclick="document.forms.form_tablename.action = document.location;document.forms.form_tablename.submit();"/>';
 	}
 	else
 	{

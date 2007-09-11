@@ -276,7 +276,7 @@ class Display {
 	 * @param array $query_vars Additional variables to add in the query-string
 	 * @author bart.mollet@hogent.be
 	 */
-	function display_sortable_table($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null)
+	function display_sortable_table($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array())
 	{
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
@@ -289,6 +289,7 @@ class Display {
 		{
 			$table->set_header($index, $header_item[0], $header_item[1], $header_item[2], $header_item[3]);
 		}
+		$table->set_form_actions($form_actions);
 		$table->display();
 	}
 	/**

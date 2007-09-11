@@ -1,4 +1,4 @@
-<?php // $Id: new_message.php 10675 2007-01-11 13:03:10Z bmol $
+<?php // $Id: new_message.php 12996 2007-09-11 14:49:05Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -139,6 +139,7 @@ function manage_form($default, $select_from_user_list = null)
 				 " VALUES (".
 		 		 "' ".$id_msg ."' , '".api_get_user_id()."', '".$receiver_user_id."', '1', '".date('Y-m-d H:i:s')."','".$title."','".$content."'".
 		 		 ");";
+		 		 
 		@api_sql_query($query,__FILE__,__LINE__);
 		display_success_message($receiver_user_id);
 	}

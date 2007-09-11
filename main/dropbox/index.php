@@ -228,14 +228,15 @@ if (($_GET['action']=='deletereceivedcategory' OR $_GET['action']=='deletesentca
 // *** Do an action on multiple files ***
 // only the download has is handled separately in dropbox_init_inc.php because this has to be done before the headers are sent
 // (which also happens in dropbox_init.inc.php
-if ($_POST['do_actions_received'] OR $_POST['do_actions_sent'])
+
+if (!isset($_POST['feedback']) && $_POST['action'] == 'delete_received' OR $_POST['action'] == 'download_received' OR $_POST['action'] == 'delete_sent' OR $_POST['action'] == 'download_sent')
 {
 	$display_message=handle_multiple_actions();
 	Display :: display_normal_message($display_message);
 }
 
 // *** Store Feedback ***
-if ($_POST['store_feedback'])
+if ($_POST['feedback'])
 {
 	$display_message = store_feedback();
 	Display :: display_normal_message($display_message);
@@ -313,9 +314,6 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=addreceivedcategory\"><img src=\"../img/folder_new.gif\" alt=\"".get_lang('NewFolder')."\" align=\"absmiddle\"/> ".get_lang('AddNewCategory')."</a>\n";
 
 
-	echo '<form name="recieved_files" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action='.$_GET['action'].'&amp;id='.$_GET['id'].'">';
-
-
 	// object initialisation
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
 
@@ -343,7 +341,7 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 		$dropbox_file_data=array();
 		if ($view_dropbox_category_received==$dropbox_file->category) // we only display the files that are in the category that we are in.
 		{
-			$dropbox_file_data[]=display_file_checkbox($dropbox_file->id, 'received');
+			$dropbox_file_data[]=$dropbox_file->id;
 			// new icon
 			if ($dropbox_file->last_upload_date > $last_access AND !in_array($dropbox_file->id,$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX]))
 			{
@@ -408,19 +406,8 @@ if (!$_GET['view'] OR $_GET['view']=='received' OR $dropbox_cnf['sent_received_t
 
 	// Displaying the table
 	$additional_get_parameters=array('view'=>$_GET['view'], 'view_received_category'=>$_GET['view_received_category'],'view_sent_category'=>$_GET['view_sent_category']);
-	Display::display_sortable_table($column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters);
-	if (empty($dropbox_data_recieved))
-	{
-		//echo get_lang('NoFilesHere');
-	}
-	else
-	{
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;selectall">'.get_lang('SelectAll').'</a> - ';
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('UnSelectAll').'</a> ';
-		echo get_lang('WithSelected').': ';
-		display_action_options('received',$dropbox_received_category, $view_dropbox_category_received);
-	}
-	echo '</form>';
+	Display::display_sortable_table($column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters, array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download')));
+
 }
 
 
@@ -456,7 +443,6 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$_GET['view']."&amp;action=addsentcategory\"><img src=\"../img/folder_new.gif\" alt=\"".get_lang('NewFolder')."\" align=\"absmiddle\" /> ".get_lang('AddNewCategory')."</a>\n";
 
 	//echo '<form name="sent_files" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'">';
-	echo '<form name="recieved_files" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;action='.$_GET['action'].'&amp;id='.$_GET['id'].'">';
 
 	// object initialisation
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
@@ -489,7 +475,7 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 
 		if ($view_dropbox_category_sent==$dropbox_file->category)
 		{
-			$dropbox_file_data[]=display_file_checkbox($dropbox_file->id, 'sent'); ;
+			$dropbox_file_data[]=$dropbox_file->id;
 			$dropbox_file_data[]=build_document_icon_tag('file',$dropbox_file->title);
 			$dropbox_file_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download"><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" /></a><a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>';
 			$dropbox_file_data[]=$dropbox_file->author;
@@ -549,19 +535,8 @@ if ($_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false)
 
 	// Displaying the table
 	$additional_get_parameters=array('view'=>$_GET['view'], 'view_received_category'=>$_GET['view_received_category'],'view_sent_category'=>$_GET['view_sent_category']);
-	Display::display_sortable_table($column_header, $dropbox_data_sent, $sorting_options, $paging_options, $additional_get_parameters);
-	if (empty($dropbox_data_sent))
-	{
-		//echo get_lang('NoFilesHere');
-	}
-	else
-	{
-		echo '<a href="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'&amp;selectall">'.get_lang('SelectAll').'</a> - ';
-		echo '<a href="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;view='.$_GET['view'].'">'.get_lang('UnSelectAll').'</a> ';
-		echo get_lang('WithSelected').': ';
-		display_action_options('sent',$dropbox_sent_category, $view_dropbox_category_sent);
-	}
-	echo '</form>';
+	Display::display_sortable_table($column_header, $dropbox_data_sent, $sorting_options, $paging_options, $additional_get_parameters, array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download')));
+
 }
 
 

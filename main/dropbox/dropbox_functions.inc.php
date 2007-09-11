@@ -1070,7 +1070,8 @@ function feedback_form()
 	$number_users_who_see_file=mysql_num_rows($result);
 	if ($number_users_who_see_file>1)
 	{
-		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><input type="button" name="store_feedback" value="'.get_lang('Ok').'" onclick="document.forms.form_tablename.action = document.location;document.forms.form_tablename.submit();"/>';
+		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><input type="button" name="store_feedback" value="'.get_lang('Ok').'" 
+onclick="document.form_tablename.attributes.action.value = document.location;document.form_tablename.submit();"/>';
 	}
 	else
 	{

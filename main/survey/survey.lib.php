@@ -899,7 +899,6 @@ class survey_manager
 		{
 			$sql = "SELECT DISTINCT user FROM $table_survey_answer WHERE survey_id= '".Database::escape_string($survey_data['survey_id'])."'";
 		}
-		echo $sql;
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		while ($row = mysql_fetch_assoc($res))
 		{

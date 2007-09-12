@@ -238,20 +238,38 @@ if ($_user['user_id'])
 	// Reporting
 	if (api_get_setting('show_tabs', 'reporting') == 'true')
 	{
-		$navigation['session_my_space'] = $possible_tabs['session_my_space'];
+		if(api_is_allowed_to_create_course())
+		{
+			$navigation['session_my_space'] = $possible_tabs['session_my_space'];
+		}
+		else
+		{
+			$navigation['session_my_space'] = $possible_tabs['session_my_progress'];
+		}
 	}
 	else
 	{
-		$menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
+		if(api_is_allowed_to_create_course())
+		{
+			$menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
+		}
+		else
+		{
+			$menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
+		}
 	}
-
-	if (api_get_setting('show_tabs', 'platform_administration') == 'true')
+	
+	
+	if(api_is_platform_admin())
 	{
-		$navigation['platform_admin'] = $possible_tabs['platform_admin'];
-	}
-	else
-	{
-		$menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
+		if (api_get_setting('show_tabs', 'platform_administration') == 'true')
+		{
+			$navigation['platform_admin'] = $possible_tabs['platform_admin'];
+		}
+		else
+		{
+			$menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
+		}
 	}
 }
 

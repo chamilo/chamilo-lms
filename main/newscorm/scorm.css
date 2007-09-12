@@ -12,14 +12,14 @@ font-size: small;
 }
 .lp_toc{
 background-color: white;
-height: 310px;
-width: 185px;
+height: 380px;
+width: 99%;
 border-right: 1px none;
 }
 .inner_lp_toc{
 overflow: auto;
 background-color: white;
-height: 290px;
+height: 345px;
 width: 99%;
 border-right: 1px #999999 solid;
 }

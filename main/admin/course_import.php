@@ -188,7 +188,7 @@ if (count($errors) != 0)
 		$error_message .= '</li>';
 	}
 	$error_message .= '</ul>';
-	Display :: display_error_message($error_message);
+	Display :: display_error_message($error_message, false);
 }
 ?>
 <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin:0px;">

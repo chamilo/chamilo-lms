@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 12952 2007-09-07 07:07:17Z pcool $
+* 	@version $Id: reporting.php 13016 2007-09-13 14:08:32Z elixir_julian $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -884,7 +884,7 @@ function export_complete_report()
 			{
 				for ($ii = 0; $ii < $row['number_of_options']; $ii ++)
 				{
-					$return .= strip_tags($row['survey_question']).';';
+					$return .= html_entity_decode(strip_tags($row['survey_question'])).';';
 				}
 			}
 		}

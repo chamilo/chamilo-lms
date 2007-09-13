@@ -87,7 +87,7 @@ if (mysql_num_rows($result) > 1)
 if ($survey_data['invited'] > 0)
 {
 	$message  = '<a href="survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
-	$message .= get_lang('HaveAnswered');
+	$message .= get_lang('HaveAnswered').' ';
 	$message .= '<a href="survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
 	$message .= get_lang('WereInvited');
 	Display::display_normal_message($message, false);

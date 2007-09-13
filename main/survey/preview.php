@@ -129,7 +129,7 @@ else
 					ON survey_question.question_id = survey_question_option.question_id
 					WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 					AND survey_question.question_id IN (".implode(',',$paged_questions[$_GET['show']]).")
-					ORDER BY survey_question.sort ASC";
+					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$question_counter_max = mysql_num_rows($result);
@@ -146,7 +146,7 @@ else
 					$questions[$row['sort']]['survey_question'] = $row['survey_question'];
 					$questions[$row['sort']]['display'] = $row['display'];
 					$questions[$row['sort']]['type'] = $row['type'];
-					$questions[$row['sort']]['options'][$row['option_sort']] = $row['option_text'];
+					$questions[$row['sort']]['options'][intval($row['option_sort'])] = $row['option_text'];
 					$questions[$row['sort']]['maximum_score'] = $row['max_value'];
 				}
 				// if the type is a pagebreak we are finished loading the questions for this page
@@ -158,7 +158,6 @@ else
 			}
 		}
 	}
-
 	// selecting the maximum number of pages
 	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($_GET[survey_id])."'";
 	$result = api_sql_query($sql, __FILE__, __LINE__);

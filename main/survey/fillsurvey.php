@@ -252,7 +252,7 @@ if (isset($_GET['show']))
 				ON survey_question.question_id = survey_question_option.question_id
 				WHERE survey_question.survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
 				AND survey_question.question_id IN (".implode(',',$paged_questions[$_GET['show']]).")
-				ORDER BY survey_question.sort ASC";
+				ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		$question_counter_max = mysql_num_rows($result);

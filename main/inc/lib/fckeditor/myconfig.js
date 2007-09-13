@@ -61,7 +61,7 @@ FCKConfig.ToolbarSets["Test"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Survey"] = [
-	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager']
+	['FontSize','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Rule','Link','Table','-','ImageManager','Source']
 ] ;
 
 var sOtherPluginPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + 'editor/plugins/' ;

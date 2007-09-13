@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 12914 2007-08-31 16:14:07Z pcool $
+<?php //$Id: announcements.php 13015 2007-09-13 13:48:20Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -635,12 +635,24 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 					    }
 				    	else if(empty($_POST['not_selected_form']))
 				    	{
-				    		// send to everybody
-				    		$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
-								                     FROM $tbl_course_user, $tbl_user
-								                     WHERE course_code='".mysql_real_escape_string($_course['sysCode'])."'
-								                     AND course_rel_user.user_id = user.user_id";
-
+				    		if(empty($_SESSION['id_session']) || api_get_setting('use_session_mode')=='false')
+				    		{
+					    		// send to everybody
+					    		$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
+						                     FROM $tbl_course_user, $tbl_user
+						                     WHERE course_code='".mysql_real_escape_string($_course['sysCode'])."'
+						                     AND course_rel_user.user_id = user.user_id";
+				    		}
+				    		else
+				    		{
+				    			$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
+						                     FROM $tbl_user
+											 INNER JOIN $tbl_session_course_user
+											 	ON $tbl_user.user_id = $tbl_session_course_user.id_user
+												AND $tbl_session_course_user.course_code = '".$_course['id']."'
+												AND $tbl_session_course_user.id_session = ".intval($_SESSION['id_session']);
+				    			
+				    		}
 				    	}
 
 						if($sqlmail!=''){

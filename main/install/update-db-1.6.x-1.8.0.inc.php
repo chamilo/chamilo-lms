@@ -133,7 +133,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		{
 			if(empty($dbStatsForm)) $dbStatsForm = $dbNameForm;
 			if(empty($dbScormForm)) $dbScormForm = $dbNameForm;
-			if(empty($dbUserForm))  $dbUserForm = $dbNameForm;
+			if(empty($dbUserForm)) $dbUserForm = $dbNameForm;
 		}
 		/**
 		 * Update the databases "pre" migration
@@ -322,12 +322,18 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					
 					//update forum tables (migrate from bb_ tables to forum_ tables)
 					//migrate categories
-					$sql_orig = "SELECT * FROM ".$prefix."bb_categories";
+					$prefix_course = $prefix;
+					if($singleDbForm)
+					{
+						$prefix_course = $prefix.$row_course['db_name']."_";
+					}
+
+					$sql_orig = "SELECT * FROM ".$prefix_course."bb_categories";
 					$res_orig = mysql_query($sql_orig);
 					$order = 1;
 					while($row = mysql_fetch_array($res_orig)){
 						$myorder = (empty($row['cat_order'])?$order:$row['cat_order']);
-						$sql = "INSERT INTO ".$prefix."forum_category " .
+						$sql = "INSERT INTO ".$prefix_course."forum_category " .
 								"(cat_id,cat_title,cat_comment,cat_order,locked) VALUES " .
 								"('".$row['cat_id']."','".mysql_real_escape_string($row['cat_title'])."','','".$myorder."',0)";
 						$res = mysql_query($sql);
@@ -335,16 +341,16 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						//error_log($sql,0);
 						$order ++;
 						//add item_property - forum categories were not put into item_properties before
-						$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+						$sql = "INSERT INTO ".$prefix_course."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 								"VALUES ('forum_category','1','$lastcatid','ForumCategoryAdded','1','1')";
 						$res = mysql_query($sql);
 						//error_log($sql,0);
 					}
-					$sql_orig = "SELECT * FROM ".$prefix."bb_forums ORDER BY forum_last_post_id desc";
+					$sql_orig = "SELECT * FROM ".$prefix_course."bb_forums ORDER BY forum_last_post_id desc";
 					$res_orig = mysql_query($sql_orig);
 					$order = 1;
 					while($row = mysql_fetch_array($res_orig)){
-						$sql = "INSERT INTO ".$prefix."forum_forum " .
+						$sql = "INSERT INTO ".$prefix_course."forum_forum " .
 								"(forum_id,forum_category,allow_edit,forum_comment," .
 								"forum_title," .
 								"forum_last_post, forum_threads," .
@@ -361,12 +367,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						$order++;
 	
 						//add item_property - forums were not put into item_properties before
-						$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+						$sql = "INSERT INTO ".$prefix_course."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 								"VALUES ('forum','1','$lastforumid','ForumAdded','1','1')";
 						$res = mysql_query($sql);
 						//error_log($sql,0);
 					}
-					$sql_orig = "SELECT * FROM ".$prefix."bb_topics";
+					$sql_orig = "SELECT * FROM ".$prefix_course."bb_topics";
 					$res_orig = mysql_query($sql_orig);
 					while($row = mysql_fetch_array($res_orig)){
 						$name = $row['prenom'].' '.$row['nom'];
@@ -385,7 +391,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						//convert time from varchar to datetime
 						$time = $row['topic_time'];
 						$name = mysql_real_escape_string($name);
-						$sql = "INSERT INTO ".$prefix."forum_thread " .
+						$sql = "INSERT INTO ".$prefix_course."forum_thread " .
 								"(thread_id,forum_id,thread_poster_id," .
 								"locked,thread_replies,thread_sticky,thread_title," .
 								"thread_poster_name, thread_date, thread_last_post," .
@@ -399,12 +405,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						$lastthreadid = mysql_insert_id();
 						
 						//add item_property - forum threads were not put into item_properties before
-						$sql = "INSERT INTO ".$prefix."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+						$sql = "INSERT INTO ".$prefix_course."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 								"VALUES ('forum_thread','1','$lastthreadid','ForumThreadAdded','1','1')";
 						$res = mysql_query($sql);
 						//error_log($sql,0);
 					}
-					$sql_orig = "SELECT * FROM ".$prefix."bb_posts bp, ".$prefix."bb_posts_text bpt WHERE bp.post_id = bpt.post_id";
+					$sql_orig = "SELECT * FROM ".$prefix_course."bb_posts bp, ".$prefix_course."bb_posts_text bpt WHERE bp.post_id = bpt.post_id";
 					$res_orig = mysql_query($sql_orig);
 					while($row = mysql_fetch_array($res_orig)){
 						$name = $row['prenom'].' '.$row['nom'];
@@ -423,7 +429,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						//convert time from varchar to datetime
 						$time = $row['post_time'];
 						$name = mysql_real_escape_string($name);
-						$sql = "INSERT INTO ".$prefix."forum_post " .
+						$sql = "INSERT INTO ".$prefix_course."forum_post " .
 								"(post_id,forum_id,thread_id," .
 								"poster_id,post_parent_id,visible, " .
 								"post_title,poster_name, post_text, " .
@@ -437,7 +443,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						$lastpostid = mysql_insert_id();
 						
 						//add item_property - forum threads were not put into item_properties before
-						$sql = "INSERT INTO ".$prefix."item_property(tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
+						$sql = "INSERT INTO ".$prefix_course."item_property(tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 								"VALUES ('forum_post','1','$lastpostid','ForumPostAdded','1','1')";
 						$res = mysql_query($sql);
 						//error_log($sql,0);
@@ -577,7 +583,14 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					 * We connect to the right DB first to make sure we can use the queries
 					 * without a database name
 					 */
-					mysql_select_db($row['db_name']);
+					$prefix_course = $prefix;
+					if($singleDbForm)
+					{
+						$prefix_course = $prefix.$row['db_name']."_";
+					}else{
+						mysql_select_db($row['db_name']);
+					}
+
 					foreach($c_q_list as $query)
 					{
 						if ($singleDbForm) //otherwise just use the main one

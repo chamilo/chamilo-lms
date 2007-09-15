@@ -29,6 +29,13 @@
 
 /*
 ==============================================================================
+		DEBUG
+==============================================================================
+*/
+$debug=0;
+
+/*
+==============================================================================
 		CONSTANTS
 ==============================================================================
 */
@@ -43,15 +50,10 @@ $IMAGE_EXTENSION = array ('.png', '.jpg', '.gif', '.jpeg');
 ==============================================================================
 */
 if (!is_array($_COOKIE) || !isset($_COOKIE["dk_sid"])){
-	error_log("setting SID to:".$_REQUEST["sid"]);
+	if ($debug>0) error_log("setting SID to:".$_REQUEST["sid"]);
 	session_id($_REQUEST["sid"]);
 }
-/*
-==============================================================================
-		DEBUG
-==============================================================================
-*/
-$debug=0;
+
 if ($debug>0)
 {
 	// dump the request
@@ -111,7 +113,7 @@ if ($action == "upload")
 	$permissions = CourseManager::get_user_in_course_status($user_id, $cidReq);
 	if ($permissions != COURSEMANAGER)
 	{
-		error_log("Upload from videoconf not allowed !!!",0);
+		if ($debug >0) error_log("Upload from videoconf not allowed !!!",0);
 		die(); // this user is not allowed to add upload documents
 	}
 /*
@@ -124,7 +126,7 @@ if ($action == "upload")
 	if (!is_dir($destPath)){
 		$result = create_unexisting_directory($_course,$user_id,0,NULL,$coursePath,VIDEOCONF_UPLOAD_PATH);
 		if (!$result)
-			error_log("Can't create ".$destPath." folder",0);
+			if ($debug>0) error_log("Can't create ".$destPath." folder",0);
 	}
 	
 	$newPath = handle_uploaded_document($_course,$_FILES['Filedata'],$coursePath,VIDEOCONF_UPLOAD_PATH,$user_id,0,NULL,'',0,'rename',false);
@@ -137,10 +139,9 @@ if ($action == "upload")
 */
 	if (in_array($file_extension, $PRESENTATION_EXTENSION))
 	{
-//		error_log("converting $coursePath$newPath", 0);
+		if ($debug > 0) error_log("converting $coursePath$newPath", 0);
 		/* creating output folder */
 		$created_dir = create_unexisting_directory($_course,$user_id,0,NULL,$coursePath,$file_name);
-//		error_log($created_dir,0);		
 		
 		/* alow user of openoffice to write into the folder */
 		// FIXME
@@ -173,7 +174,7 @@ if ($action == "upload")
 		{
 			$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$coursePath.$newPath.'" "'.$coursePath.$created_dir.'"'.' '.$slide_width.' '.$slide_height.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
 		}
-		error_log($cmd,0);
+		if ($debug>0) error_log($cmd,0);
 
 		/* Exec */
 		$shell = exec($cmd, $files, $return); // files: list of created files, return: shell return code
@@ -182,7 +183,6 @@ if ($action == "upload")
 		foreach($files as $f)
 		{
 			$did = add_document($_course, $created_dir.'/'.$f, 'file', filesize($coursePath.$created_dir.'/'.$f), $f);
-//			error_log($created_dir.'/'.$f);
 			if ($did)
 				api_item_property_update($_course, TOOL_DOCUMENT, $did, 'DocumentAdded', $user_id, 0, NULL);
 		}
@@ -193,7 +193,7 @@ if ($action == "upload")
 		LIST FILES
 ==============================================================================
 */
-	error_log("sending file list",0);
+	if ($debug>0) error_log("sending file list",0);
 	$subaction = $_REQUEST["subaction"];
 	$canDelete = (CourseManager::get_user_in_course_status($user_id, $cidReq) == COURSEMANAGER);
 	if ($subaction == "list") {
@@ -263,7 +263,7 @@ if ($action == "upload")
 	$permissions = CourseManager::get_user_in_course_status($user_id, $cidReq);
 	if ($permissions != COURSEMANAGER)
 	{
-		error_log("Upload from videoconf not allowed !!!",0);
+		if ($debug > 0) error_log("Upload from videoconf not allowed !!!",0);
 		die(); // this user is not allowed to add upload documents
 	}
 
@@ -275,7 +275,7 @@ if ($action == "upload")
 		$path = $_REQUEST["path"];
 		if ((substr($path,0,strlen(VIDEOCONF_UPLOAD_PATH)) != VIDEOCONF_UPLOAD_PATH))
 		{
-			error_log("Delete from videoconf for "+$path+" NOT ALLOWED",0);
+			if ($debug >0 ) error_log("Delete from videoconf for "+$path+" NOT ALLOWED",0);
 			die();
 		}
 	
@@ -293,7 +293,7 @@ if ($action == "upload")
 	if(!DocumentManager::get_document_id($_course,$_REQUEST['file']))
 	{
 		//file not found!
-		error_log("404 ".$_REQUEST["file"]);
+		if ($debug>0) error_log("404 ".$_REQUEST["file"]);
 		header("HTTP/1.0 404 Not Found");
 		$error404 = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">';
 		$error404 .= '<html><head>';
@@ -307,7 +307,7 @@ if ($action == "upload")
 		exit;
 	}
 	$doc_url=$_REQUEST['file'];
-	error_log($doc_url);
+	if ($debug >0) error_log($doc_url);
 	$full_file_name = $coursePath.$doc_url;
 	DocumentManager::file_send_for_download($full_file_name,false);
 	exit;

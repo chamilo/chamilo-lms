@@ -164,7 +164,8 @@ if ($action == "upload")
 		{
 			$classpath = str_replace(':',';',$classpath);
 		}
-		list($slide_width, $slide_height) = explode('x',api_get_setting('service_ppt2lp','size'));
+		$slide_width=640;
+		$slide_height=480;
 		
 		if(strpos($_ENV['OS'],'Windows') !== false)
 		{

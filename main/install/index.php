@@ -82,19 +82,18 @@ require_once('install_functions.inc.php');
 // Some constants
 define('DOKEOS_INSTALL',1);
 define('MAX_COURSE_TRANSFER',100);
-define("INSTALL_TYPE_UPDATE", "update");
-define("FORM_FIELD_DISPLAY_LENGTH", 40);
-define("DATABASE_FORM_FIELD_DISPLAY_LENGTH", 25);
-define("MAX_FORM_FIELD_LENGTH", 50);
-define("DEFAULT_LANGUAGE", "english");
+define('INSTALL_TYPE_UPDATE', 'update');
+define('FORM_FIELD_DISPLAY_LENGTH', 40);
+define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
+define('MAX_FORM_FIELD_LENGTH', 50);
+define('DEFAULT_LANGUAGE', 'english');
 
 // setting the error reporting
 error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
 // overriding the timelimit (for large campusses that have to be migrated)
 @set_time_limit(0);
-
-$update_from_version=array('1.8.2');
+$update_from_version=array('1.8.3');
 
 /*
 ==============================================================================
@@ -496,7 +495,7 @@ elseif($_POST['step6'])
 	{
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
-		include('update-db-1.8.2-1.8.3.inc.php');
+		include('update-db-1.8.3-1.8.4.inc.php');
 		//include('update-files-1.8.0-1.8.2.inc.php');
 	}
 	else

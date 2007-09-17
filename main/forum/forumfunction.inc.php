@@ -1292,9 +1292,9 @@ function get_threads($forum_id)
 				ON thread.thread_id=item_properties.ref
 				AND item_properties.visibility='1'
 				AND item_properties.tool='".TOOL_FORUM_THREAD."'
-			INNER JOIN $table_users users
+			LEFT JOIN $table_users users
 				ON thread.thread_poster_id=users.user_id
-			INNER JOIN $table_posts post
+			LEFT JOIN $table_posts post
 				ON thread.thread_last_post = post.post_id
 			LEFT JOIN $table_users last_poster_users
 				ON post.poster_id= last_poster_users.user_id
@@ -1314,9 +1314,9 @@ function get_threads($forum_id)
 					ON thread.thread_id=item_properties.ref
 					AND item_properties.visibility<>2
 					AND item_properties.tool='".TOOL_FORUM_THREAD."'
-				INNER JOIN $table_users users
+				LEFT JOIN $table_users users
 					ON thread.thread_poster_id=users.user_id
-				INNER JOIN $table_posts post
+				LEFT JOIN $table_posts post
 					ON thread.thread_last_post = post.post_id
 				LEFT JOIN $table_users last_poster_users
 					ON post.poster_id= last_poster_users.user_id

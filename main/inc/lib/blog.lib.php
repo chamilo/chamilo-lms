@@ -705,7 +705,7 @@ class Blog
 				$blog_post_id = $blog_post['post_id'];
 				$blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
 				$blog_post_date = ucfirst(format_locale_date($dateFormatLong,strtotime($blog_post['date_creation'])));
-				$blog_post_time = date('H:m',strtotime($blog_post['date_creation']));
+				$blog_post_time = date('H:i',strtotime($blog_post['date_creation']));
 
 				// Create an introduction text (but keep FULL sentences)
 				$limit = 100; //nmbr of words in introduction text
@@ -1024,7 +1024,7 @@ class Blog
 			// Prepare data
 			$comment_text = make_clickable(stripslashes($comment['comment']));
 			$blog_comment_date = ucfirst(format_locale_date($dateFormatLong,strtotime($comment['date_creation'])));
-			$blog_comment_time = date('H:m',strtotime($comment['date_creation']));
+			$blog_comment_time = date('H:i',strtotime($comment['date_creation']));
 			$blog_comment_actions = "";
 			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_comment&amp;comment_id=' . $comment['comment_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang("ConfirmYourChoice"))). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
 			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_rate')) { $rating_select = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']); }

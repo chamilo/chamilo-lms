@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 12705 2007-07-05 15:16:54Z elixir_inter $
+<?php // $Id: configure_homepage.php 13044 2007-09-17 12:32:11Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -921,10 +921,16 @@ switch($action){
 			api_display_language_form();
 			?>
 			<form id="loginform">
-				<label><?php echo get_lang('LoginName'); ?></label>
-				<input type="text" id="login" size="15" value="" disabled="disabled" />
-				<label><?php echo get_lang('UserPassword'); ?></label>
-				<input type="password" id="password" size="15" disabled="disabled" />
+				<table cellpadding="0">
+					<tr>
+						<td><label><?php echo get_lang('LoginName'); ?></label></td>
+						<td><input type="text" id="login" size="15" value="" disabled="disabled" /></td>
+					</tr>
+					<tr>
+						<td><label><?php echo get_lang('UserPassword'); ?></label></td>
+						<td><input type="password" id="password" size="15" disabled="disabled" /></td>
+					</tr>
+				</table>
 				<input type="button" value="<?php echo get_lang('Ok'); ?>" disabled="disabled" />
 			</form>
 			<div class="menusection">

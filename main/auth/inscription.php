@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 12734 2007-07-11 00:32:13Z yannoo $
+// $Id: inscription.php 13048 2007-09-17 15:08:32Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -72,7 +72,7 @@ if (CONFVAL_ASK_FOR_OFFICIAL_CODE)
 		$form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
 }
 //	USERNAME
-$form->addElement('text', 'username', get_lang('UserName'), array('size' => 40));
+$form->addElement('text', 'username', get_lang('UserName'), array('size' => 20));
 $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('username', get_lang('UsernameWrong'), 'username');
 $form->addRule('username', get_lang('UserTaken'), 'username_available');
@@ -111,6 +111,7 @@ if ($form->validate())
 	  STORE THE NEW USER DATA INSIDE THE MAIN DOKEOS DATABASE
 	  -----------------------------------------------------*/
 	$values = $form->exportValues();
+	$values['username'] = substr($values['username'],0,20); //make *sure* the login isn't too long
 
 	if (get_setting('allow_registration_as_teacher') == 'false')
 	{
@@ -126,7 +127,7 @@ if ($form->validate())
 	{
 		// TODO: add language to parameter list of UserManager::create_user(...)
 		$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
-		             SET language	= '".mysql_real_escape_string($values['language'])."'
+		             SET language	= '".Database::escape_string($values['language'])."'
 					WHERE user_id = '".$user_id."'	 ";
 		//api_sql_query($sql,__FILE__,__LINE__);
 

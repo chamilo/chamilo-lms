@@ -158,7 +158,6 @@ $UsersNumber = "&#29992;&#25143;&#25968;&#37327;";
 $PageAfterLoginTitle = "&#30331;&#24405;&#21518;&#39029;&#38754;";
 $PageAfterLoginComment = "&#26412;&#39029;&#34987;&#30456;&#36830;&#29992;&#25143;&#27983;&#35272;";
 $DokeosAdminWebLinks = "Dokeos 主页链接";
-$ParticipateInCommunityDevelopment = "参加开发团队";
 $GlobalRole = "全局角色";
 $langNomOutilTodo = "管理Todo列表";
 $langNomPageAdmin = "系统管理";
@@ -481,7 +480,7 @@ $ErrorsWhenImportingFile = "&#23548;&#20837;&#25991;&#20214;&#26102;&#20986;&#38
 $ServiceActivated = "&#26381;&#21153;&#32463;&#21551;&#21160;";
 $ActivateExtension = "&#28608;&#27963;&#26381;&#21153;";
 $InvalidExtension = "&#26080;&#25928;&#30340;&#25193;&#23637;";
-$VersionCheckExplanation = "In order to enable the automatic version checking you have to register your campus on dokeos.com. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of campusses, total number of dokeos courses, total number of dokeos students, ...) (see <a href=\"see http://www.dokeos.com/stats/\">see http://www.dokeos.com/stats/</a>. When registering you will also appear on the worldwide list (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>. If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button: <br />";
+$VersionCheckExplanation = "In order to enable the automatic version checking you have to register your campus on dokeos.com. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of campusses, total number of dokeos courses, total number of dokeos students, ...) (see <a href=\"http://www.dokeos.com/stats/\">http://www.dokeos.com/stats/</a>. When registering you will also appear on the worldwide list (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>. If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button: <br />";
 $AfterApproval = "&#25209;&#20934;&#21518;";
 $StudentViewEnabledTitle = "&#23398;&#29983;&#35270;&#22270;";
 $StudentViewEnabledComment = "&#23398;&#29983;&#35270;&#22270;&#35753;&#25945;&#24072;&#25110;&#31649;&#29702;&#21592;&#20197;&#23398;&#29983;&#30340;&#35270;&#35282;&#26469;&#27983;&#35272;&#35838;&#31243;";

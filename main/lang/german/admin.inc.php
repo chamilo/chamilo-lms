@@ -163,7 +163,6 @@ $UsersNumber = "Zahl der Benutzer";
 $PageAfterLoginTitle = "Seite nach dem Login";
 $PageAfterLoginComment = "Seite, die nach dem Login angezeigt wird";
 $DokeosAdminWebLinks = "Dokeos Web Links";
-$ParticipateInCommunityDevelopment = "An Community Entwicklung teilnehmen";
 $GlobalRole = "Globale Rolle";
 $langNomOutilTodo = "Verwaltung dere Todo-Liste";
 $langNomPageAdmin = "Administration";
@@ -494,7 +493,7 @@ $ErrorsWhenImportingFile = "Fehler bei Datei Import";
 $ServiceActivated = "Dienst ist aktiviert";
 $ActivateExtension = "Aktive Erweiterungen";
 $InvalidExtension = "Ungültige Erweiterung";
-$VersionCheckExplanation = "Um automatische Versionskontrolle zu nutzen, muss man das Campus bei dokeos.com registrieren. Die weitergegebene Information nach Klicken dieses Buttons dient lediglich internen Zwecken und lediglich Gesamtinformationen werden öffentlich verfügbar sein (Anzahl Campus Installationen insgesamt, Anzahl Kurse insgesamt, Anzahl Studenten insgesamt, usw) (vgl. <a href=\"http://www.dokeos.com/stats/\"> http://www.dokeos.com/stats/</a>. Nach der Registrierung erscheint das Campus auch auf der Worldwide List (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>. 
+$VersionCheckExplanation = "Um automatische Versionskontrolle zu nutzen, muss man das Campus bei dokeos.com registrieren. Die weitergegebene Information nach Klicken dieses Buttons dient lediglich internen Zwecken und lediglich Gesamtinformationen werden öffentlich verfügbar sein (Anzahl Campus Installationen insgesamt, Anzahl Kurse insgesamt, Anzahl Studenten insgesamt, usw) (vgl. <a href=\"http://www.dokeos.com/stats/\"> http://www.dokeos.com/stats/</a>. Nach der Registrierung erscheint das Campus auch auf der Worldwide List (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>. 
 Wenn Ihr Campus dort nicht erscheinen soll, markieren Sie bitte die nachfolgende Checkbox .  Die Registrierung ist ganz einfach: Sie klicken lediglich auf diesen Button:<br />";
 $AfterApproval = "Nach Genehmigung";
 $StudentViewEnabledTitle = "Studenten Ansicht  aktivieren";
@@ -607,6 +606,7 @@ $YouWillSoonReceiveMailFromCoach = "Sie werden bald eine Mail von Ihrem Lehrer e
 $SlideSize = "Größe der Slides";
 $EphorusPlagiarismPrevention = "EUphrous Plagiat Verhinderung";
 $CourseTeachers = "Kurslehrer";
+$UnknownTeacher = "Unbekannter Lehrer";
 $HideDLTTMarkup = "DLTT Markup ausblenden";
 $ListOfCoursesOfSession = "Liste der Kurse in dieser Periode";
 $UnsubscribeSelectedUsersFromSession = "Ausgewählte Benutzer aus der Sitzung austragen";
@@ -647,6 +647,7 @@ $EphorusDescription = "Beginnen Sie, den Ephorus Anti-Plagiat Dienst in Dokeos z
 $EphorusLeadersInAntiPlagiarism = "<STRONG>Führend bei  <br/>Anti Plagiat</STRONG>";
 $EphorusClickHereForInformationsAndPrices = "Klicken Sie hier für weitere Informationen und Preise.";
 $NameOfTheSession = "Name der Sitzung";
+$NoSessionsForThisUser = "Dieser Benutzer ist nicht für die Session angemeldet";
 $DisplayCategoriesOnHomepageTitle = "Kategorien auf der Startseite anzeigen";
 $DisplayCategoriesOnHomepageComment = "Mit dieser Option werden Kurskategorien auf der Startseite des Portals angezeigt oder ausgeblendet";
 $ShowTabsTitle = "Tabs im Kopfbereich";
@@ -657,4 +658,7 @@ $ShowTabsTitle = "Tabs";
 $ShowTabsComment = "Welche der nachfolgenden Tabs sollen angezeigt werden?";
 $NoCoursesForThisSession = "Keine Kurse für diese Session";
 $NoUsersForThisSession = "Keine Benutzer für diese Session";
+$LastNameMandatory = "Nachname kann nicht leer sein";
+$FirstNameMandatory = "Vorname kann nicht leer sein";
+$EmailMandatory = "E-Mail kann nicht leer sein";
 ?>

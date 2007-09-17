@@ -173,4 +173,9 @@ $NewExercise = "Neuer Test";
 $CreateANewLink = "Neuen Link erstellen";
 $CreateANewForum = "Neues Forum erstellen";
 $LinkAdd = "Link jinzufügen";
+$WoogieConversionPowerPoint = "Woogie : Word Übertragung";
+$WelcomeWoogieSubtitle = "Ein Word zu Lernpfad Konvertierer";
+$WelcomeWoogieConverter = "Willkommen beim Woogie Konvertierer <ul type=\\\"1\\\"><li>Datei auswählen ais .doc, .sxw, .odt<li>Diese in Woogie hochladen. Sie wird zu einem SCORM Lernpfad konvertiert.<li>Dann kann man Audio Kommentare auf jeder Seite hinzufügen und Quiz und andere Aktivitäten zwischen den Seiten hinzufügen</ul>";
+$WoogieError = "Fehler ist aufgetreten bei der Konvertierung des Word Dokuments. Bitte prüfen, ob Sonderzeichen im Dateinamen vorhanden sind.";
+$WordConvert = "Word Konvertierung";
 ?>

@@ -416,6 +416,7 @@ $EmailText = "Conteúdo do email";
 $Send = "Enviar";
 $Comments = "Comentários";
 $ModifyRecipientList = "Modificar lista de destinatários";
+$Line = "Linha";
 $NoLinkVisited = "Nenhum link visitado";
 $NoDocumentDownloaded = "Nenhum documento baixado";
 $Clicks = "Cliques";
@@ -431,4 +432,5 @@ $YourRegistrationData = "Os seus dados do registro";
 $ResetLink = "Clique aqui para recuperar a sua senha";
 $VisibilityChanged = "A visibilidade foi alterada.";
 $MainNavigation = "Navegação principal";
+$None = "Nenhum";
 ?>

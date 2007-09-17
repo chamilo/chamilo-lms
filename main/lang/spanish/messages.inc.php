@@ -2,10 +2,10 @@
 for more information: see languages.txt in the lang folder. 
 */
 $Inbox  = "Bandeja de entrada";
-$Messages = "Mensajes";
-$SendMessage = "Enviar mensaje";
-$NewMessage = "Nuevo mensaje";
-$ComposeMessage = "Redactar mensaje";
+$Messages = "Mensajes instantáneos";
+$SendMessage = "Enviar mensaje instantáneo";
+$NewMessage = "Nuevo mensaje instantáneo";
+$ComposeMessage = "Mensaje instantáneo";
 $DeleteSelectedMessages = "Borrar los mensajes seleccionados";
 $SelectAll = "Seleccionar todo";
 $DeselectAll  = "Anular selección";

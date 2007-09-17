@@ -416,6 +416,7 @@ $EmailText = "Inhoud van de email";
 $Send = "Versturen";
 $Comments = "Opmerkingen";
 $ModifyRecipientList = "Wijzig de lijst van ontvangers";
+$Line = "Lijn";
 $NoLinkVisited = "Geen link bezocht";
 $NoDocumentDownloaded = "Geen document gedownloaded";
 $Clicks = "klikken";
@@ -431,4 +432,5 @@ $YourRegistrationData = "Uw registratiegegevens";
 $ResetLink = "Klik hier om uw paswoord terug te vinden";
 $VisibilityChanged = "De zichtbaarheid is aangepast.";
 $MainNavigation = "Hoofdnavigatie";
+$None = "Geen";
 ?>

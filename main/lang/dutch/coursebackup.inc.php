@@ -43,4 +43,5 @@ $langImportBackupInfo = "Importeer een eerder aangemaakte back-up. U kan back-up
 $langCreateBackupInfo = "Creëer een back-upbestand van deze cursus. U kan zelf aangeven welke cursusonderdelen in de back-up moeten opgenomen worden.";
 $ToolIntro = "Introductietekst";
 $UploadError = "Het uploaden is mislukt. Controleer de maximum bestandsgrootte en de folderrechten.";
+$DocumentsWillBeAddedToo = "Documenten worden ook toegevoegd";
 ?>

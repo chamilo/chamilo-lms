@@ -166,7 +166,6 @@ $UsersNumber = "Nombre d\'usuaris";
 $PageAfterLoginTitle = "Pàgina inicial";
 $PageAfterLoginComment = "Pàgina a redirigir quan l\'usuari es connecta";
 $DokeosAdminWebLinks = "Vincles Web Dokeos";
-$ParticipateInCommunityDevelopment = "Participar a la comunitat de desenvolupament Dokeos";
 $GlobalRole = "Objectiu principal";
 $langNomOutilTodo = "Gestiona llista de pendents";
 $langNomPageAdmin = "Administració";
@@ -505,7 +504,7 @@ $ActivateExtension = "Serveis activats";
 $InvalidExtension = "Servei no vàlid";
 $VersionCheckExplanation = "Per tal d\'activar la verificació automàtica de les versions, heu d\'enregistrar el vostre portal a Dokeos.com. Les dades que ens transmeteu, en haver clicat el botó, són reservades per a usos interns; només es faran públiques les dades estadístiques globals (nombre total de plataformes Dokeos, de cursos, d\'estudiants ...)
 Vegeu <a href=\"http://www.dokeos.com/stats/\">http://www.dokeos.com/stats/</a>.
-Després d\'enregistrar la vostra plataforma Dokeos, apareixerà també en la nostra llista internacional (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>).
+Després d\'enregistrar la vostra plataforma Dokeos, apareixerà també en la nostra llista internacional (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>).
 Si no hi voleu aparèixer, marqueu el quadre de sota. Per enregistrar-vos, res més simple: cliqueu només el botó ! ";
 $AfterApproval = "Després de ser aprobat";
 $StudentViewEnabledTitle = "Activar la vista estudiant";

@@ -158,7 +158,6 @@ $UsersNumber = "Användarens nummer";
 $PageAfterLoginTitle = "Sida efter inloggning";
 $PageAfterLoginComment = "Sida sedd av anslutande användare";
 $DokeosAdminWebLinks = "Administrativa Dokeoslänkar";
-$ParticipateInCommunityDevelopment = "Delta i utvecklingsarbetet";
 $GlobalRole = "Global roll";
 $langNomOutilTodo = "Hantera Attgöralistan";
 $langNomPageAdmin = "Administration";

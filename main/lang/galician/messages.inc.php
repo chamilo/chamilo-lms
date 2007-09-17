@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 $Inbox  = "Caixa de Entrada";
 $Messages = "Mensaxes";
 $SendMessage = "Enviar mensaxe";
-$NewMessage = "Nova mensaxe";
-$ComposeMessage = "Redactar mensaxe";
+$NewMessage = "Nova mensaxe instantánea";
+$ComposeMessage = "Mensaxe instantánea";
 $DeleteSelectedMessages = "Eliminar as mensaxes seleccionadas";
 $SelectAll = "Seleccionar todo";
 $DeselectAll  = "Anular selección";

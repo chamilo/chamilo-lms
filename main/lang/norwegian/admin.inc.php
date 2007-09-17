@@ -153,7 +153,6 @@ $langLimitUsersListDefaultMax = "Maks. antall brukere som vises i rullelisten";
 $PageAfterLoginTitle = "Side etter pålogging";
 $PageAfterLoginComment = "Siden som vises for pålogget bruker";
 $DokeosAdminWebLinks = "Dokeos nettsted";
-$ParticipateInCommunityDevelopment = "Delta i fellesskapsutviklingen";
 $GlobalRole = "Global rolle";
 $langNomOutilTodo = "Håndter gjøremålsliste";
 $langNomPageAdmin = "Administrasjon";

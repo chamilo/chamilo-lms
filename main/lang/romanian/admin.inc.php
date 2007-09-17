@@ -153,7 +153,6 @@ $langLimitUsersListDefaultMax = "Maximum de utilizatori afisati in lista";
 $PageAfterLoginTitle = "Pagina dupa logare";
 $PageAfterLoginComment = "Pagina vizulalizata de utilizatorul conectat";
 $DokeosAdminWebLinks = "Legaturi Web Dokeos ";
-$ParticipateInCommunityDevelopment = "Participa in comunitatea de dezvoltare";
 $GlobalRole = "Rol Global";
 $langNomOutilTodo = "Gestioneaza lista de activitati (Todo list)";
 $langNomPageAdmin = "Administrare";
@@ -474,5 +473,5 @@ $ErrorsWhenImportingFile = "Eroare la importarea fisierului";
 $ServiceActivated = "Serviciu activat";
 $ActivateExtension = "Servicii active";
 $InvalidExtension = "Extensie invalida";
-$VersionCheckExplanation = "Pentru activarea verificarii versiunii automate va trebui sa va inregistrati campusul pe dokeos.com. Informatia obtinuta apasand pe acest buton este pentru utilizarea interna si numai datele sustinute vor fi publicate si disponibile (numarul total de campusuri, numarul total a cursurilor dokeos, numarul total a studentilor dokeos, ...) (vezi <a href=\"see http://www.dokeos.com/stats/\">see http://www.dokeos.com/stats/</a>. Cand va inregistrati deasemenea veti aparea pe intreaga lista  (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>. Daca nu doriti sa apareti in aceasta lista va trebui sa bifati casuta de alaturi. Inregistrarea este foarte simpla: trebuie doar sa apasati acest buton: <br />";
+$VersionCheckExplanation = "Pentru activarea verificarii versiunii automate va trebui sa va inregistrati campusul pe dokeos.com. Informatia obtinuta apasand pe acest buton este pentru utilizarea interna si numai datele sustinute vor fi publicate si disponibile (numarul total de campusuri, numarul total a cursurilor dokeos, numarul total a studentilor dokeos, ...) (vezi <a href=\"http://www.dokeos.com/stats/\">http://www.dokeos.com/stats/</a>. Cand va inregistrati deasemenea veti aparea pe intreaga lista  (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>. Daca nu doriti sa apareti in aceasta lista va trebui sa bifati casuta de alaturi. Inregistrarea este foarte simpla: trebuie doar sa apasati acest buton: <br />";
 ?>

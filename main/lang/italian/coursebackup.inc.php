@@ -43,4 +43,5 @@ $langImportBackupInfo = "Importa la copia di Backup di un corso";
 $langCreateBackupInfo = "Crea la copia di backup del corso";
 $ToolIntro = "Strumento Introduzione";
 $UploadError = "Caricamento fallito, controlla la dimensione dei file e i diritti di scrittura.";
+$DocumentsWillBeAddedToo = "Saranno aggiunti anche i documenti ";
 ?>

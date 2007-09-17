@@ -416,6 +416,7 @@ $EmailText = "Email content";
 $Send = "Send";
 $Comments = "Comments";
 $ModifyRecipientList = "Modify recipient list";
+$Line = "Line";
 $NoLinkVisited = "No link visited";
 $NoDocumentDownloaded = "No document downloaded";
 $Clicks = "clicks";

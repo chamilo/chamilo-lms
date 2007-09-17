@@ -10,8 +10,8 @@ $VisioRTMPIsWeb = "Nel caso in cui la videoconferenza funzioni in modo web (soli
 $ShowBackLinkOnTopOfCourseTreeComment = "Mostra un collegamente per risalire nella gerarchia dei corsi. In ogni caso un collegamento sarà disponibile alla fine dell\'elenco.";
 $langUsed       = "usato";
 $langPresent   = "Ok";
-$langMissing    = "non trovato";
-$langExist      = "esiste";
+$langMissing    = "mancante";
+$langExist      = "esistente";
 $ShowBackLinkOnTopOfCourseTree = "Mostra un collegamento per risalire l\'albero dei corsi e delle categorie";
 $ShowNumberOfCourses = "Mostra il numero dei corsi";
 $DisplayTeacherInCourselistTitle = "Mostra il coordinatore nell\'intestazione del corso";
@@ -163,7 +163,6 @@ $UsersNumber = "Numero di utenti";
 $PageAfterLoginTitle = "Pagina di benvenuto";
 $PageAfterLoginComment = "Pagina vista dal corsista dopo l\'accesso";
 $DokeosAdminWebLinks = "Collegamento al web di Dokeos";
-$ParticipateInCommunityDevelopment = "Partecipa alla comunità di sviluppo";
 $GlobalRole = "Ruolo globale";
 $langNomOutilTodo = "Gestisci la lista delle cose da fare";
 $langNomPageAdmin = "Amministrazione";
@@ -494,7 +493,7 @@ $ErrorsWhenImportingFile = "Errore nell\'importazione del file";
 $ServiceActivated = "Servizio attivato";
 $ActivateExtension = "Attiva i servizi";
 $InvalidExtension = "Estensione non valida";
-$VersionCheckExplanation = "Per attivare il controllo automatico della versione è necessario registrare il campus su dokeos.com. L\'informazione trasmessa cliccando sul pulsante sarà usata solo internamente al sistema e i dati verranno pubblicati in modo aggregato (numero totale di piattaforme installate, corsi totali, studenti totali...) Vedi <a href=\"http://www.dokeos.com/stats/\"> http://www.dokeos.com/stats/</a>. La registrazione implica la comparsa del nome del campus nell\'elenco internazionale (<a href=\"http://www.dokeos.com/community.php.\">http://www.dokeos.com/community.php.</a>.
+$VersionCheckExplanation = "Per attivare il controllo automatico della versione è necessario registrare il campus su dokeos.com. L\'informazione trasmessa cliccando sul pulsante sarà usata solo internamente al sistema e i dati verranno pubblicati in modo aggregato (numero totale di piattaforme installate, corsi totali, studenti totali...) Vedi <a href=\"http://www.dokeos.com/stats/\"> http://www.dokeos.com/stats/</a>. La registrazione implica la comparsa del nome del campus nell\'elenco internazionale (<a href=\"http://www.dokeos.com/community.php\">http://www.dokeos.com/community.php</a>.
 Se non vuoi che il nome del campus compaia nell\'elenco devi indicarlo nel pulsante qui sotto.
 Non ci sono altri moduli da riempire, si tratta solo di cliccare sul pulsante.";
 $AfterApproval = "Dopo l\'approvazione";
@@ -608,6 +607,7 @@ $YouWillSoonReceiveMailFromCoach = "Tra non molto riceverai una e-mail dal tuo t
 $SlideSize = "Dimensione delle diapositive";
 $EphorusPlagiarismPrevention = "Prevenzione da plagio EPhorus ";
 $CourseTeachers = "Docenti del corso";
+$UnknownTeacher = "Docente non riconosciuto";
 $HideDLTTMarkup = "Nascondi i marcatori di DLTT";
 $ListOfCoursesOfSession = "Elenco dei corsi della sessione";
 $UnsubscribeSelectedUsersFromSession = "Cancella l\'iscrizione degli utenti selezionati dalla sessione";
@@ -649,8 +649,18 @@ $EphorusDescription = "Attiva il sistema antiplagio Ephorus attivandolo contratt
 $EphorusLeadersInAntiPlagiarism = "Ephorus sistema antiplagio";
 $EphorusClickHereForInformationsAndPrices = "Clicca per informazioni e prezzi";
 $NameOfTheSession = "Nome della sessione";
+$NoSessionsForThisUser = "L\'utente non è iscritto ad una sessione";
 $DisplayCategoriesOnHomepageTitle = "Mostra le categorie nella home page";
 $DisplayCategoriesOnHomepageComment = "L\'opzione permetterà di mostrare o nascondere le categorie di corso sulla pagina di accesso del portale";
 $ShowTabsTitle = "Etichette nell\'intestazione";
 $ShowTabsComment = "Seleziona le etichette visibili nell\'intestazione. Le etichette selezionate appariranno, se necessario, nella parte destra della home page del campus o del corso.";
+$DefaultForumViewTitle = "Vista del forum per default";
+$DefaultForumViewComment = "L\'opzione di visualizzazione di default per un nuovo forum. Ciascun forum può avere un diverso tipo di visualizzazione.";
+$ShowTabsTitle = "Separatore";
+$ShowTabsComment = "Quale separatore deve essere mostrato tra quelli che seguono?";
+$NoCoursesForThisSession = "La sessione non ha corsi";
+$NoUsersForThisSession = "La sessione non ha corsisti";
+$LastNameMandatory = "Il cognome è obbligatorio";
+$FirstNameMandatory = "Il nome è obbligatorio";
+$EmailMandatory = "L\'email è obbligatoria";
 ?>

@@ -158,7 +158,6 @@ $UsersNumber = "Po&#269;et uživatel&#367;";
 $PageAfterLoginTitle = "Stránka po p&#345;ihlášení";
 $PageAfterLoginComment = "Stránka kterou vidí p&#345;ipojený uživatel";
 $DokeosAdminWebLinks = "Dokeos Web odkazy";
-$ParticipateInCommunityDevelopment = "Ú&#269;astnit se v Community Development (rozvoji komunity)";
 $GlobalRole = "Globální Role";
 $langNomOutilTodo = "Spravovat seznam pracovních úkol&#367; (Todo)";
 $langNomPageAdmin = "Administrace";

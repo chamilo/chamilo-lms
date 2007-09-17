@@ -165,4 +165,9 @@ $DeleteSurveyQuestion = "Tem certeza que deseja apagar esta questão?";
 $YouAlreadyFilledThisSurvey = "Você já preencheu este questionário. Obrigado!";
 $ClickHereToAnswerTheSurvey = "Clique aqui para responder ao questionário";
 $OrCopyPasteTheFollowingUrl = "ou copiar e colar o seguinte endereço:";
+$UnknowUser = "Usuário desconhecido";
+$MoveDown = "Mover para baixo";
+$MoveUp = "Mover para cima";
+$HaveAnswered = "responderam";
+$WereInvited = "foram convidados";
 ?>

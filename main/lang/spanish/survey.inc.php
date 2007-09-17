@@ -165,6 +165,9 @@ $DeleteSurveyQuestion = "¿ Está seguro de que quiere eliminar esta pregunta ?";
 $YouAlreadyFilledThisSurvey = "Ya ha rellenado esta encuesta";
 $ClickHereToAnswerTheSurvey = "Haga clic aquí para contestar la encuesta";
 $OrCopyPasteTheFollowingUrl = "o copie y pegue la siguiente url:";
+$UnknowUser = "Usuario desconocido";
 $MoveDown = "Mover abajo";
 $MoveUp = "Mover arriba";
+$HaveAnswered = "han contestado";
+$WereInvited = "fueron invitados";
 ?>

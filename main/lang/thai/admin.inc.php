@@ -153,7 +153,6 @@ $langLimitUsersListDefaultMax = "แสดงจำนวนสมาชิกในรายการแถบเลื่อนไว้มากที่สุด";
 $PageAfterLoginTitle = "หน้าที่แสดงเมื่อเข้าใช้ระบบ";
 $PageAfterLoginComment = "หน้าที่ให้เห็นเฉพาะสมาชิกที่กำลังเชื่อมต่อ";
 $DokeosAdminWebLinks = "เชื่อมโยงเว็ป Dokeos ";
-$ParticipateInCommunityDevelopment = "เข้าร่วมกลุ่มพัฒนาระบบ";
 $GlobalRole = "Global Role";
 $langNomOutilTodo = "สิ่งควรปรับปรุง";
 $langNomPageAdmin = "การบริหารจัดการระบบ";

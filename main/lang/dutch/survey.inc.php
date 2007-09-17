@@ -165,4 +165,9 @@ $DeleteSurveyQuestion = "Wilt u deze vraag zeker verwijderen?";
 $YouAlreadyFilledThisSurvey = "U heeft deze enquête reeds ingevuld";
 $ClickHereToAnswerTheSurvey = "Klik hier om de enquete in te vullen";
 $OrCopyPasteTheFollowingUrl = "of kopieer en plak de volgende url:";
+$UnknowUser = "Onbekende gebruiker";
+$MoveDown = "Verplaats naar onderen";
+$MoveUp = "Verplaats naar boven";
+$HaveAnswered = "heeft geantwoord";
+$WereInvited = "zijn uitgenodigd";
 ?>

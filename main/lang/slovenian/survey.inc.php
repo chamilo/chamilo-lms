@@ -165,6 +165,9 @@ $DeleteSurveyQuestion = "Ste preprièani, da želite odstraniti vprašanje ?";
 $YouAlreadyFilledThisSurvey = "Ta vprašalnik ste predhodno že izpolnili";
 $ClickHereToAnswerTheSurvey = "Kliknite tule za izpolnjevanje vprašalnika";
 $OrCopyPasteTheFollowingUrl = "ali pa uporabite kopijo najslednjega URL naslova :";
+$UnknowUser = "Neznan uporabnik";
 $MoveDown = "Premakni dol";
 $MoveUp = "Premakni gor";
+$HaveAnswered = "je odgovorilo";
+$WereInvited = "je bilo povabljenih";
 ?>

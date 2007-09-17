@@ -172,4 +172,9 @@ $NewExercise = "Nuovo Test";
 $CreateANewLink = "Nuovo collegamento";
 $CreateANewForum = "Nuovo forum";
 $LinkAdd = "Aggiungi collegamento";
+$WoogieConversionPowerPoint = "Woogie: conversione da elaboratore testi";
+$WelcomeWoogieSubtitle = "Converte in percorso un documento (ad es. Word)";
+$WelcomeWoogieConverter = "Benvenuti su Woogie<ul type=\\\"1\\\"><li>Scegli un file .doc, .sxw, .odt<li>Caricalo su Woogie per convertirlo in percorso SCORM<li>Una volta effettuata la conversione puoi aggiungere commenti audio, test o altre attività</ul>";
+$WoogieError = "Errore nella conversione del documento, fai attenzione ai caratteri speciali nel nome del file.";
+$WordConvert = "Conversione da Word";
 ?>

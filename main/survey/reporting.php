@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 13016 2007-09-13 14:08:32Z elixir_julian $
+* 	@version $Id: reporting.php 13041 2007-09-17 09:52:01Z elixir_inter $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -811,7 +811,26 @@ function display_complete_report_row($possible_answers, $answers_of_user, $user,
 {
 	$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 	echo '<tr>';
-	echo '		<th><a href="'.api_get_self().'?action=userreport&survey_id='.$_GET['survey_id'].'&user='.$user.'">'.$user.'</a></th>'; // the user column
+	
+	if(intval($user)!==0)
+	{
+		$sql = 'SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER).' WHERE user_id='.intval($user);
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		if($row = mysql_fetch_array($rs, MYSQL_ASSOC))
+		{
+			$user_displayed = $row['lastname'].' '.$row['firstname'];
+		}
+		else
+		{
+			$user_displayed = '-';
+		}
+		echo '		<th><a href="'.api_get_self().'?action=userreport&survey_id='.$_GET['survey_id'].'&user='.$user.'">'.$user_displayed.'</a></th>'; // the user column
+	}
+	else
+	{
+		echo '		<th>'.$user.'</th>'; // the user column
+	}
+	
 
 	foreach ($possible_answers as $question_id=>$possible_option)
 	{

@@ -65,7 +65,8 @@ if(isset($_POST['activeExtension'])){
 					
 					if(!empty($_POST['visioconference_url']))
 					{
-						$sql = 'INSERT INTO '.$row['db_name'].'.'.TABLE_TOOL_LIST.' SET 
+						$tool_table = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
+						$sql = 'INSERT INTO '.$tool_table.' SET 
 								name="'.TOOL_VISIO_CONFERENCE.'",
 								link="conference/index.php?type=conference",
 								image="visio.gif",
@@ -79,7 +80,7 @@ if(isset($_POST['activeExtension'])){
 					}
 					if(!empty($_POST['visioclassroom_url']))
 					{
-						$sql = 'INSERT INTO '.$row['db_name'].'.'.TABLE_TOOL_LIST.' SET 
+						$sql = 'INSERT INTO '.$tool_table.' SET 
 								name="'.TOOL_VISIO_CLASSROOM.'",
 								link="conference/index.php?type=classroom",
 								image="visio.gif",

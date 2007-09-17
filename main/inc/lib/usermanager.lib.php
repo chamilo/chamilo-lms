@@ -75,26 +75,26 @@ class UserManager
 		//$password = "PLACEHOLDER";
 		$password = ($userPasswordCrypted ? md5($password) : $password);
 		$sql = "INSERT INTO $table_user
-					                SET lastname = '".mysql_real_escape_string($lastName)."',
-					                firstname = '".mysql_real_escape_string($firstName)."',
-					                username = '".mysql_real_escape_string($loginName)."',
-					                status = '".mysql_real_escape_string($status)."',
-					                password = '".mysql_real_escape_string($password)."',
-					                email = '".mysql_real_escape_string($email)."',
-					                official_code	= '".mysql_real_escape_string($official_code)."',
-					                picture_uri 	= '".mysql_real_escape_string($picture_uri)."',
-					                creator_id  	= '".mysql_real_escape_string($creator_id)."',
-					                auth_source = '".mysql_real_escape_string($auth_source)."',
-				                    phone = '".mysql_real_escape_string($phone)."',
-				                    language = '".mysql_real_escape_string($language)."', 
+					                SET lastname = '".Database::escape_string($lastName)."',
+					                firstname = '".Database::escape_string($firstName)."',
+					                username = '".Database::escape_string($loginName)."',
+					                status = '".Database::escape_string($status)."',
+					                password = '".Database::escape_string($password)."',
+					                email = '".Database::escape_string($email)."',
+					                official_code	= '".Database::escape_string($official_code)."',
+					                picture_uri 	= '".Database::escape_string($picture_uri)."',
+					                creator_id  	= '".Database::escape_string($creator_id)."',
+					                auth_source = '".Database::escape_string($auth_source)."',
+				                    phone = '".Database::escape_string($phone)."',
+				                    language = '".Database::escape_string($language)."', 
 				                    registration_date = now(),
-				                    expiration_date = '".mysql_real_escape_string($expiration_date)."',
-									active = '".mysql_real_escape_string($active)."'";
+				                    expiration_date = '".Database::escape_string($expiration_date)."',
+									active = '".Database::escape_string($active)."'";
 		$result = api_sql_query($sql);
 		if ($result)
 		{
 			//echo "id returned";
-			return mysql_insert_id();
+			return Database::get_last_insert_id();
 		}
 		else
 		{
@@ -116,11 +116,11 @@ class UserManager
 		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		while ($course = mysql_fetch_object($res))
+		while ($course = Database::fetch_object($res))
 		{
 			$sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".$course->course_code."'";
 			$res2 = api_sql_query($sql,__FILE__,__LINE__);
-			if (mysql_num_rows($res2) == 1)
+			if (Database::num_rows($res2) == 1)
 			{
 				return false;
 			}
@@ -148,7 +148,7 @@ class UserManager
 		// Unsubscribe the user from all groups in all his courses
 		$sql = "SELECT * FROM $table_course c, $table_course_user cu WHERE cu.user_id = '".$user_id."' AND c.code = cu.course_code";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		while ($course = mysql_fetch_object($res))
+		while ($course = Database::fetch_object($res))
 		{
 			$table_group = Database :: get_course_table(TABLE_GROUP_USER, $course->db_name);
 			$sql = "DELETE FROM $table_group WHERE user_id = '".$user_id."'";
@@ -213,29 +213,29 @@ class UserManager
 		global $userPasswordCrypted;
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "UPDATE $table_user SET
-				lastname='".mysql_real_escape_string($lastname)."',
-				firstname='".mysql_real_escape_string($firstname)."',
-				username='".mysql_real_escape_string($username)."',";
+				lastname='".Database::escape_string($lastname)."',
+				firstname='".Database::escape_string($firstname)."',
+				username='".Database::escape_string($username)."',";
 		if(!is_null($password))
 		{
 			$password = $userPasswordCrypted ? md5($password) : $password;
-			$sql .= " password='".mysql_real_escape_string($password)."',";
+			$sql .= " password='".Database::escape_string($password)."',";
 		}
 		if(!is_null($auth_source))
 		{
-			$sql .=	" auth_source='".mysql_real_escape_string($auth_source)."',";
+			$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
 		}
 		$sql .=	"
-				email='".mysql_real_escape_string($email)."',
-				status='".mysql_real_escape_string($status)."',
-				official_code='".mysql_real_escape_string($official_code)."',
-				phone='".mysql_real_escape_string($phone)."',
-				picture_uri='".mysql_real_escape_string($picture_uri)."',
-				expiration_date='".mysql_real_escape_string($expiration_date)."',
-				active='".mysql_real_escape_string($active)."'";
+				email='".Database::escape_string($email)."',
+				status='".Database::escape_string($status)."',
+				official_code='".Database::escape_string($official_code)."',
+				phone='".Database::escape_string($phone)."',
+				picture_uri='".Database::escape_string($picture_uri)."',
+				expiration_date='".Database::escape_string($expiration_date)."',
+				active='".Database::escape_string($active)."'";
 		if(!is_null($creator_id))
 		{
-			$sql .= ", creator_id='".mysql_real_escape_string($creator_id)."'";
+			$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
 		}
 		$sql .=	" WHERE user_id='$user_id'";
 		return api_sql_query($sql,__FILE__,__LINE__);
@@ -251,7 +251,7 @@ class UserManager
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT username FROM $table_user WHERE username = '".addslashes($username)."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		return mysql_num_rows($res) == 0;
+		return Database::num_rows($res) == 0;
 	}
 
 	/**
@@ -264,7 +264,7 @@ class UserManager
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql_query = "SELECT * FROM $user_table";
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
-		while ($result = mysql_fetch_array($sql_result))
+		while ($result = Database::fetch_array($sql_result))
 		{
 			$return_array[] = $result;
 		}
@@ -321,7 +321,7 @@ class UserManager
 		$sql_query = "SELECT * FROM $user_table a, $user_course_table b where a.user_id=b.user_id AND b.status=1 AND b.course_code='$course_id'";
 		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 		echo "<select name=\"author\">";
-		while ($result = mysql_fetch_array($sql_result))
+		while ($result = Database::fetch_array($sql_result))
 		{
 			if($sel_teacher==$result[user_id]) $selected ="selected";
 			echo "\n<option value=\"".$result[user_id]."\" $selected>".$result[firstname]."</option>";

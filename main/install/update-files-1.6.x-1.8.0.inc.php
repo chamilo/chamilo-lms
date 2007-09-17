@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 12809 2007-07-30 21:44:36Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 13054 2007-09-17 22:09:38Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,7 +74,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	$sql = "SELECT * FROM course";
 	error_log('Getting courses for files updates: '.$sql,0);
 	$result=mysql_query($sql);
-
+	
 	$perm = api_get_setting('permissions_for_new_directories');
 	$perm = octdec(!empty($perm)?$perm:'0770');
 	
@@ -82,20 +82,18 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		
 		$currentCourseRepositorySys = $sys_course_path.$courses_directories["directory"]."/";
 		$db_name = $courses_directories["db_name"];
-		if(!is_dir($currentCourseRepositorySys)){
-			error_log('Directory '.$currentCourseRepositorySys.' does not exist. Skipping.',0);
+		$origCRS = $updatePath.'courses/'.$courses_directories["directory"];
+
+		if(!is_dir($origCRS)){
+			error_log('Directory '.$origCRS.' does not exist. Skipping.',0);
 			continue;	
 		}
 		//move everything to the new hierarchy (from old path to new path)
-		error_log('Renaming '.$updatePath.'courses/'.$courses_directories["directory"].' to '.$sys_course_path.$courses_directories["directory"],0);
-		rename($updatePath.'courses/'.$courses_directories["directory"],$sys_course_path.$courses_directories["directory"]);
-		
+		error_log('Renaming '.$origCRS.' to '.$sys_course_path.$courses_directories["directory"],0);
+		rename($origCRS,$sys_course_path.$courses_directories["directory"]);
 		error_log('Creating dirs in '.$currentCourseRepositorySys,0);
-		
-		
-		
+
 		//FOLDER DOCUMENT
-		
 			//document > audio
 			if(!is_dir($currentCourseRepositorySys."document/audio")){
 				mkdir($currentCourseRepositorySys."document/audio",$perm);

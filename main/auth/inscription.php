@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 13048 2007-09-17 15:08:32Z yannoo $
+// $Id: inscription.php 13049 2007-09-17 15:10:42Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,6 +76,7 @@ $form->addElement('text', 'username', get_lang('UserName'), array('size' => 20))
 $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('username', get_lang('UsernameWrong'), 'username');
 $form->addRule('username', get_lang('UserTaken'), 'username_available');
+$form->addRule('username', '', 'maxlength',20);
 //	PASSWORD
 $form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 40));
 $form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 40));

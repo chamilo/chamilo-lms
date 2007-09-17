@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 12889 2007-08-12 19:21:05Z yannoo $
+* 	@version $Id: exercise_result.php 13045 2007-09-17 12:57:17Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -41,6 +41,10 @@ if($_GET['origin']=='learnpath')
 {
 	require_once ('../newscorm/learnpath.class.php');
 	require_once ('../newscorm/learnpathItem.class.php');
+	require_once ('../newscorm/scorm.class.php');
+	require_once ('../newscorm/scormItem.class.php');
+	require_once ('../newscorm/aicc.class.php');
+	require_once ('../newscorm/aiccItem.class.php');
 }
 
 // answer types

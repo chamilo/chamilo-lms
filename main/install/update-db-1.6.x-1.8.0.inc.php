@@ -462,9 +462,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	{
 		if ($singleDbForm)
 		{
-			$dbStatsForm = $dbNameForm;
-			$dbScormForm = $dbNameForm;
-			$dbUserForm = $dbNameForm;
+			if(empty($dbStatsForm)) $dbStatsForm = $dbNameForm;
+			if(empty($dbScormForm)) $dbScormForm = $dbNameForm;
+			if(empty($dbUserForm)) $dbUserForm = $dbNameForm;
 		}
 		//deal with migrate-db-1.6.x-1.8.0-post.sql
 		//get the main queries list (m_q_list)

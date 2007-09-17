@@ -122,7 +122,7 @@ if($_POST['step2_install'] || $_POST['step2_update'])
 		else
 		{
 			$emptyUpdatePath = false;
-			if($_POST['updatePath'][strlen($_POST['updatePath'])-1] != '/')
+			if(substr($_POST['updatePath'],-1) != '/')
 			{
 				$_POST['updatePath'].='/';
 			}
@@ -421,11 +421,31 @@ elseif($_POST['step5'])
 	<?php echo get_lang('DBPassword').' : '.$dbPassForm; ?><br/>
 	<?php if(!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br/>'; ?>
 	<?php echo get_lang('MainDB').' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br/>
-	<?php if(!$singleDbForm) { ?>
-		<?php echo get_lang('StatDB').' : <b>'.$dbStatsForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br/>
-		<?php echo get_lang('ScormDB').' : <b>'.$dbScormForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br/>
-		<?php echo get_lang('UserDB').' : <b>'.$dbUserForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br/>
-	<?php } ?>
+	<?php 
+	if(!$singleDbForm) 
+	{
+		echo get_lang('StatDB').' : <b>'.$dbStatsForm.'</b>';
+		if($installType == 'new')
+		{
+			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
+		}
+		echo '<br />';
+		
+		echo get_lang('ScormDB').' : <b>'.$dbScormForm.'</b>';
+		if($installType == 'new')
+		{
+			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
+		}
+		echo '<br />';
+		
+		echo get_lang('UserDB').' : <b>'.$dbUserForm.'</b>';
+		if($installType == 'new')
+		{
+			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
+		}
+		echo '<br />';
+	}
+	?>
 	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm?$langYes:$langNo); ?><br/>
 	<?php echo get_lang('SingleDb').' : '.($singleDbForm?$langOne:$langSeveral); ?><br/><br/>
 

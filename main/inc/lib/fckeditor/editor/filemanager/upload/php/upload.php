@@ -138,6 +138,17 @@ if ( is_file( $sServerDir.$sFileName ) ){
 		$sFileName = $base.'_'.$counter.$ext;
 	}
 }
+
+if(!is_dir($sServerDir))
+{
+	mkdir($sServerDir);
+}
+if(!is_dir($sserverWebath))
+{
+	mkdir($sserverWebath);
+}
+
+
 if(!move_uploaded_file( $oFile['tmp_name'], $sServerDir.$sFileName )) $sErrorNumber = '203' ; //check php.ini setting
 	
 if ( is_file( $sServerDir.$sFileName ) )

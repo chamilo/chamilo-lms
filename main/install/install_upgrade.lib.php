@@ -197,9 +197,9 @@ function write_dokeos_config_file($path)
 	$config['{DATABASE_GLUE}'] = ($singleDbForm ? '_' : '`.`');
 	$config['{DATABASE_PREFIX}'] = $dbPrefixForm;
 	$config['{DATABASE_MAIN}'] = $dbNameForm;
-	$config['{DATABASE_STATS}'] = ($singleDbForm ? $dbNameForm : $dbStatsForm);
-	$config['{DATABASE_SCORM}'] = ($singleDbForm ? $dbNameForm : $dbScormForm);
-	$config['{DATABASE_PERSONAL}'] =($singleDbForm ?  $dbNameForm : $dbUserForm);
+	$config['{DATABASE_STATS}'] = (($singleDbForm && empty($dbStatsForm)) ? $dbNameForm : $dbStatsForm);
+	$config['{DATABASE_SCORM}'] = (($singleDbForm && empty($dbScormForm)) ? $dbNameForm : $dbScormForm);
+	$config['{DATABASE_PERSONAL}'] =(($singleDbForm && empty($dbUserForm)) ?  $dbNameForm : $dbUserForm);
 	$config['{ROOT_WEB}'] = $urlForm;
 	$config['{ROOT_SYS}'] = str_replace('\\', '/', $rootSys);
 	$config['{URL_APPEND_PATH}'] = $urlAppendPath;

@@ -651,7 +651,7 @@ if($show == 'test'){
 			if($from>$nbrexerc)
 			{
 				$from = $from - $nbrexerc;
-			  $to = $limitExPage;
+			  	$to = $limitExPage;
 			}
 			else
 			{
@@ -659,6 +659,10 @@ if($show == 'test'){
 				$from = 0;
 			}
 		}
+		else{
+			$to = $limitExPage;
+		}
+		
 		if($is_allowedToEdit)
 		{
 			$sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
@@ -666,8 +670,6 @@ if($show == 'test'){
 							WHERE   d.id = ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND
 							 (d.path LIKE '%htm%' OR d.path LIKE '%html%')
 							AND   d.path  LIKE '".$uploadPath."/%/%' LIMIT $from,$to"; // only .htm or .html files listed
-			$result = api_sql_query ($sql,__FILE__,__LINE__);
-			//error_log($sql,0);
 		}
 		else
 		{
@@ -676,9 +678,11 @@ if($show == 'test'){
 								WHERE d.id = ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND
 								 (d.path LIKE '%htm%' OR d.path LIKE '%html%')
 								AND   d.path  LIKE '".$uploadPath."/%/%' AND ip.visibility='1' LIMIT $from,$to";
-			$result = api_sql_query($sql, __FILE__, __LINE__); // only .htm or .html files listed
-			//error_log($sql,0);
 		}
+
+		$result = api_sql_query ($sql,__FILE__,__LINE__);
+		//error_log($sql,0);
+		
 		while($row = Database::fetch_array($result, 'ASSOC'))
 		{
 			//error_log('hop',0);

@@ -157,7 +157,6 @@ function write_courses_htaccess_file($url_append)
  */
 function write_dokeos_config_file($path)
 {
-	global $dokeos_version;
 	global $dbHostForm;
 	global $dbUsernameForm;
 	global $dbPassForm;
@@ -176,6 +175,8 @@ function write_dokeos_config_file($path)
 	global $installType;
 	global $updatePath;
 	global $session_lifetime;
+	global $new_version;
+	global $new_version_stable;
 	$rootSys = realpath($pathForm).'/';
 	$garbageDir = realpath('../garbage/').'/';
 	//change paths if updating
@@ -208,6 +209,8 @@ function write_dokeos_config_file($path)
 	$config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
 	$config['{ENCRYPT_PASSWORD}'] = trueFalse($encryptPassForm);
 	$config['{SESSION_LIFETIME}'] = $session_lifetime;
+	$config['{NEW_VERSION}'] = $new_version;
+	$config['{NEW_VERSION_STABLE}'] = trueFalse($new_version_stable);
 	foreach ($config as $key => $value)
 	{
 		$content = str_replace($key, $value, $content);

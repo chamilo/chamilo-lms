@@ -90,20 +90,20 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	{
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
-	@mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
+	$res = @mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
 
 	//if error on connection to the database, show error and exit
-	if (mysql_errno() > 0)
+	if ($res === false)
 	{
-		$no = mysql_errno();
-		$msg = mysql_error();
+		//$no = mysql_errno();
+		//$msg = mysql_error();
 
-		echo '<hr>['.$no.'] - '.$msg.'<hr>
-								'.get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br><br>
-								'.get_lang('PleaseCheckTheseValues').' :<br><br>
-							    <b>'.get_lang('DBHost').'</b> : '.$dbHostForm.'<br>
-								<b>'.get_lang('DBLogin').'</b> : '.$dbUsernameForm.'<br>
-								<b>'.get_lang('DBPassword').'</b> : '.$dbPassForm.'<br><br>
+		//echo '<hr>['.$no.'] - '.$msg.'<hr>';
+		echo					get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />' .
+				'				'.get_lang('PleaseCheckTheseValues').' :<br /><br />
+							    <b>'.get_lang('DBHost').'</b> : '.$dbHostForm.'<br />
+								<b>'.get_lang('DBLogin').'</b> : '.$dbUsernameForm.'<br />
+								<b>'.get_lang('DBPassword').'</b> : '.$dbPassForm.'<br /><br />
 								'.get_lang('PleaseGoBackToStep').' '. (defined('DOKEOS_INSTALL') ? '3' : '1').'.
 							    <p><input type="submit" name="step'. (defined('DOKEOS_INSTALL') ? '3' : '1').'" value="&lt; '.get_lang('Back').'"></p>
 							    </td></tr></table></form></body></html>';

@@ -51,7 +51,7 @@ api_session_start($already_installed);
 
 if (!$already_installed)
 {
-	require('installedVersion.inc.php');
+	//require('installedVersion.inc.php');
 	$error_message = <<<EOM
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -77,7 +77,7 @@ if (!$already_installed)
 			</div>
 
 			<div id="footer">
-				<div class="copyright">Platform <a href="http://www.dokeos.com"> Dokeos $dokeos_version</a> &copy; 2006 </div>
+				<div class="copyright">Platform <a href="http://www.dokeos.com"> Dokeos </a> &copy; 2006 </div>
 				&nbsp;
 			</div>
 		</body>

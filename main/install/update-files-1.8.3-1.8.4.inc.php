@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.8.3-1.8.4.inc.php 13056 2007-09-18 03:54:42Z yannoo $
+<?php //$Id: update-files-1.8.3-1.8.4.inc.php 13057 2007-09-18 04:01:59Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -45,18 +45,35 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	// Edit the Dokeos config file
 	$file = file('../inc/conf/configuration.php');
 	$fh = fopen('../inc/conf/configuration.php','w');
+	$found_version = false;
+	$found_stable = false;
 	foreach($file as $line)
 	{
 		if(stristr($line,'$_configuration[\'dokeos_version\']'))
 		{
-			$line = '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';';
+			$found_version = true;
+			$line = '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n";
 		}
 		elseif(stristr($line,'$_configuration[\'dokeos_version\']'))
 		{
-			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';';
+			$found_version = true;
+			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n";
+		}
+		elseif(stristr($line,'?>'))
+		{
+			//ignore the line
 		}
 		fwrite($fh,$line);
 	}
+	if(!$found_version)
+	{
+		fwrite($fh,'$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n");
+	}
+	if(!$found_stable)
+	{
+		fwrite($fh,'$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n");		
+	}
+	fwrite($fh,'?>');
 	fclose($fh);
 }
 else

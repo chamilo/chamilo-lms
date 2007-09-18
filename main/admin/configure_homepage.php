@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 13044 2007-09-17 12:32:11Z elixir_julian $
+<?php // $Id: configure_homepage.php 13065 2007-09-18 08:08:58Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -179,13 +179,16 @@ if(!empty($action))
 				// Filter
 				$notice_title=trim(strip_tags(stripslashes($_POST['notice_title'])));
 				$notice_text=trim(str_replace(array("\r","\n"),array("","<br />"),strip_tags(stripslashes($_POST['notice_text']),'<a>')));	
-				if(empty($notice_title))
+				/*if(empty($notice_title))
 				{
 					$errorMsg=get_lang('PleaseEnterNoticeTitle');
 				}
 				elseif(empty($notice_text))
 				{
 					$errorMsg=get_lang('PleaseEnterNoticeText');
+				}*/
+				if(empty($notice_title) || empty($notice_text)){
+					$errorMsg=get_lang('NoticeWillBeNotDisplayed');
 				}
 				// Write
 				if(file_exists($homep.$noticef.'_'.$lang.$ext))
@@ -193,7 +196,12 @@ if(!empty($action))
 					if(is_writable($homep.$noticef.'_'.$lang.$ext))
 					{
 						$fp=fopen($homep.$noticef.'_'.$lang.$ext,"w");
-						fputs($fp,"<b>$notice_title</b><br />\n$notice_text");
+						if($errorMsg==''){
+							fputs($fp,"<b>$notice_title</b><br />\n$notice_text");
+						}
+						else{
+							fputs($fp,"");
+						}
 						fclose($fp);
 					}
 					else
@@ -626,15 +634,18 @@ switch($action){
 		?>
 		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
 		<input type="hidden" name="formSent" value="1"/>
-		<table border="0" cellpadding="5" cellspacing="0">
+		
 		<?php
 		if(!empty($errorMsg))
 		{
-			echo '<tr><td colspan="2">';
-			Display::display_normal_message($errorMsg); //main API
-			echo '</td></tr>';
+			//echo '<tr><td colspan="2">';
+			Display::display_normal_message($errorMsg);
+			//echo '</td></tr>';
 		}
-		?>		
+		
+		?>
+		<table border="0" cellpadding="5" cellspacing="0">
+		<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
 		<tr>
 		  <td nowrap="nowrap"><?php echo get_lang('NoticeTitle'); ?> :</td>
 		  <td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo htmlentities($notice_title); ?>" style="width: 350px;"/></td>

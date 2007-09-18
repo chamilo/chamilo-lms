@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 12875 2007-08-06 12:26:55Z pcool $
+* 	@version $Id: index.php 13066 2007-09-18 08:10:04Z elixir_julian $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -426,21 +426,24 @@ function display_anonymous_right_menu()
 		echo "</div>";
 	}
 
-/**** use this comment to hide notice file section from right menu ****
 
-	echo '<div class="note">';
+	
 	// includes for any files to be displayed below anonymous right menu
-	if(!file_exists('home/home_notice_'.$user_selected_language.'.html'))
+	if(!file_exists('home/home_notice_'.$user_selected_language.'.html') && file_get_contents('home/home_notice.html')!='')
 	{
+		echo '<div class="note">';
 		include ('home/home_notice.html');
+		echo '</div>';
 	}
-	else
+	elseif(file_exists('home/home_notice_'.$user_selected_language.'.html') && file_get_contents('home/home_notice_'.$user_selected_language.'.html')!='')
 	{
+		echo '<div class="note">';
 		include('home/home_notice_'.$user_selected_language.'.html');
+		echo '</div>';
 	}
-	echo '</div>';
+	
 
-**** end of hide various right menu items on anonymous right menu ****/
+
 }
 
 /**

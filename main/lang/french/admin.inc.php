@@ -647,4 +647,6 @@ $NoUsersForThisSession = "Pas d\'utilisateurs pour cette session";
 $LastNameMandatory = "Le nom de famille doit être obligatoirement renseigné";
 $FirstNameMandatory = "Le prénom doit être obligatoirement renseigné";
 $EmailMandatory = "L\'email doit être obligatoirement renseigné";
+$NoticeWillBeNotDisplayed = "L\'avis ne sera pas affiché sur la page d\'accueil";
+$LetThoseFieldsEmptyToHideTheNotice = "Pour ne pas afficher la notice, laissez ces champs vides";
 ?>

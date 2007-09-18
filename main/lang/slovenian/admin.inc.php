@@ -662,4 +662,5 @@ $NoUsersForThisSession = "V tej seji ni uporabnikov";
 $LastNameMandatory = "Polje Priimek ne more biti prazno.";
 $FirstNameMandatory = "Polje Ime ne more biti prazno.";
 $EmailMandatory = "Polje e-pošte ne more biti prazno.";
+$NoticeWillBeNotDisplayed = "Opozorilo ne bo prikazano na domaèi strani portala.";
 ?>

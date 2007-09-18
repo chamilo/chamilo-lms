@@ -73,6 +73,14 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
 		return false;
 }
 
+
+function generate_course_code($course_title){
+	$wantedCode = strtr($course_title, "�����������������������������������������������������������", "AAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
+	$wantedCode = ereg_replace("[^A-Z0-9]", "", strtoupper($wantedCode));
+	return $wantedCode;
+}
+
+
 /**
  *	Defines the four needed keys to create a course based on several parameters.
  *	@return array with the needed keys ["currentCourseCode"], ["currentCourseId"], ["currentCourseDbName"], ["currentCourseRepository"]
@@ -91,10 +99,10 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 
 	$wantedCode = ereg_replace("[^A-Z0-9]", "", strtoupper($wantedCode));
 
-	if(empty ($wantedCode))
+	/*if(empty ($wantedCode))
 	{
-		$wantedCode = "CL";
-	}
+		$wantedCode = generate_course_code($wantedCode);
+	}*/
 
 	$keysCourseCode = $wantedCode;
 

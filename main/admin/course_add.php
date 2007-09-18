@@ -1,5 +1,5 @@
 <?php
-// $Id: course_add.php 12612 2007-06-15 13:37:31Z elixir_julian $
+// $Id: course_add.php 13069 2007-09-18 09:26:22Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -75,7 +75,7 @@ while($obj = mysql_fetch_object($res))
 }
 // Build the form
 $form = new FormValidator('update_course');
-$form->add_textfield( 'visual_code', get_lang('CourseCode'),true,array('size'=>'20','maxlength'=>20));
+$form->add_textfield( 'visual_code', get_lang('CourseCode'),false,array('size'=>'20','maxlength'=>20));
 $form->applyFilter('visual_code','strtoupper');
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',20);
 $form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers);
@@ -133,6 +133,9 @@ if( $form->validate())
 	if (!stristr($department_url, 'http://'))
 	{
 		$department_url = 'http://'.$department_url;
+	}
+	if(trim($code) == ''){
+		$code = generate_course_code($title);
 	}
 	$keys = define_course_keys($code, "", $_configuration['db_prefix']);
 	if (sizeof($keys))

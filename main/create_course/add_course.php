@@ -1,5 +1,5 @@
 <?php
-// $Id: add_course.php 12291 2007-05-03 17:54:20Z elixir_julian $
+// $Id: add_course.php 13069 2007-09-18 09:26:22Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -80,7 +80,7 @@ $form->add_textfield('title',get_lang('Title'),true,array('size'=>'60'));
 $form->addElement('static',null,null,get_lang('Ex'));
 $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
 $form->addElement('static',null,null, get_lang('TargetFac'));
-$form->add_textfield('wanted_code', get_lang('Code'),true,array('size'=>'20','maxlength'=>20));
+$form->add_textfield('wanted_code', get_lang('Code'),false,array('size'=>'20','maxlength'=>20));
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',20);
 $titular= &$form->add_textfield('tutor_name', get_lang('Professors'),true,array('size'=>'60'));
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
@@ -108,6 +108,11 @@ if($form->validate())
 	$category_code = $course_values['category_code'];
 	$title = $course_values['title'];
 	$course_language = $course_values['course_language'];
+	
+	if(trim($wanted_code) == ''){
+		$wanted_code = generate_course_code($title);
+	}
+	
 	$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
 	
 	$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
@@ -129,7 +134,7 @@ if($form->validate())
 			register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $_user['user_id'], $expiration_date);
 		}
 		$message = get_lang('JustCreated');
-		$message .= " <strong>".$course_values['wanted_code']."</strong>";
+		$message .= " <strong>".$visual_code."</strong>";
 		$message .= "<br/><br/>";
 		$message .= '<a href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
 		Display :: display_confirmation_message($message,false);

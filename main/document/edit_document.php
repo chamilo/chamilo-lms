@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 12809 2007-07-30 21:44:36Z yannoo $
+<?php // $Id: edit_document.php 13074 2007-09-18 16:06:35Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -59,6 +59,8 @@ $language_file = 'document';
 ------------------------------------------------------------------------------
 */
 include('../inc/global.inc.php');
+
+$_SESSION['whereami'] = 'document/create';
 $this_section=SECTION_COURSES;
 
 include(api_get_path(LIBRARY_PATH).'fileManage.lib.php');

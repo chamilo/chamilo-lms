@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 12809 2007-07-30 21:44:36Z yannoo $
+// $Id: create_document.php 13074 2007-09-18 16:06:35Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,8 +41,9 @@
 // name of the language file that needs to be included 
 $language_file = 'document';
 
-
 include ('../inc/global.inc.php');
+
+$_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[]='<script>

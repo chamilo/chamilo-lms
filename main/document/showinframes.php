@@ -1,4 +1,4 @@
-<?php // $Id: showinframes.php 12377 2007-05-11 08:56:44Z elixir_julian $ 
+<?php // $Id: showinframes.php 13074 2007-09-18 16:06:35Z elixir_inter $ 
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -54,6 +54,8 @@
 */ 
 
 include('../inc/global.inc.php');
+
+$_SESSION['whereami'] = 'document/view';
 	
 $interbreadcrumb[]= array ("url"=>"./document.php", "name"=> get_lang("Documents"));
 $nameTools = get_lang("Documents");

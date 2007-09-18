@@ -137,13 +137,23 @@ function file_to_array($filename)
  * and $configFile, and also changes these globals. This can be rewritten.
  *
  * @param 	string  $param  the parameter of which the value is returned
+ * @param	string	If we want to give the path rather than take it from POST
  * @return  string  the value of the parameter
  * @author Olivier Brouckaert
  */
-function get_config_param($param)
+function get_config_param($param,$updatePath='')
 {
 	global $configFile, $updateFromConfigFile;
-	$updatePath = realpath($_POST['updatePath']).'/';
+	//look if we already have the queried param
+	if(is_array($configFile) && isset($configFile[$param]))
+	{
+		return $configFile[$param];
+	}
+	if(empty($updatePath) && !empty($_POST['updatePath']))
+	{
+		$updatePath = $_POST['updatePath'];
+	}
+	$updatePath = realpath($updatePath).'/';
 	$updateFromInstalledVersionFile = '';
 
 	if(empty($updateFromConfigFile)) //if update from previous install was requested
@@ -152,6 +162,10 @@ function get_config_param($param)
 		if(file_exists($updatePath.'main/inc/conf/configuration.php'))
 		{
 			$updateFromConfigFile='main/inc/conf/configuration.php';
+		}
+		elseif(file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php'))
+		{
+			$updateFromConfigFile='claroline/inc/conf/claro_main.conf.php';
 		}
 		//give up recovering
 		else
@@ -164,22 +178,20 @@ function get_config_param($param)
 	{
 		$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
 	}
-	//look if we already have the queried param
-	if(is_array($configFile) && isset($configFile[$param]))
-	{
-		return $configFile[$param];
-	}
 	//the param was not found in global vars, so look into the old config file
 	elseif(file_exists($updatePath.$updateFromConfigFile))
 	{
-		$configFile=array();
-		$temp=file_to_array($updatePath.$updateFromConfigFile);
-		$val='';
+		//make sure the installedVersion file is read first so it is overwritten
+		//by the config file if the config file contains the version (from 1.8.4)
+		$temp2 = array();
 		if(file_exists($updatePath.$updateFromInstalledVersionFile))
 		{
 			$temp2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
-			$temp = array_merge($temp,$temp2);
-		}
+		}		
+		$configFile=array();
+		$temp=file_to_array($updatePath.$updateFromConfigFile);
+		$temp = array_merge($temp,$temp2);
+		$val='';
 
 		//parse the config file (TODO clarify why it has to be so complicated)
 		foreach($temp as $enreg)
@@ -352,14 +364,16 @@ function display_language_selection()
 /**
  * This function displays the requirements for installing Dokeos.
  *
- * @param unknown_type $installType
- * @param unknown_type $badUpdatePath
- * @param unknown_type $update_from_version
+ * @param string $installType
+ * @param boolean $badUpdatePath
+ * @param string The updatePath given (if given)
+ * @param array $update_from_version_8 The different subversions from version 1.8
+ * @param array	$update_from_version_6 The different subversions from version 1.6
  *
  * @author unknow
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function display_requirements($installType, $badUpdatePath, $update_from_version)
+function display_requirements($installType, $badUpdatePath, $updatePath='', $update_from_version_8=array(), $update_from_version_6=array())
 {
 	echo '<h2>'.display_step_sequence().get_lang('Requirements')."</h2>\n";
 
@@ -525,13 +539,13 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 	echo '	</div>';
 	echo '</div>';
 
-	if($installType == 'update' && (empty($_POST['updatePath']) || $badUpdatePath))
+	if($installType == 'update' && (empty($updatePath) || $badUpdatePath))
 	{
 		if($badUpdatePath)
 		{ ?>
 			<div style="color:red; background-color:white; font-weight:bold; text-align:center;">
 				<?php echo get_lang('Error');?>!<br />
-				Dokeos <?php echo implode('|',$update_from_version).get_lang('HasNotBeenFoundInThatDir'); ?>.
+				Dokeos <?php echo (isset($_POST['step2_update_6'])?implode('|',$update_from_version_6):implode('|',$update_from_version_8)).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
 			</div>
 		<?php }
 		else
@@ -542,12 +556,12 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 			<table border="0" cellpadding="5" align="center">
 			<tr>
 			<td><?php echo get_lang('OldVersionRootPath');?>:</td>
-			<td><input type="text" name="updatePath" size="50" value="<?php echo $badUpdatePath?htmlentities($_POST['updatePath']):$_SERVER['DOCUMENT_ROOT'].'/old_version/'; ?>" /></td>
+			<td><input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath))?htmlentities($updatePath):$_SERVER['DOCUMENT_ROOT'].'/old_version/'; ?>" /></td>
 			</tr>
 			<tr>
 			<td colspan="2" align="center">
 				<input type="submit" name="step1" value="&lt; <?php echo get_lang('Back');?>" />
-				<input type="submit" name="step2_update" value="<?php echo get_lang('Next');?> &gt;" />
+				<input type="submit" name="<?php echo (isset($_POST['step2_update_6'])?'step2_update_6':'step2_update_8');?>" value="<?php echo get_lang('Next');?> &gt;" />
 			</td>
 			</tr>
 			</table>
@@ -638,12 +652,15 @@ function display_requirements($installType, $badUpdatePath, $update_from_version
 
 		<?php
 		//real code
-		echo '<input type="submit" name="step2_update" value="Upgrade from Dokeos ' . implode(', ',$update_from_version) . '"';
+		echo '<input type="submit" name="step2_update_8" value="Upgrade from Dokeos ' . implode(', ',$update_from_version_8) . '"';
 		if($error) echo ' disabled="disabled"';
 		//temporary code for alpha version, disabling upgrade
 		//echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
 		//echo ' disabled="disabled"';
 		//end temp code
+		echo ' />';
+		echo '<input type="submit" name="step2_update_6" value="Upgrade from Dokeos ' . implode(', ',$update_from_version_6) . '"';
+		if($error) echo ' disabled="disabled"';
 		echo ' />';
 		echo '</p>';
 	}
@@ -712,19 +729,35 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 {
 	if($installType == 'update')
 	{
-		global $_configuration;
-		$dbHostForm=$_configuration['db_host'];
-		$dbUsernameForm=$_configuration['db_user'];
-		$dbPassForm=$_configuration['db_password'];
-		$dbPrefixForm=$_configuration['db_prefix'];
-		$enableTrackingForm=$_configuration['tracking_enabled'];
-		$singleDbForm=$_configuration['single_database'];
-		$dbNameForm=$_configuration['main_database'];
-		$dbStatsForm=$_configuration['statistics_database'];
-		$dbScormForm=$_configuration['scorm_database'];
-		$dbUserForm=$_configuration['user_personal_database'];
-
-		$dbScormExists=true;
+		global $_configuration, $update_from_version_6;
+		if(in_array($_POST['old_version'],$update_from_version_6))
+		{
+	        $dbHostForm=get_config_param('dbHost');
+            $dbUsernameForm=get_config_param('dbLogin');
+            $dbPassForm=get_config_param('dbPass');
+            $dbPrefixForm=get_config_param('dbNamePrefix');
+            $enableTrackingForm=get_config_param('is_trackingEnabled');
+            $singleDbForm=get_config_param('singleDbEnabled');
+            $dbNameForm=get_config_param('mainDbName');
+            $dbStatsForm=get_config_param('statsDbName');
+            $dbScormForm=get_config_param('scormDbName');
+            $dbScormExists=true;
+		}
+		else
+		{
+			$dbHostForm=$_configuration['db_host'];
+			$dbUsernameForm=$_configuration['db_user'];
+			$dbPassForm=$_configuration['db_password'];
+			$dbPrefixForm=$_configuration['db_prefix'];
+			$enableTrackingForm=$_configuration['tracking_enabled'];
+			$singleDbForm=$_configuration['single_database'];
+			$dbNameForm=$_configuration['main_database'];
+			$dbStatsForm=$_configuration['statistics_database'];
+			$dbScormForm=$_configuration['scorm_database'];
+			$dbUserForm=$_configuration['user_personal_database'];
+	
+			$dbScormExists=true;
+		}
 
 		if(empty($dbScormForm))
 		{

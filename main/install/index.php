@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
+	Copyright (c) 2004-2007 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
@@ -45,7 +45,7 @@
 */
 session_start();
 // Including necessary files
-require('../inc/installedVersion.inc.php');
+@include('../inc/installedVersion.inc.php');
 require('../inc/lib/main_api.lib.php');
 
 require('../lang/english/trad4all.inc.php');
@@ -76,7 +76,7 @@ if(in_array($install_language,$euro_langs))
 	header('Content-Type: text/html; charset='. $charset);
 }
 
-require_once('install_upgrade.lib.php');
+require_once('install_upgrade.lib.php'); //also defines constants
 require_once('install_functions.inc.php');
 
 // Some constants
@@ -93,8 +93,18 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
 // overriding the timelimit (for large campusses that have to be migrated)
 @set_time_limit(0);
-$update_from_version=array('1.8.3');
 
+//upgrading from any subversion of 1.6 is just like upgrading from 1.6.5 
+$update_from_version_6=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
+//upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
+$update_from_version_8=array('1.8','1.8.2','1.8.3');
+$my_old_version = '';
+if(!empty($_POST['old_version']))
+{
+	$my_old_version = $_POST['old_version'];
+}
+$new_version = '1.8.4';
+$new_version_stable = true;
 /*
 ==============================================================================
 		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT
@@ -102,8 +112,13 @@ $update_from_version=array('1.8.3');
 */
 $badUpdatePath=false;
 $emptyUpdatePath=true;
+$proposedUpdatePath = '';
+if(!empty($_POST['updatePath']))
+{
+	$proposedUpdatePath = $_POST['updatePath'];	
+}
 
-if($_POST['step2_install'] || $_POST['step2_update'])
+if($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_6'])
 {
 	if($_POST['step2_install'])
 	{
@@ -114,23 +129,25 @@ if($_POST['step2_install'] || $_POST['step2_update'])
 	else
 	{
 		$installType='update';
-		if(empty($_POST['updatePath']))
-		{
-			$_POST['step1']=1;
-		}
-		else
+		if($_POST['step2_update_8'])
 		{
 			$emptyUpdatePath = false;
-			if(substr($_POST['updatePath'],-1) != '/')
+			if(empty($_POST['updatePath']))
 			{
-				$_POST['updatePath'].='/';
+				$proposedUpdatePath = $_SERVER['DOCUMENT_ROOT'];
 			}
-			$_POST['step2']=1;
-			$badUpdatePath=false;
-			/* don't verify it to upgrade from 1.8.0 to 1.8.2
-			if(file_exists($_POST['updatePath']))
+			else
 			{
-				if(in_array(get_config_param('dokeos_version'),$update_from_version))
+				$proposedUpdatePath = $_POST['updatePath'];
+			}
+			if(substr($proposedUpdatePath,-1) != '/')
+			{
+				$proposedUpdatePath.='/';
+			}			
+			if(file_exists($proposedUpdatePath))
+			{
+				$my_old_version = get_config_param('dokeos_version',$proposedUpdatePath);
+				if(in_array($my_old_version,$update_from_version_8))
 				{
 					$_POST['step2']=1;
 				}
@@ -142,7 +159,41 @@ if($_POST['step2_install'] || $_POST['step2_update'])
 			else
 			{
 				$badUpdatePath=true;
-			}*/
+			}
+		}
+		else //step2_update_6, presumably
+		{
+			if(empty($_POST['updatePath']))
+			{
+				$_POST['step1']=1;
+			}
+			else
+			{
+				$emptyUpdatePath = false;
+				if(substr($_POST['updatePath'],-1) != '/')
+				{
+					$_POST['updatePath'].='/';
+				}
+	
+				if(file_exists($_POST['updatePath']))
+				{
+					//1.6.x
+					$my_old_version = get_config_param('clarolineVersion',$_POST['updatePath']);
+					if(in_array($my_old_version,$update_from_version_6))
+					{
+						$_POST['step2']=1;
+						$proposedUpdatePath = $_POST['updatePath'];
+					}
+					else
+					{
+						$badUpdatePath=true;
+					}
+				}
+				else
+				{
+					$badUpdatePath=true;
+				}
+			}
 		}
 	}
 }
@@ -159,11 +210,12 @@ else
 	$updateFromConfigFile=$_GET['updateFromConfigFile'];
 }
 
+/* 1.8.x
 if($installType=='update')
 {
 	include_once('../inc/conf/configuration.php');
 }
-
+*/
 if(!isset($_GET['running']))
 {
 	$dbHostForm='localhost';
@@ -245,20 +297,17 @@ else
 	}
 }
 
-
-
-
 // The Steps
 $total_steps=7;
 if (!$_POST)
 {
 	$current_step=1;
 }
-elseif (!empty($_POST['language_list']) or !empty($_POST['step1']) or (!empty($_POST['step2_update']) && ($emptyUpdatePath or $badUpdatePath)))
+elseif (!empty($_POST['language_list']) or !empty($_POST['step1']) or ((!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6'])))  && ($emptyUpdatePath or $badUpdatePath)))
 {
 	$current_step=2;
 }
-elseif (!empty($_POST['step2']) or !empty($_POST['step2_update']))
+elseif (!empty($_POST['step2']) or (!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6'])) ))
 {
 	$current_step=3;
 }
@@ -283,7 +332,7 @@ elseif (!empty($_POST['step5']))
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$dokeos_version; ?></title>
+	<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
 		@import "../css/default/default.css";
@@ -297,7 +346,7 @@ elseif (!empty($_POST['step5']))
 
 
 <div id="header">
-	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$dokeos_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').implode('|',$update_from_version); ?></div>
+	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').implode('|',$update_from_version); ?></div>
 	<div class="clear"></div>
 	<div id="header2">&nbsp;</div>
 	<div id="header3">&nbsp;</div>
@@ -322,7 +371,7 @@ elseif (!empty($_POST['step5']))
 <table cellpadding="6" cellspacing="0" border="0" width="80%" align="center">
 <tr>
   <td>
-	<input type="hidden" name="updatePath"           value="<?php if(!$badUpdatePath) echo htmlentities($_POST['updatePath']); ?>" />
+	<input type="hidden" name="updatePath"           value="<?php if(!$badUpdatePath) echo htmlentities($proposedUpdatePath); ?>" />
 	<input type="hidden" name="urlAppendPath"        value="<?php echo htmlentities($urlAppendPath); ?>" />
 	<input type="hidden" name="pathForm"             value="<?php echo htmlentities($pathForm); ?>" />
 	<input type="hidden" name="urlForm"              value="<?php echo htmlentities($urlForm); ?>" />
@@ -354,6 +403,8 @@ elseif (!empty($_POST['step5']))
 	<input type="hidden" name="userMailCanBeEmpty"   value="<?php echo htmlentities($userMailCanBeEmpty); ?>" />
 	<input type="hidden" name="encryptPassForm"      value="<?php echo htmlentities($encryptPassForm); ?>" />
 	<input type="hidden" name="session_lifetime"  value="<?php echo htmlentities($session_lifetime); ?>" />
+	<input type="hidden" name="old_version"  value="<?php echo htmlentities($my_old_version); ?>" />
+	<input type="hidden" name="new_version"  value="<?php echo htmlentities($new_version); ?>" />
 
 
 
@@ -393,10 +444,24 @@ elseif($_POST['step4'])
 		if(!empty($tmp)) $institutionForm = $tmp;
 		$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'InstitutionUrl');
 		if(!empty($tmp)) $institutionUrlForm = $tmp;
-		$urlForm = $_configuration['root_web'];
-		$encryptPassForm = get_config_param('userPasswordCrypted');
-		$allowSelfReg = get_config_param('allowSelfReg');
-		$allowSelfRegProf = get_config_param('allowSelfRegProf');
+		if(in_array($my_old_version,$update_from_version_6))
+		{   //for version 1.6
+			$urlForm = get_config_param('rootWeb');
+			$encryptPassForm = get_config_param('userPasswordCrypted');
+			$allowSelfReg = get_config_param('allowSelfReg');
+			$allowSelfRegProf = get_config_param('allowSelfRegProf');
+		}
+		else
+		{   //for version 1.8
+			$urlForm = $_configuration['root_web'];
+			$encryptPassForm = get_config_param('userPasswordCrypted');
+			$allowSelfReg = false;
+			$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'allow_registration');
+			if(!empty($tmp)) $allowSelfReg = $tmp;
+			$allowSelfRegProf = false;
+			$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'allow_registration_as_teacher');
+			if(!empty($tmp)) $allowSelfRegProf = $tmp;
+		}
 	}
 	display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm);
 }
@@ -408,18 +473,18 @@ elseif($_POST['step5'])
 	<h2><?php echo display_step_sequence().get_lang('LastCheck'); ?></h2>
 
 	<?php echo get_lang('HereAreTheValuesYouEntered');?>
-	<br/>
+	<br />
 	<b><?php echo get_lang('PrintThisPageToRememberPassAndOthers');?></b>
 
 	<blockquote>
 
-	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br/><br/>
+	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
 
-	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br/>
-	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br/>
-	<?php echo get_lang('DBPassword').' : '.$dbPassForm; ?><br/>
-	<?php if(!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br/>'; ?>
-	<?php echo get_lang('MainDB').' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br/>
+	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
+	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
+	<?php echo get_lang('DBPassword').' : '.$dbPassForm; ?><br />
+	<?php if(!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
+	<?php echo get_lang('MainDB').' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
 	<?php 
 	if(!$singleDbForm) 
 	{
@@ -429,14 +494,14 @@ elseif($_POST['step5'])
 			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
 		}
 		echo '<br />';
-		
+
 		echo get_lang('ScormDB').' : <b>'.$dbScormForm.'</b>';
 		if($installType == 'new')
 		{
 			echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
 		}
 		echo '<br />';
-		
+
 		echo get_lang('UserDB').' : <b>'.$dbUserForm.'</b>';
 		if($installType == 'new')
 		{
@@ -445,35 +510,35 @@ elseif($_POST['step5'])
 		echo '<br />';
 	}
 	?>
-	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm?$langYes:$langNo); ?><br/>
-	<?php echo get_lang('SingleDb').' : '.($singleDbForm?$langOne:$langSeveral); ?><br/><br/>
+	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm?$langYes:$langNo); ?><br />
+	<?php echo get_lang('SingleDb').' : '.($singleDbForm?$langOne:$langSeveral); ?><br /><br />
 
-	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg?$langYes:$langNo); ?><br/>
-	<?php echo get_lang('EncryptUserPass').' : '.($encryptPassForm?$langYes:$langNo); ?><br/><br/>
+	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg?$langYes:$langNo); ?><br />
+	<?php echo get_lang('EncryptUserPass').' : '.($encryptPassForm?$langYes:$langNo); ?><br /><br/>
 
-	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br/>
-	<?php echo get_lang('AdminLastName').' : '.$adminLastName; ?><br/>
-	<?php echo get_lang('AdminFirstName').' : '.$adminFirstName; ?><br/>
-	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br/>
+	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
+	<?php echo get_lang('AdminLastName').' : '.$adminLastName; ?><br />
+	<?php echo get_lang('AdminFirstName').' : '.$adminFirstName; ?><br />
+	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
 
 	<?php if($installType == 'new'): ?>
-	<?php echo get_lang('AdminLogin').' : <b>'.$loginForm; ?></b><br/>
-	<?php echo get_lang('AdminPass').' : <b>'.$passForm; ?></b><br/><br/>
+	<?php echo get_lang('AdminLogin').' : <b>'.$loginForm; ?></b><br />
+	<?php echo get_lang('AdminPass').' : <b>'.$passForm; ?></b><br /><br />
 	<?php else: ?>
-	<br/>
+	<br />
 	<?php endif; ?>
 
-	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br/>
-	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br/>
-	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br/>
-	<?php echo get_lang('DokeosURL').' : '.$urlForm; ?><br/>
+	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
+	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
+	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
+	<?php echo get_lang('DokeosURL').' : '.$urlForm; ?><br />
 
 	</blockquote>
 
 	<?php if($installType == 'new'): ?>
 	<div style="background-color:#FFFFFF">
 	<p align="center"><b><font color="red">
-	<?php echo get_lang('Warning');?> !<br/>
+	<?php echo get_lang('Warning');?> !<br />
 	<?php echo get_lang('TheInstallScriptWillEraseAllTables');?>
 	</font></b></p>
 	</div>
@@ -493,10 +558,34 @@ elseif($_POST['step6'])
 	//STEP 6 : INSTALLATION PROCESS
 	if($installType == 'update')
 	{
+		if(empty($my_old_version)){$my_old_version='1.8.3';} //we guess
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
-		include('update-db-1.8.3-1.8.4.inc.php');
-		//include('update-files-1.8.0-1.8.2.inc.php');
+		switch($my_old_version)
+		{
+			case '1.6':
+			case '1.6.0':
+			case '1.6.1':
+			case '1.6.2':
+			case '1.6.3':
+			case '1.6.4':
+			case '1.6.5':
+				include('update-db-1.6.x-1.8.0.inc.php');
+				include('update-files-1.6.x-1.8.0.inc.php');
+				//intentionally no break to continue processing
+			case '1.8':
+			case '1.8.0':
+				include('update-db-1.8.0-1.8.2.inc.php');
+				//intentionally no break to continue processing
+			case '1.8.2':
+				include('update-db-1.8.2-1.8.3.inc.php');
+				//intentionally no break to continue processing
+			case '1.8.3':
+			default:
+				include('update-db-1.8.3-1.8.4.inc.php');
+				include('update-files-1.8.3-1.8.4.inc.php');
+				break;
+		}
 	}
 	else
 	{
@@ -508,9 +597,10 @@ elseif($_POST['step6'])
 }
 elseif($_POST['step1'] || $badUpdatePath)
 {
-
 	//STEP 1 : REQUIREMENTS
-	display_requirements($installType, $badUpdatePath, $update_from_version);
+	//make sure that proposed path is set, shouldn't be necessary but...
+	if(empty($proposedUpdatePath)){$proposedUpdatePath = $_POST['updatePath'];}
+	display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8, $update_from_version_6);
 }
 else
 {
@@ -528,7 +618,7 @@ else
 </form>
 <br style="clear:both;" />
 <div id="footer">
-	<div class="copyright"><?php echo get_lang('Platform');?> <a href="http://www.dokeos.com"> Dokeos <?php echo $dokeos_version ?></a> &copy; <?php echo date('Y'); ?> </div>
+	<div class="copyright"><?php echo get_lang('Platform');?> <a href="http://www.dokeos.com"> Dokeos <?php echo $new_version ?></a> &copy; <?php echo date('Y'); ?> </div>
 	&nbsp;
 </div>
 </body>

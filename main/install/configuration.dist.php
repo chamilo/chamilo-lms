@@ -151,4 +151,8 @@ $openoffice_conf['host'] 								= 'ns6077.ovh.net';
 $openoffice_conf['port'] 								= '2002';
 $openoffice_conf['ftpuser'] 							= '****';
 $openoffice_conf['ftppasswd'] 							= '****';
+
+// Version settings
+$_configuration['dokeos_version'] 	= '{NEW_VERSION}';
+$_configuration['dokeos_stable'] 	= {NEW_VERSION_STABLE};
 ?>

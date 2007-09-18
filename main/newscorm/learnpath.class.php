@@ -3765,15 +3765,15 @@ class learnpath {
 			$menu_page = api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $_SESSION['oLP']->lp_id;
 			if(file_exists("../img/lp_" . $arrLP[$i]['item_type'] . ".png"))
 			{
-				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $arrLP[$i]['title'] . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".png', '../img/lp_" . $arrLP[$i]['item_type'] . ".png');\n";
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . stripslashes($arrLP[$i]['title']) . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".png', '../img/lp_" . $arrLP[$i]['item_type'] . ".png');\n";
 			}
 			else if(file_exists("../img/lp_" . $arrLP[$i]['item_type'] . ".gif"))
 			{
-				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $arrLP[$i]['title'] . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif');\n";
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . stripslashes($arrLP[$i]['title']) . "', '" . $menu_page . "', '', '', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif', '../img/lp_" . $arrLP[$i]['item_type'] . ".gif');\n";
 			}
 			else
 			{
-				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . $arrLP[$i]['title'] . "', '" . $menu_page . "', '', '', '../img/lp_document.png', '../img/lp_document.png');\n";
+				$return .= "\tm.add(" . $arrLP[$i]['id'] . ", " . $arrLP[$i]['parent_item_id'] . ", '" . stripslashes($arrLP[$i]['title']) . "', '" . $menu_page . "', '', '', '../img/lp_document.png', '../img/lp_document.png');\n";
 			}
 			if($menu < $arrLP[$i]['id'])
 				$menu = $arrLP[$i]['id'];

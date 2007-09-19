@@ -521,13 +521,53 @@ function api_get_cidreq()
 *	['extLink']['name']
 *	['categoryCode']
 *	['categoryName']
-*
+*	Now if the course_code is given, the returned array gives info about that
+*   particular course, not specially the current one.
 * @todo	same behaviour as api_get_user_info so that api_get_course_id becomes absolete too
 */
-function api_get_course_info()
+function api_get_course_info($course_code=null)
 {
-	global $_course;
-	return $_course;
+	if(!empty($course_code))
+	{
+		$course_code = Database::escape_string($course_code);
+		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    	$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $sql =    "SELECT `course`.*, `course_category`.`code` `faCode`, `course_category`.`name` `faName`
+                 FROM $course_table
+                 LEFT JOIN $course_cat_table
+                 ON `course`.`category_code` =  `course_category`.`code`
+                 WHERE `course`.`code` = '$course_code'";
+        $result = api_sql_query($sql,__FILE__,__LINE__);
+        $_course = array();
+        if (Database::num_rows($result)>0)
+        {
+        	global $_configuration;
+            $cData = Database::fetch_array($result);
+			$_course['id'          ]         = $cData['code'             ]; //auto-assigned integer
+			$_course['name'        ]         = $cData['title'         ];
+            $_course['official_code']         = $cData['visual_code'        ]; // use in echo
+            $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
+            $_course['path'        ]         = $cData['directory'        ]; // use as key in path
+            $_course['dbName'      ]         = $cData['db_name'           ]; // use as key in db list
+            $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
+            $_course['titular'     ]         = $cData['tutor_name'       ];
+            $_course['language'    ]         = $cData['course_language'   ];
+            $_course['extLink'     ]['url' ] = $cData['department_url'    ];
+            $_course['extLink'     ]['name'] = $cData['department_name'];
+            $_course['categoryCode']         = $cData['faCode'           ];
+            $_course['categoryName']         = $cData['faName'           ];
+
+            $_course['visibility'  ]         = $cData['visibility'];
+            $_course['subscribe_allowed']    = $cData['subscribe'];
+			$_course['unubscribe_allowed']   = $cData['unsubscribe'];
+        }
+        return $_course;			
+	}
+	else
+	{
+		global $_course;
+		return $_course;
+	}
 }
 
 /*
@@ -776,6 +816,8 @@ function api_check_password($password)
 	}
 	$passLower = strtolower($password);
 	$cptLettres = $cptChiffres = 0;
+	$consecutif = 0;
+	$codeCharPrev = 0;
 	for ($i = 0; $i < $lengthPass; $i ++)
 	{
 		$codeCharCur = ord($passLower[$i]);
@@ -1501,7 +1543,6 @@ function api_not_allowed($print_headers = false)
 	{//if the access is not authorized and there is some login information 
 	 // but the cidReq is not found, assume we are missing course data and send the user
 	 // to the user_portal
-	 //TODO deal with the no-headers case (headers already sent, so no redirection possible)
 		if(!headers_sent())
 		{
 			header('location: '.$home_url.'user_portal.php');

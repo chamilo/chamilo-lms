@@ -302,6 +302,66 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							}
 						}
 					}
+					//ensure each learnpath is present in the item_property table
+					$prefix_course = '';
+					if($singleDbForm)
+					{
+						$prefix_course = $prefix.$row_course['db_name']."_";
+					}
+
+					$sql_ip = "SELECT * FROM ".$prefix_course."item_property WHERE tool='learnpath'";
+					$res_ip = mysql_query($sql_ip);
+					$paths = array();
+					while($row_ip = mysql_fetch_array($res_ip))
+					{
+						$paths[] = $row_ip['ref'];
+					}
+					$sql_lp = "SELECT * FROM ".$prefix_course."lp";
+					$res_lp = mysql_query($sql_lp);
+	    			$tbl_tool = $prefix_course."tool";
+					while($row_lp = mysql_fetch_array($res_lp))
+					{
+						$time = date("Y-m-d H:i:s", time());
+						$vis = 'v';
+						$input = stripslashes($row_lp['name']);
+						$input = str_replace("'", "''", $input);
+						$input = str_replace('"', "''", $input);							
+						$mylink = 'newscorm/lp_controller.php?action=view&lp_id='.$row_lp['id'];
+						$sql2="SELECT * FROM $tbl_tool where (name='$input' and image='scormbuilder.gif' and link LIKE '$mylink%')";
+
+						if(in_array($row_lp['id'],$paths))
+						{
+							//the path is already in item_property, check the visibility is the
+							//same as the homepage tool's
+							$res2 = api_sql_query($sql2,__FILE__,__LINE__);
+							if(mysql_num_rows($res2)>0){
+								$row2 = mysql_fetch_array($res2);
+								$vis = $row2['visibility'];
+							}
+							$visi = array('v'=>1,'i'=>0);
+							if($visi[$vis] != $row_ip['visibility'])
+							{
+								$sql_upd = "UPDATE ".$prefix_course."item_propery SET visibility=".$visi[$vis]." WHERE tool='learnpath' AND ref='".$row_lp['id']."'";
+								$res_upd = mysql_query($sql_upd);
+							}
+						}
+						else
+						{
+							//the path is not in item_property, insert it
+							$res2 = api_sql_query($sql2,__FILE__,__LINE__);
+							if(mysql_num_rows($res2)>0){
+								$row2 = mysql_fetch_array($res2);
+								$vis = $row2['visibility'];
+							}
+							$visi = array('v'=>1,'i'=>0);
+
+							$sql_ins = "INSERT INTO ".$prefix_course."item_property " .
+									"(tool,ref,insert_date,last_edit_date,insert_user_id,lastedit_type,lastedit_user_id,visibility)" .
+									"VALUES" .
+									"('learnpath',".$row_lp['id'].",'$time','$time',1,'learnpathAdded',1,".$visi[$vis].")";
+							$res_ins = mysql_query($sql_ins);
+						}
+					}
 				}
 			}
 		}

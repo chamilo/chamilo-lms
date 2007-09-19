@@ -1605,6 +1605,26 @@ function convert_mysql_date($last_post_datetime)
 }
 
 /**
+ * Gets item visibility from the item_property table
+ * @param	array	Course properties array (result of api_get_course_info())
+ * @param	string	Tool (learnpath, document, etc)
+ * @param	int		The item ID in the given tool
+ * @return	int		-1 on error, 0 if invisible, 1 if visible 
+ */
+function api_get_item_visibility($_course,$tool,$id)
+{
+	if(!is_array($_course) or count($_course)==0 or empty($tool) or empty($id)) return -1;
+	$tool = Database::escape_string($tool);
+	$id = Database::escape_string($id);
+	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
+	$sql = "SELECT FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $id";
+	$res = api_sql_query($sql);
+	if($res === false or Database::num_rows($res)==0) return -1;
+	$row = Database::fetch_array($res);
+	return $row['visibility'];  	
+}
+
+/**
  * Updates or adds item properties to the Item_propetry table
  * Tool and lastedit_type are language independant strings (langvars->get_lang!)
  *

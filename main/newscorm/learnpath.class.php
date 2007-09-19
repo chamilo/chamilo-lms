@@ -602,6 +602,8 @@ class learnpath {
     			$res_insert = api_sql_query($sql_insert);
 				$id = Database::get_last_insert_id();
 				if($id>0){
+					//insert into item_property
+					api_item_property_update(api_get_course_info($course),TOOL_LEARNPATH,$id,'LearnpathAdded',api_get_user_id());
 					return $id;
 				}
     			break;
@@ -784,6 +786,7 @@ class learnpath {
     	$sql_del_lp = "DELETE FROM $lp WHERE id = ".$this->lp_id;
     	//if($this->debug>2){error_log('New LP - Deleting lp '.$this->lp_id.': '.$sql_del_lp,0);}
     	$res_del_lp = api_sql_query($sql_del_lp);
+ 		api_item_property_update(api_get_course_info(),TOOL_LEARNPATH,$this->lp_id,'delete',api_get_user_id());
     	//TODO: also delete items and item-views
     }
 

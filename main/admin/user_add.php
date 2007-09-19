@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 13076 2007-09-19 07:45:31Z elixir_inter $
+<?php // $Id: user_add.php 13079 2007-09-19 08:11:36Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -169,10 +169,13 @@ if( $form->validate())
 		$picture_uri = '';
 		if (strlen($picture['name']) > 0)
 		{
-			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm))?$perm:'0770';
 			if(!is_dir(api_get_path(SYS_CODE_PATH).'upload/users/')){
-				mkdir(api_get_path(SYS_CODE_PATH).'upload/users/', $perm);
+				if(mkdir(api_get_path(SYS_CODE_PATH).'upload/users/'))
+				{
+					$perm = api_get_setting('permissions_for_new_directories');
+					$perm = octdec(!empty($perm))?$perm:'0770';
+					chmod(api_get_path(SYS_CODE_PATH).'upload/users/');
+				}
 			}
 			$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
 			$picture_location = api_get_path(SYS_CODE_PATH).'upload/users/'.$picture_uri;

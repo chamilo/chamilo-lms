@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 13076 2007-09-19 07:45:31Z elixir_inter $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 13079 2007-09-19 08:11:36Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -77,7 +77,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	
 	$perm = api_get_setting('permissions_for_new_directories');
 	$perm = octdec(!empty($perm))?$perm:'0770';
-	
+	$old_umask = umask(0);
 	while($courses_directories=mysql_fetch_array($result)){
 		
 		$currentCourseRepositorySys = $sys_course_path.$courses_directories["directory"]."/";
@@ -154,6 +154,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			
 		
 	}
+	umask($old_umask);
 	// Write the Dokeos config file
 	write_dokeos_config_file('../inc/conf/configuration.php');
 	// Write a distribution file with the config as a backup for the admin

@@ -1413,6 +1413,7 @@ function sort_pictures($files,$type){
 */
 function fill_course_repository($courseRepository)
 {
+	$old_umask = umask(0);
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 	$web_code_path = api_get_path(WEB_CODE_PATH);
 
@@ -1454,7 +1455,7 @@ function fill_course_repository($courseRepository)
 		$perm = api_get_setting('permissions_for_new_directories');
 		$perm = octdec(!empty($perm))?$perm:'0770';
 		$perm_file = api_get_setting('permissions_for_new_files');
-		$perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
+		$perm_file = octdec(!empty($perm_file))?$perm_file:'0660';
 		mkdir($course_documents_folder_images,$perm);
 
 		$handle = opendir($img_code_path);
@@ -1555,6 +1556,7 @@ function fill_course_repository($courseRepository)
 		$default_document_array['video']=$video_array;
 
 	}
+	umask($old_umask);
 	return $default_document_array;
 }
 

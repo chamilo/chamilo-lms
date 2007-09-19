@@ -185,6 +185,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 
 		@ mkdir($oldPath.$course.'/temp', $perm);
+		@ chmod($oldPath.$course.'/temp', $perm);
 
 		@ rename($oldPath.$course, $newPath.'courses/'.$course);
 

@@ -1,4 +1,4 @@
-<?php // $Id: index.php 12894 2007-08-13 15:45:25Z yannoo $
+<?php // $Id: index.php 13102 2007-09-19 21:35:38Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -295,7 +295,8 @@ function register_site()
 */
 function check_dokeos_version2()
 {
-	global $dokeos_version; // the dokeos version of your installation
+	global $_configuration;
+	$dokeos_version = $_configuration['dokeos_version']; // the dokeos version of your installation
 
 	if (ini_get('allow_url_fopen')==1)
 	{

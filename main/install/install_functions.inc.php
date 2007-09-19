@@ -741,6 +741,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
             $dbNameForm=get_config_param('mainDbName');
             $dbStatsForm=get_config_param('statsDbName');
             $dbScormForm=get_config_param('scormDbName');
+            $dbUserForm=get_config_param('user_personal_database');
             $dbScormExists=true;
 		}
 		else

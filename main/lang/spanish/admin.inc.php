@@ -668,4 +668,6 @@ $NoUsersForThisSession = "No hay usuarios para esta sesión";
 $LastNameMandatory = "Los apellidos deben cumplimentarse obligatoriamente";
 $FirstNameMandatory = "El nombre debe cumplimentarse obligatoriamente";
 $EmailMandatory = "La dirección de correo electrónico debe cumplimentarse obligatoriamente";
+$NoticeWillBeNotDisplayed = "La noticia no será mostrada en la página principal";
+$LetThoseFieldsEmptyToHideTheNotice = "Deje estos campos vacíos si no quiere mostrar la noticia";
 ?>

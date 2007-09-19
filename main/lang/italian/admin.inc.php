@@ -663,4 +663,6 @@ $NoUsersForThisSession = "La sessione non ha corsisti";
 $LastNameMandatory = "Il cognome è obbligatorio";
 $FirstNameMandatory = "Il nome è obbligatorio";
 $EmailMandatory = "L\'email è obbligatoria";
+$NoticeWillBeNotDisplayed = "L\'avviso non sarà visualizzato nella pagina iniziale";
+$LetThoseFieldsEmptyToHideTheNotice = "Per nascondere l\'avviso lascia vuoti questi campi";
 ?>

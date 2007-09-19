@@ -663,4 +663,6 @@ $NoUsersForThisSession = "Geen gebruikers voor deze sessie";
 $LastNameMandatory = "De achternaam kan niet leeg zijn";
 $FirstNameMandatory = "De voornaam kan niet leeg zijn";
 $EmailMandatory = "Het e-mailadres kan niet leeg zijn";
+$NoticeWillBeNotDisplayed = "De waarschuwing wordt niet getoond op de startpagina";
+$LetThoseFieldsEmptyToHideTheNotice = "Laat deze velden leeg om de waarschuwing te verbergen";
 ?>

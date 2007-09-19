@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langNewGroupCreate = "Créer nouveau(x) groupe(x)";
+$langNewGroupCreate = "Créer nouveau(x) groupe(s)";
 $langGroupCreation = "Création de groupes";
 $langCreate = "créer";
 $langNewGroups = "nouveau(x) groupe(s)";

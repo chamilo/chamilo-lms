@@ -24,4 +24,5 @@ $Interaction = "Interaction";
 $Authoring = "Production";
 $Administration = "Administration";
 $IntroductionTextUpdated = "Le texte d\'introduction a été mis à jour";
+$IntroductionTextDeleted = "Le texte d\'introduction du cours a bien été supprimé";
 ?>

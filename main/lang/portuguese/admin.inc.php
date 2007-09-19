@@ -662,4 +662,6 @@ $NoUsersForThisSession = "Não há utilizadores para esta sessão";
 $LastNameMandatory = "Último nome não pode estar vazio";
 $FirstNameMandatory = "O primeiro nome não pode estar vazio";
 $EmailMandatory = "O email não pode estar vazio";
+$NoticeWillBeNotDisplayed = "A notícia não será publicada na página principal";
+$LetThoseFieldsEmptyToHideTheNotice = "Deixe estes campos vazios se não desejar publicar a notícia";
 ?>

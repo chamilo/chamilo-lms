@@ -661,4 +661,6 @@ $NoUsersForThisSession = "Keine Benutzer für diese Session";
 $LastNameMandatory = "Nachname kann nicht leer sein";
 $FirstNameMandatory = "Vorname kann nicht leer sein";
 $EmailMandatory = "E-Mail kann nicht leer sein";
+$NoticeWillBeNotDisplayed = "Die Nachricht wird nicht auf der Homepage angezeigt";
+$LetThoseFieldsEmptyToHideTheNotice = "Diese Felder leer lassen, um Nachricht zu verbergen";
 ?>

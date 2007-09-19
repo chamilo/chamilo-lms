@@ -605,6 +605,7 @@ $YouWillSoonReceiveMailFromCoach = "En breve recibirás un correo-e do teu titor"
 $SlideSize = "Tamaño das diapositivas";
 $EphorusPlagiarismPrevention = "Prevención de plaxio Ephorus";
 $CourseTeachers = "Profesorado do curso";
+$UnknownTeacher = "Profesor descoñecido";
 $HideDLTTMarkup = "Ocultar as marcas DLTT";
 $ListOfCoursesOfSession = "Lista de cursos da sesión";
 $UnsubscribeSelectedUsersFromSession = "Eliminar da sesión aos usuarios seleccionados";

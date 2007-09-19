@@ -32,7 +32,7 @@ if(api_get_setting('show_navigation_menu') != 'false')
 
 <div id="footer"> <!-- start of #footer section -->
  <div class="copyright">
-  <?php include_once('installedVersion.inc.php'); ?>
+  <?php global $_configuration; ?>
   <?php echo get_lang("Platform") ?> <a href="http://www.dokeos.com">Dokeos <?php echo $dokeos_version; ?></a> &copy; <?php echo date('Y'); ?>
  </div>
 <?php

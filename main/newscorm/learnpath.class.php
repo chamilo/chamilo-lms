@@ -603,7 +603,7 @@ class learnpath {
 				$id = Database::get_last_insert_id();
 				if($id>0){
 					//insert into item_property
-					api_item_property_update(api_get_course_info($course),TOOL_LEARNPATH,$id,'LearnpathAdded',api_get_user_id());
+					api_item_property_update(api_get_course_info(),TOOL_LEARNPATH,$id,'LearnpathAdded',api_get_user_id());
 					return $id;
 				}
     			break;
@@ -2836,9 +2836,27 @@ class learnpath {
      * @param	string	New visibility
      */
 
-    function toggle_visibility($lp_id,$set_visibility='v')
+    function toggle_visibility($lp_id,$set_visibility=1)
     {
 		//if($this->debug>0){error_log('New LP - In learnpath::toggle_visibility()',0);}
+		$action = 'visible';
+		if($set_visibility != 1)
+		{
+			$action = 'invisible';
+		}
+		return api_item_property_update(api_get_course_info(),TOOL_LEARNPATH,$lp_id,$action,api_get_user_id());
+	}
+    /**
+     * Publishes a learnpath. This basically means show or hide the learnpath
+     * on the course homepage
+     * Can be used as abstract
+	 * @param	integer	Learnpath ID
+     * @param	string	New visibility
+     */
+
+    function toggle_publish($lp_id,$set_visibility='v')
+    {
+		//if($this->debug>0){error_log('New LP - In learnpath::toggle_publish()',0);}
     	$tbl_lp = Database::get_course_table('lp');
 		$sql="SELECT * FROM $tbl_lp where id=$lp_id";
 		$result=api_sql_query($sql,__FILE__,__LINE__);

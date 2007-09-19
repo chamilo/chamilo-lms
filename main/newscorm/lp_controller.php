@@ -471,14 +471,25 @@ switch($_REQUEST['action'])
 			require('lp_list.php');
 		}
 		break;
-	case 'toggle_visible': //change lp visibility
+	case 'toggle_visible': //change lp visibility (inside lp tool)
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
+		if($debug>0) error_log('New LP - visibility action triggered',0);
+		if(!$lp_found){ error_log('New LP - No learnpath given for visibility',0); require('lp_list.php'); }
+		else{
+			learnpath::toggle_visibility($_REQUEST['lp_id'],$_REQUEST['new_status']);
+			require('lp_list.php');
+		}
+		break;
+	case 'toggle_publish': //change lp published status (visibility on homepage)
 		if(!api_is_allowed_to_edit()){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - publish action triggered',0);
 		if(!$lp_found){ error_log('New LP - No learnpath given for publish',0); require('lp_list.php'); }
 		else{
-			learnpath::toggle_visibility($_REQUEST['lp_id'],$_REQUEST['new_status']);
+			learnpath::toggle_publish($_REQUEST['lp_id'],$_REQUEST['new_status']);
 			require('lp_list.php');
 		}
 		break;

@@ -40,6 +40,8 @@ class learnpathList {
     	$names = array();
     	while ($row = Database::fetch_array($res))
     	{
+    		//check if published
+    		$pub = '';
     		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
     		//use domesticate here instead of mysql_real_escape_string because
     		//it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
@@ -51,10 +53,12 @@ class learnpathList {
 			$res2 = api_sql_query($sql2,__FILE__,__LINE__);
 			if(Database::num_rows($res2)>0){
 				$row2 = Database::fetch_array($res2);
-				$vis = $row2['visibility'];
+				$pub = $row2['visibility'];
 			}else{
-				$vis = 'i';
+				$pub = 'i';
 			}
+			//check if visible
+			$vis = api_get_item_visibility(api_get_course_info($course_code),'learnpath',$row['id']);
 			
     		$this->list[$row['id']] = array(
     			'lp_type' => $row['lp_type'],
@@ -68,6 +72,7 @@ class learnpathList {
     			'lp_encoding' => $row['default_encoding'],
     			'lp_progress' => $row['progress'],
     			'lp_visibility' => $vis,
+    			'lp_published'	=> $pub,
     			'lp_prevent_reinit' => $row['prevent_reinit'],
     			'lp_scorm_debug' => $row['debug'],
     			);

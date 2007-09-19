@@ -173,7 +173,7 @@ if (is_array($flat_list))
 	$counter = 0;
 	foreach ($flat_list as $id => $details)
 	{
-	    if(!$is_allowed_to_edit && $details['lp_visibility'] == "i")
+	    if(!$is_allowed_to_edit && $details['lp_visibility'] == 0)
 	    {
 	    	// This is a student and this path is invisible, skip
 	    	continue;		
@@ -245,17 +245,33 @@ if (is_array($flat_list))
 
 			/* VISIBILITY COMMAND */
 
-			if ($details['lp_visibility'] == "i")
+			if ($details['lp_published'] == "i")
 			{
-		        $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=v\">" .
+		        $dsp_publish =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v\">" .
 				"<img src=\"../img/invisible_LP_list.gif\" border=\"0\" title=\"".get_lang('_publish')."\" />" .
 				"</a>" .
 				"";
 			}
 			else
 			{
-				$dsp_visible =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=i'>" .
+				$dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .
 				"<img src=\"../img/visible_LP_list.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />" .
+				"</a>".
+				"";
+			}
+			/* VISIBILITY COMMAND */
+
+			if ($details['lp_visibility'] == 0)
+			{
+		        $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">" .
+				"<img src=\"../img/invisible.gif\" border=\"0\" title=\"".get_lang('Show')."\" />" .
+				"</a>" .
+				"";
+			}
+			else
+			{
+				$dsp_visible =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>" .
+				"<img src=\"../img/visible.gif\" border=\"0\" title=\"".get_lang('Hide')."\" />" .
 				"</a>".
 				"";
 			}
@@ -309,7 +325,7 @@ if (is_array($flat_list))
 	    	}
 	    }	// end if($is_allowedToEdit)
 	    //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
-	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete;
+	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete;
 	    //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_force_commit.$dsp_delete;
 	    echo	"</tr>\n";
 

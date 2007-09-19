@@ -69,7 +69,7 @@ $tbl_admin				= Database :: get_main_table(TABLE_MAIN_ADMIN);
 		fwrite($open,$info);
 		fclose($open);
 		$perm = api_get_setting('permissions_for_new_files');
-		$perm = octdec(!empty($perm)?$perm:'0660');
+		$perm = octdec(!empty($perm))?$perm:'0660';
 		chmod($fileName,$perm);
 		
 		header("Location:".$archiveURL.$fileName);

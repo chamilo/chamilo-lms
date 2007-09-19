@@ -65,7 +65,7 @@ $tbl_track_exercice = Database :: get_statistic_table(STATISTIC_TRACK_E_EXERCICE
 		fwrite($open,$info);
 		fclose($open);
 		$perm = api_get_setting('permissions_for_new_files');
-		$perm = octdec(!empty($perm)?$perm:'0660');
+		$perm = octdec(!empty($perm))?$perm:'0660';
 		chmod($fileName,$perm);
 		$message = get_lang('UsageDatacreated');
 		

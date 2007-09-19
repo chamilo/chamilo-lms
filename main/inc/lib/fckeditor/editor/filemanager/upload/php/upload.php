@@ -155,7 +155,7 @@ if ( is_file( $sServerDir.$sFileName ) )
 {
 	$oldumask = umask(0) ;
 	$perm = api_get_setting('permissions_for_new_files');
-	$perm = octdec(!empty($perm)?$perm:'0660');
+	$perm = octdec(!empty($perm))?$perm:'0660';
 	chmod( $sFilePath, $perm ) ;
 	umask( $oldumask ) ;
 }

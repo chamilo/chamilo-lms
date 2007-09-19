@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 13054 2007-09-17 22:09:38Z yannoo $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 13076 2007-09-19 07:45:31Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,7 +76,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	$result=mysql_query($sql);
 	
 	$perm = api_get_setting('permissions_for_new_directories');
-	$perm = octdec(!empty($perm)?$perm:'0770');
+	$perm = octdec(!empty($perm))?$perm:'0770';
 	
 	while($courses_directories=mysql_fetch_array($result)){
 		

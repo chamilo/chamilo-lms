@@ -64,7 +64,7 @@ if(!is_dir($chatPath))
 	}
 	
 	$perm = api_get_setting('permissions_for_new_directories');
-	$perm = octdec(!empty($perm)?$perm:'0770');
+	$perm = octdec(!empty($perm))?$perm:'0770';
 	@mkdir($chatPath,$perm);
 	@chmod($chatPath,$perm);
 

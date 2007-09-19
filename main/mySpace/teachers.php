@@ -70,7 +70,7 @@ function exportCsv($a_header,$a_data)
 		fwrite($open,$info);
 		fclose($open);
 		$perm = api_get_setting('permissions_for_new_files');
-		$perm = octdec(!empty($perm)?$perm:'0660');
+		$perm = octdec(!empty($perm))?$perm:'0660';
 		chmod($fileName,$perm);
 		
 		header("Location:".$archiveURL.$fileName);

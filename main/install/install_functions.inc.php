@@ -572,7 +572,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 		$error=false;
 
 		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm)?$perm:'0770');
+		$perm = octdec(!empty($perm))?$perm:'0770';
 		$perm_file = api_get_setting('permissions_for_new_files');
 		$perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
 

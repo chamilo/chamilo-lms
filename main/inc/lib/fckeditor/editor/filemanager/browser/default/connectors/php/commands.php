@@ -168,7 +168,7 @@ function FileUpload( $resourceType, $currentFolder )
 		$arDenied	= $Config['DeniedExtensions'][$resourceType] ;
 
 		$perm = api_get_setting('permissions_for_new_files');
-		$perm = octdec(!empty($perm)?$perm:'0660');
+		$perm = octdec(!empty($perm))?$perm:'0660';
 
 		if ( ( count($arAllowed) == 0 || in_array( $sExtension, $arAllowed ) ) && ( count($arDenied) == 0 || !in_array( $sExtension, $arDenied ) ) )
 		{

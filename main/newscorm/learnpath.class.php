@@ -6991,7 +6991,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$dest_path_to_lp = substr($this->path, -1) == '.' ? substr($this->path, 0, -1) : $this->path;
 			$dest_path_to_scorm_folder = str_replace('//','/',$temp_zip_dir.'/scorm/'.$dest_path_to_lp);
 			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm)?$perm:'0770');
+			$perm = octdec(!empty($perm))?$perm:'0770';
 			mkdir ($dest_path_to_scorm_folder, $perm, true);
 			$zip_files_dist = copyr($current_course_path.'/scorm/'.$this->path, $dest_path_to_scorm_folder, array('imsmanifest'), $zip_files);
 		}

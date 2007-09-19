@@ -1617,7 +1617,7 @@ function api_get_item_visibility($_course,$tool,$id)
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
-	$sql = "SELECT FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $id";
+	$sql = "SELECT * FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $id";
 	$res = api_sql_query($sql);
 	if($res === false or Database::num_rows($res)==0) return -1;
 	$row = Database::fetch_array($res);

@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 13076 2007-09-19 07:45:31Z elixir_inter $
+<?php // $Id: edit_document.php 13080 2007-09-19 08:21:27Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -381,7 +381,7 @@ if($is_allowedToEdit)
 				fclose($fp);
 
 				$perm = api_get_setting('permissions_for_new_directories');
-				$perm = octdec(!empty($perm))?$perm:'0770';
+				$perm = octdec(!empty($perm)?$perm:'0770');
 
 				if(!is_dir($filepath.'css'))
 				{

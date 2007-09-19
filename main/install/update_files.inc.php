@@ -153,7 +153,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	$oldPath = $_POST['updatePath'];
 
 	$perm = api_get_setting('permissions_for_new_directories');
-	$perm = octdec(!empty($perm))?$perm:'0770';
+	$perm = octdec(!empty($perm)?$perm:'0770');
 
 	foreach ($coursePath as $key => $course)
 	{

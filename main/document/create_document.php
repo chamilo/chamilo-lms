@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 13079 2007-09-19 08:11:36Z elixir_inter $
+// $Id: create_document.php 13080 2007-09-19 08:21:27Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -306,7 +306,7 @@ if ($form->validate())
 		fclose($fp);
 
 		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm))?$perm:'0770';
+		$perm = octdec(!empty($perm)?$perm:'0770');
 		if (!is_dir($filepath.'css'))
 		{
 			mkdir($filepath.'css');

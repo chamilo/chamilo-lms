@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 13079 2007-09-19 08:11:36Z elixir_inter $
+<?php // $Id: user_add.php 13080 2007-09-19 08:21:27Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -173,7 +173,7 @@ if( $form->validate())
 				if(mkdir(api_get_path(SYS_CODE_PATH).'upload/users/'))
 				{
 					$perm = api_get_setting('permissions_for_new_directories');
-					$perm = octdec(!empty($perm))?$perm:'0770';
+					$perm = octdec(!empty($perm)?$perm:'0770');
 					chmod(api_get_path(SYS_CODE_PATH).'upload/users/');
 				}
 			}

@@ -138,7 +138,7 @@ class word_document extends learnpath {
 					}
 				}
 			}
-			$perm = octdec(!empty($perm))?$perm:0700;
+			$perm = octdec(!empty($perm)?$perm:0700);
 			chmod ($base_work_dir.$created_dir,$perm);
 			chmod($file,$perm);
 			

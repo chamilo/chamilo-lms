@@ -71,7 +71,7 @@ function CreateServerFolder( $folderPath )
 
 		// To create the folder with 0777 permissions, we need to set umask to zero.
 		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm))?$perm:'0770';
+		$perm = octdec(!empty($perm)?$perm:'0770');
 		$oldumask = umask(0) ;
 		mkdir( $folderPath, $perm ) ;
 		umask( $oldumask ) ;

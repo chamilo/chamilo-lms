@@ -2121,6 +2121,7 @@ class learnpath {
 				'status'=>$this->items[$item_id]->get_status(),
 				'level'=>$this->items[$item_id]->get_level(),
 				'type' =>$this->items[$item_id]->get_type(),
+				'description'=>$this->items[$item_id]->get_description(),
 				);
     	}
     	if($this->debug>2){error_log('New LP - In learnpath::get_toc() - TOC array: '.print_r($toc,true),0);}
@@ -2280,14 +2281,14 @@ class learnpath {
     		
     		if($item['type']!='dokeos_module' AND $item['type']!='dokeos_chapter'){
     		
-	    		$html .= '<a name="atoc_'.$item['id'].'" /><div class="'.$style.'" style="padding-left: '.($item['level']*1.5).'em; padding-right:'.($item['level']/2).'em" id="toc_'.$item['id'].'" >' .
+	    		$html .= '<a name="atoc_'.$item['id'].'" /><div class="'.$style.'" style="padding-left: '.($item['level']*1.5).'em; padding-right:'.($item['level']/2).'em" id="toc_'.$item['id'].'" title="'.$item['description'].'" >' .
 	    				'';
     		
     		}
     		
     		else{
     			
-    			$html .= '<div class="'.$style.'" style="padding-left: '.($item['level']*2).'em; padding-right:'.($item['level']*1.5).'em" id="toc_'.$item['id'].'" >' .
+    			$html .= '<div class="'.$style.'" style="padding-left: '.($item['level']*2).'em; padding-right:'.($item['level']*1.5).'em" id="toc_'.$item['id'].'" title="'.$item['description'].'" >' .
 	    				'';
     			
     		}

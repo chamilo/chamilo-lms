@@ -1394,7 +1394,7 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 	}
 	$perm = api_get_setting('permissions_for_new_directories');
 	
-	$perm = octdec(!empty($perm))?$perm:'0770';echo $perm;exit;
+	$perm = octdec(!empty($perm))?$perm:'0770';
 	if ( mkdir($base_work_dir.$desired_dir_name.$nb, $perm))
 	{
 		$document_id = add_document($_course, $desired_dir_name.$nb,'folder',0,$title);

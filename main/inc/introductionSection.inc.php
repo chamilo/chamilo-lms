@@ -105,7 +105,7 @@ if ($intro_editAllowed)
 	if($intro_cmdDel)
 	{
 		api_sql_query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'",__FILE__,__LINE__);
-		Display::display_confirmation_message('IntroductionTextDeleted');
+		Display::display_confirmation_message(get_lang('IntroductionTextDeleted'));
 	}
 }
 

@@ -188,10 +188,10 @@ if (api_is_allowed_to_edit())
 	{
 		echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
 	}
-	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0)
+	/*if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0)
 	{
 		echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
-	}
+	}*/
 }
 $group_cats = GroupManager :: get_categories();
 if (get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)

@@ -23,7 +23,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
-*  	@version $Id: work.php 12582 2007-06-11 14:55:14Z elixir_julian $
+*  	@version $Id: work.php 13078 2007-09-19 07:49:58Z elixir_julian $
 *
 * 	@todo refactor more code into functions, use quickforms, coding standards, ...
 */
@@ -92,6 +92,24 @@ if(isset($_GET['id_session']))
 	$_SESSION['id_session'] = $_GET['id_session'];
 }
 
+$htmlHeadXtra[] = '<script>
+
+function updateDocumentTitle(value){
+
+	var temp = value.indexOf("/");
+	
+	//linux path
+	if(temp!=-1){
+		var temp=value.split("/");
+	}
+	else{
+		var temp=value.split("\\\");
+	}
+	
+	document.getElementById("file_upload").value=temp[temp.length-1];
+}
+</script>
+';
 
 /*
 -----------------------------------------------------------
@@ -851,13 +869,19 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 
 			else // else standard upload option
 			{
-				$form->addElement('file','file',get_lang('DownloadFile'), 'size="30"');
+				$form->addElement('file','file',get_lang('DownloadFile'), 'size="30" onchange="updateDocumentTitle(this.value)"');
 			}
 
-			$titleWork=$form->addElement('text', 'title', get_lang("TitleWork"), 'style="width: 350px;"');
+			$titleWork=$form->addElement('text', 'title', get_lang("TitleWork"), 'id="file_upload"  style="width: 350px;"');
 			$defaults["title"] = ($edit?stripslashes($workTitle):stripslashes($title));
 
 			$titleAuthors=$form->addElement('text', 'authors', get_lang("Authors"), 'style="width: 350px;"');
+			
+			if(empty($authors))
+			{
+				$authors=$_user['firstName']." ".$_user['lastName'];
+			}
+			
 			$defaults["authors"] = ($edit?stripslashes($workAuthor):stripslashes($authors));
 
 			$titleAuthors=$form->addElement('textarea', 'description', get_lang("Description"), 'style="width: 350px; height: 60px;"');
@@ -869,10 +893,7 @@ if ($_POST['submitWork'] && $succeed &&!$id) //last value is to check this is no
 			
 			$form->addElement('submit', 'submitWork', get_lang('Ok'));
 
-			if(empty($authors))
-			{
-				$authors=$_user['lastName']." ".$_user['firstName'];
-			}
+			
 
 			if($_POST['submitWork'] || $edit)
 			{

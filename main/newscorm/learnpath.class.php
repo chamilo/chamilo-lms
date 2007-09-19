@@ -583,6 +583,7 @@ class learnpath {
 	    		//check zipname string. If empty, we are currently creating a new Dokeos learnpath
     			break;
     		case 'manual':
+    		default:
 		    	$get_max = "SELECT MAX(display_order) FROM $tbl_lp";
 		    	$res_max = api_sql_query($get_max);
 		    	if(Database::num_rows($res_max)<1){

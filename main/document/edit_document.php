@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 13080 2007-09-19 08:21:27Z elixir_inter $
+<?php // $Id: edit_document.php 13087 2007-09-19 13:39:43Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -69,8 +69,8 @@ include(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 include(api_get_path(LIBRARY_PATH).'document.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
-$fck_attribute['Width'] = '800';
-$fck_attribute['Height'] = '450';
+$fck_attribute['Width'] = '100%';
+$fck_attribute['Height'] = '650';
 $fck_attribute['ToolbarSet'] = 'Full';
 
 
@@ -495,6 +495,7 @@ if($extension == "htm" || $extension == "html")
 {
 	$form->addElement('hidden','formSent');
 	$defaults['formSent'] = 1;
+	$form->addElement('submit','submit',get_lang('Ok'));
 	$form->add_html_editor('texte',get_lang('Content'),false,true);
 	$defaults['texte'] = $texte;
 }

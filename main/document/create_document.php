@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 13080 2007-09-19 08:21:27Z elixir_inter $
+// $Id: create_document.php 13087 2007-09-19 13:39:43Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -146,7 +146,7 @@ include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $nameTools = get_lang('CreateDocument');
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '350';
+$fck_attribute['Height'] = '650';
 $fck_attribute['ToolbarSet'] = 'Full';
 $fck_attribute['Config']['FullPage'] = true;
 
@@ -266,6 +266,9 @@ else
 	$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
 	$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
 }
+
+$form->addElement('submit', 'submit', get_lang('Ok'));
+
 // HTML-editor
 $form->add_html_editor('content', get_lang('Content'), false, true);
 // Comment-field

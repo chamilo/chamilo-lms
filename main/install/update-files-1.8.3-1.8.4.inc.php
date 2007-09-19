@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.8.3-1.8.4.inc.php 13092 2007-09-19 16:56:33Z yannoo $
+<?php //$Id: update-files-1.8.3-1.8.4.inc.php 13094 2007-09-19 17:21:14Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -54,7 +54,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			$found_version = true;
 			$line = '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n";
 		}
-		elseif(stristr($line,'$_configuration[\'dokeos_version\']'))
+		elseif(stristr($line,'$_configuration[\'dokeos_stable\']'))
 		{
 			$found_stable = true;
 			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n";

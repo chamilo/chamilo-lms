@@ -30,3 +30,4 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('default_forum
 -- xxCOURSExx
 ALTER TABLE survey ADD anonymous ENUM( '0', '1' ) NOT NULL DEFAULT '0';
 ALTER TABLE lp_item ADD max_time_allowed char(13) NULL DEFAULT '';
+ALTER TABLE item_property ADD INDEX (tool(20),ref);

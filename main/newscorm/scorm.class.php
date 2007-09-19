@@ -595,6 +595,11 @@ class scorm extends learnpath {
 		*/
 		if(is_dir($course_sys_dir.$new_dir) OR @mkdir($course_sys_dir.$new_dir))
 		{
+			$perm = api_get_setting('permissions_for_new_directories');
+			$perm = octdec(!empty($perm)?$perm:'0770');
+			
+			chmod($course_sys_dir.$new_dir , $perm);
+			
 			// PHP method - slower...
 			if($this->debug>=1){error_log('New LP - Changing dir to '.$course_sys_dir.$new_dir,0);}
 			$saved_dir = getcwd();

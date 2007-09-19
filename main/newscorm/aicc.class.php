@@ -237,17 +237,25 @@ class aicc extends learnpath {
 		
 		$new_lp = Database::get_course_table('lp');
 		$new_lp_item = Database::get_course_table('lp_item');
+    	$get_max = "SELECT MAX(display_order) FROM $new_lp";
+    	$res_max = api_sql_query($get_max);
+    	if(Database::num_rows($res_max)<1){
+    		$dsp = 1;
+    	}else{
+    		$row = Database::fetch_array($res_max);
+    		$dsp = $row[0]+1;
+    	}
 
 		$this->config_encoding = "ISO-8859-1";
 		
 		$sql = "INSERT INTO $new_lp " .
 				"(lp_type, name, ref, description, " .
 				"path, force_commit, default_view_mod, default_encoding, " .
-				"js_lib, content_maker)" .
+				"js_lib, content_maker,display_order)" .
 				"VALUES " .
 				"(3,'".$this->course_title."', '".$this->course_id."','".$this->course_description."'," .
 				"'".$this->subdir."', 0, 'embedded', '".$this->config_encoding."'," .
-				"'aicc_api.php','".$this->course_creator."')";
+				"'aicc_api.php','".$this->course_creator."',$dsp)";
 		if($this->debug>2){error_log('New LP - In import_aicc(), inserting path: '. $sql,0);}
 		$res = api_sql_query($sql);
 		$lp_id = Database::get_last_insert_id();

@@ -371,15 +371,21 @@ class scorm extends learnpath {
 	     	//-for learnpath
 	     	//-for items
 	     	//-for views?
-	     	
+	    	$get_max = "SELECT MAX(display_order) FROM $new_lp";
+	    	$res_max = api_sql_query($get_max);
+	    	$dsp = 1;
+	    	if(Database::num_rows($res_max)>0){
+	    		$row = Database::fetch_array($res_max);
+	    		$dsp = $row[0]+1;
+	    	}
 	     	$myname = $oOrganization->get_name();
 	     		$this->manifest_encoding = 'UTF-8';
 	     	if($this->manifest_encoding != 'ISO-8859-1'){
 	     		$myname = mb_convert_encoding($myname,'ISO-8859-1',$this->manifest_encoding);
 	     		//error_log('New LP - Converting name from '.$this->manifest_encoding.' to ISO-8859-1',0);
 	     	}
-			$sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib)" .
-					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php')";
+			$sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order)" .
+					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php',$dsp)";
 			if($this->debug>1){error_log('New LP - In import_manifest(), inserting path: '. $sql,0);}
 			$res = api_sql_query($sql,__FILE__,__LINE__);
 			$lp_id = Database::get_last_insert_id();

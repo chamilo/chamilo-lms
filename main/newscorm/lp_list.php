@@ -254,14 +254,14 @@ if (is_array($flat_list))
 			if ($details['lp_published'] == "i")
 			{
 		        $dsp_publish =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v\">" .
-				"<img src=\"../img/invisible_LP_list.gif\" border=\"0\" title=\"".get_lang('_publish')."\" />" .
+				"<img src=\"../img/visible_LP_list.gif\" border=\"0\" title=\"".get_lang('_publish')."\" />" .
 				"</a>" .
 				"";
 			}
 			else
 			{
 				$dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .
-				"<img src=\"../img/visible_LP_list.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />" .
+				"<img src=\"../img/invisible_LP_list.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />" .
 				"</a>".
 				"";
 			}

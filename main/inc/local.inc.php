@@ -294,6 +294,7 @@ else
             else // no standard Dokeos login - try external authentification
             {
             	//huh... nothing to do... we shouldn't get here
+            	error_log('Dokeos Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
             }
             
     	    if(!empty($_SESSION['request_uri']))
@@ -336,6 +337,10 @@ else
                 	if(!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser']))
                 	{
                     	include_once($thisAuthSource['newUser']);
+                	}
+                	else
+                	{
+		            	error_log('Dokeos Authentication file '. $thisAuthSource['newUser']. ' could not be found - this might prevent your system from using the authentication process in the user creation process',0);
                 	}
                 }
             } //end if is_array($extAuthSource)

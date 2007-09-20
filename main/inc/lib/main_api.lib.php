@@ -983,6 +983,7 @@ function api_set_anonymous()
 			$_user['user_id'] = $user_id;
 			$_user['is_anonymous'] = true;
 			api_session_register('_user');
+			$GLOBALS['_user'] = $_user;
 			return true;
 		}
 	}

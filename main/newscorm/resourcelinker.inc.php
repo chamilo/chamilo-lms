@@ -1839,13 +1839,16 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			break;
 
 		case TOOL_QUIZ:
-			$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
-			$sql = "SELECT * FROM $TBL_EXERCICES WHERE id=$id";
-			$result= api_sql_query($sql,__FILE__,__LINE__);
-			$myrow=Database::fetch_array($result);
+			if(!empty($id))
+			{
+				$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
+				$sql = "SELECT * FROM $TBL_EXERCICES WHERE id=$id";
+				$result= api_sql_query($sql,__FILE__,__LINE__);
+				$myrow=Database::fetch_array($result);
 
-			if ($row_item['title'] != '') { $myrow["title"]=$row_item['title']; }
-			$link .= $main_dir_path.'exercice/exercice_submit.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+				if ($row_item['title'] != '') { $myrow["title"]=$row_item['title']; }
+				$link .= $main_dir_path.'exercice/exercice_submit.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+			}
 			break;
 
 		case "hotpotatoes": //lowercase because of strtolower above

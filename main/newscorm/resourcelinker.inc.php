@@ -1865,11 +1865,14 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 
 		case TOOL_THREAD:  //forum post
 			$tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD,$_course['database']);
-			$sql="SELECT * FROM $tbl_topics where thread_id=$id";
-			$result= api_sql_query($sql,__FILE__,__LINE__);
-			$myrow=Database::fetch_array($result);
-			$link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.'' .
-					'&forum='.$myrow['forum_id'].'&lp=true';
+			if(!empty($id))
+			{
+				$sql="SELECT * FROM $tbl_topics where thread_id=$id";
+				$result= api_sql_query($sql,__FILE__,__LINE__);
+				$myrow=Database::fetch_array($result);
+				$link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.'' .
+						'&forum='.$myrow['forum_id'].'&lp=true';
+			}
 			break;
 
 		case TOOL_POST:

@@ -30,7 +30,7 @@ $result			= api_sql_query($sql,__FILE__,__LINE__);
 <title><?php echo get_lang('Print'); ?></title>
 <style type="text/css" media="screen, projection">
 /*<![CDATA[*/
-@import "../css/default.css";
+@import "../css/<?php echo api_get_setting('stylesheets'); ?>/default.css";
 /*]]>*/
 </style>
 </head>

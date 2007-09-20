@@ -341,6 +341,10 @@ if (is_array($flat_list))
 	    				'<img src="../img/arrow_up_0.gif" border="0" alt="'.get_lang("MoveDown").'" title="'.get_lang("MoveDown").'"/>' .
 	    				'</a></td>';
 	    	}
+	    	elseif($max == 1)
+	    	{
+	    		$dsp_order = '<td></td>';
+	    	}
 	    	else
 	    	{
 	    		$dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .

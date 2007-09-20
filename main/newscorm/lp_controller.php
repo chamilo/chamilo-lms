@@ -151,7 +151,19 @@ $fck_attribute['ToolbarSet'] = 'Full';
 $fck_attribute['Config']['FullPage'] = true;
 
 if($_GET['isStudentView'] == 'true')
-	$_REQUEST['action'] = 'view';
+{
+	if($_REQUEST['action'] != 'list' AND $_REQUEST['action'] != 'view')
+	{
+		if(!empty($_REQUEST['lp_id']))
+		{
+			$_REQUEST['action'] = 'view';
+		}
+		else
+		{
+			$_REQUEST['action'] = 'list';
+		}
+	}
+}
 
 switch($_REQUEST['action'])
 {

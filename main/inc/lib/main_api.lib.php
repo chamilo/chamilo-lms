@@ -1454,10 +1454,10 @@ function api_is_allowed($tool, $action, $task_id = 0)
 		//print_r($_SESSION['total_permissions']);
 
 		// getting the permissions of the groups of the user
-		$groups_of_user = GroupManager::get_group_ids($_course['db_name'], $_user['user_id']);
+		//$groups_of_user = GroupManager::get_group_ids($_course['db_name'], $_user['user_id']);
 
-		foreach($groups_of_user as $group)
-			$this_group_permissions = get_permissions('group', $group);
+		//foreach($groups_of_user as $group)
+			//$this_group_permissions = get_permissions('group', $group);
 
 		// getting the permissions of the courseroles of the user
 		$user_courserole_permissions = get_roles_permissions('user', $_user['user_id']);
@@ -1466,12 +1466,12 @@ function api_is_allowed($tool, $action, $task_id = 0)
 		//$user_platformrole_permissions = get_roles_permissions('user', $_user['user_id'], ', platform');
 
 		// getting the permissions of the roles of the groups of the user
-		foreach($groups_of_user as $group)
-			$this_group_courserole_permissions = get_roles_permissions('group', $group);
+		//foreach($groups_of_user as $group)
+			//$this_group_courserole_permissions = get_roles_permissions('group', $group);
 
 		// getting the permissions of the platformroles of the groups of the user
-		foreach($groups_of_user as $group)
-			$this_group_platformrole_permissions = get_roles_permissions('group', $group, 'platform');
+		//foreach($groups_of_user as $group)
+			//$this_group_platformrole_permissions = get_roles_permissions('group', $group, 'platform');
 	}
 
 	// ifthe permissions are limited we have to map the extended ones to the limited ones

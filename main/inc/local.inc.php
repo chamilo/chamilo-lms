@@ -277,7 +277,7 @@ else
                     //do nothing (code may be added later)
                 }
             }
-            else // no standard Dokeos login - try external authentification
+            elseif(!empty($extAuthSource[$uData['auth_source']]['login']))
             {
                  /*
                   * Process external authentication
@@ -285,13 +285,17 @@ else
                   */
                  $loginFailed = true;  // Default initialisation. It could
                                        // change after the external authentication
-                 $key = $uData['auth_source'];
-
-                /* >>>>>>>>>>>>>>>> External authentication modules <<<<<<<<<<<<<<<< */
+                 $key = $uData['auth_source']; //'ldap','shibboleth'...
+                /* >>>>>>>> External authentication modules <<<<<<<<< */
 				// see configuration.php to define these
                 include_once($extAuthSource[$key]['login']);
-                /* >>>>>>>>>>>>>>>> External authentication modules <<<<<<<<<<<<<<<<<< */
+                /* >>>>>>>> External authentication modules <<<<<<<<< */
             }
+            else // no standard Dokeos login - try external authentification
+            {
+            	//huh... nothing to do... we shouldn't get here
+            }
+            
     	    if(!empty($_SESSION['request_uri']))
     	    {
       	        $req = $_SESSION['request_uri'];

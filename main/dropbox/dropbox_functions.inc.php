@@ -145,7 +145,7 @@ function delete_category($action, $id)
 	}
 
 	// step 1: delete the category
-	$sql="DELETE FROM `".$dropbox_cnf['tbl_category']."` WHERE cat_id='".Database::escape_string($id)."' AND $sentreceived='1'";
+	$sql="DELETE FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".Database::escape_string($id)."' AND $sentreceived='1'";
 	$result=api_sql_query($sql);
 
 	// step 2: delete all the documents in this category

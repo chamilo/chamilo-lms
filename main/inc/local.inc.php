@@ -277,7 +277,7 @@ else
                     //do nothing (code may be added later)
                 }
             }
-            elseif(!empty($extAuthSource[$uData['auth_source']]['login']))
+            elseif(!empty($extAuthSource[$uData['auth_source']]['login']) && file_exists($extAuthSource[$uData['auth_source']]['login']))
             {
                  /*
                   * Process external authentication
@@ -333,7 +333,10 @@ else
             {
                 foreach($extAuthSource as $thisAuthSource)
                 {
-                    include_once($thisAuthSource['newUser']);
+                	if(!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser']))
+                	{
+                    	include_once($thisAuthSource['newUser']);
+                	}
                 }
             } //end if is_array($extAuthSource)
 
@@ -426,6 +429,7 @@ $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
             $_user ['picture_uri'] = $uData ['picture_uri'];
 			$_user ['user_id'] = $uData ['user_id'];
 			$_user ['language'] = $uData ['language'];
+			$_user ['auth_source'] = $uData ['auth_source'];
 
             $is_platformAdmin        = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse  = (bool) ($uData ['status'] == 1);

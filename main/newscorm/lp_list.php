@@ -153,9 +153,10 @@ echo	'<th>'.get_lang("Name").'</th>'."\n" .
 		'<th>'.get_lang("Progress")."</th>\n";
 if (api_is_allowed_to_edit())
 {
-  echo "<th>",get_lang("Description"),"</th>\n" .
-  		"<th>",get_lang("ExportShort"),"</th>\n",
-	'<th>',get_lang("Modify"),"</th>\n";
+  echo '<th>'.get_lang("Description")."</th>\n" .
+  		'<th>'.get_lang("ExportShort")."</th>\n" .
+		'<th>'.get_lang("Modify")."</th>\n" .
+		'<th>'.get_lang('Move')."</th>\n";
 }
 
 echo		"</tr>\n";
@@ -167,10 +168,12 @@ $list = new LearnpathList(api_get_user_id());
 $flat_list = $list->get_flat_list();
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $test_mode = api_get_setting('server_type');
+$max = count($flat_list);
 //var_dump($flat_list);
 if (is_array($flat_list))
 {
 	$counter = 0;
+	$current = 0;
 	foreach ($flat_list as $id => $details)
 	{
 	    if(!$is_allowed_to_edit && $details['lp_visibility'] == 0)
@@ -194,10 +197,12 @@ if (is_array($flat_list))
 
 	    $dsp_export = '';
 	    $dsp_edit = '';
+	    $dsp_edit_close = '';
 	    $dsp_delete = '';
 	    $dsp_visible = '';
 	    $dsp_default_view = '';
 	    $dsp_debug = '';
+	    $dsp_order = '';
 	    if($display_progress_bar)
 	    {
 	    	$dsp_progress = '<td>'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id,api_get_user_id()),'').'</td>';
@@ -236,7 +241,8 @@ if (is_array($flat_list))
 			/* edit title and description */
 
 			$dsp_edit = '<td align="center">';
-
+	    	$dsp_edit_close = '</td>';
+			
 			/* DELETE COMMAND */
 			$dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" " .
 			"onClick=\"return confirmation('".addslashes($dspFileName)."');\">" .
@@ -323,12 +329,33 @@ if (is_array($flat_list))
 							'</a>&nbsp;';
 				}
 	    	}
+	    	if($details['lp_display_order'] == 1)
+	    	{
+	    		$dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .
+	    				'<img src="../img/arrow_down_0.gif" border="0" alt="'.get_lang("MoveDown").'" title="'.get_lang("MoveDown").'"/>' .
+	    				'</a><img src="../img/blanco.png" border="0" alt="" title="" /></td>';
+	    	}
+	    	elseif($current == $max-1) //last element
+	    	{
+	    		$dsp_order .= '<td><img src="../img/blanco.png" border="0" alt="" title="" /><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">' .
+	    				'<img src="../img/arrow_up_0.gif" border="0" alt="'.get_lang("MoveDown").'" title="'.get_lang("MoveDown").'"/>' .
+	    				'</a></td>';
+	    	}
+	    	else
+	    	{
+	    		$dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .
+	    				'<img src="../img/arrow_down_0.gif" border="0" alt="'.get_lang("MoveDown").'" title="'.get_lang("MoveDown").'"/>' .
+	    				'</a>&nbsp;';
+	    		$dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">' .
+	    				'<img src="../img/arrow_up_0.gif" border="0" alt="'.get_lang("MoveDown").'" title="'.get_lang("MoveDown").'"/>' .
+	    				'</a></td>';
+	    	}
 	    }	// end if($is_allowedToEdit)
 	    //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
-	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete;
+	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_force_commit.$dsp_debug.$dsp_delete.$dsp_close.$dsp_order;
 	    //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_force_commit.$dsp_delete;
 	    echo	"</tr>\n";
-
+		$current ++; //counter for number of elements treated
 	}	// end foreach ($flat_list)
 	//TODO print some user-friendly message if counter is still = 0 to tell nothing can be displayd yet
 }// end if ( is_array($flat_list)

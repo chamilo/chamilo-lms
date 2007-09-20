@@ -493,8 +493,40 @@ switch($_REQUEST['action'])
 			require('lp_list.php');
 		}
 		break;
-	case 'edit':
+	case 'move_lp_up': //change lp published status (visibility on homepage)
 		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
+		if($debug>0) error_log('New LP - publish action triggered',0);
+		if(!$lp_found)
+		{ 
+			error_log('New LP - No learnpath given for publish',0); 
+			require('lp_list.php'); 
+		}
+		else
+		{
+			learnpath::move_up($_REQUEST['lp_id']);
+			require('lp_list.php');
+		}
+		break;
+	case 'move_lp_down': //change lp published status (visibility on homepage)
+		if(!api_is_allowed_to_edit()){
+			api_not_allowed(true);
+		}
+		if($debug>0) error_log('New LP - publish action triggered',0);
+		if(!$lp_found){ 
+			error_log('New LP - No learnpath given for publish',0); 
+			require('lp_list.php'); 
+		}
+		else
+		{
+			learnpath::move_down($_REQUEST['lp_id']);
+			require('lp_list.php');
+		}
+		break;
+	case 'edit':
+		if(!api_is_allowed_to_edit())
+		{
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - edit action triggered',0);

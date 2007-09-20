@@ -35,7 +35,7 @@ class learnpathList {
     	}
     	$this->course_code = $course_code;
     	$this->user_id = $user_id;
-    	$sql = "SELECT * FROM $lp_table ORDER BY name ASC";
+    	$sql = "SELECT * FROM $lp_table ORDER BY display_order ASC, name ASC";
     	$res = api_sql_query($sql);
     	$names = array();
     	while ($row = Database::fetch_array($res))
@@ -75,6 +75,7 @@ class learnpathList {
     			'lp_published'	=> $pub,
     			'lp_prevent_reinit' => $row['prevent_reinit'],
     			'lp_scorm_debug' => $row['debug'],
+    			'lp_display_order' => $row['display_order'],
     			);
     		$names[$row['name']]=$row['id'];
        	}

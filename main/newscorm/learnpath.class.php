@@ -2742,7 +2742,98 @@ class learnpath {
     	}
 		return $display;
     }
-
+    /**
+     * Move a learnpath up (display_order)
+     * @param	integer	Learnpath ID
+     */
+    function move_up($lp_id)
+    {
+    	$lp_table = Database::get_course_table(TABLE_LP_MAIN);
+    	$sql = "SELECT * FROM $lp_table ORDER BY display_order";
+    	$res = api_sql_query($sql);
+    	if($res === false) return false;
+    	$lps = array();
+    	$lp_order = array();
+    	$num = Database::num_rows($res);
+    	//first check the order is correct, globally (might be wrong because
+    	//of versions < 1.8.4)
+    	if($num>0)
+    	{
+    		$i = 1;
+    		$need_fix = false;
+			while($row = Database::fetch_array($res))
+			{
+				if($row['display_order'] != $i)
+				{	//if we find a gap in the order, we need to fix it
+					$need_fix = true;
+					$sql_u = "UPDATE $lp_table SET display_order = $i WHERE id = ".$row['id'];
+					$res_u = api_sql_query($sql_u);
+				}
+				$row['display_order'] = $i;
+				$lps[$row['id']] = $row;
+				$lp_order[$i] = $row['id'];
+				$i++;
+			}
+    	}
+    	if($num>1) //if there's only one element, no need to sort
+    	{
+    		$order = $lps[$lp_id]['display_order'];
+    		if($order>1) //if it's the first element, no need to move up
+    		{
+    			$sql_u1 = "UPDATE $lp_table SET display_order = $order WHERE id = ".$lp_order[$order-1];
+    			$res_u1 = api_sql_query($sql_u1);
+    			$sql_u2 = "UPDATE $lp_table SET display_order = ".($order-1)." WHERE id = ".$lp_id;
+    			$res_u2 = api_sql_query($sql_u2);    			
+    		}
+    	}
+    }
+    /**
+     * Move a learnpath down (display_order)
+     * @param	integer	Learnpath ID
+     */
+    function move_down($lp_id)
+    {
+    	$lp_table = Database::get_course_table(TABLE_LP_MAIN);
+    	$sql = "SELECT * FROM $lp_table ORDER BY display_order";
+    	$res = api_sql_query($sql);
+    	if($res === false) return false;
+    	$lps = array();
+    	$lp_order = array();
+    	$num = Database::num_rows($res);
+    	$max = 0;
+    	//first check the order is correct, globally (might be wrong because
+    	//of versions < 1.8.4)
+    	if($num>0)
+    	{
+    		$i = 1;
+    		$need_fix = false;
+			while($row = Database::fetch_array($res))
+			{
+				$max = $i;
+				if($row['display_order'] != $i)
+				{	//if we find a gap in the order, we need to fix it
+					$need_fix = true;
+					$sql_u = "UPDATE $lp_table SET display_order = $i WHERE id = ".$row['id'];
+					$res_u = api_sql_query($sql_u);
+				}
+				$row['display_order'] = $i;
+				$lps[$row['id']] = $row;
+				$lp_order[$i] = $row['id'];
+				$i++;
+			}
+    	}
+    	if($num>1) //if there's only one element, no need to sort
+    	{
+    		$order = $lps[$lp_id]['display_order'];
+    		if($order<$max) //if it's the first element, no need to move up
+    		{
+    			$sql_u1 = "UPDATE $lp_table SET display_order = $order WHERE id = ".$lp_order[$order+1];
+    			$res_u1 = api_sql_query($sql_u1);
+    			$sql_u2 = "UPDATE $lp_table SET display_order = ".($order+1)." WHERE id = ".$lp_id;
+    			$res_u2 = api_sql_query($sql_u2);    			
+    		}
+    	}
+    }
     /**
      * Updates learnpath attributes to point to the next element
      * The last part is similar to set_current_item but processing the other way around

@@ -1,4 +1,4 @@
-<?php // $Id: login.php 9983 2006-11-15 00:21:16Z pcool $
+<?php // $Id: login.php 13113 2007-09-20 03:22:21Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -48,7 +48,7 @@
 		variables based on the result.
 	===============================================
 	*/
-	include_once("./main/auth/ldap/authldap.php");
+	include_once('authldap.php');
 
 	$loginLdapSucces = loginWithLdap($login, $password);	
 

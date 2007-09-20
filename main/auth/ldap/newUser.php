@@ -1,4 +1,4 @@
-<?php # $Id: newUser.php 9983 2006-11-15 00:21:16Z pcool $
+<?php # $Id: newUser.php 13113 2007-09-20 03:22:21Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -25,7 +25,8 @@
 /**
 ==============================================================================
 *	Users trying to login, who do not yet exist in the Dokeos database, 
-*	can be added by this script which tries to retrieve ldap information about them.
+*	can be added by this script which tries to retrieve ldap information about
+*   them.
 *
 *	@author Roan Embrechts
 *	@package dokeos.auth.ldap
@@ -40,7 +41,7 @@
 ==================================================
 */
 
-include_once('./main/auth/ldap/authldap.php');
+include_once('authldap.php');
 
 $loginLdapSucces = loginWithLdap($login, $password);	
 

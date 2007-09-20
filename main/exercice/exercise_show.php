@@ -684,36 +684,45 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
-			echo '
+			?>
 			<tr>
-				<td>
-					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'" width="380" height="400">
+				<td valign="top" align="left">
+					<table style="border: 1px solid" width="200">';
+					<?php 
+					for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
+					{
+						$answer=$objAnswerTmp->selectAnswer($answerId);
+						$answerComment=$objAnswerTmp->selectComment($answerId);
+						$answerCorrect=$objAnswerTmp->isCorrect($answerId);
+						$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+		
+						$query = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
+						$resq=api_sql_query($query);
+						$choice = mysql_result($resq,0,"answer");
+		
+						display_hotspot_answer($answerId,$answer,$choice,$answerComment);
+		
+						$i++;
+				 	}
+				 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
+					$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
+					$questionScore= mysql_result($resfree,0,"marks");
+					$totalScore+=$questionScore;
+		 			?>
+		 			</table>
+		 		</td>
+		 		<?php
+		 		
+		 	echo '
+			<tr>
+				<td colspan="2">
+					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'" width="730" height="730">
 						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'" />
 					</object>
-				</td><td valign="top"><table style="border: 1px solid" width="200">';
-			for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-			{
-				$answer=$objAnswerTmp->selectAnswer($answerId);
-				$answerComment=$objAnswerTmp->selectComment($answerId);
-				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+				</td>
+			</tr>
+			</tr></table></td></tr></table>';
 
-				$query = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
-				$resq=api_sql_query($query);
-				$choice = mysql_result($resq,0,"answer");
-
-				display_hotspot_answer($answerId,$answer,$choice,$answerComment);
-
-				$i++;
-		 	}
-		 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
-			$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
-			$questionScore= mysql_result($resfree,0,"marks");
-			$totalScore+=$questionScore;
-		 	?>
-			</table></td></tr></table>
-
-	<?php
 	}
 	?>
 

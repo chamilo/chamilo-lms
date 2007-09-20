@@ -23,7 +23,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 13128 2007-09-20 13:38:47Z elixir_inter $
+* 	@version $Id: exercise.lib.php 13139 2007-09-20 15:19:08Z elixir_inter $
 */
 
 
@@ -424,7 +424,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 
 						// Check to see if the version meets the requirements for playback
 						if (hasReqestedVersion) {  // if we've detected an acceptable version
-						    var oeTags = '<object type=\"application/x-shockwave-flash\" data=\"../plugin/hotspot/hotspot_user.swf?modifyAnswers=".$questionId."&amp;canClick:".$canClick."\" width=\"720\" height=\"720\">'
+						    var oeTags = '<object type=\"application/x-shockwave-flash\" data=\"../plugin/hotspot/hotspot_user.swf?modifyAnswers=".$questionId."&amp;canClick:".$canClick."\" width=\"730\" height=\"620\">'
 										+ '<param name=\"movie\" value=\"../plugin/hotspot/hotspot_user.swf?modifyAnswers=".$questionId."&amp;canClick:".$canClick."\" \/>'
 										+ '<\/object>';
 						    document.write(oeTags);   // embed the Flash Content SWF when all tests are passed

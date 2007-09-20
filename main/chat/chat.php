@@ -1,4 +1,4 @@
-<?php // $Id: chat.php 11215 2007-02-26 10:29:11Z elixir_julian $
+<?php // $Id: chat.php 13111 2007-09-20 01:10:41Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -71,7 +71,7 @@ switch($used_stylesheet){
 
 ?>
 
-<frameset rows="115,*,<?php echo $footer_size;?>" border="0" frameborder="0" framespacing="1">
+<frameset rows="130,*,<?php echo $footer_size;?>" border="0" frameborder="0" framespacing="1">
 	<frame src="chat_banner.php" name="chat_banner" scrolling="no">
 	<frameset cols="200,*,0" border="1" frameborder="1" framespacing="1">
 		<frame src="chat_whoisonline.php" name="chat_whoisonline" scrolling="auto">

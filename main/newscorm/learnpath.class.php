@@ -787,6 +787,7 @@ class learnpath {
     	$sql_del_lp = "DELETE FROM $lp WHERE id = ".$this->lp_id;
     	//if($this->debug>2){error_log('New LP - Deleting lp '.$this->lp_id.': '.$sql_del_lp,0);}
     	$res_del_lp = api_sql_query($sql_del_lp);
+    	$this->update_display_order();//updates the display order of all lps
  		api_item_property_update(api_get_course_info(),TOOL_LEARNPATH,$this->lp_id,'delete',api_get_user_id());
     	//TODO: also delete items and item-views
     }
@@ -2760,7 +2761,6 @@ class learnpath {
     	if($num>0)
     	{
     		$i = 1;
-    		$need_fix = false;
 			while($row = Database::fetch_array($res))
 			{
 				if($row['display_order'] != $i)
@@ -2806,7 +2806,6 @@ class learnpath {
     	if($num>0)
     	{
     		$i = 1;
-    		$need_fix = false;
 			while($row = Database::fetch_array($res))
 			{
 				$max = $i;
@@ -3494,6 +3493,38 @@ class learnpath {
     	return -1;
 
     }
+
+	/**
+	 * Updates the order of learning paths (goes through all of them by order and fills the gaps)
+	 * @return	bool	True on success, false on failure
+	 */
+	function update_display_order()
+	{
+    	$lp_table = Database::get_course_table(TABLE_LP_MAIN);
+    	$sql = "SELECT * FROM $lp_table ORDER BY display_order";
+    	$res = api_sql_query($sql);
+    	if($res === false) return false;
+    	$lps = array();
+    	$lp_order = array();
+    	$num = Database::num_rows($res);
+    	//first check the order is correct, globally (might be wrong because
+    	//of versions < 1.8.4)
+    	if($num>0)
+    	{
+    		$i = 1;
+			while($row = Database::fetch_array($res))
+			{
+				if($row['display_order'] != $i)
+				{	//if we find a gap in the order, we need to fix it
+					$need_fix = true;
+					$sql_u = "UPDATE $lp_table SET display_order = $i WHERE id = ".$row['id'];
+					$res_u = api_sql_query($sql_u);
+				}
+				$i++;
+			}
+    	}
+		return true;
+	}
 
     /**
 

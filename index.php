@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 13119 2007-09-20 05:37:51Z yannoo $
+* 	@version $Id: index.php 13120 2007-09-20 05:51:07Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -302,7 +302,7 @@ function logout()
 				$logout_function = $uinfo['auth_source'].'_logout';
 				if(function_exists($logout_function))
 				{
-					$logout_function();
+					$logout_function($uinfo);
 				}
 			}
 		}

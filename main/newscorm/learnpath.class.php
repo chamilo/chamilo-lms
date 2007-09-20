@@ -3968,6 +3968,7 @@ class learnpath {
 		
 		$tmp_filename = $filename;
 									
+		$i=0;
 		while(file_exists($filepath . $tmp_filename . '.html'))
 			$tmp_filename = $filename . '_' . ++$i;
 									
@@ -3992,7 +3993,7 @@ class learnpath {
 											
 				if($document_id)
 				{
-					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id);
+					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id(), $to_group_id);
 									
 					//update parent folders
 					//item_property_update_on_folder($_course, $_GET['dir'], $_user['user_id']);

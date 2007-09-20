@@ -342,7 +342,7 @@ else
 							FROM ".$tbl_blogs_tasks_rel_user."
 							WHERE
 								`blog_id` = ".$blog_id." AND
-								`user_id` = ".$_user['user_id']." AND
+								`user_id` = ".api_get_user_id()." AND
 								`task_id` = ".$task_id;
 
 	$result = api_sql_query($sql, __LINE__, __FILE__);

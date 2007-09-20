@@ -1,5 +1,5 @@
 <?php
-// $Id: html_editor.php 11004 2007-01-30 10:20:01Z elixir_julian $
+// $Id: html_editor.php 13148 2007-09-20 18:38:01Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -49,7 +49,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		
 		
 		@ $editor_lang = Database :: get_language_isocode($language_interface);
-		$language_file = api_get_path(WEB_PATH).'/main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
+		$language_file = api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
 		if (empty ($editor_lang) || !file_exists($language_file))
 		{
 			//if there was no valid iso-code, use the english one
@@ -58,7 +58,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		$name = $this->getAttribute('name');
 		
 		$this -> fck_editor = new FCKeditor($name);
-		$this -> fck_editor->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
+		$this -> fck_editor->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
 
 		$this -> fck_editor->Width = $fck_attribute['Width'] ? $fck_attribute['Width'] : '990';
 		$this -> fck_editor->Height = $fck_attribute['Height'] ? $fck_attribute['Height'] : '400';
@@ -106,7 +106,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 		
 		$this -> fck_editor->Config['LinkBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Connector=connectors/php/connector.php&ServerPath=$upload_path";
 		
-		$this -> fck_editor->Config['EditorAreaCSS'] = api_get_path(SYS_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css';
+		$this -> fck_editor->Config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css';
 		
 		//for image
 		$this -> fck_editor->Config['ImageBrowserURL'] = $this -> fck_editor->BasePath . "editor/filemanager/browser/default/browser.html?Type=Image&Connector=connectors/php/connector.php&ServerPath=$upload_path";

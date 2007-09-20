@@ -555,7 +555,8 @@ else {
 		}
 		$table -> setColAttributes(0,array('align'=>'left'));
 		$table -> setColAttributes(1,array('align'=>'left'));
-		$table -> setColAttributes(7,array('align'=>'left'));
+		$table -> setColAttributes(2,array('align'=>'left'));
+		$table -> setColAttributes(7,array('align'=>'right'));
 		$table -> setColAttributes(8,array('align'=>'center'));
 		$table -> display();
 		

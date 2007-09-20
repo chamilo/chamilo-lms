@@ -20,7 +20,7 @@
 /**
 *	@package dokeos.main
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Refactoring
-* 	@version $Id: index.php 13066 2007-09-18 08:10:04Z elixir_julian $
+* 	@version $Id: index.php 13119 2007-09-20 05:37:51Z yannoo $
 *   @todo check the different @todos in this page and really do them
 * 	@todo check if the news management works as expected
 */
@@ -262,6 +262,7 @@ Display :: display_footer();
  */
 function logout()
 {
+	global $_configuration, $extAuthSource;
 	// variable initialisation
 	$query_string='';
 
@@ -282,7 +283,30 @@ function logout()
 	$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 	api_sql_query($s_sql_update_logout_date);
 
-	LoginDelete($uid, $_configuration['statistics_database']);
+	LoginDelete($uid, $_configuration['statistics_database']); //from inc/lib/online.inc.php - removes the "online" status
+	
+	//the following code enables the use of an external logout function.
+	//example: define a $extAuthSource['ldap']['logout']="file.php" in configuration.php
+	// then a function called ldap_logout() inside that file 
+	// (using *authent_name*_logout as the function name) and the following code 
+	// will find and execute it 
+	$uinfo = api_get_user_info($uid);
+	if(($uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource))
+	{
+		if(is_array($extAuthSource[$uinfo['auth_source']]))
+		{
+			$subarray = $extAuthSource[$uinfo['auth_source']];
+			if(!empty($subarray['logout']) && file_exists($subarray['logout']))
+			{
+				include_once($subarray['logout']);
+				$logout_function = $uinfo['auth_source'].'_logout';
+				if(function_exists($logout_function))
+				{
+					$logout_function();
+				}
+			}
+		}
+	}
 
 	api_session_destroy();
 

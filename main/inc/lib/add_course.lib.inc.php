@@ -306,7 +306,6 @@ function update_Db_course($courseDbName)
 
 	// Document
 	$TABLETOOLDOCUMENT 			= $courseDbName . "document";
-	$TABLETOOLSCORMDOCUMENT 	= $courseDbName . "scormdocument";
 
 	// Forum
 	$TABLETOOLFORUMCATEGORY 	= $courseDbName . "forum_category";
@@ -666,23 +665,6 @@ function update_Db_course($courseDbName)
 			filetype set('file','folder') NOT NULL default 'file',
 			size int NOT NULL default 0,
 			PRIMARY KEY (`id`)
-		)";
-	api_sql_query($sql, __FILE__, __LINE__);
-
-	/*
-	-----------------------------------------------------------
-		Scorm Document tool
-	-----------------------------------------------------------
-	*/
-	$sql = "
-		CREATE TABLE `".$TABLETOOLSCORMDOCUMENT . "` (
-		id int unsigned NOT NULL auto_increment,
-		path varchar(255) NOT NULL,
-		visibility char(1) DEFAULT 'v' NOT NULL,
-		comment varchar(255),
-		filetype set('file','folder') NOT NULL default 'file',
-		name varchar(100),
-		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
 
@@ -1599,7 +1581,6 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	$TABLETOOLWORKS = $courseDbName . "student_publication";
 	$TABLETOOLWORKSUSER = $courseDbName . "stud_pub_rel_user";
 	$TABLETOOLDOCUMENT = $courseDbName . "document";
-	$TABLETOOLSCORMDOCUMENT = $courseDbName . "scormdocument";
 
 	$TABLETOOLLINK = $courseDbName . "link";
 

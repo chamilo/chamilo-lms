@@ -23,7 +23,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 12439 2007-05-21 08:14:11Z elixir_julian $
+* 	@version $Id: exercise.lib.php 13128 2007-09-20 13:38:47Z elixir_inter $
 */
 
 
@@ -415,7 +415,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 						}
 						// -->
 						</script>";
-		$s .= '<tr><td valign="top" colspan="2"><table><tr><td>'."
+		$s .= '<tr><td valign="top" colspan="2" width="100%"><table><tr><td width="100%">'."
 					<script language=\"JavaScript\" type=\"text/javascript\">
 						<!--
 						// Version check based upon the values entered above in \"Globals\"
@@ -424,7 +424,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 
 						// Check to see if the version meets the requirements for playback
 						if (hasReqestedVersion) {  // if we've detected an acceptable version
-						    var oeTags = '<object type=\"application/x-shockwave-flash\" data=\"../plugin/hotspot/hotspot_user.swf?modifyAnswers=".$questionId."&amp;canClick:".$canClick."\" width=\"380\" height=\"470\">'
+						    var oeTags = '<object type=\"application/x-shockwave-flash\" data=\"../plugin/hotspot/hotspot_user.swf?modifyAnswers=".$questionId."&amp;canClick:".$canClick."\" width=\"720\" height=\"720\">'
 										+ '<param name=\"movie\" value=\"../plugin/hotspot/hotspot_user.swf?modifyAnswers=".$questionId."&amp;canClick:".$canClick."\" \/>'
 										+ '<\/object>';
 						    document.write(oeTags);   // embed the Flash Content SWF when all tests are passed

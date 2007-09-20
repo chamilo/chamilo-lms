@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13045 2007-09-17 12:57:17Z elixir_inter $
+* 	@version $Id: exercise_result.php 13128 2007-09-20 13:38:47Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -398,13 +398,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		{
 			?>
 				<tr>
-					<td width="40%">
-						<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
-						<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo $questionId ?>" width="570" height="600">
-							<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo $questionId ?>" />
-						</object>
-					</td>
-					<td width="60%" valign="top">
+					<td valign="top" colspan="2">
 						<table width="100%" border="0">
 							<tr>
 								<td width="25%" valign="top">
@@ -693,6 +687,17 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			{
 				// We made an extra table for the answers
 				echo "</table></td></tr>";
+				?>
+				
+				<tr>
+					<td colspan="2">
+						<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
+						<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo $questionId ?>" width="730" height="750">
+							<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo $questionId ?>" />
+						</object>
+					</td>
+				</tr>
+				<?php 
 			}
 		?>
 			<tr>

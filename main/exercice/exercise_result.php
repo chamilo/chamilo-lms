@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13128 2007-09-20 13:38:47Z elixir_inter $
+* 	@version $Id: exercise_result.php 13177 2007-09-21 14:50:21Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -783,7 +783,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 			}else{
 			  echo $totalScore."/".$totalWeighting;
 			}
-                        ?> !</b>
+                        ?></b>
 		</td>
 		</tr>
 		<tr>

@@ -298,6 +298,15 @@ if($modifyAnswers)
 
 <form method="post" action="<?php echo api_get_self(); ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" name="frm_exercise">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+	<tr>
+		<td colspan="2" valign="bottom">
+			<input type="submit" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" />
+			<input type="submit" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />
+			<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" />
+			<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />
+		</td>
+	</tr>
 	<tr>
 		<td valign="top" style="border:1px solid #4271b5;border-top:none; border-right:none; border-bottom:none">			
 				<input type="hidden" name="formSent" value="1" />
@@ -324,7 +333,7 @@ if($modifyAnswers)
 					  <td valign="top"><div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div></td>
 					  <td valign="top" align="left"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo htmlentities($reponse[$i]); ?>" size="45" /></td>
 					  <td align="left"><textarea wrap="virtual" rows="1" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo stripslashes(htmlentities($comment[$i])); ?></textarea></td>
-					  <td valign="top"><input type="text" name="weighting[<?php echo $i; ?>]" size="1" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 1); ?>" />
+					  <td valign="top"><input type="text" name="weighting[<?php echo $i; ?>]" size="1" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
 					  <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
 					  <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" /></td>
 					</tr>
@@ -340,17 +349,7 @@ if($modifyAnswers)
 					<td style="width:auto;"><?php echo get_lang('HotspotRequired'); ?></td>
 				</tr>
 			</table>
-		</td>
-		<td style="border-right:1px solid #4271b5;" valign="bottom">
-			<input type="submit" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" />
-			<input type="submit" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" /><br /><br /><br />
-		</td>		
-	</tr>
-	<tr>
-		<td colspan="2" style="border:1px solid #4271b5;border-top:none;padding-bottom:3px;margin-bottom:5px;">
-			<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />
-			<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" />
-		</td>
+		</td>	
 	</tr>
 	<tr>
 		<td colspan="2" valign="top" style="border:1px solid #4271b5;border-top:none">

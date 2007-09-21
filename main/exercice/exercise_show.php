@@ -687,7 +687,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 			?>
 			<tr>
 				<td valign="top" align="left">
-					<table style="border: 1px solid" width="200">';
+					<table style="border: 1px solid #4271b5;border-bottom:none" width="730">
 					<?php 
 					for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 					{
@@ -699,7 +699,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						$query = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
 						$resq=api_sql_query($query);
 						$choice = mysql_result($resq,0,"answer");
-		
+						echo $choice;
 						display_hotspot_answer($answerId,$answer,$choice,$answerComment);
 		
 						$i++;
@@ -716,7 +716,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		 	echo '
 			<tr>
 				<td colspan="2">
-					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'" width="730" height="730">
+					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'" width="730" height="570">
 						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'" />
 					</object>
 				</td>

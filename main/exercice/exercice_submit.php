@@ -33,7 +33,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 12891 2007-08-12 19:25:08Z yannoo $
+* 	@version $Id: exercice_submit.php 13177 2007-09-21 14:50:21Z elixir_inter $
 */
 
 
@@ -482,7 +482,7 @@ $s.=" <form method='post' action='".api_get_self()."?autocomplete=off".$s2."' na
 <table width='100%' border='0' cellpadding='1' cellspacing='0'>
  <tr>
   <td>
-  <table width='100%' cellpadding='3' cellspacing='2' border='0'>";
+  <table width='100%' cellpadding='3' cellspacing='0' border='0'>";
 echo $s;
 
 $i=0;
@@ -520,7 +520,7 @@ foreach($questionList as $questionId)
 	}
 
 	$s="<tr>
-	 <td width='3%'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
+	 <td width='3%' bgcolor='#e6e6e6'><img src=\"".api_get_path(WEB_IMG_PATH)."test.gif\" align=\"absmiddle\"></td>
 	 <td valign='middle' bgcolor='#e6e6e6'>
 		".get_lang('Question')." ";
 	$s.=$i;

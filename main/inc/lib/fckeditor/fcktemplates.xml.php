@@ -5,11 +5,11 @@ echo '<?xml version="1.0" encoding="utf-8" ?>';
 $IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
 
 function loadCSS($css_name){
-	$template_css = '<style type="text/css">'.file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/course.css').'</style>';
+	$template_css = '<style type="text/css">'.file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css').'</style>';
 	$template_css=str_replace('images/',api_get_path(WEB_PATH).'main/css/'.$css_name.'/images/',$template_css);
 	return $template_css;
 }
-$css = loadCSS('default');
+$css = loadCSS(api_get_setting('stylesheets'));
 
 ?>
 <Templates imagesBasePath="fck_template/images/">

@@ -1,5 +1,5 @@
 <?php
-// $Id: user_export.php 12420 2007-05-16 09:09:12Z elixir_julian $
+// $Id: user_export.php 13180 2007-09-21 17:50:47Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -84,7 +84,7 @@ if ($form->validate())
 					u.phone		AS Phone";
 	if (strlen($course_code) > 0)
 	{
-		$sql .= " FROM $user_table u, $course_user_table cu WHERE u.user_id = cu.user_id ORDER BY lastname,firstname";
+		$sql .= " FROM $user_table u, $course_user_table cu WHERE u.user_id = cu.user_id AND course_code = '$course_code' ORDER BY lastname,firstname";
 		$filename = 'export_users_'.$course_code.'_'.date('Y-m-d_H-i-s');
 	}
 	else

@@ -1099,7 +1099,8 @@ function show_new_item_form($id = "")
 	echo "</td></tr>";
 	// ********** The text field ********** \\
 	echo "<tr><td colspan=\"2\">";
-	api_disp_html_area('frm_content', $text, '300px');
+	//api_disp_html_area('frm_content', $text, '300px');
+	echo'<textarea name="frm_content" style="width: 450px; height: 100px;">'.$text.'</textarea>';
 	echo "</td></tr>";
 	// ********** The Submit button********** \\
 	echo "<tr><td colspan=\"2\">";

@@ -332,7 +332,7 @@ foreach ($forum_list as $key=>$forum)
 			echo "</td>\n";
 			if (api_is_allowed_to_edit())
 			{
-				echo "\t\t<td NOWRAP>";
+				echo "\t\t<td NOWRAP align='center'>";
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".$_GET['forumcategory']."&amp;action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".$_GET['forumcategory']."&amp;action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeleteForum")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('forum',$forum['forum_id'], $forum['visibility'], array("forumcategory"=>$_GET['forumcategory']));

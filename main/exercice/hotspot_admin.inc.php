@@ -292,12 +292,12 @@ if($modifyAnswers)
 	{
 		Display::display_normal_message($msgErr); //main API
 	}
+	
+	Display::display_normal_message(stripslashes(get_lang('HotspotChoose')), false);
 ?>
+
 <form method="post" action="<?php echo api_get_self(); ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" name="frm_exercise">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tr>
-		<td colspan="2" style="border:1px solid #4271b5;"><?php echo stripslashes(get_lang('HotspotChoose')); ?></td>
-	</tr>
 	<tr>
 		<td valign="top" style="border:1px solid #4271b5;border-top:none; border-right:none; border-bottom:none">			
 				<input type="hidden" name="formSent" value="1" />
@@ -310,7 +310,7 @@ if($modifyAnswers)
 					-->
 					<tr>
 					  <th width="5">&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></th>
-					  <th ><?php echo get_lang('Description'); ?>*</th>
+					  <th ><?php echo get_lang('HotspotDescription'); ?>*</th>
 					  <th ><?php echo get_lang('Comment'); ?></th>
 					  <th><?php echo get_lang('QuestionWeighting'); ?>*</th>
 					</tr>

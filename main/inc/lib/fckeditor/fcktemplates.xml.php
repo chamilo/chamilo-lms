@@ -111,9 +111,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    
 				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Comparison</font><br />
 				    <br />
-				
-				    <span style="font-weight: bold; font-style: italic;">Tip</span> <span style="font-style: italic;">: use this template to compare two sets of propositions.</span><br />
-				    <br />
+				    
+				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip : </span>use this template to compare two sets of propositions.</span>
+				    
+				    <br /><br />
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
 				      <tbody>
 				        <tr>
@@ -363,13 +364,12 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">A table<br /></font><br />
-				    <span style="font-style: italic;"><span style="font-weight: bold;">Tip</span> : to edit this table, click on the small arrows and cross-in-a-circle icons on the borders of the
-				    cells.</span><br style="font-style: italic;" />
-				
-				    <span style="font-style: italic;">This will add /remove lines and columns. You can also right-click in the table to display the table and cell edit options.</span> <font size="5" style=
-				    "font-weight: bold; color: rgb(192, 192, 192);"><br /></font><br />
-				    <table width="720" cellspacing="0" cellpadding="2" border="1" align="left" summary="">
+				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">A table<br><br></font>
+				    
+				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip</span> : to edit this table, click on the small arrows and cross-in-a-circle icons on the borders of the cells.<br />This will add /remove lines and columns. You can also right-click in the table to display the table and cell edit options.</span><br /><br />
+				    
+				    
+				    <table width="720" cellspacing="0" cellpadding="2" border="1" align="left" summary="" style="font-size: 12px">
 				      <tbody>
 				        <tr>
 				          <td valign="top" bgcolor="#E3E3E3" style="font-weight: bold;">
@@ -788,11 +788,10 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Certificate of completion<br /></font><br />
-				    <span style="font-style: italic;"><span style="font-weight: bold;">Tip</span> : edit this certificate and put it at the end of your learning path.</span><br style="font-style: italic;" />
-				
-				    <span style="font-style: italic;">If you create pre-requisites in your learning path, the certificate will be visible only to ones who deserve it.</span> <font size="5" style=
-				    "font-weight: bold; color: rgb(192, 192, 192);"><br /></font><br />
+				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Certificate of completion<br><br></font>
+				    
+				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip</span> : edit this certificate and put it at the end of your learning path.<br />If you create pre-requisites in your learning path, the certificate will be visible only to ones who deserve it.</span><br /><br />
+				    
 				    <table width="720" cellspacing="0" cellpadding="20" border="5" align="left" summary="">
 				      <tbody>
 				        <tr>

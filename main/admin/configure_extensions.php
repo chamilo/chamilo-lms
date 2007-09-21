@@ -114,11 +114,11 @@ if(isset($_POST['activeExtension'])){
 					AND subkey="visio_rtmp_host_local"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);	
 
-			$sql = 'UPDATE '.$tbl_settings_current.' SET
-					selected_value="'.addslashes($_POST['visio_is_web_rtmp']).'"
-					WHERE variable="service_visio"
-					AND subkey="visio_is_web_rtmp"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);	
+			//$sql = 'UPDATE '.$tbl_settings_current.' SET
+			//		selected_value="'.addslashes($_POST['visio_is_web_rtmp']).'"
+			//		WHERE variable="service_visio"
+			//		AND subkey="visio_is_web_rtmp"';
+			//$rs = api_sql_query($sql, __FILE__, __LINE__);	
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['visio_rtmp_port']).'"
@@ -199,7 +199,6 @@ $rs = api_sql_query($sql, __FILE__, __LINE__);
 while($row = mysql_fetch_array($rs)){
 	$listActiveServices[] = $row['variable'];
 }
-
 
 $javascript_service_displayed = '';
 if(isset($_GET['display'])){
@@ -305,8 +304,8 @@ Display::display_header($nameTool);
 						$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'visio_rtmp_host_local', get_lang('VisioHostLocal'));
 						$form -> addElement('html','<br /><br />');
-						$form -> addElement('text', 'visio_is_web_rtmp', get_lang('VisioRTMPIsWeb'));
-						$form -> addElement('html','<br /><br />');
+						//$form -> addElement('text', 'visio_is_web_rtmp', get_lang('VisioRTMPIsWeb'));
+						//$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'visio_rtmp_port', get_lang('VisioRTMPPort'));
 						$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'visio_rtmp_tunnel_port', get_lang('VisioRTMPTunnelPort'));
@@ -344,7 +343,7 @@ Display::display_header($nameTool);
 			<a href="#"><?php echo get_lang('Ppt2lp') ?></a>
 		</div>
 		<div id="extension_content_ppt2lp" style="display:none" class="accordion_content">		
-			<?php echo get_lang('Ppt2lpDescription') ?><br /><br />
+			<?php echo get_lang('Ppt2lpDescription').' '.get_lang('Ppt2lpVoiceRecordingNeedsRed5') ?><br /><br />
 			<table width="100%">
 				<tr>
 					<td width="50%">

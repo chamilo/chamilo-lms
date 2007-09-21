@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 12927 2007-09-03 14:48:13Z elixir_julian $
+<?php // $Id: user_edit.php 13183 2007-09-21 21:23:20Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -254,10 +254,15 @@ if( $form->validate())
 		$password = api_generate_password();
 		$auth_source = PLATFORM_AUTH_SOURCE;
 	}
-	else
+	elseif($reset_password == 2)
 	{
 		$password = $user['password'];
 		$auth_source = PLATFORM_AUTH_SOURCE;
+	}
+	elseif($reset_password == 3)
+	{
+		$password = $user['password'];
+		$auth_source = $user['auth_source'];		
 	}
 	UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active);
 	if($user_id != $_SESSION['_uid'])

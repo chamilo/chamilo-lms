@@ -22,7 +22,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 13160 2007-09-21 09:54:34Z elixir_inter $
+* 	@version $Id: exercise.class.php 13172 2007-09-21 13:40:49Z elixir_julian $
 */
 
 
@@ -616,9 +616,9 @@ class Exercise
 		$form -> addGroup($radios, null, get_lang('ExerciseType').' : ', '<br />');
 
 		// random
-		$random = array();
+		/*$random = array();
 		$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
-		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');
+		$form -> addGroup($random,null,get_lang('RandomQuestions').' : ','<br />');*/
 
 		// submit
 		$form -> addElement('submit', 'submitExercise', get_lang('Ok'));
@@ -633,11 +633,11 @@ class Exercise
 			$defaults['exerciseType'] = $this -> selectType();
 			$defaults['exerciseTitle'] = $this -> selectTitle();
 			$defaults['exerciseDescription'] = $this -> selectDescription();
-			$defaults['randomQuestions'] = $this -> isRandom();
+			//$defaults['randomQuestions'] = $this -> isRandom();
 		}
 		else{
 			$defaults['exerciseType'] = 1;
-			$defaults['randomQuestions'] = 0;
+			//$defaults['randomQuestions'] = 0;
 			$defaults['exerciseDescription'] = '';
 		}
 

@@ -193,10 +193,10 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 	$totquery = "update $TBL_TRACK_EXERCICES set exe_result = $tot where exe_Id=$id";
 
 	api_sql_query($totquery, __FILE__, __LINE__);
-$subject = "Examsheet viewed/corrected/commented by teacher";
-$message = "<html>
+$subject = get_lang('ExamSheetVCC');
+$htmlmessage = '<html>
 <head>
-<style type='text/css'>
+<style type="text/css">
 <!--
 .body{
 font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -214,30 +214,29 @@ color: #000000;
 </style>
 </head>
 <body>
-<DIV>
+<div>
   <p>Dear Student, </p>
-  <p class='style10'> Your following attempt has been viewed/commented/corrected by teacher </p>
-  <table width='417'>
+  <p class="style10"> '.get_lang('AttemptVCC').' </p>
+  <table width="417">
     <tr>
-      <td width='229' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Question</span></td>
-      <td width='469' valign='top' bgcolor='#F3F3F3'><span class='style16'>#ques_name#</span></td>
+      <td width="229" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
+      <td width="469" valign="top" bgcolor="#F3F3F3"><span class="style16">#ques_name#</span></td>
 
     </tr>
     <tr>
-      <td width='229' valign='top' bgcolor='E5EDF8'>&nbsp;&nbsp;<span class='style10'>Test</span></td>
-       <td width='469' valign='top' bgcolor='#F3F3F3'><span class='style16'>#test#</span></td>
+      <td width="229" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Exercice').'</span></td>
+       <td width="469" valign="top" bgcolor="#F3F3F3"><span class="style16">#test#</span></td>
 
     </tr>
   </table>
-  <p>Click the link below to access   your account and view your commented Examsheet. <A href='#url#'>#url#</A><BR>
-    <BR>
-  Regards </p>
-  </DIV>
+  <p>'.get_lang('ClickLinkToViewComment').' <a href="#url#">#url#</a><br />
+    <br />
+  '.get_lang('Regards').' </p>
+  </div>
   </body>
   </html>
-";
-$message = "<p>You attempt for the test #test# has been viewed/commented/corrected by the teacher. Click the link below to access  your account and view your Examsheet. <A href='#url#'>#url#</A></p>
-<BR>";
+';
+$message = '<p>'.sprintf(get_lang('AttemptVCCLong'),$test).' <A href="#url#">#url#</A></p><br />';
 $mess= str_replace("#test#",$test,$message);
 //$message= str_replace("#ques_name#",$ques_name,$mess);
 $message = str_replace("#url#",$url,$mess);

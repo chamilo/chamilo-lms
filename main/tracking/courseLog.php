@@ -258,7 +258,7 @@ if($_GET['studentlist'] == 'false')
 	 
 	 echo "<div class='admin_section'>
 				<h4>
-					<img src='../img/quiz.gif' align='absbottom'>&nbsp;".get_lang('AverageResultsToTheExercices')."
+					<img src='../img/quiz.gif' align='absbottom'>&nbsp;".get_lang('AverageResultsToTheExercices')." <a href='../exercice/exercice.php?".api_get_cidreq()."&show=result'>".get_lang('SeeDetail')."</a>
 				</h4>
 			<table class='data_table'>";
 			

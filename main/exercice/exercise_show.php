@@ -699,7 +699,6 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						$query = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
 						$resq=api_sql_query($query);
 						$choice = mysql_result($resq,0,"answer");
-						echo $choice;
 						display_hotspot_answer($answerId,$answer,$choice,$answerComment);
 		
 						$i++;

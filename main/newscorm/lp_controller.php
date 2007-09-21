@@ -146,7 +146,7 @@ $_SESSION['oLP']->update_queue = array(); //reinitialises array used by javascri
 $_SESSION['oLP']->message = ''; //should use ->clear_message() method but doesn't work
 
 $fck_attribute['Width'] = '100%';
-$fck_attribute['Height'] = '400';
+$fck_attribute['Height'] = '950';
 $fck_attribute['ToolbarSet'] = 'Full';
 $fck_attribute['Config']['FullPage'] = true;
 

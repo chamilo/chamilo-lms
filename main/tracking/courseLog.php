@@ -192,151 +192,6 @@ echo '<div class="clear"></div>';
 if($_GET['studentlist'] == 'false')
 {
 	echo'<br /><br />';
-		
-	
-	/**********************
-	 * TOOLS
-	 **********************/
-	
-	echo "<div class='admin_section'>
-				<h4>
-					<img src='../img/acces_tool.gif' align='absbottom'>&nbsp;".get_lang('ToolsMostUsed')."
-				</h4>
-			<table class='data_table'>";
-			 
-	$sql = "SELECT `access_tool`, COUNT(DISTINCT `access_user_id`),count( `access_tool` ) as count_access_tool
-            FROM $TABLETRACK_ACCESS
-            WHERE `access_tool` IS NOT NULL
-                AND `access_cours_code` = '$_cid'
-            GROUP BY `access_tool`
-			ORDER BY count_access_tool DESC
-			LIMIT 0, 3";
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
-	
-	 if($export_csv){
-    	$temp=array(get_lang('ToolsMostUsed'),'');
-    	$csv_content[] = $temp;
-    }
-	
-	while ($row = mysql_fetch_array($rs))
-	{
-		echo '	<tr>
-					<td>'.get_lang(ucfirst($row['access_tool'])).'</td>
-					<td align="right">'.$row['count_access_tool'].' '.get_lang('Clicks').'</td>
-				</tr>';
-		if($export_csv){
-			$temp=array(get_lang(ucfirst($row['access_tool'])),$row['count_access_tool'].' '.get_lang('Clicks'));
-			$csv_content[] = $temp;
-		}
-	}
-	
-	echo '</table></div>';
-	
-	echo '<div class="clear"></div>';
-	
-	/***************************
-	 * LINKS
-	 ***************************/
-	 
-	 echo "<div class='admin_section'>
-				<h4>
-					<img src='../img/link.gif' align='absbottom'>&nbsp;".get_lang('LinksMostClicked')."
-				</h4>
-			<table class='data_table'>";
-			
-	$sql = "SELECT `cl`.`title`, `cl`.`url`,count(DISTINCT `sl`.`links_user_id`), count(`cl`.`title`) as count_visits
-            FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
-            WHERE `sl`.`links_link_id` = `cl`.`id`
-                AND `sl`.`links_cours_id` = '$_cid'
-            GROUP BY `cl`.`title`, `cl`.`url`
-			ORDER BY count_visits DESC
-			LIMIT 0, 3";
-    $rs = api_sql_query($sql, __FILE__, __LINE__);
-    
-    if($export_csv){
-    	$temp=array(get_lang('LinksMostClicked'),'');
-    	$csv_content[] = array('','');
-    	$csv_content[] = $temp;
-    }
-    
-    if(mysql_num_rows($rs)>0)
-    {
-	    while($row = mysql_fetch_array($rs))
-	    {
-	    	echo '	<tr>
-						<td>'.$row['title'].'</td>
-						<td align="right">'.$row['count_visits'].' '.get_lang('Clicks').'</td>
-					</tr>';
-			if($export_csv){
-				$temp=array($row['title'],$row['count_visits'].' '.get_lang('Clicks'));
-				$csv_content[] = $temp;
-			}
-	    }
-    }
-    else
-    {
-    	echo '<tr><td>'.get_lang('NoLinkVisited').'</td></tr>';
-    	if($export_csv){
-    		$temp=array(get_lang('NoLinkVisited'),'');
-			$csv_content[] = $temp;
-    	}
-    }
-	echo '</table></div>';
-	
-	
-	echo '<div class="clear"></div>';
-	
-	
-	/***************************
-	 * DOCUMENTS
-	 ***************************/
-	 
-	 echo "<div class='admin_section'>
-				<h4>
-					<img src='../img/documents.gif' align='absbottom'>&nbsp;".get_lang('DocumentsMostDownloaded')."
-				</h4>
-			<table class='data_table'>";
-			
-	$sql = "SELECT `down_doc_path`, COUNT(DISTINCT `down_user_id`), COUNT(`down_doc_path`) as count_down
-            FROM $TABLETRACK_DOWNLOADS
-            WHERE `down_cours_id` = '$_cid'
-            GROUP BY `down_doc_path`
-			ORDER BY count_down DESC
-			LIMIT 0, 3";
-    $rs = api_sql_query($sql, __FILE__, __LINE__);
-    
-    if($export_csv){
-    	$temp=array(get_lang('DocumentsMostDownloaded'),'');
-    	$csv_content[] = array('','');
-    	$csv_content[] = $temp;
-    }
-    
-    if(mysql_num_rows($rs)>0)
-    {
-	    while($row = mysql_fetch_array($rs))
-	    {
-	    	echo '	<tr>
-						<td>'.$row['down_doc_path'].'</td>
-						<td align="right">'.$row['count_down'].' '.get_lang('Clicks').'</td>
-					</tr>';
-					
-			if($export_csv){
-				$temp=array($row['down_doc_path'],$row['count_down'].' '.get_lang('Clicks'));
-				$csv_content[] = $temp;
-			}
-	    }
-    }
-    else
-    {
-    	echo '<tr><td>'.get_lang('NoDocumentDownloaded').'</td></tr>';
-    	if($export_csv){
-    		$temp=array(get_lang('NoDocumentDownloaded'),'');
-			$csv_content[] = $temp;
-    	}
-    }
-	echo '</table></div>';
-	
-	echo '<div class="clear"></div>';
 	
 	
 	/***************************
@@ -456,6 +311,153 @@ if($_GET['studentlist'] == 'false')
 	}
 	
 	echo '</table></div>';
+	echo '<div class="clear"></div>';
+	
+	
+	/**********************
+	 * TOOLS
+	 **********************/
+	
+	echo "<div class='admin_section'>
+				<h4>
+					<img src='../img/acces_tool.gif' align='absbottom'>&nbsp;".get_lang('ToolsMostUsed')."
+				</h4>
+			<table class='data_table'>";
+			 
+	$sql = "SELECT `access_tool`, COUNT(DISTINCT `access_user_id`),count( `access_tool` ) as count_access_tool
+            FROM $TABLETRACK_ACCESS
+            WHERE `access_tool` IS NOT NULL
+                AND `access_cours_code` = '$_cid'
+            GROUP BY `access_tool`
+			ORDER BY count_access_tool DESC
+			LIMIT 0, 3";
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	
+	 if($export_csv){
+    	$temp=array(get_lang('ToolsMostUsed'),'');
+    	$csv_content[] = $temp;
+    }
+	
+	while ($row = mysql_fetch_array($rs))
+	{
+		echo '	<tr>
+					<td>'.get_lang(ucfirst($row['access_tool'])).'</td>
+					<td align="right">'.$row['count_access_tool'].' '.get_lang('Clicks').'</td>
+				</tr>';
+		if($export_csv){
+			$temp=array(get_lang(ucfirst($row['access_tool'])),$row['count_access_tool'].' '.get_lang('Clicks'));
+			$csv_content[] = $temp;
+		}
+	}
+	
+	echo '</table></div>';
+	
+	echo '<div class="clear"></div>';
+	
+	
+	/***************************
+	 * DOCUMENTS
+	 ***************************/
+	 
+	 echo "<div class='admin_section'>
+				<h4>
+					<img src='../img/documents.gif' align='absbottom'>&nbsp;".get_lang('DocumentsMostDownloaded')."
+				</h4>
+			<table class='data_table'>";
+			
+	$sql = "SELECT `down_doc_path`, COUNT(DISTINCT `down_user_id`), COUNT(`down_doc_path`) as count_down
+            FROM $TABLETRACK_DOWNLOADS
+            WHERE `down_cours_id` = '$_cid'
+            GROUP BY `down_doc_path`
+			ORDER BY count_down DESC
+			LIMIT 0, 3";
+    $rs = api_sql_query($sql, __FILE__, __LINE__);
+    
+    if($export_csv){
+    	$temp=array(get_lang('DocumentsMostDownloaded'),'');
+    	$csv_content[] = array('','');
+    	$csv_content[] = $temp;
+    }
+    
+    if(mysql_num_rows($rs)>0)
+    {
+	    while($row = mysql_fetch_array($rs))
+	    {
+	    	echo '	<tr>
+						<td>'.$row['down_doc_path'].'</td>
+						<td align="right">'.$row['count_down'].' '.get_lang('Clicks').'</td>
+					</tr>';
+					
+			if($export_csv){
+				$temp=array($row['down_doc_path'],$row['count_down'].' '.get_lang('Clicks'));
+				$csv_content[] = $temp;
+			}
+	    }
+    }
+    else
+    {
+    	echo '<tr><td>'.get_lang('NoDocumentDownloaded').'</td></tr>';
+    	if($export_csv){
+    		$temp=array(get_lang('NoDocumentDownloaded'),'');
+			$csv_content[] = $temp;
+    	}
+    }
+	echo '</table></div>';
+	
+	echo '<div class="clear"></div>';
+	
+	
+	/***************************
+	 * LINKS
+	 ***************************/
+	 
+	 echo "<div class='admin_section'>
+				<h4>
+					<img src='../img/link.gif' align='absbottom'>&nbsp;".get_lang('LinksMostClicked')."
+				</h4>
+			<table class='data_table'>";
+			
+	$sql = "SELECT `cl`.`title`, `cl`.`url`,count(DISTINCT `sl`.`links_user_id`), count(`cl`.`title`) as count_visits
+            FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
+            WHERE `sl`.`links_link_id` = `cl`.`id`
+                AND `sl`.`links_cours_id` = '$_cid'
+            GROUP BY `cl`.`title`, `cl`.`url`
+			ORDER BY count_visits DESC
+			LIMIT 0, 3";
+    $rs = api_sql_query($sql, __FILE__, __LINE__);
+    
+    if($export_csv){
+    	$temp=array(get_lang('LinksMostClicked'),'');
+    	$csv_content[] = array('','');
+    	$csv_content[] = $temp;
+    }
+    
+    if(mysql_num_rows($rs)>0)
+    {
+	    while($row = mysql_fetch_array($rs))
+	    {
+	    	echo '	<tr>
+						<td>'.$row['title'].'</td>
+						<td align="right">'.$row['count_visits'].' '.get_lang('Clicks').'</td>
+					</tr>';
+			if($export_csv){
+				$temp=array($row['title'],$row['count_visits'].' '.get_lang('Clicks'));
+				$csv_content[] = $temp;
+			}
+	    }
+    }
+    else
+    {
+    	echo '<tr><td>'.get_lang('NoLinkVisited').'</td></tr>';
+    	if($export_csv){
+    		$temp=array(get_lang('NoLinkVisited'),'');
+			$csv_content[] = $temp;
+    	}
+    }
+	echo '</table></div>';
+	
+	
+	echo '<div class="clear"></div>';	
 	
 	// send the csv file if asked
 	if($export_csv)

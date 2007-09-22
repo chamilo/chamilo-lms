@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 12219 2007-05-01 18:46:59Z yannoo $
+* 	@version $Id: admin.php 13186 2007-09-22 05:33:18Z yannoo $
 */
 
 
@@ -75,6 +75,16 @@ $language_file='exercice';
 include("../inc/global.inc.php");
 include('exercise.lib.php');
 $this_section=SECTION_COURSES;
+
+$is_allowedToEdit=api_is_allowed_to_edit();
+
+if(!$is_allowedToEdit)
+{
+	api_not_allowed(true);
+}
+
+// allows script inclusions
+define(ALLOWED_TO_INCLUDE,1);
 
 include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
@@ -141,13 +151,6 @@ $objExercise = $_SESSION['objExercise'];
 $objQuestion = $_SESSION['objQuestion'];
 $objAnswer   = $_SESSION['objAnswer'];
 
-
-
-// allows script inclusions
-define(ALLOWED_TO_INCLUDE,1);
-
-$is_allowedToEdit=api_is_allowed_to_edit();
-
 // document path
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
@@ -167,9 +170,11 @@ $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TBL_DOCUMENT          = Database::get_course_table(TABLE_DOCUMENT);
 
-if(!$is_allowedToEdit)
+if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId']))
 {
-	api_not_allowed(true);
+	require_once('export/qti2/qti2_export.php');
+	$export = export_question((int)$_GET['questionId'],true);
+	DocumentManager::string_send_for_download($export,true,'qti2export_q'.$_GET['questionId'].'.xml');
 }
 
 // intializes the Exercise object

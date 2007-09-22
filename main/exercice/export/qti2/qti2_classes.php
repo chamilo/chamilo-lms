@@ -22,6 +22,12 @@ define('FREE_ANSWER', 		5);
 define('HOTSPOT',			6);
 
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotspot.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercice/unique_answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercice/multiple_answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercice/matching.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercice/freeanswer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercice/fill_blanks.class.php');
 //include_once $path . '/../../lib/answer_multiplechoice.class.php';
 //include_once $path . '/../../lib/answer_truefalse.class.php';
 //include_once $path . '/../../lib/answer_fib.class.php';
@@ -59,6 +65,14 @@ class Ims2Question extends Question
                 break;
         }
         return $answer;
+    }
+    function createAnswersForm($form)
+    {
+    	return true;
+    }
+    function processAnswersCreation($form)
+    {
+    	return true;
     }
 } 
 

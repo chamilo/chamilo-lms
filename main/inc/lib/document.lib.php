@@ -396,6 +396,73 @@ class DocumentManager
 	}
 
 	/**
+	* This function streams a string to the client for download
+	*
+	* @param string The string contents
+	* @param boolean Whether "save" mode is forced (or opening directly authorized)
+	* @param string The name of the file in the end (including extension)
+	* @return false if file doesn't exist, true if stream succeeded
+	*/
+	function string_send_for_download($full_string, $forced = false, $name = '')
+	{
+		$filename = $name;
+		$len = strlen($full_string);
+
+		if ($forced)
+		{
+			//force the browser to save the file instead of opening it
+
+			header('Content-type: application/octet-stream');
+			//header('Content-Type: application/force-download');
+			header('Content-length: '.$len);
+			if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
+			{
+				header('Content-Disposition: filename= '.$filename);
+			}
+			else
+			{
+				header('Content-Disposition: attachment; filename= '.$filename);
+			}
+			if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
+			{
+				header('Pragma: ');
+				header('Cache-Control: ');
+				header('Cache-Control: public'); // IE cannot download from sessions without a cache
+			}
+			header('Content-Description: '.$filename);
+			header('Content-transfer-encoding: binary');
+
+			//$fp = fopen($full_string, 'r');
+			//fpassthru($fp);
+			echo $full_string;
+			return true;
+		}
+		else
+		{
+			//no forced download, just let the browser decide what to do according to the mimetype
+
+			$content_type = DocumentManager :: file_get_mime_type($filename);
+			header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
+			header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+			header('Cache-Control: no-cache, must-revalidate');
+			header('Pragma: no-cache');
+			header('Content-type: '.$content_type);
+			header('Content-Length: '.$len);
+			$user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+			if (strpos($user_agent, 'msie'))
+			{
+				header('Content-Disposition: ; filename= '.$filename);
+			}
+			else
+			{
+				header('Content-Disposition: inline; filename= '.$filename);
+			}
+			echo($full_string);
+			return true;
+		}
+	}
+
+	/**
 	* Fetches all document data for the given user/group
 	*
 	* @param array $_course

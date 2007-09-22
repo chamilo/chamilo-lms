@@ -22,7 +22,7 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercise.class.php 13172 2007-09-21 13:40:49Z elixir_julian $
+* 	@version $Id: exercise.class.php 13184 2007-09-22 05:30:47Z yannoo $
 */
 
 
@@ -37,6 +37,7 @@ class Exercise
 	var $type;
 	var $random;
 	var $active;
+	var $timeLimit;
 
 	var $questionList;  // array with the list of this exercise's questions
 
@@ -55,6 +56,7 @@ class Exercise
 		$this->random=0;
 		$this->active=1;
 		$this->questionList=array();
+		$this->timeLimit = 0;
 	}
 
 	/**
@@ -130,6 +132,13 @@ class Exercise
 	{
 		return $this->exercise;
 	}
+	/**
+	 * returns the time limit
+	 */
+	function selectTimeLimit()
+	{
+		return $this->timeLimit;
+	}
 
 	/**
 	 * returns the exercise description
@@ -171,6 +180,13 @@ class Exercise
 	 * @return - integer - 0 if not random, otherwise the draws
 	 */
 	function isRandom()
+	{
+		return $this->random;
+	}
+	/**
+	 * Same as isRandom() but has a name applied to values different than 0 or 1
+	 */
+	function getShuffle()
 	{
 		return $this->random;
 	}

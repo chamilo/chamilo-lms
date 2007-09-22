@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 12269 2007-05-03 14:17:37Z elixir_julian $
+* 	@version $Id: question_list_admin.inc.php 13188 2007-09-22 05:36:41Z yannoo $
 */
 
 
@@ -86,7 +86,8 @@ Question :: display_type_menu ();
 <table class="data_table">
 <tr class="row_odd" bgcolor='#e6e6e6'><th><b><?php echo get_lang('Question'); ?></b></th>
 <th><b><?php echo get_lang('Type');?></b></th>
-<th ><b><?php echo get_lang('Modify'); ?></b></th>
+<th><b><?php echo get_lang('Export'); ?></b></th>
+<th><b><?php echo get_lang('Modify'); ?></b></th>
 </tr>
 
 <?php
@@ -105,37 +106,38 @@ if($nbrQuestions)
 
 <tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
   <td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td> <td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
+  <td align="center"><a href="<?php echo api_get_self(); ?>?action=exportqti2&questionId=<?php echo $id; ?>"><img src="../img/export.png" border="0" align="absmiddle" alt="IMS/QTI" /></a></td>
   <td> <a href="<?php echo api_get_self(); ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" align="absmiddle" alt="<?php echo get_lang('Delete'); ?>" /></a>
 
 	<?php
 		if($i != 1)
 		{
-?>
+    ?>
 
 	<a href="<?php echo api_get_self(); ?>?moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveUp'); ?>"></a>
 
-<?php
+    <?php
 		}
 
 		if($i != $nbrQuestions)
 		{
-?>
+    ?>
 
 	<a href="<?php echo api_get_self(); ?>?moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" align="absmiddle" alt="<?php echo get_lang('MoveDown'); ?>"></a>
 
-<?php
+    <?php
 		}
-?>
+    ?>
+    </td>
 
- </td>
-
-<?php
+    <?php
 		$i++;
 
 		unset($objQuestionTmp);
-?>
-</tr>
-	<?php }
+    ?>
+    </tr>
+	<?php 
+	}
 }
 ?>
 </table>

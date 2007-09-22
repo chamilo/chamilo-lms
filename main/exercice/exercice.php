@@ -48,6 +48,7 @@ require_once('answer.class.php');
 require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once('hotpotatoes.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 
 /*
 -----------------------------------------------------------
@@ -144,8 +145,8 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 	$id  = $_GET['exeid'];
 	$emailid = $_GET['emailid'];
 	$test  = $_GET['test'];
-	$from = $_SESSION[_user]['mail'];
-	$from_name = $_SESSION[_user]['firstName']." ".$_SESSION[_user]['lastName'];
+	$from = $_SESSION['_user']['mail'];
+	$from_name = $_SESSION['_user']['firstName']." ".$_SESSION['_user']['lastName'];
 	$url = $_SESSION['checkDokeosURL'].'claroline/exercice/exercice.php?'.api_get_cidreq().'&show=result';
 
 	foreach ($_POST as $key=>$v)
@@ -193,66 +194,62 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 	$totquery = "update $TBL_TRACK_EXERCICES set exe_result = $tot where exe_Id=$id";
 
 	api_sql_query($totquery, __FILE__, __LINE__);
-$subject = get_lang('ExamSheetVCC');
-$htmlmessage = '<html>
-<head>
-<style type="text/css">
-<!--
-.body{
-font-family: Verdana, Arial, Helvetica, sans-serif;
-font-weight: Normal;
-color: #000000;
-}
-.style8 {font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: #006699; }
-.style10 {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	font-weight: bold;
-}
-.style16 {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; }
--->
-</style>
-</head>
-<body>
-<div>
-  <p>Dear Student, </p>
-  <p class="style10"> '.get_lang('AttemptVCC').' </p>
-  <table width="417">
-    <tr>
-      <td width="229" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
-      <td width="469" valign="top" bgcolor="#F3F3F3"><span class="style16">#ques_name#</span></td>
+	$subject = get_lang('ExamSheetVCC');
+	$htmlmessage = '<html>'.
+				'<head>' .
+				'<style type="text/css">' .
+				'<!--' .
+				'.body{' .
+				'font-family: Verdana, Arial, Helvetica, sans-serif;' .
+				'font-weight: Normal;' .
+				'color: #000000;' .
+				'}' .
+				'.style8 {font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold; color: #006699; }' .
+				'.style10 {' .
+				'	font-family: Verdana, Arial, Helvetica, sans-serif;' .
+				'	font-size: 12px;' .
+				'	font-weight: bold;' .
+				'}' .
+				'.style16 {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; }' .
+				'-->' .
+				'</style>' .
+				'</head>' .
+				'<body>' .
+				'<div>' .
+				'  <p>Dear Student, </p>' .
+				'  <p class="style10"> '.get_lang('AttemptVCC').' </p>' .
+				'  <table width="417">' .
+				'    <tr>' .
+				'      <td width="229" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>' .
+				'      <td width="469" valign="top" bgcolor="#F3F3F3"><span class="style16">#ques_name#</span></td>' .
+				'    </tr>' .
+				'    <tr>' .
+				'      <td width="229" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Exercice').'</span></td>' .
+				'       <td width="469" valign="top" bgcolor="#F3F3F3"><span class="style16">#test#</span></td>' .
+				'    </tr>' .
+				'  </table>' .
+				'  <p>'.get_lang('ClickLinkToViewComment').' <a href="#url#">#url#</a><br />' .
+				'    <br />' .
+				'  '.get_lang('Regards').' </p>' .
+				'  </div>' .
+				'  </body>' .
+				'  </html>';
+	$message = '<p>'.sprintf(get_lang('AttemptVCCLong'),$test).' <A href="#url#">#url#</A></p><br />';
+	$mess= str_replace("#test#",$test,$message);
+	//$message= str_replace("#ques_name#",$ques_name,$mess);
+	$message = str_replace("#url#",$url,$mess);
+	$mess = stripslashes($message);
+	$headers  = " MIME-Version: 1.0 \r\n";
+	$headers .= "User-Agent: Dokeos/1.6";
+	$headers .= "Content-Transfer-Encoding: 7bit";
+	$headers .= 'From: '.$from_name.' <'.$from.'>' . "\r\n";
+	$headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=".($charset?$charset:'ISO-8859-15');
+	//mail($emailid, $subject, $mess,$headers);
 
-    </tr>
-    <tr>
-      <td width="229" valign="top" bgcolor="E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Exercice').'</span></td>
-       <td width="469" valign="top" bgcolor="#F3F3F3"><span class="style16">#test#</span></td>
-
-    </tr>
-  </table>
-  <p>'.get_lang('ClickLinkToViewComment').' <a href="#url#">#url#</a><br />
-    <br />
-  '.get_lang('Regards').' </p>
-  </div>
-  </body>
-  </html>
-';
-$message = '<p>'.sprintf(get_lang('AttemptVCCLong'),$test).' <A href="#url#">#url#</A></p><br />';
-$mess= str_replace("#test#",$test,$message);
-//$message= str_replace("#ques_name#",$ques_name,$mess);
-$message = str_replace("#url#",$url,$mess);
-$mess = stripslashes($message);
-$headers  = " MIME-Version: 1.0 \r\n";
-$headers .= "User-Agent: Dokeos/1.6";
-$headers .= "Content-Transfer-Encoding: 7bit";
-$headers .= 'From: '.$from_name.' <'.$from.'>' . "\r\n";
-$headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=iso-8859-15";
-//mail($emailid, $subject, $mess,$headers);
-
-if(in_array($origin, array('tracking_course','user_course'))){
-	//Redirect to the reporting		
-	header('location: ../mySpace/myStudents.php?origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['course']);
-}
-
+	if(in_array($origin, array('tracking_course','user_course'))){
+		//Redirect to the reporting		
+		header('location: ../mySpace/myStudents.php?origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['course']);
+	}
 }
 
 if($show!='result')
@@ -273,6 +270,12 @@ else
 	}
 }
 
+if($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2')
+{
+	require_once('export/qti2/qti2_export.php');
+	$export = export_exercise($exerciseId,true);
+	DocumentManager::string_send_for_download($export,true,'qti2export_'.$exerciseId.'.xml');
+}
 
 if ($origin != 'learnpath')
 {
@@ -289,9 +292,7 @@ if ($origin != 'learnpath')
 }
 else
 {
-	?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css"/>
-
-<?php
+	echo '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/default.css"/>';
 }
 
 // used for stats
@@ -504,6 +505,7 @@ if($show == 'test'){
   <tr class="row_odd">
     <th colspan="2"><?php echo get_lang("ExerciseName");?></th>
      <th><?php echo get_lang("Description");?></th>
+	 <th><?php echo get_lang('Export');?></th>
 	 <th><?php echo get_lang("Modify");?></th>
 
   </tr>
@@ -512,7 +514,7 @@ if($show == 'test'){
   else
 	{
 	 ?> <tr bgcolor="#e6e6e6">
-    <th><?php echo get_lang("ExerciseName");?></th>
+     <th><?php echo get_lang("ExerciseName");?></th>
      <th><?php echo get_lang("Description");?></th>
 	 <th><?php echo get_lang("State");?></th>
 
@@ -524,7 +526,7 @@ if($show == 'test'){
 	{
 	?>
   <tr>
-    <td <?php if($is_allowedToEdit) echo 'colspan="4"'; ?>><?php echo get_lang("NoEx"); ?></td>
+    <td <?php echo ($is_allowedToEdit?'colspan="5"':'colspan="3"'); ?>><?php echo get_lang("NoEx"); ?></td>
   </tr>
   <?php
 	}
@@ -550,27 +552,30 @@ if($show == 'test'){
 			if($is_allowedToEdit)
 			{
 				?>
-  <td width="27%" colspan="2">
-  <table border="0" cellpadding="0" cellspacing="0" width="100%">
-    <tr>
-      <td width="30" align="left"><img src="../img/quiz.gif"></td>
-      <td width="15" valign="left" align="center"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
-      <?php $row['title']=api_parse_tex($row['title']); ?>
-      <td>
-      	<a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a>
-      	<a href="exercise_admin.php?modifyExercise=yes&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>" alt="<?php echo htmlentities(get_lang('Modify')); ?>" /></a>
-      </td>
-    </tr>
-  </table></td>
- <td width="8%" align="center"> <?php
- $exid = $row['id'];
- $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE `exercice_id` = '$exid'";
- $sqlresult =api_sql_query($sqlquery);
- $rowi = mysql_result($sqlresult,0);
- echo $rowi.' '.strtolower(get_lang('Questions')); ?> </td>
-       <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build')); ?>" alt="<?php echo htmlentities(get_lang('Build')); ?>" /></a>
-    <a href="exercice.php?choice=delete&exerciseId=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSureToDelete'))); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete')); ?>" /></a>
-    <?php
+		  <td width="27%" colspan="2">
+		  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+		    <tr>
+		      <td width="30" align="left"><img src="../img/quiz.gif"></td>
+		      <td width="15" valign="left" align="center"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
+		      <?php $row['title']=api_parse_tex($row['title']); ?>
+		      <td>
+		      	<a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a>
+		      	<a href="exercise_admin.php?modifyExercise=yes&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>" alt="<?php echo htmlentities(get_lang('Modify')); ?>" /></a>
+		      </td>
+		    </tr>
+		  </table>
+		  </td>
+		  <td width="8%" align="center"> <?php
+		  $exid = $row['id'];
+		  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE `exercice_id` = '$exid'";
+		  $sqlresult =api_sql_query($sqlquery);
+		  $rowi = mysql_result($sqlresult,0);
+		  echo $rowi.' '.strtolower(get_lang('Questions')).'</td>';
+  		  echo '<td width="5%" align="center"><a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a></td>';
+  		  ?>
+	       <td width="12%" align="center"><a href="admin.php?exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo htmlentities(get_lang('Build')); ?>" alt="<?php echo htmlentities(get_lang('Build')); ?>" /></a>
+	    <a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('AreYouSureToDelete'))); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo htmlentities(get_lang('Delete')); ?>" /></a>
+	    <?php
 				// if active
 				if($row['active'])
 				{
@@ -585,7 +590,8 @@ if($show == 'test'){
       <a href="exercice.php?choice=enable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/invisible.gif" border="0" alt="<?php echo htmlentities(get_lang('Activate')); ?>" /></a>
     <?php
 				}
-				echo "</td></tr>\n";
+				echo "</td>";
+				echo "</tr>\n";
 
 			}
 			// student only
@@ -602,11 +608,11 @@ if($show == 'test'){
 			</tr>
     </table></td>
 	 <td align='center'> <?php
- $exid = $row['id'];
- $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE `exercice_id` = '$exid'";
- $sqlresult =api_sql_query($sqlquery);
- $rowi = mysql_result($sqlresult,0);
- echo $rowi.' Question(s)'; ?> </td>
+  $exid = $row['id'];
+  $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE `exercice_id` = '$exid'";
+  $sqlresult =api_sql_query($sqlquery);
+  $rowi = mysql_result($sqlresult,0);
+  echo $rowi.' Question(s)'; ?> </td>
 
 	<td align='center'><?php
 		$eid = $row['id'];

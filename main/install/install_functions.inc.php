@@ -710,11 +710,11 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
 	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
 	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update)
 	{
-		echo '<td><input type="hidden" name="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'.$parameter_value."</td>\n";
+		echo '<td><input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'.$parameter_value."</td>\n";
 	}
 	else
 	{
-		echo '<td><input type="text" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'."</td>\n";
+		echo '<td><input type="text" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'."</td>\n";
 		echo "<td>$extra_notice</td>\n";
 	}
 	echo "</tr>\n";
@@ -822,7 +822,10 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	//fields for the four standard Dokeos databases
 	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;');
 	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;');
-	display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;');
+	if($installType == 'update')
+	{
+		display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;');
+	}
 	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;');
 	?>
 	<tr>
@@ -846,8 +849,8 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	  <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm? get_lang('One') : get_lang('Several'); ?></td>
 	  <?php else: ?>
 	  <td>
-		<input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm?'checked="checked" ':''; ?>/> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
-		<input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm?'':'checked="checked" '; ?>/> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
+		<input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm?'checked="checked" ':''; ?> onclick="document.getElementById('dbStatsForm').disabled='true'; document.getElementById('dbUserForm').disabled='true';" /> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
+		<input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm?'':'checked="checked" '; ?> onclick="document.getElementById('dbStatsForm').disabled='false'; document.getElementById('dbUserForm').disabled='false';" /> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
 	  </td>
 	  <?php endif; ?>
 

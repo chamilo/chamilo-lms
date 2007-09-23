@@ -381,9 +381,23 @@ elseif (!empty($_POST['step5']))
 	<input type="hidden" name="singleDbForm"         value="<?php echo htmlentities($singleDbForm); ?>" />
 	<input type="hidden" name="dbPrefixForm"         value="<?php echo htmlentities($dbPrefixForm); ?>" />
 	<input type="hidden" name="dbNameForm"           value="<?php echo htmlentities($dbNameForm); ?>" />
+<?php
+	if($installType == 'update' OR $singleDbForm == 0)
+	{
+?>
 	<input type="hidden" name="dbStatsForm"          value="<?php echo htmlentities($dbStatsForm); ?>" />
 	<input type="hidden" name="dbScormForm"          value="<?php echo htmlentities($dbScormForm); ?>" />
 	<input type="hidden" name="dbUserForm"           value="<?php echo htmlentities($dbUserForm); ?>" />
+<?php
+	}
+	else
+	{
+?>
+	<input type="hidden" name="dbStatsForm"          value="<?php echo htmlentities($dbNameForm); ?>" />
+	<input type="hidden" name="dbUserForm"           value="<?php echo htmlentities($dbNameForm); ?>" />
+<?php
+	}
+?>
 	<input type="hidden" name="enableTrackingForm"   value="<?php echo htmlentities($enableTrackingForm); ?>" />
 	<input type="hidden" name="allowSelfReg"         value="<?php echo htmlentities($allowSelfReg); ?>" />
 	<input type="hidden" name="allowSelfRegProf"     value="<?php echo htmlentities($allowSelfRegProf); ?>" />

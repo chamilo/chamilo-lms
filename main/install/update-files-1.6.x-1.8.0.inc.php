@@ -1,4 +1,4 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 13080 2007-09-19 08:21:27Z elixir_inter $
+<?php //$Id: update-files-1.6.x-1.8.0.inc.php 13195 2007-09-23 20:29:09Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -168,6 +168,14 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 	error_log('Renaming '.$updatePath.'claroline/upload/users to '.$pathForm.'main/upload/users',0);
 	rename($updatePath.'claroline/upload/users',$pathForm.'main/upload/users');
+	error_log('Renaming '.$updatePath.'claroline/upload/audio to '.$pathForm.'main/upload/audio',0);
+	rename($updatePath.'claroline/upload/audio',$pathForm.'main/upload/audio');
+	error_log('Renaming '.$updatePath.'claroline/upload/images to '.$pathForm.'main/upload/images',0);
+	rename($updatePath.'claroline/upload/images',$pathForm.'main/upload/images');
+	error_log('Renaming '.$updatePath.'claroline/upload/linked_files to '.$pathForm.'main/upload/linked_files',0);
+	rename($updatePath.'claroline/upload/linked_files',$pathForm.'main/upload/linked_files');
+	error_log('Renaming '.$updatePath.'claroline/upload/video to '.$pathForm.'main/upload/video',0);
+	rename($updatePath.'claroline/upload/video',$pathForm.'main/upload/video');
 		
 	/*
 	if (defined('DOKEOS_INSTALL'))

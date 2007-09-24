@@ -3976,8 +3976,17 @@ class learnpath {
 		
 		$content = stripslashes(text_filter($content));
 		
+		//if flv player, change absolute paht temporarely to prevent from erasing it in the following lines
+		$content = str_replace('flv=h','flv=h|',$content);
+		$content = str_replace('flv=/','flv=/|',$content);		
+		
 		$path_to_remove = api_get_path('WEB_COURSE_PATH') . $_course['path'] . '/document' . $dir;
 		$content = str_replace($path_to_remove, './', $content);
+		
+		// for flv player : change back the url to absolute
+		$content = str_replace('flv=h|','flv=h',$content);
+		$content = str_replace('flv=/|','flv=/',$content);
+		
 		
 		if(!file_exists($filepath . $filename))
 		{

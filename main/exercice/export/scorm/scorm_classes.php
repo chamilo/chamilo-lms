@@ -461,13 +461,15 @@ class ScormAnswerHotspot extends Answer
 	 */
 	function get_js_header()
 	{
-		$header = '<script type="text/javascript" language="javascript">';
-		$header .= file_get_contents('../plugin/hotspot/JavaScriptFlashGateway.js');
-		$header .= '</script>';
-		$header .= '<script type="text/javascript" language="javascript">';
-		$header .= file_get_contents('../plugin/hotspot/hotspot.js');
-		$header .= '</script>';
-		$header .= '<script language="javascript" type="text/javascript">'.
+		if($this->standalone)
+		{
+			$header = '<script type="text/javascript" language="javascript">';
+			$header .= file_get_contents('../plugin/hotspot/JavaScriptFlashGateway.js');
+			$header .= '</script>';
+			$header .= '<script type="text/javascript" language="javascript">';
+			$header .= file_get_contents('../plugin/hotspot/hotspot.js');
+			$header .= '</script>';
+			$header .= '<script language="javascript" type="text/javascript">'.
 					"<!--
 					// -----------------------------------------------------------------------------
 					// Globals
@@ -577,6 +579,13 @@ class ScormAnswerHotspot extends Answer
 					}
 					// -->
 					</script>";
+			//because this header closes so many times the <script> tag, we have to reopen our own
+			$header .= '<script type="text/javascript" language="javascript">'."\n";
+		}
+		else
+		{
+			$header = '';
+		}
 		return $header;
 	}
 	/**

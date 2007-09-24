@@ -371,9 +371,8 @@ Media.prototype.getOuterHTML = function (objectId){
  * Devuelve el codigo HTML interno del elemento
  */
 Media.prototype.getInnerHTML = function (objectId){
-	var s = '<object type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" height="240" width="320">\r\n<param name="movie" value="'+getObjData(this.url)+'">\r\n\t<param name="FlashVars" value="flv='+getVideoUrl()+'">\r\n</object>\r\n';
+	var s = '<object type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" height="240" width="320">\r\n<param name="movie" value="'+getObjData(this.url)+'">\r\n\t<param name="FlashVars" value="flv='+getVideoUrl()+'&autoplay=1" /></object>\r\n';
 
-	//var s = 'D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" id="test" ALIGN=""><PARAM NAME=movie VALUE="'+getObjData(this.url)+'"> <PARAM NAME=quality VALUE=high> <PARAM NAME=bgcolor VALUE=#FFFFFF><PARAM NAME="FlashVars" value="flv='+getVideoUrl()+'" /> <EMBED src="'+getObjData(this.url)+'" quality=high bgcolor=#FFFFFF NAME="Streaming" ALIGN=""TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED></OBJECT>';
 	return s;
 };
 

@@ -364,54 +364,67 @@ class ScormAnswerMatching extends Answer
 		// get max length of displayed array
 		$arrayLength = max( count($this->leftList), count($this->rightList) );
 
-		$leftCpt = 1;
-		$rightCpt = 'A';
-		for( $i = 0; $i < $arrayLength; $i++ ) 
+		$nbrAnswers=$this->selectNbrAnswers();
+		$cpt1='A';
+		$cpt2=1;
+		$Select=array();
+		$qId = $this->questionId;
+		$s = '';
+		$jstmp = '';
+		$jstmpc = '';
+		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
-			if( isset($this->leftList[$i]['answer']) )
+			$identifier = 'question_'.$qId.'_matching_'.$answerId;
+			$answer=$this->selectAnswer($answerId);
+			$answerCorrect=$this->isCorrect($answerId);
+			if(!$answerCorrect)
 			{
-				// build html option list 
-				$optionList = array();
-				$optionCpt = 'A';
-				$optionList[0] = '--';
-				
-				foreach( $this->rightList as $rightElt )
+				// options (A, B, C, ...) that will be put into the list-box
+				$Select[$answerId]['Lettre']=$cpt1++;
+				// answers that will be shown at the right side
+				$answer = api_parse_tex($answer);
+				$Select[$answerId]['Reponse']=$answer;
+			}
+			else
+			{
+				$s.='<tr>'."\n";
+				$s.='<td width="40%" valign="top">'."\n".'<b>'.$cpt2.'</b>.&nbsp;'.$answer."\n</td>\n";
+				$s.='<td width="20%" align="center">&nbsp;&nbsp;<select name="'.$identifier.'">';
+				$s.=' <option value="0">--</option>';
+	            // fills the list-box
+	            foreach($Select as $key=>$val)
+	            {
+					$s.='<option value="'.$key.'">'.$val['Lettre'].'</option>';
+				}  // end foreach()
+	
+				$s.='</select>&nbsp;&nbsp;</td>'."\n";
+				$s.='<td width="40%" valign="top">';
+				if(isset($Select[$cpt2])) $s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+					else $s.='&nbsp;';
+				$s.="</td>\n</tr>\n";
+	
+				$cpt2++;
+	
+				// if the left side of the "matching" has been completely shown
+				if($answerId == $nbrAnswers)
 				{
-					$optionList[$optionCpt] = $this->leftList[$i]['grade'];
-		
-					$optionCpt++;		
-				}
-
-				$leftHtml = $leftCpt . '. ' . $this->leftList[$i]['answer'];
-				
-				$attr['id'] = 'scorm_'.getIdCounter();
-				$centerHtml = claro_html_form_select('matching_'.$this->questionId.'_'.$this->leftList[$i]['code'], $optionList, null, $attr);	
+					// if there remain answers to be shown on the right side
+					while(isset($Select[$cpt2]))
+					{
+						//$s.='<tr>'."\n";
+						//$s.='<td colspan="2">'."\n";
+						//$s.='<table border="0" cellpadding="0" cellspacing="0" width="100%">'."\n";
+						$s.='<tr>'."\n";
+						$s.='<td width="60%" colspan="2">&nbsp;</td>'."\n";
+						$s.='<td width="40%" valign="top">';
+						$s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+						$s.="</td>\n</tr>\n";
+						$cpt2++;
+					}	// end while()
+				}  // end if()
 			}
-			else
-			{
-				$leftHtml = '&nbsp;';
-				$centerHtml = '&nbsp;';
-			}
-			
-			if( isset($displayedRightList[$i]['answer']) )
-			{
-				$rightHtml = $rightCpt . '. ' . $displayedRightList[$i]['answer'];
-			}
-			else
-			{
-				$rightHtml = '&nbsp;';
-			}
-			
-			$html .= 
-				'<tr>' . "\n"	
-			. 	'<td valign="top" width="40%">' . "\n" . $leftHtml . "\n" . '</td>' . "\n"
-    		. 	'<td valign="top" width="20%">' . "\n" . $centerHtml . "\n" . '</td>' . "\n"	    		
-    		. 	'<td valign="top" width="40%">' . "\n" . $rightHtml . "\n" . '</td>' . "\n"
-    		.	'</tr>' . "\n\n";
-			
-			$leftCpt++;
-			$rightCpt++;
 		}
+		$html .= $s;
 		$html .= '</table></td></tr>' . "\n";
         return array($js,$html); 
     }
@@ -431,15 +444,19 @@ class ScormAnswerFree extends Answer
      */
     function export()
     {
+    	$qId = $this->questionId;
     	$js = '';
     	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// some javascript must be added for that kind of questions
 		$html .= '<tr>' . "\n" 
 				.	'<td>' . "\n"
-		    	//.	$displayedAnswer  . "\n"
+		    	. '<textarea name="question_'.$qId.'_free" rows="20" cols="200"></textarea>' . "\n"
 		    	.	'</td>' . "\n"
 		    	.	'</tr>' . "\n";
 		$html .= '</table></td></tr>' . "\n";
+		$js .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
+    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array();'."\n";
+    	$js .= 'questions_types['.$this->questionId.'] = \'free\';'."\n";
         return array($js,$html);
     }
 }
@@ -454,10 +471,14 @@ class ScormAnswerHotspot extends Answer
 	 */
 	function get_js_header()
 	{
-		$header = "<script type=\"text/javascript\" src=\"hotspot/JavaScriptFlashGateway.js\"></script>
-					<script src=\"hotspot/hotspot.js\" type=\"text/javascript\"></script>
-					<script language=\"JavaScript\" type=\"text/javascript\">
-					<!--
+		$header = '<script type="text/javascript" language="javascript">';
+		$header .= file_get_contents('../plugin/hotspot/JavaScriptFlashGateway.js');
+		$header .= '</script>';
+		$header .= '<script type="text/javascript" language="javascript">';
+		$header .= file_get_contents('../plugin/hotspot/hotspot.js');
+		$header .= '</script>';
+		$header .= '<script language="javascript" type="text/javascript">'.
+					"<!--
 					// -----------------------------------------------------------------------------
 					// Globals
 					// Major version of Flash required

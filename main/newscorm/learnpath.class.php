@@ -7105,12 +7105,15 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			return null;
 		}
 	 	//Create the zip handler (this will remain available throughout the method)
+		$garbage_path = api_get_path(GARBAGE_PATH);
+		$sys_course_path = api_get_path(SYS_COURSE_PATH);
 		$temp_dir_short = uniqid();
-		$temp_zip_dir = api_get_path(GARBAGE_PATH)."/".$temp_dir_short;
+		$temp_zip_dir = $garbage_path."/".$temp_dir_short;
 		$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 		$zip_folder=new PclZip($temp_zip_file);
 		$current_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
 		$root_path = $main_path = api_get_path(SYS_PATH);
+		$files_cleanup = array();
 		//place to temporarily stash the zipfiles
 		//create the temp dir if it doesn't exist
 		//or do a cleanup befor creating the zipfile
@@ -7431,6 +7434,80 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				 		$resources->appendChild($my_resource);
 	 				}
 	 			}
+	 			elseif($item->type == TOOL_QUIZ)
+	 			{
+	 				require_once(api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php');
+	 				$exe_id = $item->path; //should be using ref when everything will be cleaned up in this regard
+	 				$exe = new Exercise();
+	 				$exe->read($exe_id);
+			 		$my_item = $xmldoc->createElement('item');
+			 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
+			 		$my_item->setAttribute('identifierref','RESOURCE_'.$item->get_id()); 
+			 		$my_item->setAttribute('isvisible','true');
+			 		//give a child element <title> to the <item> element
+			 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
+			 		$my_item->appendChild($my_title);
+			 		//give a child element <adlcp:prerequisite> to the <item> element
+			 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisite',$item->get_prereq_string());
+			 		$my_prereqs->setAttribute('type','aicc_script');
+			 		$my_item->appendChild($my_prereqs);
+			 		//give a child element <adlcp:masteryscore> to the <item> element
+			 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->masteryscore);
+			 		$my_item->appendChild($my_masteryscore);
+
+			 		//attach this item to the organization element or hits parent if there is one
+			 		if(!empty($item->parent) && $item->parent!=0)
+			 		{
+			 			$children = $organization->childNodes;
+				        for($i=0;$i<$children->length;$i++){
+					        $item_temp = $children->item($i);
+					        if ($item_temp -> nodeName == 'item')
+					        {
+					        	if($item_temp->getAttribute('identifier') == 'ITEM_'.$item->parent)
+					        	{
+					        		$item_temp -> appendChild($my_item);
+					        	}
+					        	
+					        }
+				        }
+			 		}
+			 		else
+			 		{
+			 			$organization->appendChild($my_item);
+			 		}
+			 		
+			 		//include export scripts
+			 		require_once(api_get_path(SYS_CODE_PATH).'exercice/export/scorm/scorm_export.php');
+
+			 		//get the path of the file(s) from the course directory root
+					//$my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
+					$my_file_path = 'quiz_'.$item->get_id().'.html';
+			 		//write the contents of the exported exercise into a (big) html file
+			 		//to later pack it into the exported SCORM. The file will be removed afterwards
+			 		$contents = export_exercise($exe_id,true);
+			 		$res = file_put_contents($garbage_path.$temp_dir_short.'/'.$my_file_path,$contents);
+			 		if($res === false){error_log('Could not write into file '.$garbage_path.$temp_dir_short.'/'.$my_file_path.' '.__FILE__.' '.__LINE__,0);}
+			 		$files_cleanup[] = $garbage_path.$temp_dir_short.'/'.$my_file_path;
+			 		//error_log($tmp_path);die();
+					$my_xml_file_path = htmlentities($my_file_path); 
+					$my_sub_dir = dirname($my_file_path); 
+					$my_xml_sub_dir = htmlentities($my_sub_dir);
+			 		//give a <resource> child to the <resources> element
+			 		$my_resource = $xmldoc->createElement('resource');
+			 		$my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
+			 		$my_resource->setAttribute('type','webcontent');
+			 		$my_resource->setAttribute('href',$my_xml_file_path);
+			 		//adlcp:scormtype can be either 'sco' or 'asset'
+			 		$my_resource->setAttribute('adlcp:scormtype','sco');
+			 		//xml:base is the base directory to find the files declared in this resource
+			 		$my_resource->setAttribute('xml:base','');
+			 		//give a <file> child to the <resource> element
+			 		$my_file = $xmldoc->createElement('file');
+			 		$my_file->setAttribute('href',$my_xml_file_path);
+			 		$my_resource->appendChild($my_file);
+			 		$resources->appendChild($my_resource);
+	 				
+				}
 	 			else
 	 			{
 		 		
@@ -7463,9 +7540,6 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		$xmldoc->appendChild($root);
 
 		//error_log(print_r($zip_files,true),0);
-		$garbage_path = api_get_path(GARBAGE_PATH);
-		$sys_course_path = api_get_path(SYS_COURSE_PATH);
-		
 		foreach($zip_files as $file_path)
 		{
 			if(empty($file_path)){continue;}
@@ -7556,7 +7630,12 @@ EOD;
 		
 		$zip_folder->add($garbage_path.'/'.$temp_dir_short, PCLZIP_OPT_REMOVE_PATH, $garbage_path);
 
-
+		//clean possible temporary files
+		foreach($files_cleanup as $file)
+		{
+			$res = unlink($file);
+			if($res === false){error_log('Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__,0);}
+		}
 		//Send file to client
 		$name = 'scorm_export_'.$this->lp_id.'.zip';
 		DocumentManager::file_send_for_download($temp_zip_file,true,$name);

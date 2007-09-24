@@ -198,22 +198,30 @@ class ScormAnswerMultipleChoice extends Answer
         {
         	//$questionTypeLang = get_lang('MultipleChoiceUniqueAnswer');
         	$id = 1;
+        	$jstmp = '';
+        	$jstmpc = '';
 			foreach( $this->answer as $i => $answer )
 			{			
 	        	$identifier = 'question_'.$this->questionId.'_unique_'.$i;
 				$html .=	
 		    		'<tr>' . "\n" 
 				.	'<td align="center" width="5%">' . "\n"
-		    	.	'<input name="'.$identifier.'" id="'.$identifier.'" value="'.$i.'" type="radio" '
-		    	.		($this->correct[$i] == 1? 'checked="checked"':'')
-				.		'/>' . "\n"
+		    	.	'<input name="'.$identifier.'" id="'.$identifier.'" value="'.$i.'" type="radio"/>' . "\n"
 		    	.	'</td>' . "\n"
 		    	.	'<td width="95%">' . "\n"
 		    	.	'<label for="'.$identifier.'">' . $this->answer[$i] . '</label>' . "\n"
 		    	.	'</td>' . "\n"
 		    	.	'</tr>' . "\n\n";
+		    	$jstmp .= $i.',';
+		    	if($this->correct[$i])
+		    	{
+		    		$jstmpc .= $i;
+		    	}
 		    	$id++;
 			}
+			$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
+	    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.$jstmpc.');'."\n";
+	    	$js .= 'questions_types['.$this->questionId.'] = \'mcua\';'."\n";
         }
 		$html .= '</table></td></tr>' . "\n";
         return array($js,$html);
@@ -234,43 +242,43 @@ class ScormAnswerTrueFalse extends Answer
     function export()
     {
     	$js = '';
-    	$html = '';
-		$identifier = 'unique_'.$this->questionId.'_x';
-				
-    	$html .= 
-			'<table width="100%">' . "\n\n";
-		
-		$scormIdentifier = 'scorm_'.getIdCounter();
-		
+    	$html = '<tr><td colspan="2"><table width="100%">';
+		$identifier = 'question_'.$this->questionId.'_tf';
+		$identifier_true  = $identifier.'_true';
+		$identifier_false = $identifier.'_false';
 		$html .=	
     		'<tr>' . "\n" 
 		.	'<td align="center" width="5%">' . "\n"
-    	.	'<input name="'.$identifier.'" id="'.$scormIdentifier.'" value="'.$this->trueGrade.'" type="radio" '
-    	.		($this->response == 'TRUE'? 'checked="checked"':'')
+    	.	'<input name="'.$identifier_true.'" id="'.$identifier_true.'" value="'.$this->trueGrade.'" type="radio" '
 		.		'/>' . "\n"
     	.	'</td>' . "\n"
     	.	'<td width="95%">' . "\n"
-    	.	'<label for="'.$scormIdentifier.'">' . get_lang('True') . '</label>' . "\n"
+    	.	'<label for="'.$identifier_true.'">' . get_lang('True') . '</label>' . "\n"
     	.	'</td>' . "\n"
     	.	'</tr>' . "\n\n";
-    	
-    	$scormIdentifier = 'scorm_'.getIdCounter();
-    		
     	$html .=
 			'<tr>' . "\n" 
 		.	'<td align="center" width="5%">' . "\n"
-		.	'<input name="'.$identifier.'" id="'.$scormIdentifier.'" value="'.$this->falseGrade.'" type="radio" '
-		.		($this->response == 'FALSE'? 'checked="checked"':'')
+		.	'<input name="'.$identifier_false.'" id="'.$identifier_false.'" value="'.$this->falseGrade.'" type="radio" '
 		.		'/>' . "\n"
 		.	'</td>' . "\n"
 		.	'<td width="95%">' . "\n"
-		.	'<label for="'.$scormIdentifier.'">' . get_lang('False') . '</label>' . "\n"
+		.	'<label for="'.$identifier_false.'">' . get_lang('False') . '</label>' . "\n"
 		.	'</td>' . "\n"
 		.	'</tr>' . "\n\n"
 		
-		.	'</table>' . "\n"
-		.	'<p><small>' . get_lang('True/False') . '</small></p>' . "\n";
-			
+		.	'</table>' . "\n";
+		$js .= 'questions_answers['.$this->questionId.'] = new Array(\'true\',\'false\');'."\n";
+    	$js .= 'questions_types['.$this->questionId.'] = \'tf\';'."\n";
+		if($this->response == 'TRUE')
+		{
+	    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array(\'true\');'."\n";
+		}
+		else
+		{
+	    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array(\'false\');'."\n";
+		}
+		$html .= '</table></td></tr>' . "\n";
         return array($js,$html);
     }
 }
@@ -285,89 +293,51 @@ class ScormAnswerFillInBlanks extends Answer
      *
      * As a side effect, it stores two lists in the class :
      * the missing words and their respective weightings.
-     *
-     * @author Amand Tihon <amand@alrj.org>
      */
     function export()
     {
     	$js = '';
-    	$html = '';
+    	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// get all enclosed answers
-		foreach( $this->answerList as $answer )
+		$blankList = array();
+		// build replacement 
+		$replacementList = array();
+		foreach( $this->answer as $i => $answer )
 		{
 			$blankList[] = '['.$answer.']';
 		}
 		$answerCount = count($blankList);
-							
-		// build replacement 
-		$replacementList = array();
-		
-		if( $this->type == LISTBOX_FILL )
-		{
-			// build the list shown in list box
-			// prepare option list using good and wrong answers
-			$allAnswerList = array_merge($this->answerList, $this->wrongAnswerList);
-			
-			// alphabetical sort of the list
-			natcasesort($allAnswerList);
-			
-			$optionList[''] = '';
-			
-			foreach( $allAnswerList as $answer )
-			{
-				$optionList[htmlspecialchars($answer)] = htmlspecialchars($answer);
-			}
-					
-			for( $i = 0; $i < $answerCount; $i++ )
-			{
-				$identifier = 'fill_' . $this->questionId . '_' . $i;
-				$attr['id'] = 'scorm_'.getIdCounter();
-								
-				$replacementList[] = claro_html_form_select($identifier, $optionList, null, $attr);
-			}
-		}
-		else
-		{
-			for( $i = 0; $i < $answerCount; $i++ )
-			{
-				$identifier = 'fill_' . $this->questionId . '_' . $i;
-				$scormIdentifier = 'scorm_'.getIdCounter();
-				
-				$replacementList[] = "\n" . ' <input type="text" name="'.$identifier.'" id="'.$scormIdentifier.'" size="10" value="" /> ' . "\n";  					
-			}
-		}
-		
-		
-		// apply replacement on answer
-		$displayedAnswer = str_replace( $blankList, $replacementList, claro_parse_user_text($this->answerText) );
-		
-		// some javascript must be added for that kind of questions
-		$js .= ''; 
-			//'<script type="text/javascript" language="javascript">' . "\n";
-    
-        // Add the data for fillAnswerList
-		for( $i = 0; $i < $answerCount; $i++ )
-        {
-            $js .= "    fillAnswerList['fill_" . $this->questionId . "_" . $i . "'] = new Array('" . $this->answerList[$i] . "', '" . $this->gradeList[$i] . "');\n";
-        }
-		
-    	$js .= '';
-    		//'</script>' . "\n" 
-		$html .= 	'<table width="100%">' . "\n\n"
-			
-    	.	'<tr>' . "\n" 
-		.	'<td>' . "\n"
-    		
-    	.	$displayedAnswer  . "\n"
-    		
-    	.	'</td>' . "\n"
-    	.	'</tr>' . "\n\n"
-		
-    	.	'</table>' . "\n"
-		.	'<p><small>' . get_lang('Fill in blanks') . '</small></p>' . "\n";
 
+
+		// splits text and weightings that are joined with the character '::'
+		list($answer)=explode('::',$answer);
+
+		// because [] is parsed here we follow this procedure:
+		// 1. find everything between the [ and ] tags
+		$i=1;
+		$jstmpc = '';
+		$startlocations=strpos($answer,'[');
+		$endlocations=strpos($answer,']');
+		while($startlocations !== false && $endlocations !== false)
+		{
+			$texstring=substr($answer,$startlocations,($endlocations-$startlocations)+1);
+			$answer = substr_replace($answer,'<input type="text" name="choice_'.$this->questionId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
+			$jstmpc .= substr($texstring,1,-1).',';			
+			$i++;
+			$startlocations=strpos($answer,'[');
+			$endlocations=strpos($answer,']');
+		}
+
+		$html .= 	'<tr>' . "\n" 
+				.	'<td>' . "\n"
+		    	.	$answer  . "\n"
+	    		.	'</td>' . "\n"
+	    		.	'</tr>' . "\n";
+		$html .= '</table></td></tr>' . "\n";
+		$js .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
+    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
+    	$js .= 'questions_types['.$this->questionId.'] = \'fib\';'."\n";
         return array($js,$html);
-        
     }
     
 }
@@ -384,7 +354,7 @@ class ScormAnswerMatching extends Answer
     function export()
     {
     	$js = '';
-    	$html = '';
+    	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
   		// prepare list of right proposition to allow
 		// - easiest display
 		// - easiest randomisation if needed one day 
@@ -394,8 +364,6 @@ class ScormAnswerMatching extends Answer
 		// get max length of displayed array
 		$arrayLength = max( count($this->leftList), count($this->rightList) );
 
-		$html .= '<table width="100%">' . "\n\n";
-		
 		$leftCpt = 1;
 		$rightCpt = 'A';
 		for( $i = 0; $i < $arrayLength; $i++ ) 
@@ -444,13 +412,8 @@ class ScormAnswerMatching extends Answer
 			$leftCpt++;
 			$rightCpt++;
 		}
-
-		
-		$html .= 
-			'</table>' . "\n"
-		.	'<p><small>' . get_lang('Matching') . '</small></p>' . "\n";
-		
-       return array($js,$html); 
+		$html .= '</table></td></tr>' . "\n";
+        return array($js,$html); 
     }
 }
 
@@ -469,31 +432,17 @@ class ScormAnswerFree extends Answer
     function export()
     {
     	$js = '';
-    	$html = '';
+    	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// some javascript must be added for that kind of questions
-		$js .= ''; 
-			//'<script type="text/javascript" language="javascript">' . "\n";
-    
-    	$js .= '';
-    		//'</script>' . "\n" 
-		$html .= '<table width="100%">' . "\n\n"
-			
-    	.	'<tr>' . "\n" 
-		.	'<td>' . "\n"
-    		
-    	.	$displayedAnswer  . "\n"
-    		
-    	.	'</td>' . "\n"
-    	.	'</tr>' . "\n\n"
-		
-    	.	'</table>' . "\n"
-		.	'<p><small>' . get_lang('FreeAnswer') . '</small></p>' . "\n";
+		$html .= '<tr>' . "\n" 
+				.	'<td>' . "\n"
+		    	//.	$displayedAnswer  . "\n"
+		    	.	'</td>' . "\n"
+		    	.	'</tr>' . "\n";
+		$html .= '</table></td></tr>' . "\n";
         return array($js,$html);
-        
     }
-    
 }
-
 /**
  * This class handles the SCORM export of hotpot questions
  */
@@ -628,29 +577,16 @@ class ScormAnswerHotspot extends Answer
      */
     function export()
     {
-    	$js = '';
-    	$html = '';
+    	$js = $this->get_js_header();
+    	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// some javascript must be added for that kind of questions
-		$js .= ''; 
-			//'<script type="text/javascript" language="javascript">' . "\n";
-    
-    	$js .= '';
-    		//'</script>' . "\n" 
-		$html .= '<table width="100%">' . "\n\n"
-			
-    	.	'<tr>' . "\n" 
-		.	'<td>' . "\n"
-    		
-    	.	$displayedAnswer  . "\n"
-    		
-    	.	'</td>' . "\n"
-    	.	'</tr>' . "\n\n"
-		
-    	.	'</table>' . "\n"
-		.	'<p><small>' . get_lang('HotSpot') . '</small></p>' . "\n";
+		$html .= '<tr>' . "\n" 
+			.	'<td>' . "\n"
+	    	. "\n"
+	    	.	'</td>' . "\n"
+	    	.	'</tr>' . "\n\n";
+		$html .= '</table></td></tr>' . "\n";
         return array($js,$html);
-        
     }
-    
 }
 ?>

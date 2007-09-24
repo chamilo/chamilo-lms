@@ -81,7 +81,6 @@ class ScormQuestion extends Question
 	
 	function export()
 	{
-		//echo "<pre>".print_r($this,1)."</pre>";
 		$html = $this->getQuestionHTML();
 		$js   = $this->getQuestionJS();
 		
@@ -91,7 +90,6 @@ class ScormQuestion extends Question
 			$js .= $js2;
 			$html .= $html2;
 		}
-		
 		return array($js,$html);
 		
 	}
@@ -110,32 +108,16 @@ class ScormQuestion extends Question
     {
     	$title			= $this->selectTitle();
 		$description	= $this->selectDescription();
-		$type 			= $this->selectType();
-
 		$cols = 0;
-		switch($type)
-		{
-			case MCUA:
-			case MCMA:
-			case TF:
-			case FIB:
-			case FREE_ANSWER:
-			case HOTSPOT:
-				$cols = 2;
-				break;
-			case MATCHING:
-				$cols = 3;
-				break;			
-		}
 		$s='<tr>' .
 			'<td valign="top" colspan="'.$cols.'" id="question_'.$this->id.'_title">' . "\n" .
-		   api_parse_tex($title).
+		   	api_parse_tex($title).
 		   	'</td>' . "\n" .
-		   '</tr>' . "\n" .
-		   '<tr>' . "\n" .
-		   		'<td valign="top" colspan="'.$cols.'">' . "\n" .
-		   		'	<i>'.api_parse_tex($description).'</i>' . "\n" .
-		   		'</td>' . "\n" .
+		   	'</tr>' . "\n" .
+		   	'<tr>' . "\n" .
+		   	'<td valign="top" colspan="'.$cols.'">' . "\n" .
+		   	'<i>'.api_parse_tex($description).'</i>' . "\n" .
+		   	'</td>' . "\n" .
 		   	'</tr>' . "\n";
 		return $s;
     }

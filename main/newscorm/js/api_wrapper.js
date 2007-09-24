@@ -15,6 +15,19 @@ var _debug = false;
 var findAPITries = 0;
 var _apiHandle = null; //private variable
 var errMsgLocate = "Unable to locate the LMS's API implementation";
+
+var _NoError = 0;
+var _GeneralException = 101;
+var _ServerBusy = 102;
+var _InvalidArgumentError = 201;
+var _ElementCannotHaveChildren = 202;
+var _ElementIsNotAnArray = 203;
+var _NotInitialized = 301;
+var _NotImplementedError = 401;
+var _InvalidSetValue = 402;
+var _ElementIsReadOnly = 403;
+var _ElementIsWriteOnly = 404;
+var _IncorrectDataType = 405;
 /**
  * Gets the API handle right into the local API object and ensure there is only one.
  * Using the singleton pattern to ensure there's only one API object.
@@ -400,25 +413,24 @@ var questions_types = new Array();
  */
 function checkAnswers(interrupted)
 {
-	alert('Test');
 	var tmpScore = 0;
+	var status = 'not attempted';
 	for(var i=0; i<questions_types.length;i++)
 	{
 		var idQuestion = questions[i];
-		alert('Question'+idQuestion);
 		var type = questions_types[idQuestion];
 		var interactionScore = 0;
-		var interactionAnswer = '';
+		var interactionAnswers = '';
+		var interactionCorrectResponses = '';
 		if (type == 'mcma')
 		{
 			var myScore = 0;
-			for(var j=0; j<questions_answers[idQuestion];j++)
+			for(var j=0; j<questions_answers[idQuestion].length;j++)
 			{
 				var idAnswer = questions_answers[idQuestion][j];
 				var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
 				if(answer.checked.value == 'checked')
 				{
-					alert(idQuestion+'_'+idAnswer+' was selected');
 					myScore += questions_answers_correct[idQuestion][idAnswer];
 				}
 			}
@@ -428,7 +440,7 @@ function checkAnswers(interrupted)
 		else if(type == 'mcua')
 		{
 			var myScore = 0;
-			for(var j=0; j<questions_answers[idQuestion];j++)
+			for(var j=0; j<questions_answers[idQuestion].length;j++)
 			{
 				var idAnswer = questions_answers[idQuestion][j];
 				var answer = document.getElementById('question_'+(idQuestion)+'_unique_'+(idAnswer));
@@ -443,7 +455,7 @@ function checkAnswers(interrupted)
 		else if(type == 'tf')
 		{
 			var myScore = 0;
-			for(var j=0; j<questions_answers[idQuestion];j++)
+			for(var j=0; j<questions_answers[idQuestion].length;j++)
 			{
 				var idAnswer = questions_answers[idQuestion][j];
 				var answer = document.getElementById('question_'+(idQuestion)+'_tf_'+(idAnswer));
@@ -458,7 +470,7 @@ function checkAnswers(interrupted)
 		else if(type == 'fib')
 		{
 			var myScore = 0;
-			for(var j=0; j<questions_answers[idQuestion];j++)
+			for(var j=0; j<questions_answers[idQuestion].length;j++)
 			{
 				var idAnswer = questions_answers[idQuestion][j];
 				var answer = document.getElementById('question_'+(idQuestion)+'_fib_'+(idAnswer));
@@ -488,7 +500,7 @@ function checkAnswers(interrupted)
 			//
 		}
 		var interactionCorrectResponses = '';
-		for(var i=0; i<questions_answers_correct.length();i++)
+		for(var i=0; i<questions_answers_correct.length;i++)
 		{
 			interactionCorrectResponses += questions_answers_correct[i];
 		}
@@ -496,11 +508,24 @@ function checkAnswers(interrupted)
 		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.result',interactionScore);
 		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.type',type);
 		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.student_response',interactionAnswers);
-		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.correct_responses',interactionCorrectRespnoses);		
+		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.correct_responses',interactionCorrectResponses);		
 	}
-	LMSSetValue('cmi.core.score_raw',tmpScore);
+	doLMSSetValue('cmi.core.score.raw',tmpScore);
 	//get status
-	LMSSetValue('cmi.core.lesson_status','completed');
+	var mastery_score = doLMSGetValue('cmi.student_data.mastery_score');
+	if(mastery_score <= 0)
+	{
+		mastery_score = 80;
+	}
+	if(tmpScore > mastery_score)
+	{
+		status = 'passed';
+	}
+	else
+	{
+		status = 'failed';
+	}
+	doLMSSetValue('cmi.core.lesson_status',status);
 
 	if((interrupted==true) && (status != 'completed') && (status != 'passed'))
 	{

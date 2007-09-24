@@ -1673,7 +1673,15 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		Course homepage tools for platform admin only
 	-----------------------------------------------------------
 	*/
-
+	
+	
+	/*
+	-----------------------------------------------------------
+		Group tool
+	-----------------------------------------------------------
+	*/
+	api_sql_query("INSERT INTO `".$TABLEGROUPCATEGORIES . "` ( id , title , description , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');");
+	
 
 	/*
 	-----------------------------------------------------------
@@ -1817,13 +1825,6 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		api_sql_query('INSERT INTO `'.$TABLEQUIZ . '` VALUES ( "1", "'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "", "1", "0", "1")');
 		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTIONLIST . "` VALUES ( '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','')");
 		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTION . "` VALUES ( '1', '1')");
-
-		/*
-		-----------------------------------------------------------
-			Group tool
-		-----------------------------------------------------------
-		*/
-		api_sql_query("INSERT INTO `".$TABLEGROUPCATEGORIES . "` ( id , title , description , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');");
 
 
 		/*

@@ -377,13 +377,16 @@ class ScormAnswerMatching extends Answer
 			$identifier = 'question_'.$qId.'_matching_'.$answerId;
 			$answer=$this->selectAnswer($answerId);
 			$answerCorrect=$this->isCorrect($answerId);
+			$weight=$this->selectWeighting($answerId);
+
 			if(!$answerCorrect)
 			{
 				// options (A, B, C, ...) that will be put into the list-box
-				$Select[$answerId]['Lettre']=$cpt1++;
+				$Select[$answerId]['Lettre']=$cpt1;
 				// answers that will be shown at the right side
 				$answer = api_parse_tex($answer);
 				$Select[$answerId]['Reponse']=$answer;
+				$cpt1++;
 			}
 			else
 			{
@@ -403,6 +406,8 @@ class ScormAnswerMatching extends Answer
 					else $s.='&nbsp;';
 				$s.="</td>\n</tr>\n";
 	
+				$jstmp  .= $cpt2.',';
+				$jstmpc .= '['.$cpt2.','.$Select[$cpt2]['Lettre'].'],';
 				$cpt2++;
 	
 				// if the left side of the "matching" has been completely shown
@@ -424,6 +429,9 @@ class ScormAnswerMatching extends Answer
 				}  // end if()
 			}
 		}
+		$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
+    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
+    	$js .= 'questions_types['.$this->questionId.'] = \'matching\';'."\n";
 		$html .= $s;
 		$html .= '</table></td></tr>' . "\n";
         return array($js,$html); 

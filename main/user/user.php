@@ -495,7 +495,7 @@ $table->set_header($header_nr++, get_lang('OfficialCode'));
 $table->set_header($header_nr++, get_lang('LastName'));
 $table->set_header($header_nr++, get_lang('FirstName'));
 $table->set_header($header_nr++, get_lang('Description'));
-$table->set_header($header_nr++, get_lang('Group'),false);
+$table->set_header($header_nr++, get_lang('GroupSingle'),false);
  if( api_is_allowed_to_edit())
 {
 	$table->set_header($header_nr++, get_lang('Tutor'));

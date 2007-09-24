@@ -252,7 +252,7 @@ EOT;
 		}
 		//$group_el[] = & $form->createElement('select', 'group_'.$group_number.'_tutor', null, $tutor_options, array ('id' => 'tutor_'.$group_number));
 		$group_el[] = & $form->createElement('text', 'group_'.$group_number.'_places', null, array ('size' => 3, 'id' => 'places_'.$group_number));
-		$defaults['group_'.$group_number.'_name'] = get_lang('Group').' '.$group_id ++;
+		$defaults['group_'.$group_number.'_name'] = get_lang('GroupSingle').' '.$group_id ++;
 		$form->addGroup($group_el, 'group_'.$group_number, null, '</td><td>', false);
 	}
 	$defaults['action'] = 'create_groups';

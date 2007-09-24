@@ -440,7 +440,7 @@ class ScormAnswerFree extends Answer
 		// some javascript must be added for that kind of questions
 		$html .= '<tr>' . "\n" 
 				.	'<td>' . "\n"
-		    	. '<textarea name="question_'.$qId.'_free" rows="20" cols="200"></textarea>' . "\n"
+		    	. '<textarea name="question_'.$qId.'_free" id="question_'.$qId.'_free" rows="20" cols="200"></textarea>' . "\n"
 		    	.	'</td>' . "\n"
 		    	.	'</tr>' . "\n";
 		$html .= '</table></td></tr>' . "\n";
@@ -602,7 +602,7 @@ class ScormAnswerHotspot extends Answer
 		// some javascript must be added for that kind of questions
 		$html .= '<tr>' . "\n" 
 			.	'<td>' . "\n"
-	    	. "\n"
+	    	. "<div>Hotspot zone</div>\n"
 	    	.	'</td>' . "\n"
 	    	.	'</tr>' . "\n\n";
 		$html .= '</table></td></tr>' . "\n";

@@ -170,4 +170,6 @@ $MoveDown = "Mover abajo";
 $MoveUp = "Mover arriba";
 $HaveAnswered = "han contestado";
 $WereInvited = "fueron invitados";
+$PagebreakNotFirst = "El separador de página no puede estar al comienzo";
+$PagebreakNotLast = "El separador de página no puede estar al final";
 ?>

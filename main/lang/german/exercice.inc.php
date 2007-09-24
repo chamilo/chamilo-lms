@@ -225,4 +225,10 @@ $StudentEmail = "E-Mail des Studenten";
 $OpenQuestionsAttemptedAre = "Die versuchte offene Frage ist ";
 $CourseName = "Kursname";
 $UploadJpgPicture = "Ein JPG Bild hochladen";
+$HotspotDescription = "Hotspot Beschreibung";
+$ExamSheetVCC = "Examenblatt wurde vom Lehrer angesehen/korrigiert/kommentiert.";
+$AttemptVCC = "Dein nachfolgender Versuch wurde vom Lehrer angesehen/kommentiert/korrigiert.";
+$ClickLinkToViewComment = "Klicke nachfolgenden Link, um zu Deinem Account zu gelangen und Dein kommentiertes Examensblatt anzusehen";
+$Regards = "Herzliche Grüße";
+$AttemptVCCLong = "Dein Versuch an Test %s wurde vom Lehrer angesehen, kommentiert/korrigiert. Klick den nachfolgenden Link, um zu Deinem Account zu gelangen und Dein Examensblatt anzusehen.";
 ?>

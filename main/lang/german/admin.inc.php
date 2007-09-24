@@ -667,4 +667,5 @@ $EmailMandatory = "E-Mail kann nicht leer sein";
 $TabsMyAgenda = "Tab \"Meine Agenda\"";
 $NoticeWillBeNotDisplayed = "Die Nachricht wird nicht auf der Homepage angezeigt";
 $LetThoseFieldsEmptyToHideTheNotice = "Diese Felder leer lassen, um Nachricht zu verbergen";
+$Ppt2lpVoiceRecordingNeedsRed5 = "Die Voice Recorder Funktion im Lernpfad Editor beruht auf einem Red5 Streaming Server. Die Parameter dieses Servers können im Videokonferenz Teil auf dieser Seite konfiguriert werden.";
 ?>

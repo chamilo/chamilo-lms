@@ -171,4 +171,6 @@ $MoveDown = "Nach unten verschieben";
 $MoveUp = "Nach oben verschieben";
 $HaveAnswered = "haben geantwortet";
 $WereInvited = "wurden eingeladen";
+$PagebreakNotFirst = "Der Seitenumbruch kann nicht zuerst kommen";
+$PagebreakNotLast = "Der Seitenumbruch kann nicht zuletzt kommen";
 ?>

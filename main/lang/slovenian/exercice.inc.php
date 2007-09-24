@@ -226,4 +226,10 @@ $StudentEmail = "Teèajnikova e-pošta";
 $OpenQuestionsAttemptedAre = "Poskusi vprašanj s prostim odgovorom";
 $CourseName = "Ime teèaja";
 $UploadJpgPicture = "Naloži JPG sliko";
+$HotspotDescription = "Vroèe toèke - opis";
+$ExamSheetVCC = "Preglednica rezultatov, pregledana/popravljena/komentirana s strani uèitelja";
+$AttemptVCC = "Vaš naslednji poskus je bil pregledan/komentiran/popravljen s strani uèitelja";
+$ClickLinkToViewComment = "Kliknite spodnjo povezavo za dostop do vašega uporabniškega raèuna in vpogled v preglednico rezultatov";
+$Regards = "Pozdrav";
+$AttemptVCCLong = "Vaš poskus testa %s je bil pregledan/komentiran/popravljen s strani uèitelja. Kliknite spodnjo povezavo za dostop do vašega uporabniškega raèuna in vpogled v preglednico rezultatov.";
 ?>

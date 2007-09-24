@@ -649,4 +649,5 @@ $FirstNameMandatory = "Le prénom doit être obligatoirement renseigné";
 $EmailMandatory = "L\'email doit être obligatoirement renseigné";
 $NoticeWillBeNotDisplayed = "L\'avis ne sera pas affiché sur la page d\'accueil";
 $LetThoseFieldsEmptyToHideTheNotice = "Pour ne pas afficher la notice, laissez ces champs vides";
+$Ppt2lpVoiceRecordingNeedsRed5 = "La fonctionnalité d\'enregistrement de la voix dans les parcours d\'apprentissage dépend d\'un serveur de streaming Red5. Les paramètres de ce serveur peuvent être configurés dans la section vidéoconférence sur cette même page.";
 ?>

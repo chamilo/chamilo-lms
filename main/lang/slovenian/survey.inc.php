@@ -170,4 +170,6 @@ $MoveDown = "Premakni dol";
 $MoveUp = "Premakni gor";
 $HaveAnswered = "je odgovorilo";
 $WereInvited = "je bilo povabljenih";
+$PagebreakNotFirst = "Prelm strani ne more biti na zaèetku";
+$PagebreakNotLast = "Prelom strani ne more biti na koncu";
 ?>

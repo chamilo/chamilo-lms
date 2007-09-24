@@ -224,4 +224,10 @@ $StudentEmail = "Student email";
 $OpenQuestionsAttemptedAre = "Open question attempted is";
 $CourseName = "Course name";
 $UploadJpgPicture = "Upload a JPG picture";
+$HotspotDescription = "Hotspot description";
+$ExamSheetVCC = "Examsheet viewed/corrected/commented by teacher";
+$AttemptVCC = "Your following attempt has been viewed/commented/corrected by teacher";
+$ClickLinkToViewComment = "Click the link below to access  your account and view your commented Examsheet.";
+$Regards = "Regards";
+$AttemptVCCLong = "You attempt for the test %s has been viewed/commented/corrected by the teacher. Click the link below to access  your account and view your Examsheet.";
 ?>

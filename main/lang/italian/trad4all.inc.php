@@ -433,4 +433,5 @@ $ResetLink = "Clicca per reinizializzare la password";
 $VisibilityChanged = "La visibilità è stata cambiata";
 $MainNavigation = "Navigazione principale";
 $None = "Niente";
+$SeeDetail = "Vedi dettagli";
 ?>

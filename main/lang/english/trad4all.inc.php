@@ -433,4 +433,5 @@ $ResetLink = "Click here to recover your password";
 $VisibilityChanged = "The visibility has been changed.";
 $MainNavigation = "Main navigation";
 $None = "None";
+$SeeDetail = "See detail";
 ?>

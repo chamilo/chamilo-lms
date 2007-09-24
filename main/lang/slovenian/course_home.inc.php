@@ -24,4 +24,5 @@ $Interaction = "Interakcijska orodja";
 $Authoring = "Avtorska orodja";
 $Administration = "Upravljanje";
 $IntroductionTextUpdated = "Uvodno besedilo je bilo ažurirano";
+$IntroductionTextDeleted = "Uvodno besedilo je bilo odstranjeno";
 ?>

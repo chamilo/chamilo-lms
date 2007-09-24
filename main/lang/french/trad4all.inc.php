@@ -430,4 +430,5 @@ $DearUser = "Cher utilisateur";
 $YourRegistrationData = "Vos accès au portail";
 $ResetLink = "Cliquez ici pour réinitialiser votre mot de passe";
 $None = "Aucun";
+$SeeDetail = "Voir détail";
 ?>

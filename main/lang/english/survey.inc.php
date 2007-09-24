@@ -170,4 +170,6 @@ $MoveDown = "Move down";
 $MoveUp = "Move up";
 $HaveAnswered = "have answered";
 $WereInvited = "were invited";
+$PagebreakNotFirst = "The page break cannot be the first";
+$PagebreakNotLast = "The page break cannot be the last one";
 ?>

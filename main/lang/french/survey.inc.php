@@ -167,4 +167,6 @@ $MoveDown = "Déplacer vers le bas";
 $MoveUp = "Déplacer vers le haut";
 $HaveAnswered = "ont répondu";
 $WereInvited = "sont invités";
+$PagebreakNotFirst = "Le séparateur ne peut pas être en premier";
+$PagebreakNotLast = "Le séparateur ne peut pas être en dernier";
 ?>

@@ -17,5 +17,5 @@ $showHotspots = "Montrer/cacher les zones cliquables";
 $labelPolyMenu = "Fermer le polygone";
 $triesleft = "Essais restants";
 $exeFinished = "Toutes les réponses ont été remplies. Modifiez vos choix ou envoyez vos réponses";
-$nextAnswer = "Cliquez maitenant sur : &done=done";
+$nextAnswer = "Cliquez maintenant sur : &done=done";
 ?>

@@ -655,12 +655,11 @@ $ShowTabsTitle = "Zavihki v zaglavju strani";
 $ShowTabsComment = "Oznaèite zavihke za katere želite, da se pojavijo v zaglavju. Neizbrani zavihki se bodo pojavili v desni izbiri domaèe strani portala in aktivnega teèaja, èe je potrebno, da se pojavljajo.";
 $DefaultForumViewTitle = "Privzeti pogled forumov";
 $DefaultForumViewComment = "Definira privzete možnosti pri kreiranju novega foruma. Vsak upravljalec teèaja lahko nato naknadno doloèi želen pogled za vsak posamezen forum.";
-$ShowTabsTitle = "Zavihki";
-$ShowTabsComment = "Kateri od naslednjih zavihkov bodo prikazani ?";
 $NoCoursesForThisSession = "V tej seji ni uporabnikov";
 $NoUsersForThisSession = "V tej seji ni uporabnikov";
 $LastNameMandatory = "Polje Priimek ne more biti prazno.";
 $FirstNameMandatory = "Polje Ime ne more biti prazno.";
 $EmailMandatory = "Polje e-pošte ne more biti prazno.";
 $NoticeWillBeNotDisplayed = "Opozorilo ne bo prikazano na domaèi strani portala.";
+$LetThoseFieldsEmptyToHideTheNotice = "Da bi skrili opombo je potrebno ta polja izprazniti";
 ?>

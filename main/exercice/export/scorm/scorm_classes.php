@@ -389,7 +389,7 @@ class ScormAnswerMatching extends Answer
 				$s.="</td>\n</tr>\n";
 	
 				$jstmp  .= $cpt2.',';
-				$jstmpc .= '['.$cpt2.','.$Select[$cpt2]['Lettre'].'],';
+				$jstmpc .= '['.$cpt2.',\''.$Select[$cpt2]['Lettre'].'\'],';
 				$cpt2++;
 	
 				// if the left side of the "matching" has been completely shown

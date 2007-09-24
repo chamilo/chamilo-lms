@@ -149,7 +149,7 @@ class ScormAssessmentItem
             	addEvent(my_button,\'click\',checkAnswers,false);
             	//addEvent(my_button,\'change\',checkAnswers,false);
             	addEvent(window,\'unload\',unloadPage,false);
-            }'."\n";
+            }'."\n\n";
 		
 		$js .= '';
 		//$js .= 'addEvent(window,\'load\',loadPage,false);'."\n";
@@ -302,6 +302,7 @@ class ScormSection
 	 */
 	function common_js()
 	{
+		$js = "\n";
 		$js .= file_get_contents('../plugin/hotspot/JavaScriptFlashGateway.js');
 		$js .= file_get_contents('../plugin/hotspot/hotspot.js');
 		$js .=	"<!--
@@ -411,7 +412,7 @@ class ScormSection
 							}
 						}
 					}
-					// -->";
+					// -->\n\n";
 		$js .= file_get_contents('../newscorm/js/api_wrapper.js');
 		$js .= 'var questions = new Array();' . "\n";
 		$js .= 'var questions_answers = new Array();' . "\n";

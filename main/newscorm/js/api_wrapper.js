@@ -336,6 +336,7 @@ function convertTotalSeconds(ts)
  */
 function doBack()
 {  
+	checkAnswers(true);
 	doLMSSetValue( "cmi.core.exit", "suspend" );
 	computeTime();
 	exitPageStatus = true;
@@ -368,6 +369,7 @@ function doContinue(status)
  */
 function doQuit(status)
 {
+	checkAnswers();
 	computeTime();
 	exitPageStatus = true;
 	var result;
@@ -384,4 +386,128 @@ function unloadPage(status)
     {
             doQuit( status );
     }
+}
+/**
+ * Third section - depending on Dokeos - check answers and set score
+ */
+var questions = new Array();
+var questions_answers = new Array();
+var questions_answers_correct = new Array();
+var questions_types = new Array();
+
+/**
+ * Checks the answers on the test formular page
+ */
+function checkAnswers(interrupted)
+{
+	alert('Test');
+	var tmpScore = 0;
+	for(var i=0; i<questions_types.length;i++)
+	{
+		var idQuestion = questions[i];
+		alert('Question'+idQuestion);
+		var type = questions_types[idQuestion];
+		var interactionScore = 0;
+		var interactionAnswer = '';
+		if (type == 'mcma')
+		{
+			var myScore = 0;
+			for(var j=0; j<questions_answers[idQuestion];j++)
+			{
+				var idAnswer = questions_answers[idQuestion][j];
+				var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
+				if(answer.checked.value == 'checked')
+				{
+					alert(idQuestion+'_'+idAnswer+' was selected');
+					myScore += questions_answers_correct[idQuestion][idAnswer];
+				}
+			}
+			interactionScore = myScore;
+			tmpScore = myScore;
+		}
+		else if(type == 'mcua')
+		{
+			var myScore = 0;
+			for(var j=0; j<questions_answers[idQuestion];j++)
+			{
+				var idAnswer = questions_answers[idQuestion][j];
+				var answer = document.getElementById('question_'+(idQuestion)+'_unique_'+(idAnswer));
+				if(answer.selected.value == 'selected')
+				{
+					myScore += questions_answers_correct[idQuestion][idAnswer];
+				}
+			}
+			interactionScore = myScore;
+			tmpScore = myScore;
+		}
+		else if(type == 'tf')
+		{
+			var myScore = 0;
+			for(var j=0; j<questions_answers[idQuestion];j++)
+			{
+				var idAnswer = questions_answers[idQuestion][j];
+				var answer = document.getElementById('question_'+(idQuestion)+'_tf_'+(idAnswer));
+				if(answer.selected == 'selected')
+				{
+					myScore += questions_answers_correct[idQuestion][idAnswer];
+				}
+			}
+			interactionScore = myScore;
+			tmpScore = myScore;		
+		}
+		else if(type == 'fib')
+		{
+			var myScore = 0;
+			for(var j=0; j<questions_answers[idQuestion];j++)
+			{
+				var idAnswer = questions_answers[idQuestion][j];
+				var answer = document.getElementById('question_'+(idQuestion)+'_fib_'+(idAnswer));
+				if(answer.value == questions_answers_correct[idQuestion][idAnswer])
+				{
+					myScore += 1;
+				}
+				interactionAnswers += answer.value+',';
+			}
+			interactionScore = myScore;
+			tmpScore = myScore;
+		}
+		else if(type == 'matching')
+		{
+			//
+		}
+		else if(type == 'free')
+		{
+			interactionAnswers += document.getElementById('question_'+idQuestion+'_free').value;
+		}
+		else if(type == 'hotspot')
+		{
+			//
+		}
+		else
+		{
+			//
+		}
+		var interactionCorrectResponses = '';
+		for(var i=0; i<questions_answers_correct.length();i++)
+		{
+			interactionCorrectResponses += questions_answers_correct[i];
+		}
+		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.id','Q'+idQuestion);
+		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.result',interactionScore);
+		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.type',type);
+		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.student_response',interactionAnswers);
+		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.correct_responses',interactionCorrectRespnoses);		
+	}
+	LMSSetValue('cmi.core.score_raw',tmpScore);
+	//get status
+	LMSSetValue('cmi.core.lesson_status','completed');
+
+	if((interrupted==true) && (status != 'completed') && (status != 'passed'))
+	{
+		doLMSSetValue('cmi.core.exit','suspended');
+	}
+	else
+	{
+	}
+	return false; //do not submit the form
 }

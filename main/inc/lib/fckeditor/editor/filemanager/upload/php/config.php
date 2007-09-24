@@ -38,7 +38,7 @@ $Config['DeniedExtensions']['Flash']	= array() ;
 $Config['AllowedExtensions']['MP3']	= array('mp3') ;
 $Config['DeniedExtensions']['MP3']	= array() ;
 
-$Config['AllowedExtensions']['Video']	= array('avi','mpg','mpeg','mov','wmv','rm') ;
+$Config['AllowedExtensions']['Video']	= array('avi','mpg','mpeg','mov','wmv','rm','flv') ;
 $Config['DeniedExtensions']['Video']	= array() ;
 
 ?>

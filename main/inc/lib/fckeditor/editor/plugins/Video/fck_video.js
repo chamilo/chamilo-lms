@@ -2,10 +2,14 @@ var oEditor		= window.parent.InnerDialogLoaded() ;
 var FCK			= oEditor.FCK ;
 var FCKLang		= oEditor.FCKLang ;
 var FCKConfig	= oEditor.FCKConfig ;
+var flv_url = "";
 
 // Set the dialog tabs.
 window.parent.AddTab( 'Upload', FCKLang.DlgVideoUpload ) ;
 window.parent.AddTab( 'Info', FCKLang.DlgVideoTab ) ;
+
+
+var oMedia = null;
 
 // Function called when a dialog tag is selected.
 function OnDialogTabChange( tabCode )
@@ -79,25 +83,56 @@ function Ok()
 
 		return false ;
 	}
-
+	
+	
 	if ( !oEmbed )
 	{
 		oEmbed		= FCK.EditorDocument.createElement( 'EMBED' ) ;
 		oFakeImage  = null ;
 	}
-	UpdateEmbed( oEmbed ) ;
 	
-	if ( !oFakeImage )
+	
+	// check if it's a flv file
+	tmp_url = GetE('txtUrl').value;
+	extension = tmp_url.substring(tmp_url.indexOf('.')+1);
+
+	
+	if(extension == 'flv')
+		flvplayer = true;
+	else
+		flvplayer = false;
+	
+	if(flvplayer == true)
 	{
-		oFakeImage	= oEditor.FCKDocumentProcessors_CreateFakeImage( 'FCK__Video', oEmbed ) ;
-		oFakeImage.setAttribute( '_fckVideo', 'true', 0 ) ;
-		oFakeImage	= FCK.InsertElementAndGetIt( oFakeImage ) ;
+		var e = (oMedia || new Media()) ;
+		updateMovie(e);
+		FCK.InsertHtml(e.getOuterHTML()) ;	
+			
+		if ( !oFakeImage )
+		{
+			oFakeImage	= oEditor.FCKDocumentProcessors_CreateFakeImage( 'FCK__Video_flv', oEmbed ) ;
+			oFakeImage.setAttribute( '_fckVideo', 'true', 0 ) ;
+			oFakeImage	= FCK.InsertElementAndGetIt( oFakeImage ) ;
+		}
+		else
+			oEditor.FCKUndo.SaveUndoStep() ;
 	}
 	else
-		oEditor.FCKUndo.SaveUndoStep() ;
+	{	
+		if ( !oFakeImage )
+		{
+			oFakeImage	= oEditor.FCKDocumentProcessors_CreateFakeImage( 'FCK__Video', oEmbed ) ;
+			oFakeImage.setAttribute( '_fckVideo', 'true', 0 ) ;
+			oFakeImage	= FCK.InsertElementAndGetIt( oFakeImage ) ;
+		}
+		else
+			oEditor.FCKUndo.SaveUndoStep() ;
+		UpdateEmbed( oEmbed ) ;		
+	}
+	
+
 	
 	oEditor.FCKFlashProcessor.RefreshView( oFakeImage, oEmbed ) ;
-
 	return true ;
 }
 
@@ -171,6 +206,7 @@ function SetUrl( url, width, height )
 	UpdatePreview() ;
 
 	//window.parent.SetSelectedTab( 'Info' ) ;
+	
 	Ok();
 	window.parent.close();
 
@@ -223,6 +259,8 @@ function CheckUpload()
 		return false ;
 	}
 	
+	alert("ici "+oUploadAllowedExtRegex.test( sFile ));
+	
 	if ( ( FCKConfig.VideoUploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
 		( FCKConfig.VideoUploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
 	{
@@ -236,4 +274,110 @@ function CheckUpload()
 function OnSizeChanged( dimension, value ) 
 {	
 	UpdatePreview() ;
+}
+
+function updateMovie(e){
+	e.url = GetE('txtUrl').value;
+}
+
+
+function getObjData(txtUrl){ // to create data attribute for object
+		var url=txtUrl;		
+		var configBasePath = FCKConfig.BasePath;
+		var cor_indx=configBasePath.indexOf("inc/")+4;
+		var objdata = configBasePath.substring(0, cor_indx)+"lib/flv_player/player_flv_mini.swf";
+		
+		setVideoUrl(GetE('txtUrl').value);
+		
+		return objdata;
+}
+
+function setVideoUrl(url){
+	flv_url=url;
+}
+
+function getVideoUrl(){
+	return flv_url;
+}
+
+
+
+
+
+var Media = function (o){
+	this.url = '';
+	this.width = '';
+	this.height = '';
+	
+	if (o) 
+		this.setObjectElement(o);
+};
+
+/**
+ * Toma los datos de un elemento.
+ */ 
+Media.prototype.setObjectElement = function (e){
+	if (!e) return ;
+	
+	this.width = GetAttribute( e, 'width', this.width );
+	this.height = GetAttribute( e, 'height', this.height );
+	this.url = GetAttribute( e, 'data', this.url );	
+	// params
+	for (var i=0;i<e.childNodes.length;i++){
+		if (e.childNodes[i].tagName == 'PARAM'){
+			var paramName = GetAttribute(e.childNodes[i], 'name', '').toLowerCase();
+			var paramValue = GetAttribute(e.childNodes[i], 'value', '');
+			
+			switch (paramName){
+				case 'movie':
+					this.url = paramValue;
+					break;
+				case 'quality':
+					this.quality = paramValue;
+					break;
+				case 'scale':
+					this.scale = paramValue;
+					break;
+				case 'bgcolor':
+					this.bgcolor = paramValue;
+					break;
+				case 'loop':
+					this.loop = paramValue;
+					break;
+				case 'play':
+					this.play = paramValue;
+					break;
+			}
+		}
+	}
+};
+
+
+
+
+/**
+ * Devuelve el codigo HTML externo del elemento
+ */
+Media.prototype.getOuterHTML = function (objectId){
+	var s;
+
+  s= this.getInnerHTML(objectId);
+  
+  return s;
+};
+
+
+/**
+ * Devuelve el codigo HTML interno del elemento
+ */
+Media.prototype.getInnerHTML = function (objectId){
+	var s = '<object type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" height="240" width="320">\r\n<param name="movie" value="'+getObjData(this.url)+'">\r\n\t<param name="FlashVars" value="flv='+getVideoUrl()+'">\r\n</object>\r\n';
+
+	//var s = 'D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" id="test" ALIGN=""><PARAM NAME=movie VALUE="'+getObjData(this.url)+'"> <PARAM NAME=quality VALUE=high> <PARAM NAME=bgcolor VALUE=#FFFFFF><PARAM NAME="FlashVars" value="flv='+getVideoUrl()+'" /> <EMBED src="'+getObjData(this.url)+'" quality=high bgcolor=#FFFFFF NAME="Streaming" ALIGN=""TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED></OBJECT>';
+	return s;
+};
+
+
+Media.prototype.createAttribute = function(n,v){
+	return ' '+n+'="'+v+'" ';
 }

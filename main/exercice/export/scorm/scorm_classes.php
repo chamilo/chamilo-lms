@@ -322,7 +322,7 @@ class ScormAnswerFillInBlanks extends Answer
 		{
 			$texstring=substr($answer,$startlocations,($endlocations-$startlocations)+1);
 			$answer = substr_replace($answer,'<input type="text" name="choice_'.$this->questionId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
-			$jstmpc .= substr($texstring,1,-1).',';			
+			$jstmpc .= "'".htmlentities(substr($texstring,1,-1),ENT_QUOTES)."',";			
 			$i++;
 			$startlocations=strpos($answer,'[');
 			$endlocations=strpos($answer,']');

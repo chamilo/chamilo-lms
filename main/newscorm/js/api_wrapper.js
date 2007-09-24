@@ -136,13 +136,13 @@ function doLMSFinish()
 	}
 	else
 	{
-		var result = API.LMSFinish("");
-		if(result.toString() != "true")
-		{
-			var err = ErrorHandler();
-		}
+		var result = API.LMSFinish('');
+		//if(result.toString() != "true")
+		//{
+		//	var err = ErrorHandler();
+		//}
 	}
-	return result.toString();
+	//return result.toString();
 }
 /**
  * Calls the LMSGetValue method
@@ -415,100 +415,97 @@ function checkAnswers(interrupted)
 {
 	var tmpScore = 0;
 	var status = 'not attempted';
-	for(var i=0; i<questions_types.length;i++)
+	for(var i=0; i<questions.length;i++)
 	{
-		var idQuestion = questions[i];
-		var type = questions_types[idQuestion];
-		var interactionScore = 0;
-		var interactionAnswers = '';
-		var interactionCorrectResponses = '';
-		if (type == 'mcma')
-		{
-			var myScore = 0;
-			for(var j=0; j<questions_answers[idQuestion].length;j++)
+		if(questions[i]){
+			var idQuestion = questions[i];
+			var type = questions_types[idQuestion];
+			var interactionScore = 0;
+			var interactionAnswers = '';
+			var interactionCorrectResponses = '';
+			if (type == 'mcma')
 			{
-				var idAnswer = questions_answers[idQuestion][j];
-				var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
-				if(answer.checked.value == 'checked')
+				var myScore = 0;
+				for(var j=0; j<questions_answers[idQuestion].length;j++)
 				{
-					myScore += questions_answers_correct[idQuestion][idAnswer];
+					var idAnswer = questions_answers[idQuestion][j];
+					var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
+					if(answer.checked.value == true)
+					{
+						myScore += questions_answers_correct[idQuestion][idAnswer];
+					}
 				}
+				interactionScore = myScore;
+				tmpScore = myScore;
 			}
-			interactionScore = myScore;
-			tmpScore = myScore;
-		}
-		else if(type == 'mcua')
-		{
-			var myScore = 0;
-			for(var j=0; j<questions_answers[idQuestion].length;j++)
+			else if(type == 'mcua')
 			{
-				var idAnswer = questions_answers[idQuestion][j];
-				var answer = document.getElementById('question_'+(idQuestion)+'_unique_'+(idAnswer));
-				if(answer.selected.value == 'selected')
+				var myScore = 0;
+				for(var j=0; j<questions_answers[idQuestion].length;j++)
 				{
-					myScore += questions_answers_correct[idQuestion][idAnswer];
+					var idAnswer = questions_answers[idQuestion][j];
+					var answer = document.getElementById('question_'+(idQuestion)+'_unique_'+(idAnswer));
+					if(answer.checked.value == true)
+					{
+						myScore += questions_answers_correct[idQuestion][idAnswer];
+					}
 				}
+				interactionScore = myScore;
+				tmpScore = myScore;
 			}
-			interactionScore = myScore;
-			tmpScore = myScore;
-		}
-		else if(type == 'tf')
-		{
-			var myScore = 0;
-			for(var j=0; j<questions_answers[idQuestion].length;j++)
+			else if(type == 'tf')
 			{
-				var idAnswer = questions_answers[idQuestion][j];
-				var answer = document.getElementById('question_'+(idQuestion)+'_tf_'+(idAnswer));
-				if(answer.selected == 'selected')
+				var myScore = 0;
+				for(var j=0; j<questions_answers[idQuestion].length;j++)
 				{
-					myScore += questions_answers_correct[idQuestion][idAnswer];
+					var idAnswer = questions_answers[idQuestion][j];
+					var answer = document.getElementById('question_'+(idQuestion)+'_tf_'+(idAnswer));
+					if(answer.checked.value == true)
+					{
+						myScore += questions_answers_correct[idQuestion][idAnswer];
+					}
 				}
+				interactionScore = myScore;
+				tmpScore = myScore;		
 			}
-			interactionScore = myScore;
-			tmpScore = myScore;		
-		}
-		else if(type == 'fib')
-		{
-			var myScore = 0;
-			for(var j=0; j<questions_answers[idQuestion].length;j++)
+			else if(type == 'fib')
 			{
-				var idAnswer = questions_answers[idQuestion][j];
-				var answer = document.getElementById('question_'+(idQuestion)+'_fib_'+(idAnswer));
-				if(answer.value == questions_answers_correct[idQuestion][idAnswer])
+				var myScore = 0;
+				for(var j=0; j<questions_answers[idQuestion].length;j++)
 				{
-					myScore += 1;
+					var idAnswer = questions_answers[idQuestion][j];
+					var answer = document.getElementById('question_'+(idQuestion)+'_fib_'+(idAnswer));
+					if(answer.value == questions_answers_correct[idQuestion][idAnswer])
+					{
+						myScore += 1;
+					}
+					interactionAnswers += answer.value+',';
 				}
-				interactionAnswers += answer.value+',';
+				interactionScore = myScore;
+				tmpScore = myScore;
 			}
-			interactionScore = myScore;
-			tmpScore = myScore;
+			else if(type == 'matching')
+			{
+				//
+			}
+			else if(type == 'free')
+			{
+				interactionAnswers += document.getElementById('question_'+(idQuestion)+'_free').innerHTML;
+			}
+			else if(type == 'hotspot')
+			{
+				//
+			}
+			else
+			{
+				//
+			}
+			doLMSSetValue('cmi.interactions.'+idQuestion+'.id','Q'+idQuestion);
+			doLMSSetValue('cmi.interactions.'+idQuestion+'.result',interactionScore);
+			doLMSSetValue('cmi.interactions.'+idQuestion+'.type',type);
+			doLMSSetValue('cmi.interactions.'+idQuestion+'.student_response',interactionAnswers);
+			doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',questions_answers_correct[idQuestion]);		
 		}
-		else if(type == 'matching')
-		{
-			//
-		}
-		else if(type == 'free')
-		{
-			interactionAnswers += document.getElementById('question_'+idQuestion+'_free').value;
-		}
-		else if(type == 'hotspot')
-		{
-			//
-		}
-		else
-		{
-			//
-		}
-		var interactionCorrectResponses = '';
-		for(var i=0; i<questions_answers_correct.length;i++)
-		{
-			interactionCorrectResponses += questions_answers_correct[i];
-		}
-		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.id','Q'+idQuestion);
-		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.result',interactionScore);
-		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.type',type);
-		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.student_response',interactionAnswers);
-		doLMSSetValue('cmi.core.interactions.'+idQuestion+'.correct_responses',interactionCorrectResponses);		
 	}
 	doLMSSetValue('cmi.core.score.raw',tmpScore);
 	//get status

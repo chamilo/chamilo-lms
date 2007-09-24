@@ -146,7 +146,8 @@ class ScormAssessmentItem
             	addEvent(my_form,\'submit\',checkAnswers,false);
             	*/
             	var my_button = document.getElementById(\'dokeos_scorm_submit\');
-            	addEvent(my_button,\'click\',checkAnswers,false);
+            	addEvent(my_button,\'click\',doQuit,false);
+            	//addEvent(my_button,\'click\',checkAnswers,false);
             	//addEvent(my_button,\'change\',checkAnswers,false);
             	addEvent(window,\'unload\',unloadPage,false);
             }'."\n\n";
@@ -448,7 +449,8 @@ class ScormSection
             	addEvent(my_form,\'submit\',checkAnswers,false);
             	*/
             	var my_button = document.getElementById(\'dokeos_scorm_submit\');
-            	addEvent(my_button,\'click\',checkAnswers,false);
+            	addEvent(my_button,\'click\',doQuit,false);
+            	//addEvent(my_button,\'click\',checkAnswers,false);
             	//addEvent(my_button,\'change\',checkAnswers,false);
             	addEvent(window,\'unload\',unloadPage,false);
             }'."\n";

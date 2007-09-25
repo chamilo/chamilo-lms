@@ -94,8 +94,7 @@ function Ok()
 	
 	// check if it's a flv file
 	tmp_url = GetE('txtUrl').value;
-	extension = tmp_url.substring(tmp_url.indexOf('.')+1);
-
+	extension = tmp_url.substring(tmp_url.lastIndexOf('.')+1);
 	
 	if(extension == 'flv')
 		flvplayer = true;

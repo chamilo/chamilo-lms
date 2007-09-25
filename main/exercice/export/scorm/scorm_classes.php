@@ -600,11 +600,64 @@ class ScormAnswerHotspot extends Answer
     	$js = $this->get_js_header();
     	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// some javascript must be added for that kind of questions
-		$html .= '<tr>' . "\n" 
-			.	'<td>' . "\n"
-	    	. "<div>Hotspot zone</div>\n"
-	    	.	'</td>' . "\n"
-	    	.	'</tr>' . "\n\n";
+		$html .= '';
+		
+		// Get the answers, make a list
+		$nbrAnswers=$this->selectNbrAnswers();
+
+		$answer_list = '<div style="padding: 10px; margin-left: -8px; border: 1px solid #4271b5; height: 448px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
+		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
+		{
+			$answer_list .= '<li>'.$this->selectAnswer($answerId).'</li>';
+		}
+		$answer_list .= '</ol></div>';
+
+		/*
+		if(!$onlyAnswers)
+		{
+			$s="<tr>
+			  <td valign='top' colspan='2'>&nbsp;";
+			$questionName=api_parse_tex($questionName);
+			$s.=$questionName;
+			$s.="</td>
+			</tr>
+			<tr>
+			  <td valign='top' colspan='2'>
+				<i>";
+			$questionDescription=api_parse_tex($questionDescription);
+			$s.=$questionDescription;
+			$s.="</i>
+			  </td>
+			</tr>";
+		}
+		*/
+
+		//$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
+		$canClick = true;
+		//$tes = isset($_GET['modifyAnswers']) ? '0' : '1';
+		//echo $tes;
+		$html .= '<tr><td>'."
+					<script language=\"JavaScript\" type=\"text/javascript\">
+						<!--
+						// Version check based upon the values entered above in \"Globals\"
+						var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+
+
+						// Check to see if the version meets the requirements for playback
+						if (hasReqestedVersion) {  // if we've detected an acceptable version
+						    var oeTags = '<object type=\"application/x-shockwave-flash\"".' data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_user.swf?modifyAnswers='.$this->questionId."&amp;canClick:".$canClick."\" width=\"380\" height=\"470\">'
+										+ '<param name=\"movie\"".' value="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_user.swf?modifyAnswers='.$this->questionId."&amp;canClick:".$canClick."\" \/>'
+										+ '<\/object>';
+						    document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
+						} else {  // flash is too old or we can't detect the plugin
+							var alternateContent = 'Error<br \/>'
+								+ 'Hotspots requires Macromedia Flash 7.<br \/>'
+								+ '<a href=http://www.macromedia.com/go/getflash/>Get Flash<\/a>';
+							document.write(alternateContent);  // insert non-flash content
+						}
+						// -->
+					</script></td>
+					<td valign='top'>$answer_list</td></tr>";		
 		$html .= '</table></td></tr>' . "\n";
         return array($js,$html);
     }

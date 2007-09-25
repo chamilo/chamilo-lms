@@ -429,9 +429,16 @@ function checkAnswers(interrupted)
 				{
 					var idAnswer = questions_answers[idQuestion][j];
 					var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
-					if(answer.checked.value == true)
+					if(answer.checked == true)
 					{
-						myScore += questions_answers_correct[idQuestion][idAnswer];
+						interactionAnswers += idAnswer+',';
+						for(k=0;k<questions_answers_correct[idQuestion].length;k++)
+						{
+							if(questions_answers_correct[idQuestion][k] == idAnswer)
+							{
+								myScore ++;
+							}
+						}
 					}
 				}
 				interactionScore = myScore;
@@ -448,9 +455,13 @@ function checkAnswers(interrupted)
 				{
 					var idAnswer = questions_answers[idQuestion][j];
 					var answer = document.getElementById('question_'+(idQuestion)+'_unique_'+(idAnswer));
-					if(answer.checked.value == true)
+					if(answer.checked == true)
 					{
-						myScore += questions_answers_correct[idQuestion][idAnswer];
+						interactionAnswers += idAnswer;
+						if(questions_answers_correct[idQuestion] == idAnswer)
+						{
+							myScore ++;
+						}
 					}
 				}
 				interactionScore = myScore;
@@ -466,7 +477,14 @@ function checkAnswers(interrupted)
 					var answer = document.getElementById('question_'+(idQuestion)+'_tf_'+(idAnswer));
 					if(answer.checked.value == true)
 					{
-						myScore += questions_answers_correct[idQuestion][idAnswer];
+						interactionAnswers += idAnswer;
+						for(k=0;k<questions_answers_correct[idQuestion].length;k++)
+						{
+							if(questions_answers_correct[idQuestion][k] == idAnswer)
+							{
+								myScore ++;
+							}
+						}
 					}
 				}
 				interactionScore = myScore;
@@ -480,11 +498,17 @@ function checkAnswers(interrupted)
 				{
 					var idAnswer = questions_answers[idQuestion][j];
 					var answer = document.getElementById('question_'+(idQuestion)+'_fib_'+(idAnswer));
-					if(answer.value == questions_answers_correct[idQuestion][idAnswer])
+					if(answer.value)
 					{
-						myScore += 1;
+						interactionAnswers += answer.value+',';
+						for(k=0;k<questions_answers_correct[idQuestion].length;k++)
+						{
+							if(questions_answers_correct[idQuestion][k] == answer.value)
+							{
+								myScore ++;
+							}
+						}
 					}
-					interactionAnswers += answer.value+',';
 				}
 				interactionScore = myScore;
 				//correct responses work by pattern, see SCORM Runtime Env Doc
@@ -495,8 +519,25 @@ function checkAnswers(interrupted)
 			}
 			else if(type == 'matching')
 			{
-				//
-				interactionScore = 0;
+				var myScore = 0;
+				for(var j=0; j<questions_answers[idQuestion].length;j++)
+				{
+					var idAnswer = questions_answers[idQuestion][j];
+					var answer = document.getElementById('question_'+(idQuestion)+'_matching_'+(idAnswer));
+					if(answer && answer.value)
+					{
+						interactionAnswers += answer.value+',';
+						for(k=0;k<questions_answers_correct[idQuestion].length;k++)
+						{
+							var left = questions_answers_correct[idQuestion][k][0];
+							var right = questions_answers_correct[idQuestion][k][1];
+							if(left == idAnswer && right == answer.value)
+							{
+								myScore ++;
+							}
+						}
+					}
+				}
 				//correct responses work by pattern, see SCORM Runtime Env Doc
 				//for(k=0;k<questions_answers_correct[idQuestion].length;k++)
 				//{
@@ -506,14 +547,16 @@ function checkAnswers(interrupted)
 			else if(type == 'free')
 			{
 				interactionScore = 0;
-				interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').innerHTML;
+				interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').value;
 				//correct responses work by pattern, see SCORM Runtime Env Doc
 				//interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
 			}
 			else if(type == 'hotspot')
 			{
-				//
-				interactionScore = 0;
+				//if(question_score && question_score[idQuestion]){
+				//	interactionScore = question_score[idQuestion];
+				//} //else, 0
+				
 				//interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').innerHTML;
 				interactionAnswers = '';
 				//correct responses work by pattern, see SCORM Runtime Env Doc

@@ -202,7 +202,7 @@ class ScormAnswerMultipleChoice extends Answer
 		    	$id++;
 			}
 			$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
-	    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.$jstmpc.');'."\n";
+	    	$js .= 'questions_answers_correct['.$this->questionId.'] = '.$jstmpc.';'."\n";
 	    	$js .= 'questions_types['.$this->questionId.'] = \'mcua\';'."\n";
         }
 		$html .= '</table></td></tr>' . "\n";
@@ -297,13 +297,15 @@ class ScormAnswerFillInBlanks extends Answer
 		// because [] is parsed here we follow this procedure:
 		// 1. find everything between the [ and ] tags
 		$i=1;
+		$jstmp = '';
 		$jstmpc = '';
 		$startlocations=strpos($answer,'[');
 		$endlocations=strpos($answer,']');
 		while($startlocations !== false && $endlocations !== false)
 		{
 			$texstring=substr($answer,$startlocations,($endlocations-$startlocations)+1);
-			$answer = substr_replace($answer,'<input type="text" name="choice_'.$this->questionId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
+			$answer = substr_replace($answer,'<input type="text" name="question_'.$this->questionId.'_fib_'.$i.'" id="question_'.$this->questionId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
+			$jstmp .= $i.',';
 			$jstmpc .= "'".htmlentities(substr($texstring,1,-1),ENT_QUOTES)."',";			
 			$i++;
 			$startlocations=strpos($answer,'[');
@@ -316,7 +318,7 @@ class ScormAnswerFillInBlanks extends Answer
 	    		.	'</td>' . "\n"
 	    		.	'</tr>' . "\n";
 		$html .= '</table></td></tr>' . "\n";
-		$js .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
+		$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
     	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
     	$js .= 'questions_types['.$this->questionId.'] = \'fib\';'."\n";
         return array($js,$html);
@@ -356,7 +358,7 @@ class ScormAnswerMatching extends Answer
 		$jstmpc = '';
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
-			$identifier = 'question_'.$qId.'_matching_'.$answerId;
+			$identifier = 'question_'.$qId.'_matching_';
 			$answer=$this->selectAnswer($answerId);
 			$answerCorrect=$this->isCorrect($answerId);
 			$weight=$this->selectWeighting($answerId);
@@ -374,7 +376,7 @@ class ScormAnswerMatching extends Answer
 			{
 				$s.='<tr>'."\n";
 				$s.='<td width="40%" valign="top">'."\n".'<b>'.$cpt2.'</b>.&nbsp;'.$answer."\n</td>\n";
-				$s.='<td width="20%" align="center">&nbsp;&nbsp;<select name="'.$identifier.'">';
+				$s.='<td width="20%" align="center">&nbsp;&nbsp;<select name="'.$identifier.$cpt2.'" id="'.$identifier.$cpt2.'">';
 				$s.=' <option value="0">--</option>';
 	            // fills the list-box
 	            foreach($Select as $key=>$val)
@@ -389,7 +391,7 @@ class ScormAnswerMatching extends Answer
 				$s.="</td>\n</tr>\n";
 	
 				$jstmp  .= $cpt2.',';
-				$jstmpc .= '['.$cpt2.',\''.$Select[$cpt2]['Lettre'].'\'],';
+				$jstmpc .= '['.$cpt2.',\''.$cpt2.'\'],';
 				$cpt2++;
 	
 				// if the left side of the "matching" has been completely shown
@@ -581,10 +583,17 @@ class ScormAnswerHotspot extends Answer
 					</script>";
 			//because this header closes so many times the <script> tag, we have to reopen our own
 			$header .= '<script type="text/javascript" language="javascript">'."\n";
+			$header .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
+    		$header .= 'questions_answers_correct['.$this->questionId.'] = new Array();'."\n";
+    		$header .= 'questions_types['.$this->questionId.'] = \'hotspot\';'."\n";
+			
 		}
 		else
 		{
 			$header = '';
+			$header .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
+    		$header .= 'questions_answers_correct['.$this->questionId.'] = new Array();'."\n";
+    		$header .= 'questions_types['.$this->questionId.'] = \'hotspot\';'."\n";
 		}
 		return $header;
 	}

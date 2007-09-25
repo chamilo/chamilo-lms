@@ -652,14 +652,14 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 
 		<?php
 		//real code
-		echo '<input type="submit" name="step2_update_8" value="Upgrade from Dokeos ' . implode(', ',$update_from_version_8) . '"';
+		echo '<input type="submit" name="step2_update_8" value="Upgrade from Dokeos 1.8.x"';
 		if($error) echo ' disabled="disabled"';
 		//temporary code for alpha version, disabling upgrade
 		//echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
 		//echo ' disabled="disabled"';
 		//end temp code
 		echo ' />';
-		echo '<input type="submit" name="step2_update_6" value="Upgrade from Dokeos ' . implode(', ',$update_from_version_6) . '"';
+		echo '<input type="submit" name="step2_update_6" value="Upgrade from Dokeos 1.6.x"';
 		if($error) echo ' disabled="disabled"';
 		echo ' />';
 		echo '</p>';

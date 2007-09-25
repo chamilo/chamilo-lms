@@ -137,12 +137,12 @@ function doLMSFinish()
 	else
 	{
 		var result = API.LMSFinish('');
-		//if(result.toString() != "true")
-		//{
-		//	var err = ErrorHandler();
-		//}
+		if(result.toString() != "true")
+		{
+			var err = ErrorHandler();
+		}
 	}
-	//return result.toString();
+	return result.toString();
 }
 /**
  * Calls the LMSGetValue method
@@ -380,14 +380,13 @@ function doContinue(status)
 /**
  * handles the recording of everything on a normal shutdown
  */
-function doQuit(status)
+function doQuit()
 {
 	checkAnswers();
 	computeTime();
 	exitPageStatus = true;
 	var result;
 	result = doLMSCommit();
-	result = doLMSSetValue("cmi.core.lesson_status", status);
 	result = doLMSFinish();
 }
 /**
@@ -436,7 +435,11 @@ function checkAnswers(interrupted)
 					}
 				}
 				interactionScore = myScore;
-				tmpScore = myScore;
+				//correct responses work by pattern, see SCORM Runtime Env Doc
+				//for(k=0;k<questions_answers_correct[idQuestion].length;k++)
+				//{
+				//	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
+				//}
 			}
 			else if(type == 'mcua')
 			{
@@ -451,7 +454,8 @@ function checkAnswers(interrupted)
 					}
 				}
 				interactionScore = myScore;
-				tmpScore = myScore;
+				//correct responses work by pattern, see SCORM Runtime Env Doc
+				//interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
 			}
 			else if(type == 'tf')
 			{
@@ -466,7 +470,8 @@ function checkAnswers(interrupted)
 					}
 				}
 				interactionScore = myScore;
-				tmpScore = myScore;		
+				//correct responses work by pattern, see SCORM Runtime Env Doc
+				//interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
 			}
 			else if(type == 'fib')
 			{
@@ -482,29 +487,54 @@ function checkAnswers(interrupted)
 					interactionAnswers += answer.value+',';
 				}
 				interactionScore = myScore;
-				tmpScore = myScore;
+				//correct responses work by pattern, see SCORM Runtime Env Doc
+				//for(k=0;k<questions_answers_correct[idQuestion].length;k++)
+				//{
+				//	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
+				//}
 			}
 			else if(type == 'matching')
 			{
 				//
+				interactionScore = 0;
+				//correct responses work by pattern, see SCORM Runtime Env Doc
+				//for(k=0;k<questions_answers_correct[idQuestion].length;k++)
+				//{
+				//	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
+				//}
 			}
 			else if(type == 'free')
 			{
-				interactionAnswers += document.getElementById('question_'+(idQuestion)+'_free').innerHTML;
+				interactionScore = 0;
+				interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').innerHTML;
+				//correct responses work by pattern, see SCORM Runtime Env Doc
+				//interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
 			}
 			else if(type == 'hotspot')
 			{
 				//
+				interactionScore = 0;
+				//interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').innerHTML;
+				interactionAnswers = '';
+				//correct responses work by pattern, see SCORM Runtime Env Doc
+				//for(k=0;k<questions_answers_correct[idQuestion].length;k++)
+				//{
+				//	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
+				//}
 			}
 			else
 			{
 				//
 			}
+			tmpScore += interactionScore;
+
 			doLMSSetValue('cmi.interactions.'+idQuestion+'.id','Q'+idQuestion);
 			doLMSSetValue('cmi.interactions.'+idQuestion+'.result',interactionScore);
 			doLMSSetValue('cmi.interactions.'+idQuestion+'.type',type);
 			doLMSSetValue('cmi.interactions.'+idQuestion+'.student_response',interactionAnswers);
-			doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',questions_answers_correct[idQuestion]);		
+			//correct responses work by pattern, see SCORM Runtime Env Doc
+			//doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',questions_answers_correct[idQuestion]);		
+			//doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',interactionCorrectResponses);		
 		}
 	}
 	doLMSSetValue('cmi.core.score.raw',tmpScore);

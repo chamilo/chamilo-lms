@@ -49,6 +49,7 @@ require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once('hotpotatoes.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
+include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 /*
 -----------------------------------------------------------
@@ -147,7 +148,7 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 	$test  = $_GET['test'];
 	$from = $_SESSION['_user']['mail'];
 	$from_name = $_SESSION['_user']['firstName']." ".$_SESSION['_user']['lastName'];
-	$url = $_SESSION['checkDokeosURL'].'claroline/exercice/exercice.php?'.api_get_cidreq().'&show=result';
+	$url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
 
 	foreach ($_POST as $key=>$v)
 	{
@@ -245,6 +246,9 @@ if ($show=='result' && $_REQUEST['comments']=='update' && ($is_allowedToEdit || 
 	$headers .= 'From: '.$from_name.' <'.$from.'>' . "\r\n";
 	$headers="From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=".($charset?$charset:'ISO-8859-15');
 	//mail($emailid, $subject, $mess,$headers);
+
+	api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);
+	
 
 	if(in_array($origin, array('tracking_course','user_course'))){
 		//Redirect to the reporting		

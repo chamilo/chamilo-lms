@@ -558,7 +558,8 @@ class learnpathItem{
 										if(strpos($source,"+this.")) continue; //javascript code - will still work unaltered
 										if(!strpos($source,'.')) continue; //no dot, should not be an external file anyway
 										if(strpos($source,'mailto:')) continue; //mailto link
-										if(strpos($source,';')) continue; //avoid code - that should help
+										if(strpos($source,';') && !strpos($source,'&amp;')) continue; //avoid code - that should help
+										
 										if($attr == 'value')
 										{
 											if(strpos($source , 'mp3file'))
@@ -573,6 +574,8 @@ class learnpathItem{
 										}
 										if(strpos($source,'://') > 0)
 										{
+											//cut at '?' in a URL with params
+											if(strpos($source,'?')>0){$source = substr($source,0,strpos($source,'?'));}
 											//found some protocol there
 											if(strpos($source,api_get_path(WEB_PATH))!==false)
 											{

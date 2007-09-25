@@ -749,6 +749,9 @@ class learnpath {
     	//In clear: implement this in the item class as well (abstract class) and use the given ID in queries
     	//if(empty($course)){$course = api_get_course_id();}
     	//if(empty($id)){$id = $this->get_id();}
+    	//If an ID is specifically given and the current LP is not the same,
+    	//prevent delete
+    	if(!empty($id) && ($id != $this->lp_id)){return false;}
     	
 		//if($this->debug>0){error_log('New LP - In learnpath::delete()',0);}
     	foreach($this->items as $id => $dummy)

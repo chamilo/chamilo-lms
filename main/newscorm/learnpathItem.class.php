@@ -523,7 +523,9 @@ class learnpathItem{
     	$type = $this->get_type();
     	switch($type)
     	{
-    		case TOOL_DOCUMENT : case 'sco':
+    		case TOOL_DOCUMENT : 
+    		case TOOL_QUIZ:
+    		case 'sco':
     			//get the document and, if HTML, open it
     			
     			if(is_file($abs_path))
@@ -539,23 +541,6 @@ class learnpathItem{
 						case 'css':
 					 		$wanted_attributes = array('src','url','@import','href','value');
 			    			//parse it for included resources
-			    			/*
-			    			$fh = fopen($abs_path,'r');
-			    			if($fh !== false)
-			    			{
-			    				while($line = fread($fh,1024))
-			    				{
-			    					if(preg_match('expression',$line))
-			    					{
-			    						//do something
-			    					}
-			    				}
-			    				$close = fclose($fh);
-			    				if($close === false)
-			    				{
-			    					//do nothing yet
-			    				}	
-			    			}*/
 							$file_content = file_get_contents($abs_path);
 							//get an array of attributes from the HTML source
 							$attributes = learnpathItem::parse_HTML_attributes($file_content,$wanted_attributes);
@@ -569,7 +554,11 @@ class learnpathItem{
 									
 									foreach($sources as $source)
 									{
-										
+										//skip what is obviously not a resource
+										if(strpos($source,"+this.")) continue; //javascript code - will still work unaltered
+										if(!strpos($source,'.')) continue; //no dot, should not be an external file anyway
+										if(strpos($source,'mailto:')) continue; //mailto link
+										if(strpos($source,';')) continue; //avoid code - that should help
 										if($attr == 'value')
 										{
 											if(strpos($source , 'mp3file'))
@@ -582,10 +571,10 @@ class learnpathItem{
 													$files_list[] = array($mp3file,'local','rel');
 											}
 										}
-										if(strstr($source,'://') > 0)
+										if(strpos($source,'://') > 0)
 										{
 											//found some protocol there
-											if(strstr($source,api_get_path(WEB_PATH))!==false)
+											if(strpos($source,api_get_path(WEB_PATH))!==false)
 											{
 												//we found the current portal url
 												$files_list[] = array($source,'local','url');
@@ -654,8 +643,6 @@ class learnpathItem{
     				//the file could not be found
     				return false;
     			}
-    			break;
-    		case TOOL_QUIZ:
     			break;
     		default: //ignore
     			break;

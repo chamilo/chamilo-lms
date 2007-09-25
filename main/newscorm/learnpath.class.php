@@ -7497,9 +7497,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			 		//write the contents of the exported exercise into a (big) html file
 			 		//to later pack it into the exported SCORM. The file will be removed afterwards
 			 		$contents = export_exercise($exe_id,true);
-			 		$res = file_put_contents($garbage_path.$temp_dir_short.'/'.$my_file_path,$contents);
-			 		if($res === false){error_log('Could not write into file '.$garbage_path.$temp_dir_short.'/'.$my_file_path.' '.__FILE__.' '.__LINE__,0);}
-			 		$files_cleanup[] = $garbage_path.$temp_dir_short.'/'.$my_file_path;
+			 		$tmp_file_path = $garbage_path.$temp_dir_short.'/'.$my_file_path;
+			 		$res = file_put_contents($tmp_file_path,$contents);
+			 		if($res === false){error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__,0);}
+			 		$files_cleanup[] = $tmp_file_path;
 			 		//error_log($tmp_path);die();
 					$my_xml_file_path = htmlentities($my_file_path); 
 					$my_sub_dir = dirname($my_file_path); 
@@ -7517,7 +7518,141 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			 		$my_file = $xmldoc->createElement('file');
 			 		$my_file->setAttribute('href',$my_xml_file_path);
 			 		$my_resource->appendChild($my_file);
+
+			 		//get included docs
+		 			$inc_docs = $item->get_resources_from_source(null,$tmp_file_path);
+			 		//dependency to other files - not yet supported
+			 		$i = 1;
+			 		foreach($inc_docs as $doc_info)
+			 		{
+			 			if(count($doc_info)<1 or empty($doc_info[0])){continue;}
+			 			$my_dep = $xmldoc->createElement('resource');
+			 			$res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
+			 			$my_dep->setAttribute('identifier',$res_id);
+			 			$my_dep->setAttribute('type','webcontent');
+			 			$my_dep->setAttribute('adlcp:scormtype','asset');
+			 			$my_dep_file = $xmldoc->createElement('file');
+			 			//check type of URL
+			 			//error_log('Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2],0);
+			 			if($doc_info[1] == 'remote')
+			 			{ //remote file. Save url as is
+			 				$my_dep_file->setAttribute('href',$doc_info[0]);
+				 			$my_dep->setAttribute('xml:base','');
+			 			}elseif($doc_info[1] == 'local'){
+			 				switch($doc_info[2])
+			 				{
+			 					case 'url': //local URL - save path as url for now, don't zip file
+					 				$my_dep_file->setAttribute('href',$doc_info[0]);
+						 			$my_dep->setAttribute('xml:base','');
+						 			//save file but as local file (retrieve from URL)
+									$abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH),'',$doc_info[0]);
+									$current_dir = dirname($abs_path);
+									$file_path = realpath($abs_path);
+				 					if(strstr($file_path,$main_path) !== false)
+				 					{//the calculated real path is really inside the dokeos root path
+				 						//reduce file path to what's under the DocumentRoot
+				 						$file_path = substr($file_path,strlen($root_path));
+				 						//echo $file_path;echo '<br><br>';
+				 						//error_log('Reduced path: '.$file_path,0);
+				 						$zip_files_abs[] = $file_path;
+				 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>'document/'.$file_path);
+						 				$my_dep_file->setAttribute('href','document/'.$file_path);
+				 			 			$my_dep->setAttribute('xml:base','');
+				 					}
+				 					else if (empty($file_path))
+				 					{
+				 						/*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH),api_get_path(REL_PATH)));
+				 						if(strpos($document_root,-1)=='/')
+				 						{
+				 							$document_root = substr(0, -1, $document_root);
+				 						}*/
+				 						$file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
+				 						$file_path = str_replace('//','/',$file_path);
+				 						if(file_exists($file_path))
+				 						{
+					 						$file_path = substr($file_path,strlen($current_dir)); // we get the relative path
+					 						$zip_files[] = $my_sub_dir.'/'.$file_path;
+					 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>'document/'.$file_path);
+							 				$my_dep_file->setAttribute('href','document/'.$file_path);
+					 			 			$my_dep->setAttribute('xml:base','');
+				 						}
+				 					}
+			 						break;
+			 					case 'abs': //absolute path from DocumentRoot. Save file and leave path as is in the zip
+					 				$my_dep_file->setAttribute('href',$doc_info[0]);
+			 			 			$my_dep->setAttribute('xml:base','');
+		
+				 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+									
+									$file_path = realpath($doc_info[0]);
+									
+				 					if(strstr($file_path,$main_path) !== false)
+				 					{//the calculated real path is really inside the dokeos root path
+				 						//reduce file path to what's under the DocumentRoot
+				 						$file_path = substr($file_path,strlen($root_path));
+				 						//echo $file_path;echo '<br><br>';
+				 						//error_log('Reduced path: '.$file_path,0);
+				 						$zip_files_abs[] = $file_path;
+				 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+						 				$my_dep_file->setAttribute('href','document/'.$file_path);
+				 			 			$my_dep->setAttribute('xml:base','');
+				 					}
+				 					else if (empty($file_path))
+				 					{
+				 						/*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH),api_get_path(REL_PATH)));
+				 						if(strpos($document_root,-1)=='/')
+				 						{
+				 							$document_root = substr(0, -1, $document_root);
+				 						}*/
+				 						$file_path = $_SERVER['DOCUMENT_ROOT'].$doc_info[0];
+				 						$file_path = str_replace('//','/',$file_path);
+				 						if(file_exists($file_path))
+				 						{
+					 						$file_path = substr($file_path,strlen($current_dir)); // we get the relative path
+					 						$zip_files[] = $my_sub_dir.'/'.$file_path;
+					 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+							 				$my_dep_file->setAttribute('href','document/'.$file_path);
+					 			 			$my_dep->setAttribute('xml:base','');
+				 						}
+				 					}
+			 						break;
+			 					case 'rel': //path relative to the current document. Save xml:base as current document's directory and save file in zip as subdir.file_path
+				 					if(substr($doc_info[0],0,2)=='..')
+					 				{ //relative path going up
+					 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+					 					$file_path = realpath($current_dir.$doc_info[0]);
+					 					//error_log($file_path.' <-> '.$main_path,0);
+					 					if(strstr($file_path,$main_path) !== false)
+					 					{//the calculated real path is really inside the dokeos root path
+					 						//reduce file path to what's under the DocumentRoot
+					 						$file_path = substr($file_path,strlen($root_path));
+					 						//error_log('Reduced path: '.$file_path,0);
+					 						$zip_files_abs[] = $file_path;
+					 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+							 				$my_dep_file->setAttribute('href','document/'.$file_path);
+					 			 			$my_dep->setAttribute('xml:base','');
+					 					}
+					 				}else{
+					 					$zip_files[] = $my_sub_dir.'/'.$doc_info[0];
+						 				$my_dep_file->setAttribute('href',$doc_info[0]);
+				 			 			$my_dep->setAttribute('xml:base',$my_xml_sub_dir);
+					 				}
+			 						break;
+			 					default:
+					 				$my_dep_file->setAttribute('href',$doc_info[0]);
+			 			 			$my_dep->setAttribute('xml:base','');
+			 						break;
+			 				}
+			 			}
+			 			$my_dep->appendChild($my_dep_file);
+			 			$resources->appendChild($my_dep);
+			 			$dependency = $xmldoc->createElement('dependency');
+			 			$dependency->setAttribute('identifierref',$res_id);
+			 			$my_resource->appendChild($dependency);
+			 			$i++;
+			 		}
 			 		$resources->appendChild($my_resource);
+			 		$zip_files[] = $my_file_path;
 	 				
 				}
 	 			else

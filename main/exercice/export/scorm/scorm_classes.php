@@ -104,13 +104,13 @@ class ScormQuestion extends Question
     /**
      * Returns an HTML-formatted question
      */
-    function getQuestionHtml()
+    function getQuestionHTML()
     {
     	$title			= $this->selectTitle();
 		$description	= $this->selectDescription();
-		$cols = 0;
+		$cols = 2;
 		$s='<tr>' .
-			'<td valign="top" colspan="'.$cols.'" id="question_'.$this->id.'_title">' . "\n" .
+			'<td colspan="'.$cols.'" id="question_'.$this->id.'_title" valign="middle" style="background-color:#d6d6d6;">' . "\n" .
 		   	api_parse_tex($title).
 		   	'</td>' . "\n" .
 		   	'</tr>' . "\n" .
@@ -440,7 +440,7 @@ class ScormAnswerFree extends Answer
 		// some javascript must be added for that kind of questions
 		$html .= '<tr>' . "\n" 
 				.	'<td>' . "\n"
-		    	. '<textarea name="question_'.$qId.'_free" id="question_'.$qId.'_free" rows="20" cols="200"></textarea>' . "\n"
+		    	. '<textarea name="question_'.$qId.'_free" id="question_'.$qId.'_free" rows="20" cols="100"></textarea>' . "\n"
 		    	.	'</td>' . "\n"
 		    	.	'</tr>' . "\n";
 		$html .= '</table></td></tr>' . "\n";

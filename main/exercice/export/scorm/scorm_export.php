@@ -519,7 +519,8 @@ class ScormSection
     {
        return '<body>'. "\n".
        		'<h1>'.$this->exercise->selectTitle().'</h1>'."\n".
-			'<form id="dokeos_scorm_form" method="post" action="">'."\n";
+			'<form id="dokeos_scorm_form" method="post" action="">'."\n".
+			'<table width="100%">'."\n";
     }
      
     /**
@@ -528,7 +529,7 @@ class ScormSection
      */
     function end_body()
     {
-       return '<br /><input type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form>'."\n".'</body>'. "\n";
+       return '</table><br /><input type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form>'."\n".'</body>'. "\n";
     }
 
     /**
@@ -582,7 +583,7 @@ class ScormSection
         {
         	list($jstmp,$htmltmp)= export_question($q, false);
         	$js .= $jstmp."\n";
-        	$html .= $htmltmp."<br /><br />";
+        	$html .= $htmltmp."\n";
         }
         return array($js,$html);
     }

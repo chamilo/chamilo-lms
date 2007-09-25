@@ -88,6 +88,28 @@ class ScormAssessmentItem
 		if($this->standalone){return '<head>'. "\n";}
 		return '';
 	}
+	/**
+	 * Print CSS inclusion
+	 */
+	function css()
+	{
+		if($this->standalone)
+		{
+			$css = '<style type="text/css" media="screen, projection">'."\n";
+			$css .= '/*<![CDATA[*/'."\n";
+			$css .= '@import "http://my.dokeosyan.net/main/css/default/default.css";'."\n";
+			$css .= '@import "http://my.dokeosyan.net/main/css/default/course.css";'."\n";
+			$css .= '/*]]>*/'."\n";
+			$css .= '</style>'."\n";
+			$css .= '<style type="text/css" media="print">'."\n";
+			$css .= '/*<![CDATA[*/'."\n";
+			$css .= '@import "http://my.dokeosyan.net/main/css/default/print.css";'."\n";
+			$css .= '/*]]>*/'."\n";
+			$css .= '</style>'."\n";
+			return $css;
+		}
+		return '';
+	}
 
 	/**
 	 * End document header
@@ -205,6 +227,7 @@ class ScormAssessmentItem
 		{
 	        $res = $this->start_page()
 	               . $this->start_header()
+	               . $this->css()
 	               . $this->start_js()
 	               . $this->common_js()
 	               . $js
@@ -281,6 +304,25 @@ class ScormSection
 	function start_header()
 	{
 		return '<head>'. "\n";
+	}
+	/**
+	 * Print CSS inclusion
+	 */
+	function css()
+	{
+
+		$css = '<style type="text/css" media="screen, projection">'."\n";
+		$css .= '/*<![CDATA[*/'."\n";
+		$css .= '@import "http://my.dokeosyan.net/main/css/default/default.css";'."\n";
+		$css .= '@import "http://my.dokeosyan.net/main/css/default/course.css";'."\n";
+		$css .= '/*]]>*/'."\n";
+		$css .= '</style>'."\n";
+		$css .= '<style type="text/css" media="print">'."\n";
+		$css .= '/*<![CDATA[*/'."\n";
+		$css .= '@import "http://my.dokeosyan.net/main/css/default/print.css";'."\n";
+		$css .= '/*]]>*/'."\n";
+		$css .= '</style>'."\n";
+		return $css;
 	}
 
 	/**
@@ -511,6 +553,7 @@ class ScormSection
         //list($js,$html) = $this->question->answer->export();
         $res = $this->start_page()
                . $this->start_header()
+               . $this->css()
                . $this->start_js()
                . $this->common_js()
                . $js

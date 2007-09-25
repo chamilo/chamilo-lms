@@ -482,8 +482,8 @@ switch($_REQUEST['action'])
 		else{
 			$_SESSION['refresh'] = 1;
 			//remove lp from homepage if it is there
-			$_SESSION['oLP']->toggle_visibility($_SESSION['oLP']->get_id(),'i');
-			$_SESSION['oLP']->delete(null,null,'remove');
+			//$_SESSION['oLP']->toggle_visibility((int)$_GET['lp_id'],'i');
+			$_SESSION['oLP']->delete(null,(int)$_GET['lp_id'],'remove');
 			api_session_unregister('oLP');
 			require('lp_list.php');
 		}

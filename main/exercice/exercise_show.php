@@ -703,61 +703,13 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		
 						$i++;
 				 	}
-				 	echo '<tr><td colspan="3">';
-				 	
-				 	echo get_lang("Comment");
-				 	
-				 	if($is_allowedToEdit)
-			 		{
-					//if (isset($_REQUEST['showdiv']) && $questionId==$_REQUEST['ques_id'])
-						//{
-						$name = "fckdiv".$questionId;
-						$marksname = "marksName".$questionId;
-						?>
-						<a href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');"><?php if ($answerType == FREE_ANSWER) echo "&nbsp;".get_lang('EditCommentsAndMarks'); else echo "&nbsp;".get_lang('AddComments');?></a>
-						<?php
-						$comnt = get_comments($id,$questionId);
-						echo "<br> <br>".$comnt;
-						?>
-						<div id="<?php echo $name; ?>" style="visibility:hidden">
-						<?php
-						$arrid[] = $questionId;
-						$fck_attribute['Width'] = '400';
-						$fck_attribute['Height'] = '150';
-						$fck_attribute['ToolbarSet'] = 'Comment';
-						$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
-						$$questionId = new FormValidator('frmcomments'.$questionId,'post','');
-						$renderer =& $$questionId->defaultRenderer();
-						$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
-
-						$renderer->setElementTemplate('<div align="left">{element}</div>');
-						$comnt =get_comments($id,$questionId);
-						${user.$questionId}['comments_'.$questionId] = $comnt;
-						$$questionId->addElement('html_editor','comments_'.$questionId,false);
-						//$$questionId->addElement('submit','submitQuestion',get_lang('Ok'));
-						$$questionId->setDefaults(${user.$questionId});
-						$$questionId->display();
-						
-						echo '</div>';
-					
-					}
-					else{
-
-						$comnt = get_comments($id,$questionId);
-						echo "<br> <br>".$comnt;
-						
-					}
-				 	
-				 	
-				 	echo '</td></tr>';
-				 	
 				 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
 					$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
 					$questionScore= mysql_result($resfree,0,"marks");
 					$totalScore+=$questionScore;
 		 			?>
 		 			</table>
-		 		</td>
+		 		</td></tr>
 		 		<?php
 		 		
 		 	echo '
@@ -768,14 +720,63 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 					</object>
 				</td>
 			</tr>
-			</tr></table></td></tr></table>';
+			</table>';
 
 	}
 	?>
 
 
 		 </td>
-		
+		<td width="346" valign = "top"><i>
+		<?php echo get_lang("Comment"); ?></i>
+			 <?php if($is_allowedToEdit)
+					 		{
+							//if (isset($_REQUEST['showdiv']) && $questionId==$_REQUEST['ques_id'])
+								//{
+								$name = "fckdiv".$questionId;
+								$marksname = "marksName".$questionId;
+								?>
+								<a href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');"><?php if ($answerType == FREE_ANSWER) echo "&nbsp;".get_lang('EditCommentsAndMarks'); else echo "&nbsp;".get_lang('AddComments');?></a>
+								<?php
+								$comnt = get_comments($id,$questionId);
+								echo "<br> <br>".$comnt;
+								?>
+								<div id="<?php echo $name; ?>" style="visibility:hidden">
+								<?php
+								$arrid[] = $questionId;
+								$fck_attribute['Width'] = '400';
+								$fck_attribute['Height'] = '150';
+								$fck_attribute['ToolbarSet'] = 'Comment';
+								$fck_attribute['Config']['IMUploadPath'] = 'upload/test/';
+								$$questionId = new FormValidator('frmcomments'.$questionId,'post','');
+								$renderer =& $$questionId->defaultRenderer();
+								$renderer->setFormTemplate(
+	'<form{attributes}><div align="left">{content}</div></form>');
+
+								$renderer->setElementTemplate(
+	'<div align="left">{element}</div>'
+);
+								$comnt =get_comments($id,$questionId);
+								${user.$questionId}['comments_'.$questionId] = $comnt;
+								$$questionId->addElement('html_editor','comments_'.$questionId,false);
+								//$$questionId->addElement('submit','submitQuestion',get_lang('Ok'));
+								$$questionId->setDefaults(${user.$questionId});
+								$$questionId->display();
+								?>
+								</div>
+							<?php
+
+
+								}
+							else
+								{
+
+							$comnt = get_comments($id,$questionId);
+							echo "<br> <br>".$comnt;
+								}
+					?>
+
+		 </td>
 	</tr>
   <tr>
   <td></td>

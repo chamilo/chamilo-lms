@@ -238,20 +238,20 @@ if ($action == "upload")
 				continue;
 			else 
 			{
-				printf('<file><path>%s</path><title>%s</title><canDelete>%s</canDelete></file>', $i['path'], $i['title'],($canDelete?"true":"false"));
+				printf('<file><path>%s</path><title>%s</title><canDelete>%s</canDelete></file>', $i['path'],$i['title'],($canDelete?"true":"false"));
 			}
 		}
 		printf("</files><ppts>");
-		foreach($files as $i) {
+//		foreach($files as $i) {
 			// FIXME: Please optimise me !!!
-  			$extension = (strrpos($i['path'],'.')>0 ? substr($i['path'], strrpos($i['path'],'.'),10) : '');
-			if ($i["filetype"] != "file" || !in_array($extension, $PRESENTATION_EXTENSION))
-				continue;
-			else 
-			{
-				printf('<ppt><path>%s</path><title>%s</title><canDelete>%s</canDelete></ppt>', $i['path'], $i['title'],($canDelete?"true":"false"));
-			}
-		}
+//  			$extension = (strrpos($i['path'],'.')>0 ? substr($i['path'], strrpos($i['path'],'.'),10) : '');
+//			if ($i["filetype"] != "file" || !in_array($extension, $PRESENTATION_EXTENSION))
+//				continue;
+//			else 
+//			{
+//				printf('<ppt><path>%s</path><title>%s</title><canDelete>%s</canDelete></ppt>', $i['path'], $i['title'],($canDelete?"true":"false"));
+//			}
+//		}
 //		printf("<file><realname>fr1</realname><name>fn1</name></file>");
 
 		printf("</ppts>");

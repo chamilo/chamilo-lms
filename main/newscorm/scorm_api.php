@@ -388,6 +388,7 @@ function GetValue(param) {
 
 function LMSSetValue(param, val) {
 	logit_scorm("LMSSetValue\n\t('"+param+"','"+val+"')",0);
+	commit = true; //value has changed, need to re-commit
 	G_LastError = G_NoError ;
 	G_LastErrorMessage = 'No error';	
 	return_value = 'false';
@@ -496,7 +497,6 @@ function SetValue(param, val) {
 }
 
 function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
-    <?php if ($autocomplete_when_80pct){ ?>
     if ((lesson_status != 'completed') && (lesson_status != 'passed') 
     	&& (mastery_score >=0) && (score >= mastery_score))
     {
@@ -504,31 +504,21 @@ function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
     }
     else if( (mastery_score < 0) && (lms_lp_type != '2') && ( lesson_status == 'incomplete') && (score >= (0.8*max) ) )
     { //the status cannot be modified automatically by the LMS under SCORM 1.2's rules
-      lesson_status = 'completed';
-    }
-    	
+    <?php if ($autocomplete_when_80pct){ ?>
+    	      lesson_status = 'completed';
     <?php }?>
-    /*param = 'id='+lms_item_id+'&origin='+origin+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
-	
-    url="http://<?php
-    $self=api_get_self();
-    $url=$_SERVER['HTTP_HOST'].$self;
-    $url=substr($url,0,-14);//14 is the length of this file's name (/scorm_api.php)
-    echo $url;
-    ?>/lp_controller.php?cidReq=<?php echo api_get_course_id();?>&action=save&lp_id=<?php echo $oLP->get_id();?>&" + param + "";
-	*/
+    ;
+    }
 	logit_lms('saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
 	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
-	//xajax_update_pgs();
-	//xajax_update_toc();
 }
 
 function LMSCommit(val) {
 	logit_scorm('LMSCommit()',0);
 	G_LastError = G_NoError ;
 	G_LastErrorMessage = 'No error';	
-    commit = true ;
 	savedata('commit');
+    commit = false ; //now changes have been commited, no need to update until next SetValue()
 	return('true');
 }
 
@@ -545,6 +535,7 @@ function LMSFinish(val) {
 	if ( commit == true ) {
 		logit_scorm('LMSFinish() called',1);		
 		savedata('finish');
+	    commit = false ;
 	}
 	return('true');
 }

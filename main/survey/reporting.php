@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 13041 2007-09-17 09:52:01Z elixir_inter $
+* 	@version $Id: reporting.php 13244 2007-09-25 13:00:41Z elixir_julian $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -930,7 +930,7 @@ function export_complete_report()
 			// we do not show comment and pagebreak question types
 			if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak')
 			{
-				$return .= $row['option_text'].';';
+				$return .= html_entity_decode(strip_tags($row['option_text'])).';';
 				$possible_answers[$row['question_id']][$row['question_option_id']] =$row['question_option_id'];
 			}
 		}

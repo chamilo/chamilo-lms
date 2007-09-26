@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 13080 2007-09-19 08:21:27Z elixir_inter $
+<?php // $Id: user_add.php 13268 2007-09-26 08:05:54Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -58,6 +58,16 @@ function enable_expiration_date() { //v2.0
 	document.user_add.radio_expiration_date[0].checked=false;
 	document.user_add.radio_expiration_date[1].checked=true;
 }
+
+function password_switch_radio_button(form, input){
+	var NodeList = document.getElementsByTagName("input");
+	for(var i=0; i< NodeList.length; i++){
+		if(NodeList.item(i).name=="password[password_auto]" && NodeList.item(i).value=="0"){
+			NodeList.item(i).checked=true;
+		}
+	}
+}
+
 //-->
 </script>';
 
@@ -114,8 +124,8 @@ if(count($extAuthSource) > 0)
 	$group[] =& HTML_QuickForm::createElement('static','','','<br />');
 }
 $group[] =& HTML_QuickForm::createElement('radio','password_auto',get_lang('Password'),get_lang('AutoGeneratePassword').'<br />',1);
-$group[] =& HTML_QuickForm::createElement('radio', 'password_auto',null,null,0);
-$group[] =& HTML_QuickForm::createElement('password', 'password',null,null);
+$group[] =& HTML_QuickForm::createElement('radio', 'password_auto','id="radio_user_password"',null,0);
+$group[] =& HTML_QuickForm::createElement('password', 'password',null,'onkeydown=password_switch_radio_button(document.user_add,"password[password_auto]")');
 $form->addGroup($group, 'password', get_lang('Password'), '');
 // Status
 $status = array();

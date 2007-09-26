@@ -1135,26 +1135,26 @@ function get_lang($variable, $notrans = 'DLTT')
 	}
 	if (!is_string($variable))
 		return $ot.'get_lang(?)'.$ct;
-	global $language_interface, $language_file;
+	global $language_interface, $language_files;
 	//language file specified in tool
-	if (isset ($language_file))
+	if (isset ($language_files))
 	{
-		if (!is_array($language_file))
+		if (!is_array($language_files))
 		{
-			include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_file.".inc.php");
+			include_once (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_files.".inc.php");
 		}
 		else
 		{
-			foreach ($language_file as $index => $language_file)
+			foreach ($language_files as $index => $language_file)
 			{
-				include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_file.".inc.php");
+				include_once (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_file.".inc.php");
 			}
 		}
 	}
 	//general language variables
-	include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/trad4all.inc.php");
+	include_once (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/trad4all.inc.php");
 	//notification (what's new) language variables
-	include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/notification.inc.php");
+	include_once (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/notification.inc.php");
 	@ eval ('$langvar = $'.$variable.';'); // Note (RH): $$var doesn't work with arrays, see PHP doc
 	if (isset ($langvar) && is_string($langvar) && strlen($langvar) > 0)
 	{

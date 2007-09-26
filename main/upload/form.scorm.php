@@ -32,7 +32,7 @@ function get_zip_files_in_garbage(){
  * Just display the form needed to upload a SCORM and give its settings
  */
 $nameTools = get_lang("FileUpload");
-$interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Doc"));
+$interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Learnpath"));
 Display::display_header($nameTools,"Path");
 //show the title
 api_display_tool_title(get_lang("Learnpath")." - ".$nameTools.$add_group_to_title);

@@ -317,7 +317,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				        </tr>
 				        <tr>
 				          <td valign="top">
-				            <embed width="320" height="242" controller="true" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/video/GrSphere.mov" />
+				            <img src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/fckeditor/editor/css/images/flv.gif?flv=<?php echo api_get_path(WEB_CODE_PATH) ?>default_course_document/video/example.flv&endflv" />
 				          </td>
 				          <td style="vertical-align: top;">
 				            <span class="tablehead"><font size="4"><span style="font-weight: bold;">Excerpt from Marc Shuttleworth's keynote</span></font><br />
@@ -352,6 +352,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				    <br />
 				    <br />
 				    <br />
+				    <style type="text/css">body{}</style><!-- to fix a strange bug appearing with firefox when editing this template -->
 				    
 			]]>
 		</Html>

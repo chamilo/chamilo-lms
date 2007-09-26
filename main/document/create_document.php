@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 13091 2007-09-19 14:25:42Z elixir_julian $
+// $Id: create_document.php 13272 2007-09-26 09:19:53Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -301,10 +301,19 @@ if ($form->validate())
 		$texte = text_filter($texte);
 		
 		$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $texte);
+		
+		// replace fake by flv player if needed	(fake is present only in templates)	
+		$content = str_replace('<img src="'.api_get_path(REL_PATH).'main/inc/lib/fckeditor/editor/css/images/flv.gif?flv=',
+							   '<object type="application/x-shockwave-flash" data="'.api_get_path(REL_PATH).'main/inc/lib/flv_player/player_flv_mini.swf" height="240" width="320">
+					          		<param name="movie" value="'.api_get_path(REL_PATH).'main/inc/lib/flv_player/player_flv_mini.swf" />
+					          		<param name="FlashVars" value="flv=',$content);
+		
+		$content = str_replace('&amp;endflv" alt="" />','&autoplay=1" /></object><style type="text/css">body{}</style>',$content);
 
 		$texte = str_replace('mp3player.swf?son='.urlencode($path_to_remove), 'mp3player.swf?son=.%2F', $texte);
-
-		fputs($fp, $texte);
+		
+		
+		fputs($fp, $content);
 
 		fclose($fp);
 

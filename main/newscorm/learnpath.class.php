@@ -3991,6 +3991,10 @@ class learnpath {
 		$content = str_replace('flv=/|','flv=/',$content);
 		
 		
+		// for flv player : to prevent edition problem with firefox, we have to use a strange tip (don't blame me please)
+		$content = str_replace('</body>','<style type="text/css">body{}</style></body>',$content);
+		
+		
 		if(!file_exists($filepath . $filename))
 		{
 			if($fp = @fopen($filepath . $filename, 'w'))

@@ -470,7 +470,8 @@ switch($_REQUEST['action'])
 		if(!$lp_found){ error_log('New LP - No learnpath given for export',0); require('lp_list.php'); }
 		else{
 			$_SESSION['oLP']->scorm_export();
-			require('lp_list.php'); 
+			exit();
+			//require('lp_list.php'); 
 		}
 		break;
 	case 'delete':

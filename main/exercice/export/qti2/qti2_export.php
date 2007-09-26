@@ -459,7 +459,7 @@ function export_question($questionId, $standalone=true)
 {
     $question = new Ims2Question();
     $qst = $question->read($questionId);
-    if( !$qst )
+    if( !$qst or $qst->type == FREE_ANSWER)
     {
         return '';
     }

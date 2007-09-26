@@ -368,7 +368,7 @@ class GroupManager
 					work_state = '".$work_state."',
 					calendar_state = '".$calendar_state."',
 					announcements_state = '".$announcements_state."',
-					description='".trim($description)."',
+					description='".Database::escape_string(trim($description))."',
 					max_student=".$maximum_number_of_students.",
 					self_registration_allowed='".$self_registration_allowed."',
 					self_unregistration_allowed='".$self_unregistration_allowed."'

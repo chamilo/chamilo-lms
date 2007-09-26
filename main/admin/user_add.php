@@ -1,4 +1,4 @@
-<?php // $Id: user_add.php 13268 2007-09-26 08:05:54Z elixir_julian $
+<?php // $Id: user_add.php 13273 2007-09-26 09:50:11Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -250,8 +250,12 @@ if( $form->validate())
 		}
 	}
 }else{
+	if(isset($_POST['submit'])){
+		Security::clear_token();
+	}
 	$token = Security::get_token();
-	$form->addElement('hidden','sec_token',$token);
+	$form->addElement('hidden','sec_token');
+	$form->setConstants(array('sec_token' => $token));
 }
 // Display form
 Display::display_header($tool_name);

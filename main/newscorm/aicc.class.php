@@ -261,6 +261,7 @@ class aicc extends learnpath {
 		$lp_id = Database::get_last_insert_id();
 		$this->lp_id = $lp_id;
 		api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'LearnpathAdded',api_get_user_id());
+		api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'visible',api_get_user_id());
 		
 		$previous = 0;
 		foreach($this->aulist as $identifier => $dummy)

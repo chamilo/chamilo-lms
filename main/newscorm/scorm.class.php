@@ -392,6 +392,7 @@ class scorm extends learnpath {
 			$this->lp_id = $lp_id;
 			//insert into item_property
 			api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'LearnpathAdded',api_get_user_id());
+			api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'visible',api_get_user_id());
 			
 			//now insert all elements from inside that learning path
 			//make sure we also get the href and sco/asset from the resources

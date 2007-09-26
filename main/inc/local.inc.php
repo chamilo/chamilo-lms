@@ -831,5 +831,3 @@ if(isset($_cid))
 	$sql="UPDATE $tbl_course SET last_visit=NOW() WHERE code='$_cid'";
 	api_sql_query($sql,__FILE__,__LINE__);
 }
-
-?>

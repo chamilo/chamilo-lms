@@ -507,7 +507,7 @@ INSERT INTO `settings_current` VALUES
 (98, 'show_back_link_on_top_of_tree', NULL, 'radio','Platform','false', 'ShowBackLinkOnTopOfCourseTree','ShowBackLinkOnTopOfCourseTreeComment', NULL, NULL),
 (99, 'show_different_course_language', NULL, 'radio','Platform','true', 'ShowDifferentCourseLanguage','ShowDifferentCourseLanguageComment', NULL, NULL),
 (100, 'split_users_upload_directory', NULL, 'radio','Tuning','false', 'SplitUsersUploadDirectory','SplitUsersUploadDirectoryComment', NULL, NULL),
-(101, 'hide_dltt_markup', NULL, 'radio','Platform','false', 'HideDLTTMarkup','HideDLTTMarkupComment', NULL, NULL),
+(101, 'hide_dltt_markup', NULL, 'radio','Platform','true', 'HideDLTTMarkup','HideDLTTMarkupComment', NULL, NULL),
 (102, 'display_categories_on_homepage',NULL,'radio','Platform','false','DisplayCategoriesOnHomepageTitle','DisplayCategoriesOnHomepageComment',NULL,NULL),
 (103, 'permissions_for_new_directories', NULL, 'textfield', 'Security', '0770', 'PermissionsForNewDirs', 'PermissionsForNewDirsComment', NULL, NULL),
 (104, 'permissions_for_new_files', NULL, 'textfield', 'Security', '0660', 'PermissionsForNewFiles', 'PermissionsForNewFilesComment', NULL, NULL),
@@ -518,7 +518,7 @@ INSERT INTO `settings_current` VALUES
 (109, 'show_tabs', 'my_agenda', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyAgenda'), 
 (110, 'show_tabs', 'my_profile', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyProfile'),
 (111, 'default_forum_view', NULL, 'radio', 'Course', 'flat', 'DefaultForumViewTitle','DefaultForumViewComment',NULL,NULL),
-(112,'platform_charset',NULL,'textfield','Platform','iso-8859-15','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL);
+(112, 'platform_charset',NULL,'textfield','Platform','iso-8859-15','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `settings_current` ENABLE KEYS */;

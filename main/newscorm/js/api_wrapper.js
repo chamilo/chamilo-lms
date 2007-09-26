@@ -406,7 +406,8 @@ var questions = new Array();
 var questions_answers = new Array();
 var questions_answers_correct = new Array();
 var questions_types = new Array();
-
+var questions_score_max = new Array();
+var questions_answers_ponderation = new Array();
 /**
  * Checks the answers on the test formular page
  */
@@ -414,6 +415,7 @@ function checkAnswers(interrupted)
 {
 	var tmpScore = 0;
 	var status = 'not attempted';
+	var scoreMax = 0;
 	for(var i=0; i<questions.length;i++)
 	{
 		if(questions[i]){
@@ -436,7 +438,14 @@ function checkAnswers(interrupted)
 						{
 							if(questions_answers_correct[idQuestion][k] == idAnswer)
 							{
-								myScore ++;
+								if(questions_answers_ponderation[idQuestion][idAnswer])
+								{
+									myScore += questions_answers_ponderation[idQuestion][idAnswer];
+								}
+								else
+								{
+									myScore ++;
+								}
 							}
 						}
 					}
@@ -447,6 +456,7 @@ function checkAnswers(interrupted)
 				//{
 				//	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
 				//}
+				scoreMax += questions_score_max[idQuestion];
 			}
 			else if(type == 'mcua')
 			{
@@ -460,13 +470,21 @@ function checkAnswers(interrupted)
 						interactionAnswers += idAnswer;
 						if(questions_answers_correct[idQuestion] == idAnswer)
 						{
-							myScore ++;
+							if(questions_answers_ponderation[idQuestion][idAnswer])
+							{
+								myScore += questions_answers_ponderation[idQuestion][idAnswer];
+							}
+							else
+							{
+								myScore ++;
+							}
 						}
 					}
 				}
 				interactionScore = myScore;
 				//correct responses work by pattern, see SCORM Runtime Env Doc
 				//interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
+				scoreMax += questions_score_max[idQuestion];
 			}
 			else if(type == 'tf')
 			{
@@ -482,7 +500,14 @@ function checkAnswers(interrupted)
 						{
 							if(questions_answers_correct[idQuestion][k] == idAnswer)
 							{
-								myScore ++;
+								if(questions_answers_ponderation[idQuestion][idAnswer])
+								{
+									myScore += questions_answers_ponderation[idQuestion][idAnswer];
+								}
+								else
+								{
+									myScore ++;
+								}
 							}
 						}
 					}
@@ -490,6 +515,7 @@ function checkAnswers(interrupted)
 				interactionScore = myScore;
 				//correct responses work by pattern, see SCORM Runtime Env Doc
 				//interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
+				scoreMax += questions_score_max[idQuestion];
 			}
 			else if(type == 'fib')
 			{
@@ -505,7 +531,14 @@ function checkAnswers(interrupted)
 						{
 							if(questions_answers_correct[idQuestion][k] == answer.value)
 							{
-								myScore ++;
+								if(questions_answers_ponderation[idQuestion][idAnswer])
+								{
+									myScore += questions_answers_ponderation[idQuestion][idAnswer];
+								}
+								else
+								{
+									myScore ++;
+								}
 							}
 						}
 					}
@@ -516,6 +549,7 @@ function checkAnswers(interrupted)
 				//{
 				//	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
 				//}
+				scoreMax += questions_score_max[idQuestion];
 			}
 			else if(type == 'matching')
 			{
@@ -533,21 +567,30 @@ function checkAnswers(interrupted)
 							var right = questions_answers_correct[idQuestion][k][1];
 							if(left == idAnswer && right == answer.value)
 							{
-								myScore ++;
+								if(questions_answers_ponderation[idQuestion][idAnswer])
+								{
+									myScore += questions_answers_ponderation[idQuestion][idAnswer];
+								}
+								else
+								{
+									myScore ++;
+								}
 							}
 						}
 					}
 				}
+				interactionScore = myScore;
 				//correct responses work by pattern, see SCORM Runtime Env Doc
 				//for(k=0;k<questions_answers_correct[idQuestion].length;k++)
 				//{
 				//	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
 				//}
+				scoreMax += questions_score_max[idQuestion];
 			}
 			else if(type == 'free')
-			{
+			{	//ignore for now as a score cannot be given
 				interactionScore = 0;
-				interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').value;
+				//interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').value;
 				//correct responses work by pattern, see SCORM Runtime Env Doc
 				//interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
 			}
@@ -556,9 +599,7 @@ function checkAnswers(interrupted)
 				//if(question_score && question_score[idQuestion]){
 				//	interactionScore = question_score[idQuestion];
 				//} //else, 0
-				
 				//interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').innerHTML;
-				interactionAnswers = '';
 				//correct responses work by pattern, see SCORM Runtime Env Doc
 				//for(k=0;k<questions_answers_correct[idQuestion].length;k++)
 				//{
@@ -580,12 +621,15 @@ function checkAnswers(interrupted)
 			//doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',interactionCorrectResponses);		
 		}
 	}
+	doLMSSetValue('cmi.core.score.min',0);
+	doLMSSetValue('cmi.core.score.max',scoreMax);
 	doLMSSetValue('cmi.core.score.raw',tmpScore);
+	//doLMSSetValue('cmi.student_data.mastery_score',(scoreMax*0.7));
 	//get status
 	var mastery_score = doLMSGetValue('cmi.student_data.mastery_score');
 	if(mastery_score <= 0)
 	{
-		mastery_score = 80;
+		mastery_score = (scoreMax*0.80);
 	}
 	if(tmpScore > mastery_score)
 	{

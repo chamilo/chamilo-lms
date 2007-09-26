@@ -127,7 +127,14 @@ class ScormQuestion extends Question
     function getQuestionJS()
     {
     	//$id = $this->id;
+    	$w = $this->selectWeighting();
     	$s = 'questions.push('.$this->id.');'."\n";
+    	if($this->type == FREE_ANSWER or $this->type == HOTSPOT)
+    	{ //put the max score to 0 to avoid discounting the points of
+    	  //non-exported quiz types in the SCORM
+    		$w=0;
+    	}
+    	$s .= 'questions_score_max['.$this->id.'] = '.$w.";\n";
     	return $s;
     }
 }
@@ -147,6 +154,8 @@ class ScormAnswerMultipleChoice extends Answer
     	$js   = '';
     	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		$type = $this->getQuestionType();
+		$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
+		$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
         if ($type == MCMA)
         {
         	//$questionTypeLang = get_lang('MultipleChoiceMultipleAnswers');
@@ -170,11 +179,13 @@ class ScormAnswerMultipleChoice extends Answer
 		    	{
 		    		$jstmpc .= $i.',';
 		    	}
+		    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.']['.$i.'] = '.$this->weighting[$i].";\n";
 		    	$id++;
 			}
 			$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
 	    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
 	    	$js .= 'questions_types['.$this->questionId.'] = \'mcma\';'."\n";
+	    	$js .= $jstmpw;
         }
         else
         {
@@ -199,11 +210,13 @@ class ScormAnswerMultipleChoice extends Answer
 		    	{
 		    		$jstmpc .= $i;
 		    	}
+		    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.']['.$i.'] = '.$this->weighting[$i].";\n";
 		    	$id++;
 			}
 			$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
 	    	$js .= 'questions_answers_correct['.$this->questionId.'] = '.$jstmpc.';'."\n";
 	    	$js .= 'questions_types['.$this->questionId.'] = \'mcua\';'."\n";
+			$js .= $jstmpw;
         }
 		$html .= '</table></td></tr>' . "\n";
         return array($js,$html);
@@ -247,9 +260,8 @@ class ScormAnswerTrueFalse extends Answer
 		.	'<td width="95%">' . "\n"
 		.	'<label for="'.$identifier_false.'">' . get_lang('False') . '</label>' . "\n"
 		.	'</td>' . "\n"
-		.	'</tr>' . "\n\n"
-		
-		.	'</table>' . "\n";
+		.	'</tr>' . "\n\n";
+		$html .= '</table></td></tr>' . "\n";
 		$js .= 'questions_answers['.$this->questionId.'] = new Array(\'true\',\'false\');'."\n";
     	$js .= 'questions_types['.$this->questionId.'] = \'tf\';'."\n";
 		if($this->response == 'TRUE')
@@ -260,7 +272,10 @@ class ScormAnswerTrueFalse extends Answer
 		{
 	    	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array(\'false\');'."\n";
 		}
-		$html .= '</table></td></tr>' . "\n";
+		$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
+		$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
+    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][1] = '.$this->weighting[1].";\n";
+    	$js .= $jstmpw;
         return array($js,$html);
     }
 }
@@ -292,13 +307,15 @@ class ScormAnswerFillInBlanks extends Answer
 
 
 		// splits text and weightings that are joined with the character '::'
-		list($answer)=explode('::',$answer);
-
+		list($answer,$weight)=explode('::',$answer);
+		$weights = explode(',',$weight);
 		// because [] is parsed here we follow this procedure:
 		// 1. find everything between the [ and ] tags
 		$i=1;
 		$jstmp = '';
 		$jstmpc = '';
+		$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
+		$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
 		$startlocations=strpos($answer,'[');
 		$endlocations=strpos($answer,']');
 		while($startlocations !== false && $endlocations !== false)
@@ -307,6 +324,7 @@ class ScormAnswerFillInBlanks extends Answer
 			$answer = substr_replace($answer,'<input type="text" name="question_'.$this->questionId.'_fib_'.$i.'" id="question_'.$this->questionId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
 			$jstmp .= $i.',';
 			$jstmpc .= "'".htmlentities(substr($texstring,1,-1),ENT_QUOTES)."',";			
+	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.']['.$i.'] = '.$weights[$i-1].";\n";
 			$i++;
 			$startlocations=strpos($answer,'[');
 			$endlocations=strpos($answer,']');
@@ -321,6 +339,7 @@ class ScormAnswerFillInBlanks extends Answer
 		$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
     	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
     	$js .= 'questions_types['.$this->questionId.'] = \'fib\';'."\n";
+    	$js .= $jstmpw;
         return array($js,$html);
     }
     
@@ -356,12 +375,15 @@ class ScormAnswerMatching extends Answer
 		$s = '';
 		$jstmp = '';
 		$jstmpc = '';
+			$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
+			$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
 			$identifier = 'question_'.$qId.'_matching_';
 			$answer=$this->selectAnswer($answerId);
 			$answerCorrect=$this->isCorrect($answerId);
 			$weight=$this->selectWeighting($answerId);
+			$jstmp .= $answerId.',';
 
 			if(!$answerCorrect)
 			{
@@ -390,8 +412,8 @@ class ScormAnswerMatching extends Answer
 					else $s.='&nbsp;';
 				$s.="</td>\n</tr>\n";
 	
-				$jstmp  .= $cpt2.',';
-				$jstmpc .= '['.$cpt2.',\''.$cpt2.'\'],';
+				$jstmpc .= '['.$answerCorrect.','.$cpt2.'],';
+		    	$jstmpw .= 'questions_answers_ponderation['.$qId.']['.$cpt2.'] = '.$weight.";\n";
 				$cpt2++;
 	
 				// if the left side of the "matching" has been completely shown
@@ -416,6 +438,7 @@ class ScormAnswerMatching extends Answer
 		$js .= 'questions_answers['.$this->questionId.'] = new Array('.substr($jstmp,0,-1).');'."\n";
     	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array('.substr($jstmpc,0,-1).');'."\n";
     	$js .= 'questions_types['.$this->questionId.'] = \'matching\';'."\n";
+    	$js .= $jstmpw;
 		$html .= $s;
 		$html .= '</table></td></tr>' . "\n";
         return array($js,$html); 
@@ -446,9 +469,15 @@ class ScormAnswerFree extends Answer
 		    	.	'</td>' . "\n"
 		    	.	'</tr>' . "\n";
 		$html .= '</table></td></tr>' . "\n";
+		// currently the free answers cannot be displayed, so ignore the textarea
+		$html = '<tr><td colspan="2">'.get_lang('CannotExportToScorm').'</td></tr>';
 		$js .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
     	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array();'."\n";
     	$js .= 'questions_types['.$this->questionId.'] = \'free\';'."\n";
+		$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
+		$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
+    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][1] = 0'.";\n";
+    	$js .= $jstmpw;
         return array($js,$html);
     }
 }
@@ -586,7 +615,10 @@ class ScormAnswerHotspot extends Answer
 			$header .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
     		$header .= 'questions_answers_correct['.$this->questionId.'] = new Array();'."\n";
     		$header .= 'questions_types['.$this->questionId.'] = \'hotspot\';'."\n";
-			
+			$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
+			$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
+	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][1] = 0'.";\n";
+	    	$header .= $jstmpw;
 		}
 		else
 		{
@@ -594,6 +626,10 @@ class ScormAnswerHotspot extends Answer
 			$header .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
     		$header .= 'questions_answers_correct['.$this->questionId.'] = new Array();'."\n";
     		$header .= 'questions_types['.$this->questionId.'] = \'hotspot\';'."\n";
+			$jstmpw = 'questions_answers_ponderation['.$this->questionId.'] = new Array();'."\n";
+			$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][0] = 0;'."\n";
+	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.'][1] = 0;'."\n";
+	    	$header .= $jstmpw;
 		}
 		return $header;
 	}
@@ -668,6 +704,9 @@ class ScormAnswerHotspot extends Answer
 					</script></td>
 					<td valign='top'>$answer_list</td></tr>";		
 		$html .= '</table></td></tr>' . "\n";
+		
+		// currently the free answers cannot be displayed, so ignore the textarea
+		$html = '<tr><td colspan="2">'.get_lang('CannotExportToScorm').'</td></tr>';
         return array($js,$html);
     }
 }

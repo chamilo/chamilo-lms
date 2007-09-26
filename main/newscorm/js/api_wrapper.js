@@ -424,8 +424,10 @@ function checkAnswers(interrupted)
 			var interactionScore = 0;
 			var interactionAnswers = '';
 			var interactionCorrectResponses = '';
+			var interactionType = '';
 			if (type == 'mcma')
 			{
+				var interactionType = 'choice';
 				var myScore = 0;
 				for(var j=0; j<questions_answers[idQuestion].length;j++)
 				{
@@ -460,6 +462,7 @@ function checkAnswers(interrupted)
 			}
 			else if(type == 'mcua')
 			{
+				var interactionType = 'choice';
 				var myScore = 0;
 				for(var j=0; j<questions_answers[idQuestion].length;j++)
 				{
@@ -488,6 +491,7 @@ function checkAnswers(interrupted)
 			}
 			else if(type == 'tf')
 			{
+				var interactionType = 'true-false';
 				var myScore = 0;
 				for(var j=0; j<questions_answers[idQuestion].length;j++)
 				{
@@ -519,6 +523,7 @@ function checkAnswers(interrupted)
 			}
 			else if(type == 'fib')
 			{
+				var interactionType = 'fill-in';
 				var myScore = 0;
 				for(var j=0; j<questions_answers[idQuestion].length;j++)
 				{
@@ -553,6 +558,7 @@ function checkAnswers(interrupted)
 			}
 			else if(type == 'matching')
 			{
+				var interactionType = 'matching';
 				var myScore = 0;
 				for(var j=0; j<questions_answers[idQuestion].length;j++)
 				{
@@ -589,6 +595,7 @@ function checkAnswers(interrupted)
 			}
 			else if(type == 'free')
 			{	//ignore for now as a score cannot be given
+				var interactionType = 'likert';
 				interactionScore = 0;
 				//interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').value;
 				//correct responses work by pattern, see SCORM Runtime Env Doc
@@ -596,6 +603,7 @@ function checkAnswers(interrupted)
 			}
 			else if(type == 'hotspot')
 			{
+				var interactionType = 'sequencing';
 				//if(question_score && question_score[idQuestion]){
 				//	interactionScore = question_score[idQuestion];
 				//} //else, 0
@@ -613,9 +621,9 @@ function checkAnswers(interrupted)
 			tmpScore += interactionScore;
 
 			doLMSSetValue('cmi.interactions.'+idQuestion+'.id','Q'+idQuestion);
-			doLMSSetValue('cmi.interactions.'+idQuestion+'.result',interactionScore);
-			doLMSSetValue('cmi.interactions.'+idQuestion+'.type',type);
+			doLMSSetValue('cmi.interactions.'+idQuestion+'.type',interactionType);
 			doLMSSetValue('cmi.interactions.'+idQuestion+'.student_response',interactionAnswers);
+			doLMSSetValue('cmi.interactions.'+idQuestion+'.result',interactionScore);
 			//correct responses work by pattern, see SCORM Runtime Env Doc
 			//doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',questions_answers_correct[idQuestion]);		
 			//doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',interactionCorrectResponses);		

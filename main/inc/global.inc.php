@@ -152,7 +152,7 @@ while ($row=mysql_fetch_array($result))
 }
 
 
-
+$charset = api_get_setting('platform_charset');
 // include the local (contextual) parameters of this course or section
 require($includePath."/local.inc.php");
 

@@ -152,7 +152,6 @@ while ($row=mysql_fetch_array($result))
 }
 
 
-$charset = api_get_setting('platform_charset');
 // include the local (contextual) parameters of this course or section
 require($includePath."/local.inc.php");
 
@@ -334,6 +333,9 @@ foreach($language_files as $index => $language_file)
 	include(api_get_path(SYS_CODE_PATH).'lang/'.$language_interface.'/'.$language_file.'.inc.php');
 }
 
+//load the charset param after langs because the $charset variable in 
+//trad4all.inc.php might have set it and we don't want that
+$charset = api_get_setting('platform_charset');
 
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 

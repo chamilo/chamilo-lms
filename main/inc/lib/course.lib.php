@@ -1004,7 +1004,7 @@ class CourseManager
 
 		}
 	}
-
+	
 	/**
 	*	Return user info array of all users registered in the specified real or virtual course
 	*	This only returns the users that are registered in this actual course, not linked courses.
@@ -1012,19 +1012,23 @@ class CourseManager
 	*	@param string $course_code
 	*	@return array with user info
 	*/
-	function get_user_list_from_course_code($course_code, $with_session=true, $session_id=0)
-	{
+	function get_user_list_from_course_code($course_code, $with_session=true, $session_id=0){
 		
 		$session_id = intval($session_id);
 		$a_users = array();
 		
+		$table_users = Database :: get_main_table(TABLE_MAIN_USER);
+		
 		// users subscribed to the course through a session		
-		if(api_get_setting('use_session_mode')=='true' && $with_session)
-		{
-			$table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-			$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code'";
+		if(api_get_setting('use_session_mode')=='true' && $with_session){
+			
+			$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+			
+			$sql_query = "SELECT session_course_user.*, user.user_id FROM $table_session_course_user as session_course_user, $table_users as user WHERE `course_code` = '$course_code' AND session_course_user.id_user = user.user_id ";
 			if($session_id!=0)
 				$sql_query .= ' AND id_session = '.$session_id;
+			$sql_query.=' ORDER BY user.lastname';
+			
 			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
 			while($user = mysql_fetch_array($rs))
 			{
@@ -1034,15 +1038,18 @@ class CourseManager
 				$user_infos["tutor_id"] = $user["tutor_id"];
 				$a_users[$user['id_user']] = $user_infos; 
 			}
+			
 		}
 		
-
-		if($session_id == 0)
-		{
+		if($session_id == 0){
+			
 			// users directly subscribed to the course
-			$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-			$sql_query = "SELECT * FROM $table WHERE `course_code` = '$course_code'";
+			$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+			
+			$sql_query = "SELECT course_user.user_id, user.user_id FROM $table_course_user as course_user, $table_users as user WHERE `course_code` = '$course_code' AND course_user.user_id = user.user_id ORDER BY user.lastname";
+						
 			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
+			
 			while($user = mysql_fetch_array($rs))
 			{
 				$user_infos = Database :: get_user_info_from_id($user['user_id']);
@@ -1051,9 +1058,11 @@ class CourseManager
 				$user_infos["tutor_id"] = $user["tutor_id"];
 				$a_users[$user['user_id']] = $user_infos;
 			}
+			
 		}
 		
 		return $a_users;
+		
 	}
 	
 	

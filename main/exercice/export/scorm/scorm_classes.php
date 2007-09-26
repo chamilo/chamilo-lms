@@ -470,7 +470,7 @@ class ScormAnswerFree extends Answer
 		    	.	'</tr>' . "\n";
 		$html .= '</table></td></tr>' . "\n";
 		// currently the free answers cannot be displayed, so ignore the textarea
-		$html = '<tr><td colspan="2">'.get_lang('CannotExportToScorm').'</td></tr>';
+		$html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
 		$js .= 'questions_answers['.$this->questionId.'] = new Array();'."\n";
     	$js .= 'questions_answers_correct['.$this->questionId.'] = new Array();'."\n";
     	$js .= 'questions_types['.$this->questionId.'] = \'free\';'."\n";
@@ -706,7 +706,7 @@ class ScormAnswerHotspot extends Answer
 		$html .= '</table></td></tr>' . "\n";
 		
 		// currently the free answers cannot be displayed, so ignore the textarea
-		$html = '<tr><td colspan="2">'.get_lang('CannotExportToScorm').'</td></tr>';
+		$html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
         return array($js,$html);
     }
 }

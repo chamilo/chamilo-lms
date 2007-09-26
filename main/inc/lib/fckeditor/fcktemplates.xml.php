@@ -317,7 +317,25 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				        </tr>
 				        <tr>
 				          <td valign="top">
-				            <img src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/fckeditor/editor/css/images/flv.gif?flv=<?php echo api_get_path(WEB_CODE_PATH) ?>default_course_document/video/example.flv&endflv" />
+				          	<?php
+				          	if(strpos($_SERVER['HTTP_USER_AGENT'],'Gecko')!==false)
+				          	{
+				          	?>
+				            	<img src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/fckeditor/editor/css/images/flv.gif?flv=<?php echo api_get_path(WEB_CODE_PATH) ?>default_course_document/video/example.flv&endflv" />
+				          	<?php
+				          	}
+				          	else
+				          	{
+				          	?>
+				          	<object type="application/x-shockwave-flash" data="/dokeosSVN/main/inc/lib/flv_player/player_flv_mini.swf" height="240" width="320">
+					          		<param name="movie" value="/dokeosSVN/main/inc/lib/flv_player/player_flv_mini.swf" />
+					          		<param name="FlashVars" value="flv=http://192.168.1.7/dokeosSVN/main/default_course_document/video/example.flv&autoplay=1&width=320&amp;height=240" />
+					          </object>
+					          <style type="text/css">body{}</style>
+				          	
+				          	<?php
+				          	}
+				          	?>
 				          </td>
 				          <td style="vertical-align: top;">
 				            <span class="tablehead"><font size="4"><span style="font-weight: bold;">Excerpt from Marc Shuttleworth's keynote</span></font><br />

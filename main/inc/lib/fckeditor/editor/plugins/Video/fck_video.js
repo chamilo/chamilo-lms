@@ -370,7 +370,7 @@ Media.prototype.getOuterHTML = function (objectId){
  * Devuelve el codigo HTML interno del elemento
  */
 Media.prototype.getInnerHTML = function (objectId){
-	var s = '<object type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" height="240" width="320">\r\n<param name="movie" value="'+getObjData(this.url)+'">\r\n\t<param name="FlashVars" value="flv='+getVideoUrl()+'&autoplay=1" /></object>\r\n';
+	var s = '<object type="application/x-shockwave-flash" data="'+getObjData(this.url)+'" height="240" width="320">\r\n<param name="movie" value="'+getObjData(this.url)+'">\r\n\t<param name="FlashVars" value="flv='+getVideoUrl()+'&autoplay=1&width=320&amp;height=240" /></object>\r\n';
 
 	return s;
 };

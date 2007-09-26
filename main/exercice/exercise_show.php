@@ -689,6 +689,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 				<td valign="top" align="left">
 					<table style="border: 1px solid #4271b5;border-bottom:none" width="730">
 					<?php 
+					error_log('la');
 					for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 					{
 						$answer=$objAnswerTmp->selectAnswer($answerId);
@@ -716,8 +717,8 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 		 	echo '
 			<tr>
 				<td colspan="2">
-					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'" width="730" height="570">
-						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'" />
+					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="730" height="570">
+						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
 					</object>
 				</td>
 			</tr>

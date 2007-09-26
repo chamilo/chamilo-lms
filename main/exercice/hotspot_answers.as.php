@@ -34,6 +34,8 @@ include('../inc/global.inc.php');
 // set vars
 $userId        = $_user['user_id'];
 $questionId    = $_GET['modifyAnswers'];
+$exe_id    = $_GET['exe_id'];
+$from_db = isset($_GET['from_db']) ? $_GET['from_db'] : 0;
 $objQuestion = Question :: read($questionId);
 $TBL_ANSWERS   = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -94,7 +96,7 @@ $questionId    = $_GET['modifyAnswers'];
 $course_code = $_course['id'];
 
 // Get clicks
-/*if(isset($_SESSION['exerciseResultCoordinates']))
+if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0)
 {
 	foreach ($_SESSION['exerciseResultCoordinates'][$questionId] as $coordinate)
 	{
@@ -102,20 +104,21 @@ $course_code = $_course['id'];
 	}
 }
 else
-{*/
+{
 	// get it from db
 	$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 	$sql = 'SELECT hotspot_coordinate 
 			FROM '.$tbl_track_e_hotspot.'
 			WHERE hotspot_question_id = '.intval($questionId).'
-			AND hotspot_course_code = "'.Database::escape_string($course_code).'"';
-	error_log($sql);
+			AND hotspot_course_code = "'.Database::escape_string($course_code).'"
+			AND hotspot_exe_id='.intval($exe_id);
+	
 	$rs = @api_sql_query($sql); // don't output error because we are in Flash execution.
 	while($row = Database :: fetch_array($rs))
 	{
 		$output2 .= $row['hotspot_coordinate']."|";
 	}
-//}
+}
 
 $output .= "&p_hotspot_answers=".substr($output2,0,-1)."&done=done";
 

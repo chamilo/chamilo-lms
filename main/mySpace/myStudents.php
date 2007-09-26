@@ -581,7 +581,7 @@ if(!empty($_GET['student']))
 							<?php echo $progress ?>
 						</td>
 						<td align="center">
-							<?php if($start_time!='') echo format_locale_date(get_lang('DateFormatLongWithoutDay'),$start_time); else echo '-'; ?>
+							<?php if($start_time!='' && $start_time>0) echo format_locale_date(get_lang('DateFormatLongWithoutDay'),$start_time); else echo '-'; ?>
 						</td>
 						<td align="center">
 							<?php

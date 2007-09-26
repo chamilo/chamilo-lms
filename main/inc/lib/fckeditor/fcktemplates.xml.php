@@ -15,7 +15,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 <Templates imagesBasePath="fck_template/images/">
 
 	
-	<Template title="Text page" image="Text">
+	<Template title="Text page" image="Text.png">
 		<Description>Theory, content section, chapter...</Description>
 		<Html>
 			<![CDATA[
@@ -55,7 +55,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Teacher explaining" image="Teacher_explaining">
+	<Template title="Teacher explaining" image="Teacher_explaining.png">
 		<Description>Mr Dokeos points to your content</Description>
 		<Html>
 			<![CDATA[
@@ -103,7 +103,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Comparison" image="Comparison">
+	<Template title="Comparison" image="Comparison.png">
 		<Description>2 columns text page</Description>
 		<Html>
 			<![CDATA[
@@ -165,7 +165,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Diagram explained" image="Diagram_explained">
+	<Template title="Diagram explained" image="Diagram_explained.png">
 		<Description>Image on the left, comment on the right</Description>
 		<Html>
 			<![CDATA[
@@ -217,7 +217,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Image alone" image="Picture">
+	<Template title="Image alone" image="Picture.png">
 		<Description>Self-explaining diagram</Description>
 		<Html>
 			<![CDATA[
@@ -254,7 +254,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Flash animation" image="Flash_animation_page">
+	<Template title="Flash animation" image="Flash_animation_page.png">
 		<Description>Animation + introduction text</Description>
 		<Html>
 			<![CDATA[
@@ -295,7 +295,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Video page" image="Video">
+	<Template title="Video page" image="Video.png">
 		<Description>On demand video + text</Description>
 		<Html>
 			<![CDATA[
@@ -377,7 +377,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="table page" image="Table">
+	<Template title="table page" image="Table.png">
 		<Description>Spreadsheet-like page</Description>
 		<Html>
 			<![CDATA[
@@ -534,7 +534,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Course preface" image="Course_preface">
+	<Template title="Course preface" image="Course_preface.png">
 		<Description>First page of a learning path</Description>
 		<Html>
 			<![CDATA[
@@ -583,7 +583,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	
 	
 	
-	<Template title="Assignment description" image="Assignment_description">
+	<Template title="Assignment description" image="Assignment_description.png">
 		<Description>Explain goals, roles, agenda</Description>
 		<Html>
 			<![CDATA[
@@ -668,7 +668,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Resources" image="Resources">
+	<Template title="Resources" image="Resources.png">
 		<Description>Books, links, tools</Description>
 		<Html>
 			<![CDATA[
@@ -745,7 +745,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Frequently asked questions" image="Frequently_asked_questions">
+	<Template title="Frequently asked questions" image="Frequently_asked_questions.png">
 		<Description>List of questions and answers </Description>
 		<Html>
 			<![CDATA[
@@ -801,7 +801,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
-	<Template title="Certificate of completion" image="Certificate_of_completion">
+	<Template title="Certificate of completion" image="Certificate_of_completion.png">
 		<Description>To appear at the end of a learning path</Description>
 		<Html>
 			<![CDATA[

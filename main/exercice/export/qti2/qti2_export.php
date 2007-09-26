@@ -131,12 +131,11 @@ class ImsAssessmentItem
         {
             $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>' . "\n";
         }
-        
         $res = $head
                . $this->start_item() 
                  .$this->answer->imsExportResponsesDeclaration($this->questionIdent)
                  . $this->start_item_body()
-                   . $this->answer->imsExportResponses($this->questionIdent, $this->question->question, $this->question->description, $this->question->picture)
+                 . $this->answer->imsExportResponses($this->questionIdent, $this->question->question, $this->question->description, $this->question->picture)
                  . $this->end_item_body()
                . $this->add_response_processing()
                . $this->end_item()
@@ -466,6 +465,11 @@ function export_question($questionId, $standalone=true)
     }
     $question->id = $qst->id;
     $question->type = $qst->type;
+    $question->question = $qst->question;
+    $question->description = $qst->description;
+	$question->weighting=$qst->weighting;
+	$question->position=$qst->position;
+	$question->picture=$qst->picture;
     $ims = new ImsAssessmentItem($question);
     
     return $ims->export($standalone);

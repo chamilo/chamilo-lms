@@ -57,6 +57,9 @@ class Ims2Question extends Question
             case MATCHING :
                 $answer = new ImsAnswerMatching($this->id); 
             	return $answer;
+            case FREE_ANSWER :
+            	$answer = new ImsAnswerFree($this->id);
+            	return $answer;
             case HOTSPOT :
             	$answer = new ImsAnswerHotspot($this->id);
             	return $answer;
@@ -437,5 +440,24 @@ class ImsAnswerHotspot extends Answer
 
        return $out;
     }
-} 
+}
+
+class ImsAnswerFree extends Answer
+{
+    /**
+     * TODO implement
+     * Export the question part as a matrix-choice, with only one possible answer per line.
+     */
+   	function imsExportResponses($questionIdent, $questionStatment, $questionDesc='', $questionMedia='')
+	{
+		return '';
+	}
+    /**
+     *
+     */
+    function imsExportResponsesDeclaration($questionIdent)
+    {
+    	return '';
+    }
+}
 ?>

@@ -885,7 +885,7 @@ if($_configuration['tracking_enabled'])
 				}
 				echo '<td>'.$test.'</td>';
 				echo '<td>'.format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]).'</td>';
-		  		echo '<td>'.$res.' / '.$results[$i][3].'</td>';
+		  		echo '<td>'.(floor($res/($results[$i][3]!=0?$results[$i][3]:1))*100).'% ('.$res.' / '.$results[$i][3].')</td>';
 				echo '<td>'.($is_allowedToEdit || $is_courseTutor?"<a href='exercise_show.php?user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".get_lang("Edit")."</a>":"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>").'</td>';
 				echo '</tr>';
 			}
@@ -911,7 +911,7 @@ if($_configuration['tracking_enabled'])
 				}
 				echo '<td class="content">'.$title.'</td>';
 				echo '<td class="content">'.strftime($dateTimeFormatLong,$hpresults[$i][4]).'</td>';
-				echo '<td class="content">'.$hpresults[$i][2].' / '.$hpresults[$i][3].'</td>';
+				echo '<td class="content">'.(floor($hpresults[$i][2]/($hpresults[$i][3]!=0?$hpresults[$i][3]:1))*100).'% ('.$hpresults[$i][2].' / '.$hpresults[$i][3].')</td>';
 				echo '<td></td>'; //there is no possibility to edit the results of a Hotpotatoes test
 				echo '</tr>';
 			}

@@ -396,7 +396,10 @@ class DocumentManager
 	}
 
 	/**
-	* This function streams a string to the client for download
+	* This function streams a string to the client for download.
+	* You have to ensure that the calling script then stops processing (exit();)
+	* otherwise it may cause subsequent use of the page to want to download
+	* other pages in php rather than interpreting them.
 	*
 	* @param string The string contents
 	* @param boolean Whether "save" mode is forced (or opening directly authorized)
@@ -436,6 +439,9 @@ class DocumentManager
 			//fpassthru($fp);
 			echo $full_string;
 			return true;
+			//You have to ensure that the calling script then stops processing (exit();)
+			//otherwise it may cause subsequent use of the page to want to download
+			//other pages in php rather than interpreting them.
 		}
 		else
 		{
@@ -458,6 +464,9 @@ class DocumentManager
 				header('Content-Disposition: inline; filename= '.$filename);
 			}
 			echo($full_string);
+			//You have to ensure that the calling script then stops processing (exit();)
+			//otherwise it may cause subsequent use of the page to want to download
+			//other pages in php rather than interpreting them.
 			return true;
 		}
 	}

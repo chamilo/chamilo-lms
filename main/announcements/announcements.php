@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 13015 2007-09-13 13:48:20Z elixir_inter $
+<?php //$Id: announcements.php 13270 2007-09-26 08:30:54Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -593,7 +593,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 				    							MAIL FUNCTION
 				===================================================================*/
 
-				if (empty($_POST['onlyThoseMails']))
+				if ($_POST['email_ann'] && empty($_POST['onlyThoseMails']))
 				{
 					
 				  	$sent_to=sent_to("announcement", $insert_id);
@@ -1009,17 +1009,17 @@ if ($message == true)
 		if (!isset($announcement_to_modify) ) $announcement_to_modify ="";
 		if ($announcement_to_modify=='')
 		{
-			/*($email_ann=='1')?$checked='checked':$checked='';
+			($email_ann=='1')?$checked='checked':$checked='';
 			echo "<input class=\"checkbox\" type=checkbox value=\"1\" name=\"email_ann\" $checked> ".get_lang('EmailOption')," : ",
-			"<br /><br />";*/
+			"<br /><br />";
 		}
 	}else{
 			if (!isset($announcement_to_modify) ) $announcement_to_modify ="";
 			if ($announcement_to_modify=='')
 			{
-				//($email_ann=='1' || !empty($surveyid))?$checked='checked':$checked='';
-				//echo "<input class=\"checkbox\" type=checkbox value=\"1\" name=\"email_ann\" $checked> ".get_lang('EmailOption')," : ".get_lang('MyGroup'),
-				//"<br><br>";
+				($email_ann=='1' || !empty($surveyid))?$checked='checked':$checked='';
+				echo "<input class=\"checkbox\" type=checkbox value=\"1\" name=\"email_ann\" $checked> ".get_lang('EmailOption')," : ".get_lang('MyGroup'),
+				"<br><br>";
 			}
 		}
 		if($surveyid){

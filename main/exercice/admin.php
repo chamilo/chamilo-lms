@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 13186 2007-09-22 05:33:18Z yannoo $
+* 	@version $Id: admin.php 13256 2007-09-26 05:21:10Z yannoo $
 */
 
 
@@ -175,6 +175,7 @@ if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId']))
 	require_once('export/qti2/qti2_export.php');
 	$export = export_question((int)$_GET['questionId'],true);
 	DocumentManager::string_send_for_download($export,true,'qti2export_q'.$_GET['questionId'].'.xml');
+	exit(); //otherwise following clicks may become buggy
 }
 
 // intializes the Exercise object

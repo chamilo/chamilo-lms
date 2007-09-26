@@ -279,6 +279,7 @@ if($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2')
 	require_once('export/qti2/qti2_export.php');
 	$export = export_exercise($exerciseId,true);
 	DocumentManager::string_send_for_download($export,true,'qti2export_'.$exerciseId.'.xml');
+	exit(); //otherwise following clicks may become buggy
 }
 
 if ($origin != 'learnpath')

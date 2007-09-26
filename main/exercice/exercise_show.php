@@ -700,7 +700,7 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 						$query = "select hotspot_correct from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = $id and hotspot_question_id= $questionId AND hotspot_answer_id=$answerId";
 						$resq=api_sql_query($query);
-						$choice = mysql_result($resq,0,"correct");
+						$choice = mysql_result($resq,0,"hotspot_correct");
 						display_hotspot_answer($answerId,$answer,$choice,$answerComment);
 		
 						$i++;

@@ -185,7 +185,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				        </tr>
 				
 				        <tr>
-				          <td>
+				          <td valign="top">
 				            <span style="font-weight: bold;"><img width="165" height="287" align="bottom" alt="anim_twostroke.gif" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/diagrams/animated/anim_twostroke.gif" /><br /></span>
 				          </td>
 				          <td style="vertical-align: top;">

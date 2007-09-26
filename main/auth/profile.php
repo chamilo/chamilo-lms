@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 12991 2007-09-11 09:29:06Z elixir_julian $
+// $Id: profile.php 13283 2007-09-26 14:51:18Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -112,7 +112,7 @@ $fck_attribute['ToolbarSet'] = "Profil";
 /*
  * Initialize the form.
  */
-$form = new FormValidator('profile', 'post', api_get_self()."?{$_SERVER['QUERY_STRING']}", null, array('style' => 'width: 60%; float: '.($text_dir=='rtl'?'right;':'left;')));
+$form = new FormValidator('profile', 'post', api_get_self()."?{$_SERVER['QUERY_STRING']}", null, array('style' => 'width: 75%; float: '.($text_dir=='rtl'?'right;':'left;')));
 
 /* Make sure this is the first submit on the form, even though it is hidden!
  * Otherwise, if a user has productions and presses ENTER to submit, he will

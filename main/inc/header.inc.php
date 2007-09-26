@@ -17,6 +17,7 @@
 
 //Give a default value to $charset. Should change to UTF-8 some time in the future.
 //This parameter should be set in the platform configuration interface in time.
+$charset = api_get_setting('platform_charset');
 if(empty($charset))
 {
 	$charset = 'ISO-8859-15';

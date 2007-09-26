@@ -695,10 +695,11 @@ $result =api_sql_query($query, __FILE__, __LINE__);
 						$answerComment=$objAnswerTmp->selectComment($answerId);
 						$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 						$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-		
-						$query = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = $id and question_id= $questionId";
+						
+						$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+						$query = "select hotspot_correct from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = $id and hotspot_question_id= $questionId AND hotspot_answer_id=$answerId";
 						$resq=api_sql_query($query);
-						$choice = mysql_result($resq,0,"answer");
+						$choice = mysql_result($resq,0,"correct");
 						display_hotspot_answer($answerId,$answer,$choice,$answerComment);
 		
 						$i++;

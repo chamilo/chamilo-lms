@@ -78,6 +78,7 @@ define('TABLE_STATISTIC_TRACK_E_EXERCICES', 'track_e_exercices');
 define('TABLE_STATISTIC_TRACK_E_ATTEMPT', 'track_e_attempt');
 define('TABLE_STATISTIC_TRACK_E_DEFAULT', 'track_e_default');
 define('TABLE_STATISTIC_TRACK_E_UPLOADS','track_e_uploads');
+define('TABLE_STATISTIC_TRACK_E_HOTSPOT','track_e_hotspot');
 
 //scorm database tables
 define('TABLE_SCORM_MAIN', 'scorm_main');

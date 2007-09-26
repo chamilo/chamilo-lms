@@ -26,6 +26,23 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('default_forum
 INSERT INTO settings_options(variable,value,display_text) VALUES ('default_forum_view', 'nested', 'Nested');
 -- xxSTATSxx
 
+CREATE TABLE `track_e_hotspot` (
+  `hotspot_id` int(11) NOT NULL auto_increment,
+  `hotspot_user_id` int(11) NOT NULL,
+  `hotspot_course_code` varchar(50) NOT NULL,
+  `hotspot_exe_id` int(11) NOT NULL,
+  `hotspot_question_id` int(11) NOT NULL,
+  `hotspot_answer_id` int(11) NOT NULL,
+  `hotspot_correct` tinyint(3) unsigned NOT NULL,
+  `hotspot_coordinate` varchar(50) NOT NULL,
+  PRIMARY KEY  (`hotspot_id`),
+  KEY `hotspot_course_code` (`hotspot_course_code`),
+  KEY `hotspot_user_id` (`hotspot_user_id`),
+  KEY `hotspot_exe_id` (`hotspot_exe_id`),
+  KEY `hotspot_question_id` (`hotspot_question_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+
 -- xxUSERxx
 
 -- xxCOURSExx

@@ -178,6 +178,23 @@ CREATE TABLE track_e_course_access (
   counter int NOT NULL,
   PRIMARY KEY  (course_access_id)
 );
+
+CREATE TABLE `track_e_hotspot` (
+  `hotspot_id` int(11) NOT NULL auto_increment,
+  `hotspot_user_id` int(11) NOT NULL,
+  `hotspot_course_code` varchar(50) NOT NULL,
+  `hotspot_exe_id` int(11) NOT NULL,
+  `hotspot_question_id` int(11) NOT NULL,
+  `hotspot_answer_id` int(11) NOT NULL,
+  `hotspot_correct` tinyint(3) unsigned NOT NULL,
+  `hotspot_coordinate` varchar(50) NOT NULL,
+  PRIMARY KEY  (`hotspot_id`),
+  KEY `hotspot_course_code` (`hotspot_course_code`),
+  KEY `hotspot_user_id` (`hotspot_user_id`),
+  KEY `hotspot_exe_id` (`hotspot_exe_id`),
+  KEY `hotspot_question_id` (`hotspot_question_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
 ALTER TABLE track_e_course_access ADD INDEX (user_id);
 ALTER TABLE track_e_course_access ADD INDEX (login_course_date);
 ALTER TABLE track_e_course_access ADD INDEX (course_code);

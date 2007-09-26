@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13177 2007-09-21 14:50:21Z elixir_inter $
+* 	@version $Id: exercise_result.php 13267 2007-09-26 07:57:09Z elixir_inter $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -656,6 +656,14 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 				}
 				elseif($answerType == HOT_SPOT)
 				{
+					
+					$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+					// Save into db
+					$sql = "INSERT INTO $tbl_track_e_hotspot (`hotspot_user_id` , `hotspot_course_code` , `hotspot_exe_id` , `hotspot_question_id` , `hotspot_answer_id` , `hotspot_correct` , `hotspot_coordinate` ) 
+							VALUES ('".$_user['user_id']."', '".$_course['id']."', '$exeId', '$questionId', '$answerId', '$studentChoice', '".$_SESSION['exerciseResultCoordinates'][$questionId][$answerId]."')";
+				
+					$result = api_sql_query($sql,__FILE__,__LINE__);
+					
 					display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
 				}
 				elseif($answerType == HOT_SPOT_ORDER)

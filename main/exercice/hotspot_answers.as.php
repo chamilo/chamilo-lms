@@ -91,13 +91,31 @@ for ($i; $i <= 12; $i++)
 
 // set vars
 $questionId    = $_GET['modifyAnswers'];
-$courseCode = $_course['sysCode'];
+$course_code = $_course['id'];
 
 // Get clicks
-foreach ($_SESSION['exerciseResultCoordinates'][$questionId] as $coordinate)
+/*if(isset($_SESSION['exerciseResultCoordinates']))
 {
-	$output2 .= $coordinate."|";
+	foreach ($_SESSION['exerciseResultCoordinates'][$questionId] as $coordinate)
+	{
+		$output2 .= $coordinate."|";
+	}
 }
+else
+{*/
+	// get it from db
+	$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+	$sql = 'SELECT hotspot_coordinate 
+			FROM '.$tbl_track_e_hotspot.'
+			WHERE hotspot_question_id = '.intval($questionId).'
+			AND hotspot_course_code = "'.Database::escape_string($course_code).'"';
+	error_log($sql);
+	$rs = @api_sql_query($sql); // don't output error because we are in Flash execution.
+	while($row = Database :: fetch_array($rs))
+	{
+		$output2 .= $row['hotspot_coordinate']."|";
+	}
+//}
 
 $output .= "&p_hotspot_answers=".substr($output2,0,-1)."&done=done";
 

@@ -327,9 +327,9 @@ $css = loadCSS(api_get_setting('stylesheets'));
 				          	else
 				          	{
 				          	?>
-				          	<object type="application/x-shockwave-flash" data="/dokeosSVN/main/inc/lib/flv_player/player_flv_mini.swf" height="240" width="320">
-					          		<param name="movie" value="/dokeosSVN/main/inc/lib/flv_player/player_flv_mini.swf" />
-					          		<param name="FlashVars" value="flv=http://192.168.1.7/dokeosSVN/main/default_course_document/video/example.flv&autoplay=1&width=320&amp;height=240" />
+				          	<object type="application/x-shockwave-flash" data="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/flv_player/player_flv_mini.swf" height="240" width="320">
+					          		<param name="movie" value="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/flv_player/player_flv_mini.swf" />
+					          		<param name="FlashVars" value="flv=<?php echo api_get_path(REL_PATH) ?>main/default_course_document/video/example.flv&autoplay=1&width=320&amp;height=240" />
 					          </object>
 					          <style type="text/css">body{}</style>
 				          	

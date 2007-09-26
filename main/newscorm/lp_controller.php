@@ -253,7 +253,7 @@ switch($_REQUEST['action'])
 				//Kevin Van Den Haute: changed $_REQUEST['learnpath_description'] by '' because it's not used
 				//old->$new_lp_id = learnpath::add_lp(api_get_course_id(), $_REQUEST['learnpath_name'], $_REQUEST['learnpath_description'], 'dokeos', 'manual', '');
 				$new_lp_id = learnpath::add_lp(api_get_course_id(), $_REQUEST['learnpath_name'], '', 'dokeos', 'manual', '');
-				learnpath::toggle_visibility($new_lp_id,'v');
+				//learnpath::toggle_visibility($new_lp_id,'v');
 				//Kevin Van Den Haute: only go further if learnpath::add_lp has returned an id
 				if(is_numeric($new_lp_id))
 				{

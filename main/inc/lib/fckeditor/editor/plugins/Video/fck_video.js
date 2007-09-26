@@ -106,10 +106,11 @@ function Ok()
 		var e = (oMedia || new Media()) ;
 		updateMovie(e);
 		FCK.InsertHtml(e.getOuterHTML()) ;	
-			
-		if ( !oFakeImage )
+		var sAgent = navigator.userAgent.toLowerCase() ;
+		var is_ie = (sAgent.indexOf("msie") != -1);
+		if ( !oFakeImage && !is_ie )
 		{
-			oFakeImage	= oEditor.FCKDocumentProcessors_CreateFakeImage( 'FCK__Video_flv', oEmbed ) ;
+			oFakeImage	= oEditor.FCKDocumentProcessors_CreateFakeImage( 'FCK__Video_flv', oMedia ) ;
 			oFakeImage.setAttribute( '_fckVideo', 'true', 0 ) ;
 			oFakeImage	= FCK.InsertElementAndGetIt( oFakeImage ) ;
 		}
@@ -118,7 +119,7 @@ function Ok()
 	}
 	else
 	{	
-		if ( !oFakeImage )
+		if ( !oFakeImage)
 		{
 			oFakeImage	= oEditor.FCKDocumentProcessors_CreateFakeImage( 'FCK__Video', oEmbed ) ;
 			oFakeImage.setAttribute( '_fckVideo', 'true', 0 ) ;

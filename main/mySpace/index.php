@@ -62,6 +62,8 @@ function sort_users($a, $b)
 		return -1;
 }
 
+
+
 /**************************
  * MAIN CODE
  ***************************/
@@ -81,7 +83,7 @@ if(api_is_allowed_to_create_course())
 					INNER JOIN $tbl_course as course
 						ON course.code = course_rel_user.course_code
 				  	WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-				  ";
+				  	ORDER BY course.code";
 	$resultNbCours = api_sql_query($sqlNbCours, __FILE__, __LINE__);
 	$a_courses = api_store_result($resultNbCours);
 	$nb_teacher_courses = count($a_courses);
@@ -488,7 +490,7 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 			{
 				$sql = 'SELECT id_user as user_id
 						FROM '.$tbl_session_course_user.'
-						WHERE course_code="'.addslashes($course_code).'"';
+						WHERE course_code="'.addslashes($course_code).'" ORDER BY course_code';
 				$rs = api_sql_query($sql, __FILE__, __LINE__);
 				while($row = mysql_fetch_array($rs))
 				{
@@ -551,7 +553,9 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 if(api_is_platform_admin() && $view=='admin'){
 	
 	$tracking_column = isset($_GET['tracking_list_coaches_column']) ? $_GET['tracking_list_coaches_column'] : 0;
-	$tracking_direction = isset($_GET['tracking_list_coaches_direction']) ? $_GET['tracking_list_coaches_direction'] : DESC;
+	$tracking_direction = isset($_GET['tracking_list_coaches_direction']) ? $_GET['tracking_list_coaches_direction'] : 'DESC';
+	//prepare array for column order - when impossible, use lastname
+	$order = array(0=>'firstname',1=>'lastname',2=>'lastname',3=>'login_date',4=>'lastname',5=>'lastname');
 	
 	$table = new SortableTable('tracking_list_coaches', 'count_coaches');
 	$parameters['view'] = 'admin';
@@ -580,8 +584,9 @@ if(api_is_platform_admin() && $view=='admin'){
 	$sqlCoachs = "	SELECT DISTINCT id_coach, user_id, lastname, firstname, MAX(login_date) as login_date 
 					FROM $tbl_user, $tbl_session_course, $tbl_track_login 
 					WHERE id_coach=user_id AND login_user_id=user_id
-					GROUP BY user_id
-					ORDER BY login_date ".$tracking_direction;
+					GROUP BY user_id " .
+				//	ORDER BY login_date ".$tracking_direction;
+					"ORDER BY ".$order[$tracking_column]." ".$tracking_direction;
 
 	$result_coaches=api_sql_query($sqlCoachs, __FILE__, __LINE__);
 	$total_no_coachs = mysql_num_rows($result_coaches);
@@ -636,7 +641,7 @@ if(api_is_platform_admin() && $view=='admin'){
 	
 	if($tracking_column != 3){
 		usort($all_datas, 'sort_users');
-		if($tracking_direction == 'ASC')
+		if($tracking_direction == 'DESC')
 			rsort($all_datas);
 	}
 		

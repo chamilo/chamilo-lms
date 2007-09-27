@@ -299,7 +299,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 		<Description>Audio + image + text : listening comprehension etc.</Description>
 		<Html>
 			<![CDATA[
-					<?php //echo $css; ?>
+					<?php echo $css; ?>
 				    
 				    <html xmlns="http://www.w3.org/1999/xhtml">
 					  <head>
@@ -321,13 +321,13 @@ $css = loadCSS(api_get_setting('stylesheets'));
 					
 					        <tr>
 					          <td valign="top">
-					            <span style="font-weight: bold;"><object width="90" height="25" align="" id="test" codebase=
-					            "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
-					              <param value="<?php echo api_get_path(REL_PATH); ?>main/inc/lib/mp3player/player_mp3.swf?mp3file=<?php echo api_get_path(REL_PATH); ?>main/default_course_document/audio/ListeningComprehension.mp3" name="movie" />
-					              <param value="high" name="quality" />
-					              <param value="#FFFFFF" name="bgcolor" />
-					              <embed width="90" height="25" align="" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" name="Streaming" bgcolor="#FFFFFF" quality="high"
-					              src="<?php echo api_get_path(REL_PATH); ?>main/inc/lib/player_mp3.swf?mp3file=<?php echo api_get_path(REL_PATH); ?>main/default_course_document/audio/ListeningComprehension.mp3" /></embed></object><br />
+					            <span style="font-weight: bold;">
+					            <object width="90" height="25" align="" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" id="test">
+									<param name="movie" value="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/mp3player/player_mp3.swf?mp3file=/dokeosSVN/courses/FLV/document/audio/ListeningComprehension.mp3" />
+									<param name="quality" value="high" />
+									<param name="bgcolor" value="#FFFFFF" /> 
+									<embed width="90" height="25" align="" src="<?php echo api_get_path(REL_PATH) ?>main/inc/lib/mp3player/player_mp3.swf?mp3file=<?php echo api_get_path(REL_COURSE_PATH) ?>FLV/document/audio/ListeningComprehension.mp3" quality="high" bgcolor="#FFFFFF" name="Streaming" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
+								</object><br />
 					              <br />
 					              <img width="128" height="128" align="bottom" alt="female.jpg" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/female.jpg" /><br />
 					

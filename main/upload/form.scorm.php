@@ -40,7 +40,7 @@ api_display_tool_title(get_lang("Learnpath")." - ".$nameTools.$add_group_to_titl
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include('../newscorm/content_makers.inc.php');
 
-$form = new FormValidator('','POST','upload.php','','id="upload_form" enctype="multipart/form-data"');
+$form = new FormValidator('','POST','upload.php','','id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 600px;"');
 
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('hidden', 'tool', $my_tool);

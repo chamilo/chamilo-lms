@@ -175,7 +175,7 @@ else{
 $possible_users = array ();
 foreach ($complete_user_list as $index => $user)
 {
-	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
+	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
 }
 //print_r($complete_user_list2);
 // Group tutors

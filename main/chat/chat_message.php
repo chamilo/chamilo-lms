@@ -99,7 +99,7 @@ $chat_size=0;
 
 if($sent)
 {
-	$message=trim(htmlspecialchars(stripslashes($_POST['message'])));
+	$message=trim(htmlspecialchars(stripslashes($_POST['message']),ENT_QUOTES,$charset));
 	
 	if(!empty($message))
 	{
@@ -140,7 +140,7 @@ if($sent)
 include('header_frame.inc.php');
 ?>
 
-<form name="formMessage" method="post" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(htmlentities(get_lang('TypeMessage'))); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">
+<form name="formMessage" method="post" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(htmlentities(get_lang('TypeMessage'),ENT_QUOTES,$charset)); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">
 <input type="hidden" name="sent" value="1">
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>

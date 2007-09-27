@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 13071 2007-09-18 09:52:41Z elixir_julian $
+<?php //$Id: agenda.inc.php 13294 2007-09-27 02:14:48Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1259,7 +1259,7 @@ function display_agenda_items()
 	global $select_month, $select_year;
 	global $DaysShort, $DaysLong, $MonthsLong;
 	global $is_courseAdmin;
-	global $dateFormatLong, $timeNoSecFormat;
+	global $dateFormatLong, $timeNoSecFormat,$charset;
 	global $_user;
 
 	// getting the group memberships
@@ -1569,7 +1569,7 @@ function display_agenda_items()
 		// edit
 		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",
 				"<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>",
-				"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\">",
+				"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
 				"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\"/></a>";
 		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=announce&amp;id=".$myrow['id']."\">".
 				"<img src=\"../img/announce_add.gif\" border=\"0\" alt=\"".get_lang("AddAnnouncement")."\"/></a>";
@@ -1624,7 +1624,7 @@ function display_one_agenda_item($agenda_id)
 	global $select_month, $select_year;
 	global $DaysShort, $DaysLong, $MonthsLong;
 	global $is_courseAdmin;
-	global $dateFormatLong, $timeNoSecFormat;
+	global $dateFormatLong, $timeNoSecFormat, $charset;
 	global $_user;
 	//echo "displaying agenda items";
 
@@ -1764,7 +1764,7 @@ function display_one_agenda_item($agenda_id)
 		// edit
 		echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=edit&amp;id=".$myrow['id']."\">",
 				"<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang("ModifyCalendarItem")."\" /></a>",
-				"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\">",
+				"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$_GET['origin']."&amp;action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
 				"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang("Delete")."\" /></a>";
 		if ($myrow['visibility']==1)
 			{

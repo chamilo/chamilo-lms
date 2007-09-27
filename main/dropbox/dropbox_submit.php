@@ -330,7 +330,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
     $mailing_file = dropbox_cnf("sysPath") . '/' . $mailing_item->filename;
     $errormsg = '<b>' . $mailing_item->recipients[0]['name'] . ' ('
     	. "<a href='dropbox_download.php?origin=$origin&id=".urlencode($mailing_item->id)."'>"
-		. htmlspecialchars($mailing_title) . '</a>):</b><br><br>';
+		. htmlspecialchars($mailing_title,ENT_QUOTES,$charset) . '</a>):</b><br><br>';
 
     if ( preg_match( dropbox_cnf("mailingZipRegexp"), $mailing_title, $nameParts))
 	{
@@ -452,11 +452,11 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 
 			foreach( $goodFiles as $thisFile => $thisRecip)
 			{
-				$errormsg .= htmlspecialchars($thisFile) . ': ';
+				$errormsg .= htmlspecialchars($thisFile,ENT_QUOTES,$charset) . ': ';
 	            if ( is_string($thisRecip))  // see findRecipient
 	            {
 					$errormsg .= '<font color="#FF0000">'
-						. htmlspecialchars($thisRecip) . '</font><br>';
+						. htmlspecialchars($thisRecip,ENT_QUOTES,$charset) . '</font><br>';
 	            }
 	            else
 	            {
@@ -468,7 +468,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 		            {
 						$errormsg .= dropbox_lang("mailingFileIsFor");
 		            }
-					$errormsg .= htmlspecialchars($thisRecip[1].' '.$thisRecip[2]);
+					$errormsg .= htmlspecialchars($thisRecip[1].' '.$thisRecip[2],ENT_QUOTES,$charset);
 
 					if ( is_null($thisRecip[3]))
 					{
@@ -499,7 +499,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 		        $remainingUsers = '';
 		        while ( ($res = mysql_fetch_array($result)))
 		        {
-					$remainingUsers .= ', ' . htmlspecialchars($res[0].' '.$res[1]);
+					$remainingUsers .= ', ' . htmlspecialchars($res[0].' '.$res[1],ENT_QUOTES,$charset);
 		        }
 		        $errormsg .= '<br>' . dropbox_lang("mailingNothingFor") . substr($remainingUsers, 1) . '.<br>';
 	        }
@@ -657,7 +657,7 @@ if ( isset( $_GET['deleteReceived']) || isset( $_GET['deleteSent'])
     	{
         	krsort($fbarray);
             echo '<textarea class="dropbox_feedbacks">',
-                    htmlspecialchars(implode("\n\n", $fbarray)), '</textarea>', "\n";
+                    htmlspecialchars(implode("\n\n", $fbarray),ENT_QUOTES,$charset), '</textarea>', "\n";
         }
         else
         {
@@ -680,7 +680,7 @@ if ( isset( $_GET['deleteReceived']) || isset( $_GET['deleteSent'])
             '<input type="hidden" name="feedbackid" value="',
                 $id, '"/>', "\n",
             '<textarea name="feedbacktext" class="dropbox_feedbacks">',
-                htmlspecialchars($w->feedback), '</textarea>', "<br>\n",
+                htmlspecialchars($w->feedback,ENT_QUOTES,$charset), '</textarea>', "<br>\n",
             '<input type="submit" name="feedbacksubmit" value="', dropbox_lang("ok", "noDLTT"), '"/>', "\n",
             '</form>', "\n";
         $tellUser = dropbox_lang("giveFeedback");

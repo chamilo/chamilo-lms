@@ -102,7 +102,7 @@ if (api_is_allowed_to_edit() or GroupManager :: is_tutor($_user['user_id']))
  */
 if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
 {
-	echo '<p align="right"><a href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.get_lang("RegIntoGroup").'</a></p>';
+	echo '<p align="right"><a href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang("RegIntoGroup").'</a></p>';
 }
 
 /*
@@ -110,7 +110,7 @@ if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], 
  */
 if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id']))
 {
-	echo '<p align="right"><a href="'.api_get_self().'?selfUnReg=1" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a></p>';
+	echo '<p align="right"><a href="'.api_get_self().'?selfUnReg=1" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a></p>';
 }
 
 if( isset($_GET['action']))

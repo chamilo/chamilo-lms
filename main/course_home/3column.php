@@ -90,7 +90,7 @@ if (is_allowed_to_edit())
 		$sql = "SELECT * FROM $TBL_ACCUEIL WHERE id=$id";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		$toolsRow = mysql_fetch_array($result);
-		$tool_name = htmlspecialchars($toolsRow['name'] != "" ? $toolsRow['name'] : $toolsRow['link']);
+		$tool_name = htmlspecialchars($toolsRow['name'] != "" ? $toolsRow['name'] : $toolsRow['link'],ENT_QUOTES,$charset);
 		if($toolsRow['img'] != "external.gif")
 		{
 			$toolsRow['link']=$clarolineRepositoryWeb.$toolsRow['link'];

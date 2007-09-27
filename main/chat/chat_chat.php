@@ -146,7 +146,7 @@ if($isMaster || $is_courseCoach)
 	$rand=mt_rand(1,1000);
 	
 	echo '<div style="margin-left: 5px;">';
-	echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1#bottom" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmReset'))).'\')) return false;"><img src="../img/delete.gif" border="0" alt="" align="absbottom">'.get_lang('ClearList').'</a>';
+	echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1#bottom" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmReset'),ENT_QUOTES,$charset)).'\')) return false;"><img src="../img/delete.gif" border="0" alt="" align="absbottom">'.get_lang('ClearList').'</a>';
 	echo '</div>';	
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: btf_functions.php 12263 2007-05-03 13:34:40Z elixir_julian $
+// $Id: btf_functions.php 13294 2007-09-27 02:14:48Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -41,7 +41,7 @@
 
 function showtools2($cat)
 {
-	GLOBAL $_user;
+	global $_user, $charset;
 
 	$TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);
 	$TABLE_TOOLS = Database :: get_main_table(TABLE_MAIN_COURSE_MODULE);
@@ -137,7 +137,7 @@ function showtools2($cat)
 	{
 		$cell_content = '';
 		// the name of the tool
-		$tool_name = ($toolsRow['name_translated'] != "" ? $toolsRow['name_translated'] : htmlspecialchars($toolsRow['name'])); // RH: added htmlspecialchars
+		$tool_name = ($toolsRow['name_translated'] != "" ? $toolsRow['name_translated'] : htmlspecialchars($toolsRow['name'],ENT_QUOTES,$charset)); // RH: added htmlspecialchars
 
 		$link_annex = '';
 		// the url of the tool

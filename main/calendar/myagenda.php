@@ -74,7 +74,7 @@ $nameTools = get_lang('MyAgenda');
 
 // if we come from inside a course and click on the 'My Agenda' link we show a link back to the course
 // in the breadcrumbs
-$course_path = htmlentities(strip_tags($_GET['coursePath']));
+$course_path = htmlentities(strip_tags($_GET['coursePath']),ENT_QUOTES,$charset);
 if (!empty ($course_path))
 {
 	$interbreadcrumb[] = array ('url' => api_get_path(WEB_COURSE_PATH).urlencode($course_path).'/index.php', 'name' => $_GET['courseCode']);
@@ -1250,7 +1250,7 @@ function get_personal_agendaitems($agendaitems, $day = "", $month = "", $year = 
 function show_personal_agenda()
 {
 	global $tbl_personal_agenda;
-	global $MonthsLong;
+	global $MonthsLong, $charset;
 	global $_user;
 	// The SQL statement that retrieves all the personal agenda items of this user
 	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' ORDER BY date DESC";
@@ -1322,7 +1322,7 @@ function show_personal_agenda()
 			  --------------------------------------------------*/
 			echo "\t<tr>\n\t\t<td class=\"".$text_style."\" colspan='2'>";
 			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\"><img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" /></a>";
-			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\"><img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" /></a>";
+			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" /></a>";
 			echo "</td></tr>";
 		}
 	}

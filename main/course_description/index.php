@@ -1,4 +1,4 @@
-<?php // $Id: index.php 12761 2007-07-20 09:17:11Z elixir_julian $
+<?php // $Id: index.php 13294 2007-09-27 02:14:48Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -299,7 +299,7 @@ if ($show_description_list)
 			echo '<div>';
 			if (api_is_allowed_to_edit())
 			{
-				echo '<a href="'.api_get_self().'?action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;">';
+				echo '<a href="'.api_get_self().'?action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
 				echo '<img src="../img/delete.gif" alt="'.get_lang("Delete").'" border="0" style="vertical-align:middle;float:right;margin:2px;" />';
 				echo '</a> ';
 			}

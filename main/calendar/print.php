@@ -37,7 +37,7 @@ $result			= api_sql_query($sql,__FILE__,__LINE__);
 <body style="margin: 15px; padding: 0px;">
 
 <center>
-<input type="button" value="<?php echo htmlentities(get_lang('Print')); ?>" onClick="javascript:window.print();" />
+<input type="button" value="<?php echo htmlentities(get_lang('Print'),ENT_QUOTES,$charset); ?>" onClick="javascript:window.print();" />
 </center>
 <br /><br />
 
@@ -74,7 +74,7 @@ while($row=mysql_fetch_array($result))
 
 <br /><br />
 <center>
-<input type="button" value="<?php echo htmlentities(get_lang('Print')); ?>" onClick="javascript:window.print();" />
+<input type="button" value="<?php echo htmlentities(get_lang('Print'),ENT_QUOTES,$charset); ?>" onClick="javascript:window.print();" />
 </center>
 
 </body>

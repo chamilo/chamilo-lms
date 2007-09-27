@@ -1,4 +1,4 @@
-<?php // $Id: document.php 12718 2007-07-09 12:04:18Z elixir_inter $
+<?php // $Id: document.php 13294 2007-09-27 02:14:48Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -548,7 +548,7 @@ if($docs_and_folders)
 		//icons
 		$row[]= build_document_icon_tag($id['filetype'],$id['path']);
 		//document title with hyperlink
-		$row[] = create_document_link($http_www,$document_name,$id['path'],$id['filetype'],$size,$id['visibility']).'<br />'.$invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
+		$row[] = create_document_link($http_www,$document_name,$id['path'],$id['filetype'],$size,$id['visibility']).'<br />'.$invisibility_span_open.nl2br(htmlspecialchars($id['comment'],ENT_QUOTES,$charset)).$invisibility_span_close;
 		//comments => display comment under the document name
 		//$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
 		$display_size = format_file_size($size);

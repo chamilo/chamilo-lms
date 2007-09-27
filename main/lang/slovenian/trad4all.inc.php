@@ -434,4 +434,5 @@ $VisibilityChanged = "Vidnost je bila spremenjena.";
 $MainNavigation = "Osnovna izbira";
 $None = "Brez";
 $SeeDetail = "Poglej podrobnosti";
+$GroupSingle = "Skupina";
 ?>

@@ -434,4 +434,5 @@ $VisibilityChanged = "Die Sichtbarkeit wurde geändert";
 $MainNavigation = "Hauptnavigation";
 $None = "Keine";
 $SeeDetail = "Siehe Details";
+$GroupSingle = "Gruppe";
 ?>

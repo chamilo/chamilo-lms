@@ -177,4 +177,11 @@ $WelcomeWoogieSubtitle = "A Word to learnpath converter";
 $WelcomeWoogieConverter = "Welcome in the Woogie converter<ul type=\\\"1\\\"><li>Choose a file .doc, .sxw, .odt<li>Upload it in Woogie. It will be convert in a SCORM learningpath<li>Then, you will be able to add audio comments on each page and insert quizz and other activities between the pages</ul>";
 $WoogieError = "Error during the conversion of the word document. Please check if there are special characters in the name of your document..";
 $WordConvert = "Word conversion";
+$Order = "Order";
+$InteractionID = "Interaction ID";
+$TimeFinished = "Time (finished at...)";
+$CorrectAnswers = "Correct answers";
+$StudentResponse = "Student responses";
+$LatencyTimeSpent = "Time spent";
+$Result = "Result";
 ?>

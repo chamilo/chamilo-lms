@@ -33,4 +33,6 @@ $langChat_reset_by = "zresetuj czat";
 $OrFile = "Lub plik";
 $langCallSent = "Twój czatowy rozmówca otrzyma&#322; powiadomienie i wie, &#380;e chcesz z nim rozmawia&#263;. Oczekiwanie na przyj&#281;cie rozmowy.";
 $langChatDenied = "Rozmówca nie chce z tob&#261; teraz rozmawia&#263;.";
+$Send = "Wy&#347;lij";
+$Connected = "Po&#322;&#261;czony";
 ?>

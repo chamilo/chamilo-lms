@@ -433,4 +433,6 @@ $ResetLink = "Klik hier om uw paswoord terug te vinden";
 $VisibilityChanged = "De zichtbaarheid is aangepast.";
 $MainNavigation = "Hoofdnavigatie";
 $None = "Geen";
+$SeeDetail = "Zie detail";
+$GroupSingle = "Groep";
 ?>

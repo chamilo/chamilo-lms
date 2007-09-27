@@ -670,4 +670,6 @@ $TabsMyAgenda = "Etichetta \"La mia agenda\"";
 $NoticeWillBeNotDisplayed = "L\'avviso non sarà visualizzato nella pagina iniziale";
 $LetThoseFieldsEmptyToHideTheNotice = "Per nascondere l\'avviso lascia vuoti questi campi";
 $Ppt2lpVoiceRecordingNeedsRed5 = "La possibilità di registrare la voce nella composizione di un pacchetto didattico dipende dal server di streaming Red5, che dovrà essere configurato nella sezione videoconferenza di questa pagina.";
+$PlatformCharsetTitle = "Set di caratteri";
+$PlatformCharsetComment = "Il set di caratteri indica la codifica adottata per rappresentare i caratteri. L\'iso-8859-15 è di default ed è adatta per l\'inglese e l\'europa occidentale. Il Russo o il Giapponese possono avere bisogno di una diversa codifica (es. UTF-8)";
 ?>

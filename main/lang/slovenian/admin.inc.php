@@ -609,7 +609,7 @@ $SlideSize = "Velikost diapozitiva";
 $EphorusPlagiarismPrevention = "Ephorus zašita pred plagiatorstvom";
 $CourseTeachers = "Uèitelji teèaja";
 $UnknownTeacher = "Neznan uèitelj";
-$HideDLTTMarkup = "Skrij DLTT Markup";
+$HideDLTTMarkup = "Skrij DLTT oznake";
 $ListOfCoursesOfSession = "Seznam teèajev seje";
 $UnsubscribeSelectedUsersFromSession = "Izpiši izbrane uporabnike iz seje";
 $ShowDifferentCourseLanguageComment = "Prikaže uporabljen jezik posameznega teèaja ob naslovu teèaja v seznamu teèajev";
@@ -669,4 +669,6 @@ $TabsMyAgenda = "Zavihek Moja agenda";
 $NoticeWillBeNotDisplayed = "Opozorilo ne bo prikazano na domaèi strani portala.";
 $LetThoseFieldsEmptyToHideTheNotice = "Da bi skrili opombo je potrebno ta polja izprazniti";
 $Ppt2lpVoiceRecordingNeedsRed5 = "Zmožnost nasnemavanja zvoka v urejevalniku uènih poti je odvisna od Red5 strežnika podatkovnega toka. Parametri tega strežnika so nastavljivi v razdelku videokonferenc te iste strani.";
+$PlatformCharsetTitle = "Znakovni nabor";
+$PlatformCharsetComment = "Znakovni nabor doloèa naèin predstavitve oz. prikaza izbranega jezika v Dokeos. V primeru, da uporabljate Rušèino, Japonšèino,..., ga boste verjetno želeli spremeniti. Za vse angleške, latinske in zahodno evropske znakovne nabore, bo privzeti nabor iso-8859-15 verjetno ustrezal.";
 ?>

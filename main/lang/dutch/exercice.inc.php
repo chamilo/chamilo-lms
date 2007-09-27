@@ -226,4 +226,5 @@ $StudentEmail = "Email van de student";
 $OpenQuestionsAttemptedAre = "De gepoogde open vraag is";
 $CourseName = "Cursusnaam";
 $UploadJpgPicture = "Een afbeelding van het JPG formaat opladen ";
+$Regards = "Hoogachtend";
 ?>

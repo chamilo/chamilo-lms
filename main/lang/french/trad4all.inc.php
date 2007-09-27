@@ -429,6 +429,7 @@ $UsersConnectedToMySessions = "Voir les utilisateurs connectés à mes sessions";
 $DearUser = "Cher utilisateur";
 $YourRegistrationData = "Vos accès au portail";
 $ResetLink = "Cliquez ici pour réinitialiser votre mot de passe";
+$VisibilityChanged = "La visibilité a bien été changée";
 $None = "Aucun";
 $SeeDetail = "Voir détail";
 $GroupSingle = "Groupe";

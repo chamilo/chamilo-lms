@@ -21,6 +21,7 @@ $langValvas  = "Ostatnie og&#322;oszenia";
 $langUp  = "poprzedni poziom";
 $langCatList  = "Kategorie";
 $langCourseList  = "Kursy";
+$langHelptwo = "Pomoc";
 $Intranet = "Intranet";
 $langInvalidForSelfRegistration = "Niepoprawna nazwa u&#380;ytkownika - je&#347;li nie jeste&#347; zarejestrowany(-a), zrób to za pomoc&#261;  <a href=claroline/auth/inscription.php>formularza rejestracyjnego</a>";
 $langSubCat = "podkategoriach";

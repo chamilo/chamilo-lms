@@ -288,11 +288,14 @@ $Teacher = "Nauczyciel";
 $Send2All = "Nie wybra&#322;e&#347; u&#380;ytkownika / grupy. Element jest widoczny dla ka&#380;dego u&#380;ytkownika";
 $wiki = "Wiki";
 $AccessNotAllowed = "Dost&#281;p do tej strony nie jest zezwolony";
+$EditRight = "Edycja";
 $ComposeMessage = "Napisz wiadomo&#347;&#263;";
 $CampusHomepage = "Strona g&#322;ówna";
 $YouHaveNewMessage = "Masz now&#261; wiadomo&#347;&#263; !";
 $Content = "Tre&#347;&#263;";
+$year = "rok";
 $Day = "dzie&#324;";
 $Days = "Dni";
 $EmailText = "tre&#347;&#263; listu";
+$MainNavigation = "Menu g&#322;ówne";
 ?>

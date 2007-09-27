@@ -178,4 +178,11 @@ $WelcomeWoogieConverter = "
 Dobrodošli v pretvorniku Woogie<ul type=\\\"1\\\"><li>Izberite datoteko .doc, .sxw, .odt<li>Naložite jo v Woogie. Datoteka bo pretvorjena v SCORM uèno pot.<li>Nato boste imeli možnost dodati zvoène komentarje na vsako izmed strani, vstaviti vaje in druge aktivnosti med stranmi. </ul>";
 $WoogieError = "Napaka med pretvorbo Word dokumenta. Preverite, da v imena datotek ne vsebujejo posebnih zankov, ...";
 $WordConvert = "Pretvorba Word datotek";
+$Order = "Urejenost";
+$InteractionID = "ID interakcije";
+$TimeFinished = "Èas (dokonèano ob...)";
+$CorrectAnswers = "Pravilni odgovori";
+$StudentResponse = "Taèajnikovi odzivi";
+$LatencyTimeSpent = "Porabljen èas";
+$Result = "Rezultat";
 ?>

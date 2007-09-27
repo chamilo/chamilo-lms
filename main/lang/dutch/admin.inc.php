@@ -669,4 +669,5 @@ $EmailMandatory = "Het e-mailadres kan niet leeg zijn";
 $TabsMyAgenda = "Mijn agenda tab";
 $NoticeWillBeNotDisplayed = "De waarschuwing wordt niet getoond op de startpagina";
 $LetThoseFieldsEmptyToHideTheNotice = "Laat deze velden leeg om de waarschuwing te verbergen";
+$PlatformCharsetTitle = "Karakterset";
 ?>

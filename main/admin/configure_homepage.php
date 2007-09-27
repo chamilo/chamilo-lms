@@ -1,4 +1,4 @@
-<?php // $Id: configure_homepage.php 13176 2007-09-21 14:28:33Z elixir_julian $
+<?php // $Id: configure_homepage.php 13292 2007-09-27 01:59:07Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -648,11 +648,11 @@ switch($action){
 		<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
 		<tr>
 		  <td nowrap="nowrap"><?php echo get_lang('NoticeTitle'); ?> :</td>
-		  <td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo htmlentities($notice_title); ?>" style="width: 350px;"/></td>
+		  <td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo htmlentities($notice_title,ENT_QUOTES,$charset); ?>" style="width: 350px;"/></td>
 		</tr>
 		<tr>
 		  <td nowrap="nowrap" valign="top"><?php echo get_lang('NoticeText'); ?> :</td>
-		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo htmlentities($notice_text); ?></textarea></td>
+		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo htmlentities($notice_text,ENT_QUOTES,$charset); ?></textarea></td>
 		</tr>
 		<tr>
 		  <td>&nbsp;</td>
@@ -681,11 +681,11 @@ switch($action){
 		?>		
 		<tr>
 		  <td nowrap="nowrap"><?php echo get_lang('LinkName'); ?> :</td>
-		  <td><input type="text" name="link_name" size="30" maxlength="50" value="<?php echo htmlentities($link_name); ?>" style="width: 350px;"/></td>
+		  <td><input type="text" name="link_name" size="30" maxlength="50" value="<?php echo htmlentities($link_name,ENT_QUOTES,$charset); ?>" style="width: 350px;"/></td>
 		</tr>
 		<tr>
 		  <td nowrap="nowrap"><?php echo get_lang('LinkURL'); ?> (<?php echo get_lang('Optional'); ?>) :</td>
-		  <td><input type="text" name="link_url" size="30" maxlength="100" value="<?php if(empty($link_url)) echo 'http://'; else echo htmlentities($link_url); ?>" style="width: 350px;"/></td>
+		  <td><input type="text" name="link_url" size="30" maxlength="100" value="<?php if(empty($link_url)) echo 'http://'; else echo htmlentities($link_url,ENT_QUOTES,$charset); ?>" style="width: 350px;"/></td>
 		</tr>
 		
 		<?php 
@@ -853,7 +853,7 @@ switch($action){
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
 		  <td width="80%" colspan="2">
-			<a href="<?php echo api_get_self(); ?>?action=edit_top"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?action=edit_top"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
 		  </td>
 		  <td width="20%">
 			<a href="<?php echo api_get_self(); ?>?action=insert_link"><img src="../img/insert_row.png" border="0"/></a> <a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
@@ -882,11 +882,11 @@ switch($action){
 			<tr>
 			  <td width="50%">
 				<br />
-				<a href="course_category.php"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="course_category.php"><?php echo get_lang('EditCategories'); ?></a>
+				<a href="course_category.php"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"/></a> <a href="course_category.php"><?php echo get_lang('EditCategories'); ?></a>
 			  </td>
 			  <td width="50%">
 				<br />
-				<!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>-->
+				<!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>-->
 			  </td>
 			</tr>
 			<tr>
@@ -972,8 +972,8 @@ switch($action){
 				
 						if(!empty($enreg))
 						{
-							$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'"><img src="../img/edit.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Modify')).'"/></a>';
-							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img src="../img/delete.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Delete')).'"/></a>';
+							$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'"><img src="../img/edit.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Modify'),ENT_QUOTES,$charset).'"/></a>';
+							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img src="../img/delete.gif" border="0" style="margin-top: 2px;" title="'.htmlentities(get_lang('Delete'),ENT_QUOTES,$charset).'"/></a>';
 				
 							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
 						}
@@ -984,7 +984,7 @@ switch($action){
 			</div>
 		
 			<br />
-			&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=edit_notice"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify')); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
+			&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=edit_notice"><img src="../img/edit.gif" border="0" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"/></a> <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php echo get_lang('EditNotice'); ?></a>
 		
 			<div class="note">
 		

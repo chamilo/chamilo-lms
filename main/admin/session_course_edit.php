@@ -35,7 +35,7 @@ if(!list($session_name,$course_title)=mysql_fetch_row($result))
 
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("SessionList"));
-$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" => get_lang("CourseSessionList")." &quot;".htmlentities($session_name)."&quot;");
+$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" => get_lang("CourseSessionList")." &quot;".htmlentities($session_name,ENT_QUOTES,$charset)."&quot;");
 
 if($_POST['formSent'])
 {

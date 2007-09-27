@@ -120,7 +120,7 @@ foreach($Courses as $enreg)
 
 <tr class='<?php echo $i?'row_odd':'row_even'; ?>'>
   	<td>
-		<?php echo htmlentities($enreg['title']); ?>
+		<?php echo htmlentities($enreg['title'],ENT_QUOTES,$charset); ?>
   	</td>
 
   	<td align='center'>

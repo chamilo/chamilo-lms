@@ -128,7 +128,7 @@ if(!empty($errorMsg))
 
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
-  <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo htmlentities($name); else echo htmlentities($infos['name']); ?>"></td>
+  <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo htmlentities($name,ENT_QUOTES,$charset); else echo htmlentities($infos['name'],ENT_QUOTES,$charset); ?>"></td>
 </tr>
 <tr>
   <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>

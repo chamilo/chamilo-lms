@@ -1,5 +1,5 @@
 <?php
-// $Id: system_announcements.php 10976 2007-01-29 21:55:28Z pvandermaesen $
+// $Id: system_announcements.php 13292 2007-09-27 01:59:07Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -268,7 +268,7 @@ if ($show_announcement_list)
 		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\"><img src=\"../img/". ($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif')."\" border=\"0\"></a>";
 		$row[] = $announcement->title;
 		$row[] = $announcement->lang;
-		$row[] = "<a href=\"?action=edit&id=".$announcement->id."\"><img src=\"../img/edit.gif\" border=\"0\"/></a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."')) return false;\"><img src=\"../img/delete.gif\" border=\"0\"/></a>";
+		$row[] = "<a href=\"?action=edit&id=".$announcement->id."\"><img src=\"../img/edit.gif\" border=\"0\"/></a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"><img src=\"../img/delete.gif\" border=\"0\"/></a>";
 		$announcement_data[] = $row;
 	}
 	$table = new SortableTableFromArray($announcement_data);

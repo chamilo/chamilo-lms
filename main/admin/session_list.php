@@ -144,10 +144,10 @@ else
 
 	<tr class="<?php echo $i?'row_odd':'row_even'; ?>">
 	  <td><input type="checkbox" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
-	  <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo htmlentities($enreg['name']); ?></a></td>
+	  <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo htmlentities($enreg['name'],ENT_QUOTES,$charset); ?></a></td>
 	  <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses; ?> cours</a></td>
-	  <td><?php echo htmlentities($enreg['date_start']); ?></td>
-	  <td><?php echo htmlentities($enreg['date_end']); ?></td>
+	  <td><?php echo htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
+	  <td><?php echo htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
 	  <td>
 		<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/add_user_big.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeUsersToSession'); ?>"></a>
 		<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><img src="../img/synthese_view.gif" border="0" align="absmiddle" title="<?php echo get_lang('SubscribeCoursesToSession'); ?>"></a>

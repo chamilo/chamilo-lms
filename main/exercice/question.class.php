@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 13311 2007-09-27 08:03:12Z elixir_inter $
+* 	@version $Id: question.class.php 13318 2007-09-27 09:52:03Z elixir_inter $
 */
 
 
@@ -316,23 +316,28 @@ abstract class Question
 	 */
 	function uploadPicture($Picture,$PictureName)
 	{
-		global $picturePath;
+		global $picturePath, $_course, $_user;
 
 		// if the question has got an ID
 		if($this->id)
 		{
 			
 			$extension = pathinfo($PictureName, PATHINFO_EXTENSION);
-			$this->picture='quiz-'.$this->id.'.'.$extension;
+			$this->picture='quiz-'.$this->id.'.jpg';
 			if($extension == 'gif' || $extension == 'png')
 			{
 				$o_img = new image($Picture);
 				$o_img->send_image('JPG',$picturePath.'/'.$this->picture);
-				return true;
+				$document_id = add_document($_course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
 			}
 			else
 			{
-				return move_uploaded_file($Picture,$picturePath.'/'.$this->picture)?true:false;	
+				move_uploaded_file($Picture,$picturePath.'/'.$this->picture)?true:false;	
+			}
+			$document_id = add_document($_course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
+			if($document_id)
+			{
+				return api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id']);
 			}
 		}
 

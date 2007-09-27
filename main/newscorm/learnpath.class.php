@@ -5853,6 +5853,9 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 						$form->addElement('submit', 'submit_button', get_lang('Ok'), 'style="background:#F8F8F8; border:1px solid #999999; font-family:Arial, Verdana, Helvetica, sans-serif; font-size:12px; padding:1px 2px; width:75px;"');
 						
 						if(!$no_display_edit_textarea){
+							$renderer = $form->defaultRenderer();
+							$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
+
 							$form->addElement('html_editor','content_lp',get_lang("Content")." :");
 							$defaults["content_lp"]=$content;
 						}

@@ -613,7 +613,8 @@ function get_cat_def_list()
 
 function htmlize($phrase)
 {
-	return nl2br(htmlspecialchars($phrase));
+	global $charset;
+	return nl2br(htmlspecialchars($phrase,ENT_QUOTES,$charset));
 }
 
 

@@ -284,11 +284,11 @@ if(!empty($message))
 
 <tr>
 <td align="right"><?php echo get_lang('LastName'); ?> :</td>
-<td><input type="text" size="15" name="lastname_form" value="<?php echo htmlentities(stripslashes($lastname_form)); ?>" /></td>
+<td><input type="text" size="15" name="lastname_form" value="<?php echo htmlentities(stripslashes($lastname_form),ENT_QUOTES,$charset); ?>" /></td>
 </tr>
 <tr>
 <td align="right"><?php echo get_lang('FirstName'); ?> :</td>
-<td><input type="text" size="15" name="firstname_form" value="<?php echo htmlentities(stripslashes($firstname_form)); ?>" /></td>
+<td><input type="text" size="15" name="firstname_form" value="<?php echo htmlentities(stripslashes($firstname_form),ENT_QUOTES,$charset); ?>" /></td>
 </tr>
 <tr>
 <td align="right"><?php echo get_lang('OfficialCode'); ?> :</td>

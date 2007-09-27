@@ -1,4 +1,4 @@
-<?php // $Id: whoisonline.php 12589 2007-06-13 16:22:58Z yannoo $
+<?php // $Id: whoisonline.php 13297 2007-09-27 02:20:35Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -72,6 +72,7 @@ if ($_GET['chatid'] != '')
  */
 function display_user_list($user_list, $_plugins)
 {
+	global $charset;
 	if ($_GET["id"]=='')
 	{
 		$extra_params = array();
@@ -89,7 +90,7 @@ function display_user_list($user_list, $_plugins)
 			$url = '?id='.$uid.$course_url;
 			if(strlen($user_info['picture_uri']) > 0)
 			{
-				$table_row[] = '<span style="display:none;">1</span><a href="'.$url.'"><img src="'.api_get_path(WEB_CODE_PATH).'upload/users/'.$user_info['picture_uri'].'" alt="'.htmlentities($user_info['firstName']).'" width="40" border="0"/></a>';
+				$table_row[] = '<span style="display:none;">1</span><a href="'.$url.'"><img src="'.api_get_path(WEB_CODE_PATH).'upload/users/'.$user_info['picture_uri'].'" alt="'.htmlentities($user_info['firstName'],ENT_QUOTES,$charset).'" width="40" border="0"/></a>';
 			}
 			else
 			{
@@ -269,7 +270,7 @@ else
 	Display::display_header(get_lang('UsersOnLineList'));
 	Display::display_error_message(get_lang('AccessNotAllowed'));
 }
-$referer = empty($_GET['referer'])?'index.php':htmlentities(strip_tags($_GET['referer']));
+$referer = empty($_GET['referer'])?'index.php':htmlentities(strip_tags($_GET['referer']),ENT_QUOTES,$charset);
 echo '<a href="'.($_GET['id']?'javascript:window.history.back();':$referer).'">&lt; '.get_lang('Back').'</a>';
 
 /*

@@ -455,7 +455,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function modify_filter($user_id)
 {
-	global $origin,$_user, $_course, $is_allowed_to_track;
+	global $origin,$_user, $_course, $is_allowed_to_track,$charset;
 
 	$result="<div style='text-align: center'>";
 
@@ -475,7 +475,7 @@ function modify_filter($user_id)
 		// unregister
 		 if( $user_id != $_user['user_id'])
 		{
-			$result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'&amp;'.$sort_params.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'))).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
+			$result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'&amp;'.$sort_params.'" onclick="javascript:if(!confirm(\''.addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><img border="0" alt="'.get_lang("Unreg").'" src="../img/delete.gif"/></a>';
 		}
 
 	}

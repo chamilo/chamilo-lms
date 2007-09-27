@@ -295,6 +295,79 @@ $css = loadCSS(api_get_setting('stylesheets'));
 	</Template>
 	
 	
+	<Template title="Audio page" image="Audio_page.png">
+		<Description>Audio + image + text : listening comprehension etc.</Description>
+		<Html>
+			<![CDATA[
+					<?php //echo $css; ?>
+				    
+				    <html xmlns="http://www.w3.org/1999/xhtml">
+					  <head>
+					    <title></title>
+					  </head>
+					  <body>
+					    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Listening comprehension</font><br />
+					    <br />
+					    <table width="720" cellspacing="1" cellpadding="5" border="0" align="left" summary="">
+					
+					      <tbody>
+					        <tr>
+					          <td colspan="2" style="vertical-align: top;">
+					            <span style="font-style: italic;"><span style="font-weight: bold;">Tip</span> : to replace the audio by yours, select it and click on the Delete key of your keyboard. Then open the audio
+					            gallery and upload + insert your own file. Audio should be a MP3 file.&nbsp;<br />
+					            <br /></span>
+					          </td>
+					        </tr>
+					
+					        <tr>
+					          <td valign="top">
+					            <span style="font-weight: bold;"><object width="90" height="25" align="" id="test" codebase=
+					            "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+					              <param value="<?php echo api_get_path(REL_PATH); ?>main/inc/lib/mp3player/player_mp3.swf?mp3file=<?php echo api_get_path(REL_PATH); ?>main/default_course_document/audio/ListeningComprehension.mp3" name="movie" />
+					              <param value="high" name="quality" />
+					              <param value="#FFFFFF" name="bgcolor" />
+					              <embed width="90" height="25" align="" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" name="Streaming" bgcolor="#FFFFFF" quality="high"
+					              src="<?php echo api_get_path(REL_PATH); ?>main/inc/lib/player_mp3.swf?mp3file=<?php echo api_get_path(REL_PATH); ?>main/default_course_document/audio/ListeningComprehension.mp3" /></embed></object><br />
+					              <br />
+					              <img width="128" height="128" align="bottom" alt="female.jpg" src="<?php echo $_configuration['root_web']; ?>main/default_course_document/images/female.jpg" /><br />
+					
+					            <br />
+					            <br /></span>
+					          </td>
+					          <td style="vertical-align: top;">
+					            <span style="font-weight: bold;">Listening comprehension</span><br />
+					            <br />
+					            Listen carefully and repeat the text as many times as required.<br />
+					            <br />
+					
+					            Try answering the following questions :<br />
+					            <ul>
+					              <li>What is the conference about?
+					              </li>
+					              <li>Who produces solid waste?
+					              </li>
+					              <li>List 3 examples of solid waste?
+					              </li>
+					            </ul><br />
+					            Then go the test and evaluate your comprehension.<br />
+					
+					            <br />
+					            <br />
+					            <br />
+					          </td>
+					        </tr>
+					      </tbody>
+					    </table><br />
+					    <br />
+					  </body>
+					
+					</html>
+				    
+			]]>
+		</Html>
+	</Template>
+	
+	
 	<Template title="Video page" image="Video.png">
 		<Description>On demand video + text</Description>
 		<Html>

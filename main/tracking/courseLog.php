@@ -540,9 +540,11 @@ else {
 		}
 		
 		usort($all_datas, 'sort_users');
+		natcasesort($all_datas);
 		if($tracking_direction == 'DESC')
+		{
 			rsort($all_datas);
-		
+		}
 		$page = $table->get_pager()->getCurrentPageID();
 		$all_datas = array_slice($all_datas, ($page-1)*$table -> per_page, $table -> per_page);
 		

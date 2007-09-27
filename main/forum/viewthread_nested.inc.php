@@ -99,7 +99,7 @@ foreach ($rows as $post)
 	}
 	if (api_is_allowed_to_edit())
 	{
-		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=delete&amp;content=post&amp;id=".$post['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost")))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=delete&amp;content=post&amp;id=".$post['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
 		display_visible_invisible_icon('post', $post['post_id'], $post['visible'],array('forum'=>$_GET['forum'],'thread'=>$_GET['thread'] ));
 		echo "\n";
 		echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".$_GET['forum']."&amp;thread=".$_GET['thread']."&amp;action=move&amp;post=".$post['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('Edit'))."</a>";

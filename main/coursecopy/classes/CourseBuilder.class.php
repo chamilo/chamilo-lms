@@ -1,4 +1,4 @@
-<?php // $Id: CourseBuilder.class.php 13306 2007-09-27 07:16:52Z yannoo $
+<?php // $Id: CourseBuilder.class.php 13309 2007-09-27 07:29:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -84,6 +84,8 @@ class CourseBuilder
 		$this->build_quizzes();
 		$this->build_learnpaths();
 		$this->build_surveys();
+		
+		//TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
 		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 		foreach ($this->course->resources as $type => $resources)
 		{

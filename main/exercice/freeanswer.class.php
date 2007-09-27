@@ -55,7 +55,7 @@ class FreeAnswer extends Question {
 			$form -> setDefaults(array('weighting' => $this->weighting));
 		}
 		else {
-			$form -> setDefaults(array('weighting' => '1'));
+			$form -> setDefaults(array('weighting' => '10'));
 		}
 
 	}

@@ -162,7 +162,7 @@ class Matching extends Question {
 			$group[] = $puce;
 			$group[] = FormValidator :: createElement ('text', 'answer['.$i.']',null, 'size="30" style="margin-left: 0em;"');
 			$group[] = FormValidator :: createElement ('select', 'matches['.$i.']',null,$a_matches);
-			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="2" value="1"');
+			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="2" value="10"');
 			$form -> addGroup($group, null, null, '</td><td width="0">');
 
 			$form -> addElement ('html', '</td></tr>');

@@ -88,7 +88,7 @@ class FillBlanks extends Question {
 					if(document.getElementById("weighting["+i+"]"))
 						value = document.getElementById("weighting["+i+"]").value;
 					else
-						value = "1";
+						value = "10";
 					fields += "<tr><td>"+blanks[i]+"</td><td><input style=\"margin-left: 0em;\" size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
 
 				}

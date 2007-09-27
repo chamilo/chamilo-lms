@@ -7344,12 +7344,56 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				 				$my_dep_file->setAttribute('href',$doc_info[0]);
 		 			 			$my_dep->setAttribute('xml:base','');
 	
-			 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+			 					//$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
 								
 								$file_path = realpath(api_get_path(SYS_PATH).$doc_info[0]);
 								$file_path = str_replace('//','/',$file_path);
+								//prepare the current directory path (until just under 'document') with a trailing slash
+								$cur_path = substr($current_course_path,-1)=='/'?$current_course_path:$current_course_path.'/';
 								
-			 					if(strstr($file_path,$main_path) !== false)
+								//check if the current document is in that path
+								if(strstr($file_path,$cur_path) !== false)
+								{
+									//the document is in that path, now get the relative path
+									//to the containing document
+									$orig_file_path = dirname($cur_path.$my_file_path).'/';
+									$relative_path ='';
+									if(strstr($file_path,$cur_path)!==false)
+									{
+										$relative_path = substr($file_path,strlen($orig_file_path));
+				 						$file_path = substr($file_path,strlen($cur_path));
+									}
+									else
+									{
+										//this case is still a problem as it's difficult to calculate a relative path easily
+										//might still generate wrong links
+				 						//$file_path = substr($file_path,strlen($cur_path));
+				 						//calculate the directory path to the current file (without trailing slash)
+										$my_relative_path = dirname($file_path);
+										$my_relative_file = basename($file_path);
+										//calculate the directory path to the containing file (without trailing slash)
+										$my_orig_file_path = substr($orig_file_path,0,-1);
+										$dotdot = '';
+										$subdir = '';
+										while(strstr($my_relative_path,$my_orig_file_path)===false && (strlen($my_orig_file_path)>1) && (strlen($my_relative_path)>1))
+										{
+											$my_relative_path2 = dirname($my_relative_path);
+											$my_orig_file_path = dirname($my_orig_file_path);
+											$subdir = substr($my_relative_path,strlen($my_relative_path2)+1)."/".$subdir;
+											$dotdot += '../';
+											$my_relative_path = $my_relative_path2;
+										}
+										$relative_path = $dotdot.$subdir.$my_relative_file;
+									}
+									//put the current document in the zip (this array is the array
+									//that will manage documents already in the course folder - relative)
+			 						$zip_files[] = $file_path;
+			 						//update the links to the current document in the containing document (make them relative)
+			 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$relative_path);
+					 				$my_dep_file->setAttribute('href',$file_path);
+			 			 			$my_dep->setAttribute('xml:base','');
+								}
+			 					elseif(strstr($file_path,$main_path) !== false)
 			 					{//the calculated real path is really inside the dokeos root path
 			 						//reduce file path to what's under the DocumentRoot
 			 						$file_path = substr($file_path,strlen($root_path));

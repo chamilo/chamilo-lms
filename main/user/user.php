@@ -383,7 +383,6 @@ function search_keyword($firstname,$lastname,$username,$official_code,$keyword){
 }
 
 function sort_users($a,$b){
-	global $users_column;
 	$a = trim(strtolower($a[$_SESSION['users_column']]));
 	$b = trim(strtolower($b[$_SESSION['users_column']]));
 	if($_SESSION['users_direction'] == 'DESC')

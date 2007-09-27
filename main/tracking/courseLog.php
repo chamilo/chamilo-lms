@@ -150,13 +150,13 @@ function count_student_in_course()
 
 
 
-function sort_users($a, $b)
-{
-	global $tracking_column;
-	if($a[$tracking_column] > $b[$tracking_column])
-		return 1;
-	else 
-		return -1;
+function sort_users($a,$b){
+	$a = trim(strtolower($a[$_SESSION['tracking_column']]));
+	$b = trim(strtolower($b[$_SESSION['tracking_column']]));
+	if($_SESSION['tracking_direction'] == 'DESC')
+		return strcmp($b, $a);
+	else
+		return strcmp($a, $b);
 }
 
 /*
@@ -540,11 +540,6 @@ else {
 		}
 		
 		usort($all_datas, 'sort_users');
-		natcasesort($all_datas);
-		if($tracking_direction == 'DESC')
-		{
-			rsort($all_datas);
-		}
 		$page = $table->get_pager()->getCurrentPageID();
 		$all_datas = array_slice($all_datas, ($page-1)*$table -> per_page, $table -> per_page);
 		

@@ -378,7 +378,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 	echo '<h2>'.display_step_sequence().get_lang('Requirements')."</h2>\n";
 
 	echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
-	echo get_lang('MoreDetails').' <a href="../../documentation/Dokeos18InstallManual.pdf" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
+	echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
 
 	//	SERVER REQUIREMENTS
 	echo '<div class="RequirementHeading"><h1>'.get_lang('ServerRequirements').'</h1>';
@@ -628,7 +628,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 			$error=true;
 			echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
 			echo get_lang('Warning').':<br />';
-			printf(get_lang('NoWritePermissionPleaseReadInstallGuide'),'</font><a href="../../documentation/Dokeos18InstallManual.pdf" target="blank">','</a> <font color="red">');
+			printf(get_lang('NoWritePermissionPleaseReadInstallGuide'),'</font><a href="../../documentation/installation_guide.html" target="blank">','</a> <font color="red">');
 			echo '<ul>';
 			foreach ($notwritable as $value)
 			{

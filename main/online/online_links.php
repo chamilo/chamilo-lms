@@ -1,4 +1,4 @@
-<?php // $Id: online_links.php 12272 2007-05-03 14:40:45Z elixir_julian $
+<?php // $Id: online_links.php 13296 2007-09-27 02:19:40Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -171,7 +171,7 @@ include('header_frame.inc.php');
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-  <td width="1%" valign="middle"><a href="online_master.php"><img src="../img/home.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Back')); ?>"></a></td>
+  <td width="1%" valign="middle"><a href="online_master.php"><img src="../img/home.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Back'),ENT_QUOTES,$charset); ?>"></a></td>
   <td width="99%" align="left">&nbsp;<a href="online_master.php"><?php echo get_lang('Back'); ?></a></td>
 </tr>
 </table>
@@ -183,7 +183,7 @@ include('header_frame.inc.php');
 <table border="0" cellpadding="3" cellspacing="0">
 <tr>
   <td width="45%"><?php echo get_lang('LinkName'); ?> :</td>
-  <td width="55%"><input type="text" name="link_name" size="10" maxlength="50" value="<?php if($action == 'edit') echo htmlentities($link_name); ?>" style="width: 95px;"></td>
+  <td width="55%"><input type="text" name="link_name" size="10" maxlength="50" value="<?php if($action == 'edit') echo htmlentities($link_name,ENT_QUOTES,$charset); ?>" style="width: 95px;"></td>
 </tr>
 <tr>
   <td width="45%"><?php echo get_lang('LinkURL'); ?> :</td>
@@ -195,7 +195,7 @@ include('header_frame.inc.php');
 </tr>
 <tr>
   <td colspan="2" align="center">
-	<input type="submit" value="<?php echo htmlentities(get_lang('Ok')); ?>">
+	<input type="submit" value="<?php echo htmlentities(get_lang('Ok'),ENT_QUOTES,$charset); ?>">
   </td>
 </tr>
 </table>
@@ -221,8 +221,8 @@ else
 
 <tr>
   <td width="98%"><a href="online_goto.php?url=<?php echo urlencode($enreg['url']); ?>" target="online_working_area"><?php echo $enreg['name']; ?></a></td>
-  <td width="1%" valign="middle"><a href="<?php echo api_get_self(); ?>?action=edit&link=<?php echo $enreg['id']; ?>"><img src="../img/edit.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Modify')); ?>"></a></td>
-  <td width="1%" valign="middle"><a href="<?php echo api_get_self(); ?>?action=delete&link=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Delete')); ?>"></a></td>
+  <td width="1%" valign="middle"><a href="<?php echo api_get_self(); ?>?action=edit&link=<?php echo $enreg['id']; ?>"><img src="../img/edit.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>"></a></td>
+  <td width="1%" valign="middle"><a href="<?php echo api_get_self(); ?>?action=delete&link=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="" title="<?php echo htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>"></a></td>
 </tr>
 
 <?php

@@ -68,6 +68,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 */
 function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cur_dir_path,$cur_dir_path_url)
 {
+	global $charset;
 	$is_allowed_to_edit = api_is_allowed_to_edit();
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -80,7 +81,7 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 			"<td>",
 			get_lang('AllFiles')." : </td>",
 			"<td><a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;delete=all&amp;display_tool_options=true\" ",
-			"onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\">",
+			"onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
 			"<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Delete')."\" />",
 			"</a>",
 			"&nbsp;";
@@ -174,6 +175,7 @@ function display_default_visibility_form($uploadvisibledisabled)
 */
 function display_student_publications_list($work_dir,$sub_course_dir,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin)
 {
+	global $charset;
 	// Database table names
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -265,7 +267,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				//$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
 				//	'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
 				$action .= '<a href="'.api_get_self().'?'.
-					api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('DirDelete').'"></a>';
+					api_get_cidreq().'&delete_dir='.$mydir.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('DirDelete').'"></a>';
 				$row[] = $action;
 			}else{
 				$row[] = "";
@@ -304,7 +306,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			{
 				$action = '';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;move='.$work->id.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
 				if($work->accepted == '1')
 				{
@@ -319,7 +321,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			}elseif($is_author){
 				$action = '';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;edit='.$work->id.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;"><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'"></a>';
 
 				$row[] = $action;
 			}else{

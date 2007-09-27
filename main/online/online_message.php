@@ -1,4 +1,4 @@
-<?php // $Id: online_message.php 12269 2007-05-03 14:17:37Z elixir_julian $
+<?php // $Id: online_message.php 13296 2007-09-27 02:19:40Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -83,7 +83,7 @@ $chat_size=0;
 
 if($sent)
 {
-	$message=trim(htmlspecialchars(stripslashes($_POST['message'])));
+	$message=trim(htmlspecialchars(stripslashes($_POST['message']),ENT_QUOTES,$charset));
 
 	if(!empty($message))
 	{
@@ -114,12 +114,12 @@ if($sent)
 include('header_frame.inc.php');
 ?>
 
-<form name="formMessage" method="post" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(htmlentities(get_lang('TypeMessage'))); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">
+<form name="formMessage" method="post" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(document.formMessage.message.value == '') { alert('<?php echo addslashes(htmlentities(get_lang('TypeMessage'),ENT_QUOTES,$charset)); ?>'); document.formMessage.message.focus(); return false; }" autocomplete="off">
 <input type="hidden" name="sent" value="1">
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
   <td width="90%"><input type="text" name="message" size="50" value="" style="width: 100%;"></td>
-  <td width="9%" nowrap="nowrap"><?php echo get_lang('Question'); ?>&nbsp;<input type="checkbox" name="question" value="1" style="vertical-align: middle;" onclick="javascript:if(this.checked == true && !confirm('<?php echo addslashes(htmlentities(get_lang('OnlyCheckForImportantQuestion'))); ?>')) this.checked=false; document.formMessage.message.focus();"></td>
+  <td width="9%" nowrap="nowrap"><?php echo get_lang('Question'); ?>&nbsp;<input type="checkbox" name="question" value="1" style="vertical-align: middle;" onclick="javascript:if(this.checked == true && !confirm('<?php echo addslashes(htmlentities(get_lang('OnlyCheckForImportantQuestion'),ENT_QUOTES,$charset)); ?>')) this.checked=false; document.formMessage.message.focus();"></td>
   <td width="1%"><input type="submit" value="OK" style="width: 30px;"></td>
 </tr>
 </table>

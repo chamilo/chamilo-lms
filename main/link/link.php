@@ -186,12 +186,12 @@ if (is_allowed_to_edit())
 			. "<td><input type=\"text\" name=\"urllink\" size=\"50\" value=\"" . (empty($urllink)?'http://':htmlentities($urllink)) . "\" /></td>"			. "</tr>";
 		echo "<tr>"
 				. "<td align=\"right\">" . get_lang("LinkName") . " :</td>"
-				. "<td><input type=\"text\" name=\"title\" size=\"50\" value=\"" . htmlentities($title) . "\" /></td>"
+				. "<td><input type=\"text\" name=\"title\" size=\"50\" value=\"" . htmlentities($title,ENT_QUOTES,$charset) . "\" /></td>"
 				. "</tr>"
 				. "<tr>" .
 				"<td align=\"right\" valign=\"top\">" . get_lang("Description") . " :</td>" .
 				"<td><textarea rows=\"3\" cols=\"50\" name=\"description\">" .
-				htmlentities($description) . "</textarea></td></tr>";
+				htmlentities($description,ENT_QUOTES,$charset) . "</textarea></td></tr>";
 
 		$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
 		$resultcategories = api_sql_query($sqlcategories)or die("Error: " . mysql_error());
@@ -233,10 +233,10 @@ if (is_allowed_to_edit())
 		}
 		echo "<table><tr>",
 			"<td align=\"right\">".get_lang("CategoryName")."<span class=\"required\">*</span>  :</td>",
-			"<td><input type=\"text\" name=\"category_title\" size=\"50\" value=\"",htmlentities($category_title)."\" /></td>",
+			"<td><input type=\"text\" name=\"category_title\" size=\"50\" value=\"",htmlentities($category_title,ENT_QUOTES,$charset)."\" /></td>",
 			"</tr>",
 			"<tr><td align=\"right\" valign=\"top\">".get_lang("Description")." :</td>",
-			"<td><textarea rows=\"3\" cols=\"50\" name=\"description\">",htmlentities($description)."</textarea></td></tr>",
+			"<td><textarea rows=\"3\" cols=\"50\" name=\"description\">",htmlentities($description,ENT_QUOTES,$charset)."</textarea></td></tr>",
 			"<tr><td></td><td><input type=\"Submit\" name=\"submitCategory\" value=\"".get_lang("Ok")."\" /></td></tr>",
 			"</table>",
 			"</form>";
@@ -336,7 +336,7 @@ while ($myrow=@mysql_fetch_array($resultcategories))
 		$newurlview=$urlview;
 		$newurlview[$i]="0";
 		echo "<tr>",
-			"<th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">- <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$newurlview."\">".htmlentities($myrow["category_title"])."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
+			"<th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">- <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$newurlview."\">".htmlentities($myrow["category_title"],ENT_QUOTES,$charset)."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
 		if (is_allowed_to_edit())
 		{
 		showcategoryadmintools($myrow["id"]);
@@ -353,7 +353,7 @@ while ($myrow=@mysql_fetch_array($resultcategories))
 
 		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\">+ <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
 		echo is_array($view)?implode('',$view):$view;
-		echo "\">".htmlentities($myrow["category_title"])."</a><br />&nbsp;&nbsp;&nbsp;";
+		echo "\">".htmlentities($myrow["category_title"],ENT_QUOTES,$charset)."</a><br />&nbsp;&nbsp;&nbsp;";
 		echo $myrow["description"];
 
 		if (is_allowed_to_edit())

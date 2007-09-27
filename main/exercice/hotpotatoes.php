@@ -22,7 +22,7 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 13314 2007-09-27 08:16:19Z elixir_julian $
+* 	@version $Id: hotpotatoes.php 13324 2007-09-27 12:29:17Z elixir_inter $
 */
 
 
@@ -81,7 +81,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 		//check that the submit button was pressed when the button had the "Download" value
 		//This should be updated to "upload" here and on the button, and it would be better to
 		// check something else than a string displayd on a button
-		if (strcmp($_POST['submit'],get_lang('Download'))===0)
+		if (strcmp($_POST['submit'],get_lang('Send'))===0)
 		{
 			/** el kell tarolni <- english please */
 			include_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');

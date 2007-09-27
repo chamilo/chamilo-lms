@@ -517,7 +517,14 @@ class learnpathItem{
     	{
     		$path = $this->get_file_path();
    			$abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
+   			//echo "Abs path coming from item : ".$abs_path."<br/>\n";
     	}
+    	/*
+    	else
+    	{
+    		echo "Abs path coming from param: ".$abs_path."<br/>\n";
+    	}
+    	*/
     	//error_log(str_repeat(' ',$recursivity).'Analyse file '.$abs_path,0);
     	$files_list = array();
     	$type = $this->get_type();
@@ -574,8 +581,132 @@ class learnpathItem{
 										}
 										if(strpos($source,'://') > 0)
 										{
+											
 											//cut at '?' in a URL with params
-											if(strpos($source,'?')>0){$source = substr($source,0,strpos($source,'?'));}
+											if(strpos($source,'?')>0)
+											{
+												$second_part = substr($source,strpos($source,'?'));
+												if(strpos($second_part,'://')>0)
+												{//if the second part of the url contains a url too, treat the second one before cutting
+
+													$pos1 = strpos($second_part,'=');
+													$pos2 = strpos($second_part,'&');
+													$second_part = substr($second_part,$pos1+1,$pos2-($pos1+1));
+													if(strpos($second_part,api_get_path(WEB_PATH))!==false)
+													{
+														//we found the current portal url
+														$files_list[] = array($second_part,'local','url');
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$second_part,$recursivity+1);
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														} 
+													}
+													else
+													{
+														//we didn't find any trace of current portal
+														$files_list[] = array($second_part,'remote','url');
+													}
+												}
+												elseif(strpos($second_part,'=')>0)
+												{
+													if(substr($second_part,0,1) === '/')
+													{	//link starts with a /, making it absolute (relative to DocumentRoot)
+														$files_list[] = array($second_part,'local','abs');
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$second_part,$recursivity+1); 
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														} 
+													}
+													elseif(strstr($second_part,'..') === 0)
+													{	//link is relative but going back in the hierarchy
+														$files_list[] = array($second_part,'local','rel');
+														$dir = dirname($abs_path);
+														$new_abs_path = realpath($dir.'/'.$second_part);
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														} 
+													}
+													else
+													{	//no starting '/', making it relative to current document's path
+														if(substr($second_part,0,2) == './')
+														{
+															$second_part = substr($second_part,2);
+														}
+														$files_list[] = array($second_part,'local','rel');
+														$dir = dirname($abs_path);
+														$new_abs_path = realpath($dir.'/'.$second_part);
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														} 
+													}
+													
+												}
+												//leave that second part behind now
+												$source = substr($source,0,strpos($source,'?'));
+												if(strpos($source,'://') > 0)
+												{
+													if(strpos($source,api_get_path(WEB_PATH))!==false)
+													{
+														//we found the current portal url
+														$files_list[] = array($source,'local','url');
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1);
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														} 
+													}
+													else
+													{
+														//we didn't find any trace of current portal
+														$files_list[] = array($source,'remote','url');
+													}
+												}
+												else
+												{
+													//no protocol found, make link local
+													if(substr($source,0,1) === '/')
+													{	//link starts with a /, making it absolute (relative to DocumentRoot)
+														$files_list[] = array($source,'local','abs');
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1); 
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														} 
+													}
+													elseif(strstr($source,'..') === 0)
+													{	//link is relative but going back in the hierarchy
+														$files_list[] = array($source,'local','rel');
+														$dir = dirname($abs_path);
+														$new_abs_path = realpath($dir.'/'.$source);
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														} 
+													}
+													else
+													{	//no starting '/', making it relative to current document's path
+														if(substr($source,0,2) == './')
+														{
+															$source = substr($source,2);
+														}
+														$files_list[] = array($source,'local','rel');
+														$dir = dirname($abs_path);
+														$new_abs_path = realpath($dir.'/'.$source);
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														} 
+													}
+												}
+											}
 											//found some protocol there
 											if(strpos($source,api_get_path(WEB_PATH))!==false)
 											{
@@ -651,7 +782,21 @@ class learnpathItem{
     			break;
     	}
     	//error_log(str_repeat(' ',$recursivity),'found files '.print_r($files_list,true),0);
-    	return $files_list;
+		//return $files_list;
+		$checked_files_list = array();
+    	$checked_array_list = array();
+    	foreach($files_list as $idx => $file)
+    	{
+    		if(!empty($file[0]))
+    		{
+	    		if(!in_array($file[0],$checked_files_list))
+	    		{
+	    			$checked_files_list[] = $files_list[$idx][0];
+	    			$checked_array_list[] = $files_list[$idx];
+	    		}
+    		}
+    	}
+    	return $checked_array_list;
     }
     /**
      * Gets the score

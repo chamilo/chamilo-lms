@@ -7214,6 +7214,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 			$inc_docs = $item->get_resources_from_source(null,api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.'scorm/'.$this->path.'/'.$item->get_path());
 		 		else
 		 			$inc_docs = $item->get_resources_from_source();
+		 		//print_r($inc_docs);
 		 		//error_log('Dealing with document '.$item->get_file_path().', found included documents: '.print_r($inc_docs,true),0);
 		 		//give a child element <item> to the <organization> element
 		 		$my_item = $xmldoc->createElement('item');
@@ -7301,8 +7302,40 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 				switch($doc_info[2])
 		 				{
 		 					case 'url': //local URL - save path as url for now, don't zip file
-				 				$my_dep_file->setAttribute('href',$doc_info[0]);
+								$abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH),'',$doc_info[0]);
+								$current_dir = dirname($abs_path);
+								$file_path = realpath($abs_path);
+				 				$my_dep_file->setAttribute('href',$file_path);
 					 			$my_dep->setAttribute('xml:base','');
+			 					if(strstr($file_path,$main_path) !== false)
+			 					{//the calculated real path is really inside the dokeos root path
+			 						//reduce file path to what's under the DocumentRoot
+			 						$file_path = substr($file_path,strlen($root_path));
+			 						//echo $file_path;echo '<br><br>';
+			 						//error_log('Reduced path: '.$file_path,0);
+			 						$zip_files_abs[] = $file_path;
+			 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+					 				$my_dep_file->setAttribute('href',$file_path);
+			 			 			$my_dep->setAttribute('xml:base','');
+			 					}
+			 					else if (empty($file_path))
+			 					{
+			 						/*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH),api_get_path(REL_PATH)));
+			 						if(strpos($document_root,-1)=='/')
+			 						{
+			 							$document_root = substr(0, -1, $document_root);
+			 						}*/
+			 						$file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
+			 						$file_path = str_replace('//','/',$file_path);
+			 						if(file_exists($file_path))
+			 						{
+				 						$file_path = substr($file_path,strlen($current_dir)); // we get the relative path
+				 						$zip_files[] = $my_sub_dir.'/'.$file_path;
+				 						$link_updates[$my_file_path][] = array('orig'=>$doc_info[0],'dest'=>$file_path);
+						 				$my_dep_file->setAttribute('href',$file_path);
+				 			 			$my_dep->setAttribute('xml:base','');
+			 						}
+			 					}
 		 						break;
 		 					case 'abs': //absolute path from DocumentRoot. Save file and leave path as is in the zip
 				 				$my_dep_file->setAttribute('href',$doc_info[0]);
@@ -7310,7 +7343,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	
 			 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
 								
-								$file_path = realpath($doc_info[0]);
+								$file_path = realpath(api_get_path(SYS_PATH).$doc_info[0]);
+								$file_path = str_replace('//','/',$file_path);
 								
 			 					if(strstr($file_path,$main_path) !== false)
 			 					{//the calculated real path is really inside the dokeos root path
@@ -7555,12 +7589,12 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			 				switch($doc_info[2])
 			 				{
 			 					case 'url': //local URL - save path as url for now, don't zip file
-					 				$my_dep_file->setAttribute('href',$doc_info[0]);
-						 			$my_dep->setAttribute('xml:base','');
 						 			//save file but as local file (retrieve from URL)
 									$abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH),'',$doc_info[0]);
 									$current_dir = dirname($abs_path);
 									$file_path = realpath($abs_path);
+					 				$my_dep_file->setAttribute('href','document/'.$file_path);
+						 			$my_dep->setAttribute('xml:base','');
 				 					if(strstr($file_path,$main_path) !== false)
 				 					{//the calculated real path is really inside the dokeos root path
 				 						//reduce file path to what's under the DocumentRoot
@@ -7592,12 +7626,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 				 					}
 			 						break;
 			 					case 'abs': //absolute path from DocumentRoot. Save file and leave path as is in the zip
-					 				$my_dep_file->setAttribute('href',$doc_info[0]);
-			 			 			$my_dep->setAttribute('xml:base','');
-		
 				 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
-									
 									$file_path = realpath($doc_info[0]);
+					 				$my_dep_file->setAttribute('href',$file_path);
+			 			 			$my_dep->setAttribute('xml:base','');
 									
 				 					if(strstr($file_path,$main_path) !== false)
 				 					{//the calculated real path is really inside the dokeos root path

@@ -305,11 +305,11 @@ if (is_array($flat_list))
 			*/
 			if($details['lp_prevent_reinit']==1){
 				$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
-						'<img src="../img/kaboodleloop.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>' .
+						'<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>' .
 						'</a>&nbsp;';
 			}else{
 				$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
-						'<img src="../img/kaboodleloop_gray.gif" border="0" alt="Prevent reinit" title="'.get_lang("PreventMultipleAttempts").'"/>' .
+						'<img src="../img/kaboodleloop.gif" border="0" alt="Prevent reinit" title="'.get_lang("PreventMultipleAttempts").'"/>' .
 						'</a>&nbsp;';
 			}
 			if($details['lp_type']==1 || $details['lp_type']==2){

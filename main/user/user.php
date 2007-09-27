@@ -383,9 +383,10 @@ function search_keyword($firstname,$lastname,$username,$official_code,$keyword){
 }
 
 function sort_users($a,$b){
-	$a = trim(strtolower($a[$_GET['users_column']]));
-	$b = trim(strtolower($b[$_GET['users_column']]));
-	if($_GET['users_direction'] == 'DESC')
+	global $users_column;
+	$a = trim(strtolower($a[$_SESSION['users_column']]));
+	$b = trim(strtolower($b[$_SESSION['users_column']]));
+	if($_SESSION['users_direction'] == 'DESC')
 		return strcmp($b, $a);
 	else
 		return strcmp($a, $b);
@@ -482,7 +483,7 @@ function modify_filter($user_id)
 	$result.="</div>";
 	return $result;
 }
-$default_column = api_is_allowed_to_edit() ? 1 : 0;
+$default_column = api_is_allowed_to_edit() ? 2 : 1;
 $table = new SortableTable('users', 'get_number_of_users', 'get_user_data',$default_column);
 $parameters['keyword'] = $_GET['keyword'];
 $table->set_additional_parameters($parameters);

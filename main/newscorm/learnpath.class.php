@@ -2080,14 +2080,14 @@ class learnpath {
 		$num = Database::num_rows($res);
 		if($num>0){
 			$list[] = array(
-				"order_id"=>get_lang('Order'),
-				"id"=>get_lang('InteractionID'),
-				"type"=>get_lang('Type'),
-				"time"=>get_lang('TimeFinished'),
-				"correct_responses"=>get_lang('CorrectAnswers'),
-				"student_response"=>get_lang('StudentResponse'),
-				"result"=>get_lang('Result'),
-				"latency"=>get_lang('LatencyTimeSpent'));
+				"order_id"=>htmlentities(get_lang('Order')),
+				"id"=>htmlentities(get_lang('InteractionID')),
+				"type"=>htmlentities(get_lang('Type')),
+				"time"=>htmlentities(get_lang('TimeFinished')),
+				"correct_responses"=>htmlentities(get_lang('CorrectAnswers')),
+				"student_response"=>htmlentities(get_lang('StudentResponse')),
+				"result"=>htmlentities(get_lang('Result')),
+				"latency"=>htmlentities(get_lang('LatencyTimeSpent')));
 			while ($row = Database::fetch_array($res)){
 				$list[] = array(
 					"order_id"=>($row['order_id']+1),

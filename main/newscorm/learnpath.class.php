@@ -5576,7 +5576,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		}
 		
 		div.row div.formw {
-			width: 85%;
+			width: 88%;
 		}
 		</style>';
 			
@@ -5660,7 +5660,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$item_description	= '';
 		}
 				
-		$return = '<div style="margin:3px 10px;">';
+		$return = '<div style="margin:3px 0px;">';
 			
 			if($id != 0 && is_array($extra_info))
 				$parent = $extra_info['parent_item_id'];

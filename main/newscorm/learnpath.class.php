@@ -7876,7 +7876,9 @@ EOD;
 			if($res === false){error_log('Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__,0);}
 		}
 		//Send file to client
-		$name = 'scorm_export_'.$this->lp_id.'.zip';
+		//$name = 'scorm_export_'.$this->lp_id.'.zip';
+		require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+		$name = replace_dangerous_char($this->get_name()).'.zip';
 		DocumentManager::file_send_for_download($temp_zip_file,true,$name);
 	}
 	/**

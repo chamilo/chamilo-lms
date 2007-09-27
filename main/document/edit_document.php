@@ -1,4 +1,4 @@
-<?php // $Id: edit_document.php 13219 2007-09-24 13:41:13Z elixir_inter $
+<?php // $Id: edit_document.php 13337 2007-09-27 17:09:51Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -59,6 +59,12 @@ $language_file = 'document';
 ------------------------------------------------------------------------------
 */
 include('../inc/global.inc.php');
+$htmlHeadXtra[] = '
+<script type="text/javascript">
+function launch_templates(){
+	window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
+}
+</script>';
 
 $_SESSION['whereami'] = 'document/create';
 $this_section=SECTION_COURSES;
@@ -507,7 +513,7 @@ if($extension == "htm" || $extension == "html")
 	$form->addElement('hidden','formSent');
 	$defaults['formSent'] = 1;
 	$form->addElement('submit','submit',get_lang('Ok'));
-	$form->add_html_editor('texte',get_lang('Content'),false,true);
+	$form->add_html_editor('texte','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>',false,true);
 	$defaults['texte'] = $texte;
 }
 if(!$group_document)

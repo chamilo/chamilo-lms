@@ -1,5 +1,5 @@
 <?php
-// $Id: create_document.php 13272 2007-09-26 09:19:53Z elixir_inter $
+// $Id: create_document.php 13337 2007-09-27 17:09:51Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -51,6 +51,10 @@ $htmlHeadXtra[]='<script>
 	var temp=false;
 	var temp2=false;
 	var use_document_title='.api_get_setting('use_document_title').';
+
+	function launch_templates(){
+		window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
+	}
 
 	function FCKeditor_OnComplete( editorInstance )
 	{
@@ -270,7 +274,7 @@ else
 $form->addElement('submit', 'submit', get_lang('Ok'));
 
 // HTML-editor
-$form->add_html_editor('content', get_lang('Content'), false, true);
+$form->add_html_editor('content', '<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>', false, true);
 // Comment-field
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
 $form->addElement('submit', 'submit', get_lang('Ok'));

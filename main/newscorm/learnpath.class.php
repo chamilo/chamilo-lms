@@ -5856,7 +5856,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 							$renderer = $form->defaultRenderer();
 							$renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}','content_lp');
 
-							$form->addElement('html_editor','content_lp',get_lang("Content")." :");
+							$form->addElement('html_editor','content_lp','<a style="cursor:pointer" onclick="launch_templates()"><img src="'.api_get_path(WEB_IMG_PATH).'templates.gif" /></a>');
 							$defaults["content_lp"]=$content;
 						}
 						

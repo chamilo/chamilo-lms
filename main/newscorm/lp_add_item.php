@@ -70,6 +70,13 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(W
 $htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='learnpath.css' />"; //will be a merged with original learnpath.css
 $htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='dtree.css' />"; //will be moved
 $htmlHeadXtra[] = "<script src='dtree.js' type='text/javascript'></script>"; //will be moved
+$htmlHeadXtra[] = '
+<script type="text/javascript">
+function launch_templates(){
+	window.frames[0].FCKToolbarItems.GetItem("Templates").Click();
+}
+</script>';
+
 
 $htmlHeadXtra[] = $_SESSION['oLP']->create_js();
 /*

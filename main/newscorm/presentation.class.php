@@ -91,7 +91,6 @@ class presentation extends learnpath {
 			$cmd = 'cd '.api_get_path(SYS_PATH).'main/inc/lib/ppt2png && java '.$classpath.' DocumentConverter '.api_get_setting('service_ppt2lp','host').' 2002'.' "'.$file.'" "'.$base_work_dir.$created_dir.'"'.' '.$slide_width.' '.$slide_height.' '.api_get_setting('service_ppt2lp','user').' '.api_get_setting('service_ppt2lp','ftp_password');
 		}
 		chmod ($base_work_dir.$created_dir,0777);
-		
 		$shell = exec($cmd, $files, $return);
 		
 		chmod ($base_work_dir.$created_dir,0755);
@@ -109,6 +108,12 @@ class presentation extends learnpath {
 			$first_item = 0;
 			foreach($files as $file){
 				$i++;
+				
+				
+				// add the png to documents
+				$document_id = add_document($_course,$created_dir.'/'.$file,'file',filesize($base_work_dir.$created_dir.'/'.$file),$file);
+				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],$to_group_id,$to_user_id);
+				
 				
 				// create an html file
 				$html_file = $file.'.html';

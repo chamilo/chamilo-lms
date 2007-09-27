@@ -22,7 +22,7 @@
 *	File containing the Question class.
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question.class.php 12078 2007-04-23 09:05:34Z elixir_julian $
+* 	@version $Id: question.class.php 13311 2007-09-27 08:03:12Z elixir_inter $
 */
 
 
@@ -321,11 +321,19 @@ abstract class Question
 		// if the question has got an ID
 		if($this->id)
 		{
-			$PictureName=explode('.',$PictureName);
-			$Extension=$PictureName[sizeof($PictureName)-1];
-
-	  		$this->picture='quiz-'.$this->id.'.'.$Extension;
-	  		return move_uploaded_file($Picture,$picturePath.'/'.$this->picture)?true:false;
+			
+			$extension = pathinfo($PictureName, PATHINFO_EXTENSION);
+			$this->picture='quiz-'.$this->id.'.'.$extension;
+			if($extension == 'gif' || $extension == 'png')
+			{
+				$o_img = new image($Picture);
+				$o_img->send_image('JPG',$picturePath.'/'.$this->picture);
+				return true;
+			}
+			else
+			{
+				return move_uploaded_file($Picture,$picturePath.'/'.$this->picture)?true:false;	
+			}
 		}
 
 		return false;

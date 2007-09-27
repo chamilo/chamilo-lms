@@ -24,7 +24,7 @@
 * 	It is included from the script admin.php
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 12272 2007-05-03 14:40:45Z elixir_julian $
+* 	@version $Id: question_admin.inc.php 13311 2007-09-27 08:03:12Z elixir_inter $
 */
 
 /*
@@ -34,6 +34,7 @@
 */
 
 include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+include_once(api_get_path(LIBRARY_PATH).'image.lib.php');
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
 if(!defined('ALLOWED_TO_INCLUDE'))

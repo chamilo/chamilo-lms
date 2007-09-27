@@ -25,7 +25,7 @@
 *	@package dokeos.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@version $Id: exercise_result.php 13271 2007-09-26 08:46:34Z elixir_inter $
+* 	@version $Id: exercise_result.php 13320 2007-09-27 09:59:13Z elixir_julian $
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -138,6 +138,7 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 	exit();
 }
 $exerciseTitle=$objExercise->selectTitle();
+$exerciseDescription=$objExercise->selectDescription();
 
 $nameTools=get_lang('Exercice');
 
@@ -288,6 +289,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 ?>
 	<h3><?php echo $exerciseTitle ?>: <?php echo get_lang("Result"); ?></h3>
+	<?php echo $exerciseDescription; ?>
 	<form method="get" action="exercice.php">
 	<input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />

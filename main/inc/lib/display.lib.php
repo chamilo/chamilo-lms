@@ -304,10 +304,11 @@ class Display {
 	*/
 	function display_normal_message($message,$filter=true)
 	{
+		global $charset;
 		if($filter)
 		{
 			//filter message
-			$message = htmlentities($message);
+			$message = htmlentities($message,ENT_QUOTES,$charset);
 		}
 		if (!headers_sent())
 		{
@@ -334,9 +335,10 @@ class Display {
 	*/
 	function display_warning_message($message,$filter=true)
 	{
+		global $charset;
 		if($filter){
 			//filter message
-			$message = htmlentities($message);
+			$message = htmlentities($message,ENT_QUOTES,$charset);
 		}
 		if (!headers_sent())
 		{
@@ -362,9 +364,10 @@ class Display {
 	*/
 	function display_confirmation_message($message,$filter=true)
 	{
+		global $charset;
 		if($filter){
 			//filter message
-			$message = htmlentities($message);
+			$message = htmlentities($message,ENT_QUOTES,$charset);
 		}
 		if (!headers_sent())
 		{
@@ -393,9 +396,10 @@ class Display {
 	*/
 	function display_error_message($message,$filter=true)
 	{
+		global $charset;
 		if($filter){
 			//filter message
-			$message = htmlentities($message);
+			$message = htmlentities($message,ENT_QUOTES,$charset);
 		}
 
 		if (!headers_sent())
@@ -421,6 +425,7 @@ class Display {
 	 */
 	function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
 	{
+		global $charset;
 		if (is_null($clickable_text))
 		{
 			$clickable_text = $email;
@@ -448,7 +453,7 @@ class Display {
 		}
 		else
 		{
-			$hclickable_text = htmlspecialchars($clickable_text);
+			$hclickable_text = htmlspecialchars($clickable_text,ENT_QUOTES,$charset);
 		}
 
 		//return encrypted mailto hyperlink

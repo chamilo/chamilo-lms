@@ -1,4 +1,4 @@
-<?php // $Id: course_category.php 12269 2007-05-03 14:17:37Z elixir_julian $
+<?php // $Id: course_category.php 13295 2007-09-27 02:16:44Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -163,11 +163,11 @@ if(!empty($errorMsg))
 
 <tr>
   <td nowrap="nowrap"><?php echo get_lang("CategoryCode"); ?> :</td>
-  <td><input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo htmlentities(stripslashes($categoryCode)); ?>" /></td>
+  <td><input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo htmlentities(stripslashes($categoryCode),ENT_QUOTES,$charset); ?>" /></td>
 </tr>
 <tr>
   <td nowrap="nowrap"><?php echo get_lang("CategoryName"); ?> :</td>
-  <td><input type="text" name="categoryName" size="20" maxlength="100" value="<?php echo htmlentities(stripslashes($categoryName)); ?>" /></td>
+  <td><input type="text" name="categoryName" size="20" maxlength="100" value="<?php echo htmlentities(stripslashes($categoryName),ENT_QUOTES,$charset); ?>" /></td>
 </tr>
 <tr>
   <td nowrap="nowrap"><?php echo get_lang("AllowCoursesInCategory"); ?></td>
@@ -201,7 +201,7 @@ else
   <li>
 	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($enreg['code']); ?>"><img src="../img/folder_document.gif" border="0" title="<?php echo get_lang("OpenNode"); ?>" alt="" align="absbottom" /></a>
 	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>&amp;action=edit&amp;id=<?php echo urlencode($enreg['code']); ?>"><img src="../img/edit.gif" border="0" title="<?php echo get_lang("EditNode"); ?>" alt ="" /></a>
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>&amp;action=delete&amp;id=<?php echo urlencode($enreg['code']); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" title="<?php echo get_lang("DeleteNode"); ?>" alt="" /></a>
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>&amp;action=delete&amp;id=<?php echo urlencode($enreg['code']); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"><img src="../img/delete.gif" border="0" title="<?php echo get_lang("DeleteNode"); ?>" alt="" /></a>
 	<a href="<?php echo api_get_self(); ?>?category=<?php echo urlencode($category); ?>&amp;action=moveUp&amp;id=<?php echo urlencode($enreg['code']); ?>&amp;tree_pos=<?php echo $enreg['tree_pos']; ?>"><img src="../img/up.gif" border="0" title="<?php echo get_lang("UpInSameLevel"); ?>" alt="" /></a>
 	<?php echo $enreg['name']; ?>
 	(<?php echo $enreg['children_count']; ?> <?php echo get_lang("Categories"); ?> - <?php echo $enreg['nbr_courses']; ?> <?php echo get_lang("Courses"); ?>)

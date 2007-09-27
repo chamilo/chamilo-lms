@@ -192,6 +192,7 @@ class SortableTable extends HTML_Table
 	 */
 	function display()
 	{
+		global $charset;
 		$empty_table = false;
 		if ($this->get_total_number_of_items() == 0)
 		{
@@ -252,7 +253,7 @@ class SortableTable extends HTML_Table
 					$html .= '<option value="'.$action.'">'.$label.'</option>';
 				}
 				$html .= '</select>';
-				$html .= '<input type="submit" value="'.get_lang('Ok').'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice")))."'".')) return false;"/>';
+				$html .= '<input type="submit" value="'.get_lang('Ok').'" onclick="javascript:if(!confirm('."'".addslashes(htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;"/>';
 			}
 			else
 			{

@@ -90,8 +90,8 @@ echo '@import "'.$my_code_path.'css/'.$my_style.'/course.css";'."\n";
 </style>
 
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
-<link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/courses.php" title="<?php echo htmlentities(get_lang('OtherCourses')); ?>" />
-<link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/profile.php" title="<?php echo htmlentities(get_lang('ModifyProfile')); ?>" />
+<link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/courses.php" title="<?php echo htmlentities(get_lang('OtherCourses'),ENT_QUOTES,$charset); ?>" />
+<link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/profile.php" title="<?php echo htmlentities(get_lang('ModifyProfile'),ENT_QUOTES,$charset); ?>" />
 <link href="http://www.dokeos.com/documentation.php" rel="Help" />
 <link href="http://www.dokeos.com/team.php" rel="Author" />
 <link href="http://www.dokeos.com" rel="Copyright" />

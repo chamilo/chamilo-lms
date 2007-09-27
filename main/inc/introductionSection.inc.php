@@ -178,7 +178,7 @@ if ($intro_dispCommand)
 	{
 		echo	"<div id=\"courseintro_icons\"><p>\n",
 				"<a href=\"".api_get_self()."?intro_cmdEdit=1\"><img src=\"" . api_get_path(WEB_CODE_PATH) . "img/edit.gif\" alt=\"",get_lang('Modify'),"\" border=\"0\" /></a>\n",
-				"<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\"><img src=\"" . api_get_path(WEB_CODE_PATH) . "img/delete.gif\" alt=\"",get_lang('Delete'),"\" border=\"0\" /></a>\n",
+				"<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"" . api_get_path(WEB_CODE_PATH) . "img/delete.gif\" alt=\"",get_lang('Delete'),"\" border=\"0\" /></a>\n",
 				"</p>\n</div>";
 	}
 }

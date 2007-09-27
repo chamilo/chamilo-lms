@@ -250,7 +250,8 @@ class Security{
 	 */
 	function remove_XSS($var)
 	{
-		return htmlentities($var);
+		global $charset;
+		return htmlentities($var,ENT_QUOTES,$charset);
 	}
 }
 ?>

@@ -278,7 +278,24 @@ if($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2')
 {
 	require_once('export/qti2/qti2_export.php');
 	$export = export_exercise($exerciseId,true);
-	DocumentManager::string_send_for_download($export,true,'qti2export_'.$exerciseId.'.xml');
+
+	require_once(api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
+	$garbage_path = api_get_path(GARBAGE_PATH);
+	$temp_dir_short = uniqid();
+	$temp_zip_dir = $garbage_path."/".$temp_dir_short;
+	if(!is_dir($temp_zip_dir)) mkdir($temp_zip_dir);
+	$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
+	$temp_xml_file = $temp_zip_dir."/qti2export_".$exerciseId.'.xml';
+	file_put_contents($temp_xml_file,$export);
+	$zip_folder=new PclZip($temp_zip_file);	
+	$zip_folder->add($temp_zip_dir, PCLZIP_OPT_REMOVE_PATH, $temp_zip_dir);
+	$name = 'qti2_export_'.$exerciseId.'.zip';
+	
+	//DocumentManager::string_send_for_download($export,true,'qti2export_'.$exerciseId.'.xml');
+	DocumentManager::file_send_for_download($temp_zip_file,true,$name);
+	unlink($temp_zip_file);
+	unlink($temp_xml_file);
+	rmdir($temp_zip_dir);
 	exit(); //otherwise following clicks may become buggy
 }
 

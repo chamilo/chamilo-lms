@@ -60,7 +60,7 @@
 *
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 13256 2007-09-26 05:21:10Z yannoo $
+* 	@version $Id: admin.php 13302 2007-09-27 04:10:15Z yannoo $
 */
 
 
@@ -174,7 +174,24 @@ if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId']))
 {
 	require_once('export/qti2/qti2_export.php');
 	$export = export_question((int)$_GET['questionId'],true);
-	DocumentManager::string_send_for_download($export,true,'qti2export_q'.$_GET['questionId'].'.xml');
+	$qid = (int)$_GET['questionId'];
+	require_once(api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
+	$garbage_path = api_get_path(GARBAGE_PATH);
+	$temp_dir_short = uniqid();
+	$temp_zip_dir = $garbage_path."/".$temp_dir_short;
+	if(!is_dir($temp_zip_dir)) mkdir($temp_zip_dir);
+	$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
+	$temp_xml_file = $temp_zip_dir."/qti2export_".$qid.'.xml';
+	file_put_contents($temp_xml_file,$export);
+	$zip_folder=new PclZip($temp_zip_file);	
+	$zip_folder->add($temp_zip_dir, PCLZIP_OPT_REMOVE_PATH, $temp_zip_dir);
+	$name = 'qti2_export_'.$qid.'.zip';
+
+	DocumentManager::file_send_for_download($temp_zip_file,true,$name);
+	unlink($temp_zip_file);
+	unlink($temp_xml_file);
+	rmdir($temp_zip_dir);
+	//DocumentManager::string_send_for_download($export,true,'qti2export_q'.$_GET['questionId'].'.xml');
 	exit(); //otherwise following clicks may become buggy
 }
 

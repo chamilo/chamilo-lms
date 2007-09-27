@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 12974 2007-09-10 04:40:24Z yannoo $
+// $Id: CourseRestorer.class.php 13306 2007-09-27 07:16:52Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -611,7 +611,7 @@ class CourseRestorer
 			}
 			$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION, $this->course->destination_db);
 			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER, $this->course->destination_db);
-			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."'";
+			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."', picture='".addslashes($question->picture)."'";
 			api_sql_query($sql, __FILE__, __LINE__);
 			$new_id = Database::get_last_insert_id();
 			foreach ($question->answers as $index => $answer)

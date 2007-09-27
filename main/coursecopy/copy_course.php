@@ -1,5 +1,5 @@
 <?php
-// $Id: copy_course.php 12219 2007-05-01 18:46:59Z yannoo $
+// $Id: copy_course.php 13315 2007-09-27 08:17:12Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -47,6 +47,13 @@ require_once ('classes/CourseSelectForm.class.php');
 if (!api_is_allowed_to_edit())
 {
 	api_not_allowed(true);
+}
+
+//remove memory and time limits as much as possible as this might be a long process...
+if(function_exists('ini_set'))
+{
+	ini_set('memory_limit','256M');
+	ini_set('max_execution_time',1800);
 }
 
 $nameTools = get_lang('CopyCourse');

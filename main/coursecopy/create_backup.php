@@ -1,5 +1,5 @@
 <?php
-// $Id: create_backup.php 12597 2007-06-14 12:43:49Z elixir_inter $
+// $Id: create_backup.php 13315 2007-09-27 08:17:12Z yannoo $
 /*
 ============================================================================== 
 	Dokeos - elearning and course management software
@@ -43,6 +43,14 @@ if (!api_is_allowed_to_edit())
 {
 	api_not_allowed(true);
 }
+
+//remove memory and time limits as much as possible as this might be a long process...
+if(function_exists('ini_set'))
+{
+	ini_set('memory_limit','256M');
+	ini_set('max_execution_time',1800);
+}
+
 // section for the tabs
 $this_section=SECTION_COURSES;
 

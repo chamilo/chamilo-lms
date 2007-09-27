@@ -347,13 +347,12 @@ elseif (!empty($_POST['step5']))
 
 <div id="header">
 	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').implode('|',$update_from_version); ?></div>
-	<div class="clear"></div>
 	<div id="header2">&nbsp;</div>
 	<div id="header3">&nbsp;</div>
 </div>
 
 
-<form method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+<form style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 
 <div id="installation_steps">
 	<img src="../img/bluelogo.gif" hspace="10" vspace="10" alt="Dokeos logo" />
@@ -368,7 +367,7 @@ elseif (!empty($_POST['step5']))
 	</ol>
 </div>
 
-<table cellpadding="6" cellspacing="0" border="0" width="80%" align="center">
+<table cellpadding="6" cellspacing="0" border="0" width="75%" align="center">
 <tr>
   <td>
 	<input type="hidden" name="updatePath"           value="<?php if(!$badUpdatePath) echo htmlentities($proposedUpdatePath); ?>" />

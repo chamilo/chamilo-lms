@@ -22,7 +22,7 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 12263 2007-05-03 13:34:40Z elixir_julian $
+* 	@version $Id: hotpotatoes.php 13314 2007-09-27 08:16:19Z elixir_julian $
 */
 
 
@@ -245,18 +245,40 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 			  UPLOAD SECTION
 	 --------------------------------------*/
 	echo	"<!-- upload  -->\n",
-			"<td align=\"right\">\n",
-			"<form action=\"".api_get_self()."\" method=\"post\" enctype=\"multipart/form-data\">\n",
+			"<td align=\"left\" height=\"150\" style=\"background-image: url('../img/hotpotatoes.jpg'); background-repeat: no-repeat; background-position: 600px;\" valign=\"middle\">\n",
+			"<form action=\"".api_get_self()."\" method=\"post\" enctype=\"multipart/form-data\" >\n",
 			"<input type=\"hidden\" name=\"uploadPath\" value=\"\">\n",
 			"<input type=\"hidden\" name=\"fld\" value=\"$fld\">\n",
 			"<input type=\"hidden\" name=\"imgcount\" value=\"$imgcount\">\n",
 			"<input type=\"hidden\" name=\"finish\" value=\"$finish\">\n";
 	echo GenerateHiddenList($imgparams);
-	if ($finish==0){ echo get_lang('DownloadFile');}
+	/*if ($finish==0){ echo get_lang('DownloadFile');}
 	else {echo get_lang('DownloadImg');}
 	echo 	" : ",
 			"<input type=\"file\" name=\"userFile\">\n",
-			"<input type=\"submit\" name=\"submit\" value=\"".get_lang('Download')."\"><br/>\n";
+			"<input type=\"submit\" name=\"submit\" value=\"".get_lang('Send')."\"><br/>\n";*/
+	echo '<table>';
+		echo '<tr>';
+			echo '<td width="250">';
+				if ($finish==0){
+					echo get_lang('DownloadFile').' : ';
+				}
+				else{
+					echo get_lang('DownloadImg').' : ';
+				}
+			echo '</td>';
+			echo '<td>';
+				echo '<input type="file" name="userFile">';
+			echo '</td>';
+		echo '</tr>';
+		echo '<tr>';
+			echo '<td width="250">';
+			echo '</td>';
+			echo '<td>';
+				echo '<input type="submit" name="submit" value="'.get_lang('Send').'">';
+			echo '</td>';
+		echo '</tr>';
+	echo '</table>';
 ?>
 		</td>
 	</tr>

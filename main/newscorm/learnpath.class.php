@@ -7120,6 +7120,15 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			$this->error = 'PHP DOM functions not supported for PHP versions below 5.0';
 			return null;
 		}
+		//remove memory and time limits as much as possible as this might be a long process...
+		if(function_exists('ini_set'))
+		{
+			ini_set('memory_limit',-1);
+			ini_set('max_execution_time',600);
+		//}else{
+			//error_log('Scorm export: could not change memory and time limits',0);
+		}
+
 	 	//Create the zip handler (this will remain available throughout the method)
 		$garbage_path = api_get_path(GARBAGE_PATH);
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);

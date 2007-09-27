@@ -95,14 +95,26 @@ function ErrorHandler()
 	var errCode = API.LMSGetLastError().toString();
 	if(errCode != _NoError)
 	{
-		var errDescription = API.LMSGetErrorString(errCode);
-		if(_debug == true)
+		if(errCode == _NotImplementedError)
 		{
-			errDescription += "\n";
-			errDescription += api.LMSGetDiagnostic(null);
+			var errDescription = "The LMS doesn't support this feature";
+			if(_debug == true)
+			{
+				errDescription += "\n";
+				errDescription += api.LMSGetDiagnostic(null);
+			}
+			alert (errDescription);
 		}
-		alert (errDescription);
-	}
+		else
+		{
+			var errDescription = API.LMSGetErrorString(errCode);
+			if(_debug == true)
+			{
+				errDescription += "\n";
+				errDescription += api.LMSGetDiagnostic(null);
+			}
+			alert (errDescription);
+		}
 	return errCode;
 }
 /**

@@ -83,7 +83,7 @@ if(api_is_allowed_to_create_course())
 					INNER JOIN $tbl_course as course
 						ON course.code = course_rel_user.course_code
 				  	WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-				  	ORDER BY course.code";
+				  	ORDER BY course.title";
 	$resultNbCours = api_sql_query($sqlNbCours, __FILE__, __LINE__);
 	$a_courses = api_store_result($resultNbCours);
 	$nb_teacher_courses = count($a_courses);

@@ -463,7 +463,7 @@ if(!empty($_GET['student']))
 				$a_headerLearnpath = array(get_lang('Learnpath'),get_lang('Time'),get_lang('Progress'),get_lang('LastConnexion'));
 			
 			$sqlLearnpath = "	SELECT lp.name,lp.id
-								FROM ".$a_infosCours['db_name'].".".$tbl_course_lp." AS lp
+								FROM ".$a_infosCours['db_name'].".".$tbl_course_lp." AS lp ORDER BY lp.name ASC
 							";
 
 			$resultLearnpath = api_sql_query($sqlLearnpath);

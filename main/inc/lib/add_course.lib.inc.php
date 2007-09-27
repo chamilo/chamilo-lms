@@ -975,7 +975,8 @@ function update_Db_course($courseDbName)
 		"status			char(32) not null default 'Not attempted'," . //status for this item (SCORM)
 		"suspend_data	text null default ''," .
 		"lesson_location text null default ''," .
-		"core_exit		varchar(32) not null default 'none'" .
+		"core_exit		varchar(32) not null default 'none'," .
+		"max_score		varchar(8) default ''" .
 		")";
 	if(!api_sql_query($sql))
 	{

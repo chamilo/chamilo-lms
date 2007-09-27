@@ -24,24 +24,9 @@ INSERT INTO settings_current(variable,subkey,type,category,selected_value,title,
 INSERT INTO settings_options(variable,value,display_text) VALUES ('default_forum_view', 'flat', 'Flat');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('default_forum_view', 'threaded', 'Threaded');
 INSERT INTO settings_options(variable,value,display_text) VALUES ('default_forum_view', 'nested', 'Nested');
+
 -- xxSTATSxx
-
-CREATE TABLE `track_e_hotspot` (
-  `hotspot_id` int(11) NOT NULL auto_increment,
-  `hotspot_user_id` int(11) NOT NULL,
-  `hotspot_course_code` varchar(50) NOT NULL,
-  `hotspot_exe_id` int(11) NOT NULL,
-  `hotspot_question_id` int(11) NOT NULL,
-  `hotspot_answer_id` int(11) NOT NULL,
-  `hotspot_correct` tinyint(3) unsigned NOT NULL,
-  `hotspot_coordinate` varchar(50) NOT NULL,
-  PRIMARY KEY  (`hotspot_id`),
-  KEY `hotspot_course_code` (`hotspot_course_code`),
-  KEY `hotspot_user_id` (`hotspot_user_id`),
-  KEY `hotspot_exe_id` (`hotspot_exe_id`),
-  KEY `hotspot_question_id` (`hotspot_question_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
+CREATE TABLE track_e_hotspot (hotspot_id int NOT NULL auto_increment, hotspot_user_id int NOT NULL, hotspot_course_code varchar(50) NOT NULL, hotspot_exe_id int NOT NULL, hotspot_question_id int(11) NOT NULL, hotspot_answer_id int NOT NULL, hotspot_correct tinyint unsigned NOT NULL, hotspot_coordinate varchar(50) NOT NULL, PRIMARY KEY  (hotspot_id),  KEY hotspot_course_code (hotspot_course_code), KEY hotspot_user_id (hotspot_user_id), KEY hotspot_exe_id (hotspot_exe_id), KEY hotspot_question_id (hotspot_question_id));
 
 -- xxUSERxx
 
@@ -49,3 +34,4 @@ CREATE TABLE `track_e_hotspot` (
 ALTER TABLE survey ADD anonymous ENUM( '0', '1' ) NOT NULL DEFAULT '0';
 ALTER TABLE lp_item ADD max_time_allowed char(13) NULL DEFAULT '';
 ALTER TABLE item_property ADD INDEX (tool(20),ref);
+ALTER TABLE lp_item_view ADD max_score varchar(8) default '';

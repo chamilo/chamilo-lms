@@ -21,7 +21,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Text</font><br />
+				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Text</div>
 				    <br />
 				
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
@@ -61,7 +61,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Teacher explaining</font><br />
+				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Teacher explaining</div>
 				    <br />
 				
 				    <table width="720" cellspacing="1" cellpadding="5" border="0" align="left" summary="">
@@ -109,7 +109,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Comparison</font><br />
+				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Comparison</div>
 				    <br />
 				    
 				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip : </span>use this template to compare two sets of propositions.</span>
@@ -171,7 +171,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">A diagram explained</font><br />
+				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">A diagram explained</div>
 				    <br />
 				
 				    <table width="720" cellspacing="1" cellpadding="5" border="0" align="left" summary="">
@@ -223,7 +223,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Picture page</font><br />
+				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Picture page</div>
 				    <br />
 				
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
@@ -260,7 +260,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Flash animation page</font><br />
+				  <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Flash animation page</div>
 				    <br />
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
 				
@@ -306,7 +306,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 					    <title></title>
 					  </head>
 					  <body>
-					    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Listening comprehension</font><br />
+					    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Listening comprehension</div>
 					    <br />
 					    <table width="720" cellspacing="1" cellpadding="5" border="0" align="left" summary="">
 					
@@ -374,8 +374,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">On demand video</font><br />
-				    <br />
+				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">On demand video</div><br />
 				    <table width="720" cellspacing="1" cellpadding="10" border="0" align="left" summary="">
 				
 				      <tbody>
@@ -456,7 +455,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">A table<br><br></font>
+				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">A table<br></div>
 				    
 				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip</span> : to edit this table, click on the small arrows and cross-in-a-circle icons on the borders of the cells.<br />This will add /remove lines and columns. You can also right-click in the table to display the table and cell edit options.</span><br /><br />
 				    
@@ -613,9 +612,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Course preface</font><br />
-				    <br />
-				
+				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Course preface</div><br />
+				    
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
 				      <tbody>
 				        <tr>
@@ -662,9 +660,9 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Assignment description<br />
+				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Assignment description<br />
 
-				    <br /></font>
+				    </div>
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
 				      <tr>
 				        <td>
@@ -747,9 +745,8 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Resources</font><br />
-				    <br />
-				
+				    <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Resources</div><br />
+				    
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
 				      <tbody>
 				        <tr>
@@ -824,7 +821,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Frequently asked questions</font><br />
+				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Frequently asked questions</div>
 				    <br />
 				
 				    <table width="720" cellspacing="1" cellpadding="1" border="0" align="left" summary="">
@@ -880,7 +877,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 			<![CDATA[
 					<?php echo $css ?>
 				    
-				    <font size="5" style="font-weight: bold; color: rgb(192, 192, 192);">Certificate of completion<br><br></font>
+				   <div style="font-size:2em; font-weight: bold; color: rgb(192, 192, 192);">Certificate of completion<br></div>
 				    
 				    <span style="font-style: italic; font-size: 15px; "><span style="font-weight: bold">Tip</span> : edit this certificate and put it at the end of your learning path.<br />If you create pre-requisites in your learning path, the certificate will be visible only to ones who deserve it.</span><br /><br />
 				    

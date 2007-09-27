@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 13294 2007-09-27 02:14:48Z yannoo $
+<?php //$Id: agenda.inc.php 13322 2007-09-27 12:07:11Z elixir_julian $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1809,13 +1809,13 @@ function show_add_form($id = '')
 		$month	= date('m');
 		$year	= date('Y');
 		$hours	= 9;
-		$minutes= 0;
+		$minutes= '00';
 
 		$end_day	= date('d');
 		$end_month	= date('m');
 		$end_year	= date('Y');
 		$end_hours	= 17;
-		$end_minutes= 0;
+		$end_minutes= '00';
 	}
 	else
 	{

@@ -24,7 +24,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 12269 2007-05-03 14:17:37Z elixir_julian $
+* 	@version $Id: question_pool.php 13301 2007-09-27 03:47:39Z yannoo $
 */
 
 // name of the language file that needs to be included
@@ -312,7 +312,7 @@ if($is_allowedToEdit)
 ?>
 
   <td align="center">
-    <a href="<?php echo api_get_self(); ?>?exerciseId=<?php echo $exerciseId; ?>&delete=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo get_lang('Delete'); ?>"></a>
+    <a href="<?php echo api_get_self(); ?>?exerciseId=<?php echo $exerciseId; ?>&delete=<?php echo $row[id]; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo get_lang('Delete'); ?>"></a>
   </td>
 
 <?php

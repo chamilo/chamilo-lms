@@ -293,6 +293,7 @@ class ScormAnswerFillInBlanks extends Answer
      */
     function export()
     {
+    	global $charset;
     	$js = '';
     	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// get all enclosed answers
@@ -323,7 +324,7 @@ class ScormAnswerFillInBlanks extends Answer
 			$texstring=substr($answer,$startlocations,($endlocations-$startlocations)+1);
 			$answer = substr_replace($answer,'<input type="text" name="question_'.$this->questionId.'_fib_'.$i.'" id="question_'.$this->questionId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
 			$jstmp .= $i.',';
-			$jstmpc .= "'".htmlentities(substr($texstring,1,-1),ENT_QUOTES)."',";			
+			$jstmpc .= "'".htmlentities(substr($texstring,1,-1),ENT_QUOTES,$charset)."',";			
 	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionId.']['.$i.'] = '.$weights[$i-1].";\n";
 			$i++;
 			$startlocations=strpos($answer,'[');

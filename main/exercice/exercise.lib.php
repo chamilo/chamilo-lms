@@ -23,7 +23,7 @@
 * 	shows a question and its answers
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 13177 2007-09-21 14:50:21Z elixir_inter $
+* 	@version $Id: exercise.lib.php 13301 2007-09-27 03:47:39Z yannoo $
 */
 
 
@@ -48,27 +48,27 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$questionName=$objQuestionTmp->selectTitle();
 			$questionDescription=$objQuestionTmp->selectDescription();
 
-		$s="<tr>
-		  <td valign='top' colspan='2'>&nbsp;";
-		$questionName=api_parse_tex($questionName);
-		$s.=$questionName;
-		$s.="</td>
-		</tr>
-		<tr>
-		  <td valign='top' colspan='2'>
-			<i>";
-		$questionDescription=api_parse_tex($questionDescription);
-		$s.=$questionDescription;
-		$s.="</i>
-		  </td>
-		</tr>";
-
-		if(!empty($pictureName))
+			$s="<tr>
+			  <td valign='top' colspan='2'>&nbsp;";
+			$questionName=api_parse_tex($questionName);
+			$s.=$questionName;
+			$s.="</td>
+			</tr>
+			<tr>
+			  <td valign='top' colspan='2'>
+				<i>";
+			$questionDescription=api_parse_tex($questionDescription);
+			$s.=$questionDescription;
+			$s.="</i>
+			  </td>
+			</tr>";
+	
+			if(!empty($pictureName))
 			{
-			$s.="
-		<tr>
-		  <td align='center' colspan='2'><img src='../document/download.php?doc_url=%2Fimages%2F'".$pictureName."' border='0'></td>
-		</tr>";
+				$s.="
+				<tr>
+				  <td align='center' colspan='2'><img src='../document/download.php?doc_url=%2Fimages%2F'".$pictureName."' border='0'></td>
+				</tr>";
 			}
 
 		}  // end if(!$onlyAnswers)
@@ -86,30 +86,30 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 			$Select=array();
 		}
 		elseif($answerType == FREE_ANSWER)
-			{
+		{
 	        #$comment = $objAnswerTmp->selectComment(1);
 	        //
 
-	$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
-	$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
-	$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
-	$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
-	$oFCKeditor->Config['IMUploadPath'] = 'upload/test/';
-	$oFCKeditor->ToolbarSet = "Test";
-	$oFCKeditor->Width  = '80%';
-	$oFCKeditor->Height = '300';
-	$oFCKeditor->Value	= '' ;
+			$upload_path = api_get_path(REL_COURSE_PATH).$_SESSION['_course']['path'].'/document/';
+			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
+			$oFCKeditor->BasePath	= api_get_path(WEB_PATH) . 'main/inc/lib/fckeditor/' ;
+			$oFCKeditor->Config['CustomConfigurationsPath'] = api_get_path(REL_PATH)."main/inc/lib/fckeditor/myconfig.js";
+			$oFCKeditor->Config['IMUploadPath'] = 'upload/test/';
+			$oFCKeditor->ToolbarSet = "Test";
+			$oFCKeditor->Width  = '80%';
+			$oFCKeditor->Height = '300';
+			$oFCKeditor->Value	= '' ;
 
-	$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-	$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
-	$result_sql=api_sql_query($sql);
-	$isocode_language=mysql_result($result_sql,0,0);
-	$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
-
-	$s .= "<tr><td colspan='2'>".$oFCKeditor->CreateHtml()."</td></tr>";
+			$TBL_LANGUAGES = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+			$sql="SELECT isocode FROM ".$TBL_LANGUAGES." WHERE english_name='".$_SESSION["_course"]["language"]."'";
+			$result_sql=api_sql_query($sql);
+			$isocode_language=mysql_result($result_sql,0,0);
+			$oFCKeditor->Config['DefaultLanguage'] = $isocode_language;
+		
+			$s .= "<tr><td colspan='2'>".$oFCKeditor->CreateHtml()."</td></tr>";
 			//$s.="<tr><td colspan='2'><textarea cols='80' rows='10' name='choice[".$questionId."]'>$answer</textarea></td></tr>";
 
-			}
+		}
 
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
@@ -190,15 +190,15 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 				}
 				else
 				{
-		$s.="
-		<tr>
-		  <td colspan='2'>
-			<table border='0' cellpadding='0' cellspacing='0' width='100%'>
-			<tr>";
-		$answer=api_parse_tex($answer);
-		$s.="<td width='40%' valign='top'><b>".$cpt2."</b>.&nbsp;".$answer."</td>
-			  <td width='20%' align='center'>&nbsp;&nbsp;<select name='choice[".$questionId."][".$answerId."]'>
-				<option value='0'>--</option>";
+					$s.="
+					<tr>
+					  <td colspan='2'>
+						<table border='0' cellpadding='0' cellspacing='0' width='100%'>
+						<tr>";
+					$answer=api_parse_tex($answer);
+					$s.="<td width='40%' valign='top'><b>".$cpt2."</b>.&nbsp;".$answer."</td>
+						  <td width='20%' align='center'>&nbsp;&nbsp;<select name='choice[".$questionId."][".$answerId."]'>
+							<option value='0'>--</option>";
 
 		            // fills the list-box
 		            foreach($Select as $key=>$val)
@@ -208,16 +208,16 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 
 					}  // end foreach()
 
-		$s.="</select>&nbsp;&nbsp;</td>
-			  <td width='40%' valign='top'>";
-		if(isset($Select[$cpt2])) $s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
-			else $s.='&nbsp;';
-		$s.="
-		</td>
-			</tr>
-			</table>
-		  </td>
-		</tr>";
+					$s.="</select>&nbsp;&nbsp;</td>
+						  <td width='40%' valign='top'>";
+					if(isset($Select[$cpt2])) $s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+						else $s.='&nbsp;';
+					$s.="
+					</td>
+						</tr>
+						</table>
+					  </td>
+					</tr>";
 
 					$cpt2++;
 
@@ -229,18 +229,18 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false)
 						{
 
 
-		$s.="<tr>
-		  <td colspan='2'>
-			<table border='0' cellpadding='0' cellspacing='0' width='100%'>
-			<tr>
-			  <td width='60%' colspan='2'>&nbsp;</td>
-			  <td width='40%' valign='top'>";
-		$s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
-		$s.="</td>
-			</tr>
-			</table>
-		  </td>
-		</tr>";
+							$s.="<tr>
+							  <td colspan='2'>
+								<table border='0' cellpadding='0' cellspacing='0' width='100%'>
+								<tr>
+								  <td width='60%' colspan='2'>&nbsp;</td>
+								  <td width='40%' valign='top'>";
+							$s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+							$s.="</td>
+								</tr>
+								</table>
+							  </td>
+							</tr>";
 
 
 							$cpt2++;

@@ -1568,7 +1568,7 @@ function api_not_allowed($print_headers = false)
 			header('location: '.$home_url.'user_portal.php');
 		}else{
 			echo '<div align="center">';
-			Display :: display_error_message('<p>Either you are not allowed here or your session has expired.<br/><br/><a href="'.$home_url.'">Please try to login again from the homepage</a><br/>',false);
+			Display :: display_error_message('<p>'.get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br/>',false);
 			echo '</div>';
 		}
 		die();
@@ -1583,9 +1583,9 @@ function api_not_allowed($print_headers = false)
 		$form->addElement('password','password','',array('size'=>15));
 		$form->addElement('submit','submitAuth',get_lang('Ok'));
 		$test = $form->return_form();
-		if($print_headers){Display::display_header();}
+		if(!headers_sent() or $print_headers){Display::display_header();}
 		echo '<div align="center">';
-		Display :: display_error_message("<p>Either you are not allowed here or your session has expired.<br/><br/>Please try to login again using the following form: <br/>".$test,false);
+		Display :: display_error_message('<p>'.get_lang('NotAllowed').'<br/><br/>'.get_lang('PleaseLoginAgainFromFormBelow').'<br/>'.$test,false);
 		echo '</div>';
 		$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
 		if($print_headers){Display::display_footer();}
@@ -1594,7 +1594,7 @@ function api_not_allowed($print_headers = false)
 		//if no course ID was included in the requested URL, redirect to homepage
 		if($print_headers){Display::display_header();}
 		echo '<div align="center">';
-		Display :: display_error_message('<p>Either you are not allowed here or your session has expired.<br/><br/><a href="'.$home_url.'">Please try to login again from the homepage</a><br/>',false);
+		Display :: display_error_message('<p>'.get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br/>',false);
 		echo '</div>';
 		if($print_headers){Display::display_footer();}
 		die();

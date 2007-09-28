@@ -6,7 +6,7 @@
  */
  
 
-$language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm');
+$language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm', 'learnpath');
 $cidReset = true;
 include ('../inc/global.inc.php');
 include_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');

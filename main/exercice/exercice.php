@@ -33,7 +33,7 @@ $language_file='exercice';
 
 require_once('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
-api_protect_course_script();
+api_protect_course_script(true);
 
 $show=(isset($_GET['show']) && $_GET['show'] == 'result')?'result':'test'; // moved down to fix bug: http://www.dokeos.com/forum/viewtopic.php?p=18609#18609
 

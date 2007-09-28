@@ -822,7 +822,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	//fields for the four standard Dokeos databases
 	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;');
 	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;');
-	if($installType == 'update')
+	if($installType == 'update' && in_array($_POST['old_version'],$update_from_version_6))
 	{
 		display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;');
 	}

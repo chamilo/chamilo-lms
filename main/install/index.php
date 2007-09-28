@@ -99,9 +99,18 @@ $update_from_version_6=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
 //upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
 $update_from_version_8=array('1.8','1.8.2','1.8.3');
 $my_old_version = '';
+$tmp_version = get_config_param('dokeos_verion');
 if(!empty($_POST['old_version']))
 {
 	$my_old_version = $_POST['old_version'];
+}
+elseif(!empty($dokeos_version)) //variable coming from installedVersion, normally
+{
+	$my_old_version = $dokeos_version;
+}
+elseif(!empty($tmp_version))
+{
+	$my_old_version = $tmp_version;
 }
 $new_version = '1.8.4';
 $new_version_stable = true;
@@ -146,7 +155,6 @@ if($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_6
 			}			
 			if(file_exists($proposedUpdatePath))
 			{
-				$my_old_version = get_config_param('dokeos_version',$proposedUpdatePath);
 				if(in_array($my_old_version,$update_from_version_8))
 				{
 					$_POST['step2']=1;
@@ -210,12 +218,11 @@ else
 	$updateFromConfigFile=$_GET['updateFromConfigFile'];
 }
 
-/* 1.8.x
-if($installType=='update')
+if($installType=='update' && in_array($my_old_version,$update_from_version_8))
 {
 	include_once('../inc/conf/configuration.php');
 }
-*/
+
 if(!isset($_GET['running']))
 {
 	$dbHostForm='localhost';

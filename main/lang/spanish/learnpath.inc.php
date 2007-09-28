@@ -178,4 +178,11 @@ $WelcomeWoogieSubtitle = "Un conversor de Word a Itinerarios de aprendizaje";
 $WelcomeWoogieConverter = "Bienvenido al conversor Woogie<ul type=\\\"1\\\"><li>Elegir un archivo .doc, .sxw, .odt<li>Enviarlo a Woogie. Será convertido en un Itinerario de aprendizaje SCORM <li>Luego, podrá añadirle comentarios de audio en cada página e insertar tests y otras actividades entre las páginas</ul>";
 $WoogieError = "Error durante la conversión del documento word. Por favor, compruebe si hay caracteres especiales en el nombre de su documento.";
 $WordConvert = "Conversión Word";
+$Order = "Orden";
+$InteractionID = "ID de Interacción";
+$TimeFinished = "Tiempo (finalizado en...)";
+$CorrectAnswers = "Respuestas correctas";
+$StudentResponse = "Respuestas del alumno";
+$LatencyTimeSpent = "Tiempo empleado";
+$Result = "Resultado";
 ?>

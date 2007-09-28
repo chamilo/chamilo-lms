@@ -435,4 +435,6 @@ $MainNavigation = "Main navigation";
 $None = "None";
 $SeeDetail = "See detail";
 $GroupSingle = "Group";
+$PleaseLoginAgainFromHomepage = "Please try to login again from the homepage";
+$PleaseLoginAgainFromFormBelow = "Please try to login again using the form below";
 ?>

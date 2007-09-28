@@ -149,6 +149,7 @@ $DestDirectoryDoesntExist = "Docelowy folder nie istnieje";
 $Courses = "kursów";
 $In = "w";
 $langShowAll = "Poka&#380; wszystkie";
+$langPage = "Strona";
 $englishLangName = "angielski";
 $Home = "Home";
 $langAreYouSureToDelete = "Jeste&#347; pewien &#380;eby skasowa&#263;";

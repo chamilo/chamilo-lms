@@ -94,7 +94,7 @@ $AllowUserEditAnnouncementActivate = "Activer l\'édition par les utilisateurs";
 $AllowUserEditAnnouncementDeactivate = "Désactiver l\'édition par les utilisateurs";
 $OrInTime = "Soit dans";
 $CourseRegistrationPassword = "Mot de passe du cours";
-$langDescriptionDeleteCourse = "Cliquez sur ce lien afin d’éliminer toute trace du cours sur le serveur.<br><br>Cette fonctionnalité est à manier avec une extrême précaution !";
-$langDescriptionCopyCourse = "Dokeos introduit la possibilité de dupliquer tout ou partie d’un cours existant vers un autre cours, qui peut être initialement vide.<br>Le seul préalable à cette manipulation est de disposer d’un cours contenant des documents, annonces, forums… et d’un second cours ne contenant pas les éléments du premier !";
-$DescriptionRecycleCourse = "Cet outil vide le cours des éléments sélectionnés, ou de l’ensemble des éléments qu’il contient. Il supprime les documents, les forums, liens… Cette procédure peut être mise en oeuvre à l’issue d’une formation, ou d’une année universitaire.<br>Bien entendu, avant de vider le cours, vous aurez pris soin d’effectuer une sauvegarde complète !";
+$langDescriptionDeleteCourse = "Cliquez sur ce lien afin d\'éliminer toute trace du cours sur le serveur.<br /><br />Cette fonctionnalité est à manier avec une extrême précaution !";
+$langDescriptionCopyCourse = "Dokeos introduit la possibilité de dupliquer tout ou partie d\'un cours existant vers un autre cours, qui peut être initialement vide.<br />Le seul préalable à cette manipulation est de disposer d\'un cours contenant des documents, annonces, forums, ... et d\'un second cours ne contenant pas les éléments du premier !";
+$DescriptionRecycleCourse = "Cet outil vide le cours des éléments sélectionnés, ou de l\'ensemble des éléments qu\'il contient. Il supprime les documents, les forums, liens... Cette procédure peut être mise en oeuvre à l\'issue d\'une formation, ou d\'une année universitaire.<br />Bien entendu, avant de vider le cours, vous aurez pris soin d\'effectuer une sauvegarde complète !";
 ?>

@@ -419,6 +419,7 @@ $DateEnd = "Data zako&#324;czenia";
 $SessionList = "Lista sesji";
 $NextStep = "Nast&#281;pny krok";
 $keyword = "s&#322;owo kluczowe";
+$Confirm = "Potwierd&#378;";
 $InvalidExtension = "Z&#322;e rozszerzenie";
 $HomepageView2column = "Widok dwukolumnowy";
 $HomepageView3column = "Widok trzykolumnowy";

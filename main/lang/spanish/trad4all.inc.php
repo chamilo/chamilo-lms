@@ -436,4 +436,6 @@ $MainNavigation = "Navegación principal";
 $None = "Ninguno";
 $SeeDetail = "Ver detalles";
 $GroupSingle = "Grupo";
+$PleaseLoginAgainFromHomepage = "Por favor, pruebe a identificarse de nuevo desde la página principal de la plataforma";
+$PleaseLoginAgainFromFormBelow = "Por favor, pruebe a identificarse de nuevo usando el formulario inferior";
 ?>

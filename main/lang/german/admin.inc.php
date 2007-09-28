@@ -668,4 +668,6 @@ $TabsMyAgenda = "Tab \"Meine Agenda\"";
 $NoticeWillBeNotDisplayed = "Die Nachricht wird nicht auf der Homepage angezeigt";
 $LetThoseFieldsEmptyToHideTheNotice = "Diese Felder leer lassen, um Nachricht zu verbergen";
 $Ppt2lpVoiceRecordingNeedsRed5 = "Die Voice Recorder Funktion im Lernpfad Editor beruht auf einem Red5 Streaming Server. Die Parameter dieses Servers können im Videokonferenz Teil auf dieser Seite konfiguriert werden.";
+$PlatformCharsetTitle = "Zeichensatz";
+$PlatformCharsetComment = "Der Zeichensatz bestimmt die Art und Weise, in der bestimmte Sprachen in Dokeos dargestellt werden. Wenn man z.B. kyrillische oder japanische Zeichen benutzt, sollte man vielleicht den Zeichensatz ändern. Für englische, lateinische und westeuropäische Schriftzeichen sollte der Default Zeichensatz ISO-8859-15 korrekt sein";
 ?>

@@ -97,7 +97,7 @@ $langAnd = "et";
 $langChoice = "Votre choix";
 $langFinish = "Terminer";
 $langCancel = "Annuler";
-$langNotAllowed = "Vous n\'êtes pas autorisé à accéder à cette section";
+$langNotAllowed = "Vous n\'êtes pas autorisé à accéder à cette page. Peut-être votre session a-t-elle expiré?";
 $langNotLogged = "Vous n\'êtes pas identifié";
 $langManager = "Responsable";
 $langOptional = "Facultatif";
@@ -433,4 +433,6 @@ $VisibilityChanged = "La visibilité a bien été changée";
 $None = "Aucun";
 $SeeDetail = "Voir détail";
 $GroupSingle = "Groupe";
+$PleaseLoginAgainFromHomepage = "Veuillez vous identifier à nouveau depuis la page d\'accueil";
+$PleaseLoginAgainFromFormBelow = "Veuillez vous identifier à nouveau en utilisant le formulaire suivant";
 ?>

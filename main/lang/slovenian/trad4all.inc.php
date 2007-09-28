@@ -435,4 +435,6 @@ $MainNavigation = "Osnovna izbira";
 $None = "Brez";
 $SeeDetail = "Poglej podrobnosti";
 $GroupSingle = "Skupina";
+$PleaseLoginAgainFromHomepage = "Prosimo, da se poskušate ponovno prijaviti preko domaèe strani portala";
+$PleaseLoginAgainFromFormBelow = "Prosimo, da se skušate ponovno prijaviti preko spodnje prijavne forme";
 ?>

@@ -675,4 +675,6 @@ $TabsMyAgenda = "Pestaña Mi agenda";
 $NoticeWillBeNotDisplayed = "La noticia no será mostrada en la página principal";
 $LetThoseFieldsEmptyToHideTheNotice = "Deje estos campos vacíos si no quiere mostrar la noticia";
 $Ppt2lpVoiceRecordingNeedsRed5 = "La funcionalidad de grabación de voz en el Editor de Itinerarios de aprendizaje depende un servidor de streaming Red5. Los parámetros de este servidor pueden configurarse en la sección de videoconferencia de esta misma página.";
+$PlatformCharsetTitle = "Juego de caracteres";
+$PlatformCharsetComment = "El juego de caracteres es el que controla la manera en que determinados idiomas son mostrados en Dokeos. Si, por ejemplo, utiliza caracteres rusos o japoneses, es posible que quiera cambiar este juego.  Para todos los caracteres anglosajones, latinos y de Europa Occidental,  el juego por defecto iso-8859-15 debe ser el correcto.";
 ?>

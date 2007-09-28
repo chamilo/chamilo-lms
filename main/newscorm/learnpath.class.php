@@ -3965,7 +3965,9 @@ class learnpath {
 			$dir = '/';
 		}
 		
-		$title		= replace_dangerous_char($_POST['title']);
+		//stripslashes before calling replace_dangerous_char() because $_POST['title']
+		//is already escaped twice when it gets here
+		$title		= replace_dangerous_char(stripslashes($_POST['title']));
 		$filename	= $title;
 		$content	= $_POST['content_lp'];
 		

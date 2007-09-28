@@ -1141,20 +1141,16 @@ function get_lang($variable, $notrans = 'DLTT')
 	{
 		if (!is_array($language_files))
 		{
-			include_once (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_files.".inc.php");
+			include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_files.".inc.php");
 		}
 		else
 		{
 			foreach ($language_files as $index => $language_file)
 			{
-				include_once (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_file.".inc.php");
+				include (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/".$language_file.".inc.php");
 			}
 		}
 	}
-	//general language variables
-	include_once (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/trad4all.inc.php");
-	//notification (what's new) language variables
-	include_once (api_get_path(SYS_CODE_PATH)."lang/".$language_interface."/notification.inc.php");
 	@ eval ('$langvar = $'.$variable.';'); // Note (RH): $$var doesn't work with arrays, see PHP doc
 	if (isset ($langvar) && is_string($langvar) && strlen($langvar) > 0)
 	{
@@ -1167,6 +1163,14 @@ function get_lang($variable, $notrans = 'DLTT')
 	}
 	if ($notrans != 'DLTT')
 		return $ot.$variable.$ct;
+	if (!is_array($language_files))
+	{
+		$language_file = $language_files;
+	}
+	else
+	{
+		$language_file = implode('.inc.php',$language_files);
+	}
 	return $ot.$variable.$ct."<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".$language_file.".inc.php&amp;variable=$".$variable."&amp;language=".$language_interface."\" style=\"color:#FF0000\"><strong>#</strong></a>";
 }
 

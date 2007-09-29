@@ -189,7 +189,7 @@ function api_block_anonymous_users()
 {
 	global $_user;
 
-	if (!(isset ($_user['user_id']) && $_user['user_id']))
+	if (!(isset ($_user['user_id']) && $_user['user_id']) || api_is_anonymous())
 	{
 		include (api_get_path(INCLUDE_PATH)."header.inc.php");
 		api_not_allowed();

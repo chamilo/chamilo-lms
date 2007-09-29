@@ -209,6 +209,7 @@ $YourStatistics = "Vos statistiques";
 $CoachList = "Liste des coachs";
 $CoachStudents = "Etudiants du coach";
 $NoLearningPath = "Pas de parcours pédagogiques";
+$SessionCourses = "Session de cours";
 $NoUsersInCourseTracking = "Ici vous trouverez le suivi de tous les apprenants inscrits à votre cours.";
 $AvgTimeSpentInTheCourse = "Temps moyen passé dans le cours";
 ?>

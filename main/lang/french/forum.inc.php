@@ -1,6 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ForumDeleted = "Forum supprimé";
+$ForumCategoryDeleted = "Catégorie de forum supprimée";
+$ForumBlocked = "Forum bloqué";
 $Forum = "Forum";
 $AddForumCategory = "Ajouter une nouvelle catégorie de forum";
 $AddForum = "Ajouter un nouveau forum";
@@ -77,4 +80,7 @@ $PostVisibilityChanged = "La visibilité du message a bien été changée";
 $PostDeleted = "Le message a bien été supprimé";
 $MakeInvisible = "Rendre invisible";
 $ThreadCanBeFoundHere = "Le sujet est accessible à cette adresse";
+$MakeVisible = "Rendre visible";
+$DeleteCompleteThread = "Supprimer le fil de discussion en entier?";
+$PostDeletedSpecial = "Message spécial supprimé";
 ?>

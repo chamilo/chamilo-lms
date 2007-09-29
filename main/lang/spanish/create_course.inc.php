@@ -2,12 +2,12 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langProfessors = "Profesor(es)";
-$langExplanation = "Una vez que haya pulsado Aceptar, se creará el sitio web de un curso que incluirá: Foro, Agenda, Documentos, Herramienta de autor SCORM, etc. Su identificación como creador de este sitio le permitirá modificarlo según sus necesidades.";
+$langExplanation = "Una vez que haya pulsado Aceptar, se creará el sitio web de un curso que contendrá: un foro, una agenda, un gestor de documentos, la posibilidad de importar y crear cursos SCORM, etc. Su identificación como creador de este sitio le permitirá modificarlo según sus necesidades.";
 $langEmpty = "Usted no ha rellenado todos los campos.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.<br>Si usted no conoce el código de su curso, consulte el programa del curso";
 $langCodeTaken = "Este código de curso se utiliza ya en otro curso.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.";
 $langFormula = "Cordialmente, vuestro profesor";
 $langMessage = "Cuando suprima este foro de pruebas, también suprimirá todos los mensajes que contenga.";
-$langExerciceEx = "Ejemplo de ejercicio";
+$langExerciceEx = "Ejercicio de ejemplo";
 $langAntique = "Historia de la filosofía clásica";
 $langSocraticIrony = "La ironía socrática consiste en...";
 $langManyAnswers = "(varias respuestas correctas son posibles)";
@@ -48,7 +48,7 @@ $langCreateSite = "Crear el sitio de un curso";
 $langFieldsRequ = "Todos los campos son obligatorios";
 $langEx = "Por ej: <i>Historia de la literatura</i>";
 $langFac = "Categoría";
-$langTargetFac = "Este campo puede contener la facultad, el departamento o cualquier otra categoría en la que se incluya el curso";
+$langTargetFac = "Este campo puede contener la facultad, el departamento o cualquier otra categoría de la que forme parte el curso";
 $langMax = "max. 12 caracteres, p. ej.<i>ROM2121</i>";
 $langDoubt = "En caso de dudas sobre el título exacto del curso o el código que le corresponde consultar el";
 $langProgram = "Programa del curso</a>. Si el sitio que usted quiere crear no corresponde a un curso existente, usted puede inventar uno. Por ejemplo <i>INNOVACION</i> si se trata de un programa de formación sobre gestión de la innovación";

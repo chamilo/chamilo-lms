@@ -433,4 +433,8 @@ $ResetLink = "Clique aqui para recuperar a sua senha";
 $VisibilityChanged = "A visibilidade foi alterada.";
 $MainNavigation = "Navegação principal";
 $None = "Nenhum";
+$SeeDetail = "Ver Detalhes";
+$GroupSingle = "Grupo";
+$PleaseLoginAgainFromHomepage = "Por favor tente de novo o login a partir da homepage";
+$PleaseLoginAgainFromFormBelow = "Por favor tente de novo o login usando o formulário em baixo";
 ?>

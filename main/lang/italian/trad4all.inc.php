@@ -435,4 +435,6 @@ $MainNavigation = "Navigazione principale";
 $None = "Niente";
 $SeeDetail = "Vedi dettagli";
 $GroupSingle = "Gruppo";
+$PleaseLoginAgainFromHomepage = "Ti prego di accedere nuovamente al sito dalla pagina Home iniziale";
+$PleaseLoginAgainFromFormBelow = "Ti prego di accedere al sito compilando il modulo sottostante";
 ?>

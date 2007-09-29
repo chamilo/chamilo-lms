@@ -1,80 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head>
-
-  
   <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
-
-
-
-  
-  
-  
   <title>Dokeos 1.8.4 installation guide</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection">
-
-
-  
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
-
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
-  <meta name="GENERATOR" content="OpenOffice.org 2.2  (Linux)">
-  <meta name="AUTHOR" content="thomas de praetere">
-  <meta name="CREATED" content="20060828;10440000">
-  <meta name="CHANGEDBY" content="thomas">
-  <meta name="CHANGED" content="20070925;20360200">
   <style type="text/css">
 	<!--
 		@page { size: 21cm 29.7cm; margin: 2cm }
 		PRE { font-family: "Courier New", monospace }
 		P { margin-bottom: 0.21cm }
 	--></style>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
-  <meta name="GENERATOR" content="OpenOffice.org 2.2  (Linux)">
-  <meta name="AUTHOR" content="thomas de praetere">
-  <meta name="CREATED" content="20060828;10440000">
-  <meta name="CHANGEDBY" content="thomas">
-  <meta name="CHANGED" content="20070925;20360200">
-  <style type="text/css">
-	<!--
-		@page { size: 21cm 29.7cm; margin: 2cm }
-		PRE { font-family: "Courier New", monospace }
-		P { margin-bottom: 0.21cm }
-	--></style>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
-  <meta name="GENERATOR" content="OpenOffice.org 2.2  (Linux)">
-  <meta name="AUTHOR" content="thomas de praetere">
-  <meta name="CREATED" content="20060828;10440000">
-  <meta name="CHANGEDBY" content="thomas">
-  <meta name="CHANGED" content="20070925;20360200">
-  <style type="text/css">
-	<!--
-		@page { size: 21cm 29.7cm; margin: 2cm }
-		PRE { font-family: "Courier New", monospace }
-		P { margin-bottom: 0.21cm }
-	--></style>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
-  <meta name="GENERATOR" content="OpenOffice.org 2.2  (Linux)">
-  <meta name="AUTHOR" content="thomas de praetere">
-  <meta name="CREATED" content="20060828;10440000">
-  <meta name="CHANGEDBY" content="thomas">
-  <meta name="CHANGED" content="20070925;20360200">
-  <style type="text/css">
-	<!--
-		@page { size: 21cm 29.7cm; margin: 2cm }
-		PRE { font-family: "Courier New", monospace }
-		P { margin-bottom: 0.21cm }
-	--></style>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
-  <meta name="GENERATOR" content="OpenOffice.org 2.2  (Linux)">
-  <meta name="AUTHOR" content="thomas de praetere">
-  <meta name="CREATED" content="20060828;10440000">
-  <meta name="CHANGEDBY" content="thomas">
-  <meta name="CHANGED" content="20070925;20360200">
-  <style type="text/css">
-	<!--
-		@page { size: 21cm 29.7cm; margin: 2cm }
-		PRE { font-family: "Courier New", monospace }
-		P { margin-bottom: 0.21cm }
-	--></style><meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8"><meta name="GENERATOR" content="OpenOffice.org 2.2  (Linux)"><meta name="AUTHOR" content="thomas de praetere"><meta name="CREATED" content="20060828;10440000"><meta name="CHANGEDBY" content="thomas"><meta name="CHANGED" content="20070925;17363500"></head>
+<meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
+	
+</head>
 <body>
 
 
@@ -480,10 +417,10 @@ directories. You can still recover them from your backup if you have made it.
 and most important thing to do is to *move* your current directory to another 
 place.<br> An easy way to do that is to create a subdirectory called 
 "old_version" in your current Dokeos directory and move everything in 
-there using a simple copy command (i.e. under Linux: mkdir old_version; 
-mv * old_verion/)<br><br>The complete process is as follow:
+there using a simple "move" command (i.e. under Linux: mkdir old_version; 
+mv * old_verion/), then make the old_version/ directory writeable by the web server so that courses/ and upload/ directories can be moved from the old to the new installation.<br /><br />The complete process is as follow:
 <ul><li> move the current Dokeos directory contents to a subdirectory called 
-<em>old_version</em></li><li> download the Dokeos 1.8.4 install package from the 
+<em>old_version</em> and make it writeable by the web server. This is important to allow the move of the courses/ and upload/ directories to the new install</li><li> download the Dokeos 1.8.4 install package from the 
 <a href="http://www.dokeos.com/download.php">Dokeos download page</a></li><li> unzip the new files of Dokeos 1.8.4 in the main Dokeos directory. The 
 new directory <em>main</em> should be located directly inside your 
 Dokeos root folder</li><li> point your browser on your portal URL</li><li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.6.x</span> and confirm the 
@@ -534,7 +471,7 @@ The following quick-upgrade guide assumes that:
 <br>
 
 On the command-line, type:
-<ul><li>cd /tmp</li><li>mysqldump -u dokeos_db_user -p --all-databases --result-file=/home/dokeos_user/dokeos_old.sql</li><li>cp -ra /var/www/dokeos /home/dokeos_user/backup_dokeos</li><li>mkdir /var/www/dokeos/old_version</li><li>mv /var/www/dokeos/* /var/www/dokeos/old_version/</li><li>wget http://www.dokeos.com/download/dokeos-1.8.4.zip</li><li>unzip dokeos-1.8.4.zip</li><li>cp -r dokeos/* /var/www/dokeos/</li><li>sudo chmod -R 0777 /var/www/dokeos/</li></ul>
+<ul><li>cd /tmp</li><li>mysqldump -u dokeos_db_user -p --all-databases --result-file=/home/dokeos_user/dokeos_old.sql</li><li>cp -ra /var/www/dokeos /home/dokeos_user/backup_dokeos</li><li>mkdir /var/www/dokeos/old_version</li><li>mv /var/www/dokeos/* /var/www/dokeos/old_version/</li><li>chmod -R 0777 /var/www/dokeos/old_version/</li><li>wget http://www.dokeos.com/download/dokeos-1.8.4.zip</li><li>unzip dokeos-1.8.4.zip</li><li>cp -r dokeos/* /var/www/dokeos/</li><li>sudo chmod -R 0777 /var/www/dokeos/</li><li>rm dokeos-1.8.4.zip</li><li>rm -r dokeos/</li></ul>
 <br>
 Then:
 <ul><li>Direct your browser to http://www.portalurl.com/main/install/</li><li>Proceed with the installation</li><li>Review the directories permissions</li></ul>
@@ -895,7 +832,7 @@ install the PECL library for PHP. <br><br><span style="font-weight: bold;">NOTE<
 
 <br>
 
-<span style="font-weight: bold;"><br></span><h3>7.2.&nbsp;Audio-recorder</h3>See below : Videoconferencing<br><br><hr style="width: 100%; height: 2px;"><h2><a name="8._Videoconferencing_and_audio-recorder"></a>8. Videoconferencing and audio-recorder</h2>We will now install and configure RED5 Open Source Flash server § the Dokeos RED5 webapplication. These will provide both <br><ul><li>Videoconferencing and</li><li>Audio recorder for Oogie</li></ul>
+<span style="font-weight: bold;"><br></span><h3>7.2.&nbsp;Audio-recorder</h3>See below : Videoconferencing<br><br><hr style="width: 100%; height: 2px;"><h2><a name="8._Videoconferencing_and_audio-recorder"></a>8. Videoconferencing and audio-recorder</h2>We will now install and configure RED5 Open Source Flash server ï¿½ the Dokeos RED5 webapplication. These will provide both <br><ul><li>Videoconferencing and</li><li>Audio recorder for Oogie</li></ul>
 
 Oogie allows you to convert slides but also <br>
 
@@ -934,8 +871,8 @@ these paths if Dokeos is not installed into the root of your webserver.<br>url:/
 should tell Dokeos the configuration of you red5 server. This is done
 using the administration page of Dokeos. In the first field below the
 two url, set the public ip of your red5 server. The second field <br>will
-contain the value of «&nbsp;rtmp.port&nbsp;» from you red5
-configuration and the last field will contains «&nbsp;rtmpt.port&nbsp;»
+contain the value of ï¿½&nbsp;rtmp.port&nbsp;ï¿½ from you red5
+configuration and the last field will contains ï¿½&nbsp;rtmpt.port&nbsp;ï¿½
 value.<span style="font-style: italic;"><br><br></span><hr>
 Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium<br>
 

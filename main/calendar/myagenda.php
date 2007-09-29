@@ -67,7 +67,7 @@ $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require ('../inc/global.inc.php');
 $this_section = SECTION_MYAGENDA;
-
+api_block_anonymous_users();
 require (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 // setting the name of the tool
 $nameTools = get_lang('MyAgenda');

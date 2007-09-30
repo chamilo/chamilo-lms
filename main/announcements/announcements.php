@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 13294 2007-09-27 02:14:48Z yannoo $
+<?php //$Id: announcements.php 13363 2007-09-30 07:00:26Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1264,7 +1264,7 @@ if ($message == true)
 				list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
 				list($year, $month, $day) = explode("-", $last_post_date);
 				list($hour, $min) = explode(":", $last_post_time);
-				$announceDate = mktime($hour, $min, 0, $month, $day, $year);
+				$announceDate = mktime((int)$hour, (int)$min, 0, (int)$month, (int)$day, (int)$year);
 
 				// the styles
 				if ($myrow['visibility']=='0')

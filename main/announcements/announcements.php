@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 13363 2007-09-30 07:00:26Z yannoo $
+<?php //$Id: announcements.php 13364 2007-09-30 07:06:37Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -677,9 +677,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 								$emailsubjbericht = get_lang('professorMessage');
 								$emailSubject = $emailsubjbericht. " - ".$_course['official_code'];
 
-	                            $db_name = $_REQUEST['db_name'];
-
-
+								$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
 
 	                            if($surveyid) {
 	                            	$newContentone=str_replace("#page#","choose_language.php",$newContent);
@@ -717,7 +715,7 @@ if(eregi('^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z
 
 									$newmail = api_mail_html($myrow["lastname"].' '.$myrow["firstname"], $myrow["email"],    $emailSubject, $mail_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail'],$headers);
 	                            }
-								$sql_date="SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
+								$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";
 								$res_date=api_sql_query($sql_date);
 								$obj_date=mysql_fetch_object($res_date);
 								$end_date=$obj_date->avail_till;

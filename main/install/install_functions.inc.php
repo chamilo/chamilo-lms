@@ -920,7 +920,7 @@ function display_configuration_parameter($install_type, $parameter_name, $form_f
  */
 function display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm)
 {
-	if($installType != 'update')
+	if($installType != 'update' && empty($languageForm))
 	{
 		$languageForm = $_SESSION['install_language'];
 	}

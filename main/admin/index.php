@@ -1,4 +1,4 @@
-<?php // $Id: index.php 13102 2007-09-19 21:35:38Z yannoo $
+<?php // $Id: index.php 13365 2007-09-30 07:12:50Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -36,7 +36,6 @@ $cidReset=true;
 
 // including some necessary dokeos files
 require('../inc/global.inc.php');
-include_once('../inc/installedVersion.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 
 // setting the section (for the tabs)
@@ -343,7 +342,8 @@ function check_dokeos_version2()
 */
 function check_dokeos_version()
 {
-	global $dokeos_version; // the dokeos version of your installation
+	global $_configuration; // the dokeos version of your installation
+	$dokeos_version = $_configuration['dokeos_version'];
 
 	if ($fsock = @fsockopen('www.dokeos.com', 80, $errno, $errstr))
 	{

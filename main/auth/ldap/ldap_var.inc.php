@@ -1,4 +1,4 @@
-<?php // $Id: ldap_var.inc.php 10060 2006-11-20 19:18:00Z pcool $
+<?php // $Id: ldap_var.inc.php 13366 2007-10-01 01:52:09Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -60,18 +60,20 @@ $ldapport = "port";
 //domain
 $ldapDc = "OU";
 
-//older variables for French Univ. Jean Monet code
-
-// Variable pour l'annuaire LDAP Enseignant
+// Variable for the teacher's LDAP directory
 $LDAPserv = $ldaphost;
 $LDAPport = $ldapport;
 $LDAPbasedn = $ldapDc;
 
+//search term for students
 $critereRechercheEtu = "employeeType";
 
-//ajout C2M pour utiliser replica en cas de problème
+//additional server params for use of replica in case of problems
 $LDAPserv2 = "adresse replica LDAP";
 $LDAPport2 = "port replica";
 
+//protocol version - set to 3 for LDAP 3
+$LDAPversion = 2;
 
+$PLACEHOLDER = "PLACEHOLDER";
 ?>

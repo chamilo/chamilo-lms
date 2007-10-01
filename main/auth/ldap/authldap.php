@@ -1,4 +1,4 @@
-<?php // $Id: authldap.php 10060 2006-11-20 19:18:00Z pcool $
+<?php // $Id: authldap.php 13366 2007-10-01 01:52:09Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -33,7 +33,7 @@
 =======================================================================
 	- function loginWithLdap($login, $password)
 	- function findUserInfoInLdap ($login)
-	- function putUserInfoInClaroline ($login, $infoArray)
+	- function putUserInfoInDokeos ($login, $infoArray)
 
 	known bugs
 	----------
@@ -74,203 +74,192 @@
 
 include ('ldap_var.inc.php');
 
-	/*
-	----------------------------------------------------
-		Necessary constants for the LDAP functions
-	----------------------------------------------------
-		These should be placed in the configuration.php.
-		done: $usesLDAP, $ldaphost, $ldapport, $usesCurriculum --> config.inc
-	*/
-	$PLACEHOLDER = "PLACEHOLDER";
+/**
+===============================================================
+	function
+	CHECK LOGIN & PASSWORD WITH LDAP
+*	@return true when login & password both OK, false otherwise
+===============================================================
+*	@author Roan Embrechts (based on code from Université Jean Monet)
+*/
+//include_once("$includePath/../connect/authldap.php");
 
-	//debug:
-	//echo ($usesLDAP == false) ? "LDAP disabled<br>" : "LDAP enabled<br>";
+function loginWithLdap($login, $password)
+{
+	$res = Authentif($login, $password);
 
-	/**
-	===============================================================
-		function
-		CHECK LOGIN & PASSWORD WITH LDAP
-	*	@return true when login & password both OK, false otherwise
-	===============================================================
-	*	@author Roan Embrechts (based on code from Université Jean Monet)
-	*/
-	//include_once("$includePath/../connect/authldap.php");
+	// res=-1 -> the user does not exist in the ldap database
+	// res=1 -> invalid password (user does exist)
 
-	function loginWithLdap($login, $password)
+	if ($res==1) //WRONG PASSWORD
 	{
-		$res = Authentif($login, $password);
-
-		// res=-1 -> the user does not exist in the ldap database
-		// res=1 -> invalid password (user does exist)
-
-		if ($res==1) //WRONG PASSWORD
-		{
-			//$errorMessage = "LDAP Username or password incorrect, please try again.<br>";
-			if (isset($log)) unset($log); if (isset($uid)) unset($uid);
-			$loginLdapSucces = false;
-		}
-		if ($res==-1) //WRONG USERNAME
-		{
-			//$errorMessage =  "LDAP Username or password incorrect, please try again.<br>";
-			$loginLdapSucces = false;
-		}
-		if ($res==0) //LOGIN & PASSWORD OK - SUCCES
-		{
-			//$errorMessage = "Successful login w/ LDAP.<br>";
-			$loginLdapSucces = true;
-		}
-
-		//$result = "This is the result: $errorMessage";
-		$result = $loginLdapSucces;
-		return $result;
+		//$errorMessage = "LDAP Username or password incorrect, please try again.<br>";
+		if (isset($log)) unset($log); if (isset($uid)) unset($uid);
+		$loginLdapSucces = false;
+	}
+	if ($res==-1) //WRONG USERNAME
+	{
+		//$errorMessage =  "LDAP Username or password incorrect, please try again.<br>";
+		$loginLdapSucces = false;
+	}
+	if ($res==0) //LOGIN & PASSWORD OK - SUCCES
+	{
+		//$errorMessage = "Successful login w/ LDAP.<br>";
+		$loginLdapSucces = true;
 	}
 
+	//$result = "This is the result: $errorMessage";
+	$result = $loginLdapSucces;
+	return $result;
+}
 
-	/**
-	===============================================================
-		function
-		FIND USER INFO IN LDAP
-	*	@return an array with positions "firstname", "name", "email", "employeenumber"
-	===============================================================
-	*	@author Stefan De Wannemacker
-	*	@author Roan Embrechts
-	*/
-	function findUserInfoInLdap ($login)
-	{
-		global $ldaphost, $ldapport, $ldapDc;
-		// basic sequence with LDAP is connect, bind, search,
-		// interpret search result, close connection
 
-		// using ldap bind
-		$ldaprdn  = 'uname';     // ldap rdn or dn
-		$ldappass = 'password';  // associated password
+/**
+===============================================================
+	function
+	FIND USER INFO IN LDAP
+*	@return an array with positions "firstname", "name", "email", "employeenumber"
+===============================================================
+*	@author Stefan De Wannemacker
+*	@author Roan Embrechts
+*/
+function findUserInfoInLdap ($login)
+{
+	global $ldaphost, $ldapport, $ldapDc;
+	// basic sequence with LDAP is connect, bind, search,
+	// interpret search result, close connection
 
-		//echo "<h3>LDAP query</h3>";
-		//echo "Connecting ...";
-		$ldapconnect = ldap_connect( $ldaphost, $ldapport);
-		if ($ldapconnect) {
-		    	//echo " Connect to LDAP server successful ";
-		    	//echo "Binding ...";
+	// using ldap bind
+	$ldaprdn  = 'uname';     // ldap rdn or dn
+	$ldappass = 'password';  // associated password
 
-				// this is an "anonymous" bind, typically read-only access:
-		    	$ldapbind = ldap_bind($ldapconnect);
+	//echo "<h3>LDAP query</h3>";
+	//echo "Connecting ...";
+	$ldapconnect = ldap_connect( $ldaphost, $ldapport);
+	LDAPSetVersion($ldapconnect);
+	if ($ldapconnect) {
+	    	//echo " Connect to LDAP server successful ";
+	    	//echo "Binding ...";
 
-		    	if ($ldapbind)
-				{
-		  	  	//echo " LDAP bind successful... ";
-		    	  	//echo " Searching for uid... ";
-		    		// Search surname entry
-		    		//OLD: $sr=ldap_search($ldapconnect,"dc=rug, dc=ac, dc=be", "uid=$login");
-					//echo "<p> ldapDc = '$ldapDc' </p>";
-		    		$sr=ldap_search($ldapconnect, $ldapDc, "uid=$login");
+			// this is an "anonymous" bind, typically read-only access:
+	    	$ldapbind = ldap_bind($ldapconnect);
 
-					//echo " Search result is ".$sr;
-		    		//echo " Number of entries returned is ".ldap_count_entries($ldapconnect,$sr);
-
-		    		//echo " Getting entries ...";
-		    		$info = ldap_get_entries($ldapconnect, $sr);
-		    		//echo "Data for ".$info["count"]." items returned:<p>";
-
-		    	}
-			else
+	    	if ($ldapbind)
 			{
-				//echo "LDAP bind failed...";
-		    }
-	    	//echo "Closing LDAP connection<hr>";
-	    	ldap_close($ldapconnect);
-		}
+	  	  	//echo " LDAP bind successful... ";
+	    	  	//echo " Searching for uid... ";
+	    		// Search surname entry
+	    		//OLD: $sr=ldap_search($ldapconnect,"dc=rug, dc=ac, dc=be", "uid=$login");
+				//echo "<p> ldapDc = '$ldapDc' </p>";
+	    		$sr=ldap_search($ldapconnect, $ldapDc, "uid=$login");
+
+				//echo " Search result is ".$sr;
+	    		//echo " Number of entries returned is ".ldap_count_entries($ldapconnect,$sr);
+
+	    		//echo " Getting entries ...";
+	    		$info = ldap_get_entries($ldapconnect, $sr);
+	    		//echo "Data for ".$info["count"]." items returned:<p>";
+
+	    	}
 		else
 		{
-			//echo "<h3>Unable to connect to LDAP server</h3>";
-		}
-
-		//DEBUG: $result["firstname"] = "Jan"; $result["name"] = "De Test"; $result["email"] = "email@ugent.be";
-		$result["firstname"] = $info[0]["givenname"][0];
-		$result["name"] = $info[0]["sn"][0];
-		$result["email"] = $info[0]["mail"][0];
-		$result["employeenumber"] = $info[0]["employeenumber"][0];
-
-		return $result;
+			//echo "LDAP bind failed...";
+	    }
+    	//echo "Closing LDAP connection<hr>";
+    	ldap_close($ldapconnect);
 	}
-
-
-	/**
-	===============================================================
-	*	function
-	*	PUT USER INFO IN CLAROLINE
-	*	this function uses the data from findUserInfoInLdap()
-	*	to add the userdata to Claroline
-	*
-	*	the "rugid" field is specifically for the Ghent University.
-	*
-	*	"firstname", "name", "email", "isEmployee"
-	===============================================================
-	*	@author Roan Embrechts
-	*/
-	function putUserInfoInClaroline ($login, $infoArray)
+	else
 	{
-		global $_POST;
-		global $PLACEHOLDER;
-		global $submitRegistration, $submit, $uname, $email,
-				$nom, $prenom, $password, $password1, $status;
-		global $includePath, $platformLanguage;
-		global $loginFailed, $uidReset, $_user;
-
-		/*----------------------------------------------------------
-			1. set the necessary variables
-		------------------------------------------------------------ */
-
-		$uname      = $login;
-		$email      = $infoArray["email"];
-		$nom        = $infoArray["name"];
-		$prenom     = $infoArray["firstname"];
-		$password   = $PLACEHOLDER;
-		$password1  = $PLACEHOLDER;
-
-		define ("STUDENT",5);
-		define ("COURSEMANAGER",1);
-
-		if (empty($infoArray["employeenumber"]))
-		{
-			$status = STUDENT;
-		}
-		else
-		{
-			$status = COURSEMANAGER;
-		}
-
-		//$official_code = xxx; //example: choose an attribute
-
-		/*----------------------------------------------------------
-			2. add info to Dokeos
-		------------------------------------------------------------ */
-
-
-		include_once("$includePath/lib/usermanager.lib.php");
-
-
-
-		$_userId = UserManager::create_user($prenom, $nom, $status,
-						 $email, $uname, $password, $official_code,
-						 'english','', '', 'ldap');
-
-		//echo "new user added to claroline, id = $_userId";
-
-		//user_id, username, password, auth_source
-
-		/*----------------------------------------------------------
-			3. register session
-		------------------------------------------------------------ */
-
-		$uData['user_id'] = $_userId;
-		$uData['username'] = $uname;
-		$uData['auth_source'] = "ldap";
-
-		$loginFailed = false;
-		$uidReset = true;
-		$_user['user_id'] = $uData['user_id'];
-		api_session_register('_uid');
+		//echo "<h3>Unable to connect to LDAP server</h3>";
 	}
+
+	//DEBUG: $result["firstname"] = "Jan"; $result["name"] = "De Test"; $result["email"] = "email@ugent.be";
+	$result["firstname"] = $info[0]["givenname"][0];
+	$result["name"] = $info[0]["sn"][0];
+	$result["email"] = $info[0]["mail"][0];
+	$result["employeenumber"] = $info[0]["employeenumber"][0];
+
+	return $result;
+}
+
+
+/**
+===============================================================
+*	function
+*	PUT USER INFO IN CLAROLINE
+*	this function uses the data from findUserInfoInLdap()
+*	to add the userdata to Claroline
+*
+*	the "rugid" field is specifically for the Ghent University.
+*
+*	"firstname", "name", "email", "isEmployee"
+===============================================================
+*	@author Roan Embrechts
+*/
+function putUserInfoInDokeos ($login, $infoArray)
+{
+	global $_POST;
+	global $PLACEHOLDER;
+	global $submitRegistration, $submit, $uname, $email,
+			$nom, $prenom, $password, $password1, $status;
+	global $includePath, $platformLanguage;
+	global $loginFailed, $uidReset, $_user;
+
+	/*----------------------------------------------------------
+		1. set the necessary variables
+	------------------------------------------------------------ */
+
+	$uname      = $login;
+	$email      = $infoArray["email"];
+	$nom        = $infoArray["name"];
+	$prenom     = $infoArray["firstname"];
+	$password   = $PLACEHOLDER;
+	$password1  = $PLACEHOLDER;
+
+	define ("STUDENT",5);
+	define ("COURSEMANAGER",1);
+
+	if (empty($infoArray["employeenumber"]))
+	{
+		$status = STUDENT;
+	}
+	else
+	{
+		$status = COURSEMANAGER;
+	}
+
+	//$official_code = xxx; //example: choose an attribute
+
+	/*----------------------------------------------------------
+		2. add info to Dokeos
+	------------------------------------------------------------ */
+
+
+	include_once("$includePath/lib/usermanager.lib.php");
+
+
+
+	$_userId = UserManager::create_user($prenom, $nom, $status,
+					 $email, $uname, $password, $official_code,
+					 'english','', '', 'ldap');
+
+	//echo "new user added to claroline, id = $_userId";
+
+	//user_id, username, password, auth_source
+
+	/*----------------------------------------------------------
+		3. register session
+	------------------------------------------------------------ */
+
+	$uData['user_id'] = $_userId;
+	$uData['username'] = $uname;
+	$uData['auth_source'] = "ldap";
+
+	$loginFailed = false;
+	$uidReset = true;
+	$_user['user_id'] = $uData['user_id'];
+	api_session_register('_uid');
+}
 
 /* >>>>>>>>>>>>>>>> end of UGent LDAP routines <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 
@@ -304,53 +293,55 @@ function AuthVerif ($uname, $passwd)
 	global $LDAPserv, $LDAPport, $LDAPbasedn, $LDAPserv2, $LDAPport2;
 	// Establish anonymous connection with LDAP server
 	// Etablissement de la connexion anonyme avec le serveur LDAP
-	 $ds=ldap_connect($LDAPserv,$LDAPport);
-       $TestBind=ldap_bind($ds);
-       //en cas de probleme on utlise le replica
-       if(!$TestBind){
-         $ds=ldap_connect($LDAPserv2,$LDAPport2);
-       }
-	 if ($ds) {
+	$ds=ldap_connect($LDAPserv,$LDAPport);
+	LDAPSetVersion($ds);
+	$TestBind=ldap_bind($ds);
+   	//en cas de probleme on utlise le replica
+   	if(!$TestBind){
+    	$ds=ldap_connect($LDAPserv2,$LDAPport2);
+    	LDAPSetVersion($ds);
+   	}
+ 	if ($ds) {
 		// Creation du filtre contenant les valeurs saisies par l'utilisateur
 	    $filter="(uid=$uname)";
 		// Open anonymous LDAP connection
 		// Ouverture de la connection anonyme ldap
 	    $result=ldap_bind($ds);
 		// Execution de la recherche avec $filtre en parametre
-		  $sr=ldap_search($ds,"$LDAPbasedn", "$filter");
+		$sr=ldap_search($ds,"$LDAPbasedn", "$filter");
 		// La variable $info recoit le resultat de la requete
-		  $info = ldap_get_entries($ds, $sr);
-		  $dn=($info[0]["dn"]);
+		$info = ldap_get_entries($ds, $sr);
+		$dn=($info[0]["dn"]);
 		//affichage debug !!	echo"<br> dn = $dn<br> pass = $passwd<br>";
 		// fermeture de la 1ere connexion
-			ldap_close($ds);
-		}
-
-	// teste le Distinguish Name de la 1ere connection
-	  if ($dn==""){
-			 return (-1);		// ne fait pas partie de l'annuaire
-		}
- //bug ldap.. si password vide.. retourne vrai !!
-	if ($passwd=="") {
-		 return(1);
-		 }
-	// Ouverture de la 2em connection Ldap : connexion user pour verif mot de passe
-	 $ds=ldap_connect($LDAPserv,$LDAPport);
-       if(!$TestBind){
-         $ds=ldap_connect($LDAPserv2,$LDAPport2);
-       }
-	// retour en cas d'erreur de connexion password incorrecte
-	 if (!(@ldap_bind( $ds, $dn , $passwd)) == true) {
-		 return (1); // mot passe invalide
-		 }
-	// connection correcte
-	else	{
-		return (0);
+		ldap_close($ds);
 	}
 
+	// teste le Distinguish Name de la 1ere connection
+  	if ($dn==""){
+		 return (-1);		// ne fait pas partie de l'annuaire
+	}
+	//bug ldap.. si password vide.. retourne vrai !!
+	if ($passwd=="") {
+		return(1);
+	}
+	// Ouverture de la 2em connection Ldap : connexion user pour verif mot de passe
+	$ds=ldap_connect($LDAPserv,$LDAPport);
+	LDAPSetVersion($ds);
+	if(!$TestBind){
+    	$ds=ldap_connect($LDAPserv2,$LDAPport2);
+    	LDAPSetVersion($ds);
+   	}
+	// retour en cas d'erreur de connexion password incorrecte
+ 	if (!(@ldap_bind( $ds, $dn , $passwd)) == true) {
+		return (1); // mot passe invalide
+	}
+	// connection correcte
+	else
+	{
+		return (0);
+	}
 } // fin de la verif
-
-//---------------------------------------------------
 
 //-------------------------------------------------------
 //  authentification
@@ -361,4 +352,22 @@ function Authentif ($uname, $passwd)
     return($res); // fait partie du LDAP enseignant
 } // fin Authentif
 
+/**
+ * Set the protocol version with version from config file (enables LDAP version 3)
+ */
+function LDAPSetVersion (&$resource)
+{
+	global $LDAPversion;
+	if($LDAPversion>2)
+	{
+		if(ldap_set_option($resource, LDAP_OPT_PROTOCOL_VERSION, 3))
+		{
+			//ok - don't do anything
+		}
+		else
+		{
+			//failure - should switch back to version 2 by default
+		}
+	}
+}
 ?>

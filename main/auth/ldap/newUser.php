@@ -1,4 +1,4 @@
-<?php # $Id: newUser.php 13113 2007-09-20 03:22:21Z yannoo $
+<?php # $Id: newUser.php 13366 2007-10-01 01:52:09Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -53,7 +53,7 @@ if ($loginLdapSucces)
 		- the users login and password are correct
 	*/
 	$infoArray = findUserInfoInLdap($login);
-	putUserInfoInClaroline ($login, $infoArray);
+	putUserInfoInDokeos ($login, $infoArray);
 }
 else
 {

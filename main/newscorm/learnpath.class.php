@@ -7780,6 +7780,10 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	$root->appendChild($resources);
 		$xmldoc->appendChild($root);
 
+		//todo: add a readme file here, with a short description and a link to the Reload player
+		//then add the file to the zip, then destroy the file (this is done automatically)
+		// http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
+
 		//error_log(print_r($zip_files,true),0);
 		foreach($zip_files as $file_path)
 		{

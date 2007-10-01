@@ -74,6 +74,29 @@ if (!api_is_allowed_to_edit())
 		FUNCTIONS
 ============================================================================== 
 */
+
+/**
+ * function to sort users after getting the list in the db. Necessary because there are 2 or 3 queries. Called by usort()
+ */
+
+function sort_users($user_a, $user_b)
+{
+	$cmp = strcasecmp($user_a['lastname'], $user_b['lastname']);
+	if($cmp !== 0)
+		return $cmp;
+	else
+	{
+		$cmp = strcasecmp($user_a['firstname'], $user_b['firstname']);
+		if($cmp !== 0)
+			return $cmp;
+		else
+		{
+			return strcasecmp($user_a['username'], $user_b['username']);
+		}
+	}
+	
+}
+
 /**
  * Function to check the given max number of members per group 
  */
@@ -172,11 +195,17 @@ if(isset($_SESSION['id_session'])){
 else{
 	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
 }
+
+
+usort($complete_user_list, 'sort_users');
+
+
 $possible_users = array ();
 foreach ($complete_user_list as $index => $user)
 {
 	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
 }
+
 //print_r($complete_user_list2);
 // Group tutors
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);

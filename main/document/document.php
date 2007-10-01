@@ -1,4 +1,4 @@
-<?php // $Id: document.php 13294 2007-09-27 02:14:48Z yannoo $
+<?php // $Id: document.php 13367 2007-10-01 01:56:56Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -388,17 +388,20 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 		$added_slash = ($curdirpath=='/')?'':'/';
 		$dir_name = $curdirpath.$added_slash.replace_dangerous_char($_POST['dirname']);
-		$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
-		if($created_dir)
+		if(!is_dir($dir_name))
 		{
-			Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>',false);
-			//uncomment if you want to enter the created dir
-			//$curdirpath = $created_dir;
-			//$curdirpathurl = urlencode($curdirpath);
-		}
-		else
-		{
-			Display::display_error_message(get_lang('CannotCreateDir'));
+			$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
+			if($created_dir)
+			{
+				Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>',false);
+				//uncomment if you want to enter the created dir
+				//$curdirpath = $created_dir;
+				//$curdirpathurl = urlencode($curdirpath);
+			}
+			else
+			{
+				Display::display_error_message(get_lang('CannotCreateDir'));
+			}
 		}
 	}
 	//show them the form for the directory name

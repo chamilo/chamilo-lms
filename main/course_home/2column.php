@@ -167,7 +167,7 @@ function show_tools($course_tool_category)
 			unset($lnk);
 			if (api_is_allowed_to_edit())
 			{
-				if ($toolsRow["visibility"] == '1' && !strpos($toolsRow['link'],'learnpath_handler.php?learnpath_id'))
+				if ($toolsRow["visibility"] == '1' && !strpos($toolsRow['link'],'lp_controller'))
 				{
 					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/remove.gif" align="absmiddle" alt="'.get_lang("Deactivate").'"/>';
 					$link['cmd'] = "hide=yes";

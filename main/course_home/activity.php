@@ -216,7 +216,7 @@ function show_tools_category($course_tool_category)
 			echo '<td width="50%">' . "\n";
 			if($is_allowed_to_edit)
 			{
-				if($toolsRow['visibility'] == '1' && $toolsRow['admin'] !='1' && !strpos($toolsRow['link'],'learnpath_handler.php?learnpath_id'))
+				if($toolsRow['visibility'] == '1' && $toolsRow['admin'] !='1' && !strpos($toolsRow['link'],'lp_controller.php'))
 				{
 
 					$link['name'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/visible.gif" align="absmiddle" alt="'.get_lang("Deactivate").'"/>';

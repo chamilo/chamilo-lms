@@ -123,7 +123,7 @@ class presentation extends learnpath {
 						'<html>
 						<head></head>
 						<body>
-							<img src="'.$_configuration['url_append'].'/courses/'.$_course['path'].'/document'.$created_dir.'/'.$file.'" />
+							<img src="./'.$file.'" />
 						</body>
 						</html>');
 				fclose($fp);

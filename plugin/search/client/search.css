@@ -1,0 +1,27 @@
+.search_info{
+	background-color: #F0F0F0;
+	font-style: smaller;
+	padding: 5px;
+}
+.result{
+	/*border: 1px dotted black;*/
+	margin: 20px;
+	padding: 10px;
+}
+.result .title{
+	font-size: bigger;
+	margin-top: -20px;
+	background-color: white;
+	margin-right: 100px;
+	margin-left: -10px;
+	margin-bottom: 5px;
+}
+.result .description{
+	font-decoration: none;
+	width: 90%;
+}
+.result .highlight{
+	display: inline;
+	background-color: lightblue;
+	margin-right: 2px;
+}

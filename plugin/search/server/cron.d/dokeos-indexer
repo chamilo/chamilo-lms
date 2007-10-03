@@ -1,0 +1,1 @@
+0 5 * * * root /usr/sbin/indexer -N 2 /etc/mnogosearch/indexer.conf &>/dev/null

@@ -22,7 +22,7 @@
 *	Code library for HotPotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.lib.php 10789 2007-01-18 19:18:27Z pcool $
+* 	@version $Id: hotpotatoes.lib.php 13384 2007-10-04 09:08:37Z elixir_inter $
 */
 
 
@@ -47,6 +47,9 @@ function hotpotatoes_init($baseWorkDir)
 			@unlink($documentPath);
 		}
 		@mkdir($documentPath);
+		$perm = api_get_setting('permissions_for_new_directories');
+		$perm = octdec(!empty($perm)?$perm:'0770');
+		chmod ($documentPath,$perm);
 		return true;
 	}else{
 		//if this directory already exists, return false

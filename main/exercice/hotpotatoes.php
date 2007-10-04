@@ -22,7 +22,7 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 13324 2007-09-27 12:29:17Z elixir_inter $
+* 	@version $Id: hotpotatoes.php 13384 2007-10-04 09:08:37Z elixir_inter $
 */
 
 
@@ -120,6 +120,9 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 					$filename = replace_dangerous_char(trim($_FILES['userFile']['name']),'strict');
 					$fld = GenerateHpFolder($document_sys_path.$uploadPath."/");
 					@mkdir($document_sys_path.$uploadPath."/".$fld);
+					$perm = api_get_setting('permissions_for_new_directories');
+					$perm = octdec(!empty($perm)?$perm:'0770');
+					chmod ($document_sys_path.$uploadPath."/".$fld,$perm);
 					$doc_id = add_document($_course, '/HotPotatoes_files/'.$fld,'folder',0,$fld);
 					api_item_property_update($_course,TOOL_DOCUMENT,$doc_id,'FolderCreated',$_user['user_id']);
 				}

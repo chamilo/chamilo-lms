@@ -507,14 +507,18 @@ if (isset($cidReset) && $cidReset) // course session data refresh requested or e
 
             api_session_register('_cid');
             api_session_register('_course');
-
-            //We add a new record in the course tracking table
-            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);        
-
-            $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
-					"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
-
-			api_sql_query($sql,__FILE__,__LINE__);
+			
+			if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))
+			{
+	            //We add a new record in the course tracking table
+	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);        
+				
+		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
+							"VALUES('".$_course['official_code']."', '".$_user['user_id']."', NOW(), NOW(), '1')";
+		
+				api_sql_query($sql,__FILE__,__LINE__);
+			}
+			
 			
 			
 			// if a session id has been given in url, we store the session
@@ -567,7 +571,7 @@ else // continue with the previous values
    		$_course    = $_SESSION['_course'];
 
 
-		if($_configuration['tracking_enabled'])
+		if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))
 		{
 	   		$course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 	

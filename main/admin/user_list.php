@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_list.php 13292 2007-09-27 01:59:07Z yannoo $
+// $Id: user_list.php 13386 2007-10-04 14:19:50Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -135,6 +135,7 @@ function login_user($user_id)
 			$_SESSION['_user'] = $_user;
 			$_SESSION['is_platformAdmin'] = $is_platformAdmin;
 			$_SESSION['is_allowedCreateCourse'] = $is_allowedCreateCourse;
+			$_SESSION['login_as'] = true; // will be usefull later to know if the user is actually an admin or not (example reporting)s
 
 			$target_url = api_get_path(WEB_PATH)."user_portal.php";
 			$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";

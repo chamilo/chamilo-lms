@@ -339,15 +339,20 @@ $charset = api_get_setting('platform_charset');
 
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
-$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))
+{ // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
-$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
-
-$q_last_connection=mysql_query($sql_last_connection);
-if(mysql_num_rows($q_last_connection) > 0)
-{
-	$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
-	$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
-	api_sql_query($s_sql_update_logout_date);
+	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+	
+	$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
+	
+	$q_last_connection=mysql_query($sql_last_connection);
+	if(mysql_num_rows($q_last_connection) > 0)
+	{
+		$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
+		$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
+		api_sql_query($s_sql_update_logout_date);
+	}
+	
 }
 ?>

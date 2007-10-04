@@ -1,4 +1,4 @@
-<?php // $Id: document.php 13367 2007-10-01 01:56:56Z yannoo $
+<?php // $Id: document.php 13387 2007-10-04 15:28:00Z sourieo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -68,9 +68,7 @@ $language_file[] = 'slideshow';
 
 require("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
-
 require('document.inc.php');
-
 
 api_protect_course_script(true);
 
@@ -172,7 +170,6 @@ else
 	$to_group_id = 0;
 	$req_gid = '';
 }
-
 /*
 -----------------------------------------------------------
 	Libraries
@@ -267,8 +264,6 @@ $tool_name = get_lang("Document"); // title of the page (should come from the la
 Display::display_header($tool_name,"Doc");
 $is_allowed_to_edit  = api_is_allowed_to_edit();
 
-
-
 /*
  * Lib for event log, stats & tracking
  * plus record of the access
@@ -286,9 +281,6 @@ if($to_group_id !=0) //add group name after for group documents
 }
 //api_display_tool_title($tool_name.$add_group_to_title);
 
-
-
-
 /*
 -----------------------------------------------------------
 	Introduction section
@@ -302,7 +294,6 @@ Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid']);
 
 if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 {
-
 	/*======================================
 				MOVE FILE OR DIRECTORY
 	  ======================================*/
@@ -344,7 +335,6 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 			Display::display_error_message(get_lang('Impossible'));
 		}
 	}
-
 
 	/*======================================
 			DELETE FILE OR DIRECTORY
@@ -459,7 +449,6 @@ $docs_and_folders = DocumentManager::get_all_document_data($_course,$curdirpath,
 
 ?>
 
-
 <div id="folderselector" style="float:left;margin-right:10px;margin-top:5px;">
 <?php
 $folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit || $group_member_with_upload_rights);
@@ -467,7 +456,6 @@ if($folders===false){$folders = array();}
 echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'],true));
 ?>
 </div>
-
 	<?php
 	echo "<div id=\"doc_links\">";
 
@@ -477,7 +465,7 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 	if ($curdirpath!= '/'&& $curdirpath!=$group_properties['directory'])
 	{
 	?>
-		 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)) ?>">
+		 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)).$req_gid ?>">
 				<img src="../img/folder_up.gif" border="0" align="absbottom" hspace="5" alt="" />
 				<?php echo get_lang("Up"); ?></a>&nbsp;
 	<?php
@@ -488,20 +476,20 @@ echo(build_directory_selector($folders,$curdirpath,$group_properties['directory'
 		/* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
 		?>
 			<!-- create new document or directory -->
-			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl; ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
-			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl; ?>"><?php echo get_lang("CreateDoc"); ?></a>&nbsp;&nbsp;
+			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
+			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("CreateDoc"); ?></a>&nbsp;&nbsp;
 			<!-- file upload link -->
 			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
 			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;
 			<!-- create directory -->
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" alt ="" /></a>
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
+			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" alt ="" /></a>
+			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
 		<?php
 	}
 	?>
 	<!-- download zipped folder -->
-	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl; ?>"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
-	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl; ?>"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
+	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
+	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder&amp;path=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
 	<?php
 	// Slideshow by Patrick Cool, May 2004
 	include("document_slideshow.inc.php");
@@ -570,7 +558,6 @@ if($docs_and_folders)
 		$sortable_data[] = $row;
 	}
 	//*******************************************************************************************
-
 }
 else
 {
@@ -578,9 +565,6 @@ else
 	$table_footer='<div style="text-align:center;"><strong>'.get_lang('NoDocsInFolder').'</strong></div>';
 	//echo('<p><strong>'.get_lang('NoDocsInFolder').'</strong></p>');
 }
-
-
-
 
 $table = new SortableTableFromArray($sortable_data,2,100);
 $query_vars['curdirpath'] = $curdirpath;

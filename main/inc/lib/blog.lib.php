@@ -2035,6 +2035,7 @@ class Blog
 				ON user.user_id = blogs_rel_user.user_id
 				WHERE blogs_rel_user.blog_id = '".(int)$blog_id."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
+		
 		$blog_member_ids = array ();
 		while($user = mysql_fetch_array($result))
 		{
@@ -2047,12 +2048,6 @@ class Blog
 		$column_header[] = array (get_lang('FirstName'), true, '');
 		$column_header[] = array (get_lang('Email'), true, '');
 		$column_header[] = array (get_lang('Register'), false, '');
-
-		// Get users in this course
-		$sql = "SELECT u.user_id, u.lastname, u.firstname, u.email FROM $tbl_users u
-				INNER JOIN $table_course_user cu
-				ON u.user_id = cu.user_id AND course_code='$currentCourse'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
 		
 		include_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 		include_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
@@ -2071,6 +2066,10 @@ class Blog
 		// Add users that are not in this blog to the list.
 		foreach($student_list as $key=>$user)
 		{
+			if(isset($user['id_user']))
+			{
+				$user['user_id'] = $user['id_user'];
+			}
 			if(!in_array($user['user_id'],$blog_member_ids)) {
 				$a_infosUser = UserManager :: get_user_info_by_id($user['user_id']);
 				$row = array ();

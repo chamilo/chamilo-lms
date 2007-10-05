@@ -60,6 +60,8 @@ function backup_item_details($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1
  */
 function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$status='',$time=0,$suspend='',$location='',$interactions=array(),$core_exit='none')
 {
+	global $_configuration;
+	
 	$debug=0;
 	if($debug>0){error_log('In xajax_save_item('.$lp_id.','.$user_id.','.$view_id.','.$item_id.','.$score.','.$max.','.$min.','.$status.','.$time.',"'.$suspend.'","'.$location.'","'.(count($interactions)>0?$interactions[0]:'').'","'.$core_exit.'")',0);}
 	$objResponse = new xajaxResponse();
@@ -159,6 +161,24 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 		$objResponse->addScript("logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$status.")',2)");
 		if($debug>1){error_log('End of xajax_save_item()',0);}
 	}
+	
+	if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))
+	{ // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
+	
+		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+		
+		$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
+		
+		$q_last_connection=mysql_query($sql_last_connection);
+		if(mysql_num_rows($q_last_connection) > 0)
+		{
+			$i_id_last_connection=mysql_result($q_last_connection,0,"login_id");
+			$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
+			api_sql_query($s_sql_update_logout_date);
+		}
+		
+	}
+	
 	return $objResponse;
 }
 /**

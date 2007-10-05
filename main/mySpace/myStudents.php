@@ -7,6 +7,7 @@
 $language_file = array ('registration', 'index', 'tracking', 'exercice');
  $cidReset=true;
  include ('../inc/global.inc.php');
+
  include_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
  include_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
  include_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
@@ -41,7 +42,7 @@ $csv_content = array();
  		$course_infos = CourseManager :: get_course_information($_GET['course']);
  		if(empty($cidReq))
  			$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_infos['directory'], 'name' => $course_infos['title']);
- 		$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$_GET['course'].'&studentlist=true', "name" => get_lang("Tracking"));
+ 		$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$_GET['course'].'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
  	}
  	else
  	{

@@ -1,4 +1,4 @@
-<?php // $Id: document.inc.php 13388 2007-10-04 15:31:04Z sourieo $
+<?php // $Id: document.inc.php 13406 2007-10-07 04:18:50Z yannoo $
 
 /*
 ==============================================================================
@@ -129,7 +129,7 @@ function create_document_link($www,$title,$path,$filetype,$size,$visibility)
 	//add class="invisible" on invisible files
 	$visibility_class= ($visibility==0)?' class="invisible"':'';
 	//build download link (icon)
-	$forcedownload_link=($filetype=='folder')?api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid:api_get_self().'?action=download&amp;id='.$url_path.$req_gid;
+	$forcedownload_link=($filetype=='folder')?api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid:api_get_self().'?'.api_get_cidreq().'&amp;action=download&amp;id='.$url_path.$req_gid;
 	//folder download or file download?
 	$forcedownload_icon=($filetype=='folder')?'folder_zip.gif':'filesave.gif';
 	//prevent multiple clicks on zipped folder download

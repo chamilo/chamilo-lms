@@ -1046,7 +1046,8 @@ class CourseManager
 			// users directly subscribed to the course
 			$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 			
-			$sql_query = "SELECT course_user.user_id, user.user_id FROM $table_course_user as course_user, $table_users as user WHERE `course_code` = '$course_code' AND course_user.user_id = user.user_id ORDER BY user.lastname";
+			$sql_query = "SELECT course_user.user_id, user.user_id, course_user.status, course_user.role, course_user.tutor_id " .
+					"FROM $table_course_user as course_user, $table_users as user WHERE `course_code` = '$course_code' AND course_user.user_id = user.user_id ORDER BY user.lastname";
 						
 			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
 			

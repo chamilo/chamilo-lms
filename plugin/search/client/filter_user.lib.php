@@ -19,7 +19,7 @@
  */
 function get_boolean_user_access_to_course_dir($user_id,$course_dir){
   if(api_is_platform_admin()){return true;}
-  $course_user = Database::get_main_table(TABLE_MAIN_COURSE);
+  $course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
   $course      = Database::get_main_table(TABLE_MAIN_COURSE);
   //Get the course code
   $sql = "SELECT code FROM $course WHERE directory = '$course_dir'";

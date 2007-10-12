@@ -22,7 +22,7 @@
 *	HotPotatoes administration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: adminhp.php 12828 2007-08-01 16:48:13Z yannoo $
+* 	@version $Id: adminhp.php 13476 2007-10-12 11:38:16Z elixir_inter $
 */
 
 
@@ -61,7 +61,7 @@ define(FREE_ANSWER,     5);
 // allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);
 
-$is_allowedToEdit=$is_courseAdmin;
+$is_allowedToEdit=api_is_allowed_to_edit();
 
 // document path
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';

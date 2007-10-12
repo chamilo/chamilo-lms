@@ -24,7 +24,7 @@
 * 	One question can be in several exercises
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_pool.php 13301 2007-09-27 03:47:39Z yannoo $
+* 	@version $Id: question_pool.php 13476 2007-10-12 11:38:16Z elixir_inter $
 */
 
 // name of the language file that needs to be included
@@ -40,7 +40,7 @@ include('../inc/global.inc.php');
 
 $this_section=SECTION_COURSES;
 
-$is_allowedToEdit=$is_courseAdmin;
+$is_allowedToEdit=api_is_allowed_to_edit();
 
 $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);

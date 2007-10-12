@@ -33,7 +33,7 @@
 * 	the administrator
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: exercice_submit.php 13177 2007-09-21 14:50:21Z elixir_inter $
+* 	@version $Id: exercice_submit.php 13476 2007-10-12 11:38:16Z elixir_inter $
 */
 
 
@@ -63,7 +63,7 @@ $this_section=SECTION_COURSES;
 
 include_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
-$is_allowedToEdit=$is_courseAdmin;
+$is_allowedToEdit=api_is_allowed_to_edit();
 
 $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);

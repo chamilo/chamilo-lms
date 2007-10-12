@@ -22,7 +22,7 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 13475 2007-10-12 11:09:06Z elixir_inter $
+* 	@version $Id: hotpotatoes.php 13477 2007-10-12 12:20:24Z elixir_inter $
 */
 
 
@@ -139,6 +139,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 
 					if ($finish==2)
 					{
+						$imgparams = $_POST['imgparams'];
 						$checked = CheckImageName($imgparams,$filename);
 						if ($checked)
 						{ $imgcount = $imgcount-1; }
@@ -236,7 +237,7 @@ if(($is_allowedToEdit) && (($finish == 0) || ($finish == 2)))
 	if ($dialogBox)
 	{
 		echo 	"<td>\n<!-- dialog box -->\n&nbsp;\n</td>\n";
-		Display::display_normal_message($dialogBox); //main API
+		Display::display_normal_message($dialogBox, false); //main API
 		echo	"</td>\n";
 	}
 	else

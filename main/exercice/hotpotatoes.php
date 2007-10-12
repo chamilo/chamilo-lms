@@ -22,7 +22,7 @@
 *	Code for Hotpotatoes integration.
 *	@package dokeos.exercise
 * 	@author Istvan Mandak
-* 	@version $Id: hotpotatoes.php 13384 2007-10-04 09:08:37Z elixir_inter $
+* 	@version $Id: hotpotatoes.php 13475 2007-10-12 11:09:06Z elixir_inter $
 */
 
 
@@ -42,7 +42,7 @@ $fld					= (!empty($_POST['fld'])?$_POST['fld']:null);
 include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 $interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
-$is_allowedToEdit=(!empty($is_courseAdmin)?$is_courseAdmin:false);
+$is_allowedToEdit=api_is_allowed_to_edit();
 
 $dbTable				= Database::get_course_table(TABLE_DOCUMENT);
 $baseServDir = $_configuration['root_sys'];

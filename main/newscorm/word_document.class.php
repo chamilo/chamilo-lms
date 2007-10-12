@@ -110,17 +110,11 @@ class word_document extends learnpath {
 			foreach($pages as $key=>$page_content){ // for every pages, we create a new file
 				
 				$key +=1;
-				// Tidy
-				$tidy = new tidy;
-				$config = array(
-				       'indent'         => true,
-				       'output-xhtml'   => true,
-				       'wrap'           => 200);
-				$tidy->parseString($header.$page_content, $config, 'utf8');
-				$tidy->cleanRepair();
+				
+				$page_content = $this->format_page_content($header, $page_content);
 				$html_file = $created_dir.'-'.$key.'.html';
 				$handle = fopen($base_work_dir.$created_dir.'/'.$html_file,'w+');
-				fwrite($handle, $tidy);
+				fwrite($handle, $page_content);
 				fclose($handle);
 				
 				$document_id = add_document($_course,$created_dir.'/'.$html_file,'file',filesize($base_work_dir.$created_dir.'/'.$html_file),$html_file);
@@ -138,13 +132,51 @@ class word_document extends learnpath {
 					}
 				}
 			}
-			$perm = octdec(!empty($perm)?$perm:0700);
-			chmod ($base_work_dir.$created_dir,$perm);
+			$perm = api_get_setting('permissions_for_new_files');
+			$perm = octdec(!empty($perm)?$perm:0770);
 			chmod($file,$perm);
 			
 	    }
+	    $perm = api_get_setting('permissions_for_new_directories');
+		$perm = octdec(!empty($perm)?$perm:0770);
+		chmod ($base_work_dir.$created_dir,$perm);
 	    return $first_item;   	
 	    
+    }
+    
+    
+    function format_page_content($header, $content)
+    {
+    	
+		// Tidy
+		$tidy = new tidy;
+		$config = array(
+		       'indent'         => true,
+		       'output-xhtml'   => true,
+		       'wrap'           => 200);
+		$tidy->parseString($header.$content, $config, 'utf8');		
+		$tidy->cleanRepair();
+		$content = $tidy;
+		
+		// limit the width of the doc
+		$max_width = '720px';
+		$content = str_replace('<body>','<body><div style="width:'.$max_width.'">',$content);
+		$content = str_replace('</body>','</div></body>',$content);
+		
+		// line break before and after picture
+		$content = str_replace('p {','p {clear:both;',strtolower($content));
+		
+		// dokeos styles
+		$my_style = api_get_setting('stylesheets');
+		if(empty($my_style)){$my_style = 'default';}
+		$style_to_import = '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/default.css";'."\n";
+		$style_to_import .= '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/course.css";'."\n";
+		
+		$content = str_replace('/*<![cdata[*/','/*<![cdata[*/ '.$style_to_import,$content);
+		
+		
+    	return $content;
+    	
     }
 		
 }

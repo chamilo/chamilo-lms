@@ -23,7 +23,7 @@ if($export_csv)
 }
 $csv_content = array();
 
-if(!CourseManager :: is_course_teacher($_user['user_id'], $_GET['course']) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']))
+if(!api_is_platform_admin() && !CourseManager :: is_course_teacher($_user['user_id'], $_GET['course']) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']))
 {
 	Display::display_header('');
 	api_not_allowed();

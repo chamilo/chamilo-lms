@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 13487 2007-10-16 18:27:53Z yannoo $
+<?php //$Id: agenda.inc.php 13488 2007-10-16 18:41:03Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1338,7 +1338,7 @@ function display_agenda_items()
 		}
 		// A.2. you are a course admin with a GROUP filter
 		// => see only the messages of this specific group
-		elseif ($_SESSION['group']!==null)
+		elseif (!empty($_SESSION['group']))
 		{
 			$sql="SELECT
 				agenda.*, toolitemproperties.*

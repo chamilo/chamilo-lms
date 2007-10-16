@@ -1,4 +1,4 @@
-<?php //$Id: agenda.php 12663 2007-06-25 12:25:05Z pcool $
+<?php //$Id: agenda.php 13487 2007-10-16 18:27:53Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -209,8 +209,7 @@ $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USE
 /* ==============================================================================
   			ACCESS RIGHTS
 ============================================================================== */
-// permission stuff
-$is_allowedToEdit 	= is_allowed_to_edit();
+// permission stuff - also used by loading from global in agenda.inc.php
 $is_allowed_to_edit = is_allowed_to_edit();
 
 /* ==============================================================================
@@ -243,8 +242,8 @@ if (($select_year==NULL) && ($select_month==NULL))
 
 
 
-echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
-		. "<tr>";
+echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">'
+		. '<tr>';
 
 // THE LEFT PART
 if ($_GET['origin']!='learnpath')
@@ -252,18 +251,18 @@ if ($_GET['origin']!='learnpath')
 	echo '<td width="220" height="19" valign="top">';
 	// the small calendar
 	$MonthName = $MonthsLong[$select_month -1];
-	$agenda_items=get_kalender_items($select_month,$select_year);
+	$agenda_items=get_calendar_items($select_month,$select_year);
 	display_minimonthcalendar($agenda_items, $select_month,$select_year, $MonthName);
 	// the links for adding, filtering, showall, ...
-	echo "<ul id=\"agenda_select\">";
+	echo '<ul id="agenda_select">';
 	if (is_allowed_to_edit())
 	{
 		display_courseadmin_links();
 	}
 	display_student_links();
-	echo "</ul>";
-	echo "</td>";
-	echo "<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>";
+	echo '</ul>';
+	echo '</td>';
+	echo '<td width="20" background="../img/verticalruler.gif">&nbsp;</td>';
 }
 
 $fck_attribute['Width'] = '600';

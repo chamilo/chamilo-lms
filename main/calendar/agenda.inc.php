@@ -1,4 +1,4 @@
-<?php //$Id: agenda.inc.php 13322 2007-09-27 12:07:11Z elixir_julian $
+<?php //$Id: agenda.inc.php 13487 2007-10-16 18:27:53Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -28,7 +28,7 @@
 	reworked it and cleaned the code to make it more readable. The code for
 	the small calender on the left is taken from the My Agenda tool.
 
-	Reabability is also the reason why I use the if ($is_allowedToEdit)
+	Reabability is also the reason why I use the if ($is_allowed_to_edit)
 	check for each part of the code. I'm aware that is duplication, but
 	it makes the code much easier to read.
 ==============================================================================
@@ -56,14 +56,15 @@ $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang
 /**
 * Retrieves all the agenda items from the table
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Yannick Warnier <yannick.warnier@dokeos.com> - cleanup
 * @param integer $month: the integer value of the month we are viewing
 * @param integer $year: the 4-digit year indication e.g. 2005
 * @return array
 */
-function get_kalender_items($month, $year)
+function get_calendar_items($month, $year)
 {
 	global $_user, $_course;
-	global $is_allowedToEdit;
+	global $is_allowed_to_edit;
 
 	// database variables
 	$TABLEAGENDA=Database::get_course_table(TABLE_AGENDA);
@@ -74,16 +75,18 @@ function get_kalender_items($month, $year)
 	if (is_allowed_to_edit() OR api_get_course_setting('allow_user_edit_agenda'))
 	{
 		//echo "course admin";
-		// added GROUP BY `agenda`.`id` to prevent double display of a message that has been sent to two groups
+		// added GROUP BY agenda.id to prevent double display of a message that has been sent to two groups
 		$sql="SELECT
 			DISTINCT agenda.*, toolitemproperties.*
 			FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-			WHERE `agenda`.`id` = `toolitemproperties`.`ref`   ".$show_all_current."
-			AND MONTH(`agenda`.`start_date`)='".$month."' AND YEAR(`agenda`.`start_date`)='".$year."'
-			AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-			AND `toolitemproperties`.`visibility`='1'
-			GROUP BY `agenda`.`id`
-			ORDER BY  start_date ".$sort;
+			WHERE agenda.id = toolitemproperties.ref   ".
+			//$show_all_current.
+			" AND MONTH(agenda.start_date)='".$month."' AND YEAR(agenda.start_date)='".$year."'
+			AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+			AND toolitemproperties.visibility='1'
+			GROUP BY agenda.id ".
+			"ORDER BY  start_date ";
+			//.$sort;
 	}
 	// if the user is not an administrator of that course
 	else
@@ -94,24 +97,28 @@ function get_kalender_items($month, $year)
 			$sql="SELECT
 				agenda.*, toolitemproperties.*
 				FROM ".$TABLEAGENDA." agenda,	".$TABLE_ITEM_PROPERTY." toolitemproperties
-				WHERE `agenda`.`id` = `toolitemproperties`.`ref`   ".$show_all_current."
-				AND MONTH(`agenda`.`start_date`)='".$month."'
-				AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-				AND	( `toolitemproperties`.`to_user_id`='".$_user['user_id']."' OR `toolitemproperties`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
-				AND `toolitemproperties`.`visibility`='1'
-				ORDER BY  start_date ".$sort;
+				WHERE agenda.id = toolitemproperties.ref   ".
+				//$show_all_current.
+				" AND MONTH(agenda.start_date)='".$month."'
+				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+				AND	( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+				AND toolitemproperties.visibility='1'"
+				."ORDER BY  start_date ";
+				//.$sort;
 		}
 		else
 		{
 			$sql="SELECT
 				agenda.*, toolitemproperties.*
 				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-				WHERE `agenda`.`id` = `toolitemproperties`.`ref`   ".$show_all_current."
-				AND MONTH(`agenda`.`start_date`)='".$month."'
-				AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-				AND ( `toolitemproperties`.`to_user_id`='".$_user['user_id']."' OR `toolitemproperties`.`to_group_id`='0')
-				AND `toolitemproperties`.`visibility`='1'
-				ORDER BY  start_date ".$sort;
+				WHERE agenda.id = toolitemproperties.ref   ".
+				//$show_all_current.
+				" AND MONTH(agenda.start_date)='".$month."'
+				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+				AND ( toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
+				AND toolitemproperties.visibility='1' ".
+				"ORDER BY  start_date ";
+				//.$sort;
 		}
 	}
 	$result=api_sql_query($sql,__FILE__,__LINE__);
@@ -216,12 +223,11 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 function display_monthcalendar($month, $year)
 {
 	global $MonthsLong;
-	global $datakalenderitems;
 	global $DaysShort;
 	global $origin;
 
-	// grabbing all the kalender items for this year and storing it in a array
-	$data=get_kalender_items($month,$year);
+	// grabbing all the calendar items for this year and storing it in a array
+	$data=get_calendar_items($month,$year);
 
 
 	//Handle leap year
@@ -1223,7 +1229,7 @@ function delete_agenda_item($id)
 			// displaying the result message in the yellow box
 			Display::display_normal_message(get_lang("AgendaDeleteSuccess"));
 			}	  // if (isset($id)&&$id&&isset($action)&&$action=="delete")
-		} // if ($is_allowedToEdit)
+		} // if ($is_allowed_to_edit)
 
 }
 /**
@@ -1251,6 +1257,7 @@ function showhide_agenda_item($id)
 /**
 * Displays all the agenda items
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Yannick Warnier <yannick.warnier@dokeos.com> - cleanup
 */
 function display_agenda_items()
 {
@@ -1259,8 +1266,7 @@ function display_agenda_items()
 	global $select_month, $select_year;
 	global $DaysShort, $DaysLong, $MonthsLong;
 	global $is_courseAdmin;
-	global $dateFormatLong, $timeNoSecFormat,$charset;
-	global $_user;
+	global $dateFormatLong, $timeNoSecFormat,$charset, $_user, $_course;
 
 	// getting the group memberships
 	$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
@@ -1304,7 +1310,7 @@ function display_agenda_items()
 	{
 		// A.1. you are a course admin with a USER filter
 		// => see only the messages of this specific user + the messages of the group (s)he is member of.
-		if ($_SESSION['user']!==null)
+		if (!empty($_SESSION['user']))
 		{
 			$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_SESSION['user']);
 			if (is_array($group_memberships))
@@ -1312,10 +1318,10 @@ function display_agenda_items()
 				$sql="SELECT
 					agenda.*, toolitemproperties.*
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE `agenda`.`id` = `toolitemproperties`.`ref`   ".$show_all_current."
-					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-					AND	( `toolitemproperties`.`to_user_id`=$user_id OR `toolitemproperties`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
-					AND `toolitemproperties`.`visibility`='1'
+					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND	( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+					AND toolitemproperties.visibility='1'
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 			else
@@ -1323,10 +1329,10 @@ function display_agenda_items()
 				$sql="SELECT
 					agenda.*, toolitemproperties.*
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE `agenda`.`id` = `toolitemproperties`.`ref`   ".$show_all_current."
-					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-					AND ( `toolitemproperties`.`to_user_id`=$user_id OR `toolitemproperties`.`to_group_id`='0')
-					AND `toolitemproperties`.`visibility`='1'
+					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
+					AND toolitemproperties.visibility='1'
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 		}
@@ -1337,13 +1343,12 @@ function display_agenda_items()
 			$sql="SELECT
 				agenda.*, toolitemproperties.*
 				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-				WHERE `agenda`.`id` = `toolitemproperties`.`ref`  ".$show_all_current."
-				AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-				AND ( `toolitemproperties`.`to_group_id`=$group_id OR `toolitemproperties`.`to_group_id`='0')
-				AND `toolitemproperties`.`visibility`='1'
-				GROUP BY `toolitemproperties`.`ref`
+				WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
+				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+				AND ( toolitemproperties.to_group_id=$group_id OR toolitemproperties.to_group_id='0')
+				AND toolitemproperties.visibility='1'
+				GROUP BY toolitemproperties.ref
 				ORDER BY start_date ".$_SESSION['sort'];
-
 		}
 		// A.3 you are a course admin without any group or user filter
 		else
@@ -1355,10 +1360,10 @@ function display_agenda_items()
 				$sql="SELECT
 					agenda.*, toolitemproperties.*
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE `agenda`.`id` = `toolitemproperties`.`ref`  ".$show_all_current."
-					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-					AND `toolitemproperties`.`visibility`='1'
-					GROUP BY `toolitemproperties`.`ref`
+					WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND toolitemproperties.visibility='1'
+					GROUP BY toolitemproperties.ref
 					ORDER BY start_date ".$_SESSION['sort'];
 
 			}
@@ -1369,10 +1374,10 @@ function display_agenda_items()
 				$sql="SELECT
 					agenda.*, toolitemproperties.*
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE `agenda`.`id` = `toolitemproperties`.`ref`  ".$show_all_current."
-					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-					AND ( `toolitemproperties`.`visibility`='0' or `toolitemproperties`.`visibility`='1')
-					GROUP BY `toolitemproperties`.`ref`
+					WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( toolitemproperties.visibility='0' or toolitemproperties.visibility='1')
+					GROUP BY toolitemproperties.ref
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 		}
@@ -1387,10 +1392,10 @@ function display_agenda_items()
 			$sql="SELECT
 				agenda.*, toolitemproperties.*
 				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-				WHERE `agenda`.`id` = `toolitemproperties`.`ref`   ".$show_all_current."
-				AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-				AND	( `toolitemproperties`.`to_user_id`=$user_id OR `toolitemproperties`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
-				AND `toolitemproperties`.`visibility`='1'
+				WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
+				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+				AND	( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+				AND toolitemproperties.visibility='1'
 				ORDER BY start_date ".$_SESSION['sort'];
 		}
 		else
@@ -1400,10 +1405,10 @@ function display_agenda_items()
 				$sql="SELECT
 					agenda.*, toolitemproperties.*
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE `agenda`.`id` = `toolitemproperties`.`ref`   ".$show_all_current."
-					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-					AND ( `toolitemproperties`.`to_user_id`=$user_id OR `toolitemproperties`.`to_group_id`='0')
-					AND `toolitemproperties`.`visibility`='1'
+					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
+					AND toolitemproperties.visibility='1'
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 			else
@@ -1411,10 +1416,10 @@ function display_agenda_items()
 				$sql="SELECT
 					agenda.*, toolitemproperties.*
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE `agenda`.`id` = `toolitemproperties`.`ref`   ".$show_all_current."
-					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-					AND `toolitemproperties`.`to_group_id`='0'
-					AND `toolitemproperties`.`visibility`='1'
+					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND toolitemproperties.to_group_id='0'
+					AND toolitemproperties.visibility='1'
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 		}
@@ -1638,10 +1643,10 @@ function display_one_agenda_item($agenda_id)
 
 	$sql="SELECT agenda.*, toolitemproperties.*
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE `agenda`.`id` = `toolitemproperties`.`ref`
-					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-					AND `toolitemproperties`.`visibility`='1'
-					AND `agenda`.`id`='$agenda_id'";
+					WHERE agenda.id = toolitemproperties.ref
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND toolitemproperties.visibility='1'
+					AND agenda.id='$agenda_id'";
 	$result=api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error());
 	$number_items=mysql_num_rows($result);
 	$myrow=mysql_fetch_array($result); // there should be only one item so no need for a while loop

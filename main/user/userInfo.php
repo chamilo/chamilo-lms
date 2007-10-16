@@ -48,6 +48,7 @@ $language_file = array ('registration', 'userInfo');
 
 include ("../inc/global.inc.php");
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang("Users");
@@ -352,6 +353,15 @@ elseif ($displayMode == "viewMainInfoEdit")
 		echo "<td><input type=\"submit\" name=\"submit\" value=\"Ok\" /></td>\n", "</tr>", "</table>", "</form>\n";
 
 		echo "<p>".Display :: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
+		
+				if (api_get_setting('extended_profile') == 'true')
+				{
+					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
+					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
+					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
+					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
+					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
+				}
 
 	}
 	else{
@@ -442,6 +452,15 @@ elseif ($displayMode == "viewContentList") // default display
 				"</table>";
 				//"<p><a href=\"mailto:",$mainUserInfo['email'],"\">",$mainUserInfo['email'],"</a>",
 				echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
+				
+				if (api_get_setting('extended_profile') == 'true')
+				{
+					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
+					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
+					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
+					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
+					echo '<div style="margin-top:10px;"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
+				}
 	}
 	else{
 		Display :: display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));

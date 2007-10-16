@@ -1,5 +1,5 @@
 <?php
-// $Id: profile.php 13283 2007-09-26 14:51:18Z elixir_julian $
+// $Id: profile.php 13486 2007-10-16 07:39:22Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -198,17 +198,19 @@ if (api_get_setting('extended_profile') == 'true')
 
 	//	MY COMPETENCES
 	$form->add_html_editor('competences', get_lang('MyCompetences'), false);
-	
+
 	//	MY DIPLOMAS
 	$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false);
-	
+
 	//	WHAT I AM ABLE TO TEACH
 	$form->add_html_editor('teach', get_lang('MyTeach'), false);
-	
+
 	//	MY PRODUCTIONS
 	$form->addElement('file', 'production', get_lang('MyProductions'));
-	if ($production_list = build_production_list($_user['user_id']))
-		$form->addElement('static', 'productions', null, $production_list);
+	if ($production_list = UserManager::build_production_list($_user['user_id'],'',true))
+	{
+			$form->addElement('static', 'productions', null, $production_list);
+	}
 
 	//	MY PERSONAL OPEN AREA
 	$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false);
@@ -275,7 +277,7 @@ function is_profile_editable()
 */
 
 /**
- * Deprecated function. Use UserManager::get_user_picture_path_by_id($user_id,'none') instead 
+ * Deprecated function. Use UserManager::get_user_picture_path_by_id($user_id,'none') instead
  * Get a user's display picture. If the user doesn't have a picture, this
  * function will return an empty string.
  *
@@ -322,7 +324,7 @@ function upload_user_image($user_id)
 
 	if (!file_exists($image_repository))
 	{
-		//error_log('Making path '.$image_repository,0);	
+		//error_log('Making path '.$image_repository,0);
 		mkpath($image_repository);
 	}else{
 		//error_log('Path '.$image_repository.' exists',0);
@@ -349,7 +351,7 @@ function upload_user_image($user_id)
 	{
 		$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? $user_id.'_' : '').uniqid('').'.'.$file_extension;
 	}
-	
+
 	$temp = new image($_FILES['picture']['tmp_name']);
 	$picture_infos=getimagesize($_FILES['picture']['tmp_name']);
 	$thumbwidth = IMAGE_THUMBNAIL_WIDTH;
@@ -358,10 +360,10 @@ function upload_user_image($user_id)
 		$thumbwidth=100;
 	}
 	$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
-	
+
 	$temp->resize($thumbwidth,$new_height,0);
 	$type=$picture_infos[2];
-   
+
     switch ($type) {
             case 2 : $temp->send_image('JPG',$image_repository.$picture_filename);
             break;
@@ -370,7 +372,7 @@ function upload_user_image($user_id)
             case 1 : $temp->send_image('GIF',$image_repository.$picture_filename);
             break;
     }
-    
+
     return $picture_filename;
 
 }
@@ -402,76 +404,6 @@ function remove_user_image($user_id)
 */
 
 /**
- * Returns an XHTML formatted list of productions for a user, or FALSE if he
- * doesn't have any.
- *
- * If there has been a request to remove a production, the function will return
- * without building the list unless forced to do so by the optional second
- * parameter. This increases performance by avoiding to read through the
- * productions on the filesystem before the removal request has been carried
- * out because they'll have to be re-read afterwards anyway.
- *
- * @param	$user_id	User id
- * @param	$force	Optional parameter to force building after a removal request
- * @return	A string containing the XHTML code to dipslay the production list, or FALSE
- */
-function build_production_list($user_id, $force = false)
-{
-	if (!$force && $_POST['remove_production'])
-		return true; // postpone reading from the filesystem
-
-	$productions = get_user_productions($user_id);
-
-	if (empty($productions))
-		return false;
-
-	$production_path = UserManager::get_user_picture_path_by_id($user_id,'web',true);
-	$production_dir = $production_path['dir'];
-	$del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
-	$del_text = get_lang('Delete');
-
-	$production_list = '<ul id="productions">';
-
-	foreach ($productions as $file)
-	{
-		$production_list .= '<li><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
-		$production_list .= '<input type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="return confirmation(\''.htmlentities($file).'\');" /></li>';
-	}
-
-	$production_list .= '</ul>';
-
-	return $production_list;
-}
-
-/**
- * Returns an array with the user's productions.
- *
- * @param	$user_id	User id
- * @return	An array containing the user's productions
- */
-function get_user_productions($user_id)
-{
-	$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
-	$production_repository = $production_path['dir'].$user_id.'/';
-	$productions = array();
-
-	if (is_dir($production_repository))
-	{
-		$handle = opendir($production_repository);
-
-		while ($file = readdir($handle))
-		{
-			if ($file == '.' || $file == '..' || $file == '.htaccess')
-				continue; // skip current/parent directory and .htaccess
-
-			$productions[] = $file;
-		}
-	}
-
-	return $productions; // can be an empty array
-}
-
-/**
  * Upload a submitted user production.
  *
  * @param	$user_id	User id
@@ -494,18 +426,6 @@ function upload_user_production($user_id)
 	return false; // this should be returned if anything went wrong with the upload
 }
 
-/**
- * Remove a user production.
- *
- * @param	$user_id		User id
- * @param	$production	The production to remove
- */
-function remove_user_production($user_id, $production)
-{
-	$production_path = UserManager::get_user_picture_path_by_id($user_id,'system',true);
-	unlink($production_path['dir'].$user_id.'/'.$production);
-}
-
 /*
 ==============================================================================
 		MAIN CODE
@@ -520,9 +440,11 @@ if ($_SESSION['profile_update'])
 elseif ($_POST['remove_production'])
 {
 	foreach (array_keys($_POST['remove_production']) as $production)
-		remove_user_production($_user['user_id'], urldecode($production));
+	{
+		UserManager::remove_user_production($_user['user_id'], urldecode($production));
+	}
 
-	if ($production_list = build_production_list($_user['user_id'], true))
+	if ($production_list = UserManager::build_production_list($_user['user_id'], true,true))
 		$form->insertElementBefore($form->createElement('static', null, null, $production_list), 'productions');
 
 	$form->removeElement('productions');
@@ -542,7 +464,7 @@ elseif ($form->validate())
 	{
 		if ($new_picture = upload_user_image($_user['user_id']))
 			$user_data['picture_uri'] = $new_picture;
-		
+
 	}
 	// remove existing picture if asked
 	elseif ($user_data['remove_picture'])

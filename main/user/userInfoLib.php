@@ -484,7 +484,7 @@ function get_main_user_info($user_id, $courseCode)
 
 	$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT	u.lastname lastName, u.firstname firstName, 
+	$sql = "SELECT	u.*, u.lastname lastName, u.firstname firstName, 
 	                u.email, u.picture_uri picture, cu.role, 
 	                cu.`status` `status`, cu.tutor_id
 	        FROM    $table_user u, $table_course_user cu
@@ -497,6 +497,7 @@ function get_main_user_info($user_id, $courseCode)
 	if (mysql_num_rows($result) > 0)
 	{
 		$userInfo = mysql_fetch_array($result, MYSQL_ASSOC);
+		$userInfo['password']='';
 		return $userInfo;
 	}
 

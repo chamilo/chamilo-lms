@@ -229,7 +229,7 @@ if (($_GET['action']=='deletereceivedcategory' OR $_GET['action']=='deletesentca
 // only the download has is handled separately in dropbox_init_inc.php because this has to be done before the headers are sent
 // (which also happens in dropbox_init.inc.php
 
-if (!isset($_POST['feedback']) && $_POST['action'] == 'delete_received' OR $_POST['action'] == 'download_received' OR $_POST['action'] == 'delete_sent' OR $_POST['action'] == 'download_sent')
+if (!isset($_POST['feedback']) && ($_POST['action'] == 'delete_received' OR $_POST['action'] == 'download_received' OR $_POST['action'] == 'delete_sent' OR $_POST['action'] == 'download_sent'))
 {
 	$display_message=handle_multiple_actions();
 	Display :: display_normal_message($display_message);

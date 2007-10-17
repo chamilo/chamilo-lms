@@ -7229,8 +7229,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 		//give a child element <title> to the <item> element
 		 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
 		 		$my_item->appendChild($my_title);
-		 		//give a child element <adlcp:prerequisite> to the <item> element
-		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisite',$item->get_prereq_string());
+		 		//give a child element <adlcp:prerequisites> to the <item> element
+		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$item->get_prereq_string());
 		 		$my_prereqs->setAttribute('type','aicc_script');
 		 		$my_item->appendChild($my_prereqs);
 		 		//give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported
@@ -7477,8 +7477,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 		 		//give a child element <title> to the <item> element
 		 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
 		 		$my_item->appendChild($my_title);
-		 		//give a child element <adlcp:prerequisite> to the <item> element
-		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisite',$item->get_prereq_string());
+		 		//give a child element <adlcp:prerequisites> to the <item> element
+		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$item->get_prereq_string());
 		 		$my_prereqs->setAttribute('type','aicc_script');
 		 		$my_item->appendChild($my_prereqs);
 		 		//give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported
@@ -7555,8 +7555,8 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 			 		//give a child element <title> to the <item> element
 			 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
 			 		$my_item->appendChild($my_title);
-			 		//give a child element <adlcp:prerequisite> to the <item> element
-			 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisite',$item->get_prereq_string());
+			 		//give a child element <adlcp:prerequisites> to the <item> element
+			 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$item->get_prereq_string());
 			 		$my_prereqs->setAttribute('type','aicc_script');
 			 		$my_item->appendChild($my_prereqs);
 			 		//give a child element <adlcp:masteryscore> to the <item> element

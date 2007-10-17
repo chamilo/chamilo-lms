@@ -7868,6 +7868,20 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 EOD;
 		file_put_contents($garbage_path.$temp_dir_short.'/document/non_exportable.html', $file_content);
 		
+		//Add the extra files that go along with a SCORM package
+		$main_code_path = api_get_path(SYS_CODE_PATH).'newscorm/packaging/';
+		$extra_files = scandir($main_code_path);
+		foreach($extra_files as $extra_file)
+		{
+			if(strpos($extra_file,'.')===0) continue;
+			else
+			{
+				$dest_file = $garbage_path.$temp_dir_short.'/'.$extra_file;
+				$this->create_path($dest_file);
+				copy($main_code_path.$extra_file,$dest_file);				
+			}
+		}
+		
 	 	//Finalize the imsmanifest structure, add to the zip, then return the zip
 	 	
 	 	$xmldoc->save($garbage_path.'/'.$temp_dir_short.'/imsmanifest.xml');

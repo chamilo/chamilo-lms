@@ -763,6 +763,7 @@ class learnpath {
     	$sql_del_view = "DELETE FROM $lp_view WHERE lp_id = ".$this->lp_id;
     	//if($this->debug>2){error_log('New LP - Deleting views bound to lp '.$this->lp_id.': '.$sql_del_view,0);}
     	$res_del_view = api_sql_query($sql_del_view);
+	$this->toggle_publish($this->lp_id,'i');
     	//if($this->debug>2){error_log('New LP - Deleting lp '.$this->lp_id.' of type '.$this->type,0);}
     	if($this->type == 2 OR $this->type==3){
     		//this is a scorm learning path, delete the files as well

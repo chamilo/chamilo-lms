@@ -1,4 +1,4 @@
-<?php // $Id: upload.php 12908 2007-08-31 13:15:52Z elixir_julian $
+<?php // $Id: upload.php 13520 2007-10-17 21:28:34Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -230,7 +230,7 @@ if(isset($_FILES['user_upload']))
         	    " WHERE id = '$docid'", __FILE__, __LINE__);
     	}
 		//check for missing images in html files
-		$missing_files = check_for_missing_files($base_work_dir.$_POST['curdirpath'].$new_path);
+		$missing_files = check_for_missing_files($base_work_dir.$new_path);
 		if($missing_files)
 		{
 			//show a form to upload the missing files

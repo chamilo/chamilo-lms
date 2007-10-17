@@ -2979,15 +2979,7 @@ class learnpath {
 		//if($this->debug>2){error_log('New LP - '.$sql.' - '.$num,0);}
 		if(($set_visibility == 'i') && ($num>0))
 		{
-			//it is visible or hidden but once was published
-			if(($row2['visibility'])==1)
-			{
-				$sql ="DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%')";
-			}
-			else
-			{
-				$sql ="UPDATE $tbl_tool set visibility=1 WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%')";
-			}
+			$sql ="DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%')";
 		}
 		elseif(($set_visibility == 'v') && ($num==0))
 		{

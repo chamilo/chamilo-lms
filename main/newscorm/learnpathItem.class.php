@@ -563,7 +563,7 @@ class learnpathItem{
 									{
 										//skip what is obviously not a resource
 										if(strpos($source,"+this.")) continue; //javascript code - will still work unaltered
-										if(!strpos($source,'.')) continue; //no dot, should not be an external file anyway
+										if(strpos($source,'.')=== false) continue; //no dot, should not be an external file anyway
 										if(strpos($source,'mailto:')) continue; //mailto link
 										if(strpos($source,';') && !strpos($source,'&amp;')) continue; //avoid code - that should help
 										

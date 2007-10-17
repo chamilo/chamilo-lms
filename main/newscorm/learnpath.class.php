@@ -7184,7 +7184,7 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 	$root->setAttribute('xmlns','http://www.imsproject.org/xsd/imscp_rootv1p1p2');
 	 	$root->setAttribute('xmlns:adlcp','http://www.adlnet.org/xsd/adlcp_rootv1p2');
 	 	$root->setAttribute('xmlns:xsi','http://www.w3.org/2001/XMLSchema-instance');
-	 	$root->setAttribute('xsi:schemaLocation','http://www.omsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
+	 	$root->setAttribute('xsi:schemaLocation','http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
 	 			http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd
                 http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd');
 	 	//Build mandatory sub-root container elements
@@ -7873,7 +7873,7 @@ EOD;
 	 	$xmldoc->save($garbage_path.'/'.$temp_dir_short.'/imsmanifest.xml');
 		
 		
-		$zip_folder->add($garbage_path.'/'.$temp_dir_short, PCLZIP_OPT_REMOVE_PATH, $garbage_path);
+		$zip_folder->add($garbage_path.'/'.$temp_dir_short, PCLZIP_OPT_REMOVE_PATH, $garbage_path.'/'.$temp_dir_short.'/');
 
 		//clean possible temporary files
 		foreach($files_cleanup as $file)

@@ -1,5 +1,6 @@
 <?php
 include_once('../../../../../inc/global.inc.php');
+$is_in_admin = true;
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>

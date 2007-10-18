@@ -1,4 +1,4 @@
-<?php // $Id: user_edit.php 13183 2007-09-21 21:23:20Z yannoo $
+<?php // $Id: user_edit.php 13536 2007-10-18 16:58:58Z yannoo $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -284,8 +284,8 @@ if( $form->validate())
 		$emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
 		$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 		$emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
-		$emailbody = get_lang('Dear')." ".stripslashes("$form_firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username;
-		if($reset_password != 0 || !$userPasswordCrypted )
+		$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". get_setting('siteName') ." ".get_lang('Settings')." ". $username;
+		if($reset_password != 0 && !$userPasswordCrypted )
 		{
 			$emailbody .= "\n".get_lang('Pass')." : ".stripslashes($password);
 		}

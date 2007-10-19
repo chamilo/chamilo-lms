@@ -11,6 +11,7 @@
  */
 
 class word_document extends learnpath {
+	
 
 	/**
 	 * Class constructor. Based on the parent constructor.
@@ -36,11 +37,13 @@ class word_document extends learnpath {
     	$file_extension = (strrpos($file['name'],'.')>0 ? substr($file['name'], strrpos($file['name'],'.'),10) : '');
     	
     	
+		$learnpath_name = $file_name;
     	$file_name = remove_accents($file_name);
 		$file_name = replace_dangerous_char($file_name,'strict');	
 		$file_name = strtolower($file_name);
 		
 		$file['name'] = $file_name.$file_extension;
+		
 		
 		
 		$dir_name = '/'.$file_name;
@@ -90,7 +93,6 @@ class word_document extends learnpath {
 	    }
 	    else {
 			// create lp
-			$learnpath_name .= $file_name;
 			
 			$this->lp_id = learnpath::add_lp($_course['id'], $learnpath_name,'','guess','manual');
 			$content = file_get_contents($base_work_dir.$created_dir.'/'.$file_name.'.html');
@@ -111,7 +113,7 @@ class word_document extends learnpath {
 				
 				$key +=1;
 				
-				$page_content = $this->format_page_content($header, $page_content);
+				$page_content = $this->format_page_content($header, $page_content, $base_work_dir.$created_dir);
 				$html_file = $created_dir.'-'.$key.'.html';
 				$handle = fopen($base_work_dir.$created_dir.'/'.$html_file,'w+');
 				fwrite($handle, $page_content);
@@ -125,7 +127,7 @@ class word_document extends learnpath {
 					api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],$to_group_id,$to_user_id);
 					
 					$infos = pathinfo($file);
-					$slide_name = 'page'.str_repeat('0',2-strlen($key)).$key;
+					$slide_name = 'Page '.str_repeat('0',2-strlen($key)).$key;
 					$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
 					if($first_item == 0){
 						$first_item = $previous;
@@ -145,7 +147,7 @@ class word_document extends learnpath {
     }
     
     
-    function format_page_content($header, $content)
+    function format_page_content($header, $content, $path_to_folder)
     {
     	
 		// Tidy
@@ -153,14 +155,16 @@ class word_document extends learnpath {
 		$config = array(
 		       'indent'         => true,
 		       'output-xhtml'   => true,
-		       'wrap'           => 200);
+		       'wrap'           => 200,
+		       'clean'           => true,
+		       'bare'			=> true);
 		$tidy->parseString($header.$content, $config, 'utf8');		
 		$tidy->cleanRepair();
 		$content = $tidy;
 		
 		// limit the width of the doc
 		$max_width = '720px';
-		$content = str_replace('<body>','<body><div style="width:'.$max_width.'">',$content);
+		$content = preg_replace("|<body[^>]*>|","\\0\r\n<div style=\"width:".$max_width."\">",$content);
 		$content = str_replace('</body>','</div></body>',$content);
 		
 		// line break before and after picture
@@ -174,10 +178,40 @@ class word_document extends learnpath {
 		
 		$content = str_replace('/*<![cdata[*/','/*<![cdata[*/ '.$style_to_import,$content);
 		
+		$content = str_replace('absolute','relative',$content);
+		
+		/*
+		// resize all the picture to the max_width-10
+		preg_match_all("|<img src=\"([^\"]*)\"|",strtolower($content),$images);
+		
+		foreach ($images[1] as $image)
+		{
+			list($img_width, $img_height, $type) = getimagesize($path_to_folder.'/'.$image);
+			
+			$new_width = $max_width-10;
+			if($img_width > $new_width)
+			{
+				$new_height = round($new_width/$img_width*$img_height);
+				
+				include_once (api_get_path(LIBRARY_PATH).'image.lib.php');
+				$src = imagecreatefromgif($path_to_folder.'/'.$image);  
+				$dstImg = imagecreatetruecolor($new_width, $new_height);  
+				 
+				$white = imagecolorallocate($dstImg, 255, 255, 255);  
+				 
+				imagefill($dstImg, 0, 0, $white);  
+				imageColorTransparent($dstImg, $white);  
+				imagecopyresampled($dstImg, $src, 0, 0, 0, 0, $new_width, $new_height, $img_width, $img_height);  
+				 
+				imagegif($dstImg,$path_to_folder.'/2'.$image);
+			}
+		}
+		*/
 		
     	return $content;
     	
     }
+   
 		
 }
 ?>

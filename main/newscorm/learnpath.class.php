@@ -3879,7 +3879,7 @@ class learnpath {
 		
 		while($row = Database::fetch_array($result))
 		{
-			if($this->encoding='UTF-8')
+			if($this->encoding=='UTF-8')
 			{
 				$row['title'] = utf8_decode($row['title']);
 			}

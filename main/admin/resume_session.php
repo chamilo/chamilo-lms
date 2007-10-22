@@ -167,6 +167,7 @@ if($session['nbr_courses']==0){
 		</tr>';
 }
 else {
+	// select the courses
 	$sql = "SELECT code,title,nbr_users, lastname, firstname, username
 			FROM $tbl_course,$tbl_session_rel_course
 			LEFT JOIN $tbl_user
@@ -177,6 +178,10 @@ else {
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$courses=api_store_result($result);
 	foreach($courses as $course){
+		//select the number of users
+		$sql = 'SELECT COUNT(id_user) as nb_users FROM '.$tbl_session_rel_course_rel_user.' WHERE course_code="'.Database::escape_string($course['code']).'" AND id_session='.intval($id_session);
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$course['nbr_users'] = mysql_result($rs,0,0);
 		if(empty($course['username']))
 			$coach = get_lang('None');
 		else

@@ -545,6 +545,7 @@ function get_all_roles($content='course')
 * This function gets all the roles that are defined
 * @param $content are we finding the roles for a user or a group (the database depends on it)
 * @param $id the id of the user or group
+* @param string	Deprecated parameter allowing use of 'platform' scope - the corresponding tables don't exist anymore so the scope is always set to 'course'
 * @return array that contains the name of the roles the user has
 * @todo consider having a separate table that contains only an id and a name of the role. 
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
@@ -565,6 +566,7 @@ function get_roles_permissions($content,$id, $scope='course')
 	}
 	
 	// course roles or platform roles
+	$scope = 'course';
 	if($scope == 'course')
 	{
 		$table_role = Database::get_course_table(TABLE_ROLE);

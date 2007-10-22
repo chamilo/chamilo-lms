@@ -43,15 +43,13 @@ if($_POST['formSent'])
 
 	$id_coach=intval($_POST['id_coach']);
 
-	if(!$id_coach) $errorMsg=get_lang("SelectACoach");
-	else
-	{
-		api_sql_query("UPDATE $tbl_session_course
-					   SET id_coach='$id_coach'
-					   WHERE id_session='$id_session' AND course_code='$course_code'",__FILE__,__LINE__);
-		header('Location: '.$_GET['page'].'?id_session='.$id_session);
-		exit();
-	}
+
+	api_sql_query("UPDATE $tbl_session_course
+				   SET id_coach='$id_coach'
+				   WHERE id_session='$id_session' AND course_code='$course_code'",__FILE__,__LINE__);
+	header('Location: '.$_GET['page'].'?id_session='.$id_session);
+	exit();
+
 }
 else
 {
@@ -103,8 +101,9 @@ if(!empty($errorMsg))
   <td width="30%"><?php echo get_lang("CoachName") ?>&nbsp;&nbsp;</td>
   <td width="70%"><select name="id_coach" style="width:250px;">
 	<option value="0">----- <?php echo get_lang("Choose") ?> -----</option>
-
+	<option value="0" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo get_lang('None') ?></option>
 <?php
+
 foreach($Coaches as $enreg)
 {
 ?>

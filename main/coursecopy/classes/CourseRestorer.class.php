@@ -1,7 +1,7 @@
 <?php
 
 
-// $Id: CourseRestorer.class.php 13306 2007-09-27 07:16:52Z yannoo $
+// $Id: CourseRestorer.class.php 13539 2007-10-22 08:53:27Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -651,8 +651,8 @@ class CourseRestorer
 						"intro = '".Database::escape_string($survey->intro)."', " .
 						"surveythanks = '".Database::escape_string($survey->surveythanks)."', " .
 						"creation_date = '".Database::escape_string($survey->creation_date)."', " .
-						"invited = '".Database::escape_string($survey->invited)."', " .
-						"answered = '".Database::escape_string($survey->answered)."', " .
+						"invited = '0', " .
+						"answered = '0', " .
 						"invite_mail = '".Database::escape_string($survey->invite_mail)."', " .
 						"reminder_mail = '".Database::escape_string($survey->reminder_mail)."'";
 				api_sql_query($sql, __FILE__, __LINE__);

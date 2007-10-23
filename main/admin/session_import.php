@@ -146,6 +146,37 @@ if($_POST['formSent'])
 							@api_send_mail($emailto,$emailsubject,$emailbody,$emailheaders);
 						}
 					}
+					else
+					{
+						$lastname = mb_convert_encoding($userNode->Lastname,$charset,'utf-8');
+						$firstname = mb_convert_encoding($userNode->Firstname,$charset,'utf-8');
+						$password = mb_convert_encoding($userNode->Password,$charset,'utf-8');
+						$email = mb_convert_encoding($userNode->Email,$charset,'utf-8');
+						$official_code = mb_convert_encoding($userNode->OfficialCode,$charset,'utf-8');
+						$phone = mb_convert_encoding($userNode->Phone,$charset,'utf-8');
+						$status = mb_convert_encoding($userNode->Status,$charset,'utf-8');
+						switch($status)
+						{
+							case 'student' : $status = 5; break;
+							case 'teacher' : $status = 1; break;
+							default : $status = 5; $errorMsg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
+						}
+
+
+
+						$sql = "UPDATE $tbl_user SET
+									lastname = '".Database::escape_string($lastname)."',
+									firstname = '".Database::escape_string($firstname)."',
+									".(empty($password) ? "" : "password = '".($userPasswordCrypted==true ? md5($password) : $password)."',")."
+									email = '".Database::escape_string($email)."',
+									official_code = '".Database::escape_string($official_code)."',
+									phone = '".Database::escape_string($phone)."',
+									status = '".Database::escape_string($status)."'
+								WHERE username = '".Database::escape_string($username)."'";
+
+						api_sql_query($sql, __FILE__, __LINE__);
+						
+					}
 
 				}
 				foreach($racine->Courses->Course as $courseNode)

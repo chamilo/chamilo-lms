@@ -1,5 +1,5 @@
 <?php
-// $Id: inscription.php 13049 2007-09-17 15:10:42Z yannoo $
+// $Id: inscription.php 13551 2007-10-24 11:53:14Z pcool $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -52,6 +52,9 @@ if (get_setting('allow_registration')=='approval')
 	Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
 }
 
+$fck_attribute['Height'] = "150";
+$fck_attribute['Width'] = "450";
+$fck_attribute['ToolbarSet'] = "Profil";
 
 $form = new FormValidator('registration');
 //	LAST NAME and FIRST NAME
@@ -96,6 +99,45 @@ if (get_setting('allow_registration_as_teacher') <> 'false')
 	$form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT);
 	$form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
 }
+//	EXTENDED FIELDS
+if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mycomptetences') == 'true')
+{
+	$form->add_html_editor('competences', get_lang('MyCompetences'), false);
+}
+if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mydiplomas') == 'true')
+{
+	$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false);
+}
+if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
+{
+	$form->add_html_editor('teach', get_lang('MyTeach'), false);
+}
+if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true')
+{
+	$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false);
+}
+if (api_get_setting('extended_profile') == 'true')
+{
+	if (api_get_setting('extendedprofile_registrationrequired','mycomptetences') == 'true')
+	{
+		$form->addRule('competences', get_lang('ThisFieldIsRequired'), 'required');
+	}
+	if (api_get_setting('extendedprofile_registrationrequired','mydiplomas') == 'true')
+	{
+		$form->addRule('diplomas', get_lang('ThisFieldIsRequired'), 'required');
+	}
+	if (api_get_setting('extendedprofile_registrationrequired','myteach') == 'true')
+	{
+		$form->addRule('teach', get_lang('ThisFieldIsRequired'), 'required');
+	}
+	if (api_get_setting('extendedprofile_registrationrequired','mypersonalopenarea') == 'true')
+	{
+		$form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
+	}
+}
+
+
+
 $form->addElement('submit', 'submit', get_lang('Ok'));
 if(isset($_SESSION["user_language_choice"]) && $_SESSION["user_language_choice"]!=""){
 	$defaults['language'] = $_SESSION["user_language_choice"];
@@ -126,11 +168,35 @@ if ($form->validate())
 
 	if ($user_id)
 	{
-		// TODO: add language to parameter list of UserManager::create_user(...)
-		$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
-		             SET language	= '".Database::escape_string($values['language'])."'
-					WHERE user_id = '".$user_id."'	 ";
-		//api_sql_query($sql,__FILE__,__LINE__);
+		// storing the extended profile
+		$store_extended = false;
+		$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
+		if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mycomptetences') == 'true')
+		{
+			$sql_set[] = "competences = '".Database::escape_string($values['competences'])."'";
+			$store_extended = true;
+		}
+		if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mydiplomas') == 'true')
+		{
+			$sql_set[] = "diplomas = '".Database::escape_string($values['diplomas'])."'";
+			$store_extended = true;
+		}
+		if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
+		{
+			$sql_set[] = "teach = '".Database::escape_string($values['teach'])."'";
+			$store_extended = true;
+		}
+		if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true')
+		{
+			$sql_set[] = "openarea = '".Database::escape_string($values['openarea'])."'";
+			$store_extended = true;
+		}
+		if ($store_extended)
+		{
+			$sql .= implode(',',$sql_set);
+			$sql .= " WHERE user_id = '".Database::escape_string($user_id)."'";
+			api_sql_query($sql,__FILE__,__LINE__);
+		}
 
 		// if there is a default duration of a valid account then we have to change the expiration_date accordingly
 		if (get_setting('account_valid_duration')<>'')

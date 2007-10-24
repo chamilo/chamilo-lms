@@ -7462,53 +7462,53 @@ function display_thread_form($action = 'add', $id = 0, $extra_info = '')
 	 		}
 	 		else
 	 		{ // if the item is a quiz or a link or whatever non-exportable, we include a step indicating it
-	 		
-	 			$my_item = $xmldoc->createElement('item');
-		 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
-		 		$my_item->setAttribute('identifierref','RESOURCE_'.$item->get_id()); 
-		 		$my_item->setAttribute('isvisible','true');
-		 		//give a child element <title> to the <item> element
-		 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
-		 		$my_item->appendChild($my_title);
-		 		//give a child element <adlcp:prerequisites> to the <item> element
-		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$item->get_prereq_string());
-		 		$my_prereqs->setAttribute('type','aicc_script');
-		 		$my_item->appendChild($my_prereqs);
-		 		//give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported
-		 		//$xmldoc->createElement('adlcp:maxtimeallowed','');
-				//give a child element <adlcp:timelimitaction> to the <item> element - not yet supported
-		 		//$xmldoc->createElement('adlcp:timelimitaction','');
-		 		//give a child element <adlcp:datafromlms> to the <item> element - not yet supported
-		 		//$xmldoc->createElement('adlcp:datafromlms','');
-		 		//give a child element <adlcp:masteryscore> to the <item> element
-		 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->masteryscore);
-		 		$my_item->appendChild($my_masteryscore);
-		 		
-		 		
-		 		//attach this item to the organization element or hits parent if there is one
-		 		if(!empty($item->parent) && $item->parent!=0)
-		 		{
-		 			$children = $organization->childNodes;
-			        for($i=0;$i<$children->length;$i++){
-				        $item_temp = $children->item($i);
-				        if ($item_temp -> nodeName == 'item')
-				        {
-				        	if($item_temp->getAttribute('identifier') == 'ITEM_'.$item->parent)
-				        	{
-				        		$item_temp -> appendChild($my_item);
-				        	}
-				        	
-				        }
-			        }
-		 		}
-		 		else
-		 		{
-		 			$organization->appendChild($my_item);
-		 		}
-		 		
+	 				 		
 	 			if($item->type == TOOL_LINK)
 	 			{
-	 				$my_file_path = 'link_'.$item->get_id().'.html';
+		 			$my_item = $xmldoc->createElement('item');
+			 		$my_item->setAttribute('identifier','ITEM_'.$item->get_id()); 
+			 		$my_item->setAttribute('identifierref','RESOURCE_'.$item->get_id()); 
+			 		$my_item->setAttribute('isvisible','true');
+			 		//give a child element <title> to the <item> element
+			 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
+			 		$my_item->appendChild($my_title);
+			 		//give a child element <adlcp:prerequisites> to the <item> element
+			 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$item->get_prereq_string());
+			 		$my_prereqs->setAttribute('type','aicc_script');
+			 		$my_item->appendChild($my_prereqs);
+			 		//give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported
+			 		//$xmldoc->createElement('adlcp:maxtimeallowed','');
+					//give a child element <adlcp:timelimitaction> to the <item> element - not yet supported
+			 		//$xmldoc->createElement('adlcp:timelimitaction','');
+			 		//give a child element <adlcp:datafromlms> to the <item> element - not yet supported
+			 		//$xmldoc->createElement('adlcp:datafromlms','');
+			 		//give a child element <adlcp:masteryscore> to the <item> element
+			 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->masteryscore);
+			 		$my_item->appendChild($my_masteryscore);
+			 		
+			 		
+			 		//attach this item to the organization element or its parent if there is one
+			 		if(!empty($item->parent) && $item->parent!=0)
+			 		{
+			 			$children = $organization->childNodes;
+				        for($i=0;$i<$children->length;$i++){
+					        $item_temp = $children->item($i);
+					        if ($item_temp -> nodeName == 'item')
+					        {
+					        	if($item_temp->getAttribute('identifier') == 'ITEM_'.$item->parent)
+					        	{
+					        		$item_temp -> appendChild($my_item);
+					        	}
+					        	
+					        }
+				        }
+			 		}
+			 		else
+			 		{
+			 			$organization->appendChild($my_item);
+			 		}
+
+		 			$my_file_path = 'link_'.$item->get_id().'.html';
 	 				$sql = 'SELECT url, title FROM '.Database :: get_course_table(TABLE_LINK).' WHERE id='.$item->path;
 	 				$rs = api_sql_query($sql, __FILE__, __LINE__);
 	 				if($link = Database :: fetch_array($rs))

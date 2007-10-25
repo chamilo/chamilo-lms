@@ -115,6 +115,7 @@ function ErrorHandler()
 			}
 			alert (errDescription);
 		}
+	}
 	return errCode;
 }
 /**

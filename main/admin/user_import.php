@@ -1,6 +1,6 @@
 <?php
 
-// $Id: user_import.php 12982 2007-09-10 12:32:37Z elixir_inter $
+// $Id: user_import.php 13561 2007-10-25 13:17:29Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -189,14 +189,6 @@ function parse_csv_data($file)
 		if (isset ($user['Courses']))
 		{
 			$user['Courses'] = explode('|', trim($user['Courses']));
-		}
-		if ($user['Status'] == 'user')
-		{
-			$user['Status'] = STUDENT;
-		}
-		if ($user['Status'] == 'teacher')
-		{
-			$user['Status'] = COURSEMANAGER;
 		}
 		$users[$index] = $user;
 	}

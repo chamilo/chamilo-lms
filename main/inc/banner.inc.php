@@ -139,7 +139,7 @@ if ($_user['user_id'])
 		echo '</li>';
 	}
 }
-/*if ( api_is_allowed_to_edit() )
+if ( api_is_allowed_to_edit() )
 {
 	if( $help != null)
 	{
@@ -151,7 +151,7 @@ if ($_user['user_id'])
 
 	<?php
 	}
-}*/
+}
 ?>
 		</ul>
 	</div>

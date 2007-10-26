@@ -177,4 +177,11 @@ $WelcomeWoogieSubtitle = "Een Word leerpad converteerder ";
 $WelcomeWoogieConverter = "Welkom in de Woogie converteerder<ul type=\\\"1\\\"><li>Kies een .doc, .sxw of .odt bestand<li>Upload het in Woogie. Het wordt geconverteerd in een leerpad<li>Vervolgens kan u audiocommentaar op elke pagina toevoegen en testen en andere activiteiten tussen de pagina\'s</ul>";
 $WoogieError = "Fout tijdens het converteren van het Word document. Controleer of er geen speciale tekens in de naam van het document staan.";
 $WordConvert = "Word conversie";
+$Order = "Volgorde";
+$InteractionID = "Interactie ID";
+$TimeFinished = "Tijd (beëindigd om...)";
+$CorrectAnswers = "Correcte antwoorden";
+$StudentResponse = "Antwoorden van studenten";
+$LatencyTimeSpent = "Gebruikte tijd";
+$Result = "Resultaat";
 ?>

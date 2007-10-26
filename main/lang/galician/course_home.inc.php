@@ -24,4 +24,5 @@ $Interaction = "Interacción";
 $Authoring = "Creación de contidos";
 $Administration = "Administración";
 $IntroductionTextUpdated = "Actualizouse a mensaxe introdutoria";
+$IntroductionTextDeleted = "Texto de introdución eliminado.";
 ?>

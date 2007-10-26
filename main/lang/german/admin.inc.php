@@ -670,4 +670,8 @@ $LetThoseFieldsEmptyToHideTheNotice = "Diese Felder leer lassen, um Nachricht zu
 $Ppt2lpVoiceRecordingNeedsRed5 = "Die Voice Recorder Funktion im Lernpfad Editor beruht auf einem Red5 Streaming Server. Die Parameter dieses Servers können im Videokonferenz Teil auf dieser Seite konfiguriert werden.";
 $PlatformCharsetTitle = "Zeichensatz";
 $PlatformCharsetComment = "Der Zeichensatz bestimmt die Art und Weise, in der bestimmte Sprachen in Dokeos dargestellt werden. Wenn man z.B. kyrillische oder japanische Zeichen benutzt, sollte man vielleicht den Zeichensatz ändern. Für englische, lateinische und westeuropäische Schriftzeichen sollte der Default Zeichensatz ISO-8859-15 korrekt sein";
+$ExtendedProfileRegistrationTitle = "Zusätzliche Felder in Profil bei der Anmeldung";
+$ExtendedProfileRegistrationComment = "Welche der nachfolgenden Felder des ausführlichen Profils sollen dem Benutzer bei der Anmelfung angezeigt werden? Dazu muss das ausführliche Profil aktiviert sein (s. oben)";
+$ExtendedProfileRegistrationRequiredTitle = "Erforderliche Felder bei der Anmeldung für ausführliches Profil ";
+$ExtendedProfileRegistrationRequiredComment = "Welche der nachfolgenden Felder des ausführlichen Profils sind bei der Anmeldung eines Benutzers erforderlich? Dazu muss das ausführliche Profil aktiviert sein und die Felder müssen im Anmeldeformular verfügbar sein (s. oben)";
 ?>

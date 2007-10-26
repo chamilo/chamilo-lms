@@ -648,6 +648,7 @@ Pode utilizar o noso servizo web estándar para construír a súa propia integració
 $EphorusLeadersInAntiPlagiarism = "Líderes en antiplaxio";
 $EphorusClickHereForInformationsAndPrices = "Faga clic aquí para máis información e prezos";
 $NameOfTheSession = "Nome da sesión";
+$NoSessionsForThisUser = "Este usuario non está inscrito nunha sesión.";
 $DisplayCategoriesOnHomepageTitle = "Mostrar categorías na páxina principal";
 $DisplayCategoriesOnHomepageComment = "Esta opción amosa ou oculta as categorias dos cursos na páxina principal do portal";
 $ShowTabsTitle = "Pestanas na cabeceira";

@@ -78,10 +78,6 @@ $langClass = "Luokka";
 $langEdit = "muokkaa";
 $required = "Pakollinen";
 $langOptionalTextFields = "Valinnaiset kentät";
-$langMyCompetences = "Osaamiseni";
-$langMyDiplomas = "Suoritukseni";
-$langMyPersonalOpenArea = "Lisätietoja minusta";
-$langMyTeach = "Aineet joita opetan";
 $langMyProductions = "Oma tuotantoni";
 $langFileDeleted = "Tiedosto on poistettu";
 ?>

@@ -252,6 +252,10 @@ $SeptemberLong = "September";
 $OctoberLong = "Oktober";
 $NovemberLong = "November";
 $DecemberLong = "Dezember";
+$langMyCompetences = "Meine Kompetenzen";
+$langMyDiplomas = "Meine Abschlüsse";
+$langMyPersonalOpenArea = "Mein persönlicher Offener Bereich";
+$langMyTeach = "Was ich unterrichten kann";
 $Agenda = "Agenda";
 $HourShort = ":";
 $PleaseTryAgain = "Bitte nochmals versuchen!";
@@ -435,4 +439,6 @@ $MainNavigation = "Hauptnavigation";
 $None = "Keine";
 $SeeDetail = "Siehe Details";
 $GroupSingle = "Gruppe";
+$PleaseLoginAgainFromHomepage = "Bitte versuchen, sich von der Startseite aus einzuloggen.";
+$PleaseLoginAgainFromFormBelow = "Bitte versuchen, sich über das Formular unten einzuloggen.";
 ?>

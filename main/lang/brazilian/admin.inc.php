@@ -666,4 +666,7 @@ $EmailMandatory = "O email não pode estar vazio";
 $TabsMyAgenda = "Aba Minha Agenda";
 $NoticeWillBeNotDisplayed = "A notícia não será publicada na página principal";
 $LetThoseFieldsEmptyToHideTheNotice = "Deixe estes campos vazios se não desejar publicar a notícia";
+$Ppt2lpVoiceRecordingNeedsRed5 = "A funcionalidade de gravação de voz no editor de Rota de aprendizagem baseia-se num servidor de Streaming Red5. Os parâmetros deste servidor podem ser configurados na seção de videoconferência na página correspondente.";
+$PlatformCharsetTitle = "Tipo de Caracteres";
+$PlatformCharsetComment = "O tipo de caracteres é o que define idiomas específicos a serem mostrados no Dokeos. Se usar caracteres Russos ou Japoneses, por exemplo, você deve alterar esta opção. Para todos os caracteres em inglês, latinos e oeste da Europa, o tipo mais indicado é o iso-8859-15.";
 ?>

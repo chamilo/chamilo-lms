@@ -122,10 +122,6 @@ $langClass = "Klasa";
 $langEdit = "edytuj";
 $required = "wymagane";
 $langOptionalTextFields = "pole opcjonalne";
-$langMyCompetences = "Moje kompetencje";
-$langMyDiplomas = "Moje dyplomy";
-$langMyPersonalOpenArea = "Moje otwarte pole osobiste";
-$langMyTeach = "Czego jestem w stanie uczy&#263;";
 $langMyProductions = "Moje prace";
 $langFileDeleted = "Plik zosta&#322; skasowany.";
 ?>

@@ -252,6 +252,10 @@ $SeptemberLong = "september";
 $OctoberLong = "oktober";
 $NovemberLong = "november";
 $DecemberLong = "december";
+$langMyCompetences = "Mijn competenties";
+$langMyDiplomas = "Mijn diploma\'s";
+$langMyPersonalOpenArea = "Mijn persoonlijke ruimte";
+$langMyTeach = "Waarin kan ik lesgeven";
 $Agenda = "Agenda";
 $HourShort = "u";
 $PleaseTryAgain = "Gelieve opnieuw te proberen.";
@@ -435,4 +439,6 @@ $MainNavigation = "Hoofdnavigatie";
 $None = "Geen";
 $SeeDetail = "Zie detail";
 $GroupSingle = "Groep";
+$PleaseLoginAgainFromHomepage = "Gelieve opnieuw in te loggen op de startpagina";
+$PleaseLoginAgainFromFormBelow = "Gelieve opnieuw in te loggen met behulp van onderstaand formulier";
 ?>

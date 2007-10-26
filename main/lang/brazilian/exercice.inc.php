@@ -225,4 +225,9 @@ $OpenQuestionsAttemptedAre = "Questão aberta trabalhada é";
 $CourseName = "Nome do curso";
 $UploadJpgPicture = "Inserir uma imagem JPG";
 $HotspotDescription = "Descrição do Hotspot";
+$ExamSheetVCC = "Teste visualizado/corrigido/comentado pelo professor";
+$AttemptVCC = "As seguintes tentativas foram visualizadas/comentadas/corrigidas pelo professor";
+$ClickLinkToViewComment = "Clique no link seguinte para acessar sua conta e verificar a correção do seu teste.";
+$Regards = "Cordialmente";
+$AttemptVCCLong = "A sua tentativa no exercício %s foi visualizada/comentada/corrigida pelo professor. Clique no link abaixo para acessar sua conta e ver sua folha de exercícios.";
 ?>

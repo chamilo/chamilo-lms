@@ -226,5 +226,10 @@ $StudentEmail = "Email van de student";
 $OpenQuestionsAttemptedAre = "De gepoogde open vraag is";
 $CourseName = "Cursusnaam";
 $UploadJpgPicture = "Een afbeelding van het JPG formaat opladen ";
+$HotspotDescription = "Hotspot beschrijving";
+$ExamSheetVCC = "De toets is door de docent gelezen/gecorrigeerd/becommentarieerd";
+$AttemptVCC = "Uw hierna beschreven poging is door de docent gelezen/becommentarieerd/gecorrigeerd/";
+$ClickLinkToViewComment = "Klik op onderstaande link om uw account te openen, en uw toets-met-commentaar te bekijken";
 $Regards = "Hoogachtend";
+$AttemptVCCLong = "Uw poging voor de toets %s is door de docent gelezen/becommentarieerd/gecorrigeerd. Klik op onderstaande link om uw account te openen en uw toets te bekijken. ";
 ?>

@@ -669,5 +669,11 @@ $EmailMandatory = "Het e-mailadres kan niet leeg zijn";
 $TabsMyAgenda = "Mijn agenda tab";
 $NoticeWillBeNotDisplayed = "De waarschuwing wordt niet getoond op de startpagina";
 $LetThoseFieldsEmptyToHideTheNotice = "Laat deze velden leeg om de waarschuwing te verbergen";
+$Ppt2lpVoiceRecordingNeedsRed5 = "De voice recording functie in de leerpad-editor maakt gebruik van een Red5 streaming server. De parameters van deze server kunnen geconfigureerd worden in de videoconferentiesectie op deze pagina.";
 $PlatformCharsetTitle = "Karakterset";
+$PlatformCharsetComment = "De tekenset (karakterset) bepaalt de manier waarop specifieke talen in Dokeos kunnen weergegeven worden. Gebruikt u bijvoorbeeld Russische of Japanse tekens, dan kan het aangewezen zijn dit aan te passen. Maar voor alle Engelse, Latijnse en Westeuropese tekens is de standaard iso-8859-15 doorgaans correct. ";
+$ExtendedProfileRegistrationTitle = "Velden van het uitgebreid profiel bij registratie";
+$ExtendedProfileRegistrationComment = "Welke van de onderstaande velden van het uitgebreid profiel moeten beschikbaar zijn als een gebruiker zich registreert? Dit vereist dat het uitgebreid profiel geactiveerd is (zie hierboven)";
+$ExtendedProfileRegistrationRequiredTitle = "Verplichte velden van het uitgebreid profiel bij registratie";
+$ExtendedProfileRegistrationRequiredComment = "Welke van de onderstaande velden van het uitgebreid profiel moeten verplicht ingevuld worden als een gebruiker zich registreert? Dit vereist dat het uitgebreid profiel geactiveerd is en dat het veld beschikbaar is bij registratie (zie hierboven)";
 ?>

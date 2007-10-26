@@ -170,4 +170,6 @@ $MoveDown = "Verplaats naar onderen";
 $MoveUp = "Verplaats naar boven";
 $HaveAnswered = "heeft geantwoord";
 $WereInvited = "zijn uitgenodigd";
+$PagebreakNotFirst = "De paginascheiding kan niet helemaal vooraan komen";
+$PagebreakNotLast = "De paginascheiding kan niet helemaal achteraan komen";
 ?>

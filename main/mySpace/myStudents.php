@@ -228,7 +228,7 @@ if(!empty($_GET['student']))
 	}
 	$avg_student_progress = round($avg_student_progress / $nb_courses,2);
 	$avg_student_score = round($avg_student_score / $nb_courses,2);
-	$last_connection_date = Tracking::get_last_connection_date($a_infosUser['user_id']);
+	$last_connection_date = Tracking::get_last_connection_date($a_infosUser['user_id'],true);
 	if($last_connection_date==''){
 		$last_connection_date=get_lang('NoConnexion');
 	}

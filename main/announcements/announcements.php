@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 13364 2007-09-30 07:06:37Z yannoo $
+<?php //$Id: announcements.php 13574 2007-10-26 13:34:37Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -246,6 +246,10 @@ if ($_SESSION['formelements'] and $_GET['originalresource'] == 'no')
 	//load_edit_users('announcement',$announcement_to_modify);
 
 	$email_ann				= $form_elements['emailoption'];
+}
+if(!empty($_GET['remind_inactive']))
+{
+	$to[] = 'USER:'.intval($_GET['remind_inactive']);
 }
 /*
 -----------------------------------------------------------
@@ -993,6 +997,11 @@ if ($message == true)
 		echo "</td><td>";
 		if(isset($_GET['id']) && is_array($to)){
 			echo '&nbsp;';
+		}
+		elseif(isset($_GET['remind_inactive']))
+		{
+			$email_ann = '1';
+			echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
 		}
 		else{
 			echo get_lang("Everybody");

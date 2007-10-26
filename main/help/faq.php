@@ -34,6 +34,7 @@
 $language_file='help';
 $helpName=$_GET['open'];
 include('../inc/global.inc.php');
+include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $language_code = Database::get_language_isocode($language_interface);
 header('Content-Type: text/html; charset='. $charset);
 ?>
@@ -65,13 +66,41 @@ if(api_get_setting('stylesheets')<>'')
 <body>
 <div style="margin:10px;">
 <div style="text-align:right;"><a href="javascript:window.close();"><?php echo get_lang('Close'); ?></a></div>
-<a href="faq.php"><?php echo get_lang('AccessToFaq') ?></a>
 <h4>
-<?php echo get_lang('H'.$helpName); ?>
+<?php 
+echo get_lang('Faq'); 
+if(api_is_platform_admin())
+{
+	echo '&nbsp;<a href="faq.php?edit=true"><img src="'.api_get_path(WEB_IMG_PATH).'edit.gif" /></a>';
+}
+?>
 </h4>
-<?php echo get_lang($helpName.'Content'); ?>
-<br /><br />
-<a href="faq.php"><?php echo get_lang('AccessToFaq') ?></a>
+<?php
+$faq_file = 'faq.html';
+if(!empty($_GET['edit']) && $_GET['edit']=='true' && api_is_platform_admin())
+{
+	$form = new FormValidator('set_faq','post','faq.php?edit=true');
+	$form -> add_html_editor('faq_content',null, false);
+	$form -> addElement('submit','faq_submit', get_lang('Ok'));
+	$form -> setDefaults(array('faq_content'=>file_get_contents(api_get_path(SYS_PATH).'home/faq.html')));
+	if($form -> validate())
+	{
+		$content = $form -> getSubmitValue('faq_content');
+		$fp = fopen(api_get_path(SYS_PATH).'home/'.$faq_file,'w');
+		fwrite($fp, $content);
+		fclose($fp);
+		echo $content;
+	}
+	else
+	{
+		$form -> display();
+	}
+}
+else
+{
+	echo file_get_contents(api_get_path(SYS_PATH).'home/'.$faq_file);	
+}
+?>
 <div style="text-align:right;"><a href="javascript:window.close();"><?php echo get_lang('Close'); ?></a></div>
 </div>
 </body>

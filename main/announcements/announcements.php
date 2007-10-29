@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 13585 2007-10-29 14:35:38Z elixir_inter $
+<?php //$Id: announcements.php 13586 2007-10-29 15:49:43Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1003,8 +1003,8 @@ if ($message == true)
 		{
 			$email_ann = '1';
 			$_SESSION['select_groupusers']="show";
-			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('Institution'), 7);
-			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('Institution'));
+			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'), 7);
+			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));
 		}
 		elseif(isset($_GET['remindallinactives']) && $_GET['remindallinactives']=='true')
 		{
@@ -1016,8 +1016,8 @@ if ($message == true)
 			}
 			$_SESSION['select_groupusers']="show";
 			$email_ann = '1';
-			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('Institution'),$since);
-			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('Institution'));
+			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),$since);
+			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));
 			
 			//echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
 		}

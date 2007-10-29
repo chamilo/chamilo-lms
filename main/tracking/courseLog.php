@@ -66,6 +66,7 @@ require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 
 
@@ -180,8 +181,8 @@ else
 			<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;
 		  </div>';
 }
-echo '<div style="float:right; clear:right">
-		<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
+echo '<div style="float:right; clear:right">';
+echo '&nbsp;<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
 if($_GET['studentlist'] == 'false'){	
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a></div>';
 }
@@ -470,6 +471,33 @@ if($_GET['studentlist'] == 'false')
 // else display student list with all the informations
 else {
 	
+	// BEGIN : form to remind inactives susers
+	$form = new FormValidator('reminder_form','get',api_get_path(REL_CLARO_PATH).'announcements/announcements.php');
+	
+	$renderer = $form->defaultRenderer();
+	$renderer->setElementTemplate('<span>{label} {element}</span>&nbsp;<input type="submit" value="'.get_lang('Ok').'"','since');
+	
+	$options = array(
+				2 => '2 '.get_lang('Days'),
+				3 => '3 '.get_lang('Days'),
+				4 => '4 '.get_lang('Days'),
+				5 => '5 '.get_lang('Days'),
+				6 => '6 '.get_lang('Days'),
+				7 => '7 '.get_lang('Days'),
+				15 => '15 '.get_lang('Days'),
+				30 => '30 '.get_lang('Days')
+				);
+	
+	$el = $form -> addElement('select','since','<img width="22" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'),$options);
+	$el -> setSelected(7);
+	
+	$form -> addElement('hidden','action','add');
+	$form -> addElement('hidden','remindallinactives','true');
+	
+	$form -> display();
+	// END : form to remind inactives susers
+	
+
 	$tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
 	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : DESC;
 	

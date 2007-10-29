@@ -141,7 +141,7 @@ class Tracking {
 			//If the last connection is > than 7 days, the text is red
 			//345600 = 7 days in seconds 
 			if ($currentTimestamp - $timestamp > 604800) {
-				return '<span style="color: #F00;">' . format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date)) . ' <a href="'.api_get_path(REL_CLARO_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'linphone.gif" /></a></span>';
+				return '<span style="color: #F00;">' . format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date)) . ' <a href="'.api_get_path(REL_CLARO_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /></a></span>';
 			} else {
 				return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
 			}
@@ -656,6 +656,31 @@ class Tracking {
 			$a_courses[$row['course_code']] = $row['course_code'];
 		}
 		return $a_courses;
+	}
+	
+	function get_inactives_students_in_course($course_code, $since, $session_id=0) 
+	{
+		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+		$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$inner = '';
+		if($session_id!=0)
+		{
+			$inner = ' INNER JOIN '.$tbl_session_course_user.' session_course_user 
+						ON stats_login.course_code = session_course_user.course_code
+						AND session_course_user.id_session = '.intval($session_id).'
+						AND session_course_user.id_user = stats_login.user_id ';
+		}
+		$sql = 'SELECT user_id, MAX(login_course_date) max_date FROM'.$tbl_track_login.' stats_login'.$inner.'
+				GROUP BY user_id
+				HAVING DATE_ADD(max_date, INTERVAL '.$since.' DAY) < NOW() ';
+
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
+		$inactive_users = array();
+		while($user = Database::fetch_array($rs))
+		{
+			$inactive_users[] = $user['user_id'];
+		}
+		return $inactive_users;
 	}
 
 }

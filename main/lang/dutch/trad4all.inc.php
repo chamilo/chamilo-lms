@@ -441,4 +441,8 @@ $SeeDetail = "Zie detail";
 $GroupSingle = "Groep";
 $PleaseLoginAgainFromHomepage = "Gelieve opnieuw in te loggen op de startpagina";
 $PleaseLoginAgainFromFormBelow = "Gelieve opnieuw in te loggen met behulp van onderstaand formulier";
+$RemindInactivesLearnersSince = "Waarschuw gebruikers inactief sinds 7 dagen";
+$RemindInactiveLearnersMailSubject = "Inactiviteit op %s";
+$RemindInactiveLearnersMailContent = "Beste gebruiker,<br /><br /> u arnot actief op demo.dokeos.com sinds meer dan %s dagen.
+";
 ?>

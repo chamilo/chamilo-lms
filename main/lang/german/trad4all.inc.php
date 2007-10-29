@@ -441,4 +441,6 @@ $SeeDetail = "Siehe Details";
 $GroupSingle = "Gruppe";
 $PleaseLoginAgainFromHomepage = "Bitte versuchen, sich von der Startseite aus einzuloggen.";
 $PleaseLoginAgainFromFormBelow = "Bitte versuchen, sich über das Formular unten einzuloggen.";
+$AccessToFaq = "Zugang zu den FAQ (häufig gestellte Fragen)";
+$Faq = "FAQ - häufig gestellte Fragen";
 ?>

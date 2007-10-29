@@ -443,4 +443,7 @@ $PleaseLoginAgainFromHomepage = "Please try to login again from the homepage";
 $PleaseLoginAgainFromFormBelow = "Please try to login again using the form below";
 $AccessToFaq = "Access to the Frequently Asked Questions";
 $Faq = "Frequently Asked Question";
+$RemindInactivesLearnersSince = "Remind inactives users since";
+$RemindInactiveLearnersMailSubject = "Inactivity on %s";
+$RemindInactiveLearnersMailContent = "Dear user,<br /><br /> you are not active on %s since more than %s days.";
 ?>

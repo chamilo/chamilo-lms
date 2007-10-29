@@ -255,7 +255,7 @@ $DecemberLong = "Dicembre";
 $langMyCompetences = "Le mie competenze";
 $langMyDiplomas = "Le mie certificazioni";
 $langMyPersonalOpenArea = "Il mio spazio personale";
-$langMyTeach = "Cosa sono in grado di insegnare";
+$langMyTeach = "In cosa posso contribuire";
 $Agenda = "Agenda";
 $HourShort = "h";
 $PleaseTryAgain = "Per favore, riprova.";
@@ -441,4 +441,6 @@ $SeeDetail = "Vedi dettagli";
 $GroupSingle = "Gruppo";
 $PleaseLoginAgainFromHomepage = "Ti prego di accedere nuovamente al sito dalla pagina Home iniziale";
 $PleaseLoginAgainFromFormBelow = "Ti prego di accedere al sito compilando il modulo sottostante";
+$AccessToFaq = "Accesso alle FAQ - Domande frequenti";
+$Faq = "FAQ - Domande frequenti";
 ?>

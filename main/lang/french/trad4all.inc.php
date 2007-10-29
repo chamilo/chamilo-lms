@@ -443,4 +443,7 @@ $PleaseLoginAgainFromHomepage = "Veuillez vous identifier à nouveau depuis la pa
 $PleaseLoginAgainFromFormBelow = "Veuillez vous identifier à nouveau en utilisant le formulaire suivant";
 $AccessToFaq = "Accéder aux questions fréquemments posées (FAQ)";
 $Faq = "Questions fréquemment posées";
+$RemindInactivesLearnersSince = "Alerter les utilisateurs inactifs depuis";
+$RemindInactiveLearnersMailSubject = "Inactivité sur %s";
+$RemindInactiveLearnersMailContent = "Cher utilisateur,<br /><br /> vous êtes inactif sur %s depuis plus de %s jours.";
 ?>

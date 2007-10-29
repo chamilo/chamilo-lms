@@ -677,4 +677,8 @@ $LetThoseFieldsEmptyToHideTheNotice = "Deje estos campos vacíos si no quiere mos
 $Ppt2lpVoiceRecordingNeedsRed5 = "La funcionalidad de grabación de voz en el Editor de Itinerarios de aprendizaje depende un servidor de streaming Red5. Los parámetros de este servidor pueden configurarse en la sección de videoconferencia de esta misma página.";
 $PlatformCharsetTitle = "Juego de caracteres";
 $PlatformCharsetComment = "El juego de caracteres es el que controla la manera en que determinados idiomas son mostrados en Dokeos. Si, por ejemplo, utiliza caracteres rusos o japoneses, es posible que quiera cambiar este juego.  Para todos los caracteres anglosajones, latinos y de Europa Occidental,  el juego por defecto iso-8859-15 debe ser el correcto.";
+$ExtendedProfileRegistrationTitle = "Campos del perfil extendido del registro";
+$ExtendedProfileRegistrationComment = "¿ Qué campos del perfil extendido deben estar disponibles en el proceso de registro de un usuario ? Esto requiere que el perfil extendido esté activado (ver más arriba).";
+$ExtendedProfileRegistrationRequiredTitle = "Campos requeridos en el perfil extendido del registro";
+$ExtendedProfileRegistrationRequiredComment = "¿ Qué campos del perfil extendido son obligatorios en el proceso de registro de un usuario ? Esto requiere que el perfil extendido esté activado y que el campo también esté disponible en el formulario de registro (véase más arriba).";
 ?>

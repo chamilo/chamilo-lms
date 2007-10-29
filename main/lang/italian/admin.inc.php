@@ -672,4 +672,8 @@ $LetThoseFieldsEmptyToHideTheNotice = "Per nascondere l\'avviso lascia vuoti que
 $Ppt2lpVoiceRecordingNeedsRed5 = "La possibilità di registrare la voce nella composizione di un pacchetto didattico dipende dal server di streaming Red5, che dovrà essere configurato nella sezione videoconferenza di questa pagina.";
 $PlatformCharsetTitle = "Set di caratteri";
 $PlatformCharsetComment = "Il set di caratteri indica la codifica adottata per rappresentare i caratteri. L\'iso-8859-15 è di default ed è adatta per l\'inglese e l\'europa occidentale. Il Russo o il Giapponese possono avere bisogno di una diversa codifica (es. UTF-8)";
+$ExtendedProfileRegistrationTitle = "Registrazione con i campi del profilo esteso";
+$ExtendedProfileRegistrationComment = "Quale dei seguenti campi del profilo esteso saranno presenti nel moduli di registrazione? Nota: il profilo esteso deve essere prima attivato (v. sopra).";
+$ExtendedProfileRegistrationRequiredTitle = "Campi del profilo esteso obbligatori nel modulo di registrazione";
+$ExtendedProfileRegistrationRequiredComment = "Quali campi del profilo esteso sono richiesti in fase di registrazione? Il profilo esteso deve essere attivato ed i campi relativi devono essere disponibili nel modulo (v.sopra).";
 ?>

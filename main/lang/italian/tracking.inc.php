@@ -212,4 +212,5 @@ $NoLearningPath = "Non ci sono percorsi didattici";
 $SessionCourses = "Sessione dei corsi";
 $NoUsersInCourseTracking = "In questa sezione troverai le statistiche degli studenti iscritti al corso";
 $AvgTimeSpentInTheCourse = "Tempo medio impiegato nel corso";
+$RemindInactiveUser = "Richiama l\'utente inattivo";
 ?>

@@ -45,7 +45,7 @@ $langUserAddExplanation = "ogni riga del documento da trasmettere deve necessari
 		Gli utenti riceveranno un\'e-mail di conferma con Nome Utente/Password.";
 $langUserMany = "Importa gli utenti da un elenco su un documento di testo CSV / XML";
 $langOneByOne = "Aggiungi manualmente un utente";
-$langNow = "ora";
+$langNow = "adesso";
 $langTutor = "Tutor";
 $langTitular = "Autore";
 $langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Modifica l\'elenco dei corsi</big><br><br>

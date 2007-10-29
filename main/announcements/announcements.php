@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 13574 2007-10-26 13:34:37Z elixir_inter $
+<?php //$Id: announcements.php 13582 2007-10-29 12:00:26Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -144,6 +144,7 @@ require_once('announcements.inc.php');
 require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 require_once(api_get_path(INCLUDE_PATH).'conf/mail.conf.php');
 require_once(api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
 
 /*
 -----------------------------------------------------------
@@ -1000,6 +1001,17 @@ if ($message == true)
 		}
 		elseif(isset($_GET['remind_inactive']))
 		{
+			$email_ann = '1';
+			echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
+		}
+		elseif(isset($_GET['remindallinactives']) && $_GET['remindallinactives']=='true')
+		{
+			$since = isset($_GET['since']) ? intval($_GET['since']) : 6;
+			$to = Tracking :: get_inactives_students_in_course($_course['id'],$since, $_SESSION['id_session']);
+			foreach($to as &$user)
+			{
+				$user = 'USER:'.$user;
+			}
 			$email_ann = '1';
 			echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
 		}

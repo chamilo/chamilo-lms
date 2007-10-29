@@ -244,7 +244,7 @@ if(!empty($_GET['student']))
 	// csv tracking
 	$csv_content[] = array(get_lang('Tracking'));
 	$csv_content[] = array(get_lang('LatestLogin'), get_lang('TimeSpentOnThePlatform'), get_lang('Progress'), get_lang('Score'));
-	$csv_content[] = array($last_connection_date, $time_spent_on_the_platform , $avg_student_progress.' %',$avg_student_score.' %');
+	$csv_content[] = array(strip_tags($last_connection_date), $time_spent_on_the_platform , $avg_student_progress.' %',$avg_student_score.' %');
 	
 ?>
 

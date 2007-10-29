@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 13583 2007-10-29 12:12:11Z elixir_inter $
+<?php //$Id: announcements.php 13585 2007-10-29 14:35:38Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1002,6 +1002,9 @@ if ($message == true)
 		elseif(isset($_GET['remind_inactive']))
 		{
 			$email_ann = '1';
+			$_SESSION['select_groupusers']="show";
+			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('Institution'), 7);
+			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('Institution'));
 		}
 		elseif(isset($_GET['remindallinactives']) && $_GET['remindallinactives']=='true')
 		{
@@ -1010,8 +1013,12 @@ if ($message == true)
 			foreach($to as &$user)
 			{
 				$user = 'USER:'.$user;
-			}$_SESSION['select_groupusers']="show";
+			}
+			$_SESSION['select_groupusers']="show";
 			$email_ann = '1';
+			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('Institution'),$since);
+			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('Institution'));
+			
 			//echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
 		}
 		else{

@@ -21,7 +21,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-* 	@version $Id: reporting.php 13389 2007-10-05 02:05:27Z yannoo $
+* 	@version $Id: reporting.php 13587 2007-10-29 16:17:50Z elixir_inter $
 *
 * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
 */
@@ -690,6 +690,10 @@ function display_complete_report()
 	echo '<input type="submit" name="export_report" value="'.get_lang('ExportCurrentReport').'" />';*/
 	
 	echo '<input type="hidden" name="export_report" value="export_report">';
+	
+	echo '</form>';
+	
+	echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.$_GET['action'].'&survey_id='.$_GET['survey_id'].'">';
 	
 	echo '<a href="#" onclick="document.form1.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportCurrentReport').'</a>';
 	

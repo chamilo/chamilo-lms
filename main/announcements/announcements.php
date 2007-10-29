@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 13582 2007-10-29 12:00:26Z elixir_inter $
+<?php //$Id: announcements.php 13583 2007-10-29 12:12:11Z elixir_inter $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -1002,7 +1002,6 @@ if ($message == true)
 		elseif(isset($_GET['remind_inactive']))
 		{
 			$email_ann = '1';
-			echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
 		}
 		elseif(isset($_GET['remindallinactives']) && $_GET['remindallinactives']=='true')
 		{
@@ -1011,9 +1010,9 @@ if ($message == true)
 			foreach($to as &$user)
 			{
 				$user = 'USER:'.$user;
-			}
+			}$_SESSION['select_groupusers']="show";
 			$email_ann = '1';
-			echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
+			//echo '&nbsp;<script type="text/javascript">document.onload = "document.getElementById(\'recipient_list\').style.display=\'block\'";</script>';
 		}
 		else{
 			echo get_lang("Everybody");
@@ -1086,7 +1085,7 @@ if ($message == true)
         <?php
 
 				"</form><br />\n";
-		if(isset($_GET['action']) && isset($_GET['id']) && is_array($to)){
+		if((isset($_GET['action']) && isset($_GET['id']) && is_array($to))||isset($_GET['remindallinactives'])||isset($_GET['remind_inactive'])){
 			echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
 		}
     } // displayform

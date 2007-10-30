@@ -437,11 +437,29 @@ class learnpathItem{
     }
     /**
      * Gets the maximum (score)
-     * @return	int	Maximum score. Defaults to 100
+     * @return	int	Maximum score. Defaults to 100 if nothing else is defined
      */
     function get_max(){
     	if($this->debug>0){error_log('New LP - In learnpathItem::get_max()',0);}
-    	if(!empty($this->max_score)){return $this->max_score;}else{return 100;}
+    	if($this->type == 'sco')
+    	{
+    		if(!empty($this->view_max_score) and $this->view_max_score>0)
+    		{
+    			return $this->view_max_score;
+    		}
+    		elseif($this->view_max_score === '')
+    		{
+    			return $this->view_max_score;
+    		}
+    		else
+    		{
+		    	if(!empty($this->max_score)){return $this->max_score;}else{return 100;}
+    		}
+    	}
+    	else
+    	{
+    		if(!empty($this->max_score)){return $this->max_score;}else{return 100;}
+    	}
     }
     /**
      * Gets the maximum time allowed for this user in this attempt on this item
@@ -1515,8 +1533,8 @@ class learnpathItem{
 		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting score to '.$value,0);}
 		     				break;
 		     			case 'max':
-		     				$this->max_score = $value;
-		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting max_score to '.$value,0);}
+		     				$this->set_max_score($value);
+		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting view_max_score to '.$value,0);}
 		     				break;
 		     			case 'min':
 		     				$this->min_score = $value;
@@ -1702,6 +1720,8 @@ class learnpathItem{
 	     		$this->attempt_id 		= $row['view_count'];
 				$this->current_score	= $row['score'];
 				$this->current_data		= $row['suspend_data'];
+		    	$this->view_max_score 	= $row['max_score'];
+		    	//$this->view_min_score 	= $row['min_score'];
 				$this->status			= $row['status'];
 				$this->current_start_time	= $row['start_time'];
 				$this->current_stop_time 	= $this->current_start_time + $row['total_time']; 
@@ -1774,6 +1794,22 @@ class learnpathItem{
    			}
   			return true;
   		}
+     	return false;
+    }
+    /**
+     * Sets the maximum score for this item
+     * @param	int		Maximum score - must be a decimal or an empty string
+     * @return	boolean	True on success, false on error
+     */
+    function set_max_score($score)
+    {
+   		if($this->debug>0){error_log('New LP - In learnpathItem::set_max_score('.$score.')',0);}
+     	if(is_int($score) or $score == '')
+     	{
+     		$this->view_max_score = Database::escape_string($score);
+     		if($this->debug>1){error_log('New LP - In learnpathItem::set_max_score() - Updated object score of item '.$this->db_id.' to '.$this->view_max_score,0);}
+     		return true;
+     	}
      	return false;
     }
     /**
@@ -1941,6 +1977,7 @@ class learnpathItem{
 		     			"start_time, " .
 		     			"score, " .
 		     			"status, " .
+		     			"max_score, ".
 		     			"lp_item_id, " .
 		     			"lp_view_id, " .
 		     			"view_count, " .
@@ -1952,6 +1989,7 @@ class learnpathItem{
 		     			"".$this->current_start_time."," .
 		     			"".$this->get_score()."," .
 		     			"'".$this->get_status(false)."'," .
+		     			"'".$this->get_max()."'," .
 		     			"".$this->db_id."," .
 		     			"".$this->view_id."," .
 		     			"".$this->get_attempt_id()."," .
@@ -1970,6 +2008,7 @@ class learnpathItem{
 			     			"SET total_time = ".$this->get_total_time().", " .
 			     			" start_time = ".$this->get_current_start_time().", " .
 			     			" status = '".$this->get_status(false)."'," .
+			     			" max_score = '".$this->get_max()."'," .
 			     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
 			     			" lesson_location = '".$this->lesson_location."' " .
 			     			"WHERE lp_item_id = ".$this->db_id." " .
@@ -1983,6 +2022,7 @@ class learnpathItem{
 			     			" start_time = ".$this->get_current_start_time().", " .
 			     			" score = ".$this->get_score().", " .
 			     			" status = '".$this->get_status(false)."'," .
+			     			" max_score = '".$this->get_max()."'," .
 			     			" suspend_data = '".Database::escape_string($this->current_data)."'," .
 			     			//" max_time_allowed = '".$this->get_max_time_allowed()."'," .
 			     			" lesson_location = '".$this->lesson_location."' " .
